@@ -14,7 +14,7 @@ const Settings: LayoutSettings & {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Tổ chức nhân sự VWA',
+  title: 'Slink VWA',
   pwa: false,
   logo: '/logo-full-white.svg',
   iconfontUrl: '',
