@@ -1,0 +1,28 @@
+@import '~antd/es/style/themes/default.less';
+
+.sinh-vien-item {
+  margin-right: 5px;
+  padding: 5px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+
+  &.giang-vien-sinh-vien {
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+      border: 1px solid #cc0d00;
+      box-shadow: 1px 2px 6px 0 #00000033;
+    }
+  }
+}
+
+.ant-card-meta-title {
+  white-space: pre-wrap;
+}
+
+@media (max-width: @screen-xs) {
+  .sinh-vien-item {
+    margin-right: 0;
+  }
+}

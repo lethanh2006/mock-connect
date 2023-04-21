@@ -1,4 +1,5 @@
-﻿export default [
+﻿import access from '../src/access';
+export default [
   {
     path: '/user',
     layout: false,
@@ -61,6 +62,28 @@
       },
     ],
   },
+
+  // MENU SINH VIEN
+  {
+    name: 'HocTap',
+    path: '/hoc-tap',
+    icon: 'EditOutlined',
+    // access: 'sinhVien',
+    routes: [
+      {
+        name: 'LopHanhChinh',
+        path: 'lop-hanh-chinh',
+        component: './HocTap/LopHanhChinh/SinhVien',
+      },
+      {
+        name: 'LopTinChi',
+        path: 'lop-tin-chi',
+        component: './HocTap/LopTinChi',
+      },
+    ],
+  },
+
+  //MENU GIANG VIEN
 
   {
     path: '/',

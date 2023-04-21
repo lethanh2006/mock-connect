@@ -7,4 +7,11 @@ export default {
 
   'menu.DanhMuc': 'Danh mục',
   'menu.DanhMuc.ChucVu': 'Chức vụ',
+
+  // SINH VIEN
+  'menu.HocTap': 'Học tập',
+  'menu.HocTap.LopHanhChinh': 'Lớp hành chính',
+  'menu.HocTap.LopTinChi': 'Lớp tín chỉ',
+
+  // GIANG VIEN
 };
