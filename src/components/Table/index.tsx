@@ -2,6 +2,7 @@ import {
   CloseOutlined,
   FilterOutlined,
   FilterTwoTone,
+  ImportOutlined,
   PlusCircleOutlined,
   ReloadOutlined,
   SearchOutlined,
@@ -17,6 +18,7 @@ import ModalCustomFilter from './ModalCustomFilter';
 import './style.less';
 import type { TDataOption, TFilter, TableBaseProps } from './typing';
 import { EOperatorType } from './constant';
+// import ModalImport from './Import';
 
 const TableBase = (props: TableBaseProps) => {
   const {
@@ -40,6 +42,7 @@ const TableBase = (props: TableBaseProps) => {
     scroll,
     destroyModal,
     addStt,
+    fullScreen,
   } = props;
   let { columns } = props;
   const { visibleForm, setVisibleForm, setEdit, setRecord } = useModel(modelName);
@@ -61,6 +64,7 @@ const TableBase = (props: TableBaseProps) => {
 
   const [visibleFilter, setVisibleFilter] = useState(false);
   const hasFilter = columns?.filter((item) => item.filterType)?.length;
+  // const [visibleImport, setVisibleImport] = useState(false);
 
   useEffect(() => {
     getData(params);
@@ -262,6 +266,11 @@ const TableBase = (props: TableBaseProps) => {
               </Button>
             </Tooltip>
           ) : null}
+          {/* {buttonOptions?.import !== false ? (
+            <Button icon={<ImportOutlined />} onClick={() => setVisibleImport(true)}>
+              Nhập dữ liệu
+            </Button>
+          ) : null} */}
           {props.otherButtons}
 
           {children}
@@ -358,24 +367,23 @@ const TableBase = (props: TableBaseProps) => {
         <>
           {formType === 'Drawer' ? (
             <Drawer
-              maskClosable={maskCloseableForm || true}
+              maskClosable={maskCloseableForm || false}
               width={widthDrawer}
               footer={false}
               bodyStyle={{ padding: 0 }}
               visible={visibleForm}
               destroyOnClose={destroyModal}
             >
-              <Form title={title} {...props.formProps} />
+              <Form title={title ?? ''} {...props.formProps} />
               <CloseOutlined
-                onClick={() => {
-                  setVisibleForm(false);
-                }}
+                onClick={() => setVisibleForm(false)}
                 style={{ position: 'absolute', top: 24, right: 24, cursor: 'pointer' }}
               />
             </Drawer>
           ) : (
             <Modal
-              maskClosable={maskCloseableForm || true}
+              className={fullScreen ? 'modal-ho-so-nhan-su' : ''}
+              maskClosable={maskCloseableForm || false}
               width={widthDrawer}
               onCancel={() => setVisibleForm(false)}
               footer={false}
@@ -383,19 +391,25 @@ const TableBase = (props: TableBaseProps) => {
               visible={visibleForm}
               destroyOnClose={destroyModal}
             >
-              <Form title={title} {...props.formProps} />
+              <Form title={title ?? ''} {...props.formProps} />
             </Modal>
           )}
         </>
       )}
 
-      <ModalCustomFilter
-        visible={visibleFilter}
-        setVisible={setVisibleFilter}
-        columns={finalColumns}
-        filters={filters}
-        setFilters={setFilters}
-      />
+      {buttonOptions?.filter !== false && hasFilter ? (
+        <ModalCustomFilter
+          visible={visibleFilter}
+          setVisible={setVisibleFilter}
+          columns={finalColumns}
+          filters={filters}
+          setFilters={setFilters}
+        />
+      ) : null}
+
+      {/* {buttonOptions?.import !== false ? (
+        <ModalImport visible={visibleImport} setVisible={setVisibleImport} />
+      ) : null} */}
     </>
   );
 };
