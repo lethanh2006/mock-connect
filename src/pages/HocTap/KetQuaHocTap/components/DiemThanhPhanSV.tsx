@@ -3,7 +3,6 @@ import { convertNumberScoreToAlphabet } from '@/utils/utils';
 import { Card, Col, Row, Tabs, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import ChonHocKyKetQuaHocTap from './ChonHocKyKetQuaHocTap';
 import GiaLapDiem from './GiaLapDiem';
 import ModalChiTietDiemThanhPhan from './ModalChiTietDiemThanhPhan';
 import { type LopTinChi } from '@/services/LopTinChi/typings';
@@ -13,80 +12,80 @@ const { Text } = Typography;
 
 const DiemThanhPhanSV = () => {
   const {
-    sinhVienGetDiemThanhPhanByHocKyModel,
+    // sinhVienGetDiemThanhPhanByHocKyModel,
     danhSachDiemThanhPhanTheoKy,
     loading,
     setRecordDiemTongKet,
     danhSachDiemTongKet,
-    sinhVienGetDiemTongKetModel,
+    // sinhVienGetDiemTongKetModel,
   } = useModel('hoctap.loptinchi');
   const [canhBao, setCanhBao] = useState<string | undefined>(undefined);
-  const { record } = useModel('kyhoc');
+  // const { record } = useModel('kyhoc');
   const [recordDiemThanhPhan, setRecordDiemThanhPhan] = useState<LopTinChi.DiemThanhPhan>();
   const [modalVisible, setModalVisible] = useState(false);
 
-  useEffect(() => {
-    const handleApi = async () => {
-      try {
-        const res1 = getInfoSinhVien();
-        const res = sinhVienGetDiemTongKetHienTai();
-        Promise.all([res1, res]).then((values) => {
-          switch (values[0].data?.data.nam_ctk) {
-            case 1:
-              if (values[1].data?.data.diem_tich_luy_thang_4 < 1.2) {
-                setCanhBao(
-                  'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.2',
-                );
-              }
-              break;
-            case 2:
-              if (values[1].data?.data.diem_tich_luy_thang_4 < 1.4) {
-                setCanhBao(
-                  'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.4',
-                );
-              }
-              break;
-            case 3:
-              if (values[1].data?.data.diem_tich_luy_thang_4 < 1.6) {
-                setCanhBao(
-                  'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.6',
-                );
-              }
-              break;
-            default:
-              if (values[1].data?.data.diem_tich_luy_thang_4 < 1.8) {
-                setCanhBao(
-                  'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.8',
-                );
-              }
-              break;
-          }
-        });
-        sinhVienGetDiemTongKetModel().then((response: LopTinChi.DiemTheoKy[]) => {
-          const filtered = response.filter(
-            (el) => el.ky_hoc.is_ky_chinh && el.diem_tb_chung_hoc_ky_thang_4 < 3,
-          );
-          if (filtered.length > 0) {
-            setCanhBao(
-              'Bạn đang bị cảnh báo loại 1 do có điểm trung bình ở 1 học kì chính dưới 1.0',
-            );
-          }
-        });
-      } catch (error) {}
-    };
+  // useEffect(() => {
+  //   const handleApi = async () => {
+  //     try {
+  //       const res1 = getInfoSinhVien();
+  //       const res = sinhVienGetDiemTongKetHienTai();
+  //       Promise.all([res1, res]).then((values) => {
+  //         switch (values[0].data?.data.nam_ctk) {
+  //           case 1:
+  //             if (values[1].data?.data.diem_tich_luy_thang_4 < 1.2) {
+  //               setCanhBao(
+  //                 'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.2',
+  //               );
+  //             }
+  //             break;
+  //           case 2:
+  //             if (values[1].data?.data.diem_tich_luy_thang_4 < 1.4) {
+  //               setCanhBao(
+  //                 'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.4',
+  //               );
+  //             }
+  //             break;
+  //           case 3:
+  //             if (values[1].data?.data.diem_tich_luy_thang_4 < 1.6) {
+  //               setCanhBao(
+  //                 'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.6',
+  //               );
+  //             }
+  //             break;
+  //           default:
+  //             if (values[1].data?.data.diem_tich_luy_thang_4 < 1.8) {
+  //               setCanhBao(
+  //                 'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.8',
+  //               );
+  //             }
+  //             break;
+  //         }
+  //       });
+  //       sinhVienGetDiemTongKetModel().then((response: LopTinChi.DiemTheoKy[]) => {
+  //         const filtered = response.filter(
+  //           (el) => el.ky_hoc.is_ky_chinh && el.diem_tb_chung_hoc_ky_thang_4 < 3,
+  //         );
+  //         if (filtered.length > 0) {
+  //           setCanhBao(
+  //             'Bạn đang bị cảnh báo loại 1 do có điểm trung bình ở 1 học kì chính dưới 1.0',
+  //           );
+  //         }
+  //       });
+  //     } catch (error) {}
+  //   };
 
-    handleApi();
-  }, []);
+  //   handleApi();
+  // }, []);
 
   // Change ky hoc id
-  useEffect(() => {
-    sinhVienGetDiemThanhPhanByHocKyModel(record?.id);
-    if (record?.id) {
-      setRecordDiemTongKet(
-        danhSachDiemTongKet?.find((item) => item?.ky_nam_hoc_id?.[0] === record?.id),
-      );
-    }
-  }, [record?.id]);
+  // useEffect(() => {
+  //   sinhVienGetDiemThanhPhanByHocKyModel(record?.id);
+  //   if (record?.id) {
+  //     setRecordDiemTongKet(
+  //       danhSachDiemTongKet?.find((item) => item?.ky_nam_hoc_id?.[0] === record?.id),
+  //     );
+  //   }
+  // }, [record?.id]);
 
   const onCell = (rec: LopTinChi.DiemThanhPhan) => ({
     onClick: () => {

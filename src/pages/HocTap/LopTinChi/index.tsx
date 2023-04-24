@@ -8,7 +8,12 @@ import { history, useAccess, useModel } from 'umi';
 const LopTinChi = () => {
   const access = useAccess();
 
-  const { loading, setDanhSach, setRecord: setRecordLopTinChi } = useModel('hoctap.loptinchi');
+  const {
+    loading,
+    setDanhSach,
+    setRecord: setRecordLopTinChi,
+    record,
+  } = useModel('hoctap.loptinchi');
 
   const onCell = (loptinchi: ILopTinChi.Record) => ({
     onClick: () => {
@@ -79,12 +84,13 @@ const LopTinChi = () => {
   return (
     <TableBase
       columns={columns}
-      // params={{ idHocKy: record?.id }}
+      params={{ idHocKy: record?.id }}
       // dependencies={[record?.id, hinhThucDaoTao]}
       modelName="hoctap.loptinchi"
       title="Lớp tín chỉ"
       otherProps={{ scroll: { x: 500 } }}
       pageable={false}
+      buttons={{ create: false }}
       // children={
       // <>
       // {access.nhanVien && (

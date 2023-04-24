@@ -57,7 +57,7 @@ export default (props: { type?: string }) => {
   const [date, setDate] = useState(new Date());
   const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
   const [visibleXemThem, setVisibleXemThem] = useState<boolean>(false);
-  const [eventsRecord, setEventRecord] = useState<SuKien.Record[]>([]);
+  const [eventsRecord, setEventRecord] = useState<SuKien.IRecord[]>([]);
   const [dateXemThem, setDateXemThem] = useState<any>();
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export default (props: { type?: string }) => {
   }, [selectValue, year]);
 
   const dataCalendar: { title: string; [x: string]: unknown }[] | undefined = [];
-  danhSachSuKien?.forEach((x: SuKien.Record) =>
+  danhSachSuKien?.forEach((x: SuKien.IRecord) =>
     dataCalendar.push({
       ...x,
       title: x?.tenSuKien ?? '',
@@ -102,7 +102,7 @@ export default (props: { type?: string }) => {
     setRecord({
       thoiGianBatDau: event?.start?.toISOString(),
       thoiGianKetThuc: event?.end?.toISOString(),
-    } as SuKien.Record);
+    } as SuKien.IRecord);
     setVisibleForm(true);
   };
 
@@ -119,7 +119,7 @@ export default (props: { type?: string }) => {
             type="primary"
             block
             onClick={() => {
-              setRecord({} as SuKien.Record);
+              setRecord({} as SuKien.IRecord);
               setVisibleForm(true);
             }}
           >
@@ -143,7 +143,7 @@ export default (props: { type?: string }) => {
 
               for (let index = start; index < end; index++) {
                 monthOptions.push(
-                  <Select.Option className="month-item" key={`${index}`}>
+                  <Select.Option className="month-item" key={`${index}`} value={months[index]}>
                     {months[index]}
                   </Select.Option>,
                 );
@@ -531,7 +531,7 @@ export default (props: { type?: string }) => {
         maskClosable
       >
         <div>
-          {eventsRecord?.map((item: SuKien.Record) => {
+          {eventsRecord?.map((item: SuKien.IRecord) => {
             return (
               <div
                 key={item._id}

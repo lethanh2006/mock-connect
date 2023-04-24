@@ -5,8 +5,8 @@ import logo from '@/assets/logo.png';
 import { Button, Spin } from 'antd';
 import { history } from 'umi';
 
-const GocHocTap = () => {
-  const [isLamKhaoSat, setIsLamKhaoSat] = useState<number>(-1);
+const KetQuaHocTap = () => {
+  const [isLamKhaoSat, setIsLamKhaoSat] = useState<number>(-1); //-1
   const [loading, setLoading] = useState(false);
   // const checkUnfinishedModel = async () => {
   //   setLoading(true);
@@ -49,4 +49,4 @@ const GocHocTap = () => {
   );
 };
 
-export default GocHocTap;
+export default KetQuaHocTap;
