@@ -2,8 +2,8 @@ import React from 'react';
 import { DatePicker, Select, Tabs, Tag, Tooltip } from 'antd';
 import { useModel } from 'umi';
 
-const RenderFilter = (props: { dinhKy: string; danhSachKyHoc }) => {
-  const { dinhKy, danhSachKyHoc } = props;
+const RenderFilter = (props: { dinhKy: string; danhSachHocKy }) => {
+  const { dinhKy, danhSachHocKy } = props;
   const { condition, setCondition } = useModel('thanhtoan');
 
   const onChangeDatePicker = (val: any) => {
@@ -88,7 +88,7 @@ const RenderFilter = (props: { dinhKy: string; danhSachKyHoc }) => {
             showSearch
             placeholder="Chọn kỳ học"
           >
-            {danhSachKyHoc
+            {danhSachHocKy
               ?.filter((item) =>
                 condition?.metadata?.hinhThucDaoTaoId
                   ? item.hinh_thuc_dao_tao_id?.[0] === condition?.metadata?.hinhThucDaoTaoId

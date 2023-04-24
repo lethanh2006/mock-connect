@@ -86,7 +86,21 @@ export default [
       {
         name: 'LopTinChi',
         path: 'lop-tin-chi',
-        component: './HocTap/LopTinChi',
+
+        routes: [
+          {
+            path: './',
+            hideInMenu: true,
+            component: './HocTap/LopTinChi',
+            exact: true,
+          },
+          {
+            path: './:id',
+            component: './HocTap/LopTinChi/$id',
+            hideInMenu: true,
+            exact: true,
+          },
+        ],
       },
       {
         name: 'KetQuaHocTap',

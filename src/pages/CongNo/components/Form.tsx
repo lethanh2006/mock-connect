@@ -23,7 +23,7 @@ const FormCongNo = () => {
     importType,
   } = useModel('thanhtoan');
   const { danhSach } = useModel('loaithanhtoan');
-  const { danhSach: danhSachKyHoc } = useModel('kyhoc');
+  const { danhSach: danhSachHocKy } = useModel('HocKy');
   const { danhSach: danhSachNamHoc } = useModel('namhoc');
   const {
     danhSach: danhSachUser,
@@ -171,7 +171,7 @@ const FormCongNo = () => {
         {['Theo kỳ học'].includes(recordLoaiThanhToan?.dinhKy ?? '') && (
           <Form.Item rules={[...rules.required]} name="mocThoiGian" label="Kỳ học">
             <Select showSearch placeholder="Chọn kỳ học">
-              {danhSachKyHoc
+              {danhSachHocKy
                 ?.filter((item) =>
                   hinhThucDaoTaoId ? item.hinh_thuc_dao_tao_id?.[0] === hinhThucDaoTaoId : item,
                 )

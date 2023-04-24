@@ -1,4 +1,4 @@
-import { congDiemSinhVien } from '@/services/LopTinChi/ketquahoctap';
+// import { congDiemSinhVien } from '@/services/LopTinChi/ketquahoctap';
 import type { LopTinChi } from '@/services/LopTinChi/typings';
 import rules from '@/utils/rules';
 import { Button, Card, Col, Form, Input, InputNumber, message, Row } from 'antd';
@@ -32,14 +32,14 @@ const FormDiemCong = (props: {
 
   const onFinish = async (values: any) => {
     if (formSubmitting) return;
-    setFormSubmitting(true);
-    await congDiemSinhVien(lop_tin_chi_id, ma_dinh_danh, values)
-      .then((response) => {
-        message.success(edit ? 'Chỉnh sửa thành công' : 'Thêm mới thành công');
-        if (getData) getData();
-        if (onCancel) onCancel();
-      })
-      .catch((error) => console.log(error));
+    // setFormSubmitting(true);
+    // await congDiemSinhVien(lop_tin_chi_id, ma_dinh_danh, values)
+    //   .then((response) => {
+    //     message.success(edit ? 'Chỉnh sửa thành công' : 'Thêm mới thành công');
+    //     if (getData) getData();
+    //     if (onCancel) onCancel();
+    //   })
+    //   .catch((error) => console.log(error));
   };
 
   return (

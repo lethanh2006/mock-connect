@@ -49,7 +49,7 @@ const TableCongNo = (props: { type?: 'chưa nộp' | 'đã nộp' }) => {
   const { getLoaiThanhToanModel, setDanhSach, danhSach } = useModel('loaithanhtoan');
 
   const { danhSach: danhSachNamHoc } = useModel('namhoc');
-  const { danhSach: danhSachKyHoc } = useModel('kyhoc');
+  const { danhSach: danhSachHocKy } = useModel('HocKy');
 
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -269,7 +269,7 @@ const TableCongNo = (props: { type?: 'chưa nộp' | 'đã nộp' }) => {
               ))}
           </Select>
           {/* render từ hàm filter */}
-          <RenderFilter dinhKy={dinhKy} danhSachKyHoc={danhSachKyHoc} />
+          <RenderFilter dinhKy={dinhKy} danhSachHocKy={danhSachHocKy} />
         </>
       )}
       <Modal

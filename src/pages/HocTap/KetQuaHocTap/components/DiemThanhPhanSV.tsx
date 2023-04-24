@@ -20,7 +20,7 @@ const DiemThanhPhanSV = () => {
     // sinhVienGetDiemTongKetModel,
   } = useModel('hoctap.loptinchi');
   const [canhBao, setCanhBao] = useState<string | undefined>(undefined);
-  // const { record } = useModel('kyhoc');
+  // const { record } = useModel('HocKy');
   const [recordDiemThanhPhan, setRecordDiemThanhPhan] = useState<LopTinChi.DiemThanhPhan>();
   const [modalVisible, setModalVisible] = useState(false);
 

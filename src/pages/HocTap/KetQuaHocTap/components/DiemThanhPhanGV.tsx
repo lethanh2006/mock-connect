@@ -14,7 +14,7 @@ const DiemThanhPhanGV = (props: { sinhVien?: Login.Profile }) => {
     danhSachDiemTongKet,
     giangVienGetDiemThanhPhanSinhVienByIdSinhVienIdHocKyModel,
   } = useModel('hoctap.loptinchi');
-  const { record } = useModel('kyhoc');
+  const { record } = useModel('HocKy');
   const { sinhVien } = props;
 
   useEffect(() => {

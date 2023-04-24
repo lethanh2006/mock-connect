@@ -13,115 +13,110 @@ const LopTinChi = () => {
     setDanhSach,
     setRecord: setRecordLopTinChi,
     record,
+    hinhThucDaoTao,
+    setHinhThucDaoTao,
   } = useModel('hoctap.loptinchi');
+  // const { getAllHinhThucDaoTaoModel, danhSachHinhThucDaoTao } = useModel('lophanhchinh');
+  const { getAllModel: getAllHocKySinhVien, setRecord, danhSach } = useModel('hocky');
 
-  const onCell = (loptinchi: ILopTinChi.Record) => ({
+  //   useEffect(() => {
+  //   if (access.nhanVien) getAllHinhThucDaoTaoModel(true);
+  // }, []);
+
+  useEffect(() => {
+    // if (access.nhanVien) getAllHocKyByHinhThucDaoTaoGiangVienModel(hinhThucDaoTao);
+    // else {
+    getAllHocKySinhVien();
+    // }
+  }, [hinhThucDaoTao]);
+
+  const onCell = (loptinchi: ILopTinChi.IRecord) => ({
     onClick: () => {
       setRecordLopTinChi(loptinchi);
-      // history.push(
-      //   `/${access.sinhVien ? 'hoctap/loptinchi' : 'loptinchi/danhsachlop'}/${loptinchi.id}`,
-      // );
+      history.push(`/hoc-tap/lop-tin-chi/${loptinchi._id}`);
     },
     style: { cursor: 'pointer' },
   });
 
-  const columns: IColumn<ILopTinChi.Record>[] = [
-    {
-      title: 'STT',
-      dataIndex: 'index',
-      align: 'center',
-      width: 60,
-      onCell,
-    },
+  const columns: IColumn<ILopTinChi.IRecord>[] = [
     {
       title: 'Mã lớp học',
-      dataIndex: 'ma_lop',
+      dataIndex: 'ten',
       align: 'center',
-      width: 120,
+      width: 200,
       onCell,
     },
     {
       title: 'Mã học phần',
-      dataIndex: 'mon_hoc_ids',
-      render: (val) => <div>{val?.[1] ?? ''}</div>,
+      dataIndex: ['hocPhan', 'ma'],
       align: 'center',
       width: 120,
       onCell,
     },
     {
       title: 'Tên học phần',
-      dataIndex: 'ten_hoc_phan',
+      dataIndex: ['hocPhan', 'ten'],
       align: 'center',
-      width: 200,
+      width: 120,
       onCell,
     },
   ];
 
-  // useEffect(() => {
-  //   if (access.nhanVien) getAllHinhThucDaoTaoModel(true);
-  // }, []);
+  const onChangeKyHoc = (value: string) => {
+    const HocKy: HocKy.IRecord | undefined = danhSach.find(
+      (item: HocKy.IRecord) => item._id === value,
+    );
+    setRecord(HocKy);
+  };
 
-  // useEffect(() => {
-  //   if (access.nhanVien) getAllKyHocByHinhThucDaoTaoGiangVienModel(hinhThucDaoTao);
-  //   else {
-  //     getAllKyHocSinhVienModel();
-  //   }
-  // }, [hinhThucDaoTao]);
+  const onChangeHeDaoTao = (value: number) => {
+    setHinhThucDaoTao(value);
+    setDanhSach([]);
+    setRecord({} as HocKy.IRecord);
+  };
 
-  // const onChangeKyHoc = (value: number) => {
-  //   const kyHoc: KyHoc.Record | undefined = danhSach.find(
-  //     (item: KyHoc.Record) => item.id === value,
-  //   );
-  //   setRecord(kyHoc);
-  // };
-
-  // const onChangeHeDaoTao = (value: number) => {
-  //   setHinhThucDaoTao(value);
-  //   setDanhSach([]);
-  //   setRecord({} as KyHoc.Record);
-  // };
+  console.log(record, 'record');
 
   return (
     <TableBase
       columns={columns}
-      params={{ idHocKy: record?.id }}
+      params={{ idHocKy: record?._id }}
       // dependencies={[record?.id, hinhThucDaoTao]}
       modelName="hoctap.loptinchi"
       title="Lớp tín chỉ"
       otherProps={{ scroll: { x: 500 } }}
       pageable={false}
       buttons={{ create: false }}
-      // children={
-      // <>
-      // {access.nhanVien && (
-      //      <Select
-      //        placeholder="Chọn hệ đào tạo"
-      //        onChange={onChangeHeDaoTao}
-      //        value={hinhThucDaoTao === -1 ? undefined : hinhThucDaoTao}
-      //        style={{ width: 220, marginBottom: 8, marginRight: 8 }}
-      //      >
-      //        {danhSachHinhThucDaoTao?.map((item) => (
-      //          <Select.Option key={item.id} value={item.id}>
-      //            {item?.display_name ?? ''}
-      //          </Select.Option>
-      //        ))}
-      //      </Select>
-      //    )}
-      //    <Select
-      //      placeholder="Chọn kỳ học"
-      //      onChange={onChangeKyHoc}
-      //      value={record?.id}
-      //      style={{ width: 220, marginBottom: 8 }}
-      //    >
-      //      {danhSach?.map((item) => (
-      //        <Select.Option key={item.id} value={item.id}>
-      //          Kỳ {item.ten_ky_nam_hoc} năm học {item.nam_hoc_id[1]}
-      //        </Select.Option>
-      //      ))}
-      //    </Select>
-      //    }
-      // </>
-      // }
+      otherButtons={[
+        <>
+          {/* {access.nhanVien && (
+            <Select
+              placeholder="Chọn hệ đào tạo"
+              onChange={onChangeHeDaoTao}
+              value={hinhThucDaoTao === -1 ? undefined : hinhThucDaoTao}
+              style={{ width: 220, marginBottom: 8, marginRight: 8 }}
+            >
+              {danhSachHinhThucDaoTao?.map((item) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item?.display_name ?? ''}
+                </Select.Option>
+              ))}
+            </Select>
+          )} */}
+          <Select
+            placeholder="Chọn kỳ học"
+            onChange={onChangeKyHoc}
+            value={record?._id}
+            style={{ width: 220, marginBottom: 8 }}
+          >
+            {danhSach?.map((item) => (
+              <Select.Option key={item._id} value={item._id}>
+                Kỳ {item.ten}
+              </Select.Option>
+            ))}
+          </Select>
+        </>,
+      ]}
     />
   );
 };

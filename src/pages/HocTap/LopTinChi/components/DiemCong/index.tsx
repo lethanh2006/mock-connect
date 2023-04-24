@@ -1,11 +1,11 @@
 import TableBaseStatic from '@/components/Table/Table';
 import type { LopTinChi } from '@/services/LopTinChi/typings';
-import type { IColumn } from '@/utils/interfaces';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Descriptions } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import FormDiemCong from './FormDiemCong';
+import { type IColumn } from '@/components/Table/typing';
 
 const DiemCong = (props: {
   data: LopTinChi.IDiemCong[];

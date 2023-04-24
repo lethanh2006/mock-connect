@@ -16,17 +16,20 @@ const DetailLopTinChi = ({
     params: { id },
   },
 }: {
-  match: { params: { id: number } };
+  match: { params: { id: string } };
 }) => {
   const access = useAccess();
-  const { record } = useModel('hoctap.loptinchi');
+  const { record, getThongTinChungLopTinChiByIdLopModel, getAllSinhVienLopHocPhanModel } =
+    useModel('hoctap.loptinchi');
+  console.log(record, 'record lop tin chi');
   const hash = window.location.hash;
   const [tabActive, setTabActive] = useState<string>(hash.includes('danhgia') ? '6' : '1');
-  const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
+  // const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
 
-  // useEffect(() => {
-  //   getThongTinChungLopTinChi(id);
-  // }, [id]);
+  useEffect(() => {
+    // getThongTinChungLopTinChi(id);
+    getThongTinChungLopTinChiByIdLopModel(id);
+  }, [id]);
 
   // useEffect(() => {
   //   if (id) getLopTinChiByIdLop(id);
@@ -39,13 +42,13 @@ const DetailLopTinChi = ({
         <Breadcrumb style={{ cursor: 'pointer' }}>
           <Breadcrumb.Item
             onClick={() => {
-              history.push(access.sinhVien ? '/hoctap/loptinchi' : '/loptinchi/danhsachlop');
+              history.push(access.sinhVien ? '/hoc-tap/lop-tin-chi' : '/lop-tin-chi/danh-sach-lop');
             }}
           >
             <TeamOutlined /> Lớp tín chỉ
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            {record?.ma_lop ?? ''} - {record?.ten_hoc_phan ?? ''}
+            {record?.hocPhan?.ma ?? ''} - {record?.hocPhan?.ten ?? ''}
           </Breadcrumb.Item>
         </Breadcrumb>
       }
@@ -60,7 +63,7 @@ const DetailLopTinChi = ({
           <ThongTinChung id={id} isGiangVien={isNhanVien} />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Danh sách buổi học" key="2">
+        {/* <Tabs.TabPane tab="Danh sách buổi học" key="2">
           <DiemDanh idLopTinChi={id} isGiangVien={isNhanVien} />
         </Tabs.TabPane>
 
@@ -83,7 +86,7 @@ const DetailLopTinChi = ({
         </Tabs.TabPane>
         <Tabs.TabPane tab="Học liệu số" key="5">
           <HocLieuSo />
-        </Tabs.TabPane>
+        </Tabs.TabPane> */}
         {/* {access.nhanVien && (
           <Tabs.TabPane tab="Nhập điểm">
             <NhapDiem id={id} />
