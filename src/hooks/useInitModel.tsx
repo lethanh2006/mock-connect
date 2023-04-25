@@ -17,6 +17,7 @@ const useInitModel = <T,>(
   fieldNameCondtion?: 'condition' | 'cond',
   initCondition?: { [k in keyof T]?: any },
   ipService?: string,
+  initSort?: { [k in keyof T]?: 1 | -1 },
 ) => {
   const [danhSach, setDanhSach] = useState<T[]>([]);
   const [record, setRecord] = useState<T>();
@@ -26,7 +27,7 @@ const useInitModel = <T,>(
   const [formSubmiting, setFormSubmiting] = useState<boolean>(false);
   const [filters, setFilters] = useState<TFilter<T>[]>();
   const [condition, setCondition] = useState<{ [k in keyof T]?: any } | any>(initCondition);
-  const [sort, setSort] = useState<{ [k in keyof T]?: 1 | -1 }>();
+  const [sort, setSort] = useState<{ [k in keyof T]?: 1 | -1 } | undefined>(initSort);
   const [edit, setEdit] = useState<boolean>(false);
   const [visibleForm, setVisibleForm] = useState<boolean>(false);
   const [total, setTotal] = useState<number>(0);
@@ -38,20 +39,20 @@ const useInitModel = <T,>(
    * Get Pageable Model
    * @date 2023-04-05
    * @param {any} paramCondition?:any
-   * @param {any} path?:string
+   * @param {any} filterParams?: Mảng các filters
+   * @param {any} sortParam?:{[k in key of T]: 1 | -1 }
    * @param {any} paramPage?:number
    * @param {any} paramLimit?:number
-   * @param {any} sortParam?:{[k in key of T]: 1 | -1 }
-   * @param {any} queryParam?:any
+   * @param {any} path?:string
    * @returns {any}
    */
   const getModel = async (
     paramCondition?: any,
-    path?: string,
+    filterParams?: TFilter<T>[],
+    sortParam?: { [k in keyof T]: 1 | -1 },
     paramPage?: number,
     paramLimit?: number,
-    sortParam?: { [k in keyof T]: 1 | -1 },
-    queryParam?: any,
+    path?: string,
   ): Promise<T[]> => {
     setLoading(true);
     const payload = {
@@ -62,11 +63,14 @@ const useInitModel = <T,>(
         ...condition,
         ...paramCondition,
       },
-      filters: filters?.filter((item) => item.active)?.map(({ active, ...item }) => item),
+      filters: [
+        ...(filters?.filter((item) => item.active)?.map(({ active, ...item }) => item) || []),
+        ...(filterParams || []),
+      ],
     };
 
     try {
-      const response = await getService({ ...payload, ...queryParam }, path ?? 'page');
+      const response = await getService(payload, path ?? 'page');
       if (page > 1 && response?.data?.data?.result?.length === 0) setPage(page - 1);
       else {
         if (setDanhSach) setDanhSach(response?.data?.data?.result ?? []);
@@ -179,7 +183,7 @@ const useInitModel = <T,>(
       }
 
       if (getData) getData();
-      else getModel(undefined, undefined, newPage);
+      else getModel(undefined, undefined, undefined, newPage);
 
       return res.data;
     } catch (err) {
