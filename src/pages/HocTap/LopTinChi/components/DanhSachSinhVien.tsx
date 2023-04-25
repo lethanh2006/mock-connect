@@ -52,30 +52,30 @@ const DanhSachSinhVien = (props: {
     },
   ];
 
-  if (isGiangVien)
-    columns = columns.concat([
-      {
-        dataIndex: 'tong_diem_cong',
-        title: 'Điểm cộng',
-        width: 60,
-        align: 'center',
-        search: 'sort',
-      },
-      {
-        dataIndex: 'vang_co_phep',
-        title: 'Vắng có phép',
-        width: 60,
-        align: 'center',
-        search: 'sort',
-      },
-      {
-        dataIndex: 'vang_khong_phep',
-        title: 'Vắng không phép',
-        width: 60,
-        align: 'center',
-        search: 'sort',
-      },
-    ]);
+  // if (isGiangVien)
+  //   columns = columns.concat([
+  //     {
+  //       dataIndex: 'tong_diem_cong',
+  //       title: 'Điểm cộng',
+  //       width: 60,
+  //       align: 'center',
+  //       search: 'sort',
+  //     },
+  //     {
+  //       dataIndex: 'vang_co_phep',
+  //       title: 'Vắng có phép',
+  //       width: 60,
+  //       align: 'center',
+  //       search: 'sort',
+  //     },
+  //     {
+  //       dataIndex: 'vang_khong_phep',
+  //       title: 'Vắng không phép',
+  //       width: 60,
+  //       align: 'center',
+  //       search: 'sort',
+  //     },
+  //   ]);
 
   return (
     <>

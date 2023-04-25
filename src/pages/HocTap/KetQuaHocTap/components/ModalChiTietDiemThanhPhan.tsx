@@ -2,7 +2,7 @@ import type { LopTinChi } from '@/services/LopTinChi/typings';
 import { Descriptions, Modal, Tabs } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import DetailKetQuaHocTap from '../../components/KetQuaHocTap/Detail';
+import DetailKetQuaHocTap from '../../LopTinChi/components/KetQuaHocTap/Detail';
 
 const ModalChiTietDiemThanhPhan = (props: {
   modalVisible: boolean;

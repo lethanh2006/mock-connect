@@ -1,10 +1,10 @@
 import TableBaseStatic from '@/components/Table/Table';
 import type { LopTinChi } from '@/services/LopTinChi/typings';
-import type { IColumn } from '@/utils/interfaces';
 import { convertNumberScoreToAlphabet } from '@/utils/utils';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ChonHocKyKetQuaHocTap from './ChonHocKyKetQuaHocTap';
+import { type IColumn } from '@/components/Table/typing';
 
 const DiemThanhPhanGV = (props: { sinhVien?: Login.Profile }) => {
   const {
@@ -14,7 +14,7 @@ const DiemThanhPhanGV = (props: { sinhVien?: Login.Profile }) => {
     danhSachDiemTongKet,
     giangVienGetDiemThanhPhanSinhVienByIdSinhVienIdHocKyModel,
   } = useModel('hoctap.loptinchi');
-  const { record } = useModel('kyhoc');
+  const { record } = useModel('HocKy');
   const { sinhVien } = props;
 
   useEffect(() => {

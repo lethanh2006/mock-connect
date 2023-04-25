@@ -1,19 +1,21 @@
 import type { ELoaiDauDiemHocPhan } from '@/utils/constants';
 
 export declare module LopTinChi {
-  export interface Record {
-    ten_hoc_phan: string;
-    ten_lop_tin_chi: string;
-    id: number;
-    ky_nam_hoc_id: [number, string];
-    ma_hoc_phan: [string];
-    ma_lop: string;
-    mon_hoc_ids: [number, string];
+  export interface IRecord {
+    _id: string;
+    ten: string;
+    hocKyId: string;
+    hocKy?: HocKy.IRecord;
+    hocPhanId: string;
+    hocPhan?: HocPhan.IRecord;
+    siSoToiDa: number;
+    parentId?: string;
+    parent?: IRecord;
   }
 
   export interface DotDanhGia {
     _id: string;
-    idKyHoc: number;
+    idHocKy: number;
     tieuDe: string;
     noiDung: string;
     idBieuMau: string;
@@ -21,7 +23,7 @@ export declare module LopTinChi {
     thoiGianKetThuc: Date;
     idHinhThuc: number;
     active: boolean;
-    maKyHoc: string;
+    maHocKy: string;
     createdAt?: Date;
     updatedAt?: Date;
   }
@@ -92,7 +94,7 @@ export declare module LopTinChi {
     id: number;
     ket_qua_hoc_tap_nam_hoc_id: [number, string];
     ky_ctk: number;
-    ky_hoc: KyHoc.KyHocRecord;
+    ky_hoc: HocKy.HocKyRecord;
     ky_nam_hoc_id: [number, string];
     so_tin_chi_truot_trong_hoc_ky: number;
     tong_so_tin_chi_da_dang_ky: number;
@@ -131,7 +133,7 @@ export declare module LopTinChi {
     create_date: string;
     write_uid: [number, string];
     write_date: string;
-    ky_hoc: KyHoc.Record;
+    ky_hoc: HocKy.IRecord;
   }
 
   export interface ThongTinChungLopTinChiRecord {

@@ -14,7 +14,7 @@ const Settings: LayoutSettings & {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Slink VWA',
+  title: 'VWA Connect',
   pwa: false,
   logo: '/logo-full-white.svg',
   iconfontUrl: '',

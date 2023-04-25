@@ -14,12 +14,12 @@ const ChonHocKyKetQuaHocTap = (props: { isGiangVien?: boolean; sinhVienId?: numb
     giangVienGetDiemTongKetSinhVienByIdSinhVienModel,
   } = useModel('hoctap.loptinchi');
   const {
-    getAllKyHocSinhVienModel,
-    giangVienGetAllKyHocSinhVienByIdSinhVienModel,
+    getAllHocKySinhVienModel,
+    giangVienGetAllHocKySinhVienByIdSinhVienModel,
     danhSach,
     record,
     setRecord,
-  } = useModel('kyhoc');
+  } = useModel('HocKy');
   const [diemTongKetGanNhat, setDiemTongKetGanNhat] = useState<
     LopTinChi.IKetQuaHienTai | undefined
   >();
@@ -31,7 +31,7 @@ const ChonHocKyKetQuaHocTap = (props: { isGiangVien?: boolean; sinhVienId?: numb
 
   useEffect(() => {
     if (isGiangVien) {
-      giangVienGetAllKyHocSinhVienByIdSinhVienModel(sinhVienId ?? -1, false);
+      giangVienGetAllHocKySinhVienByIdSinhVienModel(sinhVienId ?? -1, false);
       giangVienGetDiemTongKetSinhVienByIdSinhVienModel(sinhVienId ?? -1);
       giangVienGetDiemTongKetHienTaiSinhVien(sinhVienId ?? -1)
         .then((response) => {
@@ -39,7 +39,7 @@ const ChonHocKyKetQuaHocTap = (props: { isGiangVien?: boolean; sinhVienId?: numb
         })
         .catch((error) => console.log(error));
     } else {
-      getAllKyHocSinhVienModel(false);
+      getAllHocKySinhVienModel(false);
       sinhVienGetDiemTongKetModel();
       sinhVienGetDiemTongKetHienTai()
         .then((response) => {
@@ -56,9 +56,9 @@ const ChonHocKyKetQuaHocTap = (props: { isGiangVien?: boolean; sinhVienId?: numb
     };
   }, []);
 
-  const onChangeKyHoc = (value: number) => {
-    const kyHoc: KyHoc.Record | undefined = danhSach.find((item) => item.id === value);
-    setRecord(kyHoc);
+  const onChangeHocKy = (value: number) => {
+    const HocKy: HocKy.IRecord | undefined = danhSach.find((item) => item.id === value);
+    setRecord(HocKy);
   };
 
   return (
@@ -68,7 +68,7 @@ const ChonHocKyKetQuaHocTap = (props: { isGiangVien?: boolean; sinhVienId?: numb
         <Select
           placeholder="Hiển thị toàn bộ điểm của các kỳ học"
           allowClear
-          onChange={onChangeKyHoc}
+          onChange={onChangeHocKy}
           value={record?.id}
           style={{ width: '100%', maxWidth: '300px' }}
         >

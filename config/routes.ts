@@ -50,18 +50,26 @@ export default [
   },
 
   // DANH MUC HE THONG
-  {
-    name: 'DanhMuc',
-    path: '/danh-muc',
-    icon: 'copy',
-    routes: [
-      {
-        name: 'ChucVu',
-        path: 'chuc-vu',
-        component: './DanhMuc/ChucVu',
-      },
-    ],
-  },
+  // {
+  //   name: 'DanhMuc',
+  //   path: '/danh-muc',
+  //   icon: 'copy',
+  //   routes: [
+  //     {
+  //       name: 'ChucVu',
+  //       path: 'chuc-vu',
+  //       component: './DanhMuc/ChucVu',
+  //     },
+  //   ],
+  // },
+
+  // MENU CHUNG
+  // {
+  //   name: 'Lich',
+  //   icon: 'CalendarOutlined',
+  //   path: '/calendar',
+  //   component: './Calendar',
+  // },
 
   // MENU SINH VIEN
   {
@@ -78,7 +86,27 @@ export default [
       {
         name: 'LopTinChi',
         path: 'lop-tin-chi',
-        component: './HocTap/LopTinChi',
+
+        routes: [
+          {
+            path: './',
+            hideInMenu: true,
+            component: './HocTap/LopTinChi',
+            exact: true,
+          },
+          {
+            path: './:id',
+            component: './HocTap/LopTinChi/$id',
+            hideInMenu: true,
+            exact: true,
+          },
+        ],
+      },
+      {
+        name: 'KetQuaHocTap',
+        path: './ket-qua-hoc-tap',
+        // access: 'sinhVien',
+        component: './HocTap/KetQuaHocTap',
       },
     ],
   },

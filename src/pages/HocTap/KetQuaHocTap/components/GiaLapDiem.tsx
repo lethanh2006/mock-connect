@@ -1,10 +1,22 @@
-import { sinhVienGetGiaLapDiem } from '@/services/LopTinChi/ketquahoctap';
+// import { sinhVienGetGiaLapDiem } from '@/services/LopTinChi/ketquahoctap';
+import { type IColumn } from '@/components/Table/typing';
 import type { LopTinChi } from '@/services/LopTinChi/typings';
-import type { IColumn } from '@/utils/interfaces';
 import rules from '@/utils/rules';
 import { convert4NumberScoreToAlphabet, convertNumberScoreToAlphabet } from '@/utils/utils';
 import type { RadioChangeEvent } from 'antd';
-import {Col, Descriptions, Divider, Form, Input, Modal, Popover, Radio, Row, Table, Typography} from 'antd';
+import {
+  Col,
+  Descriptions,
+  Divider,
+  Form,
+  Input,
+  Modal,
+  Popover,
+  Radio,
+  Row,
+  Table,
+  Typography,
+} from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 
@@ -20,6 +32,7 @@ const GiaLapDiem = () => {
   const chuDuKien = convert4NumberScoreToAlphabet(tongKet);
   const [form] = Form.useForm();
   const { Text } = Typography;
+
   const tinhDiemTongKet = (data: LopTinChi.IGiaLapDiem[]) => {
     const sum = _.sumBy(data, (item) => {
       const diem = (item.diem_du_kien_4 ?? item.diem_thang_4 ?? 0) * (item.so_tin_chi ?? 0);
@@ -36,18 +49,18 @@ const GiaLapDiem = () => {
     setTuChonCoDiem(_.sumBy(monTuChonCoDiem, (item) => item.so_tin_chi));
   };
 
-  const fetch = async () => {
-    await sinhVienGetGiaLapDiem().then((response) => {
-      const data: LopTinChi.IGiaLapDiem[] = response.data?.data?.dsDiem ?? [];
-      setTongTuChon(response.data?.data?.tongSoTinChiTuChon ?? 0);
-      tinhDiemTongKet(data);
-      setDanhSachDiem(data.map((item, index) => ({ index: index + 1, ...item })));
-      setLoading(false);
-    });
-  };
+  // const fetch = async () => {
+  //   await sinhVienGetGiaLapDiem().then((response) => {
+  //     const data: LopTinChi.IGiaLapDiem[] = response.data?.data?.dsDiem ?? [];
+  //     setTongTuChon(response.data?.data?.tongSoTinChiTuChon ?? 0);
+  //     tinhDiemTongKet(data);
+  //     setDanhSachDiem(data.map((item, index) => ({ index: index + 1, ...item })));
+  //     setLoading(false);
+  //   });
+  // };
 
   useEffect(() => {
-    fetch();
+    // fetch();
   }, []);
 
   const onOk = () => {
@@ -141,9 +154,9 @@ const GiaLapDiem = () => {
 
   return (
     <Row gutter={[12, 12]}>
-      <Text italic style={{marginBottom:'16px'}}>
-        * Lưu ý: Những điểm &#34;--&#34; là do bạn chưa đánh giá giảng viên. Vui lòng đánh giá
-        để xem điểm!
+      <Text italic style={{ marginBottom: '16px' }}>
+        * Lưu ý: Những điểm &#34;--&#34; là do bạn chưa đánh giá giảng viên. Vui lòng đánh giá để
+        xem điểm!
       </Text>
       <Col span={24}>
         Tại đây sinh viên có thể thực hiện &quot;giả lập điểm&quot;, để chủ động trong việc đăng ký

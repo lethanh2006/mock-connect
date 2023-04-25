@@ -1,7 +1,8 @@
-import type { APILopHanhChinh } from '@/services/LopHanhChinh';
+import { type APILopHanhChinh } from '@/services/LopHanhChinh';
 import { Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import ThongTinChungLopHanhChinh from '../components/ThongTinChung';
+import { getDataLopHanhChinh } from '@/services/LopHanhChinh/lophanhchinh';
 
 const LopHanhChinh = () => {
   const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
@@ -17,13 +18,13 @@ const LopHanhChinh = () => {
     diemTichLuyTB,
   } = dataLopHanhChinh;
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const res = await getDataLopHanhChinh(isNhanVien ? 'can-bo' : 'sinh-vien');
-  //     setdataLopHanhChinh(res?.data?.data ?? {});
-  //   };
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    const getData = async () => {
+      const res = await getDataLopHanhChinh(isNhanVien ? 'can-bo' : 'sinh-vien');
+      setdataLopHanhChinh(res?.data?.data ?? {});
+    };
+    getData();
+  }, []);
 
   return (
     <Card bodyStyle={{ paddingTop: 4 }} title={`Lớp hành chính ${ten_lop_hanh_chinh || ''}`}>

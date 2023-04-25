@@ -1,9 +1,11 @@
 import useInitModel from '@/hooks/useInitModel';
+import { getAllSinhVien, getThongTinChungLopTinChiByIdLop } from '@/services/LopTinChi';
 import type { IResThongBaoLopTinChi, LopTinChi } from '@/services/LopTinChi/typings';
 import { useState } from 'react';
 
 export default () => {
-  const objInit = useInitModel<LopTinChi.Record>('lop-tin-chi');
+  const objInit = useInitModel<LopTinChi.IRecord>('lop-hoc-phan');
+  const { danhSach, setDanhSach, setRecord, setLoading } = objInit;
   const [danhSachNhomLop, setDanhSachNhomLop] = useState<LopTinChi.NhomLopTinChi[]>();
   const [danhSachDiemThanhPhanTheoKy, setDanhSachDiemThanhPhanTheoKy] = useState<
     LopTinChi.DiemThanhPhan[]
@@ -30,8 +32,22 @@ export default () => {
   );
   const [thongBao, setThongBao] = useState<IResThongBaoLopTinChi.Result[]>({} as any);
 
+  const getThongTinChungLopTinChiByIdLopModel = async (idLop: string) => {
+    setLoading(true);
+    const response = await getThongTinChungLopTinChiByIdLop(idLop);
+    console.log(response, 'res get');
+    setLoading(false);
+  };
+
+  const getAllSinhVienLopHocPhanModel = async () => {
+    setLoading(true);
+    const response = await getAllSinhVien();
+    setLoading(false);
+  };
   return {
     ...objInit,
+    getThongTinChungLopTinChiByIdLopModel,
+    getAllSinhVienLopHocPhanModel,
     danhSachNhomLop,
     setDanhSachNhomLop,
     danhSachDiemThanhPhanTheoKy,
