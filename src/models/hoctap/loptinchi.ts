@@ -16,7 +16,7 @@ export default () => {
   const [hinhThucDaoTao, setHinhThucDaoTao] = useState<number>();
   const [flagDaDanhGia, setFlagDaDanhGia] = useState(false);
   // const [dataBieuMau, setDataBieuMau] = useState<BieuMau.Record>({} as BieuMau.Record);
-
+  const [danhSachDiemThanhPhanTheoKy, setDanhSachDiemThanhPhanTheoKy] = useState<any[]>([]);
   const [thongTinChung, setThongTinChung] = useState<LopTinChi.ThongTinChungLopTinChiRecord>(
     {} as any,
   );
@@ -73,5 +73,7 @@ export default () => {
     setListTkbSinhVien,
     recordBuoiHoc,
     setRecordBuoiHoc,
+    danhSachDiemThanhPhanTheoKy,
+    setDanhSachDiemThanhPhanTheoKy,
   };
 };

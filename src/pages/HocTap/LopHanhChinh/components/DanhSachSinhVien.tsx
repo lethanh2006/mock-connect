@@ -26,7 +26,7 @@ const DanhSachSinhVien = (props: {
       dataIndex: 'index',
       title: 'STT',
       width: 60,
-
+      align: 'center',
       onCell,
     },
     {
