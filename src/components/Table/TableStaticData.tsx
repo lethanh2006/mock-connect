@@ -3,6 +3,8 @@ import { Button, Drawer, Input, Modal, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { type TableStaticProps } from './typing';
+import './style.less';
+import _ from 'lodash';
 
 const TableStaticData = (props: TableStaticProps) => {
   const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal } = props;
@@ -44,7 +46,6 @@ const TableStaticData = (props: TableStaticProps) => {
           type="primary"
           onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
           icon={<SearchOutlined />}
-          size="small"
           style={{ width: 90 }}
         >
           Tìm
@@ -55,7 +56,6 @@ const TableStaticData = (props: TableStaticProps) => {
             handleSearch(selectedKeys, confirm, dataIndex);
             setSearchText('');
           }}
-          size="small"
           style={{ width: 90 }}
         >
           Xóa
@@ -149,6 +149,7 @@ const TableStaticData = (props: TableStaticProps) => {
         }}
         loading={props?.loading}
         size={props.size}
+        scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
         {...props?.otherProps}
       />
       {Form && (
