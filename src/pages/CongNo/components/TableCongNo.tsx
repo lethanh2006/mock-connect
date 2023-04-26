@@ -88,14 +88,14 @@ const TableCongNo = (props: { type?: 'chưa nộp' | 'đã nộp' }) => {
     {
       title: 'STT',
       dataIndex: 'index',
-      align: 'center',
+
       width: 80,
     },
     {
       title: 'Thông tin sinh viên',
       dataIndex: 'customerInfo',
       hide: access?.sinhVien || false,
-      align: 'center',
+
       width: 200,
       render: (val) => (
         <div>
@@ -106,7 +106,7 @@ const TableCongNo = (props: { type?: 'chưa nộp' | 'đã nộp' }) => {
     {
       title: 'Dịch vụ',
       dataIndex: ['metadata'],
-      align: 'center',
+
       width: 200,
       render: (val, record: ThanhToan.Invoice) =>
         val?.loai === 'Dịch vụ một cửa' ? (
@@ -121,7 +121,7 @@ const TableCongNo = (props: { type?: 'chưa nộp' | 'đã nộp' }) => {
     {
       title: 'Trạng thái',
       dataIndex: ['status'],
-      align: 'center',
+
       width: 140,
       hide: access.sinhVien || false,
       filterType: 'string',
@@ -137,28 +137,28 @@ const TableCongNo = (props: { type?: 'chưa nộp' | 'đã nộp' }) => {
     {
       title: 'Số tiền phải nộp',
       dataIndex: 'amountDue',
-      align: 'center',
+
       width: access.sinhVien ? 140 : 120,
       render: (val) => <div>{currencyFormat(val)}đ</div>,
     },
     {
       title: 'Số tiền đã nộp',
       dataIndex: 'amountPaid',
-      align: 'center',
+
       width: access.sinhVien ? 140 : 120,
       render: (val) => <div>{currencyFormat(val)}đ</div>,
     },
     {
       title: 'Số tiền còn lại phải nộp',
       dataIndex: 'amountRemaining',
-      align: 'center',
+
       width: access.sinhVien ? 140 : 120,
       render: (val) => <div>{currencyFormat(val)}đ</div>,
     },
 
     {
       title: 'Thao tác',
-      align: 'center',
+
       width: 100,
       fixed: 'right',
       render: (record: ThanhToan.Invoice) => (

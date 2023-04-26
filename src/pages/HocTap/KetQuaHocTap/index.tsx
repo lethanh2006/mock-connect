@@ -6,7 +6,7 @@ import { Button, Spin } from 'antd';
 import { history } from 'umi';
 
 const KetQuaHocTap = () => {
-  const [isLamKhaoSat, setIsLamKhaoSat] = useState<number>(-1); //-1
+  const [isLamKhaoSat, setIsLamKhaoSat] = useState<number>(0); //-1
   const [loading, setLoading] = useState(false);
   // const checkUnfinishedModel = async () => {
   //   setLoading(true);

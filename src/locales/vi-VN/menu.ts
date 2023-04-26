@@ -16,6 +16,8 @@ export default {
   'menu.HocTap.LopHanhChinh': 'Lớp hành chính',
   'menu.HocTap.LopTinChi': 'Lớp tín chỉ',
   'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
+  'menu.DichVuMotCua': 'Dịch vụ một cửa',
+  'menu.DichVuMotCua.TaoDon': 'Tạo đơn - Dịch vụ một cửa',
 
   // GIANG VIEN
 };

@@ -2,14 +2,9 @@ import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useAccess, useModel } from 'umi';
-import DanhGiaGiangVien from './components/DanhGiaGiangVien';
-import DiemDanh from './components/DiemDanh';
-import HocLieuSo from './components/HocLieuSo';
-import KetQuaHocTapGV from './components/KetQuaHocTap/KetQuaHocTapGV';
-import KetQuaHocTapSV from './components/KetQuaHocTap/KetQuaHocTapSV';
 import './components/style.less';
-import ThongBao from './components/ThongBao';
 import ThongTinChung from './components/ThongTinChung';
+import DanhSachBuoiHoc from './components/ThongTinBuoiHoc';
 
 const DetailLopTinChi = ({
   match: {
@@ -19,21 +14,19 @@ const DetailLopTinChi = ({
   match: { params: { id: string } };
 }) => {
   const access = useAccess();
-  const { record, getThongTinChungLopTinChiByIdLopModel, getAllSinhVienLopHocPhanModel } =
-    useModel('hoctap.loptinchi');
-  console.log(record, 'record lop tin chi');
+  const { record, sinhVienGetLopTinChiByIdModel } = useModel('hoctap.loptinchi');
   const hash = window.location.hash;
   const [tabActive, setTabActive] = useState<string>(hash.includes('danhgia') ? '6' : '1');
-  // const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
-
-  useEffect(() => {
-    // getThongTinChungLopTinChi(id);
-    getThongTinChungLopTinChiByIdLopModel(id);
-  }, [id]);
+  const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
 
   // useEffect(() => {
-  //   if (id) getLopTinChiByIdLop(id);
+  //   getThongTinChungLopTinChi(id);
   // }, [id]);
+
+  useEffect(() => {
+    if (id) sinhVienGetLopTinChiByIdModel(id);
+  }, [id]);
+  console.log(record, 'record');
 
   return (
     <Card
@@ -42,7 +35,7 @@ const DetailLopTinChi = ({
         <Breadcrumb style={{ cursor: 'pointer' }}>
           <Breadcrumb.Item
             onClick={() => {
-              history.push(access.sinhVien ? '/hoc-tap/lop-tin-chi' : '/lop-tin-chi/danh-sach-lop');
+              history.push('/hoc-tap/lop-tin-chi');
             }}
           >
             <TeamOutlined /> Lớp tín chỉ
@@ -63,11 +56,11 @@ const DetailLopTinChi = ({
           <ThongTinChung id={id} isGiangVien={isNhanVien} />
         </Tabs.TabPane>
 
-        {/* <Tabs.TabPane tab="Danh sách buổi học" key="2">
-          <DiemDanh idLopTinChi={id} isGiangVien={isNhanVien} />
+        <Tabs.TabPane tab="Danh sách buổi học" key="2">
+          <DanhSachBuoiHoc idLopTinChi={id} isGiangVien={isNhanVien} />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Kết quả học tập" key="3">
+        {/* <Tabs.TabPane tab="Kết quả học tập" key="3">
           {isNhanVien ? (
             <KetQuaHocTapGV id={id} isDisplay={tabActive === '3'} />
           ) : (
@@ -80,19 +73,19 @@ const DetailLopTinChi = ({
               }}
             />
           )}
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Thông báo" key="4">
+        </Tabs.TabPane> */}
+        {/* <Tabs.TabPane tab="Thông báo" key="4">
           <ThongBao isNhanVien={isNhanVien} id={id} typeLop="LopTinChi" />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Học liệu số" key="5">
           <HocLieuSo />
-        </Tabs.TabPane> */}
-        {/* {access.nhanVien && (
+        </Tabs.TabPane>
+        {access.nhanVien && (
           <Tabs.TabPane tab="Nhập điểm">
             <NhapDiem id={id} />
           </Tabs.TabPane>
-        )} */}
-        {/* {access.sinhVien && thongTinChung?.giangVienList?.length > 0 && (
+        )}
+        {access.sinhVien && thongTinChung?.giangVienList?.length > 0 && (
           <Tabs.TabPane tab="Đánh giá giảng viên" key="6">
             <DanhGiaGiangVien idLop={id} />
           </Tabs.TabPane>

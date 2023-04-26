@@ -1,5 +1,5 @@
 import Table from '@/components/Table/Table';
-import type { APILopHanhChinh } from '@/services/LopHanhChinh';
+import type { APILopHanhChinh } from '@/services/LopHanhChinh/typings';
 import { getDataLopHanhChinh } from '@/services/LopHanhChinh/lophanhchinh';
 import type { IColumn } from '@/utils/interfaces';
 import { Card, Select } from 'antd';
@@ -42,20 +42,20 @@ const DanhSachLopHanhChinhGiangVien = () => {
     {
       title: 'STT',
       dataIndex: 'index',
-      align: 'center',
+
       width: 80,
       onCell,
     },
     {
       title: 'Lớp',
       dataIndex: 'ten_lop_hanh_chinh',
-      align: 'center',
+
       filterType: 'string',
       onCell,
     },
     {
       title: 'Ngành',
-      align: 'center',
+
       dataIndex: 'nganh',
       render: (val: (number | string)[]) => <div>{val?.[1] ?? ''}</div>,
       filterType: 'string',
@@ -63,7 +63,7 @@ const DanhSachLopHanhChinhGiangVien = () => {
     },
     {
       title: 'Sĩ số',
-      align: 'center',
+
       dataIndex: 'si_so',
       width: 150,
       onCell,

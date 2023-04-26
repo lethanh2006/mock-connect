@@ -64,12 +64,12 @@ export default [
   // },
 
   // MENU CHUNG
-  // {
-  //   name: 'Lich',
-  //   icon: 'CalendarOutlined',
-  //   path: '/calendar',
-  //   component: './Calendar',
-  // },
+  {
+    name: 'Lich',
+    icon: 'CalendarOutlined',
+    path: '/calendar',
+    component: './Calendar',
+  },
 
   // MENU SINH VIEN
   {
@@ -81,7 +81,21 @@ export default [
       {
         name: 'LopHanhChinh',
         path: 'lop-hanh-chinh',
-        component: './HocTap/LopHanhChinh/SinhVien',
+
+        routes: [
+          {
+            path: './',
+            hideInMenu: true,
+            component: './HocTap/LopHanhChinh/SinhVien',
+            exact: true,
+          },
+          {
+            path: './:id',
+            component: './HocTap/LopHanhChinh/SinhVien/$id',
+            hideInMenu: true,
+            exact: true,
+          },
+        ],
       },
       {
         name: 'LopTinChi',
@@ -107,6 +121,37 @@ export default [
         path: './ket-qua-hoc-tap',
         // access: 'sinhVien',
         component: './HocTap/KetQuaHocTap',
+      },
+    ],
+  },
+  {
+    name: 'DichVuMotCua',
+    icon: 'AuditOutlined',
+    path: '/dich-vu-mot-cua/sinh-vien',
+    routes: [
+      {
+        path: './',
+        component: './DichVuMotCua/SinhVien/LichSu',
+        hideInMenu: true,
+        // access: 'sinhVien',
+      },
+      {
+        name: 'TaoDon',
+        path: './tao-don',
+        // access: 'sinhVien',
+        hideInMenu: true,
+        routes: [
+          {
+            path: './',
+            component: './DichVuMotCua/SinhVien/GuiDon',
+            extract: true,
+          },
+          {
+            path: './:id',
+            component: './DichVuMotCua/SinhVien/GuiDon/$id',
+            extract: true,
+          },
+        ],
       },
     ],
   },
