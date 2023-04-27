@@ -9,8 +9,9 @@ const TrangChu = () => {
   return (
     <>
       <Row gutter={[20, 20]}>
-        {/* {access.sinhVien && <BlockSinhVien />}
-        {access.sinhVienVaNhanVien && (
+        {/* {access.sinhVien && <BlockSinhVien />} */}
+        <ThoiKhoaBieu type="dashboard" />
+        {/* {access.sinhVienVaNhanVien && (
           <>
             <Col xs={24} lg={14} xl={16}>
               <ThoiKhoaBieu type="dashboard" />
