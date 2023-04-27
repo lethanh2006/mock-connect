@@ -1,12 +1,15 @@
 import teacherIcon from '@/assets/teacher.png';
-import { Avatar, Descriptions, Divider, List, Spin, Tabs } from 'antd';
+import { Avatar, Descriptions, Divider, List, Spin, Tabs, Modal } from 'antd';
 import { useModel } from 'umi';
 import DanhSachSinhVien from './DanhSachSinhVien';
+import ModalHocPhan from './DeCuongHocPhan/ModalHocPhan';
+import { useState } from 'react';
 
 const ThongTinChung = (props: { id: string; isGiangVien: boolean }) => {
   const { isGiangVien } = props;
   const { loading, record, thongTinChung, idNhomLop, thongTinNhomLop, setIdNhomLop } =
     useModel('hoctap.loptinchi');
+  const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 
   // useEffect(() => {
   //   if (props.id !== record.id) {
@@ -34,16 +37,16 @@ const ThongTinChung = (props: { id: string; isGiangVien: boolean }) => {
     <Spin spinning={loading}>
       <Descriptions column={{ xs: 1, md: 2 }} title="Thông tin lớp">
         <Descriptions.Item label="Học phần">
-          <b>{record?.hocPhan?.ten ?? ''}</b>
+          <b>
+            <a onClick={() => setVisibleDeCuong(true)}>{record?.hocPhan?.ten ?? ''}</a>
+          </b>
         </Descriptions.Item>
-        <Descriptions.Item label="Mã học phần">
-          <b>{record?.hocPhan?.ma ?? ''}</b>
-        </Descriptions.Item>
+        <Descriptions.Item label="Mã học phần">{record?.hocPhan?.ma ?? ''}</Descriptions.Item>
         <Descriptions.Item label="Số tín chỉ">
-          <b>{record?.hocPhan?.soTinChi ?? ''} tín chỉ</b>
+          {record?.hocPhan?.soTinChi ?? ''} tín chỉ
         </Descriptions.Item>
         <Descriptions.Item label="Sĩ số">
-          <b>{record?.sinhVienList?.length ?? 0} sinh viên</b>
+          {record?.sinhVienList?.length ?? 0} sinh viên
         </Descriptions.Item>
       </Descriptions>
       <>
@@ -64,11 +67,7 @@ const ThongTinChung = (props: { id: string; isGiangVien: boolean }) => {
               <List.Item>
                 <List.Item.Meta
                   avatar={<Avatar src={item?.avatar_path || teacherIcon} />}
-                  title={
-                    <>
-                      Họ và tên: <b>{item?.ten || '(Chưa cập nhật)'}</b>
-                    </>
-                  }
+                  title={<>Họ và tên: {item?.ten || '(Chưa cập nhật)'}</>}
                   description={
                     <>
                       <div>Email: {item?.email || '(Chưa cập nhật)'}</div>
@@ -134,11 +133,7 @@ const ThongTinChung = (props: { id: string; isGiangVien: boolean }) => {
               <List.Item>
                 <List.Item.Meta
                   avatar={<Avatar src={item?.avatar_path || teacherIcon} />}
-                  title={
-                    <>
-                      Họ và tên: <b>{item?.name || '(Chưa cập nhật)'}</b>
-                    </>
-                  }
+                  title={<>Họ và tên: {item?.name || '(Chưa cập nhật)'}</>}
                   description={
                     <>
                       <div>Email: {item?.email || '(Chưa cập nhật)'}</div>
@@ -165,6 +160,12 @@ const ThongTinChung = (props: { id: string; isGiangVien: boolean }) => {
           data={thongTinChung?.soBuoiVang?.concat(thongTinChung.soBuoiVangCoPhep) ?? []}
         />
       </Modal> */}
+
+      <ModalHocPhan
+        visible={visibleDeCuong}
+        setVisible={setVisibleDeCuong}
+        title="Chi tiết đề cương học phần"
+      />
     </Spin>
   );
 };

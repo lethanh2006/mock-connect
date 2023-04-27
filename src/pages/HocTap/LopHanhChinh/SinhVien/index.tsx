@@ -1,5 +1,3 @@
-import { type LopHanhChinh } from '@/services/LopHanhChinh/typings';
-import { useEffect, useState } from 'react';
 import { useModel, history } from 'umi';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';

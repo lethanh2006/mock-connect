@@ -33,7 +33,7 @@ const DanhSachSinhVien = (props: {
       dataIndex: 'avatar_path',
       title: 'Ảnh',
       width: 60,
-
+      align: 'center',
       render: (path) => <Avatar src={path || studentIcon} />,
       onCell,
     },
