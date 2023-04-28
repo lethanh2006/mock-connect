@@ -8,7 +8,9 @@ const ipGlobal = 'https://ais2.aisenote.com/qldt-internal-api'; // ip dev
 const keycloakLogoutEndpoint =
   'https://ais.aisenote.com/keycloak/realms/vwa/protocol/openid-connect/logout';
 const keycloakUrl = 'https://ais.aisenote.com/keycloak';
-const keycloakClientID = 'web-vwa-connect';
+const keycloakAuthority = 'https://ais.aisenote.com/keycloak/realms/vwa';
+const keycloakClientID = 'vwa-auth';
+const keycloakSecret = '7NlhgTsTHE37DWZa5IarN2nVE7qHniwC';
 const keycloakTokenEndpoint =
   'https://ais.aisenote.com/keycloak/realms/vwa/protocol/openid-connect/token';
 
@@ -18,5 +20,7 @@ export {
   keycloakLogoutEndpoint,
   keycloakUrl,
   keycloakClientID,
+  keycloakSecret,
   keycloakTokenEndpoint,
+  keycloakAuthority,
 };

@@ -5,7 +5,6 @@ import { useAccess } from 'umi';
 // import BlockSinhVien from './components/BlockSinhVien';
 
 const TrangChu = () => {
-  const access = useAccess();
   return (
     <>
       <Row gutter={[20, 20]}>

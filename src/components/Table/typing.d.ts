@@ -30,9 +30,6 @@ export interface IColumn<T> extends Omit<ICol<T>, 'dataIndex' | 'width'> {
    * Phải check cả ở mobile view
    */
   width: number;
-
-  /** Có bắt buộc khi import dữ liệu không? */
-  importRequired?: boolean;
 }
 
 export type TDataOption = {
@@ -48,7 +45,7 @@ export type TableBaseProps = {
   formType?: 'Modal' | 'Drawer';
   columns: IColumn<any>[];
   title?: React.ReactNode;
-  widthDrawer?: string | number;
+  widthDrawer?: number | 'full';
 
   /** Hàm getData tùy chỉnh, nếu ko có thì 'getModel' của model sẽ là mặc định */
   getData?: Function;
@@ -115,9 +112,6 @@ export type TableBaseProps = {
 
   /** Có thêm cột STT ko? Mặc định: Có */
   addStt?: boolean;
-
-  /** Modal có toàn màn hình ko? Mặc định: Không */
-  fullScreen?: boolean;
 };
 
 export type TFilter<T> = {
@@ -125,4 +119,35 @@ export type TFilter<T> = {
   operator?: EOperatorType;
   values: (string | number)[];
   active: boolean;
+};
+
+export type TableStaticProps = {
+  data: any[];
+  columns: IColumn<any>[];
+
+  title?: string;
+  Form?: any;
+  showEdit?: boolean;
+  setShowEdit?: (vi: boolean) => void;
+  addStt?: boolean;
+  children?: any;
+  hasCreate?: boolean;
+  hasTotal?: boolean;
+  size?: 'small' | 'middle';
+  otherProps?: TableProps<any>;
+  loading?: boolean;
+  formType?: 'Modal' | 'Drawer';
+  widthDrawer?: number;
+};
+
+export type TImportHeader = {
+  field: string;
+  title: string;
+  required: boolean;
+};
+
+export type TImportResponse = {
+  errorMess: string; // 'Mã đơn vị cấp trên không đúng';
+  importStatus: 'fail' | 'success';
+  row: number;
 };
