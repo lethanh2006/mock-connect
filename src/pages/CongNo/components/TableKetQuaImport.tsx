@@ -6,13 +6,13 @@ const TableKetQuaImport = (props: { data: ThanhToan.RecordResponseImport[] }) =>
     {
       title: 'STT',
       dataIndex: 'index',
-      align: 'center',
+
       width: 120,
     },
     {
       title: 'Mã sinh viên',
       dataIndex: 'maSinhVien',
-      align: 'center',
+
       search: 'search',
       width: 200,
     },
@@ -20,7 +20,6 @@ const TableKetQuaImport = (props: { data: ThanhToan.RecordResponseImport[] }) =>
       title: 'Ghi chú',
       dataIndex: 'ghiChu',
       search: 'search',
-      align: 'center',
     },
   ];
 

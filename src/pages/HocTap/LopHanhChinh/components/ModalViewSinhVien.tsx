@@ -1,13 +1,11 @@
 import studentIcon from '@/assets/student.png';
 import { Avatar, Col, Descriptions, Modal, Row, Tabs } from 'antd';
 import moment from 'moment';
-import KetQuaHocTapSinhVien from './KetQuaHocTap';
-import { type APILopHanhChinh } from '@/services/LopHanhChinh';
 
 const ModalViewSinhVien = (props: {
   visible: boolean;
   setVisible: any;
-  record?: APILopHanhChinh.ISinhVienDiemHanhChinh;
+  record?: LopHanhChinh.ISinhVien;
   isGiangVien?: boolean;
 }) => {
   const { visible, setVisible, record, isGiangVien } = props;
@@ -32,21 +30,19 @@ const ModalViewSinhVien = (props: {
             </Col>
             <Col span={24} md={16}>
               <Descriptions bordered column={1}>
-                <Descriptions.Item label="Họ và tên">{record?.name}</Descriptions.Item>
-                <Descriptions.Item label="Mã sinh viên">{record?.ma_dinh_danh}</Descriptions.Item>
+                <Descriptions.Item label="Họ và tên">{record?.ten}</Descriptions.Item>
+                <Descriptions.Item label="Mã sinh viên">{record?.ma}</Descriptions.Item>
                 <Descriptions.Item label="Email">{record?.email}</Descriptions.Item>
-                <Descriptions.Item label="Giới tính">
-                  {record?.gioi_tinh === '0' ? 'Nam' : 'Nữ'}
-                </Descriptions.Item>
+                <Descriptions.Item label="Giới tính">{record?.gioiTinh ?? ''}</Descriptions.Item>
                 {isGiangVien && (
                   <>
                     <Descriptions.Item label="Ngày sinh">
-                      {record?.ngay_sinh &&
-                        moment(record.ngay_sinh, 'YYYY-MM-DD').format('DD/MM/YYYY')}
+                      {record?.ngaySinh &&
+                        moment(record.ngaySinh, 'YYYY-MM-DD').format('DD/MM/YYYY')}
                     </Descriptions.Item>
 
                     <Descriptions.Item label="Số điện thoại">
-                      {record?.so_dien_thoai}
+                      {record?.soDienThoai}
                     </Descriptions.Item>
                   </>
                 )}
@@ -57,7 +53,7 @@ const ModalViewSinhVien = (props: {
 
         {isGiangVien && (
           <Tabs.TabPane tab="Kết quả học tập" key="2">
-            <KetQuaHocTapSinhVien sinhVien={record} />
+            Kết quả học tập sinh viên
           </Tabs.TabPane>
         )}
       </Tabs>

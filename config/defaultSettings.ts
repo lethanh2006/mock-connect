@@ -6,9 +6,9 @@ const Settings: LayoutSettings & {
   borderRadiusBase: string;
   siderWidth: number;
 } = {
-  navTheme: 'light',
+  navTheme: 'dark',
   primaryColor: '#007EB9',
-  borderRadiusBase: '8px',
+  borderRadiusBase: '2px',
   layout: 'mix',
   contentWidth: 'Fluid',
   fixedHeader: false,
@@ -16,7 +16,7 @@ const Settings: LayoutSettings & {
   colorWeak: false,
   title: 'VWA Connect',
   pwa: false,
-  logo: '/logo-full-white.svg',
+  logo: '/logo.png',
   iconfontUrl: '',
   headerTheme: 'dark',
   headerHeight: 60,

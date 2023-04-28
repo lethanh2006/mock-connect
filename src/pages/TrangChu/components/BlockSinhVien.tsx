@@ -1,6 +1,6 @@
 import { useModel, history } from 'umi';
 import { thongKeKetQuaHocTap } from '@/services/Dashboard/dashboard';
-import { thongKeDon } from '@/services/DichVuMotCuaV2/dichvumotcuav2';
+import { thongKeDon } from '@/services/DichVuMotCua/DichVuMotCua';
 import type { LopTinChi } from '@/services/LopTinChi/typings';
 import { ArrowUpOutlined } from '@ant-design/icons';
 import { Badge, Card, Col, Progress, Statistic } from 'antd';

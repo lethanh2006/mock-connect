@@ -1,5 +1,5 @@
 import ThongBao from '@/pages/LopTinChi/components/ThongBao';
-import type { APILopHanhChinh } from '@/services/LopHanhChinh';
+import type { APILopHanhChinh } from '@/services/LopHanhChinh/typings';
 import { getDataLopHanhChinh, getDSSVLopHanhChinh } from '@/services/LopHanhChinh/lophanhchinh';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Tabs } from 'antd';

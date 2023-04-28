@@ -15,13 +15,13 @@ const ModalChiTietDiemThanhPhan = (props: {
   const { modalVisible, setModalVisible, dsDiemThanhPhan, hocPhan, chuongTrinhKhung } = props;
   const loaiHocPhan = chuongTrinhKhung?.loai_hoc_phan ?? hocPhan?.loai_hoc_phan ?? '';
 
-  useEffect(() => {
-    if (modalVisible) {
-      const idHocPhan =
-        hocPhan?.id ?? chuongTrinhKhung?.hoc_phan_id?.[0] ?? dsDiemThanhPhan?.[0]?.hoc_phan_id?.[0];
-      if (idHocPhan) getInfoMonHocModel(idHocPhan);
-    }
-  }, [modalVisible]);
+  // useEffect(() => {
+  //   if (modalVisible) {
+  //     const idHocPhan =
+  //       hocPhan?.id ?? chuongTrinhKhung?.hoc_phan_id?.[0] ?? dsDiemThanhPhan?.[0]?.hoc_phan_id?.[0];
+  //     if (idHocPhan) getInfoMonHocModel(idHocPhan);
+  //   }
+  // }, [modalVisible]);
 
   return (
     <Modal

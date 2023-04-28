@@ -98,13 +98,6 @@ const GiaLapDiem = () => {
 
   const columns: IColumn<LopTinChi.IGiaLapDiem>[] = [
     {
-      dataIndex: 'index',
-      title: 'STT',
-      align: 'center',
-      width: 60,
-      onCell,
-    },
-    {
       dataIndex: 'ten_hoc_phan',
       title: 'Tên học phần',
       width: 150,
@@ -118,14 +111,14 @@ const GiaLapDiem = () => {
     {
       dataIndex: 'so_tin_chi',
       title: 'Số tín chỉ',
-      align: 'center',
+
       width: 60,
       onCell,
     },
     {
       dataIndex: 'diem_thang_4',
       title: 'Điểm tổng kết (hệ 4)',
-      align: 'center',
+
       render: (s, r) => (
         <b style={r.is_danh_gia ? (r.trang_thai === 'Không đạt' ? { color: 'red' } : {}) : {}}>
           {Object.hasOwn(r, 'is_danh_gia') ? (r.is_danh_gia ? s : '--') : ''}
@@ -137,7 +130,7 @@ const GiaLapDiem = () => {
     {
       dataIndex: 'diem_du_kien',
       title: 'Điểm dự kiến (hệ 10)',
-      align: 'center',
+
       render: (s) => <b>{s}</b>,
       width: 80,
       onCell,
@@ -145,7 +138,7 @@ const GiaLapDiem = () => {
     {
       dataIndex: 'diem_du_kien',
       title: 'Điểm dự kiến (hệ 4)',
-      align: 'center',
+
       render: (s) => <b>{convertNumberScoreToAlphabet(s)[1]}</b>,
       width: 80,
       onCell,
@@ -212,7 +205,7 @@ const GiaLapDiem = () => {
         <Table
           columns={columns}
           dataSource={danhSachDiem
-            // ?.filter((item) => showAll || item.trang_thai !== 'Chưa có điểm')
+            ?.filter((item) => showAll || item.trang_thai !== 'Chưa có điểm')
             ?.map((item, index) => ({ ...item, key: index }))}
           scroll={{ x: 500 }}
           loading={loading}

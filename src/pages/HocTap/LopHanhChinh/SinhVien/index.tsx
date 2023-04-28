@@ -1,50 +1,53 @@
-import { type APILopHanhChinh } from '@/services/LopHanhChinh';
-import { Card, Tabs } from 'antd';
-import { useEffect, useState } from 'react';
-import ThongTinChungLopHanhChinh from '../components/ThongTinChung';
-import { getDataLopHanhChinh } from '@/services/LopHanhChinh/lophanhchinh';
+import { useModel, history } from 'umi';
+import TableBase from '@/components/Table';
+import { type IColumn } from '@/components/Table/typing';
 
-const LopHanhChinh = () => {
+const LopHanhChinhPage = () => {
   const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
-  const [dataLopHanhChinh, setdataLopHanhChinh] = useState<APILopHanhChinh.Data>(
-    {} as APILopHanhChinh.Data,
-  );
-  const {
-    danhSachSinhVien,
-    canBo,
-    ten_lop_hanh_chinh,
-    diemTichLuyLonNhat,
-    diemTichLuyNhoNhat,
-    diemTichLuyTB,
-  } = dataLopHanhChinh;
 
-  useEffect(() => {
-    const getData = async () => {
-      const res = await getDataLopHanhChinh(isNhanVien ? 'can-bo' : 'sinh-vien');
-      setdataLopHanhChinh(res?.data?.data ?? {});
-    };
-    getData();
-  }, []);
+  const {
+    sinhVienGetLopHanhChinhPageableModel,
+    danhSach,
+    record: recLopHanhChinh,
+    filters,
+
+    setRecord,
+  } = useModel('hoctap.lophanhchinh');
+  console.log(filters, 'filter');
+  // useEffect(() => {
+  //   sinhVienGetLopHanhChinhPageableModel();
+  // }, []);
+
+  const onCell = (lophanhchinh: LopHanhChinh.IRecord) => ({
+    onClick: () => {
+      setRecord(lophanhchinh);
+      history.push(`/hoc-tap/lop-hanh-chinh/${lophanhchinh._id}`);
+    },
+    style: { cursor: 'pointer' },
+  });
+
+  const columns: IColumn<LopHanhChinh.IRecord>[] = [
+    {
+      title: 'Tên lớp học',
+      dataIndex: 'ten',
+      width: 100,
+      onCell,
+      filterType: 'string',
+      sortable: true,
+    },
+  ];
 
   return (
-    <Card bodyStyle={{ paddingTop: 4 }} title={`Lớp hành chính ${ten_lop_hanh_chinh || ''}`}>
-      <Tabs>
-        <Tabs.TabPane tab="Thông tin chung" key={0}>
-          <ThongTinChungLopHanhChinh
-            danhSachSinhVien={danhSachSinhVien || []}
-            giangVien={canBo}
-            diemTichLuyLonNhat={diemTichLuyLonNhat}
-            diemTichLuyNhoNhat={diemTichLuyNhoNhat}
-            diemTichLuyTB={diemTichLuyTB}
-          />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Thông báo" key={1}>
-          {/* <ThongBao isNhanVien={isNhanVien} id={dataLopHanhChinh?.id} typeLop="LopHanhChinh" /> */}
-          Thông báo
-        </Tabs.TabPane>
-      </Tabs>
-    </Card>
+    <div>
+      <TableBase
+        columns={columns}
+        modelName="hoctap.lophanhchinh"
+        title="Lớp hành chính"
+        buttons={{ create: false }}
+        getData={() => sinhVienGetLopHanhChinhPageableModel()}
+      />
+    </div>
   );
 };
 
-export default LopHanhChinh;
+export default LopHanhChinhPage;

@@ -14,6 +14,7 @@ const DiemThanhPhanSV = () => {
   const {
     // sinhVienGetDiemThanhPhanByHocKyModel,
     danhSachDiemThanhPhanTheoKy,
+    setDanhSachDiemThanhPhanTheoKy,
     loading,
     setRecordDiemTongKet,
     danhSachDiemTongKet,
@@ -87,6 +88,49 @@ const DiemThanhPhanSV = () => {
   //   }
   // }, [record?.id]);
 
+  useEffect(() => {
+    setDanhSachDiemThanhPhanTheoKy([
+      {
+        id: '2116940',
+        sinh_vien_id: [34632, 'B21DCDT016'],
+        ma_dinh_danh: 'B21DCDT016',
+        name: 'Lê Khánh Linh',
+        lop_tin_chi_id: [53001, ' INT11117_CLC-20211-02'],
+        ma_lop: 'INT11117_CLC-20211-02',
+        so_tin_chi: 3,
+        hoc_phan_id: [3130, 'INT11117_CLC'],
+        ten_hoc_phan: 'Nhập môn tin học và lập trình',
+        diem_attendance: 10,
+        diem_bai_tap: 8,
+        diem_cuoi_ky: 4.5,
+        diem_thi_nghiem: 0,
+        diem_tong_ket: 6.5,
+        diem_tong_ket_thang_4: 2.5,
+        diem_tong_ket_dang_chu: ' C+',
+        diem_trung_binh_kiem_tra_tren_lop: 8,
+        diem_doc: false,
+        diem_nghe: false,
+        diem_viet: false,
+        diem_noi: false,
+        course_chuyen_can: false,
+        course_ed_bt_viet_noi: false,
+        course_ed_giay: false,
+        course_ed_thi_cuoi_hp: false,
+        course_ed_thi_giua_hp: false,
+        course_ed_tt: false,
+        trang_thai_sv_ltc_ds: 'da_dat',
+        ky_hoc_id: [37, 20211],
+        diem_thi_lan_2: false,
+        write_date: '2022-03-16 07:25:06',
+        create_date: '2022-03-16 07:25:06',
+        loai_dau_diem_hoc_phan: 'hoc_phan_thuong',
+        loai_hoc_phan_ap_dung: 1,
+        is_diem_tieng_anh: false,
+        is_danh_gia: true,
+      },
+    ]);
+  });
+
   const onCell = (rec: LopTinChi.DiemThanhPhan) => ({
     onClick: () => {
       setRecordDiemThanhPhan(rec);
@@ -112,14 +156,12 @@ const DiemThanhPhanSV = () => {
     {
       title: 'Số tín chỉ',
       dataIndex: 'so_tin_chi',
-      align: 'center',
       width: 100,
       onCell,
     },
     {
       title: 'Tổng kết (hệ 10)',
       dataIndex: 'diem_tong_ket',
-      align: 'center',
       render: (val, r) => (
         <b style={r.diem_tong_ket < 4 ? { color: 'red' } : {}}>{r.is_danh_gia ? val : '--'}</b>
       ),
@@ -129,7 +171,6 @@ const DiemThanhPhanSV = () => {
     {
       title: 'Tổng kết (hệ 4)',
       dataIndex: 'diem_tong_ket_thang_4',
-      align: 'center',
       render: (val, recordDiem) => (
         <b
           style={
@@ -149,7 +190,6 @@ const DiemThanhPhanSV = () => {
     {
       title: 'Tổng kết (dạng chữ)',
       dataIndex: 'diem_tong_ket_dang_chu',
-      align: 'center',
       render: (val, recordDiem) => (
         <b
           style={

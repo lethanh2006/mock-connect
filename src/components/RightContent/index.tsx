@@ -1,37 +1,35 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Space } from 'antd';
 import React from 'react';
-import { history, useAccess, useModel } from 'umi';
-import NoticeIcon from '../NoticeIcon';
+import { history, useModel } from 'umi';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
+import ModuleSwitch from './ModuleSwitch';
+import { Tooltip } from 'antd';
+import NoticeIcon from './NoticeIcon/NoticeIcon';
 
 export type SiderTheme = 'light' | 'dark';
 
 const GlobalHeaderRight: React.FC = () => {
-  const access = useAccess();
   const { initialState } = useModel('@@initialState');
 
-  if (!initialState || !initialState.settings) {
+  if (!initialState || !initialState.currentUser) {
     return null;
   }
 
-  const { navTheme, layout } = initialState.settings;
-  let className = styles.right;
-
-  if ((navTheme === 'dark' && layout === 'top') || layout === 'mix') {
-    className = `${styles.right}  ${styles.dark}`;
-  }
-
   return (
-    <Space className={className}>
-      <a onClick={() => history.push('/tienichkhac/gioithieu')} title="Giới thiệu học viện">
-        <InfoCircleOutlined />
-      </a>
+    <div className={styles.right}>
+      <ModuleSwitch />
 
-      {!access.admin && !access.guest && <NoticeIcon />}
+      <NoticeIcon />
+
+      <Tooltip title="Giới thiệu chung" placement="bottom">
+        <a onClick={() => history.push('/tienichkhac/gioithieu')}>
+          <InfoCircleOutlined />
+        </a>
+      </Tooltip>
+
       <Avatar menu />
-    </Space>
+    </div>
   );
 };
 

@@ -2,14 +2,17 @@
 // const ip = 'https://dhs.ptit.edu.vn'; // ip prod
 
 const ip3 = 'https://ais.aisenote.com/qldt'; // ip dev
+// const ip3 = '192.168.1.71:3000'; // ip dev
 const ipGlobal = 'https://ais2.aisenote.com/qldt-internal-api'; // ip dev
 
 const keycloakLogoutEndpoint =
-  'https://ais.aisenote.com/keycloak/realms/master/protocol/openid-connect/logout';
+  'https://ais.aisenote.com/keycloak/realms/vwa/protocol/openid-connect/logout';
 const keycloakUrl = 'https://ais.aisenote.com/keycloak';
-const keycloakClientID = 'sso-web-client';
+const keycloakAuthority = 'https://ais.aisenote.com/keycloak/realms/vwa';
+const keycloakClientID = 'vwa-auth';
+const keycloakSecret = '7NlhgTsTHE37DWZa5IarN2nVE7qHniwC';
 const keycloakTokenEndpoint =
-  'https://ais.aisenote.com/keycloak/realms/master/protocol/openid-connect/token';
+  'https://ais.aisenote.com/keycloak/realms/vwa/protocol/openid-connect/token';
 
 export {
   ip3,
@@ -17,5 +20,7 @@ export {
   keycloakLogoutEndpoint,
   keycloakUrl,
   keycloakClientID,
+  keycloakSecret,
   keycloakTokenEndpoint,
+  keycloakAuthority,
 };

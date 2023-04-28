@@ -7,7 +7,7 @@ const ChiTietDichVu = (props: { thongTinChiTiet: any[] }) => {
       ? Object?.keys(props?.thongTinChiTiet?.[0])?.map((item) => ({
           title: item,
           dataIndex: item,
-          align: 'center',
+
           width: 200,
         }))
       : [];
