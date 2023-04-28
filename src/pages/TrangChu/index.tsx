@@ -1,14 +1,27 @@
-import { Card } from 'antd';
-import './components/style.less';
+import ThoiKhoaBieu from '@/pages/Calendar';
+import { Col, Row } from 'antd';
+import { useAccess } from 'umi';
+// import TinTucDashboard from '../TinTuc/TinTucDashboard';
+// import BlockSinhVien from './components/BlockSinhVien';
 
 const TrangChu = () => {
   return (
-    <Card bodyStyle={{ height: '100%' }}>
-      <div className="home-welcome">
-        <h1 className="title">PHÂN HỆ VWA - CONNECT</h1>
-        <h2 className="sub-title">HỆ THỐNG ĐẠI HỌC SỐ - HỌC VIỆN PHỤ NỮ VIỆT NAM</h2>
-      </div>
-    </Card>
+    <>
+      <Row gutter={[20, 20]}>
+        {/* {access.sinhVien && <BlockSinhVien />} */}
+        <ThoiKhoaBieu type="dashboard" />
+        {/* {access.sinhVienVaNhanVien && (
+          <>
+            <Col xs={24} lg={14} xl={16}>
+              <ThoiKhoaBieu type="dashboard" />
+            </Col>
+            <Col xs={24} lg={10} xl={8}>
+              <TinTucDashboard />
+            </Col>
+          </>
+        )} */}
+      </Row>
+    </>
   );
 };
 

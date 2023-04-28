@@ -1,4 +1,5 @@
-﻿export default [
+﻿import access from '../src/access';
+export default [
   {
     path: '/user',
     layout: false,
@@ -49,18 +50,113 @@
   },
 
   // DANH MUC HE THONG
+  // {
+  //   name: 'DanhMuc',
+  //   path: '/danh-muc',
+  //   icon: 'copy',
+  //   routes: [
+  //     {
+  //       name: 'ChucVu',
+  //       path: 'chuc-vu',
+  //       component: './DanhMuc/ChucVu',
+  //     },
+  //   ],
+  // },
+
+  // MENU CHUNG
   {
-    name: 'DanhMuc',
-    path: '/danh-muc',
-    icon: 'copy',
+    name: 'Lich',
+    icon: 'CalendarOutlined',
+    path: '/calendar',
+    component: './Calendar',
+  },
+
+  // MENU SINH VIEN
+  {
+    name: 'HocTap',
+    path: '/hoc-tap',
+    icon: 'EditOutlined',
+    // access: 'sinhVien',
     routes: [
       {
-        name: 'ChucVu',
-        path: 'chuc-vu',
-        component: './DanhMuc/ChucVu',
+        name: 'LopHanhChinh',
+        path: 'lop-hanh-chinh',
+
+        routes: [
+          {
+            path: './',
+            hideInMenu: true,
+            component: './HocTap/LopHanhChinh/SinhVien',
+            exact: true,
+          },
+          {
+            path: './:id',
+            component: './HocTap/LopHanhChinh/SinhVien/$id',
+            hideInMenu: true,
+            exact: true,
+          },
+        ],
+      },
+      {
+        name: 'LopTinChi',
+        path: 'lop-tin-chi',
+
+        routes: [
+          {
+            path: './',
+            hideInMenu: true,
+            component: './HocTap/LopTinChi',
+            exact: true,
+          },
+          {
+            path: './:id',
+            component: './HocTap/LopTinChi/$id',
+            hideInMenu: true,
+            exact: true,
+          },
+        ],
+      },
+      {
+        name: 'KetQuaHocTap',
+        path: './ket-qua-hoc-tap',
+        // access: 'sinhVien',
+        component: './HocTap/KetQuaHocTap',
       },
     ],
   },
+  {
+    name: 'DichVuMotCua',
+    icon: 'AuditOutlined',
+    path: '/dich-vu-mot-cua/sinh-vien',
+    routes: [
+      {
+        path: './',
+        component: './DichVuMotCua/SinhVien/LichSu',
+        hideInMenu: true,
+        // access: 'sinhVien',
+      },
+      {
+        name: 'TaoDon',
+        path: './tao-don',
+        // access: 'sinhVien',
+        hideInMenu: true,
+        routes: [
+          {
+            path: './',
+            component: './DichVuMotCua/SinhVien/GuiDon',
+            extract: true,
+          },
+          {
+            path: './:id',
+            component: './DichVuMotCua/SinhVien/GuiDon/$id',
+            extract: true,
+          },
+        ],
+      },
+    ],
+  },
+
+  //MENU GIANG VIEN
 
   {
     path: '/',
