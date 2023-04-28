@@ -5,8 +5,6 @@ const ip3 = 'https://ais.aisenote.com/qldt'; // ip dev
 // const ip3 = '192.168.1.71:3000'; // ip dev
 const ipGlobal = 'https://ais2.aisenote.com/qldt-internal-api'; // ip dev
 
-const keycloakLogoutEndpoint =
-  'https://ais.aisenote.com/keycloak/realms/vwa/protocol/openid-connect/logout';
 const keycloakUrl = 'https://ais.aisenote.com/keycloak';
 const keycloakAuthority = 'https://ais.aisenote.com/keycloak/realms/vwa';
 const keycloakClientID = 'vwa-auth';
@@ -17,7 +15,6 @@ const keycloakTokenEndpoint =
 export {
   ip3,
   ipGlobal,
-  keycloakLogoutEndpoint,
   keycloakUrl,
   keycloakClientID,
   keycloakSecret,
