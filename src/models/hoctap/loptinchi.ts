@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 export default () => {
   const objInit = useInitModel<LopTinChi.IRecord>('lop-hoc-phan');
-  const { setDanhSach, setRecord, setLoading, setTotal } = objInit;
+  const { setDanhSach, setRecord, setLoading, setTotal, sort, filters } = objInit;
   const [listTkbSinhVien, setListTkbSinhVien] = useState<LopTinChi.IBuoiHoc[]>([]);
 
   const [idNhomLop, setIdNhomLop] = useState<number>(-1);
@@ -33,7 +33,10 @@ export default () => {
 
   const sinhVienGetAllLopHocPhanModel = async () => {
     setLoading(true);
-    const response = await getAllSinhVienLopHocPhan();
+    const response = await getAllSinhVienLopHocPhan({
+      sort,
+      filters: filters?.filter((item) => item.active)?.map(({ active, ...item }) => item),
+    });
     setDanhSach(response?.data?.data ?? []);
     setTotal(response?.data?.data?.length ?? 0);
     setLoading(false);

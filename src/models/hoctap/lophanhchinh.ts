@@ -6,11 +6,18 @@ import {
 
 export default () => {
   const objInit = useInitModel<LopHanhChinh.IRecord>('lop-hanh-chinh');
-  const { setLoading, page, limit, condition, setDanhSach, setTotal, setRecord } = objInit;
+  const { setLoading, page, limit, condition, setDanhSach, setTotal, setRecord, sort, filters } =
+    objInit;
 
   const sinhVienGetLopHanhChinhPageableModel = async () => {
     setLoading(true);
-    const response = await sinhVienGetLopHanhChinhPageable({ page, limit, condition });
+    const response = await sinhVienGetLopHanhChinhPageable({
+      page,
+      limit,
+      condition,
+      sort,
+      filters: filters?.filter((item) => item.active)?.map(({ active, ...item }) => item),
+    });
     setDanhSach(response?.data?.data?.result ?? []);
     setTotal(response?.data?.data?.total ?? 0);
     setLoading(false);

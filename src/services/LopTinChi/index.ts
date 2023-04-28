@@ -1,8 +1,8 @@
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 
-export async function getAllSinhVienLopHocPhan() {
-  return axios.get(`${ip3}/lop-hoc-phan/sinh-vien/all`);
+export async function getAllSinhVienLopHocPhan(payload: { sort: any; filters: any }) {
+  return axios.get(`${ip3}/lop-hoc-phan/sinh-vien/all`, { params: payload });
 }
 
 export async function getDanhSachSinhVienByIdNhomLop(idNhomLop: string) {

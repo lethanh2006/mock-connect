@@ -9,6 +9,8 @@ export async function sinhVienGetLopHanhChinhPageable(payload: {
   page: number;
   limit: number;
   condition: any;
+  sort: any;
+  filters: any;
 }) {
   return axios.get(`${ip3}/lop-hanh-chinh/sinh-vien/page`, { params: payload });
 }

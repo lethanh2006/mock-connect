@@ -9,9 +9,11 @@ const LopHanhChinhPage = () => {
     sinhVienGetLopHanhChinhPageableModel,
     danhSach,
     record: recLopHanhChinh,
+    filters,
+
     setRecord,
   } = useModel('hoctap.lophanhchinh');
-
+  console.log(filters, 'filter');
   // useEffect(() => {
   //   sinhVienGetLopHanhChinhPageableModel();
   // }, []);
