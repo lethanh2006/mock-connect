@@ -1,5 +1,4 @@
 import studentIcon from '@/assets/student.png';
-import TableBaseStatic from '@/components/Table/Table';
 import { Avatar } from 'antd';
 import { useState } from 'react';
 import { type IColumn } from '@/components/Table/typing';

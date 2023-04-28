@@ -1,4 +1,3 @@
-import TableBaseStatic from '@/components/Table/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { type LopTinChi } from '@/services/LopTinChi/typings';
 import { Button, Modal, Tabs } from 'antd';
@@ -8,6 +7,7 @@ import { useModel } from 'umi';
 import ThongTinBuoiHoc from './components/ThongTinBuoiHoc';
 import { getNameFile } from '@/utils/utils';
 import FormNoiDungBuoiHoc from './components/FormNoiDungBuoiHoc';
+import TableStaticData from '@/components/Table/TableStaticData';
 
 const DanhSachBuoiHoc = (props: { idLopTinChi: string; isGiangVien: boolean }) => {
   const { isGiangVien, idLopTinChi } = props;
@@ -145,7 +145,7 @@ const DanhSachBuoiHoc = (props: { idLopTinChi: string; isGiangVien: boolean }) =
       ) : null} */}
 
       <span style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 12 }}>Tất cả buổi học</span>
-      <TableBaseStatic
+      <TableStaticData
         hasTotal
         data={listTkbSinhVien.map((item, index) => ({ ...item, index: index + 1 }))}
         columns={columns}

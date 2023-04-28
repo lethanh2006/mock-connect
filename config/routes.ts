@@ -1,5 +1,4 @@
-﻿import access from '../src/access';
-export default [
+﻿export default [
   {
     path: '/user',
     layout: false,
