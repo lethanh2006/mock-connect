@@ -1,4 +1,4 @@
-import Table from '@/components/Table/Table';
+import Table from '@/components/OldTable/Table';
 import type { IColumn } from '@/utils/interfaces';
 
 const TableKetQuaImport = (props: { data: ThanhToan.RecordResponseImport[] }) => {

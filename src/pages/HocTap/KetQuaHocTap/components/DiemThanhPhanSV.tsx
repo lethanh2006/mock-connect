@@ -1,4 +1,4 @@
-import TableBaseStatic from '@/components/Table/Table';
+import TableBaseStatic from '@/components/OldTable/Table';
 import { convertNumberScoreToAlphabet } from '@/utils/utils';
 import { Card, Col, Row, Tabs, Typography } from 'antd';
 import { useEffect, useState } from 'react';

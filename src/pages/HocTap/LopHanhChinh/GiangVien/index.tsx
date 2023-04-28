@@ -1,4 +1,4 @@
-import Table from '@/components/Table/Table';
+import Table from '@/components/OldTable/Table';
 import type { APILopHanhChinh } from '@/services/LopHanhChinh/typings';
 import { getDataLopHanhChinh } from '@/services/LopHanhChinh/lophanhchinh';
 import type { IColumn } from '@/utils/interfaces';

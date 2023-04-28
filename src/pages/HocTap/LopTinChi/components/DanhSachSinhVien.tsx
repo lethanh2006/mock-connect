@@ -1,5 +1,5 @@
 import studentIcon from '@/assets/student.png';
-import TableBaseStatic from '@/components/Table/Table';
+import TableBaseStatic from '@/components/OldTable/Table';
 import type { LopTinChi } from '@/services/LopTinChi/typings';
 import { Avatar, Col, Descriptions, Modal, Row } from 'antd';
 import _ from 'lodash';

@@ -1,4 +1,4 @@
-import TableBaseStatic from '@/components/Table/Table';
+import TableBaseStatic from '@/components/OldTable/Table';
 import type { LopTinChi } from '@/services/LopTinChi/typings';
 import { convertNumberScoreToAlphabet } from '@/utils/utils';
 import { useEffect } from 'react';

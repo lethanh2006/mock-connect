@@ -15,7 +15,7 @@ import NotFoundContent from './pages/exception/404';
 import { getInfo } from './services/ant-design-pro/api';
 import './styles/global.less';
 import { oidcConfig } from './utils/oidcConfig';
-import { type IInitialState } from './utils/typing';
+// import { type IInitialState } from './utils/typing';
 
 const loginPath = '/user/login';
 const pathAuth = ['/admin/login'];
@@ -27,7 +27,7 @@ export const initialStateConfig = {
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
-export async function getInitialState(): Promise<IInitialState> {
+export async function getInitialState(): Promise<any> {
   const fetchUserInfo: () => Promise<Login.User> = async () => {
     try {
       const token = localStorage.getItem('token');

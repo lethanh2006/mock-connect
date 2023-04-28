@@ -131,7 +131,7 @@ export default [
     routes: [
       {
         path: './',
-        component: './DichVuMotCua/SinhVien/LichSu',
+        component: './DichVuMotCuaV2/SinhVien/LichSu',
         hideInMenu: true,
         // access: 'sinhVien',
       },
@@ -143,12 +143,12 @@ export default [
         routes: [
           {
             path: './',
-            component: './DichVuMotCua/SinhVien/GuiDon',
+            component: './DichVuMotCuaV2/SinhVien/GuiDon',
             extract: true,
           },
           {
             path: './:id',
-            component: './DichVuMotCua/SinhVien/GuiDon/$id',
+            component: './DichVuMotCuaV2/SinhVien/GuiDon/$id',
             extract: true,
           },
         ],

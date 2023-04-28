@@ -1,4 +1,4 @@
-import Table from '@/components/Table/Table';
+import Table from '@/components/OldTable/Table';
 import { type IColumn } from '@/components/Table/typing';
 
 const ChiTietDichVu = (props: { thongTinChiTiet: any[] }) => {

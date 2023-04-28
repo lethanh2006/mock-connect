@@ -1,4 +1,4 @@
-import TableBaseStatic from '@/components/Table/Table';
+import TableBaseStatic from '@/components/OldTable/Table';
 import type { LopTinChi } from '@/services/LopTinChi/typings';
 import rules from '@/utils/rules';
 import { CloseOutlined, FileOutlined, SaveOutlined } from '@ant-design/icons';

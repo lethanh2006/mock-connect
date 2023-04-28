@@ -1,4 +1,4 @@
-import TableBaseStatic from '@/components/Table/Table';
+import TableBaseStatic from '@/components/OldTable/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { type LopTinChi } from '@/services/LopTinChi/typings';
 import { Button, Modal, Tabs } from 'antd';
