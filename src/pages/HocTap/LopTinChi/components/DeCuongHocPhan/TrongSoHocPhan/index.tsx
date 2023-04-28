@@ -37,6 +37,7 @@ const TrongSoHocPhanPage = () => {
       params={{ deCuongId: recDeCuong?._id }}
       modelName="hocphan.trongsohocphan"
       title="Trọng số"
+      getData={() => console.log()}
       hideCard
       buttons={{ reload: false, create: false }}
     />

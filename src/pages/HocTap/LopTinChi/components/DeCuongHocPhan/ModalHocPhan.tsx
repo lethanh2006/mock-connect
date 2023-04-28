@@ -1,22 +1,8 @@
-import { Card, Steps, Modal } from 'antd';
-import { useModel } from 'umi';
-import FormHocPhan from './Form';
-import { useEffect, useState } from 'react';
-import DeCuongHocPhanPage from '.';
-import ModalDeCuongHocPhan from './components/ModalDeCuongHocPhan';
+import { Modal } from 'antd';
+import TabsDeCuongHocPhan from './components/ModalDeCuongHocPhan';
 
 const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any }) => {
-  const { record, edit } = useModel('hocphan.hocphan');
   const { title, visible, setVisible } = props;
-  const [currentStep, setCurrentStep] = useState(0);
-
-  useEffect(() => {
-    setCurrentStep(0);
-  }, [record?._id]);
-
-  const onChangeStep = (step: number) => {
-    setCurrentStep(step);
-  };
 
   return (
     <Modal
@@ -26,9 +12,10 @@ const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any
       onCancel={() => setVisible(false)}
       okButtonProps={{ hidden: true }}
       cancelText="Đóng"
+      bodyStyle={{ paddingTop: '0px' }}
     >
-      <Card bordered={false}>
-        <Steps
+      {/* <Card bordered={false} bodyStyle={{ margin: '0' }}> */}
+      {/* <Steps
           current={currentStep}
           type="navigation"
           style={{ marginBottom: 18, paddingTop: 0 }}
@@ -36,14 +23,15 @@ const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any
         >
           <Steps.Step title="Thông tin chung" />
           <Steps.Step title="Đề cương chi tiết học phần" />
-        </Steps>
+        </Steps> */}
+      <TabsDeCuongHocPhan />
 
-        {currentStep === 0 ? (
+      {/* {currentStep === 0 ? (
           <FormHocPhan afterAddNew={() => setCurrentStep(1)} />
         ) : (
           <ModalDeCuongHocPhan />
-        )}
-      </Card>
+        )} */}
+      {/* </Card> */}
     </Modal>
   );
 };

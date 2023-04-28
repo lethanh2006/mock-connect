@@ -1,53 +1,15 @@
-import {
-  DeleteOutlined,
-  EditOutlined,
-  MenuOutlined,
-  PlusCircleOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
-import { Button, Col, Collapse, Modal, Popconfirm, Row, Space, Tooltip } from 'antd';
+import { MenuOutlined } from '@ant-design/icons';
+import { Button, Col, Collapse, Row, Space } from 'antd';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useState } from 'react';
 import './style.less';
 
 const LichTrinhCuTheList = () => {
-  const { getAllModel, deleteModel, setVisibleForm, setRecord, edit, visibleForm, setEdit } =
-    useModel('hocphan.tientrinhhp');
-  const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
   const [groupLichTrinh, setGroupLichTrinh] = useState<Record<string, HocPhan.ITienTrinhHocPhan[]>>(
     {},
   );
   const [maxWeek, setMaxWeek] = useState(0);
-  const [initWeek, setInitWeek] = useState(0);
   const [activeKeys, setActiveKeys] = useState<string[]>();
-
-  const getData = async () => {
-    if (recDeCuong?._id)
-      getAllModel(false, { tuan: 1 }, { deCuongId: recDeCuong._id }).then((data) => {
-        const groupWeek = _.groupBy(data, (item) => item.tuan);
-        setGroupLichTrinh(groupWeek);
-        const maxw = _.max(data.map((item) => item.tuan));
-        setMaxWeek(maxw ?? 0);
-      });
-    setRecord(undefined);
-  };
-
-  useEffect(() => {
-    getData();
-  }, [recDeCuong?._id]);
-
-  const handleEdit = (rec: HocPhan.ITienTrinhHocPhan) => {
-    setRecord(rec);
-    setEdit(true);
-    setVisibleForm(true);
-  };
-
-  const onAddNew = (week: number) => {
-    setInitWeek(week);
-    setEdit(false);
-    setVisibleForm(true);
-  };
 
   const onExpandAll = () => {
     const weeks = Object.keys(groupLichTrinh);
@@ -56,6 +18,7 @@ const LichTrinhCuTheList = () => {
 
   return (
     <Row gutter={[12, 12]}>
+      Lịch trình cụ thể
       {maxWeek ? (
         <Col span={24}>
           <Button icon={<MenuOutlined />} type="primary" onClick={onExpandAll}>
@@ -63,7 +26,6 @@ const LichTrinhCuTheList = () => {
           </Button>
         </Col>
       ) : null}
-
       <Col span={24}>
         <Collapse
           activeKey={activeKeys}
@@ -75,14 +37,6 @@ const LichTrinhCuTheList = () => {
                   header={
                     <Space>
                       <b>TUẦN {week}</b>
-                      <Button
-                        size="small"
-                        icon={<PlusOutlined />}
-                        type="link"
-                        onClick={() => onAddNew(parseInt(week))}
-                      >
-                        Thêm nội dung
-                      </Button>
                     </Space>
                   }
                   key={week}
