@@ -55,7 +55,7 @@ import FormBieuMauChonPhong from '@/pages/VanPhongSo/DonMuonPhongHop/components/
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
 const FormBieuMau = (props: {
-  infoNguoiTaoDon?: Login.Profile;
+  infoNguoiTaoDon?: SinhVien.IRecord;
   record?: DichVuMotCuaV2.Don & { index?: number };
   type?: 'view' | 'handle' | 'create' | 'edit' | 'muonCsvc';
   onCancel?: any;
@@ -75,7 +75,6 @@ const FormBieuMau = (props: {
   const chuyenVienDieuPhoiDuyetDon = useCheckAccess('don-dvmc-thao-tac:duyet-all');
   const chuyenVienXuLyDuyetDon = useCheckAccess('don-dvmc-thao-tac:duyet-my');
   const canDieuPhoiDon = useCheckAccess('don-dvmc-thao-tac:dieu-phoi');
-  const isCVDieuPhoi = useCheckAccess('don-dvmc-thao-tac:read-all');
   const isQuanTriVps = useCheckAccess('quan-tri-vps');
 
   const [form] = Form.useForm();
@@ -595,7 +594,7 @@ const FormBieuMau = (props: {
         break;
       }
       case 'TEXT_BLOCK': {
-        element = <p>{item?.label ?? ''}</p>;
+        element = <p style={{ marginLeft: 12 }}>{item?.label ?? ''}</p>;
         break;
       }
 
@@ -990,10 +989,13 @@ const FormBieuMau = (props: {
         <div>
           <b>{props.record?.thongTinDichVu?.ghiChu}</b>
         </div>
-        {!['handle', 'view', 'muonCsvc'].includes(props?.type ?? '') && !props.hideCamKet && (
-          <Checkbox style={{ marginBottom: 8 }} onChange={(e) => setCheck(e.target.checked)}>
-            Tôi xin cam đoan những thông tin trên là hoàn toàn chính xác, nếu sai sự thật tôi sẽ
-            chịu mọi hình thức kỷ luật.
+        {!['handle', 'view'].includes(props?.type ?? '') && !props.hideCamKet && (
+          <Checkbox
+            style={{ marginBottom: 8, marginLeft: 12 }}
+            onChange={(e) => setCheck(e.target.checked)}
+          >
+            Tôi xin cam đoan các thông tin là kê khai là chính xác và sử dụng giấy chứng nhận sinh
+            viên đúng theo lý do đã trình bày trên.
           </Checkbox>
         )}
 

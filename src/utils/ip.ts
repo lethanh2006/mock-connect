@@ -3,7 +3,7 @@
 
 const ip3 = 'https://ais.aisenote.com/qldt'; // ip dev
 const ipGlobal = 'https://ais2.aisenote.com/qldt-internal-api'; // ip dev
-const ipQldt = 'https://ais.aisenote.com/qldt';
+const ipSlink = 'https://ais.aisenote.com/slink'; // ip dev
 const ipTcns = 'https://ais.aisenote.com/tcns';
 const ipCore = 'https://ais.aisenote.com/core';
 
@@ -15,7 +15,7 @@ const keycloakTokenEndpoint =
   'https://ais.aisenote.com/keycloak/realms/vwa/protocol/openid-connect/token';
 
 export {
-  ipQldt,
+  ipSlink,
   ipTcns,
   ipCore,
   ip3,

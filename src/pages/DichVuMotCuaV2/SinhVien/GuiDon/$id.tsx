@@ -44,10 +44,10 @@ const SinhVienTaoDon = ({
       getAllLopTinChiSinhVienModel();
     }
     return () => {
-      setDanhSachLopTinChi([]);
-      setDanhSachMonHoc([]);
-      setDanhSachKyHoc([]);
-      setDanhSachNamHoc([]);
+      // setDanhSachLopTinChi([]);
+      // setDanhSachMonHoc([]);
+      // setDanhSachKyHoc([]);
+      // setDanhSachNamHoc([]);
       setVisibleForm(false);
     };
   }, []);

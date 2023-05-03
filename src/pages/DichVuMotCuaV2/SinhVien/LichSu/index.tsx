@@ -31,7 +31,6 @@ const LichSuGuiDon = () => {
     visibleFormBieuMau,
     setVisibleFormBieuMau,
     setDanhSach,
-    setLoaiDichVu,
     setRecord,
     sinhVienDeleteDonModel,
     visibleFormChinhSuaDon,
@@ -40,37 +39,46 @@ const LichSuGuiDon = () => {
     danhSach,
     getAllBieuMauModel,
   } = useModel('dichvumotcuav2');
+
+  const { getMyProfileModel, record } = useModel('sinhvien');
+
   const [recordView, setRecordView] = useState<DichVuMotCuaV2.Don>();
   const [visibleViewInDon, setVisibleViewInDon] = useState<boolean>(false);
   const [type, setType] = useState<'edit' | 'view' | 'handle' | 'create'>('view');
-  const { pathname } = window.location;
-  const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('hocky');
+  // const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('hocky');
   const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('namhoc');
-  const { getAllLopTinChiSinhVienModel, setDanhSach: setDanhSachLopTinChi } =
-    useModel('hoctap.loptinchi');
-  const { getAllMonHocSinhVienModel, setDanhSachMonHoc } = useModel('hoctap.loptinchi');
+  // const { getAllLopTinChiSinhVienModel, setDanhSach: setDanhSachLopTinChi } =
+  //   useModel('hoctap.loptinchi');
+  // const { getAllMonHocSinhVienModel, setDanhSachMonHoc } = useModel('hoctap.loptinchi');
   const [data, setData] = useState<any>();
-  const isDVMC = pathname?.includes('dichvumotcua') ?? false;
 
   useEffect(() => {
+    getMyProfileModel();
     setRecord({} as DichVuMotCuaV2.BieuMau);
-    setLoaiDichVu(isDVMC ? 'DVMC' : 'VAN_PHONG_SO');
-    getAllBieuMauModel(isDVMC ? 'DVMC' : 'VAN_PHONG_SO');
+    // setLoaiDichVu('DVMC');
+    getAllBieuMauModel('DVMC');
     if (access.sinhVien) {
-      getAllKyHocSinhVienModel();
+      // getAllKyHocSinhVienModel();
       getAllNamHocSinhVienModel();
-      getAllMonHocSinhVienModel();
-      getAllLopTinChiSinhVienModel();
+      // getAllMonHocSinhVienModel();
+      // getAllLopTinChiSinhVienModel();
     }
 
     return () => {
       setDanhSach([]);
-      setDanhSachLopTinChi([]);
-      setDanhSachMonHoc([]);
-      setDanhSachKyHoc([]);
+      // setDanhSachLopTinChi([]);
+      // setDanhSachMonHoc([]);
+      // setDanhSachKyHoc([]);
       setDanhSachNamHoc([]);
     };
   }, []);
+
+  const handlePreviewDon = (recordTemp: DichVuMotCuaV2.Don) => {
+    setRecord(danhSach?.find((item) => item?._id === recordTemp?.thongTinDichVu?._id));
+    setRecordView(recordTemp);
+    setType('view');
+    setVisibleFormBieuMau(true);
+  };
 
   const handleInDon = (maDon: string) => {
     setLoading(true);
@@ -119,23 +127,33 @@ const LichSuGuiDon = () => {
       });
   };
 
+  const onCell = (recordDon: DichVuMotCuaV2.Don) => ({
+    onClick: () => {
+      handlePreviewDon(recordDon);
+    },
+    style: { cursor: 'pointer' },
+  });
+
   const columns: IColumn<DichVuMotCuaV2.Don>[] = [
     {
       title: 'STT',
       dataIndex: 'index',
       align: 'center',
       width: 60,
+      onCell,
     },
     {
       title: 'Loại đơn',
       dataIndex: ['thongTinDichVu', 'ten'],
       width: 180,
+      onCell,
     },
     {
       title: 'Ghi chú kết quả',
       dataIndex: 'ketQuaText',
       align: 'center',
       width: 120,
+      onCell,
     },
     {
       title: 'File kết quả đính kèm',
@@ -167,6 +185,7 @@ const LichSuGuiDon = () => {
           {TrangThaiDonDVMC?.[val] ?? 'Chưa cập nhật'}
         </Tag>
       ),
+      onCell,
     },
     {
       title: 'Ngày tạo',
@@ -174,13 +193,14 @@ const LichSuGuiDon = () => {
       align: 'center',
       width: 100,
       render: (val) => <div>{moment(val).format('HH:mm DD/MM/YYYY')}</div>,
+      onCell,
     },
     {
       title: 'Thao tác',
       align: 'center',
       width: 60,
       fixed: 'right',
-      render: (record: DichVuMotCuaV2.Don) => {
+      render: (recordTemp: DichVuMotCuaV2.Don) => {
         return (
           <Popover
             placement="left"
@@ -189,11 +209,11 @@ const LichSuGuiDon = () => {
                 <Tooltip title="Xem biểu mẫu và in đơn">
                   <Button
                     onClick={() => {
-                      if (!record.maDon) {
+                      if (!recordTemp.maDon) {
                         message.error('Mã đơn không tồn tại');
                         return;
                       }
-                      handleInDon(record.maDon);
+                      handleInDon(recordTemp.maDon);
                     }}
                     shape="circle"
                     icon={<PrinterOutlined />}
@@ -204,12 +224,7 @@ const LichSuGuiDon = () => {
                   <Button
                     type="primary"
                     onClick={() => {
-                      setRecord(
-                        danhSach?.find((item) => item?._id === record?.thongTinDichVu?._id),
-                      );
-                      setRecordView(record);
-                      setType('view');
-                      setVisibleFormBieuMau(true);
+                      handlePreviewDon(recordTemp);
                     }}
                     shape="circle"
                     icon={<EyeOutlined />}
@@ -218,10 +233,10 @@ const LichSuGuiDon = () => {
                 <Divider type="vertical" />
                 <Tooltip title="Chỉnh sửa">
                   <Button
-                    disabled={record?.trangThai !== 'PROCESSING'}
+                    disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     onClick={() => {
                       setVisibleFormChinhSuaDon(true);
-                      setRecordView(record);
+                      setRecordView(recordTemp);
                       setType('edit');
                     }}
                     shape="circle"
@@ -231,7 +246,7 @@ const LichSuGuiDon = () => {
                 <Divider type="vertical" />
                 <Tooltip title="Xóa đơn">
                   <Popconfirm
-                    disabled={record?.trangThai !== 'PROCESSING'}
+                    disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     title="Bạn có chắc chắn muốn xóa đơn này?"
                     onConfirm={() => {
                       sinhVienDeleteDonModel(record?._id ?? '');
@@ -240,7 +255,7 @@ const LichSuGuiDon = () => {
                     <Button
                       type="primary"
                       danger
-                      disabled={record?.trangThai !== 'PROCESSING'}
+                      disabled={recordTemp?.trangThai !== 'PROCESSING'}
                       shape="circle"
                       icon={<DeleteOutlined />}
                     />
@@ -292,7 +307,7 @@ const LichSuGuiDon = () => {
             setVisibleFormChinhSuaDon(false);
           }}
           hideCamKet
-          infoNguoiTaoDon={recordView?.thongTinNguoiTao}
+          infoNguoiTaoDon={record}
           type={type}
           record={recordView}
         />
@@ -318,12 +333,7 @@ const LichSuGuiDon = () => {
             />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Biểu mẫu" key={1}>
-            <Form
-              hideCamKet
-              infoNguoiTaoDon={recordView?.thongTinNguoiTao}
-              type={type}
-              record={recordView}
-            />
+            <Form hideCamKet infoNguoiTaoDon={record} type={type} record={recordView} />
           </Tabs.TabPane>
           {recordView?.identityCode && (
             <Tabs.TabPane tab="Thông tin thanh toán" key={2}>

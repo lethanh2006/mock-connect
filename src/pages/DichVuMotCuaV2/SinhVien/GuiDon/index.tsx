@@ -33,7 +33,7 @@ const GuiDon = () => {
     return () => {
       setDanhSach([]);
       setRecord({} as DichVuMotCuaV2.BieuMau);
-      getSettingByKeyModel('HDTT');
+      // getSettingByKeyModel('HDTT');
       setPage(1);
     };
   }, []);

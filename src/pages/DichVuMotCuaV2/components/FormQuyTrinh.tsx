@@ -66,8 +66,6 @@ const FormQuyTrinh = (props: {
   const access = useAccess();
   const {
     sinhVienGetTrangThaiDonModel,
-    chuyenVienDieuPhoiGetTrangThaiDonModel,
-    chuyenVienTiepNhanGetTrangThaiDonModel,
     recordTrangThaiDon,
     setRecordDonThaoTac,
     recordDonThaoTac: recordDonThaoTacModel,
@@ -75,7 +73,6 @@ const FormQuyTrinh = (props: {
     loading,
     visibleFormBieuMau,
     setVisibleFormBieuMau,
-    adminGetTrangThaiDonModel,
     danhSachDonThaoTac,
     setDanhSachDonThaoTac,
     record,
@@ -92,14 +89,7 @@ const FormQuyTrinh = (props: {
 
   useEffect(() => {
     if (props.idDon) {
-      if (access.adminVaQuanTri) {
-        adminGetTrangThaiDonModel(props.idDon);
-      } else if (access.sinhVien) sinhVienGetTrangThaiDonModel(props.idDon);
-      else {
-        if (arrPathName?.includes('quanlydondieuphoi'))
-          chuyenVienDieuPhoiGetTrangThaiDonModel(props.idDon);
-        else chuyenVienTiepNhanGetTrangThaiDonModel(props.idDon);
-      }
+      sinhVienGetTrangThaiDonModel(props.idDon);
     }
   }, [props.idDon]);
 

@@ -127,7 +127,7 @@ export default [
   {
     name: 'DichVuMotCua',
     icon: 'AuditOutlined',
-    path: '/dich-vu-mot-cua/sinh-vien',
+    path: '/dichvumotcuasv',
     routes: [
       {
         path: './',
@@ -137,7 +137,7 @@ export default [
       },
       {
         name: 'TaoDon',
-        path: './tao-don',
+        path: './taodon',
         // access: 'sinhVien',
         hideInMenu: true,
         routes: [
