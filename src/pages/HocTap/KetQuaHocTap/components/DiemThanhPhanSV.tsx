@@ -1,12 +1,12 @@
-import TableBaseStatic from '@/components/OldTable/Table';
+import TableStaticData from '@/components/Table/TableStaticData';
+import { type IColumn } from '@/components/Table/typing';
+import { type LopTinChi } from '@/services/LopTinChi/typings';
 import { convertNumberScoreToAlphabet } from '@/utils/utils';
 import { Card, Col, Row, Tabs, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import GiaLapDiem from './GiaLapDiem';
 import ModalChiTietDiemThanhPhan from './ModalChiTietDiemThanhPhan';
-import { type LopTinChi } from '@/services/LopTinChi/typings';
-import { type IColumn } from '@/components/Table/typing';
 
 const { Text } = Typography;
 
@@ -221,7 +221,7 @@ const DiemThanhPhanSV = () => {
                     đánh giá để xem điểm!
                   </Text>
                 </div>
-                <TableBaseStatic
+                <TableStaticData
                   otherProps={{
                     loading: loading,
                     pagination: false,

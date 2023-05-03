@@ -1,12 +1,12 @@
 import studentIcon from '@/assets/student.png';
 import TableBaseStatic from '@/components/OldTable/Table';
+import { type IColumn } from '@/components/Table/typing';
 import type { LopTinChi } from '@/services/LopTinChi/typings';
 import { Avatar, Col, Descriptions, Modal, Row } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
-import { type IColumn } from '@/components/Table/typing';
 
 const DanhSachSinhVien = (props: { isGiangVien?: boolean }) => {
   const { isGiangVien } = props;
