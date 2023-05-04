@@ -35,8 +35,8 @@ const FormXuLyDon = (props: {
     adminPutDonModel,
     loaiDichVu,
   } = useModel('dichvumotcuav2');
-  const { chuyenVienDieuPhoiGetTongSoDonDVMCModel, chuyenVienXuLyGetTongSoDonDVMCModel } =
-    useModel('dashboard');
+  // const { chuyenVienDieuPhoiGetTongSoDonDVMCModel, chuyenVienXuLyGetTongSoDonDVMCModel } =
+  //   useModel('dashboard');
   const { pathname } = window.location;
   const arrPathName = pathname?.split('/') ?? [];
 
@@ -95,17 +95,13 @@ const FormXuLyDon = (props: {
                 },
               };
             }
-            if (loaiDichVu === 'DVMC') {
-              if (arrPathName?.includes('quanlydondieuphoi')) {
-                await chuyenVienDieuPhoiDuyetDonModel(payload);
-                chuyenVienDieuPhoiGetTongSoDonDVMCModel();
-              } else {
-                await chuyenVienXuLyDuyetDonModel(payload);
-                chuyenVienXuLyGetTongSoDonDVMCModel();
-              }
-            } else {
-              chuyenVienDieuPhoiDuyetDonModel(payload); // vps mặc định là chuyên viên điều phối
-            }
+
+            // if (arrPathName?.includes('quanlydondieuphoi')) {
+            await chuyenVienDieuPhoiDuyetDonModel(payload);
+            // chuyenVienDieuPhoiGetTongSoDonDVMCModel();
+            // } else {
+            // await chuyenVienXuLyDuyetDonModel(payload);
+            // chuyenVienXuLyGetTongSoDonDVMCModel();
           }
           if (
             props?.traKetQua === true ||

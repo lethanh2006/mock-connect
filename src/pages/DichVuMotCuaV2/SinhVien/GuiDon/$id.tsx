@@ -29,6 +29,7 @@ const SinhVienTaoDon = ({
 
   const { visibleForm, setVisibleForm } = useModel('thanhtoan');
   const [infoSinhVien, setInfoSinhVien] = useState<Login.Profile>();
+  const { record: recordSinhVien } = useModel('sinhvien');
   useEffect(() => {
     window.scroll({ top: 0 });
     const getInfoSV = async () => {
@@ -65,7 +66,7 @@ const SinhVienTaoDon = ({
       >
         <FormBieuMau
           type="create"
-          infoNguoiTaoDon={infoSinhVien}
+          infoNguoiTaoDon={recordSinhVien}
           record={
             {
               thongTinDichVu: { ...record },
