@@ -15,7 +15,8 @@ import NotFoundContent from './pages/exception/404';
 import { getInfo } from './services/ant-design-pro/api';
 import './styles/global.less';
 import { oidcConfig } from './utils/oidcConfig';
-// import { type IInitialState } from './utils/typing';
+import { type IInitialState } from './utils/typing';
+import { type Login } from './services/ant-design-pro/typings';
 
 const loginPath = '/user/login';
 const pathAuth = ['/admin/login'];
@@ -35,7 +36,7 @@ export async function getInitialState(): Promise<any> {
       if (token) {
         const decoded = jwt_decode(token) as any;
         currentUser = (await getInfo())?.data?.data;
-        currentUser.roles = decoded?.resource_access?.account?.roles;
+        currentUser.permissions = decoded?.authorization?.permissions;
       }
       return currentUser;
     } catch (error) {
@@ -112,13 +113,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     unAccessible: <NotAccessible />,
     noFound: <NotFoundContent />,
     rightContentRender: () => (
-      <AuthProvider {...oidcConfig} redirect_uri={window.location.href}>
+      <AuthProvider {...oidcConfig} redirect_uri={window.location.href} automaticSilentRenew>
         <RightContent />
       </AuthProvider>
     ),
     disableContentMargin: false,
     waterMarkProps: {
-      content: initialState?.currentUser?.fullName,
+      content: initialState?.currentUser?.fullname,
     },
 
     footerRender: () => <Footer />,
@@ -149,18 +150,18 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     },
     childrenRender: (dom) => {
       return (
-        <ErrorBoundary>
-          <TechnicalSupportBounder>
-            <AuthProvider
-              {...oidcConfig}
-              redirect_uri={window.location.href}
-              onSigninCallback={(user) => handleRole(user as any)}
-            >
+        <AuthProvider
+          {...oidcConfig}
+          redirect_uri={window.location.href}
+          onSigninCallback={(user) => handleRole(user as any)}
+        >
+          <ErrorBoundary>
+            <TechnicalSupportBounder>
               {dom}
-            </AuthProvider>
-            {/* <ReactKeycloakProvider authClient={keycloak}>{dom}</ReactKeycloakProvider> */}
-          </TechnicalSupportBounder>
-        </ErrorBoundary>
+              {/* <ReactKeycloakProvider authClient={keycloak}>{dom}</ReactKeycloakProvider> */}
+            </TechnicalSupportBounder>
+          </ErrorBoundary>
+        </AuthProvider>
       );
     },
     menuHeaderRender: undefined,
