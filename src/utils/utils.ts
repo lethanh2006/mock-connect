@@ -149,15 +149,6 @@ export function chuanHoaTen(ten: any) {
     .join(' ');
 }
 
-export function formatPhoneNumber(num: any) {
-  let phone = num.replace(/\D/g, '');
-  const match = phone.match(/^(\d{1,3})(\d{0,3})(\d{0,4})$/);
-  if (match) {
-    phone = `${match[1]}${match[2] ? ' ' : ''}${match[2]}${match[3] ? '-' : ''}${match[3]}`;
-  }
-  return phone;
-}
-
 export function fixedZero(val: number) {
   return val * 1 < 10 ? `0${val}` : val;
 }
