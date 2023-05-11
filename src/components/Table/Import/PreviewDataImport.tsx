@@ -19,7 +19,7 @@ const PreviewDataImport = (props: { onChange: () => void; onBack: any }) => {
     },
     ...importHeaders?.map((item) => ({
       dataIndex: item.field,
-      title: item.title,
+      title: item.label,
       width: 120,
     })),
   ];
@@ -39,7 +39,20 @@ const PreviewDataImport = (props: { onChange: () => void; onBack: any }) => {
             valid = false;
             return false;
           }
-          temp[col.field] = content;
+          switch (col.type) {
+            case 'Boolean':
+              temp[col.field] = content === 'Có';
+              break;
+            case 'Number':
+              temp[col.field] = Number.parseFloat(content) || 0;
+              break;
+            case 'String':
+              temp[col.field] = content?.toString();
+              break;
+            default:
+              temp[col.field] = content;
+              break;
+          }
           return true;
         });
 
