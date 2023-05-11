@@ -1,6 +1,9 @@
+import { uploadFile } from '@/services/uploadFile';
 import { message } from 'antd';
 import type { Moment } from 'moment';
 import moment from 'moment';
+import { useModel } from 'umi';
+import { parse } from 'path';
 
 const reg =
   /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -387,4 +390,43 @@ export const chuanHoaObject = (obj: any) => {
   if (typeof obj !== 'object') return trim(obj);
   Object.keys(obj).forEach((key) => (obj[key] = chuanHoaObject(obj[key])));
   return obj;
+};
+
+export function useCheckAccess(code: string, idDoiTuong?: string) {
+  const { initialState } = useModel('@@initialState');
+  return (
+    initialState?.currentUser?.systemRole === 'Admin' ||
+    initialState?.currentUser?.vai_tro === 'quan_tri' ||
+    initialState?.phanNhom?.nhom_vai_tro?.includes(code) ||
+    false
+  );
+  //return handlePhanNhom(initialState, code, idDoiTuong);
+}
+
+export const uploadMultiFile = async (
+  arrFile: any[],
+  returnFileType?: boolean,
+  returnAllResponse?: boolean,
+) => {
+  const url: any[] = arrFile
+    ?.filter((item) => item?.remote === true)
+    ?.map((item) =>
+      returnFileType === true ? { url: item?.url ?? '', type: item?.type } : item?.url ?? '',
+    );
+  if (!arrFile) return [];
+  let arrUrl: any[] = [];
+  const arrUpload = arrFile
+    ?.filter((item) => item?.remote !== true)
+    ?.map(async (file: { originFileObj: any; type: string; name: string }) => {
+      const response = await uploadFile({
+        file: file?.originFileObj,
+        // filename: parse(file?.name).name,
+        public: '1',
+      });
+      if (returnFileType) return { url: response?.data?.data?.url, type: file.type };
+      else if (returnAllResponse) return response?.data?.data;
+      else return response?.data?.data?.url;
+    });
+  arrUrl = await Promise.all(arrUpload);
+  return [...url, ...arrUrl];
 };

@@ -148,6 +148,18 @@
       },
     ],
   },
+  {
+    name: 'CauHoiThuongGap',
+    path: './cauhoithuonggap',
+    icon: 'QuestionOutlined',
+    component: './CauHoiThuongGap',
+  },
+  {
+    name: 'VanBanHuongDan',
+    path: '/van-ban-huong-dan',
+    component: './VanBanHuongDan',
+    icon: 'FileOutlined',
+  },
 
   //MENU GIANG VIEN
 
