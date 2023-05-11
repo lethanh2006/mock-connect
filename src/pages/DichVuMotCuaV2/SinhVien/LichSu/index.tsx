@@ -159,6 +159,20 @@ const LichSuGuiDon = () => {
       onCell,
     },
     {
+      title: 'Nội dung phản hồi',
+      dataIndex: 'noiDungPhanHoi',
+      align: 'center',
+      width: 120,
+      onCell,
+    },
+    {
+      title: 'Nội dung trả lời phản hồi',
+      dataIndex: 'noiDungTraLoiPhanHoi',
+      align: 'center',
+      width: 120,
+      onCell,
+    },
+    {
       title: 'File kết quả đính kèm',
       dataIndex: 'ketQuaDinhKem',
       align: 'center',
@@ -176,6 +190,18 @@ const LichSuGuiDon = () => {
         </div>
       ),
     },
+    // {
+    //   title: 'Trạng thái',
+    //   width: 120,
+    //   align: 'center',
+    //   dataIndex: ['daTraLoiPhanHoi'],
+    //   search: 'filterString',
+    //   notRegex: true,
+    //   key: 'daTraLoiPhanHoi',
+    //   render: (val) => (
+    //     <Tag color={!val ? '#dc3545' : '#28a745'}>{val ? 'Đã trả lời' : 'Chưa trả lời'}</Tag>
+    //   ),
+    // },
     {
       title: 'Trạng thái',
       dataIndex: 'trangThai',
@@ -267,7 +293,7 @@ const LichSuGuiDon = () => {
                 <Divider type="vertical" />
                 <Tooltip title="Gửi phản hồi">
                   <Button
-                    // disabled={recordTemp?.trangThai !== 'PROCESSING'}
+                    disabled={recordTemp?.daTraLoiPhanHoi || recordTemp.noiDungPhanHoi}
                     onClick={() => {
                       setVisibleForm(true);
                       setRecordView(recordTemp);

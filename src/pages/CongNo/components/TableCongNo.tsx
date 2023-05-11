@@ -1,17 +1,17 @@
 /* eslint-disable no-underscore-dangle */
 import TableBase from '@/components/Table';
+import { type IColumn } from '@/components/Table/typing';
 import ThanhToan from '@/components/ThanhToan';
+import { PhamVi } from '@/services/CongNo/constant';
 import data from '@/utils/data';
 import { currencyFormat, useCheckAccess } from '@/utils/utils';
-import { EyeOutlined, ImportOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Dropdown, Input, Menu, Modal, Select, Tabs, Tag, Tooltip } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Select, Tabs, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAccess, useModel } from 'umi';
 import Form from './Form';
-import TableKetQuaImport from './TableKetQuaImport';
-import { PhamVi } from '@/services/CongNo/constant';
-import { type IColumn } from '@/components/Table/typing';
 import RenderFilter from './RenderFilter';
+import TableKetQuaImport from './TableKetQuaImport';
 
 const TableCongNo = (props: { type?: 'chưa nộp' | 'đã nộp' }) => {
   const access = useAccess();
