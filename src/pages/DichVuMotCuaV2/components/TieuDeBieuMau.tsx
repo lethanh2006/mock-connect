@@ -1,4 +1,8 @@
+import { useModel } from 'umi';
+
 const TieuDeBieuMau = (props: { title: string }) => {
+  const { record, recordDon } = useModel('dichvumotcuav2');
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -52,7 +56,12 @@ const TieuDeBieuMau = (props: { title: string }) => {
         <div style={{ marginRight: 8 }}>Kính gửi:</div>
         <div>
           <div>- Ban Giám đốc Học viện Phụ nữ Việt Nam;</div>
-          <div>- Phòng Công tác sinh viên</div>
+          <div>
+            -{' '}
+            {record?.thongTinThuTuc?.donViThucHien ||
+              recordDon?.thongTinDichVu?.thongTinThuTuc?.donViThucHien ||
+              'Phòng Công tác sinh viên'}
+          </div>
         </div>
       </p>
     </>
