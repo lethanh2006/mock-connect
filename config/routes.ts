@@ -161,6 +161,25 @@
     // access: 'sinhVienVaNhanVien',
   },
 
+  {
+    name: 'News',
+    icon: 'NotificationOutlined',
+    path: '/tin-tuc',
+    // access: 'sinhVienVaNhanVien',
+    routes: [
+      {
+        path: './',
+        component: './TinTuc',
+        hideInMenu: true,
+      },
+      {
+        path: './chi-tiet',
+        hideInMenu: true,
+        component: './TinTuc/ChiTietTinTuc.tsx',
+      },
+    ],
+  },
+
   //MENU GIANG VIEN
 
   {

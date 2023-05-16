@@ -1,0 +1,247 @@
+@import '~antd/es/style/themes/default.less';
+
+.tin-tuc-wrapper {
+  > .ant-col {
+    padding: 4px;
+    &:first-child {
+      .tin-tuc-card {
+        height: 496px;
+      }
+      .ant-card-body {
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 12px;
+      }
+      .tin-tuc-image-wrapper {
+        width: 100%;
+        max-width: 480px;
+        height: 400px;
+        img {
+          width: 100%;
+          max-height: 380px;
+          object-fit: scale-down;
+        }
+      }
+    }
+    &:nth-child(n + 2):nth-child(-n + 2) {
+      .tin-tuc-card {
+        height: 160px;
+        img {
+          width: 120px;
+          height: 120px;
+        }
+      }
+      .ant-col:not(:last-of-type) {
+        padding-bottom: 8px;
+      }
+      .tin-tuc-image-wrapper {
+        img {
+          object-fit: cover;
+        }
+      }
+    }
+    &:nth-child(n + 3) {
+      .tin-tuc-card {
+        height: 160px;
+        img {
+          width: 80px;
+          height: 80px;
+          object-fit: cover;
+        }
+        .tin-tuc-mo-ta {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .tin-tuc-card {
+    display: flex;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    .ant-card-body {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 12px;
+    }
+    .tin-tuc-image-wrapper {
+      display: flex;
+      align-items: center;
+    }
+    .tin-tuc-content {
+      width: 100%;
+      margin-left: 12px;
+    }
+    .tin-tuc-tieu-de {
+      color: @text-color;
+      font-weight: 600;
+    }
+    .tin-tuc-mo-ta {
+      color: @text-color-secondary;
+    }
+  }
+}
+
+.tin-tuc-wrapper-dashboard {
+  > .ant-col {
+    padding: 4px;
+    &:nth-child(n) {
+      .tin-tuc-card {
+        height: 140px;
+        img {
+          width: 100px;
+          height: 100px;
+        }
+      }
+      .ant-col:not(:last-of-type) {
+        padding-bottom: 8px;
+      }
+    }
+  }
+
+  .tin-tuc-card {
+    display: flex;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    .ant-card-body {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 8px;
+    }
+    .tin-tuc-image-wrapper {
+      display: flex;
+      align-items: center;
+    }
+    .tin-tuc-content {
+      width: 100%;
+      margin-left: 12px;
+    }
+    .tin-tuc-tieu-de {
+      color: @text-color;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .tin-tuc-mo-ta {
+      color: @text-color-secondary;
+    }
+  }
+}
+
+@media (max-width: @screen-md) {
+  .tin-tuc-wrapper {
+    > .ant-col {
+      .tin-tuc-card {
+        height: 160px !important;
+        img {
+          width: 120px !important;
+        }
+      }
+      .tin-tuc-image-wrapper {
+        width: unset !important;
+        height: unset !important;
+      }
+      .tin-tuc-mo-ta {
+        display: -webkit-box !important;
+      }
+      .ant-card-body {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+    }
+  }
+}
+
+#content {
+  h4 {
+    display: flex;
+    align-items: center;
+    color: #d10000;
+    font-size: 24px;
+  }
+
+  .ngay-dang {
+    margin-top: -10px;
+    margin-bottom: 12px;
+    color: #727b88;
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+
+  .mo-ta {
+    font-weight: 500;
+    font-size: 18px;
+    text-align: justify;
+  }
+
+  .noi-dung {
+    margin-top: 20px;
+    overflow: auto;
+    font-size: calc(0.95em + 0.2vw);
+    text-align: justify;
+
+    p::first-letter {
+      margin-left: 40px;
+    }
+
+    .contentimg {
+      margin: auto;
+    }
+
+    img {
+      max-width: 90%;
+      height: auto;
+      margin: auto;
+    }
+
+    figure.image {
+      text-align: center;
+    }
+
+    td,
+    figcaption {
+      color: #999;
+      font-size: 13px;
+      font-style: italic;
+      text-align: center;
+    }
+
+    iframe {
+      max-width: 100% !important;
+    }
+  }
+
+  .noi-dung-pdf {
+    text-align: center;
+
+    .react-pdf__Page__canvas {
+      margin: auto;
+    }
+  }
+}
+
+.card-relate {
+  .ant-card-head-title {
+    color: #d10000;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .ant-card-body {
+    padding: 10px;
+
+    .ant-list-item {
+      padding: 5px 0;
+
+      .ant-list-item-meta {
+        align-items: center;
+      }
+    }
+  }
+}
