@@ -1,4 +1,4 @@
-import { ip3 } from '@/utils/ip';
+import { ip4 } from '@/utils/ip';
 import axios from 'axios';
 
 export const buildUpLoadFile = async (values: any, name: string) => {
@@ -23,7 +23,7 @@ export async function uploadFile(payload: { file: string | Blob; public: '1' | '
   const form = new FormData();
   form.append('file', payload?.file);
   form.append('isPublic', payload?.public);
-  return axios.post(`${ip3}/file`, form);
+  return axios.post(`${ip4}/file`, form);
 }
 
 export async function uploadFileAndExportPdf(payload: {
@@ -39,5 +39,5 @@ export async function uploadFileAndExportPdf(payload: {
   form.append('filename', payload?.filename);
   form.append('public', payload?.public);
   form.append('loai', payload?.loai);
-  return axios.post(`${ip3}/file-object`, form);
+  return axios.post(`${ip4}/file-object`, form);
 }

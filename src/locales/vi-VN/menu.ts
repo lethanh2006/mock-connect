@@ -18,6 +18,7 @@ export default {
   'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
   'menu.DichVuMotCua': 'Dịch vụ một cửa',
   'menu.DichVuMotCua.TaoDon': 'Tạo đơn - Dịch vụ một cửa',
+  'menu.PhanHoi': 'Phản hồi',
 
   // GIANG VIEN
 };

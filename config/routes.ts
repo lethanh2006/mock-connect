@@ -154,6 +154,12 @@
       },
     ],
   },
+  {
+    name: 'PhanHoi',
+    path: './phan-hoi',
+    component: './PhanHoi',
+    // access: 'sinhVienVaNhanVien',
+  },
 
   //MENU GIANG VIEN
 
