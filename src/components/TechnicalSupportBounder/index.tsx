@@ -1,4 +1,5 @@
 import { getInfo, swapToken } from '@/services/ant-design-pro/api';
+import axios from '@/utils/axios';
 import { ToolOutlined } from '@ant-design/icons';
 import { Button, Modal, Tooltip, message, notification } from 'antd';
 import jwt_decode from 'jwt-decode';
@@ -6,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useIntl, useModel } from 'umi';
 import FormPostIssue from './Form';
-import axios from '@/utils/axios';
 
 const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
   const { setInitialState, initialState } = useModel('@@initialState');
@@ -86,10 +86,12 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
             if (window.location.pathname === '/user/login') {
               notification.warn({
                 message: 'Phiên đăng nhập đã hết hạn',
-                description: 'Vui lòng đăng nhập lại!',
+                description: 'Đang chuyển hướng tới trang đăng nhập...',
               });
-              // auth.removeUser();
-            } else history.replace('/user/login');
+              setTimeout(() => auth.signinRedirect(), 1500);
+            } else {
+              history.replace('/user/login');
+            }
             // Chỗ này mặc định sẽ về trang đăng nhập của web để thông báo Phiên đã hết hạn
             // Nếu muốn vào trang đăng nhập SSO luôn thì dùng auth.removeUser()
           });

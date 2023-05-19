@@ -2,9 +2,10 @@ import { tienVietNam } from '@/utils/utils';
 import Chart from 'react-apexcharts';
 import { type DataChartType } from '.';
 import vi from './vi.json';
+import _ from 'lodash';
 
 const DonutChart = (props: DataChartType) => {
-  const { title, xAxis, yAxis, yLabel, height, colors } = props;
+  const { xAxis, yAxis, height, colors, formatY, showTotal } = props;
 
   const options = {
     chart: {
@@ -27,12 +28,29 @@ const DonutChart = (props: DataChartType) => {
     ],
     tooltip: {
       y: {
-        formatter: (val: number) => tienVietNam(val),
+        formatter: (val: number) => (formatY ? formatY(val) : tienVietNam(val)),
       },
     },
     colors,
     fill: {
       colors,
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: showTotal,
+            total: {
+              show: showTotal,
+              label: 'Tổng số',
+              formatter: (w: any) => {
+                const val = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
+                return formatY ? formatY(val) : tienVietNam(val);
+              },
+            },
+          },
+        },
+      },
     },
   };
 
