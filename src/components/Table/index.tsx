@@ -1,5 +1,6 @@
 import {
   CloseOutlined,
+  ExportOutlined,
   FilterOutlined,
   FilterTwoTone,
   ImportOutlined,
@@ -137,24 +138,29 @@ const TableBase = (props: TableBaseProps) => {
     }
   };
 
-  const getColumnSearchProps = (dataIndex: any, columnTitle: any) => ({
-    filterDropdown: () => (
-      <div className="column-search-box" onKeyDown={(e) => e.stopPropagation()}>
-        <Input.Search
-          placeholder={`Tìm ${columnTitle}`}
-          allowClear
-          enterButton
-          value={getFilterColumn(dataIndex, EOperatorType.CONTAIN, true)?.values?.[0]}
-          onSearch={(value) => handleSearch(dataIndex, value)}
-        />
-      </div>
-    ),
-    filterIcon: () => {
-      const values = getFilterColumn(dataIndex, undefined, true)?.values;
-      const filtered = values && values[0];
-      return <SearchOutlined className={filtered ? 'text-primary' : undefined} />;
-    },
-  });
+  const getColumnSearchProps = (dataIndex: any, columnTitle: any) => {
+    const filterColumn = getFilterColumn(dataIndex, EOperatorType.CONTAIN, true);
+    return {
+      filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: any) => (
+        <div className="column-search-box" onKeyDown={(e) => e.stopPropagation()}>
+          <Input.Search
+            placeholder={`Tìm ${columnTitle}`}
+            allowClear
+            enterButton
+            value={selectedKeys[0]}
+            onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+            onSearch={(value) => handleSearch(dataIndex, value)}
+          />
+        </div>
+      ),
+      filteredValue: filterColumn?.values ?? [],
+      filterIcon: () => {
+        const values = getFilterColumn(dataIndex, undefined, true)?.values;
+        const filtered = values && values[0];
+        return <SearchOutlined className={filtered ? 'text-primary' : undefined} />;
+      },
+    };
+  };
   //#endregion
 
   //#region Get Filter Column Props
@@ -189,14 +195,12 @@ const TableBase = (props: TableBaseProps) => {
   const getFilterColumnProps = (dataIndex: any, filterData?: any[]) => {
     const filterColumn = getFilterColumn(dataIndex, EOperatorType.INCLUDE, true);
     return {
-      ...{
-        filters: filterData?.map((item: string | TDataOption) =>
-          typeof item === 'string'
-            ? { key: item, value: item, text: item }
-            : { key: item.value, value: item.value, text: item.label },
-        ),
-        filteredValue: filterColumn?.values ?? [],
-      },
+      filters: filterData?.map((item: string | TDataOption) =>
+        typeof item === 'string'
+          ? { key: item, value: item, text: item }
+          : { key: item.value, value: item.value, text: item.label },
+      ),
+      filteredValue: filterColumn?.values ?? [],
     };
   };
   //#endregion
@@ -204,13 +208,21 @@ const TableBase = (props: TableBaseProps) => {
   //#region Get Table Columns
   columns = columns.map((item) => ({
     ...item,
-    ...(item.sortable ? getSort(item.dataIndex) : {}),
+    ...(item.sortable && getSort(item.dataIndex)),
     ...(item.filterType === 'string'
       ? getColumnSearchProps(item.dataIndex, item.title)
-      : undefined),
-    ...(item.filterType === 'select'
+      : item.filterType === 'select'
       ? getFilterColumnProps(item.dataIndex, item.filterData)
       : undefined),
+    children: item.children?.map((child) => ({
+      ...child,
+      ...(child.sortable && getSort(child.dataIndex)),
+      ...(child.filterType === 'string'
+        ? getColumnSearchProps(child.dataIndex, child.title)
+        : child.filterType === 'select'
+        ? getFilterColumnProps(child.dataIndex, child.filterData)
+        : undefined),
+    })),
   }));
 
   const finalColumns = columns?.filter((item) => item?.hide !== true);
@@ -233,7 +245,11 @@ const TableBase = (props: TableBaseProps) => {
     sorter: any,
   ) => {
     // Handle Filter in columns
-    Object.entries(fil).map(([field, values]) => handleFilter(field, values as any));
+    Object.entries(fil).map(([field, values]) => {
+      const col = columns.find((item) => item.dataIndex === field);
+      if (col?.filterType === 'select') handleFilter(field, values as any);
+      else if (col?.filterType === 'string') handleSearch(field, values?.[0] as any);
+    });
 
     const { order, field } = sorter;
     const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
@@ -247,6 +263,8 @@ const TableBase = (props: TableBaseProps) => {
 
   const mainContent = (
     <div className="table-base">
+      {children}
+
       <div className="header">
         <div className="action">
           {buttonOptions?.create !== false ? (
@@ -265,14 +283,15 @@ const TableBase = (props: TableBaseProps) => {
               </Button>
             </Tooltip>
           ) : null}
+
           {buttonOptions?.import ? (
             <Button icon={<ImportOutlined />} onClick={() => setVisibleImport(true)}>
               Nhập dữ liệu
             </Button>
           ) : null}
-          {props.otherButtons}
+          {buttonOptions?.export ? <Button icon={<ExportOutlined />}>Xuất dữ liệu</Button> : null}
 
-          {children}
+          {props.otherButtons}
         </div>
 
         <div className="extra">

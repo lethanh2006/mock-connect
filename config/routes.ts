@@ -30,12 +30,6 @@
         path: '/account/center',
         component: './account/center',
       },
-      // {
-      //   name: 'settings',
-      //   icon: 'smile',
-      //   path: '/account/settings',
-      //   component: './account/settings',
-      // },
     ],
   },
 
@@ -158,6 +152,7 @@
     name: 'PhanHoi',
     path: './phan-hoi',
     component: './PhanHoi',
+    icon: 'HighlightOutlined',
     // access: 'sinhVienVaNhanVien',
   },
 
@@ -179,12 +174,27 @@
       },
     ],
   },
-
+  {
+    name: 'CauHoiThuongGap',
+    path: './cauhoithuonggap',
+    icon: 'QuestionOutlined',
+    component: './CauHoiThuongGap',
+  },
+  {
+    name: 'VanBanHuongDan',
+    path: '/van-ban-huong-dan',
+    component: './VanBanHuongDan',
+    icon: 'FileOutlined',
+  },
   //MENU GIANG VIEN
 
   {
     path: '/',
-    redirect: '/user/login',
+  },
+  {
+    path: '/403',
+    component: './exception/403/403Page',
+    layout: false,
   },
   {
     component: './exception/404',

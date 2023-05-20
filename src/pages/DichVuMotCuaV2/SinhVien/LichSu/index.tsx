@@ -12,6 +12,7 @@ import {
   MenuOutlined,
   PlusOutlined,
   PrinterOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons';
 import { Button, Divider, message, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip } from 'antd';
 import axios from 'axios';
@@ -19,9 +20,9 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useAccess, useModel } from 'umi';
 import FormQuyTrinh from '../../components/FormQuyTrinh';
+import FormGuiPhanHoi from '../../QuanLyDon/components/FormGuiPhanHoi';
 
 const LichSuGuiDon = () => {
-  const access = useAccess();
   const {
     page,
     limit,
@@ -42,6 +43,8 @@ const LichSuGuiDon = () => {
 
   const { getMyProfileModel, record } = useModel('sinhvien');
 
+  const { setVisibleForm, visibleForm } = useModel('phanhoi');
+
   const [recordView, setRecordView] = useState<DichVuMotCuaV2.Don>();
   const [visibleViewInDon, setVisibleViewInDon] = useState<boolean>(false);
   const [type, setType] = useState<'edit' | 'view' | 'handle' | 'create'>('view');
@@ -57,12 +60,12 @@ const LichSuGuiDon = () => {
     setRecord({} as DichVuMotCuaV2.BieuMau);
     // setLoaiDichVu('DVMC');
     getAllBieuMauModel('DVMC');
-    if (access.sinhVien) {
-      // getAllKyHocSinhVienModel();
-      getAllNamHocSinhVienModel();
-      // getAllMonHocSinhVienModel();
-      // getAllLopTinChiSinhVienModel();
-    }
+    // if (access.sinhVien) {
+    // getAllKyHocSinhVienModel();
+    // getAllNamHocSinhVienModel();
+    // getAllMonHocSinhVienModel();
+    // getAllLopTinChiSinhVienModel();
+    // }
 
     return () => {
       setDanhSach([]);
@@ -261,6 +264,18 @@ const LichSuGuiDon = () => {
                     />
                   </Popconfirm>
                 </Tooltip>
+                <Divider type="vertical" />
+                <Tooltip title="Gửi phản hồi">
+                  <Button
+                    // disabled={recordTemp?.trangThai !== 'PROCESSING'}
+                    onClick={() => {
+                      setVisibleForm(true);
+                      setRecordView(recordTemp);
+                    }}
+                    shape="circle"
+                    icon={<QuestionCircleOutlined />}
+                  />
+                </Tooltip>
               </>
             }
           >
@@ -373,6 +388,18 @@ const LichSuGuiDon = () => {
         width={1200}
       >
         <PDFViewer data={data} />
+      </Modal>
+      <Modal
+        bodyStyle={{ padding: 0 }}
+        visible={visibleForm}
+        onCancel={() => {
+          setVisibleForm(false);
+        }}
+        footer={false}
+        destroyOnClose
+        width={600}
+      >
+        <FormGuiPhanHoi record={recordView} />
       </Modal>
     </>
   );

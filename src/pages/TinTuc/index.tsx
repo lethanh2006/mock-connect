@@ -1,10 +1,10 @@
-import { getDataTinTuc } from '@/services/ant-design-pro/api';
 import { ellipse } from '@/utils/utils';
 import { Card, Empty, Pagination, Spin, Tabs, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAccess, useModel } from 'umi';
 import BlockTinTuc from './BlockTinTuc';
 import './styles.less';
+import { getDataTinTuc } from '@/services/TinTuc/tintuc';
 
 const TinTucPage = () => {
   const { getAllChuDeModel, danhSach: danhSachChuDe } = useModel('chude');
@@ -30,7 +30,7 @@ const TinTucPage = () => {
   };
 
   useEffect(() => {
-    getAllChuDeModel(access.nhanVien ? { phamVi: 'Tất cả' } : {}).then((listMenu) => {
+    getAllChuDeModel(access?.nhanVien ? { phamVi: 'Tất cả' } : {}).then((listMenu) => {
       const k = key === '' || key.includes('=') ? listMenu?.[0]?._id : key;
       if (key !== k) setKey(k);
       getData(1, limitTinTucTheoTopic, k);

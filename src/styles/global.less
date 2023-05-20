@@ -108,11 +108,11 @@ body,
 .ant-menu-dark.ant-pro-sider-menu {
   .ant-menu-item,
   .ant-menu-submenu-title {
-    height: auto;
+    height: auto !important;
     min-height: 36px;
     padding-top: 5px;
     padding-bottom: 5px;
-    line-height: 1.5;
+    line-height: 1.5 !important;
     border-radius: 2px;
 
     &::after {
@@ -397,7 +397,47 @@ ol {
   }
 }
 
+.ant-modal .ant-card-body,
+.ant-drawer .ant-card-body {
+  @media (min-width: @screen-xl) {
+    .ant-tabs-left {
+      .ant-tabs-tab + .ant-tabs-tab {
+        margin: 10px 0 0 0;
+      }
+    }
+
+    .ant-tabs-left > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane {
+      padding-left: 18px;
+    }
+  }
+
+  .button-section {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .ant-collapse-header {
+    font-weight: 600;
+  }
+
+  .ant-divider-horizontal.ant-divider-with-text-left {
+    margin: 12px 0 4px 0;
+    font-weight: 600;
+    font-size: 14px;
+
+    &::before {
+      width: 0;
+    }
+
+    .ant-divider-inner-text {
+      padding: 0px;
+    }
+  }
+}
+
 .ant-table-cell {
+  height: 48px;
   padding: 8px !important;
 
   p,
@@ -414,7 +454,8 @@ ol {
 }
 
 .ant-table-small .ant-table-cell {
-  padding: 5px !important;
+  height: 36px;
+  padding: 3px 5px !important;
 }
 
 .li-hinh-thuc {
