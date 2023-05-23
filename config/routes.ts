@@ -42,20 +42,6 @@
     icon: 'HomeOutlined',
   },
 
-  // DANH MUC HE THONG
-  // {
-  //   name: 'DanhMuc',
-  //   path: '/danh-muc',
-  //   icon: 'copy',
-  //   routes: [
-  //     {
-  //       name: 'ChucVu',
-  //       path: 'chuc-vu',
-  //       component: './DanhMuc/ChucVu',
-  //     },
-  //   ],
-  // },
-
   // MENU CHUNG
   {
     name: 'Lich',
@@ -71,6 +57,7 @@
     icon: 'EditOutlined',
     // access: 'sinhVien',
     routes: [
+      { name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
       {
         name: 'LopHanhChinh',
         path: 'lop-hanh-chinh',

@@ -1,32 +1,19 @@
 import DiaChi from '@/components/DiaChi';
 import HocPhanCoDiem from '@/components/HocPhanCoDiem';
+import MyDatePicker from '@/components/MyDatePicker';
 import Upload from '@/components/Upload/UploadMultiFile';
-import FormBieuMauChonXe from '@/pages/VanPhongSo/DonMuonXe/components/FormBieuMauChonXe';
+import useCheckAccess from '@/hooks/useCheckAccess';
+import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import { accessFileUpload } from '@/services/DichVuMotCuaV2/constant';
 import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
-import type { QuanLyOto } from '@/services/QuanLyOto/typings';
-import type { VanphongsoCsvc } from '@/services/VanPhongSo/typings';
-import { getXeKhaDung } from '@/services/VanPhongSo/vanphongso';
-import {
-  accessFileUpload,
-  ColorTrangThaiDonMotCua,
-  ETrangThaiDonVps,
-  MaDichVuVps,
-} from '@/utils/constants';
 import rules from '@/utils/rules';
-import {
-  checkFileSize,
-  includes,
-  renderFileList,
-  uploadMultiFile,
-  useCheckAccess,
-} from '@/utils/utils';
+import { checkFileSize, includes, renderFileList } from '@/utils/utils';
 import { CopyOutlined } from '@ant-design/icons';
 import {
   AutoComplete,
   Button,
   Card,
   Checkbox,
-  DatePicker,
   Descriptions,
   Divider,
   Dropdown,
@@ -34,12 +21,11 @@ import {
   Input,
   InputNumber,
   Menu,
-  message,
   Modal,
   Radio,
   Select,
-  Tag,
   Tooltip,
+  message,
 } from 'antd';
 import moment from 'moment';
 import mm from 'moment-timezone';
@@ -50,7 +36,6 @@ import FormXuLyDon from '../QuanLyDon/components/FormXuLyDon';
 import Table from './TableElement';
 import ThongTinNguoiTaoDon from './ThongTinNguoiTaoDon';
 import TieuDeBieuMau from './TieuDeBieuMau';
-import FormBieuMauChonPhong from '@/pages/VanPhongSo/DonMuonPhongHop/components/FormBieuMauChonPhong';
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
@@ -75,7 +60,6 @@ const FormBieuMau = (props: {
   const chuyenVienDieuPhoiDuyetDon = useCheckAccess('don-dvmc-thao-tac:duyet-all');
   const chuyenVienXuLyDuyetDon = useCheckAccess('don-dvmc-thao-tac:duyet-my');
   const canDieuPhoiDon = useCheckAccess('don-dvmc-thao-tac:dieu-phoi');
-  const isQuanTriVps = useCheckAccess('quan-tri-vps');
 
   const [form] = Form.useForm();
   const access = useAccess();
@@ -89,13 +73,10 @@ const FormBieuMau = (props: {
     recordDon,
     sinhVienPutDonModel,
     exportDonModel,
-    setVisibleForm,
-    getDonSinhVienModel,
     loaiDichVu,
-    adminGetDonVpsModel,
   } = useModel('dichvumotcuav2');
-  const { danhSach: danhSachKyHoc } = useModel('hocky');
-  const { danhSach: danhSachNamHoc } = useModel('namhoc');
+  const { danhSach: danhSachKyHoc } = useModel('daotao.hocky');
+  const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
   const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
   const { danhSachDanToc, danhSachTonGiao, getAllTonGiao, getAllDanToc } =
     useModel('dantoctongiao');
@@ -109,32 +90,13 @@ const FormBieuMau = (props: {
     setObjDanhSachXaPhuong,
     setObjDanhSachQuanHuyen,
   } = useModel('donvihanhchinh');
-  const { getQuanLyOtoAllModel, danhSach: danhSachOto } = useModel('quanlyoto');
-  const { getAllDonMuonPhongByIdDonModel, getAllPhongKhaDungModel, getAllPhongModel } =
-    useModel('quantriphonghop');
-  const { laiXe, xeChon, setXeChon, setLaiXe } = useModel('quantrixecong');
-  const { getAllLaiXeModel } = useModel('quanlylaixe');
-
   const [recordEdit, setRecordEdit] = useState<{ duLieuBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }>({
     duLieuBieuMau: [],
   });
-
   const [valuesForm, setValuesForm] = useState<any>({});
   const [visibleFormDieuPhoi, setVisibleFormDieuPhoi] = useState<boolean>(false);
   const [visibleFormXuLy, setVisibleFormXuLy] = useState<boolean>(false);
   const [typeXuLy, setTypeXuLy] = useState<'ok' | 'not-ok' | 'edit-result'>('ok');
-
-  // state xe công
-  const [visibleChonXe, setVisibleChonXe] = useState<boolean>(false);
-  const [dataXeKhacLoai, setDataXeKhacLoai] = useState<any>();
-  const [dataXeCungLoai, setDataXeCungLoai] = useState<any>();
-
-  // state phòng họp
-  const [selectedRow, setSelectedRow] = useState<VanphongsoCsvc.PhongHopRecord>();
-  const [timeMuonPhong, setTimeMuonPhong] = useState<string>();
-  const [timeTraPhong, setTimeTraPhong] = useState<string>();
-  const [visibleChonPhong, setVisibleChonPhong] = useState<boolean>(false);
-
   const { pathname } = window.location;
   const arrPathName = pathname?.split('/') ?? [];
   const [check, setCheck] = useState<boolean>(false);
@@ -223,7 +185,8 @@ const FormBieuMau = (props: {
       if (values[item]?.fileList) {
         const checkSize = checkFileSize(values[item]?.fileList ?? []);
         if (!checkSize) return;
-        objectFileUpload[item] = await uploadMultiFile(values[item]?.fileList ?? [], true);
+        // TODO: Check upload multiple file
+        // objectFileUpload[item] = await uploadMultiFile(values[item]?.fileList ?? [], true);
       }
     }
     const valuesFinal = { ...values, ...objectFileUpload };
@@ -251,25 +214,6 @@ const FormBieuMau = (props: {
     );
     setValuesForm(valuesTemp);
 
-    // phần văn phòng số
-    if (props?.record?.thongTinDichVu?.maDichVu === MaDichVuVps.MUON_PHONG_HOC) {
-      if (['handle'].includes(props?.type ?? '')) {
-        getAllPhongKhaDungModel({
-          thoiGianBd: props?.record?.thongTinDichVu?.cauHinhBieuMau[0].value,
-          thoiGianKt: props?.record?.thongTinDichVu?.cauHinhBieuMau[1].value,
-        });
-        getAllDonMuonPhongByIdDonModel(props?.record?._id ?? '');
-      }
-      if (['create', 'muonCsvc'].includes(props?.type ?? '')) {
-        getAllPhongModel();
-      }
-    }
-    if (props?.record?.thongTinDichVu?.maDichVu === MaDichVuVps.MUON_OTO) {
-      getAllLaiXeModel();
-    }
-    if (props?.record?.thongTinDichVu?.cauHinhBieuMau?.find((item) => item?.type == '_OTO')) {
-      getQuanLyOtoAllModel();
-    }
     return () => {
       if (!props?.handleAdd) setDanhSachDataTable({});
       setTenTinh({});
@@ -294,38 +238,6 @@ const FormBieuMau = (props: {
     });
   };
 
-  const handleChonXe = async (item: any) => {
-    await getXeKhaDung({
-      thoiGianBd: item.cauHinhBieuMau[0]?.value as string,
-      thoiGianKt: item.cauHinhBieuMau[1]?.value as string,
-      // loaiXe: item.cauHinhBieuMau[2]?.value as string,
-    }).then((res) => {
-      setDataXeKhacLoai(
-        res?.data?.data?.result
-          ?.filter((el: any) => el?.info?.loaiXe !== item.cauHinhBieuMau[2]?.value)
-          ?.map((e: any) => {
-            return { ...e.info, id: e._id };
-          }),
-      );
-      setDataXeCungLoai(
-        res?.data?.data?.result
-          ?.filter((it: any) => {
-            return it?.info?.loaiXe == item.cauHinhBieuMau[2]?.value;
-          })
-          ?.map((e: any) => {
-            return { ...e.info, id: e._id };
-          }),
-      );
-      setVisibleChonXe(true);
-    });
-  };
-
-  const handleCloseChonXe = () => {
-    setVisibleChonXe(false);
-    setXeChon({} as any);
-    setLaiXe({} as any);
-  };
-
   //xử lý ở modal chọn xe công và phòng họp
   const handleDuyetDon = async () => {
     const values = form.getFieldsValue();
@@ -347,20 +259,6 @@ const FormBieuMau = (props: {
         element = <Input.TextArea rows={3} placeholder={item?.label ?? ''} />;
         break;
       }
-      case '_OTO': {
-        initialValue = item?.value;
-        element = (
-          <Select allowClear placeholder={item?.label ?? ''}>
-            {danhSachOto &&
-              danhSachOto.map((oto: QuanLyOto.Record, index: number) => (
-                <Select.Option key={oto._id} value={oto?.hoTen}>
-                  {oto?.hoTen} - {oto?.bienSoXe}
-                </Select.Option>
-              ))}
-          </Select>
-        );
-        break;
-      }
       case 'INPUT_NUMBER': {
         initialValue = Number(item?.value);
         element = (
@@ -377,17 +275,9 @@ const FormBieuMau = (props: {
       case 'DATE_PICKER': {
         initialValue = item?.value ? moment(item?.value) : undefined;
         element = (
-          <DatePicker
-            style={{ width: '100%' }}
+          <MyDatePicker
             format="DD/MM/YYYY HH:mm"
             showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
-            onChange={(val: any) => {
-              if (item?.label === 'Ngày giờ mượn') {
-                setTimeMuonPhong(val);
-              } else {
-                setTimeTraPhong(val);
-              }
-            }}
           />
         );
         break;
@@ -527,20 +417,7 @@ const FormBieuMau = (props: {
             if (cell.type === 'DATE_PICKER') {
               value = moment(cell?.value)?.format('HH:mm DD/MM/YYYY');
             }
-            if (
-              props?.record?.thongTinDichVu?.maDichVu === MaDichVuVps.BAO_CAO_SU_CO &&
-              cell.type === 'UPLOAD_SINGLE'
-            ) {
-              value = cell?.value?.map((el: any) => {
-                return el.url ? (
-                  <a href={el?.url} rel="noreferrer" target="_blank">
-                    {el?.url}
-                  </a>
-                ) : (
-                  'Ảnh trống'
-                );
-              });
-            }
+
             row[cell?.label] = value;
           });
           return row;
@@ -816,15 +693,6 @@ const FormBieuMau = (props: {
           daTraKetQua: false,
         });
       } else {
-        if (
-          (props?.type === 'muonCsvc' && arrPathName?.includes('xecong')) ||
-          arrPathName?.includes('phonghop')
-        ) {
-          if (Number(moment(timeTraPhong).diff(moment(timeMuonPhong), 'minutes')) <= 0) {
-            message.error('Thời gian mượn phải nhỏ hơn thời gian trả!');
-            return;
-          }
-        }
         postDonSinhVienModel({
           soLuongThanhToan: values?.soLuongThanhToan,
           duLieuBieuMau,
@@ -832,28 +700,7 @@ const FormBieuMau = (props: {
           traKetQua: props?.record?.thongTinDichVu?.traKetQua,
           daTraKetQua: false,
           idCoSoVatChat: props?.isMuonPhongHop ? selectedRow?._id : null,
-        }).then(() => {
-          if (props?.type === 'muonCsvc') {
-            if (isQuanTriVps) {
-              adminGetDonVpsModel(
-                props?.isMuonPhongHop
-                  ? MaDichVuVps.MUON_PHONG_HOC
-                  : props?.isBaoCaoSuCo
-                  ? MaDichVuVps.BAO_CAO_SU_CO
-                  : MaDichVuVps.MUON_OTO,
-              );
-            } else {
-              getDonSinhVienModel(
-                props?.isMuonPhongHop
-                  ? MaDichVuVps.MUON_PHONG_HOC
-                  : props?.isBaoCaoSuCo
-                  ? MaDichVuVps.BAO_CAO_SU_CO
-                  : MaDichVuVps.MUON_OTO,
-              );
-            }
-            setVisibleForm(false);
-          }
-        });
+        }).then(() => {});
       }
     }
   };
@@ -910,55 +757,6 @@ const FormBieuMau = (props: {
                   </Descriptions.Item>
                 </Descriptions>
               </>
-            ) : null}
-
-            {props?.record?.thongTinMuonXe ? (
-              <div style={{ marginBottom: '20px' }}>
-                <p>Thông tin mượn xe:</p>
-                <Descriptions
-                  size="small"
-                  column={{ xxl: 4, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }}
-                  layout="vertical"
-                  bordered
-                  style={{ marginBottom: '20px' }}
-                >
-                  <Descriptions.Item label="Biển số xe">
-                    {props?.record?.thongTinMuonXe?.bienSoXe ?? 'Không xác định'}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Thời gian mượn">
-                    {props?.record?.thongTinMuonXe?.thoiGianBd
-                      ? moment(props?.record?.thongTinMuonXe?.thoiGianBd).format('DD/MM/YYYY')
-                      : 'Không xác định'}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Thời gian trả">
-                    {props?.record?.thongTinMuonXe?.thoiGianKt
-                      ? moment(props?.record?.thongTinMuonXe?.thoiGianKt).format('DD/MM/YYYY')
-                      : 'Không xác định'}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Trạng thái mượn xe">
-                    <Tag
-                      color={
-                        props?.record?.thongTinMuonXe?.trangThai === ETrangThaiDonVps.DA_DUYET
-                          ? ColorTrangThaiDonMotCua.OK
-                          : props?.record?.thongTinMuonXe?.trangThai === ETrangThaiDonVps.DA_HUY
-                          ? ColorTrangThaiDonMotCua.NOT_OK
-                          : props?.record?.thongTinMuonXe?.trangThai === ETrangThaiDonVps.DANG_MUON
-                          ? '#72c9f1'
-                          : '#299b8c'
-                      }
-                    >
-                      {props?.record?.thongTinMuonXe?.trangThai ?? 'Không xác định'}
-                    </Tag>
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Thông tin lái xe">
-                    Họ tên:{' '}
-                    {props?.record?.thongTinMuonXe?.thongTinlaiXe[0]?.hoTen ?? 'Không xác định'}
-                    <br />
-                    Số điện thoại:{' '}
-                    {props?.record?.thongTinMuonXe?.thongTinlaiXe[0]?.sdt ?? 'Không xác định'}
-                  </Descriptions.Item>
-                </Descriptions>
-              </div>
             ) : null}
 
             {((record?.thongTinThuTuc?.yeuCauTraPhi &&
@@ -1094,54 +892,24 @@ const FormBieuMau = (props: {
 
           {['handle'].includes(props?.type ?? '') && (
             <>
-              {props.record?.thongTinDichVu?.maDichVu === MaDichVuVps.MUON_OTO ? (
-                <Button
-                  disabled={!chuyenVienDieuPhoiDuyetDon && !chuyenVienXuLyDuyetDon}
-                  onClick={() => handleChonXe(props.record?.thongTinDichVu)}
-                  style={{
-                    marginRight: 8,
-                    backgroundColor: '#007F3E',
-                    border: '1px solid #007F3E',
-                    color: 'white',
-                  }}
-                >
-                  Chọn xe và duyệt
-                </Button>
-              ) : props.record?.thongTinDichVu?.maDichVu === MaDichVuVps.MUON_PHONG_HOC ? (
-                <Button
-                  disabled={!chuyenVienDieuPhoiDuyetDon && !chuyenVienXuLyDuyetDon}
-                  onClick={() => setVisibleChonPhong(true)}
-                  style={{
-                    marginRight: 8,
-                    backgroundColor: '#007F3E',
-                    border: '1px solid #007F3E',
-                    color: 'white',
-                  }}
-                >
-                  Chọn phòng và duyệt
-                </Button>
-              ) : (
-                <Button
-                  disabled={!chuyenVienDieuPhoiDuyetDon && !chuyenVienXuLyDuyetDon}
-                  onClick={async () => {
-                    const values = form.getFieldsValue();
-                    const { duLieuBieuMau } = await onSubmitForm(values);
-                    setRecordEdit({ duLieuBieuMau });
-                    setVisibleFormXuLy(true);
-                    setTypeXuLy('ok');
-                  }}
-                  style={{
-                    marginRight: 8,
-                    backgroundColor: '#007F3E',
-                    border: '1px solid #007F3E',
-                    color: 'white',
-                  }}
-                >
-                  {props.record?.thongTinDichVu?.maDichVu !== MaDichVuVps.BAO_CAO_SU_CO
-                    ? 'Duyệt'
-                    : 'Tiếp nhận'}
-                </Button>
-              )}
+              <Button
+                disabled={!chuyenVienDieuPhoiDuyetDon && !chuyenVienXuLyDuyetDon}
+                onClick={async () => {
+                  const values = form.getFieldsValue();
+                  const { duLieuBieuMau } = await onSubmitForm(values);
+                  setRecordEdit({ duLieuBieuMau });
+                  setVisibleFormXuLy(true);
+                  setTypeXuLy('ok');
+                }}
+                style={{
+                  marginRight: 8,
+                  backgroundColor: '#007F3E',
+                  border: '1px solid #007F3E',
+                  color: 'white',
+                }}
+              >
+                Duyệt
+              </Button>
 
               <Button
                 disabled={!chuyenVienDieuPhoiDuyetDon && !chuyenVienXuLyDuyetDon}
@@ -1157,9 +925,7 @@ const FormBieuMau = (props: {
                   color: 'white',
                 }}
               >
-                {props.record?.thongTinDichVu?.maDichVu !== MaDichVuVps.BAO_CAO_SU_CO
-                  ? 'Không duyệt'
-                  : 'Từ chối'}
+                Không duyệt
               </Button>
 
               {arrPathName?.includes('quanlydondieuphoi') && (
@@ -1283,46 +1049,6 @@ const FormBieuMau = (props: {
           onCancel={() => {
             setVisibleFormXuLy(false);
           }}
-          idCoSoVatChat={xeChon?.id}
-          laiXe={laiXe}
-          xeChon={xeChon}
-          idCsvcPhong={selectedRow?._id ?? ''}
-        />
-      </Modal>
-      <Modal
-        maskClosable={false}
-        bodyStyle={{ padding: 0 }}
-        footer={false}
-        visible={visibleChonXe}
-        onCancel={() => handleCloseChonXe()}
-        width={800}
-      >
-        <FormBieuMauChonXe
-          propsRecord={props?.record}
-          dataXeKhacLoai={dataXeKhacLoai}
-          dataXeCungLoai={dataXeCungLoai}
-          setVisibleChonXe={setVisibleChonXe}
-          handleDuyetDon={handleDuyetDon}
-          handleCloseChonXe={handleCloseChonXe}
-        />
-      </Modal>
-
-      <Modal
-        maskClosable={false}
-        bodyStyle={{ padding: 0 }}
-        footer={false}
-        visible={visibleChonPhong}
-        onCancel={() => {
-          setVisibleChonPhong(false);
-        }}
-        width={800}
-      >
-        <FormBieuMauChonPhong
-          propsRecord={props?.record}
-          setSelectedRow={setSelectedRow}
-          selectedRow={selectedRow}
-          setVisibleChonPhong={setVisibleChonPhong}
-          handleDuyetDon={handleDuyetDon}
         />
       </Modal>
     </Card>

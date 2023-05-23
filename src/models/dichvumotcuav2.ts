@@ -35,7 +35,6 @@ import {
   nhanVienDeleteDon,
 } from '@/services/DichVuMotCuaV2/dichvumotcuav2';
 import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
-import { getAllDonVPS } from '@/services/VanPhongSo/vanphongso';
 import type { MaDichVuVps } from '@/utils/constants';
 import { message } from 'antd';
 import FileDownload from 'js-file-download';
@@ -503,13 +502,6 @@ export default () => {
     setDanhSach(response?.data?.data ?? []);
   };
 
-  const getAllBieuMauVPSModel = async () => {
-    setLoading(true);
-    const res = await getAllDonVPS();
-    setDanhSach(res?.data?.data ?? []);
-    setLoading(false);
-  };
-
   const getAllBieuMauChuyenVienTiepNhanModel = async (loaiDichVuParam?: string) => {
     const response = await getAllBieuMauChuyenVienTiepNhan({
       condition: { loaiDichVu: loaiDichVuParam || loaiDichVu },
@@ -800,6 +792,5 @@ export default () => {
     setLimit,
     typeTraKetQua,
     setTypeTraKetQua,
-    getAllBieuMauVPSModel,
   };
 };

@@ -3,8 +3,8 @@ import {
   getAllSinhVienLopHocPhan,
   sinhVienGetLopTinChiById,
   sinhVienGetThoiKhoaBieu,
-} from '@/services/LopTinChi';
-import type { LopTinChi } from '@/services/LopTinChi/typings';
+} from '@/services/HocTap/LopTinChi';
+import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
 import { useState } from 'react';
 
 export default () => {
