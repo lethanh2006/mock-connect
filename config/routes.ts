@@ -148,7 +148,7 @@
       },
       {
         name: 'TaoDon',
-        path: './taodon',
+        path: './tao-don',
         // access: 'sinhVien',
         hideInMenu: true,
         routes: [
