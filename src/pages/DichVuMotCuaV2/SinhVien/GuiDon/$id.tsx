@@ -2,12 +2,13 @@
 import ThanhToan from '@/components/ThanhToan';
 import DanhMuc from '@/pages/DichVuMotCuaV2/components/DanhMuc';
 import FormBieuMau from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
+import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
 import { getInfo } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Modal } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel, useAccess } from 'umi';
+import { useModel } from 'umi';
 
 const SinhVienTaoDon = ({
   match: {
@@ -16,20 +17,21 @@ const SinhVienTaoDon = ({
 }: {
   match: { params: { id: string } };
 }) => {
-  const access = useAccess();
   const { visibleFormBieuMau, setVisibleFormBieuMau, record, getBieuMauByIdModel, recordDon } =
     useModel('dichvumotcuav2');
-  const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('hocky');
-  const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('namhoc');
+  // const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('daotao.hocky');
+  // const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('daotao.namhoc');
 
-  const { getAllLopTinChiSinhVienModel, setDanhSach: setDanhSachLopTinChi } =
-    useModel('hoctap.loptinchi');
-
-  const { getAllMonHocSinhVienModel, setDanhSachMonHoc } = useModel('hoctap.loptinchi');
+  // const {
+  //   getAllMonHocSinhVienModel,
+  //   setDanhSachMonHoc,
+  //   getAllLopTinChiSinhVienModel,
+  //   setDanhSach: setDanhSachLopTinChi,
+  // } = useModel('hoctap.loptinchi');
 
   const { visibleForm, setVisibleForm } = useModel('thanhtoan');
-  const [infoSinhVien, setInfoSinhVien] = useState<Login.Profile>();
-  const { record: recordSinhVien } = useModel('sinhvien');
+  const [infoSinhVien, setInfoSinhVien] = useState<SinhVien.IRecord>();
+  // const { record: recordSinhVien } = useModel('sinhvien');
   useEffect(() => {
     window.scroll({ top: 0 });
     const getInfoSV = async () => {
@@ -62,7 +64,7 @@ const SinhVienTaoDon = ({
       >
         <FormBieuMau
           type="create"
-          infoNguoiTaoDon={recordSinhVien}
+          infoNguoiTaoDon={infoSinhVien}
           record={
             {
               thongTinDichVu: { ...record },

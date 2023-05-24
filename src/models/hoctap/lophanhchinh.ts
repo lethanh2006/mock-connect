@@ -2,7 +2,7 @@ import useInitModel from '@/hooks/useInitModel';
 import {
   sinhVienGetLopHanhChinhById,
   sinhVienGetLopHanhChinhPageable,
-} from '@/services/LopHanhChinh/lophanhchinh';
+} from '@/services/HocTap/LopHanhChinh/lophanhchinh';
 
 export default () => {
   const objInit = useInitModel<LopHanhChinh.IRecord>('lop-hanh-chinh');

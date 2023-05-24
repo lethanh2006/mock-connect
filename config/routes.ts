@@ -88,6 +88,7 @@
     icon: 'EditOutlined',
     // access: 'sinhVien',
     routes: [
+      { name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
       {
         name: 'LopHanhChinh',
         path: 'lop-hanh-chinh',

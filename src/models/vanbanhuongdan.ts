@@ -1,6 +1,6 @@
 import useInitModel from '@/hooks/useInitModel';
 import type { VanBanHuongDan } from '@/services/VanBanHuongDan/typing';
-import { ipSlink } from '@/utils/ip';
+import { ip3 } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
@@ -14,7 +14,7 @@ export default () => {
     'van-ban-huong-dan',
     'condition',
     undefined,
-    ipSlink,
+    ip3,
   );
   return {
     recordFile,

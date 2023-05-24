@@ -1,17 +1,18 @@
 import useInitModel from '@/hooks/useInitModel';
 import {
+  getAllMonHocSinhVien,
   getAllSinhVienLopHocPhan,
   sinhVienGetLopTinChiById,
   sinhVienGetThoiKhoaBieu,
-} from '@/services/LopTinChi';
-import type { LopTinChi } from '@/services/LopTinChi/typings';
+} from '@/services/HocTap/LopTinChi';
+import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
 import { useState } from 'react';
 
 export default () => {
   const objInit = useInitModel<LopTinChi.IRecord>('lop-hoc-phan');
   const { setDanhSach, setRecord, setLoading, setTotal, sort, filters } = objInit;
   const [listTkbSinhVien, setListTkbSinhVien] = useState<LopTinChi.IBuoiHoc[]>([]);
-
+  const [danhSachMonHoc, setDanhSachMonHoc] = useState<LopTinChi.InfoMonHoc[]>([]);
   const [idNhomLop, setIdNhomLop] = useState<number>(-1);
   const [hinhThucDaoTao, setHinhThucDaoTao] = useState<number>();
   const [flagDaDanhGia, setFlagDaDanhGia] = useState(false);
@@ -57,11 +58,17 @@ export default () => {
     setLoading(false);
   };
 
+  const getAllMonHocSinhVienModel = async (idHocKy?: number) => {
+    const response = await getAllMonHocSinhVien({ condition: { idHocKy } });
+    setDanhSachMonHoc(response?.data?.data ?? []);
+  };
+
   return {
     ...objInit,
     sinhVienGetAllLopHocPhanModel,
     sinhVienGetLopTinChiByIdModel,
     sinhVienGetThoiKhoaBieuModel,
+    getAllMonHocSinhVienModel,
     idNhomLop,
     setIdNhomLop,
     hinhThucDaoTao,
@@ -76,6 +83,8 @@ export default () => {
     setListTkbSinhVien,
     recordBuoiHoc,
     setRecordBuoiHoc,
+    danhSachMonHoc,
+    setDanhSachMonHoc,
     danhSachDiemThanhPhanTheoKy,
     setDanhSachDiemThanhPhanTheoKy,
   };

@@ -49,7 +49,7 @@ const LichSuGuiDon = () => {
   const [visibleViewInDon, setVisibleViewInDon] = useState<boolean>(false);
   const [type, setType] = useState<'edit' | 'view' | 'handle' | 'create'>('view');
   // const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('hocky');
-  const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('namhoc');
+  const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('daotao.namhoc');
   // const { getAllLopTinChiSinhVienModel, setDanhSach: setDanhSachLopTinChi } =
   //   useModel('hoctap.loptinchi');
   // const { getAllMonHocSinhVienModel, setDanhSachMonHoc } = useModel('hoctap.loptinchi');

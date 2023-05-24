@@ -1,9 +1,7 @@
-import { uploadFile } from '@/services/uploadFile';
 import { message } from 'antd';
 import type { Moment } from 'moment';
 import moment from 'moment';
-import { useModel } from 'umi';
-import { parse } from 'path';
+import * as XLSX from 'xlsx';
 
 const reg =
   /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
@@ -343,11 +341,11 @@ export const b64toBlob = (b64Data?: string, contentType = '', sliceSize = 512) =
   return blob;
 };
 
-export const blobToBase64 = (file: Blob) =>
+export const blobToBase64 = (file: Blob): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
+    reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
 
@@ -392,41 +390,20 @@ export const chuanHoaObject = (obj: any) => {
   return obj;
 };
 
-export function useCheckAccess(code: string, idDoiTuong?: string) {
-  const { initialState } = useModel('@@initialState');
-  return (
-    initialState?.currentUser?.systemRole === 'Admin' ||
-    initialState?.currentUser?.vai_tro === 'quan_tri' ||
-    initialState?.phanNhom?.nhom_vai_tro?.includes(code) ||
-    false
-  );
-  //return handlePhanNhom(initialState, code, idDoiTuong);
-}
-
-export const uploadMultiFile = async (
-  arrFile: any[],
-  returnFileType?: boolean,
-  returnAllResponse?: boolean,
+/**
+ * Tạo và tài về file dữ liệu Excel
+ * @param data Mảng của mảng dữ liệu. Ví dụ: [ ["Mã", "Tên"] , ["M01", "T01"] , ["M02", "T02"] ]
+ * @param fileName File name bao gồm cả .xlsx
+ * @param sheetName Mặc định Sheet1
+ */
+export const genExcelFile = (
+  data: (string | number | null | undefined)[][],
+  fileName: string,
+  sheetName?: string,
 ) => {
-  const url: any[] = arrFile
-    ?.filter((item) => item?.remote === true)
-    ?.map((item) =>
-      returnFileType === true ? { url: item?.url ?? '', type: item?.type } : item?.url ?? '',
-    );
-  if (!arrFile) return [];
-  let arrUrl: any[] = [];
-  const arrUpload = arrFile
-    ?.filter((item) => item?.remote !== true)
-    ?.map(async (file: { originFileObj: any; type: string; name: string }) => {
-      const response = await uploadFile({
-        file: file?.originFileObj,
-        // filename: parse(file?.name).name,
-        public: '1',
-      });
-      if (returnFileType) return { url: response?.data?.data?.url, type: file.type };
-      else if (returnAllResponse) return response?.data?.data;
-      else return response?.data?.data?.url;
-    });
-  arrUrl = await Promise.all(arrUpload);
-  return [...url, ...arrUrl];
+  const workbook = XLSX.utils.book_new();
+  const worksheet = XLSX.utils.aoa_to_sheet(data);
+  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName ?? 'Sheet1');
+
+  XLSX.writeFile(workbook, fileName || 'Danh sách.xlsx');
 };

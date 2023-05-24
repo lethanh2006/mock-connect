@@ -3,8 +3,6 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 
 const LopHanhChinhPage = () => {
-  const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
-
   const {
     sinhVienGetLopHanhChinhPageableModel,
     danhSach,

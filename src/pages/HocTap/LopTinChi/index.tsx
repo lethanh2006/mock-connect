@@ -1,6 +1,6 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import type { LopTinChi as ILopTinChi } from '@/services/LopTinChi/typings';
+import { type LopTinChi as ILopTinChi } from '@/services/HocTap/LopTinChi/typings';
 import { Select } from 'antd';
 import { useEffect } from 'react';
 import { history, useAccess, useModel } from 'umi';
@@ -15,7 +15,7 @@ const LopTinChi = () => {
     condition,
     sinhVienGetAllLopHocPhanModel,
   } = useModel('hoctap.loptinchi');
-  const { getAllModel: getAllHocKySinhVien, danhSach: danhSachHocKy } = useModel('hocky');
+  const { getAllModel: getAllHocKySinhVien, danhSach: danhSachHocKy } = useModel('daotao.hocky');
 
   // useEffect(() => {
   //   if (access.nhanVien) getAllHinhThucDaoTaoModel(true);

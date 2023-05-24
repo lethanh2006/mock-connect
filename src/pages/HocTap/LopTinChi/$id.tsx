@@ -1,7 +1,7 @@
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
-import { history, useAccess, useModel } from 'umi';
+import { history, useModel } from 'umi';
 import './components/style.less';
 import ThongTinChung from './components/ThongTinChung';
 import DanhSachBuoiHoc from './components/ThongTinBuoiHoc';
@@ -13,7 +13,6 @@ const DetailLopTinChi = ({
 }: {
   match: { params: { id: string } };
 }) => {
-  const access = useAccess();
   const { record, sinhVienGetLopTinChiByIdModel } = useModel('hoctap.loptinchi');
   const hash = window.location.hash;
   const [tabActive, setTabActive] = useState<string>(hash.includes('danhgia') ? '6' : '1');

@@ -1,56 +1,41 @@
-import DiaChi from '@/components/DiaChi';
+// import DiaChi from '@/components/DiaChi';
 import HocPhanCoDiem from '@/components/HocPhanCoDiem';
+import MyDatePicker from '@/components/MyDatePicker';
 import Upload from '@/components/Upload/UploadMultiFile';
 import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
-import {
-  accessFileUpload,
-  ColorTrangThaiDonMotCua,
-  ETrangThaiDonVps,
-  MaDichVuVps,
-} from '@/utils/constants';
 import rules from '@/utils/rules';
-import {
-  checkFileSize,
-  includes,
-  renderFileList,
-  uploadMultiFile,
-  useCheckAccess,
-} from '@/utils/utils';
+import { checkFileSize, includes, renderFileList } from '@/utils/utils';
 import { CopyOutlined } from '@ant-design/icons';
 import {
   AutoComplete,
   Button,
   Card,
   Checkbox,
-  DatePicker,
-  Descriptions,
   Divider,
-  Dropdown,
   Form,
   Input,
   InputNumber,
-  Menu,
-  message,
-  Modal,
   Radio,
   Select,
-  Tag,
-  Tooltip,
+  message,
 } from 'antd';
 import moment from 'moment';
 import mm from 'moment-timezone';
 import { useEffect, useState } from 'react';
-import { useAccess, useModel } from 'umi';
+import { useModel } from 'umi';
 import Table from './TableElement';
 import ThongTinNguoiTaoDon from './ThongTinNguoiTaoDon';
 import TieuDeBieuMau from './TieuDeBieuMau';
+import { accessFileUpload } from '@/services/DichVuMotCuaV2/constant';
+import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
 const FormBieuMau = (props: {
   infoNguoiTaoDon?: SinhVien.IRecord;
   record?: DichVuMotCuaV2.Don & { index?: number };
-  type?: 'view' | 'handle' | 'create' | 'edit' | 'muonCsvc';
+  type?: 'view' | 'handle' | 'create' | 'edit';
   onCancel?: any;
   textSaveButton?: string;
   title?: string;
@@ -65,13 +50,7 @@ const FormBieuMau = (props: {
   isMuonPhongHop?: boolean;
   isBaoCaoSuCo?: boolean;
 }) => {
-  const chuyenVienDieuPhoiDuyetDon = useCheckAccess('don-dvmc-thao-tac:duyet-all');
-  const chuyenVienXuLyDuyetDon = useCheckAccess('don-dvmc-thao-tac:duyet-my');
-  const canDieuPhoiDon = useCheckAccess('don-dvmc-thao-tac:dieu-phoi');
-  const isQuanTriVps = useCheckAccess('quan-tri-vps');
-
   const [form] = Form.useForm();
-  const access = useAccess();
   const {
     loading,
     danhSachDataTable,
@@ -81,14 +60,10 @@ const FormBieuMau = (props: {
     recordDonThaoTac,
     recordDon,
     sinhVienPutDonModel,
-    exportDonModel,
-    setVisibleForm,
-    getDonSinhVienModel,
     loaiDichVu,
-    adminGetDonVpsModel,
   } = useModel('dichvumotcuav2');
-  const { danhSach: danhSachKyHoc } = useModel('hocky');
-  const { danhSach: danhSachNamHoc } = useModel('namhoc');
+  const { danhSach: danhSachKyHoc } = useModel('daotao.hocky');
+  const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
   const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
   const { danhSachDanToc, danhSachTonGiao, getAllTonGiao, getAllDanToc } =
     useModel('dantoctongiao');
@@ -103,15 +78,8 @@ const FormBieuMau = (props: {
     setObjDanhSachQuanHuyen,
   } = useModel('donvihanhchinh');
 
-  const [recordEdit, setRecordEdit] = useState<{ duLieuBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }>({
-    duLieuBieuMau: [],
-  });
-
   const [valuesForm, setValuesForm] = useState<any>({});
-  const [visibleFormDieuPhoi, setVisibleFormDieuPhoi] = useState<boolean>(false);
-  const [visibleFormXuLy, setVisibleFormXuLy] = useState<boolean>(false);
   const [typeXuLy, setTypeXuLy] = useState<'ok' | 'not-ok' | 'edit-result'>('ok');
-
   const { pathname } = window.location;
   const arrPathName = pathname?.split('/') ?? [];
   const [check, setCheck] = useState<boolean>(false);
@@ -123,7 +91,7 @@ const FormBieuMau = (props: {
   ) => {
     arrCauHinh?.forEach((cauHinh, indexCauHinh) => {
       if (cauHinh?.type === 'TABLE' && (props?.type === 'edit' || props?.type === 'handle')) {
-        const recordTemp = {};
+        const recordTemp: any = {};
         const arrData: { cauHinhBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }[] = cauHinh?.value?.map(
           (row: DichVuMotCuaV2.CauHinhBieuMau[]) => ({ cauHinhBieuMau: row }),
         );
@@ -174,9 +142,7 @@ const FormBieuMau = (props: {
             (row: { cauHinhBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }) => buildTableData(row),
           );
         }
-        // else if (item?.type === 'BUTTON_SEARCH_PHONG') {
-        //   value = selectedRow?._id ?? '';
-        // }
+
         return {
           ...item,
           dataSource: item?.dataSource?.map((data, indexData) => ({
@@ -200,17 +166,15 @@ const FormBieuMau = (props: {
       if (values[item]?.fileList) {
         const checkSize = checkFileSize(values[item]?.fileList ?? []);
         if (!checkSize) return;
-        objectFileUpload[item] = await uploadMultiFile(values[item]?.fileList ?? [], true);
+        // TODO: Check upload multiple file
+        // objectFileUpload[item] = await uploadMultiFile(values[item]?.fileList ?? [], true);
       }
     }
     const valuesFinal = { ...values, ...objectFileUpload };
     const duLieuBieuMau = buildPostData(
       'cauHinhBieuMau',
       valuesFinal,
-      props?.handleAdd ||
-        props?.type === 'edit' ||
-        props?.type === 'handle' ||
-        props?.type === 'muonCsvc'
+      props?.handleAdd || props?.type === 'edit' || props?.type === 'handle'
         ? props?.record?.thongTinDichVu?.cauHinhBieuMau ?? []
         : record?.cauHinhBieuMau ?? [],
     );
@@ -230,27 +194,13 @@ const FormBieuMau = (props: {
 
     return () => {
       if (!props?.handleAdd) setDanhSachDataTable({});
-      setTenTinh({});
-      setTenQuanHuyen({});
-      setTenXaPhuong({});
-      setObjDanhSachQuanHuyen({});
-      setObjDanhSachXaPhuong({});
+      // setTenTinh({});
+      // setTenQuanHuyen({});
+      // setTenXaPhuong({});
+      // setObjDanhSachQuanHuyen({});
+      // setObjDanhSachXaPhuong({});
     };
   }, []);
-
-  const onClickMenuExport = (
-    idDon: string,
-    item: { key: 'word' | 'pdf' },
-    mauExport: 'MAU_DON' | 'TRA_LOI',
-    tenDon: string,
-  ) => {
-    exportDonModel({
-      idDon,
-      mauExport,
-      exportType: item.key,
-      tenDon,
-    });
-  };
 
   const buildForm = (name: string, item: DichVuMotCuaV2.CauHinhBieuMau) => {
     let element = <Input placeholder="Nhập nội dung" />;
@@ -264,7 +214,6 @@ const FormBieuMau = (props: {
         element = <Input.TextArea rows={3} placeholder={item?.label ?? ''} />;
         break;
       }
-
       case 'INPUT_NUMBER': {
         initialValue = Number(item?.value);
         element = (
@@ -281,8 +230,7 @@ const FormBieuMau = (props: {
       case 'DATE_PICKER': {
         initialValue = item?.value ? moment(item?.value) : undefined;
         element = (
-          <DatePicker
-            style={{ width: '100%' }}
+          <MyDatePicker
             format="DD/MM/YYYY HH:mm"
             showTime={{ defaultValue: moment('00:00:00', 'HH:mm:ss') }}
           />
@@ -358,23 +306,24 @@ const FormBieuMau = (props: {
         initialValue = item?.value;
         ruleElement = [];
         element = (
-          <DiaChi
-            hideDiaChiCuThe={item?.level !== 4}
-            hideQuanHuyen={item?.level === 1}
-            hideXaPhuong={[1, 2].includes(item?.level)}
-            notRequiredDiaChiCuThe={!item?.isRequired}
-            notRequiredQuanHuyen={!item?.isRequired}
-            notRequiredTinh={!item?.isRequired}
-            notRequiredXaPhuong={!item?.isRequired}
-            initialValue={item?.value}
-            form={form}
-            fields={{
-              tinh: [`${name}.${item?.label ?? ''}`, 'maTinh'],
-              quanHuyen: [`${name}.${item?.label ?? ''}`, 'maQuanHuyen'],
-              xaPhuong: [`${name}.${item?.label ?? ''}`, 'maPhuongXa'],
-              diaChiCuThe: [`${name}.${item?.label ?? ''}`, 'soNhaTenDuong'],
-            }}
-          />
+          // <DiaChi
+          //   hideDiaChiCuThe={item?.level !== 4}
+          //   hideQuanHuyen={item?.level === 1}
+          //   hideXaPhuong={[1, 2].includes(item?.level)}
+          //   notRequiredDiaChiCuThe={!item?.isRequired}
+          //   notRequiredQuanHuyen={!item?.isRequired}
+          //   notRequiredTinh={!item?.isRequired}
+          //   notRequiredXaPhuong={!item?.isRequired}
+          //   initialValue={item?.value}
+          //   form={form}
+          //   fields={{
+          //     tinh: [`${name}.${item?.label ?? ''}`, 'maTinh'],
+          //     quanHuyen: [`${name}.${item?.label ?? ''}`, 'maQuanHuyen'],
+          //     xaPhuong: [`${name}.${item?.label ?? ''}`, 'maPhuongXa'],
+          //     diaChiCuThe: [`${name}.${item?.label ?? ''}`, 'soNhaTenDuong'],
+          //   }}
+          // />
+          <SelectDonViHanhChinh form={form} />
         );
         break;
       }
@@ -418,26 +367,13 @@ const FormBieuMau = (props: {
         ];
 
         const data = item?.value?.map((recordRow: DichVuMotCuaV2.CauHinhBieuMau[]) => {
-          const row = {};
+          const row: any = {};
           recordRow?.forEach((cell: DichVuMotCuaV2.CauHinhBieuMau) => {
             let value = typeof cell?.value === 'object' ? cell?.value?.join(', ') : cell?.value;
             if (cell.type === 'DATE_PICKER') {
               value = moment(cell?.value)?.format('HH:mm DD/MM/YYYY');
             }
-            if (
-              props?.record?.thongTinDichVu?.maDichVu === MaDichVuVps.BAO_CAO_SU_CO &&
-              cell.type === 'UPLOAD_SINGLE'
-            ) {
-              value = cell?.value?.map((el: any) => {
-                return el.url ? (
-                  <a href={el?.url} rel="noreferrer" target="_blank">
-                    {el?.url}
-                  </a>
-                ) : (
-                  'Ảnh trống'
-                );
-              });
-            }
+
             row[cell?.label] = value;
           });
           return row;
@@ -498,14 +434,9 @@ const FormBieuMau = (props: {
       case 'MY_SEMESTER': {
         initialValue = item?.value;
         ruleElement = [...rules.text];
-        const kyHoc = access.sinhVien
-          ? danhSachKyHoc
-          : [
-              // { id: 1, ten_ky_nam_hoc: '1', nam_hoc_id: [1, '2022-2023'] },
-              // { id: 2, ten_ky_nam_hoc: '2', nam_hoc_id: [2, '2022-2023'] },
-            ];
+        const kyHoc = danhSachKyHoc;
         ruleElement = [...rules.text];
-        element = access.sinhVien ? (
+        element = (
           <Select allowClear placeholder={item?.label ?? ''}>
             {kyHoc?.map((kyhoc: any) => (
               <Select.Option
@@ -516,21 +447,14 @@ const FormBieuMau = (props: {
               </Select.Option>
             ))}
           </Select>
-        ) : (
-          <Input placeholder="Nhập kỳ học" />
         );
         break;
       }
       case 'MY_YEAR': {
         initialValue = item?.value;
         ruleElement = [...rules.text];
-        const namHoc = access.sinhVien
-          ? danhSachNamHoc
-          : [
-              // { id: 1, ten_nam_hoc: '2021-2022' },
-              // { id: 2, ten_nam_hoc: '2022-2023' },
-            ];
-        element = access.sinhVien ? (
+        const namHoc = danhSachNamHoc;
+        element = (
           <Select allowClear placeholder={item?.label ?? ''}>
             {namHoc?.map((nam: any) => (
               <Select.Option key={nam.id} value={`Năm học ${nam.ten_nam_hoc}`}>
@@ -538,14 +462,12 @@ const FormBieuMau = (props: {
               </Select.Option>
             ))}
           </Select>
-        ) : (
-          <Input placeholder="Nhập năm học" />
         );
         break;
       }
       case 'MY_CREDIT': {
         initialValue = item?.value;
-        const monHoc = access.sinhVien ? danhSachMonHoc : [];
+        const monHoc = danhSachMonHoc;
         element = (
           <AutoComplete
             filterOption={(value, option) => includes(option?.props.children, value)}
@@ -564,8 +486,8 @@ const FormBieuMau = (props: {
       }
       case 'MY_COURSE': {
         initialValue = item?.value;
-        const lopHoc = access.sinhVien ? danhSachLopTinChi : [];
-        element = access.sinhVien ? (
+        const lopHoc = danhSachLopTinChi;
+        element = (
           <Select
             filterOption={(value, option) => includes(option?.props.children, value)}
             showSearch
@@ -578,8 +500,6 @@ const FormBieuMau = (props: {
               </Select.Option>
             ))}
           </Select>
-        ) : (
-          <Input placeholder="Chọn lớp tín chỉ" />
         );
         break;
       }
@@ -649,7 +569,7 @@ const FormBieuMau = (props: {
                 </span>
               )}{' '}
               {item?.label ?? 'Chưa có tiêu đề'}
-              {item.type === 'DON_VI_HANH_CHINH' && !access.sinhVien && (
+              {/* {item.type === 'DON_VI_HANH_CHINH' && !access.sinhVien && (
                 <Tooltip title="Sao chép địa chỉ">
                   <CopyOutlined
                     onClick={() => {
@@ -668,7 +588,7 @@ const FormBieuMau = (props: {
                     style={{ marginLeft: 8 }}
                   />
                 </Tooltip>
-              )}
+              )} */}
             </div>
           }
           name={item.type === 'DON_VI_HANH_CHINH' ? undefined : `${name}.${item?.label}`}
@@ -863,7 +783,7 @@ const FormBieuMau = (props: {
         <Form.Item style={{ textAlign: 'center', marginBottom: 0 }}>
           {!['view', 'handle', 'edit'].includes(props?.type ?? '') && (
             <Button
-              disabled={props?.hideCamKet || props.type === 'muonCsvc' ? false : !check}
+              disabled={props?.hideCamKet ? false : !check}
               loading={loading}
               style={{ marginRight: 8 }}
               htmlType="submit"
@@ -874,7 +794,7 @@ const FormBieuMau = (props: {
           )}
           {['edit'].includes(props?.type ?? '') && (
             <Button
-              disabled={props?.hideCamKet || props.type === 'muonCsvc' ? false : !check}
+              disabled={props?.hideCamKet ? false : !check}
               loading={loading}
               style={{ marginRight: 8 }}
               htmlType="submit"
@@ -884,7 +804,7 @@ const FormBieuMau = (props: {
             </Button>
           )}
 
-          {props?.traKetQua &&
+          {/* {props?.traKetQua &&
             ['view'].includes(props?.type ?? '') &&
             props?.duocPhepSuaKetQua === true &&
             !arrPathName?.includes('vanphongso') && (
@@ -892,13 +812,12 @@ const FormBieuMau = (props: {
                 style={{ marginRight: 8 }}
                 type="primary"
                 onClick={() => {
-                  setVisibleFormXuLy(true);
                   setTypeXuLy('edit-result');
                 }}
               >
                 Sửa kết quả
               </Button>
-            )}
+            )} */}
           {props?.onCancel && <Button onClick={() => props?.onCancel()}>Đóng</Button>}
         </Form.Item>
       </Form>
