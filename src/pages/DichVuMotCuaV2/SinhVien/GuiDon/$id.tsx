@@ -38,17 +38,13 @@ const SinhVienTaoDon = ({
     };
     getInfoSV();
     getBieuMauByIdModel(id);
-    if (access.sinhVien) {
-      getAllKyHocSinhVienModel();
-      getAllNamHocSinhVienModel();
-      getAllMonHocSinhVienModel();
-      getAllLopTinChiSinhVienModel();
-    }
+    // if (access.sinhVien) {
+    //   getAllKyHocSinhVienModel();
+    //   getAllNamHocSinhVienModel();
+    //   getAllMonHocSinhVienModel();
+    //   getAllLopTinChiSinhVienModel();
+    // }
     return () => {
-      // setDanhSachLopTinChi([]);
-      // setDanhSachMonHoc([]);
-      // setDanhSachKyHoc([]);
-      // setDanhSachNamHoc([]);
       setVisibleForm(false);
     };
   }, []);

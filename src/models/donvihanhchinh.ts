@@ -1,8 +1,11 @@
+import useInitModel from '@/hooks/useInitModel';
 import { getQuanHuyenS, getTinhS, getXaPhuongS } from '@/services/DonViHanhChinh/donvihanhchinh';
 import type { IRecordTinh } from '@/services/DonViHanhChinh/typing';
 import { useState } from 'react';
 
 export default () => {
+  const objInit = useInitModel<IRecordTinh.Datum>('don-vi-hanh-chinh');
+
   const [danhSachTinh, setDanhSachTinh] = useState<IRecordTinh.Datum[]>([]);
   const [danhSachQuanHuyen, setDanhSachQuanHuyen] = useState<IRecordTinh.Datum[]>([]);
   const [danhSachXaPhuong, setDanhSachXaPhuong] = useState<IRecordTinh.Datum[]>([]);
@@ -46,6 +49,7 @@ export default () => {
   };
 
   return {
+    ...objInit,
     objDanhSachXaPhuong,
     objDanhSachQuanHuyen,
     setObjDanhSachXaPhuong,

@@ -1,10 +1,13 @@
+import useInitModel from '@/hooks/useInitModel';
 import { getDanToc, getTonGiao } from '@/services/DanTocTonGiao/dantoctongiao';
 import { useState } from 'react';
 
 export default () => {
+  const objInit = useInitModel<DanTocTonGiao.DanToc>('dm-ton-giao');
   const [danhSachDanToc, setDanhSachDanToc] = useState<DanTocTonGiao.DanToc[]>([]);
   const [danhSachTonGiao, setDanhSachTonGiao] = useState<DanTocTonGiao.TonGiao[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
   const getAllDanToc = async () => {
     setLoading(true);
     const response = await getDanToc();
@@ -20,6 +23,7 @@ export default () => {
   };
 
   return {
+    ...objInit,
     getAllDanToc,
     getAllTonGiao,
     loading,

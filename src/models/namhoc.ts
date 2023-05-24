@@ -1,9 +1,9 @@
+import useInitModel from '@/hooks/useInitModel';
 import { getAllNamHoc, getAllNamHocSinhVien } from '@/services/NamHoc/namhoc';
-import { useState } from 'react';
 
 export default () => {
-  const [danhSach, setDanhSach] = useState<NamHoc.Record[]>([]);
-  const [record, setRecord] = useState<NamHoc.Record>();
+  const objInit = useInitModel<NamHoc.Record>('nam-hoc');
+  const { setDanhSach, setRecord } = objInit;
 
   const getAllNamHocModel = async () => {
     const response = await getAllNamHoc();
@@ -17,11 +17,8 @@ export default () => {
   };
 
   return {
-    record,
-    setRecord,
+    ...objInit,
     getAllNamHocSinhVienModel,
-    danhSach,
-    setDanhSach,
     getAllNamHocModel,
   };
 };

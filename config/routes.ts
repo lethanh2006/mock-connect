@@ -41,7 +41,24 @@
     component: './TrangChu',
     icon: 'HomeOutlined',
   },
-
+  {
+    name: 'News',
+    icon: 'NotificationOutlined',
+    path: '/tin-tuc',
+    // access: 'sinhVienVaNhanVien',
+    routes: [
+      {
+        path: './',
+        component: './TinTuc',
+        hideInMenu: true,
+      },
+      {
+        path: './chi-tiet',
+        hideInMenu: true,
+        component: './TinTuc/ChiTietTinTuc.tsx',
+      },
+    ],
+  },
   // DANH MUC HE THONG
   // {
   //   name: 'DanhMuc',
@@ -156,24 +173,6 @@
     // access: 'sinhVienVaNhanVien',
   },
 
-  {
-    name: 'News',
-    icon: 'NotificationOutlined',
-    path: '/tin-tuc',
-    // access: 'sinhVienVaNhanVien',
-    routes: [
-      {
-        path: './',
-        component: './TinTuc',
-        hideInMenu: true,
-      },
-      {
-        path: './chi-tiet',
-        hideInMenu: true,
-        component: './TinTuc/ChiTietTinTuc.tsx',
-      },
-    ],
-  },
   {
     name: 'CauHoiThuongGap',
     path: './cauhoithuonggap',
