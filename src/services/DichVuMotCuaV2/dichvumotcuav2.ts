@@ -3,10 +3,6 @@ import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import type { DichVuMotCuaV2 } from './typing';
 
-export async function getBieuMauAdmin(payload: { condition: any; page: number; limit: number }) {
-  return axios.get(`${ip3}/dvmc/pageable`, { params: payload });
-}
-
 export async function getDonSinhVien(payload: { condition: any; page: number; limit: number }) {
   return axios.get(`${ip3}/don-dvmc/my/pageable`, {
     params: {

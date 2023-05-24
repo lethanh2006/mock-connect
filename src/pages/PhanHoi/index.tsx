@@ -5,6 +5,7 @@ import moment from 'moment';
 import FormGuiPhanHoi from './components/FormGuiPhanHoi';
 import { type IColumn } from '@/components/Table/typing';
 import { useModel } from 'umi';
+import { PaperClipOutlined } from '@ant-design/icons';
 
 const PhanHoi = () => {
   const { setCondition, daTraLoi, setDaTraLoi } = useModel('phanhoi');
@@ -31,9 +32,12 @@ const PhanHoi = () => {
       dataIndex: 'urlPhanAnh',
       render: (val) =>
         val ? (
-          <a href={val} target="_blank" rel="noreferrer">
-            File đính kèm
-          </a>
+          <>
+            <PaperClipOutlined />{' '}
+            <a href={val} target="_blank" rel="noreferrer">
+              File đính kèm
+            </a>
+          </>
         ) : (
           ''
         ),

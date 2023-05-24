@@ -2,7 +2,6 @@
 import useInitModel from '@/hooks/useInitModel';
 import {
   downloadDon,
-  getBieuMauAdmin,
   getBieuMauById,
   getDonSinhVien,
   postDonSinhVien,
@@ -21,16 +20,14 @@ import { useModel } from 'umi';
 
 export default () => {
   const objInit = useInitModel<DichVuMotCuaV2.BieuMau>('dvmc');
-  const { setDanhSach, setRecord, setLoading, page, limit, setPage, setTotal, total, condition } =
-    objInit;
-
+  const { setDanhSach, setRecord, setLoading, page, limit, setTotal, condition } = objInit;
   const [danhSachDon, setDanhSachDon] = useState<DichVuMotCuaV2.Don[]>([]);
   const [danhSachDonThaoTac, setDanhSachDonThaoTac] = useState<DichVuMotCuaV2.DonThaoTac[]>([]);
   const [danhSachDataTable, setDanhSachDataTable] = useState<
     Record<string, { cauHinhBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }[]>
   >({});
   const [recordDon, setRecordDon] = useState<DichVuMotCuaV2.Don>();
-  const [loaiDichVu, setLoaiDichVu] = useState<'DVMC' | 'VAN_PHONG_SO'>('DVMC');
+  const [loaiDichVu, setLoaiDichVu] = useState<'DVMC'>('DVMC');
   const [recordDonThaoTac, setRecordDonThaoTac] = useState<DichVuMotCuaV2.DonThaoTac>();
   const [thuTuc, setThuTuc] = useState<DichVuMotCuaV2.ThuTuc>();
   const [visibleFormBieuMau, setVisibleFormBieuMau] = useState<boolean>(false);
@@ -38,38 +35,10 @@ export default () => {
   const [visibleFormChinhSuaDon, setVisibleFormChinhSuaDon] = useState<boolean>(false);
   const [current, setCurrent] = useState<number>(0);
   const [typeForm, setTypeForm] = useState<string>('add');
-  const [trangThaiQuanLyDonThaoTac, setTrangThaiQuanLyDonThaoTac] = useState<string>('PENDING');
-  const [trangThaiQuanLyDon, setTrangThaiQuanLyDon] = useState<string | undefined>('PROCESSING');
-  const [recordTongSoDon, setRecordTongSoDon] = useState<{ trangThai: string; soLuong: number }[]>(
-    [],
-  );
   const [idDichVu, setIdDichVu] = useState<string>();
   const [recordTrangThaiDon, setRecordTrangThaiDon] = useState<DichVuMotCuaV2.TrangThaiBuoc[]>([]);
   const [phamVi, setPhamVi] = useState<'Tất cả' | 'Hình thức đào tạo'>('Tất cả');
   const { setVisibleForm: setVisibleFormThanhToan } = useModel('thanhtoan');
-  const [isDonCanXuLy, setIsDonCanXuLy] = useState<number>(1);
-  const [typeTraKetQua, setTypeTraKetQua] = useState<string>('');
-
-  const getBieuMauAdminModel = async (loaiDichVuParam?: string) => {
-    setLoading(true);
-    const response = await getBieuMauAdmin({
-      page,
-      limit,
-      condition: {
-        ...condition,
-        phamVi: phamVi,
-        loaiDichVu: loaiDichVuParam || loaiDichVu,
-        hinhThucDaoTaoId:
-          condition?.hinhThucDaoTaoId === -1 ? undefined : condition?.hinhThucDaoTaoId,
-      },
-    });
-    setDanhSach(response?.data?.data?.result ?? []);
-    setTotal(response?.data?.data?.total ?? 0);
-    if (response?.data?.data?.result?.length === 0 && response?.data?.data?.page !== 1) {
-      setPage(response?.data?.data?.page - 1 ?? 1);
-    }
-    setLoading(false);
-  };
 
   const getDonSinhVienModel = async () => {
     setLoading(true);
@@ -78,12 +47,6 @@ export default () => {
       limit,
       condition,
     });
-    const maxPage = Math.ceil((total - 1) / limit);
-    let newPage = page;
-    if (newPage > maxPage) {
-      newPage = maxPage || 1;
-      setPage(newPage);
-    }
     setDanhSachDon(response?.data?.data?.result ?? []);
     setTotal(response?.data?.data?.total ?? 0);
     setLoading(false);
@@ -95,7 +58,6 @@ export default () => {
       condition: { ...condition, loaiDichVu: loaiDichVuParam || loaiDichVu },
     });
     setDanhSach(response?.data?.data ?? []);
-    // setTotal(response?.data?.data?.length);
     setRecord(response?.data?.data?.[0]);
     setLoading(false);
     return response?.data?.data ?? [];
@@ -213,8 +175,6 @@ export default () => {
     setVisibleFormChinhSuaDon,
     sinhVienPutDonModel,
     sinhVienDeleteDonModel,
-    isDonCanXuLy,
-    setIsDonCanXuLy,
     phamVi,
     setPhamVi,
     traKetQuaModel,
@@ -223,12 +183,8 @@ export default () => {
     exportDonModel,
     loaiDichVu,
     setLoaiDichVu,
-    recordTongSoDon,
-    setRecordTongSoDon,
     idDichVu,
     setIdDichVu,
-    trangThaiQuanLyDon,
-    setTrangThaiQuanLyDon,
     getBieuMauByIdModel,
     thuTuc,
     setThuTuc,
@@ -239,8 +195,6 @@ export default () => {
     setDanhSachDataTable,
     recordDonThaoTac,
     setRecordDonThaoTac,
-    trangThaiQuanLyDonThaoTac,
-    setTrangThaiQuanLyDonThaoTac,
     danhSachDonThaoTac,
     setDanhSachDonThaoTac,
     current,
@@ -256,8 +210,5 @@ export default () => {
     getAllBieuMauModel,
     visibleFormBieuMau,
     setVisibleFormBieuMau,
-    getBieuMauAdminModel,
-    typeTraKetQua,
-    setTypeTraKetQua,
   };
 };

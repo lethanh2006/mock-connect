@@ -1,9 +1,10 @@
+import { type DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
 import { ELoaiPhanHoi } from '@/services/PhanHoi/constant';
 import rules from '@/utils/rules';
 import { Button, Card, Form, Input } from 'antd';
 import { useModel } from 'umi';
 
-const FormGuiPhanHoi = (props: { record?: DichVuMotCua.Don & { index?: number } }) => {
+const FormGuiPhanHoi = (props: { record?: DichVuMotCuaV2.Don & { index?: number } }) => {
   const [form] = Form.useForm();
   const { loading, setVisibleForm, postModel } = useModel('phanhoi');
   const { getDonSinhVienModel } = useModel('dichvumotcuav2');

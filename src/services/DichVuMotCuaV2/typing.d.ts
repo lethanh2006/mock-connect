@@ -116,7 +116,7 @@ declare module DichVuMotCuaV2 {
     thongTinHoSo?: string;
     thongTinQuyTrinh?: string;
     thongTinYeuCau?: string;
-    loaiDichVu?: 'DVMC' | 'VAN_PHONG_SO';
+    loaiDichVu?: 'DVMC';
     fileTraLoi?: FileInfo;
     fileMau?: FileInfo;
     phamVi?: string;
@@ -145,7 +145,7 @@ declare module DichVuMotCuaV2 {
     ketQuaDinhKem: string[];
     ketQuaText: string;
     lichSuChinhSua: LichSuChinhSua[];
-    loaiDichVu?: 'DVMC' | 'VAN_PHONG_SO';
+    loaiDichVu?: 'DVMC';
     createdAt?: string;
     trangThai?: string;
     _id?: string;
@@ -167,50 +167,6 @@ declare module DichVuMotCuaV2 {
       maDichVu: MaDichVuVps;
     };
     maDon: string;
-    idCoSoVatChat?: {
-      active: boolean;
-      info: {
-        ghiChu: string;
-        soCho: string;
-        soPhong: string;
-        tenPhong: string;
-        toaNha: string;
-      };
-
-      loai: string;
-      _id: string;
-    };
-    thongTinMuonXe?: {
-      bienSoXe: string;
-      createdAt: string;
-      hoTen: string;
-      idCoSoVatChat: string;
-      idDon: string;
-      idNguoiDuyet: string;
-      thongTinlaiXe: {
-        hoTen: string;
-        sdt: string;
-      }[];
-      maDinhDanh: string;
-      thoiGianBd: string;
-      thoiGianKt: string;
-      trangThai: ETrangThaiDonVps;
-      updatedAt: string;
-      _id: string;
-    };
-    thongTinMuonPhong?: {
-      createdAt: string;
-      hoTen: string;
-      idCoSoVatChat: string;
-      idDon: string;
-      idNguoiDuyet: string;
-      maDinhDanh: string;
-      soPhong: string;
-      toaNha: string;
-      trangThai: ETrangThaiDonVps;
-      updatedAt: string;
-      _id: string;
-    };
   }
 
   export interface TrangThaiThaoTac {

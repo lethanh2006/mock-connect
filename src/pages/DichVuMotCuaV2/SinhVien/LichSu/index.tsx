@@ -9,11 +9,12 @@ import {
   EditOutlined,
   EyeOutlined,
   MenuOutlined,
+  PaperClipOutlined,
   PlusOutlined,
   PrinterOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, message, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip } from 'antd';
+import { Button, message, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -21,6 +22,7 @@ import { history, useModel } from 'umi';
 import FormQuyTrinh from '../../components/FormQuyTrinh';
 import FormGuiPhanHoi from '../../QuanLyDon/components/FormGuiPhanHoi';
 import { TrangThaiDonDVMC } from '@/services/DichVuMotCuaV2/constant';
+import ExpandText from '@/components/ExpandText';
 
 const LichSuGuiDon = () => {
   const {
@@ -49,7 +51,7 @@ const LichSuGuiDon = () => {
   const [visibleViewInDon, setVisibleViewInDon] = useState<boolean>(false);
   const [type, setType] = useState<'edit' | 'view' | 'handle' | 'create'>('view');
   // const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('hocky');
-  const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('daotao.namhoc');
+  const { setDanhSach: setDanhSachNamHoc } = useModel('daotao.namhoc');
   // const { getAllLopTinChiSinhVienModel, setDanhSach: setDanhSachLopTinChi } =
   //   useModel('hoctap.loptinchi');
   // const { getAllMonHocSinhVienModel, setDanhSachMonHoc } = useModel('hoctap.loptinchi');
@@ -154,19 +156,26 @@ const LichSuGuiDon = () => {
     {
       title: 'Ghi chú kết quả',
       dataIndex: 'ketQuaText',
-      align: 'center',
       width: 120,
       onCell,
+      render: (val) => (
+        <ExpandText
+          style={{ marginBottom: 0 }}
+          ellipsis={{ rows: 2, expandable: true, symbol: <span>Xem tiếp</span> }}
+        >
+          {val}
+        </ExpandText>
+      ),
     },
     {
       title: 'File kết quả đính kèm',
       dataIndex: 'ketQuaDinhKem',
-      align: 'center',
       width: 120,
       render: (val: string[]) => (
         <div>
           {val?.map((item, index) => (
             <>
+              <PaperClipOutlined />{' '}
               <a href={item} target="_blank" rel="noreferrer">
                 File kết quả {index + 1}
               </a>
@@ -183,7 +192,7 @@ const LichSuGuiDon = () => {
       width: 80,
       search: 'filterString',
       notRegex: true,
-      render: (val) => (
+      render: (val: 'OK' | 'NOT_OK' | 'PROCESSING') => (
         <Tag color={val === 'OK' ? 'green' : val === 'NOT_OK' ? 'red' : 'yellow'}>
           {TrangThaiDonDVMC?.[val] ?? 'Chưa cập nhật'}
         </Tag>
@@ -193,7 +202,6 @@ const LichSuGuiDon = () => {
     {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
-      align: 'center',
       width: 100,
       render: (val) => <div>{moment(val).format('HH:mm DD/MM/YYYY')}</div>,
       onCell,
@@ -211,6 +219,7 @@ const LichSuGuiDon = () => {
               <>
                 <Tooltip title="Xem biểu mẫu và in đơn">
                   <Button
+                    type="link"
                     onClick={() => {
                       if (!recordTemp.maDon) {
                         message.error('Mã đơn không tồn tại');
@@ -218,35 +227,30 @@ const LichSuGuiDon = () => {
                       }
                       handleInDon(recordTemp.maDon);
                     }}
-                    shape="circle"
                     icon={<PrinterOutlined />}
                   />
                 </Tooltip>
-                <Divider type="vertical" />
                 <Tooltip title="Chi tiết">
                   <Button
-                    type="primary"
+                    type="link"
                     onClick={() => {
                       handlePreviewDon(recordTemp);
                     }}
-                    shape="circle"
                     icon={<EyeOutlined />}
                   />
                 </Tooltip>
-                <Divider type="vertical" />
                 <Tooltip title="Chỉnh sửa">
                   <Button
+                    type="link"
                     disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     onClick={() => {
                       setVisibleFormChinhSuaDon(true);
                       setRecordView(recordTemp);
                       setType('edit');
                     }}
-                    shape="circle"
                     icon={<EditOutlined />}
                   />
                 </Tooltip>
-                <Divider type="vertical" />
                 <Tooltip title="Xóa đơn">
                   <Popconfirm
                     disabled={recordTemp?.trangThai !== 'PROCESSING'}
@@ -256,23 +260,21 @@ const LichSuGuiDon = () => {
                     }}
                   >
                     <Button
-                      type="primary"
+                      type="link"
                       danger
                       disabled={recordTemp?.trangThai !== 'PROCESSING'}
-                      shape="circle"
                       icon={<DeleteOutlined />}
                     />
                   </Popconfirm>
                 </Tooltip>
-                <Divider type="vertical" />
                 <Tooltip title="Gửi phản hồi">
                   <Button
+                    type="link"
                     // disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     onClick={() => {
                       setVisibleForm(true);
                       setRecordView(recordTemp);
                     }}
-                    shape="circle"
                     icon={<QuestionCircleOutlined />}
                   />
                 </Tooltip>
@@ -302,7 +304,7 @@ const LichSuGuiDon = () => {
         <Button
           type="primary"
           icon={<PlusOutlined />}
-          onClick={() => history.push('/dichvumotcuasv/taodon')}
+          onClick={() => history.push('/dich-vu-mot-cua-sinh-vien/tao-don')}
         >
           Tạo đơn
         </Button>

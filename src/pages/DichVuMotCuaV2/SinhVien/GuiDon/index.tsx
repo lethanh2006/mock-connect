@@ -8,17 +8,8 @@ import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 
 const GuiDon = () => {
-  const {
-    getAllBieuMauModel,
-    setDanhSach,
-    setRecord,
-    setVisibleFormBieuMau,
-    loading,
-    setPage,
-    condition,
-  } = useModel('dichvumotcuav2');
-  const { pathname } = window.location;
-  const isDVMC = pathname?.includes('dichvumotcua') ?? false;
+  const { getAllBieuMauModel, setDanhSach, setRecord, loading, setPage, condition } =
+    useModel('dichvumotcuav2');
   const [total, setTotal] = useState();
 
   useEffect(() => {
@@ -72,11 +63,7 @@ const GuiDon = () => {
         <Tooltip title="Sử dụng dịch vụ">
           <Button
             onClick={() => {
-              if (isDVMC) history.push(`/dichvumotcuasv/taodon/${recordBieuMau?._id}`);
-              else {
-                setRecord(recordBieuMau);
-                setVisibleFormBieuMau(true);
-              }
+              history.push(`/dich-vu-mot-cua-sinh-vien/tao-don/${recordBieuMau?._id}`);
             }}
             shape="circle"
             type="primary"
@@ -99,13 +86,16 @@ const GuiDon = () => {
         hideCard
         loading={loading}
         dependencies={[condition]}
-      >
-        {isDVMC ? (
-          <Button icon={<ArrowLeftOutlined />} onClick={() => history.push('/dichvumotcuasv')}>
+        otherButtons={[
+          <Button
+            icon={<ArrowLeftOutlined />}
+            onClick={() => history.push('/dich-vu-mot-cua-sinh-vien')}
+            key={1}
+          >
             Lịch sử gửi đơn
-          </Button>
-        ) : null}
-      </TableBase>
+          </Button>,
+        ]}
+      />
     </Card>
   );
 };

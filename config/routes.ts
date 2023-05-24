@@ -138,7 +138,7 @@
   {
     name: 'DichVuMotCua',
     icon: 'AuditOutlined',
-    path: '/dichvumotcuasv',
+    path: '/dich-vu-mot-cua-sinh-vien',
     routes: [
       {
         path: './',

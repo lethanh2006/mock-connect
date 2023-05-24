@@ -6,6 +6,7 @@ import { PaperClipOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import { useModel } from 'umi';
 import Form from './FormFile';
+import ExpandText from '@/components/ExpandText';
 
 const FileList = (props: { type: 'Admin' | 'User' }) => {
   const { visibleFormFile, setVisibleFormFile, record } = useModel('vanbanhuongdan');
@@ -21,12 +22,10 @@ const FileList = (props: { type: 'Admin' | 'User' }) => {
       title: 'Tên văn bản',
       dataIndex: 'ten',
       search: 'search',
-      align: 'center',
       width: 250,
     },
     {
       title: 'Tệp đính kèm',
-      align: 'center',
       dataIndex: 'url',
       render: (val, recordFile) => (
         <>
@@ -42,6 +41,14 @@ const FileList = (props: { type: 'Admin' | 'User' }) => {
       dataIndex: 'moTa',
       align: 'center',
       width: 300,
+      render: (val) => (
+        <ExpandText
+          style={{ marginBottom: 0 }}
+          ellipsis={{ rows: 2, expandable: true, symbol: <span>Xem tiếp</span> }}
+        >
+          {val}
+        </ExpandText>
+      ),
     },
   ];
 
