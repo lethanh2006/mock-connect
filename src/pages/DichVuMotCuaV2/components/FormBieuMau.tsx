@@ -29,6 +29,8 @@ import TieuDeBieuMau from './TieuDeBieuMau';
 import { accessFileUpload } from '@/services/DichVuMotCuaV2/constant';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
+import SelectTonGiao from '@/pages/Core/TonGiao/SelectTonGiao';
+import SelectDanToc from '@/pages/Core/DanToc/SelectDanToc';
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
@@ -60,28 +62,24 @@ const FormBieuMau = (props: {
     recordDonThaoTac,
     recordDon,
     sinhVienPutDonModel,
-    loaiDichVu,
   } = useModel('dichvumotcuav2');
   const { danhSach: danhSachKyHoc } = useModel('daotao.hocky');
   const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
   const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
-  const { danhSachDanToc, danhSachTonGiao, getAllTonGiao, getAllDanToc } =
-    useModel('dantoctongiao');
-  const {
-    tenTinh,
-    tenPhuongXa,
-    tenQuanHuyen,
-    setTenTinh,
-    setTenXaPhuong,
-    setTenQuanHuyen,
-    setObjDanhSachXaPhuong,
-    setObjDanhSachQuanHuyen,
-  } = useModel('donvihanhchinh');
+
+  // const {
+  //   tenTinh,
+  //   tenPhuongXa,
+  //   tenQuanHuyen,
+  //   setTenTinh,
+  //   setTenXaPhuong,
+  //   setTenQuanHuyen,
+  //   setObjDanhSachXaPhuong,
+  //   setObjDanhSachQuanHuyen,
+  // } = useModel('donvihanhchinh');
 
   const [valuesForm, setValuesForm] = useState<any>({});
-  const [typeXuLy, setTypeXuLy] = useState<'ok' | 'not-ok' | 'edit-result'>('ok');
-  const { pathname } = window.location;
-  const arrPathName = pathname?.split('/') ?? [];
+  // const [typeXuLy, setTypeXuLy] = useState<'ok' | 'not-ok' | 'edit-result'>('ok');
   const [check, setCheck] = useState<boolean>(false);
 
   const buildValuesForm = (
@@ -131,12 +129,12 @@ const FormBieuMau = (props: {
         let value = values?.[`${name}[${index}].${item?.label}`];
 
         if (item?.type === 'DON_VI_HANH_CHINH') {
-          value = {
-            ...values?.[`${name}[${index}].${item?.label}`],
-            tenTinh: tenTinh?.[`${name}[${index}].${item?.label}.maTinh`],
-            tenQuanHuyen: tenQuanHuyen?.[`${name}[${index}].${item?.label}.maQuanHuyen`],
-            tenPhuongXa: tenPhuongXa?.[`${name}[${index}].${item?.label}.maPhuongXa`],
-          };
+          // value = {
+          //   ...values?.[`${name}[${index}].${item?.label}`],
+          //   tenTinh: tenTinh?.[`${name}[${index}].${item?.label}.maTinh`],
+          //   tenQuanHuyen: tenQuanHuyen?.[`${name}[${index}].${item?.label}.maQuanHuyen`],
+          //   tenPhuongXa: tenPhuongXa?.[`${name}[${index}].${item?.label}.maPhuongXa`],
+          // };
         } else if (item?.type === 'TABLE') {
           value = danhSachDataTable?.[`${name}[${index}].${item?.label}`]?.map(
             (row: { cauHinhBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }) => buildTableData(row),
@@ -183,8 +181,6 @@ const FormBieuMau = (props: {
 
   useEffect(() => {
     const valuesTemp = {};
-    getAllDanToc();
-    getAllTonGiao();
     buildValuesForm(
       valuesTemp,
       'cauHinhBieuMau',
@@ -505,29 +501,13 @@ const FormBieuMau = (props: {
       }
       case 'DAN_TOC': {
         initialValue = item?.value;
-        element = (
-          <Select showSearch allowClear placeholder={item?.label ?? ''}>
-            {danhSachDanToc?.map((dantoc: any) => (
-              <Select.Option key={dantoc._id} value={dantoc.tenDanToc}>
-                {dantoc.tenDanToc}
-              </Select.Option>
-            ))}
-          </Select>
-        );
+        element = <SelectDanToc />;
         break;
       }
 
       case 'TON_GIAO': {
         initialValue = item?.value;
-        element = (
-          <Select showSearch allowClear placeholder={item?.label ?? ''}>
-            {danhSachTonGiao?.map((tongiao: any) => (
-              <Select.Option key={tongiao._id} value={tongiao.tenTonGiao}>
-                {tongiao.tenTonGiao}
-              </Select.Option>
-            ))}
-          </Select>
-        );
+        element = <SelectTonGiao />;
         break;
       }
       case 'HOC_PHAN_CO_DIEM': {
@@ -757,7 +737,7 @@ const FormBieuMau = (props: {
           </>
         )}
 
-        {recordDon?.maDon && loaiDichVu !== 'VAN_PHONG_SO' ? (
+        {recordDon?.maDon ? (
           <Form.Item label={'Mã đơn'} style={{ marginLeft: '10px' }}>
             <>
               {recordDon?.maDon && (
@@ -804,20 +784,6 @@ const FormBieuMau = (props: {
             </Button>
           )}
 
-          {/* {props?.traKetQua &&
-            ['view'].includes(props?.type ?? '') &&
-            props?.duocPhepSuaKetQua === true &&
-            !arrPathName?.includes('vanphongso') && (
-              <Button
-                style={{ marginRight: 8 }}
-                type="primary"
-                onClick={() => {
-                  setTypeXuLy('edit-result');
-                }}
-              >
-                Sửa kết quả
-              </Button>
-            )} */}
           {props?.onCancel && <Button onClick={() => props?.onCancel()}>Đóng</Button>}
         </Form.Item>
       </Form>

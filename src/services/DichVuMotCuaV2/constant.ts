@@ -72,7 +72,7 @@ export const LevelDonViHanhChinh = [
 
 export const LevelCCCD = ['Số CMT/CCCD', 'Số CMT/CCCD, ngày cấp', 'Số CMT/CCCD, ngày cấp, nơi cấp'];
 
-export const accessFileUpload = {
+export const accessFileUpload: any = {
   doc: '.doc,.docx',
   excel: '.xlsm, .xls, .xlsx',
   image: '.png, .jpg, .jpeg',

@@ -1,10 +1,10 @@
-import { getDataTinTuc } from '@/services/ant-design-pro/api';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Card, Empty, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import BlockTinTuc from './BlockTinTuc';
 import { history } from 'umi';
 import './styles.less';
+import { getDataTinTuc } from '@/services/TinTuc/tintuc';
 
 const TinTucDashboard = () => {
   const [danhSachTinTucTheoTopic, setDanhSachTinTucTheoTopic] = useState<TinTuc.Record[]>([]);

@@ -2,6 +2,7 @@ import useInitModel from '@/hooks/useInitModel';
 import {
   getAllMonHocSinhVien,
   getAllSinhVienLopHocPhan,
+  sinhVienAllGetDiemTongKet,
   sinhVienGetLopTinChiById,
   sinhVienGetThoiKhoaBieu,
 } from '@/services/HocTap/LopTinChi';
@@ -16,6 +17,7 @@ export default () => {
   const [idNhomLop, setIdNhomLop] = useState<number>(-1);
   const [hinhThucDaoTao, setHinhThucDaoTao] = useState<number>();
   const [flagDaDanhGia, setFlagDaDanhGia] = useState(false);
+  const [danhSachDiemTongKet, setDanhSachDiemTongKet] = useState<LopTinChi.DiemTongKet[]>([]);
   // const [dataBieuMau, setDataBieuMau] = useState<BieuMau.Record>({} as BieuMau.Record);
   const [danhSachDiemThanhPhanTheoKy, setDanhSachDiemThanhPhanTheoKy] = useState<any[]>([]);
   const [thongTinChung, setThongTinChung] = useState<LopTinChi.ThongTinChungLopTinChiRecord>(
@@ -31,6 +33,14 @@ export default () => {
   //   const response = await getThongTinChungLopTinChiByIdLop(idLop);
   //   setLoading(false);
   // };
+
+  const sinhVienGetDiemTongKetModel = async () => {
+    setLoading(true);
+    const response = await sinhVienAllGetDiemTongKet();
+    setDanhSachDiemTongKet(response?.data?.data ?? []);
+    setLoading(false);
+    return response?.data?.data ?? [];
+  };
 
   const sinhVienGetAllLopHocPhanModel = async () => {
     setLoading(true);
@@ -69,6 +79,7 @@ export default () => {
     sinhVienGetLopTinChiByIdModel,
     sinhVienGetThoiKhoaBieuModel,
     getAllMonHocSinhVienModel,
+    sinhVienGetDiemTongKetModel,
     idNhomLop,
     setIdNhomLop,
     hinhThucDaoTao,
@@ -87,5 +98,6 @@ export default () => {
     setDanhSachMonHoc,
     danhSachDiemThanhPhanTheoKy,
     setDanhSachDiemThanhPhanTheoKy,
+    danhSachDiemTongKet,
   };
 };

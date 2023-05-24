@@ -10,8 +10,9 @@ const MyDatePicker = (
     /**
      * Format hiển thị, mặc định: DD/MM/YYYY
      */
-    format?: string;
+    date?: string;
     pickerStyle?: 'time' | 'date' | 'week' | 'month' | 'quarter' | 'year' | undefined;
+    showTime?: any
 
     /**
      * Format lưu lại, mặc định: ISOString
@@ -22,7 +23,7 @@ const MyDatePicker = (
   },
 ) => {
   const format = props?.format ?? 'DD/MM/YYYY';
-  const { saveFormat, pickerStyle, disabledDate } = props;
+  const { saveFormat, pickerStyle, disabledDate, showTime } = props;
 
   const handleChange = (value: Moment | null) => {
     if (props.onChange)
@@ -45,6 +46,7 @@ const MyDatePicker = (
       value={objMoment}
       onChange={handleChange}
       disabledDate={disabledDate}
+      showTime = {showTime}
     />
   );
 };

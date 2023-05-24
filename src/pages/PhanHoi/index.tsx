@@ -23,11 +23,12 @@ const PhanHoi = () => {
           {val}
         </Typography.Paragraph>
       ),
+      sortable: true,
+      filterType: 'string',
     },
     {
       title: 'File đính kèm',
       dataIndex: 'urlPhanAnh',
-      align: 'center',
       render: (val) =>
         val ? (
           <a href={val} target="_blank" rel="noreferrer">
@@ -39,11 +40,19 @@ const PhanHoi = () => {
       width: 200,
     },
     {
+      title: 'Câu trả lời',
+      dataIndex: 'noiDungTraLoiPhanHoi',
+      hide: !daTraLoi,
+      width: 200,
+    },
+    {
       title: 'Ngày gửi',
       dataIndex: 'createdAt',
       align: 'center',
       render: (val) => <div>{moment(val).format('HH:mm DD/MM/YYYY')}</div>,
       width: 150,
+      sortable: true,
+      filterType: 'datetime',
     },
   ];
 

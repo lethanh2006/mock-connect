@@ -3,7 +3,6 @@ import TableBase from '@/components/OldTable';
 import ThanhToan from '@/components/ThanhToan';
 import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
-import { TrangThaiDonDVMC } from '@/utils/constants';
 import type { IColumn } from '@/utils/interfaces';
 import {
   DeleteOutlined,
@@ -18,9 +17,10 @@ import { Button, Divider, message, Modal, Popconfirm, Popover, Tabs, Tag, Toolti
 import axios from 'axios';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { history, useAccess, useModel } from 'umi';
+import { history, useModel } from 'umi';
 import FormQuyTrinh from '../../components/FormQuyTrinh';
 import FormGuiPhanHoi from '../../QuanLyDon/components/FormGuiPhanHoi';
+import { TrangThaiDonDVMC } from '@/services/DichVuMotCuaV2/constant';
 
 const LichSuGuiDon = () => {
   const {
@@ -41,7 +41,7 @@ const LichSuGuiDon = () => {
     getAllBieuMauModel,
   } = useModel('dichvumotcuav2');
 
-  const { getMyProfileModel, record } = useModel('sinhvien');
+  // const { getMyProfileModel, record } = useModel('sinhvien');
 
   const { setVisibleForm, visibleForm } = useModel('phanhoi');
 
@@ -56,7 +56,7 @@ const LichSuGuiDon = () => {
   const [data, setData] = useState<any>();
 
   useEffect(() => {
-    getMyProfileModel();
+    // getMyProfileModel();
     setRecord({} as DichVuMotCuaV2.BieuMau);
     // setLoaiDichVu('DVMC');
     getAllBieuMauModel('DVMC');
@@ -252,7 +252,7 @@ const LichSuGuiDon = () => {
                     disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     title="Bạn có chắc chắn muốn xóa đơn này?"
                     onConfirm={() => {
-                      sinhVienDeleteDonModel(record?._id ?? '');
+                      sinhVienDeleteDonModel(recordTemp?._id ?? '');
                     }}
                   >
                     <Button
@@ -322,7 +322,7 @@ const LichSuGuiDon = () => {
             setVisibleFormChinhSuaDon(false);
           }}
           hideCamKet
-          infoNguoiTaoDon={record}
+          infoNguoiTaoDon={recordView?.thongTinNguoiTao}
           type={type}
           record={recordView}
         />
@@ -348,7 +348,12 @@ const LichSuGuiDon = () => {
             />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Biểu mẫu" key={1}>
-            <Form hideCamKet infoNguoiTaoDon={record} type={type} record={recordView} />
+            <Form
+              hideCamKet
+              infoNguoiTaoDon={recordView?.thongTinNguoiTao}
+              type={type}
+              record={recordView}
+            />
           </Tabs.TabPane>
           {recordView?.identityCode && (
             <Tabs.TabPane tab="Thông tin thanh toán" key={2}>
