@@ -1,9 +1,9 @@
-import DatePicker from 'antd/lib/date-picker/index';
-import moment from 'moment';
-import type { Moment } from 'moment';
+import { DatePicker } from 'antd';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import 'antd/es/date-picker/style/index.less';
 import type { PickerProps } from 'antd/lib/date-picker/generatePicker';
+import type { Moment } from 'moment';
+import moment from 'moment';
 
 const MyDatePicker = (
   props: Omit<PickerProps<Moment>, 'onChange'> & {
