@@ -41,6 +41,37 @@
     component: './TrangChu',
     icon: 'HomeOutlined',
   },
+  {
+    name: 'News',
+    icon: 'NotificationOutlined',
+    path: '/tin-tuc',
+    // access: 'sinhVienVaNhanVien',
+    routes: [
+      {
+        path: './',
+        component: './TinTuc',
+        hideInMenu: true,
+      },
+      {
+        path: './chi-tiet',
+        hideInMenu: true,
+        component: './TinTuc/ChiTietTinTuc.tsx',
+      },
+    ],
+  },
+  // DANH MUC HE THONG
+  // {
+  //   name: 'DanhMuc',
+  //   path: '/danh-muc',
+  //   icon: 'copy',
+  //   routes: [
+  //     {
+  //       name: 'ChucVu',
+  //       path: 'chuc-vu',
+  //       component: './DanhMuc/ChucVu',
+  //     },
+  //   ],
+  // },
 
   // MENU CHUNG
   {
@@ -107,7 +138,7 @@
   {
     name: 'DichVuMotCua',
     icon: 'AuditOutlined',
-    path: '/dichvumotcuasv',
+    path: '/dich-vu-mot-cua-sinh-vien',
     routes: [
       {
         path: './',
@@ -117,7 +148,7 @@
       },
       {
         name: 'TaoDon',
-        path: './taodon',
+        path: './tao-don',
         // access: 'sinhVien',
         hideInMenu: true,
         routes: [
@@ -136,6 +167,14 @@
     ],
   },
   {
+    name: 'PhanHoi',
+    path: './phan-hoi',
+    component: './PhanHoi',
+    icon: 'HighlightOutlined',
+    // access: 'sinhVienVaNhanVien',
+  },
+
+  {
     name: 'CauHoiThuongGap',
     path: './cauhoithuonggap',
     icon: 'QuestionOutlined',
@@ -147,7 +186,6 @@
     component: './VanBanHuongDan',
     icon: 'FileOutlined',
   },
-
   //MENU GIANG VIEN
 
   {

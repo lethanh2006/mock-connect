@@ -8,12 +8,12 @@ import { useModel } from 'umi';
 
 const SelectDonViHanhChinh = (props: {
   form: FormInstance<any>;
-  suffix: 'NoiSinh' | 'ThuongTru' | 'QueQuan';
+  suffix?: 'NoiSinh' | 'ThuongTru' | 'QueQuan';
   listTinh?: DonViHanhChinh.IRecord[];
   hasSoNha?: boolean;
 }) => {
   const { form, suffix, listTinh, hasSoNha } = props;
-  const { record: recSinhVien } = useModel('sinhvien.sinhvien');
+  // const { record: recSinhVien } = useModel('sinhvien.sinhvien');
   const [idTinh, setIdTinh] = useState<string>();
   const [idHuyen, setIdHuyen] = useState<string>();
   const [listHuyen, setListHuyen] = useState<DonViHanhChinh.IRecord[]>([]);
@@ -29,10 +29,10 @@ const SelectDonViHanhChinh = (props: {
     form.setFieldsValue({ ['xaPhuong' + suffix]: undefined });
   };
 
-  useEffect(() => {
-    setIdTinh(_.get(recSinhVien, 'tinhTp' + suffix));
-    setIdHuyen(_.get(recSinhVien, 'quanHuyen' + suffix));
-  }, [recSinhVien?._id, suffix]);
+  // useEffect(() => {
+  //   setIdTinh(_.get(recSinhVien, 'tinhTp' + suffix));
+  //   setIdHuyen(_.get(recSinhVien, 'quanHuyen' + suffix));
+  // }, [recSinhVien?._id, suffix]);
 
   useEffect(() => {
     if (idTinh)

@@ -24,3 +24,11 @@ export async function sinhVienGetLopTinChiById(idLop: string) {
 export async function sinhVienGetThoiKhoaBieu(idLop: string) {
   return axios.get(`${ip3}/lop-hoc-phan/${idLop}/sinh-vien/thoi-khoa-bieu`);
 }
+
+export async function getAllMonHocSinhVien(payload: { condition: { idHocKy?: number } }) {
+  return axios.get(`${ip3}/odoo-slide-channel/sinh-vien/all`, { params: payload });
+}
+
+export async function sinhVienAllGetDiemTongKet() {
+  return axios.get(`${ip3}/lop-hoc-phan/sinh-vien/me/all`);
+}

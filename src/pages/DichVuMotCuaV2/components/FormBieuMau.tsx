@@ -1,10 +1,7 @@
-import DiaChi from '@/components/DiaChi';
+// import DiaChi from '@/components/DiaChi';
 import HocPhanCoDiem from '@/components/HocPhanCoDiem';
 import MyDatePicker from '@/components/MyDatePicker';
 import Upload from '@/components/Upload/UploadMultiFile';
-import useCheckAccess from '@/hooks/useCheckAccess';
-import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import { accessFileUpload } from '@/services/DichVuMotCuaV2/constant';
 import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
 import rules from '@/utils/rules';
 import { checkFileSize, includes, renderFileList } from '@/utils/utils';
@@ -14,35 +11,33 @@ import {
   Button,
   Card,
   Checkbox,
-  Descriptions,
   Divider,
-  Dropdown,
   Form,
   Input,
   InputNumber,
-  Menu,
-  Modal,
   Radio,
   Select,
-  Tooltip,
   message,
 } from 'antd';
 import moment from 'moment';
 import mm from 'moment-timezone';
 import { useEffect, useState } from 'react';
-import { useAccess, useModel } from 'umi';
-import FormDieuPhoi from '../QuanLyDon/components/FormDieuPhoi';
-import FormXuLyDon from '../QuanLyDon/components/FormXuLyDon';
+import { useModel } from 'umi';
 import Table from './TableElement';
 import ThongTinNguoiTaoDon from './ThongTinNguoiTaoDon';
 import TieuDeBieuMau from './TieuDeBieuMau';
+import { accessFileUpload } from '@/services/DichVuMotCuaV2/constant';
+import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
+import SelectTonGiao from '@/pages/Core/TonGiao/SelectTonGiao';
+import SelectDanToc from '@/pages/Core/DanToc/SelectDanToc';
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
 const FormBieuMau = (props: {
   infoNguoiTaoDon?: SinhVien.IRecord;
   record?: DichVuMotCuaV2.Don & { index?: number };
-  type?: 'view' | 'handle' | 'create' | 'edit' | 'muonCsvc';
+  type?: 'view' | 'handle' | 'create' | 'edit';
   onCancel?: any;
   textSaveButton?: string;
   title?: string;
@@ -57,12 +52,7 @@ const FormBieuMau = (props: {
   isMuonPhongHop?: boolean;
   isBaoCaoSuCo?: boolean;
 }) => {
-  const chuyenVienDieuPhoiDuyetDon = useCheckAccess('don-dvmc-thao-tac:duyet-all');
-  const chuyenVienXuLyDuyetDon = useCheckAccess('don-dvmc-thao-tac:duyet-my');
-  const canDieuPhoiDon = useCheckAccess('don-dvmc-thao-tac:dieu-phoi');
-
   const [form] = Form.useForm();
-  const access = useAccess();
   const {
     loading,
     danhSachDataTable,
@@ -72,33 +62,24 @@ const FormBieuMau = (props: {
     recordDonThaoTac,
     recordDon,
     sinhVienPutDonModel,
-    exportDonModel,
-    loaiDichVu,
   } = useModel('dichvumotcuav2');
   const { danhSach: danhSachKyHoc } = useModel('daotao.hocky');
   const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
   const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
-  const { danhSachDanToc, danhSachTonGiao, getAllTonGiao, getAllDanToc } =
-    useModel('dantoctongiao');
-  const {
-    tenTinh,
-    tenPhuongXa,
-    tenQuanHuyen,
-    setTenTinh,
-    setTenXaPhuong,
-    setTenQuanHuyen,
-    setObjDanhSachXaPhuong,
-    setObjDanhSachQuanHuyen,
-  } = useModel('donvihanhchinh');
-  const [recordEdit, setRecordEdit] = useState<{ duLieuBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }>({
-    duLieuBieuMau: [],
-  });
+
+  // const {
+  //   tenTinh,
+  //   tenPhuongXa,
+  //   tenQuanHuyen,
+  //   setTenTinh,
+  //   setTenXaPhuong,
+  //   setTenQuanHuyen,
+  //   setObjDanhSachXaPhuong,
+  //   setObjDanhSachQuanHuyen,
+  // } = useModel('donvihanhchinh');
+
   const [valuesForm, setValuesForm] = useState<any>({});
-  const [visibleFormDieuPhoi, setVisibleFormDieuPhoi] = useState<boolean>(false);
-  const [visibleFormXuLy, setVisibleFormXuLy] = useState<boolean>(false);
-  const [typeXuLy, setTypeXuLy] = useState<'ok' | 'not-ok' | 'edit-result'>('ok');
-  const { pathname } = window.location;
-  const arrPathName = pathname?.split('/') ?? [];
+  // const [typeXuLy, setTypeXuLy] = useState<'ok' | 'not-ok' | 'edit-result'>('ok');
   const [check, setCheck] = useState<boolean>(false);
 
   const buildValuesForm = (
@@ -108,7 +89,7 @@ const FormBieuMau = (props: {
   ) => {
     arrCauHinh?.forEach((cauHinh, indexCauHinh) => {
       if (cauHinh?.type === 'TABLE' && (props?.type === 'edit' || props?.type === 'handle')) {
-        const recordTemp = {};
+        const recordTemp: any = {};
         const arrData: { cauHinhBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }[] = cauHinh?.value?.map(
           (row: DichVuMotCuaV2.CauHinhBieuMau[]) => ({ cauHinhBieuMau: row }),
         );
@@ -148,20 +129,18 @@ const FormBieuMau = (props: {
         let value = values?.[`${name}[${index}].${item?.label}`];
 
         if (item?.type === 'DON_VI_HANH_CHINH') {
-          value = {
-            ...values?.[`${name}[${index}].${item?.label}`],
-            tenTinh: tenTinh?.[`${name}[${index}].${item?.label}.maTinh`],
-            tenQuanHuyen: tenQuanHuyen?.[`${name}[${index}].${item?.label}.maQuanHuyen`],
-            tenPhuongXa: tenPhuongXa?.[`${name}[${index}].${item?.label}.maPhuongXa`],
-          };
+          // value = {
+          //   ...values?.[`${name}[${index}].${item?.label}`],
+          //   tenTinh: tenTinh?.[`${name}[${index}].${item?.label}.maTinh`],
+          //   tenQuanHuyen: tenQuanHuyen?.[`${name}[${index}].${item?.label}.maQuanHuyen`],
+          //   tenPhuongXa: tenPhuongXa?.[`${name}[${index}].${item?.label}.maPhuongXa`],
+          // };
         } else if (item?.type === 'TABLE') {
           value = danhSachDataTable?.[`${name}[${index}].${item?.label}`]?.map(
             (row: { cauHinhBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }) => buildTableData(row),
           );
         }
-        // else if (item?.type === 'BUTTON_SEARCH_PHONG') {
-        //   value = selectedRow?._id ?? '';
-        // }
+
         return {
           ...item,
           dataSource: item?.dataSource?.map((data, indexData) => ({
@@ -193,10 +172,7 @@ const FormBieuMau = (props: {
     const duLieuBieuMau = buildPostData(
       'cauHinhBieuMau',
       valuesFinal,
-      props?.handleAdd ||
-        props?.type === 'edit' ||
-        props?.type === 'handle' ||
-        props?.type === 'muonCsvc'
+      props?.handleAdd || props?.type === 'edit' || props?.type === 'handle'
         ? props?.record?.thongTinDichVu?.cauHinhBieuMau ?? []
         : record?.cauHinhBieuMau ?? [],
     );
@@ -205,8 +181,6 @@ const FormBieuMau = (props: {
 
   useEffect(() => {
     const valuesTemp = {};
-    getAllDanToc();
-    getAllTonGiao();
     buildValuesForm(
       valuesTemp,
       'cauHinhBieuMau',
@@ -216,36 +190,13 @@ const FormBieuMau = (props: {
 
     return () => {
       if (!props?.handleAdd) setDanhSachDataTable({});
-      setTenTinh({});
-      setTenQuanHuyen({});
-      setTenXaPhuong({});
-      setObjDanhSachQuanHuyen({});
-      setObjDanhSachXaPhuong({});
+      // setTenTinh({});
+      // setTenQuanHuyen({});
+      // setTenXaPhuong({});
+      // setObjDanhSachQuanHuyen({});
+      // setObjDanhSachXaPhuong({});
     };
   }, []);
-
-  const onClickMenuExport = (
-    idDon: string,
-    item: { key: 'word' | 'pdf' },
-    mauExport: 'MAU_DON' | 'TRA_LOI',
-    tenDon: string,
-  ) => {
-    exportDonModel({
-      idDon,
-      mauExport,
-      exportType: item.key,
-      tenDon,
-    });
-  };
-
-  //xử lý ở modal chọn xe công và phòng họp
-  const handleDuyetDon = async () => {
-    const values = form.getFieldsValue();
-    const { duLieuBieuMau } = await onSubmitForm(values);
-    setRecordEdit({ duLieuBieuMau });
-    setVisibleFormXuLy(true);
-    setTypeXuLy('ok');
-  };
 
   const buildForm = (name: string, item: DichVuMotCuaV2.CauHinhBieuMau) => {
     let element = <Input placeholder="Nhập nội dung" />;
@@ -351,23 +302,24 @@ const FormBieuMau = (props: {
         initialValue = item?.value;
         ruleElement = [];
         element = (
-          <DiaChi
-            hideDiaChiCuThe={item?.level !== 4}
-            hideQuanHuyen={item?.level === 1}
-            hideXaPhuong={[1, 2].includes(item?.level)}
-            notRequiredDiaChiCuThe={!item?.isRequired}
-            notRequiredQuanHuyen={!item?.isRequired}
-            notRequiredTinh={!item?.isRequired}
-            notRequiredXaPhuong={!item?.isRequired}
-            initialValue={item?.value}
-            form={form}
-            fields={{
-              tinh: [`${name}.${item?.label ?? ''}`, 'maTinh'],
-              quanHuyen: [`${name}.${item?.label ?? ''}`, 'maQuanHuyen'],
-              xaPhuong: [`${name}.${item?.label ?? ''}`, 'maPhuongXa'],
-              diaChiCuThe: [`${name}.${item?.label ?? ''}`, 'soNhaTenDuong'],
-            }}
-          />
+          // <DiaChi
+          //   hideDiaChiCuThe={item?.level !== 4}
+          //   hideQuanHuyen={item?.level === 1}
+          //   hideXaPhuong={[1, 2].includes(item?.level)}
+          //   notRequiredDiaChiCuThe={!item?.isRequired}
+          //   notRequiredQuanHuyen={!item?.isRequired}
+          //   notRequiredTinh={!item?.isRequired}
+          //   notRequiredXaPhuong={!item?.isRequired}
+          //   initialValue={item?.value}
+          //   form={form}
+          //   fields={{
+          //     tinh: [`${name}.${item?.label ?? ''}`, 'maTinh'],
+          //     quanHuyen: [`${name}.${item?.label ?? ''}`, 'maQuanHuyen'],
+          //     xaPhuong: [`${name}.${item?.label ?? ''}`, 'maPhuongXa'],
+          //     diaChiCuThe: [`${name}.${item?.label ?? ''}`, 'soNhaTenDuong'],
+          //   }}
+          // />
+          <SelectDonViHanhChinh form={form} />
         );
         break;
       }
@@ -411,7 +363,7 @@ const FormBieuMau = (props: {
         ];
 
         const data = item?.value?.map((recordRow: DichVuMotCuaV2.CauHinhBieuMau[]) => {
-          const row = {};
+          const row: any = {};
           recordRow?.forEach((cell: DichVuMotCuaV2.CauHinhBieuMau) => {
             let value = typeof cell?.value === 'object' ? cell?.value?.join(', ') : cell?.value;
             if (cell.type === 'DATE_PICKER') {
@@ -478,14 +430,9 @@ const FormBieuMau = (props: {
       case 'MY_SEMESTER': {
         initialValue = item?.value;
         ruleElement = [...rules.text];
-        const kyHoc = access.sinhVien
-          ? danhSachKyHoc
-          : [
-              // { id: 1, ten_ky_nam_hoc: '1', nam_hoc_id: [1, '2022-2023'] },
-              // { id: 2, ten_ky_nam_hoc: '2', nam_hoc_id: [2, '2022-2023'] },
-            ];
+        const kyHoc = danhSachKyHoc;
         ruleElement = [...rules.text];
-        element = access.sinhVien ? (
+        element = (
           <Select allowClear placeholder={item?.label ?? ''}>
             {kyHoc?.map((kyhoc: any) => (
               <Select.Option
@@ -496,21 +443,14 @@ const FormBieuMau = (props: {
               </Select.Option>
             ))}
           </Select>
-        ) : (
-          <Input placeholder="Nhập kỳ học" />
         );
         break;
       }
       case 'MY_YEAR': {
         initialValue = item?.value;
         ruleElement = [...rules.text];
-        const namHoc = access.sinhVien
-          ? danhSachNamHoc
-          : [
-              // { id: 1, ten_nam_hoc: '2021-2022' },
-              // { id: 2, ten_nam_hoc: '2022-2023' },
-            ];
-        element = access.sinhVien ? (
+        const namHoc = danhSachNamHoc;
+        element = (
           <Select allowClear placeholder={item?.label ?? ''}>
             {namHoc?.map((nam: any) => (
               <Select.Option key={nam.id} value={`Năm học ${nam.ten_nam_hoc}`}>
@@ -518,14 +458,12 @@ const FormBieuMau = (props: {
               </Select.Option>
             ))}
           </Select>
-        ) : (
-          <Input placeholder="Nhập năm học" />
         );
         break;
       }
       case 'MY_CREDIT': {
         initialValue = item?.value;
-        const monHoc = access.sinhVien ? danhSachMonHoc : [];
+        const monHoc = danhSachMonHoc;
         element = (
           <AutoComplete
             filterOption={(value, option) => includes(option?.props.children, value)}
@@ -544,8 +482,8 @@ const FormBieuMau = (props: {
       }
       case 'MY_COURSE': {
         initialValue = item?.value;
-        const lopHoc = access.sinhVien ? danhSachLopTinChi : [];
-        element = access.sinhVien ? (
+        const lopHoc = danhSachLopTinChi;
+        element = (
           <Select
             filterOption={(value, option) => includes(option?.props.children, value)}
             showSearch
@@ -558,36 +496,18 @@ const FormBieuMau = (props: {
               </Select.Option>
             ))}
           </Select>
-        ) : (
-          <Input placeholder="Chọn lớp tín chỉ" />
         );
         break;
       }
       case 'DAN_TOC': {
         initialValue = item?.value;
-        element = (
-          <Select showSearch allowClear placeholder={item?.label ?? ''}>
-            {danhSachDanToc?.map((dantoc: any) => (
-              <Select.Option key={dantoc._id} value={dantoc.tenDanToc}>
-                {dantoc.tenDanToc}
-              </Select.Option>
-            ))}
-          </Select>
-        );
+        element = <SelectDanToc />;
         break;
       }
 
       case 'TON_GIAO': {
         initialValue = item?.value;
-        element = (
-          <Select showSearch allowClear placeholder={item?.label ?? ''}>
-            {danhSachTonGiao?.map((tongiao: any) => (
-              <Select.Option key={tongiao._id} value={tongiao.tenTonGiao}>
-                {tongiao.tenTonGiao}
-              </Select.Option>
-            ))}
-          </Select>
-        );
+        element = <SelectTonGiao />;
         break;
       }
       case 'HOC_PHAN_CO_DIEM': {
@@ -629,7 +549,7 @@ const FormBieuMau = (props: {
                 </span>
               )}{' '}
               {item?.label ?? 'Chưa có tiêu đề'}
-              {item.type === 'DON_VI_HANH_CHINH' && !access.sinhVien && (
+              {/* {item.type === 'DON_VI_HANH_CHINH' && !access.sinhVien && (
                 <Tooltip title="Sao chép địa chỉ">
                   <CopyOutlined
                     onClick={() => {
@@ -648,7 +568,7 @@ const FormBieuMau = (props: {
                     style={{ marginLeft: 8 }}
                   />
                 </Tooltip>
-              )}
+              )} */}
             </div>
           }
           name={item.type === 'DON_VI_HANH_CHINH' ? undefined : `${name}.${item?.label}`}
@@ -696,11 +616,10 @@ const FormBieuMau = (props: {
         postDonSinhVienModel({
           soLuongThanhToan: values?.soLuongThanhToan,
           duLieuBieuMau,
-          dichVuId: props?.type === 'muonCsvc' ? props?.record?.thongTinDichVu?._id : record?._id,
+          dichVuId: record?._id,
           traKetQua: props?.record?.thongTinDichVu?.traKetQua,
           daTraKetQua: false,
-          idCoSoVatChat: props?.isMuonPhongHop ? selectedRow?._id : null,
-        }).then(() => {});
+        });
       }
     }
   };
@@ -733,31 +652,6 @@ const FormBieuMau = (props: {
             {props.record?.thongTinDichVu?.cauHinhBieuMau?.map((item, index) => {
               return buildForm(`cauHinhBieuMau[${index}]`, item);
             })}
-            {props?.type === 'view' && props?.record?.thongTinMuonPhong ? (
-              <>
-                <p>Thông tin mượn phòng:</p>
-                <Descriptions
-                  size="small"
-                  column={{ xxl: 4, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }}
-                  layout="vertical"
-                  bordered
-                  style={{ marginBottom: '20px' }}
-                >
-                  <Descriptions.Item label="Tòa nhà">
-                    {props?.record?.idCoSoVatChat?.info?.toaNha ?? 'Không xác định'}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Tên phòng">
-                    {props?.record?.idCoSoVatChat?.info?.tenPhong ?? 'Không xác định'}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Số phòng">
-                    {props?.record?.idCoSoVatChat?.info?.soPhong ?? 'Không xác định'}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Số chỗ">
-                    {props?.record?.idCoSoVatChat?.info?.soCho ?? 'Không xác định'}
-                  </Descriptions.Item>
-                </Descriptions>
-              </>
-            ) : null}
 
             {((record?.thongTinThuTuc?.yeuCauTraPhi &&
               record?.thongTinThuTuc?.tinhTienTheoSoLuong) ||
@@ -843,7 +737,7 @@ const FormBieuMau = (props: {
           </>
         )}
 
-        {recordDon?.maDon && loaiDichVu !== 'VAN_PHONG_SO' ? (
+        {recordDon?.maDon ? (
           <Form.Item label={'Mã đơn'} style={{ marginLeft: '10px' }}>
             <>
               {recordDon?.maDon && (
@@ -869,7 +763,7 @@ const FormBieuMau = (props: {
         <Form.Item style={{ textAlign: 'center', marginBottom: 0 }}>
           {!['view', 'handle', 'edit'].includes(props?.type ?? '') && (
             <Button
-              disabled={props?.hideCamKet || props.type === 'muonCsvc' ? false : !check}
+              disabled={props?.hideCamKet ? false : !check}
               loading={loading}
               style={{ marginRight: 8 }}
               htmlType="submit"
@@ -880,7 +774,7 @@ const FormBieuMau = (props: {
           )}
           {['edit'].includes(props?.type ?? '') && (
             <Button
-              disabled={props?.hideCamKet || props.type === 'muonCsvc' ? false : !check}
+              disabled={props?.hideCamKet ? false : !check}
               loading={loading}
               style={{ marginRight: 8 }}
               htmlType="submit"
@@ -890,167 +784,9 @@ const FormBieuMau = (props: {
             </Button>
           )}
 
-          {['handle'].includes(props?.type ?? '') && (
-            <>
-              <Button
-                disabled={!chuyenVienDieuPhoiDuyetDon && !chuyenVienXuLyDuyetDon}
-                onClick={async () => {
-                  const values = form.getFieldsValue();
-                  const { duLieuBieuMau } = await onSubmitForm(values);
-                  setRecordEdit({ duLieuBieuMau });
-                  setVisibleFormXuLy(true);
-                  setTypeXuLy('ok');
-                }}
-                style={{
-                  marginRight: 8,
-                  backgroundColor: '#007F3E',
-                  border: '1px solid #007F3E',
-                  color: 'white',
-                }}
-              >
-                Duyệt
-              </Button>
-
-              <Button
-                disabled={!chuyenVienDieuPhoiDuyetDon && !chuyenVienXuLyDuyetDon}
-                onClick={() => {
-                  setVisibleFormXuLy(true);
-                  setTypeXuLy('not-ok');
-                }}
-                type="primary"
-                style={{
-                  marginRight: 8,
-                  backgroundColor: '#007EB9',
-                  border: '1px solid #007EB9',
-                  color: 'white',
-                }}
-              >
-                Không duyệt
-              </Button>
-
-              {arrPathName?.includes('quanlydondieuphoi') && (
-                <Button
-                  disabled={!canDieuPhoiDon}
-                  style={{
-                    marginRight: 8,
-                    backgroundColor: '#1890ff',
-                    border: '1px solid #1890ff',
-                    color: 'white',
-                  }}
-                  onClick={() => {
-                    setVisibleFormDieuPhoi(true);
-                  }}
-                >
-                  Điều phối
-                </Button>
-              )}
-
-              {loaiDichVu !== 'VAN_PHONG_SO' ? (
-                <>
-                  <Dropdown
-                    overlay={
-                      <Menu
-                        onClick={(item: any) =>
-                          onClickMenuExport(
-                            recordDon?._id ?? '',
-                            item,
-                            'MAU_DON',
-                            `BieuMau_${recordDon?.thongTinDichVu?.ten}_${recordDon?.thongTinNguoiTao?.maSinhVien}_${recordDon?.thongTinNguoiTao?.hoTen}`,
-                          )
-                        }
-                      >
-                        <Menu.Item key="word">Tải về</Menu.Item>
-                        <Menu.Item key="pdf">In mẫu</Menu.Item>
-                      </Menu>
-                    }
-                  >
-                    <Button style={{ marginRight: 8 }} loading={loading}>
-                      Xuất mẫu đơn
-                    </Button>
-                  </Dropdown>
-                  {props?.traKetQua && (
-                    <Dropdown
-                      overlay={
-                        <Menu
-                          onClick={(item: any) =>
-                            onClickMenuExport(
-                              recordDon?._id ?? '',
-                              item,
-                              'TRA_LOI',
-                              `KetQua_${recordDon?.thongTinDichVu?.ten}_${recordDon?.thongTinNguoiTao?.maSinhVien}_${recordDon?.thongTinNguoiTao?.hoTen}`,
-                            )
-                          }
-                        >
-                          <Menu.Item key="word">Tải về</Menu.Item>
-                          <Menu.Item key="pdf">In mẫu</Menu.Item>
-                        </Menu>
-                      }
-                    >
-                      <Button style={{ marginRight: 8 }} loading={loading}>
-                        Xuất mẫu trả KQ
-                      </Button>
-                    </Dropdown>
-                  )}
-                </>
-              ) : null}
-            </>
-          )}
-          {props?.traKetQua &&
-            ['view'].includes(props?.type ?? '') &&
-            props?.duocPhepSuaKetQua === true &&
-            !arrPathName?.includes('vanphongso') && (
-              <Button
-                style={{ marginRight: 8 }}
-                type="primary"
-                onClick={() => {
-                  setVisibleFormXuLy(true);
-                  setTypeXuLy('edit-result');
-                }}
-              >
-                Sửa kết quả
-              </Button>
-            )}
           {props?.onCancel && <Button onClick={() => props?.onCancel()}>Đóng</Button>}
-          {/* <Button
-            onClick={() => (props?.onCancel ? props?.onCancel() : setVisibleFormBieuMau(false))}
-          >
-            Đóng
-          </Button> */}
         </Form.Item>
       </Form>
-      <Modal
-        destroyOnClose
-        bodyStyle={{ padding: 0 }}
-        footer={false}
-        visible={visibleFormDieuPhoi}
-        onCancel={() => {
-          setVisibleFormDieuPhoi(false);
-        }}
-      >
-        <FormDieuPhoi
-          onCancel={() => {
-            setVisibleFormDieuPhoi(false);
-          }}
-        />
-      </Modal>
-      <Modal
-        destroyOnClose
-        bodyStyle={{ padding: 0 }}
-        footer={false}
-        visible={visibleFormXuLy}
-        onCancel={() => {
-          setVisibleFormXuLy(false);
-        }}
-      >
-        <FormXuLyDon
-          recordEdit={recordEdit}
-          traKetQua={props?.traKetQua ?? false}
-          type={typeXuLy}
-          onCancel={() => {
-            setVisibleFormXuLy(false);
-          }}
-        />
-      </Modal>
     </Card>
   );
 };
