@@ -186,14 +186,12 @@ const useInitModel = <T,>(
       const res = await deleteService(id);
       message.success('Xóa thành công');
 
-      const maxPage = Math.ceil((total - 1) / limit);
+      const maxPage = Math.ceil((total - 1) / limit) || 1;
       let newPage = page;
       if (newPage > maxPage) {
-        newPage = maxPage || 1;
+        newPage = maxPage;
         setPage(newPage);
-      }
-
-      if (getData) getData();
+      } else if (getData) getData();
       else getModel(undefined, undefined, undefined, newPage);
 
       return res.data;
@@ -202,6 +200,12 @@ const useInitModel = <T,>(
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = (rec: T) => {
+    setRecord(rec);
+    setVisibleForm(true);
+    setEdit(true);
   };
 
   /**
@@ -299,6 +303,7 @@ const useInitModel = <T,>(
     setDanhSach,
     record,
     setRecord,
+    handleEdit,
     getImportHeaderModel,
     getImportTemplateModel,
     postExecuteImpotModel,
