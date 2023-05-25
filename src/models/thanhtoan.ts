@@ -1,3 +1,4 @@
+import useInitModel from '@/hooks/useInitModel';
 import {
   editInvoiceByIdentityCode,
   getInvoice,
@@ -15,18 +16,11 @@ import { message } from 'antd';
 import { useState } from 'react';
 
 export default () => {
-  const [record, setRecord] = useState<ThanhToan.Product>();
-  const [danhSach, setDanhSach] = useState<ThanhToan.Invoice[]>([]);
-  const [total, setTotal] = useState<number>(0);
+  const objInit = useInitModel<ThanhToan.Invoice>('SLINK-MANUAL/thanh-toan/invoice');
+  const { setDanhSach, setRecord, setLoading, page, limit, setTotal, condition, setVisibleForm } =
+    objInit;
   const [invoice, setInvoice] = useState<ThanhToan.Invoice>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [visibleForm, setVisibleForm] = useState<boolean>(false);
   const [visibleResponseImport, setVisibleResponseImport] = useState<boolean>(false);
-  const [filterInfo, setFilterInfo] = useState<any>({});
-  const [condition, setCondition] = useState<any>({});
-  const [edit, setEdit] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
   const [postTypeCongNo, setPostTypeCongNo] = useState<'normal' | 'import'>('normal');
   const [recordThongKeInvoice, setRecordThongKeInvoice] = useState<ThanhToan.ThongKeInvoice>();
   const [responseImportInvoice, setResponseImportInvoice] =
@@ -184,6 +178,7 @@ export default () => {
   };
 
   return {
+    ...objInit,
     phamVi,
     setPhamVi,
     editInvoiceByIdentityCodeModel,
@@ -191,14 +186,9 @@ export default () => {
     getInvoiceByIdentityCodeModel,
     payInvoiceByIdentityCodeModel,
     getProductByCodeModel,
-    record,
-    setRecord,
     invoice,
     setInvoice,
-    loading,
     setLoading,
-    visibleForm,
-    setVisibleForm,
     visibleResponseImport,
     setVisibleResponseImport,
     responseImportInvoice,
@@ -213,21 +203,7 @@ export default () => {
     postTypeCongNo,
     setPostTypeCongNo,
     postInvoiceModel,
-    edit,
-    setEdit,
     getInvoiceModel,
     getMyInvoiceModel,
-    danhSach,
-    setDanhSach,
-    page,
-    limit,
-    setPage,
-    setLimit,
-    condition,
-    setCondition,
-    filterInfo,
-    setFilterInfo,
-    total,
-    setTotal,
   };
 };

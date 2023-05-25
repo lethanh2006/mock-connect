@@ -127,7 +127,7 @@ const BlockTinTuc = (props: { data: TinTuc.Record[]; empty?: string; type?: 'das
                     style={{ height: '100%' }}
                     onClick={() => {
                       history.push({
-                        pathname: url + '/chitiet',
+                        pathname: url + '/chi-tiet',
                         query: { id: tintuc?._id },
                       });
                     }}
@@ -173,7 +173,7 @@ const BlockTinTuc = (props: { data: TinTuc.Record[]; empty?: string; type?: 'das
                   style={{ height: '100%' }}
                   onClick={() => {
                     history.push({
-                      pathname: url + '/chitiet',
+                      pathname: url + '/chi-tiet',
                       query: { id: tintuc?._id },
                     });
                   }}

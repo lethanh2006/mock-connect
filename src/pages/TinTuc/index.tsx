@@ -1,14 +1,13 @@
 import { ellipse } from '@/utils/utils';
 import { Card, Empty, Pagination, Spin, Tabs, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
-import { useAccess, useModel } from 'umi';
+import { useModel } from 'umi';
 import BlockTinTuc from './BlockTinTuc';
 import './styles.less';
 import { getDataTinTuc } from '@/services/TinTuc/tintuc';
 
 const TinTucPage = () => {
   const { getAllChuDeModel, danhSach: danhSachChuDe } = useModel('chude');
-  const access = useAccess();
   const [limitTinTucTheoTopic, setLimitTinTucTheoTopic] = useState<number>(10);
   const [pageTinTucTheoTopic, setPageTinTucTheoTopic] = useState<number>(1);
   const [danhSachTinTucTheoTopic, setDanhSachTinTucTheoTopic] = useState<TinTuc.Record[]>([]);
@@ -19,18 +18,18 @@ const TinTucPage = () => {
   const [key, setKey] = useState<string>(hash || '');
 
   const getData = async (page: number, limit: number, idTopic: string) => {
-    const res: IRecordTinTuc.RootObject = await getDataTinTuc({
+    const res = await getDataTinTuc({
       page,
       limit,
       condition: { idTopic },
     });
-    setTotalTinTucTheoTopic(res.data?.total);
-    setDanhSachTinTucTheoTopic(res.data?.result ?? []);
+    setTotalTinTucTheoTopic(res.data?.data?.total);
+    setDanhSachTinTucTheoTopic(res.data?.data?.result ?? []);
     setLoading(false);
   };
 
   useEffect(() => {
-    getAllChuDeModel(access?.nhanVien ? { phamVi: 'Tất cả' } : {}).then((listMenu) => {
+    getAllChuDeModel({}).then((listMenu) => {
       const k = key === '' || key.includes('=') ? listMenu?.[0]?._id : key;
       if (key !== k) setKey(k);
       getData(1, limitTinTucTheoTopic, k);
@@ -52,8 +51,6 @@ const TinTucPage = () => {
     getData(page, size, key);
   };
 
-  console.log(danhSachChuDe, 'ds chu de');
-  console.log(danhSachTinTucTheoTopic, 'danhSachTinTucTheoTopic');
   return (
     <Card title="Tin tức" bodyStyle={{ paddingTop: 0 }}>
       {danhSachChuDe && danhSachChuDe.length > 0 ? (
