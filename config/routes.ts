@@ -173,7 +173,12 @@
     icon: 'HighlightOutlined',
     // access: 'sinhVienVaNhanVien',
   },
-
+  {
+    name: 'KhaoSatTrucTuyen',
+    path: './khao-sat',
+    component: './KhaoSatSVGV',
+    icon: 'table',
+  },
   {
     name: 'CauHoiThuongGap',
     path: './cauhoithuonggap',
