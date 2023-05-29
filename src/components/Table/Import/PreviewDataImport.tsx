@@ -3,13 +3,18 @@ import { Button, Col, Row, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import TableStaticData from '../TableStaticData';
-import { type IColumn } from '../typing';
+import { type TImportHeader, type IColumn } from '../typing';
+import moment from 'moment';
 
-const PreviewDataImport = (props: { onChange: () => void; onBack: any }) => {
-  const { onChange, onBack } = props;
-  const { importHeaders, matchedColumns, fileData, setDataImport, dataImport, startLine } =
-    useModel('import');
+const PreviewDataImport = (props: {
+  onChange: () => void;
+  onBack: any;
+  importHeaders: TImportHeader[];
+}) => {
+  const { onChange, onBack, importHeaders } = props;
+  const { matchedColumns, fileData, setDataImport, dataImport, startLine } = useModel('import');
   const [loading, setLoading] = useState(false);
+
   const columns: IColumn<any>[] = [
     {
       dataIndex: 'row',
@@ -31,23 +36,26 @@ const PreviewDataImport = (props: { onChange: () => void; onBack: any }) => {
 
       fileData?.forEach((row, index) => {
         const temp: any = { row: index + startLine };
-        let valid = true;
+        const valid = true;
 
         importHeaders?.every((col) => {
           const content = row[matchedColumns[col.field]];
-          if (col.required && !content) {
-            valid = false;
-            return false;
-          }
+          // if (col.required && !content) {
+          //   valid = false;
+          //   return false;
+          // }
           switch (col.type) {
             case 'Boolean':
-              temp[col.field] = content === 'Có';
+              temp[col.field] = content === 'Có' || content === '1';
               break;
             case 'Number':
               temp[col.field] = Number.parseFloat(content) || 0;
               break;
             case 'String':
               temp[col.field] = content?.toString();
+              break;
+            case 'Date':
+              temp[col.field] = content ? moment(content, 'DD/MM/YYYY').toISOString() : undefined;
               break;
             default:
               temp[col.field] = content;
@@ -71,7 +79,7 @@ const PreviewDataImport = (props: { onChange: () => void; onBack: any }) => {
     <Row gutter={[12, 12]}>
       <Col span={24}>
         <div className="fw500">Danh sách dữ liệu từ tập tin</div>
-        <i>Các dòng dữ liệu trống hoặc không thỏa mản yêu cầu bắt buộc đã bị loại bỏ</i>
+        {/* <i>Các dòng dữ liệu trống hoặc không thỏa mản yêu cầu bắt buộc đã bị loại bỏ</i> */}
       </Col>
 
       <Col span={24}>
