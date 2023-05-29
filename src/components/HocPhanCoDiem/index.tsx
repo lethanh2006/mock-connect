@@ -1,4 +1,4 @@
-import type { IRecordHocPhan } from '@/services/HocPhanCoDiem/typing';
+import type { IRecordHocPhan } from '@/services/HocTap/HocPhanCoDiem/typing';
 import rules from '@/utils/rules';
 import { includes } from '@/utils/utils';
 import { useModel } from '@@/plugin-model/useModel';

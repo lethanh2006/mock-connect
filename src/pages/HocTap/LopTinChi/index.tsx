@@ -1,6 +1,6 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import type { LopTinChi as ILopTinChi } from '@/services/LopTinChi/typings';
+import { type LopTinChi as ILopTinChi } from '@/services/HocTap/LopTinChi/typings';
 import { Select } from 'antd';
 import { useEffect } from 'react';
 import { history, useAccess, useModel } from 'umi';
@@ -13,13 +13,13 @@ const LopTinChi = () => {
     hinhThucDaoTao,
     setCondition,
     condition,
-    sinhVienGetAllLopHocPhanModel,
+    getAllModel: getAllLopHocPhanModel,
   } = useModel('hoctap.loptinchi');
-  const { getAllModel: getAllHocKySinhVien, danhSach: danhSachHocKy } = useModel('hocky');
+  const { getAllModel: getAllHocKySinhVien, danhSach: danhSachHocKy } = useModel('daotao.hocky');
 
   // useEffect(() => {
   //   if (access.nhanVien) getAllHinhThucDaoTaoModel(true);
-  //   sinhVienGetAllLopHocPhanModel();
+  //   getAllLopHocPhanModel();
   // }, []);
 
   useEffect(() => {
@@ -60,35 +60,15 @@ const LopTinChi = () => {
     },
   ];
 
-  // const onChangeHeDaoTao = (value: number) => {
-  //   setHinhThucDaoTao(value);
-  //   setDanhSach([]);
-  //   setRecord({} as HocKy.IRecord);
-  // };
-
   return (
     <TableBase
       columns={columns}
       modelName="hoctap.loptinchi"
       title="Lớp tín chỉ"
       buttons={{ create: false }}
-      getData={() => sinhVienGetAllLopHocPhanModel()}
+      getData={() => getAllLopHocPhanModel()}
       otherButtons={[
         <>
-          {/* {access.nhanVien && (
-            <Select
-              placeholder="Chọn hệ đào tạo"
-              onChange={onChangeHeDaoTao}
-              value={hinhThucDaoTao === -1 ? undefined : hinhThucDaoTao}
-              style={{ width: 220, marginBottom: 8, marginRight: 8 }}
-            >
-              {danhSachHinhThucDaoTao?.map((item) => (
-                <Select.Option key={item.id} value={item.id}>
-                  {item?.display_name ?? ''}
-                </Select.Option>
-              ))}
-            </Select>
-          )} */}
           <Select
             placeholder="Chọn kỳ học"
             onChange={(val) => setCondition({ ...condition, hocKyId: val })}

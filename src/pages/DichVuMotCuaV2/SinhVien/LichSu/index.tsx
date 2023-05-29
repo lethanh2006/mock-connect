@@ -3,24 +3,26 @@ import TableBase from '@/components/OldTable';
 import ThanhToan from '@/components/ThanhToan';
 import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
-import { TrangThaiDonDVMC } from '@/utils/constants';
 import type { IColumn } from '@/utils/interfaces';
 import {
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
   MenuOutlined,
+  PaperClipOutlined,
   PlusOutlined,
   PrinterOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, message, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip } from 'antd';
+import { Button, message, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { history, useAccess, useModel } from 'umi';
+import { history, useModel } from 'umi';
 import FormQuyTrinh from '../../components/FormQuyTrinh';
 import FormGuiPhanHoi from '../../QuanLyDon/components/FormGuiPhanHoi';
+import { TrangThaiDonDVMC } from '@/services/DichVuMotCuaV2/constant';
+import ExpandText from '@/components/ExpandText';
 
 const LichSuGuiDon = () => {
   const {
@@ -41,7 +43,7 @@ const LichSuGuiDon = () => {
     getAllBieuMauModel,
   } = useModel('dichvumotcuav2');
 
-  const { getMyProfileModel, record } = useModel('sinhvien');
+  // const { getMyProfileModel, record } = useModel('sinhvien');
 
   const { setVisibleForm, visibleForm } = useModel('phanhoi');
 
@@ -49,14 +51,14 @@ const LichSuGuiDon = () => {
   const [visibleViewInDon, setVisibleViewInDon] = useState<boolean>(false);
   const [type, setType] = useState<'edit' | 'view' | 'handle' | 'create'>('view');
   // const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('hocky');
-  const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('namhoc');
+  const { setDanhSach: setDanhSachNamHoc } = useModel('daotao.namhoc');
   // const { getAllLopTinChiSinhVienModel, setDanhSach: setDanhSachLopTinChi } =
   //   useModel('hoctap.loptinchi');
   // const { getAllMonHocSinhVienModel, setDanhSachMonHoc } = useModel('hoctap.loptinchi');
   const [data, setData] = useState<any>();
 
   useEffect(() => {
-    getMyProfileModel();
+    // getMyProfileModel();
     setRecord({} as DichVuMotCuaV2.BieuMau);
     // setLoaiDichVu('DVMC');
     getAllBieuMauModel('DVMC');
@@ -154,9 +156,16 @@ const LichSuGuiDon = () => {
     {
       title: 'Ghi chú kết quả',
       dataIndex: 'ketQuaText',
-      align: 'center',
       width: 120,
       onCell,
+      render: (val) => (
+        <ExpandText
+          style={{ marginBottom: 0 }}
+          ellipsis={{ rows: 2, expandable: true, symbol: <span>Xem tiếp</span> }}
+        >
+          {val}
+        </ExpandText>
+      ),
     },
     {
       title: 'Nội dung phản hồi',
@@ -175,12 +184,12 @@ const LichSuGuiDon = () => {
     {
       title: 'File kết quả đính kèm',
       dataIndex: 'ketQuaDinhKem',
-      align: 'center',
       width: 120,
       render: (val: string[]) => (
         <div>
           {val?.map((item, index) => (
             <>
+              <PaperClipOutlined />{' '}
               <a href={item} target="_blank" rel="noreferrer">
                 File kết quả {index + 1}
               </a>
@@ -209,7 +218,7 @@ const LichSuGuiDon = () => {
       width: 80,
       search: 'filterString',
       notRegex: true,
-      render: (val) => (
+      render: (val: 'OK' | 'NOT_OK' | 'PROCESSING') => (
         <Tag color={val === 'OK' ? 'green' : val === 'NOT_OK' ? 'red' : 'yellow'}>
           {TrangThaiDonDVMC?.[val] ?? 'Chưa cập nhật'}
         </Tag>
@@ -219,7 +228,6 @@ const LichSuGuiDon = () => {
     {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
-      align: 'center',
       width: 100,
       render: (val) => <div>{moment(val).format('HH:mm DD/MM/YYYY')}</div>,
       onCell,
@@ -237,6 +245,7 @@ const LichSuGuiDon = () => {
               <>
                 <Tooltip title="Xem biểu mẫu và in đơn">
                   <Button
+                    type="link"
                     onClick={() => {
                       if (!recordTemp.maDon) {
                         message.error('Mã đơn không tồn tại');
@@ -244,61 +253,55 @@ const LichSuGuiDon = () => {
                       }
                       handleInDon(recordTemp.maDon);
                     }}
-                    shape="circle"
                     icon={<PrinterOutlined />}
                   />
                 </Tooltip>
-                <Divider type="vertical" />
                 <Tooltip title="Chi tiết">
                   <Button
-                    type="primary"
+                    type="link"
                     onClick={() => {
                       handlePreviewDon(recordTemp);
                     }}
-                    shape="circle"
                     icon={<EyeOutlined />}
                   />
                 </Tooltip>
-                <Divider type="vertical" />
                 <Tooltip title="Chỉnh sửa">
                   <Button
+                    type="link"
                     disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     onClick={() => {
                       setVisibleFormChinhSuaDon(true);
                       setRecordView(recordTemp);
                       setType('edit');
                     }}
-                    shape="circle"
                     icon={<EditOutlined />}
                   />
                 </Tooltip>
-                <Divider type="vertical" />
                 <Tooltip title="Xóa đơn">
                   <Popconfirm
                     disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     title="Bạn có chắc chắn muốn xóa đơn này?"
                     onConfirm={() => {
-                      sinhVienDeleteDonModel(record?._id ?? '');
+                      sinhVienDeleteDonModel(recordTemp?._id ?? '');
                     }}
                   >
                     <Button
-                      type="primary"
+                      type="link"
                       danger
                       disabled={recordTemp?.trangThai !== 'PROCESSING'}
-                      shape="circle"
                       icon={<DeleteOutlined />}
                     />
                   </Popconfirm>
                 </Tooltip>
-                <Divider type="vertical" />
                 <Tooltip title="Gửi phản hồi">
                   <Button
-                    disabled={recordTemp?.daTraLoiPhanHoi || recordTemp.noiDungPhanHoi}
+                    // disabled={recordTemp?.daTraLoiPhanHoi || recordTemp.noiDungPhanHoi || false}
+                    type="link"
+                    disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     onClick={() => {
                       setVisibleForm(true);
                       setRecordView(recordTemp);
                     }}
-                    shape="circle"
                     icon={<QuestionCircleOutlined />}
                   />
                 </Tooltip>
@@ -328,7 +331,7 @@ const LichSuGuiDon = () => {
         <Button
           type="primary"
           icon={<PlusOutlined />}
-          onClick={() => history.push('/dichvumotcuasv/taodon')}
+          onClick={() => history.push('/dich-vu-mot-cua-sinh-vien/tao-don')}
         >
           Tạo đơn
         </Button>
@@ -348,7 +351,7 @@ const LichSuGuiDon = () => {
             setVisibleFormChinhSuaDon(false);
           }}
           hideCamKet
-          infoNguoiTaoDon={record}
+          infoNguoiTaoDon={recordView?.thongTinNguoiTao}
           type={type}
           record={recordView}
         />
@@ -374,7 +377,12 @@ const LichSuGuiDon = () => {
             />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Biểu mẫu" key={1}>
-            <Form hideCamKet infoNguoiTaoDon={record} type={type} record={recordView} />
+            <Form
+              hideCamKet
+              infoNguoiTaoDon={recordView?.thongTinNguoiTao}
+              type={type}
+              record={recordView}
+            />
           </Tabs.TabPane>
           {recordView?.identityCode && (
             <Tabs.TabPane tab="Thông tin thanh toán" key={2}>

@@ -48,7 +48,7 @@ const TableCongNo = (props: { type?: 'chưa nộp' | 'đã nộp' }) => {
 
   const { getLoaiThanhToanModel, setDanhSach, danhSach } = useModel('loaithanhtoan');
 
-  const { danhSach: danhSachNamHoc } = useModel('namhoc');
+  const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
   const { danhSach: danhSachHocKy } = useModel('HocKy');
 
   const [visible, setVisible] = useState<boolean>(false);

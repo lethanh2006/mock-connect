@@ -10,4 +10,6 @@ export type DataChartType = {
   height?: number;
   type?: 'bar' | 'area';
   colors?: string[];
+  formatY?: (val: number) => string;
+  showTotal?: boolean;
 };

@@ -23,8 +23,8 @@ const FormCongNo = () => {
     importType,
   } = useModel('thanhtoan');
   const { danhSach } = useModel('loaithanhtoan');
-  const { danhSach: danhSachHocKy } = useModel('HocKy');
-  const { danhSach: danhSachNamHoc } = useModel('namhoc');
+  const { danhSach: danhSachHocKy } = useModel('daotao.hocky');
+  const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
   const {
     danhSach: danhSachUser,
     setCondition,

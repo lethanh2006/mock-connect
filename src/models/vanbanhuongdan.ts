@@ -1,22 +1,22 @@
 import useInitModel from '@/hooks/useInitModel';
 import type { VanBanHuongDan } from '@/services/VanBanHuongDan/typing';
-import { ipSlink } from '@/utils/ip';
+import { ip3 } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
-  const [editFile, setEditFile] = useState<boolean>(false);
-
-  const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
-  const [visibleFileList, setVisibleFileList] = useState<boolean>(false);
-  const [recordFile, setRecordFile] = useState<VanBanHuongDan.IFile>();
-
   const objInit = useInitModel<VanBanHuongDan.IRecord>(
     'van-ban-huong-dan',
     'condition',
     undefined,
-    ipSlink,
+    ip3,
   );
+  const [editFile, setEditFile] = useState<boolean>(false);
+  const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
+  const [visibleFileList, setVisibleFileList] = useState<boolean>(false);
+  const [recordFile, setRecordFile] = useState<VanBanHuongDan.IFile>();
+
   return {
+    ...objInit,
     recordFile,
     setRecordFile,
     editFile,
@@ -25,6 +25,5 @@ export default () => {
     setVisibleFileList,
     visibleFormFile,
     setVisibleFormFile,
-    ...objInit,
   };
 };

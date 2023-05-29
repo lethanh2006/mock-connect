@@ -1,20 +1,23 @@
 import useInitModel from '@/hooks/useInitModel';
 import {
+  getAllMonHocSinhVien,
   getAllSinhVienLopHocPhan,
+  sinhVienAllGetDiemTongKet,
   sinhVienGetLopTinChiById,
   sinhVienGetThoiKhoaBieu,
-} from '@/services/LopTinChi';
-import type { LopTinChi } from '@/services/LopTinChi/typings';
+} from '@/services/HocTap/LopTinChi';
+import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
 import { useState } from 'react';
 
 export default () => {
   const objInit = useInitModel<LopTinChi.IRecord>('lop-hoc-phan');
   const { setDanhSach, setRecord, setLoading, setTotal, sort, filters } = objInit;
   const [listTkbSinhVien, setListTkbSinhVien] = useState<LopTinChi.IBuoiHoc[]>([]);
-
+  const [danhSachMonHoc, setDanhSachMonHoc] = useState<LopTinChi.InfoMonHoc[]>([]);
   const [idNhomLop, setIdNhomLop] = useState<number>(-1);
   const [hinhThucDaoTao, setHinhThucDaoTao] = useState<number>();
   const [flagDaDanhGia, setFlagDaDanhGia] = useState(false);
+  const [danhSachDiemTongKet, setDanhSachDiemTongKet] = useState<LopTinChi.DiemTongKet[]>([]);
   // const [dataBieuMau, setDataBieuMau] = useState<BieuMau.Record>({} as BieuMau.Record);
   const [danhSachDiemThanhPhanTheoKy, setDanhSachDiemThanhPhanTheoKy] = useState<any[]>([]);
   const [thongTinChung, setThongTinChung] = useState<LopTinChi.ThongTinChungLopTinChiRecord>(
@@ -30,6 +33,14 @@ export default () => {
   //   const response = await getThongTinChungLopTinChiByIdLop(idLop);
   //   setLoading(false);
   // };
+
+  const sinhVienGetDiemTongKetModel = async () => {
+    setLoading(true);
+    const response = await sinhVienAllGetDiemTongKet();
+    setDanhSachDiemTongKet(response?.data?.data ?? []);
+    setLoading(false);
+    return response?.data?.data ?? [];
+  };
 
   const sinhVienGetAllLopHocPhanModel = async () => {
     setLoading(true);
@@ -57,11 +68,18 @@ export default () => {
     setLoading(false);
   };
 
+  const getAllMonHocSinhVienModel = async (idHocKy?: number) => {
+    const response = await getAllMonHocSinhVien({ condition: { idHocKy } });
+    setDanhSachMonHoc(response?.data?.data ?? []);
+  };
+
   return {
     ...objInit,
     sinhVienGetAllLopHocPhanModel,
     sinhVienGetLopTinChiByIdModel,
     sinhVienGetThoiKhoaBieuModel,
+    getAllMonHocSinhVienModel,
+    sinhVienGetDiemTongKetModel,
     idNhomLop,
     setIdNhomLop,
     hinhThucDaoTao,
@@ -76,7 +94,10 @@ export default () => {
     setListTkbSinhVien,
     recordBuoiHoc,
     setRecordBuoiHoc,
+    danhSachMonHoc,
+    setDanhSachMonHoc,
     danhSachDiemThanhPhanTheoKy,
     setDanhSachDiemThanhPhanTheoKy,
+    danhSachDiemTongKet,
   };
 };

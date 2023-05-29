@@ -108,11 +108,11 @@ body,
 .ant-menu-dark.ant-pro-sider-menu {
   .ant-menu-item,
   .ant-menu-submenu-title {
-    height: auto;
+    height: auto !important;
     min-height: 36px;
     padding-top: 5px;
     padding-bottom: 5px;
-    line-height: 1.5;
+    line-height: 1.5 !important;
     border-radius: 2px;
 
     &::after {
@@ -437,6 +437,7 @@ ol {
 }
 
 .ant-table-cell {
+  height: 48px;
   padding: 8px !important;
 
   p,
@@ -453,7 +454,8 @@ ol {
 }
 
 .ant-table-small .ant-table-cell {
-  padding: 5px !important;
+  height: 36px;
+  padding: 3px 5px !important;
 }
 
 .li-hinh-thuc {
