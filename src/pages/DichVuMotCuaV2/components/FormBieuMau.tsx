@@ -66,6 +66,7 @@ const FormBieuMau = (props: {
   const { danhSach: danhSachKyHoc } = useModel('daotao.hocky');
   const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
   const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
+  const { getTinhThanhPhoModel, danhSachTinh } = useModel('core.donvihanhchinh');
 
   // const {
   //   tenTinh,
@@ -187,7 +188,7 @@ const FormBieuMau = (props: {
       props?.record?.thongTinDichVu?.cauHinhBieuMau ?? [],
     );
     setValuesForm(valuesTemp);
-
+    getTinhThanhPhoModel();
     return () => {
       if (!props?.handleAdd) setDanhSachDataTable({});
       // setTenTinh({});
@@ -319,7 +320,17 @@ const FormBieuMau = (props: {
           //     diaChiCuThe: [`${name}.${item?.label ?? ''}`, 'soNhaTenDuong'],
           //   }}
           // />
-          <SelectDonViHanhChinh form={form} />
+          <SelectDonViHanhChinh
+            form={form}
+            listTinh={danhSachTinh}
+            hideQuanHuyen={item?.level === 1}
+            hideXaPhuong={[1, 2].includes(item?.level)}
+            notRequiredDiaChiCuThe={!item?.isRequired}
+            notRequiredQuanHuyen={!item?.isRequired}
+            notRequiredTinh={!item?.isRequired}
+            notRequiredXaPhuong={!item?.isRequired}
+            initialValue={item?.value}
+          />
         );
         break;
       }
