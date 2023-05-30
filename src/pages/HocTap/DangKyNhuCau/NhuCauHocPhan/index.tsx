@@ -71,7 +71,7 @@ const NhuCauHocPhanPage = (props: { getDataPhieu?: any }) => {
         columns={columns}
         getData={getData}
         dependencies={[page, limit]}
-        modelName="hocky.nhucauhocphan"
+        modelName="daotao.nhucauhocphan"
         title="Đăng ký nhu cầu sinh viên"
         Form={FormKhoaNganhDotDangKy}
         formProps={{ getData }}
