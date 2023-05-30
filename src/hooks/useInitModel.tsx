@@ -15,7 +15,7 @@ import { type TImportHeader, type TFilter, type TImportResponse } from '@/compon
 const useInitModel = <T,>(
   url: string,
   fieldNameCondtion?: 'condition' | 'cond',
-  initCondition?: { [k in keyof T]?: any },
+  initCondition?: Partial<T>,
   ipService?: string,
   initSort?: { [k in keyof T]?: 1 | -1 },
 ) => {
@@ -31,7 +31,8 @@ const useInitModel = <T,>(
   const [edit, setEdit] = useState<boolean>(false);
   const [visibleForm, setVisibleForm] = useState<boolean>(false);
   const [total, setTotal] = useState<number>(0);
-  const [filterInfo, setFilterInfo] = useState<any>({});
+  const [filterInfo, setFilterInfo] = useState<any>({}); // TO REMOVE
+  const [importHeaders, setImportHeaders] = useState<TImportHeader[]>([]); // Import header lấy từ API
 
   const {
     getAllService,
@@ -58,7 +59,7 @@ const useInitModel = <T,>(
    * @returns {any}
    */
   const getModel = async (
-    paramCondition?: any,
+    paramCondition?: Partial<T>,
     filterParams?: TFilter<T>[],
     sortParam?: { [k in keyof T]: 1 | -1 },
     paramPage?: number,
@@ -97,8 +98,8 @@ const useInitModel = <T,>(
 
   const getAllModel = async (
     isSetRecord?: boolean,
-    sortParam?: any,
-    conditionParam?: any,
+    sortParam?: { [k in keyof T]: 1 | -1 },
+    conditionParam?: Partial<T>,
     filterParam?: TFilter<T>[],
   ): Promise<T[]> => {
     setLoading(true);
@@ -215,6 +216,7 @@ const useInitModel = <T,>(
   const getImportHeaderModel = async (): Promise<TImportHeader[]> => {
     try {
       const res = await getImportHeaders();
+      setImportHeaders(res.data?.data ?? []);
       return res.data?.data ?? [];
     } catch (err) {
       return Promise.reject(err);
@@ -303,6 +305,8 @@ const useInitModel = <T,>(
     setDanhSach,
     record,
     setRecord,
+    importHeaders,
+    setImportHeaders,
     handleEdit,
     getImportHeaderModel,
     getImportTemplateModel,
