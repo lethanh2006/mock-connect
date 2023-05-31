@@ -90,7 +90,7 @@ const FormTraLoiKhaoSat = () => {
             });
           });
           await traLoiBieuMauModel({
-            idBieuMau: record._id,
+            idBieuMau: record?._id,
             danhSachTraLoi,
             idDot: recordDot?._id ?? '',
           });
@@ -100,10 +100,10 @@ const FormTraLoiKhaoSat = () => {
         labelCol={{ span: 24 }}
         form={form}
       >
-        <h3>{record.tieuDe}</h3>
-        <p>{record.moTa}</p>
+        <h3>{record?.tieuDe}</h3>
+        <p>{record?.moTa}</p>
         <div>
-          {record.danhSachKhoi?.map((item: BieuMau.Khoi, indexKhoi) => (
+          {record?.danhSachKhoi?.map((item: BieuMau.Khoi, indexKhoi) => (
             <Card hoverable key={indexKhoi}>
               <div>{item.tieuDe}</div>
               <div>{item.moTa}</div>

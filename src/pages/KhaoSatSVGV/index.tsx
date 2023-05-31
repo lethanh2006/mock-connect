@@ -31,9 +31,9 @@ const QuanLyDot = () => {
   const handleEdit = async (record: DotKhaoSat.Record) => {
     setRecord(record);
     setEdit(true);
-    const bieuMau: BieuMau.Record = await getBieuMauByIdModel(record?.idBieuMau);
+    const bieuMau: BieuMau.Record = await getBieuMauByIdModel(record?.idKhaoSat);
     if (bieuMau.loai === ELoaiBieuMau.TRAC_NGHIEM) {
-      await initBieuMauTracNghiemModel(record._id, record.idBieuMau);
+      await initBieuMauTracNghiemModel(record._id, record?.idKhaoSat ?? '');
     }
     setVisibleForm(true);
   };

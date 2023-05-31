@@ -3,7 +3,7 @@ import { ip3 } from '@/utils/ip';
 import type { BieuMau } from './typings';
 
 export async function getAllBieuMau(condition: any) {
-  return axios.get(`${ip3}/bieu-mau/all`, { params: { condition } });
+  return axios.get(`${ip3}/khao-sat/all`, { params: { condition } });
 }
 
 export async function getBieuMauAdmin(payload: {
@@ -12,7 +12,7 @@ export async function getBieuMauAdmin(payload: {
   condition: any;
   sort?: any;
 }) {
-  return axios.get(`${ip3}/bieu-mau/pageable`, { params: payload });
+  return axios.get(`${ip3}/khao-sat/pageable`, { params: payload });
 }
 
 export async function getBieuMauUser(payload: {
@@ -21,27 +21,27 @@ export async function getBieuMauUser(payload: {
   loai?: string;
   thoiGian?: string;
 }) {
-  return axios.get(`${ip3}/bieu-mau/my/pageable`, { params: payload });
+  return axios.get(`${ip3}/khao-sat/my/pageable`, { params: payload });
 }
 
 export async function getBieuMauById(payload: { id: string }) {
-  return axios.get(`${ip3}/bieu-mau/${payload.id}`);
+  return axios.get(`${ip3}/khao-sat/${payload.id}`);
 }
 
 export async function addBieuMau(payload: BieuMau.Record) {
-  return axios.post(`${ip3}/bieu-mau`, payload);
+  return axios.post(`${ip3}/khao-sat`, payload);
 }
 
 export async function putBieuMau(payload: { data: BieuMau.Record; id: string }) {
-  return axios.put(`${ip3}/bieu-mau/${payload.id}`, payload.data);
+  return axios.put(`${ip3}/khao-sat/${payload.id}`, payload.data);
 }
 
 export async function kichHoatBieuMau(payload: { id: string; data: { kichHoat: boolean } }) {
-  return axios.post(`${ip3}/bieu-mau/${payload.id}/kich-hoat`, payload.data);
+  return axios.post(`${ip3}/khao-sat/${payload.id}/kich-hoat`, payload.data);
 }
 
 export async function getBieuMauThongKe(payload: { id: string }) {
-  return axios.get(`${ip3}/bieu-mau/${payload.id}/thong-ke`);
+  return axios.get(`${ip3}/khao-sat/${payload.id}/thong-ke`);
 }
 
 export async function getIdBieuMauDaTraLoi(loaiBieuMau?: string) {
@@ -49,7 +49,7 @@ export async function getIdBieuMauDaTraLoi(loaiBieuMau?: string) {
 }
 
 export async function delBieuMau(payload: { id: string }) {
-  return axios.delete(`${ip3}/bieu-mau/${payload.id}`);
+  return axios.delete(`${ip3}/khao-sat/${payload.id}`);
 }
 
 export async function traLoiBieuMau(payload: {
@@ -61,14 +61,14 @@ export async function traLoiBieuMau(payload: {
 }
 
 export async function exportKetQuaKhaoSat(payload: { idKhaoSat: string }) {
-  return axios.get(`${ip3}/bieu-mau/${payload.idKhaoSat}/tong-hop`, {
+  return axios.get(`${ip3}/khao-sat/${payload.idKhaoSat}/tong-hop`, {
     responseType: 'arraybuffer',
   });
 }
 
-export async function initBieuMauTracNghiem(payload: { idBieuMau: string; idDot: string }) {
+export async function initBieuMauTracNghiem(payload: { idKhaoSat: string; idDot: string }) {
   return axios.post(
-    `${ip3}/cau-tra-loi-bieu-mau/trac-nghiem/initialize/answer/bieu-mau/${payload.idBieuMau}`,
+    `${ip3}/cau-tra-loi-bieu-mau/trac-nghiem/initialize/answer/khao-sat/${payload.idKhaoSat}`,
     payload,
   );
 }

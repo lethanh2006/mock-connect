@@ -23,7 +23,7 @@ import useInitModel from '@/hooks/useInitModel';
 import { ip3 } from '@/utils/ip';
 
 export default () => {
-  const objInit = useInitModel<BieuMau.Record>('bieu-mau', undefined, undefined, ip3);
+  const objInit = useInitModel<BieuMau.Record>('khao-sat', undefined, undefined, ip3);
   const {
     setLoading,
     page,
@@ -172,14 +172,18 @@ export default () => {
 
   const getAllBieuMauModel = async (paramCondition?: any) => {
     setLoading(true);
-    const res = await getAllBieuMau({ ...condition, ...paramCondition });
-    setDanhSach(res?.data?.data ?? []);
+    try {
+      const res = await getAllBieuMau({ ...condition, ...paramCondition });
+      setDanhSach(res?.data?.data ?? []);
+    } catch (err) {
+      setLoading(false);
+    }
     setLoading(false);
   };
 
-  const initBieuMauTracNghiemModel = async (idDot: string, idBieuMau: string) => {
+  const initBieuMauTracNghiemModel = async (idDot: string, idKhaoSat: string) => {
     setLoading(true);
-    await initBieuMauTracNghiem({ idBieuMau, idDot });
+    await initBieuMauTracNghiem({ idKhaoSat, idDot });
     setLoading(false);
   };
 
