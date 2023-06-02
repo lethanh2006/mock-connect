@@ -1,18 +1,31 @@
 import type { ELoaiDauDiemHocPhan } from '@/utils/constants';
+import { type ELoaiHinhHocTap } from './constant';
+import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 
 export declare module LopTinChi {
   export interface IRecord {
     _id: string;
     ten: string;
-    hocKyId: string;
+    tenCha?: string;
+    maLop: string;
+    maLopCha?: string;
+    maHocKy: string;
     hocKy?: HocKy.IRecord;
-    hocPhanId: string;
+    maHocPhan: string;
     hocPhan?: HocPhan.IRecord;
     siSoToiDa: number;
-    parentId?: string;
+    siSo?: number; // Sĩ số hiện tại
+    loai: ELoaiLopHocPhan;
+    // parentId?: string | null;
+    soThuTuLop?: number;
+    soThuTuNhom?: number;
+
     parent?: IRecord;
-    sinhVienList: LopTinChi.ThongTinSinhVien[];
-    nhanSuList: NhanSu.IRecord[];
+    children?: IRecord[];
+    nhanSuList?: ToChucNhanSu.INhanSu[];
+    sinhVienList?: SinhVien.IRecord[];
+    // maHoaLichHoc?: TMaHoaLichHoc[];
+    thoiKhoaBieuList?: IBuoiHoc;
   }
 
   export interface ThongTinChungLopTinChiRecord {
@@ -34,19 +47,22 @@ export declare module LopTinChi {
 
   export interface IBuoiHoc {
     _id: string;
-    ngay: string;
-    nhanSuSsoId: string;
-    createdAt: string;
-    updatedAt: string;
     lopHocPhanId: string;
-    lopHocPhan: LopTinChi.IRecord;
-    tietBatDauId: string;
-    tietBatDau: TietHoc.IRecord;
-    tietKetThuc: TietHoc.IRecord;
-    phongHoc: string;
-    tieuDeBaiHoc: string;
-    noiDungBaiHoc: string;
-    urlBaiHoc: [string];
+    lopHocPhan?: IRecord;
+    nhanSuSsoId?: string; // 'string';
+    nhanSu?: ToChucNhanSu.INhanSu;
+    ngay: string; //'2023-05-20T08:34:26.620Z';
+    nhomTietHocId: string; // 'string';
+    // nhomTietHoc: NhomTietHoc.IRecordCoSo;
+    tietBatDau: number;
+    tietKetThuc: number;
+    phongHoc?: string;
+    loaiHinhHocTap: ELoaiHinhHocTap;
+    tieuDeBaiHoc?: string;
+    noiDungBaiHoc?: string;
+    urlBaiHoc?: string;
+    thoiGianBatDau: string; //'2023-05-20T08:34:26.620Z';
+    thoiGianKetThuc: string; // '2023-05-20T08:34:26.620Z';
   }
 
   export interface InfoMonHoc {

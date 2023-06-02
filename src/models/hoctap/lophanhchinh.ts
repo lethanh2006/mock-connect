@@ -1,39 +1,24 @@
 import useInitModel from '@/hooks/useInitModel';
-import {
-  sinhVienGetLopHanhChinhById,
-  sinhVienGetLopHanhChinhPageable,
-} from '@/services/HocTap/LopHanhChinh/lophanhchinh';
+import { ipDaoTao } from '@/utils/ip';
 
 export default () => {
-  const objInit = useInitModel<LopHanhChinh.IRecord>('lop-hanh-chinh');
-  const { setLoading, page, limit, condition, setDanhSach, setTotal, setRecord, sort, filters } =
-    objInit;
+  const objInit = useInitModel<LopHanhChinh.IRecord>(
+    'lop-hanh-chinh',
+    undefined,
+    undefined,
+    ipDaoTao,
+  );
+  const { getModel, getByIdModel } = objInit;
 
-  const sinhVienGetLopHanhChinhPageableModel = async () => {
-    setLoading(true);
-    const response = await sinhVienGetLopHanhChinhPageable({
-      page,
-      limit,
-      condition,
-      sort,
-      filters: filters?.filter((item) => item.active)?.map(({ active, ...item }) => item),
-    });
-    setDanhSach(response?.data?.data?.result ?? []);
-    setTotal(response?.data?.data?.total ?? 0);
-    setLoading(false);
-  };
+  const sinhVienGetModel = async (params: any): Promise<LopHanhChinh.IRecord[]> =>
+    getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
 
-  const sinhVienGetLopHanhChinhByIdModel = async (idLop: string) => {
-    setLoading(true);
-    const response = await sinhVienGetLopHanhChinhById(idLop);
-    console.log(response, 'res');
-    setRecord(response?.data?.data ?? {});
-    setLoading(false);
-  };
+  const sinhVienGetByIdModel = async (idLop: string): Promise<LopHanhChinh.IRecord> =>
+    getByIdModel(`${idLop}/sinh-vien`);
 
   return {
     ...objInit,
-    sinhVienGetLopHanhChinhPageableModel,
-    sinhVienGetLopHanhChinhByIdModel,
+    sinhVienGetModel,
+    sinhVienGetByIdModel,
   };
 };

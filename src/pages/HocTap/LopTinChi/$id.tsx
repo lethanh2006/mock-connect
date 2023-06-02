@@ -13,7 +13,7 @@ const DetailLopTinChi = ({
 }: {
   match: { params: { id: string } };
 }) => {
-  const { record, sinhVienGetLopTinChiByIdModel } = useModel('hoctap.loptinchi');
+  const { record, sinhVienGetByIdModel } = useModel('hoctap.loptinchi');
   const hash = window.location.hash;
   const [tabActive, setTabActive] = useState<string>(hash.includes('danhgia') ? '6' : '1');
   const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
@@ -23,9 +23,8 @@ const DetailLopTinChi = ({
   // }, [id]);
 
   useEffect(() => {
-    if (id) sinhVienGetLopTinChiByIdModel(id);
+    if (id) sinhVienGetByIdModel(id);
   }, [id]);
-  console.log(record, 'record');
 
   return (
     <Card
@@ -39,9 +38,7 @@ const DetailLopTinChi = ({
           >
             <TeamOutlined /> Lớp tín chỉ
           </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            {record?.hocPhan?.ma ?? ''} - {record?.hocPhan?.ten ?? ''}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>{record?.ten ?? ''}</Breadcrumb.Item>
         </Breadcrumb>
       }
     >
