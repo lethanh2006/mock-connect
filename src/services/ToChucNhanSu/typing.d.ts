@@ -98,5 +98,6 @@ declare module ToChucNhanSu {
     // soTruongCongTac: string;
     // ngoaiNguId: string;
     // khungNangLucNgoaiNguId: string;
+    urlAnhDaiDien?: string;
   }
 }

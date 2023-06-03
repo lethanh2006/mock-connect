@@ -11,10 +11,10 @@ const DetailLopHanhChinh = ({
 }: {
   match: { params: { id: string } };
 }) => {
-  const { record, sinhVienGetLopHanhChinhByIdModel } = useModel('hoctap.lophanhchinh');
+  const { record, sinhVienGetByIdModel } = useModel('hoctap.lophanhchinh');
 
   useEffect(() => {
-    if (id) sinhVienGetLopHanhChinhByIdModel(id);
+    if (id) sinhVienGetByIdModel(id);
   }, [id]);
 
   return (

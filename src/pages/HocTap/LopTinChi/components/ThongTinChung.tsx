@@ -1,9 +1,9 @@
 import teacherIcon from '@/assets/teacher.png';
-import { Avatar, Descriptions, Divider, List, Spin, Tabs, Modal } from 'antd';
+import { Avatar, Descriptions, Divider, List, Spin, Tabs } from 'antd';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import DanhSachSinhVien from './DanhSachSinhVien';
 import ModalHocPhan from './DeCuongHocPhan/ModalHocPhan';
-import { useState } from 'react';
 
 const ThongTinChung = (props: { id: string; isGiangVien: boolean }) => {
   const { isGiangVien } = props;
@@ -45,9 +45,7 @@ const ThongTinChung = (props: { id: string; isGiangVien: boolean }) => {
         <Descriptions.Item label="Số tín chỉ">
           {record?.hocPhan?.soTinChi ?? ''} tín chỉ
         </Descriptions.Item>
-        <Descriptions.Item label="Sĩ số">
-          {record?.sinhVienList?.length ?? 0} sinh viên
-        </Descriptions.Item>
+        <Descriptions.Item label="Sĩ số">{record?.siSo ?? 0} sinh viên</Descriptions.Item>
       </Descriptions>
       <>
         <h4 style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 16 }}>Giảng viên</h4>
@@ -66,12 +64,12 @@ const ThongTinChung = (props: { id: string; isGiangVien: boolean }) => {
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
-                  avatar={<Avatar src={item?.avatar_path || teacherIcon} />}
+                  avatar={<Avatar src={item?.urlAnhDaiDien || teacherIcon} />}
                   title={<>Họ và tên: {item?.ten || '(Chưa cập nhật)'}</>}
                   description={
                     <>
                       <div>Email: {item?.email || '(Chưa cập nhật)'}</div>
-                      <div>Số điện thoại: {item?.soDienThoai || '(Chưa cập nhật)'}</div>
+                      <div>Số điện thoại: {item?.sdtCaNhan || '(Chưa cập nhật)'}</div>
                     </>
                   }
                 />

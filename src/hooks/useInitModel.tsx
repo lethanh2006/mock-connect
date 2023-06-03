@@ -31,7 +31,7 @@ const useInitModel = <T,>(
   const [edit, setEdit] = useState<boolean>(false);
   const [visibleForm, setVisibleForm] = useState<boolean>(false);
   const [total, setTotal] = useState<number>(0);
-  const [filterInfo, setFilterInfo] = useState<any>({});
+  const [filterInfo, setFilterInfo] = useState<any>({}); // TO REMOVE
   const [importHeaders, setImportHeaders] = useState<TImportHeader[]>([]); // Import header lấy từ API
 
   const {

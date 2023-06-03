@@ -1,17 +1,17 @@
 import useInitModel from '@/hooks/useInitModel';
 import {
   getAllMonHocSinhVien,
-  getAllSinhVienLopHocPhan,
   sinhVienAllGetDiemTongKet,
-  sinhVienGetLopTinChiById,
   sinhVienGetThoiKhoaBieu,
 } from '@/services/HocTap/LopTinChi';
 import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
+import { ipDaoTao } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
-  const objInit = useInitModel<LopTinChi.IRecord>('lop-hoc-phan');
-  const { setDanhSach, setRecord, setLoading, setTotal, sort, filters } = objInit;
+  const objInit = useInitModel<LopTinChi.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
+  const { getByIdModel, setLoading, getModel } = objInit;
+
   const [listTkbSinhVien, setListTkbSinhVien] = useState<LopTinChi.IBuoiHoc[]>([]);
   const [danhSachMonHoc, setDanhSachMonHoc] = useState<LopTinChi.InfoMonHoc[]>([]);
   const [idNhomLop, setIdNhomLop] = useState<number>(-1);
@@ -42,30 +42,24 @@ export default () => {
     return response?.data?.data ?? [];
   };
 
-  const sinhVienGetAllLopHocPhanModel = async () => {
-    setLoading(true);
-    const response = await getAllSinhVienLopHocPhan({
-      sort,
-      filters: filters?.filter((item) => item.active)?.map(({ active, ...item }) => item),
-    });
-    setDanhSach(response?.data?.data ?? []);
-    setTotal(response?.data?.data?.length ?? 0);
-    setLoading(false);
-  };
+  const sinhVienGetModel = async (params: any): Promise<LopTinChi.IRecord[]> =>
+    getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
 
-  const sinhVienGetLopTinChiByIdModel = async (idLop: string) => {
-    setLoading(true);
-    const response = await sinhVienGetLopTinChiById(idLop);
-    setRecord(response?.data?.data ?? {});
-    setLoading(false);
-  };
+  const sinhVienGetByIdModel = async (idLop: string): Promise<LopTinChi.IRecord> =>
+    getByIdModel(`${idLop}/sinh-vien`);
 
-  const sinhVienGetThoiKhoaBieuModel = async (idLop: string) => {
-    setLoading(true);
-    const response = await sinhVienGetThoiKhoaBieu(idLop);
-    setListTkbSinhVien(response?.data?.data ?? []);
-    console.log(response, 'res');
-    setLoading(false);
+  const sinhVienGetThoiKhoaBieuModel = async (idLop: string): Promise<LopTinChi.IBuoiHoc[]> => {
+    try {
+      setLoading(true);
+      const response = await sinhVienGetThoiKhoaBieu(idLop);
+
+      setListTkbSinhVien(response?.data?.data ?? []);
+      return response?.data?.data ?? [];
+    } catch (er) {
+      return Promise.reject(er);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getAllMonHocSinhVienModel = async (idHocKy?: number) => {
@@ -75,8 +69,8 @@ export default () => {
 
   return {
     ...objInit,
-    sinhVienGetAllLopHocPhanModel,
-    sinhVienGetLopTinChiByIdModel,
+    sinhVienGetModel,
+    sinhVienGetByIdModel,
     sinhVienGetThoiKhoaBieuModel,
     getAllMonHocSinhVienModel,
     sinhVienGetDiemTongKetModel,

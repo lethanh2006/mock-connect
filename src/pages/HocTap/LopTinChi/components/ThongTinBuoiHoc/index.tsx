@@ -1,6 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-import { type LopTinChi } from '@/services/LopTinChi/typings';
+import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
 import { getNameFile } from '@/utils/utils';
 import { Button, Modal, Tabs } from 'antd';
 import moment from 'moment';
@@ -50,7 +50,7 @@ const DanhSachBuoiHoc = (props: { idLopTinChi: string; isGiangVien: boolean }) =
     },
     style: {
       cursor: 'pointer',
-      backgroundColor: moment().format('DD/MM/YYYY') === rec.ngay ? '#cc0d001f' : undefined,
+      backgroundColor: moment().format('YYYY-MM-DD') === rec.ngay ? '#005fcc1f' : undefined,
     },
   });
 
@@ -76,22 +76,24 @@ const DanhSachBuoiHoc = (props: { idLopTinChi: string; isGiangVien: boolean }) =
       onCell,
     },
     {
-      title: 'Thời gian',
-      dataIndex: 'tietBatDau',
+      title: 'Tiết học',
       width: 80,
-      render: (val, rec) => (
-        <>
-          {rec?.tietBatDau?.timeBatDau.slice(0, -3)} - {rec?.tietKetThuc?.timeKetThuc.slice(0, -3)}
-        </>
-      ),
+      align: 'center',
+      render: (val, rec) => `${rec.tietBatDau} - ${rec.tietKetThuc}`,
       onCell,
     },
     {
       title: 'Phòng học',
       dataIndex: 'phongHoc',
-      width: 80,
+      width: 120,
       onCell,
       render: (val) => (val ? val : 'Chưa cập nhật'),
+    },
+    {
+      title: 'Loại hình',
+      dataIndex: 'loaiHinhHocTap',
+      width: 100,
+      onCell,
     },
     // {
     //   dataIndex: ['nhom_lop_tin_chi_id', 1],
@@ -149,7 +151,7 @@ const DanhSachBuoiHoc = (props: { idLopTinChi: string; isGiangVien: boolean }) =
         hasTotal
         data={listTkbSinhVien.map((item, index) => ({ ...item, index: index + 1 }))}
         columns={columns}
-        otherProps={{ pagination: false, loading }}
+        otherProps={{ pagination: false, loading, bordered: true }}
       />
 
       <Modal
