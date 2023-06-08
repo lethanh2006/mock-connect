@@ -4,6 +4,7 @@ import {
   FilterOutlined,
   FilterTwoTone,
   ImportOutlined,
+  MenuOutlined,
   PlusCircleOutlined,
   ReloadOutlined,
   SearchOutlined,
@@ -14,6 +15,8 @@ import Tooltip from 'antd/es/tooltip';
 import type { FilterValue } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
+import type { SortableContainerProps, SortEnd } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { useModel } from 'umi';
 import ModalImport from './Import';
 import ModalCustomFilter from './ModalCustomFilter';
@@ -43,6 +46,7 @@ const TableBase = (props: TableBaseProps) => {
     scroll,
     destroyModal,
     addStt,
+    rowSortable,
   } = props;
   let { columns } = props;
   const { visibleForm, setVisibleForm, setEdit, setRecord } = useModel(modelName);
@@ -208,23 +212,76 @@ const TableBase = (props: TableBaseProps) => {
   //#region Get Table Columns
   columns = columns.map((item) => ({
     ...item,
-    ...(item.sortable ? getSort(item.dataIndex) : {}),
+    ...(item.sortable && getSort(item.dataIndex)),
     ...(item.filterType === 'string'
       ? getColumnSearchProps(item.dataIndex, item.title)
-      : undefined),
-    ...(item.filterType === 'select'
+      : item.filterType === 'select'
       ? getFilterColumnProps(item.dataIndex, item.filterData)
       : undefined),
+    children: item.children?.map((child) => ({
+      ...child,
+      ...(child.sortable && getSort(child.dataIndex)),
+      ...(child.filterType === 'string'
+        ? getColumnSearchProps(child.dataIndex, child.title)
+        : child.filterType === 'select'
+        ? getFilterColumnProps(child.dataIndex, child.filterData)
+        : undefined),
+    })),
   }));
 
   const finalColumns = columns?.filter((item) => item?.hide !== true);
   if (addStt !== false)
     finalColumns.unshift({
-      title: 'STT',
+      title: 'TT',
       dataIndex: 'index',
       align: 'center',
-      width: 60,
+      width: 40,
     });
+
+  //#region Get Drag Sortable column
+  const DragHandle = SortableHandle(() => (
+    <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />
+  ));
+
+  const SortableItem = SortableElement((props1: React.HTMLAttributes<HTMLTableRowElement>) => (
+    <tr {...props1} />
+  ));
+  const SortableBody = SortableContainer(
+    (props1: React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props1} />,
+  );
+
+  if (rowSortable)
+    finalColumns.unshift({
+      title: '',
+      width: 30,
+      align: 'center',
+      render: () => <DragHandle />,
+    });
+
+  const onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
+    if (oldIndex !== newIndex) {
+      const record = model?.[dataState || 'danhSach']?.[oldIndex];
+      if (props.onSortEnd) props.onSortEnd(record, newIndex);
+    }
+  };
+
+  const DraggableContainer = (props1: SortableContainerProps) => (
+    <SortableBody
+      useDragHandle
+      disableAutoscroll
+      helperClass="row-dragging"
+      onSortEnd={onSortEnd}
+      {...props1}
+    />
+  );
+
+  const DraggableBodyRow: React.FC<any> = ({ className, style, ...restProps }) => {
+    // function findIndex base on Table rowKey props and should always be a right array index
+    const index = restProps['data-row-key'];
+    return <SortableItem index={index ?? 0} {...restProps} />;
+  };
+  //#endregion
+
   //#endregion
 
   /**
@@ -349,14 +406,26 @@ const TableBase = (props: TableBaseProps) => {
             },
           }}
           onChange={onChange}
-          dataSource={model?.[dataState || 'danhSach']?.map((item: any, index: number) => {
-            return {
-              ...item,
-              index: index + 1 + (page - 1) * limit * (pageable === false ? 0 : 1),
-              key: index,
-            };
-          })}
+          dataSource={model?.[dataState || 'danhSach']?.map((item: any, index: number) => ({
+            ...item,
+            index: index + 1 + (page - 1) * limit * (pageable === false ? 0 : 1),
+            key: index,
+            children:
+              item?.children && Array.isArray(item.children) && item.children.length
+                ? item.children
+                : undefined,
+          }))}
           columns={finalColumns as any[]}
+          components={
+            rowSortable
+              ? {
+                  body: {
+                    wrapper: DraggableContainer,
+                    row: DraggableBodyRow,
+                  },
+                }
+              : undefined
+          }
           {...otherProps}
         />
       </ConfigProvider>

@@ -15,7 +15,7 @@ import { type TImportHeader, type TFilter, type TImportResponse } from '@/compon
 const useInitModel = <T,>(
   url: string,
   fieldNameCondtion?: 'condition' | 'cond',
-  initCondition?: { [k in keyof T]?: any },
+  initCondition?: Partial<T>,
   ipService?: string,
   initSort?: { [k in keyof T]?: 1 | -1 },
 ) => {
@@ -31,6 +31,8 @@ const useInitModel = <T,>(
   const [edit, setEdit] = useState<boolean>(false);
   const [visibleForm, setVisibleForm] = useState<boolean>(false);
   const [total, setTotal] = useState<number>(0);
+  const [filterInfo, setFilterInfo] = useState<any>({}); // TO REMOVE
+  const [importHeaders, setImportHeaders] = useState<TImportHeader[]>([]); // Import header lấy từ API
 
   const {
     getAllService,
@@ -57,7 +59,7 @@ const useInitModel = <T,>(
    * @returns {any}
    */
   const getModel = async (
-    paramCondition?: any,
+    paramCondition?: Partial<T>,
     filterParams?: TFilter<T>[],
     sortParam?: { [k in keyof T]: 1 | -1 },
     paramPage?: number,
@@ -96,8 +98,8 @@ const useInitModel = <T,>(
 
   const getAllModel = async (
     isSetRecord?: boolean,
-    sortParam?: any,
-    conditionParam?: any,
+    sortParam?: { [k in keyof T]: 1 | -1 },
+    conditionParam?: Partial<T>,
     filterParam?: TFilter<T>[],
   ): Promise<T[]> => {
     setLoading(true);
@@ -185,14 +187,12 @@ const useInitModel = <T,>(
       const res = await deleteService(id);
       message.success('Xóa thành công');
 
-      const maxPage = Math.ceil((total - 1) / limit);
+      const maxPage = Math.ceil((total - 1) / limit) || 1;
       let newPage = page;
       if (newPage > maxPage) {
-        newPage = maxPage || 1;
+        newPage = maxPage;
         setPage(newPage);
-      }
-
-      if (getData) getData();
+      } else if (getData) getData();
       else getModel(undefined, undefined, undefined, newPage);
 
       return res.data;
@@ -203,6 +203,12 @@ const useInitModel = <T,>(
     }
   };
 
+  const handleEdit = (rec: T) => {
+    setRecord(rec);
+    setVisibleForm(true);
+    setEdit(true);
+  };
+
   /**
    * Lấy header cho chức năng import
    * @returns {any}
@@ -210,6 +216,7 @@ const useInitModel = <T,>(
   const getImportHeaderModel = async (): Promise<TImportHeader[]> => {
     try {
       const res = await getImportHeaders();
+      setImportHeaders(res.data?.data ?? []);
       return res.data?.data ?? [];
     } catch (err) {
       return Promise.reject(err);
@@ -290,16 +297,24 @@ const useInitModel = <T,>(
     setVisibleForm,
     total,
     setTotal,
+    filterInfo,
+    setFilterInfo,
     formSubmiting,
     setFormSubmiting,
     danhSach,
     setDanhSach,
     record,
     setRecord,
+    importHeaders,
+    setImportHeaders,
+    handleEdit,
     getImportHeaderModel,
     getImportTemplateModel,
     postExecuteImpotModel,
     postValidateModel,
+    getByIdService,
+    getService,
+    getAllService,
   };
 };
 

@@ -2,11 +2,11 @@
 import type { ColumnType as ICol } from 'rc-table/lib/interface';
 import { type EOperatorType } from './constant';
 
-export interface IColumn<T> extends Omit<ICol<T>, 'dataIndex' | 'width'> {
+export interface IColumn<T> extends Omit<ICol<T>, 'dataIndex' | 'width' | 'children'> {
   /** Ẩn cột khi hiển thị trên table, nhưng vẫn có trong filter, import, export */
   hide?: boolean;
 
-  children?: IColumn[];
+  children?: IColumn<T>[];
 
   /** Cho phép sắp xếp hay ko, thường chỉ nên cho sắp xêp các trường: Mã, tên (ngắn), số lượng, ngày */
   sortable?: boolean;
@@ -112,6 +112,17 @@ export type TableBaseProps = {
 
   /** Có thêm cột STT ko? Mặc định: Có */
   addStt?: boolean;
+
+  /** Có hiển thị thị kéo thả sắp xêp hàng ko? Mặc định: Không */
+  rowSortable?: boolean;
+
+  /**
+   * Sự kiện khi hàng được kéo đến vị trí mới
+   * @param record Record ứng với hàng được kéo thả
+   * @param newIndex Vị trí mới được kéo đến: 0 -> (limit-1)
+   * @returns
+   */
+  onSortEnd?: (record: any, newIndex: number) => void;
 };
 
 export type TFilter<T> = {
@@ -147,7 +158,7 @@ export type TImportHeader = {
   type: TImportDataType;
 };
 
-export type TImportDataType = 'String' | 'Number' | 'Boolean';
+export type TImportDataType = 'String' | 'Number' | 'Boolean' | 'Date';
 
 export type TImportResponse = {
   error: boolean;
@@ -156,6 +167,5 @@ export type TImportResponse = {
 
 export type TImportRowResponse = {
   index: number;
-  dataError?: string[];
-  typeError?: string[];
+  rowErrors?: string[];
 };

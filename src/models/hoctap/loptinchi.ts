@@ -1,20 +1,23 @@
 import useInitModel from '@/hooks/useInitModel';
 import {
-  getAllSinhVienLopHocPhan,
-  sinhVienGetLopTinChiById,
+  getAllMonHocSinhVien,
+  sinhVienAllGetDiemTongKet,
   sinhVienGetThoiKhoaBieu,
-} from '@/services/LopTinChi';
-import type { LopTinChi } from '@/services/LopTinChi/typings';
+} from '@/services/HocTap/LopTinChi';
+import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
+import { ipDaoTao } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
-  const objInit = useInitModel<LopTinChi.IRecord>('lop-hoc-phan');
-  const { setDanhSach, setRecord, setLoading, setTotal, sort, filters } = objInit;
-  const [listTkbSinhVien, setListTkbSinhVien] = useState<LopTinChi.IBuoiHoc[]>([]);
+  const objInit = useInitModel<LopTinChi.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
+  const { getByIdModel, setLoading, getModel } = objInit;
 
+  const [listTkbSinhVien, setListTkbSinhVien] = useState<LopTinChi.IBuoiHoc[]>([]);
+  const [danhSachMonHoc, setDanhSachMonHoc] = useState<LopTinChi.InfoMonHoc[]>([]);
   const [idNhomLop, setIdNhomLop] = useState<number>(-1);
   const [hinhThucDaoTao, setHinhThucDaoTao] = useState<number>();
   const [flagDaDanhGia, setFlagDaDanhGia] = useState(false);
+  const [danhSachDiemTongKet, setDanhSachDiemTongKet] = useState<LopTinChi.DiemTongKet[]>([]);
   // const [dataBieuMau, setDataBieuMau] = useState<BieuMau.Record>({} as BieuMau.Record);
   const [danhSachDiemThanhPhanTheoKy, setDanhSachDiemThanhPhanTheoKy] = useState<any[]>([]);
   const [thongTinChung, setThongTinChung] = useState<LopTinChi.ThongTinChungLopTinChiRecord>(
@@ -31,37 +34,46 @@ export default () => {
   //   setLoading(false);
   // };
 
-  const sinhVienGetAllLopHocPhanModel = async () => {
+  const sinhVienGetDiemTongKetModel = async () => {
     setLoading(true);
-    const response = await getAllSinhVienLopHocPhan({
-      sort,
-      filters: filters?.filter((item) => item.active)?.map(({ active, ...item }) => item),
-    });
-    setDanhSach(response?.data?.data ?? []);
-    setTotal(response?.data?.data?.length ?? 0);
+    const response = await sinhVienAllGetDiemTongKet();
+    setDanhSachDiemTongKet(response?.data?.data ?? []);
     setLoading(false);
+    return response?.data?.data ?? [];
   };
 
-  const sinhVienGetLopTinChiByIdModel = async (idLop: string) => {
-    setLoading(true);
-    const response = await sinhVienGetLopTinChiById(idLop);
-    setRecord(response?.data?.data ?? {});
-    setLoading(false);
+  const sinhVienGetModel = async (params: any): Promise<LopTinChi.IRecord[]> =>
+    getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
+
+  const sinhVienGetByIdModel = async (idLop: string): Promise<LopTinChi.IRecord> =>
+    getByIdModel(`${idLop}/sinh-vien`);
+
+  const sinhVienGetThoiKhoaBieuModel = async (idLop: string): Promise<LopTinChi.IBuoiHoc[]> => {
+    try {
+      setLoading(true);
+      const response = await sinhVienGetThoiKhoaBieu(idLop);
+
+      setListTkbSinhVien(response?.data?.data ?? []);
+      return response?.data?.data ?? [];
+    } catch (er) {
+      return Promise.reject(er);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const sinhVienGetThoiKhoaBieuModel = async (idLop: string) => {
-    setLoading(true);
-    const response = await sinhVienGetThoiKhoaBieu(idLop);
-    setListTkbSinhVien(response?.data?.data ?? []);
-    console.log(response, 'res');
-    setLoading(false);
+  const getAllMonHocSinhVienModel = async (idHocKy?: number) => {
+    const response = await getAllMonHocSinhVien({ condition: { idHocKy } });
+    setDanhSachMonHoc(response?.data?.data ?? []);
   };
 
   return {
     ...objInit,
-    sinhVienGetAllLopHocPhanModel,
-    sinhVienGetLopTinChiByIdModel,
+    sinhVienGetModel,
+    sinhVienGetByIdModel,
     sinhVienGetThoiKhoaBieuModel,
+    getAllMonHocSinhVienModel,
+    sinhVienGetDiemTongKetModel,
     idNhomLop,
     setIdNhomLop,
     hinhThucDaoTao,
@@ -76,7 +88,10 @@ export default () => {
     setListTkbSinhVien,
     recordBuoiHoc,
     setRecordBuoiHoc,
+    danhSachMonHoc,
+    setDanhSachMonHoc,
     danhSachDiemThanhPhanTheoKy,
     setDanhSachDiemThanhPhanTheoKy,
+    danhSachDiemTongKet,
   };
 };

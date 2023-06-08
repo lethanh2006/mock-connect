@@ -1,13 +1,12 @@
 import { useModel, history } from 'umi';
 import { thongKeKetQuaHocTap } from '@/services/Dashboard/dashboard';
-import { thongKeDon } from '@/services/DichVuMotCua/DichVuMotCua';
-import type { LopTinChi } from '@/services/LopTinChi/typings';
-import { ArrowUpOutlined } from '@ant-design/icons';
-import { Badge, Card, Col, Progress, Statistic } from 'antd';
+import { Badge, Card, Col, Statistic } from 'antd';
 import { useEffect, useState } from 'react';
 import { thongKeMyInvoice } from '@/services/ThanhToan/thanhtoan';
 import { currencyFormat } from '@/utils/utils';
 import { getMetaData } from '@/services/User/user';
+import { thongKeDon } from '@/services/DichVuMotCuaV2/dichvumotcuav2';
+import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
 
 const BlockSinhVien = () => {
   const [dataThongKe, setDataThongKe] = useState<{
@@ -37,15 +36,10 @@ const BlockSinhVien = () => {
   const getThongKeKetQuaHocTap = async () => {
     const res = await thongKeKetQuaHocTap();
     setKetQuaHocTap(res?.data?.data);
-    console.log(
-      '🚀 ~ file: BlockSinhVien.tsx:38 ~ getThongKeKetQuaHocTap ~ res?.data?.data',
-      res?.data?.data,
-    );
   };
 
   const getGPAKyGanNhat = async () => {
     const response: LopTinChi.DiemTongKet[] = await sinhVienGetDiemTongKetModel();
-    console.log('🚀 ~ file: BlockSinhVien.tsx:42 ~ getGPAKyGanNhat ~ response', response);
     for (let i = response.length - 1; i >= 0; i--) {
       if (response[i]?.diem_tb_chung_hoc_ky_thang_4) {
         setRecordDiemTongKet(response[i]);
@@ -153,7 +147,7 @@ const BlockSinhVien = () => {
       </Col>
       <Col xs={24} md={12} xl={6}>
         <Card
-          onClick={() => history.push('/dichvumotcuasv')}
+          onClick={() => history.push('/dich-vu-mot-cua-sinh-vien')}
           style={{ cursor: 'pointer', height: '100%' }}
         >
           <Statistic

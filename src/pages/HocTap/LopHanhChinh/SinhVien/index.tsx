@@ -1,28 +1,12 @@
-import { useModel, history } from 'umi';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
+import { history, useModel } from 'umi';
 
 const LopHanhChinhPage = () => {
-  const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
-
-  const {
-    sinhVienGetLopHanhChinhPageableModel,
-    danhSach,
-    record: recLopHanhChinh,
-    filters,
-
-    setRecord,
-  } = useModel('hoctap.lophanhchinh');
-  console.log(filters, 'filter');
-  // useEffect(() => {
-  //   sinhVienGetLopHanhChinhPageableModel();
-  // }, []);
+  const { page, limit, sinhVienGetModel } = useModel('hoctap.lophanhchinh');
 
   const onCell = (lophanhchinh: LopHanhChinh.IRecord) => ({
-    onClick: () => {
-      setRecord(lophanhchinh);
-      history.push(`/hoc-tap/lop-hanh-chinh/${lophanhchinh._id}`);
-    },
+    onClick: () => history.push(`/hoc-tap/lop-hanh-chinh/${lophanhchinh._id}`),
     style: { cursor: 'pointer' },
   });
 
@@ -30,7 +14,7 @@ const LopHanhChinhPage = () => {
     {
       title: 'Tên lớp học',
       dataIndex: 'ten',
-      width: 100,
+      width: 200,
       onCell,
       filterType: 'string',
       sortable: true,
@@ -38,15 +22,14 @@ const LopHanhChinhPage = () => {
   ];
 
   return (
-    <div>
-      <TableBase
-        columns={columns}
-        modelName="hoctap.lophanhchinh"
-        title="Lớp hành chính"
-        buttons={{ create: false }}
-        getData={() => sinhVienGetLopHanhChinhPageableModel()}
-      />
-    </div>
+    <TableBase
+      columns={columns}
+      dependencies={[page, limit]}
+      getData={sinhVienGetModel}
+      modelName="hoctap.lophanhchinh"
+      title="Lớp hành chính"
+      buttons={{ create: false }}
+    />
   );
 };
 

@@ -1,11 +1,10 @@
-
 import { useState } from 'react';
-import { selectHocKy, selectHocPhan } from '@/services/HocPhanCoDiem/hocphancodiem';
+import { selectHocKy, selectHocPhan } from '@/services/HocTap/HocPhanCoDiem/hocphancodiem';
 
 export default () => {
   const [dsKyHoc, setDsKyHoc] = useState<any[]>([]);
   const [dsDiemTheoKy, setDsDiemTheoKy] = useState<any[]>([]);
-  const [loading,setLoading]=useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
   const getDsKyHoc = async () => {
     try {
       const res = await selectHocKy();
@@ -31,6 +30,7 @@ export default () => {
     dsDiemTheoKy,
     getDsDiemTheoKy,
     getDsKyHoc,
-    setLoading,loading
+    setLoading,
+    loading,
   };
 };

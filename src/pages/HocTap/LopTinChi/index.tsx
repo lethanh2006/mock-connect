@@ -1,39 +1,17 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import type { LopTinChi as ILopTinChi } from '@/services/LopTinChi/typings';
-import { Select } from 'antd';
-import { useEffect } from 'react';
-import { history, useAccess, useModel } from 'umi';
+import SelectHocKy from '@/pages/DaoTao/HocKy/SelectHocKy';
+import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
+import { type LopTinChi as ILopTinChi } from '@/services/HocTap/LopTinChi/typings';
+import { history, useModel } from 'umi';
+import { useState } from 'react';
 
 const LopTinChi = () => {
-  const access = useAccess();
-
-  const {
-    setRecord: setRecordLopTinChi,
-    hinhThucDaoTao,
-    setCondition,
-    condition,
-    sinhVienGetAllLopHocPhanModel,
-  } = useModel('hoctap.loptinchi');
-  const { getAllModel: getAllHocKySinhVien, danhSach: danhSachHocKy } = useModel('hocky');
-
-  // useEffect(() => {
-  //   if (access.nhanVien) getAllHinhThucDaoTaoModel(true);
-  //   sinhVienGetAllLopHocPhanModel();
-  // }, []);
-
-  useEffect(() => {
-    if (access.nhanVien) console.log();
-    else {
-      getAllHocKySinhVien();
-    }
-  }, [hinhThucDaoTao]);
+  const { page, limit, sinhVienGetModel } = useModel('hoctap.loptinchi');
+  const [maHocKy, setMaHocKy] = useState<string>();
 
   const onCell = (loptinchi: ILopTinChi.IRecord) => ({
-    onClick: () => {
-      setRecordLopTinChi(loptinchi);
-      history.push(`/hoc-tap/lop-tin-chi/${loptinchi._id}`);
-    },
+    onClick: () => history.push(`/hoc-tap/lop-tin-chi/${loptinchi._id}`),
     style: { cursor: 'pointer' },
   });
 
@@ -41,7 +19,7 @@ const LopTinChi = () => {
     {
       title: 'Tên lớp học',
       dataIndex: 'ten',
-      width: 100,
+      width: 150,
       onCell,
       filterType: 'string',
       sortable: true,
@@ -55,52 +33,30 @@ const LopTinChi = () => {
     {
       title: 'Tên học phần',
       dataIndex: ['hocPhan', 'ten'],
+      filterType: 'customselect',
+      filterCustomSelect: <SelectHocPhan multiple />,
       width: 150,
       onCell,
     },
   ];
 
-  // const onChangeHeDaoTao = (value: number) => {
-  //   setHinhThucDaoTao(value);
-  //   setDanhSach([]);
-  //   setRecord({} as HocKy.IRecord);
-  // };
-
   return (
     <TableBase
       columns={columns}
+      dependencies={[page, limit, maHocKy]}
+      params={{ maHocKy }}
+      getData={sinhVienGetModel}
       modelName="hoctap.loptinchi"
       title="Lớp tín chỉ"
       buttons={{ create: false }}
-      getData={() => sinhVienGetAllLopHocPhanModel()}
       otherButtons={[
-        <>
-          {/* {access.nhanVien && (
-            <Select
-              placeholder="Chọn hệ đào tạo"
-              onChange={onChangeHeDaoTao}
-              value={hinhThucDaoTao === -1 ? undefined : hinhThucDaoTao}
-              style={{ width: 220, marginBottom: 8, marginRight: 8 }}
-            >
-              {danhSachHinhThucDaoTao?.map((item) => (
-                <Select.Option key={item.id} value={item.id}>
-                  {item?.display_name ?? ''}
-                </Select.Option>
-              ))}
-            </Select>
-          )} */}
-          <Select
-            placeholder="Chọn kỳ học"
-            onChange={(val) => setCondition({ ...condition, hocKyId: val })}
-            style={{ width: 300 }}
-            allowClear
-            options={danhSachHocKy.map((item) => ({
-              key: item?._id,
-              value: item?._id,
-              label: `Kỳ ${item?.ten}`,
-            }))}
-          />
-        </>,
+        <SelectHocKy
+          onChange={(val) => setMaHocKy(val)}
+          selectMa
+          style={{ width: 300 }}
+          key="1"
+          allowClear
+        />,
       ]}
     />
   );

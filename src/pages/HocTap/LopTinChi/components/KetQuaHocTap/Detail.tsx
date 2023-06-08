@@ -1,5 +1,5 @@
-import { ELoaiDauDiemHocPhan } from '@/services/LopTinChi/constant';
-import type { LopTinChi } from '@/services/LopTinChi/typings';
+import { ELoaiDauDiemHocPhan } from '@/services/HocTap/LopTinChi/constant';
+import { LopTinChi } from '@/services/HocTap/LopTinChi/typings';
 import { Button, Descriptions, message, Select } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';

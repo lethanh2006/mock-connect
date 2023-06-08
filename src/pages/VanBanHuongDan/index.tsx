@@ -153,13 +153,8 @@ const VanBanHuongDanComponent = () => {
       <Modal
         title={record?.ten}
         destroyOnClose
-        footer={
-          <Button type="primary" onClick={() => setVisibleFileList(false)}>
-            OK
-          </Button>
-        }
-        width="80%"
-        style={{ maxWidth: '1200px' }}
+        footer={<Button onClick={() => setVisibleFileList(false)}>Đóng</Button>}
+        width={1000}
         onCancel={() => setVisibleFileList(false)}
         visible={visibleFileList}
       >

@@ -8,6 +8,9 @@ export type DataChartType = {
   yAxis: number[];
   yLabel: string;
   height?: number;
+  width?: number;
   type?: 'bar' | 'area';
   colors?: string[];
+  formatY?: (val: number) => string;
+  showTotal?: boolean;
 };

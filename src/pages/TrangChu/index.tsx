@@ -1,25 +1,19 @@
-import ThoiKhoaBieu from '@/pages/Calendar';
 import { Col, Row } from 'antd';
-import { useAccess } from 'umi';
-// import TinTucDashboard from '../TinTuc/TinTucDashboard';
-// import BlockSinhVien from './components/BlockSinhVien';
+import BlockSinhVien from './components/BlockSinhVien';
+import ThoiKhoaBieu from '@/pages/Calendar';
+import TinTucDashboard from '../TinTuc/TinTucDashboard';
 
 const TrangChu = () => {
   return (
     <>
       <Row gutter={[20, 20]}>
-        {/* {access.sinhVien && <BlockSinhVien />} */}
-        <ThoiKhoaBieu type="dashboard" />
-        {/* {access.sinhVienVaNhanVien && (
-          <>
-            <Col xs={24} lg={14} xl={16}>
-              <ThoiKhoaBieu type="dashboard" />
-            </Col>
-            <Col xs={24} lg={10} xl={8}>
-              <TinTucDashboard />
-            </Col>
-          </>
-        )} */}
+        <BlockSinhVien />
+        <Col xs={24} lg={14} xl={16}>
+          <ThoiKhoaBieu type="dashboard" />
+        </Col>
+        <Col xs={24} lg={10} xl={8}>
+          <TinTucDashboard />
+        </Col>
       </Row>
     </>
   );
