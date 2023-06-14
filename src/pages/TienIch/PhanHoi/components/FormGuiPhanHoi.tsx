@@ -1,29 +1,43 @@
-/* eslint-disable no-param-reassign */
-import Upload from '@/components/Upload/UploadMultiFile';
+import UploadFile from '@/components/Upload/UploadFile';
+import { ELoaiPhanHoi } from '@/services/TienIch/PhanHoi/constant';
+import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
+import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
-import { uploadMultiFile } from '@/utils/utils';
 import { Button, Card, Form, Input } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
-import { ELoaiPhanHoi } from '../constants';
 
 const FormGuiPhanHoi = () => {
   const [form] = Form.useForm();
-  const { loading, setVisibleForm, userPostPhanHoiModel } = useModel('phanhoi');
+  const { loading, setVisibleForm, postModel, record, getModel, setFormSubmiting, formSubmiting } =
+    useModel('tienich.phanhoi');
+
+  useEffect(() => {
+    if (record?._id) form.setFieldsValue(record);
+    else form.resetFields();
+  }, [record?._id]);
+
+  const onFinish = async (values: PhanHoi.IRecord) => {
+    setFormSubmiting(true);
+    try {
+      const urlPhanAnh = await buildUpLoadFile(values, 'urlPhanAnh');
+      values.urlPhanAnh = urlPhanAnh;
+      setFormSubmiting(false);
+
+      values.loaiPhanHoi = ELoaiPhanHoi.KHAC;
+      postModel(values, getModel)
+        .then(() => form.resetFields())
+        .catch((er) => console.log(er));
+    } catch (er) {
+      console.log(er);
+    } finally {
+      setFormSubmiting(false);
+    }
+  };
 
   return (
     <Card loading={loading} title="Gửi phản hồi">
-      <Form
-        labelCol={{ span: 24 }}
-        onFinish={async (values) => {
-          const urlFileDinhKem = await uploadMultiFile(values?.urlPhanAnh?.fileList);
-          userPostPhanHoiModel({
-            ...values,
-            loaiPhanHoi: ELoaiPhanHoi.KHAC,
-            urlPhanAnh: urlFileDinhKem?.[0] ?? '',
-          });
-        }}
-        form={form}
-      >
+      <Form layout="vertical" onFinish={onFinish} form={form}>
         <Form.Item
           name="noiDungPhanHoi"
           label="Nội dung phản hồi"
@@ -31,8 +45,9 @@ const FormGuiPhanHoi = () => {
         >
           <Input.TextArea rows={4} placeholder="Nhập nội dung" />
         </Form.Item>
+
         <Form.Item name="urlPhanAnh" label="File đính kèm">
-          <Upload
+          <UploadFile
             otherProps={{
               maxCount: 1,
               multiple: false,
@@ -40,13 +55,13 @@ const FormGuiPhanHoi = () => {
             }}
           />
         </Form.Item>
-        <Form.Item style={{ textAlign: 'center', marginBottom: 0 }}>
-          <Button loading={loading} style={{ marginRight: 8 }} htmlType="submit" type="primary">
+
+        <div className="form-footer">
+          <Button loading={formSubmiting} htmlType="submit" type="primary">
             Gửi
           </Button>
-
           <Button onClick={() => setVisibleForm(false)}>Đóng</Button>
-        </Form.Item>
+        </div>
       </Form>
     </Card>
   );

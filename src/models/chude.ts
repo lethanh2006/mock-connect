@@ -1,10 +1,9 @@
 import useInitModel from '@/hooks/useInitModel';
 import { getAllChuDe } from '@/services/TinTuc/ChuDe/chude';
-import { ip3 } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
-  const objInit = useInitModel<ChuDe.Record>('common-topic', undefined, undefined, ip3);
+  const objInit = useInitModel<ChuDe.Record>('common-topic');
   const { setLoading, condition, setDanhSach, setTotal } = objInit;
   const [loaiChuDe, setLoaiChuDe] = useState<string>();
   const [phamVi, setPhamVi] = useState<'Tất cả' | 'Hình thức đào tạo'>();

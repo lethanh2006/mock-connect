@@ -11,5 +11,7 @@ declare module PhanHoi {
     daTraLoiPhanHoi: boolean;
     maChuyenVien: string;
     loaiPhanHoi: ELoaiPhanHoi;
+    thoiGianTraLoi: string;
+    urlPhanAnh?: string | null;
   }
 }

@@ -1,29 +1,24 @@
-/* eslint-disable no-underscore-dangle */
+import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
-import { Select, Typography } from 'antd';
-import moment from 'moment';
-import FormGuiPhanHoi from './components/FormGuiPhanHoi';
 import { type IColumn } from '@/components/Table/typing';
-import { useModel } from 'umi';
+import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
 import { PaperClipOutlined } from '@ant-design/icons';
+import { Select } from 'antd';
+import moment from 'moment';
+import { useModel } from 'umi';
+import FormGuiPhanHoi from './components/FormGuiPhanHoi';
+import { useState } from 'react';
 
-const PhanHoi = () => {
-  const { setCondition, daTraLoi, setDaTraLoi } = useModel('tienich.phanhoi');
+const PhanHoiPage = () => {
+  const { setCondition } = useModel('tienich.phanhoi');
+  const [daTraLoi, setDaTraLoi] = useState<boolean>();
 
   const columns: IColumn<PhanHoi.IRecord>[] = [
     {
       title: 'Câu hỏi',
       dataIndex: 'noiDungPhanHoi',
-      align: 'left',
       width: 200,
-      render: (val) => (
-        <Typography.Paragraph
-          style={{ marginBottom: 0 }}
-          ellipsis={{ rows: 2, expandable: true, symbol: <span>Xem tiếp</span> }}
-        >
-          {val}
-        </Typography.Paragraph>
-      ),
+      render: (val) => <ExpandText>{val}</ExpandText>,
       sortable: true,
       filterType: 'string',
     },
@@ -38,23 +33,32 @@ const PhanHoi = () => {
               File đính kèm
             </a>
           </>
-        ) : (
-          ''
-        ),
-      width: 200,
+        ) : null,
+      width: 120,
+    },
+    {
+      title: 'Ngày gửi',
+      dataIndex: 'createdAt',
+      align: 'center',
+      render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
+      width: 120,
+      sortable: true,
+      filterType: 'datetime',
     },
     {
       title: 'Câu trả lời',
       dataIndex: 'noiDungTraLoiPhanHoi',
       hide: !daTraLoi,
       width: 200,
+      render: (val) => <ExpandText>{val}</ExpandText>,
     },
     {
-      title: 'Ngày gửi',
-      dataIndex: 'createdAt',
+      title: 'Thời gian trả lời',
+      dataIndex: 'thoiGianTraLoi',
       align: 'center',
-      render: (val) => <div>{moment(val).format('HH:mm DD/MM/YYYY')}</div>,
-      width: 150,
+      render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
+      width: 120,
+      hide: !daTraLoi,
       sortable: true,
       filterType: 'datetime',
     },
@@ -62,33 +66,33 @@ const PhanHoi = () => {
 
   const onChangeTrangThai = (value: string) => {
     const isAnswer = value === 'Đã trả lời';
-    setCondition({ daTraLoiPhanHoi: isAnswer });
-    setDaTraLoi(isAnswer);
+    setCondition({ daTraLoiPhanHoi: value ? isAnswer : undefined });
+    setDaTraLoi(value ? isAnswer : undefined);
   };
 
   return (
     <TableBase
-      scroll={{ x: 900 }}
       columns={columns}
-      modelName="phanhoi"
+      modelName="tienich.phanhoi"
       title="Phản hồi"
       Form={FormGuiPhanHoi}
-    >
-      <Select
-        placeholder="Lọc theo trạng thái"
-        onChange={onChangeTrangThai}
-        value={daTraLoi ? 'Đã trả lời' : 'Chưa trả lời'}
-        style={{ width: 220, marginBottom: 8, marginRight: 8 }}
-      >
-        {['Đã trả lời', 'Chưa trả lời']?.map((item) => (
-          <Select.Option key={item} value={item}>
-            {item}
-          </Select.Option>
-        ))}
-      </Select>
-      ,
-    </TableBase>
+      otherButtons={[
+        <Select
+          key="1"
+          placeholder="Lọc theo trạng thái"
+          onChange={onChangeTrangThai}
+          allowClear
+          value={daTraLoi === undefined ? undefined : daTraLoi ? 'Đã trả lời' : 'Chưa trả lời'}
+          style={{ width: 200, marginBottom: 12, marginRight: 8 }}
+          options={['Chưa trả lời', 'Đã trả lời']?.map((item) => ({
+            key: item,
+            value: item,
+            label: item,
+          }))}
+        />,
+      ]}
+    />
   );
 };
 
-export default PhanHoi;
+export default PhanHoiPage;
