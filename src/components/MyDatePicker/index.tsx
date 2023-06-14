@@ -12,7 +12,7 @@ const MyDatePicker = (
      */
     date?: string;
     pickerStyle?: 'time' | 'date' | 'week' | 'month' | 'quarter' | 'year' | undefined;
-    showTime?: any
+    showTime?: any;
 
     /**
      * Format lưu lại, mặc định: ISOString
@@ -46,7 +46,7 @@ const MyDatePicker = (
       value={objMoment}
       onChange={handleChange}
       disabledDate={disabledDate}
-      showTime = {showTime}
+      showTime={showTime}
     />
   );
 };

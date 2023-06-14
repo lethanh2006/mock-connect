@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
+import Upload from '@/components/Upload/UploadMultiFile';
 import rules from '@/utils/rules';
 import { uploadMultiFile } from '@/utils/utils';
 import { Button, Card, Form, Input } from 'antd';
 import { useModel } from 'umi';
-import Upload from '@/components/Upload/UploadMultiFile';
 import { ELoaiPhanHoi } from '../constants';
 
 const FormGuiPhanHoi = () => {

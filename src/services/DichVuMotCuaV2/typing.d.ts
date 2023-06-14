@@ -142,6 +142,10 @@ declare module DichVuMotCuaV2 {
   }
 
   export interface Don {
+    daTraKetQua: boolean;
+    daTraLoiPhanHoi: boolean;
+    noiDungPhanHoi: string;
+    noiDungTraLoiPhanHoi: string;
     ketQuaDinhKem: string[];
     ketQuaText: string;
     lichSuChinhSua: LichSuChinhSua[];

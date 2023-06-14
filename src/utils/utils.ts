@@ -1,3 +1,4 @@
+import { uploadFile } from '@/services/uploadFile';
 import { message } from 'antd';
 import type { Moment } from 'moment';
 import moment from 'moment';
@@ -406,4 +407,32 @@ export const genExcelFile = (
   XLSX.utils.book_append_sheet(workbook, worksheet, sheetName ?? 'Sheet1');
 
   XLSX.writeFile(workbook, fileName || 'Danh sách.xlsx');
+};
+
+export const uploadMultiFile = async (
+  arrFile: any[],
+  returnFileType?: boolean,
+  returnAllResponse?: boolean,
+) => {
+  const url: any[] = arrFile
+    ?.filter((item) => item?.remote === true)
+    ?.map((item) =>
+      returnFileType === true ? { url: item?.url ?? '', type: item?.type } : item?.url ?? '',
+    );
+  if (!arrFile) return [];
+  let arrUrl: any[] = [];
+  const arrUpload = arrFile
+    ?.filter((item) => item?.remote !== true)
+    ?.map(async (file: { originFileObj: any; type: string; name: string }) => {
+      const response = await uploadFile({
+        file: file?.originFileObj,
+        // filename: parse(file?.name).name,
+        public: '1',
+      });
+      if (returnFileType) return { url: response?.data?.data?.url, type: file.type };
+      else if (returnAllResponse) return response?.data?.data;
+      else return response?.data?.data?.url;
+    });
+  arrUrl = await Promise.all(arrUpload);
+  return [...url, ...arrUrl];
 };
