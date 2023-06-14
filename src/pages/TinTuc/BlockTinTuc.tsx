@@ -1,7 +1,7 @@
 import anh from '@/assets/noimg.png';
 import { Col, Empty, Row, Tooltip, Typography } from 'antd';
 import moment from 'moment';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import { CardTinTuc, ContentLargeCard } from './TinTuc.style';
 
 const renderParagraph = (text: string, rows: number, style: any) => (
@@ -10,12 +10,12 @@ const renderParagraph = (text: string, rows: number, style: any) => (
   </Typography.Paragraph>
 );
 
-const BlockTinTuc = (props: { data: TinTuc.Record[]; empty?: string; type?: 'dashboard' }) => {
-  const { data, empty, type } = props;
+const BlockTinTuc = (props: { empty?: string; type?: 'dashboard' }) => {
+  const { danhSach } = useModel('tintuc.tintuc');
+  const { empty, type } = props;
   const url = 'tin-tuc';
 
-  if (data.length === 0)
-    return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={empty ?? 'Chưa có tin tức'} />;
+  if (danhSach?.length === 0) return <Empty description={empty ?? 'Chưa có tin tức'} />;
   else
     return (
       <div style={{ marginBottom: 20 }}>
@@ -34,7 +34,7 @@ const BlockTinTuc = (props: { data: TinTuc.Record[]; empty?: string; type?: 'das
                   onClick={() => {
                     history.push({
                       pathname: url + '/chi-tiet',
-                      query: { id: data?.[0]?._id },
+                      query: { id: danhSach?.[0]?._id },
                     });
                   }}
                   first={true}
@@ -42,8 +42,8 @@ const BlockTinTuc = (props: { data: TinTuc.Record[]; empty?: string; type?: 'das
                 >
                   <div
                     style={{
-                      background: data?.[0]?.urlAnhDaiDien
-                        ? `url(${data?.[0]?.urlAnhDaiDien}) center center/contain no-repeat`
+                      background: danhSach?.[0]?.urlAnhDaiDien
+                        ? `url(${danhSach?.[0]?.urlAnhDaiDien}) center center/contain no-repeat`
                         : `url(${anh}) center center/contain no-repeat`,
                       width: '100%',
                       height: '67%',
@@ -52,18 +52,18 @@ const BlockTinTuc = (props: { data: TinTuc.Record[]; empty?: string; type?: 'das
                     }}
                   />
                   <ContentLargeCard>
-                    <Tooltip placement="bottomLeft" title={data?.[0]?.tieuDe}>
-                      {renderParagraph(data?.[0]?.tieuDe, 2, {
+                    <Tooltip placement="bottomLeft" title={danhSach?.[0]?.tieuDe}>
+                      {renderParagraph(danhSach?.[0]?.tieuDe, 2, {
                         fontSize: 'calc(1em + 0.2vw)',
                         fontWeight: 500,
                         marginBottom: 10,
                         color: 'black',
                       })}
                     </Tooltip>
-                    {renderParagraph(data?.[0]?.moTa, 2, { color: '#364954' })}
-                    {data?.[0]?.ngayDang && (
+                    {renderParagraph(danhSach?.[0]?.moTa, 2, { color: '#364954' })}
+                    {danhSach?.[0]?.ngayDang && (
                       <i style={{ color: '#999' }}>
-                        Ngày đăng: {moment(data?.[0]?.ngayDang).format('DD/MM/YYYY HH:mm')}
+                        Ngày đăng: {moment(danhSach?.[0]?.ngayDang).format('DD/MM/YYYY HH:mm')}
                       </i>
                     )}
                   </ContentLargeCard>
@@ -72,7 +72,7 @@ const BlockTinTuc = (props: { data: TinTuc.Record[]; empty?: string; type?: 'das
 
               <Col span={24} md={12}>
                 <Row gutter={[0, 16]}>
-                  {data.slice(1, 4).map((tintuc) => (
+                  {danhSach.slice(1, 4).map((tintuc) => (
                     <CardTinTuc
                       key={tintuc?._id}
                       onClick={() => {
@@ -121,7 +121,7 @@ const BlockTinTuc = (props: { data: TinTuc.Record[]; empty?: string; type?: 'das
             </Row>
 
             <Row gutter={[16, 16]} style={{ alignItems: 'stretch', marginBottom: 16 }}>
-              {data.slice(4).map((tintuc) => (
+              {danhSach.slice(4).map((tintuc) => (
                 <Col span={24} md={8} key={tintuc?._id}>
                   <CardTinTuc
                     style={{ height: '100%' }}
@@ -167,7 +167,7 @@ const BlockTinTuc = (props: { data: TinTuc.Record[]; empty?: string; type?: 'das
           </>
         ) : (
           <Row gutter={[16, 16]} style={{ alignItems: 'stretch', marginBottom: 16 }}>
-            {data.map((tintuc) => (
+            {danhSach.map((tintuc) => (
               <Col span={24} key={tintuc?._id}>
                 <CardTinTuc
                   style={{ height: '100%' }}

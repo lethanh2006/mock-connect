@@ -1,37 +1,27 @@
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Card, Empty, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { history, useModel } from 'umi';
 import BlockTinTuc from './BlockTinTuc';
-import { history } from 'umi';
 import './styles.less';
-import { getDataTinTuc } from '@/services/TinTuc/tintuc';
 
 const TinTucDashboard = () => {
-  const [danhSachTinTucTheoTopic, setDanhSachTinTucTheoTopic] = useState<TinTuc.Record[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const getData = async (page: number, limit: number) => {
-    const res: IRecordTinTuc.RootObject = await getDataTinTuc({
-      page,
-      limit,
-    });
-    setDanhSachTinTucTheoTopic(res.data?.result ?? []);
-    setLoading(false);
-  };
+  const { danhSach, getModel, loading } = useModel('tintuc.tintuc');
 
   useEffect(() => {
-    getData(1, 5);
+    getModel(undefined, undefined, undefined, 1, 5);
   }, []);
 
   return (
     <Card title="Tin tức">
-      {danhSachTinTucTheoTopic && danhSachTinTucTheoTopic.length > 0 ? (
+      {danhSach && danhSach.length > 0 ? (
         <Spin spinning={loading}>
-          <BlockTinTuc data={danhSachTinTucTheoTopic} type="dashboard" />
+          <BlockTinTuc type="dashboard" />
+
           <Button
             type="link"
             onClick={() => {
-              history.push('/tintuc');
+              history.push('/tin-tuc');
             }}
           >
             Xem thêm <ArrowRightOutlined />

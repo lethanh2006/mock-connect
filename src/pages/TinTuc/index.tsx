@@ -1,77 +1,64 @@
 import { ellipse } from '@/utils/utils';
 import { Card, Empty, Pagination, Spin, Tabs, Tooltip } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import BlockTinTuc from './BlockTinTuc';
 import './styles.less';
-import { getDataTinTuc } from '@/services/TinTuc/tintuc';
 
 const TinTucPage = () => {
-  const { getAllChuDeModel, danhSach: danhSachChuDe } = useModel('chude');
-  const [limitTinTucTheoTopic, setLimitTinTucTheoTopic] = useState<number>(10);
-  const [pageTinTucTheoTopic, setPageTinTucTheoTopic] = useState<number>(1);
-  const [danhSachTinTucTheoTopic, setDanhSachTinTucTheoTopic] = useState<TinTuc.Record[]>([]);
-  const [totalTinTucTheoTopic, setTotalTinTucTheoTopic] = useState<number>();
-  const [loading, setLoading] = useState(true);
-
+  const {
+    getAllModel: getAllChuDe,
+    danhSach: danhSachChuDe,
+    setRecord: setChuDe,
+    record: recChuDe,
+  } = useModel('tintuc.chude');
+  const { loading, page, limit, total, setPage, setLimit, getModel } = useModel('tintuc.tintuc');
   const hash = window.location.hash.slice(1, 25);
-  const [key, setKey] = useState<string>(hash || '');
-
-  const getData = async (page: number, limit: number, idTopic: string) => {
-    const res = await getDataTinTuc({
-      page,
-      limit,
-      condition: { idTopic },
-    });
-    setTotalTinTucTheoTopic(res.data?.data?.total);
-    setDanhSachTinTucTheoTopic(res.data?.data?.result ?? []);
-    setLoading(false);
-  };
 
   useEffect(() => {
-    getAllChuDeModel({}).then((listMenu) => {
-      const k = key === '' || key.includes('=') ? listMenu?.[0]?._id : key;
-      if (key !== k) setKey(k);
-      getData(1, limitTinTucTheoTopic, k);
+    getAllChuDe().then((listMenu) => {
+      if (hash === '' || hash.includes('=')) setChuDe(listMenu?.[0]);
+      else setChuDe(listMenu.find((item) => item._id === hash));
     });
   }, []);
 
+  useEffect(() => {
+    getModel({ idTopic: recChuDe?._id });
+  }, [page, limit, recChuDe?._id]);
+
   const changeMenu = (k: string) => {
-    setKey(k);
+    setChuDe(danhSachChuDe.find((item) => item._id === k));
     window.location.hash = '#' + k;
-    setPageTinTucTheoTopic(1);
-    setLoading(true);
-    getData(1, limitTinTucTheoTopic, k);
+    setPage(1);
   };
 
-  const onChangePaging = (page: number, size: number) => {
-    setPageTinTucTheoTopic(page);
-    setLimitTinTucTheoTopic(size);
-    setLoading(true);
-    getData(page, size, key);
+  const onChangePaging = (p: number, size: number) => {
+    setPage(p);
+    setLimit(size);
   };
 
   return (
     <Card title="Tin tức" bodyStyle={{ paddingTop: 0 }}>
       {danhSachChuDe && danhSachChuDe.length > 0 ? (
-        <Tabs activeKey={key} onChange={changeMenu}>
+        <Tabs activeKey={recChuDe?._id} onChange={changeMenu}>
           {danhSachChuDe?.map((chuDe) => (
             <Tabs.TabPane
               key={chuDe?._id}
               tab={
                 <Tooltip title={chuDe?.name}>
-                  {key === chuDe?._id ? chuDe.name : ellipse(chuDe?.name)}
+                  {recChuDe?._id === chuDe?._id ? chuDe.name : ellipse(chuDe?.name)}
                 </Tooltip>
               }
             >
               <Spin spinning={loading}>
-                <BlockTinTuc data={danhSachTinTucTheoTopic} />
+                <BlockTinTuc />
+
                 <Pagination
                   onChange={onChangePaging}
                   defaultPageSize={22}
-                  current={pageTinTucTheoTopic}
-                  pageSize={limitTinTucTheoTopic}
-                  total={totalTinTucTheoTopic}
+                  current={page}
+                  pageSize={limit}
+                  total={total}
                   pageSizeOptions={[10, 22, 34]}
                   style={{ textAlign: 'right' }}
                 />

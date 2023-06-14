@@ -2,28 +2,22 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Card, Col, Divider, Row, Spin } from 'antd';
 import moment from 'moment';
 import queryString from 'query-string';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useModel } from 'umi';
 import './styles.less';
-import { getDetailTinTuc } from '@/services/TinTuc/tintuc';
 
-const ChiTietTinTuc = () => {
-  const [record, setRecord] = useState<TinTuc.Record>();
-  const [loading, setLoading] = useState<boolean>(true);
+const ChiTietTinTucPage = () => {
+  const { getByIdModel, loading, record } = useModel('tintuc.tintuc');
   const { location } = window;
   const { id } = queryString.parse(location.search);
 
   const fetchData = async () => {
-    setLoading(true);
-
     try {
-      getDetailTinTuc(id).then((response) => {
-        setRecord(response.data?.data);
+      getByIdModel(id as string).then((response) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     } catch (error) {
       window.history.back();
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -63,4 +57,4 @@ const ChiTietTinTuc = () => {
   );
 };
 
-export default ChiTietTinTuc;
+export default ChiTietTinTucPage;
