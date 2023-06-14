@@ -1,5 +1,6 @@
 export const Settings = {
   version: '1.0',
+  primaryColor: '#007EB9',
 };
 
 // export enum EVaiTroBieuMau {
@@ -266,12 +267,6 @@ export const Settings = {
 //   'Chưa diễn ra': '#007bff',
 //   'Đã diễn ra': '#dc3545',
 // };
-
-// export enum TrangThaiThanhToan {
-//   open = 'Chưa thanh toán đủ',
-//   paid = 'Đã thanh toán đủ',
-//   overpaid = 'Thanh toán thừa',
-// }
 
 // export enum ETrangThaiKhoa {
 //   DA_KHOA = 'Đã nộp',

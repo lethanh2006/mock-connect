@@ -1,8 +1,6 @@
 // import DiaChi from '@/components/DiaChi';
-import HocPhanCoDiem from '@/components/HocPhanCoDiem';
 import MyDatePicker from '@/components/MyDatePicker';
 import Upload from '@/components/Upload/UploadMultiFile';
-import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
 import rules from '@/utils/rules';
 import { checkFileSize, includes, renderFileList } from '@/utils/utils';
 import { CopyOutlined } from '@ant-design/icons';
@@ -26,11 +24,13 @@ import { useModel } from 'umi';
 import Table from './TableElement';
 import ThongTinNguoiTaoDon from './ThongTinNguoiTaoDon';
 import TieuDeBieuMau from './TieuDeBieuMau';
-import { accessFileUpload } from '@/services/DichVuMotCuaV2/constant';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
 import SelectTonGiao from '@/pages/Core/TonGiao/SelectTonGiao';
 import SelectDanToc from '@/pages/Core/DanToc/SelectDanToc';
+import { accessFileUpload } from '@/services/DVMC/DichVuMotCuaV2/constant';
+import { DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
+import HocPhanCoDiem from '../HocPhanCoDiem';
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
@@ -62,7 +62,7 @@ const FormBieuMau = (props: {
     recordDonThaoTac,
     recordDon,
     sinhVienPutDonModel,
-  } = useModel('dichvumotcuav2');
+  } = useModel('dvmc.dichvumotcuav2');
   const { danhSach: danhSachKyHoc } = useModel('daotao.hocky');
   const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
   const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');

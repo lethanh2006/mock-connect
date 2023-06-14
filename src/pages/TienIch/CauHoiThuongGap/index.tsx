@@ -4,7 +4,7 @@ import { useModel } from 'umi';
 const { Panel } = Collapse;
 
 const CauHoiThuongGap = () => {
-  const { getAllModel, danhSach } = useModel('cauhoithuonggap');
+  const { getAllModel, danhSach } = useModel('tienich.cauhoithuonggap');
 
   useEffect(() => {
     getAllModel(false);

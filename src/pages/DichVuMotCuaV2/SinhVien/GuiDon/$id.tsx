@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import ThanhToan from '@/components/ThanhToan';
+import ThanhToan from '@/pages/CongNo/ThanhToan';
 import DanhMuc from '@/pages/DichVuMotCuaV2/components/DanhMuc';
 import FormBieuMau from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
+import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
 import { getInfo } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Modal } from 'antd';
@@ -18,7 +18,7 @@ const SinhVienTaoDon = ({
   match: { params: { id: string } };
 }) => {
   const { visibleFormBieuMau, setVisibleFormBieuMau, record, getBieuMauByIdModel, recordDon } =
-    useModel('dichvumotcuav2');
+    useModel('dvmc.dichvumotcuav2');
   // const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('daotao.hocky');
   // const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('daotao.namhoc');
 

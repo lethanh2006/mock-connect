@@ -8,7 +8,7 @@ import { useModel } from 'umi';
 import { PaperClipOutlined } from '@ant-design/icons';
 
 const PhanHoi = () => {
-  const { setCondition, daTraLoi, setDaTraLoi } = useModel('phanhoi');
+  const { setCondition, daTraLoi, setDaTraLoi } = useModel('tienich.phanhoi');
 
   const columns: IColumn<PhanHoi.IRecord>[] = [
     {

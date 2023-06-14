@@ -1,15 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import TableBase from '@/components/Table';
-import type { BieuMau } from '@/services/BieuMau/typings';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Select, Tooltip } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import Form from './components/Form';
-import { ELoaiBieuMau } from '@/services/BieuMau/constants';
-import { type DotKhaoSat } from '@/services/KhaoSat/DotKhaoSat/typings';
-import { EThoiGianDot, MapKeyThoiGianDot } from '@/services/KhaoSat/DotKhaoSat/constants';
 import { type IColumn } from '@/components/Table/typing';
+import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typings';
+import { type BieuMau } from '@/services/DVMC/BieuMau/typings';
+import { ELoaiBieuMau } from '@/services/DVMC/BieuMau/constants';
+import { EThoiGianDot, MapKeyThoiGianDot } from '@/services/TienIch/KhaoSat/DotKhaoSat/constants';
 
 const QuanLyDot = () => {
   const {
@@ -26,7 +26,7 @@ const QuanLyDot = () => {
     sort,
   } = useModel('khaosat.dotkhaosat');
 
-  const { getBieuMauByIdModel, initBieuMauTracNghiemModel } = useModel('bieumau');
+  const { getBieuMauByIdModel, initBieuMauTracNghiemModel } = useModel('dvmc.bieumau');
 
   const handleEdit = async (record: DotKhaoSat.Record) => {
     setRecord(record);

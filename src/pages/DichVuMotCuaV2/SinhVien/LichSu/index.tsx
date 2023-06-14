@@ -1,8 +1,10 @@
-import PDFViewer from '@/components/PDFViewer';
+import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/OldTable';
-import ThanhToan from '@/components/ThanhToan';
+import PDFViewer from '@/components/PDFViewer';
+import ThanhToan from '@/pages/CongNo/ThanhToan';
 import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
-import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
+import { TrangThaiDonDVMC } from '@/services/DVMC/DichVuMotCuaV2/constant';
+import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import type { IColumn } from '@/utils/interfaces';
 import {
   DeleteOutlined,
@@ -14,15 +16,13 @@ import {
   PrinterOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons';
-import { Button, message, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip } from 'antd';
+import { Button, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip, message } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
-import FormQuyTrinh from '../../components/FormQuyTrinh';
 import FormGuiPhanHoi from '../../QuanLyDon/components/FormGuiPhanHoi';
-import { TrangThaiDonDVMC } from '@/services/DichVuMotCuaV2/constant';
-import ExpandText from '@/components/ExpandText';
+import FormQuyTrinh from '../../components/FormQuyTrinh';
 
 const LichSuGuiDon = () => {
   const {
@@ -41,11 +41,11 @@ const LichSuGuiDon = () => {
     setLoading,
     danhSach,
     getAllBieuMauModel,
-  } = useModel('dichvumotcuav2');
+  } = useModel('dvmc.dichvumotcuav2');
 
   // const { getMyProfileModel, record } = useModel('sinhvien');
 
-  const { setVisibleForm, visibleForm } = useModel('phanhoi');
+  const { setVisibleForm, visibleForm } = useModel('tienich.phanhoi');
 
   const [recordView, setRecordView] = useState<DichVuMotCuaV2.Don>();
   const [visibleViewInDon, setVisibleViewInDon] = useState<boolean>(false);
@@ -321,7 +321,7 @@ const LichSuGuiDon = () => {
         dataState="danhSachDon"
         widthDrawer={800}
         title="Dịch vụ một cửa"
-        modelName="dichvumotcuav2"
+        modelName="dvmc.dichvumotcuav2"
         columns={columns}
         loading={loading}
         dependencies={[page, limit, condition]}

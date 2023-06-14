@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-import { Setting, TrangThaiBuoc, TrangThaiThaoTac } from '@/utils/constants';
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -12,7 +10,9 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useAccess, useModel } from 'umi';
 import FormBieuMau from './FormBieuMau';
-import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
+import type { DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
+import { TrangThaiBuoc, TrangThaiThaoTac } from '@/services/DVMC/DichVuMotCuaV2/constant';
+import { Settings } from '@/utils/constants';
 
 const IconTrangThai = {
   PENDING: (
@@ -77,7 +77,7 @@ const FormQuyTrinh = (props: {
     setDanhSachDonThaoTac,
     record,
     recordDon,
-  } = useModel('dichvumotcuav2');
+  } = useModel('dvmc.dichvumotcuav2');
   const { getChuyenVienXuLyDonModel } = useModel('phanquyen');
   const { pathname } = window.location;
   const arrPathName = pathname?.split('/') ?? [];
@@ -207,7 +207,7 @@ const FormQuyTrinh = (props: {
                                 recordDonThaoTac &&
                                 recordDonThaoTac?.trangThai === 'PENDING' &&
                                 isDuocPhepXuLy
-                                  ? Setting.primaryColor
+                                  ? Settings.primaryColor
                                   : '#000',
                             }}
                           >

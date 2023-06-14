@@ -1,5 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
-import { postPhanHoiUser } from '@/services/PhanHoi/phanhoi';
+import { postPhanHoiUser } from '@/services/TienIch/PhanHoi/phanhoi';
 import { message } from 'antd';
 import { useState } from 'react';
 

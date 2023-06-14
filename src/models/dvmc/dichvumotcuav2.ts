@@ -11,8 +11,8 @@ import {
   sinhVienPutDon,
   traKetQua,
   userGetAllBieuMau,
-} from '@/services/DichVuMotCuaV2/dichvumotcuav2';
-import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
+} from '@/services/DVMC/DichVuMotCuaV2/dichvumotcuav2';
+import type { DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import { message } from 'antd';
 import FileDownload from 'js-file-download';
 import { useState } from 'react';

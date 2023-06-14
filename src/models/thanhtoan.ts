@@ -11,7 +11,7 @@ import {
   postInvoice,
   refundInvoiceByIdentityCode,
   thongKeMyInvoice,
-} from '@/services/ThanhToan/thanhtoan';
+} from '@/services/CongNo/ThanhToan/thanhtoan';
 import { message } from 'antd';
 import { useState } from 'react';
 

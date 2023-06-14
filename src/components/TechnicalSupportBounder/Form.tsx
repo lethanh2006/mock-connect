@@ -1,7 +1,7 @@
 import Upload from '@/components/Upload/UploadFile';
 import { postIssue } from '@/services/TechnicalSupport/technicalsupport';
 import { uploadFile } from '@/services/uploadFile';
-import { Setting } from '@/utils/constants';
+import { Settings } from '@/utils/constants';
 import rules from '@/utils/rules';
 import { checkFileSize } from '@/utils/utils';
 import { Button, Card, Form, Input, message } from 'antd';
@@ -34,7 +34,7 @@ const FormPostIssue = (props: { onCancel: any }) => {
         imageUrlList: urlFileDinhKem,
         os: navigator.platform,
         osVersion: navigator.platform,
-        appVersion: Setting.version,
+        appVersion: Settings.version,
       });
       message.success('Gửi thành công');
       setLoading(false);

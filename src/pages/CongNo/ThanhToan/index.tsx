@@ -5,8 +5,8 @@ import ThongTinThanhToan from './ThongTinThanhToan';
 import Table from '@/components/Table';
 import { currencyFormat } from '@/utils/utils';
 import moment from 'moment';
-import { TrangThaiThanhToan } from '@/utils/constants';
 import ChiTietDichVu from './ChiTietDichVu';
+import { TrangThaiThanhToan } from '@/services/CongNo/constant';
 
 const ThanhToan = (props: {
   identityCode: string;

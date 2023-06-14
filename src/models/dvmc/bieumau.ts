@@ -12,9 +12,9 @@ import {
   kichHoatBieuMau,
   putBieuMau,
   traLoiBieuMau,
-} from '@/services/BieuMau/bieumau';
-import { type ELoaiBieuMau } from '@/services/BieuMau/constants';
-import type { BieuMau } from '@/services/BieuMau/typings';
+} from '@/services/DVMC/BieuMau/bieumau';
+import { type ELoaiBieuMau } from '@/services/DVMC/BieuMau/constants';
+import type { BieuMau } from '@/services/DVMC/BieuMau/typings';
 import { message } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import FileDownload from 'js-file-download';

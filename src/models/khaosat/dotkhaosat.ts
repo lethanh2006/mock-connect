@@ -1,7 +1,7 @@
 import useInitModel from '@/hooks/useInitModel';
-import { getDotMe, kichHoatDot } from '@/services/KhaoSat/DotKhaoSat/DotKhaoSat';
-import { EThoiGianDot } from '@/services/KhaoSat/DotKhaoSat/constants';
-import { type DotKhaoSat } from '@/services/KhaoSat/DotKhaoSat/typings';
+import { getDotMe, kichHoatDot } from '@/services/TienIch/KhaoSat/DotKhaoSat/DotKhaoSat';
+import { EThoiGianDot } from '@/services/TienIch/KhaoSat/DotKhaoSat/constants';
+import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typings';
 import { ip3 } from '@/utils/ip';
 import { message } from 'antd';
 import { useState } from 'react';

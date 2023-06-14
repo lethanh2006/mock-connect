@@ -1,18 +1,16 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-param-reassign */
-import GridChoice from '@/pages/KhaoSatSVGV/components/Question/GridChoice';
-import MultipleChoice from '@/pages/KhaoSatSVGV/components/Question/MultipleChoice';
-import NumericChoice from '@/pages/KhaoSatSVGV/components/Question/NumericChoice';
-import SingleChoice from '@/pages/KhaoSatSVGV/components/Question/SingleChoice';
-import Text from '@/pages/KhaoSatSVGV/components/Question/Text';
-import type { BieuMau } from '@/services/BieuMau/typings';
+import { type BieuMau } from '@/services/DVMC/BieuMau/typings';
 import { Button, Card, Checkbox, Form } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
+import SingleChoice from './Question/SingleChoice';
+import MultipleChoice from './Question/MultipleChoice';
+import GridChoice from './Question/GridChoice';
+import Text from './Question/Text';
+import NumericChoice from './Question/NumericChoice';
 
 const FormTraLoiKhaoSat = () => {
   const [form] = Form.useForm();
-  const { loading, record, traLoiBieuMauModel } = useModel('bieumau');
+  const { loading, record, traLoiBieuMauModel } = useModel('dvmc.bieumau');
   const { setVisibleForm, record: recordDot, getDotMeModel } = useModel('khaosat.dotkhaosat');
   const [listLuaChonBang, setListLuaChonBang] = useState<{ idHang: string; idCot: string }[]>([]);
   const [check, setCheck] = useState<boolean>(false);

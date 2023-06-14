@@ -2,11 +2,11 @@ import { useModel, history } from 'umi';
 import { thongKeKetQuaHocTap } from '@/services/Dashboard/dashboard';
 import { Badge, Card, Col, Statistic } from 'antd';
 import { useEffect, useState } from 'react';
-import { thongKeMyInvoice } from '@/services/ThanhToan/thanhtoan';
+import { thongKeMyInvoice } from '@/services/CongNo/ThanhToan/thanhtoan';
 import { currencyFormat } from '@/utils/utils';
 import { getMetaData } from '@/services/User/user';
-import { thongKeDon } from '@/services/DichVuMotCuaV2/dichvumotcuav2';
 import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
+import { thongKeDon } from '@/services/DVMC/DichVuMotCuaV2/dichvumotcuav2';
 
 const BlockSinhVien = () => {
   const [dataThongKe, setDataThongKe] = useState<{

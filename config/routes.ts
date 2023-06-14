@@ -169,26 +169,26 @@
   {
     name: 'PhanHoi',
     path: './phan-hoi',
-    component: './PhanHoi',
+    component: './TienIch/PhanHoi',
     icon: 'HighlightOutlined',
     // access: 'sinhVienVaNhanVien',
   },
   {
     name: 'KhaoSatTrucTuyen',
     path: './khao-sat',
-    component: './KhaoSatSVGV',
+    component: './TienIch/KhaoSatSVGV',
     icon: 'table',
   },
   {
     name: 'CauHoiThuongGap',
     path: './cauhoithuonggap',
     icon: 'QuestionOutlined',
-    component: './CauHoiThuongGap',
+    component: './TienIch/CauHoiThuongGap',
   },
   {
     name: 'VanBanHuongDan',
     path: '/van-ban-huong-dan',
-    component: './VanBanHuongDan',
+    component: './TienIch/VanBanHuongDan',
     icon: 'FileOutlined',
   },
   //MENU GIANG VIEN

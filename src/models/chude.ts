@@ -1,5 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
-import { getAllChuDe } from '@/services/ChuDe/chude';
+import { getAllChuDe } from '@/services/TinTuc/ChuDe/chude';
 import { ip3 } from '@/utils/ip';
 import { useState } from 'react';
 

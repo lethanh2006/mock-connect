@@ -1,10 +1,9 @@
-/* eslint-disable no-underscore-dangle */
-import type { VanBanHuongDan } from '@/services/VanBanHuongDan/typing';
 import { Avatar, Button, Card, Col, Input, List, Modal, Row, Typography } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FileList from './components/FileList';
 import Form from './components/Form';
+import { type VanBanHuongDan } from '@/services/TienIch/VanBanHuongDan/typing';
 
 const VanBanHuongDanComponent = () => {
   const {
@@ -23,7 +22,7 @@ const VanBanHuongDanComponent = () => {
     visibleFileList,
     setVisibleFileList,
     condition,
-  } = useModel('vanbanhuongdan');
+  } = useModel('tienich.vanbanhuongdan');
 
   const getData = () => {
     getModel(undefined, undefined, undefined, undefined, undefined, 'page');

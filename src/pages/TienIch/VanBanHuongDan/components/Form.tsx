@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
-import { EDoiTuong } from '@/services/VanBanHuongDan/constant';
-import type { VanBanHuongDan } from '@/services/VanBanHuongDan/typing';
+
+import { EDoiTuong } from '@/services/TienIch/VanBanHuongDan/constant';
+import { type VanBanHuongDan } from '@/services/TienIch/VanBanHuongDan/typing';
 import rules from '@/utils/rules';
 import { Button, Card, Form, Input } from 'antd';
 import { useModel } from 'umi';
@@ -9,7 +10,7 @@ const FormBaiHoc = () => {
   const [form] = Form.useForm();
 
   const { loading, record, setVisibleForm, edit, postModel, putModel, getModel } =
-    useModel('vanbanhuongdan');
+    useModel('tienich.vanbanhuongdan');
   // const { danhSachHinhThucDaoTao } = useModel('lophanhchinh');
   // const [phamVi, setPhamVi] = useState<string>(record?.phamVi ?? '');
   // const [doiTuong, setDoiTuong] = useState<string>(record?.doiTuong ?? 'Tất cả');
