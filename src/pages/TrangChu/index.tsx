@@ -6,11 +6,13 @@ import TinTucDashboard from '../TinTuc/TinTucDashboard';
 const TrangChu = () => {
   return (
     <>
-      <Row gutter={[20, 20]}>
+      <Row gutter={[16, 16]}>
         <BlockSinhVien />
+
         <Col xs={24} lg={14} xl={16}>
           <ThoiKhoaBieu type="dashboard" />
         </Col>
+
         <Col xs={24} lg={10} xl={8}>
           <TinTucDashboard />
         </Col>
