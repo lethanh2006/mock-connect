@@ -48,7 +48,7 @@ const PhanHoiPage = () => {
     {
       title: 'Câu trả lời',
       dataIndex: 'noiDungTraLoiPhanHoi',
-      hide: !daTraLoi,
+      hide: daTraLoi === false,
       width: 200,
       render: (val) => <ExpandText>{val}</ExpandText>,
     },
@@ -58,7 +58,7 @@ const PhanHoiPage = () => {
       align: 'center',
       render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
       width: 120,
-      hide: !daTraLoi,
+      hide: daTraLoi === false,
       sortable: true,
       filterType: 'datetime',
     },
