@@ -300,7 +300,7 @@ const FormQuyTrinh = (props: {
         ) : (
           ''
         )}
-        {access.nhanVien && (
+        {/* {access.nhanVien && (
           <Modal
             destroyOnClose
             width="850px"
@@ -321,7 +321,7 @@ const FormQuyTrinh = (props: {
               duocPhepSuaKetQua={checkDuocPhepXuLy}
             />
           </Modal>
-        )}{' '}
+        )}{' '} */}
       </Spin>
     </Card>
   );

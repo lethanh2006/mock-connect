@@ -1,3 +1,4 @@
+import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { Descriptions } from 'antd';
 import { useModel } from 'umi';
 
@@ -5,7 +6,7 @@ const ThongTinNguoiTaoDon = (props: {
   record?: SinhVien.IRecord;
   thongTinNguoiTaoAdmin?: { hoTen: string; maDonVi: string; maSinhVien: string };
 }) => {
-  const { loaiDichVu, recordDon } = useModel('dichvumotcuav2');
+  const { loaiDichVu, recordDon } = useModel('dvmc.dichvumotcuav2');
 
   return (
     <Descriptions>
@@ -23,7 +24,7 @@ const ThongTinNguoiTaoDon = (props: {
           </Descriptions.Item>
           <Descriptions.Item span={2}>
             Ngành/Chuyên ngành:{' '}
-            {props?.record?.nganh?.ten || props.record?.nganh?.tenTiengAnh || ''}
+            {/* {props?.record?.nganh?.ten || props.record?.nganh?.tenTiengAnh || ''} */}
           </Descriptions.Item>
           <Descriptions.Item>Khóa: {props?.record?.khoaSinhVien?.ten}</Descriptions.Item>
           {/* <Descriptions.Item>

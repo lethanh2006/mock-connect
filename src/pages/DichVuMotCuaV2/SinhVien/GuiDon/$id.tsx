@@ -29,7 +29,7 @@ const SinhVienTaoDon = ({
   //   setDanhSach: setDanhSachLopTinChi,
   // } = useModel('hoctap.loptinchi');
 
-  const { visibleForm, setVisibleForm } = useModel('thanhtoan');
+  const { visibleForm, setVisibleForm } = useModel('dvmc.thanhtoan');
   const [infoSinhVien, setInfoSinhVien] = useState<SinhVien.IRecord>();
   // const { record: recordSinhVien } = useModel('sinhvien');
   useEffect(() => {
@@ -72,6 +72,7 @@ const SinhVienTaoDon = ({
           }
         />
       </Modal>
+
       {record?.thongTinThuTuc?.yeuCauTraPhi && (
         <Modal
           maskClosable={false}
@@ -98,6 +99,7 @@ const SinhVienTaoDon = ({
           />
         </Modal>
       )}
+
       <DanhMuc
         button={
           <Button

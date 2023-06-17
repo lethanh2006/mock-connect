@@ -1,10 +1,10 @@
 import type { IRecordHocPhan } from '@/services/HocTap/HocPhanCoDiem/typing';
 import rules from '@/utils/rules';
 import { includes } from '@/utils/utils';
-import { useModel } from '@@/plugin-model/useModel';
 import { Col, Form, Row, Select } from 'antd';
 import type { FormInstance } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
+import { useModel } from 'umi';
 type Props = {
   disabled?: boolean;
   form: FormInstance<any>;
@@ -15,7 +15,8 @@ type Props = {
   initialValue?: IRecordHocPhan.record;
 };
 const HocPhanCoDiem = (props: Props) => {
-  const { getDsKyHoc, getDsDiemTheoKy, dsKyHoc, dsDiemTheoKy, loading } = useModel('hocphancodiem');
+  const { getDsKyHoc, getDsDiemTheoKy, dsKyHoc, dsDiemTheoKy, loading } =
+    useModel('dvmc.hocphancodiem');
   const [idKy, setIdKy] = useState<string>(props?.initialValue?.idHocKy ?? '');
   useEffect(() => {
     getDsKyHoc();

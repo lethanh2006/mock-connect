@@ -1,7 +1,7 @@
 import { useModel } from 'umi';
 
 const TieuDeBieuMau = (props: { title: string }) => {
-  const { record, recordDon } = useModel('dichvumotcuav2');
+  const { record, recordDon } = useModel('dvmc.dichvumotcuav2');
 
   return (
     <>
@@ -59,7 +59,7 @@ const TieuDeBieuMau = (props: { title: string }) => {
           <div>
             -{' '}
             {record?.thongTinThuTuc?.donViThucHien ||
-              recordDon?.thongTinDichVu?.thongTinThuTuc?.donViThucHien ||
+              // recordDon?.thongTinDichVu?.thongTinThuTuc?.donViThucHien ||
               'Phòng Công tác sinh viên'}
           </div>
         </div>

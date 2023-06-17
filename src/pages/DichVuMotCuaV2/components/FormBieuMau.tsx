@@ -29,7 +29,7 @@ import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChi
 import SelectTonGiao from '@/pages/Core/TonGiao/SelectTonGiao';
 import SelectDanToc from '@/pages/Core/DanToc/SelectDanToc';
 import { accessFileUpload } from '@/services/DVMC/DichVuMotCuaV2/constant';
-import { DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
+import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import HocPhanCoDiem from '../HocPhanCoDiem';
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');

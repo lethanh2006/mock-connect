@@ -14,9 +14,9 @@ import {
   PaperClipOutlined,
   PlusOutlined,
   PrinterOutlined,
-  QuestionCircleOutlined,
+  QuestionOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip, message } from 'antd';
+import { Button, Divider, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip, message } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -215,7 +215,7 @@ const LichSuGuiDon = () => {
       title: 'Trạng thái',
       dataIndex: 'trangThai',
       align: 'center',
-      width: 80,
+      width: 100,
       search: 'filterString',
       notRegex: true,
       render: (val: 'OK' | 'NOT_OK' | 'PROCESSING') => (
@@ -230,6 +230,7 @@ const LichSuGuiDon = () => {
       dataIndex: 'createdAt',
       width: 100,
       render: (val) => <div>{moment(val).format('HH:mm DD/MM/YYYY')}</div>,
+      align: 'center',
       onCell,
     },
     {
@@ -245,7 +246,7 @@ const LichSuGuiDon = () => {
               <>
                 <Tooltip title="Xem biểu mẫu và in đơn">
                   <Button
-                    type="link"
+                    shape="circle"
                     onClick={() => {
                       if (!recordTemp.maDon) {
                         message.error('Mã đơn không tồn tại');
@@ -256,18 +257,37 @@ const LichSuGuiDon = () => {
                     icon={<PrinterOutlined />}
                   />
                 </Tooltip>
+
+                <Divider type="vertical" />
                 <Tooltip title="Chi tiết">
                   <Button
-                    type="link"
+                    shape="circle"
                     onClick={() => {
                       handlePreviewDon(recordTemp);
                     }}
                     icon={<EyeOutlined />}
                   />
                 </Tooltip>
+
+                <Divider type="vertical" />
+                <Tooltip title="Gửi phản hồi">
+                  <Button
+                    // disabled={recordTemp?.daTraLoiPhanHoi || recordTemp.noiDungPhanHoi || false}
+                    shape="circle"
+                    disabled={recordTemp?.trangThai !== 'PROCESSING'}
+                    onClick={() => {
+                      setVisibleForm(true);
+                      setRecordView(recordTemp);
+                    }}
+                    icon={<QuestionOutlined />}
+                  />
+                </Tooltip>
+
+                <Divider type="vertical" />
                 <Tooltip title="Chỉnh sửa">
                   <Button
-                    type="link"
+                    type="primary"
+                    shape="circle"
                     disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     onClick={() => {
                       setVisibleFormChinhSuaDon(true);
@@ -277,6 +297,8 @@ const LichSuGuiDon = () => {
                     icon={<EditOutlined />}
                   />
                 </Tooltip>
+
+                <Divider type="vertical" />
                 <Tooltip title="Xóa đơn">
                   <Popconfirm
                     disabled={recordTemp?.trangThai !== 'PROCESSING'}
@@ -286,29 +308,17 @@ const LichSuGuiDon = () => {
                     }}
                   >
                     <Button
-                      type="link"
+                      shape="circle"
                       danger
                       disabled={recordTemp?.trangThai !== 'PROCESSING'}
                       icon={<DeleteOutlined />}
                     />
                   </Popconfirm>
                 </Tooltip>
-                <Tooltip title="Gửi phản hồi">
-                  <Button
-                    // disabled={recordTemp?.daTraLoiPhanHoi || recordTemp.noiDungPhanHoi || false}
-                    type="link"
-                    disabled={recordTemp?.trangThai !== 'PROCESSING'}
-                    onClick={() => {
-                      setVisibleForm(true);
-                      setRecordView(recordTemp);
-                    }}
-                    icon={<QuestionCircleOutlined />}
-                  />
-                </Tooltip>
               </>
             }
           >
-            <Button icon={<MenuOutlined />} type="primary" />
+            <Button icon={<MenuOutlined />} type="link" />
           </Popover>
         );
       },

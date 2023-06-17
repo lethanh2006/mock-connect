@@ -1,6 +1,6 @@
 import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/OldTable';
-import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
+import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import type { IColumn } from '@/utils/interfaces';
 import { ArrowLeftOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
@@ -9,7 +9,7 @@ import { history, useModel } from 'umi';
 
 const GuiDon = () => {
   const { getAllBieuMauModel, setDanhSach, setRecord, loading, setPage, condition } =
-    useModel('dichvumotcuav2');
+    useModel('dvmc.dichvumotcuav2');
   const [total, setTotal] = useState();
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const GuiDon = () => {
   return (
     <Card title="Gửi đơn Dịch vụ một cửa">
       <TableBase
-        modelName={'dichvumotcuav2'}
+        modelName={'dvmc.dichvumotcuav2'}
         columns={columns}
         pageable={false}
         getData={() => {

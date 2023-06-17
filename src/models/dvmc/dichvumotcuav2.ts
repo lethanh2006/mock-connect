@@ -38,7 +38,7 @@ export default () => {
   const [idDichVu, setIdDichVu] = useState<string>();
   const [recordTrangThaiDon, setRecordTrangThaiDon] = useState<DichVuMotCuaV2.TrangThaiBuoc[]>([]);
   const [phamVi, setPhamVi] = useState<'Tất cả' | 'Hình thức đào tạo'>('Tất cả');
-  const { setVisibleForm: setVisibleFormThanhToan } = useModel('thanhtoan');
+  const { setVisibleForm: setVisibleFormThanhToan } = useModel('dvmc.thanhtoan');
 
   const getDonSinhVienModel = async () => {
     setLoading(true);

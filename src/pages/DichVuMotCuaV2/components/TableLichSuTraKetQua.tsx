@@ -1,5 +1,5 @@
 import Table from '@/components/OldTable/Table';
-import type { DichVuMotCuaV2 } from '@/services/DichVuMotCuaV2/typing';
+import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import type { IColumn } from '@/utils/interfaces';
 import moment from 'moment';
 
