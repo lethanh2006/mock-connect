@@ -436,3 +436,13 @@ export const uploadMultiFile = async (
   arrUrl = await Promise.all(arrUpload);
   return [...url, ...arrUrl];
 };
+
+/**
+ * Clear values of component in Form
+ * @param form
+ */
+export const resetFieldsForm = (form: any) => {
+  const values = form.getFieldsValue();
+  Object.keys(values).map((k) => (values[k] = undefined));
+  form.setFieldsValue(values);
+};
