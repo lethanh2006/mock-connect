@@ -34,7 +34,7 @@ export default () => {
   };
 
   const traLoiBieuMauModel = async (payload: {
-    idBieuMau: string;
+    idKhaoSat: string;
     danhSachTraLoi: BieuMau.TraLoiRecord[];
     idDot: string;
   }): Promise<any> => {
@@ -45,12 +45,12 @@ export default () => {
       message.success('Gửi câu trả lời thành công');
       // getIdBieuMauDaTraLoiModel();
 
+      setVisibleForm(false);
       return res.data;
     } catch (er) {
       return Promise.reject(er);
     } finally {
       setFormSubmiting(false);
-      setVisibleForm(false);
     }
   };
 

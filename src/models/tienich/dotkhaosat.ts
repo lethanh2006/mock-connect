@@ -9,7 +9,7 @@ export default () => {
   const { getModel } = objInit;
 
   const getDotMeModel = () =>
-    getModel(undefined, undefined, undefined, undefined, undefined, 'me/pageable', { thoiGian });
+    getModel(undefined, undefined, undefined, undefined, undefined, 'my/pageable', { thoiGian });
 
   return {
     ...objInit,

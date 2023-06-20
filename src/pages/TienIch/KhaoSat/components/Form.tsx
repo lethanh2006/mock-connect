@@ -87,12 +87,13 @@ const FormTraLoiKhaoSat = () => {
     });
 
     await traLoiBieuMauModel({
-      idBieuMau: record?._id ?? '',
+      idKhaoSat: record?._id ?? '',
       danhSachTraLoi,
       idDot: recordDot?._id ?? '',
     })
       .then(() => {
         getDotMeModel();
+        setVisibleForm(false);
       })
       .catch((er) => console.log(er));
   };

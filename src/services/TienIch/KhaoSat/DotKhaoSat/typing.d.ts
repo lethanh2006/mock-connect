@@ -12,8 +12,8 @@ declare module DotKhaoSat {
     thoiGianBatDau: string;
     thoiGianKetThuc: string;
     kichHoat: boolean;
-    idBieuMau: string;
-    bieuMau?: BieuMau.Record;
+    idKhaoSat: string;
+    khaoSat?: BieuMau.Record;
     danhSachLopTinChi: BieuMau.GeneralInfo[];
     danhSachLopHanhChinh: BieuMau.GeneralInfo[];
     danhSachNguoiDung: BieuMau.GeneralInfo[];

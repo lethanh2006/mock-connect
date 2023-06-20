@@ -4,20 +4,20 @@ import { type ELoaiBieuMau } from '../constants';
 import { type BieuMau } from './typing';
 
 export async function getIdBieuMauDaTraLoi(loaiBieuMau?: ELoaiBieuMau) {
-  return axios.get(`${ip3}/cau-tra-loi-bieu-mau/id-bieu-mau/da-tra-loi?loai=${loaiBieuMau}`);
+  return axios.get(`${ip3}/cau-tra-loi-khao-sat/id-khao-sat/da-tra-loi?loai=${loaiBieuMau}`);
 }
 
 export async function traLoiBieuMau(payload: {
-  idBieuMau: string;
+  idKhaoSat: string;
   danhSachTraLoi: BieuMau.TraLoiRecord[];
   idDot: string;
 }) {
-  return axios.post(`${ip3}/cau-tra-loi-bieu-mau/me`, payload);
+  return axios.post(`${ip3}/cau-tra-loi-khao-sat/me`, payload);
 }
 
 export async function initBieuMauTracNghiem(payload: { idKhaoSat: string; idDot: string }) {
   return axios.post(
-    `${ip3}/cau-tra-loi-bieu-mau/trac-nghiem/initialize/answer/khao-sat/${payload.idKhaoSat}`,
+    `${ip3}/cau-tra-loi-khao-sat/trac-nghiem/initialize/answer/khao-sat/${payload.idKhaoSat}`,
     payload,
   );
 }

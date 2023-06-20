@@ -25,7 +25,7 @@ const DotKhaoSatPage = () => {
   const { getByIdModel: getBieuMau } = useModel('tienich.bieumau');
 
   const handleEdit = async (record: DotKhaoSat.IRecord) => {
-    await getBieuMau(record?.idBieuMau).then((bm) => handleDot(record));
+    await getBieuMau(record?.idKhaoSat).then((bm) => handleDot(record));
     // if (bieuMau.loai === ELoaiBieuMau.TRAC_NGHIEM) {
     //   await initBieuMauTracNghiemModel(record._id, record?.idBieuMau ?? '');
     // }
@@ -49,6 +49,7 @@ const DotKhaoSatPage = () => {
       title: 'Thời gian bắt đầu',
       dataIndex: 'thoiGianBatDau',
       width: 120,
+      align: 'center',
       render: (val) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : ''),
       filterType: 'datetime',
       sortable: true,
@@ -57,6 +58,7 @@ const DotKhaoSatPage = () => {
       title: 'Thời gian kết thúc',
       dataIndex: 'thoiGianKetThuc',
       width: 120,
+      align: 'center',
       render: (val) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : ''),
       filterType: 'datetime',
       sortable: true,
