@@ -10,8 +10,8 @@ import NumericChoice from './Question/NumericChoice';
 
 const FormTraLoiKhaoSat = () => {
   const [form] = Form.useForm();
-  const { loading, record, traLoiBieuMauModel } = useModel('dvmc.bieumau');
-  const { setVisibleForm, record: recordDot, getDotMeModel } = useModel('khaosat.dotkhaosat');
+  const { loading, record, traLoiBieuMauModel } = useModel('tienich.bieumau');
+  const { setVisibleForm, record: recordDot, getDotMeModel } = useModel('tienich.dotkhaosat');
   const [listLuaChonBang, setListLuaChonBang] = useState<{ idHang: string; idCot: string }[]>([]);
   const [check, setCheck] = useState<boolean>(false);
   const renderQuestion = (question: BieuMau.CauHoi, indexKhoi: number, indexCauHoi: number) => {

@@ -1,86 +1,76 @@
-/* eslint-disable no-underscore-dangle */
+import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
+import { type IColumn } from '@/components/Table/typing';
+import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
+import {
+  EThoiGianDot,
+  MapKeyThoiGianDot,
+  textThucHienKhaoSat,
+} from '@/services/TienIch/KhaoSat/constants';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Select, Tooltip } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import Form from './components/Form';
-import { type IColumn } from '@/components/Table/typing';
-import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typings';
-import { type BieuMau } from '@/services/DVMC/BieuMau/typings';
-import { ELoaiBieuMau } from '@/services/DVMC/BieuMau/constants';
-import { EThoiGianDot, MapKeyThoiGianDot } from '@/services/TienIch/KhaoSat/DotKhaoSat/constants';
 
-const QuanLyDot = () => {
+const DotKhaoSatPage = () => {
   const {
-    loading,
-    setEdit,
-    setVisibleForm,
-    setRecord,
-    getDotMeModel,
     page,
     limit,
-    condition,
-    setThoiGian,
+    getDotMeModel,
+    handleEdit: handleDot,
     thoiGian,
-    sort,
-  } = useModel('khaosat.dotkhaosat');
+    setThoiGian,
+  } = useModel('tienich.dotkhaosat');
+  const { getByIdModel: getBieuMau } = useModel('tienich.bieumau');
 
-  const { getBieuMauByIdModel, initBieuMauTracNghiemModel } = useModel('dvmc.bieumau');
-
-  const handleEdit = async (record: DotKhaoSat.Record) => {
-    setRecord(record);
-    setEdit(true);
-    const bieuMau: BieuMau.Record = await getBieuMauByIdModel(record?.idKhaoSat);
-    if (bieuMau.loai === ELoaiBieuMau.TRAC_NGHIEM) {
-      await initBieuMauTracNghiemModel(record._id, record?.idKhaoSat ?? '');
-    }
-    setVisibleForm(true);
+  const handleEdit = async (record: DotKhaoSat.IRecord) => {
+    await getBieuMau(record?.idBieuMau).then((bm) => handleDot(record));
+    // if (bieuMau.loai === ELoaiBieuMau.TRAC_NGHIEM) {
+    //   await initBieuMauTracNghiemModel(record._id, record?.idBieuMau ?? '');
+    // }
   };
 
-  const textThucHienKhaoSat = {
-    [EThoiGianDot.CHUA_DIEN_RA]: 'Khảo sát chưa bắt đầu',
-    [EThoiGianDot.DANG_DIEN_RA]: 'Thực hiện khảo sát',
-    [EThoiGianDot.DA_DIEN_RA]: 'Khảo sát đã kết thúc',
-  };
-
-  const columns: IColumn<DotKhaoSat.Record>[] = [
+  const columns: IColumn<DotKhaoSat.IRecord>[] = [
     {
       title: 'Tên đợt',
       dataIndex: 'ten',
       width: 200,
+      filterType: 'string',
     },
     {
       title: 'Mô tả',
       dataIndex: 'moTa',
       width: 200,
+      filterType: 'string',
+      render: (val) => <ExpandText>{val}</ExpandText>,
     },
     {
       title: 'Thời gian bắt đầu',
       dataIndex: 'thoiGianBatDau',
-      // columnKey: 'thoiGianBatDau',
       width: 120,
       render: (val) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : ''),
+      filterType: 'datetime',
+      sortable: true,
     },
     {
       title: 'Thời gian kết thúc',
       dataIndex: 'thoiGianKetThuc',
-      // columnKey: 'thoiGianKetThuc',
-      width: 200,
+      width: 120,
       render: (val) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : ''),
+      filterType: 'datetime',
+      sortable: true,
     },
-
     {
       title: 'Thao tác',
       align: 'center',
-      width: 100,
+      width: 60,
       fixed: 'right',
-      render: (record: DotKhaoSat.Record) => (
+      render: (record: DotKhaoSat.IRecord) => (
         <Tooltip
           title={record?.daLam ? 'Bạn đã thực hiện khảo sát này' : textThucHienKhaoSat[thoiGian]}
         >
           <Button
-            loading={loading}
             disabled={record?.daLam || thoiGian !== EThoiGianDot.DANG_DIEN_RA}
             onClick={() => handleEdit(record)}
             type="link"
@@ -95,12 +85,12 @@ const QuanLyDot = () => {
     <TableBase
       columns={columns}
       getData={getDotMeModel}
-      dependencies={[page, limit, condition, thoiGian, sort]}
-      modelName="khaosat.dotkhaosat"
+      dependencies={[page, limit, thoiGian]}
+      modelName="tienich.dotkhaosat"
       title="Đợt khảo sát"
       Form={Form}
-      formType="Drawer"
-      widthDrawer={900}
+      widthDrawer={800}
+      buttons={{ create: false }}
       otherButtons={[
         <Select
           key="1"
@@ -117,4 +107,4 @@ const QuanLyDot = () => {
   );
 };
 
-export default QuanLyDot;
+export default DotKhaoSatPage;

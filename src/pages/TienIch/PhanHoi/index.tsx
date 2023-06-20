@@ -56,7 +56,7 @@ const PhanHoiPage = () => {
       title: 'Thời gian trả lời',
       dataIndex: 'thoiGianTraLoi',
       align: 'center',
-      render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
+      render: (val, rec) => rec.daTraLoiPhanHoi && val && moment(val).format('HH:mm DD/MM/YYYY'),
       width: 120,
       hide: daTraLoi === false,
       sortable: true,

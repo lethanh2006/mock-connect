@@ -176,7 +176,7 @@
   {
     name: 'KhaoSatTrucTuyen',
     path: './khao-sat',
-    component: './TienIch/KhaoSatSVGV',
+    component: './TienIch/KhaoSat',
     icon: 'table',
   },
   {

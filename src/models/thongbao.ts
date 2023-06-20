@@ -7,7 +7,7 @@ import {
   postThongBaoByVaiTro,
   postThongBaoGeneral,
   putThongBao,
-} from '@/services/TienIch/ThongBao/thongbao';
+} from '@/services/ThongBao/thongbao';
 import { message } from 'antd';
 import { useState } from 'react';
 

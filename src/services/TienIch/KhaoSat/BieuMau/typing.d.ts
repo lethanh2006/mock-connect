@@ -1,10 +1,6 @@
-import type {
-  ELoaiBieuMau,
-  ELoaiCauHoiBieuMau,
-  ELoaiDoiTuong,
-  EPhamVi,
-  EVaiTroBieuMau,
-} from '@/utils/constants';
+import { type EPhamViChuDe } from '@/services/TinTuc/constant';
+import { type ELoaiDoiTuong } from '../constant';
+import { type ELoaiBieuMau } from '../constants';
 
 declare module BieuMau {
   export interface LuaChon {
@@ -12,8 +8,9 @@ declare module BieuMau {
     dung?: boolean;
     _id: string;
   }
+
   export interface CauHoi {
-    loai: ELoaiCauHoiBieuMau;
+    loai: string;
     batBuoc: boolean;
     noiDungCauHoi: string;
     cauTraLoiKhac: boolean;
@@ -46,30 +43,30 @@ declare module BieuMau {
   }
 
   export interface Record {
-    phamVi: EPhamVi;
-    hinhThucDaoTaoId?: number;
-    isTatCaHe?: boolean;
-    danhSachLopTinChi: GeneralInfo[];
-    danhSachLopHanhChinh: GeneralInfo[];
-    danhSachNguoiDung: GeneralInfo[];
-    danhSachKhoaHoc: GeneralInfo[];
-    danhSachNganhHoc: GeneralInfo[];
-    loaiDoiTuongSuDung: ELoaiDoiTuong[];
-    coCamKet: boolean;
-    soPhutThucHien?: number;
-    soLuotTraLoiToiDa?: number;
-    noiDungCamKet: string;
-    thoiGian?: string[];
-    danhSachVaiTro: EVaiTroBieuMau;
-    loai: ELoaiBieuMau;
+    _id: string;
     tieuDe: string;
     moTa: string;
-    thoiGianBatDau: string;
-    thoiGianKetThuc: string;
-    kichHoat: boolean;
+    // phamVi: EPhamViChuDe;
+    // hinhThucDaoTaoId?: number;
+    // isTatCaHe?: boolean;
+    // danhSachLopTinChi: GeneralInfo[];
+    // danhSachLopHanhChinh: GeneralInfo[];
+    // danhSachNguoiDung: GeneralInfo[];
+    // danhSachKhoaHoc: GeneralInfo[];
+    // danhSachNganhHoc: GeneralInfo[];
+    // loaiDoiTuongSuDung: ELoaiDoiTuong[];
+    coCamKet: boolean;
+    noiDungCamKet: string;
+    // soPhutThucHien?: number;
+    // soLuotTraLoiToiDa?: number;
+    // thoiGian?: string[];
+    // danhSachVaiTro: string[];
+    loai: ELoaiBieuMau; // "Khảo sát"
+    // thoiGianBatDau: string;
+    // thoiGianKetThuc: string;
+    // kichHoat: boolean;
     danhSachKhoi: Khoi[];
-    doiTuong: string;
-    _id: string;
+    // doiTuong: string;
   }
 
   export interface ThongKeLuaChon {
@@ -83,6 +80,7 @@ declare module BieuMau {
     noiDungCot: string;
     soLuong: number;
   }
+
   export interface ThongKeLuaChonGrid {
     noiDungHang: string;
     idHang: string;
@@ -99,8 +97,10 @@ declare module BieuMau {
     noiDungCauHoi: string;
     loai: string;
     soLuongTraLoi: number;
-    ketQua: ThongKeLuaChon[] | ThongKeLuaChonGrid[] | ThongKeLuaChonNumeric[];
+    batBuoc?: boolean;
+    ketQua: (ThongKeLuaChon | ThongKeLuaChonGrid | ThongKeLuaChonNumeric)[];
   }
+
   export interface ThongKeKhoi {
     _id: string;
     tieuDe: string;
@@ -114,5 +114,21 @@ declare module BieuMau {
     moTa: string;
     loai: string;
     thongKeKhoi: ThongKeKhoi[];
+  }
+
+  export interface LuaChonBangRecord {
+    _id?: string;
+    idCot: string;
+    idHang: string;
+  }
+
+  export interface TraLoiRecord {
+    _id?: string;
+    listLuaChon?: string[];
+    listLuaChonBang?: LuaChonBangRecord[];
+    traLoiText?: string;
+    idCauHoi: string;
+    luaChonTuyenTinh?: number;
+    listUrlFile?: string[];
   }
 }

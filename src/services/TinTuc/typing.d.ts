@@ -1,3 +1,5 @@
+import { type EPhamViChuDe } from './constant';
+
 declare module TinTuc {
   export interface IRecord {
     hinhThucDaoTaoId: number;
@@ -17,7 +19,7 @@ declare module TinTuc {
   }
 
   export interface IChuDe {
-    phamVi: 'Tất cả' | 'Hình thức đào tạo';
+    phamVi: EPhamViChuDe;
     _id: string;
     name: string;
     type: string;

@@ -1,23 +1,19 @@
-import type {
-  EChucNangSuDung,
-  ELoaiDoiTuong,
-  ELoaiDot,
-  EPhamVi,
-  EVaiTroBieuMau,
-} from '@/utils/constants';
-import type { BieuMau } from '../BieuMau/typings';
+import { type BieuMau } from '../BieuMau/typing';
+import { type EPhamViChuDe } from '@/services/TinTuc/constant';
 
 declare module DotKhaoSat {
-  export interface Record {
-    danhSachVaiTro: EVaiTroBieuMau;
-    chucNangSuDung: EChucNangSuDung[];
+  export interface IRecord {
+    _id: string;
     ten: string;
     moTa: string;
-    loai: ELoaiDot;
+    // danhSachVaiTro: EVaiTroBieuMau;
+    // chucNangSuDung: EChucNangSuDung[];
+    // loai: ELoaiDot;
     thoiGianBatDau: string;
     thoiGianKetThuc: string;
     kichHoat: boolean;
-    idKhaoSat: string;
+    idBieuMau: string;
+    bieuMau?: BieuMau.Record;
     danhSachLopTinChi: BieuMau.GeneralInfo[];
     danhSachLopHanhChinh: BieuMau.GeneralInfo[];
     danhSachNguoiDung: BieuMau.GeneralInfo[];
@@ -25,9 +21,8 @@ declare module DotKhaoSat {
     danhSachNganhHoc: BieuMau.GeneralInfo[];
     danhSachDonVi: BieuMau.GeneralInfo[];
     loaiDoiTuongSuDung: ELoaiDoiTuong[];
-    phamVi: EPhamVi;
+    phamVi: EPhamViChuDe;
     hinhThucDaoTaoId: string;
-    _id: string;
     daLam: boolean;
   }
 }
