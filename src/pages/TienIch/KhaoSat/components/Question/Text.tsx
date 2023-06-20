@@ -1,3 +1,4 @@
+import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
 import { Input, Form } from 'antd';
 

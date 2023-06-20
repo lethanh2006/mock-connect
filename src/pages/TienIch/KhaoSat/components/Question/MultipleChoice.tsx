@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle */
+import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
 import { Checkbox, Form } from 'antd';
 
@@ -14,12 +14,9 @@ const MultipleChoice = (props: {
     >
       <Checkbox.Group>
         {props.question.luaChon?.map((item) => (
-          <>
-            <Checkbox key={item._id} value={item._id}>
-              {item.noiDung}
-            </Checkbox>
-            <br />
-          </>
+          <div key={item._id}>
+            <Checkbox value={item._id}>{item.noiDung}</Checkbox>
+          </div>
         ))}
       </Checkbox.Group>
     </Form.Item>

@@ -1,28 +1,19 @@
-/* eslint-disable no-underscore-dangle */
-import type { BieuMau } from '@/services/BieuMau/typings';
-import { Checkbox, Form, Table } from 'antd';
-import type { ColumnProps } from 'antd/lib/table';
+import TableStaticData from '@/components/Table/TableStaticData';
+import { type IColumn } from '@/components/Table/typing';
+import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
+import { Checkbox, Form } from 'antd';
 import { useState } from 'react';
 
 const GridChoice = (props: {
   question: BieuMau.CauHoi;
   indexKhoi: number;
   indexCauHoi: number;
-  listLuaChonBang: { idHang: string; idCot: string; [x: string]: any }[];
+  listLuaChonBang: BieuMau.LuaChonBangRecord[][];
   setListLuaChonBang: any;
   setErr?: any;
 }) => {
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
-  const columns: ColumnProps<any>[] = [
-    {
-      title: '',
-      dataIndex: 'tieuChi',
-      width: 250,
-      fixed: 'left',
-    },
-  ];
-
-  const fieldName = `${props.indexKhoi}||${props.indexCauHoi}`;
+  const fieldName = props.indexKhoi || props.indexCauHoi;
 
   const onChange = (e: any, idHang: string, idCot: string) => {
     const listTemp =
@@ -57,33 +48,40 @@ const GridChoice = (props: {
       props?.setErr(false);
     }
   };
-  const data = props?.question?.luaChonHang?.map((hang) => {
-    const record = {
-      tieuChi: hang.noiDung,
-      idHang: hang._id,
-    };
 
-    return record;
-  });
+  const columns: IColumn<any>[] = [
+    {
+      title: 'Nội dung',
+      dataIndex: 'tieuChi',
+      width: 250,
+      fixed: 'left',
+    },
+  ];
+
   props?.question?.luaChonCot?.forEach((item) => {
     columns.push({
       key: item._id,
       title: item.noiDung,
       dataIndex: 'idHang',
       align: 'center',
-      width: '50px',
+      width: 80,
       render: (val: string) => {
         const luaChon = props?.listLuaChonBang?.[fieldName]?.find(
-          (ele: { idHang: string; idCot: string }) => ele.idHang === val && ele.idCot === item._id,
+          (ele) => ele.idHang === val && ele.idCot === item._id,
         );
         return props?.question?.loai === 'GridSingleChoice' ? (
-          <Checkbox checked={luaChon?.idHang} onChange={(e) => onChange(e, val, item._id)} />
+          <Checkbox checked={!!luaChon?.idHang} onChange={(e) => onChange(e, val, item._id)} />
         ) : (
           <Checkbox onChange={(e) => onChange(e, val, item._id)} />
         );
       },
     });
   });
+
+  const data = props?.question?.luaChonHang?.map((hang) => ({
+    tieuChi: hang.noiDung,
+    idHang: hang._id,
+  }));
 
   const isRequired =
     !props.listLuaChonBang?.[fieldName] ||
@@ -115,7 +113,7 @@ const GridChoice = (props: {
       }
       name={fieldName}
     >
-      <Table pagination={false} scroll={{ x: 700 }} dataSource={data} columns={columns} />
+      <TableStaticData otherProps={{ pagination: false }} data={data} columns={columns} hasTotal />
     </Form.Item>
   );
 };

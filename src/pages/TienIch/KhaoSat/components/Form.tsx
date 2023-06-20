@@ -1,19 +1,20 @@
-import { type BieuMau } from '@/services/DVMC/BieuMau/typings';
+import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { Button, Card, Checkbox, Form } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
-import SingleChoice from './Question/SingleChoice';
-import MultipleChoice from './Question/MultipleChoice';
 import GridChoice from './Question/GridChoice';
-import Text from './Question/Text';
+import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
+import SingleChoice from './Question/SingleChoice';
+import Text from './Question/Text';
 
 const FormTraLoiKhaoSat = () => {
-  const [form] = Form.useForm();
-  const { loading, record, traLoiBieuMauModel } = useModel('tienich.bieumau');
+  const { loading, record, traLoiBieuMauModel, formSubmiting } = useModel('tienich.bieumau');
   const { setVisibleForm, record: recordDot, getDotMeModel } = useModel('tienich.dotkhaosat');
-  const [listLuaChonBang, setListLuaChonBang] = useState<{ idHang: string; idCot: string }[]>([]);
+  const [listLuaChonBang, setListLuaChonBang] = useState<BieuMau.LuaChonBangRecord[][]>([]);
   const [check, setCheck] = useState<boolean>(false);
+  const [form] = Form.useForm();
+
   const renderQuestion = (question: BieuMau.CauHoi, indexKhoi: number, indexCauHoi: number) => {
     let questionEleMent = <div />;
     if (question.loai === 'SingleChoice')
@@ -43,99 +44,97 @@ const FormTraLoiKhaoSat = () => {
         <NumericChoice question={question} indexKhoi={indexKhoi} indexCauHoi={indexCauHoi} />
       );
     return (
-      <div>
-        <div>
-          <b>
-            {question.batBuoc && <span style={{ color: '#dc3545' }}>*</span>} Câu hỏi{' '}
-            {indexCauHoi + 1}: {question.noiDungCauHoi}
-          </b>
+      <div key={question._id}>
+        <div className="ant-form-item-label fw500">
+          <label className={question.batBuoc ? 'ant-form-item-required' : ''}>
+            Câu {indexCauHoi + 1}: {question.noiDungCauHoi}
+          </label>
         </div>
-        <div>{questionEleMent}</div>
+        <br />
+        {questionEleMent}
         <br />
       </div>
     );
   };
+
+  const onFinish = async (values: any) => {
+    const danhSachTraLoi: BieuMau.TraLoiRecord[] = [];
+    record?.danhSachKhoi?.forEach((item, indexKhoi) => {
+      item?.danhSachCauHoi?.forEach((cauHoi, indexCauHoi) => {
+        let traLoi: BieuMau.TraLoiRecord = {
+          idCauHoi: cauHoi._id,
+          listLuaChon: [],
+          listLuaChonBang: [],
+          luaChonTuyenTinh: 0,
+          traLoiText: '',
+        };
+        if (cauHoi.loai === 'SingleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
+          traLoi = { ...traLoi, listLuaChon: [values[`${indexKhoi}||${indexCauHoi}`]] };
+        else if (cauHoi.loai === 'MultipleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
+          traLoi = { ...traLoi, listLuaChon: values[`${indexKhoi}||${indexCauHoi}`] };
+        else if (cauHoi.loai === 'Text')
+          traLoi = { ...traLoi, traLoiText: values[`${indexKhoi}||${indexCauHoi}`] };
+        else if (cauHoi.loai === 'GridMultipleChoice' || cauHoi.loai === 'GridSingleChoice')
+          traLoi = {
+            ...traLoi,
+            listLuaChonBang: listLuaChonBang?.[indexKhoi || indexCauHoi] ?? [],
+          };
+        else if (cauHoi.loai === 'NumericRange') {
+          traLoi = { ...traLoi, luaChonTuyenTinh: values[`${indexKhoi}||${indexCauHoi}`] };
+        }
+        danhSachTraLoi.push(traLoi);
+      });
+    });
+
+    await traLoiBieuMauModel({
+      idBieuMau: record?._id ?? '',
+      danhSachTraLoi,
+      idDot: recordDot?._id ?? '',
+    })
+      .then(() => {
+        getDotMeModel();
+      })
+      .catch((er) => console.log(er));
+  };
+
   return (
     <Card loading={loading} title="Chi tiết khảo sát">
-      <Form
-        scrollToFirstError
-        onFinish={async (values) => {
-          const danhSachTraLoi: KhaiBaoSucKhoe.TraLoiRecord[] = [];
-          record?.danhSachKhoi?.forEach((item, indexKhoi) => {
-            item?.danhSachCauHoi?.forEach((cauHoi, indexCauHoi) => {
-              let traLoi: KhaiBaoSucKhoe.TraLoiRecord = {
-                idCauHoi: cauHoi._id,
-                listLuaChon: [],
-                listLuaChonBang: [],
-                luaChonTuyenTinh: 0,
-                traLoiText: '',
-              };
-              if (cauHoi.loai === 'SingleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
-                traLoi = { ...traLoi, listLuaChon: [values[`${indexKhoi}||${indexCauHoi}`]] };
-              else if (cauHoi.loai === 'MultipleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
-                traLoi = { ...traLoi, listLuaChon: values[`${indexKhoi}||${indexCauHoi}`] };
-              else if (cauHoi.loai === 'Text')
-                traLoi = { ...traLoi, traLoiText: values[`${indexKhoi}||${indexCauHoi}`] };
-              else if (cauHoi.loai === 'GridMultipleChoice' || cauHoi.loai === 'GridSingleChoice')
-                traLoi = {
-                  ...traLoi,
-                  listLuaChonBang: listLuaChonBang?.[`${indexKhoi}||${indexCauHoi}`] ?? [],
-                };
-              else if (cauHoi.loai === 'NumericRange') {
-                traLoi = { ...traLoi, luaChonTuyenTinh: values[`${indexKhoi}||${indexCauHoi}`] };
-              }
-              danhSachTraLoi.push(traLoi);
-            });
-          });
-          await traLoiBieuMauModel({
-            idBieuMau: record?._id,
-            danhSachTraLoi,
-            idDot: recordDot?._id ?? '',
-          });
-          setVisibleForm(false);
-          getDotMeModel();
-        }}
-        labelCol={{ span: 24 }}
-        form={form}
-      >
+      <Form scrollToFirstError onFinish={onFinish} layout="vertical" form={form}>
         <h3>{record?.tieuDe}</h3>
         <p>{record?.moTa}</p>
-        <div>
-          {record?.danhSachKhoi?.map((item: BieuMau.Khoi, indexKhoi) => (
-            <Card hoverable key={indexKhoi}>
-              <div>{item.tieuDe}</div>
-              <div>{item.moTa}</div>
-              <div>
-                {item.danhSachCauHoi?.map((cauHoi: BieuMau.CauHoi, indexCauHoi) =>
-                  renderQuestion(cauHoi, indexKhoi, indexCauHoi),
-                )}
-              </div>
-            </Card>
-          ))}
-        </div>
-        <br />
+
+        {record?.danhSachKhoi?.map((item, indexKhoi) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <div key={indexKhoi}>
+            <div className="fw500">{item.tieuDe}</div>
+            <p>{item.moTa}</p>
+
+            {item.danhSachCauHoi?.map((cauHoi, indexCauHoi) =>
+              renderQuestion(cauHoi, indexKhoi, indexCauHoi),
+            )}
+          </div>
+        ))}
+
         {record?.coCamKet && (
           <Checkbox
-            style={{ marginBottom: 8 }}
-            onChange={(e) => {
-              setCheck(e.target.checked);
-            }}
+            style={{ marginBottom: 12, marginTop: 12 }}
+            onChange={(e) => setCheck(e.target.checked)}
           >
             {record?.noiDungCamKet}
           </Checkbox>
         )}
-        <Form.Item style={{ textAlign: 'center', marginBottom: 0 }}>
+
+        <div className="form-footer">
           <Button
             disabled={record?.coCamKet && !check}
-            loading={loading}
-            style={{ marginRight: 8 }}
+            loading={formSubmiting}
             htmlType="submit"
             type="primary"
           >
             Hoàn thành
           </Button>
           <Button onClick={() => setVisibleForm(false)}>Đóng</Button>
-        </Form.Item>
+        </div>
       </Form>
     </Card>
   );

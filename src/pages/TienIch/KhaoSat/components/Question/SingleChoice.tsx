@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle */
+import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
 import { Radio, Form } from 'antd';
 
@@ -14,9 +14,9 @@ const SingleChoice = (props: {
     >
       <Radio.Group>
         {props.question?.luaChon?.map((item) => (
-          <Radio key={item._id} value={item._id}>
-            {item.noiDung}
-          </Radio>
+          <div key={item._id}>
+            <Radio value={item._id}>{item.noiDung}</Radio>
+          </div>
         ))}
       </Radio.Group>
     </Form.Item>

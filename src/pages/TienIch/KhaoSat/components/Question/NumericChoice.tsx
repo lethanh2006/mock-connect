@@ -1,3 +1,4 @@
+import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
 import { Radio, Form } from 'antd';
 
@@ -7,12 +8,9 @@ const NumericChoice = (props: {
   indexCauHoi: number;
 }) => {
   const arrValue: number[] = [];
-  for (
-    let i = props.question?.gioiHanDuoiTuyenTinh;
-    i <= props.question?.gioiHanTrenTuyenTinh;
-    i += 1
-  )
+  for (let i = props.question?.gioiHanDuoiTuyenTinh; i <= props.question?.gioiHanTrenTuyenTinh; i++)
     arrValue.push(i);
+
   return (
     <Form.Item
       rules={props.question.batBuoc ? [...rules.required] : []}
