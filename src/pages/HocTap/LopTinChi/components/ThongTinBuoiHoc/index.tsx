@@ -1,6 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
+import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { getNameFile } from '@/utils/utils';
 import { Button, Modal, Tabs } from 'antd';
 import moment from 'moment';
@@ -42,7 +42,7 @@ const DanhSachBuoiHoc = (props: { idLopTinChi: string; isGiangVien: boolean }) =
     };
   }, [idLopTinChi]);
 
-  const onCell = (rec: LopTinChi.IBuoiHoc) => ({
+  const onCell = (rec: LopHocPhan.IBuoiHoc) => ({
     onClick: () => {
       setRecordBuoiHoc(rec);
       // if (isGiangVien) khoiTaoDiemDanhByIdBuoiHocModel(rec.id);
@@ -54,7 +54,7 @@ const DanhSachBuoiHoc = (props: { idLopTinChi: string; isGiangVien: boolean }) =
     },
   });
 
-  const columns: IColumn<LopTinChi.IBuoiHoc>[] = [
+  const columns: IColumn<LopHocPhan.IBuoiHoc>[] = [
     {
       dataIndex: 'index',
       title: 'STT',

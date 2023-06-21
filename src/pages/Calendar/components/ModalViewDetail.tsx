@@ -1,219 +1,112 @@
-import React from 'react';
-import { useAccess, useModel, history } from 'umi';
-import {
-  Card,
-  Modal,
-  Row,
-  Col,
-  Checkbox,
-  Select,
-  Button,
-  Calendar as AntdCalendar,
-  Popconfirm,
-} from 'antd';
-import { ELoaiSuKien } from '@/services/Calendar/constant';
+import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import { type SuKien } from '@/services/SuKien/typings';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Descriptions, Modal, Popconfirm, Space, Tag } from 'antd';
 import moment from 'moment';
+import { useModel } from 'umi';
 
-const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any }) => {
-  const { visible, setVisible } = props;
-  const { record, setVisibleForm, deleteSuKienCaNhanModel, setEdit } = useModel('sukien');
-  const access = useAccess();
+const ModalViewDetailCalendar = (props: {
+  visible: boolean;
+  setVisible: any;
+  event: any;
+  getData: () => void;
+}) => {
+  const { visible, setVisible, event, getData } = props;
+  const { deleteModel, handleEdit } = useModel('sukien');
+  const isThoiKhoaBieu = event.loaiSuKien === ELoaiSuKien.LICH_HOC;
+  const thoiKhoaBieu = isThoiKhoaBieu ? (event as ThoiKhoaBieu.IRecord) : undefined;
+  const suKien = !isThoiKhoaBieu ? (event as SuKien.IRecord) : undefined;
 
   return (
     <Modal
       visible={visible}
-      width="500px"
       title="Chi tiết lịch"
       destroyOnClose
-      onCancel={() => {
-        setVisible(false);
-      }}
+      onCancel={() => setVisible(false)}
       footer={
-        record?.loaiSuKien === ELoaiSuKien.CA_NHAN
-          ? [
+        <Space wrap>
+          {suKien && suKien.loaiSuKien === ELoaiSuKien.CA_NHAN ? (
+            <>
               <Button
-                key="2"
                 type="primary"
                 onClick={() => {
-                  setEdit(true);
-                  setVisibleForm(true);
+                  handleEdit(suKien);
                   setVisible(false);
                 }}
-                style={{ marginLeft: '8px' }}
+                icon={<EditOutlined />}
               >
                 Chỉnh sửa
-              </Button>,
-
+              </Button>
               <Popconfirm
-                key="3"
                 title="Bạn có chắc chắn muốn xóa sự kiện này không?"
                 onConfirm={() => {
-                  deleteSuKienCaNhanModel(record?._id ?? '');
+                  deleteModel(suKien?._id ?? '', getData);
                   setVisible(false);
                 }}
               >
-                <Button key="3" danger>
-                  Xóa sự kiện
+                <Button danger icon={<DeleteOutlined />}>
+                  Xóa
                 </Button>
-              </Popconfirm>,
-              <Button
-                key="1"
-                type="default"
-                onClick={() => {
-                  setVisible(false);
-                }}
-              >
-                Đóng
-              </Button>,
-            ]
-          : [
-              <Button
-                key="1"
-                type="default"
-                onClick={() => {
-                  setVisible(false);
-                }}
-                style={{ marginLeft: '8px' }}
-              >
-                Đóng
-              </Button>,
-            ]
-      }
-      maskClosable
-    >
-      <div>
-        <p>
-          <b>Tên sự kiện: </b>
-          {record?.loaiSuKien === ELoaiSuKien.LICH_HOC ? (
-            <>
-              {record?.info?.ten_hoc_phan ?? ''} - {record?.info?.lop_tin_chi_id[1] ?? ''}
+              </Popconfirm>
             </>
-          ) : (
-            <>{record?.tenSuKien ?? ''}</>
-          )}
-        </p>
-        {!['Cá nhân'].includes(record?.loaiSuKien ?? '') ? (
-          <>
-            {record?.info?.ten_hoc_phan && (
-              <p>
-                <b>Tên học phần: </b> {record?.info?.ten_hoc_phan}
-              </p>
+          ) : null}
+          <Button onClick={() => setVisible(false)}>Đóng</Button>
+        </Space>
+      }
+    >
+      {isThoiKhoaBieu ? (
+        <Descriptions column={1}>
+          <Descriptions.Item label="Lớp học phần">{thoiKhoaBieu?.tenLopHocPhan}</Descriptions.Item>
+          <Descriptions.Item label="Thời gian bắt đầu">
+            {moment(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+          </Descriptions.Item>
+          <Descriptions.Item label="Thời gian kết thúc">
+            {moment(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+          </Descriptions.Item>
+          <Descriptions.Item label="Giảng viên">
+            {thoiKhoaBieu?.nhanSu?.ten ?? '--'}
+          </Descriptions.Item>
+          <Descriptions.Item label="Phòng học">{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
+          <Descriptions.Item label="Loại hình học tập">
+            {thoiKhoaBieu?.loaiHinhHocTap ?? '--'}
+          </Descriptions.Item>
+          <Descriptions.Item label="Tiêu đề bài học">
+            {thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}
+          </Descriptions.Item>
+          <Descriptions.Item label="Nội dung bài học">
+            {thoiKhoaBieu?.noiDungBaiHoc ?? '--'}
+          </Descriptions.Item>
+          <Descriptions.Item label="Đường dẫn">
+            {thoiKhoaBieu?.urlBaiHoc ? (
+              <a href={thoiKhoaBieu.urlBaiHoc} target="_blank" rel="noreferrer">
+                Bài học
+              </a>
+            ) : (
+              '--'
             )}
-            {record?.info?.hoc_phan_id?.[1] && (
-              <p>
-                <b>Mã học phần: </b> {record?.info?.hoc_phan_id?.[1]}
-              </p>
+          </Descriptions.Item>
+        </Descriptions>
+      ) : (
+        <Descriptions column={1}>
+          <Descriptions.Item label="Tên sự kiện">{suKien?.tenSuKien}</Descriptions.Item>
+          <Descriptions.Item label="Thời gian bắt đầu">
+            {moment(suKien?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+          </Descriptions.Item>
+          <Descriptions.Item label="Thời gian kết thúc">
+            {moment(suKien?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+          </Descriptions.Item>
+          <Descriptions.Item label="Địa điểm">{suKien?.diaDiem ?? '--'}</Descriptions.Item>
+          <Descriptions.Item label="Ghi chú">{suKien?.ghiChu ?? '--'}</Descriptions.Item>
+          <Descriptions.Item label="Loại sự kiện">
+            {suKien?.loaiSuKien ? (
+              <Tag color={ColorSuKien[suKien.loaiSuKien]}>{suKien.loaiSuKien}</Tag>
+            ) : (
+              '--'
             )}
-
-            <p>
-              <b>Địa điểm: </b> {record?.diaDiem || 'Chưa cập nhật'}
-            </p>
-            <p>
-              <b>Ghi chú: </b> {record?.ghiChu || 'Chưa cập nhật'}
-            </p>
-            {record?.info?.link_zoom && (
-              <p>
-                Link phòng zoom:{' '}
-                <a target="_blank" href={record?.info?.link_zoom} rel="noreferrer">
-                  Link
-                </a>
-              </p>
-            )}
-            {access.sinhVien && (
-              <>
-                {record?.info?.id_zoom && (
-                  <p>
-                    <b>ID phòng Zoom: </b> {record?.info?.id_zoom}
-                  </p>
-                )}
-                {record?.info?.mat_khau_1 && (
-                  <p>
-                    <b>Mật khẩu phòng Zoom: </b> {record?.info?.mat_khau_1}
-                  </p>
-                )}
-              </>
-            )}
-            {access.nhanVien && (
-              <>
-                {record?.info?.tai_khoan && (
-                  <p>
-                    <b>Tên đăng nhập Zoom: </b> {record?.info?.tai_khoan}
-                  </p>
-                )}
-                {record?.info?.mat_khau && (
-                  <p>
-                    <b>Mật khẩu Zoom: </b> {record?.info?.mat_khau}
-                  </p>
-                )}
-              </>
-            )}
-          </>
-        ) : (
-          <>
-            <p>
-              <b>Địa điểm: </b> {record?.diaDiem || 'Chưa cập nhật'}
-            </p>
-            <p>
-              <b>Ghi chú: </b> {record?.ghiChu || 'Chưa cập nhật'}
-            </p>
-          </>
-        )}
-        <p>
-          <b>Thời gian bắt đầu: </b>
-          {record?.thoiGianBatDau
-            ? moment(record?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')
-            : 'Chưa cập nhật'}
-        </p>
-        <p>
-          <b>Thời gian kết thúc: </b>
-          {record?.thoiGianKetThuc
-            ? moment(record?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
-            : 'Chưa cập nhật'}
-        </p>
-
-        {record?.loaiSuKien === ELoaiSuKien.LICH_HOC && (
-          <>
-            {access.sinhVien && (
-              <>
-                <p>
-                  <b>Giảng viên: </b> {record?.info?.ten_giang_vien ?? ' Chưa cập nhật'}
-                </p>
-                <p>
-                  <b>Email: </b> {record?.info?.email || 'Chưa cập nhật'}
-                </p>
-                <p>
-                  <b>Số điện thoại: </b> {record?.info?.dien_thoai || 'Chưa cập nhật'}
-                </p>
-              </>
-            )}
-            <Button
-              type="link"
-              onClick={() => {
-                history.push(
-                  `${access.sinhVien ? '/hoctap/loptinchi/' : '/loptinchi/danhsachlop/'}${
-                    record?.info?.lop_tin_chi_id?.[0]
-                  }`,
-                );
-              }}
-            >
-              Chi tiết lớp học
-            </Button>
-          </>
-        )}
-        {record?.loaiSuKien === ELoaiSuKien.LICH_THI && (
-          <>
-            <p>
-              <b>Hình thức thi: </b> {record?.info?.hinh_thuc ?? ' Chưa cập nhật'}
-            </p>
-            <p>
-              <b>Cán bộ coi thi: </b> {record?.info?.can_bo_coi_thi || 'Chưa cập nhật'}
-            </p>
-            <p>
-              <b>Ghi chú: </b> {record?.info?.ghi_chu || 'Chưa cập nhật'}
-            </p>
-          </>
-        )}
-      </div>
+          </Descriptions.Item>
+        </Descriptions>
+      )}
     </Modal>
   );
 };

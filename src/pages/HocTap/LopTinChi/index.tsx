@@ -2,7 +2,7 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import SelectHocKy from '@/pages/DaoTao/HocKy/SelectHocKy';
 import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
-import { type LopTinChi as ILopTinChi } from '@/services/HocTap/LopTinChi/typings';
+import { type LopHocPhan as ILopTinChi } from '@/services/HocTap/LopHocPhan/typings';
 import { history, useModel } from 'umi';
 import { useState } from 'react';
 

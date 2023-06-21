@@ -30,7 +30,7 @@ const SelectHocKy = (props: {
   const { danhSach, getAllModel, visibleForm } = useModel('daotao.hocky');
 
   useEffect(() => {
-    if (!visibleForm) getAllModel(!!isSetRecord, undefined, condition);
+    if (!visibleForm) getAllModel(!!isSetRecord, {ma: -1}, condition);
   }, [visibleForm, JSON.stringify(condition)]);
 
   return (

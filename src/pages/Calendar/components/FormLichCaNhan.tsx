@@ -1,40 +1,46 @@
+import MyDatePicker from '@/components/MyDatePicker';
+import { ELoaiSuKien } from '@/services/SuKien/constant';
+import { type SuKien } from '@/services/SuKien/typings';
 import rules from '@/utils/rules';
-import { Button, Card, Col, DatePicker, Form, Input, Row } from 'antd';
+import { resetFieldsForm } from '@/utils/utils';
+import { Button, Card, Col, Form, Input, Row } from 'antd';
 import moment from 'moment';
-import mm from 'moment-timezone';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
-const FormLichCaNhan = () => {
-  const [form] = Form.useForm();
-  const { record, edit, setVisibleForm, postModel, putModel, getModel, formSubmiting } =
+const FormLichCaNhan = (props: { getData: () => void }) => {
+  const { record, edit, setVisibleForm, postModel, putModel, formSubmiting, visibleForm } =
     useModel('sukien');
   const [startDate, setStartDate] = useState<string>();
+  const [form] = Form.useForm();
+  const { getData } = props;
 
   useEffect(() => {
-    if (record?._id) form.setFieldsValue(record);
-    else form.resetFields();
-  }, [record?._id]);
+    if (!visibleForm) resetFieldsForm(form);
+    else {
+      form.setFieldsValue(record);
+      setStartDate(record?.thoiGianBatDau);
+    }
+  }, [record?._id, visibleForm]);
 
   const onFinish = async (values: SuKien.IRecord) => {
     if (edit) {
-      putModel(record?._id ?? '', values, getModel)
+      putModel(record?._id ?? '', values, getData)
         .then()
         .catch((er) => console.log(er));
     } else
-      postModel(values, getModel)
-        .then(() => form.resetFields())
+      postModel({ ...values, loaiSuKien: ELoaiSuKien.CA_NHAN }, getData)
+        .then()
         .catch((er) => console.log(er));
   };
 
   return (
-    <Card title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm sự kiện'}>
+    <Card title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}>
       <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Row gutter={[12, 12]}>
+        <Row gutter={[12, 0]}>
           <Col xs={24}>
             <Form.Item
-              rules={[...rules.required, ...rules.text, ...rules.length(300)]}
+              rules={[...rules.required, ...rules.text, ...rules.length(250)]}
               name="tenSuKien"
               label="Tên sự kiện"
             >
@@ -44,40 +50,37 @@ const FormLichCaNhan = () => {
 
           <Col xs={24} md={12}>
             <Form.Item rules={[...rules.required]} name="thoiGianBatDau" label="Thời gian bắt đầu">
-              <DatePicker
-                style={{ width: '100%' }}
-                showTime
+              <MyDatePicker
+                showTime={{ showHour: true, showMinute: true }}
                 format="HH:mm DD/MM/YYYY"
                 onChange={(e: any) => {
                   setStartDate(e);
-                  form.setFieldsValue({ thoiGianKetThuc: undefined });
+                  form.validateFields(['thoiGianKetThuc']);
                 }}
               />
             </Form.Item>
           </Col>
           <Col xs={24} md={12}>
             <Form.Item
-              rules={[...rules.required]}
+              rules={[...rules.required, ...rules.sauNgay(startDate)]}
               name="thoiGianKetThuc"
               label="Thời gian kết thúc"
             >
-              <DatePicker
-                style={{ width: '100%' }}
-                showTime
+              <MyDatePicker
+                showTime={{ showHour: true, showMinute: true }}
                 format="HH:mm DD/MM/YYYY"
-                disabledDate={
-                  startDate ? (cur) => moment(cur).isBefore(startDate, 'day') : undefined
-                }
+                disabledDate={startDate ? (cur) => moment(cur).isBefore(startDate) : undefined}
               />
             </Form.Item>
           </Col>
+
           <Col xs={24}>
             <Form.Item
-              rules={[...rules.text, ...rules.length(200)]}
+              rules={[...rules.text, ...rules.length(250)]}
               name="diaDiem"
               label="Địa điểm"
             >
-              <Input placeholder="Địa điểm" />
+              <Input placeholder="Nhập địa điểm" />
             </Form.Item>
           </Col>
           <Col xs={24}>
@@ -91,7 +94,7 @@ const FormLichCaNhan = () => {
           <Button loading={formSubmiting} htmlType="submit" type="primary">
             {!edit ? 'Thêm mới' : 'Lưu lại'}
           </Button>
-          <Button onClick={() => setVisibleForm(false)}>Đóng</Button>
+          <Button onClick={() => setVisibleForm(false)}>Hủy</Button>
         </div>
       </Form>
     </Card>

@@ -1,16 +1,16 @@
-import { ELoaiDauDiemHocPhan } from '@/services/HocTap/LopTinChi/constant';
-import { LopTinChi } from '@/services/HocTap/LopTinChi/typings';
+import { ELoaiDauDiemHocPhan } from '@/services/HocTap/LopHocPhan/constant';
+import { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Button, Descriptions, message, Select } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { history } from 'umi';
 
 const DetailKetQuaHocTap = (props: {
-  ketQuaHocTap?: LopTinChi.KetQuaHocTap[];
+  ketQuaHocTap?: LopHocPhan.KetQuaHocTap[];
   onSetActiveTab?: any;
 }) => {
   const { ketQuaHocTap } = props;
-  const [diemHienTai, setDiemHienTai] = useState<LopTinChi.KetQuaHocTap | undefined>(
+  const [diemHienTai, setDiemHienTai] = useState<LopHocPhan.KetQuaHocTap | undefined>(
     ketQuaHocTap?.[0],
   );
 

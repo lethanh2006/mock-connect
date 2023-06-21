@@ -1,6 +1,5 @@
+import CalendarPage from '@/pages/Calendar';
 import { Col, Row } from 'antd';
-import BlockSinhVien from './components/BlockSinhVien';
-import ThoiKhoaBieu from '@/pages/Calendar';
 import TinTucDashboard from '../TinTuc/TinTucDashboard';
 
 const TrangChu = () => {
@@ -10,7 +9,7 @@ const TrangChu = () => {
         {/* <BlockSinhVien /> */}
 
         <Col xs={24} lg={14} xl={16}>
-          <ThoiKhoaBieu type="dashboard" />
+          <CalendarPage isDashboard />
         </Col>
 
         <Col xs={24} lg={10} xl={8}>

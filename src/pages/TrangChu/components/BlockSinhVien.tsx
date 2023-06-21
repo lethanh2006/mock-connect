@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { thongKeMyInvoice } from '@/services/CongNo/ThanhToan/thanhtoan';
 import { currencyFormat } from '@/utils/utils';
 import { getMetaData } from '@/services/User/user';
-import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
+import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { thongKeDon } from '@/services/DVMC/DichVuMotCuaV2/dichvumotcuav2';
 
 const BlockSinhVien = () => {
@@ -15,7 +15,7 @@ const BlockSinhVien = () => {
     khongDuyet: number;
   }>();
   const [xepHang, setXepHang] = useState<User.XepHangUser>();
-  const [recordDiemTongKet, setRecordDiemTongKet] = useState<LopTinChi.DiemTongKet>();
+  const [recordDiemTongKet, setRecordDiemTongKet] = useState<LopHocPhan.DiemTongKet>();
   const { sinhVienGetDiemTongKetModel } = useModel('hoctap.loptinchi');
   const [ketQuaHocTap, setKetQuaHocTap] = useState<{
     gpaKyGanNhat: number;
@@ -39,7 +39,7 @@ const BlockSinhVien = () => {
   };
 
   const getGPAKyGanNhat = async () => {
-    const response: LopTinChi.DiemTongKet[] = await sinhVienGetDiemTongKetModel();
+    const response: LopHocPhan.DiemTongKet[] = await sinhVienGetDiemTongKetModel();
     for (let i = response.length - 1; i >= 0; i--) {
       if (response[i]?.diem_tb_chung_hoc_ky_thang_4) {
         setRecordDiemTongKet(response[i]);

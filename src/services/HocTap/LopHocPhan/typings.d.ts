@@ -2,7 +2,7 @@ import type { ELoaiDauDiemHocPhan } from '@/utils/constants';
 import { type ELoaiHinhHocTap } from './constant';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 
-export declare module LopTinChi {
+export declare module LopHocPhan {
   export interface IRecord {
     _id: string;
     ten: string;

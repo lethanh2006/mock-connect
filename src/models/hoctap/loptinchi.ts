@@ -3,30 +3,30 @@ import {
   getAllMonHocSinhVien,
   sinhVienAllGetDiemTongKet,
   sinhVienGetThoiKhoaBieu,
-} from '@/services/HocTap/LopTinChi';
-import { type LopTinChi } from '@/services/HocTap/LopTinChi/typings';
+} from '@/services/HocTap/LopHocPhan';
+import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { ipDaoTao } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
-  const objInit = useInitModel<LopTinChi.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
+  const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
   const { getByIdModel, setLoading, getModel } = objInit;
 
-  const [listTkbSinhVien, setListTkbSinhVien] = useState<LopTinChi.IBuoiHoc[]>([]);
-  const [danhSachMonHoc, setDanhSachMonHoc] = useState<LopTinChi.InfoMonHoc[]>([]);
+  const [listTkbSinhVien, setListTkbSinhVien] = useState<LopHocPhan.IBuoiHoc[]>([]);
+  const [danhSachMonHoc, setDanhSachMonHoc] = useState<LopHocPhan.InfoMonHoc[]>([]);
   const [idNhomLop, setIdNhomLop] = useState<number>(-1);
   const [hinhThucDaoTao, setHinhThucDaoTao] = useState<number>();
   const [flagDaDanhGia, setFlagDaDanhGia] = useState(false);
-  const [danhSachDiemTongKet, setDanhSachDiemTongKet] = useState<LopTinChi.DiemTongKet[]>([]);
+  const [danhSachDiemTongKet, setDanhSachDiemTongKet] = useState<LopHocPhan.DiemTongKet[]>([]);
   // const [dataBieuMau, setDataBieuMau] = useState<BieuMau.Record>({} as BieuMau.Record);
   const [danhSachDiemThanhPhanTheoKy, setDanhSachDiemThanhPhanTheoKy] = useState<any[]>([]);
-  const [thongTinChung, setThongTinChung] = useState<LopTinChi.ThongTinChungLopTinChiRecord>(
+  const [thongTinChung, setThongTinChung] = useState<LopHocPhan.ThongTinChungLopTinChiRecord>(
     {} as any,
   );
-  const [thongTinNhomLop, setThongTinNhomLop] = useState<LopTinChi.ThongTinChungLopTinChiRecord>(
+  const [thongTinNhomLop, setThongTinNhomLop] = useState<LopHocPhan.ThongTinChungLopTinChiRecord>(
     {} as any,
   );
-  const [recordBuoiHoc, setRecordBuoiHoc] = useState<LopTinChi.IBuoiHoc>();
+  const [recordBuoiHoc, setRecordBuoiHoc] = useState<LopHocPhan.IBuoiHoc>();
 
   // const getThongTinChungLopTinChiByIdLopModel = async (idLop: string) => {
   //   setLoading(true);
@@ -42,13 +42,13 @@ export default () => {
     return response?.data?.data ?? [];
   };
 
-  const sinhVienGetModel = async (params: any): Promise<LopTinChi.IRecord[]> =>
+  const sinhVienGetModel = async (params: any): Promise<LopHocPhan.IRecord[]> =>
     getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
 
-  const sinhVienGetByIdModel = async (idLop: string): Promise<LopTinChi.IRecord> =>
+  const sinhVienGetByIdModel = async (idLop: string): Promise<LopHocPhan.IRecord> =>
     getByIdModel(`${idLop}/sinh-vien`);
 
-  const sinhVienGetThoiKhoaBieuModel = async (idLop: string): Promise<LopTinChi.IBuoiHoc[]> => {
+  const sinhVienGetThoiKhoaBieuModel = async (idLop: string): Promise<LopHocPhan.IBuoiHoc[]> => {
     try {
       setLoading(true);
       const response = await sinhVienGetThoiKhoaBieu(idLop);
