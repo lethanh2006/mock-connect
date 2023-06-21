@@ -46,7 +46,10 @@ const FormTraLoiKhaoSat = () => {
     return (
       <div key={question._id}>
         <div className="ant-form-item-label fw500">
-          <label className={question.batBuoc ? 'ant-form-item-required' : ''}>
+          <label
+            className={question.batBuoc ? 'ant-form-item-required' : ''}
+            style={{ whiteSpace: 'pre-wrap', textAlign: 'left' }}
+          >
             Câu {indexCauHoi + 1}: {question.noiDungCauHoi}
           </label>
         </div>
@@ -106,9 +109,9 @@ const FormTraLoiKhaoSat = () => {
 
         {record?.danhSachKhoi?.map((item, indexKhoi) => (
           // eslint-disable-next-line react/no-array-index-key
-          <div key={indexKhoi}>
+          <div key={indexKhoi} style={{ marginBottom: 24 }}>
             <div className="fw500">{item.tieuDe}</div>
-            <p>{item.moTa}</p>
+            <div>{item.moTa}</div>
 
             {item.danhSachCauHoi?.map((cauHoi, indexCauHoi) =>
               renderQuestion(cauHoi, indexKhoi, indexCauHoi),
