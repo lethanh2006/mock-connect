@@ -120,6 +120,7 @@ const FormTraLoiKhaoSat = () => {
           <Checkbox
             style={{ marginBottom: 12, marginTop: 12 }}
             onChange={(e) => setCheck(e.target.checked)}
+            checked={check}
           >
             {record?.noiDungCamKet}
           </Checkbox>
