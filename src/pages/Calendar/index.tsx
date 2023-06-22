@@ -2,7 +2,7 @@ import { messagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Modal, Row } from 'antd';
+import { Button, Card, Col, Modal, Row, Spin } from 'antd';
 import moment, { type Moment } from 'moment';
 import { useEffect, useState } from 'react';
 import type { DateRange, View } from 'react-big-calendar';
@@ -22,8 +22,9 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
     setEdit,
     selectSuKiens,
     getSuKienTrongKhoangModel,
+    loading,
   } = useModel('sukien');
-  const { getTrongKhoangModel } = useModel('daotao.thoikhoabieu');
+  const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
   const [date, setDate] = useState(new Date());
   const [dateRange, setDateRange] = useState<Moment[]>([
     moment().startOf('week'),
@@ -58,11 +59,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
     getSuKienTrongKhoangModel({
       fromDate: dateRange[0].toISOString(),
       toDate: dateRange[1].toISOString(),
+      types: selectSuKiens,
     }).then((data) => {
       const temp = data.map((item) => ({
         ...item,
         title: item?.tenSuKien ?? '',
-        loaiSuKien: item.loaiSuKien === ELoaiSuKien.TAT_CA ? ELoaiSuKien.CHUNG : item.loaiSuKien,
         start: moment(item?.thoiGianBatDau).toDate(),
         end: moment(item?.thoiGianKetThuc).toDate(),
       }));
@@ -72,12 +73,15 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
   const getData = () => {
     const promises = [];
     if (selectSuKiens.includes(ELoaiSuKien.LICH_HOC)) promises.push(getThoiKhoaBieu());
-    if (selectSuKiens.includes(ELoaiSuKien.CA_NHAN) || selectSuKiens.includes(ELoaiSuKien.TAT_CA))
+    if (selectSuKiens.includes(ELoaiSuKien.CA_NHAN) || selectSuKiens.includes(ELoaiSuKien.CHUNG))
       promises.push(getSuKien());
 
-    Promise.any(promises)
+    Promise.allSettled(promises)
       .then((values) => {
-        setDataCalendar(values.flat());
+        const data = values
+          .filter((item) => item.status === 'fulfilled')
+          .map((item: any) => item.value);
+        setDataCalendar(data.flat());
       })
       .catch((er) => console.log(er));
   };
@@ -86,7 +90,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
   useEffect(() => {
     getData();
-  }, [dateRange[0].valueOf(), dateRange[1].valueOf(), ...selectSuKiens]);
+  }, [dateRange[0].valueOf(), dateRange[1].valueOf(), selectSuKiens.length]);
 
   const eventPropGetter = (event: { title: string; loaiSuKien?: string }) => ({
     style: { backgroundColor: ColorSuKien?.[event?.loaiSuKien as ELoaiSuKien] },
@@ -143,48 +147,50 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
         ) : null}
 
         <Col span={24} md={isDashboard ? 24 : 16} xl={isDashboard ? 24 : 18}>
-          <Calendar
-            formats={{
-              dayHeaderFormat: 'dddd DD/MM/YYYY',
-              dayRangeHeaderFormat: (range: DateRange) => {
-                return `${moment(range.start).format('DD/MM')} - ${moment(range.end).format(
-                  'DD/MM',
-                )}`;
-              },
-            }}
-            localizer={localizer}
-            events={dataCalendar}
-            defaultView={calendarView}
-            onView={(view) => setCalendarView(view)}
-            onRangeChange={(val) => {
-              if (Array.isArray(val))
-                setDateRange([moment(val[0]).startOf('d'), moment(val[1]).endOf('d')]);
-              else setDateRange([moment(val.start).startOf('d'), moment(val.end).endOf('d')]);
-            }}
-            onNavigate={(newDate) => setDate(newDate)}
-            selectable={!isDashboard}
-            scrollToTime={new Date(1970, 1, 1, 6)}
-            defaultDate={new Date()}
-            date={date}
-            messages={messagesCalendar}
-            views={['month', 'week', 'day']}
-            style={{ height: isDashboard ? 592 : 700, overflow: 'auto' }}
-            min={moment('0000', 'HHmm').toDate()}
-            max={moment('2359', 'HHmm').toDate()}
-            eventPropGetter={eventPropGetter}
-            onSelectSlot={handleSelect}
-            onSelectEvent={(rec: any) => {
-              setSelectEvent(rec);
-              setVisibleDetail(true);
-            }}
-            components={{ event: (event: any) => eventCustom(event) }}
-            popup
-            onShowMore={(events: any[], d) => {
-              setEventRecord(events);
-              setDateXemThem(d);
-              setVisibleXemThem(true);
-            }}
-          />
+          <Spin spinning={loading || loadingTKB}>
+            <Calendar
+              formats={{
+                dayHeaderFormat: 'dddd DD/MM/YYYY',
+                dayRangeHeaderFormat: (range: DateRange) => {
+                  return `${moment(range.start).format('DD/MM')} - ${moment(range.end).format(
+                    'DD/MM',
+                  )}`;
+                },
+              }}
+              localizer={localizer}
+              events={dataCalendar}
+              defaultView={calendarView}
+              onView={(view) => setCalendarView(view)}
+              onRangeChange={(val) => {
+                if (Array.isArray(val))
+                  setDateRange([moment(val[0]).startOf('d'), moment(val[1]).endOf('d')]);
+                else setDateRange([moment(val.start).startOf('d'), moment(val.end).endOf('d')]);
+              }}
+              onNavigate={(newDate) => setDate(newDate)}
+              selectable={!isDashboard}
+              scrollToTime={new Date(1970, 1, 1, 6)}
+              defaultDate={new Date()}
+              date={date}
+              messages={messagesCalendar}
+              views={['month', 'week', 'day']}
+              style={{ height: isDashboard ? 592 : 700, overflow: 'auto' }}
+              min={moment('0000', 'HHmm').toDate()}
+              max={moment('2359', 'HHmm').toDate()}
+              eventPropGetter={eventPropGetter}
+              onSelectSlot={handleSelect}
+              onSelectEvent={(rec: any) => {
+                setSelectEvent(rec);
+                setVisibleDetail(true);
+              }}
+              components={{ event: (event: any) => eventCustom(event) }}
+              popup
+              onShowMore={(events: any[], d) => {
+                setEventRecord(events);
+                setDateXemThem(d);
+                setVisibleXemThem(true);
+              }}
+            />
+          </Spin>
         </Col>
       </Row>
 

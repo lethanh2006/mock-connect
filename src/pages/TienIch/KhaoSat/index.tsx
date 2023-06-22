@@ -71,6 +71,7 @@ const DotKhaoSatPage = () => {
       render: (record: DotKhaoSat.IRecord) => (
         <Tooltip
           title={record?.daLam ? 'Bạn đã thực hiện khảo sát này' : textThucHienKhaoSat[thoiGian]}
+          placement="topLeft"
         >
           <Button
             disabled={record?.daLam || thoiGian !== EThoiGianDot.DANG_DIEN_RA}
