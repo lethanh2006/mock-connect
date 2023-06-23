@@ -20,11 +20,11 @@ const SelectDonViHanhChinh = (props: {
   notRequiredXaPhuong?: boolean;
   notRequiredDiaChiCuThe?: boolean;
   initialValue?: DonViHanhChinh.IRecord;
-
 }) => {
-  const { form, suffix, listTinh, hasSoNha, hideTinh, hideQuanHuyen, hideXaPhuong, initialValue } = props;
+  const { form, suffix, listTinh, hasSoNha, hideTinh, hideQuanHuyen, hideXaPhuong, initialValue } =
+    props;
   // const { record: recSinhVien } = useModel('sinhvien.sinhvien');
-  console.log(initialValue, 'initial value')
+  console.log(initialValue, 'initial value');
   const [idTinh, setIdTinh] = useState<string>();
   const [idHuyen, setIdHuyen] = useState<string>();
   const [listHuyen, setListHuyen] = useState<DonViHanhChinh.IRecord[]>([]);
