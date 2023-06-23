@@ -303,23 +303,6 @@ const FormBieuMau = (props: {
         initialValue = item?.value;
         ruleElement = [];
         element = (
-          // <DiaChi
-          //   hideDiaChiCuThe={item?.level !== 4}
-          //   hideQuanHuyen={item?.level === 1}
-          //   hideXaPhuong={[1, 2].includes(item?.level)}
-          //   notRequiredDiaChiCuThe={!item?.isRequired}
-          //   notRequiredQuanHuyen={!item?.isRequired}
-          //   notRequiredTinh={!item?.isRequired}
-          //   notRequiredXaPhuong={!item?.isRequired}
-          //   initialValue={item?.value}
-          //   form={form}
-          //   fields={{
-          //     tinh: [`${name}.${item?.label ?? ''}`, 'maTinh'],
-          //     quanHuyen: [`${name}.${item?.label ?? ''}`, 'maQuanHuyen'],
-          //     xaPhuong: [`${name}.${item?.label ?? ''}`, 'maPhuongXa'],
-          //     diaChiCuThe: [`${name}.${item?.label ?? ''}`, 'soNhaTenDuong'],
-          //   }}
-          // />
           <SelectDonViHanhChinh
             form={form}
             listTinh={danhSachTinh}
