@@ -163,7 +163,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
               onView={(view) => setCalendarView(view)}
               onRangeChange={(val) => {
                 if (Array.isArray(val))
-                  setDateRange([moment(val[0]).startOf('d'), moment(val[1]).endOf('d')]);
+                  setDateRange([moment(val[0]).startOf('d'), moment(val.at(-1)).endOf('d')]);
                 else setDateRange([moment(val.start).startOf('d'), moment(val.end).endOf('d')]);
               }}
               onNavigate={(newDate) => setDate(newDate)}
@@ -216,35 +216,31 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
       <Modal
         visible={visibleXemThem}
-        title={moment(dateXemThem).format('dddd, DD/MM/YYYY')}
+        title={'Lịch ' + moment(dateXemThem).format('dddd, ngà\\y DD/MM/YYYY')}
         onCancel={() => setVisibleXemThem(false)}
         footer={null}
-        maskClosable
       >
-        <div>
-          {eventsRecord?.map((item: SuKien.IRecord) => {
-            return (
-              <div
-                key={item._id}
-                style={{
-                  backgroundColor: ColorSuKien?.[item?.loaiSuKien],
-                  color: 'white',
-                  padding: '5px',
-                  marginBottom: '10px',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  setRecord(item);
-                  setVisibleXemThem(false);
-                  setVisibleDetail(true);
-                }}
-              >
-                {item?.loaiSuKien} - {item?.tenSuKien}
-              </div>
-            );
-          })}
-        </div>
+        {eventsRecord?.map((item: SuKien.IRecord) => {
+          return (
+            <div
+              key={item._id}
+              style={{
+                backgroundColor: ColorSuKien?.[item?.loaiSuKien],
+                color: 'white',
+                padding: 5,
+                marginBottom: 10,
+                borderRadius: 2,
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                setSelectEvent(item);
+                setVisibleDetail(true);
+              }}
+            >
+              <b>{item?.loaiSuKien}</b>: {item?.tenSuKien}
+            </div>
+          );
+        })}
       </Modal>
     </Card>
   );
