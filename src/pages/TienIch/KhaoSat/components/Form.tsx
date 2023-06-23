@@ -1,19 +1,34 @@
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { Button, Card, Checkbox, Form } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import FileChoice from './Question/FileChoice';
 import GridChoice from './Question/GridChoice';
 import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
+import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { resetFieldsForm } from '@/utils/utils';
 
 const FormTraLoiKhaoSat = () => {
   const { loading, record, traLoiBieuMauModel, formSubmiting } = useModel('tienich.bieumau');
-  const { setVisibleForm, record: recordDot, getDotMeModel } = useModel('tienich.dotkhaosat');
+  const {
+    setVisibleForm,
+    record: recordDot,
+    getDotMeModel,
+    visibleForm,
+  } = useModel('tienich.dotkhaosat');
   const [listLuaChonBang, setListLuaChonBang] = useState<BieuMau.LuaChonBangRecord[][]>([]);
   const [check, setCheck] = useState<boolean>(false);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (!visibleForm) {
+      resetFieldsForm(form);
+      setCheck(false);
+    }
+  }, [visibleForm]);
 
   const renderQuestion = (question: BieuMau.CauHoi, indexKhoi: number, indexCauHoi: number) => {
     let questionEleMent = <div />;
@@ -43,6 +58,12 @@ const FormTraLoiKhaoSat = () => {
       questionEleMent = (
         <NumericChoice question={question} indexKhoi={indexKhoi} indexCauHoi={indexCauHoi} />
       );
+    else if (question.loai === 'UploadFile') {
+      questionEleMent = (
+        <FileChoice question={question} indexKhoi={indexKhoi} indexCauHoi={indexCauHoi} />
+      );
+    }
+
     return (
       <div key={question._id}>
         <div className="ant-form-item-label fw500">
@@ -53,17 +74,15 @@ const FormTraLoiKhaoSat = () => {
             Câu {indexCauHoi + 1}: {question.noiDungCauHoi}
           </label>
         </div>
-        <br />
         {questionEleMent}
-        <br />
       </div>
     );
   };
 
   const onFinish = async (values: any) => {
     const danhSachTraLoi: BieuMau.TraLoiRecord[] = [];
-    record?.danhSachKhoi?.forEach((item, indexKhoi) => {
-      item?.danhSachCauHoi?.forEach((cauHoi, indexCauHoi) => {
+    record?.danhSachKhoi?.forEach((khoi, indexKhoi) => {
+      khoi?.danhSachCauHoi?.forEach(async (cauHoi, indexCauHoi) => {
         let traLoi: BieuMau.TraLoiRecord = {
           idCauHoi: cauHoi._id,
           listLuaChon: [],
@@ -84,6 +103,9 @@ const FormTraLoiKhaoSat = () => {
           };
         else if (cauHoi.loai === 'NumericRange') {
           traLoi = { ...traLoi, luaChonTuyenTinh: values[`${indexKhoi}||${indexCauHoi}`] };
+        } else if (cauHoi.loai === 'UploadFile') {
+          const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
+          traLoi = { ...traLoi, listUrlFile };
         }
         danhSachTraLoi.push(traLoi);
       });
