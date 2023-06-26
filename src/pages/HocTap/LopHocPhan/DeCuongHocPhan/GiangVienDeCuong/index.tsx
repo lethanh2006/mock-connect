@@ -1,5 +1,6 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
+import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { formatPhoneNumber } from '@/utils/utils';
 import { useModel } from 'umi';
 
@@ -39,8 +40,7 @@ const GiangVienDeCuongPage = () => {
         modelName="hocphan.giangviendecuong"
         title="Giảng viên đề cương"
         hideCard
-        getData={() => console.log()}
-        buttons={{ reload: false, create: false }}
+        buttons={{ create: false }}
       />
     </>
   );

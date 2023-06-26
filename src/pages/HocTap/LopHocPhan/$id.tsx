@@ -2,8 +2,8 @@ import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
-import ThongTinChung from './components/ThongTinChung';
 import DanhSachBuoiHoc from './LichHoc';
+import ThongTinChung from './components/ThongTinChung';
 
 const DetailLopTinChi = ({
   match: {
@@ -50,31 +50,21 @@ const DetailLopTinChi = ({
           <DanhSachBuoiHoc />
         </Tabs.TabPane>
 
-        {/* <Tabs.TabPane tab="Kết quả học tập" key="3">
-          {isNhanVien ? (
-            <KetQuaHocTapGV id={id} isDisplay={tabActive === '3'} />
-          ) : (
-            <KetQuaHocTapSV
-              id={id}
-              // tabActive={tabActive}
-              isDisplay={tabActive === '3'}
-              onSetActiveTab={() => {
-                setTabActive('6');
-              }}
-            />
-          )}
-        </Tabs.TabPane> */}
+        {/* <KetQuaHocTapSV
+          id={id}
+          // tabActive={tabActive}
+          isDisplay={tabActive === '3'}
+          onSetActiveTab={() => {
+            setTabActive('6');
+          }}
+        /> */}
+
         {/* <Tabs.TabPane tab="Thông báo" key="4">
           <ThongBao isNhanVien={isNhanVien} id={id} typeLop="LopTinChi" />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Học liệu số" key="5">
           <HocLieuSo />
         </Tabs.TabPane>
-        {access.nhanVien && (
-          <Tabs.TabPane tab="Nhập điểm">
-            <NhapDiem id={id} />
-          </Tabs.TabPane>
-        )}
         {access.sinhVien && thongTinChung?.giangVienList?.length > 0 && (
           <Tabs.TabPane tab="Đánh giá giảng viên" key="6">
             <DanhGiaGiangVien idLop={id} />

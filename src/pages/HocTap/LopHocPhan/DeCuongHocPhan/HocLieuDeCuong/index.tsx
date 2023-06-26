@@ -1,5 +1,6 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
+import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { EyeOutlined } from '@ant-design/icons';
 import { Switch } from 'antd';
 import { useModel } from 'umi';
@@ -49,8 +50,7 @@ const HocLieuDeCuongPage = () => {
         modelName="hocphan.hoclieudecuong"
         title="Đề cương học liệu"
         hideCard
-        getData={() => console.log()}
-        buttons={{ reload: false, create: false }}
+        buttons={{ create: false }}
       />
     </>
   );

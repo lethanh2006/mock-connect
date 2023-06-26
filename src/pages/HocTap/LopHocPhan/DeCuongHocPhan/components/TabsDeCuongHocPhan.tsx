@@ -15,7 +15,7 @@ const TabsDeCuongHocPhan = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
         <Tabs.TabPane key="0" tab="Thông tin chung" />
         <Tabs.TabPane key="1" tab="Giảng viên" />
@@ -35,7 +35,7 @@ const TabsDeCuongHocPhan = () => {
       ) : activeKey === '4' ? (
         <TrongSoHocPhanPage />
       ) : null}
-    </div>
+    </>
   );
 };
 

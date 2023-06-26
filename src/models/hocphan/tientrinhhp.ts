@@ -1,9 +1,15 @@
 import useInitModel from '@/hooks/useInitModel';
 import useInitService from '@/hooks/useInitService';
-import { type HocPhan } from '@/services/DanhMucHeThong/HocPhan/typings';
+import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
+import { ipDaoTao } from '@/utils/ip';
 
 export default () => {
-  const objInit = useInitModel<HocPhan.ITienTrinhHocPhan>('tien-trinh-hp');
+  const objInit = useInitModel<HocPhan.ITienTrinhHocPhan>(
+    'tien-trinh-hp',
+    undefined,
+    undefined,
+    ipDaoTao,
+  );
   const { postService, putService } = useInitService('nd-tien-trinh');
 
   const putOrPostNoiDungModel = (

@@ -1,46 +1,33 @@
-import TableBase from '@/components/Table';
-import { type IColumn } from '@/components/Table/typing';
+import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
+import { Descriptions } from 'antd';
+import _ from 'lodash';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const TrongSoHocPhanPage = () => {
-  const { page, limit } = useModel('hocphan.trongsohocphan');
+  const { danhSach, getModel } = useModel('daotao.daudiemhocphan');
   const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 
-  const columns: IColumn<HocPhan.ITrongSoHocPhan>[] = [
-    {
-      title: 'Đầu điểm',
-      width: 150,
-      render: (val, rec) => rec.hinhThucDanhGia?.ten,
-    },
-    {
-      title: 'Hình thức đánh giá',
-      width: 150,
-      render: (val, rec) => rec.hinhThucThi?.ten,
-    },
-    {
-      title: 'Tỷ lệ đánh giá',
-      dataIndex: 'tyLeDanhGia',
-      width: 100,
-      align: 'center',
-    },
-    {
-      title: 'Đặc điểm đánh giá',
-      dataIndex: 'dacDiemDanhGia',
-      width: 120,
-    },
-  ];
+  const ts = _.range(1, 11).map(
+    (i) => (recDeCuong?.[('trongSo' + i) as keyof HocPhan.IDeCuongHocPhan] as number) ?? 0,
+  );
+  const sum = _.sum(ts);
+
+  useEffect(() => {
+    getModel();
+  }, []);
 
   return (
-    <TableBase
-      columns={columns}
-      dependencies={[page, limit]}
-      params={{ deCuongId: recDeCuong?._id }}
-      modelName="hocphan.trongsohocphan"
-      title="Trọng số"
-      getData={() => console.log()}
-      hideCard
-      buttons={{ reload: false, create: false }}
-    />
+    <Descriptions title="Trọng số học phần">
+      {danhSach.map((item, index) => (
+        <Descriptions.Item key={item._id} label={item.ten}>
+          {recDeCuong?.[`trongSo${index + 1}` as keyof HocPhan.IDeCuongHocPhan]}%
+        </Descriptions.Item>
+      ))}
+      <Descriptions.Item key={'2'} label="Điểm KTHP">
+        {100 - sum}%
+      </Descriptions.Item>
+    </Descriptions>
   );
 };
 

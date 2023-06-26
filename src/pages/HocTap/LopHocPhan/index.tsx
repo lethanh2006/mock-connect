@@ -3,14 +3,14 @@ import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
-import { type LopHocPhan as ILopTinChi } from '@/services/HocTap/LopHocPhan/typings';
+import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { history, useModel } from 'umi';
 
-const LopTinChi = () => {
+const LopHocPhanPage = () => {
   const { page, limit, sinhVienGetModel } = useModel('daotao.lophocphan');
   const { record: recHocKy } = useModel('daotao.hocky');
 
-  const onCell = (loptinchi: ILopTinChi.IRecord) => ({
+  const onCell = (loptinchi: LopHocPhan.IRecord) => ({
     onClick: () =>
       loptinchi.loai === ELoaiLopHocPhan.CHINH
         ? history.push(`/hoc-tap/lop-hoc-phan/${loptinchi._id}`)
@@ -18,7 +18,7 @@ const LopTinChi = () => {
     style: { cursor: loptinchi.loai === ELoaiLopHocPhan.CHINH ? 'pointer' : undefined },
   });
 
-  const columns: IColumn<ILopTinChi.IRecord>[] = [
+  const columns: IColumn<LopHocPhan.IRecord>[] = [
     {
       title: 'Tên lớp học',
       dataIndex: 'ten',
@@ -53,8 +53,9 @@ const LopTinChi = () => {
       title="Lớp tín chỉ"
       buttons={{ create: false }}
       otherButtons={[<FilterHocKy isSetHocKy key="1" />]}
+      hideChildrenRows
     />
   );
 };
 
-export default LopTinChi;
+export default LopHocPhanPage;

@@ -1,15 +1,34 @@
 import { MenuOutlined } from '@ant-design/icons';
 import { Button, Col, Collapse, Row, Space } from 'antd';
 import _ from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './style.less';
+import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
+import { useModel } from 'umi';
 
 const LichTrinhCuTheList = () => {
+  const { getAllModel, setRecord } = useModel('hocphan.tientrinhhp');
+  const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
   const [groupLichTrinh, setGroupLichTrinh] = useState<Record<string, HocPhan.ITienTrinhHocPhan[]>>(
     {},
   );
   const [maxWeek, setMaxWeek] = useState(0);
   const [activeKeys, setActiveKeys] = useState<string[]>();
+
+  const getData = async () => {
+    if (recDeCuong?._id)
+      getAllModel(false, { tuan: 1 }, { deCuongId: recDeCuong._id }).then((data) => {
+        const groupWeek = _.groupBy(data, (item) => item.tuan);
+        setGroupLichTrinh(groupWeek);
+        const maxw = _.max(data.map((item) => item.tuan));
+        setMaxWeek(maxw ?? 0);
+      });
+    setRecord(undefined);
+  };
+
+  useEffect(() => {
+    getData();
+  }, [recDeCuong?._id]);
 
   const onExpandAll = () => {
     const weeks = Object.keys(groupLichTrinh);
