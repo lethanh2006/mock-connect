@@ -2,7 +2,7 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { EyeOutlined } from '@ant-design/icons';
-import { Switch } from 'antd';
+import { Checkbox } from 'antd';
 import { useModel } from 'umi';
 
 const HocLieuDeCuongPage = () => {
@@ -15,16 +15,16 @@ const HocLieuDeCuongPage = () => {
       render: (val, rec) => rec.hocLieu?.ten,
     },
     {
-      title: 'Loại học liệu',
+      title: 'Tác giả',
       width: 120,
-      render: (val, rec) => rec.hocLieu?.loaiHocLieu,
+      render: (val, rec) => rec.hocLieu?.tacGia,
     },
     {
       title: 'Bắt buộc',
       width: 100,
       dataIndex: 'batBuoc',
       align: 'center',
-      render: (val, rec) => <Switch checked={val} />,
+      render: (val, rec) => <Checkbox checked={val} />,
     },
     {
       title: 'Học liệu',
@@ -33,11 +33,11 @@ const HocLieuDeCuongPage = () => {
       dataIndex: 'hocLieuId',
       render: (val, rec) =>
         rec.hocLieu?.url ? (
-          <a>
+          <a href={rec?.hocLieu?.url} target="_blank" rel="noreferrer">
             <EyeOutlined /> Xem chi tiết
           </a>
         ) : (
-          'Chưa cập nhật'
+          <i>Chưa cập nhật</i>
         ),
     },
   ];

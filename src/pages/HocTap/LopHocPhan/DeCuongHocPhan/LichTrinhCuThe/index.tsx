@@ -37,7 +37,6 @@ const LichTrinhCuTheList = () => {
 
   return (
     <Row gutter={[12, 12]}>
-      Lịch trình cụ thể
       {maxWeek ? (
         <Col span={24}>
           <Button icon={<MenuOutlined />} type="primary" onClick={onExpandAll}>

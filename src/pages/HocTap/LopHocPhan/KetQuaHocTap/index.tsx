@@ -5,7 +5,9 @@ import { useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: { lopHocPhanId?: string }) => {
   const { danhSach, getModel } = useModel('daotao.daudiemhocphan');
-  const { sinhVienGetDiemLopHocPhanModel, sinhVienLopHocPhan } = useModel('daotao.lophocphan');
+  const { sinhVienGetDiemLopHocPhanModel, sinhVienLopHocPhan } = useModel(
+    'daotao.sinhvienlophocphan',
+  );
   const { lopHocPhanId } = props;
 
   useEffect(() => {

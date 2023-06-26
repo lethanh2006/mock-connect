@@ -1,5 +1,6 @@
 import { Collapse, Descriptions } from 'antd';
 import { useModel } from 'umi';
+import moment from 'moment';
 
 const ThongTinChungPage = () => {
   const { record } = useModel('hocphan.decuonghocphan');
@@ -36,7 +37,11 @@ const ThongTinChungPage = () => {
           {record?.nguoiBienSoan ?? <i>Chưa cập nhật</i>}
         </Descriptions.Item>
         <Descriptions.Item label="Ngày áp dụng">
-          {record?.ngayApDung ?? <i>Chưa cập nhật</i>}
+          {record?.ngayApDung ? (
+            moment(record.ngayApDung).format('DD/MM/YYYY')
+          ) : (
+            <i>Chưa cập nhật</i>
+          )}
         </Descriptions.Item>
         <Descriptions.Item label="Căn cứ pháp lý">
           {record?.canCu?.ten ?? <i>Chưa cập nhật</i>}
