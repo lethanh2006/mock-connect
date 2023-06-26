@@ -15,7 +15,7 @@ export default {
   'menu.HocTap': 'Học tập',
   'menu.HocTap.DangKyNhuCau': 'Đăng ký nhu cầu',
   'menu.HocTap.LopHanhChinh': 'Lớp hành chính',
-  'menu.HocTap.LopTinChi': 'Lớp tín chỉ',
+  'menu.HocTap.LopHocPhan': 'Lớp học phần',
   'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
   'menu.DichVuMotCua': 'Dịch vụ một cửa',
   'menu.DichVuMotCua.TaoDon': 'Tạo đơn - Dịch vụ một cửa',

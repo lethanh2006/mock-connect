@@ -2,9 +2,8 @@ import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
-import './components/style.less';
 import ThongTinChung from './components/ThongTinChung';
-import DanhSachBuoiHoc from './components/ThongTinBuoiHoc';
+import DanhSachBuoiHoc from './LichHoc';
 
 const DetailLopTinChi = ({
   match: {
@@ -13,17 +12,16 @@ const DetailLopTinChi = ({
 }: {
   match: { params: { id: string } };
 }) => {
-  const { record, sinhVienGetByIdModel } = useModel('hoctap.loptinchi');
+  const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
+  const { record, sinhVienGetByIdModel } = useModel('daotao.lophocphan');
   const hash = window.location.hash;
   const [tabActive, setTabActive] = useState<string>(hash.includes('danhgia') ? '6' : '1');
-  const isNhanVien = localStorage.getItem('vaiTro') === 'nhan_vien';
-
-  // useEffect(() => {
-  //   getThongTinChungLopTinChi(id);
-  // }, [id]);
 
   useEffect(() => {
-    if (id) sinhVienGetByIdModel(id);
+    if (id)
+      sinhVienGetByIdModel(id).then((rec) => {
+        if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
+      });
   }, [id]);
 
   return (
@@ -31,12 +29,8 @@ const DetailLopTinChi = ({
       bodyStyle={{ paddingTop: 4 }}
       title={
         <Breadcrumb style={{ cursor: 'pointer' }}>
-          <Breadcrumb.Item
-            onClick={() => {
-              history.push('/hoc-tap/lop-tin-chi');
-            }}
-          >
-            <TeamOutlined /> Lớp tín chỉ
+          <Breadcrumb.Item onClick={() => history.push('/hoc-tap/lop-hoc-phan')}>
+            <TeamOutlined /> Lớp học phần
           </Breadcrumb.Item>
           <Breadcrumb.Item>{record?.ten ?? ''}</Breadcrumb.Item>
         </Breadcrumb>
@@ -49,11 +43,11 @@ const DetailLopTinChi = ({
         activeKey={tabActive}
       >
         <Tabs.TabPane tab="Thông tin chung" key="1">
-          <ThongTinChung id={id} isGiangVien={isNhanVien} />
+          <ThongTinChung />
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="Danh sách buổi học" key="2">
-          <DanhSachBuoiHoc idLopTinChi={id} isGiangVien={isNhanVien} />
+          <DanhSachBuoiHoc />
         </Tabs.TabPane>
 
         {/* <Tabs.TabPane tab="Kết quả học tập" key="3">

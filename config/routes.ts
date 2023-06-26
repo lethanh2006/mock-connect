@@ -109,19 +109,19 @@
         ],
       },
       {
-        name: 'LopTinChi',
-        path: 'lop-tin-chi',
+        name: 'LopHocPhan',
+        path: 'lop-hoc-phan',
 
         routes: [
           {
             path: './',
             hideInMenu: true,
-            component: './HocTap/LopTinChi',
+            component: './HocTap/LopHocPhan',
             exact: true,
           },
           {
             path: './:id',
-            component: './HocTap/LopTinChi/$id',
+            component: './HocTap/LopHocPhan/$id',
             hideInMenu: true,
             exact: true,
           },

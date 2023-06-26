@@ -1,17 +1,16 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import SelectHocKy from '@/pages/DaoTao/HocKy/SelectHocKy';
+import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
 import { type LopHocPhan as ILopTinChi } from '@/services/HocTap/LopHocPhan/typings';
 import { history, useModel } from 'umi';
-import { useState } from 'react';
 
 const LopTinChi = () => {
-  const { page, limit, sinhVienGetModel } = useModel('hoctap.loptinchi');
-  const [maHocKy, setMaHocKy] = useState<string>();
+  const { page, limit, sinhVienGetModel } = useModel('daotao.lophocphan');
+  const { record: recHocKy } = useModel('daotao.hocky');
 
   const onCell = (loptinchi: ILopTinChi.IRecord) => ({
-    onClick: () => history.push(`/hoc-tap/lop-tin-chi/${loptinchi._id}`),
+    onClick: () => history.push(`/hoc-tap/lop-hoc-phan/${loptinchi._id}`),
     style: { cursor: 'pointer' },
   });
 
@@ -43,21 +42,13 @@ const LopTinChi = () => {
   return (
     <TableBase
       columns={columns}
-      dependencies={[page, limit, maHocKy]}
-      params={{ maHocKy }}
+      dependencies={[page, limit, recHocKy?._id]}
+      params={{ maHocKy: recHocKy?.ma }}
       getData={sinhVienGetModel}
-      modelName="hoctap.loptinchi"
+      modelName="daotao.lophocphan"
       title="Lớp tín chỉ"
       buttons={{ create: false }}
-      otherButtons={[
-        <SelectHocKy
-          onChange={(val) => setMaHocKy(val)}
-          selectMa
-          style={{ width: 300 }}
-          key="1"
-          allowClear
-        />,
-      ]}
+      otherButtons={[<FilterHocKy isSetHocKy key="1" />]}
     />
   );
 };
