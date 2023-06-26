@@ -8,6 +8,7 @@ import DanhSachSinhVien from './DanhSachSinhVien';
 const ThongTinChung = () => {
   const { loading, record } = useModel('daotao.lophocphan');
   const {
+    record: recLopThucHanh,
     danhSach: danhSachLopThucHanh,
     sinhVienGetModel: getLopThucHanh,
     danhSachNhanSu: danhSachNhanSuLopTH,
@@ -19,9 +20,11 @@ const ThongTinChung = () => {
   const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 
   useEffect(() => {
-    getAllNhanSu(false, undefined, { lopHocPhanId: record?._id });
     setActiveKey('-1');
-    getLopThucHanh({ tenCha: record?.ten });
+    if (record?._id) {
+      getAllNhanSu(false, undefined, { lopHocPhanId: record?._id });
+      getLopThucHanh({ tenCha: record?.ten });
+    }
   }, [record?._id]);
 
   useEffect(() => {
@@ -43,9 +46,12 @@ const ThongTinChung = () => {
         <Descriptions.Item label="Sĩ số">{record?.siSo ?? 0} sinh viên</Descriptions.Item>
       </Descriptions>
 
-      <DanhSachGiangVien danhSachNhanSu={danhSachNhanSu} title="Giảng viên" />
+      <DanhSachGiangVien
+        danhSachNhanSu={danhSachNhanSu?.map((item) => item.nhanSu)}
+        title="Giảng viên"
+      />
 
-      <h4 style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 12 }}>
+      <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
         Thông tin điểm danh của bạn
       </h4>
       <p style={{ paddingBottom: 2 }}>
@@ -63,12 +69,17 @@ const ThongTinChung = () => {
 
       {activeKey !== '-1' ? (
         <DanhSachGiangVien
-          danhSachNhanSu={danhSachNhanSuLopTH}
+          danhSachNhanSu={danhSachNhanSuLopTH?.map((item) => item.nhanSu)}
           title="Giảng viên phụ trách nhóm lớp"
         />
       ) : null}
 
-      <DanhSachSinhVien isThucHanh={activeKey !== '-1'} />
+      <DanhSachSinhVien
+        sinhVienList={
+          activeKey !== '-1' ? recLopThucHanh?.sinhVienList ?? [] : record?.sinhVienList ?? []
+        }
+        loading={loading}
+      />
 
       {/* <Modal
         title="Vắng điểm danh"

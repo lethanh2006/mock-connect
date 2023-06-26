@@ -3,7 +3,7 @@ import { type IColumn } from '@/components/Table/typing';
 import { history, useModel } from 'umi';
 
 const LopHanhChinhPage = () => {
-  const { page, limit, sinhVienGetModel } = useModel('hoctap.lophanhchinh');
+  const { page, limit, sinhVienGetModel } = useModel('daotao.lophanhchinh');
 
   const onCell = (lophanhchinh: LopHanhChinh.IRecord) => ({
     onClick: () => history.push(`/hoc-tap/lop-hanh-chinh/${lophanhchinh._id}`),
@@ -14,10 +14,32 @@ const LopHanhChinhPage = () => {
     {
       title: 'Tên lớp học',
       dataIndex: 'ten',
-      width: 200,
+      width: 150,
       onCell,
       filterType: 'string',
       sortable: true,
+    },
+    {
+      title: 'Sĩ số',
+      dataIndex: 'siSo',
+      align: 'center',
+      width: 80,
+      onCell,
+      filterType: 'number',
+      sortable: true,
+    },
+    {
+      title: 'Khóa sinh viên',
+      align: 'center',
+      width: 80,
+      render: (val, rec) => rec.khoaSinhVien?.ten,
+      onCell,
+    },
+    {
+      title: 'Ngành đào tạo',
+      width: 150,
+      render: (val, rec) => rec.nganh?.ten,
+      onCell,
     },
   ];
 
@@ -26,7 +48,7 @@ const LopHanhChinhPage = () => {
       columns={columns}
       dependencies={[page, limit]}
       getData={sinhVienGetModel}
-      modelName="hoctap.lophanhchinh"
+      modelName="daotao.lophanhchinh"
       title="Lớp hành chính"
       buttons={{ create: false }}
     />

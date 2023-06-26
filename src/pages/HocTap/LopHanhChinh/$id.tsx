@@ -1,6 +1,6 @@
 import { Card, Tabs, Breadcrumb } from 'antd';
 import { useEffect } from 'react';
-import ThongTinChungLopHanhChinh from '../components/ThongTinChung';
+import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 import { useModel, history } from 'umi';
 import { TeamOutlined } from '@ant-design/icons';
 
@@ -11,7 +11,7 @@ const DetailLopHanhChinh = ({
 }: {
   match: { params: { id: string } };
 }) => {
-  const { record, sinhVienGetByIdModel } = useModel('hoctap.lophanhchinh');
+  const { record, sinhVienGetByIdModel } = useModel('daotao.lophanhchinh');
 
   useEffect(() => {
     if (id) sinhVienGetByIdModel(id);
@@ -22,11 +22,7 @@ const DetailLopHanhChinh = ({
       bodyStyle={{ paddingTop: 4 }}
       title={
         <Breadcrumb style={{ cursor: 'pointer' }}>
-          <Breadcrumb.Item
-            onClick={() => {
-              history.push('/hoc-tap/lop-hanh-chinh');
-            }}
-          >
+          <Breadcrumb.Item onClick={() => history.push('/hoc-tap/lop-hanh-chinh')}>
             <TeamOutlined /> Lớp hành chính
           </Breadcrumb.Item>
           <Breadcrumb.Item>{record?.ten ?? ''}</Breadcrumb.Item>

@@ -1,18 +1,16 @@
 import teacherIcon from '@/assets/teacher.png';
-import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Avatar, List } from 'antd';
 
 const DanhSachGiangVien = (props: {
-  danhSachNhanSu?: LopHocPhan.IRecordNhanSuLopHP[];
+  danhSachNhanSu?: (ToChucNhanSu.INhanSu | undefined)[];
   title?: string;
 }) => {
-  const { danhSachNhanSu, title } = props;
+  const { title } = props;
+  const danhSachNhanSu = props.danhSachNhanSu?.filter((item) => item) ?? [];
 
   return (
     <>
-      <h4 style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 16 }}>
-        {title ?? 'Giảng viên'}
-      </h4>
+      <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>{title ?? 'Giảng viên'}</h4>
       {danhSachNhanSu?.length ? (
         <List
           grid={{
@@ -28,12 +26,12 @@ const DanhSachGiangVien = (props: {
           renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
-                avatar={<Avatar src={item?.nhanSu?.urlAnhDaiDien || teacherIcon} />}
-                title={<>Họ và tên: {item?.nhanSu?.ten || <i>Chưa cập nhật</i>}</>}
+                avatar={<Avatar src={item?.urlAnhDaiDien || teacherIcon} />}
+                title={<>Họ và tên: {item?.ten || <i>Chưa cập nhật</i>}</>}
                 description={
                   <>
-                    <div>Email: {item?.nhanSu?.email || <i>Chưa cập nhật</i>}</div>
-                    <div>Số điện thoại: {item?.nhanSu?.sdtCaNhan || <i>Chưa cập nhật</i>}</div>
+                    <div>Email: {item?.email || <i>Chưa cập nhật</i>}</div>
+                    <div>Số điện thoại: {item?.sdtCaNhan || <i>Chưa cập nhật</i>}</div>
                   </>
                 }
               />

@@ -2,6 +2,7 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
+import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan as ILopTinChi } from '@/services/HocTap/LopHocPhan/typings';
 import { history, useModel } from 'umi';
 
@@ -10,8 +11,11 @@ const LopTinChi = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
 
   const onCell = (loptinchi: ILopTinChi.IRecord) => ({
-    onClick: () => history.push(`/hoc-tap/lop-hoc-phan/${loptinchi._id}`),
-    style: { cursor: 'pointer' },
+    onClick: () =>
+      loptinchi.loai === ELoaiLopHocPhan.CHINH
+        ? history.push(`/hoc-tap/lop-hoc-phan/${loptinchi._id}`)
+        : undefined,
+    style: { cursor: loptinchi.loai === ELoaiLopHocPhan.CHINH ? 'pointer' : undefined },
   });
 
   const columns: IColumn<ILopTinChi.IRecord>[] = [
@@ -43,7 +47,7 @@ const LopTinChi = () => {
     <TableBase
       columns={columns}
       dependencies={[page, limit, recHocKy?._id]}
-      params={{ maHocKy: recHocKy?.ma }}
+      params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH }}
       getData={sinhVienGetModel}
       modelName="daotao.lophocphan"
       title="Lớp tín chỉ"

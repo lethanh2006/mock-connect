@@ -5,11 +5,9 @@ import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { Avatar, Col, Descriptions, Modal, Row } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
-import { useModel } from 'umi';
 
-const DanhSachSinhVien = (props: { isThucHanh: boolean }) => {
-  const { record: recordLopTinChi, loading } = useModel('daotao.lophocphan');
-  const { record: recLopThucHanh } = useModel('daotao.lopthuchanh');
+const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: boolean }) => {
+  const { sinhVienList, loading } = props;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [record, setRecord] = useState<SinhVien.IRecord>();
 
@@ -52,11 +50,7 @@ const DanhSachSinhVien = (props: { isThucHanh: boolean }) => {
     <>
       <TableStaticData
         otherProps={{ loading, onRow }}
-        data={
-          props.isThucHanh
-            ? recLopThucHanh?.sinhVienList ?? []
-            : recordLopTinChi?.sinhVienList ?? []
-        }
+        data={sinhVienList}
         columns={columns}
         addStt
       />

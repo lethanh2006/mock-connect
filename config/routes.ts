@@ -97,12 +97,12 @@
           {
             path: './',
             hideInMenu: true,
-            component: './HocTap/LopHanhChinh/SinhVien',
+            component: './HocTap/LopHanhChinh',
             exact: true,
           },
           {
             path: './:id',
-            component: './HocTap/LopHanhChinh/SinhVien/$id',
+            component: './HocTap/LopHanhChinh/$id',
             hideInMenu: true,
             exact: true,
           },
