@@ -41,3 +41,18 @@ export enum ETrangThaiDangKyGiangDay {
   DA_XU_LY_XONG = 'Đã xử lý xong',
   CHUA_CO_DANG_KY = 'Chưa có đăng ký',
 }
+
+export enum ELoaiDiemChu {
+  A_PLUS = 'A+',
+  A = 'A',
+  B_PLUS = 'B+',
+  B = 'B',
+  C_PLUS = 'C+',
+  C = 'C',
+  D_PLUS = 'D+',
+  D = 'D',
+  F = 'F',
+  HOAN_THI = 'I', // hoãn thi
+  CHUA_DU_DU_LIEU = 'X', // chưa đủ dữ liệu
+  MIEN_THI = 'R', // miễn thi
+}

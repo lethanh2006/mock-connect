@@ -1,22 +1,13 @@
 import useInitModel from '@/hooks/useInitModel';
+import { getDiemLopHocPhan } from '@/services/HocTap/LopHocPhan';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { ipDaoTao } from '@/utils/ip';
+import { useState } from 'react';
 
 export default () => {
   const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
-  const { getByIdModel, getModel } = objInit;
-
-  // const [listTkbSinhVien, setListTkbSinhVien] = useState<LopHocPhan.IBuoiHoc[]>([]);
-  // const [danhSachMonHoc, setDanhSachMonHoc] = useState<LopHocPhan.InfoMonHoc[]>([]);
-  // const [idNhomLop, setIdNhomLop] = useState<number>(-1);
-  // const [hinhThucDaoTao, setHinhThucDaoTao] = useState<number>();
-  // const [flagDaDanhGia, setFlagDaDanhGia] = useState(false);
-  // const [danhSachDiemTongKet, setDanhSachDiemTongKet] = useState<LopHocPhan.DiemTongKet[]>([]);
-  // // const [dataBieuMau, setDataBieuMau] = useState<BieuMau.Record>({} as BieuMau.Record);
-  // const [danhSachDiemThanhPhanTheoKy, setDanhSachDiemThanhPhanTheoKy] = useState<any[]>([]);
-  // const [thongTinChung, setThongTinChung] = useState<LopHocPhan.ThongTinChungLopTinChiRecord>(
-  //   {} as any,
-  // );
+  const { getByIdModel, getModel, setLoading } = objInit;
+  const [sinhVienLopHocPhan, setSinhVienLopHocPhan] = useState<LopHocPhan.IRecordSinhVienLopHP>();
 
   const sinhVienGetModel = async (params: any): Promise<LopHocPhan.IRecord[]> =>
     getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
@@ -24,28 +15,27 @@ export default () => {
   const sinhVienGetByIdModel = async (idLop: string): Promise<LopHocPhan.IRecord> =>
     getByIdModel(`${idLop}/sinh-vien`);
 
+  const sinhVienGetDiemLopHocPhanModel = async (
+    lopHocPhanId: string,
+  ): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
+    setLoading(true);
+    try {
+      const response = await getDiemLopHocPhan(lopHocPhanId);
+      setSinhVienLopHocPhan(response?.data?.data ?? null);
+      return response?.data?.data;
+    } catch (er) {
+      return Promise.reject(er);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     ...objInit,
     sinhVienGetModel,
     sinhVienGetByIdModel,
-    // idNhomLop,
-    // setIdNhomLop,
-    // hinhThucDaoTao,
-    // setHinhThucDaoTao,
-    // flagDaDanhGia,
-    // setFlagDaDanhGia,
-    // thongTinChung,
-    // setThongTinChung,
-    // thongTinNhomLop,
-    // setThongTinNhomLop,
-    // listTkbSinhVien,
-    // setListTkbSinhVien,
-    // recordBuoiHoc,
-    // setRecordBuoiHoc,
-    // danhSachMonHoc,
-    // setDanhSachMonHoc,
-    // danhSachDiemThanhPhanTheoKy,
-    // setDanhSachDiemThanhPhanTheoKy,
-    // danhSachDiemTongKet,
+    sinhVienLopHocPhan,
+    setSinhVienLopHocPhan,
+    sinhVienGetDiemLopHocPhanModel,
   };
 };
