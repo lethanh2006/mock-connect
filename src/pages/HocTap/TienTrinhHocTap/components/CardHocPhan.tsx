@@ -1,0 +1,74 @@
+import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
+import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
+import { useState } from 'react';
+import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
+import { useModel } from 'umi';
+
+const CardHocPhan = (props: {
+  chuongTrinhKhung?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
+  isChuyenNganh?: boolean;
+}) => {
+  const { setSinhVienLopHocPhan } = useModel('daotao.sinhvienlophocphan');
+  const [modalVisible, setModalVisible] = useState(false);
+  const { chuongTrinhKhung, isChuyenNganh } = props;
+  const listDiem: string[] = chuongTrinhKhung?.lichSuDiem?.map((diem) => diem.diemChu || '-') ?? [];
+  if (listDiem?.slice(-1)[0] !== '-' && chuongTrinhKhung?.hoc === ETrangThaiHocTap.DANG_HOC)
+    listDiem?.push('-');
+
+  return (
+    <div className="col-hoc-phan">
+      <div
+        className={`card-hoc-phan ${
+          chuongTrinhKhung?.hoc === ETrangThaiHocTap.CHUA_HOC && 'card-chua-hoc'
+        } ${isChuyenNganh && 'card-chua-hoc'}`}
+        onClick={() => {
+          setSinhVienLopHocPhan(chuongTrinhKhung?.lichSuDiem?.[0]);
+          setModalVisible(true);
+        }}
+      >
+        <h4
+          className={
+            chuongTrinhKhung?.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON ? 'tu_chon' : undefined
+          }
+        >
+          {chuongTrinhKhung?.hocPhan?.ten}
+        </h4>
+        <span className="tin-chi">({chuongTrinhKhung?.soTinChi} TC)</span>
+      </div>
+      {listDiem?.map((diem, index) => (
+        <div
+          className={`bookmark bookmark-diem ${
+            !diem || diem === '-'
+              ? 'diem-gray'
+              : diem.includes('A') || diem.includes('B')
+              ? 'diem-green'
+              : diem?.includes('F')
+              ? 'diem-red'
+              : 'diem-yellow'
+          }`}
+          style={{ left: 1 + index * 2 + 'rem' }}
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
+        >
+          {diem}
+        </div>
+      ))}
+      {/* 
+      {hocPhan?.hoc === 'DANG_HOC' ? (
+        <div className="bookmark bookmark-dang-hoc" title="Đang học" />
+      ) : hocPhan?.hoc === 'DANG_HOC_LAI' ? (
+        <div className="bookmark bookmark-dang-hoc" title="Đang học lại" />
+      ) : (
+        <></>
+      )} */}
+
+      <ModalChiTietDiem
+        setVisible={setModalVisible}
+        visible={modalVisible}
+        chuongTrinhKhung={chuongTrinhKhung}
+      />
+    </div>
+  );
+};
+
+export default CardHocPhan;

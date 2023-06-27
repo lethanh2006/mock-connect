@@ -90,6 +90,11 @@
     routes: [
       { name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
       {
+        name: 'TienTrinhHocTap',
+        path: 'tien-trinh-hoc-tap',
+        component: './HocTap/TienTrinhHocTap',
+      },
+      {
         name: 'LopHanhChinh',
         path: 'lop-hanh-chinh',
 

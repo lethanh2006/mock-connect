@@ -2,10 +2,10 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Card, Modal, Tabs } from 'antd';
+import { Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import DetailKetQuaHocTap from '../../LopHocPhan/KetQuaHocTap';
+import ModalChiTietDiem from './ModalChiTietDiem';
 
 const DiemThanhPhanSV = () => {
   const { danhSach, sinhVienGetAllDiemLopHocPhanModel, loading } = useModel(
@@ -83,15 +83,17 @@ const DiemThanhPhanSV = () => {
     {
       title: 'Tên học phần',
       width: 150,
-      render: (val, rec) => rec.lopHocPhan.hocPhan?.ten ?? '--',
+      render: (val, rec) => rec.hocPhan?.ten ?? '--',
       onCell,
     },
-    // {
-    //   title: 'Số tín chỉ',
-    //   dataIndex: 'so_tin_chi',
-    //   width: 100,
-    //   onCell,
-    // },
+    {
+      title: 'Số tín chỉ',
+      dataIndex: 'soTinChi',
+      width: 100,
+      align: 'center',
+      sortable: true,
+      onCell,
+    },
     {
       title: 'Tổng kết (hệ 10)',
       dataIndex: 'diemTongKet',
@@ -182,15 +184,11 @@ const DiemThanhPhanSV = () => {
         </Tabs>
       </Card>
 
-      <Modal
-        title=""
+      <ModalChiTietDiem
+        lopHocPhanId={lopHocPhanId}
         visible={modalVisible}
-        onCancel={() => setModalVisible(false)}
-        okButtonProps={{ hidden: true }}
-        cancelText="Đóng"
-      >
-        <DetailKetQuaHocTap lopHocPhanId={lopHocPhanId} />
-      </Modal>
+        setVisible={setModalVisible}
+      />
     </>
   );
 };
