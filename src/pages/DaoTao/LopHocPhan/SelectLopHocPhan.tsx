@@ -28,7 +28,7 @@ const SelectLopHocPhan = (props: {
         onChange={onChange}
         options={danhSach.map((item) => ({
           key: item._id,
-          value:  item._id,
+          value:  selectMa?item.ten:item._id,
           label: `${item.ten} `,
         }))}
         showSearch

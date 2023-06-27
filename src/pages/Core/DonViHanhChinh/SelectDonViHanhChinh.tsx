@@ -19,7 +19,7 @@ const SelectDonViHanhChinh = (props: {
   notRequiredQuanHuyen?: boolean;
   notRequiredXaPhuong?: boolean;
   notRequiredDiaChiCuThe?: boolean;
-  initialValue?: DonViHanhChinh.IRecord;
+  initialValue?: DonViHanhChinh.IDataInit;
 }) => {
   const { form, suffix, listTinh, hasSoNha, hideTinh, hideQuanHuyen, hideXaPhuong, initialValue } =
     props;
@@ -66,6 +66,7 @@ const SelectDonViHanhChinh = (props: {
           <Form.Item
             name={suffix?'tinhTp' + suffix:'tinhTp'}
             label="Tỉnh/Thành phố"
+            initialValue={props.initialValue?.tinhTp}
             rules={props.notRequiredTinh === true ? [] : [...rules.required]}
           >
             <Select
@@ -85,7 +86,7 @@ const SelectDonViHanhChinh = (props: {
       )}
       {!hideQuanHuyen && (
         <Col span={12} md={hasSoNha ? 6 : 8}>
-          <Form.Item name={suffix?'quanHuyen' + suffix:'quanHuyen'} label="Quận/Huyện">
+          <Form.Item    initialValue={props.initialValue?.quanHuyen} name={suffix?'quanHuyen' + suffix:'quanHuyen'} label="Quận/Huyện">
             <Select
               placeholder="Chọn quận/huyện"
               options={(listHuyen ?? []).map((item) => ({
@@ -104,7 +105,7 @@ const SelectDonViHanhChinh = (props: {
 
       {!hideXaPhuong && (
         <Col span={12} md={hasSoNha ? 6 : 8}>
-          <Form.Item name={suffix?'xaPhuong' + suffix:'xaPhuong'} label="Phường/Xã">
+          <Form.Item  initialValue={props.initialValue?.xaPhuong} name={suffix?'xaPhuong' + suffix:'xaPhuong'} label="Phường/Xã">
             <Select
               placeholder="Chọn phường/xã"
               allowClear

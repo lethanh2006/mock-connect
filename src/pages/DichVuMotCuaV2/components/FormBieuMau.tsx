@@ -318,7 +318,11 @@ const FormBieuMau = (props: {
             notRequiredQuanHuyen={!item?.isRequired}
             notRequiredTinh={!item?.isRequired}
             notRequiredXaPhuong={!item?.isRequired}
-            initialValue={item?.value}
+            initialValue={{
+              tinhTp:item?.value?.tenTinh,
+              quanHuyen:item?.value?.tenQuanHuyen,
+              xaPhuong:item?.value?.tenPhuongXa,
+            }}
           />
         );
         break;
@@ -443,7 +447,7 @@ const FormBieuMau = (props: {
           //     </Select.Option>
           //   ))}
           // </Select>
-          <SelectHocKy/>
+          <SelectHocKy selectMa={true}/>
         );
         break;
       }
@@ -459,7 +463,7 @@ const FormBieuMau = (props: {
           //     </Select.Option>
           //   ))}
           // </Select>
-          <SelectNamHoc/>
+          <SelectNamHoc selectTen={true}/>
         );
         break;
       }
@@ -479,7 +483,7 @@ const FormBieuMau = (props: {
           //     </Select.Option>
           //   ))}
           // </AutoComplete>
-          <SelectHocPhan />
+          <SelectHocPhan selectMa={true}/>
         );
         break;
       }
@@ -499,7 +503,7 @@ const FormBieuMau = (props: {
           //     </Select.Option>
           //   ))}
           // </Select>
-          <SelectLopHocPhan />
+          <SelectLopHocPhan selectMa={true}/>
         );
         break;
       }
