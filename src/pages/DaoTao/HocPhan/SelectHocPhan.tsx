@@ -13,7 +13,7 @@ const SelectHocPhan = (props: {
   loadData?: boolean;
   selectMa?: boolean;
 }) => {
-  const { value, onChange, multiple,isSinhVien, allowClear, loadData, selectMa } = props;
+  const { value, onChange, multiple, allowClear, loadData, selectMa } = props;
   const { danhSach, getAllModel } = useModel('hocphan.hocphan');
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const SelectHocPhan = (props: {
         options={danhSach.map((item) => ({
           key: item._id,
           value: selectMa ? item.ma : item._id,
-          label: `${item.ten} (${item.ma} - ${item.soTinChi}TC)`,
+          label: `${item.ten} (${item.ma})`,
         }))}
         showSearch
         optionFilterProp="label"

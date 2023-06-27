@@ -4,7 +4,13 @@ import { EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import { useState } from 'react';
 
 export default () => {
-  const objInit = useInitModel<DotKhaoSat.IRecord>('dot-khao-sat');
+  const objInit = useInitModel<DotKhaoSat.IRecord>(
+    'dot-khao-sat',
+    undefined,
+    undefined,
+    undefined,
+    { thoiGianKetThuc: -1 },
+  );
   const [thoiGian, setThoiGian] = useState<EThoiGianDot>(EThoiGianDot.DANG_DIEN_RA);
   const { getModel } = objInit;
 

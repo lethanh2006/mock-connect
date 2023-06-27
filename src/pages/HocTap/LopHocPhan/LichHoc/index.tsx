@@ -22,7 +22,7 @@ const DanhSachBuoiHoc = () => {
     if (recLopHocPhan?.ten)
       getTheoLopHocPhan(recLopHocPhan.ten).then((data) => {
         data.every((item) => {
-          if (moment().isSameOrBefore(item.ngay, 'day')) {
+          if (moment().diff(item.ngay, 'day') >= 0) {
             setBuoiHocGanNhat(item);
             return true;
           }
@@ -148,7 +148,7 @@ const DanhSachBuoiHoc = () => {
           index: index + 1,
         }))}
         columns={columns}
-        otherProps={{ pagination: false, loading }}
+        otherProps={{ pagination: false, loading, scroll: { y: 600 } }}
       />
 
       <ModalThoiKhoaBieu />
