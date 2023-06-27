@@ -10,7 +10,7 @@ const TienTrinhHocTap = () => {
   return (
     <Card title="Tiến trình học tập" className="card-tien-trinh">
       <Tabs accessKey={activeTabKey} onChange={(tab) => setActiveTabKey(tab)}>
-        <Tabs.TabPane tab="Chương trình khung" key="1">
+        <Tabs.TabPane tab="Chương trình đào tạo" key="1">
           <TienTrinhChuongTrinhKhung />
         </Tabs.TabPane>
 

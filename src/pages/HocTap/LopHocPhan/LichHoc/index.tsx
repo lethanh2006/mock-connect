@@ -2,9 +2,10 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalThoiKhoaBieu from './Modal';
-import { useEffect } from 'react';
+import ThongTinBuoiHoc from './ThongTinBuoiHoc';
 
 const DanhSachBuoiHoc = () => {
   const { record: recLopHocPhan } = useModel('daotao.lophocphan');
@@ -15,9 +16,19 @@ const DanhSachBuoiHoc = () => {
     danhSach,
     loading,
   } = useModel('daotao.thoikhoabieu');
+  const [buoiHocGanNhat, setBuoiHocGanNhat] = useState<ThoiKhoaBieu.IRecord>();
 
   useEffect(() => {
-    if (recLopHocPhan?.ten) getTheoLopHocPhan(recLopHocPhan.ten);
+    if (recLopHocPhan?.ten)
+      getTheoLopHocPhan(recLopHocPhan.ten).then((data) => {
+        data.every((item) => {
+          if (moment().isSameOrBefore(item.ngay, 'day')) {
+            setBuoiHocGanNhat(item);
+            return true;
+          }
+          return false;
+        });
+      });
   }, [recLopHocPhan?._id]);
 
   const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
@@ -33,13 +44,20 @@ const DanhSachBuoiHoc = () => {
 
   const columns: IColumn<ThoiKhoaBieu.IRecord>[] = [
     {
+      title: 'TT',
+      dataIndex: 'index',
+      width: 60,
+      align: 'center',
+      onCell,
+    },
+    {
       title: 'Ngày học',
       dataIndex: 'ngay',
       width: 150,
       render: (val) =>
         val ? (
           <>
-            Tuần {moment(val).week()}, thứ {moment(val).day()}, ngày{' '}
+            Tuần {moment(val).week()}, {moment(val).format('dddd')}, ngày{' '}
             {moment(val).format('DD/MM/YYYY')}
           </>
         ) : null,
@@ -99,30 +117,38 @@ const DanhSachBuoiHoc = () => {
 
   return (
     <>
-      {/* {recordBuoiHocGanNhat !== undefined ? (
+      {buoiHocGanNhat?._id ? (
         <>
-          <ThongTinBuoiHoc buoiHoc={recordBuoiHocGanNhat} title="Buổi học gần nhất" />
-          <Button
-            onClick={() => {
-              setRecord(recordBuoiHocGanNhat);
-              if (isGiangVien) khoiTaoDiemDanhByIdBuoiHocModel(recordBuoiHocGanNhat.id);
-              setVisibleDiemDanh(true);
-            }}
-            style={{ marginBottom: 24 }}
-          >
-            Chi tiết
-          </Button>
+          <ThongTinBuoiHoc
+            buoiHoc={buoiHocGanNhat}
+            title={
+              <>
+                Buổi học gần nhất{' '}
+                <a
+                  onClick={() => {
+                    setThoiKhoaBieu(buoiHocGanNhat);
+                    setVisibleForm(true);
+                  }}
+                  style={{ fontSize: 14, fontWeight: 400 }}
+                >
+                  (xem chi tiết)
+                </a>
+              </>
+            }
+          />
           <br />
         </>
-      ) : null} */}
+      ) : null}
 
-      <span style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 12 }}>Tất cả buổi học</span>
+      <span style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>Tất cả buổi học</span>
       <TableStaticData
         hasTotal
-        data={danhSach}
+        data={danhSach.map((item, index) => ({
+          ...item,
+          index: index + 1,
+        }))}
         columns={columns}
         otherProps={{ pagination: false, loading }}
-        addStt
       />
 
       <ModalThoiKhoaBieu />

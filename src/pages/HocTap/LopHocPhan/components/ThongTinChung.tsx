@@ -18,6 +18,7 @@ const ThongTinChung = () => {
     useModel('daotao.nhansulophocphan');
   const [activeKey, setActiveKey] = useState<string>('-1');
   const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
+  console.log('🚀 ~ file: ThongTinChung.tsx:18 ~ ThongTinChung ~ danhSachNhanSu:', danhSachNhanSu);
 
   useEffect(() => {
     setActiveKey('-1');
@@ -47,7 +48,7 @@ const ThongTinChung = () => {
       </Descriptions>
 
       <DanhSachGiangVien
-        danhSachNhanSu={danhSachNhanSu?.map((item) => item.nhanSu)}
+        danhSachNhanSu={danhSachNhanSu?.map((item) => item.nhanSu ?? { _id: '-1' })}
         title="Giảng viên"
       />
 

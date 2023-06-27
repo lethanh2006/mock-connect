@@ -2,13 +2,16 @@ import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { Descriptions } from 'antd';
 import moment from 'moment';
 
-const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord }) => {
-  const { buoiHoc } = props;
+const ThongTinBuoiHoc = (props: {
+  buoiHoc?: ThoiKhoaBieu.IRecord;
+  title?: string | JSX.Element;
+}) => {
+  const { buoiHoc, title } = props;
 
   return (
-    <Descriptions column={{ xs: 1, md: 3 }} title="Thông tin buổi học">
+    <Descriptions column={{ xs: 1, md: 3 }} title={title ?? 'Thông tin buổi học'}>
       <Descriptions.Item label="Ngày học" span={2}>
-        Tuần {moment(buoiHoc?.ngay).week()}, thứ {moment(buoiHoc?.ngay).day()}, ngày{' '}
+        Tuần {moment(buoiHoc?.ngay).week()}, {moment(buoiHoc?.ngay).format('dddd')}, ngày{' '}
         {moment(buoiHoc?.ngay).format('DD/MM/YYYY')}
       </Descriptions.Item>
       <Descriptions.Item label="Tiết học">

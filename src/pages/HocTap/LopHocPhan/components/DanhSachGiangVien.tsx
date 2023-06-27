@@ -2,11 +2,10 @@ import teacherIcon from '@/assets/teacher.png';
 import { Avatar, List } from 'antd';
 
 const DanhSachGiangVien = (props: {
-  danhSachNhanSu?: (ToChucNhanSu.INhanSu | undefined)[];
+  danhSachNhanSu?: (Partial<ToChucNhanSu.INhanSu> | undefined)[];
   title?: string;
 }) => {
-  const { title } = props;
-  const danhSachNhanSu = props.danhSachNhanSu?.filter((item) => item) ?? [];
+  const { title, danhSachNhanSu } = props;
 
   return (
     <>

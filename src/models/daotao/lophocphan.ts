@@ -7,6 +7,7 @@ export default () => {
   const { getByIdModel, getModel } = objInit;
 
   const sinhVienGetModel = async (params: any): Promise<LopHocPhan.IRecord[]> =>
+    params.maHocKy &&
     getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
 
   const sinhVienGetByIdModel = async (idLop: string): Promise<LopHocPhan.IRecord> =>

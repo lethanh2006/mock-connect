@@ -59,8 +59,10 @@ export default () => {
     setLoading(true);
     try {
       const response = await sinhVienGetThoiKhoaBieu(tenLop, { loaiHinhHocTap });
-      setDanhSach(response?.data?.data ?? []);
-      return response?.data?.data;
+      let data: ThoiKhoaBieu.IRecord[] = response?.data?.data ?? [];
+      data = data.sort((a, b) => (a.ngay > b.ngay ? 1 : -1));
+      setDanhSach(data);
+      return data;
     } catch (er) {
       return Promise.reject(er);
     } finally {

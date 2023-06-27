@@ -8,11 +8,14 @@ import { useModel } from 'umi';
 import ModalChiTietDiem from './ModalChiTietDiem';
 
 const DiemThanhPhanSV = () => {
-  const { danhSach, sinhVienGetAllDiemLopHocPhanModel, loading } = useModel(
-    'daotao.sinhvienlophocphan',
-  );
+  const {
+    danhSach,
+    sinhVienGetAllDiemLopHocPhanModel,
+    loading,
+    setSinhVienLopHocPhan,
+    sinhVienLopHocPhan,
+  } = useModel('daotao.sinhvienlophocphan');
   const [modalVisible, setModalVisible] = useState(false);
-  const [lopHocPhanId, setLopHocPhanId] = useState<string>();
 
   useEffect(() => {
     sinhVienGetAllDiemLopHocPhanModel();
@@ -73,7 +76,7 @@ const DiemThanhPhanSV = () => {
 
   const onCell = (rec: LopHocPhan.IRecordSinhVienLopHP) => ({
     onClick: () => {
-      setLopHocPhanId(rec.lopHocPhanId);
+      setSinhVienLopHocPhan(rec);
       setModalVisible(true);
     },
     style: { cursor: 'pointer' },
@@ -185,9 +188,9 @@ const DiemThanhPhanSV = () => {
       </Card>
 
       <ModalChiTietDiem
-        lopHocPhanId={lopHocPhanId}
         visible={modalVisible}
         setVisible={setModalVisible}
+        chuongTrinhKhung={sinhVienLopHocPhan}
       />
     </>
   );
