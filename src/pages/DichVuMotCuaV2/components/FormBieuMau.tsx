@@ -31,6 +31,7 @@ import SelectDanToc from '@/pages/Core/DanToc/SelectDanToc';
 import { accessFileUpload } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import HocPhanCoDiem from '../HocPhanCoDiem';
+import SelectLopHocPhan from "@/pages/DaoTao/LopHocPhan/SelectLopHocPhan";
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
@@ -65,7 +66,7 @@ const FormBieuMau = (props: {
   } = useModel('dvmc.dichvumotcuav2');
   const { danhSach: danhSachKyHoc } = useModel('daotao.hocky');
   const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
-  const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
+  // const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
   const { getTinhThanhPhoModel, danhSachTinh } = useModel('core.donvihanhchinh');
 
   // const {
@@ -478,20 +479,21 @@ const FormBieuMau = (props: {
       }
       case 'MY_COURSE': {
         initialValue = item?.value;
-        const lopHoc = danhSachLopTinChi;
+        // const lopHoc = danhSachLopTinChi;
         element = (
-          <Select
-            filterOption={(value, option) => includes(option?.props.children, value)}
-            showSearch
-            allowClear
-            placeholder={item?.label ?? ''}
-          >
-            {lopHoc?.map((lop: any) => (
-              <Select.Option key={lop.id} value={`${lop.ten_hoc_phan} (${lop.ma_lop})`}>
-                {lop.ten_hoc_phan} ({lop.ma_lop})
-              </Select.Option>
-            ))}
-          </Select>
+          // <Select
+          //   filterOption={(value, option) => includes(option?.props.children, value)}
+          //   showSearch
+          //   allowClear
+          //   placeholder={item?.label ?? ''}
+          // >
+          //   {lopHoc?.map((lop: any) => (
+          //     <Select.Option key={lop.id} value={`${lop.ten_hoc_phan} (${lop.ma_lop})`}>
+          //       {lop.ten_hoc_phan} ({lop.ma_lop})
+          //     </Select.Option>
+          //   ))}
+          // </Select>
+          <SelectLopHocPhan/>
         );
         break;
       }
