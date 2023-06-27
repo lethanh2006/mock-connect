@@ -2,7 +2,7 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import Upload from '@/components/Upload/UploadMultiFile';
 import rules from '@/utils/rules';
-import { checkFileSize, includes, renderFileList } from '@/utils/utils';
+import {checkFileSize, includes, renderFileList, uploadMultiFile} from '@/utils/utils';
 import { CopyOutlined } from '@ant-design/icons';
 import {
   AutoComplete,
@@ -130,12 +130,13 @@ const FormBieuMau = (props: {
         let value = values?.[`${name}[${index}].${item?.label}`];
 
         if (item?.type === 'DON_VI_HANH_CHINH') {
-          // value = {
-          //   ...values?.[`${name}[${index}].${item?.label}`],
-          //   tenTinh: tenTinh?.[`${name}[${index}].${item?.label}.maTinh`],
-          //   tenQuanHuyen: tenQuanHuyen?.[`${name}[${index}].${item?.label}.maQuanHuyen`],
-          //   tenPhuongXa: tenPhuongXa?.[`${name}[${index}].${item?.label}.maPhuongXa`],
-          // };
+          console.log('values',values)
+          value = {
+            ...values?.[`${name}[${index}].${item?.label}`],
+            tenTinh: values?.tinhTp,
+            tenQuanHuyen: values?.quanHuyen,
+            tenPhuongXa: values?.xaPhuong,
+          };
         } else if (item?.type === 'TABLE') {
           value = danhSachDataTable?.[`${name}[${index}].${item?.label}`]?.map(
             (row: { cauHinhBieuMau: DichVuMotCuaV2.CauHinhBieuMau[] }) => buildTableData(row),
@@ -166,7 +167,8 @@ const FormBieuMau = (props: {
         const checkSize = checkFileSize(values[item]?.fileList ?? []);
         if (!checkSize) return;
         // TODO: Check upload multiple file
-        // objectFileUpload[item] = await uploadMultiFile(values[item]?.fileList ?? [], true);
+        // @ts-ignore
+        objectFileUpload[item] = await uploadMultiFile(values[item]?.fileList ?? [], true);
       }
     }
     const valuesFinal = { ...values, ...objectFileUpload };
