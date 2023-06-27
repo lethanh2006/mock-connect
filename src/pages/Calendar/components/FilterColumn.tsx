@@ -63,8 +63,6 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
       />
 
       <Checkbox.Group value={selectSuKiens} onChange={changeLoaiSuKien}>
-        {/* {access.sinhVienVaNhanVien ? (
-          <> */}
         <Row>
           <Checkbox value={ELoaiSuKien.LICH_HOC}>
             <p
@@ -93,8 +91,6 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
             </p>
           </Checkbox>
         </Row>
-        {/* </>
-        ) : null} */}
         <Row>
           <Checkbox value={ELoaiSuKien.CA_NHAN}>
             <p
@@ -110,10 +106,10 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
           </Checkbox>
         </Row>
         <Row>
-          <Checkbox value={ELoaiSuKien.TAT_CA}>
+          <Checkbox value={ELoaiSuKien.CHUNG}>
             <p
               style={{
-                backgroundColor: ColorSuKien[ELoaiSuKien.TAT_CA],
+                backgroundColor: ColorSuKien[ELoaiSuKien.CHUNG],
                 color: 'white',
                 padding: '2px 6px',
                 borderRadius: 2,

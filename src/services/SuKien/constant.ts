@@ -39,7 +39,6 @@ export enum ELoaiSuKien {
   LICH_HOC = 'Lịch học',
   LICH_THI = 'Lịch thi',
   CA_NHAN = 'Cá nhân',
-  TAT_CA = 'Tất cả',
   CHUNG = 'Chung',
 }
 
@@ -48,6 +47,5 @@ export const ColorSuKien = {
   [ELoaiSuKien.LICH_HOC]: 'rgba(49, 190, 203, 0.7)',
   [ELoaiSuKien.LICH_THI]: 'rgba(223, 68, 113, 0.7)',
   [ELoaiSuKien.CA_NHAN]: 'rgba(87, 191, 86, 0.7)',
-  [ELoaiSuKien.TAT_CA]: 'rgba(32, 152, 199, 0.7)',
   [ELoaiSuKien.CHUNG]: 'rgba(32, 152, 199, 0.7)',
 };

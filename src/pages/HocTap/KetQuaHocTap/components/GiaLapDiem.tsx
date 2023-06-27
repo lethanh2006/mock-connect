@@ -1,22 +1,8 @@
 // import { sinhVienGetGiaLapDiem } from '@/services/LopTinChi/ketquahoctap';
 import { type IColumn } from '@/components/Table/typing';
-import type { LopTinChi } from '@/services/LopTinChi/typings';
 import rules from '@/utils/rules';
 import { convert4NumberScoreToAlphabet, convertNumberScoreToAlphabet } from '@/utils/utils';
-import type { RadioChangeEvent } from 'antd';
-import {
-  Col,
-  Descriptions,
-  Divider,
-  Form,
-  Input,
-  Modal,
-  Popover,
-  Radio,
-  Row,
-  Table,
-  Typography,
-} from 'antd';
+import { Col, Descriptions, Form, Input, Modal, Popover, Row, Table, Typography } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 
@@ -156,7 +142,7 @@ const GiaLapDiem = () => {
         học lại, học cải thiện.{' '}
         <Popover
           content={
-            <div style={{ maxWidth: 500 }}>
+            <div style={{ maxWidth: 600 }}>
               Bước 1: Sinh viên ấn vào môn muốn nhập điểm cải thiện;
               <br />
               Bước 2: Tại popup Giả lập điểm, sinh viên nhập điểm mong muốn (chỉ nhập điểm từ 4 -

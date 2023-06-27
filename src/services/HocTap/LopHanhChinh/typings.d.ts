@@ -2,13 +2,15 @@ declare module LopHanhChinh {
   export interface IRecord extends INhanVienSinhVien {
     _id: string;
     ten: string;
-    nhanSuSsoId: string5;
-    createdAt: string;
-    updatedAt: string;
     khoaSinhVienId: string;
+    khoaSinhVien?: KhoaSinhVien.IRecord;
     nganhId: string;
-    khoaSinhVien: KhoaSinhVien.IRecord;
-    nganh: NganhHoc.IRecord;
+    nganh?: NganhDaoTao.IRecordCoSo;
+    siSo: number;
+    nhanSuSsoId?: string;
+    nhanSu?: ToChucNhanSu.INhanSu;
+    createdAt?: string;
+    updatedAt?: string;
   }
 
   export interface INhanVienSinhVien {

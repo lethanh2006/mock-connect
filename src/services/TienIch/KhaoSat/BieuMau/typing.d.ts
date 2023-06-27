@@ -129,6 +129,6 @@ declare module BieuMau {
     traLoiText?: string;
     idCauHoi: string;
     luaChonTuyenTinh?: number;
-    listUrlFile?: string[];
+    listUrlFile?: string[] | null;
   }
 }

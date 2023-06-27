@@ -1,8 +1,6 @@
-import type { LopTinChi } from '@/services/LopTinChi/typings';
 import { Descriptions, Modal, Tabs } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import DetailKetQuaHocTap from '../../LopTinChi/components/KetQuaHocTap/Detail';
 
 const ModalChiTietDiemThanhPhan = (props: {
   modalVisible: boolean;
@@ -11,7 +9,7 @@ const ModalChiTietDiemThanhPhan = (props: {
   hocPhan?: TienTrinhHocTap.IHocPhan;
   chuongTrinhKhung?: TienTrinhHocTap.IChuongTrinhKhung;
 }) => {
-  const { infoMonHoc, getInfoMonHocModel } = useModel('hoctap.loptinchi');
+  const { infoMonHoc, getInfoMonHocModel } = useModel('daotao.lophocphan');
   const { modalVisible, setModalVisible, dsDiemThanhPhan, hocPhan, chuongTrinhKhung } = props;
   const loaiHocPhan = chuongTrinhKhung?.loai_hoc_phan ?? hocPhan?.loai_hoc_phan ?? '';
 

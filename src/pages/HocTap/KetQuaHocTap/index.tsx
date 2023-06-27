@@ -20,32 +20,32 @@ const KetQuaHocTap = () => {
   // }, []);
 
   return (
-    <Spin spinning={loading}>
-      {isLamKhaoSat !== 0 ? (
-        <ResultWithLogo
-          logo={logo}
-          title={
-            isLamKhaoSat === -1
-              ? ''
-              : 'Vui lòng thực hiện khảo sát để sử dụng tính năng Kết quả học tập'
-          }
-          extra={
-            isLamKhaoSat === -1 ? undefined : (
-              <Button
-                type="primary"
-                onClick={() => {
-                  history.push('/tienichkhac/khaosat');
-                }}
-              >
-                Thực hiện khảo sát
-              </Button>
-            )
-          }
-        />
-      ) : (
-        <DiemThanhPhanSV />
-      )}
-    </Spin>
+    <DiemThanhPhanSV />
+    // <Spin spinning={loading}>
+    //   {isLamKhaoSat !== 0 ? (
+    //     <ResultWithLogo
+    //       logo={logo}
+    //       title={
+    //         isLamKhaoSat === -1
+    //           ? ''
+    //           : 'Vui lòng thực hiện khảo sát để sử dụng tính năng Kết quả học tập'
+    //       }
+    //       extra={
+    //         isLamKhaoSat === -1 ? undefined : (
+    //           <Button
+    //             type="primary"
+    //             onClick={() => {
+    //               history.push('/tienichkhac/khaosat');
+    //             }}
+    //           >
+    //             Thực hiện khảo sát
+    //           </Button>
+    //         )
+    //       }
+    //     />
+    //   ) : (
+    //   )}
+    // </Spin>
   );
 };
 

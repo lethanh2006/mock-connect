@@ -17,7 +17,7 @@ const PhanHoiPage = () => {
     {
       title: 'Câu hỏi',
       dataIndex: 'noiDungPhanHoi',
-      width: 200,
+      width: 250,
       render: (val) => <ExpandText>{val}</ExpandText>,
       sortable: true,
       filterType: 'string',
@@ -49,8 +49,14 @@ const PhanHoiPage = () => {
       title: 'Câu trả lời',
       dataIndex: 'noiDungTraLoiPhanHoi',
       hide: daTraLoi === false,
-      width: 200,
+      width: 250,
       render: (val) => <ExpandText>{val}</ExpandText>,
+    },
+    {
+      title: 'Người trả lời',
+      dataIndex: 'maChuyenVien',
+      hide: daTraLoi === false,
+      width: 120,
     },
     {
       title: 'Thời gian trả lời',

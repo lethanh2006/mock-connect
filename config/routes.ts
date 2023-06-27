@@ -97,31 +97,31 @@
           {
             path: './',
             hideInMenu: true,
-            component: './HocTap/LopHanhChinh/SinhVien',
+            component: './HocTap/LopHanhChinh',
             exact: true,
           },
           {
             path: './:id',
-            component: './HocTap/LopHanhChinh/SinhVien/$id',
+            component: './HocTap/LopHanhChinh/$id',
             hideInMenu: true,
             exact: true,
           },
         ],
       },
       {
-        name: 'LopTinChi',
-        path: 'lop-tin-chi',
+        name: 'LopHocPhan',
+        path: 'lop-hoc-phan',
 
         routes: [
           {
             path: './',
             hideInMenu: true,
-            component: './HocTap/LopTinChi',
+            component: './HocTap/LopHocPhan',
             exact: true,
           },
           {
             path: './:id',
-            component: './HocTap/LopTinChi/$id',
+            component: './HocTap/LopHocPhan/$id',
             hideInMenu: true,
             exact: true,
           },
