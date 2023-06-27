@@ -13,7 +13,7 @@ const SelectHocPhan = (props: {
   loadData?: boolean;
   selectMa?: boolean;
 }) => {
-  const { value, onChange, multiple, allowClear, loadData, selectMa } = props;
+  const { value, onChange, multiple,isSinhVien, allowClear, loadData, selectMa } = props;
   const { danhSach, getAllModel } = useModel('hocphan.hocphan');
 
   useEffect(() => {

@@ -414,6 +414,7 @@ export const uploadMultiFile = async (
   returnFileType?: boolean,
   returnAllResponse?: boolean,
 ) => {
+  console.log('vao vao')
   const url: any[] = arrFile
     ?.filter((item) => item?.remote === true)
     ?.map((item) =>
