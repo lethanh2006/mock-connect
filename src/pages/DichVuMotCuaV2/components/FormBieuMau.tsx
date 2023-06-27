@@ -2,7 +2,7 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import Upload from '@/components/Upload/UploadMultiFile';
 import rules from '@/utils/rules';
-import {checkFileSize, includes, renderFileList, uploadMultiFile} from '@/utils/utils';
+import { checkFileSize, includes, renderFileList, uploadMultiFile } from '@/utils/utils';
 import { CopyOutlined } from '@ant-design/icons';
 import {
   AutoComplete,
@@ -31,6 +31,10 @@ import SelectDanToc from '@/pages/Core/DanToc/SelectDanToc';
 import { accessFileUpload } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import HocPhanCoDiem from '../HocPhanCoDiem';
+import SelectLopHocPhan from '@/pages/DaoTao/LopHocPhan/SelectLopHocPhan';
+import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
+import SelectNamHoc from "@/pages/DaoTao/NamHoc/Select";
+import SelectHocKy from "@/pages/DaoTao/HocKy/SelectHocKy";
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
@@ -65,7 +69,7 @@ const FormBieuMau = (props: {
   } = useModel('dvmc.dichvumotcuav2');
   const { danhSach: danhSachKyHoc } = useModel('daotao.hocky');
   const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
-  const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
+  // const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
   const { getTinhThanhPhoModel, danhSachTinh } = useModel('core.donvihanhchinh');
 
   // const {
@@ -130,7 +134,7 @@ const FormBieuMau = (props: {
         let value = values?.[`${name}[${index}].${item?.label}`];
 
         if (item?.type === 'DON_VI_HANH_CHINH') {
-          console.log('values',values)
+          console.log('values', values);
           value = {
             ...values?.[`${name}[${index}].${item?.label}`],
             tenTinh: values?.tinhTp,
@@ -429,69 +433,73 @@ const FormBieuMau = (props: {
         const kyHoc = danhSachKyHoc;
         ruleElement = [...rules.text];
         element = (
-          <Select allowClear placeholder={item?.label ?? ''}>
-            {kyHoc?.map((kyhoc: any) => (
-              <Select.Option
-                key={kyhoc.id}
-                value={`Kỳ ${kyhoc.ten_ky_nam_hoc} năm ${kyhoc.nam_hoc_id?.[1]}`}
-              >
-                Kỳ {kyhoc.ten_ky_nam_hoc} năm {kyhoc.nam_hoc_id?.[1]}
-              </Select.Option>
-            ))}
-          </Select>
+          // <Select allowClear placeholder={item?.label ?? ''}>
+          //   {kyHoc?.map((kyhoc: any) => (
+          //     <Select.Option
+          //       key={kyhoc.id}
+          //       value={`Kỳ ${kyhoc.ten_ky_nam_hoc} năm ${kyhoc.nam_hoc_id?.[1]}`}
+          //     >
+          //       Kỳ {kyhoc.ten_ky_nam_hoc} năm {kyhoc.nam_hoc_id?.[1]}
+          //     </Select.Option>
+          //   ))}
+          // </Select>
+          <SelectHocKy/>
         );
         break;
       }
       case 'MY_YEAR': {
         initialValue = item?.value;
         ruleElement = [...rules.text];
-        const namHoc = danhSachNamHoc;
+        // const namHoc = danhSachNamHoc;
         element = (
-          <Select allowClear placeholder={item?.label ?? ''}>
-            {namHoc?.map((nam: any) => (
-              <Select.Option key={nam.id} value={`Năm học ${nam.ten_nam_hoc}`}>
-                Năm học {nam.ten_nam_hoc}
-              </Select.Option>
-            ))}
-          </Select>
+          // <Select allowClear placeholder={item?.label ?? ''}>
+          //   {namHoc?.map((nam: any) => (
+          //     <Select.Option key={nam.id} value={`Năm học ${nam.ten_nam_hoc}`}>
+          //       Năm học {nam.ten_nam_hoc}
+          //     </Select.Option>
+          //   ))}
+          // </Select>
+          <SelectNamHoc/>
         );
         break;
       }
       case 'MY_CREDIT': {
         initialValue = item?.value;
-        const monHoc = danhSachMonHoc;
+        // const monHoc = danhSachMonHoc;
         element = (
-          <AutoComplete
-            filterOption={(value, option) => includes(option?.props.children, value)}
-            showSearch
-            allowClear
-            placeholder={item?.label ?? ''}
-          >
-            {monHoc?.map((mon: any) => (
-              <Select.Option key={mon.id} value={`${mon.ten_hoc_phan} (${mon.ma_hoc_phan_moi})`}>
-                {mon.ten_hoc_phan} ({mon.ma_hoc_phan_moi})
-              </Select.Option>
-            ))}
-          </AutoComplete>
+          // <AutoComplete
+          //   filterOption={(value, option) => includes(option?.props.children, value)}
+          //   showSearch
+          //   allowClear
+          //   placeholder={item?.label ?? ''}
+          // >
+          //   {monHoc?.map((mon: any) => (
+          //     <Select.Option key={mon.id} value={`${mon.ten_hoc_phan} (${mon.ma_hoc_phan_moi})`}>
+          //       {mon.ten_hoc_phan} ({mon.ma_hoc_phan_moi})
+          //     </Select.Option>
+          //   ))}
+          // </AutoComplete>
+          <SelectHocPhan />
         );
         break;
       }
       case 'MY_COURSE': {
         initialValue = item?.value;
-        const lopHoc = danhSachLopTinChi;
+        // const lopHoc = danhSachLopTinChi;
         element = (
-          <Select
-            filterOption={(value, option) => includes(option?.props.children, value)}
-            showSearch
-            allowClear
-            placeholder={item?.label ?? ''}
-          >
-            {lopHoc?.map((lop: any) => (
-              <Select.Option key={lop.id} value={`${lop.ten_hoc_phan} (${lop.ma_lop})`}>
-                {lop.ten_hoc_phan} ({lop.ma_lop})
-              </Select.Option>
-            ))}
-          </Select>
+          // <Select
+          //   filterOption={(value, option) => includes(option?.props.children, value)}
+          //   showSearch
+          //   allowClear
+          //   placeholder={item?.label ?? ''}
+          // >
+          //   {lopHoc?.map((lop: any) => (
+          //     <Select.Option key={lop.id} value={`${lop.ten_hoc_phan} (${lop.ma_lop})`}>
+          //       {lop.ten_hoc_phan} ({lop.ma_lop})
+          //     </Select.Option>
+          //   ))}
+          // </Select>
+          <SelectLopHocPhan />
         );
         break;
       }

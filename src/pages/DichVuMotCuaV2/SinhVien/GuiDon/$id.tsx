@@ -32,12 +32,16 @@ const SinhVienTaoDon = ({
   const { visibleForm, setVisibleForm } = useModel('dvmc.thanhtoan');
   const [infoSinhVien, setInfoSinhVien] = useState<SinhVien.IRecord>();
   // const { record: recordSinhVien } = useModel('sinhvien');
+  const getInfoSV = async () => {
+   try {
+     const res = await getInfo();
+     setInfoSinhVien(res?.data?.data ?? {});
+   }catch (e) {
+     console.log(e)
+   }
+  };
   useEffect(() => {
     window.scroll({ top: 0 });
-    const getInfoSV = async () => {
-      const res = await getInfo();
-      setInfoSinhVien(res?.data?.data ?? {});
-    };
     getInfoSV();
     getBieuMauByIdModel(id);
     // if (access.sinhVien) {
