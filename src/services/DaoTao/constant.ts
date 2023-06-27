@@ -6,3 +6,17 @@ export enum ELoaiNhuCauHocPhan {
   HOC_VUOT = 'Học vượt',
   HOC_VB2 = 'Học văn bằng 2',
 }
+
+export enum ELoaiHocPhanCTDT {
+  BAT_BUOC = 'Bắt buộc',
+  TU_CHON = 'Tự chọn',
+  THAY_THE_TOT_NGHIEP = 'Thay thế tốt nghiệp',
+}
+
+// Trạng thái học tập trong tiến trình học tập
+export enum ETrangThaiHocTap {
+  CHUA_HOC = 'CHUA_HOC',
+  DANG_HOC = 'DANG_HOC',
+  DA_HOC = 'DA_DAT',
+  CHUA_DAT = 'CHUA_DAT',
+}

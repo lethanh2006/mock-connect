@@ -23,6 +23,7 @@ const ModalViewDetailCalendar = (props: {
       visible={visible}
       title="Chi tiết lịch"
       destroyOnClose
+      width={600}
       onCancel={() => setVisible(false)}
       footer={
         <Space wrap>
@@ -64,18 +65,18 @@ const ModalViewDetailCalendar = (props: {
           <Descriptions.Item label="Thời gian kết thúc">
             {moment(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
           </Descriptions.Item>
-          <Descriptions.Item label="Giảng viên">
-            {thoiKhoaBieu?.nhanSu?.ten ?? '--'}
-          </Descriptions.Item>
-          <Descriptions.Item label="Phòng học">{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
           <Descriptions.Item label="Loại hình học tập">
             {thoiKhoaBieu?.loaiHinhHocTap ?? '--'}
+          </Descriptions.Item>
+          <Descriptions.Item label="Phòng học">{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
+          <Descriptions.Item label="Giảng viên">
+            {thoiKhoaBieu?.nhanSu?.ten ?? '--'}
           </Descriptions.Item>
           <Descriptions.Item label="Tiêu đề bài học">
             {thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}
           </Descriptions.Item>
           <Descriptions.Item label="Nội dung bài học">
-            {thoiKhoaBieu?.noiDungBaiHoc ?? '--'}
+            <div dangerouslySetInnerHTML={{ __html: thoiKhoaBieu?.noiDungBaiHoc ?? '--' }} />
           </Descriptions.Item>
           <Descriptions.Item label="Đường dẫn">
             {thoiKhoaBieu?.urlBaiHoc ? (
