@@ -10,11 +10,12 @@ const SelectNamHoc = (props: {
   onChange?: (val?: string) => void;
   multiple?: boolean;
   allowClear?: boolean;
+  selectTen?: boolean;
   style?: React.CSSProperties;
   condition?: { trinhDoDaoTaoId?: string; hinhThucDaoTaoId?: string };
   isSetRecord?: boolean;
 }) => {
-  const { value, onChange, multiple, allowClear, style, condition, isSetRecord } = props;
+  const { value, onChange, multiple,selectTen, allowClear, style, condition, isSetRecord } = props;
   const { danhSach, getAllModel, visibleForm } = useModel('daotao.namhoc');
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const SelectNamHoc = (props: {
       onChange={onChange}
       options={danhSach.map((item) => ({
         key: item._id,
-        value: item._id,
+        value: selectTen?item?.ten:item._id,
         label: item.ten,
       }))}
       showSearch
