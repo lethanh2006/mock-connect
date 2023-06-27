@@ -5,6 +5,8 @@ import { AppModules, EModuleKey } from '@/services/ant-design-pro/constant';
 
 // const ip3 = 'https://ais.aisenote.com/qldt'; // ip dev
 const ip3 = 'https://ais.aisenote.com/slink'; // ip dev
+
+const ipNotif = 'https://ais.aisenote.com/notification'; // ip dev
 const ipGlobal = 'https://ais2.aisenote.com/qldt-internal-api'; // ip dev
 const ipDaoTao = 'https://ais.aisenote.com/qldt'; // ip dev
 const ipNhanSu = 'https://ais.aisenote.com/tcns';
@@ -23,6 +25,7 @@ export {
   ipNhanSu,
   ipCore,
   ip3,
+  ipNotif,
   ipGlobal,
   currentRole,
   keycloakClientID,
