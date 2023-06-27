@@ -10,6 +10,7 @@ export default {
 
   // DEFAULT
   'menu.Lich': 'Lịch',
+  'menu.ThongTinCaNhan': 'Thông tin cá nhân',
 
   // SINH VIEN
   'menu.HocTap': 'Học tập',

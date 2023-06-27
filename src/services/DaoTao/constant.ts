@@ -20,3 +20,8 @@ export enum ETrangThaiHocTap {
   DA_HOC = 'DA_DAT',
   CHUA_DAT = 'CHUA_DAT',
 }
+
+export enum EGioiTinh {
+  Nam = 'Nam',
+  Nu = 'Nữ',
+}

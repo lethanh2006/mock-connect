@@ -1,10 +1,8 @@
 import { getPhuongXa, getQuanHuyen } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import rules from '@/utils/rules';
-import { Col, Form, type FormInstance, Select, Input, Row } from 'antd';
-import _ from 'lodash';
+import { Col, Form, Input, Select, type FormInstance, Row } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
 
 const SelectDonViHanhChinh = (props: {
   form: FormInstance<any>;
@@ -23,7 +21,6 @@ const SelectDonViHanhChinh = (props: {
 }) => {
   const { form, suffix, listTinh, hasSoNha, hideTinh, hideQuanHuyen, hideXaPhuong, initialValue } =
     props;
-  // const { record: recSinhVien } = useModel('sinhvien.sinhvien');
   console.log(initialValue, 'initial value');
   const [idTinh, setIdTinh] = useState<string>();
   const [idHuyen, setIdHuyen] = useState<string>();
@@ -40,11 +37,6 @@ const SelectDonViHanhChinh = (props: {
     form.setFieldsValue({ ['xaPhuong' + suffix]: undefined });
   };
 
-  // useEffect(() => {
-  //   setIdTinh(_.get(recSinhVien, 'tinhTp' + suffix));
-  //   setIdHuyen(_.get(recSinhVien, 'quanHuyen' + suffix));
-  // }, [recSinhVien?._id, suffix]);
-
   useEffect(() => {
     if (idTinh)
       getQuanHuyen(idTinh).then((data) => {
@@ -60,11 +52,11 @@ const SelectDonViHanhChinh = (props: {
   }, [idHuyen]);
 
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[12, 0]}>
       {!hideTinh && (
         <Col span={12} md={hasSoNha ? 6 : 8}>
           <Form.Item
-            name={suffix?'tinhTp' + suffix:'tinhTp'}
+            name={suffix ? 'tinhTp' + suffix : 'tinhTp'}
             label="Tỉnh/Thành phố"
             initialValue={props.initialValue?.tinhTp}
             rules={props.notRequiredTinh === true ? [] : [...rules.required]}
@@ -86,7 +78,11 @@ const SelectDonViHanhChinh = (props: {
       )}
       {!hideQuanHuyen && (
         <Col span={12} md={hasSoNha ? 6 : 8}>
-          <Form.Item    initialValue={props.initialValue?.quanHuyen} name={suffix?'quanHuyen' + suffix:'quanHuyen'} label="Quận/Huyện">
+          <Form.Item
+            initialValue={props.initialValue?.quanHuyen}
+            name={suffix ? 'quanHuyen' + suffix : 'quanHuyen'}
+            label="Quận/Huyện"
+          >
             <Select
               placeholder="Chọn quận/huyện"
               options={(listHuyen ?? []).map((item) => ({
@@ -105,7 +101,11 @@ const SelectDonViHanhChinh = (props: {
 
       {!hideXaPhuong && (
         <Col span={12} md={hasSoNha ? 6 : 8}>
-          <Form.Item  initialValue={props.initialValue?.xaPhuong} name={suffix?'xaPhuong' + suffix:'xaPhuong'} label="Phường/Xã">
+          <Form.Item
+            initialValue={props.initialValue?.xaPhuong}
+            name={suffix ? 'xaPhuong' + suffix : 'xaPhuong'}
+            label="Phường/Xã"
+          >
             <Select
               placeholder="Chọn phường/xã"
               allowClear
@@ -123,7 +123,7 @@ const SelectDonViHanhChinh = (props: {
       {hasSoNha ? (
         <Col span={12} md={6}>
           <Form.Item
-            name={suffix?'soNhaTenDuong' + suffix:'soNhaTenDuong'}
+            name={suffix ? 'soNhaTenDuong' + suffix : 'soNhaTenDuong'}
             label="Số nhà/Tên đường"
             rules={[...rules.text, ...rules.length(250)]}
           >

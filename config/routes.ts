@@ -80,6 +80,12 @@
     path: '/calendar',
     component: './Calendar',
   },
+  {
+    name: 'ThongTinCaNhan',
+    icon: 'user',
+    path: '/thong-tin-ca-nhan',
+    component: './SinhVien',
+  },
 
   // MENU SINH VIEN
   {
