@@ -42,6 +42,14 @@
     icon: 'HomeOutlined',
   },
   {
+    path: '/gioi-thieu',
+    name: 'About',
+    component: './TienIch/GioiThieu',
+    hideInMenu: true,
+  },
+
+  // DANH MUC HE THONG
+  {
     name: 'News',
     icon: 'NotificationOutlined',
     path: '/tin-tuc',
