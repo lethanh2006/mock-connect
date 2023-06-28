@@ -1,40 +1,42 @@
 import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
+import { ELoaiPhanHoi } from '@/services/TienIch/PhanHoi/constant';
 import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
-import { PaperClipOutlined } from '@ant-design/icons';
-import { Select } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
+import { Button, Select, Tooltip } from 'antd';
 import moment from 'moment';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import FormGuiPhanHoi from './components/FormGuiPhanHoi';
-import { useState } from 'react';
+import ModalDetailPhanhoi from './components/ModalDetail';
 
 const PhanHoiPage = () => {
-  const { setCondition } = useModel('tienich.phanhoi');
+  const { setCondition, handleEdit, edit } = useModel('tienich.phanhoi');
   const [daTraLoi, setDaTraLoi] = useState<boolean>();
+
+  const onCell = (rec: PhanHoi.IRecord) => ({
+    onClick: () => handleEdit(rec),
+    style: { cursor: 'pointer' },
+  });
 
   const columns: IColumn<PhanHoi.IRecord>[] = [
     {
-      title: 'Câu hỏi',
+      title: 'Nội dung phản hồi',
       dataIndex: 'noiDungPhanHoi',
       width: 250,
       render: (val) => <ExpandText>{val}</ExpandText>,
       sortable: true,
       filterType: 'string',
+      onCell,
     },
     {
-      title: 'File đính kèm',
-      dataIndex: 'urlPhanAnh',
-      render: (val) =>
-        val ? (
-          <>
-            <PaperClipOutlined />{' '}
-            <a href={val} target="_blank" rel="noreferrer">
-              File đính kèm
-            </a>
-          </>
-        ) : null,
-      width: 120,
+      title: 'Loại phản hồi',
+      dataIndex: 'loaiPhanHoi',
+      width: 100,
+      filterType: 'select',
+      filterData: Object.values(ELoaiPhanHoi),
+      onCell,
     },
     {
       title: 'Ngày gửi',
@@ -44,6 +46,7 @@ const PhanHoiPage = () => {
       width: 120,
       sortable: true,
       filterType: 'datetime',
+      onCell,
     },
     {
       title: 'Câu trả lời',
@@ -51,12 +54,14 @@ const PhanHoiPage = () => {
       hide: daTraLoi === false,
       width: 250,
       render: (val) => <ExpandText>{val}</ExpandText>,
+      onCell,
     },
     {
       title: 'Người trả lời',
       dataIndex: 'maChuyenVien',
       hide: daTraLoi === false,
       width: 120,
+      onCell,
     },
     {
       title: 'Thời gian trả lời',
@@ -67,6 +72,19 @@ const PhanHoiPage = () => {
       hide: daTraLoi === false,
       sortable: true,
       filterType: 'datetime',
+      onCell,
+    },
+    {
+      title: 'Thao tác',
+      width: 60,
+      fixed: 'right',
+      render: (val, rec) => (
+        <>
+          <Tooltip title="Xem chi tiết">
+            <Button type="link" icon={<EyeOutlined />} onClick={() => handleEdit(rec)} />
+          </Tooltip>
+        </>
+      ),
     },
   ];
 
@@ -81,7 +99,7 @@ const PhanHoiPage = () => {
       columns={columns}
       modelName="tienich.phanhoi"
       title="Phản hồi"
-      Form={FormGuiPhanHoi}
+      Form={edit ? ModalDetailPhanhoi : FormGuiPhanHoi}
       otherButtons={[
         <Select
           key="1"
