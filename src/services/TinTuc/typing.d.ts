@@ -13,8 +13,11 @@ declare module TinTuc {
     noiDung: string;
     ngayDang: string;
     nguoiDang: {
-      _id: string;
-      fullname: string;
+      email?: string; // 'admin@administrator.com';
+      hoTen: string; // 'Administrator';
+      systemRole: string; // 'Admin';
+      username: string; // 'admin';
+      _id: string; // '649a63c2e42a64cb859874d7';
     };
   }
 

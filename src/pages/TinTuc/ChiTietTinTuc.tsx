@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Card, Col, Divider, Row, Spin } from 'antd';
 import moment from 'moment';
 import queryString from 'query-string';
@@ -39,9 +39,10 @@ const ChiTietTinTucPage = () => {
             <div id="content">
               <h4>{record?.tieuDe ?? ''}</h4>
               <p className="ngay-dang">
+                <CalendarOutlined />{' '}
                 {record?.ngayDang && moment(record?.ngayDang).format('DD MMMM YYYY, HH:mm ')}
                 <Divider type="vertical" />
-                {record?.nguoiDang?.fullname}
+                <UserOutlined /> {record?.nguoiDang?.hoTen}
               </p>
               {record?.moTa !== '' && <p className="mo-ta">{record?.moTa}</p>}
 

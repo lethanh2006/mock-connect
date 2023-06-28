@@ -52,7 +52,7 @@ const BlockTinTuc = (props: { empty?: string; type?: 'dashboard' }) => {
                     }}
                   />
                   <ContentLargeCard>
-                    <Tooltip placement="bottomLeft" title={danhSach?.[0]?.tieuDe}>
+                    <Tooltip title={danhSach?.[0]?.tieuDe}>
                       {renderParagraph(danhSach?.[0]?.tieuDe, 2, {
                         fontSize: 'calc(1em + 0.2vw)',
                         fontWeight: 500,
@@ -98,7 +98,7 @@ const BlockTinTuc = (props: { empty?: string; type?: 'dashboard' }) => {
                           />
                         </Col>
                         <Col xs={16}>
-                          <Tooltip placement="bottomLeft" title={tintuc?.tieuDe}>
+                          <Tooltip title={tintuc?.tieuDe}>
                             {renderParagraph(tintuc?.tieuDe, 2, {
                               fontSize: 'calc(1em + 0.2vw)',
                               fontWeight: 500,
@@ -145,7 +145,7 @@ const BlockTinTuc = (props: { empty?: string; type?: 'dashboard' }) => {
                         />
                       </Col>
                       <Col xs={16}>
-                        <Tooltip placement="bottomLeft" title={tintuc?.tieuDe}>
+                        <Tooltip title={tintuc?.tieuDe}>
                           {renderParagraph(tintuc?.tieuDe, 2, {
                             fontSize: 'calc(1em + 0.2vw)',
                             fontWeight: 500,
@@ -191,7 +191,7 @@ const BlockTinTuc = (props: { empty?: string; type?: 'dashboard' }) => {
                       />
                     </Col>
                     <Col xs={16}>
-                      <Tooltip placement="bottomLeft" title={tintuc?.tieuDe}>
+                      <Tooltip title={tintuc?.tieuDe}>
                         {renderParagraph(tintuc?.tieuDe, 2, {
                           fontSize: 'calc(1em + 0.2vw)',
                           fontWeight: 500,
