@@ -18,7 +18,6 @@ const ThongTinChung = () => {
     useModel('daotao.nhansulophocphan');
   const [activeKey, setActiveKey] = useState<string>('-1');
   const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
-  console.log('🚀 ~ file: ThongTinChung.tsx:18 ~ ThongTinChung ~ danhSachNhanSu:', danhSachNhanSu);
 
   useEffect(() => {
     setActiveKey('-1');
@@ -37,7 +36,9 @@ const ThongTinChung = () => {
       <Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 3 }} title="Thông tin lớp">
         <Descriptions.Item label="Học phần">
           {record?.hocPhan?.ten ? (
-            <a onClick={() => setVisibleDeCuong(true)}>{record?.hocPhan?.ten ?? ''}</a>
+            <a onClick={() => setVisibleDeCuong(true)}>
+              <b>{record?.hocPhan?.ten ?? ''}</b>
+            </a>
           ) : (
             <i>Chưa cập nhật</i>
           )}
@@ -55,22 +56,22 @@ const ThongTinChung = () => {
       <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
         Thông tin điểm danh của bạn
       </h4>
-      <p style={{ paddingBottom: 2 }}>
+      <div style={{ marginBottom: 12 }}>
         Vắng có phép: --
         <Divider type="vertical" />
         Vắng không phép: -- <a>(xem chi tiết)</a>
-      </p>
+      </div>
 
       <Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
         <Tabs.TabPane tab="Danh sách sinh viên" key="-1" />
         {danhSachLopThucHanh?.map((item) => (
-          <Tabs.TabPane tab={`Nhóm ${item.soThuTuNhom} - ${item.ten}`} key={item._id} />
+          <Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
         ))}
       </Tabs>
 
       {activeKey !== '-1' ? (
         <DanhSachGiangVien
-          danhSachNhanSu={danhSachNhanSuLopTH?.map((item) => item.nhanSu)}
+          danhSachNhanSu={danhSachNhanSuLopTH?.map((item) => item.nhanSu ?? { _id: '-1' })}
           title="Giảng viên phụ trách nhóm lớp"
         />
       ) : null}

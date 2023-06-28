@@ -22,11 +22,11 @@ const DanhSachBuoiHoc = () => {
     if (recLopHocPhan?.ten)
       getTheoLopHocPhan(recLopHocPhan.ten).then((data) => {
         data.every((item) => {
-          if (moment().diff(item.ngay, 'day') >= 0) {
+          if (moment().isSameOrBefore(item.ngay, 'day')) {
             setBuoiHocGanNhat(item);
-            return true;
+            return false;
           }
-          return false;
+          return true;
         });
       });
   }, [recLopHocPhan?._id]);
