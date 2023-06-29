@@ -45,7 +45,7 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string }) => {
           {sinhVienLopHocPhan?.diemChu ? (
             <Tag color={ColorDiemChu[sinhVienLopHocPhan.diemChu]}>{sinhVienLopHocPhan.diemChu}</Tag>
           ) : (
-            '--'
+            <i>Chưa có điểm</i>
           )}
         </Descriptions.Item>
       </Descriptions>

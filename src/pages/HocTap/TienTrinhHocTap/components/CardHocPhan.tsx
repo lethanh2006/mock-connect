@@ -33,7 +33,8 @@ const CardHocPhan = (props: {
         >
           {chuongTrinhKhung?.hocPhan?.ten}
         </h4>
-        <span className="tin-chi">({chuongTrinhKhung?.soTinChi} TC)</span>
+        <span className="tin-chi">{chuongTrinhKhung?.soTinChi} tín</span>
+        <img src="/images/img-card-hoc-phan.svg" />
       </div>
       {listDiem?.map((diem, index) => (
         <div
@@ -46,21 +47,17 @@ const CardHocPhan = (props: {
               ? 'diem-red'
               : 'diem-yellow'
           }`}
-          style={{ left: 1 + index * 2 + 'rem' }}
+          style={{ right: 1 + index * 2.3 + 'rem' }}
           // eslint-disable-next-line react/no-array-index-key
           key={index}
         >
           {diem}
         </div>
       ))}
-      {/* 
-      {hocPhan?.hoc === 'DANG_HOC' ? (
+
+      {chuongTrinhKhung?.hoc === ETrangThaiHocTap.DANG_HOC ? (
         <div className="bookmark bookmark-dang-hoc" title="Đang học" />
-      ) : hocPhan?.hoc === 'DANG_HOC_LAI' ? (
-        <div className="bookmark bookmark-dang-hoc" title="Đang học lại" />
-      ) : (
-        <></>
-      )} */}
+      ) : null}
 
       <ModalChiTietDiem
         setVisible={setModalVisible}

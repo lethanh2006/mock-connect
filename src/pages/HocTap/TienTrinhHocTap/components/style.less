@@ -26,7 +26,7 @@
     &.col-link {
       cursor: pointer;
       &:hover {
-        background-color: #ac0e03;
+        background-color: @primary-6;
         transition: 0.3s;
       }
     }
@@ -48,9 +48,13 @@
       padding: 0.25rem 0.5rem 0.5rem;
 
       .card-hoc-phan {
+        position: relative;
         height: 100%;
         padding: 0.5rem;
-        background-color: #cdf7f8;
+        background-color: #fff;
+        background-image: url(/images/bg-card-hoc-phan.svg);
+        background-repeat: no-repeat;
+        background-position: bottom right;
 
         border-radius: 0.25rem;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
@@ -58,25 +62,42 @@
         transition: all 0.3s;
 
         &:hover {
-          background-color: #9deff1;
+          background-color: #f0f0f0;
           box-shadow: none;
           transition: all 0.3s;
         }
 
-        &.card-chua-hoc {
-          background-color: #f0f0f0;
-          &:hover {
-            background-color: #e0e0e0;
-          }
-        }
+        // &.card-chua-hoc {
+        //   background-color: #f1faff;
+        //   &:hover {
+        //     background-color: #dbf2ff;
+        //   }
+        // }
 
         h4 {
-          margin-top: 1rem;
-          margin-bottom: 0;
+          margin-top: 1.65rem;
+          margin-bottom: 0.25rem;
 
           &.tu_chon {
             font-weight: 400;
           }
+        }
+
+        .tin-chi {
+          position: absolute;
+          top: 0.75rem;
+          left: 0.75rem;
+          padding: 0 8px;
+
+          color: @primary-6;
+          background-color: @primary-1;
+          border-radius: 10px;
+        }
+
+        img {
+          position: absolute;
+          top: 0.75rem;
+          left: 0;
         }
       }
 
@@ -85,59 +106,60 @@
 
         &.bookmark-diem {
           top: 0;
-          left: 1rem;
+          right: 1rem;
+          width: 30px;
           padding: 0 5px 2px;
           color: white;
-          box-shadow: 1px 2px 2px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.15);
 
           &::before {
             position: absolute;
             top: 0;
-            right: -0.25rem;
+            left: -0.25rem;
             width: 0;
             height: 0;
 
             border: 0.125rem solid transparent;
             transform: scaleX(1.25);
-            transform-origin: left;
+            transform-origin: right;
             content: '';
           }
 
           &.diem-green {
-            background-color: rgb(4, 155, 72);
+            background-color: #399500;
             &::before {
-              border-bottom-color: rgb(5, 119, 56);
-              border-left-color: rgb(5, 119, 56);
+              border-right-color: #276600;
+              border-bottom-color: #276600;
             }
           }
 
           &.diem-yellow {
-            background-color: rgb(223 206 0);
+            background-color: #ffaf0b;
             &::before {
-              border-bottom-color: rgb(189, 173, 5);
-              border-left-color: rgb(189, 173, 5);
+              border-right-color: #bb7d00;
+              border-bottom-color: #bb7d00;
             }
           }
 
           &.diem-red {
-            background-color: rgb(205 23 4);
+            background-color: #a90b00;
             &::before {
-              border-bottom-color: rgb(168, 23, 7);
-              border-left-color: rgb(168, 23, 7);
+              border-right-color: #530600;
+              border-bottom-color: #530600;
             }
           }
           &.diem-gray {
             background-color: rgb(173 173 173);
             &::before {
+              border-right-color: rgb(143 143 143);
               border-bottom-color: rgb(143 143 143);
-              border-left-color: rgb(143 143 143);
             }
           }
         }
 
         &.bookmark-dang-hoc {
-          top: 0.75rem;
-          right: 1rem;
+          top: 0.5rem;
+          left: 0.75rem;
           width: 10px;
           height: 10px;
           border-radius: 5px;
@@ -150,7 +172,7 @@
             height: 300%;
             margin-top: -100%;
             margin-left: -100%;
-            background-color: #eb463bc0;
+            background-color: #0396da81;
             border-radius: 45px;
             animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
             content: '';
