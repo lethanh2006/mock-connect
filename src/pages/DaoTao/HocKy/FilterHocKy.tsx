@@ -15,7 +15,7 @@ const FilterHocKy = (props: { width?: number; isSetHocKy?: boolean; allowClear?:
   // const [hinhThucDaoTaoId, setHinhThucDaoTaoId] = useState<string>();
   const [namHocId, setNamHocId] = useState<string>();
   const [visibleOption, setVisibleOption] = useState(false);
-  const width = props.width ?? 200;
+  const width = props.width ?? 250;
 
   return (
     <>

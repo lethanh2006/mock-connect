@@ -17,6 +17,7 @@ const ModalChiTietDiem = (props: {
       onCancel={() => setVisible(false)}
       okButtonProps={{ hidden: true }}
       cancelText="Đóng"
+      width={600}
     >
       {chuongTrinhKhung ? (
         <Descriptions title="Thông tin học phần" column={1}>

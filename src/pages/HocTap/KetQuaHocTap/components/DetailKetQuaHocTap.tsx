@@ -1,5 +1,6 @@
+import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Descriptions } from 'antd';
+import { Descriptions, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -33,13 +34,20 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string }) => {
         <Descriptions.Item label="Điểm thi lần 1">
           {sinhVienLopHocPhan?.diemThi1 ?? '--'}
         </Descriptions.Item>
-        <Descriptions.Item label="Điểm thi lần 2">{sinhVienLopHocPhan?.diemThi2}</Descriptions.Item>
-        <Descriptions.Item label="Điểm KTHP">{sinhVienLopHocPhan?.diemKthp}</Descriptions.Item>
+        <Descriptions.Item label="Điểm thi lần 2">
+          {sinhVienLopHocPhan?.diemThi2 ?? '--'}
+        </Descriptions.Item>
         <Descriptions.Item label="Điểm tổng kết">
           {sinhVienLopHocPhan?.diemTongKet}
         </Descriptions.Item>
         <Descriptions.Item label="Điểm thang 4">{sinhVienLopHocPhan?.diemThang4}</Descriptions.Item>
-        <Descriptions.Item label="Điểm chữ">{sinhVienLopHocPhan?.diemChu}</Descriptions.Item>
+        <Descriptions.Item label="Điểm chữ">
+          {sinhVienLopHocPhan?.diemChu ? (
+            <Tag color={ColorDiemChu[sinhVienLopHocPhan.diemChu]}>{sinhVienLopHocPhan.diemChu}</Tag>
+          ) : (
+            '--'
+          )}
+        </Descriptions.Item>
       </Descriptions>
     </>
   );

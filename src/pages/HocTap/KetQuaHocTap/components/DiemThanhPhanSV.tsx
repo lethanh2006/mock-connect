@@ -1,8 +1,8 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
+import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Card, Tabs } from 'antd';
+import { Card, Tabs, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalChiTietDiem from './ModalChiTietDiem';
@@ -133,10 +133,11 @@ const DiemThanhPhanSV = () => {
       dataIndex: 'diemChu',
       align: 'center',
       render: (val, recordDiem) => (
-        <b
-        // style={
-        //   recordDiem.is_danh_gia ? (recordDiem.diem_tong_ket < 4 ? { color: 'red' } : {}) : {}
-        // }
+        <Tag
+          color={ColorDiemChu?.[val as ELoaiDiemChu]}
+          // style={
+          //   recordDiem.is_danh_gia ? (recordDiem.diem_tong_ket < 4 ? { color: 'red' } : {}) : {}
+          // }
         >
           {/* {recordDiem.is_danh_gia
             ? val
@@ -144,7 +145,7 @@ const DiemThanhPhanSV = () => {
               : convertNumberScoreToAlphabet(recordDiem?.diem_tong_ket ?? '')[0]
             : '--'} */}
           {val}
-        </b>
+        </Tag>
       ),
       filterType: 'select',
       filterData: Object.values(ELoaiDiemChu),

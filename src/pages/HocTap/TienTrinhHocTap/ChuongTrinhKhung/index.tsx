@@ -34,7 +34,7 @@ const TienTrinhChuongTrinhKhung = () => {
       setTongTinChi(_.sumBy(data, (item) => item.soTinChi));
       setCount(
         _.sumBy(
-          data.filter((item) => item.lichSuDiem?.length),
+          data?.filter((item) => item.lichSuDiem?.length),
           (item) => item.soTinChi,
         ),
       );

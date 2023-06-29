@@ -56,3 +56,18 @@ export enum ELoaiDiemChu {
   CHUA_DU_DU_LIEU = 'X', // chưa đủ dữ liệu
   MIEN_THI = 'R', // miễn thi
 }
+
+export const ColorDiemChu = {
+  [ELoaiDiemChu.A_PLUS]: 'rgb(4, 155, 72)',
+  [ELoaiDiemChu.A]: 'rgb(4, 155, 72)',
+  [ELoaiDiemChu.B_PLUS]: 'rgb(4, 155, 72)',
+  [ELoaiDiemChu.B]: 'rgb(4, 155, 72)',
+  [ELoaiDiemChu.C_PLUS]: 'rgb(223 206 0)',
+  [ELoaiDiemChu.C]: 'rgb(223 206 0)',
+  [ELoaiDiemChu.D_PLUS]: 'rgb(223 206 0)',
+  [ELoaiDiemChu.D]: 'rgb(223 206 0)',
+  [ELoaiDiemChu.F]: 'rgb(205 23 4)',
+  [ELoaiDiemChu.HOAN_THI]: 'default',
+  [ELoaiDiemChu.CHUA_DU_DU_LIEU]: 'default',
+  [ELoaiDiemChu.MIEN_THI]: 'default',
+};
