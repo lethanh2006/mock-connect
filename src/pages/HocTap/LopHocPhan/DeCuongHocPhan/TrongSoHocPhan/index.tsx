@@ -24,7 +24,7 @@ const TrongSoHocPhanPage = () => {
           {recDeCuong?.[`trongSo${index + 1}` as keyof HocPhan.IDeCuongHocPhan]}%
         </Descriptions.Item>
       ))}
-      <Descriptions.Item key={'2'} label="Điểm KTHP">
+      <Descriptions.Item key={'2'} label="Điểm thi KTHP">
         {100 - sum}%
       </Descriptions.Item>
     </Descriptions>

@@ -7,6 +7,7 @@ import { useModel } from 'umi';
 
 const HocLieuDeCuongPage = () => {
   const { page, limit } = useModel('hocphan.hoclieudecuong');
+  const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 
   const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
     {
@@ -47,6 +48,7 @@ const HocLieuDeCuongPage = () => {
       <TableBase
         columns={columns}
         dependencies={[page, limit]}
+        params={{ deCuongId: recDeCuong?._id }}
         modelName="hocphan.hoclieudecuong"
         title="Đề cương học liệu"
         hideCard

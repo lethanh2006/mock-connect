@@ -4,6 +4,7 @@ import moment from 'moment';
 
 const ThongTinChungPage = () => {
   const { record } = useModel('hocphan.decuonghocphan');
+  const { record: recLopHocPhan } = useModel('daotao.lophocphan');
 
   return (
     <>
@@ -14,13 +15,15 @@ const ThongTinChungPage = () => {
         column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
       >
         <Descriptions.Item label="Tên học phần">
-          {record?.hocPhan?.ten ?? <i>Chưa cập nhật</i>}
+          {record?.hocPhan?.ten ?? recLopHocPhan?.hocPhan?.ten ?? <i>Chưa cập nhật</i>}
         </Descriptions.Item>
         <Descriptions.Item label="Tên học phần (tiếng Anh)">
-          {record?.hocPhan?.tenTiengAnh ?? <i>Chưa cập nhật</i>}
+          {record?.hocPhan?.tenTiengAnh ?? recLopHocPhan?.hocPhan?.tenTiengAnh ?? (
+            <i>Chưa cập nhật</i>
+          )}
         </Descriptions.Item>
         <Descriptions.Item label="Mã học phần">
-          {record?.hocPhan?.ma ?? <i>Chưa cập nhật</i>}
+          {record?.hocPhan?.ma ?? recLopHocPhan?.hocPhan?.ma ?? <i>Chưa cập nhật</i>}
         </Descriptions.Item>
         <Descriptions.Item label="Số tín chỉ">
           {record?.soTinChi ? record.soTinChi + ' tín' : <i>Chưa cập nhật</i>}

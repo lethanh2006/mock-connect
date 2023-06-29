@@ -1,4 +1,4 @@
-import { Descriptions, Divider, Spin, Tabs } from 'antd';
+import { Descriptions, Spin, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../DeCuongHocPhan/ModalHocPhan';
@@ -44,7 +44,7 @@ const ThongTinChung = () => {
           )}
         </Descriptions.Item>
         <Descriptions.Item label="Mã học phần">{record?.hocPhan?.ma ?? ''}</Descriptions.Item>
-        <Descriptions.Item label="Số tín chỉ">-- tín chỉ</Descriptions.Item>
+        {/* <Descriptions.Item label="Số tín chỉ">-- tín chỉ</Descriptions.Item> */}
         <Descriptions.Item label="Sĩ số">{record?.siSo ?? 0} sinh viên</Descriptions.Item>
       </Descriptions>
 
@@ -53,14 +53,14 @@ const ThongTinChung = () => {
         title="Giảng viên"
       />
 
-      <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
+      {/* <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
         Thông tin điểm danh của bạn
       </h4>
       <div style={{ marginBottom: 12 }}>
         Vắng có phép: --
         <Divider type="vertical" />
         Vắng không phép: -- <a>(xem chi tiết)</a>
-      </div>
+      </div> */}
 
       <Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
         <Tabs.TabPane tab="Danh sách sinh viên" key="-1" />

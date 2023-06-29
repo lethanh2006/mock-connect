@@ -27,6 +27,11 @@ export declare module LopHocPhan {
     sinhVienList?: SinhVien.IRecord[];
     // maHoaLichHoc?: TMaHoaLichHoc[];
     thoiKhoaBieuList?: ThoiKhoaBieu.IRecord;
+
+    // Populated
+    deCuongHpHk?: {
+      deCuongId: string;
+    };
   }
 
   export interface IRecordNhanSuLopHP {

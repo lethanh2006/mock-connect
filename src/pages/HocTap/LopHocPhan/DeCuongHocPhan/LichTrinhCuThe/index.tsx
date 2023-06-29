@@ -1,10 +1,10 @@
+import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { MenuOutlined } from '@ant-design/icons';
-import { Button, Col, Collapse, Row, Space } from 'antd';
+import { Button, Col, Collapse, Empty, Row, Space } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import './style.less';
-import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { useModel } from 'umi';
+import './style.less';
 
 const LichTrinhCuTheList = () => {
   const { getAllModel, setRecord } = useModel('hocphan.tientrinhhp');
@@ -38,19 +38,20 @@ const LichTrinhCuTheList = () => {
   return (
     <Row gutter={[12, 12]}>
       {maxWeek ? (
-        <Col span={24}>
-          <Button icon={<MenuOutlined />} type="primary" onClick={onExpandAll}>
-            Xem đầy đủ
-          </Button>
-        </Col>
-      ) : null}
-      <Col span={24}>
-        <Collapse
-          activeKey={activeKeys}
-          onChange={(key) => setActiveKeys(typeof key !== 'string' ? key : [key])}
-        >
-          {groupLichTrinh
-            ? Object.entries(groupLichTrinh).map(([week, data]) => (
+        <>
+          {maxWeek ? (
+            <Col span={24}>
+              <Button icon={<MenuOutlined />} type="primary" onClick={onExpandAll}>
+                Xem đầy đủ
+              </Button>
+            </Col>
+          ) : null}
+          <Col span={24}>
+            <Collapse
+              activeKey={activeKeys}
+              onChange={(key) => setActiveKeys(typeof key !== 'string' ? key : [key])}
+            >
+              {Object.entries(groupLichTrinh).map(([week, data]) => (
                 <Collapse.Panel
                   header={
                     <Space>
@@ -101,10 +102,15 @@ const LichTrinhCuTheList = () => {
                     ))}
                   </Collapse>
                 </Collapse.Panel>
-              ))
-            : null}
-        </Collapse>
-      </Col>
+              ))}
+            </Collapse>
+          </Col>
+        </>
+      ) : (
+        <Col span={24}>
+          <Empty description="Không có thông tin lịch trình" />
+        </Col>
+      )}
     </Row>
   );
 };

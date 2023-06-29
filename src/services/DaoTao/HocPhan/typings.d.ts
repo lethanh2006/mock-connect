@@ -41,28 +41,6 @@ declare module HocPhan {
     trongSo8?: number;
     trongSo9?: number;
     trongSo10?: number;
-
-    dacDiemDanhGia1?: string;
-    dacDiemDanhGia2?: string;
-    dacDiemDanhGia3?: string;
-    dacDiemDanhGia4?: string;
-    dacDiemDanhGia5?: string;
-    dacDiemDanhGia6?: string;
-    dacDiemDanhGia7?: string;
-    dacDiemDanhGia8?: string;
-    dacDiemDanhGia9?: string;
-    dacDiemDanhGia10?: string;
-
-    hinhThucThi1Id?: string;
-    hinhThucThi2Id?: string;
-    hinhThucThi3Id?: string;
-    hinhThucThi4Id?: string;
-    hinhThucThi5Id?: string;
-    hinhThucThi6Id?: string;
-    hinhThucThi7Id?: string;
-    hinhThucThi8Id?: string;
-    hinhThucThi9Id?: string;
-    hinhThucThi10Id?: string;
   }
 
   export interface IGiangVienDeCuong {
@@ -76,16 +54,6 @@ declare module HocPhan {
     hocVi?: string | null;
     soDienThoai?: string | null;
     diaChi?: string | null;
-  }
-
-  export interface ILichTrinhChung {
-    _id: string;
-    ten: string;
-    deCuongHpId: string;
-    gioLyThuyet: number;
-    gioBaiTapTL: number;
-    gioThucHanh: number;
-    gioTuHoc: number;
   }
 
   export interface ITienTrinhHocPhan {
@@ -115,17 +83,5 @@ declare module HocPhan {
     deCuongId: string;
     deCuong?: IDeCuongHocPhan;
     batBuoc: boolean;
-  }
-
-  export interface ITrongSoHocPhan {
-    _id: string;
-    deCuongId: string;
-    deCuong?: IDeCuongHocPhan;
-    hinhThucDanhGiaId: string;
-    hinhThucDanhGia?: DauDiemHocPhan.IRecord;
-    hinhThucThiId: string;
-    hinhThucThi?: HinhThucThi.IRecord;
-    dacDiemDanhGia: string;
-    tyLeDanhGia: number;
   }
 }
