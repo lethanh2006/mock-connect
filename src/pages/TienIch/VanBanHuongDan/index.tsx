@@ -1,8 +1,10 @@
-import { Avatar, Button, Card, Col, Input, List, Modal, Row, Typography } from 'antd';
+import { EOperatorType } from '@/components/Table/constant';
+import { type VanBanHuongDan } from '@/services/TienIch/VanBanHuongDan/typing';
+import { SearchOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Form, Input, List, Modal, Space, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FileList from './components/FileList';
-import { type VanBanHuongDan } from '@/services/TienIch/VanBanHuongDan/typing';
 
 const VanBanHuongDanComponent = () => {
   const {
@@ -16,9 +18,15 @@ const VanBanHuongDanComponent = () => {
     total,
     setPage,
     setLimit,
-    condition,
+    filters,
+    setFilters,
   } = useModel('tienich.vanbanhuongdan');
   const [visibleFileList, setVisibleFileList] = useState<boolean>();
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    getModel();
+  }, [page, limit, filters]);
 
   const handleOnMouseOver = (e: any) => {
     if (!e) return;
@@ -57,31 +65,45 @@ const VanBanHuongDanComponent = () => {
     setVisibleFileList(true);
   };
 
-  useEffect(() => {
-    getModel();
-  }, [page, limit, condition]);
+  const onFinish = (values: any) => {
+    setFilters([
+      { active: true, field: 'ten', values: [values.ten], operator: EOperatorType.CONTAIN },
+    ]);
+  };
 
   return (
     <>
       <Card title="Văn bản hướng dẫn">
-        <Row>
-          <Col span={24}>
-            <h4 style={{ display: 'inline-block', margin: '0 0px 8px 50px', float: 'right' }}>
-              Tổng số:
-              <Input
-                style={{ width: '90px', fontWeight: 600, fontSize: 14, marginLeft: 10 }}
-                value={total}
-                readOnly
-                // ref={this.setTableBaseRef}
-              />
-            </h4>
-          </Col>
-        </Row>
+        <Space wrap style={{ width: '100%', justifyContent: 'space-between', marginBottom: 12 }}>
+          <Form form={form} onFinish={onFinish} layout="inline">
+            <Form.Item name="ten">
+              <Input placeholder="Tìm theo tên..." allowClear />
+            </Form.Item>
+            <Button icon={<SearchOutlined />} htmlType="submit" type="primary">
+              Tìm kiếm
+            </Button>
+          </Form>
+
+          <h4 style={{ display: 'inline-block' }}>
+            Tổng số:
+            <Input
+              style={{
+                width: 70,
+                fontWeight: 700,
+                fontSize: 16,
+                marginLeft: 10,
+                color: '#007eb9',
+              }}
+              value={total}
+              readOnly
+              // ref={this.setTableBaseRef}
+            />
+          </h4>
+        </Space>
 
         <List
           loading={loading}
           split
-          bordered
           pagination={{
             onChange: (pageNumber: number, pageSize?: number) => {
               handleListChange(pageNumber, pageSize);
@@ -104,6 +126,7 @@ const VanBanHuongDanComponent = () => {
               onMouseOut={(e) => handleOnMouseOut(e.target)}
               onMouseOver={(e) => handleOnMouseOver(e.target)}
               onClick={() => showFileList(item)}
+              style={{ paddingLeft: 8 }}
             >
               <List.Item.Meta
                 avatar={
