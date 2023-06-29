@@ -10,7 +10,7 @@ const FileChoice = (props: {
 }) => {
   return (
     <Form.Item
-      rules={props.question.batBuoc ? [...rules.required, ...rules.fileRequired] : []}
+      rules={props.question.batBuoc ? [...rules.fileRequired] : []}
       name={`${props.indexKhoi}||${props.indexCauHoi}`}
       extra="Tối đa 5 file, định dạng cho phép: File ảnh, .pdf, .doc, .docx."
     >

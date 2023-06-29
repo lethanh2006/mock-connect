@@ -1,5 +1,5 @@
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { Button, Card, Checkbox, Form } from 'antd';
+import { Button, Card, Checkbox, Divider, Form } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FileChoice from './Question/FileChoice';
@@ -66,13 +66,9 @@ const FormTraLoiKhaoSat = () => {
 
     return (
       <div key={question._id}>
-        <div className="ant-form-item-label fw500">
-          <label
-            className={question.batBuoc ? 'ant-form-item-required' : ''}
-            style={{ whiteSpace: 'pre-wrap', textAlign: 'left' }}
-          >
-            Câu {indexCauHoi + 1}: {question.noiDungCauHoi}
-          </label>
+        <div className="fw500">
+          Câu {indexCauHoi + 1}: {question.noiDungCauHoi}{' '}
+          {question.batBuoc ? <span style={{ color: 'red' }}>*</span> : null}
         </div>
         {questionEleMent}
       </div>
@@ -132,8 +128,9 @@ const FormTraLoiKhaoSat = () => {
         {record?.danhSachKhoi?.map((item, indexKhoi) => (
           // eslint-disable-next-line react/no-array-index-key
           <div key={indexKhoi} style={{ marginBottom: 24 }}>
-            <div className="fw500">{item.tieuDe}</div>
-            <div>{item.moTa}</div>
+            <Divider />
+            <div className="fw500">{item.tieuDe}D</div>
+            <div style={{ marginBottom: 8 }}>{item.moTa}</div>
 
             {item.danhSachCauHoi?.map((cauHoi, indexCauHoi) =>
               renderQuestion(cauHoi, indexKhoi, indexCauHoi),
@@ -160,7 +157,7 @@ const FormTraLoiKhaoSat = () => {
           >
             Hoàn thành
           </Button>
-          <Button onClick={() => setVisibleForm(false)}>Đóng</Button>
+          <Button onClick={() => setVisibleForm(false)}>Hủy</Button>
         </div>
       </Form>
     </Card>

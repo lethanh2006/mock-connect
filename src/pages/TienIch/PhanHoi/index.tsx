@@ -4,7 +4,7 @@ import { type IColumn } from '@/components/Table/typing';
 import { ELoaiPhanHoi } from '@/services/TienIch/PhanHoi/constant';
 import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
 import { EyeOutlined } from '@ant-design/icons';
-import { Button, Select, Tooltip } from 'antd';
+import { Button, Checkbox, Select, Tooltip } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -49,6 +49,15 @@ const PhanHoiPage = () => {
       onCell,
     },
     {
+      title: 'Đã trả lời',
+      dataIndex: 'daTraLoiPhanHoi',
+      align: 'center',
+      hide: daTraLoi === false,
+      render: (val) => <Checkbox checked={val} />,
+      width: 80,
+      onCell,
+    },
+    {
       title: 'Câu trả lời',
       dataIndex: 'noiDungTraLoiPhanHoi',
       hide: daTraLoi === false,
@@ -77,6 +86,7 @@ const PhanHoiPage = () => {
     {
       title: 'Thao tác',
       width: 60,
+      align: 'center',
       fixed: 'right',
       render: (val, rec) => (
         <>
