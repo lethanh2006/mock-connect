@@ -15,8 +15,9 @@ export default {
 
   // SINH VIEN
   'menu.HocTap': 'Học tập',
-  'menu.HocTap.DangKyNhuCau': 'Đăng ký nhu cầu',
   'menu.HocTap.TienTrinhHocTap': 'Tiến trình học tập',
+  'menu.HocTap.DangKyNhuCau': 'Đăng ký nhu cầu',
+  'menu.HocTap.DangKyTinChi': 'Đăng ký tín chỉ',
   'menu.HocTap.LopHanhChinh': 'Lớp hành chính',
   'menu.HocTap.LopHocPhan': 'Lớp học phần',
   'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',

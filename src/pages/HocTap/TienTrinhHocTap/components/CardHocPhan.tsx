@@ -3,26 +3,32 @@ import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
 import { useState } from 'react';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import { useModel } from 'umi';
+import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 
 const CardHocPhan = (props: {
   chuongTrinhKhung?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
+  sinhVienLopHocPhan?: LopHocPhan.IRecordSinhVienLopHP;
   isChuyenNganh?: boolean;
 }) => {
   const { setSinhVienLopHocPhan } = useModel('daotao.sinhvienlophocphan');
   const [modalVisible, setModalVisible] = useState(false);
-  const { chuongTrinhKhung, isChuyenNganh } = props;
-  const listDiem: string[] = chuongTrinhKhung?.lichSuDiem?.map((diem) => diem.diemChu || '-') ?? [];
-  if (listDiem?.slice(-1)[0] !== '-' && chuongTrinhKhung?.hoc === ETrangThaiHocTap.DANG_HOC)
-    listDiem?.push('-');
+  const { chuongTrinhKhung, sinhVienLopHocPhan } = props;
+  const listDiem: string[] = chuongTrinhKhung?.lichSuDiem?.map((diem) => diem.diemChu || '--') ?? [
+    sinhVienLopHocPhan?.diemChu || '--',
+  ];
+  if (listDiem?.slice(-1)[0] !== '--' && chuongTrinhKhung?.hoc === ETrangThaiHocTap.DANG_HOC)
+    listDiem?.push('--');
+  const hocPhan = chuongTrinhKhung?.hocPhan ?? sinhVienLopHocPhan?.hocPhan;
+  const soTinChi = chuongTrinhKhung?.soTinChi ?? sinhVienLopHocPhan?.soTinChi;
 
   return (
     <div className="col-hoc-phan">
       <div
         className={`card-hoc-phan ${
           chuongTrinhKhung?.hoc === ETrangThaiHocTap.CHUA_HOC && 'card-chua-hoc'
-        } ${isChuyenNganh && 'card-chua-hoc'}`}
+        }`}
         onClick={() => {
-          setSinhVienLopHocPhan(chuongTrinhKhung?.lichSuDiem?.[0]);
+          setSinhVienLopHocPhan(chuongTrinhKhung?.lichSuDiem?.[0] ?? sinhVienLopHocPhan);
           setModalVisible(true);
         }}
       >
@@ -31,21 +37,21 @@ const CardHocPhan = (props: {
             chuongTrinhKhung?.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON ? 'tu_chon' : undefined
           }
         >
-          {chuongTrinhKhung?.hocPhan?.ten}
+          {hocPhan?.ten}
         </h4>
-        <span className="tin-chi">{chuongTrinhKhung?.soTinChi} tín</span>
+        <span className="tin-chi">{soTinChi} tín</span>
         <img src="/images/img-card-hoc-phan.svg" />
       </div>
       {listDiem?.map((diem, index) => (
         <div
           className={`bookmark bookmark-diem ${
-            !diem || diem === '-'
-              ? 'diem-gray'
-              : diem.includes('A') || diem.includes('B')
+            diem.includes('A') || diem.includes('B')
               ? 'diem-green'
+              : diem.includes('C') || diem.includes('D')
+              ? 'diem-yellow'
               : diem?.includes('F')
               ? 'diem-red'
-              : 'diem-yellow'
+              : 'diem-gray'
           }`}
           style={{ right: 1 + index * 2.3 + 'rem' }}
           // eslint-disable-next-line react/no-array-index-key
@@ -62,7 +68,7 @@ const CardHocPhan = (props: {
       <ModalChiTietDiem
         setVisible={setModalVisible}
         visible={modalVisible}
-        chuongTrinhKhung={chuongTrinhKhung}
+        chuongTrinhKhung={{ hocPhan, soTinChi }}
       />
     </div>
   );

@@ -62,8 +62,10 @@ export declare module LopHocPhan {
     publicDiemThi: boolean;
 
     // Populate
+    kyHoc?: HocKy.IRecord;
     hocPhan?: HocPhan.IRecord;
     soTinChi?: number;
+    soThuTuKy?: number;
   }
 
   export interface IDiemThanhPhan {

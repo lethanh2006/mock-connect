@@ -8,7 +8,7 @@ import {
   textThucHienKhaoSat,
 } from '@/services/TienIch/KhaoSat/constants';
 import { EditOutlined } from '@ant-design/icons';
-import { Button, Select, Tooltip } from 'antd';
+import { Button, Select, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import Form from './components/Form';
@@ -62,6 +62,14 @@ const DotKhaoSatPage = () => {
       render: (val) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : ''),
       filterType: 'datetime',
       sortable: true,
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'daLam',
+      align: 'center',
+      width: 100,
+      render: (val) =>
+        val ? <Tag color="green">Đã thực hiện</Tag> : <Tag color="red">Chưa thực hiện</Tag>,
     },
     {
       title: 'Thao tác',
