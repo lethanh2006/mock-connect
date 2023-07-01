@@ -51,7 +51,7 @@ const DetailLopTinChi = ({
           <DanhSachBuoiHoc />
         </Tabs.TabPane>
 
-        <Tabs.TabPane tab="Kêt quả học tập" key="3">
+        <Tabs.TabPane tab="Kết quả học tập" key="3">
           <DetailKetQuaHocTap lopHocPhanId={record?._id} />
         </Tabs.TabPane>
 

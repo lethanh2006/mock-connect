@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import { useModel } from 'umi';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 
 const CardHocPhan = (props: {
   chuongTrinhKhung?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
@@ -13,11 +14,14 @@ const CardHocPhan = (props: {
   const { setSinhVienLopHocPhan } = useModel('daotao.sinhvienlophocphan');
   const [modalVisible, setModalVisible] = useState(false);
   const { chuongTrinhKhung, sinhVienLopHocPhan } = props;
-  const listDiem: string[] = chuongTrinhKhung?.lichSuDiem?.map((diem) => diem.diemChu || '--') ?? [
-    sinhVienLopHocPhan?.diemChu || '--',
-  ];
-  if (listDiem?.slice(-1)[0] !== '--' && chuongTrinhKhung?.hoc === ETrangThaiHocTap.DANG_HOC)
-    listDiem?.push('--');
+  const listDiem = chuongTrinhKhung?.lichSuDiem?.map(
+    (diem) => diem.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU,
+  ) ?? [sinhVienLopHocPhan?.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU];
+  // if (
+  //   listDiem?.slice(-1)[0] !== ELoaiDiemChu.CHUA_DU_DU_LIEU &&
+  //   chuongTrinhKhung?.hoc === ETrangThaiHocTap.DANG_HOC
+  // )
+  //   listDiem?.push(ELoaiDiemChu.CHUA_DU_DU_LIEU);
   const hocPhan = chuongTrinhKhung?.hocPhan ?? sinhVienLopHocPhan?.hocPhan;
   const soTinChi = chuongTrinhKhung?.soTinChi ?? sinhVienLopHocPhan?.soTinChi;
 

@@ -31,22 +31,18 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string }) => {
             }
           </Descriptions.Item>
         ))}
-        <Descriptions.Item label="Điểm thi lần 1">
-          {sinhVienLopHocPhan?.diemThi1 ?? '--'}
-        </Descriptions.Item>
-        <Descriptions.Item label="Điểm thi lần 2">
-          {sinhVienLopHocPhan?.diemThi2 ?? '--'}
-        </Descriptions.Item>
+        <Descriptions.Item label="Điểm thi lần 1">{sinhVienLopHocPhan?.diemThi1}</Descriptions.Item>
+        <Descriptions.Item label="Điểm thi lần 2">{sinhVienLopHocPhan?.diemThi2}</Descriptions.Item>
         <Descriptions.Item label="Điểm tổng kết">
           {sinhVienLopHocPhan?.diemTongKet}
         </Descriptions.Item>
         <Descriptions.Item label="Điểm thang 4">{sinhVienLopHocPhan?.diemThang4}</Descriptions.Item>
         <Descriptions.Item label="Điểm chữ">
           {sinhVienLopHocPhan?.diemChu ? (
-            <Tag color={ColorDiemChu[sinhVienLopHocPhan.diemChu]}>{sinhVienLopHocPhan.diemChu}</Tag>
-          ) : (
-            <i>Chưa có điểm</i>
-          )}
+            <Tag color={ColorDiemChu[sinhVienLopHocPhan?.diemChu]}>
+              {sinhVienLopHocPhan?.diemChu}
+            </Tag>
+          ) : null}
         </Descriptions.Item>
       </Descriptions>
     </>
