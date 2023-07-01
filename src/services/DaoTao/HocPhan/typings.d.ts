@@ -7,10 +7,10 @@ declare module HocPhan {
     ten: string;
     tenTiengAnh?: string;
     donVi: string;
-    soTinChi: number;
     deCuongHienTaiId?: string;
     createdAt?: string;
     updatedAt?: string;
+    active: boolean;
   }
 
   export interface IDeCuongHocPhan {

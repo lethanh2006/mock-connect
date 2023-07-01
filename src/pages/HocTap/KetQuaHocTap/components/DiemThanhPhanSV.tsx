@@ -6,6 +6,7 @@ import { Card, Tabs, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalChiTietDiem from './ModalChiTietDiem';
+import MayTinhThongMinh from './MayTinhThongMinh';
 
 const DiemThanhPhanSV = () => {
   const {
@@ -171,7 +172,7 @@ const DiemThanhPhanSV = () => {
               //   loading: loading,
               //   pagination: false,
               // }}
-              data={danhSach ?? []}
+              data={danhSach?.filter((item) => item.diemChu !== ELoaiDiemChu.CHUA_DU_DU_LIEU) ?? []}
               columns={columns}
               addStt
               hasTotal
@@ -181,10 +182,10 @@ const DiemThanhPhanSV = () => {
           {/* <Tabs.TabPane tab="Thắc mắc điểm" key="2"> */}
           {/* <ThacMacDiemComponent /> */}
           {/* Thắc mắc điểm
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Giả lập điểm" key="3">
-            <GiaLapDiem />
           </Tabs.TabPane> */}
+          <Tabs.TabPane tab="Máy tính thông minh" key="3">
+            <MayTinhThongMinh />
+          </Tabs.TabPane>
         </Tabs>
       </Card>
 

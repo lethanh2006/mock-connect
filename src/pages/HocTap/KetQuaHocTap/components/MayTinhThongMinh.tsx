@@ -1,142 +1,151 @@
-// import { sinhVienGetGiaLapDiem } from '@/services/LopTinChi/ketquahoctap';
+import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import { type DiemHocPhan } from '@/services/DaoTao/DiemHocPhan/typing';
+import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
 import rules from '@/utils/rules';
-import { convert4NumberScoreToAlphabet, convertNumberScoreToAlphabet } from '@/utils/utils';
-import { Col, Descriptions, Form, Input, Modal, Popover, Row, Table, Typography } from 'antd';
+import { convertNumberScoreToAlphabet } from '@/utils/utils';
+import {
+  Col,
+  Descriptions,
+  Form,
+  Input,
+  Modal,
+  Popover,
+  Radio,
+  Row,
+  type RadioChangeEvent,
+} from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
+import { useModel } from 'umi';
 
-const GiaLapDiem = () => {
-  const [danhSachDiem, setDanhSachDiem] = useState<LopTinChi.IGiaLapDiem[]>();
-  const [record, setRecord] = useState<LopTinChi.IGiaLapDiem>();
+const MayTinhThongMinh = () => {
+  const { getDiemSinhVienModel, loading, tongTuChon } = useModel('daotao.diemhocphan');
+  const [danhSach, setDanhSach] = useState<DiemHocPhan.IDiemSinhVien[]>();
+  const [record, setRecord] = useState<DiemHocPhan.IDiemSinhVien>();
   const [tongKet, setTongKet] = useState<number>(0);
-  const [tongTuChon, setTongTuChon] = useState<number>(0);
   const [tuChonCoDiem, setTuChonCoDiem] = useState<number>(0);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [showAll, setShowAll] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const chuDuKien = convert4NumberScoreToAlphabet(tongKet);
   const [form] = Form.useForm();
-  const { Text } = Typography;
 
-  const tinhDiemTongKet = (data: LopTinChi.IGiaLapDiem[]) => {
+  const tinhDiemTongKet = (data: DiemHocPhan.IDiemSinhVien[]) => {
     const sum = _.sumBy(data, (item) => {
-      const diem = (item.diem_du_kien_4 ?? item.diem_thang_4 ?? 0) * (item.so_tin_chi ?? 0);
+      const diem = (item.diemDuKienThang4 ?? item.diemThang4 ?? 0) * (item.soTinChi ?? 0);
       return diem;
     });
     const tinchi = _.sumBy(data, (item) =>
-      item.diem_du_kien_4 || item.diem_thang_4 ? item.so_tin_chi : 0,
+      item.diemDuKienThang4 || item.diemThang4 ? item.soTinChi ?? 0 : 0,
     );
     setTongKet(Math.round(tinchi === 0 ? 0 : (sum * 100) / tinchi) / 100);
 
     const monTuChonCoDiem = data.filter(
-      (item) => item.loai_hoc_phan === 'tu_chon' && (item.diem_du_kien_4 || item.diem_thang_4),
+      (item) =>
+        item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON &&
+        (item.diemDuKienThang4 || item.diemThang4),
     );
-    setTuChonCoDiem(_.sumBy(monTuChonCoDiem, (item) => item.so_tin_chi));
+    setTuChonCoDiem(_.sumBy(monTuChonCoDiem, (item) => item.soTinChi ?? 0));
   };
 
-  // const fetch = async () => {
-  //   await sinhVienGetGiaLapDiem().then((response) => {
-  //     const data: LopTinChi.IGiaLapDiem[] = response.data?.data?.dsDiem ?? [];
-  //     setTongTuChon(response.data?.data?.tongSoTinChiTuChon ?? 0);
-  //     tinhDiemTongKet(data);
-  //     setDanhSachDiem(data.map((item, index) => ({ index: index + 1, ...item })));
-  //     setLoading(false);
-  //   });
-  // };
+  const fetch = async () => {
+    await getDiemSinhVienModel().then((data) => {
+      tinhDiemTongKet(data);
+      setDanhSach(data);
+    });
+  };
 
   useEffect(() => {
-    // fetch();
+    fetch();
   }, []);
+  console.log(danhSach);
 
   const onOk = () => {
     form
       .validateFields()
       .then((values) => {
-        const data = danhSachDiem?.map((item) =>
-          item.hoc_phan_id === record?.hoc_phan_id
+        const data = danhSach?.map((item) =>
+          item.ma === record?.ma
             ? {
                 ...record,
-                diem_du_kien: parseFloat(values.diem_du_kien) || undefined,
-                diem_du_kien_4:
-                  parseFloat(convertNumberScoreToAlphabet(values.diem_du_kien)[1]) || undefined,
+                diemDuKien: parseFloat(values.diemDuKien) || undefined,
+                diemDuKienThang4:
+                  parseFloat(convertNumberScoreToAlphabet(values.diemDuKien)[1]) || undefined,
               }
             : item,
         );
         tinhDiemTongKet(data ?? []);
-        setDanhSachDiem(data);
+        setDanhSach(data);
         setModalVisible(false);
       })
       .catch((error) => console.log(error));
   };
 
-  const onCell = (rec: LopTinChi.IGiaLapDiem) => ({
+  const onCell = (rec: DiemHocPhan.IDiemSinhVien) => ({
     onClick: () => {
-      console.log(rec);
       setRecord(rec);
       form.setFieldsValue({
-        diem_du_kien: rec?.diem_du_kien ?? rec?.diem_hoc_phan ?? undefined,
+        diemDuKien: rec?.diemDuKien ?? rec?.diemTongKet ?? undefined,
       });
       setModalVisible(true);
     },
     style: { cursor: 'pointer' },
   });
 
-  const columns: IColumn<LopTinChi.IGiaLapDiem>[] = [
+  const columns: IColumn<DiemHocPhan.IDiemSinhVien>[] = [
     {
-      dataIndex: 'ten_hoc_phan',
+      dataIndex: 'ten',
       title: 'Tên học phần',
       width: 150,
       render: (s, r) => (
-        <span style={r.loai_hoc_phan === 'tu_chon' ? { fontStyle: 'italic' } : {}}>
-          {s} {r.loai_hoc_phan === 'tu_chon' ? '(tự chọn)' : ''}
+        <span style={r.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON ? { fontStyle: 'italic' } : {}}>
+          {s} {r.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON ? '(tự chọn)' : ''}
         </span>
       ),
       onCell,
     },
     {
-      dataIndex: 'so_tin_chi',
+      dataIndex: 'soTinChi',
       title: 'Số tín chỉ',
-
       width: 60,
+      align: 'center',
       onCell,
     },
     {
-      dataIndex: 'diem_thang_4',
-      title: 'Điểm tổng kết (hệ 4)',
-
-      render: (s, r) => (
-        <b style={r.is_danh_gia ? (r.trang_thai === 'Không đạt' ? { color: 'red' } : {}) : {}}>
-          {Object.hasOwn(r, 'is_danh_gia') ? (r.is_danh_gia ? s : '--') : ''}
-        </b>
-      ),
+      dataIndex: 'diemThang4',
+      title: 'Điểm tổng kết (thang 4)',
+      // render: (s, r) => (
+      //   <b style={r.is_danh_gia ? (r.trang_thai === 'Không đạt' ? { color: 'red' } : {}) : {}}>
+      //     {Object.hasOwn(r, 'is_danh_gia') ? (r.is_danh_gia ? s : '--') : ''}
+      //   </b>
+      // ),
       width: 80,
+      align: 'center',
       onCell,
     },
     {
-      dataIndex: 'diem_du_kien',
-      title: 'Điểm dự kiến (hệ 10)',
-
+      dataIndex: 'diemDuKien',
+      title: 'Điểm dự kiến (thang 10)',
       render: (s) => <b>{s}</b>,
       width: 80,
+      align: 'center',
       onCell,
     },
     {
-      dataIndex: 'diem_du_kien',
-      title: 'Điểm dự kiến (hệ 4)',
-
-      render: (s) => <b>{convertNumberScoreToAlphabet(s)[1]}</b>,
+      dataIndex: 'diemDuKienThang4',
+      title: 'Điểm dự kiến (thang 4)',
+      render: (s) => <b>{s}</b>,
       width: 80,
+      align: 'center',
       onCell,
     },
   ];
 
   return (
     <Row gutter={[12, 12]}>
-      <Text italic style={{ marginBottom: '16px' }}>
+      {/* <Text italic style={{ marginBottom: '16px' }}>
         * Lưu ý: Những điểm &#34;--&#34; là do bạn chưa đánh giá giảng viên. Vui lòng đánh giá để
         xem điểm!
-      </Text>
+      </Text> */}
       <Col span={24}>
         Tại đây sinh viên có thể thực hiện &quot;giả lập điểm&quot;, để chủ động trong việc đăng ký
         học lại, học cải thiện.{' '}
@@ -175,7 +184,7 @@ const GiaLapDiem = () => {
         (tổng số tín chỉ tự chọn phải học).
       </Col>
 
-      {/* <Col span={24} style={{ textAlign: 'center' }}>
+      <Col span={24} style={{ textAlign: 'center' }}>
         <Radio.Group
           optionType="button"
           value={showAll}
@@ -185,47 +194,47 @@ const GiaLapDiem = () => {
             { label: 'Tất cả các môn học', value: true },
           ]}
         />
-      </Col> */}
+      </Col>
 
       <Col span={24}>
-        <Table
+        <TableStaticData
           columns={columns}
-          dataSource={danhSachDiem
-            ?.filter((item) => showAll || item.trang_thai !== 'Chưa có điểm')
-            ?.map((item, index) => ({ ...item, key: index }))}
-          scroll={{ x: 500 }}
+          data={danhSach?.filter((item) => showAll || item.trangThai !== 'Chưa có điểm') ?? []}
+          otherProps={{ scroll: { y: 600 } }}
+          addStt
           loading={loading}
-          // pagination={false}
+          hasTotal
         />
       </Col>
 
       <Modal
         visible={modalVisible}
         title="Giả lập điểm"
-        onCancel={() => {
-          setModalVisible(false);
-        }}
+        onCancel={() => setModalVisible(false)}
         onOk={onOk}
         width={700}
       >
         <Form form={form}>
           <Descriptions column={1} bordered>
-            <Descriptions.Item label="Tên học phần">{record?.ten_hoc_phan}</Descriptions.Item>
-            <Descriptions.Item label="Số tín chỉ">{record?.so_tin_chi}</Descriptions.Item>
-            <Descriptions.Item label="Điểm tổng kết (hệ 10)">
-              {record?.is_danh_gia ? record?.diem_hoc_phan : '--'}
+            <Descriptions.Item label="Tên học phần">{record?.ten}</Descriptions.Item>
+            <Descriptions.Item label="Mã học phần">{record?.ma}</Descriptions.Item>
+            <Descriptions.Item label="Số tín chỉ">{record?.soTinChi}</Descriptions.Item>
+            <Descriptions.Item label="Điểm tổng kết (thang 10)">
+              {record?.diemTongKet}
             </Descriptions.Item>
-            <Descriptions.Item label="Điểm tổng kết (hệ 4)">
-              {record?.is_danh_gia ? record?.diem_thang_4 : '--'}
+            <Descriptions.Item label="Điểm tổng kết (thang 4)">
+              {record?.diemThang4}
             </Descriptions.Item>
             <Descriptions.Item label="Điểm tổng kết (dạng chữ)">
-              {record?.is_danh_gia ? record?.diem_chu : '--'}
+              {record?.diemChu}
             </Descriptions.Item>
-            <Descriptions.Item label="Trạng thái">
-              {record?.is_danh_gia ? record?.trang_thai : 'Chưa đánh giá'}
-            </Descriptions.Item>
-            <Descriptions.Item label="Điểm dự kiến sau khi học lại / cải thiện (hệ 10)">
-              <Form.Item name="diem_du_kien" rules={[...rules.number(10, 4)]}>
+            <Descriptions.Item label="Trạng thái">{record?.trangThai}</Descriptions.Item>
+            <Descriptions.Item label="Điểm dự kiến sau khi học lại / cải thiện (thang 10)">
+              <Form.Item
+                name="diemDuKien"
+                rules={[...rules.number(10, 4)]}
+                style={{ marginBottom: 0 }}
+              >
                 <Input placeholder="Nhập điểm dự kiến" />
               </Form.Item>
             </Descriptions.Item>
@@ -236,4 +245,4 @@ const GiaLapDiem = () => {
   );
 };
 
-export default GiaLapDiem;
+export default MayTinhThongMinh;

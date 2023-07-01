@@ -1,7 +1,7 @@
-import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import { type ELoaiDiemChu, type ELoaiLopHocPhan, type ETrangThaiDangKyGiangDay } from './constant';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
+import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { type ELoaiDiemChu, type ELoaiLopHocPhan, type ETrangThaiDangKyGiangDay } from './constant';
 
 export declare module LopHocPhan {
   export interface IRecord {
@@ -43,17 +43,12 @@ export declare module LopHocPhan {
     trangThai: ETrangThaiDangKyGiangDay;
   }
 
-  export interface IRecordSinhVienLopHP extends IDiemThanhPhan, IDiemThi {
+  export interface IRecordSinhVienLopHP extends IDiemThanhPhan, IDiemThi, IDiemTongKet {
     _id: string;
     lopHocPhanId: string;
     lopHocPhan: IRecord;
     sinhVienSsoId: string;
     sinhVien?: SinhVien.IRecord;
-
-    diemKthp?: number;
-    diemTongKet?: number;
-    diemThang4?: number;
-    diemChu?: ELoaiDiemChu;
 
     khoa: boolean;
     khoaDiemThi: boolean;
@@ -84,6 +79,13 @@ export declare module LopHocPhan {
   export interface IDiemThi {
     diemThi1?: number;
     diemThi2?: number;
+  }
+
+  export interface IDiemTongKet {
+    // diemKthp?: number;
+    diemTongKet?: number;
+    diemThang4?: number;
+    diemChu?: ELoaiDiemChu;
   }
 
   export interface ThongTinChungLopTinChiRecord {
