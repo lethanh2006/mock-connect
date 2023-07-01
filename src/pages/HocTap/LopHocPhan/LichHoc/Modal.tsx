@@ -26,7 +26,7 @@ const ModalThoiKhoaBieu = () => {
         <Descriptions.Item label="File đính kèm">
           {recThoiKhoaBieu?.urlBaiHoc ? (
             <a href={recThoiKhoaBieu.urlBaiHoc} target="_blank" rel="noreferrer">
-              Tải xuống
+              Xem chi tiết
             </a>
           ) : (
             '--'

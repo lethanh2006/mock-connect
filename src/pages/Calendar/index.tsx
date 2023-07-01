@@ -47,7 +47,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
     }).then((data) => {
       const temp = data.map((item) => ({
         ...item,
-        title: item?.tenLopHocPhan ?? '',
+        title:
+          item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || '',
         loaiSuKien: ELoaiSuKien.LICH_HOC,
         start: moment(item?.thoiGianBatDau).toDate(),
         end: moment(item?.thoiGianKetThuc).toDate(),
@@ -220,7 +221,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
         onCancel={() => setVisibleXemThem(false)}
         footer={null}
       >
-        {eventsRecord?.map((item: SuKien.IRecord) => {
+        {eventsRecord?.map((item: { title?: string; loaiSuKien: ELoaiSuKien; _id: string }) => {
           return (
             <div
               key={item._id}
@@ -237,7 +238,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
                 setVisibleDetail(true);
               }}
             >
-              <b>{item?.loaiSuKien}</b>: {item?.tenSuKien}
+              <b>{item?.loaiSuKien}</b>: {item?.title}
             </div>
           );
         })}

@@ -30,6 +30,7 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
     {
       dataIndex: 'ma',
       title: 'Mã sinh viên',
+      align: 'center',
       width: 120,
       filterType: 'string',
     },

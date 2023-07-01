@@ -57,7 +57,6 @@ const MayTinhThongMinh = () => {
   useEffect(() => {
     fetch();
   }, []);
-  console.log(danhSach);
 
   const onOk = () => {
     form

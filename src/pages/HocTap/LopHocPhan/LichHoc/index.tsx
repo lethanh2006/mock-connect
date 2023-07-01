@@ -65,7 +65,7 @@ const DanhSachBuoiHoc = () => {
     },
     {
       title: 'Tiết học',
-      width: 80,
+      width: 60,
       align: 'center',
       render: (val, rec) => `${rec.tietBatDau} - ${rec.tietKetThuc}`,
       onCell,
@@ -80,7 +80,21 @@ const DanhSachBuoiHoc = () => {
     {
       title: 'Loại hình',
       dataIndex: 'loaiHinhHocTap',
-      width: 100,
+      width: 80,
+      onCell,
+    },
+    {
+      title: 'Giảng viên',
+      width: 120,
+      render: (val, rec) => [rec.giangVien?.hoDem, rec.giangVien?.ten].join(' '),
+      onCell,
+    },
+    {
+      title: 'Nhóm lớp',
+      align: 'center',
+      width: 80,
+      render: (val, rec) =>
+        !!rec.lopHocPhan?.maLopCha && `Nhóm ${rec.lopHocPhan?.loai} ${rec.lopHocPhan?.soThuTuNhom}`,
       onCell,
     },
     // {

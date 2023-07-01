@@ -20,6 +20,12 @@ const LopHanhChinhPage = () => {
       sortable: true,
     },
     {
+      title: 'Cố vấn học tập',
+      width: 150,
+      onCell,
+      render: (val, rec) => [rec.giangVien?.hoDem, rec.giangVien?.ten].join(' '),
+    },
+    {
       title: 'Sĩ số',
       dataIndex: 'siSo',
       align: 'center',

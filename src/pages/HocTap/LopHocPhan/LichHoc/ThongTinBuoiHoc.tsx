@@ -27,7 +27,9 @@ const ThongTinBuoiHoc = (props: {
         {buoiHoc?.loaiHinhHocTap ?? <i>Chưa cập nhật</i>}
       </Descriptions.Item>
       <Descriptions.Item label="Giảng viên">
-        {buoiHoc?.nhanSu?.ten ?? <i>Chưa cập nhật</i>}
+        {buoiHoc?.giangVien?.ten
+          ? [buoiHoc.giangVien?.hoDem, buoiHoc.giangVien?.ten].join(' ')
+          : '--'}
       </Descriptions.Item>
     </Descriptions>
   );

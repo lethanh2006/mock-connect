@@ -138,7 +138,12 @@ const VanBanHuongDanComponent = () => {
                 title={<Typography.Text strong>{`${item.ten || 'CHƯA ĐẶT TÊN'}`}</Typography.Text>}
                 description={
                   <>
-                    <div>Mô tả: {item.moTa || ''}</div>
+                    {item.moTa ? (
+                      <>
+                        Mô tả: {item.moTa}
+                        <br />
+                      </>
+                    ) : null}
                     <div>Số lượng văn bản: {item?.danhSachTep?.length ?? 0}</div>
                   </>
                 }

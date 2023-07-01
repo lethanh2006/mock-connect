@@ -112,7 +112,6 @@
       {
         name: 'LopHanhChinh',
         path: 'lop-hanh-chinh',
-
         routes: [
           {
             path: './',
@@ -131,7 +130,6 @@
       {
         name: 'LopHocPhan',
         path: 'lop-hoc-phan',
-
         routes: [
           {
             path: './',

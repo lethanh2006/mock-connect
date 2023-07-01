@@ -41,8 +41,8 @@ const BlockTinTuc = (props: { empty?: string }) => {
               <div
                 style={{
                   background: danhSach?.[0]?.urlAnhDaiDien
-                    ? `url(${danhSach?.[0]?.urlAnhDaiDien}) center center/contain no-repeat`
-                    : `url(${anh}) center center/contain no-repeat`,
+                    ? `url(${danhSach?.[0]?.urlAnhDaiDien}) center center/cover no-repeat`
+                    : `url(${anh}) center center/cover no-repeat`,
                   width: '100%',
                   height: '67%',
                   minHeight: 220,
@@ -86,8 +86,8 @@ const BlockTinTuc = (props: { empty?: string }) => {
                       <div
                         style={{
                           background: tintuc?.urlAnhDaiDien
-                            ? `url(${tintuc?.urlAnhDaiDien}) center center/ contain no-repeat`
-                            : `url(${anh}) center center/ contain no-repeat`,
+                            ? `url(${tintuc?.urlAnhDaiDien}) center center/ cover no-repeat`
+                            : `url(${anh}) center center/ cover no-repeat`,
                           width: '100%',
                           height: '100%',
                           minHeight: 130,
@@ -135,8 +135,8 @@ const BlockTinTuc = (props: { empty?: string }) => {
                     <div
                       style={{
                         background: tintuc?.urlAnhDaiDien
-                          ? `url(${tintuc?.urlAnhDaiDien}) center center/ contain no-repeat`
-                          : `url(${anh}) center center/ contain no-repeat`,
+                          ? `url(${tintuc?.urlAnhDaiDien}) center center/ cover no-repeat`
+                          : `url(${anh}) center center/ cover no-repeat`,
                         width: '100%',
                         height: '100%',
                       }}

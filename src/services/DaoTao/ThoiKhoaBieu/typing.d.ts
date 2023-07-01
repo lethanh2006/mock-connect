@@ -7,7 +7,7 @@ declare module ThoiKhoaBieu {
     tenLopHocPhan: string;
     lopHocPhan?: LopHocPhan.IRecord;
     nhanSuSsoId?: string; // 'string';
-    nhanSu?: ToChucNhanSu.INhanSu;
+    giangVien?: ToChucNhanSu.INhanSu;
     ngay: string; //'2023-05-20T08:34:26.620Z';
     nhomTietHocId: string; // 'string';
     // nhomTietHoc: NhomTietHoc.IRecordCoSo;

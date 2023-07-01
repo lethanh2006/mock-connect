@@ -90,7 +90,9 @@ const ModalViewDetailCalendar = (props: {
               {thoiKhoaBieu?.phongHoc ?? '--'}
             </Descriptions.Item>
             <Descriptions.Item label="Giảng viên">
-              {thoiKhoaBieu?.nhanSu?.ten ?? '--'}
+              {thoiKhoaBieu?.giangVien?.ten
+                ? [thoiKhoaBieu.giangVien?.hoDem, thoiKhoaBieu.giangVien?.ten].join(' ')
+                : '--'}
             </Descriptions.Item>
             <Descriptions.Item label="Tiêu đề bài học">
               {thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}

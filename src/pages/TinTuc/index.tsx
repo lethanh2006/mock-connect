@@ -40,7 +40,7 @@ const TinTucPage = () => {
   return (
     <Card title="Tin tức" bodyStyle={{ paddingTop: 0 }}>
       {danhSachChuDe && danhSachChuDe.length > 0 ? (
-        <Tabs activeKey={recChuDe?._id} onChange={changeMenu}>
+        <Tabs activeKey={recChuDe?._id} onChange={changeMenu} style={{ overflow: 'inherit' }}>
           {danhSachChuDe?.map((chuDe) => (
             <Tabs.TabPane
               key={chuDe?._id}
