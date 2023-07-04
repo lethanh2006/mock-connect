@@ -18,9 +18,19 @@ const UploadFile = (props: {
   buttonSize?: SizeType;
   otherProps?: UploadProps;
   isAvatar?: boolean;
+  isAvatarSmall?: boolean;
 }) => {
-  const { value, onChange, otherProps, drag, buttonSize, buttonDescription, accept, isAvatar } =
-    props;
+  const {
+    value,
+    onChange,
+    otherProps,
+    drag,
+    buttonSize,
+    buttonDescription,
+    accept,
+    isAvatar,
+    isAvatarSmall,
+  } = props;
   const limit = props.maxCount || 1;
   const [fileList, setFileList] = useState<any[]>();
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -38,7 +48,7 @@ const UploadFile = (props: {
 
   const handleChange = (val: any) => {
     const fil = val.fileList;
-    const findLargeFile = fil?.find((file: any) => file.size / 1024 / 1024 > 25);
+    const findLargeFile = fil?.find((file: any) => file.size / 1024 / 1024 > 5);
     const findWrongTypeFile = fil?.find((file: any) => {
       const arrFileName = file.name.split('.');
       return (
@@ -48,7 +58,7 @@ const UploadFile = (props: {
     });
 
     if (findLargeFile) {
-      message.error('Tập tin phải nhỏ hơn 25MB!');
+      message.error('Tập tin không được quá 5Mb');
       return;
     }
     if (findWrongTypeFile && otherProps?.accept) {
@@ -68,13 +78,18 @@ const UploadFile = (props: {
     setPreviewOpen(true);
   };
 
+  const Extra = () =>
+    otherProps?.disabled ? null : (
+      <small style={{ color: '#999' }}>
+        <i>Dung lượng file không được quá 5Mb</i>
+      </small>
+    );
+
   // DRAGGER
   if (drag)
     return (
       <Upload.Dragger
-        customRequest={({ onSuccess }) => {
-          setTimeout(() => onSuccess && onSuccess('ok'), 0);
-        }}
+        customRequest={({ onSuccess }) => setTimeout(() => onSuccess && onSuccess('ok'), 0)}
         fileList={fileList}
         onChange={handleChange}
         style={{ width: '100%' }}
@@ -89,19 +104,18 @@ const UploadFile = (props: {
             </p>
             <p className="ant-upload-text">Nhấn chuột hoặc kéo thả tài liệu để tải lên</p>
             <p className="ant-upload-hint">{buttonDescription}</p>
+            <Extra />
           </>
         ) : null}
       </Upload.Dragger>
     );
-  else if (isAvatar)
+  else if (isAvatar || isAvatarSmall)
     return (
       <>
         <Upload
-          customRequest={({ onSuccess }) => {
-            setTimeout(() => onSuccess && onSuccess('ok'), 0);
-          }}
+          customRequest={({ onSuccess }) => setTimeout(() => onSuccess && onSuccess('ok'), 0)}
           listType="picture-card"
-          className="avatar-uploader"
+          className={`avatar-uploader ${isAvatarSmall ? 'avatar-small' : undefined}`}
           fileList={fileList}
           onChange={handleChange}
           style={{ width: '100%' }}
@@ -113,8 +127,6 @@ const UploadFile = (props: {
           {(!otherProps || !otherProps.disabled) && !fileList?.length ? (
             <div
               style={{
-                width: '140px',
-                height: '180px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -126,11 +138,10 @@ const UploadFile = (props: {
             </div>
           ) : null}
         </Upload>
+        <Extra />
 
         <Image
-          width={1}
           style={{ display: 'none' }}
-          // src={previewImage}
           preview={{
             visible: previewOpen,
             src: previewImage,
@@ -142,23 +153,26 @@ const UploadFile = (props: {
 
   // UPLOAD BUTTON
   return (
-    <Upload
-      customRequest={({ onSuccess }) => {
-        setTimeout(() => onSuccess && onSuccess('ok'), 0);
-      }}
-      fileList={fileList}
-      onChange={handleChange}
-      style={{ width: '100%' }}
-      multiple={limit > 1}
-      accept={accept}
-      {...otherProps}
-    >
-      {!otherProps || !otherProps.disabled ? (
-        <Button size={buttonSize || 'small'} icon={<UploadOutlined />}>
-          {buttonDescription || 'Chọn tệp'}
-        </Button>
-      ) : null}
-    </Upload>
+    <>
+      <Upload
+        customRequest={({ onSuccess }) => {
+          setTimeout(() => onSuccess && onSuccess('ok'), 0);
+        }}
+        fileList={fileList}
+        onChange={handleChange}
+        style={{ width: '100%' }}
+        multiple={limit > 1}
+        accept={accept}
+        {...otherProps}
+      >
+        {!otherProps || !otherProps.disabled ? (
+          <Button size={buttonSize || 'small'} icon={<UploadOutlined />}>
+            {buttonDescription || 'Chọn tệp'}
+          </Button>
+        ) : null}
+      </Upload>
+      <Extra />
+    </>
   );
 };
 
