@@ -28,7 +28,7 @@ const FormSinhVien = () => {
   }, []);
 
   return (
-    <Form form={form} layout="vertical">
+    <Form form={form} layout="vertical" disabled>
       <div className="button-section">
         {/* <Button
           loading={formSubmiting}
@@ -62,7 +62,7 @@ const FormSinhVien = () => {
                 label="Mã sinh viên"
                 rules={[...rules.required, ...rules.text, ...rules.length(20)]}
               >
-                <Input placeholder="Mã sinh viên" disabled />
+                <Input placeholder="Mã sinh viên" />
               </Form.Item>
             </Col>
           </Row>
@@ -74,7 +74,7 @@ const FormSinhVien = () => {
                 label="Họ và tên"
                 rules={[...rules.required, ...rules.text, ...rules.length(250)]}
               >
-                <Input placeholder="Nhập họ tên sinh viên" disabled />
+                <Input placeholder="Nhập họ tên sinh viên" />
               </Form.Item>
             </Col>
             <Col span={12} md={8}>
@@ -83,7 +83,7 @@ const FormSinhVien = () => {
                 label="Ngày sinh"
                 rules={[...rules.required, ...rules.ngaySinh]}
               >
-                <MyDatePicker style={{ width: '100%' }} disabled />
+                <MyDatePicker style={{ width: '100%' }} />
               </Form.Item>
             </Col>
             <Col span={12} md={8}>
@@ -99,7 +99,6 @@ const FormSinhVien = () => {
                     value: item,
                     label: item,
                   }))}
-                  disabled
                 />
               </Form.Item>
             </Col>
@@ -110,7 +109,7 @@ const FormSinhVien = () => {
                 label="Số CMTND/CCCD/Hộ chiếu"
                 rules={[...rules.required, ...rules.CMND]}
               >
-                <Input placeholder="Nhập số CMTND/CCCD/Hộ chiếu" disabled />
+                <Input placeholder="Nhập số CMTND/CCCD/Hộ chiếu" />
               </Form.Item>
             </Col>
             <Col span={12} md={8}>
@@ -119,12 +118,12 @@ const FormSinhVien = () => {
                 label="Nơi cấp"
                 rules={[...rules.text, ...rules.length(250)]}
               >
-                <Input placeholder="Nhập nơi cấp" disabled />
+                <Input placeholder="Nhập nơi cấp" />
               </Form.Item>
             </Col>
             <Col span={12} md={8}>
               <Form.Item name="ngayCapCccd" label="Ngày cấp" rules={[...rules.truocHomNay]}>
-                <MyDatePicker placeholder="Chọn ngày cấp" allowClear disabled />
+                <MyDatePicker placeholder="Chọn ngày cấp" allowClear />
               </Form.Item>
             </Col>
 

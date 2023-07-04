@@ -25,7 +25,7 @@ export declare module LopHocPhan {
     children?: IRecord[];
     nhanSuList?: ToChucNhanSu.INhanSu[];
     sinhVienList?: SinhVien.IRecord[];
-    // maHoaLichHoc?: TMaHoaLichHoc[];
+    maHoaLichHoc?: TMaHoaLichHoc[];
     thoiKhoaBieuList?: ThoiKhoaBieu.IRecord;
 
     // Populated
@@ -33,6 +33,16 @@ export declare module LopHocPhan {
       deCuongId: string;
     };
   }
+
+  export type TMaHoaLichHoc = {
+    thu: number;
+    tietBatDau: number;
+    soTiet: number;
+    nhanSu?: string; //SsoId
+    loaiHinhHocTap?: ELoaiHinhHocTap;
+    nhomTietHocId?: string;
+    danhSachTuan: { tuan: number; tkbId: string }[];
+  };
 
   export interface IRecordNhanSuLopHP {
     _id: string;

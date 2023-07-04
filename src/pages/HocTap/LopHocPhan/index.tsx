@@ -1,7 +1,6 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { history, useModel } from 'umi';
@@ -36,8 +35,6 @@ const LopHocPhanPage = () => {
     {
       title: 'Tên học phần',
       dataIndex: ['hocPhan', 'ten'],
-      filterType: 'customselect',
-      filterCustomSelect: <SelectHocPhan multiple />,
       width: 150,
       onCell,
     },
@@ -50,7 +47,7 @@ const LopHocPhanPage = () => {
       params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH }}
       getData={sinhVienGetModel}
       modelName="daotao.lophocphan"
-      title="Lớp tín chỉ"
+      title="Lớp học phần"
       buttons={{ create: false }}
       otherButtons={[<FilterHocKy isSetHocKy key="1" />]}
       hideChildrenRows

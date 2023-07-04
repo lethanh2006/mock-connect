@@ -9,7 +9,11 @@ const TienTrinhHocTap = () => {
 
   return (
     <Card title="Tiến trình học tập" className="card-tien-trinh">
-      <Tabs accessKey={activeTabKey} onChange={(tab) => setActiveTabKey(tab)}>
+      <Tabs
+        accessKey={activeTabKey}
+        onChange={(tab) => setActiveTabKey(tab)}
+        style={{ overflow: 'inherit' }}
+      >
         <Tabs.TabPane tab="Chương trình đào tạo" key="1">
           <TienTrinhChuongTrinhKhung />
         </Tabs.TabPane>
