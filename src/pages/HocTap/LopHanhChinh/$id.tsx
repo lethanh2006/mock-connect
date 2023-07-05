@@ -33,9 +33,9 @@ const DetailLopHanhChinh = ({
         <Tabs.TabPane tab="Thông tin chung" key={0}>
           <ThongTinChungLopHanhChinh />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Thông báo" key={1}>
+        {/* <Tabs.TabPane tab="Thông báo" key={1}>
           Thông báo
-        </Tabs.TabPane>
+        </Tabs.TabPane> */}
       </Tabs>
     </Card>
   );

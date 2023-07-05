@@ -172,7 +172,7 @@ const DiemThanhPhanSV = () => {
               //   loading: loading,
               //   pagination: false,
               // }}
-              data={danhSach?.filter((item) => item.diemChu !== ELoaiDiemChu.CHUA_DU_DU_LIEU) ?? []}
+              data={danhSach ?? []}
               columns={columns}
               addStt
               hasTotal

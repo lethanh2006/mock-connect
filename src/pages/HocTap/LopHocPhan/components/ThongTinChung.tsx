@@ -10,9 +10,11 @@ const ThongTinChung = () => {
   const {
     record: recLopThucHanh,
     danhSach: danhSachLopThucHanh,
+    getByIdModel: getByIdLopThucHanh,
     sinhVienGetModel: getLopThucHanh,
     danhSachNhanSu: danhSachNhanSuLopTH,
     getAllNhanSuModel: getNhanSuLopTH,
+    loading: loadingThucHanh,
   } = useModel('daotao.lopthuchanh');
   const { danhSach: danhSachNhanSu, getAllModel: getAllNhanSu } =
     useModel('daotao.nhansulophocphan');
@@ -28,7 +30,10 @@ const ThongTinChung = () => {
   }, [record?._id]);
 
   useEffect(() => {
-    if (activeKey !== '-1') getNhanSuLopTH(activeKey);
+    if (activeKey !== '-1') {
+      getByIdLopThucHanh(activeKey);
+      getNhanSuLopTH(activeKey);
+    }
   }, [activeKey]);
 
   return (
@@ -80,7 +85,7 @@ const ThongTinChung = () => {
         sinhVienList={
           activeKey !== '-1' ? recLopThucHanh?.sinhVienList ?? [] : record?.sinhVienList ?? []
         }
-        loading={loading}
+        loading={loading || loadingThucHanh}
       />
 
       {/* <Modal

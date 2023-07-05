@@ -1,12 +1,12 @@
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Descriptions, Tag } from 'antd';
+import { Descriptions, Tag, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: { lopHocPhanId?: string }) => {
   const { danhSach, getModel } = useModel('daotao.daudiemhocphan');
-  const { sinhVienGetDiemLopHocPhanModel, sinhVienLopHocPhan } = useModel(
+  const { sinhVienGetDiemLopHocPhanModel, sinhVienLopHocPhan, loading } = useModel(
     'daotao.sinhvienlophocphan',
   );
   const { lopHocPhanId } = props;
@@ -20,7 +20,7 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string }) => {
   }, [lopHocPhanId]);
 
   return (
-    <>
+    <Spin spinning={loading}>
       <Descriptions title="Chi tiết điểm lớp học phần">
         {danhSach.map((item, index) => (
           <Descriptions.Item key={item._id} label={item.ten}>
@@ -45,7 +45,7 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string }) => {
           ) : null}
         </Descriptions.Item>
       </Descriptions>
-    </>
+    </Spin>
   );
 };
 
