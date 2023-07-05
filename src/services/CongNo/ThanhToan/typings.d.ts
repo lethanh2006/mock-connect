@@ -1,3 +1,5 @@
+import { type ETrangThaiThanhToan } from '../constant';
+
 declare module ThanhToan {
   export interface Price {
     currency: string;
@@ -51,34 +53,47 @@ declare module ThanhToan {
     _id: string;
   }
 
+  export interface KhachHang {
+    customerId: string;
+    name: string;
+    email: string;
+    address: string;
+    cmtCccd: string;
+    soDienThoai: string;
+    dob: string;
+  }
+
   export interface Invoice {
-    transactionDate: string;
-    status: string;
     _id: string;
     code: string;
-    amountPaid: number;
-    createdAt: string;
-    customerInfo: {
-      _id: string;
-      name: string;
-      customerId: string;
-      cmtCccd: string;
-      address: string;
-    };
-    identityCode: string;
+    customerInfo: KhachHang;
     items: Item[];
-    paidHistory: any[];
-    updatedAt: string;
+    paidHistory: PaidHistory[];
+    identityCode: string;
+
+    amountPaid: number;
     amountDue: number;
     amountRemaining: number;
     amountRefund: number;
+    soTienThue?: number;
+
+    dotThu?: any;
     metadata: {
       loai: string;
       mocThoiGian?: string;
       thongTinChiTiet?: any[];
       [x: string]: string;
     };
-    paidHistory: [];
+    moTa?: string;
+    dot?: string;
+    ngayHetHanThanhToan?: string;
+    urlBienLai?: string;
+    maBienLai?: string;
+
+    status: ETrangThaiThanhToan;
+    transactionDate: string;
+    createdAt: string;
+    updatedAt: string;
   }
 
   export interface PostInvoice {

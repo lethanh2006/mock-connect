@@ -11,6 +11,7 @@ const ipGlobal = 'https://ais2.aisenote.com/qldt-internal-api'; // ip dev
 const ipDaoTao = 'https://ais.aisenote.com/qldt'; // ip dev
 const ipNhanSu = 'https://ais.aisenote.com/tcns';
 const ipCore = 'https://ais.aisenote.com/core';
+const ipTaiChinh = 'https://ais.aisenote.com/tai-chinh-api';
 
 const currentRole = EModuleKey.CONNECT;
 
@@ -27,6 +28,7 @@ export {
   ip3,
   ipNotif,
   ipGlobal,
+  ipTaiChinh,
   currentRole,
   keycloakClientID,
   resourceServerClientId,

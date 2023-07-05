@@ -17,7 +17,8 @@ const GiangVienDeCuongPage = () => {
     {
       title: 'Chức danh, học hàm, học vị',
       width: 150,
-      render: (val, rec) => [rec.chucDanh, rec.hocHam, rec.hocVi].join(' - '),
+      render: (val, rec) =>
+        [rec.chucDanh, rec.hocHam, rec.hocVi].filter((item) => !!item).join(', '),
     },
     {
       title: 'SĐT',

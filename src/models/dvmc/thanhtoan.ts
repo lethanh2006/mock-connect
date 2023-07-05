@@ -1,154 +1,31 @@
 import useInitModel from '@/hooks/useInitModel';
-import {
-  editInvoiceByIdentityCode,
-  getInvoice,
-  getInvoiceByIdentityCode,
-  getMyInvoice,
-  getProductByCode,
-  importInvoice,
-  importInvoicePaid,
-  payInvoiceByIdentityCode,
-  postInvoice,
-  refundInvoiceByIdentityCode,
-  thongKeMyInvoice,
-} from '@/services/CongNo/ThanhToan/thanhtoan';
-import { message } from 'antd';
+import { getInvoiceByIdentityCode, thongKeMyInvoice } from '@/services/CongNo/ThanhToan';
+import { type ThanhToan } from '@/services/CongNo/ThanhToan/typings';
+import { ipTaiChinh } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
-  const objInit = useInitModel<ThanhToan.Invoice>('SLINK-MANUAL/thanh-toan/invoice');
-  const { setDanhSach, setRecord, setLoading, page, limit, setTotal, condition, setVisibleForm } =
-    objInit;
-  const [invoice, setInvoice] = useState<ThanhToan.Invoice>();
-  const [visibleResponseImport, setVisibleResponseImport] = useState<boolean>(false);
+  const objInit = useInitModel<ThanhToan.Invoice>('chi-tiet-thu', undefined, undefined, ipTaiChinh);
+  const { condition, getModel: getModel1, setRecord, setLoading } = objInit;
   const [postTypeCongNo, setPostTypeCongNo] = useState<'normal' | 'import'>('normal');
   const [recordThongKeInvoice, setRecordThongKeInvoice] = useState<ThanhToan.ThongKeInvoice>();
-  const [responseImportInvoice, setResponseImportInvoice] =
-    useState<ThanhToan.ResponseImportInvoice>();
-  const [importType, setImportType] = useState<
-    'các khoản chưa thu' | 'các khoản đã thu' | undefined
-  >('các khoản chưa thu');
-  const [phamVi, setPhamVi] = useState<'Tất cả' | 'Hình thức đào tạo'>('Hình thức đào tạo');
 
-  const getProductByCodeModel = async (code: string) => {
-    if (!code) return;
-    const response = await getProductByCode(code);
-    setRecord(response?.data?.data ?? {});
-  };
+  const getModel = async () =>
+    getModel1(undefined, undefined, undefined, undefined, undefined, 'me');
 
-  const getInvoiceModel = async () => {
+  const getInvoiceByIdentityCodeModel = async (
+    identityCode?: string,
+  ): Promise<ThanhToan.Invoice> => {
+    if (!identityCode) return Promise.reject();
     setLoading(true);
-    const response = await getInvoice({
-      page,
-      limit,
-      condition: { ...condition, metadata: { ...condition?.metadata, phamVi } },
-    });
-    setDanhSach(response?.data?.data?.result ?? []);
-    setTotal(response?.data?.data?.total ?? 0);
-    setLoading(false);
-  };
-
-  const getInvoiceByIdentityCodeModel = async (identityCode?: string) => {
-    if (!identityCode) return;
-    const response = await getInvoiceByIdentityCode(identityCode);
-    setInvoice(response?.data?.data?.data);
-  };
-
-  const payInvoiceByIdentityCodeModel = async (
-    identityCode: string,
-    payload: {
-      amountPaid: number;
-      transactionDate: string;
-    },
-    isCongNo?: boolean,
-  ) => {
-    if (!identityCode) return;
-    setLoading(true);
-    await payInvoiceByIdentityCode(identityCode, payload);
-    message.success('Cập nhật thanh toán thành công');
-    getInvoiceByIdentityCodeModel(identityCode);
-    if (isCongNo === true) {
-      getInvoiceModel();
-    }
-    setLoading(false);
-  };
-
-  const refundInvoiceByIdentityCodeModel = async (
-    identityCode: string,
-    payload: {
-      amountPaid: number;
-      transactionDate: string;
-    },
-    isCongNo?: boolean,
-  ) => {
-    if (!identityCode) return;
-    setLoading(true);
-    await refundInvoiceByIdentityCode(identityCode, payload);
-    message.success('Cập nhật thanh toán thành công');
-    getInvoiceByIdentityCodeModel(identityCode);
-    if (isCongNo === true) {
-      getInvoiceModel();
-    }
-    setLoading(false);
-  };
-
-  const getMyInvoiceModel = async () => {
-    setLoading(true);
-    const response = await getMyInvoice({
-      page,
-      limit,
-      condition: { ...condition, status: condition?.status ?? 'open' },
-    });
-    setDanhSach(response?.data?.data?.result ?? []);
-    setTotal(response?.data?.data?.total ?? 0);
-    setLoading(false);
-  };
-
-  const postInvoiceModel = async (payload: ThanhToan.PostInvoice) => {
     try {
-      setLoading(true);
-      await postInvoice(payload);
-      message.success('Thêm thành công');
-      setLoading(false);
-      setVisibleForm(false);
-      getInvoiceModel();
-    } catch (error) {
-      setLoading(false);
-    }
-  };
+      const response = await getInvoiceByIdentityCode(identityCode);
+      setRecord(response?.data?.data);
 
-  const importInvoiceModel = async (payload: {
-    file: any;
-    loaiThanhToan: string;
-    mocThoiGian: string;
-  }) => {
-    try {
-      setLoading(true);
-      await importInvoice(payload);
-      message.success('Import thành công');
-      setLoading(false);
-      getInvoiceModel();
-      setVisibleForm(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-
-  const importInvoicePaidModel = async (payload: {
-    file: any;
-    loaiThanhToan: string;
-    mocThoiGian: string;
-  }) => {
-    try {
-      setLoading(true);
-      const response = await importInvoicePaid(payload);
-      setResponseImportInvoice(response?.data?.data);
-      // message.success('Import thành công');
-      setVisibleResponseImport(true);
-      setLoading(false);
-      getInvoiceModel();
-      setVisibleForm(false);
-    } catch (error) {
+      return response?.data?.data;
+    } catch (er) {
+      return Promise.reject(er);
+    } finally {
       setLoading(false);
     }
   };
@@ -158,52 +35,14 @@ export default () => {
     setRecordThongKeInvoice(response?.data?.data ?? {});
   };
 
-  const editInvoiceByIdentityCodeModel = async (
-    identityCode: string,
-    payload: {
-      amountPaid: number;
-      transactionDate?: string;
-    },
-    isCongNo?: boolean,
-  ) => {
-    if (!identityCode) return;
-    setLoading(true);
-    await editInvoiceByIdentityCode(identityCode, payload);
-    message.success('Cập nhật thanh toán thành công');
-    getInvoiceByIdentityCodeModel(identityCode);
-    if (isCongNo === true) {
-      getInvoiceModel();
-    }
-    setLoading(false);
-  };
-
   return {
     ...objInit,
-    phamVi,
-    setPhamVi,
-    editInvoiceByIdentityCodeModel,
-    refundInvoiceByIdentityCodeModel,
-    getInvoiceByIdentityCodeModel,
-    payInvoiceByIdentityCodeModel,
-    getProductByCodeModel,
-    invoice,
-    setInvoice,
-    setLoading,
-    visibleResponseImport,
-    setVisibleResponseImport,
-    responseImportInvoice,
-    setResponseImportInvoice,
-    importInvoicePaidModel,
-    importType,
-    setImportType,
+    getModel,
     recordThongKeInvoice,
     setRecordThongKeInvoice,
     thongKeMyInvoiceModel,
-    importInvoiceModel,
     postTypeCongNo,
     setPostTypeCongNo,
-    postInvoiceModel,
-    getInvoiceModel,
-    getMyInvoiceModel,
+    getInvoiceByIdentityCodeModel,
   };
 };

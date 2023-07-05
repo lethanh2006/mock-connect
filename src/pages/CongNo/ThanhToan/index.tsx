@@ -1,192 +1,143 @@
-import { Tabs } from 'antd';
-import { useEffect } from 'react';
-import { useModel, useAccess } from 'umi';
-import ThongTinThanhToan from './ThongTinThanhToan';
-import Table from '@/components/Table';
-import { currencyFormat } from '@/utils/utils';
-import moment from 'moment';
-import ChiTietDichVu from './ChiTietDichVu';
+import TableStaticData from '@/components/Table/TableStaticData';
+import { type IColumn } from '@/components/Table/typing';
+import { type ThanhToan } from '@/services/CongNo/ThanhToan/typings';
 import { TrangThaiThanhToan } from '@/services/CongNo/constant';
+import { currencyFormat } from '@/utils/utils';
+import { Tabs, Divider } from 'antd';
+import moment from 'moment';
+import { useEffect } from 'react';
+import { useModel } from 'umi';
+import ChiTietDichVu from './ChiTietDichVu';
+import ThongTinThanhToan from './ThongTinThanhToan';
 
-const ThanhToan = (props: {
+const ThanhToanPage = (props: {
   identityCode: string;
   trangThaiThanhToan?: string;
   isCongNo?: boolean;
 }) => {
-  const { getInvoiceByIdentityCodeModel, invoice, setInvoice } = useModel('thanhtoan');
-  const { initialState } = useModel('@@initialState');
-  const access = useAccess();
-  useEffect(() => {
-    return () => {
-      setInvoice(undefined);
-    };
-  }, []);
+  const { getInvoiceByIdentityCodeModel, record } = useModel('dvmc.thanhtoan');
 
   useEffect(() => {
     getInvoiceByIdentityCodeModel(props?.identityCode);
   }, [props?.identityCode]);
+
   let tongTien = 0;
-  const listChiTiet: { index: number; quantity: number; unitAmount: number }[] = [];
-  invoice?.items?.map((item: { quantity: number; unitAmount: number }, index: number) => {
+  record?.items?.map((item) => {
     tongTien += item?.quantity * item?.unitAmount;
-    listChiTiet.push({
-      ...item,
-      index: index + 1,
-    });
   });
+
+  const columnsItem: IColumn<ThanhToan.Item>[] = [
+    {
+      title: 'Danh mục',
+      dataIndex: 'productName',
+      width: 200,
+    },
+    {
+      title: 'Số tiền',
+      width: 120,
+      align: 'center',
+      render: (val, rec) => <div>{currencyFormat(rec?.quantity * rec?.unitAmount)}đ</div>,
+    },
+  ];
+
+  const columnsHistory: IColumn<ThanhToan.PaidHistory>[] = [
+    {
+      title: 'Số tiền',
+      width: 100,
+      align: 'center',
+      dataIndex: 'amountPaid',
+      render: (val: number) => <div>{currencyFormat(val)}đ</div>,
+    },
+    {
+      title: 'Thời gian',
+      width: 120,
+      dataIndex: 'transactionDate',
+      align: 'center',
+      render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+    },
+    {
+      title: 'Người thực hiện',
+      dataIndex: ['nguoiThucHien', 'hoTen'],
+      width: 120,
+    },
+    {
+      title: 'Hình thức',
+      dataIndex: 'paymentType',
+      width: 120,
+      render: (val) => (val === 'manual' ? 'Chuyên viên cập nhật' : 'Thanh toán bằng mã định danh'),
+    },
+  ];
+
   return (
-    <div>
+    <>
       <ThongTinThanhToan
         isCongNo={props?.isCongNo ?? false}
         trangThaiThanhToan={
           props?.trangThaiThanhToan
-            ? props?.trangThaiThanhToan ?? ''
-            : TrangThaiThanhToan?.[invoice?.status ?? ''] ?? ''
+            ? props.trangThaiThanhToan
+            : record?.status
+            ? TrangThaiThanhToan?.[record.status] ?? ''
+            : ''
         }
       />
-      {invoice?.metadata?.loai !== 'Dịch vụ một cửa' &&
-      invoice?.metadata?.thongTinChiTiet?.length ? (
+      {record?.metadata?.loai !== 'DVMC' && record?.metadata?.thongTinChiTiet?.length ? (
         <>
-          <br />
-          <b>
-            <u>Thông tin chi tiết:</u>
-          </b>
-          <ChiTietDichVu thongTinChiTiet={invoice?.metadata?.thongTinChiTiet ?? []} />
+          <Divider>Thông tin chi tiết</Divider>
+          <ChiTietDichVu thongTinChiTiet={record?.metadata?.thongTinChiTiet ?? []} />
         </>
-      ) : (
-        <></>
-      )}
-      <br />
-      <Tabs>
+      ) : null}
+
+      <Tabs style={{ marginTop: 8 }}>
         <Tabs.TabPane tab="Chi tiết" key="chitiet">
-          <Table
-            otherProps={{
-              scroll: { x: 600 },
-              pagination: false,
-            }}
+          <TableStaticData
+            otherProps={{ pagination: false }}
             data={[
-              ...listChiTiet,
+              ...(record?.items ?? []),
               {
                 productName: 'Tổng',
                 quantity: 1,
                 unitAmount: tongTien,
               },
             ]}
-            columns={[
-              {
-                title: 'STT',
-                dataIndex: 'index',
-                width: 80,
-                align: 'center',
-              },
-              {
-                title: 'Danh mục',
-                dataIndex: 'productName',
-                align: 'center',
-                render: (val: string) => <div style={{ textAlign: 'left' }}>{val}</div>,
-              },
-              {
-                title: 'Số tiền',
-                width: 200,
-                align: 'center',
-                render: (record: any) => (
-                  <div>{currencyFormat(record?.quantity * record?.unitAmount)} đồng</div>
-                ),
-              },
-            ]}
+            columns={columnsItem}
+            addStt
+            size="small"
           />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Lịch sử thanh toán" key="lichsu">
-          <Table
-            otherProps={{
-              scroll: { x: 600 },
-              pagination: false,
-            }}
-            data={invoice?.paidHistory?.map((item, index) => ({
-              ...item,
-              index: index + 1,
-            }))}
-            columns={[
-              {
-                title: 'STT',
-                dataIndex: 'index',
-                width: 80,
-                align: 'center',
-              },
-              {
-                title: 'Số tiền',
-                width: 100,
-                align: 'center',
-                dataIndex: 'amountPaid',
-                render: (val: number) => <div>{currencyFormat(val)}</div>,
-              },
-
-              {
-                title: 'Thời gian',
-                width: 200,
-                dataIndex: 'transactionDate',
-                align: 'center',
-                render: (val: string) => <div>{moment(val).format('HH:mm DD/MM/YYYY')}</div>,
-              },
-              {
-                title: 'Người thực hiện',
-                dataIndex: ['nguoiThucHien', 'hoTen'],
-                width: 120,
-                align: 'center',
-              },
-              {
-                title: 'Hình thức',
-                dataIndex: 'paymentType',
-                align: 'center',
-                width: 200,
-                render: (val: string) => (
-                  <div>
-                    {val === 'manual' ? 'Chuyên viên cập nhật' : 'Thanh toán bằng mã định danh'}
-                  </div>
-                ),
-              },
-            ]}
+          <TableStaticData
+            otherProps={{ pagination: false }}
+            data={record?.paidHistory ?? []}
+            columns={columnsHistory}
+            addStt
+            size="small"
           />
         </Tabs.TabPane>
       </Tabs>
-      {access.sinhVien && (
-        <>
-          <br />
-          <b>
-            <u>Hướng dẫn thanh toán:</u>
-          </b>
 
-          <p>
-            - Nếu sinh viên sử dụng tài khoản BIDV thì mã thanh toán là:{' '}
-            <b>{invoice?.identityCode}</b>{' '}
-          </p>
-          <p>
-            - Nếu sinh viên sử dụng tài khoản Ngân hàng khác thì mã thanh toán là:{' '}
-            <b>
-              {initialState?.currentUser?.ma_thanh_toan_bidv ?? ''}
-              {invoice?.identityCode}
-            </b>
-          </p>
-          <p>
-            - Sinh viên có thể tham khảo hướng dẫn thanh toán chi tiết tại{' '}
-            <a
-              target="_blank"
-              href={initialState?.currentUser?.url_huong_dan_thanh_toan ?? ''}
-              rel="noreferrer"
-            >
-              đây
-            </a>
-          </p>
-          <p>
-            <b>
-              Lưu ý: Sinh viên vui lòng thanh toán chính xác số tiền yêu cầu (không làm tròn) để hệ
-              thống ghi nhận giao dịch là hợp lệ
-            </b>
-          </p>
-        </>
-      )}
-    </div>
+      <Divider>Hướng dẫn thanh toán</Divider>
+      <p>
+        - Nếu sinh viên sử dụng tài khoản BIDV thì mã thanh toán là: <b>{record?.identityCode}</b>{' '}
+        <br />- Nếu sinh viên sử dụng tài khoản Ngân hàng khác thì mã thanh toán là:{' '}
+        <b>
+          {/* {initialState?.currentUser?.ma_thanh_toan_bidv ?? ''} */}
+          {record?.identityCode}
+        </b>
+        <br />- Sinh viên có thể tham khảo hướng dẫn thanh toán chi tiết tại{' '}
+        <a
+          target="_blank"
+          // href={initialState?.currentUser?.url_huong_dan_thanh_toan ?? ''}
+          rel="noreferrer"
+        >
+          đây
+        </a>
+      </p>
+      <div style={{ color: 'orange' }}>
+        Lưu ý: Sinh viên vui lòng thanh toán chính xác số tiền yêu cầu (không làm tròn) để hệ thống
+        ghi nhận giao dịch là hợp lệ.
+      </div>
+    </>
   );
 };
 
-export default ThanhToan;
+export default ThanhToanPage;

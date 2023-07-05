@@ -22,6 +22,8 @@ export default {
   'menu.HocTap.LopHocPhan': 'Lớp học phần',
   'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
   'menu.DichVuMotCua': 'Dịch vụ một cửa',
+  'menu.CongNo': 'Công nợ',
+
   'menu.DichVuMotCua.TaoDon': 'Tạo đơn - Dịch vụ một cửa',
   'menu.PhanHoi': 'Phản hồi',
   'menu.KhaoSatTrucTuyen': 'Khảo sát',

@@ -4,8 +4,9 @@ import { useModel } from 'umi';
 import { useState } from 'react';
 
 const CongNoSinhVien = () => {
-  const { setCondition, condition } = useModel('thanhtoan');
+  const { setCondition, condition } = useModel('dvmc.thanhtoan');
   const [tableType, setTableType] = useState<'chưa nộp' | 'đã nộp'>('chưa nộp');
+
   const onChangeTab = (key: string) => {
     setTableType(key === '1' ? 'chưa nộp' : 'đã nộp');
     setCondition({
@@ -25,6 +26,7 @@ const CongNoSinhVien = () => {
         <Tabs.TabPane tab="Các khoản chưa nộp" key="1" />
         <Tabs.TabPane tab="Các khoản đã nộp" key="2" />
       </Tabs>
+
       <TableCongNo type={tableType} />
     </Card>
   );

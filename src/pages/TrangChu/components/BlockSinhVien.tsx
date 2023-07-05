@@ -2,7 +2,7 @@ import { useModel, history } from 'umi';
 import { thongKeKetQuaHocTap } from '@/services/Dashboard/dashboard';
 import { Badge, Card, Col, Statistic } from 'antd';
 import { useEffect, useState } from 'react';
-import { thongKeMyInvoice } from '@/services/CongNo/ThanhToan/thanhtoan';
+import { thongKeMyInvoice } from '@/services/CongNo/ThanhToan';
 import { currencyFormat } from '@/utils/utils';
 import { getMetaData } from '@/services/User/user';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';

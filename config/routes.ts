@@ -156,7 +156,7 @@
   {
     name: 'DichVuMotCua',
     icon: 'AuditOutlined',
-    path: '/dich-vu-mot-cua-sinh-vien',
+    path: '/dich-vu-mot-cua',
     routes: [
       {
         path: './',
@@ -184,6 +184,13 @@
       },
     ],
   },
+  {
+    name: 'CongNo',
+    icon: 'TransactionOutlined',
+    path: '/cong-no',
+    component: './CongNo',
+  },
+
   {
     name: 'PhanHoi',
     path: './phan-hoi',
