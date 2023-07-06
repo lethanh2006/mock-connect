@@ -8,6 +8,7 @@ import { getIntl, getLocale, history } from 'umi';
 import type { RequestOptionsInit, ResponseError } from 'umi-request';
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingPage from './components/Loading';
+import OneSignalBounder from './components/OneSignalBounder';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
 import NotAccessible from './pages/exception/403';
 import NotFoundContent from './pages/exception/404';
@@ -29,46 +30,11 @@ export const initialStateConfig = {
  * // Tobe removed
  * */
 export async function getInitialState(): Promise<IInitialState> {
-  // const fetchUserInfo: () => Promise<Login.User> = async () => {
-  //   try {
-  //     const token = localStorage.getItem('token');
-  //     let currentUser;
-  //     if (token) {
-  //       const decoded = jwt_decode(token) as any;
-  //       currentUser = (await getInfo())?.data?.data;
-  //       currentUser.permissions = decoded?.authorization?.permissions;
-  //     }
-  //     return currentUser;
-  //   } catch (error) {
-  //     const { location } = history;
-  //     if (!pathAuth.includes(location.pathname)) history.push(loginPath);
-  //   }
-  //   return undefined;
-  // };
-
-  // if (history.location.pathname !== loginPath) {
-  //   const currentUser = await fetchUserInfo();
-
-  //   return {
-  //     fetchUserInfo,
-  //     currentUser,
-  //   };
-  // }
-
-  // return {
-  //   fetchUserInfo,
-  // };
   return {};
 }
 
 // Tobe removed
 const authHeaderInterceptor = (url: string, options: RequestOptionsInit) => {
-  // const token = localStorage.getItem('token');
-  // const authHeader = { ...(token && { Authorization: `Bearer ${token}` }) };
-  // return {
-  //   url: `${url}`,
-  //   options: { ...options, interceptors: true, headers: authHeader },
-  // };
   return {};
 };
 
@@ -137,18 +103,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
           history.replace('/403');
     },
 
-    menuItemRender: (item: any, dom: any) => {
-      return (
-        <div
-          style={{ flex: 'auto', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}
-          onClick={() => {
-            history.push(item?.path ?? '/');
-          }}
-        >
-          {dom}
-        </div>
-      );
-    },
+    menuItemRender: (item: any, dom: any) => (
+      <div
+        // style={{ flex: 'auto', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}
+        key={item?.path}
+        onClick={() => history.push(item?.path ?? '/')}
+      >
+        {dom}
+      </div>
+    ),
 
     childrenRender: (dom) => {
       return (
@@ -158,8 +121,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
         >
           <ErrorBoundary>
             <TechnicalSupportBounder>
-              {dom}
-              {/* <ReactKeycloakProvider authClient={keycloak}>{dom}</ReactKeycloakProvider> */}
+              <OneSignalBounder>{dom}</OneSignalBounder>
             </TechnicalSupportBounder>
           </ErrorBoundary>
         </AuthProvider>

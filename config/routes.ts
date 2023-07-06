@@ -219,6 +219,12 @@
   //MENU GIANG VIEN
 
   {
+    path: '/notification',
+    component: './ThongBao/NotifOneSignal',
+    layout: false,
+    hideInMenu: true,
+  },
+  {
     path: '/',
   },
   {
