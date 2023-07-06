@@ -2,20 +2,22 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type DiemHocPhan } from '@/services/DaoTao/DiemHocPhan/typing';
 import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
+import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import rules from '@/utils/rules';
 import { convertNumberScoreToAlphabet } from '@/utils/utils';
 import {
+  Button,
+  Card,
   Col,
   Descriptions,
   Form,
-  Input,
+  InputNumber,
   Modal,
   Popover,
   Radio,
   Row,
+  Tag,
   type RadioChangeEvent,
-  Card,
-  Button,
 } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -169,10 +171,10 @@ const MayTinhThongMinh = () => {
           {/* Hệ 10:{' '}
         <b style={{ fontSize: '1.5rem',  }}>{tongKet}</b>
         <Divider type="vertical" /> */}
-          <b style={{ fontSize: '1.5rem' }} className="text-primary">
+          <b style={{ fontSize: '1.3rem', marginLeft: 8 }} className="text-primary">
             {tongKet}
-          </b>
-          /4
+          </b>{' '}
+          / 4
           {/* <Divider type="vertical" />
         Dạng chữ: <b style={{ fontSize: '1.5rem',  }}>{chuDuKien}</b> */}
         </Col>
@@ -184,19 +186,7 @@ const MayTinhThongMinh = () => {
           (tổng số tín chỉ tự chọn phải học).
         </Col>
 
-        <Col span={24} style={{ textAlign: 'center' }}>
-          <Radio.Group
-            optionType="button"
-            value={showAll}
-            onChange={({ target: { value } }: RadioChangeEvent) => setShowAll(value)}
-            options={[
-              { label: 'Hiển thị các môn đã học', value: false },
-              { label: 'Tất cả các môn học', value: true },
-            ]}
-          />
-        </Col>
-
-        <Col span={24}>
+        <Col span={24} style={{ marginTop: 12 }}>
           <TableStaticData
             columns={columns}
             data={
@@ -208,7 +198,18 @@ const MayTinhThongMinh = () => {
             addStt
             loading={loading}
             hasTotal
-          />
+          >
+            <Radio.Group
+              optionType="button"
+              buttonStyle="solid"
+              value={showAll}
+              onChange={({ target: { value } }: RadioChangeEvent) => setShowAll(value)}
+              options={[
+                { label: 'Hiển thị các môn đã học', value: false },
+                { label: 'Tất cả các môn học', value: true },
+              ]}
+            />
+          </TableStaticData>
         </Col>
       </Row>
 
@@ -229,21 +230,30 @@ const MayTinhThongMinh = () => {
             </Descriptions.Item>
             <Descriptions.Item label="Điểm tổng kết (hệ 4)">{record?.diemThang4}</Descriptions.Item>
             <Descriptions.Item label="Điểm tổng kết (dạng chữ)">
-              {record?.diemChu}
+              {record?.diemChu ? (
+                <Tag color={ColorDiemChu[record?.diemChu]}>{record?.diemChu}</Tag>
+              ) : null}
             </Descriptions.Item>
             <Descriptions.Item label="Trạng thái">{record?.trangThai}</Descriptions.Item>
           </Descriptions>
 
-          <Form form={form} layout="vertical" onFinish={onOk}>
+          <Form form={form} onFinish={onOk}>
             <Form.Item
               name="diemDuKien"
-              label="Điểm dự kiến sau khi học lại / cải thiện (hệ 10)"
+              label={
+                <span className="fw500">Điểm dự kiến sau khi học lại / cải thiện (hệ 10)</span>
+              }
               rules={[...rules.number(10, 4)]}
             >
-              <Input placeholder="Nhập điểm dự kiến" />
+              <InputNumber
+                placeholder="Nhập điểm dự kiến"
+                min={4}
+                max={10}
+                style={{ width: '100%' }}
+              />
             </Form.Item>
 
-            <div className="form-footer">
+            <div className="form-footer" style={{ width: '100%' }}>
               <Button htmlType="submit" type="primary">
                 Đồng ý
               </Button>
