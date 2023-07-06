@@ -3,7 +3,7 @@ import { type IColumn } from '@/components/Table/typing';
 import { type ThanhToan } from '@/services/CongNo/ThanhToan/typings';
 import { TrangThaiThanhToan } from '@/services/CongNo/constant';
 import { currencyFormat } from '@/utils/utils';
-import { Tabs, Divider } from 'antd';
+import { Divider, Empty, Table, Tabs } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -20,11 +20,6 @@ const ThanhToanPage = (props: {
   useEffect(() => {
     getInvoiceByIdentityCodeModel(props?.identityCode);
   }, [props?.identityCode]);
-
-  let tongTien = 0;
-  record?.items?.map((item) => {
-    tongTien += item?.quantity * item?.unitAmount;
-  });
 
   const columnsItem: IColumn<ThanhToan.Item>[] = [
     {
@@ -90,31 +85,49 @@ const ThanhToanPage = (props: {
       <Tabs style={{ marginTop: 8 }}>
         <Tabs.TabPane tab="Chi tiết" key="chitiet">
           <TableStaticData
-            otherProps={{ pagination: false }}
-            data={[
-              ...(record?.items ?? []),
-              {
-                productName: 'Tổng',
-                quantity: 1,
-                unitAmount: tongTien,
+            otherProps={{
+              pagination: false,
+              summary: (data: ThanhToan.Item[]) => {
+                let sum = 0;
+                data.forEach(
+                  ({ quantity, unitAmount }) => (sum += (quantity ?? 0) * (unitAmount ?? 0)),
+                );
+                return (
+                  <Table.Summary fixed>
+                    <Table.Summary.Row>
+                      <Table.Summary.Cell index={0} colSpan={2} align="center">
+                        <b>Tổng cộng</b>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell index={1} align="center">
+                        <b>{currencyFormat(sum)}đ</b>
+                      </Table.Summary.Cell>
+                    </Table.Summary.Row>
+                  </Table.Summary>
+                );
               },
-            ]}
+            }}
+            data={record?.items ?? []}
             columns={columnsItem}
             addStt
             size="small"
           />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Lịch sử thanh toán" key="lichsu">
-          <TableStaticData
-            otherProps={{ pagination: false }}
-            data={record?.paidHistory ?? []}
-            columns={columnsHistory}
-            addStt
-            size="small"
-          />
+          {record?.paidHistory?.length ? (
+            <TableStaticData
+              otherProps={{ pagination: false }}
+              data={record?.paidHistory ?? []}
+              columns={columnsHistory}
+              addStt
+              size="small"
+            />
+          ) : (
+            <Empty description="Không có lịch sử thanh toán" />
+          )}
         </Tabs.TabPane>
       </Tabs>
 
+      <br />
       <Divider>Hướng dẫn thanh toán</Divider>
       <p>
         - Nếu sinh viên sử dụng tài khoản BIDV thì mã thanh toán là: <b>{record?.identityCode}</b>{' '}
@@ -123,13 +136,13 @@ const ThanhToanPage = (props: {
           {/* {initialState?.currentUser?.ma_thanh_toan_bidv ?? ''} */}
           {record?.identityCode}
         </b>
-        <br />- Sinh viên có thể tham khảo hướng dẫn thanh toán chi tiết tại{' '}
+        <br />- Sinh viên có thể tham khảo hướng dẫn thanh toán chi tiết{' '}
         <a
           target="_blank"
           // href={initialState?.currentUser?.url_huong_dan_thanh_toan ?? ''}
           rel="noreferrer"
         >
-          đây
+          tại đây
         </a>
       </p>
       <div style={{ color: 'orange' }}>
