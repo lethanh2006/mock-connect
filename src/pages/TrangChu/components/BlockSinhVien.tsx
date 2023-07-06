@@ -75,7 +75,7 @@ const BlockSinhVien = () => {
     <>
       <Col xs={24} md={12} xl={6}>
         <Card
-          onClick={() => history.push('/hoctap/gochoctap')}
+          onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap')}
           style={{ cursor: 'pointer', height: '100%' }}
         >
           <Statistic
@@ -132,7 +132,7 @@ const BlockSinhVien = () => {
       </Col>
       <Col xs={24} md={12} xl={6}>
         <Card
-          onClick={() => history.push('/hoctap/gochoctap')}
+          onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap')}
           style={{ cursor: 'pointer', height: '100%' }}
         >
           <Statistic
@@ -147,7 +147,7 @@ const BlockSinhVien = () => {
       </Col>
       <Col xs={24} md={12} xl={6}>
         <Card
-          onClick={() => history.push('/dich-vu-mot-cua-sinh-vien')}
+          onClick={() => history.push('/dich-vu-mot-cua')}
           style={{ cursor: 'pointer', height: '100%' }}
         >
           <Statistic
@@ -161,7 +161,7 @@ const BlockSinhVien = () => {
       </Col>
       <Col xs={24} md={12} xl={6}>
         <Card
-          onClick={() => history.push('/congnosinhvien')}
+          onClick={() => history.push('/cong-no')}
           style={{ cursor: 'pointer', height: '100%' }}
         >
           <Statistic title={<div style={{ fontSize: 16 }}>Công nợ</div>} value={'Chi tiết'} />

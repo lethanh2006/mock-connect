@@ -33,9 +33,9 @@ export const OneSignalDataToPath = (oneSignalData: any, sinhVien: boolean, nhanV
       path = '/hoctap/gochoctap';
       break;
       // case 'DICH_VU_MOT_CUA':
-      //   // path = sinhVien ? '/dich-vu-mot-cua-sinh-vien' : '/vanphongsonhanvien/lichsu';
+      //   // path = sinhVien ? '/dich-vu-mot-cua' : '/vanphongsonhanvien/lichsu';
       //   path = sinhVien
-      //     ? '/dich-vu-mot-cua-sinh-vien'
+      //     ? '/dich-vu-mot-cua'
       //     : oneSignalData?.maDichVu === MaDichVuVps.BAO_CAO_SU_CO
       //     ? '/vanphongso/baocaosuco'
       //     : oneSignalData?.maDichVu === MaDichVuVps.MUON_PHONG_HOC

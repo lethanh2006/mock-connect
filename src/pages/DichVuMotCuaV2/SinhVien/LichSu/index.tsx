@@ -341,7 +341,7 @@ const LichSuGuiDon = () => {
         <Button
           type="primary"
           icon={<PlusOutlined />}
-          onClick={() => history.push('/dich-vu-mot-cua-sinh-vien/tao-don')}
+          onClick={() => history.push('/dich-vu-mot-cua/tao-don')}
         >
           Tạo đơn
         </Button>
