@@ -14,7 +14,7 @@ const TableCongNo = (props: { type?: 'chưa nộp' | 'đã nộp' }) => {
   const [visible, setVisible] = useState<boolean>(false);
 
   const getData = () => {
-    // thongKeMyInvoiceModel();
+    thongKeMyInvoiceModel();
     getModel();
   };
 
