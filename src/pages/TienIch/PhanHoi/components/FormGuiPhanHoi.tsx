@@ -25,8 +25,8 @@ const FormGuiPhanHoi = () => {
       setFormSubmiting(false);
 
       values.loaiPhanHoi = ELoaiPhanHoi.KHAC;
-      postModel(values, getModel)
-        .then(() => form.resetFields())
+      postModel(values)
+        .then(() => getModel(undefined, undefined, undefined, undefined, undefined, 'me'))
         .catch((er) => console.log(er));
     } catch (er) {
       console.log(er);

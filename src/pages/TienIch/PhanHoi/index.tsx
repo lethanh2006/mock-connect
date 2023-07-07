@@ -12,7 +12,7 @@ import FormGuiPhanHoi from './components/FormGuiPhanHoi';
 import ModalDetailPhanhoi from './components/ModalDetail';
 
 const PhanHoiPage = () => {
-  const { setCondition, handleEdit, edit } = useModel('tienich.phanhoi');
+  const { setCondition, handleEdit, edit, getModel } = useModel('tienich.phanhoi');
   const [daTraLoi, setDaTraLoi] = useState<boolean>();
 
   const onCell = (rec: PhanHoi.IRecord) => ({
@@ -109,6 +109,7 @@ const PhanHoiPage = () => {
       columns={columns}
       modelName="tienich.phanhoi"
       title="Phản hồi"
+      getData={() => getModel(undefined, undefined, undefined, undefined, undefined, 'me')}
       Form={edit ? ModalDetailPhanhoi : FormGuiPhanHoi}
       otherButtons={[
         <Select
