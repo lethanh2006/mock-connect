@@ -9,8 +9,8 @@ const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any
   const { getByIdModel } = useModel('hocphan.decuonghocphan');
 
   useEffect(() => {
-    if (record?.deCuongHpHk?.deCuongId || record?.hocPhan?.deCuongHienTaiId)
-      getByIdModel((record?.deCuongHpHk?.deCuongId || record?.hocPhan?.deCuongHienTaiId) ?? '');
+    if (record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId)
+      getByIdModel((record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId) ?? '');
   }, [record?._id]);
 
   return (

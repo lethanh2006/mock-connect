@@ -29,9 +29,7 @@ export declare module LopHocPhan {
     thoiKhoaBieuList?: ThoiKhoaBieu.IRecord;
 
     // Populated
-    deCuongHpHk?: {
-      deCuongId: string;
-    };
+    deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };
   }
 
   export type TMaHoaLichHoc = {

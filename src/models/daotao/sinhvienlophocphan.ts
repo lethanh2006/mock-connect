@@ -5,7 +5,7 @@ import { useState } from 'react';
 export default () => {
   const [loading, setLoading] = useState<boolean>();
   const [sinhVienLopHocPhan, setSinhVienLopHocPhan] = useState<LopHocPhan.IRecordSinhVienLopHP>();
-  const [danhSach, setDanhSach] = useState<LopHocPhan.IRecordSinhVienLopHP[]>();
+  const [danhSach, setDanhSach] = useState<LopHocPhan.IRecordSinhVienLopHP[]>([]);
 
   const sinhVienGetDiemLopHocPhanModel = async (
     lopHocPhanId: string,
@@ -28,7 +28,7 @@ export default () => {
     setLoading(true);
     try {
       const response = await getAllDiemLopHocPhan();
-      setDanhSach(response?.data?.data ?? null);
+      setDanhSach(response?.data?.data ?? []);
       return response?.data?.data;
     } catch (er) {
       return Promise.reject(er);
