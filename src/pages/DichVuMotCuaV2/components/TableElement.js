@@ -130,6 +130,7 @@ class App extends React.Component {
           <>
             <Tooltip title="Chỉnh sửa">
               <Button
+                size="small"
                 onClick={() => {
                   this.setState({
                     record: {
@@ -170,7 +171,7 @@ class App extends React.Component {
                 }}
                 title={'Bạn có chắc chắn muốn xóa?'}
               >
-                <Button shape="circle" icon={<DeleteOutlined />} />
+                <Button size="small" shape="circle" icon={<DeleteOutlined />} />
               </Popconfirm>
             </Tooltip>
           </>
@@ -182,6 +183,7 @@ class App extends React.Component {
         {this.props?.children}
         {this.props?.hascreate && !['view', 'handle']?.includes(this.props?.type) && (
           <Button
+            size="small"
             onClick={() => {
               this.setState({ visible: true, record: this.props?.recordForm, edit: false });
             }}
@@ -196,6 +198,7 @@ class App extends React.Component {
           <h4 style={{ display: 'inline-block', margin: '0 0px 8px 50px', float: 'right' }}>
             Tổng số:
             <Input
+              size="small"
               style={{ width: '90px', fontWeight: 600, fontSize: 14, marginLeft: 10 }}
               value={this.state?.data?.length ?? 0}
               readOnly
@@ -204,6 +207,7 @@ class App extends React.Component {
           </h4>
         )}
         <Table
+          size="small"
           {...this.props?.otherProps}
           title={this.props?.title ? () => this.props.title : false}
           columns={columns}

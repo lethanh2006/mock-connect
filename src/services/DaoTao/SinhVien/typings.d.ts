@@ -29,6 +29,27 @@ declare module SinhVien {
     email2: string;
     nguoiLienLac: string;
     soDienThoaiNguoiLienLac: string;
+    khoaNganh: {
+      khoaSinhVien: {
+        ten: string;
+        hinhThucDaoTao: {
+          ma: string;
+          danhMucHTDT: {
+            ten: string;
+          };
+        };
+        trinhDoDaoTao: {
+          ma: string;
+          dmTrinhDo: {
+            ten: string;
+          };
+        };
+        namHocBatDau: number;
+      };
+      nganh: {
+        ten: string;
+      };
+    };
 
     loaiNoiSinh: string;
     quocGiaNoiSinh: string;

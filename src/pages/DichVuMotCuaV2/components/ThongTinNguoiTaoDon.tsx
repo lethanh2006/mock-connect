@@ -1,39 +1,73 @@
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { Descriptions } from 'antd';
-import { useModel } from 'umi';
 
 const ThongTinNguoiTaoDon = (props: {
   record?: SinhVien.IRecord;
   thongTinNguoiTaoAdmin?: { hoTen: string; maDonVi: string; maSinhVien: string };
 }) => {
-  const { loaiDichVu, recordDon } = useModel('dvmc.dichvumotcuav2');
-
   return (
-    <Descriptions>
-      <Descriptions.Item>Họ và tên: {props?.record?.ten}</Descriptions.Item>
-      {loaiDichVu === 'DVMC' && (
-        <Descriptions.Item>Ngày sinh: {props?.record?.ngaySinh ?? ''}</Descriptions.Item>
-      )}
-      <Descriptions.Item>
-        {'Mã sinh viên'}: {props?.record?.ma || props?.thongTinNguoiTaoAdmin?.maSinhVien || ''}
+    <Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 4, xl: 4, xxl: 4 }} size="small">
+      <Descriptions.Item label={'Họ và tên'} span={2}>
+        {props?.record?.ten}
       </Descriptions.Item>
-      {loaiDichVu === 'DVMC' && (
-        <>
-          <Descriptions.Item>
-            Lớp: {props?.record?.lopHanhChinhList?.[0]?.ten ?? ''}
-          </Descriptions.Item>
-          <Descriptions.Item span={2}>
-            Ngành/Chuyên ngành:{' '}
-            {/* {props?.record?.nganh?.ten || props.record?.nganh?.tenTiengAnh || ''} */}
-          </Descriptions.Item>
-          <Descriptions.Item>Khóa: {props?.record?.khoaSinhVien?.ten}</Descriptions.Item>
-          {/* <Descriptions.Item>
-            Hình thức đào tạo: {recordDon?.thongTinNguoiTao?.hinhThucDaoTaoId?.[1] ?? ''}
-          </Descriptions.Item> */}
-          <Descriptions.Item>SĐT: {props?.record?.soDienThoai}</Descriptions.Item>
-          <Descriptions.Item>Email: {props?.record?.email}</Descriptions.Item>
-        </>
-      )}
+      <Descriptions.Item label={'Ngày sinh'} span={2}>
+        {props?.record?.ngaySinh ?? ''}
+      </Descriptions.Item>
+      <Descriptions.Item label={'Mã sinh viên'} span={2}>
+        {props?.record?.ma || props?.thongTinNguoiTaoAdmin?.maSinhVien || ''}
+      </Descriptions.Item>
+      <Descriptions.Item span={2} label={'Hệ đào tạo'}>
+        {props?.record?.khoaNganh?.khoaSinhVien?.trinhDoDaoTao?.dmTrinhDo?.ten}
+      </Descriptions.Item>
+      <Descriptions.Item span={2} label={'Hình thức đào tạo'}>
+        {props?.record?.khoaNganh?.khoaSinhVien?.hinhThucDaoTao?.danhMucHTDT?.ten}
+      </Descriptions.Item>
+      <Descriptions.Item label={'Khóa'} span={2}>
+        {props?.record?.khoaNganh?.khoaSinhVien?.ten}
+      </Descriptions.Item>
+
+      <Descriptions.Item label={'Ngành'} span={2}>
+        {props?.record?.khoaNganh?.nganh?.ten}
+      </Descriptions.Item>
+      <Descriptions.Item label={'Lớp'} span={2}>
+        {props?.record?.lopHanhChinhList?.[0]?.ten ?? ''}
+      </Descriptions.Item>
+
+      <Descriptions.Item label={'SĐT'} span={2}>
+        {props?.record?.soDienThoai}
+      </Descriptions.Item>
+      <Descriptions.Item label={'Email'} span={2}>
+        {props?.record?.email}
+      </Descriptions.Item>
+
+      <Descriptions.Item label={'Số CMT/CCCD'} span={2}>
+        {props?.record?.cccd}
+      </Descriptions.Item>
+      <Descriptions.Item label={'Ngày cấp'} span={2}>
+        {props?.record?.ngayCapCccd?.split('-')?.reverse()?.join('-')}
+      </Descriptions.Item>
+      <Descriptions.Item label={'Nơi cấp'} span={4}>
+        {props?.record?.noiCapCccd}
+      </Descriptions.Item>
+      <Descriptions.Item label={'Nơi sinh'} span={4}>
+        {[
+          props.record?.xaPhuongNoiSinh,
+          props.record?.quanHuyenNoiSinh,
+          props.record?.tinhTpNoiSinh,
+        ]
+          .filter((item) => item !== '' && item !== null && item !== undefined)
+          .join(', ')}
+      </Descriptions.Item>
+      <Descriptions.Item label={'Hộ khẩu thường trú'} span={4}>
+        {[
+          props.record?.soNhaTenDuongThuongTru,
+          props.record?.xaPhuongThuongTru,
+          props.record?.quanHuyenThuongTru,
+          props.record?.tinhTpThuongTru,
+        ]
+          .filter((item) => item !== '' && item !== null && item !== undefined)
+          .join(', ')}
+      </Descriptions.Item>
     </Descriptions>
   );
 };

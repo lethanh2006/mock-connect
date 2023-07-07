@@ -1,11 +1,20 @@
 // import DiaChi from '@/components/DiaChi';
 import MyDatePicker from '@/components/MyDatePicker';
 import Upload from '@/components/Upload/UploadMultiFile';
+import SelectDanToc from '@/pages/Core/DanToc/SelectDanToc';
+import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
+import SelectTonGiao from '@/pages/Core/TonGiao/SelectTonGiao';
+import SelectHocKy from '@/pages/DaoTao/HocKy/SelectHocKy';
+import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
+import SelectLopHocPhan from '@/pages/DaoTao/LopHocPhan/SelectLopHocPhan';
+import SelectNamHoc from '@/pages/DaoTao/NamHoc/Select';
+import { accessFileUpload } from '@/services/DVMC/DichVuMotCuaV2/constant';
+import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
+import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import rules from '@/utils/rules';
-import { checkFileSize, includes, renderFileList, uploadMultiFile } from '@/utils/utils';
+import { checkFileSize, renderFileList, uploadMultiFile } from '@/utils/utils';
 import { CopyOutlined } from '@ant-design/icons';
 import {
-  AutoComplete,
   Button,
   Card,
   Checkbox,
@@ -21,20 +30,10 @@ import moment from 'moment';
 import mm from 'moment-timezone';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import HocPhanCoDiem from '../HocPhanCoDiem';
 import Table from './TableElement';
 import ThongTinNguoiTaoDon from './ThongTinNguoiTaoDon';
 import TieuDeBieuMau from './TieuDeBieuMau';
-import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
-import SelectTonGiao from '@/pages/Core/TonGiao/SelectTonGiao';
-import SelectDanToc from '@/pages/Core/DanToc/SelectDanToc';
-import { accessFileUpload } from '@/services/DVMC/DichVuMotCuaV2/constant';
-import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import HocPhanCoDiem from '../HocPhanCoDiem';
-import SelectLopHocPhan from '@/pages/DaoTao/LopHocPhan/SelectLopHocPhan';
-import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
-import SelectNamHoc from "@/pages/DaoTao/NamHoc/Select";
-import SelectHocKy from "@/pages/DaoTao/HocKy/SelectHocKy";
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
@@ -67,24 +66,11 @@ const FormBieuMau = (props: {
     recordDon,
     sinhVienPutDonModel,
   } = useModel('dvmc.dichvumotcuav2');
-  const { danhSach: danhSachKyHoc } = useModel('daotao.hocky');
-  const { danhSach: danhSachNamHoc } = useModel('daotao.namhoc');
-  // const { danhSach: danhSachLopTinChi, danhSachMonHoc } = useModel('hoctap.loptinchi');
+
   const { getTinhThanhPhoModel, danhSachTinh } = useModel('core.donvihanhchinh');
 
-  // const {
-  //   tenTinh,
-  //   tenPhuongXa,
-  //   tenQuanHuyen,
-  //   setTenTinh,
-  //   setTenXaPhuong,
-  //   setTenQuanHuyen,
-  //   setObjDanhSachXaPhuong,
-  //   setObjDanhSachQuanHuyen,
-  // } = useModel('donvihanhchinh');
-
   const [valuesForm, setValuesForm] = useState<any>({});
-  // const [typeXuLy, setTypeXuLy] = useState<'ok' | 'not-ok' | 'edit-result'>('ok');
+
   const [check, setCheck] = useState<boolean>(false);
 
   const buildValuesForm = (
@@ -132,14 +118,13 @@ const FormBieuMau = (props: {
     return (
       arrCauHinh?.map((item, index) => {
         let value = values?.[`${name}[${index}].${item?.label}`];
-
         if (item?.type === 'DON_VI_HANH_CHINH') {
-          console.log('values', values);
           value = {
             ...values?.[`${name}[${index}].${item?.label}`],
             tenTinh: values?.tinhTp,
             tenQuanHuyen: values?.quanHuyen,
             tenPhuongXa: values?.xaPhuong,
+            soNhaTenDuong: values?.soNhaTenDuong,
           };
         } else if (item?.type === 'TABLE') {
           value = danhSachDataTable?.[`${name}[${index}].${item?.label}`]?.map(
@@ -207,26 +192,25 @@ const FormBieuMau = (props: {
 
   const buildForm = (name: string, item: DichVuMotCuaV2.CauHinhBieuMau) => {
     let element = <Input placeholder="Nhập nội dung" />;
-    let ruleElement: any[] = [...rules.required];
+    let ruleElement: any[] = item.isRequired ? [...rules.required] : [];
     let initialValue = item?.value;
 
     if (!item?.type) return <div />;
     switch (item?.type) {
       case 'TEXT_AREA': {
-        ruleElement = [...rules.text];
+        ruleElement = item.isRequired ? [...rules.required, ...rules.text] : [...rules.text];
         element = <Input.TextArea rows={3} placeholder={item?.label ?? ''} />;
         break;
       }
       case 'INPUT_NUMBER': {
         initialValue = Number(item?.value);
-        element = (
-          <InputNumber
-            style={{ width: '100%' }}
-            placeholder={item?.label ?? ''}
-            min={item?.min ?? 0}
-            max={item?.max ?? 100000000}
-          />
-        );
+        if (item.min || item.max) {
+          ruleElement = [
+            ...(item.isRequired ? rules.required : []),
+            ...rules.number(item.max, item.min, false),
+          ];
+        }
+        element = <InputNumber style={{ width: '100%' }} placeholder={item?.label ?? ''} />;
         break;
       }
 
@@ -242,7 +226,7 @@ const FormBieuMau = (props: {
       }
 
       case 'UPLOAD_SINGLE': {
-        ruleElement = [...rules.fileRequired];
+        ruleElement = item.isRequired ? [...rules.fileRequired] : [];
         initialValue = renderFileList(
           item?.value?.map((file: { url: string; type: string }) => file?.url),
         );
@@ -259,7 +243,7 @@ const FormBieuMau = (props: {
         break;
       }
       case 'UPLOAD_MULTI': {
-        ruleElement = [...rules.fileRequired];
+        ruleElement = item.isRequired ? [...rules.fileRequired] : [];
         initialValue = renderFileList(
           typeof item?.value === 'object'
             ? item?.value?.map((file: { url: string; type: string }) => file?.url)
@@ -311,6 +295,7 @@ const FormBieuMau = (props: {
         element = (
           <SelectDonViHanhChinh
             form={form}
+            hasSoNha={item?.level === 4}
             listTinh={danhSachTinh}
             hideQuanHuyen={item?.level === 1}
             hideXaPhuong={[1, 2].includes(item?.level)}
@@ -319,9 +304,10 @@ const FormBieuMau = (props: {
             notRequiredTinh={!item?.isRequired}
             notRequiredXaPhuong={!item?.isRequired}
             initialValue={{
-              tinhTp:item?.value?.tenTinh,
-              quanHuyen:item?.value?.tenQuanHuyen,
-              xaPhuong:item?.value?.tenPhuongXa,
+              tinhTp: item?.value?.tenTinh,
+              quanHuyen: item?.value?.tenQuanHuyen,
+              xaPhuong: item?.value?.tenPhuongXa,
+              soNhaTenDuong: item?.value?.soNhaTenDuong,
             }}
           />
         );
@@ -355,17 +341,18 @@ const FormBieuMau = (props: {
         break;
       }
       case 'TABLE': {
-        ruleElement = [
-          {
-            validator: (__: { field: string | number }, value: any, callback: any) => {
-              if (!danhSachDataTable || !danhSachDataTable?.[__?.field]?.length) callback('');
-              callback();
-            },
-            message: 'Bắt buộc',
-            required: true,
-          },
-        ];
-
+        ruleElement = item?.isRequired
+          ? [
+              {
+                validator: (__: { field: string | number }, value: any, callback: any) => {
+                  if (!danhSachDataTable || !danhSachDataTable?.[__?.field]?.length) callback('');
+                  callback();
+                },
+                message: 'Bắt buộc',
+                required: true,
+              },
+            ]
+          : [];
         const data = item?.value?.map((recordRow: DichVuMotCuaV2.CauHinhBieuMau[]) => {
           const row: any = {};
           recordRow?.forEach((cell: DichVuMotCuaV2.CauHinhBieuMau) => {
@@ -433,78 +420,24 @@ const FormBieuMau = (props: {
 
       case 'MY_SEMESTER': {
         initialValue = item?.value;
-        ruleElement = [...rules.text];
-        const kyHoc = danhSachKyHoc;
-        ruleElement = [...rules.text];
-        element = (
-          // <Select allowClear placeholder={item?.label ?? ''}>
-          //   {kyHoc?.map((kyhoc: any) => (
-          //     <Select.Option
-          //       key={kyhoc.id}
-          //       value={`Kỳ ${kyhoc.ten_ky_nam_hoc} năm ${kyhoc.nam_hoc_id?.[1]}`}
-          //     >
-          //       Kỳ {kyhoc.ten_ky_nam_hoc} năm {kyhoc.nam_hoc_id?.[1]}
-          //     </Select.Option>
-          //   ))}
-          // </Select>
-          <SelectHocKy selectMa={true}/>
-        );
+
+        element = <SelectHocKy selectMa={true} />;
         break;
       }
       case 'MY_YEAR': {
         initialValue = item?.value;
-        ruleElement = [...rules.text];
-        // const namHoc = danhSachNamHoc;
-        element = (
-          // <Select allowClear placeholder={item?.label ?? ''}>
-          //   {namHoc?.map((nam: any) => (
-          //     <Select.Option key={nam.id} value={`Năm học ${nam.ten_nam_hoc}`}>
-          //       Năm học {nam.ten_nam_hoc}
-          //     </Select.Option>
-          //   ))}
-          // </Select>
-          <SelectNamHoc selectTen={true}/>
-        );
+
+        element = <SelectNamHoc selectTen={true} />;
         break;
       }
       case 'MY_CREDIT': {
         initialValue = item?.value;
-        // const monHoc = danhSachMonHoc;
-        element = (
-          // <AutoComplete
-          //   filterOption={(value, option) => includes(option?.props.children, value)}
-          //   showSearch
-          //   allowClear
-          //   placeholder={item?.label ?? ''}
-          // >
-          //   {monHoc?.map((mon: any) => (
-          //     <Select.Option key={mon.id} value={`${mon.ten_hoc_phan} (${mon.ma_hoc_phan_moi})`}>
-          //       {mon.ten_hoc_phan} ({mon.ma_hoc_phan_moi})
-          //     </Select.Option>
-          //   ))}
-          // </AutoComplete>
-          <SelectHocPhan selectMa={true}/>
-        );
+        element = <SelectHocPhan selectMa={true} />;
         break;
       }
       case 'MY_COURSE': {
         initialValue = item?.value;
-        // const lopHoc = danhSachLopTinChi;
-        element = (
-          // <Select
-          //   filterOption={(value, option) => includes(option?.props.children, value)}
-          //   showSearch
-          //   allowClear
-          //   placeholder={item?.label ?? ''}
-          // >
-          //   {lopHoc?.map((lop: any) => (
-          //     <Select.Option key={lop.id} value={`${lop.ten_hoc_phan} (${lop.ma_lop})`}>
-          //       {lop.ten_hoc_phan} ({lop.ma_lop})
-          //     </Select.Option>
-          //   ))}
-          // </Select>
-          <SelectLopHocPhan selectMa={true}/>
-        );
+        element = <SelectLopHocPhan selectMa={true} />;
         break;
       }
       case 'DAN_TOC': {
@@ -557,30 +490,10 @@ const FormBieuMau = (props: {
                 </span>
               )}{' '}
               {item?.label ?? 'Chưa có tiêu đề'}
-              {/* {item.type === 'DON_VI_HANH_CHINH' && !access.sinhVien && (
-                <Tooltip title="Sao chép địa chỉ">
-                  <CopyOutlined
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        [
-                          item?.value?.soNhaTenDuong,
-                          item?.value?.tenPhuongXa,
-                          item?.value?.tenQuanHuyen,
-                          item?.value?.tenTinh,
-                        ]
-                          ?.filter((text) => text !== undefined && text !== null && text !== '')
-                          ?.join(', '),
-                      );
-                      message.success('Đã copy địa chỉ');
-                    }}
-                    style={{ marginLeft: 8 }}
-                  />
-                </Tooltip>
-              )} */}
             </div>
           }
           name={item.type === 'DON_VI_HANH_CHINH' ? undefined : `${name}.${item?.label}`}
-          rules={item?.isRequired ? [...ruleElement, ...rules.required] : []}
+          rules={[...ruleElement]}
           initialValue={initialValue}
         >
           {element}
@@ -661,9 +574,8 @@ const FormBieuMau = (props: {
               return buildForm(`cauHinhBieuMau[${index}]`, item);
             })}
 
-            {((record?.thongTinThuTuc?.yeuCauTraPhi &&
-              record?.thongTinThuTuc?.tinhTienTheoSoLuong) ||
-              props?.record?.trangThaiThanhToan) &&
+            {props?.record?.thongTinDichVu?.thongTinThuTuc?.yeuCauTraPhi &&
+              props?.record?.thongTinDichVu?.thongTinThuTuc?.tinhTienTheoSoLuong &&
               !(props?.edit !== null && props?.edit !== undefined) && (
                 <Form.Item
                   initialValue={props?.record?.soLuongThanhToan}
@@ -689,7 +601,7 @@ const FormBieuMau = (props: {
         <div>
           <b>{props.record?.thongTinDichVu?.ghiChu}</b>
         </div>
-        {!['handle', 'view'].includes(props?.type ?? '') && !props.hideCamKet && (
+        {/* {!['handle', 'view'].includes(props?.type ?? '') && !props.hideCamKet && (
           <Checkbox
             style={{ marginBottom: 8, marginLeft: 12 }}
             onChange={(e) => setCheck(e.target.checked)}
@@ -697,7 +609,7 @@ const FormBieuMau = (props: {
             Tôi xin cam đoan các thông tin là kê khai là chính xác và sử dụng giấy chứng nhận sinh
             viên đúng theo lý do đã trình bày trên.
           </Checkbox>
-        )}
+        )} */}
 
         {(recordDonThaoTac?.urlFileDinhKem?.length || recordDonThaoTac?.info?.ghiChuXuLy) && (
           <>
@@ -770,24 +682,12 @@ const FormBieuMau = (props: {
 
         <Form.Item style={{ textAlign: 'center', marginBottom: 0 }}>
           {!['view', 'handle', 'edit'].includes(props?.type ?? '') && (
-            <Button
-              disabled={props?.hideCamKet ? false : !check}
-              loading={loading}
-              style={{ marginRight: 8 }}
-              htmlType="submit"
-              type="primary"
-            >
+            <Button loading={loading} style={{ marginRight: 8 }} htmlType="submit" type="primary">
               {props?.textSaveButton || 'Gửi đơn'}
             </Button>
           )}
           {['edit'].includes(props?.type ?? '') && (
-            <Button
-              disabled={props?.hideCamKet ? false : !check}
-              loading={loading}
-              style={{ marginRight: 8 }}
-              htmlType="submit"
-              type="primary"
-            >
+            <Button loading={loading} style={{ marginRight: 8 }} htmlType="submit" type="primary">
               Lưu
             </Button>
           )}
