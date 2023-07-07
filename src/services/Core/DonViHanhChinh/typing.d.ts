@@ -11,9 +11,10 @@ declare module DonViHanhChinh {
     updatedAt: string;
     capHanhChinh: ECapHanhChinh;
   }
-  export interface IDataInit{
+  export interface IDataInit {
     tinhTp?: string;
     quanHuyen?: string;
     xaPhuong?: string;
+    soNhaTenDuong?: string;
   }
 }

@@ -3,11 +3,9 @@ import ThanhToan from '@/pages/CongNo/ThanhToan';
 import DanhMuc from '@/pages/DichVuMotCuaV2/components/DanhMuc';
 import FormBieuMau from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import { getInfo } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Modal } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const SinhVienTaoDon = ({
@@ -30,19 +28,11 @@ const SinhVienTaoDon = ({
   // } = useModel('hoctap.loptinchi');
 
   const { visibleForm, setVisibleForm } = useModel('dvmc.thanhtoan');
-  const [infoSinhVien, setInfoSinhVien] = useState<SinhVien.IRecord>();
-  // const { record: recordSinhVien } = useModel('sinhvien');
-  const getInfoSV = async () => {
-   try {
-     const res = await getInfo();
-     setInfoSinhVien(res?.data?.data ?? {});
-   }catch (e) {
-     console.log(e)
-   }
-  };
+
+  const { record: infoSinhVien } = useModel('sinhvien.sinhvien');
+
   useEffect(() => {
     window.scroll({ top: 0 });
-    getInfoSV();
     getBieuMauByIdModel(id);
     // if (access.sinhVien) {
     //   getAllKyHocSinhVienModel();

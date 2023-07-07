@@ -169,6 +169,14 @@ declare module DichVuMotCuaV2 {
       traKetQua: boolean;
       cauTraLoiMacDinh: string;
       maDichVu: MaDichVuVps;
+      thongTinThuTuc: {
+        choPhepGuiNhieuLan: boolean;
+        idKhoanThu: string;
+        idMucThu: string;
+        idNguonThu: string;
+        tinhTienTheoSoLuong: boolean;
+        yeuCauTraPhi: boolean;
+      };
     };
     maDon: string;
   }

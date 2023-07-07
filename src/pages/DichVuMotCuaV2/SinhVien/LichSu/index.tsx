@@ -43,7 +43,7 @@ const LichSuGuiDon = () => {
     getAllBieuMauModel,
   } = useModel('dvmc.dichvumotcuav2');
 
-  // const { getMyProfileModel, record } = useModel('sinhvien');
+  const { getThongTinCuaToiModel, record } = useModel('sinhvien.sinhvien');
 
   const { setVisibleForm, visibleForm } = useModel('tienich.phanhoi');
 
@@ -58,7 +58,7 @@ const LichSuGuiDon = () => {
   const [data, setData] = useState<any>();
 
   useEffect(() => {
-    // getMyProfileModel();
+    getThongTinCuaToiModel();
     setRecord({} as DichVuMotCuaV2.BieuMau);
     // setLoaiDichVu('DVMC');
     getAllBieuMauModel('DVMC');
@@ -308,6 +308,7 @@ const LichSuGuiDon = () => {
                     }}
                   >
                     <Button
+                      type="primary"
                       shape="circle"
                       danger
                       disabled={recordTemp?.trangThai !== 'PROCESSING'}
@@ -389,7 +390,7 @@ const LichSuGuiDon = () => {
           <Tabs.TabPane tab="Biểu mẫu" key={1}>
             <Form
               hideCamKet
-              infoNguoiTaoDon={recordView?.thongTinNguoiTao}
+              infoNguoiTaoDon={record || recordView?.thongTinNguoiTao}
               type={type}
               record={recordView}
             />
