@@ -2,24 +2,23 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { Empty } from 'antd';
 import { type TableRowSelection } from 'antd/lib/table/interface';
-import { useState } from 'react';
 import { useModel } from 'umi';
-import FilterHocPhan from './FilterHocPhan';
+import FilterHocPhanDKTC from './FilterHocPhan';
 
 const DangKyLopHocPhan = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
-  const { record: recHocPhan } = useModel('hocphan.hocphan');
   const { page, limit, sinhVienGetModel } = useModel('daotao.lophocphan');
-  const [selectedLopHocPhan, setSelectedLopHocPhan] = useState<LopHocPhan.IRecord[]>();
+  const { danhSachLopDangKy, hocPhanDangKy } = useModel('daotao.dotdangkytinchi');
 
   const rowSelection: TableRowSelection<LopHocPhan.IRecord> = {
     hideSelectAll: true,
     type: 'radio',
-    selectedRowKeys: selectedLopHocPhan?.map((item) => item._id),
+    selectedRowKeys: danhSachLopDangKy?.map((item) => item._id ?? ''),
 
     onChange: (selectedRowKeys, selectedRows) => {
-      setSelectedLopHocPhan(selectedRows);
+      // setSelectedLopHocPhan(selectedRows);
     },
 
     getCheckboxProps: (record) => ({
@@ -64,19 +63,32 @@ const DangKyLopHocPhan = () => {
 
   return (
     <>
-      <TableBase
-        columns={columns}
-        dependencies={[page, limit, recHocKy?.ma, recHocPhan?.ma]}
-        params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH, maHocPhan: recHocPhan?.ma }}
-        getData={sinhVienGetModel}
-        modelName="daotao.lophocphan"
-        hideCard
-        buttons={{ create: false, reload: false, filter: false }}
-        otherButtons={[<FilterHocPhan key="1" />]}
-        rowSelection
-        detailRow={rowSelection}
-        otherProps={{ rowKey: '_id' }}
-      />
+      <FilterHocPhanDKTC key="1" />
+
+      {hocPhanDangKy?.maMonHoc ? (
+        <TableBase
+          columns={columns}
+          dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maMonHoc]}
+          params={{
+            maHocKy: recHocKy?.ma,
+            loai: ELoaiLopHocPhan.CHINH,
+            maHocPhan: hocPhanDangKy?.maMonHoc,
+          }}
+          getData={sinhVienGetModel}
+          modelName="daotao.lophocphan"
+          hideCard
+          buttons={{ create: false, reload: false, filter: false }}
+          hideTotal
+          rowSelection
+          detailRow={rowSelection}
+          otherProps={{ rowKey: '_id' }}
+        />
+      ) : (
+        <Empty
+          description={<i style={{ color: '#999' }}>Vui lòng chọn học phần muốn đăng ký</i>}
+          style={{ marginTop: 18, marginBottom: 24 }}
+        />
+      )}
     </>
   );
 };

@@ -22,6 +22,7 @@ export default () => {
   const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký tín chỉ hiện tại trong kỳ, back trả về
   const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký tín chỉ trong học kỳ, back tự tính
   const [danhSachLopDangKy, setDanhSachLopDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp hp đăng ký, bao gồm cả các lớp mới thêm
+  const [hocPhanDangKy, setHocPhanDangKy] = useState<DangKyTinChi.IHocPhanDangKy>();
 
   const getDotDangKyAvailableModel = async (maHocKy: string): Promise<DangKyTinChi.IDotDangKy> => {
     setLoading(true);
@@ -112,5 +113,7 @@ export default () => {
     deleteDangKyTinChiModel,
     danhSachLopDangKy,
     setDanhSachLopDangKy,
+    hocPhanDangKy,
+    setHocPhanDangKy,
   };
 };

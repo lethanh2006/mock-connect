@@ -44,7 +44,11 @@ const FilterDotDangKy = () => {
               />
             </Steps>
           ) : (
-            <Empty description="Không có đợt đăng ký tín chỉ trong học kỳ này !" />
+            <Empty
+              description={
+                <i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này !</i>
+              }
+            />
           )}
         </Spin>
       </Col>

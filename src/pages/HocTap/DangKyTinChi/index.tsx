@@ -18,7 +18,7 @@ const DangKyTinChiPage = () => {
           moment().isSameOrBefore(dotDangKyHienTai.thoiGianKetThuc) ? (
             <DangKyLopHocPhan />
           ) : (
-            <Empty description="Không trong thời gian đăng ký !" />
+            <Empty description={<i style={{ color: '#999' }}>Không trong thời gian đăng ký !</i>} />
           )}
         </>
       ) : null}

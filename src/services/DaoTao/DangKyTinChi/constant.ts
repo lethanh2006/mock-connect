@@ -1,10 +1,10 @@
 export enum ELoaiHocPhanDangKyTinChi {
   TAT_CA = 'Tất cả học phần',
-  TIEN_TRINH = 'Theo đúng tiến trình',
+  TIEN_TRINH = 'kyHienTai',
   NHU_CAU = 'Theo nhu cầu',
-  HOC_LAI = 'Học lại',
-  HOC_VUOT = 'Học vượt',
-  CAI_THIEN = 'Học cải thiện',
+  HOC_LAI = 'hocLai',
+  HOC_VUOT = 'hocVuot',
+  CAI_THIEN = 'hocCaiThien',
   NGANH_2 = 'Học ngành 2',
   HOC_NGOAI = 'Học ngoài CTĐT',
 }
