@@ -15,7 +15,7 @@ import FilterHocPhanDKTC from './FilterHocPhan';
 
 const DangKyLopHocPhan = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
-  const { page, limit, sinhVienGetModel } = useModel('daotao.lophocphan');
+  const { page, limit, danhSach } = useModel('daotao.lophocphan');
   const { danhSachLopDangKy, hocPhanDangKy, setDanhSachLopDangKy, loaiHocPhan } =
     useModel('daotao.dotdangkytinchi');
   const dangKyRoi = danhSachLopDangKy.find(
@@ -41,10 +41,17 @@ const DangKyLopHocPhan = () => {
       const lopVuaChon = selectedRows?.at(-1);
       // Nếu chọn ít nhất 1 lớp và chưa đăng ký
       if (lopVuaChon && !dangKyRoi) {
-        const temp = danhSachLopDangKy.filter((item) => item._id !== lopVuaChon._id);
+        const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác
+        let soTinChi = lopVuaChon.stc ?? lopVuaChon.deCuong?.deCuong?.soTinChi ?? 0;
+        // Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
+        if (!soTinChi && lopVuaChon.tenCha) {
+          const lopCha = danhSach.find((item) => item.ten === lopVuaChon.tenCha);
+          soTinChi = lopCha?.stc ?? lopCha?.deCuong?.deCuong?.soTinChi ?? 0;
+        }
+        // Thêm lớp vừa chọn vào danh sách Lớp đăng ký
         temp.splice(0, 0, {
           ...lopVuaChon,
-          soTinChi: lopVuaChon.stc ?? lopVuaChon.deCuong?.deCuong?.soTinChi ?? 0,
+          soTinChi,
           loaiDangKy: Object.values(ELoaiDangKyTinChi).includes(
             LoaiHocPhanDangKyTinChi[loaiHocPhan] as ELoaiDangKyTinChi,
           )
@@ -126,7 +133,7 @@ const DangKyLopHocPhan = () => {
             loai: ELoaiLopHocPhan.CHINH,
             maHocPhan: hocPhanDangKy?.maMonHoc,
           }}
-          getData={sinhVienGetModel}
+          // getData={sinhVienGetModel}
           modelName="daotao.lophocphan"
           hideCard
           buttons={{ create: false, reload: false, filter: false }}
