@@ -4,9 +4,10 @@ import {
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { getHocPhanDangKyTinChi } from '@/services/DaoTao/DiemHocPhan';
-import { Select, Space } from 'antd';
+import { Button, Popover, Select, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import ViewGhiChuDangKyTinChi from './ViewGhiChuDangKyTinChi';
 
 const FilterHocPhanDKTC = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
@@ -56,6 +57,9 @@ const FilterHocPhanDKTC = () => {
         optionFilterProp="label"
         style={{ width: 300 }}
       />
+      <Popover content={<ViewGhiChuDangKyTinChi />}>
+        <Button type="link">(ghi chú Đăng ký tín chỉ)</Button>
+      </Popover>
     </Space>
   );
 };

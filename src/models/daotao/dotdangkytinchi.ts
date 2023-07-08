@@ -1,4 +1,3 @@
-import useInitModel from '@/hooks/useInitModel';
 import {
   deleteDangKyTinChi,
   getDotAvailable,
@@ -12,19 +11,13 @@ import {
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { ipDaoTao } from '@/utils/ip';
 import { message } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 
 export default () => {
-  const objInit = useInitModel<DangKyTinChi.IDotDangKy>(
-    'dang-ky-tin-chi/dot',
-    undefined,
-    undefined,
-    ipDaoTao,
-  );
-  const { setLoading, formSubmiting, setFormSubmiting } = objInit;
+  const [loading, setLoading] = useState<boolean>(false);
+  const [formSubmiting, setFormSubmiting] = useState<boolean>();
   const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký tín chỉ hiện tại trong kỳ, back trả về
   const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký tín chỉ trong học kỳ, back tự tính
   const [danhSachLopDangKy, setDanhSachLopDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp hp đăng ký, bao gồm cả các lớp mới thêm
@@ -156,7 +149,7 @@ export default () => {
   };
 
   return {
-    ...objInit,
+    loading,
     dotDangKyHienTai,
     setDotDangKyHienTai,
     getDotDangKyAvailableModel,
