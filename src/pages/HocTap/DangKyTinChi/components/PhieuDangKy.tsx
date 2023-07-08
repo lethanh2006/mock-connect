@@ -23,6 +23,7 @@ const PhieuDangKy = () => {
     deleteDangKyTinChiModel,
     postDangKyTinChiModel,
     getPhieuDangKyModel,
+    tinhDataLichHoc,
   } = useModel('daotao.dotdangkytinchi');
   const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => {
     return item.soTinChi;
@@ -42,6 +43,7 @@ const PhieuDangKy = () => {
 
     // Xóa lớp ở danh sách tại local
     const data = danhSachLopDangKy.filter((item) => item._id !== rec._id);
+    tinhDataLichHoc(data); // Tính lại dữ liệu lịch học
     setDanhSachLopDangKy(data);
   };
 
@@ -65,44 +67,48 @@ const PhieuDangKy = () => {
       title: 'Mã học phần',
       dataIndex: 'maHocPhan',
       width: 100,
+      filterType: 'string',
     },
     {
       title: 'Tên học phần',
+      dataIndex: ['hocPhan', 'ten'],
       width: 170,
-      render: (val, rec) => rec.hocPhan?.ten,
+      filterType: 'string',
     },
     {
       title: 'Số TC',
       dataIndex: 'soTinChi',
       width: 60,
       align: 'center',
+      sortable: true,
     },
     {
       title: 'Lớp học phần',
       dataIndex: 'ten',
       width: 150,
+      filterType: 'string',
     },
-    {
-      title: 'Lịch học',
-      width: 200,
-      render: (val, rec) => (
-        <ul className="lich-hoc">
-          {rec.maHoaLichHoc
-            ?.sort((a, b) => a.thu - b.thu)
-            ?.map((item, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <li key={index}>
-                {item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-
-                {item.tietBatDau + item.soTiet - 1}), tuần{' '}
-                {item.danhSachTuan
-                  .map((j) => j.tuan)
-                  .sort((a, b) => a - b)
-                  .join(',')}
-              </li>
-            ))}
-        </ul>
-      ),
-    },
+    // {
+    //   title: 'Lịch học',
+    //   width: 200,
+    //   render: (val, rec) => (
+    //     <ul className="lich-hoc">
+    //       {rec.maHoaLichHoc
+    //         ?.sort((a, b) => a.thu - b.thu)
+    //         ?.map((item, index) => (
+    //           // eslint-disable-next-line react/no-array-index-key
+    //           <li key={index}>
+    //             {item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-
+    //             {item.tietBatDau + item.soTiet - 1}), tuần{' '}
+    //             {item.danhSachTuan
+    //               .map((j) => j.tuan)
+    //               .sort((a, b) => a - b)
+    //               .join(',')}
+    //           </li>
+    //         ))}
+    //     </ul>
+    //   ),
+    // },
     {
       title: 'Giảng viên',
       width: 120,

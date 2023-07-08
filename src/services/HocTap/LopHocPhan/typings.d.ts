@@ -26,7 +26,7 @@ export declare module LopHocPhan {
     nhanSuList?: ToChucNhanSu.INhanSu[];
     sinhVienList?: SinhVien.IRecord[];
     maHoaLichHoc?: TMaHoaLichHoc[];
-    thoiKhoaBieuList?: ThoiKhoaBieu.IRecord;
+    thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[];
 
     // Populated
     deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };

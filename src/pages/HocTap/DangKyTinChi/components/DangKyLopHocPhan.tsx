@@ -12,12 +12,20 @@ import { Empty } from 'antd';
 import { type TableRowSelection } from 'antd/lib/table/interface';
 import { useModel } from 'umi';
 import FilterHocPhanDKTC from './FilterHocPhan';
+import { useEffect, useState } from 'react';
 
 const DangKyLopHocPhan = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
   const { page, limit, danhSach } = useModel('daotao.lophocphan');
-  const { danhSachLopDangKy, hocPhanDangKy, setDanhSachLopDangKy, loaiHocPhan } =
-    useModel('daotao.dotdangkytinchi');
+  const {
+    danhSachLopDangKy,
+    hocPhanDangKy,
+    setDanhSachLopDangKy,
+    loaiHocPhan,
+    tinhDataLichHoc,
+    checkTrungLich,
+  } = useModel('daotao.dotdangkytinchi');
+  const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
   const dangKyRoi = danhSachLopDangKy.find(
     // Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
     (item) =>
@@ -25,16 +33,47 @@ const DangKyLopHocPhan = () => {
       item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY,
   );
 
+  useEffect(() => {
+    // Khi nào chuyển sang học phần khác
+    if (hocPhanDangKy?.maMonHoc) {
+      const lopChonMoi = danhSachLopDangKy.find(
+        (item) =>
+          item.maHocPhan === hocPhanDangKy.maMonHoc &&
+          item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY,
+      );
+      // Học phần này có trong danh sách vừa mới chọn
+      if (!!lopChonMoi) {
+        const tempDanhSach = danhSachLopDangKy.filter(
+          (item) => item.maHocPhan !== hocPhanDangKy.maMonHoc,
+        );
+        tinhDataLichHoc(tempDanhSach); // Tính lại lịch học không bao gồm môn này
+        setCoDangKyMoi(true); // Đánh dấu để khi sang học phần khác thì tính lại lịch học
+      }
+      // Hp trước đó có chọn lớp mới
+      else if (coDangKyMoi) {
+        tinhDataLichHoc(danhSachLopDangKy); // Tính lại dữ liệu lịch học bao gồm lớp vừa chọn kia
+        setCoDangKyMoi(false);
+      }
+    }
+  }, [hocPhanDangKy?.maMonHoc]);
+
   const onCell = (rec: LopHocPhan.IRecord) => ({
     style: {
-      background: rec.siSoToiDa - (rec.siSo ?? 0) <= 0 ? EColorLopDangKy.FULL_LOP : undefined,
+      background: !!danhSachLopDangKy.find((item) => item._id === rec._id)
+        ? undefined
+        : rec.siSoToiDa - (rec.siSo ?? 0) <= 0
+        ? EColorLopDangKy.FULL_LOP
+        : checkTrungLich(rec.thoiKhoaBieuList ?? [])
+        ? EColorLopDangKy.TRUNG_LICH
+        : undefined,
     },
   });
 
   const rowSelection: TableRowSelection<LopHocPhan.IRecord> = {
     hideSelectAll: true,
     preserveSelectedRowKeys: true,
-    // type: 'radio',
+    fixed: true,
+    // type: 'radio',     // Dùng radio không được
     selectedRowKeys: danhSachLopDangKy?.map((item) => item.ten),
 
     onChange: (selectedRowKeys, selectedRows) => {
@@ -60,12 +99,17 @@ const DangKyLopHocPhan = () => {
           trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
         });
         setDanhSachLopDangKy(temp);
+        setCoDangKyMoi(true);
+        // Không tính lại lịch học ở đây vì sẽ trùng với các lớp trong môn hiện tại
       }
     },
 
     getCheckboxProps: (record) => ({
       disabled:
-        !!dangKyRoi || !!record.children?.length || record.siSoToiDa - (record.siSo ?? 0) <= 0,
+        !!dangKyRoi ||
+        checkTrungLich(record.thoiKhoaBieuList ?? []) ||
+        !!record.children?.length ||
+        record.siSoToiDa - (record.siSo ?? 0) <= 0,
     }),
   };
 
@@ -125,27 +169,28 @@ const DangKyLopHocPhan = () => {
       <FilterHocPhanDKTC />
 
       {hocPhanDangKy?.maMonHoc ? (
-        <TableBase
-          columns={columns}
-          dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maMonHoc]}
-          params={{
-            maHocKy: recHocKy?.ma,
-            loai: ELoaiLopHocPhan.CHINH,
-            maHocPhan: hocPhanDangKy?.maMonHoc,
-          }}
-          // getData={sinhVienGetModel}
-          modelName="daotao.lophocphan"
-          hideCard
-          buttons={{ create: false, reload: false, filter: false }}
-          hideTotal
-          addStt={false}
-          rowSelection
-          detailRow={rowSelection}
-          otherProps={{
-            rowKey: 'ten',
-            expandable: { expandRowByClick: true, indentSize: 10 },
-          }}
-        />
+        <div className="table-dang-ky">
+          <TableBase
+            columns={columns}
+            dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maMonHoc]}
+            params={{
+              maHocKy: recHocKy?.ma,
+              loai: ELoaiLopHocPhan.CHINH,
+              maHocPhan: hocPhanDangKy?.maMonHoc,
+            }}
+            modelName="daotao.lophocphan"
+            hideCard
+            buttons={{ create: false, reload: false, filter: false }}
+            hideTotal
+            addStt={false}
+            rowSelection
+            detailRow={rowSelection}
+            otherProps={{
+              rowKey: 'ten',
+              expandable: { expandRowByClick: true, indentSize: 10 },
+            }}
+          />
+        </div>
       ) : (
         <Empty
           description={<i style={{ color: '#999' }}>Vui lòng chọn học phần muốn đăng ký</i>}

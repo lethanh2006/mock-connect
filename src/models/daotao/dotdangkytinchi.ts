@@ -11,8 +11,10 @@ import {
   ETrangThaiDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
+import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { ipDaoTao } from '@/utils/ip';
 import { message } from 'antd';
+import moment from 'moment';
 import { useState } from 'react';
 
 export default () => {
@@ -27,9 +29,13 @@ export default () => {
   const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký tín chỉ trong học kỳ, back tự tính
   const [danhSachLopDangKy, setDanhSachLopDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp hp đăng ký, bao gồm cả các lớp mới thêm
   const [loaiHocPhan, setLoaiHocPhan] = useState<ELoaiHocPhanDangKyTinChi>(
-    ELoaiHocPhanDangKyTinChi.TAT_CA,
+    ELoaiHocPhanDangKyTinChi.NHU_CAU,
   ); // Loại học phần đang chọn
   const [hocPhanDangKy, setHocPhanDangKy] = useState<DangKyTinChi.IHocPhanDangKy>(); // Học phần đang chọn
+  // Dữ liệu lịch học cho các lớp đang đăng ký hiện tại
+  // Dưới dạng { "DDMMYY": [true, true, false, false, true, true]...}
+  // Mỗi ngày tương ứng với mảng các tiết học trong ngày đó: true => Có lớp học trong tiết tương ứng
+  const [dataLichHoc, setDataLichHoc] = useState<Record<string, boolean[]>>({});
 
   const getDotDangKyAvailableModel = async (maHocKy: string): Promise<DangKyTinChi.IDotDangKy> => {
     setLoading(true);
@@ -46,26 +52,67 @@ export default () => {
     }
   };
 
+  /**
+   * Tính lại dữ liệu lịch học cho các lớp đã đăng ký
+   * @param {DangKyTinChi.ILopDangKy[]} lopDangKy:DangKyTinChi.ILopDangKy[]
+   * @returns {Record<string, boolean[]>}
+   */
+  const tinhDataLichHoc = (lopDangKy: DangKyTinChi.ILopDangKy[]): Record<string, boolean[]> => {
+    const data: Record<string, boolean[]> = {};
+    const allThoiKhoaBieu = lopDangKy.map((item) => item.thoiKhoaBieuList ?? []).flat();
+    allThoiKhoaBieu.forEach((item) => {
+      const date = moment(item.ngay).format('DDMMYY');
+      if (!(date in data)) data[date] = [];
+
+      for (let tiet = item.tietBatDau; tiet <= item.tietKetThuc; tiet++)
+        data[date][tiet - 1] = true;
+    });
+    setDataLichHoc(data);
+    return data;
+  };
+
+  /**
+   * Check trùng lịch học so với dữ liệu lịch hiện đang đăng ký
+   * @param {any} thoiKhoaBieuList:ThoiKhoaBieu.IRecord[] Danh sách thời khóa biểu cần check
+   * @returns {any} Có trùng hay ko?
+   */
+  const checkTrungLich = (thoiKhoaBieuList: ThoiKhoaBieu.IRecord[]): boolean => {
+    const isTrung = thoiKhoaBieuList.some((item) => {
+      const date = moment(item.ngay).format('DDMMYY');
+      if (!(date in dataLichHoc)) return false;
+
+      for (let tiet = item.tietBatDau; tiet <= item.tietKetThuc; tiet++)
+        if (dataLichHoc[date][tiet - 1]) return true;
+
+      return false;
+    });
+    return isTrung;
+  };
+
   const getPhieuDangKyModel = async (maHocKy: string): Promise<DangKyTinChi.IPhieuDangKy> => {
+    if (!maHocKy) return Promise.reject('Invalid maHocKy');
     setLoading(true);
     try {
       const res = await getPhieuDangKy(maHocKy);
       const phieu: DangKyTinChi.IPhieuDangKy = res.data?.data;
       setPhieuDangKy(phieu);
-      setDanhSachLopDangKy(
+
+      const lopDangKy =
         phieu.lopHpSvList?.map((item) => ({
           ...item.lopHocPhan,
           _id: item.lopHocPhanId,
           soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
           loaiDangKy: ELoaiDangKyTinChi.DK_LAN_DAU,
           trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
-        })) ?? [],
-      );
+        })) ?? [];
+      setDanhSachLopDangKy(lopDangKy);
+      tinhDataLichHoc(lopDangKy);
 
       return phieu;
     } catch (er) {
       setPhieuDangKy(undefined);
       setDanhSachLopDangKy([]);
+      setDataLichHoc({});
       return Promise.reject(er);
     } finally {
       setLoading(false);
@@ -124,5 +171,8 @@ export default () => {
     setLoaiHocPhan,
     hocPhanDangKy,
     setHocPhanDangKy,
+    dataLichHoc,
+    tinhDataLichHoc,
+    checkTrungLich,
   };
 };
