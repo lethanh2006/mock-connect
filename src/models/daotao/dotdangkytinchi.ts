@@ -5,7 +5,11 @@ import {
   getPhieuDangKy,
   postDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi';
-import { ELoaiDangKyTinChi, ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import {
+  ELoaiDangKyTinChi,
+  ELoaiHocPhanDangKyTinChi,
+  ETrangThaiDangKyTinChi,
+} from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ipDaoTao } from '@/utils/ip';
 import { message } from 'antd';
@@ -22,7 +26,10 @@ export default () => {
   const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký tín chỉ hiện tại trong kỳ, back trả về
   const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký tín chỉ trong học kỳ, back tự tính
   const [danhSachLopDangKy, setDanhSachLopDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp hp đăng ký, bao gồm cả các lớp mới thêm
-  const [hocPhanDangKy, setHocPhanDangKy] = useState<DangKyTinChi.IHocPhanDangKy>();
+  const [loaiHocPhan, setLoaiHocPhan] = useState<ELoaiHocPhanDangKyTinChi>(
+    ELoaiHocPhanDangKyTinChi.TAT_CA,
+  ); // Loại học phần đang chọn
+  const [hocPhanDangKy, setHocPhanDangKy] = useState<DangKyTinChi.IHocPhanDangKy>(); // Học phần đang chọn
 
   const getDotDangKyAvailableModel = async (maHocKy: string): Promise<DangKyTinChi.IDotDangKy> => {
     setLoading(true);
@@ -113,6 +120,8 @@ export default () => {
     deleteDangKyTinChiModel,
     danhSachLopDangKy,
     setDanhSachLopDangKy,
+    loaiHocPhan,
+    setLoaiHocPhan,
     hocPhanDangKy,
     setHocPhanDangKy,
   };

@@ -4,6 +4,7 @@ import {
   EColorLopDangKy,
   ELoaiDangKyTinChi,
   ETrangThaiDangKyTinChi,
+  LoaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
@@ -14,10 +15,11 @@ import FilterHocPhanDKTC from './FilterHocPhan';
 
 const DangKyLopHocPhan = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
-  const { page, limit, sinhVienGetModel, danhSach } = useModel('daotao.lophocphan');
-  const { danhSachLopDangKy, hocPhanDangKy, setDanhSachLopDangKy } =
+  const { page, limit, sinhVienGetModel } = useModel('daotao.lophocphan');
+  const { danhSachLopDangKy, hocPhanDangKy, setDanhSachLopDangKy, loaiHocPhan } =
     useModel('daotao.dotdangkytinchi');
   const dangKyRoi = danhSachLopDangKy.find(
+    // Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
     (item) =>
       item.maHocPhan === hocPhanDangKy?.maMonHoc &&
       item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY,
@@ -28,22 +30,26 @@ const DangKyLopHocPhan = () => {
       background: rec.siSoToiDa - (rec.siSo ?? 0) <= 0 ? EColorLopDangKy.FULL_LOP : undefined,
     },
   });
-  console.log(danhSachLopDangKy?.map((item) => item.ten));
-  console.log(danhSach?.map((item) => item.ten));
 
   const rowSelection: TableRowSelection<LopHocPhan.IRecord> = {
     hideSelectAll: true,
     preserveSelectedRowKeys: true,
-    type: 'radio',
+    // type: 'radio',
     selectedRowKeys: danhSachLopDangKy?.map((item) => item.ten),
 
     onChange: (selectedRowKeys, selectedRows) => {
-      if (selectedRows.length && !dangKyRoi) {
-        const temp = danhSachLopDangKy.filter((item) => item._id !== selectedRows[0]._id);
+      const lopVuaChon = selectedRows?.at(-1);
+      // Nếu chọn ít nhất 1 lớp và chưa đăng ký
+      if (lopVuaChon && !dangKyRoi) {
+        const temp = danhSachLopDangKy.filter((item) => item._id !== lopVuaChon._id);
         temp.splice(0, 0, {
-          ...selectedRows[0],
-          soTinChi: 9,
-          loaiDangKy: ELoaiDangKyTinChi.DK_LAN_DAU,
+          ...lopVuaChon,
+          soTinChi: lopVuaChon.stc ?? lopVuaChon.deCuong?.deCuong?.soTinChi ?? 0,
+          loaiDangKy: Object.values(ELoaiDangKyTinChi).includes(
+            LoaiHocPhanDangKyTinChi[loaiHocPhan] as ELoaiDangKyTinChi,
+          )
+            ? (LoaiHocPhanDangKyTinChi[loaiHocPhan] as ELoaiDangKyTinChi)
+            : ELoaiDangKyTinChi.DK_LAN_DAU,
           trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
         });
         setDanhSachLopDangKy(temp);
@@ -109,7 +115,7 @@ const DangKyLopHocPhan = () => {
 
   return (
     <>
-      <FilterHocPhanDKTC key="1" />
+      <FilterHocPhanDKTC />
 
       {hocPhanDangKy?.maMonHoc ? (
         <TableBase

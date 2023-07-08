@@ -34,11 +34,13 @@ const PhieuDangKy = () => {
 
   const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
     if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
+      // Nếu đã đăng ký rồi thì gọi API để xóa lớp
       await deleteDangKyTinChiModel({
         phieuDktcId: phieuDangKy?._id ?? '',
         lopHocPhanId: rec._id ?? '',
       });
 
+    // Xóa lớp ở danh sách tại local
     const data = danhSachLopDangKy.filter((item) => item._id !== rec._id);
     setDanhSachLopDangKy(data);
   };

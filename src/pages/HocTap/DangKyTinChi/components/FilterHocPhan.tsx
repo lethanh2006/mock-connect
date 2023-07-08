@@ -10,11 +10,9 @@ import { useModel } from 'umi';
 
 const FilterHocPhanDKTC = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
-  const { dotDangKyHienTai, hocPhanDangKy, setHocPhanDangKy } = useModel('daotao.dotdangkytinchi');
+  const { dotDangKyHienTai, hocPhanDangKy, setHocPhanDangKy, loaiHocPhan, setLoaiHocPhan } =
+    useModel('daotao.dotdangkytinchi');
   const [thongTinHocPhan, setThongTinHocPhan] = useState<DangKyTinChi.ThongTinHocPhan>();
-  const [loaiHocPhan, setLoaiHocPhan] = useState<ELoaiHocPhanDangKyTinChi>(
-    ELoaiHocPhanDangKyTinChi.TAT_CA,
-  );
   const danhSach = thongTinHocPhan?.[loaiHocPhan];
 
   useEffect(() => {
