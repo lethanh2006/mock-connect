@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import FormGuiPhanHoi from '../../QuanLyDon/components/FormGuiPhanHoi';
 import FormQuyTrinh from '../../components/FormQuyTrinh';
+import { ip3 } from '@/utils/ip';
 
 const LichSuGuiDon = () => {
   const {
@@ -88,9 +89,7 @@ const LichSuGuiDon = () => {
   const handleInDon = (maDon: string) => {
     setLoading(true);
     axios
-      .get(
-        `https://dhs.ptit.edu.vn/odoo-user-service/don-dvmc/public/ma-don/${maDon.trim()}/export/word/`,
-      )
+      .get(`${ip3}/don-dvmc/public/ma-don/${maDon.trim()}/export/word/`)
       .then((res) => {
         fetch(res?.data?.url, {
           method: 'GET', // specifying the method request
