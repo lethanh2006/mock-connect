@@ -18,6 +18,12 @@ const FilterHocPhanDKTC = () => {
   const danhSach = thongTinHocPhan?.[loaiHocPhan];
 
   useEffect(() => {
+    return () => {
+      setHocPhanDangKy(undefined);
+    };
+  }, []);
+
+  useEffect(() => {
     if (recHocKy?.ma && dotDangKyHienTai?._id) {
       getHocPhanDangKyTinChi(recHocKy.ma).then((res) => setThongTinHocPhan(res.data?.data));
     }

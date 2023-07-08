@@ -4,6 +4,7 @@ import PhieuDangKy from './components/PhieuDangKy';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import { useModel } from 'umi';
 import moment from 'moment';
+import './components/style.less';
 
 const DangKyTinChiPage = () => {
   const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
@@ -21,7 +22,13 @@ const DangKyTinChiPage = () => {
             <Empty description={<i style={{ color: '#999' }}>Không trong thời gian đăng ký !</i>} />
           )}
         </>
-      ) : null}
+      ) : (
+        <Empty
+          description={
+            <i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này !</i>
+          }
+        />
+      )}
 
       <PhieuDangKy />
     </Card>

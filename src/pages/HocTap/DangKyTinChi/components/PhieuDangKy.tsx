@@ -7,7 +7,7 @@ import {
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
-import { Modal, Button, Col, Divider, Popconfirm, Row, Tag, Tooltip, Space } from 'antd';
+import { Modal, Button, Col, Divider, Popconfirm, Row, Tag, Tooltip, Space, message } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useModel } from 'umi';
@@ -24,7 +24,9 @@ const PhieuDangKy = () => {
     postDangKyTinChiModel,
     getPhieuDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
-  const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => item.soTinChi);
+  const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => {
+    return item.soTinChi;
+  });
   const tongTinChiChuaDk = _.sumBy(
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
     (item) => item.soTinChi,
@@ -75,11 +77,29 @@ const PhieuDangKy = () => {
     },
     {
       title: 'Lớp học phần',
+      dataIndex: 'ten',
       width: 150,
     },
     {
       title: 'Lịch học',
-      width: 150,
+      width: 200,
+      render: (val, rec) => (
+        <ul className="lich-hoc">
+          {rec.maHoaLichHoc
+            ?.sort((a, b) => a.thu - b.thu)
+            ?.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <li key={index}>
+                {item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-
+                {item.tietBatDau + item.soTiet - 1}), tuần{' '}
+                {item.danhSachTuan
+                  .map((j) => j.tuan)
+                  .sort((a, b) => a - b)
+                  .join(',')}
+              </li>
+            ))}
+        </ul>
+      ),
     },
     {
       title: 'Giảng viên',
@@ -126,7 +146,7 @@ const PhieuDangKy = () => {
 
   return (
     <>
-      <Divider>Danh sách lớp học phần đã đăng ký/ đã chọn</Divider>
+      <Divider style={{ marginTop: 24 }}>Danh sách lớp học phần đã đăng ký / đã chọn</Divider>
       <Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
         <Col span={24} md={8}>
           Tổng số tín chỉ:{' '}
@@ -151,7 +171,9 @@ const PhieuDangKy = () => {
       <TableStaticData columns={columns} data={danhSachLopDangKy} addStt loading={loading} hasTotal>
         <Space wrap>
           {danhSachLopDangKy.length ? (
-            <Button icon={<CalendarOutlined />}>Xem trước lịch học</Button>
+            <Button icon={<CalendarOutlined />} onClick={() => message.warn('Đang cập nhật...')}>
+              Xem trước lịch học
+            </Button>
           ) : null}
 
           {dotDangKyHienTai &&

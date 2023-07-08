@@ -1,9 +1,8 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import { Col, Empty, Row, Steps, Spin } from 'antd';
+import { Col, Row, Spin, Steps } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import './style.less';
 
 const FilterDotDangKy = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
@@ -43,13 +42,7 @@ const FilterDotDangKy = () => {
                 subTitle="Thời gian kết thúc đăng ký"
               />
             </Steps>
-          ) : (
-            <Empty
-              description={
-                <i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này !</i>
-              }
-            />
-          )}
+          ) : null}
         </Spin>
       </Col>
     </Row>

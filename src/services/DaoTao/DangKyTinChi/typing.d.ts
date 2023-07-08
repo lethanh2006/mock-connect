@@ -27,10 +27,10 @@ declare module DangKyTinChi {
     soTinChiToiThieu: number;
     soTinChiToiDa: number;
     maSvHk: string;
-    lopHpSvList: Partial<LopHocPhan.IRecordSinhVienLopHP>[];
+    lopHpSvList: LopHocPhan.IRecordSinhVienLopHP[];
   }
 
-  export interface ILopDangKy extends Partial<LopHocPhan.IRecord> {
+  export interface ILopDangKy extends LopHocPhan.IRecord {
     soTinChi: number;
     loaiDangKy: ELoaiDangKyTinChi;
     trangThai: ETrangThaiDangKyTinChi;
