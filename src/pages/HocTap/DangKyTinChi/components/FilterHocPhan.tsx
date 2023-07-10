@@ -4,6 +4,7 @@ import {
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { getHocPhanDangKyTinChi } from '@/services/DaoTao/DiemHocPhan';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Popover, Select, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -58,7 +59,9 @@ const FilterHocPhanDKTC = () => {
         style={{ width: 300 }}
       />
       <Popover content={<ViewGhiChuDangKyTinChi />}>
-        <Button type="link">(ghi chú Đăng ký tín chỉ)</Button>
+        <Button type="link" icon={<QuestionCircleOutlined />}>
+          Hướng dẫn Đăng ký
+        </Button>
       </Popover>
     </Space>
   );

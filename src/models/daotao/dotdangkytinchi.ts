@@ -16,6 +16,7 @@ import moment from 'moment';
 import { useState } from 'react';
 
 export default () => {
+  const [visibleModal, setVisibleModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [formSubmiting, setFormSubmiting] = useState<boolean>();
   const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký tín chỉ hiện tại trong kỳ, back trả về
@@ -149,6 +150,8 @@ export default () => {
   };
 
   return {
+    visibleModal,
+    setVisibleModal,
     loading,
     dotDangKyHienTai,
     setDotDangKyHienTai,

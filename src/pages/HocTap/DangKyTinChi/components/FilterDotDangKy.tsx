@@ -1,9 +1,10 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import { Col, Row, Spin, Steps, Button, Popover } from 'antd';
+import { Button, Col, Popover, Row, Spin, Steps } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ViewDetailHocKy from './ViewDetailHocKy';
+import { InfoCircleOutlined } from '@ant-design/icons';
 
 const FilterDotDangKy = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
@@ -25,7 +26,9 @@ const FilterDotDangKy = () => {
           <FilterHocKy isSetHocKy />
 
           <Popover content={<ViewDetailHocKy />} placement="right">
-            <Button type="link">(chi tiết Học kỳ & Đợt đăng ký)</Button>
+            <Button type="link" icon={<InfoCircleOutlined />}>
+              Xem chi tiết
+            </Button>
           </Popover>
         </div>
       </Col>

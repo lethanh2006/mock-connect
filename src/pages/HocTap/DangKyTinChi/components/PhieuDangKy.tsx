@@ -7,10 +7,11 @@ import {
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
-import { Modal, Button, Col, Divider, Popconfirm, Row, Tag, Tooltip, Space, message } from 'antd';
+import { Button, Col, Divider, Modal, Popconfirm, Row, Space, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useModel } from 'umi';
+import ModalLichHoc from './ModalLichHoc';
 
 const PhieuDangKy = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
@@ -24,6 +25,7 @@ const PhieuDangKy = () => {
     postDangKyTinChiModel,
     getPhieuDangKyModel,
     tinhDataLichHoc,
+    setVisibleModal,
   } = useModel('daotao.dotdangkytinchi');
   const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => {
     return item.soTinChi;
@@ -50,7 +52,17 @@ const PhieuDangKy = () => {
   const onRegister = (): void => {
     Modal.confirm({
       title: 'Xác nhận đăng ký',
-      content: 'Xác nhận đăng ký các lớp học phần đã chọn?',
+      content: (
+        <>
+          Xác nhận đăng ký các lớp học phần đã chọn?
+          {tongTinChi < (phieuDangKy?.soTinChiToiThieu ?? 0) ? (
+            <div style={{ color: 'orange' }}>
+              Lưu ý: Tổng số tín chỉ đăng ký hiện tại đang thấp hơn quy định số tín chỉ tối thiểu
+              đăng ký trong học kỳ!
+            </div>
+          ) : null}
+        </>
+      ),
       onOk: () => {
         const danhSachDangKy = danhSachLopDangKy
           .filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY)
@@ -179,7 +191,7 @@ const PhieuDangKy = () => {
       <TableStaticData columns={columns} data={danhSachLopDangKy} addStt loading={loading} hasTotal>
         <Space wrap>
           {danhSachLopDangKy.length ? (
-            <Button icon={<CalendarOutlined />} onClick={() => message.warn('Đang cập nhật...')}>
+            <Button icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
               Xem trước lịch học
             </Button>
           ) : null}
@@ -207,6 +219,8 @@ const PhieuDangKy = () => {
           ) : null}
         </Space>
       </TableStaticData>
+
+      <ModalLichHoc />
     </>
   );
 };
