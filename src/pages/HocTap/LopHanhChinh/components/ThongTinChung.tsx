@@ -10,7 +10,9 @@ const ThongTinChungLopHanhChinh = () => {
     <>
       <Descriptions column={{ xs: 1, md: 2 }} title="Thông tin lớp">
         <Descriptions.Item label="Tên lớp">{record?.ten ?? '--'}</Descriptions.Item>
-        <Descriptions.Item label="Sĩ số">{record?.siSo ?? 0} sinh viên</Descriptions.Item>
+        <Descriptions.Item label="Sĩ số">
+          {record?.siSo ?? record?.sinhVienList?.length ?? 0} sinh viên
+        </Descriptions.Item>
         <Descriptions.Item label="Khóa sinh viên">
           {record?.khoaSinhVien?.ten ?? '--'}
         </Descriptions.Item>
@@ -19,7 +21,7 @@ const ThongTinChungLopHanhChinh = () => {
 
       <DanhSachGiangVien
         title="Cố vấn học tập"
-        danhSachNhanSu={record?.nhanSu?._id ? [record.nhanSu] : []}
+        danhSachNhanSu={record?.giangVien?.ssoId ? [record.giangVien] : []}
       />
 
       <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8 }}>Danh sách sinh viên</h4>

@@ -1,4 +1,4 @@
-import { Descriptions, Spin, Tabs } from 'antd';
+import { Descriptions, Spin, Tabs, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../DeCuongHocPhan/ModalHocPhan';
@@ -41,9 +41,11 @@ const ThongTinChung = () => {
       <Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 3 }} title="Thông tin lớp">
         <Descriptions.Item label="Học phần">
           {record?.hocPhan?.ten ? (
-            <a onClick={() => setVisibleDeCuong(true)}>
-              <b>{record?.hocPhan?.ten ?? ''}</b>
-            </a>
+            <Tooltip title="Xem đề cương chi tiết học phần">
+              <a onClick={() => setVisibleDeCuong(true)}>
+                <b>{record?.hocPhan?.ten ?? ''}</b>
+              </a>
+            </Tooltip>
           ) : (
             <i>Chưa cập nhật</i>
           )}
