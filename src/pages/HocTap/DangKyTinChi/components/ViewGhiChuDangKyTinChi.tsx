@@ -18,7 +18,7 @@ const ViewGhiChuDangKyTinChi = () => {
       Bước 4: Xem lại danh sách và ấn nút <b>Đăng ký</b>
       <br />
       <br />
-      <u>Ghi chú lớp học phần:</u>
+      <u>Ghi chú:</u>
       <br />
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <Space style={{ marginTop: 5 }}>

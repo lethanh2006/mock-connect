@@ -169,31 +169,40 @@ const DangKyLopHocPhan = () => {
       <FilterHocPhanDKTC />
 
       {hocPhanDangKy?.maMonHoc ? (
-        <div className="table-dang-ky">
-          <TableBase
-            columns={columns}
-            dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maMonHoc]}
-            params={{
-              maHocKy: recHocKy?.ma,
-              loai: ELoaiLopHocPhan.CHINH,
-              maHocPhan: hocPhanDangKy?.maMonHoc,
-            }}
-            modelName="daotao.lophocphan"
-            hideCard
-            buttons={{ create: false, reload: false, filter: false }}
-            hideTotal
-            addStt={false}
-            rowSelection
-            detailRow={rowSelection}
-            otherProps={{
-              rowKey: 'ten',
-              expandable: { expandRowByClick: true, indentSize: 10 },
-            }}
+        hocPhanDangKy.trangThaiDangKy === 'Được phép đăng ký' ? (
+          <div className="table-dang-ky">
+            <TableBase
+              columns={columns}
+              dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maMonHoc]}
+              params={{
+                maHocKy: recHocKy?.ma,
+                loai: ELoaiLopHocPhan.CHINH,
+                maHocPhan: hocPhanDangKy?.maMonHoc,
+              }}
+              modelName="daotao.lophocphan"
+              hideCard
+              buttons={{ create: false, reload: false, filter: false }}
+              hideTotal
+              addStt={false}
+              rowSelection
+              detailRow={rowSelection}
+              otherProps={{
+                rowKey: 'ten',
+                expandable: { expandRowByClick: true, indentSize: 10 },
+              }}
+            />
+          </div>
+        ) : (
+          <Empty
+            description={
+              <i style={{ color: '#999' }}>Bạn không đủ điều kiện để đăng ký học phần này !</i>
+            }
+            style={{ marginTop: 30, marginBottom: 30 }}
           />
-        </div>
+        )
       ) : (
         <Empty
-          description={<i style={{ color: '#999' }}>Vui lòng chọn học phần muốn đăng ký</i>}
+          description={<i style={{ color: '#999' }}>Vui lòng chọn học phần muốn đăng ký !</i>}
           style={{ marginTop: 30, marginBottom: 30 }}
         />
       )}

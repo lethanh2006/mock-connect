@@ -40,7 +40,7 @@ declare module DangKyTinChi {
     idHocPhan: string; // '6492ade44d774dc26787ad24';
     maMonHoc: string; // 'DHBC03';
     tenMonHoc: string; // 'Kịch bản truyền thông';
-    trangThaiDangKy: 'Được phép đăng ký';
+    trangThaiDangKy: string; // 'Được phép đăng ký';
   }
 
   export interface ThongTinHocPhan extends Record<ELoaiHocPhanDangKyTinChi, IHocPhanDangKy[]> {
