@@ -3,7 +3,7 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { useState } from 'react';
 
 export default () => {
-  const [loading, setLoading] = useState<boolean>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [sinhVienLopHocPhan, setSinhVienLopHocPhan] = useState<LopHocPhan.IRecordSinhVienLopHP>();
   const [danhSach, setDanhSach] = useState<LopHocPhan.IRecordSinhVienLopHP[]>([]);
 
