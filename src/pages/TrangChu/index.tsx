@@ -1,6 +1,6 @@
 import CalendarPage from '@/pages/Calendar';
 import { Col, Row } from 'antd';
-import TinTucDashboard from '../TinTuc/TinTucDashboard';
+import TinTucDashboard from '../TinTucStrapi/TinTucDashboard';
 
 const TrangChu = () => {
   return (

@@ -1,4 +1,4 @@
-import { type EPhamViChuDe } from './constant';
+import { type EChuDeStrapi, type EPhamViChuDe } from './constant';
 
 declare module TinTuc {
   export interface IRecord {
@@ -28,5 +28,28 @@ declare module TinTuc {
     type: string;
     order: number;
     hinhThucDaoTaoId: number;
+  }
+}
+
+declare module TinTucStrapi {
+  export interface IRecord {
+    slug: string;
+    title: string;
+    id?: number;
+    description: string;
+    content?: string;
+    banner: {
+      name: string;
+      url: string;
+    };
+    category: IChuDe;
+    contentType: string;
+    updatedAt: string;
+  }
+
+  export interface IChuDe {
+    title: string;
+    slug: string;
+    id?: number;
   }
 }

@@ -57,13 +57,13 @@
     routes: [
       {
         path: './',
-        component: './TinTuc',
+        component: './TinTucStrapi',
         hideInMenu: true,
       },
       {
         path: './chi-tiet',
         hideInMenu: true,
-        component: './TinTuc/ChiTietTinTuc.tsx',
+        component: './TinTucStrapi/ChiTietTinTuc.tsx',
       },
     ],
   },

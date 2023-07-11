@@ -1,0 +1,173 @@
+import anh from '@/assets/noimg.png';
+import { Col, Empty, Row, Tooltip, Typography } from 'antd';
+import moment from 'moment';
+import { history, useModel } from 'umi';
+import { CardTinTuc, ContentLargeCard } from './TinTuc.style';
+import { ipNews } from '@/utils/ip';
+
+export const renderParagraph = (text: string, rows: number, style: any) => (
+  <Typography.Paragraph ellipsis={{ rows, expandable: false }} style={style}>
+    {text}
+  </Typography.Paragraph>
+);
+
+const BlockTinTuc = (props: { empty?: string }) => {
+  const { danhSach } = useModel('tintuc.tintucstrapi');
+  const { empty } = props;
+  const url = 'tin-tuc';
+
+  if (danhSach?.length === 0) return <Empty description={empty ?? 'Chưa có tin tức'} />;
+  else
+    return (
+      <div style={{ marginBottom: 20 }}>
+        <Row
+          gutter={[16, 16]}
+          align="middle"
+          style={{
+            alignItems: 'stretch',
+            marginBottom: 16,
+          }}
+        >
+          <Col span={24} md={12}>
+            <CardTinTuc
+              onClick={() => {
+                history.push({
+                  pathname: url + '/chi-tiet',
+                  query: { type: danhSach?.[0]?.contentType ?? '', slug: danhSach?.[0]?.slug },
+                });
+              }}
+              first={true}
+              style={{ minHeight: '450px' }}
+            >
+              <div
+                style={{
+                  background: danhSach?.[0]?.banner?.url
+                    ? `url(${ipNews + danhSach?.[0]?.banner?.url}) center center/cover no-repeat`
+                    : `url(${anh}) center center/cover no-repeat`,
+                  width: '100%',
+                  height: '67%',
+                  minHeight: 220,
+                  backgroundSize: 'cover',
+                }}
+              />
+              <ContentLargeCard>
+                <Tooltip title={danhSach?.[0]?.title}>
+                  {renderParagraph(danhSach?.[0]?.title, 2, {
+                    fontSize: 'calc(1em + 0.2vw)',
+                    fontWeight: 500,
+                    marginBottom: 10,
+                    color: 'black',
+                  })}
+                </Tooltip>
+                {renderParagraph(danhSach?.[0]?.description, 2, { color: '#364954' })}
+                {danhSach?.[0]?.updatedAt && (
+                  <span className="thoi-gian">
+                    Ngày đăng: {moment(danhSach?.[0]?.updatedAt).format('DD/MM/YYYY HH:mm')}
+                  </span>
+                )}
+              </ContentLargeCard>
+            </CardTinTuc>
+          </Col>
+
+          <Col span={24} md={12}>
+            <Row gutter={[0, 16]}>
+              {danhSach.slice(1, 4).map((tintuc) => (
+                <CardTinTuc
+                  key={tintuc?.slug}
+                  onClick={() => {
+                    history.push({
+                      pathname: url + '/chi-tiet',
+                      query: { type: danhSach?.[0]?.contentType ?? '', slug: danhSach?.[0]?.slug },
+                    });
+                  }}
+                  style={{ height: '33.33%' }}
+                >
+                  <Row gutter={[12, 0]}>
+                    <Col xs={8} style={{ height: '100%' }}>
+                      <div
+                        style={{
+                          background: tintuc?.banner?.url
+                            ? `url(${ipNews + tintuc?.banner?.url}) center center/ cover no-repeat`
+                            : `url(${anh}) center center/ cover no-repeat`,
+                          width: '100%',
+                          height: '100%',
+                          minHeight: 130,
+                          backgroundSize: 'cover',
+                        }}
+                      />
+                    </Col>
+                    <Col xs={16}>
+                      <Tooltip title={tintuc?.title}>
+                        {renderParagraph(tintuc?.title, 2, {
+                          fontSize: 'calc(1em + 0.2vw)',
+                          fontWeight: 500,
+                          marginBottom: 6,
+                          color: 'black',
+                        })}
+                      </Tooltip>
+                      {renderParagraph(tintuc?.description, 2, {
+                        color: '#364954',
+                        marginBottom: 0,
+                      })}
+                      {tintuc.updatedAt && (
+                        <span className="thoi-gian">
+                          Ngày đăng: {moment(tintuc.updatedAt).format('DD/MM/YYYY HH:mm')}
+                        </span>
+                      )}
+                    </Col>
+                  </Row>
+                </CardTinTuc>
+              ))}
+            </Row>
+          </Col>
+        </Row>
+
+        <Row gutter={[16, 16]} style={{ alignItems: 'stretch', marginBottom: 16 }}>
+          {danhSach.slice(4).map((tintuc) => (
+            <Col span={24} md={8} key={tintuc?.slug}>
+              <CardTinTuc
+                style={{ height: '100%' }}
+                onClick={() => {
+                  history.push({
+                    pathname: url + '/chi-tiet',
+                    query: { type: danhSach?.[0]?.contentType ?? '', slug: danhSach?.[0]?.slug },
+                  });
+                }}
+              >
+                <Row gutter={12} style={{ height: '100%' }}>
+                  <Col xs={8}>
+                    <div
+                      style={{
+                        background: tintuc?.banner?.url
+                          ? `url(${ipNews + tintuc?.banner?.url}) center center/ cover no-repeat`
+                          : `url(${anh}) center center/ cover no-repeat`,
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
+                  </Col>
+                  <Col xs={16}>
+                    <Tooltip title={tintuc?.title}>
+                      {renderParagraph(tintuc?.title, 2, {
+                        fontSize: 'calc(1em + 0.2vw)',
+                        fontWeight: 500,
+                        marginBottom: 6,
+                        color: 'black',
+                      })}
+                    </Tooltip>
+                    {tintuc?.updatedAt && (
+                      <span className="thoi-gian">
+                        Ngày đăng: {moment(tintuc?.updatedAt).format('DD/MM/YYYY HH:mm')}
+                      </span>
+                    )}
+                  </Col>
+                </Row>
+              </CardTinTuc>
+            </Col>
+          ))}
+        </Row>
+      </div>
+    );
+};
+
+export default BlockTinTuc;

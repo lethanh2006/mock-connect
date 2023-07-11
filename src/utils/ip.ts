@@ -11,15 +11,15 @@ const ipDaoTao = ipRoot + 'qldt'; // ip dev
 const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
 const ipTaiChinh = ipRoot + 'tai-chinh-api';
+const ipNews = 'http://222.252.29.85:10400';
 const ipGlobal = 'https://ais2.aisenote.com/qldt-internal-api'; // ip dev
 
 const currentRole = EModuleKey.CONNECT;
 
 const keycloakClientID = AppModules[currentRole].clientId;
-const keycloakAuthority = 'https://ais.aisenote.com/keycloak/realms/vwa';
+const keycloakAuthority = ipRoot + 'keycloak/realms/vwa';
 const resourceServerClientId = 'vwa-auth';
-const keycloakTokenEndpoint =
-  'https://ais.aisenote.com/keycloak/realms/vwa/protocol/openid-connect/token';
+const keycloakTokenEndpoint = ipRoot + 'keycloak/realms/vwa/protocol/openid-connect/token';
 
 export {
   ipDaoTao,
@@ -27,6 +27,7 @@ export {
   ipCore,
   ip3,
   ipNotif,
+  ipNews,
   ipGlobal,
   ipTaiChinh,
   currentRole,
