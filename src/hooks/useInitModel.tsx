@@ -67,6 +67,7 @@ const useInitModel = <T,>(
     paramLimit?: number,
     path?: string,
     otherQuery?: Record<string, any>,
+    isSetDanhSach?: boolean,
   ): Promise<T[]> => {
     setLoading(true);
     const payload = {
@@ -86,10 +87,18 @@ const useInitModel = <T,>(
 
     try {
       const response = await getService(payload, path ?? 'page');
-      if (setDanhSach) setDanhSach(response?.data?.data?.result ?? []);
-      setTotal(response?.data?.data?.total ?? 0);
+      const tempData: T[] = response?.data?.data?.result ?? [];
+      const tempTotal: number = response?.data?.data?.total ?? 0;
 
-      return response?.data?.data?.result;
+      if (tempData.length === 0 && tempTotal) {
+        const maxPage = Math.ceil(tempTotal / payload.limit) || 1;
+        setPage(maxPage);
+        return Promise.reject('Invalid page');
+      } else {
+        if (isSetDanhSach !== false) setDanhSach(tempData);
+        setTotal(tempTotal);
+        return tempData;
+      }
     } catch (er) {
       return Promise.reject(er);
     } finally {
@@ -103,6 +112,7 @@ const useInitModel = <T,>(
     conditionParam?: Partial<T>,
     filterParam?: TFilter<T>[],
     pathParam?: string,
+    isSetDanhSach?: boolean,
   ): Promise<T[]> => {
     setLoading(true);
     try {
@@ -114,7 +124,7 @@ const useInitModel = <T,>(
       const response = await getAllService(payload, pathParam);
       const data: T[] = response?.data?.data ?? [];
       // if (sortParam) data.sort(sortParam);
-      setDanhSach(data);
+      if (isSetDanhSach !== false) setDanhSach(data);
       if (isSetRecord) setRecord(data?.[0]);
 
       return data;
