@@ -10,10 +10,10 @@ export async function getPhieuDangKy(maHocKy: string) {
 }
 
 export async function postDangKyTinChi(data: {
-  danhSachDangKy: { lopHocPhanId: string }[];
+  dangKy: { lopHocPhanId: string };
   phieuDktcId: string;
 }) {
-  return axios.post(`${ipDaoTao}/dang-ky-tin-chi/dang-ky/lop-hoc-phan`, data);
+  return axios.post(`${ipDaoTao}/dang-ky-tin-chi/dang-ky/lop-hoc-phan`, { ...data, silent: true });
 }
 
 export async function deleteDangKyTinChi(data: { phieuDktcId: string; lopHocPhanId: string }) {

@@ -32,8 +32,11 @@ declare module DangKyTinChi {
 
   export interface ILopDangKy extends LopHocPhan.IRecord {
     soTinChi: number;
-    loaiDangKy: ELoaiDangKyTinChi;
+    loai?: ELoaiHocPhanDangKyTinChi;
     trangThai: ETrangThaiDangKyTinChi;
+
+    // temp
+    error?: string;
   }
 
   export interface IHocPhanDangKy {
