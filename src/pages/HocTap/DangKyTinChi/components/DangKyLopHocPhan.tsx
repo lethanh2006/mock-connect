@@ -1,18 +1,13 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import {
-  EColorLopDangKy,
-  ELoaiDangKyTinChi,
-  ETrangThaiDangKyTinChi,
-  LoaiHocPhanDangKyTinChi,
-} from '@/services/DaoTao/DangKyTinChi/constant';
+import { EColorLopDangKy, ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Empty } from 'antd';
 import { type TableRowSelection } from 'antd/lib/table/interface';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FilterHocPhanDKTC from './FilterHocPhan';
-import { useEffect, useState } from 'react';
 
 const DangKyLopHocPhan = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
@@ -91,11 +86,7 @@ const DangKyLopHocPhan = () => {
         temp.splice(0, 0, {
           ...lopVuaChon,
           soTinChi,
-          loaiDangKy: Object.values(ELoaiDangKyTinChi).includes(
-            LoaiHocPhanDangKyTinChi[loaiHocPhan] as ELoaiDangKyTinChi,
-          )
-            ? (LoaiHocPhanDangKyTinChi[loaiHocPhan] as ELoaiDangKyTinChi)
-            : ELoaiDangKyTinChi.DK_LAN_DAU,
+          loai: loaiHocPhan,
           trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
         });
         setDanhSachLopDangKy(temp);

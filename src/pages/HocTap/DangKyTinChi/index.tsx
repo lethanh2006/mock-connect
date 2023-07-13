@@ -1,9 +1,9 @@
 import { Card, Empty } from 'antd';
+import moment from 'moment';
+import { useModel } from 'umi';
+import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
 import PhieuDangKy from './components/PhieuDangKy';
-import DangKyLopHocPhan from './components/DangKyLopHocPhan';
-import { useModel } from 'umi';
-import moment from 'moment';
 import './components/style.less';
 
 const DangKyTinChiPage = () => {
@@ -12,7 +12,6 @@ const DangKyTinChiPage = () => {
   return (
     <Card title="Đăng ký tín chỉ">
       <FilterDotDangKy />
-
       {dotDangKyHienTai ? (
         <>
           {moment().isSameOrAfter(dotDangKyHienTai.thoiGianBatDau) &&
@@ -29,7 +28,6 @@ const DangKyTinChiPage = () => {
           }
         />
       )}
-
       <PhieuDangKy />
     </Card>
   );

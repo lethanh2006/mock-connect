@@ -2,6 +2,7 @@ import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { type ELoaiDiemChu, type ELoaiLopHocPhan, type ETrangThaiDangKyGiangDay } from './constant';
+import { type ELoaiHocPhanDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 
 export declare module LopHocPhan {
   export interface IRecord {
@@ -64,6 +65,7 @@ export declare module LopHocPhan {
     nopDiem: boolean;
     public: boolean;
     publicDiemThi: boolean;
+    loai?: ELoaiHocPhanDangKyTinChi;
 
     // Populate
     kyHoc?: HocKy.IRecord;

@@ -29,7 +29,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
                     onChange(now);
                   }}
                   value={value.year()}
-                  options={_.range(2023, moment().year() + 1).map((y) => ({
+                  options={_.range(2020, moment().year() + 1).map((y) => ({
                     key: y,
                     value: y,
                     label: y,

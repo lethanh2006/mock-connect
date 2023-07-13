@@ -5,18 +5,19 @@ import {
   postDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi';
 import {
-  ELoaiDangKyTinChi,
   ELoaiHocPhanDangKyTinChi,
   ETrangThaiDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { message } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 
 export default () => {
   const [visibleModal, setVisibleModal] = useState<boolean>(false);
+  const [visibleRegister, setVisibleRegister] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [formSubmiting, setFormSubmiting] = useState<boolean>();
   const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký tín chỉ hiện tại trong kỳ, back trả về
@@ -96,7 +97,7 @@ export default () => {
           ...item.lopHocPhan,
           _id: item.lopHocPhanId,
           soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
-          loaiDangKy: ELoaiDangKyTinChi.DK_LAN_DAU,
+          loai: item.loai,
           trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
         })) ?? [];
       setDanhSachLopDangKy(lopDangKy);
@@ -114,20 +115,15 @@ export default () => {
   };
 
   const postDangKyTinChiModel = async (data: {
-    danhSachDangKy: { lopHocPhanId: string }[];
+    dangKy: { lopHocPhanId: string };
     phieuDktcId: string;
-  }): Promise<any> => {
-    if (formSubmiting) return Promise.reject('Form submitting');
-    setFormSubmiting(true);
+  }): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
     try {
       const res = await postDangKyTinChi(data);
-      message.success('Đăng ký thành công');
 
       return res.data?.data;
     } catch (er) {
       return Promise.reject(er);
-    } finally {
-      setFormSubmiting(false);
     }
   };
 
@@ -150,6 +146,8 @@ export default () => {
   };
 
   return {
+    visibleRegister,
+    setVisibleRegister,
     visibleModal,
     setVisibleModal,
     loading,

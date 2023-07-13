@@ -68,4 +68,4 @@ export const AppModules: Record<EModuleKey, Login.TModule> = {
   },
 };
 
-export const landingUrl = 'https://landing-vwa-keycloak.vercel.app/';
+export const landingUrl = 'http://portal-vwa.aisenote.com/';

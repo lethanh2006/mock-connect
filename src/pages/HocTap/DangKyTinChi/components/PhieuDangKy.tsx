@@ -2,19 +2,20 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import {
   ColorTrangThaiDangKyTinChi,
-  ELoaiDangKyTinChi,
+  ELoaiHocPhanDangKyTinChi,
   ETrangThaiDangKyTinChi,
+  LoaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
-import { Button, Col, Divider, Modal, Popconfirm, Row, Space, Tag, Tooltip } from 'antd';
+import { Button, Col, Divider, Popconfirm, Row, Space, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useModel } from 'umi';
+import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
 
 const PhieuDangKy = () => {
-  const { record: recHocKy } = useModel('daotao.hocky');
   const {
     dotDangKyHienTai,
     phieuDangKy,
@@ -22,10 +23,9 @@ const PhieuDangKy = () => {
     setDanhSachLopDangKy,
     loading,
     deleteDangKyTinChiModel,
-    postDangKyTinChiModel,
-    getPhieuDangKyModel,
     tinhDataLichHoc,
     setVisibleModal,
+    setVisibleRegister,
   } = useModel('daotao.dotdangkytinchi');
   const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => {
     return item.soTinChi;
@@ -47,31 +47,6 @@ const PhieuDangKy = () => {
     const data = danhSachLopDangKy.filter((item) => item._id !== rec._id);
     tinhDataLichHoc(data); // Tính lại dữ liệu lịch học
     setDanhSachLopDangKy(data);
-  };
-
-  const onRegister = (): void => {
-    Modal.confirm({
-      title: 'Xác nhận đăng ký',
-      content: (
-        <>
-          Xác nhận đăng ký các lớp học phần đã chọn?
-          {tongTinChi < (phieuDangKy?.soTinChiToiThieu ?? 0) ? (
-            <div style={{ color: 'orange' }}>
-              Lưu ý: Tổng số tín chỉ đăng ký hiện tại đang thấp hơn quy định số tín chỉ tối thiểu
-              đăng ký trong học kỳ!
-            </div>
-          ) : null}
-        </>
-      ),
-      onOk: () => {
-        const danhSachDangKy = danhSachLopDangKy
-          .filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY)
-          .map((item) => ({ lopHocPhanId: item._id ?? '' }));
-        postDangKyTinChiModel({ phieuDktcId: phieuDangKy?._id ?? '', danhSachDangKy })
-          .then(() => getPhieuDangKyModel(recHocKy?.ma ?? ''))
-          .catch((er) => console.log(er));
-      },
-    });
   };
 
   const columns: IColumn<DangKyTinChi.ILopDangKy>[] = [
@@ -131,18 +106,20 @@ const PhieuDangKy = () => {
     },
     {
       title: 'Loại ĐK',
-      dataIndex: 'loaiDangKy',
+      dataIndex: 'loai',
       width: 120,
       filterType: 'select',
-      filterData: Object.values(ELoaiDangKyTinChi),
+      filterData: Object.values(ELoaiHocPhanDangKyTinChi).map((item) => ({
+        label: LoaiHocPhanDangKyTinChi[item],
+        value: item,
+      })),
+      render: (val: ELoaiHocPhanDangKyTinChi) => LoaiHocPhanDangKyTinChi[val],
     },
     {
       title: 'Trạng thái',
       dataIndex: 'trangThai',
       width: 120,
       align: 'center',
-      filterType: 'select',
-      filterData: Object.values(ETrangThaiDangKyTinChi),
       render: (val: ETrangThaiDangKyTinChi) => (
         <Tag color={ColorTrangThaiDangKyTinChi[val]}>{val}</Tag>
       ),
@@ -210,7 +187,7 @@ const PhieuDangKy = () => {
               <Button
                 type="primary"
                 icon={<SendOutlined />}
-                onClick={onRegister}
+                onClick={() => setVisibleRegister(true)}
                 disabled={tongTinChi > (phieuDangKy?.soTinChiToiDa ?? 0)}
               >
                 Đăng ký
@@ -221,6 +198,8 @@ const PhieuDangKy = () => {
       </TableStaticData>
 
       <ModalLichHoc />
+
+      <ModalDangKy tongTinChi={tongTinChi} />
     </>
   );
 };

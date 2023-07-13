@@ -30,8 +30,8 @@ const TinTucDashboard = () => {
                       history.push({
                         pathname: 'tin-tuc/chi-tiet',
                         query: {
-                          type: danhSach?.[0]?.contentType ?? '',
-                          slug: danhSach?.[0]?.slug,
+                          type: tintuc?.contentType ?? '',
+                          slug: tintuc?.slug,
                         },
                       });
                     }}

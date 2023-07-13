@@ -9,7 +9,7 @@ const ipDaoTao = ipRoot + 'qldt'; // ip dev
 const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
 const ipTaiChinh = ipRoot + 'tai-chinh-api';
-const ipNews = 'http://222.252.29.85:10400';
+const ipNews = 'https://vwa-content.aisenote.com';
 const ipGlobal = 'https://ais2.aisenote.com/qldt-internal-api'; // ip dev
 
 const currentRole = EModuleKey.CONNECT;
