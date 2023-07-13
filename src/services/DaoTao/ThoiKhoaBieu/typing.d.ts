@@ -18,7 +18,7 @@ declare module ThoiKhoaBieu {
     tieuDeBaiHoc?: string;
     noiDungBaiHoc?: string;
     urlBaiHoc?: string | null;
-    thoiGianBatDau: string; //'2023-05-20T08:34:26.620Z';
-    thoiGianKetThuc: string; // '2023-05-20T08:34:26.620Z';
+    thoiGianBatDau?: string; //'2023-05-20T08:34:26.620Z';
+    thoiGianKetThuc?: string; // '2023-05-20T08:34:26.620Z';
   }
 }
