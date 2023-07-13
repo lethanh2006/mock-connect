@@ -52,6 +52,9 @@ const DetailLopTinChi = ({
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="Kết quả học tập" key="3">
+          <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
+            Chi tiết điểm lớp học phần
+          </h4>
           <DetailKetQuaHocTap lopHocPhanId={record?._id} />
         </Tabs.TabPane>
 

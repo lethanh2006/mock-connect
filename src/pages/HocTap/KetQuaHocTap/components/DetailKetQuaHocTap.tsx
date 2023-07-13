@@ -4,46 +4,40 @@ import { Descriptions, Tag, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
-const DetailKetQuaHocTap = (props: { lopHocPhanId?: string }) => {
+const DetailKetQuaHocTap = (props: {
+  lopHocPhanId?: string;
+  sinhVienLopHp?: LopHocPhan.IRecordSinhVienLopHP;
+}) => {
   const { danhSach, getModel } = useModel('daotao.daudiemhocphan');
   const { sinhVienGetDiemLopHocPhanModel, sinhVienLopHocPhan, loading } = useModel(
     'daotao.sinhvienlophocphan',
   );
-  const { lopHocPhanId } = props;
+  const { lopHocPhanId, sinhVienLopHp } = props;
+  const sinhVienDiem = sinhVienLopHp ?? sinhVienLopHocPhan;
 
   useEffect(() => {
     getModel();
   }, []);
 
   useEffect(() => {
-    if (lopHocPhanId) sinhVienGetDiemLopHocPhanModel(lopHocPhanId);
+    if (lopHocPhanId && !sinhVienLopHp) sinhVienGetDiemLopHocPhanModel(lopHocPhanId);
   }, [lopHocPhanId]);
 
   return (
     <Spin spinning={loading}>
-      <Descriptions title="Chi tiết điểm lớp học phần">
+      <Descriptions>
         {danhSach.map((item, index) => (
           <Descriptions.Item key={item._id} label={item.ten}>
-            {
-              sinhVienLopHocPhan?.[
-                `diemThanhPhan${index + 1}` as keyof LopHocPhan.IRecordSinhVienLopHP
-              ]
-            }
+            {sinhVienDiem?.[`diemThanhPhan${index + 1}` as keyof LopHocPhan.IRecordSinhVienLopHP]}
           </Descriptions.Item>
         ))}
-        <Descriptions.Item label="Điểm thi lần 1">{sinhVienLopHocPhan?.diemThi1}</Descriptions.Item>
-        <Descriptions.Item label="Điểm thi lần 2">{sinhVienLopHocPhan?.diemThi2}</Descriptions.Item>
-        <Descriptions.Item label="Tổng kết (hệ 10)">
-          {sinhVienLopHocPhan?.diemTongKet}
-        </Descriptions.Item>
-        <Descriptions.Item label="Tổng kết (hệ 4)">
-          {sinhVienLopHocPhan?.diemThang4}
-        </Descriptions.Item>
+        <Descriptions.Item label="Điểm thi lần 1">{sinhVienDiem?.diemThi1}</Descriptions.Item>
+        <Descriptions.Item label="Điểm thi lần 2">{sinhVienDiem?.diemThi2}</Descriptions.Item>
+        <Descriptions.Item label="Tổng kết (hệ 10)">{sinhVienDiem?.diemTongKet}</Descriptions.Item>
+        <Descriptions.Item label="Tổng kết (hệ 4)">{sinhVienDiem?.diemThang4}</Descriptions.Item>
         <Descriptions.Item label="Tổng kết (dạng chữ)">
-          {sinhVienLopHocPhan?.diemChu ? (
-            <Tag color={ColorDiemChu[sinhVienLopHocPhan?.diemChu]}>
-              {sinhVienLopHocPhan?.diemChu}
-            </Tag>
+          {sinhVienDiem?.diemChu ? (
+            <Tag color={ColorDiemChu[sinhVienDiem?.diemChu]}>{sinhVienDiem?.diemChu}</Tag>
           ) : null}
         </Descriptions.Item>
       </Descriptions>

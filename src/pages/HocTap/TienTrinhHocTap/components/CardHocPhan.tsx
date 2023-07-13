@@ -1,19 +1,17 @@
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
+import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
+import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { useState } from 'react';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
-import { useModel } from 'umi';
-import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 
 const CardHocPhan = (props: {
   chuongTrinhKhung?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
   sinhVienLopHocPhan?: LopHocPhan.IRecordSinhVienLopHP;
   isChuyenNganh?: boolean;
 }) => {
-  const { setSinhVienLopHocPhan } = useModel('daotao.sinhvienlophocphan');
-  const [modalVisible, setModalVisible] = useState(false);
   const { chuongTrinhKhung, sinhVienLopHocPhan } = props;
+  const [modalVisible, setModalVisible] = useState(false);
   const listDiem = chuongTrinhKhung?.lichSuDiem?.map(
     (diem) => diem.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU,
   ) ?? [sinhVienLopHocPhan?.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU];
@@ -31,10 +29,7 @@ const CardHocPhan = (props: {
         className={`card-hoc-phan ${
           chuongTrinhKhung?.hoc === ETrangThaiHocTap.CHUA_HOC && 'card-chua-hoc'
         }`}
-        onClick={() => {
-          setSinhVienLopHocPhan(chuongTrinhKhung?.lichSuDiem?.[0] ?? sinhVienLopHocPhan);
-          setModalVisible(true);
-        }}
+        onClick={() => setModalVisible(true)}
       >
         <h4
           className={
@@ -73,6 +68,7 @@ const CardHocPhan = (props: {
         setVisible={setModalVisible}
         visible={modalVisible}
         chuongTrinhKhung={{ hocPhan, soTinChi }}
+        listDiem={chuongTrinhKhung?.lichSuDiem ?? (sinhVienLopHocPhan ? [sinhVienLopHocPhan] : [])}
       />
     </div>
   );
