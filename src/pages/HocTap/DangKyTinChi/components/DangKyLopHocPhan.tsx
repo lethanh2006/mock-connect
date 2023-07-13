@@ -1,6 +1,10 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import { EColorLopDangKy, ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import {
+  EColorLopDangKy,
+  ELoaiHocPhanDangKyTinChi,
+  ETrangThaiDangKyTinChi,
+} from '@/services/DaoTao/DangKyTinChi/constant';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Empty } from 'antd';
@@ -16,30 +20,29 @@ const DangKyLopHocPhan = () => {
     danhSachLopDangKy,
     hocPhanDangKy,
     setDanhSachLopDangKy,
-    loaiHocPhan,
     tinhDataLichHoc,
     checkTrungLich,
   } = useModel('daotao.dotdangkytinchi');
   const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
+  // Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
   const dangKyRoi = danhSachLopDangKy.find(
-    // Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
     (item) =>
-      item.maHocPhan === hocPhanDangKy?.maMonHoc &&
+      item.maHocPhan === hocPhanDangKy?.maHocPhan &&
       item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY,
   );
 
   useEffect(() => {
     // Khi nào chuyển sang học phần khác
-    if (hocPhanDangKy?.maMonHoc) {
+    if (hocPhanDangKy?.maHocPhan) {
       const lopChonMoi = danhSachLopDangKy.find(
         (item) =>
-          item.maHocPhan === hocPhanDangKy.maMonHoc &&
+          item.maHocPhan === hocPhanDangKy.maHocPhan &&
           item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY,
       );
       // Học phần này có trong danh sách vừa mới chọn
       if (!!lopChonMoi) {
         const tempDanhSach = danhSachLopDangKy.filter(
-          (item) => item.maHocPhan !== hocPhanDangKy.maMonHoc,
+          (item) => item.maHocPhan !== hocPhanDangKy.maHocPhan,
         );
         tinhDataLichHoc(tempDanhSach); // Tính lại lịch học không bao gồm môn này
         setCoDangKyMoi(true); // Đánh dấu để khi sang học phần khác thì tính lại lịch học
@@ -50,7 +53,7 @@ const DangKyLopHocPhan = () => {
         setCoDangKyMoi(false);
       }
     }
-  }, [hocPhanDangKy?.maMonHoc]);
+  }, [hocPhanDangKy?.maHocPhan]);
 
   const onCell = (rec: LopHocPhan.IRecord) => ({
     style: {
@@ -75,7 +78,7 @@ const DangKyLopHocPhan = () => {
       const lopVuaChon = selectedRows?.at(-1);
       // Nếu chọn ít nhất 1 lớp và chưa đăng ký
       if (lopVuaChon && !dangKyRoi) {
-        const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác
+        const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
         let soTinChi = lopVuaChon.stc ?? lopVuaChon.deCuong?.deCuong?.soTinChi ?? 0;
         // Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
         if (!soTinChi && lopVuaChon.tenCha) {
@@ -83,10 +86,11 @@ const DangKyLopHocPhan = () => {
           soTinChi = lopCha?.stc ?? lopCha?.deCuong?.deCuong?.soTinChi ?? 0;
         }
         // Thêm lớp vừa chọn vào danh sách Lớp đăng ký
+        // Loại đăng ký theo loại học phần đã chọn
         temp.splice(0, 0, {
           ...lopVuaChon,
           soTinChi,
-          loai: loaiHocPhan,
+          loai: hocPhanDangKy?.nhuCau ? ELoaiHocPhanDangKyTinChi.NHU_CAU : hocPhanDangKy?.loai,
           trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
         });
         setDanhSachLopDangKy(temp);
@@ -159,16 +163,16 @@ const DangKyLopHocPhan = () => {
     <>
       <FilterHocPhanDKTC />
 
-      {hocPhanDangKy?.maMonHoc ? (
-        hocPhanDangKy.trangThaiDangKy === 'Được phép đăng ký' ? (
+      {hocPhanDangKy?.maHocPhan ? (
+        !hocPhanDangKy.maMonTienQuyetChuaHoanThanh ? (
           <div className="table-dang-ky">
             <TableBase
               columns={columns}
-              dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maMonHoc]}
+              dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maHocPhan]}
               params={{
                 maHocKy: recHocKy?.ma,
                 loai: ELoaiLopHocPhan.CHINH,
-                maHocPhan: hocPhanDangKy?.maMonHoc,
+                maHocPhan: hocPhanDangKy?.maHocPhan,
               }}
               modelName="daotao.lophocphan"
               hideCard
@@ -186,7 +190,13 @@ const DangKyLopHocPhan = () => {
         ) : (
           <Empty
             description={
-              <i style={{ color: '#999' }}>Bạn không đủ điều kiện để đăng ký học phần này !</i>
+              <>
+                <i style={{ color: '#999' }}>Bạn không đủ điều kiện để đăng ký học phần này !</i>
+                <br />
+                Bạn chưa hoàn thành học phần tiên quyết{' '}
+                {`"${hocPhanDangKy.maMonTienQuyetChuaHoanThanh} - 
+                ${hocPhanDangKy.monTienQuyetChuaHoanThanh?.ten}"`}
+              </>
             }
             style={{ marginTop: 30, marginBottom: 30 }}
           />

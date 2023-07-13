@@ -22,18 +22,18 @@ const ViewGhiChuDangKyTinChi = () => {
       <br />
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <Space style={{ marginTop: 5 }}>
-          <span className="dang_ky_ghi_chu selected" />
+          <span className="dang-ky-ghi-chu selected" />
           Lớp đã đăng ký / đã chọn
         </Space>
         <Space style={{ marginTop: 5 }}>
           <span
-            className="dang_ky_ghi_chu"
+            className="dang-ky-ghi-chu"
             style={{ backgroundColor: EColorLopDangKy.TRUNG_LICH }}
           />
           Lớp bị trùng lịch học
         </Space>
         <Space style={{ marginTop: 5 }}>
-          <span className="dang_ky_ghi_chu" style={{ backgroundColor: EColorLopDangKy.FULL_LOP }} />
+          <span className="dang-ky-ghi-chu" style={{ backgroundColor: EColorLopDangKy.FULL_LOP }} />
           Lớp không còn chỗ trống
         </Space>
       </div>

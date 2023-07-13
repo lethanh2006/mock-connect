@@ -37,6 +37,7 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
         dangKy: { lopHocPhanId: item._id },
       })
         .then(() =>
+          // Nếu thành công
           setDanhSachMoi((p) => {
             const p1 = [...p];
             p1[index].trangThai = ETrangThaiDangKyTinChi.DA_DANG_KY;

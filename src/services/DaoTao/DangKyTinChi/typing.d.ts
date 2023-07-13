@@ -1,10 +1,7 @@
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { type HocPhan } from '../HocPhan/typings';
 import { type SinhVien } from '../SinhVien/typings';
-import {
-  type ELoaiHocPhanDangKyTinChi,
-  type ELoaiDangKyTinChi,
-  type ETrangThaiDangKyTinChi,
-} from './constant';
+import { type ELoaiHocPhanDangKyTinChi, type ETrangThaiDangKyTinChi } from './constant';
 
 declare module DangKyTinChi {
   export interface IDotDangKy {
@@ -40,14 +37,24 @@ declare module DangKyTinChi {
   }
 
   export interface IHocPhanDangKy {
-    idHocPhan: string; // '6492ade44d774dc26787ad24';
-    maMonHoc: string; // 'DHBC03';
-    tenMonHoc: string; // 'Kịch bản truyền thông';
-    trangThaiDangKy: string; // 'Được phép đăng ký';
+    // idHocPhan: string; // '6492ade44d774dc26787ad24';
+    // maMonHoc: string; // 'DHBC03';
+    // tenMonHoc: string; // 'Kịch bản truyền thông';
+    // trangThaiDangKy: string; // 'Được phép đăng ký';
+
+    _id: string;
+    maHocKy: string;
+    hocVienSsoId?: string;
+    maHocPhan: string;
+    hocPhan?: HocPhan.IRecord;
+    nhuCau: boolean;
+    maMonTienQuyetChuaHoanThanh?: string;
+    monTienQuyetChuaHoanThanh?: HocPhan.IRecord;
+    loai: ELoaiHocPhanDangKyTinChi;
   }
 
-  export interface ThongTinHocPhan extends Record<ELoaiHocPhanDangKyTinChi, IHocPhanDangKy[]> {
-    kyTruoc: IHocPhanDangKy[];
-    mien: IHocPhanDangKy[];
-  }
+  // export interface IThongTinHocPhan extends Record<ELoaiHocPhanDangKyTinChi, IHocPhanDangKy[]> {
+  //   kyTruoc: IHocPhanDangKy[];
+  //   mien: IHocPhanDangKy[];
+  // }
 }
