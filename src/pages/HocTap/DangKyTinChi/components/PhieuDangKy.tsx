@@ -75,30 +75,27 @@ const PhieuDangKy = () => {
       width: 150,
       filterType: 'string',
     },
-    // {
-    //   title: 'Lịch học',
-    //   width: 200,
-    //   render: (val, rec) => (
-    //     <ul className="lich-hoc">
-    //       {rec.maHoaLichHoc
-    //         ?.sort((a, b) => a.thu - b.thu)
-    //         ?.map((item, index) => (
-    //           // eslint-disable-next-line react/no-array-index-key
-    //           <li key={index}>
-    //             {item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-
-    //             {item.tietBatDau + item.soTiet - 1}), tuần{' '}
-    //             {item.danhSachTuan
-    //               .map((j) => j.tuan)
-    //               .sort((a, b) => a - b)
-    //               .join(',')}
-    //           </li>
-    //         ))}
-    //     </ul>
-    //   ),
-    // },
     {
-      title: 'Giảng viên',
-      width: 120,
+      title: 'Lịch học & giảng viên',
+      width: 350,
+      render: (val, rec) => (
+        <ul className="lich-hoc">
+          {rec.maHoaLichHoc
+            ?.sort((a, b) => a.thu - b.thu)
+            ?.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <li key={index}>
+                {item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-
+                {item.tietBatDau + item.soTiet - 1}), tuần{' '}
+                {item.danhSachTuan
+                  .map((j) => j.tuan)
+                  .sort((a, b) => a - b)
+                  .join(',')}
+                , {item.nhanSu ?? '--'}
+              </li>
+            ))}
+        </ul>
+      ),
     },
     {
       title: 'Học phí',

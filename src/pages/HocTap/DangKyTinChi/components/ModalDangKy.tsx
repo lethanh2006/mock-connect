@@ -44,11 +44,11 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
             return p1;
           }),
         )
-        .catch(() =>
+        .catch((e) =>
           setDanhSachMoi((p) => {
             const p1 = [...p];
             p1[index].trangThai = ETrangThaiDangKyTinChi.LOI;
-            p1[index].error = 'error code here';
+            p1[index].error = e.response?.data?.message;
             return p1;
           }),
         ),

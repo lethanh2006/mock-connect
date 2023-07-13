@@ -79,11 +79,11 @@ const DangKyLopHocPhan = () => {
       // Nếu chọn ít nhất 1 lớp và chưa đăng ký
       if (lopVuaChon && !dangKyRoi) {
         const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
-        let soTinChi = lopVuaChon.stc ?? lopVuaChon.deCuong?.deCuong?.soTinChi ?? 0;
+        let soTinChi = lopVuaChon.deCuong?.deCuong?.soTinChi ?? 0;
         // Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
         if (!soTinChi && lopVuaChon.tenCha) {
           const lopCha = danhSach.find((item) => item.ten === lopVuaChon.tenCha);
-          soTinChi = lopCha?.stc ?? lopCha?.deCuong?.deCuong?.soTinChi ?? 0;
+          soTinChi = lopCha?.deCuong?.deCuong?.soTinChi ?? 0;
         }
         // Thêm lớp vừa chọn vào danh sách Lớp đăng ký
         // Loại đăng ký theo loại học phần đã chọn
@@ -112,12 +112,12 @@ const DangKyLopHocPhan = () => {
     {
       title: 'Lớp học phần',
       dataIndex: 'ten',
-      width: 220,
+      width: 200,
       onCell,
     },
     {
-      title: 'Lịch học',
-      width: 300,
+      title: 'Lịch học & giảng viên',
+      width: 350,
       render: (val, rec) => (
         <ul className="lich-hoc">
           {rec.maHoaLichHoc
@@ -131,6 +131,7 @@ const DangKyLopHocPhan = () => {
                   .map((j) => j.tuan)
                   .sort((a, b) => a - b)
                   .join(',')}
+                , {item.nhanSu ?? '--'}
               </li>
             ))}
         </ul>
@@ -138,8 +139,8 @@ const DangKyLopHocPhan = () => {
       onCell,
     },
     {
-      title: 'Sĩ số',
-      dataIndex: 'siSo',
+      title: 'Sĩ số tối đa',
+      dataIndex: 'siSoToiDa',
       align: 'center',
       width: 60,
       onCell,
@@ -149,12 +150,6 @@ const DangKyLopHocPhan = () => {
       align: 'center',
       width: 60,
       render: (val, rec) => rec.siSoToiDa - (rec.siSo ?? 0),
-      onCell,
-    },
-    {
-      title: 'Giảng viên',
-      width: 120,
-      render: (val, rec) => rec.nhanSuList?.map((item) => `${item.hoDem} ${item.ten}`).join(', '),
       onCell,
     },
   ];
