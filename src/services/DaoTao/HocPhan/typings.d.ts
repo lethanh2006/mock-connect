@@ -8,6 +8,7 @@ declare module HocPhan {
     tenTiengAnh?: string;
     donVi: string;
     deCuongHienTaiId?: string;
+    deCuongHienTai?: IDeCuongHocPhan;
     createdAt?: string;
     updatedAt?: string;
     active: boolean;

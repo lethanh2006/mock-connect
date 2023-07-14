@@ -1,12 +1,12 @@
 export enum ELoaiHocPhanDangKyTinChi {
-  NHU_CAU = 'Theo nhu cầu',
-  TIEN_TRINH = 'kyHienTai',
-  HOC_LAI = 'hocLai',
-  HOC_VUOT = 'hocVuot',
-  CAI_THIEN = 'hocCaiThien',
-  NGANH_2 = 'kyTruoc',
-  HOC_NGOAI = 'Học ngoài CTĐT',
-  TAT_CA = 'Tất cả học phần',
+  NHU_CAU = 'NhuCau',
+  TIEN_TRINH = 'TienTrinh',
+  HOC_LAI = 'HocLai',
+  HOC_VUOT = 'HocVuot',
+  CAI_THIEN = 'HocCaiThien',
+  // NGANH_2 = 'kyTruoc',
+  HOC_NGOAI = 'ChuaTheoTienTrinh',
+  TAT_CA = 'TatCa',
 }
 
 export const LoaiHocPhanDangKyTinChi = {
@@ -15,19 +15,10 @@ export const LoaiHocPhanDangKyTinChi = {
   [ELoaiHocPhanDangKyTinChi.HOC_LAI]: 'Học lại',
   [ELoaiHocPhanDangKyTinChi.HOC_VUOT]: 'Học vượt',
   [ELoaiHocPhanDangKyTinChi.CAI_THIEN]: 'Học cải thiện',
-  [ELoaiHocPhanDangKyTinChi.NGANH_2]: 'Học ngành 2',
+  // [ELoaiHocPhanDangKyTinChi.NGANH_2]: 'Học ngành 2',
   [ELoaiHocPhanDangKyTinChi.HOC_NGOAI]: 'Học ngoài CTĐT',
   [ELoaiHocPhanDangKyTinChi.TAT_CA]: 'Tất cả học phần',
 };
-
-// export enum ELoaiDangKyTinChi {
-//   NHU_CAU = 'NhuCau',
-//   TIEN_TRINH = 'TienTrinh',
-//   HOC_LAI = 'HocLai',
-//   HOC_CAI_THIEN = 'HocCaiThien',
-//   HOC_VUOT = 'HocVuot',
-//   CHUA_THEO_TIEN_TRINH = 'ChuaTheoTienTrinh',
-// }
 
 export enum EColorLopDangKy {
   TRUNG_LICH = 'rgba(255, 223, 140, 0.3)',

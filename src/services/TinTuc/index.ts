@@ -7,7 +7,7 @@ export async function getTinTucStrapi(params: {
   size: number;
 }) {
   return axios.get(`${ipNews}/api/dynamic-content`, {
-    params,
+    params: { ...params, sortOrder: 'DESC' },
     headers: { Authorization: undefined },
   });
 }

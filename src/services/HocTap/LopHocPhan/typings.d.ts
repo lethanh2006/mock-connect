@@ -31,7 +31,6 @@ export declare module LopHocPhan {
 
     // Populated
     deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };
-    stc?: number;
   }
 
   export type TMaHoaLichHoc = {

@@ -14,6 +14,7 @@ import moment from 'moment';
 import { useModel } from 'umi';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
+import { useEffect } from 'react';
 
 const PhieuDangKy = () => {
   const {
@@ -26,6 +27,7 @@ const PhieuDangKy = () => {
     tinhDataLichHoc,
     setVisibleModal,
     setVisibleRegister,
+    getPhieuDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
   const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => {
     return item.soTinChi;
@@ -34,6 +36,10 @@ const PhieuDangKy = () => {
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
     (item) => item.soTinChi,
   );
+
+  useEffect(() => {
+    if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
+  }, [dotDangKyHienTai?._id]);
 
   const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
     if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
@@ -75,30 +81,27 @@ const PhieuDangKy = () => {
       width: 150,
       filterType: 'string',
     },
-    // {
-    //   title: 'Lịch học',
-    //   width: 200,
-    //   render: (val, rec) => (
-    //     <ul className="lich-hoc">
-    //       {rec.maHoaLichHoc
-    //         ?.sort((a, b) => a.thu - b.thu)
-    //         ?.map((item, index) => (
-    //           // eslint-disable-next-line react/no-array-index-key
-    //           <li key={index}>
-    //             {item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-
-    //             {item.tietBatDau + item.soTiet - 1}), tuần{' '}
-    //             {item.danhSachTuan
-    //               .map((j) => j.tuan)
-    //               .sort((a, b) => a - b)
-    //               .join(',')}
-    //           </li>
-    //         ))}
-    //     </ul>
-    //   ),
-    // },
     {
-      title: 'Giảng viên',
-      width: 120,
+      title: 'Lịch học & giảng viên',
+      width: 350,
+      render: (val, rec) => (
+        <ul className="lich-hoc">
+          {rec.maHoaLichHoc
+            ?.sort((a, b) => a.thu - b.thu)
+            ?.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <li key={index}>
+                {item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-
+                {item.tietBatDau + item.soTiet - 1}), tuần{' '}
+                {item.danhSachTuan
+                  .map((j) => j.tuan)
+                  .sort((a, b) => a - b)
+                  .join(',')}
+                , {item.nhanSu ?? '--'}
+              </li>
+            ))}
+        </ul>
+      ),
     },
     {
       title: 'Học phí',
@@ -151,13 +154,10 @@ const PhieuDangKy = () => {
             {tongTinChi} tín
           </b>
         </Col>
-        <Col span={24} md={16}>
+        <Col span={24} md={8}>
           Học phí dự kiến: <b>- đ</b>
         </Col>
-        <Col span={24} md={12}>
-          Trạng thái phê duyệt: <Tag color="red">Chưa phê duyệt</Tag>
-        </Col>
-        <Col span={24} md={12}>
+        <Col span={24} md={8}>
           <div className="fw500" style={{ color: 'red', textAlign: 'right' }}>
             Bạn được đăng ký trong khoảng tín chỉ:{' '}
             {[phieuDangKy?.soTinChiToiThieu, phieuDangKy?.soTinChiToiDa].join(' - ')}

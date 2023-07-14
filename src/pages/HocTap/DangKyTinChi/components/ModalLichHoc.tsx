@@ -32,7 +32,7 @@ const ModalLichHoc = () => {
     const end = _.maxBy(data, (item) => item.end)?.end;
     setStartDate(start);
     setEndDate(end);
-    setDate(startDate);
+    setDate(start);
 
     setDataCalendar(data);
   };
