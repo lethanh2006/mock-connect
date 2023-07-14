@@ -16,10 +16,11 @@ declare module DangKyTinChi {
 
   export interface IPhieuDangKy {
     _id: string;
+    idDotDangKyTinChi: string;
     sinhVienSsoId: string;
-    sinhVien?: SinhVien.IRecord;
+    // sinhVien?: SinhVien.IRecord;
     maHocKy: string;
-    hocKy?: HocKy.IRecord;
+    // hocKy?: HocKy.IRecord;
     soTinChiDaDk: number;
     soTinChiToiThieu: number;
     soTinChiToiDa: number;

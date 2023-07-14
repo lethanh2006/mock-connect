@@ -14,6 +14,7 @@ import moment from 'moment';
 import { useModel } from 'umi';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
+import { useEffect } from 'react';
 
 const PhieuDangKy = () => {
   const {
@@ -26,6 +27,7 @@ const PhieuDangKy = () => {
     tinhDataLichHoc,
     setVisibleModal,
     setVisibleRegister,
+    getPhieuDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
   const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => {
     return item.soTinChi;
@@ -34,6 +36,10 @@ const PhieuDangKy = () => {
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
     (item) => item.soTinChi,
   );
+
+  useEffect(() => {
+    if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
+  }, [dotDangKyHienTai?._id]);
 
   const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
     if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
@@ -148,13 +154,10 @@ const PhieuDangKy = () => {
             {tongTinChi} tín
           </b>
         </Col>
-        <Col span={24} md={16}>
+        <Col span={24} md={8}>
           Học phí dự kiến: <b>- đ</b>
         </Col>
-        <Col span={24} md={12}>
-          Trạng thái phê duyệt: <Tag color="red">Chưa phê duyệt</Tag>
-        </Col>
-        <Col span={24} md={12}>
+        <Col span={24} md={8}>
           <div className="fw500" style={{ color: 'red', textAlign: 'right' }}>
             Bạn được đăng ký trong khoảng tín chỉ:{' '}
             {[phieuDangKy?.soTinChiToiThieu, phieuDangKy?.soTinChiToiDa].join(' - ')}

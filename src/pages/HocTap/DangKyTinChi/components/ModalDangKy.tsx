@@ -22,8 +22,8 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
     getPhieuDangKyModel,
     phieuDangKy,
     loading,
+    dotDangKyHienTai,
   } = useModel('daotao.dotdangkytinchi');
-  const { record: recHocKy } = useModel('daotao.hocky');
   const [danhSachMoi, setDanhSachMoi] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp mới thêm
   const [formSubmiting, setFormSubmiting] = useState<boolean>();
 
@@ -57,7 +57,7 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
       .then()
       .finally(() => {
         message.success('Đã đăng ký xong');
-        getPhieuDangKyModel(recHocKy?.ma ?? ''); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
+        if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
         setFormSubmiting(false);
       });
   };

@@ -1,22 +1,21 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Col, Popover, Row, Spin, Steps } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ViewDetailHocKy from './ViewDetailHocKy';
-import { InfoCircleOutlined } from '@ant-design/icons';
 
 const FilterDotDangKy = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
   const {
     getDotDangKyAvailableModel: getDotDangKy,
     dotDangKyHienTai,
-    getPhieuDangKyModel,
     loading,
   } = useModel('daotao.dotdangkytinchi');
 
   useEffect(() => {
-    if (recHocKy?.ma) getDotDangKy(recHocKy.ma).then(() => getPhieuDangKyModel(recHocKy.ma));
+    if (recHocKy?.ma) getDotDangKy(recHocKy.ma);
   }, [recHocKy?.ma]);
 
   return (

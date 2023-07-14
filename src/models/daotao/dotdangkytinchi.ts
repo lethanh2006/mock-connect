@@ -84,11 +84,13 @@ export default () => {
     return isTrung;
   };
 
-  const getPhieuDangKyModel = async (maHocKy: string): Promise<DangKyTinChi.IPhieuDangKy> => {
-    if (!maHocKy) return Promise.reject('Invalid maHocKy');
+  const getPhieuDangKyModel = async (
+    idDotDangKyTinChi: string,
+  ): Promise<DangKyTinChi.IPhieuDangKy> => {
+    if (!idDotDangKyTinChi) return Promise.reject('Invalid idDotDangKyTinChi');
     setLoading(true);
     try {
-      const res = await getPhieuDangKy(maHocKy);
+      const res = await getPhieuDangKy(idDotDangKyTinChi);
       const phieu: DangKyTinChi.IPhieuDangKy = res.data?.data;
       setPhieuDangKy(phieu);
 
