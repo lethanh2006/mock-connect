@@ -41,6 +41,7 @@ const FilterHocKy = (props: { width?: number; isSetHocKy?: boolean; allowClear?:
             style={{ width }}
             allowClear
             // condition={{ hinhThucDaoTaoId, trinhDoDaoTaoId }}
+            value={namHocId}
             onChange={(val) => setNamHocId(val)}
           />
         </div>
@@ -52,7 +53,7 @@ const FilterHocKy = (props: { width?: number; isSetHocKy?: boolean; allowClear?:
         condition={{ namHocId }}
         value={recHocKy?._id}
         onChange={(val) => setHocKy(danhSachHocKy.find((item) => item._id === val))}
-        isSetRecord={props.isSetHocKy && !recHocKy?._id}
+        isSetRecord={props.isSetHocKy && (!!namHocId || !recHocKy?._id)}
       />
     </>
   );
