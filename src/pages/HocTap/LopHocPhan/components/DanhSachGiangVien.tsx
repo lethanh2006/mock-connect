@@ -27,12 +27,12 @@ const DanhSachGiangVien = (props: {
               <List.Item.Meta
                 avatar={<Avatar src={item?.urlAnhDaiDien || teacherIcon} />}
                 title={`Họ và tên: ${
-                  item?.ten ? [item.hoDem, item.ten].join(' ') : <i>Chưa cập nhật</i>
+                  item?.ten ? [item.hoDem, item.ten].join(' ') : <i>Không tìm thấy thông tin</i>
                 }`}
                 description={
                   <>
-                    <div>Email: {item?.email || <i>Chưa cập nhật</i>}</div>
-                    <div>Số điện thoại: {item?.sdtCaNhan || <i>Chưa cập nhật</i>}</div>
+                    <div>Email: {item?.email || <i>--</i>}</div>
+                    <div>Số điện thoại: {item?.sdtCaNhan || <i>--</i>}</div>
                   </>
                 }
               />

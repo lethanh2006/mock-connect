@@ -20,16 +20,22 @@ const ThongTinBuoiHoc = (props: {
       <Descriptions.Item label="Tên lớp" span={3}>
         {buoiHoc?.lopHocPhan?.ten}
       </Descriptions.Item>
+      <Descriptions.Item label="Giảng viên">
+        {buoiHoc?.nhanSuSsoId ? (
+          buoiHoc.giangVien?.ten ? (
+            [buoiHoc.giangVien?.hoDem, buoiHoc.giangVien?.ten].join(' ')
+          ) : (
+            <i>Không tìm thấy thông tin</i>
+          )
+        ) : (
+          <i>Chưa cập nhật</i>
+        )}
+      </Descriptions.Item>
       <Descriptions.Item label="Phòng học">
         {buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}
       </Descriptions.Item>
       <Descriptions.Item label="Loại hình học tập">
         {buoiHoc?.loaiHinhHocTap ?? <i>Chưa cập nhật</i>}
-      </Descriptions.Item>
-      <Descriptions.Item label="Giảng viên">
-        {buoiHoc?.giangVien?.ten
-          ? [buoiHoc.giangVien?.hoDem, buoiHoc.giangVien?.ten].join(' ')
-          : '--'}
       </Descriptions.Item>
     </Descriptions>
   );

@@ -71,22 +71,33 @@ const DanhSachBuoiHoc = () => {
       onCell,
     },
     {
+      title: 'Giảng viên',
+      dataIndex: 'nhanSuSsoId',
+      width: 120,
+      render: (val, rec) =>
+        val ? (
+          rec.giangVien?.ten ? (
+            [rec.giangVien?.hoDem, rec.giangVien?.ten].join(' ')
+          ) : (
+            <i>Không tìm thấy thông tin</i>
+          )
+        ) : (
+          <i>Chưa cập nhật</i>
+        ),
+      onCell,
+    },
+    {
       title: 'Phòng học',
       dataIndex: 'phongHoc',
       width: 120,
-      onCell,
       render: (val) => (val ? val : <i>Chưa cập nhật</i>),
+      onCell,
     },
     {
       title: 'Loại hình',
       dataIndex: 'loaiHinhHocTap',
       width: 80,
-      onCell,
-    },
-    {
-      title: 'Giảng viên',
-      width: 120,
-      render: (val, rec) => [rec.giangVien?.hoDem, rec.giangVien?.ten].join(' '),
+      render: (val) => (val ? val : <i>Chưa cập nhật</i>),
       onCell,
     },
     {
