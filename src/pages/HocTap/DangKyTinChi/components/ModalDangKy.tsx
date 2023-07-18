@@ -24,39 +24,44 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
     loading,
     dotDangKyHienTai,
   } = useModel('daotao.dotdangkytinchi');
-  const [danhSachMoi, setDanhSachMoi] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp mới thêm
+  const [danhSachDangKy, setDanhSachDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp mới thêm
   const [formSubmiting, setFormSubmiting] = useState<boolean>();
+  const canRegister =
+    danhSachDangKy.filter((item) => item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY).length >
+    0;
 
   const postDangKy = async () => {
     setFormSubmiting(true);
 
     // Với từng lớp mới chọn thì gọi 1 API đăng ký
-    const promises = danhSachMoi.map((item, index) =>
-      postDangKyTinChiModel({
-        phieuDktcId: phieuDangKy?._id ?? '',
-        dangKy: { lopHocPhanId: item._id },
-      })
-        .then(() =>
-          // Nếu thành công
-          setDanhSachMoi((p) => {
-            const p1 = [...p];
-            p1[index].trangThai = ETrangThaiDangKyTinChi.DA_DANG_KY;
-            return p1;
-          }),
-        )
-        .catch((e) =>
-          setDanhSachMoi((p) => {
-            const p1 = [...p];
-            p1[index].trangThai = ETrangThaiDangKyTinChi.LOI;
-            p1[index].error = e.response?.data?.message;
-            return p1;
-          }),
-        ),
-    );
+    const promises = danhSachDangKy
+      .filter((item) => item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY)
+      .map((item, index) =>
+        postDangKyTinChiModel({
+          phieuDktcId: phieuDangKy?._id ?? '',
+          dangKy: { lopHocPhanId: item._id },
+        })
+          .then(() =>
+            // Nếu thành công
+            setDanhSachDangKy((p) => {
+              const p1 = [...p];
+              p1[index].trangThai = ETrangThaiDangKyTinChi.DA_DANG_KY;
+              return p1;
+            }),
+          )
+          .catch((e) =>
+            setDanhSachDangKy((p) => {
+              const p1 = [...p];
+              p1[index].trangThai = ETrangThaiDangKyTinChi.LOI;
+              p1[index].error = e.response?.data?.message;
+              return p1;
+            }),
+          ),
+      );
     Promise.all(promises)
       .then()
       .finally(() => {
-        message.success('Đã đăng ký xong');
+        message.success('Đã hoàn thành đăng ký');
         if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
         setFormSubmiting(false);
       });
@@ -65,12 +70,22 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
   useEffect(() => {
     // Lấy lại danh sách các lớp học phần mới chọn
     if (visibleRegister)
-      setDanhSachMoi(
+      setDanhSachDangKy(
         danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
       );
   }, [visibleRegister]);
 
   const onRegister = () => {
+    // Set trạng thái về chưa đăng ký
+    setDanhSachDangKy(
+      [...danhSachDangKy].map((item) => ({
+        ...item,
+        trangThai:
+          item.trangThai === ETrangThaiDangKyTinChi.LOI
+            ? ETrangThaiDangKyTinChi.CHUA_DANG_KY
+            : item.trangThai,
+      })),
+    );
     Modal.confirm({
       title: 'Xác nhận đăng ký',
       content: (
@@ -144,10 +159,15 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
       maskClosable={false}
     >
       <Card title="Danh sách đăng ký mới">
-        <TableStaticData columns={columns} data={danhSachMoi} addStt loading={loading} />
+        <TableStaticData columns={columns} data={danhSachDangKy} addStt loading={loading} />
 
         <div className="form-footer">
-          <Button onClick={onRegister} type="primary" loading={formSubmiting}>
+          <Button
+            onClick={onRegister}
+            type="primary"
+            loading={formSubmiting}
+            disabled={!canRegister}
+          >
             Xác nhận
           </Button>
           <Button onClick={() => setVisibleRegister(false)} disabled={formSubmiting}>
