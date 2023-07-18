@@ -110,32 +110,43 @@ const DangKyLopHocPhan = () => {
 
   const columns: IColumn<LopHocPhan.IRecord>[] = [
     {
-      title: 'Lớp học phần',
-      dataIndex: 'ten',
-      width: 200,
+      title: 'Thứ tự lớp',
+      dataIndex: 'soThuTuLop',
+      width: 60,
+      align: 'center',
+      onCell,
+    },
+    {
+      title: 'Thứ tự nhóm',
+      dataIndex: 'soThuTuNhom',
+      width: 60,
+      align: 'center',
       onCell,
     },
     {
       title: 'Lịch học & giảng viên',
       width: 350,
-      render: (val, rec) => (
-        <ul className="lich-hoc">
-          {rec.maHoaLichHoc
-            ?.sort((a, b) => a.thu - b.thu)
-            ?.map((item, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <li key={index}>
-                {item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-
-                {item.tietBatDau + item.soTiet - 1}), tuần{' '}
-                {item.danhSachTuan
-                  .map((j) => j.tuan)
-                  .sort((a, b) => a - b)
-                  .join(',')}
-                , {item.nhanSu ?? '--'}
-              </li>
-            ))}
-        </ul>
-      ),
+      render: (val, rec) =>
+        rec.maHoaLichHoc?.length ? (
+          <ul className="lich-hoc">
+            {rec.maHoaLichHoc
+              ?.sort((a, b) => a.thu - b.thu)
+              ?.map((item, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <li key={index}>
+                  {item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-
+                  {item.tietBatDau + item.soTiet - 1}), tuần{' '}
+                  {item.danhSachTuan
+                    .map((j) => j.tuan)
+                    .sort((a, b) => a - b)
+                    .join(',')}
+                  , {item.nhanSu ?? <i style={{ color: '#999' }}>Không có thông tin giảng viên</i>}
+                </li>
+              ))}
+          </ul>
+        ) : (
+          <i style={{ color: '#999' }}>Không có thông tin lịch học</i>
+        ),
       onCell,
     },
     {
@@ -155,54 +166,58 @@ const DangKyLopHocPhan = () => {
   ];
 
   return (
-    <>
-      <FilterHocPhanDKTC />
-
-      {hocPhanDangKy?.maHocPhan ? (
-        !hocPhanDangKy.maMonTienQuyetChuaHoanThanh ? (
-          <div className="table-dang-ky">
-            <TableBase
-              columns={columns}
-              dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maHocPhan]}
-              params={{
-                maHocKy: recHocKy?.ma,
-                loai: ELoaiLopHocPhan.CHINH,
-                maHocPhan: hocPhanDangKy?.maHocPhan,
-              }}
-              modelName="daotao.lophocphan"
-              hideCard
-              buttons={{ create: false, reload: false, filter: false }}
-              hideTotal
-              addStt={false}
-              rowSelection
-              detailRow={rowSelection}
-              otherProps={{
-                rowKey: 'ten',
-                expandable: { expandRowByClick: true, indentSize: 10 },
-              }}
-            />
-          </div>
-        ) : (
-          <Empty
-            description={
-              <>
-                <i style={{ color: '#999' }}>Bạn không đủ điều kiện để đăng ký học phần này !</i>
-                <br />
-                Bạn chưa hoàn thành học phần tiên quyết{' '}
-                {`"${hocPhanDangKy.maMonTienQuyetChuaHoanThanh} - 
+    <FilterHocPhanDKTC
+      child={() => (
+        <>
+          {hocPhanDangKy?.maHocPhan ? (
+            !hocPhanDangKy.maMonTienQuyetChuaHoanThanh ? (
+              <div className="table-dang-ky">
+                <TableBase
+                  columns={columns}
+                  dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maHocPhan]}
+                  params={{
+                    maHocKy: recHocKy?.ma,
+                    loai: ELoaiLopHocPhan.CHINH,
+                    maHocPhan: hocPhanDangKy?.maHocPhan,
+                  }}
+                  modelName="daotao.lophocphan"
+                  hideCard
+                  buttons={{ create: false, reload: false, filter: false }}
+                  hideTotal
+                  addStt={false}
+                  rowSelection
+                  detailRow={rowSelection}
+                  otherProps={{
+                    rowKey: 'ten',
+                    expandable: { expandRowByClick: true, indentSize: 10 },
+                  }}
+                />
+              </div>
+            ) : (
+              <Empty
+                description={
+                  <>
+                    <i style={{ color: '#999' }}>
+                      Bạn không đủ điều kiện để đăng ký học phần này !
+                    </i>
+                    <br />
+                    Bạn chưa hoàn thành học phần tiên quyết{' '}
+                    {`"${hocPhanDangKy.maMonTienQuyetChuaHoanThanh} - 
                 ${hocPhanDangKy.monTienQuyetChuaHoanThanh?.ten}"`}
-              </>
-            }
-            style={{ marginTop: 30, marginBottom: 30 }}
-          />
-        )
-      ) : (
-        <Empty
-          description={<i style={{ color: '#999' }}>Vui lòng chọn học phần muốn đăng ký !</i>}
-          style={{ marginTop: 30, marginBottom: 30 }}
-        />
+                  </>
+                }
+                style={{ marginTop: 30, marginBottom: 30 }}
+              />
+            )
+          ) : (
+            <Empty
+              description={<i style={{ color: '#999' }}>Vui lòng chọn học phần muốn đăng ký !</i>}
+              style={{ marginTop: 30, marginBottom: 30 }}
+            />
+          )}
+        </>
       )}
-    </>
+    />
   );
 };
 
