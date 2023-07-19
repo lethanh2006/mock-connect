@@ -78,8 +78,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
     items.splice(1, 0, {
       key: 'center',
       icon: <UserOutlined />,
-      label: 'Trang cá nhân',
-      onClick: () => history.push('/account/center'),
+      label: 'Thông tin cá nhân',
+      onClick: () => history.push('/thong-tin-ca-nhan'),
     });
   }
 

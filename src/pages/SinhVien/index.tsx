@@ -1,5 +1,5 @@
 import { Card } from 'antd';
-import FormSinhVien from './components/Form';
+import PreviewHoSo from './components/PreviewHoSo';
 
 const ThongTinSinhVienPage = () => {
   // const [currentStep, setCurrentStep] = useState<string>('0');
@@ -15,7 +15,7 @@ const ThongTinSinhVienPage = () => {
 
   return (
     <Card title="Thông tin cá nhân">
-      <FormSinhVien />
+      <PreviewHoSo />
       {/* <Tabs
         activeKey={currentStep}
         tabPosition={isTabletOrMobile ? 'top' : 'left'}

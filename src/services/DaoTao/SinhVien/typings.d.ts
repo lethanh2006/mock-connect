@@ -30,25 +30,9 @@ declare module SinhVien {
     nguoiLienLac: string;
     soDienThoaiNguoiLienLac: string;
     khoaNganh: {
-      khoaSinhVien: {
-        ten: string;
-        hinhThucDaoTao: {
-          ma: string;
-          danhMucHTDT: {
-            ten: string;
-          };
-        };
-        trinhDoDaoTao: {
-          ma: string;
-          dmTrinhDo: {
-            ten: string;
-          };
-        };
-        namHocBatDau: number;
-      };
-      nganh: {
-        ten: string;
-      };
+      khoaSinhVien: KhoaSinhVien.IRecord;
+      nganh: NganhDaoTao.IRecordCoSo;
+      ten: string;
     };
 
     loaiNoiSinh: string;
@@ -129,6 +113,7 @@ declare module SinhVien {
     hinhThucDaoTaoId: string;
     chuongTrinhId: string;
     ssoId: string;
+    trangThaiHoc?: string;
   }
 
   export interface IHocBongSinhVien {
