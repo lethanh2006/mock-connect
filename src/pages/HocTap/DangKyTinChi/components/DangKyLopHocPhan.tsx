@@ -15,7 +15,7 @@ import FilterHocPhanDKTC from './FilterHocPhan';
 
 const DangKyLopHocPhan = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
-  const { page, limit, danhSach } = useModel('daotao.lophocphan');
+  const { page, limit, danhSach, getModel } = useModel('daotao.lophocphan');
   const {
     danhSachLopDangKy,
     hocPhanDangKy,
@@ -24,6 +24,7 @@ const DangKyLopHocPhan = () => {
     checkTrungLich,
   } = useModel('daotao.dotdangkytinchi');
   const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
+  const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
   // Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
   const dangKyRoi = danhSachLopDangKy.find(
     (item) =>
@@ -31,8 +32,23 @@ const DangKyLopHocPhan = () => {
       item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY,
   );
 
+  const getData = () =>
+    getModel(
+      {
+        maHocKy: recHocKy?.ma,
+        loai: ELoaiLopHocPhan.CHINH,
+        maHocPhan: hocPhanDangKy?.maHocPhan,
+      },
+      undefined,
+      { soThuTuLop: 1 },
+    ).then((data) =>
+      setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
+    );
+
+  /**
+   * Khi nào chuyển sang học phần khác
+   */
   useEffect(() => {
-    // Khi nào chuyển sang học phần khác
     if (hocPhanDangKy?.maHocPhan) {
       const lopChonMoi = danhSachLopDangKy.find(
         (item) =>
@@ -108,16 +124,27 @@ const DangKyLopHocPhan = () => {
     }),
   };
 
+  /**
+   * Expand or Collapse Lớp thực hành
+   * @param expanded
+   * @param rec
+   */
+  const onExpand = (expanded: boolean, rec: LopHocPhan.IRecord) => {
+    setExpandedLopHocPhan(
+      expanded ? [...expandedLopHocPhan, rec.ten] : expandedLopHocPhan.filter((i) => i !== rec.ten),
+    );
+  };
+
   const columns: IColumn<LopHocPhan.IRecord>[] = [
     {
-      title: 'Thứ tự lớp',
+      title: 'TT lớp',
       dataIndex: 'soThuTuLop',
-      width: 60,
+      width: 70,
       align: 'center',
       onCell,
     },
     {
-      title: 'Thứ tự nhóm',
+      title: 'TT nhóm',
       dataIndex: 'soThuTuNhom',
       width: 60,
       align: 'center',
@@ -175,11 +202,7 @@ const DangKyLopHocPhan = () => {
                 <TableBase
                   columns={columns}
                   dependencies={[page, limit, recHocKy?.ma, hocPhanDangKy?.maHocPhan]}
-                  params={{
-                    maHocKy: recHocKy?.ma,
-                    loai: ELoaiLopHocPhan.CHINH,
-                    maHocPhan: hocPhanDangKy?.maHocPhan,
-                  }}
+                  getData={getData}
                   modelName="daotao.lophocphan"
                   hideCard
                   buttons={{ create: false, reload: false, filter: false }}
@@ -189,7 +212,12 @@ const DangKyLopHocPhan = () => {
                   detailRow={rowSelection}
                   otherProps={{
                     rowKey: 'ten',
-                    expandable: { expandRowByClick: true, indentSize: 10 },
+                    expandable: {
+                      expandRowByClick: true,
+                      indentSize: 0,
+                      expandedRowKeys: expandedLopHocPhan,
+                      onExpand,
+                    },
                   }}
                 />
               </div>

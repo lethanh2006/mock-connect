@@ -6,7 +6,7 @@ export enum ELoaiHocPhanDangKyTinChi {
   CAI_THIEN = 'HocCaiThien',
   // NGANH_2 = 'kyTruoc',
   HOC_NGOAI = 'ChuaTheoTienTrinh',
-  TAT_CA = 'TatCa',
+  // TAT_CA = 'TatCa',
 }
 
 export const LoaiHocPhanDangKyTinChi = {
@@ -17,7 +17,7 @@ export const LoaiHocPhanDangKyTinChi = {
   [ELoaiHocPhanDangKyTinChi.CAI_THIEN]: 'Học cải thiện',
   // [ELoaiHocPhanDangKyTinChi.NGANH_2]: 'Học ngành 2',
   [ELoaiHocPhanDangKyTinChi.HOC_NGOAI]: 'Học ngoài CTĐT',
-  [ELoaiHocPhanDangKyTinChi.TAT_CA]: 'Tất cả học phần',
+  // [ELoaiHocPhanDangKyTinChi.TAT_CA]: 'Tất cả học phần',
 };
 
 export enum EColorLopDangKy {
