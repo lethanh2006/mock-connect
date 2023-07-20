@@ -15,8 +15,11 @@ import ViewGhiChuDangKyTinChi from './ViewGhiChuDangKyTinChi';
 const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
   const { dotDangKyHienTai, hocPhanDangKy, setHocPhanDangKy, loaiHocPhan, setLoaiHocPhan } =
     useModel('daotao.dotdangkytinchi');
+  const { record: recHocKy } = useModel('daotao.hocky');
   const [danhSachHocPhan, setDanhSachHocPhan] = useState<DangKyTinChi.IHocPhanDangKy[]>([]);
   const { child } = props;
+  const loaiHocPhanDangKy = Object.values(ELoaiHocPhanDangKyTinChi);
+  if (!recHocKy?.isToChucDangKyNhuCau) loaiHocPhanDangKy.splice(0, 1); // Nếu học kỳ không đăng ký nhu cầu thì bỏ loại Nhu cầu đi
 
   /**
    * Lấy danh sách học phần tương ứng với loại học phần truyền vào
@@ -24,11 +27,13 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
    * @returns
    */
   const getDanhSach = (loai: ELoaiHocPhanDangKyTinChi) =>
-    loai === ELoaiHocPhanDangKyTinChi.TAT_CA
-      ? danhSachHocPhan
-      : loai === ELoaiHocPhanDangKyTinChi.NHU_CAU
+    loai === ELoaiHocPhanDangKyTinChi.NHU_CAU
       ? danhSachHocPhan?.filter((item) => item.nhuCau)
       : danhSachHocPhan?.filter((item) => item.loai === loai);
+
+  useEffect(() => {
+    setLoaiHocPhan(loaiHocPhanDangKy[0]);
+  }, [recHocKy?.ma]);
 
   useEffect(() => {
     return () => {
@@ -75,7 +80,7 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
     <>
       <Space size={8} wrap>
         <Select
-          options={Object.values(ELoaiHocPhanDangKyTinChi).map((item) => ({
+          options={loaiHocPhanDangKy.map((item) => ({
             key: item,
             value: item,
             label: LoaiHocPhanDangKyTinChi?.[item],
