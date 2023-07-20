@@ -83,16 +83,16 @@
 
   // MENU CHUNG
   {
-    name: 'Lich',
-    icon: 'CalendarOutlined',
-    path: '/calendar',
-    component: './Calendar',
-  },
-  {
     name: 'ThongTinCaNhan',
     icon: 'user',
     path: '/thong-tin-ca-nhan',
     component: './SinhVien',
+  },
+  {
+    name: 'Lich',
+    icon: 'CalendarOutlined',
+    path: '/calendar',
+    component: './Calendar',
   },
 
   // MENU SINH VIEN
@@ -154,9 +154,9 @@
     ],
   },
   {
-    name: 'DichVuMotCua',
+    name: 'DichVuHanhChinh',
     icon: 'AuditOutlined',
-    path: '/dich-vu-mot-cua',
+    path: '/dich-vu-hanh-chinh',
     routes: [
       {
         path: './',

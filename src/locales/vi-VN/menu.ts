@@ -21,10 +21,10 @@ export default {
   'menu.HocTap.LopHanhChinh': 'Lớp hành chính',
   'menu.HocTap.LopHocPhan': 'Lớp học phần',
   'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
-  'menu.DichVuMotCua': 'Dịch vụ một cửa',
   'menu.CongNo': 'Công nợ',
 
-  'menu.DichVuMotCua.TaoDon': 'Tạo đơn - Dịch vụ một cửa',
+  'menu.DichVuHanhChinh': 'Dịch vụ hành chính',
+  'menu.DichVuHanhChinh.TaoDon': 'Tạo đơn - Dịch vụ hành chính',
   'menu.PhanHoi': 'Phản hồi',
   'menu.KhaoSatTrucTuyen': 'Khảo sát',
   'menu.VanBanHuongDan': 'Văn bản hướng dẫn',
