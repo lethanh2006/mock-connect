@@ -29,30 +29,38 @@ const PhieuDangKy = () => {
     setVisibleRegister,
     getPhieuDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
-  const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => {
-    return item.soTinChi;
-  });
+  const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => item.soTinChi);
   const tongTinChiChuaDk = _.sumBy(
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
     (item) => item.soTinChi,
   );
+  // Đang trong thời gian đăng ký tín chỉ => Được phép đăng ký, xóa đăng ký
+  const dangTrongThoiGian =
+    dotDangKyHienTai?.thoiGianBatDau &&
+    dotDangKyHienTai?.thoiGianKetThuc &&
+    moment().isSameOrAfter(dotDangKyHienTai?.thoiGianBatDau) &&
+    moment().isSameOrBefore(dotDangKyHienTai?.thoiGianKetThuc);
 
   useEffect(() => {
     if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
   }, [dotDangKyHienTai?._id]);
 
   const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
-    if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
+    try {
       // Nếu đã đăng ký rồi thì gọi API để xóa lớp
-      await deleteDangKyTinChiModel({
-        phieuDktcId: phieuDangKy?._id ?? '',
-        lopHocPhanId: rec._id ?? '',
-      });
+      if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
+        await deleteDangKyTinChiModel({
+          phieuDktcId: phieuDangKy?._id ?? '',
+          lopHocPhanId: rec._id ?? '',
+        });
 
-    // Xóa lớp ở danh sách tại local
-    const data = danhSachLopDangKy.filter((item) => item._id !== rec._id);
-    tinhDataLichHoc(data); // Tính lại dữ liệu lịch học
-    setDanhSachLopDangKy(data);
+      // Xóa lớp ở danh sách tại local
+      const data = danhSachLopDangKy.filter((item) => item._id !== rec._id);
+      tinhDataLichHoc(data); // Tính lại dữ liệu lịch học
+      setDanhSachLopDangKy(data);
+    } catch (er) {
+      console.log(er);
+    }
   };
 
   const columns: IColumn<DangKyTinChi.ILopDangKy>[] = [
@@ -109,6 +117,7 @@ const PhieuDangKy = () => {
     {
       title: 'Học phí',
       width: 120,
+      hide: !dangTrongThoiGian,
     },
     {
       title: 'Loại ĐK',
@@ -144,6 +153,7 @@ const PhieuDangKy = () => {
           <Button icon={<DeleteOutlined />} danger type="link" />
         </Popconfirm>
       ),
+      hide: !dangTrongThoiGian,
     },
   ];
 
@@ -157,15 +167,19 @@ const PhieuDangKy = () => {
             {tongTinChi} tín
           </b>
         </Col>
-        <Col span={24} md={8}>
-          Học phí dự kiến: <b>- đ</b>
-        </Col>
-        <Col span={24} md={8}>
-          <div className="fw500" style={{ color: 'red', textAlign: 'right' }}>
-            Bạn được đăng ký trong khoảng tín chỉ:{' '}
-            {[phieuDangKy?.soTinChiToiThieu, phieuDangKy?.soTinChiToiDa].join(' - ')}
-          </div>
-        </Col>
+        {dangTrongThoiGian ? (
+          <>
+            <Col span={24} md={8}>
+              Học phí dự kiến: <b>- đ</b>
+            </Col>
+            <Col span={24} md={8}>
+              <div className="fw500" style={{ color: 'red', textAlign: 'right' }}>
+                Bạn được đăng ký trong khoảng tín chỉ:{' '}
+                {[phieuDangKy?.soTinChiToiThieu, phieuDangKy?.soTinChiToiDa].join(' - ')}
+              </div>
+            </Col>
+          </>
+        ) : null}
       </Row>
 
       <TableStaticData columns={columns} data={danhSachLopDangKy} addStt loading={loading} hasTotal>
@@ -176,10 +190,7 @@ const PhieuDangKy = () => {
             </Button>
           ) : null}
 
-          {dotDangKyHienTai &&
-          moment().isSameOrAfter(dotDangKyHienTai.thoiGianBatDau) &&
-          moment().isSameOrBefore(dotDangKyHienTai.thoiGianKetThuc) &&
-          tongTinChiChuaDk ? (
+          {dangTrongThoiGian && tongTinChiChuaDk ? (
             <Tooltip
               title={
                 tongTinChi > (phieuDangKy?.soTinChiToiDa ?? 0)
