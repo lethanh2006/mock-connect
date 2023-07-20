@@ -1,4 +1,4 @@
-import type { IRecordHocPhan } from '@/services/HocTap/HocPhanCoDiem/typing';
+import type { IRecordHocPhan } from '@/services/DVMC/HocPhanCoDiem/typing';
 import rules from '@/utils/rules';
 import { includes } from '@/utils/utils';
 import { Col, Form, Row, Select } from 'antd';

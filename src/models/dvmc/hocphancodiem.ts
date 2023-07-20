@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { selectHocKy, selectHocPhan } from '@/services/HocTap/HocPhanCoDiem/hocphancodiem';
+import { selectHocKy, selectHocPhan } from '@/services/DVMC/HocPhanCoDiem/hocphancodiem';
 
 export default () => {
   const [dsKyHoc, setDsKyHoc] = useState<any[]>([]);
