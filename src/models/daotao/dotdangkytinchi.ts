@@ -1,6 +1,7 @@
 import {
   deleteDangKyTinChi,
   getDotAvailable,
+  getLopDangKy,
   getPhieuDangKy,
   postDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi';
@@ -87,8 +88,37 @@ export default () => {
       const phieu: DangKyTinChi.IPhieuDangKy = res.data?.data;
       setPhieuDangKy(phieu);
 
+      // const lopDangKy =
+      //   phieu.lopHpSvList?.map((item) => ({
+      //     ...item.lopHocPhan,
+      //     _id: item.lopHocPhanId,
+      //     soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
+      //     loai: item.loai,
+      //     trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
+      //   })) ?? [];
+      // setDanhSachLopDangKy(lopDangKy);
+      // tinhDataLichHoc(lopDangKy);
+
+      return phieu;
+    } catch (er) {
+      setPhieuDangKy(undefined);
+      // setDanhSachLopDangKy([]);
+      // setDataLichHoc({});
+      return Promise.reject(er);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getLopDangKyModel = async (maHocKy: string): Promise<DangKyTinChi.ILopDangKy[]> => {
+    if (!maHocKy) return Promise.reject('Invalid maHocKy');
+    setLoading(true);
+    try {
+      const res = await getLopDangKy(maHocKy);
+      const lop: LopHocPhan.IRecordSinhVienLopHP[] = res.data?.data ?? [];
+
       const lopDangKy =
-        phieu.lopHpSvList?.map((item) => ({
+        lop?.map((item) => ({
           ...item.lopHocPhan,
           _id: item.lopHocPhanId,
           soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
@@ -98,9 +128,8 @@ export default () => {
       setDanhSachLopDangKy(lopDangKy);
       tinhDataLichHoc(lopDangKy);
 
-      return phieu;
+      return lopDangKy;
     } catch (er) {
-      setPhieuDangKy(undefined);
       setDanhSachLopDangKy([]);
       setDataLichHoc({});
       return Promise.reject(er);
@@ -152,6 +181,7 @@ export default () => {
     phieuDangKy,
     setPhieuDangKy,
     getPhieuDangKyModel,
+    getLopDangKyModel,
     postDangKyTinChiModel,
     deleteDangKyTinChiModel,
     danhSachLopDangKy,

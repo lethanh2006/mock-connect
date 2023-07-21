@@ -20,7 +20,6 @@ const DangKyTinChiPage = () => {
           ) : (
             <Empty description={<i style={{ color: '#999' }}>Không trong thời gian đăng ký !</i>} />
           )}
-          <PhieuDangKy />
         </>
       ) : (
         <Empty
@@ -29,6 +28,7 @@ const DangKyTinChiPage = () => {
           }
         />
       )}
+      <PhieuDangKy />
     </Card>
   );
 };

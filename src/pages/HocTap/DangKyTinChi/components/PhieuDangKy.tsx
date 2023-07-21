@@ -17,6 +17,7 @@ import ModalLichHoc from './ModalLichHoc';
 import { useEffect } from 'react';
 
 const PhieuDangKy = () => {
+  const { record: recHocKy } = useModel('daotao.hocky');
   const {
     dotDangKyHienTai,
     phieuDangKy,
@@ -28,6 +29,7 @@ const PhieuDangKy = () => {
     setVisibleModal,
     setVisibleRegister,
     getPhieuDangKyModel,
+    getLopDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
   const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => item.soTinChi);
   const tongTinChiChuaDk = _.sumBy(
@@ -44,6 +46,10 @@ const PhieuDangKy = () => {
   useEffect(() => {
     if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
   }, [dotDangKyHienTai?._id]);
+
+  useEffect(() => {
+    if (recHocKy?.ma) getLopDangKyModel(recHocKy.ma);
+  }, [recHocKy?.ma]);
 
   const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
     try {

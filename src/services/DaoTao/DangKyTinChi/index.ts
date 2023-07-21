@@ -9,6 +9,10 @@ export async function getPhieuDangKy(idDotDangKyTinChi: string) {
   return axios.get(`${ipDaoTao}/dang-ky-tin-chi/phieu-dang-ky/dot/${idDotDangKyTinChi}`);
 }
 
+export async function getLopDangKy(maHocKy: string) {
+  return axios.get(`${ipDaoTao}/dang-ky-tin-chi/lop-dang-ky/hoc-ky/${maHocKy}`);
+}
+
 export async function postDangKyTinChi(data: {
   dangKy: { lopHocPhanId: string };
   phieuDktcId: string;
