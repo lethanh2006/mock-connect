@@ -38,24 +38,14 @@ declare module DangKyTinChi {
   }
 
   export interface IHocPhanDangKy {
-    // idHocPhan: string; // '6492ade44d774dc26787ad24';
-    // maMonHoc: string; // 'DHBC03';
-    // tenMonHoc: string; // 'Kịch bản truyền thông';
-    // trangThaiDangKy: string; // 'Được phép đăng ký';
-
     _id: string;
     maHocKy: string;
     hocVienSsoId?: string;
     maHocPhan: string;
-    hocPhan?: HocPhan.IRecord;
+    hocPhan?: Partial<HocPhan.IRecord>;
     nhuCau: boolean;
     maMonTienQuyetChuaHoanThanh?: string;
-    monTienQuyetChuaHoanThanh?: HocPhan.IRecord;
+    monTienQuyetChuaHoanThanh?: Partial<HocPhan.IRecord>;
     loai: ELoaiHocPhanDangKyTinChi;
   }
-
-  // export interface IThongTinHocPhan extends Record<ELoaiHocPhanDangKyTinChi, IHocPhanDangKy[]> {
-  //   kyTruoc: IHocPhanDangKy[];
-  //   mien: IHocPhanDangKy[];
-  // }
 }

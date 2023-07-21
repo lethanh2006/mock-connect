@@ -5,7 +5,8 @@ export enum ELoaiHocPhanDangKyTinChi {
   HOC_VUOT = 'HocVuot',
   CAI_THIEN = 'HocCaiThien',
   // NGANH_2 = 'kyTruoc',
-  HOC_NGOAI = 'ChuaTheoTienTrinh',
+  CHUA_THEO_TIEN_TRINH = 'ChuaTheoTienTrinh',
+  HOC_NGOAI = 'HocNgoai',
   // TAT_CA = 'TatCa',
 }
 
@@ -16,6 +17,7 @@ export const LoaiHocPhanDangKyTinChi = {
   [ELoaiHocPhanDangKyTinChi.HOC_VUOT]: 'Học vượt',
   [ELoaiHocPhanDangKyTinChi.CAI_THIEN]: 'Học cải thiện',
   // [ELoaiHocPhanDangKyTinChi.NGANH_2]: 'Học ngành 2',
+  [ELoaiHocPhanDangKyTinChi.CHUA_THEO_TIEN_TRINH]: 'Chưa theo tiến trình',
   [ELoaiHocPhanDangKyTinChi.HOC_NGOAI]: 'Học ngoài CTĐT',
   // [ELoaiHocPhanDangKyTinChi.TAT_CA]: 'Tất cả học phần',
 };

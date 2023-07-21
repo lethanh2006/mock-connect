@@ -16,13 +16,9 @@ import FilterHocPhanDKTC from './FilterHocPhan';
 const DangKyLopHocPhan = () => {
   const { record: recHocKy } = useModel('daotao.hocky');
   const { page, limit, danhSach, getModel } = useModel('daotao.lophocphan');
-  const {
-    danhSachLopDangKy,
-    hocPhanDangKy,
-    setDanhSachLopDangKy,
-    tinhDataLichHoc,
-    checkTrungLich,
-  } = useModel('daotao.dotdangkytinchi');
+  const { danhSachLopDangKy, setDanhSachLopDangKy, tinhDataLichHoc, checkTrungLich } =
+    useModel('daotao.dotdangkytinchi');
+  const { record: hocPhanDangKy } = useModel('daotao.hocphandangkytinchi');
   const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
   const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
   // Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
