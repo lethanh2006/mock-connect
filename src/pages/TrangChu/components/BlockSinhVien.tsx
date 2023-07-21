@@ -147,7 +147,7 @@ const BlockSinhVien = () => {
       </Col>
       <Col xs={24} md={12} xl={6}>
         <Card
-          onClick={() => history.push('/dich-vu-mot-cua')}
+          onClick={() => history.push('/dich-vu-hanh-chinh')}
           style={{ cursor: 'pointer', height: '100%' }}
         >
           <Statistic

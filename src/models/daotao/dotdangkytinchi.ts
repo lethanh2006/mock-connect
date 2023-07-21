@@ -1,13 +1,11 @@
 import {
   deleteDangKyTinChi,
   getDotAvailable,
+  getLopDangKy,
   getPhieuDangKy,
   postDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi';
-import {
-  ELoaiHocPhanDangKyTinChi,
-  ETrangThaiDangKyTinChi,
-} from '@/services/DaoTao/DangKyTinChi/constant';
+import { ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
@@ -23,10 +21,6 @@ export default () => {
   const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký tín chỉ hiện tại trong kỳ, back trả về
   const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký tín chỉ trong học kỳ, back tự tính
   const [danhSachLopDangKy, setDanhSachLopDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp hp đăng ký, bao gồm cả các lớp mới thêm
-  const [loaiHocPhan, setLoaiHocPhan] = useState<ELoaiHocPhanDangKyTinChi>(
-    ELoaiHocPhanDangKyTinChi.NHU_CAU,
-  ); // Loại học phần đang chọn
-  const [hocPhanDangKy, setHocPhanDangKy] = useState<DangKyTinChi.IHocPhanDangKy>(); // Học phần đang chọn
   // Dữ liệu lịch học cho các lớp đang đăng ký hiện tại
   // Dưới dạng { "DDMMYY": [true, true, false, false, true, true]...}
   // Mỗi ngày tương ứng với mảng các tiết học trong ngày đó: true => Có lớp học trong tiết tương ứng
@@ -94,8 +88,37 @@ export default () => {
       const phieu: DangKyTinChi.IPhieuDangKy = res.data?.data;
       setPhieuDangKy(phieu);
 
+      // const lopDangKy =
+      //   phieu.lopHpSvList?.map((item) => ({
+      //     ...item.lopHocPhan,
+      //     _id: item.lopHocPhanId,
+      //     soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
+      //     loai: item.loai,
+      //     trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
+      //   })) ?? [];
+      // setDanhSachLopDangKy(lopDangKy);
+      // tinhDataLichHoc(lopDangKy);
+
+      return phieu;
+    } catch (er) {
+      setPhieuDangKy(undefined);
+      // setDanhSachLopDangKy([]);
+      // setDataLichHoc({});
+      return Promise.reject(er);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getLopDangKyModel = async (maHocKy: string): Promise<DangKyTinChi.ILopDangKy[]> => {
+    if (!maHocKy) return Promise.reject('Invalid maHocKy');
+    setLoading(true);
+    try {
+      const res = await getLopDangKy(maHocKy);
+      const lop: LopHocPhan.IRecordSinhVienLopHP[] = res.data?.data ?? [];
+
       const lopDangKy =
-        phieu.lopHpSvList?.map((item) => ({
+        lop?.map((item) => ({
           ...item.lopHocPhan,
           _id: item.lopHocPhanId,
           soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
@@ -105,9 +128,8 @@ export default () => {
       setDanhSachLopDangKy(lopDangKy);
       tinhDataLichHoc(lopDangKy);
 
-      return phieu;
+      return lopDangKy;
     } catch (er) {
-      setPhieuDangKy(undefined);
       setDanhSachLopDangKy([]);
       setDataLichHoc({});
       return Promise.reject(er);
@@ -159,14 +181,11 @@ export default () => {
     phieuDangKy,
     setPhieuDangKy,
     getPhieuDangKyModel,
+    getLopDangKyModel,
     postDangKyTinChiModel,
     deleteDangKyTinChiModel,
     danhSachLopDangKy,
     setDanhSachLopDangKy,
-    loaiHocPhan,
-    setLoaiHocPhan,
-    hocPhanDangKy,
-    setHocPhanDangKy,
     dataLichHoc,
     tinhDataLichHoc,
     checkTrungLich,
