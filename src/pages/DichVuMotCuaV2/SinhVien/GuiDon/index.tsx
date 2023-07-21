@@ -63,7 +63,7 @@ const GuiDon = () => {
         <Tooltip title="Sử dụng dịch vụ">
           <Button
             onClick={() => {
-              history.push(`/dich-vu-mot-cua/tao-don/${recordBieuMau?._id}`);
+              history.push(`/dich-vu-hanh-chinh/tao-don/${recordBieuMau?._id}`);
             }}
             shape="circle"
             type="primary"
@@ -89,7 +89,7 @@ const GuiDon = () => {
         otherButtons={[
           <Button
             icon={<ArrowLeftOutlined />}
-            onClick={() => history.push('/dich-vu-mot-cua')}
+            onClick={() => history.push('/dich-vu-hanh-chinh')}
             key={1}
           >
             Lịch sử gửi đơn
