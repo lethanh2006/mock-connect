@@ -6,7 +6,7 @@ export enum ELoaiHocPhanDangKyTinChi {
   CAI_THIEN = 'HocCaiThien',
   // NGANH_2 = 'kyTruoc',
   CHUA_THEO_TIEN_TRINH = 'ChuaTheoTienTrinh',
-  HOC_NGOAI = 'HocNgoai',
+  HOC_NGOAI = 'NgoaiChuongTrinh',
   // TAT_CA = 'TatCa',
 }
 

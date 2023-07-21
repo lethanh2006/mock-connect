@@ -32,12 +32,7 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
     dotDangKyHienTai?._id &&
     loaiHocPhan &&
     getModel(
-      {
-        loai:
-          loaiHocPhan === ELoaiHocPhanDangKyTinChi.HOC_NGOAI
-            ? ELoaiHocPhanDangKyTinChi.CHUA_THEO_TIEN_TRINH
-            : loaiHocPhan,
-      },
+      { loai: loaiHocPhan },
       undefined,
       undefined,
       undefined,
