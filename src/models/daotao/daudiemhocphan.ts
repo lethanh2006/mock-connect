@@ -7,7 +7,6 @@ export default () => {
     undefined,
     undefined,
     ipDaoTao,
-    { order: 1 },
   );
 
   return {
