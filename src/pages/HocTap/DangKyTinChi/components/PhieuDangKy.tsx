@@ -31,7 +31,13 @@ const PhieuDangKy = () => {
     getPhieuDangKyModel,
     getLopDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
-  const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => item.soTinChi);
+  const tongTinChi = _.sumBy(
+    danhSachLopDangKy.filter(
+      // Nếu có cả lớp chính và lớp thực hành thì chỉ tính lớp chính
+      (item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY || !item.tenCha,
+    ),
+    (item) => item.soTinChi,
+  );
   const tongTinChiChuaDk = _.sumBy(
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
     (item) => item.soTinChi,

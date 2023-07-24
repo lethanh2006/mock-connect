@@ -17,6 +17,7 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
   const {
     record: hocPhanDangKy,
     setRecord: setHocPhanDangKy,
+    setDanhSach,
     loaiHocPhan,
     setLoaiHocPhan,
     page,
@@ -48,6 +49,7 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
 
   useEffect(() => {
     return () => {
+      setDanhSach([]);
       setHocPhanDangKy(undefined);
       setLoaiHocPhan(undefined);
     };
