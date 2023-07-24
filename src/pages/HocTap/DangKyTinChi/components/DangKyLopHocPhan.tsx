@@ -4,6 +4,7 @@ import {
   EColorLopDangKy,
   ELoaiHocPhanDangKyTinChi,
   ETrangThaiDangKyTinChi,
+  ETrangThaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
@@ -193,7 +194,7 @@ const DangKyLopHocPhan = () => {
       child={() => (
         <>
           {hocPhanDangKy?.maHocPhan ? (
-            !hocPhanDangKy.maMonTienQuyetChuaHoanThanh ? (
+            hocPhanDangKy.trangThai === ETrangThaiHocPhanDangKyTinChi.DUOC_DK ? (
               <div className="table-dang-ky">
                 <TableBase
                   columns={columns}
@@ -225,9 +226,21 @@ const DangKyLopHocPhan = () => {
                       Bạn không đủ điều kiện để đăng ký học phần này !
                     </i>
                     <br />
-                    Bạn chưa hoàn thành học phần tiên quyết{' '}
-                    {`"${hocPhanDangKy.maMonTienQuyetChuaHoanThanh} - 
-                ${hocPhanDangKy.monTienQuyetChuaHoanThanh?.ten}"`}
+                    {hocPhanDangKy.trangThai === ETrangThaiHocPhanDangKyTinChi.MIEN
+                      ? 'Học phần được miễn'
+                      : hocPhanDangKy.trangThai}
+                    {hocPhanDangKy.hpTienQuyet ? (
+                      <div>
+                        Học phần tiên quyết: {hocPhanDangKy.hpTienQuyet?.ten ?? ''} -{' '}
+                        {hocPhanDangKy.hpTienQuyet?.ma ?? ''}
+                      </div>
+                    ) : null}
+                    {hocPhanDangKy.hpHocTruoc ? (
+                      <div>
+                        Học phần trước: {hocPhanDangKy.hpHocTruoc?.ten ?? ''} -{' '}
+                        {hocPhanDangKy.hpHocTruoc?.ma ?? ''}
+                      </div>
+                    ) : null}
                   </>
                 }
                 style={{ marginTop: 30, marginBottom: 30 }}

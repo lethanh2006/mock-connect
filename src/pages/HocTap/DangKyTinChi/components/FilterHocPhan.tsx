@@ -2,6 +2,7 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import {
   ELoaiHocPhanDangKyTinChi,
+  ETrangThaiHocPhanDangKyTinChi,
   LoaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
@@ -58,6 +59,7 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
       cursor: 'pointer',
       fontWeight: rec.maHocPhan === hocPhanDangKy?.maHocPhan ? 600 : undefined,
       backgroundColor: rec.maHocPhan === hocPhanDangKy?.maHocPhan ? '#f0f0f0' : undefined,
+      color: rec.trangThai !== ETrangThaiHocPhanDangKyTinChi.DUOC_DK ? '#cc0101' : undefined,
     },
   });
 
