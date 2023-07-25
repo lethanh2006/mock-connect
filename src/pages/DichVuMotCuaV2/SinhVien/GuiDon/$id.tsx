@@ -3,10 +3,11 @@ import ThanhToan from '@/pages/CongNo/ThanhToan';
 import DanhMuc from '@/pages/DichVuMotCuaV2/components/DanhMuc';
 import FormBieuMau from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import { PlusOutlined } from '@ant-design/icons';
+import {ArrowLeftOutlined, PlusOutlined} from '@ant-design/icons';
 import { Button, Card, Modal } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
+import {history} from "@@/core/history";
 
 const SinhVienTaoDon = ({
   match: {
@@ -46,6 +47,13 @@ const SinhVienTaoDon = ({
   }, []);
   return (
     <Card>
+      <Button
+        icon={<ArrowLeftOutlined />}
+        onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}
+        key={1}
+      >
+        Danh sách đơn
+      </Button>
       <Modal
         destroyOnClose
         onCancel={() => {

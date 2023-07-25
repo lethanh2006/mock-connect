@@ -59,6 +59,7 @@ export default () => {
     });
     setDanhSach(response?.data?.data ?? []);
     setRecord(response?.data?.data?.[0]);
+    setTotal(response?.data?.data?.length??0)
     setLoading(false);
     return response?.data?.data ?? [];
   };
