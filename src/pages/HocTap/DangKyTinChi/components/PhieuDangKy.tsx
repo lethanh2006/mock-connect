@@ -42,7 +42,7 @@ const PhieuDangKy = () => {
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
     (item) => item.soTinChi,
   );
-  // Đang trong thời gian đăng ký tín chỉ => Được phép đăng ký, xóa đăng ký
+  // Đang trong thời gian đăng ký học phần => Được phép đăng ký, xóa đăng ký
   const dangTrongThoiGian =
     dotDangKyHienTai?.thoiGianBatDau &&
     dotDangKyHienTai?.thoiGianKetThuc &&

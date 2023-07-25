@@ -15,7 +15,7 @@ const ViewDetailHocKy = () => {
       </Descriptions.Item>
       {dotDangKyHienTai ? (
         <>
-          <Descriptions.Item label="Tên đợt đăng ký tín chỉ">
+          <Descriptions.Item label="Tên đợt đăng ký học phần">
             {dotDangKyHienTai.ten}
           </Descriptions.Item>
         </>

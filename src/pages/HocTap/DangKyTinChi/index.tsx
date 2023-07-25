@@ -10,7 +10,7 @@ const DangKyTinChiPage = () => {
   const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
 
   return (
-    <Card title="Đăng ký tín chỉ">
+    <Card title="Đăng ký học phần">
       <FilterDotDangKy />
       {dotDangKyHienTai ? (
         <>
@@ -24,7 +24,7 @@ const DangKyTinChiPage = () => {
       ) : (
         <Empty
           description={
-            <i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này !</i>
+            <i style={{ color: '#999' }}>Không có đợt đăng ký học phần trong học kỳ này !</i>
           }
         />
       )}
