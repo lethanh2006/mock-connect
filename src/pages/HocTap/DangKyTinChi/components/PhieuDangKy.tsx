@@ -31,13 +31,17 @@ const PhieuDangKy = () => {
     getPhieuDangKyModel,
     getLopDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
-  const tongTinChi = _.sumBy(
-    danhSachLopDangKy.filter(
-      // Nếu có cả lớp chính và lớp thực hành thì chỉ tính lớp chính
-      (item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY || !item.tenCha,
-    ),
-    (item) => item.soTinChi,
+  const hocPhanCoLopThucHanh = danhSachLopDangKy
+    .filter((item) => !!item.tenCha)
+    .map((item) => item.maHocPhan);
+  // Nếu có cả lớp chính và lớp thực hành thì chỉ hiện lớp thực hành
+  const danhSachLopHienThi = danhSachLopDangKy.filter(
+    (item) =>
+      item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY ||
+      !hocPhanCoLopThucHanh.includes(item.maHocPhan) ||
+      !!item.tenCha,
   );
+  const tongTinChi = _.sumBy(danhSachLopHienThi, (item) => item.soTinChi);
   const tongTinChiChuaDk = _.sumBy(
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
     (item) => item.soTinChi,
@@ -67,7 +71,7 @@ const PhieuDangKy = () => {
         });
 
       // Xóa lớp ở danh sách tại local
-      const data = danhSachLopDangKy.filter((item) => item._id !== rec._id);
+      const data = danhSachLopDangKy.filter((item) => item.maHocPhan !== rec.maHocPhan);
       tinhDataLichHoc(data); // Tính lại dữ liệu lịch học
       setDanhSachLopDangKy(data);
     } catch (er) {
@@ -79,6 +83,7 @@ const PhieuDangKy = () => {
     {
       title: 'Mã học phần',
       dataIndex: 'maHocPhan',
+      align: 'center',
       width: 100,
       filterType: 'string',
     },
@@ -89,17 +94,23 @@ const PhieuDangKy = () => {
       filterType: 'string',
     },
     {
+      title: 'TT lớp',
+      dataIndex: 'soThuTuLop',
+      align: 'center',
+      width: 60,
+    },
+    {
+      title: 'TT nhóm',
+      dataIndex: 'soThuTuNhom',
+      align: 'center',
+      width: 60,
+    },
+    {
       title: 'Số TC',
       dataIndex: 'soTinChi',
       width: 60,
       align: 'center',
       sortable: true,
-    },
-    {
-      title: 'Lớp học phần',
-      dataIndex: 'ten',
-      width: 150,
-      filterType: 'string',
     },
     {
       title: 'Lịch học & giảng viên',
@@ -194,7 +205,13 @@ const PhieuDangKy = () => {
         ) : null}
       </Row>
 
-      <TableStaticData columns={columns} data={danhSachLopDangKy} addStt loading={loading} hasTotal>
+      <TableStaticData
+        columns={columns}
+        data={danhSachLopHienThi}
+        addStt
+        loading={loading}
+        hasTotal
+      >
         <Space wrap>
           {danhSachLopDangKy.length ? (
             <Button icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
@@ -223,7 +240,7 @@ const PhieuDangKy = () => {
         </Space>
       </TableStaticData>
 
-      <ModalLichHoc />
+      <ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
 
       <ModalDangKy tongTinChi={tongTinChi} />
     </>
