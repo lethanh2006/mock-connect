@@ -207,6 +207,7 @@ const DangKyLopHocPhan = () => {
                   addStt={false}
                   rowSelection
                   detailRow={rowSelection}
+                  scroll={{ y: 600 }}
                   otherProps={{
                     rowKey: 'ten',
                     expandable: {

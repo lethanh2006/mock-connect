@@ -20,6 +20,7 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
     danhSachLopDangKy,
     postDangKyTinChiModel,
     getPhieuDangKyModel,
+    getLopDangKyModel,
     phieuDangKy,
     loading,
     dotDangKyHienTai,
@@ -62,7 +63,10 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
       .then()
       .finally(() => {
         message.success('Đã hoàn thành đăng ký');
-        if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
+        if (dotDangKyHienTai?._id) {
+          getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
+          getLopDangKyModel(dotDangKyHienTai.maHocKy);
+        }
         setFormSubmiting(false);
       });
   };
