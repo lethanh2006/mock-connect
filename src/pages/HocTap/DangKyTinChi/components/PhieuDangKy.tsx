@@ -31,16 +31,25 @@ const PhieuDangKy = () => {
     getPhieuDangKyModel,
     getLopDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
+  // Danh sách học phần đã đăng ký có cả lớp Chính và lớp thực hành
   const hocPhanCoLopThucHanh = danhSachLopDangKy
-    .filter((item) => !!item.tenCha)
+    .filter((item) => !!item.tenCha && item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
     .map((item) => item.maHocPhan);
   // Nếu có cả lớp chính và lớp thực hành thì chỉ hiện lớp thực hành
-  const danhSachLopHienThi = danhSachLopDangKy.filter(
-    (item) =>
-      item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY ||
-      !hocPhanCoLopThucHanh.includes(item.maHocPhan) ||
-      !!item.tenCha,
-  );
+  const danhSachLopHienThi = danhSachLopDangKy
+    .filter((item) => !hocPhanCoLopThucHanh.includes(item.maHocPhan) || !!item.tenCha)
+    .map((item) =>
+      hocPhanCoLopThucHanh.includes(item.maHocPhan)
+        ? {
+            ...item,
+            // Gộp lịch học lớp Chính với lớp hiển thị
+            maHoaLichHoc: danhSachLopDangKy
+              .filter((j) => j.maHocPhan === item.maHocPhan)
+              .map((j) => j.maHoaLichHoc)
+              .flat(),
+          }
+        : item,
+    );
   const tongTinChi = _.sumBy(danhSachLopHienThi, (item) => item.soTinChi);
   const tongTinChiChuaDk = _.sumBy(
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
