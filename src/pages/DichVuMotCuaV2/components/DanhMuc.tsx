@@ -32,7 +32,9 @@ const DanhMuc = (props: { button: any }) => {
           </Descriptions.Item>
           <Descriptions.Item label="Lĩnh vực">{record?.thongTinThuTuc?.linhVuc}</Descriptions.Item>
           <Descriptions.Item label="Đơn vị thực hiện">
-            {record?.thongTinThuTuc?.donViThucHien}
+            <div dangerouslySetInnerHTML={{__html:record?.thongTinThuTuc?.donViThucHien??''}}>
+
+            </div>
           </Descriptions.Item>
           <Descriptions.Item label="Cấp độ">{record?.thongTinThuTuc?.capDo}</Descriptions.Item>
           <Descriptions.Item label="Thời hạn giải quyết">
@@ -47,12 +49,10 @@ const DanhMuc = (props: { button: any }) => {
                 {record?.thongTinThuTuc?.tinhTienTheoSoLuong ? 'Có' : 'Không'}
               </Descriptions.Item>
               <Descriptions.Item label="Mức lệ phí">
-                {/* {recordProduct?.currentPrice?.unitAmount
-                  ? `${currencyFormat(recordProduct?.currentPrice?.unitAmount)} đồng`
-                  : ''} */}
+                 {record?.thongTinThuTuc?.idMucThu}
               </Descriptions.Item>
               <Descriptions.Item label="Đơn vị tính">
-                {/* {recordProduct?.unitLabel ?? ''} */}
+                 {record?.donViTinh ?? 'Đơn'}
               </Descriptions.Item>
             </>
           )}
