@@ -29,7 +29,7 @@ import {
 import moment from 'moment';
 import mm from 'moment-timezone';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useModel, history } from 'umi';
 import HocPhanCoDiem from '../HocPhanCoDiem';
 import Table from './TableElement';
 import ThongTinNguoiTaoDon from './ThongTinNguoiTaoDon';
@@ -540,6 +540,10 @@ const FormBieuMau = (props: {
           dichVuId: record?._id,
           traKetQua: props?.record?.thongTinDichVu?.traKetQua,
           daTraKetQua: false,
+        }).then(() => {
+          if (!props?.record?.thongTinDichVu?.thongTinThuTuc?.yeuCauTraPhi) {
+            history.push('/dich-vu-hanh-chinh');
+          }
         });
       }
     }

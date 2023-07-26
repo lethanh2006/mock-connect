@@ -1,6 +1,6 @@
 import ExpandText from '@/components/ExpandText';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import { ArrowLeftOutlined, EditOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, EditOutlined, FormOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
@@ -67,8 +67,8 @@ const GuiDon = () => {
               history.push(`/dich-vu-hanh-chinh/tao-don/${recordBieuMau?._id}`);
             }}
             shape="circle"
-            type="primary"
-            icon={<EditOutlined />}
+            type="link"
+            icon={<FormOutlined  />}
           />
         </Tooltip>
       ),
@@ -88,6 +88,7 @@ const GuiDon = () => {
         dependencies={[condition]}
         otherButtons={[
           <Button
+            type={'primary'}
             icon={<ArrowLeftOutlined />}
             onClick={() => history.push('/dich-vu-hanh-chinh')}
             key={1}
