@@ -47,13 +47,15 @@ const SinhVienTaoDon = ({
   }, []);
   return (
     <Card>
-      <Button
-        icon={<ArrowLeftOutlined />}
-        onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}
-        key={1}
-      >
-        Danh sách đơn
-      </Button>
+      <ArrowLeftOutlined  style={{ color: '#007EB9',fontSize:'24px' }}  onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}/>
+      {/*<Button*/}
+      {/*  type={'primary'}*/}
+      {/*  icon={<ArrowLeftOutlined />}*/}
+      {/*  onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}*/}
+      {/*  key={1}*/}
+      {/*>*/}
+
+      {/*</Button>*/}
       <Modal
         destroyOnClose
         onCancel={() => {
@@ -69,8 +71,8 @@ const SinhVienTaoDon = ({
           infoNguoiTaoDon={infoSinhVien}
           record={
             {
-              thongTinDichVu: { ...record },
-            } as DichVuMotCuaV2.Don
+              thongTinDichVu: {...record},
+            } as unknown as DichVuMotCuaV2.Don
           }
         />
       </Modal>
@@ -81,12 +83,14 @@ const SinhVienTaoDon = ({
           title="Thanh toán (Sinh viên có thể xem lại các thông tin này ở mục 'Đơn đã gửi')"
           destroyOnClose
           onCancel={() => {
+            history.push('/dich-vu-hanh-chinh');
             setVisibleForm(false);
           }}
           footer={
             <Button
               onClick={() => {
                 setVisibleForm(false);
+                history.push('/dich-vu-hanh-chinh');
               }}
             >
               Đóng
