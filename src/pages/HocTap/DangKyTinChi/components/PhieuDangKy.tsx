@@ -146,11 +146,11 @@ const PhieuDangKy = () => {
           <i style={{ color: '#999' }}>Không có thông tin lịch học</i>
         ),
     },
-    {
-      title: 'Học phí',
-      width: 120,
-      hide: !dangTrongThoiGian,
-    },
+    // {
+    //   title: 'Học phí',
+    //   width: 120,
+    //   hide: !dangTrongThoiGian,
+    // },
     {
       title: 'Loại ĐK',
       dataIndex: 'loai',
@@ -201,10 +201,10 @@ const PhieuDangKy = () => {
         </Col>
         {dangTrongThoiGian ? (
           <>
-            <Col span={24} md={8}>
+            {/* <Col span={24} md={8}>
               Học phí dự kiến: <b>- đ</b>
-            </Col>
-            <Col span={24} md={8}>
+            </Col> */}
+            <Col span={24} md={16}>
               <div className="fw500" style={{ color: 'red', textAlign: 'right' }}>
                 Bạn được đăng ký trong khoảng tín chỉ:{' '}
                 {[phieuDangKy?.soTinChiToiThieu, phieuDangKy?.soTinChiToiDa].join(' - ')}
