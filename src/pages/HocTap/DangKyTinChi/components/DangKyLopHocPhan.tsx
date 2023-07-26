@@ -94,9 +94,17 @@ const DangKyLopHocPhan = () => {
         const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
         let soTinChi = lopVuaChon.deCuong?.deCuong?.soTinChi ?? 0;
         // Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
-        if (!soTinChi && lopVuaChon.tenCha) {
+        if (lopVuaChon.tenCha) {
           const lopCha = danhSach.find((item) => item.ten === lopVuaChon.tenCha);
-          soTinChi = lopCha?.deCuong?.deCuong?.soTinChi ?? 0;
+          if (!soTinChi) soTinChi = lopCha?.deCuong?.deCuong?.soTinChi ?? 0;
+          // Thêm cả lớp cha vào để hiển thị lịch học ở lớp đăng ký
+          if (lopCha)
+            temp.splice(0, 0, {
+              ...lopCha,
+              soTinChi,
+              loai: hocPhanDangKy?.nhuCau ? ELoaiHocPhanDangKyTinChi.NHU_CAU : hocPhanDangKy?.loai,
+              trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
+            });
         }
         // Thêm lớp vừa chọn vào danh sách Lớp đăng ký
         // Loại đăng ký theo loại học phần đã chọn

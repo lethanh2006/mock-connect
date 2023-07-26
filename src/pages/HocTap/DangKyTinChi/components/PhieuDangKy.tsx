@@ -31,9 +31,9 @@ const PhieuDangKy = () => {
     getPhieuDangKyModel,
     getLopDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
-  // Danh sách học phần đã đăng ký có cả lớp Chính và lớp thực hành
+  // Danh sách học phần có cả lớp Chính và lớp thực hành
   const hocPhanCoLopThucHanh = danhSachLopDangKy
-    .filter((item) => !!item.tenCha && item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
+    .filter((item) => !!item.tenCha)
     .map((item) => item.maHocPhan);
   // Nếu có cả lớp chính và lớp thực hành thì chỉ hiện lớp thực hành
   const danhSachLopHienThi = danhSachLopDangKy
@@ -43,10 +43,11 @@ const PhieuDangKy = () => {
         ? {
             ...item,
             // Gộp lịch học lớp Chính với lớp hiển thị
-            maHoaLichHoc: danhSachLopDangKy
-              .filter((j) => j.maHocPhan === item.maHocPhan)
-              .map((j) => j.maHoaLichHoc)
-              .flat(),
+            maHoaLichHoc:
+              danhSachLopDangKy
+                ?.filter((j) => j.maHocPhan === item.maHocPhan)
+                ?.map((j) => j.maHoaLichHoc ?? [])
+                ?.flat() ?? [],
           }
         : item,
     );
@@ -251,7 +252,7 @@ const PhieuDangKy = () => {
 
       <ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
 
-      <ModalDangKy tongTinChi={tongTinChi} />
+      <ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
     </>
   );
 };

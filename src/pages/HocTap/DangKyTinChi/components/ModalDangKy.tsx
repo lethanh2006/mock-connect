@@ -12,12 +12,11 @@ import { Button, Card, Modal, Tag, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
-const ModalDangKy = (props: { tongTinChi: number }) => {
+const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.ILopDangKy[] }) => {
   const { tongTinChi } = props;
   const {
     visibleRegister,
     setVisibleRegister,
-    danhSachLopDangKy,
     postDangKyTinChiModel,
     getPhieuDangKyModel,
     getLopDangKyModel,
@@ -75,7 +74,9 @@ const ModalDangKy = (props: { tongTinChi: number }) => {
     // Lấy lại danh sách các lớp học phần mới chọn
     if (visibleRegister)
       setDanhSachDangKy(
-        danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
+        props.danhSachDangKy.filter(
+          (item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY,
+        ),
       );
   }, [visibleRegister]);
 
