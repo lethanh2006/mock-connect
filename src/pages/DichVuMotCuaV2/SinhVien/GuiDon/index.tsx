@@ -75,7 +75,7 @@ const GuiDon = () => {
     },
   ];
   return (
-    <Card title="Gửi đơn Dịch vụ một cửa">
+    <Card title="Gửi đơn Dịch vụ hành chính">
       <TableBase
         modelName={'dvmc.dichvumotcuav2'}
         columns={columns}
