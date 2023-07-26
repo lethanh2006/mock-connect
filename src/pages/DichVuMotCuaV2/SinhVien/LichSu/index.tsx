@@ -324,7 +324,7 @@ const LichSuGuiDon = () => {
       <TableBase
         dataState="danhSachDon"
         widthDrawer={800}
-        title="Dịch vụ một cửa"
+        title="Dịch vụ hành chính"
         modelName="dvmc.dichvumotcuav2"
         columns={columns}
         dependencies={[page, limit, condition]}
