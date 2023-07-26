@@ -1,11 +1,11 @@
 import ExpandText from '@/components/ExpandText';
-import TableBase from '@/components/OldTable';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import type { IColumn } from '@/utils/interfaces';
 import { ArrowLeftOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Card, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
+import TableBase from "@/components/Table";
+import { IColumn } from '@/components/Table/typing';
 
 const GuiDon = () => {
   const { getAllBieuMauModel, setDanhSach, setRecord, loading, setPage, condition } =
@@ -19,32 +19,33 @@ const GuiDon = () => {
       setPage(1);
     };
   }, []);
-
-  const columns: IColumn<DichVuMotCuaV2.BieuMau>[] = [
-    {
-      title: 'STT',
-      dataIndex: 'index',
-      align: 'center',
-      width: 60,
+  const onCell = (recordBieuMau: DichVuMotCuaV2.BieuMau) => ({
+    onClick: () => {
+      history.push(`/dich-vu-hanh-chinh/tao-don/${recordBieuMau?._id}`);
     },
+    style: { cursor: 'pointer' },
+  });
+  const columns: IColumn<DichVuMotCuaV2.BieuMau>[] = [
+
     {
       title: 'Dịch vụ',
       dataIndex: 'ten',
-      search: 'search',
       width: 250,
+      onCell
     },
     {
       title: 'Loại dịch vụ',
       dataIndex: ['thongTinThuTuc', 'yeuCauTraPhi'],
       width: 100,
       align: 'center',
+      onCell,
       render: (val) => (val ? 'Dịch vụ trả phí' : 'Dịch vụ không tính phí'),
     },
     {
       title: 'Mô tả',
       dataIndex: 'moTa',
-      search: 'search',
       width: 250,
+      onCell,
       render: (val) => (
         <ExpandText
           style={{ marginBottom: 0 }}
@@ -80,11 +81,10 @@ const GuiDon = () => {
         columns={columns}
         pageable={false}
         getData={() => {
-          getAllBieuMauModel().then((res) => setTotal(res.length));
+          getAllBieuMauModel();
         }}
-        total={total}
+        buttons={{create:false}}
         hideCard
-        loading={loading}
         dependencies={[condition]}
         otherButtons={[
           <Button
