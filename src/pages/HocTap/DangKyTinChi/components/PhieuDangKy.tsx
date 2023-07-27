@@ -180,7 +180,7 @@ const PhieuDangKy = () => {
       render: (val, rec) => (
         <Popconfirm
           title="Bạn có chắc chắn muốn huỷ đăng ký lớp học phần này?"
-          placement="topLeft"
+          placement="topRight"
           onConfirm={() => onDeleteLop(rec)}
         >
           <Button icon={<DeleteOutlined />} danger type="link" />

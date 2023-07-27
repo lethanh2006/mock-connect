@@ -42,7 +42,8 @@ declare module DangKyTinChi {
 
   export interface IHocPhanDangKy {
     maHocPhan: string;
-    hocPhan?: Partial<HocPhan.IRecord>;
+    tenHocPhan: string;
+    soTinChi: number;
     nhuCau: boolean;
     loai: ELoaiHocPhanDangKyTinChi;
     trangThai: ETrangThaiHocPhanDangKyTinChi;
