@@ -6,7 +6,7 @@ import {
   ETrangThaiDangKyTinChi,
   ETrangThaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
-import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
+import { ELoaiLopHocPhan, ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Empty } from 'antd';
 import { type TableRowSelection } from 'antd/lib/table/interface';
@@ -35,6 +35,7 @@ const DangKyLopHocPhan = () => {
         maHocKy: recHocKy?.ma,
         loai: ELoaiLopHocPhan.CHINH,
         maHocPhan: hocPhanDangKy?.maHocPhan,
+        trangThaiLop: ETrangThaiLopHocPhan.MO,
       },
       undefined,
       { soThuTuLop: 1 },
