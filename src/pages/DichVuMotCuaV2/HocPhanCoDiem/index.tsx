@@ -1,6 +1,5 @@
 import type { IRecordHocPhan } from '@/services/DVMC/HocPhanCoDiem/typing';
 import rules from '@/utils/rules';
-import { includes } from '@/utils/utils';
 import { Col, Form, Row, Select } from 'antd';
 import type { FormInstance } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
@@ -52,15 +51,13 @@ const HocPhanCoDiem = (props: Props) => {
             allowClear
             showSearch
             placeholder="Kỳ học"
-            optionFilterProp="children"
-            filterOption={(value, option) => includes(option?.props.children, value)}
-          >
-            {dsKyHoc?.map((item) => (
-              <Select.Option value={item.id} key={item.ma_ky_nam_hoc}>
-                {item.ma_ky_nam_hoc}
-              </Select.Option>
-            ))}
-          </Select>
+            optionFilterProp="label"
+            options={dsKyHoc?.map((item) => ({
+              key: item.id,
+              value: item.ma_ky_nam_hoc,
+              label: item.ma_ky_nam_hoc,
+            }))}
+          />
         </Form.Item>
       </Col>
 
@@ -97,15 +94,13 @@ const HocPhanCoDiem = (props: Props) => {
             allowClear
             showSearch
             placeholder="Học phần"
-            optionFilterProp="children"
-            filterOption={(value, option) => includes(option?.props.children, value)}
-          >
-            {dsDiemTheoKy?.map((item) => (
-              <Select.Option value={item.id ?? 1} key={item.hoc_phan_id?.[1] ?? ''}>
-                {item.ten_hoc_phan}
-              </Select.Option>
-            ))}
-          </Select>
+            optionFilterProp="label"
+            options={dsDiemTheoKy?.map((item) => ({
+              key: item.hoc_phan_id?.[1],
+              value: item.id ?? 1,
+              label: item.ten_hoc_phan,
+            }))}
+          />
         </Form.Item>
       </Col>
     </Row>
