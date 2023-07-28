@@ -121,13 +121,22 @@ const DangKyLopHocPhan = () => {
       }
     },
 
-    getCheckboxProps: (record) => ({
-      disabled:
-        !!dangKyRoi ||
-        checkTrungLich(record.thoiKhoaBieuList ?? []) ||
-        !!record.children?.length ||
-        record.siSoToiDa - (record.siSo ?? 0) <= 0,
-    }),
+    getCheckboxProps: (record) => {
+      const lopCha = danhSach.find((item) => item.ten === record.tenCha);
+      // Check trùng cả thời khóa biểu của lớp cha
+      const allThoiKhoaBieu = [
+        ...(record.thoiKhoaBieuList ?? []),
+        ...(lopCha?.thoiKhoaBieuList ?? []),
+      ];
+      // Check sĩ số còn trống ở cả lớp cha nữa
+      const siSo =
+        record.siSoToiDa - (record.siSo ?? 0) <= 0 ||
+        (!!lopCha?._id && lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0);
+      return {
+        disabled:
+          !!dangKyRoi || checkTrungLich(allThoiKhoaBieu) || !!record.children?.length || siSo,
+      };
+    },
   };
 
   /**
