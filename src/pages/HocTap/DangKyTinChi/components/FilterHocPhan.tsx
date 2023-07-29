@@ -77,8 +77,8 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
     },
     {
       title: 'Tên học phần',
-      dataIndex: ['hocPhan', 'ten'],
-      width: 150,
+      dataIndex: 'tenHocPhan',
+      width: 170,
       filterType: 'string',
       onCell,
     },

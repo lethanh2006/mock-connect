@@ -8,6 +8,7 @@ import {
 import { ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { message } from 'antd';
 import moment from 'moment';
@@ -118,13 +119,15 @@ export default () => {
       const lop: LopHocPhan.IRecordSinhVienLopHP[] = res.data?.data ?? [];
 
       const lopDangKy =
-        lop?.map((item) => ({
-          ...item.lopHocPhan,
-          _id: item.lopHocPhanId,
-          soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
-          loai: item.loai,
-          trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
-        })) ?? [];
+        lop
+          ?.filter((item) => item.lopHocPhan?.trangThaiLop === ETrangThaiLopHocPhan.MO)
+          ?.map((item) => ({
+            ...item.lopHocPhan,
+            _id: item.lopHocPhanId,
+            soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
+            loai: item.loai,
+            trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
+          })) ?? [];
       setDanhSachLopDangKy(lopDangKy);
       tinhDataLichHoc(lopDangKy);
 

@@ -31,16 +31,26 @@ const PhieuDangKy = () => {
     getPhieuDangKyModel,
     getLopDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
+  // Danh sách học phần có cả lớp Chính và lớp thực hành
   const hocPhanCoLopThucHanh = danhSachLopDangKy
     .filter((item) => !!item.tenCha)
     .map((item) => item.maHocPhan);
   // Nếu có cả lớp chính và lớp thực hành thì chỉ hiện lớp thực hành
-  const danhSachLopHienThi = danhSachLopDangKy.filter(
-    (item) =>
-      item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY ||
-      !hocPhanCoLopThucHanh.includes(item.maHocPhan) ||
-      !!item.tenCha,
-  );
+  const danhSachLopHienThi = danhSachLopDangKy
+    .filter((item) => !hocPhanCoLopThucHanh.includes(item.maHocPhan) || !!item.tenCha)
+    .map((item) =>
+      hocPhanCoLopThucHanh.includes(item.maHocPhan)
+        ? {
+            ...item,
+            // Gộp lịch học lớp Chính với lớp hiển thị
+            maHoaLichHoc:
+              danhSachLopDangKy
+                ?.filter((j) => j.maHocPhan === item.maHocPhan)
+                ?.map((j) => j.maHoaLichHoc ?? [])
+                ?.flat() ?? [],
+          }
+        : item,
+    );
   const tongTinChi = _.sumBy(danhSachLopHienThi, (item) => item.soTinChi);
   const tongTinChiChuaDk = _.sumBy(
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
@@ -137,11 +147,11 @@ const PhieuDangKy = () => {
           <i style={{ color: '#999' }}>Không có thông tin lịch học</i>
         ),
     },
-    {
-      title: 'Học phí',
-      width: 120,
-      hide: !dangTrongThoiGian,
-    },
+    // {
+    //   title: 'Học phí',
+    //   width: 120,
+    //   hide: !dangTrongThoiGian,
+    // },
     {
       title: 'Loại ĐK',
       dataIndex: 'loai',
@@ -170,7 +180,7 @@ const PhieuDangKy = () => {
       render: (val, rec) => (
         <Popconfirm
           title="Bạn có chắc chắn muốn huỷ đăng ký lớp học phần này?"
-          placement="topLeft"
+          placement="topRight"
           onConfirm={() => onDeleteLop(rec)}
         >
           <Button icon={<DeleteOutlined />} danger type="link" />
@@ -192,10 +202,10 @@ const PhieuDangKy = () => {
         </Col>
         {dangTrongThoiGian ? (
           <>
-            <Col span={24} md={8}>
+            {/* <Col span={24} md={8}>
               Học phí dự kiến: <b>- đ</b>
-            </Col>
-            <Col span={24} md={8}>
+            </Col> */}
+            <Col span={24} md={16}>
               <div className="fw500" style={{ color: 'red', textAlign: 'right' }}>
                 Bạn được đăng ký trong khoảng tín chỉ:{' '}
                 {[phieuDangKy?.soTinChiToiThieu, phieuDangKy?.soTinChiToiDa].join(' - ')}
@@ -242,7 +252,7 @@ const PhieuDangKy = () => {
 
       <ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
 
-      <ModalDangKy tongTinChi={tongTinChi} />
+      <ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
     </>
   );
 };

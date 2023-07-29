@@ -6,7 +6,7 @@ import {
   ETrangThaiDangKyTinChi,
   ETrangThaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
-import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
+import { ELoaiLopHocPhan, ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Empty } from 'antd';
 import { type TableRowSelection } from 'antd/lib/table/interface';
@@ -35,6 +35,7 @@ const DangKyLopHocPhan = () => {
         maHocKy: recHocKy?.ma,
         loai: ELoaiLopHocPhan.CHINH,
         maHocPhan: hocPhanDangKy?.maHocPhan,
+        trangThaiLop: ETrangThaiLopHocPhan.MO,
       },
       undefined,
       { soThuTuLop: 1 },
@@ -94,9 +95,17 @@ const DangKyLopHocPhan = () => {
         const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
         let soTinChi = lopVuaChon.deCuong?.deCuong?.soTinChi ?? 0;
         // Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
-        if (!soTinChi && lopVuaChon.tenCha) {
+        if (lopVuaChon.tenCha) {
           const lopCha = danhSach.find((item) => item.ten === lopVuaChon.tenCha);
-          soTinChi = lopCha?.deCuong?.deCuong?.soTinChi ?? 0;
+          if (!soTinChi) soTinChi = lopCha?.deCuong?.deCuong?.soTinChi ?? 0;
+          // Thêm cả lớp cha vào để hiển thị lịch học ở lớp đăng ký
+          if (lopCha)
+            temp.splice(0, 0, {
+              ...lopCha,
+              soTinChi,
+              loai: hocPhanDangKy?.nhuCau ? ELoaiHocPhanDangKyTinChi.NHU_CAU : hocPhanDangKy?.loai,
+              trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
+            });
         }
         // Thêm lớp vừa chọn vào danh sách Lớp đăng ký
         // Loại đăng ký theo loại học phần đã chọn
@@ -112,13 +121,22 @@ const DangKyLopHocPhan = () => {
       }
     },
 
-    getCheckboxProps: (record) => ({
-      disabled:
-        !!dangKyRoi ||
-        checkTrungLich(record.thoiKhoaBieuList ?? []) ||
-        !!record.children?.length ||
-        record.siSoToiDa - (record.siSo ?? 0) <= 0,
-    }),
+    getCheckboxProps: (record) => {
+      const lopCha = danhSach.find((item) => item.ten === record.tenCha);
+      // Check trùng cả thời khóa biểu của lớp cha
+      const allThoiKhoaBieu = [
+        ...(record.thoiKhoaBieuList ?? []),
+        ...(lopCha?.thoiKhoaBieuList ?? []),
+      ];
+      // Check sĩ số còn trống ở cả lớp cha nữa
+      const siSo =
+        record.siSoToiDa - (record.siSo ?? 0) <= 0 ||
+        (!!lopCha?._id && lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0);
+      return {
+        disabled:
+          !!dangKyRoi || checkTrungLich(allThoiKhoaBieu) || !!record.children?.length || siSo,
+      };
+    },
   };
 
   /**

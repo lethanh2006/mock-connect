@@ -23,6 +23,11 @@ export enum ELoaiLopHocPhan {
   DO_AN_TOT_NGHIEP = 'DATN',
 }
 
+export enum ETrangThaiLopHocPhan {
+  MO = 'Mở',
+  DONG = 'Đóng',
+}
+
 export const ETenLoaiLopHocPhan = {
   [ELoaiLopHocPhan.CHINH]: 'Lớp học phần',
   [ELoaiLopHocPhan.LY_THUYET]: 'Lớp lý thuyết',

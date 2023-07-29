@@ -151,10 +151,6 @@ export function chuanHoaTen(ten: any) {
     .join(' ');
 }
 
-export function fixedZero(val: number) {
-  return val * 1 < 10 ? `0${val}` : val;
-}
-
 /**
  * Lấy tên file từ đường dẫn
  * @param {any} url:string Đường dẫn
@@ -210,18 +206,6 @@ export function renderFileList(arr: string[]) {
     })),
   };
 }
-
-export function includes(str1: string, str2: string) {
-  // str1 có chứa str2 ko
-  return Format(str1).includes(Format(str2));
-}
-
-export const toISOString = (date: moment.MomentInput) => {
-  if (date) {
-    return moment(date).startOf('day').toISOString();
-  }
-  return undefined;
-};
 
 export const checkFileSize = (arrFile: any[], fileSize?: number) => {
   let check = true;
@@ -464,8 +448,8 @@ export const uploadMultiFile = async (
  * Clear values of component in Form
  * @param form
  */
-export const resetFieldsForm = (form: any) => {
+export const resetFieldsForm = (form: any, formDefaultValues?: Record<string, any>) => {
   const values = form.getFieldsValue();
   Object.keys(values).map((k) => (values[k] = undefined));
-  form.setFieldsValue(values);
+  form.setFieldsValue({ ...values, ...(formDefaultValues ?? {}) });
 };
