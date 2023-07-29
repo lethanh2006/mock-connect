@@ -131,8 +131,8 @@ export function trim(str: string) {
 }
 
 export function currencyFormat(num?: number) {
-  if (!num) return '';
-  return num?.toFixed(0)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') ?? '';
+  if (!num) return '0';
+  return num?.toFixed(0)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') ?? '0';
 }
 
 export function formatPhoneNumber(num: any) {
