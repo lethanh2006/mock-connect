@@ -17,4 +17,13 @@ declare module DonViHanhChinh {
     xaPhuong?: string;
     soNhaTenDuong?: string;
   }
+  export interface DonViHanhChinhRecord {
+    maPhuongXa?: string;
+    maQuanHuyen?: string;
+    maTinh?: string;
+    soNhaTenDuong?: string;
+    tenPhuongXa?: string;
+    tenQuanHuyen?: string;
+    tenTinh?: string;
+  }
 }
