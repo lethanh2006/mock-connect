@@ -69,6 +69,7 @@ const useInitModel = <T,>(
     path?: string,
     otherQuery?: Record<string, any>,
     isSetDanhSach?: boolean,
+    isAbsolutePath?: boolean,
   ): Promise<T[]> => {
     setLoading(true);
     const payload = {
@@ -87,7 +88,7 @@ const useInitModel = <T,>(
     };
 
     try {
-      const response = await getService(payload, path ?? 'page');
+      const response = await getService(payload, path ?? 'page', isAbsolutePath ?? false);
       const tempData: T[] = response?.data?.data?.result ?? [];
       const tempTotal: number = response?.data?.data?.total ?? 0;
 
