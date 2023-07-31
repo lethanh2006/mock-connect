@@ -22,6 +22,15 @@ export const LoaiHocPhanDangKyTinChi = {
   // [ELoaiHocPhanDangKyTinChi.TAT_CA]: 'Tất cả học phần',
 };
 
+export enum ETrangThaiHocPhanDangKyTinChi {
+  DUOC_DK = 'Được phép đăng ký',
+  NO_TIEN_QUYET = 'Thiếu học phần tiên quyết',
+  NO_HOC_TRUOC = 'Thiếu học phần học trước',
+  NO_TIEN_QUYET_VA_HOC_TRUOC = 'Thiếu học phần tiên quyết và học phần học trước',
+  NO_SONG_HANH = 'Thiếu học phần song hành',
+  MIEN = 'Miễn',
+}
+
 export enum EColorLopDangKy {
   TRUNG_LICH = 'rgba(255, 223, 140, 0.3)',
   FULL_LOP = 'rgba(255, 122, 0, 0.3)',

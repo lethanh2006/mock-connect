@@ -78,7 +78,6 @@ const FormQuyTrinh = (props: {
     record,
     recordDon,
   } = useModel('dvmc.dichvumotcuav2');
-  const { getChuyenVienXuLyDonModel } = useModel('phanquyen');
   const { pathname } = window.location;
   const arrPathName = pathname?.split('/') ?? [];
   const [checkLastStep, setCheckLastStep] = useState<boolean>(false);
@@ -117,9 +116,6 @@ const FormQuyTrinh = (props: {
     isDonThaoTacOBuocCuoi: boolean,
     isDuocPhepXuLyDonThaoTac: boolean,
   ): any => {
-    if (arrPathName?.includes('quanlydondieuphoi')) {
-      getChuyenVienXuLyDonModel(recordDonThaoTac?.idDonVi);
-    }
     setType('handle');
     setRecordDonThaoTac(recordDonThaoTac);
     setVisibleFormBieuMau(true);

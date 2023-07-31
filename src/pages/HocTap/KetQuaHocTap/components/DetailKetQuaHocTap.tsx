@@ -26,9 +26,9 @@ const DetailKetQuaHocTap = (props: {
   return (
     <Spin spinning={loading}>
       <Descriptions>
-        {danhSach.map((item, index) => (
+        {danhSach.map((item) => (
           <Descriptions.Item key={item._id} label={item.ten}>
-            {sinhVienDiem?.[`diemThanhPhan${index + 1}` as keyof LopHocPhan.IRecordSinhVienLopHP]}
+            {sinhVienDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IRecordSinhVienLopHP]}
           </Descriptions.Item>
         ))}
         <Descriptions.Item label="Điểm thi lần 1">{sinhVienDiem?.diemThi1}</Descriptions.Item>

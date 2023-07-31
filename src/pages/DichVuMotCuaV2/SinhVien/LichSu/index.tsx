@@ -1,11 +1,9 @@
 import ExpandText from '@/components/ExpandText';
-import TableBase from '@/components/OldTable';
 import PDFViewer from '@/components/PDFViewer';
 import ThanhToan from '@/pages/CongNo/ThanhToan';
 import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import { TrangThaiDonDVMC } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import type { IColumn } from '@/utils/interfaces';
 import {
   DeleteOutlined,
   EditOutlined,
@@ -24,6 +22,8 @@ import { history, useModel } from 'umi';
 import FormGuiPhanHoi from '../../QuanLyDon/components/FormGuiPhanHoi';
 import FormQuyTrinh from '../../components/FormQuyTrinh';
 import { ip3 } from '@/utils/ip';
+import TableBase from "@/components/Table";
+import { IColumn } from '@/components/Table/typing';
 
 const LichSuGuiDon = () => {
   const {
@@ -140,13 +140,6 @@ const LichSuGuiDon = () => {
 
   const columns: IColumn<DichVuMotCuaV2.Don>[] = [
     {
-      title: 'STT',
-      dataIndex: 'index',
-      align: 'center',
-      width: 60,
-      onCell,
-    },
-    {
       title: 'Loại đơn',
       dataIndex: ['thongTinDichVu', 'ten'],
       width: 180,
@@ -215,8 +208,6 @@ const LichSuGuiDon = () => {
       dataIndex: 'trangThai',
       align: 'center',
       width: 100,
-      search: 'filterString',
-      notRegex: true,
       render: (val: 'OK' | 'NOT_OK' | 'PROCESSING') => (
         <Tag color={val === 'OK' ? 'green' : val === 'NOT_OK' ? 'red' : 'yellow'}>
           {TrangThaiDonDVMC?.[val] ?? 'Chưa cập nhật'}
@@ -245,6 +236,7 @@ const LichSuGuiDon = () => {
               <>
                 <Tooltip title="Xem biểu mẫu và in đơn">
                   <Button
+                    type={'link'}
                     shape="circle"
                     onClick={() => {
                       if (!recordTemp.maDon) {
@@ -260,6 +252,7 @@ const LichSuGuiDon = () => {
                 <Divider type="vertical" />
                 <Tooltip title="Chi tiết">
                   <Button
+                    type={'link'}
                     shape="circle"
                     onClick={() => {
                       handlePreviewDon(recordTemp);
@@ -271,6 +264,7 @@ const LichSuGuiDon = () => {
                 <Divider type="vertical" />
                 <Tooltip title="Gửi phản hồi">
                   <Button
+                    type={"link"}
                     // disabled={recordTemp?.daTraLoiPhanHoi || recordTemp.noiDungPhanHoi || false}
                     shape="circle"
                     disabled={recordTemp?.trangThai !== 'PROCESSING'}
@@ -285,7 +279,7 @@ const LichSuGuiDon = () => {
                 <Divider type="vertical" />
                 <Tooltip title="Chỉnh sửa">
                   <Button
-                    type="primary"
+                    type="link"
                     shape="circle"
                     disabled={recordTemp?.trangThai !== 'PROCESSING'}
                     onClick={() => {
@@ -307,7 +301,7 @@ const LichSuGuiDon = () => {
                     }}
                   >
                     <Button
-                      type="primary"
+                      type="link"
                       shape="circle"
                       danger
                       disabled={recordTemp?.trangThai !== 'PROCESSING'}
@@ -330,21 +324,26 @@ const LichSuGuiDon = () => {
       <TableBase
         dataState="danhSachDon"
         widthDrawer={800}
-        title="Dịch vụ một cửa"
+        title="Dịch vụ hành chính"
         modelName="dvmc.dichvumotcuav2"
         columns={columns}
-        loading={loading}
         dependencies={[page, limit, condition]}
         getData={getDonSinhVienModel}
         scroll={{ x: 800 }}
+        buttons={{create:false}}
+        otherButtons={[
+          <>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}
+            >
+              Tạo đơn
+            </Button>
+          </>
+        ]}
       >
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}
-        >
-          Tạo đơn
-        </Button>
+
       </TableBase>
 
       <Modal

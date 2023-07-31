@@ -31,12 +31,32 @@ const PhieuDangKy = () => {
     getPhieuDangKyModel,
     getLopDangKyModel,
   } = useModel('daotao.dotdangkytinchi');
-  const tongTinChi = _.sumBy(danhSachLopDangKy, (item) => item.soTinChi);
+  // Danh sách học phần có cả lớp Chính và lớp thực hành
+  const hocPhanCoLopThucHanh = danhSachLopDangKy
+    .filter((item) => !!item.tenCha)
+    .map((item) => item.maHocPhan);
+  // Nếu có cả lớp chính và lớp thực hành thì chỉ hiện lớp thực hành
+  const danhSachLopHienThi = danhSachLopDangKy
+    .filter((item) => !hocPhanCoLopThucHanh.includes(item.maHocPhan) || !!item.tenCha)
+    .map((item) =>
+      hocPhanCoLopThucHanh.includes(item.maHocPhan)
+        ? {
+            ...item,
+            // Gộp lịch học lớp Chính với lớp hiển thị
+            maHoaLichHoc:
+              danhSachLopDangKy
+                ?.filter((j) => j.maHocPhan === item.maHocPhan)
+                ?.map((j) => j.maHoaLichHoc ?? [])
+                ?.flat() ?? [],
+          }
+        : item,
+    );
+  const tongTinChi = _.sumBy(danhSachLopHienThi, (item) => item.soTinChi);
   const tongTinChiChuaDk = _.sumBy(
     danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
     (item) => item.soTinChi,
   );
-  // Đang trong thời gian đăng ký tín chỉ => Được phép đăng ký, xóa đăng ký
+  // Đang trong thời gian đăng ký học phần => Được phép đăng ký, xóa đăng ký
   const dangTrongThoiGian =
     dotDangKyHienTai?.thoiGianBatDau &&
     dotDangKyHienTai?.thoiGianKetThuc &&
@@ -61,7 +81,7 @@ const PhieuDangKy = () => {
         });
 
       // Xóa lớp ở danh sách tại local
-      const data = danhSachLopDangKy.filter((item) => item._id !== rec._id);
+      const data = danhSachLopDangKy.filter((item) => item.maHocPhan !== rec.maHocPhan);
       tinhDataLichHoc(data); // Tính lại dữ liệu lịch học
       setDanhSachLopDangKy(data);
     } catch (er) {
@@ -73,6 +93,7 @@ const PhieuDangKy = () => {
     {
       title: 'Mã học phần',
       dataIndex: 'maHocPhan',
+      align: 'center',
       width: 100,
       filterType: 'string',
     },
@@ -83,17 +104,23 @@ const PhieuDangKy = () => {
       filterType: 'string',
     },
     {
+      title: 'TT lớp',
+      dataIndex: 'soThuTuLop',
+      align: 'center',
+      width: 60,
+    },
+    {
+      title: 'TT nhóm',
+      dataIndex: 'soThuTuNhom',
+      align: 'center',
+      width: 60,
+    },
+    {
       title: 'Số TC',
       dataIndex: 'soTinChi',
       width: 60,
       align: 'center',
       sortable: true,
-    },
-    {
-      title: 'Lớp học phần',
-      dataIndex: 'ten',
-      width: 150,
-      filterType: 'string',
     },
     {
       title: 'Lịch học & giảng viên',
@@ -120,11 +147,11 @@ const PhieuDangKy = () => {
           <i style={{ color: '#999' }}>Không có thông tin lịch học</i>
         ),
     },
-    {
-      title: 'Học phí',
-      width: 120,
-      hide: !dangTrongThoiGian,
-    },
+    // {
+    //   title: 'Học phí',
+    //   width: 120,
+    //   hide: !dangTrongThoiGian,
+    // },
     {
       title: 'Loại ĐK',
       dataIndex: 'loai',
@@ -153,7 +180,7 @@ const PhieuDangKy = () => {
       render: (val, rec) => (
         <Popconfirm
           title="Bạn có chắc chắn muốn huỷ đăng ký lớp học phần này?"
-          placement="topLeft"
+          placement="topRight"
           onConfirm={() => onDeleteLop(rec)}
         >
           <Button icon={<DeleteOutlined />} danger type="link" />
@@ -175,10 +202,10 @@ const PhieuDangKy = () => {
         </Col>
         {dangTrongThoiGian ? (
           <>
-            <Col span={24} md={8}>
+            {/* <Col span={24} md={8}>
               Học phí dự kiến: <b>- đ</b>
-            </Col>
-            <Col span={24} md={8}>
+            </Col> */}
+            <Col span={24} md={16}>
               <div className="fw500" style={{ color: 'red', textAlign: 'right' }}>
                 Bạn được đăng ký trong khoảng tín chỉ:{' '}
                 {[phieuDangKy?.soTinChiToiThieu, phieuDangKy?.soTinChiToiDa].join(' - ')}
@@ -188,7 +215,13 @@ const PhieuDangKy = () => {
         ) : null}
       </Row>
 
-      <TableStaticData columns={columns} data={danhSachLopDangKy} addStt loading={loading} hasTotal>
+      <TableStaticData
+        columns={columns}
+        data={danhSachLopHienThi}
+        addStt
+        loading={loading}
+        hasTotal
+      >
         <Space wrap>
           {danhSachLopDangKy.length ? (
             <Button icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
@@ -217,9 +250,9 @@ const PhieuDangKy = () => {
         </Space>
       </TableStaticData>
 
-      <ModalLichHoc />
+      <ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
 
-      <ModalDangKy tongTinChi={tongTinChi} />
+      <ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
     </>
   );
 };

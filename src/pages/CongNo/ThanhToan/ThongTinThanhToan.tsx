@@ -34,7 +34,7 @@ const ThongTinThanhToan = (props: ThongTinThanhToanProps) => {
         <p>{`Số lượng: ${record?.items?.[0]?.quantity ?? 0} ${
           record?.items?.[0]?.unitLabel ?? ''
         }. Mức lệ phí: ${currencyFormat(record?.items?.[0]?.unitAmount ?? 0)} đ/${
-          record?.items?.[0]?.unitLabel ?? ''
+          record?.items?.[0]?.unitLabel !== '' ? record?.items?.[0]?.unitLabel : 'Đơn'
         }`}</p>
       )}
       <Descriptions column={1} bordered>

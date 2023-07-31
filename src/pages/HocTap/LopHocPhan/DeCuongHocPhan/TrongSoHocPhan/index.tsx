@@ -8,8 +8,8 @@ const TrongSoHocPhanPage = () => {
   const { danhSach, getModel } = useModel('daotao.daudiemhocphan');
   const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 
-  const ts = _.range(1, 11).map(
-    (i) => (recDeCuong?.[('trongSo' + i) as keyof HocPhan.IDeCuongHocPhan] as number) ?? 0,
+  const ts = danhSach.map(
+    (i) => (recDeCuong?.[('trongSo' + i.field) as keyof HocPhan.IDeCuongHocPhan] as number) ?? 0,
   );
   const sum = _.sum(ts);
 
@@ -19,9 +19,9 @@ const TrongSoHocPhanPage = () => {
 
   return (
     <Descriptions title="Trọng số học phần">
-      {danhSach.map((item, index) => (
+      {danhSach.map((item) => (
         <Descriptions.Item key={item._id} label={item.ten}>
-          {recDeCuong?.[`trongSo${index + 1}` as keyof HocPhan.IDeCuongHocPhan]}%
+          {recDeCuong?.[`trongSo${item.field}` as keyof HocPhan.IDeCuongHocPhan]}%
         </Descriptions.Item>
       ))}
       <Descriptions.Item key={'2'} label="Điểm thi KTHP">

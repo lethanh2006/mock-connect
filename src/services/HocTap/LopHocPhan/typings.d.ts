@@ -1,8 +1,13 @@
+import { type ELoaiHocPhanDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { type ELoaiDiemChu, type ELoaiLopHocPhan, type ETrangThaiDangKyGiangDay } from './constant';
-import { type ELoaiHocPhanDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import {
+  type ELoaiDiemChu,
+  type ELoaiLopHocPhan,
+  type ETrangThaiDangKyGiangDay,
+  type ETrangThaiLopHocPhan,
+} from './constant';
 
 export declare module LopHocPhan {
   export interface IRecord {
@@ -28,6 +33,7 @@ export declare module LopHocPhan {
     sinhVienList?: SinhVien.IRecord[];
     maHoaLichHoc?: TMaHoaLichHoc[];
     thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[];
+    trangThaiLop: ETrangThaiLopHocPhan;
 
     // Populated
     deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };

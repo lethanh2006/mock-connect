@@ -10,7 +10,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useModel } from 'umi';
 const localizer = momentLocalizer(moment);
 
-const ModalLichHoc = () => {
+const ModalLichHoc = (props: { soLopHienThi: number }) => {
   const { visibleModal, setVisibleModal, danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
   const [calendarView, setCalendarView] = useState<View>(Views.MONTH);
   const [dataCalendar, setDataCalendar] = useState<{ title: string; [x: string]: unknown }[]>([]);
@@ -61,7 +61,7 @@ const ModalLichHoc = () => {
     >
       <Card title="Lịch học dự kiến">
         <p>
-          Bạn đã đăng ký / đã chọn <b>{danhSachLopDangKy.length} lớp học phần</b>, tổng cộng có{' '}
+          Bạn đã đăng ký / đã chọn <b>{props.soLopHienThi} lớp học phần</b>, tổng cộng có{' '}
           <b>{dataCalendar.length} ca học</b>, từ ngày {moment(startDate).format('DD/MM/YYYY')} đến
           ngày {moment(endDate).format('DD/MM/YYYY')}
           <br />

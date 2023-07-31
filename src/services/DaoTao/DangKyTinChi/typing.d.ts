@@ -1,7 +1,10 @@
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { type HocPhan } from '../HocPhan/typings';
-import { type SinhVien } from '../SinhVien/typings';
-import { type ELoaiHocPhanDangKyTinChi, type ETrangThaiDangKyTinChi } from './constant';
+import {
+  type ETrangThaiHocPhanDangKyTinChi,
+  type ELoaiHocPhanDangKyTinChi,
+  type ETrangThaiDangKyTinChi,
+} from './constant';
 
 declare module DangKyTinChi {
   export interface IDotDangKy {
@@ -38,14 +41,13 @@ declare module DangKyTinChi {
   }
 
   export interface IHocPhanDangKy {
-    _id: string;
-    maHocKy: string;
-    hocVienSsoId?: string;
     maHocPhan: string;
-    hocPhan?: Partial<HocPhan.IRecord>;
+    tenHocPhan: string;
+    soTinChi: number;
     nhuCau: boolean;
-    maMonTienQuyetChuaHoanThanh?: string;
-    monTienQuyetChuaHoanThanh?: Partial<HocPhan.IRecord>;
     loai: ELoaiHocPhanDangKyTinChi;
+    trangThai: ETrangThaiHocPhanDangKyTinChi;
+    hpTienQuyet?: Partial<HocPhan.IRecord>;
+    hpHocTruoc?: Partial<HocPhan.IRecord>;
   }
 }

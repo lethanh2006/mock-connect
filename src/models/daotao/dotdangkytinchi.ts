@@ -8,6 +8,7 @@ import {
 import { ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { message } from 'antd';
 import moment from 'moment';
@@ -18,8 +19,8 @@ export default () => {
   const [visibleRegister, setVisibleRegister] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [formSubmiting, setFormSubmiting] = useState<boolean>();
-  const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký tín chỉ hiện tại trong kỳ, back trả về
-  const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký tín chỉ trong học kỳ, back tự tính
+  const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký học phần hiện tại trong kỳ, back trả về
+  const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký học phần trong học kỳ, back tự tính
   const [danhSachLopDangKy, setDanhSachLopDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp hp đăng ký, bao gồm cả các lớp mới thêm
   // Dữ liệu lịch học cho các lớp đang đăng ký hiện tại
   // Dưới dạng { "DDMMYY": [true, true, false, false, true, true]...}
@@ -118,13 +119,15 @@ export default () => {
       const lop: LopHocPhan.IRecordSinhVienLopHP[] = res.data?.data ?? [];
 
       const lopDangKy =
-        lop?.map((item) => ({
-          ...item.lopHocPhan,
-          _id: item.lopHocPhanId,
-          soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
-          loai: item.loai,
-          trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
-        })) ?? [];
+        lop
+          ?.filter((item) => item.lopHocPhan?.trangThaiLop === ETrangThaiLopHocPhan.MO)
+          ?.map((item) => ({
+            ...item.lopHocPhan,
+            _id: item.lopHocPhanId,
+            soTinChi: item.lopHocPhan?.deCuong?.deCuong?.soTinChi ?? 0,
+            loai: item.loai,
+            trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
+          })) ?? [];
       setDanhSachLopDangKy(lopDangKy);
       tinhDataLichHoc(lopDangKy);
 

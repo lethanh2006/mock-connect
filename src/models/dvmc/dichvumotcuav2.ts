@@ -59,6 +59,7 @@ export default () => {
     });
     setDanhSach(response?.data?.data ?? []);
     setRecord(response?.data?.data?.[0]);
+    setTotal(response?.data?.data?.length ?? 0);
     setLoading(false);
     return response?.data?.data ?? [];
   };
@@ -74,12 +75,15 @@ export default () => {
     try {
       setLoading(true);
       const response = await postDonSinhVien(payload);
-      setRecordDon(response?.data?.data ?? {});
-      message.success('Gửi đơn thành công');
-      setLoading(false);
-      setVisibleFormBieuMau(false);
-      setVisibleFormThanhToan(true);
+      if (response) {
+        setRecordDon(response?.data?.data ?? {});
+        message.success('Gửi đơn thành công');
+        setLoading(false);
+        setVisibleFormBieuMau(false);
+        setVisibleFormThanhToan(true);
+      }
     } catch (error: any) {
+      setVisibleFormBieuMau(false);
       const { response } = error;
       if (response?.data?.errorCode === 2 && response?.data?.statusCode === 400) {
         message.error('Đơn của bạn đang được xử lý, vui lòng không tạo thêm đơn mới');
