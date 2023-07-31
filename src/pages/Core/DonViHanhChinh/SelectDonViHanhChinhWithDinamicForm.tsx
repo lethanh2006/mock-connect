@@ -84,6 +84,7 @@ const SelectDonViHanhChinhWithDinamicForm = (props: Props) => {
                 setIdTinh(option?.key);
                 props.form.setFieldsValue(newValue);
               }}
+              placeholder={"Chọn tỉnh/ Thành phố"}
               options={listTinh?.map((item) => ({
                 key: item.ma,
                 value: item.tenDonVi,
