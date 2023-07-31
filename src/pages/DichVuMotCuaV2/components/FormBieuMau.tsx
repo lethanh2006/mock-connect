@@ -34,6 +34,7 @@ import HocPhanCoDiem from '../HocPhanCoDiem';
 import Table from './TableElement';
 import ThongTinNguoiTaoDon from './ThongTinNguoiTaoDon';
 import TieuDeBieuMau from './TieuDeBieuMau';
+import SelectDonViHanhChinhWithDinamicForm from "@/pages/Core/DonViHanhChinh/SelectDonViHanhChinhWithDinamicForm";
 
 mm.tz.setDefault('Asia/Ho_Chi_Minh');
 
@@ -124,7 +125,7 @@ const FormBieuMau = (props: {
             tenTinh: values?.tinhTp,
             tenQuanHuyen: values?.quanHuyen,
             tenPhuongXa: values?.xaPhuong,
-            soNhaTenDuong: values?.soNhaTenDuong,
+            // soNhaTenDuong: values?.soNhaTenDuong,
           };
         } else if (item?.type === 'TABLE') {
           value = danhSachDataTable?.[`${name}[${index}].${item?.label}`]?.map(
@@ -293,9 +294,10 @@ const FormBieuMau = (props: {
         initialValue = item?.value;
         ruleElement = [];
         element = (
-          <SelectDonViHanhChinh
+          <SelectDonViHanhChinhWithDinamicForm
             form={form}
-            hasSoNha={item?.level === 4}
+            // hasSoNha={item?.level === 4}
+            hideDiaChiCuThe={item?.level === 4}
             listTinh={danhSachTinh}
             hideQuanHuyen={item?.level === 1}
             hideXaPhuong={[1, 2].includes(item?.level)}
@@ -303,11 +305,16 @@ const FormBieuMau = (props: {
             notRequiredQuanHuyen={!item?.isRequired}
             notRequiredTinh={!item?.isRequired}
             notRequiredXaPhuong={!item?.isRequired}
-            initialValue={{
-              tinhTp: item?.value?.tenTinh,
-              quanHuyen: item?.value?.tenQuanHuyen,
-              xaPhuong: item?.value?.tenPhuongXa,
-              soNhaTenDuong: item?.value?.soNhaTenDuong,
+            initialValue={
+              typeof item?.value?.maPhuongXa === 'string'
+                ? item?.value
+                : { ...item.value, maPhuongXa: item?.value?.maPhuongXa?.maPhuongXa }
+            }
+            fields={{
+              tinh: [`${name}.${item?.label ?? ''}`, 'maTinh'],
+              quanHuyen: [`${name}.${item?.label ?? ''}`, 'maQuanHuyen'],
+              xaPhuong: [`${name}.${item?.label ?? ''}`, 'maPhuongXa'],
+              diaChiCuThe: [`${name}.${item?.label ?? ''}`, 'soNhaTenDuong'],
             }}
           />
         );
@@ -522,6 +529,7 @@ const FormBieuMau = (props: {
   };
 
   const onFinish = async (values: any) => {
+    console.log('values',values)
     const { valuesFinal, duLieuBieuMau } = await onSubmitForm(values);
     if (props?.edit !== null && props?.edit !== undefined) {
       if (props?.edit === false && props?.handleAdd) props.handleAdd(valuesFinal, duLieuBieuMau);
