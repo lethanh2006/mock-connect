@@ -129,7 +129,7 @@ const FormTraLoiKhaoSat = () => {
           // eslint-disable-next-line react/no-array-index-key
           <div key={indexKhoi} style={{ marginBottom: 24 }}>
             <Divider />
-            <div className="fw500">{item.tieuDe}D</div>
+            <div className="fw500">{item.tieuDe}</div>
             <div style={{ marginBottom: 8 }}>{item.moTa}</div>
 
             {item.danhSachCauHoi?.map((cauHoi, indexCauHoi) =>
