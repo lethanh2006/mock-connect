@@ -1,4 +1,9 @@
-import { type TFilter, type TImportHeader, type TImportResponse } from '@/components/Table/typing';
+import {
+  type TExportField,
+  type TFilter,
+  type TImportHeader,
+  type TImportResponse,
+} from '@/components/Table/typing';
 import { chuanHoaObject } from '@/utils/utils';
 import { message } from 'antd';
 import { useState } from 'react';
@@ -46,6 +51,8 @@ const useInitModel = <T,>(
     getImportTemplate,
     postExecuteImport,
     postValidateImport,
+    getExportFields,
+    postExport,
   } = useInitService(url, ipService);
 
   /**
@@ -231,6 +238,7 @@ const useInitModel = <T,>(
     setVisibleForm(true);
   };
 
+  //#region BASE IMPORT
   /**
    * Lấy header cho chức năng import
    * @returns {any}
@@ -259,7 +267,7 @@ const useInitModel = <T,>(
   };
 
   /**
-   * Lấy header cho chức năng import
+   * Validate dữ liệu cần import
    * @returns {any}
    */
   const postValidateModel = async (payload: any[]): Promise<TImportResponse> => {
@@ -277,7 +285,7 @@ const useInitModel = <T,>(
   };
 
   /**
-   * Lấy header cho chức năng import
+   * Thực thi import dữ liệu
    * @returns {any}
    */
   const postExecuteImpotModel = async (payload: any[]): Promise<TImportResponse> => {
@@ -293,6 +301,60 @@ const useInitModel = <T,>(
       setFormSubmiting(false);
     }
   };
+  //#endregion
+
+  //#region BASE EXPORT
+  /**
+   * Lấy fields cho chức năng export
+   * @returns {any}
+   */
+  const getExportFieldsModel = async (): Promise<TExportField[]> => {
+    const genIdField = (data?: TExportField[], prefix?: string): TExportField[] | undefined => {
+      if (!data?.length) return undefined;
+      return data?.map((f, index) => ({
+        ...f,
+        _id: [prefix ?? '0', index].join('-'),
+        children: genIdField(f.children, [prefix ?? '0', index].join('-')),
+      }));
+    };
+
+    try {
+      const res = await getExportFields();
+      const fields = genIdField(res.data?.data) ?? [];
+
+      return fields;
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  };
+
+  /**
+   * Thực thi export
+   * @returns {any}
+   */
+  const postExportModel = async (
+    payload: { ids?: string[]; definitions: TExportField[] },
+    paramCondition?: Partial<T>,
+    paramFilters?: TFilter<T>[],
+  ): Promise<Blob> => {
+    if (formSubmiting) return Promise.reject('form submiting');
+    setFormSubmiting(true);
+    try {
+      const res = await postExport(payload, {
+        condition: { ...condition, ...paramCondition },
+        filters: [
+          ...(filters?.filter((item) => item.active)?.map(({ active, ...item }) => item) || []),
+          ...(paramFilters ?? []),
+        ],
+      });
+      return res.data;
+    } catch (err) {
+      return Promise.reject(err);
+    } finally {
+      setFormSubmiting(false);
+    }
+  };
+  //#endregion
 
   return {
     sort,
@@ -342,6 +404,8 @@ const useInitModel = <T,>(
     getAllService,
     postService,
     putService,
+    getExportFieldsModel,
+    postExportModel,
   };
 };
 
