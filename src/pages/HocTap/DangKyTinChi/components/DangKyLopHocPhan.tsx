@@ -39,6 +39,9 @@ const DangKyLopHocPhan = () => {
       },
       undefined,
       { soThuTuLop: 1 },
+      undefined,
+      undefined,
+      'dang-ky/pageable',
     ).then((data) =>
       setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
     );
