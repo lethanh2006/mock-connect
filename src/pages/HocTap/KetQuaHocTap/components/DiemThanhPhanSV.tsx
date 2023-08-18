@@ -2,17 +2,18 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Card, Tabs, Tag } from 'antd';
+import { Card, Segmented, Tabs, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import ModalChiTietDiem from './ModalChiTietDiem';
 import MayTinhThongMinh from './MayTinhThongMinh';
+import ModalChiTietDiem from './ModalChiTietDiem';
 
 const DiemThanhPhanSV = () => {
 	const { danhSach, sinhVienGetAllDiemLopHocPhanModel, loading, setSinhVienLopHocPhan, sinhVienLopHocPhan } =
 		useModel('daotao.sinhvienlophocphan');
 	const { danhSach: danhSachDauDiem, getModel: getDauDiem } = useModel('daotao.daudiemhocphan');
 	const [modalVisible, setModalVisible] = useState(false);
+	const [loaiHocPhan, setLoaiHocPhan] = useState<string>('all');
 
 	useEffect(() => {
 		sinhVienGetAllDiemLopHocPhanModel();
@@ -29,15 +30,22 @@ const DiemThanhPhanSV = () => {
 
 	const columns: IColumn<LopHocPhan.IRecordSinhVienLopHP>[] = [
 		{
+			title: 'Mã học phần',
+			width: 100,
+			align: 'center',
+			render: (_, rec) => <span style={rec.diemThang4 === 0 ? { color: 'red' } : {}}>{rec.hocPhan?.ma ?? '--'}</span>,
+			onCell,
+		},
+		{
 			title: 'Tên học phần',
-			width: 150,
-			render: (val, rec) => rec.hocPhan?.ten ?? '--',
+			width: 220,
+			render: (_, rec) => <span style={rec.diemThang4 === 0 ? { color: 'red' } : {}}>{rec.hocPhan?.ten ?? '--'}</span>,
 			onCell,
 		},
 		{
 			title: 'Số tín chỉ',
 			dataIndex: 'soTinChi',
-			width: 100,
+			width: 80,
 			align: 'center',
 			sortable: true,
 			onCell,
@@ -52,34 +60,37 @@ const DiemThanhPhanSV = () => {
 		sortable: true,
 		onCell,
 	}));
-	cols1.push({
-		title: 'Tổng tổng kết',
-		dataIndex: 'diemTongKet',
-		align: 'center',
-		render: (val, r) => <b style={val < 4 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
-		width: 80,
-		onCell,
-		sortable: true,
-	});
-	cols1.push({
-		title: 'Điểm thang 4',
-		width: 80,
-		dataIndex: 'diemThang4',
-		align: 'center',
-		sortable: true,
-		onCell,
-	});
-	cols1.push({
-		title: 'Điểm chữ',
-		width: 80,
-		dataIndex: 'diemChu',
-		align: 'center',
-		filterType: 'select',
-		filterData: Object.values(ELoaiDiemChu),
-		render: (val, recordDiem) => <Tag color={ColorDiemChu?.[val as ELoaiDiemChu]}>{val}</Tag>,
-		onCell,
-	});
-	columns.splice(2, 0, {
+	cols1.push(
+		{
+			title: 'Tổng tổng kết',
+			dataIndex: 'diemTongKet',
+			align: 'center',
+			render: (val) => <b style={(val || val === 0) && val < 4 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
+			width: 80,
+			onCell,
+			sortable: true,
+		},
+		{
+			title: 'Điểm thang 4',
+			width: 80,
+			dataIndex: 'diemThang4',
+			align: 'center',
+			render: (val) => <b style={val === 0 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
+			sortable: true,
+			onCell,
+		},
+		{
+			title: 'Điểm chữ',
+			width: 80,
+			dataIndex: 'diemChu',
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDiemChu),
+			render: (val) => <Tag color={ColorDiemChu?.[val as ELoaiDiemChu]}>{val}</Tag>,
+			onCell,
+		},
+	);
+	columns.splice(3, 0, {
 		title: 'Điểm KTHP',
 		width: cols1.length * 80,
 		children: cols1,
@@ -93,8 +104,7 @@ const DiemThanhPhanSV = () => {
 		sortable: true,
 		onCell,
 	}));
-
-	columns.splice(2, 0, {
+	columns.splice(3, 0, {
 		title: 'Điểm thành phần',
 		width: cols.length * 80,
 		children: cols,
@@ -111,11 +121,20 @@ const DiemThanhPhanSV = () => {
 								loading: loading,
 								pagination: false,
 							}}
-							data={danhSach ?? []}
+							data={(danhSach ?? []).filter((item) => loaiHocPhan === 'all' || !item.diemThang4)}
 							columns={columns}
 							addStt
 							hasTotal
-						/>
+						>
+							<Segmented
+								value={loaiHocPhan}
+								onChange={(val) => setLoaiHocPhan(val.toString())}
+								options={[
+									{ value: 'all', label: 'Tất cả học phần' },
+									{ value: 'fail', label: 'Học phần chưa đạt' },
+								]}
+							/>
+						</TableStaticData>
 					</Tabs.TabPane>
 
 					<Tabs.TabPane tab='Máy tính thông minh' key='3'>
