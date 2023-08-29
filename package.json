@@ -35,7 +35,8 @@
     "test:component": "umi test ./src/components",
     "serve": "umi-serve",
     "tsc": "tsc --noEmit",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org aisoft --project sentry-vwa build && sentry-cli --url https://sentry.aisoftech.vn/ sourcemaps upload --org aisoft --project sentry-vwa build"
   },
   "lint-staged": {
     "**/*.less": "stylelint --syntax less",
@@ -52,6 +53,7 @@
   "dependencies": {
     "@ant-design/icons": "~4.5.0",
     "@ant-design/pro-layout": "~6.15.3",
+    "@sentry/react": "^7.65.0",
     "@tinymce/tinymce-react": "^4.2.0",
     "@types/lodash.debounce": "^4.0.6",
     "@types/react-highlight-words": "^0.16.4",
@@ -67,7 +69,7 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "numeral": "^2.0.6",
-    "oidc-client-ts": "^2.2.3",
+    "oidc-client-ts": "^2.2.5",
     "path": "^0.12.7",
     "react": "^17.0.0",
     "react-apexcharts": "^1.4.1",
@@ -79,7 +81,7 @@
     "react-helmet-async": "^1.0.4",
     "react-highlight-words": "^0.18.0",
     "react-infinite-scroll-component": "^6.1.0",
-    "react-oidc-context": "^2.2.2",
+    "react-oidc-context": "^2.3.0",
     "react-onesignal": "^2.0.4",
     "react-pdf": "^5.6.0",
     "react-recaptcha": "^2.3.10",

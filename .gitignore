@@ -41,4 +41,6 @@ build
 
 # .vercel
 
-.husky
+
+# Sentry Auth Token
+#.sentryclirc
