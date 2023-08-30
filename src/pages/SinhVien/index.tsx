@@ -2,21 +2,21 @@ import { Card } from 'antd';
 import PreviewHoSo from './components/PreviewHoSo';
 
 const ThongTinSinhVienPage = () => {
-  // const [currentStep, setCurrentStep] = useState<string>('0');
-  // const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
+	// const [currentStep, setCurrentStep] = useState<string>('0');
+	// const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
 
-  // useEffect(() => {
-  //   setCurrentStep('0');
-  // }, [record?.ssoId]);
+	// useEffect(() => {
+	//   setCurrentStep('0');
+	// }, [record?.ssoId]);
 
-  // const onChangeStep = (step: string) => {
-  //   setCurrentStep(step);
-  // };
+	// const onChangeStep = (step: string) => {
+	//   setCurrentStep(step);
+	// };
 
-  return (
-    <Card title="Thông tin cá nhân">
-      <PreviewHoSo />
-      {/* <Tabs
+	return (
+		<Card title='Thông tin cá nhân'>
+			<PreviewHoSo />
+			{/* <Tabs
         activeKey={currentStep}
         tabPosition={isTabletOrMobile ? 'top' : 'left'}
         onChange={record?.ssoId ? onChangeStep : undefined}
@@ -46,11 +46,11 @@ const ThongTinSinhVienPage = () => {
         </Tabs.TabPane>
       </Tabs> */}
 
-      {/* <div className="form-footer">
+			{/* <div className="form-footer">
         <Button onClick={() => setVisibleForm(false)}>Đóng</Button>
       </div> */}
-    </Card>
-  );
+		</Card>
+	);
 };
 
 export default ThongTinSinhVienPage;
