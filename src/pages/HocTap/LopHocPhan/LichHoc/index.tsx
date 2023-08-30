@@ -1,5 +1,5 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { Segmented } from 'antd';
+import { Segmented, Space } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -52,15 +52,18 @@ const DanhSachBuoiHoc = () => {
 				</>
 			) : null}
 
-			<span style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>Tất cả buổi học</span>
-			<Segmented
-				value={show}
-				onChange={(val) => setShow(val.toString())}
-				options={[
-					{ value: 'calendar', label: 'Hiển thị lịch học' },
-					{ value: 'table', label: 'Danh sách chi tiết' },
-				]}
-			/>
+			<Space wrap size={12} style={{ marginBottom: 12 }}>
+				<span style={{ fontWeight: 600, fontSize: 16 }}>Tất cả buổi học</span>
+				<Segmented
+					value={show}
+					onChange={(val) => setShow(val.toString())}
+					options={[
+						{ value: 'calendar', label: 'Hiển thị lịch học' },
+						{ value: 'table', label: 'Danh sách chi tiết' },
+					]}
+				/>
+			</Space>
+
 			{show === 'calendar' ? <CalendarLichHocLopHp /> : <TableLichHocLopHP />}
 
 			<ModalThoiKhoaBieu />
