@@ -28,6 +28,7 @@ const CalendarLichHocLopHp = () => {
 			}}
 			localizer={localizer}
 			events={danhSach.map((j) => ({
+				...j,
 				title: j.tenLopHocPhan,
 				start: moment(j?.thoiGianBatDau).toDate(),
 				end: moment(j?.thoiGianKetThuc).toDate(),
@@ -36,7 +37,7 @@ const CalendarLichHocLopHp = () => {
 			defaultView={Views.MONTH}
 			defaultDate={new Date()}
 			messages={messagesCalendar}
-			style={{ height: 600, overflow: 'auto' }}
+			style={{ height: 640, overflow: 'auto' }}
 			min={moment('0600', 'HHmm').toDate()}
 			max={moment('2100', 'HHmm').toDate()}
 			eventPropGetter={eventPropGetter}

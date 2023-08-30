@@ -32,8 +32,9 @@ const TableLichHocLopHP = () => {
 			width: 150,
 			render: (val) =>
 				val
-					? `${moment(val).format('dddd').charAt(0).toUpperCase()}
-						${moment(val).format('dddd').slice(1)}, ngày ${moment(val).format('DD/MM/YYYY')}`
+					? `${moment(val).format('dddd').charAt(0).toUpperCase()}${moment(val).format('dddd').slice(1)}, ngày ${moment(
+							val,
+					  ).format('DD/MM/YYYY')}`
 					: null,
 			onCell,
 		},
