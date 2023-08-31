@@ -13,6 +13,9 @@ declare module HocPhan {
 		createdAt?: string;
 		updatedAt?: string;
 		active: boolean;
+
+		isTinhSoTinChi: boolean;
+		isTinhDiem: boolean;
 	}
 
 	export interface IDeCuongHocPhan {
@@ -24,7 +27,7 @@ declare module HocPhan {
 		ngayApDung: string;
 		canCuId: string;
 		canCu: VanBanQuyDinh.IRecord;
-		isTinhDiem: boolean;
+
 		mucTieuHocPhan: string;
 		noiDungTomTat: string;
 		noiDungChiTiet: string;
