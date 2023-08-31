@@ -120,7 +120,7 @@ export default () => {
 					?.map((item) => ({
 						...item.lopHocPhan,
 						_id: item.lopHocPhanId,
-						soTinChi: item.hocPhan?.soTinChi ?? 0,
+						soTinChi: item.lopHocPhan?.hocPhan?.soTinChi ?? 0,
 						loai: item.loai,
 						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
 					})) ?? [];

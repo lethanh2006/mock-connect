@@ -174,7 +174,7 @@ const MayTinhThongMinh = () => {
 							danhSach?.filter((item) => showAll === 'all' || (item.trangThai && item.trangThai !== 'Chưa có điểm')) ??
 							[]
 						}
-						otherProps={{ scroll: { y: 600 } }}
+						otherProps={{ scroll: { y: 600 }, pagination: false }}
 						addStt
 						loading={loading}
 						hasTotal
