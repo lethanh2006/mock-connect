@@ -120,6 +120,7 @@ const DiemThanhPhanSV = () => {
 							otherProps={{
 								loading: loading,
 								pagination: false,
+								scroll: { y: 660 },
 							}}
 							data={(danhSach ?? []).filter((item) => loaiHocPhan === 'all' || !item.diemThang4)}
 							columns={columns}
