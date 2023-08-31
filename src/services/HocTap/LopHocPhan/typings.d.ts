@@ -61,7 +61,7 @@ export declare module LopHocPhan {
 	export interface IRecordSinhVienLopHP extends IDiemThanhPhan, IDiemThi, IDiemTongKet {
 		_id: string;
 		lopHocPhanId: string;
-		lopHocPhan?: IRecord;
+		lopHocPhan: IRecord;
 		sinhVienSsoId: string;
 		sinhVien?: SinhVien.IRecord;
 
@@ -79,6 +79,7 @@ export declare module LopHocPhan {
 
 		soTinChi?: number;
 		hocPhan?: HocPhan.IRecord;
+		kyHoc?: HocKy.IRecord;
 	}
 
 	export interface IDiemThanhPhan {
