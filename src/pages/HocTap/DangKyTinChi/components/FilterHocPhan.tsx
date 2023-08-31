@@ -1,6 +1,7 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import {
+	ChoPhepHocPhanDangKy,
 	ELoaiHocPhanDangKyTinChi,
 	ETrangThaiHocPhanDangKyTinChi,
 	LoaiHocPhanDangKyTinChi,
@@ -26,7 +27,9 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
 	} = useModel('daotao.hocphandangkytinchi');
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { child } = props;
-	const loaiHocPhanDangKy = Object.values(ELoaiHocPhanDangKyTinChi);
+	const loaiHocPhanDangKy = Object.entries(ChoPhepHocPhanDangKy)
+		.filter(([_, field]) => dotDangKyHienTai?.[field] !== false)
+		.map(([loai]) => loai as ELoaiHocPhanDangKyTinChi);
 	if (!recHocKy?.isToChucDangKyNhuCau) loaiHocPhanDangKy.splice(0, 1); // Nếu học kỳ không đăng ký nhu cầu thì bỏ loại Nhu cầu đi
 
 	const getData = () =>
@@ -39,7 +42,7 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
 
 	useEffect(() => {
 		setLoaiHocPhan(loaiHocPhanDangKy[0]);
-	}, [recHocKy?.ma]);
+	}, [dotDangKyHienTai?._id]);
 
 	useEffect(() => {
 		return () => {
