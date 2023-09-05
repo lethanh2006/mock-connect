@@ -28,7 +28,7 @@ const FilterHocPhanDKTC = (props: { child: () => JSX.Element }) => {
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { child } = props;
 	const loaiHocPhanDangKy = Object.entries(ChoPhepHocPhanDangKy)
-		.filter(([_, field]) => dotDangKyHienTai?.[field] !== false)
+		.filter(([_, field]) => dotDangKyHienTai?.[field])
 		.map(([loai]) => loai as ELoaiHocPhanDangKyTinChi);
 	if (!recHocKy?.isToChucDangKyNhuCau) loaiHocPhanDangKy.splice(0, 1); // Nếu học kỳ không đăng ký nhu cầu thì bỏ loại Nhu cầu đi
 

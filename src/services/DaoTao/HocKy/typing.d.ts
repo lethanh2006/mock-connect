@@ -13,6 +13,9 @@ declare module HocKy {
 		thoiGianBatDau: string;
 		soTuan: number;
 		isKyChinh: boolean;
+
+		active?: boolean;
+		namBatDau?: number;
 		isToChucDangKyNhuCau: boolean;
 		sySoDuKienBatBuoc: number;
 		// sySoDuKienTuChon: number;
