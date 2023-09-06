@@ -25,25 +25,31 @@ const DiemThanhPhanSV = () => {
 			setSinhVienLopHocPhan(rec);
 			setModalVisible(true);
 		},
-		style: { cursor: 'pointer' },
+		style: {
+			cursor: 'pointer',
+			backgroundColor: rec.diemThang4 === 0 ? '#f7dcdcbd' : undefined,
+			color: rec.diemThang4 === 0 ? 'red' : undefined,
+		},
 	});
 
 	const columns: IColumn<LopHocPhan.IRecordSinhVienLopHP>[] = [
 		{
-			title: 'Mã học phần',
-			width: 100,
+			title: 'Mã HP',
+			dataIndex: ['hocPhan', 'ma'],
+			width: 80,
 			align: 'center',
-			render: (_, rec) => <span style={rec.diemThang4 === 0 ? { color: 'red' } : {}}>{rec.hocPhan?.ma ?? '--'}</span>,
+			filterType: 'string',
 			onCell,
 		},
 		{
 			title: 'Tên học phần',
+			dataIndex: ['hocPhan', 'ten'],
 			width: 220,
-			render: (_, rec) => <span style={rec.diemThang4 === 0 ? { color: 'red' } : {}}>{rec.hocPhan?.ten ?? '--'}</span>,
+			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Số tín chỉ',
+			title: 'Số TC',
 			dataIndex: 'soTinChi',
 			width: 80,
 			align: 'center',

@@ -68,19 +68,28 @@ const MayTinhThongMinh = () => {
 			});
 			setModalVisible(true);
 		},
-		style: { cursor: 'pointer' },
+		style: {
+			cursor: 'pointer',
+			backgroundColor: !rec.diemThang4 && !rec.diemDuKienThang4 ? '#f7dcdcbd' : undefined,
+			color: !rec.diemThang4 && !rec.diemDuKienThang4 ? 'red' : undefined,
+		},
 	});
 
 	const columns: IColumn<DiemHocPhan.IDiemSinhVien>[] = [
 		{
 			dataIndex: 'ten',
 			title: 'Tên học phần',
-			width: 150,
-			render: (s, r) => (
-				<span style={r.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON ? { fontStyle: 'italic' } : {}}>
-					{s} {r.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON ? '(tự chọn)' : ''}
-				</span>
-			),
+			filterType: 'string',
+			width: 180,
+			onCell,
+		},
+		{
+			dataIndex: 'loaiHocPhanCtdt',
+			title: 'Loại HP',
+			width: 80,
+			align: 'center',
+			// render: (val: ELoaiHocPhanCTDT) =>
+			// 	val && <Tag color={val === ELoaiHocPhanCTDT.BAT_BUOC ? 'orange' : 'blue'}>{val}</Tag>,
 			onCell,
 		},
 		{
@@ -93,11 +102,6 @@ const MayTinhThongMinh = () => {
 		{
 			dataIndex: 'diemThang4',
 			title: 'Điểm tổng kết (hệ 4)',
-			// render: (s, r) => (
-			//   <b style={r.is_danh_gia ? (r.trang_thai === 'Không đạt' ? { color: 'red' } : {}) : {}}>
-			//     {Object.hasOwn(r, 'is_danh_gia') ? (r.is_danh_gia ? s : '--') : ''}
-			//   </b>
-			// ),
 			width: 80,
 			align: 'center',
 			onCell,

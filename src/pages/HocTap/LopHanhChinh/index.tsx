@@ -14,7 +14,7 @@ const LopHanhChinhPage = () => {
 		{
 			title: 'Tên lớp học',
 			dataIndex: 'ten',
-			width: 150,
+			width: 120,
 			onCell,
 			filterType: 'string',
 			sortable: true,
@@ -43,7 +43,7 @@ const LopHanhChinhPage = () => {
 		},
 		{
 			title: 'Ngành đào tạo',
-			width: 150,
+			width: 180,
 			render: (val, rec) => rec.nganh?.ten,
 			onCell,
 		},
