@@ -43,13 +43,13 @@ const columns: IColumn<ChiTietThu.Record>[] = [
 			</ExpandText>
 		),
 	},
-	{
-		title: 'Địa chỉ',
-		width: 180,
-		dataIndex: ['customerInfo.address'],
-		filterType: 'string',
-		render: (val, rec) => <ExpandText>{rec.customerInfo?.address}</ExpandText>,
-	},
+	// {
+	// 	title: 'Địa chỉ',
+	// 	width: 180,
+	// 	dataIndex: ['customerInfo.address'],
+	// 	filterType: 'string',
+	// 	render: (val, rec) => <ExpandText>{rec.customerInfo?.address}</ExpandText>,
+	// },
 	{
 		title: 'Trạng thái',
 		dataIndex: 'status',

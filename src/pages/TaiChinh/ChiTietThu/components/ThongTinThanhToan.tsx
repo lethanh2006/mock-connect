@@ -1,45 +1,15 @@
-import MyDatePicker from '@/components/MyDatePicker';
-import { type ChiTietThu } from '@/services/TaiChinh/Thu/ChiTietThu/typings';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import rules from '@/utils/rules';
+import { EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { AppstoreAddOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Descriptions, Form, Modal, Row, Tabs, Tag } from 'antd';
-import moment from 'moment';
-import { useCallback, useEffect, useState } from 'react';
+import { Button, Card, Col, Descriptions, Row, Tabs, Tag } from 'antd';
+import { useState } from 'react';
 import { useModel } from 'umi';
-import FormThanhToan from './FormThanhToan';
 import TableDanhSachGiaoDich from './TableDanhSachGiaoDich';
 import TableDanhSachKhoanThu from './TableDanhSachKhoanThu';
 
 const ThongTinThanhToan = (props: { setVisible: any }) => {
 	const { setVisible } = props;
-	const { record, putThanhToanThuModel, getByIdModel, getModel, visibleFormThanhToan, setVisibleFormThanhToan } =
-		useModel('chitietthu');
+	const { record } = useModel('taichinh.chitietthu');
 	const [activeTab, setActiveTab] = useState('1');
-	const [form] = Form.useForm();
-	const handleCancelFormThanhToan = useCallback(() => {
-		setVisibleFormThanhToan(false);
-	}, []);
-
-	useEffect(() => {
-		form.setFieldsValue({ transactionDate: moment() });
-	}, [record?._id]);
-
-	const onFinish = (val: ChiTietThu.IThongTinGiaoDich) => {
-		// putThanhToanThuModel(
-		// 	{
-		// 		maChiTietThu: record?.code ?? '',
-		// 		amountPaid: val.amountPaid,
-		// 		transactionDate: val.transactionDate,
-		// 	},
-		// 	false,
-		// ).then(() => {
-		// 	getModel();
-		// 	getByIdModel(record?._id ?? '');
-		// 	form.resetFields();
-		// });
-	};
 
 	return (
 		<Card title='Thông tin thanh toán'>
@@ -57,49 +27,15 @@ const ThongTinThanhToan = (props: { setVisible: any }) => {
 				</Col>
 			</Row>
 
-			<Form form={form} onFinish={onFinish} layout='vertical'>
-				<Descriptions column={1} bordered>
-					<Descriptions.Item label='Số tiền phải thu'>{inputFormat(record?.amountDue ?? 0)} VNĐ</Descriptions.Item>
-					<Descriptions.Item label='Số tiền đã thu'>{inputFormat(record?.amountPaid ?? 0)} VNĐ</Descriptions.Item>
-					<Descriptions.Item label='Số tiền còn lại phải thu'>
-						{inputFormat(record?.amountRemaining ?? 0)} VNĐ
-					</Descriptions.Item>
-					<Descriptions.Item label='Số tiền hoàn trả'>{inputFormat(record?.amountRefund ?? 0)} VNĐ</Descriptions.Item>
-					{/*<Descriptions.Item label='Thanh toán'>*/}
-					{/*	<Form.Item name='amountPaid' label='' rules={[...rules.required]}>*/}
-					{/*		<InputNumber*/}
-					{/*			addonAfter='VNĐ'*/}
-					{/*			placeholder='Số tiền thanh toán'*/}
-					{/*			min={0}*/}
-					{/*			step={1000}*/}
-					{/*			style={{ width: '100%' }}*/}
-					{/*			formatter={inputFormat}*/}
-					{/*			parser={inputParse}*/}
-					{/*		/>*/}
-					{/*	</Form.Item>*/}
-					{/*</Descriptions.Item>*/}
-					<Descriptions.Item label='Thời gian thanh toán'>
-						<Form.Item name='transactionDate' label='' rules={[...rules.required]}>
-							<MyDatePicker placeholder='Thời gian thanh toán' showTime format={'HH:mm DD/MM/YYYY'} />
-						</Form.Item>
-					</Descriptions.Item>
-				</Descriptions>
-				<div style={{ display: 'flex', justifyContent: 'center', marginTop: 18 }}>
-					{/*<Button htmlType='submit' icon={<EditOutlined />} type='link'>*/}
-					{/*	Cập nhật thông tin thanh toán*/}
-					{/*</Button>*/}
-					<Button
-						disabled={record?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU}
-						onClick={() => {
-							setVisibleFormThanhToan(true);
-						}}
-						icon={<AppstoreAddOutlined />}
-						type='link'
-					>
-						Thanh toán
-					</Button>
-				</div>
-			</Form>
+			<Descriptions column={1} bordered>
+				<Descriptions.Item label='Số tiền phải thu'>{inputFormat(record?.amountDue ?? 0)} VNĐ</Descriptions.Item>
+				<Descriptions.Item label='Số tiền đã thu'>{inputFormat(record?.amountPaid ?? 0)} VNĐ</Descriptions.Item>
+				<Descriptions.Item label='Số tiền còn lại phải thu'>
+					{inputFormat(record?.amountRemaining ?? 0)} VNĐ
+				</Descriptions.Item>
+				<Descriptions.Item label='Số tiền hoàn trả'>{inputFormat(record?.amountRefund ?? 0)} VNĐ</Descriptions.Item>
+			</Descriptions>
+
 			<Tabs activeKey={activeTab} onChange={(tab) => setActiveTab(tab)}>
 				<Tabs.TabPane key={'1'} tab='Chi tiết' />
 				<Tabs.TabPane key={'2'} tab='Lịch sử thanh toán' />
@@ -107,11 +43,7 @@ const ThongTinThanhToan = (props: { setVisible: any }) => {
 			{activeTab === '1' ? (
 				<TableDanhSachKhoanThu value={record?.items ?? []} />
 			) : (
-				<TableDanhSachGiaoDich
-					identityCode={record?.identityCode}
-					value={record?.paidHistory ?? []}
-					onChange={onFinish}
-				/>
+				<TableDanhSachGiaoDich identityCode={record?.identityCode} value={record?.paidHistory ?? []} />
 			)}
 
 			{!record?.metadata?.tenCoSoDaoTao?.toLocaleLowerCase()?.includes('hồ chí minh') ? (
@@ -228,16 +160,6 @@ const ThongTinThanhToan = (props: { setVisible: any }) => {
 			<div style={{ display: 'flex', justifyContent: 'center', marginTop: 18 }}>
 				<Button onClick={() => setVisible(false)}>Đóng</Button>
 			</div>
-			<Modal
-				destroyOnClose
-				footer={false}
-				title='Chi tiết thanh toán'
-				width={1200}
-				visible={visibleFormThanhToan}
-				onCancel={handleCancelFormThanhToan}
-			>
-				<FormThanhToan mode={'pay'} />
-			</Modal>
 		</Card>
 	);
 };
