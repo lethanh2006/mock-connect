@@ -27,8 +27,8 @@ const DiemThanhPhanSV = () => {
 		},
 		style: {
 			cursor: 'pointer',
-			backgroundColor: rec.diemThang4 === 0 ? '#f7dcdcbd' : undefined,
-			color: rec.diemThang4 === 0 ? 'red' : undefined,
+			backgroundColor: rec.diemChu === ELoaiDiemChu.F ? '#f7dcdcbd' : undefined,
+			color: rec.diemChu === ELoaiDiemChu.F ? 'red' : undefined,
 		},
 	});
 
@@ -128,7 +128,7 @@ const DiemThanhPhanSV = () => {
 								pagination: false,
 								scroll: { y: 660 },
 							}}
-							data={(danhSach ?? []).filter((item) => loaiHocPhan === 'all' || !item.diemThang4)}
+							data={(danhSach ?? []).filter((item) => loaiHocPhan === 'all' || item.diemChu === ELoaiDiemChu.F)}
 							columns={columns}
 							addStt
 							hasTotal
