@@ -4,7 +4,6 @@ import type { ChiTietThu } from '@/services/TaiChinh/ChiTietThu/typing';
 import type { ELoaiThanhToan } from '@/services/TaiChinh/constant';
 import { MapKeyLoaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { Col, Row } from 'antd';
 import moment from 'moment';
 
 const TableDanhSachGiaoDich = (props: any) => {
@@ -35,13 +34,7 @@ const TableDanhSachGiaoDich = (props: any) => {
 		},
 	];
 
-	return (
-		<Row gutter={[12, 12]}>
-			<Col span={24}>
-				<TableStaticData columns={columns?.filter((item) => !item?.hide)} data={value} addStt size='small' />
-			</Col>
-		</Row>
-	);
+	return <TableStaticData columns={columns?.filter((item) => !item?.hide)} data={value} addStt size='small' />;
 };
 
 export default TableDanhSachGiaoDich;
