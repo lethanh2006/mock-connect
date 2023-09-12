@@ -190,7 +190,7 @@
 		name: 'CongNo',
 		icon: 'TransactionOutlined',
 		path: '/cong-no',
-		component: './CongNo',
+		component: './TaiChinh/ChiTietThu',
 	},
 
 	{
