@@ -172,7 +172,16 @@ const DangKyLopHocPhan = () => {
 										.map((j) => j.tuan)
 										.sort((a, b) => a - b)
 										.join(',')}
-									, {item.nhanSu ?? <i style={{ color: '#999' }}>Không có thông tin giảng viên</i>}
+									,{' '}
+									{item.nhanSu ? (
+										item.nhanSuInfo?.hoDem ? (
+											[item.nhanSuInfo.hoDem, item.nhanSuInfo.ten].join(' ')
+										) : (
+											<i style={{ color: '#999' }}>Không lấy được thông tin</i>
+										)
+									) : (
+										<i style={{ color: '#999' }}>Không có thông tin giảng viên</i>
+									)}
 								</li>
 							))}
 					</ul>
