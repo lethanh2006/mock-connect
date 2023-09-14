@@ -150,7 +150,12 @@ const DiemThanhPhanSV = () => {
 				</Tabs>
 			</Card>
 
-			<ModalChiTietDiem visible={modalVisible} setVisible={setModalVisible} chuongTrinhKhung={sinhVienLopHocPhan} />
+			<ModalChiTietDiem
+				visible={modalVisible}
+				setVisible={setModalVisible}
+				chuongTrinhKhung={sinhVienLopHocPhan}
+				lopHocPhanId={sinhVienLopHocPhan?.lopHocPhanId}
+			/>
 		</>
 	);
 };

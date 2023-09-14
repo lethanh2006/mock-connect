@@ -65,6 +65,7 @@ const CardHocPhan = (props: {
 				visible={modalVisible}
 				chuongTrinhKhung={{ hocPhan, soTinChi }}
 				listDiem={chuongTrinhKhung?.lichSuDiem ?? (sinhVienLopHocPhan ? [sinhVienLopHocPhan] : [])}
+				lopHocPhanId={sinhVienLopHocPhan?.lopHocPhanId}
 			/>
 		</div>
 	);
