@@ -7,8 +7,6 @@ import SelectNamHoc from '../NamHoc/Select';
 
 const FilterHocKy = (props: { width?: number; isSetHocKy?: boolean; allowClear?: boolean }) => {
 	const { record: recHocKy, danhSach: danhSachHocKy, setRecord: setHocKy } = useModel('daotao.hocky');
-	// const [trinhDoDaoTaoId, setTrinhDoDaoTaoId] = useState<string>();
-	// const [hinhThucDaoTaoId, setHinhThucDaoTaoId] = useState<string>();
 	const [namHocId, setNamHocId] = useState<string>();
 	const [visibleOption, setVisibleOption] = useState(false);
 	const width = props.width ?? 250;
@@ -20,13 +18,7 @@ const FilterHocKy = (props: { width?: number; isSetHocKy?: boolean; allowClear?:
 					<Tooltip title='Ẩn bộ lọc'>
 						<Button icon={<MinusOutlined />} onClick={() => setVisibleOption(false)} type='dashed' />
 					</Tooltip>
-					<SelectNamHoc
-						style={{ width }}
-						allowClear
-						// condition={{ hinhThucDaoTaoId, trinhDoDaoTaoId }}
-						value={namHocId}
-						onChange={(val) => setNamHocId(val)}
-					/>
+					<SelectNamHoc style={{ width }} allowClear value={namHocId} onChange={(val) => setNamHocId(val)} />
 				</>
 			) : (
 				<Tooltip title='Mở rộng bộ lọc'>
