@@ -5,27 +5,22 @@ import { ipCore } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
-  const objInit = useInitModel<DonViHanhChinh.IRecord>(
-    'don-vi-hanh-chinh',
-    undefined,
-    undefined,
-    ipCore,
-  );
-  const { setLoading } = objInit;
+	const objInit = useInitModel<DonViHanhChinh.IRecord>('don-vi-hanh-chinh', undefined, undefined, ipCore);
+	const { setLoading } = objInit;
 
-  const [danhSachTinh, setDanhSachTinh] = useState<DonViHanhChinh.IRecord[]>([]);
+	const [danhSachTinh, setDanhSachTinh] = useState<DonViHanhChinh.IRecord[]>([]);
 
-  const getTinhThanhPhoModel = async () => {
-    setLoading(true);
-    const response = await getTinhThanhPho();
-    console.log(response, 'res');
-    setDanhSachTinh(response?.data?.data ?? [])
-    setLoading(false);
-  };
+	const getTinhThanhPhoModel = async () => {
+		setLoading(true);
+		const response = await getTinhThanhPho();
+		console.log(response, 'res');
+		setDanhSachTinh(response?.data?.data ?? []);
+		setLoading(false);
+	};
 
-  return {
-    ...objInit,
-    danhSachTinh,
-    getTinhThanhPhoModel,
-  };
+	return {
+		...objInit,
+		danhSachTinh,
+		getTinhThanhPhoModel,
+	};
 };
