@@ -30,7 +30,7 @@ export default () => {
 			sortParam,
 			paramPage,
 			paramLimit,
-			path,
+			'sinh-vien/page',
 			otherQuery,
 			isSetDanhSach,
 			isAbsolutePath,

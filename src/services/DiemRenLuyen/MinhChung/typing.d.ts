@@ -22,8 +22,10 @@ declare module MinhChungDiemRenLuyen {
 			lop: string;
 			hoTen: string;
 			maSinhVien: string;
+			_id: string;
 		};
 		createdAt?: string;
+		nguoiGui?: ENguoiGui;
 	}
 
 	export interface IMinhChungSinhVien {

@@ -94,3 +94,9 @@ export const EPhanLoaiNoiNgoaiTruMappingToLabel = {
 	[EPhanLoaiNoiNgoaiTru.NGOAI_TRU]: 'Ngoại trú',
 	[EPhanLoaiNoiNgoaiTru.NOI_TRU]: 'Nội trú',
 };
+
+export enum ENguoiGui {
+	SINH_VIEN = 'Sinh viên',
+	CO_VAN_HOC_TAP = 'Cố vấn học tập',
+	CHUYEN_VIEN = 'Chuyên viên',
+}
