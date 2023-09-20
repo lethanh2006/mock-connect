@@ -12,7 +12,7 @@ export function getCauHinhPhieu() {
 }
 
 export function sinhVienGetKetQua(idDotChamDiem: string) {
-	return axios.get(`${ip3}/ket-qua-phieu-diem-ren-luyen/dot-cham-diem/${idDotChamDiem}/sinh-vien/ket-qua`);
+	return axios.get(`${ip3}/phieu-diem-ren-luyen/dot-cham-diem/${idDotChamDiem}/sinh-vien/ket-qua`);
 }
 
 export function postKetQuaChamDiemRL(
@@ -21,5 +21,5 @@ export function postKetQuaChamDiemRL(
 	type: 'luu' | 'nop',
 	payload: Partial<PhieuDiemRenLuyen.IDiemCham>,
 ) {
-	return axios.post(`${ip3}/ket-qua-phieu-diem-ren-luyen/${role}/ket-qua/${idKetQua}/${type}`, payload);
+	return axios.post(`${ip3}/phieu-diem-ren-luyen/${role}/ket-qua/${idKetQua}/${type}`, payload);
 }
