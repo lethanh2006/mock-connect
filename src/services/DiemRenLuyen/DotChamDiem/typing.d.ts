@@ -1,3 +1,4 @@
+import { type PhieuDiemRenLuyen } from '../PhieuDiemRenLuyen/typing';
 import { type EHeDaoTaoRenLuyen } from './constants';
 
 declare module DotChamDiem {
@@ -30,6 +31,7 @@ declare module DotChamDiem {
 		topics?: string[];
 		users?: IUser[];
 		roles?: EVaiTroBieuMau[];
+		ketQua?: PhieuDiemRenLuyen.IKetQua;
 	}
 	export interface IUser {
 		code: string;
