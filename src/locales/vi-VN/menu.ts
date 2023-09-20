@@ -24,6 +24,18 @@ export default {
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
 	'menu.CongNo': 'Công nợ',
 
+	// DRL
+
+	'menu.DiemRenLuyen': 'Điểm rèn luyện',
+
+	'menu.DiemRenLuyen.KhaiBaoMinhChung': 'Khai báo minh chứng',
+	'menu.DiemRenLuyen.KhaiBaoMinhChung.NoiNgoaiTru': 'Nội ngoại trú',
+	'menu.DiemRenLuyen.KhaiBaoMinhChung.ThamGiaCongTacXaHoi': 'Tham gia công tác xã hội',
+	'menu.DiemRenLuyen.KhaiBaoMinhChung.TuyenTruyen': 'Tuyên truyền tích cực về Trường/Khoa',
+	'menu.DiemRenLuyen.KhaiBaoMinhChung.DacBiet': 'Thành tích đặc biệt',
+
+	'menu.DiemRenLuyen.PhieuDiemRenLuyen': 'Phiếu điểm rèn luyện',
+
 	'menu.DichVuHanhChinh': 'Dịch vụ hành chính',
 	'menu.DichVuHanhChinh.TaoDon': 'Tạo đơn - Dịch vụ hành chính',
 	'menu.PhanHoi': 'Phản hồi',
