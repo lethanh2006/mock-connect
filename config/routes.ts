@@ -188,6 +188,11 @@
 					},
 				],
 			},
+			{
+				name: 'PhieuDiemRenLuyen',
+				path: 'phieu-diem-ren-luyen',
+				component: './DiemRenLuyen/PhieuDiemRenLuyen',
+			},
 		],
 	},
 

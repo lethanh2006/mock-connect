@@ -3,6 +3,31 @@ export enum EHeDaoTaoRenLuyen {
 	CHINH_QUY = 'Hệ chính quy',
 }
 
+// Loại họp lớp/sinh hoạt
+export enum ELoaiHopLopSinhHoat {
+	DAU_KY = 'Đầu kỳ học',
+	GIUA_KY = 'Giữa kỳ học',
+	CUOI_KY = 'Cuối kỳ học',
+}
+
+export enum ETrangThaiChamDiem {
+	CHUA_CHAM = 'Chưa chấm',
+	LUU = 'Lưu',
+	DA_NOP = 'Đã nộp',
+}
+
+export const trangThaiPhieuDiem = [
+	'CVHT đã nộp',
+	'CVHT đã đánh giá',
+	'Chờ CVHT đánh giá',
+	'Lớp đã đánh giá - Chưa gửi',
+	'Chờ lớp đánh giá',
+	'Đã đánh giá - Chưa gửi',
+	'Chưa đánh giá',
+];
+
+export const colorTagTrangThaiPhieuDiem = ['green', 'lime', 'magenta', 'purple', 'cyan', 'blue', 'gold'];
+
 export enum EReceiverType {
 	// Topic = 'Topic',
 	User = 'User',
