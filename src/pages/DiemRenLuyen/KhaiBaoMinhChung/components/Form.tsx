@@ -2,6 +2,7 @@ import { ELoaiDanhMucChung } from '@/services/DiemRenLuyen/DanhMuc/constant';
 import {
 	ELoaiMinhChungDiemRenLuyen,
 	ELoaiMinhChungDiemRenLuyenMappingToTitle,
+	ENguoiGui,
 	EPhanLoaiNoiNgoaiTru,
 	EPhanLoaiNoiNgoaiTruMappingToLabel,
 } from '@/services/DiemRenLuyen/MinhChung/constants';
@@ -21,6 +22,7 @@ import { useWatch } from 'antd/lib/form/Form';
 import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
+import { type DotChamDiem } from '@/services/DiemRenLuyen/DotChamDiem/typing';
 
 interface FormValues extends Omit<MinhChungDiemRenLuyen.IRecord, 'urlFileList'> {
 	urlFileList: any;
@@ -38,6 +40,7 @@ export const FormKhaiBaoMinhChung = () => {
 	const idKyTucXa = useWatch(['thongTinNoiTru', 'idKyTucXa'], form);
 
 	const [listTinh, setListTinh] = useState<DonViHanhChinh.IRecord[]>();
+	const [dotChamDiem, setDotChamDiem] = useState<DotChamDiem.IRecord | undefined>(undefined);
 
 	useEffect(() => {
 		getTinhThanhPho().then((data) => {
@@ -65,6 +68,9 @@ export const FormKhaiBaoMinhChung = () => {
 	].includes(getLoaiMinhChung());
 
 	const disabledForm = isView;
+	const isNgoaiThoiGianTiepNhan =
+		moment().isBefore(dotChamDiem?.thoiGianTiepNhanMinhChung?.thoiGianBatDau) ||
+		moment().isAfter(dotChamDiem?.thoiGianTiepNhanMinhChung?.thoiGianKetThuc);
 
 	useEffect(() => {
 		resetFieldsForm(form, {
@@ -90,6 +96,7 @@ export const FormKhaiBaoMinhChung = () => {
 
 		const values_ = {
 			...values,
+			nguoiGui: record?.nguoiGui ?? ENguoiGui.SINH_VIEN,
 			thongTinNgoaiTru: {
 				...values.thongTinNgoaiTru,
 				soNha: values.soNhaTenDuong,
@@ -125,8 +132,22 @@ export const FormKhaiBaoMinhChung = () => {
 				<Form.Item name='loaiMinhChung' hidden />
 				<Row gutter={12}>
 					<Col span={24}>
-						<Form.Item name='idDotChamDiem' label='Đợt chấm điểm' rules={[...rules.required]}>
-							<SelectDotChamDiem />
+						<Form.Item
+							name='idDotChamDiem'
+							label='Đợt chấm điểm'
+							rules={[...rules.required]}
+							extra={
+								isNgoaiThoiGianTiepNhan && !disabledForm ? (
+									<i style={{ color: 'red' }}>Ngoài khoảng thời gian tiếp nhận minh chứng</i>
+								) : null
+							}
+						>
+							<SelectDotChamDiem
+								onChange={(_, option) => {
+									const rawData = option?.rawData as DotChamDiem.IRecord | undefined;
+									setDotChamDiem(rawData);
+								}}
+							/>
 						</Form.Item>
 					</Col>
 					{getLoaiMinhChung() === ELoaiMinhChungDiemRenLuyen.THAM_GIA_CONG_TAC_XA_HOI && (
@@ -218,25 +239,26 @@ export const FormKhaiBaoMinhChung = () => {
 						</>
 					)}
 
-					<Col span={24}>
-						<Form.Item name='phanLoai' label='Phân loại cư trú' rules={[...rules.required]}>
-							<Select
-								placeholder='Chọn phân loại cư trú'
-								options={Object.values(EPhanLoaiNoiNgoaiTru).map((item) => ({
-									value: item,
-									label: EPhanLoaiNoiNgoaiTruMappingToLabel[item],
-								}))}
-							/>
-						</Form.Item>
-					</Col>
-
+					{getLoaiMinhChung() === ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU && (
+						<Col span={24}>
+							<Form.Item name='phanLoai' label='Phân loại cư trú' rules={[...rules.required]}>
+								<Select
+									placeholder='Chọn phân loại cư trú'
+									options={Object.values(EPhanLoaiNoiNgoaiTru).map((item) => ({
+										value: item,
+										label: EPhanLoaiNoiNgoaiTruMappingToLabel[item],
+									}))}
+								/>
+							</Form.Item>
+						</Col>
+					)}
 					{phanLoai === EPhanLoaiNoiNgoaiTru.NGOAI_TRU ? (
 						<>
 							<Col span={24}>
 								<div className='ant-descriptions-title'>Nơi ở hiện nay</div>
 							</Col>
 							<Form.Item name='thongTinNgoaiTru' noStyle>
-								<SelectDonViHanhChinh keyValue='ma' listTinh={listTinh} hasLabel hasSoNha form={form} />
+								<SelectDonViHanhChinh listTinh={listTinh} hasLabel hasSoNha form={form} />
 							</Form.Item>
 
 							<Col span={24}>

@@ -1,10 +1,11 @@
 import { Select } from 'antd';
+import { type BaseOptionType } from 'antd/lib/select';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 export const SelectDotChamDiem = (props: {
 	value?: string;
-	onChange?: (val: string) => void;
+	onChange?: (val?: string, option?: BaseOptionType) => void;
 	multiple?: boolean;
 	condition?: any;
 	allowClear?: boolean;
@@ -30,6 +31,7 @@ export const SelectDotChamDiem = (props: {
 				key: item._id,
 				value: item._id,
 				label: item.tenDot,
+				rawData: item,
 			}))}
 			removeIcon={readOnly ? null : undefined}
 			showSearch

@@ -17,7 +17,7 @@ import { FormKhaiBaoMinhChung } from './components/Form';
 import ExpandText from '@/components/ExpandText';
 
 export default () => {
-	const { page, limit, getLoaiMinhChung, handleView, handleEdit, deleteModel, getModel } =
+	const { danhSach, page, limit, getLoaiMinhChung, handleView, handleEdit, deleteModel, getModel } =
 		useModel('diemrenluyen.minhchung');
 
 	const onCell = (rec: MinhChungDiemRenLuyen.IRecord) => ({
@@ -67,7 +67,7 @@ export default () => {
 				} else if (record.phanLoai === 'ngoai_tru') {
 					return (
 						<p>
-							{val?.soNha}, {val?.quan?.tenDonVi}, {val?.xa?.tenDonVi}, {val?.tinh?.tenDonVi}
+							{val?.soNha}, {val?.quan}, {val?.xa}, {val?.tinh}
 						</p>
 					);
 				} else {
@@ -215,6 +215,7 @@ export default () => {
 			align: 'center',
 			width: 70,
 			fixed: 'right',
+			hide: getLoaiMinhChung() === ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU,
 			render: (val, rec) => {
 				return (
 					<>
@@ -245,6 +246,11 @@ export default () => {
 			modelName='diemrenluyen.minhchung'
 			columns={columns}
 			dependencies={[page, limit]}
+			buttons={{
+				create:
+					getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU ||
+					!danhSach.find((item) => item.trangThai === ETrangThaiMinhChungDiemRenLuyen.DA_DUYET),
+			}}
 		/>
 	);
 };
