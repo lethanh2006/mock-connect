@@ -7,47 +7,45 @@ import CardHocPhan from '../components/CardHocPhan';
 import flag from '../components/flag.svg';
 
 const TienTrinhChuongTrinhKhung = () => {
-  const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
-  const [count, setCount] = useState(0);
-  const [tongTinChi, setTongTinChi] = useState(0);
-  const [danhSachHocKy, setDanhSachHocKy] = useState<
-    Record<string, ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>
-  >({});
+	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+	const [count, setCount] = useState(0);
+	const [tongTinChi, setTongTinChi] = useState(0);
+	const [danhSachHocKy, setDanhSachHocKy] = useState<Record<string, ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>>({});
 
-  // const [soKyTheoChuyenNganh, setSoKyTheoChuyenNganh] = useState<number[] | undefined>(undefined);
+	// const [soKyTheoChuyenNganh, setSoKyTheoChuyenNganh] = useState<number[] | undefined>(undefined);
 
-  // const [ctkChuyenNganh, setCtkChuyenNganh] = useState<
-  //   ChuongTrinhKhungChuyenNganh.ICtkChuyenNganhRecord[] | undefined
-  // >();
+	// const [ctkChuyenNganh, setCtkChuyenNganh] = useState<
+	//   ChuongTrinhKhungChuyenNganh.ICtkChuyenNganhRecord[] | undefined
+	// >();
 
-  const fetch = async () => {
-    await sinhVienGetTienTrinhKhungModel().then((data) => {
-      // if (response.data.data.ctkChuyenNganh) {
-      //   const cacKy = response.data?.data?.ctkChuyenNganh
-      //     .filter((chuyenNganh: any) => chuyenNganh.tienTrinh.length > 0)[0]
-      //     ?.tienTrinh.map((el: any) => Number(el.hoc_ky));
-      //   setSoKyTheoChuyenNganh(cacKy);
-      //   setCtkChuyenNganh(response.data?.data?.ctkChuyenNganh);
-      // }
-      const gHocKy = _.groupBy(data, (item) => item.soThuTuKy);
-      setDanhSachHocKy(gHocKy);
-      setTongTinChi(_.sumBy(data, (item) => item.soTinChi));
-      setCount(
-        _.sumBy(
-          data?.filter((item) => item.lichSuDiem?.length),
-          (item) => item.soTinChi,
-        ),
-      );
-    });
-  };
+	const fetch = async () => {
+		await sinhVienGetTienTrinhKhungModel().then((data) => {
+			// if (response.data.data.ctkChuyenNganh) {
+			//   const cacKy = response.data?.data?.ctkChuyenNganh
+			//     .filter((chuyenNganh: any) => chuyenNganh.tienTrinh.length > 0)[0]
+			//     ?.tienTrinh.map((el: any) => Number(el.hoc_ky));
+			//   setSoKyTheoChuyenNganh(cacKy);
+			//   setCtkChuyenNganh(response.data?.data?.ctkChuyenNganh);
+			// }
+			const gHocKy = _.groupBy(data, (item) => item.soThuTuKy);
+			setDanhSachHocKy(gHocKy);
+			setTongTinChi(_.sumBy(data, (item) => item.soTinChi));
+			setCount(
+				_.sumBy(
+					data?.filter((item) => item.lichSuDiem?.length),
+					(item) => item.soTinChi,
+				),
+			);
+		});
+	};
 
-  useEffect(() => {
-    fetch();
-  }, []);
+	useEffect(() => {
+		fetch();
+	}, []);
 
-  return (
-    <>
-      {/* {chuongTrinhKhung && chuongTrinhKhung.length > 0 ? (
+	return (
+		<>
+			{/* {chuongTrinhKhung && chuongTrinhKhung.length > 0 ? (
         <Row style={{ marginBottom: 8 }}>
           {chuongTrinhKhung.map((ctk) => (
             <Col key={ctk.id} span={24}>
@@ -59,31 +57,31 @@ const TienTrinhChuongTrinhKhung = () => {
           ))}
         </Row>
       ) : null} */}
-      <Row>
-        <Col>Số tín chỉ đã tích lũy:</Col>
-      </Row>
-      <Row align="middle">
-        <Col span={20} md={22}>
-          <div className="progress-wrapper">
-            <div className="proress-bar" style={{ width: `${(count * 100) / tongTinChi}%` }}>
-              <div className="progress-label">{count} tín</div>
-            </div>
-          </div>
-        </Col>
-        <Col span={4} md={2}>
-          <div className="progress-end">
-            <img src={flag} />
-            <br />
-            {tongTinChi} tín chỉ
-          </div>
-        </Col>
-      </Row>
+			<Row>
+				<Col>Số tín chỉ đã tích lũy:</Col>
+			</Row>
+			<Row align='middle'>
+				<Col span={20} md={22}>
+					<div className='progress-wrapper'>
+						<div className='proress-bar' style={{ width: `${(count * 100) / tongTinChi}%` }}>
+							<div className='progress-label'>{count} tín</div>
+						</div>
+					</div>
+				</Col>
+				<Col span={4} md={2}>
+					<div className='progress-end'>
+						<img src={flag} />
+						<br />
+						{tongTinChi} tín chỉ
+					</div>
+				</Col>
+			</Row>
 
-      <Spin spinning={loading}>
-        {Object.entries(danhSachHocKy)?.map(([hocKy, data]) => (
-          <div className="row-hoc-ky" key={hocKy}>
-            <div className="col-hoc-ky">
-              {/* <Tooltip
+			<Spin spinning={loading}>
+				{Object.entries(danhSachHocKy)?.map(([hocKy, data]) => (
+					<div className='row-hoc-ky' key={hocKy}>
+						<div className='col-hoc-ky'>
+							{/* <Tooltip
                 title={
                   <>
                     Tổng số tín chỉ cần học: {hocKy.tongSoTinCanHoc}
@@ -94,18 +92,18 @@ const TienTrinhChuongTrinhKhung = () => {
                   </>
                 }
               > */}
-              <h4>Học kỳ {hocKy}</h4>
-              <span className="tin-chi">({_.sumBy(data, (i) => i.soTinChi)} TC)</span>
-              {/* </Tooltip> */}
-            </div>
-            <div className="col-chi-tiet">
-              {data.map((ctk) => (
-                <CardHocPhan chuongTrinhKhung={ctk} key={ctk._id} />
-              ))}
-            </div>
-          </div>
-        ))}
-        {/* {soKyTheoChuyenNganh &&
+							<h4>Học kỳ {hocKy}</h4>
+							<span className='tin-chi'>({_.sumBy(data, (i) => i.soTinChi)} TC)</span>
+							{/* </Tooltip> */}
+						</div>
+						<div className='col-chi-tiet'>
+							{data.map((ctk) => (
+								<CardHocPhan chuongTrinhKhung={ctk} key={ctk._id} />
+							))}
+						</div>
+					</div>
+				))}
+				{/* {soKyTheoChuyenNganh &&
           danhSachHocPhan
             ?.filter((hocKy) => Number(hocKy.hoc_ky) <= soKyTheoChuyenNganh[0])
             ?.map((hocKy) => (
@@ -134,7 +132,7 @@ const TienTrinhChuongTrinhKhung = () => {
               </div>
             ))} */}
 
-        {/* {ctkChuyenNganh?.map((el) => (
+				{/* {ctkChuyenNganh?.map((el) => (
           <Collapse accordion key={el.chuyen_nganh.id} bordered={false}>
             <Collapse.Panel
               key={el.chuyen_nganh.id}
@@ -195,9 +193,9 @@ const TienTrinhChuongTrinhKhung = () => {
                 </div>
               </div>
             ))} */}
-      </Spin>
-    </>
-  );
+			</Spin>
+		</>
+	);
 };
 
 export default TienTrinhChuongTrinhKhung;

@@ -1,3 +1,4 @@
+import { primaryColor } from '@/services/ant-design-pro/constant';
 import { tienVietNam } from '@/utils/utils';
 import { type ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
@@ -80,7 +81,7 @@ const ColumnChart = (props: DataChartType) => {
 	const series = yLabel.map((y, index) => ({
 		name: y,
 		data: yAxis?.[index] || [],
-		color: colors?.[index] ?? '#007EB9',
+		color: colors?.[index] ?? primaryColor,
 	}));
 
 	return (
