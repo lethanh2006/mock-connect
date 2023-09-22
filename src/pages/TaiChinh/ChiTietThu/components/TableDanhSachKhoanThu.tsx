@@ -19,14 +19,14 @@ const TableDanhSachKhoanThu = (props: any) => {
 			dataIndex: 'unitAmount',
 			width: 80,
 			align: 'center',
-			render: (val) => inputFormat(val),
+			render: (val) => `${inputFormat(val)} VNĐ`,
 		},
 		{ title: 'Số lượng', dataIndex: 'quantity', width: 60, align: 'center' },
 		{
 			title: 'Thành tiền',
 			width: 60,
 			align: 'center',
-			render: (val, rec) => inputFormat(rec.quantity * rec.unitAmount),
+			render: (val, rec) => `${inputFormat(rec.quantity * rec.unitAmount)} VNĐ`,
 		},
 	];
 

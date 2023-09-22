@@ -72,4 +72,14 @@ declare module ChiTietThu {
 		tongTienDaThu: number;
 		tongTienThua: number;
 	};
+
+	export interface IResponseMomo {
+		payUrl: string;
+		deeplink: string;
+		qrCodeUrl: string;
+		deeplinkMiniApp: string;
+		userFee: number;
+		userFeePercent: number;
+		userFeeMax: number;
+	}
 }
