@@ -24,12 +24,11 @@ const TableDanhSachGiaoDich = (props: any) => {
 			align: 'center',
 			render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
 		},
-		{ title: 'Người thực hiện', dataIndex: ['nguoiThucHien', 'hoTen'], width: 120, align: 'center' },
+		{ title: 'Người thực hiện', dataIndex: ['nguoiThucHien', 'hoTen'], width: 120 },
 		{
 			title: 'Hình thức',
 			dataIndex: 'paymentType',
 			width: 120,
-			align: 'center',
 			render: (val: ELoaiThanhToan) => MapKeyLoaiThanhToan?.[val] ?? '',
 		},
 	];
