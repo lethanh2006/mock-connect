@@ -1,5 +1,5 @@
 import { messagesCalendar } from '@/services/Calendar/constant';
-import { ELoaiSuKienColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import moment from 'moment';
 import type { DateRange } from 'react-big-calendar';
 import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
@@ -11,7 +11,7 @@ const CalendarLichHocLopHp = () => {
 	const { setVisibleForm, danhSach, setRecord } = useModel('daotao.thoikhoabieu');
 
 	const eventPropGetter = () => ({
-		style: { backgroundColor: ELoaiSuKienColorSuKien?.[ELoaiSuKien.LICH_HOC] },
+		style: { backgroundColor: ColorSuKien?.[ELoaiSuKien.LICH_HOC] },
 	});
 
 	const eventCustom = ({ event }: any) => {

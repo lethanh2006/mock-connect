@@ -1,5 +1,5 @@
 import { messagesCalendar } from '@/services/Calendar/constant';
-import { ESuKienTypeMappingToColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { Card, Modal } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
@@ -42,7 +42,7 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	}, [visibleModal]);
 
 	const eventPropGetter = () => ({
-		style: { backgroundColor: ESuKienTypeMappingToColorSuKien?.[ELoaiSuKien.LICH_HOC] },
+		style: { backgroundColor: ColorSuKien?.[ELoaiSuKien.LICH_HOC] },
 	});
 
 	const eventCustom = ({ event }: any) => {
