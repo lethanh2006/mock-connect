@@ -1,5 +1,5 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { ESuKienTypeMappingToColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Modal, Popconfirm, Space, Tag } from 'antd';
@@ -62,7 +62,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 		>
 			<Descriptions column={1}>
 				<Descriptions.Item label='Loại sự kiện'>
-					{loaiSuKien ? <Tag color={ESuKienTypeMappingToColorSuKien[loaiSuKien]}>{loaiSuKien}</Tag> : '--'}
+					{loaiSuKien ? <Tag color={ColorSuKien[loaiSuKien]}>{loaiSuKien}</Tag> : '--'}
 				</Descriptions.Item>
 				{isThoiKhoaBieu ? (
 					<>

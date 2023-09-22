@@ -1,5 +1,5 @@
 import { type EVaiTroBieuMau } from '../TienIch/constant';
-import { type ESuKienType, type ETrangThaiDienRa, type ELoaiSuKienSinhVien, type EReceiverType } from './constant';
+import { type ELoaiSuKien, type ELoaiSuKienSinhVien, type EReceiverType, type ETrangThaiDienRa } from './constant';
 
 declare module SuKien {
 	export interface ThongTinSukien {
@@ -24,7 +24,7 @@ declare module SuKien {
 
 	export interface IRecord {
 		_id: string;
-		loaiSuKien: ESuKienType;
+		loaiSuKien: ELoaiSuKien;
 		tenSuKien: string;
 		maSuKien?: string;
 		listNguoiDaThamDa?: IUser[];

@@ -1,4 +1,4 @@
-import { ESuKienTypeMappingToColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { Calendar as AntdCalendar, Checkbox, Col, Row, Select } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
@@ -67,7 +67,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					<Checkbox value={ELoaiSuKien.LICH_HOC}>
 						<p
 							style={{
-								backgroundColor: ESuKienTypeMappingToColorSuKien[ELoaiSuKien.LICH_HOC],
+								backgroundColor: ColorSuKien[ELoaiSuKien.LICH_HOC],
 								color: 'white',
 								padding: '2px 6px',
 								borderRadius: 2,
@@ -81,7 +81,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					<Checkbox value={ELoaiSuKien.LICH_THI}>
 						<p
 							style={{
-								backgroundColor: ESuKienTypeMappingToColorSuKien[ELoaiSuKien.LICH_THI],
+								backgroundColor: ColorSuKien[ELoaiSuKien.LICH_THI],
 								color: 'white',
 								padding: '2px 6px',
 								borderRadius: 2,
@@ -95,7 +95,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					<Checkbox value={ELoaiSuKien.CA_NHAN}>
 						<p
 							style={{
-								backgroundColor: ESuKienTypeMappingToColorSuKien[ELoaiSuKien.CA_NHAN],
+								backgroundColor: ColorSuKien[ELoaiSuKien.CA_NHAN],
 								color: 'white',
 								padding: '2px 6px',
 								borderRadius: 2,
@@ -109,7 +109,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					<Checkbox value={ELoaiSuKien.CHUNG}>
 						<p
 							style={{
-								backgroundColor: ESuKienTypeMappingToColorSuKien[ELoaiSuKien.CHUNG],
+								backgroundColor: ColorSuKien[ELoaiSuKien.CHUNG],
 								color: 'white',
 								padding: '2px 6px',
 								borderRadius: 2,
