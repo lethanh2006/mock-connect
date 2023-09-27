@@ -50,7 +50,7 @@ const PhieuDangKy = () => {
 				: item,
 		);
 	const tongTinChi = _.sumBy(
-		danhSachLopHienThi.filter((item) => item.hocPhan?.isTinhSoTinChi !== false),
+		danhSachLopHienThi.filter((item) => item.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy !== false),
 		(item) => item.soTinChi,
 	);
 	const tongTinChiChuaDk = _.sumBy(
@@ -124,7 +124,7 @@ const PhieuDangKy = () => {
 			sortable: true,
 			render: (val, rec) => (
 				<>
-					{val} {rec.hocPhan?.isTinhSoTinChi === false ? <i>(không tính)</i> : null}
+					{val} {rec.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy === false ? <i>(không tính)</i> : null}
 				</>
 			),
 		},
@@ -146,9 +146,9 @@ const PhieuDangKy = () => {
 										.sort((a, b) => a - b)
 										.join(',')}
 									,{' '}
-									{item.nhanSu ? (
-										item.nhanSuInfo?.hoDem ? (
-											[item.nhanSuInfo.hoDem, item.nhanSuInfo.ten].join(' ')
+									{item.nhanSuSsoId ? (
+										item.nhanSu?.hoDem ? (
+											[item.nhanSu.hoDem, item.nhanSu.ten].join(' ')
 										) : (
 											<i style={{ color: '#999' }}>Không lấy được thông tin</i>
 										)

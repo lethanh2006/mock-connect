@@ -4,6 +4,8 @@ declare module KhoaSinhVien {
 		ten: string;
 		namHocId: string;
 		namHoc?: NamHoc.IRecord;
+		maTrinhDoDaoTao: string;
+		trinhDoDaoTao?: TrinhDoDaoTao.IRecordCoSo;
 		maHinhThucDaoTao: string;
 		hinhThucDaoTao?: HinhThucDaoTao.IRecordCoSo;
 		namHocBatDau: number;

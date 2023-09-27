@@ -5,11 +5,14 @@ import { type EGioiTinh, type EHinhThucTuyenDung, type ENoiNgoaiTru, type EViTri
 declare module SinhVien {
 	export interface IRecord {
 		_id: string;
+		ssoId: string;
+		trangThaiHoc?: string;
 		anhDaiDienUrl: string;
 		ma: string;
 		ten: string;
 		firstName: string;
 		lastName: string;
+
 		gioiTinh: EGioiTinh;
 		quocTich: string;
 		danToc: string;
@@ -20,36 +23,31 @@ declare module SinhVien {
 		ngayCapCccd: string;
 		soDienThoai: string;
 		email: string;
-		soDienThoai2: string;
-		email2: string;
-		nguoiLienLac: string;
-		soDienThoaiNguoiLienLac: string;
-		khoaNganh: {
-			khoaSinhVien: KhoaSinhVien.IRecord;
-			nganh: NganhDaoTao.IRecordCoSo;
-			ten: string;
-		};
+		// soDienThoai2: string;
+		// email2: string;
+		// nguoiLienLac: string;
+		// soDienThoaiNguoiLienLac: string;
 
 		loaiNoiSinh: string;
 		quocGiaNoiSinh: string;
 		tinhTpNoiSinh: string;
-		quanHuyenNoiSinh: string;
-		xaPhuongNoiSinh: string;
+		// quanHuyenNoiSinh: string;
+		// xaPhuongNoiSinh: string;
 
 		tinhTpQueQuan: string;
 		quanHuyenQueQuan: string;
 		xaPhuongQueQuan: string;
-		soNhaTenDuongQueQuan: string;
+		// soNhaTenDuongQueQuan: string;
 
 		tinhTpThuongTru: string;
 		quanHuyenThuongTru: string;
 		xaPhuongThuongTru: string;
 		soNhaTenDuongThuongTru: string;
 
-		laDoanVien: boolean;
+		// laDoanVien: boolean;
 		ngayVaoDoan: string;
-		daHocLopCamTinhDang: boolean;
-		laDangVien: boolean;
+		// daHocLopCamTinhDang: boolean;
+		// laDangVien: boolean;
 		ngayVaoDang: string;
 		ngayVaoDangChinhThuc: string;
 
@@ -100,15 +98,20 @@ declare module SinhVien {
 		thongTinAnhChiEm: string;
 		thongTinCacCon: string;
 
+		maKhoaNganh?: string;
+		khoaNganh: {
+			khoaSinhVien: KhoaSinhVien.IRecord;
+			nganh: NganhDaoTao.IRecordCoSo;
+			ten: string;
+		};
 		maKhoaSinhVien: string;
 		khoaSinhVien?: KhoaSinhVien.IRecord;
 		lopHanhChinhList?: LopHanhChinh.IRecord[];
 		maNganh: string;
-		maTrinhDoDaoTao: string;
-		maTinhThucDaoTao: string;
+		nganh?: NganhDaoTao.IRecordCoSo;
+		maTrinhDo: string;
+		maHinhThuc: string;
 		maChuongTrinhDaoTao: string;
-		ssoId: string;
-		trangThaiHoc?: string;
 	}
 
 	export interface IHocBongSinhVien {
@@ -184,14 +187,5 @@ declare module SinhVien {
 		sinhVienNamThu: string; //"Sinh viên năm nhất"
 		soNamDaoTao: number;
 		trangThaiSinhVien: string; //"Đang học"
-	}
-
-	export interface ICongNoSinhVien {
-		_id: string;
-		sinhVienSsoId: string;
-		sinhVien?: IRecord;
-		dichVu: string;
-		soTienPhaiNop: number;
-		soTienDaNop: number;
 	}
 }

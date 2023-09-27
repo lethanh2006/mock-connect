@@ -6,10 +6,10 @@ declare module HocKy {
 		soThuTu: number;
 		namHocId: string;
 		namHoc?: NamHoc.IRecord;
-		// trinhDoDaoTaoId: string;
+		maTrinhDoDaoTao: string;
 		// trinhDoDaoTao?: TrinhDoDaoTao.IRecordCoSo;
-		// hinhThucDaoTaoId: string;
-		// hinhThucDaoTao?: HinhThucDaoTao.IRecordCoSo;
+		maHinhThucDaoTao: string;
+		// hinhThucDaoTao: HinhThucDaoTao.IRecordCoSo;
 		thoiGianBatDau: string;
 		soTuan: number;
 		isKyChinh: boolean;

@@ -49,37 +49,24 @@
 	},
 
 	// DANH MUC HE THONG
-	// {
-	// 	name: 'News',
-	// 	icon: 'NotificationOutlined',
-	// 	path: '/tin-tuc',
-	// 	// access: 'sinhVienVaNhanVien',
-	// 	routes: [
-	// 		{
-	// 			path: './',
-	// 			component: './TinTucStrapi',
-	// 			hideInMenu: true,
-	// 		},
-	// 		{
-	// 			path: './chi-tiet',
-	// 			hideInMenu: true,
-	// 			component: './TinTucStrapi/ChiTietTinTuc.tsx',
-	// 		},
-	// 	],
-	// },
-	// DANH MUC HE THONG
-	// {
-	//   name: 'DanhMuc',
-	//   path: '/danh-muc',
-	//   icon: 'copy',
-	//   routes: [
-	//     {
-	//       name: 'ChucVu',
-	//       path: 'chuc-vu',
-	//       component: './DanhMuc/ChucVu',
-	//     },
-	//   ],
-	// },
+	{
+		name: 'News',
+		icon: 'NotificationOutlined',
+		path: '/tin-tuc',
+		// access: 'sinhVienVaNhanVien',
+		routes: [
+			{
+				path: './',
+				component: './TinTucStrapi',
+				hideInMenu: true,
+			},
+			{
+				path: './chi-tiet',
+				hideInMenu: true,
+				component: './TinTucStrapi/ChiTietTinTuc.tsx',
+			},
+		],
+	},
 
 	// MENU CHUNG
 	{

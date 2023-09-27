@@ -14,8 +14,8 @@ export declare module LopHocPhan {
 		_id: string;
 		ten: string;
 		tenCha?: string;
-		maLop: string;
-		maLopCha?: string;
+		// maLop: string;
+		// maLopCha?: string;
 		maHocKy: string;
 		hocKy?: HocKy.IRecord;
 		maHocPhan: string;
@@ -23,9 +23,9 @@ export declare module LopHocPhan {
 		siSoToiDa: number;
 		siSo?: number; // Sĩ số hiện tại
 		loai: ELoaiLopHocPhan;
-		// parentId?: string | null;
 		soThuTuLop?: number;
 		soThuTuNhom?: number;
+		lmsUrl?: string | null;
 
 		parent?: IRecord;
 		children?: IRecord[];
@@ -43,11 +43,12 @@ export declare module LopHocPhan {
 		thu: number;
 		tietBatDau: number;
 		soTiet: number;
-		nhanSu?: string; //SsoId
-		nhanSuInfo?: ToChucNhanSu.INhanSu;
+		nhanSuSsoId?: string; //SsoId
+		nhanSu?: ToChucNhanSu.INhanSu;
 		loaiHinhHocTap?: ELoaiHinhHocTap;
 		nhomTietHocId?: string;
 		danhSachTuan: { tuan: number; tkbId: string }[];
+		phongHoc?: string;
 	};
 
 	export interface IRecordNhanSuLopHP {
@@ -78,6 +79,7 @@ export declare module LopHocPhan {
 
 		loai?: ELoaiHocPhanDangKyTinChi;
 
+		// Populate
 		soTinChi?: number;
 		hocPhan?: HocPhan.IRecord;
 		kyHoc?: HocKy.IRecord;

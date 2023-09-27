@@ -51,8 +51,8 @@ const TableLichHocLopHP = () => {
 			width: 120,
 			render: (val, rec) =>
 				val ? (
-					rec.giangVien?.ten ? (
-						[rec.giangVien?.hoDem, rec.giangVien?.ten].join(' ')
+					rec.nhanSu?.ten ? (
+						[rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ')
 					) : (
 						<i>Không tìm thấy thông tin</i>
 					)
@@ -79,7 +79,7 @@ const TableLichHocLopHP = () => {
 			title: 'Nhóm lớp',
 			align: 'center',
 			width: 80,
-			render: (val, rec) => !!rec.lopHocPhan?.maLopCha && `Nhóm ${rec.lopHocPhan?.loai} ${rec.lopHocPhan?.soThuTuNhom}`,
+			render: (val, rec) => !!rec.lopHocPhan?.tenCha && `Nhóm ${rec.lopHocPhan?.loai} ${rec.lopHocPhan?.soThuTuNhom}`,
 			onCell,
 		},
 	];
