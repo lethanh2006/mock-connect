@@ -6,22 +6,35 @@ declare module HocPhan {
 		ma: string;
 		ten: string;
 		tenTiengAnh?: string;
+		maLoaiHocPhan: string;
+		loaiHocPhan?: ILoaiHocPhan;
 		soTinChi: number;
-		donVi: string;
+		maDonVi: string;
+		donVi?: ToChucNhanSu.IDonVi;
+
+		active: boolean;
 		deCuongHienTaiId?: string;
 		deCuongHienTai?: IDeCuongHocPhan;
 		createdAt?: string;
 		updatedAt?: string;
-		active: boolean;
+	}
 
-		isTinhSoTinChi: boolean;
+	export interface ILoaiHocPhan {
+		_id: string;
+		ma: string;
+		ten: string;
+
 		isTinhDiem: boolean;
+		isTinhSoTinChiDangKy: boolean;
+		isTinhSoTinChiTichLuy: boolean;
+		khoiTuChon?: boolean;
+		khoiTotNghiep?: boolean;
 	}
 
 	export interface IDeCuongHocPhan {
 		_id: string;
 		ma: string;
-		hocPhanId: string;
+		maHocPhan: string;
 		hocPhan: IRecord;
 		nguoiBienSoan: string;
 		ngayApDung: string;

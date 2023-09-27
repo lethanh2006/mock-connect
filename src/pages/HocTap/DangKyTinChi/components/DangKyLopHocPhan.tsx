@@ -173,9 +173,9 @@ const DangKyLopHocPhan = () => {
 										.sort((a, b) => a - b)
 										.join(',')}
 									,{' '}
-									{item.nhanSu ? (
-										item.nhanSuInfo?.hoDem ? (
-											[item.nhanSuInfo.hoDem, item.nhanSuInfo.ten].join(' ')
+									{item.nhanSuSsoId ? (
+										item.nhanSu?.hoDem ? (
+											[item.nhanSu.hoDem, item.nhanSu.ten].join(' ')
 										) : (
 											<i style={{ color: '#999' }}>Không lấy được thông tin</i>
 										)

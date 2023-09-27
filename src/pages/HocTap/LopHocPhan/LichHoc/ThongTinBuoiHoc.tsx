@@ -19,8 +19,8 @@ const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord; title?: string
 			</Descriptions.Item>
 			<Descriptions.Item label='Giảng viên'>
 				{buoiHoc?.nhanSuSsoId ? (
-					buoiHoc.giangVien?.ten ? (
-						[buoiHoc.giangVien?.hoDem, buoiHoc.giangVien?.ten].join(' ')
+					buoiHoc.nhanSu?.ten ? (
+						[buoiHoc.nhanSu?.hoDem, buoiHoc.nhanSu?.ten].join(' ')
 					) : (
 						<i>Không tìm thấy thông tin</i>
 					)
