@@ -6,8 +6,17 @@ import { useModel } from 'umi';
 import CardHocPhan from '../components/CardHocPhan';
 import flag from '../components/flag.svg';
 
+type TChuongTrinhHocKy = {
+	khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
+	soTinChiPhaiHoc: number;
+	soTinChiTuChon: number;
+	soTinChiDaDat?: number;
+	khoiChuyenNganh?: TChuongTrinhHocKy[];
+};
+
 const TienTrinhChuongTrinhKhung = () => {
 	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+	// const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
 	const [count, setCount] = useState(0);
 	const [tongTinChi, setTongTinChi] = useState(0);
 	const [danhSachHocKy, setDanhSachHocKy] = useState<Record<string, ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>>({});
