@@ -42,12 +42,8 @@ declare module ChuongTrinhDaoTao {
 		soThuTuKy?: number;
 		soTinChiTuChonPhaiHoc?: number;
 		ten?: string; // Tên khối chương trình tự chọn
-		hocPhanTuChonList?: IHocPhanTuChonCTDT[];
-
-		// Populate
-		soTinChi: number;
-		hoc: ETrangThaiHocTap;
-		lichSuDiem?: LopHocPhan.IRecordSinhVienLopHP[];
+		isTinhSoTinChiTichLuy?: boolean;
+		hocPhanCtdtList?: IHocPhanTuChonCTDT[];
 	}
 
 	export interface IHocPhanTuChonCTDT extends IHocPhanBase {
@@ -65,7 +61,12 @@ declare module ChuongTrinhDaoTao {
 		hocPhanTruoc?: HocPhan.IRecord;
 		maHocPhanSongHanh: string;
 		hocPhanSongHanh?: HocPhan.IRecord;
+
 		createdAt?: string;
 		updatedAt?: string;
+
+		// Populate
+		hoc: ETrangThaiHocTap;
+		lichSuDiem?: LopHocPhan.IRecordSinhVienLopHP[];
 	}
 }
