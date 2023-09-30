@@ -32,19 +32,15 @@ const TienTrinhChuongTrinhKhung = () => {
 			setTongTinChi(
 				_.sumBy(da, (item) =>
 					item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC
-						? item.hocPhan?.loaiHocPhan?.isTinhSoTinChiTichLuy
-							? item.hocPhan?.soTinChi ?? 0
-							: 0
-						: item.isTinhSoTinChiTichLuy
-						? item.soTinChiTuChonPhaiHoc ?? 0
-						: 0,
+						? (item.hocPhan?.loaiHocPhan?.isTinhSoTinChiTichLuy && item.hocPhan?.soTinChi) || 0
+						: (item.isTinhSoTinChiTichLuy && item.soTinChiTuChonPhaiHoc) || 0,
 				),
 			);
 			// TODO: Xem xét khối tự chọn cùng nhóm học phần, hoặc khác chuyên ngành
 			setCount(
 				_.sumBy(
 					data?.filter((item) => item.lichSuDiem?.length),
-					(item) => (item.hocPhan?.loaiHocPhan?.isTinhSoTinChiTichLuy ? item.hocPhan?.soTinChi ?? 0 : 0),
+					(item) => (item.hocPhan?.loaiHocPhan?.isTinhSoTinChiTichLuy && item.hocPhan?.soTinChi) || 0,
 				),
 			);
 
@@ -56,7 +52,7 @@ const TienTrinhChuongTrinhKhung = () => {
 				// Học phần ko có chuyên ngành hoặc thuộc chuyên ngành đầu tiên
 				const da1 = hk.filter((item) => !item.maChuyenNganh || item.maChuyenNganh === uniqchuyenNganh?.[0]);
 				const soTinChiPhaiHoc = _.sumBy(da1, (item) => item.hocPhan?.soTinChi ?? item.soTinChiTuChonPhaiHoc ?? 0);
-				const soTinChiTuChon = _.sumBy(da1, (item) => item.soTinChiTuChonPhaiHoc ?? 0);
+				const soTinChiTuChon = _.sumBy(da1, (item) => item.soTinChiTuChonPhaiHoc || 0);
 
 				const chuyenNganh = hk.filter((item) => !!item.maChuyenNganh && uniqchuyenNganh.length >= 2);
 				const chuyenNganhList = Object.values(_.groupBy(chuyenNganh, (item) => item.maChuyenNganh)).map((item) => ({
