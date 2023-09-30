@@ -48,7 +48,7 @@ export enum ETrangThaiDangKyGiangDay {
 }
 
 export enum ELoaiDiemChu {
-	// A_PLUS = 'A+',
+	A_PLUS = 'A+',
 	A = 'A',
 	B_PLUS = 'B+',
 	B = 'B',
@@ -63,7 +63,7 @@ export enum ELoaiDiemChu {
 }
 
 export const ColorDiemChu = {
-	// [ELoaiDiemChu.A_PLUS]: '#399500',
+	[ELoaiDiemChu.A_PLUS]: '#399500',
 	[ELoaiDiemChu.A]: '#399500',
 	[ELoaiDiemChu.B_PLUS]: '#399500',
 	[ELoaiDiemChu.B]: '#399500',
