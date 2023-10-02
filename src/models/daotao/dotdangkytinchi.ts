@@ -120,6 +120,7 @@ export default () => {
 					?.map((item) => ({
 						...item.lopHocPhan,
 						_id: item.lopHocPhanId,
+						ten: item.lopHocPhan.ten,
 						soTinChi: item.lopHocPhan?.hocPhan?.soTinChi ?? 0,
 						loai: item.loai,
 						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
@@ -138,7 +139,7 @@ export default () => {
 	};
 
 	const postDangKyTinChiModel = async (data: {
-		dangKy: { lopHocPhanId: string };
+		dangKy: { maLopHocPhan: string };
 		phieuDktcId: string;
 	}): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
 		try {
@@ -150,7 +151,7 @@ export default () => {
 		}
 	};
 
-	const deleteDangKyTinChiModel = async (data: { phieuDktcId: string; lopHocPhanId: string }): Promise<any> => {
+	const deleteDangKyTinChiModel = async (data: { phieuDktcId: string; maLopHocPhan: string }): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
 		setFormSubmiting(true);
 		try {
