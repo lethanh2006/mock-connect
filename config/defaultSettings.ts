@@ -7,14 +7,14 @@ const Settings: LayoutSettings & {
 	siderWidth: number;
 } = {
 	navTheme: 'dark',
-	primaryColor: '#007EB9',
+	primaryColor: process.env.APP_CONFIG_PRIMARY_COLOR,
 	borderRadiusBase: '2px',
 	layout: 'mix',
 	contentWidth: 'Fluid',
 	fixedHeader: false,
 	fixSiderbar: true,
 	colorWeak: false,
-	title: 'VWA Connect',
+	title: process.env.APP_CONFIG_TITLE_CONNECT ?? '',
 	pwa: false,
 	logo: '/logo.png',
 	iconfontUrl: '',
