@@ -37,7 +37,9 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		}).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
-				title: item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || '',
+				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''} - ${
+					item.phongHoc ?? ''
+				}`,
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 				start: moment(item?.thoiGianBatDau).toDate(),
 				end: moment(item?.thoiGianKetThuc).toDate(),
@@ -86,11 +88,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 	const eventCustom = ({ event }: any) => {
 		const { title, loaiSuKien } = event;
-		return (
-			<div style={{ width: '100%', fontSize: 13 }}>
-				<b>{loaiSuKien || ''}</b>: {title || '--'}
-			</div>
-		);
+		return <div style={{ width: '100%', fontSize: 13 }}>{title || '--'}</div>;
 	};
 
 	const onChangeFilterDate = (val: Date) => {
