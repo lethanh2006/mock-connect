@@ -1,7 +1,12 @@
-import { Card } from 'antd';
+import { exportLyLich } from '@/services/DaoTao/SinhVien';
+import { PrinterOutlined } from '@ant-design/icons';
+import { Button, Card, Space } from 'antd';
+import fileDownload from 'js-file-download';
+import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
 
 const ThongTinSinhVienPage = () => {
+	const { record } = useModel('sinhvien.sinhvien');
 	// const [currentStep, setCurrentStep] = useState<string>('0');
 	// const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
 
@@ -13,8 +18,22 @@ const ThongTinSinhVienPage = () => {
 	//   setCurrentStep(step);
 	// };
 
+	const onExport = () => {
+		if (record?.ssoId) {
+			exportLyLich(record?.ssoId).then((res) => fileDownload(res.data, `Hồ sơ ${record.ten}.pdf`));
+		}
+	};
+
 	return (
 		<Card title='Thông tin cá nhân'>
+			<Space style={{ marginBottom: 12 }} wrap>
+				{record?.ssoId ? (
+					<Button icon={<PrinterOutlined />} onClick={onExport}>
+						In hồ sơ
+					</Button>
+				) : null}
+			</Space>
+
 			<PreviewHoSo />
 			{/* <Tabs
         activeKey={currentStep}

@@ -5,17 +5,17 @@ import TienTrinhThucTe from './TienTrinhThucTe';
 import './components/style.less';
 
 const TienTrinhHocTap = () => {
-	const [activeTabKey, setActiveTabKey] = useState<string>('1');
+	const [activeTabKey, setActiveTabKey] = useState<string>('2');
 
 	return (
 		<Card title='Tiến trình học tập' className='card-tien-trinh'>
 			<Tabs accessKey={activeTabKey} onChange={(tab) => setActiveTabKey(tab)} style={{ overflow: 'inherit' }}>
-				<Tabs.TabPane tab='Chương trình đào tạo' key='1'>
-					<TienTrinhChuongTrinhKhung />
-				</Tabs.TabPane>
-
 				<Tabs.TabPane tab='Tiến trình thực tế' key='2'>
 					<TienTrinhThucTe />
+				</Tabs.TabPane>
+
+				<Tabs.TabPane tab='Chương trình đào tạo' key='1'>
+					<TienTrinhChuongTrinhKhung />
 				</Tabs.TabPane>
 			</Tabs>
 		</Card>

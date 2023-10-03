@@ -131,7 +131,7 @@ const PreviewHoSo = () => {
 
 	return (
 		<Spin spinning={loading}>
-			<h2 style={{ textAlign: 'center', marginBottom: 32, marginTop: 24 }}>SƠ YẾU LÝ LỊCH</h2>
+			<h2 style={{ textAlign: 'center', marginBottom: 32 }}>SƠ YẾU LÝ LỊCH</h2>
 
 			<Row gutter={[18, 18]} style={{ maxWidth: 1200, margin: 'auto' }}>
 				<Col span={24} sm={6} style={{ display: 'flex', justifyContent: 'center', padding: 12 }}>
