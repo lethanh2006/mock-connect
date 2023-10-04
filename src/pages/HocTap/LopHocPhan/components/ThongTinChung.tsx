@@ -1,4 +1,4 @@
-import { Descriptions, Spin, Tabs, Tooltip } from 'antd';
+import { Button, Descriptions, Spin, Tabs, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../DeCuongHocPhan/ModalHocPhan';
@@ -6,7 +6,7 @@ import DanhSachGiangVien from './DanhSachGiangVien';
 import DanhSachSinhVien from './DanhSachSinhVien';
 
 const ThongTinChung = () => {
-	const { loading, record } = useModel('daotao.lophocphan');
+	const { loading, record, getMoodleLopHocPhanModel } = useModel('daotao.lophocphan');
 	const {
 		record: recLopThucHanh,
 		danhSach: danhSachLopThucHanh,
@@ -35,6 +35,14 @@ const ThongTinChung = () => {
 		}
 	}, [activeKey]);
 
+	const handleMoodle = () => {
+		if (record?.moodleShortname && record?._id)
+			getMoodleLopHocPhanModel(record._id).then((data) => {
+				if (data?.url) window.open(data.url);
+				else message.error('Có lỗi, vui lòng thử lại sau');
+			});
+	};
+
 	return (
 		<Spin spinning={loading}>
 			<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 3 }} title='Thông tin lớp'>
@@ -53,6 +61,12 @@ const ThongTinChung = () => {
 				<Descriptions.Item label='Số tín chỉ'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Descriptions.Item>
 				<Descriptions.Item label='Sĩ số'>{record?.siSo ?? 0} sinh viên</Descriptions.Item>
 			</Descriptions>
+
+			{record?.moodleShortname ? (
+				<Button onClick={handleMoodle} style={{ marginBottom: 18 }}>
+					Lớp học trực tuyến
+				</Button>
+			) : null}
 
 			<DanhSachGiangVien
 				danhSachNhanSu={danhSachNhanSu?.map((item) => item.nhanSu ?? { _id: '-1' })}

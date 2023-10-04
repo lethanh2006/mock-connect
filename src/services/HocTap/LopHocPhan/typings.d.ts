@@ -25,7 +25,7 @@ export declare module LopHocPhan {
 		loai: ELoaiLopHocPhan;
 		soThuTuLop?: number;
 		soThuTuNhom?: number;
-		lmsUrl?: string | null;
+		moodleShortname?: string | null;
 
 		parent?: IRecord;
 		children?: IRecord[];
