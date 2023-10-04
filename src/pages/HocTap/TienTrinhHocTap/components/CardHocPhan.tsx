@@ -33,7 +33,7 @@ const CardHocPhan = (props: {
 			{listDiem?.map((diem, index) => (
 				<div
 					className={`bookmark bookmark-diem ${
-						diem.includes('A') || diem.includes('B')
+						diem.includes('A') || diem.includes('B') || diem === ELoaiDiemChu.PASS
 							? 'diem-green'
 							: diem.includes('C') || diem.includes('D')
 							? 'diem-yellow'
