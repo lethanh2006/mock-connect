@@ -71,7 +71,7 @@ const TienTrinhChuongTrinhKhung = () => {
 
 	return (
 		<>
-			<Row>
+			{/* <Row>
 				<Col>Số tín chỉ đã tích lũy:</Col>
 			</Row>
 			<Row align='middle'>
@@ -89,7 +89,7 @@ const TienTrinhChuongTrinhKhung = () => {
 						{tongTinChi} tín chỉ
 					</div>
 				</Col>
-			</Row>
+			</Row> */}
 
 			<Spin spinning={loading}>
 				{danhSachHocKy?.map((data) => (
