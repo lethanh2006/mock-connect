@@ -2,7 +2,7 @@ import { messagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Modal, Row, Spin } from 'antd';
+import { Button, Card, Col, Modal, Row, Space, Spin } from 'antd';
 import moment, { type Moment } from 'moment';
 import { useEffect, useState } from 'react';
 import type { DateRange, View } from 'react-big-calendar';
@@ -173,6 +173,27 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 						/>
 					</Spin>
 				</Col>
+
+				{isDashboard ? (
+					<Col span={24}>
+						<Space wrap size={12}>
+							<span>Ghi chú: </span>
+							{[ELoaiSuKien.LICH_HOC, ELoaiSuKien.LICH_THI, ELoaiSuKien.CA_NHAN, ELoaiSuKien.CHUNG].map((item) => (
+								<div
+									key={item}
+									style={{
+										backgroundColor: ColorSuKien[item],
+										color: 'white',
+										padding: '2px 6px',
+										borderRadius: 2,
+									}}
+								>
+									{item}
+								</div>
+							))}
+						</Space>
+					</Col>
+				) : null}
 			</Row>
 
 			<Modal

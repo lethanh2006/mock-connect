@@ -1,6 +1,6 @@
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
-import { PrinterOutlined } from '@ant-design/icons';
-import { Button, Card, Space } from 'antd';
+import { EditOutlined, PrinterOutlined } from '@ant-design/icons';
+import { Button, Card, Space, message } from 'antd';
 import fileDownload from 'js-file-download';
 import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
@@ -28,9 +28,14 @@ const ThongTinSinhVienPage = () => {
 		<Card title='Thông tin cá nhân'>
 			<Space style={{ marginBottom: 12 }} wrap>
 				{record?.ssoId ? (
-					<Button icon={<PrinterOutlined />} onClick={onExport}>
-						In hồ sơ
-					</Button>
+					<>
+						<Button icon={<EditOutlined />} onClick={() => message.warn('Đang cập nhật')}>
+							Cập nhật hồ sơ
+						</Button>
+						<Button icon={<PrinterOutlined />} onClick={onExport}>
+							In hồ sơ
+						</Button>
+					</>
 				) : null}
 			</Space>
 
