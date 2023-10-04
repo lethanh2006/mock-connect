@@ -57,6 +57,7 @@ export enum ELoaiDiemChu {
 	D_PLUS = 'D+',
 	D = 'D',
 	F = 'F',
+	PASS = 'P',
 	HOAN_THI = 'I', // hoãn thi
 	CHUA_DU_DU_LIEU = 'X', // chưa đủ dữ liệu
 	MIEN_THI = 'R', // miễn thi
@@ -72,6 +73,7 @@ export const ColorDiemChu = {
 	[ELoaiDiemChu.D_PLUS]: '#ffaf0b',
 	[ELoaiDiemChu.D]: '#ffaf0b',
 	[ELoaiDiemChu.F]: '#a90b00',
+	[ELoaiDiemChu.PASS]: '#399500',
 	[ELoaiDiemChu.HOAN_THI]: 'rgb(173 173 173)',
 	[ELoaiDiemChu.CHUA_DU_DU_LIEU]: 'rgb(173 173 173)',
 	[ELoaiDiemChu.MIEN_THI]: 'rgb(173 173 173)',
