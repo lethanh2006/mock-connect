@@ -1,8 +1,16 @@
+import NoticeList from '@/components/RightContent/NoticeIcon/NoticeList';
 import CalendarPage from '@/pages/Calendar';
-import { Card, Col, Row, Statistic, Tabs } from 'antd';
+import { Card, Col, Modal, Row, Statistic, Tabs } from 'antd';
+import { useModel } from 'umi';
+import ViewThongBao from '../ThongBao/components/ViewThongBao';
+import TinTucDashboard from '../TinTuc/TinTucDashboard';
 import CardLopHocPhan from './components/CardLopHocPhan';
+import { useState } from 'react';
 
 const TrangChu = () => {
+	const { danhSach, record, setRecord } = useModel('thongbao.noticeicon');
+	const [visibleThongBao, setVisibleThongBao] = useState<boolean>(false);
+
 	return (
 		<>
 			<Row gutter={[16, 16]}>
@@ -41,8 +49,17 @@ const TrangChu = () => {
 						<Col span={24}>
 							<Card bodyStyle={{ paddingTop: 8 }}>
 								<Tabs>
-									<Tabs.TabPane key='1' tab={<span style={{ fontSize: 16 }}>Tin tức</span>} />
-									<Tabs.TabPane key='2' tab={<span style={{ fontSize: 16 }}>Thông báo</span>} />
+									<Tabs.TabPane key='1' tab={<span style={{ fontSize: 16 }}>Tin tức</span>}>
+										<TinTucDashboard hiddenTitle />
+									</Tabs.TabPane>
+									<Tabs.TabPane key='2' tab={<span style={{ fontSize: 16 }}>Thông báo</span>}>
+										<NoticeList
+											onClick={(item) => (setRecord(item), setVisibleThongBao(true))}
+											title={''}
+											tabKey={''}
+											list={danhSach}
+										/>
+									</Tabs.TabPane>
 								</Tabs>
 							</Card>
 						</Col>
@@ -53,6 +70,17 @@ const TrangChu = () => {
 				{/* <Col xs={24} lg={10} xl={8}>
 					<TinTucDashboard />
 				</Col> */}
+				<Modal
+					width={800}
+					bodyStyle={{ padding: 0 }}
+					destroyOnClose
+					onCancel={() => setVisibleThongBao(false)}
+					visible={visibleThongBao}
+					okButtonProps={{ hidden: true }}
+					cancelText='Đóng'
+				>
+					<ViewThongBao record={record} />
+				</Modal>
 			</Row>
 		</>
 	);
