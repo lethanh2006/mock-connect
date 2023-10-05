@@ -141,7 +141,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 							}}
 							localizer={localizer}
 							events={dataCalendar}
-							defaultView={calendarView}
+							defaultView={isDashboard ? Views.DAY : Views.WEEK}
 							onView={(view) => setCalendarView(view)}
 							onRangeChange={(val) => {
 								if (Array.isArray(val)) setDateRange([moment(val[0]).startOf('d'), moment(val.at(-1)).endOf('d')]);
@@ -154,7 +154,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 							date={date}
 							messages={messagesCalendar}
 							views={['month', 'week', 'day']}
-							style={{ height: isDashboard ? 592 : 700, overflow: 'auto' }}
+							style={{ height: isDashboard ? 500 : 700, overflow: 'auto' }}
 							min={moment('0000', 'HHmm').toDate()}
 							max={moment('2359', 'HHmm').toDate()}
 							eventPropGetter={eventPropGetter}

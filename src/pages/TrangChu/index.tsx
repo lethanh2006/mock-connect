@@ -1,7 +1,6 @@
 import CalendarPage from '@/pages/Calendar';
-import { Col, Row, Card, Tabs, Statistic } from 'antd';
-import TinTucDashboard from '../TinTucStrapi/TinTucDashboard';
-import BlockSinhVien from './components/BlockSinhVien';
+import { Card, Col, Row, Statistic, Tabs } from 'antd';
+import CardLopHocPhan from './components/CardLopHocPhan';
 
 const TrangChu = () => {
 	return (
@@ -11,14 +10,18 @@ const TrangChu = () => {
 					<Row gutter={[16, 16]} style={{ height: '100%' }}>
 						<Col span={24} md={8}>
 							<Card>
-								<Statistic title='GPA' value={3.2} />
+								<Statistic title='GPA' value={3.2} suffix='/4' />
 							</Card>
 						</Col>
 						<Col span={24} md={8}>
-							<Card>asdad</Card>
+							<Card>
+								<Statistic title='Tín chỉ tích lũy' value={32} suffix='/121' />
+							</Card>
 						</Col>
 						<Col span={24} md={8}>
-							<Card>asdad</Card>
+							<Card>
+								<Statistic title='Công nợ' value={0} />
+							</Card>
 						</Col>
 
 						{/* <Col span={24}>
@@ -33,7 +36,7 @@ const TrangChu = () => {
 				<Col span={24} md={8}>
 					<Row gutter={[16, 16]}>
 						<Col span={24}>
-							<Card title='Lớp học phần'>sadfsd</Card>
+							<CardLopHocPhan />
 						</Col>
 						<Col span={24}>
 							<Card bodyStyle={{ paddingTop: 8 }}>
@@ -41,7 +44,6 @@ const TrangChu = () => {
 									<Tabs.TabPane key='1' tab={<span style={{ fontSize: 16 }}>Tin tức</span>} />
 									<Tabs.TabPane key='2' tab={<span style={{ fontSize: 16 }}>Thông báo</span>} />
 								</Tabs>
-								asdas
 							</Card>
 						</Col>
 					</Row>
