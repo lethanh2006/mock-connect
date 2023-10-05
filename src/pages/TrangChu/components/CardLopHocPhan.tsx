@@ -2,7 +2,7 @@ import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { Card, List, Progress } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 
 const CardLopHocPhan = () => {
 	const { danhSach: danhSachLHP, sinhVienGetAllModel } = useModel('daotao.lophocphan');
@@ -31,10 +31,11 @@ const CardLopHocPhan = () => {
 					itemLayout='horizontal'
 					dataSource={danhSachLHP}
 					renderItem={(item) => (
-						<List.Item>
+						<List.Item style={{ cursor: 'pointer' }} onClick={() => history.push(`/hoc-tap/lop-hoc-phan/${item._id}`)}>
 							<List.Item.Meta title={item.hocPhan?.ten} description={`${item.ten}`} />
 							<Progress
-								width={70}
+								style={{ marginRight: 8, marginLeft: 8 }}
+								width={50}
 								type='dashboard'
 								percent={Math.round(
 									((item?.thoiKhoaBieuList || [])?.filter((items) => moment().isAfter(items?.ngay)).length /
