@@ -1,5 +1,6 @@
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
-import { Card, List } from 'antd';
+import { Card, List, Progress } from 'antd';
+import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -32,6 +33,15 @@ const CardLopHocPhan = () => {
 					renderItem={(item) => (
 						<List.Item>
 							<List.Item.Meta title={item.hocPhan?.ten} description={`${item.ten}`} />
+							<Progress
+								width={70}
+								type='dashboard'
+								percent={Math.round(
+									((item?.thoiKhoaBieuList || [])?.filter((items) => moment().isAfter(items?.ngay)).length /
+										(item?.thoiKhoaBieuList || [])?.length) *
+										100,
+								)}
+							/>
 						</List.Item>
 					)}
 				/>
