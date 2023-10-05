@@ -7,8 +7,8 @@ const ip3 = ipRoot + 'slink'; // ip dev
 // const ip3 = 'http://192.168.1.42:3000'; // ip dev
 
 const ipNotif = ipRoot + 'notification'; // ip dev
-// const ipDaoTao = ipRoot + 'qldt'; // ip dev
-const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
+const ipDaoTao = ipRoot + 'qldt'; // ip dev
+// const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
 const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
 const ipTaiChinh = ipRoot + 'tai-chinh-api';
