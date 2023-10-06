@@ -1,4 +1,4 @@
-import { AppModules, EModuleKey } from '@/services/ant-design-pro/constant';
+import { AppModules, EModuleKey } from '@/services/base/constant';
 
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
 
@@ -13,7 +13,6 @@ const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
 const ipTaiChinh = ipRoot + 'tai-chinh-api';
 const ipNews = 'https://vwa-content.aisenote.com';
-const ipGlobal = APP_CONFIG_IP_GLOBAL; // ip dev
 
 const currentRole = EModuleKey.CONNECT;
 
@@ -32,7 +31,6 @@ export {
 	ip3,
 	ipNotif,
 	ipNews,
-	ipGlobal,
 	ipTaiChinh,
 	currentRole,
 	keycloakClientID,
