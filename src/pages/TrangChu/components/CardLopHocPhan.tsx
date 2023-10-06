@@ -3,9 +3,10 @@ import { Card, List, Progress } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
+import './style.less';
 
 const CardLopHocPhan = () => {
-	const { danhSach: danhSachLHP, sinhVienGetAllModel } = useModel('daotao.lophocphan');
+	const { danhSach: danhSachLHP, sinhVienGetAllModel, loading } = useModel('daotao.lophocphan');
 	const { getAllModel: getAllHocKy } = useModel('daotao.hocky');
 
 	const getData = async () => {
@@ -19,7 +20,7 @@ const CardLopHocPhan = () => {
 	}, []);
 
 	return (
-		<Card title='Lớp học phần'>
+		<Card title='Lớp học phần' loading={loading}>
 			<div
 				id='scrollableDiv'
 				style={{
@@ -29,9 +30,10 @@ const CardLopHocPhan = () => {
 			>
 				<List
 					itemLayout='horizontal'
+					className='dashboard-list-lhp'
 					dataSource={danhSachLHP}
 					renderItem={(item) => (
-						<List.Item style={{ cursor: 'pointer' }} onClick={() => history.push(`/hoc-tap/lop-hoc-phan/${item._id}`)}>
+						<List.Item onClick={() => history.push(`/hoc-tap/lop-hoc-phan/${item._id}`)}>
 							<List.Item.Meta title={item.hocPhan?.ten} description={`${item.ten}`} />
 							<Progress
 								style={{ marginRight: 8, marginLeft: 8 }}

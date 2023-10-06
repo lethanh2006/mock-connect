@@ -17,7 +17,7 @@ const TinTucDashboard = (props: { hiddenTitle?: boolean }) => {
 	}, []);
 
 	return (
-		<Card title={`${!hiddenTitle ? 'Tin tức' : ''}`}>
+		<Card title={`${!hiddenTitle ? 'Tin tức' : ''}`} bordered={false}>
 			<Spin spinning={loading}>
 				{danhSach && danhSach.length > 0 ? (
 					<>
