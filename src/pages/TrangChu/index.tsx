@@ -15,7 +15,7 @@ const TrangChu = () => {
 		<>
 			<Row gutter={[16, 16]}>
 				<Col span={24} md={16}>
-					<Row gutter={[16, 16]} style={{ height: '100%' }}>
+					<Row gutter={[16, 16]}>
 						<Col span={24} md={8}>
 							<Card>
 								<Statistic title='GPA' value={3.2} suffix='/4' />

@@ -1,6 +1,6 @@
 import { TrangThaiBuoc, TrangThaiThaoTac } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import type { DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import { primaryColor } from '@/services/ant-design-pro/constant';
+import { primaryColor } from '@/services/base/constant';
 import {
 	CheckCircleOutlined,
 	ClockCircleOutlined,
