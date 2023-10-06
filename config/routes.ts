@@ -13,23 +13,6 @@
 				path: '/user',
 				redirect: '/user/login',
 			},
-			{
-				component: '404',
-			},
-		],
-	},
-	{
-		hideInMenu: true,
-		name: 'account',
-		icon: 'user',
-		path: '/account',
-		routes: [
-			{
-				name: 'center',
-				icon: 'smile',
-				path: '/account/center',
-				component: './account/center',
-			},
 		],
 	},
 
