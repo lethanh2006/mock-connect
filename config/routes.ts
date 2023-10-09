@@ -123,6 +123,11 @@
 				// access: 'sinhVien',
 				component: './HocTap/KetQuaHocTap',
 			},
+			{
+				name: 'XetTotNghiep',
+				path: './xet-tot-nghiep',
+				component: './HocTap/XetTotNghiep',
+			},
 		],
 	},
 

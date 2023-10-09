@@ -22,6 +22,7 @@ export default {
 	'menu.HocTap.DangKyTinChi': 'Đăng ký học phần',
 	'menu.HocTap.LopHocPhan': 'Lớp học phần',
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
+	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
 	'menu.CongNo': 'Công nợ',
 
 	// DRL
