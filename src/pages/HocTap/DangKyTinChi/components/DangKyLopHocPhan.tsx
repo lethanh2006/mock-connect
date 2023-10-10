@@ -201,7 +201,7 @@ const DangKyLopHocPhan = () => {
 			title: 'Còn trống',
 			align: 'center',
 			width: 60,
-			render: (val, rec) => rec.siSoToiDa - (rec.siSo ?? 0),
+			render: (val, rec) => (rec.siSo && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
 			onCell,
 		},
 	];
