@@ -135,11 +135,16 @@ a {
 .btn-success {
 	border-color: var(--ant-success-color);
 
-	&.ant-btn-primary {
+	&.ant-btn-primary:not(:disabled) {
 		background-color: var(--ant-success-color);
 		&:hover {
 			background-color: var(--ant-success-color-hover);
 		}
+	}
+
+	&.ant-btn-link {
+		color: var(--ant-success-color);
+		border: none;
 	}
 
 	&:hover {
