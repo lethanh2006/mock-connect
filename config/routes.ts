@@ -32,24 +32,24 @@
 	},
 
 	// DANH MUC HE THONG
-	// {
-	// 	name: 'News',
-	// 	icon: 'NotificationOutlined',
-	// 	path: '/tin-tuc',
-	// 	// access: 'sinhVienVaNhanVien',
-	// 	routes: [
-	// 		{
-	// 			path: './',
-	// 			component: './TinTucStrapi',
-	// 			hideInMenu: true,
-	// 		},
-	// 		{
-	// 			path: './chi-tiet',
-	// 			hideInMenu: true,
-	// 			component: './TinTucStrapi/ChiTietTinTuc.tsx',
-	// 		},
-	// 	],
-	// },
+	{
+		name: 'News',
+		icon: 'NotificationOutlined',
+		path: '/tin-tuc',
+		// access: 'sinhVienVaNhanVien',
+		routes: [
+			{
+				path: './',
+				component: './TinTucWP',
+				hideInMenu: true,
+			},
+			{
+				path: './chi-tiet',
+				hideInMenu: true,
+				component: './TinTucWP/ChiTietTinTuc.tsx',
+			},
+		],
+	},
 
 	// MENU CHUNG
 	{

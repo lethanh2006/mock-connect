@@ -3,7 +3,7 @@ import CalendarPage from '@/pages/Calendar';
 import { Card, Col, Modal, Row, Statistic, Tabs } from 'antd';
 import { useModel } from 'umi';
 import ViewThongBao from '../ThongBao/components/ViewThongBao';
-import TinTucDashboard from '../TinTuc/TinTucDashboard';
+import TinTucDashboard from '../TinTucWP/TinTucDashboard';
 import CardLopHocPhan from './components/CardLopHocPhan';
 import { useState } from 'react';
 
