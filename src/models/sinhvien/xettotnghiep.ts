@@ -1,11 +1,12 @@
-import { postDangKyXetTotNghiep, putDangKyHoanTotNghiep, putPhanHoiXetTotNghiep } from '@/services/HocTap/XetTotNghiep';
+import { postDangKyXetTotNghiep, putYKienXetTotNghiep } from '@/services/HocTap/XetTotNghiep';
 import type { DotXetTotNghiep } from '@/services/HocTap/XetTotNghiep/typing';
-import { useState } from 'react';
 import { message } from 'antd';
+import { useState } from 'react';
 
 export default () => {
 	const [record, setRecord] = useState<DotXetTotNghiep.IRecord>();
 	const [formSubmiting, setFormSubmiting] = useState<boolean>(false);
+	const [visibleForm, setVisibleForm] = useState<boolean>(false);
 
 	const dangKyXetTotNghiepModel = async (dotXetTotNghiepId: string): Promise<DotXetTotNghiep.IRecord> => {
 		setFormSubmiting(true);
@@ -21,30 +22,16 @@ export default () => {
 		}
 	};
 
-	const hoanXetTotNghiepModel = async (
+	const yKienXetTotNghiepModel = async (
 		sinhVienDotId: string,
+		type: 'phan-hoi' | 'hoan',
 		payload: { yKienSinhVien?: string },
 	): Promise<DotXetTotNghiep.ISinhVienDot> => {
 		setFormSubmiting(true);
 		try {
-			const response = await putDangKyHoanTotNghiep(sinhVienDotId, payload);
-			message.success('Đã gửi yêu cầu hoãn xét tốt nghiệp');
-			return response?.data?.data;
-		} catch (er) {
-			return Promise.reject(er);
-		} finally {
-			setFormSubmiting(false);
-		}
-	};
-
-	const phanHoiXetTotNghiepModel = async (
-		sinhVienDotId: string,
-		payload: { yKienSinhVien?: string },
-	): Promise<DotXetTotNghiep.ISinhVienDot> => {
-		setFormSubmiting(true);
-		try {
-			const response = await putPhanHoiXetTotNghiep(sinhVienDotId, payload);
-			message.success('Đã gửi phản hồi xét tốt nghiệp');
+			const response = await putYKienXetTotNghiep(sinhVienDotId, type, payload);
+			message.success(`Đã gửi ${type === 'hoan' ? 'yêu cầu hoãn' : 'phản hồi'} xét tốt nghiệp`);
+			setVisibleForm(false);
 			return response?.data?.data;
 		} catch (er) {
 			return Promise.reject(er);
@@ -58,8 +45,9 @@ export default () => {
 		setRecord,
 		formSubmiting,
 		setFormSubmiting,
+		visibleForm,
+		setVisibleForm,
 		dangKyXetTotNghiepModel,
-		hoanXetTotNghiepModel,
-		phanHoiXetTotNghiepModel,
+		yKienXetTotNghiepModel,
 	};
 };
