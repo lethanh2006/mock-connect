@@ -25,3 +25,9 @@ export enum EGioiTinh {
 	Nam = 'Nam',
 	Nu = 'Nữ',
 }
+
+export enum EPhuongThucTinhDiem {
+	DAT = 'Đạt',
+	BAC = 'Theo bậc',
+	DIEM = 'Tính điểm',
+}

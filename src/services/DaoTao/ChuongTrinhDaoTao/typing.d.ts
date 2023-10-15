@@ -1,6 +1,8 @@
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import type { ChungChi } from '../ChungChi/typing';
 import { type HocPhan } from '../HocPhan/typings';
-import { type ETrangThaiHocTap, type ELoaiHocPhanCTDT } from '../constant';
+import type { SinhVien } from '../SinhVien/typings';
+import { type ELoaiHocPhanCTDT, type ETrangThaiHocTap } from '../constant';
 
 declare module ChuongTrinhDaoTao {
 	export interface IRecord {
@@ -68,5 +70,28 @@ declare module ChuongTrinhDaoTao {
 		// Populate
 		hoc: ETrangThaiHocTap;
 		lichSuDiem?: LopHocPhan.IRecordSinhVienLopHP[];
+	}
+
+	export interface IChungChiCTDT {
+		_id: string;
+		maChuongTrinhDaoTao: string;
+		chuongTrinhDaoTao?: IRecord;
+		maLoaiChungChi: string;
+		loaiChungChi?: ChungChi.ILoaiChungChi;
+
+		danhSachChungChiCtdtCdr?: IChuanDauRa[];
+
+		// Get tiến trình sinh viên
+		datChuanDauRa?: boolean;
+		chungChiDaDat?: SinhVien.IChungChiSinhVien[];
+	}
+
+	export interface IChuanDauRa {
+		_id: string;
+		chungChiCtdtId: string;
+		chungChiCtdt?: IChungChiCTDT;
+		maChungChi: string;
+		chungChi?: ChungChi.IRecord;
+		chuanDauRa: number;
 	}
 }

@@ -1,3 +1,4 @@
+import type { ChungChi } from '../ChungChi/typing';
 import { type ChuongTrinhDaoTao } from '../DanhMucHeThong/ChuongTrinhDaoTao/typings';
 import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
 import { type EGioiTinh, type EHinhThucTuyenDung, type ENoiNgoaiTru, type EViTriViecLam } from '../constant';
@@ -187,5 +188,20 @@ declare module SinhVien {
 		sinhVienNamThu: string; //"Sinh viên năm nhất"
 		soNamDaoTao: number;
 		trangThaiSinhVien: string; //"Đang học"
+	}
+
+	export interface IChungChiSinhVien {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		maChungChi: string;
+		chungChi?: ChungChi.IRecord;
+		ngayCap?: string;
+		donViCap?: string;
+		diem?: number;
+		// ten?: string;
+		// loaiThoiHan?: ELoaiThoiHanChungChi;
+		// ngayHetHan?: string;
+		// duDkDauRa?: boolean;
 	}
 }
