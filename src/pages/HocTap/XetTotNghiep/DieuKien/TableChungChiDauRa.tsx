@@ -18,7 +18,7 @@ const TableChungChiDauRa = () => {
 			title: 'Ngoại ngữ',
 			width: 150,
 			render: (val, rec) => rec.chungChi?.ngonNgu?.ten ?? rec.chungChi?.maNgonNgu,
-			hide: record?.maLoaiChungChi !== 'NN',
+			hide: !record?.loaiChungChi?.isNgoaiNgu,
 		},
 		{
 			title: 'Phương thức tính điểm',
@@ -47,7 +47,7 @@ const TableChungChiDauRa = () => {
 
 	return (
 		<>
-			<div className='fw500'>Danh sách chứng chỉ đủ điều kiện </div>
+			<div className='fw500'>Danh sách chứng chỉ đủ điều kiện chuẩn đầu ra</div>
 			<TableStaticData columns={columns} data={record?.danhSachChungChiCtdtCdr ?? []} />
 		</>
 	);

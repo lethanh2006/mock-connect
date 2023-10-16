@@ -15,7 +15,7 @@ const TableChungChiSinhVien = () => {
 			title: 'Chứng chỉ',
 			dataIndex: 'maChungChi',
 			width: 200,
-			render: (val, rec) => `${rec.chungChi?.loaiChungChi?.ten} - ${rec.chungChi?.ten ?? val}`,
+			render: (val, rec) => `${rec.chungChi?.loaiChungChi?.ten ?? val} - ${rec.chungChi?.ten ?? val}`,
 		},
 		{
 			title: 'Ngày cấp',
