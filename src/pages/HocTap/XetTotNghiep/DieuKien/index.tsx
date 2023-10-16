@@ -77,7 +77,7 @@ const CardDieuKienTotNghiep = () => {
 				visible={visibleChungChi}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
-				title='Loại chứng chỉ'
+				title={`Loại chứng chỉ ${record?.loaiChungChi?.ten.toLocaleLowerCase()}`}
 			>
 				<ModalChungChiCTDT />
 			</Modal>
