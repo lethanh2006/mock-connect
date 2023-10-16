@@ -9,24 +9,16 @@ const TableChungChiDauRa = () => {
 
 	const columns: IColumn<ChuongTrinhDaoTao.IChuanDauRa>[] = [
 		{
-			title: 'Mã chứng chỉ',
-			dataIndex: 'maChungChi',
-			width: 100,
-			render: (val, rec) => val,
-		},
-		{
 			title: 'Tên chứng chỉ',
 			dataIndex: 'maChungChi',
 			width: 150,
 			render: (val, rec) => rec.chungChi?.ten ?? val,
 		},
 		{
-			title: 'Loại chứng chỉ',
+			title: 'Ngoại ngữ',
 			width: 150,
-			render: (val, rec) =>
-				`${record?.loaiChungChi?.ten ?? val}${
-					record?.loaiChungChi?.isNgoaiNgu && rec?.chungChi?.ngonNgu?.ten ? ` - ${rec?.chungChi?.ngonNgu?.ten}` : ''
-				}`,
+			render: (val, rec) => rec.chungChi?.ngonNgu?.ten ?? rec.chungChi?.maNgonNgu,
+			hide: record?.maLoaiChungChi !== 'NN',
 		},
 		{
 			title: 'Phương thức tính điểm',
@@ -53,7 +45,12 @@ const TableChungChiDauRa = () => {
 		},
 	];
 
-	return <TableStaticData columns={columns} data={record?.danhSachChungChiCtdtCdr ?? []} />;
+	return (
+		<>
+			<div className='fw500'>Danh sách chứng chỉ đủ điều kiện </div>
+			<TableStaticData columns={columns} data={record?.danhSachChungChiCtdtCdr ?? []} />
+		</>
+	);
 };
 
 export default TableChungChiDauRa;
