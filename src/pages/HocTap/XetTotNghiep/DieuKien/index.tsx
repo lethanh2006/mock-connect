@@ -1,13 +1,14 @@
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { Alert, Card, Col, Progress, Row, Spin } from 'antd';
-import { useEffect } from 'react';
+import { Alert, Card, Col, Progress, Row, Spin, Modal } from 'antd';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalChungChiCTDT from './ModalChungChi';
 
 const CardDieuKienTotNghiep = () => {
-	const { getTienTrinhChungChiCTDTModel, danhSach, loading, setRecord, setVisibleForm } =
+	const { getTienTrinhChungChiCTDTModel, danhSach, loading, setRecord, setVisibleForm, record } =
 		useModel('sinhvien.chungchictdt');
+	const [visibleChungChi, setVisibleChungChi] = useState<boolean>(false);
 
 	useEffect(() => {
 		getTienTrinhChungChiCTDTModel();
@@ -16,6 +17,7 @@ const CardDieuKienTotNghiep = () => {
 	const handleView = (rec: ChuongTrinhDaoTao.IChungChiCTDT) => {
 		setRecord(rec);
 		setVisibleForm(true);
+		setVisibleChungChi(true);
 	};
 
 	return (
@@ -67,7 +69,18 @@ const CardDieuKienTotNghiep = () => {
 			<Alert type='success' description='Bạn đã đủ điều kiện để xét tốt nghiệp !' showIcon />
 			<Alert type='warning' description='Bạn chưa đủ điều kiện để xét tốt nghiệp !' showIcon />
 
-			<ModalChungChiCTDT />
+			<Modal
+				width={800}
+				bodyStyle={{ padding: 0 }}
+				destroyOnClose
+				onCancel={() => setVisibleChungChi(false)}
+				visible={visibleChungChi}
+				okButtonProps={{ hidden: true }}
+				cancelText='Đóng'
+				title='Loại chứng chỉ'
+			>
+				<ModalChungChiCTDT />
+			</Modal>
 		</Card>
 	);
 };
