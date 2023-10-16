@@ -31,8 +31,6 @@ const TableChungChiDauRa = () => {
 		{
 			title: 'Phương thức tính điểm',
 			width: 200,
-			filterType: 'select',
-			filterData: Object.values(EPhuongThucTinhDiem).map((item) => ({ label: item, value: item })),
 			render: (val, rec) =>
 				rec?.chungChi?.phuongThucTinhDiem === EPhuongThucTinhDiem.DIEM
 					? `${rec?.chungChi?.phuongThucTinhDiem}: ${rec?.chungChi?.min} - ${rec?.chungChi?.max}`
@@ -41,8 +39,9 @@ const TableChungChiDauRa = () => {
 					: rec?.chungChi?.phuongThucTinhDiem,
 		},
 		{
-			title: 'Điều kiện tối thiểu',
-			width: 100,
+			title: 'ĐK đạt tối thiểu',
+			width: 120,
+			align: 'center',
 			render: (val, rec) => {
 				if (rec.chungChi?.phuongThucTinhDiem === EPhuongThucTinhDiem.DIEM) {
 					return rec.chuanDauRa;
