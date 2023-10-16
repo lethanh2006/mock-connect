@@ -28,15 +28,12 @@ const TableChungChiSinhVien = () => {
 			title: 'Đơn vị cấp',
 			dataIndex: 'donViCap',
 			width: 180,
-			filterType: 'string',
-			sortable: true,
 		},
 		{
 			title: 'Trình độ',
 			dataIndex: 'diem',
 			width: 100,
 			align: 'center',
-			sortable: true,
 			render: (val, rec) => {
 				if (rec.chungChi?.phuongThucTinhDiem === EPhuongThucTinhDiem.DIEM) {
 					return <span>{val}</span>;
@@ -63,7 +60,6 @@ const TableChungChiSinhVien = () => {
 					} else return <Tag color='green'>Không thời hạn</Tag>;
 				else return null;
 			},
-			sortable: true,
 		},
 	];
 
