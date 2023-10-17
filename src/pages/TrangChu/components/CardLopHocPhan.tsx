@@ -10,9 +10,7 @@ const CardLopHocPhan = () => {
 	const { danhSach: danhSachLHP, sinhVienGetAllModel, loading } = useModel('daotao.lophocphan');
 	const { getAllModel: getAllHocKy, danhSach, record: recHocKy, setRecord } = useModel('daotao.hocky');
 
-	const getData = async () => {
-		sinhVienGetAllModel({ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH });
-	};
+	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH });
 
 	useEffect(() => {
 		getAllHocKy(true, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me');
@@ -42,7 +40,8 @@ const CardLopHocPhan = () => {
 					<a onClick={(e) => e.preventDefault()}>
 						<Space>
 							<div>
-								HK{recHocKy?.soThuTu} {recHocKy?.namHoc?.namBatDau}-{recHocKy?.namHoc?.namKetThuc}
+								HK{recHocKy?.soThuTu} {(recHocKy?.namHoc?.namBatDau?.toString() ?? '')?.slice(-2)}-
+								{(recHocKy?.namHoc?.namKetThuc?.toString() ?? '')?.slice(-2)}
 							</div>
 							<DownOutlined />
 						</Space>
