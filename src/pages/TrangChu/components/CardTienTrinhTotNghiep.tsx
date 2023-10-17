@@ -29,17 +29,19 @@ const CardTienTrinhTotNghiep = () => {
 					/>
 				</Card>
 			</Col>
+
 			<Col span={24} md={8}>
 				<Card loading={loading}>
 					<Statistic
-						valueStyle={{ fontSize: '18px' }}
+						valueStyle={{ fontSize: 14 }}
 						title='Tín chỉ tích lũy'
 						value={recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? 0}
-						suffix={`/${recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? 0}`}
+						suffix={`/ ${recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? 0}`}
 						prefix={<Progress width={50} type='dashboard' percent={dieuKienTotNghiep?.phanTramTinChi} />}
 					/>
 				</Card>
 			</Col>
+
 			<Col span={24} md={8}>
 				<Card loading={loading}>
 					<Statistic title='Công nợ' value={0} />
