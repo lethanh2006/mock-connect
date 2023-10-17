@@ -1,6 +1,5 @@
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import type { EKetQuaXetTotNghiep, ELoaiDoiTuongXetTotNghiep, ETrangThaiDuyetXetTotNghiep } from '../constant';
-
+import type { EKetQuaXetTotNghiep, ELoaiDoiTuongXetTotNghiep, ETrangThaiDuyetXetTotNghiep } from './constant';
 declare module DotXetTotNghiep {
 	export interface IRecord {
 		_id: string;
@@ -26,9 +25,13 @@ declare module DotXetTotNghiep {
 		dotXetTotNghiepId: string;
 		dotXetTotNghiep?: IRecord;
 		loaiDoiTuong?: ELoaiDoiTuongXetTotNghiep;
-		ketQua?: EKetQuaXetTotNghiep;
-		trangThaiDuyet?: ETrangThaiDuyetXetTotNghiep;
+		ketQua: EKetQuaXetTotNghiep;
+		trangThaiDuyet: ETrangThaiDuyetXetTotNghiep;
 		lyDo?: string;
 		yKienSinhVien?: string;
+	}
+
+	export interface IDotHienHanh extends IRecord {
+		ketQuaXetTotNghiep?: ISinhVienDot;
 	}
 }
