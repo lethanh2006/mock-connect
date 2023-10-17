@@ -1,5 +1,6 @@
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
-import { Card, List, Progress } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { Card, Dropdown, List, Menu, Progress, Space } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
@@ -7,20 +8,48 @@ import './style.less';
 
 const CardLopHocPhan = () => {
 	const { danhSach: danhSachLHP, sinhVienGetAllModel, loading } = useModel('daotao.lophocphan');
-	const { getAllModel: getAllHocKy } = useModel('daotao.hocky');
+	const { getAllModel: getAllHocKy, danhSach, record: recHocKy, setRecord } = useModel('daotao.hocky');
 
 	const getData = async () => {
-		getAllHocKy().then((data) => {
-			sinhVienGetAllModel({ maHocKy: data?.[0]?.ma, loai: ELoaiLopHocPhan.CHINH });
-		});
+		sinhVienGetAllModel({ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH });
 	};
 
 	useEffect(() => {
-		getData();
+		getAllHocKy(true, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me');
 	}, []);
 
+	useEffect(() => {
+		getData();
+	}, [recHocKy?.ma]);
+
 	return (
-		<Card title='Lớp học phần' loading={loading}>
+		<Card
+			title='Lớp học phần'
+			loading={loading}
+			extra={
+				<Dropdown
+					overlay={
+						<Menu>
+							{danhSach.map((item) => (
+								<Menu.Item onClick={() => setRecord(item)} key={item._id}>
+									{item.ten}
+								</Menu.Item>
+							))}
+						</Menu>
+					}
+					trigger={['click']}
+				>
+					<a onClick={(e) => e.preventDefault()}>
+						<Space>
+							<div>
+								HK{recHocKy?.soThuTu} {recHocKy?.namHoc?.namBatDau}-{recHocKy?.namHoc?.namKetThuc}
+							</div>
+							<DownOutlined />
+						</Space>
+					</a>
+				</Dropdown>
+			}
+		>
 			<div
 				id='scrollableDiv'
 				style={{

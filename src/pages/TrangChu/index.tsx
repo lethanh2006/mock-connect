@@ -5,11 +5,21 @@ import { useModel } from 'umi';
 import ViewThongBao from '../ThongBao/components/ViewThongBao';
 import TinTucDashboard from '../TinTucWP/TinTucDashboard';
 import CardLopHocPhan from './components/CardLopHocPhan';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Progress from 'antd/es/progress';
 
 const TrangChu = () => {
 	const { danhSach, record, setRecord } = useModel('thongbao.noticeicon');
 	const [visibleThongBao, setVisibleThongBao] = useState<boolean>(false);
+	const {
+		getTienTrinhChungChiCTDTModel,
+		record: recTienTrinh,
+		dieuKienTotNghiep,
+	} = useModel('sinhvien.tientrinhtotnghiep');
+
+	useEffect(() => {
+		getTienTrinhChungChiCTDTModel();
+	}, []);
 
 	return (
 		<>
@@ -18,12 +28,26 @@ const TrangChu = () => {
 					<Row gutter={[16, 16]}>
 						<Col span={24} md={8}>
 							<Card>
-								<Statistic title='GPA' value={3.2} suffix='/4' />
+								<Statistic
+									valueStyle={{
+										color: `${dieuKienTotNghiep?.isDuDieuKienTBC ? '#52c41a' : '#ff4d4f'}`,
+										fontWeight: 'bold',
+									}}
+									title='GPA'
+									value={recTienTrinh?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4 ?? 0}
+									suffix='/4'
+								/>
 							</Card>
 						</Col>
 						<Col span={24} md={8}>
 							<Card>
-								<Statistic title='Tín chỉ tích lũy' value={32} suffix='/121' />
+								<Statistic
+									valueStyle={{ fontSize: '18px' }}
+									title='Tín chỉ tích lũy'
+									value={recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? 0}
+									suffix={`/${recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? 0}`}
+									prefix={<Progress width={50} type='dashboard' percent={dieuKienTotNghiep?.phanTramTinChi} />}
+								/>
 							</Card>
 						</Col>
 						<Col span={24} md={8}>
