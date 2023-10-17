@@ -1,6 +1,6 @@
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { Alert, Card, Col, Progress, Row, Spin } from 'antd';
+import { Alert, Card, Col, Progress, Row } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ModalChungChiCTDT from './ModalChungChi';
@@ -19,7 +19,7 @@ const CardDieuKienTotNghiep = () => {
 	};
 
 	return (
-		<Card title='Điều kiện xét tốt nghiệp'>
+		<Card title='Điều kiện xét tốt nghiệp' loading={loading}>
 			<Row gutter={[12, 12]} style={{ marginBottom: 18 }}>
 				<Col span={24}>
 					<div className='fw500'>Điều kiện học tập</div>
@@ -43,29 +43,27 @@ const CardDieuKienTotNghiep = () => {
 				</Col>
 			</Row>
 
-			<Spin spinning={loading}>
-				<Row gutter={[12, 12]} style={{ marginBottom: 18 }}>
-					<Col span={24}>
-						<div className='fw500'>Chứng chỉ chuẩn đầu ra</div>
+			<Row gutter={[12, 12]} style={{ marginBottom: 18 }}>
+				<Col span={24}>
+					<div className='fw500'>Chứng chỉ chuẩn đầu ra</div>
+				</Col>
+				{record?.thongTinCdr?.map((cc) => (
+					<Col span={24} md={8} key={cc._id}>
+						<Card className='stat-nhap-diem-tp' style={{ cursor: 'pointer' }} onClick={() => handleView(cc)}>
+							{cc.datChuanDauRa ? (
+								<span className='num text-success'>
+									<CheckCircleOutlined />
+								</span>
+							) : (
+								<span className='num text-error'>
+									<CloseCircleOutlined />
+								</span>
+							)}
+							<span className='text'>{cc.loaiChungChi?.ten ?? cc.maLoaiChungChi}</span>
+						</Card>
 					</Col>
-					{record?.thongTinCdr?.map((cc) => (
-						<Col span={24} md={8} key={cc._id}>
-							<Card className='stat-nhap-diem-tp' style={{ cursor: 'pointer' }} onClick={() => handleView(cc)}>
-								{cc.datChuanDauRa ? (
-									<span className='num text-success'>
-										<CheckCircleOutlined />
-									</span>
-								) : (
-									<span className='num text-error'>
-										<CloseCircleOutlined />
-									</span>
-								)}
-								<span className='text'>{cc.loaiChungChi?.ten ?? cc.maLoaiChungChi}</span>
-							</Card>
-						</Col>
-					))}
-				</Row>
-			</Spin>
+				))}
+			</Row>
 
 			<Row gutter={[12, 12]} style={{ marginBottom: 18 }}>
 				<Col span={24}>
