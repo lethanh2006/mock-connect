@@ -1,7 +1,9 @@
+import { IRecord } from './../../TinTuc/typing.d';
 import type { ChungChi } from '../ChungChi/typing';
 import { type ChuongTrinhDaoTao } from '../DanhMucHeThong/ChuongTrinhDaoTao/typings';
 import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
 import { type EGioiTinh, type EHinhThucTuyenDung, type ENoiNgoaiTru, type EViTriViecLam } from '../constant';
+import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 
 declare module SinhVien {
 	export interface IRecord {
@@ -204,4 +206,18 @@ declare module SinhVien {
 		// ngayHetHan?: string;
 		// duDkDauRa?: boolean;
 	}
+
+	export interface ITienTrinhTotNghiep {
+		diemTichLuyToiThieu: number;
+		thongTinCdr?: ChuongTrinhDaoTao.IChungChiCTDT[];
+		kqhtHocKy?: KetQuaHocKy.IRecord;
+		ctdtKeHoach?: ChuongTrinhDaoTao.IRecord;
+	}
+
+	export type TDieuKienTotNghiep = {
+		isDuDieuKienTBC: boolean;
+		isDuDieuKienChungChi: boolean;
+		phanTramTinChi: number;
+		isDuKieuKien: boolean;
+	};
 }

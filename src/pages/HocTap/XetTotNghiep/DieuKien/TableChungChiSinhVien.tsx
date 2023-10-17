@@ -8,7 +8,7 @@ import moment from 'moment';
 import { useModel } from 'umi';
 
 const TableChungChiSinhVien = () => {
-	const { record } = useModel('sinhvien.chungchictdt');
+	const { recordChungChi } = useModel('sinhvien.tientrinhtotnghiep');
 
 	const columns: IColumn<SinhVien.IChungChiSinhVien>[] = [
 		{
@@ -63,8 +63,8 @@ const TableChungChiSinhVien = () => {
 		},
 	];
 
-	return record?.chungChiDaDat ? (
-		<TableStaticData columns={columns} data={record?.chungChiDaDat ?? []} />
+	return recordChungChi?.chungChiDaDat ? (
+		<TableStaticData columns={columns} data={recordChungChi?.chungChiDaDat ?? []} />
 	) : (
 		<Empty description='Bạn chưa đạt chứng chỉ nào' />
 	);
