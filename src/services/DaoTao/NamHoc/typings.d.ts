@@ -3,6 +3,8 @@ declare module NamHoc {
 		_id: string;
 		ma: string;
 		ten: string;
+		namBatDau: string;
+		namKetThuc: string;
 		thoiGianBatDau: string;
 		maHinhThucDaoTao: string;
 		hinhThucDaoTao?: HinhThucDaoTao.IRecordCoSo;
