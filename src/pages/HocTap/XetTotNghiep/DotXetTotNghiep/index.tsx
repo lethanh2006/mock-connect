@@ -39,85 +39,91 @@ const CardXetTotNghiep = () => {
 					style={{ marginBottom: 32, marginTop: 32 }}
 				/>
 			) : (
-				<Row gutter={[0, 16]}>
-					<Col span={24}>
-						<Alert
-							description={
-								<>
-									Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra
-								</>
-							}
-						/>
-					</Col>
+				<>
+					<Row gutter={[0, 16]}>
+						<Col span={24}>
+							<Alert
+								description={
+									<>
+										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra
+									</>
+								}
+							/>
+						</Col>
 
-					{record?.ketQuaXetTotNghiep?._id ? (
-						<>
-							<Col span={24}>Bạn có trong danh sách xét tốt nghiệp đợt này.</Col>
-							<Descriptions column={{ xs: 1, sm: 1, md: 1 }}>
-								<Descriptions.Item label='Kết quả rà soát sơ bộ'>
-									<Tag color={colorKetQuaXetTotNghiep[record?.ketQuaXetTotNghiep?.ketQua]}>
-										{record?.ketQuaXetTotNghiep?.ketQua}
-									</Tag>
-								</Descriptions.Item>
+						{record?.ketQuaXetTotNghiep?._id ? (
+							<>
+								<Col span={24}>Bạn có trong danh sách xét tốt nghiệp đợt này.</Col>
+								<Descriptions column={{ xs: 1, sm: 1, md: 1 }}>
+									{record.ketQuaXetTotNghiep?.ketQua ? (
+										<Descriptions.Item label='Kết quả rà soát sơ bộ'>
+											<Tag color={colorKetQuaXetTotNghiep[record.ketQuaXetTotNghiep?.ketQua]}>
+												{record?.ketQuaXetTotNghiep?.ketQua}
+											</Tag>
+										</Descriptions.Item>
+									) : null}
 
-								<Descriptions.Item label='Lý do'>
-									{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.KHONG_DU_DK
-										? record?.ketQuaXetTotNghiep?.lyDo
-										: null}
-								</Descriptions.Item>
+									{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.KHONG_DU_DK ? (
+										<Descriptions.Item label='Lý do'>{record?.ketQuaXetTotNghiep?.lyDo}</Descriptions.Item>
+									) : null}
 
-								<Descriptions.Item label='Ý kiến phản hồi'>
-									{record?.ketQuaXetTotNghiep?.yKienSinhVien ? record?.ketQuaXetTotNghiep?.yKienSinhVien : null}
-								</Descriptions.Item>
+									{record?.ketQuaXetTotNghiep?.yKienSinhVien ? (
+										<Descriptions.Item label='Ý kiến phản hồi'>
+											{record?.ketQuaXetTotNghiep?.yKienSinhVien}
+										</Descriptions.Item>
+									) : null}
 
-								<Descriptions.Item
-									label={`Trang thái ${
-										record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.HOAN
-											? 'hoãn'
-											: record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.NHU_CAU
-											? 'nhu cầu'
-											: null
-									} xét tốt nghiệp`}
-								>
 									{record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.HOAN ||
 									record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.NHU_CAU ? (
-										<Tag color={colorTrangThaiXetTotNghiep[record?.ketQuaXetTotNghiep?.trangThaiDuyet]}>
-											{record?.ketQuaXetTotNghiep?.trangThaiDuyet}
-										</Tag>
-									) : null}
-								</Descriptions.Item>
-							</Descriptions>
-						</>
-					) : (
-						<Col span={24}>Bạn không nằm trong đợt xét tốt nghiệp này</Col>
-					)}
-				</Row>
-			)}
+										<>
+											<Descriptions.Item>
+												{record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.HOAN
+													? 'Bạn đã đăng ký hoãn xét tốt nghiệp đợt này'
+													: 'Bạn đã đăng ký xét tốt nghiệp đợt này theo nhu cầu'}
+											</Descriptions.Item>
 
-			<div className='form-footer'>
-				{!record?.ketQuaXetTotNghiep?._id ? (
-					<>
-						<Popconfirm title='Xác nhận đăng ký xét tốt nghiệp đợt này?' onConfirm={handleRegister}>
-							<Button loading={formSubmiting} icon={<FormOutlined />}>
-								Đăng ký xét tốt nghiệp
-							</Button>
-						</Popconfirm>
-					</>
-				) : record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.DUNG_TIEN_DO ? (
-					<>
-						Trong đợt xét
-						<Button onClick={handlePhanHoi} icon={<FormOutlined />}>
-							Gửi phản hồi
-						</Button>
-						Đủ điều kiện xét tốt nghiệp
-						{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.DU_DK ? (
-							<Button onClick={handleHoan} danger icon={<CloseOutlined />}>
-								Yêu cầu hoãn tốt nghiệp
-							</Button>
+											{record.ketQuaXetTotNghiep?.trangThaiDuyet ? (
+												<Descriptions.Item label='Trạng thái'>
+													<Tag color={colorTrangThaiXetTotNghiep[record.ketQuaXetTotNghiep?.trangThaiDuyet]}>
+														{record?.ketQuaXetTotNghiep?.trangThaiDuyet}
+													</Tag>
+												</Descriptions.Item>
+											) : null}
+										</>
+									) : null}
+								</Descriptions>
+							</>
+						) : (
+							<Col span={24}>Bạn không có trong đợt xét tốt nghiệp này</Col>
+						)}
+					</Row>
+
+					<div className='form-footer'>
+						{!record?.ketQuaXetTotNghiep?._id ? (
+							<>
+								<Popconfirm title='Xác nhận đăng ký xét tốt nghiệp đợt này?' onConfirm={handleRegister}>
+									<Button loading={formSubmiting} icon={<FormOutlined />}>
+										Đăng ký xét tốt nghiệp
+									</Button>
+								</Popconfirm>
+							</>
+						) : record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.DUNG_TIEN_DO ? (
+							<>
+								Trong đợt xét
+								<Button onClick={handlePhanHoi} icon={<FormOutlined />}>
+									Gửi phản hồi
+								</Button>
+								Đủ điều kiện xét tốt nghiệp
+								{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.DU_DK ? (
+									<Button onClick={handleHoan} danger icon={<CloseOutlined />}>
+										Yêu cầu hoãn tốt nghiệp
+									</Button>
+								) : null}
+							</>
 						) : null}
-					</>
-				) : null}
-			</div>
+					</div>
+				</>
+			)}
 
 			<ModalYKien type={type} />
 		</Card>
