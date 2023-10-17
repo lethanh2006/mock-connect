@@ -6,16 +6,15 @@ import { useModel } from 'umi';
 import ModalChungChiCTDT from './ModalChungChi';
 
 const CardDieuKienTotNghiep = () => {
-	const { getTienTrinhChungChiCTDTModel, danhSach, loading, setRecord, setVisibleForm } =
-		useModel('sinhvien.chungchictdt');
-	const isDuDieuKien = danhSach?.every((item) => item.datChuanDauRa);
+	const { getTienTrinhChungChiCTDTModel, record, loading, setRecordChungChi, setVisibleForm, dieuKienTotNghiep } =
+		useModel('sinhvien.tientrinhtotnghiep');
 
 	useEffect(() => {
 		getTienTrinhChungChiCTDTModel();
 	}, []);
 
 	const handleView = (rec: ChuongTrinhDaoTao.IChungChiCTDT) => {
-		setRecord(rec);
+		setRecordChungChi(rec);
 		setVisibleForm(true);
 	};
 
@@ -27,14 +26,19 @@ const CardDieuKienTotNghiep = () => {
 				</Col>
 				<Col span={24} md={8}>
 					<Card className='stat-nhap-diem-tp'>
-						<span className='num text-success'>3.2 / 4</span>
+						<span className={`num ${dieuKienTotNghiep?.isDuDieuKienTBC ? 'text-success' : 'text-error'}`}>
+							{record?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4 ?? 0} / 4
+						</span>
 						<span className='text'>TBC tích lũy</span>
 					</Card>
 				</Col>
 				<Col span={24} md={8}>
 					<Card className='stat-nhap-diem-tp'>
-						<Progress width={40} type='dashboard' percent={30} />
-						<span className='text'>Số tín chỉ tích lũy (35/121)</span>
+						<Progress width={40} type='dashboard' percent={dieuKienTotNghiep?.phanTramTinChi} />
+						<span className='text'>
+							Số tín chỉ tích lũy ({record?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? 0}/
+							{record?.ctdtKeHoach?.tongSoTinChi ?? 0})
+						</span>
 					</Card>
 				</Col>
 			</Row>
@@ -44,7 +48,7 @@ const CardDieuKienTotNghiep = () => {
 					<Col span={24}>
 						<div className='fw500'>Chứng chỉ chuẩn đầu ra</div>
 					</Col>
-					{danhSach?.map((cc) => (
+					{record?.thongTinCdr?.map((cc) => (
 						<Col span={24} md={8} key={cc._id}>
 							<Card className='stat-nhap-diem-tp' style={{ cursor: 'pointer' }} onClick={() => handleView(cc)}>
 								{cc.datChuanDauRa ? (
@@ -85,7 +89,7 @@ const CardDieuKienTotNghiep = () => {
 				</Col>
 			</Row>
 
-			{isDuDieuKien ? (
+			{dieuKienTotNghiep?.isDuKieuKien ? (
 				<Alert type='success' description='Bạn đã đủ điều kiện để xét tốt nghiệp !' showIcon />
 			) : (
 				<Alert type='warning' description='Bạn chưa đủ điều kiện để xét tốt nghiệp !' showIcon />

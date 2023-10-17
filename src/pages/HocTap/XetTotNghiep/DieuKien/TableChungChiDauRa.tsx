@@ -5,7 +5,7 @@ import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
 import { useModel } from 'umi';
 
 const TableChungChiDauRa = () => {
-	const { record } = useModel('sinhvien.chungchictdt');
+	const { recordChungChi } = useModel('sinhvien.tientrinhtotnghiep');
 
 	const columns: IColumn<ChuongTrinhDaoTao.IChuanDauRa>[] = [
 		{
@@ -18,7 +18,7 @@ const TableChungChiDauRa = () => {
 			title: 'Ngoại ngữ',
 			width: 150,
 			render: (val, rec) => rec.chungChi?.ngonNgu?.ten ?? rec.chungChi?.maNgonNgu,
-			hide: !record?.loaiChungChi?.isNgoaiNgu,
+			hide: !recordChungChi?.loaiChungChi?.isNgoaiNgu,
 		},
 		{
 			title: 'Phương thức tính điểm',
@@ -48,7 +48,7 @@ const TableChungChiDauRa = () => {
 	return (
 		<>
 			<div className='fw500'>Danh sách chứng chỉ đủ điều kiện chuẩn đầu ra</div>
-			<TableStaticData columns={columns} data={record?.danhSachChungChiCtdtCdr ?? []} />
+			<TableStaticData columns={columns} data={recordChungChi?.danhSachChungChiCtdtCdr ?? []} />
 		</>
 	);
 };

@@ -13,6 +13,7 @@ import ModalYKien from './ModalYKien';
 const CardXetTotNghiep = () => {
 	const { formSubmiting, record, dangKyXetTotNghiepModel, setVisibleForm, getDotHienHanhModel } =
 		useModel('sinhvien.xettotnghiep');
+	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
 	const [type, setType] = useState<'phan-hoi' | 'hoan'>('phan-hoi');
 
 	useEffect(() => {
@@ -98,30 +99,32 @@ const CardXetTotNghiep = () => {
 						)}
 					</Row>
 
-					<div className='form-footer'>
-						{!record?.ketQuaXetTotNghiep?._id ? (
-							<>
-								<Popconfirm title='Xác nhận đăng ký xét tốt nghiệp đợt này?' onConfirm={handleRegister}>
-									<Button loading={formSubmiting} icon={<FormOutlined />}>
-										Đăng ký xét tốt nghiệp
+					{dieuKienTotNghiep?.isDuKieuKien ? (
+						<div className='form-footer'>
+							{!record?.ketQuaXetTotNghiep?._id ? (
+								<>
+									<Popconfirm title='Xác nhận đăng ký xét tốt nghiệp đợt này?' onConfirm={handleRegister}>
+										<Button loading={formSubmiting} icon={<FormOutlined />}>
+											Đăng ký xét tốt nghiệp
+										</Button>
+									</Popconfirm>
+								</>
+							) : record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.DUNG_TIEN_DO ? (
+								<>
+									Trong đợt xét
+									<Button onClick={handlePhanHoi} icon={<FormOutlined />}>
+										Gửi phản hồi
 									</Button>
-								</Popconfirm>
-							</>
-						) : record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.DUNG_TIEN_DO ? (
-							<>
-								Trong đợt xét
-								<Button onClick={handlePhanHoi} icon={<FormOutlined />}>
-									Gửi phản hồi
-								</Button>
-								Đủ điều kiện xét tốt nghiệp
-								{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.DU_DK ? (
-									<Button onClick={handleHoan} danger icon={<CloseOutlined />}>
-										Yêu cầu hoãn tốt nghiệp
-									</Button>
-								) : null}
-							</>
-						) : null}
-					</div>
+									Đủ điều kiện xét tốt nghiệp
+									{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.DU_DK ? (
+										<Button onClick={handleHoan} danger icon={<CloseOutlined />}>
+											Yêu cầu hoãn tốt nghiệp
+										</Button>
+									) : null}
+								</>
+							) : null}
+						</div>
+					) : null}
 				</>
 			)}
 
