@@ -11,7 +11,7 @@ export default () => {
 		params.maHocKy && getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
 
 	const sinhVienGetAllModel = async (params?: any): Promise<LopHocPhan.IRecord[]> =>
-		getAllModel(params, undefined, undefined, undefined, 'sinh-vien/all');
+		getAllModel(undefined, undefined, params, undefined, 'sinh-vien/all');
 
 	const sinhVienGetByIdModel = async (idLop: string): Promise<LopHocPhan.IRecord> => getByIdModel(`${idLop}/sinh-vien`);
 

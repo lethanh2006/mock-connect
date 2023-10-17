@@ -53,7 +53,7 @@ const CardLopHocPhan = () => {
 			<div
 				id='scrollableDiv'
 				style={{
-					height: 350,
+					maxHeight: 350,
 					overflow: 'auto',
 				}}
 			>
