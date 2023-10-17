@@ -10,7 +10,7 @@ const ModalYKien = (props: { type: 'phan-hoi' | 'hoan' }) => {
 		useModel('sinhvien.xettotnghiep');
 
 	const onFinish = async (values: DotXetTotNghiep.ISinhVienDot) => {
-		yKienXetTotNghiepModel(record?.ketQuaXetTotNghiep?.sinhVienSsoId ?? '', props.type, values)
+		yKienXetTotNghiepModel(record?._id ?? '', props.type, values)
 			.then()
 			.catch((er) => console.log(er));
 	};
@@ -42,7 +42,7 @@ const ModalYKien = (props: { type: 'phan-hoi' | 'hoan' }) => {
 							label='Phản hồi của bạn'
 							rules={[...rules.required, ...rules.text, ...rules.length(2000)]}
 						>
-							<Input placeholder='Nhập phản hồi của bạn' />
+							<Input.TextArea placeholder='Nhập phản hồi của bạn' />
 						</Form.Item>
 					</Col>
 				</Row>
@@ -51,7 +51,7 @@ const ModalYKien = (props: { type: 'phan-hoi' | 'hoan' }) => {
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
 						Lưu lại
 					</Button>
-					<Button onClick={() => setVisibleForm(false)}>Đóng</Button>
+					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>
 			</Form>
 		</Modal>

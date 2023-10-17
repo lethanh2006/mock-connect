@@ -25,8 +25,8 @@ declare module DotXetTotNghiep {
 		dotXetTotNghiepId: string;
 		dotXetTotNghiep?: IRecord;
 		loaiDoiTuong?: ELoaiDoiTuongXetTotNghiep;
-		ketQua: EKetQuaXetTotNghiep;
-		trangThaiDuyet: ETrangThaiDuyetXetTotNghiep;
+		ketQua?: EKetQuaXetTotNghiep;
+		trangThaiDuyet?: ETrangThaiDuyetXetTotNghiep;
 		lyDo?: string;
 		yKienSinhVien?: string;
 	}
