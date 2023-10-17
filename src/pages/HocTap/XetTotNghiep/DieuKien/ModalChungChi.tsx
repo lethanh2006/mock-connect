@@ -5,7 +5,7 @@ import TableChungChiSinhVien from './TableChungChiSinhVien';
 import { useModel } from 'umi';
 
 const ModalChungChiCTDT = () => {
-	const { visibleForm, setVisibleForm, record } = useModel('sinhvien.chungchictdt');
+	const { visibleForm, setVisibleForm, recordChungChi } = useModel('sinhvien.tientrinhtotnghiep');
 	const [activeTab, setActiveTab] = useState('1');
 
 	return (
@@ -17,7 +17,7 @@ const ModalChungChiCTDT = () => {
 			onCancel={() => setVisibleForm(false)}
 			okButtonProps={{ hidden: true }}
 			cancelText='Đóng'
-			title={`Loại chứng chỉ ${record?.loaiChungChi?.ten.toLocaleLowerCase()}`}
+			title={`Loại chứng chỉ ${recordChungChi?.loaiChungChi?.ten.toLocaleLowerCase()}`}
 		>
 			<Card bodyStyle={{ paddingTop: 0 }}>
 				<Tabs hideAdd activeKey={activeTab} onChange={(tab) => setActiveTab(tab)}>
