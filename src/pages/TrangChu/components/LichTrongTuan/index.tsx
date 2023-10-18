@@ -1,10 +1,10 @@
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
-import { Card, Empty, Space, Tag, Typography, List } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
+import { Card, Empty, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
-import { v4 } from 'uuid';
 import styles from './styles.less';
 
 const getThoiGianMotTuanKeTuHomNay = () => {
@@ -32,9 +32,8 @@ type State = Record<
 >;
 
 export const LichTrongTuan = () => {
-	const { selectSuKiens, getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
+	const { getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
-
 	const [dataCalendar, setDataCalendar] = useState<State>({});
 
 	//#region Get Data
@@ -43,9 +42,7 @@ export const LichTrongTuan = () => {
 			const temp = data.map((item) => ({
 				...item,
 				title: item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || '',
-				loaiSuKien: ELoaiSuKien.LICH_GIANG_DAY,
-				start: moment(item?.thoiGianBatDau).toDate(),
-				end: moment(item?.thoiGianKetThuc).toDate(),
+				loaiSuKien: ELoaiSuKien.LICH_HOC,
 			}));
 			return temp;
 		});
@@ -56,18 +53,13 @@ export const LichTrongTuan = () => {
 			const temp = data.map((item) => ({
 				...item,
 				title: item?.tenSuKien ?? '',
-				start: moment(item?.thoiGianBatDau).toDate(),
-				end: moment(item?.thoiGianKetThuc).toDate(),
 			}));
 			return temp;
 		});
 	};
 
 	const getData = () => {
-		const promises = [];
-		if (selectSuKiens.includes(ELoaiSuKien.LICH_GIANG_DAY)) promises.push(getThoiKhoaBieu());
-		if (selectSuKiens.includes(ELoaiSuKien.CA_NHAN) || selectSuKiens.includes(ELoaiSuKien.CHUNG))
-			promises.push(getSuKien());
+		const promises = [getThoiKhoaBieu(), getSuKien()];
 
 		Promise.allSettled(promises)
 			.then((values) => {
@@ -85,12 +77,12 @@ export const LichTrongTuan = () => {
 						[ngayString]: {
 							thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
 							cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
-								tenSuKien: item.title ?? item.tenSuKien,
-								thoiGianBatDau: item.thoiGianBatDau ?? item.start,
-								thoiGianKetThuc: item.thoiGianKetThuc ?? item.end,
-								loaiSuKien: ELoaiSuKien.CA_NHAN,
+								tenSuKien: item.title,
+								thoiGianBatDau: item.thoiGianBatDau,
+								thoiGianKetThuc: item.thoiGianKetThuc,
+								loaiSuKien: item.loaiSuKien,
 								diaDiem: item.phongHoc ?? item.diaDiem,
-								id: v4(),
+								id: item._id,
 							}),
 						},
 					};
@@ -103,52 +95,40 @@ export const LichTrongTuan = () => {
 
 	useEffect(() => {
 		getData();
-	}, [selectSuKiens.length]);
+	}, []);
 
 	const renderContent = () => {
 		const keysSorted = sortBy(Object.keys(dataCalendar), (ngay) => new Date(ngay));
 		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendar)) {
-			return <Empty description='Không có sự kiên nào' />;
+			return <Empty description='Không có sự kiện nào' />;
 		}
+
 		return keysSorted.map((ngay) => {
 			const { cacSuKien, thuTrongTuan } = dataCalendar[ngay];
 			const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
 			return (
 				<div key={ngay} className={styles.ngay}>
-					<Space style={{ marginBottom: 6 }}>
+					<Space style={{ marginBottom: 8 }}>
 						<Typography.Text className={styles.ngay__title}>
-							{thuTrongTuan} {ngay}
+							{thuTrongTuan}, {ngay}
 						</Typography.Text>
-						<Tag color='#108ee9'>{cacSuKien.length} sự kiện</Tag>
+						<Tag color='blue'>{cacSuKien.length} sự kiện</Tag>
 					</Space>
-					<List
-						style={{ maxHeight: 400, overflowX: 'hidden', overflowY: 'auto' }}
-						size='small'
-						dataSource={cacSuKienSorted}
-						renderItem={(sukien) => {
-							return (
-								<List.Item style={{ width: '100%', display: 'block' }}>
-									<div
-										key={sukien.id}
-										className={styles.su_kien}
-										style={{ color: '#fff', background: ColorSuKien[sukien.loaiSuKien] }}
-									>
-										<div className={styles.su_kien__left}>
-											<div className={styles.su_kien__thoi_gian}>{moment(sukien.thoiGianBatDau).format('HH:mm')}</div>
-										</div>
-										<div
-											className={styles.su_kien__right}
-											style={{
-												borderColor: ColorSuKien[sukien.loaiSuKien],
-											}}
-										>
-											<div>{[sukien.tenSuKien, sukien.diaDiem].filter(Boolean).join(' - ')}</div>
-										</div>
-									</div>
-								</List.Item>
-							);
-						}}
-					/>
+					{cacSuKienSorted.map((sukien) => (
+						<div key={sukien.id} className={styles.su_kien} style={{ background: ColorSuKien[sukien.loaiSuKien] }}>
+							<div className={styles.su_kien__left}>
+								<div className={styles.su_kien__thoi_gian}>{moment(sukien.thoiGianBatDau).format('HH:mm')}</div>
+							</div>
+							<div
+								className={styles.su_kien__right}
+								style={{
+									borderColor: ColorSuKien[sukien.loaiSuKien],
+								}}
+							>
+								<div>{[sukien.tenSuKien, sukien.diaDiem].filter(Boolean).join(' - ')}</div>
+							</div>
+						</div>
+					))}
 				</div>
 			);
 		});
@@ -161,13 +141,13 @@ export const LichTrongTuan = () => {
 			title={
 				<div className={styles.title}>
 					<Typography.Text>Lịch sắp tới</Typography.Text>
-					<Link to={'/calendar'} type='link' style={{ fontSize: 14 }}>
-						Xem thêm
+					<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
+						Xem thêm <ArrowRightOutlined />
 					</Link>
 				</div>
 			}
 		>
-			<div>{renderContent()}</div>
+			<div style={{ maxHeight: 400, overflowY: 'auto' }}>{renderContent()}</div>
 		</Card>
 	);
 };
