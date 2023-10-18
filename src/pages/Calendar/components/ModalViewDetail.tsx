@@ -1,6 +1,7 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
+import { moodleEndpoint } from '@/utils/ip';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Modal, Popconfirm, Space, Tag, message } from 'antd';
 import moment from 'moment';
@@ -16,9 +17,9 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	const suKien = !isThoiKhoaBieu ? (event as SuKien.IRecord) : undefined;
 
 	const handleMoodle = (lopHocPhanId?: string) => {
-		if (lopHocPhanId)
+		if (lopHocPhanId && moodleEndpoint)
 			getMoodleLopHocPhanModel(lopHocPhanId).then((data) => {
-				if (data?.url) window.open(data.url);
+				if (data?.url) window.open(`${moodleEndpoint}${data.url}`);
 				else message.error('Có lỗi, vui lòng thử lại sau');
 			});
 	};
