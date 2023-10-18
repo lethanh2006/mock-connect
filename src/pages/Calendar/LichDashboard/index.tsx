@@ -5,6 +5,7 @@ import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
+import ModalViewDetailCalendar from '../components/ModalViewDetail';
 import styles from './styles.less';
 
 const getThoiGianMotTuanKeTuHomNay = () => {
@@ -21,7 +22,7 @@ interface StateItem {
 	loaiSuKien: ELoaiSuKien;
 	thoiGianBatDau: string;
 	thoiGianKetThuc: string;
-	id: string;
+	_id: string;
 }
 type State = Record<
 	Ngay,
@@ -31,10 +32,12 @@ type State = Record<
 	}
 >;
 
-export const LichTrongTuan = () => {
+const LichDashboard = () => {
 	const { getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const [dataCalendar, setDataCalendar] = useState<State>({});
+	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
+	const [selectEvent, setSelectEvent] = useState<any>();
 
 	//#region Get Data
 	const getThoiKhoaBieu = async () => {
@@ -70,19 +73,16 @@ export const LichTrongTuan = () => {
 						return result;
 					}
 					const ngayMoment = moment(item.thoiGianBatDau);
-					const ngayString = ngayMoment.format('DD/MM/YYYY');
+					const ngayString = ngayMoment.format('YYYY-MM-DD');
 
 					return {
 						...result,
 						[ngayString]: {
 							thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
 							cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
+								...item,
 								tenSuKien: item.title,
-								thoiGianBatDau: item.thoiGianBatDau,
-								thoiGianKetThuc: item.thoiGianKetThuc,
-								loaiSuKien: item.loaiSuKien,
 								diaDiem: item.phongHoc ?? item.diaDiem,
-								id: item._id,
 							}),
 						},
 					};
@@ -98,7 +98,7 @@ export const LichTrongTuan = () => {
 	}, []);
 
 	const renderContent = () => {
-		const keysSorted = sortBy(Object.keys(dataCalendar), (ngay) => new Date(ngay));
+		const keysSorted = sortBy(Object.keys(dataCalendar));
 		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendar)) {
 			return <Empty description='Không có sự kiện nào' />;
 		}
@@ -110,12 +110,20 @@ export const LichTrongTuan = () => {
 				<div key={ngay} className={styles.ngay}>
 					<Space style={{ marginBottom: 8 }}>
 						<Typography.Text className={styles.ngay__title}>
-							{thuTrongTuan}, {ngay}
+							{thuTrongTuan}, {moment(ngay).format('DD/MM/YYYY')}
 						</Typography.Text>
 						<Tag color='blue'>{cacSuKien.length} sự kiện</Tag>
 					</Space>
 					{cacSuKienSorted.map((sukien) => (
-						<div key={sukien.id} className={styles.su_kien} style={{ background: ColorSuKien[sukien.loaiSuKien] }}>
+						<div
+							key={sukien._id}
+							className={styles.su_kien}
+							style={{ background: ColorSuKien[sukien.loaiSuKien] }}
+							onClick={() => {
+								setSelectEvent(sukien);
+								setVisibleDetail(true);
+							}}
+						>
 							<div className={styles.su_kien__left}>
 								<div className={styles.su_kien__thoi_gian}>{moment(sukien.thoiGianBatDau).format('HH:mm')}</div>
 							</div>
@@ -135,19 +143,33 @@ export const LichTrongTuan = () => {
 	};
 
 	return (
-		<Card
-			className={styles.container}
-			loading={loadingSuKien || loadingTKB}
-			title={
-				<div className={styles.title}>
-					<Typography.Text>Lịch sắp tới</Typography.Text>
-					<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
-						Xem thêm <ArrowRightOutlined />
-					</Link>
-				</div>
-			}
-		>
-			<div style={{ maxHeight: 400, overflowY: 'auto' }}>{renderContent()}</div>
-		</Card>
+		<>
+			<Card
+				className={styles.container}
+				loading={loadingSuKien || loadingTKB}
+				title={
+					<div className={styles.title}>
+						<Typography.Text>Lịch sắp tới</Typography.Text>
+						<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
+							Xem thêm <ArrowRightOutlined />
+						</Link>
+					</div>
+				}
+			>
+				<div style={{ maxHeight: 400, overflowY: 'auto' }}>{renderContent()}</div>
+			</Card>
+
+			{/* Modal xem chi tiết lịch */}
+			{selectEvent ? (
+				<ModalViewDetailCalendar
+					visible={visibleDetail}
+					setVisible={setVisibleDetail}
+					event={selectEvent}
+					getData={getData}
+				/>
+			) : null}
+		</>
 	);
 };
+
+export default LichDashboard;
