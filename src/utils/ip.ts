@@ -13,7 +13,7 @@ const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
 const ipTaiChinh = ipRoot + 'tai-chinh-api';
 const ipNews = 'https://vwa-content.aisenote.com';
-const ipNewsWP = 'http://vwa.phanmemdangky.com';
+const ipNewsWP = 'https://portal-vwa.aisenote.com/';
 
 const currentRole = EModuleKey.CONNECT;
 
