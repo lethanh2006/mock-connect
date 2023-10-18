@@ -14,7 +14,7 @@ export default () => {
 		setLoading(true);
 		const payload = {
 			page: 1,
-			per_page: 6,
+			per_page: 5,
 			// listContentType: Object.values(PathChuDeStrapi),
 		};
 
