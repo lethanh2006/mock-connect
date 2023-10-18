@@ -95,3 +95,5 @@ export const ColorSuKien: Partial<Record<ELoaiSuKien, string>> = {
 	[ELoaiSuKien.CA_NHAN]: 'rgba(87, 191, 86, 0.7)',
 	[ELoaiSuKien.CHUNG]: 'rgba(32, 152, 199, 0.7)',
 };
+
+export const THU_TRONG_TUAN = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
