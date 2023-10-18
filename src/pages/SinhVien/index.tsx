@@ -1,22 +1,46 @@
-import { Card } from 'antd';
+import { exportLyLich } from '@/services/DaoTao/SinhVien';
+import { EditOutlined, PrinterOutlined } from '@ant-design/icons';
+import { Button, Card, Space, message } from 'antd';
+import fileDownload from 'js-file-download';
+import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
 
 const ThongTinSinhVienPage = () => {
-  // const [currentStep, setCurrentStep] = useState<string>('0');
-  // const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
+	const { record } = useModel('sinhvien.sinhvien');
+	// const [currentStep, setCurrentStep] = useState<string>('0');
+	// const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
 
-  // useEffect(() => {
-  //   setCurrentStep('0');
-  // }, [record?.ssoId]);
+	// useEffect(() => {
+	//   setCurrentStep('0');
+	// }, [record?.ssoId]);
 
-  // const onChangeStep = (step: string) => {
-  //   setCurrentStep(step);
-  // };
+	// const onChangeStep = (step: string) => {
+	//   setCurrentStep(step);
+	// };
 
-  return (
-    <Card title="Thông tin cá nhân">
-      <PreviewHoSo />
-      {/* <Tabs
+	const onExport = () => {
+		if (record?.ssoId) {
+			exportLyLich(record?.ssoId).then((res) => fileDownload(res.data, `Hồ sơ ${record.ten}.pdf`));
+		}
+	};
+
+	return (
+		<Card title='Thông tin cá nhân'>
+			<Space style={{ marginBottom: 12 }} wrap>
+				{record?.ssoId ? (
+					<>
+						<Button icon={<EditOutlined />} onClick={() => message.warn('Đang cập nhật')}>
+							Cập nhật hồ sơ
+						</Button>
+						<Button icon={<PrinterOutlined />} onClick={onExport}>
+							In hồ sơ
+						</Button>
+					</>
+				) : null}
+			</Space>
+
+			<PreviewHoSo />
+			{/* <Tabs
         activeKey={currentStep}
         tabPosition={isTabletOrMobile ? 'top' : 'left'}
         onChange={record?.ssoId ? onChangeStep : undefined}
@@ -46,11 +70,11 @@ const ThongTinSinhVienPage = () => {
         </Tabs.TabPane>
       </Tabs> */}
 
-      {/* <div className="form-footer">
+			{/* <div className="form-footer">
         <Button onClick={() => setVisibleForm(false)}>Đóng</Button>
       </div> */}
-    </Card>
-  );
+		</Card>
+	);
 };
 
 export default ThongTinSinhVienPage;

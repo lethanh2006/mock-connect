@@ -38,7 +38,10 @@ screenshot
 .eslintcache
 
 build
+.husky
 
 # .vercel
 
-.husky
+# Sentry Auth Token
+#.sentryclirc
+

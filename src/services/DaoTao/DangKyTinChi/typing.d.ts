@@ -8,14 +8,22 @@ import {
 
 declare module DangKyTinChi {
   export interface IDotDangKy {
-    _id: string;
-    ten: string;
-    maHocKy: string;
-    hocKy?: HocKy.IRecord;
-    kichHoat: boolean;
-    thoiGianBatDau: string;
-    thoiGianKetThuc: string;
-  }
+		_id: string;
+		ten: string;
+		maHocKy: string;
+		hocKy?: HocKy.IRecord;
+		kichHoat: boolean;
+		thoiGianBatDau: string;
+		thoiGianKetThuc: string;
+
+		allowNhuCau: boolean;
+		allowTienTrinh: boolean;
+		allowHocLai: boolean;
+		allowHocCaiThien: boolean;
+		allowHocVuot: boolean;
+		allowChuaTheoTienTrinh: boolean;
+		allowNgoaiChuongTrinh: boolean;
+	}
 
   export interface IPhieuDangKy {
     _id: string;

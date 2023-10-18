@@ -1,4 +1,4 @@
-import { Descriptions, Spin, Tabs, Tooltip } from 'antd';
+import { Button, Descriptions, Spin, Tabs, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../DeCuongHocPhan/ModalHocPhan';
@@ -6,61 +6,74 @@ import DanhSachGiangVien from './DanhSachGiangVien';
 import DanhSachSinhVien from './DanhSachSinhVien';
 
 const ThongTinChung = () => {
-  const { loading, record } = useModel('daotao.lophocphan');
-  const {
-    record: recLopThucHanh,
-    danhSach: danhSachLopThucHanh,
-    getByIdModel: getByIdLopThucHanh,
-    sinhVienGetModel: getLopThucHanh,
-    danhSachNhanSu: danhSachNhanSuLopTH,
-    getAllNhanSuModel: getNhanSuLopTH,
-    loading: loadingThucHanh,
-  } = useModel('daotao.lopthuchanh');
-  const { danhSach: danhSachNhanSu, getAllModel: getAllNhanSu } =
-    useModel('daotao.nhansulophocphan');
-  const [activeKey, setActiveKey] = useState<string>('-1');
-  const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
+	const { loading, record, getMoodleLopHocPhanModel } = useModel('daotao.lophocphan');
+	const {
+		record: recLopThucHanh,
+		danhSach: danhSachLopThucHanh,
+		getByIdModel: getByIdLopThucHanh,
+		sinhVienGetModel: getLopThucHanh,
+		danhSachNhanSu: danhSachNhanSuLopTH,
+		getAllNhanSuModel: getNhanSuLopTH,
+		loading: loadingThucHanh,
+	} = useModel('daotao.lopthuchanh');
+	const { danhSach: danhSachNhanSu, getAllModel: getAllNhanSu } = useModel('daotao.nhansulophocphan');
+	const [activeKey, setActiveKey] = useState<string>('-1');
+	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 
-  useEffect(() => {
-    setActiveKey('-1');
-    if (record?._id) {
-      getAllNhanSu(false, undefined, { lopHocPhanId: record?._id });
-      getLopThucHanh({ tenCha: record?.ten });
-    }
-  }, [record?._id]);
+	useEffect(() => {
+		setActiveKey('-1');
+		if (record?._id) {
+			getAllNhanSu(false, undefined, { lopHocPhanId: record?._id });
+			getLopThucHanh({ tenCha: record?.ten });
+		}
+	}, [record?._id]);
 
-  useEffect(() => {
-    if (activeKey !== '-1') {
-      getByIdLopThucHanh(activeKey);
-      getNhanSuLopTH(activeKey);
-    }
-  }, [activeKey]);
+	useEffect(() => {
+		if (activeKey !== '-1') {
+			getByIdLopThucHanh(activeKey);
+			getNhanSuLopTH(activeKey);
+		}
+	}, [activeKey]);
 
-  return (
-    <Spin spinning={loading}>
-      <Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 3 }} title="Thông tin lớp">
-        <Descriptions.Item label="Học phần">
-          {record?.hocPhan?.ten ? (
-            <Tooltip title="Xem đề cương chi tiết học phần">
-              <a onClick={() => setVisibleDeCuong(true)}>
-                <b>{record?.hocPhan?.ten ?? ''}</b>
-              </a>
-            </Tooltip>
-          ) : (
-            <i>Chưa cập nhật</i>
-          )}
-        </Descriptions.Item>
-        <Descriptions.Item label="Mã học phần">{record?.hocPhan?.ma ?? ''}</Descriptions.Item>
-        {/* <Descriptions.Item label="Số tín chỉ">-- tín chỉ</Descriptions.Item> */}
-        <Descriptions.Item label="Sĩ số">{record?.siSo ?? 0} sinh viên</Descriptions.Item>
-      </Descriptions>
+	const handleMoodle = () => {
+		if (record?.moodleShortname && record?._id)
+			getMoodleLopHocPhanModel(record._id).then((data) => {
+				if (data?.url) window.open(data.url);
+				else message.error('Có lỗi, vui lòng thử lại sau');
+			});
+	};
 
-      <DanhSachGiangVien
-        danhSachNhanSu={danhSachNhanSu?.map((item) => item.nhanSu ?? { _id: '-1' })}
-        title="Giảng viên"
-      />
+	return (
+		<Spin spinning={loading}>
+			<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 3 }} title='Thông tin lớp'>
+				<Descriptions.Item label='Học phần'>
+					{record?.hocPhan?.ten ? (
+						<Tooltip title='Xem đề cương chi tiết học phần'>
+							<a onClick={() => setVisibleDeCuong(true)}>
+								<b>{record?.hocPhan?.ten ?? ''}</b>
+							</a>
+						</Tooltip>
+					) : (
+						<i>Chưa cập nhật</i>
+					)}
+				</Descriptions.Item>
+				<Descriptions.Item label='Mã học phần'>{record?.hocPhan?.ma ?? ''}</Descriptions.Item>
+				<Descriptions.Item label='Số tín chỉ'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Descriptions.Item>
+				<Descriptions.Item label='Sĩ số'>{record?.siSo ?? 0} sinh viên</Descriptions.Item>
+			</Descriptions>
 
-      {/* <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
+			{record?.moodleShortname ? (
+				<Button onClick={handleMoodle} style={{ marginBottom: 18 }}>
+					Lớp học trực tuyến
+				</Button>
+			) : null}
+
+			<DanhSachGiangVien
+				danhSachNhanSu={danhSachNhanSu?.map((item) => item.nhanSu ?? { _id: '-1' })}
+				title='Giảng viên'
+			/>
+
+			{/* <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
         Thông tin điểm danh của bạn
       </h4>
       <div style={{ marginBottom: 12 }}>
@@ -69,28 +82,26 @@ const ThongTinChung = () => {
         Vắng không phép: -- <a>(xem chi tiết)</a>
       </div> */}
 
-      <Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
-        <Tabs.TabPane tab="Danh sách sinh viên" key="-1" />
-        {danhSachLopThucHanh?.map((item) => (
-          <Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
-        ))}
-      </Tabs>
+			<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
+				<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
+				{danhSachLopThucHanh?.map((item) => (
+					<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
+				))}
+			</Tabs>
 
-      {activeKey !== '-1' ? (
-        <DanhSachGiangVien
-          danhSachNhanSu={danhSachNhanSuLopTH?.map((item) => item.nhanSu ?? { _id: '-1' })}
-          title="Giảng viên phụ trách nhóm lớp"
-        />
-      ) : null}
+			{activeKey !== '-1' ? (
+				<DanhSachGiangVien
+					danhSachNhanSu={danhSachNhanSuLopTH?.map((item) => item.nhanSu ?? { _id: '-1' })}
+					title='Giảng viên phụ trách nhóm lớp'
+				/>
+			) : null}
 
-      <DanhSachSinhVien
-        sinhVienList={
-          activeKey !== '-1' ? recLopThucHanh?.sinhVienList ?? [] : record?.sinhVienList ?? []
-        }
-        loading={loading || loadingThucHanh}
-      />
+			<DanhSachSinhVien
+				sinhVienList={activeKey !== '-1' ? recLopThucHanh?.sinhVienList ?? [] : record?.sinhVienList ?? []}
+				loading={loading || loadingThucHanh}
+			/>
 
-      {/* <Modal
+			{/* <Modal
         title="Vắng điểm danh"
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
@@ -102,13 +113,9 @@ const ThongTinChung = () => {
         />
       </Modal> */}
 
-      <ModalHocPhan
-        visible={visibleDeCuong}
-        setVisible={setVisibleDeCuong}
-        title="Chi tiết đề cương học phần"
-      />
-    </Spin>
-  );
+			<ModalHocPhan visible={visibleDeCuong} setVisible={setVisibleDeCuong} title='Chi tiết đề cương học phần' />
+		</Spin>
+	);
 };
 
 export default ThongTinChung;

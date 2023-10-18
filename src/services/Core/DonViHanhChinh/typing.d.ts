@@ -1,29 +1,36 @@
 import { type ECapHanhChinh } from '../constant';
 
 declare module DonViHanhChinh {
-  export interface IRecord {
-    _id: string;
-    tenDonVi: string;
-    cap: number;
-    ma: number;
-    maDonViTrucThuoc: string;
-    createdAt: string;
-    updatedAt: string;
-    capHanhChinh: ECapHanhChinh;
-  }
-  export interface IDataInit {
-    tinhTp?: string;
-    quanHuyen?: string;
-    xaPhuong?: string;
-    soNhaTenDuong?: string;
-  }
-  export interface DonViHanhChinhRecord {
-    maPhuongXa?: string;
-    maQuanHuyen?: string;
-    maTinh?: string;
-    soNhaTenDuong?: string;
-    tenPhuongXa?: string;
-    tenQuanHuyen?: string;
-    tenTinh?: string;
-  }
+	export interface IRecord {
+		_id: string;
+		tenDonVi: string;
+		cap: number;
+		ma: number;
+		maDonViTrucThuoc: string;
+		createdAt: string;
+		updatedAt: string;
+		capHanhChinh: ECapHanhChinh;
+	}
+	export interface IRecord2 {
+		_id: string;
+		tenDonVi: string;
+		cap: number;
+		ma: string;
+	}
+
+	export interface IDataInit {
+		tinhTp?: string;
+		quanHuyen?: string;
+		xaPhuong?: string;
+		soNhaTenDuong?: string;
+	}
+	export interface DonViHanhChinhRecord {
+		maPhuongXa?: string;
+		maQuanHuyen?: string;
+		maTinh?: string;
+		soNhaTenDuong?: string;
+		tenPhuongXa?: string;
+		tenQuanHuyen?: string;
+		tenTinh?: string;
+	}
 }
