@@ -1,26 +1,26 @@
 import { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
 const Settings: LayoutSettings & {
-  pwa?: boolean;
-  logo?: string;
-  borderRadiusBase: string;
-  siderWidth: number;
+	pwa?: boolean;
+	logo?: string;
+	borderRadiusBase: string;
+	siderWidth: number;
 } = {
-  navTheme: 'dark',
-  primaryColor: '#007EB9',
-  borderRadiusBase: '2px',
-  layout: 'mix',
-  contentWidth: 'Fluid',
-  fixedHeader: false,
-  fixSiderbar: true,
-  colorWeak: false,
-  title: 'VWA Connect',
-  pwa: false,
-  logo: '/logo.png',
-  iconfontUrl: '',
-  headerTheme: 'dark',
-  headerHeight: 60,
-  siderWidth: 220,
+	navTheme: 'dark',
+	primaryColor: process.env.APP_CONFIG_PRIMARY_COLOR,
+	borderRadiusBase: '2px',
+	layout: 'mix',
+	contentWidth: 'Fluid',
+	fixedHeader: false,
+	fixSiderbar: true,
+	colorWeak: false,
+	title: process.env.APP_CONFIG_TITLE_CONNECT ?? '',
+	pwa: false,
+	logo: '/logo.png',
+	iconfontUrl: '',
+	headerTheme: 'dark',
+	headerHeight: 60,
+	siderWidth: 220,
 };
 
 export default Settings;

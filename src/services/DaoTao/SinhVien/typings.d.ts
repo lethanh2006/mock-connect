@@ -1,202 +1,223 @@
+import { IRecord } from './../../TinTuc/typing.d';
+import type { ChungChi } from '../ChungChi/typing';
 import { type ChuongTrinhDaoTao } from '../DanhMucHeThong/ChuongTrinhDaoTao/typings';
 import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
-import {
-  type EGioiTinh,
-  type EHinhThucTuyenDung,
-  type ENoiNgoaiTru,
-  type EViTriViecLam,
-} from '../constant';
+import { type EGioiTinh, type EHinhThucTuyenDung, type ENoiNgoaiTru, type EViTriViecLam } from '../constant';
+import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 
 declare module SinhVien {
-  export interface IRecord {
-    _id: string;
-    anhDaiDienUrl: string;
-    ma: string;
-    ten: string;
-    firstName: string;
-    lastName: string;
-    gioiTinh: EGioiTinh;
-    quocTich: string;
-    danToc: string;
-    tonGiao: string;
-    ngaySinh: string;
-    cccd: string;
-    noiCapCccd: string;
-    ngayCapCccd: string;
-    soDienThoai: string;
-    email: string;
-    soDienThoai2: string;
-    email2: string;
-    nguoiLienLac: string;
-    soDienThoaiNguoiLienLac: string;
-    khoaNganh: {
-      khoaSinhVien: KhoaSinhVien.IRecord;
-      nganh: NganhDaoTao.IRecordCoSo;
-      ten: string;
-    };
+	export interface IRecord {
+		_id: string;
+		ssoId: string;
+		trangThaiHoc?: string;
+		anhDaiDienUrl: string;
+		ma: string;
+		ten: string;
+		firstName: string;
+		lastName: string;
 
-    loaiNoiSinh: string;
-    quocGiaNoiSinh: string;
-    tinhTpNoiSinh: string;
-    quanHuyenNoiSinh: string;
-    xaPhuongNoiSinh: string;
+		gioiTinh: EGioiTinh;
+		quocTich: string;
+		danToc: string;
+		tonGiao: string;
+		ngaySinh: string;
+		cccd: string;
+		noiCapCccd: string;
+		ngayCapCccd: string;
+		soDienThoai: string;
+		email: string;
+		// soDienThoai2: string;
+		// email2: string;
+		// nguoiLienLac: string;
+		// soDienThoaiNguoiLienLac: string;
 
-    tinhTpQueQuan: string;
-    quanHuyenQueQuan: string;
-    xaPhuongQueQuan: string;
-    soNhaTenDuongQueQuan: string;
+		loaiNoiSinh: string;
+		quocGiaNoiSinh: string;
+		tinhTpNoiSinh: string;
+		// quanHuyenNoiSinh: string;
+		// xaPhuongNoiSinh: string;
 
-    tinhTpThuongTru: string;
-    quanHuyenThuongTru: string;
-    xaPhuongThuongTru: string;
-    soNhaTenDuongThuongTru: string;
+		tinhTpQueQuan: string;
+		quanHuyenQueQuan: string;
+		xaPhuongQueQuan: string;
+		// soNhaTenDuongQueQuan: string;
 
-    laDoanVien: boolean;
-    ngayVaoDoan: string;
-    daHocLopCamTinhDang: boolean;
-    laDangVien: boolean;
-    ngayVaoDang: string;
-    ngayVaoDangChinhThuc: string;
+		tinhTpThuongTru: string;
+		quanHuyenThuongTru: string;
+		xaPhuongThuongTru: string;
+		soNhaTenDuongThuongTru: string;
 
-    loaiKhuyetTat: string;
-    canNang: number;
-    chieuCao: number;
-    soTaiKhoanNganHang: string;
-    tenNganHang: string;
-    chiNhanhNganHang: string;
-    soBaoHiemSinhVien: string;
-    maBenhVienKhamChuaBenh: string;
+		// laDoanVien: boolean;
+		ngayVaoDoan: string;
+		// daHocLopCamTinhDang: boolean;
+		// laDangVien: boolean;
+		ngayVaoDang: string;
+		ngayVaoDangChinhThuc: string;
 
-    tenGiamHo: string;
-    ngaySinhGiamHo: string;
-    ngheNghiepGiamHo: string;
-    soDienThoaiGiamHo: string;
-    emailGiamHo: string;
-    noiCongTacGiamHo: string;
-    nguyenQuanGiamHo: string;
-    diaChiGiamHo: string;
-    tenChuHo: string;
+		loaiKhuyetTat: string;
+		canNang: number;
+		chieuCao: number;
+		soTaiKhoanNganHang: string;
+		tenNganHang: string;
+		chiNhanhNganHang: string;
+		soBaoHiemSinhVien: string;
+		maBenhVienKhamChuaBenh: string;
 
-    chaDaMat: boolean;
-    tenCha: string;
-    ngaySinhCha: string;
-    soDienThoaiCha: string;
-    ngheNghiepCha: string;
-    emailCha: string;
-    noiCongTacCha: string;
-    nguyenQuanCha: string;
-    diaChiCha: string;
+		tenGiamHo: string;
+		ngaySinhGiamHo: string;
+		ngheNghiepGiamHo: string;
+		soDienThoaiGiamHo: string;
+		emailGiamHo: string;
+		noiCongTacGiamHo: string;
+		nguyenQuanGiamHo: string;
+		diaChiGiamHo: string;
+		tenChuHo: string;
 
-    meDaMat: boolean;
-    tenMe: string;
-    ngaySinhMe: string;
-    soDienThoaiMe: string;
-    ngheNghiepMe: string;
-    emailMe: string;
-    noiCongTacMe: string;
-    nguyenQuanMe: string;
-    diaChiMe: string;
+		chaDaMat: boolean;
+		tenCha: string;
+		ngaySinhCha: string;
+		soDienThoaiCha: string;
+		ngheNghiepCha: string;
+		emailCha: string;
+		noiCongTacCha: string;
+		nguyenQuanCha: string;
+		diaChiCha: string;
 
-    tenVoChong: string;
-    ngheNghiepVoChong: string;
-    diaChiVoChong: string;
-    soDienThoaiVoChong: string;
-    emailVoChong: string;
-    thongTinAnhChiEm: string;
-    thongTinCacCon: string;
+		meDaMat: boolean;
+		tenMe: string;
+		ngaySinhMe: string;
+		soDienThoaiMe: string;
+		ngheNghiepMe: string;
+		emailMe: string;
+		noiCongTacMe: string;
+		nguyenQuanMe: string;
+		diaChiMe: string;
 
-    khoaSinhVienId: string;
-    khoaSinhVien?: KhoaSinhVien.IRecord;
-    lopHanhChinhList?: LopHanhChinh.IRecord[];
-    nganhId: string;
-    trinhDoDaoTaoId: string;
-    hinhThucDaoTaoId: string;
-    chuongTrinhId: string;
-    ssoId: string;
-    trangThaiHoc?: string;
-  }
+		tenVoChong: string;
+		ngheNghiepVoChong: string;
+		diaChiVoChong: string;
+		soDienThoaiVoChong: string;
+		emailVoChong: string;
+		thongTinAnhChiEm: string;
+		thongTinCacCon: string;
 
-  export interface IHocBongSinhVien {
-    _id: string;
-    sinhVienSsoId: string;
-    sinhVien?: IRecord;
-    ten: string;
-    donViTaiTro: string;
-    thoiGianTraoTangHocBong: string;
-    loaiHocBongId: string;
-    loaiHocBong?: LoaiHocBong.IRecord;
-    giaTriHocBong: number;
-  }
+		maKhoaNganh?: string;
+		khoaNganh: {
+			khoaSinhVien: KhoaSinhVien.IRecord;
+			nganh: NganhDaoTao.IRecordCoSo;
+			ten: string;
+		};
+		maKhoaSinhVien: string;
+		khoaSinhVien?: KhoaSinhVien.IRecord;
+		lopHanhChinhList?: LopHanhChinh.IRecord[];
+		maNganh: string;
+		nganh?: NganhDaoTao.IRecordCoSo;
+		maTrinhDo: string;
+		maHinhThuc: string;
+		maChuongTrinhDaoTao: string;
+	}
 
-  export interface IKhenThuongSinhVien {
-    _id: string;
-    sinhVienSsoId: string;
-    sinhVien?: IRecord;
-    namKhenThuong: number;
-    soQuyetDinhKhenThuong: string;
-    danhHieuThiDuaGiaiThuongKhenThuong: string;
-    capKhenThuong: string;
-    loaiDanhHieuThiDuaGiaiThuongKhenThuong: string;
-    phuongThucKhenThuong: string;
-  }
+	export interface IHocBongSinhVien {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		ten: string;
+		donViTaiTro: string;
+		thoiGianTraoTangHocBong: string;
+		loaiHocBongId: string;
+		loaiHocBong?: LoaiHocBong.IRecord;
+		giaTriHocBong: number;
+	}
 
-  export interface IKyLuatSinhVien {
-    _id: string;
-    sinhVienSsoId: string;
-    sinhVien?: IRecord;
-    capQuyetDinh: string;
-    soQuyetDinh: string;
-    ngayQuyetDinh: string;
-    namBiKyLuat: number;
-    lyDo: string;
-    loaiKyLuat: string;
-  }
+	export interface IKhenThuongSinhVien {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		namKhenThuong: number;
+		soQuyetDinhKhenThuong: string;
+		danhHieuThiDuaGiaiThuongKhenThuong: string;
+		capKhenThuong: string;
+		loaiDanhHieuThiDuaGiaiThuongKhenThuong: string;
+		phuongThucKhenThuong: string;
+	}
 
-  export interface INoiTruSinhVien {
-    _id: string;
-    sinhVienSsoId: string;
-    sinhVien?: IRecord;
-    maKyHoc: string;
-    tinhTrang: ENoiNgoaiTru;
-    diaChi: string;
-    thoiGianKhaiBao: string;
-  }
+	export interface IKyLuatSinhVien {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		capQuyetDinh: string;
+		soQuyetDinh: string;
+		ngayQuyetDinh: string;
+		namBiKyLuat: number;
+		lyDo: string;
+		loaiKyLuat: string;
+	}
 
-  export interface IViecLamSinhVien {
-    _id: string;
-    sinhVienSsoId: string;
-    sinhVien?: IRecord;
-    donViTuyenDung: string;
-    hinhThucTuyenDung: EHinhThucTuyenDung;
-    thoiGianTuyenDung: string;
-    viTriViecLam: EViTriViecLam;
-    mucLuongKhoiDiem: number;
-    soDienThoaiLh: string;
-    email: string;
-  }
+	export interface INoiTruSinhVien {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		maKyHoc: string;
+		tinhTrang: ENoiNgoaiTru;
+		diaChi: string;
+		thoiGianKhaiBao: string;
+	}
 
-  export interface IThongTinHocTapHienTai {
-    chuongTrinhDaoTao: ChuongTrinhDaoTao.IRecord;
-    daoTaoTuNam: string; //"2023-04-28T07:06:57.151Z"
-    diemTbtl4: number;
-    diemTbtl10: number;
-    diemTbtlChu: ELoaiDiemChu;
-    hinhThucDaoTao: HinhThucDaoTao.IRecordCoSo;
-    khoaSinhVien: KhoaSinhVien.IRecord;
-    loaiHocVien: string; //"Sinh viên",
-    lopHanhChinh: LopHanhChinh.IRecord;
-    nganhDaoTao: NganhDaoTao.IRecordCoSo;
-    sinhVienNamThu: string; //"Sinh viên năm nhất"
-    soNamDaoTao: number;
-    trangThaiSinhVien: string; //"Đang học"
-  }
+	export interface IViecLamSinhVien {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		donViTuyenDung: string;
+		hinhThucTuyenDung: EHinhThucTuyenDung;
+		thoiGianTuyenDung: string;
+		viTriViecLam: EViTriViecLam;
+		mucLuongKhoiDiem: number;
+		soDienThoaiLh: string;
+		email: string;
+	}
 
-  export interface ICongNoSinhVien {
-    _id: string;
-    sinhVienSsoId: string;
-    sinhVien?: IRecord;
-    dichVu: string;
-    soTienPhaiNop: number;
-    soTienDaNop: number;
-  }
+	export interface IThongTinHocTapHienTai {
+		chuongTrinhDaoTao: ChuongTrinhDaoTao.IRecord;
+		daoTaoTuNam: string; //"2023-04-28T07:06:57.151Z"
+		diemTbtl4: number;
+		diemTbtl10: number;
+		diemTbtlChu: ELoaiDiemChu;
+		hinhThucDaoTao: HinhThucDaoTao.IRecordCoSo;
+		khoaSinhVien: KhoaSinhVien.IRecord;
+		loaiHocVien: string; //"Sinh viên",
+		lopHanhChinh: LopHanhChinh.IRecord;
+		nganhDaoTao: NganhDaoTao.IRecordCoSo;
+		sinhVienNamThu: string; //"Sinh viên năm nhất"
+		soNamDaoTao: number;
+		trangThaiSinhVien: string; //"Đang học"
+	}
+
+	export interface IChungChiSinhVien {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		maChungChi: string;
+		chungChi?: ChungChi.IRecord;
+		ngayCap?: string;
+		donViCap?: string;
+		diem?: number;
+		// ten?: string;
+		// loaiThoiHan?: ELoaiThoiHanChungChi;
+		// ngayHetHan?: string;
+		// duDkDauRa?: boolean;
+	}
+
+	export interface ITienTrinhTotNghiep {
+		diemTichLuyToiThieu: number;
+		thongTinCdr?: ChuongTrinhDaoTao.IChungChiCTDT[];
+		kqhtHocKy?: KetQuaHocKy.IRecord;
+		ctdtKeHoach?: ChuongTrinhDaoTao.IRecord;
+	}
+
+	export type TDieuKienTotNghiep = {
+		isDuDieuKienTBC: boolean;
+		isDuDieuKienChungChi: boolean;
+		phanTramTinChi: number;
+		isDuKieuKien: boolean;
+	};
 }

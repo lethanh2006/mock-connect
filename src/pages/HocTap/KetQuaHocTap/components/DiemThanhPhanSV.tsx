@@ -2,200 +2,162 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Card, Tabs, Tag } from 'antd';
+import { Card, Segmented, Tabs, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import ModalChiTietDiem from './ModalChiTietDiem';
 import MayTinhThongMinh from './MayTinhThongMinh';
+import ModalChiTietDiem from './ModalChiTietDiem';
 
 const DiemThanhPhanSV = () => {
-  const {
-    danhSach,
-    sinhVienGetAllDiemLopHocPhanModel,
-    loading,
-    setSinhVienLopHocPhan,
-    sinhVienLopHocPhan,
-  } = useModel('daotao.sinhvienlophocphan');
-  const [modalVisible, setModalVisible] = useState(false);
+	const { danhSach, sinhVienGetAllDiemLopHocPhanModel, loading, setSinhVienLopHocPhan, sinhVienLopHocPhan } =
+		useModel('daotao.sinhvienlophocphan');
+	const { danhSach: danhSachDauDiem, getModel: getDauDiem } = useModel('daotao.daudiemhocphan');
+	const [modalVisible, setModalVisible] = useState(false);
+	const [loaiHocPhan, setLoaiHocPhan] = useState<string>('all');
 
-  useEffect(() => {
-    sinhVienGetAllDiemLopHocPhanModel();
-  }, []);
+	useEffect(() => {
+		sinhVienGetAllDiemLopHocPhanModel();
+		getDauDiem();
+	}, []);
 
-  // useEffect(() => {
-  //   const handleApi = async () => {
-  //     try {
-  //       const res1 = getInfoSinhVien();
-  //       const res = sinhVienGetDiemTongKetHienTai();
-  //       Promise.all([res1, res]).then((values) => {
-  //         switch (values[0].data?.data.nam_ctk) {
-  //           case 1:
-  //             if (values[1].data?.data.diem_tich_luy_thang_4 < 1.2) {
-  //               setCanhBao(
-  //                 'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.2',
-  //               );
-  //             }
-  //             break;
-  //           case 2:
-  //             if (values[1].data?.data.diem_tich_luy_thang_4 < 1.4) {
-  //               setCanhBao(
-  //                 'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.4',
-  //               );
-  //             }
-  //             break;
-  //           case 3:
-  //             if (values[1].data?.data.diem_tich_luy_thang_4 < 1.6) {
-  //               setCanhBao(
-  //                 'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.6',
-  //               );
-  //             }
-  //             break;
-  //           default:
-  //             if (values[1].data?.data.diem_tich_luy_thang_4 < 1.8) {
-  //               setCanhBao(
-  //                 'Bạn đang bị cảnh báo loại 1 do có điểm trung bình tích lũy (hệ 4) dưới 1.8',
-  //               );
-  //             }
-  //             break;
-  //         }
-  //       });
-  //       sinhVienGetDiemTongKetModel().then((response: LopTinChi.DiemTheoKy[]) => {
-  //         const filtered = response.filter(
-  //           (el) => el.ky_hoc.is_ky_chinh && el.diem_tb_chung_hoc_ky_thang_4 < 3,
-  //         );
-  //         if (filtered.length > 0) {
-  //           setCanhBao(
-  //             'Bạn đang bị cảnh báo loại 1 do có điểm trung bình ở 1 học kì chính dưới 1.0',
-  //           );
-  //         }
-  //       });
-  //     } catch (error) {}
-  //   };
+	const onCell = (rec: LopHocPhan.IRecordSinhVienLopHP) => ({
+		onClick: () => {
+			setSinhVienLopHocPhan(rec);
+			setModalVisible(true);
+		},
+		style: {
+			cursor: 'pointer',
+			backgroundColor: rec.diemChu === ELoaiDiemChu.F ? '#f7dcdcbd' : undefined,
+			color: rec.diemChu === ELoaiDiemChu.F ? 'red' : undefined,
+		},
+	});
 
-  //   handleApi();
-  // }, []);
+	const columns: IColumn<LopHocPhan.IRecordSinhVienLopHP>[] = [
+		{
+			title: 'Mã HP',
+			dataIndex: ['hocPhan', 'ma'],
+			width: 80,
+			align: 'center',
+			filterType: 'string',
+			onCell,
+		},
+		{
+			title: 'Tên học phần',
+			dataIndex: ['hocPhan', 'ten'],
+			width: 220,
+			filterType: 'string',
+			onCell,
+		},
+		{
+			title: 'Số TC',
+			dataIndex: 'soTinChi',
+			width: 80,
+			align: 'center',
+			sortable: true,
+			onCell,
+		},
+	];
 
-  const onCell = (rec: LopHocPhan.IRecordSinhVienLopHP) => ({
-    onClick: () => {
-      setSinhVienLopHocPhan(rec);
-      setModalVisible(true);
-    },
-    style: { cursor: 'pointer' },
-  });
+	const cols1: IColumn<any>[] = [1, 2].map((item) => ({
+		title: `Điểm thi lần ${item}`,
+		width: 80,
+		dataIndex: `diemThi${item}`,
+		align: 'center',
+		sortable: true,
+		onCell,
+	}));
+	cols1.push(
+		{
+			title: 'Tổng tổng kết',
+			dataIndex: 'diemTongKet',
+			align: 'center',
+			render: (val) => <b style={(val || val === 0) && val < 4 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
+			width: 80,
+			onCell,
+			sortable: true,
+		},
+		{
+			title: 'Điểm thang 4',
+			width: 80,
+			dataIndex: 'diemThang4',
+			align: 'center',
+			render: (val) => <b style={val === 0 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
+			sortable: true,
+			onCell,
+		},
+		{
+			title: 'Điểm chữ',
+			width: 80,
+			dataIndex: 'diemChu',
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDiemChu),
+			render: (val) => <Tag color={ColorDiemChu?.[val as ELoaiDiemChu]}>{val}</Tag>,
+			onCell,
+		},
+	);
+	columns.splice(3, 0, {
+		title: 'Điểm KTHP',
+		width: cols1.length * 80,
+		children: cols1,
+	});
 
-  const columns: IColumn<LopHocPhan.IRecordSinhVienLopHP>[] = [
-    {
-      title: 'Tên học phần',
-      width: 150,
-      render: (val, rec) => rec.hocPhan?.ten ?? '--',
-      onCell,
-    },
-    {
-      title: 'Số tín chỉ',
-      dataIndex: 'soTinChi',
-      width: 100,
-      align: 'center',
-      sortable: true,
-      onCell,
-    },
-    {
-      title: 'Tổng kết (hệ 10)',
-      dataIndex: 'diemTongKet',
-      align: 'center',
-      render: (val, r) => <b style={val < 4 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
-      width: 100,
-      onCell,
-      sortable: true,
-    },
-    {
-      title: 'Tổng kết (hệ 4)',
-      dataIndex: 'diemThang4',
-      align: 'center',
-      render: (val, recordDiem) => (
-        <b
-        // style={
-        //   recordDiem.is_danh_gia ? (recordDiem.diem_tong_ket < 4 ? { color: 'red' } : {}) : {}
-        // }
-        >
-          {/* {recordDiem.is_danh_gia
-            ? val
-              ? val
-              : convertNumberScoreToAlphabet(recordDiem?.diem_tong_ket ?? '')[1]
-            : '--'} */}
-          {val ?? '--'}
-        </b>
-      ),
-      width: 100,
-      sortable: true,
-      onCell,
-    },
-    {
-      title: 'Tổng kết (dạng chữ)',
-      dataIndex: 'diemChu',
-      align: 'center',
-      render: (val, recordDiem) => (
-        <Tag
-          color={ColorDiemChu?.[val as ELoaiDiemChu]}
-          // style={
-          //   recordDiem.is_danh_gia ? (recordDiem.diem_tong_ket < 4 ? { color: 'red' } : {}) : {}
-          // }
-        >
-          {/* {recordDiem.is_danh_gia
-            ? val
-              ? val
-              : convertNumberScoreToAlphabet(recordDiem?.diem_tong_ket ?? '')[0]
-            : '--'} */}
-          {val}
-        </Tag>
-      ),
-      filterType: 'select',
-      filterData: Object.values(ELoaiDiemChu),
-      width: 100,
-      onCell,
-    },
-  ];
+	const cols: IColumn<any>[] = danhSachDauDiem.map((item) => ({
+		title: item.ten,
+		width: 80,
+		dataIndex: `diemThanhPhan${item.field}`,
+		align: 'center',
+		sortable: true,
+		onCell,
+	}));
+	columns.splice(3, 0, {
+		title: 'Điểm thành phần',
+		width: cols.length * 80,
+		children: cols,
+	});
 
-  return (
-    <>
-      <Card bodyStyle={{ paddingTop: 8 }}>
-        <Tabs>
-          <Tabs.TabPane tab="Điểm tổng kết" key="1">
-            <div style={{ marginBottom: '16px' }}>
-              {/* <Text italic>
-                  {`* Lưu ý: Những điểm "--" là do bạn chưa đánh giá giảng viên. Vui lòng đánh giá
-                    để xem điểm!`}
-                </Text> */}
-            </div>
-            <TableStaticData
-              loading={loading}
-              // otherProps={{
-              //   loading: loading,
-              //   pagination: false,
-              // }}
-              data={danhSach ?? []}
-              columns={columns}
-              addStt
-              hasTotal
-            />
-          </Tabs.TabPane>
+	return (
+		<>
+			<Card bodyStyle={{ paddingTop: 8 }}>
+				<Tabs>
+					<Tabs.TabPane tab='Điểm tổng kết' key='1'>
+						<TableStaticData
+							loading={loading}
+							otherProps={{
+								loading: loading,
+								pagination: false,
+								scroll: { y: 660 },
+							}}
+							data={(danhSach ?? []).filter((item) => loaiHocPhan === 'all' || item.diemChu === ELoaiDiemChu.F)}
+							columns={columns}
+							addStt
+							hasTotal
+						>
+							<Segmented
+								value={loaiHocPhan}
+								onChange={(val) => setLoaiHocPhan(val.toString())}
+								options={[
+									{ value: 'all', label: 'Tất cả học phần' },
+									{ value: 'fail', label: 'Học phần chưa đạt' },
+								]}
+							/>
+						</TableStaticData>
+					</Tabs.TabPane>
 
-          {/* <Tabs.TabPane tab="Thắc mắc điểm" key="2"> */}
-          {/* <ThacMacDiemComponent /> */}
-          {/* Thắc mắc điểm
-          </Tabs.TabPane> */}
-          <Tabs.TabPane tab="Máy tính thông minh" key="3">
-            <MayTinhThongMinh />
-          </Tabs.TabPane>
-        </Tabs>
-      </Card>
+					<Tabs.TabPane tab='Máy tính thông minh' key='3'>
+						<MayTinhThongMinh />
+					</Tabs.TabPane>
+				</Tabs>
+			</Card>
 
-      <ModalChiTietDiem
-        visible={modalVisible}
-        setVisible={setModalVisible}
-        chuongTrinhKhung={sinhVienLopHocPhan}
-      />
-    </>
-  );
+			<ModalChiTietDiem
+				visible={modalVisible}
+				setVisible={setModalVisible}
+				chuongTrinhKhung={sinhVienLopHocPhan}
+				lopHocPhanId={sinhVienLopHocPhan?.lopHocPhanId}
+			/>
+		</>
+	);
 };
 
 export default DiemThanhPhanSV;
