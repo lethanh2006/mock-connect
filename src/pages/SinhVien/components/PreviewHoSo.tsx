@@ -59,9 +59,9 @@ const PreviewHoSo = () => {
 		{ label: 'Email', content: record?.email, md: 16 },
 		{ label: 'Trạng thái học', content: record?.trangThaiHoc, md: 8 },
 		{ label: 'Khóa ngành', content: record?.khoaNganh?.ten, md: 16 },
-		{ label: 'Quốc tịch', content: record?.quocTich },
-		{ label: 'Dân tộc', content: record?.danToc },
-		{ label: 'Tôn giáo', content: record?.tonGiao },
+		{ label: 'Quốc tịch', content: record?.quocTich, md: 8 },
+		{ label: 'Dân tộc', content: record?.danToc, md: 8 },
+		{ label: 'Tôn giáo', content: record?.tonGiao, md: 8 },
 	];
 
 	const dataThem: DescriptionItem[] = [
