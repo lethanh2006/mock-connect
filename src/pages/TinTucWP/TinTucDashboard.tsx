@@ -1,10 +1,10 @@
 import NoticeList from '@/components/RightContent/NoticeIcon/NoticeList';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, Modal, Row, Spin, Tabs, Tooltip } from 'antd';
+import { Card, Col, Empty, Modal, Row, Spin, Tabs, Tooltip } from 'antd';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { Link, history, useModel } from 'umi';
 import ViewThongBao from '../ThongBao/components/ViewThongBao';
 import { CardTinTuc } from './TinTuc.style';
 import { Title } from './components/Title';
@@ -26,7 +26,7 @@ const TinTucDashboard = () => {
 			return <Empty style={{ paddingTop: 32 }} description='Chưa có tin tức' />;
 		}
 		return (
-			<div>
+			<>
 				<Row gutter={[12, 12]} style={{ alignItems: 'stretch', marginBottom: 12 }}>
 					{danhSachTinTuc.map((tintuc) => {
 						return (
@@ -76,18 +76,12 @@ const TinTucDashboard = () => {
 					})}
 				</Row>
 
-				{!loading && (
-					<Button
-						style={{ marginTop: 10 }}
-						type='link'
-						onClick={() => {
-							history.push('/tin-tuc');
-						}}
-					>
+				<div style={{ textAlign: 'right' }}>
+					<Link to='/tin-tuc'>
 						Xem thêm <ArrowRightOutlined />
-					</Button>
-				)}
-			</div>
+					</Link>
+				</div>
+			</>
 		);
 	};
 

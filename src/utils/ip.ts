@@ -12,8 +12,7 @@ const ipDaoTao = ipRoot + 'qldt'; // ip dev
 const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
 const ipTaiChinh = ipRoot + 'tai-chinh-api';
-const ipNews = 'https://vwa-content.aisenote.com';
-const ipNewsWP = 'https://portal-vwa.aisenote.com/';
+const ipNewsWP = APP_CONFIG_URL_LANDING;
 
 const currentRole = EModuleKey.CONNECT;
 
@@ -32,7 +31,6 @@ export {
 	ipCore,
 	ip3,
 	ipNotif,
-	ipNews,
 	ipTaiChinh,
 	currentRole,
 	keycloakClientID,
