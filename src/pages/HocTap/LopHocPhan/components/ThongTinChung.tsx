@@ -1,4 +1,7 @@
-import { Button, Descriptions, Spin, Tabs, Tooltip, message } from 'antd';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { moodleEndpoint } from '@/utils/ip';
+import { DesktopOutlined } from '@ant-design/icons';
+import { Descriptions, Spin, Tabs, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../DeCuongHocPhan/ModalHocPhan';
@@ -36,9 +39,9 @@ const ThongTinChung = () => {
 	}, [activeKey]);
 
 	const handleMoodle = () => {
-		if (record?.moodleShortname && record?._id)
+		if (record?.moodleShortname && record?._id && moodleEndpoint)
 			getMoodleLopHocPhanModel(record._id).then((data) => {
-				if (data?.url) window.open(data.url);
+				if (data?.url) window.open(`${moodleEndpoint}${data.url}`);
 				else message.error('Có lỗi, vui lòng thử lại sau');
 			});
 	};
@@ -63,9 +66,9 @@ const ThongTinChung = () => {
 			</Descriptions>
 
 			{record?.moodleShortname ? (
-				<Button onClick={handleMoodle} style={{ marginBottom: 18 }}>
+				<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle} style={{ marginBottom: 18 }}>
 					Lớp học trực tuyến
-				</Button>
+				</ButtonExtend>
 			) : null}
 
 			<DanhSachGiangVien
