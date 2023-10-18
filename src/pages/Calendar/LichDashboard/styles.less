@@ -1,0 +1,56 @@
+.container {
+	height: auto;
+}
+
+.title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.ngay {
+	margin-bottom: 18px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.ngay__title {
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.su_kien {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	margin: 0 6px 6px;
+	padding: 4px;
+	color: white;
+	border-radius: 8px;
+
+	cursor: pointer;
+	opacity: 0.8;
+	transition: 0.3s all;
+
+	&:hover {
+		opacity: 1;
+	}
+}
+
+.su_kien__left {
+	display: flex;
+	align-items: center;
+	padding-left: 12px;
+}
+.su_kien__thoi_gian {
+	font-weight: 500;
+	font-size: 15px;
+}
+
+.su_kien__right {
+	padding: 6px;
+	// border-left: 5px solid;
+	border-radius: 4px;
+}

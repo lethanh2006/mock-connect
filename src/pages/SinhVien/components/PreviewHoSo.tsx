@@ -59,12 +59,12 @@ const PreviewHoSo = () => {
 		{ label: 'Email', content: record?.email, md: 16 },
 		{ label: 'Trạng thái học', content: record?.trangThaiHoc, md: 8 },
 		{ label: 'Khóa ngành', content: record?.khoaNganh?.ten, md: 16 },
+		{ label: 'Quốc tịch', content: record?.quocTich, md: 8 },
+		{ label: 'Dân tộc', content: record?.danToc, md: 8 },
+		{ label: 'Tôn giáo', content: record?.tonGiao, md: 8 },
 	];
 
 	const dataThem: DescriptionItem[] = [
-		{ label: 'Quốc tịch', content: record?.quocTich },
-		{ label: 'Dân tộc', content: record?.danToc },
-		{ label: 'Tôn giáo', content: record?.tonGiao },
 		{
 			label: 'Thông tin của cha',
 			md: 24,
@@ -134,7 +134,7 @@ const PreviewHoSo = () => {
 			<h2 style={{ textAlign: 'center', marginBottom: 32 }}>SƠ YẾU LÝ LỊCH</h2>
 
 			<Row gutter={[18, 18]} style={{ maxWidth: 1200, margin: 'auto' }}>
-				<Col span={24} sm={6} style={{ display: 'flex', justifyContent: 'center', padding: 12 }}>
+				<Col span={24} sm={6} style={{ display: 'flex', justifyContent: 'center' }}>
 					<div style={{ width: 140, height: 180 }}>
 						<Image src={record?.anhDaiDienUrl ?? '/metadata.png'} />
 					</div>

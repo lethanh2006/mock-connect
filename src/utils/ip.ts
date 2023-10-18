@@ -21,6 +21,7 @@ const resourceServerClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}auth`;
 const keycloakTokenEndpoint = APP_CONFIG_KEYCLOAK_TOKEN_ENDPOINT_ID;
 const sentryDSN = APP_CONFIG_SENTRY_DSN;
 const oneSignalClient = APP_CONFIG_ONE_SIGNAL_ID;
+const moodleEndpoint = APP_CONFIG_MOODLE_ENDPOINT;
 
 export {
 	ipDaoTao,
@@ -38,4 +39,5 @@ export {
 	sentryDSN,
 	oneSignalClient,
 	ipNewsWP,
+	moodleEndpoint,
 };

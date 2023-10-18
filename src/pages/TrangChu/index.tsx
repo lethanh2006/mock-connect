@@ -1,8 +1,8 @@
 import NoticeList from '@/components/RightContent/NoticeIcon/NoticeList';
-import CalendarPage from '@/pages/Calendar';
 import { Card, Col, Modal, Row, Tabs } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
+import LichDashboard from '../Calendar/LichDashboard';
 import ViewThongBao from '../ThongBao/components/ViewThongBao';
 import TinTucDashboard from '../TinTucWP/TinTucDashboard';
 import CardLopHocPhan from './components/CardLopHocPhan';
@@ -25,7 +25,7 @@ const TrangChu = () => {
 							<Card title='Lịch sắp tới'>Lịch sắp tới</Card>
 						</Col> */}
 						<Col xs={24}>
-							<CalendarPage isDashboard />
+							<LichDashboard />
 						</Col>
 					</Row>
 				</Col>

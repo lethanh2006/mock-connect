@@ -1,0 +1,175 @@
+import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
+import { ArrowRightOutlined } from '@ant-design/icons';
+import { Card, Empty, Space, Tag, Typography } from 'antd';
+import { isEmpty, sortBy } from 'lodash';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { Link, useModel } from 'umi';
+import ModalViewDetailCalendar from '../components/ModalViewDetail';
+import styles from './styles.less';
+
+const getThoiGianMotTuanKeTuHomNay = () => {
+	return {
+		fromDate: moment().startOf('day').toISOString(),
+		toDate: moment().add(7, 'day').endOf('day').toISOString(),
+	};
+};
+
+type Ngay = string;
+interface StateItem {
+	tenSuKien: string;
+	diaDiem: string;
+	loaiSuKien: ELoaiSuKien;
+	thoiGianBatDau: string;
+	thoiGianKetThuc: string;
+	_id: string;
+}
+type State = Record<
+	Ngay,
+	{
+		thuTrongTuan: string;
+		cacSuKien: StateItem[];
+	}
+>;
+
+const LichDashboard = () => {
+	const { getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
+	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
+	const [dataCalendar, setDataCalendar] = useState<State>({});
+	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
+	const [selectEvent, setSelectEvent] = useState<any>();
+
+	//#region Get Data
+	const getThoiKhoaBieu = async () => {
+		return getTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
+			const temp = data.map((item) => ({
+				...item,
+				title: item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || '',
+				loaiSuKien: ELoaiSuKien.LICH_HOC,
+			}));
+			return temp;
+		});
+	};
+
+	const getSuKien = async () => {
+		return getSuKienTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
+			const temp = data.map((item) => ({
+				...item,
+				title: item?.tenSuKien ?? '',
+			}));
+			return temp;
+		});
+	};
+
+	const getData = () => {
+		const promises = [getThoiKhoaBieu(), getSuKien()];
+
+		Promise.allSettled(promises)
+			.then((values) => {
+				const responses = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
+				const data = responses.flat();
+				const nextState = data.reduce<State>((result, item) => {
+					if (!item.thoiGianBatDau) {
+						return result;
+					}
+					const ngayMoment = moment(item.thoiGianBatDau);
+					const ngayString = ngayMoment.format('YYYY-MM-DD');
+
+					return {
+						...result,
+						[ngayString]: {
+							thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
+							cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
+								...item,
+								tenSuKien: item.title,
+								diaDiem: item.phongHoc ?? item.diaDiem,
+							}),
+						},
+					};
+				}, {});
+				setDataCalendar(nextState);
+			})
+			.catch((er) => console.log(er));
+	};
+	//#endregion
+
+	useEffect(() => {
+		getData();
+	}, []);
+
+	const renderContent = () => {
+		const keysSorted = sortBy(Object.keys(dataCalendar));
+		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendar)) {
+			return <Empty description='Không có sự kiện nào' />;
+		}
+
+		return keysSorted.map((ngay) => {
+			const { cacSuKien, thuTrongTuan } = dataCalendar[ngay];
+			const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
+			return (
+				<div key={ngay} className={styles.ngay}>
+					<Space style={{ marginBottom: 8 }}>
+						<Typography.Text className={styles.ngay__title}>
+							{thuTrongTuan}, {moment(ngay).format('DD/MM/YYYY')}
+						</Typography.Text>
+						<Tag color='blue'>{cacSuKien.length} sự kiện</Tag>
+					</Space>
+					{cacSuKienSorted.map((sukien) => (
+						<div
+							key={sukien._id}
+							className={styles.su_kien}
+							style={{ background: ColorSuKien[sukien.loaiSuKien] }}
+							onClick={() => {
+								setSelectEvent(sukien);
+								setVisibleDetail(true);
+							}}
+						>
+							<div className={styles.su_kien__left}>
+								<div className={styles.su_kien__thoi_gian}>{moment(sukien.thoiGianBatDau).format('HH:mm')}</div>
+							</div>
+							<div
+								className={styles.su_kien__right}
+								style={{
+									borderColor: ColorSuKien[sukien.loaiSuKien],
+								}}
+							>
+								<div>{[sukien.tenSuKien, sukien.diaDiem].filter(Boolean).join(' - ')}</div>
+							</div>
+						</div>
+					))}
+				</div>
+			);
+		});
+	};
+
+	return (
+		<>
+			<Card
+				className={styles.container}
+				loading={loadingSuKien || loadingTKB}
+				title={
+					<div className={styles.title}>
+						<Typography.Text>Lịch sắp tới</Typography.Text>
+						<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
+							Xem thêm <ArrowRightOutlined />
+						</Link>
+					</div>
+				}
+			>
+				<div style={{ maxHeight: 400, overflowY: 'auto' }}>{renderContent()}</div>
+			</Card>
+
+			{/* Modal xem chi tiết lịch */}
+			{selectEvent ? (
+				<ModalViewDetailCalendar
+					visible={visibleDetail}
+					setVisible={setVisibleDetail}
+					event={selectEvent}
+					getData={getData}
+				/>
+			) : null}
+		</>
+	);
+};
+
+export default LichDashboard;
