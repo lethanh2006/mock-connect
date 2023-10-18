@@ -1,5 +1,4 @@
 import NoticeList from '@/components/RightContent/NoticeIcon/NoticeList';
-import CalendarPage from '@/pages/Calendar';
 import { Card, Col, Modal, Row, Tabs } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -7,6 +6,7 @@ import ViewThongBao from '../ThongBao/components/ViewThongBao';
 import TinTucDashboard from '../TinTucWP/TinTucDashboard';
 import CardLopHocPhan from './components/CardLopHocPhan';
 import CardTienTrinhTotNghiep from './components/CardTienTrinhTotNghiep';
+import { LichTrongTuan } from './components/LichTrongTuan';
 
 const TrangChu = () => {
 	const { danhSach, record, setRecord } = useModel('thongbao.noticeicon');
@@ -25,7 +25,7 @@ const TrangChu = () => {
 							<Card title='Lịch sắp tới'>Lịch sắp tới</Card>
 						</Col> */}
 						<Col xs={24}>
-							<CalendarPage isDashboard />
+							<LichTrongTuan />
 						</Col>
 					</Row>
 				</Col>
