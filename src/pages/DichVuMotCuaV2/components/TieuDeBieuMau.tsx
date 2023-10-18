@@ -1,3 +1,4 @@
+import { coQuanChuQuan, unitName } from '@/services/base/constant';
 import { useModel } from 'umi';
 
 const TieuDeBieuMau = (props: { title: string }) => {
@@ -7,7 +8,7 @@ const TieuDeBieuMau = (props: { title: string }) => {
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ textAlign: 'center' }}>
-          <p style={{ marginBottom: '-7px', fontSize: '18px' }}>HỘI LIÊN HIỆP PHỤ NỮ VIỆT NAM</p>
+          <p style={{ marginBottom: '-7px', fontSize: '18px' }}>{coQuanChuQuan?.toUpperCase()}</p>
           <p
             style={{
               display: 'flex',
@@ -17,7 +18,7 @@ const TieuDeBieuMau = (props: { title: string }) => {
               fontSize: '18px',
             }}
           >
-            <div>HỌC VIỆN PHỤ NỮ VIỆT NAM</div>
+            <div>{unitName?.toUpperCase()}</div>
             <div style={{ height: '1px', backgroundColor: '#000000', width: '50%' }} />
           </p>
         </div>
