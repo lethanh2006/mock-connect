@@ -1,6 +1,7 @@
 import { Collapse, Descriptions } from 'antd';
 import { useModel } from 'umi';
 import moment from 'moment';
+import TrongSoHocPhanPage from '../TrongSoHocPhan';
 
 const ThongTinChungPage = () => {
 	const { record } = useModel('hocphan.decuonghocphan');
@@ -40,6 +41,8 @@ const ThongTinChungPage = () => {
 				</Descriptions.Item>
 				<Descriptions.Item label='Căn cứ pháp lý'>{record?.canCu?.ten ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
 			</Descriptions>
+
+			<TrongSoHocPhanPage />
 
 			<Collapse>
 				<Collapse.Panel header='Mục tiêu học phần' key='1'>
