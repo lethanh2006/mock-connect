@@ -16,7 +16,7 @@ const CardXetTotNghiep = () => {
 		useModel('sinhvien.xettotnghiep');
 	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
 	const [type, setType] = useState<'phan-hoi' | 'hoan'>('phan-hoi');
-	const isQuaNgayChotSanhSach = moment().isBefore(record?.ngayChotDanhSach);
+	const isQuaNgayChotSanhSach = record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach);
 
 	useEffect(() => {
 		getDotHienHanhModel();
@@ -51,7 +51,7 @@ const CardXetTotNghiep = () => {
 										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra{' '}
 										{record?.ngayChotDanhSach ? (
 											<>
-												,ngày chốt danh sách sinh viên <b>{moment(record?.ngayChotDanhSach).format('DD/MM/YYYY')}</b>
+												, ngày chốt danh sách sinh viên <b>{moment(record?.ngayChotDanhSach).format('DD/MM/YYYY')}</b>
 											</>
 										) : null}
 									</>
@@ -106,7 +106,7 @@ const CardXetTotNghiep = () => {
 						)}
 					</Row>
 
-					{dieuKienTotNghiep?.isDuKieuKien || !isQuaNgayChotSanhSach ? (
+					{dieuKienTotNghiep?.isDuKieuKien || isQuaNgayChotSanhSach ? (
 						<div className='form-footer'>
 							{!record?.ketQuaXetTotNghiep?._id ? (
 								<>
