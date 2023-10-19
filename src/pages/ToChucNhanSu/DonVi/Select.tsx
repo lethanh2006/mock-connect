@@ -10,9 +10,9 @@ const SelectDonVi = (props: {
 	onChange?: any;
 	multiple?: boolean;
 	disabled?: boolean;
-	dataState?: string;
+	isSelectMa?: boolean;
 }) => {
-	const { value, onChange, multiple, disabled, dataState } = props;
+	const { value, onChange, multiple, disabled, isSelectMa } = props;
 	const { danhSach, getAllModel } = useModel('tochucnhansu.donvi');
 
 	useEffect(() => {
@@ -28,7 +28,7 @@ const SelectDonVi = (props: {
 				disabled={disabled}
 				options={danhSach.map((item) => ({
 					key: item._id,
-					value: dataState ? item?.[dataState] : item._id,
+					value: isSelectMa ? item?.maDonVi : item._id,
 					label: [item.ten, item.donViCha?.ten].join(' - '),
 				}))}
 				showSearch
