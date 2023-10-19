@@ -57,7 +57,7 @@ const FormGuiPhanHoi = () => {
 					/>
 				</Form.Item>
 				<Form.Item name='maDonVi' label='Bộ phận xử lý'>
-					<SelectDonVi dataState={'maDonVi'}/>
+					<SelectDonVi isSelectMa/>
 				</Form.Item>
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
