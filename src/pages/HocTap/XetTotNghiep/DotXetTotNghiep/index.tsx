@@ -9,12 +9,14 @@ import { Alert, Button, Card, Col, Descriptions, Empty, Popconfirm, Row, Tag } f
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalYKien from './ModalYKien';
+import moment from 'moment';
 
 const CardXetTotNghiep = () => {
 	const { formSubmiting, record, dangKyXetTotNghiepModel, setVisibleForm, getDotHienHanhModel } =
 		useModel('sinhvien.xettotnghiep');
 	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
 	const [type, setType] = useState<'phan-hoi' | 'hoan'>('phan-hoi');
+	const isQuaNgayChotSanhSach = !!record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach);
 
 	useEffect(() => {
 		getDotHienHanhModel();
@@ -46,7 +48,12 @@ const CardXetTotNghiep = () => {
 							<Alert
 								description={
 									<>
-										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra
+										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra{' '}
+										{record?.ngayChotDanhSach ? (
+											<>
+												, ngày chốt danh sách sinh viên <b>{moment(record?.ngayChotDanhSach).format('DD/MM/YYYY')}</b>
+											</>
+										) : null}
 									</>
 								}
 							/>
@@ -99,7 +106,7 @@ const CardXetTotNghiep = () => {
 						)}
 					</Row>
 
-					{dieuKienTotNghiep?.isDuKieuKien ? (
+					{dieuKienTotNghiep?.isDuKieuKien && !isQuaNgayChotSanhSach ? (
 						<div className='form-footer'>
 							{!record?.ketQuaXetTotNghiep?._id ? (
 								<>
