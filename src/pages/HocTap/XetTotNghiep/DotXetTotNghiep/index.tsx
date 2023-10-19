@@ -16,7 +16,7 @@ const CardXetTotNghiep = () => {
 		useModel('sinhvien.xettotnghiep');
 	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
 	const [type, setType] = useState<'phan-hoi' | 'hoan'>('phan-hoi');
-	const isQuaNgayChotSanhSach = record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach);
+	const isQuaNgayChotSanhSach = !!record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach);
 
 	useEffect(() => {
 		getDotHienHanhModel();
@@ -106,7 +106,7 @@ const CardXetTotNghiep = () => {
 						)}
 					</Row>
 
-					{dieuKienTotNghiep?.isDuKieuKien || isQuaNgayChotSanhSach ? (
+					{dieuKienTotNghiep?.isDuKieuKien && !isQuaNgayChotSanhSach ? (
 						<div className='form-footer'>
 							{!record?.ketQuaXetTotNghiep?._id ? (
 								<>
