@@ -1,22 +1,23 @@
 import UploadFile from '@/components/Upload/UploadFile';
+import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { ELoaiPhanHoi } from '@/services/TienIch/PhanHoi/constant';
 import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
+import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Form, Input } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 
 const FormGuiPhanHoi = () => {
 	const [form] = Form.useForm();
-	const { loading, setVisibleForm, postModel, record, getModel, setFormSubmiting, formSubmiting } =
+	const { loading, setVisibleForm, postModel, record, getModel, setFormSubmiting, formSubmiting, visibleForm } =
 		useModel('tienich.phanhoi');
 
 	useEffect(() => {
-		if (record?._id) form.setFieldsValue(record);
-		else form.resetFields();
-	}, [record?._id]);
+		if (!visibleForm) resetFieldsForm(form);
+		else if (record?._id) form.setFieldsValue(record);
+	}, [record?._id, visibleForm]);
 
 	const onFinish = async (values: PhanHoi.IRecord) => {
 		setFormSubmiting(true);
@@ -46,6 +47,9 @@ const FormGuiPhanHoi = () => {
 				>
 					<Input.TextArea rows={4} placeholder='Nhập nội dung' />
 				</Form.Item>
+				<Form.Item name='maDonVi' label='Bộ phận xử lý'>
+					<SelectDonVi allowClear />
+				</Form.Item>
 
 				<Form.Item name='urlPhanAnh' label='File đính kèm'>
 					<UploadFile
@@ -56,14 +60,12 @@ const FormGuiPhanHoi = () => {
 						}}
 					/>
 				</Form.Item>
-				<Form.Item name='maDonVi' label='Bộ phận xử lý'>
-					<SelectDonVi isSelectMa/>
-				</Form.Item>
+
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
 						Gửi
 					</Button>
-					<Button onClick={() => setVisibleForm(false)}>Đóng</Button>
+					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>
 			</Form>
 		</Card>
