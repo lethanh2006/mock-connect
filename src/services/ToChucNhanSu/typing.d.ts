@@ -8,6 +8,7 @@ declare module ToChucNhanSu {
 		// ngayRaQuyetDinh: string;
 		donViChaId: string;
 		donViCha?: IDonVi;
+		[key: string]: any;
 	}
 
 	export interface IChucVu {
