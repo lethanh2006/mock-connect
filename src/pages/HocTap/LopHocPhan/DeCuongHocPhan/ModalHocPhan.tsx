@@ -11,7 +11,7 @@ const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any
 
 	useEffect(() => {
 		if (deCuongId) getByIdModel(deCuongId ?? '');
-	}, [record?._id, deCuongId]);
+	}, [deCuongId]);
 
 	return (
 		<Modal
