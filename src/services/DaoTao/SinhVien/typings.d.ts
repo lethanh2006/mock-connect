@@ -220,4 +220,17 @@ declare module SinhVien {
 		phanTramTinChi: number;
 		isDuKieuKien: boolean;
 	};
+
+	export interface ISinhVienNoNghiaVu {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: SinhVien.IRecord;
+		maSinhVien?: string;
+		tenSinhVien?: string;
+		noTaiChinh?: boolean;
+		noThuVien?: boolean;
+
+		dotXetTotNghiepId: string;
+		dotXetTotNghiep?: IRecord;
+	}
 }
