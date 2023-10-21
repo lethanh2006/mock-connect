@@ -1,5 +1,5 @@
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { getTienTrinhDauRa } from '@/services/DaoTao/SinhVien';
+import { getTienTrinhDauRa, getTrangThaiNoSinhVienMe } from '@/services/DaoTao/SinhVien';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { useState } from 'react';
 
@@ -8,6 +8,7 @@ export default () => {
 	const [recordChungChi, setRecordChungChi] = useState<ChuongTrinhDaoTao.IChungChiCTDT>();
 	const [dieuKienTotNghiep, setDieuKienTotNghiep] = useState<SinhVien.TDieuKienTotNghiep>();
 	const [loading, setLoading] = useState<boolean>(false);
+	const [trangthaiNo, setTrangThaiNo] = useState<SinhVien.ISinhVienNoNghiaVu>();
 	const [visibleForm, setVisibleForm] = useState<boolean>(false);
 
 	const getTienTrinhChungChiCTDTModel = async (): Promise<SinhVien.ITienTrinhTotNghiep> => {
@@ -37,6 +38,20 @@ export default () => {
 		}
 	};
 
+	const getTrangThaiNoModel = async (dotXetTotNghiepId: string): Promise<SinhVien.ISinhVienNoNghiaVu> => {
+		setLoading(true);
+		try {
+			const response = await getTrangThaiNoSinhVienMe(dotXetTotNghiepId);
+			setTrangThaiNo(response?.data?.data);
+
+			return response?.data?.data;
+		} catch (er) {
+			return Promise.reject(er);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return {
 		record,
 		setRecord,
@@ -49,5 +64,7 @@ export default () => {
 		dieuKienTotNghiep,
 		setDieuKienTotNghiep,
 		getTienTrinhChungChiCTDTModel,
+		getTrangThaiNoModel,
+		trangthaiNo,
 	};
 };
