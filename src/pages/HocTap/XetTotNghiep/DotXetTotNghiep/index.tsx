@@ -12,14 +12,14 @@ import ModalYKien from './ModalYKien';
 import moment from 'moment';
 
 const CardXetTotNghiep = () => {
-	const { formSubmiting, record, dangKyXetTotNghiepModel, setVisibleForm, getDotHienHanhModel } =
+	const { formSubmiting, record, dangKyXetTotNghiepModel, setVisibleForm, getDotHienHanhModel, loading } =
 		useModel('sinhvien.xettotnghiep');
 	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
 	const [type, setType] = useState<'phan-hoi' | 'hoan'>('phan-hoi');
 	const isQuaNgayChotSanhSach = !!record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach);
 
 	useEffect(() => {
-		getDotHienHanhModel();
+		if (!record?._id) getDotHienHanhModel();
 	}, []);
 
 	const handleRegister = () => record?._id && dangKyXetTotNghiepModel(record._id).catch((er) => console.log(er));
@@ -35,7 +35,7 @@ const CardXetTotNghiep = () => {
 	};
 
 	return (
-		<Card title='Xét tốt nghiệp'>
+		<Card title='Xét tốt nghiệp' loading={loading}>
 			{!record?._id ? (
 				<Empty
 					description='Không có đợt xét tốt nghiệp trong thời điểm hiện tại !'
