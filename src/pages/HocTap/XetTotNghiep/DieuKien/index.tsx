@@ -6,11 +6,22 @@ import { useModel } from 'umi';
 import ModalChungChiCTDT from './ModalChungChi';
 
 const CardDieuKienTotNghiep = () => {
-	const { getTienTrinhChungChiCTDTModel, record, loading, setRecordChungChi, setVisibleForm, dieuKienTotNghiep } =
-		useModel('sinhvien.tientrinhtotnghiep');
+	const { record: recDot, getDotHienHanhModel } = useModel('sinhvien.xettotnghiep');
+	const {
+		getTienTrinhChungChiCTDTModel,
+		record,
+		loading,
+		setRecordChungChi,
+		setVisibleForm,
+		dieuKienTotNghiep,
+		getTrangThaiNoModel,
+		trangthaiNo,
+	} = useModel('sinhvien.tientrinhtotnghiep');
 
 	useEffect(() => {
 		getTienTrinhChungChiCTDTModel();
+		getDotHienHanhModel();
+		if (recDot?._id) getTrangThaiNoModel(recDot?._id);
 	}, []);
 
 	const handleView = (rec: ChuongTrinhDaoTao.IChungChiCTDT) => {
@@ -77,20 +88,34 @@ const CardDieuKienTotNghiep = () => {
 				<Col span={24}>
 					<div className='fw500'>Điều kiện khác</div>
 				</Col>
-				<Col span={24} md={8}>
-					<Card className='stat-nhap-diem-tp'>
-						<span className='num text-success'>
-							<CheckCircleOutlined />
-						</span>
-						<span className='text'>Công nợ: Đã thanh toán đủ</span>
+				<Col span={24} md={12}>
+					<Card className='card-stat-small'>
+						{trangthaiNo?.noTaiChinh ? (
+							<span className='num text-success'>
+								<CheckCircleOutlined />
+							</span>
+						) : (
+							<span className='num text-error'>
+								<CloseCircleOutlined />
+							</span>
+						)}
+						<span className='text'>Công nợ: {trangthaiNo?.noTaiChinh ? 'Chưa thanh toán đủ' : 'Đã thanh toán đủ'}</span>
 					</Card>
 				</Col>
-				<Col span={24} md={8}>
-					<Card className='stat-nhap-diem-tp'>
-						<span className='num text-error'>
-							<CloseCircleOutlined />
+				<Col span={24} md={12}>
+					<Card className='card-stat-small'>
+						{trangthaiNo?.noThuVien ? (
+							<span className='num text-success'>
+								<CheckCircleOutlined />
+							</span>
+						) : (
+							<span className='num text-error'>
+								<CloseCircleOutlined />
+							</span>
+						)}
+						<span className='text'>
+							Thư viện: {trangthaiNo?.noThuVien ? 'Chưa hoàn trả học liệu' : 'Đã hoàn trả học liệu'}
 						</span>
-						<span className='text'>Thư viện: Chưa hoàn trả học liệu</span>
 					</Card>
 				</Col>
 			</Row>
