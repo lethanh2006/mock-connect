@@ -219,6 +219,8 @@ declare module SinhVien {
 		isDuDieuKienChungChi: boolean;
 		phanTramTinChi: number;
 		isDuKieuKien: boolean;
+		noTaiChinh?: boolean;
+		noThuVien?: boolean;
 	};
 
 	export interface ISinhVienNoNghiaVu {

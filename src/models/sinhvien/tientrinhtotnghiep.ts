@@ -8,14 +8,17 @@ export default () => {
 	const [recordChungChi, setRecordChungChi] = useState<ChuongTrinhDaoTao.IChungChiCTDT>();
 	const [dieuKienTotNghiep, setDieuKienTotNghiep] = useState<SinhVien.TDieuKienTotNghiep>();
 	const [loading, setLoading] = useState<boolean>(false);
-	const [trangthaiNo, setTrangThaiNo] = useState<SinhVien.ISinhVienNoNghiaVu>();
 	const [visibleForm, setVisibleForm] = useState<boolean>(false);
 
-	const getTienTrinhChungChiCTDTModel = async (): Promise<SinhVien.ITienTrinhTotNghiep> => {
+	const getTienTrinhTotNghiepModel = async (dotXetTotNghiepId?: string): Promise<SinhVien.ITienTrinhTotNghiep> => {
 		setLoading(true);
 		try {
+			// Get tiến trình tốt nghiệp
 			const response = await getTienTrinhDauRa();
 			const temp: SinhVien.ITienTrinhTotNghiep = response?.data?.data;
+			// Get sinh viên nợ nghĩa vụ
+			let sinhVienNo: SinhVien.ISinhVienNoNghiaVu | undefined;
+			if (dotXetTotNghiepId) sinhVienNo = (await getTrangThaiNoSinhVienMe(dotXetTotNghiepId)).data?.data;
 
 			const isDuDieuKienTBC = (temp?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4 ?? 0) > (temp?.diemTichLuyToiThieu ?? 0);
 			const phanTramTinChi = Math.round(
@@ -26,25 +29,18 @@ export default () => {
 				isDuDieuKienChungChi,
 				isDuDieuKienTBC,
 				phanTramTinChi,
-				isDuKieuKien: isDuDieuKienChungChi && isDuDieuKienTBC && phanTramTinChi === 100,
+				noTaiChinh: sinhVienNo?.noTaiChinh,
+				noThuVien: sinhVienNo?.noThuVien,
+				isDuKieuKien:
+					isDuDieuKienChungChi &&
+					isDuDieuKienTBC &&
+					phanTramTinChi === 100 &&
+					sinhVienNo?.noTaiChinh !== true &&
+					sinhVienNo?.noThuVien !== true,
 			});
 
 			setRecord(temp);
 			return temp;
-		} catch (er) {
-			return Promise.reject(er);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const getTrangThaiNoModel = async (dotXetTotNghiepId: string): Promise<SinhVien.ISinhVienNoNghiaVu> => {
-		setLoading(true);
-		try {
-			const response = await getTrangThaiNoSinhVienMe(dotXetTotNghiepId);
-			setTrangThaiNo(response?.data?.data);
-
-			return response?.data?.data;
 		} catch (er) {
 			return Promise.reject(er);
 		} finally {
@@ -63,8 +59,6 @@ export default () => {
 		setVisibleForm,
 		dieuKienTotNghiep,
 		setDieuKienTotNghiep,
-		getTienTrinhChungChiCTDTModel,
-		getTrangThaiNoModel,
-		trangthaiNo,
+		getTienTrinhTotNghiepModel,
 	};
 };
