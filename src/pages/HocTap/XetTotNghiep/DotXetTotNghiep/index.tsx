@@ -16,7 +16,7 @@ const CardXetTotNghiep = () => {
 		useModel('sinhvien.xettotnghiep');
 	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
 	const [type, setType] = useState<'phan-hoi' | 'hoan'>('phan-hoi');
-	const isQuaNgayChotSanhSach = !!record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach);
+	const isQuaNgayChotSanhSach = !!record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach, 'day');
 
 	useEffect(() => {
 		if (!record?._id) getDotHienHanhModel();
