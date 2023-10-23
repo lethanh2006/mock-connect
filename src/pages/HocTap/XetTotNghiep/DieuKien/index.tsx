@@ -75,7 +75,7 @@ const CardDieuKienTotNghiep = () => {
 				) : (
 					<Empty
 						image={Empty.PRESENTED_IMAGE_SIMPLE}
-						description={<i>Bạn chưa đạt chuẩn đầu ra nào !</i>}
+						description={<i>Không có thông tin</i>}
 						style={{ margin: 'auto' }}
 					/>
 				)}
