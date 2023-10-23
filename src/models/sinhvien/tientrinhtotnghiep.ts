@@ -20,7 +20,8 @@ export default () => {
 			let sinhVienNo: SinhVien.ISinhVienNoNghiaVu | undefined;
 			if (dotXetTotNghiepId) sinhVienNo = (await getTrangThaiNoSinhVienMe(dotXetTotNghiepId)).data?.data;
 
-			const isDuDieuKienTBC = (temp?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4 ?? 0) > (temp?.diemTichLuyToiThieu ?? 0);
+			const isDuDieuKienTBC =
+				(temp?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4 ?? 0) >= (temp?.diemTichLuyToiThieu ?? 0);
 			const phanTramTinChi = Math.round(
 				((temp?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? 0) / (temp?.ctdtKeHoach?.tongSoTinChi ?? 100)) * 100,
 			);
