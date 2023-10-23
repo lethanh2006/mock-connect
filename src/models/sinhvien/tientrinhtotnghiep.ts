@@ -24,7 +24,7 @@ export default () => {
 			const phanTramTinChi = Math.round(
 				((temp?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? 0) / (temp?.ctdtKeHoach?.tongSoTinChi ?? 100)) * 100,
 			);
-			const isDuDieuKienChungChi = record?.thongTinCdr?.every((item) => item.datChuanDauRa) ?? false;
+			const isDuDieuKienChungChi = record?.thongTinCdr?.every((item) => item.datChuanDauRa) ?? true;
 			setDieuKienTotNghiep({
 				isDuDieuKienChungChi,
 				isDuDieuKienTBC,
