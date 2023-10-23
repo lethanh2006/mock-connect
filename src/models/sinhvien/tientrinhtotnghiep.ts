@@ -34,7 +34,7 @@ export default () => {
 				isDuKieuKien:
 					isDuDieuKienChungChi &&
 					isDuDieuKienTBC &&
-					phanTramTinChi === 100 &&
+					phanTramTinChi >= 100 &&
 					sinhVienNo?.noTaiChinh !== true &&
 					sinhVienNo?.noThuVien !== true,
 			});
