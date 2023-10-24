@@ -40,12 +40,14 @@ export default () => {
 		sinhVienDotId: string,
 		type: 'phan-hoi' | 'hoan',
 		payload: { yKienSinhVien?: string },
+		getData?: any,
 	): Promise<DotXetTotNghiep.ISinhVienDot> => {
 		setFormSubmiting(true);
 		try {
 			const response = await putYKienXetTotNghiep(sinhVienDotId, type, payload);
 			message.success(`Đã gửi ${type === 'hoan' ? 'yêu cầu hoãn' : 'phản hồi'} xét tốt nghiệp`);
 			setVisibleForm(false);
+			if (getData) getData();
 			return response?.data?.data;
 		} catch (er) {
 			return Promise.reject(er);
