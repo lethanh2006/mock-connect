@@ -118,11 +118,11 @@ const CardXetTotNghiep = () => {
 								</>
 							) : record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.DUNG_TIEN_DO ? (
 								<>
-									Trong đợt xét
+									{/* Trong đợt xét */}
 									<Button onClick={handlePhanHoi} icon={<FormOutlined />}>
 										Gửi phản hồi
 									</Button>
-									Đủ điều kiện xét tốt nghiệp
+									{/* Đủ điều kiện xét tốt nghiệp */}
 									{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.DU_DK ? (
 										<Button onClick={handleHoan} danger icon={<CloseOutlined />}>
 											Yêu cầu hoãn tốt nghiệp
