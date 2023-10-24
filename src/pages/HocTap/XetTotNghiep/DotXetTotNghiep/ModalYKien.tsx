@@ -6,11 +6,11 @@ import { useModel } from 'umi';
 
 const ModalYKien = (props: { type: 'phan-hoi' | 'hoan' }) => {
 	const [form] = Form.useForm();
-	const { yKienXetTotNghiepModel, record, visibleForm, setVisibleForm, formSubmiting } =
+	const { yKienXetTotNghiepModel, record, visibleForm, setVisibleForm, formSubmiting, getDotHienHanhModel } =
 		useModel('sinhvien.xettotnghiep');
 
 	const onFinish = async (values: DotXetTotNghiep.ISinhVienDot) => {
-		yKienXetTotNghiepModel(record?._id ?? '', props.type, values)
+		yKienXetTotNghiepModel(record?.ketQuaXetTotNghiep?._id ?? '', props.type, values, getDotHienHanhModel)
 			.then()
 			.catch((er) => console.log(er));
 	};
