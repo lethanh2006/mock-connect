@@ -1,9 +1,8 @@
-import studentIcon from '@/assets/student.png';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import { EGioiTinh } from '@/services/DaoTao/constant';
 import { Avatar, Col, Descriptions, Modal, Row } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 
 const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: boolean }) => {
@@ -25,7 +24,9 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
 			title: 'Ảnh đại diện',
 			width: 80,
 			align: 'center',
-			render: (path) => <Avatar src={path || studentIcon} />,
+			render: (path, rec) => (
+				<Avatar src={path || `/images/${rec.gioiTinh === EGioiTinh.Nam ? 'male.svg' : 'female.svg'}`} />
+			),
 		},
 		{
 			dataIndex: 'ma',
@@ -62,7 +63,7 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
 				<Row align='middle' gutter={[0, 12]}>
 					<Col span={24} md={8} style={{ textAlign: 'center' }}>
 						<Avatar
-							src={record?.anhDaiDienUrl || studentIcon}
+							src={record?.anhDaiDienUrl || `/images/${record?.gioiTinh === EGioiTinh.Nam ? 'male.svg' : 'female.svg'}`}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>
 					</Col>
