@@ -1,4 +1,3 @@
-import teacherIcon from '@/assets/teacher.png';
 import { Avatar, List } from 'antd';
 
 const DanhSachGiangVien = (props: {
@@ -14,10 +13,10 @@ const DanhSachGiangVien = (props: {
 				<List
 					grid={{
 						xs: 1,
-						xl: 3,
 						sm: 2,
-						lg: 3,
 						md: 2,
+						lg: 3,
+						xl: 3,
 						xxl: 4,
 					}}
 					itemLayout='horizontal'
@@ -25,12 +24,15 @@ const DanhSachGiangVien = (props: {
 					renderItem={(item) => (
 						<List.Item>
 							<List.Item.Meta
-								avatar={<Avatar src={item?.urlAnhDaiDien || teacherIcon} />}
+								avatar={<Avatar size='large' src={item?.urlAnhDaiDien || '/images/teacher.svg'} />}
 								title={item?.ten ? `Họ và tên: ${[item.hoDem, item.ten].join(' ')}` : <i>Không tìm thấy thông tin</i>}
 								description={
 									<>
-										<div>Email: {item?.email ? <a href={`mailto:${item?.email}`}>{item?.email}</a> : <i>--</i>}</div>
-										<div>Số điện thoại: {item?.sdtCaNhan || <i>--</i>}</div>
+										<div>Email: {item?.email ? <a href={`mailto:${item.email}`}>{item.email}</a> : <i>--</i>}</div>
+										<div>
+											Số điện thoại:{' '}
+											{item?.sdtCaNhan ? <a href={`tel:${item.sdtCaNhan}`}>{item.sdtCaNhan}</a> : <i>--</i>}
+										</div>
 									</>
 								}
 							/>
