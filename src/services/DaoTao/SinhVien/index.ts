@@ -16,5 +16,9 @@ export async function getThongTinSinhVien() {
 }
 
 export async function getTienTrinhDauRa() {
-	return axios.get(`${ipDaoTao}/chung-chi-sv/chung-chi-chuan-dau-ra/tien-trinh`);
+	return axios.get(`${ipDaoTao}/chung-chi-sv/chung-chi-chuan-dau-ra/tien-trinh/me`);
+}
+
+export async function getTrangThaiNoSinhVienMe(dotXetTotNghiepId: string) {
+	return axios.get(`${ipDaoTao}/chuan-tot-nghiep/sinh-vien/me/dot/${dotXetTotNghiepId}`);
 }

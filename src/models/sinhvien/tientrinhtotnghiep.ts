@@ -1,5 +1,5 @@
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { getTienTrinhDauRa } from '@/services/DaoTao/SinhVien';
+import { getTienTrinhDauRa, getTrangThaiNoSinhVienMe } from '@/services/DaoTao/SinhVien';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { useState } from 'react';
 
@@ -10,22 +10,34 @@ export default () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [visibleForm, setVisibleForm] = useState<boolean>(false);
 
-	const getTienTrinhChungChiCTDTModel = async (): Promise<SinhVien.ITienTrinhTotNghiep> => {
+	const getTienTrinhTotNghiepModel = async (dotXetTotNghiepId?: string): Promise<SinhVien.ITienTrinhTotNghiep> => {
 		setLoading(true);
 		try {
+			// Get tiến trình tốt nghiệp
 			const response = await getTienTrinhDauRa();
 			const temp: SinhVien.ITienTrinhTotNghiep = response?.data?.data;
+			// Get sinh viên nợ nghĩa vụ
+			let sinhVienNo: SinhVien.ISinhVienNoNghiaVu | undefined;
+			if (dotXetTotNghiepId) sinhVienNo = (await getTrangThaiNoSinhVienMe(dotXetTotNghiepId)).data?.data;
 
-			const isDuDieuKienTBC = (temp?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4 ?? 0) > (temp?.diemTichLuyToiThieu ?? 0);
+			const isDuDieuKienTBC =
+				(temp?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4 ?? 0) >= (temp?.diemTichLuyToiThieu ?? 0);
 			const phanTramTinChi = Math.round(
 				((temp?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? 0) / (temp?.ctdtKeHoach?.tongSoTinChi ?? 100)) * 100,
 			);
-			const isDuDieuKienChungChi = record?.thongTinCdr?.every((item) => item.datChuanDauRa) ?? false;
+			const isDuDieuKienChungChi = record?.thongTinCdr?.every((item) => item.datChuanDauRa) ?? true;
 			setDieuKienTotNghiep({
 				isDuDieuKienChungChi,
 				isDuDieuKienTBC,
 				phanTramTinChi,
-				isDuKieuKien: isDuDieuKienChungChi && isDuDieuKienTBC && phanTramTinChi === 100,
+				noTaiChinh: sinhVienNo?.noTaiChinh,
+				noThuVien: sinhVienNo?.noThuVien,
+				isDuKieuKien:
+					isDuDieuKienChungChi &&
+					isDuDieuKienTBC &&
+					phanTramTinChi >= 100 &&
+					sinhVienNo?.noTaiChinh !== true &&
+					sinhVienNo?.noThuVien !== true,
 			});
 
 			setRecord(temp);
@@ -48,6 +60,6 @@ export default () => {
 		setVisibleForm,
 		dieuKienTotNghiep,
 		setDieuKienTotNghiep,
-		getTienTrinhChungChiCTDTModel,
+		getTienTrinhTotNghiepModel,
 	};
 };
