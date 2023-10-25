@@ -5,15 +5,16 @@ import { useModel } from 'umi';
 
 const CardTienTrinhTotNghiep = () => {
 	const {
-		getTienTrinhChungChiCTDTModel,
+		getTienTrinhTotNghiepModel,
 		record: recTienTrinh,
 		dieuKienTotNghiep,
 		loading,
 	} = useModel('sinhvien.tientrinhtotnghiep');
 
 	useEffect(() => {
-		getTienTrinhChungChiCTDTModel();
+		getTienTrinhTotNghiepModel();
 	}, []);
+
 	return (
 		<Row gutter={[16, 16]}>
 			<Col span={24} md={8}>

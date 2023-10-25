@@ -6,7 +6,7 @@ import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
 
 const ThongTinSinhVienPage = () => {
-	const { record } = useModel('sinhvien.sinhvien');
+	const { record, loading, setLoading } = useModel('sinhvien.sinhvien');
 	// const [currentStep, setCurrentStep] = useState<string>('0');
 	// const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
 
@@ -20,7 +20,11 @@ const ThongTinSinhVienPage = () => {
 
 	const onExport = () => {
 		if (record?.ssoId) {
-			exportLyLich(record?.ssoId).then((res) => fileDownload(res.data, `Hồ sơ ${record.ten}.pdf`));
+			setLoading(true);
+			exportLyLich(record?.ssoId)
+				.then((res) => fileDownload(res.data, `Hồ sơ ${record.ten}.pdf`))
+				.catch((er) => console.log(er))
+				.finally(() => setLoading(false));
 		}
 	};
 
@@ -32,7 +36,7 @@ const ThongTinSinhVienPage = () => {
 						<Button icon={<EditOutlined />} onClick={() => message.warn('Đang cập nhật')}>
 							Cập nhật hồ sơ
 						</Button>
-						<Button icon={<PrinterOutlined />} onClick={onExport}>
+						<Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
 							In hồ sơ
 						</Button>
 					</>

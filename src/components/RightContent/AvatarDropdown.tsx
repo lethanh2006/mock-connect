@@ -46,7 +46,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 			danger: true,
 		},
 	];
-	if (menu && initialState.currentUser.systemRole !== 'Admin') {
+	if (menu && !initialState.currentUser.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
 		// items.splice(1, 0, {
 		//   key: 'password',
 		//   icon: <LockOutlined />,
@@ -75,17 +75,17 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 						src={
 							<img
 								// style={currentUser?.avatar_path ? {} : { objectFit: 'cover' }}
-								src={'/logo.png'}
+								src={initialState.currentUser?.picture ?? '/logo.png'}
 							/>
 						}
 						alt='avatar'
 					/>
 					<span className={`${styles.name}`}>
-						{initialState.currentUser?.fullname
-							? initialState.currentUser.fullname
-							: initialState.currentUser?.firstname
-							? `${initialState.currentUser.firstname} ${initialState.currentUser?.lastname ?? ''}`
-							: initialState.currentUser?.username || ''}
+						{initialState.currentUser?.family_name
+							? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
+							: initialState.currentUser?.name
+							? initialState.currentUser.name
+							: initialState.currentUser?.preferred_username || ''}
 					</span>
 				</span>
 			</HeaderDropdown>

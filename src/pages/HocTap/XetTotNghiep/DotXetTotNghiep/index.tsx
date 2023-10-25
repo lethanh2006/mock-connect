@@ -9,15 +9,17 @@ import { Alert, Button, Card, Col, Descriptions, Empty, Popconfirm, Row, Tag } f
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalYKien from './ModalYKien';
+import moment from 'moment';
 
 const CardXetTotNghiep = () => {
-	const { formSubmiting, record, dangKyXetTotNghiepModel, setVisibleForm, getDotHienHanhModel } =
+	const { formSubmiting, record, dangKyXetTotNghiepModel, setVisibleForm, getDotHienHanhModel, loading } =
 		useModel('sinhvien.xettotnghiep');
 	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
 	const [type, setType] = useState<'phan-hoi' | 'hoan'>('phan-hoi');
+	const isQuaNgayChotSanhSach = !!record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach, 'day');
 
 	useEffect(() => {
-		getDotHienHanhModel();
+		if (!record?._id) getDotHienHanhModel();
 	}, []);
 
 	const handleRegister = () => record?._id && dangKyXetTotNghiepModel(record._id).catch((er) => console.log(er));
@@ -33,7 +35,7 @@ const CardXetTotNghiep = () => {
 	};
 
 	return (
-		<Card title='Xét tốt nghiệp'>
+		<Card title='Xét tốt nghiệp' loading={loading}>
 			{!record?._id ? (
 				<Empty
 					description='Không có đợt xét tốt nghiệp trong thời điểm hiện tại !'
@@ -46,7 +48,12 @@ const CardXetTotNghiep = () => {
 							<Alert
 								description={
 									<>
-										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra
+										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra{' '}
+										{record?.ngayChotDanhSach ? (
+											<>
+												, ngày chốt danh sách sinh viên <b>{moment(record?.ngayChotDanhSach).format('DD/MM/YYYY')}</b>
+											</>
+										) : null}
 									</>
 								}
 							/>
@@ -99,7 +106,7 @@ const CardXetTotNghiep = () => {
 						)}
 					</Row>
 
-					{dieuKienTotNghiep?.isDuKieuKien ? (
+					{dieuKienTotNghiep?.isDuKieuKien && !isQuaNgayChotSanhSach ? (
 						<div className='form-footer'>
 							{!record?.ketQuaXetTotNghiep?._id ? (
 								<>
@@ -111,11 +118,11 @@ const CardXetTotNghiep = () => {
 								</>
 							) : record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.DUNG_TIEN_DO ? (
 								<>
-									Trong đợt xét
+									{/* Trong đợt xét */}
 									<Button onClick={handlePhanHoi} icon={<FormOutlined />}>
 										Gửi phản hồi
 									</Button>
-									Đủ điều kiện xét tốt nghiệp
+									{/* Đủ điều kiện xét tốt nghiệp */}
 									{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.DU_DK ? (
 										<Button onClick={handleHoan} danger icon={<CloseOutlined />}>
 											Yêu cầu hoãn tốt nghiệp

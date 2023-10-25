@@ -6,36 +6,49 @@ import { useModel } from 'umi';
  * Secect Căn cứ pháp lý để cho vào FormItem
  */
 const SelectDonVi = (props: {
-  value?: string;
-  onChange?: any;
-  multiple?: boolean;
-  disabled?: boolean;
+	value?: string;
+	onChange?: (val: string) => void;
+	multiple?: boolean;
+	disabled?: boolean;
+	style?: React.CSSProperties;
+	allowClear?: boolean;
+	placeholder?: string;
 }) => {
-  const { value, onChange, multiple, disabled } = props;
-  const { danhSach, getAllModel } = useModel('tochucnhansu.donvi');
+	const { value, onChange, multiple, disabled, style, allowClear, placeholder } = props;
+	const { danhSach, getAllModel } = useModel('tochucnhansu.donvi');
 
-  useEffect(() => {
-    getAllModel();
-  }, []);
+	useEffect(() => {
+		// Fix cứng Bộ môn
+		// [
+		// 	{
+		// 		active: true,
+		// 		field: 'loaiPhongBanId',
+		// 		values: ['64803abec0fb527080456a32'],
+		// 		operator: EOperatorType.EQUAL,
+		// 	},
+		// ];
+		getAllModel();
+	}, []);
 
-  return (
-    <div style={{ display: 'flex', gap: 8 }}>
-      <Select
-        mode={multiple ? 'multiple' : undefined}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        options={danhSach.map((item) => ({
-          key: item._id,
-          value: item._id,
-          label: [item.ten, item.donViCha?.ten].join(' - '),
-        }))}
-        showSearch
-        optionFilterProp="label"
-        placeholder="Chọn đơn vị"
-      />
-    </div>
-  );
+	return (
+		<Select
+			mode={multiple ? 'multiple' : undefined}
+			value={value}
+			allowClear={allowClear}
+			onChange={onChange}
+			disabled={disabled}
+			options={danhSach.map((item) => ({
+				key: item._id,
+				value: item.maDonVi,
+				label: `${item.ten} (${item.maDonVi ?? ''})`,
+			}))}
+			showSearch
+			showArrow
+			optionFilterProp='label'
+			placeholder={placeholder || 'Chọn đơn vị'}
+			style={{ width: '100%', ...style }}
+		/>
+	);
 };
 
 export default SelectDonVi;

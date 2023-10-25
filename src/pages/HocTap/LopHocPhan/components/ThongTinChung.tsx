@@ -1,5 +1,4 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { moodleEndpoint } from '@/utils/ip';
 import { DesktopOutlined } from '@ant-design/icons';
 import { Descriptions, Spin, Tabs, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
@@ -39,9 +38,9 @@ const ThongTinChung = () => {
 	}, [activeKey]);
 
 	const handleMoodle = () => {
-		if (record?.moodleShortname && record?._id && moodleEndpoint)
+		if (record?.moodleShortname && record?._id)
 			getMoodleLopHocPhanModel(record._id).then((data) => {
-				if (data?.url) window.open(`${moodleEndpoint}${data.url}`);
+				if (data?.url) window.open(`${data.url}`);
 				else message.error('Có lỗi, vui lòng thử lại sau');
 			});
 	};

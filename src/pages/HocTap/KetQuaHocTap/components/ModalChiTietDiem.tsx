@@ -1,10 +1,10 @@
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { Descriptions, Modal, Divider, Tooltip } from 'antd';
-import DetailKetQuaHocTap from './DetailKetQuaHocTap';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import ModalHocPhan from '../../LopHocPhan/DeCuongHocPhan/ModalHocPhan';
+import { Descriptions, Divider, Modal, Tooltip, message } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
+import ModalHocPhan from '../../LopHocPhan/DeCuongHocPhan/ModalHocPhan';
+import DetailKetQuaHocTap from './DetailKetQuaHocTap';
 
 const ModalChiTietDiem = (props: {
 	visible: boolean;
@@ -27,7 +27,7 @@ const ModalChiTietDiem = (props: {
 		if (de) {
 			setDeCuongId(de);
 			setVisibleDeCuong(true);
-		}
+		} else message.error('Không tìm thấy đề cương học phần');
 	};
 
 	return (
