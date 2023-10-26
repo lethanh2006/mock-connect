@@ -33,13 +33,14 @@ declare module ChiTietThu {
 	}
 
 	export interface IThongTinSanPham {
+		_id: string;
 		stt?: number;
 		nguonThu: NguonThu.Record; // 'string';
 		productId: string;
 		productCode?: string;
 		productName?: string;
 		// product: KhoanThu.Record; // 'string';
-		priceId: string;
+		priceId: any;
 		// price?: MucThu.Record; // 'string';
 		quantity: number; // 0;
 		unitAmount: number; // 0;
