@@ -24,7 +24,15 @@ const DanhSachGiangVien = (props: {
 					renderItem={(item) => (
 						<List.Item>
 							<List.Item.Meta
-								avatar={<Avatar size='large' src={item?.urlAnhDaiDien || '/images/teacher.svg'} />}
+								avatar={
+									<Avatar
+										size='large'
+										src={
+											item?.urlAnhDaiDien ||
+											(item?.gioiTinh === 'Nữ' ? '/images/teacher-female.svg' : '/images/teacher-male.svg')
+										}
+									/>
+								}
 								title={item?.ten ? `Họ và tên: ${[item.hoDem, item.ten].join(' ')}` : <i>Không tìm thấy thông tin</i>}
 								description={
 									<>

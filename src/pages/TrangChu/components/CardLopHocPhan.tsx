@@ -13,7 +13,7 @@ const CardLopHocPhan = () => {
 	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH });
 
 	useEffect(() => {
-		getAllHocKy(true, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me');
+		getAllHocKy(!recHocKy?._id, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me');
 	}, []);
 
 	useEffect(() => {
