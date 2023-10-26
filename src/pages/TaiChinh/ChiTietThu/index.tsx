@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import TableChiTietThu from './components/TableChiTietThu';
 
 const ChiTietThuPage = () => {
+	// Callback from MOMO
 	useEffect(() => {
 		if (window.location.href.includes('orderType=momo_wallet'))
 			if (window.location.href.includes('resultCode=0'))
