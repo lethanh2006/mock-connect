@@ -6,7 +6,7 @@ import { last } from 'lodash';
 import { useState } from 'react';
 
 export default () => {
-	const objInit = useInitModel<SuKien.IRecord>('su-kien');
+	const objInit = useInitModel<SuKien.IRecord>('su-kien/me');
 	const [selectSuKiens, setSelectSuKiens] = useState<ELoaiSuKien[]>([
 		ELoaiSuKien.LICH_HOC,
 		ELoaiSuKien.LICH_THI,
