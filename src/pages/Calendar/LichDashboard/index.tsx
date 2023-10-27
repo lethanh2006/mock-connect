@@ -100,7 +100,7 @@ const LichDashboard = () => {
 	const renderContent = () => {
 		const keysSorted = sortBy(Object.keys(dataCalendar));
 		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendar)) {
-			return <Empty description='Không có sự kiện nào' />;
+			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện nào' />;
 		}
 
 		return keysSorted.map((ngay) => {
