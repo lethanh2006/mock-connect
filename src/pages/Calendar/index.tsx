@@ -2,12 +2,15 @@ import { messagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Modal, Row, Space, Spin } from 'antd';
+import { Button, Card, Col, Modal, Space, Spin } from 'antd';
 import moment, { type Moment } from 'moment';
 import { useEffect, useState } from 'react';
 import type { DateRange, View } from 'react-big-calendar';
 import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useMediaQuery } from 'react-responsive';
+import SplitPane from 'react-split-pane';
+import Pane from 'react-split-pane/lib/Pane';
 import { useModel } from 'umi';
 import FilterColumn from './components/FilterColumn';
 import FormLichCaNhan from './components/FormLichCaNhan';
@@ -28,6 +31,12 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const [dateXemThem, setDateXemThem] = useState<any>();
 	const [selectEvent, setSelectEvent] = useState<any>();
 	const { isDashboard } = props;
+	const isMobile = useMediaQuery({ query: '(max-width: 867px)' });
+	const [paneSize, setPaneSize] = useState('30%');
+
+	const handlePaneSizeChange = (size: any) => {
+		setPaneSize(size[0]);
+	};
 
 	//#region Get Data
 	const getThoiKhoaBieu = async (): Promise<any[]> =>
@@ -111,26 +120,28 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 	return (
 		<Card title='Lịch' bordered>
-			<Row gutter={[12, 12]}>
-				{!isDashboard ? (
-					<Col span={24} md={8} xl={6}>
-						<Button
-							type='primary'
-							block
-							onClick={() => {
-								setRecord(undefined);
-								setVisibleForm(true);
-							}}
-						>
-							<PlusOutlined /> Thêm sự kiện
-						</Button>
+			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
+				<Pane initialSize={paneSize} minSize='25%'>
+					{!isDashboard ? (
+						<>
+							<Button
+								type='primary'
+								block
+								onClick={() => {
+									setRecord(undefined);
+									setVisibleForm(true);
+								}}
+							>
+								<PlusOutlined /> Thêm sự kiện
+							</Button>
 
-						{/* Bộ lọc */}
-						<FilterColumn date={date} setDate={onChangeFilterDate} />
-					</Col>
-				) : null}
+							{/* Bộ lọc */}
+							<FilterColumn date={date} setDate={onChangeFilterDate} />
+						</>
+					) : null}
+				</Pane>
 
-				<Col span={24} md={isDashboard ? 24 : 16} xl={isDashboard ? 24 : 18}>
+				<Pane minSize='40%'>
 					<Spin spinning={loading || loadingTKB}>
 						<Calendar
 							formats={{
@@ -172,7 +183,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 							}}
 						/>
 					</Spin>
-				</Col>
+				</Pane>
 
 				{isDashboard ? (
 					<Col span={24}>
@@ -194,7 +205,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 						</Space>
 					</Col>
 				) : null}
-			</Row>
+			</SplitPane>
 
 			<Modal
 				visible={visibleForm}

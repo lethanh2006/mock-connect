@@ -46,6 +46,7 @@ const CardXetTotNghiep = () => {
 					<Row gutter={[0, 16]}>
 						<Col span={24}>
 							<Alert
+								type='info'
 								description={
 									<>
 										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra{' '}
