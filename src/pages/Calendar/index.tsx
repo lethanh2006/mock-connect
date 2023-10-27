@@ -31,8 +31,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const [dateXemThem, setDateXemThem] = useState<any>();
 	const [selectEvent, setSelectEvent] = useState<any>();
 	const { isDashboard } = props;
-	const isMobile = useMediaQuery({ query: '(max-width: 867px)' });
-	const [paneSize, setPaneSize] = useState('30%');
+	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+	const [paneSize, setPaneSize] = useState('300px');
 
 	const handlePaneSizeChange = (size: any) => {
 		setPaneSize(size[0]);
@@ -121,7 +121,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	return (
 		<Card title='Lịch' bordered>
 			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
-				<Pane initialSize={paneSize} minSize='25%'>
+				<Pane initialSize={paneSize} minSize='250px' maxSize='40%'>
 					{!isDashboard ? (
 						<>
 							<Button
@@ -141,7 +141,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 					) : null}
 				</Pane>
 
-				<Pane minSize='40%'>
+				<Pane>
 					<Spin spinning={loading || loadingTKB}>
 						<Calendar
 							formats={{
