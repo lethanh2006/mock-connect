@@ -18,7 +18,7 @@ const DangKyTinChiPage = () => {
 				<>
 					{moment().isSameOrAfter(dotDangKyHienTai.thoiGianBatDau) &&
 					moment().isSameOrBefore(dotDangKyHienTai.thoiGianKetThuc) ? (
-						dotDangKyHienTai.tinhChat === ETinhChatDangKyTC.XOA ? (
+						dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 							<Empty
 								description={
 									<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp học phần đã đăng ký trước đó !</i>
