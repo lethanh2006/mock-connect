@@ -15,6 +15,7 @@ const ipTaiChinh = ipRoot + 'tai-chinh-api';
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
 const currentRole = EModuleKey.CONNECT;
+const oneSignalRole = EModuleKey.CONG_CAN_BO;
 
 // DO NOT TOUCH
 const keycloakClientID = AppModules[currentRole].clientId;
@@ -35,6 +36,7 @@ export {
 	ipNotif,
 	ipTaiChinh,
 	currentRole,
+	oneSignalRole,
 	keycloakClientID,
 	resourceServerClientId,
 	keycloakAuthEndpoint,
