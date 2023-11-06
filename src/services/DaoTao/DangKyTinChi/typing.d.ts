@@ -14,7 +14,7 @@ declare module DangKyTinChi {
 		maHocKy: string;
 		hocKy?: HocKy.IRecord;
 		kichHoat: boolean;
-		tinhChat: ETinhChatDangKyTC;
+		tinhChatDangKy: ETinhChatDangKyTC;
 		thoiGianBatDau: string;
 		thoiGianKetThuc: string;
 

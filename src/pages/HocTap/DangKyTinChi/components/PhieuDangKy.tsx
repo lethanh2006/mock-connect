@@ -199,7 +199,7 @@ const PhieuDangKy = () => {
 					// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
 					disabled={
 						rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-						dotDangKyHienTai?.tinhChat === ETinhChatDangKyTC.DANG_KY
+						dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
 					}
 				>
 					<Button
@@ -208,7 +208,7 @@ const PhieuDangKy = () => {
 						type='link'
 						disabled={
 							rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-							dotDangKyHienTai?.tinhChat === ETinhChatDangKyTC.DANG_KY
+							dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
 						}
 					/>
 				</Popconfirm>
@@ -248,7 +248,7 @@ const PhieuDangKy = () => {
 						</Button>
 					) : null}
 
-					{dangTrongThoiGian && tongTinChiChuaDk && dotDangKyHienTai.tinhChat !== ETinhChatDangKyTC.XOA ? (
+					{dangTrongThoiGian && tongTinChiChuaDk && dotDangKyHienTai.tinhChatDangKy !== ETinhChatDangKyTC.XOA ? (
 						<Tooltip
 							title={
 								tongTinChi > (phieuDangKy?.soTinChiToiDa ?? 0) ? 'Bạn đã đăng ký quá số tín chỉ tối đa' : undefined
