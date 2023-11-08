@@ -9,4 +9,6 @@ export default {
   'menu.DanhMuc.ChucVu': 'Chức vụ',
   'menu.DanhMuc.LoaiPhongBan': 'Loại phòng ban',
   'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
+
+  'menu.KhaiBaoQuyTrinh': 'Khai báo quy trình',
 };
