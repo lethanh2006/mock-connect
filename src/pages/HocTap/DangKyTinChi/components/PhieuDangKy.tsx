@@ -79,7 +79,7 @@ const PhieuDangKy = () => {
 			if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
 				await deleteDangKyTinChiModel({
 					phieuDktcId: phieuDangKy?._id ?? '',
-					maLopHocPhan: rec.ten ?? '',
+					lopHocPhanId: rec._id ?? '',
 				});
 
 			// Xóa lớp ở danh sách tại local
