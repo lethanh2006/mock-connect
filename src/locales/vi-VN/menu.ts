@@ -45,4 +45,7 @@ export default {
 	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
 
 	// GIANG VIEN
+
+
+  'menu.KhaiBaoQuyTrinh': 'Khai báo quy trình',
 };
