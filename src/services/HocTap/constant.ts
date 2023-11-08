@@ -15,3 +15,28 @@ export enum ELoaiHocLuc {
 	KEM = 'Kém',
 	EMPTY = 'Chưa xếp loại',
 }
+
+//Xét học vụ
+export enum ETrangThaiDuyetCanhBao {
+	CHO_DUYET = 'Chờ duyệt',
+	DA_DUYET = 'Đã duyệt',
+	KHONG_DUYET = 'Không duyệt',
+}
+
+export const colorTrangThaiDuyetCanhBao: Record<ETrangThaiDuyetCanhBao, string> = {
+	[ETrangThaiDuyetCanhBao.CHO_DUYET]: 'blue',
+	[ETrangThaiDuyetCanhBao.DA_DUYET]: 'green',
+	[ETrangThaiDuyetCanhBao.KHONG_DUYET]: 'orange',
+};
+
+export enum EYKienCoVanHocTap {
+	DONG_Y = 'Đồng ý',
+	KHONG_DONG_Y = 'Không đồng ý',
+	CHUA_CO_Y_KIEN = 'Chưa có ý kiến',
+}
+
+export const colorYKienCoVanHocTap: Record<EYKienCoVanHocTap, string> = {
+	[EYKienCoVanHocTap.DONG_Y]: 'green',
+	[EYKienCoVanHocTap.CHUA_CO_Y_KIEN]: 'blue',
+	[EYKienCoVanHocTap.KHONG_DONG_Y]: 'orange',
+};
