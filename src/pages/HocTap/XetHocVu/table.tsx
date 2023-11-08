@@ -1,7 +1,8 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { XetHocVu } from '@/services/HocTap/XetHocVu/typing';
-import { ETrangThaiDuyetCanhBao } from '@/services/HocTap/constant';
+import { ETrangThaiDuyetCanhBao, colorTrangThaiDuyetCanhBao } from '@/services/HocTap/constant';
+import { Tag, Card } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -11,14 +12,7 @@ const SinhVienCanhBaoTable = (props: { isThoiHoc?: boolean }) => {
 	const [danhSach, setDanhSach] = useState<XetHocVu.IRecord[]>([]);
 
 	const getData = () =>
-		getAllModel(
-			undefined,
-			undefined,
-			{ daChot: true, trangThai: ETrangThaiDuyetCanhBao.DA_DUYET },
-			undefined,
-			'me',
-			false,
-		).then((res) => setDanhSach(res));
+		getAllModel(undefined, undefined, { daChot: true }, undefined, 'me', false).then((res) => setDanhSach(res));
 
 	useEffect(() => {
 		getData();
@@ -59,10 +53,21 @@ const SinhVienCanhBaoTable = (props: { isThoiHoc?: boolean }) => {
 			width: 120,
 			hide: !isThoiHoc,
 		},
+		{
+			title: 'Trạng thái',
+			dataIndex: 'trangThai',
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ETrangThaiDuyetCanhBao),
+			render: (val, rec) => <Tag color={colorTrangThaiDuyetCanhBao[val as ETrangThaiDuyetCanhBao]}>{val}</Tag>,
+			width: 120,
+		},
 	];
 
 	return (
-		<TableStaticData columns={columns} data={danhSach} otherProps={{ create: false, filter: true }} hasTotal addStt />
+		<Card title={`Lịch sử ${isThoiHoc ? 'thôi học' : 'cảnh báo học tập'}`}>
+			<TableStaticData columns={columns} data={danhSach} otherProps={{ create: false, filter: true }} hasTotal addStt />
+		</Card>
 	);
 };
 
