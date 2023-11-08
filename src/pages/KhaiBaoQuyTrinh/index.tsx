@@ -160,14 +160,14 @@ const KhaiBaoQuyTrinhPage = () => {
 		{
 			title: 'Tên quy trình',
 			dataIndex: 'ten',
-			width: 150,
+			width: 250,
 			filterType: 'string',
-			onCell: onCellQuyTrinh,
+			// onCell: onCellQuyTrinh,
 		},
 		{
 			title: 'Trả phi',
 			dataIndex: ['cauTrucThanhToan', 'yeuCauTraPhi'],
-			width: 250,
+			width: 150,
 			align: 'center',
 			render: (val) => {
 				return (
@@ -176,7 +176,7 @@ const KhaiBaoQuyTrinhPage = () => {
 					</>
 				);
 			},
-			onCell: onCellQuyTrinh,
+			// onCell: onCellQuyTrinh,
 		},
 		{
 			title: 'Thao tác',
@@ -192,16 +192,16 @@ const KhaiBaoQuyTrinhPage = () => {
 								// setVisibleForm(true);
 								handleRedirect(recordVal?._id);
 							}}
-							type='link'
-							icon={<EyeOutlined />}
-						/>
+							type='primary'
+							// icon={<EyeOutlined />}
+            >Sử dụng</Button>
 					</Tooltip>
 				</>
 			),
 		},
 	];
 	const getDataQuyTrinh = () => {
-		getQuyTrinh();
+		getQuyTrinh(undefined,undefined,undefined,undefined,undefined,'page/Quản lý đào tạo - Sinh viên');
 	};
 	return (
 		<Card>
