@@ -22,3 +22,7 @@ export async function getTienTrinhDauRa() {
 export async function getTrangThaiNoSinhVienMe(dotXetTotNghiepId: string) {
 	return axios.get(`${ipDaoTao}/chuan-tot-nghiep/sinh-vien/me/dot/${dotXetTotNghiepId}`);
 }
+
+export async function getCanhBaoSinhVien(type: 'canh-bao-hoc-tap' | 'thoi-hoc') {
+	return axios.get(`${ipDaoTao}/${type}/me`);
+}

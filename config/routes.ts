@@ -124,6 +124,11 @@
 				component: './HocTap/KetQuaHocTap',
 			},
 			{
+				name: 'XetHocVu',
+				path: './xet-hoc-vu',
+				component: './HocTap/XetHocVu',
+			},
+			{
 				name: 'XetTotNghiep',
 				path: './xet-tot-nghiep',
 				component: './HocTap/XetTotNghiep',
