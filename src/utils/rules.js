@@ -323,6 +323,48 @@ const rules = {
 			message: `Chỉ được ${sauDauPhay} số sau dấu phẩy`,
 		},
 	],
+  arrNumber: (max, min) => [
+    {
+      validator: (__, value, callback) => {
+        let isArrNumber = true;
+        if (value && value.length) {
+          value.map((item) => {
+            const isNumber = !isNaN(item) && !isNaN(parseFloat(item));
+            if (isNumber !== true) isArrNumber = false;
+          });
+        }
+        if (!isArrNumber) callback('');
+        callback();
+      },
+      message: 'Chỉ được nhập số, ngăn cách giữa phần nguyên và phần thập phân bởi dấu chấm',
+    },
+    {
+      validator: (__, value, callback) => {
+        let isValidArrNumber = true;
+        if (value && value.length) {
+          value.map((item) => {
+            if (parseFloat(item) > max) isValidArrNumber = false;
+          });
+        }
+        if (!isValidArrNumber) callback('');
+        callback();
+      },
+      message: `Giá trị tối đa: ${max}`,
+    },
+    {
+      validator: (__, value, callback) => {
+        let isValidArrNumber = true;
+        if (value && value.length) {
+          value.map((item) => {
+            if (parseFloat(item) < min) isValidArrNumber = false;
+          });
+        }
+        if (!isValidArrNumber) callback('');
+        callback();
+      },
+      message: `Giá trị nhỏ nhất: ${min}`,
+    },
+  ],
 };
 
 export default rules;
