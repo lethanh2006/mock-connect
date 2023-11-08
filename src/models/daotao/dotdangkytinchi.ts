@@ -139,7 +139,7 @@ export default () => {
 	};
 
 	const postDangKyTinChiModel = async (data: {
-		dangKy: { maLopHocPhan: string };
+		dangKy: { lopHocPhanId: string };
 		phieuDktcId: string;
 	}): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
 		try {
@@ -151,7 +151,7 @@ export default () => {
 		}
 	};
 
-	const deleteDangKyTinChiModel = async (data: { phieuDktcId: string; maLopHocPhan: string }): Promise<any> => {
+	const deleteDangKyTinChiModel = async (data: { phieuDktcId: string; lopHocPhanId: string }): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
 		setFormSubmiting(true);
 		try {

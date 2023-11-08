@@ -62,3 +62,15 @@ export const ColorTrangThaiDangKyTinChi = {
 	[ETrangThaiDangKyTinChi.DA_DANG_KY]: 'green',
 	[ETrangThaiDangKyTinChi.LOI]: 'red',
 };
+
+export enum ETinhChatDangKyTC {
+	DANG_KY_XOA = '3',
+	DANG_KY = '2',
+	XOA = '1',
+}
+
+export const tinhChatDangKyTC: Record<ETinhChatDangKyTC, string> = {
+	[ETinhChatDangKyTC.DANG_KY_XOA]: 'Cho đăng ký mới và xoá cũ',
+	[ETinhChatDangKyTC.DANG_KY]: 'Chỉ đăng ký mới',
+	[ETinhChatDangKyTC.XOA]: 'Chỉ cho phép xóa',
+};

@@ -15,11 +15,13 @@ const ipTaiChinh = ipRoot + 'tai-chinh-api';
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
 const currentRole = EModuleKey.CONNECT;
+const oneSignalRole = EModuleKey.CONG_CAN_BO;
 
 // DO NOT TOUCH
 const keycloakClientID = AppModules[currentRole].clientId;
 const keycloakAuthority = APP_CONFIG_KEYCLOAK_AUTHORITY;
 const resourceServerClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}auth`;
+const keycloakAuthEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/auth';
 const keycloakTokenEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/token';
 const keycloakUserInfoEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/userinfo';
 const sentryDSN = APP_CONFIG_SENTRY_DSN;
@@ -34,8 +36,10 @@ export {
 	ipNotif,
 	ipTaiChinh,
 	currentRole,
+	oneSignalRole,
 	keycloakClientID,
 	resourceServerClientId,
+	keycloakAuthEndpoint,
 	keycloakTokenEndpoint,
 	keycloakUserInfoEndpoint,
 	keycloakAuthority,
