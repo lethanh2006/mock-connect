@@ -26,37 +26,38 @@ const FormKhaiBao = (props: { quyTrinhId?: string }) => {
 	};
 	return (
 		// <Card title={'Thêm mới'}>
-			<Spin spinning={loading}>
-				<Form onFinish={onFinish} layout={'vertical'}>
-					<Row gutter={16}>
-						<Col span={24}>
-							<Form.Item name={'quyTrinhId'} label={'Quy trình'} initialValue={props?.quyTrinhId}>
-								<SelectQuyTrinh
-                  disabled={props?.quyTrinhId}
-									onChange={(value: SetStateAction<string | undefined>) => {
-										setCurrentQuyTrinh(value);
-									}}
-								/>
-							</Form.Item>
-						</Col>
-						<Col span={24}>
-							<Form.Item name={'dotQuyTrinhId'} label={'Đợt khai báo'}>
-								<SelectDotQuyTrinh loadData={false}  initQuery={{ quyTrinhId: props?.quyTrinhId }} />
-							</Form.Item>
-						</Col>
-						<Col span={24}>
-							<Form.Item>
-								<div style={{ display: 'flex', justifyContent: 'center' }}>
-									<Button style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
-										Tạo
-									</Button>
-									<Button onClick={() => setVisibleForm(false)}>Huỷ</Button>
-								</div>
-							</Form.Item>
-						</Col>
-					</Row>
-				</Form>
-			</Spin>
+		<Spin spinning={loading}>
+			<Form onFinish={onFinish} layout={'vertical'}>
+				<Row gutter={16}>
+					<Col span={24}>
+						<Form.Item name={'quyTrinhId'} label={'Quy trình'} initialValue={props?.quyTrinhId}>
+							<SelectQuyTrinh
+								loadData={false}
+								disabled={!!props?.quyTrinhId}
+								onChange={(value: SetStateAction<string | undefined>) => {
+									setCurrentQuyTrinh(value);
+								}}
+							/>
+						</Form.Item>
+					</Col>
+					<Col span={24}>
+						<Form.Item name={'dotQuyTrinhId'} label={'Đợt khai báo'}>
+							<SelectDotQuyTrinh loadData={false} initQuery={{ quyTrinhId: props?.quyTrinhId }} />
+						</Form.Item>
+					</Col>
+					<Col span={24}>
+						<Form.Item>
+							<div style={{ display: 'flex', justifyContent: 'center' }}>
+								<Button style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
+									Tạo
+								</Button>
+								<Button onClick={() => setVisibleForm(false)}>Huỷ</Button>
+							</div>
+						</Form.Item>
+					</Col>
+				</Row>
+			</Form>
+		</Spin>
 		// </Card>
 	);
 };

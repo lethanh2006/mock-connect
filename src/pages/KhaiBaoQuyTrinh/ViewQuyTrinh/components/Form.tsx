@@ -17,6 +17,7 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 		recordFormKhaiBao,
 	} = useModel('quytrinh.khaibaoquytrinh');
 	const { recordSanPham, setRecordSanPham } = useModel('quytrinh.khaibaoquytrinh');
+	const { recordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
 	const [formValues, setFormValues] = useState<any>({});
 	const [loadingKhaiBao, setLoadingKhaiBao] = useState<boolean>(false);
 	const [danhSachDonViXuLy, setDanhSachDonViXuLy] = useState<KhaiBaoQuyTrinh.IDonViXuLy[]>([]);
@@ -33,7 +34,10 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 			}
 			delete values.maBoPhanXuLy;
 
-			const payload = { thongTinKhaiBao: { ...values, ...recordSanPham?.thongTinKhaiBao }, maBoPhanXuLy: maBoPhanXuLy };
+			const payload = {
+				thongTinKhaiBao: { ...values, ...recordSanPham?.thongTinKhaiBao, ...recordQuyTrinhForm?.thongTinKhaiBao },
+				maBoPhanXuLy: maBoPhanXuLy,
+			};
 
 			const res = await userUpdateBuoc(dataQuyTrinh?._id ?? '', current?.ma ?? '', payload);
 

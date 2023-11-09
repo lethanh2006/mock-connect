@@ -253,7 +253,7 @@ const FormRender = (props: { cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot; fo
             align: 'center',
             width: 100,
             render: (val, rec) => {
-              return <ViewRender cauHinh={item} recordQuyTrinhForm={rec} isCot />;
+              return <ViewRender cauHinh={item} recordSanPham={rec} isCot />;
             },
             // ...buildFilter(item, danhSach),
           });

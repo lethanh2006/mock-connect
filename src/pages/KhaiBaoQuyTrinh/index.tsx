@@ -194,14 +194,16 @@ const KhaiBaoQuyTrinhPage = () => {
 							}}
 							type='primary'
 							// icon={<EyeOutlined />}
-            >Sử dụng</Button>
+						>
+							Sử dụng
+						</Button>
 					</Tooltip>
 				</>
 			),
 		},
 	];
 	const getDataQuyTrinh = () => {
-		getQuyTrinh(undefined,undefined,undefined,undefined,undefined,'page/Quản lý đào tạo - Sinh viên');
+		getQuyTrinh(undefined, undefined, undefined, undefined, undefined, 'page/Quản lý đào tạo - Sinh viên');
 	};
 	return (
 		<Card>
@@ -227,6 +229,7 @@ const KhaiBaoQuyTrinhPage = () => {
 						otherButtons={[
 							<>
 								<SelectQuyTrinh
+									loadData={false}
 									allowClear
 									style={{ width: 220, marginBottom: 8 }}
 									onChange={(val: any) => {
