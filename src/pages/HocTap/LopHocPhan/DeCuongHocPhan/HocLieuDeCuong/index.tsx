@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
@@ -6,56 +7,79 @@ import { Checkbox } from 'antd';
 import { useModel } from 'umi';
 
 const HocLieuDeCuongPage = () => {
-  const { page, limit } = useModel('hocphan.hoclieudecuong');
-  const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
+	const { page, limit } = useModel('hocphan.hoclieudecuong');
+	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 
-  const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
-    {
-      title: 'Tên học liệu',
-      width: 150,
-      render: (val, rec) => rec.hocLieu?.ten,
-    },
-    {
-      title: 'Tác giả',
-      width: 120,
-      render: (val, rec) => rec.hocLieu?.tacGia,
-    },
-    {
-      title: 'Bắt buộc',
-      width: 100,
-      dataIndex: 'batBuoc',
-      align: 'center',
-      render: (val, rec) => <Checkbox checked={val} />,
-    },
-    {
-      title: 'Học liệu',
-      width: 120,
-      align: 'center',
-      dataIndex: 'hocLieuId',
-      render: (val, rec) =>
-        rec.hocLieu?.url ? (
-          <a href={rec?.hocLieu?.url} target="_blank" rel="noreferrer">
-            <EyeOutlined /> Xem chi tiết
-          </a>
-        ) : (
-          <i>Chưa cập nhật</i>
-        ),
-    },
-  ];
+	const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
+		{
+			title: 'Tiêu đề',
+			dataIndex: 'tieuDe',
+			width: 200,
+			filterType: 'string',
+			render: (val) => val && <ExpandText>{val}</ExpandText>,
+		},
+		{
+			title: 'Tác giả',
+			dataIndex: 'tacGia',
+			width: 120,
+			filterType: 'string',
+		},
+		{
+			title: 'Nhà xuất bản',
+			dataIndex: 'tenNhaXuatBan',
+			width: 120,
+			filterType: 'string',
+		},
+		{
+			title: 'Năm xuất bản',
+			dataIndex: 'namXuatBan',
+			align: 'center',
+			width: 100,
+			filterType: 'number',
+			sortable: true,
+		},
+		{
+			title: 'Mô tả',
+			dataIndex: 'moTa',
+			width: 250,
+			render: (val) => val && <ExpandText>{val}</ExpandText>,
+		},
+		{
+			title: 'Bắt buộc',
+			width: 100,
+			dataIndex: 'batBuoc',
+			align: 'center',
+			render: (val) => <Checkbox checked={val} disabled />,
+		},
+		{
+			title: 'Học liệu',
+			width: 120,
+			align: 'center',
+			dataIndex: 'url',
+			render: (val, rec) =>
+				val ? (
+					<a href={val} target='_blank' rel='noreferrer'>
+						<EyeOutlined /> Xem chi tiết
+					</a>
+				) : (
+					<i>Chưa cập nhật</i>
+				),
+		},
+	];
 
-  return (
-    <>
-      <TableBase
-        columns={columns}
-        dependencies={[page, limit]}
-        params={{ deCuongId: recDeCuong?._id }}
-        modelName="hocphan.hoclieudecuong"
-        title="Đề cương học liệu"
-        hideCard
-        buttons={{ create: false }}
-      />
-    </>
-  );
+	return (
+		<>
+			<TableBase
+				columns={columns}
+				dependencies={[page, limit]}
+				params={{ deCuongId: recDeCuong?._id }}
+				modelName='hocphan.hoclieudecuong'
+				title='Đề cương học liệu'
+				hideCard
+				buttons={{ create: false }}
+			/>
+		</>
+	);
 };
 
 export default HocLieuDeCuongPage;
