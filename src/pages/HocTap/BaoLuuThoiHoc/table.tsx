@@ -10,10 +10,10 @@ import { useModel } from 'umi';
 
 const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 	const { isThoiHoc } = props;
-	const { getModel, danhSach, setDanhSach } = useModel(isThoiHoc ? 'quyetdinh.thoihoc' : 'quyetdinh.baoluu');
+	const { getAllModel, danhSach, setDanhSach } = useModel(isThoiHoc ? 'quyetdinh.thoihoc' : 'quyetdinh.baoluu');
 
 	const getData = () =>
-		getModel(undefined, undefined, undefined, undefined, undefined, 'me').then((res) => setDanhSach(res));
+		getAllModel(undefined, undefined, undefined, undefined, 'me', false).then((res) => setDanhSach(res));
 
 	useEffect(() => {
 		getData();
@@ -73,7 +73,7 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 
 	return (
 		<Card title={`Quyết định ${isThoiHoc ? 'thôi học' : 'bảo lưu'}`}>
-			<TableStaticData columns={columns} data={danhSach} hasTotal addStt />
+			<TableStaticData columns={columns} data={danhSach} hasTotal addStt size='small' />
 		</Card>
 	);
 };
