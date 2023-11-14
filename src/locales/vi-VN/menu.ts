@@ -24,6 +24,7 @@ export default {
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
 	'menu.HocTap.XetHocVu': 'Cảnh báo học tập, thôi học ',
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
+	'menu.HocTap.QuyetDinh': 'Bảo lưu, thôi học',
 	'menu.CongNo': 'Công nợ',
 
 	// DRL
@@ -47,6 +48,5 @@ export default {
 
 	// GIANG VIEN
 
-
-  'menu.KhaiBaoQuyTrinh': 'Khai báo quy trình',
+	'menu.KhaiBaoQuyTrinh': 'Khai báo quy trình',
 };
