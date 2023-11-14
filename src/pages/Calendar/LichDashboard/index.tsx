@@ -1,10 +1,11 @@
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Card, Empty, Space, Tag, Typography } from 'antd';
+import { Card, Empty, Modal, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
+import FormLichCaNhan from '../components/FormLichCaNhan';
 import ModalViewDetailCalendar from '../components/ModalViewDetail';
 import styles from './styles.less';
 
@@ -33,7 +34,7 @@ type State = Record<
 >;
 
 const LichDashboard = () => {
-	const { getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
+	const { visibleForm, setVisibleForm, getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const [dataCalendar, setDataCalendar] = useState<State>({});
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
@@ -100,7 +101,7 @@ const LichDashboard = () => {
 	const renderContent = () => {
 		const keysSorted = sortBy(Object.keys(dataCalendar));
 		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendar)) {
-			return <Empty description='Không có sự kiện nào' />;
+			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện nào' />;
 		}
 
 		return keysSorted.map((ngay) => {
@@ -109,10 +110,10 @@ const LichDashboard = () => {
 			return (
 				<div key={ngay} className={styles.ngay}>
 					<Space style={{ marginBottom: 8 }}>
-						<Typography.Text className={styles.ngay__title}>
-							{thuTrongTuan}, {moment(ngay).format('DD/MM/YYYY')}
-						</Typography.Text>
-						<Tag color='blue'>{cacSuKien.length} sự kiện</Tag>
+						<div className={styles.ngay__title}>
+							{thuTrongTuan}, ngày {moment(ngay).format('DD/MM')}
+						</div>
+						<Tag>{cacSuKien.length} sự kiện</Tag>
 					</Space>
 					{cacSuKienSorted.map((sukien) => (
 						<div
@@ -158,6 +159,16 @@ const LichDashboard = () => {
 			>
 				<div style={{ maxHeight: 400, overflowY: 'auto' }}>{renderContent()}</div>
 			</Card>
+
+			<Modal
+				visible={visibleForm}
+				bodyStyle={{ padding: 0 }}
+				onCancel={() => setVisibleForm(false)}
+				footer={null}
+				maskClosable={false}
+			>
+				<FormLichCaNhan getData={getData} />
+			</Modal>
 
 			{/* Modal xem chi tiết lịch */}
 			{selectEvent ? (

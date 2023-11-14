@@ -95,10 +95,19 @@ declare module HocPhan {
 
 	export interface IHocLieuDeCuong {
 		_id: string;
-		hocLieuId: string;
-		hocLieu?: HocLieu.IRecord;
 		deCuongId: string;
 		deCuong?: IDeCuongHocPhan;
+
+		idTaiLieuThuVien?: number; // Tài liệu tinh vân
+		loaiTaiLieuThuVien?: 'item' | 'edata';
+		maTaiLieuThuVien?: string;
+
+		tieuDe?: string;
+		moTa?: string;
+		tacGia?: string;
+		tenNhaXuatBan?: string;
+		namXuatBan?: number;
 		batBuoc: boolean;
+		url?: string;
 	}
 }

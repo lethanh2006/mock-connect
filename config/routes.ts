@@ -124,9 +124,19 @@
 				component: './HocTap/KetQuaHocTap',
 			},
 			{
+				name: 'XetHocVu',
+				path: './xet-hoc-vu',
+				component: './HocTap/XetHocVu',
+			},
+			{
 				name: 'XetTotNghiep',
 				path: './xet-tot-nghiep',
 				component: './HocTap/XetTotNghiep',
+			},
+			{
+				name: 'QuyetDinh',
+				path: './quyet-dinh-bao-luu-thoi-hoc',
+				component: './HocTap/BaoLuuThoiHoc',
 			},
 		],
 	},
@@ -203,6 +213,28 @@
 		],
 	},
 	{
+		name: 'KhaiBaoQuyTrinh',
+		icon: 'AuditOutlined',
+		path: './khai-bao-quy-trinh',
+		// component: './KhaiBaoQuyTrinh',
+		routes: [
+			{
+				name: 'DanhSachQuyTrinh',
+				icon: 'AuditOutlined',
+				hideInMenu: true,
+				path: './',
+				component: './KhaiBaoQuyTrinh',
+			},
+			{
+				name: 'KhaiBaoQuyTrinh',
+				icon: 'AuditOutlined',
+				hideInMenu: true,
+				path: './:id',
+				component: './KhaiBaoQuyTrinh/ViewQuyTrinh/$id',
+			},
+		],
+	},
+	{
 		name: 'CongNo',
 		icon: 'TransactionOutlined',
 		path: '/cong-no',
@@ -238,7 +270,23 @@
 
 	{
 		path: '/notification',
-		component: './ThongBao/NotifOneSignal',
+		routes: [
+			{
+				path: './subscribe',
+				exact: true,
+				component: './ThongBao/Subscribe',
+			},
+			{
+				path: './check',
+				exact: true,
+				component: './ThongBao/Check',
+			},
+			{
+				path: './',
+				exact: true,
+				component: './ThongBao/NotifOneSignal',
+			},
+		],
 		layout: false,
 		hideInMenu: true,
 	},

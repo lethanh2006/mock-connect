@@ -3,6 +3,7 @@ import { type IColumn } from '@/components/Table/typing';
 import {
 	ColorTrangThaiDangKyTinChi,
 	ELoaiHocPhanDangKyTinChi,
+	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
 	LoaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
@@ -11,10 +12,10 @@ import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icon
 import { Button, Col, Divider, Popconfirm, Row, Space, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
-import { useEffect } from 'react';
 
 const PhieuDangKy = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -78,7 +79,7 @@ const PhieuDangKy = () => {
 			if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
 				await deleteDangKyTinChiModel({
 					phieuDktcId: phieuDangKy?._id ?? '',
-					maLopHocPhan: rec.ten ?? '',
+					lopHocPhanId: rec._id ?? '',
 				});
 
 			// Xóa lớp ở danh sách tại local
@@ -195,8 +196,21 @@ const PhieuDangKy = () => {
 					title='Bạn có chắc chắn muốn huỷ đăng ký lớp học phần này?'
 					placement='topRight'
 					onConfirm={() => onDeleteLop(rec)}
+					// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
+					disabled={
+						rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+						dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
+					}
 				>
-					<Button icon={<DeleteOutlined />} danger type='link' />
+					<Button
+						icon={<DeleteOutlined />}
+						danger
+						type='link'
+						disabled={
+							rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+							dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
+						}
+					/>
 				</Popconfirm>
 			),
 			hide: !dangTrongThoiGian,
@@ -234,7 +248,7 @@ const PhieuDangKy = () => {
 						</Button>
 					) : null}
 
-					{dangTrongThoiGian && tongTinChiChuaDk ? (
+					{dangTrongThoiGian && tongTinChiChuaDk && dotDangKyHienTai.tinhChatDangKy !== ETinhChatDangKyTC.XOA ? (
 						<Tooltip
 							title={
 								tongTinChi > (phieuDangKy?.soTinChiToiDa ?? 0) ? 'Bạn đã đăng ký quá số tín chỉ tối đa' : undefined

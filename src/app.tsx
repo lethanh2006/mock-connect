@@ -8,6 +8,7 @@ import type { RequestOptionsInit, ResponseError } from 'umi-request';
 import ErrorBoundary from './components/ErrorBoundary';
 // import LoadingPage from './components/Loading';
 import { OIDCBounder } from './components/OIDCBounder';
+import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
 import OneSignalBounder from './components/OneSignalBounder';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
 import NotAccessible from './pages/exception/403';
@@ -65,13 +66,16 @@ export const request: RequestConfig = {
 // ProLayout  https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 	return {
-		unAccessible: <NotAccessible />,
+		unAccessible: (
+			<OIDCBounder>
+				<TechnicalSupportBounder>
+					<NotAccessible />
+				</TechnicalSupportBounder>
+			</OIDCBounder>
+		),
 		noFound: <NotFoundContent />,
 		rightContentRender: () => <RightContent />,
 		disableContentMargin: false,
-		waterMarkProps: {
-			content: initialState?.currentUser?.fullname,
-		},
 
 		footerRender: () => <Footer />,
 
@@ -81,6 +85,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				if (location.pathname === '/') {
 					history.replace('/dashboard');
 				} else if (
+					!unCheckPermissionPaths.includes(window.location.pathname) &&
 					currentRole &&
 					initialState?.authorizedPermissions?.length &&
 					!initialState?.authorizedPermissions?.find((item) => item.rsname === currentRole)
