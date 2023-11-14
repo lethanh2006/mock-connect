@@ -10,6 +10,7 @@ declare module PhanHoi {
 		noiDungTraLoiPhanHoi: string;
 		daTraLoiPhanHoi: boolean;
 		maChuyenVien: string;
+    tenDonVi: string;
 		loaiPhanHoi: ELoaiPhanHoi;
 		maDonVi?: string;
 		donVi?: ToChucNhanSu.IDonVi;
