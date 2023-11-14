@@ -101,70 +101,112 @@ const FormTraLoiKhaoSat = () => {
 	const onFinish = async (values: any) => {
 		setLoadingform(true);
 		const danhSachTraLoi: BieuMau.TraLoiRecord[] = [];
-		record?.danhSachKhoi?.forEach((khoi, indexKhoi) => {
-			khoi?.danhSachCauHoi?.forEach(async (cauHoi, indexCauHoi) => {
-				let traLoi: BieuMau.TraLoiRecord = {
-					idCauHoi: cauHoi._id,
-					listLuaChon: [],
-					listLuaChonBang: [],
-					luaChonTuyenTinh: 0,
-					traLoiText: '',
-				};
-				if (cauHoi.loai === 'UploadFile') {
-					const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
-					traLoi = { ...traLoi, listUrlFile: listUrlFile };
-				} else if (cauHoi.loai === 'SingleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
-					traLoi = { ...traLoi, listLuaChon: [values[`${indexKhoi}||${indexCauHoi}`]] };
-				else if (cauHoi.loai === 'MultipleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
-					traLoi = { ...traLoi, listLuaChon: values[`${indexKhoi}||${indexCauHoi}`] };
-				else if (cauHoi.loai === 'Text') traLoi = { ...traLoi, traLoiText: values[`${indexKhoi}||${indexCauHoi}`] };
-				else if (cauHoi.loai === 'GridMultipleChoice' || cauHoi.loai === 'GridSingleChoice')
-					traLoi = {
-						...traLoi,
-						listLuaChonBang: listLuaChonBang?.[indexKhoi || indexCauHoi] ?? [],
+		if (record?.danhSachKhoi) {
+			for (let indexKhoi = 0; indexKhoi < record?.danhSachKhoi?.length; indexKhoi++) {
+				for (
+					let indexCauHoi = 0;
+					indexCauHoi < record?.danhSachKhoi?.[indexKhoi]?.danhSachCauHoi?.length;
+					indexCauHoi++
+				) {
+					const cauHoi = record?.danhSachKhoi?.[indexKhoi]?.danhSachCauHoi?.[indexCauHoi];
+					let traLoi: BieuMau.TraLoiRecord = {
+						idCauHoi: cauHoi._id,
+						listLuaChon: [],
+						listLuaChonBang: [],
+						luaChonTuyenTinh: 0,
+						traLoiText: '',
 					};
-				else if (cauHoi.loai === 'NumericRange') {
-					traLoi = { ...traLoi, luaChonTuyenTinh: values[`${indexKhoi}||${indexCauHoi}`] };
+					if (cauHoi.loai === 'UploadFile') {
+						const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
+						traLoi = { ...traLoi, listUrlFile: listUrlFile };
+					} else if (cauHoi.loai === 'SingleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
+						traLoi = { ...traLoi, listLuaChon: [values[`${indexKhoi}||${indexCauHoi}`]] };
+					else if (cauHoi.loai === 'MultipleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
+						traLoi = { ...traLoi, listLuaChon: values[`${indexKhoi}||${indexCauHoi}`] };
+					else if (cauHoi.loai === 'Text') traLoi = { ...traLoi, traLoiText: values[`${indexKhoi}||${indexCauHoi}`] };
+					else if (cauHoi.loai === 'GridMultipleChoice' || cauHoi.loai === 'GridSingleChoice')
+						traLoi = {
+							...traLoi,
+							listLuaChonBang: listLuaChonBang?.[indexKhoi || indexCauHoi] ?? [],
+						};
+					else if (cauHoi.loai === 'NumericRange') {
+						traLoi = { ...traLoi, luaChonTuyenTinh: values[`${indexKhoi}||${indexCauHoi}`] };
+					}
+					// else if (cauHoi.loai === 'UploadFile') {
+					//   const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
+					//   console.log('listUrlFile',listUrlFile)
+					//   traLoi = { ...traLoi, listUrlFile:listUrlFile };
+					// }
+					danhSachTraLoi.push(traLoi);
 				}
-				// else if (cauHoi.loai === 'UploadFile') {
-				//   const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
-				//   console.log('listUrlFile',listUrlFile)
-				//   traLoi = { ...traLoi, listUrlFile:listUrlFile };
-				// }
-				danhSachTraLoi.push(traLoi);
-			});
-		});
+			}
+		}
+
+		// record?.danhSachKhoi?.forEach((khoi, indexKhoi) => {
+		// 	khoi?.danhSachCauHoi?.forEach(async (cauHoi, indexCauHoi) => {
+		// 		let traLoi: BieuMau.TraLoiRecord = {
+		// 			idCauHoi: cauHoi._id,
+		// 			listLuaChon: [],
+		// 			listLuaChonBang: [],
+		// 			luaChonTuyenTinh: 0,
+		// 			traLoiText: '',
+		// 		};
+		// 		if (cauHoi.loai === 'UploadFile') {
+		// 			const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
+		// 			traLoi = { ...traLoi, listUrlFile: listUrlFile };
+		// 		} else if (cauHoi.loai === 'SingleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
+		// 			traLoi = { ...traLoi, listLuaChon: [values[`${indexKhoi}||${indexCauHoi}`]] };
+		// 		else if (cauHoi.loai === 'MultipleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
+		// 			traLoi = { ...traLoi, listLuaChon: values[`${indexKhoi}||${indexCauHoi}`] };
+		// 		else if (cauHoi.loai === 'Text') traLoi = { ...traLoi, traLoiText: values[`${indexKhoi}||${indexCauHoi}`] };
+		// 		else if (cauHoi.loai === 'GridMultipleChoice' || cauHoi.loai === 'GridSingleChoice')
+		// 			traLoi = {
+		// 				...traLoi,
+		// 				listLuaChonBang: listLuaChonBang?.[indexKhoi || indexCauHoi] ?? [],
+		// 			};
+		// 		else if (cauHoi.loai === 'NumericRange') {
+		// 			traLoi = { ...traLoi, luaChonTuyenTinh: values[`${indexKhoi}||${indexCauHoi}`] };
+		// 		}
+		// 		// else if (cauHoi.loai === 'UploadFile') {
+		// 		//   const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
+		// 		//   console.log('listUrlFile',listUrlFile)
+		// 		//   traLoi = { ...traLoi, listUrlFile:listUrlFile };
+		// 		// }
+		// 		danhSachTraLoi.push(traLoi);
+		// 	});
+		// });
 
 		console.log('danh', danhSachTraLoi);
 		// Promise.all()
 
-		setTimeout(() => {
-			console.log('daaaaa', danhSachTraLoi);
-			traLoiBieuMauModel({
-				idKhaoSat: record?._id ?? '',
-				danhSachTraLoi,
-				idDot: recordDot?._id ?? '',
-			})
-				.then(() => {
-					getDotMeModel();
-					setVisibleForm(false);
-					setLoadingform(false);
-				})
-				.catch((er) => console.log(er))
-				.finally(() => {
-					setLoadingform(false);
-				});
-		}, 2000);
-		// await traLoiBieuMauModel({
-		// 	idKhaoSat: record?._id ?? '',
-		// 	danhSachTraLoi,
-		// 	idDot: recordDot?._id ?? '',
-		// })
-		// 	.then(() => {
-		// 		getDotMeModel();
-		// 		setVisibleForm(false);
+		// setTimeout(() => {
+		// 	console.log('daaaaa', danhSachTraLoi);
+		// 	traLoiBieuMauModel({
+		// 		idKhaoSat: record?._id ?? '',
+		// 		danhSachTraLoi,
+		// 		idDot: recordDot?._id ?? '',
 		// 	})
-		// 	.catch((er) => console.log(er));
+		// 		.then(() => {
+		// 			getDotMeModel();
+		// 			setVisibleForm(false);
+		// 			setLoadingform(false);
+		// 		})
+		// 		.catch((er) => console.log(er))
+		// 		.finally(() => {
+		// 			setLoadingform(false);
+		// 		});
+		// }, 2000);
+		await traLoiBieuMauModel({
+			idKhaoSat: record?._id ?? '',
+			danhSachTraLoi,
+			idDot: recordDot?._id ?? '',
+		})
+			.then(() => {
+				getDotMeModel();
+				setVisibleForm(false);
+        setLoadingform(false)
+			})
+			.catch((er) => console.log(er));
 	};
 
 	return (
