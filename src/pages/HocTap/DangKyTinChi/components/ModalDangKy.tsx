@@ -1,10 +1,10 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import {
-	type ELoaiHocPhanDangKyTinChi,
+	ColorTrangThaiDangKyTinChi,
 	ETrangThaiDangKyTinChi,
 	LoaiHocPhanDangKyTinChi,
-	ColorTrangThaiDangKyTinChi,
+	type ELoaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { SyncOutlined } from '@ant-design/icons';
@@ -37,7 +37,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			.map((item, index) =>
 				postDangKyTinChiModel({
 					phieuDktcId: phieuDangKy?._id ?? '',
-					dangKy: { maLopHocPhan: item.ten },
+					dangKy: { lopHocPhanId: item._id },
 				})
 					.then(() =>
 						// Nếu thành công

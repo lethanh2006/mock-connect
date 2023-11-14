@@ -22,7 +22,9 @@ export default {
 	'menu.HocTap.DangKyTinChi': 'Đăng ký học phần',
 	'menu.HocTap.LopHocPhan': 'Lớp học phần',
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
+	'menu.HocTap.XetHocVu': 'Cảnh báo học tập, thôi học ',
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
+	'menu.HocTap.QuyetDinh': 'Bảo lưu, thôi học',
 	'menu.CongNo': 'Công nợ',
 
 	// DRL
@@ -45,4 +47,6 @@ export default {
 	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
 
 	// GIANG VIEN
+
+	'menu.KhaiBaoQuyTrinh': 'Khai báo quy trình',
 };

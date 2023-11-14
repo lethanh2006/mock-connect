@@ -23,7 +23,7 @@ const TinTucDashboard = () => {
 
 	const renderTinTuc = () => {
 		if (!loading && isEmpty(danhSachTinTuc)) {
-			return <Empty style={{ paddingTop: 32 }} description='Chưa có tin tức' />;
+			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ paddingTop: 32 }} description='Chưa có tin tức' />;
 		}
 		return (
 			<>

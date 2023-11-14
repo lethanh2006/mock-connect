@@ -27,9 +27,11 @@ const FormGuiPhanHoi = () => {
 			setFormSubmiting(false);
 
 			values.loaiPhanHoi = ELoaiPhanHoi.KHAC;
-			postModel(values)
-				.then(() => getModel(undefined, undefined, undefined, undefined, undefined, 'me'))
-				.catch((er) => console.log(er));
+			postModel(values,()=>{
+        getModel(undefined, undefined, undefined, undefined, undefined, 'me')
+      })
+				// .then(() => getModel(undefined, undefined, undefined, undefined, undefined, 'me'))
+				// .catch((er) => console.log(er));
 		} catch (er) {
 			console.log(er);
 		} finally {
@@ -47,7 +49,7 @@ const FormGuiPhanHoi = () => {
 				>
 					<Input.TextArea rows={4} placeholder='Nhập nội dung' />
 				</Form.Item>
-				<Form.Item name='maDonVi' label='Bộ phận xử lý'>
+				<Form.Item name='maDonVi' label='Bộ phận xử lý' rules={[...rules.required]}>
 					<SelectDonVi allowClear />
 				</Form.Item>
 

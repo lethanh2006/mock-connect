@@ -17,7 +17,7 @@ const FileChoice = (props: {
       <UploadFile
         otherProps={{
           multiple: true,
-          accept: 'image/*, .pdf, .doc, .docx',
+          accept: 'image/*, .pdf, .doc, .docx, .png, .jpg',
           showUploadList: { showDownloadIcon: false },
         }}
         maxCount={5}
