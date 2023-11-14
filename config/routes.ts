@@ -133,6 +133,11 @@
 				path: './xet-tot-nghiep',
 				component: './HocTap/XetTotNghiep',
 			},
+			{
+				name: 'QuyetDinh',
+				path: './quyet-dinh-bao-luu-thoi-hoc',
+				component: './HocTap/BaoLuuThoiHoc',
+			},
 		],
 	},
 
@@ -207,28 +212,28 @@
 			},
 		],
 	},
-  {
-    name: 'KhaiBaoQuyTrinh',
-    icon: 'AuditOutlined',
-    path: './khai-bao-quy-trinh',
-    // component: './KhaiBaoQuyTrinh',
-    routes: [
-      {
-        name: 'DanhSachQuyTrinh',
-        icon: 'AuditOutlined',
-        hideInMenu: true,
-        path: './',
-        component: './KhaiBaoQuyTrinh',
-      },
-      {
-        name: 'KhaiBaoQuyTrinh',
-        icon: 'AuditOutlined',
-        hideInMenu: true,
-        path: './:id',
-        component: './KhaiBaoQuyTrinh/ViewQuyTrinh/$id',
-      },
-    ],
-  },
+	{
+		name: 'KhaiBaoQuyTrinh',
+		icon: 'AuditOutlined',
+		path: './khai-bao-quy-trinh',
+		// component: './KhaiBaoQuyTrinh',
+		routes: [
+			{
+				name: 'DanhSachQuyTrinh',
+				icon: 'AuditOutlined',
+				hideInMenu: true,
+				path: './',
+				component: './KhaiBaoQuyTrinh',
+			},
+			{
+				name: 'KhaiBaoQuyTrinh',
+				icon: 'AuditOutlined',
+				hideInMenu: true,
+				path: './:id',
+				component: './KhaiBaoQuyTrinh/ViewQuyTrinh/$id',
+			},
+		],
+	},
 	{
 		name: 'CongNo',
 		icon: 'TransactionOutlined',
