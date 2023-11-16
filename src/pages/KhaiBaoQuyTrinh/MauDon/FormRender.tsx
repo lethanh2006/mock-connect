@@ -461,15 +461,15 @@ const FormRender = (props: {
 					<Form.Item
 						name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
 						label={cauHinh.ten}
-						rules={rule}
+						rules={cauHinh?.readonly ? [] : rule}
 					>
-						<Input readOnly />
+						<Input disabled={cauHinh?.readonly} />
 					</Form.Item>
 				) : (
 					<Form.Item
 						name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
 						label={cauHinh.ten}
-						rules={rule}
+						rules={cauHinh?.readonly ? [] : rule}
 					>
 						{component}
 					</Form.Item>
