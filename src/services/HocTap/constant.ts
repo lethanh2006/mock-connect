@@ -40,3 +40,15 @@ export const colorYKienCoVanHocTap: Record<EYKienCoVanHocTap, string> = {
 	[EYKienCoVanHocTap.CHUA_CO_Y_KIEN]: 'blue',
 	[EYKienCoVanHocTap.KHONG_DONG_Y]: 'orange',
 };
+
+export enum ETrangThaiSinhVienBLTH {
+	CHO_DUYET = 'Chờ duyệt',
+	DA_RA_QUYET_DINH = 'Đã ra quyết định',
+	KHONG_DUYET = 'Không duyệt',
+}
+
+export const colorTrangThaiSinhVienBLTH: Record<ETrangThaiSinhVienBLTH, string> = {
+	[ETrangThaiSinhVienBLTH.CHO_DUYET]: 'green',
+	[ETrangThaiSinhVienBLTH.DA_RA_QUYET_DINH]: 'blue',
+	[ETrangThaiSinhVienBLTH.KHONG_DUYET]: 'orange',
+};
