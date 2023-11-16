@@ -463,7 +463,7 @@ const FormRender = (props: {
 						label={cauHinh.ten}
 						rules={rule}
 					>
-						<Input readOnly />
+						<Input  disabled={cauHinh?.readonly} />
 					</Form.Item>
 				) : (
 					<Form.Item
