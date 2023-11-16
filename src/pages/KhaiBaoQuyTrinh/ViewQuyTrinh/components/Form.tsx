@@ -89,7 +89,7 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 			>
 				<Row gutter={[12, 0]}>
 					{currentFormKhaiBao?.cauHinhLoaiHinh?.map((item) => (
-						<FormRender formValues={formValues} key={item.ma} cauHinh={item} />
+						<FormRender formValues={formValues} key={item.ma} cauHinh={item} form={form} />
 					))}
 				</Row>
 				{!current?.maBoPhanXuLy && (
