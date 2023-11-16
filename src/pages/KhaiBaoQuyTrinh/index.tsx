@@ -165,7 +165,7 @@ const KhaiBaoQuyTrinhPage = () => {
 			// onCell: onCellQuyTrinh,
 		},
 		{
-			title: 'Trả phi',
+			title: 'Trả phí',
 			dataIndex: ['cauTrucThanhToan', 'yeuCauTraPhi'],
 			width: 150,
 			align: 'center',
@@ -185,18 +185,27 @@ const KhaiBaoQuyTrinhPage = () => {
 			fixed: 'right',
 			render: (recordVal: QuyTrinh.IRecord) => (
 				<>
-					<Tooltip title='Xem chi tiết'>
+					<Tooltip title='Sử dụng quy trình'>
+            <Popconfirm
+              title="Bạn có muốn sử dụng quy trình trên?"
+              onConfirm={()=>{
+                handleRedirect(recordVal?._id);
+              }}
+              okText="Sủ dụng"
+              cancelText="Đóng"
+            >
 						<Button
 							onClick={() => {
 								// setQuyTrinhIdSelect(recordVal?._id);
 								// setVisibleForm(true);
-								handleRedirect(recordVal?._id);
+								// handleRedirect(recordVal?._id);
 							}}
 							type='primary'
 							// icon={<EyeOutlined />}
 						>
 							Sử dụng
 						</Button>
+            </Popconfirm>
 					</Tooltip>
 				</>
 			),
