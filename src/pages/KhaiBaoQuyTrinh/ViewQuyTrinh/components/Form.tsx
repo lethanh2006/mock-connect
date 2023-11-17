@@ -6,6 +6,7 @@ import { useModel } from 'umi';
 import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import rules from '@/utils/rules';
 import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
+import { DoiTuongDieuPhoi } from '@/services/KhaiBaoQuyTrinh/constants';
 
 const FormQuyTrinh = (props: { getData: () => void }) => {
 	const {
@@ -22,6 +23,7 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 	const [loadingKhaiBao, setLoadingKhaiBao] = useState<boolean>(false);
 	const [danhSachDonViXuLy, setDanhSachDonViXuLy] = useState<KhaiBaoQuyTrinh.IDonViXuLy[]>([]);
 	const [form] = Form.useForm();
+	const doiTuongDieuPhoi = dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === current?.ma)?.doiTuongDieuPhoi;
 	const onFinish = async (values: any) => {
 		try {
 			setLoadingKhaiBao(true);
@@ -92,7 +94,7 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 						<FormRender formValues={formValues} key={item.ma} cauHinh={item} form={form} />
 					))}
 				</Row>
-				{!current?.maBoPhanXuLy && (
+				{!current?.maBoPhanXuLy && doiTuongDieuPhoi === DoiTuongDieuPhoi.NGUOI_CU_THE && (
 					<Form.Item name={'maBoPhanXuLy'} label={'Bộ phận xử lý'} rules={[...rules.required]}>
 						<Select
 							style={{ width: '100%' }}

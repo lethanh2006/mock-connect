@@ -3,7 +3,7 @@ import { history, useModel } from 'umi';
 import FormKhaiBao from './components/FormKhaiBao';
 import type { IColumn } from '@/components/Table/typing';
 import { Button, Card, Checkbox, message, Modal, Popconfirm, Tabs, Tag, Tooltip } from 'antd';
-import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import {DeleteOutlined, DownloadOutlined, EyeOutlined} from '@ant-design/icons';
 import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import SelectQuyTrinh from '@/pages/KhaiBaoQuyTrinh/QuyTrinh/Select';
 import moment from 'moment';
@@ -143,6 +143,15 @@ const KhaiBaoQuyTrinhPage = () => {
 							icon={<EyeOutlined />}
 						/>
 					</Tooltip>
+          <Tooltip title='Tải mẫu đơn'>
+            <Button
+              onClick={() => {
+              message.warn('Chức năng đang phát triển')
+              }}
+              type='link'
+              icon={<DownloadOutlined />}
+            />
+          </Tooltip>
 					<Tooltip title='Xóa'>
 						<Popconfirm
 							onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
