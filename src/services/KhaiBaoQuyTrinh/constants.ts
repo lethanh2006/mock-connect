@@ -29,3 +29,6 @@ export const MapColorTrangThaiTiepNhanDon = {
 	[TrangThaiTiepNhanDon.DA_CHINH_SUA_LAI]: '#0dcaf0',
 	[TrangThaiTiepNhanDon.KHONG_DUYET]: '#dc3545',
 };
+export enum DoiTuongDieuPhoi {
+  NGUOI_CU_THE = 'Người dùng',
+  TO_CHUC = 'Bộ phận xử lý',}
