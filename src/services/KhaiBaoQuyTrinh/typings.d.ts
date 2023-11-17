@@ -45,6 +45,7 @@ declare module KhaiBaoQuyTrinh {
 		ghiChu: string;
 		maBoPhanXuLy: string;
 		trangThaiTiepNhan: string;
+    doiTuongDieuPhoi: string;
 		coKhaiBao: boolean;
 		daDienThongTin: boolean;
 		laBuocHienTai: boolean;
