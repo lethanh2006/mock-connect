@@ -10,17 +10,19 @@ const SelectNamHoc = (props: {
 	onChange?: (val?: string) => void;
 	multiple?: boolean;
 	allowClear?: boolean;
-	selectTen?: boolean;
 	style?: React.CSSProperties;
-	condition?: Partial<NamHoc.IRecord>;
 	isSetRecord?: boolean;
+	hasDefault?: boolean;
 }) => {
-	const { value, onChange, multiple, selectTen, allowClear, style, condition, isSetRecord } = props;
+	const { value, onChange, multiple, allowClear, style, isSetRecord, hasDefault } = props;
 	const { danhSach, getAllModel, visibleForm } = useModel('daotao.namhoc');
 
 	useEffect(() => {
-		if (!visibleForm) getAllModel(isSetRecord, undefined, condition);
-	}, [visibleForm, JSON.stringify(condition)]);
+		if (!visibleForm)
+			getAllModel(isSetRecord, { thoiGianBatDau: -1 }).then((res) => {
+				if (hasDefault && onChange) onChange(res?.[0]?._id);
+			});
+	}, [visibleForm]);
 
 	return (
 		<Select
@@ -30,13 +32,14 @@ const SelectNamHoc = (props: {
 			onChange={onChange}
 			options={danhSach.map((item) => ({
 				key: item._id,
-				value: selectTen ? item?.ten : item._id,
+				value: item._id,
 				label: item.ten,
 			}))}
 			showSearch
 			optionFilterProp='label'
 			placeholder='Chọn năm học'
 			style={{ width: '100%', ...style }}
+			showArrow
 		/>
 	);
 };
