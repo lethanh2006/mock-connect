@@ -26,6 +26,7 @@ export default {
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
 	'menu.HocTap.QuyetDinh': 'Bảo lưu, thôi học',
 	'menu.CongNo': 'Công nợ',
+	'menu.KeHoachNamHoc': 'Kế hoạch năm học',
 
 	// DRL
 

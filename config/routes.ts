@@ -85,6 +85,13 @@
 		],
 	},
 
+	{
+		name: 'KeHoachNamHoc',
+		path: '/ke-hoach-nam-hoc',
+		icon: 'TableOutlined',
+		component: './DaoTao/KeHoachNamHoc',
+	},
+
 	// MENU SINH VIEN
 	{
 		name: 'HocTap',
