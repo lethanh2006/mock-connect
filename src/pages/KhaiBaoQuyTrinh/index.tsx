@@ -3,7 +3,7 @@ import { history, useModel } from 'umi';
 import FormKhaiBao from './components/FormKhaiBao';
 import type { IColumn } from '@/components/Table/typing';
 import { Button, Card, Checkbox, message, Modal, Popconfirm, Tabs, Tag, Tooltip } from 'antd';
-import {DeleteOutlined, DownloadOutlined, EyeOutlined} from '@ant-design/icons';
+import {ArrowRightOutlined, DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons';
 import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import SelectQuyTrinh from '@/pages/KhaiBaoQuyTrinh/QuyTrinh/Select';
 import moment from 'moment';
@@ -12,13 +12,21 @@ import { MapColorTrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants'
 import { useState } from 'react';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
+import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 
 const KhaiBaoQuyTrinhPage = () => {
 	const { page, limit, condition, deleteModel, setCondition, getDataKhaiBaoUser, visibleForm, setVisibleForm } =
 		useModel('quytrinh.khaibaoquytrinh');
-	const { getModel: getQuyTrinh, setLoading } = useModel('quytrinh.quytrinh');
+	const {
+		getModel: getQuyTrinh,
+		setLoading,
+		record: recordQuyTrinh,
+		setRecord: setRecordQuyTrinh,
+	} = useModel('quytrinh.quytrinh');
 	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
+	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
+	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 	// const { getAllModel: getAllDanhMucChung } = useModel('quanlykhoahoc.danhmuc.chung');
 
 	const onCell = (recordVal: KhaiBaoQuyTrinh.IRecord) => ({
@@ -52,12 +60,12 @@ const KhaiBaoQuyTrinhPage = () => {
 			setLoading(false);
 		}
 	};
-	const onCellQuyTrinh = (recordVal: QuyTrinh.IRecord) => ({
-		onClick: async () => {
-			handleRedirect(recordVal?._id);
-		},
-		style: { cursor: 'pointer' },
-	});
+	// const onCellQuyTrinh = (recordVal: QuyTrinh.IRecord) => ({
+	// 	onClick: async () => {
+	// 		handleRedirect(recordVal?._id??'');
+	// 	},
+	// 	style: { cursor: 'pointer' },
+	// });
 
 	// useEffect(() => {
 	// 	getAllDanhMucChung();
@@ -143,15 +151,15 @@ const KhaiBaoQuyTrinhPage = () => {
 							icon={<EyeOutlined />}
 						/>
 					</Tooltip>
-          <Tooltip title='Tải mẫu đơn'>
-            <Button
-              onClick={() => {
-              message.warn('Chức năng đang phát triển')
-              }}
-              type='link'
-              icon={<DownloadOutlined />}
-            />
-          </Tooltip>
+					<Tooltip title='Tải mẫu đơn'>
+						<Button
+							onClick={() => {
+								message.warn('Chức năng đang phát triển');
+							}}
+							type='link'
+							icon={<DownloadOutlined />}
+						/>
+					</Tooltip>
 					<Tooltip title='Xóa'>
 						<Popconfirm
 							onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
@@ -195,26 +203,32 @@ const KhaiBaoQuyTrinhPage = () => {
 			render: (recordVal: QuyTrinh.IRecord) => (
 				<>
 					<Tooltip title='Sử dụng quy trình'>
-            <Popconfirm
-              title="Bạn có muốn sử dụng quy trình trên?"
-              onConfirm={()=>{
-                handleRedirect(recordVal?._id);
-              }}
-              okText="Sủ dụng"
-              cancelText="Đóng"
-            >
-						<Button
-							onClick={() => {
-								// setQuyTrinhIdSelect(recordVal?._id);
-								// setVisibleForm(true);
-								// handleRedirect(recordVal?._id);
+						<Popconfirm
+							title='Bạn có muốn sử dụng quy trình trên?'
+							onConfirm={() => {
+								if (recordVal?.danhSachCauHinhThongTinChung && recordVal?.danhSachCauHinhThongTinChung?.length > 0) {
+									setRecordThongTinChung(recordVal?.danhSachCauHinhThongTinChung);
+									setRecordQuyTrinh(recordVal);
+									setVisibleThongTinChung(true);
+								} else {
+									handleRedirect(recordVal?._id ?? '');
+								}
 							}}
-							type='primary'
-							// icon={<EyeOutlined />}
+							okText='Sủ dụng'
+							cancelText='Đóng'
 						>
-							Sử dụng
-						</Button>
-            </Popconfirm>
+							<Button
+								onClick={() => {
+									// setQuyTrinhIdSelect(recordVal?._id);
+									// setVisibleForm(true);
+									// handleRedirect(recordVal?._id);
+								}}
+								type='primary'
+								// icon={<EyeOutlined />}
+							>
+								Sử dụng
+							</Button>
+						</Popconfirm>
 					</Tooltip>
 				</>
 			),
@@ -272,6 +286,28 @@ const KhaiBaoQuyTrinhPage = () => {
 				destroyOnClose
 			>
 				<FormKhaiBao quyTrinhId={quyTrinhIdSelect} />
+			</Modal>
+			<Modal
+				title={'Thông tin chung'}
+				width={1000}
+				visible={visibleThongTinChung}
+				onCancel={() => setVisibleThongTinChung(false)}
+				footer={
+					<>
+						<Button
+							icon={<ArrowRightOutlined />}
+							type={'primary'}
+							onClick={() => {
+								handleRedirect(recordQuyTrinh?._id ?? '');
+							}}
+						>
+							Tiếp theo
+						</Button>
+					</>
+				}
+				destroyOnClose
+			>
+				<ViewThongTinChung dataThongTinChung={recordThongTinChung} />
 			</Modal>
 		</Card>
 	);
