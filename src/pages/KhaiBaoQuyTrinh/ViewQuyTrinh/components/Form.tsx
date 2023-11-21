@@ -23,7 +23,7 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 	const [loadingKhaiBao, setLoadingKhaiBao] = useState<boolean>(false);
 	const [danhSachDonViXuLy, setDanhSachDonViXuLy] = useState<KhaiBaoQuyTrinh.IDonViXuLy[]>([]);
 	const [form] = Form.useForm();
-	const doiTuongDieuPhoi = dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === current?.ma)?.doiTuongDieuPhoi;
+	const doiTuongDieuPhoi = dataQuyTrinh?.quyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === current?.ma)?.doiTuongDieuPhoi;
 	const onFinish = async (values: any) => {
 		try {
 			setLoadingKhaiBao(true);

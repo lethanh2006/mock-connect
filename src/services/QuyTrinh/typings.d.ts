@@ -3,6 +3,7 @@ import { TruongThongTin } from '@/services/QuanLyKhoaHocV2/LoaiHinhNCKH/typings'
 
 declare module QuyTrinh {
 	export interface IRecord {
+		_id?: string;
 		ten: string;
 		ghiChu: string;
 		moTa: string;
@@ -10,8 +11,10 @@ declare module QuyTrinh {
 		maTruongHienThi: string;
 		choPhepGuiNhieuLan: true;
 		danhSachFormKhaiBao: IMauDon[];
+    danhSachFormTiepNhan: IMauDon[];
 		danhSachBoPhanXuLy: IBoPhanXuLy[];
 		boPhanChiuTrachNhiem: IBoPhanXuLy;
+    danhSachCauHinhThongTinChung: IDanhSachCauHinhThongTinChung[];
 		danhSachBuocXuLy: IBuocXuLy[];
 		cauTrucThanhToan: {
 			ten: string;
@@ -25,6 +28,12 @@ declare module QuyTrinh {
 		};
 		[key: string]: any;
 	}
+  export interface IDanhSachCauHinhThongTinChung {
+    ten: string;
+    noiDung: string;
+    html: boolean;
+    [key: string]: any;
+  }
 	export interface IMauDon {
 		ten: string;
 		ma: string;
