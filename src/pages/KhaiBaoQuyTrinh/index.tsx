@@ -1,18 +1,19 @@
 import TableBase from '@/components/Table';
-import { history, useModel } from 'umi';
-import FormKhaiBao from './components/FormKhaiBao';
 import type { IColumn } from '@/components/Table/typing';
-import { Button, Card, Checkbox, message, Modal, Popconfirm, Tabs, Tag, Tooltip } from 'antd';
-import {ArrowRightOutlined, DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import SelectQuyTrinh from '@/pages/KhaiBaoQuyTrinh/QuyTrinh/Select';
-import moment from 'moment';
+import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
+import { ELoaiDanhMucChung } from '@/services/KhaiBaoQuyTrinh/DanhMuc/constants';
 import type { TrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
 import { MapColorTrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
-import { useState } from 'react';
-import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
-import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
+import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
+import type { QuyTrinh } from '@/services/QuyTrinh/typings';
+import { ArrowRightOutlined, DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons';
+import { Button, Card, Checkbox, Modal, Popconfirm, Tabs, Tag, Tooltip, message } from 'antd';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { history, useModel } from 'umi';
+import FormKhaiBao from './components/FormKhaiBao';
 
 const KhaiBaoQuyTrinhPage = () => {
 	const { page, limit, condition, deleteModel, setCondition, getDataKhaiBaoUser, visibleForm, setVisibleForm } =
@@ -27,7 +28,11 @@ const KhaiBaoQuyTrinhPage = () => {
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
-	// const { getAllModel: getAllDanhMucChung } = useModel('quanlykhoahoc.danhmuc.chung');
+	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
+
+	useEffect(() => {
+		getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
+	}, []);
 
 	const onCell = (recordVal: KhaiBaoQuyTrinh.IRecord) => ({
 		onClick: () => {
