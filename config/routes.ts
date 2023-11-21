@@ -224,7 +224,7 @@
 		name: 'KhaiBaoSucKhoe',
 		icon: 'HeartOutlined',
 		path: '/khai-bao-suc-khoe',
-		component: './KhaiBaoSucKhoe',
+		component: './TienIch/KhaiBaoSucKhoe',
 	},
 
 	{
