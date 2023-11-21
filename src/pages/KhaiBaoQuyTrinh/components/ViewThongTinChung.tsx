@@ -31,20 +31,20 @@ const ViewThongTinChung = (props: { dataThongTinChung: QuyTrinh.IDanhSachCauHinh
 					</Descriptions>
 				</>
 			)}
-			<div style={{marginTop:16}}>
-        {dataHtml?.length > 0 && (
-          <>
-            {dataHtml?.map((val) => {
-              return (
-                <>
-                  <div style={{ fontWeight: 'bold' }}>{val?.ten}</div>
-                  <div dangerouslySetInnerHTML={{__html:val?.noiDung}}></div>
-                </>
-              );
-            })}
-          </>
-        )}
-      </div>
+			<div style={{ marginTop: 16 }}>
+				{dataHtml?.length > 0 && (
+					<>
+						{dataHtml?.map((val) => {
+							return (
+								<>
+									<div style={{ fontWeight: 'bold' }}>{val?.ten}</div>
+									<div dangerouslySetInnerHTML={{ __html: val?.noiDung }} />
+								</>
+							);
+						})}
+					</>
+				)}
+			</div>
 		</>
 	);
 };
