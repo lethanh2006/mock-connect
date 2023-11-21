@@ -219,6 +219,14 @@
 			},
 		],
 	},
+
+	{
+		name: 'KhaiBaoSucKhoe',
+		icon: 'HeartOutlined',
+		path: '/khai-bao-suc-khoe',
+		component: './KhaiBaoSucKhoe',
+	},
+
 	{
 		name: 'KhaiBaoQuyTrinh',
 		icon: 'AuditOutlined',
