@@ -12,24 +12,22 @@ const KhaiBaoSuKhoePage = () => {
 
 	const columns: IColumn<KhaiBaoSucKhoe.IRecord>[] = [
 		{
-			title: 'Mã sinh viên',
-			dataIndex: 'maSinhVien',
-			width: 120,
-			align: 'center',
-			filterType: 'string',
+			title: 'Học kỳ',
+			dataIndex: 'dotKhamSucKhoeId',
+			width: 150,
+			render: (val, rec) => rec.dotKhamSucKhoe.tenHocKy,
 		},
 		{
-			title: 'Họ tên',
-			dataIndex: 'hoTen',
-			width: 170,
-			filterType: 'string',
+			title: 'Tên đợt',
+			dataIndex: 'dotKhamSucKhoeId',
+			width: 180,
+			render: (val, rec) => rec.dotKhamSucKhoe.ten,
 		},
 		{
-			title: 'Sức khỏe',
+			title: 'Tình trạng sức khỏe',
 			dataIndex: 'tinhTrangSucKhoe',
 			align: 'center',
-			width: 170,
-
+			width: 120,
 			render: (val, rec) => <Tag color={colorETinhTrangSucKhoe[val as ETinhTrangSucKhoe]}>{val}</Tag>,
 		},
 	];
