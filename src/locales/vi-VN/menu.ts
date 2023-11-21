@@ -50,4 +50,5 @@ export default {
 	// GIANG VIEN
 
 	'menu.KhaiBaoQuyTrinh': 'Khai báo quy trình',
+	'menu.KhaiBaoSucKhoe': 'Khai báo sức khỏe',
 };
