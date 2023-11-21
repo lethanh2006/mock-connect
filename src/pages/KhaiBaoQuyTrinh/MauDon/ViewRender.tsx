@@ -3,8 +3,8 @@ import { tienVietNam } from '@/utils/utils';
 import { Tag } from 'antd';
 import moment from 'moment';
 import TableStaticData from '@/components/Table/TableStaticData';
-import {LoaiHinh} from "@/services/QuyTrinh/LoaiHinh/typing";
-import {EKieuDuLieu} from "@/services/QuyTrinh/LoaiHinh/constants";
+import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
+import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 
 const ViewRender = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
@@ -140,7 +140,7 @@ const ViewRender = (props: {
 		// 				...buildFilter(item, danhSach),
 		// 			});
 		// 		});
-    //
+		//
 		// 	value = (
 		// 		<TableStaticData
 		// 			otherProps={{ pagination: false }}
@@ -150,7 +150,7 @@ const ViewRender = (props: {
 		// 			columns={columnsDs}
 		// 		/>
 		// 	);
-    //
+		//
 		// 	break;
 
 		default:
