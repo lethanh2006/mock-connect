@@ -13,7 +13,6 @@ const QuyTrinhView = ({
 }) => {
 	const { current, setCurrent, setDataQuyTrinh, dataQuyTrinh, setCurrentFormKhaiBao } =
 		useModel('quytrinh.khaibaoquytrinh');
-	const { getAllModel } = useModel('quytrinh.danhmuc');
 	const [loadingForm, setLoadingForm] = useState<boolean>(false);
 
 	const getData = async (ids: string) => {
@@ -40,9 +39,6 @@ const QuyTrinhView = ({
 	useEffect(() => {
 		getData(id);
 	}, [id]);
-	useEffect(() => {
-		getAllModel();
-	}, []);
 	return (
 		<>
 			{dataQuyTrinh && current && (
