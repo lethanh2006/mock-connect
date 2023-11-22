@@ -52,5 +52,6 @@ export default {
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
 	'menu.KhaiBaoQuyTrinh.LichSu': 'Lịch sử',
-	'menu.KhaiBaoSucKhoe': 'Khai báo sức khỏe',
+
+	'menu.KhaiBaoSucKhoe': 'Tình trạng sức khoẻ',
 };
