@@ -254,6 +254,12 @@
 		],
 	},
 	{
+		name: 'KhaiBaoSucKhoe',
+		icon: 'HeartOutlined',
+		path: '/khai-bao-suc-khoe',
+		component: './TienIch/KhaiBaoSucKhoe',
+	},
+	{
 		name: 'CongNo',
 		icon: 'TransactionOutlined',
 		path: '/cong-no',
