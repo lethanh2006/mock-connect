@@ -6,12 +6,6 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 	const { visibleForm, setVisibleForm } = props;
 	const { record } = useModel('noingoaitru.khaibao');
 
-	// const handleEdit = () => {
-	//   setRecord(record);
-	//   setVisibleForm(true);
-	//   setEdit(true);
-	// };
-
 	return (
 		<Modal
 			visible={visibleForm}
@@ -48,14 +42,26 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 							{record?.thongTinSinhVien?.cmtCccd ?? 'Chưa khai báo'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Quê quán' span={24}>
-							{record?.thongTinSinhVien?.queQuan?.soNhaTenDuong} - {record?.thongTinSinhVien?.queQuan?.tenPhuongXa} -{' '}
-							{record?.thongTinSinhVien?.queQuan?.tenQuanHuyen} - {record?.thongTinSinhVien?.queQuan?.tenTinh}
+							{record?.thongTinSinhVien?.queQuan ? (
+								<>
+									{record?.thongTinSinhVien?.queQuan?.soNhaTenDuong} - {record?.thongTinSinhVien?.queQuan?.tenPhuongXa}{' '}
+									- {record?.thongTinSinhVien?.queQuan?.tenQuanHuyen} - {record?.thongTinSinhVien?.queQuan?.tenTinh}
+								</>
+							) : (
+								'Chưa khai báo'
+							)}
 						</Descriptions.Item>
 						<Descriptions.Item label='Hộ khẩu thường trú' span={24}>
-							{record?.thongTinSinhVien?.hoKhauThuongTru?.soNhaTenDuong} -{' '}
-							{record?.thongTinSinhVien?.hoKhauThuongTru?.tenPhuongXa} -{' '}
-							{record?.thongTinSinhVien?.hoKhauThuongTru?.tenQuanHuyen} -{' '}
-							{record?.thongTinSinhVien?.hoKhauThuongTru?.tenTinh}
+							{record?.thongTinSinhVien?.hoKhauThuongTru ? (
+								<>
+									{record?.thongTinSinhVien?.hoKhauThuongTru?.soNhaTenDuong} -{' '}
+									{record?.thongTinSinhVien?.hoKhauThuongTru?.tenPhuongXa} -{' '}
+									{record?.thongTinSinhVien?.hoKhauThuongTru?.tenQuanHuyen} -{' '}
+									{record?.thongTinSinhVien?.hoKhauThuongTru?.tenTinh}
+								</>
+							) : (
+								'Chưa khai báo'
+							)}
 						</Descriptions.Item>
 						{record?.dangONoiTru ? (
 							<>
@@ -66,8 +72,14 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 						) : (
 							<>
 								<Descriptions.Item label='Nơi ở ngoại trú' span={24}>
-									{record?.noiONgoaiTru?.soNhaTenDuong} - {record?.noiONgoaiTru?.tenPhuongXa} -{' '}
-									{record?.noiONgoaiTru?.tenQuanHuyen} - {record?.noiONgoaiTru?.tenTinh}
+									{record?.noiONgoaiTru ? (
+										<>
+											{record?.noiONgoaiTru?.soNhaTenDuong} - {record?.noiONgoaiTru?.tenPhuongXa} -{' '}
+											{record?.noiONgoaiTru?.tenQuanHuyen} - {record?.noiONgoaiTru?.tenTinh}
+										</>
+									) : (
+										'Chưa khai báo'
+									)}
 								</Descriptions.Item>
 							</>
 						)}
@@ -81,16 +93,24 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 			<Descriptions labelStyle={{ fontWeight: 'bold' }} column={2}>
 				<Descriptions.Item label='Họ tên'>{record?.thongTinNguoiThan?.hoTen ?? 'Chưa khai báo'}</Descriptions.Item>
 				<Descriptions.Item label='Ngày sinh'>
-					{moment(record?.thongTinNguoiThan?.namSinh).format('DD/MM/YYYY') ?? 'Chưa khai báo'}
+					{record?.thongTinNguoiThan?.namSinh
+						? moment(record?.thongTinNguoiThan?.namSinh).format('DD/MM/YYYY')
+						: 'Chưa khai báo'}
 				</Descriptions.Item>
 				<Descriptions.Item label='Số điện thoại'>
 					{record?.thongTinNguoiThan?.soDienThoai ?? 'Chưa khai báo'}
 				</Descriptions.Item>
 				<Descriptions.Item label='Địa chỉ'>
-					{record?.thongTinNguoiThan?.diaChiThuongTru?.soNhaTenDuong} -{' '}
-					{record?.thongTinNguoiThan?.diaChiThuongTru?.tenPhuongXa} -{' '}
-					{record?.thongTinNguoiThan?.diaChiThuongTru?.tenQuanHuyen} -{' '}
-					{record?.thongTinNguoiThan?.diaChiThuongTru?.tenTinh}
+					{record?.thongTinNguoiThan?.diaChiThuongTru ? (
+						<>
+							{record?.thongTinNguoiThan?.diaChiThuongTru?.soNhaTenDuong} -{' '}
+							{record?.thongTinNguoiThan?.diaChiThuongTru?.tenPhuongXa} -{' '}
+							{record?.thongTinNguoiThan?.diaChiThuongTru?.tenQuanHuyen} -{' '}
+							{record?.thongTinNguoiThan?.diaChiThuongTru?.tenTinh}
+						</>
+					) : (
+						'Chưa khai báo'
+					)}
 				</Descriptions.Item>
 				<Descriptions.Item label='Nghề nghiệp'>
 					{record?.thongTinNguoiThan?.ngheNghiep ?? 'Chưa khai báo'}
