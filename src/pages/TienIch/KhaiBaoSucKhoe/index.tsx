@@ -39,7 +39,7 @@ const KhaiBaoSuKhoePage = () => {
 				getData={getData}
 				dependencies={[page, limit]}
 				modelName='tienich.khaibaosuckhoe'
-				title='Khai báo sức khỏe sinh viên'
+				title='Tình trạng sức khoẻ'
 				buttons={{ create: false }}
 			/>
 		</>
