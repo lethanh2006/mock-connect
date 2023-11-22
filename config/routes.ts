@@ -221,6 +221,19 @@
 	},
 
 	{
+		name: 'NoiNgoaiTru',
+		icon: 'DeploymentUnitOutlined',
+		path: '/noi-ngoai-tru',
+		routes: [
+			{
+				name: 'KhaiBao',
+				path: 'khai-bao',
+				component: './NoiNgoaiTru',
+			},
+		],
+	},
+
+	{
 		name: 'KhaiBaoSucKhoe',
 		icon: 'HeartOutlined',
 		path: '/khai-bao-suc-khoe',

@@ -51,4 +51,8 @@ export default {
 
 	'menu.KhaiBaoQuyTrinh': 'Khai báo quy trình',
 	'menu.KhaiBaoSucKhoe': 'Tình trạng sức khoẻ',
+
+	//Nội trú, ngoại trú
+	'menu.NoiNgoaiTru': 'Nội - Ngoại trú',
+	'menu.NoiNgoaiTru.KhaiBao': 'Khai báo',
 };
