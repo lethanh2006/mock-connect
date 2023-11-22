@@ -79,7 +79,7 @@ const KhaiBaoQuyTrinhPage = () => {
 	};
 	const columns: IColumn<KhaiBaoQuyTrinh.IRecord>[] = [
 		{
-			title: 'Tên quy trình',
+			title: 'Tên dịch vụ',
 			dataIndex: 'quyTrinhId',
 			width: 150,
 			// filterType: 'customselect',
