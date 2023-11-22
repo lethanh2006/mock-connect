@@ -49,6 +49,9 @@ export default {
 
 	// GIANG VIEN
 
-	'menu.KhaiBaoQuyTrinh': 'Khai báo quy trình',
+	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
+	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
+	'menu.KhaiBaoQuyTrinh.LichSu': 'Lịch sử',
+
 	'menu.KhaiBaoSucKhoe': 'Tình trạng sức khoẻ',
 };

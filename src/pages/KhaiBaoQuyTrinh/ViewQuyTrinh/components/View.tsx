@@ -4,7 +4,7 @@ import { MapColorTrangThaiTiepNhanDon, TrangThaiKhaiBao } from '@/services/KhaiB
 import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import { LeftOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Descriptions, Row, Spin, Steps, Tag } from 'antd';
+import {Button, Card, Col, Descriptions, Popconfirm, Row, Spin, Steps, Tag} from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
@@ -107,16 +107,44 @@ const View = (props: Iprops) => {
 			<Card title={dataQuyTrinh?.quyTrinh?.ten} bordered={false}>
 				<Spin spinning={type ? false : loadingForm}>
 					{!type && (
-						<Button
-							style={{ marginBottom: 16 }}
-							icon={<LeftOutlined />}
-							type={'link'}
-							onClick={() => {
-								history.push('/khai-bao-quy-trinh');
-							}}
-						>
-							Quay lại
-						</Button>
+						<>
+							{current?.coKhaiBao ? (
+								<>
+									<Button
+										style={{ marginBottom: 16 }}
+										icon={<LeftOutlined />}
+										type={'link'}
+										onClick={() => {
+											history.push('/khai-bao-quy-trinh/lich-su');
+										}}
+									>
+										Quay lại
+									</Button>
+								</>
+							) : (
+								<>
+									<Popconfirm
+										title='Bạn chưa khai báo đơn, có muốn quay lại?'
+										onConfirm={() => {
+											history.push('/khai-bao-quy-trinh/lich-su');
+										}}
+										okText='Đồng ý'
+										cancelText='Đóng'
+									>
+										<Button
+											style={{ marginBottom: 16 }}
+											icon={<LeftOutlined />}
+											type={'link'}
+											// onClick={() => {
+											//   history.push('/khai-bao-quy-trinh/lich-su');
+											// }}
+										>
+											Quay lại
+										</Button>
+									</Popconfirm>
+								</>
+							)}
+						</>
 					)}
 
 					<Row gutter={[16, 16]}>
@@ -144,9 +172,12 @@ const View = (props: Iprops) => {
 							</Steps>
 						</Col>
 						<Col xs={24} sm={24} md={18} lg={18} xl={18}>
-							<div style={{ marginBottom: 16 }}>
-								<ThongTinTiepNhan data={current as KhaiBaoQuyTrinh.IBuocXuLy} modelName={modalName} />
-							</div>
+							{current?.coKhaiBao && (
+								<div style={{ marginBottom: 16 }}>
+									<ThongTinTiepNhan data={current as KhaiBaoQuyTrinh.IBuocXuLy} modelName={modalName} />
+								</div>
+							)}
+
 							{current?.coKhaiBao ? (
 								<div>
 									<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
