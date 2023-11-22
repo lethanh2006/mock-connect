@@ -1,15 +1,15 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
+import { Button, message, Modal, Popconfirm, Tag, Tooltip } from 'antd';
+import {ArrowRightOutlined, DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons';
+import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import SelectQuyTrinh from '@/pages/KhaiBaoQuyTrinh/QuyTrinh/Select';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import { ELoaiDanhMucChung } from '@/services/KhaiBaoQuyTrinh/DanhMuc/constants';
 import type { TrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
 import { MapColorTrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
 import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
-import { ArrowRightOutlined, DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons';
-import { Button, Card, Checkbox, Modal, Popconfirm, Tabs, Tag, Tooltip, message } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
@@ -19,10 +19,8 @@ const KhaiBaoQuyTrinhPage = () => {
 	const { page, limit, condition, deleteModel, setCondition, getDataKhaiBaoUser, visibleForm, setVisibleForm } =
 		useModel('quytrinh.khaibaoquytrinh');
 	const {
-		getModel: getQuyTrinh,
 		setLoading,
 		record: recordQuyTrinh,
-		setRecord: setRecordQuyTrinh,
 	} = useModel('quytrinh.quytrinh');
 	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
@@ -81,7 +79,7 @@ const KhaiBaoQuyTrinhPage = () => {
 	};
 	const columns: IColumn<KhaiBaoQuyTrinh.IRecord>[] = [
 		{
-			title: 'Tên quy trình',
+			title: 'Tên dịch vụ',
 			dataIndex: 'quyTrinhId',
 			width: 150,
 			// filterType: 'customselect',
@@ -178,110 +176,70 @@ const KhaiBaoQuyTrinhPage = () => {
 			),
 		},
 	];
-	const columns2: IColumn<QuyTrinh.IRecord>[] = [
-		{
-			title: 'Tên quy trình',
-			dataIndex: 'ten',
-			width: 250,
-			filterType: 'string',
-			// onCell: onCellQuyTrinh,
-		},
-		{
-			title: 'Trả phí',
-			dataIndex: ['cauTrucThanhToan', 'yeuCauTraPhi'],
-			width: 150,
-			align: 'center',
-			render: (val) => {
-				return (
-					<>
-						<Checkbox checked={val} />
-					</>
-				);
-			},
-			// onCell: onCellQuyTrinh,
-		},
-		{
-			title: 'Thao tác',
-			align: 'center',
-			width: 90,
-			fixed: 'right',
-			render: (recordVal: QuyTrinh.IRecord) => (
-				<>
-					<Tooltip title='Sử dụng quy trình'>
-						<Popconfirm
-							title='Bạn có muốn sử dụng quy trình trên?'
-							onConfirm={() => {
-								if (recordVal?.danhSachCauHinhThongTinChung && recordVal?.danhSachCauHinhThongTinChung?.length > 0) {
-									setRecordThongTinChung(recordVal?.danhSachCauHinhThongTinChung);
-									setRecordQuyTrinh(recordVal);
-									setVisibleThongTinChung(true);
-								} else {
-									handleRedirect(recordVal?._id ?? '');
-								}
-							}}
-							okText='Sủ dụng'
-							cancelText='Đóng'
-						>
-							<Button
-								onClick={() => {
-									// setQuyTrinhIdSelect(recordVal?._id);
-									// setVisibleForm(true);
-									// handleRedirect(recordVal?._id);
-								}}
-								type='primary'
-								// icon={<EyeOutlined />}
-							>
-								Sử dụng
-							</Button>
-						</Popconfirm>
-					</Tooltip>
-				</>
-			),
-		},
-	];
-	const getDataQuyTrinh = () => {
-		getQuyTrinh(undefined, undefined, undefined, undefined, undefined, 'page/Quản lý đào tạo - Sinh viên');
-	};
 	return (
-		<Card>
-			<Tabs defaultActiveKey='1'>
-				<Tabs.TabPane tab='Đơn dịch vụ' key='1'>
-					<TableBase
-						buttons={{ create: false, filter: false }}
-						modelName={'quytrinh.quytrinh'}
-						columns={columns2}
-						getData={getDataQuyTrinh}
-					/>
-				</Tabs.TabPane>
-				<Tabs.TabPane tab='Lịch sử gửi đơn' key='2'>
-					<TableBase
-						modelName={'quytrinh.khaibaoquytrinh'}
-						columns={columns}
-						// Form={FormKhaiBao}
-						getData={getData}
-						dependencies={[page, limit, condition]}
-						// title={'Khai báo quy trình'}
-						destroyModal
-						buttons={{ create: false }}
-						otherButtons={[
-							<>
-								<SelectQuyTrinh
-									loadData={false}
-									allowClear
-									style={{ width: 220, marginBottom: 8 }}
-									onChange={(val: any) => {
-										setCondition({
-											...condition,
-											quyTrinhId: val,
-										});
-									}}
-								/>
-							</>,
-						]}
-					/>
-				</Tabs.TabPane>
-			</Tabs>
-
+		<div>
+			{/*<Tabs defaultActiveKey='1'>*/}
+			{/*	<Tabs.TabPane tab='Đơn dịch vụ' key='1'>*/}
+			{/*		<TableBase*/}
+			{/*			buttons={{ create: false, filter: false }}*/}
+			{/*			modelName={'quytrinh.quytrinh'}*/}
+			{/*			columns={columns2}*/}
+			{/*			getData={getDataQuyTrinh}*/}
+			{/*		/>*/}
+			{/*	</Tabs.TabPane>*/}
+			{/*	<Tabs.TabPane tab='Lịch sử gửi đơn' key='2'>*/}
+			{/*		<TableBase*/}
+			{/*			modelName={'quytrinh.khaibaoquytrinh'}*/}
+			{/*			columns={columns}*/}
+			{/*			// Form={FormKhaiBao}*/}
+			{/*			getData={getData}*/}
+			{/*			dependencies={[page, limit, condition]}*/}
+			{/*			// title={'Khai báo quy trình'}*/}
+			{/*			destroyModal*/}
+			{/*			buttons={{ create: false }}*/}
+			{/*			otherButtons={[*/}
+			{/*				<>*/}
+			{/*					<SelectQuyTrinh*/}
+			{/*						loadData={false}*/}
+			{/*						allowClear*/}
+			{/*						style={{ width: 220, marginBottom: 8 }}*/}
+			{/*						onChange={(val: any) => {*/}
+			{/*							setCondition({*/}
+			{/*								...condition,*/}
+			{/*								quyTrinhId: val,*/}
+			{/*							});*/}
+			{/*						}}*/}
+			{/*					/>*/}
+			{/*				</>,*/}
+			{/*			]}*/}
+			{/*		/>*/}
+			{/*	</Tabs.TabPane>*/}
+			{/*</Tabs>*/}
+      <TableBase
+        modelName={'quytrinh.khaibaoquytrinh'}
+        columns={columns}
+        // Form={FormKhaiBao}
+        getData={getData}
+        dependencies={[page, limit, condition]}
+        title={'Lịch sử khai báo'}
+        destroyModal
+        buttons={{ create: false }}
+        otherButtons={[
+          <>
+            <SelectQuyTrinh
+              loadData={false}
+              allowClear
+              style={{ width: 220, marginBottom: 8 }}
+              onChange={(val: any) => {
+                setCondition({
+                  ...condition,
+                  quyTrinhId: val,
+                });
+              }}
+            />
+          </>,
+        ]}
+      />
 			<Modal
 				title={'Chọn đợt khai báo'}
 				width={500}
@@ -314,7 +272,7 @@ const KhaiBaoQuyTrinhPage = () => {
 			>
 				<ViewThongTinChung dataThongTinChung={recordThongTinChung} />
 			</Modal>
-		</Card>
+		</div>
 	);
 };
 export default KhaiBaoQuyTrinhPage;
