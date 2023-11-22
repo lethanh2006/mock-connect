@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 const SelectDonViHanhChinh = (props: {
 	form: FormInstance<any>;
-	suffix?: 'NoiSinh' | 'ThuongTru' | 'QueQuan';
+	suffix?: 'NoiSinh' | 'ThuongTru' | 'QueQuan' | 'KhaiBao' | 'NguoiThan';
 	listTinh?: DonViHanhChinh.IRecord[];
 	hasSoNha?: boolean;
 	disabled?: boolean;
