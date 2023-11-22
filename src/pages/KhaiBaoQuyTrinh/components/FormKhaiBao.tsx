@@ -30,7 +30,7 @@ const FormKhaiBao = (props: { quyTrinhId?: string }) => {
 			<Form onFinish={onFinish} layout={'vertical'}>
 				<Row gutter={16}>
 					<Col span={24}>
-						<Form.Item name={'quyTrinhId'} label={'Quy trình'} initialValue={props?.quyTrinhId}>
+						<Form.Item name={'quyTrinhId'} label={'Dịch vụ'} initialValue={props?.quyTrinhId}>
 							<SelectQuyTrinh
 								loadData={false}
 								disabled={!!props?.quyTrinhId}
