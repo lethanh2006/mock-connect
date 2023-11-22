@@ -119,7 +119,7 @@ const View = (props: Iprops) => {
 							icon={<LeftOutlined />}
 							type={'link'}
 							onClick={() => {
-								history.push('/khai-bao-quy-trinh');
+								history.push('/khai-bao-quy-trinh/lich-su');
 							}}
 						>
 							Quay lại
