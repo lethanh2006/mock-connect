@@ -40,7 +40,7 @@ const SelectQuyTrinh = (props: {
 			style={style}
 			showSearch
 			optionFilterProp='label'
-			placeholder={placeholder ?? 'Chọn quy trình'}
+			placeholder={placeholder ?? 'Chọn dịch vụ'}
 		/>
 	);
 };
