@@ -10,5 +10,7 @@ export default {
   'menu.DanhMuc.LoaiPhongBan': 'Loại phòng ban',
   'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
 
-  'menu.KhaiBaoQuyTrinh': 'Khai báo quy trình',
+  'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
+  'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
+  'menu.KhaiBaoQuyTrinh.LichSu': 'Lịch sử',
 };
