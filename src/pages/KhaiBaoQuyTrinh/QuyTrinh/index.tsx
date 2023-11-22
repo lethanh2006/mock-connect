@@ -3,11 +3,12 @@ import { history, useModel } from 'umi';
 import type { IColumn } from '@/components/Table/typing';
 import { Button, Checkbox, message, Modal, Popconfirm, Tooltip } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import FormKhaiBao from '@/pages/KhaiBaoQuyTrinh/components/FormKhaiBao';
+import { ELoaiDanhMucChung } from '@/services/KhaiBaoQuyTrinh/DanhMuc/constants';
 
 const QuyTrinhPage = () => {
 	const { visibleForm, setVisibleForm } = useModel('quytrinh.khaibaoquytrinh');
@@ -21,7 +22,11 @@ const QuyTrinhPage = () => {
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
-	// const { getAllModel: getAllDanhMucChung } = useModel('quanlykhoahoc.danhmuc.chung');
+	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
+
+	useEffect(() => {
+		getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
+	}, []);
 
 	const handleRedirect = async (quyTrinhId: string) => {
 		try {
