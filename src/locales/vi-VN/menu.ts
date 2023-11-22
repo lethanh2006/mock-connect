@@ -26,6 +26,7 @@ export default {
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
 	'menu.HocTap.QuyetDinh': 'Bảo lưu, thôi học',
 	'menu.CongNo': 'Công nợ',
+	'menu.KeHoachNamHoc': 'Kế hoạch năm học',
 
 	// DRL
 
@@ -51,4 +52,5 @@ export default {
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
 	'menu.KhaiBaoQuyTrinh.LichSu': 'Lịch sử',
+	'menu.KhaiBaoSucKhoe': 'Khai báo sức khỏe',
 };
