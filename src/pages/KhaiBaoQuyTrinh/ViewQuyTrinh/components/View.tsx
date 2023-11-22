@@ -1,12 +1,9 @@
 import ThongTinTiepNhan from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/thongTinTiepNhan';
-import {
-	MapColorTrangThaiTiepNhanDon,
-	TrangThaiKhaiBao,
-	TrangThaiTiepNhanDon,
-} from '@/services/KhaiBaoQuyTrinh/constants';
+import type { TrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
+import { MapColorTrangThaiTiepNhanDon, TrangThaiKhaiBao } from '@/services/KhaiBaoQuyTrinh/constants';
 import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
-import {  LeftOutlined } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Descriptions, Row, Spin, Steps, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
@@ -30,11 +27,7 @@ const View = (props: Iprops) => {
 	const { dataQuyTrinh, current, loadingForm, modalName, FormModal, formProps, type } = props;
 	const model = useModel(modalName);
 	// const { record: recordQuyTrinh } = useModel('quanlykhoahoc.quytrinh.quytrinh');
-	const {
-		setCurrent,
-		setCurrentFormKhaiBao,
-		currentFormKhaiBao,
-	} = model;
+	const { setCurrent, setCurrentFormKhaiBao, currentFormKhaiBao } = model;
 
 	// const { setRecord: setRecordSanPham } = useModel('quanlykhoahoc.sanphamnckh');
 	const [currentStep, setCurrentStep] = useState<number>(0);
@@ -169,7 +162,11 @@ const View = (props: Iprops) => {
 															item?.giaTriLienQuan?.includes(
 																dataForm?.thongTinKhaiBao?.[item?.truongThongTinLienQuan],
 															)))) ? (
-													<Descriptions.Item key={item.ma} span={item?.colspan ? item.colspan / 4 : 6} label={item.ten}>
+													<Descriptions.Item
+														key={item.ma}
+														span={item?.colspan ? item.colspan / 4 : 6}
+														label={<div style={{ maxWidth: 300 }}>{item.ten}</div>}
+													>
 														<ViewRender
 															cauHinh={item}
 															recordSanPham={
@@ -189,7 +186,7 @@ const View = (props: Iprops) => {
 										.map((item) => (
 											<>
 												<Descriptions>
-													<Descriptions.Item span={6} label={item.ten}>
+													<Descriptions.Item span={6} label={<div style={{ maxWidth: 300 }}>{item.ten}</div>}>
 														{' '}
 													</Descriptions.Item>
 												</Descriptions>
