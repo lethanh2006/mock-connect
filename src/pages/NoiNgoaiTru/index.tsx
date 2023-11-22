@@ -26,7 +26,7 @@ const NoiNgoaiTruPage = () => {
 			title: 'Kỳ học',
 			dataIndex: 'dotKhaiBaoId',
 			width: 150,
-			render: (val, rec) => rec.dotKhaiBao?.maHocKy,
+			render: (val, rec) => rec.dotKhaiBao?.hocKy?.ten,
 			onCell,
 		},
 		{
