@@ -31,7 +31,7 @@ const ViewThongTinChung = (props: { dataThongTinChung: QuyTrinh.IDanhSachCauHinh
 			{/*		</Descriptions>*/}
 			{/*	</>*/}
 			{/*)}*/}
-			<div style={{ marginTop: 16 }}>
+			<div>
 				{props?.dataThongTinChung?.length > 0 && (
 					<>
 						{props?.dataThongTinChung?.map((val) => {
