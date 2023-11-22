@@ -122,7 +122,7 @@ const QuyTrinhPage = () => {
 		},
 	];
 	const getDataQuyTrinh = () => {
-		getQuyTrinh(undefined, undefined, undefined, undefined, undefined, 'page/Quản lý đào tạo - Sinh viên');
+		getQuyTrinh(undefined, undefined, undefined, undefined, undefined, 'page/SINH_VIEN');
 	};
 	return (
 		<>
