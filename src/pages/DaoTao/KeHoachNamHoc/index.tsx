@@ -1,4 +1,4 @@
-import { Card, Divider, Empty, Spin } from 'antd';
+import { Alert, Card, Divider, Empty, Spin } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -60,7 +60,7 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 						<Empty description={<>Chưa có kế hoạch năm học!</>} />
 					</div>
 				</Spin>
-			) : (
+			) : recNam.daChotKeHoachNamHoc ? (
 				<>
 					<Divider>Chi tiết kế hoạch năm học theo từng ngành đào tạo</Divider>
 					<Spin spinning={loading}>
@@ -89,6 +89,10 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 
 					<DanhSachHoatDongTuan />
 				</>
+			) : (
+				<div style={{ marginTop: 12 }}>
+					<Alert description={<>Chưa chốt kế hoạch năm học</>} showIcon type='warning' />
+				</div>
 			)}
 		</div>
 	);
