@@ -16,5 +16,11 @@ declare module NamHoc {
 		isKhoiTaoKeHoach: boolean;
 		createdAt?: string;
 		updatedAt?: string;
+
+		//Kế hoạch năm học
+		ngayBdLayYKien: Date;
+		ngayKtLayYKien: Date;
+		daChotKeHoachNamHoc: boolean;
+		url: string | null;
 	}
 }
