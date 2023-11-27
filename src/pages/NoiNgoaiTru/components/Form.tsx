@@ -7,9 +7,8 @@ import { EPhanLoaiCuTru, ETrangThaiKhaiBaoNoiNgoaiTru } from '@/services/NoiNgoa
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Alert, Button, Card, Col, Form, Input, Radio, Row, Select } from 'antd';
+import { Button, Card, Col, Form, Input, Radio, Row, Select } from 'antd';
 import { useWatch } from 'antd/lib/form/Form';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -27,9 +26,6 @@ const FormKhaiBao = (props: any) => {
 	const { record: recSinhVien, getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const [listTinh, setListTinh] = useState<DonViHanhChinh.IRecord[]>();
 	const dangONoiTru = useWatch(['dangONoiTru'], form);
-	const thoiGianDotKhaiBao =
-		moment().isAfter(recKhaiBao?.dotKhaiBao?.thoiGianBatDau) &&
-		moment().isBefore(recKhaiBao?.dotKhaiBao?.thoiGianKetThuc);
 
 	const getData = () => getAllModel(undefined, undefined, undefined, undefined, 'me');
 
@@ -77,12 +73,6 @@ const FormKhaiBao = (props: any) => {
 		>
 			<Form onFinish={onFinish} form={form} layout='vertical'>
 				<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
-					{!thoiGianDotKhaiBao ? (
-						<Col xs={24} style={{ marginBottom: 12 }}>
-							<Alert description='Ngoài thời than khai báo nội trú, ngoại trú' type='warning' showIcon />
-						</Col>
-					) : null}
-
 					<Col span={24}>
 						<div className='ant-descriptions-title'>Thông tin sinh viên</div>
 					</Col>
@@ -239,7 +229,7 @@ const FormKhaiBao = (props: any) => {
 				</Row>
 
 				<div className='form-footer'>
-					<Button disabled={!thoiGianDotKhaiBao} loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button loading={formSubmiting} htmlType='submit' type='primary'>
 						{recKhaiBao?.trangThai === ETrangThaiKhaiBaoNoiNgoaiTru.CHUA_KHAI_BAO ? 'Khai báo' : 'Chỉnh sửa'}
 					</Button>
 					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
