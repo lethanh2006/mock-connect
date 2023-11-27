@@ -14,7 +14,7 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 			width={1000}
 			title='Thông tin khai báo nội trú, ngoại trú'
 		>
-			<Divider orientation='left' orientationMargin='0'>
+			<Divider orientation='left' orientationMargin='0' style={{ marginTop: -10 }}>
 				Thông tin sinh viên
 			</Divider>
 			<Row gutter={16}>

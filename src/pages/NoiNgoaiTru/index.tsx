@@ -26,7 +26,7 @@ const NoiNgoaiTruPage = () => {
 			title: 'Kỳ học',
 			dataIndex: 'dotKhaiBaoId',
 			width: 150,
-			render: (val, rec) => rec.dotKhaiBao?.hocKy?.ten,
+			render: (val, rec) => rec.dotKhaiBao?.hocKy?.ten ?? rec.dotKhaiBao?.maHocKy,
 			onCell,
 		},
 		{
@@ -85,11 +85,32 @@ const NoiNgoaiTruPage = () => {
 			render: (val, rec) => (
 				<>
 					{rec.trangThai === ETrangThaiKhaiBaoNoiNgoaiTru.CHUA_KHAI_BAO ? (
-						<ButtonExtend tooltip='Khai báo' type='primary' className='btn-success' onClick={() => handleEdit(rec)}>
+						<ButtonExtend
+							disabled={
+								!(
+									moment().isAfter(rec?.dotKhaiBao?.thoiGianBatDau) &&
+									moment().isBefore(rec?.dotKhaiBao?.thoiGianKetThuc)
+								)
+							}
+							tooltip='Khai báo'
+							type='primary'
+							className='btn-success'
+							onClick={() => handleEdit(rec)}
+						>
 							Khai báo
 						</ButtonExtend>
 					) : (
-						<ButtonExtend tooltip='Cập nhật' type='primary' onClick={() => handleEdit(rec)}>
+						<ButtonExtend
+							disabled={
+								!(
+									moment().isAfter(rec?.dotKhaiBao?.thoiGianBatDau) &&
+									moment().isBefore(rec?.dotKhaiBao?.thoiGianKetThuc)
+								)
+							}
+							tooltip='Cập nhật'
+							type='primary'
+							onClick={() => handleEdit(rec)}
+						>
 							Cập nhật
 						</ButtonExtend>
 					)}
