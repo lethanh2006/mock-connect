@@ -188,37 +188,37 @@
 		],
 	},
 
-	{
-		name: 'DichVuHanhChinh',
-		icon: 'AuditOutlined',
-		path: '/dich-vu-hanh-chinh',
-		routes: [
-			{
-				path: './',
-				component: './DichVuMotCuaV2/SinhVien/LichSu',
-				hideInMenu: true,
-				// access: 'sinhVien',
-			},
-			{
-				name: 'TaoDon',
-				path: './tao-don',
-				// access: 'sinhVien',
-				hideInMenu: true,
-				routes: [
-					{
-						path: './',
-						component: './DichVuMotCuaV2/SinhVien/GuiDon',
-						extract: true,
-					},
-					{
-						path: './:id',
-						component: './DichVuMotCuaV2/SinhVien/GuiDon/$id',
-						extract: true,
-					},
-				],
-			},
-		],
-	},
+	// {
+	// 	name: 'DichVuHanhChinh',
+	// 	icon: 'AuditOutlined',
+	// 	path: '/dich-vu-hanh-chinh',
+	// 	routes: [
+	// 		{
+	// 			path: './',
+	// 			component: './DichVuMotCuaV2/SinhVien/LichSu',
+	// 			hideInMenu: true,
+	// 			// access: 'sinhVien',
+	// 		},
+	// 		{
+	// 			name: 'TaoDon',
+	// 			path: './tao-don',
+	// 			// access: 'sinhVien',
+	// 			hideInMenu: true,
+	// 			routes: [
+	// 				{
+	// 					path: './',
+	// 					component: './DichVuMotCuaV2/SinhVien/GuiDon',
+	// 					extract: true,
+	// 				},
+	// 				{
+	// 					path: './:id',
+	// 					component: './DichVuMotCuaV2/SinhVien/GuiDon/$id',
+	// 					extract: true,
+	// 				},
+	// 			],
+	// 		},
+	// 	],
+	// },
 
 	{
 		name: 'NoiNgoaiTru',
