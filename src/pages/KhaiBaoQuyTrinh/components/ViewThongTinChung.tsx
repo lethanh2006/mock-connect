@@ -22,15 +22,6 @@ const ViewThongTinChung = (props: { dataThongTinChung: QuyTrinh.IDanhSachCauHinh
 	}, [props?.dataThongTinChung]);
 	return (
 		<>
-			{/*{dataBasic?.length > 0 && (*/}
-			{/*	<>*/}
-			{/*		<Descriptions bordered column={1}>*/}
-			{/*			{dataBasic?.map((val) => {*/}
-			{/*				return <Descriptions.Item label={val?.ten}>{val?.noiDung}</Descriptions.Item>;*/}
-			{/*			})}*/}
-			{/*		</Descriptions>*/}
-			{/*	</>*/}
-			{/*)}*/}
 			<div>
 				{props?.dataThongTinChung?.length > 0 && (
 					<>
@@ -38,7 +29,7 @@ const ViewThongTinChung = (props: { dataThongTinChung: QuyTrinh.IDanhSachCauHinh
 							return (
 								<>
 									<div style={{ fontWeight: 'bold' }}>{val?.ten}</div>
-									<div dangerouslySetInnerHTML={{ __html: val?.noiDung }}></div>
+									<div dangerouslySetInnerHTML={{ __html: val?.noiDung }} />
 								</>
 							);
 						})}
