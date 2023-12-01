@@ -3,7 +3,7 @@ import type { IColumn } from '@/components/Table/typing';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import SelectQuyTrinh from '@/pages/KhaiBaoQuyTrinh/QuyTrinh/Select';
 
-import type { TrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
+import { TrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
 import { MapColorTrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
 import { ELoaiDanhMucChung } from '@/services/KhaiBaoQuyTrinh/DanhMuc/constants';
 import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
@@ -18,7 +18,7 @@ import {
 	DownloadOutlined,
 	EyeOutlined,
 } from '@ant-design/icons';
-import { Button, message, Modal, Popconfirm, Tag, Tooltip } from 'antd';
+import { Button, Dropdown, Menu, message, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
@@ -26,8 +26,19 @@ import ThongTinThanhToan from '../TaiChinh/ChiTietThu/components/ThongTinThanhTo
 import FormKhaiBao from './components/FormKhaiBao';
 
 const KhaiBaoQuyTrinhPage = () => {
-	const { page, limit, condition, deleteModel, setCondition, getDataKhaiBaoUser, visibleForm, setVisibleForm } =
-		useModel('quytrinh.khaibaoquytrinh');
+	const {
+		page,
+		limit,
+		condition,
+		deleteModel,
+		setCondition,
+		getDataKhaiBaoUser,
+		visibleForm,
+		setVisibleForm,
+		exportMauDonTheoBuocModel,
+		exportMauTraKetQuaTheoBuocModel,
+		loading,
+	} = useModel('quytrinh.khaibaoquytrinh');
 	const { setLoading, record: recordQuyTrinh } = useModel('quytrinh.quytrinh');
 	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
 
@@ -156,49 +167,73 @@ const KhaiBaoQuyTrinhPage = () => {
 			align: 'center',
 			width: 150,
 			fixed: 'right',
-			render: (recordVal: KhaiBaoQuyTrinh.IRecord) => (
-				<>
-					<Tooltip title='Xem chi tiết'>
-						<Button
-							onClick={() => {
-								history.push(`/khai-bao-quy-trinh/${recordVal?._id}`);
-							}}
-							type='link'
-							icon={<EyeOutlined />}
-						/>
-					</Tooltip>
-					{recordVal.identityCode && (
-						<Tooltip title={<div style={{ maxWidth: 100 }}>Thông tin thanh toán</div>}>
+			render: (recordVal: KhaiBaoQuyTrinh.IRecord) => {
+				const buocHienTai = recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1];
+				const formKhai = recordVal?.quyTrinh?.danhSachFormKhaiBao?.find(
+					(item) => item.ma === buocHienTai?.maFormKhaiBao,
+				);
+				const formTiepNhan = recordVal?.quyTrinh?.danhSachFormTiepNhan?.find(
+					(item) => item.ma === buocHienTai?.maFormTiepNhan,
+				);
+
+				return (
+					<>
+						<Tooltip title='Xem chi tiết'>
 							<Button
 								onClick={() => {
-									getChiTietThuByIdentityCodeModel(recordVal.identityCode);
-									setVisibleModal(true);
+									history.push(`/khai-bao-quy-trinh/${recordVal?._id}`);
 								}}
 								type='link'
-								icon={<DollarCircleOutlined />}
+								icon={<EyeOutlined />}
 							/>
 						</Tooltip>
-					)}
-					<Tooltip title='Tải mẫu đơn'>
-						<Button
-							onClick={() => {
-								message.warn('Chức năng đang phát triển');
-							}}
-							type='link'
-							icon={<DownloadOutlined />}
-						/>
-					</Tooltip>
-					<Tooltip title='Xóa'>
-						<Popconfirm
-							onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
-							title='Bạn có chắc chắn muốn xóa?'
-							placement='topLeft'
-						>
-							<Button danger type='link' icon={<DeleteOutlined />} />
-						</Popconfirm>
-					</Tooltip>
-				</>
-			),
+						{recordVal.identityCode && (
+							<Tooltip title={<div style={{ maxWidth: 100 }}>Thông tin thanh toán</div>}>
+								<Button
+									onClick={() => {
+										getChiTietThuByIdentityCodeModel(recordVal.identityCode);
+										setVisibleModal(true);
+									}}
+									type='link'
+									icon={<DollarCircleOutlined />}
+								/>
+							</Tooltip>
+						)}
+						{(formKhai?.fileId || formTiepNhan?.fileId) && (
+							<Tooltip title='Tải mẫu đơn'>
+								<Dropdown
+									overlay={
+										<Menu
+											onClick={(val) => {
+												if (val.key === 'MAU_DON')
+													exportMauDonTheoBuocModel(recordVal._id, buocHienTai.ma, formKhai?.ten ?? '');
+												else exportMauTraKetQuaTheoBuocModel(recordVal._id, buocHienTai.ma, formTiepNhan?.ten ?? '');
+											}}
+										>
+											{formKhai?.fileId && <Menu.Item key={'MAU_DON'}>Mẫu đơn</Menu.Item>}
+											{formTiepNhan?.fileId && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.DA_DUYET && (
+												<Menu.Item key={'MAU_TRA_KET_QUA'}>Mẫu trả kết quả</Menu.Item>
+											)}
+										</Menu>
+									}
+									placement='bottomLeft'
+								>
+									<Button loading={loading} type='link' icon={<DownloadOutlined />} />
+								</Dropdown>
+							</Tooltip>
+						)}
+						<Tooltip title='Xóa'>
+							<Popconfirm
+								onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
+								title='Bạn có chắc chắn muốn xóa?'
+								placement='topLeft'
+							>
+								<Button danger type='link' icon={<DeleteOutlined />} />
+							</Popconfirm>
+						</Tooltip>
+					</>
+				);
+			},
 		},
 	];
 	return (

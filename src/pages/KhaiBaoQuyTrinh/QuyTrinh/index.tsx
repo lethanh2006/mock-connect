@@ -118,7 +118,7 @@ const QuyTrinhPage = () => {
 		},
 	];
 	const getDataQuyTrinh = () => {
-		getQuyTrinh(undefined, undefined, undefined, undefined, undefined, 'page/SINH_VIEN');
+		getQuyTrinh({ active: true }, undefined, undefined, undefined, undefined, 'page/SINH_VIEN');
 	};
 	return (
 		<>
