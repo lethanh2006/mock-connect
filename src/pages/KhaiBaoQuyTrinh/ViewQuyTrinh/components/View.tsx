@@ -85,8 +85,8 @@ const View = (props: Iprops) => {
 
 	//lấy thông tin đã khai báo trong danhSachKhaiBaoArchive còn cái thông tin khai báo ở ngoài để fill chỉnh sửa khi có yêu cầu chỉnh sửa
 	const dataForm =
-	(	current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.DUYET &&
-		current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.KHONG_DUYET)
+		current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.DUYET &&
+		current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.KHONG_DUYET
 			? dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao)
 			: dataQuyTrinh?.danhSachKhaiBao
 					?.find((ele) => ele.ma === current.maFormKhaiBao)
@@ -121,14 +121,7 @@ const View = (props: Iprops) => {
 										okText='Đồng ý'
 										cancelText='Đóng'
 									>
-										<Button
-											style={{ marginBottom: 16 }}
-											icon={<LeftOutlined />}
-											type={'link'}
-											// onClick={() => {
-											//   history.push('/khai-bao-quy-trinh/lich-su');
-											// }}
-										>
+										<Button style={{ marginBottom: 16 }} icon={<LeftOutlined />} type={'link'}>
 											Quay lại
 										</Button>
 									</Popconfirm>
@@ -154,7 +147,6 @@ const View = (props: Iprops) => {
 												if (obj) {
 													setCurrent(obj);
 												}
-												// setCurrent(value);
 											}}
 										/>
 									);
