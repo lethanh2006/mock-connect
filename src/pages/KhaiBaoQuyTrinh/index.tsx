@@ -35,7 +35,7 @@ const KhaiBaoQuyTrinhPage = () => {
 
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
-	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
+	const [recordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 
@@ -154,7 +154,7 @@ const KhaiBaoQuyTrinhPage = () => {
 		{
 			title: 'Thao tác',
 			align: 'center',
-			width: 90,
+			width: 150,
 			fixed: 'right',
 			render: (recordVal: KhaiBaoQuyTrinh.IRecord) => (
 				<>

@@ -28,6 +28,9 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 		(item) => item?.ma === current?.ma,
 	)?.doiTuongDieuPhoi;
 	const onFinish = async (values: any) => {
+		console.log('value', values);
+		console.log('recordSanPham', recordSanPham);
+		console.log('recordQuyTrinhForm', recordQuyTrinhForm);
 		try {
 			setLoadingKhaiBao(true);
 			const maBoPhanXuLy = values?.maBoPhanXuLy ?? current?.maBoPhanXuLy;
@@ -40,7 +43,7 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 			delete values.maBoPhanXuLy;
 
 			const payload = {
-				thongTinKhaiBao: { ...values, ...recordSanPham?.thongTinKhaiBao, ...recordQuyTrinhForm?.thongTinKhaiBao },
+				thongTinKhaiBao: { ...recordSanPham?.thongTinKhaiBao, ...recordQuyTrinhForm?.thongTinKhaiBao, ...values },
 				maBoPhanXuLy: maBoPhanXuLy,
 			};
 

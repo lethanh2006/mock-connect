@@ -1,7 +1,7 @@
 import ViewRender from '@/pages/KhaiBaoQuyTrinh/MauDon/ViewRender';
 import ThongTinTiepNhan from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/thongTinTiepNhan';
 import ThongTinThanhToan from '@/pages/TaiChinh/ChiTietThu/components/ThongTinThanhToan';
-import type { TrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
+import { TrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
 import { MapColorTrangThaiTiepNhanDon, TrangThaiKhaiBao } from '@/services/KhaiBaoQuyTrinh/constants';
 import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
@@ -28,8 +28,8 @@ const View = (props: Iprops) => {
 	const { dataQuyTrinh, current, loadingForm, modalName, FormModal, formProps, type } = props;
 	const model = useModel(modalName);
 	const { record, visibleForm, setVisibleForm } = useModel('taichinh.chitietthu');
-
-	const { setCurrent, setCurrentFormKhaiBao, currentFormKhaiBao } = model;
+	const { setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
+	const { setCurrent, setCurrentFormKhaiBao, currentFormKhaiBao, setEditFormKhaiBao, setRecordFormKhaiBao } = model;
 
 	const [currentStep, setCurrentStep] = useState<number>(0);
 	const onChange = (val: number) => {
@@ -71,11 +71,26 @@ const View = (props: Iprops) => {
 			const arr = dataQuyTrinh?.quyTrinh?.danhSachFormKhaiBao;
 			const obj = arr?.find((item: { ma: any }) => item?.ma === current?.maFormKhaiBao);
 			setCurrentFormKhaiBao(obj);
+			if (current?.trangThaiTiepNhan === TrangThaiTiepNhanDon.CHINH_SUA_LAI) {
+				const dataFormKhaiBao = dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao);
+				console.log('dataFormKhaiBao?.thongTinKhaiBao', dataFormKhaiBao?.thongTinKhaiBao);
+				setRecordQuyTrinhForm(dataFormKhaiBao);
+				setRecordFormKhaiBao(dataFormKhaiBao?.thongTinKhaiBao);
+				setEditFormKhaiBao(true);
+			}
 		}
 	}, [current]);
 
 	const cauHinhForm: QuyTrinh.IMauDon = currentFormKhaiBao;
-	const dataForm = dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao);
+
+	//lấy thông tin đã khai báo trong danhSachKhaiBaoArchive còn cái thông tin khai báo ở ngoài để fill chỉnh sửa khi có yêu cầu chỉnh sửa
+	const dataForm =
+	(	current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.DUYET &&
+		current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.KHONG_DUYET)
+			? dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao)
+			: dataQuyTrinh?.danhSachKhaiBao
+					?.find((ele) => ele.ma === current.maFormKhaiBao)
+					?.danhSachKhaiBaoArchive?.find((item) => item?.maBuoc === current?.ma);
 
 	return (
 		<>
@@ -153,7 +168,7 @@ const View = (props: Iprops) => {
 								</div>
 							)}
 
-							{current?.coKhaiBao ? (
+							{current?.coKhaiBao && current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.CHINH_SUA_LAI ? (
 								<div>
 									<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
 										{cauHinhForm?.cauHinhLoaiHinh
