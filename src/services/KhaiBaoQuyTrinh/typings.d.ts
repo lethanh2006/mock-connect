@@ -15,6 +15,10 @@ declare module KhaiBaoQuyTrinh {
 			ten: string;
 			ma: string;
 			thongTinKhaiBao: any;
+			danhSachKhaiBaoArchive: {
+				maBuoc: string;
+				thongTinKhaiBao: any;
+			}[];
 		}[];
 		__v: 0;
 		quyTrinh: {
