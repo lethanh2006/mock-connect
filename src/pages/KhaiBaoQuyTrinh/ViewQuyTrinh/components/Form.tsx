@@ -28,9 +28,6 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 		(item) => item?.ma === current?.ma,
 	)?.doiTuongDieuPhoi;
 	const onFinish = async (values: any) => {
-		console.log('value', values);
-		console.log('recordSanPham', recordSanPham);
-		console.log('recordQuyTrinhForm', recordQuyTrinhForm);
 		try {
 			setLoadingKhaiBao(true);
 			const maBoPhanXuLy = values?.maBoPhanXuLy ?? current?.maBoPhanXuLy;
