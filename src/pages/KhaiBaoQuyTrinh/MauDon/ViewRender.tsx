@@ -43,8 +43,8 @@ const ViewRender = (props: {
 				<div>
 					{
 						(value = cauHinh.laDangMang
-							? recordSanPhamFinal?.[cauHinh.ma]?.map((item: number) => tienVietNam(item))?.join(', ')
-							: tienVietNam(recordSanPhamFinal?.[cauHinh.ma]))
+							? recordSanPhamFinal?.[cauHinh.ma]?.map((item: number) => item)?.join(', ')
+							: recordSanPhamFinal?.[cauHinh.ma])
 					}
 				</div>
 			) : (
