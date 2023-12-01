@@ -1,17 +1,15 @@
 import TableBase from '@/components/Table';
-import { history, useModel } from 'umi';
 import type { IColumn } from '@/components/Table/typing';
-import { Button, Checkbox, message, Modal, Popconfirm, Tooltip } from 'antd';
-import { ArrowRightOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
-import type { QuyTrinh } from '@/services/QuyTrinh/typings';
-import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
-import FormKhaiBao from '@/pages/KhaiBaoQuyTrinh/components/FormKhaiBao';
 import { ELoaiDanhMucChung } from '@/services/KhaiBaoQuyTrinh/DanhMuc/constants';
+import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
+import type { QuyTrinh } from '@/services/QuyTrinh/typings';
+import { ArrowRightOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Modal, Popconfirm, Tooltip, message } from 'antd';
+import { useEffect, useState } from 'react';
+import { history, useModel } from 'umi';
 
 const QuyTrinhPage = () => {
-	const { visibleForm, setVisibleForm } = useModel('quytrinh.khaibaoquytrinh');
 	const {
 		getModel: getQuyTrinh,
 		setLoading,
@@ -19,7 +17,7 @@ const QuyTrinhPage = () => {
 		setRecord: setRecordQuyTrinh,
 	} = useModel('quytrinh.quytrinh');
 	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
-	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
+
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
@@ -40,8 +38,6 @@ const QuyTrinhPage = () => {
 					}
 				} else {
 					if (res.length > 1) {
-						setQuyTrinhIdSelect(quyTrinhId);
-						setVisibleForm(true);
 					} else {
 						message.warn('Chưa có đợt');
 					}
@@ -113,12 +109,7 @@ const QuyTrinhPage = () => {
 								okText='Sử dụng'
 								cancelText='Đóng'
 							>
-								<Button
-									type='primary'
-									// icon={<EyeOutlined />}
-								>
-									Sử dụng
-								</Button>
+								<Button type='primary'>Sử dụng</Button>
 							</Popconfirm>
 						</Tooltip>
 					)}
@@ -139,7 +130,7 @@ const QuyTrinhPage = () => {
 				getData={getDataQuyTrinh}
 			/>
 
-			<Modal
+			{/* <Modal
 				title={'Chọn đợt khai báo'}
 				width={500}
 				visible={visibleForm}
@@ -148,7 +139,7 @@ const QuyTrinhPage = () => {
 				destroyOnClose
 			>
 				<FormKhaiBao quyTrinhId={quyTrinhIdSelect} />
-			</Modal>
+			</Modal> */}
 			<Modal
 				title={'Thông tin chung'}
 				width={1000}
