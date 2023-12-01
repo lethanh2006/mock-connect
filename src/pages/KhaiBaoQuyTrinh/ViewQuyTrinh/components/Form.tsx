@@ -11,7 +11,7 @@ import { DoiTuongDieuPhoi } from '@/services/KhaiBaoQuyTrinh/constants';
 const FormQuyTrinh = (props: { getData: () => void }) => {
 	const {
 		currentFormKhaiBao,
-		setVisibleFormKhaiBaoQuyTrinh,
+
 		current,
 		dataQuyTrinh,
 		editFormKhaiBao,
@@ -19,11 +19,14 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 	} = useModel('quytrinh.khaibaoquytrinh');
 	const { recordSanPham, setRecordSanPham } = useModel('quytrinh.khaibaoquytrinh');
 	const { recordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
+	const { getChiTietThuByIdentityCodeModel, setVisibleForm } = useModel('taichinh.chitietthu');
 	const [formValues, setFormValues] = useState<any>({});
 	const [loadingKhaiBao, setLoadingKhaiBao] = useState<boolean>(false);
 	const [danhSachDonViXuLy, setDanhSachDonViXuLy] = useState<KhaiBaoQuyTrinh.IDonViXuLy[]>([]);
 	const [form] = Form.useForm();
-	const doiTuongDieuPhoi = dataQuyTrinh?.quyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === current?.ma)?.doiTuongDieuPhoi;
+	const doiTuongDieuPhoi = dataQuyTrinh?.quyTrinh?.danhSachBuocXuLy?.find(
+		(item) => item?.ma === current?.ma,
+	)?.doiTuongDieuPhoi;
 	const onFinish = async (values: any) => {
 		try {
 			setLoadingKhaiBao(true);
@@ -46,7 +49,10 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 			if (res) {
 				message.success('Khai báo thành công');
 				props?.getData();
-				setVisibleFormKhaiBaoQuyTrinh(false);
+				if (res?.data?.data?.identityCode) {
+					await getChiTietThuByIdentityCodeModel(res.data.data.identityCode);
+					setVisibleForm(true);
+				}
 			}
 		} catch (e) {
 			console.log(e);
@@ -114,13 +120,6 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 					<Button style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
 						Khai báo
 					</Button>
-					{/*<Button*/}
-					{/*	onClick={() => {*/}
-					{/*		setVisibleFormKhaiBaoQuyTrinh(false);*/}
-					{/*	}}*/}
-					{/*>*/}
-					{/*	Đóng*/}
-					{/*</Button>*/}
 				</div>
 			</Form>
 		</Spin>

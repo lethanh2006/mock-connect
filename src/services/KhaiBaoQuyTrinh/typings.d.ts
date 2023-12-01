@@ -1,4 +1,7 @@
 import type { TruongThongTin } from '@/services/LoaiHinhNCKH/typings';
+import type { ETrangThaiThanhToanVI } from '../CongNo/constant';
+import { ETrangThaiThanhToan } from '../CongNo/constant';
+import type { EMaTrangThaiThanhToan } from '../TaiChinh/constant';
 
 declare module KhaiBaoQuyTrinh {
 	export interface IRecord {
@@ -26,6 +29,8 @@ declare module KhaiBaoQuyTrinh {
 			__v: 0;
 		};
 		[key: string]: any;
+		trangThaiThanhToan: EMaTrangThaiThanhToan;
+		identityCode: string;
 	}
 	export interface IDanhSachForm {
 		ten: string;
@@ -45,7 +50,7 @@ declare module KhaiBaoQuyTrinh {
 		ghiChu: string;
 		maBoPhanXuLy: string;
 		trangThaiTiepNhan: string;
-    doiTuongDieuPhoi: string;
+		doiTuongDieuPhoi: string;
 		coKhaiBao: boolean;
 		daDienThongTin: boolean;
 		laBuocHienTai: boolean;
