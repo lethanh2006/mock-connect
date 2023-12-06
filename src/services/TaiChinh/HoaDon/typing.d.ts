@@ -10,7 +10,7 @@ declare module HoaDon {
 		status: EMaTrangThaiThanhToan;
 		soTienThue: number;
 		idDotThu: string;
-		// dotThu?: DotThu.Record;
+		dotThu?: DotThuTaiChinh.Record;
 		metadata?: Record;
 		moTa?: string;
 
