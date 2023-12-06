@@ -29,6 +29,7 @@ export default {
 
 	'menu.TaiChinh': 'Tài chính',
 	'menu.TaiChinh.CongNo': 'Công nợ',
+	'menu.TaiChinh.UuDaiThanhToan': 'Ưu đãi thanh toán',
 	'menu.TaiChinh.GiaoDich': 'Lịch sử giao dịch',
 
 	// DRL

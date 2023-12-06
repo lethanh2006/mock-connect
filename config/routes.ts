@@ -317,6 +317,11 @@
 				path: './giao-dich',
 				component: './TaiChinh/GiaoDich',
 			},
+			{
+				name: 'UuDaiThanhToan',
+				path: './uu-dai-thanh-toan',
+				component: './TaiChinh/UuDaiThanhToan',
+			},
 		],
 	},
 
