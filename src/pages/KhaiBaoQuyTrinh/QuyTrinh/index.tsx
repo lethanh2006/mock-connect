@@ -34,7 +34,7 @@ const QuyTrinhPage = () => {
 				if (res.length === 1) {
 					const res2 = await createDonKhaiBaoUser(quyTrinhId, res?.[0]?._id);
 					if (res2) {
-						history.push(`/khai-bao-quy-trinh/${res2?.data?.data?._id}`);
+						history.push(`/khai-bao-quy-trinh/${res2?.data?.data?._id}?quyTrinh=${quyTrinhId}`);
 					}
 				} else {
 					if (res.length > 1) {
