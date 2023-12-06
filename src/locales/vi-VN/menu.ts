@@ -25,8 +25,11 @@ export default {
 	'menu.HocTap.XetHocVu': 'Cảnh báo học tập, thôi học ',
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
 	'menu.HocTap.QuyetDinh': 'Bảo lưu, thôi học',
-	'menu.CongNo': 'Công nợ',
 	'menu.KeHoachNamHoc': 'Kế hoạch năm học',
+
+	'menu.TaiChinh': 'Tài chính',
+	'menu.TaiChinh.CongNo': 'Công nợ',
+	'menu.TaiChinh.GiaoDich': 'Lịch sử giao dịch',
 
 	// DRL
 

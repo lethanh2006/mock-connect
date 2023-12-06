@@ -14,11 +14,11 @@ export const ETrangThaiThanhToan: any = {
 	[EMaTrangThaiThanhToan.DONG]: 'Đóng',
 };
 
-export const EMauTrangThaiThanhToanTable: any = {
-	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: '#dc3545',
-	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: '#ffca2c',
-	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: '#1fba36',
-	[EMaTrangThaiThanhToan.THANH_TOAN_THUA]: '#f3682bc2',
+export const EMauTrangThaiThanhToanTable = {
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'red',
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'gold',
+	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'green',
+	[EMaTrangThaiThanhToan.THANH_TOAN_THUA]: 'orange',
 	[EMaTrangThaiThanhToan.DONG]: undefined,
 };
 
@@ -31,3 +31,35 @@ export const MapKeyLoaiThanhToan = {
 	[ELoaiThanhToan.bank]: 'Thanh toán bằng mã định danh',
 	[ELoaiThanhToan.manual]: 'Chuyên viên cập nhật',
 };
+
+//Giao dịch
+export enum ETransactionType {
+	DEPOSIT = 'deposit',
+	WITHDRAW = 'withdraw',
+	INTERNAL = 'internal',
+}
+
+export enum ETransactionPaymentType {
+	BANK = 'bank',
+	MANUAL = 'manual',
+	MOMO_WALLET = 'momo-wallet',
+}
+
+export const transactionPaymentLabel: Record<ETransactionPaymentType, string> = {
+	[ETransactionPaymentType.BANK]: 'Chuyển khoản ngân hàng',
+	[ETransactionPaymentType.MANUAL]: 'Chuyên viên cập nhật',
+	[ETransactionPaymentType.MOMO_WALLET]: 'Ví Momo',
+};
+
+export enum ETransactionSourceType {
+	EXTERNAL = 'external',
+	WALLET = 'wallet',
+	SYSTEM = 'system',
+}
+
+export enum ETransactionStatus {
+	PENDING = 'pending',
+	SUCCESS = 'success',
+	FAIL = 'fail',
+	CANCEL = 'cancel',
+}
