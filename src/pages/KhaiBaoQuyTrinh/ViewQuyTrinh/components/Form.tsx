@@ -7,16 +7,11 @@ import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import rules from '@/utils/rules';
 import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
 import { DoiTuongDieuPhoi } from '@/services/KhaiBaoQuyTrinh/constants';
+import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
 
-const FormQuyTrinh = (props: { getData: () => void }) => {
-	const {
-		currentFormKhaiBao,
-
-		current,
-		dataQuyTrinh,
-		editFormKhaiBao,
-		recordFormKhaiBao,
-	} = useModel('quytrinh.khaibaoquytrinh');
+const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
+	const { currentFormKhaiBao, current, dataQuyTrinh, editFormKhaiBao, recordFormKhaiBao } =
+		useModel('quytrinh.khaibaoquytrinh');
 	const { recordSanPham, setRecordSanPham } = useModel('quytrinh.khaibaoquytrinh');
 	const { recordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
 	const { getChiTietThuByIdentityCodeModel, setVisibleForm } = useModel('taichinh.chitietthu');
@@ -60,6 +55,21 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 			setLoadingKhaiBao(false);
 		}
 	};
+	const handleGetDataDefault = async () => {
+		try {
+			if (currentFormKhaiBao?.ma) {
+				const res = await getDataDefaultV2(props?.idQuyTrinh ?? '', 'khai_bao', currentFormKhaiBao?.ma ?? '');
+				if (res) {
+					form.setFieldsValue({
+						...form.getFieldsValue(),
+						...res?.data?.data,
+					});
+				}
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
 	useEffect(() => {
 		if (dataQuyTrinh) {
 			const currentBuocXuLy = dataQuyTrinh?.quyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === current?.ma);
@@ -80,10 +90,13 @@ const FormQuyTrinh = (props: { getData: () => void }) => {
 		}
 	}, [editFormKhaiBao, recordFormKhaiBao]);
 	useEffect(() => {
+		if (props?.idQuyTrinh && currentFormKhaiBao?.ma) {
+			handleGetDataDefault();
+		}
 		return () => {
 			setRecordSanPham(undefined);
 		};
-	}, []);
+	}, [props?.idQuyTrinh, currentFormKhaiBao]);
 	return (
 		<Spin spinning={loadingKhaiBao}>
 			<Form
