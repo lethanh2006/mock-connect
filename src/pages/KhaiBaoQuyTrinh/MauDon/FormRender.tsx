@@ -6,7 +6,6 @@ import UploadFile from '@/components/Upload/UploadFile';
 import { EKieuDuLieu, ELoaiThoiGianThucHien, ELoaiTruongThongTinTinh } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 import { LoaiDefaultValue } from '@/services/QuyTrinh/MauDon/constants';
-import { getDataDefault } from '@/services/QuyTrinh/MauDon/maudon';
 import rules from '@/utils/rules';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd';
@@ -35,23 +34,6 @@ const FormRender = (props: {
 	const onCancelFormTable = () => {
 		setVisibleFormTable(false);
 	};
-	const handleRenderDefaultValue = async (type: LoaiDefaultValue) => {
-		try {
-			const res = await getDataDefault(type);
-			if (res) {
-				// setDataDefault (res?.data?.data?.value as string);
-				if (form) {
-					form.setFieldsValue({
-						...form.getFieldsValue(),
-						[cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`]: res?.data?.data?.value,
-					});
-				}
-			}
-		} catch (e) {
-			console.log(e);
-		} finally {
-		}
-	};
 	useEffect(() => {
 		if (cauHinh && cauHinh?.loaiDefaultValue) {
 			if (cauHinh?.loaiDefaultValue === LoaiDefaultValue.CUSTOM) {
@@ -63,7 +45,7 @@ const FormRender = (props: {
 					});
 				}
 			} else {
-				handleRenderDefaultValue(cauHinh?.loaiDefaultValue as LoaiDefaultValue);
+
 			}
 		}
 	}, [cauHinh]);
