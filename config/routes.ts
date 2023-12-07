@@ -92,6 +92,13 @@
 		component: './DaoTao/KeHoachNamHoc',
 	},
 
+	{
+		name: 'KeHoachNCKH',
+		icon: 'FileOutlined',
+		path: '/ke-hoach-nckh',
+		component: './KeHoachNCKH',
+	},
+
 	// MENU SINH VIEN
 	{
 		name: 'HocTap',
@@ -104,7 +111,7 @@
 				path: 'tien-trinh-hoc-tap',
 				component: './HocTap/TienTrinhHocTap',
 			},
-			// { name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
+			{ name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
 			{ name: 'DangKyTinChi', path: 'dang-ky-tin-chi', component: './HocTap/DangKyTinChi' },
 			{
 				name: 'LopHocPhan',
@@ -188,37 +195,37 @@
 		],
 	},
 
-	{
-		name: 'DichVuHanhChinh',
-		icon: 'AuditOutlined',
-		path: '/dich-vu-hanh-chinh',
-		routes: [
-			{
-				path: './',
-				component: './DichVuMotCuaV2/SinhVien/LichSu',
-				hideInMenu: true,
-				// access: 'sinhVien',
-			},
-			{
-				name: 'TaoDon',
-				path: './tao-don',
-				// access: 'sinhVien',
-				hideInMenu: true,
-				routes: [
-					{
-						path: './',
-						component: './DichVuMotCuaV2/SinhVien/GuiDon',
-						extract: true,
-					},
-					{
-						path: './:id',
-						component: './DichVuMotCuaV2/SinhVien/GuiDon/$id',
-						extract: true,
-					},
-				],
-			},
-		],
-	},
+	// {
+	// 	name: 'DichVuHanhChinh',
+	// 	icon: 'AuditOutlined',
+	// 	path: '/dich-vu-hanh-chinh',
+	// 	routes: [
+	// 		{
+	// 			path: './',
+	// 			component: './DichVuMotCuaV2/SinhVien/LichSu',
+	// 			hideInMenu: true,
+	// 			// access: 'sinhVien',
+	// 		},
+	// 		{
+	// 			name: 'TaoDon',
+	// 			path: './tao-don',
+	// 			// access: 'sinhVien',
+	// 			hideInMenu: true,
+	// 			routes: [
+	// 				{
+	// 					path: './',
+	// 					component: './DichVuMotCuaV2/SinhVien/GuiDon',
+	// 					extract: true,
+	// 				},
+	// 				{
+	// 					path: './:id',
+	// 					component: './DichVuMotCuaV2/SinhVien/GuiDon/$id',
+	// 					extract: true,
+	// 				},
+	// 			],
+	// 		},
+	// 	],
+	// },
 
 	{
 		name: 'NoiNgoaiTru',
@@ -239,6 +246,7 @@
 		path: '/khai-bao-suc-khoe',
 		component: './TienIch/KhaiBaoSucKhoe',
 	},
+
 	// {
 	// 	name: 'DichVuHanhChinh',
 	// 	icon: 'AuditOutlined',

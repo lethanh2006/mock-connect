@@ -1,11 +1,16 @@
 import useInitModel from '@/hooks/useInitModel';
 import { useState } from 'react';
 import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
-import {  getQuyTrinhChuyenVien } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
+import {
+	exportMauDonTheoBuoc,
+	exportMauTraKetQuaTheoBuoc,
+	getQuyTrinhChuyenVien,
+} from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
+import fileDownload from 'js-file-download';
 
 export default () => {
 	const objInit = useInitModel<KhaiBaoQuyTrinh.IRecord>('don-quy-trinh-dong');
-	const { setDanhSach, setLoading, setTotal, page, limit, condition,getModel } = objInit;
+	const { setDanhSach, setLoading, setTotal, page, limit, condition, getModel } = objInit;
 	const [current, setCurrent] = useState<KhaiBaoQuyTrinh.IBuocXuLy>();
 	const [currentFormKhaiBao, setCurrentFormKhaiBao] = useState<KhaiBaoQuyTrinh.IDanhSachForm>();
 	const [recordFormKhaiBao, setRecordFormKhaiBao] = useState<any>();
@@ -16,8 +21,7 @@ export default () => {
 
 	const [recordSanPham, setRecordSanPham] = useState<KhaiBaoQuyTrinh.IRecord>();
 
-
-	const getDataKhaiBaoUser = async () => getModel(undefined,undefined,undefined,undefined,undefined,'user/page');
+	const getDataKhaiBaoUser = async () => getModel(undefined, undefined, undefined, undefined, undefined, 'user/page');
 
 	const getQuyTrinhChuyenVienModel = async (loaiXuLyDon: string) => {
 		try {
@@ -30,6 +34,28 @@ export default () => {
 		} catch (e) {
 			console.log(e);
 		} finally {
+			setLoading(false);
+		}
+	};
+
+	const exportMauDonTheoBuocModel = async (idDon: string, maBuoc: string, tenDon: string) => {
+		try {
+			setLoading(true);
+			const res = await exportMauDonTheoBuoc(idDon, maBuoc);
+			fileDownload(res.data, `${tenDon}.doc`);
+			setLoading(false);
+		} catch (err) {
+			setLoading(false);
+		}
+	};
+
+	const exportMauTraKetQuaTheoBuocModel = async (idDon: string, maBuoc: string, tenDon: string) => {
+		try {
+			setLoading(true);
+			const res = await exportMauTraKetQuaTheoBuoc(idDon, maBuoc);
+			fileDownload(res.data, `${tenDon}.doc`);
+			setLoading(false);
+		} catch (err) {
 			setLoading(false);
 		}
 	};
@@ -51,6 +77,10 @@ export default () => {
 		setRecordFormKhaiBao,
 		setEditFormKhaiBao,
 		editFormKhaiBao,
-		getDataKhaiBaoUser,recordSanPham,setRecordSanPham
+		getDataKhaiBaoUser,
+		recordSanPham,
+		setRecordSanPham,
+		exportMauTraKetQuaTheoBuocModel,
+		exportMauDonTheoBuocModel,
 	};
 };

@@ -6,7 +6,7 @@ export enum EMaTrangThaiThanhToan {
 	DONG = 'closed',
 }
 
-export const ETrangThaiThanhToan = {
+export const ETrangThaiThanhToan: any = {
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'Chưa thanh toán',
 	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'Chưa thanh toán đủ',
 	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'Đã thanh toán đủ',
@@ -14,11 +14,11 @@ export const ETrangThaiThanhToan = {
 	[EMaTrangThaiThanhToan.DONG]: 'Đóng',
 };
 
-export const EMauTrangThaiThanhToanTable = {
-	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'red',
-	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'gold',
-	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'green',
-	[EMaTrangThaiThanhToan.THANH_TOAN_THUA]: 'orange',
+export const EMauTrangThaiThanhToanTable: any = {
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: '#dc3545',
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: '#ffca2c',
+	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: '#1fba36',
+	[EMaTrangThaiThanhToan.THANH_TOAN_THUA]: '#f3682bc2',
 	[EMaTrangThaiThanhToan.DONG]: undefined,
 };
 

@@ -84,11 +84,14 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 					<Avatar
 						className={styles.avatar}
 						src={
-							<img
-								// style={currentUser?.avatar_path ? {} : { objectFit: 'cover' }}
-								src={initialState.currentUser?.picture ?? '/logo.png'}
-							/>
+							initialState.currentUser?.picture ? (
+								<img
+									// style={currentUser?.avatar_path ? {} : { objectFit: 'cover' }}
+									src={initialState.currentUser?.picture}
+								/>
+							) : undefined
 						}
+						icon={!initialState.currentUser?.picture ? <UserOutlined /> : undefined}
 						alt='avatar'
 					/>
 					<span className={`${styles.name}`}>
