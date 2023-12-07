@@ -55,7 +55,7 @@ const GiaoDichPage = () => {
 		},
 		{ title: 'Người thực hiện', dataIndex: 'payerFullname', width: 150, filterType: 'string' },
 		{
-			title: 'Lịch sửa giao dịch',
+			title: 'Loại giao dịch',
 			width: 120,
 			render: (val, rec) => {
 				switch ((rec.fromAccount, rec.toAccount)) {
