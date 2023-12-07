@@ -62,7 +62,7 @@ const GiaoDichPage = () => {
 					case (ETransactionSourceType.EXTERNAL, ETransactionSourceType.WALLET):
 						return <>Nộp tiền</>;
 					case (ETransactionSourceType.WALLET, ETransactionSourceType.SYSTEM):
-						return <>Thanh toán dịch vụ</>;
+						return <>Thanh toán</>;
 					case (ETransactionSourceType.SYSTEM, ETransactionSourceType.WALLET):
 						return <>Hoàn trả</>;
 					default:
@@ -129,7 +129,7 @@ const GiaoDichPage = () => {
 							options={[
 								{ value: 1, label: 'Tất cả giao dịch' },
 								{ value: 2, label: 'Nộp tiền' },
-								{ value: 3, label: 'Thanh toán dịch vụ' },
+								{ value: 3, label: 'Thanh toán' },
 								{ value: 4, label: 'Hoàn trả' },
 							]}
 							placeholder='Chọn giao dịch'
