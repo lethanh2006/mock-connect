@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
 import FormThanhToan from './FormThanhToan';
+import LichSuThanhToan from './LichSuThanhToan';
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData: () => void }) => {
 	const { setVisible, getData } = props;
 	const { record } = useModel('taichinh.hoadon');
@@ -88,11 +89,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData:
 							</ButtonExtend>
 
 							<FormItemHoaDonChiTiet isThanhToan />
-							<></>
 						</>
 					) : (
-						// <LichSuThanhToan />
-						<></>
+						<LichSuThanhToan />
 					)}
 				</Col>
 			</Row>

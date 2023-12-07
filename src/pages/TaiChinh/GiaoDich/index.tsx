@@ -136,7 +136,6 @@ const GiaoDichPage = () => {
 							style={{ width: 250 }}
 							key='select'
 						/>
-						,
 					</>,
 				]}
 			/>
