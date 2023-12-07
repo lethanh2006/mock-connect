@@ -14,11 +14,15 @@ import SelectDotThu from '../DotThu/Select';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
 
 const HoaDonPage = (props: { idDotThu?: string }) => {
-	const { getModel, page, limit, setRecord } = useModel('taichinh.hoadon');
+	const { getModel, page, limit, setRecord, record } = useModel('taichinh.hoadon');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 	const { idDotThu: dotThuCoDinh } = props;
 
-	const getData = () => getModel({ idDotThu: dotThuCoDinh });
+	const getData = () =>
+		getModel({ idDotThu: dotThuCoDinh }).then((res) => {
+			// Sau khi thanh toán => Get lại danh sách và set lại record hóa đơn hiện tại
+			if (record?._id) setRecord(res.find((item) => item._id === record._id));
+		});
 
 	const handleDetail = (rec: HoaDon.IRecord) => {
 		setRecord(rec);

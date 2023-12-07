@@ -5,6 +5,7 @@ import { useModel } from 'umi';
 const ModalThanhToanNganHang = (props: { visibleHuongDan: boolean; setVisibleHuongDan: (val: boolean) => void }) => {
 	const { visibleHuongDan, setVisibleHuongDan } = props;
 	const { record } = useModel('taichinh.hoadon');
+
 	return (
 		<Modal
 			visible={visibleHuongDan}

@@ -2,18 +2,26 @@ import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
-import { ETransactionPaymentType, ETransactionSourceType, transactionPaymentLabel } from '@/services/TaiChinh/constant';
+import {
+	ETransactionPaymentType,
+	ETransactionSourceType,
+	ETransactionStatus,
+	colorTransactionStatus,
+	transactionPaymentLabel,
+	transactionStatus,
+} from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Select } from 'antd';
+import { Select, Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
+import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
 import Form from './components/Form';
 
 const GiaoDichPage = () => {
 	const { getModel, page, limit, setRecord, setVisibleForm } = useModel('taichinh.giaodich');
-	// const { record: recDot, setRecord: setRecDot, danhSach: danhSachDot } = useModel('taichinh.dotthu');
+	const { visibleHuongDan, setVisibleHuongDan } = useModel('taichinh.hoadon');
 	const [kieuThanhToan, setKieuThanhToan] = useState<number>(1);
 
 	const getData = () => {
@@ -30,10 +38,7 @@ const GiaoDichPage = () => {
 				break;
 		}
 
-		return getModel({
-			...condition,
-			//  idDotThu: recDot?._id
-		});
+		return getModel(condition);
 	};
 
 	const columns: IColumn<GiaoDich.IRecord>[] = [
@@ -43,6 +48,23 @@ const GiaoDichPage = () => {
 			width: 120,
 			align: 'center',
 			filterType: 'string',
+		},
+		{
+			title: 'Loại giao dịch',
+			align: 'center',
+			width: 100,
+			render: (val, rec) => {
+				switch ((rec.fromAccount, rec.toAccount)) {
+					case (ETransactionSourceType.EXTERNAL, ETransactionSourceType.WALLET):
+						return <Tag color='green'>Nộp tiền</Tag>;
+					case (ETransactionSourceType.WALLET, ETransactionSourceType.SYSTEM):
+						return <Tag color='orange'>Thanh toán</Tag>;
+					case (ETransactionSourceType.SYSTEM, ETransactionSourceType.WALLET):
+						return <Tag color='purple'>Hoàn trả</Tag>;
+					default:
+						return null;
+				}
+			},
 		},
 		{
 			title: 'Số tiền',
@@ -55,25 +77,9 @@ const GiaoDichPage = () => {
 		},
 		{ title: 'Người thực hiện', dataIndex: 'payerFullname', width: 150, filterType: 'string' },
 		{
-			title: 'Loại giao dịch',
-			width: 120,
-			render: (val, rec) => {
-				switch ((rec.fromAccount, rec.toAccount)) {
-					case (ETransactionSourceType.EXTERNAL, ETransactionSourceType.WALLET):
-						return <>Nộp tiền</>;
-					case (ETransactionSourceType.WALLET, ETransactionSourceType.SYSTEM):
-						return <>Thanh toán</>;
-					case (ETransactionSourceType.SYSTEM, ETransactionSourceType.WALLET):
-						return <>Hoàn trả</>;
-					default:
-						return null;
-				}
-			},
-		},
-		{
 			title: 'Thời gian',
 			dataIndex: 'transactionDate',
-			width: 120,
+			width: 140,
 			align: 'center',
 			filterType: 'datetime',
 			sortable: true,
@@ -90,6 +96,20 @@ const GiaoDichPage = () => {
 			})),
 			render: (val: ETransactionPaymentType) => transactionPaymentLabel[val] ?? '',
 		},
+		{
+			title: 'Trạng thái',
+			dataIndex: 'status',
+			width: 140,
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ETransactionStatus)?.map((val) => ({
+				label: transactionStatus[val],
+				value: val,
+			})),
+			render: (val: ETransactionStatus) => (
+				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
+			),
+		},
 	];
 
 	return (
@@ -99,13 +119,8 @@ const GiaoDichPage = () => {
 				columns={columns}
 				Form={Form}
 				getData={getData}
-				widthDrawer={1000}
-				dependencies={[
-					page,
-					limit,
-					kieuThanhToan,
-					// recDot?._id
-				]}
+				widthDrawer={800}
+				dependencies={[page, limit, kieuThanhToan]}
 				formProps={{ getData }}
 				modelName='taichinh.giaodich'
 				title='Lịch sử thanh toán'
@@ -114,8 +129,6 @@ const GiaoDichPage = () => {
 						<ButtonExtend
 							onClick={() => {
 								setRecord(undefined);
-								// setEdit(false);
-								// setIsView(false);
 								setVisibleForm(true);
 							}}
 							icon={<PlusCircleOutlined />}
@@ -134,34 +147,14 @@ const GiaoDichPage = () => {
 								{ value: 4, label: 'Hoàn trả' },
 							]}
 							placeholder='Chọn giao dịch'
-							style={{ width: 250 }}
+							style={{ width: 200 }}
 							key='select'
 						/>
 					</>,
 				]}
 			/>
-			{/* <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-					<SelectDotThu
-						value={recDot?._id}
-						onChange={(val) => setRecDot(danhSachDot.find((item) => item._id === val))}
-						style={{ width: 200 }}
-						isSetRecord
-					/>
-					<Select
-						value={kieuThanhToan}
-						onChange={(val) => setKieuThanhToan(val)}
-						options={[
-							{ value: 1, label: 'Tất cả giao dịch' },
-							{ value: 2, label: 'Sinh viên nộp tiền' },
-							{ value: 3, label: 'Thanh toán dịch vụ' },
-							{ value: 4, label: 'Hoàn trả' },
-						]}
-						placeholder='Chọn giao dịch'
-						style={{ width: 250 }}
-						key='select'
-					/>
-				</div>
-			</TableBase> */}
+
+			<ModalThanhToanNganHang visibleHuongDan={visibleHuongDan} setVisibleHuongDan={setVisibleHuongDan} />
 		</>
 	);
 };
