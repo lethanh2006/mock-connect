@@ -49,4 +49,8 @@ declare module GiaoDich {
 		billItemId: string;
 		amount: number;
 	};
+
+	export interface TDongTruocHocPhi {
+		amount: number;
+	}
 }
