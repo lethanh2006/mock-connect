@@ -6,8 +6,8 @@ import { Button, Card, Col, Descriptions, Modal, Row, Tabs, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
-import FormThanhToan from './FormThanhToan';
-import LichSuThanhToan from './LichSuThanhToan';
+import FormThanhToan from '../ThanhToan/FormThanhToan';
+import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData: () => void }) => {
 	const { setVisible, getData } = props;
 	const { record } = useModel('taichinh.hoadon');
