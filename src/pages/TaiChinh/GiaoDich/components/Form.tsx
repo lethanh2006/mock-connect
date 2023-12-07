@@ -37,7 +37,7 @@ const FormGiaoDich = (props: any) => {
 						<Col span={24}>
 							<div className='fw500'>Hình thức thanh toán</div>
 						</Col>
-						<Col span={24}>
+						<Col span={24} style={{ marginTop: 12 }}>
 							<HuongDanThanhToan isDongTruoc amount={amount} />
 						</Col>
 					</Row>
