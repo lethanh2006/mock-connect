@@ -1,9 +1,13 @@
 import useInitModel from '@/hooks/useInitModel';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { ipTaiChinh } from '@/utils/ip';
+import { useState } from 'react';
 
 export default () => {
 	const objInit = useInitModel<HoaDon.IRecord>('bill', undefined, undefined, ipTaiChinh);
+	const [paymentType, setPaymentType] = useState<string>();
+	const [visibleHuongDan, setVisibleHuongDan] = useState<boolean>(false);
+
 	const { getModel: getModelOrigin } = objInit;
 
 	const getModel = async (condition?: Partial<HoaDon.IRecord>): Promise<HoaDon.IRecord[]> =>
@@ -11,6 +15,10 @@ export default () => {
 
 	return {
 		...objInit,
-		getModel,
+		paymentType,
+		setPaymentType,
+		visibleHuongDan,
+		setVisibleHuongDan,
+		// getModel,
 	};
 };

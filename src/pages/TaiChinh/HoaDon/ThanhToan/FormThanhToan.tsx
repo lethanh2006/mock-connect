@@ -13,7 +13,13 @@ const FormThanhToan = (props: { getData: () => void }) => {
 	// const { getData } = props;
 	const { loading, danhSach, selectedIds, visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
 	const { getSoDuViSinhVienModel, soDuVi } = useModel('taichinh.giaodich');
-	const { record: recHoaDon, danhSach: danhSachHoaDon, setRecord: setRecDon } = useModel('taichinh.hoadon');
+	const {
+		record: recHoaDon,
+		danhSach: danhSachHoaDon,
+		setRecord: setRecDon,
+		paymentType,
+		setVisibleHuongDan,
+	} = useModel('taichinh.hoadon');
 	const [form] = Form.useForm();
 	const payList: Record<string, number> = Form.useWatch('payList', form);
 	const totalPhaiNop = _.sum(Object.values(payList ?? {})) ?? 0;
@@ -171,7 +177,10 @@ const FormThanhToan = (props: { getData: () => void }) => {
 				</Row>
 
 				<div className='form-footer'>
-					<Popconfirm title='			Xác nhận thanh toán?' onConfirm={() => form.submit()}>
+					<Popconfirm
+						title='Xác nhận thanh toán?'
+						onConfirm={() => (paymentType === 'momo' ? form.submit() : setVisibleHuongDan(true))}
+					>
 						<Button loading={loading} type='primary'>
 							Thanh toán
 						</Button>
