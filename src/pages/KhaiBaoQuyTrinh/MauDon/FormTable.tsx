@@ -3,7 +3,7 @@ import FormRender from './FormRender';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
-import { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
+import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 
 const FormTable = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;

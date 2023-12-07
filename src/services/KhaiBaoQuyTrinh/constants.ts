@@ -4,7 +4,7 @@ export enum TrangThaiKhaiBao {
 }
 export enum TrangThaiTiepNhan {
 	CHUA_CO = 'Chưa có kết quả tiếp nhận',
-	DA_DUYET = 'Chưa khai báo',
+	DA_DUYET = 'Duyệt',
 	KHONG_DUYET = 'Không duyệt',
 	CHINH_SUA_LAI = 'Chỉnh sửa lại',
 }
@@ -30,5 +30,6 @@ export const MapColorTrangThaiTiepNhanDon = {
 	[TrangThaiTiepNhanDon.KHONG_DUYET]: '#dc3545',
 };
 export enum DoiTuongDieuPhoi {
-  NGUOI_CU_THE = 'Người dùng',
-  TO_CHUC = 'Bộ phận xử lý',}
+	NGUOI_CU_THE = 'Người dùng',
+	TO_CHUC = 'Bộ phận xử lý',
+}

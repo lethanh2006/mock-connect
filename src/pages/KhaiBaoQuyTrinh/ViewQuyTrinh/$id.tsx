@@ -1,4 +1,4 @@
-import { useModel } from 'umi';
+import { useModel, history } from 'umi';
 import { getDonByUserId } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
 import { useEffect, useState } from 'react';
 import FormQuyTrinh from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/Form';
@@ -14,7 +14,8 @@ const QuyTrinhView = ({
 	const { current, setCurrent, setDataQuyTrinh, dataQuyTrinh, setCurrentFormKhaiBao } =
 		useModel('quytrinh.khaibaoquytrinh');
 	const [loadingForm, setLoadingForm] = useState<boolean>(false);
-
+	const { query = {} } = history.location;
+	const { quyTrinh } = query;
 	const getData = async (ids: string) => {
 		try {
 			setLoadingForm(true);
@@ -48,7 +49,7 @@ const QuyTrinhView = ({
 					loadingForm={loadingForm}
 					modalName={'quytrinh.khaibaoquytrinh'}
 					FormModal={() => {
-						return <FormQuyTrinh getData={() => getData(id)} />;
+						return <FormQuyTrinh idQuyTrinh={quyTrinh as string} getData={() => getData(id)} />;
 					}}
 				/>
 			)}

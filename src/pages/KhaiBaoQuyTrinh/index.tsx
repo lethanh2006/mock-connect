@@ -1,36 +1,62 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
-import { Button, message, Modal, Popconfirm, Tag, Tooltip } from 'antd';
-import {ArrowRightOutlined, DeleteOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
-import SelectQuyTrinh from '@/pages/KhaiBaoQuyTrinh/QuyTrinh/Select';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
-import { ELoaiDanhMucChung } from '@/services/KhaiBaoQuyTrinh/DanhMuc/constants';
-import type { TrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
+import SelectQuyTrinh from '@/pages/KhaiBaoQuyTrinh/QuyTrinh/Select';
+
+import { TrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
 import { MapColorTrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
+import { ELoaiDanhMucChung } from '@/services/KhaiBaoQuyTrinh/DanhMuc/constants';
 import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
+import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
+import type { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import { EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import {
+	ArrowRightOutlined,
+	DeleteOutlined,
+	DollarCircleOutlined,
+	DownloadOutlined,
+	EyeOutlined,
+} from '@ant-design/icons';
+import { Button, Dropdown, Menu, message, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
+import ThongTinThanhToan from '../TaiChinh/ChiTietThu/components/ThongTinThanhToan';
 import FormKhaiBao from './components/FormKhaiBao';
 
 const KhaiBaoQuyTrinhPage = () => {
-	const { page, limit, condition, deleteModel, setCondition, getDataKhaiBaoUser, visibleForm, setVisibleForm } =
-		useModel('quytrinh.khaibaoquytrinh');
 	const {
-		setLoading,
-		record: recordQuyTrinh,
-	} = useModel('quytrinh.quytrinh');
+		page,
+		limit,
+		condition,
+		deleteModel,
+		setCondition,
+		getDataKhaiBaoUser,
+		visibleForm,
+		setVisibleForm,
+		exportMauDonTheoBuocModel,
+		exportMauTraKetQuaTheoBuocModel,
+		loading,
+	} = useModel('quytrinh.khaibaoquytrinh');
+	const { setLoading, record: recordQuyTrinh } = useModel('quytrinh.quytrinh');
 	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
+
+	const { record, getChiTietThuByIdentityCodeModel } = useModel('taichinh.chitietthu');
+
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
-	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
+	const [recordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
+	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 
 	useEffect(() => {
 		getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
 	}, []);
+
+	const getData = () => {
+		getDataKhaiBaoUser();
+	};
 
 	const onCell = (recordVal: KhaiBaoQuyTrinh.IRecord) => ({
 		onClick: () => {
@@ -63,25 +89,12 @@ const KhaiBaoQuyTrinhPage = () => {
 			setLoading(false);
 		}
 	};
-	// const onCellQuyTrinh = (recordVal: QuyTrinh.IRecord) => ({
-	// 	onClick: async () => {
-	// 		handleRedirect(recordVal?._id??'');
-	// 	},
-	// 	style: { cursor: 'pointer' },
-	// });
 
-	// useEffect(() => {
-	// 	getAllDanhMucChung();
-	// }, []);
-
-	const getData = () => {
-		getDataKhaiBaoUser();
-	};
 	const columns: IColumn<KhaiBaoQuyTrinh.IRecord>[] = [
 		{
 			title: 'Tên dịch vụ',
 			dataIndex: 'quyTrinhId',
-			width: 150,
+			width: 250,
 			// filterType: 'customselect',
 			// filterCustomSelect: <SelectQuyTrinh multiple/>,
 			render: (val, recordVal) => {
@@ -111,7 +124,7 @@ const KhaiBaoQuyTrinhPage = () => {
 			onCell,
 		},
 		{
-			title: 'Trạng thái',
+			title: 'Trạng thái xử lý',
 			dataIndex: 'quyTrinh',
 			width: 200,
 			align: 'center',
@@ -129,7 +142,18 @@ const KhaiBaoQuyTrinhPage = () => {
 			),
 		},
 		{
-			title: 'Ngày khai',
+			title: 'Trạng thái thanh toán',
+			dataIndex: 'trangThaiThanhToan',
+			width: 200,
+			align: 'center',
+			render: (val: EMaTrangThaiThanhToan) => (
+				<Tag color={EMauTrangThaiThanhToanTable?.[val] ?? 'gray'}>
+					{val ? ETrangThaiThanhToan[val] : 'Dịch vụ không tính phí'}
+				</Tag>
+			),
+		},
+		{
+			title: 'Ngày tạo',
 			dataIndex: 'createdAt',
 			width: 150,
 			align: 'center',
@@ -141,105 +165,104 @@ const KhaiBaoQuyTrinhPage = () => {
 		{
 			title: 'Thao tác',
 			align: 'center',
-			width: 90,
+			width: 150,
 			fixed: 'right',
-			render: (recordVal: KhaiBaoQuyTrinh.IRecord) => (
-				<>
-					<Tooltip title='Xem chi tiết'>
-						<Button
-							onClick={() => {
-								history.push(`/khai-bao-quy-trinh/${recordVal?._id}`);
-							}}
-							type='link'
-							icon={<EyeOutlined />}
-						/>
-					</Tooltip>
-					<Tooltip title='Tải mẫu đơn'>
-						<Button
-							onClick={() => {
-								message.warn('Chức năng đang phát triển');
-							}}
-							type='link'
-							icon={<DownloadOutlined />}
-						/>
-					</Tooltip>
-					<Tooltip title='Xóa'>
-						<Popconfirm
-							onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
-							title='Bạn có chắc chắn muốn xóa?'
-							placement='topLeft'
-						>
-							<Button danger type='link' icon={<DeleteOutlined />} />
-						</Popconfirm>
-					</Tooltip>
-				</>
-			),
+			render: (recordVal: KhaiBaoQuyTrinh.IRecord) => {
+				const buocHienTai = recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1];
+				const formKhai = recordVal?.quyTrinh?.danhSachFormKhaiBao?.find(
+					(item) => item.ma === buocHienTai?.maFormKhaiBao,
+				);
+				const formTiepNhan = recordVal?.quyTrinh?.danhSachFormTiepNhan?.find(
+					(item) => item.ma === buocHienTai?.maFormTiepNhan,
+				);
+
+				return (
+					<>
+						<Tooltip title='Xem chi tiết'>
+							<Button
+								onClick={() => {
+									history.push(`/khai-bao-quy-trinh/${recordVal?._id}`);
+								}}
+								type='link'
+								icon={<EyeOutlined />}
+							/>
+						</Tooltip>
+						{recordVal.identityCode && (
+							<Tooltip title={<div style={{ maxWidth: 100 }}>Thông tin thanh toán</div>}>
+								<Button
+									onClick={() => {
+										getChiTietThuByIdentityCodeModel(recordVal.identityCode);
+										setVisibleModal(true);
+									}}
+									type='link'
+									icon={<DollarCircleOutlined />}
+								/>
+							</Tooltip>
+						)}
+						{(formKhai?.fileId || formTiepNhan?.fileId) && (
+							<Tooltip title='Tải mẫu đơn'>
+								<Dropdown
+									overlay={
+										<Menu
+											onClick={(val) => {
+												if (val.key === 'MAU_DON')
+													exportMauDonTheoBuocModel(recordVal._id, buocHienTai.ma, formKhai?.ten ?? '');
+												else exportMauTraKetQuaTheoBuocModel(recordVal._id, buocHienTai.ma, formTiepNhan?.ten ?? '');
+											}}
+										>
+											{formKhai?.fileId && <Menu.Item key={'MAU_DON'}>Mẫu đơn</Menu.Item>}
+											{formTiepNhan?.fileId && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.DA_DUYET && (
+												<Menu.Item key={'MAU_TRA_KET_QUA'}>Mẫu trả kết quả</Menu.Item>
+											)}
+										</Menu>
+									}
+									placement='bottomLeft'
+								>
+									<Button loading={loading} type='link' icon={<DownloadOutlined />} />
+								</Dropdown>
+							</Tooltip>
+						)}
+						<Tooltip title='Xóa'>
+							<Popconfirm
+								onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
+								title='Bạn có chắc chắn muốn xóa?'
+								placement='topLeft'
+							>
+								<Button danger type='link' icon={<DeleteOutlined />} />
+							</Popconfirm>
+						</Tooltip>
+					</>
+				);
+			},
 		},
 	];
 	return (
 		<div>
-			{/*<Tabs defaultActiveKey='1'>*/}
-			{/*	<Tabs.TabPane tab='Đơn dịch vụ' key='1'>*/}
-			{/*		<TableBase*/}
-			{/*			buttons={{ create: false, filter: false }}*/}
-			{/*			modelName={'quytrinh.quytrinh'}*/}
-			{/*			columns={columns2}*/}
-			{/*			getData={getDataQuyTrinh}*/}
-			{/*		/>*/}
-			{/*	</Tabs.TabPane>*/}
-			{/*	<Tabs.TabPane tab='Lịch sử gửi đơn' key='2'>*/}
-			{/*		<TableBase*/}
-			{/*			modelName={'quytrinh.khaibaoquytrinh'}*/}
-			{/*			columns={columns}*/}
-			{/*			// Form={FormKhaiBao}*/}
-			{/*			getData={getData}*/}
-			{/*			dependencies={[page, limit, condition]}*/}
-			{/*			// title={'Khai báo quy trình'}*/}
-			{/*			destroyModal*/}
-			{/*			buttons={{ create: false }}*/}
-			{/*			otherButtons={[*/}
-			{/*				<>*/}
-			{/*					<SelectQuyTrinh*/}
-			{/*						loadData={false}*/}
-			{/*						allowClear*/}
-			{/*						style={{ width: 220, marginBottom: 8 }}*/}
-			{/*						onChange={(val: any) => {*/}
-			{/*							setCondition({*/}
-			{/*								...condition,*/}
-			{/*								quyTrinhId: val,*/}
-			{/*							});*/}
-			{/*						}}*/}
-			{/*					/>*/}
-			{/*				</>,*/}
-			{/*			]}*/}
-			{/*		/>*/}
-			{/*	</Tabs.TabPane>*/}
-			{/*</Tabs>*/}
-      <TableBase
-        modelName={'quytrinh.khaibaoquytrinh'}
-        columns={columns}
-        // Form={FormKhaiBao}
-        getData={getData}
-        dependencies={[page, limit, condition]}
-        title={'Lịch sử khai báo'}
-        destroyModal
-        buttons={{ create: false }}
-        otherButtons={[
-          <>
-            <SelectQuyTrinh
-              loadData={false}
-              allowClear
-              style={{ width: 220, marginBottom: 8 }}
-              onChange={(val: any) => {
-                setCondition({
-                  ...condition,
-                  quyTrinhId: val,
-                });
-              }}
-            />
-          </>,
-        ]}
-      />
+			<TableBase
+				modelName={'quytrinh.khaibaoquytrinh'}
+				columns={columns}
+				getData={getData}
+				dependencies={[page, limit, condition]}
+				title={'Lịch sử khai báo'}
+				destroyModal
+				buttons={{ create: false }}
+				otherButtons={[
+					<>
+						<SelectQuyTrinh
+							placeholder='Lọc theo dịch vụ'
+							loadData={false}
+							allowClear
+							style={{ width: 320, marginBottom: 8 }}
+							onChange={(val: any) => {
+								setCondition({
+									...condition,
+									quyTrinhId: val,
+								});
+							}}
+						/>
+					</>,
+				]}
+			/>
 			<Modal
 				title={'Chọn đợt khai báo'}
 				width={500}
@@ -271,6 +294,17 @@ const KhaiBaoQuyTrinhPage = () => {
 				destroyOnClose
 			>
 				<ViewThongTinChung dataThongTinChung={recordThongTinChung} />
+			</Modal>
+
+			<Modal
+				visible={visibleModal}
+				onCancel={() => setVisibleModal(false)}
+				footer={null}
+				bodyStyle={{ padding: 0 }}
+				width={1000}
+				destroyOnClose
+			>
+				{record?._id ? <ThongTinThanhToan setVisible={setVisibleModal} /> : null}
 			</Modal>
 		</div>
 	);

@@ -57,3 +57,11 @@ export async function chuyenVienTiepNhanImport(payload: any) {
 		...payload,
 	});
 }
+
+export const exportMauDonTheoBuoc = (id: string, maBuoc: string) => {
+	return axios.get(`${ip3}/${url}/${id}/export/khai-bao/${maBuoc}`, { responseType: 'arraybuffer' });
+};
+
+export const exportMauTraKetQuaTheoBuoc = (id: string, maBuoc: string) => {
+	return axios.get(`${ip3}/${url}/${id}/export/tiep-nhan/${maBuoc}`, { responseType: 'arraybuffer' });
+};

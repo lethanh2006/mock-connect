@@ -1,10 +1,11 @@
-import { Button, Col, Form, Row, Spin } from 'antd';
-import SelectQuyTrinh from '../QuyTrinh/Select';
-import { history } from 'umi';
-import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
 import SelectDotQuyTrinh from '@/pages/KhaiBaoQuyTrinh/DotQuyTrinh/Select';
-import { SetStateAction, useState } from 'react';
+import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
 import { useModel } from '@@/plugin-model/useModel';
+import { Button, Col, Form, Row, Spin } from 'antd';
+import type { SetStateAction } from 'react';
+import { useState } from 'react';
+import { history } from 'umi';
+import SelectQuyTrinh from '../QuyTrinh/Select';
 
 const FormKhaiBao = (props: { quyTrinhId?: string }) => {
 	const { setVisibleForm } = useModel('quytrinh.khaibaoquytrinh');

@@ -1,14 +1,15 @@
+import ViewRender from '@/pages/KhaiBaoQuyTrinh/MauDon/ViewRender';
 import ThongTinTiepNhan from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/thongTinTiepNhan';
-import type { TrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
+import ThongTinThanhToan from '@/pages/TaiChinh/ChiTietThu/components/ThongTinThanhToan';
+import { TrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
 import { MapColorTrangThaiTiepNhanDon, TrangThaiKhaiBao } from '@/services/KhaiBaoQuyTrinh/constants';
 import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
+import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import { LeftOutlined } from '@ant-design/icons';
-import {Button, Card, Col, Descriptions, Popconfirm, Row, Spin, Steps, Tag} from 'antd';
+import { Button, Card, Col, Descriptions, Modal, Popconfirm, Row, Spin, Steps, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
-import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
-import ViewRender from '@/pages/KhaiBaoQuyTrinh/MauDon/ViewRender';
 
 const { Step } = Steps;
 interface Iprops {
@@ -26,16 +27,15 @@ interface Iprops {
 const View = (props: Iprops) => {
 	const { dataQuyTrinh, current, loadingForm, modalName, FormModal, formProps, type } = props;
 	const model = useModel(modalName);
-	// const { record: recordQuyTrinh } = useModel('quanlykhoahoc.quytrinh.quytrinh');
-	const { setCurrent, setCurrentFormKhaiBao, currentFormKhaiBao } = model;
+	const { record, visibleForm, setVisibleForm } = useModel('taichinh.chitietthu');
+	const { setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
+	const { setCurrent, setCurrentFormKhaiBao, currentFormKhaiBao, setEditFormKhaiBao, setRecordFormKhaiBao } = model;
 
-	// const { setRecord: setRecordSanPham } = useModel('quanlykhoahoc.sanphamnckh');
 	const [currentStep, setCurrentStep] = useState<number>(0);
 	const onChange = (val: number) => {
 		setCurrentStep(val);
 	};
 	const renderDescription = (value: any) => {
-		// if (current) {
 		if (value) {
 			return (
 				<>
@@ -49,31 +49,6 @@ const View = (props: Iprops) => {
 							{value?.coKhaiBao ? TrangThaiKhaiBao.DA_KHAI_BAO : TrangThaiKhaiBao.CHUA_KHAI_BAO}
 						</Tag>
 					</div>
-					{/*{(value?.daDienThongTin === false || value?.trangThaiTiepNhan === TrangThaiTiepNhanDon.CHINH_SUA_LAI) &&*/}
-					{/*	!type && (*/}
-					{/*		<Button*/}
-					{/*			size='small'*/}
-					{/*			icon={<EditOutlined />}*/}
-					{/*			type='primary'*/}
-					{/*			onClick={() => {*/}
-					{/*				const arr = dataQuyTrinh?.quyTrinh?.danhSachFormKhaiBao;*/}
-					{/*				const obj = arr?.find((item: { ma: any }) => item?.ma === current?.maFormKhaiBao);*/}
-					{/*				setCurrentFormKhaiBao(obj);*/}
-
-					{/*				setEditFormKhaiBao(false);*/}
-					{/*				setVisibleFormKhaiBaoQuyTrinh(true);*/}
-					{/*				const dataKhaiBao = dataQuyTrinh?.danhSachKhaiBao?.find(*/}
-					{/*					(item: { ma: any }) => item?.ma === current?.maFormKhaiBao,*/}
-					{/*				);*/}
-					{/*				if (value?.trangThaiTiepNhan === TrangThaiTiepNhanDon.CHINH_SUA_LAI || dataKhaiBao) {*/}
-					{/*					setEditFormKhaiBao(true);*/}
-					{/*					setRecordFormKhaiBao(dataKhaiBao?.thongTinKhaiBao);*/}
-					{/*				}*/}
-					{/*			}}*/}
-					{/*		>*/}
-					{/*			Hoàn thiện thông tin*/}
-					{/*		</Button>*/}
-					{/*	)}*/}
 				</>
 			);
 		} else {
@@ -96,11 +71,26 @@ const View = (props: Iprops) => {
 			const arr = dataQuyTrinh?.quyTrinh?.danhSachFormKhaiBao;
 			const obj = arr?.find((item: { ma: any }) => item?.ma === current?.maFormKhaiBao);
 			setCurrentFormKhaiBao(obj);
+			if (current?.trangThaiTiepNhan === TrangThaiTiepNhanDon.CHINH_SUA_LAI) {
+				const dataFormKhaiBao = dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao);
+				console.log('dataFormKhaiBao?.thongTinKhaiBao', dataFormKhaiBao?.thongTinKhaiBao);
+				setRecordQuyTrinhForm(dataFormKhaiBao);
+				setRecordFormKhaiBao(dataFormKhaiBao?.thongTinKhaiBao);
+				setEditFormKhaiBao(true);
+			}
 		}
 	}, [current]);
 
 	const cauHinhForm: QuyTrinh.IMauDon = currentFormKhaiBao;
-	const dataForm = dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao);
+
+	//lấy thông tin đã khai báo trong danhSachKhaiBaoArchive còn cái thông tin khai báo ở ngoài để fill chỉnh sửa khi có yêu cầu chỉnh sửa
+	const dataForm =
+		current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.DUYET &&
+		current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.KHONG_DUYET
+			? dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao)
+			: dataQuyTrinh?.danhSachKhaiBao
+					?.find((ele) => ele.ma === current.maFormKhaiBao)
+					?.danhSachKhaiBaoArchive?.find((item) => item?.maBuoc === current?.ma);
 
 	return (
 		<>
@@ -131,14 +121,7 @@ const View = (props: Iprops) => {
 										okText='Đồng ý'
 										cancelText='Đóng'
 									>
-										<Button
-											style={{ marginBottom: 16 }}
-											icon={<LeftOutlined />}
-											type={'link'}
-											// onClick={() => {
-											//   history.push('/khai-bao-quy-trinh/lich-su');
-											// }}
-										>
+										<Button style={{ marginBottom: 16 }} icon={<LeftOutlined />} type={'link'}>
 											Quay lại
 										</Button>
 									</Popconfirm>
@@ -164,7 +147,6 @@ const View = (props: Iprops) => {
 												if (obj) {
 													setCurrent(obj);
 												}
-												// setCurrent(value);
 											}}
 										/>
 									);
@@ -178,7 +160,7 @@ const View = (props: Iprops) => {
 								</div>
 							)}
 
-							{current?.coKhaiBao ? (
+							{current?.coKhaiBao && current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.CHINH_SUA_LAI ? (
 								<div>
 									<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
 										{cauHinhForm?.cauHinhLoaiHinh
@@ -237,18 +219,16 @@ const View = (props: Iprops) => {
 						</Col>
 					</Row>
 				</Spin>
-				{/*{FormModal && (*/}
-				{/*	<Modal*/}
-				{/*		title={'Khai báo'}*/}
-				{/*		visible={visibleFormKhaiBaoQuyTrinh}*/}
-				{/*		onCancel={() => setVisibleFormKhaiBaoQuyTrinh(false)}*/}
-				{/*		width={1200}*/}
-				{/*		footer={null}*/}
-				{/*		destroyOnClose*/}
-				{/*	>*/}
-				{/*		<FormModal {...formProps} />*/}
-				{/*	</Modal>*/}
-				{/*)}*/}
+				<Modal
+					visible={visibleForm}
+					onCancel={() => setVisibleForm(false)}
+					footer={null}
+					bodyStyle={{ padding: 0 }}
+					width={1000}
+					destroyOnClose
+				>
+					{record?._id ? <ThongTinThanhToan setVisible={setVisibleForm} /> : null}
+				</Modal>
 			</Card>
 		</>
 	);

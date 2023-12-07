@@ -1,4 +1,8 @@
 import type { TruongThongTin } from '@/services/LoaiHinhNCKH/typings';
+import type { ETrangThaiThanhToanVI } from '../CongNo/constant';
+import { ETrangThaiThanhToan } from '../CongNo/constant';
+import type { EMaTrangThaiThanhToan } from '../TaiChinh/constant';
+import type { QuyTrinh } from '../QuyTrinh/typings';
 
 declare module KhaiBaoQuyTrinh {
 	export interface IRecord {
@@ -12,20 +16,16 @@ declare module KhaiBaoQuyTrinh {
 			ten: string;
 			ma: string;
 			thongTinKhaiBao: any;
+			danhSachKhaiBaoArchive: {
+				maBuoc: string;
+				thongTinKhaiBao: any;
+			}[];
 		}[];
 		__v: 0;
-		quyTrinh: {
-			_id: string;
-			ten: string;
-			ghiChu: string;
-			moTa: string;
-			choPhepGuiNhieuLan: boolean;
-			danhSachFormKhaiBao: IDanhSachForm[];
-			danhSachBoPhanXuLy: IDonViXuLy[];
-			danhSachBuocXuLy: IBuocXuLy[];
-			__v: 0;
-		};
+		quyTrinh: QuyTrinh.IRecord;
 		[key: string]: any;
+		trangThaiThanhToan: EMaTrangThaiThanhToan;
+		identityCode: string;
 	}
 	export interface IDanhSachForm {
 		ten: string;
@@ -42,10 +42,11 @@ declare module KhaiBaoQuyTrinh {
 		ten: string;
 		ma: string;
 		maFormKhaiBao: string;
+		maFormTiepNhan: string;
 		ghiChu: string;
 		maBoPhanXuLy: string;
 		trangThaiTiepNhan: string;
-    doiTuongDieuPhoi: string;
+		doiTuongDieuPhoi: string;
 		coKhaiBao: boolean;
 		daDienThongTin: boolean;
 		laBuocHienTai: boolean;
