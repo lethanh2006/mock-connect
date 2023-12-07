@@ -9,7 +9,7 @@ const FormGiaoDich = (props: any) => {
 	const [form] = Form.useForm();
 	const { dongTruocHocPhiModel, loading, setVisibleForm } = useModel('taichinh.giaodich');
 	const { paymentType, setVisibleHuongDan } = useModel('taichinh.hoadon');
-	const amountPay: number = Form.useWatch('amount', form) ?? 0;
+	const amount: number = Form.useWatch('amount', form) ?? 0;
 
 	const onFinish = (values: GiaoDich.TDongTruocHocPhi) => {
 		dongTruocHocPhiModel(values)
@@ -23,9 +23,9 @@ const FormGiaoDich = (props: any) => {
 					<Row gutter={[12, 0]}>
 						<Col span={24}>
 							<Col md={8}>
-								<Form.Item name='amount' label='Số điền đóng'>
+								<Form.Item name='amount' label='Số điền nộp'>
 									<InputNumber
-										placeholder='Nhập số tiền đóng'
+										placeholder='Nhập số tiền nộp'
 										addonAfter='VND'
 										formatter={inputFormat}
 										style={{ width: '100%' }}
@@ -37,8 +37,8 @@ const FormGiaoDich = (props: any) => {
 						<Col span={24}>
 							<div className='fw500'>Hình thức thanh toán</div>
 						</Col>
-						<Col span={24}>
-							<HuongDanThanhToan isDongTruoc amountPay={amountPay} />
+						<Col span={24} style={{ marginTop: 12 }}>
+							<HuongDanThanhToan isDongTruoc amount={amount} />
 						</Col>
 					</Row>
 
