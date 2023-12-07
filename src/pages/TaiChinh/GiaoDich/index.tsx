@@ -55,6 +55,22 @@ const GiaoDichPage = () => {
 		},
 		{ title: 'Người thực hiện', dataIndex: 'payerFullname', width: 150, filterType: 'string' },
 		{
+			title: 'Lịch sửa giao dịch',
+			width: 120,
+			render: (val, rec) => {
+				switch ((rec.fromAccount, rec.toAccount)) {
+					case (ETransactionSourceType.EXTERNAL, ETransactionSourceType.WALLET):
+						return <>Nộp tiền</>;
+					case (ETransactionSourceType.WALLET, ETransactionSourceType.SYSTEM):
+						return <>Thanh toán dịch vụ</>;
+					case (ETransactionSourceType.SYSTEM, ETransactionSourceType.WALLET):
+						return <>Hoàn trả</>;
+					default:
+						return null;
+				}
+			},
+		},
+		{
 			title: 'Thời gian',
 			dataIndex: 'transactionDate',
 			width: 120,
@@ -112,7 +128,7 @@ const GiaoDichPage = () => {
 							onChange={(val) => setKieuThanhToan(val)}
 							options={[
 								{ value: 1, label: 'Tất cả giao dịch' },
-								{ value: 2, label: 'Sinh viên nộp tiền' },
+								{ value: 2, label: 'Nộp tiền' },
 								{ value: 3, label: 'Thanh toán dịch vụ' },
 								{ value: 4, label: 'Hoàn trả' },
 							]}
