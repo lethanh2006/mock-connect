@@ -63,3 +63,17 @@ export enum ETransactionStatus {
 	FAIL = 'fail',
 	CANCEL = 'cancel',
 }
+
+export const transactionStatus: Record<ETransactionStatus, string> = {
+	[ETransactionStatus.PENDING]: 'Đang xử lý',
+	[ETransactionStatus.SUCCESS]: 'Thành công',
+	[ETransactionStatus.FAIL]: 'Không thành công',
+	[ETransactionStatus.CANCEL]: 'Đã hủy',
+};
+
+export const colorTransactionStatus: Record<ETransactionStatus, string> = {
+	[ETransactionStatus.PENDING]: 'blue',
+	[ETransactionStatus.SUCCESS]: 'green',
+	[ETransactionStatus.FAIL]: 'red',
+	[ETransactionStatus.CANCEL]: 'purple',
+};

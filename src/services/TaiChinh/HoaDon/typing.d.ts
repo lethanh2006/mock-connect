@@ -52,4 +52,14 @@ declare module HoaDon {
 		heSo: number;
 		status: EMaTrangThaiThanhToan;
 	}
+
+	export interface IResponseMomo {
+		payUrl: string;
+		deeplink: string;
+		qrCodeUrl: string;
+		deeplinkMiniApp: string;
+		userFee: number;
+		userFeePercent: number;
+		userFeeMax: number;
+	}
 }

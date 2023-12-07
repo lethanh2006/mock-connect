@@ -8,12 +8,13 @@ import { useModel } from 'umi';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
 import FormThanhToan from '../ThanhToan/FormThanhToan';
 import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
+import ModalThanhToanNganHang from './ModalThanhToanNganHang';
+
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData: () => void }) => {
 	const { setVisible, getData } = props;
-	const { record } = useModel('taichinh.hoadon');
+	const { record, visibleHuongDan, setVisibleHuongDan } = useModel('taichinh.hoadon');
 	const { selectedIds, setSelectedIds, visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
 	const [activeTab, setActiveTab] = useState('1');
-	// TODO: Tách componen: thông tin thanh toán, hướng dẫn thanh toán
 
 	useEffect(() => {
 		setSelectedIds([]);
@@ -56,7 +57,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData:
 							{inputFormat(
 								record?.billItems
 									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-									?.reduce((acc, item) => acc + (item.amountRemaining || 0), 0),
+									?.reduce((acc, item) => acc + (item.amountDue - item.amountPaid), 0),
 							)}{' '}
 							VNĐ
 						</Descriptions.Item>
@@ -110,6 +111,8 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData:
 			>
 				<FormThanhToan getData={getData} />
 			</Modal>
+
+			<ModalThanhToanNganHang visibleHuongDan={visibleHuongDan} setVisibleHuongDan={setVisibleHuongDan} />
 		</Card>
 	);
 };

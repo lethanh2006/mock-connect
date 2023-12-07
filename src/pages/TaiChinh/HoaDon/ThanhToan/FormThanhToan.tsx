@@ -1,53 +1,64 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import rules from '@/utils/rules';
+import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat, inputParse } from '@/utils/utils';
-import { Button, Col, Form, InputNumber, Popconfirm, Row, Table } from 'antd';
+import { Alert, Button, Col, Form, InputNumber, Popconfirm, Row, Table } from 'antd';
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import HuongDanThanhToan from './HuongDanThanhToan';
 
 const FormThanhToan = (props: { getData: () => void }) => {
-	// const { getData } = props;
-	const { loading, danhSach, selectedIds, visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
+	const { getData } = props;
+	const { formSubmiting, danhSach, selectedIds, visibleThanhToan, setVisibleThanhToan, getAllModel } =
+		useModel('taichinh.hoadonchitiet');
 	const { getSoDuViSinhVienModel, soDuVi } = useModel('taichinh.giaodich');
-	const {
-		record: recHoaDon,
-		danhSach: danhSachHoaDon,
-		setRecord: setRecDon,
-		paymentType,
-		setVisibleHuongDan,
-	} = useModel('taichinh.hoadon');
+	const { record: recHoaDon, paymentType, setVisibleHuongDan, setSelectedIds, infoMomo } = useModel('taichinh.hoadon');
+	const { record: recUuDai, getUuDaiByBillModel } = useModel('taichinh.uudaiuser');
 	const [form] = Form.useForm();
+	const dataHienThi = danhSach.filter((item) => selectedIds?.includes(item._id)) ?? [];
 	const payList: Record<string, number> = Form.useWatch('payList', form);
 	const totalPhaiNop = _.sum(Object.values(payList ?? {})) ?? 0;
-	const dataHienThi = danhSach.filter((item) => selectedIds?.includes(item._id)) ?? [];
+	const totalUuDai = _.sumBy(
+		dataHienThi.filter((item) => item.maKhoanThu === recUuDai?.uuDai?.maKhoanThuApDung),
+		(item) => Math.round(((payList?.[item._id] ?? 0) * (recUuDai?.uuDai?.phanTramUuDai ?? 0)) / 100),
+	);
+	const amount = totalPhaiNop - totalUuDai > (soDuVi ?? 0) ? totalPhaiNop - totalUuDai - (soDuVi ?? 0) : 0;
+	const totalSauThanhToan = (soDuVi ?? 0) + amount - totalPhaiNop + totalUuDai;
 
-	// const getBillItems = () =>
-	// 	recHoaDon?._id && getAllModel(undefined, undefined, { billIdentityCode: recHoaDon?.identityCode });
+	const getBillItems = () =>
+		recHoaDon?.identityCode && getAllModel(undefined, undefined, { billIdentityCode: recHoaDon?.identityCode });
 
 	useEffect(() => {
-		getSoDuViSinhVienModel();
-	}, []);
+		if (visibleThanhToan) {
+			const pay: any = {};
+			dataHienThi.forEach((item) => {
+				const payItem = item.amountDue - item.amountPaid;
+				pay[item._id] = payItem;
+			});
+			form.setFieldsValue({ payList: pay });
 
-	useEffect(() => {
-		const pay: any = {};
-		dataHienThi.forEach((item) => {
-			const payItem = item.amountDue - item.amountPaid;
-			pay[item._id] = payItem;
-		});
-		form.setFieldsValue({ payList: pay });
+			getSoDuViSinhVienModel();
+			if (recHoaDon?.identityCode) getUuDaiByBillModel(recHoaDon.identityCode);
+		}
 	}, [visibleThanhToan]);
 
 	const onFinish = (values: any) => {
-		const billItems = Object.entries(values?.payList).map(([billItemId, amount]) => ({ billItemId, amount }));
+		const billItems = Object.entries(values?.payList).map(([billItemId, amount1]) => ({ billItemId, amount: amount1 }));
 		const data = {
 			...values,
 			billIdentityCode: recHoaDon?.identityCode,
 			billItems,
 		};
+
+		setSelectedIds([]);
+		getData();
+		getBillItems();
+		setVisibleThanhToan(false);
+		if (paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
+		else if (paymentType === ETransactionPaymentType.MOMO_WALLET && !!infoMomo?.payUrl)
+			window.location.href = infoMomo.payUrl;
 
 		// chuyenVienThanhToanModel(data)
 		// 	.then(() => {
@@ -55,7 +66,6 @@ const FormThanhToan = (props: { getData: () => void }) => {
 		// 		getData();
 		// 		getBillItems();
 		// 		setVisibleThanhToan(false);
-		// 		setRecDon(danhSachHoaDon.filter((item) => item?._id === recHoaDon?._id));
 		// 	})
 		// 	.catch((err) => console.log(err));
 	};
@@ -67,21 +77,21 @@ const FormThanhToan = (props: { getData: () => void }) => {
 			width: 200,
 		},
 		{
-			title: 'Số tiền phải nộp',
+			title: 'Phải nộp',
 			dataIndex: 'amountDue',
 			width: 120,
 			align: 'right',
-			render: (val, rec) => `${inputFormat(val)} VND`,
+			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
-			title: 'Số tiền đã nộp',
+			title: 'Đã nộp',
 			dataIndex: 'amountPaid',
 			width: 120,
 			align: 'right',
-			render: (val, rec) => `${inputFormat(val)} VND`,
+			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
-			title: 'Số tiền còn lại',
+			title: 'Còn lại',
 			dataIndex: 'amountRemaining',
 			width: 120,
 			align: 'right',
@@ -92,8 +102,9 @@ const FormThanhToan = (props: { getData: () => void }) => {
 			width: 180,
 			align: 'right',
 			render: (val, rec) => (
-				<Form.Item noStyle rules={[...rules.required]} name={['payList', rec?._id]}>
+				<Form.Item noStyle name={['payList', rec?._id]}>
 					<InputNumber
+						// onChange={(value) => onChangePayList({ billItemId: rec._id, amount: value ?? 0 })}
 						step={1000}
 						min={0}
 						max={rec.amountDue - rec.amountPaid}
@@ -106,24 +117,40 @@ const FormThanhToan = (props: { getData: () => void }) => {
 				</Form.Item>
 			),
 		},
+		{
+			title: 'Ưu đãi',
+			width: 120,
+			align: 'right',
+			render: (val, rec) =>
+				rec.maKhoanThu === recUuDai?.uuDai?.maKhoanThuApDung
+					? `${inputFormat(Math.round((recUuDai.uuDai.phanTramUuDai * (payList?.[rec._id] ?? 0)) / 100))} VND`
+					: '',
+		},
 	];
 
 	return (
 		<>
 			<Form layout='vertical' form={form} onFinish={onFinish}>
-				<Row gutter={[12, 0]}>
-					<Col span={24}>
-						<Col md={8}>
-							<Form.Item label='Số dư hiện tại'>
-								<InputNumber
-									value={soDuVi}
-									disabled
-									addonAfter='VND'
-									formatter={inputFormat}
-									style={{ width: '100%' }}
-								/>
-							</Form.Item>
+				<Row gutter={[12, 12]}>
+					{recUuDai?.uuDai?._id ? (
+						<Col span={24}>
+							<Alert
+								description={
+									<>
+										Bạn có ưu đãi cho các khoản thu{' '}
+										<b>{recUuDai?.uuDai?.khoanThuApDung?.name ?? recUuDai?.uuDai?.maKhoanThuApDung}</b>, giá trị ưu đãi:{' '}
+										<b>{recUuDai?.uuDai?.phanTramUuDai}%</b>
+									</>
+								}
+								banner
+								type='success'
+							/>
 						</Col>
+					) : null}
+					<Col md={8}>
+						<Form.Item label='Số dư hiện tại'>
+							<InputNumber value={soDuVi} disabled addonAfter='VND' formatter={inputFormat} style={{ width: '100%' }} />
+						</Form.Item>
 					</Col>
 				</Row>
 
@@ -143,25 +170,26 @@ const FormThanhToan = (props: { getData: () => void }) => {
 									const totalRemain = totalDue - totalPaid;
 
 									return (
-										<>
-											<Table.Summary.Row>
-												<Table.Summary.Cell index={0} colSpan={2}>
-													<b>Tổng</b>
-												</Table.Summary.Cell>
-												<Table.Summary.Cell align={'right'} index={1}>
-													<b> {inputFormat(totalDue ?? 0)} VND</b>
-												</Table.Summary.Cell>
-												<Table.Summary.Cell align={'right'} index={2}>
-													<b>{inputFormat(totalPaid ?? 0)} VND</b>
-												</Table.Summary.Cell>
-												<Table.Summary.Cell align={'right'} index={3}>
-													<b>{inputFormat(totalRemain ?? 0)} VND</b>
-												</Table.Summary.Cell>
-												<Table.Summary.Cell align={'right'} index={4}>
-													<b>{inputFormat(totalPhaiNop ?? 0)} VND</b>
-												</Table.Summary.Cell>
-											</Table.Summary.Row>
-										</>
+										<Table.Summary.Row>
+											<Table.Summary.Cell index={0} colSpan={2}>
+												<b>Tổng</b>
+											</Table.Summary.Cell>
+											<Table.Summary.Cell align={'right'} index={1}>
+												<b> {inputFormat(totalDue ?? 0)} VND</b>
+											</Table.Summary.Cell>
+											<Table.Summary.Cell align={'right'} index={2}>
+												<b>{inputFormat(totalPaid ?? 0)} VND</b>
+											</Table.Summary.Cell>
+											<Table.Summary.Cell align={'right'} index={3}>
+												<b>{inputFormat(totalRemain ?? 0)} VND</b>
+											</Table.Summary.Cell>
+											<Table.Summary.Cell align={'right'} index={4}>
+												<b>{inputFormat(totalPhaiNop ?? 0)} VND</b>
+											</Table.Summary.Cell>
+											<Table.Summary.Cell align={'right'} index={5}>
+												<b>{inputFormat(Math.round(totalUuDai))} VND</b>
+											</Table.Summary.Cell>
+										</Table.Summary.Row>
 									);
 								},
 							}}
@@ -169,19 +197,23 @@ const FormThanhToan = (props: { getData: () => void }) => {
 					</Col>
 
 					<Col span={24}>
-						<div className='fw500'>Hình thức thanh toán</div>
+						<div className='fw500' style={{ marginTop: 18 }}>
+							Hình thức thanh toán
+						</div>
 					</Col>
 					<Col span={24}>
-						<HuongDanThanhToan totalPhaiNop={totalPhaiNop} dataHienThi={dataHienThi} />
+						<HuongDanThanhToan
+							thanhToan={totalPhaiNop}
+							tongUuDai={totalUuDai}
+							amount={amount}
+							duNo={totalSauThanhToan}
+						/>
 					</Col>
 				</Row>
 
-				<div className='form-footer'>
-					<Popconfirm
-						title='Xác nhận thanh toán?'
-						onConfirm={() => (paymentType === 'momo' ? form.submit() : setVisibleHuongDan(true))}
-					>
-						<Button loading={loading} type='primary'>
+				<div className='form-footer' style={{ marginTop: 18 }}>
+					<Popconfirm title='Xác nhận thanh toán?' onConfirm={() => form.submit()}>
+						<Button loading={formSubmiting} type='primary' htmlType='submit'>
 							Thanh toán
 						</Button>
 					</Popconfirm>

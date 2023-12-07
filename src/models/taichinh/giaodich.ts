@@ -29,7 +29,7 @@ export default () => {
 		setFormSubmiting(true);
 		try {
 			const response = await dongTruocHocPhi(payLoad);
-			message.success('Đóng học phí thành công');
+			message.success('Tạo lệnh đóng học phí thành công');
 			return response?.data?.data;
 		} catch (er) {
 			return Promise.reject(er);

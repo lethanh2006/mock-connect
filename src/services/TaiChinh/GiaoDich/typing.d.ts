@@ -1,22 +1,26 @@
 import type { ETransactionPaymentType, ETransactionSourceType, ETransactionStatus } from '../constant';
 
 declare module GiaoDich {
-	export interface IRecord extends IKhacHang, IChuyenVien {
+	export interface IRecord extends IKhachHang, IChuyenVien {
 		_id: string;
+		idDotThu: string;
+		dotThu?: DotThuTaiChinh.Record;
 		paymentType: ETransactionPaymentType;
 		status: ETransactionStatus;
 		identityCode: string;
+
 		fromAccount: ETransactionSourceType;
 		toAccount: ETransactionSourceType;
+		amount: number;
+
 		transactionId: string;
 		transactionDate: string;
 		requestId: string;
 		requestData: Record;
 		responseData: Record;
-		amount: number;
 	}
 
-	interface IKhacHang {
+	interface IKhachHang {
 		userSsoId: string;
 		userFullname: string;
 		userCode: string;
@@ -40,5 +44,5 @@ declare module GiaoDich {
 
 	export type TDongTruocHocPhi = {
 		amount: number;
-	}
+	};
 }
