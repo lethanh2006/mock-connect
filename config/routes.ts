@@ -92,6 +92,13 @@
 		component: './DaoTao/KeHoachNamHoc',
 	},
 
+	{
+		name: 'KeHoachNCKH',
+		icon: 'FileOutlined',
+		path: '/ke-hoach-nckh',
+		component: './KeHoachNCKH',
+	},
+
 	// MENU SINH VIEN
 	{
 		name: 'HocTap',
@@ -239,6 +246,7 @@
 		path: '/khai-bao-suc-khoe',
 		component: './TienIch/KhaiBaoSucKhoe',
 	},
+
 	// {
 	// 	name: 'DichVuHanhChinh',
 	// 	icon: 'AuditOutlined',
