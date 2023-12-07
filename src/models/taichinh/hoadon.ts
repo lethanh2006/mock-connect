@@ -19,6 +19,6 @@ export default () => {
 		setPaymentType,
 		visibleHuongDan,
 		setVisibleHuongDan,
-		// getModel,
+		getModel,
 	};
 };
