@@ -13,9 +13,9 @@ const HuongDanThanhToan = (props: {
 	totalPhaiNop?: number;
 	dataHienThi?: HoaDon.IBillItem[];
 	isDongTruoc?: boolean;
-	amountPay?: number;
+	amount?: number;
 }) => {
-	const { totalPhaiNop, dataHienThi, isDongTruoc, amountPay } = props;
+	const { totalPhaiNop, dataHienThi, isDongTruoc, amount } = props;
 	const {
 		record: recHoaDon,
 		paymentType,
@@ -75,21 +75,18 @@ const HuongDanThanhToan = (props: {
 								<Descriptions.Item label='Tổng ưu đãi'>
 									0{/* {inputFormat(record?.amountPaid ?? 0)} VNĐ */}
 								</Descriptions.Item>
-							</>
-						) : null}
-						<Descriptions.Item label='Số tiền cần nộp thêm'>
-							{isDongTruoc ? (
-								<>{inputFormat(amountPay)} VNĐ</>
-							) : (
-								<>
+
+								<Descriptions.Item label='Số tiền cần nộp thêm'>
 									{inputFormat(
 										_.sumBy(dataHienThi, (item) => item.amountDue) - _.sumBy(dataHienThi, (item) => item.amountPaid) ??
 											0,
 									)}{' '}
 									VNĐ
-								</>
-							)}
-						</Descriptions.Item>
+								</Descriptions.Item>
+							</>
+						) : (
+							<Descriptions.Item label='Số tiền sinh viên nộp'>{inputFormat(amount ?? 0)} VNĐ</Descriptions.Item>
+						)}
 						{paymentType === 'momo' ? (
 							//  && !!infoMomo
 							<>
