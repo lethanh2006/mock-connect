@@ -11,7 +11,7 @@ import { Modal, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import SelectDotThu from '../DotThu/Select';
-import ThongTinThanhToan from './components/ThongTinThanhToan';
+import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
 
 const HoaDonPage = (props: { idDotThu?: string }) => {
 	const { getModel, page, limit, setRecord } = useModel('taichinh.hoadon');
