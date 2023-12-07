@@ -38,15 +38,7 @@ declare module GiaoDich {
 		payerMetadata: Record;
 	}
 
-	export type TChuyenVienThanhToan = {
-		billIdentityCode: string;
-		billItems: TPayItem[];
-		amountPay?: number;
-		thoiGianThanhToan: Date;
-	};
-
-	export type TPayItem = {
-		billItemId: string;
+	export type TDongTruocHocPhi = {
 		amount: number;
-	};
+	}
 }

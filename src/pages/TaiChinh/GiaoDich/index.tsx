@@ -97,8 +97,8 @@ const GiaoDichPage = () => {
 			<TableBase
 				buttons={{ create: false }}
 				columns={columns}
-				getData={getData}
 				Form={Form}
+				getData={getData}
 				widthDrawer={1000}
 				dependencies={[
 					page,
@@ -106,6 +106,7 @@ const GiaoDichPage = () => {
 					kieuThanhToan,
 					// recDot?._id
 				]}
+				formProps={{ getData }}
 				modelName='taichinh.giaodich'
 				title='Lịch sử thanh toán'
 				otherButtons={[
