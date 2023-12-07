@@ -8,6 +8,7 @@ const FormGiaoDich = (props: any) => {
 	const { getData } = props;
 	const [form] = Form.useForm();
 	const { dongTruocHocPhiModel, loading, setVisibleForm } = useModel('taichinh.giaodich');
+	const { paymentType, setVisibleHuongDan } = useModel('taichinh.hoadon');
 	const amountPay: number = Form.useWatch('amount', form) ?? 0;
 
 	const onFinish = (values: GiaoDich.TDongTruocHocPhi) => {
@@ -40,8 +41,12 @@ const FormGiaoDich = (props: any) => {
 							<HuongDanThanhToan isDongTruoc amountPay={amountPay} />
 						</Col>
 					</Row>
+
 					<div className='form-footer'>
-						<Popconfirm title='			Xác nhận thanh toán?' onConfirm={() => form.submit()}>
+						<Popconfirm
+							title='Xác nhận thanh toán?'
+							onConfirm={() => (paymentType === 'momo' ? form.submit() : setVisibleHuongDan(true))}
+						>
 							<Button loading={loading} type='primary'>
 								Thanh toán
 							</Button>

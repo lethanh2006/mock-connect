@@ -16,9 +16,13 @@ const HuongDanThanhToan = (props: {
 	amountPay?: number;
 }) => {
 	const { totalPhaiNop, dataHienThi, isDongTruoc, amountPay } = props;
-	const { record: recHoaDon } = useModel('taichinh.hoadon');
-	const [visibleHuongDan, setVisibleHuongDan] = useState<boolean>(false);
-	const [paymentType, setPaymentType] = useState<string>();
+	const {
+		record: recHoaDon,
+		paymentType,
+		setPaymentType,
+		visibleHuongDan,
+		setVisibleHuongDan,
+	} = useModel('taichinh.hoadon');
 	const [infoMomo, setInfoMomo] = useState<ChiTietThu.IResponseMomo>();
 	const payable =
 		isDongTruoc ||
