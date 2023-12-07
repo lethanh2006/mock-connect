@@ -9,14 +9,19 @@ import { useModel } from 'umi';
 import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 import './style.less';
 
-const HuongDanThanhToan = (props: { totalPhaiNop?: number; dataHienThi?: HoaDon.IBillItem[] }) => {
-	const { totalPhaiNop, dataHienThi } = props;
+const HuongDanThanhToan = (props: {
+	totalPhaiNop?: number;
+	dataHienThi?: HoaDon.IBillItem[];
+	isDongTruoc?: boolean;
+	amountPay?: number;
+}) => {
+	const { totalPhaiNop, dataHienThi, isDongTruoc, amountPay } = props;
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
 	const [visibleHuongDan, setVisibleHuongDan] = useState<boolean>(false);
 	const [paymentType, setPaymentType] = useState<string>();
-	console.log('🚀 ~ file: HuongDanThanhToan.tsx:17 ~ HuongDanThanhToan ~ paymentType:', paymentType);
 	const [infoMomo, setInfoMomo] = useState<ChiTietThu.IResponseMomo>();
 	const payable =
+		isDongTruoc ||
 		recHoaDon?.status === EMaTrangThaiThanhToan.CHUA_THANH_TOAN ||
 		recHoaDon?.status === EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU;
 
@@ -26,7 +31,6 @@ const HuongDanThanhToan = (props: { totalPhaiNop?: number; dataHienThi?: HoaDon.
 
 	const onChangeType = async (type: string) => {
 		setPaymentType(type);
-		if (type === 'atm') setVisibleHuongDan(true);
 		// if (type === 'momo' && !infoMomo && recHoaDon?.identityCode)
 		// 	await postThongTinMomo({
 		// 		identityCode: recHoaDon?.identityCode,
@@ -61,15 +65,26 @@ const HuongDanThanhToan = (props: { totalPhaiNop?: number; dataHienThi?: HoaDon.
 				</Col>
 				<Col span={24} md={16}>
 					<Descriptions column={1} bordered labelStyle={{ width: '50%' }}>
-						<Descriptions.Item label='Số tiền thanh toán'>{inputFormat(totalPhaiNop ?? 0)} VNĐ</Descriptions.Item>
-						<Descriptions.Item label='Tổng ưu đãi'>
-							0{/* {inputFormat(record?.amountPaid ?? 0)} VNĐ */}
-						</Descriptions.Item>
+						{!isDongTruoc ? (
+							<>
+								<Descriptions.Item label='Số tiền thanh toán'>{inputFormat(totalPhaiNop ?? 0)} VNĐ</Descriptions.Item>
+								<Descriptions.Item label='Tổng ưu đãi'>
+									0{/* {inputFormat(record?.amountPaid ?? 0)} VNĐ */}
+								</Descriptions.Item>
+							</>
+						) : null}
 						<Descriptions.Item label='Số tiền cần nộp thêm'>
-							{inputFormat(
-								_.sumBy(dataHienThi, (item) => item.amountDue) - _.sumBy(dataHienThi, (item) => item.amountPaid) ?? 0,
-							)}{' '}
-							VNĐ
+							{isDongTruoc ? (
+								<>{inputFormat(amountPay)} VNĐ</>
+							) : (
+								<>
+									{inputFormat(
+										_.sumBy(dataHienThi, (item) => item.amountDue) - _.sumBy(dataHienThi, (item) => item.amountPaid) ??
+											0,
+									)}{' '}
+									VNĐ
+								</>
+							)}
 						</Descriptions.Item>
 						{paymentType === 'momo' ? (
 							//  && !!infoMomo
