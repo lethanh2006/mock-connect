@@ -1,11 +1,7 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import {
-	EMauTrangThaiThanhToanTable,
-	ETrangThaiThanhToan,
-	type EMaTrangThaiThanhToan,
-} from '@/services/TaiChinh/constant';
+import { EMauTrangThaiThanhToanTable, ETrangThaiThanhToan, EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { Col, Row, Table, Tag } from 'antd';
 import { useEffect } from 'react';
@@ -68,7 +64,7 @@ const FormItemHoaDonChiTiet = (props: { isThanhToan?: boolean }) => {
 							return (
 								<Table.Summary fixed>
 									<Table.Summary.Row>
-										<Table.Summary.Cell index={0} colSpan={5} align='center'>
+										<Table.Summary.Cell index={0} colSpan={6} align='center'>
 											<b>Tổng cộng</b>
 										</Table.Summary.Cell>
 										<Table.Summary.Cell index={1} align='right'>
@@ -86,29 +82,18 @@ const FormItemHoaDonChiTiet = (props: { isThanhToan?: boolean }) => {
 									selectedRowKeys: selectedIds ?? [],
 									preserveSelectedRowKeys: true,
 									onChange: (selectedRowKeys: string[]) => setSelectedIds(selectedRowKeys),
-									// getCheckboxProps: (rec: HoaDon.IBillItem) => ({
-									// 	disabled: ![
-									// 		EMaTrangThaiThanhToan.CHUA_THANH_TOAN,
-									// 		EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU,
-									// 	].includes(rec.status),
-									// }),
+									getCheckboxProps: (rec: HoaDon.IBillItem) => ({
+										disabled: ![
+											EMaTrangThaiThanhToan.CHUA_THANH_TOAN,
+											EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU,
+										].includes(rec.status),
+									}),
 									columnWidth: 40,
 							  }
 							: null,
 					}}
 				/>
 			</Col>
-
-			{/* <Modal
-				visible={visibleForm}
-				onCancel={() => setVisibleForm(false)}
-				footer={null}
-				title='Thêm mới'
-				width={600}
-				maskClosable={false}
-			>
-				<FormHoaDonChiTiet onOk={onAdd} />
-			</Modal> */}
 		</Row>
 	);
 };
