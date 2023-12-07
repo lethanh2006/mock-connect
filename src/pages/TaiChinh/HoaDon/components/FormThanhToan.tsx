@@ -3,18 +3,17 @@ import type { IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import rules from '@/utils/rules';
 import { inputFormat, inputParse } from '@/utils/utils';
-import { EditOutlined, PrinterOutlined } from '@ant-design/icons';
-import { Button, Col, Descriptions, Form, InputNumber, Popconfirm, Radio, Row, Table } from 'antd';
+import { Button, Col, Form, InputNumber, Popconfirm, Row, Table } from 'antd';
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import './style.less';
+import HuongDanThanhToan from './HuongDanThanhToan';
 
 const FormThanhToan = (props: { getData: () => void }) => {
 	// const { getData } = props;
 	const { loading, danhSach, selectedIds, visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
 	const { getSoDuViSinhVienModel, soDuVi } = useModel('taichinh.giaodich');
-	const { record: recHoaDon } = useModel('taichinh.hoadon');
+	const { record: recHoaDon, danhSach: danhSachHoaDon, setRecord: setRecDon } = useModel('taichinh.hoadon');
 	const [form] = Form.useForm();
 	const payList: Record<string, number> = Form.useWatch('payList', form);
 	const totalPhaiNop = _.sum(Object.values(payList ?? {})) ?? 0;
@@ -43,14 +42,14 @@ const FormThanhToan = (props: { getData: () => void }) => {
 			billIdentityCode: recHoaDon?.identityCode,
 			billItems,
 		};
-		console.log('🚀 ~ file: FormThanhToan.tsx:70 ~ onFinish ~ data:', data);
 
 		// chuyenVienThanhToanModel(data)
 		// 	.then(() => {
 		// 		setSelectedIds([]);
 		// 		getData();
 		// 		getBillItems();
-		// 		 (false);
+		// 		setVisibleThanhToan(false);
+		// 		setRecDon(danhSachHoaDon.filter((item) => item?._id === recHoaDon?._id));
 		// 	})
 		// 	.catch((err) => console.log(err));
 	};
@@ -166,87 +165,21 @@ const FormThanhToan = (props: { getData: () => void }) => {
 					<Col span={24}>
 						<div className='fw500'>Hình thức thanh toán</div>
 					</Col>
-					<Col span={24} md={8}>
-						<Radio.Group
-							className='radio-thanh-toan'
-							// disabled={!payable}
-							// value={paymentType}
-							// onChange={(val) => onChangeType(val.target.value)}
-						>
-							<Radio value='atm'>
-								<img src='/images/vietqr.png' alt='vietqr' />
-								Thẻ nội địa
-							</Radio>
-							<Radio value='momo'>
-								<img src='/images/momo.svg' alt='momo' />
-								Ví MOMO
-							</Radio>
-						</Radio.Group>
-					</Col>
-					<Col span={24} md={16}>
-						<Descriptions column={1} bordered labelStyle={{ width: '50%' }}>
-							<Descriptions.Item label='Số tiền thanh toán'>{inputFormat(totalPhaiNop ?? 0)} VNĐ</Descriptions.Item>
-							<Descriptions.Item label='Tổng ưu đãi'>
-								0{/* {inputFormat(record?.amountPaid ?? 0)} VNĐ */}
-							</Descriptions.Item>
-							<Descriptions.Item label='Số tiền cần nộp thêm'>
-								{inputFormat(
-									_.sumBy(dataHienThi, (item) => item.amountDue) - _.sumBy(dataHienThi, (item) => item.amountPaid) ?? 0,
-								)}{' '}
-								VNĐ
-							</Descriptions.Item>
-						</Descriptions>
+					<Col span={24}>
+						<HuongDanThanhToan totalPhaiNop={totalPhaiNop} dataHienThi={dataHienThi} />
 					</Col>
 				</Row>
 
 				<div className='form-footer'>
-					<Button icon={<PrinterOutlined />} onClick={() => {}}>
-						Xem trước biên lai
-					</Button>
-					<Popconfirm
-						title={
-							<>
-								{/* Số dư ví trước giao dịch: <b>{inputFormat(soDuVi)} VND</b>
-								<br />
-								Số tiền thanh toán: <b className='text-error'>{inputFormat(totalPhaiNop)} VND</b>
-								<br />
-								Số dư còn lại: <b>{inputFormat(totalSauThanhToan)} VND</b>
-								<br /> */}
-								Xác nhận thanh toán?
-							</>
-						}
-						onConfirm={() => form.submit()}
-					>
-						<Button loading={loading} icon={<EditOutlined />} type='primary'>
-							Lưu lại
+					<Popconfirm title='			Xác nhận thanh toán?' onConfirm={() => form.submit()}>
+						<Button loading={loading} type='primary'>
+							Thanh toán
 						</Button>
 					</Popconfirm>
 
 					<Button onClick={() => setVisibleThanhToan(false)}>Hủy</Button>
 				</div>
 			</Form>
-
-			{/* <Modal
-				destroyOnClose
-				visible={visibleModalPrint}
-				onCancel={() => setVisibleModalPrint(false)}
-				footer={null}
-				title='In biên lai'
-				width={'80%'}
-				bodyStyle={{ paddingTop: 12 }}
-			>
-				<ReactToPrint
-					trigger={() => {
-						return (
-							<Button icon={<PrinterOutlined />} type={'primary'}>
-								In biên lai
-							</Button>
-						);
-					}}
-					content={() => printRef?.current}
-				/>
-				<PrintWithUrl isPdfViewer={true} fileType={'pdf'} file={dataFilePreview} ref={printRef} />
-			</Modal> */}
 		</>
 	);
 };
