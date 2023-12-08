@@ -3,12 +3,11 @@ import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { UnorderedListOutlined } from '@ant-design/icons';
-import { Modal, Tag } from 'antd';
-import { useState } from 'react';
+import { Modal, Tag, notification } from 'antd';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SelectDotThu from '../DotThu/Select';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
@@ -17,6 +16,14 @@ const HoaDonPage = (props: { idDotThu?: string }) => {
 	const { getModel, page, limit, setRecord, record } = useModel('taichinh.hoadon');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 	const { idDotThu: dotThuCoDinh } = props;
+
+	// Callback from MOMO
+	useEffect(() => {
+		if (window.location.href.includes('orderType=momo_wallet'))
+			if (window.location.href.includes('resultCode=0'))
+				notification.success({ message: 'Thành công', description: 'Thanh toán công nợ thành công' });
+			else notification.warn({ message: 'Thất bại', description: 'Thanh toán thất bại' });
+	}, []);
 
 	const getData = () =>
 		getModel({ idDotThu: dotThuCoDinh }).then((res) => {
@@ -77,7 +84,7 @@ const HoaDonPage = (props: { idDotThu?: string }) => {
 			render: (val, rec) => {
 				const totalAmountDue = rec?.billItems
 					?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-					?.reduce((acc, item) => acc + (item.amountDue || 0), 0);
+					?.reduce((acc, item) => acc + ((item.amountDue ?? 0) - (item.amountDiscount ?? 0)), 0);
 				return `${inputFormat(totalAmountDue ?? 0)} VND`;
 			},
 		},

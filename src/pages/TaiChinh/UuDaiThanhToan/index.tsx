@@ -17,7 +17,7 @@ const UuDaiThanhToanPage = () => {
 		{
 			title: 'Thời gian áp dụng',
 			align: 'center',
-			width: 120,
+			width: 140,
 			render: (val, rec) =>
 				`${rec.uuDai?.thoiGianBatDau ? moment(rec.uuDai?.thoiGianBatDau).format('DD/MM/YYYY') : ''} - ${
 					rec.uuDai?.thoiGianKetThuc ? moment(rec.uuDai?.thoiGianKetThuc).format('DD/MM/YYYY') : ''
@@ -35,12 +35,6 @@ const UuDaiThanhToanPage = () => {
 			align: 'center',
 			width: 80,
 			render: (val) => val && `${val}%`,
-		},
-		{
-			title: 'Sử dụng',
-			dataIndex: 'idDotThu',
-			width: 180,
-			render: (val, rec) => (val ? rec.dotThu?.tenDot ?? 'Đã sử dụng' : <i>Chưa sử dụng</i>),
 		},
 		{
 			title: 'Mô tả',

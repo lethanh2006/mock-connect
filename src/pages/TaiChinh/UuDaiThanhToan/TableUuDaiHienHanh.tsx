@@ -33,7 +33,7 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 		{
 			title: 'Thời gian áp dụng',
 			align: 'center',
-			width: 120,
+			width: 140,
 			render: (val, rec) =>
 				`${rec.thoiGianBatDau ? moment(rec.thoiGianBatDau).format('DD/MM/YYYY') : ''} - ${
 					rec.thoiGianKetThuc ? moment(rec.thoiGianKetThuc).format('DD/MM/YYYY') : ''
@@ -63,14 +63,6 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 			width: 80,
 			sortable: true,
 			render: (val) => val && `${val}%`,
-			onCell,
-		},
-		{
-			title: 'Số lượng',
-			dataIndex: 'soLuong',
-			align: 'center',
-			width: 80,
-			sortable: true,
 			onCell,
 		},
 		{
