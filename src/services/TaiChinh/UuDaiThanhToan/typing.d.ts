@@ -10,7 +10,6 @@ declare module UuDaiThanhToan {
 		maKhoanThuApDung: string;
 		khoanThuApDung?: KhoanThu.Record;
 		mucPhiApDung: number;
-		soLuong: number;
 
 		thoiGianBatDau: Date;
 		thoiGianKetThuc: Date;
@@ -24,8 +23,5 @@ declare module UuDaiThanhToan {
 		uuDai?: IRecord;
 
 		userSsoId: string;
-
-		idDotThu?: string;
-		dotThu?: DotThuTaiChinh.Record;
 	}
 }

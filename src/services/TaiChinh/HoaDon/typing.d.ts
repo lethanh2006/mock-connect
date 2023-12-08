@@ -1,7 +1,8 @@
+import type { UuDaiThanhToan } from '../UuDaiThanhToan/typing';
 import type { EMaTrangThaiThanhToan } from '../constant';
 
 declare module HoaDon {
-	export interface IRecord extends IKhacHang {
+	export interface IRecord extends IKhachHang {
 		_id: string;
 		identityCode: string;
 		ma?: string;
@@ -20,7 +21,7 @@ declare module HoaDon {
 		billItems?: IBillItem[];
 	}
 
-	interface IKhacHang {
+	interface IKhachHang {
 		userSsoId: string;
 		userFullname: string;
 		userCode: string;
@@ -34,7 +35,7 @@ declare module HoaDon {
 	export interface IBillItem {
 		_id: string;
 		billIdentityCode?: string;
-		maNguonThu: string;
+		// maNguonThu: string;
 
 		//Khoản thu
 		maKhoanThu: string;
@@ -45,11 +46,14 @@ declare module HoaDon {
 		unitAmount: number;
 		unitLabel: string;
 		quantity: number;
+		heSo: number;
+
 		amountDue: number;
+		amountDiscount: number;
 		amountPaid: number;
 		amountRemaining: number;
-		amountRefund: number;
-		heSo: number;
+
+		listUserUuDai?: Partial<UuDaiThanhToan.IUuDaiUser>[];
 		status: EMaTrangThaiThanhToan;
 	}
 

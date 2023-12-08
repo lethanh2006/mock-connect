@@ -37,11 +37,19 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData:
 						<Descriptions.Item label='Họ tên người nộp'>
 							{record?.userFullname ?? <i>Đang cập nhật</i>}
 						</Descriptions.Item>
-						<Descriptions.Item label='Số tiền phải thu'>
+						<Descriptions.Item label='Tổng thành tiền'>
 							{inputFormat(
 								record?.billItems
 									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
 									?.reduce((acc, item) => acc + (item.amountDue || 0), 0),
+							)}{' '}
+							VNĐ
+						</Descriptions.Item>
+						<Descriptions.Item label='Số tiền ưu đãi'>
+							{inputFormat(
+								record?.billItems
+									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
+									?.reduce((acc, item) => acc + (item.amountDiscount || 0), 0),
 							)}{' '}
 							VNĐ
 						</Descriptions.Item>
@@ -57,15 +65,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData:
 							{inputFormat(
 								record?.billItems
 									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-									?.reduce((acc, item) => acc + (item.amountDue - item.amountPaid), 0),
-							)}{' '}
-							VNĐ
-						</Descriptions.Item>
-						<Descriptions.Item label='Số tiền hoàn trả'>
-							{inputFormat(
-								record?.billItems
-									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-									?.reduce((acc, item) => acc + (item.amountRefund || 0), 0),
+									?.reduce((acc, item) => acc + (item.amountRemaining || 0), 0),
 							)}{' '}
 							VNĐ
 						</Descriptions.Item>
