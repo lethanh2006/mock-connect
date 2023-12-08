@@ -4,8 +4,14 @@ import { Col, Descriptions, Radio, Row, Spin } from 'antd';
 import { useModel } from 'umi';
 import './style.less';
 
-const HuongDanThanhToan = (props: { thanhToan?: number; tongUuDai?: number; amount: number; duNo?: number }) => {
-	const { thanhToan, tongUuDai, amount, duNo } = props;
+const HuongDanThanhToan = (props: {
+	thanhToan?: number;
+	tongUuDai?: number;
+	amount: number;
+	duNo?: number;
+	isRequired?: boolean;
+}) => {
+	const { thanhToan, tongUuDai, amount, duNo, isRequired } = props;
 	const {
 		record: recHoaDon,
 		paymentType,
@@ -27,10 +33,13 @@ const HuongDanThanhToan = (props: { thanhToan?: number; tongUuDai?: number; amou
 				<Col span={24} md={8}>
 					<Radio.Group
 						className='radio-thanh-toan'
-						value={!amount ? ETransactionPaymentType.MANUAL : paymentType ?? ETransactionPaymentType.BANK}
+						value={
+							!amount && !isRequired ? ETransactionPaymentType.MANUAL : paymentType ?? ETransactionPaymentType.BANK
+						}
 						onChange={(val) => onChangeType(val.target.value)}
+						disabled={!amount}
 					>
-						{!amount ? (
+						{!amount && !isRequired ? (
 							<Radio value={ETransactionPaymentType.MANUAL}>Số dư ví hiện tại</Radio>
 						) : (
 							<>

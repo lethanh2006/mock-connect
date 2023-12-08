@@ -119,7 +119,7 @@ const GiaoDichPage = () => {
 				columns={columns}
 				Form={Form}
 				getData={getData}
-				widthDrawer={800}
+				widthDrawer={1000}
 				dependencies={[page, limit, kieuThanhToan]}
 				formProps={{ getData }}
 				modelName='taichinh.giaodich'

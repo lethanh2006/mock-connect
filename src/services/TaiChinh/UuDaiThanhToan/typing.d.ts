@@ -1,5 +1,4 @@
 import type { GiaoDich } from '../GiaoDich/typing';
-import type { ELoaiUuDaiThanhToan } from './constant';
 
 declare module UuDaiThanhToan {
 	export interface IRecord {
@@ -7,7 +6,6 @@ declare module UuDaiThanhToan {
 		ma: string;
 		ten: string;
 		moTa?: string;
-		loai: ELoaiUuDaiThanhToan;
 
 		maKhoanThuApDung: string;
 		khoanThuApDung?: KhoanThu.Record;
@@ -29,8 +27,5 @@ declare module UuDaiThanhToan {
 
 		idDotThu?: string;
 		dotThu?: DotThuTaiChinh.Record;
-
-		idTransaction?: string;
-		transaction?: GiaoDich.IRecord;
 	}
 }
