@@ -6,7 +6,9 @@ import moment from 'moment';
 import { useModel } from 'umi';
 
 const UuDaiThanhToanPage = () => {
-	const { page, limit } = useModel('taichinh.uudaiuser');
+	const { page, limit, getModel } = useModel('taichinh.uudaiuser');
+
+	const getData = () => getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
 
 	const columns: IColumn<UuDaiThanhToan.IUuDaiUser>[] = [
 		{
@@ -42,12 +44,20 @@ const UuDaiThanhToanPage = () => {
 			width: 220,
 			render: (val) => val && <ExpandText>{val}</ExpandText>,
 		},
+		{
+			title: 'Ngày nhận',
+			dataIndex: 'createdAt',
+			align: 'center',
+			width: 120,
+			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+		},
 	];
 
 	return (
 		<TableBase
 			buttons={{ create: false }}
 			columns={columns}
+			getData={getData}
 			dependencies={[page, limit]}
 			modelName='taichinh.uudaiuser'
 			title='Ưu đãi thanh toán'
