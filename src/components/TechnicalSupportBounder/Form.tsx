@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { resetFieldsForm } from '@/utils/utils';
 
 const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
-	const { formSubmiting, postModel, setFormSubmiting } = useModel('tienich.phanhoi');
+	const { formSubmiting, postModel, setFormSubmiting, getModel } = useModel('tienich.phanhoi');
 	const [form] = Form.useForm();
 	const { visible, setVisible } = props;
 
@@ -31,6 +31,7 @@ const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => 
 		})
 			.then(() => {
 				setVisible(false);
+				getModel(undefined, undefined, undefined, undefined, undefined, 'me');
 			})
 			.catch((er) => console.log(er));
 	};
