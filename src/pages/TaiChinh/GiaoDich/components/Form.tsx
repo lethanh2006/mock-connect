@@ -1,11 +1,13 @@
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat, inputParse } from '@/utils/utils';
-import { Button, Card, Col, Form, InputNumber, Popconfirm, Row, Alert } from 'antd';
+import { Alert, Button, Card, Col, Form, InputNumber, Popconfirm, Row } from 'antd';
 import { useModel } from 'umi';
 import HuongDanThanhToan from '../../HoaDon/ThanhToan/HuongDanThanhToan';
+import TableUuDaiHienHanh from '../../UuDaiThanhToan/TableUuDaiHienHanh';
 
-const FormGiaoDich = (props: any) => {
+/** Form đóng trước học phí */
+const FormDongTruocHocPhi = (props: any) => {
 	const { getData } = props;
 	const [form] = Form.useForm();
 	const { dongTruocHocPhiModel, loading, setVisibleForm } = useModel('taichinh.giaodich');
@@ -23,6 +25,7 @@ const FormGiaoDich = (props: any) => {
 			})
 			.catch((err) => console.log(err));
 	};
+
 	return (
 		<>
 			<Card title='Đóng trước học phí'>
@@ -31,8 +34,15 @@ const FormGiaoDich = (props: any) => {
 						<Col span={24}>
 							<Alert showIcon description='Đóng trước học phí cả năm để được hưởng những ưu đãi hấp dẫn !' />
 						</Col>
-						<Col md={8}>
-							<Form.Item name='amount' label='Số tiền nộp'>
+						<Col span={24}>
+							<div className='fw500'>Danh sách ưu đãi có hiệu lực</div>
+						</Col>
+						<Col span={24}>
+							<TableUuDaiHienHanh onCellClick={(rec) => form.setFieldsValue({ amount: rec.mucPhiApDung })} />
+						</Col>
+
+						<Col span={24} md={8}>
+							<Form.Item name='amount' label='Số tiền nộp trước' extra='Nộp tối thiểu Ngưỡng hưởng để nhận được ưu đãi'>
 								<InputNumber
 									placeholder='Nhập số tiền nộp'
 									addonAfter='VND'
@@ -40,6 +50,7 @@ const FormGiaoDich = (props: any) => {
 									parser={inputParse}
 									style={{ width: '100%' }}
 									step={1000}
+									min={0}
 								/>
 							</Form.Item>
 						</Col>
@@ -48,7 +59,7 @@ const FormGiaoDich = (props: any) => {
 							<div className='fw500'>Hình thức thanh toán</div>
 						</Col>
 						<Col span={24}>
-							<HuongDanThanhToan amount={amount} />
+							<HuongDanThanhToan amount={amount} isRequired />
 						</Col>
 					</Row>
 
@@ -67,4 +78,4 @@ const FormGiaoDich = (props: any) => {
 	);
 };
 
-export default FormGiaoDich;
+export default FormDongTruocHocPhi;

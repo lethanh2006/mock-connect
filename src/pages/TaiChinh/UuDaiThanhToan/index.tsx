@@ -1,63 +1,63 @@
+import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
-import { ETransactionPaymentType, transactionPaymentLabel } from '@/services/TaiChinh/constant';
-import { inputFormat } from '@/utils/utils';
+import type { UuDaiThanhToan } from '@/services/TaiChinh/UuDaiThanhToan/typing';
 import moment from 'moment';
 import { useModel } from 'umi';
 
 const UuDaiThanhToanPage = () => {
-	const { page, limit } = useModel('taichinh.giaodich');
+	const { page, limit } = useModel('taichinh.uudaiuser');
 
-	const columns: IColumn<GiaoDich.IRecord>[] = [
+	const columns: IColumn<UuDaiThanhToan.IUuDaiUser>[] = [
 		{
-			title: 'Mã ưu đãi',
-			dataIndex: 'identityCode',
-			width: 120,
+			title: 'Tên ưu đãi',
+			dataIndex: ['uuDai', 'ten'],
+			width: 150,
+		},
+		{
+			title: 'Thời gian áp dụng',
 			align: 'center',
-			filterType: 'string',
+			width: 120,
+			render: (val, rec) =>
+				`${rec.uuDai?.thoiGianBatDau ? moment(rec.uuDai?.thoiGianBatDau).format('DD/MM/YYYY') : ''} - ${
+					rec.uuDai?.thoiGianKetThuc ? moment(rec.uuDai?.thoiGianKetThuc).format('DD/MM/YYYY') : ''
+				}`,
 		},
 		{
-			title: 'Tổng phần trăm',
-			dataIndex: 'amount',
-			width: 120,
-			filterType: 'number',
-			align: 'right',
-			sortable: true,
-			render: (val) => `${inputFormat(val)} VND`,
+			title: 'Loại khoản thu áp dụng',
+			dataIndex: ['uuDai', 'maKhoanThuApDung'],
+			width: 140,
+			render: (val, rec) => rec.uuDai?.khoanThuApDung?.name ?? val,
 		},
 		{
-			title: 'Thời gian hết hạn',
-			dataIndex: 'transactionDate',
-			width: 120,
+			title: 'Giá trị ưu đãi',
+			dataIndex: ['uuDai', 'phanTramUuDai'],
 			align: 'center',
-			filterType: 'datetime',
-			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			width: 80,
+			render: (val) => val && `${val}%`,
 		},
 		{
-			title: 'Hình thức',
-			dataIndex: 'paymentType',
-			width: 120,
-			filterType: 'select',
-			filterData: Object.values(ETransactionPaymentType)?.map((val) => ({
-				label: transactionPaymentLabel[val],
-				value: val,
-			})),
-			render: (val: ETransactionPaymentType) => transactionPaymentLabel[val] ?? '',
+			title: 'Sử dụng',
+			dataIndex: 'idDotThu',
+			width: 180,
+			render: (val, rec) => (val ? rec.dotThu?.tenDot ?? 'Đã sử dụng' : <i>Chưa sử dụng</i>),
+		},
+		{
+			title: 'Mô tả',
+			dataIndex: ['uuDai', 'moTa'],
+			width: 220,
+			render: (val) => val && <ExpandText>{val}</ExpandText>,
 		},
 	];
 
 	return (
-		<>
-			<TableBase
-				buttons={{ create: false }}
-				columns={columns}
-				dependencies={[page, limit]}
-				modelName='taichinh.giaodich'
-				title='Ưu đãi thanh toán'
-			/>
-		</>
+		<TableBase
+			buttons={{ create: false }}
+			columns={columns}
+			dependencies={[page, limit]}
+			modelName='taichinh.uudaiuser'
+			title='Ưu đãi thanh toán'
+		/>
 	);
 };
 
