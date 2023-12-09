@@ -61,7 +61,7 @@ const UuDaiThanhToanPage = () => {
 			getData={getData}
 			dependencies={[page, limit]}
 			modelName='taichinh.uudaiuser'
-			title='Ưu đãi thanh toán'
+			title='Ưu đãi thanh toán đã nhận được'
 		/>
 	);
 };
