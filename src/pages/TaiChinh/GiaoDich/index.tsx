@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
 import Form from './components/Form';
+import StatGiaoDich from './components/Stat';
 
 const GiaoDichPage = () => {
 	const { getModel, page, limit, setRecord, setVisibleForm } = useModel('taichinh.giaodich');
@@ -152,7 +153,9 @@ const GiaoDichPage = () => {
 						/>
 					</>,
 				]}
-			/>
+			>
+				<StatGiaoDich />
+			</TableBase>
 
 			<ModalThanhToanNganHang visibleHuongDan={visibleHuongDan} setVisibleHuongDan={setVisibleHuongDan} />
 		</>
