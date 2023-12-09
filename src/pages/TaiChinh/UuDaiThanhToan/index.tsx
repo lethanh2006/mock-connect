@@ -14,6 +14,7 @@ const UuDaiThanhToanPage = () => {
 		{
 			title: 'Tên ưu đãi',
 			dataIndex: ['uuDai', 'ten'],
+			filterType: 'string',
 			width: 150,
 		},
 		{
