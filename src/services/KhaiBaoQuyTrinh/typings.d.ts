@@ -1,6 +1,6 @@
 import type { TruongThongTin } from '@/services/LoaiHinhNCKH/typings';
-import type { ETrangThaiThanhToanVI } from '../CongNo/constant';
-import { ETrangThaiThanhToan } from '../CongNo/constant';
+import type { ETrangThaiThanhToanVI } from '../DVMC/constant';
+import { ETrangThaiThanhToan } from '../DVMC/constant';
 import type { EMaTrangThaiThanhToan } from '../TaiChinh/constant';
 import type { QuyTrinh } from '../QuyTrinh/typings';
 

@@ -10,7 +10,7 @@ import FormThanhToan from '../ThanhToan/FormThanhToan';
 import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
 import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 
-const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData: () => void }) => {
+const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const { setVisible, getData } = props;
 	const { record, visibleHuongDan, setVisibleHuongDan } = useModel('taichinh.hoadon');
 	const { selectedIds, setSelectedIds, visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
