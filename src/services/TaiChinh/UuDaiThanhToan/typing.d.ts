@@ -23,6 +23,8 @@ declare module UuDaiThanhToan {
 		uuDai?: IRecord;
 
 		userSsoId: string;
+		userCode: string;
+		userFullname: string;
 		createdAt: string;
 	}
 }
