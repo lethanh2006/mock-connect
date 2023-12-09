@@ -2,7 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import PDFViewer from '@/components/PDFViewer';
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
-import ThanhToanPage from '@/pages/CongNo/ThanhToan';
+import ThanhToanPage from '@/pages/DichVuMotCuaV2/ThanhToan';
 import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import { TrangThaiDonDVMC } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';

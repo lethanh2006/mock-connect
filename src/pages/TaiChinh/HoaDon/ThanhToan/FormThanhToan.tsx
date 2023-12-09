@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 import HuongDanThanhToan from './HuongDanThanhToan';
 
-const FormThanhToan = (props: { getData: () => void }) => {
+const FormThanhToan = (props: { getData?: () => void }) => {
 	const { getData } = props;
 	const { formSubmiting, danhSach, selectedIds, visibleThanhToan, setVisibleThanhToan, getAllModel } =
 		useModel('taichinh.hoadonchitiet');
@@ -48,7 +48,7 @@ const FormThanhToan = (props: { getData: () => void }) => {
 		};
 
 		setSelectedIds([]);
-		getData();
+		if (getData) getData();
 		getBillItems();
 		setVisibleThanhToan(false);
 		if (paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
@@ -114,6 +114,7 @@ const FormThanhToan = (props: { getData: () => void }) => {
 						style={{ width: '100%' }}
 						placeholder='Nhập số tiền'
 						addonAfter='VND'
+						disabled
 					/>
 				</Form.Item>
 			),
