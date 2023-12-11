@@ -57,7 +57,7 @@ const HoaDonPage = () => {
 			render: (val, rec) => (
 				<ExpandText>
 					{rec?.billItems?.map((item) => (
-						<div key={item._id}>- {item?.tenKhoanThu}</div>
+						<div key={item._id}>- {item.ten ?? item?.tenKhoanThu}</div>
 					))}
 				</ExpandText>
 			),
