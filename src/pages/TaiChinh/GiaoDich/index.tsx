@@ -11,8 +11,8 @@ import {
 	transactionStatus,
 } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { PlusCircleOutlined } from '@ant-design/icons';
-import { Select, Tag } from 'antd';
+import { CloseOutlined, DollarOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Popconfirm, Select, Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -22,7 +22,7 @@ import StatGiaoDich from './components/Stat';
 
 const GiaoDichPage = () => {
 	const { getModel, page, limit, setRecord, setVisibleForm } = useModel('taichinh.giaodich');
-	const { visibleHuongDan, setVisibleHuongDan } = useModel('taichinh.hoadon');
+	const { visibleHuongDan, setVisibleHuongDan, getInfoMomoModel } = useModel('taichinh.hoadon');
 	const [kieuThanhToan, setKieuThanhToan] = useState<number>(1);
 
 	const getData = () => {
@@ -41,6 +41,16 @@ const GiaoDichPage = () => {
 
 		return getModel(condition);
 	};
+
+	const onPay = (rec: GiaoDich.IRecord) => {
+		if (rec?.paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
+		else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET)
+			getInfoMomoModel(rec.billIdentityCode).then((info) => {
+				window.location.href = info.payUrl;
+			});
+	};
+
+	const onCancel = (rec: GiaoDich.IRecord) => {};
 
 	const columns: IColumn<GiaoDich.IRecord>[] = [
 		{
@@ -109,6 +119,36 @@ const GiaoDichPage = () => {
 			})),
 			render: (val: ETransactionStatus) => (
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
+			),
+		},
+		{
+			title: 'Thao tác',
+			width: 90,
+			align: 'center',
+			fixed: 'right',
+			render: (val, rec) => (
+				<>
+					<ButtonExtend
+						disabled={rec.status !== ETransactionStatus.PENDING}
+						icon={<DollarOutlined />}
+						tooltip='Thanh toán'
+						onClick={() => onPay && onPay(rec)}
+						type='link'
+					/>
+					<Popconfirm
+						title='Xác nhận hủy giao dịch này?'
+						onConfirm={() => onCancel && onCancel(rec)}
+						disabled={rec.status !== ETransactionStatus.PENDING}
+					>
+						<ButtonExtend
+							disabled={rec.status !== ETransactionStatus.PENDING}
+							icon={<CloseOutlined />}
+							tooltip='Hủy'
+							type='link'
+							danger
+						/>
+					</Popconfirm>
+				</>
 			),
 		},
 	];

@@ -8,3 +8,7 @@ export const getSoDuViSinhVien = () => {
 export const dongTruocHocPhi = (payLoad: any) => {
 	return axios.post(`${ipTaiChinh}/transaction/me/top-up/manual`, payLoad);
 };
+
+export const thanhToanFullBill = (payLoad: any) => {
+	return axios.post(`${ipTaiChinh}/transaction/me`, payLoad);
+};

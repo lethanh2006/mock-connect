@@ -1,6 +1,7 @@
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { Col, Descriptions, Radio, Row, Spin } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import './style.less';
 
@@ -27,15 +28,17 @@ const HuongDanThanhToan = (props: {
 			getInfoMomoModel(recHoaDon.identityCode);
 	};
 
+	useEffect(() => {
+		onChangeType(!amount && !isRequired ? ETransactionPaymentType.MANUAL : ETransactionPaymentType.BANK);
+	}, [!!amount, isRequired]);
+
 	return (
 		<Spin spinning={loading}>
 			<Row gutter={[12, 12]}>
 				<Col span={24} md={8}>
 					<Radio.Group
 						className='radio-thanh-toan'
-						value={
-							!amount && !isRequired ? ETransactionPaymentType.MANUAL : paymentType ?? ETransactionPaymentType.BANK
-						}
+						value={paymentType}
 						onChange={(val) => onChangeType(val.target.value)}
 						disabled={!amount}
 					>

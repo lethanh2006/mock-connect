@@ -1,8 +1,15 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
+import {
+	EMaTrangThaiThanhToan,
+	EMauTrangThaiThanhToanTable,
+	ETrangThaiThanhToan,
+	ETransactionPaymentType,
+	ETransactionStatus,
+} from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { AppstoreAddOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Descriptions, Modal, Row, Tabs, Tag } from 'antd';
+import { AppstoreAddOutlined, DollarOutlined } from '@ant-design/icons';
+import { Alert, Button, Card, Col, Descriptions, Modal, Popconfirm, Row, Space, Tabs, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
@@ -12,9 +19,26 @@ import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const { setVisible, getData } = props;
-	const { record, visibleHuongDan, setVisibleHuongDan } = useModel('taichinh.hoadon');
+	const { record: recHoaDon, visibleHuongDan, setVisibleHuongDan, getInfoMomoModel } = useModel('taichinh.hoadon');
 	const { visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
+	const { getAllModel, record: recGiaoDich, loading } = useModel('taichinh.giaodich');
 	const [activeTab, setActiveTab] = useState('1');
+
+	const onChangeTab = (tab: string) => {
+		setActiveTab(tab);
+		if (tab === '1')
+			getAllModel(true, undefined, { status: ETransactionStatus.PENDING, billIdentityCode: recHoaDon?.identityCode });
+	};
+
+	const onPay = (rec: GiaoDich.IRecord) => {
+		if (rec?.paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
+		else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET)
+			getInfoMomoModel(rec.billIdentityCode).then((info) => {
+				window.location.href = info.payUrl;
+			});
+	};
+
+	const onCancel = (rec: GiaoDich.IRecord) => {};
 
 	return (
 		<Card title='Thông tin thanh toán'>
@@ -22,20 +46,20 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 				<Col span={24}>
 					<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
 						<Descriptions.Item label='Trạng thái'>
-							{record?.status ? (
-								<Tag color={EMauTrangThaiThanhToanTable?.[record.status]}>
-									{ETrangThaiThanhToan?.[record.status] ?? ''}
+							{recHoaDon?.status ? (
+								<Tag color={EMauTrangThaiThanhToanTable?.[recHoaDon.status]}>
+									{ETrangThaiThanhToan?.[recHoaDon.status] ?? ''}
 								</Tag>
 							) : (
 								<i>Đang cập nhật</i>
 							)}
 						</Descriptions.Item>
 						<Descriptions.Item label='Họ tên người nộp'>
-							{record?.userFullname ?? <i>Đang cập nhật</i>}
+							{recHoaDon?.userFullname ?? <i>Đang cập nhật</i>}
 						</Descriptions.Item>
 						<Descriptions.Item label='Tổng thành tiền'>
 							{inputFormat(
-								record?.billItems
+								recHoaDon?.billItems
 									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
 									?.reduce((acc, item) => acc + (item.amountDue || 0), 0),
 							)}{' '}
@@ -43,7 +67,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						</Descriptions.Item>
 						<Descriptions.Item label='Số tiền ưu đãi'>
 							{inputFormat(
-								record?.billItems
+								recHoaDon?.billItems
 									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
 									?.reduce((acc, item) => acc + (item.amountDiscount || 0), 0),
 							)}{' '}
@@ -51,7 +75,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						</Descriptions.Item>
 						<Descriptions.Item label='Số tiền đã thu'>
 							{inputFormat(
-								record?.billItems
+								recHoaDon?.billItems
 									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
 									?.reduce((acc, item) => acc + (item.amountPaid || 0), 0),
 							)}{' '}
@@ -59,7 +83,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						</Descriptions.Item>
 						<Descriptions.Item label='Số tiền còn lại phải thu'>
 							{inputFormat(
-								record?.billItems
+								recHoaDon?.billItems
 									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
 									?.reduce((acc, item) => acc + (item.amountRemaining || 0), 0),
 							)}{' '}
@@ -69,26 +93,49 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 				</Col>
 
 				<Col span={24}>
-					<Tabs activeKey={activeTab} onChange={(tab) => setActiveTab(tab)}>
+					<Tabs activeKey={activeTab} onChange={(tab) => onChangeTab(tab)}>
 						<Tabs.TabPane key={'1'} tab='Chi tiết' />
 						<Tabs.TabPane key={'2'} tab='Lịch sử thanh toán' />
 					</Tabs>
 
 					{activeTab === '1' ? (
 						<>
-							<ButtonExtend
-								disabled={record?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU}
-								onClick={() => setVisibleThanhToan(true)}
-								icon={<AppstoreAddOutlined />}
-								type='primary'
-							>
-								Thanh toán
-							</ButtonExtend>
+							{recGiaoDich?._id && recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL ? (
+								<Alert
+									description='Có giao dịch đang chờ xử lý!'
+									type='info'
+									action={
+										<Space>
+											<Button type='primary' onClick={() => onPay(recGiaoDich)} icon={<DollarOutlined />}>
+												Thanh toán ngay
+											</Button>
+											<Popconfirm
+												title='Xác nhận hủy giao dịch này?'
+												onConfirm={() => onCancel && onCancel(recGiaoDich)}
+											>
+												<Button danger type='link'>
+													Hủy giao dịch
+												</Button>
+											</Popconfirm>
+										</Space>
+									}
+								/>
+							) : (
+								<ButtonExtend
+									disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU}
+									onClick={() => setVisibleThanhToan(true)}
+									icon={<AppstoreAddOutlined />}
+									type='primary'
+									loading={loading}
+								>
+									Thanh toán
+								</ButtonExtend>
+							)}
 
 							<FormItemHoaDonChiTiet />
 						</>
 					) : (
-						<LichSuThanhToan />
+						<LichSuThanhToan onPay={onPay} onCancel={onCancel} />
 					)}
 				</Col>
 			</Row>
