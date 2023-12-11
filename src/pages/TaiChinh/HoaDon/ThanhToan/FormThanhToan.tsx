@@ -1,7 +1,7 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
+import { EMaTrangThaiThanhToan, ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat, inputParse } from '@/utils/utils';
 import { Button, Col, Form, InputNumber, Popconfirm, Row, Table } from 'antd';
 import _ from 'lodash';
@@ -11,12 +11,14 @@ import HuongDanThanhToan from './HuongDanThanhToan';
 
 const FormThanhToan = (props: { getData?: () => void }) => {
 	const { getData } = props;
-	const { formSubmiting, danhSach, selectedIds, visibleThanhToan, setVisibleThanhToan, getAllModel } =
+	const { formSubmiting, danhSach, visibleThanhToan, setVisibleThanhToan, getAllModel } =
 		useModel('taichinh.hoadonchitiet');
 	const { getSoDuViSinhVienModel, soDuVi } = useModel('taichinh.giaodich');
-	const { record: recHoaDon, paymentType, setVisibleHuongDan, setSelectedIds, infoMomo } = useModel('taichinh.hoadon');
+	const { record: recHoaDon, paymentType, setVisibleHuongDan, infoMomo } = useModel('taichinh.hoadon');
 	const [form] = Form.useForm();
-	const dataHienThi = danhSach.filter((item) => selectedIds?.includes(item._id)) ?? [];
+	const dataHienThi = danhSach.filter((item) =>
+		[EMaTrangThaiThanhToan.CHUA_THANH_TOAN, EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU].includes(item.status),
+	);
 	const totalUuDai = _.sumBy(dataHienThi, (item) => item.amountDiscount);
 	const payList: Record<string, number> = Form.useWatch('payList', form);
 	const totalPay = _.sum(Object.values(payList ?? {})) ?? 0;
@@ -47,7 +49,6 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 			billItems,
 		};
 
-		setSelectedIds([]);
 		if (getData) getData();
 		getBillItems();
 		setVisibleThanhToan(false);

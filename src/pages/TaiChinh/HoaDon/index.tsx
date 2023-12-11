@@ -12,10 +12,9 @@ import { useModel } from 'umi';
 import SelectDotThu from '../DotThu/Select';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
 
-const HoaDonPage = (props: { idDotThu?: string }) => {
+const HoaDonPage = () => {
 	const { getModel, page, limit, setRecord, record } = useModel('taichinh.hoadon');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
-	const { idDotThu: dotThuCoDinh } = props;
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -26,7 +25,7 @@ const HoaDonPage = (props: { idDotThu?: string }) => {
 	}, []);
 
 	const getData = () =>
-		getModel({ idDotThu: dotThuCoDinh }).then((res) => {
+		getModel().then((res) => {
 			// Sau khi thanh toán => Get lại danh sách và set lại record hóa đơn hiện tại
 			if (record?._id) setRecord(res.find((item) => item._id === record._id));
 		});
@@ -49,13 +48,12 @@ const HoaDonPage = (props: { idDotThu?: string }) => {
 			dataIndex: 'idDotThu',
 			width: 180,
 			render: (val, rec) => rec.dotThu?.tenDot,
-			hide: !!dotThuCoDinh,
 			filterType: 'customselect',
 			filterCustomSelect: <SelectDotThu multiple />,
 		},
 		{
 			title: 'Khoản thu',
-			width: 300,
+			width: 250,
 			render: (val, rec) => (
 				<ExpandText>
 					{rec?.billItems?.map((item) => (
@@ -79,7 +77,7 @@ const HoaDonPage = (props: { idDotThu?: string }) => {
 		},
 		{
 			title: 'Số tiền phải thu',
-			width: 150,
+			width: 130,
 			align: 'right',
 			render: (val, rec) => {
 				const totalAmountDue = rec?.billItems
@@ -90,7 +88,7 @@ const HoaDonPage = (props: { idDotThu?: string }) => {
 		},
 		{
 			title: 'Số tiền đã thu',
-			width: 150,
+			width: 130,
 			align: 'right',
 			render: (val, rec) => {
 				const totalAmountDue = rec?.billItems
@@ -122,8 +120,7 @@ const HoaDonPage = (props: { idDotThu?: string }) => {
 				columns={columns}
 				getData={getData}
 				buttons={{ create: false }}
-				hideCard={!!dotThuCoDinh}
-				dependencies={[page, limit, dotThuCoDinh]}
+				dependencies={[page, limit]}
 				modelName='taichinh.hoadon'
 				title='Công nợ'
 				widthDrawer={1000}
