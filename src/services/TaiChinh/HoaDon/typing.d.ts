@@ -36,6 +36,7 @@ declare module HoaDon {
 		_id: string;
 		billIdentityCode?: string;
 		// maNguonThu: string;
+		ten: string;
 
 		//Khoản thu
 		maKhoanThu: string;

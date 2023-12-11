@@ -1,5 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
-import { dongTruocHocPhi, getSoDuViSinhVien } from '@/services/TaiChinh/GiaoDich';
+import { dongTruocHocPhi, getSoDuViSinhVien, thanhToanFullBill } from '@/services/TaiChinh/GiaoDich';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import { ipTaiChinh } from '@/utils/ip';
 import { message } from 'antd';
@@ -23,9 +23,7 @@ export default () => {
 		}
 	};
 
-	const dongTruocHocPhiModel = async (
-		payLoad: Partial<GiaoDich.TDongTruocHocPhi>,
-	): Promise<GiaoDich.TDongTruocHocPhi> => {
+	const dongTruocHocPhiModel = async (payLoad: Partial<GiaoDich.TDongTruocHocPhi>): Promise<unknown> => {
 		setFormSubmiting(true);
 		try {
 			const response = await dongTruocHocPhi(payLoad);
@@ -38,10 +36,24 @@ export default () => {
 		}
 	};
 
+	const thanhToanFullBillModel = async (payLoad: Partial<GiaoDich.TThanhToan>): Promise<unknown> => {
+		setFormSubmiting(true);
+		try {
+			const response = await thanhToanFullBill(payLoad);
+			message.success('Tạo lệnh thanh toán thành công');
+			return response?.data?.data;
+		} catch (er) {
+			return Promise.reject(er);
+		} finally {
+			setFormSubmiting(false);
+		}
+	};
+
 	return {
 		...objInit,
-		getSoDuViSinhVienModel,
 		soDuVi,
+		getSoDuViSinhVienModel,
 		dongTruocHocPhiModel,
+		thanhToanFullBillModel,
 	};
 };

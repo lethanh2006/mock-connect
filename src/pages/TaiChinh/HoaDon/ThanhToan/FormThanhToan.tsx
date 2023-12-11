@@ -1,5 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat, inputParse } from '@/utils/utils';
@@ -13,7 +14,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 	const { getData } = props;
 	const { formSubmiting, danhSach, visibleThanhToan, setVisibleThanhToan, getAllModel } =
 		useModel('taichinh.hoadonchitiet');
-	const { getSoDuViSinhVienModel, soDuVi } = useModel('taichinh.giaodich');
+	const { getSoDuViSinhVienModel, soDuVi, thanhToanFullBillModel } = useModel('taichinh.giaodich');
 	const { record: recHoaDon, paymentType, setVisibleHuongDan, infoMomo } = useModel('taichinh.hoadon');
 	const [form] = Form.useForm();
 	const dataHienThi = danhSach.filter((item) =>
@@ -22,8 +23,8 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 	const totalUuDai = _.sumBy(dataHienThi, (item) => item.amountDiscount);
 	const payList: Record<string, number> = Form.useWatch('payList', form);
 	const totalPay = _.sum(Object.values(payList ?? {})) ?? 0;
-	const amount = totalPay > (soDuVi ?? 0) ? totalPay - (soDuVi ?? 0) : 0;
-	const totalSauThanhToan = (soDuVi ?? 0) + amount - totalPay;
+	const topupAmount = totalPay > (soDuVi ?? 0) ? totalPay - (soDuVi ?? 0) : 0;
+	const totalSauThanhToan = (soDuVi ?? 0) + topupAmount - totalPay;
 
 	const getBillItems = () =>
 		recHoaDon?.identityCode && getAllModel(undefined, undefined, { billIdentityCode: recHoaDon?.identityCode });
@@ -41,68 +42,64 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 		}
 	}, [visibleThanhToan]);
 
-	const onFinish = (values: any) => {
-		const billItems = Object.entries(values?.payList).map(([billItemId, amount1]) => ({ billItemId, amount: amount1 }));
-		const data = {
-			...values,
-			billIdentityCode: recHoaDon?.identityCode,
-			billItems,
+	const onFinish = () => {
+		const data: GiaoDich.TThanhToan = {
+			billIdentityCode: recHoaDon?.identityCode ?? '',
+			paymentType,
+			fullBill: true,
+			topupAmount,
 		};
 
-		if (getData) getData();
-		getBillItems();
-		setVisibleThanhToan(false);
-		if (paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
-		else if (paymentType === ETransactionPaymentType.MOMO_WALLET && !!infoMomo?.payUrl)
-			window.location.href = infoMomo.payUrl;
+		thanhToanFullBillModel(data)
+			.then(() => {
+				if (getData) getData();
+				getBillItems();
+				setVisibleThanhToan(false);
 
-		// chuyenVienThanhToanModel(data)
-		// 	.then(() => {
-		// 		setSelectedIds([]);
-		// 		getData();
-		// 		getBillItems();
-		// 		setVisibleThanhToan(false);
-		// 	})
-		// 	.catch((err) => console.log(err));
+				if (paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
+				else if (paymentType === ETransactionPaymentType.MOMO_WALLET && !!infoMomo?.payUrl)
+					window.location.href = infoMomo.payUrl;
+			})
+			.catch((err) => console.log(err));
 	};
 
 	const columns: IColumn<HoaDon.IBillItem & { index: number }>[] = [
 		{
 			title: 'Nội dung',
-			dataIndex: 'tenKhoanThu',
+			dataIndex: 'ten',
 			width: 200,
 		},
 		{
 			title: 'Thành tiền',
 			dataIndex: 'amountDue',
-			width: 120,
+			width: 110,
 			align: 'right',
 			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
 			title: 'Ưu đãi',
 			dataIndex: 'amountDiscount',
-			width: 120,
+			width: 110,
 			align: 'right',
 			render: (val) => `${inputFormat(val ?? 0)} VND`,
 		},
 		{
 			title: 'Đã nộp',
 			dataIndex: 'amountPaid',
-			width: 120,
+			width: 110,
 			align: 'right',
 			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
 			title: 'Còn lại',
 			dataIndex: 'amountRemaining',
-			width: 120,
+			width: 110,
 			align: 'right',
 			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
 			title: 'Thanh toán',
-			width: 180,
+			width: 140,
 			align: 'right',
 			render: (val, rec) => (
 				<Form.Item noStyle name={['payList', rec?._id]}>
@@ -126,16 +123,18 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 		<>
 			<Form layout='vertical' form={form} onFinish={onFinish}>
 				<Row gutter={[12, 12]}>
-					<Col md={8}>
+					<Col span={24} md={8}>
 						<Form.Item label='Số dư hiện tại'>
 							<InputNumber value={soDuVi} disabled addonAfter='VND' formatter={inputFormat} style={{ width: '100%' }} />
 						</Form.Item>
 					</Col>
 				</Row>
 
-				<Row gutter={[12, 12]}>
+				<Row gutter={[12, 8]}>
 					<Col span={24}>
-						<div className='fw500'>Danh sách khoản phí</div>
+						<div className='fw500' style={{ marginTop: 12 }}>
+							Danh sách khoản phí
+						</div>
 						<TableStaticData
 							data={dataHienThi}
 							addStt
@@ -176,7 +175,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 					</Col>
 
 					<Col span={24}>
-						<div className='fw500' style={{ marginTop: 18 }}>
+						<div className='fw500' style={{ marginTop: 12 }}>
 							Hình thức thanh toán
 						</div>
 					</Col>
@@ -184,7 +183,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 						<HuongDanThanhToan
 							thanhToan={totalPay + totalUuDai}
 							tongUuDai={totalUuDai}
-							amount={amount}
+							amount={topupAmount}
 							duNo={totalSauThanhToan}
 						/>
 					</Col>

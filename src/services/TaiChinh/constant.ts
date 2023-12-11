@@ -19,16 +19,6 @@ export const EMauTrangThaiThanhToanTable = {
 	[EMaTrangThaiThanhToan.DONG]: undefined,
 };
 
-export enum ELoaiThanhToan {
-	bank = 'bank',
-	manual = 'manual',
-}
-
-export const MapKeyLoaiThanhToan = {
-	[ELoaiThanhToan.bank]: 'Thanh toán bằng mã định danh',
-	[ELoaiThanhToan.manual]: 'Chuyên viên cập nhật',
-};
-
 //Giao dịch
 export enum ETransactionType {
 	DEPOSIT = 'deposit',
@@ -44,7 +34,7 @@ export enum ETransactionPaymentType {
 
 export const transactionPaymentLabel: Record<ETransactionPaymentType, string> = {
 	[ETransactionPaymentType.BANK]: 'Chuyển khoản ngân hàng',
-	[ETransactionPaymentType.MANUAL]: 'Chuyên viên cập nhật',
+	[ETransactionPaymentType.MANUAL]: 'Thủ công',
 	[ETransactionPaymentType.MOMO_WALLET]: 'Ví Momo',
 };
 

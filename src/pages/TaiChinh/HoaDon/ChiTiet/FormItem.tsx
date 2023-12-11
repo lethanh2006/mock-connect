@@ -10,10 +10,11 @@ import { inputFormat } from '@/utils/utils';
 import { Col, Row, Table, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
+import _ from 'lodash';
 
 const FormItemHoaDonChiTiet = () => {
 	const { record } = useModel('taichinh.hoadon');
-	const { getAllModel, danhSach } = useModel('taichinh.hoadonchitiet');
+	const { getAllModel, danhSach, loading } = useModel('taichinh.hoadonchitiet');
 
 	const getData = () => record?._id && getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode });
 
@@ -24,7 +25,7 @@ const FormItemHoaDonChiTiet = () => {
 	const columns: IColumn<HoaDon.IBillItem & { index: number }>[] = [
 		{
 			title: 'Nội dung',
-			dataIndex: 'tenKhoanThu',
+			dataIndex: 'ten',
 			width: 180,
 		},
 		{
@@ -38,9 +39,17 @@ const FormItemHoaDonChiTiet = () => {
 		{ title: 'Số lượng', dataIndex: 'quantity', width: 50, align: 'center' },
 		{
 			title: 'Thành tiền',
+			dataIndex: 'amountDue',
 			width: 100,
 			align: 'right',
-			render: (val, rec) => `${inputFormat(rec.quantity * rec.unitAmount * rec.heSo)} VND`,
+			render: (val) => `${inputFormat(val)} VND`,
+		},
+		{
+			title: 'Ưu đãi',
+			dataIndex: 'amountDiscount',
+			width: 100,
+			align: 'right',
+			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
 			title: 'Trạng thái',
@@ -58,12 +67,13 @@ const FormItemHoaDonChiTiet = () => {
 				<TableStaticData
 					columns={columns}
 					data={danhSach}
+					loading={loading}
 					addStt
 					size='small'
 					otherProps={{
 						summary: (data: HoaDon.IBillItem[]) => {
-							let sum = 0;
-							data.forEach(({ unitAmount, quantity }) => (sum += unitAmount * quantity));
+							const sumDue = _.sumBy(data, (item) => item.amountDue);
+							const sumDiscount = _.sumBy(data, (item) => item.amountDiscount);
 							return (
 								<Table.Summary fixed>
 									<Table.Summary.Row>
@@ -71,9 +81,12 @@ const FormItemHoaDonChiTiet = () => {
 											<b>Tổng cộng</b>
 										</Table.Summary.Cell>
 										<Table.Summary.Cell index={1} align='right'>
-											<b>{inputFormat(sum)} VND</b>
+											<b>{inputFormat(sumDue)} VND</b>
 										</Table.Summary.Cell>
-										<Table.Summary.Cell index={2} />
+										<Table.Summary.Cell index={2} align='right'>
+											<b>{inputFormat(sumDiscount)} VND</b>
+										</Table.Summary.Cell>
+										<Table.Summary.Cell index={3} />
 									</Table.Summary.Row>
 								</Table.Summary>
 							);
