@@ -3,7 +3,7 @@ import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan
 import { inputFormat } from '@/utils/utils';
 import { AppstoreAddOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Descriptions, Modal, Row, Tabs, Tag } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
 import FormThanhToan from '../ThanhToan/FormThanhToan';
@@ -13,12 +13,8 @@ import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const { setVisible, getData } = props;
 	const { record, visibleHuongDan, setVisibleHuongDan } = useModel('taichinh.hoadon');
-	const { selectedIds, setSelectedIds, visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
+	const { visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
 	const [activeTab, setActiveTab] = useState('1');
-
-	useEffect(() => {
-		setSelectedIds([]);
-	}, [record?._id]);
 
 	return (
 		<Card title='Thông tin thanh toán'>
@@ -81,7 +77,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 					{activeTab === '1' ? (
 						<>
 							<ButtonExtend
-								disabled={record?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || !selectedIds?.length}
+								disabled={record?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU}
 								onClick={() => setVisibleThanhToan(true)}
 								icon={<AppstoreAddOutlined />}
 								type='primary'
@@ -89,7 +85,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								Thanh toán
 							</ButtonExtend>
 
-							<FormItemHoaDonChiTiet isThanhToan />
+							<FormItemHoaDonChiTiet />
 						</>
 					) : (
 						<LichSuThanhToan />
