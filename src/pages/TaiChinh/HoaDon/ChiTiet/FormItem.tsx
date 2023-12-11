@@ -8,9 +8,9 @@ import {
 } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { Col, Row, Table, Tag } from 'antd';
+import _ from 'lodash';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import _ from 'lodash';
 
 const FormItemHoaDonChiTiet = () => {
 	const { record } = useModel('taichinh.hoadon');
@@ -31,9 +31,9 @@ const FormItemHoaDonChiTiet = () => {
 		{
 			title: 'Đơn giá',
 			dataIndex: 'unitAmount',
-			width: 100,
+			width: 120,
 			align: 'right',
-			render: (val) => `${inputFormat(val)} VND`,
+			render: (val, rec) => `${inputFormat(val)} VND${rec.unitLabel ? `/${rec.unitLabel}` : ''}`,
 		},
 		{ title: 'Hệ số', dataIndex: 'heSo', width: 50, align: 'center' },
 		{ title: 'Số lượng', dataIndex: 'quantity', width: 50, align: 'center' },
