@@ -15,7 +15,7 @@ const UuDaiThanhToanPage = () => {
 			title: 'Tên ưu đãi',
 			dataIndex: ['uuDai', 'ten'],
 			filterType: 'string',
-			width: 150,
+			width: 180,
 		},
 		{
 			title: 'Thời gian áp dụng',
@@ -49,7 +49,7 @@ const UuDaiThanhToanPage = () => {
 			title: 'Ngày nhận',
 			dataIndex: 'createdAt',
 			align: 'center',
-			width: 120,
+			width: 100,
 			render: (val) => val && moment(val).format('DD/MM/YYYY'),
 		},
 	];

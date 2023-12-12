@@ -12,10 +12,18 @@ import HuongDanThanhToan from './HuongDanThanhToan';
 
 const FormThanhToan = (props: { getData?: () => void }) => {
 	const { getData } = props;
-	const { formSubmiting, danhSach, visibleThanhToan, setVisibleThanhToan, getAllModel } =
-		useModel('taichinh.hoadonchitiet');
-	const { getSoDuViSinhVienModel, soDuVi, thanhToanFullBillModel } = useModel('taichinh.giaodich');
-	const { record: recHoaDon, paymentType, setVisibleHuongDan, infoMomo } = useModel('taichinh.hoadon');
+	const { record: recHoaDon } = useModel('taichinh.hoadon');
+	const { danhSach, visibleThanhToan, setVisibleThanhToan, getAllModel } = useModel('taichinh.hoadonchitiet');
+	const {
+		formSubmiting,
+		getSoDuViSinhVienModel,
+		soDuVi,
+		thanhToanFullBillModel,
+		paymentType,
+		setVisibleHuongDan,
+		thanhToanMomoModel,
+		setRecord,
+	} = useModel('taichinh.giaodich');
 	const [form] = Form.useForm();
 	const dataHienThi = danhSach.filter((item) =>
 		[EMaTrangThaiThanhToan.CHUA_THANH_TOAN, EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU].includes(item.status),
@@ -23,9 +31,10 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 	const totalUuDai = _.sumBy(dataHienThi, (item) => item.amountDiscount);
 	const payList: Record<string, number> = Form.useWatch('payList', form);
 	const totalPay = _.sum(Object.values(payList ?? {})) ?? 0;
-	const topupAmount = totalPay > (soDuVi ?? 0) ? totalPay - (soDuVi ?? 0) : 0;
-	const totalSauThanhToan = (soDuVi ?? 0) + topupAmount - totalPay;
+	const topupAmount = totalPay > (soDuVi?.totalRemain ?? 0) ? totalPay - (soDuVi?.totalRemain ?? 0) : 0;
+	const totalSauThanhToan = (soDuVi?.totalRemain ?? 0) + topupAmount - totalPay;
 
+	/** Get lại chi tiết các bill items */
 	const getBillItems = () =>
 		recHoaDon?.identityCode && getAllModel(undefined, undefined, { billIdentityCode: recHoaDon?.identityCode });
 
@@ -51,14 +60,19 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 		};
 
 		thanhToanFullBillModel(data)
-			.then(() => {
-				if (getData) getData();
+			.then((rec) => {
+				if (getData) getData(); // Get data từ Thông tin thanh toán
 				getBillItems();
 				setVisibleThanhToan(false);
 
-				if (paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
-				else if (paymentType === ETransactionPaymentType.MOMO_WALLET && !!infoMomo?.payUrl)
-					window.location.href = infoMomo.payUrl;
+				if (rec.giaoDichTopup?.paymentType === ETransactionPaymentType.BANK) {
+					setRecord(rec.giaoDichTopup);
+					setVisibleHuongDan(true);
+				} else if (
+					rec.giaoDichTopup?.paymentType === ETransactionPaymentType.MOMO_WALLET &&
+					rec.giaoDichTopup?.identityCode
+				)
+					thanhToanMomoModel(rec.giaoDichTopup.identityCode);
 			})
 			.catch((err) => console.log(err));
 	};
@@ -125,7 +139,13 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 				<Row gutter={[12, 12]}>
 					<Col span={24} md={8}>
 						<Form.Item label='Số dư hiện tại'>
-							<InputNumber value={soDuVi} disabled addonAfter='VND' formatter={inputFormat} style={{ width: '100%' }} />
+							<InputNumber
+								value={soDuVi?.totalRemain ?? 0}
+								disabled
+								addonAfter='VND'
+								formatter={inputFormat}
+								style={{ width: '100%' }}
+							/>
 						</Form.Item>
 					</Col>
 				</Row>

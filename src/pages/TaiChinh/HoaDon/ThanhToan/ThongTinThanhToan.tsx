@@ -20,19 +20,31 @@ import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const { setVisible, getData } = props;
-	const { record: recHoaDon, visibleHuongDan, setVisibleHuongDan, getInfoMomoModel } = useModel('taichinh.hoadon');
+	const { record: recHoaDon } = useModel('taichinh.hoadon');
 	const { visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
-	const { getAllModel, record: recGiaoDich, loading } = useModel('taichinh.giaodich');
+	const {
+		getAllModel,
+		record: recGiaoDich,
+		setRecord,
+		loading,
+		visibleHuongDan,
+		setVisibleHuongDan,
+		thanhToanMomoModel,
+		huyThanhToanModel,
+	} = useModel('taichinh.giaodich');
 	const [activeTab, setActiveTab] = useState('1');
+
+	const getGiaoDich = () =>
+		getAllModel(true, undefined, {
+			status: ETransactionStatus.PENDING,
+			billIdentityCode: recHoaDon?.identityCode,
+			fromAccount: ETransactionSourceType.EXTERNAL,
+		});
 
 	const onChangeTab = (tab: string) => {
 		setActiveTab(tab);
-		if (tab === '1' && recHoaDon?.identityCode)
-			getAllModel(true, undefined, {
-				status: ETransactionStatus.PENDING,
-				billIdentityCode: recHoaDon?.identityCode,
-				fromAccount: ETransactionSourceType.EXTERNAL,
-			});
+		// Get giao dịch nộp tiền chưa hoàn tất
+		if (tab === '1' && recHoaDon?.identityCode) getGiaoDich();
 	};
 
 	useEffect(() => {
@@ -40,14 +52,22 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	}, [recHoaDon?.identityCode]);
 
 	const onPay = (rec: GiaoDich.IRecord) => {
-		if (rec?.paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
-		else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET && rec.billIdentityCode)
-			getInfoMomoModel(rec.billIdentityCode).then((info) => {
-				window.location.href = info.payUrl;
-			});
+		if (rec?.paymentType === ETransactionPaymentType.BANK) {
+			setRecord(rec);
+			setVisibleHuongDan(true);
+		} else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET && rec.identityCode)
+			thanhToanMomoModel(rec.identityCode);
 	};
 
-	const onCancel = (rec: GiaoDich.IRecord) => {};
+	const onCancel = (rec: GiaoDich.IRecord) => {
+		if (rec._id)
+			huyThanhToanModel(rec._id)
+				.then(() => {
+					getGiaoDich();
+					if (getData) getData();
+				})
+				.catch((er) => console.log(er));
+	};
 
 	return (
 		<Card title='Thông tin thanh toán'>
@@ -116,7 +136,12 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 									type='info'
 									action={
 										<Space wrap>
-											<Button type='primary' onClick={() => onPay(recGiaoDich)} icon={<DollarOutlined />}>
+											<Button
+												type='primary'
+												onClick={() => onPay(recGiaoDich)}
+												icon={<DollarOutlined />}
+												loading={loading}
+											>
 												Thanh toán ngay
 											</Button>
 											<Popconfirm
@@ -162,10 +187,22 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 				width={1000}
 				maskClosable={false}
 			>
-				<FormThanhToan getData={getData} />
+				<FormThanhToan
+					getData={() => {
+						getGiaoDich();
+						if (getData) getData();
+					}}
+				/>
 			</Modal>
 
-			<ModalThanhToanNganHang visibleHuongDan={visibleHuongDan} setVisibleHuongDan={setVisibleHuongDan} />
+			<ModalThanhToanNganHang
+				visible={visibleHuongDan}
+				onOk={() => {
+					getGiaoDich();
+					if (getData) getData();
+					setVisibleHuongDan(false);
+				}}
+			/>
 		</Card>
 	);
 };

@@ -57,14 +57,4 @@ declare module HoaDon {
 		listUserUuDai?: Partial<UuDaiThanhToan.IUuDaiUser>[];
 		status: EMaTrangThaiThanhToan;
 	}
-
-	export interface IResponseMomo {
-		payUrl: string;
-		deeplink: string;
-		qrCodeUrl: string;
-		deeplinkMiniApp: string;
-		userFee: number;
-		userFeePercent: number;
-		userFeeMax: number;
-	}
 }
