@@ -79,6 +79,7 @@ const PhieuDiemRenLuyenSinhVienPage = () => {
 				dependencies={[page, limit]}
 				modelName='diemrenluyen.dotchamdiem'
 				title='Phiếu điểm rèn luyện'
+        buttons={{create:false}}
 			/>
 			<ModalPhieuDiem role={EVaiTroPhieuDiem.SINH_VIEN} onOk={getModelBySinhVien} />
 		</>

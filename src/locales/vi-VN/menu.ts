@@ -62,4 +62,6 @@ export default {
 	//Nội trú, ngoại trú
 	'menu.NoiNgoaiTru': 'Nội - Ngoại trú',
 	'menu.NoiNgoaiTru.KhaiBao': 'Khai báo',
+
+	'menu.KeHoachNCKH': 'Kế hoạch NCKH',
 };
