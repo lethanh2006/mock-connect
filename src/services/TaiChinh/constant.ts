@@ -30,12 +30,14 @@ export enum ETransactionPaymentType {
 	BANK = 'bank',
 	MANUAL = 'manual',
 	MOMO_WALLET = 'momo-wallet',
+	INTERNAL = 'internal',
 }
 
 export const transactionPaymentLabel: Record<ETransactionPaymentType, string> = {
 	[ETransactionPaymentType.BANK]: 'Chuyển khoản ngân hàng',
 	[ETransactionPaymentType.MANUAL]: 'Thủ công',
 	[ETransactionPaymentType.MOMO_WALLET]: 'Ví Momo',
+	[ETransactionPaymentType.INTERNAL]: 'Hệ thống',
 };
 
 export enum ETransactionSourceType {
