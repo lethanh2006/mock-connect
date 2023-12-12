@@ -62,5 +62,5 @@ export const colorTransactionStatus: Record<ETransactionStatus, string> = {
 	[ETransactionStatus.PENDING]: 'blue',
 	[ETransactionStatus.SUCCESS]: 'green',
 	[ETransactionStatus.FAIL]: 'red',
-	[ETransactionStatus.CANCEL]: 'purple',
+	[ETransactionStatus.CANCEL]: 'default',
 };

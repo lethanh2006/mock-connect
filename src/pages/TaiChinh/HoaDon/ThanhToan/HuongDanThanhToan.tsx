@@ -1,7 +1,7 @@
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { Col, Descriptions, Radio, Row, Spin } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import './style.less';
 
@@ -13,20 +13,20 @@ const HuongDanThanhToan = (props: {
 	isRequired?: boolean;
 }) => {
 	const { thanhToan, tongUuDai, amount, duNo, isRequired } = props;
-	const {
-		record: recHoaDon,
-		paymentType,
-		setPaymentType,
-		infoMomo,
-		getInfoMomoModel,
-		loading,
-	} = useModel('taichinh.hoadon');
+	const { paymentType, setPaymentType, momoConfig, getMomoConfigModel, loading } = useModel('taichinh.giaodich');
+	const [userFee, setUserFee] = useState<number>(0);
 
 	const onChangeType = async (type: ETransactionPaymentType) => {
 		setPaymentType(type);
-		if (type === ETransactionPaymentType.MOMO_WALLET && !infoMomo && recHoaDon?.identityCode)
-			getInfoMomoModel(recHoaDon.identityCode);
+		if (type === ETransactionPaymentType.MOMO_WALLET && !momoConfig) getMomoConfigModel();
 	};
+
+	useEffect(() => {
+		if (momoConfig?.userFeePercent) {
+			const fee = Math.round((amount * momoConfig.userFeePercent) / 100);
+			setUserFee(fee > momoConfig.userFeeMax ? momoConfig.userFeeMax : fee);
+		} else setUserFee(0);
+	}, [amount, momoConfig?.userFeePercent]);
 
 	useEffect(() => {
 		onChangeType(!amount && !isRequired ? ETransactionPaymentType.MANUAL : ETransactionPaymentType.BANK);
@@ -72,18 +72,16 @@ const HuongDanThanhToan = (props: {
 							<Descriptions.Item label='Số tiền dư nợ sau khi thanh toán'>{inputFormat(duNo)} VNĐ</Descriptions.Item>
 						) : null}
 
-						{paymentType === ETransactionPaymentType.MOMO_WALLET && !!infoMomo ? (
+						{paymentType === ETransactionPaymentType.MOMO_WALLET && !!momoConfig ? (
 							<>
 								<Descriptions.Item
-									label={`Phí người dùng (${infoMomo?.userFeePercent ?? 0}%, tối đa ${inputFormat(
-										infoMomo?.userFeeMax ?? 0,
+									label={`Phí người dùng (${momoConfig?.userFeePercent ?? 0}%, tối đa ${inputFormat(
+										momoConfig?.userFeeMax ?? 0,
 									)} VNĐ)`}
 								>
-									{inputFormat(infoMomo?.userFee ?? 0)} VNĐ
+									{inputFormat(userFee)} VNĐ
 								</Descriptions.Item>
-								<Descriptions.Item label='Tổng tiền thanh toán'>
-									{inputFormat((amount ?? 0) + (infoMomo?.userFee ?? 0))} VNĐ
-								</Descriptions.Item>
+								<Descriptions.Item label='Tổng tiền thanh toán'>{inputFormat(amount + userFee)} VNĐ</Descriptions.Item>
 							</>
 						) : null}
 					</Descriptions>

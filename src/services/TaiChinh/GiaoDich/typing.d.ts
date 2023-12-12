@@ -47,6 +47,7 @@ declare module GiaoDich {
 
 	export type TDongTruocHocPhi = {
 		amount: number;
+		paymentType: ETransactionPaymentType;
 	};
 
 	export type TThanhToan = {
@@ -54,5 +55,29 @@ declare module GiaoDich {
 		topupAmount: number;
 		paymentType: ETransactionPaymentType;
 		fullBill: boolean;
+	};
+
+	export type TThanhToanResponse = {
+		giaoDichThanhToan: IRecord;
+		giaoDichTopup: IRecord;
+	};
+
+	export type TMomoConfig = {
+		userFeeMax: number;
+		userFeePercent: number;
+	};
+
+	export type TMomoResponse = TMomoConfig & {
+		payUrl: string;
+		deeplink: string;
+		qrCodeUrl: string;
+		deeplinkMiniApp: string;
+		userFee: number;
+	};
+
+	export type TUserWallet = {
+		totalIn: number;
+		totalOut: number;
+		totalRemain: number;
 	};
 }

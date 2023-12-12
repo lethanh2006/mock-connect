@@ -106,6 +106,7 @@ const LichSuThanhToan = (props: {
 						title='Xác nhận hủy giao dịch này?'
 						onConfirm={() => onCancel && onCancel(rec)}
 						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
+						placement='topRight'
 					>
 						<ButtonExtend
 							disabled={

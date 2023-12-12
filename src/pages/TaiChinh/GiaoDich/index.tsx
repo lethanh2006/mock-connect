@@ -12,18 +12,35 @@ import {
 } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Popconfirm, Segmented, Tag } from 'antd';
+import { Popconfirm, Segmented, Tag, notification } from 'antd';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
 import Form from './components/Form';
 import StatGiaoDich from './components/Stat';
 
 const GiaoDichPage = () => {
-	const { getModel, page, limit, setRecord, setVisibleForm } = useModel('taichinh.giaodich');
-	const { visibleHuongDan, setVisibleHuongDan, getInfoMomoModel } = useModel('taichinh.hoadon');
+	const {
+		getModel,
+		page,
+		limit,
+		setRecord,
+		setVisibleForm,
+		thanhToanMomoModel,
+		visibleHuongDan,
+		setVisibleHuongDan,
+		huyThanhToanModel,
+	} = useModel('taichinh.giaodich');
 	const [kieuThanhToan, setKieuThanhToan] = useState<number>(1);
+
+	// Callback from MOMO
+	useEffect(() => {
+		if (window.location.href.includes('orderType=momo_wallet'))
+			if (window.location.href.includes('resultCode=0'))
+				notification.success({ message: 'Thành công', description: 'Thanh toán công nợ thành công' });
+			else notification.warn({ message: 'Thất bại', description: 'Thanh toán thất bại' });
+	}, []);
 
 	const getData = () => {
 		let condition: any = undefined;
@@ -43,14 +60,21 @@ const GiaoDichPage = () => {
 	};
 
 	const onPay = (rec: GiaoDich.IRecord) => {
-		if (rec?.paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
-		else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET)
-			getInfoMomoModel(rec.billIdentityCode).then((info) => {
-				window.location.href = info.payUrl;
-			});
+		if (rec?.paymentType === ETransactionPaymentType.BANK) {
+			setRecord(rec);
+			setVisibleHuongDan(true);
+		} else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET && rec.identityCode)
+			thanhToanMomoModel(rec.identityCode);
 	};
 
-	const onCancel = (rec: GiaoDich.IRecord) => {};
+	const onCancel = (rec: GiaoDich.IRecord) => {
+		if (rec._id)
+			huyThanhToanModel(rec._id)
+				.then(() => {
+					getData();
+				})
+				.catch((er) => console.log(er));
+	};
 
 	const columns: IColumn<GiaoDich.IRecord>[] = [
 		{
@@ -208,7 +232,13 @@ const GiaoDichPage = () => {
 				<StatGiaoDich />
 			</TableBase>
 
-			<ModalThanhToanNganHang visibleHuongDan={visibleHuongDan} setVisibleHuongDan={setVisibleHuongDan} />
+			<ModalThanhToanNganHang
+				visible={visibleHuongDan}
+				onOk={() => {
+					getData();
+					setVisibleHuongDan(false);
+				}}
+			/>
 		</>
 	);
 };

@@ -7,21 +7,31 @@ import HuongDanThanhToan from '../../HoaDon/ThanhToan/HuongDanThanhToan';
 import TableUuDaiHienHanh from '../../UuDaiThanhToan/TableUuDaiHienHanh';
 
 /** Form đóng trước học phí */
-const FormDongTruocHocPhi = (props: any) => {
+const FormDongTruocHocPhi = (props: { getData?: () => void; [key: string]: any }) => {
 	const { getData } = props;
 	const [form] = Form.useForm();
-	const { dongTruocHocPhiModel, loading, setVisibleForm } = useModel('taichinh.giaodich');
-	const { paymentType, setVisibleHuongDan, infoMomo } = useModel('taichinh.hoadon');
+	const {
+		dongTruocHocPhiModel,
+		formSubmiting,
+		setVisibleForm,
+		paymentType,
+		setVisibleHuongDan,
+		thanhToanMomoModel,
+		setRecord,
+	} = useModel('taichinh.giaodich');
 	const amount: number = Form.useWatch('amount', form) ?? 0;
 
 	const onFinish = (values: GiaoDich.TDongTruocHocPhi) => {
-		dongTruocHocPhiModel(values)
-			.then(() => {
-				getData();
+		dongTruocHocPhiModel({ ...values, paymentType })
+			.then((rec) => {
+				if (getData) getData();
 				setVisibleForm(false);
-				if (paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
-				else if (paymentType === ETransactionPaymentType.MOMO_WALLET && !!infoMomo?.payUrl)
-					window.location.href = infoMomo.payUrl;
+
+				if (rec.paymentType === ETransactionPaymentType.BANK) {
+					setRecord(rec);
+					setVisibleHuongDan(true);
+				} else if (rec.paymentType === ETransactionPaymentType.MOMO_WALLET && rec.identityCode)
+					thanhToanMomoModel(rec.identityCode);
 			})
 			.catch((err) => console.log(err));
 	};
@@ -65,7 +75,7 @@ const FormDongTruocHocPhi = (props: any) => {
 
 					<div className='form-footer'>
 						<Popconfirm title='Xác nhận thanh toán?' disabled={!amount} onConfirm={() => form.submit()}>
-							<Button loading={loading} type='primary' htmlType='submit' disabled={!amount}>
+							<Button loading={formSubmiting} type='primary' htmlType='submit' disabled={!amount}>
 								Thanh toán
 							</Button>
 						</Popconfirm>
