@@ -35,14 +35,14 @@ declare module GiaoDich {
 	}
 
 	interface IChuyenVien {
-		payerSsoId: string;
-		payerFullname: string;
-		payerCode: string;
-		payerAddress: string;
-		payerEmail: string;
-		payerDOB: string;
-		payerPhone: string;
-		payerMetadata: Record;
+		manualUserSsoId: string;
+		manualUserFullname: string;
+		manualUserCode: string;
+		manualUserAddress: string;
+		manualUserEmail: string;
+		manualUserDOB: string;
+		manualUserPhone: string;
+		manualUserMetadata: Record;
 	}
 
 	export type TDongTruocHocPhi = {
