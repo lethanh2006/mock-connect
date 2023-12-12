@@ -12,7 +12,7 @@ import {
 } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Popconfirm, Select, Tag } from 'antd';
+import { Popconfirm, Segmented, Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -39,7 +39,7 @@ const GiaoDichPage = () => {
 				break;
 		}
 
-		return getModel(condition);
+		return getModel(condition, undefined, undefined, undefined, undefined, 'me/page');
 	};
 
 	const onPay = (rec: GiaoDich.IRecord) => {
@@ -76,6 +76,7 @@ const GiaoDichPage = () => {
 						return null;
 				}
 			},
+			hide: kieuThanhToan !== 1,
 		},
 		{
 			title: 'Số tiền',
@@ -86,20 +87,10 @@ const GiaoDichPage = () => {
 			sortable: true,
 			render: (val) => `${inputFormat(val)} VND`,
 		},
-		{ title: 'Người thực hiện', dataIndex: 'payerFullname', width: 150, filterType: 'string' },
-		{
-			title: 'Thời gian',
-			dataIndex: 'transactionDate',
-			width: 140,
-			align: 'center',
-			filterType: 'datetime',
-			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
-		},
 		{
 			title: 'Hình thức',
 			dataIndex: 'paymentType',
-			width: 120,
+			width: 140,
 			filterType: 'select',
 			filterData: Object.values(ETransactionPaymentType)?.map((val) => ({
 				label: transactionPaymentLabel[val],
@@ -121,6 +112,25 @@ const GiaoDichPage = () => {
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
 			),
 		},
+		{ title: 'Người thực hiện', dataIndex: 'payerFullname', width: 150, filterType: 'string' },
+		{
+			title: 'Thời gian thực hiện',
+			dataIndex: 'createdAt',
+			width: 120,
+			align: 'center',
+			filterType: 'datetime',
+			sortable: true,
+			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+		},
+		{
+			title: 'Thời gian hoàn thành',
+			dataIndex: 'transactionDate',
+			width: 120,
+			align: 'center',
+			filterType: 'datetime',
+			sortable: true,
+			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+		},
 		{
 			title: 'Thao tác',
 			width: 90,
@@ -129,7 +139,7 @@ const GiaoDichPage = () => {
 			render: (val, rec) => (
 				<>
 					<ButtonExtend
-						disabled={rec.status !== ETransactionStatus.PENDING}
+						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
 						icon={<DollarOutlined />}
 						tooltip='Thanh toán'
 						onClick={() => onPay && onPay(rec)}
@@ -137,11 +147,14 @@ const GiaoDichPage = () => {
 					/>
 					<Popconfirm
 						title='Xác nhận hủy giao dịch này?'
+						placement='topRight'
 						onConfirm={() => onCancel && onCancel(rec)}
-						disabled={rec.status !== ETransactionStatus.PENDING}
+						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
 					>
 						<ButtonExtend
-							disabled={rec.status !== ETransactionStatus.PENDING}
+							disabled={
+								rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL
+							}
 							icon={<CloseOutlined />}
 							tooltip='Hủy'
 							type='link'
@@ -166,32 +179,30 @@ const GiaoDichPage = () => {
 				modelName='taichinh.giaodich'
 				title='Lịch sử thanh toán'
 				otherButtons={[
-					<>
-						<ButtonExtend
-							onClick={() => {
-								setRecord(undefined);
-								setVisibleForm(true);
-							}}
-							icon={<PlusCircleOutlined />}
-							type='primary'
-							tooltip='Đóng trước học phí'
-						>
-							Đóng trước học phí
-						</ButtonExtend>
-						<Select
-							value={kieuThanhToan}
-							onChange={(val) => setKieuThanhToan(val)}
-							options={[
-								{ value: 1, label: 'Tất cả giao dịch' },
-								{ value: 2, label: 'Nộp tiền' },
-								{ value: 3, label: 'Thanh toán' },
-								{ value: 4, label: 'Hoàn trả' },
-							]}
-							placeholder='Chọn giao dịch'
-							style={{ width: 200 }}
-							key='select'
-						/>
-					</>,
+					<Segmented
+						value={kieuThanhToan}
+						onChange={(val) => setKieuThanhToan(+val)}
+						options={[
+							{ value: 1, label: 'Tất cả giao dịch' },
+							{ value: 2, label: 'Nộp tiền' },
+							{ value: 3, label: 'Thanh toán' },
+							{ value: 4, label: 'Hoàn trả' },
+						]}
+						key='select'
+					/>,
+					<ButtonExtend
+						onClick={() => {
+							setRecord(undefined);
+							setVisibleForm(true);
+						}}
+						icon={<PlusCircleOutlined />}
+						type='primary'
+						className='btn-success'
+						tooltip='Đóng trước học phí'
+						key='topup'
+					>
+						Đóng trước học phí
+					</ButtonExtend>,
 				]}
 			>
 				<StatGiaoDich />

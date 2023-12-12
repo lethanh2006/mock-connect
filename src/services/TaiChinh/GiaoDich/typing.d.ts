@@ -19,6 +19,8 @@ declare module GiaoDich {
 		requestId: string;
 		requestData: Record;
 		responseData: Record;
+
+		createdAt?: Date;
 	}
 
 	interface IKhachHang {
