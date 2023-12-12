@@ -34,6 +34,13 @@ const LichSuThanhToan = (props: {
 
 	const columns: IColumn<GiaoDich.IRecord>[] = [
 		{
+			title: 'Mã TT',
+			dataIndex: 'identityCode',
+			width: 120,
+			align: 'center',
+			filterType: 'string',
+		},
+		{
 			title: 'Loại giao dịch',
 			align: 'center',
 			width: 100,
@@ -57,19 +64,10 @@ const LichSuThanhToan = (props: {
 			width: 120,
 			render: (val) => `${inputFormat(val)} VND`,
 		},
-		{ title: 'Người thực hiện', dataIndex: 'payerFullname', width: 150, filterType: 'string' },
-		{
-			title: 'Thời gian',
-			align: 'center',
-			dataIndex: 'transactionDate',
-			width: 120,
-			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
-		},
 		{
 			title: 'Hình thức',
 			dataIndex: 'paymentType',
-			width: 120,
+			width: 140,
 			render: (val: ETransactionPaymentType, rec) => transactionPaymentLabel?.[val as ETransactionPaymentType] ?? '',
 		},
 		{
@@ -81,6 +79,15 @@ const LichSuThanhToan = (props: {
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
 			),
 		},
+		{ title: 'Người thực hiện', dataIndex: 'payerFullname', width: 150, filterType: 'string' },
+		{
+			title: 'Thời gian thực hiện',
+			align: 'center',
+			dataIndex: 'createdAt',
+			width: 120,
+			sortable: true,
+			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+		},
 		{
 			title: 'Thao tác',
 			width: 90,
@@ -89,7 +96,7 @@ const LichSuThanhToan = (props: {
 			render: (val, rec) => (
 				<>
 					<ButtonExtend
-						disabled={rec.status !== ETransactionStatus.PENDING}
+						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
 						icon={<DollarOutlined />}
 						tooltip='Thanh toán'
 						onClick={() => onPay && onPay(rec)}
@@ -98,10 +105,12 @@ const LichSuThanhToan = (props: {
 					<Popconfirm
 						title='Xác nhận hủy giao dịch này?'
 						onConfirm={() => onCancel && onCancel(rec)}
-						disabled={rec.status !== ETransactionStatus.PENDING}
+						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
 					>
 						<ButtonExtend
-							disabled={rec.status !== ETransactionStatus.PENDING}
+							disabled={
+								rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL
+							}
 							icon={<CloseOutlined />}
 							tooltip='Hủy'
 							type='link'

@@ -5,12 +5,13 @@ import {
 	EMauTrangThaiThanhToanTable,
 	ETrangThaiThanhToan,
 	ETransactionPaymentType,
+	ETransactionSourceType,
 	ETransactionStatus,
 } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { AppstoreAddOutlined, DollarOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Col, Descriptions, Modal, Popconfirm, Row, Space, Tabs, Tag } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
 import FormThanhToan from '../ThanhToan/FormThanhToan';
@@ -26,13 +27,21 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 	const onChangeTab = (tab: string) => {
 		setActiveTab(tab);
-		if (tab === '1')
-			getAllModel(true, undefined, { status: ETransactionStatus.PENDING, billIdentityCode: recHoaDon?.identityCode });
+		if (tab === '1' && recHoaDon?.identityCode)
+			getAllModel(true, undefined, {
+				status: ETransactionStatus.PENDING,
+				billIdentityCode: recHoaDon?.identityCode,
+				fromAccount: ETransactionSourceType.EXTERNAL,
+			});
 	};
+
+	useEffect(() => {
+		onChangeTab('1');
+	}, [recHoaDon?.identityCode]);
 
 	const onPay = (rec: GiaoDich.IRecord) => {
 		if (rec?.paymentType === ETransactionPaymentType.BANK) setVisibleHuongDan(true);
-		else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET)
+		else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET && rec.billIdentityCode)
 			getInfoMomoModel(rec.billIdentityCode).then((info) => {
 				window.location.href = info.payUrl;
 			});
@@ -102,10 +111,11 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						<>
 							{recGiaoDich?._id && recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL ? (
 								<Alert
-									description='Có giao dịch đang chờ xử lý!'
+									message='Có giao dịch nộp tiền đang chờ xử lý!'
+									showIcon
 									type='info'
 									action={
-										<Space>
+										<Space wrap>
 											<Button type='primary' onClick={() => onPay(recGiaoDich)} icon={<DollarOutlined />}>
 												Thanh toán ngay
 											</Button>
