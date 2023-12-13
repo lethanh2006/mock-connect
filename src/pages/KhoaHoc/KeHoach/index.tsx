@@ -1,15 +1,15 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 
-import { EDoiTuongKeHoachNCKH, MapKeyDoiTuongKeHoachNCKH } from '@/services/KeHoachNCKH/constants';
-import type { KeHoachNCKH } from '@/services/KeHoachNCKH/typings';
+import { EDoiTuongKeHoachNCKH, MapKeyDoiTuongKeHoachNCKH } from '@/services/KhoaHoc/KeHoach/constants';
+import type { KeHoachNCKH } from '@/services/KhoaHoc/KeHoach/typings';
 import { Button, Modal } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ViewDetailKeHoachNCKH from './components/ViewDetail';
 
 const KeHoachNCKHComponent = () => {
-	const { getModel, page, limit, setRecord, record: recordKeHoach } = useModel('kehoachnckh');
+	const { getModel, page, limit, setRecord, record: recordKeHoach } = useModel('khoahoc.kehoach');
 
 	const [visibleViewDetail, setVisibleViewDetail] = useState<boolean>(false);
 
@@ -68,7 +68,7 @@ const KeHoachNCKHComponent = () => {
 				getData={getData}
 				columns={columns}
 				dependencies={[page, limit]}
-				modelName='kehoachnckh'
+				modelName='khoahoc.kehoach'
 				title='Kế hoạch NCKH'
 			/>
 			<Modal

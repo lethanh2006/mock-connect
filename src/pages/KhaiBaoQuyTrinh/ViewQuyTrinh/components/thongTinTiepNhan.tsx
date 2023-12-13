@@ -1,7 +1,7 @@
 import ThongTinThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
-import type { TrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
-import { MapColorTrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
+import type { TrangThaiTiepNhanDon } from '@/services/QuyTrinh/KhaiBao/constants';
+import { MapColorTrangThaiTiepNhanDon } from '@/services/QuyTrinh/KhaiBao/constants';
+import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import {
 	EMauTrangThaiThanhToanTable,
 	ETrangThaiThanhToan,

@@ -1,6 +1,6 @@
 import useInitModel from '@/hooks/useInitModel';
-import { khaiBaoNoiNgoaiTru } from '@/services/NoiNgoaiTru';
-import type { NoiNgoaiTru } from '@/services/NoiNgoaiTru/typing';
+import { khaiBaoNoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru';
+import type { NoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru/typing';
 import { message } from 'antd';
 
 export default () => {

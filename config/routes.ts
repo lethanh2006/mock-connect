@@ -96,7 +96,7 @@
 		name: 'KeHoachNCKH',
 		icon: 'FileOutlined',
 		path: '/ke-hoach-nckh',
-		component: './KeHoachNCKH',
+		component: './KhoaHoc/KeHoach',
 	},
 
 	// MENU SINH VIEN
@@ -240,13 +240,6 @@
 		],
 	},
 
-	{
-		name: 'KhaiBaoSucKhoe',
-		icon: 'HeartOutlined',
-		path: '/khai-bao-suc-khoe',
-		component: './TienIch/KhaiBaoSucKhoe',
-	},
-
 	// {
 	// 	name: 'DichVuHanhChinh',
 	// 	icon: 'AuditOutlined',
@@ -340,6 +333,12 @@
 	},
 
 	// TIỆN ÍCH
+	{
+		name: 'KhaiBaoSucKhoe',
+		icon: 'HeartOutlined',
+		path: '/khai-bao-suc-khoe',
+		component: './TienIch/KhaiBaoSucKhoe',
+	},
 	{
 		name: 'PhanHoi',
 		path: './phan-hoi',
