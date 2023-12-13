@@ -1,7 +1,7 @@
 import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
-import { DoiTuongDieuPhoi } from '@/services/KhaiBaoQuyTrinh/constants';
-import { userUpdateBuoc } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
+import { DoiTuongDieuPhoi } from '@/services/QuyTrinh/KhaiBao/constants';
+import { userUpdateBuoc } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
+import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';

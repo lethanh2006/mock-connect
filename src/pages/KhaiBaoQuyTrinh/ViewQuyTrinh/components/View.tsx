@@ -5,8 +5,8 @@ import {
 	MapColorTrangThaiTiepNhanDon,
 	TrangThaiKhaiBao,
 	TrangThaiTiepNhanDon,
-} from '@/services/KhaiBaoQuyTrinh/constants';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
+} from '@/services/QuyTrinh/KhaiBao/constants';
+import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import { LeftOutlined } from '@ant-design/icons';

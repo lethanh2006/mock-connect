@@ -1,14 +1,14 @@
 import { Card, Form, Tag } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import { useEffect, useState } from 'react';
-import { TrangThaiKhaiBao } from '@/services/KhaiBaoQuyTrinh/constants';
-import {LoaiHinh} from "@/services/QuyTrinh/LoaiHinh/typing";
-import FormRender from "@/pages/KhaiBaoQuyTrinh/MauDon/FormRender";
+import { TrangThaiKhaiBao } from '@/services/QuyTrinh/KhaiBao/constants';
+import { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
+import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
 
 const ViewResult = (props: { danhSachKhaiBao: any; modelName: any; type?: 'dieu_phoi' | 'tiep_nhan' }) => {
 	const { danhSachKhaiBao, modelName } = props;
 	const model = useModel(modelName);
-  const {  setRecordSanPham } = useModel('quytrinh.khaibaoquytrinh');
+	const { setRecordSanPham } = useModel('quytrinh.khaibaoquytrinh');
 	const { currentFormKhaiBao, current } = model;
 	const [formValues, setFormValues] = useState<any>({});
 	const [form] = Form.useForm();

@@ -1,4 +1,4 @@
-import type { DonViHanhChinh } from '../Core/DonViHanhChinh/typing';
+import type { DonViHanhChinh } from '../../Core/DonViHanhChinh/typing';
 import type { ETrangThaiDuyetNoiNgoaiTru, ETrangThaiKhaiBaoNoiNgoaiTru, ETrangThaiNoiNgoaiTru } from './constant';
 
 declare module NoiNgoaiTru {

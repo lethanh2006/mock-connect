@@ -7,8 +7,8 @@ import {
 	EPhanLoaiNoiNgoaiTru,
 	ETrangThaiMinhChungDiemRenLuyen,
 	EPhanLoaiNoiNgoaiTruMappingToLabel,
-} from '@/services/DiemRenLuyen/MinhChung/constants';
-import { type MinhChungDiemRenLuyen } from '@/services/DiemRenLuyen/MinhChung/typing';
+} from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/constants';
+import { type MinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/typing';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Tag, Tooltip } from 'antd';
 import moment from 'moment';

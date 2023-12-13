@@ -1,5 +1,5 @@
-import { EDoiTuongKeHoachNCKH } from '@/services/KeHoachNCKH/constants';
-import type { KeHoachNCKH } from '@/services/KeHoachNCKH/typings';
+import { EDoiTuongKeHoachNCKH } from '@/services/KhoaHoc/KeHoach/constants';
+import type { KeHoachNCKH } from '@/services/KhoaHoc/KeHoach/typings';
 import { Card, Typography } from 'antd';
 
 const ViewDetailKeHoachNCKH = (props: { record: KeHoachNCKH.IRecord }) => {

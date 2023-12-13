@@ -1,8 +1,11 @@
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
-import { ETrangThaiKhaiBaoNoiNgoaiTru, colorETrangThaiKhaiBaoNoiNgoaiTru } from '@/services/NoiNgoaiTru/constant';
-import type { NoiNgoaiTru } from '@/services/NoiNgoaiTru/typing';
+import {
+	ETrangThaiKhaiBaoNoiNgoaiTru,
+	colorETrangThaiKhaiBaoNoiNgoaiTru,
+} from '@/services/CongTacSinhVien/NoiNgoaiTru/constant';
+import type { NoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru/typing';
 import { Card, Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
