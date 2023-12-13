@@ -55,9 +55,9 @@ const BlockTinTuc = (props: { empty?: string }) => {
 										style={{ fontSize: 'calc(1em + 0.2vw)', fontWeight: 500, marginBottom: 10, color: 'black' }}
 									/>
 								</Tooltip>
-								<Excerpt data={first(danhSach)} rows={2} style={{ color: '#364954' }} />
+								<Excerpt data={first(danhSach)} rows={2} style={{ color: '#364954',marginBottom:0 }} />
 								{danhSach?.[0]?.date && (
-									<span className='thoi-gian'>Ngày đăng: {moment(danhSach?.[0]?.date).format('DD/MM/YYYY HH:mm')}</span>
+									<span  className='thoi-gian'>Ngày đăng: {moment(danhSach?.[0]?.date).format('DD/MM/YYYY HH:mm')}</span>
 								)}
 							</ContentLargeCard>
 						</CardTinTuc>
