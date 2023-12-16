@@ -14,19 +14,14 @@ export default () => {
 	 * @returns Học phí dự kiến
 	 */
 	const tinhHocPhi = (soTinChi?: number, loaiDangKy?: ELoaiHocPhanDangKyTinChi): number => {
-		let due = (record?.unitAmount ?? 0) * (soTinChi ?? 0);
-		switch (loaiDangKy) {
-			case ELoaiHocPhanDangKyTinChi.CAI_THIEN:
-				due *= record?.heSoHocCaiThien ?? 1;
-				break;
-			case ELoaiHocPhanDangKyTinChi.HOC_LAI:
-				due *= record?.heSoHocLai ?? 1;
-				break;
-			default:
-				due *= record?.heSoTienTrinh ?? 1;
-				break;
-		}
-		return due;
+		const due = (record?.unitAmount ?? 0) * (soTinChi ?? 0);
+		const heSo = {
+			[ELoaiHocPhanDangKyTinChi.CAI_THIEN]: record?.heSoHocCaiThien ?? 1,
+			[ELoaiHocPhanDangKyTinChi.HOC_LAI]: record?.heSoHocLai ?? 1,
+		};
+		const defaultHeSo = record?.heSoTienTrinh ?? 1;
+
+		return due * (heSo[loaiDangKy as keyof typeof heSo] ?? defaultHeSo);
 	};
 
 	const getMucThuHocPhiTheoNamModel = async (maNamHoc: string): Promise<MucThuHocPhi.IRecord> => {
