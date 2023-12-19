@@ -1,5 +1,7 @@
 import useInitModel from '@/hooks/useInitModel';
+import type { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
 import { getMoodleLopHocPhan } from '@/services/HocTap/LopHocPhan';
+import { ELoaiLopHocPhan, ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { ipDaoTao } from '@/utils/ip';
 
@@ -14,6 +16,24 @@ export default () => {
 		getAllModel(undefined, undefined, params, undefined, 'sinh-vien/all');
 
 	const sinhVienGetByIdModel = async (idLop: string): Promise<LopHocPhan.IRecord> => getByIdModel(`${idLop}/sinh-vien`);
+
+	const sinhVienGetLopDangKyModel = (
+		maHocKy: string,
+		loaiDangKyTheoLop: ELoaiDangKyTheoLop,
+		maHocPhan: string,
+		tatCa: boolean = false,
+	) =>
+		getModel(
+			{ maHocPhan, loai: ELoaiLopHocPhan.CHINH, trangThaiLop: ETrangThaiLopHocPhan.MO },
+			undefined,
+			{ soThuTuLop: 1 },
+			undefined,
+			undefined,
+			tatCa ? undefined : `dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${loaiDangKyTheoLop}/page`,
+			undefined,
+			undefined,
+			!tatCa,
+		);
 
 	const getMoodleLopHocPhanModel = async (lopHocPhanId: string): Promise<any> => {
 		setLoading(true);
@@ -35,5 +55,6 @@ export default () => {
 		sinhVienGetByIdModel,
 		sinhVienGetAllModel,
 		getMoodleLopHocPhanModel,
+		sinhVienGetLopDangKyModel,
 	};
 };
