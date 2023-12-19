@@ -1,5 +1,5 @@
 import { ETinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
-import { Card, Empty } from 'antd';
+import { Card, Divider, Empty } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
@@ -25,7 +25,10 @@ const DangKyTinChiPage = () => {
 								}
 							/>
 						) : (
-							<DangKyLopHocPhan />
+							<>
+								<Divider style={{ marginTop: 24 }}>Thông tin đăng ký</Divider>
+								<DangKyLopHocPhan />
+							</>
 						)
 					) : (
 						<Empty description={<i style={{ color: '#999' }}>Không trong thời gian đăng ký !</i>} />

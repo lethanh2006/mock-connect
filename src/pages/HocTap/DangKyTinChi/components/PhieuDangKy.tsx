@@ -186,17 +186,17 @@ const PhieuDangKy = () => {
 			},
 			hide: !dangTrongThoiGian,
 		},
-		{
-			title: 'Loại ĐK',
-			dataIndex: 'loai',
-			width: 120,
-			filterType: 'select',
-			filterData: Object.values(ELoaiHocPhanDangKyTinChi).map((item) => ({
-				label: LoaiHocPhanDangKyTinChi[item],
-				value: item,
-			})),
-			render: (val: ELoaiHocPhanDangKyTinChi) => LoaiHocPhanDangKyTinChi[val],
-		},
+		// {
+		// 	title: 'Loại ĐK',
+		// 	dataIndex: 'loai',
+		// 	width: 120,
+		// 	filterType: 'select',
+		// 	filterData: Object.values(ELoaiHocPhanDangKyTinChi).map((item) => ({
+		// 		label: LoaiHocPhanDangKyTinChi[item],
+		// 		value: item,
+		// 	})),
+		// 	render: (val: ELoaiHocPhanDangKyTinChi) => LoaiHocPhanDangKyTinChi[val],
+		// },
 		{
 			title: 'Trạng thái',
 			dataIndex: 'trangThai',
