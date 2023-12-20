@@ -10,7 +10,7 @@ export default () => {
 	/**
 	 * Tính học phí dự kiến sau khi get Mức thu học phí của tôi
 	 * @param soTinChi Số tín chỉ học phần
-	 * @param loaiDangKy Loại đăng ký lớp học phần
+	 * @param loaiDangKy Loại đăng ký lớp tín chỉ
 	 * @returns Học phí dự kiến
 	 */
 	const tinhHocPhi = (soTinChi?: number, loaiDangKy?: ELoaiHocPhanDangKyTinChi): number => {

@@ -29,7 +29,7 @@ export enum ETrangThaiLopHocPhan {
 }
 
 export const ETenLoaiLopHocPhan = {
-	[ELoaiLopHocPhan.CHINH]: 'Lớp học phần',
+	[ELoaiLopHocPhan.CHINH]: 'Lớp tín chỉ',
 	[ELoaiLopHocPhan.LY_THUYET]: 'Lớp lý thuyết',
 	[ELoaiLopHocPhan.THUC_HANH]: 'Lớp thực hành',
 	[ELoaiLopHocPhan.THI_NGHIEM]: 'Lớp thí nghiệm',

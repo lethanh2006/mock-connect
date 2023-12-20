@@ -19,8 +19,8 @@ export default () => {
 	const [visibleRegister, setVisibleRegister] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [formSubmiting, setFormSubmiting] = useState<boolean>();
-	const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký học phần hiện tại trong kỳ, back trả về
-	const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký học phần trong học kỳ, back tự tính
+	const [dotDangKyHienTai, setDotDangKyHienTai] = useState<DangKyTinChi.IDotDangKy>(); // Đợt đăng ký tín chỉ hiện tại trong kỳ, back trả về
+	const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký tín chỉ trong học kỳ, back tự tính
 	const [danhSachLopDangKy, setDanhSachLopDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp hp đăng ký, bao gồm cả các lớp mới thêm
 	// Dữ liệu lịch học cho các lớp đang đăng ký hiện tại
 	// Dưới dạng { "DDMMYY": [true, true, false, false, true, true]...}
