@@ -63,7 +63,7 @@ const PhieuDangKy = () => {
 		danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
 		(item) => item.soTinChi,
 	);
-	// Đang trong thời gian đăng ký học phần => Được phép đăng ký, xóa đăng ký
+	// Đang trong thời gian đăng ký tín chỉ => Được phép đăng ký, xóa đăng ký
 	const dangTrongThoiGian =
 		dotDangKyHienTai?.thoiGianBatDau &&
 		dotDangKyHienTai?.thoiGianKetThuc &&
@@ -211,7 +211,7 @@ const PhieuDangKy = () => {
 			align: 'center',
 			render: (val, rec) => (
 				<Popconfirm
-					title='Bạn có chắc chắn muốn huỷ đăng ký lớp học phần này?'
+					title='Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ này?'
 					placement='topRight'
 					onConfirm={() => onDeleteLop(rec)}
 					// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
@@ -237,7 +237,7 @@ const PhieuDangKy = () => {
 
 	return (
 		<>
-			<Divider style={{ marginTop: 24 }}>Danh sách lớp học phần đã đăng ký / đã chọn</Divider>
+			<Divider style={{ marginTop: 24 }}>Danh sách lớp tín chỉ đã đăng ký / đã chọn</Divider>
 			<Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
 				<Col span={24} md={8}>
 					Tổng số tín chỉ (đã trừ các học phần không tính số tín chỉ):{' '}

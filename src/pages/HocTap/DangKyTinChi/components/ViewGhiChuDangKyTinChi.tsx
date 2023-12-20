@@ -8,7 +8,7 @@ const ViewGhiChuDangKyTinChi = () => {
 			<br />
 			Bước 2: Tương ứng với loại đã chọn, chọn Học phần cần đăng ký
 			<br />
-			Bước 3: Tích chọn Lớp học phần mong muốn (
+			Bước 3: Tích chọn Lớp tín chỉ mong muốn (
 			<i>chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống</i>
 			)
 			<br />

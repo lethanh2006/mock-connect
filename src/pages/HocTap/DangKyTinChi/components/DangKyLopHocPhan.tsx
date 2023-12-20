@@ -252,7 +252,7 @@ const DangKyLopHocPhan = () => {
 				// 	<Empty
 				// 		description={
 				// 			<>
-				// 				<i style={{ color: '#999' }}>Bạn không đủ điều kiện để đăng ký học phần này !</i>
+				// 				<i style={{ color: '#999' }}>Bạn không đủ điều kiện để đăng ký tín chỉ này !</i>
 				// 				<br />
 				// 				{recHocPhan.trangThai === ETrangThaiHocPhanDangKyTinChi.MIEN
 				// 					? 'Học phần được miễn'
