@@ -20,6 +20,7 @@ const DangKyLopHocPhan = () => {
 		useModel('daotao.dotdangkytinchi');
 	const { record: recHocPhan, loaiDangKy } = useModel('hocphan.hocphan');
 	const { sinhVienGetModel: getLopHc } = useModel('daotao.lophanhchinh');
+	const { khoaNganhMe } = useModel('sinhvien.sinhvien'); // Đã get khóa ngành của tôi ở file Filter Học phần
 	const [danhSachMaLopHc, setDanhSachMaLopHc] = useState<string[]>();
 	const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
@@ -88,29 +89,27 @@ const DangKyLopHocPhan = () => {
 			if (lopVuaChon && !dangKyRoi) {
 				const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
 				let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
+				const lopDangKy = {
+					hocPhan: recHocPhan,
+					maKhoaNganh:
+						loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2
+							? khoaNganhMe?.khoaNganhPhu?.ma
+							: khoaNganhMe?.khoaNganhChinh?.ma,
+					// TODO: Update loại đăng ký
+					loai: ELoaiHocPhanDangKyTinChi.TIEN_TRINH,
+					trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
+				};
 				// Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
 				if (lopVuaChon.tenCha) {
 					const lopCha = danhSach.find((item) => item.ten === lopVuaChon.tenCha);
 					if (!soTinChi) soTinChi = lopCha?.hocPhan?.soTinChi ?? 0;
 					// Thêm cả lớp cha vào để hiển thị lịch học ở lớp đăng ký
-					if (lopCha)
-						temp.splice(0, 0, {
-							...lopCha,
-							hocPhan: recHocPhan,
-							soTinChi,
-							loai: ELoaiHocPhanDangKyTinChi.TIEN_TRINH,
-							trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
-						});
+					if (lopCha) temp.splice(0, 0, { ...lopCha, soTinChi, ...lopDangKy });
 				}
 				// Thêm lớp vừa chọn vào danh sách Lớp đăng ký
 				// Loại đăng ký theo loại học phần đã chọn
-				temp.splice(0, 0, {
-					...lopVuaChon,
-					hocPhan: recHocPhan,
-					soTinChi,
-					loai: ELoaiHocPhanDangKyTinChi.TIEN_TRINH,
-					trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
-				});
+				temp.splice(0, 0, { ...lopVuaChon, soTinChi, ...lopDangKy });
+
 				setDanhSachLopDangKy(temp);
 				setCoDangKyMoi(true);
 				// Không tính lại lịch học ở đây vì sẽ trùng với các lớp trong môn hiện tại

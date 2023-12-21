@@ -2,10 +2,8 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	ColorTrangThaiDangKyTinChi,
-	ELoaiHocPhanDangKyTinChi,
 	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
-	LoaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { inputFormat } from '@/utils/utils';
@@ -70,7 +68,7 @@ const PhieuDangKy = () => {
 		moment().isSameOrAfter(dotDangKyHienTai?.thoiGianBatDau) &&
 		moment().isSameOrBefore(dotDangKyHienTai?.thoiGianKetThuc);
 	// Tổng học phí dự kiến
-	const tongHocPhi = _.sumBy(danhSachLopHienThi, (lop) => tinhHocPhi(lop.soTinChi, lop.loai));
+	const tongHocPhi = _.sumBy(danhSachLopHienThi, (lop) => tinhHocPhi(lop.soTinChi, lop.loai, lop.maKhoaNganh));
 
 	useEffect(() => {
 		if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
@@ -172,11 +170,17 @@ const PhieuDangKy = () => {
 				),
 		},
 		{
+			title: 'Mã khóa ngành',
+			dataIndex: 'maKhoaNganh',
+			align: 'center',
+			width: 100,
+		},
+		{
 			title: 'Học phí dự kiến',
 			align: 'right',
 			width: 120,
 			render: (val, rec) => {
-				const due = tinhHocPhi(rec.soTinChi, rec.loai);
+				const due = tinhHocPhi(rec.soTinChi, rec.loai, rec.maKhoaNganh);
 				if (due) return `${inputFormat(due)} VND`;
 				return null;
 			},

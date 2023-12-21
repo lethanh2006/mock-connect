@@ -139,7 +139,7 @@ export default () => {
 	};
 
 	const postDangKyTinChiModel = async (data: {
-		dangKy: { lopHocPhanId: string };
+		dangKy: { lopHocPhanId: string; maKhoaNganh: string };
 		phieuDktcId: string;
 	}): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
 		try {
