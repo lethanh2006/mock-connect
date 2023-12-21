@@ -85,19 +85,19 @@
 		],
 	},
 
-	{
-		name: 'KeHoachNamHoc',
-		path: '/ke-hoach-nam-hoc',
-		icon: 'TableOutlined',
-		component: './DaoTao/KeHoachNamHoc',
-	},
+	// {
+	// 	name: 'KeHoachNamHoc',
+	// 	path: '/ke-hoach-nam-hoc',
+	// 	icon: 'TableOutlined',
+	// 	component: './DaoTao/KeHoachNamHoc',
+	// },
 
-	{
-		name: 'KeHoachNCKH',
-		icon: 'FileOutlined',
-		path: '/ke-hoach-nckh',
-		component: './KhoaHoc/KeHoach',
-	},
+	// {
+	// 	name: 'KeHoachNCKH',
+	// 	icon: 'FileOutlined',
+	// 	path: '/ke-hoach-nckh',
+	// 	component: './KhoaHoc/KeHoach',
+	// },
 
 	// MENU SINH VIEN
 	{
@@ -227,18 +227,18 @@
 	// 	],
 	// },
 
-	{
-		name: 'NoiNgoaiTru',
-		icon: 'DeploymentUnitOutlined',
-		path: '/noi-ngoai-tru',
-		routes: [
-			{
-				name: 'KhaiBao',
-				path: 'khai-bao',
-				component: './NoiNgoaiTru',
-			},
-		],
-	},
+	// {
+	// 	name: 'NoiNgoaiTru',
+	// 	icon: 'DeploymentUnitOutlined',
+	// 	path: '/noi-ngoai-tru',
+	// 	routes: [
+	// 		{
+	// 			name: 'KhaiBao',
+	// 			path: 'khai-bao',
+	// 			component: './NoiNgoaiTru',
+	// 		},
+	// 	],
+	// },
 
 	// {
 	// 	name: 'DichVuHanhChinh',
@@ -346,12 +346,12 @@
 		component: './TienIch/KhaoSat',
 		icon: 'table',
 	},
-	{
-		name: 'KhaiBaoSucKhoe',
-		icon: 'HeartOutlined',
-		path: '/khai-bao-suc-khoe',
-		component: './TienIch/KhaiBaoSucKhoe',
-	},
+	// {
+	// 	name: 'KhaiBaoSucKhoe',
+	// 	icon: 'HeartOutlined',
+	// 	path: '/khai-bao-suc-khoe',
+	// 	component: './TienIch/KhaiBaoSucKhoe',
+	// },
 	{
 		name: 'CauHoiThuongGap',
 		path: './cauhoithuonggap',
