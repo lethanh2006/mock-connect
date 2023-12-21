@@ -1,9 +1,8 @@
-import { IRecord } from './../../TinTuc/typing.d';
+import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import type { ChungChi } from '../ChungChi/typing';
 import { type ChuongTrinhDaoTao } from '../DanhMucHeThong/ChuongTrinhDaoTao/typings';
 import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
 import { type EGioiTinh, type EHinhThucTuyenDung, type ENoiNgoaiTru, type EViTriViecLam } from '../constant';
-import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 
 declare module SinhVien {
 	export interface IRecord {

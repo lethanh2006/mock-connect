@@ -1,5 +1,5 @@
 import { ETinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
-import { Card, Empty } from 'antd';
+import { Card, Divider, Empty } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
@@ -11,7 +11,7 @@ const DangKyTinChiPage = () => {
 	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
 
 	return (
-		<Card title='Đăng ký học phần'>
+		<Card title='Đăng ký tín chỉ'>
 			<FilterDotDangKy />
 
 			{dotDangKyHienTai ? (
@@ -21,18 +21,21 @@ const DangKyTinChiPage = () => {
 						dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 							<Empty
 								description={
-									<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp học phần đã đăng ký trước đó !</i>
+									<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp tín chỉ đã đăng ký trước đó !</i>
 								}
 							/>
 						) : (
-							<DangKyLopHocPhan />
+							<>
+								<Divider style={{ marginTop: 24 }}>Thông tin đăng ký</Divider>
+								<DangKyLopHocPhan />
+							</>
 						)
 					) : (
 						<Empty description={<i style={{ color: '#999' }}>Không trong thời gian đăng ký !</i>} />
 					)}
 				</>
 			) : (
-				<Empty description={<i style={{ color: '#999' }}>Không có đợt đăng ký học phần trong học kỳ này !</i>} />
+				<Empty description={<i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này !</i>} />
 			)}
 
 			<PhieuDangKy />

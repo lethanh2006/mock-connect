@@ -61,7 +61,7 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 		>
 			<Card title='Lịch học dự kiến'>
 				<p>
-					Bạn đã đăng ký / đã chọn <b>{props.soLopHienThi} lớp học phần</b>, tổng cộng có{' '}
+					Bạn đã đăng ký / đã chọn <b>{props.soLopHienThi} lớp tín chỉ</b>, tổng cộng có{' '}
 					<b>{dataCalendar.length} ca học</b>, từ ngày {moment(startDate).format('DD/MM/YYYY')} đến ngày{' '}
 					{moment(endDate).format('DD/MM/YYYY')}
 					<br />
