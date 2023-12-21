@@ -1,6 +1,6 @@
 import useInitModel from '@/hooks/useInitModel';
-import { locationPathMappingToELoaiMinhChungDiemRenLuyen } from '@/services/DiemRenLuyen/MinhChung/constants';
-import { type MinhChungDiemRenLuyen } from '@/services/DiemRenLuyen/MinhChung/typing';
+import { locationPathMappingToELoaiMinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/constants';
+import { type MinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/typing';
 import { last } from 'lodash';
 
 export default () => {

@@ -2,8 +2,8 @@ import {
 	ETrangThaiChamDiem,
 	colorTagTrangThaiPhieuDiem,
 	trangThaiPhieuDiem,
-} from '@/services/DiemRenLuyen/DotChamDiem/constants';
-import { type PhieuDiemRenLuyen } from '@/services/DiemRenLuyen/PhieuDiemRenLuyen/typing';
+} from '@/services/CongTacSinhVien/DiemRenLuyen/DotChamDiem/constants';
+import { type PhieuDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/typing';
 import { Tag } from 'antd';
 
 const TrangThaiPhieuDiem = (props: { ketQua?: PhieuDiemRenLuyen.IKetQua }) => {

@@ -1,11 +1,11 @@
 import useInitModel from '@/hooks/useInitModel';
 import { useState } from 'react';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
+import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import {
 	exportMauDonTheoBuoc,
 	exportMauTraKetQuaTheoBuoc,
 	getQuyTrinhChuyenVien,
-} from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
+} from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import fileDownload from 'js-file-download';
 
 export default () => {

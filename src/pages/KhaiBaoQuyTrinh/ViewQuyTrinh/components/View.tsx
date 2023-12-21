@@ -1,9 +1,12 @@
 import ViewRender from '@/pages/KhaiBaoQuyTrinh/MauDon/ViewRender';
 import ThongTinTiepNhan from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/thongTinTiepNhan';
-import ThongTinThanhToan from '@/pages/TaiChinh/ChiTietThu/components/ThongTinThanhToan';
-import { TrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
-import { MapColorTrangThaiTiepNhanDon, TrangThaiKhaiBao } from '@/services/KhaiBaoQuyTrinh/constants';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
+import ThongTinThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
+import {
+	MapColorTrangThaiTiepNhanDon,
+	TrangThaiKhaiBao,
+	TrangThaiTiepNhanDon,
+} from '@/services/QuyTrinh/KhaiBao/constants';
+import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import { LeftOutlined } from '@ant-design/icons';
@@ -27,7 +30,7 @@ interface Iprops {
 const View = (props: Iprops) => {
 	const { dataQuyTrinh, current, loadingForm, modalName, FormModal, formProps, type } = props;
 	const model = useModel(modalName);
-	const { record, visibleForm, setVisibleForm } = useModel('taichinh.chitietthu');
+	const { visibleForm, setVisibleForm } = useModel('taichinh.hoadon');
 	const { setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
 	const { setCurrent, setCurrentFormKhaiBao, currentFormKhaiBao, setEditFormKhaiBao, setRecordFormKhaiBao } = model;
 
@@ -219,6 +222,7 @@ const View = (props: Iprops) => {
 						</Col>
 					</Row>
 				</Spin>
+
 				<Modal
 					visible={visibleForm}
 					onCancel={() => setVisibleForm(false)}
@@ -227,7 +231,7 @@ const View = (props: Iprops) => {
 					width={1000}
 					destroyOnClose
 				>
-					{record?._id ? <ThongTinThanhToan setVisible={setVisibleForm} /> : null}
+					<ThongTinThanhToan setVisible={setVisibleForm} />
 				</Modal>
 			</Card>
 		</>
