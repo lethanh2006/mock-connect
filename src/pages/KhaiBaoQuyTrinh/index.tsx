@@ -2,12 +2,10 @@ import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import SelectQuyTrinh from '@/pages/KhaiBaoQuyTrinh/QuyTrinh/Select';
-
-import { TrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
-import { MapColorTrangThaiTiepNhan } from '@/services/KhaiBaoQuyTrinh/constants';
-import { ELoaiDanhMucChung } from '@/services/KhaiBaoQuyTrinh/DanhMuc/constants';
-import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
+import { MapColorTrangThaiTiepNhan, TrangThaiTiepNhan } from '@/services/QuyTrinh/KhaiBao/constants';
+import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
+import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
+import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import type { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
@@ -22,7 +20,7 @@ import { Button, Dropdown, Menu, message, Modal, Popconfirm, Tag, Tooltip } from
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
-import ThongTinThanhToan from '../TaiChinh/ChiTietThu/components/ThongTinThanhToan';
+import ThongTinThanhToan from '../TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import FormKhaiBao from './components/FormKhaiBao';
 
 const KhaiBaoQuyTrinhPage = () => {
@@ -41,9 +39,7 @@ const KhaiBaoQuyTrinhPage = () => {
 	} = useModel('quytrinh.khaibaoquytrinh');
 	const { setLoading, record: recordQuyTrinh } = useModel('quytrinh.quytrinh');
 	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
-
-	const { record, getChiTietThuByIdentityCodeModel } = useModel('taichinh.chitietthu');
-
+	const { getOneModel: getHoaDon } = useModel('taichinh.hoadon');
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
@@ -191,7 +187,7 @@ const KhaiBaoQuyTrinhPage = () => {
 							<Tooltip title={<div style={{ maxWidth: 100 }}>Thông tin thanh toán</div>}>
 								<Button
 									onClick={() => {
-										getChiTietThuByIdentityCodeModel(recordVal.identityCode);
+										getHoaDon({ identityCode: recordVal.identityCode });
 										setVisibleModal(true);
 									}}
 									type='link'
@@ -304,7 +300,7 @@ const KhaiBaoQuyTrinhPage = () => {
 				width={1000}
 				destroyOnClose
 			>
-				{record?._id ? <ThongTinThanhToan setVisible={setVisibleModal} /> : null}
+				<ThongTinThanhToan setVisible={setVisibleModal} />
 			</Modal>
 		</div>
 	);

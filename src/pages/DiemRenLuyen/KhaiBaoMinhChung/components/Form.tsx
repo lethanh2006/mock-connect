@@ -1,12 +1,12 @@
-import { ELoaiDanhMucChung } from '@/services/DiemRenLuyen/DanhMuc/constant';
+import { ELoaiDanhMucChung } from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/constant';
 import {
 	ELoaiMinhChungDiemRenLuyen,
 	ELoaiMinhChungDiemRenLuyenMappingToTitle,
 	ENguoiGui,
 	EPhanLoaiNoiNgoaiTru,
 	EPhanLoaiNoiNgoaiTruMappingToLabel,
-} from '@/services/DiemRenLuyen/MinhChung/constants';
-import { type MinhChungDiemRenLuyen } from '@/services/DiemRenLuyen/MinhChung/typing';
+} from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/constants';
+import { type MinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/typing';
 import rules from '@/utils/rules';
 import { resetFieldsForm, uploadMultiFile } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, Radio, Row, Select, message } from 'antd';
@@ -22,7 +22,7 @@ import { useWatch } from 'antd/lib/form/Form';
 import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
-import { type DotChamDiem } from '@/services/DiemRenLuyen/DotChamDiem/typing';
+import { type DotChamDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/DotChamDiem/typing';
 
 interface FormValues extends Omit<MinhChungDiemRenLuyen.IRecord, 'urlFileList'> {
 	urlFileList: any;

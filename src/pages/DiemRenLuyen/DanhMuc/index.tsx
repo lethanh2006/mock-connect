@@ -5,8 +5,8 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Tooltip } from 'antd';
 import { useModel } from 'umi';
 import { FormDanhMuc } from './components/Form';
-import { type DanhMucDiemRenLuyen } from '@/services/DiemRenLuyen/DanhMuc/typing';
-import { ELoaiDanhMucChungMappingToTitle } from '@/services/DiemRenLuyen/DanhMuc/constant';
+import { type DanhMucDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/typing';
+import { ELoaiDanhMucChungMappingToTitle } from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/constant';
 
 export default () => {
 	const { handleEdit, handleView, deleteModel, getModel, page, limit, getLoaiDanhMucChung } =

@@ -1,5 +1,8 @@
-import { ELoaiDanhMucChungMappingToTitle, type ELoaiDanhMucChung } from '@/services/DiemRenLuyen/DanhMuc/constant';
-import { type DanhMucDiemRenLuyen } from '@/services/DiemRenLuyen/DanhMuc/typing';
+import {
+	ELoaiDanhMucChungMappingToTitle,
+	type ELoaiDanhMucChung,
+} from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/constant';
+import { type DanhMucDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/typing';
 import { Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
