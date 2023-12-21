@@ -23,10 +23,15 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 							onClick={() => setVisible(true)}
 							style={{
 								position: 'fixed',
-								bottom: 100,
-								right: 34,
+								bottom: 90,
+								right: 24,
 								zIndex: 10,
 								boxShadow: 'rgba(0, 0, 0, 0.2) 1px 1px 8px 3px',
+								width: 44,
+								height: 44,
+								padding: 0,
+								lineHeight: '44px',
+								fontSize: 20,
 							}}
 							shape='circle'
 							size='large'

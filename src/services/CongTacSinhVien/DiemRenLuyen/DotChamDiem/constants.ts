@@ -46,5 +46,5 @@ export const LoaiDoiTuongThamGia: Partial<Record<EReceiverType, string>> = {
 	[EReceiverType.KhoaSinhVien]: 'Khóa sinh viên',
 	[EReceiverType.Nganh]: 'Ngành đào tạo',
 	[EReceiverType.LopHanhChinh]: 'Lớp hành chính',
-	[EReceiverType.LopHocPhan]: 'Lớp học phần',
+	[EReceiverType.LopHocPhan]: 'Lớp tín chỉ',
 };

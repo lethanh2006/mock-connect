@@ -37,7 +37,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			.map((item, index) =>
 				postDangKyTinChiModel({
 					phieuDktcId: phieuDangKy?._id ?? '',
-					dangKy: { lopHocPhanId: item._id },
+					dangKy: { lopHocPhanId: item._id, maKhoaNganh: item.maKhoaNganh ?? '' },
 				})
 					.then(() =>
 						// Nếu thành công
@@ -69,7 +69,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 	};
 
 	useEffect(() => {
-		// Lấy lại danh sách các lớp học phần mới chọn
+		// Lấy lại danh sách các lớp tín chỉ mới chọn
 		if (visibleRegister)
 			setDanhSachDangKy(props.danhSachDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY));
 	}, [visibleRegister]);
@@ -86,7 +86,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			title: 'Xác nhận đăng ký',
 			content: (
 				<>
-					Xác nhận đăng ký các lớp học phần đã chọn?
+					Xác nhận đăng ký các lớp tín chỉ đã chọn?
 					{tongTinChi < (phieuDangKy?.soTinChiToiThieu ?? 0) ? (
 						<div style={{ color: 'orange' }}>
 							Lưu ý: Tổng số tín chỉ đăng ký hiện tại đang thấp hơn quy định số tín chỉ tối thiểu đăng ký trong học kỳ!
@@ -100,22 +100,26 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 
 	const columns: IColumn<DangKyTinChi.ILopDangKy>[] = [
 		{
-			title: 'Mã học phần',
+			title: 'Mã HP',
 			dataIndex: 'maHocPhan',
+			align: 'center',
 			width: 100,
-			filterType: 'string',
 		},
 		{
 			title: 'Tên học phần',
 			dataIndex: ['hocPhan', 'ten'],
 			width: 170,
-			filterType: 'string',
 		},
 		{
-			title: 'Lớp học phần',
+			title: 'Lớp tín chỉ',
 			dataIndex: 'ten',
 			width: 150,
-			filterType: 'string',
+		},
+		{
+			title: 'Mã khóa ngành',
+			dataIndex: 'maKhoaNganh',
+			align: 'center',
+			width: 100,
 		},
 		{
 			title: 'Loại ĐK',

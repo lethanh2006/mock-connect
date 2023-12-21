@@ -26,4 +26,9 @@ declare module MucThuHocPhi {
 		// heSoChuaTheoTienTrinh: number;
 		// heSoNgoaiChuongTrinh: number;
 	}
+
+	export type TMyMucThu = {
+		mucThuKhoaNganhChinh: IRecord;
+		mucThuKhoaNganhPhu?: IRecord;
+	};
 }
