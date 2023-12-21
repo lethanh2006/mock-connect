@@ -37,7 +37,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			.map((item, index) =>
 				postDangKyTinChiModel({
 					phieuDktcId: phieuDangKy?._id ?? '',
-					dangKy: { lopHocPhanId: item._id },
+					dangKy: { lopHocPhanId: item._id, maKhoaNganh: item.maKhoaNganh ?? '' },
 				})
 					.then(() =>
 						// Nếu thành công
@@ -100,22 +100,26 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 
 	const columns: IColumn<DangKyTinChi.ILopDangKy>[] = [
 		{
-			title: 'Mã học phần',
+			title: 'Mã HP',
 			dataIndex: 'maHocPhan',
+			align: 'center',
 			width: 100,
-			filterType: 'string',
 		},
 		{
 			title: 'Tên học phần',
 			dataIndex: ['hocPhan', 'ten'],
 			width: 170,
-			filterType: 'string',
 		},
 		{
 			title: 'Lớp tín chỉ',
 			dataIndex: 'ten',
 			width: 150,
-			filterType: 'string',
+		},
+		{
+			title: 'Mã khóa ngành',
+			dataIndex: 'maKhoaNganh',
+			align: 'center',
+			width: 100,
 		},
 		{
 			title: 'Loại ĐK',

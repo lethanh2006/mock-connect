@@ -12,6 +12,7 @@ import { useModel } from 'umi';
 import ViewGhiChuDangKyTinChi from './ViewGhiChuDangKyTinChi';
 
 const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
+	const { khoaNganhMe, getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
 	const {
 		record: recHocPhan,
 		setRecord: setHocPhan,
@@ -25,12 +26,14 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('350px');
 	const allLoaiDangKy = Object.values(ELoaiDangKyTheoLop);
+	if (!khoaNganhMe?.khoaNganhPhu?.ma) allLoaiDangKy.splice(-1, 1);
 
 	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
 
 	const getData = () => recHocKy?.ma && getHocPhanDKHPModel(recHocKy.ma).then((res) => setHocPhan(res?.[0]));
 
 	useEffect(() => {
+		getKhoaNganhMeModel();
 		return () => {
 			setHocPhan(undefined);
 		};

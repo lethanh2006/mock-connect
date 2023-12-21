@@ -45,6 +45,7 @@ declare module DangKyTinChi {
 		soTinChi: number;
 		loai?: ELoaiHocPhanDangKyTinChi;
 		trangThai: ETrangThaiDangKyTinChi;
+		maKhoaNganh?: string;
 
 		// temp
 		error?: string;
