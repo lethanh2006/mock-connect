@@ -23,7 +23,7 @@ const DangKyLopHocPhan = () => {
 	const [danhSachMaLopHc, setDanhSachMaLopHc] = useState<string[]>();
 	const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
-	const [typeLop, setTypeLop] = useState<string>('Theo lớp hành chính');
+	const [typeLop, setTypeLop] = useState<string>('Lớp gợi ý');
 	// Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
 	const dangKyRoi = danhSachLopDangKy.find(
 		(item) => item.maHocPhan === recHocPhan?.ma && item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY,
@@ -32,7 +32,7 @@ const DangKyLopHocPhan = () => {
 	const getData = () =>
 		recHocKy?.ma &&
 		recHocPhan?.ma &&
-		sinhVienGetLopDangKyModel(recHocKy.ma, loaiDangKy, recHocPhan.ma, typeLop !== 'Theo lớp hành chính').then((data) =>
+		sinhVienGetLopDangKyModel(recHocKy.ma, loaiDangKy, recHocPhan.ma, typeLop !== 'Lớp gợi ý').then((data) =>
 			setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
 		);
 
@@ -143,48 +143,43 @@ const DangKyLopHocPhan = () => {
 
 	const columns: IColumn<LopHocPhan.IRecord>[] = [
 		{
-			title: 'TT lớp',
+			title: 'Thứ tự lớp',
 			dataIndex: 'soThuTuLop',
-			width: 70,
+			width: 80,
 			align: 'center',
+			render: (val, rec) => `${val}${rec.soThuTuNhom ? ` (nhóm ${rec.soThuTuNhom})` : ''}`,
 			onCell,
 		},
 		{
-			title: 'TT nhóm',
-			dataIndex: 'soThuTuNhom',
-			width: 60,
-			align: 'center',
-			onCell,
-		},
-		{
-			title: 'Lịch học & giảng viên',
+			title: 'Thông tin chi tiết',
 			width: 350,
 			render: (val, rec) =>
 				rec.maHoaLichHoc?.length ? (
 					<ul className='lich-hoc'>
 						{rec.maHoaLichHoc
 							?.sort((a, b) => a.thu - b.thu)
-							?.map((item, index) => (
-								// eslint-disable-next-line react/no-array-index-key
-								<li key={index}>
-									{item.thu < 7 ? `T${item.thu + 1}` : 'CN'} ({item.tietBatDau}-{item.tietBatDau + item.soTiet - 1}),
-									tuần{' '}
-									{item.danhSachTuan
-										.map((j) => j.tuan)
-										.sort((a, b) => a - b)
-										.join(',')}
-									,{' '}
-									{item.nhanSuSsoId ? (
-										item.nhanSu?.hoDem ? (
-											[item.nhanSu.hoDem, item.nhanSu.ten].join(' ')
+							?.map((item, index) => {
+								const dsTuan = item.danhSachTuan
+									.map((j) => j.tuan)
+									.sort((a, b) => a - b)
+									.join(',');
+								return (
+									// eslint-disable-next-line react/no-array-index-key
+									<li key={index}>
+										{item.thu < 7 ? `Thứ ${item.thu + 1}` : 'Chủ nhật'} (tiết {item.tietBatDau}-
+										{item.tietBatDau + item.soTiet - 1}), tuần {dsTuan},{' '}
+										{item.nhanSuSsoId ? (
+											item.nhanSu?.hoDem ? (
+												[item.nhanSu.hoDem, item.nhanSu.ten].join(' ')
+											) : (
+												<i style={{ color: '#999' }}>Không lấy được thông tin</i>
+											)
 										) : (
-											<i style={{ color: '#999' }}>Không lấy được thông tin</i>
-										)
-									) : (
-										<i style={{ color: '#999' }}>Không có thông tin giảng viên</i>
-									)}
-								</li>
-							))}
+											<i style={{ color: '#999' }}>Không có thông tin giảng viên</i>
+										)}
+									</li>
+								);
+							})}
 					</ul>
 				) : (
 					<i style={{ color: '#999' }}>Không có thông tin lịch học</i>
@@ -202,7 +197,7 @@ const DangKyLopHocPhan = () => {
 			title: 'Còn trống',
 			align: 'center',
 			width: 60,
-			render: (val, rec) => (rec.siSo && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
+			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
 			onCell,
 		},
 	];
@@ -238,7 +233,7 @@ const DangKyLopHocPhan = () => {
 								? [
 										<Segmented
 											key='1'
-											options={['Theo lớp hành chính', 'Tất cả']}
+											options={['Lớp gợi ý', 'Lựa chọn khác']}
 											value={typeLop}
 											onChange={(val) => setTypeLop(val.toString())}
 										/>,

@@ -32,7 +32,7 @@ const ViewGhiChuDangKyTinChi = () => {
 				</Space>
 				<Space style={{ marginTop: 5 }}>
 					<span className='fw500'>Chữ đậm</span>
-					Lớp theo lớp hành chính
+					Lớp gợi ý theo kế hoạch giảng dạy
 				</Space>
 			</div>
 		</div>

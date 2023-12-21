@@ -82,7 +82,7 @@ export enum ELoaiDangKyTheoLop {
 }
 
 export const loaiDangKyTheoLop: Record<ELoaiDangKyTheoLop, string> = {
-	[ELoaiDangKyTheoLop.LOP_HANH_CHINH]: 'Theo lớp hành chính',
+	[ELoaiDangKyTheoLop.LOP_HANH_CHINH]: 'Lớp theo kế hoạch giảng dạy',
 	[ELoaiDangKyTheoLop.KHOA_NGANH]: 'Theo chương trình đào tạo',
 	[ELoaiDangKyTheoLop.KHOA_NGANH_2]: 'Theo chương trình ngành 2',
 };
