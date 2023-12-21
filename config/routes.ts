@@ -334,12 +334,6 @@
 
 	// TIỆN ÍCH
 	{
-		name: 'KhaiBaoSucKhoe',
-		icon: 'HeartOutlined',
-		path: '/khai-bao-suc-khoe',
-		component: './TienIch/KhaiBaoSucKhoe',
-	},
-	{
 		name: 'PhanHoi',
 		path: './phan-hoi',
 		component: './TienIch/PhanHoi',
