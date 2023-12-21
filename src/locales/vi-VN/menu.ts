@@ -54,6 +54,7 @@ export default {
 	// GIANG VIEN
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
+	'menu.KhaiBaoQuyTrinh.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
 	'menu.KhaiBaoQuyTrinh.LichSu': 'Lịch sử',
 
