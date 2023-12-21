@@ -6,6 +6,7 @@ import {
 	ETrangThaiDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
+import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { inputFormat } from '@/utils/utils';
 import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
 import { Button, Col, Divider, Popconfirm, Row, Space, Tag, Tooltip } from 'antd';
@@ -15,6 +16,7 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
+import RenderLichHoc from './RenderLichHoc';
 
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
  * Học phí dự kiến, số tín chỉ được phép đăng ký, lịch học dự kiến
@@ -103,16 +105,16 @@ const PhieuDangKy = () => {
 
 	const columns: IColumn<DangKyTinChi.ILopDangKy>[] = [
 		{
-			title: 'Mã học phần',
+			title: 'Mã HP',
 			dataIndex: 'maHocPhan',
 			align: 'center',
-			width: 100,
+			width: 80,
 			filterType: 'string',
 		},
 		{
 			title: 'Tên học phần',
 			dataIndex: ['hocPhan', 'ten'],
-			width: 170,
+			width: 150,
 			filterType: 'string',
 		},
 		{
@@ -136,44 +138,14 @@ const PhieuDangKy = () => {
 		},
 		{
 			title: 'Thông tin chi tiết',
-			width: 350,
-			render: (val, rec) =>
-				rec.maHoaLichHoc?.length ? (
-					<ul className='lich-hoc'>
-						{rec.maHoaLichHoc
-							?.sort((a, b) => a.thu - b.thu)
-							?.map((item, index) => {
-								const dsTuan = item.danhSachTuan
-									.map((j) => j.tuan)
-									.sort((a, b) => a - b)
-									.join(',');
-								return (
-									// eslint-disable-next-line react/no-array-index-key
-									<li key={index}>
-										{item.thu < 7 ? `Thứ ${item.thu + 1}` : 'Chủ nhật'} (tiết {item.tietBatDau}-
-										{item.tietBatDau + item.soTiet - 1}), tuần {dsTuan},{' '}
-										{item.nhanSuSsoId ? (
-											item.nhanSu?.hoDem ? (
-												[item.nhanSu.hoDem, item.nhanSu.ten].join(' ')
-											) : (
-												<i style={{ color: '#999' }}>Không lấy được thông tin</i>
-											)
-										) : (
-											<i style={{ color: '#999' }}>Không có thông tin giảng viên</i>
-										)}
-									</li>
-								);
-							})}
-					</ul>
-				) : (
-					<i style={{ color: '#999' }}>Không có thông tin lịch học</i>
-				),
+			width: 400,
+			render: (val, rec) => <RenderLichHoc lopHocPhan={{ ...rec, loai: ELoaiLopHocPhan.CHINH }} />, // Fake loại để ko lỗi
 		},
 		{
 			title: 'Mã khóa ngành',
 			dataIndex: 'maKhoaNganh',
 			align: 'center',
-			width: 100,
+			width: 120,
 		},
 		{
 			title: 'Học phí dự kiến',
