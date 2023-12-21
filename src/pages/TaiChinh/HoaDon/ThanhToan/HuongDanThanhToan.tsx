@@ -50,10 +50,10 @@ const HuongDanThanhToan = (props: {
 									<img src='/images/vietqr.png' alt='vietqr' />
 									Thẻ nội địa
 								</Radio>
-								<Radio value={ETransactionPaymentType.MOMO_WALLET}>
+								{/* <Radio value={ETransactionPaymentType.MOMO_WALLET}>
 									<img src='/images/momo.svg' alt='momo' />
 									Ví MOMO
-								</Radio>
+								</Radio> */}
 							</>
 						)}
 					</Radio.Group>
