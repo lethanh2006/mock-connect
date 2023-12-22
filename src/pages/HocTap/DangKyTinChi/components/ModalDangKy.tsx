@@ -158,7 +158,13 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			maskClosable={false}
 		>
 			<Card title='Danh sách đăng ký mới'>
-				<TableStaticData columns={columns} data={danhSachDangKy} addStt loading={loading} />
+				<TableStaticData
+					columns={columns}
+					data={danhSachDangKy}
+					addStt
+					loading={loading}
+					otherProps={{ pagination: false, scoll: { y: 600 } }}
+				/>
 
 				<div className='form-footer'>
 					<Button onClick={onRegister} type='primary' loading={formSubmiting} disabled={!canRegister}>

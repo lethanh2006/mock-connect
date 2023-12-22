@@ -235,7 +235,14 @@ const PhieuDangKy = () => {
 				) : null}
 			</Row>
 
-			<TableStaticData columns={columns} data={danhSachLopHienThi} addStt loading={loading} hasTotal>
+			<TableStaticData
+				columns={columns}
+				data={danhSachLopHienThi}
+				addStt
+				loading={loading}
+				hasTotal
+				otherProps={{ pagination: false, scoll: { y: 600 } }}
+			>
 				<Space wrap>
 					{danhSachLopDangKy.length ? (
 						<Button icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
