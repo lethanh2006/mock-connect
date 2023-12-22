@@ -37,6 +37,7 @@ const PhieuDangKy = () => {
 		getLopDangKyModel,
 	} = useModel('daotao.dotdangkytinchi');
 	const { getMucThuHocPhiTheoNamModel, tinhHocPhi } = useModel('taichinh.mucthuhocphi');
+	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 	// Danh sách học phần có cả lớp Chính và lớp thực hành
 	const hocPhanCoLopThucHanh = danhSachLopDangKy.filter((item) => !!item.tenCha).map((item) => item.maHocPhan);
 	// Nếu có cả lớp chính và lớp thực hành thì chỉ hiện lớp thực hành
@@ -71,6 +72,11 @@ const PhieuDangKy = () => {
 		moment().isSameOrBefore(dotDangKyHienTai?.thoiGianKetThuc);
 	// Tổng học phí dự kiến
 	const tongHocPhi = _.sumBy(danhSachLopHienThi, (lop) => tinhHocPhi(lop.soTinChi, lop.loai, lop.maKhoaNganh));
+	// Số tín chỉ tối đa
+	const soTinChiToiDa =
+		khoaNganhMe?.khoaNganhPhu && phieuDangKy?.soTinChiToiDaSongNganh
+			? phieuDangKy.soTinChiToiDaSongNganh
+			: phieuDangKy?.soTinChiToiDa ?? 0;
 
 	useEffect(() => {
 		if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
@@ -213,7 +219,7 @@ const PhieuDangKy = () => {
 			<Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
 				<Col span={24} md={8}>
 					Tổng số tín chỉ (đã trừ các học phần không tính số tín chỉ):{' '}
-					<b style={{ color: tongTinChi > (phieuDangKy?.soTinChiToiDa ?? 0) ? 'red' : undefined }}>{tongTinChi} tín</b>
+					<b style={{ color: tongTinChi > soTinChiToiDa ? 'red' : undefined }}>{tongTinChi} tín</b>
 				</Col>
 				{dangTrongThoiGian ? (
 					<>
@@ -222,8 +228,7 @@ const PhieuDangKy = () => {
 						</Col>
 						<Col span={24} md={8}>
 							<div className='fw500' style={{ color: 'red', textAlign: 'right' }}>
-								Bạn được đăng ký trong khoảng tín chỉ:{' '}
-								{[phieuDangKy?.soTinChiToiThieu, phieuDangKy?.soTinChiToiDa].join(' - ')}
+								Bạn được đăng ký trong khoảng tín chỉ: {[phieuDangKy?.soTinChiToiThieu, soTinChiToiDa].join(' - ')}
 							</div>
 						</Col>
 					</>
@@ -241,7 +246,7 @@ const PhieuDangKy = () => {
 					{dangTrongThoiGian && tongTinChiChuaDk && dotDangKyHienTai.tinhChatDangKy !== ETinhChatDangKyTC.XOA ? (
 						<Tooltip
 							title={
-								tongTinChi > (phieuDangKy?.soTinChiToiDa ?? 0)
+								tongTinChi > soTinChiToiDa
 									? 'Bạn đã đăng ký quá số tín chỉ tối đa'
 									: tongTinChi < (phieuDangKy?.soTinChiToiThieu ?? 0)
 									? 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu'
@@ -252,9 +257,7 @@ const PhieuDangKy = () => {
 								type='primary'
 								icon={<SendOutlined />}
 								onClick={() => setVisibleRegister(true)}
-								disabled={
-									tongTinChi > (phieuDangKy?.soTinChiToiDa ?? 0) || tongTinChi < (phieuDangKy?.soTinChiToiThieu ?? 0)
-								}
+								disabled={tongTinChi > soTinChiToiDa || tongTinChi < (phieuDangKy?.soTinChiToiThieu ?? 0)}
 							>
 								Đăng ký
 							</Button>
