@@ -1,5 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
-import type { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
+import { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
 import { getMoodleLopHocPhan } from '@/services/HocTap/LopHocPhan';
 import { ELoaiLopHocPhan, ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
@@ -29,10 +29,12 @@ export default () => {
 			{ soThuTuLop: 1 },
 			undefined,
 			undefined,
-			tatCa ? undefined : `dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${loaiDangKyTheoLop}/page`,
+			`dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${
+				loaiDangKyTheoLop === ELoaiDangKyTheoLop.LOP_HANH_CHINH && tatCa ? 'doi-tuong' : loaiDangKyTheoLop
+			}/page`,
 			undefined,
 			undefined,
-			!tatCa,
+			true,
 		);
 
 	const getMoodleLopHocPhanModel = async (lopHocPhanId: string): Promise<any> => {
