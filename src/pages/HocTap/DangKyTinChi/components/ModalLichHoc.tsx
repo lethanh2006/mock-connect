@@ -12,7 +12,7 @@ const localizer = momentLocalizer(moment);
 
 const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	const { visibleModal, setVisibleModal, danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
-	const [calendarView, setCalendarView] = useState<View>(Views.MONTH);
+	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
 	const [dataCalendar, setDataCalendar] = useState<{ title: string; [x: string]: unknown }[]>([]);
 	const [date, setDate] = useState<Date>();
 	const [startDate, setStartDate] = useState<Date>();
@@ -85,7 +85,7 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 					onNavigate={(newDate) => setDate(newDate)}
 					selectable={false}
 					messages={messagesCalendar}
-					style={{ height: 700, overflow: 'auto' }}
+					style={{ height: 600, overflow: 'auto' }}
 					min={moment('0600', 'HHmm').toDate()}
 					max={moment('2100', 'HHmm').toDate()}
 					eventPropGetter={eventPropGetter}
