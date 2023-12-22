@@ -68,6 +68,7 @@ export declare module LopHocPhan {
 		lopHocPhan: IRecord;
 		sinhVienSsoId: string;
 		sinhVien?: SinhVien.IRecord;
+		maKhoaNganh?: string;
 
 		// khoa: boolean;
 		// khoaDiemThi: boolean;

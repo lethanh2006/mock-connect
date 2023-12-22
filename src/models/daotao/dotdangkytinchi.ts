@@ -124,6 +124,7 @@ export default () => {
 						soTinChi: item.lopHocPhan?.hocPhan?.soTinChi ?? 0,
 						loai: item.loai,
 						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
+						maKhoaNganh: item.maKhoaNganh,
 					})) ?? [];
 			setDanhSachLopDangKy(lopDangKy);
 			tinhDataLichHoc(lopDangKy);

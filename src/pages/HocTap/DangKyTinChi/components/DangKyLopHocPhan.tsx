@@ -12,6 +12,7 @@ import { type TableRowSelection } from 'antd/lib/table/interface';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FilterHocPhanDKTC from './FilterHocPhan';
+import RenderLichHoc from './RenderLichHoc';
 
 const DangKyLopHocPhan = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -86,7 +87,7 @@ const DangKyLopHocPhan = () => {
 		onChange: (selectedRowKeys, selectedRows) => {
 			const lopVuaChon = selectedRows?.at(-1);
 			// Nếu chọn ít nhất 1 lớp và chưa đăng ký
-			if (lopVuaChon && !dangKyRoi) {
+			if (lopVuaChon && !dangKyRoi && lopVuaChon.maHocPhan === recHocPhan?.ma) {
 				const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
 				let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
 				const lopDangKy = {
@@ -151,38 +152,8 @@ const DangKyLopHocPhan = () => {
 		},
 		{
 			title: 'Thông tin chi tiết',
-			width: 350,
-			render: (val, rec) =>
-				rec.maHoaLichHoc?.length ? (
-					<ul className='lich-hoc'>
-						{rec.maHoaLichHoc
-							?.sort((a, b) => a.thu - b.thu)
-							?.map((item, index) => {
-								const dsTuan = item.danhSachTuan
-									.map((j) => j.tuan)
-									.sort((a, b) => a - b)
-									.join(',');
-								return (
-									// eslint-disable-next-line react/no-array-index-key
-									<li key={index}>
-										{item.thu < 7 ? `Thứ ${item.thu + 1}` : 'Chủ nhật'} (tiết {item.tietBatDau}-
-										{item.tietBatDau + item.soTiet - 1}), tuần {dsTuan},{' '}
-										{item.nhanSuSsoId ? (
-											item.nhanSu?.hoDem ? (
-												[item.nhanSu.hoDem, item.nhanSu.ten].join(' ')
-											) : (
-												<i style={{ color: '#999' }}>Không lấy được thông tin</i>
-											)
-										) : (
-											<i style={{ color: '#999' }}>Không có thông tin giảng viên</i>
-										)}
-									</li>
-								);
-							})}
-					</ul>
-				) : (
-					<i style={{ color: '#999' }}>Không có thông tin lịch học</i>
-				),
+			width: 400,
+			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
 			onCell,
 		},
 		{
