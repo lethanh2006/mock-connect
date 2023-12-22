@@ -9,6 +9,7 @@ import {
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { SyncOutlined } from '@ant-design/icons';
 import { Button, Card, Modal, Tag, message } from 'antd';
+import pLimit from 'p-limit';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -30,32 +31,36 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 
 	const postDangKy = async () => {
 		setFormSubmiting(true);
+		const limit = pLimit(1); // Giới hạn 1 truy vấn cùng lúc
 
 		// Với từng lớp mới chọn thì gọi 1 API đăng ký
 		const promises = danhSachDangKy
 			.filter((item) => item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY)
 			.map((item, index) =>
-				postDangKyTinChiModel({
-					phieuDktcId: phieuDangKy?._id ?? '',
-					dangKy: { lopHocPhanId: item._id, maKhoaNganh: item.maKhoaNganh ?? '' },
-				})
-					.then(() =>
-						// Nếu thành công
-						setDanhSachDangKy((p) => {
-							const p1 = [...p];
-							p1[index].trangThai = ETrangThaiDangKyTinChi.DA_DANG_KY;
-							return p1;
-						}),
-					)
-					.catch((e) =>
-						setDanhSachDangKy((p) => {
-							const p1 = [...p];
-							p1[index].trangThai = ETrangThaiDangKyTinChi.LOI;
-							p1[index].error = e.response?.data?.message;
-							return p1;
-						}),
-					),
+				limit(() =>
+					postDangKyTinChiModel({
+						phieuDktcId: phieuDangKy?._id ?? '',
+						dangKy: { lopHocPhanId: item._id, maKhoaNganh: item.maKhoaNganh ?? '' },
+					})
+						.then(() =>
+							// Nếu thành công
+							setDanhSachDangKy((p) => {
+								const p1 = [...p];
+								p1[index].trangThai = ETrangThaiDangKyTinChi.DA_DANG_KY;
+								return p1;
+							}),
+						)
+						.catch((e) =>
+							setDanhSachDangKy((p) => {
+								const p1 = [...p];
+								p1[index].trangThai = ETrangThaiDangKyTinChi.LOI;
+								p1[index].error = e.response?.data?.message;
+								return p1;
+							}),
+						),
+				),
 			);
+
 		Promise.all(promises)
 			.then()
 			.finally(() => {
@@ -119,7 +124,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			title: 'Mã khóa ngành',
 			dataIndex: 'maKhoaNganh',
 			align: 'center',
-			width: 100,
+			width: 120,
 		},
 		{
 			title: 'Loại ĐK',
@@ -163,7 +168,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 					data={danhSachDangKy}
 					addStt
 					loading={loading}
-					otherProps={{ pagination: false, scoll: { y: 600 } }}
+					otherProps={{ pagination: false, scroll: { y: 600 } }}
 				/>
 
 				<div className='form-footer'>

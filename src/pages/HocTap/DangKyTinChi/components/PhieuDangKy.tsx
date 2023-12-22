@@ -241,7 +241,7 @@ const PhieuDangKy = () => {
 				addStt
 				loading={loading}
 				hasTotal
-				otherProps={{ pagination: false, scoll: { y: 600 } }}
+				otherProps={{ pagination: false, scroll: { y: 600 } }}
 			>
 				<Space wrap>
 					{danhSachLopDangKy.length ? (
