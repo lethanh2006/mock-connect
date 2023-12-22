@@ -77,6 +77,7 @@ const PhieuDangKy = () => {
 		khoaNganhMe?.khoaNganhPhu && phieuDangKy?.soTinChiToiDaSongNganh
 			? phieuDangKy.soTinChiToiDaSongNganh
 			: phieuDangKy?.soTinChiToiDa ?? 0;
+	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
 
 	useEffect(() => {
 		if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
@@ -219,7 +220,9 @@ const PhieuDangKy = () => {
 			<Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
 				<Col span={24} md={8}>
 					Tổng số tín chỉ (đã trừ các học phần không tính số tín chỉ):{' '}
-					<b style={{ color: tongTinChi > soTinChiToiDa ? 'red' : undefined }}>{tongTinChi} tín</b>
+					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
+						{tongTinChi} tín
+					</b>
 				</Col>
 				{dangTrongThoiGian ? (
 					<>
@@ -227,7 +230,16 @@ const PhieuDangKy = () => {
 							Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
 						</Col>
 						<Col span={24} md={8}>
-							<div className='fw500' style={{ color: 'red', textAlign: 'right' }}>
+							<div
+								className={
+									tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu
+										? 'fw500 text-error'
+										: 'fw500 text-success'
+								}
+								style={{
+									textAlign: 'right',
+								}}
+							>
 								Bạn được đăng ký trong khoảng tín chỉ: {[phieuDangKy?.soTinChiToiThieu, soTinChiToiDa].join(' - ')}
 							</div>
 						</Col>
