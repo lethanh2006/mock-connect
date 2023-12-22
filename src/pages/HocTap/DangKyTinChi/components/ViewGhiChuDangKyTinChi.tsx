@@ -14,6 +14,11 @@ const ViewGhiChuDangKyTinChi = () => {
 			<br />
 			Bước 4: Xem lại danh sách và ấn nút <b>Đăng ký</b>
 			<br />
+			Xem video hướng dẫn{' '}
+			<a href='https://www.youtube.com/watch?v=2xghlws7tAk' target='_blank' rel='noreferrer'>
+				tại đây
+			</a>
+			<br />
 			<br />
 			<u>Ghi chú:</u>
 			<br />
