@@ -8,7 +8,7 @@ ENV APP_CONFIG_ONE_SIGNAL_ID=f3857a81-2891-49be-87a7-903a4a1a54be
 ENV APP_CONFIG_SENTRY_DSN=https://ed934e521d476c44a89a42aaa8a6993a@sentry.aisoftech.vn/3
 ENV APP_CONFIG_KEYCLOAK_AUTHORITY=https://sso.hvpnvn.edu.vn/realms/vwa
 ENV APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID=vwa-
-ENV APP_CONFIG_APP_VERSION=231221.1710
+ENV APP_CONFIG_APP_VERSION=231222.1710
 
 ENV APP_CONFIG_CO_QUAN_CHU_QUAN='Hội Liên hiệp phụ nữ Việt Nam'
 ENV APP_CONFIG_TEN_TRUONG='Học viện Phụ nữ Việt Nam'
@@ -17,11 +17,11 @@ ENV APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH=VWA
 ENV APP_CONFIG_PRIMARY_COLOR=#007EB9
 
 ENV APP_CONFIG_URL_LANDING=https://portal-vwa.aisenote.com/
-ENV APP_CONFIG_URL_CONNECT=https://vwa-connect.vercel.app/
+ENV APP_CONFIG_URL_CONNECT=https://sinhvien.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_CAN_BO=https://canbo.hvpnvn.edu.vn/
-ENV APP_CONFIG_URL_DAO_TAO=https://qldt-vwa.vercel.app/
+ENV APP_CONFIG_URL_DAO_TAO=https://qldt.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_NHAN_SU=https://tcns.hvpnvn.edu.vn/
-ENV APP_CONFIG_URL_TAI_CHINH=https://tai-chinh-vwa.vercel.app/
+ENV APP_CONFIG_URL_TAI_CHINH=https://taichinh.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_CTSV=https://ctsv-vwa.vercel.app/
 ENV APP_CONFIG_URL_QLKH=https://qlkh.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_VPS=https://van-phong-vwa.vercel.app/
