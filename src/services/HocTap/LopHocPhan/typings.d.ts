@@ -47,6 +47,9 @@ export declare module LopHocPhan {
 		soTiet: number;
 		nhanSuSsoId?: string; //SsoId
 		nhanSu?: ToChucNhanSu.INhanSu;
+		maNhanSu?: string;
+		tenNhanSu?: string;
+
 		loaiHinhHocTap?: ELoaiHinhHocTap;
 		nhomTietHocId?: string;
 		danhSachTuan: { tuan: number; tkbId: string }[];

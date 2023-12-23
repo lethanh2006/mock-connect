@@ -22,7 +22,7 @@ const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord }) => {
 								<i style={{ color: '#999' }}>Không lấy được thông tin g/v</i>
 							)
 						) : (
-							<i style={{ color: '#999' }}>Không có thông tin g/v</i>
+							item.tenNhanSu ?? <i style={{ color: '#999' }}>Không có thông tin g/v</i>
 						)}
 					</li>
 				);
