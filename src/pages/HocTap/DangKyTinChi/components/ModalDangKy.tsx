@@ -34,10 +34,9 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 		const limit = pLimit(1); // Giới hạn 1 truy vấn cùng lúc
 
 		// Với từng lớp mới chọn thì gọi 1 API đăng ký
-		const promises = danhSachDangKy
-			.filter((item) => item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY)
-			.map((item, index) =>
-				limit(() =>
+		const promises = danhSachDangKy.map((item, index) =>
+			limit(() => {
+				if (item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY)
 					postDangKyTinChiModel({
 						phieuDktcId: phieuDangKy?._id ?? '',
 						dangKy: { lopHocPhanId: item._id, maKhoaNganh: item.maKhoaNganh ?? '' },
@@ -57,9 +56,9 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 								p1[index].error = e.response?.data?.message;
 								return p1;
 							}),
-						),
-				),
-			);
+						);
+			}),
+		);
 
 		Promise.all(promises)
 			.then()
