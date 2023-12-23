@@ -6,6 +6,7 @@ import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
+import { YoutubeOutlined } from '@ant-design/icons';
 
 const DangKyTinChiPage = () => {
 	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
@@ -39,6 +40,17 @@ const DangKyTinChiPage = () => {
 			)}
 
 			<PhieuDangKy />
+
+			<div className='huong-dan'>
+				<div className='title-huong-dan'>
+					<i>Xem video hướng dẫn đăng ký tín chỉ</i>
+				</div>
+
+				<YoutubeOutlined
+					className='pulse'
+					onClick={() => window.open('https://www.youtube.com/watch?v=2xghlws7tAk&t=2s')}
+				/>
+			</div>
 		</Card>
 	);
 };
