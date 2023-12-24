@@ -31,12 +31,15 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 			</span>
 		);
 
+	const fullName = initialState.currentUser?.family_name
+		? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
+		: initialState.currentUser?.name;
+
 	const items: ItemType[] = [
 		{
-			key: 'portal',
-			icon: <GlobalOutlined />,
-			label: 'Cổng thông tin',
-			onClick: () => window.open(landingUrl),
+			key: 'name',
+			icon: <UserOutlined />,
+			label: fullName ?? (initialState.currentUser?.preferred_username || ''),
 		},
 		{
 			key: 'password',
@@ -46,6 +49,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 				const redirect = window.location.href;
 				window.location.href = `${keycloakAuthEndpoint}?client_id=${AppModules[currentRole].clientId}&redirect_uri=${redirect}&response_type=code&scope=openid&kc_action=UPDATE_PASSWORD`;
 			},
+		},
+		{
+			key: 'portal',
+			icon: <GlobalOutlined />,
+			label: 'Cổng thông tin',
+			onClick: () => window.open(landingUrl),
 		},
 		{ type: 'divider', key: 'divider' },
 		{
@@ -69,10 +78,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 		//         keycloakClientID,
 		//     ),
 		// });
-		items.splice(1, 0, {
+		items.splice(0, 1, {
 			key: 'center',
 			icon: <UserOutlined />,
-			label: 'Thông tin cá nhân',
+			label: fullName
+				? `${fullName} - ${initialState.currentUser?.preferred_username || ''}`
+				: initialState.currentUser?.preferred_username || '',
 			onClick: () => history.push('/thong-tin-ca-nhan'),
 		});
 	}
@@ -94,13 +105,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 						icon={!initialState.currentUser?.picture ? <UserOutlined /> : undefined}
 						alt='avatar'
 					/>
-					<span className={`${styles.name}`}>
-						{initialState.currentUser?.family_name
-							? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
-							: initialState.currentUser?.name
-							? initialState.currentUser.name
-							: initialState.currentUser?.preferred_username || ''}
-					</span>
+					<span className={`${styles.name}`}>{fullName ?? (initialState.currentUser?.preferred_username || '')}</span>
 				</span>
 			</HeaderDropdown>
 		</>
