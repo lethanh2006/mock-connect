@@ -227,18 +227,16 @@ const PhieuDangKy = () => {
 				<Col span={24} md={8}>
 					Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
 				</Col>
-				{dangTrongThoiGian ? (
-					<Col span={24} md={8}>
-						<div
-							className={
-								tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
-							}
-							style={{ textAlign: 'right' }}
-						>
-							Bạn được đăng ký trong khoảng tín chỉ: {[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
-						</div>
-					</Col>
-				) : null}
+				<Col span={24} md={8}>
+					<div
+						className={
+							tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
+						}
+						style={{ textAlign: 'right' }}
+					>
+						Bạn được đăng ký trong khoảng tín chỉ: {[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
+					</div>
+				</Col>
 			</Row>
 
 			<TableStaticData
