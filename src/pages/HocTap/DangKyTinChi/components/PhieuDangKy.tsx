@@ -163,7 +163,7 @@ const PhieuDangKy = () => {
 				if (due) return `${inputFormat(due)} VND`;
 				return null;
 			},
-			hide: !dangTrongThoiGian,
+			// hide: !dangTrongThoiGian,
 		},
 		// {
 		// 	title: 'Loại ĐK',
@@ -224,26 +224,20 @@ const PhieuDangKy = () => {
 						{tongTinChi} tín
 					</b>
 				</Col>
+				<Col span={24} md={8}>
+					Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
+				</Col>
 				{dangTrongThoiGian ? (
-					<>
-						<Col span={24} md={8}>
-							Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
-						</Col>
-						<Col span={24} md={8}>
-							<div
-								className={
-									tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu
-										? 'fw500 text-error'
-										: 'fw500 text-success'
-								}
-								style={{
-									textAlign: 'right',
-								}}
-							>
-								Bạn được đăng ký trong khoảng tín chỉ: {[phieuDangKy?.soTinChiToiThieu, soTinChiToiDa].join(' - ')}
-							</div>
-						</Col>
-					</>
+					<Col span={24} md={8}>
+						<div
+							className={
+								tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
+							}
+							style={{ textAlign: 'right' }}
+						>
+							Bạn được đăng ký trong khoảng tín chỉ: {[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
+						</div>
+					</Col>
 				) : null}
 			</Row>
 
@@ -267,7 +261,7 @@ const PhieuDangKy = () => {
 							title={
 								tongTinChi > soTinChiToiDa
 									? 'Bạn đã đăng ký quá số tín chỉ tối đa'
-									: tongTinChi < (phieuDangKy?.soTinChiToiThieu ?? 0)
+									: tongTinChi < soTinChiToiThieu
 									? 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu'
 									: undefined
 							}
@@ -276,7 +270,7 @@ const PhieuDangKy = () => {
 								type='primary'
 								icon={<SendOutlined />}
 								onClick={() => setVisibleRegister(true)}
-								disabled={tongTinChi > soTinChiToiDa || tongTinChi < (phieuDangKy?.soTinChiToiThieu ?? 0)}
+								disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu}
 							>
 								Đăng ký
 							</Button>

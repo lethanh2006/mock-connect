@@ -1,12 +1,11 @@
 import { ETinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
+import { YoutubeOutlined } from '@ant-design/icons';
 import { Card, Divider, Empty } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
-import { YoutubeOutlined } from '@ant-design/icons';
 
 const DangKyTinChiPage = () => {
 	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
@@ -17,22 +16,17 @@ const DangKyTinChiPage = () => {
 
 			{dotDangKyHienTai ? (
 				<>
-					{moment().isSameOrAfter(dotDangKyHienTai.thoiGianBatDau) &&
-					moment().isSameOrBefore(dotDangKyHienTai.thoiGianKetThuc) ? (
-						dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
-							<Empty
-								description={
-									<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp tín chỉ đã đăng ký trước đó !</i>
-								}
-							/>
-						) : (
-							<>
-								<Divider style={{ marginTop: 24 }}>Thông tin đăng ký</Divider>
-								<DangKyLopHocPhan />
-							</>
-						)
+					{dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+						<Empty
+							description={
+								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp tín chỉ đã đăng ký trước đó !</i>
+							}
+						/>
 					) : (
-						<Empty description={<i style={{ color: '#999' }}>Không trong thời gian đăng ký !</i>} />
+						<>
+							<Divider style={{ marginTop: 24 }}>Thông tin đăng ký</Divider>
+							<DangKyLopHocPhan />
+						</>
 					)}
 				</>
 			) : (
