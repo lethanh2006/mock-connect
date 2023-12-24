@@ -16,7 +16,8 @@ const DangKyTinChiPage = () => {
 
 			{dotDangKyHienTai ? (
 				<>
-					{moment().isSameOrAfter(dotDangKyHienTai.thoiGianBatDau) &&
+					{
+					// moment().isSameOrAfter(dotDangKyHienTai.thoiGianBatDau) &&
 					moment().isSameOrBefore(dotDangKyHienTai.thoiGianKetThuc) ? (
 						dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 							<Empty
@@ -28,7 +29,7 @@ const DangKyTinChiPage = () => {
 							<DangKyLopHocPhan />
 						)
 					) : (
-						<Empty description={<i style={{ color: '#999' }}>Không trong thời gian đăng ký !</i>} />
+						<Empty description={<i style={{ color: '#999' }}>Không trong thời gian đăng ký!</i>} />
 					)}
 				</>
 			) : (
