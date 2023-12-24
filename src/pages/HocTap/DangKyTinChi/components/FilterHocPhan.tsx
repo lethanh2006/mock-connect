@@ -26,7 +26,7 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('350px');
 	const allLoaiDangKy = Object.values(ELoaiDangKyTheoLop);
-	if (!khoaNganhMe?.khoaNganhPhu?.ma) allLoaiDangKy.splice(-1, 1);
+	if (!khoaNganhMe?.khoaNganhPhu?.ma) allLoaiDangKy.splice(-2, 1);
 
 	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
 
