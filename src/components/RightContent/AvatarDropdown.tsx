@@ -21,13 +21,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 	if (!initialState || !initialState.currentUser)
 		return (
 			<span className={`${styles.action} ${styles.account}`}>
-				<Spin
-					size='small'
-					style={{
-						marginLeft: 8,
-						marginRight: 8,
-					}}
-				/>
+				<Spin size='small' style={{ marginLeft: 8, marginRight: 8 }} />
 			</span>
 		);
 
