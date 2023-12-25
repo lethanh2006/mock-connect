@@ -1,5 +1,5 @@
 import { useModel, history } from 'umi';
-import { getDonByUserId } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
+import { getDonByUserId } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import { useEffect, useState } from 'react';
 import FormQuyTrinh from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/Form';
 import View from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/View';

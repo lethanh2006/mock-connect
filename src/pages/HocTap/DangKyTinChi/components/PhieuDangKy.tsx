@@ -8,6 +8,7 @@ import {
 	LoaiHocPhanDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
+import { inputFormat } from '@/utils/utils';
 import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
 import { Button, Col, Divider, Popconfirm, Row, Space, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
@@ -17,6 +18,9 @@ import { useModel } from 'umi';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
 
+/** Hiển thị danh sách các lớp đã đăng ký và đã chọn
+ * Học phí dự kiến, số tín chỉ được phép đăng ký, lịch học dự kiến
+ */
 const PhieuDangKy = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const {
@@ -32,6 +36,7 @@ const PhieuDangKy = () => {
 		getPhieuDangKyModel,
 		getLopDangKyModel,
 	} = useModel('daotao.dotdangkytinchi');
+	const { getMucThuHocPhiTheoNamModel, tinhHocPhi } = useModel('taichinh.mucthuhocphi');
 	// Danh sách học phần có cả lớp Chính và lớp thực hành
 	const hocPhanCoLopThucHanh = danhSachLopDangKy.filter((item) => !!item.tenCha).map((item) => item.maHocPhan);
 	// Nếu có cả lớp chính và lớp thực hành thì chỉ hiện lớp thực hành
@@ -64,6 +69,8 @@ const PhieuDangKy = () => {
 		dotDangKyHienTai?.thoiGianKetThuc &&
 		moment().isSameOrAfter(dotDangKyHienTai?.thoiGianBatDau) &&
 		moment().isSameOrBefore(dotDangKyHienTai?.thoiGianKetThuc);
+	// Tổng học phí dự kiến
+	const tongHocPhi = _.sumBy(danhSachLopHienThi, (lop) => tinhHocPhi(lop.soTinChi, lop.loai));
 
 	useEffect(() => {
 		if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
@@ -72,6 +79,11 @@ const PhieuDangKy = () => {
 	useEffect(() => {
 		if (recHocKy?.ma) getLopDangKyModel(recHocKy.ma);
 	}, [recHocKy?.ma]);
+
+	useEffect(() => {
+		// Get mức thu học phí của tôi theo năm học
+		if (recHocKy?.namBatDau) getMucThuHocPhiTheoNamModel(recHocKy.namBatDau.toString());
+	}, [recHocKy?.namBatDau]);
 
 	const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
 		try {
@@ -163,11 +175,17 @@ const PhieuDangKy = () => {
 					<i style={{ color: '#999' }}>Không có thông tin lịch học</i>
 				),
 		},
-		// {
-		//   title: 'Học phí',
-		//   width: 120,
-		//   hide: !dangTrongThoiGian,
-		// },
+		{
+			title: 'Học phí dự kiến',
+			align: 'right',
+			width: 120,
+			render: (val, rec) => {
+				const due = tinhHocPhi(rec.soTinChi, rec.loai);
+				if (due) return `${inputFormat(due)} VND`;
+				return null;
+			},
+			hide: !dangTrongThoiGian,
+		},
 		{
 			title: 'Loại ĐK',
 			dataIndex: 'loai',
@@ -227,10 +245,10 @@ const PhieuDangKy = () => {
 				</Col>
 				{dangTrongThoiGian ? (
 					<>
-						{/* <Col span={24} md={8}>
-              Học phí dự kiến: <b>- đ</b>
-            </Col> */}
-						<Col span={24} md={16}>
+						<Col span={24} md={8}>
+							Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
+						</Col>
+						<Col span={24} md={8}>
 							<div className='fw500' style={{ color: 'red', textAlign: 'right' }}>
 								Bạn được đăng ký trong khoảng tín chỉ:{' '}
 								{[phieuDangKy?.soTinChiToiThieu, phieuDangKy?.soTinChiToiDa].join(' - ')}

@@ -1,7 +1,7 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import { type DotChamDiem } from '@/services/DiemRenLuyen/DotChamDiem/typing';
-import { EVaiTroPhieuDiem } from '@/services/DiemRenLuyen/PhieuDiemRenLuyen/constants';
+import { type DotChamDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/DotChamDiem/typing';
+import { EVaiTroPhieuDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/constants';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 import moment from 'moment';
@@ -79,7 +79,7 @@ const PhieuDiemRenLuyenSinhVienPage = () => {
 				dependencies={[page, limit]}
 				modelName='diemrenluyen.dotchamdiem'
 				title='Phiếu điểm rèn luyện'
-        buttons={{create:false}}
+				buttons={{ create: false }}
 			/>
 			<ModalPhieuDiem role={EVaiTroPhieuDiem.SINH_VIEN} onOk={getModelBySinhVien} />
 		</>

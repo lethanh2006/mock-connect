@@ -96,7 +96,7 @@
 		name: 'KeHoachNCKH',
 		icon: 'FileOutlined',
 		path: '/ke-hoach-nckh',
-		component: './KeHoachNCKH',
+		component: './KhoaHoc/KeHoach',
 	},
 
 	// MENU SINH VIEN
@@ -240,13 +240,6 @@
 		],
 	},
 
-	{
-		name: 'KhaiBaoSucKhoe',
-		icon: 'HeartOutlined',
-		path: '/khai-bao-suc-khoe',
-		component: './TienIch/KhaiBaoSucKhoe',
-	},
-
 	// {
 	// 	name: 'DichVuHanhChinh',
 	// 	icon: 'AuditOutlined',
@@ -314,13 +307,38 @@
 			},
 		],
 	},
+
+	// TÀI CHÍNH
 	{
-		name: 'CongNo',
+		name: 'TaiChinh',
 		icon: 'TransactionOutlined',
-		path: '/cong-no',
-		component: './TaiChinh/ChiTietThu',
+		path: '/tai-chinh',
+		routes: [
+			{
+				name: 'CongNo',
+				path: './cong-no',
+				component: './TaiChinh/HoaDon',
+			},
+			{
+				name: 'GiaoDich',
+				path: './giao-dich',
+				component: './TaiChinh/GiaoDich',
+			},
+			{
+				name: 'UuDaiThanhToan',
+				path: './uu-dai-thanh-toan',
+				component: './TaiChinh/UuDaiThanhToan',
+			},
+		],
 	},
 
+	// TIỆN ÍCH
+	{
+		name: 'KhaiBaoSucKhoe',
+		icon: 'HeartOutlined',
+		path: '/khai-bao-suc-khoe',
+		component: './TienIch/KhaiBaoSucKhoe',
+	},
 	{
 		name: 'PhanHoi',
 		path: './phan-hoi',
@@ -335,6 +353,12 @@
 		icon: 'table',
 	},
 	{
+		name: 'KhaiBaoSucKhoe',
+		icon: 'HeartOutlined',
+		path: '/khai-bao-suc-khoe',
+		component: './TienIch/KhaiBaoSucKhoe',
+	},
+	{
 		name: 'CauHoiThuongGap',
 		path: './cauhoithuonggap',
 		icon: 'QuestionOutlined',
@@ -346,7 +370,6 @@
 		component: './TienIch/VanBanHuongDan',
 		icon: 'FileOutlined',
 	},
-	//MENU GIANG VIEN
 
 	{
 		path: '/notification',
