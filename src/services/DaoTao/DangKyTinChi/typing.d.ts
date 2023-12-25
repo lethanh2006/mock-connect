@@ -37,6 +37,7 @@ declare module DangKyTinChi {
 		soTinChiDaDk: number;
 		soTinChiToiThieu: number;
 		soTinChiToiDa: number;
+		soTinChiToiDaSongNganh: number;
 		maSvHk: string;
 		lopHpSvList: LopHocPhan.IRecordSinhVienLopHP[];
 	}
@@ -45,6 +46,7 @@ declare module DangKyTinChi {
 		soTinChi: number;
 		loai?: ELoaiHocPhanDangKyTinChi;
 		trangThai: ETrangThaiDangKyTinChi;
+		maKhoaNganh?: string;
 
 		// temp
 		error?: string;

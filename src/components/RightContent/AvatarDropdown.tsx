@@ -72,10 +72,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 		//         keycloakClientID,
 		//     ),
 		// });
-		items.splice(1, 0, {
+		items.splice(0, 1, {
 			key: 'center',
 			icon: <UserOutlined />,
-			label: 'Thông tin cá nhân',
+			label: fullName
+				? `${fullName} - ${initialState.currentUser?.preferred_username || ''}`
+				: initialState.currentUser?.preferred_username || '',
 			onClick: () => history.push('/thong-tin-ca-nhan'),
 		});
 	}

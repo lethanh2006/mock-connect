@@ -35,6 +35,8 @@ export declare module LopHocPhan {
 		thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[];
 		trangThaiLop: ETrangThaiLopHocPhan;
 
+		lopHpHcList?: Partial<ILopHpLopHc>[];
+
 		// Populated
 		deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };
 	}
@@ -45,6 +47,9 @@ export declare module LopHocPhan {
 		soTiet: number;
 		nhanSuSsoId?: string; //SsoId
 		nhanSu?: ToChucNhanSu.INhanSu;
+		maNhanSu?: string;
+		tenNhanSu?: string;
+
 		loaiHinhHocTap?: ELoaiHinhHocTap;
 		nhomTietHocId?: string;
 		danhSachTuan: { tuan: number; tkbId: string }[];
@@ -66,6 +71,7 @@ export declare module LopHocPhan {
 		lopHocPhan: IRecord;
 		sinhVienSsoId: string;
 		sinhVien?: SinhVien.IRecord;
+		maKhoaNganh?: string;
 
 		// khoa: boolean;
 		// khoaDiemThi: boolean;
@@ -119,5 +125,13 @@ export declare module LopHocPhan {
 		soBuoiVang?: any[];
 		soBuoiVangCoPhep?: any[];
 		diemCong?: IDiemCong[];
+	}
+
+	export interface ILopHpLopHc {
+		_id?: string;
+		maLopHp: string;
+		lopHocPhan?: IRecord;
+		maLopHc: string;
+		lopHanhChinh?: LopHanhChinh.IRecord;
 	}
 }
