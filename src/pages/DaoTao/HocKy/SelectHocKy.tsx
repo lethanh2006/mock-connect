@@ -17,7 +17,7 @@ const SelectHocKy = (props: {
 	selectMa?: boolean;
 }) => {
 	const { value, onChange, multiple, condition, allowClear, style, isSetRecord, selectMa, disabled } = props;
-	const { danhSach, getAllModel, visibleForm } = useModel('daotao.hocky');
+	const { danhSach, getAllModel, visibleForm, loading } = useModel('daotao.hocky');
 
 	useEffect(() => {
 		if (!visibleForm) getAllModel(!!isSetRecord, { ma: -1 }, condition, undefined, 'sinh-vien/me');
@@ -39,6 +39,7 @@ const SelectHocKy = (props: {
 			placeholder='Chọn học kỳ'
 			allowClear={allowClear ?? false}
 			style={{ width: '100%', ...style }}
+			loading={loading}
 		/>
 	);
 };

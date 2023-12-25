@@ -7,58 +7,56 @@ import DanhSachBuoiHoc from './LichHoc';
 import ThongTinChung from './components/ThongTinChung';
 
 const DetailLopTinChi = ({
-  match: {
-    params: { id },
-  },
+	match: {
+		params: { id },
+	},
 }: {
-  match: { params: { id: string } };
+	match: { params: { id: string } };
 }) => {
-  const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
-  const { record, sinhVienGetByIdModel } = useModel('daotao.lophocphan');
-  const hash = window.location.hash;
-  const [tabActive, setTabActive] = useState<string>(hash.includes('danhgia') ? '6' : '1');
+	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
+	const { record, sinhVienGetByIdModel } = useModel('daotao.lophocphan');
+	const hash = window.location.hash;
+	const [tabActive, setTabActive] = useState<string>(hash.includes('danhgia') ? '6' : '1');
 
-  useEffect(() => {
-    if (id)
-      sinhVienGetByIdModel(id).then((rec) => {
-        if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
-      });
-  }, [id]);
+	useEffect(() => {
+		if (id)
+			sinhVienGetByIdModel(id).then((rec) => {
+				if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
+			});
+	}, [id]);
 
-  return (
-    <Card
-      bodyStyle={{ paddingTop: 4 }}
-      title={
-        <Breadcrumb style={{ cursor: 'pointer' }}>
-          <Breadcrumb.Item onClick={() => history.push('/hoc-tap/lop-hoc-phan')}>
-            <TeamOutlined /> Lớp học phần
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>{record?.ten ?? ''}</Breadcrumb.Item>
-        </Breadcrumb>
-      }
-    >
-      <Tabs
-        onChange={(tab) => {
-          setTabActive(tab);
-        }}
-        activeKey={tabActive}
-      >
-        <Tabs.TabPane tab="Thông tin chung" key="1">
-          <ThongTinChung />
-        </Tabs.TabPane>
+	return (
+		<Card
+			bodyStyle={{ paddingTop: 4 }}
+			title={
+				<Breadcrumb style={{ cursor: 'pointer' }}>
+					<Breadcrumb.Item onClick={() => history.push('/hoc-tap/lop-tin-chi')}>
+						<TeamOutlined /> Lớp tín chỉ
+					</Breadcrumb.Item>
+					<Breadcrumb.Item>{record?.ten ?? ''}</Breadcrumb.Item>
+				</Breadcrumb>
+			}
+		>
+			<Tabs
+				onChange={(tab) => {
+					setTabActive(tab);
+				}}
+				activeKey={tabActive}
+			>
+				<Tabs.TabPane tab='Thông tin chung' key='1'>
+					<ThongTinChung />
+				</Tabs.TabPane>
 
-        <Tabs.TabPane tab="Danh sách buổi học" key="2">
-          <DanhSachBuoiHoc />
-        </Tabs.TabPane>
+				<Tabs.TabPane tab='Danh sách buổi học' key='2'>
+					<DanhSachBuoiHoc />
+				</Tabs.TabPane>
 
-        <Tabs.TabPane tab="Kết quả học tập" key="3">
-          <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
-            Chi tiết điểm lớp học phần
-          </h4>
-          <DetailKetQuaHocTap lopHocPhanId={record?._id} />
-        </Tabs.TabPane>
+				<Tabs.TabPane tab='Kết quả học tập' key='3'>
+					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm lớp tín chỉ</h4>
+					<DetailKetQuaHocTap lopHocPhanId={record?._id} />
+				</Tabs.TabPane>
 
-        {/* <Tabs.TabPane tab="Thông báo" key="4">
+				{/* <Tabs.TabPane tab="Thông báo" key="4">
           <ThongBao isNhanVien={isNhanVien} id={id} typeLop="LopTinChi" />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Học liệu số" key="5">
@@ -69,9 +67,9 @@ const DetailLopTinChi = ({
             <DanhGiaGiangVien idLop={id} />
           </Tabs.TabPane>
         )} */}
-      </Tabs>
-    </Card>
-  );
+			</Tabs>
+		</Card>
+	);
 };
 
 export default DetailLopTinChi;

@@ -11,7 +11,7 @@ const LopHocPhanPage = () => {
 
 	const onCell = (loptinchi: LopHocPhan.IRecord) => ({
 		onClick: () =>
-			loptinchi.loai === ELoaiLopHocPhan.CHINH ? history.push(`/hoc-tap/lop-hoc-phan/${loptinchi._id}`) : undefined,
+			loptinchi.loai === ELoaiLopHocPhan.CHINH ? history.push(`/hoc-tap/lop-tin-chi/${loptinchi._id}`) : undefined,
 		style: { cursor: loptinchi.loai === ELoaiLopHocPhan.CHINH ? 'pointer' : undefined },
 	});
 
@@ -52,7 +52,7 @@ const LopHocPhanPage = () => {
 			params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH }}
 			getData={sinhVienGetModel}
 			modelName='daotao.lophocphan'
-			title='Lớp học phần'
+			title='Lớp tín chỉ'
 			buttons={{ create: false }}
 			otherButtons={[<FilterHocKy isSetHocKy key='1' />]}
 			hideChildrenRows

@@ -52,7 +52,7 @@ export const calHeader = (
 			stepKy++; // Tắng số tuần trong kỳ hiện tại
 
 			// Nếu quá số tuần trong kỳ thì tăng index kỳ và reset thứ tự tuần về 0
-			if (stepKy >= +(hocKyList[indexKy].soTuan ?? 0)) {
+			if (stepKy >= +(hocKyList[indexKy]?.soTuan ?? 0)) {
 				indexKy++;
 				stepKy = 0;
 			}
