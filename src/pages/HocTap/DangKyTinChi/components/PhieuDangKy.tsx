@@ -259,16 +259,16 @@ const PhieuDangKy = () => {
 							title={
 								tongTinChi > soTinChiToiDa
 									? 'Bạn đã đăng ký quá số tín chỉ tối đa'
-									: tongTinChi < soTinChiToiThieu
-									? 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu'
-									: undefined
+									: // : tongTinChi < soTinChiToiThieu
+									  // ? 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu'
+									  undefined
 							}
 						>
 							<Button
 								type='primary'
 								icon={<SendOutlined />}
 								onClick={() => setVisibleRegister(true)}
-								disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu}
+								disabled={tongTinChi > soTinChiToiDa}
 							>
 								Đăng ký
 							</Button>
