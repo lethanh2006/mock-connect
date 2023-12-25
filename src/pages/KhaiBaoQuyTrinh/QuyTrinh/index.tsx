@@ -1,8 +1,8 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
-import { ELoaiDanhMucChung } from '@/services/KhaiBaoQuyTrinh/DanhMuc/constants';
-import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
+import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
+import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Modal, Popconfirm, Tooltip, message } from 'antd';

@@ -3,7 +3,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 import SelectDonViHanhChinhTheoTen from '@/pages/Core/DonViHanhChinh/SelectTheoTen';
 import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
-import { EPhanLoaiCuTru, ETrangThaiKhaiBaoNoiNgoaiTru } from '@/services/NoiNgoaiTru/constant';
+import { EPhanLoaiCuTru, ETrangThaiKhaiBaoNoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru/constant';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
