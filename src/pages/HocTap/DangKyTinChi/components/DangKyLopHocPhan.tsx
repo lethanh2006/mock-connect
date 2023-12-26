@@ -179,8 +179,7 @@ const DangKyLopHocPhan = () => {
 						getData={getData}
 						modelName='daotao.lophocphan'
 						hideCard
-						buttons={{ create: false, reload: false, filter: false }}
-						hideTotal
+						buttons={{ create: false, filter: false }}
 						addStt={false}
 						rowSelection
 						detailRow={rowSelection}
