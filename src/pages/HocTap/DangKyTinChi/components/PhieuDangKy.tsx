@@ -4,6 +4,7 @@ import {
 	ColorTrangThaiDangKyTinChi,
 	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
+	ETrangThaiSinhVienDKTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
@@ -35,6 +36,7 @@ const PhieuDangKy = () => {
 		setVisibleRegister,
 		getPhieuDangKyModel,
 		getLopDangKyModel,
+		sinhVienDot,
 	} = useModel('daotao.dotdangkytinchi');
 	const { getMucThuHocPhiTheoNamModel, tinhHocPhi } = useModel('taichinh.mucthuhocphi');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
@@ -80,8 +82,9 @@ const PhieuDangKy = () => {
 	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
 
 	useEffect(() => {
-		if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
-	}, [dotDangKyHienTai?._id]);
+		if (dotDangKyHienTai?._id && sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK)
+			getPhieuDangKyModel(dotDangKyHienTai._id);
+	}, [sinhVienDot?._id]);
 
 	useEffect(() => {
 		if (recHocKy?.ma) getLopDangKyModel(recHocKy.ma);
@@ -227,16 +230,18 @@ const PhieuDangKy = () => {
 				<Col span={24} md={8}>
 					Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
 				</Col>
-				<Col span={24} md={8}>
-					<div
-						className={
-							tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
-						}
-						style={{ textAlign: 'right' }}
-					>
-						Bạn được đăng ký trong khoảng tín chỉ: {[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
-					</div>
-				</Col>
+				{phieuDangKy ? (
+					<Col span={24} md={8}>
+						<div
+							className={
+								tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
+							}
+							style={{ textAlign: 'right' }}
+						>
+							Bạn được đăng ký trong khoảng tín chỉ: {[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
+						</div>
+					</Col>
+				) : null}
 			</Row>
 
 			<TableStaticData
@@ -254,7 +259,10 @@ const PhieuDangKy = () => {
 						</Button>
 					) : null}
 
-					{dangTrongThoiGian && tongTinChiChuaDk && dotDangKyHienTai.tinhChatDangKy !== ETinhChatDangKyTC.XOA ? (
+					{dangTrongThoiGian &&
+					tongTinChiChuaDk &&
+					dotDangKyHienTai.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
+					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
 						<Tooltip
 							title={
 								tongTinChi > soTinChiToiDa

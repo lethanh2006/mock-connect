@@ -88,3 +88,8 @@ export const loaiDangKyTheoLop: Record<ELoaiDangKyTheoLop, string> = {
 	[ELoaiDangKyTheoLop.KHOA_NGANH_2]: 'Theo chương trình ngành 2',
 	[ELoaiDangKyTheoLop.TAT_CA]: 'Tất cả học phần',
 };
+
+export enum ETrangThaiSinhVienDKTinChi {
+	DUOC_DK = 'Được phép đăng ký',
+	KHONG_DUOC_DK = 'Không được phép đăng ký',
+}
