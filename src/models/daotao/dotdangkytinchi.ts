@@ -3,6 +3,7 @@ import {
 	getDotAvailable,
 	getLopDangKy,
 	getPhieuDangKy,
+	getSinhVienDot,
 	postDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi';
 import { ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
@@ -26,14 +27,22 @@ export default () => {
 	// Dưới dạng { "DDMMYY": [true, true, false, false, true, true]...}
 	// Mỗi ngày tương ứng với mảng các tiết học trong ngày đó: true => Có lớp học trong tiết tương ứng
 	const [dataLichHoc, setDataLichHoc] = useState<Record<string, boolean[]>>({});
+	const [sinhVienDot, setSinhVienDot] = useState<DangKyTinChi.ISinhVienDotDangKy>();
 
 	const getDotDangKyAvailableModel = async (maHocKy: string): Promise<DangKyTinChi.IDotDangKy> => {
 		setLoading(true);
 		try {
 			const res = await getDotAvailable(maHocKy);
-			setDotDangKyHienTai(res.data?.data);
+			const data: DangKyTinChi.IDotDangKy = res.data?.data;
+			setDotDangKyHienTai(data);
 
-			return res.data?.data;
+			if (data?._id) {
+				const dotDangKyTinChiId = data?._id;
+				const res1 = await getSinhVienDot(dotDangKyTinChiId);
+				setSinhVienDot(res1.data?.data);
+			} else setSinhVienDot(undefined);
+
+			return data;
 		} catch (er) {
 			setDotDangKyHienTai(undefined);
 			return Promise.reject(er);
@@ -187,5 +196,6 @@ export default () => {
 		dataLichHoc,
 		tinhDataLichHoc,
 		checkTrungLich,
+		sinhVienDot,
 	};
 };

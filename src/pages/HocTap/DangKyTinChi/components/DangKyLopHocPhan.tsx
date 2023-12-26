@@ -20,9 +20,8 @@ const DangKyLopHocPhan = () => {
 	const { danhSachLopDangKy, setDanhSachLopDangKy, tinhDataLichHoc, checkTrungLich } =
 		useModel('daotao.dotdangkytinchi');
 	const { record: recHocPhan, loaiDangKy } = useModel('hocphan.hocphan');
-	const { sinhVienGetModel: getLopHc } = useModel('daotao.lophanhchinh');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien'); // Đã get khóa ngành của tôi ở file Filter Học phần
-	const [danhSachMaLopHc, setDanhSachMaLopHc] = useState<string[]>();
+	const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
 	const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
 	const [typeLop, setTypeLop] = useState<string>('Lớp gợi ý');
@@ -30,6 +29,7 @@ const DangKyLopHocPhan = () => {
 	const dangKyRoi = danhSachLopDangKy.find(
 		(item) => item.maHocPhan === recHocPhan?.ma && item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY,
 	);
+	const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
 
 	const getData = () =>
 		recHocKy?.ma &&
@@ -37,10 +37,6 @@ const DangKyLopHocPhan = () => {
 		sinhVienGetLopDangKyModel(recHocKy.ma, loaiDangKy, recHocPhan.ma, typeLop !== 'Lớp gợi ý').then((data) =>
 			setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
 		);
-
-	useEffect(() => {
-		getLopHc(undefined).then((res) => setDanhSachMaLopHc(res.map((item) => item.ten)));
-	}, []);
 
 	/**
 	 * Khi nào chuyển sang học phần khác
@@ -183,8 +179,7 @@ const DangKyLopHocPhan = () => {
 						getData={getData}
 						modelName='daotao.lophocphan'
 						hideCard
-						buttons={{ create: false, reload: false, filter: false }}
-						hideTotal
+						buttons={{ create: false, filter: false }}
 						addStt={false}
 						rowSelection
 						detailRow={rowSelection}
@@ -210,6 +205,7 @@ const DangKyLopHocPhan = () => {
 								  ]
 								: undefined
 						}
+						emptyText='Không có lớp mở trong học kỳ này!'
 					/>
 				</div>
 			) : (

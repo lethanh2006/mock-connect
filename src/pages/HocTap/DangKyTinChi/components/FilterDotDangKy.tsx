@@ -5,10 +5,15 @@ import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ViewDetailHocKy from './ViewDetailHocKy';
+import { ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 
 const FilterDotDangKy = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { getDotDangKyAvailableModel: getDotDangKy, dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
+	const {
+		getDotDangKyAvailableModel: getDotDangKy,
+		dotDangKyHienTai,
+		sinhVienDot,
+	} = useModel('daotao.dotdangkytinchi');
 
 	useEffect(() => {
 		if (recHocKy?.ma) getDotDangKy(recHocKy.ma);
@@ -26,7 +31,7 @@ const FilterDotDangKy = () => {
 						</Button>
 					</Popover>
 
-					{dotDangKyHienTai ? (
+					{dotDangKyHienTai && sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
 						<span>
 							Thời gian đăng ký từ{' '}
 							<span className='fw500'>{moment(dotDangKyHienTai.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</span> đến{' '}
