@@ -13,4 +13,12 @@ declare module LopHanhChinh {
 		createdAt?: string;
 		updatedAt?: string;
 	}
+
+	export interface IRecordSinhVien {
+		_id: string;
+		lopHanhChinhId: string;
+		lopHanhChinh: IRecord;
+		sinhVienSsoId: string;
+		sinhVien?: SinhVien.IRecord;
+	}
 }

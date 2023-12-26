@@ -1,6 +1,7 @@
 import { ETinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
 import { YoutubeOutlined } from '@ant-design/icons';
 import { Card, Divider, Empty, Spin } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
@@ -9,6 +10,11 @@ import './components/style.less';
 
 const DangKyTinChiPage = () => {
 	const { dotDangKyHienTai, loading } = useModel('daotao.dotdangkytinchi');
+	const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
+
+	useEffect(() => {
+		getLopHc();
+	}, []);
 
 	return (
 		<Card title='Đăng ký tín chỉ'>
