@@ -1,7 +1,12 @@
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { useModel } from 'umi';
 
 const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord }) => {
+	const { danhSach: danhSachLopHc } = useModel('daotao.lophanhchinh');
 	const { lopHocPhan } = props;
+	const danhSachMaLopHc = danhSachLopHc.map((item) => item.ten);
+	const maLopHcList = lopHocPhan.lopHpHcList?.map((item) => item.maLopHc);
+	const trungLopHc = danhSachMaLopHc.some((item) => maLopHcList?.includes(item));
 
 	const renderLich = () => {
 		const maHoaLichs = lopHocPhan.maHoaLichHoc?.sort((a, b) => a.thu - b.thu);
@@ -40,8 +45,10 @@ const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord }) => {
 				renderLich()
 			)}
 
-			{lopHocPhan.lopHpHcList?.length ? (
-				<li>Lớp gợi ý: {lopHocPhan.lopHpHcList.map((item) => item.maLopHc).join(', ')}</li>
+			{maLopHcList?.length ? (
+				<li>
+					Lớp gợi ý: <span className={trungLopHc ? undefined : 'text-error'}>{maLopHcList.join(', ')}</span>
+				</li>
 			) : null}
 		</ul>
 	);
