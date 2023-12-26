@@ -13,7 +13,7 @@ const ipTaiChinh = ipRoot + 'tai-chinh-api-v2';
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
 const currentRole = EModuleKey.CONNECT;
-const oneSignalRole = EModuleKey.CONG_CAN_BO;
+const oneSignalRole = EModuleKey.CONNECT;
 
 // DO NOT TOUCH
 const keycloakClientID = AppModules[currentRole].clientId;
