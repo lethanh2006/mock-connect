@@ -1,15 +1,17 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	ColorTrangThaiDangKyTinChi,
 	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
+	ETrangThaiSinhVienDKTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { inputFormat } from '@/utils/utils';
-import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
-import { Button, Col, Divider, Popconfirm, Row, Space, Tag, Tooltip } from 'antd';
+import { CalendarOutlined, DeleteOutlined, ReloadOutlined, SendOutlined } from '@ant-design/icons';
+import { Col, Divider, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
@@ -35,6 +37,7 @@ const PhieuDangKy = () => {
 		setVisibleRegister,
 		getPhieuDangKyModel,
 		getLopDangKyModel,
+		sinhVienDot,
 	} = useModel('daotao.dotdangkytinchi');
 	const { getMucThuHocPhiTheoNamModel, tinhHocPhi } = useModel('taichinh.mucthuhocphi');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
@@ -79,12 +82,15 @@ const PhieuDangKy = () => {
 			: phieuDangKy?.soTinChiToiDa ?? 0;
 	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
 
-	useEffect(() => {
-		if (dotDangKyHienTai?._id) getPhieuDangKyModel(dotDangKyHienTai._id);
-	}, [dotDangKyHienTai?._id]);
+	const getData = () => recHocKy?.ma && getLopDangKyModel(recHocKy.ma);
 
 	useEffect(() => {
-		if (recHocKy?.ma) getLopDangKyModel(recHocKy.ma);
+		if (dotDangKyHienTai?._id && sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK)
+			getPhieuDangKyModel(dotDangKyHienTai._id);
+	}, [sinhVienDot?._id]);
+
+	useEffect(() => {
+		getData();
 	}, [recHocKy?.ma]);
 
 	useEffect(() => {
@@ -121,7 +127,7 @@ const PhieuDangKy = () => {
 		{
 			title: 'Tên học phần',
 			dataIndex: ['hocPhan', 'ten'],
-			width: 150,
+			width: 170,
 			filterType: 'string',
 		},
 		{
@@ -152,12 +158,12 @@ const PhieuDangKy = () => {
 			title: 'Mã khóa ngành',
 			dataIndex: 'maKhoaNganh',
 			align: 'center',
-			width: 120,
+			width: 110,
 		},
 		{
 			title: 'Học phí dự kiến',
 			align: 'right',
-			width: 120,
+			width: 110,
 			render: (val, rec) => {
 				const due = tinhHocPhi(rec.soTinChi, rec.loai, rec.maKhoaNganh);
 				if (due) return `${inputFormat(due)} VND`;
@@ -179,7 +185,7 @@ const PhieuDangKy = () => {
 		{
 			title: 'Trạng thái',
 			dataIndex: 'trangThai',
-			width: 120,
+			width: 110,
 			align: 'center',
 			render: (val: ETrangThaiDangKyTinChi) => <Tag color={ColorTrangThaiDangKyTinChi[val]}>{val}</Tag>,
 		},
@@ -199,7 +205,7 @@ const PhieuDangKy = () => {
 						dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
 					}
 				>
-					<Button
+					<ButtonExtend
 						icon={<DeleteOutlined />}
 						danger
 						type='link'
@@ -207,6 +213,7 @@ const PhieuDangKy = () => {
 							rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
 							dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
 						}
+						tooltip='Hủy lớp'
 					/>
 				</Popconfirm>
 			),
@@ -227,16 +234,18 @@ const PhieuDangKy = () => {
 				<Col span={24} md={8}>
 					Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
 				</Col>
-				<Col span={24} md={8}>
-					<div
-						className={
-							tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
-						}
-						style={{ textAlign: 'right' }}
-					>
-						Bạn được đăng ký trong khoảng tín chỉ: {[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
-					</div>
-				</Col>
+				{phieuDangKy ? (
+					<Col span={24} md={8}>
+						<div
+							className={
+								tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
+							}
+							style={{ textAlign: 'right' }}
+						>
+							Bạn được đăng ký trong khoảng tín chỉ: {[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
+						</div>
+					</Col>
+				) : null}
 			</Row>
 
 			<TableStaticData
@@ -248,31 +257,34 @@ const PhieuDangKy = () => {
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
 			>
 				<Space wrap>
+					<ButtonExtend icon={<ReloadOutlined />} onClick={getData}>
+						Tải lại
+					</ButtonExtend>
 					{danhSachLopDangKy.length ? (
-						<Button icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
+						<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
 							Xem trước lịch học
-						</Button>
+						</ButtonExtend>
 					) : null}
 
-					{dangTrongThoiGian && tongTinChiChuaDk && dotDangKyHienTai.tinhChatDangKy !== ETinhChatDangKyTC.XOA ? (
-						<Tooltip
-							title={
+					{dangTrongThoiGian &&
+					tongTinChiChuaDk &&
+					dotDangKyHienTai.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
+					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
+						<ButtonExtend
+							tooltip={
 								tongTinChi > soTinChiToiDa
 									? 'Bạn đã đăng ký quá số tín chỉ tối đa'
 									: tongTinChi < soTinChiToiThieu
 									? 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu'
-									: undefined
+									: 'Đăng ký tín chỉ'
 							}
+							type='primary'
+							icon={<SendOutlined />}
+							onClick={() => setVisibleRegister(true)}
+							disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu}
 						>
-							<Button
-								type='primary'
-								icon={<SendOutlined />}
-								onClick={() => setVisibleRegister(true)}
-								disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu}
-							>
-								Đăng ký
-							</Button>
-						</Tooltip>
+							Đăng ký
+						</ButtonExtend>
 					) : null}
 				</Space>
 			</TableStaticData>
