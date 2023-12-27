@@ -1,6 +1,6 @@
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
-import { inputFormat, inputParse } from '@/utils/utils';
+import { inputFormat, inputParse, resetFieldsForm } from '@/utils/utils';
 import { Alert, Button, Card, Col, Form, InputNumber, Popconfirm, Row } from 'antd';
 import { useModel } from 'umi';
 import HuongDanThanhToan from '../../HoaDon/ThanhToan/HuongDanThanhToan';
@@ -26,6 +26,7 @@ const FormDongTruocHocPhi = (props: { getData?: () => void; [key: string]: any }
 			.then((rec) => {
 				if (getData) getData();
 				setVisibleForm(false);
+				resetFieldsForm(form);
 
 				if (rec.paymentType === ETransactionPaymentType.BANK) {
 					setRecord(rec);
@@ -38,11 +39,11 @@ const FormDongTruocHocPhi = (props: { getData?: () => void; [key: string]: any }
 
 	return (
 		<>
-			<Card title='Đóng trước học phí'>
+			<Card title='Nộp trước học phí'>
 				<Form layout='vertical' form={form} onFinish={onFinish}>
 					<Row gutter={[12, 12]}>
 						<Col span={24}>
-							<Alert showIcon description='Đóng trước học phí cả năm để được hưởng những ưu đãi hấp dẫn !' />
+							<Alert showIcon description='Nộp trước học phí cả năm để được hưởng những ưu đãi hấp dẫn !' />
 						</Col>
 						<Col span={24}>
 							<div className='fw500'>Danh sách ưu đãi có hiệu lực</div>
