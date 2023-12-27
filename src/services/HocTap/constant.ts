@@ -52,3 +52,18 @@ export const colorTrangThaiSinhVienBLTH: Record<ETrangThaiSinhVienBLTH, string> 
 	[ETrangThaiSinhVienBLTH.DA_RA_QUYET_DINH]: 'blue',
 	[ETrangThaiSinhVienBLTH.KHONG_DUYET]: 'orange',
 };
+
+// LỚP HÀNH CHÍNH
+export enum EDoiTuongLopHanhChinh {
+	TC = 'TC',
+	LK = 'LK',
+	CLC = 'CLC',
+	PH = 'PH',
+}
+
+export const doiTuongLopHanhChinh: Record<EDoiTuongLopHanhChinh, string> = {
+	[EDoiTuongLopHanhChinh.TC]: 'Tiêu chuẩn',
+	[EDoiTuongLopHanhChinh.LK]: 'Liên kết',
+	[EDoiTuongLopHanhChinh.CLC]: 'Chất lượng cao',
+	[EDoiTuongLopHanhChinh.PH]: 'Phân hiệu',
+};

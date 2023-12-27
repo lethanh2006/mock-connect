@@ -76,7 +76,7 @@ const HoaDonPage = () => {
 			})),
 		},
 		{
-			title: 'Số tiền phải thu',
+			title: 'Số tiền phải nộp',
 			width: 130,
 			align: 'right',
 			render: (val, rec) => {
@@ -87,7 +87,7 @@ const HoaDonPage = () => {
 			},
 		},
 		{
-			title: 'Số tiền đã thu',
+			title: 'Số tiền đã nộp',
 			width: 130,
 			align: 'right',
 			render: (val, rec) => {

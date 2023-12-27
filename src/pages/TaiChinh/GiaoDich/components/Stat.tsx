@@ -15,7 +15,7 @@ const StatGiaoDich = () => {
 			<Col span={24} md={12}>
 				<Card className='card-stat-small'>
 					<span className='num text-success'>{soDuVi?.totalIn ? `${inputFormat(soDuVi.totalIn)} VND` : '--'}</span>
-					<span>Tổng tiền đã đóng</span>
+					<span>Tổng tiền đã nộp</span>
 				</Card>
 			</Col>
 			<Col span={24} md={12}>
