@@ -9,7 +9,7 @@ const ipDaoTao = ipRoot + 'qldt'; // ip dev
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
 const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
-const ipTaiChinh = ipRoot + 'tai-chinh-api-v2';
+const ipTaiChinh = ipRoot + 'tai-chinh-api';
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
 const currentRole = EModuleKey.CONNECT;
