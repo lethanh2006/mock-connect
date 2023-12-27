@@ -1,3 +1,6 @@
+import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import type { EDoiTuongLopHanhChinh } from '../constant';
+
 declare module LopHanhChinh {
 	export interface IRecord {
 		_id: string;
@@ -7,6 +10,8 @@ declare module LopHanhChinh {
 		maNganh: string;
 		nganh?: NganhDaoTao.IRecordCoSo;
 		siSo: number;
+		doiTuong?: EDoiTuongLopHanhChinh;
+
 		nhanSuSsoId?: string;
 		giangVien?: ToChucNhanSu.INhanSu;
 		sinhVienList?: SinhVien.IRecord[];

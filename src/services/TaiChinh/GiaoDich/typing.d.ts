@@ -4,6 +4,7 @@ declare module GiaoDich {
 	export interface IRecord extends IKhachHang, IChuyenVien {
 		_id: string;
 		billIdentityCode: string;
+		name: string;
 		idDotThu: string;
 		dotThu?: DotThuTaiChinh.Record;
 		paymentType: ETransactionPaymentType;

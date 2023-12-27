@@ -1,5 +1,6 @@
 import useInitModel from '@/hooks/useInitModel';
 import { getMyLopHanhChinh } from '@/services/DaoTao/SinhVien';
+import type { LopHanhChinh } from '@/services/HocTap/LopHanhChinh/typing';
 import { ipDaoTao } from '@/utils/ip';
 
 export default () => {

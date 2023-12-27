@@ -85,6 +85,12 @@ const GiaoDichPage = () => {
 			filterType: 'string',
 		},
 		{
+			title: 'Nội dung',
+			dataIndex: 'name',
+			width: 150,
+			filterType: 'string',
+		},
+		{
 			title: 'Loại giao dịch',
 			align: 'center',
 			width: 100,
@@ -136,7 +142,7 @@ const GiaoDichPage = () => {
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
 			),
 		},
-		{ title: 'Người thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
+		{ title: 'Chuyên viên thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
 		{
 			title: 'Thời gian thực hiện',
 			dataIndex: 'createdAt',
@@ -222,10 +228,9 @@ const GiaoDichPage = () => {
 						icon={<PlusCircleOutlined />}
 						type='primary'
 						className='btn-success'
-						tooltip='Đóng trước học phí'
 						key='topup'
 					>
-						Đóng trước học phí
+						Nộp trước học phí
 					</ButtonExtend>,
 				]}
 			>

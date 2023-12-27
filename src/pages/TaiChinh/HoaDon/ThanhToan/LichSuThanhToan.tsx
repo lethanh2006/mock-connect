@@ -79,7 +79,7 @@ const LichSuThanhToan = (props: {
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
 			),
 		},
-		{ title: 'Người thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
+		{ title: 'Chuyên viên thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
 		{
 			title: 'Thời gian thực hiện',
 			align: 'center',
