@@ -102,7 +102,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							)}{' '}
 							VNĐ
 						</Descriptions.Item>
-						<Descriptions.Item label='Số tiền đã thu'>
+						<Descriptions.Item label='Số tiền đã nộp'>
 							{inputFormat(
 								recHoaDon?.billItems
 									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
@@ -110,7 +110,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							)}{' '}
 							VNĐ
 						</Descriptions.Item>
-						<Descriptions.Item label='Số tiền còn lại phải thu'>
+						<Descriptions.Item label='Số tiền còn lại phải nộp'>
 							{inputFormat(
 								recHoaDon?.billItems
 									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
