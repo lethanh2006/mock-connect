@@ -23,10 +23,12 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 		setLoaiDangKy,
 	} = useModel('hocphan.hocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
+	const { danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('350px');
 	const allLoaiDangKy = Object.values(ELoaiDangKyTheoLop);
 	if (!khoaNganhMe?.khoaNganhPhu?.ma) allLoaiDangKy.splice(-2, 1);
+	const danhSachMaHpDangKy = danhSachLopDangKy.map((item) => item.maHocPhan);
 
 	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
 
@@ -34,6 +36,7 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		getKhoaNganhMeModel();
+
 		return () => {
 			setHocPhan(undefined);
 		};
@@ -46,6 +49,7 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 			fontWeight: rec.ma === recHocPhan?.ma ? 600 : undefined,
 			backgroundColor: rec.ma === recHocPhan?.ma ? '#f0f0f0' : undefined,
 			// color: rec.trangThai !== ETrangThaiHocPhanDangKyTinChi.DUOC_DK ? '#cc0101' : undefined,
+			color: danhSachMaHpDangKy.includes(rec.ma) ? 'var(--primary-color)' : undefined,
 		},
 	});
 

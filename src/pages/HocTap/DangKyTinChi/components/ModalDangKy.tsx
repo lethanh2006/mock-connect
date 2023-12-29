@@ -63,12 +63,14 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 		Promise.all(promises)
 			.then()
 			.finally(() => {
-				message.info('Đã hoàn thành đăng ký');
-				if (dotDangKyHienTai?._id) {
-					getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
-					getLopDangKyModel(dotDangKyHienTai.maHocKy);
-				}
-				setFormSubmiting(false);
+				setTimeout(() => {
+					message.info('Đã hoàn thành đăng ký');
+					if (dotDangKyHienTai?._id) {
+						getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
+						getLopDangKyModel(dotDangKyHienTai.maHocKy);
+					}
+					setFormSubmiting(false);
+				}, 1000);
 			});
 	};
 
