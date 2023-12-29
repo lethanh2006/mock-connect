@@ -2,17 +2,16 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	EMaTrangThaiThanhToan,
-	EMauTrangThaiThanhToanTable,
-	ETrangThaiThanhToan,
 	ETransactionPaymentType,
 	ETransactionSourceType,
 	ETransactionStatus,
 } from '@/services/TaiChinh/constant';
-import { inputFormat } from '@/utils/utils';
 import { AppstoreAddOutlined, DollarOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Col, Descriptions, Modal, Popconfirm, Row, Space, Tabs, Tag } from 'antd';
+import { Alert, Button, Card, Col, Modal, Popconfirm, Row, Space, Tabs } from 'antd';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import DesThongTinHoaDon from '../ChiTiet/DesThongTin';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
 import FormThanhToan from '../ThanhToan/FormThanhToan';
 import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
@@ -33,6 +32,11 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		huyThanhToanModel,
 	} = useModel('taichinh.giaodich');
 	const [activeTab, setActiveTab] = useState('1');
+	const ngoaiThoiGianThanhToan =
+		!recHoaDon?.dotThu?.thoiGianBatDau ||
+		!recHoaDon.dotThu.thoiGianKetThuc ||
+		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
+		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
 
 	const getGiaoDich = () =>
 		getAllModel(true, undefined, {
@@ -73,52 +77,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		<Card title='Thông tin thanh toán'>
 			<Row gutter={[12, 12]} style={{ marginBottom: 12 }}>
 				<Col span={24}>
-					<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
-						<Descriptions.Item label='Trạng thái'>
-							{recHoaDon?.status ? (
-								<Tag color={EMauTrangThaiThanhToanTable?.[recHoaDon.status]}>
-									{ETrangThaiThanhToan?.[recHoaDon.status] ?? ''}
-								</Tag>
-							) : (
-								<i>Đang cập nhật</i>
-							)}
-						</Descriptions.Item>
-						<Descriptions.Item label='Họ tên người nộp'>
-							{recHoaDon?.userFullname ?? <i>Đang cập nhật</i>}
-						</Descriptions.Item>
-						<Descriptions.Item label='Tổng thành tiền'>
-							{inputFormat(
-								recHoaDon?.billItems
-									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-									?.reduce((acc, item) => acc + (item.amountDue || 0), 0),
-							)}{' '}
-							VNĐ
-						</Descriptions.Item>
-						<Descriptions.Item label='Số tiền ưu đãi'>
-							{inputFormat(
-								recHoaDon?.billItems
-									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-									?.reduce((acc, item) => acc + (item.amountDiscount || 0), 0),
-							)}{' '}
-							VNĐ
-						</Descriptions.Item>
-						<Descriptions.Item label='Số tiền đã nộp'>
-							{inputFormat(
-								recHoaDon?.billItems
-									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-									?.reduce((acc, item) => acc + (item.amountPaid || 0), 0),
-							)}{' '}
-							VNĐ
-						</Descriptions.Item>
-						<Descriptions.Item label='Số tiền còn lại phải nộp'>
-							{inputFormat(
-								recHoaDon?.billItems
-									?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-									?.reduce((acc, item) => acc + (item.amountRemaining || 0), 0),
-							)}{' '}
-							VNĐ
-						</Descriptions.Item>
-					</Descriptions>
+					<DesThongTinHoaDon />
 				</Col>
 
 				<Col span={24}>
@@ -157,11 +116,12 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								/>
 							) : (
 								<ButtonExtend
-									disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU}
+									disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
 									onClick={() => setVisibleThanhToan(true)}
 									icon={<AppstoreAddOutlined />}
 									type='primary'
 									loading={loading}
+									tooltip={ngoaiThoiGianThanhToan ? 'Ngoài thời gian thanh toán' : undefined}
 								>
 									Thanh toán
 								</ButtonExtend>
