@@ -20,15 +20,9 @@ const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord }) => {
 				// eslint-disable-next-line react/no-array-index-key
 				<li key={index}>
 					{[thu, tiet, tuan].join(', ')},{' '}
-					{item.nhanSuSsoId ? (
-						item.nhanSu?.hoDem ? (
-							[item.nhanSu.hoDem, item.nhanSu.ten].join(' ')
-						) : (
-							<i style={{ color: '#999' }}>Không lấy được thông tin g/v</i>
-						)
-					) : (
-						item.tenNhanSu ?? <i style={{ color: '#999' }}>Không có thông tin g/v</i>
-					)}
+					{item.nhanSu?.hoDem
+						? [item.nhanSu.hoDem, item.nhanSu.ten].join(' ')
+						: item.tenNhanSu ?? <i style={{ color: '#999' }}>Không có thông tin g/v</i>}
 					, phòng {item.phongHoc ?? ''}
 				</li>
 			);
