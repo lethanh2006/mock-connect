@@ -4,9 +4,9 @@ import { useModel } from 'umi';
 const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord }) => {
 	const { danhSach: danhSachLopHc } = useModel('daotao.lophanhchinh');
 	const { lopHocPhan } = props;
-	const danhSachMaLopHc = danhSachLopHc.map((item) => item.ten);
 	const maLopHcList = lopHocPhan.lopHpHcList?.map((item) => item.maLopHc);
-	const trungLopHc = danhSachMaLopHc.some((item) => maLopHcList?.includes(item));
+	const danhSachDoiTuongLopHc = danhSachLopHc.map((item) => item.doiTuong);
+	const trungLopHc = danhSachDoiTuongLopHc.includes(lopHocPhan.doiTuongLopHanhChinh);
 
 	const renderLich = () => {
 		const maHoaLichs = lopHocPhan.maHoaLichHoc?.sort((a, b) => a.thu - b.thu);
