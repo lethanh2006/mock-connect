@@ -266,9 +266,8 @@ const PhieuDangKy = () => {
 						</ButtonExtend>
 					) : null}
 
-					{dangTrongThoiGian &&
-					tongTinChiChuaDk &&
-					dotDangKyHienTai.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
+					{tongTinChiChuaDk &&
+					dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
 					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
 						<ButtonExtend
 							tooltip={
@@ -276,12 +275,14 @@ const PhieuDangKy = () => {
 									? 'Bạn đã đăng ký quá số tín chỉ tối đa'
 									: tongTinChi < soTinChiToiThieu
 									? 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu'
+									: !dangTrongThoiGian
+									? 'Ngoài thời gian đăng ký tín chỉ'
 									: 'Đăng ký tín chỉ'
 							}
 							type='primary'
 							icon={<SendOutlined />}
 							onClick={() => setVisibleRegister(true)}
-							disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu}
+							disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
 						>
 							Đăng ký
 						</ButtonExtend>
