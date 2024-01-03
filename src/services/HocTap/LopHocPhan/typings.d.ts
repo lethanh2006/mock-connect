@@ -2,6 +2,7 @@ import { type ELoaiHocPhanDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/co
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import type { EDoiTuongLopHanhChinh } from '../constant';
 import {
 	type ELoaiDiemChu,
 	type ELoaiLopHocPhan,
@@ -36,6 +37,7 @@ export declare module LopHocPhan {
 		trangThaiLop: ETrangThaiLopHocPhan;
 
 		lopHpHcList?: Partial<ILopHpLopHc>[];
+		doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
 
 		// Populated
 		deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };
