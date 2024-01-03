@@ -1,11 +1,11 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
+import { ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Col, Popover, Row } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ViewDetailHocKy from './ViewDetailHocKy';
-import { ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 
 const FilterDotDangKy = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -14,6 +14,12 @@ const FilterDotDangKy = () => {
 		dotDangKyHienTai,
 		sinhVienDot,
 	} = useModel('daotao.dotdangkytinchi');
+	// Đang trong thời gian đăng ký tín chỉ => Được phép đăng ký, xóa đăng ký
+	const dangTrongThoiGian =
+		dotDangKyHienTai?.thoiGianBatDau &&
+		dotDangKyHienTai?.thoiGianKetThuc &&
+		moment().isSameOrAfter(dotDangKyHienTai?.thoiGianBatDau) &&
+		moment().isSameOrBefore(dotDangKyHienTai?.thoiGianKetThuc);
 
 	useEffect(() => {
 		if (recHocKy?.ma) getDotDangKy(recHocKy.ma);
@@ -32,7 +38,7 @@ const FilterDotDangKy = () => {
 					</Popover>
 
 					{dotDangKyHienTai && sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
-						<span>
+						<span className={dangTrongThoiGian ? 'text-success' : 'text-error'}>
 							Thời gian đăng ký từ{' '}
 							<span className='fw500'>{moment(dotDangKyHienTai.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</span> đến{' '}
 							<span className='fw500'>{moment(dotDangKyHienTai.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</span>

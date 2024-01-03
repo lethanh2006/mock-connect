@@ -1,6 +1,6 @@
 import { AppModules, landingUrl } from '@/services/base/constant';
 import { currentRole, keycloakAuthEndpoint } from '@/utils/ip';
-import { GlobalOutlined, LogoutOutlined, SwapOutlined, UserOutlined } from '@ant-design/icons';
+import { FileWordOutlined, GlobalOutlined, LogoutOutlined, SwapOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
 import { type ItemType } from 'antd/lib/menu/hooks/useItems';
 import React from 'react';
@@ -46,9 +46,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 		// },
 		{
 			key: 'office',
-			icon: <GlobalOutlined />,
-			label: 'Cổng thông tin',
-			onClick: () => window.open(landingUrl),
+			icon: <FileWordOutlined />,
+			label: 'Office 365',
+			onClick: () => window.open('https://office.com/'),
 		},
 		{
 			key: 'portal',
