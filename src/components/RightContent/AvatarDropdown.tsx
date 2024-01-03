@@ -45,6 +45,12 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 		// 	},
 		// },
 		{
+			key: 'office',
+			icon: <GlobalOutlined />,
+			label: 'Cổng thông tin',
+			onClick: () => window.open(landingUrl),
+		},
+		{
 			key: 'portal',
 			icon: <GlobalOutlined />,
 			label: 'Cổng thông tin',
