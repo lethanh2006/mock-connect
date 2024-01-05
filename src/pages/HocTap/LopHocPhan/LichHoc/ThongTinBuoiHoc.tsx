@@ -18,15 +18,9 @@ const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord; title?: string
 				{buoiHoc?.lopHocPhan?.ten}
 			</Descriptions.Item>
 			<Descriptions.Item label='Giảng viên'>
-				{buoiHoc?.nhanSuSsoId ? (
-					buoiHoc.nhanSu?.ten ? (
-						[buoiHoc.nhanSu?.hoDem, buoiHoc.nhanSu?.ten].join(' ')
-					) : (
-						<i>Không tìm thấy thông tin</i>
-					)
-				) : (
-					<i>Chưa cập nhật</i>
-				)}
+				{buoiHoc?.nhanSu?.ten
+					? [buoiHoc.nhanSu?.hoDem, buoiHoc.nhanSu?.ten].join(' ')
+					: buoiHoc?.tenNhanSu ?? <i>Chưa cập nhật</i>}
 			</Descriptions.Item>
 			<Descriptions.Item label='Phòng học'>{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
 			<Descriptions.Item label='Loại hình học tập'>{buoiHoc?.loaiHinhHocTap ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
