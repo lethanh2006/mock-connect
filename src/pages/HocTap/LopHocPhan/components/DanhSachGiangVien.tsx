@@ -1,9 +1,9 @@
+import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Avatar, List } from 'antd';
 
-const DanhSachGiangVien = (props: {
-	danhSachNhanSu?: (Partial<ToChucNhanSu.INhanSu> | undefined)[];
-	title?: string;
-}) => {
+type TNhanSu = Pick<LopHocPhan.IRecordNhanSuLopHP, 'tenNhanSu' | 'maNhanSu' | 'nhanSu' | 'nhanSuSsoId'>;
+
+const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?: string }) => {
 	const { title, danhSachNhanSu } = props;
 
 	return (
@@ -28,18 +28,31 @@ const DanhSachGiangVien = (props: {
 									<Avatar
 										size='large'
 										src={
-											item?.urlAnhDaiDien ||
-											(item?.gioiTinh === 'Nữ' ? '/images/teacher-female.svg' : '/images/teacher-male.svg')
+											item.nhanSu?.urlAnhDaiDien ||
+											(item.nhanSu?.gioiTinh === 'Nữ' ? '/images/teacher-female.svg' : '/images/teacher-male.svg')
 										}
 									/>
 								}
-								title={item?.ten ? `Họ và tên: ${[item.hoDem, item.ten].join(' ')}` : <i>Không tìm thấy thông tin</i>}
+								title={
+									item.nhanSu?.ten || item.tenNhanSu ? (
+										`Họ tên: ${item.nhanSu?.ten ? [item.nhanSu.hoDem, item.nhanSu.ten].join(' ') : item.tenNhanSu}`
+									) : (
+										<i>Không tìm thấy thông tin</i>
+									)
+								}
 								description={
 									<>
-										<div>Email: {item?.email ? <a href={`mailto:${item.email}`}>{item.email}</a> : <i>--</i>}</div>
+										<div>
+											Email:{' '}
+											{item.nhanSu?.email ? <a href={`mailto:${item.nhanSu.email}`}>{item.nhanSu.email}</a> : <i>--</i>}
+										</div>
 										<div>
 											Số điện thoại:{' '}
-											{item?.sdtCaNhan ? <a href={`tel:${item.sdtCaNhan}`}>{item.sdtCaNhan}</a> : <i>--</i>}
+											{item.nhanSu?.sdtCaNhan ? (
+												<a href={`tel:${item.nhanSu.sdtCaNhan}`}>{item.nhanSu.sdtCaNhan}</a>
+											) : (
+												<i>--</i>
+											)}
 										</div>
 									</>
 								}

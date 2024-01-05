@@ -64,6 +64,8 @@ export declare module LopHocPhan {
 		lopHocPhan: IRecord;
 		nhanSuSsoId: string;
 		nhanSu?: ToChucNhanSu.INhanSu;
+		maNhanSu?: string;
+		tenNhanSu?: string;
 		trangThai: ETrangThaiDangKyGiangDay;
 	}
 
