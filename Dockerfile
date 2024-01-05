@@ -8,7 +8,7 @@ ENV APP_CONFIG_ONE_SIGNAL_ID=f3857a81-2891-49be-87a7-903a4a1a54be
 ENV APP_CONFIG_SENTRY_DSN=https://ed934e521d476c44a89a42aaa8a6993a@sentry.aisoftech.vn/3
 ENV APP_CONFIG_KEYCLOAK_AUTHORITY=https://sso.hvpnvn.edu.vn/realms/vwa
 ENV APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID=vwa-
-ENV APP_CONFIG_APP_VERSION=231227.1200
+ENV APP_CONFIG_APP_VERSION=240105.1520
 
 ENV APP_CONFIG_CO_QUAN_CHU_QUAN='Hội Liên hiệp phụ nữ Việt Nam'
 ENV APP_CONFIG_TEN_TRUONG='Học viện Phụ nữ Việt Nam'
@@ -24,7 +24,7 @@ ENV APP_CONFIG_URL_NHAN_SU=https://tcns.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_TAI_CHINH=https://taichinh.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_CTSV=https://ctsv-vwa.vercel.app/
 ENV APP_CONFIG_URL_QLKH=https://qlkh.hvpnvn.edu.vn/
-ENV APP_CONFIG_URL_VPS=https://van-phong-vwa.vercel.app/
+ENV APP_CONFIG_URL_VPS=https://vanphong.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_KHAO_THI=https://khao-thi-vwa.vercel.app/
 ENV APP_CONFIG_URL_CORE=https://core-vwa.vercel.app/
 
@@ -38,6 +38,8 @@ ENV APP_CONFIG_TITLE_QLKH='Quản lý khoa học'
 ENV APP_CONFIG_TITLE_VPS='Văn phòng điều hành'
 ENV APP_CONFIG_TITLE_KHAO_THI='Khảo thí'
 ENV APP_CONFIG_TITLE_CORE='Danh mục chung'
+
+ENV APP_CONFIG_MOODLE_ENDPOINT=''
 
 
 # Set working directory
