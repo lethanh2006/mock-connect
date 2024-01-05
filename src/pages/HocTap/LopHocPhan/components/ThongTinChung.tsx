@@ -70,10 +70,7 @@ const ThongTinChung = () => {
 				</ButtonExtend>
 			) : null}
 
-			<DanhSachGiangVien
-				danhSachNhanSu={danhSachNhanSu?.map((item) => item.nhanSu ?? { _id: '-1' })}
-				title='Giảng viên'
-			/>
+			<DanhSachGiangVien danhSachNhanSu={danhSachNhanSu} title='Giảng viên' />
 
 			{/* <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
         Thông tin điểm danh của bạn
@@ -92,10 +89,7 @@ const ThongTinChung = () => {
 			</Tabs>
 
 			{activeKey !== '-1' ? (
-				<DanhSachGiangVien
-					danhSachNhanSu={danhSachNhanSuLopTH?.map((item) => item.nhanSu ?? { _id: '-1' })}
-					title='Giảng viên phụ trách nhóm lớp'
-				/>
+				<DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} title='Giảng viên phụ trách nhóm lớp' />
 			) : null}
 
 			<DanhSachSinhVien

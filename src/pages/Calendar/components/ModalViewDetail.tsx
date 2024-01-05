@@ -86,7 +86,9 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 						<Descriptions.Item label='Loại hình học tập'>{thoiKhoaBieu?.loaiHinhHocTap ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Phòng học'>{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Giảng viên'>
-							{thoiKhoaBieu?.nhanSu?.ten ? [thoiKhoaBieu.nhanSu?.hoDem, thoiKhoaBieu.nhanSu?.ten].join(' ') : '--'}
+							{thoiKhoaBieu?.nhanSu?.ten
+								? [thoiKhoaBieu.nhanSu?.hoDem, thoiKhoaBieu.nhanSu?.ten].join(' ')
+								: thoiKhoaBieu?.tenNhanSu ?? '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Tiêu đề bài học'>{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
 						{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (
