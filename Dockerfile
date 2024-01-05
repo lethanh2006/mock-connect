@@ -16,7 +16,7 @@ ENV APP_CONFIG_TIEN_TO_TRUONG='Học viện'
 ENV APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH=VWA
 ENV APP_CONFIG_PRIMARY_COLOR=#007EB9
 
-ENV APP_CONFIG_URL_LANDING=https://portal-vwa.aisenote.com/
+ENV APP_CONFIG_URL_LANDING=https://portal.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_CONNECT=https://sinhvien.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_CAN_BO=https://canbo.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_DAO_TAO=https://qldt.hvpnvn.edu.vn/
