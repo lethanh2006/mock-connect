@@ -38,6 +38,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
 		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
 
+	/** Get giao dịch pending */
 	const getGiaoDich = () =>
 		getAllModel(true, undefined, {
 			status: ETransactionStatus.PENDING,
@@ -67,7 +68,6 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		if (rec._id)
 			huyThanhToanModel(rec._id)
 				.then(() => {
-					getGiaoDich();
 					if (getData) getData();
 				})
 				.catch((er) => console.log(er));
@@ -149,7 +149,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			>
 				<FormThanhToan
 					getData={() => {
-						getGiaoDich();
+						if (activeTab === '1') getGiaoDich();
 						if (getData) getData();
 					}}
 				/>
@@ -158,7 +158,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			<ModalThanhToanNganHang
 				visible={visibleHuongDan}
 				onOk={() => {
-					getGiaoDich();
+					if (activeTab === '1') getGiaoDich();
 					if (getData) getData();
 					setVisibleHuongDan(false);
 				}}
