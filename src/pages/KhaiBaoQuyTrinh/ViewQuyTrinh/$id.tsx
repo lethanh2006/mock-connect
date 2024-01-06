@@ -20,6 +20,7 @@ const QuyTrinhView = ({
 		try {
 			setLoadingForm(true);
 			const res = await getDonByUserId(ids);
+
 			if (res) {
 				setDataQuyTrinh(res?.data?.data);
 				//set data buoc hien tai la buoc cuoi cung
@@ -28,6 +29,7 @@ const QuyTrinhView = ({
 				const obj = arr?.find(
 					(item: { ma: any }) => item?.ma === res?.data?.data?.danhSachBuocXuLy?.[0]?.maFormKhaiBao,
 				);
+
 				setCurrentFormKhaiBao(obj);
 			}
 		} catch (e) {

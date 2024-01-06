@@ -58,6 +58,8 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 	};
 
 	const handleGetDataDefault = async () => {
+		debugger;
+
 		try {
 			if (currentFormKhaiBao?.ma) {
 				const res = await getDataDefaultV2(props?.idQuyTrinh ?? '', 'khai_bao', currentFormKhaiBao?.ma ?? '');
@@ -101,7 +103,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 		return () => {
 			setRecordSanPham(undefined);
 		};
-	}, [props?.idQuyTrinh, currentFormKhaiBao]);
+	}, [props?.idQuyTrinh, currentFormKhaiBao?.ma]);
 
 	return (
 		<Spin spinning={loadingKhaiBao}>

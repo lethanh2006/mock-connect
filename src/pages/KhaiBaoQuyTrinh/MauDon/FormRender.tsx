@@ -45,7 +45,6 @@ const FormRender = (props: {
 					});
 				}
 			} else {
-
 			}
 		}
 	}, [cauHinh]);
@@ -425,7 +424,7 @@ const FormRender = (props: {
 	return checkTruongThongTinLienQuan ? (
 		<>
 			<Col xs={24} sm={24} md={cauHinh?.colspan}>
-				{cauHinh?.loaiDefaultValue ? (
+				{/* {cauHinh?.loaiDefaultValue ? (
 					<Form.Item
 						name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
 						label={cauHinh.ten}
@@ -433,15 +432,16 @@ const FormRender = (props: {
 					>
 						<Input disabled={cauHinh?.readonly} />
 					</Form.Item>
-				) : (
-					<Form.Item
-						name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
-						label={cauHinh.ten}
-						rules={cauHinh?.readonly ? [] : rule}
-					>
-						{component}
-					</Form.Item>
-				)}
+				) : ( */}
+				<Form.Item
+					extra={cauHinh?.ghiChu}
+					name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
+					label={cauHinh.ten}
+					rules={cauHinh?.readonly ? [] : rule}
+				>
+					{component}
+				</Form.Item>
+				{/* )} */}
 			</Col>
 			{truongThongTinTinh && truongThongTinTinh.loaiTruongThongTinTinh === ELoaiTruongThongTinTinh.VAI_TRO && (
 				<Col xs={24} sm={24} md={truongThongTinTinh?.colspan ? +truongThongTinTinh.colspan : undefined}>
