@@ -16,6 +16,7 @@ const QuyTrinhPage = () => {
 		record: recordQuyTrinh,
 		setRecord: setRecordQuyTrinh,
 	} = useModel('quytrinh.quytrinh');
+	const { setCurrentFormKhaiBao, setCurrent } = useModel('quytrinh.khaibaoquytrinh');
 	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
 
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
@@ -24,6 +25,8 @@ const QuyTrinhPage = () => {
 
 	useEffect(() => {
 		getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
+		setCurrentFormKhaiBao(undefined);
+		setCurrent(undefined);
 	}, []);
 
 	const handleRedirect = async (quyTrinhId: string) => {
@@ -102,7 +105,7 @@ const QuyTrinhPage = () => {
 					) : (
 						<Tooltip title='Sử dụng dịch vụ'>
 							<Popconfirm
-								title='Bạn có muốn sử dụng dich vụ trên?'
+								title='Bạn có muốn sử dụng dịch vụ trên?'
 								onConfirm={() => {
 									handleRedirect(recordVal?._id ?? '');
 								}}
