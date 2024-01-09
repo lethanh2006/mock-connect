@@ -1,13 +1,18 @@
 import ViewRender from '@/pages/KhaiBaoQuyTrinh/MauDon/ViewRender';
 import ThongTinTiepNhan from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/thongTinTiepNhan';
-import ThongTinThanhToan from '@/pages/TaiChinh/ChiTietThu/components/ThongTinThanhToan';
-import { TrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
-import { MapColorTrangThaiTiepNhanDon, TrangThaiKhaiBao } from '@/services/KhaiBaoQuyTrinh/constants';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
+import ThongTinThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
+import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
+import {
+	MapColorTrangThaiTiepNhanDon,
+	TrangThaiKhaiBao,
+	TrangThaiTiepNhanDon,
+} from '@/services/QuyTrinh/KhaiBao/constants';
+import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import { LeftOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Descriptions, Modal, Popconfirm, Row, Spin, Steps, Tag } from 'antd';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 
@@ -27,11 +32,21 @@ interface Iprops {
 const View = (props: Iprops) => {
 	const { dataQuyTrinh, current, loadingForm, modalName, FormModal, formProps, type } = props;
 	const model = useModel(modalName);
-	const { record, visibleForm, setVisibleForm } = useModel('taichinh.chitietthu');
+	const { visibleForm, setVisibleForm } = useModel('taichinh.hoadon');
 	const { setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
 	const { setCurrent, setCurrentFormKhaiBao, currentFormKhaiBao, setEditFormKhaiBao, setRecordFormKhaiBao } = model;
+	const { danhSach: danhSachDotQuyTrinh } = useModel('quytrinh.dotkhaibao');
+
+	const dotCurrent = danhSachDotQuyTrinh?.find((item) => item._id === dataQuyTrinh?.dotQuyTrinhId);
 
 	const [currentStep, setCurrentStep] = useState<number>(0);
+
+	const { getAllModel: getAllDanhMucChung, danhSach: danhSachDanhMuc } = useModel('quytrinh.danhmuc');
+
+	useEffect(() => {
+		if (danhSachDanhMuc.length === 0) getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
+	}, []);
+
 	const onChange = (val: number) => {
 		setCurrentStep(val);
 	};
@@ -70,6 +85,7 @@ const View = (props: Iprops) => {
 		if (current) {
 			const arr = dataQuyTrinh?.quyTrinh?.danhSachFormKhaiBao;
 			const obj = arr?.find((item: { ma: any }) => item?.ma === current?.maFormKhaiBao);
+
 			setCurrentFormKhaiBao(obj);
 			if (current?.trangThaiTiepNhan === TrangThaiTiepNhanDon.CHINH_SUA_LAI) {
 				const dataFormKhaiBao = dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao);
@@ -106,6 +122,8 @@ const View = (props: Iprops) => {
 										type={'link'}
 										onClick={() => {
 											history.push('/khai-bao-quy-trinh/lich-su');
+											setCurrentFormKhaiBao(undefined);
+											setCurrent(undefined);
 										}}
 									>
 										Quay lại
@@ -117,6 +135,8 @@ const View = (props: Iprops) => {
 										title='Bạn chưa khai báo đơn, có muốn quay lại?'
 										onConfirm={() => {
 											history.push('/khai-bao-quy-trinh/lich-su');
+											setCurrentFormKhaiBao(undefined);
+											setCurrent(undefined);
 										}}
 										okText='Đồng ý'
 										cancelText='Đóng'
@@ -132,8 +152,12 @@ const View = (props: Iprops) => {
 
 					<Row gutter={[16, 16]}>
 						<Col xs={24} sm={24} md={6} lg={6} xl={6}>
-							<Steps direction={'vertical'} current={currentStep} onChange={onChange}>
+							<Steps size='small' direction={'vertical'} current={currentStep} onChange={onChange}>
 								{dataQuyTrinh?.quyTrinh?.danhSachBuocXuLy?.map((value: any) => {
+									const cauHinhThoiGianDot = dotCurrent?.danhSachCauHinhThoiGianDot?.find(
+										(item: any) => item.maBuoc === value.ma,
+									);
+
 									return (
 										<Step
 											key={value.ten}
@@ -141,7 +165,17 @@ const View = (props: Iprops) => {
 												dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === value?.ma),
 											)}
 											disabled={dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === value?.ma) === undefined}
-											title={value?.ten}
+											title={
+												<div>
+													{value.ten}{' '}
+													{cauHinhThoiGianDot && (
+														<b>
+															({moment(cauHinhThoiGianDot?.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
+															{moment(cauHinhThoiGianDot?.thoiGianKetThuc).format('DD/MM/YYYY')})
+														</b>
+													)}
+												</div>
+											}
 											onClick={() => {
 												const obj = dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === value?.ma);
 												if (obj) {
@@ -219,6 +253,7 @@ const View = (props: Iprops) => {
 						</Col>
 					</Row>
 				</Spin>
+
 				<Modal
 					visible={visibleForm}
 					onCancel={() => setVisibleForm(false)}
@@ -227,7 +262,7 @@ const View = (props: Iprops) => {
 					width={1000}
 					destroyOnClose
 				>
-					{record?._id ? <ThongTinThanhToan setVisible={setVisibleForm} /> : null}
+					<ThongTinThanhToan setVisible={setVisibleForm} />
 				</Modal>
 			</Card>
 		</>

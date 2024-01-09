@@ -20,3 +20,7 @@ export async function postDangKyTinChi(data: { dangKy: { lopHocPhanId: string };
 export async function deleteDangKyTinChi(data: { phieuDktcId: string; lopHocPhanId: string }) {
 	return axios.delete(`${ipDaoTao}/dang-ky-tin-chi/dang-ky/lop-hoc-phan`, { data });
 }
+
+export async function getSinhVienDot(dotDangKyTinChiId: string) {
+	return axios.get(`${ipDaoTao}/dang-ky-tin-chi/dot-sinh-vien/me/dot/${dotDangKyTinChiId}`);
+}

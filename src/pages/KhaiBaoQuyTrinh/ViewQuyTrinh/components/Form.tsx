@@ -1,20 +1,22 @@
+import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
+import { DoiTuongDieuPhoi } from '@/services/QuyTrinh/KhaiBao/constants';
+import { userUpdateBuoc } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
+import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
+import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
+import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
+import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import rules from '@/utils/rules';
 import { Button, Form, message, Row, Select, Spin } from 'antd';
 import { useEffect, useState } from 'react';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
-import { userUpdateBuoc } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
 import { useModel } from 'umi';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
-import rules from '@/utils/rules';
-import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
-import { DoiTuongDieuPhoi } from '@/services/KhaiBaoQuyTrinh/constants';
-import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
 
 const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 	const { currentFormKhaiBao, current, dataQuyTrinh, editFormKhaiBao, recordFormKhaiBao } =
 		useModel('quytrinh.khaibaoquytrinh');
+	const { danhSach: danhSachDanhMuc } = useModel('quytrinh.danhmuc');
 	const { recordSanPham, setRecordSanPham } = useModel('quytrinh.khaibaoquytrinh');
 	const { recordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
-	const { getChiTietThuByIdentityCodeModel, setVisibleForm } = useModel('taichinh.chitietthu');
+	const { getOneModel: getHoaDon, setVisibleForm } = useModel('taichinh.hoadon');
 	const [formValues, setFormValues] = useState<any>({});
 	const [loadingKhaiBao, setLoadingKhaiBao] = useState<boolean>(false);
 	const [danhSachDonViXuLy, setDanhSachDonViXuLy] = useState<KhaiBaoQuyTrinh.IDonViXuLy[]>([]);
@@ -22,6 +24,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 	const doiTuongDieuPhoi = dataQuyTrinh?.quyTrinh?.danhSachBuocXuLy?.find(
 		(item) => item?.ma === current?.ma,
 	)?.doiTuongDieuPhoi;
+
 	const onFinish = async (values: any) => {
 		try {
 			setLoadingKhaiBao(true);
@@ -34,8 +37,24 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			}
 			delete values.maBoPhanXuLy;
 
+			const valuesFinal: any = {};
+			const valuesForm = { ...(recordQuyTrinhForm?.thongTinKhaiBao ?? {}), ...values };
+
+			Object.keys(valuesForm).map((item) => {
+				const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
+				const isDanhMuc = cauHinh?.kieuDuLieu === EKieuDuLieu.DANHMUC;
+				valuesFinal[item] = {
+					value: valuesForm[item],
+					info: isDanhMuc
+						? danhSachDanhMuc
+								?.find((ele) => ele.maDanhMuc === cauHinh.maDanhMuc)
+								?.danhSachGiaTri?.find((ele) => ele.value === valuesForm[item])?.info
+						: undefined,
+				};
+			});
+
 			const payload = {
-				thongTinKhaiBao: { ...recordSanPham?.thongTinKhaiBao, ...recordQuyTrinhForm?.thongTinKhaiBao, ...values },
+				thongTinKhaiBao: { ...recordSanPham?.thongTinKhaiBao, ...recordQuyTrinhForm?.thongTinKhaiBao, ...valuesFinal },
 				maBoPhanXuLy: maBoPhanXuLy,
 			};
 
@@ -45,7 +64,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 				message.success('Khai báo thành công');
 				props?.getData();
 				if (res?.data?.data?.identityCode) {
-					await getChiTietThuByIdentityCodeModel(res.data.data.identityCode);
+					await getHoaDon({ identityCode: res.data.data.identityCode });
 					setVisibleForm(true);
 				}
 			}
@@ -55,7 +74,10 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			setLoadingKhaiBao(false);
 		}
 	};
+
 	const handleGetDataDefault = async () => {
+		debugger;
+
 		try {
 			if (currentFormKhaiBao?.ma) {
 				const res = await getDataDefaultV2(props?.idQuyTrinh ?? '', 'khai_bao', currentFormKhaiBao?.ma ?? '');
@@ -70,6 +92,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			console.log(e);
 		}
 	};
+
 	useEffect(() => {
 		if (dataQuyTrinh) {
 			const currentBuocXuLy = dataQuyTrinh?.quyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === current?.ma);
@@ -84,11 +107,13 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			}
 		}
 	}, [dataQuyTrinh]);
+
 	useEffect(() => {
 		if (editFormKhaiBao && recordFormKhaiBao) {
 			form.setFieldsValue(recordFormKhaiBao);
 		}
 	}, [editFormKhaiBao, recordFormKhaiBao]);
+
 	useEffect(() => {
 		if (props?.idQuyTrinh && currentFormKhaiBao?.ma) {
 			handleGetDataDefault();
@@ -96,7 +121,8 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 		return () => {
 			setRecordSanPham(undefined);
 		};
-	}, [props?.idQuyTrinh, currentFormKhaiBao]);
+	}, [props?.idQuyTrinh, currentFormKhaiBao?.ma]);
+
 	return (
 		<Spin spinning={loadingKhaiBao}>
 			<Form

@@ -1,5 +1,6 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
+import type { LopHanhChinh } from '@/services/HocTap/LopHanhChinh/typing';
 import { history, useModel } from 'umi';
 
 const LopHanhChinhPage = () => {

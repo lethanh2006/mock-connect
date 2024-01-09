@@ -1,11 +1,10 @@
-
-import { ETrangThaiChamDiem } from '@/services/DiemRenLuyen/DotChamDiem/constants';
+import { ETrangThaiChamDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/DotChamDiem/constants';
 import {
 	ELoaiNhapTayPhieuDiem,
 	EVaiTroPhieuDiem,
 	vaiTroPhieuDiem,
-} from '@/services/DiemRenLuyen/PhieuDiemRenLuyen/constants';
-import { type PhieuDiemRenLuyen } from '@/services/DiemRenLuyen/PhieuDiemRenLuyen/typing';
+} from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/constants';
+import { type PhieuDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/typing';
 import rules from '@/utils/rules';
 import { SaveOutlined, SendOutlined } from '@ant-design/icons';
 import { Alert, Button, Form, InputNumber, Modal, Select, Space } from 'antd';
@@ -14,8 +13,8 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import StepDotChamDiemRenLuyen from '../../DotChamDiem/components/Step';
-import TableStaticData from "@/components/Table/TableStaticData";
-import {IColumn} from "@/components/Table/typing";
+import TableStaticData from '@/components/Table/TableStaticData';
+import { IColumn } from '@/components/Table/typing';
 
 /** Dùng chung cho cả sinh viên, cán sự lớp, và cố vấn học tập */
 const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) => {

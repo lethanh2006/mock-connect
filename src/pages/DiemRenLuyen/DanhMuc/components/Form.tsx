@@ -1,5 +1,8 @@
-import { ELoaiDanhMucChung, ELoaiDanhMucChungMappingToTitle } from '@/services/DiemRenLuyen/DanhMuc/constant';
-import { type DanhMucDiemRenLuyen } from '@/services/DiemRenLuyen/DanhMuc/typing';
+import {
+	ELoaiDanhMucChung,
+	ELoaiDanhMucChungMappingToTitle,
+} from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/constant';
+import { type DanhMucDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/typing';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, Row } from 'antd';

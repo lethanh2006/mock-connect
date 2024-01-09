@@ -1,7 +1,11 @@
 import useInitModel from '@/hooks/useInitModel';
-import { getCauHinhPhieu, postKetQuaChamDiemRL, sinhVienGetKetQua } from '@/services/DiemRenLuyen/PhieuDiemRenLuyen';
-import { type EVaiTroPhieuDiem } from '@/services/DiemRenLuyen/PhieuDiemRenLuyen/constants';
-import { type PhieuDiemRenLuyen } from '@/services/DiemRenLuyen/PhieuDiemRenLuyen/typing';
+import {
+	getCauHinhPhieu,
+	postKetQuaChamDiemRL,
+	sinhVienGetKetQua,
+} from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen';
+import { type EVaiTroPhieuDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/constants';
+import { type PhieuDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/typing';
 import { message } from 'antd';
 import { useState } from 'react';
 
