@@ -16,10 +16,10 @@ const ViewDetailHocKy = () => {
 			</Descriptions.Item>
 			{dotDangKyHienTai ? (
 				<>
-					<Descriptions.Item label='Tên đợt đăng ký học phần'>{dotDangKyHienTai.ten}</Descriptions.Item>
-					<Descriptions.Item label='Tính chất đợt'>
+					<Descriptions.Item label='Tên đợt đăng ký tín chỉ'>{dotDangKyHienTai.ten}</Descriptions.Item>
+					{/* <Descriptions.Item label='Tính chất đợt'>
 						{tinhChatDangKyTC?.[dotDangKyHienTai.tinhChatDangKy]}
-					</Descriptions.Item>
+					</Descriptions.Item> */}
 				</>
 			) : null}
 		</Descriptions>

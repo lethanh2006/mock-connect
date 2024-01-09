@@ -1,5 +1,5 @@
 import SelectDotQuyTrinh from '@/pages/KhaiBaoQuyTrinh/DotQuyTrinh/Select';
-import { createDonKhaiBaoUser } from '@/services/KhaiBaoQuyTrinh/khaibaoquytrinh';
+import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import { useModel } from '@@/plugin-model/useModel';
 import { Button, Col, Form, Row, Spin } from 'antd';
 import type { SetStateAction } from 'react';

@@ -50,15 +50,7 @@ const TableLichHocLopHP = () => {
 			dataIndex: 'nhanSuSsoId',
 			width: 120,
 			render: (val, rec) =>
-				val ? (
-					rec.nhanSu?.ten ? (
-						[rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ')
-					) : (
-						<i>Không tìm thấy thông tin</i>
-					)
-				) : (
-					<i>Chưa cập nhật</i>
-				),
+				rec.nhanSu?.ten ? [rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ') : rec.tenNhanSu ?? <i>Chưa cập nhật</i>,
 			onCell,
 		},
 		{

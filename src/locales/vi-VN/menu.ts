@@ -19,14 +19,18 @@ export default {
 	'menu.HocTap': 'Học tập',
 	'menu.HocTap.TienTrinhHocTap': 'Tiến trình học tập',
 	'menu.HocTap.DangKyNhuCau': 'Đăng ký nhu cầu',
-	'menu.HocTap.DangKyTinChi': 'Đăng ký học phần',
-	'menu.HocTap.LopHocPhan': 'Lớp học phần',
+	'menu.HocTap.DangKyTinChi': 'Đăng ký tín chỉ',
+	'menu.HocTap.LopHocPhan': 'Lớp tín chỉ',
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
 	'menu.HocTap.XetHocVu': 'Cảnh báo học tập, thôi học ',
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
 	'menu.HocTap.QuyetDinh': 'Bảo lưu, thôi học',
-	'menu.CongNo': 'Công nợ',
 	'menu.KeHoachNamHoc': 'Kế hoạch năm học',
+
+	'menu.TaiChinh': 'Tài chính',
+	'menu.TaiChinh.CongNo': 'Công nợ',
+	'menu.TaiChinh.UuDaiThanhToan': 'Ưu đãi thanh toán',
+	'menu.TaiChinh.GiaoDich': 'Lịch sử giao dịch',
 
 	// DRL
 
@@ -50,6 +54,7 @@ export default {
 	// GIANG VIEN
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
+	'menu.KhaiBaoQuyTrinh.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
 	'menu.KhaiBaoQuyTrinh.LichSu': 'Lịch sử',
 

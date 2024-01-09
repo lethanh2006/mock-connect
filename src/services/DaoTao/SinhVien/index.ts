@@ -26,3 +26,13 @@ export async function getTrangThaiNoSinhVienMe(dotXetTotNghiepId: string) {
 export async function getCanhBaoSinhVien(type: 'canh-bao-hoc-tap' | 'thoi-hoc') {
 	return axios.get(`${ipDaoTao}/${type}/me`);
 }
+
+// GET MY KHOA NGANH
+
+export async function getMyKhoaNganh() {
+	return axios.get(`${ipDaoTao}/sinh-vien/me/khoa-nganh`);
+}
+
+export async function getMyLopHanhChinh() {
+	return axios.get(`${ipDaoTao}/sinh-vien/me/lop-hanh-chinh`);
+}

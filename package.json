@@ -70,6 +70,7 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "oidc-client-ts": "^2.2.5",
+    "p-limit": "3.1.0",
     "path": "^0.12.7",
     "react": "^17.0.0",
     "react-apexcharts": "^1.4.1",

@@ -33,7 +33,7 @@ const SelectLopHocPhan = (props: {
 				}))}
 				showSearch
 				optionFilterProp='label'
-				placeholder='Chọn lớp học phần'
+				placeholder='Chọn lớp tín chỉ'
 				style={{ width: '100%' }}
 				allowClear={allowClear ?? false}
 			/>

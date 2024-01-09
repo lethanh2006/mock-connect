@@ -22,12 +22,12 @@ const CardLopHocPhan = () => {
 
 	return (
 		<Card
-			title='Lớp học phần'
+			title='Lớp tín chỉ'
 			loading={loading}
 			extra={
 				<Dropdown
 					overlay={
-						<Menu>
+						<Menu style={{ height: 300, overflowY: 'auto' }}>
 							{danhSach.map((item) => (
 								<Menu.Item onClick={() => setRecord(item)} key={item._id}>
 									{item.ten}
@@ -61,7 +61,7 @@ const CardLopHocPhan = () => {
 					className='dashboard-list-lhp'
 					dataSource={danhSachLHP}
 					renderItem={(item) => (
-						<List.Item onClick={() => history.push(`/hoc-tap/lop-hoc-phan/${item._id}`)}>
+						<List.Item onClick={() => history.push(`/hoc-tap/lop-tin-chi/${item._id}`)}>
 							<List.Item.Meta title={item.hocPhan?.ten} description={`${item.ten}`} />
 							<Progress
 								style={{ marginRight: 8, marginLeft: 8 }}

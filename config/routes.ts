@@ -96,7 +96,7 @@
 		name: 'KeHoachNCKH',
 		icon: 'FileOutlined',
 		path: '/ke-hoach-nckh',
-		component: './KeHoachNCKH',
+		component: './KhoaHoc/KeHoach',
 	},
 
 	// MENU SINH VIEN
@@ -111,11 +111,11 @@
 				path: 'tien-trinh-hoc-tap',
 				component: './HocTap/TienTrinhHocTap',
 			},
-			{ name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
+			// { name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
 			{ name: 'DangKyTinChi', path: 'dang-ky-tin-chi', component: './HocTap/DangKyTinChi' },
 			{
 				name: 'LopHocPhan',
-				path: 'lop-hoc-phan',
+				path: 'lop-tin-chi',
 				routes: [
 					{
 						path: './',
@@ -131,27 +131,27 @@
 					},
 				],
 			},
-			{
-				name: 'KetQuaHocTap',
-				path: './ket-qua-hoc-tap',
-				// access: 'sinhVien',
-				component: './HocTap/KetQuaHocTap',
-			},
-			{
-				name: 'XetHocVu',
-				path: './xet-hoc-vu',
-				component: './HocTap/XetHocVu',
-			},
-			{
-				name: 'XetTotNghiep',
-				path: './xet-tot-nghiep',
-				component: './HocTap/XetTotNghiep',
-			},
-			{
-				name: 'QuyetDinh',
-				path: './quyet-dinh-bao-luu-thoi-hoc',
-				component: './HocTap/BaoLuuThoiHoc',
-			},
+			// {
+			// 	name: 'KetQuaHocTap',
+			// 	path: './ket-qua-hoc-tap',
+			// 	// access: 'sinhVien',
+			// 	component: './HocTap/KetQuaHocTap',
+			// },
+			// {
+			// 	name: 'XetHocVu',
+			// 	path: './xet-hoc-vu',
+			// 	component: './HocTap/XetHocVu',
+			// },
+			// {
+			// 	name: 'XetTotNghiep',
+			// 	path: './xet-tot-nghiep',
+			// 	component: './HocTap/XetTotNghiep',
+			// },
+			// {
+			// 	name: 'QuyetDinh',
+			// 	path: './quyet-dinh-bao-luu-thoi-hoc',
+			// 	component: './HocTap/BaoLuuThoiHoc',
+			// },
 		],
 	},
 
@@ -240,13 +240,6 @@
 		],
 	},
 
-	{
-		name: 'KhaiBaoSucKhoe',
-		icon: 'HeartOutlined',
-		path: '/khai-bao-suc-khoe',
-		component: './TienIch/KhaiBaoSucKhoe',
-	},
-
 	// {
 	// 	name: 'DichVuHanhChinh',
 	// 	icon: 'AuditOutlined',
@@ -314,13 +307,32 @@
 			},
 		],
 	},
+
+	// TÀI CHÍNH
 	{
-		name: 'CongNo',
+		name: 'TaiChinh',
 		icon: 'TransactionOutlined',
-		path: '/cong-no',
-		component: './TaiChinh/ChiTietThu',
+		path: '/tai-chinh',
+		routes: [
+			{
+				name: 'CongNo',
+				path: './cong-no',
+				component: './TaiChinh/HoaDon',
+			},
+			{
+				name: 'GiaoDich',
+				path: './giao-dich',
+				component: './TaiChinh/GiaoDich',
+			},
+			{
+				name: 'UuDaiThanhToan',
+				path: './uu-dai-thanh-toan',
+				component: './TaiChinh/UuDaiThanhToan',
+			},
+		],
 	},
 
+	// TIỆN ÍCH
 	{
 		name: 'PhanHoi',
 		path: './phan-hoi',
@@ -335,6 +347,12 @@
 		icon: 'table',
 	},
 	{
+		name: 'KhaiBaoSucKhoe',
+		icon: 'HeartOutlined',
+		path: '/khai-bao-suc-khoe',
+		component: './TienIch/KhaiBaoSucKhoe',
+	},
+	{
 		name: 'CauHoiThuongGap',
 		path: './cauhoithuonggap',
 		icon: 'QuestionOutlined',
@@ -346,7 +364,6 @@
 		component: './TienIch/VanBanHuongDan',
 		icon: 'FileOutlined',
 	},
-	//MENU GIANG VIEN
 
 	{
 		path: '/notification',

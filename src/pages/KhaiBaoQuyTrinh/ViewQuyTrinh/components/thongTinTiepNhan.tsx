@@ -1,23 +1,27 @@
-import { Button, Descriptions, Modal, Tag } from 'antd';
-import type { KhaiBaoQuyTrinh } from '@/services/KhaiBaoQuyTrinh/typings';
-import type { TrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
-import { MapColorTrangThaiTiepNhanDon } from '@/services/KhaiBaoQuyTrinh/constants';
+import ThongTinThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
+import type { TrangThaiTiepNhanDon } from '@/services/QuyTrinh/KhaiBao/constants';
+import { MapColorTrangThaiTiepNhanDon } from '@/services/QuyTrinh/KhaiBao/constants';
+import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
+import {
+	EMauTrangThaiThanhToanTable,
+	ETrangThaiThanhToan,
+	type EMaTrangThaiThanhToan,
+} from '@/services/TaiChinh/constant';
 import { useModel } from '@@/plugin-model/useModel';
-import { EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import { Button, Descriptions, Modal, Tag } from 'antd';
 import { useState } from 'react';
-import ThongTinThanhToan from '@/pages/TaiChinh/ChiTietThu/components/ThongTinThanhToan';
 
 const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: any }) => {
 	const { data, modelName } = props;
 	const model = useModel(modelName);
 	const { dataQuyTrinh }: any = model;
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
-	const { record, getChiTietThuByIdentityCodeModel } = useModel('taichinh.chitietthu');
+	const { getOneModel } = useModel('taichinh.hoadon');
+
 	return (
 		<>
 			<Descriptions column={2} bordered>
 				<Descriptions.Item label='Trạng thái xử lý'>
-					{' '}
 					<Tag color={MapColorTrangThaiTiepNhanDon?.[data?.trangThaiTiepNhan as TrangThaiTiepNhanDon] ?? 'yellow'}>
 						{data?.trangThaiTiepNhan}
 					</Tag>
@@ -29,8 +33,9 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 					}
 				</Descriptions.Item>
 				<Descriptions.Item label='Trạng thái thanh toán'>
-					{' '}
-					<Tag color={EMauTrangThaiThanhToanTable?.[dataQuyTrinh?.trangThaiThanhToan] ?? 'gray'}>
+					<Tag
+						color={EMauTrangThaiThanhToanTable?.[dataQuyTrinh?.trangThaiThanhToan as EMaTrangThaiThanhToan] ?? 'gray'}
+					>
 						{dataQuyTrinh?.trangThaiThanhToan
 							? ETrangThaiThanhToan[dataQuyTrinh.trangThaiThanhToan]
 							: 'Dịch vụ không tính phí'}
@@ -38,7 +43,7 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 					{dataQuyTrinh?.identityCode ? (
 						<Button
 							onClick={() => {
-								getChiTietThuByIdentityCodeModel(dataQuyTrinh.identityCode);
+								getOneModel({ identityCode: dataQuyTrinh.identityCode });
 								setVisibleModal(true);
 							}}
 							type='link'
@@ -54,6 +59,7 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 					{data?.ghiChu}
 				</Descriptions.Item>
 			</Descriptions>
+
 			<Modal
 				visible={visibleModal}
 				onCancel={() => setVisibleModal(false)}
@@ -62,7 +68,7 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 				width={1000}
 				destroyOnClose
 			>
-				{record?._id ? <ThongTinThanhToan setVisible={setVisibleModal} /> : null}
+				<ThongTinThanhToan setVisible={setVisibleModal} getData={() => {}} />
 			</Modal>
 		</>
 	);

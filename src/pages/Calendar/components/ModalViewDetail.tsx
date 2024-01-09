@@ -60,7 +60,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 					{isThoiKhoaBieu ? (
 						<Button
 							type='primary'
-							onClick={() => history.push(`/hoc-tap/lop-hoc-phan/${thoiKhoaBieu?.lopHocPhan?._id}`)}
+							onClick={() => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}`)}
 						>
 							Xem chi tiết
 						</Button>
@@ -75,7 +75,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 				</Descriptions.Item>
 				{isThoiKhoaBieu ? (
 					<>
-						<Descriptions.Item label='Lớp học phần'>{thoiKhoaBieu?.tenLopHocPhan}</Descriptions.Item>
+						<Descriptions.Item label='Lớp tín chỉ'>{thoiKhoaBieu?.tenLopHocPhan}</Descriptions.Item>
 						<Descriptions.Item label='Tên học phần'>{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}</Descriptions.Item>
 						<Descriptions.Item label='Thời gian bắt đầu'>
 							{moment(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
@@ -86,7 +86,9 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 						<Descriptions.Item label='Loại hình học tập'>{thoiKhoaBieu?.loaiHinhHocTap ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Phòng học'>{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Giảng viên'>
-							{thoiKhoaBieu?.nhanSu?.ten ? [thoiKhoaBieu.nhanSu?.hoDem, thoiKhoaBieu.nhanSu?.ten].join(' ') : '--'}
+							{thoiKhoaBieu?.nhanSu?.ten
+								? [thoiKhoaBieu.nhanSu?.hoDem, thoiKhoaBieu.nhanSu?.ten].join(' ')
+								: thoiKhoaBieu?.tenNhanSu ?? '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Tiêu đề bài học'>{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
 						{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (

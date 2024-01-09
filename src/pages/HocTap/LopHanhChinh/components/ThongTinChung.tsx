@@ -17,7 +17,10 @@ const ThongTinChungLopHanhChinh = () => {
 				</Descriptions.Item>
 			</Descriptions>
 
-			<DanhSachGiangVien title='Cố vấn học tập' danhSachNhanSu={record?.giangVien?.ssoId ? [record.giangVien] : []} />
+			<DanhSachGiangVien
+				title='Cố vấn học tập'
+				danhSachNhanSu={record?.giangVien?.ssoId ? [{ nhanSu: record.giangVien }] : []}
+			/>
 
 			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8 }}>Danh sách sinh viên</h4>
 			<DanhSachSinhVien sinhVienList={record?.sinhVienList ?? []} loading={loading} />

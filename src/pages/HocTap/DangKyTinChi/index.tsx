@@ -1,6 +1,7 @@
-import { ETinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
-import { Card, Empty } from 'antd';
-import moment from 'moment';
+import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import { YoutubeOutlined } from '@ant-design/icons';
+import { Card, Divider, Empty, Spin } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
@@ -8,34 +9,58 @@ import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
 
 const DangKyTinChiPage = () => {
-	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
+	const { dotDangKyHienTai, loading, sinhVienDot } = useModel('daotao.dotdangkytinchi');
+	const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
+
+	useEffect(() => {
+		getLopHc();
+	}, []);
 
 	return (
-		<Card title='Đăng ký học phần'>
+		<Card title='Đăng ký tín chỉ'>
 			<FilterDotDangKy />
 
-			{dotDangKyHienTai ? (
-				<>
-					{moment().isSameOrAfter(dotDangKyHienTai.thoiGianBatDau) &&
-					moment().isSameOrBefore(dotDangKyHienTai.thoiGianKetThuc) ? (
-						dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
-							<Empty
-								description={
-									<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp học phần đã đăng ký trước đó !</i>
-								}
-							/>
-						) : (
-							<DangKyLopHocPhan />
-						)
+			<Spin spinning={loading}>
+				{dotDangKyHienTai && sinhVienDot ? (
+					sinhVienDot.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.KHONG_DUOC_DK ? (
+						<Empty
+							description={
+								<>
+									<span className='text-error'>Bạn không được phép đăng ký tín chỉ trong đợt này!</span>
+									<br />
+									Ghi chú: {sinhVienDot.ghiChu ?? '--'}
+								</>
+							}
+						/>
+					) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+						<Empty
+							description={
+								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp tín chỉ đã đăng ký trước đó !</i>
+							}
+						/>
 					) : (
-						<Empty description={<i style={{ color: '#999' }}>Không trong thời gian đăng ký !</i>} />
-					)}
-				</>
-			) : (
-				<Empty description={<i style={{ color: '#999' }}>Không có đợt đăng ký học phần trong học kỳ này !</i>} />
-			)}
+						<>
+							<Divider style={{ marginTop: 24 }}>Thông tin đăng ký</Divider>
+							<DangKyLopHocPhan />
+						</>
+					)
+				) : (
+					<Empty description={<i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này !</i>} />
+				)}
+			</Spin>
 
 			<PhieuDangKy />
+
+			<div className='huong-dan'>
+				<div className='title-huong-dan'>
+					<i>Xem video hướng dẫn đăng ký tín chỉ</i>
+				</div>
+
+				<YoutubeOutlined
+					className='pulse'
+					onClick={() => window.open('https://www.youtube.com/watch?v=2xghlws7tAk&t=2s')}
+				/>
+			</div>
 		</Card>
 	);
 };
