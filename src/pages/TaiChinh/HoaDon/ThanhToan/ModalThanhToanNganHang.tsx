@@ -58,10 +58,13 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 						Lưu ý: <br />
 						1. Thí sinh nên sử dụng thanh toán theo mã QR để thực hiện thanh toán được chính xác. Trong trường hợp sử
 						dụng hình thức còn lại, thí sinh lưu ý nhập chính xác số tiền yêu cầu (không làm tròn) để hệ thống ghi nhận
-						giao dịch là hợp lệ
+						giao dịch là hợp lệ.
 						<br />
 						2. Mã QR được khởi tạo dành riêng cho cá nhân thí sinh và chỉ sử dụng để thanh toán một lần. Vui lòng không
-						sử dụng để thanh toán hộ người khác
+						sử dụng để thanh toán hộ người khác.
+						<br />
+						3. Sau khi thanh toán thành công, sinh viên vui lòng đợi để hệ thống xác nhận thông tin thanh toán từ ngân
+						hàng.
 					</b>
 				</p>
 			</Col>
@@ -106,9 +109,12 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 				<p>
 					<b>
 						Lưu ý: <br />
-						Thí sinh nên sử dụng thanh toán theo mã QR để thực hiện thanh toán được chính xác. Trong trường hợp sử dụng
-						hình thức còn lại, thí sinh lưu ý nhập chính xác số tiền yêu cầu (không làm tròn) để hệ thống ghi nhận giao
-						dịch là hợp lệ
+						1. Thí sinh nên sử dụng thanh toán theo mã QR để thực hiện thanh toán được chính xác. Trong trường hợp sử
+						dụng hình thức còn lại, thí sinh lưu ý nhập chính xác số tiền yêu cầu (không làm tròn) để hệ thống ghi nhận
+						giao dịch là hợp lệ.
+						<br />
+						2. Sau khi thanh toán thành công, sinh viên vui lòng đợi để hệ thống xác nhận thông tin thanh toán từ ngân
+						hàng.
 					</b>
 				</p>
 			</Col>
