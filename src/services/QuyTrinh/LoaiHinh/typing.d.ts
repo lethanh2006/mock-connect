@@ -27,6 +27,8 @@ declare module LoaiHinh {
 		loaiDefaultValue: string;
 		customDefaultValue: string;
 		ghiChu: string;
+		maFormLayDefaultValue: string;
+		maFieldLayDefaultValue: string;
 	}
 
 	export interface TruongThongTin {
@@ -48,6 +50,8 @@ declare module LoaiHinh {
 		loaiDefaultValue: string;
 		customDefaultValue: string;
 		ghiChu: string;
+		maFormLayDefaultValue: string;
+		maFieldLayDefaultValue: string;
 	}
 
 	export interface TieuChi {

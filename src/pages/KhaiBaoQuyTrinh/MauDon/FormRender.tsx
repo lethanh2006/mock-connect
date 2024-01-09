@@ -3,6 +3,7 @@ import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import UploadFile from '@/components/Upload/UploadFile';
+
 import { EKieuDuLieu, ELoaiThoiGianThucHien, ELoaiTruongThongTinTinh } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 import { LoaiDefaultValue } from '@/services/QuyTrinh/MauDon/constants';
@@ -10,44 +11,91 @@ import rules from '@/utils/rules';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, InputNumber, Modal, Popconfirm, Radio, Select, Space, Tooltip } from 'antd';
+import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import FormTable from './FormTable';
 import ViewRender from './ViewRender';
+import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 
 const FormRender = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
 	formValues: any;
 	form?: FormInstance;
+	danhSachCauHinh?: LoaiHinh.Cot[];
 }) => {
 	const { cauHinh, form } = props;
 	const [visibleFormTable, setVisibleFormTable] = useState<boolean>(false);
 	const [editFormTable, setEditFormTable] = useState<boolean>(false);
 	const [recordTable, setRecordTable] = useState<any>({});
-	// const { record: recordQuyTrinhForm, setRecord: setrecordQuyTrinhForm } = useModel('quanlykhoahoc.sanphamnckh');
+
 	const { danhSach } = useModel('quytrinh.danhmuc');
 	const { record: recordLoaiHinh } = useModel('quytrinh.loaihinh');
 	const { recordQuyTrinhForm, setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
+	const { dataQuyTrinh } = useModel('quytrinh.khaibaoquytrinh');
+	const { danhSach: danhSachNhanSu } = useModel('tochucnhansu.nhansu');
 	let component = <div />;
 	let rule: any[] = [...rules.required];
 
 	const onCancelFormTable = () => {
 		setVisibleFormTable(false);
 	};
+
+	const cauHinhLoaiHinh = props?.danhSachCauHinh || recordLoaiHinh?.cauHinhLoaiHinh;
+
+	const listCauHinhPhuThuocDuLieu = cauHinhLoaiHinh?.filter(
+		(item: { layDuLieuTu: string }) => item.layDuLieuTu === cauHinh.ma,
+	);
+
+	const onChangeNhanSu: any = (val: string) => {
+		if (!val) return;
+		const recNhanSu: any = danhSachNhanSu.find((item) => item.ssoId === val);
+		if (props.form && listCauHinhPhuThuocDuLieu?.length) {
+			const objDuLieuPhuThuoc: any = {};
+			listCauHinhPhuThuocDuLieu.map((item: { ma: string | number; truongLayDuLieu: any }) => {
+				objDuLieuPhuThuoc[item.ma] = item.truongLayDuLieu
+					? _.get(recNhanSu, item.truongLayDuLieu, undefined)
+					: recNhanSu;
+			});
+			props.form.setFieldsValue(objDuLieuPhuThuoc);
+		}
+	};
+
+	// const handleRenderDefaultValue = async (type: LoaiDefaultValue) => {
+	// 	try {
+	// 		const res = await getDataDefault(type);
+	// 		if (res) {
+	// 			if (form) {
+	// 				form.setFieldsValue({
+	// 					...form.getFieldsValue(),
+	// 					[cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`]: res?.data?.data?.value,
+	// 				});
+	// 			}
+	// 		}
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 	} finally {
+	// 	}
+	// };
+
 	useEffect(() => {
 		if (cauHinh && cauHinh?.loaiDefaultValue) {
+			if (!form) return;
 			if (cauHinh?.loaiDefaultValue === LoaiDefaultValue.CUSTOM) {
-				if (form) {
-					form.setFieldsValue({
-						...form.getFieldsValue(),
-						[cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`]:
-							cauHinh?.customDefaultValue,
-					});
-				}
-			} else {
+				form.setFieldsValue({
+					...form.getFieldsValue(),
+					[cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`]: cauHinh?.customDefaultValue,
+				});
+			} else if (cauHinh?.loaiDefaultValue === LoaiDefaultValue.LAY_TU_KHAI_BAO) {
+				const khaiBao = dataQuyTrinh?.danhSachKhaiBao.find((item) => item.ma === cauHinh.maFormLayDefaultValue)
+					?.thongTinKhaiBao?.[cauHinh.maFieldLayDefaultValue];
+
+				form.setFieldsValue({
+					[cauHinh.ma]: khaiBao,
+				});
 			}
 		}
-	}, [cauHinh]);
+	}, [cauHinh.ma]);
 	switch (cauHinh.kieuDuLieu) {
 		case EKieuDuLieu.TEXT:
 			if (cauHinh.textarea) {
@@ -61,10 +109,10 @@ const FormRender = (props: {
 			rule = [...(cauHinh.laDangMang ? [] : rules.text), ...(cauHinh.batBuoc ? rules.required : [])];
 			break;
 
-		// case EKieuDuLieu.CAN_BO:
-		// 	rule = [...(cauHinh.batBuoc ? rules.required : [])];
-		// 	component = <SelectNhanSuDebounce disabled={cauHinh?.readonly} />;
-		// 	break;
+		case EKieuDuLieu.CAN_BO:
+			rule = [...(cauHinh.batBuoc ? rules.required : [])];
+			component = <SelectNhanSuDebounce onChange={onChangeNhanSu} />;
+			break;
 
 		case EKieuDuLieu.BOOLEAN:
 			component = (
@@ -87,7 +135,7 @@ const FormRender = (props: {
 					placeholder='Chọn giá trị'
 					options={danhSach
 						.find((item) => item.maDanhMuc === cauHinh.maDanhMuc)
-						?.danhSachGiaTri.map((item: any) => ({ value: item, label: item }))}
+						?.danhSachGiaTri.map((item: { value: string }) => ({ value: item.value, label: item.value }))}
 				/>
 			);
 			rule = [...(cauHinh.batBuoc ? rules.required : [])];
@@ -134,18 +182,26 @@ const FormRender = (props: {
 			break;
 		case EKieuDuLieu.DATE:
 			component = (
-				<MyDatePicker disabled={cauHinh?.readonly} style={{ width: '100%' }} allowClear format={'DD/MM/YYYY'} />
+				<MyDatePicker
+					placeholder={cauHinh.ten}
+					disabled={cauHinh?.readonly}
+					style={{ width: '100%' }}
+					allowClear
+					format={'DD/MM/YYYY'}
+				/>
 			);
 			rule = [...(cauHinh.batBuoc ? rules.required : [])];
 			break;
 		case EKieuDuLieu.MONTH:
 			component = (
 				<MyDatePicker
+					placeholder={cauHinh.ten}
 					disabled={cauHinh?.readonly}
 					style={{ width: '100%' }}
 					allowClear
 					format={'MM/YYYY'}
 					picker='month'
+					pickerStyle={'month'}
 				/>
 			);
 			rule = [...(cauHinh.batBuoc ? rules.required : [])];
@@ -279,6 +335,7 @@ const FormRender = (props: {
 		// 	break;
 
 		case EKieuDuLieu.TABLE:
+			// component = <div>abc</div>;
 			const columns: IColumn<any>[] = [];
 			cauHinh?.danhSachCot
 				?.filter((item) =>
@@ -305,6 +362,7 @@ const FormRender = (props: {
 					<>
 						<Tooltip title='Chỉnh sửa'>
 							<Button
+								disabled={cauHinh?.readonly}
 								size='small'
 								onClick={() => {
 									setVisibleFormTable(true);
@@ -318,6 +376,7 @@ const FormRender = (props: {
 
 						<Tooltip title='Xóa'>
 							<Popconfirm
+								disabled={cauHinh?.readonly}
 								onConfirm={() => {
 									if (recordQuyTrinhForm) {
 										setRecordQuyTrinhForm({
@@ -334,7 +393,7 @@ const FormRender = (props: {
 								title='Bạn có chắc chắn muốn xóa lớp này khỏi danh sách đăng ký sinh viên?'
 								placement='topRight'
 							>
-								<Button size='small' danger type='link' icon={<DeleteOutlined />} />
+								<Button disabled={cauHinh?.readonly} size='small' danger type='link' icon={<DeleteOutlined />} />
 							</Popconfirm>
 						</Tooltip>
 					</>
@@ -424,24 +483,34 @@ const FormRender = (props: {
 	return checkTruongThongTinLienQuan ? (
 		<>
 			<Col xs={24} sm={24} md={cauHinh?.colspan}>
-				{/* {cauHinh?.loaiDefaultValue ? (
+				{cauHinh?.loaiDefaultValue ? (
 					<Form.Item
+						extra={cauHinh?.ghiChu ? <div>{cauHinh.ghiChu}</div> : null}
 						name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
 						label={cauHinh.ten}
 						rules={cauHinh?.readonly ? [] : rule}
 					>
-						<Input disabled={cauHinh?.readonly} />
+						{cauHinh.kieuDuLieu === EKieuDuLieu.TABLE ? (
+							{ component }
+						) : (
+							<Input.TextArea
+								rows={cauHinh.textarea ? undefined : 1}
+								placeholder={cauHinh.ten}
+								disabled={cauHinh?.readonly}
+							/>
+						)}
 					</Form.Item>
-				) : ( */}
-				<Form.Item
-					extra={cauHinh?.ghiChu}
-					name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
-					label={cauHinh.ten}
-					rules={cauHinh?.readonly ? [] : rule}
-				>
-					{component}
-				</Form.Item>
-				{/* )} */}
+				) : (
+					<Form.Item
+						extra={cauHinh?.ghiChu ? <div>{cauHinh.ghiChu}</div> : null}
+						name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
+						label={cauHinh.ten}
+						rules={cauHinh?.readonly ? [] : rule}
+						style={cauHinh.kieuDuLieu === EKieuDuLieu.TABLE ? { flexDirection: 'row' } : {}}
+					>
+						{component}
+					</Form.Item>
+				)}
 			</Col>
 			{truongThongTinTinh && truongThongTinTinh.loaiTruongThongTinTinh === ELoaiTruongThongTinTinh.VAI_TRO && (
 				<Col xs={24} sm={24} md={truongThongTinTinh?.colspan ? +truongThongTinTinh.colspan : undefined}>
