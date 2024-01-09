@@ -34,7 +34,13 @@ const QuyTrinhPage = () => {
 	const handleRedirect = async (quyTrinhId: string) => {
 		try {
 			setLoading(true);
-			const res = await getDot(undefined, undefined, { quyTrinhId: quyTrinhId });
+			const res = await getDot(
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				`all/quy-trinh/${quyTrinhId}`,
+			);
 			if (res) {
 				if (res.length === 1) {
 					const res2 = await createDonKhaiBaoUser(quyTrinhId, res?.[0]?._id);
@@ -130,7 +136,7 @@ const QuyTrinhPage = () => {
 		},
 	];
 	const getDataQuyTrinh = () => {
-		getQuyTrinh(undefined, undefined, undefined, undefined, undefined, 'page/CBGV');
+		getQuyTrinh(undefined, undefined, undefined, undefined, undefined, 'page/SINH_VIEN');
 	};
 	return (
 		<>
