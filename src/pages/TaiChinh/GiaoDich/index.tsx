@@ -32,7 +32,7 @@ const GiaoDichPage = () => {
 		setVisibleHuongDan,
 		huyThanhToanModel,
 	} = useModel('taichinh.giaodich');
-	const [kieuThanhToan, setKieuThanhToan] = useState<number>(1);
+	const [kieuThanhToan, setKieuThanhToan] = useState<number>(2);
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -213,10 +213,10 @@ const GiaoDichPage = () => {
 						value={kieuThanhToan}
 						onChange={(val) => setKieuThanhToan(+val)}
 						options={[
-							{ value: 1, label: 'Tất cả giao dịch' },
 							{ value: 2, label: 'Nộp tiền' },
 							{ value: 3, label: 'Thanh toán' },
 							{ value: 4, label: 'Hoàn trả' },
+							{ value: 1, label: 'Tất cả giao dịch' },
 						]}
 						key='select'
 					/>,
