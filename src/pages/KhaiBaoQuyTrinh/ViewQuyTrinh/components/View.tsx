@@ -1,6 +1,7 @@
 import ViewRender from '@/pages/KhaiBaoQuyTrinh/MauDon/ViewRender';
 import ThongTinTiepNhan from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/thongTinTiepNhan';
 import ThongTinThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
+import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
 import {
 	MapColorTrangThaiTiepNhanDon,
 	TrangThaiKhaiBao,
@@ -39,6 +40,13 @@ const View = (props: Iprops) => {
 	const dotCurrent = danhSachDotQuyTrinh?.find((item) => item._id === dataQuyTrinh?.dotQuyTrinhId);
 
 	const [currentStep, setCurrentStep] = useState<number>(0);
+
+	const { getAllModel: getAllDanhMucChung, danhSach: danhSachDanhMuc } = useModel('quytrinh.danhmuc');
+
+	useEffect(() => {
+		if (danhSachDanhMuc.length === 0) getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
+	}, []);
+
 	const onChange = (val: number) => {
 		setCurrentStep(val);
 	};

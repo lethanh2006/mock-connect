@@ -2,6 +2,7 @@ import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
 import { DoiTuongDieuPhoi } from '@/services/QuyTrinh/KhaiBao/constants';
 import { userUpdateBuoc } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
+import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
@@ -12,6 +13,7 @@ import { useModel } from 'umi';
 const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 	const { currentFormKhaiBao, current, dataQuyTrinh, editFormKhaiBao, recordFormKhaiBao } =
 		useModel('quytrinh.khaibaoquytrinh');
+	const { danhSach: danhSachDanhMuc } = useModel('quytrinh.danhmuc');
 	const { recordSanPham, setRecordSanPham } = useModel('quytrinh.khaibaoquytrinh');
 	const { recordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
 	const { getOneModel: getHoaDon, setVisibleForm } = useModel('taichinh.hoadon');
@@ -35,8 +37,24 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			}
 			delete values.maBoPhanXuLy;
 
+			const valuesFinal: any = {};
+			const valuesForm = { ...(recordQuyTrinhForm?.thongTinKhaiBao ?? {}), ...values };
+
+			Object.keys(valuesForm).map((item) => {
+				const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
+				const isDanhMuc = cauHinh?.kieuDuLieu === EKieuDuLieu.DANHMUC;
+				valuesFinal[item] = {
+					value: valuesForm[item],
+					info: isDanhMuc
+						? danhSachDanhMuc
+								?.find((ele) => ele.maDanhMuc === cauHinh.maDanhMuc)
+								?.danhSachGiaTri?.find((ele) => ele.value === valuesForm[item])?.info
+						: undefined,
+				};
+			});
+
 			const payload = {
-				thongTinKhaiBao: { ...recordSanPham?.thongTinKhaiBao, ...recordQuyTrinhForm?.thongTinKhaiBao, ...values },
+				thongTinKhaiBao: { ...recordSanPham?.thongTinKhaiBao, ...recordQuyTrinhForm?.thongTinKhaiBao, ...valuesFinal },
 				maBoPhanXuLy: maBoPhanXuLy,
 			};
 

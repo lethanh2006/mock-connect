@@ -1,24 +1,26 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
+import FormKhaiBao from '@/pages/KhaiBaoQuyTrinh/components/FormKhaiBao';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
+
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Modal, Popconfirm, Tooltip, message } from 'antd';
+import { Button, Modal, Popconfirm, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 
 const QuyTrinhPage = () => {
+	const { visibleForm, setVisibleForm, setCurrent, setCurrentFormKhaiBao } = useModel('quytrinh.khaibaoquytrinh');
 	const {
 		getModel: getQuyTrinh,
 		setLoading,
 		record: recordQuyTrinh,
 		setRecord: setRecordQuyTrinh,
 	} = useModel('quytrinh.quytrinh');
-	const { setCurrentFormKhaiBao, setCurrent } = useModel('quytrinh.khaibaoquytrinh');
 	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
-
+	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
@@ -41,6 +43,8 @@ const QuyTrinhPage = () => {
 					}
 				} else {
 					if (res.length > 1) {
+						setQuyTrinhIdSelect(quyTrinhId);
+						setVisibleForm(true);
 					} else {
 						message.warn('Chưa có đợt');
 					}
@@ -61,26 +65,26 @@ const QuyTrinhPage = () => {
 
 	const columns2: IColumn<QuyTrinh.IRecord>[] = [
 		{
-			title: 'Tên dịch vụ',
+			title: 'Hoạt động KH&CN',
 			dataIndex: 'ten',
 			width: 250,
 			filterType: 'string',
 			// onCell: onCellQuyTrinh,
 		},
-		{
-			title: 'Trả phí',
-			dataIndex: ['cauTrucThanhToan', 'yeuCauTraPhi'],
-			width: 150,
-			align: 'center',
-			render: (val) => {
-				return (
-					<>
-						<Checkbox checked={val} />
-					</>
-				);
-			},
-			// onCell: onCellQuyTrinh,
-		},
+		// {
+		// 	title: 'Trả phí',
+		// 	dataIndex: ['cauTrucThanhToan', 'yeuCauTraPhi'],
+		// 	width: 150,
+		// 	align: 'center',
+		// 	render: (val) => {
+		// 		return (
+		// 			<>
+		// 				<Checkbox checked={val} />
+		// 			</>
+		// 		);
+		// 	},
+		// 	// onCell: onCellQuyTrinh,
+		// },
 		{
 			title: 'Thao tác',
 			align: 'center',
@@ -105,14 +109,19 @@ const QuyTrinhPage = () => {
 					) : (
 						<Tooltip title='Sử dụng dịch vụ'>
 							<Popconfirm
-								title='Bạn có muốn sử dụng dịch vụ trên?'
+								title='Bạn có muốn sử dụng dich vụ trên?'
 								onConfirm={() => {
 									handleRedirect(recordVal?._id ?? '');
 								}}
 								okText='Sử dụng'
 								cancelText='Đóng'
 							>
-								<Button type='primary'>Sử dụng</Button>
+								<Button
+									type='primary'
+									// icon={<EyeOutlined />}
+								>
+									Sử dụng
+								</Button>
 							</Popconfirm>
 						</Tooltip>
 					)}
@@ -121,19 +130,19 @@ const QuyTrinhPage = () => {
 		},
 	];
 	const getDataQuyTrinh = () => {
-		getQuyTrinh({ active: true }, undefined, undefined, undefined, undefined, 'page/SINH_VIEN');
+		getQuyTrinh(undefined, undefined, undefined, undefined, undefined, 'page/CBGV');
 	};
 	return (
 		<>
 			<TableBase
-				title={'Dịch vụ hành chính'}
+				title={'Hoạt động khoa học và công nghệ'}
 				buttons={{ create: false, filter: false }}
 				modelName={'quytrinh.quytrinh'}
 				columns={columns2}
 				getData={getDataQuyTrinh}
 			/>
 
-			{/* <Modal
+			<Modal
 				title={'Chọn đợt khai báo'}
 				width={500}
 				visible={visibleForm}
@@ -142,7 +151,7 @@ const QuyTrinhPage = () => {
 				destroyOnClose
 			>
 				<FormKhaiBao quyTrinhId={quyTrinhIdSelect} />
-			</Modal> */}
+			</Modal>
 			<Modal
 				title={'Thông tin chung'}
 				width={1000}
