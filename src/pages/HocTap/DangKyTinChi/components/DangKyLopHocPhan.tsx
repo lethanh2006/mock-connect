@@ -143,7 +143,7 @@ const DangKyLopHocPhan = () => {
 			dataIndex: 'soThuTuLop',
 			width: 80,
 			align: 'center',
-			render: (val, rec) => `${val}${rec.soThuTuNhom ? ` (nhóm ${rec.soThuTuNhom})` : ''}`,
+			render: (val, rec) => (rec.soThuTuNhom ? `Nhóm ${rec.soThuTuNhom}` : val),
 			onCell,
 		},
 		{
