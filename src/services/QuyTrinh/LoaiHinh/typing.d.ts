@@ -23,9 +23,12 @@ declare module LoaiHinh {
 		colspan: number;
 		danhSachCotHienThi: string[];
 		textarea: boolean;
-    readonly: boolean;
-    loaiDefaultValue: string;
-    customDefaultValue: string;
+		readonly: boolean;
+		loaiDefaultValue: string;
+		customDefaultValue: string;
+		ghiChu: string;
+		maFormLayDefaultValue: string;
+		maFieldLayDefaultValue: string;
 	}
 
 	export interface TruongThongTin {
@@ -43,9 +46,12 @@ declare module LoaiHinh {
 		danhSachCotHienThi: string[];
 		laDangMang: boolean;
 		textarea: boolean;
-    readonly: boolean;
-    loaiDefaultValue: string;
-    customDefaultValue: string;
+		readonly: boolean;
+		loaiDefaultValue: string;
+		customDefaultValue: string;
+		ghiChu: string;
+		maFormLayDefaultValue: string;
+		maFieldLayDefaultValue: string;
 	}
 
 	export interface TieuChi {

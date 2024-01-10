@@ -49,7 +49,7 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 			fontWeight: rec.ma === recHocPhan?.ma ? 600 : undefined,
 			backgroundColor: rec.ma === recHocPhan?.ma ? '#f0f0f0' : undefined,
 			// color: rec.trangThai !== ETrangThaiHocPhanDangKyTinChi.DUOC_DK ? '#cc0101' : undefined,
-			color: danhSachMaHpDangKy.includes(rec.ma) ? 'var(--primary-color)' : undefined,
+			color: danhSachMaHpDangKy.includes(rec.ma) ? 'var(--ant-info-color)' : undefined,
 		},
 	});
 

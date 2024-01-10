@@ -67,17 +67,6 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 	];
 
 	if (menu && !initialState.currentUser.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
-		// items.splice(1, 0, {
-		//   key: 'password',
-		//   icon: <LockOutlined />,
-		//   label: 'Đổi mật khẩu',
-		//   onClick: () =>
-		//     window.open(
-		//       keycloakAuthority +
-		//         '/login-actions/required-action?execution=UPDATE_PASSWORD&client_id=' +
-		//         keycloakClientID,
-		//     ),
-		// });
 		items.splice(0, 1, {
 			key: 'center',
 			icon: <UserOutlined />,

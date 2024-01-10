@@ -35,9 +35,10 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const ngoaiThoiGianThanhToan =
 		!recHoaDon?.dotThu?.thoiGianBatDau ||
 		!recHoaDon.dotThu.thoiGianKetThuc ||
-		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
-		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
+		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau, 'd') ||
+		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc, 'd');
 
+	/** Get giao dịch pending */
 	const getGiaoDich = () =>
 		getAllModel(true, undefined, {
 			status: ETransactionStatus.PENDING,
@@ -67,7 +68,6 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		if (rec._id)
 			huyThanhToanModel(rec._id)
 				.then(() => {
-					getGiaoDich();
 					if (getData) getData();
 				})
 				.catch((er) => console.log(er));
@@ -90,7 +90,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						<>
 							{recGiaoDich?._id && recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL ? (
 								<Alert
-									message='Có giao dịch nộp tiền đang chờ xử lý!'
+									message='Có giao dịch nộp tiền đang chờ xử lý! Bạn đã thực hiện thanh toán chưa?'
 									showIcon
 									type='info'
 									action={
@@ -149,7 +149,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			>
 				<FormThanhToan
 					getData={() => {
-						getGiaoDich();
+						if (activeTab === '1') getGiaoDich();
 						if (getData) getData();
 					}}
 				/>
@@ -158,7 +158,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			<ModalThanhToanNganHang
 				visible={visibleHuongDan}
 				onOk={() => {
-					getGiaoDich();
+					if (activeTab === '1') getGiaoDich();
 					if (getData) getData();
 					setVisibleHuongDan(false);
 				}}

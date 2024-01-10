@@ -165,6 +165,7 @@ const KhaiBaoQuyTrinhPage = () => {
 			fixed: 'right',
 			render: (recordVal: KhaiBaoQuyTrinh.IRecord) => {
 				const buocHienTai = recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1];
+				const isBuocDauTien = recordVal?.danhSachBuocXuLy?.length === 1;
 				const formKhai = recordVal?.quyTrinh?.danhSachFormKhaiBao?.find(
 					(item) => item.ma === buocHienTai?.maFormKhaiBao,
 				);
@@ -220,11 +221,17 @@ const KhaiBaoQuyTrinhPage = () => {
 						)}
 						<Tooltip title='Xóa'>
 							<Popconfirm
+								disabled={!(isBuocDauTien && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.CHUA_CO)}
 								onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
 								title='Bạn có chắc chắn muốn xóa?'
 								placement='topLeft'
 							>
-								<Button danger type='link' icon={<DeleteOutlined />} />
+								<Button
+									disabled={!(isBuocDauTien && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.CHUA_CO)}
+									danger
+									type='link'
+									icon={<DeleteOutlined />}
+								/>
 							</Popconfirm>
 						</Tooltip>
 					</>
@@ -239,7 +246,7 @@ const KhaiBaoQuyTrinhPage = () => {
 				columns={columns}
 				getData={getData}
 				dependencies={[page, limit, condition]}
-				title={'Lịch sử khai báo'}
+				title={'Đơn đã gửi'}
 				destroyModal
 				buttons={{ create: false }}
 				otherButtons={[
