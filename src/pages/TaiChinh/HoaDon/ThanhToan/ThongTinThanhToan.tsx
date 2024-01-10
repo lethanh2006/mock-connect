@@ -35,8 +35,8 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const ngoaiThoiGianThanhToan =
 		!recHoaDon?.dotThu?.thoiGianBatDau ||
 		!recHoaDon.dotThu.thoiGianKetThuc ||
-		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
-		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
+		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau, 'd') ||
+		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc, 'd');
 
 	/** Get giao dịch pending */
 	const getGiaoDich = () =>
