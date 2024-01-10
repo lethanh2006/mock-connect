@@ -14,7 +14,7 @@ const UuDaiThanhToanPage = () => {
 		{
 			title: 'Tên ưu đãi',
 			dataIndex: ['uuDai', 'ten'],
-			filterType: 'string',
+			// filterType: 'string',
 			width: 180,
 		},
 		{
@@ -51,6 +51,13 @@ const UuDaiThanhToanPage = () => {
 			align: 'center',
 			width: 100,
 			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+		},
+		{
+			title: 'Thời gian sử dụng',
+			dataIndex: 'thoiGianSuDung',
+			align: 'center',
+			width: 100,
+			render: (val) => (val ? moment(val).format('DD/MM/YYYY') : <i>Chưa sử dụng</i>),
 		},
 	];
 
