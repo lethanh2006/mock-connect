@@ -35,7 +35,7 @@ export enum ETransactionPaymentType {
 
 export const transactionPaymentLabel: Record<ETransactionPaymentType, string> = {
 	[ETransactionPaymentType.BANK]: 'Chuyển khoản ngân hàng',
-	[ETransactionPaymentType.MANUAL]: 'Thủ công',
+	[ETransactionPaymentType.MANUAL]: 'Chuyên viên cập nhật',
 	[ETransactionPaymentType.MOMO_WALLET]: 'Ví Momo',
 	[ETransactionPaymentType.INTERNAL]: 'Hệ thống',
 };
@@ -54,7 +54,7 @@ export enum ETransactionStatus {
 }
 
 export const transactionStatus: Record<ETransactionStatus, string> = {
-	[ETransactionStatus.PENDING]: 'Đang xử lý',
+	[ETransactionStatus.PENDING]: 'Đang thực hiện',
 	[ETransactionStatus.SUCCESS]: 'Thành công',
 	[ETransactionStatus.FAIL]: 'Không thành công',
 	[ETransactionStatus.CANCEL]: 'Đã hủy',
