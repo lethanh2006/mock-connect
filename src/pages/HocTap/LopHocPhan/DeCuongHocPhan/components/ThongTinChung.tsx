@@ -25,7 +25,7 @@ const ThongTinChungPage = () => {
 					{record?.hocPhan?.ma ?? recLopHocPhan?.hocPhan?.ma ?? <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
 				<Descriptions.Item label='Số tín chỉ'>
-					{record?.hocPhan?.soTinChi ? record.hocPhan.soTinChi + ' tín' : <i>Chưa cập nhật</i>}
+					{record?.hocPhan?.soTinChi ? record.hocPhan.soTinChi + ' tín chỉ' : <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
 			</Descriptions>
 			<Descriptions

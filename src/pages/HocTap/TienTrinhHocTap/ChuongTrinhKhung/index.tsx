@@ -108,7 +108,7 @@ const TienTrinhChuongTrinhKhung = () => {
 									}
 								>
 									<h4>Học kỳ {data.soThuTuKy}</h4>
-									<span className='tin-chi'>({data.soTinChiPhaiHoc} TC)</span>
+									<span className='tin-chi'>({data.soTinChiPhaiHoc} tín chỉ)</span>
 								</Tooltip>
 							</div>
 							<div className='col-chi-tiet'>

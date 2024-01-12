@@ -6,29 +6,29 @@ import { useModel } from 'umi';
 import CardHocPhan from '../components/CardHocPhan';
 
 const TienTrinhThucTe = () => {
-  const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
-  // const [modalHocKy, setModalHocKy] = useState(false);
-  const [danhSachHocKy, setDanhSachHocKy] = useState<LopHocPhan.IRecordSinhVienLopHP[][]>();
+	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
+	// const [modalHocKy, setModalHocKy] = useState(false);
+	const [danhSachHocKy, setDanhSachHocKy] = useState<LopHocPhan.IRecordSinhVienLopHP[][]>();
 
-  const fetch = async () => {
-    await sinhVienGetTienTrinhThucTeModel().then((data) => {
-      const gHocKy = Object.entries(_.groupBy(data, (item) => item.kyHoc?.ma));
-      const dataHocKy = _.sortBy(gHocKy, ([ma, ds]) => ma);
-      setDanhSachHocKy(dataHocKy.map(([ma, ds]) => ds));
-    });
-  };
+	const fetch = async () => {
+		await sinhVienGetTienTrinhThucTeModel().then((data) => {
+			const gHocKy = Object.entries(_.groupBy(data, (item) => item.kyHoc?.ma));
+			const dataHocKy = _.sortBy(gHocKy, ([ma, ds]) => ma);
+			setDanhSachHocKy(dataHocKy.map(([ma, ds]) => ds));
+		});
+	};
 
-  useEffect(() => {
-    fetch();
-  }, []);
+	useEffect(() => {
+		fetch();
+	}, []);
 
-  return (
-    <Spin spinning={loading}>
-      {danhSachHocKy?.map((data, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <div className="row-hoc-ky" key={index}>
-          <div className="col-hoc-ky">
-            {/* <Tooltip
+	return (
+		<Spin spinning={loading}>
+			{danhSachHocKy?.map((data, index) => (
+				// eslint-disable-next-line react/no-array-index-key
+				<div className='row-hoc-ky' key={index}>
+					<div className='col-hoc-ky'>
+						{/* <Tooltip
                 title={
                   <>
                     Tổng số tín chỉ cần học: {hocKy.tongSoTinCanHoc}
@@ -39,19 +39,19 @@ const TienTrinhThucTe = () => {
                   </>
                 }
               > */}
-            <h4>{data[0].kyHoc?.ten}</h4>
-            <span className="tin-chi">({_.sumBy(data, (i) => i.soTinChi ?? 0)} TC)</span>
-            {/* </Tooltip> */}
-          </div>
-          <div className="col-chi-tiet">
-            {data.map((sv) => (
-              <CardHocPhan sinhVienLopHocPhan={sv} key={sv._id} />
-            ))}
-          </div>
-        </div>
-      ))}
+						<h4>{data[0].kyHoc?.ten}</h4>
+						<span className='tin-chi'>({_.sumBy(data, (i) => i.soTinChi ?? 0)} tín chỉ)</span>
+						{/* </Tooltip> */}
+					</div>
+					<div className='col-chi-tiet'>
+						{data.map((sv) => (
+							<CardHocPhan sinhVienLopHocPhan={sv} key={sv._id} />
+						))}
+					</div>
+				</div>
+			))}
 
-      {/* <Modal
+			{/* <Modal
         title="Tích lũy học kỳ"
         visible={modalHocKy}
         onCancel={() => setModalHocKy(false)}
@@ -86,8 +86,8 @@ const TienTrinhThucTe = () => {
           </Descriptions.Item>
         </Descriptions>
       </Modal> */}
-    </Spin>
-  );
+		</Spin>
+	);
 };
 
 export default TienTrinhThucTe;
