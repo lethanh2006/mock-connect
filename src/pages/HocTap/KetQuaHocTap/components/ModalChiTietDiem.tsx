@@ -1,11 +1,13 @@
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { trangThaiHocTap, ETrangThaiHocTap } from '@/services/DaoTao/constant';
+import { ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Descriptions, Divider, Modal, Tooltip, message } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Descriptions, Divider, Modal, Space, Tooltip, message } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../LopHocPhan/DeCuongHocPhan/ModalHocPhan';
 import DetailKetQuaHocTap from './DetailKetQuaHocTap';
+import ModalQuyDoiDiem from './ModalQuyDoiDiem';
 
 const ModalChiTietDiem = (props: {
 	visible: boolean;
@@ -18,6 +20,7 @@ const ModalChiTietDiem = (props: {
 	const { getByIdModel } = useModel('daotao.lophocphan');
 	const { visible, setVisible, lopHocPhanId, chuongTrinhKhung, listDiem, trangThaiHoc } = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
+	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
 	const [deCuongId, setDeCuongId] = useState<string>();
 
 	const handleShowDeCuong = async () => {
@@ -38,8 +41,17 @@ const ModalChiTietDiem = (props: {
 				title='Kết quả học tập'
 				visible={visible}
 				onCancel={() => setVisible(false)}
-				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				footer={
+					<Space>
+						{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
+							<Button onClick={() => setVisibleCongNhan(true)} icon={<PlusCircleOutlined />}>
+								Công nhận KQHT
+							</Button>
+						) : null}
+
+						<Button onClick={() => setVisible(false)}>Đóng</Button>
+					</Space>
+				}
 				width={800}
 			>
 				{chuongTrinhKhung ? (
@@ -86,6 +98,8 @@ const ModalChiTietDiem = (props: {
 				title='Chi tiết đề cương học phần'
 				deCuongId={deCuongId}
 			/>
+
+			<ModalQuyDoiDiem visible={visibleCongNhan} setVisible={setVisibleCongNhan} chuongTrinhKhung={chuongTrinhKhung} />
 		</>
 	);
 };
