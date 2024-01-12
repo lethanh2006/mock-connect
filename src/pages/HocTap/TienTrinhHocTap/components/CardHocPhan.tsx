@@ -59,6 +59,7 @@ const CardHocPhan = (props: {
 				chuongTrinhKhung={{ hocPhan, soTinChi }}
 				listDiem={chuongTrinhKhung?.lichSuDiem ?? (sinhVienLopHocPhan ? [sinhVienLopHocPhan] : [])}
 				lopHocPhanId={sinhVienLopHocPhan?.lopHocPhanId}
+				trangThaiHoc={chuongTrinhKhung?.hoc}
 			/>
 		</div>
 	);
