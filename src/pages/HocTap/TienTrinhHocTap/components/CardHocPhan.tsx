@@ -27,7 +27,7 @@ const CardHocPhan = (props: {
 				onClick={() => setModalVisible(true)}
 			>
 				<h4>{hocPhan?.ten}</h4>
-				<span className='tin-chi'>{soTinChi} tín</span>
+				<span className='tin-chi'>{soTinChi} tín chỉ</span>
 				<img src='/images/img-card-hoc-phan.svg' />
 			</div>
 			{listDiem?.map((diem, index) => (
