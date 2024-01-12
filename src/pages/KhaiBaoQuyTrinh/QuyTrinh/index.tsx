@@ -141,7 +141,7 @@ const QuyTrinhPage = () => {
 	return (
 		<>
 			<TableBase
-				title={'Hoạt động khoa học và công nghệ'}
+				title={'Dịch vụ hành chính'}
 				buttons={{ create: false, filter: false }}
 				modelName={'quytrinh.quytrinh'}
 				columns={columns2}
