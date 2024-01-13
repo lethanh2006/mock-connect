@@ -18,6 +18,7 @@ const ModalChiTietDiem = (props: {
 	trangThaiHoc?: ETrangThaiHocTap;
 }) => {
 	const { getByIdModel } = useModel('daotao.lophocphan');
+	const { setIsView } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { visible, setVisible, lopHocPhanId, chuongTrinhKhung, listDiem, trangThaiHoc } = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
@@ -44,7 +45,13 @@ const ModalChiTietDiem = (props: {
 				footer={
 					<Space>
 						{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
-							<Button onClick={() => setVisibleCongNhan(true)} icon={<PlusCircleOutlined />}>
+							<Button
+								onClick={() => {
+									setVisibleCongNhan(true);
+									setIsView(false);
+								}}
+								icon={<PlusCircleOutlined />}
+							>
 								Công nhận KQHT
 							</Button>
 						) : null}
