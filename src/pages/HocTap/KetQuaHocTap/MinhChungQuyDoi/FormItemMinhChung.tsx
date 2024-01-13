@@ -1,33 +1,31 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-
+import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Modal, Popconfirm, Space } from 'antd';
 import monent from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FormMinhChungQuyDoiDiem from './Form';
-import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 
 const FormItemMinhChungQuyDoi = (props: {
 	value?: QuyDoiDiem.IMinhChungQuyDoiDiem[];
 	onChange?: (data: QuyDoiDiem.IMinhChungQuyDoiDiem[]) => void;
 	getData?: () => void;
 }) => {
-	const { record } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
+	const { record, isView } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { handleEdit, setVisibleForm, visibleForm, getModel, danhSach } = useModel(
 		'daotao.quydoidiem.minhchungquydoidiem',
 	);
 	const { value = record?.danhSachMinhChungQuyDoi ?? [], onChange, getData: getDataExternal } = props;
+	const [recMinhChung, setRecMinhChung] = useState<any>();
 
 	const getData = () => getModel({ quyDoiDiemSvId: record?._id });
 
 	useEffect(() => {
 		if (record?._id) getData();
 	}, [record?._id]);
-
-	const [recMinhChung, setRecMinhChung] = useState<any>();
 
 	const onDelete = (index: number) => {
 		const data = [...value];
@@ -177,6 +175,7 @@ const FormItemMinhChungQuyDoi = (props: {
 					</Popconfirm>
 				</>
 			),
+			hide: isView,
 		},
 	];
 
@@ -193,7 +192,7 @@ const FormItemMinhChungQuyDoi = (props: {
 				addStt
 				otherProps={{ pagination: false }}
 			>
-				<ButtonExtend icon={<PlusCircleOutlined />} onClick={() => setVisibleForm(true)} size='small'>
+				<ButtonExtend icon={<PlusCircleOutlined />} hidden={isView} onClick={() => setVisibleForm(true)} size='small'>
 					Thêm mới
 				</ButtonExtend>
 			</TableStaticData>

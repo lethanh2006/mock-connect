@@ -81,6 +81,12 @@ export enum ETrangThaiSinhVienQuyDoiDiem {
 	KHONG_DUYET = 'Không duyệt',
 }
 
+export const colorTrangThaiSinhVienQuyDoiDiem: Record<ETrangThaiSinhVienQuyDoiDiem, string> = {
+	[ETrangThaiSinhVienQuyDoiDiem.CHO_XU_LY]: 'blue',
+	[ETrangThaiSinhVienQuyDoiDiem.DA_RA_QUYET_DINH]: 'green',
+	[ETrangThaiSinhVienQuyDoiDiem.KHONG_DUYET]: 'orange',
+};
+
 export enum EMinhChungQuyDoiDiem {
 	HOC_PHAN = 'Học phần',
 	CHUNG_CHI = 'Chứng chỉ',

@@ -1,16 +1,18 @@
+import { EOperatorType } from '@/components/Table/constant';
+import { ETrangThaiDotQuyDoiDiem } from '@/services/HocTap/constant';
 import { Alert, Card, Tabs } from 'antd';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useModel } from 'umi';
+import LichSuQuyDoiDiemPage from '../KetQuaHocTap/components/LichSuQuyDoiDiem';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import TienTrinhThucTe from './TienTrinhThucTe';
 import './components/style.less';
-import { useModel } from 'umi';
-import { ETrangThaiDotQuyDoiDiem } from '@/services/HocTap/constant';
-import { EOperatorType } from '@/components/Table/constant';
-import moment from 'moment';
 
 const TienTrinhHocTap = () => {
 	const [activeTabKey, setActiveTabKey] = useState<string>('2');
 	const { getModel, danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
+	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
 		getModel({ trangThai: ETrangThaiDotQuyDoiDiem.DA_BAN_HANH }, [
@@ -27,12 +29,14 @@ const TienTrinhHocTap = () => {
 				values: [moment().toISOString()],
 			},
 		]);
+		getThongTinCuaToiModel();
 	}, []);
 
 	return (
 		<Card title='Tiến trình học tập' className='card-tien-trinh'>
 			{danhSach.length > 0 ? (
 				<Alert
+					style={{ marginBottom: 12 }}
 					type='info'
 					description={
 						<>
@@ -55,8 +59,7 @@ const TienTrinhHocTap = () => {
 				</Tabs.TabPane>
 
 				<Tabs.TabPane tab='Lịch sử xin công nhận KQHT' key='3'>
-					{/* <TienTrinhChuongTrinhKhung /> */}
-					<></>
+					<LichSuQuyDoiDiemPage />
 				</Tabs.TabPane>
 			</Tabs>
 		</Card>
