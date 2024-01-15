@@ -2,6 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
+import { compareFullname } from '@/utils/utils';
 import { Avatar, Col, Descriptions, Modal, Row } from 'antd';
 import { useState } from 'react';
 
@@ -34,17 +35,22 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
 			align: 'center',
 			width: 120,
 			filterType: 'string',
+			sortable: true,
 		},
 		{
 			dataIndex: 'ten',
 			title: 'Họ tên',
-			width: 150,
+			width: 180,
 			filterType: 'string',
+			sortable: true,
+			customSort: compareFullname,
 		},
 		{
 			title: 'Giới tính',
 			dataIndex: 'gioiTinh',
 			width: 100,
+			filterType: 'select',
+			filterData: Object.values(EGioiTinh),
 		},
 	];
 

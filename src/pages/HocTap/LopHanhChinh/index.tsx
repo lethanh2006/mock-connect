@@ -1,64 +1,44 @@
-import TableBase from '@/components/Table';
-import { type IColumn } from '@/components/Table/typing';
-import type { LopHanhChinh } from '@/services/HocTap/LopHanhChinh/typing';
-import { history, useModel } from 'umi';
+import { Card, Empty, Tabs } from 'antd';
+import { useModel } from 'umi';
+import ThongTinChungLopHanhChinh from './components/ThongTinChung';
+import SelectLopHanhChinhSinhVien from './components/Select';
+import { useEffect } from 'react';
 
 const LopHanhChinhPage = () => {
-	const { page, limit, sinhVienGetModel } = useModel('daotao.lophanhchinh');
+	const { record, sinhVienGetByIdModel, setRecord, danhSach } = useModel('daotao.lophanhchinh');
 
-	const onCell = (lophanhchinh: LopHanhChinh.IRecord) => ({
-		onClick: () => history.push(`/lop-hanh-chinh/${lophanhchinh._id}`),
-		style: { cursor: 'pointer' },
-	});
-
-	const columns: IColumn<LopHanhChinh.IRecord>[] = [
-		{
-			title: 'Tên lớp học',
-			dataIndex: 'ten',
-			width: 120,
-			onCell,
-			filterType: 'string',
-			sortable: true,
-		},
-		{
-			title: 'Cố vấn học tập',
-			width: 150,
-			onCell,
-			render: (val, rec) => [rec.giangVien?.hoDem, rec.giangVien?.ten].join(' '),
-		},
-		{
-			title: 'Sĩ số',
-			dataIndex: 'siSo',
-			align: 'center',
-			width: 80,
-			onCell,
-			filterType: 'number',
-			sortable: true,
-		},
-		{
-			title: 'Khóa sinh viên',
-			align: 'center',
-			width: 80,
-			render: (val, rec) => rec.khoaSinhVien?.ten,
-			onCell,
-		},
-		{
-			title: 'Ngành đào tạo',
-			width: 180,
-			render: (val, rec) => rec.nganh?.ten,
-			onCell,
-		},
-	];
+	useEffect(() => {
+		if (record?._id) sinhVienGetByIdModel(record._id);
+	}, [record?._id]);
 
 	return (
-		<TableBase
-			columns={columns}
-			dependencies={[page, limit]}
-			getData={sinhVienGetModel}
-			modelName='daotao.lophanhchinh'
+		<Card
+			bodyStyle={{ paddingTop: 4 }}
 			title='Lớp hành chính'
-			buttons={{ create: false }}
-		/>
+			extra={
+				<SelectLopHanhChinhSinhVien
+					value={record?._id}
+					onChange={(val) => setRecord(danhSach.find((item) => item._id === val))}
+					style={{ width: 180 }}
+					hasDefault
+				/>
+			}
+		>
+			{record?._id ? (
+				<>
+					<Tabs>
+						<Tabs.TabPane tab='Thông tin chung' key={0}>
+							<ThongTinChungLopHanhChinh />
+						</Tabs.TabPane>
+						{/* <Tabs.TabPane tab='Thông báo' key={1}>
+					Thông báo
+				</Tabs.TabPane> */}
+					</Tabs>
+				</>
+			) : (
+				<Empty description='Vui lòng chọn lớp hành chính' style={{ margin: '32px 0' }} />
+			)}
+		</Card>
 	);
 };
 
