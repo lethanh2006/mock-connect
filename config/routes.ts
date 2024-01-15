@@ -69,20 +69,7 @@
 		name: 'LopHanhChinh',
 		icon: 'hdd',
 		path: 'lop-hanh-chinh',
-		routes: [
-			{
-				path: './',
-				hideInMenu: true,
-				component: './HocTap/LopHanhChinh',
-				exact: true,
-			},
-			{
-				path: './:id',
-				component: './HocTap/LopHanhChinh/$id',
-				hideInMenu: true,
-				exact: true,
-			},
-		],
+		component: './HocTap/LopHanhChinh',
 	},
 
 	{
