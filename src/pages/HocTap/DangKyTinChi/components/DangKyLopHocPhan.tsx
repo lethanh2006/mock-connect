@@ -74,6 +74,7 @@ const DangKyLopHocPhan = () => {
 	});
 
 	const rowSelection: TableRowSelection<LopHocPhan.IRecord> = {
+		columnWidth: 40,
 		hideSelectAll: true,
 		preserveSelectedRowKeys: true,
 		fixed: true,
@@ -143,7 +144,7 @@ const DangKyLopHocPhan = () => {
 			dataIndex: 'soThuTuLop',
 			width: 80,
 			align: 'center',
-			render: (val, rec) => (rec.soThuTuNhom ? `Nhóm ${rec.soThuTuNhom}` : val),
+			render: (val, rec) => (rec.soThuTuNhom ? `Nhóm TH ${rec.soThuTuNhom}` : val),
 			onCell,
 		},
 		{
@@ -181,8 +182,6 @@ const DangKyLopHocPhan = () => {
 						hideCard
 						buttons={{ create: false, filter: false }}
 						addStt={false}
-						rowSelection
-						detailRow={rowSelection}
 						scroll={{ y: 600 }}
 						otherProps={{
 							rowKey: 'ten',
@@ -192,6 +191,7 @@ const DangKyLopHocPhan = () => {
 								expandedRowKeys: expandedLopHocPhan,
 								onExpand,
 							},
+							rowSelection,
 						}}
 						otherButtons={
 							loaiDangKy === ELoaiDangKyTheoLop.LOP_HANH_CHINH

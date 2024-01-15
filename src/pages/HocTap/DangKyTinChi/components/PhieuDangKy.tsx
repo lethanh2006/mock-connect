@@ -135,7 +135,7 @@ const PhieuDangKy = () => {
 			dataIndex: 'soThuTuLop',
 			width: 80,
 			align: 'center',
-			render: (val, rec) => `${val}${rec.soThuTuNhom ? ` (nhóm ${rec.soThuTuNhom})` : ''}`,
+			render: (val, rec) => `${val}${rec.soThuTuNhom ? ` (nhóm TH ${rec.soThuTuNhom})` : ''}`,
 		},
 		{
 			title: 'Số TC',
@@ -196,7 +196,20 @@ const PhieuDangKy = () => {
 			align: 'center',
 			render: (val, rec) => (
 				<Popconfirm
-					title='Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ này?'
+					title={
+						<>
+							Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ này?
+							{tongTinChi - rec.soTinChi < soTinChiToiThieu ? (
+								<>
+									<br />
+									<i className='text-error'>
+										Lưu ý: Sau khi hủy lớp, tổng số tín chỉ còn lại không thỏa mãn điều kiện số tín chỉ tối thiểu
+									</i>
+								</>
+							) : null}
+						</>
+					}
+					overlayStyle={{ maxWidth: 400 }}
 					placement='topRight'
 					onConfirm={() => onDeleteLop(rec)}
 					// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
