@@ -2,7 +2,7 @@ declare module MucThuHocPhi {
 	export interface IRecord {
 		_id: string;
 		// ten: string;
-		maKhoaNganh: string;
+		// maKhoaNganh: string;
 		// khoaNganh?: KhoaNganh.IRecord;
 		maNamHoc: string;
 		namHoc?: NamHoc.IRecord;
@@ -13,7 +13,7 @@ declare module MucThuHocPhi {
 		nganh?: NganhDaoTao.IRecordCoSo;
 
 		maMucThuCoBan: string;
-		// mucThuCoBan?: MucThuTaiChinh.IRecord;
+		mucThuCoBan?: MucThuTaiChinh.IRecord;
 		// Giống bên tài chính
 		currency: ECurrency;
 		unitAmount: number;
