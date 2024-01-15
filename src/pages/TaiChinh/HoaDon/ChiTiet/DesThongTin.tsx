@@ -18,9 +18,9 @@ const DesThongTinHoaDon = () => {
 			<Descriptions.Item label='Thời gian thu'>
 				<span className={ngoaiThoiGianThanhToan ? 'text-error' : undefined}>
 					{recHoaDon?.dotThu?.thoiGianBatDau ? (
-						`${moment(recHoaDon.dotThu.thoiGianBatDau).format('DD/MM/YYYY')} - ${moment(
+						`${moment(recHoaDon.dotThu.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} - ${moment(
 							recHoaDon.dotThu.thoiGianKetThuc,
-						).format('DD/MM/YYYY')}`
+						).format('HH:mm DD/MM/YYYY')}`
 					) : (
 						<i>Đang cập nhật</i>
 					)}
