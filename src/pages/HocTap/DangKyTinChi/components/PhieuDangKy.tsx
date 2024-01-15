@@ -74,7 +74,7 @@ const PhieuDangKy = () => {
 		moment().isSameOrAfter(dotDangKyHienTai?.thoiGianBatDau) &&
 		moment().isSameOrBefore(dotDangKyHienTai?.thoiGianKetThuc);
 	// Tổng học phí dự kiến
-	const tongHocPhi = _.sumBy(danhSachLopHienThi, (lop) => tinhHocPhi(lop.soTinChi, lop.loai, lop.maKhoaNganh));
+	const tongHocPhi = _.sumBy(danhSachLopHienThi, (lop) => tinhHocPhi(lop.soTinChi, lop.loai, lop.maNganh));
 	// Số tín chỉ tối đa
 	const soTinChiToiDa =
 		khoaNganhMe?.khoaNganhPhu && phieuDangKy?.soTinChiToiDaSongNganh
@@ -135,7 +135,7 @@ const PhieuDangKy = () => {
 			dataIndex: 'soThuTuLop',
 			width: 80,
 			align: 'center',
-			render: (val, rec) => `${val}${rec.soThuTuNhom ? ` (nhóm ${rec.soThuTuNhom})` : ''}`,
+			render: (val, rec) => `${val}${rec.soThuTuNhom ? ` (nhóm TH ${rec.soThuTuNhom})` : ''}`,
 		},
 		{
 			title: 'Số TC',
@@ -196,7 +196,20 @@ const PhieuDangKy = () => {
 			align: 'center',
 			render: (val, rec) => (
 				<Popconfirm
-					title='Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ này?'
+					title={
+						<>
+							Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ này?
+							{tongTinChi - rec.soTinChi < soTinChiToiThieu ? (
+								<>
+									<br />
+									<i className='text-error'>
+										Lưu ý: Sau khi hủy lớp, tổng số tín chỉ còn lại không thỏa mãn điều kiện số tín chỉ tối thiểu
+									</i>
+								</>
+							) : null}
+						</>
+					}
+					overlayStyle={{ maxWidth: 400 }}
 					placement='topRight'
 					onConfirm={() => onDeleteLop(rec)}
 					// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
@@ -228,7 +241,7 @@ const PhieuDangKy = () => {
 				<Col span={24} md={8}>
 					Tổng số tín chỉ (đã trừ các học phần không tính số tín chỉ):{' '}
 					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
-						{tongTinChi} tín
+						{tongTinChi} tín chỉ
 					</b>
 				</Col>
 				<Col span={24} md={8}>
@@ -286,6 +299,10 @@ const PhieuDangKy = () => {
 						>
 							Đăng ký
 						</ButtonExtend>
+					) : null}
+
+					{tongTinChi < soTinChiToiThieu ? (
+						<i className='text-error'>Lưu ý: Bạn chưa đăng ký đủ số tín chỉ tối thiểu</i>
 					) : null}
 				</Space>
 			</TableStaticData>

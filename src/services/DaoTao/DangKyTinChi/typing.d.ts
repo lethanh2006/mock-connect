@@ -71,6 +71,8 @@ declare module DangKyTinChi {
 
 		// temp
 		error?: string;
+		// So sánh để tính học phí
+		maNganh?: string;
 	}
 
 	export interface IHocPhanDangKy {

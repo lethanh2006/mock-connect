@@ -10,11 +10,12 @@ declare module UuDaiThanhToan {
 		maKhoanThuApDung: string;
 		khoanThuApDung?: KhoanThu.Record;
 		mucPhiApDung: number;
+		phanTramUuDai: number;
 
 		thoiGianBatDau: Date;
 		thoiGianKetThuc: Date;
 		active: boolean;
-		phanTramUuDai: number;
+		tuDong: boolean;
 	}
 
 	export interface IUuDaiUser {
@@ -25,6 +26,12 @@ declare module UuDaiThanhToan {
 		userSsoId: string;
 		userCode: string;
 		userFullname: string;
-		createdAt: string;
+
+		daSuDung: boolean;
+		idDotThu?: string;
+		idTransaction?: string;
+		thoiGianSuDung?: string;
+
+		createdAt?: string;
 	}
 }

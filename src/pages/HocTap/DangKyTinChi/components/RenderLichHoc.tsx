@@ -16,15 +16,12 @@ const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord }) => {
 			const thu = item.thu < 7 ? `Thứ ${item.thu + 1}` : 'Chủ nhật';
 			const tiet = `tiết ${item.tietBatDau}-${item.tietBatDau + item.soTiet - 1}`;
 			const tuan = `${dsTuan.length} tuần (${dsTuan.join(',')})`;
+			const tenNhanSu = item.nhanSu?.hoDem ? [item.nhanSu.hoDem, item.nhanSu.ten].join(' ') : item.tenNhanSu ?? '';
+			// <i style={{ color: '#999' }}>Không có thông tin g/v</i>;
+			const phongHoc = item.phongHoc ? `phòng ${item.phongHoc}` : '';
 			return (
 				// eslint-disable-next-line react/no-array-index-key
-				<li key={index}>
-					{[thu, tiet, tuan].join(', ')},{' '}
-					{item.nhanSu?.hoDem
-						? [item.nhanSu.hoDem, item.nhanSu.ten].join(' ')
-						: item.tenNhanSu ?? <i style={{ color: '#999' }}>Không có thông tin g/v</i>}
-					, phòng {item.phongHoc ?? ''}
-				</li>
+				<li key={index}>{[thu, tiet, tuan, tenNhanSu, phongHoc].filter((j) => !!j).join(', ')}</li>
 			);
 		});
 	};

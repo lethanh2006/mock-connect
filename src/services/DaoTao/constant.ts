@@ -21,6 +21,13 @@ export enum ETrangThaiHocTap {
 	CHUA_DAT = 'CHUA_DAT',
 }
 
+export const trangThaiHocTap: Record<ETrangThaiHocTap, string> = {
+	[ETrangThaiHocTap.CHUA_HOC]: 'Chưa học',
+	[ETrangThaiHocTap.DANG_HOC]: 'Đang học',
+	[ETrangThaiHocTap.DA_HOC]: 'Đã học',
+	[ETrangThaiHocTap.CHUA_DAT]: 'Chưa đạt',
+};
+
 export enum EGioiTinh {
 	Nam = 'Nam',
 	Nu = 'Nữ',

@@ -13,7 +13,7 @@ const CardKhoiHocPhan = (props: { khoi?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT }) =
 			<div className='col-hoc-phan' onClick={() => setVisible(true)}>
 				<div className='card-hoc-phan'>
 					<h4 className='tu_chon'>{khoi?.ten}</h4>
-					<span className='tin-chi'>{soTinChi} tín</span>
+					<span className='tin-chi'>{soTinChi} tín chỉ</span>
 					<img src='/images/img-card-hoc-phan.svg' />
 				</div>
 			</div>

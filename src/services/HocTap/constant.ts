@@ -67,3 +67,37 @@ export const doiTuongLopHanhChinh: Record<EDoiTuongLopHanhChinh, string> = {
 	[EDoiTuongLopHanhChinh.CLC]: 'Chất lượng cao',
 	[EDoiTuongLopHanhChinh.PH]: 'Phân hiệu',
 };
+
+//QUY ĐỔi ĐIỂM
+export enum ETrangThaiDotQuyDoiDiem {
+	CHO_XU_LY = 'Chờ xử lý',
+	YEU_CAU_CHINH_SUA = 'Yêu cầu chỉnh sửa',
+	DA_BAN_HANH = 'Đã ban hành',
+}
+
+export enum ETrangThaiSinhVienQuyDoiDiem {
+	CHO_XU_LY = 'Chờ xử lý',
+	DA_RA_QUYET_DINH = 'Đã ra quyết định',
+	KHONG_DUYET = 'Không duyệt',
+}
+
+export const colorTrangThaiSinhVienQuyDoiDiem: Record<ETrangThaiSinhVienQuyDoiDiem, string> = {
+	[ETrangThaiSinhVienQuyDoiDiem.CHO_XU_LY]: 'blue',
+	[ETrangThaiSinhVienQuyDoiDiem.DA_RA_QUYET_DINH]: 'green',
+	[ETrangThaiSinhVienQuyDoiDiem.KHONG_DUYET]: 'orange',
+};
+
+export enum EMinhChungQuyDoiDiem {
+	HOC_PHAN = 'Học phần',
+	CHUNG_CHI = 'Chứng chỉ',
+}
+
+export enum ETrinhDoMinhChungQuyDoiDiem {
+	CAO_DANG = 'Cao đẳng',
+	DAI_HOC = 'Đại học',
+}
+
+export enum ELoaiHocPhanMinhChung {
+	NGOAI_CHUONG_TRINH = 'Ngoài chương trình',
+	TRONG_CHUONG_TRINH = 'Trong chương trình',
+}

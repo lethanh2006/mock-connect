@@ -1,10 +1,13 @@
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
+import { ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Descriptions, Divider, Modal, Tooltip, message } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Descriptions, Divider, Modal, Space, Tooltip, message } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../LopHocPhan/DeCuongHocPhan/ModalHocPhan';
 import DetailKetQuaHocTap from './DetailKetQuaHocTap';
+import ModalQuyDoiDiem from './ModalQuyDoiDiem';
 
 const ModalChiTietDiem = (props: {
 	visible: boolean;
@@ -12,10 +15,13 @@ const ModalChiTietDiem = (props: {
 	lopHocPhanId?: string;
 	chuongTrinhKhung?: { hocPhan?: HocPhan.IRecord; soTinChi?: number };
 	listDiem?: LopHocPhan.IRecordSinhVienLopHP[];
+	trangThaiHoc?: ETrangThaiHocTap;
 }) => {
 	const { getByIdModel } = useModel('daotao.lophocphan');
-	const { visible, setVisible, lopHocPhanId, chuongTrinhKhung, listDiem } = props;
+	const { setIsView } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
+	const { visible, setVisible, lopHocPhanId, chuongTrinhKhung, listDiem, trangThaiHoc } = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
+	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
 	const [deCuongId, setDeCuongId] = useState<string>();
 
 	const handleShowDeCuong = async () => {
@@ -36,13 +42,28 @@ const ModalChiTietDiem = (props: {
 				title='Kết quả học tập'
 				visible={visible}
 				onCancel={() => setVisible(false)}
-				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
-				width={600}
+				footer={
+					<Space>
+						{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
+							<Button
+								onClick={() => {
+									setVisibleCongNhan(true);
+									setIsView(false);
+								}}
+								icon={<PlusCircleOutlined />}
+							>
+								Công nhận KQHT
+							</Button>
+						) : null}
+
+						<Button onClick={() => setVisible(false)}>Đóng</Button>
+					</Space>
+				}
+				width={800}
 			>
 				{chuongTrinhKhung ? (
-					<Descriptions title='Thông tin học phần' column={1}>
-						<Descriptions.Item label='Tên học phần'>
+					<Descriptions title='Thông tin học phần' column={{ xs: 1, sm: 1, md: 3 }}>
+						<Descriptions.Item label='Tên học phần' span={3}>
 							{chuongTrinhKhung?.hocPhan?.ten ? (
 								<Tooltip title='Xem đề cương chi tiết học phần'>
 									<a onClick={handleShowDeCuong}>
@@ -54,21 +75,28 @@ const ModalChiTietDiem = (props: {
 							)}
 						</Descriptions.Item>
 						<Descriptions.Item label='Mã học phần'>{chuongTrinhKhung.hocPhan?.ma}</Descriptions.Item>
-						<Descriptions.Item label='Số tín chỉ'>{chuongTrinhKhung.soTinChi}</Descriptions.Item>
+						<Descriptions.Item label='Số tín chỉ'>{chuongTrinhKhung.soTinChi} tín chỉ</Descriptions.Item>
+						{trangThaiHoc ? (
+							<Descriptions.Item label='Trạng thái'>{trangThaiHocTap[trangThaiHoc]}</Descriptions.Item>
+						) : null}
 					</Descriptions>
 				) : null}
 
-				<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
-				{!listDiem?.length ? (
-					<DetailKetQuaHocTap lopHocPhanId={lopHocPhanId} />
-				) : (
-					listDiem.map((diem, index) => (
-						<>
-							{listDiem.length > 1 ? <Divider>Học lần {index + 1}</Divider> : null}
-							<DetailKetQuaHocTap key={diem._id} sinhVienLopHp={diem} />
-						</>
-					))
-				)}
+				{trangThaiHoc === undefined || trangThaiHoc !== ETrangThaiHocTap.CHUA_HOC ? (
+					<>
+						<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10, marginTop: 12 }}>Chi tiết điểm học phần</h4>
+						{!listDiem?.length ? (
+							<DetailKetQuaHocTap lopHocPhanId={lopHocPhanId} />
+						) : (
+							listDiem.map((diem, index) => (
+								<>
+									{listDiem.length > 1 ? <Divider>Học lần {index + 1}</Divider> : null}
+									<DetailKetQuaHocTap key={diem._id} sinhVienLopHp={diem} />
+								</>
+							))
+						)}
+					</>
+				) : null}
 			</Modal>
 
 			<ModalHocPhan
@@ -77,6 +105,8 @@ const ModalChiTietDiem = (props: {
 				title='Chi tiết đề cương học phần'
 				deCuongId={deCuongId}
 			/>
+
+			<ModalQuyDoiDiem visible={visibleCongNhan} setVisible={setVisibleCongNhan} chuongTrinhKhung={chuongTrinhKhung} />
 		</>
 	);
 };
