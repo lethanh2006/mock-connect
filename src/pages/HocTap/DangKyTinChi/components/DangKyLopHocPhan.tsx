@@ -84,15 +84,15 @@ const DangKyLopHocPhan = () => {
 		onChange: (selectedRowKeys, selectedRows) => {
 			const lopVuaChon = selectedRows?.at(-1);
 			// Nếu chọn ít nhất 1 lớp và chưa đăng ký
-			if (lopVuaChon && !dangKyRoi && lopVuaChon.maHocPhan === recHocPhan?.ma) {
+			if (lopVuaChon && !lopVuaChon.children?.length && !dangKyRoi && lopVuaChon.maHocPhan === recHocPhan?.ma) {
 				const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
 				let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
+				const khoaNganh =
+					loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu : khoaNganhMe?.khoaNganhChinh;
 				const lopDangKy = {
 					hocPhan: recHocPhan,
-					maKhoaNganh:
-						loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2
-							? khoaNganhMe?.khoaNganhPhu?.ma
-							: khoaNganhMe?.khoaNganhChinh?.ma,
+					maNganh: khoaNganh?.maNganh,
+					maKhoaNganh: khoaNganh?.ma,
 					// TODO: Update loại đăng ký
 					loai: ELoaiHocPhanDangKyTinChi.TIEN_TRINH,
 					trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
@@ -142,7 +142,7 @@ const DangKyLopHocPhan = () => {
 		{
 			title: 'Thứ tự lớp',
 			dataIndex: 'soThuTuLop',
-			width: 80,
+			width: 100,
 			align: 'center',
 			render: (val, rec) => (rec.soThuTuNhom ? `Nhóm TH ${rec.soThuTuNhom}` : val),
 			onCell,
