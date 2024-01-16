@@ -37,7 +37,7 @@ const HoaDonPage = () => {
 
 	const columns: IColumn<HoaDon.IRecord>[] = [
 		{
-			title: 'Mã TT',
+			title: 'Mã HĐ',
 			dataIndex: 'identityCode',
 			align: 'center',
 			filterType: 'string',
