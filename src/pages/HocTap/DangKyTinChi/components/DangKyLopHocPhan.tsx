@@ -16,7 +16,7 @@ import RenderLichHoc from './RenderLichHoc';
 
 const DangKyLopHocPhan = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { page, limit, danhSach, sinhVienGetLopDangKyModel } = useModel('daotao.lophocphan');
+	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel } = useModel('daotao.lophocphan');
 	const { danhSachLopDangKy, setDanhSachLopDangKy, tinhDataLichHoc, checkTrungLich } =
 		useModel('daotao.dotdangkytinchi');
 	const { record: recHocPhan, loaiDangKy } = useModel('hocphan.hocphan');
@@ -99,7 +99,7 @@ const DangKyLopHocPhan = () => {
 				};
 				// Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
 				if (lopVuaChon.tenCha) {
-					const lopCha = danhSach.find((item) => item.ten === lopVuaChon.tenCha);
+					const lopCha = danhSachLopDktc.find((item) => item.ten === lopVuaChon.tenCha);
 					if (!soTinChi) soTinChi = lopCha?.hocPhan?.soTinChi ?? 0;
 					// Thêm cả lớp cha vào để hiển thị lịch học ở lớp đăng ký
 					if (lopCha) temp.splice(0, 0, { ...lopCha, soTinChi, ...lopDangKy });
@@ -115,7 +115,7 @@ const DangKyLopHocPhan = () => {
 		},
 
 		getCheckboxProps: (record) => {
-			const lopCha = danhSach.find((item) => item.ten === record.tenCha);
+			const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
 			// Check trùng cả thời khóa biểu của lớp cha
 			const allThoiKhoaBieu = [...(record.thoiKhoaBieuList ?? []), ...(lopCha?.thoiKhoaBieuList ?? [])];
 			// Check sĩ số còn trống ở cả lớp cha nữa
@@ -178,6 +178,7 @@ const DangKyLopHocPhan = () => {
 						columns={columns}
 						dependencies={[page, limit, recHocKy?.ma, recHocPhan?.ma, typeLop]}
 						getData={getData}
+						dataState='danhSachLopDktc'
 						modelName='daotao.lophocphan'
 						hideCard
 						buttons={{ create: false, filter: false }}
