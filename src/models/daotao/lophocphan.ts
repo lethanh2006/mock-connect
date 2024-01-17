@@ -4,10 +4,12 @@ import { getMoodleLopHocPhan } from '@/services/HocTap/LopHocPhan';
 import { ELoaiLopHocPhan, ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { ipDaoTao } from '@/utils/ip';
+import { useState } from 'react';
 
 export default () => {
 	const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
-	const { getByIdModel, getModel, getAllModel, setLoading } = objInit;
+	const { getByIdModel, getModel, getAllModel, setLoading, page, limit, getService, setPage, setTotal } = objInit;
+	const [danhSachLopDktc, setDanhSachLopDktc] = useState<LopHocPhan.IRecord[]>([]); // Dùng danh sách khác để tránh xung đột do delay
 
 	const sinhVienGetModel = async (params: any): Promise<LopHocPhan.IRecord[]> =>
 		params.maHocKy && getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
@@ -17,25 +19,46 @@ export default () => {
 
 	const sinhVienGetByIdModel = async (idLop: string): Promise<LopHocPhan.IRecord> => getByIdModel(`${idLop}/sinh-vien`);
 
-	const sinhVienGetLopDangKyModel = (
+	const sinhVienGetLopDangKyModel = async (
 		maHocKy: string,
 		loaiDangKyTheoLop: ELoaiDangKyTheoLop,
 		maHocPhan: string,
 		tatCa: boolean = false,
-	) =>
-		getModel(
-			{ maHocPhan, loai: ELoaiLopHocPhan.CHINH, trangThaiLop: ETrangThaiLopHocPhan.MO },
-			undefined,
-			{ soThuTuLop: 1 },
-			undefined,
-			undefined,
-			`dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${
-				loaiDangKyTheoLop === ELoaiDangKyTheoLop.LOP_HANH_CHINH && tatCa ? 'doi-tuong' : loaiDangKyTheoLop
-			}/page`,
-			undefined,
-			undefined,
-			true,
-		);
+	): Promise<LopHocPhan.IRecord[]> => {
+		setLoading(true);
+		const payload = {
+			page,
+			limit,
+			sort: { soThuTuLop: 1 },
+			condition: { maHocPhan, loai: ELoaiLopHocPhan.CHINH, trangThaiLop: ETrangThaiLopHocPhan.MO },
+		};
+
+		try {
+			const response = await getService(
+				payload,
+				`dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${
+					loaiDangKyTheoLop === ELoaiDangKyTheoLop.LOP_HANH_CHINH && tatCa ? 'doi-tuong' : loaiDangKyTheoLop
+				}/page`,
+				true,
+			);
+			const tempData: LopHocPhan.IRecord[] = response?.data?.data?.result ?? [];
+			const tempTotal: number = response?.data?.data?.total ?? 0;
+
+			if (tempData.length === 0 && tempTotal) {
+				const maxPage = Math.ceil(tempTotal / payload.limit) || 1;
+				setPage(maxPage);
+				return Promise.reject('Invalid page');
+			} else {
+				setDanhSachLopDktc(tempData);
+				setTotal(tempTotal);
+				return tempData;
+			}
+		} catch (er) {
+			return Promise.reject(er);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	const getMoodleLopHocPhanModel = async (lopHocPhanId: string): Promise<any> => {
 		setLoading(true);
@@ -53,6 +76,7 @@ export default () => {
 
 	return {
 		...objInit,
+		danhSachLopDktc,
 		sinhVienGetModel,
 		sinhVienGetByIdModel,
 		sinhVienGetAllModel,

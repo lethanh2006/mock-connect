@@ -6,9 +6,12 @@ import {
 	ETransactionSourceType,
 	ETransactionStatus,
 	colorTransactionStatus,
+	colorTransactionType,
 	transactionPaymentLabel,
 	transactionStatus,
+	transactionType,
 	type ETransactionPaymentType,
+	type ETransactionType,
 } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined } from '@ant-design/icons';
@@ -34,28 +37,18 @@ const LichSuThanhToan = (props: {
 
 	const columns: IColumn<GiaoDich.IRecord>[] = [
 		{
-			title: 'Mã TT',
+			title: 'Mã GD',
 			dataIndex: 'identityCode',
 			width: 120,
 			align: 'center',
 			filterType: 'string',
 		},
 		{
-			title: 'Loại giao dịch',
+			title: 'Phân loại',
+			dataIndex: 'type',
 			align: 'center',
 			width: 100,
-			render: (val, rec) => {
-				switch ((rec.fromAccount, rec.toAccount)) {
-					case (ETransactionSourceType.EXTERNAL, ETransactionSourceType.WALLET):
-						return <Tag color='green'>Nộp tiền</Tag>;
-					case (ETransactionSourceType.WALLET, ETransactionSourceType.SYSTEM):
-						return <Tag color='orange'>Thanh toán</Tag>;
-					case (ETransactionSourceType.SYSTEM, ETransactionSourceType.WALLET):
-						return <Tag color='purple'>Hoàn trả</Tag>;
-					default:
-						return null;
-				}
-			},
+			render: (val: ETransactionType) => val && <Tag color={colorTransactionType[val]}>{transactionType[val]}</Tag>,
 		},
 		{
 			title: 'Số tiền',
@@ -79,9 +72,9 @@ const LichSuThanhToan = (props: {
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
 			),
 		},
-		{ title: 'Chuyên viên thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
+		{ title: 'Người thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
 		{
-			title: 'Thời gian thực hiện',
+			title: 'Thời gian',
 			align: 'center',
 			dataIndex: 'createdAt',
 			width: 120,

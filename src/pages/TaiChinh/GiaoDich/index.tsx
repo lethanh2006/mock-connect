@@ -6,9 +6,12 @@ import {
 	ETransactionPaymentType,
 	ETransactionSourceType,
 	ETransactionStatus,
+	ETransactionType,
 	colorTransactionStatus,
+	colorTransactionType,
 	transactionPaymentLabel,
 	transactionStatus,
+	transactionType,
 } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined, PlusCircleOutlined } from '@ant-design/icons';
@@ -32,7 +35,7 @@ const GiaoDichPage = () => {
 		setVisibleHuongDan,
 		huyThanhToanModel,
 	} = useModel('taichinh.giaodich');
-	const [kieuThanhToan, setKieuThanhToan] = useState<number>(2);
+	const [kieuThanhToan, setKieuThanhToan] = useState<ETransactionType | undefined>(ETransactionType.DEPOSIT);
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -42,22 +45,7 @@ const GiaoDichPage = () => {
 			else notification.warn({ message: 'Thất bại', description: 'Thanh toán thất bại' });
 	}, []);
 
-	const getData = () => {
-		let condition: any = undefined;
-		switch (kieuThanhToan) {
-			case 2:
-				condition = { fromAccount: ETransactionSourceType.EXTERNAL, toAccount: ETransactionSourceType.WALLET };
-				break;
-			case 3:
-				condition = { fromAccount: ETransactionSourceType.WALLET, toAccount: ETransactionSourceType.SYSTEM };
-				break;
-			case 4:
-				condition = { fromAccount: ETransactionSourceType.SYSTEM, toAccount: ETransactionSourceType.WALLET };
-				break;
-		}
-
-		return getModel(condition, undefined, undefined, undefined, undefined, 'me/page');
-	};
+	const getData = () => getModel({ type: kieuThanhToan }, undefined, undefined, undefined, undefined, 'me/page');
 
 	const onPay = (rec: GiaoDich.IRecord) => {
 		if (rec?.paymentType === ETransactionPaymentType.BANK) {
@@ -78,7 +66,7 @@ const GiaoDichPage = () => {
 
 	const columns: IColumn<GiaoDich.IRecord>[] = [
 		{
-			title: 'Mã TT',
+			title: 'Mã GD',
 			dataIndex: 'identityCode',
 			width: 120,
 			align: 'center',
@@ -91,22 +79,12 @@ const GiaoDichPage = () => {
 			filterType: 'string',
 		},
 		{
-			title: 'Loại giao dịch',
+			title: 'Phân loại',
+			dataIndex: 'type',
 			align: 'center',
 			width: 100,
-			render: (val, rec) => {
-				switch ((rec.fromAccount, rec.toAccount)) {
-					case (ETransactionSourceType.EXTERNAL, ETransactionSourceType.WALLET):
-						return <Tag color='green'>Nộp tiền</Tag>;
-					case (ETransactionSourceType.WALLET, ETransactionSourceType.SYSTEM):
-						return <Tag color='orange'>Thanh toán</Tag>;
-					case (ETransactionSourceType.SYSTEM, ETransactionSourceType.WALLET):
-						return <Tag color='purple'>Hoàn trả</Tag>;
-					default:
-						return null;
-				}
-			},
-			hide: kieuThanhToan !== 1,
+			render: (val: ETransactionType) => val && <Tag color={colorTransactionType[val]}>{transactionType[val]}</Tag>,
+			hide: !!kieuThanhToan,
 		},
 		{
 			title: 'Số tiền',
@@ -142,9 +120,9 @@ const GiaoDichPage = () => {
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
 			),
 		},
-		{ title: 'Chuyên viên thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
+		{ title: 'Người thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
 		{
-			title: 'Thời gian thực hiện',
+			title: 'Thực hiện',
 			dataIndex: 'createdAt',
 			width: 120,
 			align: 'center',
@@ -153,7 +131,7 @@ const GiaoDichPage = () => {
 			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
-			title: 'Thời gian hoàn thành',
+			title: 'Hoàn thành',
 			dataIndex: 'transactionDate',
 			width: 120,
 			align: 'center',
@@ -210,13 +188,14 @@ const GiaoDichPage = () => {
 				title='Lịch sử thanh toán'
 				otherButtons={[
 					<Segmented
-						value={kieuThanhToan}
-						onChange={(val) => setKieuThanhToan(+val)}
+						value={kieuThanhToan || '1'}
+						onChange={(val) => setKieuThanhToan(val === '1' ? undefined : (val as ETransactionType))}
 						options={[
-							{ value: 2, label: 'Nộp tiền' },
-							{ value: 3, label: 'Thanh toán' },
-							{ value: 4, label: 'Hoàn trả' },
-							{ value: 1, label: 'Tất cả giao dịch' },
+							...[ETransactionType.DEPOSIT, ETransactionType.INTERNAL, ETransactionType.REFUND].map((item) => ({
+								value: item,
+								label: transactionType[item],
+							})),
+							{ value: '1', label: 'Tất cả giao dịch' },
 						]}
 						key='select'
 					/>,

@@ -47,8 +47,8 @@ const ThongTinChung = () => {
 
 	return (
 		<Spin spinning={loading}>
-			<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 3 }} title='Thông tin lớp'>
-				<Descriptions.Item label='Học phần'>
+			<Descriptions column={{ xs: 1, sm: 1, md: 3, lg: 3, xl: 3, xxl: 3 }} title='Thông tin lớp'>
+				<Descriptions.Item label='Học phần' span={3}>
 					{record?.hocPhan?.ten ? (
 						<Tooltip title='Xem đề cương chi tiết học phần'>
 							<a onClick={() => setVisibleDeCuong(true)}>
