@@ -24,7 +24,22 @@ export enum ETransactionType {
 	DEPOSIT = 'deposit',
 	WITHDRAW = 'withdraw',
 	INTERNAL = 'internal',
+	REFUND = 'refund',
 }
+
+export const transactionType: Record<ETransactionType, string> = {
+	[ETransactionType.DEPOSIT]: 'Nộp tiền',
+	[ETransactionType.WITHDRAW]: 'Rút tiền',
+	[ETransactionType.INTERNAL]: 'Thanh toán',
+	[ETransactionType.REFUND]: 'Hoàn trả',
+};
+
+export const colorTransactionType: Record<ETransactionType, string> = {
+	[ETransactionType.DEPOSIT]: 'green',
+	[ETransactionType.WITHDRAW]: 'yellow',
+	[ETransactionType.INTERNAL]: 'purple',
+	[ETransactionType.REFUND]: 'default',
+};
 
 export enum ETransactionPaymentType {
 	BANK = 'bank',

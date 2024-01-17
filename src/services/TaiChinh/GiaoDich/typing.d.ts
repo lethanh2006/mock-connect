@@ -1,4 +1,9 @@
-import type { ETransactionPaymentType, ETransactionSourceType, ETransactionStatus } from '../constant';
+import type {
+	ETransactionPaymentType,
+	ETransactionSourceType,
+	ETransactionStatus,
+	ETransactionType,
+} from '../constant';
 
 declare module GiaoDich {
 	export interface IRecord extends IKhachHang, IChuyenVien {
@@ -14,6 +19,7 @@ declare module GiaoDich {
 		fromAccount: ETransactionSourceType;
 		toAccount: ETransactionSourceType;
 		amount: number;
+		type: ETransactionType;
 
 		transactionId: string;
 		transactionDate: string;
