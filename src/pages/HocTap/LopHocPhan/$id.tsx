@@ -5,6 +5,7 @@ import { history, useModel } from 'umi';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
 import DanhSachBuoiHoc from './LichHoc';
 import ThongTinChung from './components/ThongTinChung';
+import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 
 const DetailLopTinChi = ({
 	match: {
@@ -50,15 +51,16 @@ const DetailLopTinChi = ({
 				<Tabs.TabPane tab='Danh sách buổi học' key='2'>
 					<DanhSachBuoiHoc />
 				</Tabs.TabPane>
+				<Tabs.TabPane tab='Thông báo' key='4'>
+					<ThongBaoLopPage loai='lop-hoc-phan' idLop={id} />
+				</Tabs.TabPane>
 
 				<Tabs.TabPane tab='Kết quả học tập' key='3'>
 					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm lớp tín chỉ</h4>
 					<DetailKetQuaHocTap lopHocPhanId={record?._id} />
 				</Tabs.TabPane>
 
-				{/* <Tabs.TabPane tab="Thông báo" key="4">
-          <ThongBao isNhanVien={isNhanVien} id={id} typeLop="LopTinChi" />
-        </Tabs.TabPane>
+				{/*
         <Tabs.TabPane tab="Học liệu số" key="5">
           <HocLieuSo />
         </Tabs.TabPane>
