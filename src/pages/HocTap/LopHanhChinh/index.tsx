@@ -3,6 +3,7 @@ import { useModel } from 'umi';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 import SelectLopHanhChinhSinhVien from './components/Select';
 import { useEffect } from 'react';
+import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 
 const LopHanhChinhPage = () => {
 	const { record, sinhVienGetByIdModel, setRecord, danhSach } = useModel('daotao.lophanhchinh');
@@ -30,9 +31,9 @@ const LopHanhChinhPage = () => {
 						<Tabs.TabPane tab='Thông tin chung' key={0}>
 							<ThongTinChungLopHanhChinh />
 						</Tabs.TabPane>
-						{/* <Tabs.TabPane tab='Thông báo' key={1}>
-					Thông báo
-				</Tabs.TabPane> */}
+						<Tabs.TabPane tab='Thông báo' key={1}>
+							<ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />
+						</Tabs.TabPane>
 					</Tabs>
 				</>
 			) : (
