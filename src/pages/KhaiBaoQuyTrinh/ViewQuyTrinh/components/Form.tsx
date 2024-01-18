@@ -76,8 +76,6 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 	};
 
 	const handleGetDataDefault = async () => {
-		debugger;
-
 		try {
 			if (currentFormKhaiBao?.ma) {
 				const res = await getDataDefaultV2(props?.idQuyTrinh ?? '', 'khai_bao', currentFormKhaiBao?.ma ?? '');
@@ -157,7 +155,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 
 				<div style={{ display: 'flex', justifyContent: 'center' }}>
 					<Button style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
-						Khai báo
+						Lưu
 					</Button>
 				</div>
 			</Form>

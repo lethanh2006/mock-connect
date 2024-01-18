@@ -3,7 +3,6 @@ import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import UploadFile from '@/components/Upload/UploadFile';
-
 import { EKieuDuLieu, ELoaiThoiGianThucHien, ELoaiTruongThongTinTinh } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 import { LoaiDefaultValue } from '@/services/QuyTrinh/MauDon/constants';
@@ -88,7 +87,7 @@ const FormRender = (props: {
 				});
 			} else if (cauHinh?.loaiDefaultValue === LoaiDefaultValue.LAY_TU_KHAI_BAO) {
 				const khaiBao = dataQuyTrinh?.danhSachKhaiBao.find((item) => item.ma === cauHinh.maFormLayDefaultValue)
-					?.thongTinKhaiBao?.[cauHinh.maFieldLayDefaultValue];
+					?.thongTinKhaiBao?.[cauHinh.maFieldLayDefaultValue]?.value;
 
 				form.setFieldsValue({
 					[cauHinh.ma]: khaiBao,
@@ -220,122 +219,7 @@ const FormRender = (props: {
 			);
 			break;
 
-		// case EKieuDuLieu.DANHSACH:
-		// 	const columnsDs: IColumn<any>[] = [];
-		// 	recordLoaiHinh?.cauHinhLoaiHinh
-		// 		?.filter((item) =>
-		// 			recordLoaiHinh?.danhSachCotHienThi?.length ? recordLoaiHinh.danhSachCotHienThi.includes(item.ma) : item,
-		// 		)
-		// 		.map((item) => {
-		// 			if (item.kieuDuLieu === EKieuDuLieu.TABLE || item.kieuDuLieu === EKieuDuLieu.DANHSACH) return;
-		// 			columnsDs.push({
-		// 				title: item.ten,
-		// 				dataIndex: [`${item.ma}`],
-		// 				width: 200,
-		// 				align: 'center',
-		// 				render: (val, rec) => <ViewRender cauHinh={item} recordQuyTrinhForm={rec} />,
-		// 				// ...buildFilter(item, danhSach),
-		// 			});
-		// 		});
-		// 	columnsDs.push({
-		// 		title: 'Thao tác',
-		// 		align: 'center',
-		// 		width: 60,
-		// 		fixed: 'right',
-		// 		render: (rec: any) => (
-		// 			<>
-		// 				<Tooltip title='Xóa'>
-		// 					<Popconfirm
-		// 						onConfirm={() => {
-		// 							if (recordQuyTrinhForm) {
-		// 								setRecordQuyTrinhForm({
-		// 									...recordQuyTrinhForm,
-		// 									thongTinKhaiBao: {
-		// 										...recordQuyTrinhForm.thongTinKhaiBao,
-		// 										[cauHinh.ma]: recordQuyTrinhForm.thongTinKhaiBao?.[cauHinh.ma]
-		// 											?.map((item: any, index: number) => ({ ...item, index: index + 1 }))
-		// 											?.filter((item: any) => item.index !== rec.index),
-		// 									},
-		// 								});
-		// 							}
-		// 						}}
-		// 						title='Bạn có chắc chắn muốn xóa lớp này khỏi danh sách đăng ký sinh viên?'
-		// 						placement='topRight'
-		// 					>
-		// 						<Button size='small' danger type='link' icon={<DeleteOutlined />} />
-		// 					</Popconfirm>
-		// 				</Tooltip>
-		// 			</>
-		// 		),
-		// 	});
-
-		// 	rule = cauHinh?.batBuoc
-		// 		? [
-		// 				{
-		// 					validator: (__: { field: string | number }, value: any, callback: any) => {
-		// 						if (!recordQuyTrinhForm?.thongTinKhaiBao?.[cauHinh.ma]?.length) callback('');
-		// 						callback();
-		// 					},
-		// 					message: 'Bắt buộc',
-		// 					required: true,
-		// 				},
-		// 		  ]
-		// 		: [];
-		// 	component = (
-		// 		<>
-		// 			<Space wrap>
-		// 				<Button
-		// 					size='small'
-		// 					type='primary'
-		// 					icon={<PlusCircleOutlined />}
-		// 					onClick={() => {
-		// 						setRecordTable(undefined);
-		// 						setVisibleFormTable(true);
-		// 						setEditFormTable(false);
-		// 					}}
-		// 				>
-		// 					Thêm mới
-		// 				</Button>
-		// 			</Space>
-
-		// 			<TableStaticData
-		// 				otherProps={{ pagination: false }}
-		// 				addStt
-		// 				size='small'
-		// 				data={recordQuyTrinhForm?.thongTinKhaiBao?.[cauHinh.ma]?.map((item: any, index: number) => ({
-		// 					...item,
-		// 					index: index + 1,
-		// 				}))}
-		// 				columns={columnsDs}
-		// 			/>
-		// 			<Modal
-		// 				destroyOnClose
-		// 				width={1000}
-		// 				footer={false}
-		// 				title={`${editFormTable ? 'Chỉnh sửa' : 'Thêm mới'} ${cauHinh.ten}`}
-		// 				visible={visibleFormTable}
-		// 				onCancel={onCancelFormTable}
-		// 			>
-		// 				{/*<SelectSanPhamNCKH*/}
-		// 				{/*	select={true}*/}
-		// 				{/*	handleSelect={(data) => {*/}
-		// 				{/*		const obj: any = {*/}
-		// 				{/*			...recordQuyTrinhForm,*/}
-		// 				{/*			thongTinKhaiBao: { ...recordQuyTrinhForm?.thongTinKhaiBao, [cauHinh.ma]: data },*/}
-		// 				{/*		};*/}
-
-		// 				{/*		setRecordQuyTrinhForm(obj);*/}
-		// 				{/*		onCancelFormTable();*/}
-		// 				{/*	}}*/}
-		// 				{/*	loaiHinhActive={cauHinh?.loaiHinhNckhId}*/}
-		// 				{/*/>*/}
-		// 			</Modal>
-		// 		</>
-		// 	);
-		// 	break;
-
 		case EKieuDuLieu.TABLE:
-			// component = <div>abc</div>;
 			const columns: IColumn<any>[] = [];
 			cauHinh?.danhSachCot
 				?.filter((item) =>
