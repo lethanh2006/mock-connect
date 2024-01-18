@@ -3,18 +3,20 @@ import ThongTinTiepNhan from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/th
 import ThongTinThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
 import {
+	ETienDoQuyTrinh,
+	MapColorTienDoQuyTrinh,
 	MapColorTrangThaiTiepNhanDon,
-	TrangThaiKhaiBao,
 	TrangThaiTiepNhanDon,
 } from '@/services/QuyTrinh/KhaiBao/constants';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
-import { LeftOutlined } from '@ant-design/icons';
+import { EditOutlined, LeftOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Descriptions, Modal, Popconfirm, Row, Spin, Steps, Tag } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
+import ViewDot from '../../DotQuyTrinh/ViewDot';
 
 const { Step } = Steps;
 interface Iprops {
@@ -34,23 +36,33 @@ const View = (props: Iprops) => {
 	const model = useModel(modalName);
 	const { visibleForm, setVisibleForm } = useModel('taichinh.hoadon');
 	const { setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
-	const { setCurrent, setCurrentFormKhaiBao, currentFormKhaiBao, setEditFormKhaiBao, setRecordFormKhaiBao } = model;
+	const {
+		setCurrent,
+		setCurrentFormKhaiBao,
+		currentFormKhaiBao,
+		setEditFormKhaiBao,
+		setRecordFormKhaiBao,
+		editFormKhaiBao,
+	} = model;
 	const { danhSach: danhSachDotQuyTrinh } = useModel('quytrinh.dotkhaibao');
-
+	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
 	const dotCurrent = danhSachDotQuyTrinh?.find((item) => item._id === dataQuyTrinh?.dotQuyTrinhId);
 
 	const [currentStep, setCurrentStep] = useState<number>(0);
 
 	const { getAllModel: getAllDanhMucChung, danhSach: danhSachDanhMuc } = useModel('quytrinh.danhmuc');
 
+	const [visibleViewDetailDot, setVisibleViewDetailDot] = useState<boolean>(false);
+
 	useEffect(() => {
 		if (danhSachDanhMuc.length === 0) getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
+		getDot();
 	}, []);
 
 	const onChange = (val: number) => {
 		setCurrentStep(val);
 	};
-	const renderDescription = (value: any) => {
+	const renderDescription = (value: any, tienDo?: ETienDoQuyTrinh) => {
 		if (value) {
 			return (
 				<>
@@ -61,17 +73,27 @@ const View = (props: Iprops) => {
 					</div>
 					<div style={{ marginBottom: 8 }}>
 						<Tag color={value?.coKhaiBao ? '#1fba36' : '#ffca2c'}>
-							{value?.coKhaiBao ? TrangThaiKhaiBao.DA_KHAI_BAO : TrangThaiKhaiBao.CHUA_KHAI_BAO}
+							{value?.coKhaiBao ? 'Đã thực hiện' : 'Chưa thực hiện'}
 						</Tag>
 					</div>
+					{tienDo && (
+						<div style={{ marginBottom: 8 }}>
+							<Tag color={MapColorTienDoQuyTrinh[tienDo]}>{tienDo}</Tag>
+						</div>
+					)}
 				</>
 			);
 		} else {
 			return (
 				<>
 					<div style={{ marginBottom: 8 }}>
-						<Tag color={'blue'}>Chưa đến bước xử lý</Tag>
+						<Tag color={'gray'}>Chưa đến bước xử lý</Tag>
 					</div>
+					{tienDo && (
+						<div style={{ marginBottom: 8 }}>
+							<Tag color={MapColorTienDoQuyTrinh[tienDo]}>{tienDo}</Tag>
+						</div>
+					)}
 				</>
 			);
 		}
@@ -89,9 +111,12 @@ const View = (props: Iprops) => {
 			setCurrentFormKhaiBao(obj);
 			if (current?.trangThaiTiepNhan === TrangThaiTiepNhanDon.CHINH_SUA_LAI) {
 				const dataFormKhaiBao = dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao);
-				console.log('dataFormKhaiBao?.thongTinKhaiBao', dataFormKhaiBao?.thongTinKhaiBao);
-				setRecordQuyTrinhForm(dataFormKhaiBao);
-				setRecordFormKhaiBao(dataFormKhaiBao?.thongTinKhaiBao);
+				const valuesFormKhaiBao: any = {};
+				Object.keys(dataFormKhaiBao?.thongTinKhaiBao).map((key) => {
+					valuesFormKhaiBao[key] = dataFormKhaiBao?.thongTinKhaiBao[key]?.value;
+				});
+				setRecordQuyTrinhForm({ ...dataFormKhaiBao, thongTinKhaiBao: valuesFormKhaiBao });
+				setRecordFormKhaiBao(valuesFormKhaiBao);
 				setEditFormKhaiBao(true);
 			}
 		}
@@ -110,7 +135,17 @@ const View = (props: Iprops) => {
 
 	return (
 		<>
-			<Card title={dataQuyTrinh?.quyTrinh?.ten} bordered={false}>
+			<Card
+				title={
+					<div>
+						{dataQuyTrinh?.quyTrinh?.ten}{' '}
+						{dotCurrent?.danhSachCauHinhThoiGianDot?.length > 0 && (
+							<a onClick={() => setVisibleViewDetailDot(true)}>{dotCurrent?.ten}</a>
+						)}
+					</div>
+				}
+				bordered={false}
+			>
 				<Spin spinning={type ? false : loadingForm}>
 					{!type && (
 						<>
@@ -157,12 +192,37 @@ const View = (props: Iprops) => {
 									const cauHinhThoiGianDot = dotCurrent?.danhSachCauHinhThoiGianDot?.find(
 										(item: any) => item.maBuoc === value.ma,
 									);
+									let tienDo;
+									const coKhaiBao = dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === value?.ma)?.coKhaiBao;
+
+									if (
+										cauHinhThoiGianDot &&
+										moment().isAfter(moment(cauHinhThoiGianDot.thoiGianKetThuc)) &&
+										!coKhaiBao
+									) {
+										tienDo = ETienDoQuyTrinh.QUA_HAN;
+									} else if (
+										cauHinhThoiGianDot &&
+										moment(cauHinhThoiGianDot.thoiGianBatDau).isBefore(moment()) &&
+										moment().isBefore(cauHinhThoiGianDot.thoiGianKetThuc)
+									) {
+										tienDo = ETienDoQuyTrinh.DANG_DIEN_RA;
+									} else if (
+										cauHinhThoiGianDot &&
+										moment().isBefore(moment(cauHinhThoiGianDot.thoiGianBatDau)) &&
+										moment(cauHinhThoiGianDot.thoiGianBatDau).diff(moment(), 'days') === 7
+									) {
+										tienDo = ETienDoQuyTrinh.SAP_TOI;
+									} else if (cauHinhThoiGianDot && moment().isAfter(moment(cauHinhThoiGianDot.thoiGianKetThuc))) {
+										tienDo = ETienDoQuyTrinh.DA_DIEN_RA;
+									}
 
 									return (
 										<Step
 											key={value.ten}
 											description={renderDescription(
 												dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === value?.ma),
+												tienDo,
 											)}
 											disabled={dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === value?.ma) === undefined}
 											title={
@@ -194,7 +254,9 @@ const View = (props: Iprops) => {
 								</div>
 							)}
 
-							{current?.coKhaiBao && current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.CHINH_SUA_LAI ? (
+							{current?.coKhaiBao &&
+							current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.CHINH_SUA_LAI &&
+							!editFormKhaiBao ? (
 								<div>
 									<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
 										{cauHinhForm?.cauHinhLoaiHinh
@@ -246,6 +308,29 @@ const View = (props: Iprops) => {
 												<br />
 											</>
 										))}
+									{!editFormKhaiBao && (
+										<div style={{ display: 'flex', justifyContent: 'center' }}>
+											<Button
+												onClick={() => {
+													setEditFormKhaiBao(true);
+													const dataFormKhaiBao = dataQuyTrinh?.danhSachKhaiBao?.find(
+														(ele) => ele.ma === current.maFormKhaiBao,
+													);
+													const valuesFormKhaiBao: any = {};
+													Object.keys(dataFormKhaiBao?.thongTinKhaiBao).map((key) => {
+														valuesFormKhaiBao[key] = dataFormKhaiBao?.thongTinKhaiBao[key]?.value;
+													});
+													setRecordQuyTrinhForm({ ...dataFormKhaiBao, thongTinKhaiBao: valuesFormKhaiBao });
+													setRecordFormKhaiBao(valuesFormKhaiBao);
+												}}
+												style={{ margin: '0 auto' }}
+												icon={<EditOutlined />}
+												type='primary'
+											>
+												Chỉnh sửa
+											</Button>
+										</div>
+									)}
 								</div>
 							) : (
 								<>{FormModal && <FormModal {...formProps} />}</>
@@ -263,6 +348,23 @@ const View = (props: Iprops) => {
 					destroyOnClose
 				>
 					<ThongTinThanhToan setVisible={setVisibleForm} />
+				</Modal>
+				<Modal
+					footer={
+						<Button
+							type='primary'
+							onClick={() => {
+								setVisibleViewDetailDot(false);
+							}}
+						>
+							OK
+						</Button>
+					}
+					bodyStyle={{ padding: 0 }}
+					visible={visibleViewDetailDot}
+					onCancel={() => setVisibleViewDetailDot(false)}
+				>
+					{dotCurrent && dataQuyTrinh.quyTrinh && <ViewDot recDot={dotCurrent} recQuyTrinh={dataQuyTrinh.quyTrinh} />}
 				</Modal>
 			</Card>
 		</>

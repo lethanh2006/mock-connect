@@ -6,6 +6,7 @@ import { Modal, Tag } from 'antd';
 import moment from 'moment';
 import FormTable from '@/pages/KhaiBaoQuyTrinh/MauDon/FormTable';
 import { useState } from 'react';
+import { primaryColor } from '@/services/base/constant';
 
 const ViewRender = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
@@ -73,9 +74,9 @@ const ViewRender = (props: {
 			value = (
 				<div>
 					{recordSanPhamFinal[cauHinh.ma] &&
-						recordSanPhamFinal[cauHinh.ma].map &&
+						recordSanPhamFinal[cauHinh.ma]?.value?.map &&
 						valueFinal?.map((item: string) => (
-							<Tag color={'red'} key={cauHinh.ma}>
+							<Tag color={primaryColor} key={cauHinh.ma}>
 								<a href={item} target='_blank' rel='noreferrer'>
 									Xem tập tin
 								</a>
