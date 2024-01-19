@@ -1,3 +1,4 @@
+import { EOperatorType } from '@/components/Table/constant';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { ETrangThaiSinhVienQuyDoiDiem, colorTrangThaiSinhVienQuyDoiDiem } from '@/services/HocTap/constant';
@@ -14,11 +15,21 @@ const ModalQuyDoiDiem = (props: {
 }) => {
 	const [form] = Form.useForm();
 	const { visible, setVisible, chuongTrinhKhung } = props;
-	const { formSubmiting, postSinhVienQuyDoiModel, isView, record, setIsView } = useModel(
+	const { formSubmiting, postSinhVienQuyDoiModel, isView, record, setIsView, getModel } = useModel(
 		'daotao.quydoidiem.sinhvienquydoidiem',
 	);
 	const { danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
+
+	const getData = () =>
+		getModel(undefined, [
+			{
+				active: true,
+				field: 'sinhVienSsoId',
+				operator: EOperatorType.INCLUDE,
+				values: [recSinhVien?.ssoId ?? ''],
+			},
+		]);
 
 	const onFinish = async (values: QuyDoiDiem.IQuyDoiDiemSinhVien) => {
 		const data = {
@@ -33,7 +44,7 @@ const ModalQuyDoiDiem = (props: {
 
 		postSinhVienQuyDoiModel(danhSach[0]?._id ?? '', data)
 			.then(() => {
-				// if (getData) getData();
+				getData();
 				setVisible(false);
 			})
 			.catch((rec) => console.log(rec));
@@ -109,9 +120,12 @@ const ModalQuyDoiDiem = (props: {
 				</Row>
 
 				<div className='form-footer'>
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
-						Đăng ký
-					</Button>
+					{!isView ? (
+						<Button loading={formSubmiting} htmlType='submit' type='primary'>
+							Đăng ký
+						</Button>
+					) : null}
+
 					<Button
 						onClick={() => {
 							setVisible(false);

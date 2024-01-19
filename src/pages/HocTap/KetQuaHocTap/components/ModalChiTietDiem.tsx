@@ -8,6 +8,8 @@ import { useModel } from 'umi';
 import ModalHocPhan from '../../LopHocPhan/DeCuongHocPhan/ModalHocPhan';
 import DetailKetQuaHocTap from './DetailKetQuaHocTap';
 import ModalQuyDoiDiem from './ModalQuyDoiDiem';
+import moment from 'moment';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 
 const ModalChiTietDiem = (props: {
 	visible: boolean;
@@ -19,10 +21,17 @@ const ModalChiTietDiem = (props: {
 }) => {
 	const { getByIdModel } = useModel('daotao.lophocphan');
 	const { setIsView } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
+	const { danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { visible, setVisible, lopHocPhanId, chuongTrinhKhung, listDiem, trangThaiHoc } = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
 	const [deCuongId, setDeCuongId] = useState<string>();
+
+	const thoiGianQuyDoiDiem =
+		!danhSach[0]?.thoiGianBatDau ||
+		!danhSach[0]?.thoiGianKetThuc ||
+		moment().isAfter(danhSach[0]?.thoiGianBatDau, 'd') ||
+		moment().isBefore(danhSach[0]?.thoiGianKetThuc, 'd');
 
 	const handleShowDeCuong = async () => {
 		let de = chuongTrinhKhung?.hocPhan?.deCuongHienTaiId;
@@ -45,7 +54,9 @@ const ModalChiTietDiem = (props: {
 				footer={
 					<Space>
 						{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
-							<Button
+							<ButtonExtend
+								tooltip={!danhSach.length || !thoiGianQuyDoiDiem ? 'Không có đợt công nhận KQHT' : null}
+								disabled={!danhSach.length || !thoiGianQuyDoiDiem}
 								onClick={() => {
 									setVisibleCongNhan(true);
 									setIsView(false);
@@ -53,7 +64,7 @@ const ModalChiTietDiem = (props: {
 								icon={<PlusCircleOutlined />}
 							>
 								Công nhận KQHT
-							</Button>
+							</ButtonExtend>
 						) : null}
 
 						<Button onClick={() => setVisible(false)}>Đóng</Button>
