@@ -1,6 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
-import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
+import { EKieuDuLieu, ETextDisplay } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 import { Modal, Tag } from 'antd';
 import moment from 'moment';
@@ -37,7 +37,12 @@ const ViewRender = (props: {
 	const valueFinal = isCot ? recordSanPhamFinal?.[cauHinh.ma] : recordSanPhamFinal?.[cauHinh.ma]?.value;
 	switch (cauHinh.kieuDuLieu) {
 		case EKieuDuLieu.TEXT:
-			value = <div>{valueFinal}</div>;
+			value =
+				cauHinh.textDisplay === ETextDisplay.TEXT_EDITOR ? (
+					<div dangerouslySetInnerHTML={{ __html: valueFinal }} />
+				) : (
+					<div>{valueFinal}</div>
+				);
 			break;
 
 		case EKieuDuLieu.BOOLEAN:

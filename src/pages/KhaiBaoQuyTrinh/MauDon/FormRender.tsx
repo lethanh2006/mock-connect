@@ -3,7 +3,12 @@ import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import UploadFile from '@/components/Upload/UploadFile';
-import { EKieuDuLieu, ELoaiThoiGianThucHien, ELoaiTruongThongTinTinh } from '@/services/QuyTrinh/LoaiHinh/constants';
+import {
+	EKieuDuLieu,
+	ELoaiThoiGianThucHien,
+	ELoaiTruongThongTinTinh,
+	ETextDisplay,
+} from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 import { LoaiDefaultValue } from '@/services/QuyTrinh/MauDon/constants';
 import rules from '@/utils/rules';
@@ -16,6 +21,7 @@ import { useModel } from 'umi';
 import FormTable from './FormTable';
 import ViewRender from './ViewRender';
 import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
+import TinyEditor from '@/components/TinyEditor';
 
 const FormRender = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
@@ -52,9 +58,21 @@ const FormRender = (props: {
 		if (props.form && listCauHinhPhuThuocDuLieu?.length) {
 			const objDuLieuPhuThuoc: any = {};
 			listCauHinhPhuThuocDuLieu.map((item: { ma: string | number; truongLayDuLieu: any }) => {
-				objDuLieuPhuThuoc[item.ma] = item.truongLayDuLieu
-					? _.get(recNhanSu, item.truongLayDuLieu, undefined)
-					: recNhanSu;
+				if (item.truongLayDuLieu.includes('||')) {
+					let value: any;
+					const arrKey = item.truongLayDuLieu.split('||');
+					arrKey.map((ele: any) => {
+						const valueTemp = _.get(recNhanSu, ele, undefined);
+						if (!value && valueTemp) {
+							value = valueTemp;
+						}
+					});
+					objDuLieuPhuThuoc[item.ma] = value;
+				} else {
+					objDuLieuPhuThuoc[item.ma] = item.truongLayDuLieu
+						? _.get(recNhanSu, item.truongLayDuLieu, undefined)
+						: recNhanSu;
+				}
 			});
 			props.form.setFieldsValue(objDuLieuPhuThuoc);
 		}
@@ -88,7 +106,6 @@ const FormRender = (props: {
 			} else if (cauHinh?.loaiDefaultValue === LoaiDefaultValue.LAY_TU_KHAI_BAO) {
 				const khaiBao = dataQuyTrinh?.danhSachKhaiBao.find((item) => item.ma === cauHinh.maFormLayDefaultValue)
 					?.thongTinKhaiBao?.[cauHinh.maFieldLayDefaultValue]?.value;
-
 				form.setFieldsValue({
 					[cauHinh.ma]: khaiBao,
 				});
@@ -97,8 +114,10 @@ const FormRender = (props: {
 	}, [cauHinh.ma]);
 	switch (cauHinh.kieuDuLieu) {
 		case EKieuDuLieu.TEXT:
-			if (cauHinh.textarea) {
+			if (cauHinh.textDisplay === ETextDisplay.TEXT_AREA) {
 				component = <Input.TextArea disabled={cauHinh?.readonly} placeholder={cauHinh.ten} />;
+			} else if (cauHinh.textDisplay === ETextDisplay.TEXT_EDITOR) {
+				component = <TinyEditor height={300} disabled={cauHinh?.readonly} />;
 			} else
 				component = cauHinh.laDangMang ? (
 					<Select disabled={cauHinh?.readonly} placeholder={cauHinh.ten} mode='tags' />

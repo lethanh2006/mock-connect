@@ -12,11 +12,13 @@ import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import { EditOutlined, LeftOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Descriptions, Modal, Popconfirm, Row, Spin, Steps, Tag } from 'antd';
+import { Button, Card, Col, Collapse, Descriptions, Modal, Popconfirm, Row, Spin, Steps, Tag } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import ViewDot from '../../DotQuyTrinh/ViewDot';
+import ThongTinHoiDong from './ThongTinHoiDong';
+import ThongTinQuyetDinh from './ThongTinQuyetDinh';
 
 const { Step } = Steps;
 interface Iprops {
@@ -47,7 +49,9 @@ const View = (props: Iprops) => {
 	const { danhSach: danhSachDotQuyTrinh } = useModel('quytrinh.dotkhaibao');
 	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
 	const dotCurrent = danhSachDotQuyTrinh?.find((item) => item._id === dataQuyTrinh?.dotQuyTrinhId);
-
+	const cauHinhThoiGianDotBuocHienTai = dotCurrent?.danhSachCauHinhThoiGianDot?.find(
+		(item: { maBuoc: string }) => item.maBuoc === current.ma,
+	);
 	const [currentStep, setCurrentStep] = useState<number>(0);
 
 	const { getAllModel: getAllDanhMucChung, danhSach: danhSachDanhMuc } = useModel('quytrinh.danhmuc');
@@ -62,7 +66,18 @@ const View = (props: Iprops) => {
 	const onChange = (val: number) => {
 		setCurrentStep(val);
 	};
-	const renderDescription = (value: any, tienDo?: ETienDoQuyTrinh) => {
+	const renderDescription = (value: any, tienDo?: ETienDoQuyTrinh, isBuocNgoaiHeThong?: boolean) => {
+		if (isBuocNgoaiHeThong) {
+			return (
+				<div>
+					{tienDo && (
+						<div style={{ marginBottom: 8 }}>
+							<Tag color={MapColorTienDoQuyTrinh[tienDo]}>{tienDo}</Tag>
+						</div>
+					)}
+				</div>
+			);
+		}
 		if (value) {
 			return (
 				<>
@@ -223,6 +238,7 @@ const View = (props: Iprops) => {
 											description={renderDescription(
 												dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === value?.ma),
 												tienDo,
+												cauHinhThoiGianDot?.tuDongChuyenBuocKhiHetHan,
 											)}
 											disabled={dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === value?.ma) === undefined}
 											title={
@@ -248,90 +264,104 @@ const View = (props: Iprops) => {
 							</Steps>
 						</Col>
 						<Col xs={24} sm={24} md={18} lg={18} xl={18}>
-							{current?.coKhaiBao && (
-								<div style={{ marginBottom: 16 }}>
-									<ThongTinTiepNhan data={current as KhaiBaoQuyTrinh.IBuocXuLy} modelName={modalName} />
-								</div>
-							)}
+							<ThongTinTiepNhan
+								isBuocNgoaiHeThong={cauHinhThoiGianDotBuocHienTai?.tuDongChuyenBuocKhiHetHan}
+								data={current as KhaiBaoQuyTrinh.IBuocXuLy}
+								modelName={modalName}
+							/>
+
+							<ThongTinHoiDong
+								maBuoc={current?.ma}
+								quyTrinhId={dataQuyTrinh?.quyTrinhId}
+								dotQuyTrinhId={dotCurrent?._id}
+							/>
+							<ThongTinQuyetDinh maBuoc={current?.ma} dotQuyTrinhId={dotCurrent?._id} />
 
 							{current?.coKhaiBao &&
 							current?.trangThaiTiepNhan !== TrangThaiTiepNhanDon.CHINH_SUA_LAI &&
 							!editFormKhaiBao ? (
-								<div>
-									<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
+								<Collapse ghost defaultActiveKey={['viewkhaibao']}>
+									<Collapse.Panel
+										key={'viewkhaibao'}
+										header={
+											<b>{dataQuyTrinh?.danhSachKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao)?.ten}</b>
+										}
+									>
+										<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
+											{cauHinhForm?.cauHinhLoaiHinh
+												?.filter(
+													(item) => item.kieuDuLieu !== EKieuDuLieu.TABLE && item.kieuDuLieu !== EKieuDuLieu.DANHSACH,
+												)
+												.map((item) =>
+													!item?.truongThongTinLienQuan ||
+													(item?.truongThongTinLienQuan &&
+														(dataForm?.thongTinKhaiBao?.[item?.truongThongTinLienQuan] === item?.giaTriLienQuan ||
+															(item.giaTriLienQuan.includes &&
+																item?.giaTriLienQuan?.includes(
+																	dataForm?.thongTinKhaiBao?.[item?.truongThongTinLienQuan],
+																)))) ? (
+														<Descriptions.Item
+															key={item.ma}
+															span={item?.colspan ? item.colspan / 4 : 6}
+															label={<div style={{ maxWidth: 300 }}>{item.ten}</div>}
+														>
+															<ViewRender
+																cauHinh={item}
+																recordSanPham={
+																	{
+																		thongTinKhaiBao: dataForm?.thongTinKhaiBao,
+																	} as any
+																}
+															/>
+														</Descriptions.Item>
+													) : null,
+												)}
+										</Descriptions>
 										{cauHinhForm?.cauHinhLoaiHinh
-											?.filter(
-												(item) => item.kieuDuLieu !== EKieuDuLieu.TABLE && item.kieuDuLieu !== EKieuDuLieu.DANHSACH,
-											)
-											.map((item) =>
-												!item?.truongThongTinLienQuan ||
-												(item?.truongThongTinLienQuan &&
-													(dataForm?.thongTinKhaiBao?.[item?.truongThongTinLienQuan] === item?.giaTriLienQuan ||
-														(item.giaTriLienQuan.includes &&
-															item?.giaTriLienQuan?.includes(
-																dataForm?.thongTinKhaiBao?.[item?.truongThongTinLienQuan],
-															)))) ? (
-													<Descriptions.Item
-														key={item.ma}
-														span={item?.colspan ? item.colspan / 4 : 6}
-														label={<div style={{ maxWidth: 300 }}>{item.ten}</div>}
-													>
-														<ViewRender
-															cauHinh={item}
-															recordSanPham={
-																{
-																	thongTinKhaiBao: dataForm?.thongTinKhaiBao,
-																} as any
-															}
-														/>
-													</Descriptions.Item>
-												) : null,
-											)}
-									</Descriptions>
-									{cauHinhForm?.cauHinhLoaiHinh
-										.filter((item) => {
-											return item.kieuDuLieu === EKieuDuLieu.TABLE || item.kieuDuLieu === EKieuDuLieu.DANHSACH;
-										})
-										.map((item) => (
-											<>
-												<Descriptions>
-													<Descriptions.Item span={6} label={<div style={{ maxWidth: 300 }}>{item.ten}</div>}>
-														{' '}
-													</Descriptions.Item>
-												</Descriptions>
-												<ViewRender
-													cauHinh={item}
-													recordSanPham={{
-														thongTinKhaiBao: dataForm?.thongTinKhaiBao,
+											.filter((item) => {
+												return item.kieuDuLieu === EKieuDuLieu.TABLE || item.kieuDuLieu === EKieuDuLieu.DANHSACH;
+											})
+											.map((item) => (
+												<>
+													<Descriptions>
+														<Descriptions.Item span={6} label={<div style={{ maxWidth: 300 }}>{item.ten}</div>}>
+															{' '}
+														</Descriptions.Item>
+													</Descriptions>
+													<ViewRender
+														cauHinh={item}
+														recordSanPham={{
+															thongTinKhaiBao: dataForm?.thongTinKhaiBao,
+														}}
+													/>
+													<br />
+												</>
+											))}
+										{!editFormKhaiBao && (
+											<div style={{ display: 'flex', justifyContent: 'center' }}>
+												<Button
+													onClick={() => {
+														setEditFormKhaiBao(true);
+														const dataFormKhaiBao = dataQuyTrinh?.danhSachKhaiBao?.find(
+															(ele) => ele.ma === current.maFormKhaiBao,
+														);
+														const valuesFormKhaiBao: any = {};
+														Object.keys(dataFormKhaiBao?.thongTinKhaiBao).map((key) => {
+															valuesFormKhaiBao[key] = dataFormKhaiBao?.thongTinKhaiBao[key]?.value;
+														});
+														setRecordQuyTrinhForm({ ...dataFormKhaiBao, thongTinKhaiBao: valuesFormKhaiBao });
+														setRecordFormKhaiBao(valuesFormKhaiBao);
 													}}
-												/>
-												<br />
-											</>
-										))}
-									{!editFormKhaiBao && (
-										<div style={{ display: 'flex', justifyContent: 'center' }}>
-											<Button
-												onClick={() => {
-													setEditFormKhaiBao(true);
-													const dataFormKhaiBao = dataQuyTrinh?.danhSachKhaiBao?.find(
-														(ele) => ele.ma === current.maFormKhaiBao,
-													);
-													const valuesFormKhaiBao: any = {};
-													Object.keys(dataFormKhaiBao?.thongTinKhaiBao).map((key) => {
-														valuesFormKhaiBao[key] = dataFormKhaiBao?.thongTinKhaiBao[key]?.value;
-													});
-													setRecordQuyTrinhForm({ ...dataFormKhaiBao, thongTinKhaiBao: valuesFormKhaiBao });
-													setRecordFormKhaiBao(valuesFormKhaiBao);
-												}}
-												style={{ margin: '0 auto' }}
-												icon={<EditOutlined />}
-												type='primary'
-											>
-												Chỉnh sửa
-											</Button>
-										</div>
-									)}
-								</div>
+													style={{ margin: '0 auto' }}
+													icon={<EditOutlined />}
+													type='primary'
+												>
+													Chỉnh sửa
+												</Button>
+											</div>
+										)}
+									</Collapse.Panel>
+								</Collapse>
 							) : (
 								<>{FormModal && <FormModal {...formProps} />}</>
 							)}
