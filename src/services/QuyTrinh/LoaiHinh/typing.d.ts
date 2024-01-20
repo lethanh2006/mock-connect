@@ -29,6 +29,7 @@ declare module LoaiHinh {
 		ghiChu: string;
 		maFormLayDefaultValue: string;
 		maFieldLayDefaultValue: string;
+		textDisplay: ETextDisplay;
 	}
 
 	export interface TruongThongTin {
@@ -52,6 +53,7 @@ declare module LoaiHinh {
 		ghiChu: string;
 		maFormLayDefaultValue: string;
 		maFieldLayDefaultValue: string;
+		textDisplay: ETextDisplay;
 	}
 
 	export interface TieuChi {

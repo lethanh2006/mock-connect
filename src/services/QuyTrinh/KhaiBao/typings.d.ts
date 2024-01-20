@@ -46,6 +46,7 @@ declare module KhaiBaoQuyTrinh {
 		ghiChu: string;
 		maBoPhanXuLy: string;
 		trangThaiTiepNhan: string;
+		vanBan: VanBan.IRecord;
 		doiTuongDieuPhoi: string;
 		coKhaiBao: boolean;
 		daDienThongTin: boolean;
