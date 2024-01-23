@@ -27,8 +27,8 @@ const DiemThanhPhanSV = () => {
 		},
 		style: {
 			cursor: 'pointer',
-			backgroundColor: rec.diemChu === ELoaiDiemChu.F ? '#f7dcdcbd' : undefined,
-			color: rec.diemChu === ELoaiDiemChu.F ? 'red' : undefined,
+			backgroundColor: rec.diemHpSvHk?.diemChu === ELoaiDiemChu.F ? '#f7dcdcbd' : undefined,
+			color: rec.diemHpSvHk?.diemChu === ELoaiDiemChu.F ? 'red' : undefined,
 		},
 	});
 
@@ -58,10 +58,10 @@ const DiemThanhPhanSV = () => {
 		},
 	];
 
-	const cols1: IColumn<any>[] = [1, 2].map((item) => ({
+	const cols1: IColumn<LopHocPhan.IRecordSinhVienLopHP>[] = [1, 2].map((item) => ({
 		title: `Điểm thi lần ${item}`,
 		width: 80,
-		dataIndex: `diemThi${item}`,
+		dataIndex: ['diemHpSvHk', `diemThi${item}`],
 		align: 'center',
 		sortable: true,
 		onCell,
@@ -69,7 +69,7 @@ const DiemThanhPhanSV = () => {
 	cols1.push(
 		{
 			title: 'Tổng tổng kết',
-			dataIndex: 'diemTongKet',
+			dataIndex: ['diemHpSvHk', 'diemTongKet'],
 			align: 'center',
 			render: (val) => <b style={(val || val === 0) && val < 4 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
 			width: 80,
@@ -79,7 +79,7 @@ const DiemThanhPhanSV = () => {
 		{
 			title: 'Điểm thang 4',
 			width: 80,
-			dataIndex: 'diemThang4',
+			dataIndex: ['diemHpSvHk', 'diemThang4'],
 			align: 'center',
 			render: (val) => <b style={val === 0 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
 			sortable: true,
@@ -88,7 +88,7 @@ const DiemThanhPhanSV = () => {
 		{
 			title: 'Điểm chữ',
 			width: 80,
-			dataIndex: 'diemChu',
+			dataIndex: ['diemHpSvHk', 'diemChu'],
 			align: 'center',
 			filterType: 'select',
 			filterData: Object.values(ELoaiDiemChu),
@@ -102,10 +102,10 @@ const DiemThanhPhanSV = () => {
 		children: cols1,
 	});
 
-	const cols: IColumn<any>[] = danhSachDauDiem.map((item) => ({
+	const cols: IColumn<LopHocPhan.IRecordSinhVienLopHP>[] = danhSachDauDiem.map((item) => ({
 		title: item.ten,
 		width: 80,
-		dataIndex: `diemThanhPhan${item.field}`,
+		dataIndex: ['diemHpSvHk', `diemThanhPhan${item.field}`],
 		align: 'center',
 		sortable: true,
 		onCell,
@@ -128,7 +128,9 @@ const DiemThanhPhanSV = () => {
 								pagination: false,
 								scroll: { y: 660 },
 							}}
-							data={(danhSach ?? []).filter((item) => loaiHocPhan === 'all' || item.diemChu === ELoaiDiemChu.F)}
+							data={(danhSach ?? []).filter(
+								(item) => loaiHocPhan === 'all' || item.diemHpSvHk?.diemChu === ELoaiDiemChu.F,
+							)}
 							columns={columns}
 							addStt
 							hasTotal
