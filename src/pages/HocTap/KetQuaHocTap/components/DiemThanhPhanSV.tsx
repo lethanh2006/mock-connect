@@ -68,7 +68,7 @@ const DiemThanhPhanSV = () => {
 	}));
 	cols1.push(
 		{
-			title: 'Tổng tổng kết',
+			title: 'Tổng kết (hệ 10)',
 			dataIndex: ['diemHpSvHk', 'diemTongKet'],
 			align: 'center',
 			render: (val) => <b style={(val || val === 0) && val < 4 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
@@ -77,7 +77,7 @@ const DiemThanhPhanSV = () => {
 			sortable: true,
 		},
 		{
-			title: 'Điểm thang 4',
+			title: 'Tổng kết (hệ 4)',
 			width: 80,
 			dataIndex: ['diemHpSvHk', 'diemThang4'],
 			align: 'center',
@@ -86,7 +86,7 @@ const DiemThanhPhanSV = () => {
 			onCell,
 		},
 		{
-			title: 'Điểm chữ',
+			title: 'Tổng kết (dạng chữ)',
 			width: 80,
 			dataIndex: ['diemHpSvHk', 'diemChu'],
 			align: 'center',
