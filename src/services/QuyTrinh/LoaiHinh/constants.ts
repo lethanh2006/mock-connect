@@ -19,6 +19,7 @@ export enum EKieuDuLieu {
 	TABLE = 'Bảng',
 	FILE = 'File',
 	CAN_BO = 'TCNS - Cán bộ',
+	SINH_VIEN = 'QLĐT - Sinh viên',
 	DANHSACH = 'Danh sách sản phẩm NCKH',
 }
 

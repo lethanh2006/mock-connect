@@ -363,7 +363,21 @@ const View = (props: Iprops) => {
 									</Collapse.Panel>
 								</Collapse>
 							) : (
-								<>{FormModal && <FormModal {...formProps} />}</>
+								<Collapse ghost defaultActiveKey={['viewkhaibao']}>
+									<Collapse.Panel
+										key={'viewkhaibao'}
+										header={
+											<b>
+												{
+													dataQuyTrinh?.quyTrinh?.danhSachFormKhaiBao?.find((ele) => ele.ma === current.maFormKhaiBao)
+														?.ten
+												}
+											</b>
+										}
+									>
+										{FormModal && <FormModal {...formProps} />}
+									</Collapse.Panel>
+								</Collapse>
 							)}
 						</Col>
 					</Row>
