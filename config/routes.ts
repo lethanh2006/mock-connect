@@ -118,12 +118,12 @@
 					},
 				],
 			},
-			// {
-			// 	name: 'KetQuaHocTap',
-			// 	path: './ket-qua-hoc-tap',
-			// 	// access: 'sinhVien',
-			// 	component: './HocTap/KetQuaHocTap',
-			// },
+			{
+				name: 'KetQuaHocTap',
+				path: './ket-qua-hoc-tap',
+				// access: 'sinhVien',
+				component: './HocTap/KetQuaHocTap',
+			},
 			// {
 			// 	name: 'XetHocVu',
 			// 	path: './xet-hoc-vu',

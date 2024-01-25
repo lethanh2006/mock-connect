@@ -69,7 +69,7 @@ declare module ChuongTrinhDaoTao {
 
 		// Populate
 		hoc: ETrangThaiHocTap;
-		lichSuDiem?: LopHocPhan.IRecordSinhVienLopHP[];
+		lichSuDiem?: LopHocPhan.IDiemHpSvHk[];
 	}
 
 	export interface IChungChiCTDT {

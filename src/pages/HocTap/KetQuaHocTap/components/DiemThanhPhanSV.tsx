@@ -1,5 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Card, Segmented, Tabs, Tag } from 'antd';
@@ -14,6 +15,7 @@ const DiemThanhPhanSV = () => {
 	const { danhSach: danhSachDauDiem, getModel: getDauDiem } = useModel('daotao.daudiemhocphan');
 	const [modalVisible, setModalVisible] = useState(false);
 	const [loaiHocPhan, setLoaiHocPhan] = useState<string>('all');
+	const [hocPhan, setHocPhan] = useState<HocPhan.IRecord>();
 
 	useEffect(() => {
 		sinhVienGetAllDiemLopHocPhanModel();
@@ -22,6 +24,7 @@ const DiemThanhPhanSV = () => {
 
 	const onCell = (rec: LopHocPhan.IRecordSinhVienLopHP) => ({
 		onClick: () => {
+			setHocPhan(rec.hocPhan);
 			setSinhVienLopHocPhan(rec);
 			setModalVisible(true);
 		},
@@ -59,7 +62,7 @@ const DiemThanhPhanSV = () => {
 	];
 
 	const cols1: IColumn<LopHocPhan.IRecordSinhVienLopHP>[] = [1, 2].map((item) => ({
-		title: `Điểm thi lần ${item}`,
+		title: `Thi lần ${item}`,
 		width: 80,
 		dataIndex: ['diemHpSvHk', `diemThi${item}`],
 		align: 'center',
@@ -103,7 +106,7 @@ const DiemThanhPhanSV = () => {
 	});
 
 	const cols: IColumn<LopHocPhan.IRecordSinhVienLopHP>[] = danhSachDauDiem.map((item) => ({
-		title: item.ten,
+		title: item.ma ?? item.ten,
 		width: 80,
 		dataIndex: ['diemHpSvHk', `diemThanhPhan${item.field}`],
 		align: 'center',
@@ -128,9 +131,9 @@ const DiemThanhPhanSV = () => {
 								pagination: false,
 								scroll: { y: 660 },
 							}}
-							data={(danhSach ?? []).filter(
-								(item) => loaiHocPhan === 'all' || item.diemHpSvHk?.diemChu === ELoaiDiemChu.F,
-							)}
+							data={(danhSach ?? [])
+								.filter((item) => loaiHocPhan === 'all' || item.diemHpSvHk?.diemChu === ELoaiDiemChu.F)
+								.map((item) => ({ ...item, soTinChi: item.hocPhan?.soTinChi }))}
 							columns={columns}
 							addStt
 							hasTotal
@@ -155,7 +158,7 @@ const DiemThanhPhanSV = () => {
 			<ModalChiTietDiem
 				visible={modalVisible}
 				setVisible={setModalVisible}
-				chuongTrinhKhung={sinhVienLopHocPhan}
+				hocPhan={hocPhan}
 				lopHocPhanId={sinhVienLopHocPhan?.lopHocPhanId}
 			/>
 		</>
