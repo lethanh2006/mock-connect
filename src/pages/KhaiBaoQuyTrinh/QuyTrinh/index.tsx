@@ -34,13 +34,7 @@ const QuyTrinhPage = () => {
 	const handleRedirect = async (quyTrinhId: string) => {
 		try {
 			setLoading(true);
-			const res = await getDot(
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				`all/quy-trinh/${quyTrinhId}`,
-			);
+			const res = await getDot(undefined, undefined, undefined, undefined, `all/quy-trinh/${quyTrinhId}`);
 			if (res) {
 				if (res.length === 1) {
 					const res2 = await createDonKhaiBaoUser(quyTrinhId, res?.[0]?._id);
@@ -71,7 +65,7 @@ const QuyTrinhPage = () => {
 
 	const columns2: IColumn<QuyTrinh.IRecord>[] = [
 		{
-			title: 'Hoạt động KH&CN',
+			title: 'Dịch vụ',
 			dataIndex: 'ten',
 			width: 250,
 			filterType: 'string',

@@ -11,7 +11,7 @@ const QuyTrinhView = ({
 }: {
 	match: { params: { id: string } };
 }) => {
-	const { current, setCurrent, setDataQuyTrinh, dataQuyTrinh, setCurrentFormKhaiBao } =
+	const { current, setCurrent, setDataQuyTrinh, dataQuyTrinh, setCurrentFormKhaiBao, setEditFormKhaiBao } =
 		useModel('quytrinh.khaibaoquytrinh');
 	const [loadingForm, setLoadingForm] = useState<boolean>(false);
 	const { query = {} } = history.location;
@@ -42,6 +42,13 @@ const QuyTrinhView = ({
 	useEffect(() => {
 		getData(id);
 	}, [id]);
+
+	useEffect(() => {
+		return () => {
+			setEditFormKhaiBao(false);
+		};
+	}, []);
+
 	return (
 		<>
 			{dataQuyTrinh && current && (

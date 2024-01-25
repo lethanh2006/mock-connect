@@ -3,7 +3,7 @@ import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
-import { ETrangThaiSinhVienQuyDoiDiem, colorTrangThaiSinhVienQuyDoiDiem } from '@/services/HocTap/constant';
+import { type ETrangThaiSinhVienQuyDoiDiem, colorTrangThaiSinhVienQuyDoiDiem } from '@/services/HocTap/constant';
 import { Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
@@ -21,19 +21,14 @@ const LichSuQuyDoiDiemPage = () => {
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 
 	const getData = () =>
-		getModel(
+		getModel(undefined, [
 			{
-				trangThai: ETrangThaiSinhVienQuyDoiDiem.DA_RA_QUYET_DINH,
+				active: true,
+				field: 'sinhVienSsoId',
+				operator: EOperatorType.INCLUDE,
+				values: [recSinhVien?.ssoId ?? ''],
 			},
-			[
-				{
-					active: true,
-					field: 'sinhVienSsoId',
-					operator: EOperatorType.INCLUDE,
-					values: [recSinhVien?.ssoId ?? ''],
-				},
-			],
-		);
+		]);
 
 	const onCell = (rec: QuyDoiDiem.IQuyDoiDiemSinhVien) => ({
 		onClick: () => handleViewQuyDoi(rec),
@@ -69,7 +64,7 @@ const LichSuQuyDoiDiemPage = () => {
 			width: 240,
 			children: [
 				{
-					title: 'Điểm thang 10',
+					title: 'Điểm hệ 10',
 					dataIndex: 'diemHe10',
 					align: 'center',
 					width: 80,
@@ -78,7 +73,7 @@ const LichSuQuyDoiDiemPage = () => {
 					onCell,
 				},
 				{
-					title: 'Điểm thang 4',
+					title: 'Điểm hệ 4',
 					dataIndex: 'diemHe4',
 					align: 'center',
 					width: 80,
@@ -99,7 +94,11 @@ const LichSuQuyDoiDiemPage = () => {
 			title: 'Trạng thái',
 			width: 100,
 			render: (val, rec) =>
-				rec.diemHe10 && rec.diemHe4 ? <Tag color='green'>Đã có KQ</Tag> : <Tag color='blue'>Chưa có KQ</Tag>,
+				rec.diemHe10 || rec.diemHe4 || rec.diemChu ? (
+					<Tag color='green'>Đã có KQ</Tag>
+				) : (
+					<Tag color='blue'>Chưa có KQ</Tag>
+				),
 			onCell,
 		},
 		{

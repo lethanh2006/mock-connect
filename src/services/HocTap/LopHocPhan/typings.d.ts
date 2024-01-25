@@ -2,7 +2,8 @@ import { type ELoaiHocPhanDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/co
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import type { EDoiTuongLopHanhChinh } from '../constant';
+import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
+import type { EDoiTuongLopHanhChinh, ETrangThaiThi } from '../constant';
 import {
 	type ELoaiDiemChu,
 	type ELoaiLopHocPhan,
@@ -69,7 +70,7 @@ export declare module LopHocPhan {
 		trangThai: ETrangThaiDangKyGiangDay;
 	}
 
-	export interface IRecordSinhVienLopHP extends IDiemThanhPhan, IDiemThi, IDiemTongKet {
+	export interface IRecordSinhVienLopHP {
 		_id: string;
 		lopHocPhanId: string;
 		lopHocPhan: IRecord;
@@ -77,22 +78,42 @@ export declare module LopHocPhan {
 		sinhVien?: SinhVien.IRecord;
 		maKhoaNganh?: string;
 
-		// khoa: boolean;
-		// khoaDiemThi: boolean;
-		// nopDiem: boolean;
-		public?: boolean;
-		publicDiemThi?: boolean;
-
 		maSvHk?: string; // {ssoId}|{maHocKy}
 		idPhieuDktc?: string;
 		// phieuDktc: ;
 
 		loai?: ELoaiHocPhanDangKyTinChi;
+		diemHpSvHk?: IDiemHpSvHk;
 
 		// Populate
 		soTinChi?: number;
 		hocPhan?: HocPhan.IRecord;
 		kyHoc?: HocKy.IRecord;
+	}
+
+	export interface IDiemHpSvHk extends IDiemThanhPhan, IDiemThi, IDiemTongKet {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: SinhVien.IRecord;
+		maHocPhan: string;
+		hocPhan?: HocPhan.IRecord;
+		maHocKy: string;
+		hocKy?: HocKy.IRecord;
+
+		// Điểm có từ lớp học phần?
+		tenLopHocPhan?: string;
+		lopHocPhan?: IRecord;
+
+		// Điểm có từ quy đổi điểm?
+		dotDangKyQuyDoiDiemId: string;
+		dotDangKyQuyDoiDiem?: QuyDoiDiem.IQuyDoiDiemSinhVien;
+
+		// trangThaiDuyetDiemThanhPhan?: ETrangThaiDuyetDiem;
+		// trangThaiDuyet?: ETrangThaiDuyetDiem;
+
+		khoa: boolean; // Khóa điểm thành phần
+		khoaDiemThi: boolean; // Khóa điểm thi
+		public: boolean;
 	}
 
 	export interface IDiemThanhPhan {
@@ -106,6 +127,7 @@ export declare module LopHocPhan {
 		diemThanhPhan8?: number;
 		diemThanhPhan9?: number;
 		diemThanhPhan10?: number;
+		trangThaiThi?: ETrangThaiThi;
 	}
 
 	export interface IDiemThi {
