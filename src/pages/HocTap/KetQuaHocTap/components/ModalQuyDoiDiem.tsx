@@ -8,13 +8,9 @@ import moment from 'moment';
 import { useModel } from 'umi';
 import FormItemMinhChungQuyDoi from '../MinhChungQuyDoi/FormItemMinhChung';
 
-const ModalQuyDoiDiem = (props: {
-	visible: boolean;
-	setVisible: any;
-	chuongTrinhKhung?: { hocPhan?: HocPhan.IRecord; soTinChi?: number };
-}) => {
+const ModalQuyDoiDiem = (props: { visible: boolean; setVisible: any; hocPhan?: HocPhan.IRecord }) => {
 	const [form] = Form.useForm();
-	const { visible, setVisible, chuongTrinhKhung } = props;
+	const { visible, setVisible, hocPhan } = props;
 	const { formSubmiting, postSinhVienQuyDoiModel, isView, record, setIsView, getModel } = useModel(
 		'daotao.quydoidiem.sinhvienquydoidiem',
 	);
@@ -35,7 +31,7 @@ const ModalQuyDoiDiem = (props: {
 		const data = {
 			thongTinQuyDoiDiemSinhVien: {
 				sinhVienSsoId: recSinhVien?.ssoId,
-				maHocPhan: chuongTrinhKhung?.hocPhan?.ma,
+				maHocPhan: hocPhan?.ma,
 				maSinhVien: recSinhVien?.ma,
 				hoTen: recSinhVien?.ten,
 			},
@@ -105,10 +101,10 @@ const ModalQuyDoiDiem = (props: {
 						<>
 							<Descriptions column={{ xs: 1, md: 2, sm: 1, lg: 2, xl: 2 }}>
 								<Descriptions.Item span={2} label='Học phần xin công nhận'>
-									{chuongTrinhKhung?.hocPhan?.ten ?? ''}
+									{hocPhan?.ten ?? ''}
 								</Descriptions.Item>
-								<Descriptions.Item label='Mã học phần'>{chuongTrinhKhung?.hocPhan?.ma ?? ''}</Descriptions.Item>
-								<Descriptions.Item label='Số tín chỉ'>{chuongTrinhKhung?.hocPhan?.soTinChi ?? ''}</Descriptions.Item>
+								<Descriptions.Item label='Mã học phần'>{hocPhan?.ma ?? ''}</Descriptions.Item>
+								<Descriptions.Item label='Số tín chỉ'>{hocPhan?.soTinChi ?? ''}</Descriptions.Item>
 							</Descriptions>
 						</>
 					)}
