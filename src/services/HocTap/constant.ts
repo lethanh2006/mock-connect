@@ -16,6 +16,12 @@ export enum ELoaiHocLuc {
 	EMPTY = 'Chưa xếp loại',
 }
 
+// Nhập điểm: Trạng thái thi
+export enum ETrangThaiThi {
+	CAM_THI = 'Cấm thi',
+	DU_DIEU_KIEN = 'Đủ điều kiện',
+}
+
 //Xét học vụ
 export enum ETrangThaiDuyetCanhBao {
 	CHO_DUYET = 'Chờ duyệt',

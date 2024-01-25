@@ -2,7 +2,7 @@ import { Card, Form, Tag } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import { useEffect, useState } from 'react';
 import { TrangThaiKhaiBao } from '@/services/QuyTrinh/KhaiBao/constants';
-import { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
+import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
 
 const ViewResult = (props: { danhSachKhaiBao: any; modelName: any; type?: 'dieu_phoi' | 'tiep_nhan' }) => {
@@ -42,7 +42,7 @@ const ViewResult = (props: { danhSachKhaiBao: any; modelName: any; type?: 'dieu_
 					disabled={true}
 				>
 					{currentFormKhaiBao?.cauHinhLoaiHinh?.map((item: LoaiHinh.TruongThongTin | LoaiHinh.Cot) => (
-						<FormRender formValues={formValues} key={item.ma} cauHinh={item} />
+						<FormRender form={form} formValues={formValues} key={item.ma} cauHinh={item} />
 					))}
 				</Form>
 			</Card>
