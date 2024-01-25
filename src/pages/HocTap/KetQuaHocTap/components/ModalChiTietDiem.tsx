@@ -16,7 +16,7 @@ const ModalChiTietDiem = (props: {
 	setVisible: (val: boolean) => void;
 	lopHocPhanId?: string;
 	chuongTrinhKhung?: { hocPhan?: HocPhan.IRecord; soTinChi?: number };
-	listDiem?: LopHocPhan.IRecordSinhVienLopHP[];
+	listDiem?: LopHocPhan.IDiemHpSvHk[];
 	trangThaiHoc?: ETrangThaiHocTap;
 }) => {
 	const { getByIdModel } = useModel('daotao.lophocphan');
@@ -102,7 +102,7 @@ const ModalChiTietDiem = (props: {
 							listDiem.map((diem, index) => (
 								<>
 									{listDiem.length > 1 ? <Divider>Học lần {index + 1}</Divider> : null}
-									<DetailKetQuaHocTap key={diem._id} sinhVienLopHp={diem} />
+									<DetailKetQuaHocTap key={diem._id} diemHpSvHk={diem} />
 								</>
 							))
 						)}
