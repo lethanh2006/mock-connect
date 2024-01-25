@@ -1,4 +1,6 @@
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
+import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -8,16 +10,25 @@ import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
-import { resetFieldsForm } from '@/utils/utils';
 
-const FormTraLoiKhaoSat = () => {
+const FormTraLoiKhaoSat = (props: {
+	isDanhGiaGiangVien?: boolean;
+	giangVienSsoId?: string;
+	getDanhGiaGiangVien?: any;
+	ngoaiThoiGian?: boolean;
+}) => {
+	const { isDanhGiaGiangVien, giangVienSsoId, getDanhGiaGiangVien, ngoaiThoiGian } = props;
 	const { loading, record, traLoiBieuMauModel, formSubmiting } = useModel('tienich.bieumau');
-	const { setVisibleForm, record: recordDot, getDotMeModel, visibleForm } = useModel('tienich.dotkhaosat');
+	const { danhGiaGiangVienModel, danhSach: dannhSachDanhGia } = useModel('sinhvien.danhgiagiangvien');
+	const { setVisibleForm, record: recordDot, getDotMeModel, visibleForm, danhSach } = useModel('tienich.dotkhaosat');
+	const { danhSach: danhSachNhanSu } = useModel('daotao.nhansulophocphan');
+	const { record: recLopHocPhan } = useModel('daotao.lophocphan');
 	const [listLuaChonBang, setListLuaChonBang] = useState<BieuMau.LuaChonBangRecord[][]>([]);
 	const [check, setCheck] = useState<boolean>(false);
 	const [loadingForm, setLoadingform] = useState<boolean>(false);
 	const [form] = Form.useForm();
+
+	const cauTraLoi = dannhSachDanhGia.find((item) => item.giangVienSsoId === giangVienSsoId)?.danhSachTraLoi;
 
 	useEffect(() => {
 		if (!visibleForm) {
@@ -26,14 +37,44 @@ const FormTraLoiKhaoSat = () => {
 		}
 	}, [visibleForm]);
 
+	useEffect(() => {
+		if (!cauTraLoi) {
+			resetFieldsForm(form);
+		}
+	}, [giangVienSsoId]);
+
 	const renderQuestion = (question: BieuMau.CauHoi, indexKhoi: number, indexCauHoi: number) => {
 		let questionEleMent = <div />;
 		if (question.loai === 'SingleChoice')
-			questionEleMent = <SingleChoice question={question} indexKhoi={indexKhoi} indexCauHoi={indexCauHoi} />;
+			questionEleMent = (
+				<SingleChoice
+					question={question}
+					indexKhoi={indexKhoi}
+					indexCauHoi={indexCauHoi}
+					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
+					form={form}
+				/>
+			);
 		else if (question.loai === 'MultipleChoice')
-			questionEleMent = <MultipleChoice question={question} indexKhoi={indexKhoi} indexCauHoi={indexCauHoi} />;
+			questionEleMent = (
+				<MultipleChoice
+					question={question}
+					indexKhoi={indexKhoi}
+					indexCauHoi={indexCauHoi}
+					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
+					form={form}
+				/>
+			);
 		else if (question.loai === 'Text')
-			questionEleMent = <Text question={question} indexKhoi={indexKhoi} indexCauHoi={indexCauHoi} />;
+			questionEleMent = (
+				<Text
+					question={question}
+					indexKhoi={indexKhoi}
+					indexCauHoi={indexCauHoi}
+					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
+					form={form}
+				/>
+			);
 		else if (question.loai === 'GridMultipleChoice' || question.loai === 'GridSingleChoice')
 			questionEleMent = (
 				<GridChoice
@@ -42,12 +83,29 @@ const FormTraLoiKhaoSat = () => {
 					question={question}
 					indexKhoi={indexKhoi}
 					indexCauHoi={indexCauHoi}
+					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
 				/>
 			);
 		else if (question.loai === 'NumericRange')
-			questionEleMent = <NumericChoice question={question} indexKhoi={indexKhoi} indexCauHoi={indexCauHoi} />;
+			questionEleMent = (
+				<NumericChoice
+					question={question}
+					indexKhoi={indexKhoi}
+					indexCauHoi={indexCauHoi}
+					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
+					form={form}
+				/>
+			);
 		else if (question.loai === 'UploadFile') {
-			questionEleMent = <FileChoice question={question} indexKhoi={indexKhoi} indexCauHoi={indexCauHoi} />;
+			questionEleMent = (
+				<FileChoice
+					question={question}
+					indexKhoi={indexKhoi}
+					indexCauHoi={indexCauHoi}
+					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
+					form={form}
+				/>
+			);
 		}
 
 		return (
@@ -60,6 +118,7 @@ const FormTraLoiKhaoSat = () => {
 			</div>
 		);
 	};
+
 	const handleConvertCauTraLoi = async (values: any) => {
 		const danhSachTraLoi: BieuMau.TraLoiRecord[] = [];
 		record?.danhSachKhoi?.forEach((khoi, indexKhoi) => {
@@ -74,7 +133,7 @@ const FormTraLoiKhaoSat = () => {
 				if (cauHoi.loai === 'UploadFile') {
 					const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`).then(() => {});
 					console.log('lisst', listUrlFile);
-					traLoi = { ...traLoi, listUrlFile: listUrlFile };
+					// traLoi = { ...traLoi, listUrlFile: listUrlFile };
 				} else if (cauHoi.loai === 'SingleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
 					traLoi = { ...traLoi, listLuaChon: [values[`${indexKhoi}||${indexCauHoi}`]] };
 				else if (cauHoi.loai === 'MultipleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
@@ -98,6 +157,7 @@ const FormTraLoiKhaoSat = () => {
 		});
 		return danhSachTraLoi;
 	};
+
 	const onFinish = async (values: any) => {
 		setLoadingform(true);
 		const danhSachTraLoi: BieuMau.TraLoiRecord[] = [];
@@ -176,7 +236,6 @@ const FormTraLoiKhaoSat = () => {
 		// 	});
 		// });
 
-		console.log('danh', danhSachTraLoi);
 		// Promise.all()
 
 		// setTimeout(() => {
@@ -196,21 +255,44 @@ const FormTraLoiKhaoSat = () => {
 		// 			setLoadingform(false);
 		// 		});
 		// }, 2000);
-		await traLoiBieuMauModel({
-			idKhaoSat: record?._id ?? '',
-			danhSachTraLoi,
-			idDot: recordDot?._id ?? '',
-		})
-			.then(() => {
-				getDotMeModel();
-				setVisibleForm(false);
-        setLoadingform(false)
+
+		if (isDanhGiaGiangVien) {
+			await danhGiaGiangVienModel({
+				idKhaoSat: record?._id ?? '',
+				danhSachTraLoi,
+				idDot: recordDot?._id ?? danhSach[0]?._id,
+				maLop: isDanhGiaGiangVien ? recLopHocPhan?.maHocPhan : undefined,
+				lopHocPhanId: isDanhGiaGiangVien ? recLopHocPhan?._id : undefined,
+				giangVienSsoId: isDanhGiaGiangVien ? giangVienSsoId : undefined,
+				maGiangVien: isDanhGiaGiangVien
+					? danhSachNhanSu.find((item) => item.nhanSuSsoId === giangVienSsoId)?.maNhanSu
+					: undefined,
+				hoTenGiangVien: isDanhGiaGiangVien
+					? danhSachNhanSu.find((item) => item.nhanSuSsoId === giangVienSsoId)?.tenNhanSu
+					: undefined,
 			})
-			.catch((er) => console.log(er));
+				.then(() => {
+					if (getDanhGiaGiangVien) getDanhGiaGiangVien();
+					setLoadingform(false);
+				})
+				.catch((er) => console.log(er));
+		} else {
+			await traLoiBieuMauModel({
+				idKhaoSat: record?._id ?? '',
+				danhSachTraLoi,
+				idDot: recordDot?._id ?? danhSach[0]?._id,
+			})
+				.then(() => {
+					getDotMeModel();
+					setVisibleForm(false);
+					setLoadingform(false);
+				})
+				.catch((er) => console.log(er));
+		}
 	};
 
 	return (
-		<Card loading={loading} title='Chi tiết khảo sát'>
+		<Card loading={loading} title={isDanhGiaGiangVien ? undefined : 'Chi tiết khảo sát'}>
 			<Spin spinning={loadingForm}>
 				<Form scrollToFirstError onFinish={onFinish} layout='vertical' form={form}>
 					<h3>{record?.tieuDe}</h3>
@@ -238,10 +320,15 @@ const FormTraLoiKhaoSat = () => {
 					)}
 
 					<div className='form-footer'>
-						<Button disabled={record?.coCamKet && !check} loading={formSubmiting} htmlType='submit' type='primary'>
+						<Button
+							disabled={(record?.coCamKet && !check) || ngoaiThoiGian}
+							loading={formSubmiting}
+							htmlType='submit'
+							type='primary'
+						>
 							Hoàn thành
 						</Button>
-						<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+						{!isDanhGiaGiangVien ? <Button onClick={() => setVisibleForm(false)}>Hủy</Button> : null}
 					</div>
 				</Form>
 			</Spin>

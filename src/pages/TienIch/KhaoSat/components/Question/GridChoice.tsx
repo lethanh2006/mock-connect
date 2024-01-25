@@ -11,9 +11,20 @@ const GridChoice = (props: {
 	listLuaChonBang: BieuMau.LuaChonBangRecord[][];
 	setListLuaChonBang: any;
 	setErr?: any;
+	traLoi?: any;
 }) => {
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 	const fieldName = props.indexKhoi || props.indexCauHoi;
+
+	const handleCheckDapAn = (idCot: string, idHang: string): boolean => {
+		let check = false;
+		props?.traLoi?.listLuaChonBang?.forEach((val: { idHang: string; idCot: string }) => {
+			if (val?.idHang === idHang && val?.idCot === idCot) {
+				check = true;
+			}
+		});
+		return check;
+	};
 
 	const onChange = (e: any, idHang: string, idCot: string) => {
 		const listTemp =
@@ -73,9 +84,12 @@ const GridChoice = (props: {
 					(ele) => ele.idHang === val && ele.idCot === item._id,
 				);
 				return props?.question?.loai === 'GridSingleChoice' ? (
-					<Checkbox checked={!!luaChon?.idHang} onChange={(e) => onChange(e, val, item._id)} />
+					<Checkbox
+						checked={!!luaChon?.idHang || handleCheckDapAn(item?._id, val)}
+						onChange={(e) => onChange(e, val, item._id)}
+					/>
 				) : (
-					<Checkbox onChange={(e) => onChange(e, val, item._id)} />
+					<Checkbox checked={handleCheckDapAn(item?._id, val)} onChange={(e) => onChange(e, val, item._id)} />
 				);
 			},
 		});
