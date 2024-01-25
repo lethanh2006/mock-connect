@@ -15,14 +15,14 @@ const ModalChiTietDiem = (props: {
 	visible: boolean;
 	setVisible: (val: boolean) => void;
 	lopHocPhanId?: string;
-	chuongTrinhKhung?: { hocPhan?: HocPhan.IRecord; soTinChi?: number };
+	hocPhan?: HocPhan.IRecord;
 	listDiem?: LopHocPhan.IDiemHpSvHk[];
 	trangThaiHoc?: ETrangThaiHocTap;
 }) => {
 	const { getByIdModel } = useModel('daotao.lophocphan');
 	const { setIsView } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
-	const { visible, setVisible, lopHocPhanId, chuongTrinhKhung, listDiem, trangThaiHoc } = props;
+	const { visible, setVisible, lopHocPhanId, hocPhan, listDiem, trangThaiHoc } = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
 	const [deCuongId, setDeCuongId] = useState<string>();
@@ -34,7 +34,7 @@ const ModalChiTietDiem = (props: {
 		moment().isBefore(danhSach[0]?.thoiGianKetThuc, 'd');
 
 	const handleShowDeCuong = async () => {
-		let de = chuongTrinhKhung?.hocPhan?.deCuongHienTaiId;
+		let de = hocPhan?.deCuongHienTaiId;
 		if (!de && lopHocPhanId) {
 			const res = await getByIdModel(lopHocPhanId);
 			de = res.deCuong?.deCuongId || res.hocPhan?.deCuongHienTaiId;
@@ -72,21 +72,21 @@ const ModalChiTietDiem = (props: {
 				}
 				width={800}
 			>
-				{chuongTrinhKhung ? (
+				{hocPhan ? (
 					<Descriptions title='Thông tin học phần' column={{ xs: 1, sm: 1, md: 3 }}>
 						<Descriptions.Item label='Tên học phần' span={3}>
-							{chuongTrinhKhung?.hocPhan?.ten ? (
+							{hocPhan?.ten ? (
 								<Tooltip title='Xem đề cương chi tiết học phần'>
 									<a onClick={handleShowDeCuong}>
-										<b>{chuongTrinhKhung?.hocPhan?.ten ?? ''}</b>
+										<b>{hocPhan?.ten ?? ''}</b>
 									</a>
 								</Tooltip>
 							) : (
 								<i>Chưa cập nhật</i>
 							)}
 						</Descriptions.Item>
-						<Descriptions.Item label='Mã học phần'>{chuongTrinhKhung.hocPhan?.ma}</Descriptions.Item>
-						<Descriptions.Item label='Số tín chỉ'>{chuongTrinhKhung.soTinChi} tín chỉ</Descriptions.Item>
+						<Descriptions.Item label='Mã học phần'>{hocPhan?.ma}</Descriptions.Item>
+						<Descriptions.Item label='Số tín chỉ'>{hocPhan?.soTinChi} tín chỉ</Descriptions.Item>
 						{trangThaiHoc ? (
 							<Descriptions.Item label='Trạng thái'>{trangThaiHocTap[trangThaiHoc]}</Descriptions.Item>
 						) : null}
@@ -117,7 +117,7 @@ const ModalChiTietDiem = (props: {
 				deCuongId={deCuongId}
 			/>
 
-			<ModalQuyDoiDiem visible={visibleCongNhan} setVisible={setVisibleCongNhan} chuongTrinhKhung={chuongTrinhKhung} />
+			<ModalQuyDoiDiem visible={visibleCongNhan} setVisible={setVisibleCongNhan} hocPhan={hocPhan} />
 		</>
 	);
 };

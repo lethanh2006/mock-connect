@@ -16,7 +16,7 @@ const CardHocPhan = (props: {
 		sinhVienLopHocPhan?.diemHpSvHk?.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU,
 	];
 	const hocPhan = chuongTrinhKhung?.hocPhan ?? sinhVienLopHocPhan?.hocPhan;
-	const soTinChi = chuongTrinhKhung?.hocPhan?.soTinChi ?? sinhVienLopHocPhan?.soTinChi ?? 0;
+	const soTinChi = hocPhan?.soTinChi ?? 0;
 
 	return (
 		<div className='col-hoc-phan'>
@@ -56,7 +56,7 @@ const CardHocPhan = (props: {
 			<ModalChiTietDiem
 				setVisible={setModalVisible}
 				visible={modalVisible}
-				chuongTrinhKhung={{ hocPhan, soTinChi }}
+				hocPhan={hocPhan}
 				listDiem={
 					chuongTrinhKhung?.lichSuDiem ?? (sinhVienLopHocPhan?.diemHpSvHk ? [sinhVienLopHocPhan.diemHpSvHk] : [])
 				}
