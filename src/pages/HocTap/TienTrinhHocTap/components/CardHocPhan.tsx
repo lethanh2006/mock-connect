@@ -13,10 +13,10 @@ const CardHocPhan = (props: {
 	const { chuongTrinhKhung, sinhVienLopHocPhan } = props;
 	const [modalVisible, setModalVisible] = useState(false);
 	const listDiem = chuongTrinhKhung?.lichSuDiem?.map((diem) => diem.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU) ?? [
-		sinhVienLopHocPhan?.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU,
+		sinhVienLopHocPhan?.diemHpSvHk?.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU,
 	];
 	const hocPhan = chuongTrinhKhung?.hocPhan ?? sinhVienLopHocPhan?.hocPhan;
-	const soTinChi = chuongTrinhKhung?.hocPhan?.soTinChi ?? sinhVienLopHocPhan?.soTinChi ?? 0;
+	const soTinChi = hocPhan?.soTinChi ?? 0;
 
 	return (
 		<div className='col-hoc-phan'>
@@ -56,8 +56,10 @@ const CardHocPhan = (props: {
 			<ModalChiTietDiem
 				setVisible={setModalVisible}
 				visible={modalVisible}
-				chuongTrinhKhung={{ hocPhan, soTinChi }}
-				listDiem={chuongTrinhKhung?.lichSuDiem ?? (sinhVienLopHocPhan ? [sinhVienLopHocPhan] : [])}
+				hocPhan={hocPhan}
+				listDiem={
+					chuongTrinhKhung?.lichSuDiem ?? (sinhVienLopHocPhan?.diemHpSvHk ? [sinhVienLopHocPhan.diemHpSvHk] : [])
+				}
 				lopHocPhanId={sinhVienLopHocPhan?.lopHocPhanId}
 				trangThaiHoc={chuongTrinhKhung?.hoc}
 			/>
