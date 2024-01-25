@@ -64,7 +64,7 @@ const LichSuQuyDoiDiemPage = () => {
 			width: 240,
 			children: [
 				{
-					title: 'Điểm thang 10',
+					title: 'Điểm hệ 10',
 					dataIndex: 'diemHe10',
 					align: 'center',
 					width: 80,
@@ -73,7 +73,7 @@ const LichSuQuyDoiDiemPage = () => {
 					onCell,
 				},
 				{
-					title: 'Điểm thang 4',
+					title: 'Điểm hệ 4',
 					dataIndex: 'diemHe4',
 					align: 'center',
 					width: 80,
