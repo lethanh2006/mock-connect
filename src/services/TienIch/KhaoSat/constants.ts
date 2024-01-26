@@ -4,17 +4,13 @@ export enum EThoiGianDot {
 	DA_DIEN_RA = 'DA_DIEN_RA',
 }
 
-export enum EChucNangSuDung {
-	KET_QUA_HOC_TAP = 'KET_QUA_HOC_TAP',
-}
-
-export const MapKeyThoiGianDot = {
+export const thoiGianDot: Record<EThoiGianDot, string> = {
 	[EThoiGianDot.CHUA_DIEN_RA]: 'Chưa diễn ra',
 	[EThoiGianDot.DANG_DIEN_RA]: 'Đang diễn ra',
 	[EThoiGianDot.DA_DIEN_RA]: 'Đã diễn ra',
 };
 
-export const textThucHienKhaoSat = {
+export const textThucHienKhaoSat: Record<EThoiGianDot, string> = {
 	[EThoiGianDot.CHUA_DIEN_RA]: 'Khảo sát chưa bắt đầu',
 	[EThoiGianDot.DANG_DIEN_RA]: 'Thực hiện khảo sát',
 	[EThoiGianDot.DA_DIEN_RA]: 'Khảo sát đã kết thúc',

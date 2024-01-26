@@ -11,7 +11,7 @@ export default () => {
 
 	const getDotMeModel = () =>
 		getModel(
-			undefined,
+			{ kichHoat: true },
 			[
 				{
 					active: true,
