@@ -1,12 +1,16 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import FormTable from '@/pages/KhaiBaoQuyTrinh/MauDon/FormTable';
+import SelectSinhVienDebounce from '@/pages/SinhVien/components/Select';
+import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
+
 import { EKieuDuLieu, ETextDisplay } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
+import { primaryColor } from '@/services/base/constant';
+import { currencyFormat } from '@/utils/utils';
 import { Modal, Tag } from 'antd';
 import moment from 'moment';
-import FormTable from '@/pages/KhaiBaoQuyTrinh/MauDon/FormTable';
 import { useState } from 'react';
-import { primaryColor } from '@/services/base/constant';
 
 const ViewRender = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
@@ -45,6 +49,13 @@ const ViewRender = (props: {
 				);
 			break;
 
+		case EKieuDuLieu.CAN_BO:
+			value = <SelectNhanSuDebounce value={valueFinal} isView />;
+			break;
+		case EKieuDuLieu.SINH_VIEN:
+			value = <SelectSinhVienDebounce value={valueFinal} isView />;
+			break;
+
 		case EKieuDuLieu.BOOLEAN:
 			value = <div>{valueFinal ? 'Có' : 'Không'}</div>;
 			break;
@@ -55,7 +66,11 @@ const ViewRender = (props: {
 			break;
 		case EKieuDuLieu.NUMBER:
 			value = valueFinal ? (
-				<div>{(value = cauHinh.laDangMang ? valueFinal?.map((item: number) => item)?.join(', ') : valueFinal)}</div>
+				<div>
+					{currencyFormat(
+						(value = cauHinh.laDangMang ? valueFinal?.map((item: number) => item)?.join(', ') : valueFinal),
+					)}
+				</div>
 			) : (
 				<div />
 			);
@@ -103,7 +118,7 @@ const ViewRender = (props: {
 						title: item.ten,
 						dataIndex: item.ma,
 						align: 'center',
-						width: 100,
+						width: 200,
 						onCell: onCellTable,
 						render: (val, rec) => {
 							return <ViewRender cauHinh={item} recordSanPham={rec} isCot />;

@@ -21,7 +21,8 @@ export default () => {
 
 	const [recordSanPham, setRecordSanPham] = useState<KhaiBaoQuyTrinh.IRecord>();
 
-	const getDataKhaiBaoUser = async () => getModel(undefined, undefined, undefined, undefined, undefined, 'user/page');
+	const getDataKhaiBaoUser = async (paramcondition?: any) =>
+		getModel(paramcondition, undefined, undefined, undefined, undefined, 'user/page');
 
 	const getQuyTrinhChuyenVienModel = async (loaiXuLyDon: string) => {
 		try {

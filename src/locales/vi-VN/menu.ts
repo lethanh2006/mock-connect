@@ -51,13 +51,15 @@ export default {
 	'menu.VanBanHuongDan': 'Văn bản',
 	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
 
+	'menu.HoatDongKHCN': 'Hoạt động KH&CN',
+	'menu.HoatDongKHCN.DeTaiHocVien': 'Đề tài NCKH cấp Học viện',
+	'menu.HoatDongKHCN.DeTaiKhoa': 'Đề tài NCKH cấp khoa/viện',
 	// GIANG VIEN
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
 	'menu.KhaiBaoQuyTrinh.LichSu': 'Lịch sử',
-
 	'menu.KhaiBaoSucKhoe': 'Tình trạng sức khoẻ',
 
 	//Nội trú, ngoại trú
