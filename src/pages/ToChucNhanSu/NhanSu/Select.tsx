@@ -11,9 +11,10 @@ const SelectNhanSuDebounce = (props: {
 	multiple?: boolean;
 	placeholder?: string;
 	maDonVi?: string;
-}) => {
+	isView?: boolean;
+}): any => {
 	const { value, onChange, multiple, placeholder, maDonVi } = props;
-	const { danhSach, getModel, setFilters, filters, loading } = useModel('tochucnhansu.nhansu');
+	const { danhSach, getModel, setFilters, filters, loading, condition } = useModel('tochucnhansu.nhansu');
 
 	useEffect(() => {
 		getModel(
@@ -36,7 +37,11 @@ const SelectNhanSuDebounce = (props: {
 			1,
 			20,
 		);
-	}, [filters, value]);
+	}, [filters, value, JSON.stringify(condition)]);
+
+	useEffect(() => {
+		if (value && onChange) onChange(value, 'CB');
+	}, [value]);
 
 	const searchDebounceSinhVien = _.debounce((val) => {
 		setFilters([
@@ -45,7 +50,11 @@ const SelectNhanSuDebounce = (props: {
 		]);
 	}, 800);
 
-	return (
+	const dataView = danhSach.find((item) => item.ssoId === value);
+
+	return props.isView ? (
+		`${dataView?.hoDem ?? ''} ${dataView?.ten ?? ''} - ${dataView?.maCanBo ?? ''}`
+	) : (
 		<Select
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
