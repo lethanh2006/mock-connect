@@ -16,6 +16,7 @@ const FormTraLoiKhaoSat = (props: {
 	giangVienSsoId?: string;
 	getDanhGiaGiangVien?: any;
 	ngoaiThoiGian?: boolean;
+	[key: string]: any;
 }) => {
 	const { isDanhGiaGiangVien, giangVienSsoId, getDanhGiaGiangVien, ngoaiThoiGian } = props;
 	const { loading, record, traLoiBieuMauModel, formSubmiting } = useModel('tienich.bieumau');
@@ -25,7 +26,6 @@ const FormTraLoiKhaoSat = (props: {
 	const { record: recLopHocPhan } = useModel('daotao.lophocphan');
 	const [listLuaChonBang, setListLuaChonBang] = useState<BieuMau.LuaChonBangRecord[][]>([]);
 	const [check, setCheck] = useState<boolean>(false);
-	const [loadingForm, setLoadingform] = useState<boolean>(false);
 	const [form] = Form.useForm();
 
 	const cauTraLoi = dannhSachDanhGia.find((item) => item.giangVienSsoId === giangVienSsoId)?.danhSachTraLoi;
@@ -109,9 +109,9 @@ const FormTraLoiKhaoSat = (props: {
 		}
 
 		return (
-			<div key={question._id}>
+			<div key={question._id} style={{ marginBottom: 12 }}>
 				<div className='fw500'>
-					Câu {indexCauHoi + 1}: {question.noiDungCauHoi}{' '}
+					<u>Câu {indexCauHoi + 1}:</u> {question.noiDungCauHoi}{' '}
 					{question.batBuoc ? <span style={{ color: 'red' }}>*</span> : null}
 				</div>
 				{questionEleMent}
@@ -159,7 +159,6 @@ const FormTraLoiKhaoSat = (props: {
 	};
 
 	const onFinish = async (values: any) => {
-		setLoadingform(true);
 		const danhSachTraLoi: BieuMau.TraLoiRecord[] = [];
 		if (record?.danhSachKhoi) {
 			for (let indexKhoi = 0; indexKhoi < record?.danhSachKhoi?.length; indexKhoi++) {
@@ -273,7 +272,6 @@ const FormTraLoiKhaoSat = (props: {
 			})
 				.then(() => {
 					if (getDanhGiaGiangVien) getDanhGiaGiangVien();
-					setLoadingform(false);
 				})
 				.catch((er) => console.log(er));
 		} else {
@@ -285,7 +283,6 @@ const FormTraLoiKhaoSat = (props: {
 				.then(() => {
 					getDotMeModel();
 					setVisibleForm(false);
-					setLoadingform(false);
 				})
 				.catch((er) => console.log(er));
 		}
@@ -293,17 +290,17 @@ const FormTraLoiKhaoSat = (props: {
 
 	return (
 		<Card loading={loading} title={isDanhGiaGiangVien ? undefined : 'Chi tiết khảo sát'}>
-			<Spin spinning={loadingForm}>
+			<Spin spinning={formSubmiting}>
 				<Form scrollToFirstError onFinish={onFinish} layout='vertical' form={form}>
 					<h3>{record?.tieuDe}</h3>
 					<p>{record?.moTa}</p>
 
 					{record?.danhSachKhoi?.map((item, indexKhoi) => (
 						// eslint-disable-next-line react/no-array-index-key
-						<div key={indexKhoi} style={{ marginBottom: 24 }}>
+						<div key={indexKhoi} style={{ marginBottom: 32 }}>
 							<Divider />
 							<div className='fw500'>{item.tieuDe}</div>
-							<div style={{ marginBottom: 8 }}>{item.moTa}</div>
+							<div style={{ marginBottom: 12 }}>{item.moTa}</div>
 
 							{item.danhSachCauHoi?.map((cauHoi, indexCauHoi) => renderQuestion(cauHoi, indexKhoi, indexCauHoi))}
 						</div>

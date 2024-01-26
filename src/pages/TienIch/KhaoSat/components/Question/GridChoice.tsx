@@ -68,7 +68,6 @@ const GridChoice = (props: {
 			title: 'Nội dung',
 			dataIndex: 'tieuChi',
 			width: 250,
-			fixed: 'left',
 		},
 	];
 
@@ -78,7 +77,7 @@ const GridChoice = (props: {
 			title: item.noiDung,
 			dataIndex: 'idHang',
 			align: 'center',
-			width: 80,
+			width: 120,
 			render: (val: string) => {
 				const luaChon = props?.listLuaChonBang?.[fieldName]?.find(
 					(ele) => ele.idHang === val && ele.idCot === item._id,
@@ -129,7 +128,7 @@ const GridChoice = (props: {
 			}
 			name={fieldName}
 		>
-			<TableStaticData otherProps={{ pagination: false }} data={data} columns={columns} hasTotal />
+			<TableStaticData otherProps={{ pagination: false }} data={data} columns={columns} addStt size='small' />
 		</Form.Item>
 	);
 };
