@@ -1,5 +1,6 @@
 import { EOperatorType } from '@/components/Table/constant';
 import FormTraLoiKhaoSat from '@/pages/TienIch/KhaoSat/components/Form';
+import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import { Alert, Empty, Select, Spin } from 'antd';
 import moment from 'moment';
@@ -7,25 +8,32 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const DanhGiaGiangVienPage = () => {
-	const { getModel, danhSach, loading } = useModel('tienich.dotkhaosat');
+	const { getModel, danhSach, loading, setRecord, record } = useModel('tienich.dotkhaosat');
 	const { danhSach: danhSachNhanSu } = useModel('daotao.nhansulophocphan');
 	const { getByIdModel: getBieuMau } = useModel('tienich.bieumau');
-	const { getDanhGiaGiangVienModel } = useModel('sinhvien.danhgiagiangvien');
+	const { record: recHocKy } = useModel('daotao.hocky');
+	const {
+		getDanhGiaGiangVienModel,
+		danhGiaGiangVienModel,
+		danhSach: dannhSachDanhGia,
+	} = useModel('sinhvien.danhgiagiangvien');
 	const { record: recLopHocPhan } = useModel('daotao.lophocphan');
 	const [giangVienSsoId, setGiangVienSsoId] = useState<string>(danhSachNhanSu[0]?.nhanSuSsoId ?? '');
 
 	const thoiGian = EThoiGianDot.DANG_DIEN_RA;
 
-	const ngoaiThoiGian =
-		!danhSach[0]?.thoiGianBatDau ||
-		!danhSach[0]?.thoiGianKetThuc ||
-		moment().isBefore(danhSach[0]?.thoiGianBatDau, 'd') ||
-		moment().isAfter(danhSach[0]?.thoiGianKetThuc, 'd');
+	const cauTraLoi = dannhSachDanhGia.find((item) => item.giangVienSsoId === giangVienSsoId)?.danhSachTraLoi;
 
-	const getData = () => {
+	const ngoaiThoiGian =
+		!record?.thoiGianBatDau ||
+		!record?.thoiGianKetThuc ||
+		moment().isBefore(record?.thoiGianBatDau, 'd') ||
+		moment().isAfter(record?.thoiGianKetThuc, 'd');
+
+	const getDotHienTai = () => {
 		getModel(
-			undefined,
-			[{ active: true, field: 'loai', values: [ELoaiDot.DANH_GIA_GIANG_VIEN], operator: EOperatorType.EQUAL }],
+			{ maHocKy: recHocKy?.ma },
+			[{ active: true, field: 'loai', values: [ELoaiDot.DANH_GIA_GIANG_VIEN], operator: EOperatorType.INCLUDE }],
 			undefined,
 			undefined,
 			undefined,
@@ -33,22 +41,47 @@ const DanhGiaGiangVienPage = () => {
 			{
 				thoiGian,
 			},
-		);
+		).then((res) => {
+			setRecord(res?.[0]);
+			getBieuMau(res?.[0]?.idKhaoSat ?? '');
+		});
 	};
 
 	const getDanhGiaGiangVien = () => getDanhGiaGiangVienModel(recLopHocPhan?._id ?? '');
 
-	useEffect(() => {
-		getData();
-	}, []);
+	const getData = () => {
+		Promise.all([getDotHienTai(), getDanhGiaGiangVien()])
+			.then((res) => {
+				// nếu có đánh giá gv khảo sát => getBieuMau
+				// nếu có đợt hiện tại getBieuMau
+				// if (record) getBieuMau(record?.idKhaoSat ?? '');
+				// console.log(res);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	useEffect(() => {
-		if (recLopHocPhan?._id) getDanhGiaGiangVien();
+		if (recLopHocPhan?._id) getData();
 	}, [recLopHocPhan?._id]);
 
-	useEffect(() => {
-		if (danhSach[0]?._id) getBieuMau(danhSach[0]?.idKhaoSat);
-	}, [danhSach[0]?._id]);
+	const hanldeDanhGiaGiangVien = async (val: BieuMau.TraLoiRecord[]) => {
+		await danhGiaGiangVienModel({
+			idKhaoSat: record?.idKhaoSat ?? '',
+			danhSachTraLoi: val,
+			idDot: record?._id,
+			maLop: recLopHocPhan?.maLop,
+			lopHocPhanId: recLopHocPhan?._id,
+			giangVienSsoId: giangVienSsoId,
+			maGiangVien: danhSachNhanSu.find((item) => item.nhanSuSsoId === giangVienSsoId)?.maNhanSu,
+			hoTenGiangVien: danhSachNhanSu.find((item) => item.nhanSuSsoId === giangVienSsoId)?.tenNhanSu,
+		})
+			.then(() => {
+				getDanhGiaGiangVien();
+			})
+			.catch((er) => console.log(er));
+	};
 
 	return (
 		<Spin spinning={loading}>
@@ -63,8 +96,8 @@ const DanhGiaGiangVienPage = () => {
 								) : (
 									<>
 										Thời gian khảo sát đánh giá giảng viên từ{' '}
-										<b>{moment(danhSach[0].thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-										<b>{moment(danhSach[0].thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+										<b>{moment(record?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+										<b>{moment(record?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
 									</>
 								)
 							}
@@ -90,12 +123,7 @@ const DanhGiaGiangVienPage = () => {
 							/>
 						</>
 					</div>
-					<FormTraLoiKhaoSat
-						isDanhGiaGiangVien
-						giangVienSsoId={giangVienSsoId}
-						getDanhGiaGiangVien={getDanhGiaGiangVien}
-						ngoaiThoiGian={ngoaiThoiGian}
-					/>
+					<FormTraLoiKhaoSat onOk={hanldeDanhGiaGiangVien} isDanhGiaGiangVien cauTraLoi={cauTraLoi} />
 				</>
 			) : !danhSach.length && danhSachNhanSu.length ? (
 				<Empty style={{ marginTop: 30, marginBottom: 30 }} description='Không có đợt khảo sát đánh giá giảng viên' />

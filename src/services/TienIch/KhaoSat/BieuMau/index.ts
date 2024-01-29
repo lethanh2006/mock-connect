@@ -22,3 +22,7 @@ export async function initBieuMauTracNghiem(payload: { idKhaoSat: string; idDot:
 export async function danhGiaGiangVien(payload: any) {
 	return axios.post(`${ip3}/danh-gia-giang-vien/me`, payload);
 }
+
+export async function getDanhGiaGiangVien(lopHocPhanId: string) {
+	return axios.get(`${ip3}/danh-gia-giang-vien/lop-hoc-phan/${lopHocPhanId}`);
+}

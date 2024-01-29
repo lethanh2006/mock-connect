@@ -1,14 +1,25 @@
-import useInitModel from '@/hooks/useInitModel';
-import { danhGiaGiangVien } from '@/services/TienIch/KhaoSat/BieuMau';
+import { danhGiaGiangVien, getDanhGiaGiangVien } from '@/services/TienIch/KhaoSat/BieuMau';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { message } from 'antd';
+import { useState } from 'react';
 
 export default () => {
-	const objInit = useInitModel<BieuMau.IDanhGiaGiangVien>('danh-gia-giang-vien');
-	const { setVisibleForm, getAllModel, formSubmiting, setFormSubmiting } = objInit;
+	const [danhSach, setDanhSach] = useState<BieuMau.IDanhGiaGiangVien[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
+	const [formSubmiting, setFormSubmiting] = useState<boolean>(false);
 
-	const getDanhGiaGiangVienModel = async (lopHocPhanId?: string) =>
-		getAllModel(undefined, undefined, undefined, undefined, `lop-hoc-phan/${lopHocPhanId}`);
+	const getDanhGiaGiangVienModel = async (lopHocPhanId: string): Promise<BieuMau.IDanhGiaGiangVien[]> => {
+		setLoading(true);
+		try {
+			const res = await getDanhGiaGiangVien(lopHocPhanId);
+			setDanhSach(res.data?.data);
+			return res.data?.data;
+		} catch (error) {
+			return Promise.reject(error);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	const danhGiaGiangVienModel = async (
 		payload: Partial<BieuMau.IDanhGiaGiangVien>,
@@ -18,7 +29,7 @@ export default () => {
 		try {
 			const res = await danhGiaGiangVien(payload);
 			message.success('Gửi câu trả lời thành công');
-			setVisibleForm(false);
+
 			return res.data;
 		} catch (er) {
 			return Promise.reject(er);
@@ -28,8 +39,10 @@ export default () => {
 	};
 
 	return {
-		...objInit,
 		getDanhGiaGiangVienModel,
 		danhGiaGiangVienModel,
+		danhSach,
+		loading,
+		formSubmiting,
 	};
 };

@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 
 const SingleChoice = (props: {
 	question: BieuMau.CauHoi;
-	indexKhoi: number;
-	indexCauHoi: number;
-	traLoi?: any;
+	// indexKhoi: number;
+	// indexCauHoi: number;
+	traLoi?: BieuMau.TraLoiRecord;
 	form: FormInstance;
 }) => {
 	const [idCauTraLoi, setIdCauTraLoi] = useState<string>();
@@ -30,15 +30,12 @@ const SingleChoice = (props: {
 
 	useEffect(() => {
 		props.form.setFieldsValue({
-			[`${props.indexKhoi}||${props.indexCauHoi}`]: idCauTraLoi ? idCauTraLoi : undefined,
+			[props.question._id]: idCauTraLoi ? idCauTraLoi : undefined,
 		});
 	}, [idCauTraLoi]);
 
 	return (
-		<Form.Item
-			rules={props.question.batBuoc ? [...rules.required] : []}
-			name={`${props.indexKhoi}||${props.indexCauHoi}`}
-		>
+		<Form.Item rules={props.question.batBuoc ? [...rules.required] : []} name={props.question._id}>
 			<Radio.Group>
 				{props.question?.luaChon?.map((item) => (
 					<div key={item._id}>

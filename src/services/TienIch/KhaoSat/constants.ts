@@ -27,3 +27,13 @@ export enum ELoaiDot {
 	BIEU_MAU = 'BIEU_MAU',
 	DANH_GIA_GIANG_VIEN = 'DANH_GIA_GIANG_VIEN',
 }
+
+export enum ELoaiCauHoi {
+	SINGLE_CHOICE = 'SingleChoice',
+	MULTIPLE_CHOICE = 'MultipleChoice',
+	TEXT = 'Text',
+	GRID_MULTIPLE_CHOICE = 'GridMultipleChoice',
+	GRID_SINGLE_CHOICE = 'GridSingleChoice',
+	NUMERIC_RANGE = 'NumericRange',
+	UPLOAD_FILE = 'UploadFile',
+}

@@ -4,23 +4,17 @@ import rules from '@/utils/rules';
 import { Form, type FormInstance } from 'antd';
 import { useEffect } from 'react';
 
-const FileChoice = (props: {
-	question: BieuMau.CauHoi;
-	indexKhoi: number;
-	indexCauHoi: number;
-	traLoi?: any;
-	form: FormInstance;
-}) => {
+const FileChoice = (props: { question: BieuMau.CauHoi; traLoi?: BieuMau.TraLoiRecord; form: FormInstance }) => {
 	useEffect(() => {
 		props.form.setFieldsValue({
-			[`${props.indexKhoi}||${props.indexCauHoi}`]: props?.traLoi?.listUrlFile ? props?.traLoi?.listUrlFile : undefined,
+			[props.question._id]: props?.traLoi?.listUrlFile ? props?.traLoi?.listUrlFile : undefined,
 		});
 	}, [props?.traLoi?.listUrlFile]);
 
 	return (
 		<Form.Item
 			rules={props.question.batBuoc ? [...rules.fileRequired] : []}
-			name={`${props.indexKhoi}||${props.indexCauHoi}`}
+			name={props.question._id}
 			extra={
 				<i>
 					<small>Định dạng cho phép: file ảnh, file PDF, file Word</small>

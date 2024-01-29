@@ -4,7 +4,7 @@ import { Breadcrumb, Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
-import DanhGiaGiangVienPage from './DeCuongHocPhan/DanhGiaGiangVien';
+import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import ThongTinChung from './components/ThongTinChung';
 
