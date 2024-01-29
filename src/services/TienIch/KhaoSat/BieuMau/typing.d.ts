@@ -1,6 +1,6 @@
 import { type EPhamViChuDe } from '@/services/TinTuc/constant';
 import { type ELoaiDoiTuong } from '../constant';
-import { type ELoaiBieuMau } from '../constants';
+import { type ELoaiCauHoi, type ELoaiBieuMau } from '../constants';
 
 declare module BieuMau {
 	export interface LuaChon {
@@ -10,25 +10,33 @@ declare module BieuMau {
 	}
 
 	export interface CauHoi {
-		loai: string;
+		loai: ELoaiCauHoi;
 		batBuoc: boolean;
 		noiDungCauHoi: string;
+
+		//text
 		cauTraLoiKhac: boolean;
+
+		//MultipleChoice
 		luaChon: LuaChon[];
-		luaChonCot: {
-			noiDung: string;
-			_id: string;
-		}[];
-		luaChonHang: {
-			noiDung: string;
-			_id: string;
-		}[];
+
+		//GridChoice
+		luaChonCot: TGridItem[];
+		luaChonHang: TGridItem[];
+
+		///NumericRange
 		gioiHanDuoiTuyenTinh: number;
 		gioiHanTrenTuyenTinh: number;
 		_id: string;
 	}
 
+	export type TGridItem = {
+		noiDung: string;
+		_id: string;
+	};
+
 	export interface Khoi {
+		_id: string;
 		tieuDe: string;
 		moTa: string;
 		danhSachCauHoi: CauHoi[];
@@ -132,14 +140,27 @@ declare module BieuMau {
 		listUrlFile?: string[] | null;
 	}
 
-	export type IDanhGiaGiangVien = {
-		idKhaoSat: string;
+	export interface IDanhGiaGiangVien {
+		_id: string;
 		danhSachTraLoi: BieuMau.TraLoiRecord[];
 		idDot: string;
-		maLop?: string;
-		lopHocPhanId?: string;
-		giangVienSsoId?: string;
-		maGiangVien?: string;
-		hoTenGiangVien?: string;
-	};
+		idKhaoSat: string;
+		lopHocPhanId: string;
+		maLop: string;
+
+		maGiangVien: string;
+		hoTenGiangVien: string;
+		giangVienSsoId: string;
+
+		hoTen: string;
+		userCode: string;
+		userSsoId: string;
+		vaiTro: string;
+
+		answered: boolean;
+		saved: boolean;
+		startedAt: Date;
+		createdAt: Date;
+		updatedAt: Date;
+	}
 }

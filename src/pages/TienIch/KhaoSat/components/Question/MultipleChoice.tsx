@@ -3,24 +3,20 @@ import rules from '@/utils/rules';
 import { Checkbox, Form, type FormInstance } from 'antd';
 import { useEffect, useState } from 'react';
 
-const MultipleChoice = (props: {
-	question: BieuMau.CauHoi;
-	indexKhoi: number;
-	indexCauHoi: number;
-	traLoi?: any;
-	form: FormInstance;
-}) => {
-	const [idCauTraLoi, setIdCauTraLoi] = useState<string>();
+const MultipleChoice = (props: { question: BieuMau.CauHoi; traLoi?: BieuMau.TraLoiRecord; form: FormInstance }) => {
+	const [idCauTraLoi, setIdCauTraLoi] = useState<string[]>([]);
 
 	const handleRenderTraLoi = () => {
 		if (props.traLoi) {
+			const arr = [...idCauTraLoi];
 			props.question?.luaChon?.forEach((val) => {
 				if (props?.traLoi?.listLuaChon?.includes(val?.noiDung)) {
-					setIdCauTraLoi(val?._id);
+					arr.push(val?._id);
 				}
 			});
+			setIdCauTraLoi(arr);
 		} else {
-			setIdCauTraLoi(undefined);
+			setIdCauTraLoi([]);
 		}
 	};
 
@@ -30,15 +26,12 @@ const MultipleChoice = (props: {
 
 	useEffect(() => {
 		props.form.setFieldsValue({
-			[`${props.indexKhoi}||${props.indexCauHoi}`]: idCauTraLoi ? idCauTraLoi : undefined,
+			[props.question._id]: idCauTraLoi ? idCauTraLoi : undefined,
 		});
 	}, [idCauTraLoi]);
 
 	return (
-		<Form.Item
-			rules={props.question.batBuoc ? [...rules.required] : []}
-			name={`${props.indexKhoi}||${props.indexCauHoi}`}
-		>
+		<Form.Item rules={props.question.batBuoc ? [...rules.required] : []} name={props.question._id}>
 			<Checkbox.Group>
 				{props.question.luaChon?.map((item) => (
 					<div key={item._id}>
