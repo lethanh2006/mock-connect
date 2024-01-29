@@ -1,8 +1,12 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import TableStaticData from '@/components/Table/TableStaticData';
+import { EOperatorType } from '@/components/Table/constant';
 import type { IColumn } from '@/components/Table/typing';
+import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';
+import SelectSinhVienDebounce from '@/pages/SinhVien/components/Select';
+import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import {
 	EKieuDuLieu,
 	ELoaiThoiGianThucHien,
@@ -20,10 +24,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import FormTable from './FormTable';
 import ViewRender from './ViewRender';
-import TinyEditor from '@/components/TinyEditor';
-import { EOperatorType } from '@/components/Table/constant';
-import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
-import SelectSinhVienDebounce from '@/pages/SinhVien/components/Select';
 
 const FormRender = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
@@ -129,8 +129,10 @@ const FormRender = (props: {
 				const khaiBao = dataQuyTrinh?.danhSachKhaiBao.find((item) => item.ma === cauHinh.maFormLayDefaultValue)
 					?.thongTinKhaiBao?.[cauHinh.maFieldLayDefaultValue]?.value;
 				if (cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE) {
+					const isDate = cauHinh.kieuDuLieu === EKieuDuLieu.DATE;
+					const isMonth = cauHinh.kieuDuLieu === EKieuDuLieu.MONTH;
 					form.setFieldsValue({
-						[cauHinh.ma]: khaiBao,
+						[cauHinh.ma]: isDate || isMonth ? khaiBao?.split('/')?.reverse()?.join('-') : khaiBao,
 					});
 				} else {
 					setRecordQuyTrinhForm({
@@ -438,15 +440,25 @@ const FormRender = (props: {
 	return checkTruongThongTinLienQuan ? (
 		<>
 			<Col xs={24} sm={24} md={cauHinh?.colspan}>
-				<Form.Item
-					extra={cauHinh?.ghiChu ? <div>{cauHinh.ghiChu}</div> : null}
-					name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
-					label={cauHinh.ten}
-					rules={cauHinh?.readonly ? [] : rule}
-					style={cauHinh.kieuDuLieu === EKieuDuLieu.TABLE ? { flexDirection: 'row' } : {}}
-				>
-					{component}
-				</Form.Item>
+				{cauHinh.kieuDuLieu === EKieuDuLieu.DOAN_VAN_BAN ? (
+					<>
+						{cauHinh.customDefaultValue ? (
+							<div dangerouslySetInnerHTML={{ __html: cauHinh.customDefaultValue }} />
+						) : (
+							<div>{cauHinh.ten}</div>
+						)}
+					</>
+				) : (
+					<Form.Item
+						extra={cauHinh?.ghiChu ? <div>{cauHinh.ghiChu}</div> : null}
+						name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
+						label={cauHinh.ten}
+						rules={cauHinh?.readonly ? [] : rule}
+						style={cauHinh.kieuDuLieu === EKieuDuLieu.TABLE ? { flexDirection: 'row' } : {}}
+					>
+						{component}
+					</Form.Item>
+				)}
 			</Col>
 			{truongThongTinTinh && truongThongTinTinh.loaiTruongThongTinTinh === ELoaiTruongThongTinTinh.VAI_TRO && (
 				<Col xs={24} sm={24} md={truongThongTinTinh?.colspan ? +truongThongTinTinh.colspan : undefined}>
