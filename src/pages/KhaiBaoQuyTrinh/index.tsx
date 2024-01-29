@@ -43,6 +43,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 		exportMauDonTheoBuocModel,
 		exportMauTraKetQuaTheoBuocModel,
 		loading,
+		setDanhSach,
 	} = useModel('quytrinh.khaibaoquytrinh');
 	const {
 		setLoading,
@@ -77,7 +78,10 @@ const KhaiBaoQuyTrinhPage = (props: {
 	}, []);
 
 	const getData = () => {
-		getDataKhaiBaoUser({ ten: props.tenQuyTrinh });
+		if (props.tenQuyTrinh) {
+			if (danhSachQuyTrinh.length) getDataKhaiBaoUser({ quyTrinhId: danhSachQuyTrinh[0]._id });
+			else setDanhSach([]);
+		} else getDataKhaiBaoUser();
 	};
 
 	const onCell = (recordVal: KhaiBaoQuyTrinh.IRecord) => ({
@@ -285,7 +289,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 				modelName={'quytrinh.khaibaoquytrinh'}
 				columns={columns}
 				getData={getData}
-				dependencies={[page, limit, condition]}
+				dependencies={[page, limit, condition, props.tenQuyTrinh, danhSachQuyTrinh.length]}
 				title={props.title || 'Đơn đã gửi'}
 				destroyModal
 				buttons={{ create: false }}

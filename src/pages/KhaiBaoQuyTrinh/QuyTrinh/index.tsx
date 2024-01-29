@@ -130,7 +130,7 @@ const QuyTrinhPage = () => {
 		},
 	];
 	const getDataQuyTrinh = () => {
-		getQuyTrinh({ linhVuc: 'Dịch vụ hành chính' }, undefined, undefined, undefined, undefined, 'page/SINH_VIEN');
+		getQuyTrinh({ linhVuc: 'Dịch vụ hành chính' }, undefined, { order: -1 }, undefined, undefined, 'page/SINH_VIEN');
 	};
 	return (
 		<>

@@ -8,6 +8,7 @@ export enum ELoaiThoiGianThucHien {
 }
 
 export enum EKieuDuLieu {
+	DOAN_VAN_BAN = 'Đoạn văn bản',
 	NUMBER = 'Số nguyên',
 	DECIMAL = 'Số thập phân',
 	TEXT = 'Chữ',
