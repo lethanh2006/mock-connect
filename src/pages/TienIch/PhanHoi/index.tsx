@@ -49,12 +49,19 @@ const PhanHoiPage = () => {
 			onCell,
 		},
 		{
+			title: 'Chủ đề',
+			dataIndex: 'tenLinhVuc',
+			width: 150,
+			filterType: 'string',
+			onCell,
+		},
+		{
 			title: 'Bộ phận xử lý',
 			dataIndex: 'maDonVi',
 			width: 150,
 			filterType: 'customselect',
 			filterCustomSelect: <SelectDonVi multiple />,
-      render: (val, rec) => `${val ? (rec.tenDonVi ? `${rec.tenDonVi} (${val})` : val) : 'Không có thông tin'}`,
+			render: (val, rec) => `${val ? (rec.tenDonVi ? `${rec.tenDonVi} (${val})` : val) : 'Không có thông tin'}`,
 			onCell,
 		},
 		{
@@ -113,7 +120,7 @@ const PhanHoiPage = () => {
 			getData={() => getModel(undefined, undefined, undefined, undefined, undefined, 'me')}
 			Form={edit ? ModalDetailPhanhoi : FormGuiPhanHoi}
 			widthDrawer={600}
-      destroyModal
+			destroyModal
 			otherButtons={[
 				<Select
 					key='1'
