@@ -9,9 +9,11 @@ import rules from '@/utils/rules';
 import { Button, Form, message, Row, Select, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
-	const { currentFormKhaiBao, current, dataQuyTrinh, editFormKhaiBao, recordFormKhaiBao } =
+	const { currentFormKhaiBao, current, dataQuyTrinh, editFormKhaiBao, recordFormKhaiBao, setEditFormKhaiBao } =
 		useModel('quytrinh.khaibaoquytrinh');
 	const { danhSach: danhSachDanhMuc } = useModel('quytrinh.danhmuc');
 	const { recordSanPham, setRecordSanPham } = useModel('quytrinh.khaibaoquytrinh');
@@ -43,8 +45,13 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			Object.keys(valuesForm).map((item) => {
 				const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
 				const isDanhMuc = cauHinh?.kieuDuLieu === EKieuDuLieu.DANHMUC;
+				const isDate = cauHinh?.kieuDuLieu === EKieuDuLieu.DATE;
+				const isMonth = cauHinh?.kieuDuLieu === EKieuDuLieu.MONTH;
 				valuesFinal[item] = {
-					value: valuesForm[item],
+					value:
+						(isDate || isMonth) && valuesForm
+							? moment(valuesForm[item]).format(isDate ? 'DD/MM/YYYY' : 'MM/YYYY')
+							: valuesForm[item],
 					info: isDanhMuc
 						? danhSachDanhMuc
 								?.find((ele) => ele.maDanhMuc === cauHinh.maDanhMuc)
@@ -59,7 +66,8 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			};
 
 			const res = await userUpdateBuoc(dataQuyTrinh?._id ?? '', current?.ma ?? '', payload);
-
+			setEditFormKhaiBao(false);
+			window.scroll({ top: 0, behavior: 'smooth' });
 			if (res) {
 				message.success('Khai báo thành công');
 				props?.getData();
@@ -108,7 +116,16 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 
 	useEffect(() => {
 		if (editFormKhaiBao && recordFormKhaiBao) {
-			form.setFieldsValue(recordFormKhaiBao);
+			const recordFormKhaiBaoFinal: any = {};
+			Object.keys(recordFormKhaiBao).map((key) => {
+				const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((item) => item.ma === key);
+				const isDate = cauHinh.kieuDuLieu === EKieuDuLieu.DATE;
+				const isMonth = cauHinh.kieuDuLieu === EKieuDuLieu.MONTH;
+				const khaiBao = recordFormKhaiBao[key];
+				recordFormKhaiBaoFinal[key] = isDate || isMonth ? khaiBao?.split('/')?.reverse()?.join('-') : khaiBao;
+			});
+
+			form.setFieldsValue(recordFormKhaiBaoFinal);
 		}
 	}, [editFormKhaiBao, recordFormKhaiBao]);
 
@@ -124,6 +141,8 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 	return (
 		<Spin spinning={loadingKhaiBao}>
 			<Form
+				style={{ position: 'relative' }}
+				scrollToFirstError
 				onValuesChange={(changedValues, values) => {
 					setFormValues(values);
 				}}
@@ -153,10 +172,27 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 					</Form.Item>
 				)}
 
-				<div style={{ display: 'flex', justifyContent: 'center' }}>
-					<Button style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+					}}
+				>
+					<Button icon={<SaveOutlined />} style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
 						Lưu
 					</Button>
+					{editFormKhaiBao && (
+						<Button
+							icon={<CloseOutlined />}
+							style={{ marginRight: 8 }}
+							onClick={() => {
+								setEditFormKhaiBao(false);
+								window.scroll({ top: 0, behavior: 'smooth' });
+							}}
+						>
+							Hủy
+						</Button>
+					)}
 				</div>
 			</Form>
 		</Spin>

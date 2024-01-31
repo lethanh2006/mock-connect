@@ -25,8 +25,12 @@ export default {
 	'menu.HocTap.XetHocVu': 'Cảnh báo học tập, thôi học ',
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
 	'menu.HocTap.QuyetDinh': 'Bảo lưu, thôi học',
-	'menu.CongNo': 'Công nợ',
 	'menu.KeHoachNamHoc': 'Kế hoạch năm học',
+
+	'menu.TaiChinh': 'Tài chính',
+	'menu.TaiChinh.CongNo': 'Công nợ',
+	'menu.TaiChinh.UuDaiThanhToan': 'Ưu đãi thanh toán',
+	'menu.TaiChinh.GiaoDich': 'Lịch sử giao dịch',
 
 	// DRL
 
@@ -47,12 +51,15 @@ export default {
 	'menu.VanBanHuongDan': 'Văn bản',
 	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
 
+	'menu.HoatDongKHCN': 'Hoạt động KH&CN',
+	'menu.HoatDongKHCN.DeTaiHocVien': 'Đề tài NCKH cấp Học viện',
+	'menu.HoatDongKHCN.DeTaiKhoa': 'Đề tài NCKH cấp khoa/viện',
 	// GIANG VIEN
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
+	'menu.KhaiBaoQuyTrinh.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
 	'menu.KhaiBaoQuyTrinh.LichSu': 'Lịch sử',
-
 	'menu.KhaiBaoSucKhoe': 'Tình trạng sức khoẻ',
 
 	//Nội trú, ngoại trú

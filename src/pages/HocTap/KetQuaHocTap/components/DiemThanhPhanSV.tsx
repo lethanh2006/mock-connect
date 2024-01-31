@@ -62,7 +62,7 @@ const DiemThanhPhanSV = () => {
 	];
 
 	const cols1: IColumn<LopHocPhan.IRecordSinhVienLopHP>[] = [1, 2].map((item) => ({
-		title: `Thi L${item}`,
+		title: `Thi lần ${item}`,
 		width: 80,
 		dataIndex: ['diemHpSvHk', `diemThi${item}`],
 		align: 'center',
@@ -71,7 +71,7 @@ const DiemThanhPhanSV = () => {
 	}));
 	cols1.push(
 		{
-			title: 'TK (hệ 10)',
+			title: 'Tổng kết (hệ 10)',
 			dataIndex: ['diemHpSvHk', 'diemTongKet'],
 			align: 'center',
 			render: (val) => <b style={(val || val === 0) && val < 4 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
@@ -80,7 +80,7 @@ const DiemThanhPhanSV = () => {
 			sortable: true,
 		},
 		{
-			title: 'TK (hệ 4)',
+			title: 'Tổng kết (hệ 4)',
 			width: 80,
 			dataIndex: ['diemHpSvHk', 'diemThang4'],
 			align: 'center',
@@ -89,7 +89,7 @@ const DiemThanhPhanSV = () => {
 			onCell,
 		},
 		{
-			title: 'TK (dạng chữ)',
+			title: 'Tổng kết (dạng chữ)',
 			width: 80,
 			dataIndex: ['diemHpSvHk', 'diemChu'],
 			align: 'center',
