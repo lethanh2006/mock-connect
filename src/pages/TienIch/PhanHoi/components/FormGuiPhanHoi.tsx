@@ -57,13 +57,6 @@ const FormGuiPhanHoi = () => {
 	return (
 		<Card loading={loading} title='Gửi phản hồi'>
 			<Form layout='vertical' onFinish={onFinish} form={form}>
-				<Form.Item
-					name='noiDungPhanHoi'
-					label='Nội dung phản hồi'
-					rules={[...rules.required, ...rules.text, ...rules.length(2000)]}
-				>
-					<Input.TextArea rows={4} placeholder='Nhập nội dung' />
-				</Form.Item>
 				<Form.Item name='tenLinhVuc' label='Chủ đề câu hỏi' rules={[...rules.required]}>
 					<SelectChuDePhanHoi
 						onChange={(val) => {
@@ -83,7 +76,13 @@ const FormGuiPhanHoi = () => {
 					/>
 				</Form.Item>
 				<Form.Item name='tenDonVi' hidden />
-
+				<Form.Item
+					name='noiDungPhanHoi'
+					label='Nội dung phản hồi'
+					rules={[...rules.required, ...rules.text, ...rules.length(2000)]}
+				>
+					<Input.TextArea rows={4} placeholder='Nhập nội dung' />
+				</Form.Item>
 				<Form.Item name='urlPhanAnh' label='File đính kèm'>
 					<UploadFile
 						otherProps={{
