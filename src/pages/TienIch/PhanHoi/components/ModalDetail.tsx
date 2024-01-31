@@ -27,6 +27,7 @@ const ModalDetailPhanhoi = () => {
 				</Descriptions.Item>
 				<Descriptions.Item label='Ngày gửi'>{moment(record?.createdAt).format('HH:mm DD/MM/YYYY')}</Descriptions.Item>
 
+				<Descriptions.Item label='Chủ đề'>{record?.tenLinhVuc ?? ''}</Descriptions.Item>
 				<Descriptions.Item label='Bộ phận xử lý'>{record?.donVi?.ten ?? record?.maDonVi}</Descriptions.Item>
 				<Descriptions.Item label='Nội dung trả lời'>{record?.noiDungTraLoiPhanHoi}</Descriptions.Item>
 				<Descriptions.Item label='Người trả lời'>{record?.maChuyenVien}</Descriptions.Item>

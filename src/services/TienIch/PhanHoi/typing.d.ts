@@ -17,5 +17,21 @@ declare module PhanHoi {
 		maChuyenVien: string;
 		tenDonVi: string;
 		thoiGianTraLoi: string;
+
+		//Sinh Viên
+		maSv: string;
+		hoTen: string;
+		ssoId: string;
+		tenLinhVuc: string;
+		lichSuDieuPhoi: ILichSuDieuPhoi;
+	}
+
+	export interface IChuDePhanHoi {
+		_id: string;
+		maDonVi: string;
+		tenDonVi: string;
+		tenLinhVuc: string;
+		createdAt: Date;
+		updatedAt: Date;
 	}
 }

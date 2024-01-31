@@ -276,7 +276,7 @@
 				name: 'LichSu',
 				icon: 'AuditOutlined',
 				path: './lich-su',
-				component: './KhaiBaoQuyTrinh',
+				component: './KhaiBaoQuyTrinh/DichVuHanhChinh',
 			},
 			// {
 			// 	name: 'DanhSachQuyTrinh',
@@ -291,6 +291,25 @@
 				hideInMenu: true,
 				path: './:id',
 				component: './KhaiBaoQuyTrinh/ViewQuyTrinh/$id',
+			},
+		],
+	},
+	{
+		name: 'HoatDongKHCN',
+		path: 'hoat-dong-khcn',
+		icon: 'DotChartOutlined',
+		routes: [
+			{
+				name: 'DeTaiHocVien',
+				icon: 'AuditOutlined',
+				path: './de-tai-hoc-vien',
+				component: './KhaiBaoQuyTrinh/DeTaiHocVien',
+			},
+			{
+				name: 'DeTaiKhoa',
+				icon: 'AuditOutlined',
+				path: './de-tai-khoa',
+				component: './KhaiBaoQuyTrinh/DeTaiKhoa',
 			},
 		],
 	},

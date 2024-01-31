@@ -23,7 +23,14 @@ import { history, useModel } from 'umi';
 import ThongTinThanhToan from '../TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import FormKhaiBao from './components/FormKhaiBao';
 
-const KhaiBaoQuyTrinhPage = () => {
+const KhaiBaoQuyTrinhPage = (props: {
+	title?: string;
+	tenQuyTrinh?: string;
+	hasFilterHoatDong?: boolean;
+	hasColumnTenQuyTrinh?: boolean;
+	hasCreate?: boolean;
+	linhVuc?: string;
+}) => {
 	const {
 		page,
 		limit,
@@ -36,22 +43,45 @@ const KhaiBaoQuyTrinhPage = () => {
 		exportMauDonTheoBuocModel,
 		exportMauTraKetQuaTheoBuocModel,
 		loading,
+		setDanhSach,
 	} = useModel('quytrinh.khaibaoquytrinh');
-	const { setLoading, record: recordQuyTrinh } = useModel('quytrinh.quytrinh');
-	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
+	const {
+		setLoading,
+		record: recordQuyTrinh,
+		getModel: getQuyTrinh,
+		danhSach: danhSachQuyTrinh,
+		setRecord: setRecordQuyTrinh,
+	} = useModel('quytrinh.quytrinh');
+	const { getAllModel: getDot, danhSach: danhSachDot } = useModel('quytrinh.dotkhaibao');
 	const { getOneModel: getHoaDon } = useModel('taichinh.hoadon');
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
-	const [recordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
+	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 
+	const getDataQuyTrinh = () => {
+		getQuyTrinh(
+			{ ten: props.tenQuyTrinh, linhVuc: props.linhVuc },
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			'page/SINH_VIEN',
+		);
+	};
+
 	useEffect(() => {
 		getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
+		getDataQuyTrinh();
+		getDot();
 	}, []);
 
 	const getData = () => {
-		getDataKhaiBaoUser();
+		if (props.tenQuyTrinh) {
+			if (danhSachQuyTrinh.length) getDataKhaiBaoUser({ quyTrinhId: danhSachQuyTrinh[0]._id });
+			else setDanhSach([]);
+		} else getDataKhaiBaoUser();
 	};
 
 	const onCell = (recordVal: KhaiBaoQuyTrinh.IRecord) => ({
@@ -91,12 +121,11 @@ const KhaiBaoQuyTrinhPage = () => {
 			title: 'Tên dịch vụ',
 			dataIndex: 'quyTrinhId',
 			width: 250,
-			// filterType: 'customselect',
-			// filterCustomSelect: <SelectQuyTrinh multiple/>,
 			render: (val, recordVal) => {
 				return recordVal?.quyTrinh?.ten;
 			},
 			onCell,
+			hide: !props.hasColumnTenQuyTrinh,
 		},
 		{
 			title: 'Chi tiết',
@@ -110,11 +139,26 @@ const KhaiBaoQuyTrinhPage = () => {
 			width: 250,
 			align: 'center',
 			render: (val, recordVal: KhaiBaoQuyTrinh.IRecord) => {
+				const buocHienTai = recordVal?.danhSachBuocXuLy?.find((item) => item.laBuocHienTai);
+				const dotHienTai = danhSachDot.find((item) => item._id === recordVal.dotQuyTrinhId);
+				const cauHinhThoiGianDotBuocHienTai = dotHienTai?.danhSachCauHinhThoiGianDot.find(
+					(item: { maBuoc: string | undefined }) => item.maBuoc === buocHienTai?.ma,
+				);
+
 				return (
-					<>
-						Bước {recordVal?.danhSachBuocXuLy?.length}/{val?.danhSachBuocXuLy?.length}:{' '}
-						{recordVal?.danhSachBuocXuLy?.find((item) => item.laBuocHienTai)?.ten}
-					</>
+					<div>
+						<span>
+							{' '}
+							Bước {recordVal?.danhSachBuocXuLy?.length}/{val?.danhSachBuocXuLy?.length}:{' '}
+							{recordVal?.danhSachBuocXuLy?.find((item) => item.laBuocHienTai)?.ten}
+						</span>
+						{buocHienTai && cauHinhThoiGianDotBuocHienTai && (
+							<span style={{ marginLeft: 4, fontWeight: 'bold' }}>
+								({moment(cauHinhThoiGianDotBuocHienTai.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
+								{moment(cauHinhThoiGianDotBuocHienTai.thoiGianKetThuc).format('DD/MM/YYYY')})
+							</span>
+						)}
+					</div>
 				);
 			},
 			onCell,
@@ -245,24 +289,46 @@ const KhaiBaoQuyTrinhPage = () => {
 				modelName={'quytrinh.khaibaoquytrinh'}
 				columns={columns}
 				getData={getData}
-				dependencies={[page, limit, condition]}
-				title={'Đơn đã gửi'}
+				dependencies={[page, limit, condition, props.tenQuyTrinh, danhSachQuyTrinh.length]}
+				title={props.title || 'Đơn đã gửi'}
 				destroyModal
 				buttons={{ create: false }}
 				otherButtons={[
 					<>
-						<SelectQuyTrinh
-							placeholder='Lọc theo dịch vụ'
-							loadData={false}
-							allowClear
-							style={{ width: 320, marginBottom: 8 }}
-							onChange={(val: any) => {
-								setCondition({
-									...condition,
-									quyTrinhId: val,
-								});
-							}}
-						/>
+						{danhSachQuyTrinh.length && props.hasCreate ? (
+							<Button
+								onClick={() => {
+									if (
+										danhSachQuyTrinh[0]?.danhSachCauHinhThongTinChung &&
+										danhSachQuyTrinh[0]?.danhSachCauHinhThongTinChung?.length > 0
+									) {
+										setRecordThongTinChung(danhSachQuyTrinh[0]?.danhSachCauHinhThongTinChung);
+										setRecordQuyTrinh(danhSachQuyTrinh[0]);
+										setVisibleThongTinChung(true);
+									} else {
+										handleRedirect(danhSachQuyTrinh[0]?._id ?? '');
+									}
+								}}
+								type='primary'
+								key={'add'}
+							>
+								Thêm mới
+							</Button>
+						) : null}
+						{props.hasFilterHoatDong && (
+							<SelectQuyTrinh
+								placeholder='Lọc theo dịch vụ'
+								loadData={false}
+								allowClear
+								style={{ width: 320, marginBottom: 8 }}
+								onChange={(val: any) => {
+									setCondition({
+										...condition,
+										quyTrinhId: val,
+									});
+								}}
+							/>
+						)}
 					</>,
 				]}
 			/>

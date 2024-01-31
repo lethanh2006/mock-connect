@@ -11,6 +11,7 @@ const HeaderContentPage = () => {
 				<div className='text-error'>HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH</div>
 				<Link to='/'>{AppModules[currentRole].title?.toLocaleUpperCase()}</Link>
 			</div>
+			<img src='/images/hoa-dao.png' alt='hoa-dao' />
 		</div>
 	);
 };

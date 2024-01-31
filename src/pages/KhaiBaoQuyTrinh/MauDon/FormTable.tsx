@@ -13,7 +13,7 @@ const FormTable = (props: {
 	record: any;
 }) => {
 	const [form] = Form.useForm();
-	const [formValues, setFormValues] = useState<any>({});
+	const [formValues, setFormValues] = useState<any>(props?.record ?? {});
 	const { recordQuyTrinhForm, setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
 
 	useEffect(() => {

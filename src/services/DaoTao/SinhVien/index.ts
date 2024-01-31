@@ -36,3 +36,5 @@ export async function getMyKhoaNganh() {
 export async function getMyLopHanhChinh() {
 	return axios.get(`${ipDaoTao}/sinh-vien/me/lop-hanh-chinh`);
 }
+
+export const getThongTinSinhVienBySsoId = (ssoId: string) => axios.get(`${ipDaoTao}/sinh-vien/${ssoId}/info`);
