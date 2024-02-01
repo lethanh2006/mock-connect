@@ -40,8 +40,6 @@ export declare module LopHocPhan {
 		lopHpHcList?: Partial<ILopHpLopHc>[];
 		doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
 
-		maLop: string;
-
 		// Populated
 		deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };
 	}

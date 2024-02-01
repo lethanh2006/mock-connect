@@ -61,7 +61,7 @@ const DanhGiaGiangVienPage = () => {
 			idKhaoSat: record?.idKhaoSat ?? '',
 			danhSachTraLoi: val,
 			idDot: record?._id,
-			maLop: recLopHocPhan?.maLop,
+			maLop: recLopHocPhan?.ten,
 			lopHocPhanId: recLopHocPhan?._id,
 			giangVienSsoId: giangVienSsoId,
 			maGiangVien: danhSachNhanSu.find((item) => item.nhanSuSsoId === giangVienSsoId)?.maNhanSu,
