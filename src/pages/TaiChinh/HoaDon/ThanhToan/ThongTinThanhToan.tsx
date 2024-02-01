@@ -68,6 +68,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		if (rec._id)
 			huyThanhToanModel(rec._id)
 				.then(() => {
+					getGiaoDich();
 					if (getData) getData();
 				})
 				.catch((er) => console.log(er));
@@ -103,10 +104,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 											>
 												Thanh toán ngay
 											</Button>
-											<Popconfirm
-												title='Xác nhận hủy giao dịch này?'
-												onConfirm={() => onCancel && onCancel(recGiaoDich)}
-											>
+											<Popconfirm title='Xác nhận hủy giao dịch này?' onConfirm={() => onCancel(recGiaoDich)}>
 												<Button danger type='link'>
 													Hủy giao dịch
 												</Button>

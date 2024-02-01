@@ -35,7 +35,9 @@ const DesThongTinHoaDon = () => {
 					<i>Đang cập nhật</i>
 				)}
 			</Descriptions.Item>
-			<Descriptions.Item label='Họ tên người nộp'>{recHoaDon?.userFullname ?? <i>Đang cập nhật</i>}</Descriptions.Item>
+			<Descriptions.Item label='Người nộp tiền'>
+				{recHoaDon?.userFullname ? `${recHoaDon.userFullname} - ${recHoaDon.userCode}` : <i>Đang cập nhật</i>}
+			</Descriptions.Item>
 			<Descriptions.Item label='Tổng thành tiền'>
 				{inputFormat(
 					recHoaDon?.billItems
