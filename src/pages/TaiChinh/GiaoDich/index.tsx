@@ -199,18 +199,18 @@ const GiaoDichPage = () => {
 						]}
 						key='select'
 					/>,
-					<ButtonExtend
-						onClick={() => {
-							setRecord(undefined);
-							setVisibleForm(true);
-						}}
-						icon={<PlusCircleOutlined />}
-						type='primary'
-						className='btn-success'
-						key='topup'
-					>
-						Nộp trước học phí
-					</ButtonExtend>,
+					// <ButtonExtend
+					// 	onClick={() => {
+					// 		setRecord(undefined);
+					// 		setVisibleForm(true);
+					// 	}}
+					// 	icon={<PlusCircleOutlined />}
+					// 	type='primary'
+					// 	className='btn-success'
+					// 	key='topup'
+					// >
+					// 	Nộp trước học phí
+					// </ButtonExtend>,
 				]}
 			>
 				<StatGiaoDich />
