@@ -49,21 +49,11 @@ const DanhGiaGiangVienPage = () => {
 
 	const getDanhGiaGiangVien = () => getDanhGiaGiangVienModel(recLopHocPhan?._id ?? '');
 
-	const getData = () => {
-		Promise.all([getDotHienTai(), getDanhGiaGiangVien()])
-			.then((res) => {
-				// nếu có đánh giá gv khảo sát => getBieuMau
-				// nếu có đợt hiện tại getBieuMau
-				// if (record) getBieuMau(record?.idKhaoSat ?? '');
-				// console.log(res);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	};
-
 	useEffect(() => {
-		if (recLopHocPhan?._id) getData();
+		if (recLopHocPhan?._id) {
+			getDotHienTai();
+			getDanhGiaGiangVien();
+		}
 	}, [recLopHocPhan?._id]);
 
 	const hanldeDanhGiaGiangVien = async (val: BieuMau.TraLoiRecord[]) => {
@@ -123,7 +113,12 @@ const DanhGiaGiangVienPage = () => {
 							/>
 						</>
 					</div>
-					<FormTraLoiKhaoSat onOk={hanldeDanhGiaGiangVien} isDanhGiaGiangVien cauTraLoi={cauTraLoi} />
+					<FormTraLoiKhaoSat
+						onOk={hanldeDanhGiaGiangVien}
+						isDanhGiaGiangVien
+						cauTraLoi={cauTraLoi}
+						giangVienSsoId={giangVienSsoId}
+					/>
 				</>
 			) : !danhSach.length && danhSachNhanSu.length ? (
 				<Empty style={{ marginTop: 30, marginBottom: 30 }} description='Không có đợt khảo sát đánh giá giảng viên' />

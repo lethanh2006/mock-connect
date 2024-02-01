@@ -1,5 +1,6 @@
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
+import { handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, Spin } from 'antd';
 import moment from 'moment';
@@ -11,20 +12,21 @@ import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
-import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 
 const FormTraLoiKhaoSat = (props: {
 	isDanhGiaGiangVien?: boolean;
 	onOk: (val: BieuMau.TraLoiRecord[]) => void;
-	[key: string]: any;
 	cauTraLoi?: BieuMau.TraLoiRecord[];
+	giangVienSsoId: string;
+	[key: string]: any;
 }) => {
-	const { isDanhGiaGiangVien, onOk, cauTraLoi } = props;
+	const [form] = Form.useForm();
+	const { isDanhGiaGiangVien, onOk, cauTraLoi, giangVienSsoId } = props;
 	const { loading, record, traLoiBieuMauModel, formSubmiting } = useModel('tienich.bieumau');
+
 	const { formSubmiting: formSubmitingGV } = useModel('sinhvien.danhgiagiangvien');
 	const { setVisibleForm, record: recordDot, getDotMeModel, visibleForm, danhSach } = useModel('tienich.dotkhaosat');
 	const [check, setCheck] = useState<boolean>(false);
-	const [form] = Form.useForm();
 
 	const ngoaiThoiGian =
 		!recordDot?.thoiGianBatDau ||
@@ -33,59 +35,48 @@ const FormTraLoiKhaoSat = (props: {
 		moment().isAfter(recordDot?.thoiGianKetThuc, 'd');
 
 	useEffect(() => {
-		if (!visibleForm) {
+		if (!visibleForm && !giangVienSsoId) {
 			resetFieldsForm(form);
 			setCheck(false);
 		}
 	}, [visibleForm]);
 
+	useEffect(() => {
+		if (giangVienSsoId) {
+			const values: any = {};
+			record?.danhSachKhoi?.map((khoi) => {
+				khoi.danhSachCauHoi?.map((question) => {
+					const traLoi = cauTraLoi?.find((i) => i.idCauHoi === question._id);
+
+					if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) values[question._id] = traLoi?.listLuaChon?.[0];
+					else if (
+						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
+						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
+					) {
+						values[question._id] = {};
+						traLoi?.listLuaChonBang?.forEach((item) => {
+							const idHang = item.idHang;
+							const idCot = item.idCot;
+							if (!values[question._id][idHang]) values[question._id][idHang] = {};
+							values[question._id][idHang][idCot] = true;
+						});
+					} else values[question._id] = traLoi;
+				});
+			});
+			form.resetFields();
+			form.setFieldsValue(values);
+		}
+	}, [record?._id, JSON.stringify(cauTraLoi)]);
+
 	const renderQuestion = (question: BieuMau.CauHoi, index: number) => {
 		let questionEleMent = <div />;
-		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
-			questionEleMent = (
-				<SingleChoice
-					question={question}
-					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
-					form={form}
-				/>
-			);
-		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
-			questionEleMent = (
-				<MultipleChoice
-					question={question}
-					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
-					form={form}
-				/>
-			);
-		else if (question.loai === ELoaiCauHoi.TEXT)
-			questionEleMent = (
-				<Text question={question} traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)} form={form} />
-			);
+		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) questionEleMent = <SingleChoice question={question} />;
+		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE) questionEleMent = <MultipleChoice question={question} />;
+		else if (question.loai === ELoaiCauHoi.TEXT) questionEleMent = <Text question={question} />;
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
-			questionEleMent = (
-				<GridChoice
-					question={question}
-					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
-					form={form}
-				/>
-			);
-		else if (question.loai === ELoaiCauHoi.NUMERIC_RANGE)
-			questionEleMent = (
-				<NumericChoice
-					question={question}
-					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
-					form={form}
-				/>
-			);
-		else if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
-			questionEleMent = (
-				<FileChoice
-					question={question}
-					traLoi={cauTraLoi?.find((item) => item?.idCauHoi === question?._id)}
-					form={form}
-				/>
-			);
-		}
+			questionEleMent = <GridChoice question={question} form={form} />;
+		else if (question.loai === ELoaiCauHoi.NUMERIC_RANGE) questionEleMent = <NumericChoice question={question} />;
+		else if (question.loai === ELoaiCauHoi.UPLOAD_FILE) questionEleMent = <FileChoice question={question} />;
 
 		return (
 			<div key={question._id} style={{ marginBottom: 12 }}>
@@ -96,6 +87,26 @@ const FormTraLoiKhaoSat = (props: {
 				{questionEleMent}
 			</div>
 		);
+	};
+
+	function convertList(originalList: any) {
+		const convertedList = [];
+		for (const idHang in originalList) {
+			for (const idCot in originalList[idHang]) {
+				if (originalList[idHang][idCot] === true) {
+					convertedList.push({ idCot, idHang });
+				}
+			}
+		}
+		return convertedList;
+	}
+
+	const buildUpLoadTaiLieu = (url: string | { fileList: any[] }) => {
+		if (typeof url === 'string') return url;
+		else if (url?.fileList.length) {
+			return Promise.all(url?.fileList?.map((file: any) => handleSingleFile(file)));
+		}
+		return null;
 	};
 
 	// const handleConvertCauTraLoi = async (values: any) => {
@@ -139,6 +150,32 @@ const FormTraLoiKhaoSat = (props: {
 
 	const onFinish = async (values: any) => {
 		const danhSachTraLoi: BieuMau.TraLoiRecord[] = [];
+		// const danhSachTraLoi: Partial<BieuMau.TraLoiRecord>[] = [];
+		// const dsCauHoi = record?.danhSachKhoi?.map((khoi) => khoi.danhSachCauHoi).flat();
+
+		// await dsCauHoi?.map(async (question) => {
+		//   const traLoi = values[question._id];
+		//   if (traLoi) {
+		//     // Check if values[question._id] is an object
+		//     if (typeof values[question._id] === 'object') {
+		//       values[question._id].idCauHoi = question._id;
+
+		//       if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
+		//         const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
+		//         values[question._id].listUrlFile = listUrlFile;
+		//       } else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE && values?.[question._id])
+		//         values[question._id] = [values[question._id]];
+		//       else if (
+		//         question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
+		//         question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
+		//       )
+		//         values[question._id].listLuaChonBang = convertList(values[question._id]);
+
+		//       danhSachTraLoi.push(values[question._id]);
+		//     }
+		//   }
+		// });
+
 		if (record?.danhSachKhoi) {
 			for (let indexKhoi = 0; indexKhoi < record?.danhSachKhoi?.length; indexKhoi++) {
 				for (
@@ -147,6 +184,7 @@ const FormTraLoiKhaoSat = (props: {
 					indexCauHoi++
 				) {
 					const cauHoi = record?.danhSachKhoi?.[indexKhoi]?.danhSachCauHoi?.[indexCauHoi];
+
 					let traLoi: BieuMau.TraLoiRecord = {
 						idCauHoi: cauHoi._id,
 						listLuaChon: [],
@@ -155,88 +193,40 @@ const FormTraLoiKhaoSat = (props: {
 						traLoiText: '',
 					};
 					if (cauHoi.loai === ELoaiCauHoi.UPLOAD_FILE) {
-						const listUrlFile = await buildUpLoadMultiFile(values, cauHoi._id);
+						const listUrlFile = await buildUpLoadTaiLieu(values[cauHoi._id].listUrlFile);
 						traLoi = { ...traLoi, listUrlFile: listUrlFile };
 					} else if (cauHoi.loai === ELoaiCauHoi.SINGLE_CHOICE && values?.[cauHoi._id])
-						traLoi = { ...traLoi, listLuaChon: [values[cauHoi._id]] };
+						traLoi = {
+							...traLoi,
+							listLuaChon: cauHoi.luaChon
+								?.map((item: any) => {
+									if (values[cauHoi._id]?.includes(item.noiDung)) {
+										return item._id;
+									}
+								})
+								.filter(Boolean),
+						};
 					else if (cauHoi.loai === ELoaiCauHoi.MULTIPLE_CHOICE && values?.[cauHoi._id])
-						traLoi = { ...traLoi, listLuaChon: values[cauHoi._id] };
-					else if (cauHoi.loai === ELoaiCauHoi.TEXT) traLoi = { ...traLoi, traLoiText: values[cauHoi._id] };
+						traLoi = {
+							...traLoi,
+							listLuaChon: cauHoi.luaChon
+								?.map((item: any) => {
+									if (values[cauHoi._id]?.listLuaChon?.includes(item.noiDung)) {
+										return item._id;
+									}
+								})
+								.filter(Boolean),
+						};
+					else if (cauHoi.loai === ELoaiCauHoi.TEXT) traLoi = { ...traLoi, traLoiText: values[cauHoi._id]?.traLoiText };
 					else if (cauHoi.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || cauHoi.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
 						traLoi = { ...traLoi, listLuaChonBang: convertList(values[cauHoi._id]) };
 					else if (cauHoi.loai === ELoaiCauHoi.NUMERIC_RANGE) {
-						traLoi = { ...traLoi, luaChonTuyenTinh: values[cauHoi._id] };
+						traLoi = { ...traLoi, luaChonTuyenTinh: values[cauHoi._id]?.luaChonTuyenTinh };
 					}
 					danhSachTraLoi.push(traLoi);
 				}
 			}
 		}
-
-		function convertList(originalList: any) {
-			const convertedList = [];
-			for (const idHang in originalList) {
-				for (const idCot in originalList[idHang]) {
-					if (originalList[idHang][idCot] === true) {
-						convertedList.push({ idCot, idHang });
-					}
-				}
-			}
-			return convertedList;
-		}
-
-		// record?.danhSachKhoi?.forEach((khoi, indexKhoi) => {
-		// 	khoi?.danhSachCauHoi?.forEach(async (cauHoi, indexCauHoi) => {
-		// 		let traLoi: BieuMau.TraLoiRecord = {
-		// 			idCauHoi: cauHoi._id,
-		// 			listLuaChon: [],
-		// 			listLuaChonBang: [],
-		// 			luaChonTuyenTinh: 0,
-		// 			traLoiText: '',
-		// 		};
-		// 		if (cauHoi.loai === 'UploadFile') {
-		// 			const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
-		// 			traLoi = { ...traLoi, listUrlFile: listUrlFile };
-		// 		} else if (cauHoi.loai === 'SingleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
-		// 			traLoi = { ...traLoi, listLuaChon: [values[`${indexKhoi}||${indexCauHoi}`]] };
-		// 		else if (cauHoi.loai === 'MultipleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
-		// 			traLoi = { ...traLoi, listLuaChon: values[`${indexKhoi}||${indexCauHoi}`] };
-		// 		else if (cauHoi.loai === 'Text') traLoi = { ...traLoi, traLoiText: values[`${indexKhoi}||${indexCauHoi}`] };
-		// 		else if (cauHoi.loai === 'GridMultipleChoice' || cauHoi.loai === 'GridSingleChoice')
-		// 			traLoi = {
-		// 				...traLoi,
-		// 				listLuaChonBang: listLuaChonBang?.[indexKhoi || indexCauHoi] ?? [],
-		// 			};
-		// 		else if (cauHoi.loai === 'NumericRange') {
-		// 			traLoi = { ...traLoi, luaChonTuyenTinh: values[`${indexKhoi}||${indexCauHoi}`] };
-		// 		}
-		// 		// else if (cauHoi.loai === 'UploadFile') {
-		// 		//   const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
-		// 		//   console.log('listUrlFile',listUrlFile)
-		// 		//   traLoi = { ...traLoi, listUrlFile:listUrlFile };
-		// 		// }
-		// 		danhSachTraLoi.push(traLoi);
-		// 	});
-		// });
-
-		// Promise.all()
-
-		// setTimeout(() => {
-		// 	console.log('daaaaa', danhSachTraLoi);
-		// 	traLoiBieuMauModel({
-		// 		idKhaoSat: record?._id ?? '',
-		// 		danhSachTraLoi,
-		// 		idDot: recordDot?._id ?? '',
-		// 	})
-		// 		.then(() => {
-		// 			getDotMeModel();
-		// 			setVisibleForm(false);
-		// 			setLoadingform(false);
-		// 		})
-		// 		.catch((er) => console.log(er))
-		// 		.finally(() => {
-		// 			setLoadingform(false);
-		// 		});
-		// }, 2000);
 
 		if (isDanhGiaGiangVien) {
 			onOk(danhSachTraLoi);
