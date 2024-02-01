@@ -1,6 +1,6 @@
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
-import { Col, Collapse, Row, Spin, Tooltip } from 'antd';
+import { Col, Collapse, Row, Select, Spin, Tooltip } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -18,13 +18,19 @@ type TChuongTrinhHocKy = {
 };
 
 const TienTrinhChuongTrinhKhung = () => {
-	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+	const { loading, sinhVienGetTienTrinhKhungModel, sinhVienGetTienTrinhKhungSongNganhModel } =
+		useModel('daotao.chuongtrinhdaotao');
+	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const [count, setCount] = useState(0);
 	const [tongTinChi, setTongTinChi] = useState(0);
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
+	const [value, setValue] = useState(khoaNganhMe?.khoaNganhChinh.ma ?? '');
 
 	const fetch = async () => {
-		await sinhVienGetTienTrinhKhungModel().then((data) => {
+		await (value === khoaNganhMe?.khoaNganhChinh.ma
+			? sinhVienGetTienTrinhKhungModel()
+			: sinhVienGetTienTrinhKhungSongNganhModel()
+		).then((data) => {
 			// Các mã chuyên ngành (nếu có)
 			const uniqchuyenNganh = _.uniq(data?.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
 			// Học phần ko có chuyên ngành hoặc thuộc chuyên ngành đầu tiên
@@ -67,7 +73,7 @@ const TienTrinhChuongTrinhKhung = () => {
 
 	useEffect(() => {
 		fetch();
-	}, []);
+	}, [value]);
 
 	return (
 		<>
@@ -90,6 +96,33 @@ const TienTrinhChuongTrinhKhung = () => {
 					</div>
 				</Col>
 			</Row> */}
+
+			<div>
+				<Select
+					value={value}
+					style={{ width: 250 }}
+					options={
+						khoaNganhMe?.khoaNganhPhu
+							? [
+									{
+										value: khoaNganhMe?.khoaNganhChinh?.ma,
+										label: `${khoaNganhMe?.khoaNganhChinh?.ten} (${khoaNganhMe?.khoaNganhChinh?.ma})`,
+									},
+									{
+										value: khoaNganhMe?.khoaNganhPhu?.ma,
+										label: `${khoaNganhMe?.khoaNganhPhu?.ten} (${khoaNganhMe?.khoaNganhPhu?.ma})`,
+									},
+							  ]
+							: [
+									{
+										value: khoaNganhMe?.khoaNganhChinh?.ma,
+										label: `${khoaNganhMe?.khoaNganhChinh?.ten} (${khoaNganhMe?.khoaNganhChinh?.ma})`,
+									},
+							  ]
+					}
+					onChange={(val) => setValue(val.toString())}
+				/>
+			</div>
 
 			<Spin spinning={loading}>
 				{danhSachHocKy?.map((data) => (
