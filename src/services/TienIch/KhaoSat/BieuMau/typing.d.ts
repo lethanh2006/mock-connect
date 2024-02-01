@@ -132,10 +132,12 @@ declare module BieuMau {
 
 	export interface TraLoiRecord {
 		_id?: string;
+		idCauHoi: string;
+
 		listLuaChon?: string[];
 		listLuaChonBang?: LuaChonBangRecord[];
+
 		traLoiText?: string;
-		idCauHoi: string;
 		luaChonTuyenTinh?: number;
 		listUrlFile?: string[] | null;
 	}

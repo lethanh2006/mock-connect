@@ -4,27 +4,9 @@ import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import rules from '@/utils/rules';
 import { Checkbox, Form, type FormInstance } from 'antd';
-import { useEffect } from 'react';
 
-const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance; traLoi?: BieuMau.TraLoiRecord }) => {
-	const { question, form, traLoi } = props;
-
-	useEffect(() => {
-		if (traLoi?.listLuaChonBang?.length) {
-			const initialValues: Record<string, Record<string, boolean>> = {};
-			traLoi?.listLuaChonBang?.forEach((item) => {
-				const idHang = item.idHang;
-				const idCot = item.idCot;
-				if (!initialValues[idHang]) {
-					initialValues[idHang] = {};
-				}
-				initialValues[idHang][idCot] = true;
-			});
-
-			form.setFieldsValue({ [question._id]: initialValues });
-		} else {
-		}
-	}, [traLoi?.listLuaChonBang]);
+const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance }) => {
+	const { question, form } = props;
 
 	const handleCheckboxChange = (idHang: string, checkboxId: string, checked: boolean) => {
 		if (question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE) {
