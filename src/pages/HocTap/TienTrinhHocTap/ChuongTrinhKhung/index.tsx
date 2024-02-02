@@ -18,8 +18,7 @@ type TChuongTrinhHocKy = {
 };
 
 const TienTrinhChuongTrinhKhung = () => {
-	const { loading, sinhVienGetTienTrinhKhungModel, sinhVienGetTienTrinhKhungSongNganhModel } =
-		useModel('daotao.chuongtrinhdaotao');
+	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const [count, setCount] = useState(0);
 	const [tongTinChi, setTongTinChi] = useState(0);
@@ -27,10 +26,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	const [value, setValue] = useState(khoaNganhMe?.khoaNganhChinh.ma ?? '');
 
 	const fetch = async () => {
-		await (value === khoaNganhMe?.khoaNganhChinh.ma
-			? sinhVienGetTienTrinhKhungModel()
-			: sinhVienGetTienTrinhKhungSongNganhModel()
-		).then((data) => {
+		await sinhVienGetTienTrinhKhungModel(value === khoaNganhMe?.khoaNganhPhu?.ma ? '/song-nganh' : '').then((data) => {
 			// Các mã chuyên ngành (nếu có)
 			const uniqchuyenNganh = _.uniq(data?.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
 			// Học phần ko có chuyên ngành hoặc thuộc chuyên ngành đầu tiên
