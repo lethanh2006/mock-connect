@@ -30,7 +30,7 @@ export default () => {
 
 	const traLoiBieuMauModel = async (payload: {
 		idKhaoSat: string;
-		danhSachTraLoi: BieuMau.TraLoiRecord[];
+		danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]>;
 		idDot: string;
 	}): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submiting');

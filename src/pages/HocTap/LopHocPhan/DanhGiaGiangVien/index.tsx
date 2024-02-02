@@ -82,7 +82,7 @@ const DanhGiaGiangVienPage = () => {
 							type={ngoaiThoiGian ? 'warning' : 'info'}
 							description={
 								ngoaiThoiGian ? (
-									'Ngoài thời gian khảo sát giảng viên !'
+									'Ngoài thời gian đánh giá khảo sát giảng viên !'
 								) : (
 									<>
 										Thời gian khảo sát đánh giá giảng viên từ{' '}

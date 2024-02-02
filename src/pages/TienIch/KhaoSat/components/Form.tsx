@@ -149,87 +149,43 @@ const FormTraLoiKhaoSat = (props: {
 	// };
 
 	const onFinish = async (values: any) => {
-		const danhSachTraLoi: BieuMau.TraLoiRecord[] = [];
-		// const danhSachTraLoi: Partial<BieuMau.TraLoiRecord>[] = [];
-		// const dsCauHoi = record?.danhSachKhoi?.map((khoi) => khoi.danhSachCauHoi).flat();
+		const danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]> = [];
+		const dsCauHoi = record?.danhSachKhoi?.map((khoi) => khoi.danhSachCauHoi).flat();
 
-		// await dsCauHoi?.map(async (question) => {
-		//   const traLoi = values[question._id];
-		//   if (traLoi) {
-		//     // Check if values[question._id] is an object
-		//     if (typeof values[question._id] === 'object') {
-		//       values[question._id].idCauHoi = question._id;
+		dsCauHoi?.map(async (question) => {
+			const traLoi = values[question._id];
+			if (traLoi) {
+				let tempTraLoi: Partial<BieuMau.TraLoiRecord> = { idCauHoi: question._id };
 
-		//       if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
-		//         const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
-		//         values[question._id].listUrlFile = listUrlFile;
-		//       } else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE && values?.[question._id])
-		//         values[question._id] = [values[question._id]];
-		//       else if (
-		//         question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
-		//         question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
-		//       )
-		//         values[question._id].listLuaChonBang = convertList(values[question._id]);
+				if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
+					const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
+					tempTraLoi.listUrlFile = listUrlFile as string[];
+				} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
+					tempTraLoi.listLuaChon = question?.luaChon
+						?.map((item: any) => {
+							if ([traLoi]?.includes(item.noiDung)) {
+								return item._id;
+							}
+						})
+						.filter(Boolean);
+				else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
+					tempTraLoi.listLuaChon = question?.luaChon
+						?.map((item: any) => {
+							if (traLoi?.listLuaChon?.includes(item.noiDung)) {
+								return item._id;
+							}
+						})
+						.filter(Boolean);
+				else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
+					tempTraLoi.listLuaChonBang = convertList(values[question._id]);
+				else tempTraLoi = { ...tempTraLoi, ...values[question._id] };
 
-		//       danhSachTraLoi.push(values[question._id]);
-		//     }
-		//   }
-		// });
-
-		if (record?.danhSachKhoi) {
-			for (let indexKhoi = 0; indexKhoi < record?.danhSachKhoi?.length; indexKhoi++) {
-				for (
-					let indexCauHoi = 0;
-					indexCauHoi < record?.danhSachKhoi?.[indexKhoi]?.danhSachCauHoi?.length;
-					indexCauHoi++
-				) {
-					const cauHoi = record?.danhSachKhoi?.[indexKhoi]?.danhSachCauHoi?.[indexCauHoi];
-
-					let traLoi: BieuMau.TraLoiRecord = {
-						idCauHoi: cauHoi._id,
-						listLuaChon: [],
-						listLuaChonBang: [],
-						luaChonTuyenTinh: 0,
-						traLoiText: '',
-					};
-					if (cauHoi.loai === ELoaiCauHoi.UPLOAD_FILE) {
-						const listUrlFile = await buildUpLoadTaiLieu(values[cauHoi._id].listUrlFile);
-						traLoi = { ...traLoi, listUrlFile: listUrlFile };
-					} else if (cauHoi.loai === ELoaiCauHoi.SINGLE_CHOICE && values?.[cauHoi._id])
-						traLoi = {
-							...traLoi,
-							listLuaChon: cauHoi.luaChon
-								?.map((item: any) => {
-									if (values[cauHoi._id]?.includes(item.noiDung)) {
-										return item._id;
-									}
-								})
-								.filter(Boolean),
-						};
-					else if (cauHoi.loai === ELoaiCauHoi.MULTIPLE_CHOICE && values?.[cauHoi._id])
-						traLoi = {
-							...traLoi,
-							listLuaChon: cauHoi.luaChon
-								?.map((item: any) => {
-									if (values[cauHoi._id]?.listLuaChon?.includes(item.noiDung)) {
-										return item._id;
-									}
-								})
-								.filter(Boolean),
-						};
-					else if (cauHoi.loai === ELoaiCauHoi.TEXT) traLoi = { ...traLoi, traLoiText: values[cauHoi._id]?.traLoiText };
-					else if (cauHoi.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || cauHoi.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
-						traLoi = { ...traLoi, listLuaChonBang: convertList(values[cauHoi._id]) };
-					else if (cauHoi.loai === ELoaiCauHoi.NUMERIC_RANGE) {
-						traLoi = { ...traLoi, luaChonTuyenTinh: values[cauHoi._id]?.luaChonTuyenTinh };
-					}
-					danhSachTraLoi.push(traLoi);
-				}
+				danhSachTraLoi.push(tempTraLoi as BieuMau.TraLoiRecord);
 			}
-		}
+		});
 
 		if (isDanhGiaGiangVien) {
-			onOk(danhSachTraLoi);
+			onOk(danhSachTraLoi as BieuMau.TraLoiRecord[]);
 		} else {
 			await traLoiBieuMauModel({
 				idKhaoSat: record?._id ?? '',

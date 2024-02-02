@@ -9,7 +9,7 @@ export async function getIdBieuMauDaTraLoi(loaiBieuMau?: ELoaiBieuMau) {
 
 export async function traLoiBieuMau(payload: {
 	idKhaoSat: string;
-	danhSachTraLoi: BieuMau.TraLoiRecord[];
+	danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]>;
 	idDot: string;
 }) {
 	return axios.post(`${ip3}/cau-tra-loi-khao-sat/me`, payload);
