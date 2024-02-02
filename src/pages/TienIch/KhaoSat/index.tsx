@@ -2,9 +2,9 @@ import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
-import { EThoiGianDot, MapKeyThoiGianDot, textThucHienKhaoSat } from '@/services/TienIch/KhaoSat/constants';
+import { EThoiGianDot, textThucHienKhaoSat, thoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import { EditOutlined } from '@ant-design/icons';
-import { Button, Select, Tag, Tooltip } from 'antd';
+import { Button, Segmented, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import Form from './components/Form';
@@ -19,13 +19,13 @@ const DotKhaoSatPage = () => {
 		//   await initBieuMauTracNghiemModel(record._id, record?.idBieuMau ?? '');
 		// }
 	};
+
 	const renderTrangThaiDot = (recordVal: DotKhaoSat.IRecord) => {
 		if (!recordVal?.kichHoat) {
 			return 'Đợt chưa kích hoạt';
 		} else return textThucHienKhaoSat[thoiGian];
-
-		return 'Thực hiện khảo sát';
 	};
+
 	const columns: IColumn<DotKhaoSat.IRecord>[] = [
 		{
 			title: 'Tên đợt',
@@ -36,7 +36,7 @@ const DotKhaoSatPage = () => {
 		{
 			title: 'Mô tả',
 			dataIndex: 'moTa',
-			width: 200,
+			width: 250,
 			filterType: 'string',
 			render: (val) => <ExpandText>{val}</ExpandText>,
 		},
@@ -62,7 +62,7 @@ const DotKhaoSatPage = () => {
 			title: 'Trạng thái',
 			dataIndex: 'daLam',
 			align: 'center',
-			width: 100,
+			width: 120,
 			render: (val) => (val ? <Tag color='green'>Đã thực hiện</Tag> : <Tag color='red'>Chưa thực hiện</Tag>),
 		},
 		{
@@ -94,15 +94,11 @@ const DotKhaoSatPage = () => {
 			widthDrawer={800}
 			buttons={{ create: false }}
 			otherButtons={[
-				<Select
+				<Segmented
 					key='1'
-					onChange={(val) => setThoiGian(val)}
-					style={{ width: 200 }}
-					options={Object.values(EThoiGianDot).map((item) => ({
-						value: item,
-						label: MapKeyThoiGianDot[item],
-					}))}
 					value={thoiGian}
+					onChange={(val) => setThoiGian(val as EThoiGianDot)}
+					options={Object.values(EThoiGianDot).map((item) => ({ value: item, label: thoiGianDot[item] }))}
 				/>,
 			]}
 		/>

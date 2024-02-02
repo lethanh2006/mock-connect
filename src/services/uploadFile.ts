@@ -7,7 +7,7 @@ export enum EFileScope {
 	PRIVATE = 'Private',
 }
 
-const handleSingleFile = async (file: any, scope: EFileScope = EFileScope.PUBLIC): Promise<string | null> => {
+export const handleSingleFile = async (file: any, scope: EFileScope = EFileScope.PUBLIC): Promise<string | null> => {
 	if (file?.originFileObj) {
 		try {
 			const response = await uploadFile({
