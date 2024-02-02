@@ -1,12 +1,11 @@
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
-import { Col, Collapse, Row, Select, Spin, Tooltip } from 'antd';
+import { Collapse, Select, Spin, Tooltip } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import CardHocPhan from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
-import flag from '../components/flag.svg';
 
 type TChuongTrinhHocKy = {
 	khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
@@ -26,7 +25,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	const [value, setValue] = useState(khoaNganhMe?.khoaNganhChinh.ma ?? '');
 
 	const fetch = async () => {
-		await sinhVienGetTienTrinhKhungModel(value === khoaNganhMe?.khoaNganhPhu?.ma ? '/song-nganh' : '').then((data) => {
+		await sinhVienGetTienTrinhKhungModel(value === khoaNganhMe?.khoaNganhPhu?.ma ? true : false).then((data) => {
 			// Các mã chuyên ngành (nếu có)
 			const uniqchuyenNganh = _.uniq(data?.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
 			// Học phần ko có chuyên ngành hoặc thuộc chuyên ngành đầu tiên
@@ -102,17 +101,17 @@ const TienTrinhChuongTrinhKhung = () => {
 							? [
 									{
 										value: khoaNganhMe?.khoaNganhChinh?.ma,
-										label: `${khoaNganhMe?.khoaNganhChinh?.ten} (${khoaNganhMe?.khoaNganhChinh?.ma})`,
+										label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten} (${khoaNganhMe?.khoaNganhChinh?.ma})`,
 									},
 									{
 										value: khoaNganhMe?.khoaNganhPhu?.ma,
-										label: `${khoaNganhMe?.khoaNganhPhu?.ten} (${khoaNganhMe?.khoaNganhPhu?.ma})`,
+										label: `${khoaNganhMe?.khoaNganhPhu?.nganh?.ten} (${khoaNganhMe?.khoaNganhPhu?.ma})`,
 									},
 							  ]
 							: [
 									{
 										value: khoaNganhMe?.khoaNganhChinh?.ma,
-										label: `${khoaNganhMe?.khoaNganhChinh?.ten} (${khoaNganhMe?.khoaNganhChinh?.ma})`,
+										label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten} (${khoaNganhMe?.khoaNganhChinh?.ma})`,
 									},
 							  ]
 					}
