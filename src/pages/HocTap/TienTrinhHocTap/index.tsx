@@ -12,7 +12,7 @@ import './components/style.less';
 const TienTrinhHocTap = () => {
 	const [activeTabKey, setActiveTabKey] = useState<string>('2');
 	const { getModel, danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
-	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
+	const { getThongTinCuaToiModel, getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
 		getModel({ trangThai: ETrangThaiDotQuyDoiDiem.DA_BAN_HANH }, [
@@ -30,6 +30,7 @@ const TienTrinhHocTap = () => {
 			},
 		]);
 		getThongTinCuaToiModel();
+		getKhoaNganhMeModel();
 	}, []);
 
 	return (
