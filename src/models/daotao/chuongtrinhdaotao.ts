@@ -9,7 +9,7 @@ export default () => {
 	const [tienTrinhHocTap, setTienTrinhHocTap] = useState<LopHocPhan.IRecordSinhVienLopHP[]>();
 
 	const sinhVienGetTienTrinhKhungModel = async (
-		isSongNhanh?: string,
+		isSongNhanh?: boolean,
 	): Promise<ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]> => {
 		setLoading(true);
 		try {
