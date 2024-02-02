@@ -104,11 +104,11 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 											>
 												Thanh toán ngay
 											</Button>
-											<Popconfirm title='Xác nhận hủy giao dịch này?' onConfirm={() => onCancel(recGiaoDich)}>
+											{/* <Popconfirm title='Xác nhận hủy giao dịch này?' onConfirm={() => onCancel(recGiaoDich)}>
 												<Button danger type='link'>
 													Hủy giao dịch
 												</Button>
-											</Popconfirm>
+											</Popconfirm> */}
 										</Space>
 									}
 								/>
