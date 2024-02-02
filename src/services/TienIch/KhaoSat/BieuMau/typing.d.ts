@@ -1,134 +1,168 @@
 import { type EPhamViChuDe } from '@/services/TinTuc/constant';
 import { type ELoaiDoiTuong } from '../constant';
-import { type ELoaiBieuMau } from '../constants';
+import { type ELoaiCauHoi, type ELoaiBieuMau } from '../constants';
 
 declare module BieuMau {
-  export interface LuaChon {
-    noiDung: string;
-    dung?: boolean;
-    _id: string;
-  }
+	export interface LuaChon {
+		noiDung: string;
+		dung?: boolean;
+		_id: string;
+	}
 
-  export interface CauHoi {
-    loai: string;
-    batBuoc: boolean;
-    noiDungCauHoi: string;
-    cauTraLoiKhac: boolean;
-    luaChon: LuaChon[];
-    luaChonCot: {
-      noiDung: string;
-      _id: string;
-    }[];
-    luaChonHang: {
-      noiDung: string;
-      _id: string;
-    }[];
-    gioiHanDuoiTuyenTinh: number;
-    gioiHanTrenTuyenTinh: number;
-    _id: string;
-  }
+	export interface CauHoi {
+		loai: ELoaiCauHoi;
+		batBuoc: boolean;
+		noiDungCauHoi: string;
 
-  export interface Khoi {
-    tieuDe: string;
-    moTa: string;
-    danhSachCauHoi: CauHoi[];
-  }
+		//text
+		cauTraLoiKhac: boolean;
 
-  export interface GeneralInfo {
-    id: string;
-    code: string;
-    name: string;
-    description: string;
-    info: any;
-  }
+		//MultipleChoice
+		luaChon: LuaChon[];
 
-  export interface Record {
-    _id: string;
-    tieuDe: string;
-    moTa: string;
-    // phamVi: EPhamViChuDe;
-    // hinhThucDaoTaoId?: number;
-    // isTatCaHe?: boolean;
-    // danhSachLopTinChi: GeneralInfo[];
-    // danhSachLopHanhChinh: GeneralInfo[];
-    // danhSachNguoiDung: GeneralInfo[];
-    // danhSachKhoaHoc: GeneralInfo[];
-    // danhSachNganhHoc: GeneralInfo[];
-    // loaiDoiTuongSuDung: ELoaiDoiTuong[];
-    coCamKet: boolean;
-    noiDungCamKet: string;
-    // soPhutThucHien?: number;
-    // soLuotTraLoiToiDa?: number;
-    // thoiGian?: string[];
-    // danhSachVaiTro: string[];
-    loai: ELoaiBieuMau; // "Khảo sát"
-    // thoiGianBatDau: string;
-    // thoiGianKetThuc: string;
-    // kichHoat: boolean;
-    danhSachKhoi: Khoi[];
-    // doiTuong: string;
-  }
+		//GridChoice
+		luaChonCot: TGridItem[];
+		luaChonHang: TGridItem[];
 
-  export interface ThongKeLuaChon {
-    noiDungLuaChon: string;
-    idLuaChon: string;
-    soLuong: number;
-  }
+		///NumericRange
+		gioiHanDuoiTuyenTinh: number;
+		gioiHanTrenTuyenTinh: number;
+		_id: string;
+	}
 
-  export interface ThongKeCot {
-    idCot: string;
-    noiDungCot: string;
-    soLuong: number;
-  }
+	export type TGridItem = {
+		noiDung: string;
+		_id: string;
+	};
 
-  export interface ThongKeLuaChonGrid {
-    noiDungHang: string;
-    idHang: string;
-    thongKeCot: ThongKeCot[];
-  }
+	export interface Khoi {
+		_id: string;
+		tieuDe: string;
+		moTa: string;
+		danhSachCauHoi: CauHoi[];
+	}
 
-  export interface ThongKeLuaChonNumeric {
-    giaTriTuyenTinh: number;
-    soLuong: number;
-  }
+	export interface GeneralInfo {
+		id: string;
+		code: string;
+		name: string;
+		description: string;
+		info: any;
+	}
 
-  export interface ThongKeCauHoi {
-    _id: string;
-    noiDungCauHoi: string;
-    loai: string;
-    soLuongTraLoi: number;
-    batBuoc?: boolean;
-    ketQua: (ThongKeLuaChon | ThongKeLuaChonGrid | ThongKeLuaChonNumeric)[];
-  }
+	export interface Record {
+		_id: string;
+		tieuDe: string;
+		moTa: string;
+		// phamVi: EPhamViChuDe;
+		// hinhThucDaoTaoId?: number;
+		// isTatCaHe?: boolean;
+		// danhSachLopTinChi: GeneralInfo[];
+		// danhSachLopHanhChinh: GeneralInfo[];
+		// danhSachNguoiDung: GeneralInfo[];
+		// danhSachKhoaHoc: GeneralInfo[];
+		// danhSachNganhHoc: GeneralInfo[];
+		// loaiDoiTuongSuDung: ELoaiDoiTuong[];
+		coCamKet: boolean;
+		noiDungCamKet: string;
+		// soPhutThucHien?: number;
+		// soLuotTraLoiToiDa?: number;
+		// thoiGian?: string[];
+		// danhSachVaiTro: string[];
+		loai: ELoaiBieuMau; // "Khảo sát"
+		// thoiGianBatDau: string;
+		// thoiGianKetThuc: string;
+		// kichHoat: boolean;
+		danhSachKhoi: Khoi[];
+		// doiTuong: string;
+	}
 
-  export interface ThongKeKhoi {
-    _id: string;
-    tieuDe: string;
-    moTa: string;
-    thongKeCauHoi: ThongKeCauHoi[];
-  }
+	export interface ThongKeLuaChon {
+		noiDungLuaChon: string;
+		idLuaChon: string;
+		soLuong: number;
+	}
 
-  export interface ThongKe {
-    _id: string;
-    tieuDe: string;
-    moTa: string;
-    loai: string;
-    thongKeKhoi: ThongKeKhoi[];
-  }
+	export interface ThongKeCot {
+		idCot: string;
+		noiDungCot: string;
+		soLuong: number;
+	}
 
-  export interface LuaChonBangRecord {
-    _id?: string;
-    idCot: string;
-    idHang: string;
-  }
+	export interface ThongKeLuaChonGrid {
+		noiDungHang: string;
+		idHang: string;
+		thongKeCot: ThongKeCot[];
+	}
 
-  export interface TraLoiRecord {
-    _id?: string;
-    listLuaChon?: string[];
-    listLuaChonBang?: LuaChonBangRecord[];
-    traLoiText?: string;
-    idCauHoi: string;
-    luaChonTuyenTinh?: number;
-    listUrlFile?: string[] | null;
-  }
+	export interface ThongKeLuaChonNumeric {
+		giaTriTuyenTinh: number;
+		soLuong: number;
+	}
+
+	export interface ThongKeCauHoi {
+		_id: string;
+		noiDungCauHoi: string;
+		loai: string;
+		soLuongTraLoi: number;
+		batBuoc?: boolean;
+		ketQua: (ThongKeLuaChon | ThongKeLuaChonGrid | ThongKeLuaChonNumeric)[];
+	}
+
+	export interface ThongKeKhoi {
+		_id: string;
+		tieuDe: string;
+		moTa: string;
+		thongKeCauHoi: ThongKeCauHoi[];
+	}
+
+	export interface ThongKe {
+		_id: string;
+		tieuDe: string;
+		moTa: string;
+		loai: string;
+		thongKeKhoi: ThongKeKhoi[];
+	}
+
+	export interface LuaChonBangRecord {
+		_id?: string;
+		idCot: string;
+		idHang: string;
+	}
+
+	export interface TraLoiRecord {
+		_id?: string;
+		idCauHoi: string;
+
+		listLuaChon?: string[];
+		listLuaChonBang?: LuaChonBangRecord[];
+
+		traLoiText?: string;
+		luaChonTuyenTinh?: number;
+		listUrlFile?: string[] | null;
+	}
+
+	export interface IDanhGiaGiangVien {
+		_id: string;
+		danhSachTraLoi: BieuMau.TraLoiRecord[];
+		idDot: string;
+		idKhaoSat: string;
+		lopHocPhanId: string;
+		maLop: string;
+
+		maGiangVien: string;
+		hoTenGiangVien: string;
+		giangVienSsoId: string;
+
+		hoTen: string;
+		userCode: string;
+		userSsoId: string;
+		vaiTro: string;
+
+		answered: boolean;
+		saved: boolean;
+		startedAt: Date;
+		createdAt: Date;
+		updatedAt: Date;
+	}
 }

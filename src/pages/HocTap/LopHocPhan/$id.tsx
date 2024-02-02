@@ -1,11 +1,12 @@
+import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
+import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import ThongTinChung from './components/ThongTinChung';
-import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 
 const DetailLopTinChi = ({
 	match: {
@@ -38,12 +39,7 @@ const DetailLopTinChi = ({
 				</Breadcrumb>
 			}
 		>
-			<Tabs
-				onChange={(tab) => {
-					setTabActive(tab);
-				}}
-				activeKey={tabActive}
-			>
+			<Tabs onChange={(tab) => setTabActive(tab)} activeKey={tabActive}>
 				<Tabs.TabPane tab='Thông tin chung' key='1'>
 					<ThongTinChung />
 				</Tabs.TabPane>
@@ -58,6 +54,10 @@ const DetailLopTinChi = ({
 				<Tabs.TabPane tab='Kết quả học tập' key='3'>
 					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm lớp tín chỉ</h4>
 					<DetailKetQuaHocTap lopHocPhanId={record?._id} />
+				</Tabs.TabPane>
+
+				<Tabs.TabPane tab='Đánh giá giảng viên' key='5'>
+					<DanhGiaGiangVienPage />
 				</Tabs.TabPane>
 
 				{/*
