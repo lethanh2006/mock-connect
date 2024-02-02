@@ -1,30 +1,25 @@
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
-import { Radio, Form } from 'antd';
+import { Form, Radio } from 'antd';
 
-const NumericChoice = (props: {
-  question: BieuMau.CauHoi;
-  indexKhoi: number;
-  indexCauHoi: number;
-}) => {
-  const arrValue: number[] = [];
-  for (let i = props.question?.gioiHanDuoiTuyenTinh; i <= props.question?.gioiHanTrenTuyenTinh; i++)
-    arrValue.push(i);
+const NumericChoice = (props: { question: BieuMau.CauHoi }) => {
+	const arrValue: number[] = [];
+	for (let i = props.question?.gioiHanDuoiTuyenTinh; i <= props.question?.gioiHanTrenTuyenTinh; i++) arrValue.push(i);
 
-  return (
-    <Form.Item
-      rules={props.question.batBuoc ? [...rules.required] : []}
-      name={`${props.indexKhoi}||${props.indexCauHoi}`}
-    >
-      <Radio.Group>
-        {arrValue.map((item) => (
-          <Radio key={item} value={item}>
-            {item}
-          </Radio>
-        ))}
-      </Radio.Group>
-    </Form.Item>
-  );
+	return (
+		<Form.Item
+			rules={props.question.batBuoc ? [...rules.required] : []}
+			name={[props.question._id, 'luaChonTuyenTinh']}
+		>
+			<Radio.Group>
+				{arrValue.map((item) => (
+					<Radio key={item} value={item}>
+						{item}
+					</Radio>
+				))}
+			</Radio.Group>
+		</Form.Item>
+	);
 };
 
 export default NumericChoice;

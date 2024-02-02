@@ -1,122 +1,59 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { Checkbox, Form } from 'antd';
-import { useState } from 'react';
+import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
+import rules from '@/utils/rules';
+import { Checkbox, Form, type FormInstance } from 'antd';
 
-const GridChoice = (props: {
-	question: BieuMau.CauHoi;
-	indexKhoi: number;
-	indexCauHoi: number;
-	listLuaChonBang: BieuMau.LuaChonBangRecord[][];
-	setListLuaChonBang: any;
-	setErr?: any;
-}) => {
-	const [isSubmit, setIsSubmit] = useState<boolean>(false);
-	const fieldName = props.indexKhoi || props.indexCauHoi;
+const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance }) => {
+	const { question, form } = props;
 
-	const onChange = (e: any, idHang: string, idCot: string) => {
-		const listTemp =
-			props?.question?.loai === 'GridSingleChoice'
-				? props.listLuaChonBang?.[fieldName]?.filter(
-						(item: { idHang: string; idCot: string }) => item?.idHang !== idHang,
-				  ) ?? []
-				: props.listLuaChonBang?.[fieldName] ?? [];
-		const check = e.target.checked;
-		const record = { ...props.listLuaChonBang };
-		if (check) {
-			listTemp.push({ idHang, idCot });
-			record[fieldName] = listTemp;
-			props.setListLuaChonBang(record);
-		} else {
-			record[fieldName] =
-				props?.question?.loai === 'GridSingleChoice'
-					? listTemp
-					: listTemp?.filter((item: { idCot: string; idHang: string }) => item.idCot !== idCot);
-			props.setListLuaChonBang(record);
-		}
-		// console.log('fieldName', fieldName);
-		// console.log('idCot', idCot);
-		// console.log('idHang', idHang);
-		// console.log('record cc', record);
-		// console.log('listTemp', listTemp);
-		// console.log(
-		// 	'listTemp FF',
-		// 	listTemp?.filter((item: { idCot: string; idHang: string }) => item.idCot !== idCot),
-		// );
-		if (!props.setErr) return;
-		if (props.question.batBuoc && record[fieldName].length !== props.question.luaChonHang.length) {
-			props?.setErr(true);
-		} else {
-			props?.setErr(false);
+	const handleCheckboxChange = (idHang: string, checkboxId: string, checked: boolean) => {
+		if (question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE) {
+			const updatedCheckedValues: Record<string, any> = {};
+			question.luaChonCot.forEach((recCot) => {
+				updatedCheckedValues[recCot._id] = recCot._id === checkboxId ? checked : undefined;
+			});
+			form.setFieldsValue({ [question._id]: { [idHang]: updatedCheckedValues } });
 		}
 	};
 
-	const columns: IColumn<any>[] = [
+	const columns: IColumn<BieuMau.TGridItem>[] = [
 		{
 			title: 'Nội dung',
-			dataIndex: 'tieuChi',
+			dataIndex: 'noiDung',
 			width: 250,
-			fixed: 'left',
 		},
 	];
 
-	props?.question?.luaChonCot?.forEach((item) => {
+	question?.luaChonCot?.forEach((recCot) => {
 		columns.push({
-			key: item._id,
-			title: item.noiDung,
-			dataIndex: 'idHang',
+			key: recCot._id,
+			title: recCot.noiDung,
 			align: 'center',
-			width: 80,
-			render: (val: string) => {
-				const luaChon = props?.listLuaChonBang?.[fieldName]?.find(
-					(ele) => ele.idHang === val && ele.idCot === item._id,
-				);
-				return props?.question?.loai === 'GridSingleChoice' ? (
-					<Checkbox checked={!!luaChon?.idHang} onChange={(e) => onChange(e, val, item._id)} />
-				) : (
-					<Checkbox onChange={(e) => onChange(e, val, item._id)} />
-				);
-			},
+			width: 120,
+			render: (val, recHang) => (
+				<Form.Item
+					name={[question?._id, recHang._id, recCot._id]}
+					valuePropName='checked'
+					rules={props.question.batBuoc ? [...rules.required] : []}
+				>
+					<Checkbox onChange={(e) => handleCheckboxChange(recHang._id ?? '', recCot._id, e.target.checked)} />
+				</Form.Item>
+			),
 		});
 	});
 
-	const data = props?.question?.luaChonHang?.map((hang) => ({
-		tieuChi: hang.noiDung,
-		idHang: hang._id,
-	}));
-
-	const isRequired = !props.listLuaChonBang?.[fieldName] || props.listLuaChonBang?.[fieldName]?.length === 0;
-	// props.listLuaChonBang?.[fieldName]?.length !== props.question.luaChonHang.length;
+	// const isRequired = !props.listLuaChonBang?.[fieldName] || props.listLuaChonBang?.[fieldName]?.length === 0;
 
 	return (
-		<Form.Item
-			extra={
-				props.question.batBuoc && isSubmit && isRequired ? (
-					<span style={{ color: '#FF4D4F' }}>Bắt buộc</span>
-				) : undefined
-			}
-			rules={
-				props.question.batBuoc
-					? [
-							{
-								validator: (_: any, value, callback) => {
-									if (isRequired) {
-										callback('');
-										setIsSubmit(true);
-									} else {
-										setIsSubmit(false);
-									}
-									callback();
-								},
-							},
-					  ]
-					: []
-			}
-			name={fieldName}
-		>
-			<TableStaticData otherProps={{ pagination: false }} data={data} columns={columns} hasTotal />
-		</Form.Item>
+		<TableStaticData
+			otherProps={{ pagination: false }}
+			data={props?.question?.luaChonHang}
+			columns={columns}
+			addStt
+			size='small'
+		/>
 	);
 };
 
