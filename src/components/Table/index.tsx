@@ -575,8 +575,8 @@ const TableBase = (props: TableBaseProps) => {
 							width={widthDrawer !== 'full' ? widthDrawer : undefined}
 							onCancel={() => setVisibleForm(false)}
 							footer={false}
-							bodyStyle={{ padding: 0 }}
-							visible={visibleForm}
+							styles={{ content: { padding: 0 } }}
+							open={visibleForm}
 							destroyOnClose={destroyModal || false}
 						>
 							<Form title={title ?? ''} {...props.formProps} />

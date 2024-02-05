@@ -4,15 +4,16 @@ import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
 import { currentRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
+import { useModel } from '@umijs/max';
 import { notification } from 'antd';
-import { useEffect, type FC } from 'react';
+import React, { useEffect, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
-import { history, useModel } from 'umi';
+import { history } from 'umi';
 import { unAuthPaths, unCheckPermissionPaths } from './constant';
 
 let OIDCBounderHandlers: ReturnType<typeof useAuthActions> | null = null;
 
-const OIDCBounder_: FC = ({ children }) => {
+const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
 	const { setInitialState, initialState } = useModel('@@initialState');
 	const auth = useAuth();
 	const actions = useAuthActions();
@@ -45,7 +46,7 @@ const OIDCBounder_: FC = ({ children }) => {
 						history.replace('/dashboard');
 				}
 			} catch {
-				notification.warn({
+				notification.warning({
 					message: 'Xác thực người dùng',
 					description: 'Vui lòng đợi trong giây lát. Đang chuyển hướng ...',
 				});
@@ -83,7 +84,9 @@ const OIDCBounder_: FC = ({ children }) => {
 	return <>{children}</>;
 };
 
-export const OIDCBounder: FC & { getActions: () => typeof OIDCBounderHandlers } = (props) => {
+export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: () => typeof OIDCBounderHandlers } = (
+	props,
+) => {
 	return (
 		<AuthProvider
 			{...oidcConfig}

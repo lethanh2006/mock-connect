@@ -37,9 +37,9 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 					</Tooltip>
 
 					<Modal
-						bodyStyle={{ padding: 0 }}
+						styles={{ content: { padding: 0 }, body: { padding: 0 } }}
 						footer={false}
-						visible={visible}
+						open={visible}
 						onCancel={() => setVisible(false)}
 						maskClosable={false}
 					>

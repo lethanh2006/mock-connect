@@ -1,25 +1,23 @@
 import { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
 const Settings: LayoutSettings & {
-	pwa?: boolean;
 	logo?: string;
 	borderRadiusBase: string;
 	siderWidth: number;
 } = {
-	navTheme: 'dark',
-	primaryColor: process.env.APP_CONFIG_PRIMARY_COLOR,
+	navTheme: 'light',
+	colorPrimary: process.env.APP_CONFIG_PRIMARY_COLOR,
 	borderRadiusBase: '2px',
-	layout: 'side',
+	layout: 'mix',
 	contentWidth: 'Fluid',
 	fixedHeader: true,
 	fixSiderbar: true,
-	colorWeak: false,
+	colorWeak: true,
 	title: process.env.APP_CONFIG_TITLE_NHAN_SU ?? '',
-	pwa: false,
 	logo: '/logo-text.png',
 	iconfontUrl: '',
-	headerTheme: 'dark',
-	headerHeight: 60,
+	// headerTheme: 'dark',
+	// headerHeight: 60,
 	siderWidth: 220,
 };
 

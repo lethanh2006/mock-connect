@@ -76,6 +76,7 @@
 		layout: false,
 	},
 	{
+		path: '/',
 		component: './exception/404',
 	},
 ];
