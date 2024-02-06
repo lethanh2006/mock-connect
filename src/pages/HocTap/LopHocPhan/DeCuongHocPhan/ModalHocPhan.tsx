@@ -17,7 +17,7 @@ const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any
 		<Modal
 			title={title ?? ''}
 			visible={visible}
-			width={800}
+			width={1000}
 			onCancel={() => setVisible(false)}
 			okButtonProps={{ hidden: true }}
 			cancelText='Đóng'

@@ -25,7 +25,7 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 				<Collapse.Panel style={{ padding: 0 }} key={'thongtinchung'} header={<b>Thông tin chung</b>}>
 					<Descriptions column={2} bordered>
 						{buocHienTai?.moTa || buocHienTai?.danhSachVanBanLuuTru?.length ? (
-							<Descriptions.Item span={24} label='Diễn giải chi tiết'>
+							<Descriptions.Item span={24} label='Mô tả'>
 								<div
 									dangerouslySetInnerHTML={{
 										__html: buocHienTai?.moTa ?? '',
@@ -45,6 +45,13 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 								) : null}
 							</Descriptions.Item>
 						) : null}
+						<Descriptions.Item label='Bộ phận xử lý'>
+							{
+								dataQuyTrinh?.quyTrinh?.danhSachBoPhanXuLy?.find(
+									(item: { ma: string }) => item?.ma === data?.maBoPhanXuLy,
+								)?.ten
+							}
+						</Descriptions.Item>
 						{!props.isBuocNgoaiHeThong && data?.coKhaiBao && (
 							<>
 								<Descriptions.Item label='Trạng thái xử lý'>
@@ -54,13 +61,7 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 										{data?.trangThaiTiepNhan}
 									</Tag>
 								</Descriptions.Item>
-								<Descriptions.Item label='Bộ phận xử lý'>
-									{
-										dataQuyTrinh?.quyTrinh?.danhSachBoPhanXuLy?.find(
-											(item: { ma: string }) => item?.ma === data?.maBoPhanXuLy,
-										)?.ten
-									}
-								</Descriptions.Item>
+
 								<Descriptions.Item label='Trạng thái thanh toán'>
 									<Tag
 										color={
