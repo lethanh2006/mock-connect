@@ -3,7 +3,7 @@ import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Divider, Modal, Space, Tooltip, message } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
@@ -72,6 +72,9 @@ const ModalChiTietDiem = (props: {
 				onCancel={() => setVisible(false)}
 				footer={
 					<Space>
+						<ButtonExtend icon={<StarOutlined />} title='Quan tâm học phần'>
+							Quan tâm
+						</ButtonExtend>
 						{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
 							<ButtonExtend
 								tooltip={!danhSach.length || !thoiGianQuyDoiDiem ? 'Không có đợt công nhận KQHT' : null}
