@@ -1,20 +1,18 @@
 import { EOperatorType } from '@/components/Table/constant';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
-import { ETrangThaiSinhVienQuyDoiDiem, colorTrangThaiSinhVienQuyDoiDiem } from '@/services/HocTap/constant';
 import rules from '@/utils/rules';
-import { Button, Col, Descriptions, Form, Modal, Row, Tag } from 'antd';
-import moment from 'moment';
+import { Button, Col, Descriptions, Form, Modal, Row } from 'antd';
 import { useModel } from 'umi';
+import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
 import FormItemMinhChungQuyDoi from '../MinhChungQuyDoi/FormItemMinhChung';
 
 const ModalQuyDoiDiem = (props: { visible: boolean; setVisible: any; hocPhan?: HocPhan.IRecord }) => {
 	const [form] = Form.useForm();
 	const { visible, setVisible, hocPhan } = props;
-	const { formSubmiting, postSinhVienQuyDoiModel, isView, record, setIsView, getModel } = useModel(
-		'daotao.quydoidiem.sinhvienquydoidiem',
-	);
-	const { danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
+	const { formSubmiting, isView, record, setIsView, getModel } = useModel('daotao.quydoidiem.phieuquydoidiem');
+	const { postSinhVienQuyDoiModel, postSinhVienQuyDoiPhieuModel } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
+	const { record: recDot } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 
 	const getData = () =>
@@ -29,26 +27,40 @@ const ModalQuyDoiDiem = (props: { visible: boolean; setVisible: any; hocPhan?: H
 
 	const onFinish = async (values: QuyDoiDiem.IQuyDoiDiemSinhVien) => {
 		const data = {
-			thongTinQuyDoiDiemSinhVien: {
-				sinhVienSsoId: recSinhVien?.ssoId,
-				maHocPhan: hocPhan?.ma,
-				maSinhVien: recSinhVien?.ma,
-				hoTen: recSinhVien?.ten,
+			danhSachHocPhanDangKyQuyDoiDiem: {
+				thongTinQuyDoiDiemSinhVien: {
+					phieuDangKyQuyDoiDiemId: record?._id,
+					maHocPhan: hocPhan?.ma,
+					tenHocPhan: hocPhan?.ten,
+				},
+				danhSachMinhChung: values.danhSachMinhChungQuyDoi,
 			},
-			danhSachMinhChung: values.danhSachMinhChungQuyDoi,
+			sinhVienSsoId: recSinhVien?.ssoId,
+
+			maSinhVien: recSinhVien?.ma,
+			hoTen: recSinhVien?.ten,
 		};
 
-		postSinhVienQuyDoiModel(danhSach[0]?._id ?? '', data)
-			.then(() => {
-				getData();
-				setVisible(false);
-			})
-			.catch((rec) => console.log(rec));
+		if (record?._id) {
+			postSinhVienQuyDoiPhieuModel(recDot?._id ?? '', data.danhSachHocPhanDangKyQuyDoiDiem)
+				.then(() => {
+					getData();
+					setVisible(false);
+				})
+				.catch((rec) => console.log(rec));
+		} else {
+			postSinhVienQuyDoiModel(recDot?._id ?? '', data)
+				.then(() => {
+					getData();
+					setVisible(false);
+				})
+				.catch((rec) => console.log(rec));
+		}
 	};
 
 	return (
 		<Modal
-			width={800}
+			width={1000}
 			visible={visible}
 			onCancel={() => {
 				setVisible(false);
@@ -61,41 +73,7 @@ const ModalQuyDoiDiem = (props: { visible: boolean; setVisible: any; hocPhan?: H
 				<Row gutter={[12, 0]}>
 					{isView ? (
 						<Col xs={24}>
-							<Descriptions column={{ xs: 1, sm: 1, md: 2 }}>
-								<Descriptions.Item span={2} label='Học phần quy đổi'>
-									{record?.maHocPhan ?? ''} - {record?.hocPhan.ten ?? ''} - {record?.hocPhan.soTinChi ?? ''}TC
-								</Descriptions.Item>
-								<Descriptions.Item label='Kết quả quy đổi'>
-									{record?.diemHe10 ? `${record.diemHe10} điểm` : ''}
-								</Descriptions.Item>
-
-								{record?.trangThai === ETrangThaiSinhVienQuyDoiDiem.DA_RA_QUYET_DINH ? (
-									<>
-										<Descriptions.Item label='Số quyết định'>{record?.soQuyetDinh}</Descriptions.Item>
-										<Descriptions.Item label='Ngày ban hành'>
-											{record.thoiGianBanHanh ? moment(record?.thoiGianBanHanh).format('DD/MM/YYYY') : ''}
-										</Descriptions.Item>
-									</>
-								) : null}
-
-								<Descriptions.Item label='Ý kiến phòng ban' span={2}>
-									{record?.hoTenNguoiChoYKien ? (
-										<>
-											{record?.hoTenNguoiChoYKien}: {record?.ghiChu ?? <i>Không có ý kiến</i>}
-											{record.thoiGianChoYKien
-												? ` (${moment(record.thoiGianChoYKien).format('HH:mm DD/MM/YYYY')})`
-												: ''}
-										</>
-									) : (
-										<Tag color='blue'>Chưa cho ý kiến</Tag>
-									)}
-								</Descriptions.Item>
-								<Descriptions.Item label='Trạng thái'>
-									<Tag color={colorTrangThaiSinhVienQuyDoiDiem[record?.trangThai as ETrangThaiSinhVienQuyDoiDiem]}>
-										{record?.trangThai ?? ''}
-									</Tag>
-								</Descriptions.Item>
-							</Descriptions>
+							<FormItemHocPhanQuyDoi />
 						</Col>
 					) : (
 						<>
@@ -106,13 +84,13 @@ const ModalQuyDoiDiem = (props: { visible: boolean; setVisible: any; hocPhan?: H
 								<Descriptions.Item label='Mã học phần'>{hocPhan?.ma ?? ''}</Descriptions.Item>
 								<Descriptions.Item label='Số tín chỉ'>{hocPhan?.soTinChi ?? ''}</Descriptions.Item>
 							</Descriptions>
+							<Col xs={24}>
+								<Form.Item name='danhSachMinhChungQuyDoi' rules={[...rules.required]}>
+									<FormItemMinhChungQuyDoi />
+								</Form.Item>
+							</Col>
 						</>
 					)}
-					<Col xs={24}>
-						<Form.Item name='danhSachMinhChungQuyDoi' rules={[...rules.required]}>
-							<FormItemMinhChungQuyDoi />
-						</Form.Item>
-					</Col>
 				</Row>
 
 				<div className='form-footer'>
