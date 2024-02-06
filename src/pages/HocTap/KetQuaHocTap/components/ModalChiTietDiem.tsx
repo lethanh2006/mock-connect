@@ -23,7 +23,8 @@ const ModalChiTietDiem = (props: {
 	khoiHocPhanCt?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 }) => {
 	const { getByIdModel } = useModel('daotao.lophocphan');
-	const { setIsView } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
+	const { setIsView: setIsViewPhieu } = useModel('daotao.quydoidiem.phieuquydoidiem');
+	const { setIsView: setIsViewSinhVien } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { visible, setVisible, lopHocPhanId, hocPhan, listDiem, trangThaiHoc, chuongTrinh, khoiHocPhanCt } = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
@@ -81,7 +82,8 @@ const ModalChiTietDiem = (props: {
 								disabled={!danhSach.length || !thoiGianQuyDoiDiem}
 								onClick={() => {
 									setVisibleCongNhan(true);
-									setIsView(false);
+									setIsViewPhieu(false);
+									setIsViewSinhVien(false);
 								}}
 								icon={<PlusCircleOutlined />}
 							>

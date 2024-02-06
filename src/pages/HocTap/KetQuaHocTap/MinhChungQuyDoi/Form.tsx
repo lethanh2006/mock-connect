@@ -31,8 +31,13 @@ const FormMinhChungQuyDoiDiem = (props: {
 	const loaiHocPhan: string = Form.useWatch('loaiHocPhan', form);
 
 	useEffect(() => {
-		if (!visibleForm) resetFieldsForm(form);
-		else if (recMinhChung?.index) form.setFieldsValue(recMinhChung);
+		if (!visibleForm) {
+			resetFieldsForm(form);
+			form.setFieldsValue({
+				loai: EMinhChungQuyDoiDiem.HOC_PHAN,
+				loaiHocPhan: ELoaiHocPhanMinhChung.NGOAI_CHUONG_TRINH,
+			});
+		} else if (recMinhChung?.index) form.setFieldsValue(recMinhChung);
 	}, [visibleForm, recMinhChung?.index]);
 
 	const onChangeHocPhan = (maHocPhan?: string) => {
@@ -125,6 +130,27 @@ const FormMinhChungQuyDoiDiem = (props: {
 						{loaiHocPhan === ELoaiHocPhanMinhChung.NGOAI_CHUONG_TRINH ? (
 							<>
 								<Col xs={24} md={12}>
+									<Form.Item name='trinhDoDaoTao' label='Trình độ' rules={[...rules.required]}>
+										<Select
+											placeholder='Chọn trình độ'
+											options={Object.values(ETrinhDoMinhChungQuyDoiDiem).map((item) => ({
+												key: item,
+												label: item,
+												value: item,
+											}))}
+										/>
+									</Form.Item>
+								</Col>
+								<Col xs={24} md={12}>
+									<Form.Item
+										name='tenTruong'
+										label='Trường học'
+										rules={[...rules.required, ...rules.text, ...rules.length(500)]}
+									>
+										<Input placeholder='Nhập tên trường' />
+									</Form.Item>
+								</Col>
+								<Col xs={24} md={12}>
 									<Form.Item
 										name='tenHocPhan'
 										label='Tên học phần'
@@ -148,24 +174,8 @@ const FormMinhChungQuyDoiDiem = (props: {
 									</Form.Item>
 								</Col>
 								<Col xs={24} md={12}>
-									<Form.Item name='trinhDoDaoTao' label='Trình độ' rules={[...rules.required]}>
-										<Select
-											placeholder='Chọn trình độ'
-											options={Object.values(ETrinhDoMinhChungQuyDoiDiem).map((item) => ({
-												key: item,
-												label: item,
-												value: item,
-											}))}
-										/>
-									</Form.Item>
-								</Col>
-								<Col xs={24} md={12}>
-									<Form.Item
-										name='tenTruong'
-										label='Trường học'
-										rules={[...rules.required, ...rules.text, ...rules.length(500)]}
-									>
-										<Input placeholder='Nhập tên trường' />
+									<Form.Item name='namTotNghiep' label='Năm tốt nghiệp' rules={[...rules.required]}>
+										<InputNumber style={{ width: '100%' }} placeholder='Nhập năm tốt nghiệp' min={1970} />
 									</Form.Item>
 								</Col>
 							</>
@@ -213,7 +223,7 @@ const FormMinhChungQuyDoiDiem = (props: {
 				) : loaiMinhChung === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
 					<>
 						<Col xs={24}>
-							<div className='fw500'>Chứng chỉ / Bằng cấp đã đạt</div>
+							<div className='fw500'>Chứng chỉ / Bằng cấp</div>
 						</Col>
 						<Col xs={24} md={12}>
 							<Form.Item
@@ -227,10 +237,10 @@ const FormMinhChungQuyDoiDiem = (props: {
 						<Col xs={24} md={12}>
 							<Form.Item
 								name='bacChungChi'
-								label='Điểm/Bậc chứng chỉ'
+								label='Điểm/Bằng cấp'
 								rules={[...rules.required, ...rules.text, ...rules.length(20)]}
 							>
-								<Input placeholder='Nhập điểm/Bậc chứng chỉ' />
+								<Input placeholder='Nhập điểm/Bằng cấp' />
 							</Form.Item>
 						</Col>
 						<Col xs={24} md={12}>
