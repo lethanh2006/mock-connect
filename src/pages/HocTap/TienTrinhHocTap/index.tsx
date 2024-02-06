@@ -59,7 +59,7 @@ const TienTrinhHocTap = () => {
 					<TienTrinhChuongTrinhKhung />
 				</Tabs.TabPane>
 
-				<Tabs.TabPane tab='Lịch sử xin công nhận KQHT' key='3'>
+				<Tabs.TabPane tab='Lịch sử công nhận KQHT' key='3'>
 					<LichSuQuyDoiDiemPage />
 				</Tabs.TabPane>
 			</Tabs>
