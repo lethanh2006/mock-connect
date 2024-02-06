@@ -13,7 +13,7 @@ const TienTrinhHocTap = () => {
 	const [activeTabKey, setActiveTabKey] = useState<string>('2');
 	const { getModel, record, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { getModel: getPhieuQuyDoiDiem, setRecord: setRecPheu } = useModel('daotao.quydoidiem.phieuquydoidiem');
-	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { getThongTinCuaToiModel, getKhoaNganhMeModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
 		getModel({ trangThai: ETrangThaiDotQuyDoiDiem.DA_BAN_HANH }, [
@@ -32,6 +32,7 @@ const TienTrinhHocTap = () => {
 		]).then((res) => setRecord(res[0]));
 
 		getThongTinCuaToiModel();
+		getKhoaNganhMeModel();
 	}, []);
 
 	useEffect(() => {

@@ -52,18 +52,17 @@ const HocLieuDeCuongPage = () => {
 			render: (val) => <Checkbox checked={val} disabled />,
 		},
 		{
-			title: 'Học liệu',
-			width: 120,
-			align: 'center',
+			title: 'Thao tác',
 			dataIndex: 'url',
+			width: 60,
+			align: 'center',
+			fixed: 'right',
 			render: (val, rec) =>
 				val ? (
-					<a href={val} target='_blank' rel='noreferrer'>
-						<EyeOutlined /> Xem chi tiết
+					<a href={val} target='_blank' rel='noreferrer' title='Xem chi tiết'>
+						<EyeOutlined />
 					</a>
-				) : (
-					<i>Chưa cập nhật</i>
-				),
+				) : null,
 		},
 	];
 

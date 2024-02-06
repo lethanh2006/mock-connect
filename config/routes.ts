@@ -297,6 +297,7 @@
 	{
 		name: 'HoatDongKHCN',
 		path: 'hoat-dong-khcn',
+		icon: 'DotChartOutlined',
 		routes: [
 			{
 				name: 'DeTaiHocVien',
