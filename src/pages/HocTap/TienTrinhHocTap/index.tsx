@@ -11,8 +11,9 @@ import './components/style.less';
 
 const TienTrinhHocTap = () => {
 	const [activeTabKey, setActiveTabKey] = useState<string>('2');
-	const { getModel, danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
-	const { getThongTinCuaToiModel, getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
+	const { getModel, record, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
+	const { getModel: getPhieuQuyDoiDiem, setRecord: setRecPheu } = useModel('daotao.quydoidiem.phieuquydoidiem');
+	const { getThongTinCuaToiModel, getKhoaNganhMeModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
 		getModel({ trangThai: ETrangThaiDotQuyDoiDiem.DA_BAN_HANH }, [
@@ -28,22 +29,37 @@ const TienTrinhHocTap = () => {
 				operator: EOperatorType.GREAT_EQUAL,
 				values: [moment().toISOString()],
 			},
-		]);
+		]).then((res) => setRecord(res[0]));
+
 		getThongTinCuaToiModel();
 		getKhoaNganhMeModel();
 	}, []);
 
+	useEffect(() => {
+		if (record?._id && recSinhVien?._id)
+			getPhieuQuyDoiDiem(
+				{ dotDangKyQuyDoiDiemId: record?._id, sinhVienSsoId: recSinhVien?.ssoId },
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				false,
+			).then((res) => setRecPheu(res[0]));
+	}, [record?._id, recSinhVien?._id]);
+
 	return (
 		<Card title='Tiến trình học tập' className='card-tien-trinh'>
-			{danhSach.length > 0 ? (
+			{record?._id ? (
 				<Alert
 					style={{ marginBottom: 12 }}
 					type='info'
 					description={
 						<>
-							Đợt công nhận kết quả học tập <b>{danhSach[0].tenDot}</b> đang diễn ra từ{' '}
-							<b>{moment(danhSach[0].thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-							<b>{moment(danhSach[0].thoiGianKetThuc).format('DD/MM/YYYY')}</b>. Bạn có thể đăng ký quy đổi điểm các học
+							Đợt công nhận kết quả học tập <b>{record?.tenDot}</b> đang diễn ra từ{' '}
+							<b>{moment(record?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+							<b>{moment(record?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>. Bạn có thể đăng ký quy đổi điểm các học
 							phần trong chương trình đào tạo
 						</>
 					}

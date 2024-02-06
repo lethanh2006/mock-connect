@@ -107,3 +107,15 @@ export enum ELoaiHocPhanMinhChung {
 	NGOAI_CHUONG_TRINH = 'Ngoài chương trình',
 	TRONG_CHUONG_TRINH = 'Trong chương trình',
 }
+
+export enum ETrangThaiHocPhanQuyDoi {
+	CHO_XU_LY = 'Chờ xử lý',
+	CONG_NHAN = 'Công nhận',
+	KHONG_CONG_NHAN = 'Không công nhận',
+}
+
+export const colorTrangThaiHocPhanQuyDoi: Record<ETrangThaiHocPhanQuyDoi, string> = {
+	[ETrangThaiHocPhanQuyDoi.CHO_XU_LY]: 'blue',
+	[ETrangThaiHocPhanQuyDoi.CONG_NHAN]: 'green',
+	[ETrangThaiHocPhanQuyDoi.KHONG_CONG_NHAN]: 'red',
+};
