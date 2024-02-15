@@ -36,7 +36,7 @@ declare module ChuongTrinhDaoTao {
 		maChuongTrinhDaoTao: string;
 		chuongTrinhDaoTao?: IRecord;
 		maKhoiKienThuc: string;
-		khoiKienThuc?: KhoiKienThuc.IRecord;
+		khoiKienThuc?: { ma: string; ten: string };
 		maChuyenNganh?: string;
 		chuyenNganh?: NganhDaoTao.IRecordCoSo;
 		loaiHocPhanCtdt: ELoaiHocPhanCTDT;
@@ -57,12 +57,15 @@ declare module ChuongTrinhDaoTao {
 		_id: string;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
-		maHocPhanTienQuyet: string;
-		hocPhanTienQuyet?: HocPhan.IRecord;
-		maHocPhanTruoc: string;
-		hocPhanTruoc?: HocPhan.IRecord;
-		maHocPhanSongHanh: string;
-		hocPhanSongHanh?: HocPhan.IRecord;
+		// maHocPhanTienQuyet: string;
+		// hocPhanTienQuyet?: HocPhan.IRecord;
+		// maHocPhanTruoc: string;
+		// hocPhanTruoc?: HocPhan.IRecord;
+		// maHocPhanSongHanh: string;
+		// hocPhanSongHanh?: HocPhan.IRecord;
+		dsHocPhanTienQuyet?: THocPhanTuongQuan[];
+		dsHocPhanTruoc?: THocPhanTuongQuan[];
+		dsHocPhanSongHanh?: THocPhanTuongQuan[];
 
 		createdAt?: string;
 		updatedAt?: string;
@@ -71,6 +74,8 @@ declare module ChuongTrinhDaoTao {
 		hoc: ETrangThaiHocTap;
 		lichSuDiem?: LopHocPhan.IDiemHpSvHk[];
 	}
+
+	export type THocPhanTuongQuan = Pick<HocPhan.IRecord, 'ma' | 'ten' | 'soTinChi'>;
 
 	export interface IChungChiCTDT {
 		_id: string;
