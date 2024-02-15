@@ -2,6 +2,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
+import { EMinhChungQuyDoiDiem } from '@/services/HocTap/constant';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Modal, Popconfirm, Space } from 'antd';
 import monent from 'moment';
@@ -56,102 +57,45 @@ const FormItemMinhChungQuyDoi = (props: {
 		{
 			title: 'Thông tin minh chứng',
 			width: 350,
-			render: (val, rec) => (
-				<>
-					{/* Chứng chỉ đã đạt */}
-					{rec.tenChungChi ? (
-						<>
-							- Tên chứng chỉ: <b>{rec?.tenChungChi}</b> <br />
-						</>
-					) : null}
-					{rec.bacChungChi ? (
-						<>
-							- Điểm/bậc chứng chỉ: <b>{rec?.bacChungChi}</b> <br />
-						</>
-					) : null}
-					{rec.donViCap ? (
-						<>
-							- Đơn vị cấp: <b>{rec?.donViCap}</b> <br />
-						</>
-					) : null}
-					{rec.thoiGianHieuLuc ? (
-						<>
-							- Thời gian hiệu lực: <b>{monent(rec?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b> <br />
-						</>
-					) : null}
-					{rec.thoiGianHetHieuLuc ? (
-						<>
-							- Thời gian hết hiệu lực: <b>{monent(rec?.thoiGianHetHieuLuc).format('DD/MM/YYYY')}</b> <br />
-						</>
-					) : null}
-
-					{/* Học phần đã học */}
-					{rec?.tenHocPhan ? (
-						<>
-							- Tên học phần: <b>{rec?.tenHocPhan}</b> <br />
-						</>
-					) : null}
-					{rec?.maHocPhan ? (
-						<>
-							- Mã học phần: <b>{rec?.maHocPhan}</b> <br />
-						</>
-					) : null}
-					{rec?.soTinChi ? (
-						<>
-							- Số tín chỉ: <b>{rec?.soTinChi}</b> <br />
-						</>
-					) : null}
-					{rec?.trinhDoDaoTao ? (
-						<>
-							- Trình độ: <b>{rec?.trinhDoDaoTao}</b> <br />
-						</>
-					) : null}
-					{rec?.tenTruong ? (
-						<>
-							- Trường đã học: <b>{rec?.tenTruong}</b> <br />
-						</>
-					) : null}
-					{rec?.diemHe10 ? (
-						<>
-							- Điểm hệ 10: <b>{rec?.diemHe10}</b> <br />
-						</>
-					) : null}
-					{rec?.diemHe4 ? (
-						<>
-							- Điểm hệ 4: <b>{rec?.diemHe4}</b> <br />
-						</>
-					) : null}
-					{rec?.diemChu ? (
-						<>
-							- Điểm chữ: <b>{rec?.diemChu}</b> <br />
-						</>
-					) : null}
-					{rec.urlsChungChi ? (
-						<>
-							- Tệp đính kèm:{' '}
-							<Space>
-								{rec?.urlsChungChi?.map((item, index) => (
-									<a target='_blank' href={item} key={item} rel='noreferrer'>
-										Xem tệp tin {index + 1}
-									</a>
-								))}
-							</Space>
-						</>
-					) : null}
-					{rec.urlsHocPhan ? (
-						<>
-							- Tệp đính kèm:{' '}
-							<Space>
-								{rec?.urlsHocPhan?.map((item, index) => (
-									<a target='_blank' href={item} key={item} rel='noreferrer'>
-										Xem tệp tin {index + 1}
-									</a>
-								))}
-							</Space>
-						</>
-					) : null}
-				</>
-			),
+			render: (val, rec) =>
+				rec.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
+					<>
+						- Tên chứng chỉ: <b>{rec?.tenChungChi ?? ''}</b>
+						<br />- Điểm/bậc chứng chỉ: <b>{rec?.bacChungChi ?? ''}</b>
+						<br />- Đơn vị cấp: <b>{rec?.donViCap ?? ''}</b>
+						<br />- Thời gian hiệu lực:
+						<b>{rec?.thoiGianHieuLuc && monent(rec?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>
+						<br />- Thời gian hết hiệu lực:{' '}
+						<b>{rec?.thoiGianHetHieuLuc && monent(rec?.thoiGianHetHieuLuc).format('DD/MM/YYYY')}</b>
+						<br />- Tệp đính kèm:{' '}
+						<Space>
+							{rec?.urlsChungChi?.map((item, index) => (
+								<a target='_blank' href={item} key={item} rel='noreferrer'>
+									Xem tệp tin {index + 1}
+								</a>
+							))}
+						</Space>
+					</>
+				) : (
+					<>
+						- Tên học phần: <b>{rec?.tenHocPhan ?? ''}</b>
+						<br />- Mã học phần: <b>{rec?.maHocPhan ?? ''}</b>
+						<br />- Sốtín chỉ: <b>{rec?.soTinChi ?? ''}</b>
+						<br />- Trình độ: <b>{rec?.trinhDoDaoTao ?? ''}</b>
+						<br />- Trường đã học: <b>{rec?.tenTruong ?? ''}</b>
+						<br />- Điểm hệ 10: <b>{rec?.diemHe10 ?? ''}</b>
+						<br />- Điểm hệ 4: <b>{rec?.diemHe4 ?? ''}</b>
+						<br />- Điểm chữ: <b>{rec?.diemChu ?? ''}</b>
+						<br />- Tệp đính kèm:{' '}
+						<Space>
+							{rec?.urlsHocPhan?.map((item, index) => (
+								<a target='_blank' href={item} key={item} rel='noreferrer'>
+									Xem tệp tin {index + 1}
+								</a>
+							))}
+						</Space>
+					</>
+				),
 		},
 		{
 			title: 'Thao tác',

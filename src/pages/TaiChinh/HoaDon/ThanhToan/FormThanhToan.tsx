@@ -138,7 +138,10 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 			<Form layout='vertical' form={form} onFinish={onFinish}>
 				<Row gutter={[12, 12]}>
 					<Col span={24} md={8}>
-						<Form.Item label='Số dư hiện tại'>
+						<Form.Item
+							label='Số dư hiện tại'
+							tooltip='Là số tiền nộp dư tính đến thời điểm hiện tại. Được tính bằng tổng số tiền đã nộp - tổng các khoản đã thanh toán. (Xem chi tiết tại menu Lịch sử giao dịch)'
+						>
 							<InputNumber
 								value={soDuVi?.totalRemain ?? 0}
 								disabled
@@ -206,6 +209,13 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 							amount={topupAmount}
 							duNo={totalSauThanhToan}
 						/>
+					</Col>
+					<Col span={24}>
+						<div className='text-error' style={{ marginTop: 12 }}>
+							Lưu ý: Sinh viên kiểm tra lại Số dư hiện tại của mình, danh sách chi tiết các khoản phí cần nộp, mức Ưu
+							đãi được hưởng và Tổng tiền phải nộp trước khi thực hiện Thanh toán. Trong trường hợp số liệu chưa chính
+							xác vui lòng liên hệ ngay với Phòng Tài chính kế toán!
+						</div>
 					</Col>
 				</Row>
 

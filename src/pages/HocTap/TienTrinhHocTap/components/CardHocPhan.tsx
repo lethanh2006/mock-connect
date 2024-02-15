@@ -2,15 +2,18 @@ import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { ETrangThaiHocTap } from '@/services/DaoTao/constant';
 import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import classNames from 'classnames';
 import { useState } from 'react';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 
 const CardHocPhan = (props: {
 	chuongTrinhKhung?: ChuongTrinhDaoTao.IHocPhanBase;
+	khoiHocPhanCt?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 	sinhVienLopHocPhan?: LopHocPhan.IRecordSinhVienLopHP;
 	isChuyenNganh?: boolean;
+	colorKhoiKienThuc?: string;
 }) => {
-	const { chuongTrinhKhung, sinhVienLopHocPhan } = props;
+	const { chuongTrinhKhung, sinhVienLopHocPhan, khoiHocPhanCt, colorKhoiKienThuc } = props;
 	const [modalVisible, setModalVisible] = useState(false);
 	const listDiem = chuongTrinhKhung?.lichSuDiem?.map((diem) => diem.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU) ?? [
 		sinhVienLopHocPhan?.diemHpSvHk?.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU,
@@ -21,14 +24,17 @@ const CardHocPhan = (props: {
 	return (
 		<div className='col-hoc-phan'>
 			<div
-				className={`card-hoc-phan ${chuongTrinhKhung?.hoc === ETrangThaiHocTap.CHUA_HOC && 'card-chua-hoc'} ${
-					listDiem.length && listDiem.every((diem) => diem === ELoaiDiemChu.F) && 'card-truot'
-				}`}
+				className={classNames({
+					'card-hoc-phan': true,
+					'card-chua-hoc': chuongTrinhKhung?.hoc === ETrangThaiHocTap.CHUA_HOC,
+					'card-truot': listDiem.length && listDiem.every((diem) => diem === ELoaiDiemChu.F),
+				})}
 				onClick={() => setModalVisible(true)}
 			>
 				<h4>{hocPhan?.ten}</h4>
 				<span className='tin-chi'>{soTinChi} tín chỉ</span>
-				<img src='/images/img-card-hoc-phan.svg' />
+				<div className='khoi-kien-thuc' style={{ borderLeftColor: colorKhoiKienThuc }} />
+				{/* <img src='/images/img-card-hoc-phan.svg' /> */}
 			</div>
 			{listDiem?.map((diem, index) => (
 				<div
@@ -62,6 +68,8 @@ const CardHocPhan = (props: {
 				}
 				lopHocPhanId={sinhVienLopHocPhan?.lopHocPhanId}
 				trangThaiHoc={chuongTrinhKhung?.hoc}
+				chuongTrinh={chuongTrinhKhung}
+				khoiHocPhanCt={khoiHocPhanCt}
 			/>
 		</div>
 	);

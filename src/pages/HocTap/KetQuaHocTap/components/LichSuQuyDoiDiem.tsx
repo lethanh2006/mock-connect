@@ -1,9 +1,12 @@
 import TableBase from '@/components/Table';
 import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
-import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
+import {
+	colorTrangThaiHocPhanQuyDoi,
+	colorTrangThaiSinhVienQuyDoiDiem,
+	type ETrangThaiSinhVienQuyDoiDiem,
+} from '@/services/HocTap/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
-import { type ETrangThaiSinhVienQuyDoiDiem, colorTrangThaiSinhVienQuyDoiDiem } from '@/services/HocTap/constant';
 import { Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
@@ -17,7 +20,7 @@ const LichSuQuyDoiDiemPage = () => {
 		handleView: handleViewQuyDoi,
 		visibleForm,
 		setVisibleForm,
-	} = useModel('daotao.quydoidiem.sinhvienquydoidiem');
+	} = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 
 	const getData = () =>
@@ -30,92 +33,35 @@ const LichSuQuyDoiDiemPage = () => {
 			},
 		]);
 
-	const onCell = (rec: QuyDoiDiem.IQuyDoiDiemSinhVien) => ({
+	const onCell = (rec: QuyDoiDiem.IPhieuDangKyQuyDoiDiem) => ({
 		onClick: () => handleViewQuyDoi(rec),
 		style: { cursor: 'pointer' },
 	});
 
-	const columns: IColumn<QuyDoiDiem.IQuyDoiDiemSinhVien>[] = [
+	const columns: IColumn<QuyDoiDiem.IPhieuDangKyQuyDoiDiem>[] = [
 		{
-			title: 'HP xin công nhận',
+			title: 'Đợt quy đổi điểm',
+			dataIndex: 'dotDangKyQuyDoiDiemId',
+			width: 100,
+			render: (val, rec) => rec?.DotQuyDoiDiem?.tenDot,
+			onCell,
+		},
+		{
+			title: 'Học phần quy đổi',
 			width: 250,
-			children: [
-				{
-					title: 'Tên học phần',
-					dataIndex: 'maHocPhan',
-					width: 170,
-					filterType: 'customselect',
-					filterCustomSelect: <SelectHocPhan multiple />,
-					render: (val, rec) => `${rec.maHocPhan} - ${rec.hocPhan?.ten}`,
-					onCell,
-				},
-				{
-					title: 'Số tín chỉ',
-					dataIndex: 'maHocPhan',
-					align: 'center',
-					width: 80,
-					render: (val, rec) => rec.hocPhan?.soTinChi,
-					onCell,
-				},
-			],
-		},
-		{
-			title: 'Kết quả quy đổi',
-			width: 240,
-			children: [
-				{
-					title: 'Điểm hệ 10',
-					dataIndex: 'diemHe10',
-					align: 'center',
-					width: 80,
-					filterType: 'number',
-					sortable: true,
-					onCell,
-				},
-				{
-					title: 'Điểm hệ 4',
-					dataIndex: 'diemHe4',
-					align: 'center',
-					width: 80,
-					filterType: 'number',
-					sortable: true,
-					onCell,
-				},
-				{
-					title: 'Điểm chữ',
-					dataIndex: 'diemChu',
-					align: 'center',
-					width: 80,
-					onCell,
-				},
-			],
-		},
-		{
-			title: 'Trạng thái',
-			width: 100,
 			render: (val, rec) =>
-				rec.diemHe10 || rec.diemHe4 || rec.diemChu ? (
-					<Tag color='green'>Đã có KQ</Tag>
-				) : (
-					<Tag color='blue'>Chưa có KQ</Tag>
-				),
-			onCell,
-		},
-		{
-			title: 'Khuyến nghị',
-			width: 100,
-			// hide: trangThaiQuyDoiDiem === ETrangThaiSinhVienDot.DA_RA_QUYET_DINH,
-			onCell,
-		},
-		{
-			title: 'Tỷ lệ công nhận',
-			width: 100,
-			// hide: trangThaiQuyDoiDiem === ETrangThaiSinhVienDot.DA_RA_QUYET_DINH,
+				rec.danhSachHocPhan?.map((item) => (
+					<>
+						- {item.hocPhan?.ten} - {item.diemHe10 ?? 'Chưa có điểm'} -{' '}
+						<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i>
+						<br />
+					</>
+				)),
 			onCell,
 		},
 		{
 			title: 'Số QĐ',
-			dataIndex: 'soQuyetDinh',
+			dataIndex: 'soQuyetDinhId',
 			width: 100,
 			align: 'center',
 			filterType: 'string',
@@ -133,8 +79,21 @@ const LichSuQuyDoiDiemPage = () => {
 			onCell,
 		},
 		{
+			title: 'Khuyến nghị',
+			width: 100,
+			// hide: trangThaiQuyDoiDiem === ETrangThaiSinhVienDot.DA_RA_QUYET_DINH,
+			onCell,
+		},
+		{
+			title: 'Tỷ lệ công nhận',
+			width: 100,
+			// hide: trangThaiQuyDoiDiem === ETrangThaiSinhVienDot.DA_RA_QUYET_DINH,
+			onCell,
+		},
+		{
 			title: 'Công nhận',
 			dataIndex: 'trangThai',
+			align: 'center',
 			width: 100,
 			render: (val, rec) => (
 				<Tag color={colorTrangThaiSinhVienQuyDoiDiem[val as ETrangThaiSinhVienQuyDoiDiem]}>{val}</Tag>
@@ -149,7 +108,7 @@ const LichSuQuyDoiDiemPage = () => {
 				getData={getData}
 				columns={columns}
 				dependencies={[page, limit]}
-				modelName='daotao.quydoidiem.sinhvienquydoidiem'
+				modelName='daotao.quydoidiem.phieuquydoidiem'
 				title='Lịch sử công nhận kết quả'
 				buttons={{
 					create: false,

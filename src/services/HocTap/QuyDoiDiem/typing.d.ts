@@ -3,6 +3,7 @@ import type {
 	ELoaiHocPhanMinhChung,
 	EMinhChungQuyDoiDiem,
 	ETrangThaiDotQuyDoiDiem,
+	ETrangThaiHocPhanQuyDoi,
 	ETrangThaiSinhVienQuyDoiDiem,
 	ETrinhDoMinhChungQuyDoiDiem,
 } from '../constant';
@@ -26,30 +27,38 @@ declare module QuyDoiDiem {
 
 	export interface IQuyDoiDiemSinhVien {
 		_id: string;
-		create: boolean;
-		danhSachMinhChungQuyDoi: IMinhChungQuyDoiDiem[];
-		sinhVienSsoId: string;
-		sinhVien: SinhVien.IRecord;
-		maSinhVien: string;
-		hoTen: string;
-		maDon: string;
+		phieuDangKyQuyDoiDiemId: string;
+		phieuDangKyQuyDoiDiem: string;
 		maHocPhan: string;
 		hocPhan: HocPhan.IRecord;
 		diemHe10: number;
 		diemHe4: number;
 		diemChu: string;
-
-		trangThai: ETrangThaiSinhVienQuyDoiDiem;
-
+		trangThai: ETrangThaiHocPhanQuyDoi;
 		ghiChu: string;
 		nguoiChoYKienSsoId: string;
 		hoTenNguoiChoYKien: string;
 		thoiGianChoYKien: Date;
+		danhSachMinhChungQuyDoi: IMinhChungQuyDoiDiem[];
 
-		soQuyetDinh: string;
+		tenHocPhan?: string;
+		soTinChi?: string;
+	}
+
+	export interface IPhieuDangKyQuyDoiDiem {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien: SinhVien.IRecord;
+		maSinhVien: string;
+		hoTen: string;
+		maDon: string;
+		trangThai: ETrangThaiSinhVienQuyDoiDiem;
+		soQuyetDinhId: string;
+		quyetDinh: QuyetDinh.IRecord;
 		thoiGianBanHanh: Date;
-
 		dotDangKyQuyDoiDiemId: string;
+		DotQuyDoiDiem: DotQuyDoiDiem;
+		danhSachHocPhan: IQuyDoiDiemSinhVien[];
 	}
 
 	export interface IMinhChungQuyDoiDiem {
@@ -75,4 +84,9 @@ declare module QuyDoiDiem {
 		diemChu: string;
 		urlsHocPhan: string[] | null;
 	}
+
+	export type TDanhSachHocPhanDangKyQuyDoiDiem = {
+		thongTinQuyDoiDiemSinhVien: IQuyDoiDiemSinhVien;
+		danhSachMinhChung: Partial<IMinhChungQuyDoiDiem>[];
+	};
 }
