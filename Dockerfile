@@ -45,13 +45,13 @@ ENV APP_CONFIG_MOODLE_ENDPOINT=''
 # Set working directory
 WORKDIR /app
 
-COPY package.json /app/
+COPY package.json yarn.lock /app/
 RUN yarn install
 
 COPY . /app
 
 FROM development AS build
-RUN npm run build
+RUN yarn build
 
 FROM nginx:alpine
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
