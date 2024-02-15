@@ -36,7 +36,7 @@ const FormItemHoaDonChiTiet = () => {
 			render: (val, rec) => `${inputFormat(val)} VND${rec.unitLabel ? `/${rec.unitLabel}` : ''}`,
 		},
 		{ title: 'Hệ số', dataIndex: 'heSo', width: 50, align: 'center' },
-		{ title: 'Số lượng', dataIndex: 'quantity', width: 50, align: 'center' },
+		{ title: 'SL', dataIndex: 'quantity', width: 50, align: 'center' },
 		{
 			title: 'Thành tiền',
 			dataIndex: 'amountDue',
