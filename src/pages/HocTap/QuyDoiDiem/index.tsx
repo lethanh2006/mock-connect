@@ -10,7 +10,7 @@ import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
-import ModalQuyDoiDiem from './ModalQuyDoiDiem';
+import ModalQuyDoiDiem from './components/Modal';
 
 const LichSuQuyDoiDiemPage = () => {
 	const {
