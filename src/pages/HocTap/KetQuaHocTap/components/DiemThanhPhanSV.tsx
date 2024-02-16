@@ -3,10 +3,9 @@ import { type IColumn } from '@/components/Table/typing';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Card, Segmented, Tabs, Tag } from 'antd';
+import { Segmented, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import MayTinhThongMinh from './MayTinhThongMinh';
 import ModalChiTietDiem from './ModalChiTietDiem';
 
 const DiemThanhPhanSV = () => {
@@ -121,39 +120,29 @@ const DiemThanhPhanSV = () => {
 
 	return (
 		<>
-			<Card bodyStyle={{ paddingTop: 8 }}>
-				<Tabs>
-					<Tabs.TabPane tab='Điểm tổng kết' key='1'>
-						<TableStaticData
-							loading={loading}
-							otherProps={{
-								loading: loading,
-								pagination: false,
-								scroll: { y: 660 },
-							}}
-							data={(danhSach ?? [])
-								.filter((item) => loaiHocPhan === 'all' || item.diemHpSvHk?.diemChu === ELoaiDiemChu.F)
-								.map((item) => ({ ...item, soTinChi: item.hocPhan?.soTinChi }))}
-							columns={columns}
-							addStt
-							hasTotal
-						>
-							<Segmented
-								value={loaiHocPhan}
-								onChange={(val) => setLoaiHocPhan(val.toString())}
-								options={[
-									{ value: 'all', label: 'Tất cả học phần' },
-									{ value: 'fail', label: 'Học phần chưa đạt' },
-								]}
-							/>
-						</TableStaticData>
-					</Tabs.TabPane>
-
-					<Tabs.TabPane tab='Máy tính thông minh' key='3'>
-						<MayTinhThongMinh />
-					</Tabs.TabPane>
-				</Tabs>
-			</Card>
+			<TableStaticData
+				loading={loading}
+				otherProps={{
+					loading: loading,
+					pagination: false,
+					scroll: { y: 660 },
+				}}
+				data={(danhSach ?? [])
+					.filter((item) => loaiHocPhan === 'all' || item.diemHpSvHk?.diemChu === ELoaiDiemChu.F)
+					.map((item) => ({ ...item, soTinChi: item.hocPhan?.soTinChi }))}
+				columns={columns}
+				addStt
+				hasTotal
+			>
+				<Segmented
+					value={loaiHocPhan}
+					onChange={(val) => setLoaiHocPhan(val.toString())}
+					options={[
+						{ value: 'all', label: 'Tất cả học phần' },
+						{ value: 'fail', label: 'Học phần chưa đạt' },
+					]}
+				/>
+			</TableStaticData>
 
 			<ModalChiTietDiem
 				visible={modalVisible}
