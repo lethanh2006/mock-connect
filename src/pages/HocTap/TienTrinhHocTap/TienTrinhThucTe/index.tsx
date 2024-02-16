@@ -1,5 +1,5 @@
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Spin } from 'antd';
+import { Empty, Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -7,7 +7,6 @@ import CardHocPhan from '../components/CardHocPhan';
 
 const TienTrinhThucTe = () => {
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
-	// const [modalHocKy, setModalHocKy] = useState(false);
 	const [danhSachHocKy, setDanhSachHocKy] = useState<LopHocPhan.IRecordSinhVienLopHP[][]>();
 
 	const fetch = async () => {
@@ -24,11 +23,12 @@ const TienTrinhThucTe = () => {
 
 	return (
 		<Spin spinning={loading}>
-			{danhSachHocKy?.map((data, index) => (
-				// eslint-disable-next-line react/no-array-index-key
-				<div className='row-hoc-ky' key={index}>
-					<div className='col-hoc-ky'>
-						{/* <Tooltip
+			{danhSachHocKy?.length ? (
+				danhSachHocKy.map((data, index) => (
+					// eslint-disable-next-line react/no-array-index-key
+					<div className='row-hoc-ky' key={index}>
+						<div className='col-hoc-ky'>
+							{/* <Tooltip
                 title={
                   <>
                     Tổng số tín chỉ cần học: {hocKy.tongSoTinCanHoc}
@@ -39,53 +39,20 @@ const TienTrinhThucTe = () => {
                   </>
                 }
               > */}
-						<h4>{data[0].kyHoc?.ten}</h4>
-						<span className='tin-chi'>({_.sumBy(data, (i) => i.soTinChi ?? 0)} tín chỉ)</span>
-						{/* </Tooltip> */}
+							<h4>{data[0].kyHoc?.ten}</h4>
+							<span className='tin-chi'>({_.sumBy(data, (i) => i.soTinChi ?? 0)} tín chỉ)</span>
+							{/* </Tooltip> */}
+						</div>
+						<div className='col-chi-tiet'>
+							{data.map((sv) => (
+								<CardHocPhan sinhVienLopHocPhan={sv} key={sv._id} />
+							))}
+						</div>
 					</div>
-					<div className='col-chi-tiet'>
-						{data.map((sv) => (
-							<CardHocPhan sinhVienLopHocPhan={sv} key={sv._id} />
-						))}
-					</div>
-				</div>
-			))}
-
-			{/* <Modal
-        title="Tích lũy học kỳ"
-        visible={modalHocKy}
-        onCancel={() => setModalHocKy(false)}
-        okButtonProps={{ hidden: true }}
-        cancelText="Đóng"
-        // bodyStyle={{ padding: 0 }}
-      >
-        <Descriptions column={1} bordered>
-          <Descriptions.Item label="Học kỳ">
-            {convertHocKy(recordHocKy?.hocKy ?? '')}
-          </Descriptions.Item>
-          <Descriptions.Item label="Tổng số tín chỉ đã đăng ký">
-            {recordHocKy?.diemTichLuyKy?.tong_so_tin_chi_da_dang_ky ?? 'Chưa cập nhật'}
-          </Descriptions.Item>
-          <Descriptions.Item label="Tổng số tín chỉ trong học kỳ">
-            {recordHocKy?.diemTichLuyKy?.tong_so_tin_chi_trong_hoc_ky ?? 'Chưa cập nhật'}
-          </Descriptions.Item>
-          <Descriptions.Item label="Tổng số tín chỉ tích lũy sau học kỳ">
-            {recordHocKy?.diemTichLuyKy?.tong_so_tin_chi_tich_luy_sau_hoc_ky ?? 'Chưa cập nhật'}
-          </Descriptions.Item>
-          <Descriptions.Item label="Số tín chỉ trượt trong học kỳ">
-            {recordHocKy?.diemTichLuyKy?.so_tin_chi_truot_trong_hoc_ky ?? 'Chưa cập nhật'}
-          </Descriptions.Item>
-          <Descriptions.Item label="Tổng số tín chỉ trượt">
-            {recordHocKy?.diemTichLuyKy?.tong_so_tin_chi_truot ?? 'Chưa cập nhật'}
-          </Descriptions.Item>
-          <Descriptions.Item label="Điểm TB học kỳ (hệ 4)">
-            {recordHocKy?.diemTichLuyKy?.diem_tb_chung_hoc_ky_thang_4 ?? 'Chưa cập nhật'}
-          </Descriptions.Item>
-          <Descriptions.Item label="Điểm CPA (hệ 4)">
-            {recordHocKy?.diemTichLuyKy?.diem_tb_tich_luy_hoc_ky_thang_4 ?? 'Chưa cập nhật'}
-          </Descriptions.Item>
-        </Descriptions>
-      </Modal> */}
+				))
+			) : (
+				<Empty description='Không có dữ liệu' style={{ marginTop: 50, marginBottom: 32 }} />
+			)}
 		</Spin>
 	);
 };
