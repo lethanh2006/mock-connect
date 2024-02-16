@@ -27,5 +27,8 @@ declare module ThongBao {
     urlFile?: string[];
     createdAt: string; // '2023-06-27T07:47:29.693Z';
     read: boolean;
+
+    thoiGianHieuLuc: Date;
+		taiLieuDinhKem: string[];
   }
 }
