@@ -23,6 +23,17 @@ const TienTrinhChuongTrinhKhung = () => {
 	const [tongTinChi, setTongTinChi] = useState(0);
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
 	const [value, setValue] = useState(khoaNganhMe?.khoaNganhChinh.ma ?? '');
+	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
+
+	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
+		const listKhoi = _.uniq(listKhoiHpCt.map((item) => item.maKhoiKienThuc));
+		const temp: Record<string, string> = {};
+		listKhoi.forEach(
+			(khoi) =>
+				(temp[khoi] = `rgb(${Math.random() * 200 + 25}, ${Math.random() * 200 + 25}, ${Math.random() * 200 + 25})`),
+		);
+		setMapColorKhoiKienThuc(temp);
+	};
 
 	const fetch = async () => {
 		await sinhVienGetTienTrinhKhungModel(value === khoaNganhMe?.khoaNganhPhu?.ma ? true : false).then((data) => {
@@ -63,6 +74,7 @@ const TienTrinhChuongTrinhKhung = () => {
 				return { khoiHocPhan, soTinChiPhaiHoc, soTinChiTuChon, chuyenNganhList, soThuTuKy: hk[0].soThuTuKy };
 			});
 			setDanhSachHocKy(dataHocKy);
+			getColorMap(data);
 		});
 	};
 
@@ -101,17 +113,17 @@ const TienTrinhChuongTrinhKhung = () => {
 							? [
 									{
 										value: khoaNganhMe?.khoaNganhChinh?.ma,
-										label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten} (${khoaNganhMe?.khoaNganhChinh?.ma})`,
+										label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten} (${khoaNganhMe?.khoaNganhChinh?.maNganh})`,
 									},
 									{
 										value: khoaNganhMe?.khoaNganhPhu?.ma,
-										label: `${khoaNganhMe?.khoaNganhPhu?.nganh?.ten} (${khoaNganhMe?.khoaNganhPhu?.ma})`,
+										label: `${khoaNganhMe?.khoaNganhPhu?.nganh?.ten} (${khoaNganhMe?.khoaNganhPhu?.maNganh})`,
 									},
 							  ]
 							: [
 									{
 										value: khoaNganhMe?.khoaNganhChinh?.ma,
-										label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten} (${khoaNganhMe?.khoaNganhChinh?.ma})`,
+										label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten} (${khoaNganhMe?.khoaNganhChinh?.maNganh})`,
 									},
 							  ]
 					}
@@ -142,9 +154,18 @@ const TienTrinhChuongTrinhKhung = () => {
 							<div className='col-chi-tiet'>
 								{data.khoiHocPhan.map((ctk) =>
 									ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC ? (
-										<CardHocPhan chuongTrinhKhung={ctk} key={ctk._id} />
+										<CardHocPhan
+											chuongTrinhKhung={ctk}
+											khoiHocPhanCt={ctk}
+											key={ctk._id}
+											colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+										/>
 									) : (
-										<CardKhoiHocPhan khoi={ctk} key={ctk._id} />
+										<CardKhoiHocPhan
+											khoi={ctk}
+											key={ctk._id}
+											colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+										/>
 									),
 								)}
 							</div>
@@ -163,9 +184,18 @@ const TienTrinhChuongTrinhKhung = () => {
 											<div className='col-chi-tiet'>
 												{chuyenNganh.khoiHocPhan.map((ctk) =>
 													ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC ? (
-														<CardHocPhan chuongTrinhKhung={ctk} key={ctk._id} />
+														<CardHocPhan
+															chuongTrinhKhung={ctk}
+															khoiHocPhanCt={ctk}
+															key={ctk._id}
+															colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+														/>
 													) : (
-														<CardKhoiHocPhan khoi={ctk} key={ctk._id} />
+														<CardKhoiHocPhan
+															khoi={ctk}
+															key={ctk._id}
+															colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+														/>
 													),
 												)}
 											</div>

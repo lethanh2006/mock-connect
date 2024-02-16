@@ -1,52 +1,24 @@
-import ResultWithLogo from '@/components/ResultWithLogo';
-import { useEffect, useState } from 'react';
+import { Card, Tabs } from 'antd';
+import KetQuaToanKhoaSinhVien from './KetQuaToanKhoa';
 import DiemThanhPhanSV from './components/DiemThanhPhanSV';
-import logo from '@/assets/logo.png';
-import { Button, Spin } from 'antd';
-import { history } from 'umi';
+import MayTinhThongMinh from './components/MayTinhThongMinh';
 
 const KetQuaHocTap = () => {
-  const [isLamKhaoSat, setIsLamKhaoSat] = useState<number>(0); //-1
-  const [loading, setLoading] = useState(false);
-  // const checkUnfinishedModel = async () => {
-  //   setLoading(true);
-  //   const res = await checkUnfinished({ chucNangSuDung: 'KET_QUA_HOC_TAP', loai: 'BIEU_MAU' });
-  //   setIsLamKhaoSat(res?.data?.data ? 1 : 0);
-  //   setLoading(false);
-  // };
+	return (
+		<Card title='Kết quả học tập'>
+			<KetQuaToanKhoaSinhVien />
 
-  // useEffect(() => {
-  //   checkUnfinishedModel();
-  // }, []);
+			<Tabs style={{ marginTop: 8 }}>
+				<Tabs.TabPane tab='Điểm tổng kết' key='1'>
+					<DiemThanhPhanSV />
+				</Tabs.TabPane>
 
-  return (
-    <DiemThanhPhanSV />
-    // <Spin spinning={loading}>
-    //   {isLamKhaoSat !== 0 ? (
-    //     <ResultWithLogo
-    //       logo={logo}
-    //       title={
-    //         isLamKhaoSat === -1
-    //           ? ''
-    //           : 'Vui lòng thực hiện khảo sát để sử dụng tính năng Kết quả học tập'
-    //       }
-    //       extra={
-    //         isLamKhaoSat === -1 ? undefined : (
-    //           <Button
-    //             type="primary"
-    //             onClick={() => {
-    //               history.push('/tienichkhac/khaosat');
-    //             }}
-    //           >
-    //             Thực hiện khảo sát
-    //           </Button>
-    //         )
-    //       }
-    //     />
-    //   ) : (
-    //   )}
-    // </Spin>
-  );
+				<Tabs.TabPane tab='Máy tính thông minh' key='2'>
+					<MayTinhThongMinh />
+				</Tabs.TabPane>
+			</Tabs>
+		</Card>
+	);
 };
 
 export default KetQuaHocTap;
