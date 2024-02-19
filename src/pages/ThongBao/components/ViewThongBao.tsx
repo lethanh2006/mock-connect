@@ -41,7 +41,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 			<Row style={{ marginTop: 12 }} gutter={[12, 12]}>
 				{record?.taiLieuDinhKem?.length ? (
 					<>
-						<Col span={24}>Tài liệu đính kèm: </Col>
+						<Col span={24}>Đính kèm: </Col>
 						{record?.taiLieuDinhKem?.map((item) => (
 							<Col span={24} key={item}>
 								<a href={item} target='_blank' rel='noreferrer'>
