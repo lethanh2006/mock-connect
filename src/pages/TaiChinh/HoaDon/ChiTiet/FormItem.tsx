@@ -91,6 +91,7 @@ const FormItemHoaDonChiTiet = () => {
 								</Table.Summary>
 							);
 						},
+						pagination: false,
 						// rowKey: (rec: HoaDon.IBillItem) => rec._id,
 						// rowSelection: isThanhToan
 						// 	? {

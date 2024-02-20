@@ -1,6 +1,7 @@
 export enum EDoiTuong {
-  TAT_CA = 'Tất cả',
-  VAI_TRO = 'Vai trò',
+	TAT_CA = 'Tất cả',
+	SINH_VIEN = 'Sinh viên',
+	CAN_BO = 'Cán bộ',
 }
 
 export enum EPhamVi {

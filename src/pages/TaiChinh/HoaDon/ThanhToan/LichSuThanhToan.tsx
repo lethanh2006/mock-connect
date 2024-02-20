@@ -22,7 +22,7 @@ import { useModel } from 'umi';
 
 const LichSuThanhToan = (props: {
 	onPay: (rec: GiaoDich.IRecord) => void;
-	onCancel: (rec: GiaoDich.IRecord) => void;
+	onCancel: (rec: GiaoDich.IRecord) => Promise<unknown>;
 }) => {
 	const { record } = useModel('taichinh.hoadon');
 	const { getAllModel, danhSach, loading } = useModel('taichinh.giaodich');
@@ -97,7 +97,12 @@ const LichSuThanhToan = (props: {
 					/>
 					<Popconfirm
 						title='Xác nhận hủy giao dịch này?'
-						onConfirm={() => onCancel && onCancel(rec)}
+						onConfirm={() => {
+							if (onCancel)
+								onCancel(rec).then(() => {
+									getData();
+								});
+						}}
 						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
 						placement='topRight'
 					>
