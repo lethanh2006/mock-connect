@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../LopHocPhan/DeCuongHocPhan/ModalHocPhan';
 import DetailKetQuaHocTap from './DetailKetQuaHocTap';
-import ModalQuyDoiDiem from './ModalQuyDoiDiem';
+import ModalQuyDoiDiem from '../../QuyDoiDiem/components/Modal';
 
 const ModalChiTietDiem = (props: {
 	visible: boolean;

@@ -7,7 +7,7 @@ import {
 	ETransactionStatus,
 } from '@/services/TaiChinh/constant';
 import { AppstoreAddOutlined, DollarOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Col, Modal, Popconfirm, Row, Space, Tabs } from 'antd';
+import { Alert, Button, Card, Col, Modal, Row, Space, Tabs } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -66,12 +66,13 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 	const onCancel = (rec: GiaoDich.IRecord) => {
 		if (rec._id)
-			huyThanhToanModel(rec._id)
+			return huyThanhToanModel(rec._id)
 				.then(() => {
 					getGiaoDich();
 					if (getData) getData();
 				})
 				.catch((er) => console.log(er));
+		else return Promise.reject();
 	};
 
 	return (
@@ -84,7 +85,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 				<Col span={24}>
 					<Tabs activeKey={activeTab} onChange={(tab) => onChangeTab(tab)}>
 						<Tabs.TabPane key={'1'} tab='Chi tiết' />
-						<Tabs.TabPane key={'2'} tab='Lịch sử thanh toán' />
+						<Tabs.TabPane key={'2'} tab='Lịch sử giao dịch' />
 					</Tabs>
 
 					{activeTab === '1' ? (
@@ -92,6 +93,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							{recGiaoDich?._id && recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL ? (
 								<Alert
 									message='Có giao dịch nộp tiền đang chờ xử lý! Bạn đã thực hiện thanh toán chưa?'
+									description='(Nếu đã thanh toán, vui lòng bỏ qua thông báo này)'
 									showIcon
 									type='info'
 									action={
@@ -113,22 +115,36 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 									}
 								/>
 							) : (
-								<ButtonExtend
-									disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
-									onClick={() => setVisibleThanhToan(true)}
-									icon={<AppstoreAddOutlined />}
-									type='primary'
-									loading={loading}
-									tooltip={ngoaiThoiGianThanhToan ? 'Ngoài thời gian thanh toán' : undefined}
-								>
-									Thanh toán
-								</ButtonExtend>
+								<Space wrap>
+									<ButtonExtend
+										disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
+										onClick={() => setVisibleThanhToan(true)}
+										icon={<AppstoreAddOutlined />}
+										type='primary'
+										className='btn-success'
+										loading={loading}
+										tooltip={ngoaiThoiGianThanhToan ? 'Ngoài thời gian thanh toán' : undefined}
+									>
+										Thông tin thanh toán
+									</ButtonExtend>
+									<i>(Xem chi tiết Số dư ví hiện tại, số tiền cần nộp và hướng dẫn thanh toán)</i>
+								</Space>
 							)}
 
 							<FormItemHoaDonChiTiet />
 						</>
 					) : (
-						<LichSuThanhToan onPay={onPay} onCancel={onCancel} />
+						<>
+							<div>
+								<i>Lưu ý: </i>
+								<br />- Không hủy giao dịch khi đã quét mã QR và thực hiện chuyển khoản thành công.
+								<br />- Sau khi quét QR thành công, hệ thống cần đợi thông tin xác nhận từ phía ngân hàng. Khi kết thúc
+								đợt thu, Phòng Tài chính kế toán sẽ thực hiện đối soát.
+								<br />- Số tiền nộp dư (nếu có) sẽ được hoàn lại trong Số dư ví, sinh viên có thể xem chi tiết trong
+								menu Lịch sử giao dịch.
+							</div>
+							<LichSuThanhToan onPay={onPay} onCancel={onCancel} />
+						</>
 					)}
 				</Col>
 			</Row>

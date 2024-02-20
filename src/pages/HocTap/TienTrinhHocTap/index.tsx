@@ -4,7 +4,7 @@ import { Alert, Card, Tabs } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import LichSuQuyDoiDiemPage from '../KetQuaHocTap/components/LichSuQuyDoiDiem';
+import LichSuQuyDoiDiemPage from '../QuyDoiDiem';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import TienTrinhThucTe from './TienTrinhThucTe';
 import './components/style.less';
@@ -75,7 +75,7 @@ const TienTrinhHocTap = () => {
 					<TienTrinhChuongTrinhKhung />
 				</Tabs.TabPane>
 
-				<Tabs.TabPane tab='Lịch sử công nhận KQHT' key='3'>
+				<Tabs.TabPane tab='Công nhận KQHT' key='3'>
 					<LichSuQuyDoiDiemPage />
 				</Tabs.TabPane>
 			</Tabs>
