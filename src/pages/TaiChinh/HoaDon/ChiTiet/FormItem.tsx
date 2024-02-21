@@ -1,11 +1,7 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import {
-	EMauTrangThaiThanhToanTable,
-	ETrangThaiThanhToan,
-	type EMaTrangThaiThanhToan,
-} from '@/services/TaiChinh/constant';
+import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { Col, Row, Table, Tag } from 'antd';
 import _ from 'lodash';
@@ -42,14 +38,22 @@ const FormItemHoaDonChiTiet = () => {
 			dataIndex: 'amountDue',
 			width: 100,
 			align: 'right',
-			render: (val) => `${inputFormat(val)} VND`,
+			render: (val, rec) => (
+				<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
+					{inputFormat(val)} VND
+				</span>
+			),
 		},
 		{
 			title: 'Ưu đãi',
 			dataIndex: 'amountDiscount',
 			width: 100,
 			align: 'right',
-			render: (val) => `${inputFormat(val)} VND`,
+			render: (val, rec) => (
+				<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
+					{inputFormat(val)} VND
+				</span>
+			),
 		},
 		{
 			title: 'Trạng thái',
