@@ -1,13 +1,12 @@
+import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import type {
 	ELoaiHocPhanMinhChung,
 	EMinhChungQuyDoiDiem,
 	ETrangThaiDotQuyDoiDiem,
 	ETrangThaiHocPhanQuyDoi,
-	ETrangThaiSinhVienQuyDoiDiem,
 	ETrinhDoMinhChungQuyDoiDiem,
 } from '../constant';
-import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 
 declare module QuyDoiDiem {
 	export interface DotQuyDoiDiem {
@@ -25,6 +24,27 @@ declare module QuyDoiDiem {
 		ghiChu: string;
 	}
 
+	export interface IPhieuDangKyQuyDoiDiem {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien: SinhVien.IRecord;
+		maSinhVien: string;
+		hoTen: string;
+		maDon: string;
+		trangThai: ETrangThaiSinhVienDot;
+		soQuyetDinhId: string;
+		quyetDinh: QuyetDinh.IRecord;
+		thoiGianBanHanh: Date;
+		dotDangKyQuyDoiDiemId: string;
+		dotDangKyQuyDoiDiem?: QuyDoiDiem.DotQuyDoiDiem;
+		danhSachHocPhan: IQuyDoiDiemSinhVien[];
+		urlsMinhChung: string[] | null;
+
+		soTinChiDaCongNhan: number;
+		soTinChiChuongTrinhDaoTao: number;
+		soTinChiCongNhanDot: number;
+	}
+
 	export interface IQuyDoiDiemSinhVien {
 		_id: string;
 		phieuDangKyQuyDoiDiemId: string;
@@ -39,54 +59,27 @@ declare module QuyDoiDiem {
 		nguoiChoYKienSsoId: string;
 		hoTenNguoiChoYKien: string;
 		thoiGianChoYKien: Date;
-		danhSachMinhChungQuyDoi: IMinhChungQuyDoiDiem[];
 
-		tenHocPhan?: string;
-		soTinChi?: string;
-	}
-
-	export interface IPhieuDangKyQuyDoiDiem {
-		_id: string;
-		sinhVienSsoId: string;
-		sinhVien: SinhVien.IRecord;
-		maSinhVien: string;
-		hoTen: string;
-		maDon: string;
-		trangThai: ETrangThaiSinhVienQuyDoiDiem;
-		soQuyetDinhId: string;
-		quyetDinh: QuyetDinh.IRecord;
-		thoiGianBanHanh: Date;
-		dotDangKyQuyDoiDiemId: string;
-		DotQuyDoiDiem: DotQuyDoiDiem;
-		danhSachHocPhan: IQuyDoiDiemSinhVien[];
-	}
-
-	export interface IMinhChungQuyDoiDiem {
-		_id: string;
-		quyDoiDiemSvId: string;
-
+		//Minh chứng
 		loai: EMinhChungQuyDoiDiem;
 		tenChungChi: string;
+		urlsChungChi: string;
+		diemChungChi: string;
 		bacChungChi: string;
 		donViCap: string;
 		thoiGianHieuLuc: Date;
 		thoiGianHetHieuLuc: Date;
-		urlsChungChi: string[] | null;
-
-		loaiHocPhan: ELoaiHocPhanMinhChung;
 		tenHocPhan: string;
-		maHocPhan: string;
 		trinhDoDaoTao: ETrinhDoMinhChungQuyDoiDiem;
 		tenTruong: string;
+		maHocPhanMinhChung: string;
 		soTinChi: number;
-		diemHe10: number;
-		diemHe4: number;
-		diemChu: string;
-		urlsHocPhan: string[] | null;
+		diemHe10MinhChung: number;
+		diemHe4MinhChung: number;
+		diemChuMinhChung: string;
+		urlsHocPhan: string;
+		loaiHocPhan: ELoaiHocPhanMinhChung;
+		namTotNghiep: number;
+		nganh: number;
 	}
-
-	export type TDanhSachHocPhanDangKyQuyDoiDiem = {
-		thongTinQuyDoiDiemSinhVien: IQuyDoiDiemSinhVien;
-		danhSachMinhChung: Partial<IMinhChungQuyDoiDiem>[];
-	};
 }
