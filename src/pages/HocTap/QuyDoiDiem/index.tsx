@@ -7,7 +7,7 @@ import {
 	type ETrangThaiSinhVienQuyDoiDiem,
 } from '@/services/HocTap/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
-import { Tag } from 'antd';
+import { Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import ModalQuyDoiDiem from './components/Modal';
@@ -42,8 +42,8 @@ const LichSuQuyDoiDiemPage = () => {
 		{
 			title: 'Đợt quy đổi điểm',
 			dataIndex: 'dotDangKyQuyDoiDiemId',
-			width: 100,
-			render: (val, rec) => rec?.DotQuyDoiDiem?.tenDot,
+			width: 130,
+			render: (val, rec) => rec?.dotDangKyQuyDoiDiem?.tenDot,
 			onCell,
 		},
 		{
@@ -52,7 +52,7 @@ const LichSuQuyDoiDiemPage = () => {
 			render: (val, rec) =>
 				rec.danhSachHocPhan?.map((item) => (
 					<>
-						- {item.hocPhan?.ten} - {item.diemHe10 ?? 'Chưa có điểm'} -{' '}
+						- {item.hocPhan?.ten} - {item.diemHe4 ?? 'Chưa có điểm'} -{' '}
 						<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i>
 						<br />
 					</>
@@ -64,8 +64,7 @@ const LichSuQuyDoiDiemPage = () => {
 			dataIndex: 'soQuyetDinhId',
 			width: 100,
 			align: 'center',
-			filterType: 'string',
-			sortable: true,
+			render: (val, rec) => rec.quyetDinh?.soQuyetDinh,
 			onCell,
 		},
 		{
@@ -86,8 +85,21 @@ const LichSuQuyDoiDiemPage = () => {
 		},
 		{
 			title: 'Tỷ lệ công nhận',
+			align: 'center',
 			width: 100,
-			// hide: trangThaiQuyDoiDiem === ETrangThaiSinhVienDot.DA_RA_QUYET_DINH,
+			render: (val, rec) => {
+				const tiLeCongNhan =
+					((rec?.soTinChiDaCongNhan + rec?.soTinChiCongNhanDot) / rec?.soTinChiChuongTrinhDaoTao) * 100;
+				return (
+					<div>
+						( <Tooltip title='Tổng số tín đã được công nhận trước đó'>{rec?.soTinChiDaCongNhan ?? 0}</Tooltip> +{' '}
+						<Tooltip title='Tổng số tín chỉ đã được công nhận đợt này'>{rec?.soTinChiCongNhanDot}</Tooltip>) /{' '}
+						<Tooltip title='Tổng số tín chỉ trong chương trình đào tạo'>{rec?.soTinChiChuongTrinhDaoTao}</Tooltip>{' '}
+						<br />
+						<span style={{ color: tiLeCongNhan > 50 ? 'green' : 'red' }}>{Math.ceil(tiLeCongNhan * 100) / 100} %</span>
+					</div>
+				);
+			},
 			onCell,
 		},
 		{
