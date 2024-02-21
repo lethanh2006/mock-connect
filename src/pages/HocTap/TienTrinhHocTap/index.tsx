@@ -14,6 +14,7 @@ const TienTrinhHocTap = () => {
 	const { getModel, record, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { getModel: getPhieuQuyDoiDiem, setRecord: setRecPheu } = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const { getThongTinCuaToiModel, getKhoaNganhMeModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { getAllModel: getAllQuyDoiDiem } = useModel('daotao.dmquydoidiem');
 
 	useEffect(() => {
 		getModel({ trangThai: ETrangThaiDotQuyDoiDiem.DA_BAN_HANH }, [
@@ -33,6 +34,7 @@ const TienTrinhHocTap = () => {
 
 		getThongTinCuaToiModel();
 		getKhoaNganhMeModel();
+		getAllQuyDoiDiem();
 	}, []);
 
 	useEffect(() => {

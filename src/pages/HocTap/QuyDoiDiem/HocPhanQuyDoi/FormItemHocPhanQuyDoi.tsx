@@ -27,81 +27,75 @@ const FormItemHocPhanQuyDoi = () => {
 
 	const columns: IColumn<QuyDoiDiem.IQuyDoiDiemSinhVien>[] = [
 		{
-			title: 'Học phần',
-			width: 200,
-			render: (val, rec) =>
-				rec?.danhSachMinhChungQuyDoi?.map((item: any) => (
-					<div key={item._id}>
-						- {item?.loai}
-						{item?.tenChungChi ? <>: {item?.tenChungChi} </> : null}
-						{item?.tenHocPhan ? <>: {item?.tenHocPhan}</> : null}
-					</div>
-				)),
+			title: 'Học phần xin công nhận',
+			dataIndex: 'maHocPhan',
+			width: 250,
+			render: (val, rec) => (
+				<>
+					{rec?.hocPhan?.ten} ({val} - {rec?.hocPhan?.soTinChi} tín chỉ)
+				</>
+			),
 			onCell,
 		},
 		{
-			title: 'HP xin công nhận',
-			width: 250,
-			children: [
-				{
-					title: 'Tên học phần',
-					width: 170,
-					render: (val, rec) => rec?.hocPhan?.ten,
-					onCell,
-				},
-				{
-					title: 'Số tín chỉ',
-					align: 'center',
-					width: 80,
-					render: (val, rec) => rec?.hocPhan?.soTinChi,
-					onCell,
-				},
-			],
+			title: 'Minh chứng',
+			width: 200,
+			render: (val, rec) => (
+				<>
+					- {rec?.loai}
+					{rec?.tenChungChi ? <>: {rec?.tenChungChi} </> : null}
+					{rec?.tenHocPhan ? <>: {rec?.tenHocPhan}</> : null}
+				</>
+			),
+			onCell,
 		},
 		{
 			title: 'Kết quả quy đổi',
 			width: 240,
 			children: [
 				{
-					title: 'Điểm thang 10',
+					title: 'Điểm hệ 10',
 					dataIndex: 'diemHe10',
 					align: 'center',
 					width: 80,
-					onCell,
+					onCell: (rec) => ({
+						colSpan: !rec?.diemHe10 && !rec?.diemChu ? 0 : 1,
+						onClick: () => handleView(rec),
+						style: { cursor: 'pointer' },
+					}),
 				},
 				{
-					title: 'Điểm thang 4',
+					title: 'Điểm hệ 4',
 					dataIndex: 'diemHe4',
 					align: 'center',
 					width: 80,
-					onCell,
+					onCell: (rec) => ({
+						colSpan: !rec?.diemHe4 && 0,
+						onClick: () => handleView(rec),
+						style: { cursor: 'pointer' },
+					}),
 				},
 				{
 					title: 'Điểm chữ',
 					dataIndex: 'diemChu',
 					align: 'center',
 					width: 80,
-					onCell,
+					render: (val) => val ?? <i>Chưa có điểm</i>,
+					onCell: (rec) => ({
+						colSpan: !rec?.diemChu && 3,
+						onClick: () => handleView(rec),
+						style: { cursor: 'pointer' },
+					}),
 				},
 			],
 		},
 		{
 			title: 'Trạng thái',
-			width: 100,
-			align: 'center',
-			render: (val, rec) =>
-				rec?.diemHe10 || rec?.diemHe4 || rec?.diemChu ? (
-					<Tag color='green'>Đã có KQ</Tag>
-				) : (
-					<Tag color='blue'>Chưa có KQ</Tag>
-				),
-		},
-		{
-			title: 'Công nhận',
 			dataIndex: 'trangThai',
-			width: 150,
 			align: 'center',
+			width: 120,
 			render: (val, rec) => <Tag color={colorTrangThaiHocPhanQuyDoi[val as ETrangThaiHocPhanQuyDoi]}>{val}</Tag>,
+			onCell,
 		},
 	];
 
@@ -123,7 +117,7 @@ const FormItemHocPhanQuyDoi = () => {
 			<Modal
 				title='Chi tiết học phần'
 				visible={visibleForm}
-				width={800}
+				width={600}
 				footer={null}
 				onCancel={() => setVisibleForm(false)}
 			>
