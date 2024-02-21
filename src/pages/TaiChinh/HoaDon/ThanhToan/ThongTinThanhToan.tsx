@@ -123,6 +123,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 										type='primary'
 										className='btn-success'
 										loading={loading}
+										notHideText
 										tooltip={ngoaiThoiGianThanhToan ? 'Ngoài thời gian thanh toán' : undefined}
 									>
 										Thông tin thanh toán
