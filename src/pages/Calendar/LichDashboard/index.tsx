@@ -1,6 +1,6 @@
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Card, Empty, Modal, Space, Tag, Typography } from 'antd';
+import { Badge, Card, Empty, Modal, Space, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -110,10 +110,11 @@ const LichDashboard = () => {
 			return (
 				<div key={ngay} className={styles.ngay}>
 					<Space style={{ marginBottom: 8 }}>
-						<div className={styles.ngay__title}>
-							{thuTrongTuan}, ngày {moment(ngay).format('DD/MM')}
-						</div>
-						<Tag>{cacSuKien.length} sự kiện</Tag>
+						<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
+							<div className={styles.ngay__title}>
+								{thuTrongTuan}, ngày {moment(ngay).format('DD/MM')}
+							</div>
+						</Badge>
 					</Space>
 					{cacSuKienSorted.map((sukien) => (
 						<div
