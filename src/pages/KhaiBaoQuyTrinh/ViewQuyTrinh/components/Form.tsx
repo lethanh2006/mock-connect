@@ -6,11 +6,10 @@ import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
+import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Form, message, Row, Select, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
-import moment from 'moment';
 
 const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 	const { currentFormKhaiBao, current, dataQuyTrinh, editFormKhaiBao, recordFormKhaiBao, setEditFormKhaiBao } =
@@ -45,13 +44,14 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			Object.keys(valuesForm).map((item) => {
 				const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
 				const isDanhMuc = cauHinh?.kieuDuLieu === EKieuDuLieu.DANHMUC;
-				const isDate = cauHinh?.kieuDuLieu === EKieuDuLieu.DATE;
-				const isMonth = cauHinh?.kieuDuLieu === EKieuDuLieu.MONTH;
+				// const isDate = cauHinh?.kieuDuLieu === EKieuDuLieu.DATE;
+				// const isMonth = cauHinh?.kieuDuLieu === EKieuDuLieu.MONTH;
 				valuesFinal[item] = {
 					value:
-						(isDate || isMonth) && valuesForm
-							? moment(valuesForm[item]).format(isDate ? 'DD/MM/YYYY' : 'MM/YYYY')
-							: valuesForm[item],
+						// (isDate || isMonth) && valuesForm
+						// 	? moment(valuesForm[item]).format(isDate ? 'DD/MM/YYYY' : 'MM/YYYY')
+						// 	:
+						valuesForm[item],
 					info: isDanhMuc
 						? danhSachDanhMuc
 								?.find((ele) => ele.maDanhMuc === cauHinh.maDanhMuc)
