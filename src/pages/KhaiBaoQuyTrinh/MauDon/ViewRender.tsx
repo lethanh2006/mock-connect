@@ -85,12 +85,12 @@ const ViewRender = (props: {
 			value = <div>{moment(valueFinal).format('HH:mm DD/MM/YYYY')}</div>;
 			break;
 		case EKieuDuLieu.DATE:
-			// value = <div>{moment(valueFinal).format('DD/MM/YYYY')}</div>;
-			value = <div>{valueFinal}</div>;
+			value = <div>{moment(valueFinal).format('DD/MM/YYYY')}</div>;
+			// value = <div>{valueFinal}</div>;
 			break;
 		case EKieuDuLieu.MONTH:
-			// value = <div>{moment(valueFinal).format('MM/YYYY')}</div>;
-			value = <div>{valueFinal}</div>;
+			value = <div>{moment(valueFinal).format('MM/YYYY')}</div>;
+			// value = <div>{valueFinal}</div>;
 			break;
 		case EKieuDuLieu.FILE:
 			value = (

@@ -129,11 +129,11 @@ const FormRender = (props: {
 				const khaiBao = dataQuyTrinh?.danhSachKhaiBao.find((item) => item.ma === cauHinh.maFormLayDefaultValue)
 					?.thongTinKhaiBao?.[cauHinh.maFieldLayDefaultValue]?.value;
 				if (cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE) {
-					const isDate = cauHinh.kieuDuLieu === EKieuDuLieu.DATE;
-					const isMonth = cauHinh.kieuDuLieu === EKieuDuLieu.MONTH;
-					form.setFieldsValue({
-						[cauHinh.ma]: isDate || isMonth ? khaiBao?.split('/')?.reverse()?.join('-') : khaiBao,
-					});
+					// const isDate = cauHinh.kieuDuLieu === EKieuDuLieu.DATE;
+					// const isMonth = cauHinh.kieuDuLieu === EKieuDuLieu.MONTH;
+					// form.setFieldsValue({
+					// 	[cauHinh.ma]: isDate || isMonth ? khaiBao?.split('/')?.reverse()?.join('-') : khaiBao,
+					// });
 				} else {
 					setRecordQuyTrinhForm({
 						...(recordQuyTrinhForm || {}),
