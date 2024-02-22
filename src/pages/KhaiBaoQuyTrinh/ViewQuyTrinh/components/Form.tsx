@@ -118,11 +118,8 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 		if (editFormKhaiBao && recordFormKhaiBao) {
 			const recordFormKhaiBaoFinal: any = {};
 			Object.keys(recordFormKhaiBao).map((key) => {
-				const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((item) => item.ma === key);
-				const isDate = cauHinh.kieuDuLieu === EKieuDuLieu.DATE;
-				const isMonth = cauHinh.kieuDuLieu === EKieuDuLieu.MONTH;
 				const khaiBao = recordFormKhaiBao[key];
-				recordFormKhaiBaoFinal[key] = isDate || isMonth ? khaiBao?.split('/')?.reverse()?.join('-') : khaiBao;
+				recordFormKhaiBaoFinal[key] = khaiBao;
 			});
 
 			form.setFieldsValue(recordFormKhaiBaoFinal);

@@ -335,7 +335,7 @@ const View = (props: Iprops) => {
 											})}
 										</Row>
 										{!editFormKhaiBao && (
-											<div style={{ display: 'flex', justifyContent: 'center' }}>
+											<div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>
 												<Button
 													onClick={() => {
 														setEditFormKhaiBao(true);
