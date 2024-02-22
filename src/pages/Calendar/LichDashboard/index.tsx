@@ -120,7 +120,7 @@ const LichDashboard = () => {
 						<div
 							key={sukien._id}
 							className={styles.su_kien}
-							style={{ background: ColorSuKien[sukien.loaiSuKien] }}
+							// style={{ background: ColorSuKien[sukien.loaiSuKien] }}
 							onClick={() => {
 								setSelectEvent(sukien);
 								setVisibleDetail(true);
