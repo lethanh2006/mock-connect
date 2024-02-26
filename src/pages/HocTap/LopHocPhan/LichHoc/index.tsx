@@ -9,7 +9,7 @@ import TableLichHocLopHP from './TableLichHoc';
 import ThongTinBuoiHoc from './ThongTinBuoiHoc';
 
 const DanhSachBuoiHoc = () => {
-	const { record: recLopHocPhan } = useModel('daotao.lophocphan');
+	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const { setRecord, setVisibleForm, getTheoLopHocPhan } = useModel('daotao.thoikhoabieu');
 	const [buoiHocGanNhat, setBuoiHocGanNhat] = useState<ThoiKhoaBieu.IRecord>();
 	const [show, setShow] = useState<string>('calendar');

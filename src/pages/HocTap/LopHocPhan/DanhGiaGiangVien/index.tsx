@@ -8,7 +8,7 @@ import { useModel } from 'umi';
 
 const DanhGiaGiangVienPage = () => {
 	const { getModel, danhSach, loading, setRecord, record } = useModel('tienich.dotkhaosat');
-	const { danhSach: danhSachNhanSu } = useModel('daotao.nhansulophocphan');
+	const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
 	const { getByIdModel: getBieuMau } = useModel('tienich.bieumau');
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const {
@@ -16,8 +16,8 @@ const DanhGiaGiangVienPage = () => {
 		danhGiaGiangVienModel,
 		danhSach: dannhSachDanhGia,
 		formSubmiting,
-	} = useModel('sinhvien.danhgiagiangvien');
-	const { record: recLopHocPhan } = useModel('daotao.lophocphan');
+	} = useModel('lophocphan.danhgiagiangvien');
+	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const [giangVienSsoId, setGiangVienSsoId] = useState<string>(danhSachNhanSu[0]?.nhanSuSsoId ?? '');
 	const cauTraLoi = dannhSachDanhGia.find((item) => item.giangVienSsoId === giangVienSsoId)?.danhSachTraLoi;
 	const ngoaiThoiGian =
@@ -90,31 +90,34 @@ const DanhGiaGiangVienPage = () => {
 							showIcon
 						/>
 					</div>
-					<div style={{ marginBottom: 12 }}>
+					<div style={{ marginBottom: 24 }}>
 						<div className='ant-form-item-label' style={{ padding: 0 }}>
 							<label className='ant-form-item-required'>Giảng viên</label>
 						</div>
 						<br />
-						<>
-							<Select
-								value={giangVienSsoId}
-								style={{ width: 300 }}
-								placeholder='Chọn giảng viên'
-								options={danhSachNhanSu.map((item) => ({
-									key: item.nhanSuSsoId,
-									value: item.nhanSuSsoId,
-									label: `${item.tenNhanSu} - ${item.maNhanSu}`,
-								}))}
-								onChange={(val) => setGiangVienSsoId(val)}
-							/>
-						</>
+						<Select
+							value={giangVienSsoId}
+							style={{ width: 300 }}
+							placeholder='Chọn giảng viên'
+							options={danhSachNhanSu.map((item) => ({
+								key: item.nhanSuSsoId,
+								value: item.nhanSuSsoId,
+								label: `${item.tenNhanSu} - ${item.maNhanSu}`,
+							}))}
+							onChange={(val) => setGiangVienSsoId(val)}
+						/>
 					</div>
-					<FormTraLoiKhaoSat onOk={hanldeDanhGiaGiangVien} cauTraLoi={cauTraLoi} formSubmiting={formSubmiting} />
+					<FormTraLoiKhaoSat
+						onOk={hanldeDanhGiaGiangVien}
+						cauTraLoi={cauTraLoi}
+						formSubmiting={formSubmiting}
+						hideCard
+					/>
 				</>
 			) : !danhSach.length ? (
-				<Empty style={{ marginTop: 30, marginBottom: 30 }} description='Không có đợt khảo sát đánh giá giảng viên' />
+				<Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không có đợt khảo sát đánh giá giảng viên' />
 			) : (
-				<Empty style={{ marginTop: 30, marginBottom: 30 }} description='Không có giảng viên trong đợt khảo sát này' />
+				<Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không có giảng viên trong đợt khảo sát này' />
 			)}
 		</Spin>
 	);

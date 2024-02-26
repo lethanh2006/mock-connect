@@ -9,7 +9,7 @@ import { history, useModel } from 'umi';
 const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; event: any; getData: () => void }) => {
 	const { visible, setVisible, event, getData } = props;
 	const { deleteModel, handleEdit } = useModel('sukien');
-	const { getMoodleLopHocPhanModel } = useModel('daotao.lophocphan');
+	const { getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
 	const loaiSuKien = event.loaiSuKien as ELoaiSuKien;
 	const isThoiKhoaBieu = loaiSuKien === ELoaiSuKien.LICH_HOC;
 	const thoiKhoaBieu = isThoiKhoaBieu ? (event as ThoiKhoaBieu.IRecord) : undefined;

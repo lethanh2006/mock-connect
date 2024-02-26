@@ -9,8 +9,9 @@ import { useModel } from 'umi';
 import ModalChiTietDiem from './ModalChiTietDiem';
 
 const DiemThanhPhanSV = () => {
-	const { danhSach, sinhVienGetAllDiemLopHocPhanModel, loading, setSinhVienLopHocPhan, sinhVienLopHocPhan } =
-		useModel('daotao.sinhvienlophocphan');
+	const { danhSach, sinhVienGetAllDiemLopHocPhanModel, loading, setSinhVienLopHocPhan, sinhVienLopHocPhan } = useModel(
+		'lophocphan.sinhvienlophocphan',
+	);
 	const { danhSach: danhSachDauDiem, getModel: getDauDiem } = useModel('daotao.daudiemhocphan');
 	const [modalVisible, setModalVisible] = useState(false);
 	const [loaiHocPhan, setLoaiHocPhan] = useState<string>('all');

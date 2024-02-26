@@ -16,7 +16,7 @@ const DetailLopTinChi = ({
 	match: { params: { id: string } };
 }) => {
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
-	const { record, sinhVienGetByIdModel } = useModel('daotao.lophocphan');
+	const { record, sinhVienGetByIdModel } = useModel('lophocphan.lophocphan');
 	const hash = window.location.hash;
 	const [tabActive, setTabActive] = useState<string>(hash.includes('danhgia') ? '6' : '1');
 

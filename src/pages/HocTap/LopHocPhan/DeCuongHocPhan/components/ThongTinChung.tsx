@@ -5,7 +5,7 @@ import TrongSoHocPhanPage from '../TrongSoHocPhan';
 
 const ThongTinChungPage = () => {
 	const { record } = useModel('hocphan.decuonghocphan');
-	const { record: recLopHocPhan } = useModel('daotao.lophocphan');
+	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 
 	return (
 		<>

@@ -6,7 +6,7 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { history, useModel } from 'umi';
 
 const LopHocPhanPage = () => {
-	const { page, limit, sinhVienGetModel } = useModel('daotao.lophocphan');
+	const { page, limit, sinhVienGetModel } = useModel('lophocphan.lophocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
 
 	const onCell = (loptinchi: LopHocPhan.IRecord) => ({
@@ -51,7 +51,7 @@ const LopHocPhanPage = () => {
 			dependencies={[page, limit, recHocKy?._id]}
 			params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH }}
 			getData={sinhVienGetModel}
-			modelName='daotao.lophocphan'
+			modelName='lophocphan.lophocphan'
 			title='Lớp tín chỉ'
 			buttons={{ create: false }}
 			otherButtons={[<FilterHocKy isSetHocKy key='1' />]}
