@@ -1,4 +1,3 @@
-import { EOperatorType } from '@/components/Table/constant';
 import FormTraLoiKhaoSat from '@/pages/TienIch/KhaoSat/components/Form';
 import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
@@ -16,14 +15,11 @@ const DanhGiaGiangVienPage = () => {
 		getDanhGiaGiangVienModel,
 		danhGiaGiangVienModel,
 		danhSach: dannhSachDanhGia,
+		formSubmiting,
 	} = useModel('sinhvien.danhgiagiangvien');
 	const { record: recLopHocPhan } = useModel('daotao.lophocphan');
 	const [giangVienSsoId, setGiangVienSsoId] = useState<string>(danhSachNhanSu[0]?.nhanSuSsoId ?? '');
-
-	const thoiGian = EThoiGianDot.DANG_DIEN_RA;
-
 	const cauTraLoi = dannhSachDanhGia.find((item) => item.giangVienSsoId === giangVienSsoId)?.danhSachTraLoi;
-
 	const ngoaiThoiGian =
 		!record?.thoiGianBatDau ||
 		!record?.thoiGianKetThuc ||
@@ -32,14 +28,14 @@ const DanhGiaGiangVienPage = () => {
 
 	const getDotHienTai = () => {
 		getModel(
-			{ maHocKy: recHocKy?.ma },
-			[{ active: true, field: 'loai', values: [ELoaiDot.DANH_GIA_GIANG_VIEN], operator: EOperatorType.INCLUDE }],
+			{ maHocKy: recHocKy?.ma, kichHoat: true, loai: ELoaiDot.DANH_GIA_GIANG_VIEN },
+			undefined,
 			undefined,
 			undefined,
 			undefined,
 			'my/page',
 			{
-				thoiGian,
+				thoiGian: EThoiGianDot.DANG_DIEN_RA,
 			},
 		).then((res) => {
 			setRecord(res?.[0]);
@@ -113,18 +109,13 @@ const DanhGiaGiangVienPage = () => {
 							/>
 						</>
 					</div>
-					<FormTraLoiKhaoSat
-						onOk={hanldeDanhGiaGiangVien}
-						isDanhGiaGiangVien
-						cauTraLoi={cauTraLoi}
-						giangVienSsoId={giangVienSsoId}
-					/>
+					<FormTraLoiKhaoSat onOk={hanldeDanhGiaGiangVien} cauTraLoi={cauTraLoi} formSubmiting={formSubmiting} />
 				</>
-			) : !danhSach.length && danhSachNhanSu.length ? (
+			) : !danhSach.length ? (
 				<Empty style={{ marginTop: 30, marginBottom: 30 }} description='Không có đợt khảo sát đánh giá giảng viên' />
-			) : danhSach.length && !danhSachNhanSu.length ? (
+			) : (
 				<Empty style={{ marginTop: 30, marginBottom: 30 }} description='Không có giảng viên trong đợt khảo sát này' />
-			) : null}
+			)}
 		</Spin>
 	);
 };
