@@ -12,6 +12,7 @@ import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 
 const FormTraLoiKhaoSat = (props: {
 	/** Hàm xử lý bên ngoài truyền vào nếu ko sử dụng model `bieumau` */
@@ -230,14 +231,15 @@ const FormTraLoiKhaoSat = (props: {
 				)}
 
 				<div className='form-footer'>
-					<Button
+					<ButtonExtend
 						disabled={(record?.coCamKet && !check) || ngoaiThoiGian}
 						loading={formSubmiting}
 						htmlType='submit'
 						type='primary'
+						tooltip={ngoaiThoiGian ? 'Ngoài thời gian đợt khảo sát' : undefined}
 					>
 						Hoàn thành
-					</Button>
+					</ButtonExtend>
 					{!onOk ? <Button onClick={() => setVisibleForm(false)}>Hủy</Button> : null}
 					{!!onCancel ? <Button onClick={() => onCancel()}>Hủy</Button> : null}
 				</div>

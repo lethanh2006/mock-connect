@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const DanhGiaGiangVienPage = () => {
-	const { getModel, danhSach, loading, setRecord, record } = useModel('tienich.dotkhaosat');
+	const { getModel, danhSach, loading, setRecord, record: recDot } = useModel('tienich.dotkhaosat');
 	const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
-	const { getByIdModel: getBieuMau } = useModel('tienich.bieumau');
+	const { getByIdModel: getBieuMau, record: recBieuMau } = useModel('tienich.bieumau');
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const {
 		getDanhGiaGiangVienModel,
@@ -21,10 +21,10 @@ const DanhGiaGiangVienPage = () => {
 	const [giangVienSsoId, setGiangVienSsoId] = useState<string>(danhSachNhanSu[0]?.nhanSuSsoId ?? '');
 	const cauTraLoi = dannhSachDanhGia.find((item) => item.giangVienSsoId === giangVienSsoId)?.danhSachTraLoi;
 	const ngoaiThoiGian =
-		!record?.thoiGianBatDau ||
-		!record?.thoiGianKetThuc ||
-		moment().isBefore(record?.thoiGianBatDau, 'd') ||
-		moment().isAfter(record?.thoiGianKetThuc, 'd');
+		!recDot?.thoiGianBatDau ||
+		!recDot?.thoiGianKetThuc ||
+		moment().isBefore(recDot?.thoiGianBatDau, 'd') ||
+		moment().isAfter(recDot?.thoiGianKetThuc, 'd');
 
 	const getDotHienTai = () => {
 		getModel(
@@ -52,11 +52,15 @@ const DanhGiaGiangVienPage = () => {
 		}
 	}, [recLopHocPhan?._id]);
 
+	useEffect(() => {
+		if (recDot?.idKhaoSat && recBieuMau?._id && recBieuMau._id !== recDot.idKhaoSat) getBieuMau(recDot.idKhaoSat);
+	}, [recDot?.idKhaoSat, recBieuMau?._id]);
+
 	const hanldeDanhGiaGiangVien = async (val: BieuMau.TraLoiRecord[]) => {
 		await danhGiaGiangVienModel({
-			idKhaoSat: record?.idKhaoSat ?? '',
+			idKhaoSat: recDot?.idKhaoSat ?? '',
 			danhSachTraLoi: val,
-			idDot: record?._id,
+			idDot: recDot?._id,
 			maLop: recLopHocPhan?.ten,
 			lopHocPhanId: recLopHocPhan?._id,
 			giangVienSsoId: giangVienSsoId,
@@ -82,8 +86,8 @@ const DanhGiaGiangVienPage = () => {
 								) : (
 									<>
 										Thời gian khảo sát đánh giá giảng viên từ{' '}
-										<b>{moment(record?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-										<b>{moment(record?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+										<b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+										<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
 									</>
 								)
 							}
