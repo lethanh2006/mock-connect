@@ -5,7 +5,7 @@ import TabsDeCuongHocPhan from './components/TabsDeCuongHocPhan';
 
 const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any; deCuongId?: string }) => {
 	const { title, visible, setVisible } = props;
-	const { record } = useModel('daotao.lophocphan');
+	const { record } = useModel('lophocphan.lophocphan');
 	const { getByIdModel } = useModel('hocphan.decuonghocphan');
 	const deCuongId = props.deCuongId || record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
 

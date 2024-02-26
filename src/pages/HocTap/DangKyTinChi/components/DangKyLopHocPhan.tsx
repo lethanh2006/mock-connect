@@ -16,7 +16,7 @@ import RenderLichHoc from './RenderLichHoc';
 
 const DangKyLopHocPhan = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel } = useModel('daotao.lophocphan');
+	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel } = useModel('lophocphan.lophocphan');
 	const { danhSachLopDangKy, setDanhSachLopDangKy, tinhDataLichHoc, checkTrungLich } =
 		useModel('daotao.dotdangkytinchi');
 	const { record: recHocPhan, loaiDangKy } = useModel('hocphan.hocphan');
@@ -179,7 +179,7 @@ const DangKyLopHocPhan = () => {
 						dependencies={[page, limit, recHocKy?.ma, recHocPhan?.ma, typeLop]}
 						getData={getData}
 						dataState='danhSachLopDktc'
-						modelName='daotao.lophocphan'
+						modelName='lophocphan.lophocphan'
 						hideCard
 						buttons={{ create: false, filter: false }}
 						addStt={false}

@@ -7,7 +7,7 @@ import { history, useModel } from 'umi';
 import './style.less';
 
 const CardLopHocPhan = () => {
-	const { danhSach: danhSachLHP, sinhVienGetAllModel, loading } = useModel('daotao.lophocphan');
+	const { danhSach: danhSachLHP, sinhVienGetAllModel, loading } = useModel('lophocphan.lophocphan');
 	const { getAllModel: getAllHocKy, danhSach, record: recHocKy, setRecord } = useModel('daotao.hocky');
 
 	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH });
