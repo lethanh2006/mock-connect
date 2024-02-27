@@ -3,13 +3,37 @@ import { TruongThongTin } from '@/services/LoaiHinhNCKH/typings';
 
 declare module QuyTrinh {
 	export interface IRecord {
+		_id: string;
 		ten: string;
 		ghiChu: string;
 		moTa: string;
-		choPhepGuiNhieuLan: true;
+		active: boolean;
+		isTraKetQua: boolean;
+		soNgayHenTraKetQua?: number;
+		maFormHienThi: string;
+		maTruongHienThi: string;
+		linhVuc: string;
+		choPhepGuiNhieuLan: boolean;
+		danhSachPhamViQuyTrinh: PhamViQuyTrinh[];
 		danhSachFormKhaiBao: IMauDon[];
+		danhSachFormTiepNhan: IMauDon[];
 		danhSachBoPhanXuLy: IBoPhanXuLy[];
+		boPhanChiuTrachNhiem: IBoPhanXuLy;
+		danhSachMappingDoiTuong: IDoiTuongMapping[];
+		danhSachCauHinhThongTinChung: IDanhSachCauHinhThongTinChung[];
+		cauHinhDotQuyTrinh: ICauHinhDotQuyTrinh;
 		danhSachBuocXuLy: IBuocXuLy[];
+		cauTrucThanhToan: {
+			ten: string;
+			yeuCauTraPhi: boolean;
+			idNguonThu: string;
+			idKhoanThu: string;
+			idMucThu: string;
+			thanhToanTheoSoLuong: boolean;
+			maFormThamChieuSoLuongThanhToan: string;
+			maTruongThamChieuSoLuongThanhToan: string;
+		};
+		phanHe: EPhanHe;
 		[key: string]: any;
 	}
 	export interface IMauDon {
