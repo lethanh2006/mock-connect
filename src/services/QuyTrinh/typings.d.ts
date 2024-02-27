@@ -3,18 +3,25 @@ import { TruongThongTin } from '@/services/QuanLyKhoaHocV2/LoaiHinhNCKH/typings'
 
 declare module QuyTrinh {
 	export interface IRecord {
-		_id?: string;
+		_id: string;
 		ten: string;
 		ghiChu: string;
 		moTa: string;
+		active: boolean;
+		isTraKetQua: boolean;
+		soNgayHenTraKetQua?: number;
 		maFormHienThi: string;
 		maTruongHienThi: string;
-		choPhepGuiNhieuLan: true;
+		linhVuc: string;
+		choPhepGuiNhieuLan: boolean;
+		danhSachPhamViQuyTrinh: PhamViQuyTrinh[];
 		danhSachFormKhaiBao: IMauDon[];
-    danhSachFormTiepNhan: IMauDon[];
+		danhSachFormTiepNhan: IMauDon[];
 		danhSachBoPhanXuLy: IBoPhanXuLy[];
 		boPhanChiuTrachNhiem: IBoPhanXuLy;
-    danhSachCauHinhThongTinChung: IDanhSachCauHinhThongTinChung[];
+		danhSachMappingDoiTuong: IDoiTuongMapping[];
+		danhSachCauHinhThongTinChung: IDanhSachCauHinhThongTinChung[];
+		cauHinhDotQuyTrinh: ICauHinhDotQuyTrinh;
 		danhSachBuocXuLy: IBuocXuLy[];
 		cauTrucThanhToan: {
 			ten: string;
@@ -26,14 +33,15 @@ declare module QuyTrinh {
 			maFormThamChieuSoLuongThanhToan: string;
 			maTruongThamChieuSoLuongThanhToan: string;
 		};
+		phanHe: EPhanHe;
 		[key: string]: any;
 	}
-  export interface IDanhSachCauHinhThongTinChung {
-    ten: string;
-    noiDung: string;
-    html: boolean;
-    [key: string]: any;
-  }
+	export interface IDanhSachCauHinhThongTinChung {
+		ten: string;
+		noiDung: string;
+		html: boolean;
+		[key: string]: any;
+	}
 	export interface IMauDon {
 		ten: string;
 		ma: string;
@@ -68,4 +76,11 @@ declare module QuyTrinh {
 		email: string;
 		[key: string]: any;
 	}
+}
+
+export interface ICauHinhDotQuyTrinh {
+	nguonDot: ENguonDot;
+	phanHeNguon: EPhanHe;
+	internalPath: string;
+	internalPathMy: string;
 }
