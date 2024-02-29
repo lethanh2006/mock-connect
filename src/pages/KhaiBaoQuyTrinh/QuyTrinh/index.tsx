@@ -4,6 +4,7 @@ import FormKhaiBao from '@/pages/KhaiBaoQuyTrinh/components/FormKhaiBao';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
+import { ENguonDot } from '@/services/QuyTrinh/constant';
 
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { ArrowRightOutlined } from '@ant-design/icons';
@@ -19,7 +20,7 @@ const QuyTrinhPage = () => {
 		record: recordQuyTrinh,
 		setRecord: setRecordQuyTrinh,
 	} = useModel('quytrinh.quytrinh');
-	const { getAllModel: getDot } = useModel('quytrinh.dotkhaibao');
+	const { getAllMyDotModel } = useModel('quytrinh.dotkhaibao');
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
@@ -31,19 +32,26 @@ const QuyTrinhPage = () => {
 		setCurrent(undefined);
 	}, []);
 
-	const handleRedirect = async (quyTrinhId: string) => {
+	const handleRedirect = async (quyTrinh: QuyTrinh.IRecord) => {
 		try {
 			setLoading(true);
-			const res = await getDot(undefined, undefined, undefined, undefined, `all/quy-trinh/${quyTrinhId}`);
+			if (quyTrinh.cauHinhDotQuyTrinh.nguonDot === ENguonDot.KHONG_CO_DOT) {
+				const res2 = await createDonKhaiBaoUser(quyTrinh._id);
+				if (res2) {
+					history.push(`/khai-bao-quy-trinh/${res2?.data?.data?._id}?quyTrinh=${quyTrinh._id}`);
+				}
+				return;
+			}
+			const res = await getAllMyDotModel(quyTrinh._id);
 			if (res) {
 				if (res.length === 1) {
-					const res2 = await createDonKhaiBaoUser(quyTrinhId, res?.[0]?._id);
+					const res2 = await createDonKhaiBaoUser(quyTrinh._id, res?.[0]?._id);
 					if (res2) {
-						history.push(`/khai-bao-quy-trinh/${res2?.data?.data?._id}?quyTrinh=${quyTrinhId}`);
+						history.push(`/khai-bao-quy-trinh/${res2?.data?.data?._id}?quyTrinh=${quyTrinh._id}`);
 					}
 				} else {
 					if (res.length > 1) {
-						setQuyTrinhIdSelect(quyTrinhId);
+						setQuyTrinhIdSelect(quyTrinh._id);
 						setVisibleForm(true);
 					} else {
 						message.warn('Chưa có đợt');
@@ -111,7 +119,7 @@ const QuyTrinhPage = () => {
 							<Popconfirm
 								title='Bạn có muốn sử dụng dich vụ trên?'
 								onConfirm={() => {
-									handleRedirect(recordVal?._id ?? '');
+									handleRedirect(recordVal);
 								}}
 								okText='Sử dụng'
 								cancelText='Đóng'
@@ -163,7 +171,7 @@ const QuyTrinhPage = () => {
 							icon={<ArrowRightOutlined />}
 							type={'primary'}
 							onClick={() => {
-								handleRedirect(recordQuyTrinh?._id ?? '');
+								if (recordQuyTrinh) handleRedirect(recordQuyTrinh);
 							}}
 						>
 							Tiếp theo
