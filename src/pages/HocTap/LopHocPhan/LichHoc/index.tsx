@@ -1,5 +1,5 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { Segmented, Space } from 'antd';
+import { Segmented, Space, Spin } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -9,8 +9,8 @@ import TableLichHocLopHP from './TableLichHoc';
 import ThongTinBuoiHoc from './ThongTinBuoiHoc';
 
 const DanhSachBuoiHoc = () => {
-	const { record: recLopHocPhan } = useModel('daotao.lophocphan');
-	const { setRecord, setVisibleForm, getTheoLopHocPhan } = useModel('daotao.thoikhoabieu');
+	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
+	const { setRecord, setVisibleForm, getTheoLopHocPhan, loading } = useModel('daotao.thoikhoabieu');
 	const [buoiHocGanNhat, setBuoiHocGanNhat] = useState<ThoiKhoaBieu.IRecord>();
 	const [show, setShow] = useState<string>('calendar');
 
@@ -28,7 +28,7 @@ const DanhSachBuoiHoc = () => {
 	}, [recLopHocPhan?._id]);
 
 	return (
-		<>
+		<Spin spinning={loading}>
 			{buoiHocGanNhat?._id ? (
 				<>
 					<ThongTinBuoiHoc
@@ -67,7 +67,7 @@ const DanhSachBuoiHoc = () => {
 			{show === 'calendar' ? <CalendarLichHocLopHp /> : <TableLichHocLopHP />}
 
 			<ModalThoiKhoaBieu />
-		</>
+		</Spin>
 	);
 };
 

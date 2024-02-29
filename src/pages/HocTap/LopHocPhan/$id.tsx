@@ -16,9 +16,10 @@ const DetailLopTinChi = ({
 	match: { params: { id: string } };
 }) => {
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
-	const { record, sinhVienGetByIdModel } = useModel('daotao.lophocphan');
-	const hash = window.location.hash;
-	const [tabActive, setTabActive] = useState<string>(hash.includes('danhgia') ? '6' : '1');
+	const { record, sinhVienGetByIdModel } = useModel('lophocphan.lophocphan');
+	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia'];
+	const [tabActive, setTabActive] = useState<string>(paths[0]);
+	const hash = window.location.hash?.replace('#', '') ?? paths[0];
 
 	useEffect(() => {
 		if (id)
@@ -26,6 +27,15 @@ const DetailLopTinChi = ({
 				if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
 			});
 	}, [id]);
+
+	useEffect(() => {
+		if (hash && paths.includes(hash)) setTabActive(hash);
+		else setTabActive(paths[0]);
+	}, [hash]);
+
+	const onChangeTab = (tab: string) => {
+		window.location.hash = tab === paths[0] ? '' : tab;
+	};
 
 	return (
 		<Card
@@ -39,37 +49,28 @@ const DetailLopTinChi = ({
 				</Breadcrumb>
 			}
 		>
-			<Tabs onChange={(tab) => setTabActive(tab)} activeKey={tabActive}>
-				<Tabs.TabPane tab='Thông tin chung' key='1'>
-					<ThongTinChung />
-				</Tabs.TabPane>
+			<Tabs onChange={onChangeTab} activeKey={tabActive}>
+				<Tabs.TabPane tab='Thông tin chung' key={paths[0]} />
+				<Tabs.TabPane tab='Danh sách buổi học' key={paths[1]} />
+				<Tabs.TabPane tab='Thông báo' key={paths[2]} />
+				<Tabs.TabPane tab='Kết quả học tập' key={paths[3]} />
+				<Tabs.TabPane tab='Đánh giá giảng viên' key={paths[4]} />
+			</Tabs>
 
-				<Tabs.TabPane tab='Danh sách buổi học' key='2'>
-					<DanhSachBuoiHoc />
-				</Tabs.TabPane>
-				<Tabs.TabPane tab='Thông báo' key='4'>
-					<ThongBaoLopPage loai='lop-hoc-phan' idLop={id} />
-				</Tabs.TabPane>
-
-				<Tabs.TabPane tab='Kết quả học tập' key='3'>
+			{tabActive === paths[0] ? (
+				<ThongTinChung />
+			) : tabActive === paths[1] ? (
+				<DanhSachBuoiHoc />
+			) : tabActive === paths[2] ? (
+				<ThongBaoLopPage loai='lop-hoc-phan' idLop={id} />
+			) : tabActive === paths[3] ? (
+				<>
 					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm lớp tín chỉ</h4>
 					<DetailKetQuaHocTap lopHocPhanId={record?._id} />
-				</Tabs.TabPane>
-
-				<Tabs.TabPane tab='Đánh giá giảng viên' key='5'>
-					<DanhGiaGiangVienPage />
-				</Tabs.TabPane>
-
-				{/*
-        <Tabs.TabPane tab="Học liệu số" key="5">
-          <HocLieuSo />
-        </Tabs.TabPane>
-        {access.sinhVien && thongTinChung?.giangVienList?.length > 0 && (
-          <Tabs.TabPane tab="Đánh giá giảng viên" key="6">
-            <DanhGiaGiangVien idLop={id} />
-          </Tabs.TabPane>
-        )} */}
-			</Tabs>
+				</>
+			) : paths[4] ? (
+				<DanhGiaGiangVienPage />
+			) : null}
 		</Card>
 	);
 };

@@ -165,4 +165,23 @@ declare module BieuMau {
 		createdAt: Date;
 		updatedAt: Date;
 	}
+
+	export interface IDanhGiaTietHoc {
+		_id: string;
+		idKhaoSat: string;
+		idDot: string;
+		danhSachTraLoi: BieuMau.TraLoiRecord[];
+
+		hoTen: string;
+		userId: string;
+		userSsoId: string;
+
+		createdAt: Date;
+		updatedAt: Date;
+	}
+
+	export type TPostDanhGiaTietHoc = {
+		idTkb: string;
+		cauTraLoi: Pick<IDanhGiaTietHoc, 'danhSachTraLoi' | 'idDot' | 'idKhaoSat'>;
+	};
 }
