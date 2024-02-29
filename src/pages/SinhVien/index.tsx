@@ -30,7 +30,7 @@ const ThongTinSinhVienPage = () => {
 
 	return (
 		<Card title='Thông tin cá nhân'>
-			<Space style={{ marginBottom: 12 }} wrap>
+			{/* <Space style={{ marginBottom: 12 }} wrap>
 				{record?.ssoId ? (
 					<>
 						<Button icon={<EditOutlined />} onClick={() => message.warn('Đang cập nhật')}>
@@ -41,7 +41,7 @@ const ThongTinSinhVienPage = () => {
 						</Button>
 					</>
 				) : null}
-			</Space>
+			</Space> */}
 
 			<PreviewHoSo />
 			{/* <Tabs

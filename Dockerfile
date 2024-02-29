@@ -3,12 +3,12 @@ FROM node:16-alpine AS development
 
 
 # Set environment variables
-ENV APP_CONFIG_IP_ROOT=https://ais.aisenote.com/dev/
+ENV APP_CONFIG_IP_ROOT=https://ais.aisenote.com/
 ENV APP_CONFIG_ONE_SIGNAL_ID=f3857a81-2891-49be-87a7-903a4a1a54be
 ENV APP_CONFIG_SENTRY_DSN=https://ed934e521d476c44a89a42aaa8a6993a@sentry.aisoftech.vn/3
-ENV APP_CONFIG_KEYCLOAK_AUTHORITY=https://ais.aisenote.com/dev/keycloak/realms/vwa
+ENV APP_CONFIG_KEYCLOAK_AUTHORITY=https://sso.hvpnvn.edu.vn/realms/vwa
 ENV APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID=vwa-
-ENV APP_CONFIG_APP_VERSION=231101
+ENV APP_CONFIG_APP_VERSION=240229.0937
 
 ENV APP_CONFIG_CO_QUAN_CHU_QUAN='Hội Liên hiệp phụ nữ Việt Nam'
 ENV APP_CONFIG_TEN_TRUONG='Học viện Phụ nữ Việt Nam'
@@ -17,16 +17,16 @@ ENV APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH=VWA
 ENV APP_CONFIG_PRIMARY_COLOR=#007EB9
 
 ENV APP_CONFIG_URL_LANDING=https://portal.hvpnvn.edu.vn/
-ENV APP_CONFIG_URL_CONNECT=https://vwa-connect-dev.vercel.app/
-ENV APP_CONFIG_URL_CAN_BO=https://cong-can-bo-vwa-dev.vercel.app/
-ENV APP_CONFIG_URL_DAO_TAO=https://qldt-vwa-dev.vercel.app/
-ENV APP_CONFIG_URL_NHAN_SU=https://tcns-vwa-dev.vercel.app/
-ENV APP_CONFIG_URL_TAI_CHINH=https://tai-chinh-vwa-dev.vercel.app/
-ENV APP_CONFIG_URL_CTSV=https://ctsv-vwa-dev.vercel.app/
-ENV APP_CONFIG_URL_QLKH=https://qlkh-vwa-dev.vercel.app/
-ENV APP_CONFIG_URL_VPS=https://van-phong-vwa-dev.vercel.app/
-ENV APP_CONFIG_URL_KHAO_THI=https://khao-thi-vwa-dev.vercel.app/
-ENV APP_CONFIG_URL_CORE=https://core-vwa-dev.vercel.app/
+ENV APP_CONFIG_URL_CONNECT=https://sinhvien.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_CAN_BO=https://canbo.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_DAO_TAO=https://qldt.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_NHAN_SU=https://tcns.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_TAI_CHINH=https://taichinh.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_CTSV=https://ctsv-vwa.vercel.app/
+ENV APP_CONFIG_URL_QLKH=https://qlkh.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_VPS=https://vanphong.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_KHAO_THI=https://khao-thi-vwa.vercel.app/
+ENV APP_CONFIG_URL_CORE=https://core-vwa.vercel.app/
 
 ENV APP_CONFIG_TITLE_CONNECT='Cổng người học'
 ENV APP_CONFIG_TITLE_CAN_BO='Cổng cán bộ'
@@ -39,17 +39,19 @@ ENV APP_CONFIG_TITLE_VPS='Văn phòng điều hành'
 ENV APP_CONFIG_TITLE_KHAO_THI='Khảo thí'
 ENV APP_CONFIG_TITLE_CORE='Danh mục chung'
 
+ENV APP_CONFIG_MOODLE_ENDPOINT=''
+
 
 # Set working directory
 WORKDIR /app
 
-COPY package.json /app/
+COPY package.json yarn.lock /app/
 RUN yarn install
 
 COPY . /app
 
 FROM development AS build
-RUN npm run build
+RUN yarn build
 
 FROM nginx:alpine
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf

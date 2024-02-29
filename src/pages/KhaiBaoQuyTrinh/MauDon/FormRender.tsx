@@ -131,9 +131,11 @@ const FormRender = (props: {
 				if (cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE) {
 					// const isDate = cauHinh.kieuDuLieu === EKieuDuLieu.DATE;
 					// const isMonth = cauHinh.kieuDuLieu === EKieuDuLieu.MONTH;
-					// form.setFieldsValue({
-					// 	[cauHinh.ma]: isDate || isMonth ? khaiBao?.split('/')?.reverse()?.join('-') : khaiBao,
-					// });
+					form.setFieldsValue({
+						[cauHinh.ma]:
+							// isDate || isMonth ? khaiBao?.split('/')?.reverse()?.join('-') :
+							khaiBao,
+					});
 				} else {
 					setRecordQuyTrinhForm({
 						...(recordQuyTrinhForm || {}),

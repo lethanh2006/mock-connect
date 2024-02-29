@@ -8,6 +8,7 @@ import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Form, message, Row, Select, Spin } from 'antd';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -58,6 +59,9 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 								?.danhSachGiaTri?.find((ele) => ele.value === valuesForm[item])?.info
 						: undefined,
 				};
+				if (isDate || isMonth) {
+					valuesFinal[`${item}Date`] = { value: moment(valuesForm[item]).format(isDate ? 'DD/MM/YYYY' : 'MM/YYYY') };
+				}
 			});
 
 			const payload = {
@@ -87,11 +91,17 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 		try {
 			if (currentFormKhaiBao?.ma) {
 				const res = await getDataDefaultV2(props?.idQuyTrinh ?? '', 'khai_bao', currentFormKhaiBao?.ma ?? '');
+				const finalData = {
+					...form.getFieldsValue(),
+				};
+				Object.keys(res?.data?.data)?.map((item: string) => {
+					const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
+					finalData[item] = [EKieuDuLieu.DATE, EKieuDuLieu.MONTH].includes(cauHinh.kieuDuLieu)
+						? moment(res?.data?.data[item])
+						: res?.data?.data[item];
+				});
 				if (res) {
-					form.setFieldsValue({
-						...form.getFieldsValue(),
-						...res?.data?.data,
-					});
+					form.setFieldsValue(finalData);
 				}
 			}
 		} catch (e) {
@@ -118,11 +128,8 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 		if (editFormKhaiBao && recordFormKhaiBao) {
 			const recordFormKhaiBaoFinal: any = {};
 			Object.keys(recordFormKhaiBao).map((key) => {
-				const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((item) => item.ma === key);
-				const isDate = cauHinh.kieuDuLieu === EKieuDuLieu.DATE;
-				const isMonth = cauHinh.kieuDuLieu === EKieuDuLieu.MONTH;
 				const khaiBao = recordFormKhaiBao[key];
-				recordFormKhaiBaoFinal[key] = isDate || isMonth ? khaiBao?.split('/')?.reverse()?.join('-') : khaiBao;
+				recordFormKhaiBaoFinal[key] = khaiBao;
 			});
 
 			form.setFieldsValue(recordFormKhaiBaoFinal);
