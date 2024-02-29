@@ -17,7 +17,7 @@ const FormKhaiBao = (props: { quyTrinhId?: string }) => {
 			const res = await createDonKhaiBaoUser(values?.quyTrinhId, values?.dotQuyTrinhId);
 			if (res) {
 				setVisibleForm(false);
-				history.push(`/khai-bao-quy-trinh/${res?.data?.data?._id}`);
+				history.push(`/khai-bao-quy-trinh/${res?.data?.data?._id}?quyTrinh=${props.quyTrinhId}`);
 			}
 		} catch (e) {
 			console.log(e);

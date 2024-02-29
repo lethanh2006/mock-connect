@@ -45,8 +45,8 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			Object.keys(valuesForm).map((item) => {
 				const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
 				const isDanhMuc = cauHinh?.kieuDuLieu === EKieuDuLieu.DANHMUC;
-				// const isDate = cauHinh?.kieuDuLieu === EKieuDuLieu.DATE;
-				// const isMonth = cauHinh?.kieuDuLieu === EKieuDuLieu.MONTH;
+				const isDate = cauHinh?.kieuDuLieu === EKieuDuLieu.DATE;
+				const isMonth = cauHinh?.kieuDuLieu === EKieuDuLieu.MONTH;
 				valuesFinal[item] = {
 					value:
 						// (isDate || isMonth) && valuesForm
