@@ -21,6 +21,7 @@ export enum ELoaiBieuMau {
 	TRAC_NGHIEM = 'Trắc nghiệm',
 	KHAI_BAO_Y_TE = 'Khai báo y tế',
 	DANH_GIA_GIANG_VIEN = 'Đánh giá giảng viên',
+	DANH_GIA_TIET_HOC = 'Khảo sát tiết học',
 }
 
 export enum ELoaiDot {

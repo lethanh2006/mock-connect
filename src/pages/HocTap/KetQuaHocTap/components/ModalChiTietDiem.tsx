@@ -22,7 +22,7 @@ const ModalChiTietDiem = (props: {
 	chuongTrinh?: ChuongTrinhDaoTao.IHocPhanBase;
 	khoiHocPhanCt?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 }) => {
-	const { getByIdModel } = useModel('daotao.lophocphan');
+	const { getByIdModel } = useModel('lophocphan.lophocphan');
 	const { setIsView: setIsViewPhieu } = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const { setIsView: setIsViewSinhVien } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');

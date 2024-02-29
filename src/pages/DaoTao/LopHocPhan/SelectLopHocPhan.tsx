@@ -14,7 +14,7 @@ const SelectLopHocPhan = (props: {
 	selectMa?: boolean;
 }) => {
 	const { value, onChange, multiple, allowClear, loadData, selectMa } = props;
-	const { danhSach, sinhVienGetAllModel } = useModel('daotao.lophocphan');
+	const { danhSach, sinhVienGetAllModel } = useModel('lophocphan.lophocphan');
 
 	useEffect(() => {
 		if (loadData !== false) sinhVienGetAllModel();

@@ -8,7 +8,7 @@ import DanhSachGiangVien from './DanhSachGiangVien';
 import DanhSachSinhVien from './DanhSachSinhVien';
 
 const ThongTinChung = () => {
-	const { loading, record, getMoodleLopHocPhanModel } = useModel('daotao.lophocphan');
+	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
 	const {
 		record: recLopThucHanh,
 		danhSach: danhSachLopThucHanh,
@@ -18,7 +18,7 @@ const ThongTinChung = () => {
 		getAllNhanSuModel: getNhanSuLopTH,
 		loading: loadingThucHanh,
 	} = useModel('daotao.lopthuchanh');
-	const { danhSach: danhSachNhanSu, getAllModel: getAllNhanSu } = useModel('daotao.nhansulophocphan');
+	const { danhSach: danhSachNhanSu, getAllModel: getAllNhanSu } = useModel('lophocphan.nhansulophocphan');
 	const [activeKey, setActiveKey] = useState<string>('-1');
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 

@@ -12,22 +12,25 @@ import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 
 const FormTraLoiKhaoSat = (props: {
-	isDanhGiaGiangVien?: boolean;
-	onOk: (val: BieuMau.TraLoiRecord[]) => void;
+	/** Hàm xử lý bên ngoài truyền vào nếu ko sử dụng model `bieumau` */
+	onOk?: (val: BieuMau.TraLoiRecord[]) => void;
+	/** Câu trả lời để fill vào */
 	cauTraLoi?: BieuMau.TraLoiRecord[];
-	giangVienSsoId: string;
+	/** FormSubmiting truyền vào nếu ko sử dụng model `bieumau` */
+	formSubmiting?: boolean;
+	onCancel?: () => void;
+	hideCard?: boolean;
 	[key: string]: any;
 }) => {
-	const [form] = Form.useForm();
-	const { isDanhGiaGiangVien, onOk, cauTraLoi, giangVienSsoId } = props;
-	const { loading, record, traLoiBieuMauModel, formSubmiting } = useModel('tienich.bieumau');
-
-	const { formSubmiting: formSubmitingGV } = useModel('sinhvien.danhgiagiangvien');
 	const { setVisibleForm, record: recordDot, getDotMeModel, visibleForm, danhSach } = useModel('tienich.dotkhaosat');
+	const { loading, record, traLoiBieuMauModel, formSubmiting: formSubmiting1 } = useModel('tienich.bieumau');
+	const [form] = Form.useForm();
+	const { onOk, cauTraLoi, onCancel, hideCard } = props;
+	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
 	const [check, setCheck] = useState<boolean>(false);
-
 	const ngoaiThoiGian =
 		!recordDot?.thoiGianBatDau ||
 		!recordDot?.thoiGianKetThuc ||
@@ -35,14 +38,14 @@ const FormTraLoiKhaoSat = (props: {
 		moment().isAfter(recordDot?.thoiGianKetThuc, 'd');
 
 	useEffect(() => {
-		if (!visibleForm && !giangVienSsoId) {
+		if (!visibleForm && !onOk) {
 			resetFieldsForm(form);
 			setCheck(false);
 		}
 	}, [visibleForm]);
 
 	useEffect(() => {
-		if (giangVienSsoId) {
+		if (cauTraLoi) {
 			const values: any = {};
 			record?.danhSachKhoi?.map((khoi) => {
 				khoi.danhSachCauHoi?.map((question) => {
@@ -184,7 +187,7 @@ const FormTraLoiKhaoSat = (props: {
 			}
 		});
 
-		if (isDanhGiaGiangVien) {
+		if (!!onOk) {
 			onOk(danhSachTraLoi as BieuMau.TraLoiRecord[]);
 		} else {
 			await traLoiBieuMauModel({
@@ -200,49 +203,52 @@ const FormTraLoiKhaoSat = (props: {
 		}
 	};
 
-	return (
-		<Card loading={loading} title={isDanhGiaGiangVien ? undefined : 'Chi tiết khảo sát'}>
-			<Spin spinning={formSubmiting}>
-				<Form scrollToFirstError onFinish={onFinish} layout='vertical' form={form}>
-					<h3>{record?.tieuDe}</h3>
-					<p>{record?.moTa}</p>
+	const mainContent = (
+		<Spin spinning={formSubmiting || loading}>
+			<Form scrollToFirstError onFinish={onFinish} layout='vertical' form={form}>
+				<h3>{record?.tieuDe}</h3>
+				<p>{record?.moTa}</p>
 
-					{record?.danhSachKhoi?.map((item) => (
-						// eslint-disable-next-line react/no-array-index-key
-						<div key={item._id} style={{ marginBottom: 32 }}>
-							<Divider />
-							<div className='fw500'>{item.tieuDe}</div>
-							<div style={{ marginBottom: 12 }}>{item.moTa}</div>
+				{record?.danhSachKhoi?.map((item) => (
+					// eslint-disable-next-line react/no-array-index-key
+					<div key={item._id} style={{ marginBottom: 32 }}>
+						<Divider />
+						<div className='fw500'>{item.tieuDe}</div>
+						<div style={{ marginBottom: 12 }}>{item.moTa}</div>
 
-							{item.danhSachCauHoi?.map((cauHoi, index) => renderQuestion(cauHoi, index))}
-						</div>
-					))}
-
-					{record?.coCamKet && (
-						<Checkbox
-							style={{ marginBottom: 12, marginTop: 12 }}
-							onChange={(e) => setCheck(e.target.checked)}
-							checked={check}
-						>
-							{record?.noiDungCamKet}
-						</Checkbox>
-					)}
-
-					<div className='form-footer'>
-						<Button
-							disabled={(record?.coCamKet && !check) || ngoaiThoiGian}
-							loading={formSubmiting || formSubmitingGV}
-							htmlType='submit'
-							type='primary'
-						>
-							Hoàn thành
-						</Button>
-						{!isDanhGiaGiangVien ? <Button onClick={() => setVisibleForm(false)}>Hủy</Button> : null}
+						{item.danhSachCauHoi?.map((cauHoi, index) => renderQuestion(cauHoi, index))}
 					</div>
-				</Form>
-			</Spin>
-		</Card>
+				))}
+
+				{record?.coCamKet && (
+					<Checkbox
+						style={{ marginBottom: 12, marginTop: 12 }}
+						onChange={(e) => setCheck(e.target.checked)}
+						checked={check}
+					>
+						{record?.noiDungCamKet}
+					</Checkbox>
+				)}
+
+				<div className='form-footer'>
+					<ButtonExtend
+						disabled={(record?.coCamKet && !check) || ngoaiThoiGian}
+						loading={formSubmiting}
+						htmlType='submit'
+						type='primary'
+						tooltip={ngoaiThoiGian ? 'Ngoài thời gian đợt khảo sát' : undefined}
+					>
+						Hoàn thành
+					</ButtonExtend>
+					{!onOk ? <Button onClick={() => setVisibleForm(false)}>Hủy</Button> : null}
+					{!!onCancel ? <Button onClick={() => onCancel()}>Hủy</Button> : null}
+				</div>
+			</Form>
+		</Spin>
 	);
+
+	if (hideCard) return mainContent;
+	return <Card title='Chi tiết khảo sát'>{mainContent}</Card>;
 };
 
 export default FormTraLoiKhaoSat;
