@@ -32,11 +32,12 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		huyThanhToanModel,
 	} = useModel('taichinh.giaodich');
 	const [activeTab, setActiveTab] = useState('1');
-	const ngoaiThoiGianThanhToan =
-		!recHoaDon?.dotThu?.thoiGianBatDau ||
-		!recHoaDon.dotThu.thoiGianKetThuc ||
-		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
-		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
+	const ngoaiThoiGianThanhToan = recHoaDon?.dotThu
+		? !recHoaDon?.dotThu?.thoiGianBatDau ||
+		  !recHoaDon.dotThu.thoiGianKetThuc ||
+		  moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
+		  moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc)
+		: true;
 
 	/** Get giao dịch pending */
 	const getGiaoDich = () =>
