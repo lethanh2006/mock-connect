@@ -5,11 +5,12 @@ import type { DotQuyTrinh } from '@/services/QuyTrinh/DotQuyTrinh/typing';
 export default () => {
 	const objInit = useInitModel<DotQuyTrinh.IRecord>('dot-quy-trinh-dong');
 
-	const { setLoading } = objInit;
+	const { setLoading, setDanhSach } = objInit;
 
 	const getAllMyDotModel = async (idQuyTrinh: string) => {
 		setLoading(true);
 		const res = await getAllMyDot(idQuyTrinh);
+		setDanhSach(res?.data?.data ?? []);
 		setLoading(false);
 		return res?.data?.data ?? [];
 	};
