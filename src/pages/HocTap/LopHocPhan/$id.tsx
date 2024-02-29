@@ -1,11 +1,13 @@
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import { TeamOutlined } from '@ant-design/icons';
-import { Breadcrumb, Card, Tabs } from 'antd';
+import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
 import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
+import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
+import CardThongBao from './ThongBao/CardThongBao';
 import ThongTinChung from './components/ThongTinChung';
 
 const DetailLopTinChi = ({
@@ -16,16 +18,23 @@ const DetailLopTinChi = ({
 	match: { params: { id: string } };
 }) => {
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
-	const { record, sinhVienGetByIdModel } = useModel('lophocphan.lophocphan');
+	const { record, sinhVienGetByIdModel, setRecord } = useModel('lophocphan.lophocphan');
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia'];
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 	const hash = window.location.hash?.replace('#', '') ?? paths[0];
 
+	const getData = () =>
+		id &&
+		sinhVienGetByIdModel(id).then((rec) => {
+			if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
+		});
+
 	useEffect(() => {
-		if (id)
-			sinhVienGetByIdModel(id).then((rec) => {
-				if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
-			});
+		getData();
+
+		return () => {
+			setRecord(undefined);
+		};
 	}, [id]);
 
 	useEffect(() => {
@@ -58,7 +67,21 @@ const DetailLopTinChi = ({
 			</Tabs>
 
 			{tabActive === paths[0] ? (
-				<ThongTinChung />
+				<Row gutter={[16, 16]}>
+					<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
+						<Row gutter={[16, 16]}>
+							<Col span={24}>
+								<CardBuoiHocTiepTheo />
+							</Col>
+							<Col span={24}>
+								<CardThongBao />
+							</Col>
+						</Row>
+					</Col>
+					<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
+						<ThongTinChung />
+					</Col>
+				</Row>
 			) : tabActive === paths[1] ? (
 				<DanhSachBuoiHoc />
 			) : tabActive === paths[2] ? (

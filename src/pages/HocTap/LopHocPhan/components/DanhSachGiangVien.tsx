@@ -1,4 +1,5 @@
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { formatPhoneNumber } from '@/utils/utils';
 import { Avatar, List } from 'antd';
 
 type TNhanSu = Pick<LopHocPhan.IRecordNhanSuLopHP, 'tenNhanSu' | 'maNhanSu' | 'nhanSu' | 'nhanSuSsoId'>;
@@ -49,7 +50,7 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 										<div>
 											Số điện thoại:{' '}
 											{item.nhanSu?.sdtCaNhan ? (
-												<a href={`tel:${item.nhanSu.sdtCaNhan}`}>{item.nhanSu.sdtCaNhan}</a>
+												<a href={`tel:${item.nhanSu.sdtCaNhan}`}>{formatPhoneNumber(item.nhanSu.sdtCaNhan)}</a>
 											) : (
 												<i>--</i>
 											)}
