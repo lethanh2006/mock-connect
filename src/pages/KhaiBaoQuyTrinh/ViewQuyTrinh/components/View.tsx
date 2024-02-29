@@ -313,12 +313,20 @@ const View = (props: Iprops) => {
 																	flexDirection: isHtml || isTable ? 'column' : 'row',
 																}}
 															>
-																<div style={{ marginRight: 4 }}>
-																	<b>{item.ten}: </b>
-																</div>
+																{!isDoanVanBan && (
+																	<div style={{ marginRight: 4 }}>
+																		<b>{item.ten}: </b>
+																	</div>
+																)}
 																<div>
 																	{isDoanVanBan ? (
-																		item.ten
+																		<div>
+																			{item.customDefaultValue ? (
+																				<div dangerouslySetInnerHTML={{ __html: item.customDefaultValue }} />
+																			) : (
+																				<div>{item.ten}</div>
+																			)}
+																		</div>
 																	) : (
 																		<ViewRender
 																			cauHinh={item}
