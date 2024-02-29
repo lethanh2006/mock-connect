@@ -1,4 +1,4 @@
-import { type EPhamViChuDe } from './constant';
+import type { CommonTopicType, EPhamViChuDe } from './constant';
 
 declare module TinTuc {
 	export interface IRecord {
@@ -25,7 +25,7 @@ declare module TinTuc {
 		phamVi: EPhamViChuDe;
 		_id: string;
 		name: string;
-		type: string;
+		type: CommonTopicType;
 		order: number;
 		hinhThucDaoTaoId: number;
 	}
