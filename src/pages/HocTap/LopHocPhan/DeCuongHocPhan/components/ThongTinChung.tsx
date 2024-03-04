@@ -35,11 +35,20 @@ const ThongTinChungPage = () => {
 				bordered={false}
 				column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
 			>
-				<Descriptions.Item label=' Người biên soạn'>{record?.nguoiBienSoan ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
+				<Descriptions.Item label='Người biên soạn'>{record?.nguoiBienSoan ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
 				<Descriptions.Item label='Ngày áp dụng'>
 					{record?.ngayApDung ? moment(record.ngayApDung).format('DD/MM/YYYY') : <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
 				<Descriptions.Item label='Căn cứ pháp lý'>{record?.canCu?.ten ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
+				<Descriptions.Item label='Tệp tin'>
+					{record?.url ? (
+						<a href={record.url} target='_blank' rel='noreferrer'>
+							Xem chi tiết
+						</a>
+					) : (
+						<i>Chưa cập nhật</i>
+					)}
+				</Descriptions.Item>
 			</Descriptions>
 
 			<TrongSoHocPhanPage />
