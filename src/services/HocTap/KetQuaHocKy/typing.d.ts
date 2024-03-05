@@ -1,3 +1,4 @@
+import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import type { ELoaiHocLuc, ETrinhDoKqhtHocKy } from '../constant';
 
@@ -27,5 +28,8 @@ declare module KetQuaHocKy {
 		trinhDo: ETrinhDoKqhtHocKy;
 		hocLuc: ELoaiHocLuc;
 		// lopHpSvList?: LopHocPhan.IRecordSinhVienLopHP[];
+
+		maKhoaNganh: string;
+		khoaNganh: KhoaNganh.IRecord;
 	}
 }
