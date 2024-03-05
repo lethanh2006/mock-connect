@@ -10,7 +10,8 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
-const MayTinhThongMinh = () => {
+const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
+	const { maKhoaNganh } = props;
 	const { getDiemSinhVienModel, loading, tongTuChon } = useModel('daotao.diemhocphan');
 	const [danhSach, setDanhSach] = useState<DiemHocPhan.IDiemSinhVien[]>();
 	const [record, setRecord] = useState<DiemHocPhan.IDiemSinhVien>();
@@ -35,7 +36,7 @@ const MayTinhThongMinh = () => {
 	};
 
 	const fetch = async () => {
-		await getDiemSinhVienModel().then((data) => {
+		await getDiemSinhVienModel({ maKhoaNganh }).then((data) => {
 			tinhDiemTongKet(data);
 			setDanhSach(data);
 		});
@@ -43,7 +44,7 @@ const MayTinhThongMinh = () => {
 
 	useEffect(() => {
 		fetch();
-	}, []);
+	}, [maKhoaNganh]);
 
 	const onOk = (values: any) => {
 		const data = danhSach?.map((item) =>
