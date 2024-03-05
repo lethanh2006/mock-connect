@@ -43,7 +43,7 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 	};
 
 	useEffect(() => {
-		fetch();
+		if (maKhoaNganh) fetch();
 	}, [maKhoaNganh]);
 
 	const onOk = (values: any) => {

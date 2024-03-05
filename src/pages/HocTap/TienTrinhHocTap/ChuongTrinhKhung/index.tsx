@@ -19,11 +19,10 @@ type TChuongTrinhHocKy = {
 
 const TienTrinhChuongTrinhKhung = () => {
 	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
-	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
+	const { khoaNganhMe, maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [count, setCount] = useState(0);
 	const [tongTinChi, setTongTinChi] = useState(0);
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
-	const [maKhoaNganh, setMaKhoaNganh] = useState<string>();
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 
 	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {

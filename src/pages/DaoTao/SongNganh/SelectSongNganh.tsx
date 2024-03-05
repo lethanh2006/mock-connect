@@ -13,9 +13,10 @@ const SelectSongNganh = (props: {
 	const { getKhoaNganhMeModel, khoaNganhMe, loading } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
-		getKhoaNganhMeModel().then((response) => {
-			if (onChange) onChange(response?.khoaNganhChinh?.ma);
-		});
+		if (!khoaNganhMe)
+			getKhoaNganhMeModel().then((response) => {
+				if (onChange) onChange(response?.khoaNganhChinh?.ma);
+			});
 	}, []);
 
 	if (hideSelect && !khoaNganhMe?.khoaNganhPhu?.ma) return null;
