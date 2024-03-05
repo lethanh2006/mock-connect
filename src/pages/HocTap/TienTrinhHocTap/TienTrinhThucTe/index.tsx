@@ -1,3 +1,4 @@
+import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Empty, Spin } from 'antd';
 import _ from 'lodash';
@@ -8,9 +9,10 @@ import CardHocPhan from '../components/CardHocPhan';
 const TienTrinhThucTe = () => {
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
 	const [danhSachHocKy, setDanhSachHocKy] = useState<LopHocPhan.IRecordSinhVienLopHP[][]>();
+	const [maKhoaNganh, setMaKhoaNganh] = useState<string>();
 
 	const fetch = async () => {
-		await sinhVienGetTienTrinhThucTeModel().then((data) => {
+		await sinhVienGetTienTrinhThucTeModel(maKhoaNganh).then((data) => {
 			const gHocKy = Object.entries(_.groupBy(data, (item) => item.kyHoc?.ma));
 			const dataHocKy = _.sortBy(gHocKy, ([ma, ds]) => ma);
 			setDanhSachHocKy(dataHocKy.map(([ma, ds]) => ds));
@@ -19,16 +21,21 @@ const TienTrinhThucTe = () => {
 
 	useEffect(() => {
 		fetch();
-	}, []);
+	}, [maKhoaNganh]);
 
 	return (
-		<Spin spinning={loading}>
-			{danhSachHocKy?.length ? (
-				danhSachHocKy.map((data, index) => (
-					// eslint-disable-next-line react/no-array-index-key
-					<div className='row-hoc-ky' key={index}>
-						<div className='col-hoc-ky'>
-							{/* <Tooltip
+		<>
+			<div style={{ marginBottom: 12 }}>
+				<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+			</div>
+
+			<Spin spinning={loading}>
+				{danhSachHocKy?.length ? (
+					danhSachHocKy.map((data, index) => (
+						// eslint-disable-next-line react/no-array-index-key
+						<div className='row-hoc-ky' key={index}>
+							<div className='col-hoc-ky'>
+								{/* <Tooltip
                 title={
                   <>
                     Tổng số tín chỉ cần học: {hocKy.tongSoTinCanHoc}
@@ -39,21 +46,22 @@ const TienTrinhThucTe = () => {
                   </>
                 }
               > */}
-							<h4>{data[0].kyHoc?.ten}</h4>
-							<span className='tin-chi'>({_.sumBy(data, (i) => i.soTinChi ?? 0)} tín chỉ)</span>
-							{/* </Tooltip> */}
+								<h4>{data[0].kyHoc?.ten}</h4>
+								<span className='tin-chi'>({_.sumBy(data, (i) => i.soTinChi ?? 0)} tín chỉ)</span>
+								{/* </Tooltip> */}
+							</div>
+							<div className='col-chi-tiet'>
+								{data.map((sv) => (
+									<CardHocPhan sinhVienLopHocPhan={sv} key={sv._id} />
+								))}
+							</div>
 						</div>
-						<div className='col-chi-tiet'>
-							{data.map((sv) => (
-								<CardHocPhan sinhVienLopHocPhan={sv} key={sv._id} />
-							))}
-						</div>
-					</div>
-				))
-			) : (
-				<Empty description='Không có dữ liệu' style={{ marginTop: 50, marginBottom: 32 }} />
-			)}
-		</Spin>
+					))
+				) : (
+					<Empty description='Không có dữ liệu' style={{ marginTop: 50, marginBottom: 32 }} />
+				)}
+			</Spin>
+		</>
 	);
 };
 

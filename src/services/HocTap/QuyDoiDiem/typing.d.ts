@@ -39,6 +39,8 @@ declare module QuyDoiDiem {
 		dotDangKyQuyDoiDiem?: QuyDoiDiem.DotQuyDoiDiem;
 		danhSachHocPhan: IQuyDoiDiemSinhVien[];
 		urlsMinhChung: string[] | null;
+		maKhoaNganh: string;
+		khoaNganh?: KhoaNganh.IRecord;
 
 		soTinChiDaCongNhan: number;
 		soTinChiChuongTrinhDaoTao: number;
