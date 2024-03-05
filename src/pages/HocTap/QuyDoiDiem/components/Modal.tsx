@@ -16,9 +16,14 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
 
-const ModalQuyDoiDiem = (props: { visible: boolean; setVisible: any; hocPhan?: HocPhan.IRecord }) => {
+const ModalQuyDoiDiem = (props: {
+	visible: boolean;
+	setVisible: any;
+	hocPhan?: HocPhan.IRecord;
+	maKhoaNganh?: string;
+}) => {
 	const [form] = Form.useForm();
-	const { visible, setVisible, hocPhan } = props;
+	const { visible, setVisible, hocPhan, maKhoaNganh } = props;
 	const { formSubmiting, isView, record, setIsView, getModel } = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const {
 		dataTruongHoc,
@@ -160,6 +165,7 @@ const ModalQuyDoiDiem = (props: { visible: boolean; setVisible: any; hocPhan?: H
 			sinhVienSsoId: recSinhVien?.ssoId,
 			maSinhVien: recSinhVien?.ma,
 			hoTen: recSinhVien?.ten,
+			maKhoaNganh: maKhoaNganh,
 		};
 
 		postSinhVienQuyDoiPhieuModel(recDot?._id ?? '', data)
