@@ -10,7 +10,7 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string }) => {
 	const { getAllModel: getKetQuaHocKy, danhSach, loading } = useModel('daotao.ketquahocky');
 
 	const getData = () =>
-		getKetQuaHocKy(false, { maHocKy: 1 }, undefined, undefined, `me/many/khoa-nganh/${maKhoaNganh}`);
+		maKhoaNganh && getKetQuaHocKy(false, { maHocKy: 1 }, undefined, undefined, `me/many/khoa-nganh/${maKhoaNganh}`);
 
 	useEffect(() => {
 		getData();

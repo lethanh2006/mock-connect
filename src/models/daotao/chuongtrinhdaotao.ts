@@ -23,7 +23,7 @@ export default () => {
 		}
 	};
 
-	const sinhVienGetTienTrinhThucTeModel = async (maKhoaNganh?: string): Promise<LopHocPhan.IRecordSinhVienLopHP[]> => {
+	const sinhVienGetTienTrinhThucTeModel = async (maKhoaNganh: string): Promise<LopHocPhan.IRecordSinhVienLopHP[]> => {
 		setLoading(true);
 		try {
 			const response = await getTienTrinhThucTe(maKhoaNganh);

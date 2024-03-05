@@ -18,7 +18,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const [loaiHocPhan, setLoaiHocPhan] = useState<string>('all');
 	const [hocPhan, setHocPhan] = useState<HocPhan.IRecord>();
 
-	const getData = () => sinhVienGetAllDiemLopHocPhanModel({ maKhoaNganh });
+	const getData = () => maKhoaNganh && sinhVienGetAllDiemLopHocPhanModel({ maKhoaNganh });
 
 	useEffect(() => {
 		getData();

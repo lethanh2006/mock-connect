@@ -1,17 +1,21 @@
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { Card, Tabs } from 'antd';
-import { useState } from 'react';
+import { Card, Space, Tabs } from 'antd';
+import { useModel } from 'umi';
 import KetQuaToanKhoaSinhVien from './KetQuaToanKhoa';
 import DiemThanhPhanSV from './components/DiemThanhPhanSV';
 import MayTinhThongMinh from './components/MayTinhThongMinh';
 
 const KetQuaHocTap = () => {
-	const [maKhoaNganh, setMaKhoaNganh] = useState<string>();
+	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 
 	return (
 		<Card
-			title='Kết quả học tập'
-			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
+			title={
+				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
+					<span>Kết quả học tập</span>
+					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+				</Space>
+			}
 		>
 			<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} />
 

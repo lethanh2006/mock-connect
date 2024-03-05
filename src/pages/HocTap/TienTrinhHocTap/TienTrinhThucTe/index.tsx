@@ -8,15 +8,16 @@ import CardHocPhan from '../components/CardHocPhan';
 
 const TienTrinhThucTe = () => {
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
+	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [danhSachHocKy, setDanhSachHocKy] = useState<LopHocPhan.IRecordSinhVienLopHP[][]>();
-	const [maKhoaNganh, setMaKhoaNganh] = useState<string>();
 
 	const fetch = async () => {
-		await sinhVienGetTienTrinhThucTeModel(maKhoaNganh).then((data) => {
-			const gHocKy = Object.entries(_.groupBy(data, (item) => item.kyHoc?.ma));
-			const dataHocKy = _.sortBy(gHocKy, ([ma, ds]) => ma);
-			setDanhSachHocKy(dataHocKy.map(([ma, ds]) => ds));
-		});
+		if (maKhoaNganh)
+			sinhVienGetTienTrinhThucTeModel(maKhoaNganh).then((data) => {
+				const gHocKy = Object.entries(_.groupBy(data, (item) => item.kyHoc?.ma));
+				const dataHocKy = _.sortBy(gHocKy, ([ma, ds]) => ma);
+				setDanhSachHocKy(dataHocKy.map(([ma, ds]) => ds));
+			});
 	};
 
 	useEffect(() => {
