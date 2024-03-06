@@ -57,7 +57,6 @@ const KhaiBaoQuyTrinhPage = (props: {
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
-	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 
 	const getDataQuyTrinh = () => {
@@ -72,7 +71,6 @@ const KhaiBaoQuyTrinhPage = (props: {
 	};
 
 	useEffect(() => {
-		getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
 		getDataQuyTrinh();
 		getDot();
 	}, []);

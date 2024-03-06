@@ -1,6 +1,5 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
-import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
 import type { TrangThaiTiepNhan } from '@/services/QuyTrinh/KhaiBao/constants';
 import { MapColorTrangThaiTiepNhan } from '@/services/QuyTrinh/KhaiBao/constants';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
@@ -8,18 +7,11 @@ import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Tag, Tooltip } from 'antd';
 import moment from 'moment';
-import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 
 const TableDonHoiDong = () => {
 	const { page, limit, condition, getDonHoiDongModel, setRecord } = useModel('quytrinh.donhoidong');
 	const { record: recordHoiDong } = useModel('quytrinh.hoidong');
-
-	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
-
-	useEffect(() => {
-		getAllDanhMucChung(false, undefined, { maModule: ELoaiDanhMucChung.QUY_TRINH });
-	}, []);
 
 	const onCell = (recordVal: KhaiBaoQuyTrinh.IRecord) => ({
 		onClick: () => {
