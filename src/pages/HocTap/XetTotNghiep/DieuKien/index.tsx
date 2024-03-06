@@ -16,12 +16,12 @@ const CardDieuKienTotNghiep = () => {
 		let dot = null;
 		if (!recDot?._id) dot = await getDotHienHanhModel();
 		const idDot = recDot?._id ?? dot?._id;
-		getTienTrinhTotNghiepModel(idDot);
+		getTienTrinhTotNghiepModel(maKhoaNganh ?? '', idDot);
 	};
 
 	useEffect(() => {
 		getData();
-	}, []);
+	}, [maKhoaNganh]);
 
 	const handleView = (rec: ChuongTrinhDaoTao.IChungChiCTDT) => {
 		setRecordChungChi(rec);
