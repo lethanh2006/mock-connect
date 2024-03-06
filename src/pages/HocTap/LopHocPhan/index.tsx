@@ -51,8 +51,8 @@ const LopHocPhanPage = () => {
 	return (
 		<TableBase
 			columns={columns}
-			dependencies={[page, limit, recHocKy?._id]}
-			params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH }}
+			dependencies={[page, limit, recHocKy?._id, maKhoaNganh]}
+			params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH, maKhoaNganh }}
 			getData={sinhVienGetModel}
 			modelName='lophocphan.lophocphan'
 			title={
