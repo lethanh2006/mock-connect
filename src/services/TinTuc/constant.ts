@@ -7,3 +7,9 @@ export enum EPhamViChuDe {
 export enum WpCategoriesId {
 	TIN_TUC_SU_KIEN = 25,
 }
+
+export enum CommonTopicType {
+	TIN_TUC = 'Tin tức',
+	VAN_BAN_HUONG_DAN = 'Văn bản hướng dẫn',
+	CAU_HOI_THUONG_GAP = 'Câu hỏi thường gặp',
+}
