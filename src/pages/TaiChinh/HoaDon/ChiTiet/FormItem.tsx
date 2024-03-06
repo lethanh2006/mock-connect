@@ -76,8 +76,9 @@ const FormItemHoaDonChiTiet = () => {
 					size='small'
 					otherProps={{
 						summary: (data: HoaDon.IBillItem[]) => {
-							const sumDue = _.sumBy(data, (item) => item.amountDue);
-							const sumDiscount = _.sumBy(data, (item) => item.amountDiscount);
+							const dataFiltered = data.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG);
+							const sumDue = _.sumBy(dataFiltered, (item) => item.amountDue);
+							const sumDiscount = _.sumBy(dataFiltered, (item) => item.amountDiscount);
 							return (
 								<Table.Summary fixed>
 									<Table.Summary.Row>
