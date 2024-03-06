@@ -1,17 +1,29 @@
 import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
+import { getCauTraLoiMe } from '@/services/TienIch/KhaoSat/BieuMau';
+import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
 import { EThoiGianDot, textThucHienKhaoSat, thoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import Form from './components/Form';
 
 const DotKhaoSatPage = () => {
-	const { page, limit, getDotMeModel, handleEdit: handleDot, thoiGian, setThoiGian } = useModel('tienich.dotkhaosat');
-	const { getByIdModel: getBieuMau } = useModel('tienich.bieumau');
+	const {
+		page,
+		limit,
+		getDotMeModel,
+		handleEdit: handleDot,
+		thoiGian,
+		setThoiGian,
+		record: recDotKhaoSat,
+	} = useModel('tienich.dotkhaosat');
+	const { getByIdModel: getBieuMau, setLoading } = useModel('tienich.bieumau');
+	const [cauTraLoi, setCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
 
 	const handleEdit = async (record: DotKhaoSat.IRecord) => {
 		await getBieuMau(record?.idKhaoSat).then((bm) => handleDot(record));
@@ -19,6 +31,18 @@ const DotKhaoSatPage = () => {
 		//   await initBieuMauTracNghiemModel(record._id, record?.idBieuMau ?? '');
 		// }
 	};
+
+	useEffect(() => {
+		if (recDotKhaoSat?._id) {
+			setLoading(true);
+			getCauTraLoiMe(recDotKhaoSat?.idKhaoSat ?? '', recDotKhaoSat?._id ?? '')
+				.then((res) => {
+					setCauTraLoi(res.data?.data[0]?.danhSachTraLoi);
+					setLoading(false);
+				})
+				.catch((err) => console.log(err));
+		}
+	}, [recDotKhaoSat?._id]);
 
 	const renderTrangThaiDot = (recordVal: DotKhaoSat.IRecord) => {
 		if (!recordVal?.kichHoat) {
@@ -91,6 +115,7 @@ const DotKhaoSatPage = () => {
 			modelName='tienich.dotkhaosat'
 			title='Đợt khảo sát'
 			Form={Form}
+			formProps={{ cauTraLoi }}
 			widthDrawer={800}
 			buttons={{ create: false }}
 			otherButtons={[

@@ -1,3 +1,4 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { handleSingleFile } from '@/services/uploadFile';
@@ -12,7 +13,6 @@ import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
-import ButtonExtend from '@/components/Table/ButtonExtend';
 
 const FormTraLoiKhaoSat = (props: {
 	/** Hàm xử lý bên ngoài truyền vào nếu ko sử dụng model `bieumau` */
@@ -45,7 +45,7 @@ const FormTraLoiKhaoSat = (props: {
 	}, [visibleForm]);
 
 	useEffect(() => {
-		if (cauTraLoi) {
+		if (cauTraLoi?.length) {
 			const values: any = {};
 			record?.danhSachKhoi?.map((khoi) => {
 				khoi.danhSachCauHoi?.map((question) => {
@@ -69,7 +69,7 @@ const FormTraLoiKhaoSat = (props: {
 			form.resetFields();
 			form.setFieldsValue(values);
 		}
-	}, [record?._id, JSON.stringify(cauTraLoi)]);
+	}, [record?._id, JSON.stringify(cauTraLoi), visibleForm]);
 
 	const renderQuestion = (question: BieuMau.CauHoi, index: number) => {
 		let questionEleMent = <div />;
