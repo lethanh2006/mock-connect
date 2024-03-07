@@ -1,6 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { ArrowRightOutlined, EyeOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, CheckSquareOutlined, EyeOutlined } from '@ant-design/icons';
 import { Card, Col, Descriptions, Empty, Progress, Row } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
@@ -13,6 +13,11 @@ const CardBuoiHocTiepTheo = () => {
 	const { getTheoLopHocPhan, setRecord, setVisibleForm, danhSach, loading } = useModel('daotao.thoikhoabieu');
 	const [buoiHocHienTai, setBuoiHocHienTai] = useState<ThoiKhoaBieu.IRecord>();
 	const [buoiHocTiepTheo, setBuoiHocTiepTheo] = useState<ThoiKhoaBieu.IRecord>();
+	const buoiHocTruoc = buoiHocTiepTheo?._id
+		? _.indexOf(danhSach, buoiHocTiepTheo)
+			? danhSach[_.indexOf(danhSach, buoiHocTiepTheo) - 1]
+			: undefined
+		: danhSach.at(-1);
 
 	const getData = () => {
 		if (recLopHocPhan?.ten)
@@ -34,24 +39,23 @@ const CardBuoiHocTiepTheo = () => {
 		getData();
 	}, [recLopHocPhan?._id]);
 
-	const renderBuoihoc = (buoiHoc: ThoiKhoaBieu.IRecord) => {
+	const renderBuoihoc = (buoiHoc: ThoiKhoaBieu.IRecord, isPass?: boolean) => {
 		const index = _.indexOf(danhSach, buoiHoc) + 1;
 
 		return (
 			<>
-				<Progress percent={Math.round((index / danhSach.length) * 100)} style={{ marginBottom: 12 }} size='small' />
+				{!isPass ? (
+					<Progress percent={Math.round((index / danhSach.length) * 100)} style={{ marginBottom: 12 }} size='small' />
+				) : null}
 
 				<Descriptions column={1}>
-					<Descriptions.Item label='Ngày học' span={2}>
-						Tuần {moment(buoiHoc?.ngay).week()}, {moment(buoiHoc?.ngay).format('dddd')}, ngày{' '}
-						{moment(buoiHoc?.ngay).format('DD/MM/YYYY')}
-					</Descriptions.Item>
-					<Descriptions.Item label='Thời gian'>
+					<Descriptions.Item label='Ngày giờ'>
 						{buoiHoc.thoiGianBatDau && buoiHoc.thoiGianKetThuc
 							? `${moment(buoiHoc.thoiGianBatDau).format('HH:mm')} - ${moment(buoiHoc.thoiGianKetThuc).format('HH:mm')}`
 							: `Tiết ${buoiHoc.tietBatDau} - ${buoiHoc.tietKetThuc}`}
+						, {moment(buoiHoc?.ngay).format('dddd')}, ngày {moment(buoiHoc?.ngay).format('DD/MM/YYYY')}
 					</Descriptions.Item>
-					<Descriptions.Item label='Phòng học'>{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
+					<Descriptions.Item label='Phòng'>{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
 				</Descriptions>
 
 				<div style={{ textAlign: 'right' }}>
@@ -61,7 +65,15 @@ const CardBuoiHocTiepTheo = () => {
 							setVisibleForm(true);
 						}}
 					>
-						<EyeOutlined /> Xem chi tiết
+						{isPass ? (
+							<>
+								<CheckSquareOutlined /> Đánh giá
+							</>
+						) : (
+							<>
+								<EyeOutlined /> Chi tiết
+							</>
+						)}
 					</a>
 				</div>
 			</>
@@ -72,14 +84,20 @@ const CardBuoiHocTiepTheo = () => {
 		<>
 			<Row gutter={[16, 16]}>
 				{buoiHocHienTai?._id ? (
-					<Col span={24}>
-						<Card title='Buổi học hiện tại'>{renderBuoihoc(buoiHocHienTai)}</Card>
+					<Col span={24} sm={12} md={24}>
+						<Card title='Buổi học đang diễn ra'>{renderBuoihoc(buoiHocHienTai)}</Card>
+					</Col>
+				) : buoiHocTruoc ? (
+					<Col span={24} sm={12} md={24}>
+						<Card title='Buổi học đã qua' loading={loading}>
+							{renderBuoihoc(buoiHocTruoc, true)}
+						</Card>
 					</Col>
 				) : null}
 
-				<Col span={24}>
+				<Col span={24} sm={12} md={24}>
 					<Card
-						title='Buổi học tiếp theo'
+						title='Buổi học sắp tới'
 						extra={[
 							<ButtonExtend
 								key='all'
