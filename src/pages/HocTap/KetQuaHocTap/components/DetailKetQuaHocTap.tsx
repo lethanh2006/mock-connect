@@ -1,6 +1,6 @@
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Descriptions, Spin, Tag } from 'antd';
+import { Descriptions, Empty, Spin, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -20,22 +20,26 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 
 	return (
 		<Spin spinning={loading}>
-			<Descriptions>
-				{danhSach.map((item) => (
-					<Descriptions.Item key={item._id} label={item.ten}>
-						{sinhVienDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}
+			{sinhVienDiem ? (
+				<Descriptions bordered>
+					{danhSach.map((item) => (
+						<Descriptions.Item key={item._id} label={item.ten}>
+							{sinhVienDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}
+						</Descriptions.Item>
+					))}
+					<Descriptions.Item label='Điểm thi lần 1'>{sinhVienDiem?.diemThi1}</Descriptions.Item>
+					<Descriptions.Item label='Điểm thi lần 2'>{sinhVienDiem?.diemThi2}</Descriptions.Item>
+					<Descriptions.Item label='Tổng kết (hệ 10)'>{sinhVienDiem?.diemTongKet}</Descriptions.Item>
+					<Descriptions.Item label='Tổng kết (hệ 4)'>{sinhVienDiem?.diemThang4}</Descriptions.Item>
+					<Descriptions.Item label='Tổng kết (dạng chữ)'>
+						{sinhVienDiem?.diemChu ? (
+							<Tag color={ColorDiemChu[sinhVienDiem?.diemChu]}>{sinhVienDiem?.diemChu}</Tag>
+						) : null}
 					</Descriptions.Item>
-				))}
-				<Descriptions.Item label='Điểm thi lần 1'>{sinhVienDiem?.diemThi1}</Descriptions.Item>
-				<Descriptions.Item label='Điểm thi lần 2'>{sinhVienDiem?.diemThi2}</Descriptions.Item>
-				<Descriptions.Item label='Tổng kết (hệ 10)'>{sinhVienDiem?.diemTongKet}</Descriptions.Item>
-				<Descriptions.Item label='Tổng kết (hệ 4)'>{sinhVienDiem?.diemThang4}</Descriptions.Item>
-				<Descriptions.Item label='Tổng kết (dạng chữ)'>
-					{sinhVienDiem?.diemChu ? (
-						<Tag color={ColorDiemChu[sinhVienDiem?.diemChu]}>{sinhVienDiem?.diemChu}</Tag>
-					) : null}
-				</Descriptions.Item>
-			</Descriptions>
+				</Descriptions>
+			) : (
+				<Empty />
+			)}
 		</Spin>
 	);
 };
