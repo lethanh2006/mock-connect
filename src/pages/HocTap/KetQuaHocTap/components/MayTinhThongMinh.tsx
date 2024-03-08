@@ -77,10 +77,18 @@ const MayTinhThongMinh = () => {
 
 	const columns: IColumn<DiemHocPhan.IDiemSinhVien>[] = [
 		{
+			dataIndex: 'ma',
+			title: 'Mã HP',
+			filterType: 'string',
+			sortable: true,
+			width: 100,
+			onCell,
+		},
+		{
 			dataIndex: 'ten',
 			title: 'Tên học phần',
 			filterType: 'string',
-			width: 180,
+			width: 200,
 			onCell,
 		},
 		{
@@ -94,7 +102,7 @@ const MayTinhThongMinh = () => {
 		},
 		{
 			dataIndex: 'soTinChi',
-			title: 'Số tín chỉ',
+			title: 'Số TC',
 			width: 60,
 			align: 'center',
 			onCell,
@@ -165,7 +173,7 @@ const MayTinhThongMinh = () => {
 				</Col>
 				<Col span={24}>
 					Số tín chỉ tự chọn đã có điểm:{' '}
-					<b style={{ color: tuChonCoDiem === tongTuChon ? '#2ec94f' : '#f36f52' }}>
+					<b className={tuChonCoDiem === tongTuChon ? 'text-success' : 'text-error'}>
 						{tuChonCoDiem} / {tongTuChon}
 					</b>{' '}
 					(tổng số tín chỉ tự chọn phải học).
@@ -204,9 +212,9 @@ const MayTinhThongMinh = () => {
 			>
 				<Card title='Giả lập điểm'>
 					<Descriptions column={1}>
-						<Descriptions.Item label='Tên học phần'>{record?.ten}</Descriptions.Item>
 						<Descriptions.Item label='Mã học phần'>{record?.ma}</Descriptions.Item>
-						<Descriptions.Item label='Số tín chỉ'>{record?.soTinChi}</Descriptions.Item>
+						<Descriptions.Item label='Tên học phần'>{record?.ten}</Descriptions.Item>
+						<Descriptions.Item label='Số tín chỉ'>{record?.soTinChi} tín chỉ</Descriptions.Item>
 						<Descriptions.Item label='Điểm tổng kết (hệ 10)'>{record?.diemTongKet}</Descriptions.Item>
 						<Descriptions.Item label='Điểm tổng kết (hệ 4)'>{record?.diemThang4}</Descriptions.Item>
 						<Descriptions.Item label='Điểm tổng kết (dạng chữ)'>
