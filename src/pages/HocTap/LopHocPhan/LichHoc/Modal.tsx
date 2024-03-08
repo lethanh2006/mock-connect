@@ -1,6 +1,6 @@
 import { Descriptions, Empty, Modal, Tabs } from 'antd';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import DanhGiaTietHocPage from '../DanhGiaTietHoc';
 import ThongTinBuoiHoc from './ThongTinBuoiHoc';
@@ -9,6 +9,11 @@ const ModalThoiKhoaBieu = () => {
 	const { record: recThoiKhoaBieu, visibleForm, setVisibleForm } = useModel('daotao.thoikhoabieu');
 	const [activeKey, setActiveKey] = useState<string>('noidung');
 	const chuaKetThuc = moment().isBefore(recThoiKhoaBieu?.thoiGianKetThuc);
+
+	useEffect(() => {
+		if (!chuaKetThuc) setActiveKey('danhgia');
+		else setActiveKey('noidung');
+	}, [chuaKetThuc]);
 
 	return (
 		<Modal
