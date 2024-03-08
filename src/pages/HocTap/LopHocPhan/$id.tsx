@@ -19,15 +19,19 @@ const DetailLopTinChi = ({
 }) => {
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
 	const { record, sinhVienGetByIdModel, setRecord } = useModel('lophocphan.lophocphan');
+	const { getAllModel: getAllNhanSu } = useModel('lophocphan.nhansulophocphan');
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia'];
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 	const hash = window.location.hash?.replace('#', '') ?? paths[0];
 
-	const getData = () =>
-		id &&
-		sinhVienGetByIdModel(id).then((rec) => {
-			if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
-		});
+	const getData = () => {
+		if (id) {
+			sinhVienGetByIdModel(id).then((rec) => {
+				if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
+			});
+			getAllNhanSu(false, undefined, { lopHocPhanId: id });
+		}
+	};
 
 	useEffect(() => {
 		getData();

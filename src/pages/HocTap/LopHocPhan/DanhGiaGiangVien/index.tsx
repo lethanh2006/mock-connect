@@ -56,6 +56,10 @@ const DanhGiaGiangVienPage = () => {
 		if (recDot?.idKhaoSat && recBieuMau?._id && recBieuMau._id !== recDot.idKhaoSat) getBieuMau(recDot.idKhaoSat);
 	}, [recDot?.idKhaoSat, recBieuMau?._id]);
 
+	useEffect(() => {
+		setGiangVienSsoId(danhSachNhanSu?.[0]?.nhanSuSsoId);
+	}, [danhSachNhanSu.length]);
+
 	const hanldeDanhGiaGiangVien = async (val: BieuMau.TraLoiRecord[]) => {
 		await danhGiaGiangVienModel({
 			idKhaoSat: recDot?.idKhaoSat ?? '',
@@ -101,12 +105,12 @@ const DanhGiaGiangVienPage = () => {
 						<br />
 						<Select
 							value={giangVienSsoId}
-							style={{ width: 300 }}
+							style={{ width: 250 }}
 							placeholder='Chọn giảng viên'
 							options={danhSachNhanSu.map((item) => ({
 								key: item.nhanSuSsoId,
 								value: item.nhanSuSsoId,
-								label: `${item.tenNhanSu} - ${item.maNhanSu}`,
+								label: `${item.tenNhanSu}`,
 							}))}
 							onChange={(val) => setGiangVienSsoId(val)}
 						/>

@@ -18,14 +18,13 @@ const ThongTinChung = () => {
 		getAllNhanSuModel: getNhanSuLopTH,
 		loading: loadingThucHanh,
 	} = useModel('daotao.lopthuchanh');
-	const { danhSach: danhSachNhanSu, getAllModel: getAllNhanSu } = useModel('lophocphan.nhansulophocphan');
+	const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
 	const [activeKey, setActiveKey] = useState<string>('-1');
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 
 	useEffect(() => {
 		setActiveKey('-1');
 		if (record?._id) {
-			getAllNhanSu(false, undefined, { lopHocPhanId: record?._id });
 			getLopThucHanh({ tenCha: record?.ten });
 		}
 	}, [record?._id]);
