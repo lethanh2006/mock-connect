@@ -33,6 +33,7 @@ const CardThongBao = () => {
 		>
 			<List<ThongBao.IRecord>
 				className={styles.list}
+				style={{ maxHeight: 400, overflow: 'scroll' }}
 				dataSource={danhSach}
 				renderItem={(item) => {
 					const leftIcon = item.imageUrl ? <Avatar className={styles.avatar} src={item.imageUrl} /> : null;
