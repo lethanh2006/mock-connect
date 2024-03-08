@@ -38,7 +38,7 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 					</Descriptions.Item>
 				</Descriptions>
 			) : (
-				<Empty />
+				<Empty description='Chưa có kết quả học tập' style={{ margin: '18px 0' }} />
 			)}
 		</Spin>
 	);
