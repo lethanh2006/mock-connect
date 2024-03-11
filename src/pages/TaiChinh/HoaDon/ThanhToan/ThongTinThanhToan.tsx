@@ -32,12 +32,11 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		huyThanhToanModel,
 	} = useModel('taichinh.giaodich');
 	const [activeTab, setActiveTab] = useState('1');
-	const ngoaiThoiGianThanhToan = recHoaDon?.dotThu
-		? !recHoaDon?.dotThu?.thoiGianBatDau ||
-		  !recHoaDon.dotThu.thoiGianKetThuc ||
-		  moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
-		  moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc)
-		: true;
+	// const ngoaiThoiGianThanhToan =
+	// 	!recHoaDon?.dotThu?.thoiGianBatDau ||
+	// 	!recHoaDon.dotThu.thoiGianKetThuc ||
+	// 	moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
+	// 	moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
 
 	/** Get giao dịch pending */
 	const getGiaoDich = () =>
@@ -118,14 +117,15 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							) : (
 								<Space wrap>
 									<ButtonExtend
-										disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
+										disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU}
+										//  || ngoaiThoiGianThanhToan}
 										onClick={() => setVisibleThanhToan(true)}
 										icon={<AppstoreAddOutlined />}
 										type='primary'
 										className='btn-success'
 										loading={loading}
 										notHideText
-										tooltip={ngoaiThoiGianThanhToan ? 'Ngoài thời gian thanh toán' : undefined}
+										// tooltip={ngoaiThoiGianThanhToan ? 'Ngoài thời gian thanh toán' : undefined}
 									>
 										Thông tin thanh toán
 									</ButtonExtend>
