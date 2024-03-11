@@ -6,17 +6,18 @@ import { useModel } from 'umi';
 
 const DesThongTinHoaDon = () => {
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
-	const ngoaiThoiGianThanhToan =
-		!recHoaDon?.dotThu?.thoiGianBatDau ||
-		!recHoaDon.dotThu.thoiGianKetThuc ||
-		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
-		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
+	// const ngoaiThoiGianThanhToan =
+	// 	!recHoaDon?.dotThu?.thoiGianBatDau ||
+	// 	!recHoaDon.dotThu.thoiGianKetThuc ||
+	// 	moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
+	// 	moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
 
 	return (
 		<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
 			<Descriptions.Item label='Đợt thu'>{recHoaDon?.dotThu?.tenDot ?? <i>Đang cập nhật</i>}</Descriptions.Item>
 			<Descriptions.Item label='Thời gian thu'>
-				<span className={ngoaiThoiGianThanhToan ? 'text-error' : undefined}>
+				{/* <span className={ngoaiThoiGianThanhToan ? 'text-error' : undefined}> */}
+				<span>
 					{recHoaDon?.dotThu?.thoiGianBatDau ? (
 						`${moment(recHoaDon.dotThu.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} - ${moment(
 							recHoaDon.dotThu.thoiGianKetThuc,
