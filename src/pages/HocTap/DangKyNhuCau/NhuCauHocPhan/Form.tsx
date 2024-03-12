@@ -1,78 +1,72 @@
-import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
-import { type DangKyNhuCau } from '@/services/DaoTao/DangKyNhuCau/typing';
-import { ELoaiNhuCauHocPhan } from '@/services/DaoTao/constant';
+import SelectHocPhanKhoaNganh from '@/pages/DaoTao/ChuongTrinhDaoTao/SelectHocPhanKhoaNganh';
+import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
+import type { DangKyNhuCau } from '@/services/DaoTao/DangKyNhuCau/typing';
+import { ETrangThaiHocPhanDangKyNhuCau } from '@/services/DaoTao/constant';
 import rules from '@/utils/rules';
-import { Button, Card, Col, Form, Row, Select } from 'antd';
+import { resetFieldsForm } from '@/utils/utils';
+import { Button, Card, Col, Form, Row } from 'antd';
+import { useWatch } from 'antd/lib/form/Form';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
-const FormKhoaNganhDotDangKy = (props: any) => {
-  const [form] = Form.useForm();
-  const { record, setVisibleForm, edit, postModel, putModel, formSubmiting } =
-    useModel('daotao.nhucauhocphan');
-  const { record: recNhuCau } = useModel('daotao.dangkynhucau');
-  const title = props?.title ?? '';
+const FormDangKyNhuCau = (props: any) => {
+	const { getData, title } = props;
+	const [form] = Form.useForm();
+	const { record, setVisibleForm, edit, sinhVienDangKyNhuCauModel, putModel, formSubmiting, visibleForm } = useModel(
+		'daotao.dangkynhucau.hocphandangkynhucau',
+	);
+	const { record: recPhieu } = useModel('daotao.dangkynhucau.dangkynhucau');
+	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangkynhucau');
+	const maKhoaNganh: string = useWatch('maKhoaNganh', form);
 
-  const getData = () => {
-    if (props.getData) props.getData();
-  };
+	useEffect(() => {
+		if (!visibleForm) resetFieldsForm(form);
+		else if (record?._id) form.setFieldsValue(record);
+	}, [record?._id, visibleForm]);
 
-  useEffect(() => {
-    if (record?._id) form.setFieldsValue(record);
-    else form.resetFields();
-  }, [record?._id]);
+	const onFinish = async (values: DangKyNhuCau.IHocPhanDangKyNhuCau) => {
+		if (edit) {
+			putModel(record?._id ?? '', values, getData)
+				.then()
+				.catch((er) => console.log(er));
+		} else
+			sinhVienDangKyNhuCauModel(
+				recDot?._id ?? '',
+				{ ...values, phieuDangKyHocNhuCauId: recPhieu?._id ?? '', trangThai: ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET },
+				getData,
+			)
+				.then()
+				.catch((er) => console.log(er));
+	};
 
-  const onFinish = async (values: DangKyNhuCau.INhuCauHocPhan) => {
-    if (edit) {
-      putModel(record?._id ?? '', values, getData)
-        .then()
-        .catch((er) => console.log(er));
-    } else {
-      const valuesFinal = { ...values, banDkNhuCauId: recNhuCau?._id ?? '' };
-      postModel(valuesFinal, getData)
-        .then(() => form.resetFields())
-        .catch((er) => console.log(er));
-    }
-  };
+	return (
+		<Card title={`${edit ? 'Chỉnh sửa' : 'Thêm mới'} ${title?.toLowerCase()}`}>
+			<Form onFinish={onFinish} form={form} layout='vertical'>
+				<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
+					<Col xs={24}>
+						<Form.Item label='Khóa ngành' name='maKhoaNganh' rules={[...rules.required]}>
+							<SelectSongNganh />
+						</Form.Item>
+					</Col>
 
-  return (
-    <Card title={`${edit ? 'Chỉnh sửa' : 'Thêm mới'} ${title}`}>
-      <Form onFinish={onFinish} form={form} layout="vertical">
-        <Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
-          <Col xs={24}>
-            <Form.Item
-              name="loaiNhuCauHocPhan"
-              label="Loại nhu cầu học phần"
-              rules={[...rules.required]}
-            >
-              <Select
-                options={Object.values(ELoaiNhuCauHocPhan).map((item) => ({
-                  key: item,
-                  value: item,
-                  label: item,
-                }))}
-                placeholder="Chọn loại nhu cầu học phần"
-              />
-            </Form.Item>
-          </Col>
+					<Col xs={24}>
+						<Form.Item name='maHocPhan' label='Học phần' rules={[...rules.required]}>
+							<SelectHocPhanKhoaNganh disabled={!maKhoaNganh} maKhoaNganh={maKhoaNganh} selectMa />
+						</Form.Item>
+					</Col>
+				</Row>
 
-          {/* TODO: Hệ thống tự động gợi ý các học phần thuộc loại học phần tương ứng */}
-          <Col xs={24}>
-            <Form.Item name="hocPhanFk" label="Học phần" rules={[...rules.required]}>
-              <SelectHocPhan selectMa />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <div className="form-footer">
-          <Button loading={formSubmiting} htmlType="submit" type="primary">
-            {!edit ? 'Thêm mới ' : 'Lưu lại'}
-          </Button>
-          <Button onClick={() => setVisibleForm(false)}>Đóng</Button>
-        </div>
-      </Form>
-    </Card>
-  );
+				<div className='form-footer'>
+					{!edit ? (
+						<Button loading={formSubmiting} htmlType='submit' type='primary'>
+							Thêm mới
+						</Button>
+					) : null}
+					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+				</div>
+			</Form>
+		</Card>
+	);
 };
 
-export default FormKhoaNganhDotDangKy;
+export default FormDangKyNhuCau;

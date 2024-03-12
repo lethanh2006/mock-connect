@@ -1,84 +1,94 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import { type DangKyNhuCau } from '@/services/DaoTao/DangKyNhuCau/typing';
-import { ELoaiNhuCauHocPhan } from '@/services/DaoTao/constant';
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Tooltip } from 'antd';
+import type { DangKyNhuCau } from '@/services/DaoTao/DangKyNhuCau/typing';
+import {
+	colorTrangThaiHocPhanDangKyNhuCau,
+	mapTrangThaiHocPhanDangKyNhuCau,
+	type ETrangThaiHocPhanDangKyNhuCau,
+} from '@/services/DaoTao/constant';
+
+import { Alert, Tag } from 'antd';
+import moment from 'moment';
 import { useModel } from 'umi';
-import FormKhoaNganhDotDangKy from './Form';
-import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
+import FormDangKyNhuCau from './Form';
 
-const NhuCauHocPhanPage = (props: { getDataPhieu?: any }) => {
-  const { getModel, page, limit, deleteModel } = useModel('daotao.nhucauhocphan');
-  const { record: recNhuCau } = useModel('daotao.dangkynhucau');
+const NhuCauHocPhanPage = () => {
+	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangkynhucau');
+	const { record: recPhieu } = useModel('daotao.dangkynhucau.dangkynhucau');
+	const { getModel, page, limit } = useModel('daotao.dangkynhucau.hocphandangkynhucau');
 
-  const getData = () => {
-    getModel({ banDkNhuCauId: recNhuCau?._id });
-    if (props.getDataPhieu) props.getDataPhieu();
-  };
+	const getData = () => {
+		if (recPhieu?._id) getModel({ phieuDangKyHocNhuCauId: recPhieu?._id });
+	};
 
-  const columns: IColumn<DangKyNhuCau.INhuCauHocPhan>[] = [
-    {
-      title: 'Mã học phần',
-      width: 100,
-      render: (val, rec) => rec.hocPhan?.ma,
-    },
-    {
-      title: 'Tên học phần',
-      width: 180,
-      filterType: 'customselect',
-      filterCustomSelect: <SelectHocPhan multiple />,
-      render: (val, rec) => rec.hocPhan?.ten,
-    },
-    {
-      title: 'Số tín chỉ',
-      width: 80,
-      render: (val, rec) => rec.hocPhan?.soTinChi,
-      align: 'center',
-    },
-    {
-      title: 'Loại nhu cầu',
-      dataIndex: 'loaiNhuCauHocPhan',
-      width: 150,
-      filterType: 'select',
-      filterData: Object.values(ELoaiNhuCauHocPhan),
-      sortable: true,
-    },
-    {
-      title: 'Thao tác',
-      align: 'center',
-      width: 80,
-      fixed: 'right',
-      render: (record: DangKyNhuCau.INhuCauHocPhan) => (
-        <>
-          <Tooltip title="Loại bỏ">
-            <Popconfirm
-              onConfirm={() => deleteModel(record._id, getData)}
-              title="Bạn có chắc chắn muốn bỏ học phần này khỏi phiếu đăng ký?"
-              placement="topLeft"
-            >
-              <Button danger type="link" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
-        </>
-      ),
-    },
-  ];
+	const ngoaiThoiGian =
+		!recDot?.thoiGianBatDau ||
+		!recDot?.thoiGianKetThuc ||
+		moment().isBefore(recDot?.thoiGianBatDau, 'd') ||
+		moment().isAfter(recDot?.thoiGianKetThuc, 'd');
 
-  return (
-    <>
-      <TableBase
-        columns={columns}
-        getData={getData}
-        dependencies={[page, limit]}
-        modelName="daotao.nhucauhocphan"
-        title="Đăng ký nhu cầu sinh viên"
-        Form={FormKhoaNganhDotDangKy}
-        formProps={{ getData }}
-        hideCard
-      />
-    </>
-  );
+	const columns: IColumn<DangKyNhuCau.IHocPhanDangKyNhuCau>[] = [
+		{
+			title: 'Khóa ngành',
+			width: 100,
+			dataIndex: 'maKhoaNganh',
+			render: (val, rec) => rec.khoaNganh?.ten,
+		},
+		{
+			title: 'Học phần',
+			width: 150,
+			dataIndex: 'maHocPhan',
+			render: (val, rec) => rec.hocPhan?.ten,
+		},
+		{
+			title: 'Số tín chỉ',
+			width: 60,
+			align: 'center',
+			render: (val, rec) => rec.hocPhan?.soTinChi,
+		},
+		{
+			title: 'Trạng thái',
+			dataIndex: 'trangThai',
+			align: 'center',
+			width: 90,
+			render: (val, rec) => (
+				<Tag color={colorTrangThaiHocPhanDangKyNhuCau[val as ETrangThaiHocPhanDangKyNhuCau]}>
+					{mapTrangThaiHocPhanDangKyNhuCau[val as ETrangThaiHocPhanDangKyNhuCau]}
+				</Tag>
+			),
+		},
+	];
+
+	return (
+		<>
+			<div style={{ marginBottom: 12 }}>
+				<Alert
+					type={ngoaiThoiGian ? 'warning' : 'info'}
+					description={
+						ngoaiThoiGian ? (
+							'Ngoài thời gian đăng ký nhu cầu !'
+						) : (
+							<>
+								Thời gian đăng ký nhu cầu từ <b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+								<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+							</>
+						)
+					}
+					showIcon
+				/>
+			</div>
+			<TableBase
+				columns={columns}
+				getData={getData}
+				dependencies={[page, limit, recPhieu?._id]}
+				modelName='daotao.dangkynhucau.hocphandangkynhucau'
+				title='Nhu Cầu học phần'
+				hideCard
+				Form={FormDangKyNhuCau}
+				buttons={{ create: ngoaiThoiGian ? false : true }}
+			/>
+		</>
+	);
 };
 
 export default NhuCauHocPhanPage;
