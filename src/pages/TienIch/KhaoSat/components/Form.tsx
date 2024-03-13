@@ -155,37 +155,42 @@ const FormTraLoiKhaoSat = (props: {
 		const danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]> = [];
 		const dsCauHoi = record?.danhSachKhoi?.map((khoi) => khoi.danhSachCauHoi).flat();
 
-		dsCauHoi?.map(async (question) => {
-			const traLoi = values[question._id];
-			if (traLoi) {
-				let tempTraLoi: Partial<BieuMau.TraLoiRecord> = { idCauHoi: question._id };
+		if (dsCauHoi) {
+			for (const question of dsCauHoi) {
+				const traLoi = values[question._id];
+				if (traLoi) {
+					let tempTraLoi: Partial<BieuMau.TraLoiRecord> = { idCauHoi: question._id };
 
-				if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
-					const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
-					tempTraLoi.listUrlFile = listUrlFile as string[];
-				} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
-					tempTraLoi.listLuaChon = question?.luaChon
-						?.map((item: any) => {
-							if ([traLoi]?.includes(item.noiDung)) {
-								return item._id;
-							}
-						})
-						.filter(Boolean);
-				else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
-					tempTraLoi.listLuaChon = question?.luaChon
-						?.map((item: any) => {
-							if (traLoi?.listLuaChon?.includes(item.noiDung)) {
-								return item._id;
-							}
-						})
-						.filter(Boolean);
-				else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
-					tempTraLoi.listLuaChonBang = convertList(values[question._id]);
-				else tempTraLoi = { ...tempTraLoi, ...values[question._id] };
+					if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
+						const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
+						tempTraLoi.listUrlFile = listUrlFile as string[];
+					} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
+						tempTraLoi.listLuaChon = question?.luaChon
+							?.map((item: any) => {
+								if ([traLoi]?.includes(item.noiDung)) {
+									return item._id;
+								}
+							})
+							.filter(Boolean);
+					else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
+						tempTraLoi.listLuaChon = question?.luaChon
+							?.map((item: any) => {
+								if (traLoi?.listLuaChon?.includes(item.noiDung)) {
+									return item._id;
+								}
+							})
+							.filter(Boolean);
+					else if (
+						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
+						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
+					)
+						tempTraLoi.listLuaChonBang = convertList(values[question._id]);
+					else tempTraLoi = { ...tempTraLoi, ...values[question._id] };
 
-				danhSachTraLoi.push(tempTraLoi as BieuMau.TraLoiRecord);
+					danhSachTraLoi.push(tempTraLoi as BieuMau.TraLoiRecord);
+				}
 			}
-		});
+		}
 
 		if (!!onOk) {
 			onOk(danhSachTraLoi as BieuMau.TraLoiRecord[]);
