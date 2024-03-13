@@ -35,7 +35,7 @@ declare module DangKyNhuCau {
 	export interface IHocPhanDangKyNhuCau {
 		_id: string;
 		phieuDangKyHocNhuCauId: string;
-		phieuDangKyHocNhuCau: IDotDangKySinhVien;
+		phieuDangKyHocNhuCau: IDangKyNhuCau;
 		maKhoaNganh: string;
 		khoaNganh: KhoaNganh.IRecord;
 		maHocPhan: string;
