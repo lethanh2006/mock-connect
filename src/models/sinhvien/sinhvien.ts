@@ -11,8 +11,8 @@ import { useState } from 'react';
 export default () => {
 	const objInit = useInitModel<SinhVien.IRecord>('sinh-vien', undefined, undefined, ipDaoTao);
 	const { setLoading, setRecord, getService, setDanhSach } = objInit;
-
 	const [khoaNganhMe, setKhoaNganhMe] = useState<KhoaNganh.TMyKhoaNganh>();
+	const [maKhoaNganh, setMaKhoaNganh] = useState<string>();
 
 	const getThongTinSinhVienBySsoIdModel = async (ssoId: string): Promise<SinhVien.IRecord | undefined> => {
 		if (!ssoId) return;
@@ -91,6 +91,8 @@ export default () => {
 		getThongTinCuaToiModel,
 		khoaNganhMe,
 		getKhoaNganhMeModel,
+		maKhoaNganh,
+		setMaKhoaNganh,
 		...objInit,
 	};
 };
