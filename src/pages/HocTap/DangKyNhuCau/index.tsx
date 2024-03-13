@@ -5,19 +5,11 @@ import NhuCauHocPhanPage from './NhuCauHocPhan';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 
 const DangKyNhuCauPage = () => {
-	const { getModel: getModelDotDangKyNhuCau, setRecord, record } = useModel('daotao.dangkynhucau.dotdangkynhucau');
+	const { getDotDangKyNhuCauHocKyModel, record } = useModel('daotao.dangkynhucau.dotdangkynhucau');
 	const { record: recHocKy } = useModel('daotao.hocky');
 
 	useEffect(() => {
-		if (recHocKy?._id)
-			getModelDotDangKyNhuCau(
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				`sinh-vien/me/hoc-ky/${recHocKy?._id}`,
-			).then((rec) => setRecord(rec?.[0]));
+		if (recHocKy?._id) getDotDangKyNhuCauHocKyModel(recHocKy?.ma);
 	}, [recHocKy?._id]);
 
 	return (

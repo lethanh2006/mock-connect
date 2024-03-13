@@ -6,5 +6,9 @@ export async function getDotDangKyNhuCauTheoHocKy(maHocKy: string) {
 }
 
 export async function sinhVienDangKyNhuCau(idDot: string, payLoad: any) {
-	return axios.get(`${ipDaoTao}/hoc-phan-dk-nhu-cau/sinh-vien/dang-ky/dot/${idDot}`, payLoad);
+	return axios.post(`${ipDaoTao}/hoc-phan-dk-nhu-cau/sinh-vien/dang-ky/dot/${idDot}`, payLoad);
+}
+
+export async function getDotDangKyNhuCauHocKy(maHocKy: string) {
+	return axios.get(`${ipDaoTao}/dot-dang-ky-nhu-cau/sinh-vien/me/hoc-ky/${maHocKy}`);
 }
