@@ -14,12 +14,9 @@ import FormDangKyNhuCau from './Form';
 
 const NhuCauHocPhanPage = () => {
 	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangkynhucau');
-	const { record: recPhieu } = useModel('daotao.dangkynhucau.dangkynhucau');
 	const { getModel, page, limit } = useModel('daotao.dangkynhucau.hocphandangkynhucau');
 
-	const getData = () => {
-		if (recPhieu?._id) getModel({ phieuDangKyHocNhuCauId: recPhieu?._id });
-	};
+	const getData = () => getModel({});
 
 	const ngoaiThoiGian =
 		!recDot?.thoiGianBatDau ||
@@ -77,10 +74,11 @@ const NhuCauHocPhanPage = () => {
 					showIcon
 				/>
 			</div>
+
 			<TableBase
 				columns={columns}
 				getData={getData}
-				dependencies={[page, limit, recPhieu?._id]}
+				dependencies={[page, limit]}
 				modelName='daotao.dangkynhucau.hocphandangkynhucau'
 				title='Nhu Cầu học phần'
 				hideCard
