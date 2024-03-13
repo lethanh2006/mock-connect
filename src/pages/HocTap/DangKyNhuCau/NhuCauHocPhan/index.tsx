@@ -7,16 +7,26 @@ import {
 	type ETrangThaiHocPhanDangKyNhuCau,
 } from '@/services/DaoTao/constant';
 
-import { Alert, Tag } from 'antd';
+import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
+import { Alert, Empty, Tag } from 'antd';
 import moment from 'moment';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormDangKyNhuCau from './Form';
 
 const NhuCauHocPhanPage = () => {
 	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangkynhucau');
 	const { getModel, page, limit } = useModel('daotao.dangkynhucau.hocphandangkynhucau');
+	const { getAllModel, danhSach } = useModel('daotao.dangkynhucau.dotdangkynhucaukhoanganh');
+	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 
-	const getData = () => getModel({});
+	useEffect(() => {
+		getAllModel(undefined, undefined, { dotDangKyNhuCauId: recDot?._id });
+	}, []);
+
+	const checkKhoaNganh = danhSach.find((item) => maKhoaNganh?.includes(item?.maKhoaNganh));
+
+	const getData = () => getModel({ maKhoaNganh }, undefined, undefined, undefined, undefined, `me/dot/${recDot?._id}`);
 
 	const ngoaiThoiGian =
 		!recDot?.thoiGianBatDau ||
@@ -28,8 +38,7 @@ const NhuCauHocPhanPage = () => {
 		{
 			title: 'Khóa ngành',
 			width: 100,
-			dataIndex: 'maKhoaNganh',
-			render: (val, rec) => rec.khoaNganh?.ten,
+			render: (val, rec) => rec.phieuDangKyHocNhuCau?.khoaNganh?.ten,
 		},
 		{
 			title: 'Học phần',
@@ -74,17 +83,25 @@ const NhuCauHocPhanPage = () => {
 					showIcon
 				/>
 			</div>
+			<div style={{ marginBottom: 12 }}>
+				<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+			</div>
 
-			<TableBase
-				columns={columns}
-				getData={getData}
-				dependencies={[page, limit]}
-				modelName='daotao.dangkynhucau.hocphandangkynhucau'
-				title='Nhu Cầu học phần'
-				hideCard
-				Form={FormDangKyNhuCau}
-				buttons={{ create: ngoaiThoiGian ? false : true }}
-			/>
+			{checkKhoaNganh?._id ? (
+				<TableBase
+					columns={columns}
+					getData={getData}
+					formProps={{ getData }}
+					dependencies={[page, limit, maKhoaNganh]}
+					modelName='daotao.dangkynhucau.hocphandangkynhucau'
+					title='Nhu Cầu học phần'
+					hideCard
+					Form={FormDangKyNhuCau}
+					buttons={{ create: ngoaiThoiGian ? false : true }}
+				/>
+			) : (
+				<Empty description='Khóa ngành không có trong đợt đăng ký!' style={{ marginTop: 32, marginBottom: 32 }} />
+			)}
 		</>
 	);
 };

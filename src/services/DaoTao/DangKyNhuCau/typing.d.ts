@@ -21,6 +21,8 @@ declare module DangKyNhuCau {
 		sinhVienSsoId: string;
 		sinhVien: SinhVien.IRecord;
 		tongSoNhuCau: number;
+		maKhoaNganh: string;
+		khoaNganh: KhoaNganh.IRecord;
 	}
 
 	export interface INhuCauHocPhan {
@@ -36,10 +38,19 @@ declare module DangKyNhuCau {
 		_id: string;
 		phieuDangKyHocNhuCauId: string;
 		phieuDangKyHocNhuCau: IDangKyNhuCau;
-		maKhoaNganh: string;
-		khoaNganh: KhoaNganh.IRecord;
 		maHocPhan: string;
 		hocPhan: HocPhan.IRecord;
 		trangThai: ETrangThaiHocPhanDangKyNhuCau;
+
+		//fake condition
+		maKhoaNganh: string;
+	}
+
+	export interface IDotDangKyKhoaNganh {
+		_id: string;
+		dotDangKyNhuCauId: string;
+		dotDangKyNhuCau: IDotDangKy;
+		maKhoaNganh: string;
+		khoaNganh: KhoaNganh.IRecord;
 	}
 }

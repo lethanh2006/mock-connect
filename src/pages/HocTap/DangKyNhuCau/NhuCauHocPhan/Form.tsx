@@ -5,7 +5,6 @@ import { ETrangThaiHocPhanDangKyNhuCau } from '@/services/DaoTao/constant';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Row } from 'antd';
-import { useWatch } from 'antd/lib/form/Form';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -17,11 +16,14 @@ const FormDangKyNhuCau = (props: any) => {
 	);
 	const { record: recPhieu } = useModel('daotao.dangkynhucau.dangkynhucau');
 	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangkynhucau');
-	const maKhoaNganh: string = useWatch('maKhoaNganh', form);
+	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
 		if (!visibleForm) resetFieldsForm(form);
 		else if (record?._id) form.setFieldsValue(record);
+		else {
+			form.setFieldsValue({ maKhoaNganh: maKhoaNganh });
+		}
 	}, [record?._id, visibleForm]);
 
 	const onFinish = async (values: DangKyNhuCau.IHocPhanDangKyNhuCau) => {
@@ -35,7 +37,7 @@ const FormDangKyNhuCau = (props: any) => {
 				{ ...values, phieuDangKyHocNhuCauId: recPhieu?._id ?? '', trangThai: ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET },
 				getData,
 			)
-				.then()
+				.then(() => setVisibleForm(false))
 				.catch((er) => console.log(er));
 	};
 
@@ -45,7 +47,7 @@ const FormDangKyNhuCau = (props: any) => {
 				<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
 					<Col xs={24}>
 						<Form.Item label='Khóa ngành' name='maKhoaNganh' rules={[...rules.required]}>
-							<SelectSongNganh />
+							<SelectSongNganh disabled />
 						</Form.Item>
 					</Col>
 
