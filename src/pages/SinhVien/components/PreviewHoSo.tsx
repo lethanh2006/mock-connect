@@ -1,5 +1,6 @@
+import { colorTrangThaiHocSv, type ETrangThaiHocSv } from '@/services/DaoTao/constant';
 import { formatPhoneNumber } from '@/utils/utils';
-import { Col, Image, Row, Spin } from 'antd';
+import { Col, Image, Row, Spin, Tag } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -57,7 +58,11 @@ const PreviewHoSo = () => {
 			md: 8,
 		},
 		{ label: 'Email', content: record?.email, md: 16 },
-		{ label: 'Trạng thái học', content: record?.trangThaiHoc, md: 8 },
+		{
+			label: 'Trạng thái học',
+			content: <Tag color={colorTrangThaiHocSv[record?.trangThaiHoc as ETrangThaiHocSv]}>{record?.trangThaiHoc}</Tag>,
+			md: 8,
+		},
 		{ label: 'Khóa ngành', content: record?.khoaNganh?.ten, md: 16 },
 		{ label: 'Quốc tịch', content: record?.quocTich, md: 8 },
 		{ label: 'Dân tộc', content: record?.danToc, md: 8 },
@@ -65,32 +70,6 @@ const PreviewHoSo = () => {
 	];
 
 	const dataThem: DescriptionItem[] = [
-		{
-			label: 'Thông tin của cha',
-			md: 24,
-			children: [
-				{ label: 'Họ tên', content: record?.tenCha },
-				{
-					label: 'Ngày sinh',
-					content: record?.ngaySinhCha ? moment(record.ngaySinhCha).format('DD/MM/YYYY') : '',
-				},
-				{ label: 'Nghề nghiệp', content: record?.ngheNghiepCha },
-				{ label: 'SĐT', content: record?.soDienThoaiCha },
-			],
-		},
-		{
-			label: 'Thông tin của mẹ',
-			md: 24,
-			children: [
-				{ label: 'Họ tên', content: record?.tenMe },
-				{
-					label: 'Ngày sinh',
-					content: record?.ngaySinhMe ? moment(record.ngaySinhMe).format('DD/MM/YYYY') : '',
-				},
-				{ label: 'Nghề nghiệp', content: record?.ngheNghiepMe },
-				{ label: 'SĐT', content: record?.soDienThoaiMe },
-			],
-		},
 		{
 			label: 'Địa chỉ thường trú',
 			md: 24,

@@ -8,7 +8,8 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalChiTietDiem from './ModalChiTietDiem';
 
-const DiemThanhPhanSV = () => {
+const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
+	const { maKhoaNganh } = props;
 	const { danhSach, sinhVienGetAllDiemLopHocPhanModel, loading, setSinhVienLopHocPhan, sinhVienLopHocPhan } = useModel(
 		'lophocphan.sinhvienlophocphan',
 	);
@@ -17,10 +18,12 @@ const DiemThanhPhanSV = () => {
 	const [loaiHocPhan, setLoaiHocPhan] = useState<string>('all');
 	const [hocPhan, setHocPhan] = useState<HocPhan.IRecord>();
 
+	const getData = () => maKhoaNganh && sinhVienGetAllDiemLopHocPhanModel({ maKhoaNganh });
+
 	useEffect(() => {
-		sinhVienGetAllDiemLopHocPhanModel();
+		getData();
 		getDauDiem();
-	}, []);
+	}, [maKhoaNganh]);
 
 	const onCell = (rec: LopHocPhan.IRecordSinhVienLopHP) => ({
 		onClick: () => {

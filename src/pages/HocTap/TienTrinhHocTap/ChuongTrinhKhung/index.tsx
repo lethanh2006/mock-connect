@@ -1,6 +1,7 @@
+import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
-import { Collapse, Select, Spin, Tooltip } from 'antd';
+import { Collapse, Spin, Tooltip } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -18,11 +19,10 @@ type TChuongTrinhHocKy = {
 
 const TienTrinhChuongTrinhKhung = () => {
 	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
-	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
+	const { khoaNganhMe, maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [count, setCount] = useState(0);
 	const [tongTinChi, setTongTinChi] = useState(0);
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
-	const [value, setValue] = useState(khoaNganhMe?.khoaNganhChinh.ma ?? '');
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 
 	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
@@ -36,7 +36,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	};
 
 	const fetch = async () => {
-		await sinhVienGetTienTrinhKhungModel(value === khoaNganhMe?.khoaNganhPhu?.ma ? true : false).then((data) => {
+		await sinhVienGetTienTrinhKhungModel(maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma ? true : false).then((data) => {
 			// Các mã chuyên ngành (nếu có)
 			const uniqchuyenNganh = _.uniq(data?.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
 			// Học phần ko có chuyên ngành hoặc thuộc chuyên ngành đầu tiên
@@ -80,7 +80,7 @@ const TienTrinhChuongTrinhKhung = () => {
 
 	useEffect(() => {
 		fetch();
-	}, [value]);
+	}, [maKhoaNganh]);
 
 	return (
 		<>
@@ -104,31 +104,8 @@ const TienTrinhChuongTrinhKhung = () => {
 				</Col>
 			</Row> */}
 
-			<div>
-				<Select
-					value={value}
-					style={{ width: 250 }}
-					options={
-						khoaNganhMe?.khoaNganhPhu
-							? [
-									{
-										value: khoaNganhMe?.khoaNganhChinh?.ma,
-										label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten} (${khoaNganhMe?.khoaNganhChinh?.maNganh})`,
-									},
-									{
-										value: khoaNganhMe?.khoaNganhPhu?.ma,
-										label: `${khoaNganhMe?.khoaNganhPhu?.nganh?.ten} (${khoaNganhMe?.khoaNganhPhu?.maNganh})`,
-									},
-							  ]
-							: [
-									{
-										value: khoaNganhMe?.khoaNganhChinh?.ma,
-										label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten} (${khoaNganhMe?.khoaNganhChinh?.maNganh})`,
-									},
-							  ]
-					}
-					onChange={(val) => setValue(val.toString())}
-				/>
+			<div style={{ marginBottom: 12 }}>
+				<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
 			</div>
 
 			<Spin spinning={loading}>
@@ -159,6 +136,7 @@ const TienTrinhChuongTrinhKhung = () => {
 											khoiHocPhanCt={ctk}
 											key={ctk._id}
 											colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+											maKhoaNganh={maKhoaNganh}
 										/>
 									) : (
 										<CardKhoiHocPhan

@@ -21,12 +21,23 @@ const ModalChiTietDiem = (props: {
 	trangThaiHoc?: ETrangThaiHocTap;
 	chuongTrinh?: ChuongTrinhDaoTao.IHocPhanBase;
 	khoiHocPhanCt?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
+	maKhoaNganh?: string;
 }) => {
 	const { getByIdModel } = useModel('lophocphan.lophocphan');
 	const { setIsView: setIsViewPhieu } = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const { setIsView: setIsViewSinhVien } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
-	const { visible, setVisible, lopHocPhanId, hocPhan, listDiem, trangThaiHoc, chuongTrinh, khoiHocPhanCt } = props;
+	const {
+		visible,
+		setVisible,
+		lopHocPhanId,
+		hocPhan,
+		listDiem,
+		trangThaiHoc,
+		chuongTrinh,
+		khoiHocPhanCt,
+		maKhoaNganh,
+	} = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
 	const [deCuongId, setDeCuongId] = useState<string>();
@@ -154,7 +165,12 @@ const ModalChiTietDiem = (props: {
 				deCuongId={deCuongId}
 			/>
 
-			<ModalQuyDoiDiem visible={visibleCongNhan} setVisible={setVisibleCongNhan} hocPhan={hocPhan} />
+			<ModalQuyDoiDiem
+				visible={visibleCongNhan}
+				setVisible={setVisibleCongNhan}
+				hocPhan={hocPhan}
+				maKhoaNganh={maKhoaNganh}
+			/>
 		</>
 	);
 };
