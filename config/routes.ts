@@ -124,21 +124,21 @@
 				// access: 'sinhVien',
 				component: './HocTap/KetQuaHocTap',
 			},
-			// {
-			// 	name: 'XetHocVu',
-			// 	path: './xet-hoc-vu',
-			// 	component: './HocTap/XetHocVu',
-			// },
-			// {
-			// 	name: 'XetTotNghiep',
-			// 	path: './xet-tot-nghiep',
-			// 	component: './HocTap/XetTotNghiep',
-			// },
-			// {
-			// 	name: 'QuyetDinh',
-			// 	path: './quyet-dinh-bao-luu-thoi-hoc',
-			// 	component: './HocTap/BaoLuuThoiHoc',
-			// },
+			{
+				name: 'XetTotNghiep',
+				path: './xet-tot-nghiep',
+				component: './HocTap/XetTotNghiep',
+			},
+			{
+				name: 'XetHocVu',
+				path: './xet-hoc-vu',
+				component: './HocTap/XetHocVu',
+			},
+			{
+				name: 'QuyetDinh',
+				path: './quyet-dinh-bao-luu-thoi-hoc',
+				component: './HocTap/BaoLuuThoiHoc',
+			},
 		],
 	},
 

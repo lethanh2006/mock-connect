@@ -6,14 +6,20 @@ import { useModel } from 'umi';
 const CardTienTrinhTotNghiep = () => {
 	const {
 		getTienTrinhTotNghiepModel,
+
 		record: recTienTrinh,
 		dieuKienTotNghiep,
 		loading,
 	} = useModel('sinhvien.tientrinhtotnghiep');
+	const { getKhoaNganhMeModel, khoaNganhMe } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
-		getTienTrinhTotNghiepModel();
+		getKhoaNganhMeModel();
 	}, []);
+
+	useEffect(() => {
+		if (khoaNganhMe?.khoaNganhChinh?.ma) getTienTrinhTotNghiepModel(khoaNganhMe?.khoaNganhChinh?.ma);
+	}, [khoaNganhMe]);
 
 	return (
 		<Row gutter={[16, 16]}>

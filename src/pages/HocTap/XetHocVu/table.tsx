@@ -65,7 +65,7 @@ const SinhVienCanhBaoTable = (props: { isThoiHoc?: boolean }) => {
 	];
 
 	return (
-		<Card title={`Lịch sử ${isThoiHoc ? 'thôi học' : 'cảnh báo học tập'}`}>
+		<Card title={`Lịch sử ${isThoiHoc ? 'buộc thôi học' : 'cảnh báo học tập'}`}>
 			<TableStaticData columns={columns} data={danhSach} otherProps={{ create: false, filter: true }} hasTotal addStt />
 		</Card>
 	);

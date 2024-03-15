@@ -72,7 +72,7 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 	];
 
 	return (
-		<Card title={`Quyết định ${isThoiHoc ? 'thôi học' : 'bảo lưu'}`}>
+		<Card title={`Lịch sử ${isThoiHoc ? 'thôi học' : 'bảo lưu'}`}>
 			<TableStaticData columns={columns} data={danhSach} hasTotal addStt size='small' />
 		</Card>
 	);

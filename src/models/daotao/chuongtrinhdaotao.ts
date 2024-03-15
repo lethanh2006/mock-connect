@@ -23,10 +23,10 @@ export default () => {
 		}
 	};
 
-	const sinhVienGetTienTrinhThucTeModel = async (): Promise<LopHocPhan.IRecordSinhVienLopHP[]> => {
+	const sinhVienGetTienTrinhThucTeModel = async (maKhoaNganh: string): Promise<LopHocPhan.IRecordSinhVienLopHP[]> => {
 		setLoading(true);
 		try {
-			const response = await getTienTrinhThucTe();
+			const response = await getTienTrinhThucTe(maKhoaNganh);
 			setTienTrinhHocTap(response?.data?.data ?? null);
 			return response?.data?.data;
 		} catch (er) {

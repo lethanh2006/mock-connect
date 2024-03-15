@@ -10,11 +10,14 @@ export default () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [visibleForm, setVisibleForm] = useState<boolean>(false);
 
-	const getTienTrinhTotNghiepModel = async (dotXetTotNghiepId?: string): Promise<SinhVien.ITienTrinhTotNghiep> => {
+	const getTienTrinhTotNghiepModel = async (
+		maKhoaNganh: string,
+		dotXetTotNghiepId?: string,
+	): Promise<SinhVien.ITienTrinhTotNghiep> => {
 		setLoading(true);
 		try {
 			// Get tiến trình tốt nghiệp
-			const response = await getTienTrinhDauRa();
+			const response = await getTienTrinhDauRa(maKhoaNganh);
 			const temp: SinhVien.ITienTrinhTotNghiep = response?.data?.data;
 			// Get sinh viên nợ nghĩa vụ
 			let sinhVienNo: SinhVien.ISinhVienNoNghiaVu | undefined;
