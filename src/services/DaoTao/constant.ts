@@ -38,3 +38,21 @@ export enum EPhuongThucTinhDiem {
 	BAC = 'Theo bậc',
 	DIEM = 'Tính điểm',
 }
+
+export enum ETrangThaiHocSv {
+	CHUA_PHAN_LOP = 'Chưa phân lớp',
+	DANG_HOC = 'Đang học',
+	THOI_HOC = 'Thôi học',
+	BUOC_THOI_HOC = 'Buộc thôi học',
+	BAO_LUU = 'Bảo lưu',
+	DA_TOT_NGHIEP = 'Đã tốt nghiệp',
+}
+
+export const colorTrangThaiHocSv: Record<ETrangThaiHocSv, string> = {
+	[ETrangThaiHocSv.CHUA_PHAN_LOP]: 'gray',
+	[ETrangThaiHocSv.DANG_HOC]: 'blue',
+	[ETrangThaiHocSv.THOI_HOC]: 'red',
+	[ETrangThaiHocSv.BUOC_THOI_HOC]: 'violet',
+	[ETrangThaiHocSv.BAO_LUU]: 'orange',
+	[ETrangThaiHocSv.DA_TOT_NGHIEP]: 'green',
+};

@@ -12,8 +12,9 @@ const CardHocPhan = (props: {
 	sinhVienLopHocPhan?: LopHocPhan.IRecordSinhVienLopHP;
 	isChuyenNganh?: boolean;
 	colorKhoiKienThuc?: string;
+	maKhoaNganh?: string;
 }) => {
-	const { chuongTrinhKhung, sinhVienLopHocPhan, khoiHocPhanCt, colorKhoiKienThuc } = props;
+	const { chuongTrinhKhung, sinhVienLopHocPhan, khoiHocPhanCt, colorKhoiKienThuc, maKhoaNganh } = props;
 	const [modalVisible, setModalVisible] = useState(false);
 	const listDiem = chuongTrinhKhung?.lichSuDiem?.map((diem) => diem.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU) ?? [
 		sinhVienLopHocPhan?.diemHpSvHk?.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU,
@@ -70,6 +71,7 @@ const CardHocPhan = (props: {
 				trangThaiHoc={chuongTrinhKhung?.hoc}
 				chuongTrinh={chuongTrinhKhung}
 				khoiHocPhanCt={khoiHocPhanCt}
+				maKhoaNganh={maKhoaNganh}
 			/>
 		</div>
 	);
