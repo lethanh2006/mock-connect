@@ -6,8 +6,6 @@ import {
 	mapTrangThaiHocPhanDangKyNhuCau,
 	type ETrangThaiHocPhanDangKyNhuCau,
 } from '@/services/DaoTao/constant';
-
-import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { Alert, Empty, Tag } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
@@ -15,18 +13,19 @@ import { useModel } from 'umi';
 import FormDangKyNhuCau from './Form';
 
 const NhuCauHocPhanPage = () => {
-	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangkynhucau');
-	const { getModel, page, limit } = useModel('daotao.dangkynhucau.hocphandangkynhucau');
-	const { getAllModel, danhSach } = useModel('daotao.dangkynhucau.dotdangkynhucaukhoanganh');
-	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
+	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangky');
+	const { getModel, page, limit } = useModel('daotao.dangkynhucau.hocphannhucau');
+	const { getAllModel, danhSach } = useModel('daotao.dangkynhucau.khoanganhdot');
+	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
 		getAllModel(undefined, undefined, { dotDangKyNhuCauId: recDot?._id });
 	}, []);
 
-	const checkKhoaNganh = danhSach.find((item) => maKhoaNganh?.includes(item?.maKhoaNganh));
+	const checkKhoaNganh = danhSach.find((item) => maKhoaNganh === item?.maKhoaNganh);
 
-	const getData = () => getModel({ maKhoaNganh }, undefined, undefined, undefined, undefined, `me/dot/${recDot?._id}`);
+	const getData = () =>
+		recDot?._id && getModel({ maKhoaNganh }, undefined, undefined, undefined, undefined, `me/dot/${recDot?._id}`);
 
 	const ngoaiThoiGian =
 		!recDot?.thoiGianBatDau ||
@@ -36,9 +35,9 @@ const NhuCauHocPhanPage = () => {
 
 	const columns: IColumn<DangKyNhuCau.IHocPhanDangKyNhuCau>[] = [
 		{
-			title: 'Khóa ngành',
-			width: 100,
-			render: (val, rec) => rec.phieuDangKyHocNhuCau?.khoaNganh?.ten,
+			title: 'Mã HP',
+			width: 80,
+			dataIndex: 'maHocPhan',
 		},
 		{
 			title: 'Học phần',
@@ -57,7 +56,7 @@ const NhuCauHocPhanPage = () => {
 			dataIndex: 'trangThai',
 			align: 'center',
 			width: 90,
-			render: (val, rec) => (
+			render: (val) => (
 				<Tag color={colorTrangThaiHocPhanDangKyNhuCau[val as ETrangThaiHocPhanDangKyNhuCau]}>
 					{mapTrangThaiHocPhanDangKyNhuCau[val as ETrangThaiHocPhanDangKyNhuCau]}
 				</Tag>
@@ -70,7 +69,7 @@ const NhuCauHocPhanPage = () => {
 			<div style={{ marginBottom: 12 }}>
 				<Alert
 					type={ngoaiThoiGian ? 'warning' : 'info'}
-					description={
+					message={
 						ngoaiThoiGian ? (
 							'Ngoài thời gian đăng ký nhu cầu !'
 						) : (
@@ -83,9 +82,6 @@ const NhuCauHocPhanPage = () => {
 					showIcon
 				/>
 			</div>
-			<div style={{ marginBottom: 12 }}>
-				<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
-			</div>
 
 			{checkKhoaNganh?._id ? (
 				<TableBase
@@ -93,8 +89,8 @@ const NhuCauHocPhanPage = () => {
 					getData={getData}
 					formProps={{ getData }}
 					dependencies={[page, limit, maKhoaNganh]}
-					modelName='daotao.dangkynhucau.hocphandangkynhucau'
-					title='Nhu Cầu học phần'
+					modelName='daotao.dangkynhucau.hocphannhucau'
+					title='Nhu cầu học phần'
 					hideCard
 					Form={FormDangKyNhuCau}
 					buttons={{ create: ngoaiThoiGian ? false : true }}

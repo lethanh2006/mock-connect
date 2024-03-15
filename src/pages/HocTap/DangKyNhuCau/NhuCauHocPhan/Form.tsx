@@ -1,7 +1,6 @@
 import SelectHocPhanKhoaNganh from '@/pages/DaoTao/ChuongTrinhDaoTao/SelectHocPhanKhoaNganh';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import type { DangKyNhuCau } from '@/services/DaoTao/DangKyNhuCau/typing';
-import { ETrangThaiHocPhanDangKyNhuCau } from '@/services/DaoTao/constant';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Row } from 'antd';
@@ -12,10 +11,9 @@ const FormDangKyNhuCau = (props: any) => {
 	const { getData, title } = props;
 	const [form] = Form.useForm();
 	const { record, setVisibleForm, edit, sinhVienDangKyNhuCauModel, putModel, formSubmiting, visibleForm } = useModel(
-		'daotao.dangkynhucau.hocphandangkynhucau',
+		'daotao.dangkynhucau.hocphannhucau',
 	);
-	const { record: recPhieu } = useModel('daotao.dangkynhucau.dangkynhucau');
-	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangkynhucau');
+	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangky');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
@@ -32,11 +30,7 @@ const FormDangKyNhuCau = (props: any) => {
 				.then()
 				.catch((er) => console.log(er));
 		} else
-			sinhVienDangKyNhuCauModel(
-				recDot?._id ?? '',
-				{ ...values, phieuDangKyHocNhuCauId: recPhieu?._id ?? '', trangThai: ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET },
-				getData,
-			)
+			sinhVienDangKyNhuCauModel(recDot?._id ?? '', values, getData)
 				.then(() => setVisibleForm(false))
 				.catch((er) => console.log(er));
 	};
