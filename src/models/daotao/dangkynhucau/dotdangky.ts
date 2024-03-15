@@ -5,7 +5,6 @@ import { ipDaoTao } from '@/utils/ip';
 
 export default () => {
 	const objInit = useInitModel<DangKyNhuCau.IDotDangKy>('dot-dang-ky-nhu-cau', undefined, undefined, ipDaoTao);
-
 	const { setLoading, setRecord } = objInit;
 
 	const getDotDangKyNhuCauHocKyModel = async (maHocKy: string): Promise<DangKyNhuCau.IDotDangKy> => {
