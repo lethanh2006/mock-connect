@@ -1,13 +1,16 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
+import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { Space } from 'antd';
 import { history, useModel } from 'umi';
 
 const LopHocPhanPage = () => {
 	const { page, limit, sinhVienGetModel } = useModel('lophocphan.lophocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
+	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 
 	const onCell = (loptinchi: LopHocPhan.IRecord) => ({
 		onClick: () =>
@@ -48,11 +51,16 @@ const LopHocPhanPage = () => {
 	return (
 		<TableBase
 			columns={columns}
-			dependencies={[page, limit, recHocKy?._id]}
-			params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH }}
+			dependencies={[page, limit, recHocKy?._id, maKhoaNganh]}
+			params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH, maKhoaNganh }}
 			getData={sinhVienGetModel}
 			modelName='lophocphan.lophocphan'
-			title='Lớp tín chỉ'
+			title={
+				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
+					<span>Lớp tín chỉ</span>
+					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+				</Space>
+			}
 			buttons={{ create: false }}
 			otherButtons={[<FilterHocKy isSetHocKy key='1' />]}
 			hideChildrenRows
