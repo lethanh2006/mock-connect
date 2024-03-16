@@ -3,7 +3,7 @@ import { DesktopOutlined } from '@ant-design/icons';
 import { Descriptions, Spin, Tabs, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import ModalHocPhan from '../DeCuongHocPhan/ModalHocPhan';
+import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
 import DanhSachGiangVien from './DanhSachGiangVien';
 import DanhSachSinhVien from './DanhSachSinhVien';
 

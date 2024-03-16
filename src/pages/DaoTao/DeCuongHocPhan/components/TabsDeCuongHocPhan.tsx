@@ -18,7 +18,7 @@ const TabsDeCuongHocPhan = () => {
 			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
 				<Tabs.TabPane key='0' tab='Thông tin chung' />
 				<Tabs.TabPane key='4' tab='Nội dung học phần' />
-				<Tabs.TabPane key='2' tab='Lịch trình cụ thể' />
+				{/* <Tabs.TabPane key='2' tab='Lịch trình cụ thể' /> */}
 				<Tabs.TabPane key='1' tab='Giảng viên' />
 				<Tabs.TabPane key='3' tab='Học liệu' />
 			</Tabs>
