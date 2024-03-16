@@ -1,6 +1,5 @@
 import { Collapse, Descriptions } from 'antd';
 import { useModel } from 'umi';
-import moment from 'moment';
 import TrongSoHocPhanPage from '../TrongSoHocPhan';
 
 const ThongTinChungPage = () => {
@@ -28,6 +27,7 @@ const ThongTinChungPage = () => {
 					{record?.hocPhan?.soTinChi ? record.hocPhan.soTinChi + ' tín chỉ' : <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
 			</Descriptions>
+
 			<Descriptions
 				style={{ marginBottom: '15px', marginTop: '5px' }}
 				size='small'
@@ -35,11 +35,21 @@ const ThongTinChungPage = () => {
 				bordered={false}
 				column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
 			>
-				<Descriptions.Item label=' Người biên soạn'>{record?.nguoiBienSoan ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
-				<Descriptions.Item label='Ngày áp dụng'>
-					{record?.ngayApDung ? moment(record.ngayApDung).format('DD/MM/YYYY') : <i>Chưa cập nhật</i>}
+				<Descriptions.Item label='Thời điểm ban hành'>
+					{record?.thoiDiemApDung ?? <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
-				<Descriptions.Item label='Căn cứ pháp lý'>{record?.canCu?.ten ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
+				<Descriptions.Item label='Quyết định ban hành đề cương'>
+					{record?.canCu?.ten ?? <i>Chưa cập nhật</i>}
+				</Descriptions.Item>
+				<Descriptions.Item label='Đề cương chi tiết đính kèm'>
+					{record?.url ? (
+						<a href={record.url} target='_blank' rel='noreferrer'>
+							Xem chi tiết
+						</a>
+					) : (
+						<i>Chưa cập nhật</i>
+					)}
+				</Descriptions.Item>
 			</Descriptions>
 
 			<TrongSoHocPhanPage />
@@ -48,12 +58,12 @@ const ThongTinChungPage = () => {
 				<Collapse.Panel header='Mục tiêu học phần' key='1'>
 					<div dangerouslySetInnerHTML={{ __html: record?.mucTieuHocPhan ?? '--' }} />
 				</Collapse.Panel>
-				<Collapse.Panel header='Nội dung tóm tắt' key='2'>
+				{/* <Collapse.Panel header='Nội dung tóm tắt' key='2'>
 					<div dangerouslySetInnerHTML={{ __html: record?.noiDungTomTat ?? '--' }} />
 				</Collapse.Panel>
 				<Collapse.Panel header='Nội dung chi tiết' key='3'>
 					<div dangerouslySetInnerHTML={{ __html: record?.noiDungChiTiet ?? '--' }} />
-				</Collapse.Panel>
+				</Collapse.Panel> */}
 			</Collapse>
 		</>
 	);
