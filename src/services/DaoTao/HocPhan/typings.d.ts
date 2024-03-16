@@ -31,23 +31,28 @@ declare module HocPhan {
 		khoiTotNghiep?: boolean;
 	}
 
-	export interface IDeCuongHocPhan {
+	export interface IDeCuongHocPhan extends ITrongSoDeCuong {
 		_id: string;
 		ma: string;
 		maHocPhan: string;
 		hocPhan: IRecord;
-		nguoiBienSoan: string;
-		ngayApDung: string;
-		canCuId: string;
+		// nguoiBienSoan: string;
+		// ngayApDung: string;
+		thoiDiemApDung?: string;
+		maCanCu: string;
 		canCu: VanBanQuyDinh.IRecord;
-
+		// soTinChi: number;
+		// isTinhDiem: boolean;
 		mucTieuHocPhan: string;
-		noiDungTomTat: string;
-		noiDungChiTiet: string;
+		// noiDungTomTat: string;
+		// noiDungChiTiet: string;
 		active: boolean;
 		createdAt?: string;
 		updatedAt?: string;
+		url?: string | null;
+	}
 
+	export interface ITrongSoDeCuong {
 		trongSo1?: number;
 		trongSo2?: number;
 		trongSo3?: number;
@@ -73,11 +78,22 @@ declare module HocPhan {
 		diaChi?: string | null;
 	}
 
+	export interface ILichTrinhChung {
+		_id: string;
+		ten: string;
+		deCuongHpId: string;
+		gioLyThuyet: number;
+		gioBaiTapTL: number;
+		gioThucHanh: number;
+		gioTuHoc: number;
+	}
+
 	export interface ITienTrinhHocPhan {
 		_id: string;
 		deCuongId: string;
 		deCuong?: IDeCuongHocPhan;
-		tuan: number;
+		tuanBatDau: number;
+		tuanKetThuc: number;
 		noiDung: string;
 		noiDungChinh: string;
 		yeuCauSinhVien: string;
