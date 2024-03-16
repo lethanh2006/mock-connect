@@ -52,5 +52,6 @@ declare const APP_CONFIG_TITLE_QLKH: string;
 declare const APP_CONFIG_TITLE_VPS: string;
 declare const APP_CONFIG_TITLE_KHAO_THI: string;
 declare const APP_CONFIG_TITLE_CORE: string;
+declare const APP_CONFIG_TITLE_CSVC: string;
 
 declare const APP_CONFIG_MOODLE_ENDPOINT: string;
