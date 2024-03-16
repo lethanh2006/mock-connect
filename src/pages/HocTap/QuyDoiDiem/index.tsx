@@ -43,7 +43,7 @@ const LichSuQuyDoiDiemPage = () => {
 		{
 			title: 'Đợt quy đổi điểm',
 			dataIndex: 'dotDangKyQuyDoiDiemId',
-			width: 130,
+			width: 150,
 			render: (val, rec) => rec?.dotDangKyQuyDoiDiem?.tenDot,
 			onCell,
 		},
