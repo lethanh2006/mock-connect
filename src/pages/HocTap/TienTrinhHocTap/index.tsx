@@ -57,7 +57,7 @@ const TienTrinhHocTap = () => {
 				<Alert
 					style={{ marginBottom: 12 }}
 					type='info'
-					description={
+					message={
 						<>
 							Đợt công nhận kết quả học tập <b>{record?.tenDot}</b> đang diễn ra từ{' '}
 							<b>{moment(record?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
