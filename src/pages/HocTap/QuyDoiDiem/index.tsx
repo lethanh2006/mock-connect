@@ -70,13 +70,6 @@ const LichSuQuyDoiDiemPage = () => {
 			),
 		},
 		{
-			title: 'Ngành đào tạo',
-			dataIndex: 'maKhoaNganh',
-			width: 120,
-			render: (val, rec) => rec?.khoaNganh?.ten,
-			onCell,
-		},
-		{
 			title: 'Số QĐ',
 			dataIndex: 'soQuyetDinhId',
 			width: 100,
