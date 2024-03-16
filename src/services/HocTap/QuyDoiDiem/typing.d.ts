@@ -45,6 +45,9 @@ declare module QuyDoiDiem {
 		soTinChiDaCongNhan: number;
 		soTinChiChuongTrinhDaoTao: number;
 		soTinChiCongNhanDot: number;
+
+		maKhoaNganh: string;
+		khoaNganh?: KhoaNganh.IRecord;
 	}
 
 	export interface IQuyDoiDiemSinhVien {
@@ -61,6 +64,7 @@ declare module QuyDoiDiem {
 		nguoiChoYKienSsoId: string;
 		hoTenNguoiChoYKien: string;
 		thoiGianChoYKien: Date;
+		khuyenNghi: string[];
 
 		//Minh chứng
 		loai: EMinhChungQuyDoiDiem;
