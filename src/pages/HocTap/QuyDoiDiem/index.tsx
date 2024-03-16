@@ -11,6 +11,7 @@ import { Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import ModalQuyDoiDiem from './components/Modal';
+import ExpandText from '@/components/ExpandText';
 
 const LichSuQuyDoiDiemPage = () => {
 	const {
@@ -47,17 +48,26 @@ const LichSuQuyDoiDiemPage = () => {
 			onCell,
 		},
 		{
+			title: 'Ngành đào tạo',
+			dataIndex: 'maKhoaNganh',
+			width: 150,
+			render: (val, rec) => rec?.khoaNganh?.ten,
+			onCell,
+		},
+		{
 			title: 'Học phần quy đổi',
 			width: 250,
-			render: (val, rec) =>
-				rec.danhSachHocPhan?.map((item) => (
-					<>
-						- {item.hocPhan?.ten} - {item.diemHe4 ?? 'Chưa có điểm'} -{' '}
-						<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i>
-						<br />
-					</>
-				)),
-			onCell,
+			render: (val, rec) => (
+				<ExpandText>
+					{rec.danhSachHocPhan?.map((item) => (
+						<>
+							- {item.hocPhan?.ten} - {item.diemHe4 ?? 'Chưa có điểm'} -{' '}
+							<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i> -{' '}
+							{item?.khuyenNghi?.map((items) => items).join(', ')}
+						</>
+					))}
+				</ExpandText>
+			),
 		},
 		{
 			title: 'Ngành đào tạo',
@@ -85,12 +95,6 @@ const LichSuQuyDoiDiemPage = () => {
 			onCell,
 		},
 		{
-			title: 'Khuyến nghị',
-			width: 100,
-			// hide: trangThaiQuyDoiDiem === ETrangThaiSinhVienDot.DA_RA_QUYET_DINH,
-			onCell,
-		},
-		{
 			title: 'Tỷ lệ công nhận',
 			align: 'center',
 			width: 100,
@@ -100,10 +104,12 @@ const LichSuQuyDoiDiemPage = () => {
 				return (
 					<div>
 						( <Tooltip title='Tổng số tín đã được công nhận trước đó'>{rec?.soTinChiDaCongNhan ?? 0}</Tooltip> +{' '}
-						<Tooltip title='Tổng số tín chỉ đã được công nhận đợt này'>{rec?.soTinChiCongNhanDot}</Tooltip>) /{' '}
-						<Tooltip title='Tổng số tín chỉ trong chương trình đào tạo'>{rec?.soTinChiChuongTrinhDaoTao}</Tooltip>{' '}
+						<Tooltip title='Tổng số tín chỉ đã được công nhận đợt này'>{rec?.soTinChiCongNhanDot ?? 0}</Tooltip>) /{' '}
+						<Tooltip title='Tổng số tín chỉ trong chương trình đào tạo'>{rec?.soTinChiChuongTrinhDaoTao ?? 0}</Tooltip>{' '}
 						<br />
-						<span style={{ color: tiLeCongNhan > 50 ? 'green' : 'red' }}>{Math.ceil(tiLeCongNhan * 100) / 100} %</span>
+						<span style={{ color: tiLeCongNhan !== Infinity && tiLeCongNhan > 50 ? 'red' : 'green' }}>
+							{Math.ceil(tiLeCongNhan === Infinity ? 0 : tiLeCongNhan * 100) / 100} %
+						</span>
 					</div>
 				);
 			},
