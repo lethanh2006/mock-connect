@@ -15,6 +15,9 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
+import UploadFile from '@/components/Upload/UploadFile';
+import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { resetFieldsForm } from '@/utils/utils';
 
 const ModalQuyDoiDiem = (props: {
 	visible: boolean;
@@ -32,6 +35,7 @@ const ModalQuyDoiDiem = (props: {
 		getAllModel: getAllSvQuyDoi,
 		filters,
 		setFilters,
+		setFormSubmiting,
 	} = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { record: recDot } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
@@ -44,6 +48,8 @@ const ModalQuyDoiDiem = (props: {
 	const [loading, setLoading] = useState<boolean>(false);
 
 	useEffect(() => {
+		if (!visible) resetFieldsForm(form);
+
 		const initValue = {
 			loai: EMinhChungQuyDoiDiem.HOC_PHAN,
 			loaiHocPhan: ELoaiHocPhanMinhChung.NGOAI_CHUONG_TRINH,
@@ -153,6 +159,11 @@ const ModalQuyDoiDiem = (props: {
 	};
 
 	const onFinish = async (values: QuyDoiDiem.IQuyDoiDiemSinhVien) => {
+		setFormSubmiting(true);
+		const urlsHocPhan = await buildUpLoadMultiFile(values, 'urlsHocPhan');
+		const urlsChungChi = await buildUpLoadMultiFile(values, 'urlsChungChi');
+		setFormSubmiting(false);
+
 		const data = {
 			thongTinQuyDoiDiemSinhVien: [
 				{
@@ -160,6 +171,8 @@ const ModalQuyDoiDiem = (props: {
 					phieuDangKyQuyDoiDiemId: record?._id,
 					maHocPhan: hocPhan?.ma,
 					tenHocPhan: hocPhan?.ten,
+					urlsHocPhan: urlsHocPhan,
+					urlsChungChi: urlsChungChi,
 				},
 			],
 			sinhVienSsoId: recSinhVien?.ssoId,
@@ -416,7 +429,7 @@ const ModalQuyDoiDiem = (props: {
 											<div className='fw500'>Kết quả học tập/quy đổi</div>
 										</Col>
 										<Col xs={12} md={8}>
-											<Form.Item name='diemHe10MinhChung' label='Điểm hệ 10'>
+											<Form.Item name='diemHe10MinhChung' label='Điểm hệ 10' rules={[...rules.required]}>
 												<InputNumber
 													style={{ width: '100%' }}
 													placeholder='Nhập điểm (hệ 10)'
@@ -429,6 +442,7 @@ const ModalQuyDoiDiem = (props: {
 										<Col xs={12} md={8}>
 											<Form.Item name='diemHe4MinhChung' label='Điểm hệ 4'>
 												<Select
+													disabled
 													placeholder='Chọn điểm hệ 4'
 													options={danhSach.map((item) => ({
 														key: item._id,
@@ -449,6 +463,15 @@ const ModalQuyDoiDiem = (props: {
 								<Form.Item name='diemHe10' hidden />
 								<Form.Item name='diemHe4' hidden />
 								<Form.Item name='diemChu' hidden />
+								<Col xs={24} md={12}>
+									<Form.Item
+										name={`${loaiMinhChung === EMinhChungQuyDoiDiem.CHUNG_CHI ? 'urlsChungChi' : 'urlsHocPhan'}`}
+										label='File minh chứng'
+										rules={[...rules.required]}
+									>
+										<UploadFile maxCount={5} />
+									</Form.Item>
+								</Col>
 							</Col>
 						</>
 					)}
