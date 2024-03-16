@@ -8,7 +8,7 @@ import { Button, Descriptions, Divider, Modal, Space, Tooltip, message } from 'a
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
-import ModalHocPhan from '../../LopHocPhan/DeCuongHocPhan/ModalHocPhan';
+import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
 import DetailKetQuaHocTap from './DetailKetQuaHocTap';
 import ModalQuyDoiDiem from '../../QuyDoiDiem/components/Modal';
 
