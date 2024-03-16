@@ -43,7 +43,7 @@ const LichSuQuyDoiDiemPage = () => {
 		{
 			title: 'Đợt quy đổi điểm',
 			dataIndex: 'dotDangKyQuyDoiDiemId',
-			width: 130,
+			width: 150,
 			render: (val, rec) => rec?.dotDangKyQuyDoiDiem?.tenDot,
 			onCell,
 		},
@@ -62,19 +62,12 @@ const LichSuQuyDoiDiemPage = () => {
 					{rec.danhSachHocPhan?.map((item) => (
 						<>
 							- {item.hocPhan?.ten} - {item.diemHe4 ?? 'Chưa có điểm'} -{' '}
-							<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i> -{' '}
-							{item?.khuyenNghi?.map((items) => items).join(', ')}
+							<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i>
+							<br />
 						</>
 					))}
 				</ExpandText>
 			),
-		},
-		{
-			title: 'Ngành đào tạo',
-			dataIndex: 'maKhoaNganh',
-			width: 120,
-			render: (val, rec) => rec?.khoaNganh?.ten,
-			onCell,
 		},
 		{
 			title: 'Số QĐ',
@@ -99,21 +92,19 @@ const LichSuQuyDoiDiemPage = () => {
 			align: 'center',
 			width: 100,
 			render: (val, rec) => {
-				const tiLeCongNhan =
-					((rec?.soTinChiDaCongNhan + rec?.soTinChiCongNhanDot) / rec?.soTinChiChuongTrinhDaoTao) * 100;
+				const tiLeCongNhan = !rec?.soTinChiChuongTrinhDaoTao
+					? 0
+					: ((rec?.soTinChiDaCongNhan + rec?.soTinChiCongNhanDot) / rec?.soTinChiChuongTrinhDaoTao) * 100;
 				return (
 					<div>
-						( <Tooltip title='Tổng số tín đã được công nhận trước đó'>{rec?.soTinChiDaCongNhan ?? 0}</Tooltip> +{' '}
-						<Tooltip title='Tổng số tín chỉ đã được công nhận đợt này'>{rec?.soTinChiCongNhanDot ?? 0}</Tooltip>) /{' '}
+						(<Tooltip title='Tổng số tín chỉ đã được công nhận trước đó'>{rec?.soTinChiDaCongNhan ?? 0}</Tooltip> +{' '}
+						<Tooltip title='Số tín chỉ đã được công nhận trong phiếu'>{rec?.soTinChiCongNhanDot ?? 0}</Tooltip>) /{' '}
 						<Tooltip title='Tổng số tín chỉ trong chương trình đào tạo'>{rec?.soTinChiChuongTrinhDaoTao ?? 0}</Tooltip>{' '}
 						<br />
-						<span style={{ color: tiLeCongNhan !== Infinity && tiLeCongNhan > 50 ? 'red' : 'green' }}>
-							{Math.ceil(tiLeCongNhan === Infinity ? 0 : tiLeCongNhan * 100) / 100} %
-						</span>
+						<span style={{ color: tiLeCongNhan > 50 ? 'red' : 'green' }}>{Math.ceil(tiLeCongNhan * 100) / 100} %</span>
 					</div>
 				);
 			},
-			onCell,
 		},
 		{
 			title: 'Công nhận',
