@@ -41,7 +41,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 	}, []);
 
 	useEffect(() => {
-		getThongTinCuaToiModel().then((rec) => form.setFieldsValue(rec));
+		getThongTinCuaToiModel().then((rec) => form.setFieldsValue({...rec}));
 	}, []);
 
 	return (
@@ -182,7 +182,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
           <Divider orientation='center'>Nơi sinh</Divider>
           <Row gutter={[12, 0]}>
             <Col span={12} md={12}>
-              <Form.Item name='loaiNoiSinh' label='Loại nơi sinh'>
+              <Form.Item name='loaiNoiSinh' label='Loại nơi sinh' >
                 <Select
                   placeholder='Chọn loại nơi sinh'
                   allowClear
