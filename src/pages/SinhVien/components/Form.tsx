@@ -6,7 +6,7 @@ import SelectTonGiao from '@/pages/Core/TonGiao/SelectTonGiao';
 import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import rules from '@/utils/rules';
-import { Button, Checkbox, Col, Collapse, Divider, Form, Input, InputNumber, Row, Select } from 'antd';
+import { Button, Checkbox, Col, Collapse, Divider, Form, Input, InputNumber, message, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SelectDonViHanhChinh from '../../Core/DonViHanhChinh/SelectDonViHanhChinh';
@@ -21,7 +21,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 	const [form] = Form.useForm();
 	const { getThongTinCuaToiModel, putModel, record } = useModel('sinhvien.sinhvien');
 	const [listTinh, setListTinh] = useState<DonViHanhChinh.IRecord[]>();
-  const loaiNoiSinh = Form.useWatch('loaiNoiSinh', form) ?? ELoaiNoiSinh.TRONG_NUOC;
+	const loaiNoiSinh = Form.useWatch('loaiNoiSinh', form) ?? ELoaiNoiSinh.TRONG_NUOC;
 	const onFinish = async (values: any) => {
 		try {
 			const urlImg = await buildUpLoadFile(values, 'anhDaiDienUrl').catch(console.log);
@@ -41,11 +41,23 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 	}, []);
 
 	useEffect(() => {
-		getThongTinCuaToiModel().then((rec) => form.setFieldsValue({...rec}));
+		getThongTinCuaToiModel().then((rec) => form.setFieldsValue({ ...rec }));
 	}, []);
 
 	return (
-		<Form form={form} layout='vertical' onFinish={onFinish}>
+		<Form
+			form={form}
+			layout='vertical'
+			onFinish={onFinish}
+			scrollToFirstError={{
+				behavior: 'smooth',
+				block: 'center',
+				inline: 'center',
+			}}
+			onFinishFailed={() => {
+				message.warning('Một số trường thông tin còn thiếu vui lòng kiểm tra lại');
+			}}
+		>
 			<div className='button-section'>
 				{/* <Button
           loading={formSubmiting}
@@ -64,7 +76,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 			</div>
 
 			{/*<Divider orientation="center">Thông tin chung</Divider>*/}
-			<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
+			<Row gutter={[12, 0]}>
 				{/*<Col span={24} md={6}>*/}
 				{/*  <Form.Item name="anhDaiDienUrl" label=" ">*/}
 				{/*    <UploadFile isAvatar otherProps={{ disabled: true }} />*/}
@@ -93,7 +105,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 					<Row gutter={[12, 0]}>
 						<Col span={24} md={8}>
 							<Form.Item name='ma' label='Mã sinh viên' rules={[...rules.required, ...rules.text, ...rules.length(20)]}>
-								<Input placeholder='Mã sinh viên' />
+								<Input disabled placeholder='Mã sinh viên' />
 							</Form.Item>
 						</Col>
 						<Col span={24} md={8}>
@@ -149,100 +161,117 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 								<SelectDanToc allowClear />
 							</Form.Item>
 						</Col>
+					</Row>
+				</Col>
+			</Row>
+			<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
+				<Col span={12} md={6}>
+					<Form.Item name='tonGiao' label='Tôn giáo' rules={[...rules.required]}>
+						<SelectTonGiao allowClear />
+					</Form.Item>
+				</Col>
+				<Col span={12} md={6}>
+					<Form.Item name='chieuCao' label='Chiều cao (cm)' rules={[...rules.number(300, 0), ...rules.required]}>
+						<InputNumber placeholder='Nhập chiều cao' style={{ width: '100%' }} />
+					</Form.Item>
+				</Col>
+				<Col span={12} md={6}>
+					<Form.Item name='canNang' label='Cân nặng (kg)' rules={[...rules.number(300, 0), ...rules.required]}>
+						<InputNumber placeholder='Nhập cân nặng' style={{ width: '100%' }} />
+					</Form.Item>
+				</Col>
+				<Col span={12} md={6}>
+					<Form.Item
+						name='soBaoHiemSinhVien'
+						label='Số thẻ BHYT'
+						rules={[...rules.text, ...rules.length(20), ...rules.required]}
+					>
+						<Input placeholder='Nhập số thẻ BHYT' />
+					</Form.Item>
+				</Col>
+			</Row>
+			<Collapse style={{ marginBottom: 12 }} defaultActiveKey={['1']}>
+				<Collapse.Panel forceRender header={'Thông tin cá nhân chi tiết'} key={'1'}>
+					<Row gutter={[12, 0]}>
 						<Col span={12} md={8}>
-							<Form.Item name='tonGiao' label='Tôn giáo' rules={[...rules.required]}>
+							<Form.Item name='quocTich' label='Quốc tịch'>
+								<SelectQuocTich allowClear />
+							</Form.Item>
+						</Col>
+						<Col span={12} md={8}>
+							<Form.Item name='danToc' label='Dân tộc'>
+								<SelectDanToc allowClear />
+							</Form.Item>
+						</Col>
+						<Col span={12} md={8}>
+							<Form.Item name='tonGiao' label='Tôn giáo'>
 								<SelectTonGiao allowClear />
 							</Form.Item>
 						</Col>
 					</Row>
-				</Col>
-			</Row>
 
-
-      <Collapse style={{marginBottom:12}}>
-        <Collapse.Panel forceRender header={'Thông tin cá nhân chi tiết'} key={'1'}>
-          <Row gutter={[12, 0]}>
-            <Col span={12} md={8}>
-              <Form.Item name='quocTich' label='Quốc tịch'>
-                <SelectQuocTich allowClear />
-              </Form.Item>
-            </Col>
-            <Col span={12} md={8}>
-              <Form.Item name='danToc' label='Dân tộc'>
-                <SelectDanToc allowClear />
-              </Form.Item>
-            </Col>
-            <Col span={12} md={8}>
-              <Form.Item name='tonGiao' label='Tôn giáo'>
-                <SelectTonGiao allowClear />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Divider orientation='center'>Nơi sinh</Divider>
-          <Row gutter={[12, 0]}>
-            <Col span={12} md={12}>
-              <Form.Item name='loaiNoiSinh' label='Loại nơi sinh' >
-                <Select
-                  placeholder='Chọn loại nơi sinh'
-                  allowClear
-                  options={Object.values(ELoaiNoiSinh).map((item) => ({
-                    key: item,
-                    value: item,
-                    label: TenLoaiNoiSinh[item],
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12} md={12}>
-              {loaiNoiSinh === ELoaiNoiSinh.TRONG_NUOC ? (
-                <Form.Item name='tinhTpNoiSinh' label='Tỉnh/Thành phố' rules={[...rules.required]}>
-                  <Select
-                    placeholder='Chọn tỉnh/thành phố'
-                    options={listTinh?.map((item) => ({
-                      key: item.ma,
-                      value: item.tenDonVi,
-                      label: item.tenDonVi,
-                    }))}
-                    allowClear
-                    showSearch
-                    optionFilterProp='label'
-                  />
-                </Form.Item>
-              ) : (
-                <Form.Item name='quocGiaNoiSinh' label='Quốc gia'>
-                  <Input placeholder='Nhập quốc gia nơi sinh' />
-                </Form.Item>
-              )}
-            </Col>
-          </Row>
-          {/* <Row gutter={[12, 0]}>
+					<Divider orientation='center'>Nơi sinh</Divider>
+					<Row gutter={[12, 0]}>
+						<Col span={12} md={12}>
+							<Form.Item name='loaiNoiSinh' label='Loại nơi sinh'>
+								<Select
+									placeholder='Chọn loại nơi sinh'
+									allowClear
+									options={Object.values(ELoaiNoiSinh).map((item) => ({
+										key: item,
+										value: item,
+										label: TenLoaiNoiSinh[item],
+									}))}
+								/>
+							</Form.Item>
+						</Col>
+						<Col span={12} md={12}>
+							{loaiNoiSinh === ELoaiNoiSinh.TRONG_NUOC ? (
+								<Form.Item name='tinhTpNoiSinh' label='Tỉnh/Thành phố' rules={[...rules.required]}>
+									<Select
+										placeholder='Chọn tỉnh/thành phố'
+										options={listTinh?.map((item) => ({
+											key: item.ma,
+											value: item.tenDonVi,
+											label: item.tenDonVi,
+										}))}
+										allowClear
+										showSearch
+										optionFilterProp='label'
+									/>
+								</Form.Item>
+							) : (
+								<Form.Item name='quocGiaNoiSinh' label='Quốc gia'>
+									<Input placeholder='Nhập quốc gia nơi sinh' />
+								</Form.Item>
+							)}
+						</Col>
+					</Row>
+					{/* <Row gutter={[12, 0]}>
 						<SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='NoiSinh' />
 					</Row> */}
 
-          <Divider orientation='center'>Quê quán</Divider>
+					<Divider orientation='center'>Quê quán</Divider>
 
-            <SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='QueQuan' hasLabel />
+					<SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='QueQuan' hasLabel />
 
+					<Divider orientation='center'>Hộ khẩu thường trú</Divider>
 
-          <Divider orientation='center'>Hộ khẩu thường trú</Divider>
+					<SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='ThuongTru' hasSoNha hasLabel />
 
-            <SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='ThuongTru' hasSoNha hasLabel />
-
-
-          <Divider orientation='center'>Thông tin liên lạc</Divider>
-          <Row gutter={[12, 0]}>
-            <Col span={12}>
-              <Form.Item name='soDienThoai' label='Số điện thoại' rules={[...rules.soDienThoai]}>
-                <Input placeholder='Nhập số điện thoại' />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name='email2' label='Email liên lạc' rules={[...rules.email]}>
-                <Input placeholder='Nhập email' />
-              </Form.Item>
-            </Col>
-            {/* <Col span={24} md={6}>
+					<Divider orientation='center'>Thông tin liên lạc</Divider>
+					<Row gutter={[12, 0]}>
+						<Col span={12}>
+							<Form.Item name='soDienThoai' label='Số điện thoại' rules={[...rules.soDienThoai]}>
+								<Input placeholder='Nhập số điện thoại' />
+							</Form.Item>
+						</Col>
+						<Col span={12}>
+							<Form.Item name='email2' label='Email liên lạc' rules={[...rules.email]}>
+								<Input placeholder='Nhập email' />
+							</Form.Item>
+						</Col>
+						{/* <Col span={24} md={6}>
 							<Form.Item name='soDienThoai2' label='Số điện thoại 2' rules={[...rules.soDienThoai]}>
 								<Input placeholder='Nhập số điện thoại 2' />
 							</Form.Item>
@@ -262,70 +291,70 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 								<Input placeholder='Nhập số điện thoại người liên lạc' />
 							</Form.Item>
 						</Col> */}
-          </Row>
+					</Row>
 
-          <Divider orientation='center'>Thông tin tài khoản ngân hàng</Divider>
-          <Row gutter={[12, 0]}>
-            <Col span={24} md={8}>
-              <Form.Item name='soTaiKhoanNganHang' label='Số tài khoản ngân hàng' rules={[...rules.sotaikhoan]}>
-                <Input placeholder='Nhập số tài khoản' />
-              </Form.Item>
-            </Col>
-            <Col span={24} md={8}>
-              <Form.Item name='tenNganHang' label='Tên ngân hàng' rules={[...rules.text, ...rules.length(250)]}>
-                <Input placeholder='Nhập tên ngân hàng' />
-              </Form.Item>
-            </Col>
-            <Col span={24} md={8}>
-              <Form.Item
-                name='chiNhanhNganHang'
-                label='Chi nhánh ngân hàng'
-                rules={[...rules.text, ...rules.length(250)]}
-              >
-                <Input placeholder='Nhập chi nhánh' />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Collapse.Panel>
+					<Divider orientation='center'>Thông tin tài khoản ngân hàng</Divider>
+					<Row gutter={[12, 0]}>
+						<Col span={24} md={8}>
+							<Form.Item name='soTaiKhoanNganHang' label='Số tài khoản ngân hàng' rules={[...rules.sotaikhoan]}>
+								<Input placeholder='Nhập số tài khoản' />
+							</Form.Item>
+						</Col>
+						<Col span={24} md={8}>
+							<Form.Item name='tenNganHang' label='Tên ngân hàng' rules={[...rules.text, ...rules.length(250)]}>
+								<Input placeholder='Nhập tên ngân hàng' />
+							</Form.Item>
+						</Col>
+						<Col span={24} md={8}>
+							<Form.Item
+								name='chiNhanhNganHang'
+								label='Chi nhánh ngân hàng'
+								rules={[...rules.text, ...rules.length(250)]}
+							>
+								<Input placeholder='Nhập chi nhánh' />
+							</Form.Item>
+						</Col>
+					</Row>
+				</Collapse.Panel>
 
-        <Collapse.Panel forceRender header={'Thông tin gia đình'} key={'4'}>
-          <Row gutter={[12, 0]}>
-            <Col span={24}>
-              <Form.Item name='thanhVienGiaDinh' label=''>
-                <ThongTinGiaDinhFormItem />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Collapse.Panel>
+				<Collapse.Panel forceRender header={'Thông tin gia đình'} key={'4'}>
+					<Row gutter={[12, 0]}>
+						<Col span={24}>
+							<Form.Item name='thanhVienGiaDinh' label=''>
+								<ThongTinGiaDinhFormItem />
+							</Form.Item>
+						</Col>
+					</Row>
+				</Collapse.Panel>
 
-        <Collapse.Panel forceRender header={'Thông tin Đoàn/Đảng'} key={'2'}>
-          {/* <Divider orientation='center'>Thông tin Đoàn</Divider> */}
-          <Row gutter={[12, 0]}>
-            {/* <Col span={24} md={12}>
+				<Collapse.Panel forceRender header={'Thông tin Đoàn/Đảng'} key={'2'}>
+					{/* <Divider orientation='center'>Thông tin Đoàn</Divider> */}
+					<Row gutter={[12, 0]}>
+						{/* <Col span={24} md={12}>
 							<Form.Item name='laDoanVien' label=' ' valuePropName='checked'>
 								<Checkbox>Là đoàn viên</Checkbox>
 							</Form.Item>
 						</Col> */}
-            <Col span={12} md={8}>
-              <Form.Item name='ngayVaoDoan' label='Ngày vào đoàn' rules={[...rules.truocHomNay]}>
-                <MyDatePicker allowClear style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-            <Col span={12} md={8}>
-              <Form.Item name='ngayVaoDang' label='Ngày vào đảng' rules={[...rules.truocHomNay]}>
-                <MyDatePicker allowClear style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-            <Col span={24} md={8}>
-              <Form.Item name='ngayVaoDangChinhThuc' label='Ngày vào đảng chính thức' rules={[...rules.truocHomNay]}>
-                <MyDatePicker allowClear style={{ width: '100%' }} />
-              </Form.Item>
-            </Col>
-          </Row>
+						<Col span={12} md={8}>
+							<Form.Item name='ngayVaoDoan' label='Ngày vào đoàn' rules={[...rules.truocHomNay]}>
+								<MyDatePicker allowClear style={{ width: '100%' }} />
+							</Form.Item>
+						</Col>
+						<Col span={12} md={8}>
+							<Form.Item name='ngayVaoDang' label='Ngày vào đảng' rules={[...rules.truocHomNay]}>
+								<MyDatePicker allowClear style={{ width: '100%' }} />
+							</Form.Item>
+						</Col>
+						<Col span={24} md={8}>
+							<Form.Item name='ngayVaoDangChinhThuc' label='Ngày vào đảng chính thức' rules={[...rules.truocHomNay]}>
+								<MyDatePicker allowClear style={{ width: '100%' }} />
+							</Form.Item>
+						</Col>
+					</Row>
 
-          {/* <Divider orientation='center'>Thông tin Đảng</Divider> */}
-          {/* <Row gutter={[12, 0]}> */}
-          {/* <Col span={24} md={12}>
+					{/* <Divider orientation='center'>Thông tin Đảng</Divider> */}
+					{/* <Row gutter={[12, 0]}> */}
+					{/* <Col span={24} md={12}>
 							<Form.Item name='daHocLopCamTinhDang' label='' valuePropName='checked'>
 								<Checkbox>Đã học lớp cảm tình Đảng</Checkbox>
 							</Form.Item>
@@ -336,14 +365,13 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 							</Form.Item>
 						</Col> */}
 
-          {/* </Row> */}
-        </Collapse.Panel>
+					{/* </Row> */}
+				</Collapse.Panel>
 
-        <Collapse.Panel forceRender header={'Thông tin sức khoẻ và bảo hiểm'} key={'3'}>
-          <FormSucKhoe />
-        </Collapse.Panel>
-
-      </Collapse>
+				<Collapse.Panel forceRender header={'Thông tin sức khoẻ và bảo hiểm'} key={'3'}>
+					<FormSucKhoe />
+				</Collapse.Panel>
+			</Collapse>
 			<div style={{ display: 'flex', justifyContent: 'center' }}>
 				<Form.Item>
 					<Button type={'primary'} htmlType={'submit'}>
