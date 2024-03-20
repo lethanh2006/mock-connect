@@ -1,4 +1,5 @@
-import type { ETrangThaiSinhVienBLTH } from '../constant';
+import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
+import type { ETrangThaiSinhVienBLTH, ETrangThaiSinhVienBaoLuu } from '../constant';
 
 declare module QuyetDinh {
 	export interface IRecord {
@@ -20,18 +21,45 @@ declare module QuyetDinh {
 		khoaSinhVien?: KhoaSinhVien.IRecord;
 		maNganh: string;
 		nganh?: KhoaNganh.IRecord;
+		maKhoaNganh: string;
+		khoaNganh: KhoaNganh.IRecord;
 
-		trangThai: ETrangThaiSinhVienBLTH;
-		maDon?: string;
-		soQuyetDinh?: string;
-		quyetDinh?: IRecord;
-		lyDo?: string;
+		trangThai: ETrangThaiSinhVienBLTH; // Trạng thái duyệt
+		maDon?: string; // Mã đơn sinh viên gửi
+		lyDo?: string; // Lý do không duyệt
+		ghiChu?: string;
 
 		//Quyết định thôi học
 		thoiGianHieuLuc?: string;
+		quyetDinhThoiHoc: IRecord;
+		quyetDinhThoiHocId: string;
 
 		//Quyết định bao lưu
 		thoiGianBatDau?: string;
 		thoiGianKetThuc?: string;
+		trangThaiBaoLuu: ETrangThaiSinhVienBaoLuu;
+
+		//Quyết định
+		quyetDinhId?: string;
+		soQuyetDinh?: string;
+		quyetDinh?: IRecord;
+
+		//Quay lại học
+		idDonQuayLaiHoc: string;
+		donQuayLaiHoc: ISinhVienQuayLaiHoc;
+	}
+
+	export interface ISinhVienQuayLaiHoc {
+		_id: string;
+		ghiChu: string;
+		hoTen: string;
+		lyDo: null;
+		maDon: null;
+		maKhoaNganh: string;
+		maSinhVien: string;
+		quyetDinhId: stirng;
+		quyetDinh: IRecord;
+		sinhVienSsoId: string;
+		trangThai: ETrangThaiSinhVienDot;
 	}
 }

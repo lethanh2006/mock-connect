@@ -21,15 +21,18 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 
 	const columns: IColumn<QuyetDinh.ISinhVienBaoLuuThoiHoc>[] = [
 		{
-			title: 'Số quyết đinh',
+			title: 'Quyết định',
 			dataIndex: 'soQuyetDinh',
 			width: 150,
+			render: (val, rec) => rec?.quyetDinh?.soQuyetDinh ?? val,
 		},
 		{
-			title: 'Nội dung',
-			dataIndex: 'quyetDinh',
-			width: 250,
-			render: (val, rec) => <ExpandText>{rec.quyetDinh?.noiDung}</ExpandText>,
+			title: 'Quyết định QLH',
+			dataIndex: 'idDonQuayLaiHoc',
+			align: 'center',
+			width: 120,
+			render: (val, rec) => rec.donQuayLaiHoc?.quyetDinh?.soQuyetDinh,
+			hide: isThoiHoc,
 		},
 		{
 			title: 'Thời gian thôi học',
@@ -42,7 +45,7 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 		{
 			title: 'Thời gian bảo lưu',
 			dataIndex: 'thoiGianBatDau',
-			width: 120,
+			width: 130,
 			align: 'center',
 			render: (val, rec) => val && moment(val).format('DD/MM/YYYY'),
 			hide: isThoiHoc,
@@ -50,17 +53,28 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 		{
 			title: 'Thời gian kết thúc',
 			dataIndex: 'thoiGianKetThuc',
-			width: 120,
+			width: 130,
 			align: 'center',
 			render: (val, rec) => val && moment(val).format('DD/MM/YYYY'),
 			hide: isThoiHoc,
 		},
 		{
-			title: 'Tập tin',
-			dataIndex: 'quyetDinh',
-			align: 'center',
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 180,
+			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+		},
+		{
+			title: 'Khóa',
+			dataIndex: 'maKhoaSinhVien',
 			width: 120,
-			render: (val, rec) => rec.quyetDinh?.url && <a href={rec.quyetDinh?.url}>Xem chi tiết</a>,
+			render: (val, rec) => rec.khoaSinhVien?.ten,
+		},
+		{
+			title: 'Ngành',
+			dataIndex: 'maNganh',
+			width: 180,
+			render: (val, rec) => rec.nganh?.ten,
 		},
 		{
 			title: 'Trạng thái',
@@ -68,6 +82,7 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 			align: 'center',
 			render: (val, rec) => <Tag color={colorTrangThaiSinhVienBLTH[val as ETrangThaiSinhVienBLTH]}>{val}</Tag>,
 			width: 120,
+			fixed: 'right',
 		},
 	];
 

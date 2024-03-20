@@ -59,6 +59,18 @@ export const colorTrangThaiSinhVienBLTH: Record<ETrangThaiSinhVienBLTH, string> 
 	[ETrangThaiSinhVienBLTH.KHONG_DUYET]: 'orange',
 };
 
+export enum ETrangThaiSinhVienBaoLuu {
+	DANG_BAO_LUU = 'Đang bảo lưu',
+	QUAY_LAI_HOC = 'Quay lại học',
+	BUOC_THOI_HOC = 'Buộc thôi học',
+}
+
+export const colorTrangThaiSinhVienBaoLuu: Record<ETrangThaiSinhVienBaoLuu, string> = {
+	[ETrangThaiSinhVienBaoLuu.DANG_BAO_LUU]: 'blue',
+	[ETrangThaiSinhVienBaoLuu.QUAY_LAI_HOC]: 'green',
+	[ETrangThaiSinhVienBaoLuu.BUOC_THOI_HOC]: 'red',
+};
+
 // LỚP HÀNH CHÍNH
 export enum EDoiTuongLopHanhChinh {
 	TC = 'TC',
