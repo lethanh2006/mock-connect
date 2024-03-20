@@ -117,7 +117,7 @@ export enum ETrangThaiHocPhanQuyDoi {
 
 export const colorTrangThaiHocPhanQuyDoi: Record<ETrangThaiHocPhanQuyDoi, string> = {
 	[ETrangThaiHocPhanQuyDoi.CHO_XU_LY]: 'blue',
-	[ETrangThaiHocPhanQuyDoi.CONG_NHAN]: 'green',
+	[ETrangThaiHocPhanQuyDoi.CONG_NHAN]: 'orange',
 	[ETrangThaiHocPhanQuyDoi.KHONG_CONG_NHAN]: 'red',
-	[ETrangThaiHocPhanQuyDoi.DA_RA_QUYET_DINH]: 'orange',
+	[ETrangThaiHocPhanQuyDoi.DA_RA_QUYET_DINH]: 'green',
 };
