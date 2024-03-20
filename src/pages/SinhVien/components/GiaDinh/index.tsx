@@ -1,12 +1,12 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
-import type { SinhVien } from '@/services/SinhVien/typings';
 import { formatPhoneNumber } from '@/utils/utils';
 import moment from 'moment';
 import Form from './Form';
 import { useState } from 'react';
 import { Tooltip, Button, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 
 const ThongTinGiaDinhFormItem = (props: {
 	value?: SinhVien.TThongTinGiaDinh[];
