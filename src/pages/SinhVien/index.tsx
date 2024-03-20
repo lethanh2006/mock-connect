@@ -1,12 +1,16 @@
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
-import { EditOutlined, PrinterOutlined } from '@ant-design/icons';
+import { EditOutlined, LeftOutlined, PrinterOutlined } from '@ant-design/icons';
 import { Button, Card, Space, message } from 'antd';
 import fileDownload from 'js-file-download';
 import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
+import { useState } from 'react';
+import FormSinhVien from '@/pages/SinhVien/components/Form';
 
 const ThongTinSinhVienPage = () => {
 	const { record, loading, setLoading } = useModel('sinhvien.sinhvien');
+	const [isCapNhat, setIsCapNhat] = useState<boolean>(false);
+
 	// const [currentStep, setCurrentStep] = useState<string>('0');
 	// const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
 
@@ -30,20 +34,34 @@ const ThongTinSinhVienPage = () => {
 
 	return (
 		<Card title='Thông tin cá nhân'>
-			{/* <Space style={{ marginBottom: 12 }} wrap>
-				{record?.ssoId ? (
-					<>
-						<Button icon={<EditOutlined />} onClick={() => message.warn('Đang cập nhật')}>
-							Cập nhật hồ sơ
+			{isCapNhat ? (
+				<>
+					<Space style={{ marginBottom: 12 }} wrap>
+						<Button icon={<LeftOutlined />} onClick={() => setIsCapNhat(false)}>
+							Quay lại
 						</Button>
-						<Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
-							In hồ sơ
-						</Button>
-					</>
-				) : null}
-			</Space> */}
+					</Space>
+					<FormSinhVien onCancel={() => setIsCapNhat(false)} />
+				</>
+			) : (
+				<>
+					{' '}
+					<Space style={{ marginBottom: 12 }} wrap>
+						{record?.ssoId ? (
+							<>
+								<Button icon={<EditOutlined />} onClick={() => setIsCapNhat(true)}>
+									Cập nhật hồ sơ
+								</Button>
+								<Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
+									In hồ sơ
+								</Button>
+							</>
+						) : null}
+					</Space>
+					<PreviewHoSo />
+				</>
+			)}
 
-			<PreviewHoSo />
 			{/* <Tabs
         activeKey={currentStep}
         tabPosition={isTabletOrMobile ? 'top' : 'left'}
