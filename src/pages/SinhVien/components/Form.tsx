@@ -192,23 +192,23 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 			</Row>
 			<Collapse style={{ marginBottom: 12 }} defaultActiveKey={['1']}>
 				<Collapse.Panel forceRender header={'Thông tin cá nhân chi tiết'} key={'1'}>
-					<Row gutter={[12, 0]}>
-						<Col span={12} md={8}>
-							<Form.Item name='quocTich' label='Quốc tịch'>
-								<SelectQuocTich allowClear />
-							</Form.Item>
-						</Col>
-						<Col span={12} md={8}>
-							<Form.Item name='danToc' label='Dân tộc'>
-								<SelectDanToc allowClear />
-							</Form.Item>
-						</Col>
-						<Col span={12} md={8}>
-							<Form.Item name='tonGiao' label='Tôn giáo'>
-								<SelectTonGiao allowClear />
-							</Form.Item>
-						</Col>
-					</Row>
+					{/*<Row gutter={[12, 0]}>*/}
+					{/*	<Col span={12} md={8}>*/}
+					{/*		<Form.Item name='quocTich' label='Quốc tịch'>*/}
+					{/*			<SelectQuocTich allowClear />*/}
+					{/*		</Form.Item>*/}
+					{/*	</Col>*/}
+					{/*	<Col span={12} md={8}>*/}
+					{/*		<Form.Item name='danToc' label='Dân tộc'>*/}
+					{/*			<SelectDanToc allowClear />*/}
+					{/*		</Form.Item>*/}
+					{/*	</Col>*/}
+					{/*	<Col span={12} md={8}>*/}
+					{/*		<Form.Item name='tonGiao' label='Tôn giáo'>*/}
+					{/*			<SelectTonGiao allowClear />*/}
+					{/*		</Form.Item>*/}
+					{/*	</Col>*/}
+					{/*</Row>*/}
 
 					<Divider orientation='center'>Nơi sinh</Divider>
 					<Row gutter={[12, 0]}>
