@@ -1,5 +1,6 @@
 import { type ELoaiHocPhanDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
+import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
@@ -93,7 +94,6 @@ export declare module LopHocPhan {
 
 	export interface IDiemHpSvHk extends IDiemThanhPhan, IDiemThi, IDiemTongKet {
 		_id: string;
-		title: number;
 		sinhVienSsoId: string;
 		maSinhVien: string;
 		sinhVien?: SinhVien.IRecord;
@@ -119,7 +119,7 @@ export declare module LopHocPhan {
 		public: boolean;
 
 		maKhoaNganh: string;
-		khoaNganh: KhoaNganh.IRecord;
+		khoaNganh?: KhoaNganh.IRecord;
 	}
 
 	export interface IDiemThanhPhan {
