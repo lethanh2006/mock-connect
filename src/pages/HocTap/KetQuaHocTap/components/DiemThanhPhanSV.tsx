@@ -8,11 +8,11 @@ import { useModel } from 'umi';
 
 const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const { maKhoaNganh } = props;
-	const { danhSach, sinhVienGetAllDiemLopHocPhanModel, loading } = useModel('lophocphan.sinhvienlophocphan');
+	const { danhSach, getAllModel, loading } = useModel('daotao.diemhpsvhk');
 	const { danhSach: danhSachDauDiem, getModel: getDauDiem } = useModel('daotao.daudiemhocphan');
 	const [loaiHocPhan, setLoaiHocPhan] = useState<string>('all');
 
-	const getData = () => maKhoaNganh && sinhVienGetAllDiemLopHocPhanModel({ maKhoaNganh });
+	const getData = () => maKhoaNganh && getAllModel(undefined, undefined, { maKhoaNganh });
 
 	useEffect(() => {
 		getData();

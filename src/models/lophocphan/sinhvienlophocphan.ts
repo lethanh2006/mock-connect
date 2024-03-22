@@ -1,4 +1,4 @@
-import { getAllDiemLopHocPhan, getDiemLopHocPhan } from '@/services/HocTap/LopHocPhan';
+import { getDiemLopHocPhan } from '@/services/HocTap/LopHocPhan';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { useState } from 'react';
 
@@ -20,19 +20,6 @@ export default () => {
 		}
 	};
 
-	const sinhVienGetAllDiemLopHocPhanModel = async (condition?: any): Promise<LopHocPhan.IDiemHpSvHk[]> => {
-		setLoading(true);
-		try {
-			const response = await getAllDiemLopHocPhan({ condition });
-			setDanhSach(response?.data?.data ?? []);
-			return response?.data?.data;
-		} catch (er) {
-			return Promise.reject(er);
-		} finally {
-			setLoading(false);
-		}
-	};
-
 	return {
 		loading,
 		setLoading,
@@ -41,6 +28,5 @@ export default () => {
 		sinhVienGetDiemLopHocPhanModel,
 		danhSach,
 		setDanhSach,
-		sinhVienGetAllDiemLopHocPhanModel,
 	};
 };
