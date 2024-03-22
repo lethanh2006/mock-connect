@@ -6,7 +6,7 @@ import Form from './Form';
 import { useState } from 'react';
 import { Tooltip, Button, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 
 const ThongTinGiaDinhFormItem = (props: {
 	value?: SinhVien.TThongTinGiaDinh[];

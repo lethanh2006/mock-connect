@@ -5,17 +5,16 @@ import SelectQuocTich from '@/pages/Core/QuocTich/SelectQuocTich';
 import SelectTonGiao from '@/pages/Core/TonGiao/SelectTonGiao';
 import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
+import { EGioiTinh } from '@/services/DaoTao/constant';
+import { ELoaiNoiSinh, TenLoaiNoiSinh } from '@/services/DaoTao/SinhVien/constants';
+import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
-import { Button, Checkbox, Col, Collapse, Divider, Form, Input, InputNumber, message, Row, Select } from 'antd';
+import { Button, Col, Collapse, Divider, Form, Input, InputNumber, message, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SelectDonViHanhChinh from '../../Core/DonViHanhChinh/SelectDonViHanhChinh';
-import { EGioiTinh } from '@/services/DaoTao/constant';
-import { buildUpLoadFile } from '@/services/uploadFile';
-import { TenLoaiNoiSinh } from '@/services/DaoTao/SinhVien/constants';
-import { ELoaiNoiSinh } from '@/services/DaoTao/SinhVien/constants';
-import ThongTinGiaDinhFormItem from './GiaDinh';
 import FormSucKhoe from './FormSucKhoe';
+import ThongTinGiaDinhFormItem from './GiaDinh';
 
 const FormSinhVien = (props: { onCancel?: () => void }) => {
 	const [form] = Form.useForm();
@@ -23,6 +22,10 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 	const [listTinh, setListTinh] = useState<DonViHanhChinh.IRecord[]>();
 	const loaiNoiSinh = Form.useWatch('loaiNoiSinh', form) ?? ELoaiNoiSinh.TRONG_NUOC;
 	const onFinish = async (values: any) => {
+		if (!values.thanhVienGiaDinh || !values.thanhVienGiaDinh.length) {
+			message.error('Vui lòng khai thông tin thành viên gia đình');
+			return;
+		}
 		try {
 			const urlImg = await buildUpLoadFile(values, 'anhDaiDienUrl').catch(console.log);
 			const payload = { ...values, anhDaiDienUrl: urlImg };
@@ -190,7 +193,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 					</Form.Item>
 				</Col>
 			</Row>
-			<Collapse style={{ marginBottom: 12 }} defaultActiveKey={['1']}>
+			<Collapse style={{ marginBottom: 12 }} defaultActiveKey={['1', '4']}>
 				<Collapse.Panel forceRender header={'Thông tin cá nhân chi tiết'} key={'1'}>
 					{/*<Row gutter={[12, 0]}>*/}
 					{/*	<Col span={12} md={8}>*/}
@@ -262,12 +265,12 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 					<Divider orientation='center'>Thông tin liên lạc</Divider>
 					<Row gutter={[12, 0]}>
 						<Col span={12}>
-							<Form.Item name='soDienThoai' label='Số điện thoại' rules={[...rules.soDienThoai]}>
+							<Form.Item name='soDienThoai' label='Số điện thoại' rules={[...rules.required, ...rules.soDienThoai]}>
 								<Input placeholder='Nhập số điện thoại' />
 							</Form.Item>
 						</Col>
 						<Col span={12}>
-							<Form.Item name='email2' label='Email liên lạc' rules={[...rules.email]}>
+							<Form.Item name='email2' label='Email liên lạc' rules={[...rules.required, ...rules.email]}>
 								<Input placeholder='Nhập email' />
 							</Form.Item>
 						</Col>
