@@ -5,8 +5,8 @@ import SelectQuocTich from '@/pages/Core/QuocTich/SelectQuocTich';
 import SelectTonGiao from '@/pages/Core/TonGiao/SelectTonGiao';
 import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import type { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
-import {ELoaiThanhVienGiaDinh, ETrangThaiThanhVienGiaDinh } from '@/services/DaoTao/SinhVien/constants';
-import { SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import { ELoaiThanhVienGiaDinh, ETrangThaiThanhVienGiaDinh } from '@/services/DaoTao/SinhVien/constants';
+import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
@@ -99,7 +99,15 @@ const FormThongTinGiaDinh = (props: {
 							</Col>
 
 							<Col span={12} md={6}>
-								<Form.Item name='soDienThoai' label='Số điện thoại' rules={[...rules.soDienThoai]}>
+								<Form.Item
+									name='soDienThoai'
+									label='Số điện thoại'
+									rules={
+										trangThaiThanhVien === ETrangThaiThanhVienGiaDinh.DA_MAT
+											? [...rules.soDienThoai]
+											: [...rules.required, ...rules.soDienThoai]
+									}
+								>
 									<Input placeholder='Nhập số điện thoại' />
 								</Form.Item>
 							</Col>
@@ -109,7 +117,15 @@ const FormThongTinGiaDinh = (props: {
 								</Form.Item>
 							</Col>
 							<Col span={12} md={6}>
-								<Form.Item name='ngheNghiep' label='Nghề nghiệp' rules={[...rules.text, ...rules.length(250),...rules.required]}>
+								<Form.Item
+									name='ngheNghiep'
+									label='Nghề nghiệp'
+									rules={
+										trangThaiThanhVien === ETrangThaiThanhVienGiaDinh.DA_MAT
+											? [...rules.text, ...rules.length(250)]
+											: [...rules.text, ...rules.length(250), ...rules.required]
+									}
+								>
 									<Input placeholder='Nhập nghề nghiệp' />
 								</Form.Item>
 							</Col>
@@ -120,12 +136,16 @@ const FormThongTinGiaDinh = (props: {
 							</Col>
 
 							<Col span={24}>
-								<Form.Item name='hoKhauThuongTru' label='Hộ khẩu thường trú' rules={[...rules.required]}>
-									<SelectDiaChiHoSoFormItem listTinh={listTinh} required/>
+								<Form.Item
+									name='hoKhauThuongTru'
+									label='Hộ khẩu thường trú'
+									rules={trangThaiThanhVien === ETrangThaiThanhVienGiaDinh.DA_MAT ? undefined : [...rules.required]}
+								>
+									<SelectDiaChiHoSoFormItem listTinh={listTinh} required />
 								</Form.Item>
 							</Col>
 							<Col span={24}>
-								<Form.Item name='diaChiHienNay' label='Địa chỉ hiện nay' >
+								<Form.Item name='diaChiHienNay' label='Địa chỉ hiện nay'>
 									<SelectDiaChiHoSoFormItem listTinh={listTinh} hasSoNha />
 								</Form.Item>
 							</Col>
