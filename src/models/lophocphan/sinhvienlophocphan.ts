@@ -5,7 +5,7 @@ import { useState } from 'react';
 export default () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [sinhVienLopHocPhan, setSinhVienLopHocPhan] = useState<LopHocPhan.IRecordSinhVienLopHP>();
-	const [danhSach, setDanhSach] = useState<LopHocPhan.IRecordSinhVienLopHP[]>([]);
+	const [danhSach, setDanhSach] = useState<LopHocPhan.IDiemHpSvHk[]>([]);
 
 	const sinhVienGetDiemLopHocPhanModel = async (lopHocPhanId: string): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
 		setLoading(true);
@@ -20,7 +20,7 @@ export default () => {
 		}
 	};
 
-	const sinhVienGetAllDiemLopHocPhanModel = async (condition?: any): Promise<LopHocPhan.IRecordSinhVienLopHP[]> => {
+	const sinhVienGetAllDiemLopHocPhanModel = async (condition?: any): Promise<LopHocPhan.IDiemHpSvHk[]> => {
 		setLoading(true);
 		try {
 			const response = await getAllDiemLopHocPhan({ condition });

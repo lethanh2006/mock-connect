@@ -6,7 +6,7 @@ export async function getDiemLopHocPhan(lopHocPhanId: string) {
 }
 
 export async function getAllDiemLopHocPhan(params: { condition?: any }) {
-	return axios.get(`${ipDaoTao}/lop-hp-sv/sinh-vien/all`, { params });
+	return axios.get(`${ipDaoTao}/diem-hp-sv-hk/many`, { params });
 }
 
 export async function getMoodleLopHocPhan(lopHocPhanId: string) {
