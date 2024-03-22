@@ -1,6 +1,6 @@
 import { getPhuongXa, getQuanHuyen } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
-import { SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import rules from '@/utils/rules';
 import { Col, Form, Input, Select, Row } from 'antd';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,7 @@ const SelectDiaChiHoSoFormItem = (props: {
 	hasSoNha?: boolean;
 	required?: boolean;
 }) => {
-	const { value, onChange, listTinh, hasSoNha,required } = props;
+	const { value, onChange, listTinh, hasSoNha, required } = props;
 	const [listHuyen, setListHuyen] = useState<DonViHanhChinh.IRecord[]>([]);
 	const [listXa, setListXa] = useState<DonViHanhChinh.IRecord[]>([]);
 
@@ -50,7 +50,7 @@ const SelectDiaChiHoSoFormItem = (props: {
 	return (
 		<Row gutter={[12, 0]}>
 			<Col span={12} md={hasSoNha ? 6 : 8}>
-				<Form.Item label='Tỉnh/Thành phố' rules={required?[...rules.required]:[]}>
+				<Form.Item label='Tỉnh/Thành phố' rules={required ? [...rules.required] : []}>
 					<Select
 						placeholder='Chọn tỉnh/thành phố'
 						options={listTinh?.map((item) => ({
@@ -67,7 +67,7 @@ const SelectDiaChiHoSoFormItem = (props: {
 				</Form.Item>
 			</Col>
 			<Col span={12} md={hasSoNha ? 6 : 8}>
-				<Form.Item label='Quận/Huyện' rules={required?[...rules.required]:[]}>
+				<Form.Item label='Quận/Huyện' rules={required ? [...rules.required] : []}>
 					<Select
 						placeholder='Chọn quận/huyện'
 						options={(listHuyen ?? []).map((item) => ({
@@ -85,7 +85,7 @@ const SelectDiaChiHoSoFormItem = (props: {
 				</Form.Item>
 			</Col>
 			<Col span={12} md={hasSoNha ? 6 : 8}>
-				<Form.Item label='Phường/Xã' rules={required?[...rules.required]:[]}>
+				<Form.Item label='Phường/Xã' rules={required ? [...rules.required] : []}>
 					<Select
 						placeholder='Chọn phường/xã'
 						allowClear

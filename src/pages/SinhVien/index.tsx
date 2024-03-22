@@ -49,7 +49,7 @@ const ThongTinSinhVienPage = () => {
 					<Space style={{ marginBottom: 12 }} wrap>
 						{record?.ssoId ? (
 							<>
-								<Button icon={<EditOutlined />} onClick={() => setIsCapNhat(true)}>
+								<Button type='primary' icon={<EditOutlined />} onClick={() => setIsCapNhat(true)}>
 									Cập nhật hồ sơ
 								</Button>
 								<Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
