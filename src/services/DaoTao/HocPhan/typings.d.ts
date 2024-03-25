@@ -44,6 +44,7 @@ declare module HocPhan {
 		// soTinChi: number;
 		// isTinhDiem: boolean;
 		mucTieuHocPhan: string;
+		chuanDauRa: string;
 		// noiDungTomTat: string;
 		// noiDungChiTiet: string;
 		active: boolean;
