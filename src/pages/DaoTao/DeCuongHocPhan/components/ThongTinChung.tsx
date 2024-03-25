@@ -58,6 +58,9 @@ const ThongTinChungPage = () => {
 				<Collapse.Panel header='Mục tiêu học phần' key='1'>
 					<div dangerouslySetInnerHTML={{ __html: record?.mucTieuHocPhan ?? '--' }} />
 				</Collapse.Panel>
+				<Collapse.Panel header='Chuẩn đầu ra' key='2'>
+					<div dangerouslySetInnerHTML={{ __html: record?.chuanDauRa ?? '--' }} />
+				</Collapse.Panel>
 				{/* <Collapse.Panel header='Nội dung tóm tắt' key='2'>
 					<div dangerouslySetInnerHTML={{ __html: record?.noiDungTomTat ?? '--' }} />
 				</Collapse.Panel>
