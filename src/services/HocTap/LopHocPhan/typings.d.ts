@@ -1,5 +1,6 @@
 import { type ELoaiHocPhanDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
+import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
@@ -94,6 +95,7 @@ export declare module LopHocPhan {
 	export interface IDiemHpSvHk extends IDiemThanhPhan, IDiemThi, IDiemTongKet {
 		_id: string;
 		sinhVienSsoId: string;
+		maSinhVien: string;
 		sinhVien?: SinhVien.IRecord;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
@@ -107,6 +109,7 @@ export declare module LopHocPhan {
 		// Điểm có từ quy đổi điểm?
 		dotDangKyQuyDoiDiemId: string;
 		dotDangKyQuyDoiDiem?: QuyDoiDiem.IQuyDoiDiemSinhVien;
+		isCongNhanQuyDoiDiem?: boolean;
 
 		// trangThaiDuyetDiemThanhPhan?: ETrangThaiDuyetDiem;
 		// trangThaiDuyet?: ETrangThaiDuyetDiem;
@@ -114,6 +117,9 @@ export declare module LopHocPhan {
 		khoa: boolean; // Khóa điểm thành phần
 		khoaDiemThi: boolean; // Khóa điểm thi
 		public: boolean;
+
+		maKhoaNganh: string;
+		khoaNganh?: KhoaNganh.IRecord;
 	}
 
 	export interface IDiemThanhPhan {
