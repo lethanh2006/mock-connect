@@ -4,13 +4,13 @@ import { useState } from 'react';
 
 export default () => {
 	const [loading, setLoading] = useState<boolean>(false);
-	const [sinhVienLopHocPhan, setSinhVienLopHocPhan] = useState<LopHocPhan.IRecordSinhVienLopHP>();
+	const [record, setRecord] = useState<LopHocPhan.IRecordSinhVienLopHP>();
 
-	const sinhVienGetDiemLopHocPhanModel = async (lopHocPhanId: string): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
+	const sinhVienGetDiemLHPModel = async (lopHocPhanId: string): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
 		setLoading(true);
 		try {
 			const response = await getDiemLopHocPhan(lopHocPhanId);
-			setSinhVienLopHocPhan(response?.data?.data ?? null);
+			setRecord(response?.data?.data ?? null);
 			return response?.data?.data;
 		} catch (er) {
 			return Promise.reject(er);
@@ -22,8 +22,8 @@ export default () => {
 	return {
 		loading,
 		setLoading,
-		sinhVienLopHocPhan,
-		setSinhVienLopHocPhan,
-		sinhVienGetDiemLopHocPhanModel,
+		record,
+		setRecord,
+		sinhVienGetDiemLHPModel,
 	};
 };

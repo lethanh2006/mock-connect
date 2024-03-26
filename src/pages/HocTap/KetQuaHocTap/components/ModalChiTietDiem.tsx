@@ -5,12 +5,11 @@ import { ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { PlusCircleOutlined, StarOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Divider, Modal, Space, Tooltip, message } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
-import DetailKetQuaHocTap from './DetailKetQuaHocTap';
 import ModalQuyDoiDiem from '../../QuyDoiDiem/components/Modal';
+import DetailKetQuaHocTap from './DetailKetQuaHocTap';
 
 const ModalChiTietDiem = (props: {
 	visible: boolean;
@@ -19,34 +18,15 @@ const ModalChiTietDiem = (props: {
 	hocPhan?: HocPhan.IRecord;
 	listDiem?: LopHocPhan.IDiemHpSvHk[];
 	trangThaiHoc?: ETrangThaiHocTap;
-	chuongTrinh?: ChuongTrinhDaoTao.IHocPhanBase;
-	khoiHocPhanCt?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
+	khoiChuongTrinh?: Partial<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>;
 	maKhoaNganh?: string;
 }) => {
 	const { getByIdModel } = useModel('lophocphan.lophocphan');
-	const { setIsView: setIsViewPhieu } = useModel('daotao.quydoidiem.phieuquydoidiem');
-	const { setIsView: setIsViewSinhVien } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
-	const { danhSach } = useModel('daotao.quydoidiem.dotquydoidiem');
-	const {
-		visible,
-		setVisible,
-		lopHocPhanId,
-		hocPhan,
-		listDiem,
-		trangThaiHoc,
-		chuongTrinh,
-		khoiHocPhanCt,
-		maKhoaNganh,
-	} = props;
+	const { ngoaiQuyDoiDiem } = useModel('daotao.quydoidiem.dotquydoidiem');
+	const { visible, setVisible, lopHocPhanId, hocPhan, listDiem, trangThaiHoc, khoiChuongTrinh, maKhoaNganh } = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
 	const [deCuongId, setDeCuongId] = useState<string>();
-
-	const thoiGianQuyDoiDiem =
-		!danhSach[0]?.thoiGianBatDau ||
-		!danhSach[0]?.thoiGianKetThuc ||
-		moment().isAfter(danhSach[0]?.thoiGianBatDau, 'd') ||
-		moment().isBefore(danhSach[0]?.thoiGianKetThuc, 'd');
 
 	const handleShowDeCuong = async () => {
 		let de = hocPhan?.deCuongHienTaiId;
@@ -83,19 +63,15 @@ const ModalChiTietDiem = (props: {
 				visible={visible}
 				onCancel={() => setVisible(false)}
 				footer={
-					<Space>
+					<Space wrap>
 						<ButtonExtend icon={<StarOutlined />} title='Quan tâm học phần'>
 							Quan tâm
 						</ButtonExtend>
 						{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
 							<ButtonExtend
-								tooltip={!danhSach.length || !thoiGianQuyDoiDiem ? 'Không có đợt công nhận KQHT' : null}
-								disabled={!danhSach.length || !thoiGianQuyDoiDiem}
-								onClick={() => {
-									setVisibleCongNhan(true);
-									setIsViewPhieu(false);
-									setIsViewSinhVien(false);
-								}}
+								tooltip={ngoaiQuyDoiDiem ? 'Không có đợt công nhận KQHT' : null}
+								disabled={ngoaiQuyDoiDiem}
+								onClick={() => setVisibleCongNhan(true)}
 								icon={<PlusCircleOutlined />}
 							>
 								Công nhận KQHT
@@ -128,16 +104,14 @@ const ModalChiTietDiem = (props: {
 					</Descriptions>
 				) : null}
 
-				{chuongTrinh ? (
+				{khoiChuongTrinh ? (
 					<Descriptions title='Chương trình học' column={1} style={{ marginTop: 12 }}>
-						{khoiHocPhanCt ? (
-							<Descriptions.Item label='Khối kiến thức'>
-								{khoiHocPhanCt.khoiKienThuc?.ten ?? khoiHocPhanCt.maKhoiKienThuc}
-							</Descriptions.Item>
-						) : null}
-						{renderHocPhanCt(chuongTrinh.dsHocPhanTienQuyet, 'Học phần tiên quyết')}
-						{renderHocPhanCt(chuongTrinh.dsHocPhanTruoc, 'Học phần trước')}
-						{renderHocPhanCt(chuongTrinh.dsHocPhanSongHanh, 'Học phần song hành')}
+						<Descriptions.Item label='Khối kiến thức'>
+							{khoiChuongTrinh.khoiKienThuc?.ten ?? khoiChuongTrinh.maKhoiKienThuc}
+						</Descriptions.Item>
+						{renderHocPhanCt(khoiChuongTrinh.dsHocPhanTienQuyet, 'Học phần tiên quyết')}
+						{renderHocPhanCt(khoiChuongTrinh.dsHocPhanTruoc, 'Học phần trước')}
+						{renderHocPhanCt(khoiChuongTrinh.dsHocPhanSongHanh, 'Học phần song hành')}
 					</Descriptions>
 				) : null}
 
@@ -165,12 +139,14 @@ const ModalChiTietDiem = (props: {
 				deCuongId={deCuongId}
 			/>
 
-			<ModalQuyDoiDiem
-				visible={visibleCongNhan}
-				setVisible={setVisibleCongNhan}
-				hocPhan={hocPhan}
-				maKhoaNganh={maKhoaNganh}
-			/>
+			{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
+				<ModalQuyDoiDiem
+					visible={visibleCongNhan}
+					setVisible={setVisibleCongNhan}
+					hocPhan={hocPhan}
+					maKhoaNganh={maKhoaNganh}
+				/>
+			) : null}
 		</>
 	);
 };
