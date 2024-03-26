@@ -6,16 +6,16 @@ import { useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocPhan.IDiemHpSvHk }) => {
 	const { danhSach, getModel } = useModel('daotao.daudiemhocphan');
-	const { sinhVienGetDiemLopHocPhanModel, sinhVienLopHocPhan, loading } = useModel('lophocphan.sinhvienlophocphan');
+	const { sinhVienGetDiemLHPModel, record: recSinhVienLhp, loading } = useModel('lophocphan.sinhvienlophocphan');
 	const { lopHocPhanId, diemHpSvHk } = props;
-	const sinhVienDiem = diemHpSvHk ?? sinhVienLopHocPhan?.diemHpSvHk;
+	const sinhVienDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
 
 	useEffect(() => {
 		getModel();
 	}, []);
 
 	useEffect(() => {
-		if (lopHocPhanId && !diemHpSvHk) sinhVienGetDiemLopHocPhanModel(lopHocPhanId);
+		if (lopHocPhanId && !diemHpSvHk) sinhVienGetDiemLHPModel(lopHocPhanId);
 	}, [lopHocPhanId]);
 
 	return (
