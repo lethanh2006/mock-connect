@@ -15,8 +15,11 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const getData = () => maKhoaNganh && getAllModel(undefined, undefined, { maKhoaNganh });
 
 	useEffect(() => {
-		getData();
 		getDauDiem();
+	}, []);
+
+	useEffect(() => {
+		getData();
 	}, [maKhoaNganh]);
 
 	const columns: IColumn<LopHocPhan.IDiemHpSvHk>[] = [
@@ -26,12 +29,11 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			width: 80,
 			align: 'center',
 			filterType: 'string',
-			render: (val, rec) => val ?? rec?.hocPhan?.ma,
 		},
 		{
 			title: 'Tên học phần',
 			width: 220,
-			render: (val, rec) => val ?? rec?.hocPhan?.ten,
+			render: (val, rec) => rec?.hocPhan?.ten,
 		},
 		{
 			title: 'Số TC',
