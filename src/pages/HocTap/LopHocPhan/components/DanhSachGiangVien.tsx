@@ -1,11 +1,14 @@
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { formatPhoneNumber } from '@/utils/utils';
-import { Avatar, List } from 'antd';
+import { Avatar, Image, List } from 'antd';
+import { useState } from 'react';
 
 type TNhanSu = Pick<LopHocPhan.IRecordNhanSuLopHP, 'tenNhanSu' | 'maNhanSu' | 'nhanSu' | 'nhanSuSsoId'>;
 
 const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?: string }) => {
 	const { title, danhSachNhanSu } = props;
+	const [previewOpen, setPreviewOpen] = useState(false);
+	const [previewImage, setPreviewImage] = useState('');
 
 	return (
 		<>
@@ -19,13 +22,23 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 						<List.Item>
 							<List.Item.Meta
 								avatar={
-									<Avatar
-										size='large'
-										src={
-											item.nhanSu?.urlAnhDaiDien ||
-											(item.nhanSu?.gioiTinh === 'Nữ' ? '/images/teacher-female.svg' : '/images/teacher-male.svg')
-										}
-									/>
+									<div
+										style={{ cursor: item.nhanSu?.urlAnhDaiDien ? 'pointer' : undefined }}
+										onClick={() => {
+											if (item.nhanSu?.urlAnhDaiDien) {
+												setPreviewImage(item.nhanSu.urlAnhDaiDien);
+												setPreviewOpen(true);
+											}
+										}}
+									>
+										<Avatar
+											size='large'
+											src={
+												item.nhanSu?.urlAnhDaiDien ||
+												(item.nhanSu?.gioiTinh === 'Nữ' ? '/images/teacher-female.svg' : '/images/teacher-male.svg')
+											}
+										/>
+									</div>
 								}
 								title={
 									item.nhanSu?.ten || item.tenNhanSu ? (
@@ -55,8 +68,19 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 					)}
 				/>
 			) : (
-				<div style={{ marginBottom: 24 }}>Không có thông tin giảng viên</div>
+				<div>
+					<i>Không có thông tin</i>
+				</div>
 			)}
+
+			<Image
+				style={{ display: 'none' }}
+				preview={{
+					visible: previewOpen,
+					src: previewImage,
+					onVisibleChange: (val) => setPreviewOpen(val),
+				}}
+			/>
 		</>
 	);
 };

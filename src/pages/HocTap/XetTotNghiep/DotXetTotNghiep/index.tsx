@@ -47,7 +47,7 @@ const CardXetTotNghiep = () => {
 						<Col span={24}>
 							<Alert
 								type='info'
-								description={
+								message={
 									<>
 										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra{' '}
 										{record?.ngayChotDanhSach ? (
