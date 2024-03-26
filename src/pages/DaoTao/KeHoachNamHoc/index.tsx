@@ -91,7 +91,7 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 				</>
 			) : (
 				<div style={{ marginTop: 12 }}>
-					<Alert description={<>Chưa chốt kế hoạch năm học</>} showIcon type='warning' />
+					<Alert message={<>Chưa chốt kế hoạch năm học</>} showIcon type='warning' />
 				</div>
 			)}
 		</div>
