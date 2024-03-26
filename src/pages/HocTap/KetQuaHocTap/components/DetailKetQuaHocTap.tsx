@@ -1,6 +1,6 @@
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Descriptions, Empty, Spin, Tag } from 'antd';
+import { Descriptions, Empty, Spin, Tag, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -34,7 +34,8 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 					<Descriptions.Item label='Tổng kết (dạng chữ)'>
 						{sinhVienDiem?.diemChu ? (
 							<Tag color={ColorDiemChu[sinhVienDiem?.diemChu]}>{sinhVienDiem?.diemChu}</Tag>
-						) : null}
+						) : null}{' '}
+						{sinhVienDiem?.isCongNhanQuyDoiDiem && <Tooltip title='Điểm quy đổi'>(R)</Tooltip>}
 					</Descriptions.Item>
 				</Descriptions>
 			) : (
