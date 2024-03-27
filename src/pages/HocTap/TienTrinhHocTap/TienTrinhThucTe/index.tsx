@@ -4,12 +4,15 @@ import { Empty, Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhan from '../components/CardHocPhan';
 
 const TienTrinhThucTe = () => {
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
+	const { record: sinhVienLhp, setRecord: setSinhVienLhp } = useModel('lophocphan.sinhvienlophocphan');
 	const [danhSachHocKy, setDanhSachHocKy] = useState<LopHocPhan.IRecordSinhVienLopHP[][]>();
+	const [visibleDiem, setVisibleDiem] = useState(false);
 
 	const fetch = async () => {
 		if (maKhoaNganh)
@@ -53,7 +56,15 @@ const TienTrinhThucTe = () => {
 							</div>
 							<div className='col-chi-tiet'>
 								{data.map((sv) => (
-									<CardHocPhan sinhVienLopHocPhan={sv} key={sv._id} />
+									<CardHocPhan
+										key={sv._id}
+										hocPhan={sv.hocPhan}
+										onClick={() => {
+											setSinhVienLhp(sv);
+											setVisibleDiem(true);
+										}}
+										listDiem={sv.diemHpSvHk ? [sv.diemHpSvHk] : []}
+									/>
 								))}
 							</div>
 						</div>
@@ -62,6 +73,15 @@ const TienTrinhThucTe = () => {
 					<Empty description='Không có dữ liệu' style={{ marginTop: 50, marginBottom: 32 }} />
 				)}
 			</Spin>
+
+			<ModalChiTietDiem
+				setVisible={setVisibleDiem}
+				visible={visibleDiem}
+				hocPhan={sinhVienLhp?.hocPhan}
+				listDiem={sinhVienLhp?.diemHpSvHk ? [sinhVienLhp.diemHpSvHk] : []}
+				lopHocPhanId={sinhVienLhp?.lopHocPhanId}
+				maKhoaNganh={maKhoaNganh}
+			/>
 		</>
 	);
 };

@@ -84,7 +84,7 @@ const DanhGiaGiangVienPage = () => {
 					<div style={{ marginBottom: 12 }}>
 						<Alert
 							type={ngoaiThoiGian ? 'warning' : 'info'}
-							description={
+							message={
 								ngoaiThoiGian ? (
 									'Ngoài thời gian đánh giá khảo sát giảng viên !'
 								) : (

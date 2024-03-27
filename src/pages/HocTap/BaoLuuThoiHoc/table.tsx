@@ -2,7 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { QuyetDinh } from '@/services/HocTap/QuyetDinh/typing';
-import { colorTrangThaiSinhVienBLTH, type ETrangThaiSinhVienBLTH } from '@/services/HocTap/constant';
+import { colorTrangThaiSinhVienBaoLuu, type ETrangThaiSinhVienBaoLuu } from '@/services/HocTap/constant';
 import { Card, Tag } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
@@ -27,14 +27,6 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 			render: (val, rec) => rec?.quyetDinh?.soQuyetDinh ?? val,
 		},
 		{
-			title: 'Quyết định QLH',
-			dataIndex: 'idDonQuayLaiHoc',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => rec.donQuayLaiHoc?.quyetDinh?.soQuyetDinh,
-			hide: isThoiHoc,
-		},
-		{
 			title: 'Thời gian thôi học',
 			dataIndex: 'thoiGianHieuLuc',
 			width: 120,
@@ -45,7 +37,7 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 		{
 			title: 'Thời gian bảo lưu',
 			dataIndex: 'thoiGianBatDau',
-			width: 130,
+			width: 120,
 			align: 'center',
 			render: (val, rec) => val && moment(val).format('DD/MM/YYYY'),
 			hide: isThoiHoc,
@@ -53,42 +45,49 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 		{
 			title: 'Thời gian kết thúc',
 			dataIndex: 'thoiGianKetThuc',
-			width: 130,
+			width: 120,
 			align: 'center',
 			render: (val, rec) => val && moment(val).format('DD/MM/YYYY'),
 			hide: isThoiHoc,
 		},
 		{
-			title: 'Ghi chú',
-			dataIndex: 'ghiChu',
-			width: 180,
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			title: 'Quyết định QLH',
+			dataIndex: 'idDonQuayLaiHoc',
+			align: 'center',
+			width: 120,
+			render: (val, rec) => rec.donQuayLaiHoc?.quyetDinh?.soQuyetDinh,
+			hide: isThoiHoc,
 		},
 		{
 			title: 'Khóa',
 			dataIndex: 'maKhoaSinhVien',
-			width: 120,
+			width: 100,
 			render: (val, rec) => rec.khoaSinhVien?.ten,
 		},
 		{
 			title: 'Ngành',
 			dataIndex: 'maNganh',
-			width: 180,
+			width: 150,
 			render: (val, rec) => rec.nganh?.ten,
 		},
 		{
 			title: 'Trạng thái',
-			dataIndex: 'trangThai',
+			dataIndex: 'trangThaiBaoLuu',
 			align: 'center',
-			render: (val, rec) => <Tag color={colorTrangThaiSinhVienBLTH[val as ETrangThaiSinhVienBLTH]}>{val}</Tag>,
+			render: (val: ETrangThaiSinhVienBaoLuu) => val && <Tag color={colorTrangThaiSinhVienBaoLuu[val]}>{val}</Tag>,
 			width: 120,
-			fixed: 'right',
+		},
+		{
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 150,
+			render: (val, rec) => <ExpandText>{val}</ExpandText>,
 		},
 	];
 
 	return (
 		<Card title={`Lịch sử ${isThoiHoc ? 'thôi học' : 'bảo lưu'}`}>
-			<TableStaticData columns={columns} data={danhSach} hasTotal addStt size='small' />
+			<TableStaticData columns={columns} data={danhSach} hasTotal addStt />
 		</Card>
 	);
 };
