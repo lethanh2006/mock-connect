@@ -2,9 +2,15 @@ import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { Modal } from 'antd';
 import { useState } from 'react';
 import CardHocPhan from './CardHocPhan';
+import { useModel } from 'umi';
 
-const CardKhoiHocPhan = (props: { khoi?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT; colorKhoiKienThuc?: string }) => {
-	const { khoi, colorKhoiKienThuc } = props;
+const CardKhoiHocPhan = (props: {
+	khoi?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
+	colorKhoiKienThuc?: string;
+	onClickHocPhan: () => void;
+}) => {
+	const { khoi, colorKhoiKienThuc, onClickHocPhan } = props;
+	const { setRecord: setChuongTrinh } = useModel('daotao.chuongtrinhdaotao');
 	const soTinChi = khoi?.soTinChiTuChonPhaiHoc ?? 0;
 	const [visible, setVisible] = useState<boolean>(false);
 
@@ -32,10 +38,16 @@ const CardKhoiHocPhan = (props: { khoi?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT; col
 					<div className='col-chi-tiet' style={{ flexWrap: 'wrap' }}>
 						{khoi?.hocPhanCtdtList?.map((ctk) => (
 							<CardHocPhan
-								chuongTrinhKhung={ctk}
-								khoiHocPhanCt={khoi}
 								key={ctk._id}
+								hocPhan={ctk.hocPhan}
 								colorKhoiKienThuc={colorKhoiKienThuc}
+								onClick={() => {
+									setChuongTrinh({ ...khoi, ...ctk });
+									setVisible(false);
+									if (onClickHocPhan) onClickHocPhan();
+								}}
+								trangThaiHoc={ctk.hoc}
+								listDiem={ctk.lichSuDiem}
 							/>
 						))}
 					</div>

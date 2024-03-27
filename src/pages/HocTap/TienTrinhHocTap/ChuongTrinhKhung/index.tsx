@@ -5,6 +5,7 @@ import { Collapse, Spin, Tooltip } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhan from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
 
@@ -18,12 +19,18 @@ type TChuongTrinhHocKy = {
 };
 
 const TienTrinhChuongTrinhKhung = () => {
-	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+	const {
+		loading,
+		sinhVienGetTienTrinhKhungModel,
+		record: recChuongTrinh,
+		setRecord: setChuongTrinh,
+	} = useModel('daotao.chuongtrinhdaotao');
 	const { khoaNganhMe, maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [count, setCount] = useState(0);
 	const [tongTinChi, setTongTinChi] = useState(0);
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
+	const [visibleDiem, setVisibleDiem] = useState(false);
 
 	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
 		const listKhoi = _.uniq(listKhoiHpCt.map((item) => item.maKhoiKienThuc));
@@ -82,6 +89,33 @@ const TienTrinhChuongTrinhKhung = () => {
 		fetch();
 	}, [maKhoaNganh]);
 
+	const renderHocPhan = (data: TChuongTrinhHocKy) => (
+		<div className='col-chi-tiet'>
+			{data.khoiHocPhan.map((ctk) =>
+				ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC ? (
+					<CardHocPhan
+						key={ctk._id}
+						hocPhan={ctk.hocPhan}
+						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+						onClick={() => {
+							setChuongTrinh(ctk);
+							setVisibleDiem(true);
+						}}
+						trangThaiHoc={ctk.hoc}
+						listDiem={ctk.lichSuDiem}
+					/>
+				) : (
+					<CardKhoiHocPhan
+						khoi={ctk}
+						key={ctk._id}
+						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+						onClickHocPhan={() => setVisibleDiem(true)}
+					/>
+				),
+			)}
+		</div>
+	);
+
 	return (
 		<>
 			{/* <Row>
@@ -128,25 +162,8 @@ const TienTrinhChuongTrinhKhung = () => {
 									<span className='tin-chi'>({data.soTinChiPhaiHoc} tín chỉ)</span>
 								</Tooltip>
 							</div>
-							<div className='col-chi-tiet'>
-								{data.khoiHocPhan.map((ctk) =>
-									ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC ? (
-										<CardHocPhan
-											chuongTrinhKhung={ctk}
-											khoiHocPhanCt={ctk}
-											key={ctk._id}
-											colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
-											maKhoaNganh={maKhoaNganh}
-										/>
-									) : (
-										<CardKhoiHocPhan
-											khoi={ctk}
-											key={ctk._id}
-											colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
-										/>
-									),
-								)}
-							</div>
+
+							{renderHocPhan(data)}
 						</div>
 
 						{data.chuyenNganhList?.length ? (
@@ -158,26 +175,7 @@ const TienTrinhChuongTrinhKhung = () => {
 											chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
 										}`}
 									>
-										<div className='row-hoc-ky'>
-											<div className='col-chi-tiet'>
-												{chuyenNganh.khoiHocPhan.map((ctk) =>
-													ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC ? (
-														<CardHocPhan
-															chuongTrinhKhung={ctk}
-															khoiHocPhanCt={ctk}
-															key={ctk._id}
-															colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
-														/>
-													) : (
-														<CardKhoiHocPhan
-															khoi={ctk}
-															key={ctk._id}
-															colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
-														/>
-													),
-												)}
-											</div>
-										</div>
+										<div className='row-hoc-ky'>{renderHocPhan(chuyenNganh)}</div>
 									</Collapse.Panel>
 								))}
 							</Collapse>
@@ -185,6 +183,16 @@ const TienTrinhChuongTrinhKhung = () => {
 					</React.Fragment>
 				))}
 			</Spin>
+
+			<ModalChiTietDiem
+				setVisible={setVisibleDiem}
+				visible={visibleDiem}
+				hocPhan={recChuongTrinh?.hocPhan}
+				listDiem={recChuongTrinh?.lichSuDiem}
+				maKhoaNganh={maKhoaNganh}
+				khoiChuongTrinh={recChuongTrinh}
+				trangThaiHoc={recChuongTrinh?.hoc}
+			/>
 		</>
 	);
 };

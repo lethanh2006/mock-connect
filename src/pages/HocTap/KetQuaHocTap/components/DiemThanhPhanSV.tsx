@@ -12,7 +12,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const { danhSach: danhSachDauDiem, getModel: getDauDiem } = useModel('daotao.daudiemhocphan');
 	const [loaiHocPhan, setLoaiHocPhan] = useState<string>('all');
 
-	const getData = () => maKhoaNganh && getAllModel(undefined, undefined, { maKhoaNganh });
+	const getData = () => maKhoaNganh && getAllModel(undefined, undefined, { maKhoaNganh }, undefined, 'sinh-vien/me');
 
 	useEffect(() => {
 		getDauDiem();
