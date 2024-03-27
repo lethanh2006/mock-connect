@@ -34,6 +34,8 @@ const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance }) => 
 			render: (val, recHang) => (
 				<Form.Item
 					name={[question?._id, recHang._id, recCot._id]}
+					initialValue={false}
+					valuePropName='checked'
 					rules={[
 						{
 							validator: async (_, value) => {
@@ -48,7 +50,6 @@ const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance }) => 
 							},
 						},
 					]}
-					valuePropName='checked'
 				>
 					<Checkbox onChange={(e) => handleCheckboxChange(recHang._id ?? '', recCot._id, e.target.checked)} />
 				</Form.Item>

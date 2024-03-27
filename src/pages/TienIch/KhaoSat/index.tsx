@@ -21,6 +21,7 @@ const DotKhaoSatPage = () => {
 		thoiGian,
 		setThoiGian,
 		record: recDotKhaoSat,
+		visibleForm,
 	} = useModel('tienich.dotkhaosat');
 	const { getByIdModel: getBieuMau, setLoading } = useModel('tienich.bieumau');
 	const [cauTraLoi, setCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
@@ -33,7 +34,7 @@ const DotKhaoSatPage = () => {
 	};
 
 	useEffect(() => {
-		if (recDotKhaoSat?._id) {
+		if (recDotKhaoSat?._id && visibleForm) {
 			setLoading(true);
 			getCauTraLoiMe(recDotKhaoSat?.idKhaoSat ?? '', recDotKhaoSat?._id ?? '')
 				.then((res) => {
@@ -42,7 +43,7 @@ const DotKhaoSatPage = () => {
 				})
 				.catch((err) => console.log(err));
 		}
-	}, [recDotKhaoSat?._id]);
+	}, [recDotKhaoSat?._id, visibleForm]);
 
 	const renderTrangThaiDot = (recordVal: DotKhaoSat.IRecord) => {
 		if (!recordVal?.kichHoat) {
