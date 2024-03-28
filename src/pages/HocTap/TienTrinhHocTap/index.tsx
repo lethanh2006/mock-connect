@@ -1,4 +1,5 @@
 import { EOperatorType } from '@/components/Table/constant';
+import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { ETrangThaiDotQuyDoiDiem } from '@/services/HocTap/constant';
 import { Alert, Card, Tabs } from 'antd';
 import moment from 'moment';
@@ -15,6 +16,7 @@ const TienTrinhHocTap = () => {
 	const { getModel: getPhieuQuyDoiDiem, setRecord: setRecPheu } = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const { getThongTinCuaToiModel, getKhoaNganhMeModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { getAllModel: getAllQuyDoiDiem } = useModel('daotao.dmquydoidiem');
+	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
 		getModel({ trangThai: ETrangThaiDotQuyDoiDiem.DA_BAN_HANH }, [
@@ -52,7 +54,11 @@ const TienTrinhHocTap = () => {
 	}, [record?._id, recSinhVien?._id]);
 
 	return (
-		<Card title='Tiến trình học tập' className='card-tien-trinh'>
+		<Card
+			title='Tiến trình học tập'
+			className='card-tien-trinh'
+			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
+		>
 			{record?._id ? (
 				<Alert
 					style={{ marginBottom: 12 }}
