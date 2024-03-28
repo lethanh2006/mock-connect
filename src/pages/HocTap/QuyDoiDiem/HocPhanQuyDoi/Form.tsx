@@ -34,7 +34,7 @@ const FormHocPhanQuyDoiDiem = () => {
 					</Descriptions.Item>
 					<Descriptions.Item label='Minh chứng'>
 						{record?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
-							<>
+							<div>
 								- Tên chứng chỉ: <b>{record?.tenChungChi ?? ''}</b>
 								<br />- Điểm/bậc chứng chỉ: <b>{record?.bacChungChi ?? ''}</b>
 								<br />- Đơn vị cấp: <b>{record?.donViCap ?? ''}</b>
@@ -42,7 +42,7 @@ const FormHocPhanQuyDoiDiem = () => {
 								<b>{record?.thoiGianHieuLuc && monent(record?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>
 								<br />- Thời gian hết hiệu lực:{' '}
 								<b>{record?.thoiGianHetHieuLuc && monent(record?.thoiGianHetHieuLuc).format('DD/MM/YYYY')}</b>
-							</>
+							</div>
 						) : (
 							<div>
 								- Tên học phần:{' '}
