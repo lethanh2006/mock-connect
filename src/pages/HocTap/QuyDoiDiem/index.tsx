@@ -1,5 +1,5 @@
+import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
-import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	colorTrangThaiHocPhanQuyDoi,
@@ -9,30 +9,23 @@ import {
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { Tag, Tooltip } from 'antd';
 import moment from 'moment';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalQuyDoiDiem from './components/Modal';
-import ExpandText from '@/components/ExpandText';
+import ViewPhieuQuyDoiDiem from './components/View';
 
 const LichSuQuyDoiDiemPage = () => {
-	const {
-		page,
-		limit,
-		getModel,
-		handleView: handleViewQuyDoi,
-		visibleForm,
-		setVisibleForm,
-	} = useModel('daotao.quydoidiem.phieuquydoidiem');
-	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { page, limit, getModel, visibleForm, setVisibleForm, setRecord } = useModel(
+		'daotao.quydoidiem.phieuquydoidiem',
+	);
+	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
+	const [visibleView, setVisibleView] = useState<boolean>(false);
 
-	const getData = () =>
-		getModel(undefined, [
-			{
-				active: true,
-				field: 'sinhVienSsoId',
-				operator: EOperatorType.INCLUDE,
-				values: [recSinhVien?.ssoId ?? ''],
-			},
-		]);
+	const handleViewQuyDoi = (rec: QuyDoiDiem.IPhieuDangKyQuyDoiDiem) => {
+		setRecord(rec);
+		setVisibleView(true);
+	};
+	const getData = () => getModel({ maKhoaNganh }, undefined, undefined, undefined, undefined, 'me');
 
 	const onCell = (rec: QuyDoiDiem.IPhieuDangKyQuyDoiDiem) => ({
 		onClick: () => handleViewQuyDoi(rec),
@@ -123,7 +116,7 @@ const LichSuQuyDoiDiemPage = () => {
 			<TableBase
 				getData={getData}
 				columns={columns}
-				dependencies={[page, limit]}
+				dependencies={[page, limit, maKhoaNganh]}
 				modelName='daotao.quydoidiem.phieuquydoidiem'
 				title='Lịch sử công nhận kết quả'
 				buttons={{
@@ -132,6 +125,7 @@ const LichSuQuyDoiDiemPage = () => {
 				hideCard
 			/>
 			<ModalQuyDoiDiem visible={visibleForm} setVisible={setVisibleForm} />
+			<ViewPhieuQuyDoiDiem visible={visibleView} setVisible={setVisibleView} />
 		</>
 	);
 };

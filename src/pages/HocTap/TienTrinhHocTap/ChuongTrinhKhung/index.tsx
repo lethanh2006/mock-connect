@@ -1,4 +1,3 @@
-import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
 import { Collapse, Spin, Tooltip } from 'antd';
@@ -25,7 +24,7 @@ const TienTrinhChuongTrinhKhung = () => {
 		record: recChuongTrinh,
 		setRecord: setChuongTrinh,
 	} = useModel('daotao.chuongtrinhdaotao');
-	const { khoaNganhMe, maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
+	const { khoaNganhMe, maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [count, setCount] = useState(0);
 	const [tongTinChi, setTongTinChi] = useState(0);
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
@@ -137,10 +136,6 @@ const TienTrinhChuongTrinhKhung = () => {
 					</div>
 				</Col>
 			</Row> */}
-
-			<div style={{ marginBottom: 12 }}>
-				<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
-			</div>
 
 			<Spin spinning={loading}>
 				{danhSachHocKy?.map((data) => (
