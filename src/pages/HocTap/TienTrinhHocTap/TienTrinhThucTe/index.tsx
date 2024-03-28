@@ -1,4 +1,3 @@
-import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Empty, Spin } from 'antd';
 import _ from 'lodash';
@@ -9,7 +8,7 @@ import CardHocPhan from '../components/CardHocPhan';
 
 const TienTrinhThucTe = () => {
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
-	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
+	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const { record: sinhVienLhp, setRecord: setSinhVienLhp } = useModel('lophocphan.sinhvienlophocphan');
 	const [danhSachHocKy, setDanhSachHocKy] = useState<LopHocPhan.IRecordSinhVienLopHP[][]>();
 	const [visibleDiem, setVisibleDiem] = useState(false);
@@ -29,10 +28,6 @@ const TienTrinhThucTe = () => {
 
 	return (
 		<>
-			<div style={{ marginBottom: 12 }}>
-				<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
-			</div>
-
 			<Spin spinning={loading}>
 				{danhSachHocKy?.length ? (
 					danhSachHocKy.map((data, index) => (
