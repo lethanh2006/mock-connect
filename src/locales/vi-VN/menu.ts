@@ -24,6 +24,8 @@ export default {
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
 	'menu.HocTap.XetHocVu': 'Cảnh báo học tập, buộc thôi học ',
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
+	'menu.HocTap.XetTotNghiep.ChungChiTotNghiep': 'Chứng chỉ',
+	'menu.HocTap.XetTotNghiep.XetTotNghiep': 'Xét tốt nghiệp',
 	'menu.HocTap.QuyetDinh': 'Bảo lưu, thôi học',
 	'menu.KeHoachNamHoc': 'Kế hoạch năm học',
 
