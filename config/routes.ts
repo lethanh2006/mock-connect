@@ -72,12 +72,12 @@
 		component: './HocTap/LopHanhChinh',
 	},
 
-	// {
-	// 	name: 'KeHoachNamHoc',
-	// 	path: '/ke-hoach-nam-hoc',
-	// 	icon: 'TableOutlined',
-	// 	component: './DaoTao/KeHoachNamHoc',
-	// },
+	{
+		name: 'KeHoachNamHoc',
+		path: '/ke-hoach-nam-hoc',
+		icon: 'TableOutlined',
+		component: './DaoTao/KeHoachNamHoc',
+	},
 
 	// {
 	// 	name: 'KeHoachNCKH',
