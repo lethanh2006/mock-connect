@@ -27,9 +27,9 @@ const ThongTinGiaDinhFormItem = (props: {
 	};
 
 	const handleDelete = (rec: SinhVien.TThongTinGiaDinh) => {
-		if (value?.length && rec.key && onChange) {
+		if (value?.length && rec && onChange) {
 			const temp = [...value];
-			temp.splice(rec.key, 1);
+			temp.splice(rec?.key??0, 1);
 			onChange(temp);
 		}
 	};
