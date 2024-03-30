@@ -1,6 +1,12 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import {
+	colorTrangThaiUserDiemDanh,
+	trangThaiUserDiemDanh,
+	type ETrangThaiUserDiemDanh,
+} from '@/services/DaoTao/constant';
+import { Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 
@@ -48,7 +54,7 @@ const TableLichHocLopHP = () => {
 		{
 			title: 'Giảng viên',
 			dataIndex: 'nhanSuSsoId',
-			width: 120,
+			width: 140,
 			render: (val, rec) =>
 				rec.nhanSu?.ten ? [rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ') : rec.tenNhanSu ?? <i>Chưa cập nhật</i>,
 			onCell,
@@ -56,7 +62,7 @@ const TableLichHocLopHP = () => {
 		{
 			title: 'Phòng học',
 			dataIndex: 'phongHoc',
-			width: 120,
+			width: 100,
 			render: (val) => (val ? val : <i>Chưa cập nhật</i>),
 			onCell,
 		},
@@ -64,7 +70,7 @@ const TableLichHocLopHP = () => {
 			title: 'Loại hình',
 			dataIndex: 'loaiHinhHocTap',
 			width: 80,
-			render: (val) => (val ? val : <i>Chưa cập nhật</i>),
+			render: (val) => (val ? val : ''),
 			onCell,
 		},
 		{
@@ -72,6 +78,15 @@ const TableLichHocLopHP = () => {
 			align: 'center',
 			width: 80,
 			render: (val, rec) => !!rec.lopHocPhan?.tenCha && `Nhóm ${rec.lopHocPhan?.loai} ${rec.lopHocPhan?.soThuTuNhom}`,
+			onCell,
+		},
+		{
+			title: 'Điểm danh',
+			dataIndex: 'trangThaiDiemDanhCaNhan',
+			align: 'center',
+			width: 120,
+			render: (val: ETrangThaiUserDiemDanh) =>
+				val ? <Tag color={colorTrangThaiUserDiemDanh[val]}>{trangThaiUserDiemDanh[val]}</Tag> : null,
 			onCell,
 		},
 	];

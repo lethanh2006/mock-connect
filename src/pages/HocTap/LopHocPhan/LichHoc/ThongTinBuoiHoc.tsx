@@ -1,5 +1,6 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { Descriptions } from 'antd';
+import { colorTrangThaiUserDiemDanh, trangThaiUserDiemDanh } from '@/services/DaoTao/constant';
+import { Descriptions, Tag } from 'antd';
 import moment from 'moment';
 
 const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord; title?: string | JSX.Element }) => {
@@ -14,7 +15,7 @@ const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord; title?: string
 			<Descriptions.Item label='Tiết học'>
 				{buoiHoc?.tietBatDau} - {buoiHoc?.tietKetThuc}
 			</Descriptions.Item>
-			<Descriptions.Item label='Tên lớp' span={3}>
+			<Descriptions.Item label='Tên lớp' span={2}>
 				{buoiHoc?.lopHocPhan?.ten}
 			</Descriptions.Item>
 			<Descriptions.Item label='Giảng viên'>
@@ -23,7 +24,16 @@ const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord; title?: string
 					: buoiHoc?.tenNhanSu ?? <i>Chưa cập nhật</i>}
 			</Descriptions.Item>
 			<Descriptions.Item label='Phòng học'>{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
-			<Descriptions.Item label='Loại hình học tập'>{buoiHoc?.loaiHinhHocTap ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
+			<Descriptions.Item label='Loại hình'>{buoiHoc?.loaiHinhHocTap ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
+			<Descriptions.Item label='Điểm danh'>
+				{buoiHoc?.trangThaiDiemDanhCaNhan ? (
+					<Tag color={colorTrangThaiUserDiemDanh[buoiHoc.trangThaiDiemDanhCaNhan]}>
+						{trangThaiUserDiemDanh[buoiHoc.trangThaiDiemDanhCaNhan]}
+					</Tag>
+				) : (
+					''
+				)}
+			</Descriptions.Item>
 		</Descriptions>
 	);
 };
