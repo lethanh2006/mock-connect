@@ -94,7 +94,7 @@ export const trangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> = {
 
 export const colorTrangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> = {
 	[ETrangThaiUserDiemDanh.CO_MAT]: 'green',
-	[ETrangThaiUserDiemDanh.MUON_VE_SOM]: 'geekblue',
+	[ETrangThaiUserDiemDanh.MUON_VE_SOM]: 'blue',
 	[ETrangThaiUserDiemDanh.VANG_CO_PHEP]: 'gold',
 	[ETrangThaiUserDiemDanh.VANG_KHONG_PHEP]: 'orange',
 	[ETrangThaiUserDiemDanh.CHUA_DIEM_DANH]: 'red',
