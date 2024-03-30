@@ -258,11 +258,13 @@ declare module SinhVien {
 		ngayCap?: string;
 		donViCap?: string;
 		diem?: number;
+		ghiChu: string;
 		// ten?: string;
 		// loaiThoiHan?: ELoaiThoiHanChungChi;
 		// ngayHetHan?: string;
 		// duDkDauRa?: boolean;
 		trangThaiDuyet: ETrangThaiChungChiSinhVen;
+		urlMinhChung: string | null;
 	}
 
 	export interface ITienTrinhTotNghiep {

@@ -58,21 +58,25 @@ export enum ELoaiThoiHanChungChi {
 
 export enum ETrangThaiChungChiSinhVen {
 	CHO_DUYET = 'CHO_DUYET',
+	YEU_CAU_CHINH_SUA = 'YEU_CAU_CHINH_SUA',
 	DA_DUYET = 'DA_DUYET',
 	KHONG_DUYET = 'KHONG_DUYET',
 }
 
 export const nameTrangThaiChungChiSinhVen: Record<ETrangThaiChungChiSinhVen, string> = {
 	[ETrangThaiChungChiSinhVen.CHO_DUYET]: 'Chờ duyệt',
+	[ETrangThaiChungChiSinhVen.YEU_CAU_CHINH_SUA]: 'Yêu cầu chỉnh sửa',
 	[ETrangThaiChungChiSinhVen.DA_DUYET]: 'Đã duyệt',
 	[ETrangThaiChungChiSinhVen.KHONG_DUYET]: 'Không duyệt',
 };
 
 export const colorTrangThaiChungChiSinhVen: Record<ETrangThaiChungChiSinhVen, string> = {
 	[ETrangThaiChungChiSinhVen.CHO_DUYET]: 'blue',
+	[ETrangThaiChungChiSinhVen.YEU_CAU_CHINH_SUA]: 'orange',
 	[ETrangThaiChungChiSinhVen.DA_DUYET]: 'green',
 	[ETrangThaiChungChiSinhVen.KHONG_DUYET]: 'red',
 };
+
 // Trạng thái bảo lưu
 
 export enum ETrangThaiSinhVienBaoLuu {

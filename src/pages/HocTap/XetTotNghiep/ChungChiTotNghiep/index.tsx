@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { IColumn } from '@/components/Table/typing';
@@ -78,6 +79,13 @@ const ChungChiTotNghiepPage = () => {
 			onCell,
 		},
 		{
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 180,
+			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			onCell,
+		},
+		{
 			title: 'Thời hạn chứng chỉ',
 			width: 130,
 			filterType: 'date',
@@ -101,6 +109,7 @@ const ChungChiTotNghiepPage = () => {
 			title: 'Trạng thái',
 			dataIndex: 'trangThaiDuyet',
 			align: 'center',
+			fixed: 'right',
 			width: 100,
 			render: (val) => (
 				<Tag color={colorTrangThaiChungChiSinhVen[val as ETrangThaiChungChiSinhVen]}>
@@ -121,13 +130,31 @@ const ChungChiTotNghiepPage = () => {
 			fixed: 'right',
 			render: (record: SinhVien.IChungChiSinhVien) => (
 				<>
-					<ButtonExtend tooltip='Chỉnh sửa' onClick={() => handleEdit(record)} type='link' icon={<EditOutlined />} />
+					<ButtonExtend
+						disabled={
+							record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.DA_DUYET ||
+							record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.KHONG_DUYET
+						}
+						tooltip='Chỉnh sửa'
+						onClick={() => handleEdit(record)}
+						type='link'
+						icon={<EditOutlined />}
+					/>
 					<Popconfirm
 						onConfirm={() => deleteModel(record._id, getData)}
 						title='Bạn có chắc chắn muốn xóa chứng chỉ này?'
 						placement='topRight'
 					>
-						<ButtonExtend tooltip='Xóa' danger type='link' icon={<DeleteOutlined />} />
+						<ButtonExtend
+							disabled={
+								record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.DA_DUYET ||
+								record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.KHONG_DUYET
+							}
+							tooltip='Xóa'
+							danger
+							type='link'
+							icon={<DeleteOutlined />}
+						/>
 					</Popconfirm>
 				</>
 			),
@@ -144,9 +171,6 @@ const ChungChiTotNghiepPage = () => {
 			Form={Form}
 			formProps={{ getData }}
 			widthDrawer={800}
-			deleteMany
-			rowSelection
-			buttons={{ export: true, import: true }}
 		/>
 	);
 };

@@ -1,6 +1,10 @@
 import MyDatePicker from '@/components/MyDatePicker';
+import UploadFile from '@/components/Upload/UploadFile';
 import SelectChungChi from '@/pages/DaoTao/ChungChi/Select';
+import { ETrangThaiChungChiSinhVen } from '@/services/DaoTao/SinhVien/constants';
+import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
+import { buildUpLoadFile } from '@/services/uploadFile';
 
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
@@ -27,7 +31,9 @@ const FormChungChiSinhVien = (props: any) => {
 		else if (record?._id) form.setFieldsValue(record);
 	}, [record?._id, visibleForm]);
 
-	const onFinish = async (values: any) => {
+	const onFinish = async (values: SinhVien.IChungChiSinhVien) => {
+		const urlMinhChung = await buildUpLoadFile(values, 'urlMinhChung');
+		values.urlMinhChung = urlMinhChung;
 		const data = {
 			...values,
 			sinhVienSsoId: recSinhVien?.ssoId,
@@ -97,10 +103,23 @@ const FormChungChiSinhVien = (props: any) => {
 							</Col>
 						</>
 					) : null}
+					<Col xs={24}>
+						<Form.Item name='urlMinhChung' label='Minh chứng' rules={[...rules.required]}>
+							<UploadFile maxCount={1} otherProps={{ accept: 'image/*, .docx, .doc, .xls, .xlsx, .pdf' }} />
+						</Form.Item>
+					</Col>
 				</Row>
 
 				<div className='form-footer'>
-					<Button loading={formSubmiting} htmlType='submit' type='primary'>
+					<Button
+						loading={formSubmiting}
+						disabled={
+							record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.DA_DUYET ||
+							record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.KHONG_DUYET
+						}
+						htmlType='submit'
+						type='primary'
+					>
 						{!edit ? 'Thêm mới' : 'Lưu lại'}
 					</Button>
 					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
