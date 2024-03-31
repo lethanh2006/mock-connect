@@ -5,6 +5,7 @@ import type {
 	EMinhChungQuyDoiDiem,
 	ETrangThaiDotQuyDoiDiem,
 	ETrangThaiHocPhanQuyDoi,
+	ETrangThaiPhieuQuyDoiDiem,
 	ETrinhDoMinhChungQuyDoiDiem,
 } from '../constant';
 
@@ -31,7 +32,7 @@ declare module QuyDoiDiem {
 		maSinhVien: string;
 		hoTen: string;
 		maDon: string;
-		trangThai: ETrangThaiSinhVienDot;
+		trangThai: ETrangThaiPhieuQuyDoiDiem;
 		soQuyetDinhId: string;
 		quyetDinh: QuyetDinh.IRecord;
 		thoiGianBanHanh: Date;
@@ -41,6 +42,7 @@ declare module QuyDoiDiem {
 		urlsMinhChung: string[] | null;
 		maKhoaNganh: string;
 		khoaNganh?: KhoaNganh.IRecord;
+		ghiChu: string;
 
 		soTinChiDaCongNhan: number;
 		soTinChiChuongTrinhDaoTao: number;
