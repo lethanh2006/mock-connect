@@ -21,6 +21,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const { visibleForm, setVisibleForm, setRecord, setEdit, selectSuKiens, getSuKienTrongKhoangModel, loading } =
 		useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
+	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const [date, setDate] = useState(new Date());
 	const [dateRange, setDateRange] = useState<Moment[]>([moment().startOf('week'), moment().endOf('week')]);
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
@@ -56,6 +57,21 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			return temp;
 		});
 
+	const getLichThi = async (): Promise<any[]> =>
+		getLichThiModel({
+			fromDate: dateRange[0].toISOString(),
+			toDate: dateRange[1].toISOString(),
+		}).then((data) => {
+			const temp = data.map((item) => ({
+				...item,
+				title: `${item.danhSachHocPhan?.map((i) => i.ten)?.join(', ') || ''} - ${item.phong?.ma ?? ''}`,
+				loaiSuKien: ELoaiSuKien.LICH_THI,
+				start: moment(item?.thoiGianBatDau).toDate(),
+				end: moment(item?.thoiGianKetThuc).toDate(),
+			}));
+			return temp;
+		});
+
 	const getSuKien = async (): Promise<any[]> =>
 		getSuKienTrongKhoangModel({
 			fromDate: dateRange[0].toISOString(),
@@ -74,6 +90,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const getData = () => {
 		const promises = [];
 		if (selectSuKiens.includes(ELoaiSuKien.LICH_HOC)) promises.push(getThoiKhoaBieu());
+		if (selectSuKiens.includes(ELoaiSuKien.LICH_THI)) promises.push(getLichThi());
 		if (selectSuKiens.includes(ELoaiSuKien.CA_NHAN) || selectSuKiens.includes(ELoaiSuKien.CHUNG))
 			promises.push(getSuKien());
 
@@ -96,7 +113,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	});
 
 	const eventCustom = ({ event }: any) => {
-		const { title, loaiSuKien } = event;
+		const { title } = event; // loaiSuKien
 		return <div style={{ width: '100%', fontSize: 13 }}>{title || '--'}</div>;
 	};
 
@@ -142,7 +159,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				</Pane>
 
 				<Pane>
-					<Spin spinning={loading || loadingTKB}>
+					<Spin spinning={loading || loadingTKB || loadingThi}>
 						<Calendar
 							formats={{
 								dayHeaderFormat: 'dddd DD/MM/YYYY',
