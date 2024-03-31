@@ -36,6 +36,7 @@ type State = Record<
 const LichDashboard = () => {
 	const { visibleForm, setVisibleForm, getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
+	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const [dataCalendar, setDataCalendar] = useState<State>({});
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
@@ -52,6 +53,18 @@ const LichDashboard = () => {
 		});
 	};
 
+	const getLichThi = async () => {
+		return getLichThiModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
+			const temp = data.map((item) => ({
+				...item,
+				title: `Lịch thi: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
+				phongHoc: item.phong?.ma ?? '',
+				loaiSuKien: ELoaiSuKien.LICH_THI,
+			}));
+			return temp;
+		});
+	};
+
 	const getSuKien = async () => {
 		return getSuKienTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
 			const temp = data.map((item) => ({
@@ -63,7 +76,7 @@ const LichDashboard = () => {
 	};
 
 	const getData = () => {
-		const promises = [getThoiKhoaBieu(), getSuKien()];
+		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi()];
 
 		Promise.allSettled(promises)
 			.then((values) => {
@@ -148,7 +161,7 @@ const LichDashboard = () => {
 		<>
 			<Card
 				className={styles.container}
-				loading={loadingSuKien || loadingTKB}
+				loading={loadingSuKien || loadingTKB || loadingThi}
 				title={
 					<div className={styles.title}>
 						<Typography.Text>Lịch sắp tới</Typography.Text>

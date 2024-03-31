@@ -1,4 +1,4 @@
-import { colorTrangThaiSinhVienQuyDoiDiem, type ETrangThaiSinhVienQuyDoiDiem } from '@/services/HocTap/constant';
+import { colorTrangThaiSinhVienQuyDoiDiem, type ETrangThaiPhieuQuyDoiDiem } from '@/services/HocTap/constant';
 import { Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
 import { useModel } from 'umi';
 import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
@@ -45,7 +45,7 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 							{record?.quyetDinh?.ngayBanHanh ? moment(record?.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY') : ''}
 						</Descriptions.Item>
 						<Descriptions.Item label='Trạng thái'>
-							<Tag color={colorTrangThaiSinhVienQuyDoiDiem[record?.trangThai as ETrangThaiSinhVienQuyDoiDiem]}>
+							<Tag color={colorTrangThaiSinhVienQuyDoiDiem[record?.trangThai as ETrangThaiPhieuQuyDoiDiem]}>
 								{record?.trangThai ?? ''}
 							</Tag>
 						</Descriptions.Item>
