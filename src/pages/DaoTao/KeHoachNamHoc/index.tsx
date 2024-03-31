@@ -8,6 +8,7 @@ import DanhSachHoatDongTuan from './DanhSachHoatDongTuan';
 import KeHoachHeader from './KeHoachHeader';
 import { calHeader } from './functions';
 import './style.less';
+import ExpandText from '@/components/ExpandText';
 
 const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 	const { hideSelect } = props;
@@ -33,7 +34,7 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 				maNganh: keHoachList[0].khoaNganh?.maNganh,
 				maKhoaNganh,
 				keHoachList,
-				tenKhoaNganh: [keHoachList[0].khoaNganh?.khoaSinhVien?.ten, keHoachList[0].khoaNganh?.nganh?.ma].join(' - '),
+				tenKhoaNganh: [keHoachList[0].khoaNganh?.khoaSinhVien?.ten, keHoachList[0].khoaNganh?.nganh?.ten].join('-'),
 			}));
 			setData(dat);
 		});
@@ -69,17 +70,18 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 
 							{data.map((item) => (
 								<div className='row-ke-hoach' key={item.maKhoaNganh}>
-									<div className='cell first-cell border-right'>{item.maKhoaNganh}</div>
+									<div className='cell first-cell border-right' title={item.tenKhoaNganh}>
+										<ExpandText ellipsis={{ expandable: false, rows: 1 }}>{item.tenKhoaNganh}</ExpandText>
+									</div>
 									{_.sortBy(item.keHoachList, (j) => j.thuTuTuan).map((kh, index) => (
 										<div
 											className={`cell ${header?.days?.[index]?.isBreak ? 'break' : ''}`}
 											key={kh._id}
 											style={{
 												backgroundColor: kh.hoatDongTuan?.maMau,
-												cursor: header?.days?.[index]?.isBreak ? 'not-allowed' : undefined,
 											}}
 										>
-											{header?.days?.[index]?.isBreak ? null : kh.hoatDongTuan?.kyHieu ?? '--'}
+											{kh.hoatDongTuan?.kyHieu ?? '--'}
 										</div>
 									))}
 								</div>

@@ -7,6 +7,7 @@ import CalendarLichHocLopHp from './CalendarLichHoc';
 import ModalThoiKhoaBieu from './Modal';
 import TableLichHocLopHP from './TableLichHoc';
 import ThongTinBuoiHoc from './ThongTinBuoiHoc';
+import StatDiemDanh from './Stat';
 
 const DanhSachBuoiHoc = () => {
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
@@ -29,6 +30,8 @@ const DanhSachBuoiHoc = () => {
 
 	return (
 		<Spin spinning={loading}>
+			<StatDiemDanh />
+
 			{buoiHocGanNhat?._id ? (
 				<>
 					<ThongTinBuoiHoc
