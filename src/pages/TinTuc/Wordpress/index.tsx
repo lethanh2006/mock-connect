@@ -4,7 +4,7 @@ import { useModel } from 'umi';
 import BlockTinTuc from './BlockTinTuc';
 import './styles.less';
 
-const TinTucPage = () => {
+const TinTucWpPage = () => {
 	const { loading, page, limit, total, setPage, setLimit, getModel } = useModel('tintuc.tintucwp');
 
 	useEffect(() => {
@@ -35,4 +35,4 @@ const TinTucPage = () => {
 	);
 };
 
-export default TinTucPage;
+export default TinTucWpPage;

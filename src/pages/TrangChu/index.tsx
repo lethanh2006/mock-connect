@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import LichDashboard from '../Calendar/LichDashboard';
-import TinTucDashboard from '../TinTucWP/TinTucDashboard';
+import TinTucDashboardWrapper from '../TinTuc/Wrapper/Dashboard';
 import CardLopHocPhan from './components/CardLopHocPhan';
 import CardTienTrinhTotNghiep from './components/CardTienTrinhTotNghiep';
 
@@ -26,7 +26,7 @@ const TrangChu = () => {
 							<CardLopHocPhan />
 						</Col>
 						<Col span={24}>
-							<TinTucDashboard />
+							<TinTucDashboardWrapper />
 						</Col>
 					</Row>
 				</Col>
