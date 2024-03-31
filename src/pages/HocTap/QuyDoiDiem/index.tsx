@@ -4,7 +4,7 @@ import { type IColumn } from '@/components/Table/typing';
 import {
 	colorTrangThaiHocPhanQuyDoi,
 	colorTrangThaiSinhVienQuyDoiDiem,
-	type ETrangThaiSinhVienQuyDoiDiem,
+	type ETrangThaiPhieuQuyDoiDiem,
 } from '@/services/HocTap/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { Tag, Tooltip } from 'antd';
@@ -100,14 +100,20 @@ const LichSuQuyDoiDiemPage = () => {
 			},
 		},
 		{
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 220,
+			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			onCell,
+		},
+		{
 			title: 'Công nhận',
 			dataIndex: 'trangThai',
 			align: 'center',
 			width: 100,
-			render: (val, rec) => (
-				<Tag color={colorTrangThaiSinhVienQuyDoiDiem[val as ETrangThaiSinhVienQuyDoiDiem]}>{val}</Tag>
-			),
+			render: (val, rec) => <Tag color={colorTrangThaiSinhVienQuyDoiDiem[val as ETrangThaiPhieuQuyDoiDiem]}>{val}</Tag>,
 			onCell,
+			fixed: 'right',
 		},
 	];
 
