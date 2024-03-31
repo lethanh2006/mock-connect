@@ -1,4 +1,5 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -13,7 +14,9 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	const loaiSuKien = event.loaiSuKien as ELoaiSuKien;
 	const isThoiKhoaBieu = loaiSuKien === ELoaiSuKien.LICH_HOC;
 	const thoiKhoaBieu = isThoiKhoaBieu ? (event as ThoiKhoaBieu.IRecord) : undefined;
-	const suKien = !isThoiKhoaBieu ? (event as SuKien.IRecord) : undefined;
+	const isLichThi = loaiSuKien === ELoaiSuKien.LICH_THI;
+	const lichThi = isLichThi ? (event as LichThi.IRecord) : undefined;
+	const suKien = !isThoiKhoaBieu && !isLichThi ? (event as SuKien.IRecord) : undefined;
 
 	const handleMoodle = (lopHocPhanId?: string) => {
 		if (lopHocPhanId)
@@ -22,6 +25,63 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 				else message.error('Có lỗi, vui lòng thử lại sau');
 			});
 	};
+
+	const renderThoiKhoaBieu = () => (
+		<>
+			<Descriptions.Item label='Lớp tín chỉ'>{thoiKhoaBieu?.tenLopHocPhan}</Descriptions.Item>
+			<Descriptions.Item label='Tên học phần'>{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}</Descriptions.Item>
+			<Descriptions.Item label='Thời gian bắt đầu'>
+				{moment(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+			</Descriptions.Item>
+			<Descriptions.Item label='Thời gian kết thúc'>
+				{moment(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+			</Descriptions.Item>
+			<Descriptions.Item label='Loại hình học tập'>{thoiKhoaBieu?.loaiHinhHocTap ?? '--'}</Descriptions.Item>
+			<Descriptions.Item label='Phòng học'>{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
+			<Descriptions.Item label='Giảng viên'>
+				{thoiKhoaBieu?.nhanSu?.ten
+					? [thoiKhoaBieu.nhanSu?.hoDem, thoiKhoaBieu.nhanSu?.ten].join(' ')
+					: thoiKhoaBieu?.tenNhanSu ?? '--'}
+			</Descriptions.Item>
+			<Descriptions.Item label='Tiêu đề bài học'>{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
+			{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (
+				<Descriptions.Item label='Lớp học trực tuyến'>
+					<a href='#!' onClick={() => handleMoodle(thoiKhoaBieu.lopHocPhan?._id)}>
+						Đường dẫn
+					</a>
+				</Descriptions.Item>
+			) : null}
+		</>
+	);
+
+	const renderLichThi = () => (
+		<>
+			<Descriptions.Item label='Môn thi'>
+				{lichThi?.danhSachHocPhan?.map((item) => `${item.ma} - ${item.ten}`).join(', ')}
+			</Descriptions.Item>
+			<Descriptions.Item label='Thời gian bắt đầu'>
+				{moment(lichThi?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+			</Descriptions.Item>
+			<Descriptions.Item label='Thời gian kết thúc'>
+				{moment(lichThi?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+			</Descriptions.Item>
+			<Descriptions.Item label='Phòng thi'>{lichThi?.phong?.ma ?? '--'}</Descriptions.Item>
+		</>
+	);
+
+	const renderSuKien = () => (
+		<>
+			<Descriptions.Item label='Tên sự kiện'>{suKien?.tenSuKien}</Descriptions.Item>
+			<Descriptions.Item label='Thời gian bắt đầu'>
+				{moment(suKien?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+			</Descriptions.Item>
+			<Descriptions.Item label='Thời gian kết thúc'>
+				{moment(suKien?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+			</Descriptions.Item>
+			<Descriptions.Item label='Địa điểm'>{suKien?.diaDiem ?? '--'}</Descriptions.Item>
+			<Descriptions.Item label='Ghi chú'>{suKien?.ghiChu ?? '--'}</Descriptions.Item>
+		</>
+	);
 
 	return (
 		<Modal
@@ -73,45 +133,8 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 				<Descriptions.Item label='Loại sự kiện'>
 					{loaiSuKien ? <Tag color={ColorSuKien[loaiSuKien]}>{loaiSuKien}</Tag> : '--'}
 				</Descriptions.Item>
-				{isThoiKhoaBieu ? (
-					<>
-						<Descriptions.Item label='Lớp tín chỉ'>{thoiKhoaBieu?.tenLopHocPhan}</Descriptions.Item>
-						<Descriptions.Item label='Tên học phần'>{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}</Descriptions.Item>
-						<Descriptions.Item label='Thời gian bắt đầu'>
-							{moment(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
-						</Descriptions.Item>
-						<Descriptions.Item label='Thời gian kết thúc'>
-							{moment(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
-						</Descriptions.Item>
-						<Descriptions.Item label='Loại hình học tập'>{thoiKhoaBieu?.loaiHinhHocTap ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Phòng học'>{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Giảng viên'>
-							{thoiKhoaBieu?.nhanSu?.ten
-								? [thoiKhoaBieu.nhanSu?.hoDem, thoiKhoaBieu.nhanSu?.ten].join(' ')
-								: thoiKhoaBieu?.tenNhanSu ?? '--'}
-						</Descriptions.Item>
-						<Descriptions.Item label='Tiêu đề bài học'>{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
-						{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (
-							<Descriptions.Item label='Lớp học trực tuyến'>
-								<a href='#!' onClick={() => handleMoodle(thoiKhoaBieu.lopHocPhan?._id)}>
-									Đường dẫn
-								</a>
-							</Descriptions.Item>
-						) : null}
-					</>
-				) : (
-					<>
-						<Descriptions.Item label='Tên sự kiện'>{suKien?.tenSuKien}</Descriptions.Item>
-						<Descriptions.Item label='Thời gian bắt đầu'>
-							{moment(suKien?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
-						</Descriptions.Item>
-						<Descriptions.Item label='Thời gian kết thúc'>
-							{moment(suKien?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
-						</Descriptions.Item>
-						<Descriptions.Item label='Địa điểm'>{suKien?.diaDiem ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Ghi chú'>{suKien?.ghiChu ?? '--'}</Descriptions.Item>
-					</>
-				)}
+
+				{isThoiKhoaBieu ? renderThoiKhoaBieu() : isLichThi ? renderLichThi() : renderSuKien()}
 			</Descriptions>
 		</Modal>
 	);
