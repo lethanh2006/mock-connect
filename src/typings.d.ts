@@ -55,3 +55,5 @@ declare const APP_CONFIG_TITLE_CORE: string;
 declare const APP_CONFIG_TITLE_CSVC: string;
 
 declare const APP_CONFIG_MOODLE_ENDPOINT: string;
+declare const APP_CONFIG_TIN_TUC_WP: string;
+declare const APP_CONFIG_TIN_TUC_WP_CATEGORY: number;

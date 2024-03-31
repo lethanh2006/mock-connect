@@ -40,13 +40,13 @@
 		routes: [
 			{
 				path: './',
-				component: './TinTucWP',
+				component: './TinTuc/Wrapper',
 				hideInMenu: true,
 			},
 			{
 				path: './chi-tiet',
 				hideInMenu: true,
-				component: './TinTucWP/ChiTietTinTuc.tsx',
+				component: './TinTuc/Wrapper/ChiTiet.tsx',
 			},
 		],
 	},

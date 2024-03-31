@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 import './styles.less';
 
-const ChiTietTinTucPage = () => {
+const ChiTietTinTucWpPage = () => {
 	const { getByIdModel, loading, record } = useModel('tintuc.tintucwp');
 	const { location } = window;
 	const { id } = queryString.parse(location.search);
@@ -52,4 +52,4 @@ const ChiTietTinTucPage = () => {
 	);
 };
 
-export default ChiTietTinTucPage;
+export default ChiTietTinTucWpPage;
