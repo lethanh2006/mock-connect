@@ -320,6 +320,14 @@ const ModalQuyDoiDiem = (props: {
 													</Form.Item>
 												</Col>
 												<Col xs={24} md={12}>
+													<Form.Item name='soDVHT' label='Số ĐVHT' rules={[...rules.required]}>
+														<InputNumber style={{ width: '100%' }} placeholder='Nhập số ĐVHT' min={0} />
+														<small style={{ color: '#999' }}>
+															<i>1,5 đơn vị hạch tính = 1 tín chỉ</i>
+														</small>
+													</Form.Item>
+												</Col>
+												<Col xs={24} md={12}>
 													<Form.Item name='soTinChi' label='Số tín chỉ/đơn vị học trình' rules={[...rules.required]}>
 														<InputNumber
 															style={{ width: '100%' }}

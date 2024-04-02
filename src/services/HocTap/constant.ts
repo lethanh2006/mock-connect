@@ -94,7 +94,7 @@ export enum ETrangThaiDotQuyDoiDiem {
 }
 
 export enum ETrangThaiPhieuQuyDoiDiem {
-	CHO_TIEP_NHAN = 'Chờ tiếp nhận',
+	// CHO_TIEP_NHAN = 'Chờ tiếp nhận',
 	YEU_CAU_CHINH_SUA = 'Yêu cầu chỉnh sửa',
 	CHO_XU_LY = 'Chờ xử lý',
 	DA_RA_QUYET_DINH = 'Đã ra quyết định',
@@ -102,7 +102,7 @@ export enum ETrangThaiPhieuQuyDoiDiem {
 }
 
 export const colorTrangThaiSinhVienQuyDoiDiem: Record<ETrangThaiPhieuQuyDoiDiem, string> = {
-	[ETrangThaiPhieuQuyDoiDiem.CHO_TIEP_NHAN]: 'blue',
+	// [ETrangThaiPhieuQuyDoiDiem.CHO_TIEP_NHAN]: 'blue',
 	[ETrangThaiPhieuQuyDoiDiem.YEU_CAU_CHINH_SUA]: 'red',
 	[ETrangThaiPhieuQuyDoiDiem.CHO_XU_LY]: 'blue',
 	[ETrangThaiPhieuQuyDoiDiem.DA_RA_QUYET_DINH]: 'green',
@@ -127,6 +127,7 @@ export enum ELoaiHocPhanMinhChung {
 export enum ETrangThaiHocPhanQuyDoi {
 	CHO_XU_LY = 'Chờ xử lý',
 	CONG_NHAN = 'Công nhận',
+	XIN_Y_KIEN_HOI_DONG = 'Xin ý kiến hội đồng',
 	KHONG_CONG_NHAN = 'Không công nhận',
 	DA_RA_QUYET_DINH = 'Đã ra quyết định',
 }
@@ -134,6 +135,7 @@ export enum ETrangThaiHocPhanQuyDoi {
 export const colorTrangThaiHocPhanQuyDoi: Record<ETrangThaiHocPhanQuyDoi, string> = {
 	[ETrangThaiHocPhanQuyDoi.CHO_XU_LY]: 'blue',
 	[ETrangThaiHocPhanQuyDoi.CONG_NHAN]: 'orange',
+	[ETrangThaiHocPhanQuyDoi.XIN_Y_KIEN_HOI_DONG]: 'purple',
 	[ETrangThaiHocPhanQuyDoi.KHONG_CONG_NHAN]: 'red',
 	[ETrangThaiHocPhanQuyDoi.DA_RA_QUYET_DINH]: 'green',
 };
