@@ -5,13 +5,13 @@ import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, history, useModel } from 'umi';
-import ViewThongBao from '../ThongBao/components/ViewThongBao';
+import ViewThongBao from '../../ThongBao/components/ViewThongBao';
 import { CardTinTuc } from './TinTuc.style';
 import { Title } from './components/Title';
 import './styles.less';
 import { getImageSrc } from './utils/getImageSrc';
 
-const TinTucDashboard = () => {
+const TinTucWpDashboard = () => {
 	const { danhSach: danhSachTinTuc, getDashboardModel, loading } = useModel('tintuc.tintucwp');
 	const { danhSach: dánhachThongBao, setRecord, record } = useModel('thongbao.noticeicon');
 	const [tab, setTab] = useState<string>('tin-tuc');
@@ -123,4 +123,4 @@ const TinTucDashboard = () => {
 	);
 };
 
-export default TinTucDashboard;
+export default TinTucWpDashboard;
