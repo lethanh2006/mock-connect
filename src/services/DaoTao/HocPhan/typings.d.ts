@@ -51,6 +51,14 @@ declare module HocPhan {
 		createdAt?: string;
 		updatedAt?: string;
 		url?: string | null;
+
+		thongTinTrongSo: IThongTinTrongSo[];
+	}
+
+	export interface IThongTinTrongSo {
+		trongSo: number;
+		hinhThucDanhGia: string;
+		moTa: string;
 	}
 
 	export interface ITrongSoDeCuong {

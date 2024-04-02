@@ -17,13 +17,16 @@ const TrongSoHocPhanPage = () => {
 
 	return (
 		<Descriptions title='Trọng số học phần'>
-			{danhSach.map((item) =>
-				!!recDeCuong?.[`trongSo${item.field}` as keyof HocPhan.IDeCuongHocPhan] ? (
-					<Descriptions.Item key={item._id} label={item.ten}>
-						{recDeCuong?.[`trongSo${item.field}` as keyof HocPhan.IDeCuongHocPhan]}%
-					</Descriptions.Item>
-				) : null,
-			)}
+			{recDeCuong?.thongTinTrongSo?.length
+				? recDeCuong?.thongTinTrongSo?.map((item, index) => (
+						<>
+							<Descriptions.Item label={danhSach[index]?.ten}>{item?.trongSo}%</Descriptions.Item>
+							<Descriptions.Item label='Hình thức đánh giá'>{item?.hinhThucDanhGia ?? ''} </Descriptions.Item>
+							<Descriptions.Item label='Mô tả'>{item?.moTa ?? ''}</Descriptions.Item>
+						</>
+				  ))
+				: null}
+
 			<Descriptions.Item key={'2'} label='Điểm thi KTHP'>
 				{100 - sum}%
 			</Descriptions.Item>

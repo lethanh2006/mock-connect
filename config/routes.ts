@@ -127,7 +127,18 @@
 			{
 				name: 'XetTotNghiep',
 				path: './xet-tot-nghiep',
-				component: './HocTap/XetTotNghiep',
+				routes: [
+					{
+						name: 'ChungChiTotNghiep',
+						path: './chung-chi-tot-nghiep',
+						component: './HocTap/XetTotNghiep/ChungChiTotNghiep',
+					},
+					{
+						name: 'XetTotNghiep',
+						path: './xet-tot-nghiep',
+						component: './HocTap/XetTotNghiep',
+					},
+				],
 			},
 			{
 				name: 'XetHocVu',
