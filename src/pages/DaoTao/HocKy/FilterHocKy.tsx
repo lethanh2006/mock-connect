@@ -5,7 +5,12 @@ import { Button, Space, Tooltip } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import SelectNamHoc from '../NamHoc/Select';
 
-const FilterHocKy = (props: { width?: number; isSetHocKy?: boolean; allowClear?: boolean }) => {
+const FilterHocKy = (props: {
+	width?: number;
+	isSetHocKy?: boolean;
+	allowClear?: boolean;
+	children?: React.ReactNode;
+}) => {
 	const { record: recHocKy, danhSach: danhSachHocKy, setRecord: setHocKy } = useModel('daotao.hocky');
 	const [namHocId, setNamHocId] = useState<string>();
 	const [visibleOption, setVisibleOption] = useState(false);
@@ -34,6 +39,8 @@ const FilterHocKy = (props: { width?: number; isSetHocKy?: boolean; allowClear?:
 				onChange={(val) => setHocKy(danhSachHocKy.find((item) => item._id === val))}
 				isSetRecord={props.isSetHocKy && (!!namHocId || !recHocKy?._id)}
 			/>
+
+			{props.children}
 		</Space>
 	);
 };

@@ -1,9 +1,12 @@
+import useInitModel from '@/hooks/useInitModel';
 import { getTienTrinhKhung, getTienTrinhThucTe } from '@/services/DaoTao/ChuongTrinhDaoTao';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { ipDaoTao } from '@/utils/ip';
 import { useState } from 'react';
 
 export default () => {
+	const objInit = useInitModel<ChuongTrinhDaoTao.IRecord>('chuong-trinh-dao-tao', undefined, undefined, ipDaoTao);
 	const [loading, setLoading] = useState<boolean>();
 	const [record, setRecord] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>();
 	const [tienTrinhHocTap, setTienTrinhHocTap] = useState<LopHocPhan.IRecordSinhVienLopHP[]>();
@@ -37,6 +40,7 @@ export default () => {
 	};
 
 	return {
+		...objInit,
 		loading,
 		record,
 		setRecord,
