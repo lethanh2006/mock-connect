@@ -16,7 +16,10 @@ const CardDieuKienTotNghiep = () => {
 		let dot = null;
 		if (!recDot?._id) dot = await getDotHienHanhModel();
 		const idDot = recDot?._id ?? dot?._id;
-		getTienTrinhTotNghiepModel(maKhoaNganh ?? '', idDot);
+
+		if (maKhoaNganh) {
+			getTienTrinhTotNghiepModel(maKhoaNganh, idDot);
+		}
 	};
 
 	useEffect(() => {

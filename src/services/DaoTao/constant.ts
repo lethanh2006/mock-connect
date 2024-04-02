@@ -99,3 +99,19 @@ export const colorTrangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> 
 	[ETrangThaiUserDiemDanh.VANG_KHONG_PHEP]: 'orange',
 	[ETrangThaiUserDiemDanh.CHUA_DIEM_DANH]: 'red',
 };
+
+//Đăng ký nhu cầu
+export enum ETrangThaiHocPhanDangKyNhuCau {
+	CHO_DUYET = 'CHO_DUYET',
+	DA_DUYET = 'DA_DUYET',
+}
+
+export const mapTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
+	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'Chờ duyệt',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'Đã duyệt',
+};
+
+export const colorTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
+	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'blue',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'green',
+};

@@ -40,13 +40,13 @@
 		routes: [
 			{
 				path: './',
-				component: './TinTucWP',
+				component: './TinTuc/Wrapper',
 				hideInMenu: true,
 			},
 			{
 				path: './chi-tiet',
 				hideInMenu: true,
-				component: './TinTucWP/ChiTietTinTuc.tsx',
+				component: './TinTuc/Wrapper/ChiTiet.tsx',
 			},
 		],
 	},
@@ -98,8 +98,8 @@
 				path: 'tien-trinh-hoc-tap',
 				component: './HocTap/TienTrinhHocTap',
 			},
-			// { name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
 			{ name: 'DangKyTinChi', path: 'dang-ky-tin-chi', component: './HocTap/DangKyTinChi' },
+			{ name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
 			{
 				name: 'LopHocPhan',
 				path: 'lop-tin-chi',
@@ -127,7 +127,18 @@
 			{
 				name: 'XetTotNghiep',
 				path: './xet-tot-nghiep',
-				component: './HocTap/XetTotNghiep',
+				routes: [
+					{
+						name: 'ChungChiTotNghiep',
+						path: './chung-chi-tot-nghiep',
+						component: './HocTap/XetTotNghiep/ChungChiTotNghiep',
+					},
+					{
+						name: 'XetTotNghiep',
+						path: './xet-tot-nghiep',
+						component: './HocTap/XetTotNghiep',
+					},
+				],
 			},
 			{
 				name: 'XetHocVu',
