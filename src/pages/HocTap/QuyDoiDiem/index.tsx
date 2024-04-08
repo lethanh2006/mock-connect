@@ -110,7 +110,7 @@ const LichSuQuyDoiDiemPage = () => {
 			title: 'Công nhận',
 			dataIndex: 'trangThai',
 			align: 'center',
-			width: 100,
+			width: 120,
 			render: (val, rec) => <Tag color={colorTrangThaiSinhVienQuyDoiDiem[val as ETrangThaiPhieuQuyDoiDiem]}>{val}</Tag>,
 			onCell,
 			fixed: 'right',
