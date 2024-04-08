@@ -32,6 +32,7 @@ const FormHocPhanQuyDoiDiem = () => {
 							{record?.trangThai ?? ''}
 						</Tag>
 					</Descriptions.Item>
+					<Descriptions.Item label='Ghi chú'>{record?.ghiChu ?? ''}</Descriptions.Item>
 					<Descriptions.Item label='Minh chứng'>
 						{record?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
 							<div>
@@ -51,6 +52,8 @@ const FormHocPhanQuyDoiDiem = () => {
 								</b>
 								<br />- Trình độ: <b>{record?.trinhDoDaoTao ?? ''}</b>
 								<br />- Trường đã học: <b>{record?.tenTruong ?? ''}</b>
+								<br />- Ngành học: <b>{record?.nganh ?? ''}</b>
+								<br />- Năm tốt nghiệp: <b>{record?.namTotNghiep ?? ''}</b>
 								<br />- Kết quả học tập: Điểm hệ 10: {record?.diemHe10MinhChung ?? ''}{' '}
 								{record?.diemHe4MinhChung ? <>, điểm hệ 4: {record?.diemHe4MinhChung}</> : ''}{' '}
 								{record?.diemChuMinhChung ? <>, điểm chữ: {record?.diemChuMinhChung}</> : ''}

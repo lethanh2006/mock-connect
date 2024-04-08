@@ -95,14 +95,14 @@ export enum ETrangThaiDotQuyDoiDiem {
 
 export enum ETrangThaiPhieuQuyDoiDiem {
 	CHO_XU_LY = 'Chờ xử lý',
+	DA_CO_KET_QUA = 'Đã có kết quả',
 	DA_RA_QUYET_DINH = 'Đã ra quyết định',
-	KHONG_DUYET = 'Không duyệt',
 }
 
 export const colorTrangThaiSinhVienQuyDoiDiem: Record<ETrangThaiPhieuQuyDoiDiem, string> = {
 	[ETrangThaiPhieuQuyDoiDiem.CHO_XU_LY]: 'blue',
+	[ETrangThaiPhieuQuyDoiDiem.DA_CO_KET_QUA]: 'orange',
 	[ETrangThaiPhieuQuyDoiDiem.DA_RA_QUYET_DINH]: 'green',
-	[ETrangThaiPhieuQuyDoiDiem.KHONG_DUYET]: 'orange',
 };
 
 export enum EMinhChungQuyDoiDiem {

@@ -10,6 +10,7 @@ import { Modal, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormHocPhanQuyDoiDiem from './Form';
+import ExpandText from '@/components/ExpandText';
 
 const FormItemHocPhanQuyDoi = () => {
 	const { setVisibleForm, visibleForm, getModel, danhSach, loading, handleView } = useModel(
@@ -68,6 +69,13 @@ const FormItemHocPhanQuyDoi = () => {
 			align: 'center',
 			width: 120,
 			render: (val, rec) => <Tag color={colorTrangThaiHocPhanQuyDoi[val as ETrangThaiHocPhanQuyDoi]}>{val}</Tag>,
+			onCell,
+		},
+		{
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 180,
+			render: (val, rec) => <ExpandText>{val}</ExpandText>,
 			onCell,
 		},
 	];
