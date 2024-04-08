@@ -11,6 +11,7 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 	const tiLeCongNhan = !record?.soTinChiChuongTrinhDaoTao
 		? 0
 		: ((record?.soTinChiDaCongNhan + record?.soTinChiCongNhanDot) / record?.soTinChiChuongTrinhDaoTao) * 100;
+
 	return (
 		<Modal
 			width={1000}

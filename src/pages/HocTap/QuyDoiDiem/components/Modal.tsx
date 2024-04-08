@@ -13,10 +13,11 @@ import {
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { AutoComplete, Button, Col, Descriptions, Form, Input, InputNumber, Modal, Row, Select, Spin } from 'antd';
-import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { Button, Col, Descriptions, Form, Input, InputNumber, Modal, Row, Select } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
+import AutoHocPhanQuyDoi from './AutoHocPhan';
+import AutoTruongHocQuyDoi from './AutoTruongHoc';
 
 const ModalQuyDoiDiem = (props: {
 	visible: boolean;
@@ -27,15 +28,7 @@ const ModalQuyDoiDiem = (props: {
 	const [form] = Form.useForm();
 	const { visible, setVisible, hocPhan, maKhoaNganh } = props;
 	const { formSubmiting, record, getModel } = useModel('daotao.quydoidiem.phieuquydoidiem');
-	const {
-		dataTruongHoc,
-		postSinhVienQuyDoiPhieuModel,
-		selectTruongHocDebounceModel,
-		getAllModel: getAllSvQuyDoi,
-		filters,
-		setFilters,
-		setFormSubmiting,
-	} = useModel('daotao.quydoidiem.sinhvienquydoidiem');
+	const { postSinhVienQuyDoiPhieuModel, setFormSubmiting } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { record: recDot } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { danhSach } = useModel('daotao.dmquydoidiem');
@@ -43,8 +36,7 @@ const ModalQuyDoiDiem = (props: {
 	const loaiMinhChung: string = Form.useWatch('loai', form);
 	const loaiHocPhan: string = Form.useWatch('loaiHocPhan', form);
 	const trinhDoDaoTao: ETrinhDoMinhChungQuyDoiDiem = Form.useWatch('trinhDoDaoTao', form);
-	const [danhSachSVQuyDoi, setDanhSachSVQuyDoi] = useState<QuyDoiDiem.IQuyDoiDiemSinhVien[]>([]);
-	const [loading, setLoading] = useState<boolean>(false);
+	const tenTruong = Form.useWatch('tenTruong', form);
 
 	useEffect(() => {
 		if (!visible) resetFieldsForm(form);
@@ -66,44 +58,6 @@ const ModalQuyDoiDiem = (props: {
 				values: [recSinhVien?.ssoId ?? ''],
 			},
 		]);
-
-	const getHocPhan = (val?: ETrinhDoMinhChungQuyDoiDiem) => {
-		setLoading(true);
-		getAllSvQuyDoi(
-			undefined,
-			undefined,
-			{ trinhDoDaoTao: trinhDoDaoTao, tenTruong: val, trangThai: ETrangThaiHocPhanQuyDoi.DA_RA_QUYET_DINH },
-			filters,
-			undefined,
-			false,
-		).then((res) => {
-			setDanhSachSVQuyDoi(res);
-			setLoading(false);
-		});
-	};
-
-	useEffect(() => {
-		getHocPhan();
-	}, [filters]);
-
-	const searchDebounceTenHocPhan = _.debounce((val) => {
-		setFilters([{ active: true, field: 'tenHocPhan', values: [val], operator: EOperatorType.CONTAIN }]);
-	}, 800);
-
-	const onSelectTenHocPhan = (val: string) => {
-		const index = danhSachSVQuyDoi.find((item) => item.tenHocPhan === val);
-		if (index) {
-			form.setFieldsValue({
-				maHocPhanMinhChung: index.maHocPhanMinhChung,
-				soTinChi: index.soTinChi,
-			});
-		} else {
-			form.setFieldsValue({
-				maHocPhanMinhChung: '',
-				soTinChi: '',
-			});
-		}
-	};
 
 	const onChangeHocPhanMinhChung = (maHocPhanMinhChung?: string) => {
 		const ns = danhSachHocPhan.find((item) => item.ma === maHocPhanMinhChung);
@@ -237,13 +191,7 @@ const ModalQuyDoiDiem = (props: {
 												<Col xs={24} md={12}>
 													<Form.Item name='trinhDoDaoTao' label='Trình độ' rules={[...rules.required]}>
 														<Select
-															onSelect={(val) => {
-																selectTruongHocDebounceModel({ trinhDoDaoTao: val }, 'tenTruong');
-																form.setFieldsValue({
-																	tenTruong: '',
-																	tenHocPhan: '',
-																});
-															}}
+															onSelect={() => form.setFieldsValue({ tenTruong: undefined, tenHocPhan: undefined })}
 															placeholder='Chọn trình độ'
 															options={Object.values(ETrinhDoMinhChungQuyDoiDiem).map((item) => ({
 																key: item,
@@ -259,25 +207,9 @@ const ModalQuyDoiDiem = (props: {
 														label='Trường học'
 														rules={[...rules.required, ...rules.text, ...rules.length(500)]}
 													>
-														<AutoComplete
-															filterOption={(inputValue, option) =>
-																(option!.value as string).toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-															}
-															onSelect={(val) => {
-																getHocPhan(val);
-																form.setFieldsValue({
-																	tenHocPhan: '',
-																});
-															}}
-															placeholder='Nhập tên trường'
-															options={dataTruongHoc
-																?.filter((item) => item !== null)
-																?.map((item) => ({
-																	key: item,
-																	value: item,
-																	label: item,
-																}))}
-															allowClear
+														<AutoTruongHocQuyDoi
+															trinhDoDaoTao={trinhDoDaoTao}
+															onSelect={() => form.setFieldsValue({ tenHocPhan: undefined })}
 														/>
 													</Form.Item>
 												</Col>
@@ -296,17 +228,15 @@ const ModalQuyDoiDiem = (props: {
 														label='Tên học phần'
 														rules={[...rules.required, ...rules.text, ...rules.length(250)]}
 													>
-														<AutoComplete
-															notFoundContent={loading ? <Spin spinning={true} /> : undefined}
-															onSearch={(val) => searchDebounceTenHocPhan(val)}
-															onSelect={(val) => onSelectTenHocPhan(val)}
-															placeholder='Nhập tên học phần'
-															options={danhSachSVQuyDoi?.map((item) => ({
-																key: item?._id,
-																value: item?.tenHocPhan,
-																label: item?.tenHocPhan,
-															}))}
-															allowClear
+														<AutoHocPhanQuyDoi
+															trinhDoDaoTao={trinhDoDaoTao}
+															tenTruong={tenTruong}
+															onSelect={(val) =>
+																form.setFieldsValue({
+																	maHocPhanMinhChung: val?.maHocPhanMinhChung,
+																	soTinChi: val?.soTinChi,
+																})
+															}
 														/>
 													</Form.Item>
 												</Col>
@@ -319,20 +249,30 @@ const ModalQuyDoiDiem = (props: {
 														<Input placeholder='Nhập mã học phần' />
 													</Form.Item>
 												</Col>
-												<Col xs={24} md={12}>
+												<Col xs={24} md={8}>
+													<Form.Item
+														name='soDVHT'
+														label='Số đơn vị học trình'
+														extra={
+															<small style={{ color: '#999' }}>
+																<i>1,5 đơn vị học trình = 1 tín chỉ</i>
+															</small>
+														}
+													>
+														<InputNumber
+															style={{ width: '100%' }}
+															placeholder='Nhập số đơn vị học trình'
+															min={0}
+															onChange={(val) => form.setFieldsValue({ soTinChi: Math.round((val ?? 0) / 1.5) })}
+														/>
+													</Form.Item>
+												</Col>
+												<Col xs={24} md={8}>
 													<Form.Item name='soTinChi' label='Số tín chỉ'>
 														<InputNumber style={{ width: '100%' }} placeholder='Nhập số tín chỉ' min={0} />
 													</Form.Item>
 												</Col>
-												<Col xs={24} md={12}>
-													<Form.Item name='soDVHT' label='Số ĐVHT'>
-														<InputNumber style={{ width: '100%' }} placeholder='Nhập số đơn vị học trình' min={0} />
-														<small style={{ color: '#999' }}>
-															<i>1,5 đơn vị học trình = 1 tín chỉ</i>
-														</small>
-													</Form.Item>
-												</Col>
-												<Col xs={24} md={12}>
+												<Col xs={24} md={8}>
 													<Form.Item name='namTotNghiep' label='Năm tốt nghiệp' rules={[...rules.required]}>
 														<InputNumber style={{ width: '100%' }} placeholder='Nhập năm tốt nghiệp' min={0} />
 													</Form.Item>

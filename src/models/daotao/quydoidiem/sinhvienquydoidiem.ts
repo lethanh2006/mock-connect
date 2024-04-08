@@ -1,3 +1,4 @@
+import type { TFilter } from '@/components/Table/typing';
 import useInitModel from '@/hooks/useInitModel';
 import { postSinhVienQuyDoiPhieu, selectTruongHocDebounce } from '@/services/HocTap/QuyDoiDiem';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
@@ -13,8 +14,8 @@ export default () => {
 		ipDaoTao,
 	);
 	const { formSubmiting, setFormSubmiting } = objInit;
-	const [dataTruongHoc, setDataTruongHoc] = useState<[]>();
-	const [dataHocPhan, setDataHocPhan] = useState<[]>();
+	const [loadingDebounce, setLoadingDebounce] = useState<boolean>(false);
+	const [dataAuto, setDataAuto] = useState<Record<keyof QuyDoiDiem.IQuyDoiDiemSinhVien, any[]>>();
 
 	const postSinhVienQuyDoiPhieuModel = async (idDotQuyDoi: string, payLoad: any): Promise<any> => {
 		if (formSubmiting) return Promise.reject('form submiting');
@@ -31,26 +32,33 @@ export default () => {
 		}
 	};
 
-	const selectTruongHocDebounceModel = async (condition?: any, key?: any, filter?: any[]): Promise<any> => {
+	const selectTruongHocDebounceModel = async (
+		key: keyof QuyDoiDiem.IQuyDoiDiemSinhVien,
+		condition?: Partial<QuyDoiDiem.IQuyDoiDiemSinhVien>,
+		filter?: TFilter<QuyDoiDiem.IQuyDoiDiemSinhVien>[],
+	): Promise<any> => {
 		try {
+			setLoadingDebounce(true);
 			const res = await selectTruongHocDebounce({ condition, key, filter });
-			if (key === 'tenTruong') {
-				setDataTruongHoc(res.data?.data);
-			} else if (key === 'tenHocPhan') {
-				setDataHocPhan(res.data?.data);
-			}
+
+			const temp = Object.assign(dataAuto ?? {}, { [key]: res.data?.data ?? [] }) as Record<
+				keyof QuyDoiDiem.IQuyDoiDiemSinhVien,
+				any[]
+			>;
+			setDataAuto(temp);
 
 			return res.data?.data;
 		} catch (error) {
 			return Promise.reject(error);
 		} finally {
+			setLoadingDebounce(false);
 		}
 	};
 
 	return {
 		...objInit,
-		dataHocPhan,
-		dataTruongHoc,
+		loadingDebounce,
+		dataAuto,
 		postSinhVienQuyDoiPhieuModel,
 		selectTruongHocDebounceModel,
 	};
