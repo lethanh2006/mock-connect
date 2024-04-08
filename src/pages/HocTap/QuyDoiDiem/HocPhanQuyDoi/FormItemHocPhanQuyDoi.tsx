@@ -1,6 +1,10 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-import { colorTrangThaiHocPhanQuyDoi, type ETrangThaiHocPhanQuyDoi } from '@/services/HocTap/constant';
+import {
+	EMinhChungQuyDoiDiem,
+	colorTrangThaiHocPhanQuyDoi,
+	type ETrangThaiHocPhanQuyDoi,
+} from '@/services/HocTap/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { Modal, Tag } from 'antd';
 import { useEffect } from 'react';
@@ -42,52 +46,21 @@ const FormItemHocPhanQuyDoi = () => {
 			width: 200,
 			render: (val, rec) => (
 				<>
-					- {rec?.loai}
-					{rec?.tenChungChi ? <>: {rec?.tenChungChi} </> : null}
-					{rec?.tenHocPhan ? <>: {rec?.tenHocPhan}</> : null}
+					{rec?.loai}:{' '}
+					{(rec?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? rec?.tenChungChi : rec?.tenHocPhan) ?? (
+						<i>Không có thông tin</i>
+					)}
 				</>
 			),
 			onCell,
 		},
 		{
 			title: 'Kết quả quy đổi',
-			width: 240,
-			children: [
-				{
-					title: 'Điểm hệ 10',
-					dataIndex: 'diemHe10',
-					align: 'center',
-					width: 80,
-					onCell: (rec) => ({
-						colSpan: !rec?.diemHe10 && !rec?.diemChu ? 0 : 1,
-						onClick: () => handleView(rec),
-						style: { cursor: 'pointer' },
-					}),
-				},
-				{
-					title: 'Điểm hệ 4',
-					dataIndex: 'diemHe4',
-					align: 'center',
-					width: 80,
-					onCell: (rec) => ({
-						colSpan: !rec?.diemHe4 && 0,
-						onClick: () => handleView(rec),
-						style: { cursor: 'pointer' },
-					}),
-				},
-				{
-					title: 'Điểm chữ',
-					dataIndex: 'diemChu',
-					align: 'center',
-					width: 80,
-					render: (val) => val ?? <i>Chưa có điểm</i>,
-					onCell: (rec) => ({
-						colSpan: !rec?.diemChu && 3,
-						onClick: () => handleView(rec),
-						style: { cursor: 'pointer' },
-					}),
-				},
-			],
+			dataIndex: 'diemHe10',
+			align: 'center',
+			width: 120,
+			render: (val, rec) => (val ? `${val} - ${rec.diemHe4 ?? ''} - ${rec.diemChu ?? ''}` : <i>Chưa có điểm</i>),
+			onCell,
 		},
 		{
 			title: 'Trạng thái',

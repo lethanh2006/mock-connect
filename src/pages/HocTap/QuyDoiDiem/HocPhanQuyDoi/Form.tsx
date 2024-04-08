@@ -51,7 +51,9 @@ const FormHocPhanQuyDoiDiem = () => {
 								</b>
 								<br />- Trình độ: <b>{record?.trinhDoDaoTao ?? ''}</b>
 								<br />- Trường đã học: <b>{record?.tenTruong ?? ''}</b>
-								<br />- Kết quả học tập:{' '}
+								<br />- Kết quả học tập: Điểm hệ 10: {record?.diemHe10MinhChung ?? ''}{' '}
+								{record?.diemHe4MinhChung ? <>, điểm hệ 4: {record?.diemHe4MinhChung}</> : ''}{' '}
+								{record?.diemChuMinhChung ? <>, điểm chữ: {record?.diemChuMinhChung}</> : ''}
 							</div>
 						)}
 					</Descriptions.Item>
