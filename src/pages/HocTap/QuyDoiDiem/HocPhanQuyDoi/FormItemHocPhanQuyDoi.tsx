@@ -2,6 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	EMinhChungQuyDoiDiem,
+	ETrangThaiPhieuQuyDoiDiem,
 	colorTrangThaiHocPhanQuyDoi,
 	type ETrangThaiHocPhanQuyDoi,
 } from '@/services/HocTap/constant';
@@ -33,18 +34,16 @@ const FormItemHocPhanQuyDoi = () => {
 	const columns: IColumn<QuyDoiDiem.IQuyDoiDiemSinhVien>[] = [
 		{
 			title: 'Học phần xin công nhận',
-			dataIndex: 'maHocPhan',
-			width: 250,
-			render: (val, rec) => (
-				<>
-					{rec?.hocPhan?.ten} ({val} - {rec?.hocPhan?.soTinChi} tín chỉ)
-				</>
-			),
-			onCell,
+			width: 300,
+			children: [
+				{ title: 'Mã HP', width: 80, dataIndex: 'maHocPhan', align: 'center', onCell },
+				{ title: 'Tên học phần', width: 160, render: (val, rec) => rec.hocPhan?.ten, onCell },
+				{ title: 'STC', width: 60, align: 'center', render: (val, rec) => rec.hocPhan?.soTinChi, onCell },
+			],
 		},
 		{
 			title: 'Minh chứng',
-			width: 200,
+			width: 220,
 			render: (val, rec) => (
 				<>
 					{rec?.loai}:{' '}
@@ -67,15 +66,18 @@ const FormItemHocPhanQuyDoi = () => {
 			title: 'Trạng thái',
 			dataIndex: 'trangThai',
 			align: 'center',
-			width: 120,
+			width: 130,
+			hide: recPhieu?.trangThai === ETrangThaiPhieuQuyDoiDiem.DA_RA_QUYET_DINH,
 			render: (val, rec) => <Tag color={colorTrangThaiHocPhanQuyDoi[val as ETrangThaiHocPhanQuyDoi]}>{val}</Tag>,
 			onCell,
 		},
+
 		{
 			title: 'Ghi chú',
 			dataIndex: 'ghiChu',
-			width: 180,
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			width: 160,
+			hide: recPhieu?.trangThai === ETrangThaiPhieuQuyDoiDiem.DA_RA_QUYET_DINH,
+			render: (val) => <ExpandText>{val}</ExpandText>,
 			onCell,
 		},
 	];
