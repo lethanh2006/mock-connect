@@ -291,6 +291,32 @@ const ModalQuyDoiDiem = (props: {
 												</Col>
 											</>
 										)}
+										<Row gutter={[12, 0]}>
+											<Col xs={24}>
+												<div className='fw500'>Kết quả học tập/quy đổi</div>
+											</Col>
+											<Col xs={12} md={8}>
+												<Form.Item name='diemHe10MinhChung' label='Điểm hệ 10' rules={[...rules.required]}>
+													<InputNumber
+														style={{ width: '100%' }}
+														placeholder='Nhập điểm (hệ 10)'
+														min={0}
+														max={10}
+														onChange={(val) => convertToLetterGradeDiemHe10(Number(val))}
+													/>
+												</Form.Item>
+											</Col>
+											<Col xs={12} md={8}>
+												<Form.Item name='diemHe4MinhChung' label='Điểm hệ 4'>
+													<Input disabled placeholder='Điểm hệ 4 sẽ được tính tự động' />
+												</Form.Item>
+											</Col>
+											<Col span={12} md={8}>
+												<Form.Item name='diemChuMinhChung' label='Điểm chữ'>
+													<Input disabled placeholder='Điểm chữ sẽ được tính tự động' />
+												</Form.Item>
+											</Col>
+										</Row>
 									</>
 								) : loaiMinhChung === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
 									<>
@@ -332,33 +358,6 @@ const ModalQuyDoiDiem = (props: {
 										</Col>
 									</>
 								) : null}
-							</Row>
-
-							<Row gutter={[12, 0]}>
-								<Col xs={24}>
-									<div className='fw500'>Kết quả học tập/quy đổi</div>
-								</Col>
-								<Col xs={12} md={8}>
-									<Form.Item name='diemHe10MinhChung' label='Điểm hệ 10' rules={[...rules.required]}>
-										<InputNumber
-											style={{ width: '100%' }}
-											placeholder='Nhập điểm (hệ 10)'
-											min={0}
-											max={10}
-											onChange={(val) => convertToLetterGradeDiemHe10(Number(val))}
-										/>
-									</Form.Item>
-								</Col>
-								<Col xs={12} md={8}>
-									<Form.Item name='diemHe4MinhChung' label='Điểm hệ 4'>
-										<Input disabled placeholder='Điểm hệ 4 sẽ được tính tự động' />
-									</Form.Item>
-								</Col>
-								<Col span={12} md={8}>
-									<Form.Item name='diemChuMinhChung' label='Điểm chữ'>
-										<Input disabled placeholder='Điểm chữ sẽ được tính tự động' />
-									</Form.Item>
-								</Col>
 							</Row>
 						</Col>
 						<Form.Item name='diemHe10' hidden />
