@@ -81,6 +81,7 @@ declare module QuyDoiDiem {
 		trinhDoDaoTao: ETrinhDoMinhChungQuyDoiDiem;
 		tenTruong: string;
 		maHocPhanMinhChung: string;
+		soDVHT: number;
 		soTinChi: number;
 		diemHe10MinhChung: number;
 		diemHe4MinhChung: number;

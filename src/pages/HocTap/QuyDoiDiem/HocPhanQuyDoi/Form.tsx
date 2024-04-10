@@ -1,10 +1,6 @@
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
-import {
-	EMinhChungQuyDoiDiem,
-	colorTrangThaiHocPhanQuyDoi,
-	type ETrangThaiHocPhanQuyDoi,
-} from '@/services/HocTap/constant';
-import { Button, Descriptions, Row, Tag } from 'antd';
+import { EMinhChungQuyDoiDiem, colorTrangThaiHocPhanQuyDoi } from '@/services/HocTap/constant';
+import { Button, Descriptions, Row, Space, Tag } from 'antd';
 import monent from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -16,6 +12,24 @@ const FormHocPhanQuyDoiDiem = () => {
 		if (!visibleForm) setRecord({} as QuyDoiDiem.IQuyDoiDiemSinhVien);
 	}, [visibleForm]);
 
+	const renderDiem = (he10?: number, he4?: number, diemChu?: string) => (
+		<Space wrap>
+			<span>
+				Điểm hệ 10: <b>{he10 ?? ''}</b>
+			</span>
+			{he4 ? (
+				<span>
+					Điểm hệ 4: <b>{he4}</b>
+				</span>
+			) : null}
+			{diemChu ? (
+				<span>
+					Điểm chữ: <b>{diemChu}</b>
+				</span>
+			) : null}
+		</Space>
+	);
+
 	return (
 		<>
 			<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
@@ -23,38 +37,40 @@ const FormHocPhanQuyDoiDiem = () => {
 					<Descriptions.Item label='Học phần xin công nhận'>
 						{record?.hocPhan?.ten ?? ''} ({record?.maHocPhan ?? ''} - {record?.hocPhan?.soTinChi ?? ''} tín chỉ)
 					</Descriptions.Item>
-					<Descriptions.Item label='Kế quả quy đổi'>
-						Điểm hệ 10: {record?.diemHe10 ?? ''} {record?.diemHe4 ? <>, điểm hệ 4: {record?.diemHe4}</> : ''}{' '}
-						{record?.diemChu ? <>, điểm chữ: {record?.diemChu}</> : ''}
+					<Descriptions.Item label='Kết quả quy đổi'>
+						{renderDiem(record?.diemHe10, record?.diemHe4, record?.diemChu)}
 					</Descriptions.Item>
+					<Descriptions.Item label='Khuyến nghị'>{record?.khuyenNghi ?? '--'}</Descriptions.Item>
 					<Descriptions.Item label='Trạng thái'>
-						<Tag color={colorTrangThaiHocPhanQuyDoi[record?.trangThai as ETrangThaiHocPhanQuyDoi]}>
-							{record?.trangThai ?? ''}
-						</Tag>
+						{record?.trangThai ? (
+							<Tag color={colorTrangThaiHocPhanQuyDoi[record?.trangThai]}>{record?.trangThai}</Tag>
+						) : null}
 					</Descriptions.Item>
-					<Descriptions.Item label='Minh chứng'>
-						{record?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
+
+					{record?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
+						<Descriptions.Item label='Thông tin chứng chỉ'>
 							<div>
 								- Tên chứng chỉ: <b>{record?.tenChungChi ?? ''}</b>
 								<br />- Điểm/bậc chứng chỉ: <b>{record?.bacChungChi ?? ''}</b>
 								<br />- Đơn vị cấp: <b>{record?.donViCap ?? ''}</b>
-								<br />- Thời gian hiệu lực:
-								<b>{record?.thoiGianHieuLuc && monent(record?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>
-								<br />- Thời gian hết hiệu lực:{' '}
-								<b>{record?.thoiGianHetHieuLuc && monent(record?.thoiGianHetHieuLuc).format('DD/MM/YYYY')}</b>
+								<br />- Thời gian hiệu lực:{' '}
+								<b>{record?.thoiGianHieuLuc ? monent(record?.thoiGianHieuLuc).format('DD/MM/YYYY') : '--'}</b>
 							</div>
-						) : (
+						</Descriptions.Item>
+					) : (
+						<Descriptions.Item label='Thông tin học phần đã học'>
 							<div>
-								- Tên học phần:{' '}
-								<b>
-									{record?.tenHocPhan} ({record?.maHocPhan} - {record?.soTinChi} tín chỉ)
-								</b>
-								<br />- Trình độ: <b>{record?.trinhDoDaoTao ?? ''}</b>
-								<br />- Trường đã học: <b>{record?.tenTruong ?? ''}</b>
+								- Tên học phần: {record?.tenHocPhan ? <b>{record.tenHocPhan}</b> : <i>Không có tên học phần</i>} (
+								{record?.maHocPhanMinhChung} - {record?.soTinChi} tín chỉ)
+								<br />- Học tại trường: <b>{record?.tenTruong ?? ''}</b>. Trình độ: <b>{record?.trinhDoDaoTao ?? ''}</b>
+								. Ngành học: <b>{record?.nganh ?? ''}</b>. Năm tốt nghiệp: <b>{record?.namTotNghiep ?? ''}</b>
 								<br />- Kết quả học tập:{' '}
+								{renderDiem(record?.diemHe10MinhChung, record?.diemHe4MinhChung, record?.diemChuMinhChung)}
 							</div>
-						)}
-					</Descriptions.Item>
+						</Descriptions.Item>
+					)}
+
+					<Descriptions.Item label='Ghi chú'>{record?.ghiChu ?? '--'}</Descriptions.Item>
 				</Descriptions>
 			</Row>
 
