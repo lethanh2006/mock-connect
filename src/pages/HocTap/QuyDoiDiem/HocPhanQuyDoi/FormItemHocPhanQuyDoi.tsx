@@ -1,11 +1,17 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-import { colorTrangThaiHocPhanQuyDoi, type ETrangThaiHocPhanQuyDoi } from '@/services/HocTap/constant';
+import {
+	EMinhChungQuyDoiDiem,
+	ETrangThaiPhieuQuyDoiDiem,
+	colorTrangThaiHocPhanQuyDoi,
+	type ETrangThaiHocPhanQuyDoi,
+} from '@/services/HocTap/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { Modal, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormHocPhanQuyDoiDiem from './Form';
+import ExpandText from '@/components/ExpandText';
 
 const FormItemHocPhanQuyDoi = () => {
 	const { setVisibleForm, visibleForm, getModel, danhSach, loading, handleView } = useModel(
@@ -28,73 +34,50 @@ const FormItemHocPhanQuyDoi = () => {
 	const columns: IColumn<QuyDoiDiem.IQuyDoiDiemSinhVien>[] = [
 		{
 			title: 'Học phần xin công nhận',
-			dataIndex: 'maHocPhan',
-			width: 250,
-			render: (val, rec) => (
-				<>
-					{rec?.hocPhan?.ten} ({val} - {rec?.hocPhan?.soTinChi} tín chỉ)
-				</>
-			),
-			onCell,
+			width: 300,
+			children: [
+				{ title: 'Mã HP', width: 80, dataIndex: 'maHocPhan', align: 'center', onCell },
+				{ title: 'Tên học phần', width: 160, render: (val, rec) => rec.hocPhan?.ten, onCell },
+				{ title: 'STC', width: 60, align: 'center', render: (val, rec) => rec.hocPhan?.soTinChi, onCell },
+			],
 		},
 		{
 			title: 'Minh chứng',
-			width: 200,
+			width: 220,
 			render: (val, rec) => (
 				<>
-					- {rec?.loai}
-					{rec?.tenChungChi ? <>: {rec?.tenChungChi} </> : null}
-					{rec?.tenHocPhan ? <>: {rec?.tenHocPhan}</> : null}
+					{rec?.loai}:{' '}
+					{(rec?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? rec?.tenChungChi : rec?.tenHocPhan) ?? (
+						<i>Không có thông tin</i>
+					)}
 				</>
 			),
 			onCell,
 		},
 		{
 			title: 'Kết quả quy đổi',
-			width: 240,
-			children: [
-				{
-					title: 'Điểm hệ 10',
-					dataIndex: 'diemHe10',
-					align: 'center',
-					width: 80,
-					onCell: (rec) => ({
-						colSpan: !rec?.diemHe10 && !rec?.diemChu ? 0 : 1,
-						onClick: () => handleView(rec),
-						style: { cursor: 'pointer' },
-					}),
-				},
-				{
-					title: 'Điểm hệ 4',
-					dataIndex: 'diemHe4',
-					align: 'center',
-					width: 80,
-					onCell: (rec) => ({
-						colSpan: !rec?.diemHe4 && 0,
-						onClick: () => handleView(rec),
-						style: { cursor: 'pointer' },
-					}),
-				},
-				{
-					title: 'Điểm chữ',
-					dataIndex: 'diemChu',
-					align: 'center',
-					width: 80,
-					render: (val) => val ?? <i>Chưa có điểm</i>,
-					onCell: (rec) => ({
-						colSpan: !rec?.diemChu && 3,
-						onClick: () => handleView(rec),
-						style: { cursor: 'pointer' },
-					}),
-				},
-			],
+			dataIndex: 'diemHe10',
+			align: 'center',
+			width: 120,
+			render: (val, rec) => (val ? `${val} - ${rec.diemHe4 ?? ''} - ${rec.diemChu ?? ''}` : <i>Chưa có điểm</i>),
+			onCell,
 		},
 		{
 			title: 'Trạng thái',
 			dataIndex: 'trangThai',
 			align: 'center',
-			width: 120,
+			width: 130,
+			hide: recPhieu?.trangThai === ETrangThaiPhieuQuyDoiDiem.DA_RA_QUYET_DINH,
 			render: (val, rec) => <Tag color={colorTrangThaiHocPhanQuyDoi[val as ETrangThaiHocPhanQuyDoi]}>{val}</Tag>,
+			onCell,
+		},
+
+		{
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 160,
+			hide: recPhieu?.trangThai === ETrangThaiPhieuQuyDoiDiem.DA_RA_QUYET_DINH,
+			render: (val) => <ExpandText>{val}</ExpandText>,
 			onCell,
 		},
 	];

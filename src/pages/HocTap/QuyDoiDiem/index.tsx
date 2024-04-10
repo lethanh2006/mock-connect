@@ -1,12 +1,12 @@
 import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
+import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import {
+	type ETrangThaiPhieuQuyDoiDiem,
 	colorTrangThaiHocPhanQuyDoi,
 	colorTrangThaiSinhVienQuyDoiDiem,
-	type ETrangThaiPhieuQuyDoiDiem,
 } from '@/services/HocTap/constant';
-import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
@@ -49,18 +49,45 @@ const LichSuQuyDoiDiemPage = () => {
 		},
 		{
 			title: 'Học phần quy đổi',
-			width: 250,
+			width: 320,
 			render: (val, rec) => (
 				<ExpandText>
 					{rec.danhSachHocPhan?.map((item) => (
 						<>
-							- {item.hocPhan?.ten} - {item.diemHe4 ?? 'Chưa có điểm'} -{' '}
+							- {item.hocPhan?.ten} - {item.diemHe4 ? `${item.diemHe4} điểm` : 'Chưa có điểm'} -{' '}
 							<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i>
+							{item?.khuyenNghi?.length ? (
+								<>
+									{' '}
+									- <small>({item?.khuyenNghi?.map((items) => items).join(', ')})</small>
+								</>
+							) : null}
 							<br />
 						</>
 					))}
 				</ExpandText>
 			),
+		},
+		{
+			title: 'Tỷ lệ công nhận',
+			align: 'center',
+			width: 120,
+			render: (val, rec) => {
+				const tiLeCongNhan = !rec?.soTinChiChuongTrinhDaoTao
+					? 0
+					: ((rec?.soTinChiDaCongNhan + rec?.soTinChiCongNhanDot) / rec?.soTinChiChuongTrinhDaoTao) * 100;
+				return (
+					<div>
+						(<Tooltip title='Tổng số tín chỉ đã được công nhận trước đó'>{rec?.soTinChiDaCongNhan ?? 0}</Tooltip> +{' '}
+						<Tooltip title='Số tín chỉ đã được công nhận trong phiếu'>{rec?.soTinChiCongNhanDot ?? 0}</Tooltip>) /{' '}
+						<Tooltip title='Tổng số tín chỉ trong chương trình đào tạo'>{rec?.soTinChiChuongTrinhDaoTao ?? 0}</Tooltip>{' '}
+						<br />
+						<span style={{ color: tiLeCongNhan > 50 ? 'red' : 'green' }}>
+							{tiLeCongNhan.toFixed(tiLeCongNhan !== 0 ? 2 : 0)} %
+						</span>
+					</div>
+				);
+			},
 		},
 		{
 			title: 'Số QĐ',
@@ -81,25 +108,6 @@ const LichSuQuyDoiDiemPage = () => {
 			onCell,
 		},
 		{
-			title: 'Tỷ lệ công nhận',
-			align: 'center',
-			width: 100,
-			render: (val, rec) => {
-				const tiLeCongNhan = !rec?.soTinChiChuongTrinhDaoTao
-					? 0
-					: ((rec?.soTinChiDaCongNhan + rec?.soTinChiCongNhanDot) / rec?.soTinChiChuongTrinhDaoTao) * 100;
-				return (
-					<div>
-						(<Tooltip title='Tổng số tín chỉ đã được công nhận trước đó'>{rec?.soTinChiDaCongNhan ?? 0}</Tooltip> +{' '}
-						<Tooltip title='Số tín chỉ đã được công nhận trong phiếu'>{rec?.soTinChiCongNhanDot ?? 0}</Tooltip>) /{' '}
-						<Tooltip title='Tổng số tín chỉ trong chương trình đào tạo'>{rec?.soTinChiChuongTrinhDaoTao ?? 0}</Tooltip>{' '}
-						<br />
-						<span style={{ color: tiLeCongNhan > 50 ? 'red' : 'green' }}>{Math.ceil(tiLeCongNhan * 100) / 100} %</span>
-					</div>
-				);
-			},
-		},
-		{
 			title: 'Ghi chú',
 			dataIndex: 'ghiChu',
 			width: 220,
@@ -110,7 +118,7 @@ const LichSuQuyDoiDiemPage = () => {
 			title: 'Công nhận',
 			dataIndex: 'trangThai',
 			align: 'center',
-			width: 100,
+			width: 120,
 			render: (val, rec) => <Tag color={colorTrangThaiSinhVienQuyDoiDiem[val as ETrangThaiPhieuQuyDoiDiem]}>{val}</Tag>,
 			onCell,
 			fixed: 'right',
