@@ -46,6 +46,7 @@ export default () => {
 		try {
 			const response = await getMyKhoaNganh();
 			setKhoaNganhMe(response?.data?.data ?? null);
+			setMaKhoaNganh(response?.data?.data?.khoaNganhChinh?.ma);
 			return response?.data?.data;
 		} catch (er) {
 			return Promise.reject(er);
