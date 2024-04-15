@@ -184,11 +184,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 					</Form.Item>
 				</Col>
 				<Col span={12} md={6}>
-					<Form.Item
-						name='soBaoHiemSinhVien'
-						label='Số thẻ BHYT'
-						rules={[...rules.text, ...rules.length(20), ...rules.required]}
-					>
+					<Form.Item name='soBaoHiemSinhVien' label='Số thẻ BHYT' rules={[...rules.text, ...rules.length(20)]}>
 						<Input placeholder='Nhập số thẻ BHYT' />
 					</Form.Item>
 				</Col>
