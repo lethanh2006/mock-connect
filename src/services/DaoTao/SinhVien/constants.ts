@@ -76,23 +76,3 @@ export const colorTrangThaiChungChiSinhVen: Record<ETrangThaiChungChiSinhVen, st
 	[ETrangThaiChungChiSinhVen.DA_DUYET]: 'green',
 	[ETrangThaiChungChiSinhVen.KHONG_DUYET]: 'red',
 };
-
-// Trạng thái bảo lưu
-
-export enum ETrangThaiSinhVienBaoLuu {
-	DANG_BAO_LUU = 'Đang bảo lưu',
-	QUAY_LAI_HOC = 'Quay lại học',
-	BUOC_THOI_HOC = 'Buộc thôi học',
-}
-
-export const colorTrangThaiSinhVienBaoLuu: Record<ETrangThaiSinhVienBaoLuu, string> = {
-	[ETrangThaiSinhVienBaoLuu.DANG_BAO_LUU]: 'blue',
-	[ETrangThaiSinhVienBaoLuu.QUAY_LAI_HOC]: 'green',
-	[ETrangThaiSinhVienBaoLuu.BUOC_THOI_HOC]: 'red',
-};
-
-// export const fieldTrangThaiSinhVienBaoLuu: Record<ETrangThaiSinhVienBaoLuu, keyof QuyetDinh.TThongKeSinhVienBaoLuu> = {
-// 	[ETrangThaiSinhVienBaoLuu.DANG_BAO_LUU]: 'dangBaoLuu',
-// 	[ETrangThaiSinhVienBaoLuu.QUAY_LAI_HOC]: 'quayLaiHoc',
-// 	[ETrangThaiSinhVienBaoLuu.BUOC_THOI_HOC]: 'buocThoiHoc',
-// };

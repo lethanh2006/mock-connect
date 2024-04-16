@@ -4,12 +4,13 @@ import type { ETrangThaiSinhVienBLTH, ETrangThaiSinhVienBaoLuu } from '../consta
 declare module QuyetDinh {
 	export interface IRecord {
 		_id: string;
-		soQuyetDinh: string;
-		noiDung: string;
+		maHocKy?: string;
+		hocKy?: HocKy.IRecord;
 		loai: ELoaiQuyetDinh;
-		thoiGianBatDau: date;
-		thoiGianKetThuc: date;
-		url: string | null;
+		soQuyetDinh: string;
+		ngayBanHanh?: Date;
+		noiDung: string;
+		url?: string | null;
 	}
 
 	export interface ISinhVienBaoLuuThoiHoc {
@@ -20,7 +21,7 @@ declare module QuyetDinh {
 		maKhoaSinhVien: string;
 		khoaSinhVien?: KhoaSinhVien.IRecord;
 		maNganh: string;
-		nganh?: KhoaNganh.IRecord;
+		nganh?: NganhDaoTao.IRecordCoSo;
 		maKhoaNganh: string;
 		khoaNganh: KhoaNganh.IRecord;
 
@@ -28,14 +29,17 @@ declare module QuyetDinh {
 		maDon?: string; // Mã đơn sinh viên gửi
 		lyDo?: string; // Lý do không duyệt
 		ghiChu?: string;
+		maHocKy: string;
+		hocKy?: HocKy.IRecord;
 
 		//Quyết định thôi học
-		thoiGianHieuLuc?: string;
+		// thoiGianHieuLuc?: string;
 		quyetDinhThoiHoc: IRecord;
 		quyetDinhThoiHocId: string;
 
 		//Quyết định bao lưu
-		thoiGianBatDau?: string;
+		soKyBaoLuu: number;
+		// thoiGianBatDau?: string;
 		thoiGianKetThuc?: string;
 		trangThaiBaoLuu: ETrangThaiSinhVienBaoLuu;
 
@@ -47,6 +51,8 @@ declare module QuyetDinh {
 		//Quay lại học
 		idDonQuayLaiHoc: string;
 		donQuayLaiHoc: ISinhVienQuayLaiHoc;
+		quyetDinhQuayLaiHoc: IRecord;
+		quyetDinhQuayLaiHocId: string;
 	}
 
 	export interface ISinhVienQuayLaiHoc {
