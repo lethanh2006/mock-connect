@@ -9,6 +9,7 @@ import {
 	EMinhChungQuyDoiDiem,
 	ETrangThaiHocPhanQuyDoi,
 	ETrinhDoMinhChungQuyDoiDiem,
+	mapNameLoaiHocPhanMinhChung,
 } from '@/services/HocTap/constant';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
@@ -170,8 +171,8 @@ const ModalQuyDoiDiem = (props: {
 													placeholder='Chọn loại học phần'
 													options={Object.values(ELoaiHocPhanMinhChung).map((item) => ({
 														key: item,
-														label: item,
 														value: item,
+														label: mapNameLoaiHocPhanMinhChung[item],
 													}))}
 													onSelect={() => {
 														form.resetFields([
