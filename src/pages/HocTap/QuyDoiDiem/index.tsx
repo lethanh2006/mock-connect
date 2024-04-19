@@ -7,7 +7,7 @@ import {
 	colorTrangThaiSinhVienQuyDoiDiem,
 	type ETrangThaiPhieuQuyDoiDiem,
 } from '@/services/HocTap/constant';
-import { Tag, Tooltip } from 'antd';
+import { Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -41,14 +41,7 @@ const LichSuQuyDoiDiemPage = () => {
 			onCell,
 		},
 		{
-			title: 'Ngành đào tạo',
-			dataIndex: 'maKhoaNganh',
-			width: 150,
-			render: (val, rec) => rec?.khoaNganh?.ten,
-			onCell,
-		},
-		{
-			title: 'Học phần học phần xin công nhận',
+			title: 'Học phần xin công nhận',
 			width: 320,
 			render: (val, rec) => (
 				<ExpandText>
@@ -69,25 +62,12 @@ const LichSuQuyDoiDiemPage = () => {
 			),
 		},
 		{
-			title: 'Tỷ lệ công nhận',
+			title: 'Trạng thái',
+			dataIndex: 'trangThai',
 			align: 'center',
-			width: 120,
-			render: (val, rec) => {
-				const tiLeCongNhan = !rec?.soTinChiChuongTrinhDaoTao
-					? 0
-					: ((rec?.soTinChiDaCongNhan + rec?.soTinChiCongNhanDot) / rec?.soTinChiChuongTrinhDaoTao) * 100;
-				return (
-					<div>
-						(<Tooltip title='Tổng số tín chỉ đã được công nhận trước đó'>{rec?.soTinChiDaCongNhan ?? 0}</Tooltip> +{' '}
-						<Tooltip title='Số tín chỉ đã được công nhận trong phiếu'>{rec?.soTinChiCongNhanDot ?? 0}</Tooltip>) /{' '}
-						<Tooltip title='Tổng số tín chỉ trong chương trình đào tạo'>{rec?.soTinChiChuongTrinhDaoTao ?? 0}</Tooltip>{' '}
-						<br />
-						<span style={{ color: tiLeCongNhan > 50 ? 'red' : 'green' }}>
-							{tiLeCongNhan.toFixed(tiLeCongNhan !== 0 ? 2 : 0)} %
-						</span>
-					</div>
-				);
-			},
+			width: 140,
+			render: (val, rec) => <Tag color={colorTrangThaiSinhVienQuyDoiDiem[val as ETrangThaiPhieuQuyDoiDiem]}>{val}</Tag>,
+			onCell,
 		},
 		{
 			title: 'Số QĐ',
@@ -98,7 +78,7 @@ const LichSuQuyDoiDiemPage = () => {
 			onCell,
 		},
 		{
-			title: 'Ngày ban hành',
+			title: 'Ngày BH',
 			dataIndex: 'thoiGianBanHanh',
 			align: 'center',
 			width: 120,
@@ -106,22 +86,6 @@ const LichSuQuyDoiDiemPage = () => {
 			filterType: 'date',
 			sortable: true,
 			onCell,
-		},
-		{
-			title: 'Ghi chú',
-			dataIndex: 'ghiChu',
-			width: 220,
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
-			onCell,
-		},
-		{
-			title: 'Công nhận',
-			dataIndex: 'trangThai',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => <Tag color={colorTrangThaiSinhVienQuyDoiDiem[val as ETrangThaiPhieuQuyDoiDiem]}>{val}</Tag>,
-			onCell,
-			fixed: 'right',
 		},
 	];
 
