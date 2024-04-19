@@ -116,9 +116,14 @@ export enum ETrinhDoMinhChungQuyDoiDiem {
 }
 
 export enum ELoaiHocPhanMinhChung {
-	NGOAI_CHUONG_TRINH = 'Ngoài chương trình',
 	TRONG_CHUONG_TRINH = 'Trong chương trình',
+	NGOAI_CHUONG_TRINH = 'Ngoài chương trình',
 }
+
+export const mapNameLoaiHocPhanMinhChung: Record<ELoaiHocPhanMinhChung, string> = {
+	[ELoaiHocPhanMinhChung.TRONG_CHUONG_TRINH]: `Học tại ${APP_CONFIG_TEN_TRUONG.toLocaleLowerCase()}`,
+	[ELoaiHocPhanMinhChung.NGOAI_CHUONG_TRINH]: 'Học tại cơ sở đào tạo khác',
+};
 
 export enum ETrangThaiHocPhanQuyDoi {
 	CHO_XU_LY = 'Chờ xử lý',
