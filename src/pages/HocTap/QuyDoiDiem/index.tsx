@@ -3,9 +3,9 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import {
-	type ETrangThaiPhieuQuyDoiDiem,
 	colorTrangThaiHocPhanQuyDoi,
 	colorTrangThaiSinhVienQuyDoiDiem,
+	type ETrangThaiPhieuQuyDoiDiem,
 } from '@/services/HocTap/constant';
 import { Tag, Tooltip } from 'antd';
 import moment from 'moment';
@@ -48,7 +48,7 @@ const LichSuQuyDoiDiemPage = () => {
 			onCell,
 		},
 		{
-			title: 'Học phần quy đổi',
+			title: 'Học phần học phần xin công nhận',
 			width: 320,
 			render: (val, rec) => (
 				<ExpandText>
