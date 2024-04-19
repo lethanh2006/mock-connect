@@ -1,17 +1,15 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import {
 	EMinhChungQuyDoiDiem,
-	ETrangThaiPhieuQuyDoiDiem,
 	colorTrangThaiHocPhanQuyDoi,
 	type ETrangThaiHocPhanQuyDoi,
 } from '@/services/HocTap/constant';
-import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { Modal, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormHocPhanQuyDoiDiem from './Form';
-import ExpandText from '@/components/ExpandText';
 
 const FormItemHocPhanQuyDoi = () => {
 	const { setVisibleForm, visibleForm, getModel, danhSach, loading, handleView } = useModel(
@@ -67,17 +65,7 @@ const FormItemHocPhanQuyDoi = () => {
 			dataIndex: 'trangThai',
 			align: 'center',
 			width: 130,
-			hide: recPhieu?.trangThai === ETrangThaiPhieuQuyDoiDiem.DA_RA_QUYET_DINH,
 			render: (val, rec) => <Tag color={colorTrangThaiHocPhanQuyDoi[val as ETrangThaiHocPhanQuyDoi]}>{val}</Tag>,
-			onCell,
-		},
-
-		{
-			title: 'Ghi chú',
-			dataIndex: 'ghiChu',
-			width: 160,
-			hide: recPhieu?.trangThai === ETrangThaiPhieuQuyDoiDiem.DA_RA_QUYET_DINH,
-			render: (val) => <ExpandText>{val}</ExpandText>,
 			onCell,
 		},
 	];
