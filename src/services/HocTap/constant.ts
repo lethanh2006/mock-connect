@@ -116,8 +116,8 @@ export enum ETrinhDoMinhChungQuyDoiDiem {
 }
 
 export enum ELoaiHocPhanMinhChung {
-	NGOAI_CHUONG_TRINH = 'Ngoài chương trình',
-	TRONG_CHUONG_TRINH = 'Trong chương trình',
+	NGOAI_CHUONG_TRINH = 'Học tại HVPNVN',
+	TRONG_CHUONG_TRINH = 'Học tại CSĐT khác',
 }
 
 export enum ETrangThaiHocPhanQuyDoi {

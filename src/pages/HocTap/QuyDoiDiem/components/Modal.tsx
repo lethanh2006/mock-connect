@@ -273,7 +273,7 @@ const ModalQuyDoiDiem = (props: {
 													</Form.Item>
 												</Col>
 												<Col xs={24} md={8}>
-													<Form.Item name='namTotNghiep' label='Năm tốt nghiệp' rules={[...rules.required]}>
+													<Form.Item name='namTotNghiep' label='Năm tốt nghiệp'>
 														<InputNumber style={{ width: '100%' }} placeholder='Nhập năm tốt nghiệp' min={0} />
 													</Form.Item>
 												</Col>
