@@ -104,14 +104,20 @@ export const colorTrangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> 
 export enum ETrangThaiHocPhanDangKyNhuCau {
 	CHO_DUYET = 'CHO_DUYET',
 	DA_DUYET = 'DA_DUYET',
+	KHONG_DUYET = 'KHONG_DUYET',
+	DA_PHAN_LOP = 'DA_PHAN_LOP',
 }
 
 export const mapTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
 	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'Chờ duyệt',
 	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'Đã duyệt',
+	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'Không duyệt',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'Đã phân lớp',
 };
 
 export const colorTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
 	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'blue',
-	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'green',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'orange',
+	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'red',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'green',
 };
