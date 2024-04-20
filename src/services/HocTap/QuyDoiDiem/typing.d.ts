@@ -37,12 +37,10 @@ declare module QuyDoiDiem {
 		quyetDinh: QuyetDinh.IRecord;
 		thoiGianBanHanh: Date;
 		dotDangKyQuyDoiDiemId: string;
-		dotDangKyQuyDoiDiem?: QuyDoiDiem.DotQuyDoiDiem;
+		dotDangKyQuyDoiDiem?: DotQuyDoiDiem;
 		danhSachHocPhan: IQuyDoiDiemSinhVien[];
 		urlsMinhChung: string[] | null;
-		maKhoaNganh: string;
-		khoaNganh?: KhoaNganh.IRecord;
-		ghiChu: string;
+		// ghiChu: string;
 
 		soTinChiDaCongNhan: number;
 		soTinChiChuongTrinhDaoTao: number;
@@ -57,26 +55,33 @@ declare module QuyDoiDiem {
 		phieuDangKyQuyDoiDiemId: string;
 		phieuDangKyQuyDoiDiem: string;
 		maHocPhan: string;
-		hocPhan: HocPhan.IRecord;
+		hocPhan?: HocPhan.IRecord;
+		ghiChu?: string;
+
+		// Kết quả quy đổi
 		diemHe10: number;
 		diemHe4: number;
 		diemChu: string;
 		trangThai: ETrangThaiHocPhanQuyDoi;
 		ghiChu: string;
+		khuyenNghi: string[];
+
+		// Người cho ý kiến?
 		nguoiChoYKienSsoId: string;
 		hoTenNguoiChoYKien: string;
 		thoiGianChoYKien: Date;
-		khuyenNghi: string[];
 
-		//Minh chứng
+		// Minh chứng chứng chỉ
 		loai: EMinhChungQuyDoiDiem;
 		tenChungChi: string;
-		urlsChungChi: string;
-		diemChungChi: string;
+		// urlsChungChi: string;
+		// diemChungChi: string;
 		bacChungChi: string;
 		donViCap: string;
 		thoiGianHieuLuc: Date;
-		thoiGianHetHieuLuc: Date;
+		// thoiGianHetHieuLuc: Date;
+
+		// Minh chứng học phần
 		tenHocPhan: string;
 		trinhDoDaoTao: ETrinhDoMinhChungQuyDoiDiem;
 		tenTruong: string;
@@ -85,10 +90,10 @@ declare module QuyDoiDiem {
 		soTinChi: number;
 		diemHe10MinhChung: number;
 		diemHe4MinhChung: number;
-		diemChuMinhChung: string;
-		urlsHocPhan: string;
+		diemChuMinhChung: ELoaiDiemChu;
+		// urlsHocPhan: string;
 		loaiHocPhan: ELoaiHocPhanMinhChung;
 		namTotNghiep: number;
-		nganh: number;
+		nganh: string;
 	}
 }
