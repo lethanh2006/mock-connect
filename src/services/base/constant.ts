@@ -77,10 +77,16 @@ export const AppModules: Record<EModuleKey, Login.TModule> = {
 	},
 	[EModuleKey.CSVC]: {
 		title: APP_CONFIG_TITLE_CSVC,
-		clientId: `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}kt`,
-		url: APP_CONFIG_URL_CTSV,
-		icon: EModuleKey.KT + '.svg',
+		clientId: `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}csvc`,
+		url: APP_CONFIG_URL_CSVC,
+		icon: EModuleKey.CSVC + '.svg',
 	},
+};
+
+export const moduleThuVien: Partial<Login.TModule> = {
+	title: APP_CONFIG_TITLE_THU_VIEN,
+	url: APP_CONFIG_URL_THU_VIEN,
+	icon: 'thu-vien.svg',
 };
 
 /** Đường link landing page */
