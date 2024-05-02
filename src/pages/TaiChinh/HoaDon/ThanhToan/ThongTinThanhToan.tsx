@@ -90,7 +90,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 					{activeTab === '1' ? (
 						<>
-							{recGiaoDich?._id && recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL ? (
+							{recGiaoDich?._id &&
+							recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
+							!ngoaiThoiGianThanhToan ? (
 								<Alert
 									message='Có giao dịch nộp tiền đang chờ xử lý! Bạn đã thực hiện thanh toán chưa?'
 									description='(Nếu đã thanh toán, vui lòng bỏ qua thông báo này)'
