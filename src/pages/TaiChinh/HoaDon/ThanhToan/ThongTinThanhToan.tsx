@@ -146,7 +146,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								<br />- Số tiền nộp dư (nếu có) sẽ được hoàn lại trong Số dư ví, sinh viên có thể xem chi tiết trong
 								menu Lịch sử giao dịch.
 							</div>
-							<LichSuThanhToan onPay={onPay} onCancel={onCancel} />
+							<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
 						</>
 					)}
 				</Col>
