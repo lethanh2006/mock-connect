@@ -6,23 +6,16 @@ import {
 	mapTrangThaiHocPhanDangKyNhuCau,
 	type ETrangThaiHocPhanDangKyNhuCau,
 } from '@/services/DaoTao/constant';
-import { Alert, Empty, Tag } from 'antd';
+import { Alert, Tag } from 'antd';
 import moment from 'moment';
-import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormDangKyNhuCau from './Form';
 
-const NhuCauHocPhanPage = () => {
+const NhuCauHocPhanPage = (props: { khoaNganhTrongDot: boolean }) => {
 	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangky');
 	const { getModel, page, limit } = useModel('daotao.dangkynhucau.hocphannhucau');
-	const { getAllModel, danhSach } = useModel('daotao.dangkynhucau.khoanganhdot');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
-
-	useEffect(() => {
-		getAllModel(undefined, undefined, { dotDangKyNhuCauId: recDot?._id });
-	}, []);
-
-	const checkKhoaNganh = danhSach.find((item) => maKhoaNganh === item?.maKhoaNganh);
+	const { khoaNganhTrongDot } = props;
 
 	const getData = () =>
 		recDot?._id && getModel({ maKhoaNganh }, undefined, undefined, undefined, undefined, `me/dot/${recDot?._id}`);
@@ -83,21 +76,26 @@ const NhuCauHocPhanPage = () => {
 				/>
 			</div>
 
-			{checkKhoaNganh?._id ? (
-				<TableBase
-					columns={columns}
-					getData={getData}
-					formProps={{ getData }}
-					dependencies={[page, limit, maKhoaNganh]}
-					modelName='daotao.dangkynhucau.hocphannhucau'
-					title='Nhu cầu học phần'
-					hideCard
-					Form={FormDangKyNhuCau}
-					buttons={{ create: ngoaiThoiGian ? false : true }}
-				/>
-			) : (
-				<Empty description='Khóa ngành không có trong đợt đăng ký!' style={{ marginTop: 32, marginBottom: 32 }} />
-			)}
+			<TableBase
+				columns={columns}
+				getData={getData}
+				formProps={{ getData }}
+				dependencies={[page, limit, maKhoaNganh, recDot?._id]}
+				modelName='daotao.dangkynhucau.hocphannhucau'
+				title='Nhu cầu học phần'
+				hideCard
+				Form={FormDangKyNhuCau}
+				buttons={{ create: !ngoaiThoiGian && khoaNganhTrongDot }}
+				otherButtons={
+					!khoaNganhTrongDot
+						? [
+								<i color='red' key='1'>
+									Bạn không được phép đăng ký nhu cầu mới
+								</i>,
+						  ]
+						: undefined
+				}
+			/>
 		</>
 	);
 };
