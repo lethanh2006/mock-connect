@@ -90,7 +90,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 					{activeTab === '1' ? (
 						<>
-							{recGiaoDich?._id && recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL ? (
+							{recGiaoDich?._id &&
+							recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
+							!ngoaiThoiGianThanhToan ? (
 								<Alert
 									message='Có giao dịch nộp tiền đang chờ xử lý! Bạn đã thực hiện thanh toán chưa?'
 									description='(Nếu đã thanh toán, vui lòng bỏ qua thông báo này)'
@@ -144,7 +146,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								<br />- Số tiền nộp dư (nếu có) sẽ được hoàn lại trong Số dư ví, sinh viên có thể xem chi tiết trong
 								menu Lịch sử giao dịch.
 							</div>
-							<LichSuThanhToan onPay={onPay} onCancel={onCancel} />
+							<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
 						</>
 					)}
 				</Col>
