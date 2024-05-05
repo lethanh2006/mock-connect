@@ -162,7 +162,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			onCell,
 		},
 		{
-			title: 'Trạng thái xử lý',
+			title: 'Kết quả',
 			dataIndex: 'quyTrinh',
 			width: 200,
 			align: 'center',
@@ -178,6 +178,17 @@ const KhaiBaoQuyTrinhPage = (props: {
 					{recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.trangThaiTiepNhan}
 				</Tag>
 			),
+		},
+		{
+			title: 'Trạng thái thực hiện',
+			dataIndex: 'coKhaiBao',
+			width: 200,
+			align: 'center',
+			render: (val, recordVal) => {
+				const coKhaiBao = recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.coKhaiBao ?? false;
+				return <Tag color={coKhaiBao ? '#1fba36' : '#ffca2c'}>{coKhaiBao ? 'Đã thực hiện' : 'Chưa thực hiện'}</Tag>;
+			},
+			onCell,
 		},
 		{
 			title: 'Trạng thái thanh toán',
