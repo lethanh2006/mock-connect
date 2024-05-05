@@ -14,13 +14,13 @@ const StatGiaoDich = () => {
 		<Row gutter={[12, 12]} style={{ marginBottom: 18 }}>
 			<Col span={24} md={12}>
 				<Card className='card-stat-small'>
-					<span className='num text-success'>{soDuVi?.totalIn ? `${inputFormat(soDuVi.totalIn)} VND` : '--'}</span>
+					<span className='num text-success'>{`${inputFormat(soDuVi?.totalIn ?? 0)} VND`}</span>
 					<span>Tổng tiền đã nộp</span>
 				</Card>
 			</Col>
 			<Col span={24} md={12}>
 				<Card className='card-stat-small'>
-					<span className='num'>{soDuVi?.totalRemain ? `${inputFormat(soDuVi.totalRemain)} VND` : '--'}</span>
+					<span className='num'>{`${inputFormat(soDuVi?.totalRemain ?? 0)} VND`}</span>
 					<span>Số dư hiện tại</span>
 				</Card>
 			</Col>
