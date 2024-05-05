@@ -27,23 +27,42 @@ const SelectSinhVienDebounce = (props: {
 		);
 
 		if (keyword) searchSinhVienModel(keyword);
-		else
-			getModel(
-				undefined,
-				value && !gotData
-					? [
+		else {
+			if (props.isView) {
+				if (props.value)
+					getModel(
+						undefined,
+						[
 							{
 								active: true,
 								field: selectMa ? 'ma' : 'ssoId',
 								values: Array.isArray(value) ? value : [value],
 								operator: EOperatorType.INCLUDE,
 							},
-					  ]
-					: undefined,
-				undefined,
-				1,
-				20,
-			);
+						],
+
+						undefined,
+						1,
+						20,
+					);
+			} else
+				getModel(
+					undefined,
+					value && !gotData
+						? [
+								{
+									active: true,
+									field: selectMa ? 'ma' : 'ssoId',
+									values: Array.isArray(value) ? value : [value],
+									operator: EOperatorType.INCLUDE,
+								},
+						  ]
+						: undefined,
+					undefined,
+					1,
+					20,
+				);
+		}
 	}, [keyword, value]);
 
 	useEffect(() => {
