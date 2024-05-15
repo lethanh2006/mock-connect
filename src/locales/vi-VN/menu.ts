@@ -56,6 +56,8 @@ export default {
 	'menu.HoatDongKHCN': 'Hoạt động KH&CN',
 	'menu.HoatDongKHCN.DeTaiHocVien': 'Đề tài NCKH cấp Học viện',
 	'menu.HoatDongKHCN.DeTaiKhoa': 'Đề tài NCKH cấp khoa/viện',
+	'menu.HoatDongKHCN.KeHoachNCKH': 'Định hướng NCKH',
+	'menu.HoatDongKHCN.QuyCheQuyDinh': 'Quy chế, quy định',
 	// GIANG VIEN
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
