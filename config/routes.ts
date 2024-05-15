@@ -323,6 +323,18 @@
 				path: './de-tai-khoa',
 				component: './KhaiBaoQuyTrinh/DeTaiKhoa',
 			},
+			{
+				name: 'QuyCheQuyDinh',
+				path: './quychequydinh',
+				icon: 'FileOutlined',
+				component: './KhoaHoc/QuyChe',
+			},
+			{
+				name: 'KeHoachNCKH',
+				icon: 'FileOutlined',
+				path: './ke-hoach-nckh',
+				component: './KhoaHoc/KeHoach',
+			},
 		],
 	},
 

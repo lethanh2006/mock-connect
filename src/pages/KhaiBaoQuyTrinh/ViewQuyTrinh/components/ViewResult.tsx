@@ -15,6 +15,7 @@ const ViewResult = (props: { danhSachKhaiBao: any; modelName: any; type?: 'dieu_
 	useEffect(() => {
 		if (danhSachKhaiBao) {
 			form.setFieldsValue(danhSachKhaiBao?.thongTinKhaiBao);
+
 			setRecordSanPham(danhSachKhaiBao);
 		}
 	}, [danhSachKhaiBao]);
@@ -42,7 +43,13 @@ const ViewResult = (props: { danhSachKhaiBao: any; modelName: any; type?: 'dieu_
 					disabled={true}
 				>
 					{currentFormKhaiBao?.cauHinhLoaiHinh?.map((item: LoaiHinh.TruongThongTin | LoaiHinh.Cot) => (
-						<FormRender form={form} formValues={formValues} key={item.ma} cauHinh={item} />
+						<FormRender
+							danhSachCauHinh={currentFormKhaiBao.cauHinhLoaiHinh}
+							form={form}
+							formValues={formValues}
+							key={item.ma}
+							cauHinh={item}
+						/>
 					))}
 				</Form>
 			</Card>
