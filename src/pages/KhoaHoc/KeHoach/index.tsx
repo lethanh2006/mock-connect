@@ -1,12 +1,18 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 
-import { EDoiTuongKeHoachNCKH, MapKeyDoiTuongKeHoachNCKH } from '@/services/KhoaHoc/KeHoach/constants';
+import {
+	EDoiTuongKeHoachNCKH,
+	ETrangThaiKeHoachNCKH,
+	MapKeyDoiTuongKeHoachNCKH,
+} from '@/services/KhoaHoc/KeHoach/constants';
 import type { KeHoachNCKH } from '@/services/KhoaHoc/KeHoach/typings';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ViewDetailKeHoachNCKH from './components/ViewDetail';
+import moment from 'moment';
+import { primaryColor } from '@/services/base/constant';
 
 const KeHoachNCKHComponent = () => {
 	const { getModel, page, limit, setRecord, record: recordKeHoach } = useModel('khoahoc.kehoach');
@@ -15,14 +21,21 @@ const KeHoachNCKHComponent = () => {
 
 	const onCell = (record: KeHoachNCKH.IRecord) => ({
 		onClick: () => {
-			setVisibleViewDetail(true);
+			// setVisibleViewDetail(true);
 			setRecord(record);
 		},
 		style: { cursor: 'pointer' },
 	});
 
 	const getData = () => {
-		getModel({ doiTuong: EDoiTuongKeHoachNCKH.SINH_VIEN }, undefined, undefined, undefined, undefined, 'page/duyet');
+		getModel(
+			{ doiTuong: EDoiTuongKeHoachNCKH.SINH_VIEN as any, trangThai: ETrangThaiKeHoachNCKH.DUYET },
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			'page/duyet',
+		);
 	};
 
 	const columns: IColumn<KeHoachNCKH.IRecord>[] = [
@@ -39,7 +52,7 @@ const KeHoachNCKHComponent = () => {
 			width: 150,
 			align: 'center',
 			filterType: 'select',
-			render: (val: EDoiTuongKeHoachNCKH) => MapKeyDoiTuongKeHoachNCKH[val],
+			render: (val: EDoiTuongKeHoachNCKH[]) => val.map((item) => MapKeyDoiTuongKeHoachNCKH[item]).join(', '),
 			filterData: Object.values(EDoiTuongKeHoachNCKH).map((item) => ({
 				value: item,
 				label: MapKeyDoiTuongKeHoachNCKH[item],
@@ -47,12 +60,35 @@ const KeHoachNCKHComponent = () => {
 			onCell,
 		},
 		{
-			title: 'Năm áp dụng',
-			dataIndex: 'namApDung',
-			width: 150,
-			filterType: 'string',
+			title: 'Số văn bản',
+			dataIndex: 'soQuyetDinh',
+			width: 120,
 			onCell,
 			align: 'center',
+		},
+		{
+			title: 'Ngày ban hành',
+			dataIndex: 'ngayBanHanh',
+			width: 150,
+			sortable: true,
+			onCell,
+			align: 'center',
+			render: (val) => (val ? moment(val).format('DD/MM/YYYY') : ''),
+		},
+		{
+			title: 'File kèm theo',
+			dataIndex: 'fileDinhKem',
+			width: 120,
+			align: 'center',
+			render: (val: string[]) => (
+				<div>
+					{val?.map((item) => (
+						<Tag color={primaryColor} key={item} onClick={() => window.open(item)}>
+							Xem tập tin
+						</Tag>
+					))}
+				</div>
+			),
 		},
 	];
 
