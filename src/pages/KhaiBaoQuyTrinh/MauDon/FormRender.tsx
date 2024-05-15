@@ -39,7 +39,7 @@ const FormRender = (props: {
 	const { danhSach } = useModel('quytrinh.danhmuc');
 	const { record: recordLoaiHinh } = useModel('quytrinh.loaihinh');
 	const { recordQuyTrinhForm, setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
-	const { dataQuyTrinh, editFormKhaiBao } = useModel('quytrinh.khaibaoquytrinh');
+	const { dataQuyTrinh, editFormKhaiBao, recordFormKhaiBao } = useModel('quytrinh.khaibaoquytrinh');
 	const { danhSach: danhSachNhanSu, getModel: getCanBo } = useModel('tochucnhansu.nhansu');
 	const { danhSach: danhSachSinhVien, getModel: getSinhVien } = useModel('sinhvien.sinhvien');
 	let component = <div />;
@@ -53,6 +53,7 @@ const FormRender = (props: {
 	const listCauHinhPhuThuocDuLieu = cauHinhLoaiHinh?.filter(
 		(item: { layDuLieuTu: string }) => item.layDuLieuTu === cauHinh.ma,
 	);
+
 	const onChangeNhanSu: any = async (val: string, type: 'SV' | 'CB') => {
 		if (!val) return;
 		let recNhanSu: any =
@@ -77,6 +78,7 @@ const FormRender = (props: {
 			);
 			recNhanSu = danhSachTemp.find((item) => item.ssoId === val);
 		}
+
 		if (props.form && listCauHinhPhuThuocDuLieu?.length) {
 			const objDuLieuPhuThuoc: any = {};
 			listCauHinhPhuThuocDuLieu.map((item: { truongLayDuLieu: string; ma: string | number }) => {
@@ -84,18 +86,21 @@ const FormRender = (props: {
 					let value: any;
 					const arrKey = item.truongLayDuLieu.split('||');
 					arrKey.map((ele: string | [string]) => {
-						const valueTemp = _.get(recNhanSu, ele, undefined);
+						const valueLayTuTruongLayDuLieu = _.get(recNhanSu, ele, undefined);
+						const valueTemp = valueLayTuTruongLayDuLieu || recordFormKhaiBao?.[item.ma];
 						if (!value && valueTemp) {
 							value = valueTemp;
 						}
 					});
 					objDuLieuPhuThuoc[item.ma] = value;
 				} else {
-					objDuLieuPhuThuoc[item.ma] = item.truongLayDuLieu
-						? _.get(recNhanSu, item.truongLayDuLieu, undefined)
-						: recNhanSu;
+					if (item.truongLayDuLieu) {
+						const valueLayTuTruongLayDuLieu = _.get(recNhanSu, item.truongLayDuLieu, undefined);
+						objDuLieuPhuThuoc[item.ma] = valueLayTuTruongLayDuLieu || recordFormKhaiBao?.[item.ma];
+					} else objDuLieuPhuThuoc[item.ma] = recNhanSu;
 				}
 			});
+
 			props.form.setFieldsValue(objDuLieuPhuThuoc);
 		}
 	};

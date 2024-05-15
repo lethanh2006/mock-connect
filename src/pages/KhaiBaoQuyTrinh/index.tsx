@@ -1,9 +1,8 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
-import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import SelectQuyTrinh from '@/pages/KhaiBaoQuyTrinh/QuyTrinh/Select';
+import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import { MapColorTrangThaiTiepNhan, TrangThaiTiepNhan } from '@/services/QuyTrinh/KhaiBao/constants';
-import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
@@ -16,7 +15,7 @@ import {
 	DownloadOutlined,
 	EyeOutlined,
 } from '@ant-design/icons';
-import { Button, Dropdown, Menu, message, Modal, Popconfirm, Tag, Tooltip } from 'antd';
+import { Button, Dropdown, Menu, Modal, Popconfirm, Tag, Tooltip, message } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
@@ -128,7 +127,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 		{
 			title: 'Chi tiết',
 			dataIndex: 'moTa',
-			width: 150,
+			width: 250,
 			onCell,
 		},
 		{
@@ -162,7 +161,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			onCell,
 		},
 		{
-			title: 'Trạng thái xử lý',
+			title: 'Kết quả',
 			dataIndex: 'quyTrinh',
 			width: 200,
 			align: 'center',
@@ -180,10 +179,22 @@ const KhaiBaoQuyTrinhPage = (props: {
 			),
 		},
 		{
+			title: 'Trạng thái thực hiện',
+			dataIndex: 'coKhaiBao',
+			width: 200,
+			align: 'center',
+			render: (val, recordVal) => {
+				const coKhaiBao = recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.coKhaiBao ?? false;
+				return <Tag color={coKhaiBao ? '#1fba36' : '#ffca2c'}>{coKhaiBao ? 'Đã thực hiện' : 'Chưa thực hiện'}</Tag>;
+			},
+			onCell,
+		},
+		{
 			title: 'Trạng thái thanh toán',
 			dataIndex: 'trangThaiThanhToan',
 			width: 200,
 			align: 'center',
+			hide: props?.tenQuyTrinh ? true : false,
 			render: (val: EMaTrangThaiThanhToan) => (
 				<Tag color={EMauTrangThaiThanhToanTable?.[val] ?? 'gray'}>
 					{val ? ETrangThaiThanhToan[val] : 'Dịch vụ không tính phí'}
@@ -193,6 +204,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 		{
 			title: 'Ngày tạo',
 			dataIndex: 'createdAt',
+			hide: props?.tenQuyTrinh ? true : false,
 			width: 150,
 			align: 'center',
 			render: (val) => {
@@ -263,13 +275,13 @@ const KhaiBaoQuyTrinhPage = (props: {
 						)}
 						<Tooltip title='Xóa'>
 							<Popconfirm
-								disabled={!(isBuocDauTien && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.CHUA_CO)}
+								// disabled={!(isBuocDauTien && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.CHUA_CO)}
 								onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
 								title='Bạn có chắc chắn muốn xóa?'
 								placement='topLeft'
 							>
 								<Button
-									disabled={!(isBuocDauTien && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.CHUA_CO)}
+									// disabled={!(isBuocDauTien && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.CHUA_CO)}
 									danger
 									type='link'
 									icon={<DeleteOutlined />}

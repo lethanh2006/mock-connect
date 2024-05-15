@@ -10,7 +10,7 @@ const ThongTinHoiDong = (props: { maBuoc?: string; dotQuyTrinhId?: string; quyTr
 		getModel({ dotQuyTrinhId, maBuoc, quyTrinhId });
 	}, [maBuoc, dotQuyTrinhId, quyTrinhId]);
 	return danhSach.length ? (
-		<Collapse ghost defaultActiveKey={'hoidong'}>
+		<Collapse ghost defaultActiveKey={'thongtinhoidong'}>
 			<Collapse.Panel key={'thongtinhoidong'} header={<b>Thông tin hội đồng</b>}>
 				<HoiDongThamGia viewTheoBuoc />
 			</Collapse.Panel>

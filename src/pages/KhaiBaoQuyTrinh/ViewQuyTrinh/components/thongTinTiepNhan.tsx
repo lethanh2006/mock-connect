@@ -62,31 +62,34 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 									</Tag>
 								</Descriptions.Item>
 
-								<Descriptions.Item label='Trạng thái thanh toán'>
-									<Tag
-										color={
-											EMauTrangThaiThanhToanTable?.[dataQuyTrinh?.trangThaiThanhToan as EMaTrangThaiThanhToan] ?? 'gray'
-										}
-									>
-										{dataQuyTrinh?.trangThaiThanhToan
-											? ETrangThaiThanhToan[dataQuyTrinh.trangThaiThanhToan]
-											: 'Dịch vụ không tính phí'}
-									</Tag>{' '}
-									{dataQuyTrinh?.identityCode ? (
-										<Button
-											onClick={() => {
-												getOneModel({ identityCode: dataQuyTrinh.identityCode });
-												setVisibleModal(true);
-											}}
-											type='link'
-											size='small'
+								{dataQuyTrinh?.trangThaiThanhToan && (
+									<Descriptions.Item label='Trạng thái thanh toán'>
+										<Tag
+											color={
+												EMauTrangThaiThanhToanTable?.[dataQuyTrinh?.trangThaiThanhToan as EMaTrangThaiThanhToan] ??
+												'gray'
+											}
 										>
-											(Xem chi tiết)
-										</Button>
-									) : (
-										''
-									)}
-								</Descriptions.Item>
+											{dataQuyTrinh?.trangThaiThanhToan
+												? ETrangThaiThanhToan[dataQuyTrinh.trangThaiThanhToan]
+												: 'Dịch vụ không tính phí'}
+										</Tag>{' '}
+										{dataQuyTrinh?.identityCode ? (
+											<Button
+												onClick={() => {
+													getOneModel({ identityCode: dataQuyTrinh.identityCode });
+													setVisibleModal(true);
+												}}
+												type='link'
+												size='small'
+											>
+												(Xem chi tiết)
+											</Button>
+										) : (
+											''
+										)}
+									</Descriptions.Item>
+								)}
 								{data?.ghiChu && (
 									<Descriptions.Item span={24} label='Ghi chú của bộ phận xử lý'>
 										{data?.ghiChu}
