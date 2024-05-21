@@ -253,6 +253,9 @@ declare module SinhVien {
 		_id: string;
 		sinhVienSsoId: string;
 		sinhVien?: IRecord;
+		maSinhVien?: string;
+		hoTen?: string;
+
 		maChungChi: string;
 		chungChi?: ChungChi.IRecord;
 		ngayCap?: string;
