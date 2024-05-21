@@ -45,12 +45,12 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 				<p>
 					2. SỬ DỤNG ỨNG DỤNG SMARTBANKING CỦA NGÂN HÀNG HOẶC QUẦY GIAO DỊCH:
 					<br />
-					{settings[ESettingKey.THONG_TIN_THANH_TOAN].urlHuongDanThanhToan ? (
+					{settings[ESettingKey.THONG_TIN_THANH_TOAN]?.urlHuongDanThanhToan ? (
 						<>
 							Thí sinh thực hiện thanh toán theo hướng dẫn chi tiết{' '}
 							<a
 								target='_blank'
-								href={settings[ESettingKey.THONG_TIN_THANH_TOAN].urlHuongDanThanhToan}
+								href={settings[ESettingKey.THONG_TIN_THANH_TOAN]?.urlHuongDanThanhToan}
 								rel='noreferrer'
 							>
 								tại đây
@@ -61,7 +61,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 					Mã thanh toán của thí sinh là: <b>{record?.identityCode}</b> <br />
 					Số tài khoản với thí sinh chuyển khoản 24/7:{' '}
 					<b>
-						{settings[ESettingKey.THONG_TIN_THANH_TOAN].tienToTaiKhoan}
+						{settings[ESettingKey.THONG_TIN_THANH_TOAN]?.tienToTaiKhoan}
 						{record?.identityCode}
 					</b>
 				</p>
@@ -88,8 +88,8 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 					</b>
 					<img
 						style={{ maxWidth: '100%' }}
-						src={`https://img.vietqr.io/image/${settings[ESettingKey.THONG_TIN_THANH_TOAN].maNganHang}-${
-							settings[ESettingKey.THONG_TIN_THANH_TOAN].tienToTaiKhoan
+						src={`https://img.vietqr.io/image/${settings[ESettingKey.THONG_TIN_THANH_TOAN]?.maNganHang}-${
+							settings[ESettingKey.THONG_TIN_THANH_TOAN]?.tienToTaiKhoan
 						}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
 					/>
 					<i>Thí sinh quét mã QR bằng Ứng dụng ngân hàng để thanh toán</i>
