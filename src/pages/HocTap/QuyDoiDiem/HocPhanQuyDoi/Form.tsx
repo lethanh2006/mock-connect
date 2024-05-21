@@ -14,19 +14,19 @@ const FormHocPhanQuyDoiDiem = () => {
 
 	const renderDiem = (he10?: number, he4?: number, diemChu?: string) => (
 		<Space wrap>
-			<span>
-				Điểm hệ 10: <b>{he10 ?? ''}</b>
-			</span>
+			{he10 ? (
+				<span>
+					Điểm hệ 10: <b>{he10 ?? ''}</b>
+				</span>
+			) : null}
 			{he4 ? (
 				<span>
 					Điểm hệ 4: <b>{he4}</b>
 				</span>
 			) : null}
-			{diemChu ? (
-				<span>
-					Điểm chữ: <b>{diemChu}</b>
-				</span>
-			) : null}
+			<span>
+				Điểm chữ: <b>{diemChu}</b>
+			</span>
 		</Space>
 	);
 

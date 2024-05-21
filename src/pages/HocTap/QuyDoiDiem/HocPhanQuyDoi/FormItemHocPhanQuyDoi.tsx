@@ -54,10 +54,10 @@ const FormItemHocPhanQuyDoi = () => {
 		},
 		{
 			title: 'Kết quả quy đổi',
-			dataIndex: 'diemHe10',
+			dataIndex: 'diemChu',
 			align: 'center',
 			width: 120,
-			render: (val, rec) => (val ? `${val} - ${rec.diemHe4 ?? ''} - ${rec.diemChu ?? ''}` : <i>Chưa có điểm</i>),
+			render: (val, rec) => (val ? `${rec.diemHe10 ?? ''} - ${rec.diemHe4 ?? ''} - ${val}` : <i>Chưa có điểm</i>),
 			onCell,
 		},
 		{

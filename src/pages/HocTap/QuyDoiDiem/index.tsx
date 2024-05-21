@@ -47,7 +47,7 @@ const LichSuQuyDoiDiemPage = () => {
 				<ExpandText>
 					{rec.danhSachHocPhan?.map((item) => (
 						<>
-							- {item.hocPhan?.ten} - {item.diemHe4 ? `${item.diemHe4} điểm` : 'Chưa có điểm'} -{' '}
+							- {item.hocPhan?.ten} - {item.diemChu ?? 'Chưa có điểm'} -{' '}
 							<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i>
 							{item?.khuyenNghi?.length ? (
 								<>
