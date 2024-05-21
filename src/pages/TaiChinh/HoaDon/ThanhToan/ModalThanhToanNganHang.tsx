@@ -32,7 +32,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 
 	const renderLopThuong = () => (
 		<Row gutter={[12, 12]}>
-			<Col span={24}>THÍ SINH CÓ THỂ SỬ DỤNG PHƯƠNG THỨC THANH TOÁN QUA MÃ ĐỊNH DANH HOẶC MÃ QR</Col>
+			<Col span={24}>SINH VIÊN CÓ THỂ SỬ DỤNG PHƯƠNG THỨC THANH TOÁN QUA MÃ ĐỊNH DANH HOẶC MÃ QR</Col>
 			<Col xs={24} md={14}>
 				<b>
 					<u>Hướng dẫn thanh toán:</u>
@@ -40,14 +40,14 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 				<p>
 					1. QUÉT MÃ QR:
 					<br />
-					Thí sinh sử dụng ứng dụng smartbanking của các ngân hàng hoặc ví điện tử và quét mã QR bên phải
+					Sinh viên sử dụng ứng dụng smartbanking của các ngân hàng hoặc ví điện tử và quét mã QR bên phải
 				</p>
 				<p>
 					2. SỬ DỤNG ỨNG DỤNG SMARTBANKING CỦA NGÂN HÀNG HOẶC QUẦY GIAO DỊCH:
 					<br />
 					{settings[ESettingKey.THONG_TIN_THANH_TOAN]?.urlHuongDanThanhToan ? (
 						<>
-							Thí sinh thực hiện thanh toán theo hướng dẫn chi tiết{' '}
+							Sinh viên thực hiện thanh toán theo hướng dẫn chi tiết{' '}
 							<a
 								target='_blank'
 								href={settings[ESettingKey.THONG_TIN_THANH_TOAN]?.urlHuongDanThanhToan}
@@ -58,8 +58,8 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 							<br />
 						</>
 					) : null}
-					Mã thanh toán của thí sinh là: <b>{record?.identityCode}</b> <br />
-					Số tài khoản với thí sinh chuyển khoản 24/7:{' '}
+					Mã thanh toán của sinh viên là: <b>{record?.identityCode}</b> <br />
+					Số tài khoản với sinh viên chuyển khoản 24/7:{' '}
 					<b>
 						{settings[ESettingKey.THONG_TIN_THANH_TOAN]?.tienToTaiKhoan}
 						{record?.identityCode}
@@ -68,11 +68,11 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 				<p>
 					<b>
 						Lưu ý: <br />
-						1. Thí sinh nên sử dụng thanh toán theo mã QR để thực hiện thanh toán được chính xác. Trong trường hợp sử
-						dụng hình thức còn lại, thí sinh lưu ý nhập chính xác số tiền yêu cầu (không làm tròn) để hệ thống ghi nhận
+						1. Sinh viên nên sử dụng thanh toán theo mã QR để thực hiện thanh toán được chính xác. Trong trường hợp sử
+						dụng hình thức còn lại, sinh viên lưu ý nhập chính xác số tiền yêu cầu (không làm tròn) để hệ thống ghi nhận
 						giao dịch là hợp lệ.
 						<br />
-						2. Mã QR được khởi tạo dành riêng cho cá nhân thí sinh và chỉ sử dụng để thanh toán một lần. Vui lòng không
+						2. Mã QR được khởi tạo dành riêng cho cá nhân sinh viên và chỉ sử dụng để thanh toán một lần. Vui lòng không
 						sử dụng để thanh toán hộ người khác.
 						<br />
 						3. Sau khi thanh toán thành công, sinh viên vui lòng đợi để hệ thống xác nhận thông tin thanh toán từ ngân
@@ -92,7 +92,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 							settings[ESettingKey.THONG_TIN_THANH_TOAN]?.tienToTaiKhoan
 						}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
 					/>
-					<i>Thí sinh quét mã QR bằng Ứng dụng ngân hàng để thanh toán</i>
+					<i>Sinh viên quét mã QR bằng Ứng dụng ngân hàng để thanh toán</i>
 				</Space>
 			</Col>
 		</Row>
