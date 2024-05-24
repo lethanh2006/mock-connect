@@ -23,16 +23,32 @@ export enum ETrangThaiThi {
 }
 
 //Xét học vụ
-export enum ETrangThaiDuyetCanhBao {
+
+export enum ELoaiXuLyKQHT {
+	CANH_BAO_HOC_TAP = 'CANH_BAO_HOC_TAP',
+	BUOC_THOI_HOC = 'BUOC_THOI_HOC',
+}
+
+export const loaiXuLyKQHT: Record<ELoaiXuLyKQHT, string> = {
+	[ELoaiXuLyKQHT.CANH_BAO_HOC_TAP]: 'Cảnh báo học tập',
+	[ELoaiXuLyKQHT.BUOC_THOI_HOC]: 'Buộc thôi học',
+};
+
+export const colorLoaiXuLyKQHT: Record<ELoaiXuLyKQHT, string> = {
+	[ELoaiXuLyKQHT.CANH_BAO_HOC_TAP]: 'orange',
+	[ELoaiXuLyKQHT.BUOC_THOI_HOC]: 'red',
+};
+
+export enum ETrangThaiDuyetXuLyKqht {
 	CHO_DUYET = 'Chờ duyệt',
 	DA_DUYET = 'Đã duyệt',
 	KHONG_DUYET = 'Không duyệt',
 }
 
-export const colorTrangThaiDuyetCanhBao: Record<ETrangThaiDuyetCanhBao, string> = {
-	[ETrangThaiDuyetCanhBao.CHO_DUYET]: 'blue',
-	[ETrangThaiDuyetCanhBao.DA_DUYET]: 'green',
-	[ETrangThaiDuyetCanhBao.KHONG_DUYET]: 'orange',
+export const colorTrangThaiDuyetXuLyKqht: Record<ETrangThaiDuyetXuLyKqht, string> = {
+	[ETrangThaiDuyetXuLyKqht.CHO_DUYET]: 'blue',
+	[ETrangThaiDuyetXuLyKqht.DA_DUYET]: 'green',
+	[ETrangThaiDuyetXuLyKqht.KHONG_DUYET]: 'orange',
 };
 
 export enum EYKienCoVanHocTap {
