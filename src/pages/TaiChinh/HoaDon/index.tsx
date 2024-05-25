@@ -104,7 +104,7 @@ const HoaDonPage = () => {
 			fixed: 'right',
 			render: (val, rec) => (
 				<ButtonExtend
-					tooltip='Thông tin thanh toán'
+					tooltip='Thanh toán'
 					onClick={() => handleDetail(rec)}
 					type='link'
 					className='text-success'
