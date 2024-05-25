@@ -1,5 +1,6 @@
 import { EDoiTuongLopHanhChinh } from '@/services/HocTap/constant';
 import { ESettingKey, unitName } from '@/services/base/constant';
+import { ipTaiChinh } from '@/utils/ip';
 import { removeVietnameseTones } from '@/utils/utils';
 import { Col, Modal, Row, Space } from 'antd';
 import { useEffect } from 'react';
@@ -25,7 +26,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 
 	useEffect(() => {
 		getLopHc();
-		getByKeyModel(ESettingKey.THONG_TIN_THANH_TOAN)
+		getByKeyModel(ESettingKey.THONG_TIN_THANH_TOAN, ipTaiChinh)
 			.then()
 			.catch((er) => console.log(er));
 	}, []);
