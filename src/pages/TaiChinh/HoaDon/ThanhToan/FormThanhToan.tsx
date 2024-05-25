@@ -4,7 +4,7 @@ import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat, inputParse } from '@/utils/utils';
-import { Button, Col, Form, InputNumber, Popconfirm, Row, Table } from 'antd';
+import { Button, Col, Form, InputNumber, Row, Table } from 'antd';
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -223,12 +223,9 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 				</Row>
 
 				<div className='form-footer' style={{ marginTop: 18 }}>
-					<Popconfirm title='Xác nhận thanh toán?' onConfirm={() => form.submit()}>
-						<Button loading={formSubmiting} type='primary' htmlType='submit'>
-							Thanh toán
-						</Button>
-					</Popconfirm>
-
+					<Button loading={formSubmiting} type='primary' htmlType='submit'>
+						Thanh toán
+					</Button>
 					<Button onClick={() => setVisibleThanhToan(false)}>Hủy</Button>
 				</div>
 			</Form>
