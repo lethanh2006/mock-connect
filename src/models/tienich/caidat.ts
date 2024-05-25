@@ -9,10 +9,10 @@ export default () => {
 	const [formSubmiting, setFormSubmiting] = useState<boolean>(false);
 	const [settings, setSettings] = useState<Partial<Record<ESettingKey, any>>>({});
 
-	const getByKeyModel = async (key: ESettingKey): Promise<any> => {
+	const getByKeyModel = async (key: ESettingKey, ip?: string): Promise<any> => {
 		setLoading(true);
 		try {
-			const res = await getSettingByKey(key);
+			const res = await getSettingByKey(key, ip);
 			const temp = Object.assign(settings, { [key]: res.data?.data });
 			setSettings(temp);
 
