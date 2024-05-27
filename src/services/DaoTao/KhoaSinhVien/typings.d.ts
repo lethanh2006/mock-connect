@@ -1,6 +1,7 @@
 declare module KhoaSinhVien {
 	export interface IRecord {
 		_id: string;
+		ma: string;
 		ten: string;
 		namHocId: string;
 		namHoc?: NamHoc.IRecord;
