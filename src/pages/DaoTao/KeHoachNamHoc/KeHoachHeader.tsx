@@ -9,7 +9,7 @@ const KeHoachHeader = (props: { header?: KeHoachNamHoc.TGridHeader }) => {
 					<div
 						className={`cell title-cell border-right ${item.isBreak ? 'break' : ''}`}
 						key={item.title}
-						style={{ width: 70 * item.span + item.span - 1 }}
+						style={{ width: 36 * item.span + item.span - 1 }}
 					>
 						{item.isBreak ? '' : item.title}
 					</div>
@@ -21,7 +21,7 @@ const KeHoachHeader = (props: { header?: KeHoachNamHoc.TGridHeader }) => {
 					<div
 						className='cell title-cell border-right'
 						key={item.title}
-						style={{ width: 70 * item.span + item.span - 1 }}
+						style={{ width: 36 * item.span + item.span - 1 }}
 					>
 						{item.title}
 					</div>

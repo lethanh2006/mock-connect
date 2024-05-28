@@ -1,6 +1,7 @@
 import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import type { ELoaiXuLyKQHT, ETrangThaiDuyetXuLyKqht, EYKienCoVanHocTap } from '../constant';
+import type { QuyetDinh } from '../QuyetDinh/typing';
 
 declare module XetHocVu {
 	export interface IRecord {
@@ -24,6 +25,8 @@ declare module XetHocVu {
 		lyDo: string;
 		daChot: boolean;
 		trangThai: ETrangThaiDuyetXuLyKqht;
+		quyetDinhId: string;
+		quyetDinh: QuyetDinh.IRecord;
 
 		//ý kiến cố vấn học tập
 		yKienCoVanHocTap: string;
