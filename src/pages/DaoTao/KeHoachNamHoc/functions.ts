@@ -30,6 +30,7 @@ export const calHeader = (
 	const day = thoiGianBatDau.clone();
 	let month: number = -1;
 	const weeks: number[] = [];
+	const isoWeeks: number[] = [];
 	const months: KeHoachNamHoc.THeadGroup[] = [];
 	const days: KeHoachNamHoc.THeadGroup[] = [];
 	// Lấy danh sách các học kỳ
@@ -67,10 +68,11 @@ export const calHeader = (
 			months.slice(-1)[0].title = `Tháng ${day.format('M/YYYY')}`;
 		}
 		weeks.push(tuan + 1);
+		isoWeeks.push(day.week());
 		// Ngày bắt đầu - kết thúc của tuần
 		days.push({ title: `${day.date()}-${day.clone().add(6, 'd').date()}`, span: tuan, isBreak });
 		day.add(1, 'w');
 	});
 
-	return { hocKys, weeks, months, days };
+	return { hocKys, weeks, months, days, isoWeeks };
 };

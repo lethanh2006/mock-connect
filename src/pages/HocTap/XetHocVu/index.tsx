@@ -10,6 +10,7 @@ import {
 	type ETrangThaiDuyetXuLyKqht,
 } from '@/services/HocTap/constant';
 import { Card, Tag } from 'antd';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -63,7 +64,7 @@ const XetHocVuPage = () => {
 		{
 			title: 'Lý do',
 			dataIndex: 'lyDo',
-			width: 300,
+			width: 280,
 			render: (val) => val && <ExpandText>{val}</ExpandText>,
 		},
 		{
@@ -74,6 +75,18 @@ const XetHocVuPage = () => {
 				<Tag color={colorTrangThaiDuyetXuLyKqht[val]}>{colorTrangThaiDuyetXuLyKqht[val]}</Tag>
 			),
 			width: 120,
+		},
+		{
+			title: 'Quyết định',
+			dataIndex: 'quyetDinhId',
+			align: 'center',
+			width: 120,
+			render: (val, rec) =>
+				val && (
+					<>
+						{rec.quyetDinh?.soQuyetDinh}, {moment(rec?.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY')}
+					</>
+				),
 		},
 	];
 
