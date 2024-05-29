@@ -118,6 +118,7 @@
 					},
 				],
 			},
+			{ name: 'LichThi', path: 'lich-thi', component: './HocTap/LichThi' },
 			{
 				name: 'KetQuaHocTap',
 				path: './ket-qua-hoc-tap',
