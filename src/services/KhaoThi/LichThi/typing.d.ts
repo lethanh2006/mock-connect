@@ -1,4 +1,5 @@
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
+import type { EDKDTCongNo, EDKDTKetQuaHocTap } from '../constant';
 
 declare module LichThi {
 	export interface IRecord {
@@ -6,6 +7,18 @@ declare module LichThi {
 		thoiGianKetThuc: string;
 		phong?: TObject;
 		danhSachHocPhan?: TObject[];
+	}
+
+	export interface IRecordMe {
+		kyThi: string;
+		tenHocPhan: string;
+		maHocPhan: string;
+		soLuong: number;
+		ngayThi: string;
+		gioThi: string;
+		phong: string;
+		dieuKienKetQuaHocTap: EDKDTKetQuaHocTap;
+		dieuKienCongNo: EDKDTCongNo;
 	}
 
 	export type TObject = Pick<HocPhan.IRecord, 'ma' | 'ten'>;
