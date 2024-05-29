@@ -17,7 +17,7 @@ const LichThiPage = () => {
 
 	const columns: IColumn<LichThi.IRecordMe>[] = [
 		{
-			title: 'Kỳ thi',
+			title: 'Đợt thi',
 			dataIndex: 'kyThi',
 			width: 180,
 			filterType: 'string',
