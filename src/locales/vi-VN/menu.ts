@@ -21,6 +21,7 @@ export default {
 	'menu.HocTap.DangKyNhuCau': 'Đăng ký nhu cầu',
 	'menu.HocTap.DangKyTinChi': 'Đăng ký tín chỉ',
 	'menu.HocTap.LopHocPhan': 'Lớp tín chỉ',
+	'menu.HocTap.LichThi': 'Lịch thi',
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
 	'menu.HocTap.XetHocVu': 'Cảnh báo học tập, buộc thôi học ',
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
