@@ -49,6 +49,11 @@ const LichThiPage = () => {
 			filterType: 'string',
 		},
 		{
+			title: 'Phòng thi',
+			dataIndex: 'phong',
+			width: 80,
+		},
+		{
 			title: 'Số SV',
 			dataIndex: 'soLuong',
 			align: 'center',
