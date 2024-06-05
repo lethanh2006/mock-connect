@@ -73,7 +73,7 @@ const FormTraLoiKhaoSat = (props: {
 
 	const renderQuestion = (question: BieuMau.CauHoi, index: number) => {
 		let questionEleMent = <div />;
-		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) questionEleMent = <SingleChoice question={question} />;
+		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) questionEleMent = <SingleChoice form={form} question={question} />;
 		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE) questionEleMent = <MultipleChoice question={question} />;
 		else if (question.loai === ELoaiCauHoi.TEXT) questionEleMent = <Text question={question} />;
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
@@ -158,13 +158,14 @@ const FormTraLoiKhaoSat = (props: {
 		if (dsCauHoi) {
 			for (const question of dsCauHoi) {
 				const traLoi = values[question._id];
-				if (traLoi) {
+				const otherAnswer = values[`${question._id}_otherAnswer`];
+				if (traLoi || otherAnswer) {
 					let tempTraLoi: Partial<BieuMau.TraLoiRecord> = { idCauHoi: question._id };
 
 					if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
 						const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
 						tempTraLoi.listUrlFile = listUrlFile as string[];
-					} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
+					} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
 						tempTraLoi.listLuaChon = question?.luaChon
 							?.map((item: any) => {
 								if ([traLoi]?.includes(item.noiDung)) {
@@ -172,7 +173,11 @@ const FormTraLoiKhaoSat = (props: {
 								}
 							})
 							.filter(Boolean);
-					else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
+						const traLoiKhac = values[`${question._id}_otherAnswer`];
+						if (traLoiKhac) {
+							tempTraLoi.traLoiKhac = traLoiKhac;
+						}
+					} else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
 						tempTraLoi.listLuaChon = question?.luaChon
 							?.map((item: any) => {
 								if (traLoi?.listLuaChon?.includes(item.noiDung)) {
