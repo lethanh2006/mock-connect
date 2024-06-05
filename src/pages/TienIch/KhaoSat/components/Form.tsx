@@ -51,8 +51,14 @@ const FormTraLoiKhaoSat = (props: {
 				khoi.danhSachCauHoi?.map((question) => {
 					const traLoi = cauTraLoi?.find((i) => i.idCauHoi === question._id);
 
-					if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) values[question._id] = traLoi?.listLuaChon?.[0];
-					else if (
+					if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
+						if (traLoi && traLoi.traLoiKhac) {
+							values[question._id] = 'traLoiKhac';
+							values[`${question._id}_otherAnswer`] = traLoi.traLoiKhac;
+						} else {
+							values[question._id] = traLoi?.listLuaChon?.[0];
+						}
+					} else if (
 						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
 						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
 					) {
@@ -166,16 +172,19 @@ const FormTraLoiKhaoSat = (props: {
 						const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
 						tempTraLoi.listUrlFile = listUrlFile as string[];
 					} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
-						tempTraLoi.listLuaChon = question?.luaChon
-							?.map((item: any) => {
-								if ([traLoi]?.includes(item.noiDung)) {
-									return item._id;
-								}
-							})
-							.filter(Boolean);
-						const traLoiKhac = values[`${question._id}_otherAnswer`];
-						if (traLoiKhac) {
-							tempTraLoi.traLoiKhac = traLoiKhac;
+						if (traLoi === 'traLoiKhac') {
+							const traLoiKhac = values[`${question._id}_otherAnswer`];
+							if (traLoiKhac) {
+								tempTraLoi.traLoiKhac = traLoiKhac;
+							}
+						} else {
+							tempTraLoi.listLuaChon = question?.luaChon
+								?.map((item: any) => {
+									if ([traLoi]?.includes(item.noiDung)) {
+										return item._id;
+									}
+								})
+								.filter(Boolean);
 						}
 					} else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
 						tempTraLoi.listLuaChon = question?.luaChon
