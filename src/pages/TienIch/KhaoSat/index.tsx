@@ -11,6 +11,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import Form from './components/Form';
+import _ from 'lodash';
 
 const DotKhaoSatPage = () => {
 	const {
@@ -38,7 +39,8 @@ const DotKhaoSatPage = () => {
 			setLoading(true);
 			getCauTraLoiMe(recDotKhaoSat?.idKhaoSat ?? '', recDotKhaoSat?._id ?? '')
 				.then((res) => {
-					setCauTraLoi(res.data?.data[0]?.danhSachTraLoi);
+					const sortedData = _.orderBy(res.data?.data, ['updatedAt'], ['desc']);
+					setCauTraLoi(sortedData[0]?.danhSachTraLoi);
 					setLoading(false);
 				})
 				.catch((err) => console.log(err));
