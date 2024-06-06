@@ -92,7 +92,7 @@ const DetailLopTinChi = ({
 				<ThongBaoLopPage loai='lop-hoc-phan' idLop={id} />
 			) : tabActive === paths[3] ? (
 				<>
-					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm lớp tín chỉ</h4>
+					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
 					<DetailKetQuaHocTap lopHocPhanId={record?._id} />
 				</>
 			) : paths[4] ? (

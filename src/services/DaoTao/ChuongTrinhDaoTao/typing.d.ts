@@ -99,4 +99,12 @@ declare module ChuongTrinhDaoTao {
 		chungChi?: ChungChi.IRecord;
 		chuanDauRa: number;
 	}
+
+	export type TTienTrinhThucTe = {
+		diemHpSvHk: LopHocPhan.IDiemHpSvHk;
+		hocPhan: Pick<HocPhan.IRecord, 'ma' | 'ten' | 'soTinChi' | 'deCuongHienTaiId'>;
+		kyHoc: Pick<HocKy.IRecord, 'ma' | 'ten'>;
+		lopHocPhan: Pick<LopHocPhan.IRecord, 'ten' | 'soThuTuLop' | 'deCuong'>;
+		soTinChi: number;
+	};
 }

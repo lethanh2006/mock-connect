@@ -1,14 +1,15 @@
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Descriptions, Empty, Spin, Tag, Tooltip } from 'antd';
+import { ETrangThaiThi } from '@/services/HocTap/constant';
+import { Descriptions, Divider, Empty, Spin, Tag, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocPhan.IDiemHpSvHk }) => {
-	const { danhSach, getModel } = useModel('daotao.daudiemhocphan');
+	const { danhSach: danhSachDauDiem, getModel } = useModel('daotao.daudiemhocphan');
 	const { sinhVienGetDiemLHPModel, record: recSinhVienLhp, loading } = useModel('lophocphan.sinhvienlophocphan');
 	const { lopHocPhanId, diemHpSvHk } = props;
-	const sinhVienDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
+	const recDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
 
 	useEffect(() => {
 		getModel();
@@ -20,24 +21,46 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 
 	return (
 		<Spin spinning={loading}>
-			{sinhVienDiem ? (
-				<Descriptions bordered>
-					{danhSach.map((item) => (
-						<Descriptions.Item key={item._id} label={item.ten}>
-							{sinhVienDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}
+			{recDiem ? (
+				<>
+					<Divider>Điểm thành phần & Điều kiện dự thi</Divider>
+					<Descriptions bordered>
+						{danhSachDauDiem?.map((item) =>
+							recDiem[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk] ? (
+								<Descriptions.Item
+									label={`${item.ten} (${recDiem[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}%)`}
+									key={item._id}
+								>
+									{recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk] ?? '--'}
+								</Descriptions.Item>
+							) : null,
+						)}
+						<Descriptions.Item label='ĐKDT'>
+							<span style={{ color: recDiem?.trangThaiThi === ETrangThaiThi.CAM_THI ? 'red' : undefined }}>
+								{recDiem?.trangThaiThi ?? '--'}
+							</span>
 						</Descriptions.Item>
-					))}
-					<Descriptions.Item label='Điểm thi lần 1'>{sinhVienDiem?.diemThi1}</Descriptions.Item>
-					<Descriptions.Item label='Điểm thi lần 2'>{sinhVienDiem?.diemThi2}</Descriptions.Item>
-					<Descriptions.Item label='Tổng kết (hệ 10)'>{sinhVienDiem?.diemTongKet}</Descriptions.Item>
-					<Descriptions.Item label='Tổng kết (hệ 4)'>{sinhVienDiem?.diemThang4}</Descriptions.Item>
-					<Descriptions.Item label='Tổng kết (dạng chữ)'>
-						{sinhVienDiem?.diemChu ? (
-							<Tag color={ColorDiemChu[sinhVienDiem?.diemChu]}>{sinhVienDiem?.diemChu}</Tag>
-						) : null}{' '}
-						{sinhVienDiem?.isCongNhanQuyDoiDiem && <Tooltip title='Điểm quy đổi'>(R)</Tooltip>}
-					</Descriptions.Item>
-				</Descriptions>
+					</Descriptions>
+
+					<Divider>Điểm thi kết thúc học phần</Divider>
+					<Descriptions bordered>
+						<Descriptions.Item label='Điểm thi lần 1'>{recDiem?.diemThi1 ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label='Điểm thẩm định'>{recDiem?.diemThamDinh ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label='Điểm phúc khảo'>{recDiem?.diemPhucKhao ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label='Điểm thi lần 2'>{recDiem?.diemThi2 ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label='Điểm cuối'>{recDiem?.diemKthp ?? '--'}</Descriptions.Item>
+					</Descriptions>
+
+					<Divider>Điểm tổng kết</Divider>
+					<Descriptions bordered>
+						<Descriptions.Item label='Điểm hệ 10'>{recDiem?.diemTongKet ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label='Điểm hệ 4'>{recDiem?.diemThang4 ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label='Điểm chữ'>
+							{recDiem?.diemChu ? <Tag color={ColorDiemChu[recDiem?.diemChu]}>{recDiem?.diemChu}</Tag> : null}{' '}
+							{recDiem?.isCongNhanQuyDoiDiem && <Tooltip title='Điểm quy đổi'>(R)</Tooltip>}
+						</Descriptions.Item>
+					</Descriptions>
+				</>
 			) : (
 				<Empty description='Chưa có kết quả học tập' style={{ margin: '18px 0' }} />
 			)}
