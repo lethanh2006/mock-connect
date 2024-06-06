@@ -1,43 +1,38 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { PlusCircleOutlined, StarOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Divider, Modal, Space, Tooltip, message } from 'antd';
+import { Button, Descriptions, Modal, Space, Tooltip, message } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
 import ModalQuyDoiDiem from '../../QuyDoiDiem/components/Modal';
 import DetailKetQuaHocTap from './DetailKetQuaHocTap';
 
-const ModalChiTietDiem = (props: {
-	visible: boolean;
-	setVisible: (val: boolean) => void;
-	lopHocPhanId?: string;
-	hocPhan?: HocPhan.IRecord;
-	listDiem?: LopHocPhan.IDiemHpSvHk[];
-	trangThaiHoc?: ETrangThaiHocTap;
-	khoiChuongTrinh?: Partial<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>;
-	maKhoaNganh?: string;
-}) => {
-	const { getByIdModel } = useModel('lophocphan.lophocphan');
+const ModalChiTietDiem = (
+	props: {
+		visible: boolean;
+		setVisible: (val: boolean) => void;
+		listDiem: LopHocPhan.IDiemHpSvHk[];
+		/** Đề cương của đề cương học phần học kỳ */
+		deCuongId?: string;
+
+		// Chương trình khung
+		trangThaiHoc?: ETrangThaiHocTap;
+		khoiChuongTrinh?: Partial<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>;
+		maKhoaNganh?: string;
+	} & Partial<Pick<ChuongTrinhDaoTao.TTienTrinhThucTe, 'hocPhan'>>,
+) => {
 	const { ngoaiQuyDoiDiem } = useModel('daotao.quydoidiem.dotquydoidiem');
-	const { visible, setVisible, lopHocPhanId, hocPhan, listDiem, trangThaiHoc, khoiChuongTrinh, maKhoaNganh } = props;
+	const { visible, setVisible, hocPhan, listDiem, trangThaiHoc, khoiChuongTrinh, maKhoaNganh } = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
-	const [deCuongId, setDeCuongId] = useState<string>();
+	const deCuongId = props.deCuongId ?? hocPhan?.deCuongHienTaiId;
 
 	const handleShowDeCuong = async () => {
-		let de = hocPhan?.deCuongHienTaiId;
-		if (!de && lopHocPhanId) {
-			const res = await getByIdModel(lopHocPhanId);
-			de = res.deCuong?.deCuongId || res.hocPhan?.deCuongHienTaiId;
-		}
-		if (de) {
-			setDeCuongId(de);
-			setVisibleDeCuong(true);
-		} else message.error('Không tìm thấy đề cương học phần');
+		if (deCuongId) setVisibleDeCuong(true);
+		else message.error('Không tìm thấy đề cương học phần');
 	};
 
 	const renderHocPhanCt = (dsHocPhan?: ChuongTrinhDaoTao.THocPhanTuongQuan[], label?: string) => (
@@ -115,21 +110,16 @@ const ModalChiTietDiem = (props: {
 					</Descriptions>
 				) : null}
 
-				{trangThaiHoc === undefined || trangThaiHoc !== ETrangThaiHocTap.CHUA_HOC ? (
-					<>
-						<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10, marginTop: 12 }}>Chi tiết điểm học phần</h4>
-						{!listDiem?.length ? (
-							<DetailKetQuaHocTap lopHocPhanId={lopHocPhanId} />
-						) : (
-							listDiem.map((diem, index) => (
-								<>
-									{listDiem.length > 1 ? <Divider>Học lần {index + 1}</Divider> : null}
-									<DetailKetQuaHocTap key={diem._id} diemHpSvHk={diem} />
-								</>
-							))
-						)}
-					</>
-				) : null}
+				{(trangThaiHoc === undefined || trangThaiHoc !== ETrangThaiHocTap.CHUA_HOC) && listDiem.length
+					? listDiem.map((diem, index) => (
+							<>
+								<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10, marginTop: 12 }}>
+									Chi tiết điểm học phần{listDiem.length > 1 ? ` học lần ${index + 1}` : null}
+								</h4>
+								<DetailKetQuaHocTap key={diem._id} diemHpSvHk={diem} />
+							</>
+					  ))
+					: null}
 			</Modal>
 
 			<ModalHocPhan
