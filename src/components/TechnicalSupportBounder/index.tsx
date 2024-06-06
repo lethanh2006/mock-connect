@@ -3,6 +3,7 @@ import { Button, ConfigProvider, Modal, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import FormPostIssue from './Form';
 import { unTechnicalSupportPaths } from './constant';
+import { history } from 'umi';
 
 const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 	const [visible, setVisible] = useState<boolean>(false);
@@ -18,9 +19,10 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 
 			{!unTechnicalSupportPaths.includes(window.location.pathname) ? (
 				<>
-					<Tooltip title='Phản hồi kĩ thuật' placement='topLeft'>
+					<Tooltip title='Phản hồi' placement='topLeft'>
 						<Button
-							onClick={() => setVisible(true)}
+							// onClick={() => setVisible(true)}
+							onClick={() => history.push('/phan-hoi')}
 							style={{
 								position: 'fixed',
 								bottom: 90,
