@@ -23,7 +23,7 @@ import AutoTruongHocQuyDoi from './AutoTruongHoc';
 const ModalQuyDoiDiem = (props: {
 	visible: boolean;
 	setVisible: any;
-	hocPhan?: HocPhan.IRecord;
+	hocPhan?: Pick<HocPhan.IRecord, 'ma' | 'ten' | 'soTinChi'>;
 	maKhoaNganh?: string;
 }) => {
 	const [form] = Form.useForm();
