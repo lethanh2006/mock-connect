@@ -140,6 +140,8 @@ declare module BieuMau {
 		traLoiText?: string;
 		luaChonTuyenTinh?: number;
 		listUrlFile?: string[] | null;
+
+		traLoiKhac?: string;
 	}
 
 	export interface IDanhGiaGiangVien {

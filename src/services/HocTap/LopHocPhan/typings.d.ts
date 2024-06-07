@@ -41,7 +41,7 @@ export declare module LopHocPhan {
 		lopHpHcList?: Partial<ILopHpLopHc>[];
 		doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
 
-		// Populated
+		// Đề cương học phần học kỳ
 		deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };
 	}
 
@@ -85,17 +85,12 @@ export declare module LopHocPhan {
 
 		loai?: ELoaiHocPhanDangKyTinChi;
 		diemHpSvHk?: IDiemHpSvHk;
-
-		// Populate
-		soTinChi?: number;
-		hocPhan?: HocPhan.IRecord;
-		kyHoc?: HocKy.IRecord;
 	}
 
-	export interface IDiemHpSvHk extends IDiemThanhPhan, IDiemThi, IDiemTongKet {
+	export interface IDiemHpSvHk extends IDiemThanhPhan, IDiemThi, IDiemTongKet, HocPhan.ITrongSoDeCuong {
 		_id: string;
 		sinhVienSsoId: string;
-		maSinhVien: string;
+		// maSinhVien: string;
 		sinhVien?: SinhVien.IRecord;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
@@ -104,6 +99,7 @@ export declare module LopHocPhan {
 
 		// Điểm có từ lớp học phần?
 		tenLopHocPhan?: string;
+		soThuTuLop?: number;
 		lopHocPhan?: IRecord;
 
 		// Điểm có từ quy đổi điểm?
