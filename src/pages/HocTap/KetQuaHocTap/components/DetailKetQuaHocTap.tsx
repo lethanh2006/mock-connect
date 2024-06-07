@@ -10,6 +10,7 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 	const { sinhVienGetDiemLHPModel, record: recSinhVienLhp, loading } = useModel('lophocphan.sinhvienlophocphan');
 	const { lopHocPhanId, diemHpSvHk } = props;
 	const recDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
+	const hasTrongSo = !!recDiem?.trongSo1;
 
 	useEffect(() => {
 		getModel();
@@ -26,9 +27,11 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 					<Divider>Điểm thành phần & Điều kiện dự thi</Divider>
 					<Descriptions bordered>
 						{danhSachDauDiem?.map((item) =>
-							recDiem[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk] ? (
+							recDiem[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk] || !hasTrongSo ? (
 								<Descriptions.Item
-									label={`${item.ten} (${recDiem[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}%)`}
+									label={`${item.ten}${
+										hasTrongSo ? `(${recDiem[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}%)` : ''
+									}`}
 									key={item._id}
 								>
 									{recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk] ?? '--'}
