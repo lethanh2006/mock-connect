@@ -2,7 +2,6 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
-import rules from '@/utils/rules';
 import { Checkbox, Form, type FormInstance } from 'antd';
 
 const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance }) => {
@@ -35,16 +34,28 @@ const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance }) => 
 			render: (val, recHang) => (
 				<Form.Item
 					name={[question?._id, recHang._id, recCot._id]}
+					initialValue={false}
 					valuePropName='checked'
-					rules={props.question.batBuoc ? [...rules.required] : []}
+					rules={[
+						{
+							validator: async (_, value) => {
+								const rowValues = form.getFieldValue([question?._id, recHang._id]);
+								const selectedCheckboxes = Object.values(rowValues).filter((vals) => vals === true);
+
+								if (question.batBuoc && !selectedCheckboxes.length) {
+									return Promise.reject('Bắt buộc');
+								} else {
+									return Promise.resolve();
+								}
+							},
+						},
+					]}
 				>
 					<Checkbox onChange={(e) => handleCheckboxChange(recHang._id ?? '', recCot._id, e.target.checked)} />
 				</Form.Item>
 			),
 		});
 	});
-
-	// const isRequired = !props.listLuaChonBang?.[fieldName] || props.listLuaChonBang?.[fieldName]?.length === 0;
 
 	return (
 		<TableStaticData

@@ -1,3 +1,4 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { handleSingleFile } from '@/services/uploadFile';
@@ -12,7 +13,6 @@ import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
-import ButtonExtend from '@/components/Table/ButtonExtend';
 
 const FormTraLoiKhaoSat = (props: {
 	/** Hàm xử lý bên ngoài truyền vào nếu ko sử dụng model `bieumau` */
@@ -45,14 +45,20 @@ const FormTraLoiKhaoSat = (props: {
 	}, [visibleForm]);
 
 	useEffect(() => {
-		if (cauTraLoi) {
+		if (cauTraLoi?.length) {
 			const values: any = {};
 			record?.danhSachKhoi?.map((khoi) => {
 				khoi.danhSachCauHoi?.map((question) => {
 					const traLoi = cauTraLoi?.find((i) => i.idCauHoi === question._id);
 
-					if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) values[question._id] = traLoi?.listLuaChon?.[0];
-					else if (
+					if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
+						if (traLoi && traLoi.traLoiKhac) {
+							values[question._id] = 'traLoiKhac';
+							values[`${question._id}_otherAnswer`] = traLoi.traLoiKhac;
+						} else {
+							values[question._id] = traLoi?.listLuaChon?.[0];
+						}
+					} else if (
 						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
 						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
 					) {
@@ -69,11 +75,11 @@ const FormTraLoiKhaoSat = (props: {
 			form.resetFields();
 			form.setFieldsValue(values);
 		}
-	}, [record?._id, JSON.stringify(cauTraLoi)]);
+	}, [record?._id, JSON.stringify(cauTraLoi), visibleForm]);
 
 	const renderQuestion = (question: BieuMau.CauHoi, index: number) => {
 		let questionEleMent = <div />;
-		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) questionEleMent = <SingleChoice question={question} />;
+		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) questionEleMent = <SingleChoice form={form} question={question} />;
 		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE) questionEleMent = <MultipleChoice question={question} />;
 		else if (question.loai === ELoaiCauHoi.TEXT) questionEleMent = <Text question={question} />;
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
@@ -155,37 +161,50 @@ const FormTraLoiKhaoSat = (props: {
 		const danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]> = [];
 		const dsCauHoi = record?.danhSachKhoi?.map((khoi) => khoi.danhSachCauHoi).flat();
 
-		dsCauHoi?.map(async (question) => {
-			const traLoi = values[question._id];
-			if (traLoi) {
-				let tempTraLoi: Partial<BieuMau.TraLoiRecord> = { idCauHoi: question._id };
+		if (dsCauHoi) {
+			for (const question of dsCauHoi) {
+				const traLoi = values[question._id];
+				const otherAnswer = values[`${question._id}_otherAnswer`];
+				if (traLoi || otherAnswer) {
+					let tempTraLoi: Partial<BieuMau.TraLoiRecord> = { idCauHoi: question._id };
 
-				if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
-					const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
-					tempTraLoi.listUrlFile = listUrlFile as string[];
-				} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
-					tempTraLoi.listLuaChon = question?.luaChon
-						?.map((item: any) => {
-							if ([traLoi]?.includes(item.noiDung)) {
-								return item._id;
+					if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
+						const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
+						tempTraLoi.listUrlFile = listUrlFile as string[];
+					} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
+						if (traLoi === 'traLoiKhac') {
+							const traLoiKhac = values[`${question._id}_otherAnswer`];
+							if (traLoiKhac) {
+								tempTraLoi.traLoiKhac = traLoiKhac;
 							}
-						})
-						.filter(Boolean);
-				else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
-					tempTraLoi.listLuaChon = question?.luaChon
-						?.map((item: any) => {
-							if (traLoi?.listLuaChon?.includes(item.noiDung)) {
-								return item._id;
-							}
-						})
-						.filter(Boolean);
-				else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
-					tempTraLoi.listLuaChonBang = convertList(values[question._id]);
-				else tempTraLoi = { ...tempTraLoi, ...values[question._id] };
+						} else {
+							tempTraLoi.listLuaChon = question?.luaChon
+								?.map((item: any) => {
+									if ([traLoi]?.includes(item.noiDung)) {
+										return item._id;
+									}
+								})
+								.filter(Boolean);
+						}
+					} else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
+						tempTraLoi.listLuaChon = question?.luaChon
+							?.map((item: any) => {
+								if (traLoi?.listLuaChon?.includes(item.noiDung)) {
+									return item._id;
+								}
+							})
+							.filter(Boolean);
+					else if (
+						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
+						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
+					)
+						tempTraLoi.listLuaChonBang = convertList(values[question._id]);
+					else tempTraLoi = { ...tempTraLoi, ...values[question._id] };
 
-				danhSachTraLoi.push(tempTraLoi as BieuMau.TraLoiRecord);
+					danhSachTraLoi.push(tempTraLoi as BieuMau.TraLoiRecord);
+				}
 			}
-		});
+		}
 
 		if (!!onOk) {
 			onOk(danhSachTraLoi as BieuMau.TraLoiRecord[]);
