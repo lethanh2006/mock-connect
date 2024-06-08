@@ -1,6 +1,7 @@
 export enum PhuongThucPhanCong {
 	TO_CHUC = 'Tổ chức nhân sự - Đơn vị',
 	NGUOI_CU_THE = 'Người cụ thể',
+  CO_VAN_HOC_TAP = 'Cố vấn học tập',
 }
 export enum DoiTuongDieuPhoi {
 	NGUOI_CU_THE = 'Người dùng',
@@ -9,6 +10,7 @@ export enum DoiTuongDieuPhoi {
 export const MapKeyPhuongThucPhanCong = {
 	[PhuongThucPhanCong.TO_CHUC]: 'Đơn vị cụ thể',
 	[PhuongThucPhanCong.NGUOI_CU_THE]: 'Người cụ thể',
+  [PhuongThucPhanCong.CO_VAN_HOC_TAP]: 'Cố vấn học tập',
 };
 export enum EHocHam {
 	GS = 'Giáo sư',
