@@ -14,10 +14,10 @@ type DescriptionItem = {
 
 const PreviewHoSo = () => {
 	const { getThongTinCuaToiModel, record, loading } = useModel('sinhvien.sinhvien');
-  const { danhSach, getAllModel } = useModel('core.quoctich');
+	const { danhSach, getAllModel } = useModel('core.quoctich');
 	useEffect(() => {
 		getThongTinCuaToiModel();
-    getAllModel()
+		getAllModel();
 	}, []);
 
 	const renderDescription = (data: DescriptionItem) => (
@@ -65,7 +65,7 @@ const PreviewHoSo = () => {
 			md: 8,
 		},
 		{ label: 'Khóa ngành', content: record?.khoaNganh?.ten, md: 16 },
-		{ label: 'Quốc tịch', content: danhSach?.find((item)=>item?._id===record?.quocTich)?.tenQuocTich, md: 8 },
+		{ label: 'Quốc tịch', content: danhSach?.find((item) => item?._id === record?.quocTich)?.tenQuocTich, md: 8 },
 		{ label: 'Dân tộc', content: record?.danToc, md: 8 },
 		{ label: 'Tôn giáo', content: record?.tonGiao, md: 8 },
 	];
@@ -115,7 +115,7 @@ const PreviewHoSo = () => {
 
 			<Row gutter={[18, 18]} style={{ maxWidth: 1200, margin: 'auto' }}>
 				<Col span={24} sm={6} style={{ display: 'flex', justifyContent: 'center' }}>
-					<div style={{ width: 140, height: 180 }}>
+					<div className='avatar-container'>
 						<Image src={record?.anhDaiDienUrl ?? '/metadata.png'} />
 					</div>
 				</Col>
