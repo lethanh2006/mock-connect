@@ -1,11 +1,12 @@
+import FormSinhVien from '@/pages/SinhVien/components/Form';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
 import { EditOutlined, LeftOutlined, PrinterOutlined } from '@ant-design/icons';
-import { Button, Card, Space, message } from 'antd';
+import { Button, Card, Space } from 'antd';
 import fileDownload from 'js-file-download';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
-import { useState } from 'react';
-import FormSinhVien from '@/pages/SinhVien/components/Form';
+import './components/style.less';
 
 const ThongTinSinhVienPage = () => {
 	const { record, loading, setLoading } = useModel('sinhvien.sinhvien');
