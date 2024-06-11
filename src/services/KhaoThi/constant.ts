@@ -22,18 +22,16 @@ export const colorDKDTKetQuaHocTap: Record<EDKDTKetQuaHocTap, string> = {
 	[EDKDTKetQuaHocTap.KHONG_DAT]: 'red',
 };
 
-export enum ETrangThaiSinhVienThi {
+export enum ETrangThaiThi {
+	CHUA_DUYET = 'Chưa duyệt',
 	DU_DIEU_KIEN = 'Đủ điều kiện',
-	KHONG_DU_DIEU_KIEN = 'Không đủ điều kiện',
+	KHONG_DU = 'Không đủ điều kiện',
 	HOAN_THI = 'Hoãn thi',
-	// CHUA_DUYET = 'Chưa duyệt',
-	// KHONG_CO_THONG_TIN = 'Không có thông tin',
 }
 
-export const MapKeyColorTrangThaiSinhVienThi: any = {
-	[ETrangThaiSinhVienThi.DU_DIEU_KIEN]: 'green',
-	[ETrangThaiSinhVienThi.HOAN_THI]: 'yellow',
-	// [ETrangThaiSinhVienThi.KHONG_CO_THONG_TIN]: '#939393',
-	[ETrangThaiSinhVienThi.KHONG_DU_DIEU_KIEN]: 'red',
-	// [ETrangThaiSinhVienThi.CHUA_DUYET]: '#ccc',
+export const colorTrangThaiThi: Record<ETrangThaiThi, string> = {
+	[ETrangThaiThi.CHUA_DUYET]: 'default',
+	[ETrangThaiThi.DU_DIEU_KIEN]: 'green',
+	[ETrangThaiThi.KHONG_DU]: 'red',
+	[ETrangThaiThi.HOAN_THI]: 'orange',
 };

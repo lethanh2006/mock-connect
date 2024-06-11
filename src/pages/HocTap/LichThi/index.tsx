@@ -5,16 +5,16 @@ import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import {
 	EDKDTCongNo,
 	EDKDTKetQuaHocTap,
-	ETrangThaiSinhVienThi,
-	MapKeyColorTrangThaiSinhVienThi,
+	ETrangThaiThi,
 	colorDKDTCongNo,
 	colorDKDTKetQuaHocTap,
+	colorTrangThaiThi,
 } from '@/services/KhaoThi/constant';
-import { Card, Tag, Tooltip, Button } from 'antd';
+import { TeamOutlined } from '@ant-design/icons';
+import { Button, Card, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import DanhSachSinhVienThi from './DanhSachSinhVienThi';
-import { TeamOutlined } from '@ant-design/icons';
 
 const LichThiPage = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -116,8 +116,8 @@ const LichThiPage = () => {
 					align: 'center',
 					width: 80,
 					filterType: 'select',
-					filterData: Object.values(ETrangThaiSinhVienThi),
-					render: (val: ETrangThaiSinhVienThi) => val && <Tag color={MapKeyColorTrangThaiSinhVienThi[val]}>{val}</Tag>,
+					filterData: Object.values(ETrangThaiThi),
+					render: (val: ETrangThaiThi) => val && <Tag color={colorTrangThaiThi[val]}>{val}</Tag>,
 					onCell,
 				},
 			],

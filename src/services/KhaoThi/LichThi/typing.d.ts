@@ -1,6 +1,5 @@
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import type { EDKDTCongNo, EDKDTKetQuaHocTap, ETrangThaiSinhVienThi } from '../constant';
-import { ETrangThaiThi } from '@/services/HocTap/constant';
+import type { EDKDTCongNo, EDKDTKetQuaHocTap, ETrangThaiThi } from '../constant';
 
 declare module LichThi {
 	export interface IRecord {
@@ -8,6 +7,9 @@ declare module LichThi {
 		thoiGianKetThuc: string;
 		phong?: TObject;
 		danhSachHocPhan?: TObject[];
+		dieuKienKetQuaHocTap: EDKDTKetQuaHocTap;
+		dieuKienCongNo: EDKDTCongNo;
+		trangThai: ETrangThaiThi;
 	}
 
 	export interface IRecordMe {
@@ -21,7 +23,7 @@ declare module LichThi {
 		phong: string;
 		dieuKienKetQuaHocTap: EDKDTKetQuaHocTap;
 		dieuKienCongNo: EDKDTCongNo;
-		trangThai: ETrangThaiSinhVienThi;
+		trangThai: ETrangThaiThi;
 	}
 
 	export interface SinhVienLichThi {
