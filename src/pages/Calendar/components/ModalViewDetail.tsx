@@ -1,5 +1,6 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
+import { colorTrangThaiThi } from '@/services/KhaoThi/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -66,6 +67,9 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 				{moment(lichThi?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 			</Descriptions.Item>
 			<Descriptions.Item label='Phòng thi'>{lichThi?.phong?.ma ?? '--'}</Descriptions.Item>
+			<Descriptions.Item label='Điều kiện dự thi'>
+				{lichThi?.trangThai ? <Tag color={colorTrangThaiThi[lichThi.trangThai]}>{lichThi.trangThai}</Tag> : '--'}
+			</Descriptions.Item>
 		</>
 	);
 
@@ -123,6 +127,10 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 							onClick={() => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}`)}
 						>
 							Xem chi tiết
+						</Button>
+					) : isLichThi ? (
+						<Button type='primary' onClick={() => history.push('/hoc-tap/lich-thi')}>
+							Xem lịch thi
 						</Button>
 					) : null}
 					<Button onClick={() => setVisible(false)}>Đóng</Button>
