@@ -89,6 +89,7 @@ declare module HocPhan {
 
 	export interface ILichTrinhChung {
 		_id: string;
+		tieuDe: string;
 		ten: string;
 		deCuongHpId: string;
 		gioLyThuyet: number;
