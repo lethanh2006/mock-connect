@@ -52,7 +52,12 @@ const LichSuQuyDoiDiemPage = () => {
 							{item?.khuyenNghi?.length ? (
 								<>
 									{' '}
-									- <small>({item?.khuyenNghi?.map((items) => items).join(', ')})</small>
+									-{' '}
+									<small
+										dangerouslySetInnerHTML={{
+											__html: `(${item?.khuyenNghi?.map((items) => items).join(', ')})`,
+										}}
+									/>
 								</>
 							) : null}
 							<br />
