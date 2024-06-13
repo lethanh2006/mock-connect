@@ -40,7 +40,15 @@ const FormHocPhanQuyDoiDiem = () => {
 					<Descriptions.Item label='Kết quả quy đổi'>
 						{renderDiem(record?.diemHe10, record?.diemHe4, record?.diemChu)}
 					</Descriptions.Item>
-					<Descriptions.Item label='Khuyến nghị'>{record?.khuyenNghi ?? '--'}</Descriptions.Item>
+					<Descriptions.Item label='Khuyến nghị'>
+						{(
+							<div
+								dangerouslySetInnerHTML={{
+									__html: `${record?.khuyenNghi?.map((items) => items).join(', ')}`,
+								}}
+							/>
+						) ?? '--'}
+					</Descriptions.Item>
 					<Descriptions.Item label='Trạng thái'>
 						{record?.trangThai ? (
 							<Tag color={colorTrangThaiHocPhanQuyDoi[record?.trangThai]}>{record?.trangThai}</Tag>
