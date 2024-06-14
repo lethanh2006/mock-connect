@@ -134,8 +134,8 @@ export declare module LopHocPhan {
 
 	export interface IDiemThi {
 		diemThi1?: number;
-		diemThamDinh?: number;
-		diemPhucKhao?: number;
+		// diemThamDinh?: number;
+		// diemPhucKhao?: number;
 		diemThi2?: number;
 	}
 
