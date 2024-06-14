@@ -7,6 +7,7 @@ const ViewLichTrinhDeCuong = () => {
 	return (
 		<Card title='Nội dung học phần'>
 			<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
+				<Descriptions.Item label='Tiêu đề'>{record?.tieuDe ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Nội dung' span={2}>
 					<div dangerouslySetInnerHTML={{ __html: record?.ten ?? '--' }} />
 				</Descriptions.Item>
