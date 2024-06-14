@@ -17,6 +17,12 @@ const NoiDungHocPhanPage = () => {
 
 	const columns: IColumn<HocPhan.ILichTrinhChung>[] = [
 		{
+			title: 'Tiêu đề',
+			dataIndex: 'tieuDe',
+			width: 180,
+			onCell,
+		},
+		{
 			title: 'Nội dung',
 			dataIndex: 'ten',
 			width: 250,

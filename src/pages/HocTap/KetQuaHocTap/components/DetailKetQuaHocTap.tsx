@@ -11,6 +11,12 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 	const { lopHocPhanId, diemHpSvHk } = props;
 	const recDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
 	const hasTrongSo = !!recDiem?.trongSo1;
+	// Đầu điểm học phần theo đề cương
+	const dauDiemCoTrongSo = danhSachDauDiem.filter(
+		(item) =>
+			!hasTrongSo || // Đề cương học phần học kỳ này ko có trọng số
+			recDiem?.[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk],
+	);
 
 	useEffect(() => {
 		getModel();
@@ -26,18 +32,16 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 				<>
 					<Divider>Điểm thành phần & Điều kiện dự thi</Divider>
 					<Descriptions bordered>
-						{danhSachDauDiem?.map((item) =>
-							recDiem[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk] || !hasTrongSo ? (
-								<Descriptions.Item
-									label={`${item.ten}${
-										hasTrongSo ? `(${recDiem[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}%)` : ''
-									}`}
-									key={item._id}
-								>
-									{recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk] ?? '--'}
-								</Descriptions.Item>
-							) : null,
-						)}
+						{dauDiemCoTrongSo?.map((item) => (
+							<Descriptions.Item
+								label={`${item.ten}${
+									hasTrongSo ? ` (${recDiem?.[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}%)` : ''
+								}`}
+								key={item._id}
+							>
+								{recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk] ?? '--'}
+							</Descriptions.Item>
+						))}
 						<Descriptions.Item label='ĐKDT'>
 							<span style={{ color: recDiem?.trangThaiThi === ETrangThaiThi.CAM_THI ? 'red' : undefined }}>
 								{recDiem?.trangThaiThi ?? '--'}
