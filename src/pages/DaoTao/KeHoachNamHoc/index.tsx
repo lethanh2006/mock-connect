@@ -120,13 +120,20 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 									</div>
 									{_.sortBy(item.keHoachList, (j) => j.thuTuTuan).map((kh, index) => (
 										<div
-											className={`cell ${header?.days?.[index]?.isBreak ? 'break' : ''}`}
+											className={`cell ${
+												!!kh.ghiChu
+													? 'highlight1'
+													: index && header?.days?.[index - 1]?.isBreak && !kh.hoatDongTuan?._id
+													? 'break'
+													: ''
+											}`}
 											key={kh._id}
+											title={kh.ghiChu ?? kh.hoatDongTuan?.ten}
 											style={{
 												backgroundColor: kh.hoatDongTuan?.maMau,
 											}}
 										>
-											{kh.hoatDongTuan?.kyHieu ?? '--'}
+											{kh.ghiChu ?? kh.hoatDongTuan?.kyHieu ?? '--'}
 										</div>
 									))}
 								</div>
