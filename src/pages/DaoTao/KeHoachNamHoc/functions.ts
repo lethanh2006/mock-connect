@@ -36,8 +36,8 @@ export const calHeader = (
 	// Lấy danh sách các học kỳ
 	const hocKys: KeHoachNamHoc.THeadGroup[] = [];
 
-	let indexKy = 0;
-	let stepKy = 0;
+	let indexKy = 0; // Thứ tự kỳ hiện tại
+	let stepKy = 0; // Thứ tự tuần trong kỳ hiện tại
 	_.range(0, numWeek).map((tuan) => {
 		// Tuần này có ở trong học kỳ nào ko?
 		const isBreak = day.diff(moment(hocKyList[indexKy]?.thoiGianBatDau).startOf('isoWeek'), 'w') !== stepKy;
@@ -65,12 +65,13 @@ export const calHeader = (
 			months.push({ title: `T${day.format('M/YY')}`, span: 1 });
 		} else {
 			months.slice(-1)[0].span++;
-			months.slice(-1)[0].title = `Tháng ${day.format('M/YYYY')}`;
+			months.slice(-1)[0].title = `Tháng ${day.format('M/YY')}`;
 		}
 		weeks.push(tuan + 1);
 		isoWeeks.push(day.week());
 		// Ngày bắt đầu - kết thúc của tuần
-		days.push({ title: `${day.date()}-${day.clone().add(6, 'd').date()}`, span: tuan, isBreak });
+		// days.push({ title: `${day.date()}-${day.clone().add(6, 'd').date()}`, span: tuan, isBreak });
+		days.push({ title: `${day.date()}`, span: tuan, isBreak });
 		day.add(1, 'w');
 	});
 
