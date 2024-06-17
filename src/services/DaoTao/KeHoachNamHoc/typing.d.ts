@@ -11,6 +11,8 @@ declare module KeHoachNamHoc {
 		active: boolean;
 		phienBanId: string;
 
+		ghiChu?: string | null;
+
 		createdAt?: string;
 		updatedAt?: string;
 	}
@@ -21,6 +23,7 @@ declare module KeHoachNamHoc {
 		tuanBatDau: number;
 		tuanKetThuc: number;
 		hoatDongTuanId?: string;
+		ghiChu?: string | null;
 	}
 
 	export type THeadGroup = {
