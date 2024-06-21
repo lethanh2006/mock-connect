@@ -1,6 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
+import { ELoaiCauHoi, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, Spin } from 'antd';
@@ -27,6 +27,7 @@ const FormTraLoiKhaoSat = (props: {
 }) => {
 	const { setVisibleForm, record: recordDot, getDotMeModel, visibleForm, danhSach } = useModel('tienich.dotkhaosat');
 	const { loading, record, traLoiBieuMauModel, formSubmiting: formSubmiting1 } = useModel('tienich.bieumau');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
 	const { onOk, cauTraLoi, onCancel, hideCard } = props;
 	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
@@ -213,6 +214,10 @@ const FormTraLoiKhaoSat = (props: {
 				idKhaoSat: record?._id ?? '',
 				danhSachTraLoi,
 				idDot: recordDot?._id ?? danhSach[0]?._id,
+				vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
+				trangThaiSinhVien: recSinhVien?.trangThaiHoc,
+				danToc: recSinhVien?.danToc,
+				gioiTinh: recSinhVien?.gioiTinh,
 			})
 				.then(() => {
 					getDotMeModel();
