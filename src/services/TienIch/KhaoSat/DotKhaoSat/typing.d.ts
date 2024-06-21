@@ -29,5 +29,7 @@ declare module DotKhaoSat {
 
 		// Populate
 		daLam: boolean;
+		updatedAt: Date;
+		createdAt: Date;
 	}
 }

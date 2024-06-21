@@ -4,6 +4,7 @@ import type { NganhDaoTao } from '../DanhMucHeThong/Nganh/typings';
 import type { KetQuaHocKy } from '../KetQuaHocTap/KetQuaHocKy/typing';
 import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
 import { type LopHanhChinh } from '../NamHoc/LopHanhChinh/typings';
+import { type ETrangThaiHocSv } from '../constant';
 import type {
 	EGioiTinh,
 	EHinhThucTuyenDung,
@@ -19,7 +20,7 @@ declare module SinhVien {
 	export interface IRecord {
 		_id: string;
 		ssoId: string;
-		trangThaiHoc?: string;
+		trangThaiHoc?: ETrangThaiHocSv;
 		anhDaiDienUrl?: string | null;
 		ma: string;
 		ten: string;
