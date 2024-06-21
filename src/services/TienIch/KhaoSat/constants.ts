@@ -38,3 +38,9 @@ export enum ELoaiCauHoi {
 	NUMERIC_RANGE = 'NumericRange',
 	UPLOAD_FILE = 'UploadFile',
 }
+
+export enum EVaiTroKhaoSat {
+	NHAN_VIEN = 'nhan_vien',
+	SINH_VIEN = 'sinh_vien',
+	KHAC = 'khac',
+}
