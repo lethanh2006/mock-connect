@@ -25,7 +25,12 @@ const DotKhaoSatPage = () => {
 		visibleForm,
 	} = useModel('tienich.dotkhaosat');
 	const { getByIdModel: getBieuMau, setLoading } = useModel('tienich.bieumau');
+	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const [cauTraLoi, setCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
+
+	useEffect(() => {
+		getThongTinCuaToiModel();
+	}, []);
 
 	const handleEdit = async (record: DotKhaoSat.IRecord) => {
 		await getBieuMau(record?.idKhaoSat).then((bm) => handleDot(record));

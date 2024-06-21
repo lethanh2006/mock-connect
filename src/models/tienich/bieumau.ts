@@ -1,7 +1,8 @@
 import useInitModel from '@/hooks/useInitModel';
+import type { ETrangThaiHocSv } from '@/services/DaoTao/constant';
 import { getIdBieuMauDaTraLoi, initBieuMauTracNghiem, traLoiBieuMau } from '@/services/TienIch/KhaoSat/BieuMau';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { ELoaiBieuMau } from '@/services/TienIch/KhaoSat/constants';
+import { ELoaiBieuMau, type EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { message } from 'antd';
 import { useState } from 'react';
 
@@ -32,6 +33,10 @@ export default () => {
 		idKhaoSat: string;
 		danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]>;
 		idDot: string;
+		vaiTroNguoiKhaoSat: EVaiTroKhaoSat;
+		trangThaiSinhVien?: ETrangThaiHocSv;
+		danToc?: string;
+		gioiTinh?: string;
 	}): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);

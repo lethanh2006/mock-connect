@@ -1,6 +1,6 @@
 import { type EPhamViChuDe } from '@/services/TinTuc/constant';
 import { type ELoaiDoiTuong } from '../constant';
-import { type ELoaiCauHoi, type ELoaiBieuMau } from '../constants';
+import { type ELoaiCauHoi, type ELoaiBieuMau, type EVaiTroKhaoSat } from '../constants';
 
 declare module BieuMau {
 	export interface LuaChon {
@@ -160,6 +160,8 @@ declare module BieuMau {
 		userCode: string;
 		userSsoId: string;
 		vaiTro: string;
+
+		vaiTroNguoiKhaoSat: EVaiTroKhaoSat;
 
 		answered: boolean;
 		saved: boolean;

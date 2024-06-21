@@ -1,16 +1,16 @@
 import FormTraLoiKhaoSat from '@/pages/TienIch/KhaoSat/components/Form';
 import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
+import { getDotDanhGiaGiangVien } from '@/services/TienIch/KhaoSat/DotKhaoSat';
+import { EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { Alert, Empty, Select, Spin } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const DanhGiaGiangVienPage = () => {
-	const { getModel, danhSach, loading, setRecord, record: recDot } = useModel('tienich.dotkhaosat');
+	const { loading, setRecord, record: recDot, setLoading } = useModel('tienich.dotkhaosat');
 	const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
 	const { getByIdModel: getBieuMau, record: recBieuMau } = useModel('tienich.bieumau');
-	const { record: recHocKy } = useModel('daotao.hocky');
 	const {
 		getDanhGiaGiangVienModel,
 		danhGiaGiangVienModel,
@@ -27,20 +27,13 @@ const DanhGiaGiangVienPage = () => {
 		moment().isAfter(recDot?.thoiGianKetThuc, 'd');
 
 	const getDotHienTai = () => {
-		getModel(
-			{ maHocKy: recHocKy?.ma, kichHoat: true, loai: ELoaiDot.DANH_GIA_GIANG_VIEN },
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			'my/page',
-			{
-				thoiGian: EThoiGianDot.DANG_DIEN_RA,
-			},
-		).then((res) => {
-			setRecord(res?.[0]);
-			getBieuMau(res?.[0]?.idKhaoSat ?? '');
-		});
+		setLoading(true);
+		getDotDanhGiaGiangVien(recLopHocPhan?.hocKy?.ma ?? '')
+			.then((res: any) => {
+				setRecord(res?.data?.data);
+				getBieuMau(res?.data?.data?.idKhaoSat ?? '');
+			})
+			.finally(() => setLoading(false));
 	};
 
 	const getDanhGiaGiangVien = () => getDanhGiaGiangVienModel(recLopHocPhan?._id ?? '');
@@ -70,6 +63,7 @@ const DanhGiaGiangVienPage = () => {
 			giangVienSsoId: giangVienSsoId,
 			maGiangVien: danhSachNhanSu.find((item) => item.nhanSuSsoId === giangVienSsoId)?.maNhanSu,
 			hoTenGiangVien: danhSachNhanSu.find((item) => item.nhanSuSsoId === giangVienSsoId)?.tenNhanSu,
+			vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
 		})
 			.then(() => {
 				getDanhGiaGiangVien();
@@ -79,7 +73,7 @@ const DanhGiaGiangVienPage = () => {
 
 	return (
 		<Spin spinning={loading}>
-			{danhSach.length && danhSachNhanSu.length ? (
+			{recDot?._id && danhSachNhanSu.length ? (
 				<>
 					<div style={{ marginBottom: 12 }}>
 						<Alert
@@ -122,7 +116,7 @@ const DanhGiaGiangVienPage = () => {
 						hideCard
 					/>
 				</>
-			) : !danhSach.length ? (
+			) : !recDot?._id ? (
 				<Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không có đợt khảo sát đánh giá giảng viên' />
 			) : (
 				<Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không có giảng viên trong đợt khảo sát này' />
