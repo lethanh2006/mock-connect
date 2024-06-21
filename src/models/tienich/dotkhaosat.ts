@@ -21,7 +21,7 @@ export default () => {
 					values: [ELoaiDot.BIEU_MAU],
 				},
 			],
-			{ thoiGianKetThuc: -1 },
+			{ updatedAt: -1 },
 			undefined,
 			undefined,
 			'my/page',
