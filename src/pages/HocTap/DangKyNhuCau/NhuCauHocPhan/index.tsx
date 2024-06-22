@@ -29,12 +29,12 @@ const NhuCauHocPhanPage = (props: { khoaNganhTrongDot: boolean }) => {
 	const columns: IColumn<DangKyNhuCau.IHocPhanDangKyNhuCau>[] = [
 		{
 			title: 'Mã HP',
-			width: 80,
+			width: 100,
 			dataIndex: 'maHocPhan',
 		},
 		{
 			title: 'Học phần',
-			width: 150,
+			width: 180,
 			dataIndex: 'maHocPhan',
 			render: (val, rec) => rec.hocPhan?.ten,
 		},
@@ -64,7 +64,7 @@ const NhuCauHocPhanPage = (props: { khoaNganhTrongDot: boolean }) => {
 					type={ngoaiThoiGian ? 'warning' : 'info'}
 					message={
 						ngoaiThoiGian ? (
-							'Ngoài thời gian đăng ký nhu cầu !'
+							'Ngoài thời gian đăng ký nhu cầu!'
 						) : (
 							<>
 								Thời gian đăng ký nhu cầu từ <b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
