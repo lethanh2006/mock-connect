@@ -17,8 +17,8 @@ const DangKyNhuCauPage = () => {
 	}, [record?._id]);
 
 	useEffect(() => {
-		if (recHocKy?._id) getDotDangKyNhuCauHocKyModel(recHocKy?.ma);
-	}, [recHocKy?._id]);
+		if (recHocKy?.ma) getDotDangKyNhuCauHocKyModel(recHocKy?.ma);
+	}, [recHocKy?.ma]);
 
 	return (
 		<>
@@ -29,11 +29,11 @@ const DangKyNhuCauPage = () => {
 					</FilterHocKy>
 				</div>
 
-				{record?._id ? (
-					<NhuCauHocPhanPage khoaNganhTrongDot={khoaNganhTrongDot} />
-				) : (
+				{/* {record?._id ? ( */}
+				<NhuCauHocPhanPage khoaNganhTrongDot={khoaNganhTrongDot} />
+				{/* ) : (
 					<Empty description='Không có đợt đăng ký trong kỳ học' style={{ marginTop: 32 }} />
-				)}
+				)} */}
 			</Card>
 		</>
 	);
