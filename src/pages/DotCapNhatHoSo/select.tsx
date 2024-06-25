@@ -13,7 +13,7 @@ export const SelectDotCapNhat = (props: {
 	const { danhSach, getAllModel, visibleForm } = useModel('daotao.dotcapnhathoso');
 
 	useEffect(() => {
-		if (!visibleForm) getAllModel(isSetRecord);
+		if (!visibleForm) getAllModel(isSetRecord, undefined, { kichHoat: true });
 	}, [visibleForm, isSetRecord]);
 
 	return (
@@ -28,7 +28,7 @@ export const SelectDotCapNhat = (props: {
 						key: item._id,
 						value: item._id,
 						label: `${item.tenDot}`,
-            rawData:item
+						rawData: item,
 					}))}
 					showSearch
 					optionFilterProp='label'
