@@ -131,7 +131,6 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 				const khaiBao = recordFormKhaiBao[key];
 				recordFormKhaiBaoFinal[key] = khaiBao;
 			});
-			debugger;
 			form.setFieldsValue(recordFormKhaiBaoFinal);
 		}
 	}, [editFormKhaiBao, recordFormKhaiBao]);
