@@ -193,6 +193,18 @@
 			},
 		],
 	},
+	{
+		name: 'GiaoDucChinhTriTuTuong',
+		icon: 'calendar',
+		path: '/giao-duc-chinh-tri-tu-tuong',
+		routes: [
+			{
+				name: 'TuanSinhHoatCongDan',
+				path: 'danh-gia-ket-qua',
+				component: './CheDoChinhSach/GiaoDucChinhTriTuTuong/QuyetDinhGDCTTT',
+			},
+		],
+	},
 
 	// {
 	// 	name: 'DichVuHanhChinh',

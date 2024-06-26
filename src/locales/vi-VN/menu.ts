@@ -59,6 +59,9 @@ export default {
 	'menu.HoatDongKHCN.DeTaiKhoa': 'Đề tài NCKH cấp khoa/viện',
 	'menu.HoatDongKHCN.KeHoachNCKH': 'Định hướng NCKH',
 	'menu.HoatDongKHCN.QuyCheQuyDinh': 'Quy chế, quy định',
+
+	'menu.GiaoDucChinhTriTuTuong': 'Giáo dục chính trị tư tưởng',
+	'menu.GiaoDucChinhTriTuTuong.TuanSinhHoatCongDan': 'Tuần sinh hoạt công dân',
 	// GIANG VIEN
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
