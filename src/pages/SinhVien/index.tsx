@@ -1,17 +1,21 @@
 import FormSinhVien from '@/pages/SinhVien/components/Form';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
 import { EditOutlined, LeftOutlined, PrinterOutlined } from '@ant-design/icons';
-import { Button, Card, Space } from 'antd';
+import { Button, Card, Space, Tooltip } from 'antd';
 import fileDownload from 'js-file-download';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
 import './components/style.less';
+import { SelectDotCapNhat } from '@/pages/DotCapNhatHoSo/select';
+import moment from 'moment';
 
 const ThongTinSinhVienPage = () => {
 	const { record, loading, setLoading } = useModel('sinhvien.sinhvien');
 	const [isCapNhat, setIsCapNhat] = useState<boolean>(false);
-
+	const { record: recordDot, setRecord: setRecordDot } = useModel('daotao.dotcapnhathoso');
+	const ngoaiThoiGian =
+		moment().isBefore(moment(recordDot?.thoiGianBatDau)) || moment().isAfter(moment(recordDot?.thoiGianKetThuc));
 	// const [currentStep, setCurrentStep] = useState<string>('0');
 	// const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
 
@@ -48,11 +52,35 @@ const ThongTinSinhVienPage = () => {
 				<>
 					{' '}
 					<Space style={{ marginBottom: 12 }} wrap>
+						<SelectDotCapNhat
+							style={{ width: 500 }}
+							isSetRecord
+							value={recordDot?._id}
+							onChange={(val: any, option: { rawData: any }) => {
+								const rawData = option?.rawData;
+								setRecordDot(rawData);
+							}}
+						/>
 						{record?.ssoId ? (
 							<>
-								<Button type='primary' icon={<EditOutlined />} onClick={() => setIsCapNhat(true)}>
-									Cập nhật hồ sơ
-								</Button>
+								<Tooltip
+									title={
+										ngoaiThoiGian
+											? `Ngoài thời gian cập nhật hồ sơ (${moment(recordDot?.thoiGianBatDau).format(
+													'HH:mm DD/MM/YYYY',
+											  )} - ${moment(recordDot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})`
+											: 'Cập nhật hồ sơ'
+									}
+								>
+									<Button
+										disabled={ngoaiThoiGian}
+										type='primary'
+										icon={<EditOutlined />}
+										onClick={() => setIsCapNhat(true)}
+									>
+										Cập nhật hồ sơ
+									</Button>
+								</Tooltip>
 								<Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
 									In hồ sơ
 								</Button>

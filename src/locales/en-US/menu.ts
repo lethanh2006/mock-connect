@@ -21,6 +21,7 @@ export default {
 	'menu.HocTap.DangKyNhuCau': 'Đăng ký nhu cầu',
 	'menu.HocTap.DangKyTinChi': 'Đăng ký tín chỉ',
 	'menu.HocTap.LopHocPhan': 'Lớp tín chỉ',
+	'menu.HocTap.LichThi': 'Lịch thi',
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
 	'menu.HocTap.XetHocVu': 'Cảnh báo học tập, buộc thôi học ',
 	'menu.HocTap.XetTotNghiep': 'Xét tốt nghiệp',
@@ -58,6 +59,9 @@ export default {
 	'menu.HoatDongKHCN.DeTaiKhoa': 'Đề tài NCKH cấp khoa/viện',
 	'menu.HoatDongKHCN.KeHoachNCKH': 'Định hướng NCKH',
 	'menu.HoatDongKHCN.QuyCheQuyDinh': 'Quy chế, quy định',
+
+	'menu.GiaoDucChinhTriTuTuong': 'Giáo dục chính trị tư tưởng',
+	'menu.GiaoDucChinhTriTuTuong.TuanSinhHoatCongDan': 'Tuần sinh hoạt công dân',
 	// GIANG VIEN
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
