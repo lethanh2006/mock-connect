@@ -1,9 +1,15 @@
 import { EOperatorType } from '@/components/Table/constant';
 import useInitModel from '@/hooks/useInitModel';
 import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
-import { getMyKhoaNganh, getThongTinSinhVien, getThongTinSinhVienBySsoId } from '@/services/DaoTao/SinhVien';
+import {
+	getMyKhoaNganh,
+	getThongTinSinhVien,
+	getThongTinSinhVienBySsoId,
+	putLyLichMe,
+} from '@/services/DaoTao/SinhVien';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { ipDaoTao } from '@/utils/ip';
+import { message } from 'antd';
 import type { AxiosResponse } from 'axios';
 import _ from 'lodash';
 import { useState } from 'react';
@@ -39,6 +45,14 @@ export default () => {
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const putLyLichMeModel = async (payload: any, getData?: any) => {
+		setLoading(true);
+		await putLyLichMe(payload);
+		message.success('Cập nhật thành công');
+		if (getData) getData();
+		setLoading(false);
 	};
 
 	const getKhoaNganhMeModel = async (): Promise<KhoaNganh.TMyKhoaNganh> => {
@@ -94,6 +108,7 @@ export default () => {
 		getKhoaNganhMeModel,
 		maKhoaNganh,
 		setMaKhoaNganh,
+		putLyLichMeModel,
 		...objInit,
 	};
 };

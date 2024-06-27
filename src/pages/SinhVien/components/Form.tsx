@@ -18,7 +18,7 @@ import ThongTinGiaDinhFormItem from './GiaDinh';
 
 const FormSinhVien = (props: { onCancel?: () => void }) => {
 	const [form] = Form.useForm();
-	const { getThongTinCuaToiModel, putModel, record } = useModel('sinhvien.sinhvien');
+	const { getThongTinCuaToiModel, putLyLichMeModel, record } = useModel('sinhvien.sinhvien');
 	const [listTinh, setListTinh] = useState<DonViHanhChinh.IRecord[]>();
 	const loaiNoiSinh = Form.useWatch('loaiNoiSinh', form) ?? ELoaiNoiSinh.TRONG_NUOC;
 	const onFinish = async (values: any) => {
@@ -29,8 +29,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 		try {
 			const urlImg = await buildUpLoadFile(values, 'anhDaiDienUrl').catch(console.log);
 			const payload = { ...values, anhDaiDienUrl: urlImg };
-
-			putModel(record?._id ?? '', { ...payload }).then(() => {
+			putLyLichMeModel({ ...payload }).then(() => {
 				if (props?.onCancel) props?.onCancel();
 			});
 		} catch (e) {

@@ -44,3 +44,7 @@ export const getThongTinSinhVienBySsoId = (ssoId: string) => axios.get(`${ipDaoT
 export async function postChungChiSinhVien(payLoad: any) {
 	return axios.post(`${ipDaoTao}/chung-chi-sv/sinh-vien/dang-ky`, payLoad);
 }
+
+export const putLyLichMe = (payload: any) => {
+	return axios.put(`${ipDaoTao}/sinh-vien/me`);
+};
