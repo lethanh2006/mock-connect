@@ -179,11 +179,12 @@ const useInitModel = <T,>(
 		getData?: any,
 		closeModal?: boolean,
 		messageText?: string,
+		path?: string,
 	): Promise<T> => {
 		if (formSubmiting) Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await postService(chuanHoaObject(payload));
+			const res = await postService(chuanHoaObject(payload), path);
 			message.success(messageText ?? 'Thêm mới thành công');
 			setLoading(false);
 			if (getData) getData();
@@ -205,11 +206,12 @@ const useInitModel = <T,>(
 		notGet?: boolean,
 		closeModal?: boolean,
 		messageText?: string,
+		path?: string,
 	): Promise<T> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await putService(id, chuanHoaObject(payload));
+			const res = await putService(id, chuanHoaObject(payload), path);
 			message.success(messageText ?? 'Lưu thành công');
 			setLoading(false);
 			if (getData) getData();
@@ -250,10 +252,10 @@ const useInitModel = <T,>(
 		}
 	};
 
-	const deleteModel = async (id: string | number, getData?: () => void): Promise<any> => {
+	const deleteModel = async (id: string | number, getData?: () => void, path?: string): Promise<any> => {
 		setLoading(true);
 		try {
-			const res = await deleteService(id);
+			const res = await deleteService(id, undefined, path);
 			message.success('Xóa thành công');
 
 			const maxPage = Math.ceil((total - 1) / limit) || 1;

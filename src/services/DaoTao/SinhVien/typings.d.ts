@@ -125,7 +125,7 @@ declare module SinhVien {
 		maKhoaNganh2?: string;
 		maKhoaSinhVien2?: string;
 		maNganh2?: string;
-
+		hoKhauThuongTru: TDiaChi;
 		lopHanhChinhList?: LopHanhChinh.IRecord[];
 		maTrinhDo: string;
 		trinhDoDaoTao: TrinhDoDaoTao.IRecordCoSo;
