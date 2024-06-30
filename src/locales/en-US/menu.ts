@@ -64,6 +64,16 @@ export default {
 	'menu.GiaoDucChinhTriTuTuong.TuanSinhHoatCongDan': 'Tuần sinh hoạt công dân',
 	// GIANG VIEN
 
+	'menu.HoatDongKHCN.DeTaiHocVien.DangKyDeXuat': 'Đăng ký đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongXetChonDeXuat': 'Hội đồng xét chọn đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongXetDuyetThuyetMinh': 'Hội đồng xét duyệt thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongNghiemThu': 'Hội đồng nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopThuyetMinh': 'Xây dựng và nộp hồ sơ thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoNghiemThu': 'Nộp hồ sơ nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.ThucHienDeTai': 'Thực hiện đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhGiao': 'Quyết định giao đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoSauNghiemThu': 'Nộp hồ sơ sau nghiệm thu đề tài',
+
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
