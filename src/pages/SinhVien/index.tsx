@@ -66,7 +66,7 @@ const ThongTinSinhVienPage = () => {
 							<>
 								<Tooltip
 									title={
-										ngoaiThoiGian
+										(ngoaiThoiGian&&!record?.choPhepSua)
 											? `Ngoài thời gian cập nhật hồ sơ (${moment(recordDot?.thoiGianBatDau).format(
 													'HH:mm DD/MM/YYYY',
 											  )} - ${moment(recordDot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})`
