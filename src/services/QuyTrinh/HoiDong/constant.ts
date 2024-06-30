@@ -6,6 +6,6 @@ export enum EVaiTroHoiDong {
 }
 
 export enum ELoaiThanhVien {
-	TRONG_HE_THONG = 'Cán bộ / Giảng viên trong Học viện',
-	NGOAI_HE_THONG = 'Người ngoài Học viện',
+	TRONG_HE_THONG = 'Sinh viên trong Học viện',
+	NGOAI_HE_THONG = 'Sinh viên ngoài Học viện',
 }
