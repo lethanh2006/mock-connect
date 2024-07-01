@@ -79,6 +79,7 @@ declare module DeTaiKHCN {
 		tomTatDeXuat: string;
 		thuocLinhVuc: string;
 		donViChuTri: string;
+		maDonViChuTri: string;
 		coQuanQuanLy: string;
 		coQuanPhoiHop: string;
 		soDienThoai: string;

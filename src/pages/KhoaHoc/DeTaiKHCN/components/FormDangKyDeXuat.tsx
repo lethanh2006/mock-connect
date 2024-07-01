@@ -4,6 +4,7 @@ import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';
 import SelectSinhVienDebounce from '@/pages/SinhVien/components/Select';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
+import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import {
 	ELoaiDeTaiCaNhan,
 	EMenhGia,
@@ -21,7 +22,6 @@ import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import TableThanhVien from './TableThanhVien';
-import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 
 const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 	const [form] = Form.useForm();
@@ -66,6 +66,7 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 			const dangKyKhcn = {
 				...record?.dangKyKhcn,
 				...values,
+				donViChuTri: danhSachDonVi?.find((item) => item.maDonVi === values?.maDonViChuTri)?.ten,
 				urlPhieuDangKyDeXuat,
 				kinhPhi: values?.kinhPhi
 					? {
@@ -266,6 +267,11 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 							rules={[...rules.required, ...rules.text]}
 						>
 							<Input placeholder='Số tài khoản ngân hàng' />
+						</Form.Item>
+					</Col>
+					<Col xs={24} md={24}>
+						<Form.Item name={'maDonViChuTri'} label='Cơ quan chủ trì đề tài' rules={[...rules.required, ...rules.text]}>
+							<SelectDonVi />
 						</Form.Item>
 					</Col>
 					<Col xs={24} lg={24}>
