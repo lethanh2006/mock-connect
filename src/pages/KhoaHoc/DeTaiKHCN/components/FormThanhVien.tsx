@@ -125,6 +125,14 @@ const FormThanhVien = (props: { onCancel: any; record?: DeTaiKHCN.ThanhVienDeTai
 				>
 					<Input placeholder='Nhập mã sinh viên' />
 				</Form.Item>
+				<Form.Item
+					name={['tenLopHanhChinh']}
+					label='Lớp'
+					rules={[...rules.required, ...rules.text]}
+					style={{ marginBottom: 10 }}
+				>
+					<Input placeholder='Nhập lớp' />
+				</Form.Item>
 
 				{/* <Form.Item
 					name={'danhSachVaiTroDeTai'}

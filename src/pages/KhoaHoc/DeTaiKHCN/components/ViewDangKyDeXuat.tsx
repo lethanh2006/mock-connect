@@ -158,7 +158,7 @@ const ViewDangKyDeXuat = (props: {
 					{moment(dangKyKhcn.thoiGianThucHienBatDau).format('DD/MM/YYYY')} -{' '}
 					{moment(dangKyKhcn.thoiGianThucHienKetThuc).format('DD/MM/YYYY')}
 				</Descriptions.Item>
-				<Descriptions.Item span={3} label='Đề xuất người hướng dẫn nếu có'>
+				<Descriptions.Item span={3} label='Đề xuất người hướng dẫn (nếu có)'>
 					{dangKyKhcn.nguoiHuongDan.ten} - {dangKyKhcn.nguoiHuongDan.tenDonVi}
 				</Descriptions.Item>
 				{/* <Descriptions.Item span={3} label='Tổng kinh phí đề nghị của đề tài'>
