@@ -24,6 +24,7 @@ const ModalChungChiCTDT = () => {
 					<Tabs.TabPane tab='Chứng chỉ của tôi' key='1' />
 					<Tabs.TabPane tab='Chuẩn đầu ra' key='2' />
 				</Tabs>
+
 				{activeTab === '1' ? <TableChungChiSinhVien /> : <TableChungChiDauRa />}
 			</Card>
 		</Modal>

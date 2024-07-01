@@ -6,7 +6,10 @@ import { message } from 'antd';
 
 export default () => {
 	const objInit = useInitModel<SinhVien.IChungChiSinhVien>('chung-chi-sv', undefined, undefined, ipDaoTao);
-	const { setFormSubmiting } = objInit;
+	const { setFormSubmiting, getModel: getOrigin } = objInit;
+
+	const getModel = async (condition?: Partial<SinhVien.IChungChiSinhVien>) =>
+		getOrigin(condition, undefined, undefined, undefined, undefined, 'sinh-vien/page');
 
 	const postChungChiSinhVienModel = async (
 		payLoad: Partial<SinhVien.IChungChiSinhVien>,
@@ -25,8 +28,10 @@ export default () => {
 			setFormSubmiting(false);
 		}
 	};
+
 	return {
 		...objInit,
+		getModel,
 		postChungChiSinhVienModel,
 	};
 };
