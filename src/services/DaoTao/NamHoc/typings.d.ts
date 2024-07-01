@@ -15,6 +15,9 @@ declare module NamHoc {
 		createdAt?: string;
 		updatedAt?: string;
 
+		namBatDau?: number;
+		namKetThuc?: number;
+
 		//Kế hoạch năm học
 		ngayBdLayYKien: Date;
 		ngayKtLayYKien: Date;

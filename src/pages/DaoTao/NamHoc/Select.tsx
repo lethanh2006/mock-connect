@@ -19,7 +19,7 @@ const SelectNamHoc = (props: {
 
 	useEffect(() => {
 		if (!visibleForm)
-			getAllModel(isSetRecord, { thoiGianBatDau: -1 }).then((res) => {
+			getAllModel(isSetRecord, undefined, undefined, undefined, 'sinh-vien/me').then((res) => {
 				if (hasDefault && onChange) onChange(res?.[0]?._id);
 			});
 	}, [visibleForm]);
