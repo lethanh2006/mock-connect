@@ -27,12 +27,12 @@ const TableChungChiSinhVien = () => {
 		{
 			title: 'Đơn vị cấp',
 			dataIndex: 'donViCap',
-			width: 180,
+			width: 200,
 		},
 		{
 			title: 'Trình độ',
 			dataIndex: 'diem',
-			width: 100,
+			width: 80,
 			align: 'center',
 			render: (val, rec) => {
 				if (rec.chungChi?.phuongThucTinhDiem === EPhuongThucTinhDiem.DIEM) {
@@ -45,7 +45,7 @@ const TableChungChiSinhVien = () => {
 			},
 		},
 		{
-			title: 'Thời hạn chứng chỉ',
+			title: 'Thời hạn',
 			width: 130,
 			align: 'center',
 			render: (val, rec) => {
@@ -64,9 +64,9 @@ const TableChungChiSinhVien = () => {
 	];
 
 	return recordChungChi?.chungChiDaDat ? (
-		<TableStaticData columns={columns} data={recordChungChi?.chungChiDaDat ?? []} />
+		<TableStaticData columns={columns} data={recordChungChi?.chungChiDaDat ?? []} size='small' addStt />
 	) : (
-		<Empty description='Bạn chưa đạt chứng chỉ nào' />
+		<Empty description='Bạn chưa đạt chứng chỉ nào' image={Empty.PRESENTED_IMAGE_SIMPLE} />
 	);
 };
 

@@ -34,7 +34,11 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string }) => {
 					</Carousel>
 				</>
 			) : (
-				<Empty description='Chưa có kết quả học kỳ!' style={{ marginTop: 50, marginBottom: 32 }} />
+				<Empty
+					description='Chưa có kết quả học tập!'
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+					style={{ marginTop: 50, marginBottom: 32 }}
+				/>
 			)}
 		</Spin>
 	);
