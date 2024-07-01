@@ -3,7 +3,7 @@ import { AppModules, EModuleKey } from '@/services/base/constant';
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
 
 const ip3 = ipRoot + 'slink'; // ip dev
-// const ip3 = 'http://192.168.1.71:3004'; // ip dev
+// const ip3 = 'http://192.168.1.37:3000'; // ip dev
 
 const ipNotif = ipRoot + 'notification'; // ip dev
 const ipDaoTao = ipRoot + 'qldt'; // ip dev
