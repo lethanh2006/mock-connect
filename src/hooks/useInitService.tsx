@@ -19,7 +19,7 @@ const useInitService = (url: string, ip?: string) => {
 	};
 
 	const putService = (id: string | number, payload: any, path?: string) => {
-		const finalPath = path ? `${finalIp}/${url}/${path ?? ''}` : `${finalIp}/${url}`;
+		const finalPath = path ? `${finalIp}/${url}/${path ?? ''}` : `${finalIp}/${url}/${id}`;
 		return axios.put(finalPath, payload);
 	};
 

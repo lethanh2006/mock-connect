@@ -27,7 +27,7 @@ const CardLopHocPhan = () => {
 			extra={
 				<Dropdown
 					overlay={
-						<Menu style={{ height: 300, overflowY: 'auto' }}>
+						<Menu style={{ maxHeight: 300, overflowY: 'auto' }}>
 							{danhSach.map((item) => (
 								<Menu.Item onClick={() => setRecord(item)} key={item._id}>
 									{item.ten}
