@@ -1,6 +1,5 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
-import type { EVaiTroDeTai } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import type { EVaiTroHoiDong } from '@/services/QuyTrinh/HoiDong/constant';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
@@ -34,6 +33,13 @@ const TableThanhVien = (props: {
 		{
 			title: 'Mã sinh viên',
 			dataIndex: 'maDinhDanh',
+			width: 120,
+			align: 'center',
+			hide: props.type === 'HoiDong',
+		},
+		{
+			title: 'Lớp',
+			dataIndex: 'tenLopHanhChinh',
 			width: 120,
 			align: 'center',
 			hide: props.type === 'HoiDong',

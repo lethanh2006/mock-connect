@@ -1,7 +1,7 @@
-import type { ChungChi } from '../DanhMucHeThong/ChungChi/typing';
-import { type ChuongTrinhDaoTao } from '../DanhMucHeThong/ChuongTrinhDaoTao/typings';
-import type { NganhDaoTao } from '../DanhMucHeThong/Nganh/typings';
-import type { KetQuaHocKy } from '../KetQuaHocTap/KetQuaHocKy/typing';
+import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
+import type { DotXetTotNghiep } from '@/services/HocTap/XetTotNghiep/typing';
+import type { ChungChi } from '../ChungChi/typing';
+import type { ChuongTrinhDaoTao } from '../ChuongTrinhDaoTao/typing';
 import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
 import { type LopHanhChinh } from '../NamHoc/LopHanhChinh/typings';
 import { type ETrangThaiHocSv } from '../constant';
@@ -276,6 +276,28 @@ declare module SinhVien {
 		thongTinCdr?: ChuongTrinhDaoTao.IChungChiCTDT[];
 		kqhtHocKy?: KetQuaHocKy.IRecord;
 		ctdtKeHoach?: ChuongTrinhDaoTao.IRecord;
+	}
+
+	export type TDieuKienTotNghiep = {
+		isDuDieuKienTBC: boolean;
+		isDuDieuKienChungChi: boolean;
+		phanTramTinChi: number;
+		isDuKieuKien: boolean;
+		noTaiChinh?: boolean;
+		noThuVien?: boolean;
+	};
+
+	export interface ISinhVienNoNghiaVu {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		maSinhVien?: string;
+		tenSinhVien?: string;
+		noTaiChinh?: boolean;
+		noThuVien?: boolean;
+
+		dotXetTotNghiepId: string;
+		dotXetTotNghiep?: DotXetTotNghiep.IRecord;
 	}
 
 	export type TThongKeTrangThai = {

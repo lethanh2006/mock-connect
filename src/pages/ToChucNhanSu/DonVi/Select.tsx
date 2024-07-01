@@ -13,6 +13,7 @@ const SelectDonVi = (props: {
 	style?: React.CSSProperties;
 	allowClear?: boolean;
 	placeholder?: string;
+	fieldValue?: string;
 }) => {
 	const { value, onChange, multiple, disabled, style, allowClear, placeholder } = props;
 	const { danhSach, getAllModel } = useModel('tochucnhansu.donvi');
@@ -39,7 +40,7 @@ const SelectDonVi = (props: {
 			disabled={disabled}
 			options={danhSach.map((item) => ({
 				key: item._id,
-				value: item.maDonVi,
+				value: props.fieldValue ? item?.[props.fieldValue] ?? '' : item.maDonVi,
 				label: `${item.ten} (${item.maDonVi ?? ''})`,
 			}))}
 			showSearch
