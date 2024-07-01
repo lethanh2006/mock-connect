@@ -136,7 +136,47 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			onCell,
 		},
 		{
-			title: 'Đề tài tập thể/cá nhân',
+			title: 'Sinh viên thực hiện đề tài',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.ten}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.ten}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
 			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
 			width: 120,
 			align: 'center',
@@ -144,27 +184,18 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
 			onCell,
 		},
-		{
-			title: 'Sinh viên chịu trách nhiệm thực hiện chính',
-			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
-			width: 150,
-			filterType: 'string',
-			align: 'center',
-			render: (val, rec) => `${rec.dangKyKhcn.chuTriDeTai.ten} (${rec.dangKyKhcn.chuTriDeTai.maDinhDanh})`,
-			onCell,
-		},
-		{
-			title: 'Thời gian thực hiện',
-			width: 150,
-			align: 'center',
-			render: (val: DeTaiKHCN.IRecord) => (
-				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
-				</div>
-			),
-			onCell,
-		},
+		// {
+		// 	title: 'Thời gian thực hiện',
+		// 	width: 150,
+		// 	align: 'center',
+		// 	render: (val: DeTaiKHCN.IRecord) => (
+		// 		<div>
+		// 			{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+		// 			{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+		// 		</div>
+		// 	),
+		// 	onCell,
+		// },
 		// {
 		// 	title: 'Kinh phí đề xuất',
 		// 	width: 120,
@@ -294,7 +325,47 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			onCell,
 		},
 		{
-			title: 'Đề tài tập thể/cá nhân',
+			title: 'Sinh viên thực hiện đề tài',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.ten}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.ten}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
 			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
 			width: 120,
 			align: 'center',
@@ -302,27 +373,18 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
 			onCell,
 		},
-		{
-			title: 'Sinh viên chịu trách nhiệm thực hiện chính',
-			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
-			width: 150,
-			filterType: 'string',
-			align: 'center',
-			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.ten,
-			onCell,
-		},
-		{
-			title: 'Thời gian thực hiện',
-			width: 150,
-			align: 'center',
-			render: (val: DeTaiKHCN.IRecord) => (
-				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
-				</div>
-			),
-			onCell,
-		},
+		// {
+		// 	title: 'Thời gian thực hiện',
+		// 	width: 150,
+		// 	align: 'center',
+		// 	render: (val: DeTaiKHCN.IRecord) => (
+		// 		<div>
+		// 			{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+		// 			{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+		// 		</div>
+		// 	),
+		// 	onCell,
+		// },
 		// {
 		// 	title: 'Kinh phí đề xuất',
 		// 	width: 120,
