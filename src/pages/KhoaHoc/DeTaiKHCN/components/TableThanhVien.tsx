@@ -52,14 +52,14 @@ const TableThanhVien = (props: {
 			dataIndex: 'tenDonVi',
 			align: 'center',
 		},
-		{
-			title: 'Vai trò',
-			dataIndex: 'danhSachVaiTroDeTai',
-			width: 120,
-			align: 'center',
-			hide: props.type === 'HoiDong',
-			render: (val: EVaiTroDeTai[], rec) => val.join(', '),
-		},
+		// {
+		// 	title: 'Vai trò',
+		// 	dataIndex: 'danhSachVaiTroDeTai',
+		// 	width: 120,
+		// 	align: 'center',
+		// 	hide: props.type === 'HoiDong',
+		// 	render: (val: EVaiTroDeTai[], rec) => val.join(', '),
+		// },
 		{
 			title: 'Chức vụ hội đồng',
 			dataIndex: 'danhSachChucVuHoiDong',

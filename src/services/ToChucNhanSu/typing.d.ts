@@ -1,3 +1,5 @@
+import type { EHocHam, EHocVi } from '../QuyTrinh/constant';
+
 declare module ToChucNhanSu {
 	export interface IDonVi {
 		_id: string;
@@ -105,6 +107,8 @@ declare module ToChucNhanSu {
 			capChucVu: string; //'Cán bộ, giảng viên';
 			tenChucVu: string; // 'Giảng viên'
 		};
+		hocHam: EHocHam;
+		hocVi: EHocVi;
 		maDonViChinh: string;
 		donViChinh?: Partial<IDonVi>;
 		trangThai: string; // 'Đang làm việc';
