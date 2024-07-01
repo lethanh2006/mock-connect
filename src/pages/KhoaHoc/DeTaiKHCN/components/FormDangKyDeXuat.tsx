@@ -21,6 +21,7 @@ import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import TableThanhVien from './TableThanhVien';
+import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 
 const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 	const [form] = Form.useForm();
@@ -39,9 +40,10 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 	const { record: recKeHoach } = useModel('khoahoc.kehoachdetai');
 	const { danhSach } = useModel('sinhvien.sinhvien');
 	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
+	const { danhSach: danhSachCanBo } = useModel('tochucnhansu.nhansu');
 
 	const [menhGia, setMenhGia] = useState(record?.dangKyKhcn?.kinhPhi?.menhGia ?? EMenhGia.VND);
-
+	const loaiCaNhan = Form.useWatch('loaiCaNhan', form);
 	useEffect(() => {
 		if (!visibleForm) resetFieldsForm(form);
 		else if (record?._id) {
@@ -59,6 +61,7 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 			setLoading(true);
 			const urlPhieuDangKyDeXuat = await buildUpLoadFile(values, 'urlPhieuDangKyDeXuat');
 			const recSinhVien = danhSach.find((item) => item.ssoId === values?.chuTriDeTai?.userId);
+			const recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
 			const recDonVi = danhSachDonVi?.find((item) => item.maDonVi === values?.chuTriDeTai?.maDonVi);
 			const dangKyKhcn = {
 				...record?.dangKyKhcn,
@@ -78,6 +81,17 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 					maDinhDanh: recSinhVien?.ma,
 					tenDonVi: recDonVi?.ten || '',
 				},
+				nguoiHuongDan: values?.nguoiHuongDan
+					? {
+							...values?.nguoiHuongDan,
+							ten: recCanBo ? `${recCanBo?.hoDem} ${recCanBo?.ten}` : record?.dangKyKhcn?.nguoiHuongDan?.ten,
+							maDinhDanh: recCanBo?.maCanBo,
+							maDonVi: recCanBo?.donViChinh?.maDonVi,
+							tenDonVi: recCanBo?.donViChinh?.ten,
+							hocHam: recCanBo?.hocHam || record?.dangKyKhcn?.nguoiHuongDan?.hocHam,
+							hocVi: recCanBo?.hocVi || record?.dangKyKhcn?.nguoiHuongDan?.hocVi,
+					  }
+					: null,
 				thoiGianThucHienBatDau: values?.thoiGianDuKienThucHien?.[0],
 				thoiGianThucHienKetThuc: values?.thoiGianDuKienThucHien?.[1],
 				loaiDeTai: ELoaiDeTai.SINH_VIEN_HOC_VIEN,
@@ -234,18 +248,19 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 							<Input placeholder='Số điện thoại' />
 						</Form.Item>
 					</Col>
-					<Col xs={24} md={8}>
+					<Col xs={24} md={12}>
 						<Form.Item name={['chuTriDeTai', 'email']} label='Email' rules={[...rules.required, ...rules.email]}>
 							<Input placeholder='Email' />
 						</Form.Item>
 					</Col>
-					<Col xs={24} md={8}>
+					<Col xs={24} md={12}>
 						<Form.Item name={['chuTriDeTai', 'cccd']} label='Số CCCD' rules={[...rules.required, ...rules.CMND]}>
 							<Input placeholder='Số CCCD' />
 						</Form.Item>
 					</Col>
-					<Col xs={24} md={8}>
+					<Col xs={24} md={24}>
 						<Form.Item
+							extra={'Sinh viên nhập đầy đủ số tài khoản và tên chi nhánh ngân hàng'}
 							name={['chuTriDeTai', 'soTaiKhoanNganHang']}
 							label='Số tài khoản ngân hàng'
 							rules={[...rules.required, ...rules.text]}
@@ -271,7 +286,7 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 							<TinyEditor height={300} />
 						</Form.Item>
 					</Col>
-					<Col xs={24} lg={24}>
+					{/* <Col xs={24} lg={24}>
 						<Form.Item
 							name={'tomTatDeXuat'}
 							label='Tóm tắt các đề xuất, giải pháp'
@@ -279,16 +294,18 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 						>
 							<TinyEditor height={300} />
 						</Form.Item>
-					</Col>
-					<Col span={24}>
-						<div>Thành viên đề tài:</div>
-						<TableThanhVien
-							type='DeTai'
-							fieldName='danhSachCTV'
-							mode='edit'
-							data={record?.dangKyKhcn?.danhSachCTV ?? []}
-						/>
-					</Col>
+					</Col> */}
+					{loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE && (
+						<Col span={24}>
+							<div>Thành viên đề tài:</div>
+							<TableThanhVien
+								type='DeTai'
+								fieldName='danhSachCTV'
+								mode='edit'
+								data={record?.dangKyKhcn?.danhSachCTV ?? []}
+							/>
+						</Col>
+					)}
 					<Col xs={24} lg={12}>
 						<Form.Item
 							name={['thoiGianDuKienThucHien']}
@@ -296,6 +313,15 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 							rules={[...rules.required]}
 						>
 							<MyDateRangePicker picker='month' format={'MM/YYYY'} placeholder={['Từ tháng', 'đến tháng']} />
+						</Form.Item>
+					</Col>
+					<Col xs={24} lg={12}>
+						<Form.Item
+							name={['nguoiHuongDan', 'userId']}
+							label='Đề xuất người hướng dẫn (nếu có)'
+							// rules={[...rules.required]}
+						>
+							<SelectNhanSuDebounce />
 						</Form.Item>
 					</Col>
 					{/* <Col xs={24} lg={12}>
