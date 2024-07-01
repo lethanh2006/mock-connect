@@ -1,4 +1,4 @@
-import { MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc } from '@/services/KhoaHoc/DeTaiKHCN/constants';
+import { ELoaiDeTaiCaNhan, MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
 import { Button, Descriptions, Tag } from 'antd';
@@ -119,13 +119,13 @@ const ViewDangKyDeXuat = (props: {
 				<Descriptions.Item span={6} label='Địa chỉ liên hệ'>
 					{dangKyKhcn.chuTriDeTai.diaChi}
 				</Descriptions.Item>
-				<Descriptions.Item span={2} label='Email'>
+				<Descriptions.Item span={3} label='Email'>
 					{dangKyKhcn.chuTriDeTai.email}
 				</Descriptions.Item>
-				<Descriptions.Item span={2} label='SĐT'>
+				<Descriptions.Item span={3} label='SĐT'>
 					{dangKyKhcn.chuTriDeTai.soDienThoai}
 				</Descriptions.Item>
-				<Descriptions.Item span={2} label='Số tài khoản ngân hàng'>
+				<Descriptions.Item span={6} label='Số tài khoản và chi nhánh ngân hàng'>
 					{dangKyKhcn.chuTriDeTai.soTaiKhoanNganHang}
 				</Descriptions.Item>
 
@@ -135,19 +135,31 @@ const ViewDangKyDeXuat = (props: {
 				<Descriptions.Item span={6} label='Tính cấp thiết và tính mới'>
 					<div dangerouslySetInnerHTML={{ __html: dangKyKhcn?.tinhCanThietVaMoi }} />
 				</Descriptions.Item>
-				<Descriptions.Item span={6} label='Tóm tắt các đề xuất, giải pháp'>
+				{/* <Descriptions.Item span={6} label='Tóm tắt các đề xuất, giải pháp'>
 					<div dangerouslySetInnerHTML={{ __html: dangKyKhcn?.tomTatDeXuat }} />
-				</Descriptions.Item>
+				</Descriptions.Item> */}
 			</Descriptions>
-			<div>
-				<b>Thông tin chung về thành viên cộng tác của đề tài</b>
-			</div>
-			<TableThanhVien type='DeTai' fieldName='danhSachCTV' mode='view' data={props.rec.dangKyKhcn.danhSachCTV || []} />
-			<br />
+			{dangKyKhcn?.loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE && (
+				<>
+					<div>
+						<b>Thành viên đề tài</b>
+					</div>
+					<TableThanhVien
+						type='DeTai'
+						fieldName='danhSachCTV'
+						mode='view'
+						data={props.rec.dangKyKhcn.danhSachCTV || []}
+					/>
+					<br />
+				</>
+			)}
 			<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
 				<Descriptions.Item span={3} label='Thời gian dự kiến thực hiện đề tài'>
 					{moment(dangKyKhcn.thoiGianThucHienBatDau).format('DD/MM/YYYY')} -{' '}
 					{moment(dangKyKhcn.thoiGianThucHienKetThuc).format('DD/MM/YYYY')}
+				</Descriptions.Item>
+				<Descriptions.Item span={3} label='Đề xuất người hướng dẫn nếu có'>
+					{dangKyKhcn.nguoiHuongDan.ten} - {dangKyKhcn.nguoiHuongDan.tenDonVi}
 				</Descriptions.Item>
 				{/* <Descriptions.Item span={3} label='Tổng kinh phí đề nghị của đề tài'>
 					{currencyFormat(dangKyKhcn.kinhPhi.kinhPhi)} {dangKyKhcn.kinhPhi.menhGia}
