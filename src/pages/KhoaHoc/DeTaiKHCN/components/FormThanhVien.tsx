@@ -1,7 +1,6 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import SelectSinhVienDebounce from '@/pages/SinhVien/components/Select';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
-import { EVaiTroDeTai } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { ELoaiThanhVien } from '@/services/QuyTrinh/HoiDong/constant';
 import rules from '@/utils/rules';
@@ -127,7 +126,7 @@ const FormThanhVien = (props: { onCancel: any; record?: DeTaiKHCN.ThanhVienDeTai
 					<Input placeholder='Nhập mã sinh viên' />
 				</Form.Item>
 
-				<Form.Item
+				{/* <Form.Item
 					name={'danhSachVaiTroDeTai'}
 					label='Vai trò'
 					rules={[...rules.required]}
@@ -141,7 +140,7 @@ const FormThanhVien = (props: { onCancel: any; record?: DeTaiKHCN.ThanhVienDeTai
 							label: item,
 						}))}
 					/>
-				</Form.Item>
+				</Form.Item> */}
 
 				<Form.Item
 					rules={[...rules.required, ...rules.text, ...rules.length(200)]}

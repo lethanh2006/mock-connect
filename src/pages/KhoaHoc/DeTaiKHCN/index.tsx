@@ -323,18 +323,18 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			),
 			onCell,
 		},
-		{
-			title: 'Kinh phí đề xuất',
-			width: 120,
-			align: 'center',
-			dataIndex: ['dangKyKhcn', 'kinhPhi', 'kinhPhi'] as any,
-			sortable: true,
-			render: (val, rec) => (
-				<div>
-					{currencyFormat(rec?.dangKyKhcn?.kinhPhi?.kinhPhi)} {rec?.dangKyKhcn?.kinhPhi?.menhGia}
-				</div>
-			),
-		},
+		// {
+		// 	title: 'Kinh phí đề xuất',
+		// 	width: 120,
+		// 	align: 'center',
+		// 	dataIndex: ['dangKyKhcn', 'kinhPhi', 'kinhPhi'] as any,
+		// 	sortable: true,
+		// 	render: (val, rec) => (
+		// 		<div>
+		// 			{currencyFormat(rec?.dangKyKhcn?.kinhPhi?.kinhPhi)} {rec?.dangKyKhcn?.kinhPhi?.menhGia}
+		// 		</div>
+		// 	),
+		// },
 		{
 			title: 'Bước',
 			dataIndex: 'phaseDeTaiKhcn',
@@ -352,6 +352,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			title: 'Trạng thái nộp',
 			dataIndex: 'lockXetDuyet',
 			width: 120,
+			fixed: 'right',
 			align: 'center',
 			render: (val) => <Tag color={val ? '#28a745' : '#dc3545'}>{val ? 'Đã nộp' : 'Chưa nộp'}</Tag>,
 			filterType: 'select',
@@ -365,6 +366,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			title: 'Trạng thái xử lý',
 			dataIndex: 'trangThaiXetDuyetDangKy',
 			width: 150,
+			fixed: 'right',
 			align: 'center',
 			render: (val) => (
 				<div>
