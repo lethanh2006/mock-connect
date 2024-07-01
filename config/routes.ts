@@ -99,7 +99,7 @@
 				component: './HocTap/TienTrinhHocTap',
 			},
 			{ name: 'DangKyTinChi', path: 'dang-ky-tin-chi', component: './HocTap/DangKyTinChi' },
-			{ name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
+			// { name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' }, // Sinh viên gửi đơn qua DVHC
 			{
 				name: 'LopHocPhan',
 				path: 'lop-tin-chi',
