@@ -26,6 +26,7 @@ declare module SinhVien {
 		ten: string;
 		firstName: string;
 		lastName: string;
+    choPhepSua: boolean;
 		gioiTinh: EGioiTinh;
 
 		quocTich: string;
