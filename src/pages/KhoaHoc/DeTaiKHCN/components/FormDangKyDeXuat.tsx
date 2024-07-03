@@ -38,7 +38,7 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 		giangVienPutMyDeTaiPhaseXetDuyetOrDeCuongOrNghiemThuModel,
 	} = useModel('khoahoc.detaikhcn');
 	const { record: recKeHoach } = useModel('khoahoc.kehoachdetai');
-	const { danhSach } = useModel('sinhvien.sinhvien');
+	const { danhSach, getModel } = useModel('sinhvien.sinhvien');
 	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
 	const { danhSach: danhSachCanBo } = useModel('tochucnhansu.nhansu');
 
@@ -60,13 +60,17 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 		try {
 			setLoading(true);
 			const urlPhieuDangKyDeXuat = await buildUpLoadFile(values, 'urlPhieuDangKyDeXuat');
-			const recSinhVien = danhSach.find((item) => item.ssoId === values?.chuTriDeTai?.userId);
+			let recSinhVien = danhSach.find((item) => item.ssoId === values?.chuTriDeTai?.userId);
+			if (!recSinhVien?.ssoId) {
+				const res = await getModel({ ssoId: values?.chuTriDeTai?.userId });
+				recSinhVien = res?.[0] ?? {};
+			}
 			const recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
 			const recDonVi = danhSachDonVi?.find((item) => item.maDonVi === values?.chuTriDeTai?.maDonVi);
 			const dangKyKhcn = {
 				...record?.dangKyKhcn,
 				...values,
-				donViChuTri: danhSachDonVi?.find((item) => item.maDonVi === values?.maDonViChuTri)?.ten,
+				donViChuTri: 'Học viện Phụ nữ Việt Nam',
 				urlPhieuDangKyDeXuat,
 				kinhPhi: values?.kinhPhi
 					? {
@@ -269,11 +273,11 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 							<Input placeholder='Số tài khoản ngân hàng' />
 						</Form.Item>
 					</Col>
-					<Col xs={24} md={24}>
+					{/* <Col xs={24} md={24}>
 						<Form.Item name={'maDonViChuTri'} label='Cơ quan chủ trì đề tài' rules={[...rules.required, ...rules.text]}>
 							<SelectDonVi />
 						</Form.Item>
-					</Col>
+					</Col> */}
 					<Col xs={24} lg={24}>
 						<Form.Item
 							name={['mucTieuDeTai']}

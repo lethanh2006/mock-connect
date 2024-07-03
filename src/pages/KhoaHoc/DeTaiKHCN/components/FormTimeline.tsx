@@ -1,7 +1,8 @@
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
+import { ELoaiDeTaiCaNhan } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import rules from '@/utils/rules';
-import { Button, Card, Form, Input, message } from 'antd';
+import { Button, Card, Form, Input, Select, message } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -9,7 +10,7 @@ const FormTimeline = (props: { onCancel: any; record?: DeTaiKHCN.TimelineThuyetM
 	const [form] = Form.useForm();
 	const { record, edit } = props;
 	const { record: recDeTai, setRecord: setRecDeTai } = useModel('khoahoc.detaikhcn');
-
+	const isDeTaiTapThe = recDeTai?.dangKyKhcn?.loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE;
 	useEffect(() => {
 		if (record && edit) {
 			form.setFieldsValue({
@@ -21,12 +22,17 @@ const FormTimeline = (props: { onCancel: any; record?: DeTaiKHCN.TimelineThuyetM
 		}
 	}, [record]);
 
-	const onFinish = async (values: DeTaiKHCN.TimelineThuyetMinh & { thoiGian: any[] }) => {
+	const onFinish = async (values: any) => {
 		const payload = {
 			...values,
 			startDate: values?.thoiGian?.[0],
 			endDate: values?.thoiGian?.[1],
 			thoiGian: undefined,
+			danhSachNguoiThucHien: values?.danhSachNguoiThucHien
+				? values?.danhSachNguoiThucHien?.map((item: string) =>
+						recDeTai?.dangKyKhcn?.danhSachCTV?.find((ele) => ele.userId === item || ele.ten === item),
+				  ) ?? []
+				: [recDeTai?.dangKyKhcn?.chuTriDeTai],
 		};
 
 		if (edit && record && recDeTai) {
@@ -82,6 +88,23 @@ const FormTimeline = (props: { onCancel: any; record?: DeTaiKHCN.TimelineThuyetM
 				>
 					<MyDateRangePicker placeholder={['Từ ngày', 'đến ngày']} format={'DD/MM/YYYY'} />
 				</Form.Item>
+				{isDeTaiTapThe && (
+					<Form.Item
+						name={['danhSachNguoiThucHien']}
+						label='Người thực hiện'
+						rules={[...rules.required]}
+						style={{ marginBottom: 10 }}
+					>
+						<Select
+							mode='multiple'
+							options={recDeTai?.dangKyKhcn?.danhSachCTV?.map((item) => ({
+								value: item.userId || item.ten,
+								label: item.ten,
+							}))}
+							placeholder='Người thực hiện'
+						/>
+					</Form.Item>
+				)}
 
 				<div className='form-footer'>
 					<Button htmlType='submit' type='primary'>

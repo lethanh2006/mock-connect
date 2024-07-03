@@ -83,7 +83,7 @@ const FormSanPhamDangIII = (props: {
 
 				<Form.Item
 					name={['duKienNoiCongBo']}
-					label='Dự kiến nơi công bố (Tạp chí, NXB)'
+					label='Dự kiến nơi công bố'
 					rules={[...rules.text]}
 					style={{ marginBottom: 10 }}
 				>
