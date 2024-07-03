@@ -27,13 +27,13 @@ const TableTimeline = (props: {
 
 	const columns: IColumn<DeTaiKHCN.TimelineThuyetMinh>[] = [
 		{
-			title: 'Các nội dung thực hiện chủ yếu',
+			title: 'Nội dung công việc',
 			dataIndex: 'noiDungTimeline',
 			width: 250,
 			// align: 'center',
 		},
 		{
-			title: 'Sản phẩm phải đạt',
+			title: 'Kết quả dự kiến',
 			width: 200,
 			dataIndex: 'ketQuaDuKien',
 		},
@@ -45,6 +45,17 @@ const TableTimeline = (props: {
 			render: (val: string, rec) => (
 				<div>
 					{moment(val).format('DD/MM/YYYY')} - {moment(rec.endDate).format('DD/MM/YYYY')}
+				</div>
+			),
+		},
+		{
+			title: 'Người thực hiện',
+			width: 200,
+			render: (rec: DeTaiKHCN.TimelineThuyetMinh) => (
+				<div>
+					{rec?.danhSachNguoiThucHien?.map((item) => (
+						<div key={item.userId || item.ten}>{item.ten}</div>
+					))}
 				</div>
 			),
 		},
