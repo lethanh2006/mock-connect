@@ -26,6 +26,7 @@ declare module SinhVien {
 		ten: string;
 		firstName: string;
 		lastName: string;
+		choPhepSua: boolean;
 		gioiTinh: EGioiTinh;
 
 		quocTich: string;
@@ -273,10 +274,17 @@ declare module SinhVien {
 
 	export interface ITienTrinhTotNghiep {
 		diemTichLuyToiThieu: number;
-		thongTinCdr?: ChuongTrinhDaoTao.IChungChiCTDT[];
+		thongTinCdr?: TChungChiDauRaSv[];
 		kqhtHocKy?: KetQuaHocKy.IRecord;
 		ctdtKeHoach?: ChuongTrinhDaoTao.IRecord;
 	}
+
+	export type TChungChiDauRaSv = ChuongTrinhDaoTao.IChungChiCTDT & {
+		/** Chứng chỉ sinh viên đã đạt và còn hiệu lực */
+		chungChiDaDat: ChungChi.IRecord[];
+		/** Có đủ điều kiện đầu ra hay ko? */
+		datChuanDauRa: boolean;
+	};
 
 	export type TDieuKienTotNghiep = {
 		isDuDieuKienTBC: boolean;

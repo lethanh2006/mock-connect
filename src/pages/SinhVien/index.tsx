@@ -14,8 +14,9 @@ const ThongTinSinhVienPage = () => {
 	const { record, loading, setLoading } = useModel('sinhvien.sinhvien');
 	const [isCapNhat, setIsCapNhat] = useState<boolean>(false);
 	const { record: recordDot, setRecord: setRecordDot } = useModel('daotao.dotcapnhathoso');
-	const ngoaiThoiGian =
-		moment().isBefore(moment(recordDot?.thoiGianBatDau)) || moment().isAfter(moment(recordDot?.thoiGianKetThuc));
+	const ngoaiThoiGian = record?.choPhepSua
+		? false
+		: moment().isBefore(moment(recordDot?.thoiGianBatDau)) || moment().isAfter(moment(recordDot?.thoiGianKetThuc));
 	// const [currentStep, setCurrentStep] = useState<string>('0');
 	// const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
 
@@ -65,7 +66,7 @@ const ThongTinSinhVienPage = () => {
 							<>
 								<Tooltip
 									title={
-										ngoaiThoiGian
+										(ngoaiThoiGian&&!record?.choPhepSua)
 											? `Ngoài thời gian cập nhật hồ sơ (${moment(recordDot?.thoiGianBatDau).format(
 													'HH:mm DD/MM/YYYY',
 											  )} - ${moment(recordDot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})`

@@ -1,4 +1,4 @@
-import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
+import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row } from 'antd';
 import { history, useModel } from 'umi';
@@ -7,7 +7,7 @@ import ModalChungChiCTDT from './ModalChungChi';
 const DieuKienChungChiSection = () => {
 	const { record, setRecordChungChi, setVisibleForm } = useModel('sinhvien.tientrinhtotnghiep');
 
-	const handleView = (rec: ChuongTrinhDaoTao.IChungChiCTDT) => {
+	const handleView = (rec: SinhVien.TChungChiDauRaSv) => {
 		setRecordChungChi(rec);
 		setVisibleForm(true);
 	};
