@@ -3,14 +3,14 @@ import type { IColumn } from '@/components/Table/typing';
 import UploadFile from '@/components/Upload/UploadFile';
 import { EDangSanPham } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
+import { primaryColor } from '@/services/base/constant';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Divider, Form, Modal, Popconfirm, Space, Tooltip, Tag } from 'antd';
+import { Button, Divider, Form, Modal, Popconfirm, Space, Tag, Tooltip } from 'antd';
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
 import FormSanPhamDangI from './FormSanPhamDangI';
 import FormSanPhamDangII from './FormSanPhamDangII';
 import FormSanPhamDangIII from './FormSanPhamDangIII';
-import { primaryColor } from '@/services/base/constant';
 
 const TableSanPham = (props: {
 	mode: 'view' | 'edit';
@@ -156,7 +156,7 @@ const TableSanPham = (props: {
 			dataIndex: 'yeuCauLoai23',
 		},
 		{
-			title: 'Dự kiến nơi công bố (Tạp chí, NXB)',
+			title: 'Dự kiến nơi công bố',
 			width: 200,
 			dataIndex: 'duKienNoiCongBo',
 		},

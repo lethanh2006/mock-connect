@@ -13,7 +13,6 @@ import {
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
-import { currencyFormat } from '@/utils/utils';
 import {
 	DeleteOutlined,
 	EditOutlined,
@@ -140,10 +139,12 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
 			width: 150,
 			filterType: 'string',
-			align: 'center',
+			// align: 'center',
 			render: (val, rec) => (
 				<div>
-					<div>{rec.dangKyKhcn.chuTriDeTai.ten}</div>
+					<div>
+						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
+					</div>
 					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
 						<div key={item.maDinhDanh}>{item.ten}</div>
 					))}
@@ -491,17 +492,19 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			onCell,
 		},
 		{
-			title: 'Sinh viên chịu trách nhiệm thực hiện chính/Thành viên tham gia',
+			title: 'Sinh viên thực hiện đề tài',
 			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
 			width: 200,
 			filterType: 'string',
 			// align: 'center',
 			render: (val, rec) => (
 				<div>
-					<div>- {rec.dangKyKhcn.chuTriDeTai.ten} (Sinh viên chịu trách nhiệm thực hiện chính)</div>
+					<div>
+						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
+					</div>
 					{rec.dangKyKhcn.danhSachCTV.map((item) => (
 						<div key={item.userId || item.ten}>
-							- {item.ten} ({item.danhSachVaiTroDeTai.join(', ')})
+							{item.ten} ({item.danhSachVaiTroDeTai.join(', ')})
 						</div>
 					))}
 				</div>
