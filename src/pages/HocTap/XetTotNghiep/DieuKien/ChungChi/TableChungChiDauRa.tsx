@@ -47,7 +47,7 @@ const TableChungChiDauRa = () => {
 
 	return (
 		<>
-			<div className='fw500'>Danh sách chứng chỉ đủ điều kiện chuẩn đầu ra</div>
+			<div>Danh sách chứng chỉ đủ điều kiện chuẩn đầu ra của chương trình đào tạo</div>
 			<TableStaticData columns={columns} data={recordChungChi?.danhSachChungChiCtdtCdr ?? []} size='small' addStt />
 		</>
 	);

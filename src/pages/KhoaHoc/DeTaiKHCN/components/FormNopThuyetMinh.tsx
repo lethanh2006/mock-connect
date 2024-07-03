@@ -4,7 +4,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 
 import {
 	EDangSanPham,
-	ELinhVucDeTai,
+	ELoaiDeTaiCaNhan,
 	EMenhGia,
 	EPhaseDeTaiKHCN,
 	ETrangThaiNopDeCuong,
@@ -13,11 +13,12 @@ import {
 
 import SelectSinhVienDebounce from '@/pages/SinhVien/components/Select';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
+import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import { primaryColor } from '@/services/base/constant';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { AutoComplete, Button, Card, Col, Form, Input, InputNumber, Row, Select } from 'antd';
+import { Button, Card, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import TableSanPham from './TableSanPham';
@@ -37,21 +38,18 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 		giangVienPutMyDeTaiPhaseXetDuyetOrDeCuongOrNghiemThuModel,
 	} = useModel('khoahoc.detaikhcn');
 
-	const { danhSachAllSinhVien } = useModel('sinhvien.sinhvien');
-
+	const { danhSach, getModel } = useModel('sinhvien.sinhvien');
+	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
 	const [menhGia, setMenhGia] = useState(record?.dangKyKhcn?.kinhPhi?.menhGia ?? EMenhGia.VND);
-
+	const isDeTaiTapThe = record?.dangKyKhcn?.loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE;
 	useEffect(() => {
 		if (!visibleForm) resetFieldsForm(form);
 		else if (record?._id) {
-			const recChuTri = danhSachAllSinhVien?.find((item) => item.ssoId === record?.dangKyKhcn?.chuTriDeTai?.userId);
 			const rec = {
 				...record?.dangKyKhcn,
 				...record?.deCuongKhcn,
 				chuTriDeTai: {
 					...record?.dangKyKhcn?.chuTriDeTai,
-					email: record?.dangKyKhcn?.chuTriDeTai?.email || recChuTri?.email,
-					soDienThoai: record?.dangKyKhcn?.chuTriDeTai?.soDienThoai || recChuTri?.sdtCaNhan,
 				},
 				thoiGianDuKienThucHien: [record.dangKyKhcn.thoiGianThucHienBatDau, record.dangKyKhcn.thoiGianThucHienKetThuc],
 			};
@@ -66,7 +64,12 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 			setLoading(true);
 			const deCuongUrl = await buildUpLoadFile(values, 'deCuongUrl');
 			const banGiaiTrinhUrl = await buildUpLoadFile(values, 'banGiaiTrinhUrl');
-			const recSinhVien = danhSachAllSinhVien.find((item) => item.ssoId === values?.chuTriDeTai?.userId);
+			let recSinhVien = danhSach.find((item) => item.ssoId === values?.chuTriDeTai?.userId);
+			const recDonVi = danhSachDonVi?.find((item) => item.maDonVi === values?.chuTriDeTai?.maDonVi);
+			if (!recSinhVien?.ssoId) {
+				const res = await getModel({ ssoId: values?.chuTriDeTai?.userId });
+				recSinhVien = res?.[0] ?? {};
+			}
 			const payload = {
 				deCuongKhcn: {
 					...record?.deCuongKhcn,
@@ -78,12 +81,14 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 						...values?.kinhPhi,
 						menhGia,
 					},
+					donViChuTri: 'Học viện Phụ nữ Việt Nam',
 					chuTriDeTai: {
 						...values?.chuTriDeTai,
-						ten: recSinhVien ? `${recSinhVien?.hoDem} ${recSinhVien?.ten}` : record?.dangKyKhcn?.chuTriDeTai?.ten,
-						maDinhDanh: recSinhVien?.maCanBo,
-						maDonVi: recSinhVien?.donViChinh?.maDonVi,
-						tenDonVi: recSinhVien?.donViChinh?.ten,
+						ten: recSinhVien
+							? recSinhVien?.ten || `${recSinhVien?.lastName} ${recSinhVien?.firstName}`
+							: record?.dangKyKhcn?.chuTriDeTai?.ten,
+						maDinhDanh: recSinhVien?.ma,
+						tenDonVi: recDonVi?.ten || '',
 					},
 					thoiGianThucHienBatDau: values?.thoiGianDuKienThucHien?.[0],
 					thoiGianThucHienKetThuc: values?.thoiGianDuKienThucHien?.[1],
@@ -110,7 +115,7 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 	};
 
 	return (
-		<Card title={(edit ? 'Chỉnh sửa ' : 'Thêm mới ') + 'thuyết minh'}>
+		<Card title={(edit ? 'Chỉnh sửa ' : 'Thêm mới ') + 'đề cương'}>
 			<Form onFinish={onFinish} form={form} layout='vertical'>
 				{record?.phaseDeTaiKhcn === EPhaseDeTaiKHCN.NOP_DE_CUONG &&
 					record?.trangThaiNopDeCuong !== ETrangThaiNopDeCuong.CHUA_TIEP_NHAN && (
@@ -133,7 +138,7 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 						</Form.Item>
 					</Col>
 
-					<Col xs={24} md={12}>
+					<Col xs={24} lg={12}>
 						<Form.Item
 							name={['chuTriDeTai', 'userId']}
 							label='Sinh viên chịu trách nhiệm thực hiện chính'
@@ -141,15 +146,30 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 						>
 							<SelectSinhVienDebounce
 								onChange={(val) => {
-									const recChuTri = danhSachAllSinhVien.find((item) => item.ssoId === val);
+									const recSinhVien = danhSach.find((item) => item.ssoId === val);
 									form.setFieldsValue({
 										chuTriDeTai: {
-											hocHam: recChuTri?.hocHam || record?.dangKyKhcn?.chuTriDeTai?.hocHam,
-											hocVi: recChuTri?.hocVi || record?.dangKyKhcn?.chuTriDeTai?.hocVi,
-											ngaySinh: recChuTri?.ngaySinh || record?.dangKyKhcn?.chuTriDeTai?.ngaySinh,
-											idDonVi: recChuTri?.donViChinhId || record?.dangKyKhcn?.chuTriDeTai?.idDonVi,
-											email: recChuTri?.email || record?.dangKyKhcn?.chuTriDeTai?.email,
-											soDienThoai: recChuTri?.sdtCaNhan || record?.dangKyKhcn?.chuTriDeTai?.soDienThoai,
+											ngaySinh: recSinhVien?.ngaySinh || record?.dangKyKhcn?.chuTriDeTai?.ngaySinh,
+											maDonVi: recSinhVien?.nganh?.maDonVi || record?.dangKyKhcn?.chuTriDeTai?.maDonVi,
+											noiSinh: recSinhVien?.tinhTpNoiSinh || record?.dangKyKhcn?.chuTriDeTai?.noiSinh,
+											maDinhDanh: recSinhVien?.ma || record?.dangKyKhcn?.chuTriDeTai?.maDinhDanh,
+											tenLopHanhChinh:
+												recSinhVien?.lopHanhChinhList?.[0]?.ten || record?.dangKyKhcn?.chuTriDeTai?.tenLopHanhChinh,
+											diaChi:
+												[
+													recSinhVien?.hoKhauThuongTru?.diaChi,
+													recSinhVien?.hoKhauThuongTru?.tenXaPhuong,
+													recSinhVien?.hoKhauThuongTru?.tenQH,
+													recSinhVien?.hoKhauThuongTru?.tenTP,
+												]
+													?.filter((item) => item)
+													?.join(', ')
+													?.trim() || record?.dangKyKhcn?.chuTriDeTai?.diaChi,
+											soDienThoai: recSinhVien?.soDienThoai || record?.dangKyKhcn?.chuTriDeTai?.soDienThoai,
+											email: recSinhVien?.email || record?.dangKyKhcn?.chuTriDeTai?.email,
+											cccd: recSinhVien?.cccd || record?.dangKyKhcn?.chuTriDeTai?.cccd,
+											soTaiKhoanNganHang:
+												recSinhVien?.soTaiKhoanNganHang || record?.dangKyKhcn?.chuTriDeTai?.soTaiKhoanNganHang,
 										},
 									});
 								}}
@@ -157,23 +177,34 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 						</Form.Item>
 					</Col>
 
-					<Col xs={24} md={12}>
-						<Form.Item
-							name={['chuTriDeTai', 'chuyenNganhDaoTaoCaoNhat']}
-							label='Chuyên ngành đào tạo cao nhất'
-							rules={[...rules.required]}
-						>
-							<Input placeholder='Chuyên ngành' />
-						</Form.Item>
-					</Col>
-					<Col xs={24} md={12}>
+					<Col xs={24} lg={12}>
 						<Form.Item name={['chuTriDeTai', 'ngaySinh']} label='Ngày sinh' rules={[...rules.required]}>
 							<MyDatePicker format={'DD/MM/YYYY'} placeholder='Ngày sinh' />
 						</Form.Item>
 					</Col>
-					<Col xs={24} md={12}>
-						<Form.Item name={['chuTriDeTai', 'idDonVi']} label='Đơn vị công tác' rules={[...rules.required]}>
+					<Col xs={24} lg={12}>
+						<Form.Item name={['chuTriDeTai', 'noiSinh']} label='Nơi sinh' rules={[...rules.required]}>
+							<Input placeholder='Nơi sinh' />
+						</Form.Item>
+					</Col>
+					<Col xs={24} lg={12}>
+						<Form.Item name={['chuTriDeTai', 'maDinhDanh']} label='Mã sinh viên' rules={[...rules.required]}>
+							<Input placeholder='Mã sinh viên' />
+						</Form.Item>
+					</Col>
+					<Col xs={24} lg={12}>
+						<Form.Item name={['chuTriDeTai', 'tenLopHanhChinh']} label='Lớp' rules={[...rules.required]}>
+							<Input placeholder='Lớp' />
+						</Form.Item>
+					</Col>
+					<Col xs={24} lg={12}>
+						<Form.Item name={['chuTriDeTai', 'maDonVi']} label='Khoa' rules={[...rules.required]}>
 							<SelectDonVi />
+						</Form.Item>
+					</Col>
+					<Col xs={24} lg={12}>
+						<Form.Item name={['chuTriDeTai', 'diaChi']} label='Địa chỉ liên hệ' rules={[...rules.required]}>
+							<Input placeholder='Địa chỉ liên hệ' />
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={12}>
@@ -190,34 +221,52 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 							<Input placeholder='Email' />
 						</Form.Item>
 					</Col>
-					<Col span={24}>
-						<div>Thư ký và những người thực hiện đề tài:</div>
-						<TableThanhVien
-							type='DeTai'
-							fieldName='danhSachCTV'
-							mode='edit'
-							data={record?.dangKyKhcn?.danhSachCTV ?? []}
-						/>
-					</Col>
 					<Col xs={24} md={12}>
-						<Form.Item name={'donViChuTri'} label='Cơ quan chủ trì đề tài' rules={[...rules.required, ...rules.text]}>
-							<Input placeholder='Cơ quan chủ trì đề tài' />
+						<Form.Item name={['chuTriDeTai', 'cccd']} label='Số CCCD' rules={[...rules.required, ...rules.CMND]}>
+							<Input placeholder='Số CCCD' />
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={12}>
-						<Form.Item name={'thuocLinhVuc'} label='Lĩnh vực khoa học' rules={[...rules.required]}>
-							<AutoComplete
-								options={Object.values(ELinhVucDeTai).map((item) => ({ value: item, label: item }))}
-								placeholder='Lĩnh vực khoa học (chọn hoặc nhập lĩnh vực khác)'
+						<Form.Item
+							extra={'Sinh viên nhập đầy đủ số tài khoản và tên chi nhánh ngân hàng'}
+							name={['chuTriDeTai', 'soTaiKhoanNganHang']}
+							label='Số tài khoản ngân hàng'
+							rules={[...rules.required, ...rules.text]}
+						>
+							<Input placeholder='Số tài khoản ngân hàng' />
+						</Form.Item>
+					</Col>
+					<Col xs={24} lg={12}>
+						<Form.Item
+							name={['nguoiHuongDan', 'userId']}
+							label='Người hướng dẫn'
+							// rules={[...rules.required]}
+						>
+							<SelectNhanSuDebounce />
+						</Form.Item>
+					</Col>
+					{/* <Col xs={24} md={24}>
+						<Form.Item name={'maDonViChuTri'} label='Cơ quan chủ trì đề tài' rules={[...rules.required, ...rules.text]}>
+							<SelectDonVi />
+						</Form.Item>
+					</Col> */}
+					{isDeTaiTapThe && (
+						<Col span={24}>
+							<div>Thành viên đề tài:</div>
+							<TableThanhVien
+								type='DeTai'
+								fieldName='danhSachCTV'
+								mode='edit'
+								data={record?.dangKyKhcn?.danhSachCTV ?? []}
 							/>
-						</Form.Item>
-					</Col>
+						</Col>
+					)}
 					<Col span={24}>
-						<div>Kế hoạch, phương án tổ chức thực hiện:</div>
+						<div>Kế hoạch/Phân công thực hiện:</div>
 						<TableTimeline mode='edit' data={record?.deCuongKhcn?.timeline ?? []} />
 						<br />
 					</Col>
-					<Col span={24}>
+					{/* <Col span={24}>
 						<div>
 							Sản phẩm chính của đề tài (Dạng I){' '}
 							<i>
@@ -232,8 +281,8 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 							data={record?.deCuongKhcn?.sanPhamDeCuongDangI ?? []}
 						/>
 						<br />
-					</Col>
-					<Col span={24}>
+					</Col> */}
+					{/* <Col span={24}>
 						<div>
 							Sản phẩm chính của đề tài (Dạng II){' '}
 							<i>
@@ -250,11 +299,9 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 							data={record?.deCuongKhcn?.sanPhamDeCuongDangII ?? []}
 						/>
 						<br />
-					</Col>
+					</Col> */}
 					<Col span={24}>
-						<div>
-							Sản phẩm chính của đề tài (Dạng III) <i>Bài báo; Sách chuyên khảo và các sản phẩm khác</i>
-						</div>
+						<div>Sản phẩm dự kiến và sản phẩm ứng dụng của đề tài</div>
 						<TableSanPham
 							phase='deCuongKhcn'
 							type={EDangSanPham.DANG_SAN_PHAM_III}
@@ -264,16 +311,12 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 						<br />
 					</Col>
 					<Col xs={24} md={12}>
-						<Form.Item
-							name={['thoiGianDuKienThucHien']}
-							label='Thời gian dự kiến thực hiện đề tài'
-							rules={[...rules.required]}
-						>
+						<Form.Item name={['thoiGianDuKienThucHien']} label='Thời gian thực hiện đề tài' rules={[...rules.required]}>
 							<MyDateRangePicker picker='month' format={'MM/YYYY'} placeholder={['Từ tháng', 'đến tháng']} />
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={12}>
-						<Form.Item name={['kinhPhi', 'kinhPhi']} label='Tổng kinh phí' rules={[...rules.required]}>
+						<Form.Item name={['kinhPhi', 'kinhPhi']} label='Kinh phí thực hiện' rules={[...rules.required]}>
 							<InputNumber
 								formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 								style={{ width: '100%' }}

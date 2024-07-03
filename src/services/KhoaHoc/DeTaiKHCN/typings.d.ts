@@ -60,6 +60,7 @@ declare module DeTaiKHCN {
 		ketQuaDuKien: string;
 		kinhPhiDuKien: number;
 		sanPhamUrl: string;
+		danhSachNguoiThucHien: ThanhVienDeTai[];
 	}
 
 	export interface DangKyDeXuat {
@@ -112,6 +113,7 @@ declare module DeTaiKHCN {
 		ketQuaDuKien: string;
 		kinhPhiDuKIen: number;
 		sanPhamUrl: string[];
+		danhSachNguoiThucHien?: ThanhVienDeTai[];
 	}
 
 	export interface SanPhamThuyetMinh {
