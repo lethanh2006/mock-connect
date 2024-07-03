@@ -85,10 +85,6 @@ declare module ChuongTrinhDaoTao {
 		loaiChungChi?: ChungChi.ILoaiChungChi;
 
 		danhSachChungChiCtdtCdr?: IChuanDauRa[];
-
-		// Get tiến trình sinh viên
-		datChuanDauRa?: boolean;
-		chungChiDaDat?: SinhVien.IChungChiSinhVien[];
 	}
 
 	export interface IChuanDauRa {
