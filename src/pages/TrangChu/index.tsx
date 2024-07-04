@@ -3,6 +3,7 @@ import LichDashboard from '../Calendar/LichDashboard';
 import TinTucDashboardWrapper from '../TinTuc/Wrapper/Dashboard';
 import CardLopHocPhan from './components/CardLopHocPhan';
 import CardTienTrinhTotNghiep from './components/CardTienTrinhTotNghiep';
+import './components/style.less';
 
 const TrangChu = () => {
 	return (
