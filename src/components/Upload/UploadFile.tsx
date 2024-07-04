@@ -19,8 +19,20 @@ const UploadFile = (props: {
 	otherProps?: UploadProps;
 	isAvatar?: boolean;
 	isAvatarSmall?: boolean;
+	disabled?: boolean;
 }) => {
-	const { value, onChange, otherProps, drag, buttonSize, buttonDescription, accept, isAvatar, isAvatarSmall } = props;
+	const {
+		value,
+		onChange,
+		otherProps,
+		drag,
+		buttonSize,
+		buttonDescription,
+		accept,
+		isAvatar,
+		isAvatarSmall,
+		disabled,
+	} = props;
 	const limit = props.maxCount || 1;
 	const [fileList, setFileList] = useState<any[]>();
 	const [previewOpen, setPreviewOpen] = useState(false);
@@ -110,6 +122,7 @@ const UploadFile = (props: {
 		return (
 			<>
 				<Upload
+					disabled={disabled}
 					customRequest={({ onSuccess }) => setTimeout(() => onSuccess && onSuccess('ok'), 0)}
 					listType='picture-card'
 					className={`avatar-uploader ${isAvatarSmall ? 'avatar-small' : undefined}`}

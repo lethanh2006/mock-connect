@@ -87,6 +87,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 				<Col span={24} sm={9} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
 					<Form.Item className='alignUploadCenter' name='anhDaiDienUrl' label={''}>
 						<UploadFile
+							disabled
 							otherProps={{
 								style: { textAlign: 'center' },
 							}}
