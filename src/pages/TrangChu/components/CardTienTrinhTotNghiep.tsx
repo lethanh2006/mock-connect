@@ -1,30 +1,26 @@
-import { Card, Col, Row, Statistic } from 'antd';
-import Progress from 'antd/es/progress';
+import { Card, Col, Progress, Row, Statistic } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 
 const CardTienTrinhTotNghiep = () => {
 	const {
 		getTienTrinhTotNghiepModel,
-
 		record: recTienTrinh,
 		dieuKienTotNghiep,
 		loading,
 	} = useModel('sinhvien.tientrinhtotnghiep');
-	const { getKhoaNganhMeModel, khoaNganhMe } = useModel('sinhvien.sinhvien');
+	const { getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
-		getKhoaNganhMeModel();
+		getKhoaNganhMeModel().then((res) => {
+			if (res?.khoaNganhChinh?.ma) getTienTrinhTotNghiepModel(res?.khoaNganhChinh?.ma);
+		});
 	}, []);
-
-	useEffect(() => {
-		if (khoaNganhMe?.khoaNganhChinh?.ma) getTienTrinhTotNghiepModel(khoaNganhMe?.khoaNganhChinh?.ma);
-	}, [khoaNganhMe]);
 
 	return (
 		<Row gutter={[16, 16]}>
-			<Col span={24} md={8}>
-				<Card loading={loading}>
+			<Col span={24} md={8} className='dashboard-card-with-icon'>
+				<Card loading={loading} style={{ cursor: 'pointer' }} onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap')}>
 					<Statistic
 						valueStyle={{
 							color: `${dieuKienTotNghiep?.isDuDieuKienTBC ? '#52c41a' : '#ff4d4f'}`,
@@ -37,8 +33,8 @@ const CardTienTrinhTotNghiep = () => {
 				</Card>
 			</Col>
 
-			<Col span={24} md={8}>
-				<Card loading={loading}>
+			<Col span={24} md={8} className='dashboard-card-with-icon'>
+				<Card loading={loading} style={{ cursor: 'pointer' }} onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap')}>
 					<Statistic
 						valueStyle={{ fontSize: 14 }}
 						title='Tín chỉ tích lũy'
@@ -49,8 +45,8 @@ const CardTienTrinhTotNghiep = () => {
 				</Card>
 			</Col>
 
-			<Col span={24} md={8}>
-				<Card loading={loading}>
+			<Col span={24} md={8} className='dashboard-card-with-icon'>
+				<Card loading={loading} style={{ cursor: 'pointer' }} onClick={() => history.push('/tai-chinh/cong-no')}>
 					<Statistic title='Công nợ' value={0} />
 				</Card>
 			</Col>
