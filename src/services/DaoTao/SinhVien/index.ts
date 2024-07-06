@@ -46,5 +46,5 @@ export async function postChungChiSinhVien(payLoad: any) {
 }
 
 export const putLyLichMe = (payload: any) => {
-	return axios.put(`${ipDaoTao}/sinh-vien/me`);
+	return axios.put(`${ipDaoTao}/sinh-vien/me`, payload);
 };
