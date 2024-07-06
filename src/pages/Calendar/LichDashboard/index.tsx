@@ -83,10 +83,10 @@ const LichDashboard = () => {
 				const responses = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
 				const data = responses.flat();
 				const nextState = data.reduce<State>((result, item) => {
-					if (!item.thoiGianBatDau) {
+					if (!item?.thoiGianBatDau) {
 						return result;
 					}
-					const ngayMoment = moment(item.thoiGianBatDau);
+					const ngayMoment = moment(item?.thoiGianBatDau);
 					const ngayString = ngayMoment.format('YYYY-MM-DD');
 
 					return {
