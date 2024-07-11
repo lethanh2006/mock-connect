@@ -32,6 +32,16 @@ declare module UuDaiThanhToan {
 		idTransaction?: string;
 		thoiGianSuDung?: string;
 
+		maNamHoc: string;
+		tenNamHoc: string;
+		idDotThuTruocHocPhi: string;
+		dotThuTruocHocPhi: DotThuTruocHocPhi.IRecord;
+		transactionId: string;
+		transaction: GiaoDich.IRecord;
+		soLanApDungToiDa: number;
+		tongTienUuDai: number;
+		phanTramUuDai: number;
+
 		createdAt?: string;
 	}
 }

@@ -22,6 +22,7 @@ import { useModel } from 'umi';
 import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
 import Form from './components/Form';
 import StatGiaoDich from './components/Stat';
+import ModalNopTruocHocPhi from './components/NopTruocHocPhi';
 
 const GiaoDichPage = () => {
 	const {
@@ -29,13 +30,15 @@ const GiaoDichPage = () => {
 		page,
 		limit,
 		setRecord,
-		setVisibleForm,
+		// setVisibleForm,
 		thanhToanMomoModel,
 		visibleHuongDan,
 		setVisibleHuongDan,
 		huyThanhToanModel,
 	} = useModel('taichinh.giaodich');
+	const { getModel: getModelDotThu, setRecord: setRecDotThu, loading } = useModel('taichinh.dotthutruochocphi');
 	const [kieuThanhToan, setKieuThanhToan] = useState<ETransactionType | undefined>(ETransactionType.DEPOSIT);
+	const [visibleHocPhi, setVisibleHocPhi] = useState<boolean>(false);
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -199,18 +202,21 @@ const GiaoDichPage = () => {
 						]}
 						key='select'
 					/>,
-					// <ButtonExtend
-					// 	onClick={() => {
-					// 		setRecord(undefined);
-					// 		setVisibleForm(true);
-					// 	}}
-					// 	icon={<PlusCircleOutlined />}
-					// 	type='primary'
-					// 	className='btn-success'
-					// 	key='topup'
-					// >
-					// 	Nộp trước học phí
-					// </ButtonExtend>,
+
+					<ButtonExtend
+						loading={loading}
+						onClick={() => {
+							getModelDotThu(undefined, undefined, { _id: 1 })
+								.then((res) => setRecDotThu(res?.[0]))
+								.then(() => setVisibleHocPhi(true));
+						}}
+						icon={<PlusCircleOutlined />}
+						type='primary'
+						className='btn-success'
+						key='topup'
+					>
+						Nộp trước học phí
+					</ButtonExtend>,
 				]}
 			>
 				<StatGiaoDich />
@@ -223,6 +229,8 @@ const GiaoDichPage = () => {
 					setVisibleHuongDan(false);
 				}}
 			/>
+
+			<ModalNopTruocHocPhi visibleForm={visibleHocPhi} setVisibleForm={setVisibleHocPhi} getData={getData} />
 		</>
 	);
 };
