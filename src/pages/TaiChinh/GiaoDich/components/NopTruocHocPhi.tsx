@@ -6,7 +6,7 @@ import { Alert, Button, Col, Descriptions, Form, Modal, Popconfirm, Row } from '
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import HuongDanThanhToan from '../ThanhToan/HuongDanThanhToan';
+import HuongDanThanhToan from '../../HoaDon/ThanhToan/HuongDanThanhToan';
 
 const ModalNopTruocHocPhi = (props: {
 	visibleForm: boolean;
@@ -46,7 +46,21 @@ const ModalNopTruocHocPhi = (props: {
 	const soTienUuDau = soTienPhaiDong * (record?.uuDai?.phanTramUuDai / 100);
 
 	const onFinish = (values: any) => {
-		dongTruocHocPhiModel({ ...values, paymentType })
+		const data = {
+			...values,
+			amount: soTienPhaiDong - soTienUuDau,
+			paymentType,
+			idDotThuTruocHocPhi: record?._id,
+			userMaKhoaSinhVien:
+				values?.maKhoaNganh === khoaNganhMe?.khoaNganhChinh?.ma
+					? khoaNganhMe?.khoaNganhChinh?.maKhoaSinhVien
+					: khoaNganhMe?.khoaNganhPhu?.maKhoaSinhVien,
+			userMaNganh:
+				values?.maKhoaNganh === khoaNganhMe?.khoaNganhChinh?.ma
+					? khoaNganhMe?.khoaNganhChinh?.maNganh
+					: khoaNganhMe?.khoaNganhPhu?.maNganh,
+		};
+		dongTruocHocPhiModel(data)
 			.then((rec) => {
 				if (getData) getData();
 				setVisibleForm(false);
