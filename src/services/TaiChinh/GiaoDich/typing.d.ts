@@ -55,6 +55,9 @@ declare module GiaoDich {
 	export type TDongTruocHocPhi = {
 		amount: number;
 		paymentType: ETransactionPaymentType;
+		idDotThuTruocHocPhi: string;
+		userMaKhoaSinhVien: string;
+		userMaNganh: string;
 	};
 
 	export type TThanhToan = {
