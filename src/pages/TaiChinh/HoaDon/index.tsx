@@ -5,16 +5,19 @@ import { type IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { UnorderedListOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Modal, Tag, notification } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SelectDotThu from '../DotThu/Select';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
+import ModalNopTruocHocPhi from './components/NopTruocHocPhi';
 
 const HoaDonPage = () => {
 	const { getModel, page, limit, setRecord, record } = useModel('taichinh.hoadon');
+	const { getModel: getModelDotThu, setRecord: setRecDotThu, loading } = useModel('taichinh.dotthutruochocphi');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
+	const [visibleHocPhi, setVisibleHocPhi] = useState<boolean>(false);
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -124,6 +127,22 @@ const HoaDonPage = () => {
 				modelName='taichinh.hoadon'
 				title='Công nợ'
 				widthDrawer={1000}
+				otherButtons={[
+					<ButtonExtend
+						loading={loading}
+						onClick={() => {
+							getModelDotThu(undefined, undefined, { _id: 1 })
+								.then((res) => setRecDotThu(res?.[0]))
+								.then(() => setVisibleHocPhi(true));
+						}}
+						icon={<PlusCircleOutlined />}
+						type='primary'
+						className='btn-success'
+						key='topup'
+					>
+						Nộp trước học phí
+					</ButtonExtend>,
+				]}
 			/>
 
 			<Modal
@@ -135,6 +154,8 @@ const HoaDonPage = () => {
 			>
 				<ThongTinThanhToan setVisible={setVisibleModal} getData={getData} />
 			</Modal>
+
+			<ModalNopTruocHocPhi visibleForm={visibleHocPhi} setVisibleForm={setVisibleHocPhi} getData={getData} />
 		</>
 	);
 };
