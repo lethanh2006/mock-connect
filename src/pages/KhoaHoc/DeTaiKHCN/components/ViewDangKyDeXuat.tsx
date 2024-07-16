@@ -79,8 +79,8 @@ const ViewDangKyDeXuat = (props: {
 				{props.mode === 'HoiDongXetChonDeXuat' && (
 					<Descriptions.Item span={6} label='Phiếu đánh giá xét chọn của Hội đồng'>
 						<span style={{ color: primaryColor }}>
-							{props.rec?.ketQuaHoiDongXetChonDeXuat?.ketQuaXetDuyet?.bienBanXetDuyetUrl ||
-							xetDuyetKhcn?.bienBanXetDuyetUrl ? (
+							{props.rec?.ketQuaHoiDongXetChonDeXuat?.ketQuaXetDuyet?.bienBanXetDuyetUrl?.length ||
+							xetDuyetKhcn?.bienBanXetDuyetUrl?.length ? (
 								<a
 									href={
 										props.rec?.ketQuaHoiDongXetChonDeXuat?.ketQuaXetDuyet?.bienBanXetDuyetUrl?.[0] ||
