@@ -40,6 +40,7 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 
 	const { danhSach, getModel } = useModel('sinhvien.sinhvien');
 	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
+	const { danhSach: danhSachCanBo } = useModel('tochucnhansu.nhansu');
 	const [menhGia, setMenhGia] = useState(record?.dangKyKhcn?.kinhPhi?.menhGia ?? EMenhGia.VND);
 	const isDeTaiTapThe = record?.dangKyKhcn?.loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE;
 	useEffect(() => {
@@ -70,6 +71,8 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 				const res = await getModel({ ssoId: values?.chuTriDeTai?.userId });
 				recSinhVien = res?.[0] ?? {};
 			}
+			const recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
+
 			const payload = {
 				deCuongKhcn: {
 					...record?.deCuongKhcn,
@@ -90,6 +93,17 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 						maDinhDanh: recSinhVien?.ma,
 						tenDonVi: recDonVi?.ten || '',
 					},
+					nguoiHuongDan: values?.nguoiHuongDan
+						? {
+								...values?.nguoiHuongDan,
+								ten: recCanBo ? `${recCanBo?.hoDem} ${recCanBo?.ten}` : record?.dangKyKhcn?.nguoiHuongDan?.ten,
+								maDinhDanh: recCanBo?.maCanBo,
+								maDonVi: recCanBo?.donViChinh?.maDonVi,
+								tenDonVi: recCanBo?.donViChinh?.ten,
+								hocHam: recCanBo?.hocHam || record?.dangKyKhcn?.nguoiHuongDan?.hocHam,
+								hocVi: recCanBo?.hocVi || record?.dangKyKhcn?.nguoiHuongDan?.hocVi,
+						  }
+						: null,
 					thoiGianThucHienBatDau: values?.thoiGianDuKienThucHien?.[0],
 					thoiGianThucHienKetThuc: values?.thoiGianDuKienThucHien?.[1],
 					sanPhamDeCuong: [
@@ -104,7 +118,7 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 			};
 
 			giangVienPutMyDeTaiPhaseXetDuyetOrDeCuongOrNghiemThuModel(record?._id, payload, 'de-cuong', props.getData)
-				.then(() => form.resetFields())
+				.then(() => {})
 				.catch((er) => {
 					setLoading(false);
 					console.log(er);
