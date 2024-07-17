@@ -65,16 +65,19 @@ const TableDeTaiQuyetDinh = (props: { mode: 'view' | 'edit' | 'duyet'; data: DeT
 			onCell,
 		},
 		{
-			title: 'Sinh viên chịu trách nhiệm thực hiện chính/Thành viên tham gia',
+			title: 'Sinh viên thực hiện đề tài',
 			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
 			width: 200,
-			// filterType: 'string',
+			align: 'center',
+			filterType: 'string',
 			// align: 'center',
 			render: (val, rec) => (
 				<div>
-					<div>- {rec.dangKyKhcn.chuTriDeTai.ten} (Sinh viên chịu trách nhiệm thực hiện chính)</div>
+					<div>
+						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
+					</div>
 					{rec.dangKyKhcn.danhSachCTV.map((item) => (
-						<div key={item.userId || item.ten}>- {item.ten}</div>
+						<div key={item.userId || item.ten}>{item.ten}</div>
 					))}
 				</div>
 			),

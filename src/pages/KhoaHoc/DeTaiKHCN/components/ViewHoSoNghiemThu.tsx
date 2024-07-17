@@ -6,6 +6,7 @@ import { useModel } from 'umi';
 import TableKeHoachUngDung from './TableKeHoachUngDung';
 import TableSanPham from './TableSanPham';
 import TableUngDungTrongHocVien from './TableUngDungTrongHocVien';
+import moment from 'moment';
 
 const ViewHoSoNghiemThu = (props: {
 	rec: DeTaiKHCN.IRecord;
@@ -120,10 +121,31 @@ const ViewHoSoNghiemThu = (props: {
 				</Descriptions.Item>
 
 				<Descriptions.Item span={3} label='Sinh viên chịu trách nhiệm thực hiện chính'>
-					{dangKyKhcn?.chuTriDeTai?.hocHam ?? ''} {dangKyKhcn?.chuTriDeTai?.hocVi ?? ''} {dangKyKhcn.chuTriDeTai.ten}
+					{dangKyKhcn.chuTriDeTai.ten}
 				</Descriptions.Item>
-				<Descriptions.Item span={3} label='Cơ quan chủ trì đề tài'>
-					{dangKyKhcn.donViChuTri}
+				<Descriptions.Item span={2} label='Mã sinh viên'>
+					{dangKyKhcn.chuTriDeTai.maDinhDanh}
+				</Descriptions.Item>
+				<Descriptions.Item span={2} label='Khoa'>
+					{dangKyKhcn.chuTriDeTai.tenDonVi}
+				</Descriptions.Item>
+				<Descriptions.Item span={2} label='Ngày sinh'>
+					{moment(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
+				</Descriptions.Item>
+				<Descriptions.Item span={2} label='Nơi sinh'>
+					{dangKyKhcn.chuTriDeTai.noiSinh}
+				</Descriptions.Item>
+				<Descriptions.Item span={6} label='Địa chỉ liên hệ'>
+					{dangKyKhcn.chuTriDeTai.diaChi}
+				</Descriptions.Item>
+				<Descriptions.Item span={3} label='Email'>
+					{dangKyKhcn.chuTriDeTai.email}
+				</Descriptions.Item>
+				<Descriptions.Item span={3} label='SĐT'>
+					{dangKyKhcn.chuTriDeTai.soDienThoai}
+				</Descriptions.Item>
+				<Descriptions.Item span={6} label='Số tài khoản và chi nhánh ngân hàng'>
+					{dangKyKhcn.chuTriDeTai.soTaiKhoanNganHang}
 				</Descriptions.Item>
 			</Descriptions>
 			<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
@@ -144,12 +166,12 @@ const ViewHoSoNghiemThu = (props: {
 						</a>
 					</Descriptions.Item>
 				) : null}
-				<Descriptions.Item
+				{/* <Descriptions.Item
 					label={'Sản phẩm của đề tài được công bố hoặc minh chứng ứng dụng trong thực tiễn (nếu có)'}
 					span={6}
 				>
 					{''}
-				</Descriptions.Item>
+				</Descriptions.Item> */}
 				{nghiemThuKhcn?.sanPham
 					?.filter((item) => item?.url?.length > 0)
 					?.map((item, index) => (
@@ -180,11 +202,11 @@ const ViewHoSoNghiemThu = (props: {
 					<br />
 				</>
 			) : null}
-			<Descriptions>
+			{/* <Descriptions>
 				<Descriptions.Item label='Nội dung ứng dụng khác'>
 					<div dangerouslySetInnerHTML={{ __html: nghiemThuKhcn?.noiDungUngDungKhac }} />
 				</Descriptions.Item>
-			</Descriptions>
+			</Descriptions> */}
 			{nghiemThuKhcn?.sanPhamDeCuongDangI?.length ? (
 				<>
 					<div>

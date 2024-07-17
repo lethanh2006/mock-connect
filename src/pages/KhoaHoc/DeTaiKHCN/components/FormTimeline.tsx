@@ -16,6 +16,7 @@ const FormTimeline = (props: { onCancel: any; record?: DeTaiKHCN.TimelineThuyetM
 			form.setFieldsValue({
 				...record,
 				thoiGian: record.startDate ? [record.startDate, record.endDate] : undefined,
+				danhSachNguoiThucHien: record?.danhSachNguoiThucHien?.map((item) => item?.userId || item?.ten),
 			});
 		} else {
 			form.setFieldsValue({ ...form });
@@ -30,7 +31,9 @@ const FormTimeline = (props: { onCancel: any; record?: DeTaiKHCN.TimelineThuyetM
 			thoiGian: undefined,
 			danhSachNguoiThucHien: values?.danhSachNguoiThucHien
 				? values?.danhSachNguoiThucHien?.map((item: string) =>
-						recDeTai?.dangKyKhcn?.danhSachCTV?.find((ele) => ele.userId === item || ele.ten === item),
+						[recDeTai?.dangKyKhcn?.chuTriDeTai, ...(recDeTai?.dangKyKhcn?.danhSachCTV ?? [])]?.find(
+							(ele) => ele?.userId === item || ele?.ten === item,
+						),
 				  ) ?? []
 				: [recDeTai?.dangKyKhcn?.chuTriDeTai],
 		};
@@ -97,10 +100,12 @@ const FormTimeline = (props: { onCancel: any; record?: DeTaiKHCN.TimelineThuyetM
 					>
 						<Select
 							mode='multiple'
-							options={recDeTai?.dangKyKhcn?.danhSachCTV?.map((item) => ({
-								value: item.userId || item.ten,
-								label: item.ten,
-							}))}
+							options={[recDeTai?.dangKyKhcn?.chuTriDeTai ?? {}, ...(recDeTai?.dangKyKhcn?.danhSachCTV ?? [])]?.map(
+								(item) => ({
+									value: item?.userId || item?.ten,
+									label: item?.ten,
+								}),
+							)}
 							placeholder='Người thực hiện'
 						/>
 					</Form.Item>
