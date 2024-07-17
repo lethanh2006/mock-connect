@@ -1,10 +1,9 @@
-import MyDatePicker from '@/components/MyDatePicker';
 import { EDangSanPham, ETrangThaiThucHien, ETrangThaiTienDo } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import { primaryColor } from '@/services/base/constant';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, Radio, Row, Select } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import TableSanPham from './TableSanPham';
@@ -22,7 +21,7 @@ const FormThucHienDeTai = (props: { getData: any }) => {
 		loading,
 		giangVienPutMyDeTaiPhaseXetDuyetOrDeCuongOrNghiemThuModel,
 	} = useModel('khoahoc.detaikhcn');
-
+	const ketLuanTienDo = Form.useWatch('ketLuanTienDo', form);
 	useEffect(() => {
 		if (!visibleForm) resetFieldsForm(form);
 		else if (record?._id) {
@@ -200,7 +199,7 @@ const FormThucHienDeTai = (props: { getData: any }) => {
 							<br />
 						</Col>
 					) : null}
-					<Col xs={24} md={12} lg={8}>
+					{/* <Col xs={24} md={12} lg={8}>
 						<Form.Item name={['daThucHienTamUng']} label='Đã thực hiện tạm ứng' rules={[...rules.required]}>
 							<Radio.Group
 								options={[
@@ -209,8 +208,8 @@ const FormThucHienDeTai = (props: { getData: any }) => {
 								]}
 							/>
 						</Form.Item>
-					</Col>
-					<Col xs={24} md={12} lg={8}>
+					</Col> */}
+					<Col xs={24}>
 						<Form.Item name={['ketLuanTienDo']} label='Kết luận' rules={[...rules.required]}>
 							<Select
 								placeholder='Kết luận'
@@ -218,11 +217,22 @@ const FormThucHienDeTai = (props: { getData: any }) => {
 							/>
 						</Form.Item>
 					</Col>
-					<Col xs={24} md={12} lg={8}>
+					<Col xs={24}>
+						<Form.Item
+							name={['ghiChuTienDo']}
+							label={ketLuanTienDo === ETrangThaiTienDo.DUNG_VOI_KE_HOACH ? 'Ghi chú (nếu có)' : 'Lý do'}
+							rules={ketLuanTienDo === ETrangThaiTienDo.DUNG_VOI_KE_HOACH ? undefined : [...rules.required]}
+						>
+							<Input.TextArea
+								placeholder={ketLuanTienDo === ETrangThaiTienDo.DUNG_VOI_KE_HOACH ? 'Ghi chú (nếu có)' : 'Lý do'}
+							/>
+						</Form.Item>
+					</Col>
+					{/* <Col xs={24} md={12} lg={8}>
 						<Form.Item name={['duKienLichBaoVe']} label='Dự kiến lịch bảo vệ'>
 							<MyDatePicker format={'DD/MM/YYYY'} placeholder='Chọn ngày' />
 						</Form.Item>
-					</Col>
+					</Col> */}
 				</Row>
 
 				<div className='form-footer'>

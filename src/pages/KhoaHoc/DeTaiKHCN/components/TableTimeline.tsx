@@ -55,7 +55,7 @@ const TableTimeline = (props: {
 			render: (rec: DeTaiKHCN.TimelineThuyetMinh) => (
 				<div>
 					{rec?.danhSachNguoiThucHien?.map((item) => (
-						<div key={item.userId || item.ten}>{item.ten}</div>
+						<div key={item?.userId || item?.ten}>{item?.ten}</div>
 					))}
 				</div>
 			),

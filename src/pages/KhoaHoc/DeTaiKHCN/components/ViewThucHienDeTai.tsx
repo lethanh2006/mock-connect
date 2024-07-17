@@ -1,5 +1,6 @@
 import {
 	EDangSanPham,
+	ETrangThaiTienDo,
 	MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc,
 	MapKeyColorTrangThaiTienDo,
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
@@ -37,23 +38,35 @@ const ViewThucHienDeTai = (props: { rec: DeTaiKHCN.IRecord }) => {
 					{dangKyKhcn.ten}
 				</Descriptions.Item>
 
+				<Descriptions.Item span={3} label='Loại đề tài'>
+					{dangKyKhcn.loaiCaNhan}
+				</Descriptions.Item>
 				<Descriptions.Item span={3} label='Sinh viên chịu trách nhiệm thực hiện chính'>
 					{dangKyKhcn.chuTriDeTai.ten}
 				</Descriptions.Item>
-				<Descriptions.Item span={2} label='Học hàm'>
-					{dangKyKhcn.chuTriDeTai.hocHam}
+				<Descriptions.Item span={2} label='Mã sinh viên'>
+					{dangKyKhcn.chuTriDeTai.maDinhDanh}
 				</Descriptions.Item>
-				<Descriptions.Item span={2} label='Học vị'>
-					{dangKyKhcn.chuTriDeTai.hocVi}
+				<Descriptions.Item span={2} label='Khoa'>
+					{dangKyKhcn.chuTriDeTai.tenDonVi}
 				</Descriptions.Item>
 				<Descriptions.Item span={2} label='Ngày sinh'>
 					{moment(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
 				</Descriptions.Item>
-				<Descriptions.Item span={2} label='Đơn vị công tác'>
-					{dangKyKhcn.chuTriDeTai.tenDonVi}
+				<Descriptions.Item span={2} label='Nơi sinh'>
+					{dangKyKhcn.chuTriDeTai.noiSinh}
 				</Descriptions.Item>
-				<Descriptions.Item span={2} label='Chuyên ngành đào tạo (cao nhất)'>
-					{dangKyKhcn.chuTriDeTai.chuyenNganhDaoTaoCaoNhat}
+				<Descriptions.Item span={6} label='Địa chỉ liên hệ'>
+					{dangKyKhcn.chuTriDeTai.diaChi}
+				</Descriptions.Item>
+				<Descriptions.Item span={3} label='Email'>
+					{dangKyKhcn.chuTriDeTai.email}
+				</Descriptions.Item>
+				<Descriptions.Item span={3} label='SĐT'>
+					{dangKyKhcn.chuTriDeTai.soDienThoai}
+				</Descriptions.Item>
+				<Descriptions.Item span={6} label='Số tài khoản và chi nhánh ngân hàng'>
+					{dangKyKhcn.chuTriDeTai.soTaiKhoanNganHang}
 				</Descriptions.Item>
 			</Descriptions>
 			<div>
@@ -113,15 +126,21 @@ const ViewThucHienDeTai = (props: { rec: DeTaiKHCN.IRecord }) => {
 				</>
 			) : null}
 			<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
-				<Descriptions.Item span={3} label='Đã thực hiện tạm ứng?'>
+				{/* <Descriptions.Item span={3} label='Đã thực hiện tạm ứng?'>
 					{deCuongKhcn?.daThucHienTamUng ? 'Đã tạm ứng' : 'Chưa tạm ứng'}
-				</Descriptions.Item>
-				<Descriptions.Item span={3} label='Kết luận'>
+				</Descriptions.Item> */}
+				<Descriptions.Item span={2} label='Kết luận'>
 					<Tag color={MapKeyColorTrangThaiTienDo[deCuongKhcn.ketLuanTienDo]}>{deCuongKhcn?.ketLuanTienDo}</Tag>
 				</Descriptions.Item>
-				<Descriptions.Item span={6} label='Dự kiến lịch bảo vệ'>
-					{deCuongKhcn?.duKienLichBaoVe ? moment(deCuongKhcn.duKienLichBaoVe).format('DD/MM/YYYY') : 'Chưa có'}
+				<Descriptions.Item
+					span={4}
+					label={deCuongKhcn?.ketLuanTienDo === ETrangThaiTienDo.DUNG_VOI_KE_HOACH ? 'Ghi chú (nếu có)' : 'Lý do'}
+				>
+					{deCuongKhcn?.ghiChuTienDo}
 				</Descriptions.Item>
+				{/* <Descriptions.Item span={6} label='Dự kiến lịch bảo vệ'>
+					{deCuongKhcn?.duKienLichBaoVe ? moment(deCuongKhcn.duKienLichBaoVe).format('DD/MM/YYYY') : 'Chưa có'}
+				</Descriptions.Item> */}
 			</Descriptions>
 		</>
 	);
