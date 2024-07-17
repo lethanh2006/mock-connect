@@ -17,7 +17,7 @@ export const MapKeyNameLoaiDeTai = {
 };
 
 export enum EMocThoiGianDot {
-	thoiGian = 'thoiGian',
+	// thoiGian = 'thoiGian',
 	thoiGianDangKy = 'thoiGianDangKy',
 	thoiGianXetDuyetDangKy = 'thoiGianXetDuyetDangKy',
 	thoiGianThuyetMinh = 'thoiGianThuyetMinh',
@@ -26,7 +26,7 @@ export enum EMocThoiGianDot {
 }
 
 export const MapKeyNameMocThoiGianDot = {
-	[EMocThoiGianDot.thoiGian]: 'Thời gian bắt đầu - kết thúc đợt',
+	// [EMocThoiGianDot.thoiGian]: 'Thời gian bắt đầu - kết thúc đợt',
 	[EMocThoiGianDot.thoiGianDangKy]: 'Thời gian bắt đầu - kết thúc đăng ký đề xuất',
 	[EMocThoiGianDot.thoiGianXetDuyetDangKy]: 'Thời gian bắt đầu - kết thúc xét duyệt đăng ký đề xuất',
 	[EMocThoiGianDot.thoiGianThuyetMinh]: 'Thời gian bắt đầu - kết thúc nộp thuyết minh',
@@ -35,7 +35,7 @@ export const MapKeyNameMocThoiGianDot = {
 };
 
 export const MapKeyFieldMocThoiGianDot = {
-	[EMocThoiGianDot.thoiGian]: ['ngayBatDau', 'ngayKetThuc'],
+	// [EMocThoiGianDot.thoiGian]: ['ngayBatDau', 'ngayKetThuc'],
 	[EMocThoiGianDot.thoiGianDangKy]: ['ngayBatDauDangKy', 'ngayKetThucDangKy'],
 	[EMocThoiGianDot.thoiGianXetDuyetDangKy]: ['ngayBatDauXetDuyet', 'ngayKetThucXetDuyet'],
 	[EMocThoiGianDot.thoiGianThuyetMinh]: ['ngayBatDauDeCuong', 'ngayKetThucDeCuong'],

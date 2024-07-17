@@ -51,6 +51,7 @@ const TableTimeline = (props: {
 		{
 			title: 'Người thực hiện',
 			width: 200,
+			align: 'center',
 			render: (rec: DeTaiKHCN.TimelineThuyetMinh) => (
 				<div>
 					{rec?.danhSachNguoiThucHien?.map((item) => (

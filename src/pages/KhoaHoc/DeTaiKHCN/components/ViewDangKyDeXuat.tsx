@@ -159,16 +159,25 @@ const ViewDangKyDeXuat = (props: {
 					{moment(dangKyKhcn.thoiGianThucHienKetThuc).format('DD/MM/YYYY')}
 				</Descriptions.Item>
 				<Descriptions.Item span={3} label='Đề xuất người hướng dẫn (nếu có)'>
-					{dangKyKhcn.nguoiHuongDan.ten} - {dangKyKhcn.nguoiHuongDan.tenDonVi}
+					{[
+						dangKyKhcn?.nguoiHuongDan?.hocHam,
+						dangKyKhcn?.nguoiHuongDan?.hocVi,
+						dangKyKhcn?.nguoiHuongDan?.ten,
+						dangKyKhcn?.nguoiHuongDan?.tenDonVi,
+					]
+						?.filter((item) => item !== undefined && item !== null)
+						?.join('-')}
 				</Descriptions.Item>
 				{/* <Descriptions.Item span={3} label='Tổng kinh phí đề nghị của đề tài'>
 					{currencyFormat(dangKyKhcn.kinhPhi.kinhPhi)} {dangKyKhcn.kinhPhi.menhGia}
 				</Descriptions.Item> */}
-				<Descriptions.Item span={6} label='Phiếu đăng ký đề xuất'>
-					<a href={dangKyKhcn.urlPhieuDangKyDeXuat} target='_blank' rel='noreferrer'>
-						<Tag color={primaryColor}>Xem tập tin</Tag>
-					</a>
-				</Descriptions.Item>
+				{dangKyKhcn.urlPhieuDangKyDeXuat && (
+					<Descriptions.Item span={6} label='Phiếu đăng ký đề xuất'>
+						<a href={dangKyKhcn.urlPhieuDangKyDeXuat} target='_blank' rel='noreferrer'>
+							<Tag color={primaryColor}>Xem tập tin</Tag>
+						</a>
+					</Descriptions.Item>
+				)}
 			</Descriptions>
 		</>
 	);
