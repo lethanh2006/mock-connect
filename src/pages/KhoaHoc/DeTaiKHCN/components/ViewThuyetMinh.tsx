@@ -1,4 +1,8 @@
-import { EDangSanPham, MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc } from '@/services/KhoaHoc/DeTaiKHCN/constants';
+import {
+	EDangSanPham,
+	ELoaiDeTaiCaNhan,
+	MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc,
+} from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
 import { currencyFormat } from '@/utils/utils';
@@ -115,33 +119,31 @@ const ViewThuyetMinh = (props: {
 				<Descriptions.Item span={3} label='Sinh viên chịu trách nhiệm thực hiện chính'>
 					{dangKyKhcn.chuTriDeTai.ten}
 				</Descriptions.Item>
-				<Descriptions.Item span={2} label='Học hàm'>
-					{dangKyKhcn.chuTriDeTai.hocHam}
-				</Descriptions.Item>
-				<Descriptions.Item span={2} label='Học vị'>
-					{dangKyKhcn.chuTriDeTai.hocVi}
-				</Descriptions.Item>
-				<Descriptions.Item span={2} label='Ngày sinh'>
+
+				<Descriptions.Item span={3} label='Ngày sinh'>
 					{moment(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
 				</Descriptions.Item>
-				<Descriptions.Item span={3} label='Đơn vị công tác'>
+				<Descriptions.Item span={3} label='Khoa'>
 					{dangKyKhcn.chuTriDeTai.tenDonVi}
 				</Descriptions.Item>
-				<Descriptions.Item span={3} label='Chuyên ngành đào tạo (cao nhất)'>
-					{dangKyKhcn.chuTriDeTai.chuyenNganhDaoTaoCaoNhat}
-				</Descriptions.Item>
 			</Descriptions>
-			<div>
-				<b>Thư ký và những người thực hiện đề tài</b>
-			</div>
-			<TableThanhVien type='DeTai' fieldName='danhSachCTV' mode='view' data={props.rec.dangKyKhcn.danhSachCTV || []} />
-			<br />
+			{dangKyKhcn.loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE && (
+				<>
+					<div>
+						<b>Thành viên đề tài</b>
+					</div>
+					<TableThanhVien
+						type='DeTai'
+						fieldName='danhSachCTV'
+						mode='view'
+						data={props.rec.dangKyKhcn.danhSachCTV || []}
+					/>
+					<br />
+				</>
+			)}
 			<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
 				<Descriptions.Item span={3} label='Cơ quan chủ trì đề tài'>
 					{dangKyKhcn.donViChuTri}
-				</Descriptions.Item>
-				<Descriptions.Item span={3} label='Lĩnh vực khoa học'>
-					{dangKyKhcn.thuocLinhVuc}
 				</Descriptions.Item>
 			</Descriptions>
 			<div>

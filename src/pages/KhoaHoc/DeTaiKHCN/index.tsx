@@ -12,7 +12,9 @@ import {
 	MapKeyNamePhaseDeTaiKHCN,
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
+import { ELoaiDeTai } from '@/services/KhoaHoc/KeHoachDeTai/constants';
 import { primaryColor } from '@/services/base/constant';
+import { currencyFormat } from '@/utils/utils';
 import {
 	DeleteOutlined,
 	EditOutlined,
@@ -137,7 +139,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		{
 			title: 'Sinh viên thực hiện đề tài',
 			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
-			width: 150,
+			width: 200,
+			align: 'center',
 			filterType: 'string',
 			// align: 'center',
 			render: (val, rec) => (
@@ -227,6 +230,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'lock',
 			width: 120,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => <Tag color={val ? '#28a745' : '#dc3545'}>{val ? 'Đã nộp' : 'Chưa nộp'}</Tag>,
 			filterType: 'select',
 			filterData: [
@@ -240,6 +244,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'trangThaiDangKy',
 			width: 120,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => (
 				<div>
 					<Tag color={MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc[val]}>{val}</Tag>
@@ -328,7 +333,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		{
 			title: 'Sinh viên thực hiện đề tài',
 			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
-			width: 150,
+			width: 200,
 			filterType: 'string',
 			align: 'center',
 			render: (val, rec) => (
@@ -495,6 +500,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			title: 'Sinh viên thực hiện đề tài',
 			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
 			width: 200,
+			align: 'center',
 			filterType: 'string',
 			// align: 'center',
 			render: (val, rec) => (
@@ -503,22 +509,68 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
 					</div>
 					{rec.dangKyKhcn.danhSachCTV.map((item) => (
-						<div key={item.userId || item.ten}>
-							{item.ten} ({item.danhSachVaiTroDeTai.join(', ')})
-						</div>
+						<div key={item.userId || item.ten}>{item.ten}</div>
 					))}
 				</div>
 			),
 			onCell,
 		},
 		{
-			title: 'Thể loại',
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
 			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
 			width: 120,
 			align: 'center',
 			filterType: 'select',
 			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
 			onCell,
+		},
+		{
+			title: 'Thời gian thực hiện',
+			width: 150,
+			align: 'center',
+			render: (val: DeTaiKHCN.IRecord) => (
+				<div>
+					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Kinh phí thực hiện',
+			width: 120,
+			align: 'center',
+			dataIndex: ['dangKyKhcn', 'kinhPhi', 'kinhPhi'] as any,
+			sortable: true,
+			render: (val, rec) => (
+				<div>
+					{currencyFormat(rec?.dangKyKhcn?.kinhPhi?.kinhPhi)} {rec?.dangKyKhcn?.kinhPhi?.menhGia}
+				</div>
+			),
 		},
 		{
 			title: 'Bước',
@@ -538,6 +590,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'lockNopDeCuong',
 			width: 120,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => <Tag color={val ? '#28a745' : '#dc3545'}>{val ? 'Đã nộp' : 'Chưa nộp'}</Tag>,
 			filterType: 'select',
 			filterData: [
@@ -550,6 +603,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			title: 'Trạng thái xử lý',
 			dataIndex: 'trangThaiNopDeCuong',
 			width: 130,
+			fixed: 'right',
 			align: 'center',
 			render: (val) => (
 				<div>
@@ -658,25 +712,50 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			onCell,
 		},
 		{
-			title: 'Sinh viên chịu trách nhiệm thực hiện chính/Thành viên tham gia',
+			title: 'Sinh viên thực hiện đề tài',
 			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
 			width: 200,
+			align: 'center',
 			filterType: 'string',
 			// align: 'center',
 			render: (val, rec) => (
 				<div>
-					<div>- {rec.dangKyKhcn.chuTriDeTai.ten} (Sinh viên chịu trách nhiệm thực hiện chính)</div>
+					<div>
+						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
+					</div>
 					{rec.dangKyKhcn.danhSachCTV.map((item) => (
-						<div key={item.userId || item.ten}>
-							- {item.ten} ({item.danhSachVaiTroDeTai.join(', ')})
-						</div>
+						<div key={item.userId || item.ten}>{item.ten}</div>
 					))}
 				</div>
 			),
 			onCell,
 		},
 		{
-			title: 'Thể loại',
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
 			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
 			width: 120,
 			align: 'center',
@@ -684,25 +763,36 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
 			onCell,
 		},
-
 		{
-			title: 'Bước',
-			dataIndex: 'phaseDeTaiKhcn',
+			title: 'Thời gian thực hiện',
 			width: 150,
 			align: 'center',
-			filterType: 'select',
-			filterData: Object.values(EPhaseDeTaiKHCN).map((item) => ({
-				value: item,
-				label: MapKeyNamePhaseDeTaiKHCN[item],
-			})),
-			render: (val: EPhaseDeTaiKHCN) => MapKeyNamePhaseDeTaiKHCN[val],
+			render: (val: DeTaiKHCN.IRecord) => (
+				<div>
+					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+				</div>
+			),
 			onCell,
+		},
+		{
+			title: 'Kinh phí thực hiện',
+			width: 120,
+			align: 'center',
+			dataIndex: ['dangKyKhcn', 'kinhPhi', 'kinhPhi'] as any,
+			sortable: true,
+			render: (val, rec) => (
+				<div>
+					{currencyFormat(rec?.dangKyKhcn?.kinhPhi?.kinhPhi)} {rec?.dangKyKhcn?.kinhPhi?.menhGia}
+				</div>
+			),
 		},
 		{
 			title: 'Trạng thái nộp',
 			dataIndex: 'lockDeCuong',
 			width: 120,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => <Tag color={val ? '#28a745' : '#dc3545'}>{val ? 'Đã nộp' : 'Chưa nộp'}</Tag>,
 			filterType: 'select',
 			filterData: [
@@ -716,6 +806,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'trangThaiXetDuyetDeCuong',
 			width: 150,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => (
 				<div>
 					<Tag color={MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc[val]}>{val}</Tag>
@@ -829,9 +920,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 				<div>
 					<div>- {rec.dangKyKhcn.chuTriDeTai.ten} (Sinh viên chịu trách nhiệm thực hiện chính)</div>
 					{rec.dangKyKhcn.danhSachCTV.map((item) => (
-						<div key={item.userId || item.ten}>
-							- {item.ten} ({item.danhSachVaiTroDeTai.join(', ')})
-						</div>
+						<div key={item.userId || item.ten}>- {item.ten}</div>
 					))}
 				</div>
 			),
@@ -919,6 +1008,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'lockThucHien',
 			width: 120,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => <Tag color={val ? '#28a745' : '#dc3545'}>{val ? 'Đã nộp' : 'Chưa nộp'}</Tag>,
 			filterType: 'select',
 			filterData: [
@@ -932,6 +1022,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'trangThaiThucHien',
 			width: 150,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => (
 				<div>
 					<Tag color={MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc[val]}>{val}</Tag>
@@ -1089,6 +1180,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'lockNopNghiemThu',
 			width: 120,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => <Tag color={val ? '#28a745' : '#dc3545'}>{val ? 'Đã nộp' : 'Chưa nộp'}</Tag>,
 			filterType: 'select',
 			filterData: [
@@ -1102,6 +1194,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'trangThaiNopNghiemThu',
 			width: 150,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => (
 				<div>
 					<Tag color={MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc[val]}>{val}</Tag>
@@ -1315,6 +1408,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'lockNghiemThu',
 			width: 120,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => <Tag color={val ? '#28a745' : '#dc3545'}>{val ? 'Đã nộp' : 'Chưa nộp'}</Tag>,
 			filterType: 'select',
 			filterData: [
@@ -1328,6 +1422,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'trangThaiNghiemThu',
 			width: 150,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => (
 				<div>
 					<Tag color={MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc[val]}>{val}</Tag>
@@ -1500,6 +1595,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'lockSauNghiemThu',
 			width: 120,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => <Tag color={val ? '#28a745' : '#dc3545'}>{val ? 'Đã nộp' : 'Chưa nộp'}</Tag>,
 			filterType: 'select',
 			filterData: [
@@ -1513,6 +1609,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			dataIndex: 'hoanThanh',
 			width: 150,
 			align: 'center',
+			fixed: 'right',
 			render: (val) => <Tag color={val ? '#28a745' : '#007bff'}>{val ? 'Đã tiếp nhận' : 'Chưa tiếp nhận'}</Tag>,
 			filterType: 'select',
 			filterData: [
@@ -1602,7 +1699,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			otherButtons={[
 				<SelectKeHoachDeTai
 					onChange={(val: string) => setRecKeHoach(danhSachKeHoach.find((item) => item._id === val))}
-					loaiDeTai={props?.paramCondition?.['dangKyKhcn.loaiDeTai']}
+					loaiDeTai={ELoaiDeTai.SINH_VIEN_HOC_VIEN}
 					value={recKeHoach?._id}
 					isSetRecord
 					style={{ width: 300 }}

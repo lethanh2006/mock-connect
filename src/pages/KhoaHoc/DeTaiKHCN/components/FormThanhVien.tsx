@@ -17,7 +17,7 @@ const FormThanhVien = (props: { onCancel: any; record?: DeTaiKHCN.ThanhVienDeTai
 		record?.userId ? ELoaiThanhVien.TRONG_HE_THONG : ELoaiThanhVien.NGOAI_HE_THONG,
 	);
 
-	const { danhSach } = useModel('sinhvien.sinhvien');
+	const { danhSach, getModel } = useModel('sinhvien.sinhvien');
 	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
 
 	useEffect(() => {
@@ -33,8 +33,12 @@ const FormThanhVien = (props: { onCancel: any; record?: DeTaiKHCN.ThanhVienDeTai
 	}, [record?.userId, record?.ten]);
 
 	const onFinish = async (values: DeTaiKHCN.ThanhVienDeTai) => {
-		const recSinhVien = danhSach?.find((item) => item.ssoId === values?.userId);
+		let recSinhVien = danhSach?.find((item) => item.ssoId === values?.userId);
 		const recDonVi = danhSachDonVi?.find((item) => item.maDonVi === values?.maDonVi);
+		if (!recSinhVien?.ssoId) {
+			const res = await getModel({ ssoId: values?.userId });
+			recSinhVien = res?.[0] ?? {};
+		}
 		const payload = {
 			...record,
 			...values,
@@ -161,7 +165,7 @@ const FormThanhVien = (props: { onCancel: any; record?: DeTaiKHCN.ThanhVienDeTai
 
 				<Row gutter={[10, 0]}>
 					<Col xs={24}>
-						<Form.Item name={['ngaySinh']} label='Ngày sinh' rules={[...rules.required]} style={{ marginBottom: 10 }}>
+						<Form.Item name={['ngaySinh']} label='Ngày sinh' style={{ marginBottom: 10 }}>
 							<MyDatePicker placeholder='Ngày sinh' format={'DD/MM/YYYY'} />
 						</Form.Item>
 					</Col>

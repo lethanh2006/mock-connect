@@ -40,7 +40,7 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 	const { record: recKeHoach } = useModel('khoahoc.kehoachdetai');
 	const { danhSach, getModel } = useModel('sinhvien.sinhvien');
 	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
-	const { danhSach: danhSachCanBo } = useModel('tochucnhansu.nhansu');
+	const { danhSach: danhSachCanBo, getModel: getModelCanBo } = useModel('tochucnhansu.nhansu');
 
 	const [menhGia, setMenhGia] = useState(record?.dangKyKhcn?.kinhPhi?.menhGia ?? EMenhGia.VND);
 	const loaiCaNhan = Form.useWatch('loaiCaNhan', form);
@@ -61,12 +61,17 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 			setLoading(true);
 			const urlPhieuDangKyDeXuat = await buildUpLoadFile(values, 'urlPhieuDangKyDeXuat');
 			let recSinhVien = danhSach.find((item) => item.ssoId === values?.chuTriDeTai?.userId);
+			let recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
+			const recDonVi = danhSachDonVi?.find((item) => item.maDonVi === values?.chuTriDeTai?.maDonVi);
 			if (!recSinhVien?.ssoId) {
 				const res = await getModel({ ssoId: values?.chuTriDeTai?.userId });
 				recSinhVien = res?.[0] ?? {};
 			}
-			const recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
-			const recDonVi = danhSachDonVi?.find((item) => item.maDonVi === values?.chuTriDeTai?.maDonVi);
+			if (!recCanBo?.ssoId) {
+				const res = await getModelCanBo({ ssoId: values?.chuTriDeTai?.userId });
+				recCanBo = res?.[0] ?? {};
+			}
+
 			const dangKyKhcn = {
 				...record?.dangKyKhcn,
 				...values,
@@ -86,7 +91,7 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 					maDinhDanh: recSinhVien?.ma,
 					tenDonVi: recDonVi?.ten || '',
 				},
-				nguoiHuongDan: values?.nguoiHuongDan
+				nguoiHuongDan: values?.nguoiHuongDan?.userId
 					? {
 							...values?.nguoiHuongDan,
 							ten: recCanBo ? `${recCanBo?.hoDem} ${recCanBo?.ten}` : record?.dangKyKhcn?.nguoiHuongDan?.ten,
