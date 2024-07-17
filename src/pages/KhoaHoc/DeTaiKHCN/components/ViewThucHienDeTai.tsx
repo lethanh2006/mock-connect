@@ -57,7 +57,7 @@ const ViewThucHienDeTai = (props: { rec: DeTaiKHCN.IRecord }) => {
 				</Descriptions.Item>
 			</Descriptions>
 			<div>
-				<b>Thư ký và những người thực hiện đề tài</b>
+				<b>Thành viên đề tài</b>
 			</div>
 			<TableThanhVien type='DeTai' fieldName='danhSachCTV' mode='view' data={props.rec.dangKyKhcn.danhSachCTV || []} />
 			<br />

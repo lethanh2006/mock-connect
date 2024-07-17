@@ -74,9 +74,7 @@ const TableDeTaiQuyetDinh = (props: { mode: 'view' | 'edit' | 'duyet'; data: DeT
 				<div>
 					<div>- {rec.dangKyKhcn.chuTriDeTai.ten} (Sinh viên chịu trách nhiệm thực hiện chính)</div>
 					{rec.dangKyKhcn.danhSachCTV.map((item) => (
-						<div key={item.userId || item.ten}>
-							- {item.ten} ({item.danhSachVaiTroDeTai.join(', ')})
-						</div>
+						<div key={item.userId || item.ten}>- {item.ten}</div>
 					))}
 				</div>
 			),

@@ -40,7 +40,7 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 
 	const { danhSach, getModel } = useModel('sinhvien.sinhvien');
 	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
-	const { danhSach: danhSachCanBo } = useModel('tochucnhansu.nhansu');
+	const { danhSach: danhSachCanBo, getModel: getModelCanBo } = useModel('tochucnhansu.nhansu');
 	const [menhGia, setMenhGia] = useState(record?.dangKyKhcn?.kinhPhi?.menhGia ?? EMenhGia.VND);
 	const isDeTaiTapThe = record?.dangKyKhcn?.loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE;
 	useEffect(() => {
@@ -71,8 +71,11 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 				const res = await getModel({ ssoId: values?.chuTriDeTai?.userId });
 				recSinhVien = res?.[0] ?? {};
 			}
-			const recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
-
+			let recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
+			if (!recCanBo?.ssoId) {
+				const res = await getModelCanBo({ ssoId: values?.chuTriDeTai?.userId });
+				recCanBo = res?.[0] ?? {};
+			}
 			const payload = {
 				deCuongKhcn: {
 					...record?.deCuongKhcn,
@@ -93,7 +96,7 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 						maDinhDanh: recSinhVien?.ma,
 						tenDonVi: recDonVi?.ten || '',
 					},
-					nguoiHuongDan: values?.nguoiHuongDan
+					nguoiHuongDan: values?.nguoiHuongDan?.userId
 						? {
 								...values?.nguoiHuongDan,
 								ten: recCanBo ? `${recCanBo?.hoDem} ${recCanBo?.ten}` : record?.dangKyKhcn?.nguoiHuongDan?.ten,

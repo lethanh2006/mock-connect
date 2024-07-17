@@ -7,7 +7,6 @@ import type { HoiDongKHCN } from '@/services/KhoaHoc/HoiDongKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Space, Tag, message } from 'antd';
-import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
 import DeTaiNgoaiHoiDong from './DeTaiNgoaiHoiDong';
@@ -93,7 +92,50 @@ const TableDeTaiHoiDong = (props: {
 			onCell,
 		},
 		{
-			title: 'Đề tài tập thể/cá nhân',
+			title: 'Sinh viên thực hiện đề tài',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 200,
+			align: 'center',
+			filterType: 'string',
+			// align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>
+						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
+					</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.ten}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
 			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
 			width: 120,
 			align: 'center',
@@ -101,47 +143,6 @@ const TableDeTaiHoiDong = (props: {
 			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
 			onCell,
 		},
-
-		{
-			title: 'Sinh viên chịu trách nhiệm thực hiện chính',
-			dataIndex: ['dangKyKhcn', 'chuTriDeTai', 'ten'] as any,
-			width: 150,
-			filterType: 'string',
-			align: 'center',
-			onCell,
-		},
-		{
-			title: 'Đơn vị',
-			dataIndex: ['dangKyKhcn', 'chuTriDeTai', 'tenDonVi'] as any,
-			width: 150,
-			filterType: 'string',
-			align: 'center',
-			onCell,
-		},
-		{
-			title: 'Thời gian thực hiện',
-			width: 150,
-			align: 'center',
-			render: (val: DeTaiKHCN.IRecord) => (
-				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
-				</div>
-			),
-			onCell,
-		},
-		// {
-		// 	title: 'Kinh phí đề xuất',
-		// 	width: 120,
-		// 	align: 'center',
-		// 	dataIndex: ['dangKyKhcn', 'kinhPhi', 'kinhPhi'] as any,
-		// 	sortable: true,
-		// 	render: (val, rec) => (
-		// 		<div>
-		// 			{currencyFormat(rec?.dangKyKhcn?.kinhPhi?.kinhPhi)} {rec?.dangKyKhcn?.kinhPhi?.menhGia}
-		// 		</div>
-		// 	),
-		// },
 	];
 
 	const columnsHoiDongXetDuyetThuyetMinh: IColumn<DeTaiKHCN.IRecord>[] = [
