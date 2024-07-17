@@ -60,14 +60,14 @@ const ViewHoiDong = (props: { rec: HoiDongKHCN.IRecord; zIndex?: number }) => {
 			{/* <b>Danh sách thành viên hội đồng</b>
 			<TableThanhVien data={rec.danhSachThanhVien} mode='view' type='HoiDong' fieldName='danhSachThanhVien' />
 			<br /> */}
-			<b>Danh sách thành viên tham gia</b>
+			{/* <b>Danh sách thành viên tham gia</b>
 			<TableThanhVien
 				data={rec.danhSachThanhVienThamGia}
 				mode='view'
 				type='HoiDong'
 				fieldName='danhSachThanhVienThamGia'
 			/>
-			<br />
+			<br /> */}
 			<b>Danh sách đề tài NCKH</b>
 			<TableDeTaiHoiDong type={rec.loaiHoiDongKhcn} mode='view' data={rec.danhSachDeTai} />
 		</Modal>

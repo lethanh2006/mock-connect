@@ -101,11 +101,18 @@ const HoiDongKHCNPage = (props: {
 			render: (val: ELoaiHoiDongKHCN) => MapKeyNameLoaiHoiDongKHCN[val],
 		},
 		{
-			title: 'Ngày tổ chức',
+			title: 'Thời gian',
 			dataIndex: 'thoiGianBatDau',
 			width: 150,
 			align: 'center',
 			render: (val) => <div>{val ? moment(val).format('HH:mm DD/MM/YYYY') : ''}</div>,
+			onCell,
+		},
+		{
+			title: 'Địa điểm',
+			dataIndex: 'diaDiem',
+			width: 150,
+			align: 'center',
 			onCell,
 		},
 		{
@@ -124,22 +131,22 @@ const HoiDongKHCNPage = (props: {
 				</Button>
 			),
 		},
-		{
-			title: 'DS thành viên tham dự',
-			dataIndex: 'danhSachThanhVienThamGia',
-			width: 150,
-			align: 'center',
-			render: (val, rec) => (
-				<Button
-					onClick={() => {
-						handleClickView(rec, 'ThanhVienThamGia');
-					}}
-					type='link'
-				>
-					{val?.length ?? 0} thành viên
-				</Button>
-			),
-		},
+		// {
+		// 	title: 'DS thành viên tham dự',
+		// 	dataIndex: 'danhSachThanhVienThamGia',
+		// 	width: 150,
+		// 	align: 'center',
+		// 	render: (val, rec) => (
+		// 		<Button
+		// 			onClick={() => {
+		// 				handleClickView(rec, 'ThanhVienThamGia');
+		// 			}}
+		// 			type='link'
+		// 		>
+		// 			{val?.length ?? 0} thành viên
+		// 		</Button>
+		// 	),
+		// },
 		{
 			title: 'DS đề tài',
 			dataIndex: 'danhSachDeTai',
@@ -342,7 +349,9 @@ const HoiDongKHCNPage = (props: {
 						data={recHoiDong?.danhSachThanhVienThamGia ?? []}
 					/>
 				)}
-				{typeView === 'DeTai' && <TableDeTaiHoiDong mode='view' data={recHoiDong?.danhSachDeTai ?? []} />}
+				{typeView === 'DeTai' && (
+					<TableDeTaiHoiDong type={props.loaiHoiDongKhcn} mode='view' data={recHoiDong?.danhSachDeTai ?? []} />
+				)}
 			</Modal>
 			{recDeTai && (
 				<ViewDeTai
