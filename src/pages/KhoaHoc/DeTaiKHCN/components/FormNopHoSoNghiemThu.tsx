@@ -138,8 +138,8 @@ const FormNopHoSoNghiemThu = (props: { getData: any }) => {
 								</Form.Item>
 							</Col>
 						)}
-					<Col span={24}>Sản phẩm của đề tài được công bố hoặc minh chứng ứng dụng trong thực tiễn (nếu có)</Col>
-					{arrKeyNameSanPhamNghiemThu.map((item, index) => (
+					{/* <Col span={24}>Sản phẩm của đề tài được công bố hoặc minh chứng ứng dụng trong thực tiễn (nếu có)</Col> */}
+					{/* {arrKeyNameSanPhamNghiemThu.map((item, index) => (
 						<Col key={item.field} xs={24} sm={12}>
 							<Form.Item label={`${index + 1}. ${item.title}`} name={item.field}>
 								<UploadFile
@@ -152,8 +152,8 @@ const FormNopHoSoNghiemThu = (props: { getData: any }) => {
 								/>
 							</Form.Item>
 						</Col>
-					))}
-					<Col span={24}>
+					))} */}
+					{/* <Col span={24}>
 						<div>Nội dung ứng dụng trong đào tạo (quá trình dạy và học) tại Học viện</div>
 						<TableUngDungTrongHocVien mode='edit' data={record?.nghiemThuKhcn?.noiDungUngDungHocVien ?? []} />
 					</Col>
@@ -161,8 +161,8 @@ const FormNopHoSoNghiemThu = (props: { getData: any }) => {
 						<Form.Item name={'noiDungUngDungKhac'} label='Nội dung ứng dụng khác' rules={[...rules.text]}>
 							<TinyEditor height={300} />
 						</Form.Item>
-					</Col>
-					<Col span={24}>
+					</Col> */}
+					{/* <Col span={24}>
 						<div>
 							Sản phẩm chính của đề tài (Dạng I){' '}
 							<i>
@@ -177,8 +177,8 @@ const FormNopHoSoNghiemThu = (props: { getData: any }) => {
 							data={record?.nghiemThuKhcn?.sanPhamDeCuongDangI ?? []}
 						/>
 						<br />
-					</Col>
-					<Col span={24}>
+					</Col> */}
+					{/* <Col span={24}>
 						<div>
 							Sản phẩm chính của đề tài (Dạng II){' '}
 							<i>
@@ -195,10 +195,10 @@ const FormNopHoSoNghiemThu = (props: { getData: any }) => {
 							data={record?.nghiemThuKhcn?.sanPhamDeCuongDangII ?? []}
 						/>
 						<br />
-					</Col>
+					</Col> */}
 					<Col span={24}>
 						<div>
-							Sản phẩm chính của đề tài (Dạng III) <i>Bài báo; Sách chuyên khảo và các sản phẩm khác</i>
+							Sản phẩm công bố/sản phẩm ứng dụng của đề tài <i>(Đã có hoặc dự tính trong tương lai)</i>
 						</div>
 						<TableSanPham
 							phase='nghiemThuKhcn'
@@ -209,7 +209,9 @@ const FormNopHoSoNghiemThu = (props: { getData: any }) => {
 						<br />
 					</Col>
 					<Col span={24}>
-						<div>Kế hoạch ứng dụng:</div>
+						<div>
+							Kế hoạch ứng dụng <i>(Trong quá trình dạy và học tại Học viện Phụ nữ Việt Nam/Khác)</i>:
+						</div>
 						<TableKeHoachUngDung mode='edit' data={record?.nghiemThuKhcn?.keHoachUngDung ?? []} />
 						<br />
 					</Col>

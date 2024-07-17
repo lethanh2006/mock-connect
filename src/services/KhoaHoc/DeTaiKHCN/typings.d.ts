@@ -155,6 +155,7 @@ declare module DeTaiKHCN {
 		ketLuanTienDo: ETrangThaiTienDo;
 		duKienLichBaoVe: string;
 		banGiaiTrinhUrl: string[];
+		ghiChuTienDo: string;
 	}
 
 	export interface GhiChuDuToanKinhPhi {
