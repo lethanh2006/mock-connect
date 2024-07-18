@@ -1210,6 +1210,39 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			onCell,
 		},
 		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
+			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
+			width: 120,
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
+			onCell,
+		},
+		{
 			title: 'Báo cáo tổng hợp kết quả nghiên cứu đề tài',
 			dataIndex: ['nghiemThuKhcn', 'baoCaoUrl'],
 			width: 120,
@@ -1439,6 +1472,39 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			onCell,
 		},
 		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
+			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
+			width: 120,
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
+			onCell,
+		},
+		{
 			title: 'Báo cáo tổng hợp kết quả nghiên cứu đề tài',
 			dataIndex: ['nghiemThuKhcn', 'baoCaoUrl'],
 			width: 120,
@@ -1640,6 +1706,39 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 					))}
 				</div>
 			),
+			onCell,
+		},
+		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
+			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
+			width: 120,
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
 			onCell,
 		},
 		{
