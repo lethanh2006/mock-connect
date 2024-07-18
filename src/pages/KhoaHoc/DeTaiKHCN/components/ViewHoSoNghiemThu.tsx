@@ -83,7 +83,26 @@ const ViewHoSoNghiemThu = (props: {
 										</Tag>
 									</Descriptions.Item>
 								)}
-								<Descriptions.Item span={3} label='Kết luận hội đồng nghiệm thu đề tài NCKH'>
+								<Descriptions.Item span={3} label='Tổng điểm đánh giá'>
+									<span style={{ color: primaryColor }}>
+										{props.rec?.ketQuaHoiDongNghiemThu?.ketQuaNghiemThu?.tongDiem ||
+											props.rec?.ketQuaHoiDong?.[item._id]?.ketQuaNghiemThu?.tongDiem ||
+											nghiemThuKhcn?.tongDiem ||
+											'Chưa có'}{' '}
+										điểm
+									</span>
+								</Descriptions.Item>
+
+								<Descriptions.Item span={3} label='Có bài kỷ yếu?'>
+									<span style={{ color: primaryColor }}>
+										{props.rec?.ketQuaHoiDongNghiemThu?.ketQuaNghiemThu?.coBaiKyYeu ||
+										props.rec?.ketQuaHoiDong?.[item._id]?.ketQuaNghiemThu?.coBaiKyYeu ||
+										nghiemThuKhcn?.coBaiKyYeu
+											? 'Có bài'
+											: 'Không có bài'}
+									</span>
+								</Descriptions.Item>
+								<Descriptions.Item span={6} label='Kết luận hội đồng nghiệm thu đề tài NCKH'>
 									<span style={{ color: primaryColor }}>
 										{props.rec?.ketQuaHoiDongNghiemThu?.ketQuaNghiemThu?.comment ||
 											props.rec?.ketQuaHoiDong?.[item._id]?.ketQuaNghiemThu?.comment ||
