@@ -32,7 +32,7 @@ export declare module LopHocPhan {
 
 		parent?: IRecord;
 		children?: IRecord[];
-		nhanSuList?: ToChucNhanSu.INhanSu[];
+		nhanSuList?: IRecordNhanSuLopHP[];
 		sinhVienList?: SinhVien.IRecord[];
 		maHoaLichHoc?: TMaHoaLichHoc[];
 		thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[];
@@ -40,6 +40,12 @@ export declare module LopHocPhan {
 
 		lopHpHcList?: Partial<ILopHpLopHc>[];
 		doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
+
+		maCSDT?: string;
+		maHinhThuc: string;
+		hinhThuc?: HinhThucDaoTao.IRecordCoSo;
+		maTinhChat: string;
+		// tinhChat?: TinhChatChuongTrinh.IRecord;
 
 		// Đề cương học phần học kỳ
 		deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };
