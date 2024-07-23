@@ -127,12 +127,12 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			align: 'center',
 			width: 120,
 		},
-		{
-			title: 'Loại ĐK',
-			dataIndex: 'loai',
-			width: 120,
-			render: (val: ELoaiHocPhanDangKyTinChi) => LoaiHocPhanDangKyTinChi[val],
-		},
+		// {
+		// 	title: 'Loại ĐK',
+		// 	dataIndex: 'loai',
+		// 	width: 120,
+		// 	render: (val: ELoaiHocPhanDangKyTinChi) => LoaiHocPhanDangKyTinChi[val],
+		// },
 		{
 			title: 'Trạng thái',
 			dataIndex: 'trangThai',
