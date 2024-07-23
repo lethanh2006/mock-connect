@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import {
@@ -148,8 +149,21 @@ const DangKyLopHocPhan = () => {
 			onCell,
 		},
 		{
+			title: 'Giảng viên',
+			width: 160,
+			render: (val, rec) => (
+				<ExpandText>
+					{rec.nhanSuList
+						?.map((item) =>
+							item.nhanSu?.ten ? `${item.nhanSu?.hoDem ?? ''} ${item.nhanSu?.ten ?? ''}` : item.tenNhanSu,
+						)
+						.join(', ')}
+				</ExpandText>
+			),
+		},
+		{
 			title: 'Thông tin chi tiết',
-			width: 400,
+			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
 			onCell,
 		},
@@ -165,6 +179,26 @@ const DangKyLopHocPhan = () => {
 			align: 'center',
 			width: 60,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
+			onCell,
+		},
+		{
+			title: 'Hình thức ĐT',
+			width: 80,
+			render: (val, rec) => rec.hinhThuc?.ten,
+			onCell,
+		},
+		{
+			title: 'CSĐT',
+			dataIndex: 'maCSDT',
+			align: 'center',
+			width: 60,
+			onCell,
+		},
+		{
+			title: 'Tính chất',
+			dataIndex: 'maTinhChat',
+			align: 'center',
+			width: 60,
 			onCell,
 		},
 	];
