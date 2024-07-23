@@ -160,6 +160,7 @@ const DangKyLopHocPhan = () => {
 						.join(', ')}
 				</ExpandText>
 			),
+			onCell,
 		},
 		{
 			title: 'Thông tin chi tiết',
