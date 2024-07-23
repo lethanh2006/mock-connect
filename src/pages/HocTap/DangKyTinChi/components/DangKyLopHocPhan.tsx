@@ -22,7 +22,7 @@ const DangKyLopHocPhan = () => {
 		useModel('daotao.dotdangkytinchi');
 	const { record: recHocPhan, loaiDangKy } = useModel('hocphan.hocphan');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien'); // Đã get khóa ngành của tôi ở file Filter Học phần
-	const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
+	// const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
 	const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
 	const [typeLop, setTypeLop] = useState<string>('Lớp gợi ý');
@@ -30,7 +30,7 @@ const DangKyLopHocPhan = () => {
 	const dangKyRoi = danhSachLopDangKy.find(
 		(item) => item.maHocPhan === recHocPhan?.ma && item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY,
 	);
-	const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
+	// const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
 
 	const getData = () =>
 		recHocKy?.ma &&
@@ -70,7 +70,7 @@ const DangKyLopHocPhan = () => {
 				: checkTrungLich(rec.thoiKhoaBieuList ?? [])
 				? EColorLopDangKy.TRUNG_LICH
 				: undefined,
-			fontWeight: rec.lopHpHcList?.some((item) => danhSachMaLopHc?.includes(item.maLopHc ?? '')) ? 600 : undefined,
+			// fontWeight: rec.lopHpHcList?.some((item) => danhSachMaLopHc?.includes(item.maLopHc ?? '')) ? 600 : undefined,
 		},
 	});
 

@@ -1,12 +1,11 @@
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { useModel } from 'umi';
 
 const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord }) => {
-	const { danhSach: danhSachLopHc } = useModel('daotao.lophanhchinh');
+	// const { danhSach: danhSachLopHc } = useModel('daotao.lophanhchinh');
 	const { lopHocPhan } = props;
-	const maLopHcList = lopHocPhan.lopHpHcList?.map((item) => item.maLopHc);
-	const danhSachDoiTuongLopHc = danhSachLopHc.map((item) => item.doiTuong);
-	const trungLopHc = danhSachDoiTuongLopHc.includes(lopHocPhan.doiTuongLopHanhChinh);
+	// const maLopHcList = lopHocPhan.lopHpHcList?.map((item) => item.maLopHc);
+	// const danhSachDoiTuongLopHc = danhSachLopHc.map((item) => item.doiTuong);
+	// const trungLopHc = danhSachDoiTuongLopHc.includes(lopHocPhan.doiTuongLopHanhChinh);
 
 	const renderLich = () => {
 		const maHoaLichs = lopHocPhan.maHoaLichHoc?.sort((a, b) => a.thu - b.thu);
@@ -36,11 +35,11 @@ const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord }) => {
 				renderLich()
 			)}
 
-			{maLopHcList?.length ? (
+			{/* {maLopHcList?.length ? (
 				<li>
 					Lớp gợi ý: <span className={trungLopHc ? undefined : 'text-error'}>{maLopHcList.join(', ')}</span>
 				</li>
-			) : null}
+			) : null} */}
 		</ul>
 	);
 };

@@ -38,8 +38,8 @@ export declare module LopHocPhan {
 		thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[];
 		trangThaiLop: ETrangThaiLopHocPhan;
 
-		lopHpHcList?: Partial<ILopHpLopHc>[];
-		doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
+		// lopHpHcList?: Partial<ILopHpLopHc>[];
+		// doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
 
 		maCSDT?: string;
 		maHinhThuc: string;
