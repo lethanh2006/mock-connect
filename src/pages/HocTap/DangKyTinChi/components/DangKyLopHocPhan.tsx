@@ -184,8 +184,9 @@ const DangKyLopHocPhan = () => {
 		},
 		{
 			title: 'Hình thức ĐT',
+			dataIndex: 'maHinhThuc',
 			width: 80,
-			render: (val, rec) => rec.hinhThuc?.ten,
+			render: (val, rec) => rec.hinhThuc?.ten ?? val,
 			onCell,
 		},
 		{
