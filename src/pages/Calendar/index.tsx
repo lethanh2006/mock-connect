@@ -1,7 +1,8 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { messagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Modal, Space, Spin } from 'antd';
 import moment, { type Moment } from 'moment';
 import { useEffect, useState } from 'react';
@@ -15,6 +16,7 @@ import { useModel } from 'umi';
 import FilterColumn from './components/FilterColumn';
 import FormLichCaNhan from './components/FormLichCaNhan';
 import ModalViewDetailCalendar from './components/ModalViewDetail';
+import ModalSettingMauLich from './components/SettingLich';
 const localizer = momentLocalizer(moment);
 
 const CalendarPage = (props: { isDashboard?: boolean }) => {
@@ -22,6 +24,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
+	const { record: recSetting, setVisibleForm: setVisibleMauLich, getSettingLich } = useModel('settinglich');
+	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const [date, setDate] = useState(new Date());
 	const [dateRange, setDateRange] = useState<Moment[]>([moment().startOf('week'), moment().endOf('week')]);
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
@@ -34,6 +38,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const { isDashboard } = props;
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('300px');
+
+	useEffect(() => {
+		getSettingLich();
+		getThongTinCuaToiModel();
+	}, []);
 
 	const handlePaneSizeChange = (size: any) => {
 		setPaneSize(size[0]);
@@ -109,7 +118,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	}, [dateRange[0].valueOf(), dateRange[1].valueOf(), selectSuKiens.length]);
 
 	const eventPropGetter = (event: { title: string; loaiSuKien?: string }) => ({
-		style: { backgroundColor: ColorSuKien?.[event?.loaiSuKien as ELoaiSuKien] },
+		style: {
+			backgroundColor:
+				recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === event?.loaiSuKien)?.maMau ??
+				ColorSuKien?.[event?.loaiSuKien as ELoaiSuKien],
+		},
 	});
 
 	const eventCustom = ({ event }: any) => {
@@ -136,7 +149,13 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	};
 
 	return (
-		<Card title='Lịch' bordered>
+		<Card
+			title='Lịch'
+			bordered
+			extra={
+				<ButtonExtend tooltip='Cấu hình màu lịch' icon={<SettingOutlined />} onClick={() => setVisibleMauLich(true)} />
+			}
+		>
 			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
 				<Pane initialSize={paneSize} minSize='250px' maxSize='40%'>
 					{!isDashboard ? (
@@ -272,6 +291,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 					);
 				})}
 			</Modal>
+
+			<ModalSettingMauLich getData={getSettingLich} />
 		</Card>
 	);
 };
