@@ -3,14 +3,18 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ChartDiemTrungBinh from './ChartDiemTrungBinh';
 import ChartSoTinChi from './ChartSoTinChi';
+import StatKetQuaTichLuySinhVien from './StatKetQuaTichLuy';
 import './style.less';
 
 const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string }) => {
 	const { maKhoaNganh } = props;
-	const { getAllModel: getKetQuaHocKy, danhSach, loading } = useModel('daotao.ketquahocky');
+	const { getAllModel: getKetQuaHocKy, danhSach, loading, setRecord } = useModel('daotao.ketquahocky');
 
 	const getData = () =>
-		maKhoaNganh && getKetQuaHocKy(false, { maHocKy: 1 }, undefined, undefined, `me/many/khoa-nganh/${maKhoaNganh}`);
+		maKhoaNganh &&
+		getKetQuaHocKy(false, { maHocKy: 1 }, undefined, undefined, `me/many/khoa-nganh/${maKhoaNganh}`).then((res) => {
+			if (res.length) setRecord(res.at(-1));
+		});
 
 	useEffect(() => {
 		getData();
@@ -20,6 +24,10 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string }) => {
 		<Spin spinning={loading}>
 			{danhSach.length ? (
 				<>
+					<div style={{ marginBottom: 12 }}>
+						<StatKetQuaTichLuySinhVien />
+					</div>
+
 					<Carousel autoplay pauseOnDotsHover>
 						<div>
 							<div style={{ marginBottom: 8 }}>
