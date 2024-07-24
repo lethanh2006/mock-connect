@@ -454,6 +454,20 @@
 	},
 
 	{
+		name: 'HoatDongCTSV',
+		path: 'hoat-dong-ctsv',
+		component: './SuKien/SinhVienHoatDongCTSV',
+		icon: 'CarryOutOutlined',
+	},
+
+	{
+		name: 'XemSau',
+		path: 'xem-sau',
+		component: './XemSau',
+		icon: 'ClockCircleOutlined',
+	},
+
+	{
 		path: '/notification',
 		routes: [
 			{
