@@ -27,8 +27,9 @@ ENV APP_CONFIG_URL_QLKH=https://qlkh.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_VPS=https://vanphong.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_KHAO_THI=https://khaothi.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_CORE=https://core-vwa.vercel.app/
-ENV APP_CONFIG_URL_CSVC=
+ENV APP_CONFIG_URL_CSVC=https://csvc.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_THU_VIEN=https://thuvien.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_QLVB=https://sso.hvpnvn.edu.vn/realms/vwa/protocol/openid-connect/auth?response_type=token&client_id=vwa-odoo-qlvb&redirect_uri=http%3A%2F%2Fqlvb.hvpnvn.edu.vn%2Fauth_oauth%2Fsignin&scope=profile+openid+email&state=%7B%22d%22%3A+%22qlvb1%22%2C+%22p%22%3A+4%2C+%22r%22%3A+%22http%253A%252F%252Fqlvb.hvpnvn.edu.vn%252Fweb%22%7D
 
 ENV APP_CONFIG_TITLE_CONNECT='Cổng người học'
 ENV APP_CONFIG_TITLE_CAN_BO='Cổng cán bộ'
@@ -42,6 +43,7 @@ ENV APP_CONFIG_TITLE_KHAO_THI='Khảo thí'
 ENV APP_CONFIG_TITLE_CORE='Danh mục chung'
 ENV APP_CONFIG_TITLE_CSVC='Cơ sở vật chất'
 ENV APP_CONFIG_TITLE_THU_VIEN='Thư viện'
+ENV APP_CONFIG_TITLE_QLVB='Quản lý văn bản'
 
 ENV APP_CONFIG_MOODLE_ENDPOINT=''
 ENV APP_CONFIG_TIN_TUC_WP=1
