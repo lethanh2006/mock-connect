@@ -9,7 +9,7 @@ import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
 
 const DangKyTinChiPage = () => {
-	const { dotDangKyHienTai, loading, sinhVienDot } = useModel('daotao.dotdangkytinchi');
+	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy } = useModel('daotao.dotdangkytinchi');
 	const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
 
 	useEffect(() => {
@@ -35,17 +35,19 @@ const DangKyTinChiPage = () => {
 					) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 						<Empty
 							description={
-								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp tín chỉ đã đăng ký trước đó !</i>
+								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp tín chỉ đã đăng ký trước đó!</i>
 							}
 						/>
-					) : (
+					) : !!phieuDangKy?.soTinChiToiDa ? (
 						<>
 							<Divider style={{ marginTop: 24 }}>Thông tin đăng ký</Divider>
 							<DangKyLopHocPhan />
 						</>
+					) : (
+						<Empty description={<i style={{ color: '#999' }}>Có lỗi xảy ra, vui lòng thử lại!</i>} />
 					)
 				) : (
-					<Empty description={<i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này !</i>} />
+					<Empty description={<i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này!</i>} />
 				)}
 			</Spin>
 
