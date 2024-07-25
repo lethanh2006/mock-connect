@@ -110,8 +110,9 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 				</b>
 				<p>
 					1. CHUYỂN KHOẢN VÀO SỐ TÀI KHOẢN NGÂN HÀNG CỦA HỌC VIỆN:
+					<br />- Ngân hàng: TMCP Đầu tư và phát triển Việt Nam (BIDV) - chi nhánh Thành phố Thủ Đức
 					<br />- Tên tài khoản thụ hưởng: PHAN HIEU HOC VIEN PHU NU VIET NAM
-					<br />- Số tài khoản: <b>123000079922</b>
+					<br />- Số tài khoản: <b>1810071908</b>
 					<br />
 					- Nội dung chuyển khoản: [Mã sinh viên] [Họ tên] [Nội dung]
 					<br />- Ví dụ: <i>23123456P NGUYEN VAN A HocphiHK2NH20232024</i>
@@ -141,7 +142,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 					</b>
 					<img
 						style={{ maxWidth: '100%' }}
-						src={`https://img.vietqr.io/image/970415-123000079922-compact2.png?amount=${
+						src={`https://img.vietqr.io/image/970418-1810071908-compact2.png?amount=${
 							record?.amount
 						}&addInfo=${addInfo}&accountName=${'PHAN HIEU HOC VIEN PHU NU VIET NAM'}`}
 					/>
