@@ -1,8 +1,8 @@
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { Modal } from 'antd';
 import { useState } from 'react';
-import CardHocPhan from './CardHocPhan';
 import { useModel } from 'umi';
+import CardHocPhan from './CardHocPhan';
 
 const CardKhoiHocPhan = (props: {
 	khoi?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
@@ -21,7 +21,7 @@ const CardKhoiHocPhan = (props: {
 					<h4 className='tu_chon'>{khoi?.ten}</h4>
 					<span className='tin-chi'>{soTinChi} tín chỉ</span>
 					<div className='khoi-kien-thuc' style={{ borderLeftColor: colorKhoiKienThuc }} />
-					{/* <img src='/images/img-card-hoc-phan.svg' /> */}
+					<img src='/images/folder-khoi-hp.svg' className='folder-khoi' title='Khối học phần' alt='khoi-hoc-phan' />
 				</div>
 			</div>
 
