@@ -5,7 +5,20 @@ import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import rules from '@/utils/rules';
 import { convertNumberScoreToAlphabet } from '@/utils/utils';
-import { Button, Card, Col, Descriptions, Form, InputNumber, Modal, Popover, Row, Segmented, Tag } from 'antd';
+import {
+	Button,
+	Card,
+	Checkbox,
+	Col,
+	Descriptions,
+	Form,
+	InputNumber,
+	Modal,
+	Popover,
+	Row,
+	Segmented,
+	Tag,
+} from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -13,6 +26,7 @@ import { useModel } from 'umi';
 const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 	const { maKhoaNganh } = props;
 	const { getDiemSinhVienModel, loading, tongTuChon } = useModel('daotao.diemhocphan');
+	const { getAllModel: getLoaiHp, danhSach: danhSachLoaiHp } = useModel('daotao.loaihocphan');
 	const [danhSach, setDanhSach] = useState<DiemHocPhan.IDiemSinhVien[]>();
 	const [record, setRecord] = useState<DiemHocPhan.IDiemSinhVien>();
 	const [tongKet, setTongKet] = useState<number>(0);
@@ -20,14 +34,20 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 	const [showAll, setShowAll] = useState<string>('none');
 	const [form] = Form.useForm();
+	const loaiHpTinhDiem = danhSachLoaiHp.filter((i) => i.isTinhDiem).map((i) => i.ma);
 
 	const tinhDiemTongKet = (data: DiemHocPhan.IDiemSinhVien[]) => {
-		const sum = _.sumBy(data, (item) => {
+		const tongDiem = _.sumBy(data, (item) => {
+			if (!loaiHpTinhDiem.includes(item.maLoaiHocPhan)) return 0;
 			const diem = (item.diemDuKienThang4 ?? item.diemThang4 ?? 0) * (item.soTinChi ?? 0);
 			return diem;
 		});
-		const tinchi = _.sumBy(data, (item) => (item.diemDuKienThang4 || item.diemThang4 ? item.soTinChi ?? 0 : 0));
-		setTongKet(Math.round(tinchi === 0 ? 0 : (sum * 100) / tinchi) / 100);
+		const tongTinChi = _.sumBy(data, (item) =>
+			loaiHpTinhDiem.includes(item.maLoaiHocPhan) && (item.diemDuKienThang4 || item.diemThang4)
+				? item.soTinChi ?? 0
+				: 0,
+		);
+		setTongKet(Math.round(tongTinChi === 0 ? 0 : (tongDiem * 100) / tongTinChi) / 100);
 
 		const monTuChonCoDiem = data.filter(
 			(item) => item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && (item.diemDuKienThang4 || item.diemThang4),
@@ -43,8 +63,12 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 	};
 
 	useEffect(() => {
-		if (maKhoaNganh) fetch();
-	}, [maKhoaNganh]);
+		getLoaiHp();
+	}, []);
+
+	useEffect(() => {
+		if (maKhoaNganh && danhSachLoaiHp.length) fetch();
+	}, [maKhoaNganh, danhSachLoaiHp.length]);
 
 	const onOk = (values: any) => {
 		const data = danhSach?.map((item) =>
@@ -78,6 +102,13 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 
 	const columns: IColumn<DiemHocPhan.IDiemSinhVien>[] = [
 		{
+			title: 'TT',
+			dataIndex: 'index',
+			align: 'center',
+			width: 40,
+			onCell,
+		},
+		{
 			dataIndex: 'ma',
 			title: 'Mã HP',
 			filterType: 'string',
@@ -93,6 +124,13 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
+			dataIndex: 'soTinChi',
+			title: 'STC',
+			width: 60,
+			align: 'center',
+			onCell,
+		},
+		{
 			dataIndex: 'loaiHocPhanCtdt',
 			title: 'Loại HP',
 			width: 80,
@@ -102,10 +140,10 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			dataIndex: 'soTinChi',
-			title: 'Số TC',
+			title: 'HP tính điểm',
 			width: 60,
 			align: 'center',
+			render: (val, rec) => <Checkbox disabled checked={loaiHpTinhDiem.includes(rec.maLoaiHocPhan)} />,
 			onCell,
 		},
 		{
@@ -188,7 +226,6 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 							[]
 						}
 						otherProps={{ scroll: { y: 600 }, pagination: false }}
-						addStt
 						loading={loading}
 						hasTotal
 					>
