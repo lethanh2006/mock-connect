@@ -235,35 +235,28 @@ const BlockTinTuc = (props: { empty?: string }) => {
 											{tintuc?.date && (
 												<span className='thoi-gian'>Ngày đăng: {moment(tintuc?.date).format('DD/MM/YYYY HH:mm')}</span>
 											)}
-											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-												{tintuc?.date && (
-													<span className='thoi-gian'>
-														Ngày đăng: {moment(tintuc?.date).format('DD/MM/YYYY HH:mm')}
-													</span>
-												)}
-												{danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id)?._id ? (
-													<ButtonExtend
-														type='link'
-														onClick={(event) => {
-															event.stopPropagation();
-															handleBoXemSau(danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id));
-														}}
-														danger
-													>
-														Bỏ lưu
-													</ButtonExtend>
-												) : (
-													<ButtonExtend
-														type='link'
-														onClick={(event) => {
-															event.stopPropagation();
-															handleXemSau(tintuc);
-														}}
-													>
-														Lưu
-													</ButtonExtend>
-												)}
-											</div>
+											{danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id)?._id ? (
+												<ButtonExtend
+													type='link'
+													onClick={(event) => {
+														event.stopPropagation();
+														handleBoXemSau(danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id));
+													}}
+													danger
+												>
+													Bỏ lưu
+												</ButtonExtend>
+											) : (
+												<ButtonExtend
+													type='link'
+													onClick={(event) => {
+														event.stopPropagation();
+														handleXemSau(tintuc);
+													}}
+												>
+													Lưu
+												</ButtonExtend>
+											)}
 										</div>
 									</Col>
 								</Row>
