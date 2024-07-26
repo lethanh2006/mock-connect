@@ -53,7 +53,7 @@ export default {
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
 	'menu.VanBanHuongDan': 'Văn bản',
 	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
-	'menu.HoatDongCTSV': 'Hoạt động công tác sinh viên',
+	'menu.HoatDongCTSV': 'Sự kiện',
 	'menu.XemSau': 'Đã lưu',
 
 	'menu.HoatDongKHCN': 'Hoạt động KH&CN',

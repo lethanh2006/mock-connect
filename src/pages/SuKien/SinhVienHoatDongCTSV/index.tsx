@@ -137,7 +137,7 @@ const SinhVienHoatDongCTSV = () => {
 	];
 
 	return (
-		<Card title='Danh sách hoạt động công tác sinh viên'>
+		<Card title='Danh sách sự kiện'>
 			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EHoatDongChungType1)}>
 				{Object.values(EHoatDongChungType1).map((item) => (
 					<Tabs.TabPane tab={item} key={item} />
