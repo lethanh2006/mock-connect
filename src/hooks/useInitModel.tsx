@@ -93,7 +93,6 @@ const useInitModel = <T,>(
 			select: selectParams?.join(' '),
 			...(otherQuery ?? {}),
 		};
-
 		try {
 			const response = await getService(payload, path ?? 'page', isAbsolutePath ?? false);
 			const tempData: T[] = response?.data?.data?.result ?? [];

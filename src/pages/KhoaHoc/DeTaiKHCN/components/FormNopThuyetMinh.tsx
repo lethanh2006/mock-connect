@@ -119,7 +119,6 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 					sanPhamDeCuongDangIII: undefined,
 				},
 			};
-
 			giangVienPutMyDeTaiPhaseXetDuyetOrDeCuongOrNghiemThuModel(record?._id, payload, 'de-cuong', props.getData)
 				.then(() => {})
 				.catch((er) => {
