@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
@@ -150,8 +151,21 @@ const PhieuDangKy = () => {
 			),
 		},
 		{
+			title: 'Giảng viên',
+			width: 160,
+			render: (val, rec) => (
+				<ExpandText>
+					{rec.nhanSuList
+						?.map((item) =>
+							item.nhanSu?.ten ? `${item.nhanSu?.hoDem ?? ''} ${item.nhanSu?.ten ?? ''}` : item.tenNhanSu,
+						)
+						.join(', ')}
+				</ExpandText>
+			),
+		},
+		{
 			title: 'Thông tin chi tiết',
-			width: 400,
+			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={{ ...rec, loai: ELoaiLopHocPhan.CHINH }} />, // Fake loại để ko lỗi
 		},
 		{

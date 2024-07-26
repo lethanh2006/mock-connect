@@ -53,6 +53,8 @@ export default {
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
 	'menu.VanBanHuongDan': 'Văn bản',
 	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
+	'menu.HoatDongCTSV': 'Sự kiện',
+	'menu.XemSau': 'Đã lưu',
 
 	'menu.HoatDongKHCN': 'Hoạt động KH&CN',
 	'menu.HoatDongKHCN.DeTaiHocVien': 'Đề tài NCKH cấp Học viện',

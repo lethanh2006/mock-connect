@@ -25,6 +25,7 @@
 
 		&.col-link {
 			cursor: pointer;
+
 			&:hover {
 				background-color: var(--ant-primary-6);
 				transition: 0.3s;
@@ -50,7 +51,9 @@
 			.card-hoc-phan {
 				position: relative;
 				height: 100%;
+				min-height: 90px;
 				padding: 0.5rem;
+
 				background-color: #fff;
 				background-image: url(/images/bg-card-hoc-phan.svg);
 				background-repeat: no-repeat;
@@ -69,6 +72,7 @@
 
 				&.card-chua-hoc {
 					background-color: #f1faffe0;
+
 					&:hover {
 						background-color: #dbf2ff;
 					}
@@ -119,10 +123,11 @@
 					border-bottom: 2px solid transparent;
 				}
 
-				img {
+				img.folder-khoi {
 					position: absolute;
-					top: 0.75rem;
-					left: 0;
+					bottom: 0.5rem;
+					left: 0.75rem;
+					width: 22px;
 				}
 			}
 
@@ -152,6 +157,7 @@
 
 					&.diem-green {
 						background-color: #399500;
+
 						&::before {
 							border-right-color: #276600;
 							border-bottom-color: #276600;
@@ -160,6 +166,7 @@
 
 					&.diem-yellow {
 						background-color: #ffaf0b;
+
 						&::before {
 							border-right-color: #bb7d00;
 							border-bottom-color: #bb7d00;
@@ -168,13 +175,16 @@
 
 					&.diem-red {
 						background-color: #a90b00;
+
 						&::before {
 							border-right-color: #530600;
 							border-bottom-color: #530600;
 						}
 					}
+
 					&.diem-gray {
 						background-color: rgb(173 173 173);
+
 						&::before {
 							border-right-color: rgb(143 143 143);
 							border-bottom-color: rgb(143 143 143);
@@ -306,6 +316,7 @@ div.ant-collapse-item {
 	0% {
 		transform: scale(0.33);
 	}
+
 	80%,
 	100% {
 		opacity: 0;
@@ -316,9 +327,11 @@ div.ant-collapse-item {
 	0% {
 		transform: scale(0.8);
 	}
+
 	50% {
 		transform: scale(1);
 	}
+
 	100% {
 		transform: scale(0.8);
 	}
