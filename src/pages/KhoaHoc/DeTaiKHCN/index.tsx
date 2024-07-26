@@ -25,7 +25,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import moment from 'moment';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useModel } from 'umi';
 import ViewHoiDong from '../HoiDongKHCN/components/ViewHoiDong';
 import SelectKeHoachDeTai from '../KeHoachDeTai/components/SelectKeHoachDeTai';
@@ -48,6 +48,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		setRecord,
 		setVisibleViewDetail,
 		exportDeXuatUngDungModel,
+		page,
+		limit,
 	} = useModel('khoahoc.detaikhcn');
 
 	const {
@@ -73,16 +75,9 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		);
 	};
 
-	// const { getAllModel, setDanhSachAllSinhVien, danhSachAllSinhVien } = useModel('sinhvien.sinhvien');
-
-	// const getAllSinhVien = async () => {
-	// 	const res = await getAllModel(false);
-	// 	setDanhSachAllSinhVien(res);
-	// };
-
-	// useEffect(() => {
-	// 	if (!danhSachAllSinhVien.length) getAllSinhVien();
-	// }, []);
+	useEffect(() => {
+		return () => location.reload();
+	}, []);
 
 	const onCell = (recordDeTai: DeTaiKHCN.IRecord) => ({
 		onClick: () => {
@@ -1874,13 +1869,12 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		if (props.type === ETypeTableDeTai.NopHoSoNghiemThu || props.type === ETypeTableDeTai.HoiDongNghiemThu)
 			return <FormNopHoSoNghiemThu getData={getData} />;
 		if (props.type === ETypeTableDeTai.NopHoSoSauNghiemThu) return <FormNopHoSoSauNghiemThu getData={getData} />;
-
 		return null;
-	}, [props.type]);
+	}, [props.type, recKeHoach?._id, page, limit, JSON.stringify(props?.paramCondition ?? {})]);
 
 	return (
 		<TableBase
-			dependencies={[recKeHoach?._id]}
+			dependencies={[recKeHoach?._id, JSON.stringify(props?.paramCondition ?? {})]}
 			buttons={{ create: props.type === 'DangKyDeXuat' ? true : false }}
 			Form={Form}
 			otherButtons={[
