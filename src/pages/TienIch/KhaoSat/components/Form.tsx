@@ -177,6 +177,8 @@ const FormTraLoiKhaoSat = (props: {
 							const traLoiKhac = values[`${question._id}_otherAnswer`];
 							if (traLoiKhac) {
 								tempTraLoi.traLoiKhac = traLoiKhac;
+								tempTraLoi.listLuaChonBang = [];
+								tempTraLoi.listLuaChon = [];
 							}
 						} else {
 							tempTraLoi.listLuaChon = question?.luaChon

@@ -12,6 +12,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	const { visible, setVisible, event, getData } = props;
 	const { deleteModel, handleEdit } = useModel('sukien');
 	const { getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
+	const { record: recSetting } = useModel('settinglich');
 	const loaiSuKien = event.loaiSuKien as ELoaiSuKien;
 	const isThoiKhoaBieu = loaiSuKien === ELoaiSuKien.LICH_HOC;
 	const thoiKhoaBieu = isThoiKhoaBieu ? (event as ThoiKhoaBieu.IRecord) : undefined;
@@ -139,7 +140,18 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 		>
 			<Descriptions column={1}>
 				<Descriptions.Item label='Loại sự kiện'>
-					{loaiSuKien ? <Tag color={ColorSuKien[loaiSuKien]}>{loaiSuKien}</Tag> : '--'}
+					{loaiSuKien ? (
+						<Tag
+							color={
+								recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === event?.loaiSuKien)?.maMau ??
+								ColorSuKien?.[event?.loaiSuKien as ELoaiSuKien]
+							}
+						>
+							{loaiSuKien}
+						</Tag>
+					) : (
+						'--'
+					)}
 				</Descriptions.Item>
 
 				{isThoiKhoaBieu ? renderThoiKhoaBieu() : isLichThi ? renderLichThi() : renderSuKien()}

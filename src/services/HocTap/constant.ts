@@ -16,6 +16,16 @@ export enum ELoaiHocLuc {
 	EMPTY = 'Chưa xếp loại',
 }
 
+export const colorLoaiHocLuc: Record<ELoaiHocLuc, string> = {
+	[ELoaiHocLuc.XUAT_SAC]: '#52c41a',
+	[ELoaiHocLuc.GIOI]: '#7ecb08',
+	[ELoaiHocLuc.KHA]: '#ffee04',
+	[ELoaiHocLuc.TRUNG_BINH]: '#ffc20a',
+	[ELoaiHocLuc.YEU]: '#ef9b20',
+	[ELoaiHocLuc.KEM]: '#ea5545',
+	[ELoaiHocLuc.EMPTY]: '#939393',
+};
+
 // Nhập điểm: Trạng thái thi
 export enum ETrangThaiThi {
 	CAM_THI = 'Cấm thi',
