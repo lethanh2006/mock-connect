@@ -25,7 +25,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import moment from 'moment';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useModel } from 'umi';
 import ViewHoiDong from '../HoiDongKHCN/components/ViewHoiDong';
 import SelectKeHoachDeTai from '../KeHoachDeTai/components/SelectKeHoachDeTai';
@@ -48,6 +48,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		setRecord,
 		setVisibleViewDetail,
 		exportDeXuatUngDungModel,
+		page,
+		limit,
 	} = useModel('khoahoc.detaikhcn');
 
 	const {
@@ -73,16 +75,9 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		);
 	};
 
-	// const { getAllModel, setDanhSachAllSinhVien, danhSachAllSinhVien } = useModel('sinhvien.sinhvien');
-
-	// const getAllSinhVien = async () => {
-	// 	const res = await getAllModel(false);
-	// 	setDanhSachAllSinhVien(res);
-	// };
-
-	// useEffect(() => {
-	// 	if (!danhSachAllSinhVien.length) getAllSinhVien();
-	// }, []);
+	useEffect(() => {
+		return () => location.reload();
+	}, []);
 
 	const onCell = (recordDeTai: DeTaiKHCN.IRecord) => ({
 		onClick: () => {
@@ -1210,6 +1205,39 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			onCell,
 		},
 		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
+			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
+			width: 120,
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
+			onCell,
+		},
+		{
 			title: 'Báo cáo tổng hợp kết quả nghiên cứu đề tài',
 			dataIndex: ['nghiemThuKhcn', 'baoCaoUrl'],
 			width: 120,
@@ -1439,6 +1467,39 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			onCell,
 		},
 		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
+			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
+			width: 120,
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
+			onCell,
+		},
+		{
 			title: 'Báo cáo tổng hợp kết quả nghiên cứu đề tài',
 			dataIndex: ['nghiemThuKhcn', 'baoCaoUrl'],
 			width: 120,
@@ -1643,6 +1704,39 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			onCell,
 		},
 		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
+			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
+			width: 120,
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
+			onCell,
+		},
+		{
 			title: 'Hồ sơ sau nghiệm thu',
 			dataIndex: 'taiLieuSauNghiemThu',
 			width: 250,
@@ -1775,13 +1869,12 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		if (props.type === ETypeTableDeTai.NopHoSoNghiemThu || props.type === ETypeTableDeTai.HoiDongNghiemThu)
 			return <FormNopHoSoNghiemThu getData={getData} />;
 		if (props.type === ETypeTableDeTai.NopHoSoSauNghiemThu) return <FormNopHoSoSauNghiemThu getData={getData} />;
-
 		return null;
-	}, [props.type]);
+	}, [props.type, recKeHoach?._id, page, limit, JSON.stringify(props?.paramCondition ?? {})]);
 
 	return (
 		<TableBase
-			dependencies={[recKeHoach?._id]}
+			dependencies={[recKeHoach?._id, JSON.stringify(props?.paramCondition ?? {})]}
 			buttons={{ create: props.type === 'DangKyDeXuat' ? true : false }}
 			Form={Form}
 			otherButtons={[
