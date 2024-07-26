@@ -1,6 +1,7 @@
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
 import { Descriptions, Tag } from 'antd';
+import moment from 'moment';
 
 const ViewHoSoSauNghiemThu = (props: { rec: DeTaiKHCN.IRecord }) => {
 	const { dangKyKhcn } = props.rec;
@@ -22,13 +23,37 @@ const ViewHoSoSauNghiemThu = (props: { rec: DeTaiKHCN.IRecord }) => {
 				<Descriptions.Item span={6} label='Tên đề tài'>
 					{dangKyKhcn.ten}
 				</Descriptions.Item>
+				<Descriptions.Item span={3} label='Loại đề tài'>
+					{dangKyKhcn.loaiCaNhan}
+				</Descriptions.Item>
 
 				<Descriptions.Item span={3} label='Sinh viên chịu trách nhiệm thực hiện chính'>
-					{dangKyKhcn?.chuTriDeTai?.hocHam ?? ''} {dangKyKhcn?.chuTriDeTai?.hocVi ?? ''} {dangKyKhcn.chuTriDeTai.ten}
+					{dangKyKhcn.chuTriDeTai.ten}
 				</Descriptions.Item>
-				<Descriptions.Item span={3} label='Cơ quan chủ trì đề tài'>
+				<Descriptions.Item span={2} label='Mã sinh viên'>
+					{dangKyKhcn.chuTriDeTai.maDinhDanh}
+				</Descriptions.Item>
+				<Descriptions.Item span={2} label='Khoa'>
+					{dangKyKhcn.chuTriDeTai.tenDonVi}
+				</Descriptions.Item>
+				<Descriptions.Item span={2} label='Ngày sinh'>
+					{moment(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
+				</Descriptions.Item>
+				<Descriptions.Item span={2} label='Nơi sinh'>
+					{dangKyKhcn.chuTriDeTai.noiSinh}
+				</Descriptions.Item>
+				<Descriptions.Item span={6} label='Địa chỉ liên hệ'>
+					{dangKyKhcn.chuTriDeTai.diaChi}
+				</Descriptions.Item>
+				<Descriptions.Item span={3} label='Email'>
+					{dangKyKhcn.chuTriDeTai.email}
+				</Descriptions.Item>
+				<Descriptions.Item span={3} label='SĐT'>
+					{dangKyKhcn.chuTriDeTai.soDienThoai}
+				</Descriptions.Item>
+				{/* <Descriptions.Item span={3} label='Cơ quan chủ trì đề tài'>
 					{dangKyKhcn.donViChuTri}
-				</Descriptions.Item>
+				</Descriptions.Item> */}
 			</Descriptions>
 			<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
 				{props.rec.taiLieuSauNghiemThu
