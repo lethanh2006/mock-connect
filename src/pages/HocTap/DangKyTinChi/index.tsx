@@ -2,7 +2,7 @@ import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao
 import { YoutubeOutlined } from '@ant-design/icons';
 import { Card, Divider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
 import PhieuDangKy from './components/PhieuDangKy';
@@ -41,6 +41,30 @@ const DangKyTinChiPage = () => {
 					) : !!phieuDangKy?.soTinChiToiDa ? (
 						<>
 							<Divider style={{ marginTop: 24 }}>Thông tin đăng ký</Divider>
+							<div style={{ marginBottom: 12 }}>
+								Sinh viên chủ động theo dõi{' '}
+								<a
+									href='./tien-trinh-hoc-tap'
+									onClick={(e) => {
+										e.preventDefault();
+										history.push('./tien-trinh-hoc-tap');
+									}}
+								>
+									Tiến trình học tập
+								</a>{' '}
+								và{' '}
+								<a
+									href='./ket-qua-hoc-tap'
+									onClick={(e) => {
+										e.preventDefault();
+										history.push('./ket-qua-hoc-tap');
+									}}
+								>
+									Kết quả học tập
+								</a>{' '}
+								để lựa chọn các lớp theo đúng tiến trình; học phần cần học lại, học cải thiện; khóa luận tốt nghiệp hoặc
+								học phần thay thế...
+							</div>
 							<DangKyLopHocPhan />
 						</>
 					) : (
