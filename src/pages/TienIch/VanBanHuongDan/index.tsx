@@ -138,7 +138,9 @@ const VanBanHuongDanComponent = () => {
 												<br />
 											</>
 										) : null}
-										<div>Số lượng văn bản: {item?.danhSachTep?.length ?? 0}</div>
+										<div>
+											Số lượng văn bản: {item?.danhSachTep?.filter((items) => items?.active !== true)?.length ?? 0}
+										</div>
 									</>
 								}
 							/>
