@@ -12,6 +12,7 @@ const UploadFile = (props: {
 	value?: string | string[] | null | { fileList: any; [key: string]: any };
 	onChange?: (val: { fileList: any[] | null }) => void;
 	maxCount?: number;
+	maxSize?: number;
 	drag?: boolean;
 	accept?: string;
 	buttonDescription?: string;
@@ -60,14 +61,15 @@ const UploadFile = (props: {
 
 	const handleChange = (val: any) => {
 		const fil = val.fileList;
-		const findLargeFile = fil?.find((file: any) => file.size / 1024 / 1024 > 5);
+		const maxSize = props?.maxSize ? props.maxSize : 5;
+		const findLargeFile = fil?.find((file: any) => file.size / 1024 / 1024 > maxSize);
 		const findWrongTypeFile = fil?.find((file: any) => {
 			const arrFileName = file.name.split('.');
 			return file?.remote !== true && !otherProps?.accept?.includes(arrFileName?.[arrFileName.length - 1]);
 		});
 
 		if (findLargeFile) {
-			message.error('Tập tin không được quá 5Mb');
+			message.error(`Tập tin không được quá ${props?.maxSize ?? 5}Mb`);
 			return;
 		}
 		if (findWrongTypeFile && otherProps?.accept) {

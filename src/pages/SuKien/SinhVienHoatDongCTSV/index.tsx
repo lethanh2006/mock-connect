@@ -4,7 +4,7 @@ import { type IColumn } from '@/components/Table/typing';
 import { EHoatDongChungType1 } from '@/services/SuKien/constant';
 import type { SuKien } from '@/services/SuKien/typings';
 import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
-import { CheckOutlined, CloseOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons';
+import { EyeOutlined, FileExcelOutlined, ReloadOutlined, SaveOutlined } from '@ant-design/icons';
 import { Card, Tabs } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -117,7 +117,7 @@ const SinhVienHoatDongCTSV = () => {
 							loading={loadingXemSau}
 							type='link'
 							danger
-							icon={<CloseOutlined />}
+							icon={<FileExcelOutlined />}
 							tooltip='Bỏ lưu'
 							onClick={() => handleBoXemSau(danhSachXemSau?.find((items) => items?.sourceId === rec?._id))}
 						/>
@@ -126,7 +126,7 @@ const SinhVienHoatDongCTSV = () => {
 							className='text-success'
 							loading={loadingXemSau}
 							type='link'
-							icon={<CheckOutlined />}
+							icon={<SaveOutlined />}
 							tooltip='Lưu'
 							onClick={() => handleXemSau(rec)}
 						/>
