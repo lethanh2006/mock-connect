@@ -435,6 +435,12 @@
 		component: './TienIch/KhaoSat',
 		icon: 'table',
 	},
+	{
+		name: 'ThongBao',
+		path: 'thong-bao',
+		component: './ThongBao',
+		icon: 'BellOutlined',
+	},
 	// {
 	// 	name: 'KhaiBaoSucKhoe',
 	// 	icon: 'HeartOutlined',
