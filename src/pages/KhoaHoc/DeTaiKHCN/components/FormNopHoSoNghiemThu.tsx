@@ -110,6 +110,7 @@ const FormNopHoSoNghiemThu = (props: { getData: any }) => {
 					<Col xs={24} sm={12}>
 						<Form.Item rules={[...rules.required]} label='Báo cáo tổng hợp kết quả nghiên cứu đề tài' name='baoCaoUrl'>
 							<UploadFile
+								maxSize={10}
 								maxCount={5}
 								accept='.doc, .docx, .pdf'
 								otherProps={{
@@ -128,6 +129,7 @@ const FormNopHoSoNghiemThu = (props: { getData: any }) => {
 									name='banGiaiTrinhUrl'
 								>
 									<UploadFile
+										maxSize={10}
 										maxCount={1}
 										accept='.doc, .docx, .pdf'
 										otherProps={{
