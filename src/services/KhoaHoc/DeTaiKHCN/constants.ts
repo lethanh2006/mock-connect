@@ -259,7 +259,7 @@ export const arrKeyNameSanPhamSauNghiemThu = [
 	{
 		title: 'Giấy xác nhận nhận tài liệu của viện CNTT',
 		field: 'giayXacNhanUrl',
-		required: true,
+		required: false,
 	},
 ];
 

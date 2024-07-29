@@ -83,6 +83,7 @@ const FormNopHoSoSauNghiemThu = (props: { getData: any }) => {
 							<Form.Item rules={item.required ? [...rules.required] : undefined} label={item.title} name={item.field}>
 								<UploadFile
 									maxCount={5}
+									maxSize={50}
 									accept='.doc, .docx, .pdf'
 									otherProps={{
 										multiple: true,
