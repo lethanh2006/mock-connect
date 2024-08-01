@@ -53,9 +53,14 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 					</Col>
 				) : null}
 
-				{pathname ? (
+				{record?.metadata?.pathWeb ? (
 					<Col span={24}>
-						<Button type='primary' onClick={redirectNotif}>
+						<Button
+							type='primary'
+							onClick={() => {
+								window.open(record?.metadata?.pathWeb, '_blank');
+							}}
+						>
 							Xem chi tiết
 						</Button>
 					</Col>
