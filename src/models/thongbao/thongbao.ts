@@ -1,9 +1,9 @@
 import useInitModel from '@/hooks/useInitModel';
 import type { ThongBao } from '@/services/ThongBao/typing';
-import { ipDaoTao } from '@/utils/ip';
+import { ipNotif } from '@/utils/ip';
 
 export default () => {
-	const objInit = useInitModel<ThongBao.IRecord>('foo', undefined, undefined, ipDaoTao);
+	const objInit = useInitModel<ThongBao.IRecord>('notification', undefined, undefined, ipNotif);
 	const { getModel } = objInit;
 
 	const getThongBaoLopModel = (

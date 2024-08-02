@@ -51,6 +51,7 @@ export default {
 	'menu.DichVuHanhChinh.TaoDon': 'Tạo đơn - Dịch vụ hành chính',
 	'menu.PhanHoi': 'Phản hồi',
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
+	'menu.ThongBao': 'Thông báo',
 	'menu.VanBanHuongDan': 'Văn bản',
 	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
 	'menu.HoatDongCTSV': 'Sự kiện',
@@ -74,6 +75,7 @@ export default {
 	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoNghiemThu': 'Nộp hồ sơ nghiệm thu đề tài',
 	'menu.HoatDongKHCN.DeTaiHocVien.ThucHienDeTai': 'Thực hiện đề tài',
 	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhGiao': 'Quyết định giao đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhCongNhan': 'Quyết định công nhận đề tài',
 	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoSauNghiemThu': 'Nộp hồ sơ sau nghiệm thu đề tài',
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
