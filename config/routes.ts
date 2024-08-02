@@ -374,6 +374,11 @@
 						path: './nop-ho-so-sau-nghiem-thu',
 						component: './KhoaHoc/DeTaiKHCN/NopHoSoSauNghiemThu',
 					},
+					{
+						name: 'QuyetDinhCongNhan',
+						path: './quyet-dinh-cong-nhan',
+						component: './KhoaHoc/DeTaiKHCN/QuyetDinhCongNhan',
+					},
 				],
 			},
 			{
@@ -434,6 +439,12 @@
 		path: './khao-sat',
 		component: './TienIch/KhaoSat',
 		icon: 'table',
+	},
+	{
+		name: 'ThongBao',
+		path: 'thong-bao',
+		component: './ThongBao',
+		icon: 'BellOutlined',
 	},
 	// {
 	// 	name: 'KhaiBaoSucKhoe',

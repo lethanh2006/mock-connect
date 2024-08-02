@@ -36,5 +36,6 @@ declare module ThongBao {
 	export type TNotificationSource = {
 		entityId?: string;
 		entitySource?: ENotificationSource;
+		pathweb?: string;
 	} & Record<string, any>;
 }
