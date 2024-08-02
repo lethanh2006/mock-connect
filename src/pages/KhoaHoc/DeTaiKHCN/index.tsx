@@ -25,12 +25,13 @@ import {
 } from '@ant-design/icons';
 import { Button, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import moment from 'moment';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useModel } from 'umi';
 import ViewHoiDong from '../HoiDongKHCN/components/ViewHoiDong';
 import SelectKeHoachDeTai from '../KeHoachDeTai/components/SelectKeHoachDeTai';
 import ViewMocThoiGianDot from '../KeHoachDeTai/components/ViewMocThoiGianDot';
-import ViewQuyetDinh from '../QuyetDinhGiao/ViewQuyetDinh';
+import ViewQuyetDinhGiao from '../QuyetDinhGiao/ViewQuyetDinh';
+import ViewQuyetDinhCongNhan from '../QuyetDinhCongNhan/ViewQuyetDinh';
 import FormDangKyDeXuat from './components/FormDangKyDeXuat';
 import FormNopHoSoNghiemThu from './components/FormNopHoSoNghiemThu';
 import FormNopHoSoSauNghiemThu from './components/FormNopHoSoSauNghiemThu';
@@ -57,6 +58,11 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		getByIdModel: getByIdQuyetDinhGiaoModel,
 		setVisibleViewDetail: setVisibleViewDetailQuyetDinhGiao,
 	} = useModel('khoahoc.quyetdinhgiao');
+	const {
+		loading: loadingQuyetDinhCongNhan,
+		getByIdModel: getByIdQuyetDinhCongNhanModel,
+		setVisibleViewDetail: setVisibleViewDetailQuyetDinhCongNhan,
+	} = useModel('khoahoc.quyetdinhcongnhan');
 
 	const { record: recKeHoach, setRecord: setRecKeHoach, danhSach: danhSachKeHoach } = useModel('khoahoc.kehoachdetai');
 	const {
@@ -74,10 +80,6 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			'me/pageable',
 		);
 	};
-
-	useEffect(() => {
-		return () => location.reload();
-	}, []);
 
 	const onCell = (recordDeTai: DeTaiKHCN.IRecord) => ({
 		onClick: () => {
@@ -982,6 +984,115 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			),
 		},
 	];
+	const columnsQuyetDinhCongNhan: IColumn<DeTaiKHCN.IRecord>[] = [
+		{
+			title: 'Quyết định công nhận đề tài NCKH',
+			width: 120,
+			align: 'center',
+			render: (rec: DeTaiKHCN.IRecord) => (
+				<div>
+					{rec?.quyetDinhCongNhanId ? (
+						<Button
+							loading={loadingQuyetDinh}
+							type='link'
+							onClick={async () => {
+								await getByIdQuyetDinhCongNhanModel(rec.quyetDinhCongNhanId);
+								setVisibleViewDetailQuyetDinhCongNhan(true);
+							}}
+						>
+							Xem chi tiết
+						</Button>
+					) : (
+						'Chưa có quyết định'
+					)}
+				</div>
+			),
+		},
+		{
+			title: 'Tên đề tài',
+			dataIndex: ['dangKyKhcn', 'ten'],
+			width: 200,
+			filterType: 'string',
+			onCell,
+		},
+		{
+			title: 'Sinh viên thực hiện đề tài',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 200,
+			align: 'center',
+			filterType: 'string',
+			// align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>
+						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
+					</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.ten}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
+						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
+			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
+			width: 120,
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
+			onCell,
+		},
+		{
+			title: 'Thời gian thực hiện',
+			width: 150,
+			align: 'center',
+			render: (val: DeTaiKHCN.IRecord) => (
+				<div>
+					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Kinh phí thực hiện',
+			width: 120,
+			align: 'center',
+			dataIndex: ['dangKyKhcn', 'kinhPhi', 'kinhPhi'] as any,
+			sortable: true,
+			render: (val, rec) => (
+				<div>
+					{currencyFormat(rec?.dangKyKhcn?.kinhPhi?.kinhPhi)} {rec?.dangKyKhcn?.kinhPhi?.menhGia}
+				</div>
+			),
+		},
+	];
+
 	const columnsThucHienDeTai: IColumn<DeTaiKHCN.IRecord>[] = [
 		{
 			title: 'Tên đề tài',
@@ -1910,6 +2021,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 					? columnsHoiDongXetDuyetThuyetMinh
 					: props.type === ETypeTableDeTai.QuyetDinhGiao
 					? columnsQuyetDinhGiao
+					: props.type === ETypeTableDeTai.QuyetDinhCongNhan
+					? columnsQuyetDinhCongNhan
 					: props.type === ETypeTableDeTai.ThucHienDeTai
 					? columnsThucHienDeTai
 					: props.type === ETypeTableDeTai.NopHoSoNghiemThu
@@ -1944,7 +2057,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 				/>
 			)}
 			{recHoiDong && <ViewHoiDong zIndex={1005} rec={recHoiDong} />}
-			<ViewQuyetDinh />
+			<ViewQuyetDinhGiao />
+			<ViewQuyetDinhCongNhan />
 		</TableBase>
 	);
 };

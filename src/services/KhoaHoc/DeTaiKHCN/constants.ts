@@ -195,6 +195,7 @@ export enum ETypeTableDeTai {
 	NopThuyetMinh = 'NopThuyetMinh',
 	HoiDongXetDuyetThuyetMinh = 'HoiDongXetDuyetThuyetMinh',
 	QuyetDinhGiao = 'QuyetDinhGiao',
+	QuyetDinhCongNhan = 'QuyetDinhCongNhan',
 	ThucHienDeTai = 'ThucHienDeTai',
 	NopHoSoNghiemThu = 'NopHoSoNghiemThu',
 	HoiDongNghiemThu = 'HoiDongNghiemThu',

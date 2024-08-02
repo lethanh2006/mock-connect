@@ -1,0 +1,47 @@
+import { primaryColor } from '@/services/base/constant';
+import { Button, Descriptions, Modal, Tag } from 'antd';
+import { useModel } from 'umi';
+import TableDeTaiQuyetDinh from './DeTaiQuyetDinh';
+
+const ViewQuyetDinh = () => {
+	const { record, visibleViewDetail, setVisibleViewDetail } = useModel('khoahoc.quyetdinhcongnhan');
+	const handleCancel = () => {
+		setVisibleViewDetail(false);
+	};
+
+	return (
+		<Modal
+			width={900}
+			title='Chi tiết quyết định công nhận'
+			visible={visibleViewDetail}
+			onCancel={handleCancel}
+			footer={
+				<Button type='primary' onClick={handleCancel}>
+					OK
+				</Button>
+			}
+		>
+			<Descriptions column={{ xs: 3, sm: 3, md: 6, xl: 6, xxl: 6 }}>
+				<Descriptions.Item span={6} label='Tên quyết định'>
+					{record?.ten}
+				</Descriptions.Item>
+				<Descriptions.Item span={3} label='Số quyết định'>
+					{record?.so}
+				</Descriptions.Item>
+				<Descriptions.Item span={3} label='File đính kèm'>
+					{record?.urlQuyetDinhCongNhan && (
+						<a href={record?.urlQuyetDinhCongNhan} target='_blank' rel='noreferrer'>
+							<Tag color={primaryColor}>Xem tập tin</Tag>
+						</a>
+					)}
+				</Descriptions.Item>
+			</Descriptions>
+			<div>
+				<b>Danh sách đề tài</b>
+			</div>
+			<TableDeTaiQuyetDinh mode='view' data={record?.danhSachDeTai ?? []} />
+		</Modal>
+	);
+};
+
+export default ViewQuyetDinh;

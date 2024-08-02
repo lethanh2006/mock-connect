@@ -75,6 +75,7 @@ export default {
 	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoNghiemThu': 'Nộp hồ sơ nghiệm thu đề tài',
 	'menu.HoatDongKHCN.DeTaiHocVien.ThucHienDeTai': 'Thực hiện đề tài',
 	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhGiao': 'Quyết định giao đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhCongNhan': 'Quyết định công nhận đề tài',
 	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoSauNghiemThu': 'Nộp hồ sơ sau nghiệm thu đề tài',
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
