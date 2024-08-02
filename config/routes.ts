@@ -373,6 +373,11 @@
 						path: './nop-ho-so-sau-nghiem-thu',
 						component: './KhoaHoc/DeTaiKHCN/NopHoSoSauNghiemThu',
 					},
+					{
+						name: 'QuyetDinhCongNhan',
+						path: './quyet-dinh-cong-nhan',
+						component: './KhoaHoc/DeTaiKHCN/QuyetDinhCongNhan',
+					},
 				],
 			},
 			{

@@ -290,6 +290,7 @@ declare module DeTaiKHCN {
 		taiLieuSauNghiemThu: TaiLieu[];
 		hoanThanh: boolean;
 		quyetDinhGiaoId: string;
+		quyetDinhCongNhanId: string;
 		urlQuyetDinhGiao: string;
 		mauQuyetDinhGiao: string;
 	}
