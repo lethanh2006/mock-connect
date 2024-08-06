@@ -11,7 +11,7 @@ import { useState } from 'react';
 import ViewThongBao from '../components/ViewThongBao';
 
 const ThongBaoLopPage = (props: { idLop: string; loai: 'lop-hanh-chinh' | 'lop-hoc-phan' }) => {
-	const { page, limit, getThongBaoLopModel, setRecord, record } = useModel('thongbao.thongbao');
+	const { page, limit, getThongBaoLopModel, setRecord, record } = useModel('thongbao.thongbaolop');
 	const { readNotificationModel } = useModel('thongbao.noticeicon');
 	const [visibleThongBao, setVisibleThongBao] = useState<boolean>(false);
 	const { loai, idLop } = props;
@@ -68,7 +68,7 @@ const ThongBaoLopPage = (props: { idLop: string; loai: 'lop-hanh-chinh' | 'lop-h
 				columns={columns}
 				getData={getData}
 				dependencies={[page, limit, idLop, loai]}
-				modelName='thongbao.thongbao'
+				modelName='thongbao.thongbaolop'
 				widthDrawer={800}
 				hideCard
 				formProps={{ idLop, loai, getData }}
