@@ -20,9 +20,10 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
+import CanhBaoGiaoDich from './components/CanhBao';
 import Form from './components/Form';
-import StatGiaoDich from './components/Stat';
 import ModalNopTruocHocPhi from './components/NopTruocHocPhi';
+import StatGiaoDich from './components/Stat';
 
 const GiaoDichPage = () => {
 	const {
@@ -220,6 +221,10 @@ const GiaoDichPage = () => {
 				]}
 			>
 				<StatGiaoDich />
+
+				<div style={{ marginBottom: 8 }}>
+					<CanhBaoGiaoDich />
+				</div>
 			</TableBase>
 
 			<ModalThanhToanNganHang
