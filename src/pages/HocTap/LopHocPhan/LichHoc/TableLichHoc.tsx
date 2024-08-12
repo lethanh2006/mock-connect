@@ -6,6 +6,7 @@ import {
 	trangThaiUserDiemDanh,
 	type ETrangThaiUserDiemDanh,
 } from '@/services/DaoTao/constant';
+import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
@@ -36,12 +37,7 @@ const TableLichHocLopHP = () => {
 			title: 'Ngày học',
 			dataIndex: 'ngay',
 			width: 150,
-			render: (val) =>
-				val
-					? `${moment(val).format('dddd').charAt(0).toUpperCase()}${moment(val).format('dddd').slice(1)}, ngày ${moment(
-							val,
-					  ).format('DD/MM/YYYY')}`
-					: null,
+			render: (val) => (val ? `${THU_TRONG_TUAN[moment(val).day()]}, ${moment(val).format('DD/MM/YYYY')}` : null),
 			onCell,
 		},
 		{
@@ -52,18 +48,19 @@ const TableLichHocLopHP = () => {
 			onCell,
 		},
 		{
+			title: 'Phòng học',
+			dataIndex: 'phongHoc',
+			align: 'center',
+			width: 100,
+			render: (val) => (val ? val : <i>Chưa cập nhật</i>),
+			onCell,
+		},
+		{
 			title: 'Giảng viên',
 			dataIndex: 'nhanSuSsoId',
 			width: 140,
 			render: (val, rec) =>
 				rec.nhanSu?.ten ? [rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ') : rec.tenNhanSu ?? <i>Chưa cập nhật</i>,
-			onCell,
-		},
-		{
-			title: 'Phòng học',
-			dataIndex: 'phongHoc',
-			width: 100,
-			render: (val) => (val ? val : <i>Chưa cập nhật</i>),
 			onCell,
 		},
 		{

@@ -47,7 +47,7 @@ const CalendarLichHocLopHp = () => {
 			defaultView={Views.MONTH}
 			defaultDate={new Date()}
 			messages={messagesCalendar}
-			style={{ height: 640, overflow: 'auto' }}
+			style={{ height: 540, overflow: 'auto' }}
 			min={moment('0600', 'HHmm').toDate()}
 			max={moment('2100', 'HHmm').toDate()}
 			eventPropGetter={eventPropGetter}
