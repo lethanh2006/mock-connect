@@ -61,7 +61,7 @@ const DanhSachBuoiHoc = () => {
 					value={show}
 					onChange={(val) => setShow(val.toString())}
 					options={[
-						{ value: 'calendar', label: 'Hiển thị lịch học' },
+						{ value: 'calendar', label: 'Lịch học' },
 						{ value: 'table', label: 'Danh sách chi tiết' },
 					]}
 				/>

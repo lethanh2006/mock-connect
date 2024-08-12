@@ -56,7 +56,7 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
 
 	return (
 		<>
-			<TableStaticData otherProps={{ loading, onRow }} data={sinhVienList} columns={columns} addStt />
+			<TableStaticData otherProps={{ loading, onRow }} data={sinhVienList} columns={columns} addStt hasTotal />
 
 			<Modal
 				title='Thông tin sinh viên'

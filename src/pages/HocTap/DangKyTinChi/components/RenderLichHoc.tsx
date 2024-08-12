@@ -1,47 +1,41 @@
+import ExpandText from '@/components/ExpandText';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { Tooltip } from 'antd';
+import './style.less';
 
-const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord }) => {
-	// const { danhSach: danhSachLopHc } = useModel('daotao.lophanhchinh');
+const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord; showAll?: boolean }) => {
 	const { lopHocPhan } = props;
-	// const maLopHcList = lopHocPhan.lopHpHcList?.map((item) => item.maLopHc);
-	// const danhSachDoiTuongLopHc = danhSachLopHc.map((item) => item.doiTuong);
-	// const trungLopHc = danhSachDoiTuongLopHc.includes(lopHocPhan.doiTuongLopHanhChinh);
+	const maHoaLichHoc = !!lopHocPhan?.lopGhepTkb?.maHoaLichHoc?.length
+		? lopHocPhan.lopGhepTkb.maHoaLichHoc
+		: lopHocPhan?.maHoaLichHoc;
 
-	const renderLich = () => {
-		const maHoaLichs = lopHocPhan.maHoaLichHoc?.sort((a, b) => a.thu - b.thu);
+	if (!maHoaLichHoc?.length) return <i style={{ color: '#999' }}>Không có thông tin lịch học</i>;
 
-		return maHoaLichs?.map((item, index) => {
-			const dsTuan = item.danhSachTuan.map((j) => j.tuan).sort((a, b) => a - b);
-			const thu = item.thu < 7 ? `Thứ ${item.thu + 1}` : 'Chủ nhật';
-			const tiet = `tiết ${item.tietBatDau}-${item.tietBatDau + item.soTiet - 1}`;
-			const tuan = `${dsTuan.length} tuần (${dsTuan.join(',')})`;
-			const tenNhanSu = ''; // item.nhanSu?.hoDem ? [item.nhanSu.hoDem, item.nhanSu.ten].join(' ') : item.tenNhanSu ?? '';
-			// <i style={{ color: '#999' }}>Không có thông tin g/v</i>;
-			const phongHoc = item.phongHoc ? `phòng ${item.phongHoc}` : '';
-			return (
-				// eslint-disable-next-line react/no-array-index-key
-				<li key={index}>{[thu, tiet, tuan, tenNhanSu, phongHoc].filter((j) => !!j).join(', ')}</li>
-			);
-		});
-	};
+	const maHoaLichs = maHoaLichHoc?.sort((a, b) => a.thu - b.thu);
+	const content = maHoaLichs?.map((item, index) => {
+		const dsTuan = item.danhSachTuan.map((j) => j.tuan).sort((a, b) => a - b);
+		const thu = item.thu < 7 ? `Thứ ${item.thu + 1}` : 'Chủ nhật';
+		const tiet = `tiết ${item.tietBatDau}-${item.tietBatDau + item.soTiet - 1}`;
+		const tenNhanSu = ''; //item.nhanSu?.hoDem ? [item.nhanSu.hoDem, item.nhanSu.ten].join(' ') : item.tenNhanSu ?? '';
+		// <i style={{ color: '#999' }}>Không có thông tin g/v</i>;
+		const phongHoc = item.phongHoc ? `phòng ${item.phongHoc}` : '';
+		return (
+			// eslint-disable-next-line react/no-array-index-key
+			<div key={index} className='lich-hoc'>
+				- {thu}, {tiet},{' '}
+				{props.showAll ? (
+					<>
+						{dsTuan.length} tuần ({dsTuan.join(',')})
+					</>
+				) : (
+					<Tooltip title={dsTuan.join(', ')}>{dsTuan.length} tuần</Tooltip>
+				)}
+				, {[tenNhanSu, phongHoc].filter((j) => !!j).join(', ')}
+			</div>
+		);
+	});
 
-	return (
-		<ul className='lich-hoc'>
-			{!lopHocPhan.maHoaLichHoc?.length ? (
-				<li>
-					<i style={{ color: '#999' }}>Không có thông tin lịch học</i>
-				</li>
-			) : (
-				renderLich()
-			)}
-
-			{/* {maLopHcList?.length ? (
-				<li>
-					Lớp gợi ý: <span className={trungLopHc ? undefined : 'text-error'}>{maLopHcList.join(', ')}</span>
-				</li>
-			) : null} */}
-		</ul>
-	);
+	return props.showAll ? <>{content}</> : <ExpandText>{content}</ExpandText>;
 };
 
 export default RenderLichHoc;
