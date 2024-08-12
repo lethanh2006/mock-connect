@@ -12,9 +12,9 @@ const ThongTinChungLopHanhChinh = () => {
 				<Descriptions.Item label='Tên lớp'>{record?.ten ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Khóa sinh viên'>{record?.khoaSinhVien?.ten ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Ngành đào tạo'>{record?.nganh?.ten ?? '--'}</Descriptions.Item>
-				<Descriptions.Item label='Sĩ số'>
+				{/* <Descriptions.Item label='Sĩ số'>
 					{record?.siSo ?? record?.sinhVienList?.length ?? 0} sinh viên
-				</Descriptions.Item>
+				</Descriptions.Item> */}
 			</Descriptions>
 
 			<DanhSachGiangVien

@@ -176,42 +176,6 @@ declare module SinhVien {
 		diaChi?: string;
 	};
 
-	export interface IHocBongSinhVien {
-		_id: string;
-		sinhVienSsoId: string;
-		sinhVien?: IRecord;
-		ten: string;
-		donViTaiTro: string;
-		thoiGianTraoTangHocBong: string;
-		loaiHocBongId: string;
-		loaiHocBong?: LoaiHocBong.IRecord;
-		giaTriHocBong: number;
-	}
-
-	export interface IKhenThuongSinhVien {
-		_id: string;
-		sinhVienSsoId: string;
-		sinhVien?: IRecord;
-		namKhenThuong: number;
-		soQuyetDinhKhenThuong: string;
-		danhHieuThiDuaGiaiThuongKhenThuong: string;
-		capKhenThuong: string;
-		loaiDanhHieuThiDuaGiaiThuongKhenThuong: string;
-		phuongThucKhenThuong: string;
-	}
-
-	export interface IKyLuatSinhVien {
-		_id: string;
-		sinhVienSsoId: string;
-		sinhVien?: IRecord;
-		capQuyetDinh: string;
-		soQuyetDinh: string;
-		ngayQuyetDinh: string;
-		namBiKyLuat: number;
-		lyDo: string;
-		loaiKyLuat: string;
-	}
-
 	export interface INoiTruSinhVien {
 		_id: string;
 		sinhVienSsoId: string;

@@ -32,6 +32,10 @@ export declare module LopHocPhan {
 
 		parent?: IRecord;
 		children?: IRecord[];
+		/** Lớp ghép thời khóa biểu cùng */
+		tenLopGhepTkb?: string;
+		lopGhepTkb?: IRecord;
+
 		nhanSuList?: IRecordNhanSuLopHP[];
 		sinhVienList?: SinhVien.IRecord[];
 		maHoaLichHoc?: TMaHoaLichHoc[];
