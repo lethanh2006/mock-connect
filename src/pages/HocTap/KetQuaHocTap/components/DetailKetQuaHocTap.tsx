@@ -1,14 +1,17 @@
+import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { ETrangThaiThi } from '@/services/HocTap/constant';
 import { Descriptions, Divider, Empty, Spin, Tag, Tooltip } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocPhan.IDiemHpSvHk }) => {
+	const { lopHocPhanId, diemHpSvHk } = props;
 	const { danhSach: danhSachDauDiem, getModel } = useModel('daotao.daudiemhocphan');
 	const { sinhVienGetDiemLHPModel, record: recSinhVienLhp, loading } = useModel('lophocphan.sinhvienlophocphan');
-	const { lopHocPhanId, diemHpSvHk } = props;
+	const [hienThiDiemThi, setHienThiDiemThi] = useState<boolean>(false);
+
 	const recDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
 	const hasTrongSo = !!recDiem?.trongSo1;
 	// Đầu điểm học phần theo đề cương
@@ -57,6 +60,11 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 						<Descriptions.Item label='Điểm thi lần 2'>{recDiem?.diemThi2 ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Điểm cuối'>{recDiem?.diemKthp ?? '--'}</Descriptions.Item>
 					</Descriptions>
+
+					<div style={{ marginTop: 8 }}>
+						<a onClick={() => setHienThiDiemThi(true)}>Xem chi tiết điểm thi</a>
+						{hienThiDiemThi && <DiemThiHocKy maHocKy={recDiem?.maHocKy} maHocPhan={recDiem?.maHocPhan} />}
+					</div>
 
 					<Divider>Điểm tổng kết</Divider>
 					<Descriptions bordered>
