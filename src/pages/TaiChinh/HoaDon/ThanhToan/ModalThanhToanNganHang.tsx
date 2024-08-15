@@ -2,8 +2,8 @@ import { EDoiTuongLopHanhChinh } from '@/services/HocTap/constant';
 import { ESettingKey, unitName } from '@/services/base/constant';
 import { ipTaiChinh } from '@/utils/ip';
 import { removeVietnameseTones } from '@/utils/utils';
-import { Col, Modal, Row, Space } from 'antd';
-import { useEffect } from 'react';
+import { Col, Modal, Row, Segmented, Space } from 'antd';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) => {
@@ -12,6 +12,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	const { getMeModel: getLopHc, danhSach: danhSachLopHc } = useModel('daotao.lophanhchinh');
 	const { getByKeyModel, settings } = useModel('tienich.caidat');
 	const { initialState } = useModel('@@initialState');
+	const [bank, setBank] = useState('agri');
 	const isPhanHieu = danhSachLopHc.some((item) => item.doiTuong === EDoiTuongLopHanhChinh.PH);
 	const userFullname =
 		record?.userFullname ??
@@ -23,6 +24,9 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 		`${userCode ?? ''} ${userFullname ?? ''} ${record?.name ?? 'Nộp tiền'}`,
 	).toUpperCase();
 	const unitInfo = removeVietnameseTones(unitName).toUpperCase();
+	const { tienToTaiKhoan, maNganHang, urlHuongDanThanhToan } = settings[ESettingKey.THONG_TIN_THANH_TOAN];
+	const tienToTaiKhoan1 = bank === 'agri' ? tienToTaiKhoan : '963128';
+	const maNganHang1 = bank === 'agri' ? maNganHang : '970418';
 
 	useEffect(() => {
 		getLopHc();
@@ -46,14 +50,10 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 				<p>
 					2. SỬ DỤNG ỨNG DỤNG SMARTBANKING CỦA NGÂN HÀNG HOẶC QUẦY GIAO DỊCH:
 					<br />
-					{settings[ESettingKey.THONG_TIN_THANH_TOAN]?.urlHuongDanThanhToan ? (
+					{urlHuongDanThanhToan ? (
 						<>
 							Sinh viên thực hiện thanh toán theo hướng dẫn chi tiết{' '}
-							<a
-								target='_blank'
-								href={settings[ESettingKey.THONG_TIN_THANH_TOAN]?.urlHuongDanThanhToan}
-								rel='noreferrer'
-							>
+							<a target='_blank' href={urlHuongDanThanhToan} rel='noreferrer'>
 								tại đây
 							</a>
 							<br />
@@ -62,7 +62,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 					Mã thanh toán của sinh viên là: <b>{record?.identityCode}</b> <br />
 					Số tài khoản với sinh viên chuyển khoản 24/7:{' '}
 					<b>
-						{settings[ESettingKey.THONG_TIN_THANH_TOAN]?.tienToTaiKhoan}
+						{tienToTaiKhoan1}
 						{record?.identityCode}
 					</b>
 				</p>
@@ -87,11 +87,17 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 					<b>
 						<u>Mã thanh toán QR liên ngân hàng:</u>
 					</b>
+					<Segmented
+						value={bank}
+						onChange={(val) => setBank(val.toString())}
+						options={[
+							{ value: 'agri', label: 'Agribank' },
+							{ value: 'bidv', label: 'BIDV' },
+						]}
+					/>
 					<img
 						style={{ maxWidth: '100%' }}
-						src={`https://img.vietqr.io/image/${settings[ESettingKey.THONG_TIN_THANH_TOAN]?.maNganHang}-${
-							settings[ESettingKey.THONG_TIN_THANH_TOAN]?.tienToTaiKhoan
-						}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
+						src={`https://img.vietqr.io/image/${maNganHang1}-${tienToTaiKhoan1}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
 					/>
 					<i>Sinh viên quét mã QR bằng Ứng dụng ngân hàng để thanh toán</i>
 				</Space>
