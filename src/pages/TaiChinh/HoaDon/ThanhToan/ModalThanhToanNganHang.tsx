@@ -24,7 +24,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 		`${userCode ?? ''} ${userFullname ?? ''} ${record?.name ?? 'Nộp tiền'}`,
 	).toUpperCase();
 	const unitInfo = removeVietnameseTones(unitName).toUpperCase();
-	const { tienToTaiKhoan, maNganHang, urlHuongDanThanhToan } = settings[ESettingKey.THONG_TIN_THANH_TOAN];
+	const { tienToTaiKhoan, maNganHang, urlHuongDanThanhToan } = settings[ESettingKey.THONG_TIN_THANH_TOAN] ?? {};
 	const tienToTaiKhoan1 = bank === 'agri' ? tienToTaiKhoan : '963128';
 	const maNganHang1 = bank === 'agri' ? maNganHang : '970418';
 
