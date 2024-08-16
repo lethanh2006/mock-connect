@@ -11,8 +11,8 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 	const [previewImage, setPreviewImage] = useState('');
 
 	return (
-		<>
-			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>{title ?? 'Giảng viên'}</h4>
+		<div style={{ marginTop: 24 }}>
+			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>{title ?? 'Giảng viên'}</h4>
 			{danhSachNhanSu?.length ? (
 				<List
 					grid={{ xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 3 }}
@@ -81,7 +81,7 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 					onVisibleChange: (val) => setPreviewOpen(val),
 				}}
 			/>
-		</>
+		</div>
 	);
 };
 
