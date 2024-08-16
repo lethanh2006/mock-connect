@@ -23,6 +23,8 @@ export declare module LopHocPhan {
 		hocKy?: HocKy.IRecord;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
+		gioiThieuChung?: string;
+
 		siSoToiDa: number;
 		siSo?: number; // Sĩ số hiện tại
 		loai: ELoaiLopHocPhan;
