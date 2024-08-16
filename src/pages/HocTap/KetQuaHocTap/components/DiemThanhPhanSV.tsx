@@ -183,7 +183,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 					onChange={(val) => setLoaiHocPhan(val.toString())}
 					options={[
 						{ value: 'all', label: 'Tất cả học phần' },
-						{ value: 'fail', label: 'Học phần chưa đạt' },
+						// { value: 'fail', label: 'Học phần chưa đạt' },
 					]}
 				/>
 			</TableStaticData>
