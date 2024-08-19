@@ -6,6 +6,7 @@ import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
 import DanhSachGiangVien from './DanhSachGiangVien';
 import DanhSachSinhVien from './DanhSachSinhVien';
+import GioiThieuChungLopHp from './GioiThieuChung';
 
 const ThongTinChung = () => {
 	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
@@ -62,6 +63,8 @@ const ThongTinChung = () => {
 				<Descriptions.Item label='Số tín chỉ'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Descriptions.Item>
 				{/* <Descriptions.Item label='Sĩ số'>{record?.siSo ?? 0} sinh viên</Descriptions.Item> */}
 			</Descriptions>
+
+			<GioiThieuChungLopHp />
 
 			{record?.moodleShortname ? (
 				<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle} style={{ marginBottom: 18 }}>
