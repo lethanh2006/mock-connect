@@ -29,18 +29,25 @@ const ModalThoiKhoaBieu = () => {
 			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
 				<Tabs.TabPane tab='Nội dung bài học' key='noidung'>
 					<Descriptions column={1} title='' style={{ marginTop: 12 }}>
+						<Descriptions.Item label='Nội dung học phần'>{recThoiKhoaBieu?.noiDungHp?.ten ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Tiêu đề bài học'>{recThoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Nội dung'>
 							<div dangerouslySetInnerHTML={{ __html: recThoiKhoaBieu?.noiDungBaiHoc ?? '--' }} />
 						</Descriptions.Item>
-						<Descriptions.Item label='Tệp đính kèm'>
-							{recThoiKhoaBieu?.urlBaiHoc ? (
-								<a href={recThoiKhoaBieu.urlBaiHoc} target='_blank' rel='noreferrer'>
-									Xem chi tiết
-								</a>
-							) : (
-								'--'
-							)}
+						<Descriptions.Item label='Học liệu'>
+							{recThoiKhoaBieu?.hocLieuList?.map((item, ind) => (
+								// eslint-disable-next-line react/no-array-index-key
+								<div key={ind}>
+									-{' '}
+									{item.url ? (
+										<a href={item.url} target='_blank' rel='noreferrer'>
+											{item.ten ?? '--'}
+										</a>
+									) : (
+										item.ten
+									)}
+								</div>
+							)) ?? '--'}
 						</Descriptions.Item>
 					</Descriptions>
 				</Tabs.TabPane>
