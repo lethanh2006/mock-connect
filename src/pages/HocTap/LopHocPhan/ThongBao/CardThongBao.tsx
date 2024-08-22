@@ -19,6 +19,7 @@ const CardThongBao = () => {
 
 	return (
 		<Card
+			size='small'
 			title='Thông báo'
 			bodyStyle={{ padding: 0 }}
 			extra={[
