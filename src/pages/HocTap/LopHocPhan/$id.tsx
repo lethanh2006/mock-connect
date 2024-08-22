@@ -8,6 +8,7 @@ import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
 import CardThongBao from './ThongBao/CardThongBao';
+import CardGiangVienLop from './components/CardGiangVien';
 import ThongTinChung from './components/ThongTinChung';
 
 const DetailLopTinChi = ({
@@ -19,7 +20,7 @@ const DetailLopTinChi = ({
 }) => {
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
 	const { record, sinhVienGetByIdModel, setRecord } = useModel('lophocphan.lophocphan');
-	const { getAllModel: getAllNhanSu } = useModel('lophocphan.nhansulophocphan');
+	const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia'];
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 	const hash = window.location.hash?.replace('#', '') ?? paths[0];
@@ -76,6 +77,9 @@ const DetailLopTinChi = ({
 						<Row gutter={[16, 16]}>
 							<Col span={24}>
 								<CardBuoiHocTiepTheo />
+							</Col>
+							<Col span={24}>
+								<CardGiangVienLop danhSachNhanSu={danhSachNhanSu} title='Giảng viên lớp học' loading={loading} />
 							</Col>
 							<Col span={24}>
 								<CardThongBao />

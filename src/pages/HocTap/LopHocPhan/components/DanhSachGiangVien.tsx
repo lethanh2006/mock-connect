@@ -17,6 +17,7 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 				<List
 					grid={{ xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 3 }}
 					itemLayout='horizontal'
+					size='small'
 					dataSource={danhSachNhanSu}
 					renderItem={(item) => (
 						<List.Item>
@@ -42,25 +43,19 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 								}
 								title={
 									item.nhanSu?.ten || item.tenNhanSu ? (
-										`Họ tên: ${item.nhanSu?.ten ? [item.nhanSu.hoDem, item.nhanSu.ten].join(' ') : item.tenNhanSu}`
+										`${item.nhanSu?.ten ? [item.nhanSu.hoDem, item.nhanSu.ten].join(' ') : item.tenNhanSu}`
 									) : (
 										<i>Không tìm thấy thông tin</i>
 									)
 								}
 								description={
 									<>
-										<div>
-											Email:{' '}
-											{item.nhanSu?.email ? <a href={`mailto:${item.nhanSu.email}`}>{item.nhanSu.email}</a> : <i>--</i>}
-										</div>
-										<div>
-											SĐT:{' '}
-											{item.nhanSu?.sdtCaNhan ? (
-												<a href={`tel:${item.nhanSu.sdtCaNhan}`}>{formatPhoneNumber(item.nhanSu.sdtCaNhan)}</a>
-											) : (
-												<i>--</i>
-											)}
-										</div>
+										{item.nhanSu?.email ? <a href={`mailto:${item.nhanSu.email}`}>{item.nhanSu.email}</a> : <i>--</i>} |{' '}
+										{item.nhanSu?.sdtCaNhan ? (
+											<a href={`tel:${item.nhanSu.sdtCaNhan}`}>{formatPhoneNumber(item.nhanSu.sdtCaNhan)}</a>
+										) : (
+											<i>--</i>
+										)}
 									</>
 								}
 							/>

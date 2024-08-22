@@ -7,6 +7,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalThoiKhoaBieu from './Modal';
+import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 
 const CardBuoiHocTiepTheo = () => {
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
@@ -48,12 +49,14 @@ const CardBuoiHocTiepTheo = () => {
 					<Progress percent={Math.round((index / danhSach.length) * 100)} style={{ marginBottom: 12 }} size='small' />
 				) : null}
 
-				<Descriptions column={1}>
-					<Descriptions.Item label='Ngày giờ'>
+				<Descriptions column={1} size='small'>
+					<Descriptions.Item label='Ngày học' span={2}>
+						{THU_TRONG_TUAN[moment(buoiHoc.ngay).day()]}, {moment(buoiHoc.ngay).format('DD/MM/YYYY')}
+					</Descriptions.Item>
+					<Descriptions.Item label='Thời gian'>
 						{buoiHoc.thoiGianBatDau && buoiHoc.thoiGianKetThuc
 							? `${moment(buoiHoc.thoiGianBatDau).format('HH:mm')} - ${moment(buoiHoc.thoiGianKetThuc).format('HH:mm')}`
 							: `Tiết ${buoiHoc.tietBatDau} - ${buoiHoc.tietKetThuc}`}
-						, {moment(buoiHoc?.ngay).format('dddd')}, ngày {moment(buoiHoc?.ngay).format('DD/MM/YYYY')}
 					</Descriptions.Item>
 					<Descriptions.Item label='Phòng'>{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
 				</Descriptions>
@@ -85,11 +88,13 @@ const CardBuoiHocTiepTheo = () => {
 			<Row gutter={[16, 16]}>
 				{buoiHocHienTai?._id ? (
 					<Col span={24} sm={12} md={24}>
-						<Card title='Buổi học đang diễn ra'>{renderBuoihoc(buoiHocHienTai)}</Card>
+						<Card size='small' title='Buổi học đang diễn ra'>
+							{renderBuoihoc(buoiHocHienTai)}
+						</Card>
 					</Col>
 				) : buoiHocTruoc ? (
 					<Col span={24} sm={12} md={24}>
-						<Card title='Buổi học đã qua' loading={loading}>
+						<Card size='small' title='Buổi học đã qua' loading={loading}>
 							{renderBuoihoc(buoiHocTruoc, true)}
 						</Card>
 					</Col>
@@ -97,6 +102,7 @@ const CardBuoiHocTiepTheo = () => {
 
 				<Col span={24} sm={12} md={24}>
 					<Card
+						size='small'
 						title='Buổi học sắp tới'
 						extra={[
 							<ButtonExtend
