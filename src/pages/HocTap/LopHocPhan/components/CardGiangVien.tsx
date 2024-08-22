@@ -16,7 +16,7 @@ const CardGiangVienLop = (props: { danhSachNhanSu?: TNhanSu[]; title?: string; l
 					size='small'
 					dataSource={danhSachNhanSu}
 					renderItem={(item) => (
-						<List.Item>
+						<List.Item style={{ padding: 0 }}>
 							<List.Item.Meta
 								avatar={
 									<Avatar
