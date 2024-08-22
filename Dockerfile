@@ -4,7 +4,7 @@ FROM node:16-alpine AS development
 
 # Set environment variables
 ENV APP_CONFIG_IP_ROOT=https://ais.aisenote.com/
-ENV APP_CONFIG_ONE_SIGNAL_ID=
+ENV APP_CONFIG_ONE_SIGNAL_ID=f3857a81-2891-49be-87a7-903a4a1a54be
 ENV APP_CONFIG_SENTRY_DSN=
 ENV APP_CONFIG_KEYCLOAK_AUTHORITY=https://sso.hvpnvn.edu.vn/realms/vwa
 ENV APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID=vwa-
