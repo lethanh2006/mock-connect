@@ -74,10 +74,11 @@ const TableLichHocLopHP = () => {
 			onCell,
 		},
 		{
-			title: 'Nội dung',
-			dataIndex: 'noiDungHpId',
+			title: 'Tiêu đề',
+			dataIndex: 'tieuDeBaiHoc',
 			width: 180,
-			render: (val, rec) => rec.noiDungHp?.tieuDe ?? '',
+			// render: (val, rec) => rec.noiDungHp?.tieuDe ?? '',
+			onCell,
 		},
 		{
 			title: 'Học liệu',

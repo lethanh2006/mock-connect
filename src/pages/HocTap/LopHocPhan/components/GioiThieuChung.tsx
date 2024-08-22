@@ -25,9 +25,9 @@ const GioiThieuChungLopHp = () => {
 				}
 				dangerouslySetInnerHTML={{ __html: record?.gioiThieuChung ?? '' }}
 			/>
-			{record?.gioiThieuChung && !expand ? (
-				<a onClick={() => setExpand(true)} style={{ marginTop: 8 }}>
-					Xem tiếp
+			{record?.gioiThieuChung ? (
+				<a onClick={() => setExpand((v) => !v)} style={{ marginTop: 8 }}>
+					{expand ? 'Thu gọn' : 'Xem thêm'}
 				</a>
 			) : null}
 		</div>
