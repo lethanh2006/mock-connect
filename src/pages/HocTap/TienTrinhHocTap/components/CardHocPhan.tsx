@@ -18,6 +18,7 @@ const CardHocPhan = (props: {
 	return (
 		<div className='col-hoc-phan'>
 			<div
+				title={hocPhan?.ten}
 				className={classNames({
 					'card-hoc-phan': true,
 					'card-chua-hoc': trangThaiHoc === ETrangThaiHocTap.CHUA_HOC,

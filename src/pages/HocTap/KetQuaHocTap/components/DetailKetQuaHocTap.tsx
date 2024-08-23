@@ -22,7 +22,7 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 	);
 
 	useEffect(() => {
-		getModel();
+		if (!danhSachDauDiem.length) getModel();
 	}, []);
 
 	useEffect(() => {
@@ -61,10 +61,12 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 						<Descriptions.Item label='Điểm cuối'>{recDiem?.diemKthp ?? '--'}</Descriptions.Item>
 					</Descriptions>
 
-					<div style={{ marginTop: 8 }}>
-						<a onClick={() => setHienThiDiemThi(true)}>Xem chi tiết điểm thi</a>
-						{hienThiDiemThi && <DiemThiHocKy maHocKy={recDiem?.maHocKy} maHocPhan={recDiem?.maHocPhan} />}
-					</div>
+					{recDiem.diemKthp !== undefined ? (
+						<div style={{ marginTop: 8 }}>
+							<a onClick={() => setHienThiDiemThi(true)}>Xem chi tiết điểm thi</a>
+							{hienThiDiemThi && <DiemThiHocKy maHocKy={recDiem?.maHocKy} maHocPhan={recDiem?.maHocPhan} />}
+						</div>
+					) : null}
 
 					<Divider>Điểm tổng kết</Divider>
 					<Descriptions bordered>
