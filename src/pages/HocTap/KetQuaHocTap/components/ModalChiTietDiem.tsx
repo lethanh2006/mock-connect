@@ -2,8 +2,8 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { PlusCircleOutlined, StarOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Modal, Space, Tooltip, message } from 'antd';
+import { InfoCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Descriptions, Modal, Popover, Space, Tooltip, message } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
@@ -46,7 +46,7 @@ const ModalChiTietDiem = (
 					))}
 				</ul>
 			) : (
-				<i>Không có thông tin</i>
+				<i style={{ color: '#999' }}>Không có thông tin</i>
 			)}
 		</Descriptions.Item>
 	);
@@ -59,9 +59,9 @@ const ModalChiTietDiem = (
 				onCancel={() => setVisible(false)}
 				footer={
 					<Space wrap>
-						<ButtonExtend icon={<StarOutlined />} title='Quan tâm học phần'>
+						{/* <ButtonExtend icon={<StarOutlined />} title='Quan tâm học phần'>
 							Quan tâm
-						</ButtonExtend>
+						</ButtonExtend> */}
 						{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
 							<ButtonExtend
 								tooltip={ngoaiQuyDoiDiem ? 'Không có đợt công nhận KQHT' : null}
@@ -112,12 +112,26 @@ const ModalChiTietDiem = (
 
 				{(trangThaiHoc === undefined || trangThaiHoc !== ETrangThaiHocTap.CHUA_HOC) && listDiem.length
 					? listDiem.map((diem, index) => (
-							<>
-								<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10, marginTop: 12 }}>
-									Chi tiết điểm học phần{listDiem.length > 1 ? ` học lần ${index + 1}` : null}
+							// eslint-disable-next-line react/no-array-index-key
+							<div style={{ marginBottom: index === 1 ? undefined : 18 }} key={index}>
+								<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10, marginTop: 10 }}>
+									Chi tiết kết quả học tập{listDiem.length > 1 ? ` học lần ${index + 1}` : null}{' '}
+									<Popover
+										content={
+											<Descriptions column={1} title='Thông tin học tập' style={{ maxWidth: 300 }}>
+												<Descriptions.Item label='Kỳ học' span={2}>
+													{diem?.hocKy?.ten ?? diem.maHocKy ?? '--'}
+												</Descriptions.Item>
+												<Descriptions.Item label='Tên lớp tín chỉ'>{diem?.tenLopHocPhan ?? '--'}</Descriptions.Item>
+											</Descriptions>
+										}
+									>
+										<InfoCircleOutlined />
+									</Popover>
 								</h4>
+
 								<DetailKetQuaHocTap key={diem._id} diemHpSvHk={diem} />
-							</>
+							</div>
 					  ))
 					: null}
 			</Modal>
