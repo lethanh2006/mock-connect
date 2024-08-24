@@ -14,8 +14,8 @@ interface DataType extends LopHocPhan.IDiemHpSvHk {
 
 const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	const { maKhoaNganh } = props;
-	const { danhSach: danhSachKQHK } = useModel('daotao.ketquahocky');
-	const { danhSach, getAllModel, loading } = useModel('daotao.diemhpsvhk');
+	const { getKetQuaHocKy } = useModel('daotao.ketquahocky');
+	const { danhSach, getDiemSvHk, loading } = useModel('daotao.diemhpsvhk');
 	const { danhSach: danhSachDauDiem, getModel: getDauDiem } = useModel('daotao.daudiemhocphan');
 	const [loaiHocPhan, setLoaiHocPhan] = useState<string>('all');
 	const [data, setData] = useState<DataType[]>([]);
@@ -23,23 +23,15 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 		.filter((i) => i.diemChu === ELoaiDiemChu.F)
 		.map((i, ind) => ({ ...i, title: ind + 1, tenHocPhan: i.hocPhan?.ten }));
 
-	/** Get Data theo điều kiện: Học kỳ, Năm học hoặc Toàn khóa */
-	const getData = (): Promise<LopHocPhan.IDiemHpSvHk[]> => {
-		if (maKhoaNganh) return getAllModel(undefined, undefined, { maKhoaNganh }, undefined, 'sinh-vien/me');
-		return Promise.reject('Invalid sinhVien');
-	};
+	const getData = () => {
+		if (!maKhoaNganh) return;
 
-	useEffect(() => {
-		getDauDiem();
-	}, []);
-
-	useEffect(() => {
-		getData().then((da) => {
+		Promise.all([getKetQuaHocKy(maKhoaNganh), getDiemSvHk(maKhoaNganh)]).then(([kqhkList, diemSv]) => {
 			const res: any[] = [];
-			const gHocKy = _.groupBy(da, (item) => item.maHocKy); // Nhóm theo học kỳ
-			const aHocKy = Object.entries(gHocKy).sort(([a], [b]) => (a > b ? -1 : 1)); // Sắp xếp tăng dần học kỳ
+			const gHocKy = _.groupBy(diemSv, (item) => item.maHocKy); // Nhóm theo học kỳ
+			const aHocKy = Object.entries(gHocKy).sort(([a], [b]) => (a > b ? -1 : 1)); // Sắp xếp giảm dần học kỳ
 			aHocKy.forEach(([mahk, diemHpHkList]) => {
-				const kqhk = danhSachKQHK.find((j) => j.maHocKy === mahk);
+				const kqhk = kqhkList.find((j) => j.maHocKy === mahk);
 				let tenHocPhan = diemHpHkList[0]?.hocKy?.ten ?? `Học kỳ ${mahk}`;
 				if (kqhk)
 					tenHocPhan += ` (TB học kỳ: ${kqhk.trungBinhHocKy ?? '--'}, đạt: ${
@@ -59,6 +51,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 
 			setData(res);
 		});
+	};
+
+	useEffect(() => {
+		getDauDiem();
+	}, []);
+
+	useEffect(() => {
+		getData();
 	}, [maKhoaNganh]);
 
 	const onCell = (rec: LopHocPhan.IDiemHpSvHk) => ({
@@ -96,7 +96,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 		},
 		{
 			title: 'Số TC',
-			width: 80,
+			width: 60,
 			align: 'center',
 			render: (val, rec) => rec?.hocPhan?.soTinChi,
 			onCell,

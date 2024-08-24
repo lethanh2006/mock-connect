@@ -8,8 +8,8 @@ const ChartDiemTrungBinh = () => {
 		<LineChart
 			xAxis={danhSach.map((item) => item.maHocKy)}
 			yAxis={[
-				danhSach.map((item) => item.trungBinhHocKyThang4),
-				danhSach.map((item) => item.trungBinhTichLuyToanKhoaThang4),
+				danhSach.map((item) => item.trungBinhHocKyThang4 ?? 0),
+				danhSach.map((item) => item.trungBinhTichLuyToanKhoaThang4 ?? 0),
 			]}
 			yLabel={['TB học kỳ', 'TB tích lũy']}
 			colors={['#0982c9', '#18b903']}
