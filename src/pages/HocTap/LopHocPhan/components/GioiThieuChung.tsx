@@ -12,17 +12,7 @@ const GioiThieuChungLopHp = () => {
 			</div>
 
 			<div
-				style={
-					expand
-						? undefined
-						: {
-								display: '-webkit-box',
-								lineClamp: 3,
-								overflow: 'hidden',
-								textOverflow: 'ellipsis',
-								overflowWrap: 'anywhere',
-						  }
-				}
+				style={expand ? undefined : { maxHeight: 80, overflow: 'hidden' }}
 				dangerouslySetInnerHTML={{ __html: record?.gioiThieuChung ?? '' }}
 			/>
 			{record?.gioiThieuChung ? (
