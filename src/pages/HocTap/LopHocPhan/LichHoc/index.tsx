@@ -13,7 +13,7 @@ const DanhSachBuoiHoc = () => {
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const { setRecord, setVisibleForm, getTheoLopHocPhan, loading } = useModel('daotao.thoikhoabieu');
 	const [buoiHocGanNhat, setBuoiHocGanNhat] = useState<ThoiKhoaBieu.IRecord>();
-	const [show, setShow] = useState<string>('calendar');
+	const [show, setShow] = useState<string>('table');
 
 	useEffect(() => {
 		if (recLopHocPhan?.ten)
@@ -61,8 +61,8 @@ const DanhSachBuoiHoc = () => {
 					value={show}
 					onChange={(val) => setShow(val.toString())}
 					options={[
-						{ value: 'calendar', label: 'Lịch học' },
 						{ value: 'table', label: 'Danh sách chi tiết' },
+						{ value: 'calendar', label: 'Lịch học' },
 					]}
 				/>
 			</Space>
