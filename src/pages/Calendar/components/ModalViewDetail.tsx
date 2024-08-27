@@ -38,7 +38,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			<Descriptions.Item label='Thời gian kết thúc'>
 				{moment(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 			</Descriptions.Item>
-			<Descriptions.Item label='Loại hình học tập'>{thoiKhoaBieu?.loaiHinhHocTap ?? '--'}</Descriptions.Item>
+			{/* <Descriptions.Item label='Loại hình học tập'>{thoiKhoaBieu?.loaiHinhHocTap ?? '--'}</Descriptions.Item> */}
 			<Descriptions.Item label='Phòng học'>{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Giảng viên'>
 				{thoiKhoaBieu?.giangVien?.ten

@@ -2,10 +2,10 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Segmented, Tag, Tooltip } from 'antd';
+import { Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 
 interface DataType extends LopHocPhan.IDiemHpSvHk {
 	title?: string;
@@ -101,17 +101,22 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			render: (val, rec) => rec?.hocPhan?.soTinChi,
 			onCell,
 		},
-	];
-
-	const cols1: IColumn<LopHocPhan.IDiemHpSvHk>[] = [1, 2].map((item) => ({
-		title: `Thi lần ${item}`,
-		width: 80,
-		dataIndex: `diemThi${item}` as keyof LopHocPhan.IDiemHpSvHk,
-		align: 'center',
-		// sortable: true,
-		onCell,
-	}));
-	cols1.push(
+		{
+			title: 'Thi lần 1',
+			width: 80,
+			dataIndex: 'diemThi1',
+			align: 'center',
+			// sortable: true,
+			onCell,
+		},
+		{
+			title: 'Thi lần 2',
+			width: 80,
+			dataIndex: 'diemThi2',
+			align: 'center',
+			// sortable: true,
+			onCell,
+		},
 		{
 			title: 'Tổng kết (hệ 10)',
 			dataIndex: 'diemTongKet',
@@ -131,10 +136,11 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			title: 'Tổng kết (dạng chữ)',
+			title: 'Tổng kết (chữ)',
 			width: 80,
 			dataIndex: 'diemChu',
 			align: 'center',
+			fixed: 'right',
 			// filterType: 'select',
 			// filterData: Object.values(ELoaiDiemChu),
 			render: (val, rec) => (
@@ -145,12 +151,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			),
 			onCell,
 		},
-	);
-	columns.splice(4, 0, {
-		title: 'Điểm KTHP',
-		width: cols1.length * 80,
-		children: cols1,
-	});
+	];
 
 	const cols: IColumn<LopHocPhan.IDiemHpSvHk>[] = danhSachDauDiem.map((item) => ({
 		title: item.ma ?? item.ten,
@@ -168,6 +169,22 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 
 	return (
 		<>
+			<div style={{ marginBottom: 12 }}>
+				Danh sách kết quả học tập các học phần được tích lũy qua từng kỳ học (chỉ tính học phần có trong chương trình
+				đào tạo của ngành).
+				<br />
+				Xem chi tiết tiến trình học tập{' '}
+				<a
+					href='./tien-trinh-hoc-tap'
+					onClick={(e) => {
+						e.preventDefault();
+						history.push('./tien-trinh-hoc-tap');
+					}}
+				>
+					tại đây
+				</a>
+				.
+			</div>
 			<TableStaticData
 				loading={loading}
 				otherProps={{
@@ -178,14 +195,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				data={loaiHocPhan === 'all' ? data : danhSachKhongDat}
 				columns={columns}
 			>
-				<Segmented
+				{/* <Segmented
 					value={loaiHocPhan}
 					onChange={(val) => setLoaiHocPhan(val.toString())}
 					options={[
 						{ value: 'all', label: 'Tất cả học phần' },
 						// { value: 'fail', label: 'Học phần chưa đạt' },
 					]}
-				/>
+				/> */}
 			</TableStaticData>
 		</>
 	);
