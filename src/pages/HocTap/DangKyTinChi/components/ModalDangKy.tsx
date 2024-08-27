@@ -121,12 +121,12 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			dataIndex: 'ten',
 			width: 150,
 		},
-		{
-			title: 'Mã khóa ngành',
-			dataIndex: 'maKhoaNganh',
-			align: 'center',
-			width: 120,
-		},
+		// {
+		// 	title: 'Mã khóa ngành',
+		// 	dataIndex: 'maKhoaNganh',
+		// 	align: 'center',
+		// 	width: 120,
+		// },
 		// {
 		// 	title: 'Loại ĐK',
 		// 	dataIndex: 'loai',
