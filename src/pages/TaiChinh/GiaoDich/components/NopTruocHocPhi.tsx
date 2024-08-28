@@ -20,6 +20,7 @@ const ModalNopTruocHocPhi = (props: {
 		useModel('taichinh.giaodich');
 	const { record: recThuTruocHp } = useModel('taichinh.dotthutruochocphi');
 	const { getMucThuHocPhiTheoNamModel, mucThuMe } = useModel('taichinh.mucthuhocphi');
+	const { initialState } = useModel('@@initialState');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const maKhoaNganh: string = Form.useWatch('maKhoaNganh', form);
 
@@ -49,6 +50,9 @@ const ModalNopTruocHocPhi = (props: {
 	const onFinish = (values: any) => {
 		const data: GiaoDich.TDongTruocHocPhi = {
 			...values,
+			name: `Nộp trước học phí ${recThuTruocHp?.tenNamHoc || `Năm học ${recThuTruocHp?.maNamHoc}` || ''} MSV ${
+				initialState?.currentUser?.preferred_username ?? ''
+			}`,
 			amount: soTienPhaiDong - soTienUuDai,
 			paymentType,
 			idDotThuTruocHocPhi: recThuTruocHp?._id,
