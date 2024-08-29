@@ -114,6 +114,13 @@ export function currencyFormat(num?: number) {
 	return num?.toFixed(0)?.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') ?? '0';
 }
 
+export const toISOString = (date: moment.MomentInput) => {
+	if (date) {
+		return moment(date).startOf('day').toISOString();
+	}
+	return undefined;
+};
+
 export function formatPhoneNumber(num: any) {
 	// Remove any non-digit characters
 	const phoneNumber = num.replace(/\D/g, '');

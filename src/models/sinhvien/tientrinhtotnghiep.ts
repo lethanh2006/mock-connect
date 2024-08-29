@@ -1,11 +1,10 @@
-import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { getTienTrinhDauRa, getTrangThaiNoSinhVienMe } from '@/services/DaoTao/SinhVien';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { useState } from 'react';
 
 export default () => {
 	const [record, setRecord] = useState<SinhVien.ITienTrinhTotNghiep>();
-	const [recordChungChi, setRecordChungChi] = useState<ChuongTrinhDaoTao.IChungChiCTDT>();
+	const [recordChungChi, setRecordChungChi] = useState<SinhVien.TChungChiDauRaSv>();
 	const [dieuKienTotNghiep, setDieuKienTotNghiep] = useState<SinhVien.TDieuKienTotNghiep>();
 	const [loading, setLoading] = useState<boolean>(false);
 	const [visibleForm, setVisibleForm] = useState<boolean>(false);

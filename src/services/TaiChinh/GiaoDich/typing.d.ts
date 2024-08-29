@@ -16,6 +16,7 @@ declare module GiaoDich {
 		status: ETransactionStatus;
 		identityCode: string;
 
+		idDotThuTruocHocPhi?: string;
 		fromAccount: ETransactionSourceType;
 		toAccount: ETransactionSourceType;
 		amount: number;
@@ -38,6 +39,8 @@ declare module GiaoDich {
 		userEmail: string;
 		userDOB: string;
 		userPhone: string;
+		userMaKhoaSinhVien: string;
+		userMaNganh: string;
 		userMetadata?: Record;
 	}
 
@@ -52,10 +55,10 @@ declare module GiaoDich {
 		manualUserMetadata: Record;
 	}
 
-	export type TDongTruocHocPhi = {
-		amount: number;
-		paymentType: ETransactionPaymentType;
-	};
+	export type TDongTruocHocPhi = Pick<
+		IRecord,
+		'name' | 'amount' | 'paymentType' | 'userMaKhoaSinhVien' | 'userMaNganh' | 'idDotThuTruocHocPhi'
+	>;
 
 	export type TThanhToan = {
 		billIdentityCode: string;

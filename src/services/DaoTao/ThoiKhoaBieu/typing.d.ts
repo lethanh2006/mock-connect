@@ -10,6 +10,7 @@ declare module ThoiKhoaBieu {
 		lopHocPhan?: LopHocPhan.IRecord;
 		nhanSuSsoId?: string; // 'string';
 		nhanSu?: ToChucNhanSu.INhanSu;
+		giangVien?: ToChucNhanSu.INhanSu; // Khi lấy thời khóa biểu
 		maNhanSu?: string;
 		tenNhanSu?: string;
 
@@ -27,6 +28,7 @@ declare module ThoiKhoaBieu {
 		tieuDeBaiHoc?: string;
 		noiDungBaiHoc?: string;
 		urlBaiHoc?: string | null;
+		hocLieuList?: { ten?: string; url?: string | null }[];
 		thoiGianBatDau?: string; //'2023-05-20T08:34:26.620Z';
 		thoiGianKetThuc?: string; // '2023-05-20T08:34:26.620Z';
 

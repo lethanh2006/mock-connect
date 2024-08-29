@@ -97,7 +97,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 				Object.keys(res?.data?.data)?.map((item: string) => {
 					const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
 					finalData[item] = [EKieuDuLieu.DATE, EKieuDuLieu.MONTH].includes(cauHinh.kieuDuLieu)
-						? moment(res?.data?.data[item])
+						? moment(res?.data?.data[item], 'DD/MM/YYYY')
 						: res?.data?.data[item];
 				});
 				if (res) {
@@ -131,7 +131,6 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 				const khaiBao = recordFormKhaiBao[key];
 				recordFormKhaiBaoFinal[key] = khaiBao;
 			});
-			debugger;
 			form.setFieldsValue(recordFormKhaiBaoFinal);
 		}
 	}, [editFormKhaiBao, recordFormKhaiBao]);

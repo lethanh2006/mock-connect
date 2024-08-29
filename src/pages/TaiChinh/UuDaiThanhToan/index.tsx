@@ -12,19 +12,17 @@ const UuDaiThanhToanPage = () => {
 
 	const columns: IColumn<UuDaiThanhToan.IUuDaiUser>[] = [
 		{
+			title: 'Năm học',
+			dataIndex: 'tenNamHoc',
+			// filterType: 'string',
+			width: 120,
+			render: (val, rec) => val && rec?.maNamHoc,
+		},
+		{
 			title: 'Tên ưu đãi',
 			dataIndex: ['uuDai', 'ten'],
 			// filterType: 'string',
 			width: 180,
-		},
-		{
-			title: 'Thời gian áp dụng',
-			align: 'center',
-			width: 140,
-			render: (val, rec) =>
-				`${rec.uuDai?.thoiGianBatDau ? moment(rec.uuDai?.thoiGianBatDau).format('DD/MM/YYYY') : ''} - ${
-					rec.uuDai?.thoiGianKetThuc ? moment(rec.uuDai?.thoiGianKetThuc).format('DD/MM/YYYY') : ''
-				}`,
 		},
 		{
 			title: 'Loại khoản thu áp dụng',
@@ -38,6 +36,15 @@ const UuDaiThanhToanPage = () => {
 			align: 'center',
 			width: 80,
 			render: (val) => val && `${val}%`,
+		},
+		{
+			title: 'Tổng tiền ưu đãi',
+			dataIndex: 'tongTienUuDai',
+			align: 'center',
+			width: 120,
+			render: (val) => val && `${val} VNĐ`,
+			filterType: 'number',
+			sortable: true,
 		},
 		{
 			title: 'Mô tả',

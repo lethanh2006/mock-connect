@@ -5,7 +5,6 @@ import { ETrangThaiChungChiSinhVen } from '@/services/DaoTao/SinhVien/constants'
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
 import { buildUpLoadFile } from '@/services/uploadFile';
-
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, InputNumber, Row, Select } from 'antd';
@@ -14,11 +13,19 @@ import { useModel } from 'umi';
 
 const FormChungChiSinhVien = (props: any) => {
 	const [form] = Form.useForm();
-	const { record, setVisibleForm, edit, postChungChiSinhVienModel, putModel, formSubmiting, visibleForm } =
-		useModel('sinhvien.chungchi');
+	const {
+		record,
+		setVisibleForm,
+		edit,
+		postChungChiSinhVienModel,
+		putModel,
+		formSubmiting,
+		visibleForm,
+		setFormSubmiting,
+		getModel,
+	} = useModel('sinhvien.chungchi');
 	const { danhSach: danhSachChungChi, record: recChungChi, setRecord } = useModel('daotao.chungchi');
-	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
-	const { title, getData } = props;
+	const { title } = props;
 	const maChungChi = Form.useWatch('maChungChi', form);
 
 	useEffect(() => {
@@ -32,19 +39,16 @@ const FormChungChiSinhVien = (props: any) => {
 	}, [record?._id, visibleForm]);
 
 	const onFinish = async (values: SinhVien.IChungChiSinhVien) => {
-		const urlMinhChung = await buildUpLoadFile(values, 'urlMinhChung');
+		setFormSubmiting(true);
+		const urlMinhChung = await buildUpLoadFile(values, 'urlMinhChung').finally(() => setFormSubmiting(false));
 		values.urlMinhChung = urlMinhChung;
-		const data = {
-			...values,
-			sinhVienSsoId: recSinhVien?.ssoId,
-		};
 
 		if (edit) {
-			putModel(record?._id ?? '', data, getData)
+			putModel(`${record?._id ?? ''}/sinh-vien/cap-nhat`, values, getModel)
 				.then()
 				.catch((er) => console.log(er));
 		} else {
-			postChungChiSinhVienModel(data, getData)
+			postChungChiSinhVienModel(values, getModel)
 				.then(() => setVisibleForm(false))
 				.catch((er) => console.log(er));
 		}

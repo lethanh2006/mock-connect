@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
@@ -6,6 +7,7 @@ import {
 	trangThaiUserDiemDanh,
 	type ETrangThaiUserDiemDanh,
 } from '@/services/DaoTao/constant';
+import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
@@ -36,12 +38,7 @@ const TableLichHocLopHP = () => {
 			title: 'Ngày học',
 			dataIndex: 'ngay',
 			width: 150,
-			render: (val) =>
-				val
-					? `${moment(val).format('dddd').charAt(0).toUpperCase()}${moment(val).format('dddd').slice(1)}, ngày ${moment(
-							val,
-					  ).format('DD/MM/YYYY')}`
-					: null,
+			render: (val) => (val ? `${THU_TRONG_TUAN[moment(val).day()]}, ${moment(val).format('DD/MM/YYYY')}` : null),
 			onCell,
 		},
 		{
@@ -49,6 +46,23 @@ const TableLichHocLopHP = () => {
 			width: 60,
 			align: 'center',
 			render: (val, rec) => `${rec.tietBatDau} - ${rec.tietKetThuc}`,
+			onCell,
+		},
+		{
+			title: 'Phòng học',
+			dataIndex: 'phongHoc',
+			align: 'center',
+			width: 100,
+			render: (val) => (val ? val : <i>Chưa cập nhật</i>),
+			onCell,
+		},
+		{
+			title: 'Điểm danh',
+			dataIndex: 'trangThaiDiemDanhCaNhan',
+			align: 'center',
+			width: 120,
+			render: (val: ETrangThaiUserDiemDanh) =>
+				val ? <Tag color={colorTrangThaiUserDiemDanh[val]}>{trangThaiUserDiemDanh[val]}</Tag> : null,
 			onCell,
 		},
 		{
@@ -60,17 +74,33 @@ const TableLichHocLopHP = () => {
 			onCell,
 		},
 		{
-			title: 'Phòng học',
-			dataIndex: 'phongHoc',
-			width: 100,
-			render: (val) => (val ? val : <i>Chưa cập nhật</i>),
+			title: 'Tiêu đề',
+			dataIndex: 'tieuDeBaiHoc',
+			width: 180,
+			// render: (val, rec) => rec.noiDungHp?.tieuDe ?? '',
 			onCell,
 		},
 		{
-			title: 'Nội dung',
-			dataIndex: 'noiDungHpId',
-			width: 180,
-			render: (val, rec) => rec.noiDungHp?.tieuDe ?? '',
+			title: 'Học liệu',
+			width: 140,
+			render: (val, rec) => (
+				<ExpandText>
+					{rec.hocLieuList?.map((item, ind) => (
+						// eslint-disable-next-line react/no-array-index-key
+						<div key={ind}>
+							-{' '}
+							{item.url ? (
+								<a href={item.url} target='_blank' rel='noreferrer'>
+									{item.ten ?? '--'}
+								</a>
+							) : (
+								item.ten
+							)}
+						</div>
+					))}
+				</ExpandText>
+			),
+			onCell,
 		},
 		// {
 		// 	title: 'Loại hình',
@@ -86,15 +116,6 @@ const TableLichHocLopHP = () => {
 		// 	render: (val, rec) => !!rec.lopHocPhan?.tenCha && `Nhóm ${rec.lopHocPhan?.loai} ${rec.lopHocPhan?.soThuTuNhom}`,
 		// 	onCell,
 		// },
-		{
-			title: 'Điểm danh',
-			dataIndex: 'trangThaiDiemDanhCaNhan',
-			align: 'center',
-			width: 120,
-			render: (val: ETrangThaiUserDiemDanh) =>
-				val ? <Tag color={colorTrangThaiUserDiemDanh[val]}>{trangThaiUserDiemDanh[val]}</Tag> : null,
-			onCell,
-		},
 	];
 
 	return (

@@ -56,7 +56,14 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
 
 	return (
 		<>
-			<TableStaticData otherProps={{ loading, onRow }} data={sinhVienList} columns={columns} addStt />
+			<TableStaticData
+				otherProps={{ loading, onRow }}
+				data={sinhVienList}
+				columns={columns}
+				addStt
+				hasTotal
+				size='small'
+			/>
 
 			<Modal
 				title='Thông tin sinh viên'
@@ -74,8 +81,8 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
 						/>
 					</Col>
 					<Col span={24} md={16}>
-						<Descriptions bordered column={1}>
-							<Descriptions.Item label='Họ và tên'>{record?.ten}</Descriptions.Item>
+						<Descriptions bordered column={1} size='small'>
+							<Descriptions.Item label='Họ tên'>{record?.ten}</Descriptions.Item>
 							<Descriptions.Item label='Mã sinh viên'>{record?.ma}</Descriptions.Item>
 							{/* <Descriptions.Item label="Email">{record?.email}</Descriptions.Item> */}
 							<Descriptions.Item label='Giới tính'>{record?.gioiTinh ?? ''}</Descriptions.Item>

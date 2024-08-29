@@ -18,7 +18,7 @@ export default {
 	// SINH VIEN
 	'menu.HocTap': 'Học tập',
 	'menu.HocTap.TienTrinhHocTap': 'Tiến trình học tập',
-	'menu.HocTap.DangKyNhuCau': 'Đăng ký nhu cầu',
+	'menu.HocTap.DangKyNhuCau': 'Đăng ký học tập theo nhu cầu',
 	'menu.HocTap.DangKyTinChi': 'Đăng ký tín chỉ',
 	'menu.HocTap.LopHocPhan': 'Lớp tín chỉ',
 	'menu.HocTap.LichThi': 'Lịch thi',
@@ -51,15 +51,32 @@ export default {
 	'menu.DichVuHanhChinh.TaoDon': 'Tạo đơn - Dịch vụ hành chính',
 	'menu.PhanHoi': 'Phản hồi',
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
+	'menu.ThongBao': 'Thông báo',
 	'menu.VanBanHuongDan': 'Văn bản',
 	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
+	'menu.HoatDongCTSV': 'Sự kiện',
+	'menu.XemSau': 'Đã lưu',
 
 	'menu.HoatDongKHCN': 'Hoạt động KH&CN',
 	'menu.HoatDongKHCN.DeTaiHocVien': 'Đề tài NCKH cấp Học viện',
 	'menu.HoatDongKHCN.DeTaiKhoa': 'Đề tài NCKH cấp khoa/viện',
 	'menu.HoatDongKHCN.KeHoachNCKH': 'Định hướng NCKH',
 	'menu.HoatDongKHCN.QuyCheQuyDinh': 'Quy chế, quy định',
+
+	'menu.GiaoDucChinhTriTuTuong': 'Giáo dục chính trị tư tưởng',
+	'menu.GiaoDucChinhTriTuTuong.TuanSinhHoatCongDan': 'Tuần sinh hoạt công dân',
 	// GIANG VIEN
+
+	'menu.HoatDongKHCN.DeTaiHocVien.DangKyDeXuat': 'Đăng ký đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongXetChonDeXuat': 'Hội đồng xét chọn đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongXetDuyetThuyetMinh': 'Hội đồng xét duyệt thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongNghiemThu': 'Hội đồng nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopThuyetMinh': 'Xây dựng và nộp hồ sơ thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoNghiemThu': 'Nộp hồ sơ nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.ThucHienDeTai': 'Thực hiện đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhGiao': 'Quyết định giao đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhCongNhan': 'Quyết định công nhận đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoSauNghiemThu': 'Nộp hồ sơ sau nghiệm thu đề tài',
 
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',

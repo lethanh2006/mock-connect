@@ -13,20 +13,11 @@ import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
 import moment from 'moment';
-import { useEffect } from 'react';
 import { useModel } from 'umi';
 import Form from './components/Form';
 
 const ChungChiTotNghiepPage = () => {
-	const { record: recSinhVien, getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
-
 	const { page, limit, deleteModel, handleEdit, getModel } = useModel('sinhvien.chungchi');
-
-	const getData = () => recSinhVien?._id && getModel({ sinhVienSsoId: recSinhVien?.ssoId });
-
-	useEffect(() => {
-		getThongTinCuaToiModel();
-	}, []);
 
 	const onCell = (rec: SinhVien.IChungChiSinhVien) => ({
 		onClick: () => handleEdit(rec),
@@ -37,26 +28,16 @@ const ChungChiTotNghiepPage = () => {
 		{
 			title: 'Chứng chỉ',
 			dataIndex: 'maChungChi',
-			width: 200,
+			width: 180,
 			filterType: 'customselect',
 			filterCustomSelect: <SelectChungChi multiple selectMa />,
 			render: (val, rec) => `${rec.chungChi?.loaiChungChi?.ten} - ${rec.chungChi?.ten ?? val}`,
 			onCell,
 		},
 		{
-			title: 'Ngày cấp',
-			dataIndex: 'ngayCap',
-			width: 100,
-			filterType: 'date',
-			align: 'center',
-			sortable: true,
-			render: (val) => val && moment(val).format('DD/MM/YYYY'),
-			onCell,
-		},
-		{
 			title: 'Đơn vị cấp',
 			dataIndex: 'donViCap',
-			width: 180,
+			width: 200,
 			filterType: 'string',
 			sortable: true,
 			onCell,
@@ -79,14 +60,34 @@ const ChungChiTotNghiepPage = () => {
 			onCell,
 		},
 		{
-			title: 'Ghi chú',
-			dataIndex: 'ghiChu',
-			width: 180,
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			title: 'Trạng thái',
+			dataIndex: 'trangThaiDuyet',
+			align: 'center',
+			width: 130,
+			render: (val) => (
+				<Tag color={colorTrangThaiChungChiSinhVen[val as ETrangThaiChungChiSinhVen]}>
+					{nameTrangThaiChungChiSinhVen[val as ETrangThaiChungChiSinhVen]}
+				</Tag>
+			),
+			filterType: 'select',
+			filterData: Object.values(ETrangThaiChungChiSinhVen).map((item) => ({
+				value: item,
+				label: nameTrangThaiChungChiSinhVen[item],
+			})),
 			onCell,
 		},
 		{
-			title: 'Thời hạn chứng chỉ',
+			title: 'Ngày cấp',
+			dataIndex: 'ngayCap',
+			width: 100,
+			filterType: 'date',
+			align: 'center',
+			sortable: true,
+			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+			onCell,
+		},
+		{
+			title: 'Thời hạn',
 			width: 130,
 			filterType: 'date',
 			align: 'center',
@@ -106,21 +107,10 @@ const ChungChiTotNghiepPage = () => {
 			onCell,
 		},
 		{
-			title: 'Trạng thái',
-			dataIndex: 'trangThaiDuyet',
-			align: 'center',
-			fixed: 'right',
-			width: 100,
-			render: (val) => (
-				<Tag color={colorTrangThaiChungChiSinhVen[val as ETrangThaiChungChiSinhVen]}>
-					{nameTrangThaiChungChiSinhVen[val as ETrangThaiChungChiSinhVen]}
-				</Tag>
-			),
-			filterType: 'select',
-			filterData: Object.values(ETrangThaiChungChiSinhVen).map((item) => ({
-				value: item,
-				label: nameTrangThaiChungChiSinhVen[item],
-			})),
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 180,
+			render: (val, rec) => <ExpandText>{val}</ExpandText>,
 			onCell,
 		},
 		{
@@ -141,7 +131,7 @@ const ChungChiTotNghiepPage = () => {
 						icon={<EditOutlined />}
 					/>
 					<Popconfirm
-						onConfirm={() => deleteModel(record._id, getData)}
+						onConfirm={() => deleteModel(record._id, getModel)}
 						title='Bạn có chắc chắn muốn xóa chứng chỉ này?'
 						placement='topRight'
 					>
@@ -163,13 +153,11 @@ const ChungChiTotNghiepPage = () => {
 
 	return (
 		<TableBase
-			getData={getData}
 			title='Chứng chỉ xét tốt nghiệp'
 			columns={columns}
-			dependencies={[page, limit, recSinhVien?.ssoId]}
+			dependencies={[page, limit]}
 			modelName='sinhvien.chungchi'
 			Form={Form}
-			formProps={{ getData }}
 			widthDrawer={800}
 		/>
 	);

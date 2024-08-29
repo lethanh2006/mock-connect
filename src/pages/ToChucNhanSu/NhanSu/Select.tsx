@@ -73,6 +73,7 @@ const SelectNhanSuDebounce = (props: {
 		`${dataView?.hoDem ?? ''} ${dataView?.ten ?? ''} - ${dataView?.maCanBo ?? ''}`
 	) : (
 		<Select
+			allowClear
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			onChange={onChange}

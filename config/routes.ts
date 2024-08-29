@@ -99,7 +99,7 @@
 				component: './HocTap/TienTrinhHocTap',
 			},
 			{ name: 'DangKyTinChi', path: 'dang-ky-tin-chi', component: './HocTap/DangKyTinChi' },
-			{ name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
+			// { name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' }, // Sinh viên gửi đơn qua DVHC
 			{
 				name: 'LopHocPhan',
 				path: 'lop-tin-chi',
@@ -190,6 +190,18 @@
 				name: 'PhieuDiemRenLuyen',
 				path: 'phieu-diem-ren-luyen',
 				component: './DiemRenLuyenV2/PhieuDiemRenLuyen',
+			},
+		],
+	},
+	{
+		name: 'GiaoDucChinhTriTuTuong',
+		icon: 'calendar',
+		path: '/giao-duc-chinh-tri-tu-tuong',
+		routes: [
+			{
+				name: 'TuanSinhHoatCongDan',
+				path: 'danh-gia-ket-qua',
+				component: './CheDoChinhSach/GiaoDucChinhTriTuTuong/QuyetDinhGDCTTT',
 			},
 		],
 	},
@@ -315,7 +327,58 @@
 				name: 'DeTaiHocVien',
 				icon: 'AuditOutlined',
 				path: './de-tai-hoc-vien',
-				component: './KhaiBaoQuyTrinh/DeTaiHocVien',
+				routes: [
+					{
+						name: 'DangKyDeXuat',
+						path: './tong-hop-dang-ky-de-xuat',
+						component: './KhoaHoc/DeTaiKHCN/DangKyDeXuat',
+					},
+					{
+						name: 'HoiDongXetChonDeXuat',
+						path: './hoi-dong-xet-chon-de-xuat',
+						component: './KhoaHoc/DeTaiKHCN/HoiDongXetChonDeXuat',
+					},
+					{
+						name: 'NopThuyetMinh',
+						path: './nop-thuyet-minh',
+						component: './KhoaHoc/DeTaiKHCN/NopThuyetMinh',
+					},
+					{
+						name: 'HoiDongXetDuyetThuyetMinh',
+						path: './hoi-dong-xet-duyet-thuyet-minh',
+						component: './KhoaHoc/DeTaiKHCN/HoiDongXetDuyetThuyetMinh',
+					},
+					{
+						name: 'QuyetDinhGiao',
+						path: './quyet-dinh-giao',
+						component: './KhoaHoc/DeTaiKHCN/QuyetDinhGiao',
+					},
+					{
+						name: 'ThucHienDeTai',
+						path: './thuc-hien-de-tai',
+						component: './KhoaHoc/DeTaiKHCN/ThucHienDeTai',
+					},
+					{
+						name: 'NopHoSoNghiemThu',
+						path: './nop-ho-so-nghiem-thu',
+						component: './KhoaHoc/DeTaiKHCN/NopHoSoNghiemThu',
+					},
+					{
+						name: 'HoiDongNghiemThu',
+						path: './hoi-dong-nghiem-thu',
+						component: './KhoaHoc/DeTaiKHCN/HoiDongNghiemThu',
+					},
+					{
+						name: 'NopHoSoSauNghiemThu',
+						path: './nop-ho-so-sau-nghiem-thu',
+						component: './KhoaHoc/DeTaiKHCN/NopHoSoSauNghiemThu',
+					},
+					{
+						name: 'QuyetDinhCongNhan',
+						path: './quyet-dinh-cong-nhan',
+						component: './KhoaHoc/DeTaiKHCN/QuyetDinhCongNhan',
+					},
+				],
 			},
 			{
 				name: 'DeTaiKhoa',
@@ -376,6 +439,12 @@
 		component: './TienIch/KhaoSat',
 		icon: 'table',
 	},
+	{
+		name: 'ThongBao',
+		path: 'thong-bao',
+		component: './ThongBao',
+		icon: 'BellOutlined',
+	},
 	// {
 	// 	name: 'KhaiBaoSucKhoe',
 	// 	icon: 'HeartOutlined',
@@ -393,6 +462,20 @@
 		path: '/van-ban-huong-dan',
 		component: './TienIch/VanBanHuongDan',
 		icon: 'FileOutlined',
+	},
+
+	{
+		name: 'HoatDongCTSV',
+		path: 'hoat-dong-ctsv',
+		component: './SuKien/SinhVienHoatDongCTSV',
+		icon: 'CarryOutOutlined',
+	},
+
+	{
+		name: 'XemSau',
+		path: 'xem-sau',
+		component: './XemSau',
+		icon: 'ClockCircleOutlined',
 	},
 
 	{

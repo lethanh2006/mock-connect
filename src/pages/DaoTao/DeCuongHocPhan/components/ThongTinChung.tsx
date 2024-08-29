@@ -35,6 +35,7 @@ const ThongTinChungPage = () => {
 				bordered={false}
 				column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
 			>
+				<Descriptions.Item label='Phiên bản đề cương'>{record?.ma ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
 				<Descriptions.Item label='Thời điểm ban hành'>
 					{record?.thoiDiemApDung ?? <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
@@ -54,7 +55,7 @@ const ThongTinChungPage = () => {
 
 			<TrongSoHocPhanPage />
 
-			<Collapse>
+			<Collapse style={{ marginTop: 12 }}>
 				<Collapse.Panel header='Mục tiêu học phần' key='1'>
 					<div dangerouslySetInnerHTML={{ __html: record?.mucTieuHocPhan ?? '--' }} />
 				</Collapse.Panel>

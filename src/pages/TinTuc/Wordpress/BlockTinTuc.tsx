@@ -1,6 +1,9 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
 import { Col, Empty, Row, Tooltip } from 'antd';
 import { first } from 'lodash';
 import moment from 'moment';
+import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import { CardTinTuc, ContentLargeCard } from './TinTuc.style';
 import { Excerpt } from './components/Excerpt';
@@ -9,8 +12,37 @@ import { getImageSrc } from './utils/getImageSrc';
 
 const BlockTinTuc = (props: { empty?: string }) => {
 	const { danhSach } = useModel('tintuc.tintucwp');
+	const { postModel, getAllModel, danhSach: danhSachXemSau, deleteModel } = useModel('xemsau');
+	const { getThongTinCuaToiModel, record } = useModel('sinhvien.sinhvien');
 	const { empty } = props;
 	const url = 'tin-tuc';
+
+	const getData = () => {
+		getAllModel(undefined, undefined, { loaiThongTin: ELoaiThongTinXemSau.TIN_TUC }, undefined, 'me/many');
+	};
+
+	useEffect(() => {
+		getThongTinCuaToiModel();
+		getData();
+	}, []);
+
+	const handleXemSau = (rec: any) => {
+		const data = {
+			userSsoId: record?.ssoId,
+			sourceId: String(rec?.id),
+			loaiThongTin: ELoaiThongTinXemSau.TIN_TUC,
+			thongTin: rec,
+		};
+		postModel(data, getData, undefined, 'Lưu thành công')
+			.then()
+			.catch((err) => console.log(err));
+	};
+
+	const handleBoXemSau = (rec: any) => {
+		deleteModel(rec?._id, getData)
+			.then()
+			.catch((err) => console.log(err));
+	};
 
 	if (danhSach?.length === 0) return <Empty description={empty ?? 'Chưa có tin tức'} />;
 	else
@@ -55,10 +87,36 @@ const BlockTinTuc = (props: { empty?: string }) => {
 										style={{ fontSize: 'calc(1em + 0.2vw)', fontWeight: 500, marginBottom: 10, color: 'black' }}
 									/>
 								</Tooltip>
-								<Excerpt data={first(danhSach)} rows={2} style={{ color: '#364954',marginBottom:0 }} />
-								{danhSach?.[0]?.date && (
-									<span  className='thoi-gian'>Ngày đăng: {moment(danhSach?.[0]?.date).format('DD/MM/YYYY HH:mm')}</span>
-								)}
+								<Excerpt data={first(danhSach)} rows={2} style={{ color: '#364954', marginBottom: 0 }} />
+								<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+									{danhSach?.[0]?.date && (
+										<span className='thoi-gian'>
+											Ngày đăng: {moment(danhSach?.[0]?.date).format('DD/MM/YYYY HH:mm')}
+										</span>
+									)}
+									{danhSachXemSau?.find((item) => Number(item?.sourceId) === danhSach?.[0]?.id)?._id ? (
+										<ButtonExtend
+											type='link'
+											onClick={(event) => {
+												event.stopPropagation();
+												handleBoXemSau(danhSachXemSau?.find((item) => Number(item?.sourceId) === danhSach?.[0]?.id));
+											}}
+											danger
+										>
+											Bỏ lưu
+										</ButtonExtend>
+									) : (
+										<ButtonExtend
+											type='link'
+											onClick={(event) => {
+												event.stopPropagation();
+												handleXemSau(danhSach?.[0]);
+											}}
+										>
+											Lưu
+										</ButtonExtend>
+									)}
+								</div>
 							</ContentLargeCard>
 						</CardTinTuc>
 					</Col>
@@ -100,9 +158,33 @@ const BlockTinTuc = (props: { empty?: string }) => {
 												/>
 											</Tooltip>
 											<Excerpt data={tintuc} rows={2} style={{ color: '#364954', marginBottom: 0 }} />
-											{tintuc.date && (
-												<span className='thoi-gian'>Ngày đăng: {moment(tintuc.date).format('DD/MM/YYYY HH:mm')}</span>
-											)}
+											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+												{tintuc.date && (
+													<span className='thoi-gian'>Ngày đăng: {moment(tintuc.date).format('DD/MM/YYYY HH:mm')}</span>
+												)}
+												{danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id)?._id ? (
+													<ButtonExtend
+														type='link'
+														onClick={(event) => {
+															event.stopPropagation();
+															handleBoXemSau(danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id));
+														}}
+														danger
+													>
+														Bỏ lưu
+													</ButtonExtend>
+												) : (
+													<ButtonExtend
+														type='link'
+														onClick={(event) => {
+															event.stopPropagation();
+															handleXemSau(tintuc);
+														}}
+													>
+														Lưu
+													</ButtonExtend>
+												)}
+											</div>
 										</Col>
 									</Row>
 								</CardTinTuc>
@@ -149,9 +231,33 @@ const BlockTinTuc = (props: { empty?: string }) => {
 												}}
 											/>
 										</Tooltip>
-										{tintuc?.date && (
-											<span className='thoi-gian'>Ngày đăng: {moment(tintuc?.date).format('DD/MM/YYYY HH:mm')}</span>
-										)}
+										<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+											{tintuc?.date && (
+												<span className='thoi-gian'>Ngày đăng: {moment(tintuc?.date).format('DD/MM/YYYY HH:mm')}</span>
+											)}
+											{danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id)?._id ? (
+												<ButtonExtend
+													type='link'
+													onClick={(event) => {
+														event.stopPropagation();
+														handleBoXemSau(danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id));
+													}}
+													danger
+												>
+													Bỏ lưu
+												</ButtonExtend>
+											) : (
+												<ButtonExtend
+													type='link'
+													onClick={(event) => {
+														event.stopPropagation();
+														handleXemSau(tintuc);
+													}}
+												>
+													Lưu
+												</ButtonExtend>
+											)}
+										</div>
 									</Col>
 								</Row>
 							</CardTinTuc>

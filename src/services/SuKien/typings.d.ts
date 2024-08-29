@@ -1,5 +1,11 @@
 import { type EVaiTroBieuMau } from '../TienIch/constant';
-import { type ELoaiSuKien, type ELoaiSuKienSinhVien, type EReceiverType, type ETrangThaiDienRa } from './constant';
+import {
+	type EHoatDongChungType1,
+	type ELoaiSuKien,
+	type ELoaiSuKienSinhVien,
+	type EReceiverType,
+	type ETrangThaiDienRa,
+} from './constant';
 
 declare module SuKien {
 	export interface ThongTinSukien {
@@ -57,5 +63,47 @@ declare module SuKien {
 		vaiTro?: EVaiTroBieuMau;
 		thamGia?: boolean;
 		fullname?: string;
+	}
+
+	export interface ISinhVienHoatDongCTSV {
+		_id: string;
+		ssoId: string;
+		ma: string;
+		ten: string;
+		maNganh: string;
+		tenNganh: string;
+		hoatDongCtsvId: string;
+		hoatDongCtsv: IHoatDongCTSV;
+		trangThaiThamGia: string;
+	}
+
+	export interface IHoatDongCTSV {
+		_id: string;
+		phanLoaiCap1: EHoatDongChungType1;
+		phanLoaiCap2: string;
+		ten: string;
+		maHocKy: string;
+		loai: string;
+		diaDiem: string;
+		soLuongThamGia: number;
+		cap: string;
+		soLuongThamGiaGv: number;
+		soLuongTiepCan: number;
+		soLuongThamGiaNgoaiHocVien: number;
+		thoiGianBatDau: Date;
+		thoiGianKetThuc: Date;
+		danhSachDuToanKinhPhi: [];
+		danhSachPhamVi: [];
+		info: {
+			type: string;
+			refId: string;
+		};
+		tinh: string;
+		donViPhoiHop: string;
+		donViChuTri: string;
+		nguonKinhPhiList: string;
+		loaiDonViPhoiHop: 'Học viện';
+		loaidonViChuTri: 'Học viện';
+		thongTinPhanBoNguonKinhPhi: [];
 	}
 }
