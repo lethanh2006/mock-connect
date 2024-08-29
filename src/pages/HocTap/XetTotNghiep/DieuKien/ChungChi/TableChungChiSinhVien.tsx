@@ -14,25 +14,18 @@ const TableChungChiSinhVien = () => {
 		{
 			title: 'Chứng chỉ',
 			dataIndex: 'maChungChi',
-			width: 200,
+			width: 180,
 			render: (val, rec) => `${rec.chungChi?.loaiChungChi?.ten ?? val} - ${rec.chungChi?.ten ?? val}`,
-		},
-		{
-			title: 'Ngày cấp',
-			dataIndex: 'ngayCap',
-			width: 100,
-			align: 'center',
-			render: (val) => val && moment(val).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Đơn vị cấp',
 			dataIndex: 'donViCap',
-			width: 180,
+			width: 200,
 		},
 		{
 			title: 'Trình độ',
 			dataIndex: 'diem',
-			width: 100,
+			width: 80,
 			align: 'center',
 			render: (val, rec) => {
 				if (rec.chungChi?.phuongThucTinhDiem === EPhuongThucTinhDiem.DIEM) {
@@ -45,7 +38,14 @@ const TableChungChiSinhVien = () => {
 			},
 		},
 		{
-			title: 'Thời hạn chứng chỉ',
+			title: 'Ngày cấp',
+			dataIndex: 'ngayCap',
+			width: 100,
+			align: 'center',
+			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+		},
+		{
+			title: 'Thời hạn',
 			width: 130,
 			align: 'center',
 			render: (val, rec) => {
@@ -64,9 +64,12 @@ const TableChungChiSinhVien = () => {
 	];
 
 	return recordChungChi?.chungChiDaDat ? (
-		<TableStaticData columns={columns} data={recordChungChi?.chungChiDaDat ?? []} />
+		<TableStaticData columns={columns} data={recordChungChi?.chungChiDaDat ?? []} size='small' addStt />
 	) : (
-		<Empty description='Bạn chưa đạt chứng chỉ nào' />
+		<Empty
+			description='Bạn chưa có chứng chỉ nào hoặc chứng chỉ không đủ điều kiện'
+			image={Empty.PRESENTED_IMAGE_SIMPLE}
+		/>
 	);
 };
 

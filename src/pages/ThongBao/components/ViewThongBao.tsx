@@ -3,19 +3,14 @@ import { getNameFile } from '@/utils/utils';
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Divider, Row } from 'antd';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { history } from 'umi';
 import OneSignalDataToPath from './OneSignalDataToPath';
 import './style.less';
 
-const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () => void }) => {
-	const { record, afterViewDetail } = props;
-	const [pathname, setPathname] = useState('');
-
-	useEffect(() => {
-		const path = OneSignalDataToPath(record?.oneSignalData);
-		setPathname(path);
-	}, [record?._id]);
+const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () => void; hideCard?: boolean }) => {
+	const { record, afterViewDetail, hideCard } = props;
+	const pathname = useMemo(() => OneSignalDataToPath(record?.metadata), [record?._id]);
 
 	const redirectNotif = () => {
 		if (pathname) {
@@ -24,13 +19,13 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 		}
 	};
 
-	return (
-		<Card title={record?.title}>
+	const content = (
+		<>
 			<Card.Meta
 				avatar={record?.imageUrl ? <Avatar src={record?.imageUrl} size='large' /> : false}
 				description={
 					<>
-						<div>{record?.description}</div>
+						<div style={{ marginBottom: 8 }}>{record?.description}</div>
 						<UserOutlined /> {record?.senderName ?? ''} <Divider type='vertical' />
 						<CalendarOutlined /> {moment(record?.createdAt).format('HH:mm DD/MM/YYYY')}
 					</>
@@ -53,36 +48,29 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 				) : null}
 
 				{record?.thoiGianHieuLuc ? (
-					<>
-						<Col span={24}>
-							Hiệu lực thông báo: <b style={{ color: 'red' }}>{moment(record?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>{' '}
-						</Col>
-					</>
-				) : null}
-
-				{record?.urlFile?.length ? (
-					<>
-						<Col span={24}>File đính kèm: </Col>
-						{record?.urlFile?.map((item) => (
-							<Col span={24} key={item}>
-								<a href={item} target='_blank' rel='noreferrer'>
-									{getNameFile(item)}
-								</a>
-							</Col>
-						))}
-					</>
-				) : null}
-
-				{pathname && afterViewDetail ? (
 					<Col span={24}>
-						<Button type='primary' onClick={redirectNotif}>
+						Hiệu lực thông báo: <b style={{ color: 'red' }}>{moment(record?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>{' '}
+					</Col>
+				) : null}
+
+				{record?.metadata?.pathWeb ? (
+					<Col span={24}>
+						<Button
+							type='primary'
+							onClick={() => {
+								window.open(record?.metadata?.pathWeb, '_blank');
+							}}
+						>
 							Xem chi tiết
 						</Button>
 					</Col>
 				) : null}
 			</Row>
-		</Card>
+		</>
 	);
+
+	if (hideCard) return content;
+	return <Card title={record?.title}>{content}</Card>;
 };
 
 export default ViewThongBao;

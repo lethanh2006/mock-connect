@@ -11,12 +11,12 @@ const TableChungChiDauRa = () => {
 		{
 			title: 'Tên chứng chỉ',
 			dataIndex: 'maChungChi',
-			width: 150,
+			width: 160,
 			render: (val, rec) => rec.chungChi?.ten ?? val,
 		},
 		{
-			title: 'Ngoại ngữ',
-			width: 150,
+			title: 'Ngôn ngữ',
+			width: 120,
 			render: (val, rec) => rec.chungChi?.ngonNgu?.ten ?? rec.chungChi?.maNgonNgu,
 			hide: !recordChungChi?.loaiChungChi?.isNgoaiNgu,
 		},
@@ -31,7 +31,7 @@ const TableChungChiDauRa = () => {
 					: rec?.chungChi?.phuongThucTinhDiem,
 		},
 		{
-			title: 'ĐK đạt tối thiểu',
+			title: 'Điều kiện đạt',
 			width: 120,
 			align: 'center',
 			render: (val, rec) => {
@@ -47,8 +47,8 @@ const TableChungChiDauRa = () => {
 
 	return (
 		<>
-			<div className='fw500'>Danh sách chứng chỉ đủ điều kiện chuẩn đầu ra</div>
-			<TableStaticData columns={columns} data={recordChungChi?.danhSachChungChiCtdtCdr ?? []} />
+			<div>Danh sách chứng chỉ đủ điều kiện chuẩn đầu ra của chương trình đào tạo</div>
+			<TableStaticData columns={columns} data={recordChungChi?.danhSachChungChiCtdtCdr ?? []} size='small' addStt />
 		</>
 	);
 };

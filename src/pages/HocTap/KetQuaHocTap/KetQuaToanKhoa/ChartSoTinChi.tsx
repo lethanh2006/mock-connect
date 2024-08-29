@@ -13,17 +13,17 @@ const ChartSoTinChi = () => {
 			data: danhSach.map((item) => item.tongSoTinChiTichLuyHocKy),
 		},
 		{
-			name: 'Tổng số TC tích luỹ',
+			name: 'Tổng STC tích luỹ',
 			group: 'tichluy',
 			data: danhSach.map((item) => item.tongSoTinChiTichLuyToanKhoa),
 		},
 		{
-			name: 'Số TC nợ trong HK',
+			name: 'Số TC chưa đạt HK',
 			group: 'dat',
 			data: danhSach.map((item) => item.tongSoTinChiNoHocKy),
 		},
 		{
-			name: 'Tổng số TC nợ',
+			name: 'Tổng STC chưa đạt',
 			group: 'tichluy',
 			data: danhSach.map((item) => item.tongSoTinChiNoToanKhoa),
 		},

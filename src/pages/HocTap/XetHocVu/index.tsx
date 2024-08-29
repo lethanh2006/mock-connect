@@ -29,7 +29,7 @@ const XetHocVuPage = () => {
 		{
 			title: 'Học kỳ',
 			dataIndex: 'maHocKy',
-			width: 150,
+			width: 140,
 			render: (val, rec) => rec.hocKy?.ten ?? val,
 		},
 		// {
@@ -44,9 +44,9 @@ const XetHocVuPage = () => {
 		// 	width: 180,
 		// },
 		{
-			title: 'Ngành đào tạo',
+			title: 'Khóa ngành',
 			dataIndex: 'maKhoaNganh',
-			width: 120,
+			width: 140,
 			render: (val, rec) => rec?.khoaNganh?.ten,
 		},
 		{
@@ -71,9 +71,7 @@ const XetHocVuPage = () => {
 			title: 'Trạng thái',
 			dataIndex: 'trangThai',
 			align: 'center',
-			render: (val: ETrangThaiDuyetXuLyKqht) => (
-				<Tag color={colorTrangThaiDuyetXuLyKqht[val]}>{colorTrangThaiDuyetXuLyKqht[val]}</Tag>
-			),
+			render: (val: ETrangThaiDuyetXuLyKqht) => <Tag color={colorTrangThaiDuyetXuLyKqht[val]}>{val}</Tag>,
 			width: 120,
 		},
 		{

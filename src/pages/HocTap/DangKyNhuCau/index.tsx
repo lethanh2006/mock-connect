@@ -22,7 +22,7 @@ const DangKyNhuCauPage = () => {
 
 	return (
 		<>
-			<Card title='Đăng ký nhu cầu'>
+			<Card title='Đăng ký học tập theo nhu cầu'>
 				<div style={{ marginBottom: 12 }}>
 					<FilterHocKy isSetHocKy>
 						<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />

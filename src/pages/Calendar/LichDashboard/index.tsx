@@ -37,9 +37,14 @@ const LichDashboard = () => {
 	const { visibleForm, setVisibleForm, getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
+	const { record: recSetting, getSettingLich } = useModel('settinglich');
 	const [dataCalendar, setDataCalendar] = useState<State>({});
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
+
+	useEffect(() => {
+		getSettingLich();
+	}, []);
 
 	//#region Get Data
 	const getThoiKhoaBieu = async () => {
@@ -83,10 +88,10 @@ const LichDashboard = () => {
 				const responses = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
 				const data = responses.flat();
 				const nextState = data.reduce<State>((result, item) => {
-					if (!item.thoiGianBatDau) {
+					if (!item?.thoiGianBatDau) {
 						return result;
 					}
-					const ngayMoment = moment(item.thoiGianBatDau);
+					const ngayMoment = moment(item?.thoiGianBatDau);
 					const ngayString = ngayMoment.format('YYYY-MM-DD');
 
 					return {
@@ -145,7 +150,9 @@ const LichDashboard = () => {
 							<div
 								className={styles.su_kien__right}
 								style={{
-									borderColor: ColorSuKien[sukien.loaiSuKien],
+									borderColor:
+										recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ??
+										ColorSuKien[sukien.loaiSuKien],
 								}}
 							>
 								<div>{[sukien.tenSuKien, sukien.diaDiem].filter(Boolean).join(' - ')}</div>

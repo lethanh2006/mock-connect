@@ -8,6 +8,7 @@ import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
 import CardThongBao from './ThongBao/CardThongBao';
+import CardGiangVienLop from './components/CardGiangVien';
 import ThongTinChung from './components/ThongTinChung';
 import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 
@@ -78,6 +79,9 @@ const DetailLopTinChi = ({
 						<Row gutter={[16, 16]}>
 							<Col span={24}>
 								<CardBuoiHocTiepTheo />
+							</Col>
+							<Col span={24}>
+								<CardGiangVienLop danhSachNhanSu={danhSachNhanSu} title='Giảng viên lớp học' loading={loading} />
 							</Col>
 							<Col span={24}>
 								<CardThongBao />

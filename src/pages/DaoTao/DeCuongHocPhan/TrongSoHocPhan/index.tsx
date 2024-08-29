@@ -16,14 +16,17 @@ const TrongSoHocPhanPage = () => {
 	}, []);
 
 	return (
-		<Descriptions title='Trọng số học phần'>
+		<Descriptions title='Trọng số học phần' bordered column={1}>
 			{recDeCuong?.thongTinTrongSo?.length
 				? recDeCuong?.thongTinTrongSo?.map((item, index) => (
-						<>
-							<Descriptions.Item label={danhSach[index]?.ten}>{item?.trongSo}%</Descriptions.Item>
-							<Descriptions.Item label='Hình thức đánh giá'>{item?.hinhThucDanhGia ?? ''} </Descriptions.Item>
-							<Descriptions.Item label='Mô tả'>{item?.moTa ?? ''}</Descriptions.Item>
-						</>
+						// eslint-disable-next-line react/no-array-index-key
+						<Descriptions.Item label={danhSach[index]?.ten} key={index}>
+							{item?.trongSo}%.
+							<br />
+							Hình thức đánh giá: {item?.hinhThucDanhGia ?? '--'}
+							<br />
+							Mô tả: {item?.moTa ?? '--'}
+						</Descriptions.Item>
 				  ))
 				: null}
 

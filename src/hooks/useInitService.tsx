@@ -13,20 +13,23 @@ const useInitService = (url: string, ip?: string) => {
 		return axios.get(finalPath, { params: payload });
 	};
 
-	const postService = (payload: any) => {
-		return axios.post(`${finalIp}/${url}`, payload);
+	const postService = (payload: any, path?: string) => {
+		const finalPath = path ? `${finalIp}/${url}/${path ?? ''}` : `${finalIp}/${url}`;
+		return axios.post(finalPath, payload);
 	};
 
-	const putService = (id: string | number, payload: any) => {
-		return axios.put(`${finalIp}/${url}/${id}`, payload);
+	const putService = (id: string | number, payload: any, path?: string) => {
+		const finalPath = path ? `${finalIp}/${url}/${path ?? ''}` : `${finalIp}/${url}/${id}`;
+		return axios.put(finalPath, payload);
 	};
 
 	const putManyService = (ids: (string | number)[], update: any) => {
 		return axios.put(`${finalIp}/${url}/many/ids`, { ids, update });
 	};
 
-	const deleteService = (id: string | number, silent?: boolean) => {
-		return axios.delete(`${finalIp}/${url}/${id}`, { data: { silent } });
+	const deleteService = (id: string | number, silent?: boolean, path?: string) => {
+		const finalPath = path ? `${finalIp}/${url}/${path ?? ''}` : `${finalIp}/${url}/${id}`;
+		return axios.delete(finalPath, { data: { silent } });
 	};
 
 	const deleteManyService = (ids: (string | number)[], silent?: boolean) => {

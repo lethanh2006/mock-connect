@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const CardThongBao = () => {
-	const { danhSach, getThongBaoLopModel, setRecord, record } = useModel('thongbao.thongbao');
+	const { danhSach, getThongBaoLopModel, setRecord, record } = useModel('thongbao.thongbaolop');
 	const { record: recLopHp } = useModel('lophocphan.lophocphan');
 	const [visibleThongBao, setVisibleThongBao] = useState<boolean>(false);
 
@@ -19,6 +19,7 @@ const CardThongBao = () => {
 
 	return (
 		<Card
+			size='small'
 			title='Thông báo'
 			bodyStyle={{ padding: 0 }}
 			extra={[

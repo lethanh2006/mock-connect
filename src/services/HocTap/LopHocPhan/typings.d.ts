@@ -23,6 +23,8 @@ export declare module LopHocPhan {
 		hocKy?: HocKy.IRecord;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
+		gioiThieuChung?: string;
+
 		siSoToiDa: number;
 		siSo?: number; // Sĩ số hiện tại
 		loai: ELoaiLopHocPhan;
@@ -32,14 +34,24 @@ export declare module LopHocPhan {
 
 		parent?: IRecord;
 		children?: IRecord[];
-		nhanSuList?: ToChucNhanSu.INhanSu[];
+		/** Lớp ghép thời khóa biểu cùng */
+		tenLopGhepTkb?: string;
+		lopGhepTkb?: IRecord;
+
+		nhanSuList?: IRecordNhanSuLopHP[];
 		sinhVienList?: SinhVien.IRecord[];
 		maHoaLichHoc?: TMaHoaLichHoc[];
 		thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[];
 		trangThaiLop: ETrangThaiLopHocPhan;
 
-		lopHpHcList?: Partial<ILopHpLopHc>[];
-		doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
+		// lopHpHcList?: Partial<ILopHpLopHc>[];
+		// doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
+
+		maCSDT?: string;
+		maHinhThuc: string;
+		hinhThuc?: HinhThucDaoTao.IRecordCoSo;
+		maTinhChat: string;
+		// tinhChat?: TinhChatChuongTrinh.IRecord;
 
 		// Đề cương học phần học kỳ
 		deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };

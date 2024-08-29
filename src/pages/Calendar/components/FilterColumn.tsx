@@ -7,6 +7,7 @@ import { useModel } from 'umi';
 const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 	const { date, setDate } = props;
 	const { selectSuKiens, setSelectSuKiens } = useModel('sukien');
+	const { record: recSetting } = useModel('settinglich');
 
 	const pickDate = (val: moment.Moment) => setDate(val.toDate());
 
@@ -67,7 +68,9 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					<Checkbox value={ELoaiSuKien.LICH_HOC}>
 						<p
 							style={{
-								backgroundColor: ColorSuKien[ELoaiSuKien.LICH_HOC],
+								backgroundColor:
+									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.LICH_HOC)?.maMau ??
+									ColorSuKien[ELoaiSuKien.LICH_HOC],
 								color: 'white',
 								padding: '2px 6px',
 								borderRadius: 2,
@@ -81,7 +84,9 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					<Checkbox value={ELoaiSuKien.LICH_THI}>
 						<p
 							style={{
-								backgroundColor: ColorSuKien[ELoaiSuKien.LICH_THI],
+								backgroundColor:
+									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.LICH_THI)?.maMau ??
+									ColorSuKien[ELoaiSuKien.LICH_THI],
 								color: 'white',
 								padding: '2px 6px',
 								borderRadius: 2,
@@ -95,7 +100,9 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					<Checkbox value={ELoaiSuKien.CA_NHAN}>
 						<p
 							style={{
-								backgroundColor: ColorSuKien[ELoaiSuKien.CA_NHAN],
+								backgroundColor:
+									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.CA_NHAN)?.maMau ??
+									ColorSuKien[ELoaiSuKien.CA_NHAN],
 								color: 'white',
 								padding: '2px 6px',
 								borderRadius: 2,
@@ -109,7 +116,9 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					<Checkbox value={ELoaiSuKien.CHUNG}>
 						<p
 							style={{
-								backgroundColor: ColorSuKien[ELoaiSuKien.CHUNG],
+								backgroundColor:
+									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.CHUNG)?.maMau ??
+									ColorSuKien[ELoaiSuKien.CHUNG],
 								color: 'white',
 								padding: '2px 6px',
 								borderRadius: 2,

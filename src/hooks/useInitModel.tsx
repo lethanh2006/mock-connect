@@ -87,13 +87,12 @@ const useInitModel = <T,>(
 				...paramCondition,
 			},
 			filters: [
-				...(filters?.filter((item) => item.active)?.map(({ active, ...item }) => item) || []),
+				...(filters?.filter((item) => item.active !== false)?.map(({ active, ...item }) => item) || []),
 				...(filterParams || []),
 			],
 			select: selectParams?.join(' '),
 			...(otherQuery ?? {}),
 		};
-
 		try {
 			const response = await getService(payload, path ?? 'page', isAbsolutePath ?? false);
 			const tempData: T[] = response?.data?.data?.result ?? [];
@@ -106,6 +105,7 @@ const useInitModel = <T,>(
 			} else {
 				if (isSetDanhSach !== false) setDanhSach(tempData);
 				setTotal(tempTotal);
+
 				return tempData;
 			}
 		} catch (er) {
@@ -123,6 +123,7 @@ const useInitModel = <T,>(
 		pathParam?: string,
 		isSetDanhSach?: boolean,
 		selectParams?: string[],
+		otherQuery?: Record<string, any>,
 	): Promise<T[]> => {
 		setLoading(true);
 		try {
@@ -131,6 +132,7 @@ const useInitModel = <T,>(
 				sort: sortParam,
 				filters: filterParam,
 				select: selectParams?.join(' '),
+				...(otherQuery ?? {}),
 			};
 			const response = await getAllService(payload, pathParam);
 			const data: T[] = response?.data?.data ?? [];
@@ -179,11 +181,12 @@ const useInitModel = <T,>(
 		getData?: any,
 		closeModal?: boolean,
 		messageText?: string,
+		path?: string,
 	): Promise<T> => {
 		if (formSubmiting) Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await postService(chuanHoaObject(payload));
+			const res = await postService(chuanHoaObject(payload), path);
 			message.success(messageText ?? 'Thêm mới thành công');
 			setLoading(false);
 			if (getData) getData();
@@ -205,11 +208,12 @@ const useInitModel = <T,>(
 		notGet?: boolean,
 		closeModal?: boolean,
 		messageText?: string,
+		path?: string,
 	): Promise<T> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await putService(id, chuanHoaObject(payload));
+			const res = await putService(id, chuanHoaObject(payload), path);
 			message.success(messageText ?? 'Lưu thành công');
 			setLoading(false);
 			if (getData) getData();
@@ -250,10 +254,10 @@ const useInitModel = <T,>(
 		}
 	};
 
-	const deleteModel = async (id: string | number, getData?: () => void): Promise<any> => {
+	const deleteModel = async (id: string | number, getData?: () => void, path?: string): Promise<any> => {
 		setLoading(true);
 		try {
-			const res = await deleteService(id);
+			const res = await deleteService(id, undefined, path);
 			message.success('Xóa thành công');
 
 			const maxPage = Math.ceil((total - 1) / limit) || 1;
@@ -415,7 +419,7 @@ const useInitModel = <T,>(
 			const res = await postExport(payload, {
 				condition: { ...condition, ...paramCondition },
 				filters: [
-					...(filters?.filter((item) => item.active)?.map(({ active, ...item }) => item) || []),
+					...(filters?.filter((item) => item.active !== false)?.map(({ active, ...item }) => item) || []),
 					...(paramFilters ?? []),
 				],
 				...(otherQuery ?? {}),

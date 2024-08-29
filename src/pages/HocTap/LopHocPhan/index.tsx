@@ -1,16 +1,14 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Space } from 'antd';
 import { history, useModel } from 'umi';
+import RenderLichHoc from '../DangKyTinChi/components/RenderLichHoc';
 
 const LopHocPhanPage = () => {
 	const { page, limit, sinhVienGetModel } = useModel('lophocphan.lophocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 
 	const onCell = (loptinchi: LopHocPhan.IRecord) => ({
 		onClick: () =>
@@ -22,13 +20,13 @@ const LopHocPhanPage = () => {
 		{
 			title: 'Tên lớp học',
 			dataIndex: 'ten',
-			width: 120,
+			width: 140,
 			onCell,
 			filterType: 'string',
 			sortable: true,
 		},
 		{
-			title: 'Mã học phần',
+			title: 'Mã HP',
 			dataIndex: ['hocPhan', 'ma'],
 			width: 100,
 			onCell,
@@ -36,14 +34,20 @@ const LopHocPhanPage = () => {
 		{
 			title: 'Tên học phần',
 			dataIndex: ['hocPhan', 'ten'],
-			width: 180,
+			width: 200,
 			onCell,
 		},
 		{
-			title: 'Số tín chỉ',
+			title: 'STC',
 			dataIndex: ['hocPhan', 'soTinChi'],
 			align: 'center',
-			width: 80,
+			width: 60,
+			onCell,
+		},
+		{
+			title: 'Lịch học',
+			width: 220,
+			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
 			onCell,
 		},
 	];
@@ -51,16 +55,11 @@ const LopHocPhanPage = () => {
 	return (
 		<TableBase
 			columns={columns}
-			dependencies={[page, limit, recHocKy?._id, maKhoaNganh]}
-			params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH, maKhoaNganh }}
+			dependencies={[page, limit, recHocKy?._id]}
+			params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH }}
 			getData={sinhVienGetModel}
 			modelName='lophocphan.lophocphan'
-			title={
-				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-					<span>Lớp tín chỉ</span>
-					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
-				</Space>
-			}
+			title='Lớp tín chỉ'
 			buttons={{ create: false }}
 			otherButtons={[<FilterHocKy isSetHocKy key='1' />]}
 			hideChildrenRows

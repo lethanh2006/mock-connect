@@ -1,7 +1,7 @@
-import type { ChungChi } from '../DanhMucHeThong/ChungChi/typing';
-import { type ChuongTrinhDaoTao } from '../DanhMucHeThong/ChuongTrinhDaoTao/typings';
-import type { NganhDaoTao } from '../DanhMucHeThong/Nganh/typings';
-import type { KetQuaHocKy } from '../KetQuaHocTap/KetQuaHocKy/typing';
+import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
+import type { DotXetTotNghiep } from '@/services/HocTap/XetTotNghiep/typing';
+import type { ChungChi } from '../ChungChi/typing';
+import type { ChuongTrinhDaoTao } from '../ChuongTrinhDaoTao/typing';
 import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
 import { type LopHanhChinh } from '../NamHoc/LopHanhChinh/typings';
 import { type ETrangThaiHocSv } from '../constant';
@@ -26,6 +26,7 @@ declare module SinhVien {
 		ten: string;
 		firstName: string;
 		lastName: string;
+		choPhepSua: boolean;
 		gioiTinh: EGioiTinh;
 
 		quocTich: string;
@@ -125,7 +126,7 @@ declare module SinhVien {
 		maKhoaNganh2?: string;
 		maKhoaSinhVien2?: string;
 		maNganh2?: string;
-
+		hoKhauThuongTru: TDiaChi;
 		lopHanhChinhList?: LopHanhChinh.IRecord[];
 		maTrinhDo: string;
 		trinhDoDaoTao: TrinhDoDaoTao.IRecordCoSo;
@@ -174,42 +175,6 @@ declare module SinhVien {
 		tenXaPhuong: string;
 		diaChi?: string;
 	};
-
-	export interface IHocBongSinhVien {
-		_id: string;
-		sinhVienSsoId: string;
-		sinhVien?: IRecord;
-		ten: string;
-		donViTaiTro: string;
-		thoiGianTraoTangHocBong: string;
-		loaiHocBongId: string;
-		loaiHocBong?: LoaiHocBong.IRecord;
-		giaTriHocBong: number;
-	}
-
-	export interface IKhenThuongSinhVien {
-		_id: string;
-		sinhVienSsoId: string;
-		sinhVien?: IRecord;
-		namKhenThuong: number;
-		soQuyetDinhKhenThuong: string;
-		danhHieuThiDuaGiaiThuongKhenThuong: string;
-		capKhenThuong: string;
-		loaiDanhHieuThiDuaGiaiThuongKhenThuong: string;
-		phuongThucKhenThuong: string;
-	}
-
-	export interface IKyLuatSinhVien {
-		_id: string;
-		sinhVienSsoId: string;
-		sinhVien?: IRecord;
-		capQuyetDinh: string;
-		soQuyetDinh: string;
-		ngayQuyetDinh: string;
-		namBiKyLuat: number;
-		lyDo: string;
-		loaiKyLuat: string;
-	}
 
 	export interface INoiTruSinhVien {
 		_id: string;
@@ -273,9 +238,38 @@ declare module SinhVien {
 
 	export interface ITienTrinhTotNghiep {
 		diemTichLuyToiThieu: number;
-		thongTinCdr?: ChuongTrinhDaoTao.IChungChiCTDT[];
+		thongTinCdr?: TChungChiDauRaSv[];
 		kqhtHocKy?: KetQuaHocKy.IRecord;
 		ctdtKeHoach?: ChuongTrinhDaoTao.IRecord;
+	}
+
+	export type TChungChiDauRaSv = ChuongTrinhDaoTao.IChungChiCTDT & {
+		/** Chứng chỉ sinh viên đã đạt và còn hiệu lực */
+		chungChiDaDat: ChungChi.IRecord[];
+		/** Có đủ điều kiện đầu ra hay ko? */
+		datChuanDauRa: boolean;
+	};
+
+	export type TDieuKienTotNghiep = {
+		isDuDieuKienTBC: boolean;
+		isDuDieuKienChungChi: boolean;
+		phanTramTinChi: number;
+		isDuKieuKien: boolean;
+		noTaiChinh?: boolean;
+		noThuVien?: boolean;
+	};
+
+	export interface ISinhVienNoNghiaVu {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		maSinhVien?: string;
+		tenSinhVien?: string;
+		noTaiChinh?: boolean;
+		noThuVien?: boolean;
+
+		dotXetTotNghiepId: string;
+		dotXetTotNghiep?: DotXetTotNghiep.IRecord;
 	}
 
 	export type TThongKeTrangThai = {
