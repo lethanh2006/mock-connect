@@ -9,6 +9,7 @@ import DanhSachBuoiHoc from './LichHoc';
 import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
 import CardThongBao from './ThongBao/CardThongBao';
 import ThongTinChung from './components/ThongTinChung';
+import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 
 const DetailLopTinChi = ({
 	match: {
@@ -20,7 +21,7 @@ const DetailLopTinChi = ({
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
 	const { record, sinhVienGetByIdModel, setRecord } = useModel('lophocphan.lophocphan');
 	const { getAllModel: getAllNhanSu } = useModel('lophocphan.nhansulophocphan');
-	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia'];
+	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia', 'dien-dan'];
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 	const hash = window.location.hash?.replace('#', '') ?? paths[0];
 
@@ -68,6 +69,7 @@ const DetailLopTinChi = ({
 				<Tabs.TabPane tab='Thông báo' key={paths[2]} />
 				<Tabs.TabPane tab='Kết quả học tập' key={paths[3]} />
 				<Tabs.TabPane tab='Đánh giá giảng viên' key={paths[4]} />
+				<Tabs.TabPane tab='Diễn đàn' key={paths[5]} />
 			</Tabs>
 
 			{tabActive === paths[0] ? (
@@ -95,8 +97,10 @@ const DetailLopTinChi = ({
 					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
 					<DetailKetQuaHocTap lopHocPhanId={record?._id} />
 				</>
-			) : paths[4] ? (
+			) : tabActive === paths[4] ? (
 				<DanhGiaGiangVienPage />
+			) : tabActive === paths[5] ? (
+				<DienDan idLopHocPhan={record?._id ?? id} />
 			) : null}
 		</Card>
 	);

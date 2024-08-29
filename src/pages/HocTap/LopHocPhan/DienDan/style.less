@@ -1,0 +1,66 @@
+.dien-dan {
+	.flex {
+		display: flex;
+	}
+
+	.item-center {
+		align-items: center;
+	}
+
+	.justify-center {
+		justify-content: center;
+	}
+
+	.justify-between {
+		justify-content: space-between;
+	}
+	.relative {
+		position: relative;
+	}
+
+	.absolute {
+		position: absolute;
+	}
+
+	.pointer {
+		cursor: pointer;
+	}
+
+	p {
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+	}
+	.file-box {
+		display: -webkit-box;
+
+		max-width: 200px;
+		height: 30px;
+		padding: 4px 8px 4px 8px;
+
+		overflow: hidden;
+		border-radius: 2px;
+		cursor: pointer;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
+
+		&:hover {
+			color: #2a64a6;
+		}
+	}
+	.shadow {
+		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08), 0 1px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+	}
+
+	.avatar-class {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+.option-item {
+	&:hover {
+		color: #0065ca;
+	}
+}
