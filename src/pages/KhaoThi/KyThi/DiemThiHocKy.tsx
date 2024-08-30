@@ -44,12 +44,8 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 			data={diemThiHocKySinhVien}
 			columns={columns}
 			size='small'
-			hasTotal
 			loading={loading}
-			otherProps={{
-				pagination: false,
-				scroll: { y: 150 },
-			}}
+			otherProps={{ pagination: false, scroll: { y: 150 } }}
 		/>
 	);
 };
