@@ -1,5 +1,6 @@
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
 import type { DotXetTotNghiep } from '@/services/HocTap/XetTotNghiep/typing';
+import type { EDoiTuongLopHanhChinh } from '@/services/HocTap/constant';
 import type { ChungChi } from '../ChungChi/typing';
 import type { ChuongTrinhDaoTao } from '../ChuongTrinhDaoTao/typing';
 import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
@@ -19,14 +20,17 @@ import type { ETrangThaiChungChiSinhVen } from './constants';
 declare module SinhVien {
 	export interface IRecord {
 		_id: string;
+		dotNhapHocId: string | null;
+		dotNhapHoc?: DotNhapHoc.IRecord;
 		ssoId: string;
-		trangThaiHoc?: ETrangThaiHocSv;
+		trangThaiHoc?: ETrangThaiHocSv; //Trạng thái học tổng
+		trangThaiHocNganh1?: ETrangThaiHocSv;
+		trangThaiHocNganh2?: ETrangThaiHocSv;
 		anhDaiDienUrl?: string | null;
 		ma: string;
 		ten: string;
 		firstName: string;
 		lastName: string;
-		choPhepSua: boolean;
 		gioiTinh: EGioiTinh;
 
 		quocTich: string;
@@ -38,6 +42,10 @@ declare module SinhVien {
 		ngayCapCccd: string;
 		soDienThoai: string;
 		email: string;
+		doiTuong: EDoiTuongLopHanhChinh;
+
+		maCSDT: string;
+		csdt?: CoSoDaoTao.IRecord;
 		// soDienThoai2: string;
 		// email2: string;
 		// nguoiLienLac: string;
@@ -140,7 +148,9 @@ declare module SinhVien {
 		ngayNhapHoc: string;
 
 		//Kết quả học tập tích lũy
-		kqhtTichLuy?: KetQuaHocKy.IKetQuaTichLuy;
+		kqhtTichLuyList?: KetQuaHocKy.IKetQuaTichLuy[];
+		kqhtTichLuyNganh1?: KetQuaHocKy.IKetQuaTichLuy;
+		kqhtTichLuyNganh2?: KetQuaHocKy.IKetQuaTichLuy;
 	}
 
 	export type TThongTinGiaDinh = {
