@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useModel } from 'umi';
+import './style.less';
 
 const GioiThieuChungLopHp = () => {
 	const { record } = useModel('lophocphan.lophocphan');
@@ -12,7 +13,8 @@ const GioiThieuChungLopHp = () => {
 			</div>
 
 			<div
-				style={expand ? undefined : { maxHeight: 80, overflow: 'hidden' }}
+				className='gioi-thieu-chung-content'
+				style={{ display: expand ? 'block' : '-webkit-box' }}
 				dangerouslySetInnerHTML={{ __html: record?.gioiThieuChung ?? '' }}
 			/>
 			{record?.gioiThieuChung ? (
