@@ -222,11 +222,8 @@ export const FormKhaiBaoMinhChung = () => {
 								<Form.Item name='urlFileList' label='Tập tin minh chứng'>
 									<UploadFile
 										maxCount={5}
-										otherProps={{
-											showUploadList: { showDownloadIcon: false },
-											accept: 'image/*, .docx, .doc, .xls, .xlsx, .pdf',
-											multiple: true,
-										}}
+										accept='image/*, .docx, .doc, .xls, .xlsx, .pdf'
+										otherProps={{ showUploadList: { showDownloadIcon: false } }}
 									/>
 								</Form.Item>
 							</Col>

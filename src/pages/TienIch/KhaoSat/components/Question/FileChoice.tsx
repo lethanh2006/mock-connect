@@ -15,11 +15,8 @@ const FileChoice = (props: { question: BieuMau.CauHoi }) => {
 			}
 		>
 			<UploadFile
-				otherProps={{
-					multiple: true,
-					accept: 'image/*, .pdf, .doc, .docx, .png, .jpg',
-					showUploadList: { showDownloadIcon: false },
-				}}
+				accept='image/*, .pdf, .doc, .docx, .png, .jpg'
+				otherProps={{ showUploadList: { showDownloadIcon: false } }}
 				maxCount={5}
 			/>
 		</Form.Item>
