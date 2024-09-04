@@ -4,80 +4,8 @@ import { Form, Input, Popconfirm, Popover } from 'antd';
 import moment from 'moment';
 import { nanoid } from 'nanoid';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
-import styled from 'styled-components';
 import { useModel } from 'umi';
 import AvatarBlog from './Avatar';
-
-const CommendWrapper = styled.div`
-	.comment-box {
-		margin-top: 20px;
-
-		.image {
-			//width: 32px;
-			//height: 32px;
-			margin-right: 8px;
-			//overflow: hidden;
-			//border-radius: 50%;
-		}
-
-		.fake-input {
-			display: flex;
-			align-items: center;
-			width: 100%;
-			height: 40px;
-			padding: 0 12px;
-			background: rgba(136, 136, 136, 0.14);
-			border-radius: 12px;
-			cursor: pointer;
-		}
-	}
-
-	.list-comment {
-		.image {
-			//width: 42px;
-			//height: 42px;
-			margin-right: 8px;
-			//overflow: hidden;
-			//border-radius: 50%;
-		}
-
-		.comment-user {
-			padding: 8px;
-			overflow: hidden;
-			background: rgba(136, 136, 136, 0.14);
-			border-radius: 8px;
-		}
-	}
-
-	.item-comment {
-		.icon-action {
-			display: none;
-		}
-
-		.time-comment {
-			display: none;
-		}
-
-		&:hover {
-			.icon-action {
-				display: block;
-			}
-
-			.time-comment {
-				display: block;
-			}
-		}
-	}
-
-	.option-item {
-		margin-bottom: 8px;
-		cursor: pointer;
-
-		&:last-of-type {
-			margin-bottom: 0;
-		}
-	}
-`;
 
 interface IProps {
 	idBaiDang: string;
@@ -215,17 +143,15 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 	}, [dataBinhLuan]);
 
 	return (
-		<CommendWrapper>
-			<div
-				style={{
-					display: 'grid',
-					gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
-					gap: 8,
-				}}
-			>
-				{danhSachComment &&
-					danhSachComment?.length > 0 &&
-					danhSachComment?.map((val) => (
+		<div
+			style={{
+				display: 'grid',
+				gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
+				gap: 8,
+			}}
+		>
+			{danhSachComment?.length
+				? danhSachComment?.map((val) => (
 						<div className='item-comment flex item-center relative' key={val._id}>
 							<div className='list-comment flex'>
 								<div className='image' style={{ flexShrink: 0 }}>
@@ -233,7 +159,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 								</div>
 								<div>
 									<div className='comment-user'>
-										<div className='flex item-center'>
+										<div className='flex item-center wrap'>
 											<div className='flex item-center'>
 												<b>
 													{val?.thongTinNguoiDang?.hoTen ?? 'Không xác định'}{' '}
@@ -325,8 +251,8 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 								</Popover>
 							)}
 						</div>
-					))}
-			</div>
+				  ))
+				: null}
 
 			<div ref={cardRef} className='comment-box'>
 				<Form form={form} onFinish={onFinish}>
@@ -337,9 +263,9 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 						{showComment || showCommentEdit ? (
 							<div style={{ width: '100%' }}>
 								<div style={{ width: '100%' }}>
-									<Form.Item style={{ width: '100%', marginBottom: 8 }} name='noiDung'>
+									<Form.Item name='noiDung' noStyle>
 										{/*<TinyEditor tinyToolbar hideMenubar />*/}
-										<Input.TextArea placeholder={`Trả lời dưới tên ${recSinhVien?.ten ?? ''}`} />
+										<Input.TextArea autoFocus placeholder={`Trả lời dưới tên ${recSinhVien?.ten ?? ''}`} />
 									</Form.Item>
 								</div>
 								{/*<Form.Item style={{ marginBottom: 0 }} name={'fileDinhKem'}>*/}
@@ -383,16 +309,21 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 						{/*</div>*/}
 
 						<svg
-							onClick={() => {
-								form.submit();
-							}}
+							onClick={() => form.submit()}
 							xmlns='http://www.w3.org/2000/svg'
 							fill='none'
 							viewBox='0 0 24 24'
 							strokeWidth={1.5}
 							stroke='currentColor'
 							className='size-6'
-							style={{ width: 24, height: 24, marginLeft: 12, color: '#007EB9', flexShrink: 0, cursor: 'pointer' }}
+							style={{
+								width: 24,
+								height: 24,
+								marginLeft: 12,
+								color: 'var(--primary-color)',
+								flexShrink: 0,
+								cursor: 'pointer',
+							}}
 						>
 							<path
 								strokeLinecap='round'
@@ -403,7 +334,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 					</div>
 				</Form>
 			</div>
-		</CommendWrapper>
+		</div>
 	);
 });
 export default Comment;
