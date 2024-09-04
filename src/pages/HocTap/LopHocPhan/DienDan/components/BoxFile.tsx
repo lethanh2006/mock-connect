@@ -1,6 +1,6 @@
-import styled from 'styled-components';
 import { getNameFile } from '@/utils/utils';
 import { FileExcelOutlined, FileOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
 
 const PrimaryColor = APP_CONFIG_PRIMARY_COLOR;
 
@@ -13,7 +13,7 @@ const BoxFileWrapper = styled.div`
 		cursor: pointer;
 		&:hover {
 			color: ${PrimaryColor};
-      background: #f5f5f5;
+			background: #f5f5f5;
 		}
 	}
 	.name-file {
