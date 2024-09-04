@@ -43,15 +43,17 @@ const DienDanLopPage = (props: IProps) => {
 	return (
 		<div className='dien-dan'>
 			{!!idBaiViet ? (
-				<Link
-					to='#!'
-					onClick={(e) => {
-						e.preventDefault();
-						history.push(`${history?.location?.pathname}${history?.location?.hash ?? ''}`);
-					}}
-				>
-					← Quay lại
-				</Link>
+				<div style={{ marginBottom: 12 }}>
+					<Link
+						to='#!'
+						onClick={(e) => {
+							e.preventDefault();
+							history.push(`${history?.location?.pathname}${history?.location?.hash ?? ''}`);
+						}}
+					>
+						← Quay lại
+					</Link>
+				</div>
 			) : null}
 
 			<Spin spinning={loading}>
