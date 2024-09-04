@@ -4,14 +4,38 @@
 	.main-content {
 		width: 100%;
 		max-width: 800px;
-		display: grid;
-		grid-template-columns: repeat(1, minmax(0, 1fr));
-		gap: 18px;
 		margin: auto
+	}
+
+	.card {
+		margin-bottom: 18px;
+		border-radius: 2px;
+		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08), 0 1px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
 	}
 
 	.header-card {
 		padding: 18px 18px 0 18px;
+
+		.user-name {
+			.image {
+				//width: 42px;
+				//height: 42px;
+				margin-right: 8px;
+				//overflow: hidden;
+				border-radius: 50%;
+			}
+
+			.name {
+				color: rgb(0, 0, 0);
+				font-weight: 600;
+				font-size: 16px;
+			}
+
+			.time {
+				color: #000000b3;
+				font-size: 12px;
+			}
+		}
 
 		@media (max-width: @screen-xs) {
 			padding: 12px;
@@ -20,6 +44,10 @@
 
 	.flex {
 		display: flex;
+	}
+
+	.wrap {
+		flex-wrap: wrap;
 	}
 
 	.item-center {
@@ -50,6 +78,22 @@
 		&:last-of-type {
 			margin-bottom: 0;
 		}
+	}
+
+	.content {
+		margin-top: 12px;
+		padding: 0 18px 0 18px;
+
+		@media (max-width: @screen-xs) {
+			padding: 0 12px 0 12px;
+		}
+	}
+
+	.action {
+		margin-top: 12px;
+		padding: 8px 20px 8px 20px;
+		border-top: 1px solid rgba(167, 171, 175, 0.53);
+		border-bottom: 1px solid rgba(167, 171, 175, 0.53);
 	}
 
 	.file-box {
@@ -98,9 +142,79 @@
 		clip-path: polygon(0 1%, 100% 0, 100% 71%, 74% 100%, 0 100%, 0% 50%);
 		padding-left: 4px;
 	}
+
+	.comment-box {
+		textarea {
+			field-sizing: content;
+			min-height: 1lh;
+			max-height: 10lh;
+		}
+
+		.image {
+			//width: 32px;
+			//height: 32px;
+			margin-right: 8px;
+			//overflow: hidden;
+			//border-radius: 50%;
+		}
+
+		.fake-input {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			padding: 6px 12px;
+			background: rgba(136, 136, 136, 0.14);
+			border-radius: 12px;
+			cursor: pointer;
+		}
+	}
+
+	.item-comment {
+		.list-comment {
+			.image {
+				//width: 42px;
+				//height: 42px;
+				margin-right: 8px;
+				//overflow: hidden;
+				//border-radius: 50%;
+			}
+
+			.comment-user {
+				padding: 8px;
+				overflow: hidden;
+				background: rgba(136, 136, 136, 0.14);
+				border-radius: 8px;
+			}
+		}
+
+		.icon-action {
+			display: none;
+		}
+
+		.time-comment {
+			display: none;
+		}
+
+		&:hover {
+			.icon-action {
+				display: block;
+			}
+
+			.time-comment {
+				display: block;
+			}
+		}
+	}
 }
 
 .option-item {
+	margin-bottom: 8px;
+	cursor: pointer;
+
+	&:last-of-type {
+		margin-bottom: 0;
+	}
+
 	&:hover {
 		color: var(--primary-color);
 	}
