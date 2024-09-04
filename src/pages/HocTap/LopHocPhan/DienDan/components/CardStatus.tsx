@@ -12,89 +12,10 @@ import { Col, message, Popconfirm, Popover, Row, Tooltip } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import { history, Link, useModel } from 'umi';
 import AvatarBlog from './Avatar';
 import BoxFile from './BoxFile';
 import Comment from './Comment';
-
-const CardStatusWrapper = styled.div`
-	.card {
-		margin-bottom: 18px;
-		border-radius: 2px;
-		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08), 0 1px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
-	}
-	.header-card {
-		//padding: 10px 20px 0px 20px;
-
-		.user-name {
-			.image {
-				//width: 42px;
-				//height: 42px;
-				margin-right: 8px;
-				//overflow: hidden;
-				border-radius: 50%;
-			}
-
-			.name {
-				color: rgb(0, 0, 0);
-				font-weight: 600;
-				font-size: 16px;
-			}
-
-			.time {
-				color: #000000b3;
-				font-size: 12px;
-			}
-		}
-	}
-
-	.content {
-		margin-top: 12px;
-		padding: 0px 20px 0px 20px;
-	}
-
-	.action-info {
-		margin-top: 6px;
-		padding: 0px 20px 0px 20px;
-
-		.like {
-			font-size: 0.9375rem;
-		}
-
-		.sum-comment {
-			font-size: 0.9375rem;
-		}
-	}
-
-	.action {
-		margin-top: 12px;
-		padding: 8px 20px 8px 20px;
-		border-top: 1px solid rgba(167, 171, 175, 0.53);
-		border-bottom: 1px solid rgba(167, 171, 175, 0.53);
-	}
-
-	.comment-content {
-		padding: 0px 20px 20px 20px;
-	}
-
-	.option-them {
-		padding: 12px;
-		background: #ffffff;
-		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
-	}
-
-	.option-item {
-		margin-bottom: 8px;
-		cursor: pointer;
-		&:hover {
-			color: #0065ca;
-		}
-		&:last-of-type {
-			margin-bottom: 0;
-		}
-	}
-`;
 
 interface IProps {
 	handleDoubleClick?: () => void;
@@ -167,13 +88,8 @@ const CardStatus = (props: IProps) => {
 	};
 
 	return (
-		<CardStatusWrapper>
-			<div
-				className='card relative'
-				onDoubleClick={() => {
-					handleRedirectDetail();
-				}}
-			>
+		<>
+			<div className='card relative' onDoubleClick={() => handleRedirectDetail()}>
 				{!daXem ? (
 					<div className='absolute' style={{ top: 0, left: 0 }}>
 						<div className='new'>MỚI</div>
@@ -371,7 +287,7 @@ const CardStatus = (props: IProps) => {
 							Bình luận
 						</div>
 					</div>
-					<div className='comment-content' style={{ marginTop: 12 }}>
+					<div className='content' style={{ paddingBottom: 12 }}>
 						<Comment
 							idBaiDang={data?._id}
 							ref={commentRef}
@@ -388,7 +304,7 @@ const CardStatus = (props: IProps) => {
 					</div>
 				</div>
 			</div>
-		</CardStatusWrapper>
+		</>
 	);
 };
 export default CardStatus;
