@@ -57,6 +57,14 @@ const FormHocPhanQuyDoiDiem = () => {
 								<b>{record?.thoiGianHieuLuc ? monent(record?.thoiGianHieuLuc).format('DD/MM/YYYY') : '--'}</b>
 							</div>
 						</Descriptions.Item>
+					) : record?.loai === EMinhChungQuyDoiDiem.NCKH ? (
+						<Descriptions.Item label='Thông tin NCKH'>
+							<div>
+								- Tên đề tài: <b>{record?.tenDeTaiNckh ?? ''}</b>
+								<br />- Người hướng dẫn: <b>{record?.nguoiHuongDanNckh ?? ''}</b>
+								<br />- Điểm NCKH: <b>{record?.diemNckh ?? ''}</b>
+							</div>
+						</Descriptions.Item>
 					) : (
 						<Descriptions.Item label='Thông tin học phần đã học'>
 							<div>

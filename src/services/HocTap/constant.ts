@@ -134,6 +134,7 @@ export const colorTrangThaiSinhVienQuyDoiDiem: Record<ETrangThaiPhieuQuyDoiDiem,
 export enum EMinhChungQuyDoiDiem {
 	HOC_PHAN = 'Học phần',
 	CHUNG_CHI = 'Chứng chỉ',
+	NCKH = 'NCKH',
 }
 
 export enum ETrinhDoMinhChungQuyDoiDiem {
