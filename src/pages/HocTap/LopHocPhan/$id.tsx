@@ -1,3 +1,5 @@
+import BaiTapPage from '@/pages/DaoTao/BaiTap';
+import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
@@ -10,7 +12,6 @@ import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
 import CardThongBao from './ThongBao/CardThongBao';
 import CardGiangVienLop from './components/CardGiangVien';
 import ThongTinChung from './components/ThongTinChung';
-import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 
 const DetailLopTinChi = ({
 	match: {
@@ -22,7 +23,7 @@ const DetailLopTinChi = ({
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
 	const { record, sinhVienGetByIdModel, setRecord } = useModel('lophocphan.lophocphan');
 	const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
-	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia', 'dien-dan'];
+	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia', 'dien-dan', 'bai-tap'];
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 	const hash = window.location.hash?.replace('#', '') ?? paths[0];
 
@@ -68,6 +69,7 @@ const DetailLopTinChi = ({
 				<Tabs.TabPane tab='Thông tin chung' key={paths[0]} />
 				<Tabs.TabPane tab='Diễn đàn' key={paths[5]} />
 				<Tabs.TabPane tab='Lịch học' key={paths[1]} />
+				<Tabs.TabPane tab='Bài tập' key={paths[6]} />
 				<Tabs.TabPane tab='Thông báo' key={paths[2]} />
 				<Tabs.TabPane tab='Kết quả học tập' key={paths[3]} />
 				<Tabs.TabPane tab='Đánh giá giảng viên' key={paths[4]} />
@@ -105,6 +107,8 @@ const DetailLopTinChi = ({
 				<DanhGiaGiangVienPage />
 			) : tabActive === paths[5] ? (
 				<DienDan idLopHocPhan={record?._id ?? id} />
+			) : tabActive === paths[6] ? (
+				<BaiTapPage lopHocPhanId={id} />
 			) : null}
 		</Card>
 	);
