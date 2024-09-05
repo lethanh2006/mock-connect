@@ -15,7 +15,6 @@ const FormItemHocPhanQuyDoi = () => {
 	const { setVisibleForm, visibleForm, getModel, danhSach, loading, handleView } = useModel(
 		'daotao.quydoidiem.sinhvienquydoidiem',
 	);
-
 	const { record: recPhieu } = useModel('daotao.quydoidiem.phieuquydoidiem');
 
 	const getData = () => getModel({ phieuDangKyQuyDoiDiemId: recPhieu?._id });
@@ -45,9 +44,11 @@ const FormItemHocPhanQuyDoi = () => {
 			render: (val, rec) => (
 				<>
 					{rec?.loai}:{' '}
-					{(rec?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? rec?.tenChungChi : rec?.tenHocPhan) ?? (
-						<i>Không có thông tin</i>
-					)}
+					{(rec?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI
+						? rec?.tenChungChi
+						: rec.loai === EMinhChungQuyDoiDiem.NCKH
+						? rec.tenDeTaiNckh
+						: rec?.tenHocPhan) ?? <i>Không có thông tin</i>}
 				</>
 			),
 			onCell,

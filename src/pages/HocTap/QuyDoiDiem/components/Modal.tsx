@@ -136,8 +136,13 @@ const ModalQuyDoiDiem = (props: {
 				</Descriptions>
 
 				<Row gutter={[12, 0]}>
-					<Col xs={24} md={12}>
-						<Form.Item name='loai' label='Loại minh chứng' rules={[...rules.required]}>
+					<Col xs={24}>
+						<Form.Item
+							name='loai'
+							label='Loại minh chứng'
+							rules={[...rules.required]}
+							extra='Đối với minh chứng NCKH, kết quả quy đổi sẽ được tính vào Điểm TBC'
+						>
 							<Select
 								placeholder='Chọn minh chứng'
 								options={Object.values(EMinhChungQuyDoiDiem).map((item) => ({
@@ -365,12 +370,41 @@ const ModalQuyDoiDiem = (props: {
 							</Col>
 
 							<Col xs={24} md={12}>
-								<Form.Item name='thoiGianHieuLuc' label='Thời gian có hiệu lực' rules={[...rules.required]}>
-									<MyDatePicker onChange={() => form.validateFields(['thoiGianHetHieuLuc'])} />
+								<Form.Item name='thoiGianHieuLuc' label='Thời gian có hiệu lực'>
+									<MyDatePicker />
 								</Form.Item>
 							</Col>
 						</>
-					) : null}
+					) : (
+						<>
+							<Col xs={24}>
+								<div className='fw500'>Thông tin Nghiên cứu khoa học</div>
+							</Col>
+							<Col xs={24}>
+								<Form.Item
+									name='tenDeTaiNckh'
+									label='Tên đề tài'
+									rules={[...rules.required, ...rules.text, ...rules.length(500)]}
+								>
+									<Input placeholder='Nhập tên đề tài' />
+								</Form.Item>
+							</Col>
+							<Col xs={24} md={12}>
+								<Form.Item
+									name='nguoiHuongDanNckh'
+									label='Người hướng dẫn'
+									rules={[...rules.text, ...rules.length(100)]}
+								>
+									<Input placeholder='Nhập tên người hướng dẫn' />
+								</Form.Item>
+							</Col>
+							<Col xs={24} md={12}>
+								<Form.Item name='diemNckh' label='Điểm NCKH' rules={[...rules.required]}>
+									<InputNumber placeholder='Nhập điểm NCKH' style={{ width: '100%' }} min={0} />
+								</Form.Item>
+							</Col>
+						</>
+					)}
 
 					<Col xs={24} md={12}>
 						<Form.Item
