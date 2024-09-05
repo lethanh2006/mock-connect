@@ -1,6 +1,6 @@
 import UploadFile from '@/components/Upload/UploadFile';
-import { ETrangThaiNopBaiTap } from '@/services/BaiTap/constants';
-import type { BaiTap } from '@/services/BaiTap/typing';
+import { ETrangThaiNopBaiTap } from '@/services/DaoTao/BaiTap/constants';
+import type { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
@@ -15,7 +15,7 @@ const FormBaiTap = (props: any) => {
 	const { record, visibleForm, setVisibleForm, putModel, formSubmiting } = useModel('daotao.baitap');
 	const [isLuuBai, setIsLuuBai] = useState<boolean>(false);
 	const quaThoiHanNopBai =
-		!record?.assignment?.thoiGianKetThuc || moment().isBefore(record?.assignment?.thoiGianKetThuc);
+		!record?.assignment?.thoiGianKetThuc || moment().isAfter(record?.assignment?.thoiGianKetThuc);
 
 	useEffect(() => {
 		if (!visibleForm) {
@@ -41,9 +41,12 @@ const FormBaiTap = (props: any) => {
 
 	return (
 		<Card title='Nộp bài tập'>
-			<div style={{ marginBottom: 12 }}>
-				<Alert type='error' showIcon message='Quá thời gian nộp bài' />
-			</div>
+			{quaThoiHanNopBai && (
+				<div style={{ marginBottom: 12 }}>
+					<Alert type='error' showIcon message='Quá thời gian nộp bài' />
+				</div>
+			)}
+
 			<Form onFinish={onFinish} form={form} layout='vertical'>
 				<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
 					<Col span={24}>
@@ -51,6 +54,9 @@ const FormBaiTap = (props: any) => {
 					</Col>
 					<Col span={24}>
 						<Descriptions column={1}>
+							<Descriptions.Item label='Giảng viên giao bài'>
+								{record?.assignment?.hoTenNguoiGiao ?? ''}
+							</Descriptions.Item>
 							<Descriptions.Item label='Tiêu đề'>{record?.assignment?.noiDung ?? '--'}</Descriptions.Item>
 							<Descriptions.Item label='Hướng dẫn'>
 								<div
@@ -78,7 +84,9 @@ const FormBaiTap = (props: any) => {
 						</Descriptions>
 					</Col>
 
-					<Divider>Câu trả lời</Divider>
+					<Col span={24}>
+						<Divider>Câu trả lời</Divider>
+					</Col>
 					<Col span={24}>
 						<Form.Item name='noiDungTraLoi' label='Nội dung trả lời'>
 							<Input.TextArea rows={3} placeholder='Nhập nội dung trả lời' />

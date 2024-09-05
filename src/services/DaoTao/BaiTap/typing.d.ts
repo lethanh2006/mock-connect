@@ -9,12 +9,18 @@ declare module BaiTap {
 		urlTepDinhKem: string[] | null;
 		noiDung: string;
 		huongDanNop: string;
+
 		lopHocPhanId: string;
 		tenLopHocPhan: string;
 		thoiGianGiao: Date;
 		thoiGianBatDau: Date;
 		thoiGianKetThuc: Date;
 		choPhepCapNhatSauNop: boolean;
+
+		hoTenNguoiGiao: string;
+		ssoIdNguoiGiao: string;
+		maCanBoNguoiGiao: string;
+
 		createdAt: Date;
 		updatedAt: Date;
 	}
@@ -26,6 +32,7 @@ declare module BaiTap {
 		maSinhVien: string;
 		hoTen: string;
 		sinhVienSsoId: string;
+
 		sinhVien: SinhVien.IRecord;
 		urlVideos: string[] | null;
 		urlImages: string[] | null;
