@@ -1,4 +1,4 @@
-import BaiTapPage from '@/pages/DaoTao/BaiTap';
+import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
 import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import { TeamOutlined } from '@ant-design/icons';

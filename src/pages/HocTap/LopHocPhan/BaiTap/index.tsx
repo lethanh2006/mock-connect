@@ -1,8 +1,12 @@
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
-import { colorTrangThaiNopBaiTap, ETrangThaiNopBaiTap, mapTrangThaiNopBaiTap } from '@/services/BaiTap/constants';
-import type { BaiTap } from '@/services/BaiTap/typing';
+import {
+	colorTrangThaiNopBaiTap,
+	ETrangThaiNopBaiTap,
+	mapTrangThaiNopBaiTap,
+} from '@/services/DaoTao/BaiTap/constants';
+import type { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import { EditOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
 import moment from 'moment';
@@ -19,6 +23,11 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 	};
 
 	const columns: IColumn<BaiTap.IDanhSachGiaoBaiTap>[] = [
+		{
+			title: 'Giảng viên giao bài',
+			width: 150,
+			render: (val, rec) => rec?.assignment?.hoTenNguoiGiao ?? '',
+		},
 		{
 			title: 'Tiêu đề',
 			width: 200,
