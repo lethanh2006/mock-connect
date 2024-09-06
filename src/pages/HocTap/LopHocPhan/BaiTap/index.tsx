@@ -8,23 +8,32 @@ import {
 } from '@/services/DaoTao/BaiTap/constants';
 import type { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import { EditOutlined } from '@ant-design/icons';
-import { Tag } from 'antd';
+import { Segmented, Tag } from 'antd';
 import moment from 'moment';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import FormBaiTap from './components/Form';
 
 const BaiTapPage = (props: { lopHocPhanId: string }) => {
+	const [activeKey, setActiveKey] = useState<string>('1');
 	const { lopHocPhanId } = props;
 	const { getModel, page, limit, handleEdit } = useModel('daotao.baitap');
 
 	const getData = () => {
 		if (lopHocPhanId)
-			getModel(undefined, undefined, undefined, undefined, undefined, `lop-hoc-phan/${lopHocPhanId}/me`);
+			getModel(
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				`lop-hoc-phan/${lopHocPhanId}/me/${activeKey === '1' ? 'dang-dien-ra' : 'da-ket-thuc'}`,
+			);
 	};
 
 	const columns: IColumn<BaiTap.IDanhSachGiaoBaiTap>[] = [
 		{
-			title: 'Giảng viên giao bài',
+			title: 'Giảng viên',
 			width: 150,
 			render: (val, rec) => rec?.assignment?.hoTenNguoiGiao ?? '',
 		},
@@ -93,18 +102,31 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 	];
 
 	return (
-		<TableBase
-			getData={getData}
-			columns={columns}
-			dependencies={[page, limit, lopHocPhanId]}
-			modelName='daotao.baitap'
-			formProps={{ getData }}
-			Form={FormBaiTap}
-			hideCard
-			widthDrawer={800}
-			buttons={{ create: false }}
-			destroyModal
-		/>
+		<>
+			<div style={{ marginBottom: 8 }}>
+				<Segmented
+					value={activeKey}
+					onChange={(val) => setActiveKey(val.toString())}
+					options={[
+						{ value: '1', label: 'Đang diễn ra' },
+						{ value: '2', label: 'Đã kết thúc' },
+					]}
+				/>
+			</div>
+
+			<TableBase
+				getData={getData}
+				columns={columns}
+				dependencies={[page, limit, lopHocPhanId, activeKey]}
+				modelName='daotao.baitap'
+				formProps={{ getData }}
+				Form={FormBaiTap}
+				hideCard
+				widthDrawer={800}
+				buttons={{ create: false }}
+				destroyModal
+			/>
+		</>
 	);
 };
 
