@@ -43,7 +43,7 @@ const FormBaiTap = (props: any) => {
 		<Card title='Nộp bài tập'>
 			{quaThoiHanNopBai && (
 				<div style={{ marginBottom: 12 }}>
-					<Alert type='error' showIcon message='Quá thời gian nộp bài' />
+					<Alert type='error' showIcon message='Quá thời hạn nộp bài' />
 				</div>
 			)}
 
@@ -54,11 +54,9 @@ const FormBaiTap = (props: any) => {
 					</Col>
 					<Col span={24}>
 						<Descriptions column={1}>
-							<Descriptions.Item label='Giảng viên giao bài'>
-								{record?.assignment?.hoTenNguoiGiao ?? ''}
-							</Descriptions.Item>
+							<Descriptions.Item label='Giảng viên'>{record?.assignment?.hoTenNguoiGiao ?? ''}</Descriptions.Item>
 							<Descriptions.Item label='Tiêu đề'>{record?.assignment?.noiDung ?? '--'}</Descriptions.Item>
-							<Descriptions.Item label='Hướng dẫn'>
+							<Descriptions.Item label='Nội dung chi tiết'>
 								<div
 									dangerouslySetInnerHTML={{ __html: record?.assignment?.huongDanNop ?? '--' }}
 									className='notif-content'
@@ -89,12 +87,12 @@ const FormBaiTap = (props: any) => {
 					</Col>
 					<Col span={24}>
 						<Form.Item name='noiDungTraLoi' label='Nội dung trả lời'>
-							<Input.TextArea rows={3} placeholder='Nhập nội dung trả lời' />
+							<Input.TextArea rows={3} placeholder='Nhập nội dung trả lời' disabled={quaThoiHanNopBai} />
 						</Form.Item>
 					</Col>
 					<Col span={24}>
 						<Form.Item name='urlImages' label='Tệp đính kèm' rules={[...rules.required]}>
-							<UploadFile maxCount={5} />
+							<UploadFile maxCount={5} disabled={quaThoiHanNopBai} />
 						</Form.Item>
 					</Col>
 				</Row>
