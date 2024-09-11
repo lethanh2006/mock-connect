@@ -24,6 +24,7 @@ export declare module LopHocPhan {
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
 		gioiThieuChung?: string;
+		lmsUrl?: string; // Link học trực tuyến
 
 		siSoToiDa: number;
 		siSo?: number; // Sĩ số hiện tại
