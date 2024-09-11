@@ -33,7 +33,7 @@ export default () => {
 		idKhaoSat: string;
 		danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]>;
 		idDot: string;
-		vaiTroNguoiKhaoSat: EVaiTroKhaoSat;
+		vaiTroNguoiKhaoSat?: EVaiTroKhaoSat;
 		trangThaiSinhVien?: ETrangThaiHocSv;
 		danToc?: string;
 		gioiTinh?: string;
