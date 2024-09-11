@@ -20,8 +20,6 @@ const CardStatusBaiTap = (props: IProps) => {
 	const { data, getData } = props;
 	const { setVisibleForm, setRecord } = useModel('daotao.baitap');
 
-	const quaThoiHanNopBai = !data?.assignment?.thoiGianKetThuc || moment().isAfter(data?.assignment?.thoiGianKetThuc);
-
 	return (
 		<div className='card relative' style={{ paddingBottom: 12 }}>
 			<div className='header-card flex justify-between'>
@@ -81,8 +79,6 @@ const CardStatusBaiTap = (props: IProps) => {
 					<Col xs={24} style={{ textAlign: 'right' }}>
 						<Space style={{ marginRight: 12 }}>
 							<ButtonExtend
-								tooltip={quaThoiHanNopBai && 'Ngoài thời gian nộp bài'}
-								disabled={quaThoiHanNopBai}
 								type='primary'
 								onClick={() => {
 									setRecord(data);

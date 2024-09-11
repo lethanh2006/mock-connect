@@ -6,19 +6,15 @@ import SingleChoice from '@/pages/TienIch/KhaoSat/components/Question/SingleChoi
 import Text from '@/pages/TienIch/KhaoSat/components/Question/Text';
 import { getCauTraLoiMeBaiTap } from '@/services/TienIch/KhaoSat/BieuMau';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { ELoaiCauHoi, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
-import { handleSingleFile } from '@/services/uploadFile';
-import { Checkbox, Divider, Form, Spin } from 'antd';
-import moment from 'moment';
+import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
+import { Checkbox, Divider } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const FormQuiz = (props: any) => {
-	const { getData } = props;
-	const { record, traLoiBieuMauModel, formSubmiting, getByIdModel: getBieuMau } = useModel('tienich.bieumau');
-	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
-	const { record: recBaiTap, setVisibleForm, sinhVienNopBaiTapModal } = useModel('daotao.baitap');
-	const [form] = Form.useForm();
+	const { form } = props;
+	const { record, getByIdModel: getBieuMau } = useModel('tienich.bieumau');
+	const { record: recBaiTap } = useModel('daotao.baitap');
 	const [check, setCheck] = useState<boolean>(false);
 	const [cauTraLoi, setCauTraLoi] = useState<BieuMau.TraLoiRecord>();
 
@@ -81,126 +77,29 @@ const FormQuiz = (props: any) => {
 		);
 	};
 
-	function convertList(originalList: any) {
-		const convertedList = [];
-		for (const idHang in originalList) {
-			for (const idCot in originalList[idHang]) {
-				if (originalList[idHang][idCot] === true) {
-					convertedList.push({ idCot, idHang });
-				}
-			}
-		}
-		return convertedList;
-	}
-
-	const buildUpLoadTaiLieu = (url: string | { fileList: any[] }) => {
-		if (typeof url === 'string') return url;
-		else if (url?.fileList.length) {
-			return Promise.all(url?.fileList?.map((file: any) => handleSingleFile(file)));
-		}
-		return null;
-	};
-
-	const onFinish = async (values: any) => {
-		const danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]> = [];
-		const dsCauHoi = record?.danhSachKhoi?.map((khoi) => khoi.danhSachCauHoi).flat();
-
-		if (dsCauHoi) {
-			for (const question of dsCauHoi) {
-				const traLoi = values[question._id];
-				const otherAnswer = values[`${question._id}_otherAnswer`];
-				if (traLoi || otherAnswer) {
-					let tempTraLoi: Partial<BieuMau.TraLoiRecord> = { idCauHoi: question._id };
-
-					if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
-						const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
-						tempTraLoi.listUrlFile = listUrlFile as string[];
-					} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
-						if (traLoi === 'traLoiKhac') {
-							const traLoiKhac = values[`${question._id}_otherAnswer`];
-							if (traLoiKhac) {
-								tempTraLoi.traLoiKhac = traLoiKhac;
-								tempTraLoi.listLuaChonBang = [];
-								tempTraLoi.listLuaChon = [];
-							}
-						} else {
-							tempTraLoi.listLuaChon = question?.luaChon
-								?.map((item: any) => {
-									if ([traLoi]?.includes(item.noiDung)) {
-										return item._id;
-									}
-								})
-								.filter(Boolean);
-						}
-					} else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
-						tempTraLoi.listLuaChon = question?.luaChon
-							?.map((item: any) => {
-								if (traLoi?.listLuaChon?.includes(item.noiDung)) {
-									return item._id;
-								}
-							})
-							.filter(Boolean);
-					else if (
-						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
-						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
-					)
-						tempTraLoi.listLuaChonBang = convertList(values[question._id]);
-					else tempTraLoi = { ...tempTraLoi, ...values[question._id] };
-
-					danhSachTraLoi.push(tempTraLoi as BieuMau.TraLoiRecord);
-				}
-			}
-		}
-
-		await traLoiBieuMauModel({
-			idKhaoSat: record?._id ?? '',
-			danhSachTraLoi,
-			idDot: '',
-			vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
-			trangThaiSinhVien: recSinhVien?.trangThaiHoc,
-			danToc: recSinhVien?.danToc,
-			gioiTinh: recSinhVien?.gioiTinh,
-		})
-			.then((res) => {
-				if (res) {
-					const data = {
-						...recBaiTap,
-						cauTraLoiId: res?._id,
-						thoiGianTraLoi: moment(),
-						mode: 'save',
-					};
-					sinhVienNopBaiTapModal(data as any, getData);
-				}
-				setVisibleForm(false);
-			})
-			.catch((er) => console.log(er));
-	};
-
 	return (
-		<Spin spinning={formSubmiting}>
-			<Form scrollToFirstError onFinish={onFinish} layout='vertical' form={form}>
-				{record?.danhSachKhoi?.map((item) => (
-					// eslint-disable-next-line react/no-array-index-key
-					<div key={item._id} style={{ marginBottom: 32 }}>
-						<Divider />
-						<div className='fw500'>{item.tieuDe}</div>
-						<div style={{ marginBottom: 12 }}>{item.moTa}</div>
+		<>
+			{record?.danhSachKhoi?.map((item) => (
+				// eslint-disable-next-line react/no-array-index-key
+				<div key={item._id} style={{ marginBottom: 32 }}>
+					<Divider />
+					<div className='fw500'>{item.tieuDe}</div>
+					<div style={{ marginBottom: 12 }}>{item.moTa}</div>
 
-						{item.danhSachCauHoi?.map((cauHoi, index) => renderQuestion(cauHoi, index))}
-					</div>
-				))}
+					{item.danhSachCauHoi?.map((cauHoi, index) => renderQuestion(cauHoi, index))}
+				</div>
+			))}
 
-				{record?.coCamKet && (
-					<Checkbox
-						style={{ marginBottom: 12, marginTop: 12 }}
-						onChange={(e) => setCheck(e.target.checked)}
-						checked={check}
-					>
-						{record?.noiDungCamKet}
-					</Checkbox>
-				)}
-			</Form>
-		</Spin>
+			{record?.coCamKet && (
+				<Checkbox
+					style={{ marginBottom: 12, marginTop: 12 }}
+					onChange={(e) => setCheck(e.target.checked)}
+					checked={check}
+				>
+					{record?.noiDungCamKet}
+				</Checkbox>
+			)}
+		</>
 	);
 };
 
