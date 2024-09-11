@@ -34,7 +34,7 @@ const StatKetQuaTichLuySinhVien = () => {
 							<Col span={24} md={8}>
 								<div className='row'>
 									<span className='sum-text'>{record.tongSoTinChiNoToanKhoa ?? '--'}</span>
-									Tổng số tín chỉ nợ toàn khóa
+									Tổng STC chưa đạt toàn khóa
 								</div>
 							</Col>
 						</Row>

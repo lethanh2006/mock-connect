@@ -1,16 +1,17 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 	const { maHocKy, maHocPhan } = props;
-	const { diemThiHocKySinhVien, loading, getDiemThiHocKySinhVienModel } = useModel('khaothi.sinhvienthi');
+	const { loading, getDiemThiHocKySinhVienModel } = useModel('khaothi.sinhvienthi');
+	const [diemThiHocKySinhVien, setDiemThiHocKySinhVien] = useState<SinhVienThi.IDiemThiHocKySinhVien[]>([]);
 
 	useEffect(() => {
 		if (maHocKy && maHocPhan) {
-			getDiemThiHocKySinhVienModel(maHocKy, maHocPhan);
+			getDiemThiHocKySinhVienModel(maHocKy, maHocPhan).then((res) => setDiemThiHocKySinhVien(res));
 		}
 	}, []);
 
@@ -43,11 +44,8 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 			data={diemThiHocKySinhVien}
 			columns={columns}
 			size='small'
-			hasTotal
 			loading={loading}
-			otherProps={{
-				pagination: true,
-			}}
+			otherProps={{ pagination: false, scroll: { y: 150 } }}
 		/>
 	);
 };

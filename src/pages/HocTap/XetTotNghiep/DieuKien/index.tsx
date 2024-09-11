@@ -39,7 +39,7 @@ const CardDieuKienTotNghiep = () => {
 
 				<DieuKienChungChiSection />
 
-				<DieuKienKhacSection />
+				{/* <DieuKienKhacSection /> */}
 			</Spin>
 
 			{dieuKienTotNghiep?.isDuKieuKien ? (

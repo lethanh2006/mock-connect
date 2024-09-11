@@ -17,7 +17,7 @@ const CardKhoiHocPhan = (props: {
 	return (
 		<>
 			<div className='col-hoc-phan' onClick={() => setVisible(true)}>
-				<div className='card-hoc-phan'>
+				<div className='card-hoc-phan' title={khoi?.ten}>
 					<h4 className='tu_chon'>{khoi?.ten}</h4>
 					<span className='tin-chi'>{soTinChi} tín chỉ</span>
 					<div className='khoi-kien-thuc' style={{ borderLeftColor: colorKhoiKienThuc }} />
@@ -27,7 +27,7 @@ const CardKhoiHocPhan = (props: {
 
 			<Modal
 				visible={visible}
-				title={`Khối ${khoi?.loaiHocPhanCtdt?.toLowerCase() ?? ''}: ${khoi?.ten ?? ''}`}
+				title={khoi?.ten ?? 'Khối học phần'}
 				onCancel={() => setVisible(false)}
 				width={680}
 				okButtonProps={{ hidden: true }}

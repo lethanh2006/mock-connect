@@ -1,5 +1,6 @@
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
+import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import rules from '@/utils/rules';
 import { inputFormat } from '@/utils/utils';
 import { Alert, Button, Col, Descriptions, Form, Modal, Popconfirm, Row } from 'antd';
@@ -17,21 +18,22 @@ const ModalNopTruocHocPhi = (props: {
 	const { visibleForm, setVisibleForm, getData } = props;
 	const { dongTruocHocPhiModel, formSubmiting, paymentType, setVisibleHuongDan, thanhToanMomoModel, setRecord } =
 		useModel('taichinh.giaodich');
-	const { record } = useModel('taichinh.dotthutruochocphi');
+	const { record: recThuTruocHp } = useModel('taichinh.dotthutruochocphi');
 	const { getMucThuHocPhiTheoNamModel, mucThuMe } = useModel('taichinh.mucthuhocphi');
+	const { initialState } = useModel('@@initialState');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const maKhoaNganh: string = Form.useWatch('maKhoaNganh', form);
 
 	const ngoaiThoiGian =
-		!record?._id ||
-		!record?.thoiGianBatDau ||
-		!record?.thoiGianKetThuc ||
-		moment().isBefore(record?.thoiGianBatDau) ||
-		moment().isAfter(record?.thoiGianKetThuc);
+		!recThuTruocHp?._id ||
+		!recThuTruocHp?.thoiGianBatDau ||
+		!recThuTruocHp?.thoiGianKetThuc ||
+		moment().isBefore(recThuTruocHp?.thoiGianBatDau) ||
+		moment().isAfter(recThuTruocHp?.thoiGianKetThuc);
 
 	useEffect(() => {
-		if (record?._id) getMucThuHocPhiTheoNamModel(record?.maNamHoc);
-	}, [record?._id]);
+		if (recThuTruocHp?._id) getMucThuHocPhiTheoNamModel(recThuTruocHp?.maNamHoc);
+	}, [recThuTruocHp?._id]);
 
 	//Số tiền trên 1 tín chỉ
 	const soTienTinChi =
@@ -40,17 +42,20 @@ const ModalNopTruocHocPhi = (props: {
 			: mucThuMe?.mucThuKhoaNganhPhu?.unitAmount ?? 0;
 
 	//Số tiền phải đóng để được hưởng ưu đãi
-	const soTienPhaiDong = soTienTinChi * (record?.soTinChiNhanUuDai ?? 0);
+	const soTienPhaiDong = soTienTinChi * (recThuTruocHp?.soTinChiNhanUuDai ?? 0);
 
 	//Số tiền ưu đãi
-	const soTienUuDau = soTienPhaiDong * (record?.uuDai?.phanTramUuDai / 100);
+	const soTienUuDai = soTienPhaiDong * (recThuTruocHp?.uuDai?.phanTramUuDai / 100);
 
 	const onFinish = (values: any) => {
-		const data = {
+		const data: GiaoDich.TDongTruocHocPhi = {
 			...values,
-			amount: soTienPhaiDong - soTienUuDau,
+			name: `Nộp trước học phí ${recThuTruocHp?.tenNamHoc || `Năm học ${recThuTruocHp?.maNamHoc}` || ''} MSV ${
+				initialState?.currentUser?.preferred_username ?? ''
+			}`,
+			amount: soTienPhaiDong - soTienUuDai,
 			paymentType,
-			idDotThuTruocHocPhi: record?._id,
+			idDotThuTruocHocPhi: recThuTruocHp?._id,
 			userMaKhoaSinhVien:
 				values?.maKhoaNganh === khoaNganhMe?.khoaNganhChinh?.ma
 					? khoaNganhMe?.khoaNganhChinh?.maKhoaSinhVien
@@ -97,8 +102,8 @@ const ModalNopTruocHocPhi = (props: {
 									<div>
 										<div>Nộp trước học phí cả năm để được hưởng những ưu đãi hấp dẫn!</div>
 										<div>
-											Thời gian từ {<b>{moment(record?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</b>} đến
-											{<b>{moment(record?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</b>}.
+											Thời gian từ {<b>{moment(recThuTruocHp?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</b>} đến
+											{<b>{moment(recThuTruocHp?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</b>}.
 										</div>
 									</div>
 								}
@@ -111,27 +116,27 @@ const ModalNopTruocHocPhi = (props: {
 							</Form.Item>
 						</Col>
 						<Col span={24}>
-							<div style={{ fontSize: 17 }}>
+							<div style={{ fontSize: 16 }}>
 								Sinh viên nộp học phí 1 lần cho cả năm học, tương đương với học phí cho{' '}
-								<b>{record?.soTinChiNhanUuDai} tín chỉ</b> sẽ được Học viện miễn giảm học phí bằng{' '}
-								<b>{record?.uuDai?.phanTramUuDai}%</b> trên tổng số tiền nộp.
+								<b>{recThuTruocHp?.soTinChiNhanUuDai} tín chỉ</b> sẽ được Học viện miễn giảm học phí bằng{' '}
+								<b>{recThuTruocHp?.uuDai?.phanTramUuDai}%</b> trên tổng số tiền nộp.
 							</div>
 						</Col>
 						<Col span={24}>
 							<Descriptions column={1}>
 								<Descriptions.Item label='Năm học'>
-									<b style={{ color: 'red' }}>{record?.tenNamHoc}</b>
+									<b style={{ color: 'red' }}>{recThuTruocHp?.tenNamHoc}</b>
 								</Descriptions.Item>
 								<Descriptions.Item label='Định mức tín chỉ theo ngành'>
 									{inputFormat(soTienTinChi)} VNĐ
 								</Descriptions.Item>
 								<Descriptions.Item label='Số tín chỉ cần nộp để được hưởng ưu đãi'>
-									{record?.soTinChiNhanUuDai} tín chỉ
+									{recThuTruocHp?.soTinChiNhanUuDai} tín chỉ
 								</Descriptions.Item>
 								<Descriptions.Item label='Tổng tiền'>{inputFormat(soTienPhaiDong)} VNĐ</Descriptions.Item>
-								<Descriptions.Item label='Số tiền được miễn giảm'>{inputFormat(soTienUuDau)} VNĐ</Descriptions.Item>
+								<Descriptions.Item label='Số tiền được miễn giảm'>{inputFormat(soTienUuDai)} VNĐ</Descriptions.Item>
 								<Descriptions.Item label='Số tiền đóng thực tế'>
-									{inputFormat(soTienPhaiDong - soTienUuDau)} VNĐ
+									{inputFormat(soTienPhaiDong - soTienUuDai)} VNĐ
 								</Descriptions.Item>
 							</Descriptions>
 						</Col>
@@ -140,7 +145,7 @@ const ModalNopTruocHocPhi = (props: {
 							<div className='fw500'>Hình thức thanh toán</div>
 						</Col>
 						<Col span={24}>
-							<HuongDanThanhToan amount={soTienPhaiDong - soTienUuDau} isRequired />
+							<HuongDanThanhToan amount={soTienPhaiDong - soTienUuDai} isRequired />
 						</Col>
 					</Row>
 
