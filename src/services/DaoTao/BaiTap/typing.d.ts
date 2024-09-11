@@ -4,9 +4,9 @@ import type { ETrangThaiNopBaiTap } from './constants';
 declare module BaiTap {
 	export interface IRecord {
 		_id: string;
-		urlVideos: string[] | null;
-		urlImages: string[] | null;
-		urlTepDinhKem: string[] | null;
+		urlVideos: any[];
+		urlImages: any[];
+		urlTepDinhKem: any[];
 		noiDung: string;
 		huongDanNop: string;
 
@@ -20,6 +20,14 @@ declare module BaiTap {
 		hoTenNguoiGiao: string;
 		ssoIdNguoiGiao: string;
 		maCanBoNguoiGiao: string;
+
+		isQuiz: boolean;
+		congBoDiemSauNop: boolean;
+		congBoDapAnDungSauNop: boolean;
+		khaoSatId: string;
+		thoiGianLamBaiQuiz: number;
+
+		active?: boolean;
 
 		createdAt: Date;
 		updatedAt: Date;
@@ -39,5 +47,11 @@ declare module BaiTap {
 		noiDungTraLoi: string;
 		thoiGianTraLoi: Date;
 		trangThai: ETrangThaiNopBaiTap;
+
+		cauTraLoiId: string;
+		tongDiem: number;
+
+		createdAt: Date;
+		updatedAt: Date;
 	}
 }

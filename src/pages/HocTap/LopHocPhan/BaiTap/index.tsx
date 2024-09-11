@@ -1,132 +1,85 @@
-import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { type IColumn } from '@/components/Table/typing';
-import {
-	colorTrangThaiNopBaiTap,
-	ETrangThaiNopBaiTap,
-	mapTrangThaiNopBaiTap,
-} from '@/services/DaoTao/BaiTap/constants';
-import type { BaiTap } from '@/services/DaoTao/BaiTap/typing';
-import { EditOutlined } from '@ant-design/icons';
-import { Segmented, Tag } from 'antd';
-import moment from 'moment';
-import { useState } from 'react';
-import { useModel } from 'umi';
-import FormBaiTap from './components/Form';
+import { ReloadOutlined } from '@ant-design/icons';
+import { Skeleton, Spin } from 'antd';
+import { useEffect } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { history, Link, useModel } from 'umi';
+import '../../LopHocPhan/DienDan/style.less';
+import CardStatusBaiTap from './components/CardStatusBaiTap';
 
 const BaiTapPage = (props: { lopHocPhanId: string }) => {
-	const [activeKey, setActiveKey] = useState<string>('1');
 	const { lopHocPhanId } = props;
-	const { getModel, page, limit, handleEdit } = useModel('daotao.baitap');
+	const { getModel, danhSach, loading, setLimit, limit, total } = useModel('daotao.baitap');
+	const { idBaiTap } = history?.location?.query ?? {};
 
 	const getData = () => {
 		if (lopHocPhanId)
-			getModel(
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				undefined,
-				`lop-hoc-phan/${lopHocPhanId}/me/${activeKey === '1' ? 'dang-dien-ra' : 'da-ket-thuc'}`,
-			);
+			getModel(undefined, undefined, undefined, undefined, undefined, `lop-hoc-phan/${lopHocPhanId}/me`);
 	};
 
-	const columns: IColumn<BaiTap.IDanhSachGiaoBaiTap>[] = [
-		{
-			title: 'Giảng viên',
-			width: 150,
-			render: (val, rec) => rec?.assignment?.hoTenNguoiGiao ?? '',
-		},
-		{
-			title: 'Tiêu đề',
-			width: 200,
-			render: (val, rec) => rec?.assignment?.noiDung,
-		},
-		{
-			title: 'Thời hạn',
-			align: 'center',
-			render: (val, rec) =>
-				rec?.assignment?.thoiGianKetThuc ? moment(rec?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY') : '',
-			width: 120,
-		},
-		{
-			title: 'Tệp đính kèm',
-			width: 180,
-			render: (val, rec) =>
-				rec?.assignment?.urlTepDinhKem?.length &&
-				rec?.assignment?.urlTepDinhKem?.map((item, index) => (
-					<>
-						<a key={item} href={item} target='_blank' rel='noreferrer'>
-							Tệp {index + 1}
-						</a>
-						{index < (rec?.assignment?.urlTepDinhKem?.length ?? 0) - 1 && ', '}
-					</>
-				)),
-		},
-		{
-			title: 'Trạng thái',
-			dataIndex: 'trangThai',
-			align: 'center',
-			width: 120,
-			render: (val) => (
-				<Tag color={colorTrangThaiNopBaiTap[val as ETrangThaiNopBaiTap]}>
-					{mapTrangThaiNopBaiTap[val as ETrangThaiNopBaiTap]}
-				</Tag>
-			),
-			filterType: 'select',
-			filterData: Object.values(ETrangThaiNopBaiTap).map((item) => ({
-				value: item,
-				label: mapTrangThaiNopBaiTap[item],
-			})),
-		},
-		{
-			title: 'Thời gian cập nhật',
-			dataIndex: 'thoiGianTraLoi',
-			align: 'center',
-			render: (val, rec) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : ''),
-			width: 120,
-			filterType: 'date',
-			sortable: true,
-		},
-		{
-			title: 'Thao tác',
-			align: 'center',
-			width: 90,
-			fixed: 'right',
-			render: (val, rec) => (
-				<>
-					<ButtonExtend tooltip='Chỉnh sửa' type='link' icon={<EditOutlined />} onClick={() => handleEdit(rec)} />
-				</>
-			),
-		},
-	];
+	useEffect(() => {
+		getData();
+	}, [lopHocPhanId]);
 
 	return (
-		<>
-			<div style={{ marginBottom: 8 }}>
-				<Segmented
-					value={activeKey}
-					onChange={(val) => setActiveKey(val.toString())}
-					options={[
-						{ value: '1', label: 'Đang diễn ra' },
-						{ value: '2', label: 'Đã kết thúc' },
-					]}
-				/>
-			</div>
+		<div className='dien-dan'>
+			{!!idBaiTap ? (
+				<div style={{ marginBottom: 12 }}>
+					<Link
+						to='#!'
+						onClick={(e) => {
+							e.preventDefault();
+							history.push(`${history?.location?.pathname}${history?.location?.hash ?? ''}`);
+						}}
+					>
+						← Quay lại
+					</Link>
+				</div>
+			) : null}
 
-			<TableBase
-				getData={getData}
-				columns={columns}
-				dependencies={[page, limit, lopHocPhanId, activeKey]}
-				modelName='daotao.baitap'
-				formProps={{ getData }}
-				Form={FormBaiTap}
-				hideCard
-				widthDrawer={800}
-				buttons={{ create: false }}
-				destroyModal
-			/>
-		</>
+			<Spin spinning={loading}>
+				<div className='main-content'>
+					{!danhSach?.length ? (
+						<div style={{ textAlign: 'center' }}>
+							<div style={{ marginBottom: 8 }}>
+								<img src='/images/bai-tap.svg' />
+							</div>
+							<div>
+								<b>Hiện tại lớp tín chỉ chưa có bài tập</b> <br />
+								<span>Theo giõ thông báo để không bỏ lỡ bài tập nào!</span>
+							</div>
+						</div>
+					) : (
+						<>
+							<div style={{ textAlign: 'right', marginBottom: 8 }}>
+								<ButtonExtend icon={<ReloadOutlined />} onClick={() => getData()}>
+									Tải lại
+								</ButtonExtend>
+							</div>
+							<InfiniteScroll
+								style={{ overflow: 'unset' }}
+								dataLength={danhSach?.length}
+								next={() => {
+									if (loading) return;
+									setLimit(limit + 5);
+								}}
+								hasMore={danhSach?.length < total}
+								loader={
+									<div style={{ padding: '12px 24px' }}>
+										<Skeleton paragraph={{ rows: 3 }} active />
+									</div>
+								}
+								scrollableTarget='body'
+							>
+								{danhSach?.map((val) => (
+									<CardStatusBaiTap key={val._id} data={val} getData={getData} />
+								))}
+							</InfiniteScroll>
+						</>
+					)}
+				</div>
+			</Spin>
+		</div>
 	);
 };
 
