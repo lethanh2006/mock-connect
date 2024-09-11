@@ -1,6 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { DesktopOutlined } from '@ant-design/icons';
-import { Descriptions, Spin, Tabs, Tooltip, message } from 'antd';
+import { DesktopOutlined, GlobalOutlined } from '@ant-design/icons';
+import { Descriptions, Space, Spin, Tabs, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
@@ -65,11 +65,18 @@ const ThongTinChung = () => {
 
 			<GioiThieuChungLopHp />
 
-			{record?.moodleShortname ? (
-				<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
-					Lớp học trực tuyến
-				</ButtonExtend>
-			) : null}
+			<Space wrap style={{ marginTop: 8 }}>
+				{record?.lmsUrl ? (
+					<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
+						Học trực tuyến
+					</ButtonExtend>
+				) : null}
+				{record?.moodleShortname ? (
+					<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
+						Lớp học LMS
+					</ButtonExtend>
+				) : null}
+			</Space>
 
 			{/* <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
         Thông tin điểm danh của bạn
@@ -80,7 +87,7 @@ const ThongTinChung = () => {
         Vắng không phép: -- <a>(xem chi tiết)</a>
       </div> */}
 
-			<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)} style={{ marginTop: 18 }}>
+			<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)} style={{ marginTop: 16 }}>
 				<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
 				{danhSachLopThucHanh?.map((item) => (
 					<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
