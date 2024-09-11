@@ -6,18 +6,14 @@ import ChartSoTinChi from './ChartSoTinChi';
 import StatKetQuaTichLuySinhVien from './StatKetQuaTichLuy';
 import './style.less';
 
-const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string }) => {
-	const { maKhoaNganh } = props;
-	const { getAllModel: getKetQuaHocKy, danhSach, loading, setRecord } = useModel('daotao.ketquahocky');
+const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolean }) => {
+	const { maKhoaNganh, loadData } = props;
+	const { getKetQuaHocKy, danhSach, loading } = useModel('daotao.ketquahocky');
 
-	const getData = () =>
-		maKhoaNganh &&
-		getKetQuaHocKy(false, { maHocKy: 1 }, undefined, undefined, `me/many/khoa-nganh/${maKhoaNganh}`).then((res) => {
-			if (res.length) setRecord(res.at(-1));
-		});
+	const getData = () => maKhoaNganh && getKetQuaHocKy(maKhoaNganh);
 
 	useEffect(() => {
-		getData();
+		if (loadData !== false) getData();
 	}, [maKhoaNganh]);
 
 	return (

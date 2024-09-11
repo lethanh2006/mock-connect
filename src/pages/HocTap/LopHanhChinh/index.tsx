@@ -1,12 +1,13 @@
-import { Card, Empty, Tabs } from 'antd';
+import { Card, Col, Empty, Row, Tabs } from 'antd';
 import { useModel } from 'umi';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 import SelectLopHanhChinhSinhVien from './components/Select';
 import { useEffect } from 'react';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
+import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
 
 const LopHanhChinhPage = () => {
-	const { record, sinhVienGetByIdModel, setRecord, danhSach } = useModel('daotao.lophanhchinh');
+	const { record, sinhVienGetByIdModel, setRecord, danhSach, loading } = useModel('daotao.lophanhchinh');
 
 	useEffect(() => {
 		if (record?._id) sinhVienGetByIdModel(record._id);
@@ -29,7 +30,26 @@ const LopHanhChinhPage = () => {
 				<>
 					<Tabs>
 						<Tabs.TabPane tab='Thông tin chung' key={0}>
-							<ThongTinChungLopHanhChinh />
+							<Row gutter={[16, 16]}>
+								<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
+									<Row gutter={[16, 16]}>
+										<Col span={24}>
+											<CardGiangVienLop
+												loading={loading}
+												title='Cố vấn học tập'
+												danhSachNhanSu={
+													record?.giangVien?._id
+														? [{ nhanSu: record.giangVien, nhanSuSsoId: record.giangVien.ssoId }]
+														: []
+												}
+											/>
+										</Col>
+									</Row>
+								</Col>
+								<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
+									<ThongTinChungLopHanhChinh />
+								</Col>
+							</Row>
 						</Tabs.TabPane>
 						<Tabs.TabPane tab='Thông báo' key={1}>
 							<ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />

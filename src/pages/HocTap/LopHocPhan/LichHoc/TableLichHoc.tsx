@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
@@ -56,6 +57,15 @@ const TableLichHocLopHP = () => {
 			onCell,
 		},
 		{
+			title: 'Điểm danh',
+			dataIndex: 'trangThaiDiemDanhCaNhan',
+			align: 'center',
+			width: 120,
+			render: (val: ETrangThaiUserDiemDanh) =>
+				val ? <Tag color={colorTrangThaiUserDiemDanh[val]}>{trangThaiUserDiemDanh[val]}</Tag> : null,
+			onCell,
+		},
+		{
 			title: 'Giảng viên',
 			dataIndex: 'nhanSuSsoId',
 			width: 140,
@@ -64,10 +74,33 @@ const TableLichHocLopHP = () => {
 			onCell,
 		},
 		{
-			title: 'Nội dung',
-			dataIndex: 'noiDungHpId',
+			title: 'Tiêu đề',
+			dataIndex: 'tieuDeBaiHoc',
 			width: 180,
-			render: (val, rec) => rec.noiDungHp?.tieuDe ?? '',
+			// render: (val, rec) => rec.noiDungHp?.tieuDe ?? '',
+			onCell,
+		},
+		{
+			title: 'Học liệu',
+			width: 140,
+			render: (val, rec) => (
+				<ExpandText>
+					{rec.hocLieuList?.map((item, ind) => (
+						// eslint-disable-next-line react/no-array-index-key
+						<div key={ind}>
+							-{' '}
+							{item.url ? (
+								<a href={item.url} target='_blank' rel='noreferrer'>
+									{item.ten ?? '--'}
+								</a>
+							) : (
+								item.ten
+							)}
+						</div>
+					))}
+				</ExpandText>
+			),
+			onCell,
 		},
 		// {
 		// 	title: 'Loại hình',
@@ -83,15 +116,6 @@ const TableLichHocLopHP = () => {
 		// 	render: (val, rec) => !!rec.lopHocPhan?.tenCha && `Nhóm ${rec.lopHocPhan?.loai} ${rec.lopHocPhan?.soThuTuNhom}`,
 		// 	onCell,
 		// },
-		{
-			title: 'Điểm danh',
-			dataIndex: 'trangThaiDiemDanhCaNhan',
-			align: 'center',
-			width: 120,
-			render: (val: ETrangThaiUserDiemDanh) =>
-				val ? <Tag color={colorTrangThaiUserDiemDanh[val]}>{trangThaiUserDiemDanh[val]}</Tag> : null,
-			onCell,
-		},
 	];
 
 	return (

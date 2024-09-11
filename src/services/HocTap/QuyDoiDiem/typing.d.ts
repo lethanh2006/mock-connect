@@ -35,7 +35,7 @@ declare module QuyDoiDiem {
 		trangThai: ETrangThaiPhieuQuyDoiDiem;
 		soQuyetDinhId: string;
 		quyetDinh: QuyetDinh.IRecord;
-		thoiGianBanHanh: Date;
+		// thoiGianBanHanh: Date;
 		dotDangKyQuyDoiDiemId: string;
 		dotDangKyQuyDoiDiem?: DotQuyDoiDiem;
 		danhSachHocPhan: IQuyDoiDiemSinhVien[];
@@ -53,7 +53,7 @@ declare module QuyDoiDiem {
 	export interface IQuyDoiDiemSinhVien {
 		_id: string;
 		phieuDangKyQuyDoiDiemId: string;
-		phieuDangKyQuyDoiDiem: string;
+		phieuDangKyQuyDoiDiem: IPhieuDangKyQuyDoiDiem;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
 		ghiChu?: string;
@@ -63,7 +63,6 @@ declare module QuyDoiDiem {
 		diemHe4: number;
 		diemChu: string;
 		trangThai: ETrangThaiHocPhanQuyDoi;
-		ghiChu: string;
 		khuyenNghi: string[];
 
 		// Người cho ý kiến?
@@ -95,5 +94,10 @@ declare module QuyDoiDiem {
 		loaiHocPhan: ELoaiHocPhanMinhChung;
 		namTotNghiep: number;
 		nganh: string;
+
+		// Minh chứng nghiên cứu khoa học
+		tenDeTaiNckh?: string;
+		nguoiHuongDanNckh?: string;
+		diemNckh?: number;
 	}
 }

@@ -13,7 +13,7 @@ import {
 	ETrangThaiXetDuyetDangKy,
 	ETypeTableDeTai,
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
-import { ELoaiDeTai } from '@/services/KhoaHoc/KeHoachDeTai/constants';
+import type { ELoaiDeTai } from '@/services/KhoaHoc/KeHoachDeTai/constants';
 import { primaryColor } from '@/services/base/constant';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
@@ -23,7 +23,7 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import TableThanhVien from './TableThanhVien';
 
-const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
+const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai; loaiDeTai: ELoaiDeTai }) => {
 	const [form] = Form.useForm();
 	const {
 		record,
@@ -104,7 +104,7 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai }) => {
 					: null,
 				thoiGianThucHienBatDau: values?.thoiGianDuKienThucHien?.[0],
 				thoiGianThucHienKetThuc: values?.thoiGianDuKienThucHien?.[1],
-				loaiDeTai: ELoaiDeTai.SINH_VIEN_HOC_VIEN,
+				loaiDeTai: props.loaiDeTai,
 			};
 			const payload = {
 				...record,

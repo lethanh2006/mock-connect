@@ -1,6 +1,5 @@
 import { Descriptions } from 'antd';
 import { useModel } from 'umi';
-import DanhSachGiangVien from '../../LopHocPhan/components/DanhSachGiangVien';
 import DanhSachSinhVien from '../../LopHocPhan/components/DanhSachSinhVien';
 
 const ThongTinChungLopHanhChinh = () => {
@@ -17,12 +16,7 @@ const ThongTinChungLopHanhChinh = () => {
 				</Descriptions.Item> */}
 			</Descriptions>
 
-			<DanhSachGiangVien
-				title='Cố vấn học tập'
-				danhSachNhanSu={record?.giangVien?.ssoId ? [{ nhanSu: record.giangVien }] : []}
-			/>
-
-			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8 }}>Danh sách sinh viên</h4>
+			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8, marginTop: 18 }}>Danh sách sinh viên</h4>
 			<DanhSachSinhVien sinhVienList={record?.sinhVienList ?? []} loading={loading} />
 		</>
 	);

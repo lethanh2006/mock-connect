@@ -506,3 +506,14 @@ export function removeVietnameseTones(str: string, removeSpecial: boolean = fals
 
 	return strTemp;
 }
+
+export const copyToClipboard = (text: string, callBack?: () => void) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(function () {
+      if (callBack) callBack();
+    })
+    .catch(function (err) {
+      console.error('Could not copy text: ', err);
+    });
+};

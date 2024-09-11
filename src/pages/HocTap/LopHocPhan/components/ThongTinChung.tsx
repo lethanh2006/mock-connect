@@ -6,6 +6,7 @@ import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
 import DanhSachGiangVien from './DanhSachGiangVien';
 import DanhSachSinhVien from './DanhSachSinhVien';
+import GioiThieuChungLopHp from './GioiThieuChung';
 
 const ThongTinChung = () => {
 	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
@@ -18,7 +19,6 @@ const ThongTinChung = () => {
 		getAllNhanSuModel: getNhanSuLopTH,
 		loading: loadingThucHanh,
 	} = useModel('daotao.lopthuchanh');
-	const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
 	const [activeKey, setActiveKey] = useState<string>('-1');
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 
@@ -63,13 +63,13 @@ const ThongTinChung = () => {
 				{/* <Descriptions.Item label='Sĩ số'>{record?.siSo ?? 0} sinh viên</Descriptions.Item> */}
 			</Descriptions>
 
+			<GioiThieuChungLopHp />
+
 			{record?.moodleShortname ? (
-				<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle} style={{ marginBottom: 18 }}>
+				<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
 					Lớp học trực tuyến
 				</ButtonExtend>
 			) : null}
-
-			<DanhSachGiangVien danhSachNhanSu={danhSachNhanSu} title='Giảng viên' />
 
 			{/* <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
         Thông tin điểm danh của bạn
@@ -80,7 +80,7 @@ const ThongTinChung = () => {
         Vắng không phép: -- <a>(xem chi tiết)</a>
       </div> */}
 
-			<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
+			<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)} style={{ marginTop: 18 }}>
 				<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
 				{danhSachLopThucHanh?.map((item) => (
 					<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />

@@ -1973,7 +1973,13 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 
 	const Form = useCallback(() => {
 		if (props.type === ETypeTableDeTai.DangKyDeXuat || props.type === ETypeTableDeTai.HoiDongXetChonDeXuat)
-			return <FormDangKyDeXuat type={props.type} getData={getData} />;
+			return (
+				<FormDangKyDeXuat
+					loaiDeTai={props.paramCondition?.['dangKyKhcn.loaiDeTai']}
+					type={props.type}
+					getData={getData}
+				/>
+			);
 		if (props.type === ETypeTableDeTai.NopThuyetMinh || props.type === ETypeTableDeTai.HoiDongXetDuyetThuyetMinh)
 			return <FormNopThuyetMinh getData={getData} />;
 		if (props.type === ETypeTableDeTai.ThucHienDeTai) return <FormThucHienDeTai getData={getData} />;
@@ -1991,7 +1997,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			otherButtons={[
 				<SelectKeHoachDeTai
 					onChange={(val: string) => setRecKeHoach(danhSachKeHoach.find((item) => item._id === val))}
-					loaiDeTai={ELoaiDeTai.SINH_VIEN_HOC_VIEN}
+					loaiDeTai={props.paramCondition?.['dangKyKhcn.loaiDeTai']}
 					value={recKeHoach?._id}
 					isSetRecord
 					style={{ width: 300 }}

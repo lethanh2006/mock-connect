@@ -17,7 +17,7 @@ const KetQuaHocTap = () => {
 				</Space>
 			}
 		>
-			<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} />
+			<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} loadData={false} />
 
 			<Tabs style={{ marginTop: 8 }}>
 				<Tabs.TabPane tab='Điểm tổng kết' key='1'>

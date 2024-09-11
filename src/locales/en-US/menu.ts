@@ -78,6 +78,17 @@ export default {
 	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhCongNhan': 'Quyết định công nhận đề tài',
 	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoSauNghiemThu': 'Nộp hồ sơ sau nghiệm thu đề tài',
 
+	'menu.HoatDongKHCN.DeTaiKhoa.DangKyDeXuat': 'Đăng ký đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.HoiDongXetChonDeXuat': 'Hội đồng xét chọn đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.HoiDongXetDuyetThuyetMinh': 'Hội đồng xét duyệt thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.HoiDongNghiemThu': 'Hội đồng nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.NopThuyetMinh': 'Xây dựng và nộp hồ sơ thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.NopHoSoNghiemThu': 'Nộp hồ sơ nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.ThucHienDeTai': 'Thực hiện đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.QuyetDinhGiao': 'Quyết định giao đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.QuyetDinhCongNhan': 'Quyết định công nhận đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.NopHoSoSauNghiemThu': 'Nộp hồ sơ sau nghiệm thu đề tài',
+
 	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
 	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
