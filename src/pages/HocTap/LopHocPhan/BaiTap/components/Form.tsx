@@ -8,6 +8,7 @@ import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormQuiz from './FormQuiz';
+import { ETrangThaiNopBaiTap } from '@/services/DaoTao/BaiTap/constants';
 
 const FormBaiTap = (props: any) => {
 	const { getData } = props;
@@ -166,7 +167,7 @@ const FormBaiTap = (props: any) => {
 
 				<div className='form-footer'>
 					<Button
-						// disabled={record?.trangThai === ETrangThaiNopBaiTap.DA_NOP || quaThoiHanNopBai}
+						disabled={record?.trangThai === ETrangThaiNopBaiTap.DA_NOP || quaThoiHanNopBai}
 						loading={formSubmiting || formBieuMau}
 						htmlType='submit'
 						type='primary'
