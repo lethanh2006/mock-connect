@@ -47,8 +47,15 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			</Descriptions.Item>
 			<Descriptions.Item label='Tiêu đề bài học'>{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
 			{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (
-				<Descriptions.Item label='Lớp học trực tuyến'>
+				<Descriptions.Item label='Lớp học LMS'>
 					<a href='#!' onClick={() => handleMoodle(thoiKhoaBieu.lopHocPhan?._id)}>
+						Đường dẫn
+					</a>
+				</Descriptions.Item>
+			) : null}
+			{thoiKhoaBieu?.lopHocPhan?.lmsUrl ? (
+				<Descriptions.Item label='Học trực tuyến'>
+					<a href={thoiKhoaBieu?.lopHocPhan?.lmsUrl} target='_blank' rel='noreferrer'>
 						Đường dẫn
 					</a>
 				</Descriptions.Item>
