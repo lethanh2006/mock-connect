@@ -32,8 +32,8 @@ const SelectKeHoachDeTai = (props: {
 	} = props;
 	const { danhSach, loading, getAllModel } = useModel('khoahoc.kehoachdetai');
 	useEffect(() => {
-		if (loadData !== false && !danhSach.length) getAllModel(isSetRecord, undefined, { loaiDeTai });
-	}, []);
+		if (loadData !== false) getAllModel(isSetRecord, undefined, { loaiDeTai });
+	}, [loaiDeTai]);
 
 	return (
 		<Select
