@@ -223,12 +223,23 @@ const CardStatus = (props: IProps) => {
 								<Tooltip
 									placement={'bottom'}
 									title={
-										data?.danhSachDaXem?.length > 0 ? (
-											<>
-												{data?.danhSachDaXem?.length > 0 &&
-													_.uniqBy(data?.danhSachDaXem, 'ssoId')?.map((val) => <div key={val.ssoId}>{val?.hoTen}</div>)}
-											</>
-										) : null
+                    data?.danhSachDaXem?.length > 0 ? (
+                      <div style={{ maxHeight: '300px', overflowY: 'scroll' }}>
+                        {data?.danhSachDaXem?.length > 0 &&
+                          _.uniqBy(data?.danhSachDaXem, 'ssoId')?.map((val, index) => {
+                            if (!detail) {
+                              if (index < 10) {
+                                return <div key={val.ssoId}>{val?.hoTen}</div>;
+                              } else return null;
+                            } else {
+                              return <div key={val.ssoId}>{val?.hoTen}</div>;
+                            }
+                          })}
+                        {data?.danhSachDaXem?.length > 10 && !detail && (
+                          <div>và {data?.danhSachDaXem?.length - 10} người khác</div>
+                        )}
+                      </div>
+                    ) : null
 									}
 								>
 									<div
