@@ -98,6 +98,8 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 					const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
 					finalData[item] = [EKieuDuLieu.DATE, EKieuDuLieu.MONTH].includes(cauHinh.kieuDuLieu)
 						? moment(res?.data?.data[item], 'DD/MM/YYYY')
+						: res?.data?.data[item] === 'Invalid date'
+						? undefined
 						: res?.data?.data[item];
 				});
 				if (res) {
