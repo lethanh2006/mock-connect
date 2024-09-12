@@ -150,7 +150,7 @@ const View = (props: Iprops) => {
 				title={
 					<div>
 						{dataQuyTrinh?.quyTrinh?.ten}{' '}
-						{dotCurrent?.danhSachCauHinhThoiGianDot?.length > 0 && (
+						{dotCurrent && dotCurrent?.danhSachCauHinhThoiGianDot?.length > 0 && (
 							<a onClick={() => setVisibleViewDetailDot(true)}>{dotCurrent?.ten}</a>
 						)}
 					</div>
