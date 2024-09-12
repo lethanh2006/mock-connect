@@ -255,14 +255,23 @@ const CardStatus = (props: IProps) => {
 								<Tooltip
 									placement={'bottom'}
 									title={
-										data?.danhSachBinhLuan?.length > 0 ? (
-											<>
-												{data?.danhSachBinhLuan?.length > 0 &&
-													_.uniqBy(data?.danhSachBinhLuan, 'thongTinNguoiDang.ssoId')?.map((val) => (
-														<div key={val._id}>{val?.thongTinNguoiDang?.hoTen}</div>
-													))}
-											</>
-										) : null
+                    data?.danhSachBinhLuan?.length > 0 ? (
+                      <div style={{ maxHeight: '300px', overflowY: 'scroll' }}>
+                        {data?.danhSachBinhLuan?.length > 0 &&
+                          _.uniqBy(data?.danhSachBinhLuan, 'ssoId')?.map((val, index) => {
+                            if (!detail) {
+                              if (index < 10) {
+                                return <div key={val._id}>{val?.thongTinNguoiDang?.hoTen}</div>;
+                              } else return null;
+                            } else {
+                              return <div key={val._id}>{val?.thongTinNguoiDang?.hoTen}</div>;
+                            }
+                          })}
+                        {data?.danhSachBinhLuan?.length > 10 && !detail && (
+                          <div>và {data?.danhSachBinhLuan?.length - 10} người khác</div>
+                        )}
+                      </div>
+                    ) : null
 									}
 								>
 									<div className='sum-comment' style={{ color: '#a7abaf' }} onClick={() => handleRedirectDetail()}>

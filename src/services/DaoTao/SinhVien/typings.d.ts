@@ -19,6 +19,7 @@ import type { ETrangThaiChungChiSinhVen } from './constants';
 
 declare module SinhVien {
 	export interface IRecord {
+		choPhepSua: boolean;
 		_id: string;
 		dotNhapHocId: string | null;
 		dotNhapHoc?: DotNhapHoc.IRecord;
