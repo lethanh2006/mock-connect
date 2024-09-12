@@ -5,8 +5,8 @@ import type { Moment } from 'moment';
 import moment from 'moment';
 import * as XLSX from 'xlsx';
 
-const reg =
-	/(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+export const urlRegex =
+	/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.,~#?&//=]*)$/;
 
 const charMap: any = {
 	a: '[aàáâãăăạảấầẩẫậắằẳẵặ]',
@@ -19,7 +19,7 @@ const charMap: any = {
 	' ': ' ',
 };
 
-export const isUrl = (path: string): boolean => reg.test(path);
+export const isUrl = (path: string): boolean => urlRegex.test(path);
 
 export const isAntDesignPro = (): boolean => {
 	if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
