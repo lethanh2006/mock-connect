@@ -1,44 +1,53 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ReloadOutlined } from '@ant-design/icons';
-import { Skeleton, Spin } from 'antd';
-import { useEffect } from 'react';
+import { Modal, Segmented, Skeleton, Spin } from 'antd';
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { history, Link, useModel } from 'umi';
+import { useModel } from 'umi';
 import '../../LopHocPhan/DienDan/style.less';
 import CardStatusBaiTap from './components/CardStatusBaiTap';
+import FormBaiTap from './components/Form';
 
 const BaiTapPage = (props: { lopHocPhanId: string }) => {
 	const { lopHocPhanId } = props;
-	const { getModel, danhSach, loading, setLimit, limit, total } = useModel('daotao.baitap');
-	const { idBaiTap } = history?.location?.query ?? {};
+	const { getModel, danhSach, loading, setLimit, limit, total, visibleForm, setVisibleForm } =
+		useModel('daotao.baitap');
+
+	const [segment, setSegment] = useState<string>('1');
 
 	const getData = () => {
 		if (lopHocPhanId)
-			getModel(undefined, undefined, undefined, undefined, undefined, `lop-hoc-phan/${lopHocPhanId}/me`);
+			getModel(
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				`lop-hoc-phan/${lopHocPhanId}/me/${segment === '1' ? 'dang-dien-ra' : 'da-ket-thuc'}`,
+			);
 	};
 
 	useEffect(() => {
 		getData();
-	}, [lopHocPhanId]);
+	}, [lopHocPhanId, segment]);
 
 	return (
 		<div className='dien-dan'>
-			{!!idBaiTap ? (
-				<div style={{ marginBottom: 12 }}>
-					<Link
-						to='#!'
-						onClick={(e) => {
-							e.preventDefault();
-							history.push(`${history?.location?.pathname}${history?.location?.hash ?? ''}`);
-						}}
-					>
-						← Quay lại
-					</Link>
-				</div>
-			) : null}
-
 			<Spin spinning={loading}>
 				<div className='main-content'>
+					<div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+						<Segmented
+							value={segment}
+							onChange={(val) => setSegment(val.toString())}
+							options={[
+								{ value: '1', label: 'Đang diễn ra' },
+								{ value: '2', label: 'Đã kết thúc' },
+							]}
+						/>
+						<ButtonExtend icon={<ReloadOutlined />} onClick={() => getData()}>
+							Tải lại
+						</ButtonExtend>
+					</div>
 					{!danhSach?.length ? (
 						<div style={{ textAlign: 'center' }}>
 							<div style={{ marginBottom: 8 }}>
@@ -46,16 +55,11 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 							</div>
 							<div>
 								<b>Hiện tại lớp tín chỉ chưa có bài tập</b> <br />
-								<span>Theo giõ thông báo để không bỏ lỡ bài tập nào!</span>
+								<span>Theo dõi thông báo để không bỏ lỡ bài tập nào!</span>
 							</div>
 						</div>
 					) : (
 						<>
-							<div style={{ textAlign: 'right', marginBottom: 8 }}>
-								<ButtonExtend icon={<ReloadOutlined />} onClick={() => getData()}>
-									Tải lại
-								</ButtonExtend>
-							</div>
 							<InfiniteScroll
 								style={{ overflow: 'unset' }}
 								dataLength={danhSach?.length}
@@ -72,13 +76,16 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 								scrollableTarget='body'
 							>
 								{danhSach?.map((val) => (
-									<CardStatusBaiTap key={val._id} data={val} getData={getData} />
+									<CardStatusBaiTap key={val._id} data={val} />
 								))}
 							</InfiniteScroll>
 						</>
 					)}
 				</div>
 			</Spin>
+			<Modal visible={visibleForm} onCancel={() => setVisibleForm(false)} footer={null} width={800} title='Nộp bài tập'>
+				<FormBaiTap getData={getData} />
+			</Modal>
 		</div>
 	);
 };

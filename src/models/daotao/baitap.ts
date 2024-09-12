@@ -9,7 +9,13 @@ export default () => {
 	const { formSubmiting, setFormSubmiting } = objInit;
 
 	const sinhVienNopBaiTapModal = async (
-		payLoad: Partial<BaiTap.IDanhSachGiaoBaiTap>,
+		payLoad: {
+			mode: 'submit' | 'save';
+			thongTinCauTraLoiQuiz: object;
+			assignmentId: string;
+			noiDungTraLoi: string;
+			urlImages: string[] | null;
+		},
 		getData?: () => void,
 	): Promise<BaiTap.IDanhSachGiaoBaiTap> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
