@@ -21,6 +21,7 @@ import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import ThongTinThanhToan from '../TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import FormKhaiBao from './components/FormKhaiBao';
+import { EPhanHe } from '@/services/QuyTrinh/constant';
 
 const KhaiBaoQuyTrinhPage = (props: {
 	title?: string;
@@ -78,7 +79,12 @@ const KhaiBaoQuyTrinhPage = (props: {
 		if (props.tenQuyTrinh) {
 			if (danhSachQuyTrinh.length) getDataKhaiBaoUser({ quyTrinhId: danhSachQuyTrinh[0]._id });
 			else setDanhSach([]);
-		} else getDataKhaiBaoUser();
+		} else
+			getDataKhaiBaoUser({
+				phanHe: {
+					$ne: EPhanHe.QUAN_LY_KHOA_HOC,
+				},
+			});
 	};
 
 	const onCell = (recordVal: KhaiBaoQuyTrinh.IRecord) => ({

@@ -331,61 +331,113 @@
 					{
 						name: 'DangKyDeXuat',
 						path: './tong-hop-dang-ky-de-xuat',
-						component: './KhoaHoc/DeTaiKHCN/DangKyDeXuat',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/DangKyDeXuat',
 					},
 					{
 						name: 'HoiDongXetChonDeXuat',
 						path: './hoi-dong-xet-chon-de-xuat',
-						component: './KhoaHoc/DeTaiKHCN/HoiDongXetChonDeXuat',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/HoiDongXetChonDeXuat',
 					},
 					{
 						name: 'NopThuyetMinh',
 						path: './nop-thuyet-minh',
-						component: './KhoaHoc/DeTaiKHCN/NopThuyetMinh',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/NopThuyetMinh',
 					},
 					{
 						name: 'HoiDongXetDuyetThuyetMinh',
 						path: './hoi-dong-xet-duyet-thuyet-minh',
-						component: './KhoaHoc/DeTaiKHCN/HoiDongXetDuyetThuyetMinh',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/HoiDongXetDuyetThuyetMinh',
 					},
 					{
 						name: 'QuyetDinhGiao',
 						path: './quyet-dinh-giao',
-						component: './KhoaHoc/DeTaiKHCN/QuyetDinhGiao',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/QuyetDinhGiao',
 					},
 					{
 						name: 'ThucHienDeTai',
 						path: './thuc-hien-de-tai',
-						component: './KhoaHoc/DeTaiKHCN/ThucHienDeTai',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/ThucHienDeTai',
 					},
 					{
 						name: 'NopHoSoNghiemThu',
 						path: './nop-ho-so-nghiem-thu',
-						component: './KhoaHoc/DeTaiKHCN/NopHoSoNghiemThu',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/NopHoSoNghiemThu',
 					},
 					{
 						name: 'HoiDongNghiemThu',
 						path: './hoi-dong-nghiem-thu',
-						component: './KhoaHoc/DeTaiKHCN/HoiDongNghiemThu',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/HoiDongNghiemThu',
 					},
 					{
 						name: 'NopHoSoSauNghiemThu',
 						path: './nop-ho-so-sau-nghiem-thu',
-						component: './KhoaHoc/DeTaiKHCN/NopHoSoSauNghiemThu',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/NopHoSoSauNghiemThu',
 					},
 					{
 						name: 'QuyetDinhCongNhan',
 						path: './quyet-dinh-cong-nhan',
-						component: './KhoaHoc/DeTaiKHCN/QuyetDinhCongNhan',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/QuyetDinhCongNhan',
 					},
 				],
 			},
 			{
 				name: 'DeTaiKhoa',
 				icon: 'AuditOutlined',
-				path: './de-tai-khoa',
-				component: './KhaiBaoQuyTrinh/DeTaiKhoa',
+				path: './de-tai-khoa-vien',
+				routes: [
+					{
+						name: 'DangKyDeXuat',
+						path: './tong-hop-dang-ky-de-xuat',
+						component: './KhoaHoc/DeTaiKHCN/DeTaiKhoa/DangKyDeXuat',
+					},
+					// {
+					// 	name: 'HoiDongXetChonDeXuat',
+					// 	path: './hoi-dong-xet-chon-de-xuat',
+					// 	component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/HoiDongXetChonDeXuat',
+					// },
+					// {
+					// 	name: 'NopThuyetMinh',
+					// 	path: './nop-thuyet-minh',
+					// 	component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/NopThuyetMinh',
+					// },
+					// {
+					// 	name: 'HoiDongXetDuyetThuyetMinh',
+					// 	path: './hoi-dong-xet-duyet-thuyet-minh',
+					// 	component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/HoiDongXetDuyetThuyetMinh',
+					// },
+					// {
+					// 	name: 'QuyetDinhGiao',
+					// 	path: './quyet-dinh-giao',
+					// 	component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/QuyetDinhGiao',
+					// },
+					// {
+					// 	name: 'ThucHienDeTai',
+					// 	path: './thuc-hien-de-tai',
+					// 	component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/ThucHienDeTai',
+					// },
+					// {
+					// 	name: 'NopHoSoNghiemThu',
+					// 	path: './nop-ho-so-nghiem-thu',
+					// 	component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/NopHoSoNghiemThu',
+					// },
+					// {
+					// 	name: 'HoiDongNghiemThu',
+					// 	path: './hoi-dong-nghiem-thu',
+					// 	component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/HoiDongNghiemThu',
+					// },
+					// {
+					// 	name: 'NopHoSoSauNghiemThu',
+					// 	path: './nop-ho-so-sau-nghiem-thu',
+					// 	component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/NopHoSoSauNghiemThu',
+					// },
+					// {
+					// 	name: 'QuyetDinhCongNhan',
+					// 	path: './quyet-dinh-cong-nhan',
+					// 	component: './KhoaHoc/DeTaiKHCN/DeTaiHocVien/QuyetDinhCongNhan',
+					// },
+				],
 			},
+
 			{
 				name: 'QuyCheQuyDinh',
 				path: './quychequydinh',

@@ -1,5 +1,5 @@
 import { EPhaseDeTaiKHCN, ETypeTableDeTai } from '@/services/KhoaHoc/DeTaiKHCN/constants';
-import DeTaiKHCNPage from '.';
+import DeTaiKHCNPage from '..';
 import { ELoaiDeTai } from '@/services/KhoaHoc/KeHoachDeTai/constants';
 
 const HoiDongXetChonDeXuat = () => {

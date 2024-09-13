@@ -1,4 +1,5 @@
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import { createTextLinks } from '@/utils/utils';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Form, Input, Popconfirm, Popover } from 'antd';
 import moment from 'moment';
@@ -173,7 +174,11 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 												{moment(val?.ngayDang).calendar()}
 											</span>
 										</div>
-										<div dangerouslySetInnerHTML={{ __html: (val?.noiDung ?? '')?.replace(/\n/g, '<br/>') }} />
+										<div
+											dangerouslySetInnerHTML={{
+												__html: createTextLinks((val?.noiDung ?? '')?.replace(/\n/g, '<br/>')),
+											}}
+										/>
 										{/*{typeof val?.fileDinhKem !== 'string' && val?.fileDinhKem && val?.fileDinhKem?.length > 0 && (*/}
 										{/*	<div*/}
 										{/*		style={{*/}

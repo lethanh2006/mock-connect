@@ -1,12 +1,12 @@
 import { EPhaseDeTaiKHCN, ETypeTableDeTai } from '@/services/KhoaHoc/DeTaiKHCN/constants';
-import DeTaiKHCNPage from '.';
+import DeTaiKHCNPage from '..';
 import { ELoaiDeTai } from '@/services/KhoaHoc/KeHoachDeTai/constants';
 
-const NopHoSoNghiemThu = () => {
+const NopHoSoSauNghiemThu = () => {
 	return (
 		<DeTaiKHCNPage
-			title='Nộp hồ sơ nghiệm thu đề tài NCKH'
-			type={ETypeTableDeTai.NopHoSoNghiemThu}
+			title='Nộp hồ sơ sau nghiệm thu đề tài NCKH'
+			type={ETypeTableDeTai.NopHoSoSauNghiemThu}
 			paramCondition={{
 				'dangKyKhcn.loaiDeTai': ELoaiDeTai.SINH_VIEN_HOC_VIEN,
 				phaseDeTaiKhcn: {
@@ -16,6 +16,8 @@ const NopHoSoNghiemThu = () => {
 						EPhaseDeTaiKHCN.NOP_DE_CUONG,
 						EPhaseDeTaiKHCN.XET_DUYET_DE_CUONG,
 						EPhaseDeTaiKHCN.THUC_HIEN,
+						EPhaseDeTaiKHCN.NOP_NGHIEM_THU,
+						EPhaseDeTaiKHCN.NGHIEM_THU,
 					],
 				},
 			}}
@@ -23,4 +25,4 @@ const NopHoSoNghiemThu = () => {
 	);
 };
 
-export default NopHoSoNghiemThu;
+export default NopHoSoSauNghiemThu;

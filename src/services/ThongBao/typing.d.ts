@@ -27,6 +27,7 @@ declare module ThongBao {
 		read: boolean;
 
 		sourceType?: ESourceTypeNotification;
+		targetType?: ESourceTypeNotification;
 		notificationInternal: boolean;
 		thoiGianHieuLuc: Date;
 
@@ -36,6 +37,6 @@ declare module ThongBao {
 	export type TNotificationSource = {
 		entityId?: string;
 		entitySource?: ENotificationSource;
-		pathweb?: string;
+		pathWeb?: string;
 	} & Record<string, any>;
 }
