@@ -1,12 +1,17 @@
 import UploadFile from '@/components/Upload/UploadFile';
+import {
+	colorTrangThaiNopBaiTap,
+	ETrangThaiNopBaiTap,
+	mapTrangThaiNopBaiTap,
+} from '@/services/DaoTao/BaiTap/constants';
 import { getCauTraLoiMeBaiTap } from '@/services/TienIch/KhaoSat/BieuMau';
 import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { buildUpLoadMultiFile, handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
-import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row } from 'antd';
+import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Tag } from 'antd';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
 import '../../DienDan/style.less';
@@ -15,17 +20,19 @@ const FormBaiTap = (props: any) => {
 	const { getData } = props;
 	const [form] = Form.useForm();
 	const { record, visibleForm, setVisibleForm, sinhVienNopBaiTapModal, formSubmiting } = useModel('daotao.baitap');
-	const { record: recBieuMau, getByIdModel: getBieuMau } = useModel('tienich.bieumau');
-	const quaThoiHanNopBai =
-		!record?.assignment?.thoiGianKetThuc || moment().isAfter(record?.assignment?.thoiGianKetThuc);
+	const { record: recBieuMau, getBieuMauKhaoSatSinhVienModel } = useModel('tienich.bieumau');
+	const [trangThaiNopBai, setTrangThaiNopBai] = useState<string>();
+	const quaThoiHanNopBai = moment().isAfter(record?.assignment?.thoiGianKetThuc);
+	const [cauTraLoi, setRecCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
 
 	useEffect(() => {
 		if (!visibleForm) {
 			resetFieldsForm(form);
 		} else if (record?._id) {
-			getBieuMau(record?.assignment?.khaoSatId ?? '');
+			getBieuMauKhaoSatSinhVienModel(record?.assignment?.khaoSatId ?? '');
 			if (record?.cauTraLoiId) {
 				getCauTraLoiMeBaiTap(record?.cauTraLoiId).then((res: any) => {
+					setRecCauTraLoi(res?.data?.data?.danhSachTraLoi);
 					const index = res?.data?.data?.danhSachTraLoi?.[0];
 					if (index?._id) {
 						const values: any = {};
@@ -60,7 +67,7 @@ const FormBaiTap = (props: any) => {
 				});
 			}
 		}
-	}, [visibleForm, record?._id]);
+	}, [visibleForm, record?._id, recBieuMau?._id]);
 
 	function convertList(originalList: any) {
 		const convertedList = [];
@@ -136,11 +143,13 @@ const FormBaiTap = (props: any) => {
 		}
 
 		const data = {
-			mode: 'submit',
-			thongTinCauTraLoiQuiz: {
-				danhSachTraLoi,
-				idKhaoSat: record?.assignment?.khaoSatId,
-			},
+			mode: trangThaiNopBai === '1' ? 'submit' : 'save',
+			thongTinCauTraLoiQuiz: record?.assignment?.khaoSatId
+				? {
+						danhSachTraLoi,
+						idKhaoSat: record?.assignment?.khaoSatId,
+				  }
+				: null,
 			assignmentId: record?.assignmentId,
 			noiDungTraLoi: values.noiDungTraLoi,
 			urlImages: urlImages,
@@ -153,7 +162,21 @@ const FormBaiTap = (props: any) => {
 
 	return (
 		<>
-			{quaThoiHanNopBai ? (
+			{record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.CHUA_NOP && !quaThoiHanNopBai && (
+				<div style={{ marginBottom: 12 }}>
+					<Alert
+						type='info'
+						showIcon
+						message='Đối với dạng bài tập QUiZ chỉ được nộp bài 1 lần, xem lại kỹ bài tập trước khi nộp bài!'
+					/>
+				</div>
+			)}
+
+			{record?.trangThai === ETrangThaiNopBaiTap.DA_NOP ? (
+				<div style={{ marginBottom: 12 }}>
+					<Alert type='success' showIcon message='Đã nộp bài' />
+				</div>
+			) : quaThoiHanNopBai ? (
 				<div style={{ marginBottom: 12 }}>
 					<Alert type='error' showIcon message='Quá thời hạn nộp bài' />
 				</div>
@@ -207,6 +230,19 @@ const FormBaiTap = (props: any) => {
 					</Col>
 
 					<Col span={24}>
+						<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
+							<Descriptions.Item label='Trạng thái'>
+								<Tag color={colorTrangThaiNopBaiTap[record?.trangThai as ETrangThaiNopBaiTap]}>
+									{mapTrangThaiNopBaiTap[record?.trangThai as ETrangThaiNopBaiTap]}
+								</Tag>
+							</Descriptions.Item>
+							<Descriptions.Item label='Thời gian cập nhật'>
+								{moment(record?.thoiGianTraLoi ?? record?.updatedAt).format('HH:mm DD/MM/YYYY')}
+							</Descriptions.Item>
+						</Descriptions>
+					</Col>
+
+					<Col span={24}>
 						<Form.Item name='noiDungTraLoi' label='Nội dung trả lời'>
 							<Input.TextArea rows={3} placeholder='Nhập nội dung trả lời' />
 						</Form.Item>
@@ -218,17 +254,35 @@ const FormBaiTap = (props: any) => {
 						</Form.Item>
 					</Col>
 				</Row>
-				{record?.assignment?.isQuiz && <FormQuiz form={form} />}
+				{record?.assignment?.isQuiz && <FormQuiz form={form} cauTraLoi={cauTraLoi} />}
 
 				<div className='form-footer'>
 					<Button
-						disabled={quaThoiHanNopBai && !record?.assignment?.choPhepCapNhatSauNop}
+						disabled={
+							(quaThoiHanNopBai && !record?.assignment?.choPhepCapNhatSauNop) ||
+							(!!record?.assignment.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.DA_NOP)
+						}
 						loading={formSubmiting}
 						htmlType='submit'
 						type='primary'
+						onClick={() => setTrangThaiNopBai('1')}
 					>
 						Nộp bài
 					</Button>
+					{!record?.assignment?.isQuiz && (
+						<Button
+							disabled={
+								record?.trangThai === ETrangThaiNopBaiTap.DA_NOP ||
+								(quaThoiHanNopBai && !record?.assignment?.choPhepCapNhatSauNop)
+							}
+							loading={formSubmiting}
+							htmlType='submit'
+							type='primary'
+							onClick={() => setTrangThaiNopBai('2')}
+						>
+							Lưu lại
+						</Button>
+					)}
 					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>
 			</Form>

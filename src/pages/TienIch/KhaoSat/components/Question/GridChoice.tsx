@@ -4,7 +4,7 @@ import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { Checkbox, Form, type FormInstance } from 'antd';
 
-const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance }) => {
+const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance; disabled?: boolean }) => {
 	const { question, form } = props;
 
 	const handleCheckboxChange = (idHang: string, checkboxId: string, checked: boolean) => {
@@ -51,7 +51,10 @@ const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance }) => 
 						},
 					]}
 				>
-					<Checkbox onChange={(e) => handleCheckboxChange(recHang._id ?? '', recCot._id, e.target.checked)} />
+					<Checkbox
+						disabled={props.disabled}
+						onChange={(e) => handleCheckboxChange(recHang._id ?? '', recCot._id, e.target.checked)}
+					/>
 				</Form.Item>
 			),
 		});
