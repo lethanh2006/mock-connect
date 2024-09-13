@@ -25,6 +25,7 @@ export async function getCauTraLoiMe(idKhaoSat: string, idDot: string) {
 export async function getCauTraLoiMeBaiTap(idCauTraLoi: string) {
 	return axios.get(`${ip3}/cau-tra-loi-khao-sat/${idCauTraLoi}`);
 }
+
 // ĐÁNH GIÁ GIẢNG VIÊN
 export async function danhGiaGiangVien(payload: any) {
 	return axios.post(`${ip3}/danh-gia-giang-vien/me`, payload);
@@ -41,4 +42,8 @@ export async function danhGiaTietHoc(payload: any) {
 
 export async function getDanhGiaTietHoc(thoiKhoaBieuId: string) {
 	return axios.get(`${ipDaoTao}/lop-hoc-phan/tkb/${thoiKhoaBieuId}/sinh-vien/danh-gia`);
+}
+
+export async function getBieuMauKhaoSatSinhVien(idKhaoSat: string | number) {
+	return axios.get(`${ip3}/khao-sat/${idKhaoSat}/nguoi-dung-khao-sat`);
 }

@@ -21,7 +21,7 @@ const CardStatusBaiTap = (props: IProps) => {
 	return (
 		<div className='card relative' style={{ paddingBottom: 12 }}>
 			<div className='header-card flex justify-between'>
-				<div className='user-name flex item-center'>
+				<div className='user-name flex item-center' style={{ width: '60%' }}>
 					<Space>
 						<div className='name'>{data?.assignment?.noiDung}</div>{' '}
 						{data?.assignment?.isQuiz && <Tag color='blue'>Quiz</Tag>}
@@ -58,7 +58,9 @@ const CardStatusBaiTap = (props: IProps) => {
 						</Tag>
 						{data?.assignment?.isQuiz && (
 							<>
-								<div style={{ fontSize: 28, fontWeight: 'bold', color: 'green' }}>{data?.tongDiem ?? '--'}</div>
+								<div style={{ marginTop: 8, fontSize: 28, fontWeight: 'bold', color: 'green' }}>
+									{data?.assignment?.congBoDiemSauNop ? data?.tongDiem : '--'}
+								</div>
 								<div>Điểm số</div>
 							</>
 						)}
