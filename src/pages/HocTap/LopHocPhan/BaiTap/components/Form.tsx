@@ -9,7 +9,7 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { buildUpLoadMultiFile, handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
-import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Tag, Tooltip } from 'antd';
+import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Spin, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -20,10 +20,11 @@ const FormBaiTap = (props: any) => {
 	const { getData } = props;
 	const [form] = Form.useForm();
 	const { record, visibleForm, setVisibleForm, sinhVienNopBaiTapModal, formSubmiting } = useModel('daotao.baitap');
-	const { record: recBieuMau, getBieuMauKhaoSatSinhVienModel } = useModel('tienich.bieumau');
+	const { record: recBieuMau, getBieuMauKhaoSatSinhVienModel, loading } = useModel('tienich.bieumau');
 	const [trangThaiNopBai, setTrangThaiNopBai] = useState<string>();
 	const quaThoiHanNopBai = moment().isAfter(record?.assignment?.thoiGianKetThuc);
 	const [cauTraLoi, setRecCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
+	const [remainingTime, setRemainingTime] = useState('');
 
 	const disable = quaThoiHanNopBai && !record?.assignment?.choPhepCapNhatSauNop;
 	const disableIsQuiz = record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.DA_NOP;
@@ -32,39 +33,43 @@ const FormBaiTap = (props: any) => {
 		if (!visibleForm) {
 			resetFieldsForm(form);
 		} else if (record?._id) {
-			getBieuMauKhaoSatSinhVienModel(record?.assignment?.khaoSatId ?? '');
-			if (record?.cauTraLoiId) {
-				getCauTraLoiMeBaiTap(record?.cauTraLoiId).then((res: any) => {
-					setRecCauTraLoi(res?.data?.data?.danhSachTraLoi);
-					const index = res?.data?.data?.danhSachTraLoi?.[0];
-					if (index?._id) {
-						const values: any = {};
-						recBieuMau?.danhSachKhoi?.map((khoi) => {
-							khoi.danhSachCauHoi?.map((question) => {
-								if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
-									if (index && index.traLoiKhac) {
-										values[question._id] = 'traLoiKhac';
-										values[`${question._id}_otherAnswer`] = index.traLoiKhac;
-									} else {
-										values[question._id] = index?.listLuaChon?.[0];
-									}
-								} else if (
-									question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
-									question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
-								) {
-									values[question._id] = {};
-									index?.listLuaChonBang?.forEach((item: any) => {
-										const idHang = item.idHang;
-										const idCot = item.idCot;
-										if (!values[question._id][idHang]) values[question._id][idHang] = {};
-										values[question._id][idHang][idCot] = true;
+			if (record?.assignment?.khaoSatId) {
+				getBieuMauKhaoSatSinhVienModel(record?.assignment?.khaoSatId ?? '').then((recBieuMau1) => {
+					if (record?.cauTraLoiId) {
+						getCauTraLoiMeBaiTap(record?.cauTraLoiId).then((res: any) => {
+							const index = res?.data?.data?.danhSachTraLoi;
+							setRecCauTraLoi(index);
+							if (index?.length) {
+								const values: any = {};
+								recBieuMau1?.danhSachKhoi?.map((khoi: any) => {
+									khoi.danhSachCauHoi?.map((question: any) => {
+										const traLoi = index?.find((i: any) => i.idCauHoi === question._id);
+										if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
+											if (traLoi && traLoi.traLoiKhac) {
+												values[question._id] = 'traLoiKhac';
+												values[`${question._id}_otherAnswer`] = traLoi.traLoiKhac;
+											} else {
+												values[question._id] = traLoi?.listLuaChon?.[0];
+											}
+										} else if (
+											question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
+											question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
+										) {
+											values[question._id] = {};
+											traLoi?.listLuaChonBang?.forEach((item: any) => {
+												const idHang = item.idHang;
+												const idCot = item.idCot;
+												if (!values[question._id][idHang]) values[question._id][idHang] = {};
+												values[question._id][idHang][idCot] = true;
+											});
+										} else values[question._id] = traLoi;
 									});
-								} else values[question._id] = index;
-							});
-						});
-						form.setFieldsValue({
-							...record,
-							...values,
+								});
+								form.setFieldsValue({
+									...record,
+									...values,
+								});
+							}
 						});
 					}
 				});
@@ -72,7 +77,34 @@ const FormBaiTap = (props: any) => {
 				form.setFieldsValue(record);
 			}
 		}
-	}, [visibleForm, record?._id, recBieuMau?._id]);
+	}, [visibleForm, record?._id]);
+
+	useEffect(() => {
+		if (!record?.assignment?.thoiGianKetThuc) return;
+
+		// Hàm đếm ngược
+		const countdown = () => {
+			const endTime = moment(record?.assignment?.thoiGianKetThuc);
+			const now = moment();
+			const duration = moment.duration(endTime.diff(now));
+
+			if (duration.asSeconds() <= 0) {
+				setRemainingTime('Thời hạn đã hết');
+				return;
+			}
+
+			const hours = Math.floor(duration.asHours());
+			const minutes = Math.floor(duration.minutes());
+			const seconds = Math.floor(duration.seconds());
+			setRemainingTime(`${hours} giờ ${minutes} phút ${seconds} giây`);
+		};
+
+		// Chạy hàm đếm ngược mỗi giây
+		const intervalId = setInterval(countdown, 1000);
+
+		// Dọn dẹp khi component unmount
+		return () => clearInterval(intervalId);
+	}, [record?.assignment?.thoiGianKetThuc]);
 
 	function convertList(originalList: any) {
 		const convertedList = [];
@@ -170,7 +202,7 @@ const FormBaiTap = (props: any) => {
 			{record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.CHUA_NOP && !quaThoiHanNopBai && (
 				<div style={{ marginBottom: 12 }}>
 					<Alert
-						type='info'
+						type='warning'
 						showIcon
 						message='Đối với dạng bài tập QUiZ chỉ được nộp bài 1 lần, xem lại kỹ bài tập trước khi nộp bài!'
 					/>
@@ -181,9 +213,25 @@ const FormBaiTap = (props: any) => {
 				<div style={{ marginBottom: 12 }}>
 					<Alert type='success' showIcon message='Đã nộp bài' />
 				</div>
+			) : !quaThoiHanNopBai ? (
+				<div style={{ marginBottom: 12 }}>
+					<Alert
+						type='info'
+						showIcon
+						message={
+							<>
+								Thời gian còn lại để nộp bài: <b style={{ color: 'red' }}>({remainingTime})</b>
+							</>
+						}
+					/>
+				</div>
 			) : quaThoiHanNopBai ? (
 				<div style={{ marginBottom: 12 }}>
-					<Alert type='error' showIcon message='Quá thời hạn nộp bài' />
+					<Alert
+						type='error'
+						showIcon
+						message={<>Quá thời hạn nộp bài {moment(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</>}
+					/>
 				</div>
 			) : null}
 
@@ -199,11 +247,6 @@ const FormBaiTap = (props: any) => {
 								<Descriptions.Item label='Thời gian giao bài'>
 									{record?.assignment?.thoiGianGiao
 										? moment(record?.assignment?.thoiGianGiao).format('HH:mm DD/MM/YYYY')
-										: '--'}
-								</Descriptions.Item>
-								<Descriptions.Item label='Thời hạn nộp bài'>
-									{record?.assignment?.thoiGianKetThuc
-										? moment(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
 										: '--'}
 								</Descriptions.Item>
 							</Descriptions>
@@ -264,7 +307,11 @@ const FormBaiTap = (props: any) => {
 						</Form.Item>
 					</Col>
 				</Row>
-				{record?.assignment?.isQuiz && <FormQuiz form={form} cauTraLoi={cauTraLoi} />}
+				{record?.assignment?.isQuiz && (
+					<Spin spinning={loading}>
+						<FormQuiz form={form} cauTraLoi={cauTraLoi} />
+					</Spin>
+				)}
 
 				<div className='form-footer'>
 					<Tooltip title={disable || disableIsQuiz ? 'Đã nộp bài tập hoặc quá thời hạn nộp bài' : 'Nộp bài'}>

@@ -9,7 +9,6 @@ import { Col, Row, Space, Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
-import { PlusOutlined } from '@ant-design/icons';
 
 interface IProps {
 	data: BaiTap.IDanhSachGiaoBaiTap;
@@ -80,7 +79,7 @@ const CardStatusBaiTap = (props: IProps) => {
 						</Row>
 					</Col>
 					<Col xs={24} style={{ textAlign: 'right' }}>
-						<ButtonExtend type='primary' onClick={() => handleEdit(data)} icon={<PlusOutlined />}>
+						<ButtonExtend type='primary' onClick={() => handleEdit(data)} notHideText>
 							Xem chi tiết và làm bài
 						</ButtonExtend>
 					</Col>
