@@ -41,7 +41,7 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 							onChange={(val) => setSegment(val.toString())}
 							options={[
 								{ value: '1', label: 'Đang diễn ra' },
-								{ value: '2', label: 'Đã kết thúc' },
+								{ value: '2', label: 'Đã quá hạn' },
 							]}
 						/>
 						<ButtonExtend icon={<ReloadOutlined />} onClick={() => getData()}>

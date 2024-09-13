@@ -43,25 +43,26 @@ const FormQuiz = (props: any) => {
 				<FileChoice question={question} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} />
 			);
 
+		const correctQuestion = cauTraLoi?.find((item: any) => item?.idCauHoi === question?._id)?.correct;
 		return (
 			<div key={question._id} style={{ marginBottom: 12 }}>
 				<div
 					className='fw500'
 					style={
-						recBaiTap?.assignment?.congBoDapAnDungSauNop
-							? { color: cauTraLoi?.find((item: any) => item?.idCauHoi === question?._id)?.correct ? 'green' : 'red' }
+						recBaiTap?.assignment?.congBoDapAnDungSauNop && recBaiTap?.cauTraLoiId
+							? { color: correctQuestion === true ? 'green' : correctQuestion === false ? 'red' : undefined }
 							: undefined
 					}
 				>
 					<u>Câu {index + 1}:</u> {question.noiDungCauHoi}{' '}
 					{question.batBuoc ? <span style={{ color: 'red' }}>*</span> : null}{' '}
 					{question.diem ? <span>({question.diem} điểm)</span> : null}{' '}
-					{recBaiTap?.assignment?.congBoDapAnDungSauNop ? (
-						cauTraLoi?.find((item: any) => item?.idCauHoi === question?._id)?.correct ? (
+					{recBaiTap?.assignment?.congBoDapAnDungSauNop && recBaiTap?.cauTraLoiId ? (
+						correctQuestion === true ? (
 							<CheckOutlined />
-						) : (
+						) : correctQuestion === false ? (
 							<CloseOutlined />
-						)
+						) : null
 					) : null}
 				</div>
 				{questionEleMent}
