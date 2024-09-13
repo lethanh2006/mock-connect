@@ -460,7 +460,7 @@ const FormRender = (props: {
 						extra={cauHinh?.ghiChu ? <div>{cauHinh.ghiChu}</div> : null}
 						name={cauHinh.kieuDuLieu !== EKieuDuLieu.TABLE ? cauHinh.ma : `table||${cauHinh.ma}`}
 						label={cauHinh.ten}
-						rules={cauHinh?.readonly ? [] : rule}
+						rules={rule}
 						style={cauHinh.kieuDuLieu === EKieuDuLieu.TABLE ? { flexDirection: 'row' } : {}}
 					>
 						{component}

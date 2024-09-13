@@ -23,7 +23,7 @@ export default () => {
 
 		try {
 			const res = await postSinhVienQuyDoiPhieu(idDotQuyDoi, payLoad);
-			message.success('Thêm thành công');
+			message.success('Đăng ký thành công');
 			return res.data?.data;
 		} catch (err) {
 			return Promise.reject(err);

@@ -5,8 +5,8 @@ import type { Moment } from 'moment';
 import moment from 'moment';
 import * as XLSX from 'xlsx';
 
-const reg =
-	/(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
+export const urlRegex =
+	/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.,~#?&//=]*)$/;
 
 const charMap: any = {
 	a: '[aàáâãăăạảấầẩẫậắằẳẵặ]',
@@ -19,7 +19,7 @@ const charMap: any = {
 	' ': ' ',
 };
 
-export const isUrl = (path: string): boolean => reg.test(path);
+export const isUrl = (path: string): boolean => urlRegex.test(path);
 
 export const isAntDesignPro = (): boolean => {
 	if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
@@ -507,13 +507,57 @@ export function removeVietnameseTones(str: string, removeSpecial: boolean = fals
 	return strTemp;
 }
 
+/**
+ * Scroll to div element
+ * @param id
+ * @param delay
+ */
+export const handleScrollToDivElementById = (id: string, delay?: number) => {
+	if (delay) {
+		setTimeout(() => {
+			const targetDiv = document.getElementById(id);
+			// Scroll to the target div
+			if (targetDiv) {
+				targetDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}, delay);
+	} else {
+		const targetDiv = document.getElementById(id);
+		// Scroll to the target div
+		if (targetDiv) {
+			targetDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+	}
+};
+
+/**
+ * Copy text to clipboard
+ * @param text
+ * @param callBack
+ */
 export const copyToClipboard = (text: string, callBack?: () => void) => {
-  navigator.clipboard
-    .writeText(text)
-    .then(function () {
-      if (callBack) callBack();
-    })
-    .catch(function (err) {
-      console.error('Could not copy text: ', err);
-    });
+	navigator.clipboard
+		.writeText(text)
+		.then(function () {
+			if (callBack) callBack();
+		})
+		.catch(function (err) {
+			console.error('Could not copy text: ', err);
+		});
+};
+
+/**
+ * Convert plain text to HTML contains Link tags
+ * @param text Plain text
+ * @param targetBlank
+ * @returns HTML contains a tag
+ */
+export const createTextLinks = (text: string, targetBlank: boolean = true) => {
+	return removeHtmlTags(text || '').replace(
+		/((https?:\/\/(www\.)?)|(www\.))(\S+)/gi,
+		function (match, temp, protocol, www1, www2, url) {
+			const hyperlink = (protocol ?? 'https://') + url;
+			return `<a href="${hyperlink}"${targetBlank ? 'target="_blank" rel="noreferrer"' : ''}>${url}</a>`;
+		},
+	);
 };
