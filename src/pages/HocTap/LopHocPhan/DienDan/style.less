@@ -4,7 +4,7 @@
 	.main-content {
 		width: 100%;
 		max-width: 800px;
-		margin: auto
+		margin: auto;
 	}
 
 	.card {
@@ -39,6 +39,12 @@
 
 		@media (max-width: @screen-xs) {
 			padding: 12px;
+		}
+		@media (max-width: 768px) {
+			.hannopbai {
+				margin-right: 8px;
+				text-align: right;
+			}
 		}
 	}
 
@@ -86,6 +92,14 @@
 
 		@media (max-width: @screen-xs) {
 			padding: 0 12px 0 12px;
+		}
+
+		@media (max-width: 768px) {
+			.diembaitap {
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+			}
 		}
 	}
 
@@ -136,18 +150,18 @@
 		align-items: center;
 		width: 35px;
 		height: 20px;
+		padding-left: 4px;
 		color: #ffffff;
 		font-size: 12px;
 		background: #b70000;
 		clip-path: polygon(0 1%, 100% 0, 100% 71%, 74% 100%, 0 100%, 0% 50%);
-		padding-left: 4px;
 	}
 
 	.comment-box {
 		textarea {
-			field-sizing: content;
 			min-height: 1lh;
 			max-height: 10lh;
+			field-sizing: content;
 		}
 
 		.image {

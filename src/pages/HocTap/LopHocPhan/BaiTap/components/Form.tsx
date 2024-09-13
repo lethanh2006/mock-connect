@@ -9,7 +9,7 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { buildUpLoadMultiFile, handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
-import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Tag } from 'antd';
+import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -24,6 +24,9 @@ const FormBaiTap = (props: any) => {
 	const [trangThaiNopBai, setTrangThaiNopBai] = useState<string>();
 	const quaThoiHanNopBai = moment().isAfter(record?.assignment?.thoiGianKetThuc);
 	const [cauTraLoi, setRecCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
+
+	const disable = quaThoiHanNopBai && !record?.assignment?.choPhepCapNhatSauNop;
+	const disableIsQuiz = record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.DA_NOP;
 
 	useEffect(() => {
 		if (!visibleForm) {
@@ -65,6 +68,8 @@ const FormBaiTap = (props: any) => {
 						});
 					}
 				});
+			} else {
+				form.setFieldsValue(record);
 			}
 		}
 	}, [visibleForm, record?._id, recBieuMau?._id]);
@@ -244,44 +249,53 @@ const FormBaiTap = (props: any) => {
 
 					<Col span={24}>
 						<Form.Item name='noiDungTraLoi' label='Nội dung trả lời'>
-							<Input.TextArea rows={3} placeholder='Nhập nội dung trả lời' />
+							<Input.TextArea disabled={disable || disableIsQuiz} rows={3} placeholder='Nhập nội dung trả lời' />
 						</Form.Item>
 					</Col>
 
 					<Col span={24}>
 						<Form.Item name='urlImages' label='Tệp đính kèm'>
-							<UploadFile maxCount={5} disabled={quaThoiHanNopBai} />
+							<UploadFile
+								maxCount={5}
+								otherProps={{
+									disabled: disable || disableIsQuiz,
+								}}
+							/>
 						</Form.Item>
 					</Col>
 				</Row>
 				{record?.assignment?.isQuiz && <FormQuiz form={form} cauTraLoi={cauTraLoi} />}
 
 				<div className='form-footer'>
-					<Button
-						disabled={
-							(quaThoiHanNopBai && !record?.assignment?.choPhepCapNhatSauNop) ||
-							(!!record?.assignment.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.DA_NOP)
-						}
-						loading={formSubmiting}
-						htmlType='submit'
-						type='primary'
-						onClick={() => setTrangThaiNopBai('1')}
-					>
-						Nộp bài
-					</Button>
-					{!record?.assignment?.isQuiz && (
+					<Tooltip title={disable || disableIsQuiz ? 'Đã nộp bài tập hoặc quá thời hạn nộp bài' : 'Nộp bài'}>
 						<Button
-							disabled={
-								record?.trangThai === ETrangThaiNopBaiTap.DA_NOP ||
-								(quaThoiHanNopBai && !record?.assignment?.choPhepCapNhatSauNop)
-							}
+							disabled={disable || disableIsQuiz}
 							loading={formSubmiting}
 							htmlType='submit'
 							type='primary'
-							onClick={() => setTrangThaiNopBai('2')}
+							onClick={() => setTrangThaiNopBai('1')}
 						>
-							Lưu lại
+							Nộp bài
 						</Button>
+					</Tooltip>
+					{!record?.assignment?.isQuiz && (
+						<Tooltip
+							title={
+								record?.trangThai === ETrangThaiNopBaiTap.DA_NOP || disable
+									? 'Đã nộp bài tập hoặc quá thời hạn nộp bài'
+									: 'Lưu bài'
+							}
+						>
+							<Button
+								disabled={record?.trangThai === ETrangThaiNopBaiTap.DA_NOP || disable}
+								loading={formSubmiting}
+								htmlType='submit'
+								type='primary'
+								onClick={() => setTrangThaiNopBai('2')}
+							>
+								Lưu lại
+							</Button>
+						</Tooltip>
 					)}
 					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>
