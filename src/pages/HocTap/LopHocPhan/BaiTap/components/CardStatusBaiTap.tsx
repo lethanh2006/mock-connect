@@ -9,6 +9,7 @@ import { Col, Row, Space, Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
+import { PlusOutlined } from '@ant-design/icons';
 
 interface IProps {
 	data: BaiTap.IDanhSachGiaoBaiTap;
@@ -28,7 +29,7 @@ const CardStatusBaiTap = (props: IProps) => {
 					</Space>
 				</div>
 
-				<div className='flex item-center' style={{ gap: 12 }}>
+				<div className='hannopbai'>
 					<span style={{ color: APP_CONFIG_PRIMARY_COLOR }}>
 						{data?.assignment?.thoiGianLamBaiQuiz ? (
 							<span>
@@ -53,17 +54,19 @@ const CardStatusBaiTap = (props: IProps) => {
 			<div className='content'>
 				<Row gutter={[12, 12]} style={{ marginTop: 8 }}>
 					<Col xs={24} md={{ span: 7, push: 17 }} style={{ textAlign: 'center' }}>
-						<Tag color={colorTrangThaiNopBaiTap[data.trangThai as ETrangThaiNopBaiTap]}>
-							{mapTrangThaiNopBaiTap[data.trangThai as ETrangThaiNopBaiTap]}
-						</Tag>
-						{data?.assignment?.isQuiz && (
-							<>
-								<div style={{ marginTop: 8, fontSize: 28, fontWeight: 'bold', color: 'green' }}>
-									{data?.assignment?.congBoDiemSauNop ? data?.tongDiem : '--'}
+						<div className='diembaitap'>
+							<Tag color={colorTrangThaiNopBaiTap[data.trangThai as ETrangThaiNopBaiTap]}>
+								{mapTrangThaiNopBaiTap[data.trangThai as ETrangThaiNopBaiTap]}
+							</Tag>
+							{data?.assignment?.isQuiz && (
+								<div>
+									<div style={{ marginTop: 8, fontSize: 28, fontWeight: 'bold', color: 'green' }}>
+										{data?.assignment?.congBoDiemSauNop ? data?.tongDiem ?? '--' : '--'}
+									</div>
+									<div>Điểm số</div>
 								</div>
-								<div>Điểm số</div>
-							</>
-						)}
+							)}
+						</div>
 					</Col>
 					<Col xs={24} md={{ span: 17, pull: 7 }}>
 						<div className='noi-dung-post' dangerouslySetInnerHTML={{ __html: data?.assignment?.huongDanNop ?? '' }} />
@@ -77,12 +80,9 @@ const CardStatusBaiTap = (props: IProps) => {
 						</Row>
 					</Col>
 					<Col xs={24} style={{ textAlign: 'right' }}>
-						<Space style={{ marginRight: 12 }}>
-							<ButtonExtend type='primary' onClick={() => handleEdit(data)}>
-								Xem chi tiết và làm bài
-								{/* {data?.trangThai === ETrangThaiNopBaiTap.DA_NOP ? 'Hủy nộp' : 'Nộp bài'} */}
-							</ButtonExtend>
-						</Space>
+						<ButtonExtend type='primary' onClick={() => handleEdit(data)} icon={<PlusOutlined />}>
+							Xem chi tiết và làm bài
+						</ButtonExtend>
 					</Col>
 				</Row>
 			</div>
