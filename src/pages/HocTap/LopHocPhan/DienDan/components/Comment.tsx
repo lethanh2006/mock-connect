@@ -176,7 +176,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 										</div>
 										<div
 											dangerouslySetInnerHTML={{
-												__html: createTextLinks((val?.noiDung ?? '')?.replace(/\n/g, '<br/>')),
+												__html: createTextLinks(val?.noiDung ?? '')?.replace(/\n/g, '<br/>'),
 											}}
 										/>
 										{/*{typeof val?.fileDinhKem !== 'string' && val?.fileDinhKem && val?.fileDinhKem?.length > 0 && (*/}
