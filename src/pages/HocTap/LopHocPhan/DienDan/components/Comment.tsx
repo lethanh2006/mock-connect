@@ -1,3 +1,4 @@
+import type { BinhLuan } from '@/services/DienDan/BinhLuan/typing';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import { createTextLinks } from '@/utils/utils';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -156,7 +157,11 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 						<div className='item-comment flex item-center relative' key={val._id}>
 							<div className='list-comment flex'>
 								<div className='image' style={{ flexShrink: 0 }}>
-									<AvatarBlog url={val?.thongTinNguoiDang?.avatar} style={{ width: 32, height: 32 }} />
+									<AvatarBlog
+										url={val?.thongTinNguoiDang?.avatar}
+										name={val?.thongTinNguoiDang?.hoTen}
+										style={{ width: 32, height: 32 }}
+									/>
 								</div>
 								<div>
 									<div className='comment-user'>
@@ -263,7 +268,11 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 				<Form form={form} onFinish={onFinish}>
 					<div className={`flex ${showComment ? '' : 'item-center'}`}>
 						<div className='image' style={{ flexShrink: 0 }}>
-							<AvatarBlog url={recSinhVien?.anhDaiDienUrl ?? ''} style={{ width: 32, height: 32 }} />
+							<AvatarBlog
+								url={recSinhVien?.anhDaiDienUrl ?? ''}
+								name={recSinhVien?.ten}
+								style={{ width: 32, height: 32 }}
+							/>
 						</div>
 						{showComment || showCommentEdit ? (
 							<div style={{ width: '100%' }}>
