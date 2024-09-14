@@ -44,7 +44,11 @@ const CardAddStatus = (props: IProps) => {
 				<div className='card'>
 					<div className='user-name flex item-center'>
 						<div className='image' style={{ flexShrink: 0 }}>
-							<AvatarBlog url={recNhanSu?.anhDaiDienUrl ?? ''} style={{ width: 42, height: 42 }} />
+							<AvatarBlog
+								url={recNhanSu?.anhDaiDienUrl ?? ''}
+								name={recNhanSu?.ten}
+								style={{ width: 42, height: 42 }}
+							/>
 						</div>
 						<div
 							className='fake-input'

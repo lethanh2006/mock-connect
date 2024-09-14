@@ -1,5 +1,6 @@
 import type { LopHanhChinh } from '@/services/HocTap/LopHanhChinh/typing';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import type { BinhLuan } from '../BinhLuan/typing';
 
 declare module BaiDang {
 	export interface IRecord {
@@ -11,22 +12,10 @@ declare module BaiDang {
 		ghiChu: string;
 		ngayDang: string;
 
-		danhSachDaXem: {
-			ma: string;
-			hoTen: string;
-			ssoId: string;
-			thoiGian: string;
-			isGiaoVien: boolean;
-		}[];
+		thongTinNguoiDang: Omit<TThongTinNguoiDang, 'thoiGian'>;
+		danhSachDaXem: Omit<TThongTinNguoiDang, 'avatar'>[];
 		danhSachBinhLuan: BinhLuan.IRecord[];
 
-		thongTinNguoiDang: {
-			ma: string;
-			hoTen: string;
-			ssoId: string;
-			avatar: string;
-			isGiaoVien: boolean;
-		};
 		isPublic: boolean;
 		createdAt: string;
 		updatedAt: string;
@@ -38,4 +27,13 @@ declare module BaiDang {
 		ghimBaiViet: boolean;
 		fileDinhKem: string[] | string;
 	}
+
+	export type TThongTinNguoiDang = {
+		ma: string;
+		hoTen: string;
+		ssoId: string;
+		isGiaoVien: boolean;
+		avatar?: string;
+		thoiGian?: string;
+	};
 }
