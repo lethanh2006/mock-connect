@@ -27,6 +27,8 @@ declare module BieuMau {
 		///NumericRange
 		gioiHanDuoiTuyenTinh: number;
 		gioiHanTrenTuyenTinh: number;
+
+		diem: number;
 		_id: string;
 	}
 

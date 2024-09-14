@@ -1,3 +1,5 @@
+import type { BaiDang } from '../BaiDang/typing';
+
 declare module BinhLuan {
 	export interface IRecord {
 		_id: string;
@@ -8,7 +10,7 @@ declare module BinhLuan {
 		updatedAt: string;
 		createdAt: string;
 		ghiChu: string;
-		thongTinNguoiDang: any;
-		fileDinhKem: string[];
+		thongTinNguoiDang: Omit<BaiDang.TThongTinNguoiDang, 'thoiGian'>;
+		fileDinhKem?: string[];
 	}
 }
