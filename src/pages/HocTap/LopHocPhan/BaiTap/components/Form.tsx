@@ -1,3 +1,4 @@
+import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';
 import {
 	colorTrangThaiNopBaiTap,
@@ -9,7 +10,7 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { buildUpLoadMultiFile, handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
-import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Spin, Tag, Tooltip } from 'antd';
+import { Alert, Button, Col, Descriptions, Divider, Form, Row, Spin, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -32,6 +33,7 @@ const FormBaiTap = (props: any) => {
 	useEffect(() => {
 		if (!visibleForm) {
 			resetFieldsForm(form);
+			form.setFieldsValue({ noiDungTraLoi: '' });
 		} else if (record?._id) {
 			if (record?.assignment?.khaoSatId) {
 				getBieuMauKhaoSatSinhVienModel(record?.assignment?.khaoSatId ?? '').then((recBieuMau1) => {
@@ -220,7 +222,8 @@ const FormBaiTap = (props: any) => {
 						showIcon
 						message={
 							<>
-								Thời gian còn lại để nộp bài: <b style={{ color: 'red' }}>({remainingTime})</b>
+								Thời gian còn lại để nộp bài: <b style={{ color: 'red' }}>{remainingTime}</b>{' '}
+								<b>({moment(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})</b>
 							</>
 						}
 					/>
@@ -292,7 +295,7 @@ const FormBaiTap = (props: any) => {
 
 					<Col span={24}>
 						<Form.Item name='noiDungTraLoi' label='Nội dung trả lời'>
-							<Input.TextArea disabled={disable || disableIsQuiz} rows={3} placeholder='Nhập nội dung trả lời' />
+							<TinyEditor height={350} miniToolbar hideMenubar disabled={disable || disableIsQuiz} />
 						</Form.Item>
 					</Col>
 
