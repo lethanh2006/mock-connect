@@ -57,7 +57,11 @@ const FormThemMoiBaiViet = (props: IProps) => {
 			<div>
 				<div style={{ display: 'flex', alignItems: 'center' }}>
 					<div style={{ flexShrink: 0, marginRight: 8 }}>
-						<AvatarBlog url={recSinhVien?.anhDaiDienUrl ?? ''} style={{ width: 42, height: 42 }} />
+						<AvatarBlog
+							url={recSinhVien?.anhDaiDienUrl ?? ''}
+							name={recSinhVien?.ten}
+							style={{ width: 42, height: 42 }}
+						/>
 					</div>
 					<b>{recSinhVien?.ten}</b>
 				</div>
