@@ -183,12 +183,13 @@ const FormBaiTap = (props: any) => {
 
 		const data = {
 			mode: trangThaiNopBai === '1' ? 'submit' : 'save',
-			thongTinCauTraLoiQuiz: record?.assignment?.khaoSatId
-				? {
-						danhSachTraLoi,
-						idKhaoSat: record?.assignment?.khaoSatId,
-				  }
-				: null,
+			thongTinCauTraLoiQuiz:
+				record?.assignment?.khaoSatId && record?.assignment?.isQuiz
+					? {
+							danhSachTraLoi,
+							idKhaoSat: record?.assignment?.khaoSatId,
+					  }
+					: null,
 			assignmentId: record?.assignmentId,
 			noiDungTraLoi: values.noiDungTraLoi,
 			urlImages: urlImages,
