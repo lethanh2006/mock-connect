@@ -3,7 +3,7 @@ import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
 import { Form } from 'antd';
 
-const FileChoice = (props: { question: BieuMau.CauHoi }) => {
+const FileChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean }) => {
 	return (
 		<Form.Item
 			rules={props.question.batBuoc ? [...rules.fileRequired] : []}
@@ -15,6 +15,7 @@ const FileChoice = (props: { question: BieuMau.CauHoi }) => {
 			}
 		>
 			<UploadFile
+				disabled={props.disabled}
 				accept='image/*, .pdf, .doc, .docx, .png, .jpg'
 				otherProps={{ showUploadList: { showDownloadIcon: false } }}
 				maxCount={5}
