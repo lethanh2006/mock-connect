@@ -1,5 +1,6 @@
 import type { LopHanhChinh } from '@/services/HocTap/LopHanhChinh/typing';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import type { BinhLuan } from '../BinhLuan/typing';
 
 declare module BaiDang {
 	export interface IRecord {
