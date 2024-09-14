@@ -35,7 +35,7 @@ const FormBaiTap = (props: any) => {
 			resetFieldsForm(form);
 			form.setFieldsValue({ noiDungTraLoi: '' });
 		} else if (record?._id) {
-			if (record?.assignment?.khaoSatId) {
+			if (record?.assignment?.khaoSatId && record?.assignment?.isQuiz) {
 				getBieuMauKhaoSatSinhVienModel(record?.assignment?.khaoSatId ?? '').then((recBieuMau1) => {
 					if (record?.cauTraLoiId) {
 						getCauTraLoiMeBaiTap(record?.cauTraLoiId).then((res: any) => {
@@ -71,8 +71,12 @@ const FormBaiTap = (props: any) => {
 									...record,
 									...values,
 								});
+							} else {
+								form.setFieldsValue(record);
 							}
 						});
+					} else {
+						form.setFieldsValue(record);
 					}
 				});
 			} else {
