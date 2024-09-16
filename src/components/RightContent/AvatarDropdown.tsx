@@ -15,7 +15,7 @@ export type GlobalHeaderRightProps = {
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 	const { initialState } = useModel('@@initialState');
 
-	const loginOut = () => OIDCBounder.getActions()?.dangXuat();
+	const loginOut = () => OIDCBounder?.getActions()?.dangXuat();
 
 	if (!initialState || !initialState.currentUser)
 		return (
@@ -27,7 +27,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 	const fullName = initialState.currentUser?.family_name
 		? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
 		: initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || '');
-	const lastNameChar = fullName.split(' ')?.at(-1)?.[0];
+	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
 	const items: ItemType[] = [
 		{
