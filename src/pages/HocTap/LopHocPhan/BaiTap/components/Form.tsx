@@ -316,9 +316,11 @@ const FormBaiTap = (props: any) => {
 					</Col>
 				</Row>
 				{record?.assignment?.isQuiz && (
-					<Spin spinning={loading}>
-						<FormQuiz form={form} cauTraLoi={cauTraLoi} />
-					</Spin>
+					<Col span={24}>
+						<Spin spinning={loading}>
+							<FormQuiz form={form} cauTraLoi={cauTraLoi} />
+						</Spin>
+					</Col>
 				)}
 
 				<div className='form-footer'>
