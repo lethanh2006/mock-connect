@@ -18,6 +18,8 @@ const FormQuiz = (props: any) => {
 	const { record: recBaiTap } = useModel('daotao.baitap');
 	const [check, setCheck] = useState<boolean>(false);
 
+	const isDiemSo = !!recBaiTap?.assignment?.congBoDapAnDungSauNop && !!recBaiTap?.cauTraLoiId;
+
 	const renderQuestion = (question: BieuMau.CauHoi, index: number) => {
 		let questionEleMent = <div />;
 		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
@@ -29,7 +31,9 @@ const FormQuiz = (props: any) => {
 				<MultipleChoice question={question} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} />
 			);
 		else if (question.loai === ELoaiCauHoi.TEXT)
-			questionEleMent = <Text question={question} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} />;
+			questionEleMent = (
+				<Text question={question} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} isDiemSo={isDiemSo} />
+			);
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
 			questionEleMent = (
 				<GridChoice question={question} form={form} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} />
@@ -40,29 +44,35 @@ const FormQuiz = (props: any) => {
 			);
 		else if (question.loai === ELoaiCauHoi.UPLOAD_FILE)
 			questionEleMent = (
-				<FileChoice question={question} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} />
+				<FileChoice
+					question={question}
+					disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP}
+					isDiemSo={isDiemSo}
+				/>
 			);
 
 		const correctQuestion = cauTraLoi?.find((item: any) => item?.idCauHoi === question?._id)?.correct;
+
 		return (
 			<div key={question._id} style={{ marginBottom: 12 }}>
 				<div
 					className='fw500'
 					style={
-						recBaiTap?.assignment?.congBoDapAnDungSauNop && recBaiTap?.cauTraLoiId
-							? { color: correctQuestion === true ? 'green' : correctQuestion === false ? 'red' : undefined }
+						isDiemSo && (question.loai === ELoaiCauHoi.SINGLE_CHOICE || question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
+							? { color: correctQuestion ? 'green' : 'red' }
 							: undefined
 					}
 				>
 					<u>Câu {index + 1}:</u> {question.noiDungCauHoi}{' '}
 					{question.batBuoc ? <span style={{ color: 'red' }}>*</span> : null}{' '}
 					{question.diem ? <span>({question.diem} điểm)</span> : null}{' '}
-					{recBaiTap?.assignment?.congBoDapAnDungSauNop && recBaiTap?.cauTraLoiId ? (
-						correctQuestion === true ? (
+					{isDiemSo &&
+					(question.loai === ELoaiCauHoi.SINGLE_CHOICE || question.loai === ELoaiCauHoi.MULTIPLE_CHOICE) ? (
+						correctQuestion ? (
 							<CheckOutlined />
-						) : correctQuestion === false ? (
+						) : (
 							<CloseOutlined />
-						) : null
+						)
 					) : null}
 				</div>
 				{questionEleMent}
