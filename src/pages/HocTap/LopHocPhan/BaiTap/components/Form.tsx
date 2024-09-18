@@ -304,7 +304,9 @@ const FormBaiTap = (props: any) => {
 					</Col>
 
 					<Col span={24}>
-						{record?._id && !urlImagesForm?.length ? null : (
+						{record?._id && !urlImagesForm?.length && (disable || disableIsQuiz) ? (
+							<i>Không có tệp đính kèm</i>
+						) : (
 							<Form.Item name='urlImages' label='Tệp đính kèm'>
 								<UploadFile
 									maxCount={5}
@@ -325,9 +327,17 @@ const FormBaiTap = (props: any) => {
 				)}
 
 				<div className='form-footer'>
-					<Tooltip title={disable || disableIsQuiz ? 'Đã nộp bài tập hoặc quá thời hạn nộp bài' : 'Nộp bài'}>
+					<Tooltip
+						title={
+							disable || disableIsQuiz
+								? 'Đã nộp bài tập hoặc quá thời hạn nộp bài'
+								: !!record?.tongDiem
+								? 'Đã có điểm bài tập'
+								: 'Nộp bài'
+						}
+					>
 						<Button
-							disabled={disable || disableIsQuiz}
+							disabled={disable || disableIsQuiz || !!record?.tongDiem}
 							loading={formSubmiting}
 							htmlType='submit'
 							type='primary'
