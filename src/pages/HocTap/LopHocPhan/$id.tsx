@@ -67,10 +67,10 @@ const DetailLopTinChi = ({
 		>
 			<Tabs onChange={onChangeTab} activeKey={tabActive}>
 				<Tabs.TabPane tab='Thông tin chung' key={paths[0]} />
-				<Tabs.TabPane tab='Diễn đàn' key={paths[5]} />
 				<Tabs.TabPane tab='Lịch học' key={paths[1]} />
-				<Tabs.TabPane tab='Bài tập, Bài kiểm tra' key={paths[6]} />
 				<Tabs.TabPane tab='Thông báo' key={paths[2]} />
+				<Tabs.TabPane tab='Diễn đàn' key={paths[5]} />
+				<Tabs.TabPane tab='Bài tập, Bài kiểm tra' key={paths[6]} />
 				<Tabs.TabPane tab='Kết quả học tập' key={paths[3]} />
 				<Tabs.TabPane tab='Đánh giá giảng viên' key={paths[4]} />
 			</Tabs>

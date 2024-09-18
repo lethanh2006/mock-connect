@@ -66,14 +66,16 @@ const CardStatusBaiTap = (props: IProps) => {
 									{mapTrangThaiNopBaiTap[data.trangThai as ETrangThaiNopBaiTap]}
 								</Tag>
 							</Col>
-							{data?.assignment?.isQuiz && (
-								<Col xs={12} md={24}>
-									<div style={{ marginTop: 8, fontSize: 28, fontWeight: 'bold', color: 'green' }}>
-										{data?.assignment?.congBoDiemSauNop ? data?.tongDiem ?? '--' : '--'}
-									</div>
-									<div>Điểm số</div>
-								</Col>
-							)}
+
+							<Col xs={12} md={24}>
+								<div style={{ marginTop: 8, fontSize: 28, fontWeight: 'bold', color: 'green' }}>
+									{(data?.assignment?.isQuiz && data?.assignment?.congBoDiemSauNop) || !data?.assignment?.isQuiz
+										? data?.tongDiem ?? '--'
+										: '--'}
+								</div>
+								<div>Điểm số</div>
+							</Col>
+
 							<Col xs={24}>
 								<ButtonExtend type='primary' onClick={() => handleEdit(data)} notHideText>
 									Xem chi tiết và làm bài
