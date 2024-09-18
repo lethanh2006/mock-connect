@@ -1,4 +1,3 @@
-import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';
 import {
 	colorTrangThaiNopBaiTap,
@@ -10,7 +9,7 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { buildUpLoadMultiFile, handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
-import { Alert, Button, Col, Descriptions, Divider, Form, Row, Spin, Tag, Tooltip } from 'antd';
+import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Spin, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -26,6 +25,7 @@ const FormBaiTap = (props: any) => {
 	const quaThoiHanNopBai = moment().isAfter(record?.assignment?.thoiGianKetThuc);
 	const [cauTraLoi, setRecCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
 	const [remainingTime, setRemainingTime] = useState('');
+	const urlImagesForm: string[] = form.getFieldValue(['urlImages']);
 
 	const disable = quaThoiHanNopBai && !record?.assignment?.choPhepCapNhatSauNop;
 	const disableIsQuiz = record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.DA_NOP;
@@ -33,7 +33,6 @@ const FormBaiTap = (props: any) => {
 	useEffect(() => {
 		if (!visibleForm) {
 			resetFieldsForm(form);
-			form.setFieldsValue({ noiDungTraLoi: '' });
 		} else if (record?._id) {
 			if (record?.assignment?.khaoSatId && record?.assignment?.isQuiz) {
 				getBieuMauKhaoSatSinhVienModel(record?.assignment?.khaoSatId ?? '').then((recBieuMau1) => {
@@ -300,19 +299,21 @@ const FormBaiTap = (props: any) => {
 
 					<Col span={24}>
 						<Form.Item name='noiDungTraLoi' label='Nội dung trả lời'>
-							<TinyEditor height={350} miniToolbar hideMenubar disabled={disable || disableIsQuiz} />
+							<Input.TextArea rows={3} disabled={disable || disableIsQuiz} />
 						</Form.Item>
 					</Col>
 
 					<Col span={24}>
-						<Form.Item name='urlImages' label='Tệp đính kèm'>
-							<UploadFile
-								maxCount={5}
-								otherProps={{
-									disabled: disable || disableIsQuiz,
-								}}
-							/>
-						</Form.Item>
+						{record?._id && !urlImagesForm?.length ? null : (
+							<Form.Item name='urlImages' label='Tệp đính kèm'>
+								<UploadFile
+									maxCount={5}
+									otherProps={{
+										disabled: disable || disableIsQuiz,
+									}}
+								/>
+							</Form.Item>
+						)}
 					</Col>
 				</Row>
 				{record?.assignment?.isQuiz && (

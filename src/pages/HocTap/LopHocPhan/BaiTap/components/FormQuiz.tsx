@@ -82,10 +82,10 @@ const FormQuiz = (props: any) => {
 
 	return (
 		<>
-			{record?.danhSachKhoi?.map((item) => (
+			{record?.danhSachKhoi?.map((item, indexKhoi) => (
 				// eslint-disable-next-line react/no-array-index-key
 				<div key={item._id} style={{ marginBottom: 32 }}>
-					<Divider />
+					<Divider>{indexKhoi === 0 && 'Danh sách câu hỏi'}</Divider>
 					<div className='fw500'>{item.tieuDe}</div>
 					<div style={{ marginBottom: 12 }}>{item.moTa}</div>
 

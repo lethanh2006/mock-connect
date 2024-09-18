@@ -85,10 +85,14 @@ const CardStatusBaiTap = (props: IProps) => {
 					<Col xs={24} md={{ span: 17, pull: 7 }}>
 						<Row gutter={[12, 12]}>
 							<Col span={24}>
-								<div
-									className='noi-dung-post'
-									dangerouslySetInnerHTML={{ __html: data?.assignment?.huongDanNop ?? '' }}
-								/>
+								{data?.assignment?.huongDanNop ? (
+									<div
+										className='noi-dung-post'
+										dangerouslySetInnerHTML={{ __html: data?.assignment?.huongDanNop ?? '' }}
+									/>
+								) : (
+									<i>Không có mô tả</i>
+								)}
 							</Col>
 
 							<Col span={24} style={{ lineHeight: 1 }}>
