@@ -25,7 +25,6 @@ const FormBaiTap = (props: any) => {
 	const quaThoiHanNopBai = moment().isAfter(record?.assignment?.thoiGianKetThuc);
 	const [cauTraLoi, setRecCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
 	const [remainingTime, setRemainingTime] = useState('');
-	const urlImagesForm: string[] = form.getFieldValue(['urlImages']);
 
 	const disable = quaThoiHanNopBai && !record?.assignment?.choPhepCapNhatSauNop;
 	const disableIsQuiz = record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.DA_NOP;
@@ -252,9 +251,7 @@ const FormBaiTap = (props: any) => {
 							<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
 								<Descriptions.Item label='Giảng viên giao bài'>{record?.assignment?.hoTenNguoiGiao}</Descriptions.Item>
 								<Descriptions.Item label='Thời gian giao bài'>
-									{record?.assignment?.thoiGianGiao
-										? moment(record?.assignment?.thoiGianGiao).format('HH:mm DD/MM/YYYY')
-										: '--'}
+									{moment(record?.assignment?.thoiGianGiao ?? record?.assignment?.updatedAt).format('HH:mm DD/MM/YYYY')}
 								</Descriptions.Item>
 							</Descriptions>
 							<Row gutter={[12, 12]} style={{ marginTop: 8 }}>
@@ -292,7 +289,7 @@ const FormBaiTap = (props: any) => {
 								</Tag>
 							</Descriptions.Item>
 							<Descriptions.Item label='Thời gian cập nhật'>
-								{moment(record?.thoiGianTraLoi ?? record?.updatedAt).format('HH:mm DD/MM/YYYY')}
+								{record?.thoiGianTraLoi ? moment(record?.thoiGianTraLoi).format('HH:mm DD/MM/YYYY') : '--'}
 							</Descriptions.Item>
 						</Descriptions>
 					</Col>
@@ -304,18 +301,14 @@ const FormBaiTap = (props: any) => {
 					</Col>
 
 					<Col span={24}>
-						{record?._id && !urlImagesForm?.length && (disable || disableIsQuiz) ? (
-							<i>Không có tệp đính kèm</i>
-						) : (
-							<Form.Item name='urlImages' label='Tệp đính kèm'>
-								<UploadFile
-									maxCount={5}
-									otherProps={{
-										disabled: disable || disableIsQuiz,
-									}}
-								/>
-							</Form.Item>
-						)}
+						<Form.Item name='urlImages' label='Tệp đính kèm'>
+							<UploadFile
+								maxCount={5}
+								otherProps={{
+									disabled: disable || disableIsQuiz,
+								}}
+							/>
+						</Form.Item>
 					</Col>
 				</Row>
 				{record?.assignment?.isQuiz && (
