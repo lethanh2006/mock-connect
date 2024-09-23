@@ -110,7 +110,7 @@ const ChungChiTotNghiepPage = () => {
 			title: 'Ghi chú',
 			dataIndex: 'ghiChu',
 			width: 180,
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			render: (val) => <ExpandText>{val}</ExpandText>,
 			onCell,
 		},
 		{
@@ -123,7 +123,8 @@ const ChungChiTotNghiepPage = () => {
 					<ButtonExtend
 						disabled={
 							record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.DA_DUYET ||
-							record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.KHONG_DUYET
+							record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.KHONG_DUYET ||
+							!record.chungChi?.choPhepDangKy
 						}
 						tooltip='Chỉnh sửa'
 						onClick={() => handleEdit(record)}
@@ -138,7 +139,8 @@ const ChungChiTotNghiepPage = () => {
 						<ButtonExtend
 							disabled={
 								record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.DA_DUYET ||
-								record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.KHONG_DUYET
+								record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.KHONG_DUYET ||
+								!record.chungChi?.choPhepDangKy
 							}
 							tooltip='Xóa'
 							danger
