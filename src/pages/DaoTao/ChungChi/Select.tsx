@@ -18,16 +18,15 @@ const SelectChungChi = (props: {
 	style?: React.CSSProperties;
 }) => {
 	const { value, onChange, multiple, allowClear, placeholder, disabled, hasDefault, selectMa, style } = props;
-	const { danhSach, getAllModel, visibleForm } = useModel('daotao.chungchi');
+	const { danhSach, getAllModel } = useModel('daotao.chungchi');
 
 	useEffect(() => {
-		if (!visibleForm)
-			getAllModel().then((data) => {
-				// Nếu chưa chọn giá trị và (sau khi thêm mới hoặc data chỉ có 1 phần tử)
-				// Thì chọn phần tử đầu tiên
-				if (hasDefault && data.length === 1 && !!onChange) onChange(selectMa ? data[0].ma : data[0]._id);
-			});
-	}, [visibleForm]);
+		getAllModel(undefined, undefined, { choPhepDangKy: true }).then((data) => {
+			// Nếu chưa chọn giá trị và (sau khi thêm mới hoặc data chỉ có 1 phần tử)
+			// Thì chọn phần tử đầu tiên
+			if (hasDefault && data.length === 1 && !!onChange) onChange(selectMa ? data[0].ma : data[0]._id);
+		});
+	}, []);
 
 	return (
 		<Select
