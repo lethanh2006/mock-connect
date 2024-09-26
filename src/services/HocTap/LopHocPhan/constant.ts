@@ -60,7 +60,7 @@ export enum ELoaiDiemChu {
 	PASS = 'P',
 	HOAN_THI = 'I', // hoãn thi
 	CHUA_DU_DU_LIEU = 'X', // chưa đủ dữ liệu
-	MIEN_THI = 'R', // miễn thi
+	MIEN_THI = 'M', // miễn thi
 }
 
 export const ColorDiemChu = {

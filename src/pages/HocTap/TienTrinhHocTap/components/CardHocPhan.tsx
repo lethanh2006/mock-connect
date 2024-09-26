@@ -14,6 +14,12 @@ const CardHocPhan = (props: {
 	const { hocPhan, listDiem, colorKhoiKienThuc, trangThaiHoc, onClick } = props;
 	const soTinChi = hocPhan?.soTinChi ?? 0;
 	const listDiemChu = listDiem?.map((item) => item.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU);
+	// Chỉ hiển thị 2 mục
+	const listDiemHienThi: any[] = listDiemChu?.slice(0, 2) ?? [];
+	if (listDiemChu?.length && listDiemChu.length > 2) {
+		listDiemHienThi.pop();
+		listDiemHienThi?.push(`+${listDiemChu.length - 1}`);
+	}
 
 	return (
 		<div className='col-hoc-phan'>
@@ -31,10 +37,10 @@ const CardHocPhan = (props: {
 				<div className='khoi-kien-thuc' style={{ borderLeftColor: colorKhoiKienThuc }} />
 				{/* <img src='/images/img-card-hoc-phan.svg' /> */}
 			</div>
-			{listDiemChu?.map((diem, index) => (
+			{listDiemHienThi?.map((diem, index) => (
 				<div
 					className={`bookmark bookmark-diem ${
-						diem.includes('A') || diem.includes('B') || diem === ELoaiDiemChu.PASS
+						diem.includes('A') || diem.includes('B') || diem === ELoaiDiemChu.PASS || diem === ELoaiDiemChu.MIEN_THI
 							? 'diem-green'
 							: diem.includes('C') || diem.includes('D')
 							? 'diem-yellow'
@@ -51,7 +57,7 @@ const CardHocPhan = (props: {
 			))}
 
 			{trangThaiHoc === ETrangThaiHocTap.DANG_HOC ? (
-				<div className='bookmark bookmark-dang-hoc' title='Đang học' />
+				<div className='bookmark bookmark-dang-hoc' title='Đang học/Chưa có KQHT' />
 			) : null}
 		</div>
 	);
