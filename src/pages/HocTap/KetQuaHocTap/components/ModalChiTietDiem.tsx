@@ -111,28 +111,30 @@ const ModalChiTietDiem = (
 				) : null}
 
 				{(trangThaiHoc === undefined || trangThaiHoc !== ETrangThaiHocTap.CHUA_HOC) && listDiem.length
-					? listDiem.map((diem, index) => (
-							// eslint-disable-next-line react/no-array-index-key
-							<div style={{ marginBottom: index === 1 ? undefined : 18 }} key={index}>
-								<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10, marginTop: 10 }}>
-									Chi tiết kết quả học tập{listDiem.length > 1 ? ` học lần ${index + 1}` : null}{' '}
-									<Popover
-										content={
-											<Descriptions column={1} title='Thông tin học tập' style={{ maxWidth: 300 }}>
-												<Descriptions.Item label='Kỳ học' span={2}>
-													{diem?.hocKy?.ten ?? diem.maHocKy ?? '--'}
-												</Descriptions.Item>
-												<Descriptions.Item label='Tên lớp tín chỉ'>{diem?.tenLopHocPhan ?? '--'}</Descriptions.Item>
-											</Descriptions>
-										}
-									>
-										<InfoCircleOutlined />
-									</Popover>
-								</h4>
+					? listDiem
+							.sort((a, b) => (b.maHocKy ?? '').localeCompare(a.maHocKy ?? '')) // Sort DESC
+							.map((diem, index) => (
+								// eslint-disable-next-line react/no-array-index-key
+								<div style={{ marginBottom: index === 1 ? undefined : 18 }} key={index}>
+									<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10, marginTop: 12 }}>
+										Chi tiết kết quả học tập{listDiem.length > 1 ? ` học lần ${listDiem.length - index}` : null}{' '}
+										<Popover
+											content={
+												<Descriptions column={1} title='Thông tin học tập' style={{ maxWidth: 300 }}>
+													<Descriptions.Item label='Kỳ học' span={2}>
+														{diem?.hocKy?.ten ?? diem.maHocKy ?? '--'}
+													</Descriptions.Item>
+													<Descriptions.Item label='Tên lớp tín chỉ'>{diem?.tenLopHocPhan ?? '--'}</Descriptions.Item>
+												</Descriptions>
+											}
+										>
+											<InfoCircleOutlined />
+										</Popover>
+									</h4>
 
-								<DetailKetQuaHocTap key={diem._id} diemHpSvHk={diem} />
-							</div>
-					  ))
+									<DetailKetQuaHocTap key={diem._id} diemHpSvHk={diem} />
+								</div>
+							))
 					: null}
 			</Modal>
 
