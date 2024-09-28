@@ -33,7 +33,7 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 		<Spin spinning={loading}>
 			{recDiem ? (
 				<>
-					<Divider>Điểm thành phần & Điều kiện dự thi</Divider>
+					<Divider>Điểm thành phần & Điểm thi</Divider>
 					<Descriptions bordered>
 						{dauDiemCoTrongSo?.map((item) => (
 							<Descriptions.Item
@@ -50,15 +50,15 @@ const DetailKetQuaHocTap = (props: { lopHocPhanId?: string; diemHpSvHk?: LopHocP
 								{recDiem?.trangThaiThi ?? '--'}
 							</span>
 						</Descriptions.Item>
-					</Descriptions>
-
-					<Divider>Điểm thi kết thúc học phần</Divider>
-					<Descriptions bordered>
-						<Descriptions.Item label='Điểm thi lần 1'>{recDiem?.diemThi1 ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label='Điểm thi'>{recDiem?.diemThi1 ?? '--'}</Descriptions.Item>
 						{/* <Descriptions.Item label='Điểm thẩm định'>{recDiem?.diemThamDinh ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Điểm phúc khảo'>{recDiem?.diemPhucKhao ?? '--'}</Descriptions.Item> */}
-						<Descriptions.Item label='Điểm thi lần 2'>{recDiem?.diemThi2 ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Điểm cuối'>{recDiem?.diemKthp ?? '--'}</Descriptions.Item>
+						{recDiem?.diemThi2 ? (
+							<>
+								<Descriptions.Item label='Điểm thi lần 2'>{recDiem?.diemThi2 ?? '--'}</Descriptions.Item>
+								<Descriptions.Item label='Điểm cuối'>{recDiem?.diemKthp ?? '--'}</Descriptions.Item>
+							</>
+						) : null}
 					</Descriptions>
 
 					{recDiem.diemKthp !== undefined ? (
