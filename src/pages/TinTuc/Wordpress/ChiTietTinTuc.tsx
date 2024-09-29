@@ -4,7 +4,7 @@ import moment from 'moment';
 import queryString from 'query-string';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import './styles.less';
+import '../styles.less';
 
 const ChiTietTinTucWpPage = () => {
 	const { getByIdModel, loading, record } = useModel('tintuc.tintucwp');

@@ -4,17 +4,17 @@ import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { Link, history, useModel } from 'umi';
-import { CardTinTuc } from './TinTuc.style';
+import '../styles.less';
+import { CardTinTuc } from '../TinTuc.style';
 import { Title } from './components/Title';
-import './styles.less';
 import { getImageSrc } from './utils/getImageSrc';
 
-const TinTucWpDashboard = (props: { categories?: number[] }) => {
+const TinTucWpDashboard = (props: { category?: number }) => {
 	const { danhSach: danhSachTinTuc, getDashboardModel, loading } = useModel('tintuc.tintucwp');
 
 	useEffect(() => {
-		getDashboardModel(props.categories);
-	}, []);
+		getDashboardModel(props.category);
+	}, [props.category]);
 
 	return (
 		<Spin spinning={loading}>
@@ -59,9 +59,7 @@ const TinTucWpDashboard = (props: { categories?: number[] }) => {
 													}}
 												/>
 											</Tooltip>
-											{tintuc?.date && (
-												<span className='thoi-gian'>{moment(tintuc?.date).format('HH:mm DD/MM/YYYY')}</span>
-											)}
+											{tintuc?.date && <span className='thoi-gian'>{moment(tintuc?.date).format('DD/MM/YYYY')}</span>}
 										</Col>
 									</Row>
 								</CardTinTuc>
@@ -72,7 +70,7 @@ const TinTucWpDashboard = (props: { categories?: number[] }) => {
 			)}
 
 			<div style={{ textAlign: 'right' }}>
-				<Link to='/tin-tuc'>
+				<Link to={`/tin-tuc?category=${props.category ?? ''}`}>
 					Xem thêm <ArrowRightOutlined />
 				</Link>
 			</div>
