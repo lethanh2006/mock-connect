@@ -1,15 +1,17 @@
 import { Card, Pagination, Spin } from 'antd';
+import queryString from 'query-string';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
+import '../styles.less';
 import BlockTinTuc from './BlockTinTuc';
-import './styles.less';
 
 const TinTucWpPage = () => {
 	const { loading, page, limit, total, setPage, setLimit, getModel } = useModel('tintuc.tintucwp');
+	const { category } = queryString.parse(location.search);
 
 	useEffect(() => {
-		getModel();
-	}, [page, limit]);
+		getModel(page, limit, category ? +category : undefined);
+	}, [page, limit, category]);
 
 	const onChangePaging = (p: number, size: number) => {
 		setPage(p);

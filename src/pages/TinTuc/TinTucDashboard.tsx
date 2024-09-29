@@ -54,7 +54,7 @@ const TinTucDashboard = () => {
 											})}
 										</Tooltip>
 										{tintuc?.ngayDang && (
-											<span className='thoi-gian'>{moment(tintuc?.ngayDang).format('HH:mm DD/MM/YYYY')}</span>
+											<span className='thoi-gian'>{moment(tintuc?.ngayDang).format('DD/MM/YYYY')}</span>
 										)}
 									</Col>
 								</Row>

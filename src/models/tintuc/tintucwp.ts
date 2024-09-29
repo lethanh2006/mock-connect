@@ -10,12 +10,12 @@ export default () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [total, setTotal] = useState<number>(0);
 
-	const getDashboardModel = async (categories?: number[]): Promise<TinTucWP.IRecord[]> => {
+	const getDashboardModel = async (category?: number): Promise<TinTucWP.IRecord[]> => {
 		setLoading(true);
 		const payload = {
 			page: 1,
 			per_page: 5,
-			categories: categories ?? [APP_CONFIG_TIN_TUC_WP_CATEGORY],
+			categories: category ? [category] : [APP_CONFIG_TIN_TUC_WP_CATEGORY],
 		};
 
 		try {
@@ -30,16 +30,12 @@ export default () => {
 		}
 	};
 
-	const getModel = async (
-		paramPage?: number,
-		paramLimit?: number,
-		categories?: number[],
-	): Promise<TinTucWP.IRecord[]> => {
+	const getModel = async (paramPage?: number, paramLimit?: number, category?: number): Promise<TinTucWP.IRecord[]> => {
 		setLoading(true);
 		const payload = {
 			page: paramPage || page,
 			per_page: paramLimit || limit,
-			categories: categories ?? [APP_CONFIG_TIN_TUC_WP_CATEGORY],
+			categories: category ? [category] : [APP_CONFIG_TIN_TUC_WP_CATEGORY],
 		};
 
 		try {

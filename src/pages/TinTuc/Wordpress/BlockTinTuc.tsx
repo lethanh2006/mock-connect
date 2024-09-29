@@ -5,7 +5,7 @@ import { first } from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
-import { CardTinTuc, ContentLargeCard } from './TinTuc.style';
+import { CardTinTuc, ContentLargeCard } from '../TinTuc.style';
 import { Excerpt } from './components/Excerpt';
 import { Title } from './components/Title';
 import { getImageSrc } from './utils/getImageSrc';
@@ -90,9 +90,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 								<Excerpt data={first(danhSach)} rows={2} style={{ color: '#364954', marginBottom: 0 }} />
 								<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 									{danhSach?.[0]?.date && (
-										<span className='thoi-gian'>
-											Ngày đăng: {moment(danhSach?.[0]?.date).format('DD/MM/YYYY HH:mm')}
-										</span>
+										<span className='thoi-gian'>{moment(danhSach?.[0]?.date).format('DD/MM/YYYY')}</span>
 									)}
 									{danhSachXemSau?.find((item) => Number(item?.sourceId) === danhSach?.[0]?.id)?._id ? (
 										<ButtonExtend
@@ -112,6 +110,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 												event.stopPropagation();
 												handleXemSau(danhSach?.[0]);
 											}}
+											tooltip='Lưu xem sau'
 										>
 											Lưu
 										</ButtonExtend>
@@ -159,9 +158,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 											</Tooltip>
 											<Excerpt data={tintuc} rows={2} style={{ color: '#364954', marginBottom: 0 }} />
 											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-												{tintuc.date && (
-													<span className='thoi-gian'>Ngày đăng: {moment(tintuc.date).format('DD/MM/YYYY HH:mm')}</span>
-												)}
+												{tintuc.date && <span className='thoi-gian'>{moment(tintuc.date).format('DD/MM/YYYY')}</span>}
 												{danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id)?._id ? (
 													<ButtonExtend
 														type='link'
@@ -180,6 +177,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 															event.stopPropagation();
 															handleXemSau(tintuc);
 														}}
+														tooltip='Lưu xem sau'
 													>
 														Lưu
 													</ButtonExtend>
@@ -232,9 +230,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 											/>
 										</Tooltip>
 										<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-											{tintuc?.date && (
-												<span className='thoi-gian'>Ngày đăng: {moment(tintuc?.date).format('DD/MM/YYYY HH:mm')}</span>
-											)}
+											{tintuc?.date && <span className='thoi-gian'>{moment(tintuc?.date).format('DD/MM/YYYY')}</span>}
 											{danhSachXemSau?.find((item) => Number(item?.sourceId) === tintuc?.id)?._id ? (
 												<ButtonExtend
 													type='link'
@@ -253,6 +249,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 														event.stopPropagation();
 														handleXemSau(tintuc);
 													}}
+													tooltip='Lưu xem sau'
 												>
 													Lưu
 												</ButtonExtend>
