@@ -9,11 +9,11 @@ import { Title } from './components/Title';
 import './styles.less';
 import { getImageSrc } from './utils/getImageSrc';
 
-const TinTucWpDashboard = () => {
+const TinTucWpDashboard = (props: { categories?: number[] }) => {
 	const { danhSach: danhSachTinTuc, getDashboardModel, loading } = useModel('tintuc.tintucwp');
 
 	useEffect(() => {
-		getDashboardModel();
+		getDashboardModel(props.categories);
 	}, []);
 
 	return (
