@@ -178,7 +178,7 @@ const LichDashboard = () => {
 					</div>
 				}
 			>
-				<div style={{ maxHeight: 400, overflowY: 'auto' }}>{renderContent()}</div>
+				<div style={{ maxHeight: 450, overflowY: 'auto' }}>{renderContent()}</div>
 			</Card>
 
 			<Modal

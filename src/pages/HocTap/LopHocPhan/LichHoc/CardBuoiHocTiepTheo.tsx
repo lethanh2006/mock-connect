@@ -92,12 +92,6 @@ const CardBuoiHocTiepTheo = () => {
 							{renderBuoihoc(buoiHocHienTai)}
 						</Card>
 					</Col>
-				) : buoiHocTruoc ? (
-					<Col span={24} sm={12} md={24}>
-						<Card size='small' title='Buổi học đã qua' loading={loading}>
-							{renderBuoihoc(buoiHocTruoc, true)}
-						</Card>
-					</Col>
 				) : null}
 
 				<Col span={24} sm={12} md={24}>
@@ -114,6 +108,7 @@ const CardBuoiHocTiepTheo = () => {
 							/>,
 						]}
 						loading={loading}
+						className='card-highlight'
 					>
 						{buoiHocTiepTheo?._id ? (
 							renderBuoihoc(buoiHocTiepTheo)
@@ -122,6 +117,14 @@ const CardBuoiHocTiepTheo = () => {
 						)}
 					</Card>
 				</Col>
+
+				{buoiHocTruoc ? (
+					<Col span={24} sm={12} md={24}>
+						<Card size='small' title='Buổi học đã qua' loading={loading}>
+							{renderBuoihoc(buoiHocTruoc, true)}
+						</Card>
+					</Col>
+				) : null}
 			</Row>
 
 			<ModalThoiKhoaBieu />
