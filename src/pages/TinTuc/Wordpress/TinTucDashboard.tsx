@@ -4,8 +4,8 @@ import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { Link, history, useModel } from 'umi';
-import '../styles.less';
-import { CardTinTuc } from '../TinTuc.style';
+import '../components/styles.less';
+import { CardTinTuc } from '../components/TinTuc.style';
 import { Title } from './components/Title';
 import { getImageSrc } from './utils/getImageSrc';
 

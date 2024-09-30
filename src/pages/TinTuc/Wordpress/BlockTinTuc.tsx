@@ -5,12 +5,13 @@ import { first } from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
-import { CardTinTuc, ContentLargeCard } from '../TinTuc.style';
 import { Excerpt } from './components/Excerpt';
 import { Title } from './components/Title';
 import { getImageSrc } from './utils/getImageSrc';
+import { CardTinTuc, ContentLargeCard } from '../components/TinTuc.style';
 
 const BlockTinTuc = (props: { empty?: string }) => {
+	const { record: recChuDe } = useModel('tintuc.chude');
 	const { danhSach } = useModel('tintuc.tintucwp');
 	const { postModel, getAllModel, danhSach: danhSachXemSau, deleteModel } = useModel('xemsau');
 	const { getThongTinCuaToiModel, record } = useModel('sinhvien.sinhvien');
@@ -61,7 +62,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 							onClick={() => {
 								history.push({
 									pathname: url + '/chi-tiet',
-									query: { id: danhSach?.[0]?.id as any },
+									query: { idWordPess: danhSach?.[0]?.id as any, idChuDe: recChuDe?._id as any },
 								});
 							}}
 							first={true}
@@ -128,7 +129,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 									onClick={() => {
 										history.push({
 											pathname: url + '/chi-tiet',
-											query: { id: tintuc?.id as any },
+											query: { idWordPess: tintuc?.id as any, idChuDe: recChuDe?._id as any },
 										});
 									}}
 									style={{ height: '33.33%' }}
@@ -199,7 +200,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 								onClick={() => {
 									history.push({
 										pathname: url + '/chi-tiet',
-										query: { id: tintuc?.id as any },
+										query: { idWordPess: tintuc?.id as any, idChuDe: recChuDe?._id as any },
 									});
 								}}
 							>
