@@ -8,6 +8,7 @@ import type {
 	ETrangThaiPhieuQuyDoiDiem,
 	ETrinhDoMinhChungQuyDoiDiem,
 } from '../constant';
+import type { ELoaiDiemChu } from '../LopHocPhan/constant';
 
 declare module QuyDoiDiem {
 	export interface DotQuyDoiDiem {
@@ -61,7 +62,7 @@ declare module QuyDoiDiem {
 		// Kết quả quy đổi
 		diemHe10: number;
 		diemHe4: number;
-		diemChu: string;
+		diemChu: ELoaiDiemChu;
 		trangThai: ETrangThaiHocPhanQuyDoi;
 		khuyenNghi: string[];
 

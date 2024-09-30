@@ -9,7 +9,7 @@ import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
 import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
-import CardThongBao from './ThongBao/CardThongBao';
+import CardThongBao from '../../ThongBao/ThongBaoLop/CardThongBao';
 import CardGiangVienLop from './components/CardGiangVien';
 import ThongTinChung from './components/ThongTinChung';
 
@@ -86,7 +86,11 @@ const DetailLopTinChi = ({
 								<CardGiangVienLop danhSachNhanSu={danhSachNhanSu} title='Giảng viên lớp học' loading={loading} />
 							</Col>
 							<Col span={24}>
-								<CardThongBao />
+								<CardThongBao
+									loai='lop-hoc-phan'
+									idLop={record?._id}
+									onShowAll={() => (window.location.hash = 'thong-bao')}
+								/>
 							</Col>
 						</Row>
 					</Col>
