@@ -11,11 +11,13 @@ const mapFieldLoaiSuKien: Partial<Record<ELoaiSuKien, string>> = {
 	[ELoaiSuKien.CHUNG]: 'lichChung',
 };
 
-const ModalSettingMauLich = (props: any) => {
-	const { getData } = props;
-	const { formSubmiting, visibleForm, setVisibleForm, record, putModel, postModel } = useModel('settinglich');
+const ModalSettingMauLich = () => {
+	const { formSubmiting, visibleForm, setVisibleForm, record, putModel, postModel, getSettingLich } =
+		useModel('settinglich');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
+
+	const getData = () => getSettingLich();
 
 	useEffect(() => {
 		const mapValue = Object.values(ELoaiSuKien)

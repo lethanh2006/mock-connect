@@ -1,11 +1,12 @@
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Badge, Card, Empty, Modal, Space, Typography } from 'antd';
+import { Badge, Card, Col, Empty, Modal, Row, Space, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 import FormLichCaNhan from '../components/FormLichCaNhan';
+import GhiChuLich from '../components/GhiChuLich';
 import ModalViewDetailCalendar from '../components/ModalViewDetail';
 import styles from './styles.less';
 
@@ -37,14 +38,10 @@ const LichDashboard = () => {
 	const { visibleForm, setVisibleForm, getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
-	const { record: recSetting, getSettingLich } = useModel('settinglich');
+	const { record: recSetting } = useModel('settinglich');
 	const [dataCalendar, setDataCalendar] = useState<State>({});
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
-
-	useEffect(() => {
-		getSettingLich();
-	}, []);
 
 	//#region Get Data
 	const getThoiKhoaBieu = async () => {
@@ -178,7 +175,16 @@ const LichDashboard = () => {
 					</div>
 				}
 			>
-				<div style={{ maxHeight: 400, overflowY: 'auto' }}>{renderContent()}</div>
+				<Row gutter={[12, 12]}>
+					<Col span={24}>
+						<div style={{ maxHeight: 450, overflowY: 'auto' }}>{renderContent()}</div>
+					</Col>
+					<Col span={24}>
+						<Col span={24}>
+							<GhiChuLich />
+						</Col>
+					</Col>
+				</Row>
 			</Card>
 
 			<Modal

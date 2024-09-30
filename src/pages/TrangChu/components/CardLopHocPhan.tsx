@@ -27,7 +27,7 @@ const CardLopHocPhan = () => {
 			extra={
 				<Dropdown
 					overlay={
-						<Menu style={{ maxHeight: 300, overflowY: 'auto' }}>
+						<Menu style={{ maxHeight: 250, overflowY: 'auto' }}>
 							{danhSach.map((item) => (
 								<Menu.Item onClick={() => setRecord(item)} key={item._id}>
 									{item.ten}
@@ -49,13 +49,7 @@ const CardLopHocPhan = () => {
 				</Dropdown>
 			}
 		>
-			<div
-				id='scrollableDiv'
-				style={{
-					maxHeight: 350,
-					overflow: 'auto',
-				}}
-			>
+			<div id='scrollableDiv' style={{ maxHeight: 250, overflow: 'auto' }}>
 				<List
 					itemLayout='horizontal'
 					className='dashboard-list-lhp'

@@ -8,14 +8,14 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
-const CardThongBao = () => {
+const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: string; onShowAll?: () => void }) => {
 	const { danhSach, getThongBaoLopModel, setRecord, record } = useModel('thongbao.thongbaolop');
-	const { record: recLopHp } = useModel('lophocphan.lophocphan');
 	const [visibleThongBao, setVisibleThongBao] = useState<boolean>(false);
+	const { loai, idLop, onShowAll } = props;
 
 	useEffect(() => {
-		if (recLopHp?._id) getThongBaoLopModel(recLopHp._id, 'lop-hoc-phan', 1, 5);
-	}, [recLopHp?._id]);
+		if (idLop) getThongBaoLopModel(idLop, loai, 1, 5);
+	}, [idLop]);
 
 	return (
 		<Card
@@ -25,7 +25,7 @@ const CardThongBao = () => {
 			extra={[
 				<ButtonExtend
 					key='all'
-					onClick={() => (window.location.hash = 'thong-bao')}
+					onClick={() => onShowAll && onShowAll()}
 					type='link'
 					icon={<ArrowRightOutlined />}
 					tooltip='Xem tất cả'

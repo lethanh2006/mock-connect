@@ -142,14 +142,20 @@
 				],
 			},
 			{
-				name: 'XetHocVu',
-				path: './xet-hoc-vu',
-				component: './HocTap/XetHocVu',
-			},
-			{
-				name: 'QuyetDinh',
-				path: './quyet-dinh-bao-luu-thoi-hoc',
-				component: './HocTap/BaoLuuThoiHoc',
+				name: 'HocTapKhac',
+				path: './khac',
+				routes: [
+					{
+						name: 'XetHocVu',
+						path: './xet-hoc-vu',
+						component: './HocTap/XetHocVu',
+					},
+					{
+						name: 'QuyetDinh',
+						path: './bao-luu-thoi-hoc',
+						component: './HocTap/BaoLuuThoiHoc',
+					},
+				],
 			},
 		],
 	},

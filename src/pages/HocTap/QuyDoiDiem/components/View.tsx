@@ -1,5 +1,5 @@
 import { colorTrangThaiSinhVienQuyDoiDiem, type ETrangThaiPhieuQuyDoiDiem } from '@/services/HocTap/constant';
-import { Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
+import { Button, Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
 import { useModel } from 'umi';
 import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
 import moment from 'moment';
@@ -56,6 +56,10 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 					<FormItemHocPhanQuyDoi />
 				</Col>
 			</Row>
+
+			<div className='form-footer'>
+				<Button onClick={() => setVisible(false)}>Đóng</Button>
+			</div>
 		</Modal>
 	);
 };
