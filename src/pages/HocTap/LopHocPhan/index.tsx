@@ -5,6 +5,7 @@ import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { history, useModel } from 'umi';
 import RenderLichHoc from '../DangKyTinChi/components/RenderLichHoc';
+import ExpandText from '@/components/ExpandText';
 
 const LopHocPhanPage = () => {
 	const { page, limit, sinhVienGetModel } = useModel('lophocphan.lophocphan');
@@ -43,6 +44,19 @@ const LopHocPhanPage = () => {
 			align: 'center',
 			width: 60,
 			onCell,
+		},
+		{
+			title: 'Giảng viên',
+			width: 160,
+			render: (val, rec) => (
+				<ExpandText>
+					{rec.nhanSuList
+						?.map((item) =>
+							item.nhanSu?.ten ? `${item.nhanSu?.hoDem ?? ''} ${item.nhanSu?.ten ?? ''}` : item.tenNhanSu,
+						)
+						.join(', ')}
+				</ExpandText>
+			),
 		},
 		{
 			title: 'Lịch học',
