@@ -77,7 +77,7 @@ const DangKyTinChiPage = () => {
 
 			<PhieuDangKy />
 
-			{/* <div className='huong-dan'>
+			<div className='huong-dan'>
 				<div className='title-huong-dan'>
 					<i>Xem video hướng dẫn đăng ký tín chỉ</i>
 				</div>
@@ -86,7 +86,7 @@ const DangKyTinChiPage = () => {
 					className='pulse'
 					onClick={() => window.open('https://www.youtube.com/watch?v=2xghlws7tAk&t=2s')}
 				/>
-			</div> */}
+			</div>
 		</Card>
 	);
 };
