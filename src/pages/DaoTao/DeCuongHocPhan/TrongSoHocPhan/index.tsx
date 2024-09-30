@@ -7,6 +7,15 @@ import { useModel } from 'umi';
 const TrongSoHocPhanPage = () => {
 	const { danhSach, getModel } = useModel('daotao.daudiemhocphan');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
+	const thongTinTrongSo = recDeCuong?.thongTinTrongSo ?? [];
+	if (!thongTinTrongSo.length) {
+		for (let i = 1; i <= danhSach.length; i++) {
+			if (recDeCuong?.[`trongSo${i}` as keyof HocPhan.IDeCuongHocPhan])
+				thongTinTrongSo.push({
+					trongSo: recDeCuong?.[`trongSo${i}` as keyof HocPhan.IDeCuongHocPhan] as number,
+				});
+		}
+	}
 
 	const ts = danhSach.map((i) => (recDeCuong?.[('trongSo' + i.field) as keyof HocPhan.IDeCuongHocPhan] as number) ?? 0);
 	const sum = _.sum(ts);
@@ -17,11 +26,11 @@ const TrongSoHocPhanPage = () => {
 
 	return (
 		<Descriptions title='Trọng số học phần' bordered column={1}>
-			{recDeCuong?.thongTinTrongSo?.length
-				? recDeCuong?.thongTinTrongSo?.map((item, index) => (
+			{thongTinTrongSo?.length
+				? thongTinTrongSo?.map((item, index) => (
 						// eslint-disable-next-line react/no-array-index-key
 						<Descriptions.Item label={danhSach[index]?.ten} key={index}>
-							{item?.trongSo}%.
+							Trọng số: <b>{item?.trongSo}%</b>
 							<br />
 							Hình thức đánh giá: {item?.hinhThucDanhGia ?? '--'}
 							<br />
@@ -31,7 +40,7 @@ const TrongSoHocPhanPage = () => {
 				: null}
 
 			<Descriptions.Item key={'2'} label='Điểm thi KTHP'>
-				{100 - sum}%
+				Trọng số: <b>{100 - sum}%</b>
 			</Descriptions.Item>
 		</Descriptions>
 	);
