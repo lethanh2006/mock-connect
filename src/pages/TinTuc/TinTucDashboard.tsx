@@ -5,9 +5,9 @@ import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { Link, history, useModel } from 'umi';
-import { renderParagraph } from './BlockTinTuc';
-import { CardTinTuc } from './TinTuc.style';
-import './styles.less';
+import './components/styles.less';
+import { CardTinTuc } from './components/TinTuc.style';
+import { renderParagraph } from './Slink/BlockTinTuc';
 
 const TinTucDashboard = () => {
 	const { danhSach, getModel, loading } = useModel('tintuc.tintuc');

@@ -1,17 +1,10 @@
-import { Card, Pagination, Spin } from 'antd';
-import queryString from 'query-string';
-import { useEffect } from 'react';
+import { Pagination, Spin } from 'antd';
 import { useModel } from 'umi';
-import '../styles.less';
+import '../components/styles.less';
 import BlockTinTuc from './BlockTinTuc';
 
 const TinTucWpPage = () => {
-	const { loading, page, limit, total, setPage, setLimit, getModel } = useModel('tintuc.tintucwp');
-	const { category } = queryString.parse(location.search);
-
-	useEffect(() => {
-		getModel(page, limit, category ? +category : undefined);
-	}, [page, limit, category]);
+	const { loading, page, limit, total, setPage, setLimit } = useModel('tintuc.tintucwp');
 
 	const onChangePaging = (p: number, size: number) => {
 		setPage(p);
@@ -19,21 +12,19 @@ const TinTucWpPage = () => {
 	};
 
 	return (
-		<Card title='Tin tức'>
-			<Spin spinning={loading}>
-				<BlockTinTuc />
+		<Spin spinning={loading}>
+			<BlockTinTuc />
 
-				<Pagination
-					onChange={onChangePaging}
-					defaultPageSize={22}
-					current={page}
-					pageSize={limit}
-					total={total}
-					pageSizeOptions={[10, 22, 34]}
-					style={{ textAlign: 'right' }}
-				/>
-			</Spin>
-		</Card>
+			<Pagination
+				onChange={onChangePaging}
+				defaultPageSize={22}
+				current={page}
+				pageSize={limit}
+				total={total}
+				pageSizeOptions={[10, 22, 34]}
+				style={{ textAlign: 'right' }}
+			/>
+		</Spin>
 	);
 };
 

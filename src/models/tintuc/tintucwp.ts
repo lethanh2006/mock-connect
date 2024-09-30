@@ -10,7 +10,7 @@ export default () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [total, setTotal] = useState<number>(0);
 
-	const getDashboardModel = async (category?: number): Promise<TinTucWP.IRecord[]> => {
+	const getDashboardModel = async (category?: number, ipNewsWP?: string): Promise<TinTucWP.IRecord[]> => {
 		setLoading(true);
 		const payload = {
 			page: 1,
@@ -19,7 +19,7 @@ export default () => {
 		};
 
 		try {
-			const response = await getMultiTinTucWP(payload);
+			const response = await getMultiTinTucWP(ipNewsWP ? ipNewsWP : APP_CONFIG_URL_LANDING, payload);
 			if (setDanhSach) setDanhSach(response?.data ?? []);
 
 			return response?.data;
@@ -30,7 +30,12 @@ export default () => {
 		}
 	};
 
-	const getModel = async (paramPage?: number, paramLimit?: number, category?: number): Promise<TinTucWP.IRecord[]> => {
+	const getModel = async (
+		paramPage?: number,
+		paramLimit?: number,
+		category?: number,
+		ipNewsWP?: string,
+	): Promise<TinTucWP.IRecord[]> => {
 		setLoading(true);
 		const payload = {
 			page: paramPage || page,
@@ -39,7 +44,7 @@ export default () => {
 		};
 
 		try {
-			const response = await getTinTucWP(payload);
+			const response = await getTinTucWP(ipNewsWP ? ipNewsWP : APP_CONFIG_URL_LANDING, payload);
 			const totalPosts = response.headers?.['x-wp-total'];
 			if (setDanhSach) setDanhSach(response?.data ?? []);
 			setTotal(totalPosts ?? 0);
@@ -52,11 +57,11 @@ export default () => {
 		}
 	};
 
-	const getByIdModel = async (id: string, isSetRecord?: boolean): Promise<TinTucWP.IRecord> => {
+	const getByIdModel = async (id: string, isSetRecord?: boolean, ipNewsWP?: string): Promise<TinTucWP.IRecord> => {
 		if (!id) return Promise.reject();
 		setLoading(true);
 		try {
-			const response = await getTinTucChiTietWP({ id });
+			const response = await getTinTucChiTietWP(ipNewsWP ? ipNewsWP : APP_CONFIG_URL_LANDING, { id });
 			if (isSetRecord !== false) setRecord(response?.data ?? null);
 			return response?.data;
 		} catch (er) {

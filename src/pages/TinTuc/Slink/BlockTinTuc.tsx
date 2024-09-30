@@ -2,7 +2,7 @@ import anh from '@/assets/noimg.png';
 import { Col, Empty, Row, Tooltip, Typography } from 'antd';
 import moment from 'moment';
 import { history, useModel } from 'umi';
-import { CardTinTuc, ContentLargeCard } from './TinTuc.style';
+import { CardTinTuc, ContentLargeCard } from '../components/TinTuc.style';
 
 export const renderParagraph = (text: string, rows: number, style: any) => (
 	<Typography.Paragraph ellipsis={{ rows, expandable: false }} style={style}>
@@ -32,7 +32,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 							onClick={() => {
 								history.push({
 									pathname: url + '/chi-tiet',
-									query: { id: danhSach?.[0]?._id },
+									query: { idSlink: danhSach?.[0]?._id },
 								});
 							}}
 							first={true}
@@ -60,7 +60,9 @@ const BlockTinTuc = (props: { empty?: string }) => {
 								</Tooltip>
 								{renderParagraph(danhSach?.[0]?.moTa, 2, { color: '#364954' })}
 								{danhSach?.[0]?.ngayDang && (
-									<span className='thoi-gian'>{moment(danhSach?.[0]?.ngayDang).format('DD/MM/YYYY')}</span>
+									<span className='thoi-gian'>
+										{moment(danhSach?.[0]?.ngayDang).format('DD/MM/YYYY')} - {danhSach?.[0]?.chuDe?.name}
+									</span>
 								)}
 							</ContentLargeCard>
 						</CardTinTuc>
@@ -74,7 +76,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 									onClick={() => {
 										history.push({
 											pathname: url + '/chi-tiet',
-											query: { id: tintuc?._id },
+											query: { idSlink: tintuc?._id },
 										});
 									}}
 									style={{ height: '33.33%' }}
@@ -104,7 +106,9 @@ const BlockTinTuc = (props: { empty?: string }) => {
 											</Tooltip>
 											{renderParagraph(tintuc?.moTa, 2, { color: '#364954', marginBottom: 0 })}
 											{tintuc.ngayDang && (
-												<span className='thoi-gian'>{moment(tintuc.ngayDang).format('DD/MM/YYYY')}</span>
+												<span className='thoi-gian'>
+													{moment(tintuc.ngayDang).format('DD/MM/YYYY')} - {tintuc?.chuDe?.name}
+												</span>
 											)}
 										</Col>
 									</Row>
@@ -122,7 +126,7 @@ const BlockTinTuc = (props: { empty?: string }) => {
 								onClick={() => {
 									history.push({
 										pathname: url + '/chi-tiet',
-										query: { id: tintuc?._id },
+										query: { idSlink: tintuc?._id },
 									});
 								}}
 							>
@@ -148,7 +152,9 @@ const BlockTinTuc = (props: { empty?: string }) => {
 											})}
 										</Tooltip>
 										{tintuc?.ngayDang && (
-											<span className='thoi-gian'>{moment(tintuc?.ngayDang).format('DD/MM/YYYY')}</span>
+											<span className='thoi-gian'>
+												{moment(tintuc?.ngayDang).format('DD/MM/YYYY')} - {tintuc?.chuDe?.name}
+											</span>
 										)}
 									</Col>
 								</Row>
