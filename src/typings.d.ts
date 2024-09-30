@@ -61,5 +61,4 @@ declare const APP_CONFIG_TITLE_THU_VIEN: string;
 declare const APP_CONFIG_TITLE_QLVB: string;
 
 declare const APP_CONFIG_MOODLE_ENDPOINT: string;
-declare const APP_CONFIG_TIN_TUC_WP: string;
 declare const APP_CONFIG_TIN_TUC_WP_CATEGORY: number;
