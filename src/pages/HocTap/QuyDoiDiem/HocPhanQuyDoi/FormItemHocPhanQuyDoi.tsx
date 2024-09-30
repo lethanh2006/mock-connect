@@ -1,5 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import { ColorDiemChu, type ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import {
 	EMinhChungQuyDoiDiem,
@@ -58,7 +59,14 @@ const FormItemHocPhanQuyDoi = () => {
 			dataIndex: 'diemChu',
 			align: 'center',
 			width: 120,
-			render: (val, rec) => (val ? `${rec.diemHe10 ?? ''} - ${rec.diemHe4 ?? ''} - ${val}` : <i>Chưa có điểm</i>),
+			render: (val: ELoaiDiemChu, rec) =>
+				val ? (
+					<>
+						{rec.diemHe10 ?? ''} - {rec.diemHe4 ?? ''} - <b style={{ color: ColorDiemChu[val] }}>{val}</b>
+					</>
+				) : (
+					<i>Chưa có điểm</i>
+				),
 			onCell,
 		},
 		{
