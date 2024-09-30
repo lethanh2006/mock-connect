@@ -1,3 +1,4 @@
+import { ColorDiemChu, type ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { EMinhChungQuyDoiDiem, colorTrangThaiHocPhanQuyDoi } from '@/services/HocTap/constant';
 import { Button, Descriptions, Row, Space, Tag } from 'antd';
@@ -12,7 +13,7 @@ const FormHocPhanQuyDoiDiem = () => {
 		if (!visibleForm) setRecord({} as QuyDoiDiem.IQuyDoiDiemSinhVien);
 	}, [visibleForm]);
 
-	const renderDiem = (he10?: number, he4?: number, diemChu?: string) => (
+	const renderDiem = (he10?: number, he4?: number, diemChu?: ELoaiDiemChu) => (
 		<Space wrap>
 			{he10 ? (
 				<span>
@@ -25,11 +26,10 @@ const FormHocPhanQuyDoiDiem = () => {
 				</span>
 			) : null}
 			<span>
-				Điểm chữ: <b>{diemChu}</b>
+				Điểm chữ: <b style={diemChu ? { color: ColorDiemChu[diemChu] } : undefined}>{diemChu}</b>
 			</span>
 		</Space>
 	);
-
 	return (
 		<>
 			<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
@@ -83,7 +83,7 @@ const FormHocPhanQuyDoiDiem = () => {
 			</Row>
 
 			<div className='form-footer'>
-				<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+				<Button onClick={() => setVisibleForm(false)}>Đóng</Button>
 			</div>
 		</>
 	);

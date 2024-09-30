@@ -1,6 +1,7 @@
 import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
+import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import {
 	colorTrangThaiHocPhanQuyDoi,
@@ -47,7 +48,8 @@ const LichSuQuyDoiDiemPage = () => {
 				<ExpandText>
 					{rec.danhSachHocPhan?.map((item) => (
 						<>
-							- {item.hocPhan?.ten} - {item.diemChu ?? 'Chưa có điểm'} -{' '}
+							- {item.hocPhan?.ten} -{' '}
+							{item.diemChu ? <b style={{ color: ColorDiemChu[item.diemChu] }}>{item.diemChu}</b> : 'Chưa có điểm'} -{' '}
 							<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i>
 							{item?.khuyenNghi?.length ? (
 								<>
@@ -74,17 +76,13 @@ const LichSuQuyDoiDiemPage = () => {
 			dataIndex: 'soQuyetDinhId',
 			width: 100,
 			align: 'center',
-			render: (val, rec) => rec.quyetDinh?.soQuyetDinh,
-			onCell,
-		},
-		{
-			title: 'Ngày BH',
-			dataIndex: 'thoiGianBanHanh',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => val && moment(val).format('DD/MM/YYYY'),
-			filterType: 'date',
-			sortable: true,
+			render: (val, rec) =>
+				val && (
+					<>
+						{rec.quyetDinh?.soQuyetDinh ?? ''},{' '}
+						{rec.quyetDinh?.ngayBanHanh ? moment(rec.quyetDinh.ngayBanHanh).format('DD/MM/YYYY') : ''}
+					</>
+				),
 			onCell,
 		},
 	];
