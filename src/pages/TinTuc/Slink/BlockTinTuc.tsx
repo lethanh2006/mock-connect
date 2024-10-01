@@ -24,7 +24,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 	const handleXemSau = (rec: any) => {
 		const data = {
 			userSsoId: recSinhVien?.ssoId,
-			sourceId: String(rec?.id),
+			sourceId: String(rec?._id),
 			loaiThongTin: ELoaiThongTinXemSau.TIN_TUC,
 			thongTin: rec,
 		};
