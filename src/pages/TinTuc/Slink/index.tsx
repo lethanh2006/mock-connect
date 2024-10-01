@@ -1,17 +1,10 @@
 import { Pagination, Spin } from 'antd';
-import { useEffect } from 'react';
 import { useModel } from 'umi';
 import BlockTinTuc from './BlockTinTuc';
 
 const TinTucSlinkPage = (props: any) => {
 	const { getData } = props;
-	const { record: recChuDe } = useModel('tintuc.chude');
-
-	const { loading, page, limit, total, setPage, setLimit, getModel } = useModel('tintuc.tintuc');
-
-	useEffect(() => {
-		getModel({ idTopic: recChuDe?._id });
-	}, [page, limit, recChuDe?._id]);
+	const { loading, page, limit, total, setPage, setLimit } = useModel('tintuc.tintuc');
 
 	const onChangePaging = (p: number, size: number) => {
 		setPage(p);
