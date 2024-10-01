@@ -1,10 +1,10 @@
 import { type ELoaiHocPhanDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import type { DiemHocPhan } from '@/services/DaoTao/DiemHocPhan/typing';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
-import type { EDoiTuongLopHanhChinh, ETrangThaiThi } from '../constant';
+import type { ETrangThaiThi } from '../constant';
 import {
 	type ELoaiDiemChu,
 	type ELoaiLopHocPhan,
@@ -127,9 +127,16 @@ export declare module LopHocPhan {
 		khoaDiemThi: boolean; // Khóa điểm thi
 		public: boolean;
 
-		maKhoaNganh: string;
-		khoaNganh?: KhoaNganh.IRecord;
+		/** Khi get all điểm hphk của sinh viên */
+		infoKhoaNganh?: Record<string, TInfoKhoaNganh>; // `maKhoaNganh` 7380101_7_1_2022: { ... }
+
+		// maKhoaNganh: string;
+		// khoaNganh?: KhoaNganh.IRecord;
 	}
+
+	type TInfoKhoaNganh = Pick<DiemHocPhan.IDiemSinhVien, 'maHocKyDat' | 'maHocKyCaiThien' | 'soLanHoc' | 'trongCtdt'> & {
+		maHocPhanQuyDoi?: string;
+	};
 
 	export interface IDiemThanhPhan {
 		diemThanhPhan1?: number;
