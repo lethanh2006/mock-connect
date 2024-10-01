@@ -42,6 +42,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 	const changeMenu = (k: string) => {
 		setChuDe(danhSachChuDe.find((item) => item._id === k));
 		window.location.hash = '#' + k;
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 		setPage(1);
 	};
 
