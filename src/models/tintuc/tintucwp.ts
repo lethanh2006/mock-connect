@@ -15,7 +15,7 @@ export default () => {
 		const payload = {
 			page: 1,
 			per_page: 5,
-			categories: categories?.length ? categories : [APP_CONFIG_TIN_TUC_WP_CATEGORY],
+			categories: categories?.length ? categories : [],
 		};
 
 		try {
@@ -40,7 +40,7 @@ export default () => {
 		const payload = {
 			page: paramPage || page,
 			per_page: paramLimit || limit,
-			categories: categories?.length ? categories : [APP_CONFIG_TIN_TUC_WP_CATEGORY],
+			categories: categories?.length ? categories : [],
 		};
 
 		try {

@@ -2,7 +2,7 @@ import { CommonTopicType } from '@/services/TinTuc/constant';
 import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
 import { ellipse } from '@/utils/utils';
 import { Card, Empty, Tabs, Tooltip } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import './components/styles.less';
 import TinTucSlinkPage from './Slink';
@@ -14,16 +14,20 @@ const TinTucPage = () => {
 		danhSach: danhSachChuDe,
 		setRecord: setChuDe,
 		record: recChuDe,
-		tabActive,
-		setTabActive,
 	} = useModel('tintuc.chude');
 	const { setPage } = useModel('tintuc.tintuc');
 	const { setPage: setPageWP } = useModel('tintuc.tintucwp');
 	const { getAllModel } = useModel('xemsau');
 	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const hash = window.location.hash.slice(1, 25);
+	const [tabActive, setTabActive] = useState<string>('all');
 
 	const isWp = recChuDe?.isTinTucWP || (tabActive === 'all' && danhSachChuDe?.find((item) => item?.isTinTucWP));
+
+	useEffect(() => {
+		if (hash === '' || hash.includes('=')) setTabActive('all');
+		else setTabActive(hash);
+	}, [hash]);
 
 	//Xem sau
 	const getData = () => {
@@ -44,7 +48,6 @@ const TinTucPage = () => {
 	}, []);
 
 	const changeMenu = (k: string) => {
-		setTabActive(k);
 		setChuDe(danhSachChuDe.find((item) => item._id === k));
 		window.location.hash = '#' + k;
 		setPage(1);
@@ -55,7 +58,7 @@ const TinTucPage = () => {
 		<Card title='Tin tức' bodyStyle={{ paddingTop: 0 }}>
 			{danhSachChuDe && danhSachChuDe.length > 0 ? (
 				<>
-					<Tabs activeKey={tabActive} onChange={(val) => changeMenu(val)} style={{ overflow: 'inherit' }}>
+					<Tabs activeKey={tabActive} onChange={changeMenu} style={{ overflow: 'inherit' }}>
 						<Tabs.TabPane key={'all'} tab={<Tooltip title='Tất cả'>Tất cả</Tooltip>} />
 						{danhSachChuDe?.map((chuDe) => (
 							<Tabs.TabPane

@@ -13,7 +13,7 @@ export const renderParagraph = (text: string, rows: number, style: any) => (
 );
 
 const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
-	const { danhSach: danhSachChuDe, setRecord: setChuDe, setTabActive } = useModel('tintuc.chude');
+	const { danhSach: danhSachChuDe, setRecord: setChuDe } = useModel('tintuc.chude');
 	const { danhSach, setPage } = useModel('tintuc.tintuc');
 	const { postModel, danhSach: danhSachXemSau, deleteModel } = useModel('xemsau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
@@ -40,7 +40,6 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 	};
 
 	const changeMenu = (k: string) => {
-		setTabActive(k);
 		setChuDe(danhSachChuDe.find((item) => item._id === k));
 		window.location.hash = '#' + k;
 		window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -64,7 +63,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 							onClick={() => {
 								history.push({
 									pathname: url + '/chi-tiet',
-									query: { idSlink: danhSach?.[0]?._id },
+									query: { id: danhSach?.[0]?._id },
 								});
 							}}
 							first={true}
@@ -145,7 +144,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 									onClick={() => {
 										history.push({
 											pathname: url + '/chi-tiet',
-											query: { idSlink: tintuc?._id },
+											query: { id: tintuc?._id },
 										});
 									}}
 									style={{ height: '33.33%' }}
@@ -229,7 +228,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 								onClick={() => {
 									history.push({
 										pathname: url + '/chi-tiet',
-										query: { idSlink: tintuc?._id },
+										query: { id: tintuc?._id },
 									});
 								}}
 							>

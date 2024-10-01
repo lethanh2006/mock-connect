@@ -5,11 +5,10 @@ import { history, useModel } from 'umi';
 import '../components/styles.less';
 
 const ChiTietTinTucWpPage = () => {
-	const { record: recChuDe, setTabActive } = useModel('tintuc.chude');
+	const { record: recChuDe } = useModel('tintuc.chude');
 	const { loading, record, setPage } = useModel('tintuc.tintucwp');
 
 	const changeMenu = () => {
-		setTabActive(recChuDe?._id ?? '');
 		history.push(`/tin-tuc#${recChuDe?._id}`);
 		setPage(1);
 	};

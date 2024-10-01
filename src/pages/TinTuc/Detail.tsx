@@ -13,14 +13,14 @@ const ChiTietTinTucPage = () => {
 	const { getByIdModel: getIdTinTucSlink } = useModel('tintuc.tintuc');
 	const { location } = window;
 
-	const { idSlink, id, cat } = queryString.parse(location.search);
-	const isTinTucWP = !!id;
+	const { _id: idWordPess, id: idSlink, cat: idChuDe } = queryString.parse(location.search);
+	const isTinTucWP = !!idWordPess;
 
 	const fetchData = async () => {
 		if (isTinTucWP) {
-			getByIdModel(cat as string, true).then((res) => {
+			getByIdModel(idChuDe as string, true).then((res) => {
 				if (res) {
-					getIdTinTucWP(id as string, undefined, res?.linkWP).then((response) => {
+					getIdTinTucWP(idWordPess as string, undefined, res?.linkWP).then((response) => {
 						window.scrollTo({ top: 0, behavior: 'smooth' });
 					});
 				}
@@ -34,7 +34,7 @@ const ChiTietTinTucPage = () => {
 
 	useEffect(() => {
 		fetchData();
-	}, [idSlink, id]);
+	}, [idWordPess, idSlink]);
 
 	return (
 		<Card
