@@ -5,12 +5,10 @@ import { history, useModel } from 'umi';
 import '../components/styles.less';
 
 const ChiTietTinTucSlink = () => {
-	const { getByIdModel, setRecord: setChuDe } = useModel('tintuc.chude');
 	const { loading, record, setPage } = useModel('tintuc.tintuc');
 
-	const changeMenu = (k: string) => {
-		getByIdModel(k).then((res) => setChuDe(res));
-		history.push(`/tin-tuc#${k}`);
+	const changeMenu = () => {
+		history.push(`/tin-tuc#${record?.chuDe?._id}`);
 		setPage(1);
 	};
 
@@ -25,7 +23,7 @@ const ChiTietTinTucSlink = () => {
 							<Divider type='vertical' />
 							<UserOutlined /> {record?.nguoiDang?.hoTen}
 							<Divider type='vertical' />{' '}
-							<a type='link' onClick={() => changeMenu(record?.chuDe?._id ?? '')}>
+							<a type='link' onClick={() => changeMenu()}>
 								{record?.chuDe?.name}
 							</a>
 						</p>
