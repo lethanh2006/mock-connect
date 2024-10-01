@@ -3,44 +3,34 @@ import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
 import { Col, Empty, Row, Tooltip } from 'antd';
 import { first } from 'lodash';
 import moment from 'moment';
-import { useEffect } from 'react';
 import { history, useModel } from 'umi';
+import { CardTinTuc, ContentLargeCard } from '../components/TinTuc.style';
 import { Excerpt } from './components/Excerpt';
 import { Title } from './components/Title';
 import { getImageSrc } from './utils/getImageSrc';
-import { CardTinTuc, ContentLargeCard } from '../components/TinTuc.style';
 
-const BlockTinTuc = (props: { empty?: string }) => {
+const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 	const { record: recChuDe } = useModel('tintuc.chude');
 	const { danhSach } = useModel('tintuc.tintucwp');
-	const { postModel, getAllModel, danhSach: danhSachXemSau, deleteModel } = useModel('xemsau');
-	const { getThongTinCuaToiModel, record } = useModel('sinhvien.sinhvien');
+	const { postModel, danhSach: danhSachXemSau, deleteModel } = useModel('xemsau');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { empty } = props;
 	const url = 'tin-tuc';
 
-	const getData = () => {
-		getAllModel(undefined, undefined, { loaiThongTin: ELoaiThongTinXemSau.TIN_TUC }, undefined, 'me/many');
-	};
-
-	useEffect(() => {
-		getThongTinCuaToiModel();
-		getData();
-	}, []);
-
 	const handleXemSau = (rec: any) => {
 		const data = {
-			userSsoId: record?.ssoId,
+			userSsoId: recSinhVien?.ssoId,
 			sourceId: String(rec?.id),
 			loaiThongTin: ELoaiThongTinXemSau.TIN_TUC,
 			thongTin: rec,
 		};
-		postModel(data, getData, undefined, 'Lưu thành công')
+		postModel(data, props.getData, undefined, 'Lưu thành công')
 			.then()
 			.catch((err) => console.log(err));
 	};
 
 	const handleBoXemSau = (rec: any) => {
-		deleteModel(rec?._id, getData)
+		deleteModel(rec?._id, props.getData)
 			.then()
 			.catch((err) => console.log(err));
 	};

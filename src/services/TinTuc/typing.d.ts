@@ -33,7 +33,7 @@ declare module TinTuc {
 
 		isTinTucWP: boolean;
 		linkWP: string;
-		idCategoryWp: string;
+		idCategoryWp: number;
 	}
 }
 
