@@ -29,8 +29,9 @@ const TinTucDashboardSlink = () => {
 								onClick={() => {
 									history.push({
 										pathname: 'tin-tuc/chi-tiet',
-										query: { id: tintuc?._id },
+										query: { idSlink: danhSach?.[0]?._id },
 									});
+									window.scrollTo({ top: 0, behavior: 'smooth' });
 								}}
 							>
 								<Row gutter={12} style={{ height: '100%' }}>
