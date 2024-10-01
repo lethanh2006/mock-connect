@@ -63,7 +63,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 							onClick={() => {
 								history.push({
 									pathname: url + '/chi-tiet',
-									query: { idSlink: danhSach?.[0]?._id },
+									query: { id: danhSach?.[0]?._id },
 								});
 							}}
 							first={true}
@@ -144,7 +144,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 									onClick={() => {
 										history.push({
 											pathname: url + '/chi-tiet',
-											query: { idSlink: tintuc?._id },
+											query: { id: tintuc?._id },
 										});
 									}}
 									style={{ height: '33.33%' }}
@@ -228,7 +228,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 								onClick={() => {
 									history.push({
 										pathname: url + '/chi-tiet',
-										query: { idSlink: tintuc?._id },
+										query: { id: tintuc?._id },
 									});
 								}}
 							>

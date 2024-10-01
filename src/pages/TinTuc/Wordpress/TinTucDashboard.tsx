@@ -9,7 +9,8 @@ import { CardTinTuc } from '../components/TinTuc.style';
 import { Title } from './components/Title';
 import { getImageSrc } from './utils/getImageSrc';
 
-const TinTucDashboardWP = () => {
+const TinTucDashboardWP = (props: { category?: number }) => {
+	const { category } = props;
 	const { danhSach: danhSachChuDe } = useModel('tintuc.chude');
 	const { danhSach: danhSachTinTuc, getDashboardModel, loading } = useModel('tintuc.tintucwp');
 
@@ -17,10 +18,14 @@ const TinTucDashboardWP = () => {
 	const idCategory = danhSachChuDe?.filter((item) => item?.isTinTucWP)?.map((items) => items?.idCategoryWp);
 
 	useEffect(() => {
-		if (linkWp?.linkWP && idCategory?.length) {
-			getDashboardModel(idCategory, linkWp?.linkWP);
+		if (category) {
+			getDashboardModel([category], linkWp?.linkWP);
+		} else {
+			if (linkWp?.linkWP && idCategory?.length) {
+				getDashboardModel(idCategory, linkWp?.linkWP);
+			}
 		}
-	}, [linkWp?.linkWP, idCategory?.length]);
+	}, [linkWp?.linkWP, idCategory?.length, category]);
 
 	return (
 		<Spin spinning={loading}>
