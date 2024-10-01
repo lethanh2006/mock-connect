@@ -10,12 +10,12 @@ export default () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [total, setTotal] = useState<number>(0);
 
-	const getDashboardModel = async (category?: number, ipNewsWP?: string): Promise<TinTucWP.IRecord[]> => {
+	const getDashboardModel = async (categories?: number[], ipNewsWP?: string): Promise<TinTucWP.IRecord[]> => {
 		setLoading(true);
 		const payload = {
 			page: 1,
 			per_page: 5,
-			categories: category ? [category] : [APP_CONFIG_TIN_TUC_WP_CATEGORY],
+			categories: categories?.length ? categories : [APP_CONFIG_TIN_TUC_WP_CATEGORY],
 		};
 
 		try {
