@@ -4,7 +4,7 @@ import { type IColumn } from '@/components/Table/typing';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
 import { EyeOutlined } from '@ant-design/icons';
-import { Button, Tag, Select, Tooltip } from 'antd';
+import { Button, Segmented, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -13,7 +13,7 @@ import ModalDetailPhanhoi from './components/ModalDetail';
 
 const PhanHoiPage = () => {
 	const { setCondition, handleEdit, edit, getModel } = useModel('tienich.phanhoi');
-	const [daTraLoi, setDaTraLoi] = useState<boolean>();
+	const [daTraLoi, setDaTraLoi] = useState<string>('all');
 
 	const onCell = (rec: PhanHoi.IRecord) => ({
 		onClick: () => handleEdit(rec),
@@ -25,8 +25,7 @@ const PhanHoiPage = () => {
 			title: 'Nội dung phản hồi',
 			dataIndex: 'noiDungPhanHoi',
 			width: 250,
-			render: (val) => <ExpandText>{val}</ExpandText>,
-			sortable: true,
+			render: (val) => <ExpandText ellipsis={{ expandable: false }}>{val}</ExpandText>,
 			filterType: 'string',
 			onCell,
 		},
@@ -67,7 +66,7 @@ const PhanHoiPage = () => {
 		{
 			title: 'Trả lời',
 			dataIndex: 'noiDungTraLoiPhanHoi',
-			hide: daTraLoi === false,
+			hide: daTraLoi === 'chua',
 			width: 250,
 			render: (val) => <ExpandText>{val}</ExpandText>,
 			onCell,
@@ -75,7 +74,7 @@ const PhanHoiPage = () => {
 		{
 			title: 'Người trả lời',
 			dataIndex: 'maChuyenVien',
-			hide: daTraLoi === false,
+			hide: daTraLoi === 'chua',
 			width: 120,
 			onCell,
 		},
@@ -86,7 +85,7 @@ const PhanHoiPage = () => {
 			render: (val, rec) =>
 				rec.daTraLoiPhanHoi && val ? moment(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa trả lời</Tag>,
 			width: 120,
-			hide: daTraLoi === false,
+			hide: daTraLoi === 'chua',
 			sortable: true,
 			filterType: 'datetime',
 			onCell,
@@ -98,7 +97,7 @@ const PhanHoiPage = () => {
 			fixed: 'right',
 			render: (val, rec) => (
 				<>
-					<Tooltip title='Xem chi tiết'>
+					<Tooltip title='Chi tiết'>
 						<Button type='link' icon={<EyeOutlined />} onClick={() => handleEdit(rec)} />
 					</Tooltip>
 				</>
@@ -107,9 +106,8 @@ const PhanHoiPage = () => {
 	];
 
 	const onChangeTrangThai = (value: string) => {
-		const isAnswer = value === 'Đã trả lời';
-		setCondition({ daTraLoiPhanHoi: value ? isAnswer : undefined });
-		setDaTraLoi(value ? isAnswer : undefined);
+		setDaTraLoi(value);
+		setCondition({ daTraLoiPhanHoi: value === 'all' ? undefined : value === 'roi' ? true : false });
 	};
 
 	return (
@@ -122,18 +120,15 @@ const PhanHoiPage = () => {
 			widthDrawer={600}
 			destroyModal
 			otherButtons={[
-				<Select
+				<Segmented
 					key='1'
-					placeholder='Lọc theo trạng thái'
-					onChange={onChangeTrangThai}
-					allowClear
-					value={daTraLoi === undefined ? undefined : daTraLoi ? 'Đã trả lời' : 'Chưa trả lời'}
-					style={{ width: 200 }}
-					options={['Chưa trả lời', 'Đã trả lời']?.map((item) => ({
-						key: item,
-						value: item,
-						label: item,
-					}))}
+					value={daTraLoi}
+					onChange={(val) => onChangeTrangThai(val.toString())}
+					options={[
+						{ value: 'all', label: 'Tất cả' },
+						{ value: 'chua', label: 'Chưa trả lời' },
+						{ value: 'roi', label: 'Đã trả lời' },
+					]}
 				/>,
 			]}
 		/>

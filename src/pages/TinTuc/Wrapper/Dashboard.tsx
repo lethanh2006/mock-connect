@@ -1,10 +1,9 @@
+import NoticeList from '@/components/RightContent/NoticeIcon/NoticeList';
+import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
+import { Card, Modal, Tabs } from 'antd';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import TinTucDashboard from '../TinTucDashboard';
-import TinTucWpDashboard from '../Wordpress/TinTucDashboard';
-import { useState } from 'react';
-import NoticeList from '@/components/RightContent/NoticeIcon/NoticeList';
-import { Card, Modal, Tabs } from 'antd';
-import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
 
 const TinTucDashboardWrapper = () => {
 	const { danhSach: danhsachThongBao, setRecord, record } = useModel('thongbao.noticeicon');
@@ -36,7 +35,7 @@ const TinTucDashboardWrapper = () => {
 		);
 	};
 
-	const renderTinTuc = () => (APP_CONFIG_TIN_TUC_WP ? <TinTucWpDashboard /> : <TinTucDashboard />);
+	const renderTinTuc = () => <TinTucDashboard />;
 
 	return (
 		<Card bodyStyle={{ paddingTop: 0 }}>

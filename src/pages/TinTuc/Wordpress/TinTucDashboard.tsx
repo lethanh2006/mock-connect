@@ -4,17 +4,28 @@ import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { Link, history, useModel } from 'umi';
-import '../styles.less';
-import { CardTinTuc } from '../TinTuc.style';
+import '../components/styles.less';
+import { CardTinTuc } from '../components/TinTuc.style';
 import { Title } from './components/Title';
 import { getImageSrc } from './utils/getImageSrc';
 
-const TinTucWpDashboard = (props: { category?: number }) => {
+const TinTucDashboardWP = (props: { category?: number }) => {
+	const { category } = props;
+	const { danhSach: danhSachChuDe } = useModel('tintuc.chude');
 	const { danhSach: danhSachTinTuc, getDashboardModel, loading } = useModel('tintuc.tintucwp');
 
+	const linkWp = danhSachChuDe?.filter((item) => item?.isTinTucWP)?.[0];
+	const idCategory = danhSachChuDe?.filter((item) => item?.isTinTucWP)?.map((items) => items?.idCategoryWp);
+
 	useEffect(() => {
-		getDashboardModel(props.category);
-	}, [props.category]);
+		if (category) {
+			getDashboardModel([category], linkWp?.linkWP);
+		} else {
+			if (linkWp?.linkWP && idCategory?.length) {
+				getDashboardModel(idCategory, linkWp?.linkWP);
+			}
+		}
+	}, [linkWp?.linkWP, idCategory?.length, category]);
 
 	return (
 		<Spin spinning={loading}>
@@ -30,8 +41,9 @@ const TinTucWpDashboard = (props: { category?: number }) => {
 									onClick={() => {
 										history.push({
 											pathname: 'tin-tuc/chi-tiet',
-											query: { id: tintuc?.id as any },
+											query: { idWordPess: tintuc?.id as any, idChuDe: linkWp?._id as any },
 										});
+										window.scrollTo({ top: 0, behavior: 'smooth' });
 									}}
 								>
 									<Row gutter={12} style={{ height: '100%' }}>
@@ -70,7 +82,7 @@ const TinTucWpDashboard = (props: { category?: number }) => {
 			)}
 
 			<div style={{ textAlign: 'right' }}>
-				<Link to={`/tin-tuc?category=${props.category ?? ''}`}>
+				<Link to='/tin-tuc'>
 					Xem thêm <ArrowRightOutlined />
 				</Link>
 			</div>
@@ -78,4 +90,4 @@ const TinTucWpDashboard = (props: { category?: number }) => {
 	);
 };
 
-export default TinTucWpDashboard;
+export default TinTucDashboardWP;
