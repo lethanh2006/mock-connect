@@ -20,7 +20,7 @@ const TinTucDashboardWP = () => {
 		if (linkWp?.linkWP && idCategory?.length) {
 			getDashboardModel(idCategory, linkWp?.linkWP);
 		}
-	}, []);
+	}, [linkWp?.linkWP, idCategory?.length]);
 
 	return (
 		<Spin spinning={loading}>
