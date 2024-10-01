@@ -1,4 +1,6 @@
 import anh from '@/assets/noimg.png';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
 import { Col, Empty, Row, Tooltip, Typography } from 'antd';
 import moment from 'moment';
 import { history, useModel } from 'umi';
@@ -10,10 +12,39 @@ export const renderParagraph = (text: string, rows: number, style: any) => (
 	</Typography.Paragraph>
 );
 
-const BlockTinTuc = (props: { empty?: string }) => {
-	const { danhSach } = useModel('tintuc.tintuc');
+const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
+	const { danhSach: danhSachChuDe, setRecord: setChuDe } = useModel('tintuc.chude');
+	const { danhSach, setPage } = useModel('tintuc.tintuc');
+	const { postModel, danhSach: danhSachXemSau, deleteModel } = useModel('xemsau');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
+
 	const { empty } = props;
 	const url = 'tin-tuc';
+
+	const handleXemSau = (rec: any) => {
+		const data = {
+			userSsoId: recSinhVien?.ssoId,
+			sourceId: String(rec?.id),
+			loaiThongTin: ELoaiThongTinXemSau.TIN_TUC,
+			thongTin: rec,
+		};
+		postModel(data, props.getData, undefined, 'Lưu thành công')
+			.then()
+			.catch((err) => console.log(err));
+	};
+
+	const handleBoXemSau = (rec: any) => {
+		deleteModel(rec?._id, props.getData)
+			.then()
+			.catch((err) => console.log(err));
+	};
+
+	const changeMenu = (k: string) => {
+		setChuDe(danhSachChuDe.find((item) => item._id === k));
+		window.location.hash = '#' + k;
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+		setPage(1);
+	};
 
 	if (danhSach?.length === 0) return <Empty description={empty ?? 'Chưa có tin tức'} />;
 	else
@@ -54,16 +85,53 @@ const BlockTinTuc = (props: { empty?: string }) => {
 									{renderParagraph(danhSach?.[0]?.tieuDe, 2, {
 										fontSize: 'calc(1em + 0.2vw)',
 										fontWeight: 500,
-										marginBottom: 10,
+										marginBottom: 5,
 										color: 'black',
 									})}
 								</Tooltip>
-								{renderParagraph(danhSach?.[0]?.moTa, 2, { color: '#364954' })}
-								{danhSach?.[0]?.ngayDang && (
-									<span className='thoi-gian'>
-										{moment(danhSach?.[0]?.ngayDang).format('DD/MM/YYYY')} - {danhSach?.[0]?.chuDe?.name}
-									</span>
-								)}
+								{renderParagraph(danhSach?.[0]?.moTa, 2, { color: '#364954', marginBottom: 5 })}
+
+								<div
+									style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 8 }}
+								>
+									{danhSach?.[0]?.ngayDang && (
+										<span className='thoi-gian'>
+											{moment(danhSach?.[0]?.ngayDang).format('DD/MM/YYYY')} -{' '}
+											<a
+												type='link'
+												onClick={(e) => {
+													e.stopPropagation();
+													changeMenu(danhSach?.[0]?.chuDe?._id);
+												}}
+											>
+												{danhSach?.[0]?.chuDe?.name}
+											</a>
+										</span>
+									)}
+									{danhSachXemSau?.find((item) => item?.sourceId === danhSach?.[0]?._id)?._id ? (
+										<ButtonExtend
+											type='link'
+											onClick={(event) => {
+												event.stopPropagation();
+												handleBoXemSau(danhSachXemSau?.find((item) => item?.sourceId === danhSach?.[0]?._id));
+											}}
+											danger
+										>
+											Bỏ lưu
+										</ButtonExtend>
+									) : (
+										<ButtonExtend
+											type='link'
+											onClick={(event) => {
+												event.stopPropagation();
+												handleXemSau(danhSach?.[0]);
+											}}
+											tooltip='Lưu xem sau'
+										>
+											Lưu
+										</ButtonExtend>
+									)}
+								</div>
 							</ContentLargeCard>
 						</CardTinTuc>
 					</Col>
@@ -105,11 +173,45 @@ const BlockTinTuc = (props: { empty?: string }) => {
 												})}
 											</Tooltip>
 											{renderParagraph(tintuc?.moTa, 2, { color: '#364954', marginBottom: 0 })}
-											{tintuc.ngayDang && (
-												<span className='thoi-gian'>
-													{moment(tintuc.ngayDang).format('DD/MM/YYYY')} - {tintuc?.chuDe?.name}
-												</span>
-											)}
+											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+												{tintuc.ngayDang && (
+													<span className='thoi-gian'>
+														{moment(tintuc.ngayDang).format('DD/MM/YYYY')} -{' '}
+														<a
+															type='link'
+															onClick={(e) => {
+																e.stopPropagation();
+																changeMenu(tintuc?.chuDe?._id);
+															}}
+														>
+															{tintuc?.chuDe?.name}
+														</a>
+													</span>
+												)}
+												{danhSachXemSau?.find((item) => item?.sourceId === tintuc?._id)?._id ? (
+													<ButtonExtend
+														type='link'
+														onClick={(event) => {
+															event.stopPropagation();
+															handleBoXemSau(danhSachXemSau?.find((item) => item?.sourceId === tintuc?._id));
+														}}
+														danger
+													>
+														Bỏ lưu
+													</ButtonExtend>
+												) : (
+													<ButtonExtend
+														type='link'
+														onClick={(event) => {
+															event.stopPropagation();
+															handleXemSau(tintuc);
+														}}
+														tooltip='Lưu xem sau'
+													>
+														Lưu
+													</ButtonExtend>
+												)}
+											</div>
 										</Col>
 									</Row>
 								</CardTinTuc>
@@ -151,11 +253,46 @@ const BlockTinTuc = (props: { empty?: string }) => {
 												color: 'black',
 											})}
 										</Tooltip>
-										{tintuc?.ngayDang && (
-											<span className='thoi-gian'>
-												{moment(tintuc?.ngayDang).format('DD/MM/YYYY')} - {tintuc?.chuDe?.name}
-											</span>
-										)}
+
+										<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+											{tintuc?.ngayDang && (
+												<span className='thoi-gian'>
+													{moment(tintuc?.ngayDang).format('DD/MM/YYYY')} -{' '}
+													<a
+														type='link'
+														onClick={(e) => {
+															e.stopPropagation();
+															changeMenu(tintuc?.chuDe?._id);
+														}}
+													>
+														{tintuc?.chuDe?.name}
+													</a>
+												</span>
+											)}
+											{danhSachXemSau?.find((item) => item?.sourceId === tintuc?._id)?._id ? (
+												<ButtonExtend
+													type='link'
+													onClick={(event) => {
+														event.stopPropagation();
+														handleBoXemSau(danhSachXemSau?.find((item) => item?.sourceId === tintuc?._id));
+													}}
+													danger
+												>
+													Bỏ lưu
+												</ButtonExtend>
+											) : (
+												<ButtonExtend
+													type='link'
+													onClick={(event) => {
+														event.stopPropagation();
+														handleXemSau(tintuc);
+													}}
+													tooltip='Lưu xem sau'
+												>
+													Lưu
+												</ButtonExtend>
+											)}
+										</div>
 									</Col>
 								</Row>
 							</CardTinTuc>

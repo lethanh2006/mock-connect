@@ -1,11 +1,16 @@
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Col, Divider, Row, Spin } from 'antd';
 import moment from 'moment';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 import '../components/styles.less';
 
 const ChiTietTinTucSlink = () => {
-	const { loading, record } = useModel('tintuc.tintuc');
+	const { loading, record, setPage } = useModel('tintuc.tintuc');
+
+	const changeMenu = () => {
+		history.push(`/tin-tuc#${record?.chuDe?._id}`);
+		setPage(1);
+	};
 
 	return (
 		<Spin spinning={loading}>
@@ -17,6 +22,10 @@ const ChiTietTinTucSlink = () => {
 							<CalendarOutlined /> {record?.ngayDang && moment(record?.ngayDang).format('DD MMMM YYYY, HH:mm ')}
 							<Divider type='vertical' />
 							<UserOutlined /> {record?.nguoiDang?.hoTen}
+							<Divider type='vertical' />{' '}
+							<a type='link' onClick={() => changeMenu()}>
+								{record?.chuDe?.name}
+							</a>
 						</p>
 						{record?.moTa !== '' && <p className='mo-ta'>{record?.moTa}</p>}
 

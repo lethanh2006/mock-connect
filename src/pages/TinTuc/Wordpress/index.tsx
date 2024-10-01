@@ -3,7 +3,8 @@ import { useModel } from 'umi';
 import '../components/styles.less';
 import BlockTinTuc from './BlockTinTuc';
 
-const TinTucWpPage = () => {
+const TinTucWpPage = (props: any) => {
+	const { getData } = props;
 	const { loading, page, limit, total, setPage, setLimit } = useModel('tintuc.tintucwp');
 
 	const onChangePaging = (p: number, size: number) => {
@@ -13,7 +14,7 @@ const TinTucWpPage = () => {
 
 	return (
 		<Spin spinning={loading}>
-			<BlockTinTuc />
+			<BlockTinTuc getData={getData} />
 
 			<Pagination
 				onChange={onChangePaging}
