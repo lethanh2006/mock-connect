@@ -36,8 +36,9 @@ const TinTucDashboardWP = () => {
 									onClick={() => {
 										history.push({
 											pathname: 'tin-tuc/chi-tiet',
-											query: { id: tintuc?.id as any },
+											query: { idWordPess: tintuc?.id as any, idChuDe: linkWp?._id as any },
 										});
+										window.scrollTo({ top: 0, behavior: 'smooth' });
 									}}
 								>
 									<Row gutter={12} style={{ height: '100%' }}>
