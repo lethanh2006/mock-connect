@@ -13,7 +13,7 @@ export const renderParagraph = (text: string, rows: number, style: any) => (
 );
 
 const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
-	const { danhSach: danhSachChuDe, setRecord: setChuDe } = useModel('tintuc.chude');
+	const { danhSach: danhSachChuDe, setRecord: setChuDe, setTabActive } = useModel('tintuc.chude');
 	const { danhSach, setPage } = useModel('tintuc.tintuc');
 	const { postModel, danhSach: danhSachXemSau, deleteModel } = useModel('xemsau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
@@ -40,6 +40,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 	};
 
 	const changeMenu = (k: string) => {
+		setTabActive(k);
 		setChuDe(danhSachChuDe.find((item) => item._id === k));
 		window.location.hash = '#' + k;
 		window.scrollTo({ top: 0, behavior: 'smooth' });

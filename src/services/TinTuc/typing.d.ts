@@ -41,6 +41,7 @@ declare module TinTucWP {
 	export interface IRecord {
 		id: number;
 		date: string;
+		categories: any[];
 		slug: string;
 		type: string;
 		link: string;

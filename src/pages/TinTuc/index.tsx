@@ -14,12 +14,16 @@ const TinTucPage = () => {
 		danhSach: danhSachChuDe,
 		setRecord: setChuDe,
 		record: recChuDe,
+		tabActive,
+		setTabActive,
 	} = useModel('tintuc.chude');
-	const { page, limit, setPage, getModel } = useModel('tintuc.tintuc');
-	const { page: pagewp, limit: limitwp, setPage: setPageWP, getModel: getModelwp } = useModel('tintuc.tintucwp');
+	const { setPage } = useModel('tintuc.tintuc');
+	const { setPage: setPageWP } = useModel('tintuc.tintucwp');
 	const { getAllModel } = useModel('xemsau');
 	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const hash = window.location.hash.slice(1, 25);
+
+	const isWp = recChuDe?.isTinTucWP || (tabActive === 'all' && danhSachChuDe?.find((item) => item?.isTinTucWP));
 
 	//Xem sau
 	const getData = () => {
@@ -39,16 +43,8 @@ const TinTucPage = () => {
 		});
 	}, []);
 
-	//Tin Tức
-	useEffect(() => {
-		if (recChuDe?.isTinTucWP) {
-			getModelwp(pagewp, limitwp, recChuDe?.idCategoryWp ? +recChuDe?.idCategoryWp : undefined, recChuDe?.linkWP);
-		} else {
-			getModel({ idTopic: recChuDe?._id });
-		}
-	}, [page, limit, pagewp, limitwp, recChuDe?._id]);
-
 	const changeMenu = (k: string) => {
+		setTabActive(k);
 		setChuDe(danhSachChuDe.find((item) => item._id === k));
 		window.location.hash = '#' + k;
 		setPage(1);
@@ -58,23 +54,26 @@ const TinTucPage = () => {
 	return (
 		<Card title='Tin tức' bodyStyle={{ paddingTop: 0 }}>
 			{danhSachChuDe && danhSachChuDe.length > 0 ? (
-				<Tabs activeKey={recChuDe?._id ?? 'all'} onChange={changeMenu} style={{ overflow: 'inherit' }}>
-					<Tabs.TabPane key={'all'} tab={<Tooltip title='Tất cả'>Tất cả</Tooltip>}>
-						{recChuDe?.isTinTucWP ? <TinTucWpPage getData={getData} /> : <TinTucSlinkPage getData={getData} />}
-					</Tabs.TabPane>
-					{danhSachChuDe?.map((chuDe) => (
-						<Tabs.TabPane
-							key={chuDe?._id}
-							tab={
-								<Tooltip title={chuDe?.name}>
-									{recChuDe?._id === chuDe?._id ? chuDe.name : ellipse(chuDe?.name)}
-								</Tooltip>
-							}
-						>
-							{recChuDe?.isTinTucWP ? <TinTucWpPage getData={getData} /> : <TinTucSlinkPage getData={getData} />}
-						</Tabs.TabPane>
-					))}
-				</Tabs>
+				<>
+					<Tabs activeKey={tabActive} onChange={(val) => changeMenu(val)} style={{ overflow: 'inherit' }}>
+						<Tabs.TabPane key={'all'} tab={<Tooltip title='Tất cả'>Tất cả</Tooltip>} />
+						{danhSachChuDe?.map((chuDe) => (
+							<Tabs.TabPane
+								key={chuDe?._id}
+								tab={
+									<Tooltip title={chuDe?.name}>
+										{recChuDe?._id === chuDe?._id ? chuDe.name : ellipse(chuDe?.name)}
+									</Tooltip>
+								}
+							/>
+						))}
+					</Tabs>
+					{isWp ? (
+						<TinTucWpPage tabActive={tabActive} getData={getData} />
+					) : (
+						<TinTucSlinkPage tabActive={tabActive} getData={getData} />
+					)}
+				</>
 			) : (
 				<Empty style={{ paddingTop: 32 }} description='Chưa có tin tức' />
 			)}
