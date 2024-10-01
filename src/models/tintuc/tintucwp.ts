@@ -15,7 +15,7 @@ export default () => {
 		const payload = {
 			page: 1,
 			per_page: 5,
-			categories: categories?.length ? categories : [APP_CONFIG_TIN_TUC_WP_CATEGORY],
+			categories: categories?.length ? categories : [],
 		};
 
 		try {
@@ -33,14 +33,14 @@ export default () => {
 	const getModel = async (
 		paramPage?: number,
 		paramLimit?: number,
-		category?: number,
+		categories?: number[],
 		ipNewsWP?: string,
 	): Promise<TinTucWP.IRecord[]> => {
 		setLoading(true);
 		const payload = {
 			page: paramPage || page,
 			per_page: paramLimit || limit,
-			categories: category ? [category] : [APP_CONFIG_TIN_TUC_WP_CATEGORY],
+			categories: categories?.length ? categories : [],
 		};
 
 		try {
