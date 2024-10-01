@@ -57,8 +57,8 @@ declare module HocPhan {
 
 	export interface IThongTinTrongSo {
 		trongSo: number;
-		hinhThucDanhGia: string;
-		moTa: string;
+		hinhThucDanhGia?: string;
+		moTa?: string;
 	}
 
 	export interface ITrongSoDeCuong {

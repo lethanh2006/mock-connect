@@ -69,11 +69,10 @@ const DotKhaoSatPage = () => {
 			title: 'Mô tả',
 			dataIndex: 'moTa',
 			width: 250,
-			filterType: 'string',
 			render: (val) => <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Thời gian bắt đầu',
+			title: 'Bắt đầu',
 			dataIndex: 'thoiGianBatDau',
 			width: 120,
 			align: 'center',
@@ -82,7 +81,7 @@ const DotKhaoSatPage = () => {
 			sortable: true,
 		},
 		{
-			title: 'Thời gian kết thúc',
+			title: 'Kết thúc',
 			dataIndex: 'thoiGianKetThuc',
 			width: 120,
 			align: 'center',

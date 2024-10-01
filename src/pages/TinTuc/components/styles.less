@@ -1,5 +1,5 @@
 @import '~antd/es/style/themes/default.less';
-@import '../../styles/_variable.less';
+@import '../../../styles/_variable.less';
 
 .tin-tuc-wrapper {
 	> .ant-col {
@@ -201,6 +201,11 @@
 			margin: auto;
 		}
 
+		figure {
+			width: 100% !important;
+			text-align: center;
+		}
+
 		figure.image {
 			text-align: center;
 		}
@@ -215,6 +220,18 @@
 
 		iframe {
 			max-width: 100% !important;
+		}
+
+		.wp-caption.alignnone {
+			width: 100% !important;
+			text-align: center;
+
+			.wp-caption-text {
+				color: #999;
+				font-size: 13px;
+				font-style: italic;
+				text-align: center;
+			}
 		}
 	}
 

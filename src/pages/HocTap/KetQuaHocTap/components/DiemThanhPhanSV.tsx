@@ -10,6 +10,9 @@ import { history, useModel } from 'umi';
 interface DataType extends LopHocPhan.IDiemHpSvHk {
 	title?: string;
 	tenHocPhan?: string;
+	maHocPhanQuyDoi?: string;
+	tichLuy?: boolean;
+	trongChuongTrinh?: boolean;
 }
 
 const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
@@ -45,6 +48,15 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 						...diem,
 						title: `${index + 1}`,
 						tenHocPhan: diem.hocPhan?.ten,
+						maHocPhanQuyDoi:
+							diem.infoKhoaNganh?.[maKhoaNganh]?.maHocPhanQuyDoi !== diem.maHocPhan
+								? diem.infoKhoaNganh?.[maKhoaNganh]?.maHocPhanQuyDoi
+								: '',
+						trongChuongTrinh: diem.infoKhoaNganh?.[maKhoaNganh]?.trongCtdt ?? false,
+						tichLuy:
+							diem.infoKhoaNganh?.[maKhoaNganh]?.trongCtdt &&
+							diem.infoKhoaNganh?.[maKhoaNganh]?.maHocKyCaiThien === diem.maHocKy &&
+							diem.hocPhan?.loaiHocPhan?.isTinhSoTinChiTichLuy !== false,
 					})),
 				);
 			});
@@ -83,6 +95,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			width: 80,
 			align: 'center',
 			filterType: 'string',
+			render: (val, rec) =>
+				rec.trongChuongTrinh ? (
+					val
+				) : (
+					<Tooltip title='Không trong chương trình đào tạo'>
+						<u className='text-warning'>{val}</u>
+					</Tooltip>
+				),
 			onCell,
 		},
 		{
@@ -102,7 +122,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			title: 'Thi lần 1',
+			title: 'Điểm thi',
 			width: 80,
 			dataIndex: 'diemThi1',
 			align: 'center',
@@ -145,7 +165,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			// filterData: Object.values(ELoaiDiemChu),
 			render: (val, rec) => (
 				<>
-					<Tag color={ColorDiemChu?.[val as ELoaiDiemChu]}>{val}</Tag>{' '}
+					<Tag color={ColorDiemChu?.[val as ELoaiDiemChu]}>{val === ELoaiDiemChu.CHUA_DU_DU_LIEU ? '--' : val}</Tag>{' '}
 					{rec?.isCongNhanQuyDoiDiem && <Tooltip title='Điểm quy đổi'>(R)</Tooltip>}
 				</>
 			),
