@@ -27,7 +27,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const { record: recSetting, setVisibleForm: setVisibleMauLich, getSettingLich } = useModel('settinglich');
 	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
-	const { getAllModel: getBaiTapModel } = useModel('daotao.giaobaitap');
+	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 	const [date, setDate] = useState(new Date());
 	const [dateRange, setDateRange] = useState<Moment[]>([moment().startOf('week'), moment().endOf('week')]);
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
@@ -99,16 +99,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		});
 
 	const getBaiTap = async () => {
-		return getBaiTapModel(
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			`lich/sinh-vien/from/${moment().startOf('day').toISOString()}/to/${moment()
-				.add(7, 'day')
-				.endOf('day')
-				.toISOString()}`,
-		).then((data) => {
+		return thongKeBaiTapModel(dateRange[0].toISOString(), dateRange[1].toISOString()).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
 				title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
