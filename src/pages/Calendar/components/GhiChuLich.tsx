@@ -13,7 +13,7 @@ const GhiChuLich = () => {
 
 	return (
 		<Space wrap size={12}>
-			<span>Ghi chú: </span>
+			{/* <span>Ghi chú: </span> */}
 			{loaiSuKien.map((sukien) => (
 				<div
 					key={sukien}
