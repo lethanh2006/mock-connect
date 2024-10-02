@@ -23,11 +23,12 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 
 	const chuDe01 = danhSachChuDe?.filter((item) => idCategoryWp01?.includes(item.idCategoryWp))?.[0];
 
-	const handleXemSau = (rec: any) => {
+	const handleXemSau = (rec: any, idChuDe: string) => {
 		const data = {
 			userSsoId: recSinhVien?.ssoId,
 			sourceId: String(rec?.id),
 			loaiThongTin: ELoaiThongTinXemSau.TIN_TUC,
+			idChuDe: idChuDe,
 			thongTin: rec,
 		};
 		postModel(data, props.getData, undefined, 'Lưu thành công')
@@ -123,7 +124,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 											type='link'
 											onClick={(event) => {
 												event.stopPropagation();
-												handleXemSau(danhSach?.[0]);
+												handleXemSau(danhSach?.[0], chuDe01?._id);
 											}}
 											tooltip='Lưu xem sau'
 										>
@@ -211,7 +212,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 															type='link'
 															onClick={(event) => {
 																event.stopPropagation();
-																handleXemSau(tintuc);
+																handleXemSau(tintuc, chuDe?._id);
 															}}
 															tooltip='Lưu xem sau'
 														>
@@ -304,7 +305,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 														type='link'
 														onClick={(event) => {
 															event.stopPropagation();
-															handleXemSau(tintuc);
+															handleXemSau(tintuc, chuDe?._id);
 														}}
 														tooltip='Lưu xem sau'
 													>

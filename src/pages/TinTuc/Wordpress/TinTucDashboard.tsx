@@ -1,3 +1,4 @@
+import { landingUrl } from '@/services/base/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Col, Empty, Row, Spin, Tooltip } from 'antd';
 import { isEmpty } from 'lodash';
@@ -16,10 +17,11 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 
 	const linkWp = danhSachChuDe?.filter((item) => item?.isTinTucWP)?.[0];
 	const idCategory = danhSachChuDe?.filter((item) => item?.isTinTucWP)?.map((items) => items?.idCategoryWp);
+	const chuDe = danhSachChuDe?.find((item) => item?.idCategoryWp === category);
 
 	useEffect(() => {
 		if (category) {
-			getDashboardModel([category], linkWp?.linkWP);
+			getDashboardModel([category], linkWp?.linkWP ?? landingUrl);
 		} else {
 			if (linkWp?.linkWP && idCategory?.length) {
 				getDashboardModel(idCategory, linkWp?.linkWP);
@@ -41,7 +43,7 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 									onClick={() => {
 										history.push({
 											pathname: 'tin-tuc/chi-tiet',
-											query: { idWordPess: tintuc?.id as any, idChuDe: linkWp?._id as any },
+											query: { _id: tintuc?.id as any, cat: linkWp?._id as any },
 										});
 										window.scrollTo({ top: 0, behavior: 'smooth' });
 									}}
@@ -82,7 +84,7 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 			)}
 
 			<div style={{ textAlign: 'right' }}>
-				<Link to='/tin-tuc'>
+				<Link to={category ? `/tin-tuc#${chuDe?._id ?? 'all'}` : '/tin-tuc'}>
 					Xem thêm <ArrowRightOutlined />
 				</Link>
 			</div>

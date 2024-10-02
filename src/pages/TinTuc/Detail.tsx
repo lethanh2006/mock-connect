@@ -18,15 +18,20 @@ const ChiTietTinTucPage = () => {
 
 	const fetchData = async () => {
 		if (isTinTucWP) {
-			getByIdModel(idChuDe as string, true).then((res) => {
-				if (res) {
-					getIdTinTucWP(idWordPess as string, undefined, res?.linkWP).then((response) => {
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+			idChuDe
+				? getByIdModel(idChuDe as string, true).then((res) => {
+						if (res) {
+							getIdTinTucWP(idWordPess as string, undefined, res?.linkWP).then(() => {
+								window.scrollTo({ top: 0, behavior: 'smooth' });
+							});
+						}
+				  })
+				: getIdTinTucWP(idWordPess as string, undefined, APP_CONFIG_URL_LANDING).then(() => {
 						window.scrollTo({ top: 0, behavior: 'smooth' });
-					});
-				}
-			});
+				  });
 		} else {
-			getIdTinTucSlink(idSlink as string).then((response) => {
+			getIdTinTucSlink(idSlink as string).then(() => {
 				window.scrollTo({ top: 0, behavior: 'smooth' });
 			});
 		}
