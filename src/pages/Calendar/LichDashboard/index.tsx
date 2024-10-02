@@ -38,7 +38,7 @@ const LichDashboard = () => {
 	const { visibleForm, setVisibleForm, getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
-	const { getAllModel: getBaiTapModel } = useModel('daotao.giaobaitap');
+	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 	const { record: recSetting } = useModel('settinglich');
 	const [dataCalendar, setDataCalendar] = useState<State>({});
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
@@ -79,15 +79,9 @@ const LichDashboard = () => {
 	};
 
 	const getBaiTap = async () => {
-		return getBaiTapModel(
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			`lich/sinh-vien/from/${moment().startOf('day').toISOString()}/to/${moment()
-				.add(7, 'day')
-				.endOf('day')
-				.toISOString()}`,
+		return thongKeBaiTapModel(
+			moment().startOf('day').toISOString(),
+			moment().add(7, 'day').endOf('day').toISOString(),
 		).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
