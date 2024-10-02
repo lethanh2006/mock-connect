@@ -29,15 +29,15 @@ const SelectChuDePhanHoi = (props: {
 			value={value}
 			onChange={onChange}
 			options={[
-				{
-					value: 'Khác',
-					label: 'Khác',
-				},
 				...danhSach.map((item) => ({
 					key: item._id,
 					value: item._id,
 					label: `${item.tenLinhVuc}`,
 				})),
+				{
+					value: 'Khác',
+					label: 'Khác',
+				},
 			]}
 			showSearch
 			optionFilterProp='label'
