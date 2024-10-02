@@ -38,6 +38,7 @@ const LichDashboard = () => {
 	const { visibleForm, setVisibleForm, getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
+	const { getAllModel: getBaiTapModel } = useModel('daotao.giaobaitap');
 	const { record: recSetting } = useModel('settinglich');
 	const [dataCalendar, setDataCalendar] = useState<State>({});
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
@@ -77,8 +78,30 @@ const LichDashboard = () => {
 		});
 	};
 
+	const getBaiTap = async () => {
+		return getBaiTapModel(
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			`lich/sinh-vien/from/${moment().startOf('day').toISOString()}/to/${moment()
+				.add(7, 'day')
+				.endOf('day')
+				.toISOString()}`,
+		).then((data) => {
+			const temp = data.map((item) => ({
+				...item,
+				title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
+				thoiGianBatDau: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+				thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+				loaiSuKien: ELoaiSuKien.BAI_TAP,
+			}));
+			return temp;
+		});
+	};
+
 	const getData = () => {
-		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi()];
+		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
 
 		Promise.allSettled(promises)
 			.then((values) => {

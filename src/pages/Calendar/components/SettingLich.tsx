@@ -9,6 +9,7 @@ const mapFieldLoaiSuKien: Partial<Record<ELoaiSuKien, string>> = {
 	[ELoaiSuKien.LICH_THI]: 'lichThi',
 	[ELoaiSuKien.CA_NHAN]: 'lichCaNhan',
 	[ELoaiSuKien.CHUNG]: 'lichChung',
+	[ELoaiSuKien.BAI_TAP]: 'baiTap',
 };
 
 const ModalSettingMauLich = () => {
