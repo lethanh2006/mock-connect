@@ -12,6 +12,7 @@ export default () => {
 		ELoaiSuKien.LICH_THI,
 		ELoaiSuKien.CA_NHAN,
 		ELoaiSuKien.CHUNG,
+		ELoaiSuKien.BAI_TAP,
 	]);
 	const { getModel, setLoading, setDanhSach } = objInit;
 
