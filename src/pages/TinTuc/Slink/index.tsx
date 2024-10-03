@@ -10,7 +10,7 @@ const TinTucSlinkPage = (props: any) => {
 
 	useEffect(() => {
 		getModel(tabActive === 'all' ? undefined : { idTopic: recChuDe?._id });
-	}, [page, limit, recChuDe?._id]);
+	}, [page, limit, recChuDe?._id, tabActive]);
 
 	const onChangePaging = (p: number, size: number) => {
 		setPage(p);
