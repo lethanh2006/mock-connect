@@ -5,7 +5,13 @@ import { useModel } from 'umi';
 
 const GhiChuLich = () => {
 	const { record: recSetting, getSettingLich } = useModel('settinglich');
-	const loaiSuKien = [ELoaiSuKien.LICH_HOC, ELoaiSuKien.LICH_THI, ELoaiSuKien.CA_NHAN, ELoaiSuKien.CHUNG];
+	const loaiSuKien = [
+		ELoaiSuKien.LICH_HOC,
+		ELoaiSuKien.LICH_THI,
+		ELoaiSuKien.CA_NHAN,
+		ELoaiSuKien.CHUNG,
+		ELoaiSuKien.BAI_TAP,
+	];
 
 	useEffect(() => {
 		getSettingLich();
