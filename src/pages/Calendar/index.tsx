@@ -21,8 +21,18 @@ import ModalSettingMauLich from './components/SettingLich';
 const localizer = momentLocalizer(moment);
 
 const CalendarPage = (props: { isDashboard?: boolean }) => {
-	const { visibleForm, setVisibleForm, setRecord, setEdit, selectSuKiens, getSuKienTrongKhoangModel, loading } =
-		useModel('sukien');
+	const {
+		visibleForm,
+		setVisibleForm,
+		setRecord,
+		setEdit,
+		selectSuKiens,
+		getSuKienTrongKhoangModel,
+		loading,
+		dataCalendar,
+		setDataCalendar,
+		setDataLich,
+	} = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const { record: recSetting, setVisibleForm: setVisibleMauLich, getSettingLich } = useModel('settinglich');
@@ -31,7 +41,6 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const [date, setDate] = useState(new Date());
 	const [dateRange, setDateRange] = useState<Moment[]>([moment().startOf('week'), moment().endOf('week')]);
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
-	const [dataCalendar, setDataCalendar] = useState<{ title: string; [x: string]: unknown }[]>([]);
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [visibleXemThem, setVisibleXemThem] = useState<boolean>(false);
 	const [eventsRecord, setEventRecord] = useState<(SuKien.IRecord & { title: string })[]>([]);
@@ -112,17 +121,13 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	};
 
 	const getData = () => {
-		const promises = [];
-		if (selectSuKiens.includes(ELoaiSuKien.LICH_HOC)) promises.push(getThoiKhoaBieu());
-		if (selectSuKiens.includes(ELoaiSuKien.LICH_THI)) promises.push(getLichThi());
-		if (selectSuKiens.includes(ELoaiSuKien.CA_NHAN) || selectSuKiens.includes(ELoaiSuKien.CHUNG))
-			promises.push(getSuKien());
-		if (selectSuKiens.includes(ELoaiSuKien.BAI_TAP)) promises.push(getBaiTap());
+		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
 
 		Promise.allSettled(promises)
 			.then((values) => {
 				const data = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
 				setDataCalendar(data.flat());
+				setDataLich(data.flat());
 			})
 			.catch((er) => console.log(er));
 	};
@@ -131,7 +136,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 	useEffect(() => {
 		getData();
-	}, [dateRange[0].valueOf(), dateRange[1].valueOf(), selectSuKiens.length]);
+	}, [dateRange[0].valueOf(), dateRange[1].valueOf()]);
 
 	const eventPropGetter = (event: { title: string; loaiSuKien?: string }) => ({
 		style: {

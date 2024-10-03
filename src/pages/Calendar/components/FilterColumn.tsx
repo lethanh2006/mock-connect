@@ -6,13 +6,15 @@ import { useModel } from 'umi';
 
 const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 	const { date, setDate } = props;
-	const { selectSuKiens, setSelectSuKiens } = useModel('sukien');
+	const { selectSuKiens, setSelectSuKiens, setDataCalendar, dataLich } = useModel('sukien');
 	const { record: recSetting } = useModel('settinglich');
 
 	const pickDate = (val: moment.Moment) => setDate(val.toDate());
 
 	const changeLoaiSuKien = (checkedValue: any) => {
 		setSelectSuKiens(checkedValue as ELoaiSuKien[]);
+		const filteredEvents = dataLich.filter((event) => checkedValue.includes(event.loaiSuKien));
+		setDataCalendar(filteredEvents);
 	};
 
 	return (
@@ -141,6 +143,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 							}}
 						>
 							Bài tập
+						</p>
+					</Checkbox>
+				</Row>
+				<Row>
+					<Checkbox value={ELoaiSuKien.HOP_LOP}>
+						<p
+							style={{
+								backgroundColor:
+									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.HOP_LOP)?.maMau ??
+									ColorSuKien[ELoaiSuKien.HOP_LOP],
+								color: 'white',
+								padding: '2px 6px',
+								borderRadius: 2,
+							}}
+						>
+							Họp lớp
 						</p>
 					</Checkbox>
 				</Row>

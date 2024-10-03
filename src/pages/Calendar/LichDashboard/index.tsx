@@ -1,15 +1,15 @@
-import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Badge, Card, Col, Empty, Modal, Row, Space, Tabs, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
+import CalendarPage from '..';
 import FormLichCaNhan from '../components/FormLichCaNhan';
 import GhiChuLich from '../components/GhiChuLich';
 import ModalViewDetailCalendar from '../components/ModalViewDetail';
 import styles from './styles.less';
-import CalendarPage from '..';
 
 const getThoiGianMotTuanKeTuHomNay = () => {
 	return {
@@ -18,36 +18,21 @@ const getThoiGianMotTuanKeTuHomNay = () => {
 	};
 };
 
-type Ngay = string;
-interface StateItem {
-	tenSuKien: string;
-	diaDiem: string;
-	loaiSuKien: ELoaiSuKien;
-	thoiGianBatDau: string;
-	thoiGianKetThuc: string;
-	_id: string;
-}
-type State = Record<
-	Ngay,
-	{
-		thuTrongTuan: string;
-		cacSuKien: StateItem[];
-	}
->;
-
 const LichDashboard = () => {
 	const {
 		visibleForm,
 		setVisibleForm,
 		getSuKienTrongKhoangModel,
 		loading: loadingSuKien,
-		selectSuKiens,
+		dataCalendarDashboard,
+		setDataLichDashboard,
+		dataLichDashboard,
+		setLichHienThiDashboardModel,
 	} = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 	const { record: recSetting } = useModel('settinglich');
-	const [dataCalendar, setDataCalendar] = useState<State>({});
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
 	const [activeKey, setActiveKey] = useState<string>('1');
@@ -103,55 +88,34 @@ const LichDashboard = () => {
 	};
 
 	const getData = () => {
-		// const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
-		const promises = [];
-		if (selectSuKiens.includes(ELoaiSuKien.LICH_HOC)) promises.push(getThoiKhoaBieu());
-		if (selectSuKiens.includes(ELoaiSuKien.LICH_THI)) promises.push(getLichThi());
-		if (selectSuKiens.includes(ELoaiSuKien.CA_NHAN) || selectSuKiens.includes(ELoaiSuKien.CHUNG))
-			promises.push(getSuKien());
-		if (selectSuKiens.includes(ELoaiSuKien.BAI_TAP)) promises.push(getBaiTap());
+		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
 
 		Promise.allSettled(promises)
 			.then((values) => {
 				const responses = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
 				const data = responses.flat();
-				const nextState = data.reduce<State>((result, item) => {
-					if (!item?.thoiGianBatDau) {
-						return result;
-					}
-					const ngayMoment = moment(item?.thoiGianBatDau);
-					const ngayString = ngayMoment.format('YYYY-MM-DD');
-
-					return {
-						...result,
-						[ngayString]: {
-							thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
-							cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
-								...item,
-								tenSuKien: item.title,
-								diaDiem: item.phongHoc ?? item.diaDiem,
-							}),
-						},
-					};
-				}, {});
-				setDataCalendar(nextState);
+				setDataLichDashboard(data);
 			})
 			.catch((er) => console.log(er));
 	};
 	//#endregion
 
 	useEffect(() => {
+		setLichHienThiDashboardModel(dataLichDashboard ?? []);
+	}, [dataLichDashboard?.length]);
+
+	useEffect(() => {
 		getData();
-	}, [activeKey, selectSuKiens.length]);
+	}, [activeKey]);
 
 	const renderContent = () => {
-		const keysSorted = sortBy(Object.keys(dataCalendar));
-		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendar)) {
+		const keysSorted = sortBy(Object.keys(dataCalendarDashboard));
+		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendarDashboard)) {
 			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện nào' />;
 		}
 
 		return keysSorted.map((ngay) => {
-			const { cacSuKien, thuTrongTuan } = dataCalendar[ngay];
+			const { cacSuKien, thuTrongTuan } = dataCalendarDashboard[ngay];
 			const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
 			return (
 				<div key={ngay} className={styles.ngay}>
@@ -217,7 +181,7 @@ const LichDashboard = () => {
 						</Col>
 						<Col span={24}>
 							<Col span={24}>
-								<GhiChuLich />
+								<GhiChuLich isDashboard />
 							</Col>
 						</Col>
 					</Row>
