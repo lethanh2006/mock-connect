@@ -1,6 +1,6 @@
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Badge, Card, Col, Empty, Modal, Row, Space, Typography } from 'antd';
+import { Badge, Card, Col, Empty, Modal, Row, Space, Tabs, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -9,6 +9,7 @@ import FormLichCaNhan from '../components/FormLichCaNhan';
 import GhiChuLich from '../components/GhiChuLich';
 import ModalViewDetailCalendar from '../components/ModalViewDetail';
 import styles from './styles.less';
+import CalendarPage from '..';
 
 const getThoiGianMotTuanKeTuHomNay = () => {
 	return {
@@ -35,7 +36,13 @@ type State = Record<
 >;
 
 const LichDashboard = () => {
-	const { visibleForm, setVisibleForm, getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
+	const {
+		visibleForm,
+		setVisibleForm,
+		getSuKienTrongKhoangModel,
+		loading: loadingSuKien,
+		selectSuKiens,
+	} = useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
@@ -43,6 +50,7 @@ const LichDashboard = () => {
 	const [dataCalendar, setDataCalendar] = useState<State>({});
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
+	const [activeKey, setActiveKey] = useState<string>('1');
 
 	//#region Get Data
 	const getThoiKhoaBieu = async () => {
@@ -95,7 +103,13 @@ const LichDashboard = () => {
 	};
 
 	const getData = () => {
-		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
+		// const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
+		const promises = [];
+		if (selectSuKiens.includes(ELoaiSuKien.LICH_HOC)) promises.push(getThoiKhoaBieu());
+		if (selectSuKiens.includes(ELoaiSuKien.LICH_THI)) promises.push(getLichThi());
+		if (selectSuKiens.includes(ELoaiSuKien.CA_NHAN) || selectSuKiens.includes(ELoaiSuKien.CHUNG))
+			promises.push(getSuKien());
+		if (selectSuKiens.includes(ELoaiSuKien.BAI_TAP)) promises.push(getBaiTap());
 
 		Promise.allSettled(promises)
 			.then((values) => {
@@ -128,7 +142,7 @@ const LichDashboard = () => {
 
 	useEffect(() => {
 		getData();
-	}, []);
+	}, [activeKey, selectSuKiens.length]);
 
 	const renderContent = () => {
 		const keysSorted = sortBy(Object.keys(dataCalendar));
@@ -180,29 +194,37 @@ const LichDashboard = () => {
 
 	return (
 		<>
-			<Card
-				className={styles.container}
-				loading={loadingSuKien || loadingTKB || loadingThi}
-				title={
-					<div className={styles.title}>
-						<Typography.Text>Lịch sắp tới</Typography.Text>
-						<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
-							Xem thêm <ArrowRightOutlined />
-						</Link>
-					</div>
-				}
-			>
-				<Row gutter={[12, 12]}>
-					<Col span={24}>
-						<div style={{ maxHeight: 450, overflowY: 'auto' }}>{renderContent()}</div>
-					</Col>
-					<Col span={24}>
+			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
+				<Tabs.TabPane key='1' tab='Dạng list' />
+				<Tabs.TabPane key='2' tab='Dạng lịch' />
+			</Tabs>
+			{activeKey === '1' ? (
+				<Card
+					className={styles.container}
+					loading={loadingSuKien || loadingTKB || loadingThi}
+					title={
+						<div className={styles.title}>
+							<Typography.Text>Lịch sắp tới</Typography.Text>
+							<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
+								Xem thêm <ArrowRightOutlined />
+							</Link>
+						</div>
+					}
+				>
+					<Row gutter={[12, 12]}>
 						<Col span={24}>
-							<GhiChuLich />
+							<div style={{ maxHeight: 450, overflowY: 'auto' }}>{renderContent()}</div>
 						</Col>
-					</Col>
-				</Row>
-			</Card>
+						<Col span={24}>
+							<Col span={24}>
+								<GhiChuLich />
+							</Col>
+						</Col>
+					</Row>
+				</Card>
+			) : (
+				<CalendarPage isDashboard />
+			)}
 
 			<Modal
 				visible={visibleForm}
