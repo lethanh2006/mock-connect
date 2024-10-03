@@ -1,14 +1,20 @@
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Avatar, Card, Empty, List } from 'antd';
+import classNames from 'classnames';
 
 type TNhanSu = Pick<LopHocPhan.IRecordNhanSuLopHP, 'tenNhanSu' | 'maNhanSu' | 'nhanSu' | 'nhanSuSsoId'>;
 
-const CardGiangVienLop = (props: { danhSachNhanSu?: TNhanSu[]; title?: string; loading?: boolean }) => {
-	const { title = 'Giảng viên', danhSachNhanSu, loading } = props;
+const CardGiangVienLop = (props: {
+	danhSachNhanSu?: TNhanSu[];
+	title?: string;
+	loading?: boolean;
+	isHighlight?: boolean;
+}) => {
+	const { title = 'Giảng viên', danhSachNhanSu, loading, isHighlight } = props;
 
 	return (
-		<Card title={title} size='small' loading={loading}>
+		<Card title={title} size='small' loading={loading} className={classNames({ 'card-highlight': isHighlight })}>
 			{danhSachNhanSu?.length ? (
 				<List
 					grid={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }}
