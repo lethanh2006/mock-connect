@@ -49,6 +49,7 @@ const LopHanhChinhPage = () => {
 														? [{ nhanSu: record.giangVien, nhanSuSsoId: record.giangVien.ssoId }]
 														: []
 												}
+												isHighlight
 											/>
 										</Col>
 										<Col span={24}>
