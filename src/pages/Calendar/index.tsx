@@ -189,8 +189,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				messages={messagesCalendar}
 				views={['month', 'week', 'day']}
 				style={{ height: isDashboard ? 500 : 700, overflow: 'auto' }}
-				min={moment('0000', 'HHmm').toDate()}
-				max={moment('2359', 'HHmm').toDate()}
+				min={moment('0600', 'HHmm').toDate()}
+				max={moment('2300', 'HHmm').toDate()}
 				eventPropGetter={eventPropGetter}
 				onSelectSlot={handleSelect}
 				onSelectEvent={(rec: any) => {
