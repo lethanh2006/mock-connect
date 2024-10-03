@@ -27,6 +27,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 			sourceId: String(rec?._id),
 			loaiThongTin: ELoaiThongTinXemSau.TIN_TUC,
 			thongTin: rec,
+			idChuDe: null,
 		};
 		postModel(data, props.getData, undefined, 'Lưu thành công')
 			.then()

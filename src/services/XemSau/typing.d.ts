@@ -6,6 +6,7 @@ declare module XemSau {
 		userSsoId: string;
 		sourceId: string;
 		loaiThongTin: ELoaiThongTinXemSau;
+		idChuDe: string | null;
 		thongTin: any;
 	}
 }

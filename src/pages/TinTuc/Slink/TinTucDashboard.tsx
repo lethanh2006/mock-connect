@@ -29,7 +29,7 @@ const TinTucDashboardSlink = () => {
 								onClick={() => {
 									history.push({
 										pathname: 'tin-tuc/chi-tiet',
-										query: { idSlink: danhSach?.[0]?._id },
+										query: { id: danhSach?.[0]?._id },
 									});
 									window.scrollTo({ top: 0, behavior: 'smooth' });
 								}}
