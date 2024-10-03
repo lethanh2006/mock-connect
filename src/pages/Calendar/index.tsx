@@ -43,7 +43,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 	useEffect(() => {
 		getThongTinCuaToiModel();
-		getSettingLich();
+		if (!isDashboard) getSettingLich();
 	}, []);
 
 	const handlePaneSizeChange = (size: any) => {
