@@ -25,8 +25,9 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		useModel('sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
-	const { record: recSetting, setVisibleForm: setVisibleMauLich } = useModel('settinglich');
+	const { record: recSetting, setVisibleForm: setVisibleMauLich, getSettingLich } = useModel('settinglich');
 	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
+	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 	const [date, setDate] = useState(new Date());
 	const [dateRange, setDateRange] = useState<Moment[]>([moment().startOf('week'), moment().endOf('week')]);
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
@@ -42,6 +43,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 	useEffect(() => {
 		getThongTinCuaToiModel();
+		if (!isDashboard) getSettingLich();
 	}, []);
 
 	const handlePaneSizeChange = (size: any) => {
@@ -96,12 +98,26 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			return temp;
 		});
 
+	const getBaiTap = async () => {
+		return thongKeBaiTapModel(dateRange[0].toISOString(), dateRange[1].toISOString()).then((data) => {
+			const temp = data.map((item) => ({
+				...item,
+				title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
+				start: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+				end: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+				loaiSuKien: ELoaiSuKien.BAI_TAP,
+			}));
+			return temp;
+		});
+	};
+
 	const getData = () => {
 		const promises = [];
 		if (selectSuKiens.includes(ELoaiSuKien.LICH_HOC)) promises.push(getThoiKhoaBieu());
 		if (selectSuKiens.includes(ELoaiSuKien.LICH_THI)) promises.push(getLichThi());
 		if (selectSuKiens.includes(ELoaiSuKien.CA_NHAN) || selectSuKiens.includes(ELoaiSuKien.CHUNG))
 			promises.push(getSuKien());
+		if (selectSuKiens.includes(ELoaiSuKien.BAI_TAP)) promises.push(getBaiTap());
 
 		Promise.allSettled(promises)
 			.then((values) => {
@@ -173,8 +189,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				messages={messagesCalendar}
 				views={['month', 'week', 'day']}
 				style={{ height: isDashboard ? 500 : 700, overflow: 'auto' }}
-				min={moment('0000', 'HHmm').toDate()}
-				max={moment('2359', 'HHmm').toDate()}
+				min={moment('0600', 'HHmm').toDate()}
+				max={moment('2300', 'HHmm').toDate()}
 				eventPropGetter={eventPropGetter}
 				onSelectSlot={handleSelect}
 				onSelectEvent={(rec: any) => {

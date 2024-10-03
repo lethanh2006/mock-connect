@@ -13,12 +13,12 @@ const TinTucWpPage = (props: { getData: () => void; tabActive: string }) => {
 	const idCategory = danhSachChuDe?.filter((item) => item?.isTinTucWP)?.map((items) => items?.idCategoryWp);
 
 	useEffect(() => {
-		if (tabActive === 'all') {
-			getModel(page, limit, idCategory, linkWp?.linkWP);
-		} else {
+		if (recChuDe?._id) {
 			getModel(page, limit, recChuDe?.idCategoryWp ? [+recChuDe?.idCategoryWp] : undefined, recChuDe?.linkWP);
+		} else if (tabActive === 'all') {
+			getModel(page, limit, idCategory, linkWp?.linkWP);
 		}
-	}, [page, limit, recChuDe?._id]);
+	}, [page, limit, recChuDe?._id, tabActive]);
 
 	const onChangePaging = (p: number, size: number) => {
 		setPage(p);

@@ -6,7 +6,7 @@ import type { XemSau } from '@/services/XemSau/typing';
 import { CloseOutlined, EyeOutlined } from '@ant-design/icons';
 import { Card, Popconfirm, Tabs } from 'antd';
 import { useState } from 'react';
-import { useModel, history } from 'umi';
+import { history, useModel } from 'umi';
 import ModalChiTiet from '../SuKien/SinhVienHoatDongCTSV/ModalChiTiet';
 
 const XemSauPage = () => {
@@ -14,8 +14,27 @@ const XemSauPage = () => {
 	const { setVisibleForm, setRecord } = useModel('sukien.sinhvienhoatdongctsv');
 	const [tabActive, setTabActive] = useState<ELoaiThongTinXemSau>(ELoaiThongTinXemSau.SU_KIEN);
 
+	const xemChiTiet = (rec: XemSau.IRecord) => {
+		if (tabActive === ELoaiThongTinXemSau.SU_KIEN) {
+			setRecord(rec?.thongTin);
+			setVisibleForm(true);
+		} else if (tabActive === ELoaiThongTinXemSau.TIN_TUC) {
+			history.push({
+				pathname: 'tin-tuc/chi-tiet',
+				query: rec?.idChuDe ? { _id: rec?.sourceId, cat: rec?.idChuDe } : { id: rec?.sourceId },
+			});
+		} else if (tabActive === ELoaiThongTinXemSau.VBHD) {
+			window.open(rec?.thongTin?.url, '_blank');
+		}
+	};
+
 	const getData = () =>
 		tabActive && getModel({ loaiThongTin: tabActive }, undefined, undefined, undefined, undefined, 'me');
+
+	const onCell = (rec: XemSau.IRecord) => ({
+		onClick: () => xemChiTiet(rec),
+		style: { cursor: 'pointer' },
+	});
 
 	const columns: IColumn<XemSau.IRecord>[] = [
 		{
@@ -24,13 +43,14 @@ const XemSauPage = () => {
 			width: 250,
 			render: (val, rec) => {
 				if (tabActive === ELoaiThongTinXemSau.TIN_TUC) {
-					return rec?.thongTin?.title?.rendered;
+					return rec?.thongTin?.title?.rendered ?? rec?.thongTin?.tieuDe;
 				} else if (tabActive === ELoaiThongTinXemSau.VBHD) {
 					return rec?.thongTin?.ten;
 				} else if (tabActive === ELoaiThongTinXemSau.SU_KIEN) {
 					return rec?.thongTin?.hoatDongCtsv?.ten;
 				}
 			},
+			onCell,
 		},
 		{
 			title: 'Thao tác',
@@ -51,17 +71,7 @@ const XemSauPage = () => {
 						type='link'
 						icon={<EyeOutlined />}
 						onClick={() => {
-							if (tabActive === ELoaiThongTinXemSau.SU_KIEN) {
-								setRecord(rec?.thongTin);
-								setVisibleForm(true);
-							} else if (tabActive === ELoaiThongTinXemSau.TIN_TUC) {
-								history.push({
-									pathname: 'tin-tuc/chi-tiet',
-									query: { id: rec?.sourceId as any },
-								});
-							} else if (tabActive === ELoaiThongTinXemSau.VBHD) {
-								window.open(rec?.thongTin?.url, '_blank');
-							}
+							xemChiTiet(rec);
 						}}
 					/>
 				</>

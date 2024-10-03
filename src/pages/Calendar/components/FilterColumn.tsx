@@ -128,6 +128,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 						</p>
 					</Checkbox>
 				</Row>
+				<Row>
+					<Checkbox value={ELoaiSuKien.BAI_TAP}>
+						<p
+							style={{
+								backgroundColor:
+									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.BAI_TAP)?.maMau ??
+									ColorSuKien[ELoaiSuKien.BAI_TAP],
+								color: 'white',
+								padding: '2px 6px',
+								borderRadius: 2,
+							}}
+						>
+							Bài tập
+						</p>
+					</Checkbox>
+				</Row>
 			</Checkbox.Group>
 		</div>
 	);
