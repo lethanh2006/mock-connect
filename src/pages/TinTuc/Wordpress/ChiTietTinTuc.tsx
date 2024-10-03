@@ -18,7 +18,7 @@ const ChiTietTinTucWpPage = () => {
 			<Row gutter={[16, 16]} justify='center'>
 				<Col lg={17} span={24}>
 					<div id='content'>
-						<h4>{record?.title?.rendered ?? ''}</h4>
+						<h4 dangerouslySetInnerHTML={{ __html: record?.title?.rendered ?? '' }} />
 						<p className='ngay-dang'>
 							<CalendarOutlined /> {record?.date && moment(record?.date).format('DD MMMM YYYY, HH:mm ')}
 							<Divider type='vertical' />{' '}
