@@ -17,9 +17,8 @@ const FileChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean; isDie
 					}
 				>
 					<UploadFile
-						disabled={props.disabled}
 						accept='image/*, .pdf, .doc, .docx, .png, .jpg'
-						otherProps={{ showUploadList: { showDownloadIcon: false } }}
+						otherProps={{ showUploadList: { showDownloadIcon: false }, disabled: props?.disabled }}
 						maxCount={5}
 					/>
 				</Form.Item>
