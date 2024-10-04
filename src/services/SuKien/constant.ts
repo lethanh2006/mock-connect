@@ -94,8 +94,8 @@ export const ColorSuKien: Partial<Record<ELoaiSuKien, string>> = {
 	[ELoaiSuKien.LICH_THI]: '#df4471b3',
 	[ELoaiSuKien.CA_NHAN]: '#57bf56b3',
 	[ELoaiSuKien.CHUNG]: '#2098c7b3',
-	[ELoaiSuKien.BAI_TAP]: '#df4471b3',
-	[ELoaiSuKien.HOP_LOP]: '#d5eb34',
+	[ELoaiSuKien.BAI_TAP]: '#f1a32ab3',
+	[ELoaiSuKien.HOP_LOP]: '#9f44efb3',
 };
 
 export const THU_TRONG_TUAN = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];

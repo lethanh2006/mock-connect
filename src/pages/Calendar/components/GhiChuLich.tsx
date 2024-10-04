@@ -15,12 +15,12 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 		setDataCalendar,
 	} = useModel('sukien');
 	const loaiSuKien = [
-		ELoaiSuKien.LICH_HOC,
-		ELoaiSuKien.LICH_THI,
-		ELoaiSuKien.CA_NHAN,
 		ELoaiSuKien.CHUNG,
+		ELoaiSuKien.LICH_HOC,
 		ELoaiSuKien.BAI_TAP,
+		ELoaiSuKien.LICH_THI,
 		ELoaiSuKien.HOP_LOP,
+		ELoaiSuKien.CA_NHAN,
 	];
 
 	useEffect(() => {
@@ -54,7 +54,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 				const isSelected = selectSuKiens.includes(sukien);
 				const bgColor = isSelected
 					? recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien)?.maMau ?? ColorSuKien[sukien]
-					: 'gray';
+					: '#d3d3d3b3';
 
 				return (
 					<div
@@ -62,7 +62,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 						style={{
 							backgroundColor: bgColor,
 							color: 'white',
-							padding: '2px 6px',
+							padding: '1px 4px',
 							borderRadius: 2,
 							cursor: 'pointer',
 						}}
