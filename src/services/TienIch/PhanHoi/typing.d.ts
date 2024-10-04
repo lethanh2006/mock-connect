@@ -10,6 +10,7 @@ declare module PhanHoi {
 		noiDungPhanHoi: string;
 		urlPhanAnh?: string | null;
 
+		tieuDe?: string;
 		maDonVi?: string;
 		donVi?: ToChucNhanSu.IDonVi;
 		noiDungTraLoiPhanHoi: string;
