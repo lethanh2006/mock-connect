@@ -5,13 +5,14 @@ import { useModel } from 'umi';
 
 const GhiChuLich = () => {
 	const { record: recSetting, getSettingLich } = useModel('settinglich');
-	const { selectSuKiens, setSelectSuKiens } = useModel('sukien');
+	const { selectSuKiens, setSelectSuKiens, dataLichDashboard, setLichHienThiDashboardModel } = useModel('sukien');
 	const loaiSuKien = [
-		ELoaiSuKien.LICH_HOC,
-		ELoaiSuKien.LICH_THI,
-		ELoaiSuKien.CA_NHAN,
 		ELoaiSuKien.CHUNG,
+		ELoaiSuKien.LICH_HOC,
 		ELoaiSuKien.BAI_TAP,
+		ELoaiSuKien.LICH_THI,
+		ELoaiSuKien.HOP_LOP,
+		ELoaiSuKien.CA_NHAN,
 	];
 
 	useEffect(() => {
@@ -20,11 +21,17 @@ const GhiChuLich = () => {
 
 	const handleToggleSuKien = (sukien: ELoaiSuKien) => {
 		const isSelected = selectSuKiens.includes(sukien);
+		let updatedSelectSuKiens;
+
 		if (isSelected) {
-			setSelectSuKiens(selectSuKiens.filter((item) => item !== sukien));
+			updatedSelectSuKiens = selectSuKiens.filter((item) => item !== sukien);
 		} else {
-			setSelectSuKiens([...selectSuKiens, sukien]);
+			updatedSelectSuKiens = [...selectSuKiens, sukien];
 		}
+		setSelectSuKiens(updatedSelectSuKiens);
+
+		const filteredEvents = dataLichDashboard?.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien));
+		setLichHienThiDashboardModel(filteredEvents ?? []);
 	};
 
 	return (
@@ -34,7 +41,7 @@ const GhiChuLich = () => {
 				const isSelected = selectSuKiens.includes(sukien);
 				const bgColor = isSelected
 					? recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien)?.maMau ?? ColorSuKien[sukien]
-					: 'gray';
+					: '#d3d3d3b3';
 
 				return (
 					<div
@@ -42,7 +49,7 @@ const GhiChuLich = () => {
 						style={{
 							backgroundColor: bgColor,
 							color: 'white',
-							padding: '2px 6px',
+							padding: '1px 4px',
 							borderRadius: 2,
 							cursor: 'pointer',
 						}}

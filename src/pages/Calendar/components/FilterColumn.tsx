@@ -6,13 +6,15 @@ import { useModel } from 'umi';
 
 const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 	const { date, setDate } = props;
-	const { selectSuKiens, setSelectSuKiens } = useModel('sukien');
+	const { selectSuKiens, setSelectSuKiens, setDataCalendar, dataLich } = useModel('sukien');
 	const { record: recSetting } = useModel('settinglich');
 
 	const pickDate = (val: moment.Moment) => setDate(val.toDate());
 
 	const changeLoaiSuKien = (checkedValue: any) => {
 		setSelectSuKiens(checkedValue as ELoaiSuKien[]);
+		const filteredEvents = dataLich.filter((event) => checkedValue.includes(event.loaiSuKien));
+		setDataCalendar(filteredEvents);
 	};
 
 	return (
@@ -65,6 +67,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 
 			<Checkbox.Group value={selectSuKiens} onChange={changeLoaiSuKien}>
 				<Row>
+					<Checkbox value={ELoaiSuKien.CHUNG}>
+						<p
+							style={{
+								backgroundColor:
+									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.CHUNG)?.maMau ??
+									ColorSuKien[ELoaiSuKien.CHUNG],
+								color: 'white',
+								padding: '2px 6px',
+								borderRadius: 2,
+							}}
+						>
+							Sự kiện chung
+						</p>
+					</Checkbox>
+				</Row>
+				<Row>
 					<Checkbox value={ELoaiSuKien.LICH_HOC}>
 						<p
 							style={{
@@ -77,6 +95,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 							}}
 						>
 							{ELoaiSuKien.LICH_HOC}
+						</p>
+					</Checkbox>
+				</Row>
+				<Row>
+					<Checkbox value={ELoaiSuKien.BAI_TAP}>
+						<p
+							style={{
+								backgroundColor:
+									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.BAI_TAP)?.maMau ??
+									ColorSuKien[ELoaiSuKien.BAI_TAP],
+								color: 'white',
+								padding: '2px 6px',
+								borderRadius: 2,
+							}}
+						>
+							Bài tập
 						</p>
 					</Checkbox>
 				</Row>
@@ -97,6 +131,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 					</Checkbox>
 				</Row>
 				<Row>
+					<Checkbox value={ELoaiSuKien.HOP_LOP}>
+						<p
+							style={{
+								backgroundColor:
+									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.HOP_LOP)?.maMau ??
+									ColorSuKien[ELoaiSuKien.HOP_LOP],
+								color: 'white',
+								padding: '2px 6px',
+								borderRadius: 2,
+							}}
+						>
+							Họp lớp
+						</p>
+					</Checkbox>
+				</Row>
+				<Row>
 					<Checkbox value={ELoaiSuKien.CA_NHAN}>
 						<p
 							style={{
@@ -109,38 +159,6 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 							}}
 						>
 							Sự kiện cá nhân
-						</p>
-					</Checkbox>
-				</Row>
-				<Row>
-					<Checkbox value={ELoaiSuKien.CHUNG}>
-						<p
-							style={{
-								backgroundColor:
-									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.CHUNG)?.maMau ??
-									ColorSuKien[ELoaiSuKien.CHUNG],
-								color: 'white',
-								padding: '2px 6px',
-								borderRadius: 2,
-							}}
-						>
-							Sự kiện chung
-						</p>
-					</Checkbox>
-				</Row>
-				<Row>
-					<Checkbox value={ELoaiSuKien.BAI_TAP}>
-						<p
-							style={{
-								backgroundColor:
-									recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.BAI_TAP)?.maMau ??
-									ColorSuKien[ELoaiSuKien.BAI_TAP],
-								color: 'white',
-								padding: '2px 6px',
-								borderRadius: 2,
-							}}
-						>
-							Bài tập
 						</p>
 					</Checkbox>
 				</Row>

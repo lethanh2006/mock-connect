@@ -14,8 +14,9 @@ const SelectChuDePhanHoi = (props: {
 	allowClear?: boolean;
 	style?: React.CSSProperties;
 	isSetRecord?: boolean;
+	placeholder?: string;
 }) => {
-	const { value, onChange, multiple, condition, allowClear, style, isSetRecord, disabled } = props;
+	const { value, onChange, multiple, condition, allowClear, style, isSetRecord, disabled, placeholder } = props;
 	const { danhSach, getAllModel, visibleForm, loading } = useModel('tienich.chudephanhoi');
 
 	useEffect(() => {
@@ -41,7 +42,7 @@ const SelectChuDePhanHoi = (props: {
 			]}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Chọn chủ đề phản hồi'
+			placeholder={placeholder || 'Chọn chủ đề phản hồi'}
 			allowClear={allowClear ?? false}
 			style={{ width: '100%', ...style }}
 			loading={loading}
