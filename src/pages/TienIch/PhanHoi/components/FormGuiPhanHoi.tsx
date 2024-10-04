@@ -57,8 +57,12 @@ const FormGuiPhanHoi = () => {
 	return (
 		<Card loading={loading} title='Gửi phản hồi'>
 			<Form layout='vertical' onFinish={onFinish} form={form}>
+				<Form.Item name='tieuDe' label='Tiêu đề'>
+					<Input placeholder='Nhập tiêu đề' />
+				</Form.Item>
 				<Form.Item name='tenLinhVuc' label='Chủ đề câu hỏi' rules={[...rules.required]}>
 					<SelectChuDePhanHoi
+						placeholder='Chọn chủ đề câu hỏi'
 						onChange={(val) => {
 							form.setFieldsValue({
 								['maDonVi']: danhSach.find((item) => item._id === val)?.maDonVi,
@@ -66,7 +70,7 @@ const FormGuiPhanHoi = () => {
 						}}
 					/>
 				</Form.Item>
-				<Form.Item name='maDonVi' label='Bộ phận xử lý' rules={[...rules.required]}>
+				<Form.Item name='maDonVi' label='Bộ phận xử lý'>
 					<SelectDonVi
 						onChange={(val) => {
 							onChangeDonVi(val?.toString());
