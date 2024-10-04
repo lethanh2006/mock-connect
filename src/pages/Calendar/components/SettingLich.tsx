@@ -60,7 +60,7 @@ const ModalSettingMauLich = () => {
 				const hexColor = rgbaToHex(color.r, color.g, color.b, color.a);
 				return {
 					loaiLich: item,
-					maMau: hexColor,
+					maMau: typeof color === 'string' ? color : hexColor,
 				};
 			}),
 		};
