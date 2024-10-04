@@ -314,7 +314,7 @@ const FormBaiTap = (props: any) => {
 				{record?.assignment?.isQuiz && (
 					<Col span={24}>
 						<Spin spinning={loading}>
-							<FormQuiz form={form} cauTraLoi={cauTraLoi} />
+							<FormQuiz form={form} cauTraLoi={cauTraLoi} disabled={disable || disableIsQuiz} />
 						</Spin>
 					</Col>
 				)}
