@@ -59,13 +59,13 @@ const TableBase = (props: TableBaseProps) => {
 		setPage,
 		setLimit,
 		condition,
-		loading,
 		sort,
 		setSort,
 		setFilters,
 		deleteManyModel,
 	} = model;
 	const filters: TFilter<any>[] = model?.filters;
+	const loading = props?.loading || model?.loading;
 	const getData = props.getData ?? model?.getModel;
 	const hasFilter = props.columns?.filter((item) => item.filterType)?.length;
 	const [finalColumns, setColumns] = useState<IColumn<any>[]>([]);
