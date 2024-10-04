@@ -1,11 +1,10 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Badge, Card, Col, Empty, Modal, Row, Space, Tabs, Typography } from 'antd';
+import { Badge, Card, Col, Empty, Modal, Row, Space, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
-import CalendarPage from '..';
 import FormLichCaNhan from '../components/FormLichCaNhan';
 import GhiChuLich from '../components/GhiChuLich';
 import ModalViewDetailCalendar from '../components/ModalViewDetail';
@@ -35,7 +34,6 @@ const LichDashboard = () => {
 	const { record: recSetting } = useModel('settinglich');
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
-	const [activeKey, setActiveKey] = useState<string>('1');
 
 	//#region Get Data
 	const getThoiKhoaBieu = async () => {
@@ -106,7 +104,7 @@ const LichDashboard = () => {
 
 	useEffect(() => {
 		getData();
-	}, [activeKey]);
+	}, []);
 
 	const renderContent = () => {
 		const keysSorted = sortBy(Object.keys(dataCalendarDashboard));
@@ -158,37 +156,29 @@ const LichDashboard = () => {
 
 	return (
 		<>
-			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
-				<Tabs.TabPane key='1' tab='Dạng list' />
-				<Tabs.TabPane key='2' tab='Dạng lịch' />
-			</Tabs>
-			{activeKey === '1' ? (
-				<Card
-					className={styles.container}
-					loading={loadingSuKien || loadingTKB || loadingThi}
-					title={
-						<div className={styles.title}>
-							<Typography.Text>Lịch sắp tới</Typography.Text>
-							<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
-								Xem thêm <ArrowRightOutlined />
-							</Link>
-						</div>
-					}
-				>
-					<Row gutter={[12, 12]}>
+			<Card
+				className={styles.container}
+				loading={loadingSuKien || loadingTKB || loadingThi}
+				title={
+					<div className={styles.title}>
+						<Typography.Text>Lịch sắp tới</Typography.Text>
+						<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
+							Xem thêm <ArrowRightOutlined />
+						</Link>
+					</div>
+				}
+			>
+				<Row gutter={[12, 12]}>
+					<Col span={24}>
+						<div style={{ maxHeight: 450, overflowY: 'auto' }}>{renderContent()}</div>
+					</Col>
+					<Col span={24}>
 						<Col span={24}>
-							<div style={{ maxHeight: 450, overflowY: 'auto' }}>{renderContent()}</div>
+							<GhiChuLich />
 						</Col>
-						<Col span={24}>
-							<Col span={24}>
-								<GhiChuLich isDashboard />
-							</Col>
-						</Col>
-					</Row>
-				</Card>
-			) : (
-				<CalendarPage isDashboard />
-			)}
+					</Col>
+				</Row>
+			</Card>
 
 			<Modal
 				visible={visibleForm}

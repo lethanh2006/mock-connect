@@ -3,17 +3,9 @@ import { Space } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
-const GhiChuLich = (props: { isDashboard?: boolean }) => {
-	const { isDashboard } = props;
+const GhiChuLich = () => {
 	const { record: recSetting, getSettingLich } = useModel('settinglich');
-	const {
-		selectSuKiens,
-		setSelectSuKiens,
-		dataLichDashboard,
-		setLichHienThiDashboardModel,
-		dataLich,
-		setDataCalendar,
-	} = useModel('sukien');
+	const { selectSuKiens, setSelectSuKiens, dataLichDashboard, setLichHienThiDashboardModel } = useModel('sukien');
 	const loaiSuKien = [
 		ELoaiSuKien.CHUNG,
 		ELoaiSuKien.LICH_HOC,
@@ -38,13 +30,8 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 		}
 		setSelectSuKiens(updatedSelectSuKiens);
 
-		if (isDashboard) {
-			const filteredEvents = dataLichDashboard?.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien));
-			setLichHienThiDashboardModel(filteredEvents ?? []);
-		} else {
-			const filteredEvents = dataLich.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien as ELoaiSuKien));
-			setDataCalendar(filteredEvents);
-		}
+		const filteredEvents = dataLichDashboard?.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien));
+		setLichHienThiDashboardModel(filteredEvents ?? []);
 	};
 
 	return (
