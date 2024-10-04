@@ -89,9 +89,12 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 
 	const renderBaiTap = () => (
 		<>
-			<Descriptions.Item label='Giảng viên'>{event?.assignment?.hoTenNguoiGiao ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Tên bài tập'>{event?.assignment?.noiDung ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Lớp học phần'>{event?.assignment?.tenLopHocPhan ?? '--'}</Descriptions.Item>
+			<Descriptions.Item label='Giảng viên'>{event?.assignment?.hoTenNguoiGiao ?? '--'}</Descriptions.Item>
+			<Descriptions.Item label='Thời gian giao bài tập'>
+				{event?.createdAt ? moment(event?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
+			</Descriptions.Item>
 			<Descriptions.Item label='Thời hạn bài tập'>
 				{event?.thoiGianKetThuc ? moment(event?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY') : '--'}
 			</Descriptions.Item>
@@ -100,10 +103,6 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 					{mapTrangThaiNopBaiTap[event.trangThai as ETrangThaiNopBaiTap]}
 				</Tag>
 			</Descriptions.Item>
-			<Descriptions.Item label='Thời gian cập nhật'>
-				{event?.thoiGianTraLoi ? moment(event?.thoiGianTraLoi).format('HH:mm DD/MM/YYYY') : '--'}
-			</Descriptions.Item>
-			<Descriptions.Item label='Điểm số'>{event?.tongDiem ?? '--'}</Descriptions.Item>
 		</>
 	);
 

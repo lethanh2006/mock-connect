@@ -44,15 +44,25 @@ const ModalSettingMauLich = () => {
 		form.setFieldsValue(mapValue);
 	}, [record?._id, visibleForm]);
 
+	const rgbaToHex = (r: number, g: number, b: number, a: number): string => {
+		return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}${Math.round(a * 255)
+			.toString(16)
+			.padStart(2, '0')}`;
+	};
+
 	const onFinish = async (values: any) => {
 		const data = {
 			ssoId: recSinhVien?.ssoId,
 			maCanBo: recSinhVien?.ma,
 			hoTen: recSinhVien?.ten,
-			danhSachSettingLich: loaiSuKien?.map((item) => ({
-				loaiLich: item,
-				maMau: values[mapFieldLoaiSuKien[item] as any],
-			})),
+			danhSachSettingLich: Object.values(ELoaiSuKien).map((item) => {
+				const color = values[mapFieldLoaiSuKien[item] as any];
+				const hexColor = rgbaToHex(color.r, color.g, color.b, color.a);
+				return {
+					loaiLich: item,
+					maMau: typeof color === 'string' ? color : hexColor,
+				};
+			}),
 		};
 
 		if (record?._id) {
@@ -80,7 +90,7 @@ const ModalSettingMauLich = () => {
 					{loaiSuKien?.map((item) => (
 						<Col span={24} md={12} key={item}>
 							<Form.Item name={mapFieldLoaiSuKien[item]} label={item}>
-								<Colorpicker popup />
+								<Colorpicker popup onColorResult={(color) => color.rgb} />
 							</Form.Item>
 						</Col>
 					))}
