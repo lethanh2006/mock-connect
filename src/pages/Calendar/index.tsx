@@ -2,7 +2,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { messagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
-import { ArrowRightOutlined, PlusOutlined, SettingOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, PlusCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Modal, Row, Spin } from 'antd';
 import moment, { type Moment } from 'moment';
 import { useEffect, useState } from 'react';
@@ -249,7 +249,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 								setVisibleForm(true);
 							}}
 						>
-							<PlusOutlined /> Thêm sự kiện
+							<PlusCircleOutlined /> Thêm sự kiện cá nhân
 						</Button>
 
 						{/* Bộ lọc */}
