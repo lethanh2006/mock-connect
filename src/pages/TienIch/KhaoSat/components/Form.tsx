@@ -1,10 +1,9 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { ELoaiCauHoi, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
+import { ELoaiCauHoi, EThoiGianDot, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, Spin } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FileChoice from './Question/FileChoice';
@@ -25,18 +24,21 @@ const FormTraLoiKhaoSat = (props: {
 	hideCard?: boolean;
 	[key: string]: any;
 }) => {
-	const { setVisibleForm, record: recordDot, getDotMeModel, visibleForm, danhSach } = useModel('tienich.dotkhaosat');
+	const {
+		setVisibleForm,
+		record: recordDot,
+		getDotMeModel,
+		visibleForm,
+		danhSach,
+		thoiGian,
+	} = useModel('tienich.dotkhaosat');
 	const { loading, record, traLoiBieuMauModel, formSubmiting: formSubmiting1 } = useModel('tienich.bieumau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
 	const { onOk, cauTraLoi, onCancel, hideCard } = props;
 	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
 	const [check, setCheck] = useState<boolean>(false);
-	const ngoaiThoiGian =
-		!recordDot?.thoiGianBatDau ||
-		!recordDot?.thoiGianKetThuc ||
-		moment().isBefore(recordDot?.thoiGianBatDau, 'd') ||
-		moment().isAfter(recordDot?.thoiGianKetThuc, 'd');
+	const disabled = thoiGian !== EThoiGianDot.DANG_DIEN_RA || recordDot?.kichHoat === false;
 
 	useEffect(() => {
 		if (!visibleForm && !onOk) {
@@ -80,13 +82,17 @@ const FormTraLoiKhaoSat = (props: {
 
 	const renderQuestion = (question: BieuMau.CauHoi, index: number) => {
 		let questionEleMent = <div />;
-		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) questionEleMent = <SingleChoice form={form} question={question} />;
-		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE) questionEleMent = <MultipleChoice question={question} />;
-		else if (question.loai === ELoaiCauHoi.TEXT) questionEleMent = <Text question={question} />;
+		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
+			questionEleMent = <SingleChoice form={form} question={question} disabled={disabled} />;
+		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
+			questionEleMent = <MultipleChoice question={question} disabled={disabled} />;
+		else if (question.loai === ELoaiCauHoi.TEXT) questionEleMent = <Text question={question} disabled={disabled} />;
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
-			questionEleMent = <GridChoice question={question} form={form} />;
-		else if (question.loai === ELoaiCauHoi.NUMERIC_RANGE) questionEleMent = <NumericChoice question={question} />;
-		else if (question.loai === ELoaiCauHoi.UPLOAD_FILE) questionEleMent = <FileChoice question={question} />;
+			questionEleMent = <GridChoice question={question} form={form} disabled={disabled} />;
+		else if (question.loai === ELoaiCauHoi.NUMERIC_RANGE)
+			questionEleMent = <NumericChoice question={question} disabled={disabled} />;
+		else if (question.loai === ELoaiCauHoi.UPLOAD_FILE)
+			questionEleMent = <FileChoice question={question} disabled={disabled} />;
 
 		return (
 			<div key={question._id} style={{ marginBottom: 12 }}>
@@ -251,6 +257,7 @@ const FormTraLoiKhaoSat = (props: {
 						style={{ marginBottom: 12, marginTop: 12 }}
 						onChange={(e) => setCheck(e.target.checked)}
 						checked={check}
+						disabled={disabled}
 					>
 						{record?.noiDungCamKet}
 					</Checkbox>
@@ -258,11 +265,11 @@ const FormTraLoiKhaoSat = (props: {
 
 				<div className='form-footer'>
 					<ButtonExtend
-						disabled={(record?.coCamKet && !check) || ngoaiThoiGian}
+						disabled={(record?.coCamKet && !check) || disabled}
 						loading={formSubmiting}
 						htmlType='submit'
 						type='primary'
-						tooltip={ngoaiThoiGian ? 'Ngoài thời gian đợt khảo sát' : undefined}
+						tooltip={disabled ? 'Ngoài thời gian đợt khảo sát' : undefined}
 					>
 						Hoàn thành
 					</ButtonExtend>
