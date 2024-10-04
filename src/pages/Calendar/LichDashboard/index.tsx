@@ -172,7 +172,7 @@ const LichDashboard = () => {
 					<Col span={24}>
 						<div style={{ maxHeight: 450, overflowY: 'auto' }}>{renderContent()}</div>
 					</Col>
-					{!isEmpty(dataCalendarDashboard) ? (
+					{!isEmpty(dataLichDashboard) ? (
 						<Col span={24}>
 							<GhiChuLich />
 						</Col>

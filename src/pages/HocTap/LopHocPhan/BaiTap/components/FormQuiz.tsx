@@ -13,43 +13,29 @@ import { useState } from 'react';
 import { useModel } from 'umi';
 
 const FormQuiz = (props: any) => {
-	const { form, cauTraLoi } = props;
+	const { form, cauTraLoi, disabled } = props;
 	const { record } = useModel('tienich.bieumau');
 	const { record: recBaiTap } = useModel('daotao.baitap');
 	const [check, setCheck] = useState<boolean>(false);
+
+	const disabledNopBai = recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP || disabled;
 
 	const isDiemSo = !!recBaiTap?.assignment?.congBoDapAnDungSauNop && !!recBaiTap?.cauTraLoiId;
 
 	const renderQuestion = (question: BieuMau.CauHoi, index: number) => {
 		let questionEleMent = <div />;
 		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
-			questionEleMent = (
-				<SingleChoice form={form} question={question} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} />
-			);
+			questionEleMent = <SingleChoice form={form} question={question} disabled={disabledNopBai} />;
 		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
-			questionEleMent = (
-				<MultipleChoice question={question} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} />
-			);
+			questionEleMent = <MultipleChoice question={question} disabled={disabledNopBai} />;
 		else if (question.loai === ELoaiCauHoi.TEXT)
-			questionEleMent = (
-				<Text question={question} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} isDiemSo={isDiemSo} />
-			);
+			questionEleMent = <Text question={question} disabled={disabledNopBai} isDiemSo={isDiemSo} />;
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
-			questionEleMent = (
-				<GridChoice question={question} form={form} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} />
-			);
+			questionEleMent = <GridChoice question={question} form={form} disabled={disabledNopBai} />;
 		else if (question.loai === ELoaiCauHoi.NUMERIC_RANGE)
-			questionEleMent = (
-				<NumericChoice question={question} disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP} />
-			);
+			questionEleMent = <NumericChoice question={question} disabled={disabledNopBai} />;
 		else if (question.loai === ELoaiCauHoi.UPLOAD_FILE)
-			questionEleMent = (
-				<FileChoice
-					question={question}
-					disabled={recBaiTap?.trangThai === ETrangThaiNopBaiTap.DA_NOP}
-					isDiemSo={isDiemSo}
-				/>
-			);
+			questionEleMent = <FileChoice question={question} disabled={disabledNopBai} isDiemSo={isDiemSo} />;
 
 		const correctQuestion = cauTraLoi?.find((item: any) => item?.idCauHoi === question?._id)?.correct;
 
@@ -98,6 +84,7 @@ const FormQuiz = (props: any) => {
 					style={{ marginBottom: 12, marginTop: 12 }}
 					onChange={(e) => setCheck(e.target.checked)}
 					checked={check}
+					disabled={disabledNopBai}
 				>
 					{record?.noiDungCamKet}
 				</Checkbox>
