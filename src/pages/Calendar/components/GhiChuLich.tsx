@@ -3,15 +3,24 @@ import { Space } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
-const GhiChuLich = () => {
+const GhiChuLich = (props: { isDashboard?: boolean }) => {
+	const { isDashboard } = props;
 	const { record: recSetting, getSettingLich } = useModel('settinglich');
-	const { selectSuKiens, setSelectSuKiens } = useModel('sukien');
+	const {
+		selectSuKiens,
+		setSelectSuKiens,
+		dataLichDashboard,
+		setLichHienThiDashboardModel,
+		dataLich,
+		setDataCalendar,
+	} = useModel('sukien');
 	const loaiSuKien = [
 		ELoaiSuKien.LICH_HOC,
 		ELoaiSuKien.LICH_THI,
 		ELoaiSuKien.CA_NHAN,
 		ELoaiSuKien.CHUNG,
 		ELoaiSuKien.BAI_TAP,
+		ELoaiSuKien.HOP_LOP,
 	];
 
 	useEffect(() => {
@@ -20,10 +29,21 @@ const GhiChuLich = () => {
 
 	const handleToggleSuKien = (sukien: ELoaiSuKien) => {
 		const isSelected = selectSuKiens.includes(sukien);
+		let updatedSelectSuKiens;
+
 		if (isSelected) {
-			setSelectSuKiens(selectSuKiens.filter((item) => item !== sukien));
+			updatedSelectSuKiens = selectSuKiens.filter((item) => item !== sukien);
 		} else {
-			setSelectSuKiens([...selectSuKiens, sukien]);
+			updatedSelectSuKiens = [...selectSuKiens, sukien];
+		}
+		setSelectSuKiens(updatedSelectSuKiens);
+
+		if (isDashboard) {
+			const filteredEvents = dataLichDashboard?.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien));
+			setLichHienThiDashboardModel(filteredEvents ?? []);
+		} else {
+			const filteredEvents = dataLich.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien as ELoaiSuKien));
+			setDataCalendar(filteredEvents);
 		}
 	};
 
