@@ -103,6 +103,9 @@ export type TableBaseProps = {
 	/** View antd Row Selection */
 	detailRow?: any;
 
+	/** Trạng thái loading của table */
+	loading?: boolean;
+
 	/** Cho phép xóa nhiều, đi kèm với props `rowSelection` */
 	deleteMany?: boolean;
 
