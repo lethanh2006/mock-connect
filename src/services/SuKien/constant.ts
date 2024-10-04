@@ -90,12 +90,12 @@ export const locationPathMappingToESuKienType: Partial<Record<string, ELoaiSuKie
 };
 
 export const ColorSuKien: Partial<Record<ELoaiSuKien, string>> = {
-	[ELoaiSuKien.LICH_HOC]: '#31becbb3',
-	[ELoaiSuKien.LICH_THI]: '#df4471b3',
-	[ELoaiSuKien.CA_NHAN]: '#57bf56b3',
-	[ELoaiSuKien.CHUNG]: '#2098c7b3',
-	[ELoaiSuKien.BAI_TAP]: '#df4471b3',
-	[ELoaiSuKien.HOP_LOP]: '#d5eb34',
+	[ELoaiSuKien.LICH_HOC]: '#1be6f5',
+	[ELoaiSuKien.LICH_THI]: '#f51bf1',
+	[ELoaiSuKien.CA_NHAN]: '#1bf53f',
+	[ELoaiSuKien.CHUNG]: '#381bf5',
+	[ELoaiSuKien.BAI_TAP]: '#f53c1b',
+	[ELoaiSuKien.HOP_LOP]: '#f1f51b',
 };
 
 export const THU_TRONG_TUAN = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
