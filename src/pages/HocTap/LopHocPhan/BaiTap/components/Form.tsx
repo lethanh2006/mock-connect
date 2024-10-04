@@ -206,11 +206,9 @@ const FormBaiTap = (props: any) => {
 		<>
 			{record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.CHUA_NOP && !quaThoiHanNopBai && (
 				<div style={{ marginBottom: 12 }}>
-					<Alert
-						type='warning'
-						showIcon
-						message='Đối với dạng bài tập QUiZ chỉ được nộp bài 1 lần, xem lại kỹ bài tập trước khi nộp bài!'
-					/>
+					<i style={{ color: 'red' }}>
+						Đối với bài Quiz, chỉ cho phép sinh viên làm bài và nộp bài 1 lần, không thể chỉnh sửa sau khi nộp bài
+					</i>
 				</div>
 			)}
 
