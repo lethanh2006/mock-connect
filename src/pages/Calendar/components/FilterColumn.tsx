@@ -1,13 +1,18 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
-import { Calendar as AntdCalendar, Checkbox, Col, Row, Select } from 'antd';
+import { Calendar as AntdCalendar, Checkbox, Col, Popover, Row, Select } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useModel } from 'umi';
+import PickColorLich from './PickColorLich';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { EditFilled } from '@ant-design/icons';
+import { useState } from 'react';
 
 const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 	const { date, setDate } = props;
 	const { selectSuKiens, setSelectSuKiens, setDataCalendar, dataLich } = useModel('sukien');
 	const { record: recSetting } = useModel('settinglich');
+	const [hovered, setHovered] = useState<ELoaiSuKien | null>(null);
 
 	const pickDate = (val: moment.Moment) => setDate(val.toDate());
 
@@ -66,7 +71,11 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 			/>
 
 			<Checkbox.Group value={selectSuKiens} onChange={changeLoaiSuKien}>
-				<Row>
+				<div
+					onMouseEnter={() => setHovered(ELoaiSuKien.CHUNG)}
+					// onMouseLeave={() => setHovered(null)}
+					style={{ display: 'flex', alignItems: 'center' }}
+				>
 					<Checkbox value={ELoaiSuKien.CHUNG}>
 						<p
 							style={{
@@ -81,8 +90,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 							Sự kiện chung
 						</p>
 					</Checkbox>
-				</Row>
-				<Row>
+					{hovered === ELoaiSuKien.CHUNG && (
+						<Popover
+							content={<PickColorLich loaiLich={ELoaiSuKien.CHUNG} />}
+							title='Chọn màu'
+							trigger='click'
+							placement='right'
+						>
+							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
+						</Popover>
+					)}
+				</div>
+				<div
+					onMouseEnter={() => setHovered(ELoaiSuKien.LICH_HOC)}
+					// onMouseLeave={() => setHovered(null)}
+					style={{ display: 'flex', alignItems: 'center' }}
+				>
 					<Checkbox value={ELoaiSuKien.LICH_HOC}>
 						<p
 							style={{
@@ -97,8 +120,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 							{ELoaiSuKien.LICH_HOC}
 						</p>
 					</Checkbox>
-				</Row>
-				<Row>
+					{hovered === ELoaiSuKien.LICH_HOC && (
+						<Popover
+							content={<PickColorLich loaiLich={ELoaiSuKien.LICH_HOC} />}
+							title='Chọn màu'
+							trigger='click'
+							placement='right'
+						>
+							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
+						</Popover>
+					)}
+				</div>
+				<div
+					onMouseEnter={() => setHovered(ELoaiSuKien.BAI_TAP)}
+					// onMouseLeave={() => setHovered(null)}
+					style={{ display: 'flex', alignItems: 'center' }}
+				>
 					<Checkbox value={ELoaiSuKien.BAI_TAP}>
 						<p
 							style={{
@@ -113,8 +150,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 							Bài tập
 						</p>
 					</Checkbox>
-				</Row>
-				<Row>
+					{hovered === ELoaiSuKien.BAI_TAP && (
+						<Popover
+							content={<PickColorLich loaiLich={ELoaiSuKien.BAI_TAP} />}
+							title='Chọn màu'
+							trigger='click'
+							placement='right'
+						>
+							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
+						</Popover>
+					)}
+				</div>
+				<div
+					onMouseEnter={() => setHovered(ELoaiSuKien.LICH_THI)}
+					// onMouseLeave={() => setHovered(null)}
+					style={{ display: 'flex', alignItems: 'center' }}
+				>
 					<Checkbox value={ELoaiSuKien.LICH_THI}>
 						<p
 							style={{
@@ -129,8 +180,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 							{ELoaiSuKien.LICH_THI}
 						</p>
 					</Checkbox>
-				</Row>
-				<Row>
+					{hovered === ELoaiSuKien.LICH_THI && (
+						<Popover
+							content={<PickColorLich loaiLich={ELoaiSuKien.LICH_THI} />}
+							title='Chọn màu'
+							trigger='click'
+							placement='right'
+						>
+							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
+						</Popover>
+					)}
+				</div>
+				<div
+					onMouseEnter={() => setHovered(ELoaiSuKien.HOP_LOP)}
+					// onMouseLeave={() => setHovered(null)}
+					style={{ display: 'flex', alignItems: 'center' }}
+				>
 					<Checkbox value={ELoaiSuKien.HOP_LOP}>
 						<p
 							style={{
@@ -145,8 +210,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 							Họp lớp
 						</p>
 					</Checkbox>
-				</Row>
-				<Row>
+					{hovered === ELoaiSuKien.HOP_LOP && (
+						<Popover
+							content={<PickColorLich loaiLich={ELoaiSuKien.HOP_LOP} />}
+							title='Chọn màu'
+							trigger='click'
+							placement='right'
+						>
+							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
+						</Popover>
+					)}
+				</div>
+				<div
+					onMouseEnter={() => setHovered(ELoaiSuKien.CA_NHAN)}
+					// onMouseLeave={() => setHovered(null)}
+					style={{ display: 'flex', alignItems: 'center' }}
+				>
 					<Checkbox value={ELoaiSuKien.CA_NHAN}>
 						<p
 							style={{
@@ -161,7 +240,17 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 							Sự kiện cá nhân
 						</p>
 					</Checkbox>
-				</Row>
+					{hovered === ELoaiSuKien.CA_NHAN && (
+						<Popover
+							content={<PickColorLich loaiLich={ELoaiSuKien.CA_NHAN} />}
+							title='Chọn màu'
+							trigger='click'
+							placement='right'
+						>
+							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
+						</Popover>
+					)}
+				</div>
 			</Checkbox.Group>
 		</div>
 	);
