@@ -37,6 +37,7 @@ export enum ELoaiCauHoi {
 	GRID_SINGLE_CHOICE = 'GridSingleChoice',
 	NUMERIC_RANGE = 'NumericRange',
 	UPLOAD_FILE = 'UploadFile',
+	RENDER_INPUT = 'RenderInput',
 }
 
 export enum EVaiTroKhaoSat {
