@@ -45,7 +45,7 @@ const LopHanhChinhPage = () => {
 												loading={loading}
 												title='Cố vấn học tập'
 												danhSachNhanSu={
-													record?.giangVien?._id
+													record?.giangVien?.ssoId
 														? [{ nhanSu: record.giangVien, nhanSuSsoId: record.giangVien.ssoId }]
 														: []
 												}
