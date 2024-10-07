@@ -52,6 +52,7 @@ const GhiChuLich = () => {
 							padding: '1px 4px',
 							borderRadius: 2,
 							cursor: 'pointer',
+							userSelect: 'none',
 						}}
 						onClick={() => handleToggleSuKien(sukien)}
 					>

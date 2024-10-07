@@ -74,7 +74,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 				<div
 					onMouseEnter={() => setHovered(ELoaiSuKien.CHUNG)}
 					// onMouseLeave={() => setHovered(null)}
-					style={{ display: 'flex', alignItems: 'center' }}
+					style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}
 				>
 					<Checkbox value={ELoaiSuKien.CHUNG}>
 						<p
@@ -99,7 +99,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 				<div
 					onMouseEnter={() => setHovered(ELoaiSuKien.LICH_HOC)}
 					// onMouseLeave={() => setHovered(null)}
-					style={{ display: 'flex', alignItems: 'center' }}
+					style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}
 				>
 					<Checkbox value={ELoaiSuKien.LICH_HOC}>
 						<p
@@ -124,7 +124,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 				<div
 					onMouseEnter={() => setHovered(ELoaiSuKien.BAI_TAP)}
 					// onMouseLeave={() => setHovered(null)}
-					style={{ display: 'flex', alignItems: 'center' }}
+					style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}
 				>
 					<Checkbox value={ELoaiSuKien.BAI_TAP}>
 						<p
@@ -149,7 +149,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 				<div
 					onMouseEnter={() => setHovered(ELoaiSuKien.LICH_THI)}
 					// onMouseLeave={() => setHovered(null)}
-					style={{ display: 'flex', alignItems: 'center' }}
+					style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}
 				>
 					<Checkbox value={ELoaiSuKien.LICH_THI}>
 						<p
@@ -174,7 +174,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 				<div
 					onMouseEnter={() => setHovered(ELoaiSuKien.HOP_LOP)}
 					// onMouseLeave={() => setHovered(null)}
-					style={{ display: 'flex', alignItems: 'center' }}
+					style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}
 				>
 					<Checkbox value={ELoaiSuKien.HOP_LOP}>
 						<p
@@ -199,7 +199,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 				<div
 					onMouseEnter={() => setHovered(ELoaiSuKien.CA_NHAN)}
 					// onMouseLeave={() => setHovered(null)}
-					style={{ display: 'flex', alignItems: 'center' }}
+					style={{ display: 'flex', alignItems: 'center', userSelect: 'none' }}
 				>
 					<Checkbox value={ELoaiSuKien.CA_NHAN}>
 						<p
