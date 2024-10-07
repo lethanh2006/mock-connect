@@ -91,12 +91,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 						</p>
 					</Checkbox>
 					{hovered === ELoaiSuKien.CHUNG && (
-						<Popover
-							content={<PickColorLich loaiLich={ELoaiSuKien.CHUNG} />}
-							title='Chọn màu'
-							trigger='click'
-							placement='right'
-						>
+						<Popover content={<PickColorLich loaiLich={ELoaiSuKien.CHUNG} />} trigger='click' placement='right'>
 							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
 						</Popover>
 					)}
@@ -121,12 +116,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 						</p>
 					</Checkbox>
 					{hovered === ELoaiSuKien.LICH_HOC && (
-						<Popover
-							content={<PickColorLich loaiLich={ELoaiSuKien.LICH_HOC} />}
-							title='Chọn màu'
-							trigger='click'
-							placement='right'
-						>
+						<Popover content={<PickColorLich loaiLich={ELoaiSuKien.LICH_HOC} />} trigger='click' placement='right'>
 							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
 						</Popover>
 					)}
@@ -151,12 +141,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 						</p>
 					</Checkbox>
 					{hovered === ELoaiSuKien.BAI_TAP && (
-						<Popover
-							content={<PickColorLich loaiLich={ELoaiSuKien.BAI_TAP} />}
-							title='Chọn màu'
-							trigger='click'
-							placement='right'
-						>
+						<Popover content={<PickColorLich loaiLich={ELoaiSuKien.BAI_TAP} />} trigger='click' placement='right'>
 							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
 						</Popover>
 					)}
@@ -181,12 +166,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 						</p>
 					</Checkbox>
 					{hovered === ELoaiSuKien.LICH_THI && (
-						<Popover
-							content={<PickColorLich loaiLich={ELoaiSuKien.LICH_THI} />}
-							title='Chọn màu'
-							trigger='click'
-							placement='right'
-						>
+						<Popover content={<PickColorLich loaiLich={ELoaiSuKien.LICH_THI} />} trigger='click' placement='right'>
 							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
 						</Popover>
 					)}
@@ -211,12 +191,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 						</p>
 					</Checkbox>
 					{hovered === ELoaiSuKien.HOP_LOP && (
-						<Popover
-							content={<PickColorLich loaiLich={ELoaiSuKien.HOP_LOP} />}
-							title='Chọn màu'
-							trigger='click'
-							placement='right'
-						>
+						<Popover content={<PickColorLich loaiLich={ELoaiSuKien.HOP_LOP} />} trigger='click' placement='right'>
 							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
 						</Popover>
 					)}
@@ -241,12 +216,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 						</p>
 					</Checkbox>
 					{hovered === ELoaiSuKien.CA_NHAN && (
-						<Popover
-							content={<PickColorLich loaiLich={ELoaiSuKien.CA_NHAN} />}
-							title='Chọn màu'
-							trigger='click'
-							placement='right'
-						>
+						<Popover content={<PickColorLich loaiLich={ELoaiSuKien.CA_NHAN} />} trigger='click' placement='right'>
 							<ButtonExtend type='link' icon={<EditFilled />} style={{ marginTop: -10 }} />
 						</Popover>
 					)}
