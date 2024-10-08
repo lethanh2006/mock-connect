@@ -235,7 +235,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				<Row gutter={[12, 12]}>
 					<Col span={24}>{mainContent()}</Col>
 					<Col span={24}>
-						<GhiChuLich />
+						<GhiChuLich isDashboard />
 					</Col>
 				</Row>
 			) : (
