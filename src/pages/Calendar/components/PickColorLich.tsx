@@ -1,12 +1,19 @@
 import { ColorSuKien, type ELoaiSuKien } from '@/services/SuKien/constant';
-import { Button } from 'antd';
+import { Button, Form } from 'antd';
 import { Colorpicker } from 'antd-colorpicker';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 	const { loaiLich } = props;
+	const [form] = Form.useForm();
 	const { record } = useModel('sinhvien.sinhvien');
-	const { record: recSetting, putModel, postModel, getSettingLich } = useModel('settinglich');
+	const { record: recSetting, putModel, postModel, formSubmiting, getSettingLich } = useModel('settinglich');
+
+	useEffect(() => {
+		const maMau = recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === loaiLich)?.maMau;
+		form.setFieldsValue({ maMau: maMau ?? ColorSuKien[loaiLich] });
+	}, []);
 
 	const rgbaToHex = (r: number, g: number, b: number, a: number): string => {
 		return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}${Math.round(a * 255)
@@ -14,10 +21,10 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 			.padStart(2, '0')}`;
 	};
 
-	const onFinish = (maMau: any) => {
+	const onFinish = (values: any) => {
 		let danhSachLich = [];
 
-		const color = maMau;
+		const color = values?.maMau;
 		const hexColor = rgbaToHex(color.r, color.g, color.b, color.a);
 
 		if (recSetting?._id) {
@@ -48,19 +55,27 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 	};
 
 	return (
-		<>
-			<Colorpicker
-				value={recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === loaiLich)?.maMau}
-				onColorResult={(color) => color.rgb}
-				onChangeComplete={(val) => onFinish(val)}
-			/>
+		<Form form={form} onFinish={onFinish}>
+			<Form.Item name='maMau' label=''>
+				<Colorpicker onColorResult={(color) => color.rgb} />
+			</Form.Item>
 
 			<div className='form-footer'>
-				<Button size='small' onClick={() => onFinish(ColorSuKien[loaiLich])}>
-					Màu mặc định
+				<Button size='small' loading={formSubmiting} htmlType='submit' type='primary'>
+					Xác nhận
+				</Button>
+				<Button
+					size='small'
+					onClick={() =>
+						onFinish({
+							maMau: ColorSuKien[loaiLich],
+						})
+					}
+				>
+					Đặt về mặc định
 				</Button>
 			</div>
-		</>
+		</Form>
 	);
 };
 
