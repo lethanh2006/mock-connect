@@ -56,9 +56,11 @@ const HoaDonPage = () => {
 			width: 250,
 			render: (val, rec) => (
 				<ExpandText>
-					{rec?.billItems?.map((item) => (
-						<div key={item._id}>- {item.ten ?? item?.tenKhoanThu}</div>
-					))}
+					{rec?.billItems
+						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
+						?.map((item) => (
+							<div key={item._id}>- {item.ten ?? item?.tenKhoanThu}</div>
+						))}
 				</ExpandText>
 			),
 		},

@@ -28,7 +28,7 @@ const FormQuiz = (props: any) => {
 			questionEleMent = <SingleChoice form={form} question={question} disabled={disabledNopBai} />;
 		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
 			questionEleMent = <MultipleChoice question={question} disabled={disabledNopBai} />;
-		else if (question.loai === ELoaiCauHoi.TEXT)
+		else if (question.loai === ELoaiCauHoi.TEXT || question.loai === ELoaiCauHoi.RENDER_INPUT)
 			questionEleMent = <Text question={question} disabled={disabledNopBai} isDiemSo={isDiemSo} />;
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
 			questionEleMent = <GridChoice question={question} form={form} disabled={disabledNopBai} />;
