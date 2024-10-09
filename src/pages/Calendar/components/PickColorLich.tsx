@@ -25,7 +25,7 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 		let danhSachLich = [];
 
 		const color = values?.maMau;
-		const hexColor = rgbaToHex(color.r, color.g, color.b, color.a);
+		const hexColor = rgbaToHex(color?.r, color?.g, color?.b, color?.a);
 
 		if (recSetting?._id) {
 			danhSachLich = recSetting.danhSachSettingLich.map((item) =>

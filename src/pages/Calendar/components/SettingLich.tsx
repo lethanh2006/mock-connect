@@ -57,7 +57,7 @@ const ModalSettingMauLich = () => {
 			hoTen: recSinhVien?.ten,
 			danhSachSettingLich: Object.values(ELoaiSuKien).map((item) => {
 				const color = values[mapFieldLoaiSuKien[item] as any];
-				const hexColor = rgbaToHex(color.r, color.g, color.b, color.a);
+				const hexColor = rgbaToHex(color?.r, color?.g, color?.b, color?.a);
 				return {
 					loaiLich: item,
 					maMau: typeof color === 'string' ? color : hexColor,
