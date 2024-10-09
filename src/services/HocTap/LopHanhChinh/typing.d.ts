@@ -1,4 +1,5 @@
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import type { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import type { EDoiTuongLopHanhChinh } from '../constant';
 
 declare module LopHanhChinh {

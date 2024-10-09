@@ -107,9 +107,10 @@ const ModalSettingMauLich = () => {
 								return acc;
 							}, {});
 							form.setFieldsValue(defaultColors);
+							form.submit();
 						}}
 					>
-						Màu mặc định
+						Đặt về mặc định
 					</Button>
 					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>

@@ -86,7 +86,8 @@ const FormTraLoiKhaoSat = (props: {
 			questionEleMent = <SingleChoice form={form} question={question} disabled={disabled} />;
 		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
 			questionEleMent = <MultipleChoice question={question} disabled={disabled} />;
-		else if (question.loai === ELoaiCauHoi.TEXT) questionEleMent = <Text question={question} disabled={disabled} />;
+		else if (question.loai === ELoaiCauHoi.TEXT || question.loai === ELoaiCauHoi.RENDER_INPUT)
+			questionEleMent = <Text question={question} disabled={disabled} />;
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
 			questionEleMent = <GridChoice question={question} form={form} disabled={disabled} />;
 		else if (question.loai === ELoaiCauHoi.NUMERIC_RANGE)

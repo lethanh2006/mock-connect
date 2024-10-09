@@ -93,10 +93,12 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			<Descriptions.Item label='Lớp học phần'>{event?.assignment?.tenLopHocPhan ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Giảng viên'>{event?.assignment?.hoTenNguoiGiao ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Thời gian giao bài tập'>
-				{event?.createdAt ? moment(event?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
+				{event?.assignment?.createdAt ? moment(event?.assignment?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
 			</Descriptions.Item>
 			<Descriptions.Item label='Thời hạn bài tập'>
-				{event?.thoiGianKetThuc ? moment(event?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY') : '--'}
+				{event?.assignment?.thoiGianKetThuc
+					? moment(event?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
+					: '--'}
 			</Descriptions.Item>
 			<Descriptions.Item label='Trạng thái nộp bài'>
 				<Tag color={colorTrangThaiNopBaiTap[event.trangThai as ETrangThaiNopBaiTap]}>

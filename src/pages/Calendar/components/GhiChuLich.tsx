@@ -3,9 +3,17 @@ import { Space } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
-const GhiChuLich = () => {
+const GhiChuLich = (props: { isDashboard?: boolean }) => {
+	const { isDashboard } = props;
 	const { record: recSetting, getSettingLich } = useModel('settinglich');
-	const { selectSuKiens, setSelectSuKiens, dataLichDashboard, setLichHienThiDashboardModel } = useModel('sukien');
+	const {
+		selectSuKiens,
+		setSelectSuKiens,
+		dataLichDashboard,
+		setLichHienThiDashboardModel,
+		dataLich,
+		setDataCalendar,
+	} = useModel('sukien');
 	const loaiSuKien = [
 		ELoaiSuKien.CHUNG,
 		ELoaiSuKien.LICH_HOC,
@@ -30,8 +38,13 @@ const GhiChuLich = () => {
 		}
 		setSelectSuKiens(updatedSelectSuKiens);
 
-		const filteredEvents = dataLichDashboard?.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien));
-		setLichHienThiDashboardModel(filteredEvents ?? []);
+		if (isDashboard) {
+			const filteredEvents = dataLich.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien as ELoaiSuKien));
+			setDataCalendar(filteredEvents);
+		} else {
+			const filteredEvents = dataLichDashboard?.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien));
+			setLichHienThiDashboardModel(filteredEvents ?? []);
+		}
 	};
 
 	return (
@@ -52,6 +65,7 @@ const GhiChuLich = () => {
 							padding: '1px 4px',
 							borderRadius: 2,
 							cursor: 'pointer',
+							userSelect: 'none',
 						}}
 						onClick={() => handleToggleSuKien(sukien)}
 					>
