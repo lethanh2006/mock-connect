@@ -412,7 +412,7 @@ const ModalQuyDoiDiem = (props: {
 							label='File minh chứng'
 							rules={[...rules.required]}
 						>
-							<UploadFile maxCount={5} />
+							<UploadFile resize maxCount={5} />
 						</Form.Item>
 					</Col>
 				</Row>

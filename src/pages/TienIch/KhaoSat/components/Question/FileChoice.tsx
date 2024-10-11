@@ -20,6 +20,7 @@ const FileChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean; isDie
 						accept='image/*, .pdf, .doc, .docx, .png, .jpg'
 						otherProps={{ showUploadList: { showDownloadIcon: false }, disabled: props?.disabled }}
 						maxCount={5}
+						resize
 					/>
 				</Form.Item>
 			</Col>

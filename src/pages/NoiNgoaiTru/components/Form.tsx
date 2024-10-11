@@ -112,7 +112,7 @@ const FormKhaiBao = (props: any) => {
 					<Col xs={24}>
 						<Col md={8}>
 							<Form.Item name='urlAnhThe' label='Ảnh chân dung' rules={[...rules.required, ...rules.fileRequired]}>
-								<UploadFile isAvatarSmall />
+								<UploadFile isAvatarSmall resize />
 							</Form.Item>
 						</Col>
 					</Col>
