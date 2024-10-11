@@ -94,6 +94,7 @@ const FormGuiPhanHoi = () => {
 							multiple: false,
 							showUploadList: { showDownloadIcon: false },
 						}}
+						resize
 					/>
 				</Form.Item>
 

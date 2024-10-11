@@ -109,7 +109,7 @@ const FormChungChiSinhVien = (props: any) => {
 					) : null}
 					<Col xs={24}>
 						<Form.Item name='urlMinhChung' label='Minh chứng' rules={[...rules.required]}>
-							<UploadFile maxCount={1} accept='image/*, .docx, .doc, .xls, .xlsx, .pdf' />
+							<UploadFile resize maxCount={1} accept='image/*, .docx, .doc, .xls, .xlsx, .pdf' />
 						</Form.Item>
 					</Col>
 				</Row>

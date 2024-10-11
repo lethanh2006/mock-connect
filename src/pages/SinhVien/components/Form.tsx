@@ -92,6 +92,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 								style: { textAlign: 'center' },
 							}}
 							isAvatar
+							resize
 						/>
 					</Form.Item>
 				</Col>

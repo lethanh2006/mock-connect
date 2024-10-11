@@ -305,6 +305,7 @@ const FormBaiTap = (props: any) => {
 								otherProps={{
 									disabled: disable || disableIsQuiz,
 								}}
+								resize
 							/>
 						</Form.Item>
 					</Col>
