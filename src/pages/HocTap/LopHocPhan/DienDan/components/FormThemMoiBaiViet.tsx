@@ -79,7 +79,7 @@ const FormThemMoiBaiViet = (props: IProps) => {
 							<TinyEditor hideMenubar miniToolbar height={500} minHeight={350} />
 						</Form.Item>
 						<Form.Item name={'fileDinhKem'} label='File đính kèm'>
-							<UploadFile maxCount={5} accept={'.png, .jpg, .doc, .docx, .pdf'} />
+							<UploadFile resize maxCount={5} accept={'.png, .jpg, .doc, .docx, .pdf'} />
 						</Form.Item>
 
 						<div className='form-footer'>
