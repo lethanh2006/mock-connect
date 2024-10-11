@@ -5,11 +5,33 @@ import type { RcFile } from 'antd/es/upload';
 import type { UploadFile as UpFile } from 'antd/es/upload/interface';
 import { type SizeType } from 'antd/lib/config-provider/SizeContext';
 import { useEffect, useState } from 'react';
+import Resizer from 'react-image-file-resizer';
 import './UploadAvatar.less';
+
+type TResizeProps = {
+	/** Chiều rộng tối đa của hình ảnh sau khi resize */
+	maxWidth?: number;
+	/** Chiều cao tối đa của hình ảnh sau khi resize */
+	maxHeight?: number;
+	/** Định dạng của hình ảnh mới */
+	compressFormat?: 'jpeg' | 'png' | 'webp';
+	/** Chất lượng của hình ảnh mới */
+	quality?: number;
+	/** Độ xoay theo chiều kim đồng hồ áp dụng cho hình ảnh được tải lên */
+	rotation?: number;
+	/** Loại đầu ra của hình ảnh mới */
+	outputType?: 'base64' | 'blob' | 'file';
+	/** Chiều rộng tối thiểu của hình ảnh mới */
+	minWidth?: number;
+	/** Chiều cao tối thiểu của hình ảnh mới */
+	minHeight?: number;
+};
+
+type TFile = UpFile & { resized?: boolean; remote?: boolean };
 
 const UploadFile = (props: {
 	fileList?: any;
-	value?: string | string[] | null | { fileList: any; [key: string]: any };
+	value?: string | string[] | null | { fileList: UpFile[]; [key: string]: any };
 	onChange?: (val: { fileList: any[] | null }) => void;
 	maxCount?: number;
 	maxSize?: number;
@@ -21,6 +43,9 @@ const UploadFile = (props: {
 	isAvatar?: boolean;
 	isAvatarSmall?: boolean;
 	disabled?: boolean;
+	/** Sử dụng khi `isAvatar` hoặc `isAvatarSmall`. */
+	resize?: boolean | TResizeProps;
+	maxFileSize?: number;
 }) => {
 	const {
 		value,
@@ -33,55 +58,94 @@ const UploadFile = (props: {
 		isAvatar,
 		isAvatarSmall,
 		disabled,
+		maxFileSize = 5,
 	} = props;
 	const limit = props.maxCount || 1;
 	const [fileList, setFileList] = useState<any[]>();
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
+	const resize: TResizeProps | undefined = typeof props.resize === 'boolean' ? {} : props.resize;
 
 	useEffect(() => {
-		let temp: any[] = [];
+		let files: any[] = [];
 		// Single URL
 		if (typeof value === 'string') {
-			temp = [{ url: value, remote: true, name: getNameFile(value) }];
-			setFileList(temp);
+			files = [{ url: value, remote: true, name: getNameFile(value) }];
+			setFileList(files);
 			// Callback về Form để Form Item có fileList => Phục vụ check rules fileRequired
-			if (onChange) onChange({ fileList: temp });
+			if (onChange) onChange({ fileList: files });
 		}
 		// Array of URLs
 		else if (Array.isArray(value)) {
-			temp = value.map((url) => ({ url, remote: true, name: getNameFile(url) }));
-			setFileList(temp);
+			files = value.map((url) => ({ url, remote: true, name: getNameFile(url) }));
+			setFileList(files);
 			// Callback về Form để Form Item có fileList => Phục vụ check rules fileRequired
-			if (onChange) onChange({ fileList: temp });
+			if (onChange) onChange({ fileList: files });
 		}
 		// Object of antd file upload
-		else setFileList(props.fileList || (value && value.fileList) || []);
+		else {
+			files = props.fileList || (value && value.fileList) || [];
+			setFileList(files);
+		}
 	}, [value, props.fileList]);
 
+	/** Resize Hình ảnh */
+	const resizeImages = (files: TFile[]): TFile[] => {
+		let res = files;
+		try {
+			res = files?.map((file) => {
+				const type = file.type?.split('/'); // image/jpeg
+				if (type?.[0] === 'image' && !file.resized) {
+					file.resized = true;
+					Resizer.imageFileResizer(
+						file.originFileObj as any,
+						resize?.maxWidth ?? 1024,
+						resize?.maxHeight ?? 1024,
+						resize?.compressFormat ?? type?.[1] ?? 'webp',
+						resize?.quality ?? 90,
+						resize?.rotation ?? 0,
+						(blob: any) => {
+							// temp = [{ url: URL.createObjectURL(blob), remote: true, name: getNameFile(URL.createObjectURL(blob)) }];
+							// console.log('🚀 ~ useEffect ~ temp:', temp);
+							file.originFileObj = blob;
+						},
+						resize?.outputType ?? 'file',
+						resize?.minWidth,
+						resize?.minHeight,
+					);
+				}
+				return file;
+			});
+		} catch (err) {
+			console.log(err);
+		}
+		return res;
+	};
+
 	const handleChange = (val: any) => {
-		const fil = val.fileList;
-		const maxSize = props?.maxSize ? props.maxSize : 5;
-		const findLargeFile = fil?.find((file: any) => file.size / 1024 / 1024 > maxSize);
-		const findWrongTypeFile = fil?.find((file: any) => {
+		let files = val.fileList as TFile[];
+		const findLargeFile = files?.some((file) => file.size && file.size / 1024 / 1024 > maxFileSize);
+		if (findLargeFile) {
+			message.error(`Dung lượng tập tin không được quá ${maxFileSize}Mb`);
+			return;
+		}
+
+		const findWrongTypeFile = files?.some((file) => {
 			const arrFileName = file.name.split('.');
 			return file?.remote !== true && !otherProps?.accept?.includes(arrFileName?.[arrFileName.length - 1]);
 		});
-
-		if (findLargeFile) {
-			message.error(`Tập tin không được quá ${props?.maxSize ?? 5}Mb`);
-			return;
-		}
 		if (findWrongTypeFile && otherProps?.accept) {
-			message.error(`Chỉ được chọn các định dạng file sau ${otherProps.accept}`);
+			message.error('Định dạng tập tin không cho phép');
 			return;
 		}
 
-		if (fil.length > limit) fil.splice(0, fil.length - limit);
-		setFileList(fil);
-		if (onChange) onChange({ fileList: fil });
+		if (files.length > limit) files.splice(0, files.length - limit);
+		if (!!props.resize) files = resizeImages(files);
+		setFileList(files);
+		if (onChange) onChange({ fileList: files });
 	};
 
+	/** Xem trước ảnh */
 	const handlePreviewImage = async (file: UpFile) => {
 		if (!file.url && !file.preview) file.preview = await blobToBase64(file.originFileObj as RcFile);
 
@@ -92,7 +156,9 @@ const UploadFile = (props: {
 	const Extra = () =>
 		otherProps?.disabled ? null : (
 			<small style={{ color: '#999' }}>
-				<i>Tối đa {limit} mục, dung lượng mỗi file không được quá 5Mb</i>
+				<i>
+					Tối đa {limit} mục, dung lượng mỗi file không được quá {maxFileSize}Mb
+				</i>
 			</small>
 		);
 
