@@ -49,16 +49,23 @@ const OIDCBounder_: FC = ({ children }) => {
 						history.replace('/dashboard');
 				}
 			} catch {
-				notification.warn({
-					message: 'Xác thực người dùng',
-					description: 'Vui lòng đợi trong giây lát. Đang chuyển hướng ...',
-				});
-				history.replace('/user/login');
+				if (auth.isAuthenticated) auth.removeUser();
+				else {
+					notification.warn({
+						message: 'Xác thực người dùng',
+						description: 'Vui lòng đợi trong giây lát. Đang chuyển hướng...',
+					});
+					history.replace('/user/login');
+				}
 			}
 		}
 	};
 
 	useEffect(() => {
+		// Nếu đang cập nhật thì bật cái này lên
+		// history.replace('/hold-on');
+		// return;
+
 		if (unAuthPaths.includes(window.location.pathname) || auth.isLoading) return;
 
 		// Chưa login + chưa có auth params ==> Cần redirect keycloak để lấy auth params + cookie
