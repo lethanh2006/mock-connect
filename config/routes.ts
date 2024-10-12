@@ -159,6 +159,9 @@
 			},
 		],
 	},
+	// Trường hợp copy link từ giảng viên => Tự động redirect tới học tập
+	{ path: 'giang-day/lop-tin-chi/:id', component: './HocTap/LopHocPhan/$id', hideInMenu: true, exact: true },
+	{ path: 'lop-tin-chi/:id', component: './HocTap/LopHocPhan/$id', hideInMenu: true, exact: true },
 
 	// DRL
 	{
