@@ -1,7 +1,8 @@
 import { ESettingKey, unitName } from '@/services/base/constant';
 import { ipTaiChinh } from '@/utils/ip';
 import { removeVietnameseTones } from '@/utils/utils';
-import { Col, Modal, Row, Space } from 'antd';
+import { Col, Empty, Modal, Row, Space } from 'antd';
+import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -22,6 +23,11 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	const unitInfo = removeVietnameseTones(unitName).toUpperCase();
 	const { tienToTaiKhoan, maNganHang, urlHuongDanThanhToan } = settings[ESettingKey.THONG_TIN_THANH_TOAN] ?? {};
 
+	// Define the start and end times
+	const start = moment('23:00', 'HH:mm');
+	const end = moment('01:00', 'HH:mm').add(1, 'day');
+	const nganHangBaoTri = moment().isBetween(start, end);
+
 	useEffect(() => {
 		getByKeyModel(ESettingKey.THONG_TIN_THANH_TOAN, ipTaiChinh)
 			.then()
@@ -31,7 +37,23 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	const renderLopThuong = () => (
 		<Row gutter={[12, 12]}>
 			<Col span={24}>SINH VIÊN CÓ THỂ SỬ DỤNG PHƯƠNG THỨC THANH TOÁN QUA MÃ ĐỊNH DANH HOẶC MÃ QR</Col>
-			<Col xs={24} md={14}>
+
+			<Col span={24} md={{ span: 10, push: 14 }}>
+				<Space direction='vertical' style={{ alignItems: 'center' }}>
+					<b>
+						<u>Mã thanh toán QR liên ngân hàng:</u>
+					</b>
+					{maNganHang && tienToTaiKhoan ? (
+						<img
+							style={{ maxWidth: '100%' }}
+							src={`https://img.vietqr.io/image/${maNganHang}-${tienToTaiKhoan}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
+						/>
+					) : null}
+					<i>Sinh viên quét mã QR bằng Ứng dụng ngân hàng để thanh toán</i>
+				</Space>
+			</Col>
+
+			<Col span={24} md={{ span: 14, pull: 10 }}>
 				<b>
 					<u>Hướng dẫn thanh toán:</u>
 				</b>
@@ -74,21 +96,6 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 					</b>
 				</p>
 			</Col>
-
-			<Col xs={24} md={10}>
-				<Space direction='vertical' style={{ alignItems: 'center' }}>
-					<b>
-						<u>Mã thanh toán QR liên ngân hàng:</u>
-					</b>
-					{maNganHang && tienToTaiKhoan ? (
-						<img
-							style={{ maxWidth: '100%' }}
-							src={`https://img.vietqr.io/image/${maNganHang}-${tienToTaiKhoan}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
-						/>
-					) : null}
-					<i>Sinh viên quét mã QR bằng Ứng dụng ngân hàng để thanh toán</i>
-				</Space>
-			</Col>
 		</Row>
 	);
 
@@ -101,7 +108,11 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 			okButtonProps={{ hidden: true }}
 			width={1000}
 		>
-			{renderLopThuong()}
+			{nganHangBaoTri ? (
+				<Empty description='Hệ thống đang sao lưu dữ liệu, vui lòng thực hiện thanh toán từ 01:00 đến 23:00' />
+			) : (
+				renderLopThuong()
+			)}
 		</Modal>
 	);
 };
