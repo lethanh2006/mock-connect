@@ -42,7 +42,7 @@ const DetailLopTinChi = ({
 		if (auth.user?.access_token) {
 			const path = window.location.pathname;
 			// Nếu là link lấy từ giảng viên thì chuyển đến đúng link của sinh viên
-			if (path.startsWith('/giang-day/lop-tin-chi/') || path.startsWith('/lop-tin-chi/')) {
+			if (path.startsWith('/giang-day/lop-tin-chi/')) {
 				window.history.replaceState(
 					{},
 					document.title,
