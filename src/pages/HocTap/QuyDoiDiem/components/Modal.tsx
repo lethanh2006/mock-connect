@@ -1,7 +1,7 @@
 import MyDatePicker from '@/components/MyDatePicker';
-import { EOperatorType } from '@/components/Table/constant';
 import UploadFile from '@/components/Upload/UploadFile';
 import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
+import SelectQuyDoiDiem from '@/pages/DaoTao/QuyDoiDiem/Select';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import {
@@ -22,24 +22,38 @@ import AutoTruongHocQuyDoi from './AutoTruongHoc';
 
 const ModalQuyDoiDiem = (props: {
 	visible: boolean;
-	setVisible: any;
+	setVisible: (val: boolean) => void;
 	hocPhan?: Pick<HocPhan.IRecord, 'ma' | 'ten' | 'soTinChi'>;
 	maKhoaNganh?: string;
+	getData?: () => void;
 }) => {
 	const [form] = Form.useForm();
-	const { visible, setVisible, hocPhan, maKhoaNganh } = props;
-	const { formSubmiting, record, getModel } = useModel('daotao.quydoidiem.phieuquydoidiem');
+	const { visible, setVisible, hocPhan, maKhoaNganh, getData } = props;
+	const {
+		formSubmiting,
+		record: recPhieu,
+		getModel: getPhieu,
+		setRecord: setPhieu,
+	} = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const { postSinhVienQuyDoiPhieuModel, setFormSubmiting } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { record: recDot } = useModel('daotao.quydoidiem.dotquydoidiem');
-	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { danhSach: danhSachQuyDoiDiem } = useModel('daotao.dmquydoidiem');
 	const { danhSach: danhSachHocPhan } = useModel('hocphan.hocphan');
+	const { initialState } = useModel('@@initialState');
 	const loaiMinhChung: string = Form.useWatch('loai', form);
 	const loaiHocPhan: string = Form.useWatch('loaiHocPhan', form);
 	const trinhDoDaoTao: ETrinhDoMinhChungQuyDoiDiem = Form.useWatch('trinhDoDaoTao', form);
 	const tenTruong = Form.useWatch('tenTruong', form);
 	const diemHe10MinhChung = Form.useWatch('diemHe10MinhChung', form);
 	const diemHe4MinhChung = Form.useWatch('diemHe4MinhChung', form);
+
+	useEffect(() => {
+		// TODO: Bỏ đi
+		if (recDot?._id && initialState?.currentUser?.ssoId)
+			getPhieu({ dotDangKyQuyDoiDiemId: recDot?._id, sinhVienSsoId: initialState?.currentUser?.ssoId }).then((res) =>
+				setPhieu(res[0]),
+			);
+	}, [recDot?._id, initialState?.currentUser?.ssoId]);
 
 	useEffect(() => {
 		if (!visible) resetFieldsForm(form);
@@ -51,16 +65,6 @@ const ModalQuyDoiDiem = (props: {
 		};
 		form.setFieldsValue(initValue);
 	}, [visible]);
-
-	const getData = () =>
-		getModel(undefined, [
-			{
-				active: true,
-				field: 'sinhVienSsoId',
-				operator: EOperatorType.INCLUDE,
-				values: [recSinhVien?.ssoId ?? ''],
-			},
-		]);
 
 	const onChangeHocPhanMinhChung = (maHocPhanMinhChung?: string) => {
 		const ns = danhSachHocPhan.find((item) => item.ma === maHocPhanMinhChung);
@@ -96,21 +100,23 @@ const ModalQuyDoiDiem = (props: {
 			thongTinQuyDoiDiemSinhVien: [
 				{
 					...values,
-					phieuDangKyQuyDoiDiemId: record?._id,
+					// TODO: API chỉnh lại, bỏ những thông tin này đi
+					phieuDangKyQuyDoiDiemId: recPhieu?._id,
 					maHocPhan: hocPhan?.ma,
 					urlsHocPhan: urlsHocPhan,
 					urlsChungChi: urlsChungChi,
 				},
 			],
-			sinhVienSsoId: recSinhVien?.ssoId,
-			maSinhVien: recSinhVien?.ma,
-			hoTen: recSinhVien?.ten,
+			// TODO: API chỉnh lại, bỏ những thông tin này đi
+			sinhVienSsoId: initialState?.currentUser?.ssoId,
+			maSinhVien: initialState?.currentUser?.preferred_username,
+			hoTen: initialState?.currentUser?.name,
 			maKhoaNganh: maKhoaNganh,
 		};
 
 		postSinhVienQuyDoiPhieuModel(recDot?._id ?? '', data)
 			.then(() => {
-				getData();
+				if (getData) getData();
 				setVisible(false);
 			})
 			.catch((rec) => console.log(rec));
@@ -323,13 +329,7 @@ const ModalQuyDoiDiem = (props: {
 							</Col>
 							<Col span={12} md={8}>
 								<Form.Item name='diemChuMinhChung' label='Điểm chữ' rules={[...rules.required]}>
-									<Select
-										options={danhSachQuyDoiDiem.map((item) => ({
-											key: item._id,
-											value: item.diemChu,
-											label: item.diemChu,
-										}))}
-										placeholder='Nhập điểm chữ'
+									<SelectQuyDoiDiem
 										disabled={!!diemHe4MinhChung}
 										onChange={(val) => form.setFieldsValue({ diemChu: val })}
 									/>

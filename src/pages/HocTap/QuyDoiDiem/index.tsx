@@ -26,6 +26,7 @@ const LichSuQuyDoiDiemPage = () => {
 		setRecord(rec);
 		setVisibleView(true);
 	};
+
 	const getData = () => getModel({ maKhoaNganh }, undefined, undefined, undefined, undefined, 'me');
 
 	const onCell = (rec: QuyDoiDiem.IPhieuDangKyQuyDoiDiem) => ({
@@ -100,7 +101,9 @@ const LichSuQuyDoiDiemPage = () => {
 				}}
 				hideCard
 			/>
-			<ModalQuyDoiDiem visible={visibleForm} setVisible={setVisibleForm} />
+
+			<ModalQuyDoiDiem visible={visibleForm} setVisible={setVisibleForm} getData={getData} />
+
 			<ViewPhieuQuyDoiDiem visible={visibleView} setVisible={setVisibleView} />
 		</>
 	);
