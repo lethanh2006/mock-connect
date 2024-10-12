@@ -82,10 +82,12 @@ axios.interceptors.response.use(
 					break;
 
 				case 401:
-					notification.error({
-						message: 'Phiên đăng nhập đã hết hạn (104)',
-						description: 'Vui lòng tải lại trang (F5) để cập nhật. Chú ý các dữ liệu chưa lưu sẽ bị mất!',
-					});
+					// Nếu có access token (có thể access token hết hạn) thì mới cảnh báo
+					if (originalRequest?.headers?.Authorization)
+						notification.error({
+							message: 'Phiên đăng nhập đã thay đổi (104)',
+							description: 'Vui lòng tải lại trang (F5) để cập nhật. Chú ý các dữ liệu chưa lưu sẽ bị mất!',
+						});
 					if (originalRequest._retry) break;
 					break;
 				// return routeLogin('Unauthorize');
@@ -143,7 +145,7 @@ axios.interceptors.response.use(
 				case 403:
 				case 405:
 					notification.error({
-						message: 'Thao tác không được phép (3041)',
+						message: 'Thao tác không được phép (304)',
 						description: descriptionError,
 					});
 					break;

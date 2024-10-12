@@ -5,6 +5,7 @@ import axios from '@/utils/axios';
 import { currentRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
 import { notification } from 'antd';
+import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useModel } from 'umi';
@@ -78,7 +79,20 @@ const OIDCBounder_: FC = ({ children }) => {
 		if (auth.isAuthenticated) {
 			handleLogin();
 			if (hasAuthParams()) {
-				window.history.replaceState({}, document.title, window.location.pathname);
+				// Loại bỏ các Auth params
+				const { code, iss, session_state, state, ...other } = queryString.parse(window.location.search);
+				let newSearch = Object.keys(other)
+					.map((key) => `${key}=${other[key]}`)
+					.join('&');
+				if (newSearch) newSearch = '?' + newSearch;
+				// Reload trang để cập nhật access token mới
+				const pathname = window.location.pathname === '/' ? '/dashboard' : window.location.pathname;
+				window.location.replace(`${pathname}${newSearch}${window.location.hash}`);
+				// window.history.replaceState(
+				// 	{},
+				// 	document.title,
+				// 	`${window.location.pathname}${newSearch}${window.location.hash}`,
+				// );
 			}
 		}
 	}, [auth.isAuthenticated, auth.isLoading]);

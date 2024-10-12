@@ -4,14 +4,15 @@ import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
 import { history, useModel } from 'umi';
+import CardThongBao from '../../ThongBao/ThongBaoLop/CardThongBao';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
+import CardGiangVienLop from './components/CardGiangVien';
+import ThongTinChung from './components/ThongTinChung';
 import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
-import CardThongBao from '../../ThongBao/ThongBaoLop/CardThongBao';
-import CardGiangVienLop from './components/CardGiangVien';
-import ThongTinChung from './components/ThongTinChung';
 
 const DetailLopTinChi = ({
 	match: {
@@ -23,6 +24,7 @@ const DetailLopTinChi = ({
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
 	const { record, sinhVienGetByIdModel, setRecord } = useModel('lophocphan.lophocphan');
 	const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
+	const auth = useAuth();
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia', 'dien-dan', 'bai-tap'];
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 	const hash = window.location.hash?.replace('#', '') ?? paths[0];
@@ -35,6 +37,20 @@ const DetailLopTinChi = ({
 			getAllNhanSu(false, undefined, { lopHocPhanId: id });
 		}
 	};
+
+	useEffect(() => {
+		if (auth.user?.access_token) {
+			const path = window.location.pathname;
+			// Nếu là link lấy từ giảng viên thì chuyển đến đúng link của sinh viên
+			if (path.startsWith('/giang-day/lop-tin-chi/') || path.startsWith('/lop-tin-chi/')) {
+				window.history.replaceState(
+					{},
+					document.title,
+					`/hoc-tap/lop-tin-chi/${id}${window.location.search}${window.location.hash}`,
+				);
+			}
+		}
+	}, [auth.user?.access_token]);
 
 	useEffect(() => {
 		getData();
