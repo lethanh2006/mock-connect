@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
 import './components/style.less';
-import { SelectDotCapNhat } from '@/pages/DotCapNhatHoSo/select';
+import { SelectDotCapNhat } from '@/pages/DaoTao/DotCapNhatHoSo/select';
 import moment from 'moment';
 
 const ThongTinSinhVienPage = () => {

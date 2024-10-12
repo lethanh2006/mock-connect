@@ -12,7 +12,7 @@ const localizer = momentLocalizer(moment);
 
 const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	const { visibleModal, setVisibleModal, danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
-	const { record: recSetting, getSettingLich } = useModel('settinglich');
+	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
 	const [dataCalendar, setDataCalendar] = useState<{ title: string; [x: string]: unknown }[]>([]);
 	const [date, setDate] = useState<Date>();

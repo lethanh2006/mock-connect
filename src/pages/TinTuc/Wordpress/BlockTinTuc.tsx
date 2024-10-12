@@ -1,5 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
+import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import { Col, Empty, Row, Tooltip } from 'antd';
 import { first } from 'lodash';
 import moment from 'moment';
@@ -12,7 +12,7 @@ import { getImageSrc } from './utils/getImageSrc';
 const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 	const { danhSach: danhSachChuDe, setRecord: setChuDe } = useModel('tintuc.chude');
 	const { danhSach, setPage } = useModel('tintuc.tintucwp');
-	const { postModel, danhSach: danhSachXemSau, deleteModel } = useModel('xemsau');
+	const { postModel, danhSach: danhSachXemSau, deleteModel } = useModel('tienich.xemsau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { empty } = props;
 	const url = 'tin-tuc';

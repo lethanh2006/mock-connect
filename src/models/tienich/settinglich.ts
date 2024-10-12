@@ -1,5 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
-import type { SettingLich } from '@/services/SettingLich/typing';
+import type { SettingLich } from '@/services/TienIch/SettingLich/typing';
 
 export default () => {
 	const objInit = useInitModel<SettingLich.IRecord>('setting-lich');
