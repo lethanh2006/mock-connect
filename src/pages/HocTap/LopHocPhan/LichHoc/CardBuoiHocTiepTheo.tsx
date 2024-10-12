@@ -88,7 +88,7 @@ const CardBuoiHocTiepTheo = () => {
 			<Row gutter={[16, 16]}>
 				{buoiHocHienTai?._id ? (
 					<Col span={24} sm={12} md={24}>
-						<Card size='small' title='Buổi học đang diễn ra'>
+						<Card size='small' title='Buổi học đang diễn ra' className='card-highlight'>
 							{renderBuoihoc(buoiHocHienTai)}
 						</Card>
 					</Col>
@@ -108,7 +108,7 @@ const CardBuoiHocTiepTheo = () => {
 							/>,
 						]}
 						loading={loading}
-						className='card-highlight'
+						className={!!buoiHocHienTai?._id ? undefined : 'card-highlight'}
 					>
 						{buoiHocTiepTheo?._id ? (
 							renderBuoihoc(buoiHocTiepTheo)
