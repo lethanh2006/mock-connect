@@ -1,4 +1,4 @@
-import { ELoaiCheDoSinhVien } from '@/services/CheDoSinhVien/constant';
+import { ELoaiCheDoSinhVien } from '@/services/CongTacSinhVien/CheDoSinhVien/constant';
 import QuyetDinh from '../QuyetDinh';
 
 const CheDoChinhSach = () => {

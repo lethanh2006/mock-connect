@@ -10,7 +10,7 @@ const localizer = momentLocalizer(moment);
 
 const CalendarLichHocLopHp = () => {
 	const { setVisibleForm, danhSach, setRecord } = useModel('daotao.thoikhoabieu');
-	const { record: recSetting, getSettingLich } = useModel('settinglich');
+	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 
 	useEffect(() => {
 		getSettingLich();

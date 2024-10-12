@@ -1,7 +1,7 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
-import { ELoaiBoLoc, type ELoaiCheDoSinhVien } from '@/services/CheDoSinhVien/constant';
-import type { CheDoSinhVien } from '@/services/CheDoSinhVien/typings';
+import { ELoaiBoLoc, type ELoaiCheDoSinhVien } from '@/services/CongTacSinhVien/CheDoSinhVien/constant';
+import type { CheDoSinhVien } from '@/services/CongTacSinhVien/CheDoSinhVien/typings';
 
 import { Input, Modal, Select } from 'antd';
 import moment from 'moment';

@@ -24,7 +24,7 @@ const loaiSuKien = [
 
 const ModalSettingMauLich = () => {
 	const { formSubmiting, visibleForm, setVisibleForm, record, putModel, postModel, getSettingLich } =
-		useModel('settinglich');
+		useModel('tienich.settinglich');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
 

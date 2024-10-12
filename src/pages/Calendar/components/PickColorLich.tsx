@@ -8,7 +8,7 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 	const { loaiLich } = props;
 	const [form] = Form.useForm();
 	const { record } = useModel('sinhvien.sinhvien');
-	const { record: recSetting, putModel, postModel, formSubmiting, getSettingLich } = useModel('settinglich');
+	const { record: recSetting, putModel, postModel, formSubmiting, getSettingLich } = useModel('tienich.settinglich');
 
 	useEffect(() => {
 		const maMau = recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === loaiLich)?.maMau;

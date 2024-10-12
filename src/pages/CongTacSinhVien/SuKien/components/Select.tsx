@@ -4,7 +4,7 @@ import { useModel } from 'umi';
 
 export const SelectSuKien = (props: { value?: string; onChange?: any; multiple?: boolean }) => {
 	const { value, onChange, multiple } = props;
-	const { danhSach, getAllModel, visibleForm } = useModel('sukien');
+	const { danhSach, getAllModel, visibleForm } = useModel('sukien.sukien');
 
 	useEffect(() => {
 		if (!visibleForm) getAllModel();

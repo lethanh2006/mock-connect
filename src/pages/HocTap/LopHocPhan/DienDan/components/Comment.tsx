@@ -1,4 +1,4 @@
-import type { BinhLuan } from '@/services/DienDan/BinhLuan/typing';
+import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import { createTextLinks } from '@/utils/utils';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';

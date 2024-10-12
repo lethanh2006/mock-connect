@@ -3,7 +3,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { EHoatDongChungType1 } from '@/services/SuKien/constant';
 import type { SuKien } from '@/services/SuKien/typings';
-import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
+import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import { EyeOutlined, FileExcelOutlined, ReloadOutlined, SaveOutlined } from '@ant-design/icons';
 import { Card, Tabs } from 'antd';
 import moment from 'moment';
@@ -18,7 +18,7 @@ const SinhVienHoatDongCTSV = () => {
 		getAllModel: getAllXemSau,
 		danhSach: danhSachXemSau,
 		deleteModel,
-	} = useModel('xemsau');
+	} = useModel('tienich.xemsau');
 	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { getAllModel: getAllHocKy, danhSach: danhSachHocKy } = useModel('daotao.hocky');
 	const [tabActive, setTabActive] = useState<EHoatDongChungType1>(EHoatDongChungType1.GIAO_DUC_CHINH_TRI_TU_TUONG);

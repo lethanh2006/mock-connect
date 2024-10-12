@@ -1,6 +1,6 @@
 import anh from '@/assets/noimg.png';
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
+import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import { Col, Empty, Row, Tooltip, Typography } from 'antd';
 import moment from 'moment';
 import { history, useModel } from 'umi';
@@ -15,7 +15,7 @@ export const renderParagraph = (text: string, rows: number, style: any) => (
 const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 	const { danhSach: danhSachChuDe, setRecord: setChuDe } = useModel('tintuc.chude');
 	const { danhSach, setPage } = useModel('tintuc.tintuc');
-	const { postModel, danhSach: danhSachXemSau, deleteModel } = useModel('xemsau');
+	const { postModel, danhSach: danhSachXemSau, deleteModel } = useModel('tienich.xemsau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 
 	const { empty } = props;
