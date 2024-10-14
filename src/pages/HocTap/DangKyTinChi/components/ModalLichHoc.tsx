@@ -12,11 +12,16 @@ const localizer = momentLocalizer(moment);
 
 const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	const { visibleModal, setVisibleModal, danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
+	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
 	const [dataCalendar, setDataCalendar] = useState<{ title: string; [x: string]: unknown }[]>([]);
 	const [date, setDate] = useState<Date>();
 	const [startDate, setStartDate] = useState<Date>();
 	const [endDate, setEndDate] = useState<Date>();
+
+	useEffect(() => {
+		getSettingLich();
+	}, []);
 
 	const getData = () => {
 		const data = danhSachLopDangKy
@@ -42,7 +47,11 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	}, [visibleModal]);
 
 	const eventPropGetter = () => ({
-		style: { backgroundColor: ColorSuKien?.[ELoaiSuKien.LICH_HOC] },
+		style: {
+			backgroundColor:
+				recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.LICH_HOC)?.maMau ??
+				ColorSuKien?.[ELoaiSuKien.LICH_HOC],
+		},
 	});
 
 	const eventCustom = ({ event }: any) => {

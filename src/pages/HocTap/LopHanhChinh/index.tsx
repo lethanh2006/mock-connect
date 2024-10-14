@@ -1,16 +1,24 @@
-import { Card, Empty, Tabs } from 'antd';
-import { useModel } from 'umi';
-import ThongTinChungLopHanhChinh from './components/ThongTinChung';
-import SelectLopHanhChinhSinhVien from './components/Select';
-import { useEffect } from 'react';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
+import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
+import { Card, Col, Empty, Row, Tabs } from 'antd';
+import { useEffect, useState } from 'react';
+import { useModel } from 'umi';
+import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
+import SelectLopHanhChinhSinhVien from './components/Select';
+import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
 const LopHanhChinhPage = () => {
-	const { record, sinhVienGetByIdModel, setRecord, danhSach } = useModel('daotao.lophanhchinh');
+	const { record, sinhVienGetByIdModel, setRecord, danhSach, loading } = useModel('daotao.lophanhchinh');
+	const paths = ['thong-tin', 'thong-bao'];
+	const [tabActive, setTabActive] = useState<string>(paths[0]);
 
 	useEffect(() => {
 		if (record?._id) sinhVienGetByIdModel(record._id);
 	}, [record?._id]);
+
+	const onChangeTab = (tab: string) => {
+		setTabActive(tab);
+	};
 
 	return (
 		<Card
@@ -27,11 +35,34 @@ const LopHanhChinhPage = () => {
 		>
 			{record?._id ? (
 				<>
-					<Tabs>
-						<Tabs.TabPane tab='Thông tin chung' key={0}>
-							<ThongTinChungLopHanhChinh />
+					<Tabs onChange={onChangeTab} activeKey={tabActive}>
+						<Tabs.TabPane tab='Thông tin chung' key={paths[0]}>
+							<Row gutter={[16, 16]}>
+								<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
+									<Row gutter={[16, 16]}>
+										<Col span={24}>
+											<CardGiangVienLop
+												loading={loading}
+												title='Cố vấn học tập'
+												danhSachNhanSu={
+													record?.giangVien?.ssoId
+														? [{ nhanSu: record.giangVien, nhanSuSsoId: record.giangVien.ssoId }]
+														: []
+												}
+												isHighlight
+											/>
+										</Col>
+										<Col span={24}>
+											<CardThongBao loai='lop-hanh-chinh' idLop={record?._id} onShowAll={() => onChangeTab(paths[1])} />
+										</Col>
+									</Row>
+								</Col>
+								<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
+									<ThongTinChungLopHanhChinh />
+								</Col>
+							</Row>
 						</Tabs.TabPane>
-						<Tabs.TabPane tab='Thông báo' key={1}>
+						<Tabs.TabPane tab='Thông báo' key={paths[1]}>
 							<ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />
 						</Tabs.TabPane>
 					</Tabs>

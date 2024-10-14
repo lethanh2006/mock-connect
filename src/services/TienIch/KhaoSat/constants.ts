@@ -5,9 +5,9 @@ export enum EThoiGianDot {
 }
 
 export const thoiGianDot: Record<EThoiGianDot, string> = {
-	[EThoiGianDot.CHUA_DIEN_RA]: 'Chưa diễn ra',
+	[EThoiGianDot.CHUA_DIEN_RA]: 'Chưa bắt đầu',
 	[EThoiGianDot.DANG_DIEN_RA]: 'Đang diễn ra',
-	[EThoiGianDot.DA_DIEN_RA]: 'Đã diễn ra',
+	[EThoiGianDot.DA_DIEN_RA]: 'Đã kết thúc',
 };
 
 export const textThucHienKhaoSat: Record<EThoiGianDot, string> = {
@@ -37,4 +37,11 @@ export enum ELoaiCauHoi {
 	GRID_SINGLE_CHOICE = 'GridSingleChoice',
 	NUMERIC_RANGE = 'NumericRange',
 	UPLOAD_FILE = 'UploadFile',
+	RENDER_INPUT = 'RenderInput',
+}
+
+export enum EVaiTroKhaoSat {
+	NHAN_VIEN = 'nhan_vien',
+	SINH_VIEN = 'sinh_vien',
+	KHAC = 'khac',
 }

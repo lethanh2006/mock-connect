@@ -11,6 +11,8 @@ declare module KeHoachNamHoc {
 		active: boolean;
 		phienBanId: string;
 
+		ghiChu?: string | null;
+
 		createdAt?: string;
 		updatedAt?: string;
 	}
@@ -21,6 +23,7 @@ declare module KeHoachNamHoc {
 		tuanBatDau: number;
 		tuanKetThuc: number;
 		hoatDongTuanId?: string;
+		ghiChu?: string | null;
 	}
 
 	export type THeadGroup = {
@@ -31,16 +34,20 @@ declare module KeHoachNamHoc {
 
 	export type TGridHeader = {
 		hocKys?: THeadGroup[];
-		weeks: number[];
+		weeks: number[]; // Thứ tự kỳ theo năm học
+		isoWeeks: number[]; // Thứ tự kỳ theo năm hành chính
 		months: THeadGroup[];
 		days: THeadGroup[];
 	};
 
 	export type TKeHoachData = {
-		maKhoa?: string;
-		maNganh?: string;
+		maKhoa: string;
+		maNganh: string;
+		maTrinhDo?: string;
+		maHinhThuc?: string;
 		maKhoaNganh: string;
 		tenKhoaNganh: string;
+		tenKhoaNganhVietTat?: string;
 		keHoachList: Partial<IRecord>[];
 	};
 }

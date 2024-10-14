@@ -1,6 +1,7 @@
 import { danhGiaGiangVien, getDanhGiaGiangVien } from '@/services/TienIch/KhaoSat/BieuMau';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { message } from 'antd';
+import _ from 'lodash';
 import { useState } from 'react';
 
 export default () => {
@@ -12,7 +13,8 @@ export default () => {
 		setLoading(true);
 		try {
 			const res = await getDanhGiaGiangVien(lopHocPhanId);
-			setDanhSach(res.data?.data);
+
+			setDanhSach(_.orderBy(res.data?.data, ['updatedAt'], ['desc']));
 			return res.data?.data;
 		} catch (error) {
 			return Promise.reject(error);

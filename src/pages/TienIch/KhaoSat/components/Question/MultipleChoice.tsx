@@ -2,7 +2,7 @@ import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
 import { Checkbox, Form } from 'antd';
 
-const MultipleChoice = (props: { question: BieuMau.CauHoi }) => {
+const MultipleChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean }) => {
 	// const [idCauTraLoi, setIdCauTraLoi] = useState<string[]>([]);
 
 	// const handleRenderTraLoi = () => {
@@ -31,7 +31,7 @@ const MultipleChoice = (props: { question: BieuMau.CauHoi }) => {
 
 	return (
 		<Form.Item rules={props.question.batBuoc ? [...rules.required] : []} name={[props.question._id, 'listLuaChon']}>
-			<Checkbox.Group>
+			<Checkbox.Group disabled={props.disabled}>
 				{props.question.luaChon?.map((item) => (
 					<div key={item._id}>
 						<Checkbox value={item.noiDung}>{item.noiDung}</Checkbox>

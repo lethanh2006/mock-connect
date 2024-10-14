@@ -77,10 +77,28 @@ export const AppModules: Record<EModuleKey, Login.TModule> = {
 	},
 	[EModuleKey.CSVC]: {
 		title: APP_CONFIG_TITLE_CSVC,
-		clientId: `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}kt`,
-		url: APP_CONFIG_URL_CTSV,
-		icon: EModuleKey.KT + '.svg',
+		clientId: `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}csvc`,
+		url: APP_CONFIG_URL_CSVC,
+		icon: EModuleKey.CSVC + '.svg',
 	},
+};
+
+export const moduleThuVien: Partial<Login.TModule> = {
+	title: APP_CONFIG_TITLE_THU_VIEN,
+	url: APP_CONFIG_URL_THU_VIEN,
+	icon: 'thu-vien.svg',
+};
+
+export const moduleQuanLyVanBan: Partial<Login.TModule> = {
+	title: APP_CONFIG_TITLE_QLVB,
+	url: APP_CONFIG_URL_QLVB,
+	icon: 'quan-ly-van-ban.svg',
+};
+
+export const moduleCongThongTin: Partial<Login.TModule> = {
+	title: APP_CONFIG_TITLE_LANDING,
+	url: APP_CONFIG_URL_LANDING,
+	icon: 'cong-thong-tin.svg',
 };
 
 /** Đường link landing page */
@@ -100,3 +118,8 @@ export const unitPrefix = APP_CONFIG_TIEN_TO_TRUONG;
 
 /** Tên tiếng anh của trường */
 export const tenTruongVietTatTiengAnh = APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH;
+
+/** Cài đặt hệ thống */
+export enum ESettingKey {
+	THONG_TIN_THANH_TOAN = 'THONG_TIN_THANH_TOAN',
+}

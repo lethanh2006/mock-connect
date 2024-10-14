@@ -1,8 +1,10 @@
 import { Col, Row } from 'antd';
 import LichDashboard from '../Calendar/LichDashboard';
-import TinTucDashboard from '../TinTucWP/TinTucDashboard';
+import TinTucDashboardWrapper from '../TinTuc/Wrapper/Dashboard';
 import CardLopHocPhan from './components/CardLopHocPhan';
 import CardTienTrinhTotNghiep from './components/CardTienTrinhTotNghiep';
+import './components/style.less';
+import CalendarPage from '../Calendar';
 
 const TrangChu = () => {
 	return (
@@ -16,6 +18,7 @@ const TrangChu = () => {
 
 						<Col xs={24}>
 							<LichDashboard />
+							{/* <CalendarPage isDashboard /> */}
 						</Col>
 					</Row>
 				</Col>
@@ -26,7 +29,7 @@ const TrangChu = () => {
 							<CardLopHocPhan />
 						</Col>
 						<Col span={24}>
-							<TinTucDashboard />
+							<TinTucDashboardWrapper />
 						</Col>
 					</Row>
 				</Col>

@@ -1,5 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import { ColorDiemChu, type ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import {
 	EMinhChungQuyDoiDiem,
@@ -15,7 +16,6 @@ const FormItemHocPhanQuyDoi = () => {
 	const { setVisibleForm, visibleForm, getModel, danhSach, loading, handleView } = useModel(
 		'daotao.quydoidiem.sinhvienquydoidiem',
 	);
-
 	const { record: recPhieu } = useModel('daotao.quydoidiem.phieuquydoidiem');
 
 	const getData = () => getModel({ phieuDangKyQuyDoiDiemId: recPhieu?._id });
@@ -45,19 +45,28 @@ const FormItemHocPhanQuyDoi = () => {
 			render: (val, rec) => (
 				<>
 					{rec?.loai}:{' '}
-					{(rec?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? rec?.tenChungChi : rec?.tenHocPhan) ?? (
-						<i>Không có thông tin</i>
-					)}
+					{(rec?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI
+						? rec?.tenChungChi
+						: rec.loai === EMinhChungQuyDoiDiem.NCKH
+						? rec.tenDeTaiNckh
+						: rec?.tenHocPhan) ?? <i>Không có thông tin</i>}
 				</>
 			),
 			onCell,
 		},
 		{
 			title: 'Kết quả quy đổi',
-			dataIndex: 'diemHe10',
+			dataIndex: 'diemChu',
 			align: 'center',
 			width: 120,
-			render: (val, rec) => (val ? `${val} - ${rec.diemHe4 ?? ''} - ${rec.diemChu ?? ''}` : <i>Chưa có điểm</i>),
+			render: (val: ELoaiDiemChu, rec) =>
+				val ? (
+					<>
+						{rec.diemHe10 ?? ''} - {rec.diemHe4 ?? ''} - <b style={{ color: ColorDiemChu[val] }}>{val}</b>
+					</>
+				) : (
+					<i>Chưa có điểm</i>
+				),
 			onCell,
 		},
 		{

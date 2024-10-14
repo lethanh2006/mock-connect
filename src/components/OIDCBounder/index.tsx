@@ -5,6 +5,7 @@ import axios from '@/utils/axios';
 import { currentRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
 import { notification } from 'antd';
+import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useModel } from 'umi';
@@ -28,10 +29,13 @@ const OIDCBounder_: FC = ({ children }) => {
 				const [getPermissionsResponse, getUserInfoResponse] = await Promise.all([getPermission(), getUserInfo()]);
 				const userInfo: Login.IUser = getUserInfoResponse?.data;
 				const permissions: Login.IPermission[] = getPermissionsResponse.data;
+				const isUncheckPath = unCheckPermissionPaths.some((path) => window.location.pathname.includes(path));
 
 				if (
-					unCheckPermissionPaths.includes(window.location.pathname) ||
-					(currentRole && permissions.length && !permissions.find((item) => item.rsname === currentRole))
+					!isUncheckPath &&
+					currentRole &&
+					permissions.length &&
+					!permissions.find((item) => item.rsname === currentRole)
 				) {
 					history.replace('/403');
 				} else {
@@ -39,22 +43,30 @@ const OIDCBounder_: FC = ({ children }) => {
 						...initialState,
 						currentUser: { ...userInfo, ssoId: userInfo.sub },
 						authorizedPermissions: permissions,
+						permissionLoading: false,
 					});
 
 					if (window.location.pathname === '/' || window.location.pathname === '/user/login')
 						history.replace('/dashboard');
 				}
 			} catch {
-				notification.warn({
-					message: 'Xác thực người dùng',
-					description: 'Vui lòng đợi trong giây lát. Đang chuyển hướng ...',
-				});
-				history.replace('/user/login');
+				if (auth.isAuthenticated) auth.removeUser();
+				else {
+					notification.warn({
+						message: 'Xác thực người dùng',
+						description: 'Vui lòng đợi trong giây lát. Đang chuyển hướng...',
+					});
+					history.replace('/user/login');
+				}
 			}
 		}
 	};
 
 	useEffect(() => {
+		// Nếu đang cập nhật thì bật cái này lên
+		// history.replace('/hold-on');
+		// return;
+
 		if (unAuthPaths.includes(window.location.pathname) || auth.isLoading) return;
 
 		// Chưa login + chưa có auth params ==> Cần redirect keycloak để lấy auth params + cookie
@@ -67,7 +79,20 @@ const OIDCBounder_: FC = ({ children }) => {
 		if (auth.isAuthenticated) {
 			handleLogin();
 			if (hasAuthParams()) {
-				window.history.replaceState({}, document.title, window.location.pathname);
+				// Loại bỏ các Auth params
+				const { code, iss, session_state, state, ...other } = queryString.parse(window.location.search);
+				let newSearch = Object.keys(other)
+					.map((key) => `${key}=${other[key]}`)
+					.join('&');
+				if (newSearch) newSearch = '?' + newSearch;
+				// Reload trang để cập nhật access token mới
+				const pathname = window.location.pathname === '/' ? '/dashboard' : window.location.pathname;
+				window.location.replace(`${pathname}${newSearch}${window.location.hash}`);
+				// window.history.replaceState(
+				// 	{},
+				// 	document.title,
+				// 	`${window.location.pathname}${newSearch}${window.location.hash}`,
+				// );
 			}
 		}
 	}, [auth.isAuthenticated, auth.isLoading]);

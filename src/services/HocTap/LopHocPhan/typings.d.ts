@@ -1,10 +1,10 @@
 import { type ELoaiHocPhanDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import type { DiemHocPhan } from '@/services/DaoTao/DiemHocPhan/typing';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
-import type { EDoiTuongLopHanhChinh, ETrangThaiThi } from '../constant';
+import type { ETrangThaiThi } from '../constant';
 import {
 	type ELoaiDiemChu,
 	type ELoaiLopHocPhan,
@@ -23,6 +23,9 @@ export declare module LopHocPhan {
 		hocKy?: HocKy.IRecord;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
+		gioiThieuChung?: string;
+		lmsUrl?: string; // Link học trực tuyến
+
 		siSoToiDa: number;
 		siSo?: number; // Sĩ số hiện tại
 		loai: ELoaiLopHocPhan;
@@ -32,16 +35,26 @@ export declare module LopHocPhan {
 
 		parent?: IRecord;
 		children?: IRecord[];
-		nhanSuList?: ToChucNhanSu.INhanSu[];
+		/** Lớp ghép thời khóa biểu cùng */
+		tenLopGhepTkb?: string;
+		lopGhepTkb?: IRecord;
+
+		nhanSuList?: IRecordNhanSuLopHP[];
 		sinhVienList?: SinhVien.IRecord[];
 		maHoaLichHoc?: TMaHoaLichHoc[];
 		thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[];
 		trangThaiLop: ETrangThaiLopHocPhan;
 
-		lopHpHcList?: Partial<ILopHpLopHc>[];
-		doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
+		// lopHpHcList?: Partial<ILopHpLopHc>[];
+		// doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
 
-		// Populated
+		maCSDT?: string;
+		maHinhThuc: string;
+		hinhThuc?: HinhThucDaoTao.IRecordCoSo;
+		maTinhChat: string;
+		// tinhChat?: TinhChatChuongTrinh.IRecord;
+
+		// Đề cương học phần học kỳ
 		deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };
 	}
 
@@ -85,17 +98,12 @@ export declare module LopHocPhan {
 
 		loai?: ELoaiHocPhanDangKyTinChi;
 		diemHpSvHk?: IDiemHpSvHk;
-
-		// Populate
-		soTinChi?: number;
-		hocPhan?: HocPhan.IRecord;
-		kyHoc?: HocKy.IRecord;
 	}
 
-	export interface IDiemHpSvHk extends IDiemThanhPhan, IDiemThi, IDiemTongKet {
+	export interface IDiemHpSvHk extends IDiemThanhPhan, IDiemThi, IDiemTongKet, HocPhan.ITrongSoDeCuong {
 		_id: string;
 		sinhVienSsoId: string;
-		maSinhVien: string;
+		// maSinhVien: string;
 		sinhVien?: SinhVien.IRecord;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
@@ -104,6 +112,7 @@ export declare module LopHocPhan {
 
 		// Điểm có từ lớp học phần?
 		tenLopHocPhan?: string;
+		soThuTuLop?: number;
 		lopHocPhan?: IRecord;
 
 		// Điểm có từ quy đổi điểm?
@@ -118,9 +127,16 @@ export declare module LopHocPhan {
 		khoaDiemThi: boolean; // Khóa điểm thi
 		public: boolean;
 
-		maKhoaNganh: string;
-		khoaNganh?: KhoaNganh.IRecord;
+		/** Khi get all điểm hphk của sinh viên */
+		infoKhoaNganh?: Record<string, TInfoKhoaNganh>; // `maKhoaNganh` 7380101_7_1_2022: { ... }
+
+		// maKhoaNganh: string;
+		// khoaNganh?: KhoaNganh.IRecord;
 	}
+
+	type TInfoKhoaNganh = Pick<DiemHocPhan.IDiemSinhVien, 'maHocKyDat' | 'maHocKyCaiThien' | 'soLanHoc' | 'trongCtdt'> & {
+		maHocPhanQuyDoi?: string;
+	};
 
 	export interface IDiemThanhPhan {
 		diemThanhPhan1?: number;
@@ -138,8 +154,8 @@ export declare module LopHocPhan {
 
 	export interface IDiemThi {
 		diemThi1?: number;
-		diemThamDinh?: number;
-		diemPhucKhao?: number;
+		// diemThamDinh?: number;
+		// diemPhucKhao?: number;
 		diemThi2?: number;
 	}
 

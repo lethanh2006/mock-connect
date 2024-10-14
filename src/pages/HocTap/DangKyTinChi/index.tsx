@@ -2,14 +2,14 @@ import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao
 import { YoutubeOutlined } from '@ant-design/icons';
 import { Card, Divider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
 
 const DangKyTinChiPage = () => {
-	const { dotDangKyHienTai, loading, sinhVienDot } = useModel('daotao.dotdangkytinchi');
+	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy } = useModel('daotao.dotdangkytinchi');
 	const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
 
 	useEffect(() => {
@@ -35,23 +35,49 @@ const DangKyTinChiPage = () => {
 					) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 						<Empty
 							description={
-								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp tín chỉ đã đăng ký trước đó !</i>
+								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp tín chỉ đã đăng ký trước đó!</i>
 							}
 						/>
-					) : (
+					) : !!phieuDangKy?.soTinChiToiDa ? (
 						<>
 							<Divider style={{ marginTop: 24 }}>Thông tin đăng ký</Divider>
+							<div style={{ marginBottom: 12 }}>
+								Sinh viên chủ động theo dõi{' '}
+								<a
+									href='./tien-trinh-hoc-tap'
+									onClick={(e) => {
+										e.preventDefault();
+										history.push('./tien-trinh-hoc-tap');
+									}}
+								>
+									Tiến trình học tập
+								</a>{' '}
+								và{' '}
+								<a
+									href='./ket-qua-hoc-tap'
+									onClick={(e) => {
+										e.preventDefault();
+										history.push('./ket-qua-hoc-tap');
+									}}
+								>
+									Kết quả học tập
+								</a>{' '}
+								để lựa chọn các lớp theo đúng tiến trình; học phần cần học lại, học cải thiện; khóa luận tốt nghiệp hoặc
+								học phần thay thế...
+							</div>
 							<DangKyLopHocPhan />
 						</>
+					) : (
+						<Empty description={<i style={{ color: '#999' }}>Có lỗi xảy ra, vui lòng thử lại!</i>} />
 					)
 				) : (
-					<Empty description={<i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này !</i>} />
+					<Empty description={<i style={{ color: '#999' }}>Không có đợt đăng ký tín chỉ trong học kỳ này!</i>} />
 				)}
 			</Spin>
 
 			<PhieuDangKy />
 
-			<div className='huong-dan'>
+			{/* <div className='huong-dan'>
 				<div className='title-huong-dan'>
 					<i>Xem video hướng dẫn đăng ký tín chỉ</i>
 				</div>
@@ -60,7 +86,7 @@ const DangKyTinChiPage = () => {
 					className='pulse'
 					onClick={() => window.open('https://www.youtube.com/watch?v=2xghlws7tAk&t=2s')}
 				/>
-			</div>
+			</div> */}
 		</Card>
 	);
 };

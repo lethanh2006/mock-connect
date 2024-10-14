@@ -97,7 +97,9 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 				Object.keys(res?.data?.data)?.map((item: string) => {
 					const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
 					finalData[item] = [EKieuDuLieu.DATE, EKieuDuLieu.MONTH].includes(cauHinh.kieuDuLieu)
-						? moment(res?.data?.data[item])
+						? moment(res?.data?.data[item], 'DD/MM/YYYY')
+						: res?.data?.data[item] === 'Invalid date'
+						? undefined
 						: res?.data?.data[item];
 				});
 				if (res) {
@@ -131,7 +133,6 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 				const khaiBao = recordFormKhaiBao[key];
 				recordFormKhaiBaoFinal[key] = khaiBao;
 			});
-
 			form.setFieldsValue(recordFormKhaiBaoFinal);
 		}
 	}, [editFormKhaiBao, recordFormKhaiBao]);
@@ -160,7 +161,13 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			>
 				<Row gutter={[12, 0]}>
 					{currentFormKhaiBao?.cauHinhLoaiHinh?.map((item) => (
-						<FormRender formValues={formValues} key={item.ma} cauHinh={item} form={form} />
+						<FormRender
+							danhSachCauHinh={currentFormKhaiBao.cauHinhLoaiHinh}
+							formValues={formValues}
+							key={item.ma}
+							cauHinh={item}
+							form={form}
+						/>
 					))}
 				</Row>
 				{!current?.maBoPhanXuLy && doiTuongDieuPhoi === DoiTuongDieuPhoi.NGUOI_CU_THE && (

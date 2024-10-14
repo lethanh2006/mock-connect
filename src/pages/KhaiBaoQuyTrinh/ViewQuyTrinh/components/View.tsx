@@ -150,7 +150,7 @@ const View = (props: Iprops) => {
 				title={
 					<div>
 						{dataQuyTrinh?.quyTrinh?.ten}{' '}
-						{dotCurrent?.danhSachCauHinhThoiGianDot?.length > 0 && (
+						{dotCurrent && dotCurrent?.danhSachCauHinhThoiGianDot?.length > 0 && (
 							<a onClick={() => setVisibleViewDetailDot(true)}>{dotCurrent?.ten}</a>
 						)}
 					</div>
@@ -167,7 +167,7 @@ const View = (props: Iprops) => {
 										icon={<LeftOutlined />}
 										type={'link'}
 										onClick={() => {
-											history.push('/khai-bao-quy-trinh/lich-su');
+											window.history.back();
 											setCurrentFormKhaiBao(undefined);
 											setCurrent(undefined);
 										}}
@@ -180,7 +180,7 @@ const View = (props: Iprops) => {
 									<Popconfirm
 										title='Bạn chưa khai báo đơn, có muốn quay lại?'
 										onConfirm={() => {
-											history.push('/khai-bao-quy-trinh/lich-su');
+											window.history.back();
 											setCurrentFormKhaiBao(undefined);
 											setCurrent(undefined);
 										}}

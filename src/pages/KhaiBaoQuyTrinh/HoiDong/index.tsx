@@ -38,10 +38,10 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 			render: (val, rec) => {
 				return (
 					<div>
-						{rec.danhSachVanBanLuuTru.map((item) => (
+						{rec.danhSachVanBanLuuTru.map((item, index) => (
 							<div key={item.url}>
 								<a href={item.url} target='_blank' rel='noreferrer'>
-									{item.tenFile}
+									{index + 1}. {item.tenFile}
 								</a>
 							</div>
 						))}
@@ -75,26 +75,26 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 			),
 		},
 
-		{
-			title: 'Thao tác',
-			align: 'center',
-			width: 120,
-			fixed: 'right',
-			render: (rec: HoiDong.IRecord) => (
-				<>
-					<Tooltip title='Chi tiết'>
-						<Button
-							onClick={() => {
-								setVisibleForm(true);
-								setRecord(rec);
-							}}
-							type='link'
-							icon={<EyeOutlined />}
-						/>
-					</Tooltip>
-				</>
-			),
-		},
+		// {
+		// 	title: 'Thao tác',
+		// 	align: 'center',
+		// 	width: 120,
+		// 	fixed: 'right',
+		// 	render: (rec: HoiDong.IRecord) => (
+		// 		<>
+		// 			<Tooltip title='Chi tiết'>
+		// 				<Button
+		// 					onClick={() => {
+		// 						setVisibleForm(true);
+		// 						setRecord(rec);
+		// 					}}
+		// 					type='link'
+		// 					icon={<EyeOutlined />}
+		// 				/>
+		// 			</Tooltip>
+		// 		</>
+		// 	),
+		// },
 	];
 	return (
 		<>

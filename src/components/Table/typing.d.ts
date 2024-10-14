@@ -103,6 +103,9 @@ export type TableBaseProps = {
 	/** View antd Row Selection */
 	detailRow?: any;
 
+	/** Trạng thái loading của table */
+	loading?: boolean;
+
 	/** Cho phép xóa nhiều, đi kèm với props `rowSelection` */
 	deleteMany?: boolean;
 
@@ -139,10 +142,10 @@ export type TableBaseProps = {
 };
 
 export type TFilter<T> = {
-	field: keyof T;
+	field: keyof T | [keyof T, string];
 	operator?: EOperatorType;
 	values: (string | number)[];
-	active: boolean;
+	active?: boolean;
 };
 
 export type TableStaticProps = {

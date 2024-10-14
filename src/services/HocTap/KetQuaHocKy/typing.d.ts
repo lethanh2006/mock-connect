@@ -32,4 +32,29 @@ declare module KetQuaHocKy {
 		maKhoaNganh: string;
 		khoaNganh: KhoaNganh.IRecord;
 	}
+
+	export interface IKetQuaTichLuy {
+		_id: string;
+		sinhVienSsoId: string;
+		sinhVien?: SinhVien;
+
+		trungBinh: number;
+		trungBinhThang4: number;
+
+		tongSoTinChi: number;
+		tongSoTinChiNo: number;
+		tongSoTinChiDangKy: number;
+
+		tongSoTinChiHocLai?: number;
+		tongSoTinChiHocCaiThien?: number;
+		tongSoTinChiThiLai?: number;
+		tongSoTinChiThiCaiThien?: number;
+
+		hocLuc: ELoaiHocLuc;
+		trinhDo: ETrinhDoKqhtHocKy;
+		thuTuHocKy?: number;
+
+		maKhoaNganh: string;
+		khoaNganh?: KhoaNganh.IRecord;
+	}
 }

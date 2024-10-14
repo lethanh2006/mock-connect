@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
@@ -131,14 +132,14 @@ const PhieuDangKy = () => {
 			filterType: 'string',
 		},
 		{
-			title: 'Thứ tự lớp',
+			title: 'TT lớp',
 			dataIndex: 'soThuTuLop',
 			width: 80,
 			align: 'center',
 			render: (val, rec) => `${val}${rec.soThuTuNhom ? ` (nhóm TH ${rec.soThuTuNhom})` : ''}`,
 		},
 		{
-			title: 'Số TC',
+			title: 'STC',
 			dataIndex: 'soTinChi',
 			width: 60,
 			align: 'center',
@@ -150,20 +151,33 @@ const PhieuDangKy = () => {
 			),
 		},
 		{
+			title: 'Giảng viên',
+			width: 160,
+			render: (val, rec) => (
+				<ExpandText>
+					{rec.nhanSuList
+						?.map((item) =>
+							item.nhanSu?.ten ? `${item.nhanSu?.hoDem ?? ''} ${item.nhanSu?.ten ?? ''}` : item.tenNhanSu,
+						)
+						.join(', ')}
+				</ExpandText>
+			),
+		},
+		{
 			title: 'Thông tin chi tiết',
-			width: 400,
+			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={{ ...rec, loai: ELoaiLopHocPhan.CHINH }} />, // Fake loại để ko lỗi
 		},
+		// {
+		// 	title: 'Mã khóa ngành',
+		// 	dataIndex: 'maKhoaNganh',
+		// 	align: 'center',
+		// 	width: 110,
+		// },
 		{
-			title: 'Mã khóa ngành',
-			dataIndex: 'maKhoaNganh',
-			align: 'center',
-			width: 110,
-		},
-		{
-			title: 'Học phí dự kiến',
+			title: 'Học phí (dự kiến)',
 			align: 'right',
-			width: 110,
+			width: 120,
 			render: (val, rec) => {
 				const due = tinhHocPhi(rec.soTinChi, rec.loai, rec.maKhoaNganh);
 				if (due) return `${inputFormat(due)} VND`;

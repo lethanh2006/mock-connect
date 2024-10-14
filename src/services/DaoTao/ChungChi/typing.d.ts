@@ -23,6 +23,9 @@ declare module ChungChi {
 		step?: number;
 		chungChiCoThoiHan: boolean;
 		thoiHanChungChi?: number;
+
+		maDonVi?: string;
+		choPhepDangKy?: boolean;
 	}
 
 	export type TBac = {

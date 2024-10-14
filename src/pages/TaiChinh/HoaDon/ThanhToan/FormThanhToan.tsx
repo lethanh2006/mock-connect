@@ -4,7 +4,7 @@ import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat, inputParse } from '@/utils/utils';
-import { Button, Col, Form, InputNumber, Popconfirm, Row, Table } from 'antd';
+import { Button, Col, Form, InputNumber, Row, Table } from 'antd';
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -31,8 +31,9 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 	const totalUuDai = _.sumBy(dataHienThi, (item) => item.amountDiscount);
 	const payList: Record<string, number> = Form.useWatch('payList', form);
 	const totalPay = _.sum(Object.values(payList ?? {})) ?? 0;
-	const topupAmount = totalPay > (soDuVi?.totalRemain ?? 0) ? totalPay - (soDuVi?.totalRemain ?? 0) : 0;
-	const totalSauThanhToan = (soDuVi?.totalRemain ?? 0) + topupAmount - totalPay;
+	const soDuHienTai = !recHoaDon?.dotThu?.suDungVi ? 0 : soDuVi?.totalRemain ?? 0;
+	const topupAmount = totalPay > soDuHienTai ? totalPay - soDuHienTai : 0;
+	const totalSauThanhToan = soDuHienTai + topupAmount - totalPay;
 
 	/** Get lại chi tiết các bill items */
 	const getBillItems = () =>
@@ -47,7 +48,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 			});
 			form.setFieldsValue({ payList: pay });
 
-			getSoDuViSinhVienModel();
+			if (recHoaDon?.dotThu?.suDungVi) getSoDuViSinhVienModel();
 		}
 	}, [visibleThanhToan]);
 
@@ -136,22 +137,24 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 	return (
 		<>
 			<Form layout='vertical' form={form} onFinish={onFinish}>
-				<Row gutter={[12, 12]}>
-					<Col span={24} md={8}>
-						<Form.Item
-							label='Số dư hiện tại'
-							tooltip='Là số tiền nộp dư tính đến thời điểm hiện tại. Được tính bằng tổng số tiền đã nộp - tổng các khoản đã thanh toán. (Xem chi tiết tại menu Lịch sử giao dịch)'
-						>
-							<InputNumber
-								value={soDuVi?.totalRemain ?? 0}
-								disabled
-								addonAfter='VND'
-								formatter={inputFormat}
-								style={{ width: '100%' }}
-							/>
-						</Form.Item>
-					</Col>
-				</Row>
+				{recHoaDon?.dotThu?.suDungVi ? (
+					<Row gutter={[12, 12]}>
+						<Col span={24} md={8}>
+							<Form.Item
+								label='Số dư hiện tại'
+								tooltip='Là số tiền nộp dư tính đến thời điểm hiện tại. Được tính bằng tổng số tiền đã nộp - tổng các khoản đã thanh toán. (Xem chi tiết tại menu Lịch sử giao dịch)'
+							>
+								<InputNumber
+									value={soDuHienTai}
+									disabled
+									addonAfter='VND'
+									formatter={inputFormat}
+									style={{ width: '100%' }}
+								/>
+							</Form.Item>
+						</Col>
+					</Row>
+				) : null}
 
 				<Row gutter={[12, 8]}>
 					<Col span={24}>
@@ -220,12 +223,9 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 				</Row>
 
 				<div className='form-footer' style={{ marginTop: 18 }}>
-					<Popconfirm title='Xác nhận thanh toán?' onConfirm={() => form.submit()}>
-						<Button loading={formSubmiting} type='primary' htmlType='submit'>
-							Thanh toán
-						</Button>
-					</Popconfirm>
-
+					<Button loading={formSubmiting} type='primary' htmlType='submit'>
+						Thanh toán
+					</Button>
 					<Button onClick={() => setVisibleThanhToan(false)}>Hủy</Button>
 				</div>
 			</Form>

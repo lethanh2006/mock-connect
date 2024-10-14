@@ -3,13 +3,11 @@ declare module NamHoc {
 		_id: string;
 		ma: string;
 		ten: string;
-		namBatDau: string;
-		namKetThuc: string;
 		thoiGianBatDau: string;
-		maHinhThucDaoTao: string;
-		hinhThucDaoTao?: HinhThucDaoTao.IRecordCoSo;
-		maTrinhDoDaoTao: string;
-		trinhDoDaoTao?: TrinhDoDaoTao.IRecordCoSo;
+		// hinhThucDaoTaoId: string;
+		// hinhThucDaoTao?: HinhThucDaoTao.IRecordCoSo;
+		// trinhDoDaoTaoId: string;
+		// trinhDoDaoTao?: TrinhDoDaoTao.IRecordCoSo;
 		soTuan: number;
 		soKyChinh: number;
 		soKyPhu: number;
@@ -17,10 +15,14 @@ declare module NamHoc {
 		createdAt?: string;
 		updatedAt?: string;
 
+		namBatDau?: number;
+		namKetThuc?: number;
+
 		//Kế hoạch năm học
 		ngayBdLayYKien: Date;
 		ngayKtLayYKien: Date;
 		daChotKeHoachNamHoc: boolean;
 		url: string | null;
+		maKhoaMoiList?: string;
 	}
 }

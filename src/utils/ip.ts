@@ -3,13 +3,16 @@ import { AppModules, EModuleKey } from '@/services/base/constant';
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
 
 const ip3 = ipRoot + 'slink'; // ip dev
-// const ip3 = 'http://192.168.1.71:3004'; // ip dev
+// const ip3 = 'http://192.168.1.37:3000'; // ip dev
+
 const ipNotif = ipRoot + 'notification'; // ip dev
 const ipDaoTao = ipRoot + 'qldt'; // ip dev
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
 const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
-const ipTaiChinh = ipRoot + 'tai-chinh-api';
+const ipTaiChinh = ipRoot + 'tai-chinh-api-v2';
+const ipKhaoThi = ipRoot + 'khao-thi';
+
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
 const currentRole = EModuleKey.CONNECT;
@@ -45,4 +48,5 @@ export {
 	oneSignalClient,
 	ipNewsWP,
 	moodleEndpoint,
+	ipKhaoThi,
 };

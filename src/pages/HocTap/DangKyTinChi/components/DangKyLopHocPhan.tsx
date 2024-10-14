@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import {
@@ -21,7 +22,7 @@ const DangKyLopHocPhan = () => {
 		useModel('daotao.dotdangkytinchi');
 	const { record: recHocPhan, loaiDangKy } = useModel('hocphan.hocphan');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien'); // Đã get khóa ngành của tôi ở file Filter Học phần
-	const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
+	// const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
 	const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
 	const [typeLop, setTypeLop] = useState<string>('Lớp gợi ý');
@@ -29,7 +30,7 @@ const DangKyLopHocPhan = () => {
 	const dangKyRoi = danhSachLopDangKy.find(
 		(item) => item.maHocPhan === recHocPhan?.ma && item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY,
 	);
-	const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
+	// const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
 
 	const getData = () =>
 		recHocKy?.ma &&
@@ -69,7 +70,7 @@ const DangKyLopHocPhan = () => {
 				: checkTrungLich(rec.thoiKhoaBieuList ?? [])
 				? EColorLopDangKy.TRUNG_LICH
 				: undefined,
-			fontWeight: rec.lopHpHcList?.some((item) => danhSachMaLopHc?.includes(item.maLopHc ?? '')) ? 600 : undefined,
+			// fontWeight: rec.lopHpHcList?.some((item) => danhSachMaLopHc?.includes(item.maLopHc ?? '')) ? 600 : undefined,
 		},
 	});
 
@@ -148,8 +149,22 @@ const DangKyLopHocPhan = () => {
 			onCell,
 		},
 		{
+			title: 'Giảng viên',
+			width: 160,
+			render: (val, rec) => (
+				<ExpandText>
+					{rec.nhanSuList
+						?.map((item) =>
+							item.nhanSu?.ten ? `${item.nhanSu?.hoDem ?? ''} ${item.nhanSu?.ten ?? ''}` : item.tenNhanSu,
+						)
+						.join(', ')}
+				</ExpandText>
+			),
+			onCell,
+		},
+		{
 			title: 'Thông tin chi tiết',
-			width: 400,
+			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
 			onCell,
 		},
@@ -165,6 +180,27 @@ const DangKyLopHocPhan = () => {
 			align: 'center',
 			width: 60,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
+			onCell,
+		},
+		{
+			title: 'Hình thức ĐT',
+			dataIndex: 'maHinhThuc',
+			width: 80,
+			render: (val, rec) => rec.hinhThuc?.ten ?? val,
+			onCell,
+		},
+		{
+			title: 'CSĐT',
+			dataIndex: 'maCSDT',
+			align: 'center',
+			width: 60,
+			onCell,
+		},
+		{
+			title: 'Tính chất',
+			dataIndex: 'maTinhChat',
+			align: 'center',
+			width: 60,
 			onCell,
 		},
 	];
