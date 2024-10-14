@@ -16,6 +16,16 @@ export enum ELoaiHocLuc {
 	EMPTY = 'Chưa xếp loại',
 }
 
+export const colorLoaiHocLuc: Record<ELoaiHocLuc, string> = {
+	[ELoaiHocLuc.XUAT_SAC]: '#52c41a',
+	[ELoaiHocLuc.GIOI]: '#7ecb08',
+	[ELoaiHocLuc.KHA]: '#ffee04',
+	[ELoaiHocLuc.TRUNG_BINH]: '#ffc20a',
+	[ELoaiHocLuc.YEU]: '#ef9b20',
+	[ELoaiHocLuc.KEM]: '#ea5545',
+	[ELoaiHocLuc.EMPTY]: '#939393',
+};
+
 // Nhập điểm: Trạng thái thi
 export enum ETrangThaiThi {
 	CAM_THI = 'Cấm thi',
@@ -23,16 +33,32 @@ export enum ETrangThaiThi {
 }
 
 //Xét học vụ
-export enum ETrangThaiDuyetCanhBao {
+
+export enum ELoaiXuLyKQHT {
+	CANH_BAO_HOC_TAP = 'CANH_BAO_HOC_TAP',
+	BUOC_THOI_HOC = 'BUOC_THOI_HOC',
+}
+
+export const loaiXuLyKQHT: Record<ELoaiXuLyKQHT, string> = {
+	[ELoaiXuLyKQHT.CANH_BAO_HOC_TAP]: 'Cảnh báo học tập',
+	[ELoaiXuLyKQHT.BUOC_THOI_HOC]: 'Buộc thôi học',
+};
+
+export const colorLoaiXuLyKQHT: Record<ELoaiXuLyKQHT, string> = {
+	[ELoaiXuLyKQHT.CANH_BAO_HOC_TAP]: 'orange',
+	[ELoaiXuLyKQHT.BUOC_THOI_HOC]: 'red',
+};
+
+export enum ETrangThaiDuyetXuLyKqht {
 	CHO_DUYET = 'Chờ duyệt',
 	DA_DUYET = 'Đã duyệt',
 	KHONG_DUYET = 'Không duyệt',
 }
 
-export const colorTrangThaiDuyetCanhBao: Record<ETrangThaiDuyetCanhBao, string> = {
-	[ETrangThaiDuyetCanhBao.CHO_DUYET]: 'blue',
-	[ETrangThaiDuyetCanhBao.DA_DUYET]: 'green',
-	[ETrangThaiDuyetCanhBao.KHONG_DUYET]: 'orange',
+export const colorTrangThaiDuyetXuLyKqht: Record<ETrangThaiDuyetXuLyKqht, string> = {
+	[ETrangThaiDuyetXuLyKqht.CHO_DUYET]: 'blue',
+	[ETrangThaiDuyetXuLyKqht.DA_DUYET]: 'green',
+	[ETrangThaiDuyetXuLyKqht.KHONG_DUYET]: 'orange',
 };
 
 export enum EYKienCoVanHocTap {
@@ -108,6 +134,7 @@ export const colorTrangThaiSinhVienQuyDoiDiem: Record<ETrangThaiPhieuQuyDoiDiem,
 export enum EMinhChungQuyDoiDiem {
 	HOC_PHAN = 'Học phần',
 	CHUNG_CHI = 'Chứng chỉ',
+	NCKH = 'NCKH',
 }
 
 export enum ETrinhDoMinhChungQuyDoiDiem {

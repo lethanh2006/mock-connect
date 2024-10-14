@@ -1,9 +1,9 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
+import { ELoaiCauHoi, EThoiGianDot, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, Spin } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FileChoice from './Question/FileChoice';
@@ -12,7 +12,6 @@ import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
-import ButtonExtend from '@/components/Table/ButtonExtend';
 
 const FormTraLoiKhaoSat = (props: {
 	/** Hàm xử lý bên ngoài truyền vào nếu ko sử dụng model `bieumau` */
@@ -25,17 +24,21 @@ const FormTraLoiKhaoSat = (props: {
 	hideCard?: boolean;
 	[key: string]: any;
 }) => {
-	const { setVisibleForm, record: recordDot, getDotMeModel, visibleForm, danhSach } = useModel('tienich.dotkhaosat');
+	const {
+		setVisibleForm,
+		record: recordDot,
+		getDotMeModel,
+		visibleForm,
+		danhSach,
+		thoiGian,
+	} = useModel('tienich.dotkhaosat');
 	const { loading, record, traLoiBieuMauModel, formSubmiting: formSubmiting1 } = useModel('tienich.bieumau');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
 	const { onOk, cauTraLoi, onCancel, hideCard } = props;
 	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
 	const [check, setCheck] = useState<boolean>(false);
-	const ngoaiThoiGian =
-		!recordDot?.thoiGianBatDau ||
-		!recordDot?.thoiGianKetThuc ||
-		moment().isBefore(recordDot?.thoiGianBatDau, 'd') ||
-		moment().isAfter(recordDot?.thoiGianKetThuc, 'd');
+	const disabled = thoiGian !== EThoiGianDot.DANG_DIEN_RA || recordDot?.kichHoat === false;
 
 	useEffect(() => {
 		if (!visibleForm && !onOk) {
@@ -45,14 +48,20 @@ const FormTraLoiKhaoSat = (props: {
 	}, [visibleForm]);
 
 	useEffect(() => {
-		if (cauTraLoi) {
+		if (cauTraLoi?.length) {
 			const values: any = {};
 			record?.danhSachKhoi?.map((khoi) => {
 				khoi.danhSachCauHoi?.map((question) => {
 					const traLoi = cauTraLoi?.find((i) => i.idCauHoi === question._id);
 
-					if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) values[question._id] = traLoi?.listLuaChon?.[0];
-					else if (
+					if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
+						if (traLoi && traLoi.traLoiKhac) {
+							values[question._id] = 'traLoiKhac';
+							values[`${question._id}_otherAnswer`] = traLoi.traLoiKhac;
+						} else {
+							values[question._id] = traLoi?.listLuaChon?.[0];
+						}
+					} else if (
 						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
 						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
 					) {
@@ -69,17 +78,22 @@ const FormTraLoiKhaoSat = (props: {
 			form.resetFields();
 			form.setFieldsValue(values);
 		}
-	}, [record?._id, JSON.stringify(cauTraLoi)]);
+	}, [record?._id, JSON.stringify(cauTraLoi), visibleForm]);
 
 	const renderQuestion = (question: BieuMau.CauHoi, index: number) => {
 		let questionEleMent = <div />;
-		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) questionEleMent = <SingleChoice question={question} />;
-		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE) questionEleMent = <MultipleChoice question={question} />;
-		else if (question.loai === ELoaiCauHoi.TEXT) questionEleMent = <Text question={question} />;
+		if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
+			questionEleMent = <SingleChoice form={form} question={question} disabled={disabled} />;
+		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
+			questionEleMent = <MultipleChoice question={question} disabled={disabled} />;
+		else if (question.loai === ELoaiCauHoi.TEXT || question.loai === ELoaiCauHoi.RENDER_INPUT)
+			questionEleMent = <Text question={question} disabled={disabled} />;
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
-			questionEleMent = <GridChoice question={question} form={form} />;
-		else if (question.loai === ELoaiCauHoi.NUMERIC_RANGE) questionEleMent = <NumericChoice question={question} />;
-		else if (question.loai === ELoaiCauHoi.UPLOAD_FILE) questionEleMent = <FileChoice question={question} />;
+			questionEleMent = <GridChoice question={question} form={form} disabled={disabled} />;
+		else if (question.loai === ELoaiCauHoi.NUMERIC_RANGE)
+			questionEleMent = <NumericChoice question={question} disabled={disabled} />;
+		else if (question.loai === ELoaiCauHoi.UPLOAD_FILE)
+			questionEleMent = <FileChoice question={question} disabled={disabled} />;
 
 		return (
 			<div key={question._id} style={{ marginBottom: 12 }}>
@@ -155,37 +169,52 @@ const FormTraLoiKhaoSat = (props: {
 		const danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]> = [];
 		const dsCauHoi = record?.danhSachKhoi?.map((khoi) => khoi.danhSachCauHoi).flat();
 
-		dsCauHoi?.map(async (question) => {
-			const traLoi = values[question._id];
-			if (traLoi) {
-				let tempTraLoi: Partial<BieuMau.TraLoiRecord> = { idCauHoi: question._id };
+		if (dsCauHoi) {
+			for (const question of dsCauHoi) {
+				const traLoi = values[question._id];
+				const otherAnswer = values[`${question._id}_otherAnswer`];
+				if (traLoi || otherAnswer) {
+					let tempTraLoi: Partial<BieuMau.TraLoiRecord> = { idCauHoi: question._id };
 
-				if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
-					const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
-					tempTraLoi.listUrlFile = listUrlFile as string[];
-				} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE)
-					tempTraLoi.listLuaChon = question?.luaChon
-						?.map((item: any) => {
-							if ([traLoi]?.includes(item.noiDung)) {
-								return item._id;
+					if (question.loai === ELoaiCauHoi.UPLOAD_FILE) {
+						const listUrlFile = await buildUpLoadTaiLieu(values[question._id].listUrlFile);
+						tempTraLoi.listUrlFile = listUrlFile as string[];
+					} else if (question.loai === ELoaiCauHoi.SINGLE_CHOICE) {
+						if (traLoi === 'traLoiKhac') {
+							const traLoiKhac = values[`${question._id}_otherAnswer`];
+							if (traLoiKhac) {
+								tempTraLoi.traLoiKhac = traLoiKhac;
+								tempTraLoi.listLuaChonBang = [];
+								tempTraLoi.listLuaChon = [];
 							}
-						})
-						.filter(Boolean);
-				else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
-					tempTraLoi.listLuaChon = question?.luaChon
-						?.map((item: any) => {
-							if (traLoi?.listLuaChon?.includes(item.noiDung)) {
-								return item._id;
-							}
-						})
-						.filter(Boolean);
-				else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
-					tempTraLoi.listLuaChonBang = convertList(values[question._id]);
-				else tempTraLoi = { ...tempTraLoi, ...values[question._id] };
+						} else {
+							tempTraLoi.listLuaChon = question?.luaChon
+								?.map((item: any) => {
+									if ([traLoi]?.includes(item.noiDung)) {
+										return item._id;
+									}
+								})
+								.filter(Boolean);
+						}
+					} else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
+						tempTraLoi.listLuaChon = question?.luaChon
+							?.map((item: any) => {
+								if (traLoi?.listLuaChon?.includes(item.noiDung)) {
+									return item._id;
+								}
+							})
+							.filter(Boolean);
+					else if (
+						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
+						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
+					)
+						tempTraLoi.listLuaChonBang = convertList(values[question._id]);
+					else tempTraLoi = { ...tempTraLoi, ...values[question._id] };
 
-				danhSachTraLoi.push(tempTraLoi as BieuMau.TraLoiRecord);
+					danhSachTraLoi.push(tempTraLoi as BieuMau.TraLoiRecord);
+				}
 			}
-		});
+		}
 
 		if (!!onOk) {
 			onOk(danhSachTraLoi as BieuMau.TraLoiRecord[]);
@@ -194,6 +223,10 @@ const FormTraLoiKhaoSat = (props: {
 				idKhaoSat: record?._id ?? '',
 				danhSachTraLoi,
 				idDot: recordDot?._id ?? danhSach[0]?._id,
+				vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
+				trangThaiSinhVien: recSinhVien?.trangThaiHoc,
+				danToc: recSinhVien?.danToc,
+				gioiTinh: recSinhVien?.gioiTinh,
 			})
 				.then(() => {
 					getDotMeModel();
@@ -225,6 +258,7 @@ const FormTraLoiKhaoSat = (props: {
 						style={{ marginBottom: 12, marginTop: 12 }}
 						onChange={(e) => setCheck(e.target.checked)}
 						checked={check}
+						disabled={disabled}
 					>
 						{record?.noiDungCamKet}
 					</Checkbox>
@@ -232,11 +266,11 @@ const FormTraLoiKhaoSat = (props: {
 
 				<div className='form-footer'>
 					<ButtonExtend
-						disabled={(record?.coCamKet && !check) || ngoaiThoiGian}
+						disabled={(record?.coCamKet && !check) || disabled}
 						loading={formSubmiting}
 						htmlType='submit'
 						type='primary'
-						tooltip={ngoaiThoiGian ? 'Ngoài thời gian đợt khảo sát' : undefined}
+						tooltip={disabled ? 'Ngoài thời gian đợt khảo sát' : undefined}
 					>
 						Hoàn thành
 					</ButtonExtend>

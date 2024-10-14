@@ -1,4 +1,4 @@
-import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { Empty, Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -9,8 +9,8 @@ import CardHocPhan from '../components/CardHocPhan';
 const TienTrinhThucTe = () => {
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
-	const { record: sinhVienLhp, setRecord: setSinhVienLhp } = useModel('lophocphan.sinhvienlophocphan');
-	const [danhSachHocKy, setDanhSachHocKy] = useState<LopHocPhan.IRecordSinhVienLopHP[][]>();
+	const [tienTrinhHocKy, setTienTrinhHocKy] = useState<ChuongTrinhDaoTao.TTienTrinhThucTe[][]>();
+	const [recTienTrinh, setRecTienTrinh] = useState<ChuongTrinhDaoTao.TTienTrinhThucTe>();
 	const [visibleDiem, setVisibleDiem] = useState(false);
 
 	const fetch = async () => {
@@ -18,7 +18,7 @@ const TienTrinhThucTe = () => {
 			sinhVienGetTienTrinhThucTeModel(maKhoaNganh).then((data) => {
 				const gHocKy = Object.entries(_.groupBy(data, (item) => item.kyHoc?.ma));
 				const dataHocKy = _.sortBy(gHocKy, ([ma, ds]) => ma);
-				setDanhSachHocKy(dataHocKy.map(([ma, ds]) => ds));
+				setTienTrinhHocKy(dataHocKy.map(([ma, ds]) => ds));
 			});
 	};
 
@@ -29,8 +29,8 @@ const TienTrinhThucTe = () => {
 	return (
 		<>
 			<Spin spinning={loading}>
-				{danhSachHocKy?.length ? (
-					danhSachHocKy.map((data, index) => (
+				{tienTrinhHocKy?.length ? (
+					tienTrinhHocKy.map((data, index) => (
 						// eslint-disable-next-line react/no-array-index-key
 						<div className='row-hoc-ky' key={index}>
 							<div className='col-hoc-ky'>
@@ -52,10 +52,10 @@ const TienTrinhThucTe = () => {
 							<div className='col-chi-tiet'>
 								{data.map((sv) => (
 									<CardHocPhan
-										key={sv._id}
+										key={sv.diemHpSvHk._id}
 										hocPhan={sv.hocPhan}
 										onClick={() => {
-											setSinhVienLhp(sv);
+											setRecTienTrinh(sv);
 											setVisibleDiem(true);
 										}}
 										listDiem={sv.diemHpSvHk ? [sv.diemHpSvHk] : []}
@@ -72,9 +72,9 @@ const TienTrinhThucTe = () => {
 			<ModalChiTietDiem
 				setVisible={setVisibleDiem}
 				visible={visibleDiem}
-				hocPhan={sinhVienLhp?.hocPhan}
-				listDiem={sinhVienLhp?.diemHpSvHk ? [sinhVienLhp.diemHpSvHk] : []}
-				lopHocPhanId={sinhVienLhp?.lopHocPhanId}
+				hocPhan={recTienTrinh?.hocPhan}
+				listDiem={recTienTrinh?.diemHpSvHk ? [recTienTrinh.diemHpSvHk] : []}
+				deCuongId={recTienTrinh?.lopHocPhan?.deCuong?.deCuongId}
 				maKhoaNganh={maKhoaNganh}
 			/>
 		</>

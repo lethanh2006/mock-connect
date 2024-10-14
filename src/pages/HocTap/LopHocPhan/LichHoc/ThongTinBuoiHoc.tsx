@@ -1,5 +1,6 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { colorTrangThaiUserDiemDanh, trangThaiUserDiemDanh } from '@/services/DaoTao/constant';
+import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { Descriptions, Tag } from 'antd';
 import moment from 'moment';
 
@@ -9,8 +10,7 @@ const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord; title?: string
 	return (
 		<Descriptions column={{ xs: 1, md: 3 }} title={title ?? 'Thông tin buổi học'}>
 			<Descriptions.Item label='Ngày học' span={2}>
-				Tuần {moment(buoiHoc?.ngay).week()}, {moment(buoiHoc?.ngay).format('dddd')}, ngày{' '}
-				{moment(buoiHoc?.ngay).format('DD/MM/YYYY')}
+				{THU_TRONG_TUAN[moment(buoiHoc?.ngay).day()]}, {moment(buoiHoc?.ngay).format('DD/MM/YYYY')}
 			</Descriptions.Item>
 			<Descriptions.Item label='Tiết học'>
 				{buoiHoc?.tietBatDau} - {buoiHoc?.tietKetThuc}

@@ -16,6 +16,7 @@ import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
 import FormThanhToan from '../ThanhToan/FormThanhToan';
 import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
 import ModalThanhToanNganHang from './ModalThanhToanNganHang';
+import CanhBaoGiaoDich from '../../GiaoDich/components/CanhBao';
 
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const { setVisible, getData } = props;
@@ -33,10 +34,11 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	} = useModel('taichinh.giaodich');
 	const [activeTab, setActiveTab] = useState('1');
 	const ngoaiThoiGianThanhToan =
-		!!recHoaDon?.dotThu?._id &&
-		!!recHoaDon?.dotThu?.thoiGianBatDau &&
-		!!recHoaDon.dotThu.thoiGianKetThuc &&
-		(moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) || moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc));
+		!recHoaDon?.dotThu?._id ||
+		!recHoaDon?.dotThu?.thoiGianBatDau ||
+		!recHoaDon?.dotThu?.thoiGianKetThuc ||
+		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
+		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
 
 	/** Get giao dịch pending */
 	const getGiaoDich = () =>
@@ -90,7 +92,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 					{activeTab === '1' ? (
 						<>
-							{recGiaoDich?._id && recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL ? (
+							{recGiaoDich?._id &&
+							recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
+							!ngoaiThoiGianThanhToan ? (
 								<Alert
 									message='Có giao dịch nộp tiền đang chờ xử lý! Bạn đã thực hiện thanh toán chưa?'
 									description='(Nếu đã thanh toán, vui lòng bỏ qua thông báo này)'
@@ -136,15 +140,8 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						</>
 					) : (
 						<>
-							<div>
-								<i>Lưu ý: </i>
-								<br />- Không hủy giao dịch khi đã quét mã QR và thực hiện chuyển khoản thành công.
-								<br />- Sau khi quét QR thành công, hệ thống cần đợi thông tin xác nhận từ phía ngân hàng. Khi kết thúc
-								đợt thu, Phòng Tài chính kế toán sẽ thực hiện đối soát.
-								<br />- Số tiền nộp dư (nếu có) sẽ được hoàn lại trong Số dư ví, sinh viên có thể xem chi tiết trong
-								menu Lịch sử giao dịch.
-							</div>
-							<LichSuThanhToan onPay={onPay} onCancel={onCancel} />
+							<CanhBaoGiaoDich />
+							<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
 						</>
 					)}
 				</Col>

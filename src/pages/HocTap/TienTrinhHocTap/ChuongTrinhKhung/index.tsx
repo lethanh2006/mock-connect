@@ -183,7 +183,7 @@ const TienTrinhChuongTrinhKhung = () => {
 				setVisible={setVisibleDiem}
 				visible={visibleDiem}
 				hocPhan={recChuongTrinh?.hocPhan}
-				listDiem={recChuongTrinh?.lichSuDiem}
+				listDiem={recChuongTrinh?.lichSuDiem ?? []}
 				maKhoaNganh={maKhoaNganh}
 				khoiChuongTrinh={recChuongTrinh}
 				trangThaiHoc={recChuongTrinh?.hoc}

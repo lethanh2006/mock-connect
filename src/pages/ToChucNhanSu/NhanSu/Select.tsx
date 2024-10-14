@@ -17,26 +17,43 @@ const SelectNhanSuDebounce = (props: {
 	const { danhSach, getModel, setFilters, filters, loading, condition } = useModel('tochucnhansu.nhansu');
 
 	useEffect(() => {
-		getModel(
-			{ trangThaiChinhSua: ETrangThaiChinhSuaNhanSu.DUYET_DANG_AP_DUNG },
-			!filters || !filters.length
-				? value
-					? [
-							{
-								active: true,
-								field: 'ssoId',
-								values: Array.isArray(value) ? value : [value],
-								operator: EOperatorType.INCLUDE,
-							},
-					  ]
-					: !!maDonVi
-					? [{ active: true, field: 'maDonVi', values: [maDonVi], operator: EOperatorType.INCLUDE }]
-					: undefined
-				: undefined,
-			undefined,
-			1,
-			20,
-		);
+		if (props.isView) {
+			if (props.value)
+				getModel(
+					{ trangThaiChinhSua: ETrangThaiChinhSuaNhanSu.DUYET_DANG_AP_DUNG },
+					[
+						{
+							active: true,
+							field: 'ssoId',
+							values: Array.isArray(value) ? value : [value],
+							operator: EOperatorType.INCLUDE,
+						},
+					],
+					undefined,
+					1,
+					20,
+				);
+		} else
+			getModel(
+				{ trangThaiChinhSua: ETrangThaiChinhSuaNhanSu.DUYET_DANG_AP_DUNG },
+				!filters || !filters.length
+					? value
+						? [
+								{
+									active: true,
+									field: 'ssoId',
+									values: Array.isArray(value) ? value : [value],
+									operator: EOperatorType.INCLUDE,
+								},
+						  ]
+						: !!maDonVi
+						? [{ active: true, field: 'maDonVi', values: [maDonVi], operator: EOperatorType.INCLUDE }]
+						: undefined
+					: undefined,
+				undefined,
+				1,
+				20,
+			);
 	}, [filters, value, JSON.stringify(condition)]);
 
 	useEffect(() => {
@@ -56,6 +73,7 @@ const SelectNhanSuDebounce = (props: {
 		`${dataView?.hoDem ?? ''} ${dataView?.ten ?? ''} - ${dataView?.maCanBo ?? ''}`
 	) : (
 		<Select
+			allowClear
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			onChange={onChange}

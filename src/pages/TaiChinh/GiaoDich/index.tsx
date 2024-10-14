@@ -20,7 +20,9 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
+import CanhBaoGiaoDich from './components/CanhBao';
 import Form from './components/Form';
+import ModalNopTruocHocPhi from './components/NopTruocHocPhi';
 import StatGiaoDich from './components/Stat';
 
 const GiaoDichPage = () => {
@@ -29,13 +31,15 @@ const GiaoDichPage = () => {
 		page,
 		limit,
 		setRecord,
-		setVisibleForm,
+		// setVisibleForm,
 		thanhToanMomoModel,
 		visibleHuongDan,
 		setVisibleHuongDan,
 		huyThanhToanModel,
 	} = useModel('taichinh.giaodich');
+	const { getModel: getModelDotThu, setRecord: setRecDotThu, loading } = useModel('taichinh.dotthutruochocphi');
 	const [kieuThanhToan, setKieuThanhToan] = useState<ETransactionType | undefined>(ETransactionType.DEPOSIT);
+	const [visibleHocPhi, setVisibleHocPhi] = useState<boolean>(false);
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -199,21 +203,28 @@ const GiaoDichPage = () => {
 						]}
 						key='select'
 					/>,
-					// <ButtonExtend
-					// 	onClick={() => {
-					// 		setRecord(undefined);
-					// 		setVisibleForm(true);
-					// 	}}
-					// 	icon={<PlusCircleOutlined />}
-					// 	type='primary'
-					// 	className='btn-success'
-					// 	key='topup'
-					// >
-					// 	Nộp trước học phí
-					// </ButtonExtend>,
+
+					<ButtonExtend
+						loading={loading}
+						onClick={() => {
+							getModelDotThu(undefined, undefined, { _id: 1 })
+								.then((res) => setRecDotThu(res?.[0]))
+								.then(() => setVisibleHocPhi(true));
+						}}
+						icon={<PlusCircleOutlined />}
+						type='primary'
+						className='btn-success'
+						key='topup'
+					>
+						Nộp trước học phí
+					</ButtonExtend>,
 				]}
 			>
 				<StatGiaoDich />
+
+				<div style={{ marginBottom: 8 }}>
+					<CanhBaoGiaoDich />
+				</div>
 			</TableBase>
 
 			<ModalThanhToanNganHang
@@ -223,6 +234,8 @@ const GiaoDichPage = () => {
 					setVisibleHuongDan(false);
 				}}
 			/>
+
+			<ModalNopTruocHocPhi visibleForm={visibleHocPhi} setVisibleForm={setVisibleHocPhi} getData={getData} />
 		</>
 	);
 };

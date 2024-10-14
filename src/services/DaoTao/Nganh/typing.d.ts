@@ -16,14 +16,19 @@ declare module NganhDaoTao {
 		ma: string;
 		ten: string;
 		tenTiengAnh: string;
-		dmNganhId?: string;
-		dmNganh?: NganhDaoTao.IRecordBo;
+		tenVietTat: string;
 		maTrinhDo: string;
 		trinhDo?: TrinhDoDaoTao.IRecordCoSo;
-		canCuId?: string;
+		maDmNganh: string;
+		dmNganh?: NganhDaoTao.IRecordBo;
+		maCanCuPhapLy?: string;
 		canCu?: VanBanQuyDinh.IRecord;
 		maNganhGoc?: string | null;
 		nganhGoc?: IRecordCoSo;
+
+		maDonVi?: string;
+		donVi?: ToChucNhanSu.IDonVi;
+
 		createdAt?: string;
 		updatedAt?: string;
 	}

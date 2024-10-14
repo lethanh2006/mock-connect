@@ -1,14 +1,18 @@
+import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
+import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
 import { history, useModel } from 'umi';
+import CardThongBao from '../../ThongBao/ThongBaoLop/CardThongBao';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
+import CardGiangVienLop from './components/CardGiangVien';
+import ThongTinChung from './components/ThongTinChung';
 import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
-import CardThongBao from './ThongBao/CardThongBao';
-import ThongTinChung from './components/ThongTinChung';
 
 const DetailLopTinChi = ({
 	match: {
@@ -19,8 +23,9 @@ const DetailLopTinChi = ({
 }) => {
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
 	const { record, sinhVienGetByIdModel, setRecord } = useModel('lophocphan.lophocphan');
-	const { getAllModel: getAllNhanSu } = useModel('lophocphan.nhansulophocphan');
-	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia'];
+	const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
+	const auth = useAuth();
+	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia', 'dien-dan', 'bai-tap'];
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 	const hash = window.location.hash?.replace('#', '') ?? paths[0];
 
@@ -32,6 +37,20 @@ const DetailLopTinChi = ({
 			getAllNhanSu(false, undefined, { lopHocPhanId: id });
 		}
 	};
+
+	useEffect(() => {
+		if (auth.user?.access_token) {
+			const path = window.location.pathname;
+			// Nếu là link lấy từ giảng viên thì chuyển đến đúng link của sinh viên
+			if (path.startsWith('/giang-day/lop-tin-chi/')) {
+				window.history.replaceState(
+					{},
+					document.title,
+					`/hoc-tap/lop-tin-chi/${id}${window.location.search}${window.location.hash}`,
+				);
+			}
+		}
+	}, [auth.user?.access_token]);
 
 	useEffect(() => {
 		getData();
@@ -64,8 +83,10 @@ const DetailLopTinChi = ({
 		>
 			<Tabs onChange={onChangeTab} activeKey={tabActive}>
 				<Tabs.TabPane tab='Thông tin chung' key={paths[0]} />
-				<Tabs.TabPane tab='Danh sách buổi học' key={paths[1]} />
+				<Tabs.TabPane tab='Lịch học' key={paths[1]} />
 				<Tabs.TabPane tab='Thông báo' key={paths[2]} />
+				<Tabs.TabPane tab='Diễn đàn' key={paths[5]} />
+				<Tabs.TabPane tab='Bài tập, Bài kiểm tra' key={paths[6]} />
 				<Tabs.TabPane tab='Kết quả học tập' key={paths[3]} />
 				<Tabs.TabPane tab='Đánh giá giảng viên' key={paths[4]} />
 			</Tabs>
@@ -78,7 +99,14 @@ const DetailLopTinChi = ({
 								<CardBuoiHocTiepTheo />
 							</Col>
 							<Col span={24}>
-								<CardThongBao />
+								<CardGiangVienLop danhSachNhanSu={danhSachNhanSu} title='Giảng viên lớp học' loading={loading} />
+							</Col>
+							<Col span={24}>
+								<CardThongBao
+									loai='lop-hoc-phan'
+									idLop={record?._id}
+									onShowAll={() => (window.location.hash = 'thong-bao')}
+								/>
 							</Col>
 						</Row>
 					</Col>
@@ -92,11 +120,15 @@ const DetailLopTinChi = ({
 				<ThongBaoLopPage loai='lop-hoc-phan' idLop={id} />
 			) : tabActive === paths[3] ? (
 				<>
-					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm lớp tín chỉ</h4>
+					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
 					<DetailKetQuaHocTap lopHocPhanId={record?._id} />
 				</>
-			) : paths[4] ? (
+			) : tabActive === paths[4] ? (
 				<DanhGiaGiangVienPage />
+			) : tabActive === paths[5] ? (
+				<DienDan idLopHocPhan={record?._id ?? id} />
+			) : tabActive === paths[6] ? (
+				<BaiTapPage lopHocPhanId={id} />
 			) : null}
 		</Card>
 	);

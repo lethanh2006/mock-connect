@@ -58,7 +58,6 @@ export enum ESuKienRole {
 }
 
 export enum ELoaiSuKien {
-	LICH_GIANG_DAY = 'Lịch giảng dạy',
 	LICH_HOC = 'Lịch học',
 	LICH_THI = 'Lịch thi',
 	CA_NHAN = 'Cá nhân',
@@ -69,6 +68,8 @@ export enum ELoaiSuKien {
 	THUC_THI_CHINH_SACH = 'Thực thi, phát triển chính sách',
 	HOAT_DONG_XA_HOI = 'Hoạt động xã hội',
 	KHAC = 'Khác',
+	BAI_TAP = 'Bài tập',
+	HOP_LOP = 'Họp lớp',
 }
 
 export enum ELoaiSuKienSinhVien {
@@ -89,11 +90,19 @@ export const locationPathMappingToESuKienType: Partial<Record<string, ELoaiSuKie
 };
 
 export const ColorSuKien: Partial<Record<ELoaiSuKien, string>> = {
-	[ELoaiSuKien.LICH_GIANG_DAY]: 'rgba(49, 190, 203, 0.7)',
-	[ELoaiSuKien.LICH_HOC]: 'rgba(49, 190, 203, 0.7)',
-	[ELoaiSuKien.LICH_THI]: 'rgba(223, 68, 113, 0.7)',
-	[ELoaiSuKien.CA_NHAN]: 'rgba(87, 191, 86, 0.7)',
-	[ELoaiSuKien.CHUNG]: 'rgba(32, 152, 199, 0.7)',
+	[ELoaiSuKien.LICH_HOC]: '#31becbb3',
+	[ELoaiSuKien.LICH_THI]: '#df4471b3',
+	[ELoaiSuKien.CA_NHAN]: '#57bf56b3',
+	[ELoaiSuKien.CHUNG]: '#2098c7b3',
+	[ELoaiSuKien.BAI_TAP]: '#f1a32ab3',
+	[ELoaiSuKien.HOP_LOP]: '#9f44efb3',
 };
 
 export const THU_TRONG_TUAN = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
+
+// Hoạt động công tác sinh viên
+export enum EHoatDongChungType1 {
+	GIAO_DUC_CHINH_TRI_TU_TUONG = 'Giáo dục chính trị tư tưởng',
+	PHUC_VU_CONG_DONG = 'Phục vụ cộng đồng',
+	VAN_HOA_THE_THAO = 'Văn hóa, thể thao',
+}

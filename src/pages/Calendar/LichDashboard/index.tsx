@@ -1,11 +1,12 @@
-import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Badge, Card, Empty, Modal, Space, Typography } from 'antd';
+import { Badge, Card, Col, Empty, Modal, Row, Space, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 import FormLichCaNhan from '../components/FormLichCaNhan';
+import GhiChuLich from '../components/GhiChuLich';
 import ModalViewDetailCalendar from '../components/ModalViewDetail';
 import styles from './styles.less';
 
@@ -16,27 +17,21 @@ const getThoiGianMotTuanKeTuHomNay = () => {
 	};
 };
 
-type Ngay = string;
-interface StateItem {
-	tenSuKien: string;
-	diaDiem: string;
-	loaiSuKien: ELoaiSuKien;
-	thoiGianBatDau: string;
-	thoiGianKetThuc: string;
-	_id: string;
-}
-type State = Record<
-	Ngay,
-	{
-		thuTrongTuan: string;
-		cacSuKien: StateItem[];
-	}
->;
-
 const LichDashboard = () => {
-	const { visibleForm, setVisibleForm, getSuKienTrongKhoangModel, loading: loadingSuKien } = useModel('sukien');
+	const {
+		visibleForm,
+		setVisibleForm,
+		getSuKienTrongKhoangModel,
+		loading: loadingSuKien,
+		dataCalendarDashboard,
+		setDataLichDashboard,
+		dataLichDashboard,
+		setLichHienThiDashboardModel,
+	} = useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
-	const [dataCalendar, setDataCalendar] = useState<State>({});
+	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
+	const { thongKeBaiTapModel } = useModel('daotao.baitap');
+	const { record: recSetting } = useModel('tienich.settinglich');
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
 
@@ -52,6 +47,18 @@ const LichDashboard = () => {
 		});
 	};
 
+	const getLichThi = async () => {
+		return getLichThiModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
+			const temp = data.map((item) => ({
+				...item,
+				title: `Lịch thi: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
+				phongHoc: item.phong?.ma ?? '',
+				loaiSuKien: ELoaiSuKien.LICH_THI,
+			}));
+			return temp;
+		});
+	};
+
 	const getSuKien = async () => {
 		return getSuKienTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
 			const temp = data.map((item) => ({
@@ -62,50 +69,51 @@ const LichDashboard = () => {
 		});
 	};
 
+	const getBaiTap = async () => {
+		return thongKeBaiTapModel(
+			moment().startOf('day').toISOString(),
+			moment().add(7, 'day').endOf('day').toISOString(),
+		).then((data) => {
+			const temp = data.map((item) => ({
+				...item,
+				title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
+				thoiGianBatDau: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+				thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+				loaiSuKien: ELoaiSuKien.BAI_TAP,
+			}));
+			return temp;
+		});
+	};
+
 	const getData = () => {
-		const promises = [getThoiKhoaBieu(), getSuKien()];
+		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
 
 		Promise.allSettled(promises)
 			.then((values) => {
 				const responses = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
 				const data = responses.flat();
-				const nextState = data.reduce<State>((result, item) => {
-					if (!item.thoiGianBatDau) {
-						return result;
-					}
-					const ngayMoment = moment(item.thoiGianBatDau);
-					const ngayString = ngayMoment.format('YYYY-MM-DD');
-
-					return {
-						...result,
-						[ngayString]: {
-							thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
-							cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
-								...item,
-								tenSuKien: item.title,
-								diaDiem: item.phongHoc ?? item.diaDiem,
-							}),
-						},
-					};
-				}, {});
-				setDataCalendar(nextState);
+				setDataLichDashboard(data);
 			})
 			.catch((er) => console.log(er));
 	};
 	//#endregion
 
 	useEffect(() => {
+		setLichHienThiDashboardModel(dataLichDashboard ?? []);
+	}, [dataLichDashboard?.length]);
+
+	useEffect(() => {
 		getData();
 	}, []);
 
 	const renderContent = () => {
-		const keysSorted = sortBy(Object.keys(dataCalendar));
-		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendar)) {
+		const keysSorted = sortBy(Object.keys(dataCalendarDashboard));
+		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendarDashboard)) {
 			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện nào' />;
 		}
 
 		return keysSorted.map((ngay) => {
-			const { cacSuKien, thuTrongTuan } = dataCalendar[ngay];
+			const { cacSuKien, thuTrongTuan } = dataCalendarDashboard[ngay];
 			const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
 			return (
 				<div key={ngay} className={styles.ngay}>
@@ -132,7 +140,9 @@ const LichDashboard = () => {
 							<div
 								className={styles.su_kien__right}
 								style={{
-									borderColor: ColorSuKien[sukien.loaiSuKien],
+									borderColor:
+										recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ??
+										ColorSuKien[sukien.loaiSuKien],
 								}}
 							>
 								<div>{[sukien.tenSuKien, sukien.diaDiem].filter(Boolean).join(' - ')}</div>
@@ -148,7 +158,7 @@ const LichDashboard = () => {
 		<>
 			<Card
 				className={styles.container}
-				loading={loadingSuKien || loadingTKB}
+				loading={loadingSuKien || loadingTKB || loadingThi}
 				title={
 					<div className={styles.title}>
 						<Typography.Text>Lịch sắp tới</Typography.Text>
@@ -158,7 +168,16 @@ const LichDashboard = () => {
 					</div>
 				}
 			>
-				<div style={{ maxHeight: 400, overflowY: 'auto' }}>{renderContent()}</div>
+				<Row gutter={[12, 12]}>
+					<Col span={24}>
+						<div style={{ maxHeight: 450, overflowY: 'auto' }}>{renderContent()}</div>
+					</Col>
+					{!isEmpty(dataLichDashboard) ? (
+						<Col span={24}>
+							<GhiChuLich />
+						</Col>
+					) : null}
+				</Row>
 			</Card>
 
 			<Modal

@@ -19,6 +19,8 @@ declare module TinTuc {
 			username: string; // 'admin';
 			_id: string; // '649a63c2e42a64cb859874d7';
 		};
+
+		chuDe: IChuDe;
 	}
 
 	export interface IChuDe {
@@ -28,6 +30,10 @@ declare module TinTuc {
 		type: CommonTopicType;
 		order: number;
 		hinhThucDaoTaoId: number;
+
+		isTinTucWP: boolean;
+		linkWP: string;
+		idCategoryWp: number;
 	}
 }
 
@@ -35,6 +41,7 @@ declare module TinTucWP {
 	export interface IRecord {
 		id: number;
 		date: string;
+		categories: any[];
 		slug: string;
 		type: string;
 		link: string;

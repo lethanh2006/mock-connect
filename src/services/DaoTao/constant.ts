@@ -42,19 +42,21 @@ export enum EPhuongThucTinhDiem {
 export enum ETrangThaiHocSv {
 	CHUA_PHAN_LOP = 'Chưa phân lớp',
 	DANG_HOC = 'Đang học',
-	THOI_HOC = 'Thôi học',
-	BUOC_THOI_HOC = 'Buộc thôi học',
 	BAO_LUU = 'Bảo lưu',
 	DA_TOT_NGHIEP = 'Đã tốt nghiệp',
+	THOI_HOC = 'Thôi học',
+	BUOC_THOI_HOC = 'Buộc thôi học',
+	CHUYEN_TRUONG = 'Chuyển trường',
 }
 
 export const colorTrangThaiHocSv: Record<ETrangThaiHocSv, string> = {
-	[ETrangThaiHocSv.CHUA_PHAN_LOP]: 'gray',
+	[ETrangThaiHocSv.CHUA_PHAN_LOP]: 'geekblue',
 	[ETrangThaiHocSv.DANG_HOC]: 'blue',
-	[ETrangThaiHocSv.THOI_HOC]: 'red',
-	[ETrangThaiHocSv.BUOC_THOI_HOC]: 'violet',
 	[ETrangThaiHocSv.BAO_LUU]: 'orange',
 	[ETrangThaiHocSv.DA_TOT_NGHIEP]: 'green',
+	[ETrangThaiHocSv.THOI_HOC]: 'red',
+	[ETrangThaiHocSv.BUOC_THOI_HOC]: 'purple',
+	[ETrangThaiHocSv.CHUYEN_TRUONG]: 'volcano',
 };
 
 // Điểm danh lớp
@@ -98,4 +100,26 @@ export const colorTrangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> 
 	[ETrangThaiUserDiemDanh.VANG_CO_PHEP]: 'gold',
 	[ETrangThaiUserDiemDanh.VANG_KHONG_PHEP]: 'orange',
 	[ETrangThaiUserDiemDanh.CHUA_DIEM_DANH]: 'red',
+};
+
+//Đăng ký nhu cầu
+export enum ETrangThaiHocPhanDangKyNhuCau {
+	CHO_DUYET = 'CHO_DUYET',
+	DA_DUYET = 'DA_DUYET',
+	KHONG_DUYET = 'KHONG_DUYET',
+	DA_PHAN_LOP = 'DA_PHAN_LOP',
+}
+
+export const mapTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
+	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'Chờ duyệt',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'Đã duyệt',
+	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'Không duyệt',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'Đã phân lớp',
+};
+
+export const colorTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
+	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'blue',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'orange',
+	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'red',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'green',
 };

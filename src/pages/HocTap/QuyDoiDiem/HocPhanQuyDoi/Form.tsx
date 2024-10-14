@@ -1,3 +1,4 @@
+import { ColorDiemChu, type ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { EMinhChungQuyDoiDiem, colorTrangThaiHocPhanQuyDoi } from '@/services/HocTap/constant';
 import { Button, Descriptions, Row, Space, Tag } from 'antd';
@@ -12,24 +13,23 @@ const FormHocPhanQuyDoiDiem = () => {
 		if (!visibleForm) setRecord({} as QuyDoiDiem.IQuyDoiDiemSinhVien);
 	}, [visibleForm]);
 
-	const renderDiem = (he10?: number, he4?: number, diemChu?: string) => (
+	const renderDiem = (he10?: number, he4?: number, diemChu?: ELoaiDiemChu) => (
 		<Space wrap>
-			<span>
-				Điểm hệ 10: <b>{he10 ?? ''}</b>
-			</span>
+			{he10 ? (
+				<span>
+					Điểm hệ 10: <b>{he10 ?? ''}</b>
+				</span>
+			) : null}
 			{he4 ? (
 				<span>
 					Điểm hệ 4: <b>{he4}</b>
 				</span>
 			) : null}
-			{diemChu ? (
-				<span>
-					Điểm chữ: <b>{diemChu}</b>
-				</span>
-			) : null}
+			<span>
+				Điểm chữ: <b style={diemChu ? { color: ColorDiemChu[diemChu] } : undefined}>{diemChu}</b>
+			</span>
 		</Space>
 	);
-
 	return (
 		<>
 			<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
@@ -65,6 +65,14 @@ const FormHocPhanQuyDoiDiem = () => {
 								<b>{record?.thoiGianHieuLuc ? monent(record?.thoiGianHieuLuc).format('DD/MM/YYYY') : '--'}</b>
 							</div>
 						</Descriptions.Item>
+					) : record?.loai === EMinhChungQuyDoiDiem.NCKH ? (
+						<Descriptions.Item label='Thông tin NCKH'>
+							<div>
+								- Tên đề tài: <b>{record?.tenDeTaiNckh ?? ''}</b>
+								<br />- Người hướng dẫn: <b>{record?.nguoiHuongDanNckh ?? ''}</b>
+								<br />- Điểm NCKH: <b>{record?.diemNckh ?? ''}</b>
+							</div>
+						</Descriptions.Item>
 					) : (
 						<Descriptions.Item label='Thông tin học phần đã học'>
 							<div>
@@ -83,7 +91,7 @@ const FormHocPhanQuyDoiDiem = () => {
 			</Row>
 
 			<div className='form-footer'>
-				<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+				<Button onClick={() => setVisibleForm(false)}>Đóng</Button>
 			</div>
 		</>
 	);

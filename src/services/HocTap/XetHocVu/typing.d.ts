@@ -1,5 +1,7 @@
+import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import type { ETrangThaiDuyetCanhBao, EYKienCoVanHocTap } from '../constant';
+import type { ELoaiXuLyKQHT, ETrangThaiDuyetXuLyKqht, EYKienCoVanHocTap } from '../constant';
+import type { QuyetDinh } from '../QuyetDinh/typing';
 
 declare module XetHocVu {
 	export interface IRecord {
@@ -16,10 +18,15 @@ declare module XetHocVu {
 		maNganh: string;
 		nganh?: KhoaNganh.IRecord;
 		tenLopHanhChinh: string;
+		maKhoaNganh: string;
+		khoaNganh?: KhoaNganh.IRecord;
 
-		danhSachLyDo: ILyDo[];
+		loaiXuLy: ELoaiXuLyKQHT;
+		lyDo: string;
 		daChot: boolean;
-		trangThai: ETrangThaiDuyetCanhBao;
+		trangThai: ETrangThaiDuyetXuLyKqht;
+		quyetDinhId: string;
+		quyetDinh: QuyetDinh.IRecord;
 
 		//ý kiến cố vấn học tập
 		yKienCoVanHocTap: string;
@@ -27,31 +34,6 @@ declare module XetHocVu {
 		coVanHocTapSsoId: string;
 
 		//Cảnh báo học tập
-		thuTuKy: string;
-
-		//Cảnh báo thôi học
-		loaiThoiHoc: ELoaiThoiHoc;
-	}
-
-	export interface ILyDo {
-		_id: string;
-		canhBaoKqhtId?: string;
-		// canhBaoKetQuaHocTap?: ICanhBaoHocTap;
-		thoiHocId?: string;
-		// thoiHoc?: IThoiHoc;
-
-		sinhVienSsoId: string;
-		sinhVien?: SinhVien.IRecord;
-		hoTen?: string;
-		maSinhVien: string;
-		maKhoaSinhVien: string;
-		tenLopHanhChinh: string;
-
-		noiDung?: string;
-		isCoVanHocTap?: boolean;
-		dongY?: boolean;
-		yKien?: string;
-
-		donViXuLy?: string;
+		thuTuHocKy: string;
 	}
 }

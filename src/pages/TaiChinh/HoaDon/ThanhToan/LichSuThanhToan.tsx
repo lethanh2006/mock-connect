@@ -23,10 +23,11 @@ import { useModel } from 'umi';
 const LichSuThanhToan = (props: {
 	onPay: (rec: GiaoDich.IRecord) => void;
 	onCancel: (rec: GiaoDich.IRecord) => Promise<unknown>;
+	ngoaiThoiGianThanhToan?: boolean;
 }) => {
 	const { record } = useModel('taichinh.hoadon');
 	const { getAllModel, danhSach, loading } = useModel('taichinh.giaodich');
-	const { onPay, onCancel } = props;
+	const { onPay, onCancel, ngoaiThoiGianThanhToan } = props;
 
 	const getData = () =>
 		record?.identityCode && getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode });
@@ -89,7 +90,11 @@ const LichSuThanhToan = (props: {
 			render: (val, rec) => (
 				<>
 					<ButtonExtend
-						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
+						disabled={
+							rec.status !== ETransactionStatus.PENDING ||
+							rec.fromAccount !== ETransactionSourceType.EXTERNAL ||
+							ngoaiThoiGianThanhToan
+						}
 						icon={<DollarOutlined />}
 						tooltip='Thanh toán'
 						onClick={() => onPay && onPay(rec)}

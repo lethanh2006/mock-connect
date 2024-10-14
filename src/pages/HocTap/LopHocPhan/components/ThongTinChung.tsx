@@ -1,11 +1,12 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { DesktopOutlined } from '@ant-design/icons';
-import { Descriptions, Spin, Tabs, Tooltip, message } from 'antd';
+import { DesktopOutlined, GlobalOutlined } from '@ant-design/icons';
+import { Descriptions, Space, Spin, Tabs, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
 import DanhSachGiangVien from './DanhSachGiangVien';
 import DanhSachSinhVien from './DanhSachSinhVien';
+import GioiThieuChungLopHp from './GioiThieuChung';
 
 const ThongTinChung = () => {
 	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
@@ -18,7 +19,6 @@ const ThongTinChung = () => {
 		getAllNhanSuModel: getNhanSuLopTH,
 		loading: loadingThucHanh,
 	} = useModel('daotao.lopthuchanh');
-	const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
 	const [activeKey, setActiveKey] = useState<string>('-1');
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 
@@ -46,8 +46,8 @@ const ThongTinChung = () => {
 
 	return (
 		<Spin spinning={loading}>
-			<Descriptions column={{ xs: 1, sm: 1, md: 3, lg: 3, xl: 3, xxl: 3 }} title='Thông tin lớp'>
-				<Descriptions.Item label='Học phần' span={3}>
+			<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} title='Thông tin lớp'>
+				<Descriptions.Item label='Học phần' span={2}>
 					{record?.hocPhan?.ten ? (
 						<Tooltip title='Xem đề cương chi tiết học phần'>
 							<a onClick={() => setVisibleDeCuong(true)}>
@@ -60,16 +60,23 @@ const ThongTinChung = () => {
 				</Descriptions.Item>
 				<Descriptions.Item label='Mã học phần'>{record?.hocPhan?.ma ?? ''}</Descriptions.Item>
 				<Descriptions.Item label='Số tín chỉ'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Descriptions.Item>
-				<Descriptions.Item label='Sĩ số'>{record?.siSo ?? 0} sinh viên</Descriptions.Item>
+				{/* <Descriptions.Item label='Sĩ số'>{record?.siSo ?? 0} sinh viên</Descriptions.Item> */}
 			</Descriptions>
 
-			{record?.moodleShortname ? (
-				<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle} style={{ marginBottom: 18 }}>
-					Lớp học trực tuyến
-				</ButtonExtend>
-			) : null}
+			<GioiThieuChungLopHp />
 
-			<DanhSachGiangVien danhSachNhanSu={danhSachNhanSu} title='Giảng viên' />
+			<Space wrap style={{ marginTop: 8 }}>
+				{record?.lmsUrl ? (
+					<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
+						Học trực tuyến
+					</ButtonExtend>
+				) : null}
+				{record?.moodleShortname ? (
+					<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
+						Lớp học LMS
+					</ButtonExtend>
+				) : null}
+			</Space>
 
 			{/* <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>
         Thông tin điểm danh của bạn
@@ -80,7 +87,7 @@ const ThongTinChung = () => {
         Vắng không phép: -- <a>(xem chi tiết)</a>
       </div> */}
 
-			<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
+			<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)} style={{ marginTop: 16 }}>
 				<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
 				{danhSachLopThucHanh?.map((item) => (
 					<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />

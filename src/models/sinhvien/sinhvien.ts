@@ -13,6 +13,7 @@ export default () => {
 	const { setLoading, setRecord, getService, setDanhSach } = objInit;
 	const [khoaNganhMe, setKhoaNganhMe] = useState<KhoaNganh.TMyKhoaNganh>();
 	const [maKhoaNganh, setMaKhoaNganh] = useState<string>();
+	const [danhSachAllSinhVien, setDanhSachAllSinhVien] = useState<SinhVien.IRecord[]>([]);
 
 	const getThongTinSinhVienBySsoIdModel = async (ssoId: string): Promise<SinhVien.IRecord | undefined> => {
 		if (!ssoId) return;
@@ -46,6 +47,7 @@ export default () => {
 		try {
 			const response = await getMyKhoaNganh();
 			setKhoaNganhMe(response?.data?.data ?? null);
+			setMaKhoaNganh(response?.data?.data?.khoaNganhChinh?.ma);
 			return response?.data?.data;
 		} catch (er) {
 			return Promise.reject(er);
@@ -86,6 +88,8 @@ export default () => {
 	};
 
 	return {
+		danhSachAllSinhVien,
+		setDanhSachAllSinhVien,
 		searchSinhVienModel,
 		getThongTinSinhVienBySsoIdModel,
 		getThongTinCuaToiModel,

@@ -1,7 +1,13 @@
 import useInitModel from '@/hooks/useInitModel';
-import { getIdBieuMauDaTraLoi, initBieuMauTracNghiem, traLoiBieuMau } from '@/services/TienIch/KhaoSat/BieuMau';
+import type { ETrangThaiHocSv } from '@/services/DaoTao/constant';
+import {
+	getBieuMauKhaoSatSinhVien,
+	getIdBieuMauDaTraLoi,
+	initBieuMauTracNghiem,
+	traLoiBieuMau,
+} from '@/services/TienIch/KhaoSat/BieuMau';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { ELoaiBieuMau } from '@/services/TienIch/KhaoSat/constants';
+import { ELoaiBieuMau, type EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { message } from 'antd';
 import { useState } from 'react';
 
@@ -9,7 +15,7 @@ export default () => {
 	const objInit = useInitModel<BieuMau.Record>('khao-sat', undefined, {
 		loai: ELoaiBieuMau.KHAO_SAT,
 	});
-	const { setLoading, condition, setVisibleForm, getModel, formSubmiting, setFormSubmiting } = objInit;
+	const { setLoading, condition, setVisibleForm, getModel, formSubmiting, setFormSubmiting, setRecord } = objInit;
 	const [listIdBieuMauDaTraLoi, setListIdBieuMauDaTraLoi] = useState<string[]>([]);
 
 	const getBieuMauUserModel = async (loaiParam?: ELoaiBieuMau) =>
@@ -32,6 +38,10 @@ export default () => {
 		idKhaoSat: string;
 		danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]>;
 		idDot: string;
+		vaiTroNguoiKhaoSat?: EVaiTroKhaoSat;
+		trangThaiSinhVien?: ETrangThaiHocSv;
+		danToc?: string;
+		gioiTinh?: string;
 	}): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
@@ -49,6 +59,20 @@ export default () => {
 		}
 	};
 
+	const getBieuMauKhaoSatSinhVienModel = async (id: string | number, isSetRecord?: boolean): Promise<any> => {
+		if (!id) return Promise.reject('Invalid id');
+		setLoading(true);
+		try {
+			const response = await getBieuMauKhaoSatSinhVien(id);
+			if (isSetRecord !== false) setRecord(response?.data?.data ?? null);
+			return response?.data?.data;
+		} catch (er) {
+			return Promise.reject(er);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return {
 		...objInit,
 		getBieuMauUserModel,
@@ -57,5 +81,6 @@ export default () => {
 		setListIdBieuMauDaTraLoi,
 		initBieuMauTracNghiemModel,
 		traLoiBieuMauModel,
+		getBieuMauKhaoSatSinhVienModel,
 	};
 };

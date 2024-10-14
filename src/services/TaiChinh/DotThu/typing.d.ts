@@ -12,6 +12,7 @@ declare module DotThuTaiChinh {
 		// danhSachKhoanThu?: KhoanThu.Record[]; // {};
 		// danhSachMucThu?: MucThu.Record[]; // [{}];
 
+		suDungVi: boolean; // true;
 		kichHoat: boolean; // true;
 		metadata?: Record;
 	}

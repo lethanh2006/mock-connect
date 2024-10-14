@@ -52,6 +52,7 @@ declare module KhaiBaoQuyTrinh {
 		daDienThongTin: boolean;
 		laBuocHienTai: boolean;
 		danhSachMaBoPhanXuLy: string[];
+    danhSachThanhVienXuLy: string[];
 	}
 	export interface IThanhVienXuLy {
 		ssoId: string;
