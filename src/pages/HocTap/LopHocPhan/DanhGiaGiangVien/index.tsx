@@ -10,16 +10,9 @@ import { useModel } from 'umi';
 const DanhGiaGiangVienPage = () => {
 	const { loading, setRecord, record: recDot, setLoading } = useModel('tienich.dotkhaosat');
 	const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
-	const { getByIdModel: getBieuMau, record: recBieuMau } = useModel('tienich.bieumau');
-	const {
-		getDanhGiaGiangVienModel,
-		danhGiaGiangVienModel,
-		danhSach: dannhSachDanhGia,
-		formSubmiting,
-	} = useModel('lophocphan.danhgiagiangvien');
+	const { danhGiaGiangVienModel, formSubmiting } = useModel('lophocphan.danhgiagiangvien');
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const [giangVienSsoId, setGiangVienSsoId] = useState<string>(danhSachNhanSu[0]?.nhanSuSsoId ?? '');
-	const cauTraLoi = dannhSachDanhGia.find((item) => item.giangVienSsoId === giangVienSsoId)?.danhSachTraLoi;
 	const ngoaiThoiGian =
 		!recDot?.thoiGianBatDau ||
 		!recDot?.thoiGianKetThuc ||
@@ -31,23 +24,15 @@ const DanhGiaGiangVienPage = () => {
 		getDotDanhGiaGiangVien(recLopHocPhan?.hocKy?.ma ?? '')
 			.then((res: any) => {
 				setRecord(res?.data?.data);
-				getBieuMau(res?.data?.data?.idKhaoSat ?? '');
 			})
 			.finally(() => setLoading(false));
 	};
 
-	const getDanhGiaGiangVien = () => getDanhGiaGiangVienModel(recLopHocPhan?._id ?? '');
-
 	useEffect(() => {
 		if (recLopHocPhan?._id) {
 			getDotHienTai();
-			getDanhGiaGiangVien();
 		}
 	}, [recLopHocPhan?._id]);
-
-	useEffect(() => {
-		if (recDot?.idKhaoSat && recBieuMau?._id && recBieuMau._id !== recDot.idKhaoSat) getBieuMau(recDot.idKhaoSat);
-	}, [recDot?.idKhaoSat, recBieuMau?._id]);
 
 	useEffect(() => {
 		setGiangVienSsoId(danhSachNhanSu?.[0]?.nhanSuSsoId);
@@ -66,7 +51,7 @@ const DanhGiaGiangVienPage = () => {
 			vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
 		})
 			.then(() => {
-				getDanhGiaGiangVien();
+				getDotHienTai();
 			})
 			.catch((er) => console.log(er));
 	};
@@ -111,9 +96,10 @@ const DanhGiaGiangVienPage = () => {
 					</div>
 					<FormTraLoiKhaoSat
 						onOk={hanldeDanhGiaGiangVien}
-						cauTraLoi={cauTraLoi}
+						cauTraLoi={recDot?.thongTinCauTraLoi?.[0]?.danhSachTraLoi}
 						formSubmiting={formSubmiting}
 						hideCard
+						recBieuMauProps={recDot?.khaoSat}
 					/>
 				</>
 			) : !recDot?._id ? (
