@@ -24,9 +24,11 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	const { tienToTaiKhoan, maNganHang, urlHuongDanThanhToan } = settings[ESettingKey.THONG_TIN_THANH_TOAN] ?? {};
 
 	// Define the start and end times
-	const start = moment('23:00', 'HH:mm');
-	const end = moment('01:00', 'HH:mm').add(1, 'day');
-	const nganHangBaoTri = moment().isBetween(start, end);
+	const start = moment('23:00', 'HH:mm'); // Từ 23h đến
+	const end = moment('00:00', 'HH:mm').add(1, 'day'); // 0h ngày hôm sau
+	const start1 = moment('00:00', 'HH:mm'); // Hoặc từ 0h đến
+	const end1 = moment('01:00', 'HH:mm'); // 1h hôm nay
+	const nganHangBaoTri = moment().isBetween(start, end) || moment().isBetween(start1, end1);
 
 	useEffect(() => {
 		getByKeyModel(ESettingKey.THONG_TIN_THANH_TOAN, ipTaiChinh)
