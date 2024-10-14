@@ -22,6 +22,7 @@ const FormTraLoiKhaoSat = (props: {
 	formSubmiting?: boolean;
 	onCancel?: () => void;
 	hideCard?: boolean;
+	recBieuMauProps?: BieuMau.Record;
 	[key: string]: any;
 }) => {
 	const {
@@ -32,13 +33,19 @@ const FormTraLoiKhaoSat = (props: {
 		danhSach,
 		thoiGian,
 	} = useModel('tienich.dotkhaosat');
-	const { loading, record, traLoiBieuMauModel, formSubmiting: formSubmiting1 } = useModel('tienich.bieumau');
+	const {
+		loading,
+		record: recBieuMau,
+		traLoiBieuMauModel,
+		formSubmiting: formSubmiting1,
+	} = useModel('tienich.bieumau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
 	const { onOk, cauTraLoi, onCancel, hideCard } = props;
 	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
 	const [check, setCheck] = useState<boolean>(false);
 	const disabled = thoiGian !== EThoiGianDot.DANG_DIEN_RA || recordDot?.kichHoat === false;
+	const record = props?.recBieuMauProps ?? recBieuMau;
 
 	useEffect(() => {
 		if (!visibleForm && !onOk) {

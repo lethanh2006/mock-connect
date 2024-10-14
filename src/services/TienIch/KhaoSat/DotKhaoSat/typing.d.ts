@@ -27,6 +27,8 @@ declare module DotKhaoSat {
 		phamVi: EPhamViChuDe;
 		hinhThucDaoTaoId: string;
 
+		thongTinCauTraLoi?: BieuMau.IDanhGiaGiangVien[];
+
 		// Populate
 		daLam: boolean;
 		updatedAt: Date;
