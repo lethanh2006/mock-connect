@@ -12,13 +12,10 @@ import { Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
-import ModalQuyDoiDiem from './components/Modal';
 import ViewPhieuQuyDoiDiem from './components/View';
 
 const LichSuQuyDoiDiemPage = () => {
-	const { page, limit, getModel, visibleForm, setVisibleForm, setRecord } = useModel(
-		'daotao.quydoidiem.phieuquydoidiem',
-	);
+	const { page, limit, getModel, setRecord } = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [visibleView, setVisibleView] = useState<boolean>(false);
 
@@ -68,6 +65,7 @@ const LichSuQuyDoiDiemPage = () => {
 					))}
 				</ExpandText>
 			),
+			onCell,
 		},
 		{
 			title: 'Trạng thái',
@@ -106,8 +104,6 @@ const LichSuQuyDoiDiemPage = () => {
 				}}
 				hideCard
 			/>
-
-			<ModalQuyDoiDiem visible={visibleForm} setVisible={setVisibleForm} getData={getData} />
 
 			<ViewPhieuQuyDoiDiem visible={visibleView} setVisible={setVisibleView} />
 		</>
