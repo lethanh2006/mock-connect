@@ -13,7 +13,7 @@ const ThongTinChung = () => {
 	const {
 		record: recLopThucHanh,
 		danhSach: danhSachLopThucHanh,
-		getByIdModel: getByIdLopThucHanh,
+		sinhVienGetByIdModel: getByIdLopThucHanh,
 		sinhVienGetModel: getLopThucHanh,
 		danhSachNhanSu: danhSachNhanSuLopTH,
 		getAllNhanSuModel: getNhanSuLopTH,

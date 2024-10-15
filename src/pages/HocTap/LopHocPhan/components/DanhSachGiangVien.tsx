@@ -11,7 +11,7 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 	const [previewImage, setPreviewImage] = useState('');
 
 	return (
-		<div style={{ marginTop: 24 }}>
+		<div>
 			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>{title ?? 'Giảng viên'}</h4>
 			{danhSachNhanSu?.length ? (
 				<List
