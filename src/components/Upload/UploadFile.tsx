@@ -57,7 +57,6 @@ const UploadFile = (props: {
 		accept,
 		isAvatar,
 		isAvatarSmall,
-		disabled,
 		maxFileSize = 5,
 	} = props;
 	const limit = props.maxCount || 1;
