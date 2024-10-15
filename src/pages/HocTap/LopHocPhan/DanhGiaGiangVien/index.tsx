@@ -68,9 +68,18 @@ const DanhGiaGiangVienPage = () => {
 									'Ngoài thời gian đánh giá khảo sát giảng viên !'
 								) : (
 									<>
-										Thời gian khảo sát đánh giá giảng viên từ{' '}
-										<b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-										<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+										<span>
+											Thời gian khảo sát đánh giá giảng viên từ{' '}
+											<b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+											<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+										</span>
+										,{' '}
+										{recDot?.thongTinCauTraLoi?.length ? (
+											<span>
+												Bạn đã thực hiện khảo sát vào lúc{' '}
+												<b>{moment(recDot?.thongTinCauTraLoi?.[0]?.updatedAt).format('HH:mm, DD/MM/YYYY')}</b>{' '}
+											</span>
+										) : null}
 									</>
 								)
 							}
