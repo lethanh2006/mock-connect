@@ -74,7 +74,7 @@ declare module QuyDoiDiem {
 		// Minh chứng chứng chỉ
 		loai: EMinhChungQuyDoiDiem;
 		tenChungChi: string;
-		// urlsChungChi: string;
+		urlsChungChi: string[] | null;
 		// diemChungChi: string;
 		bacChungChi: string;
 		donViCap: string;
@@ -91,7 +91,7 @@ declare module QuyDoiDiem {
 		diemHe10MinhChung: number;
 		diemHe4MinhChung: number;
 		diemChuMinhChung: ELoaiDiemChu;
-		// urlsHocPhan: string;
+		urlsHocPhan: string[] | null;
 		loaiHocPhan: ELoaiHocPhanMinhChung;
 		namTotNghiep: number;
 		nganh: string;
