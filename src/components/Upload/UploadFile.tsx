@@ -61,6 +61,7 @@ const UploadFile = (props: {
 		maxFileSize = 5,
 	} = props;
 	const limit = props.maxCount || 1;
+	const disabled = props.disabled || props.otherProps?.disabled || false;
 	const [fileList, setFileList] = useState<any[]>();
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
@@ -154,7 +155,7 @@ const UploadFile = (props: {
 	};
 
 	const Extra = () =>
-		otherProps?.disabled ? null : (
+		disabled ? null : (
 			<small style={{ color: '#999' }}>
 				<i>
 					Tối đa {limit} mục, dung lượng mỗi file không được quá {maxFileSize}Mb
@@ -166,6 +167,7 @@ const UploadFile = (props: {
 	if (drag)
 		return (
 			<Upload.Dragger
+				disabled={disabled}
 				customRequest={({ onSuccess }) => setTimeout(() => onSuccess && onSuccess('ok'), 0)}
 				fileList={fileList}
 				onChange={handleChange}
@@ -174,7 +176,7 @@ const UploadFile = (props: {
 				accept={accept}
 				{...otherProps}
 			>
-				{!otherProps || !otherProps.disabled ? (
+				{!disabled ? (
 					<>
 						<p className='ant-upload-drag-icon'>
 							<UploadOutlined />
@@ -202,7 +204,7 @@ const UploadFile = (props: {
 					onPreview={handlePreviewImage}
 					{...otherProps}
 				>
-					{(!otherProps || !otherProps.disabled) && !fileList?.length ? (
+					{!disabled && !fileList?.length ? (
 						<div
 							style={{
 								display: 'flex',
@@ -233,6 +235,7 @@ const UploadFile = (props: {
 	return (
 		<>
 			<Upload
+				disabled={disabled}
 				customRequest={({ onSuccess }) => {
 					setTimeout(() => onSuccess && onSuccess('ok'), 0);
 				}}
@@ -243,7 +246,7 @@ const UploadFile = (props: {
 				accept={accept}
 				{...otherProps}
 			>
-				{!otherProps || !otherProps.disabled ? (
+				{!disabled ? (
 					<Button size={buttonSize || 'small'} icon={<UploadOutlined />}>
 						{buttonDescription || 'Chọn tệp'}
 					</Button>

@@ -3,7 +3,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type VanBanHuongDan } from '@/services/TienIch/VanBanHuongDan/typing';
-import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
+import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import { FileExcelOutlined, PaperClipOutlined, SaveOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -15,7 +15,7 @@ const FileList = () => {
 		getAllModel: getAllXemSau,
 		danhSach: danhSachXemSau,
 		deleteModel,
-	} = useModel('xemsau');
+	} = useModel('tienich.xemsau');
 	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [loadingXemSau, setLoadingXemSau] = useState<boolean>(false);
 

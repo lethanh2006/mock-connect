@@ -1,16 +1,16 @@
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
-import { ELoaiThongTinXemSau, mapLoaiThongTinXemSau } from '@/services/XemSau/constant';
-import type { XemSau } from '@/services/XemSau/typing';
+import ModalChiTiet from '@/pages/CongTacSinhVien/HoatDongCTSV/ModalChiTiet';
+import { ELoaiThongTinXemSau, mapLoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
+import type { XemSau } from '@/services/TienIch/XemSau/typing';
 import { CloseOutlined, EyeOutlined } from '@ant-design/icons';
 import { Card, Popconfirm, Tabs } from 'antd';
 import { useState } from 'react';
 import { history, useModel } from 'umi';
-import ModalChiTiet from '../SuKien/SinhVienHoatDongCTSV/ModalChiTiet';
 
 const XemSauPage = () => {
-	const { getModel, page, limit, deleteModel } = useModel('xemsau');
+	const { getModel, page, limit, deleteModel } = useModel('tienich.xemsau');
 	const { setVisibleForm, setRecord } = useModel('sukien.sinhvienhoatdongctsv');
 	const [tabActive, setTabActive] = useState<ELoaiThongTinXemSau>(ELoaiThongTinXemSau.SU_KIEN);
 
@@ -92,7 +92,7 @@ const XemSauPage = () => {
 				dependencies={[page, limit, tabActive]}
 				title='Danh sách xem sau'
 				columns={columns}
-				modelName='xemsau'
+				modelName='tienich.xemsau'
 				rowSelection
 				deleteMany
 				buttons={{ create: false }}

@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const FormLichCaNhan = (props: { getData: () => void }) => {
-	const { record, edit, setVisibleForm, postModel, putModel, formSubmiting, visibleForm } = useModel('sukien');
+	const { record, edit, setVisibleForm, postModel, putModel, formSubmiting, visibleForm } = useModel('sukien.sukien');
 	const [startDate, setStartDate] = useState<string>();
 	const [form] = Form.useForm();
 	const { getData } = props;

@@ -17,7 +17,7 @@ import { SelectDotChamDiem } from '../../DotChamDiem/components/Select';
 import MyDatePicker from '@/components/MyDatePicker';
 import moment from 'moment';
 import UploadFile from '@/components/Upload/UploadFile';
-import { SelectSuKien } from '@/pages/SuKien/components/Select';
+import { SelectSuKien } from '@/pages/CongTacSinhVien/SuKien/components/Select';
 import { useWatch } from 'antd/lib/form/Form';
 import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';

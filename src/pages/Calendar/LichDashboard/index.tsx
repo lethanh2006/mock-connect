@@ -27,11 +27,11 @@ const LichDashboard = () => {
 		setDataLichDashboard,
 		dataLichDashboard,
 		setLichHienThiDashboardModel,
-	} = useModel('sukien');
+	} = useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
-	const { record: recSetting } = useModel('settinglich');
+	const { record: recSetting } = useModel('tienich.settinglich');
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
 

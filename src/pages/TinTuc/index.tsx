@@ -1,5 +1,5 @@
 import { CommonTopicType } from '@/services/TinTuc/constant';
-import { ELoaiThongTinXemSau } from '@/services/XemSau/constant';
+import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import { ellipse } from '@/utils/utils';
 import { Card, Empty, Tabs, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ const TinTucPage = () => {
 	} = useModel('tintuc.chude');
 	const { setPage } = useModel('tintuc.tintuc');
 	const { setPage: setPageWP } = useModel('tintuc.tintucwp');
-	const { getAllModel } = useModel('xemsau');
+	const { getAllModel } = useModel('tienich.xemsau');
 	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const hash = window.location.hash.slice(1, 25);
 	const [tabActive, setTabActive] = useState<string>('all');
