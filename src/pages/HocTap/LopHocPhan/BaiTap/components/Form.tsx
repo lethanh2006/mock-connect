@@ -97,10 +97,11 @@ const FormBaiTap = (props: any) => {
 				return;
 			}
 
-			const hours = Math.floor(duration.asHours());
+			const days = Math.floor(duration.asDays());
+			const hours = Math.floor(duration.hours());
 			const minutes = Math.floor(duration.minutes());
 			const seconds = Math.floor(duration.seconds());
-			setRemainingTime(`${hours} giờ ${minutes} phút ${seconds} giây`);
+			setRemainingTime(`${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`);
 		};
 
 		// Chạy hàm đếm ngược mỗi giây
@@ -204,14 +205,6 @@ const FormBaiTap = (props: any) => {
 
 	return (
 		<>
-			{record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.CHUA_NOP && !quaThoiHanNopBai && (
-				<div style={{ marginBottom: 12 }}>
-					<i style={{ color: 'red' }}>
-						Đối với bài Quiz, chỉ cho phép sinh viên làm bài và nộp bài 1 lần, không thể chỉnh sửa sau khi nộp bài
-					</i>
-				</div>
-			)}
-
 			{record?.trangThai === ETrangThaiNopBaiTap.DA_NOP ? (
 				<div style={{ marginBottom: 12 }}>
 					<Alert type='success' showIcon message='Đã nộp bài' />
@@ -315,6 +308,14 @@ const FormBaiTap = (props: any) => {
 						<Spin spinning={loading}>
 							<FormQuiz form={form} cauTraLoi={cauTraLoi} disabled={disable || disableIsQuiz} />
 						</Spin>
+					</Col>
+				)}
+
+				{record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.CHUA_NOP && !quaThoiHanNopBai && (
+					<Col span={24}>
+						<i style={{ color: 'red' }}>
+							Đối với bài Quiz, chỉ cho phép sinh viên làm bài và nộp bài 1 lần, không thể chỉnh sửa sau khi nộp bài
+						</i>
 					</Col>
 				)}
 
