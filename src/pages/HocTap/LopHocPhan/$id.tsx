@@ -31,9 +31,13 @@ const DetailLopTinChi = ({
 
 	const getData = () => {
 		if (id) {
-			sinhVienGetByIdModel(id).then((rec) => {
-				if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
-			});
+			sinhVienGetByIdModel(id)
+				.then((rec) => {
+					if (!recHocKy?._id) getHocKy({ ma: rec?.maHocKy });
+				})
+				.catch((er) => {
+					history.push('/hoc-tap/lop-tin-chi');
+				});
 			getAllNhanSu(false, undefined, { lopHocPhanId: id });
 		}
 	};
@@ -48,17 +52,13 @@ const DetailLopTinChi = ({
 					document.title,
 					`/hoc-tap/lop-tin-chi/${id}${window.location.search}${window.location.hash}`,
 				);
-			}
+			} else getData();
 		}
-	}, [auth.user?.access_token]);
-
-	useEffect(() => {
-		getData();
 
 		return () => {
 			setRecord(undefined);
 		};
-	}, [id]);
+	}, [auth.user?.access_token, id]);
 
 	useEffect(() => {
 		if (hash && paths.includes(hash)) setTabActive(hash);
