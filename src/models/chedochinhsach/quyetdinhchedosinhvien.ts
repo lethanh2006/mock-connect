@@ -1,6 +1,6 @@
 import useInitModel from '@/hooks/useInitModel';
-import { exportCheDoSinhVien } from '@/services/CheDoSinhVien';
-import type { CheDoSinhVien } from '@/services/CheDoSinhVien/typings';
+import { exportCheDoSinhVien } from '@/services/CongTacSinhVien/CheDoSinhVien';
+import type { CheDoSinhVien } from '@/services/CongTacSinhVien/CheDoSinhVien/typings';
 import { useState } from 'react';
 import fileDownload from 'js-file-download';
 

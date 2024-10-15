@@ -528,14 +528,14 @@
 	{
 		name: 'HoatDongCTSV',
 		path: 'hoat-dong-ctsv',
-		component: './SuKien/SinhVienHoatDongCTSV',
+		component: './CongTacSinhVien/HoatDongCTSV',
 		icon: 'CarryOutOutlined',
 	},
 
 	{
 		name: 'XemSau',
 		path: 'xem-sau',
-		component: './XemSau',
+		component: './TienIch/XemSau',
 		icon: 'ClockCircleOutlined',
 	},
 

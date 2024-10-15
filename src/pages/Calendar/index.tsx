@@ -32,10 +32,10 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		dataCalendar,
 		setDataCalendar,
 		setDataLich,
-	} = useModel('sukien');
+	} = useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
-	const { record: recSetting, setVisibleForm: setVisibleMauLich, getSettingLich } = useModel('settinglich');
+	const { record: recSetting, setVisibleForm: setVisibleMauLich, getSettingLich } = useModel('tienich.settinglich');
 	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 	const [date, setDate] = useState(new Date());

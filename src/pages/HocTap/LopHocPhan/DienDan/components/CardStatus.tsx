@@ -1,5 +1,5 @@
-import type { BaiDang } from '@/services/DienDan/BaiDang/typing';
-import type { BinhLuan } from '@/services/DienDan/BinhLuan/typing';
+import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
+import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import { copyToClipboard } from '@/utils/utils';
 import {
 	CheckCircleOutlined,

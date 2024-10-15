@@ -10,8 +10,8 @@ import { useState } from 'react';
 
 const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 	const { date, setDate } = props;
-	const { selectSuKiens, setSelectSuKiens, setDataCalendar, dataLich } = useModel('sukien');
-	const { record: recSetting } = useModel('settinglich');
+	const { selectSuKiens, setSelectSuKiens, setDataCalendar, dataLich } = useModel('sukien.sukien');
+	const { record: recSetting } = useModel('tienich.settinglich');
 	const [hovered, setHovered] = useState<ELoaiSuKien | null>(null);
 
 	const pickDate = (val: moment.Moment) => setDate(val.toDate());

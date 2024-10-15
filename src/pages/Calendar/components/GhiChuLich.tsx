@@ -5,7 +5,7 @@ import { useModel } from 'umi';
 
 const GhiChuLich = (props: { isDashboard?: boolean }) => {
 	const { isDashboard } = props;
-	const { record: recSetting, getSettingLich } = useModel('settinglich');
+	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 	const {
 		selectSuKiens,
 		setSelectSuKiens,
@@ -13,7 +13,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 		setLichHienThiDashboardModel,
 		dataLich,
 		setDataCalendar,
-	} = useModel('sukien');
+	} = useModel('sukien.sukien');
 	const loaiSuKien = [
 		ELoaiSuKien.CHUNG,
 		ELoaiSuKien.LICH_HOC,

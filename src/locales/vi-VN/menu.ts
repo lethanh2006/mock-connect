@@ -53,7 +53,7 @@ export default {
 	'menu.PhanHoi': 'Phản hồi',
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
 	'menu.ThongBao': 'Thông báo',
-	'menu.VanBanHuongDan': 'Văn bản',
+	'menu.VanBanHuongDan': 'Văn bản hướng dẫn',
 	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
 	'menu.HoatDongCTSV': 'Sự kiện',
 	'menu.XemSau': 'Đã lưu',

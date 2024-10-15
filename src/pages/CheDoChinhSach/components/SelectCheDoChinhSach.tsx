@@ -1,4 +1,4 @@
-import type { CheDoSinhVien } from '@/services/CheDoSinhVien/typings';
+import type { CheDoSinhVien } from '@/services/CongTacSinhVien/CheDoSinhVien/typings';
 import { Select } from 'antd';
 import React, { useEffect } from 'react';
 import { useModel } from 'umi';

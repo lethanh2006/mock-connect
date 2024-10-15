@@ -1,5 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
-import { getDataThongKeDocx, getDataThongKeExcel } from '@/services/CheDoSinhVien';
+import { getDataThongKeDocx, getDataThongKeExcel } from '@/services/CongTacSinhVien/CheDoSinhVien';
 import type { ThongKeQuyTrinhDong } from '@/services/QuyTrinhDong/ThongKe/typings';
 import fileDownload from 'js-file-download';
 
