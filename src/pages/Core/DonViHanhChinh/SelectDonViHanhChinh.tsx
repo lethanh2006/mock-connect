@@ -1,8 +1,7 @@
-import { FormItem } from '@/components/FormItem';
 import { getPhuongXa, getQuanHuyen } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import rules from '@/utils/rules';
-import { Col, Input, Row, Select, type FormInstance } from 'antd';
+import { Col, Form, Input, Row, Select, type FormInstance } from 'antd';
 import { useEffect, useState } from 'react';
 
 const SelectDonViHanhChinh = (props: {
@@ -69,7 +68,7 @@ const SelectDonViHanhChinh = (props: {
 		<Row gutter={[12, 0]}>
 			{!hideTinh && (
 				<Col span={8}>
-					<FormItem
+					<Form.Item
 						name={suffix ? 'tinhTp' + suffix : 'tinhTp'}
 						label={hasLabel ? 'Tỉnh/Thành phố' : undefined}
 						initialValue={props.initialValue?.tinhTp}
@@ -87,12 +86,12 @@ const SelectDonViHanhChinh = (props: {
 							onChange={(val, opt: any) => onchangeTinhThanhPho(opt?.key)}
 							optionFilterProp='label'
 						/>
-					</FormItem>
+					</Form.Item>
 				</Col>
 			)}
 			{!hideQuanHuyen && (
 				<Col span={8}>
-					<FormItem
+					<Form.Item
 						initialValue={props.initialValue?.quanHuyen}
 						name={suffix ? 'quanHuyen' + suffix : 'quanHuyen'}
 						rules={props.notRequiredQuanHuyen === true ? [] : [...rules.required]}
@@ -110,13 +109,13 @@ const SelectDonViHanhChinh = (props: {
 							onChange={(val, opt: any) => onchangeQuanHuyen(opt?.key)}
 							optionFilterProp='label'
 						/>
-					</FormItem>
+					</Form.Item>
 				</Col>
 			)}
 
 			{!hideXaPhuong && (
 				<Col span={8}>
-					<FormItem
+					<Form.Item
 						initialValue={props.initialValue?.xaPhuong}
 						name={suffix ? 'xaPhuong' + suffix : 'xaPhuong'}
 						rules={props.notRequiredXaPhuong === true ? [] : [...rules.required]}
@@ -133,19 +132,19 @@ const SelectDonViHanhChinh = (props: {
 							}))}
 							optionFilterProp='label'
 						/>
-					</FormItem>
+					</Form.Item>
 				</Col>
 			)}
 			{hasSoNha ? (
 				<Col span={24}>
-					<FormItem
+					<Form.Item
 						name={suffix ? 'soNhaTenDuong' + suffix : 'soNhaTenDuong'}
 						initialValue={props.initialValue?.soNhaTenDuong}
 						rules={[...(props.notRequiredDiaChiCuThe ? [] : rules.required), ...rules.text, ...rules.length(250)]}
 						label={hasLabel ? 'Số nhà, đường phố' : undefined}
 					>
 						<Input.TextArea placeholder='Nhập số nhà/tên đường' />
-					</FormItem>
+					</Form.Item>
 				</Col>
 			) : null}
 		</Row>
