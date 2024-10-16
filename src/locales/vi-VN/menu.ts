@@ -38,7 +38,7 @@ export default {
 
 	// DRL
 
-	'menu.DiemRenLuyen': 'Điểm rèn luyện',
+	'menu.DiemRenLuyen': 'Rèn luyện',
 
 	'menu.DiemRenLuyen.KhaiBaoMinhChung': 'Khai báo minh chứng',
 	'menu.DiemRenLuyen.KhaiBaoMinhChung.NoiNgoaiTru': 'Nội ngoại trú',
@@ -47,26 +47,25 @@ export default {
 	'menu.DiemRenLuyen.KhaiBaoMinhChung.DacBiet': 'Thành tích đặc biệt',
 
 	'menu.DiemRenLuyen.PhieuDiemRenLuyen': 'Phiếu điểm rèn luyện',
+	'menu.DiemRenLuyen.HoatDongCTSV': 'Sự kiện tham gia',
+	'menu.DiemRenLuyen.TuanSinhHoatCongDan': 'Tuần sinh hoạt công dân',
 
 	'menu.DichVuHanhChinh': 'Dịch vụ hành chính',
 	'menu.DichVuHanhChinh.TaoDon': 'Tạo đơn - Dịch vụ hành chính',
 	'menu.PhanHoi': 'Phản hồi',
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
 	'menu.ThongBao': 'Thông báo',
-	'menu.VanBanHuongDan': 'Văn bản hướng dẫn',
-	'menu.CauHoiThuongGap': 'Câu hỏi thường gặp',
-	'menu.HoatDongCTSV': 'Sự kiện',
-	'menu.XemSau': 'Đã lưu',
+
+	'menu.TienIch': 'Tiện ích khác',
+	'menu.TienIch.VanBanHuongDan': 'Văn bản hướng dẫn',
+	'menu.TienIch.CauHoiThuongGap': 'Câu hỏi thường gặp',
+	'menu.TienIch.XemSau': 'Đã lưu',
 
 	'menu.HoatDongKHCN': 'Hoạt động KH&CN',
 	'menu.HoatDongKHCN.DeTaiHocVien': 'Đề tài NCKH cấp Học viện',
 	'menu.HoatDongKHCN.DeTaiKhoa': 'Đề tài NCKH cấp khoa/viện',
 	'menu.HoatDongKHCN.KeHoachNCKH': 'Định hướng NCKH',
 	'menu.HoatDongKHCN.QuyCheQuyDinh': 'Quy chế, quy định',
-
-	'menu.GiaoDucChinhTriTuTuong': 'Giáo dục chính trị tư tưởng',
-	'menu.GiaoDucChinhTriTuTuong.TuanSinhHoatCongDan': 'Tuần sinh hoạt công dân',
-	// GIANG VIEN
 
 	'menu.HoatDongKHCN.DeTaiHocVien.DangKyDeXuat': 'Đăng ký đề xuất đề tài',
 	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongXetChonDeXuat': 'Hội đồng xét chọn đề xuất đề tài',
