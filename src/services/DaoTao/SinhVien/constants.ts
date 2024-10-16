@@ -76,3 +76,21 @@ export const colorTrangThaiChungChiSinhVen: Record<ETrangThaiChungChiSinhVen, st
 	[ETrangThaiChungChiSinhVen.DA_DUYET]: 'green',
 	[ETrangThaiChungChiSinhVen.KHONG_DUYET]: 'red',
 };
+
+// Vai trò sinh viên trong lớp hành chính
+
+export enum EVaiTroSvLhc {
+	THANH_VIEN = 'thanh_vien',
+	LOP_TRUONG = 'lop_truong',
+	LOP_PHO = 'lop_pho',
+	LOP_PHO_DOI_SONG = 'lop_pho_doi_song',
+	LOP_PHO_HOC_TAP = 'lop_pho_hoc_tap',
+}
+
+export const vaiTroSvLhc: Record<EVaiTroSvLhc, string> = {
+	[EVaiTroSvLhc.THANH_VIEN]: 'Thành viên',
+	[EVaiTroSvLhc.LOP_TRUONG]: 'Lớp trưởng',
+	[EVaiTroSvLhc.LOP_PHO]: 'Lớp phó',
+	[EVaiTroSvLhc.LOP_PHO_DOI_SONG]: 'Lớp phó đời sống',
+	[EVaiTroSvLhc.LOP_PHO_HOC_TAP]: 'Lớp phó học tập',
+};

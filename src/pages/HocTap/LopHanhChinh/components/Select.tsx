@@ -15,12 +15,13 @@ const SelectLopHanhChinhSinhVien = (props: {
 	hasDefault?: boolean;
 	selectMa?: boolean;
 	placeholder?: string;
+	maHocKy?: string;
 }) => {
-	const { value, onChange, multiple, allowClear, disabled, style, hasDefault, selectMa, placeholder } = props;
+	const { value, onChange, multiple, allowClear, disabled, style, hasDefault, selectMa, placeholder, maHocKy } = props;
 	const { danhSach, sinhVienGetModel, loading, setRecord } = useModel('daotao.lophanhchinh');
 
 	useEffect(() => {
-		sinhVienGetModel(undefined)
+		sinhVienGetModel(undefined, maHocKy)
 			.then((data) => {
 				if (hasDefault && onChange) {
 					onChange(data?.[0]._id);
@@ -28,7 +29,7 @@ const SelectLopHanhChinhSinhVien = (props: {
 				}
 			})
 			.catch((er) => console.log(er));
-	}, []);
+	}, [maHocKy]);
 
 	return (
 		<Select
