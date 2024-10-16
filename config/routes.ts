@@ -232,18 +232,25 @@
 			// 	],
 			// },
 			{
-				name: 'PhieuDiemRenLuyen',
-				path: 'phieu-diem-ren-luyen',
-				component: './DiemRenLuyenV2/PhieuDiemRenLuyen',
-			},
-			{
 				name: 'HoatDongCTSV',
 				path: 'hoat-dong-ctsv',
 				component: './CongTacSinhVien/HoatDongCTSV',
 				icon: 'CarryOutOutlined',
 			},
+			{
+				name: 'PhieuDiemRenLuyen',
+				path: 'phieu-diem-ren-luyen',
+				component: './DiemRenLuyenV2/PhieuDiemRenLuyen',
+			},
+			{
+				name: 'TuanSinhHoatCongDan',
+				path: 'tuan-sinh-hoat-cong-dan',
+				component: './CheDoChinhSach/GiaoDucChinhTriTuTuong/QuyetDinhGDCTTT',
+			},
 		],
 	},
+
+	// Khoa học công nghệ
 	{
 		name: 'HoatDongKHCN',
 		path: 'hoat-dong-khcn',
@@ -380,51 +387,6 @@
 		],
 	},
 
-	{
-		name: 'GiaoDucChinhTriTuTuong',
-		icon: 'calendar',
-		path: '/giao-duc-chinh-tri-tu-tuong',
-		routes: [
-			{
-				name: 'TuanSinhHoatCongDan',
-				path: 'danh-gia-ket-qua',
-				component: './CheDoChinhSach/GiaoDucChinhTriTuTuong/QuyetDinhGDCTTT',
-			},
-		],
-	},
-
-	// {
-	// 	name: 'DichVuHanhChinh',
-	// 	icon: 'AuditOutlined',
-	// 	path: '/dich-vu-hanh-chinh',
-	// 	routes: [
-	// 		{
-	// 			path: './',
-	// 			component: './DichVuMotCuaV2/SinhVien/LichSu',
-	// 			hideInMenu: true,
-	// 			// access: 'sinhVien',
-	// 		},
-	// 		{
-	// 			name: 'TaoDon',
-	// 			path: './tao-don',
-	// 			// access: 'sinhVien',
-	// 			hideInMenu: true,
-	// 			routes: [
-	// 				{
-	// 					path: './',
-	// 					component: './DichVuMotCuaV2/SinhVien/GuiDon',
-	// 					extract: true,
-	// 				},
-	// 				{
-	// 					path: './:id',
-	// 					component: './DichVuMotCuaV2/SinhVien/GuiDon/$id',
-	// 					extract: true,
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// },
-
 	// {
 	// 	name: 'NoiNgoaiTru',
 	// 	icon: 'DeploymentUnitOutlined',
@@ -434,38 +396,6 @@
 	// 			name: 'KhaiBao',
 	// 			path: 'khai-bao',
 	// 			component: './NoiNgoaiTru',
-	// 		},
-	// 	],
-	// },
-
-	// {
-	// 	name: 'DichVuHanhChinh',
-	// 	icon: 'AuditOutlined',
-	// 	path: '/dich-vu-hanh-chinh',
-	// 	routes: [
-	// 		{
-	// 			path: './',
-	// 			component: './DichVuMotCuaV2/SinhVien/LichSu',
-	// 			hideInMenu: true,
-	// 			// access: 'sinhVien',
-	// 		},
-	// 		{
-	// 			name: 'TaoDon',
-	// 			path: './tao-don',
-	// 			// access: 'sinhVien',
-	// 			hideInMenu: true,
-	// 			routes: [
-	// 				{
-	// 					path: './',
-	// 					component: './DichVuMotCuaV2/SinhVien/GuiDon',
-	// 					extract: true,
-	// 				},
-	// 				{
-	// 					path: './:id',
-	// 					component: './DichVuMotCuaV2/SinhVien/GuiDon/$id',
-	// 					extract: true,
-	// 				},
-	// 			],
 	// 		},
 	// 	],
 	// },
@@ -528,19 +458,17 @@
 		routes: [
 			{
 				name: 'CauHoiThuongGap',
-				path: './cauhoithuonggap',
-
+				path: './cau-hoi-thuong-gap',
 				component: './TienIch/CauHoiThuongGap',
 			},
 			{
 				name: 'VanBanHuongDan',
-				path: '/van-ban-huong-dan',
+				path: './van-ban-huong-dan',
 				component: './TienIch/VanBanHuongDan',
 			},
-
 			{
 				name: 'XemSau',
-				path: 'xem-sau',
+				path: './xem-sau',
 				component: './TienIch/XemSau',
 			},
 		],
