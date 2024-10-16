@@ -9,19 +9,27 @@ const SelectHocKy = (props: {
 	value?: string;
 	onChange?: (id: string) => void;
 	multiple?: boolean;
-	condition?: any;
 	disabled?: boolean;
 	allowClear?: boolean;
 	style?: React.CSSProperties;
 	isSetRecord?: boolean;
 	selectMa?: boolean;
+	/** Nếu căn cứ từ lớp hành chính thì chỉ lọc những HK có `sinh viên học kỳ`, còn ko mặc định sẽ lấy toàn bộ học kỳ theo `Khóa ngành` */
+	fromLhc?: boolean;
 }) => {
-	const { value, onChange, multiple, condition, allowClear, style, isSetRecord, selectMa, disabled } = props;
-	const { danhSach, getAllModel, visibleForm, loading } = useModel('daotao.hocky');
+	const { value, onChange, multiple, allowClear, style, isSetRecord, selectMa, disabled, fromLhc = false } = props;
+	const { danhSach, getAllModel, loading } = useModel('daotao.hocky');
 
 	useEffect(() => {
-		if (!visibleForm) getAllModel(!!isSetRecord, { ma: -1 }, condition, undefined, 'sinh-vien/me');
-	}, [visibleForm, JSON.stringify(condition)]);
+		if (!danhSach.length)
+			getAllModel(
+				!!isSetRecord,
+				{ ma: -1 },
+				undefined,
+				undefined,
+				fromLhc ? 'lop-hanh-chinh/sinh-vien/me' : 'sinh-vien/me',
+			);
+	}, []);
 
 	return (
 		<Select

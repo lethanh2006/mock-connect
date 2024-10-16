@@ -7,11 +7,18 @@ export default () => {
 	const objInit = useInitModel<LopHanhChinh.IRecord>('lop-hanh-chinh', undefined, undefined, ipDaoTao);
 	const { getModel, getByIdModel, setLoading, setDanhSach } = objInit;
 
-	const sinhVienGetModel = async (params: any): Promise<LopHanhChinh.IRecord[]> =>
-		getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
+	const sinhVienGetModel = async (params: any, maHocKy?: string): Promise<LopHanhChinh.IRecord[]> =>
+		getModel(
+			params,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			maHocKy ? `sinh-vien/page/hoc-ky/${maHocKy}` : 'sinh-vien/page',
+		);
 
-	const sinhVienGetByIdModel = async (idLop: string): Promise<LopHanhChinh.IRecord> =>
-		getByIdModel(`${idLop}/sinh-vien`);
+	const sinhVienGetByIdModel = async (idLop: string, maHocKy?: string): Promise<LopHanhChinh.IRecord> =>
+		getByIdModel(`${idLop}/sinh-vien${maHocKy ? `/${maHocKy}` : ''}`);
 
 	const getMeModel = async (): Promise<LopHanhChinh.IRecord[]> => {
 		setLoading(true);
