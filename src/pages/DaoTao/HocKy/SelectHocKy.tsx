@@ -21,15 +21,14 @@ const SelectHocKy = (props: {
 	const { danhSach, getAllModel, loading } = useModel('daotao.hocky');
 
 	useEffect(() => {
-		if (!danhSach.length)
-			getAllModel(
-				!!isSetRecord,
-				{ ma: -1 },
-				undefined,
-				undefined,
-				fromLhc ? 'lop-hanh-chinh/sinh-vien/me' : 'sinh-vien/me',
-			);
-	}, []);
+		getAllModel(
+			!!isSetRecord,
+			{ ma: -1 },
+			undefined,
+			undefined,
+			fromLhc ? 'lop-hanh-chinh/sinh-vien/me' : 'sinh-vien/me',
+		);
+	}, [fromLhc]);
 
 	return (
 		<Select

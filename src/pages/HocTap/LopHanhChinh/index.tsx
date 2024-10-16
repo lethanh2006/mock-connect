@@ -37,7 +37,7 @@ const LopHanhChinhPage = () => {
 			// }
 		>
 			{/* Xem lớp hành chính theo từng học kỳ khác nhau */}
-			<FilterHocKy style={{ marginBottom: 8 }} isSetHocKy>
+			<FilterHocKy style={{ marginBottom: 8 }} isSetHocKy fromLhc>
 				<SelectLopHanhChinhSinhVien
 					value={record?._id}
 					onChange={(val) => setRecord(danhSach.find((item) => item._id === val))}
