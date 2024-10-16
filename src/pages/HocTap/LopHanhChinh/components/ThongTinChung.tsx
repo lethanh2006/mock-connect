@@ -1,3 +1,4 @@
+import { vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { Descriptions } from 'antd';
 import { useModel } from 'umi';
 import DanhSachSinhVien from '../../LopHocPhan/components/DanhSachSinhVien';
@@ -14,10 +15,20 @@ const ThongTinChungLopHanhChinh = () => {
 				{/* <Descriptions.Item label='Sĩ số'>
 					{record?.siSo ?? record?.sinhVienList?.length ?? 0} sinh viên
 				</Descriptions.Item> */}
+				{record?.lopHcSvKy ? (
+					<>
+						<Descriptions.Item label='Vai trò trong lớp'>
+							{record?.lopHcSvKy.vaiTro ? vaiTroSvLhc[record.lopHcSvKy.vaiTro] : '--'}
+						</Descriptions.Item>
+					</>
+				) : null}
 			</Descriptions>
 
 			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8, marginTop: 18 }}>Danh sách sinh viên</h4>
-			<DanhSachSinhVien sinhVienList={record?.sinhVienList ?? []} loading={loading} />
+			<DanhSachSinhVien
+				sinhVienList={record?.sinhVienKyList?.length ? record.sinhVienKyList : record?.sinhVienList ?? []}
+				loading={loading}
+			/>
 		</>
 	);
 };

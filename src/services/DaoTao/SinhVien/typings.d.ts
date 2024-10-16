@@ -1,10 +1,10 @@
 import type { KetQuaHocKy } from '@/services/HocTap/KetQuaHocKy/typing';
+import type { LopHanhChinh } from '@/services/HocTap/LopHanhChinh/typing';
 import type { DotXetTotNghiep } from '@/services/HocTap/XetTotNghiep/typing';
 import type { EDoiTuongLopHanhChinh } from '@/services/HocTap/constant';
 import type { ChungChi } from '../ChungChi/typing';
 import type { ChuongTrinhDaoTao } from '../ChuongTrinhDaoTao/typing';
 import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
-import { type LopHanhChinh } from '../NamHoc/LopHanhChinh/typings';
 import { type ETrangThaiHocSv } from '../constant';
 import type {
 	EGioiTinh,
@@ -15,7 +15,7 @@ import type {
 	ETrangThaiThanhVienGiaDinh,
 	EViTriViecLam,
 } from './constant';
-import type { ETrangThaiChungChiSinhVen } from './constants';
+import type { ETrangThaiChungChiSinhVen, EVaiTroSvLhc } from './constants';
 
 declare module SinhVien {
 	export interface IRecord {
@@ -289,4 +289,18 @@ declare module SinhVien {
 		thoiHoc: number;
 		totNghiep: number;
 	};
+
+	export interface ISinhVienHocKy {
+		_id: string;
+		lopHanhChinhId: string;
+		sinhVienSsoId: string;
+		sinhVien?: IRecord;
+		lopHanhChinh?: LopHanhChinh.IRecord;
+		maHocKy: string;
+		hocKy?: HocKy.IRecord;
+
+		vaiTro?: EVaiTroSvLhc;
+		trangThaiHoc?: ETrangThaiHocSv;
+		ghiChuHocKy?: string;
+	}
 }
