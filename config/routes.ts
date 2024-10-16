@@ -155,7 +155,7 @@
 					},
 				],
 			},
-			{ name: 'LichThi', path: 'lich-thi', component: './HocTap/LichThi' },
+			{ name: 'LichThi', path: 'lich-thi', component: './KhaoThi/LichThi' },
 			{
 				name: 'KetQuaHocTap',
 				path: './ket-qua-hoc-tap',
