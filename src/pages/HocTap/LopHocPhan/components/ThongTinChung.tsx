@@ -101,6 +101,7 @@ const ThongTinChung = () => {
 			<DanhSachSinhVien
 				sinhVienList={activeKey !== '-1' ? recLopThucHanh?.sinhVienList ?? [] : record?.sinhVienList ?? []}
 				loading={loading || loadingThucHanh}
+				fromLopHocPhan
 			/>
 
 			{/* <Modal

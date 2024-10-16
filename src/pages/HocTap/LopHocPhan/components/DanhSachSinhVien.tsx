@@ -1,17 +1,20 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import { EVaiTroSvLhc, vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
 import { compareFullname } from '@/utils/utils';
 import { Avatar, Col, Descriptions, Modal, Row } from 'antd';
 import { useState } from 'react';
 
-const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: boolean }) => {
-	const { sinhVienList, loading } = props;
-	const [modalVisible, setModalVisible] = useState<boolean>(false);
-	const [record, setRecord] = useState<SinhVien.IRecord>();
+type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
 
-	const onRow = (rec: SinhVien.IRecord) => ({
+const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; fromLopHocPhan?: boolean }) => {
+	const { sinhVienList, loading, fromLopHocPhan } = props;
+	const [modalVisible, setModalVisible] = useState<boolean>(false);
+	const [record, setRecord] = useState<TSinhVien>();
+
+	const onRow = (rec: TSinhVien) => ({
 		onClick: () => {
 			setRecord(rec);
 			setModalVisible(true);
@@ -19,7 +22,7 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
 		style: { cursor: 'pointer' },
 	});
 
-	const columns: IColumn<SinhVien.IRecord>[] = [
+	const columns: IColumn<TSinhVien>[] = [
 		{
 			dataIndex: 'anhDaiDienUrl',
 			title: 'Ảnh đại diện',
@@ -51,6 +54,15 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
 			width: 100,
 			filterType: 'select',
 			filterData: Object.values(EGioiTinh),
+		},
+		{
+			title: 'Vai trò',
+			dataIndex: 'vaiTro',
+			filterType: 'select',
+			filterData: Object.values(EVaiTroSvLhc).map((i) => ({ label: vaiTroSvLhc[i], value: i })),
+			width: 120,
+			render: (val: EVaiTroSvLhc) => val && vaiTroSvLhc[val],
+			hide: fromLopHocPhan,
 		},
 	];
 
@@ -90,6 +102,11 @@ const DanhSachSinhVien = (props: { sinhVienList: SinhVien.IRecord[]; loading: bo
                 {record?.ngaySinh && moment(record.ngaySinh).format('DD/MM/YYYY')}
               </Descriptions.Item>
               <Descriptions.Item label="Số điện thoại">{record?.soDienThoai}</Descriptions.Item> */}
+							{!fromLopHocPhan ? (
+								<Descriptions.Item label='Vai trò trong lớp'>
+									{record?.vaiTro ? vaiTroSvLhc[record.vaiTro] : '--'}
+								</Descriptions.Item>
+							) : null}
 						</Descriptions>
 					</Col>
 				</Row>
