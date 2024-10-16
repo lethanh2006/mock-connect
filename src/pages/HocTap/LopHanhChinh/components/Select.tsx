@@ -24,7 +24,7 @@ const SelectLopHanhChinhSinhVien = (props: {
 		sinhVienGetModel(undefined, maHocKy)
 			.then((data) => {
 				if (hasDefault && onChange) {
-					onChange(data?.[0]._id);
+					onChange(data?.[0]?._id);
 					setRecord(data?.[0]);
 				}
 			})
