@@ -1,3 +1,4 @@
+import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import { Card, Col, Empty, Row, Tabs } from 'antd';
@@ -8,13 +9,15 @@ import SelectLopHanhChinhSinhVien from './components/Select';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
 const LopHanhChinhPage = () => {
+	const { record: recHocKy } = useModel('daotao.hocky');
 	const { record, sinhVienGetByIdModel, setRecord, danhSach, loading } = useModel('daotao.lophanhchinh');
 	const paths = ['thong-tin', 'thong-bao'];
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 
 	useEffect(() => {
-		if (record?._id) sinhVienGetByIdModel(record._id);
-	}, [record?._id]);
+		// Get lớp hành chính theo kỳ
+		if (record?._id && recHocKy?.ma) sinhVienGetByIdModel(record._id, recHocKy?.ma);
+	}, [recHocKy?.ma, record?._id]);
 
 	const onChangeTab = (tab: string) => {
 		setTabActive(tab);
@@ -22,17 +25,28 @@ const LopHanhChinhPage = () => {
 
 	return (
 		<Card
-			bodyStyle={{ paddingTop: 4 }}
+			// bodyStyle={{ paddingTop: 4 }}
 			title='Lớp hành chính'
-			extra={
+			// extra={
+			// 	<SelectLopHanhChinhSinhVien
+			// 		value={record?._id}
+			// 		onChange={(val) => setRecord(danhSach.find((item) => item._id === val))}
+			// 		style={{ width: 180 }}
+			// 		hasDefault
+			// 	/>
+			// }
+		>
+			{/* Xem lớp hành chính theo từng học kỳ khác nhau */}
+			<FilterHocKy>
 				<SelectLopHanhChinhSinhVien
 					value={record?._id}
 					onChange={(val) => setRecord(danhSach.find((item) => item._id === val))}
 					style={{ width: 180 }}
 					hasDefault
+					maHocKy={recHocKy?.ma}
 				/>
-			}
-		>
+			</FilterHocKy>
+
 			{record?._id ? (
 				<>
 					<Tabs onChange={onChangeTab} activeKey={tabActive}>
@@ -45,9 +59,10 @@ const LopHanhChinhPage = () => {
 												loading={loading}
 												title='Cố vấn học tập'
 												danhSachNhanSu={
-													record?.giangVien?.ssoId
+													record.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
+													(record?.giangVien?.ssoId
 														? [{ nhanSu: record.giangVien, nhanSuSsoId: record.giangVien.ssoId }]
-														: []
+														: [])
 												}
 												isHighlight
 											/>
