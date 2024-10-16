@@ -16,7 +16,7 @@ const LopHanhChinhPage = () => {
 
 	useEffect(() => {
 		// Get lớp hành chính theo kỳ
-		if (record?._id && recHocKy?.ma) sinhVienGetByIdModel(record._id, recHocKy?.ma);
+		if (record?._id) sinhVienGetByIdModel(record._id); //, recHocKy?.ma
 	}, [recHocKy?.ma, record?._id]);
 
 	const onChangeTab = (tab: string) => {
@@ -25,19 +25,19 @@ const LopHanhChinhPage = () => {
 
 	return (
 		<Card
-			// bodyStyle={{ paddingTop: 4 }}
+			bodyStyle={{ paddingTop: 4 }}
 			title='Lớp hành chính'
-			// extra={
-			// 	<SelectLopHanhChinhSinhVien
-			// 		value={record?._id}
-			// 		onChange={(val) => setRecord(danhSach.find((item) => item._id === val))}
-			// 		style={{ width: 180 }}
-			// 		hasDefault
-			// 	/>
-			// }
+			extra={
+				<SelectLopHanhChinhSinhVien
+					value={record?._id}
+					onChange={(val) => setRecord(danhSach.find((item) => item._id === val))}
+					style={{ width: 180 }}
+					hasDefault
+				/>
+			}
 		>
 			{/* Xem lớp hành chính theo từng học kỳ khác nhau */}
-			<FilterHocKy>
+			{/* <FilterHocKy>
 				<SelectLopHanhChinhSinhVien
 					value={record?._id}
 					onChange={(val) => setRecord(danhSach.find((item) => item._id === val))}
@@ -45,7 +45,7 @@ const LopHanhChinhPage = () => {
 					hasDefault
 					maHocKy={recHocKy?.ma}
 				/>
-			</FilterHocKy>
+			</FilterHocKy> */}
 
 			{record?._id ? (
 				<>
