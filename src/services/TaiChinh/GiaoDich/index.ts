@@ -9,8 +9,8 @@ export async function postThongTinMomo(payload: { identityCode: string; redirect
 	return axios.post(`${ipTaiChinh}/momo/payment-url`, { ...payload, requestType: 'captureWallet' });
 }
 
-export const getSoDuViSinhVien = () => {
-	return axios.get(`${ipTaiChinh}/transaction/wallet/in-out/me`);
+export const getSoDuViSinhVien = (idDotThu?: string | null) => {
+	return axios.get(`${ipTaiChinh}/transaction/wallet/me/dot-thu/${idDotThu}`);
 };
 
 export const dongTruocHocPhi = (payLoad: any) => {
