@@ -9,6 +9,7 @@ const FilterHocKy = (props: {
 	children?: React.ReactNode;
 	style?: React.CSSProperties;
 	fromLhc?: boolean;
+	onChange?: (val: string) => void;
 }) => {
 	const { record: recHocKy, danhSach: danhSachHocKy, setRecord: setHocKy } = useModel('daotao.hocky');
 	const width = props.width ?? 250;
@@ -19,7 +20,10 @@ const FilterHocKy = (props: {
 				style={{ width }}
 				allowClear={props.allowClear}
 				value={recHocKy?._id}
-				onChange={(val) => setHocKy(danhSachHocKy.find((item) => item._id === val))}
+				onChange={(val) => {
+					if (props.onChange) props.onChange(val);
+					setHocKy(danhSachHocKy.find((item) => item._id === val));
+				}}
 				isSetRecord={props.isSetHocKy && !recHocKy?._id}
 				fromLhc={props.fromLhc}
 			/>
