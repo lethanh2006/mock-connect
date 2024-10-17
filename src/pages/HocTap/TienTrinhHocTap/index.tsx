@@ -1,6 +1,4 @@
-import { EOperatorType } from '@/components/Table/constant';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { ETrangThaiDotQuyDoiDiem } from '@/services/HocTap/constant';
 import { Alert, Card, Tabs } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -11,24 +9,13 @@ import TienTrinhThucTe from './TienTrinhThucTe';
 import './components/style.less';
 
 const TienTrinhHocTap = () => {
-	const { getModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
+	const { getAllModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [activeTabKey, setActiveTabKey] = useState<string>('2');
 
 	useEffect(() => {
-		// TODO: API get đợt hiện hành `me`
-		getModel({ trangThai: ETrangThaiDotQuyDoiDiem.DA_BAN_HANH }, [
-			{
-				field: 'thoiGianBatDau',
-				operator: EOperatorType.LESS_EQUAL,
-				values: [moment().toISOString()],
-			},
-			{
-				field: 'thoiGianKetThuc',
-				operator: EOperatorType.GREAT_EQUAL,
-				values: [moment().toISOString()],
-			},
-		]).then((res) => setRecord(res[0]));
+		//Get đợt me
+		getAllModel(undefined, undefined, undefined, undefined, 'current', false).then((res) => setRecord(res as any));
 	}, []);
 
 	return (

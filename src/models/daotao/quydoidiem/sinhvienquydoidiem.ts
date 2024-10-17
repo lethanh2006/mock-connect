@@ -17,13 +17,18 @@ export default () => {
 	const [loadingDebounce, setLoadingDebounce] = useState<boolean>(false);
 	const [dataAuto, setDataAuto] = useState<Record<keyof QuyDoiDiem.IQuyDoiDiemSinhVien, any[]>>();
 
-	const postSinhVienQuyDoiPhieuModel = async (idDotQuyDoi: string, payLoad: any): Promise<any> => {
+	const postSinhVienQuyDoiPhieuModel = async (
+		idDotQuyDoi: string,
+		payLoad: any,
+		getData?: () => void,
+	): Promise<any> => {
 		if (formSubmiting) return Promise.reject('form submiting');
 		setFormSubmiting(true);
 
 		try {
 			const res = await postSinhVienQuyDoiPhieu(idDotQuyDoi, payLoad);
 			message.success('Đăng ký thành công');
+			if (getData) getData();
 			return res.data?.data;
 		} catch (err) {
 			return Promise.reject(err);
