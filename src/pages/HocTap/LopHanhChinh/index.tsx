@@ -1,4 +1,3 @@
-import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import { Card, Col, Empty, Row, Tabs } from 'antd';

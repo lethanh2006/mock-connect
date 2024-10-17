@@ -19,6 +19,7 @@ declare module LopHanhChinh {
 
 		sinhVienList?: SinhVien.IRecord[]; // Cũ => remove
 		sinhVienKyList?: SinhVien.IRecord[];
+		lopHcSvKyList?: SinhVien.ISinhVienHocKy[];
 
 		createdAt?: string;
 		updatedAt?: string;

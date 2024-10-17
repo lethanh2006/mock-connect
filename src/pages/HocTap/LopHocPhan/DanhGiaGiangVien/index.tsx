@@ -2,6 +2,7 @@ import FormTraLoiKhaoSat from '@/pages/TienIch/KhaoSat/components/Form';
 import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { getDotDanhGiaGiangVien } from '@/services/TienIch/KhaoSat/DotKhaoSat';
 import { EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
+import { primaryColor } from '@/services/base/constant';
 import { Alert, Empty, Select, Spin } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -68,14 +69,25 @@ const DanhGiaGiangVienPage = () => {
 									'Ngoài thời gian đánh giá khảo sát giảng viên !'
 								) : (
 									<>
-										Thời gian khảo sát đánh giá giảng viên từ{' '}
-										<b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-										<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+										<span>
+											Thời gian khảo sát đánh giá giảng viên từ{' '}
+											<b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+											<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+										</span>
 									</>
 								)
 							}
 							showIcon
 						/>
+
+						{recDot?.thongTinCauTraLoi?.length ? (
+							<div style={{ marginTop: 8 }}>
+								<i style={{ color: primaryColor }}>
+									Bạn đã thực hiện khảo sát vào lúc{' '}
+									<b>{moment(recDot?.thongTinCauTraLoi?.[0]?.updatedAt).format('HH:mm, DD/MM/YYYY')}</b>{' '}
+								</i>
+							</div>
+						) : null}
 					</div>
 					<div style={{ marginBottom: 24 }}>
 						<div className='ant-form-item-label' style={{ padding: 0 }}>

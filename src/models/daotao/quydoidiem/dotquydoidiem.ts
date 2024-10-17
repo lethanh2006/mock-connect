@@ -5,13 +5,12 @@ import moment from 'moment';
 
 export default () => {
 	const objInit = useInitModel<QuyDoiDiem.DotQuyDoiDiem>('dot-quy-doi-diem-sinh-vien', undefined, undefined, ipDaoTao);
-	const { danhSach } = objInit;
+	const { record } = objInit;
 	const ngoaiQuyDoiDiem =
-		!danhSach.length ||
-		!danhSach[0]?.thoiGianBatDau ||
-		!danhSach[0]?.thoiGianKetThuc ||
-		moment().isBefore(danhSach[0]?.thoiGianBatDau, 'd') ||
-		moment().isAfter(danhSach[0]?.thoiGianKetThuc, 'd');
+		!record?.thoiGianBatDau ||
+		!record?.thoiGianKetThuc ||
+		moment().isBefore(record?.thoiGianBatDau, 'd') ||
+		moment().isAfter(record?.thoiGianKetThuc, 'd');
 
 	return {
 		...objInit,

@@ -30,65 +30,71 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 	}, [linkWp?.linkWP, idCategory?.length, category]);
 
 	return (
-		<Spin spinning={loading}>
-			{isEmpty(danhSachTinTuc) ? (
-				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ paddingTop: 32 }} description='Chưa có tin tức' />
-			) : (
-				<Row gutter={[12, 12]} style={{ alignItems: 'stretch', marginBottom: 12 }}>
-					{danhSachTinTuc.map((tintuc) => {
-						return (
-							<Col span={24} key={tintuc?.id}>
-								<CardTinTuc
-									style={{ height: '100%' }}
-									onClick={() => {
-										history.push({
-											pathname: 'tin-tuc/chi-tiet',
-											query: { _id: tintuc?.id as any, cat: linkWp?._id as any },
-										});
-										window.scrollTo({ top: 0, behavior: 'smooth' });
-									}}
-								>
-									<Row gutter={12} style={{ height: '100%' }}>
-										<Col xs={8}>
-											<div
-												style={{
-													background: `url(${getImageSrc({
-														tinTuc: tintuc,
-														targetSize: 'thumbnail',
-													})}) center center/ cover no-repeat`,
-													width: '100%',
-													height: '100%',
-												}}
-											/>
-										</Col>
-										<Col xs={16}>
-											<Tooltip title={<Title data={tintuc} />}>
-												<Title
-													data={tintuc}
-													rows={3}
-													style={{
-														fontWeight: 600,
-														marginBottom: 6,
-														color: 'black',
-													}}
-												/>
-											</Tooltip>
-											{tintuc?.date && <span className='thoi-gian'>{moment(tintuc?.date).format('DD/MM/YYYY')}</span>}
-										</Col>
-									</Row>
-								</CardTinTuc>
-							</Col>
-						);
-					})}
-				</Row>
-			)}
+		<>
+			<div style={{ maxHeight: 400, overflowY: 'auto', overflowX: 'hidden', padding: '0 5px 0 2px' }}>
+				<Spin spinning={loading}>
+					{isEmpty(danhSachTinTuc) ? (
+						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ paddingTop: 32 }} description='Chưa có tin tức' />
+					) : (
+						<Row gutter={[12, 12]} style={{ alignItems: 'stretch', marginBottom: 12 }}>
+							{danhSachTinTuc.map((tintuc) => {
+								return (
+									<Col span={24} key={tintuc?.id}>
+										<CardTinTuc
+											style={{ height: '100%' }}
+											onClick={() => {
+												history.push({
+													pathname: 'tin-tuc/chi-tiet',
+													query: { _id: tintuc?.id as any, cat: linkWp?._id as any },
+												});
+												window.scrollTo({ top: 0, behavior: 'smooth' });
+											}}
+										>
+											<Row gutter={12} style={{ height: '100%' }}>
+												<Col xs={8}>
+													<div
+														style={{
+															background: `url(${getImageSrc({
+																tinTuc: tintuc,
+																targetSize: 'thumbnail',
+															})}) center center/ cover no-repeat`,
+															width: '100%',
+															height: '100%',
+														}}
+													/>
+												</Col>
+												<Col xs={16}>
+													<Tooltip title={<Title data={tintuc} />}>
+														<Title
+															data={tintuc}
+															rows={3}
+															style={{
+																fontWeight: 600,
+																marginBottom: 6,
+																color: 'black',
+															}}
+														/>
+													</Tooltip>
+													{tintuc?.date && (
+														<span className='thoi-gian'>{moment(tintuc?.date).format('DD/MM/YYYY')}</span>
+													)}
+												</Col>
+											</Row>
+										</CardTinTuc>
+									</Col>
+								);
+							})}
+						</Row>
+					)}
+				</Spin>
+			</div>
 
-			<div style={{ textAlign: 'right' }}>
+			<div style={{ textAlign: 'right', marginTop: 12 }}>
 				<Link to={category ? `/tin-tuc#${chuDe?._id ?? 'all'}` : '/tin-tuc'}>
 					Xem thêm <ArrowRightOutlined />
 				</Link>
 			</div>
-		</Spin>
+		</>
 	);
 };
 
