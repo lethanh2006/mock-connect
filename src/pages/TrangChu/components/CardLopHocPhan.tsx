@@ -1,6 +1,6 @@
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { DownOutlined } from '@ant-design/icons';
-import { Card, Dropdown, List, Menu, Progress, Space } from 'antd';
+import { Card, Dropdown, Empty, List, Menu, Progress, Space } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
@@ -13,7 +13,7 @@ const CardLopHocPhan = () => {
 	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH });
 
 	useEffect(() => {
-		getAllHocKy(!recHocKy?._id, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me');
+		if (!danhSach.length) getAllHocKy(!recHocKy?._id, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me');
 	}, []);
 
 	useEffect(() => {
@@ -50,26 +50,30 @@ const CardLopHocPhan = () => {
 			}
 		>
 			<div id='scrollableDiv' style={{ maxHeight: 250, overflow: 'auto' }}>
-				<List
-					itemLayout='horizontal'
-					className='dashboard-list-lhp'
-					dataSource={danhSachLHP}
-					renderItem={(item) => (
-						<List.Item onClick={() => history.push(`/hoc-tap/lop-tin-chi/${item._id}`)}>
-							<List.Item.Meta title={item.hocPhan?.ten} description={`${item.ten}`} />
-							<Progress
-								style={{ marginRight: 8, marginLeft: 8 }}
-								width={50}
-								type='dashboard'
-								percent={Math.round(
-									((item?.thoiKhoaBieuList || [])?.filter((items) => moment().isAfter(items?.ngay)).length /
-										(item?.thoiKhoaBieuList || [])?.length) *
-										100,
-								)}
-							/>
-						</List.Item>
-					)}
-				/>
+				{danhSachLHP.length ? (
+					<List
+						itemLayout='horizontal'
+						className='dashboard-list-lhp'
+						dataSource={danhSachLHP}
+						renderItem={(item) => (
+							<List.Item onClick={() => history.push(`/hoc-tap/lop-tin-chi/${item._id}`)}>
+								<List.Item.Meta title={item.hocPhan?.ten} description={`${item.ten}`} />
+								<Progress
+									style={{ marginRight: 8, marginLeft: 8 }}
+									width={50}
+									type='dashboard'
+									percent={Math.round(
+										((item?.thoiKhoaBieuList || [])?.filter((items) => moment().isAfter(items?.ngay)).length /
+											(item?.thoiKhoaBieuList || [])?.length) *
+											100,
+									)}
+								/>
+							</List.Item>
+						)}
+					/>
+				) : (
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' style={{ margin: '24px 0' }} />
+				)}
 			</div>
 		</Card>
 	);

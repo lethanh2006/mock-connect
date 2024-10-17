@@ -1,8 +1,9 @@
 import NoticeList from '@/components/RightContent/NoticeIcon/NoticeList';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
+import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Modal, Tabs } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import TinTucDashboard from '../TinTucDashboard';
 
 const TinTucDashboardWrapper = () => {
@@ -18,7 +19,14 @@ const TinTucDashboardWrapper = () => {
 					title={''}
 					tabKey={''}
 					list={danhsachThongBao}
+					showClear={false}
 				/>
+
+				<div style={{ textAlign: 'right', marginTop: 12 }}>
+					<Link to='/thong-bao'>
+						Xem thêm <ArrowRightOutlined />
+					</Link>
+				</div>
 
 				<Modal
 					width={800}

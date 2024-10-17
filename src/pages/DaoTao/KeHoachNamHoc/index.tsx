@@ -78,7 +78,7 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 	};
 
 	const updateNamHoc = async () => {
-		if (recNam?._id) {
+		if (recNam?.isKhoiTaoKeHoach && recNam.daChotKeHoachNamHoc) {
 			if (!mapNganh.current) mapNganh.current = await getMapNganh();
 			if (!mapKhoa.current) mapKhoa.current = await getMapKhoa();
 			getData();
@@ -100,54 +100,54 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 				/>
 			) : null}
 
-			{!recNam?.isKhoiTaoKeHoach ? (
-				<Spin spinning={loading}>
+			<Spin spinning={loading}>
+				{!recNam?.isKhoiTaoKeHoach ? (
 					<div style={{ display: 'flex', justifyContent: 'center', margin: '24px 12px' }}>
 						<Empty description={<>Chưa có kế hoạch năm học!</>} />
 					</div>
-				</Spin>
-			) : recNam.daChotKeHoachNamHoc ? (
-				<>
-					<Divider>Chi tiết kế hoạch năm học theo từng ngành đào tạo</Divider>
-					<Spin spinning={loading}>
-						<div className='grid-ke-hoach'>
-							<KeHoachHeader header={header} />
+				) : recNam.daChotKeHoachNamHoc ? (
+					<>
+						<Divider>Chi tiết kế hoạch năm học theo từng ngành đào tạo</Divider>
+						<Spin spinning={loading}>
+							<div className='grid-ke-hoach'>
+								<KeHoachHeader header={header} />
 
-							{data.map((item) => (
-								<div className='row-ke-hoach' key={item.maKhoaNganh}>
-									<div className='cell first-cell border-right' title={item.tenKhoaNganh}>
-										{item.tenKhoaNganhVietTat}
-									</div>
-									{_.sortBy(item.keHoachList, (j) => j.thuTuTuan).map((kh, index) => (
-										<div
-											className={`cell ${
-												!!kh.ghiChu
-													? 'highlight1'
-													: index && header?.days?.[index - 1]?.isBreak && !kh.hoatDongTuan?._id
-													? 'break'
-													: ''
-											}`}
-											key={kh._id}
-											title={kh.ghiChu ?? kh.hoatDongTuan?.ten}
-											style={{
-												backgroundColor: kh.hoatDongTuan?.maMau,
-											}}
-										>
-											{kh.ghiChu ?? kh.hoatDongTuan?.kyHieu ?? '--'}
+								{data.map((item) => (
+									<div className='row-ke-hoach' key={item.maKhoaNganh}>
+										<div className='cell first-cell border-right' title={item.tenKhoaNganh}>
+											{item.tenKhoaNganhVietTat}
 										</div>
-									))}
-								</div>
-							))}
-						</div>
-					</Spin>
+										{_.sortBy(item.keHoachList, (j) => j.thuTuTuan).map((kh, index) => (
+											<div
+												className={`cell ${
+													!!kh.ghiChu
+														? 'highlight1'
+														: index && header?.days?.[index - 1]?.isBreak && !kh.hoatDongTuan?._id
+														? 'break'
+														: ''
+												}`}
+												key={kh._id}
+												title={kh.ghiChu ?? kh.hoatDongTuan?.ten}
+												style={{
+													backgroundColor: kh.hoatDongTuan?.maMau,
+												}}
+											>
+												{kh.ghiChu ?? kh.hoatDongTuan?.kyHieu ?? '--'}
+											</div>
+										))}
+									</div>
+								))}
+							</div>
+						</Spin>
 
-					<DanhSachHoatDongTuan />
-				</>
-			) : (
-				<div style={{ marginTop: 12 }}>
-					<Alert message={<>Chưa chốt kế hoạch năm học</>} showIcon type='warning' />
-				</div>
-			)}
+						<DanhSachHoatDongTuan />
+					</>
+				) : (
+					<div style={{ marginTop: 24 }}>
+						<Empty description={<>Chưa công bố kế hoạch năm học</>} />
+					</div>
+				)}
+			</Spin>
 		</div>
 	);
 
