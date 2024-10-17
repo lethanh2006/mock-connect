@@ -204,46 +204,44 @@
 		name: 'DiemRenLuyen',
 		path: '/diem-ren-luyen',
 		icon: 'user',
-		component: './DiemRenLuyenV2/PhieuDiemRenLuyen',
-		// routes: [
-		// 	// {
-		// 	// 	name: 'KhaiBaoMinhChung',
-		// 	// 	path: 'khai-bao-minh-chung',
-		// 	// 	routes: [
-		// 	// 		{
-		// 	// 			name: 'NoiNgoaiTru',
-		// 	// 			path: 'noi-ngoai-tru',
-		// 	// 			component: './DiemRenLuyen/KhaiBaoMinhChung',
-		// 	// 		},
-		// 	// 		{
-		// 	// 			name: 'ThamGiaCongTacXaHoi',
-		// 	// 			path: 'tham-gia-cong-tac-xa-hoi',
-		// 	// 			component: './DiemRenLuyen/KhaiBaoMinhChung',
-		// 	// 		},
-		// 	// 		{
-		// 	// 			name: 'TuyenTruyen',
-		// 	// 			path: 'tuyen-truyen',
-		// 	// 			component: './DiemRenLuyen/KhaiBaoMinhChung',
-		// 	// 		},
-		// 	// 		{
-		// 	// 			name: 'DacBiet',
-		// 	// 			path: 'dac-biet',
-		// 	// 			component: './DiemRenLuyen/KhaiBaoMinhChung',
-		// 	// 		},
-		// 	// 	],
-		// 	// },
-		// 	{
-		// 		name: 'PhieuDiemRenLuyen',
-		// 		path: 'phieu-diem-ren-luyen',
-		// 		component: './DiemRenLuyenV2/PhieuDiemRenLuyen',
-		// 	},
-		// ],
-	},
-	{
-		name: 'GiaoDucChinhTriTuTuong',
-		icon: 'calendar',
-		path: '/giao-duc-chinh-tri-tu-tuong',
 		routes: [
+			// {
+			// 	name: 'KhaiBaoMinhChung',
+			// 	path: 'khai-bao-minh-chung',
+			// 	routes: [
+			// 		{
+			// 			name: 'NoiNgoaiTru',
+			// 			path: 'noi-ngoai-tru',
+			// 			component: './DiemRenLuyen/KhaiBaoMinhChung',
+			// 		},
+			// 		{
+			// 			name: 'ThamGiaCongTacXaHoi',
+			// 			path: 'tham-gia-cong-tac-xa-hoi',
+			// 			component: './DiemRenLuyen/KhaiBaoMinhChung',
+			// 		},
+			// 		{
+			// 			name: 'TuyenTruyen',
+			// 			path: 'tuyen-truyen',
+			// 			component: './DiemRenLuyen/KhaiBaoMinhChung',
+			// 		},
+			// 		{
+			// 			name: 'DacBiet',
+			// 			path: 'dac-biet',
+			// 			component: './DiemRenLuyen/KhaiBaoMinhChung',
+			// 		},
+			// 	],
+			// },
+			{
+				name: 'HoatDongCTSV',
+				path: 'hoat-dong-ctsv',
+				component: './CongTacSinhVien/HoatDongCTSV',
+				icon: 'CarryOutOutlined',
+			},
+			{
+				name: 'PhieuDiemRenLuyen',
+				path: 'phieu-diem-ren-luyen',
+				component: './DiemRenLuyenV2/PhieuDiemRenLuyen',
+			},
 			{
 				name: 'TuanSinhHoatCongDan',
 				path: 'tuan-sinh-hoat-cong-dan',
