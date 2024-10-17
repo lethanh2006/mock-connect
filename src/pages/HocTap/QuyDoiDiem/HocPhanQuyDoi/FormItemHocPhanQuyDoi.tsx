@@ -1,21 +1,23 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorDiemChu, type ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import {
 	EMinhChungQuyDoiDiem,
+	ETrangThaiHocPhanQuyDoi,
+	ETrangThaiPhieuQuyDoiDiem,
 	colorTrangThaiHocPhanQuyDoi,
-	type ETrangThaiHocPhanQuyDoi,
 } from '@/services/HocTap/constant';
-import { Modal, Tag } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
+import { Tag } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormHocPhanQuyDoiDiem from './Form';
+import ExpandText from '@/components/ExpandText';
 
 const FormItemHocPhanQuyDoi = () => {
-	const { setVisibleForm, visibleForm, getModel, danhSach, loading, handleView } = useModel(
-		'daotao.quydoidiem.sinhvienquydoidiem',
-	);
+	const { getModel, danhSach, loading, handleView, handleEdit } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { record: recPhieu } = useModel('daotao.quydoidiem.phieuquydoidiem');
 
 	const getData = () => getModel({ phieuDangKyQuyDoiDiemId: recPhieu?._id });
@@ -70,12 +72,37 @@ const FormItemHocPhanQuyDoi = () => {
 			onCell,
 		},
 		{
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 180,
+			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			onCell,
+		},
+		{
 			title: 'Trạng thái',
 			dataIndex: 'trangThai',
 			align: 'center',
 			width: 130,
 			render: (val, rec) => <Tag color={colorTrangThaiHocPhanQuyDoi[val as ETrangThaiHocPhanQuyDoi]}>{val}</Tag>,
 			onCell,
+		},
+		{
+			title: 'Thao tác',
+			align: 'center',
+			width: 60,
+			fixed: 'right',
+			render: (val, rec) => (
+				<ButtonExtend
+					disabled={
+						rec?.trangThai !== ETrangThaiHocPhanQuyDoi.CHO_XU_LY ||
+						recPhieu?.trangThai !== ETrangThaiPhieuQuyDoiDiem.CHO_XU_LY
+					}
+					tooltip='Chỉnh sửa'
+					onClick={() => handleEdit(rec)}
+					type='link'
+					icon={<EditOutlined />}
+				/>
+			),
 		},
 	];
 
@@ -93,16 +120,7 @@ const FormItemHocPhanQuyDoi = () => {
 				addStt
 				otherProps={{ pagination: false }}
 			/>
-
-			<Modal
-				title='Chi tiết học phần'
-				visible={visibleForm}
-				width={600}
-				footer={null}
-				onCancel={() => setVisibleForm(false)}
-			>
-				<FormHocPhanQuyDoiDiem />
-			</Modal>
+			<FormHocPhanQuyDoiDiem getData={getData} />
 		</>
 	);
 };
