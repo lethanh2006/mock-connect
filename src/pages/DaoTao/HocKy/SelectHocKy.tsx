@@ -18,7 +18,8 @@ const SelectHocKy = (props: {
 	fromLhc?: boolean;
 }) => {
 	const { value, onChange, multiple, allowClear, style, isSetRecord, selectMa, disabled, fromLhc = false } = props;
-	const { danhSach, getAllModel, loading, setRecord, record, danhSachHkLhc } = useModel('daotao.hocky');
+	const { danhSach, getAllModel, loading, setRecord, record, danhSachHkLhc, setDanhSach, setDanhSachHkLhc } =
+		useModel('daotao.hocky');
 	const danhSachHienThi = fromLhc ? danhSachHkLhc : danhSach;
 
 	useEffect(() => {
@@ -30,7 +31,10 @@ const SelectHocKy = (props: {
 				undefined,
 				undefined,
 				fromLhc ? 'lop-hanh-chinh/sinh-vien/me' : 'sinh-vien/me',
+				false,
 			).then((res) => {
+				if (fromLhc) setDanhSachHkLhc(res);
+				else setDanhSach(res);
 				const exist = record?._id && res.some((i) => i._id === record?._id);
 				if (!exist) setRecord(res?.[0]);
 			});
