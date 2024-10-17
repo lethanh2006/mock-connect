@@ -48,7 +48,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 			});
 			form.setFieldsValue({ payList: pay });
 
-			getSoDuViSinhVienModel();
+			getSoDuViSinhVienModel(recHoaDon?.idDotThu);
 		}
 	}, [visibleThanhToan]);
 
