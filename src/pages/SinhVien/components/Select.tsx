@@ -44,7 +44,7 @@ const SelectSinhVienDebounce = (props: {
 						undefined,
 						1,
 						20,
-						'sinh-vien/page',
+						'sinh-vien/pageable',
 					);
 			} else
 				getModel(
@@ -62,7 +62,7 @@ const SelectSinhVienDebounce = (props: {
 					undefined,
 					1,
 					20,
-					'sinh-vien/page',
+					'sinh-vien/pageable',
 				);
 		}
 	}, [keyword, value]);
