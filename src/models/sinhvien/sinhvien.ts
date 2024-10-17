@@ -57,6 +57,7 @@ export default () => {
 	};
 
 	const getKhoaNganhMeModel = async (): Promise<KhoaNganh.TMyKhoaNganh> => {
+		if (khoaNganhMe) return khoaNganhMe; // Đảm bảo chỉ get 1 lần
 		setLoading(true);
 		try {
 			const response = await getMyKhoaNganh();
