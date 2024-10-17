@@ -15,14 +15,14 @@ const SelectNamHoc = (props: {
 	hasDefault?: boolean;
 }) => {
 	const { value, onChange, multiple, allowClear, style, isSetRecord, hasDefault } = props;
-	const { danhSach, getAllModel, visibleForm } = useModel('daotao.namhoc');
+	const { danhSach, getAllModel } = useModel('daotao.namhoc');
 
 	useEffect(() => {
-		if (!visibleForm)
+		if (!danhSach.length)
 			getAllModel(isSetRecord, undefined, undefined, undefined, 'sinh-vien/me').then((res) => {
 				if (hasDefault && onChange) onChange(res?.[0]?._id);
 			});
-	}, [visibleForm]);
+	}, []);
 
 	return (
 		<Select
