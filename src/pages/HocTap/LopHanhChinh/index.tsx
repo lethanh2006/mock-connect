@@ -10,7 +10,7 @@ import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
 const LopHanhChinhPage = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { record, sinhVienGetByIdModel, setRecord, danhSach, loading } = useModel('daotao.lophanhchinh');
+	const { record, sinhVienGetByIdModel, setRecord, danhSach, loading, recordDetail } = useModel('daotao.lophanhchinh');
 	const paths = ['thong-tin', 'thong-bao'];
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 
@@ -63,9 +63,9 @@ const LopHanhChinhPage = () => {
 												loading={loading}
 												title='Cố vấn học tập'
 												danhSachNhanSu={
-													record.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
-													(record?.giangVien?.ssoId
-														? [{ nhanSu: record.giangVien, nhanSuSsoId: record.giangVien.ssoId }]
+													recordDetail?.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
+													(recordDetail?.giangVien?.ssoId
+														? [{ nhanSu: recordDetail.giangVien, nhanSuSsoId: recordDetail.giangVien.ssoId }]
 														: [])
 												}
 												isHighlight
