@@ -15,10 +15,12 @@ const LopHanhChinhPage = () => {
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 
 	useEffect(() => {
+		setTabActive(paths[0]);
 		if (record?._id) sinhVienGetByIdModel(record._id);
 	}, [record?._id]);
 
 	// useEffect(() => {
+	// setTabActive(paths[0]);
 	// 	// Get lớp hành chính theo kỳ
 	// 	if (record?._id && recHocKy?.ma) sinhVienGetByIdModel(record._id, recHocKy?.ma);
 	// }, [recHocKy?.ma, record?._id]);
