@@ -72,7 +72,7 @@ export default () => {
 					filters: [{ active: true, field: 'ten', values: [keyword], operator: EOperatorType.CONTAIN }],
 				},
 			];
-			const responses = await Promise.allSettled(payloads.map((payload) => getService(payload, 'page')));
+			const responses = await Promise.allSettled(payloads.map((payload) => getService(payload, 'sinh-vien/pageable')));
 			const data = (
 				responses.filter((item) => item.status === 'fulfilled') as PromiseFulfilledResult<AxiosResponse<any>>[]
 			).map((item) => item.value.data?.data?.result);
