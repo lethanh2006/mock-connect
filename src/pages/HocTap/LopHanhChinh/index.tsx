@@ -1,7 +1,7 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
-import { Card, Col, Empty, Row, Tabs } from 'antd';
+import { Card, Col, Empty, Row, Spin, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
@@ -51,44 +51,50 @@ const LopHanhChinhPage = () => {
 				/>
 			</FilterHocKy> */}
 
-			{record?._id ? (
-				<>
-					<Tabs onChange={onChangeTab} activeKey={tabActive}>
-						<Tabs.TabPane tab='Thông tin chung' key={paths[0]}>
-							<Row gutter={[16, 16]}>
-								<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
-									<Row gutter={[16, 16]}>
-										<Col span={24}>
-											<CardGiangVienLop
-												loading={loading}
-												title='Cố vấn học tập'
-												danhSachNhanSu={
-													recordDetail?.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
-													(recordDetail?.giangVien?.ssoId
-														? [{ nhanSu: recordDetail.giangVien, nhanSuSsoId: recordDetail.giangVien.ssoId }]
-														: [])
-												}
-												isHighlight
-											/>
-										</Col>
-										<Col span={24}>
-											<CardThongBao loai='lop-hanh-chinh' idLop={record?._id} onShowAll={() => onChangeTab(paths[1])} />
-										</Col>
-									</Row>
-								</Col>
-								<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
-									<ThongTinChungLopHanhChinh />
-								</Col>
-							</Row>
-						</Tabs.TabPane>
-						<Tabs.TabPane tab='Thông báo' key={paths[1]}>
-							<ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />
-						</Tabs.TabPane>
-					</Tabs>
-				</>
-			) : (
-				<Empty description='Vui lòng chọn lớp hành chính' style={{ margin: '32px 0' }} />
-			)}
+			<Spin spinning={loading}>
+				{record?._id ? (
+					<>
+						<Tabs onChange={onChangeTab} activeKey={tabActive}>
+							<Tabs.TabPane tab='Thông tin chung' key={paths[0]}>
+								<Row gutter={[16, 16]}>
+									<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
+										<Row gutter={[16, 16]}>
+											<Col span={24}>
+												<CardGiangVienLop
+													loading={loading}
+													title='Cố vấn học tập'
+													danhSachNhanSu={
+														recordDetail?.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
+														(recordDetail?.giangVien?.ssoId
+															? [{ nhanSu: recordDetail.giangVien, nhanSuSsoId: recordDetail.giangVien.ssoId }]
+															: [])
+													}
+													isHighlight
+												/>
+											</Col>
+											<Col span={24}>
+												<CardThongBao
+													loai='lop-hanh-chinh'
+													idLop={record?._id}
+													onShowAll={() => onChangeTab(paths[1])}
+												/>
+											</Col>
+										</Row>
+									</Col>
+									<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
+										<ThongTinChungLopHanhChinh />
+									</Col>
+								</Row>
+							</Tabs.TabPane>
+							<Tabs.TabPane tab='Thông báo' key={paths[1]}>
+								<ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />
+							</Tabs.TabPane>
+						</Tabs>
+					</>
+				) : (
+					<Empty description='Vui lòng chọn lớp hành chính' style={{ margin: '32px 0' }} />
+				)}
+			</Spin>
 		</Card>
 	);
 };
