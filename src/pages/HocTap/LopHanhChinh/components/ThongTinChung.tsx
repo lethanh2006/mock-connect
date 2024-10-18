@@ -10,15 +10,15 @@ const ThongTinChungLopHanhChinh = () => {
 		<>
 			<Descriptions column={{ xs: 1, md: 2 }} title='Thông tin lớp'>
 				<Descriptions.Item label='Tên lớp'>{record?.ten ?? '--'}</Descriptions.Item>
-				<Descriptions.Item label='Khóa sinh viên'>{record?.khoaSinhVien?.ten ?? '--'}</Descriptions.Item>
-				<Descriptions.Item label='Ngành đào tạo'>{record?.nganh?.ten ?? '--'}</Descriptions.Item>
+				<Descriptions.Item label='Khóa sinh viên'>{recordDetail?.khoaSinhVien?.ten ?? '--'}</Descriptions.Item>
+				<Descriptions.Item label='Ngành đào tạo'>{recordDetail?.nganh?.ten ?? '--'}</Descriptions.Item>
 				{/* <Descriptions.Item label='Sĩ số'>
 					{record?.siSo ?? record?.sinhVienList?.length ?? 0} sinh viên
 				</Descriptions.Item> */}
-				{record?.lopHcSvKy ? (
+				{recordDetail?.lopHcSvKy ? (
 					<>
 						<Descriptions.Item label='Vai trò trong lớp'>
-							{record?.lopHcSvKy.vaiTro ? vaiTroSvLhc[record.lopHcSvKy.vaiTro] : '--'}
+							{recordDetail?.lopHcSvKy.vaiTro ? vaiTroSvLhc[recordDetail.lopHcSvKy.vaiTro] : '--'}
 						</Descriptions.Item>
 					</>
 				) : null}
