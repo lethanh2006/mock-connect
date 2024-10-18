@@ -14,11 +14,6 @@ const LopHanhChinhPage = () => {
 	const [tabActive, setTabActive] = useState<string>(paths[0]);
 
 	useEffect(() => {
-<<<<<<< HEAD
-		// Get lớp hành chính theo kỳ
-		if (record?._id) sinhVienGetByIdModel(record._id); //, recHocKy?.ma
-	}, [recHocKy?.ma, record?._id]);
-=======
 		setTabActive(paths[0]);
 		if (record?._id) sinhVienGetByIdModel(record._id);
 	}, [record?._id]);
@@ -28,7 +23,6 @@ const LopHanhChinhPage = () => {
 	// 	// Get lớp hành chính theo kỳ
 	// 	if (record?._id && recHocKy?.ma) sinhVienGetByIdModel(record._id, recHocKy?.ma);
 	// }, [recHocKy?.ma, record?._id]);
->>>>>>> 1c8b69b9de53d192d7494bb4e38217820135c2c6
 
 	const onChangeTab = (tab: string) => {
 		setTabActive(tab);
