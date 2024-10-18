@@ -4,7 +4,7 @@ import { useModel } from 'umi';
 import DanhSachSinhVien from '../../LopHocPhan/components/DanhSachSinhVien';
 
 const ThongTinChungLopHanhChinh = () => {
-	const { record, loading } = useModel('daotao.lophanhchinh');
+	const { record, loading, recordDetail } = useModel('daotao.lophanhchinh');
 
 	return (
 		<>
@@ -26,7 +26,9 @@ const ThongTinChungLopHanhChinh = () => {
 
 			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8, marginTop: 18 }}>Danh sách sinh viên</h4>
 			<DanhSachSinhVien
-				sinhVienList={record?.lopHcSvKyList?.map((i) => ({ ...i, ...i.sinhVien })) ?? record?.sinhVienList ?? []}
+				sinhVienList={
+					recordDetail?.lopHcSvKyList?.map((i) => ({ ...i, ...i.sinhVien })) ?? recordDetail?.sinhVienList ?? []
+				}
 				loading={loading}
 			/>
 		</>
