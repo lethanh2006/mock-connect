@@ -7,8 +7,12 @@ import { useModel } from 'umi';
 const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 	const { loaiLich } = props;
 	const [form] = Form.useForm();
-	const { record } = useModel('sinhvien.sinhvien');
-	const { record: recSetting, putModel, postModel, formSubmiting, getSettingLich } = useModel('tienich.settinglich');
+	const {
+		record: recSetting,
+		putMeSettingLichModel,
+		postMeSettingLichModel,
+		formSubmiting,
+	} = useModel('tienich.settinglich');
 
 	useEffect(() => {
 		const maMau = recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === loaiLich)?.maMau;
@@ -41,16 +45,13 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 		}
 
 		const data = {
-			ssoId: record?.ssoId,
-			maCanBo: record?.ma,
-			hoTen: record?.ten,
 			danhSachSettingLich: danhSachLich,
 		};
 
 		if (recSetting?._id) {
-			putModel(recSetting._id ?? '', data, getSettingLich).catch((er) => console.log(er));
+			putMeSettingLichModel(recSetting._id ?? '', data).catch((er) => console.log(er));
 		} else {
-			postModel(data, getSettingLich).catch((er) => console.log(er));
+			postMeSettingLichModel(data).catch((er) => console.log(er));
 		}
 	};
 
