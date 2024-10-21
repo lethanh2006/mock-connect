@@ -36,7 +36,6 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const { record: recSetting, setVisibleForm: setVisibleMauLich, getSettingLich } = useModel('tienich.settinglich');
-	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 	const [date, setDate] = useState(new Date());
 	const [dateRange, setDateRange] = useState<Moment[]>([moment().startOf('week'), moment().endOf('week')]);
@@ -51,8 +50,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const [paneSize, setPaneSize] = useState('300px');
 
 	useEffect(() => {
-		getThongTinCuaToiModel();
-		if (!isDashboard || !recSetting?._id) getSettingLich();
+		if (!recSetting?._id) getSettingLich();
 	}, []);
 
 	const handlePaneSizeChange = (size: any) => {
