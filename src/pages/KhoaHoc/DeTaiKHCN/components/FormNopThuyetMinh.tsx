@@ -68,7 +68,14 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 			let recSinhVien = danhSach.find((item) => item.ssoId === values?.chuTriDeTai?.userId);
 			const recDonVi = danhSachDonVi?.find((item) => item.maDonVi === values?.chuTriDeTai?.maDonVi);
 			if (!recSinhVien?.ssoId) {
-				const res = await getModel({ ssoId: values?.chuTriDeTai?.userId });
+				const res = await getModel(
+					{ ssoId: values?.chuTriDeTai?.userId },
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					'sinh-vien/pageable',
+				);
 				recSinhVien = res?.[0] ?? {};
 			}
 			let recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
