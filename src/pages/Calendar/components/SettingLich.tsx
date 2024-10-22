@@ -23,12 +23,9 @@ const loaiSuKien = [
 ];
 
 const ModalSettingMauLich = () => {
-	const { formSubmiting, visibleForm, setVisibleForm, record, putModel, postModel, getSettingLich } =
+	const { formSubmiting, visibleForm, setVisibleForm, record, putMeSettingLichModel, postMeSettingLichModel } =
 		useModel('tienich.settinglich');
-	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
-
-	const getData = () => getSettingLich();
 
 	useEffect(() => {
 		const mapValue = loaiSuKien?.reduce((acc: any, item) => {
@@ -52,9 +49,6 @@ const ModalSettingMauLich = () => {
 
 	const onFinish = async (values: any) => {
 		const data = {
-			ssoId: recSinhVien?.ssoId,
-			maCanBo: recSinhVien?.ma,
-			hoTen: recSinhVien?.ten,
 			danhSachSettingLich: Object.values(ELoaiSuKien).map((item) => {
 				const color = values[mapFieldLoaiSuKien[item] as any];
 				const hexColor = rgbaToHex(color?.r, color?.g, color?.b, color?.a);
@@ -66,11 +60,11 @@ const ModalSettingMauLich = () => {
 		};
 
 		if (record?._id) {
-			putModel(record._id ?? '', data, getData)
+			putMeSettingLichModel(record._id ?? '', data)
 				.then()
 				.catch((er) => console.log(er));
 		} else {
-			postModel(data, getData)
+			postMeSettingLichModel(data)
 				.then()
 				.catch((er) => console.log(er));
 		}

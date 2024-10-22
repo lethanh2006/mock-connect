@@ -6,10 +6,10 @@ declare module SettingLich {
 		ssoId: string;
 		maCanBo: string;
 		hoTen: string;
-		danhSachSettingLich: TTanhSachSettingLich[];
+		danhSachSettingLich: TDanhSachSettingLich[];
 	}
 
-	export type TTanhSachSettingLich = {
+	export type TDanhSachSettingLich = {
 		loaiLich: ELoaiSuKien;
 		maMau: string;
 	};
