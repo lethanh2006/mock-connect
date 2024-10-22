@@ -64,7 +64,14 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai; loaiDeTa
 			let recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
 			const recDonVi = danhSachDonVi?.find((item) => item.maDonVi === values?.chuTriDeTai?.maDonVi);
 			if (!recSinhVien?.ssoId) {
-				const res = await getModel({ ssoId: values?.chuTriDeTai?.userId });
+				const res = await getModel(
+					{ ssoId: values?.chuTriDeTai?.userId },
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					'sinh-vien/pageable',
+				);
 				recSinhVien = res?.[0] ?? {};
 			}
 			if (!recCanBo?.ssoId) {
