@@ -50,16 +50,16 @@ const OIDCBounder_: FC = ({ children }) => {
 				const isUncheckPath = unCheckPermissionPaths.some((path) => window.location.pathname.includes(path));
 				const hasRole = permissions.some((item) => item.rsname === currentRole);
 
+				setInitialState({
+					...initialState,
+					currentUser: { ...userInfo, ssoId: userInfo.sub },
+					authorizedPermissions: permissions,
+					permissionLoading: false,
+				});
+
 				if (!isUncheckPath && currentRole && permissions.length && !hasRole) {
 					history.replace('/403');
 				} else {
-					setInitialState({
-						...initialState,
-						currentUser: { ...userInfo, ssoId: userInfo.sub },
-						authorizedPermissions: permissions,
-						permissionLoading: false,
-					});
-
 					if (window.location.pathname === '/' || window.location.pathname === '/user/login') redirectLocation();
 				}
 			} catch {
@@ -103,7 +103,7 @@ const OIDCBounder_: FC = ({ children }) => {
 		OIDCBounderHandlers = actions;
 	}, [actions]);
 
-	return <>{auth.isLoading ? <LoadingPage /> : children}</>;
+	return <>{auth.isLoading || initialState?.permissionLoading ? <LoadingPage /> : children}</>;
 };
 
 export const OIDCBounder: FC & { getActions: () => typeof OIDCBounderHandlers } = (props) => {
