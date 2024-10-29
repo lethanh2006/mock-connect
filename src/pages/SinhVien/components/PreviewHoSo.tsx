@@ -14,10 +14,11 @@ type DescriptionItem = {
 
 const PreviewHoSo = () => {
 	const { getThongTinCuaToiModel, record, loading } = useModel('sinhvien.sinhvien');
-	const { danhSach, getAllModel } = useModel('core.quoctich');
+	const { danhSach: danhSachQuocTich, getAllModel } = useModel('core.quoctich');
+
 	useEffect(() => {
-		getThongTinCuaToiModel();
-		getAllModel();
+		if (!record?._id) getThongTinCuaToiModel();
+		if (!danhSachQuocTich.length) getAllModel();
 	}, []);
 
 	const renderDescription = (data: DescriptionItem) => (
@@ -65,7 +66,11 @@ const PreviewHoSo = () => {
 			md: 8,
 		},
 		{ label: 'Khóa ngành', content: record?.khoaNganh?.ten, md: 16 },
-		{ label: 'Quốc tịch', content: danhSach?.find((item) => item?._id === record?.quocTich)?.tenQuocTich, md: 8 },
+		{
+			label: 'Quốc tịch',
+			content: danhSachQuocTich?.find((item) => item?._id === record?.quocTich)?.tenQuocTich,
+			md: 8,
+		},
 		{ label: 'Dân tộc', content: record?.danToc, md: 8 },
 		{ label: 'Tôn giáo', content: record?.tonGiao, md: 8 },
 	];
