@@ -1,18 +1,21 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import FormSinhVien from '@/pages/SinhVien/components/Form';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
-import { EditOutlined, LeftOutlined, PrinterOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Space, Tooltip } from 'antd';
+import { EditOutlined, LeftOutlined, SmileOutlined } from '@ant-design/icons';
+import { Alert, Button, Card, Space } from 'antd';
 import fileDownload from 'js-file-download';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
 import './components/style.less';
+import ModalCapNhatAnhNhanDien from './CapNhatKhuonMat/Modal';
 
 const ThongTinSinhVienPage = () => {
 	const { record, loading, setLoading } = useModel('sinhvien.sinhvien');
-	const [isCapNhat, setIsCapNhat] = useState<boolean>(false);
 	const { record: recordDot, getAllModel: getDotCapNhat } = useModel('daotao.dotcapnhathoso');
+	const [isCapNhat, setIsCapNhat] = useState<boolean>(false);
+	const [visibleCapNhat, setVisibleCapNhat] = useState<boolean>(false);
 	const choPhepSua =
 		record?.choPhepSua ||
 		(recordDot?.thoiGianBatDau &&
@@ -62,25 +65,28 @@ const ThongTinSinhVienPage = () => {
 						/>
 					) : null}
 
-					<Space style={{ marginBottom: 12 }} wrap>
-						{record?.ssoId ? (
-							<>
-								<Tooltip title={!choPhepSua ? 'Ngoài thời gian cập nhật hồ sơ' : 'Cập nhật hồ sơ'}>
-									<Button
-										disabled={!choPhepSua}
-										type='primary'
-										icon={<EditOutlined />}
-										onClick={() => setIsCapNhat(true)}
-									>
-										Cập nhật hồ sơ
-									</Button>
-								</Tooltip>
-								{/* <Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
+					{record?.ssoId ? (
+						<Space style={{ marginBottom: 12 }} wrap>
+							<ButtonExtend
+								disabled={!choPhepSua}
+								type='primary'
+								icon={<EditOutlined />}
+								onClick={() => setIsCapNhat(true)}
+								tooltip={!choPhepSua ? 'Ngoài thời gian cập nhật hồ sơ' : 'Cập nhật hồ sơ'}
+								notHideText
+							>
+								Cập nhật hồ sơ
+							</ButtonExtend>
+
+							{/* <ButtonExtend icon={<SmileOutlined />} onClick={() => setVisibleCapNhat(true)}>
+								Cập nhật ảnh nhận diện
+							</ButtonExtend> */}
+
+							{/* <Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
 									In hồ sơ
 								</Button> */}
-							</>
-						) : null}
-					</Space>
+						</Space>
+					) : null}
 
 					<PreviewHoSo />
 				</>
@@ -119,6 +125,8 @@ const ThongTinSinhVienPage = () => {
 			{/* <div className="form-footer">
         <Button onClick={() => setVisibleForm(false)}>Đóng</Button>
       </div> */}
+
+			<ModalCapNhatAnhNhanDien visible={visibleCapNhat} setVisible={setVisibleCapNhat} />
 		</Card>
 	);
 };

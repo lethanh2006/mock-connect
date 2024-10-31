@@ -83,7 +83,7 @@ const PreviewHoSo = () => {
 				{ label: 'Tỉnh/Thành phố', content: record?.tinhTpThuongTru },
 				{ label: 'Quận/Huyện', content: record?.quanHuyenThuongTru },
 				{ label: 'Phường/Xã', content: record?.xaPhuongThuongTru },
-				{ label: 'Địa chỉ cụ thể', content: record?.soNhaTenDuongThuongTru },
+				{ label: 'Địa chỉ', content: record?.soNhaTenDuongThuongTru },
 			],
 		},
 		{

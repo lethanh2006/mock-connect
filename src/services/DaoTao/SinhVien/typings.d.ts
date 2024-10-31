@@ -125,6 +125,11 @@ declare module SinhVien {
 
 		/** CTSV chủ động cho phép sửa */
 		choPhepSua: boolean;
+
+		/** Đường dẫn ảnh nhận diện khuôn mặt */
+		faceRegImgUrl?: string;
+		/** Có cần cập nhật lại ảnh nhận diện khuôn mặt không */
+		needUpdateFaceReg?: boolean;
 	}
 
 	export type TThongTinGiaDinh = {
