@@ -98,6 +98,7 @@ const DangKyChuyenNganhPage = () => {
 					</Tooltip>
 				</>
 			),
+			hide: !dotHienHanh?._id,
 		},
 	];
 
