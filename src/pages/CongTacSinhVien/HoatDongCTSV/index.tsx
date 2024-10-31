@@ -19,7 +19,7 @@ const SinhVienHoatDongCTSV = () => {
 		danhSach: danhSachXemSau,
 		deleteModel,
 	} = useModel('tienich.xemsau');
-	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { getAllModel: getAllHocKy, danhSach: danhSachHocKy } = useModel('daotao.hocky');
 	const [tabActive, setTabActive] = useState<EHoatDongChungType1>(EHoatDongChungType1.GIAO_DUC_CHINH_TRI_TU_TUONG);
 	const [loadingXemSau, setLoadingXemSau] = useState<boolean>(false);
@@ -29,7 +29,6 @@ const SinhVienHoatDongCTSV = () => {
 	};
 
 	useEffect(() => {
-		getThongTinCuaToiModel();
 		getDataXemSau();
 		getAllHocKy();
 	}, []);

@@ -16,7 +16,7 @@ const FileList = () => {
 		danhSach: danhSachXemSau,
 		deleteModel,
 	} = useModel('tienich.xemsau');
-	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [loadingXemSau, setLoadingXemSau] = useState<boolean>(false);
 
 	const getDataXemSau = () => {
@@ -24,7 +24,6 @@ const FileList = () => {
 	};
 
 	useEffect(() => {
-		getThongTinCuaToiModel();
 		getDataXemSau();
 	}, []);
 

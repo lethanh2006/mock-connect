@@ -1,32 +1,28 @@
 import FormSinhVien from '@/pages/SinhVien/components/Form';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
 import { EditOutlined, LeftOutlined, PrinterOutlined } from '@ant-design/icons';
-import { Button, Card, Space, Tooltip } from 'antd';
+import { Alert, Button, Card, Space, Tooltip } from 'antd';
 import fileDownload from 'js-file-download';
-import { useState } from 'react';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import PreviewHoSo from './components/PreviewHoSo';
 import './components/style.less';
-import { SelectDotCapNhat } from '@/pages/DaoTao/DotCapNhatHoSo/select';
-import moment from 'moment';
 
 const ThongTinSinhVienPage = () => {
 	const { record, loading, setLoading } = useModel('sinhvien.sinhvien');
 	const [isCapNhat, setIsCapNhat] = useState<boolean>(false);
-	const { record: recordDot, setRecord: setRecordDot } = useModel('daotao.dotcapnhathoso');
-	const ngoaiThoiGian = record?.choPhepSua
-		? false
-		: moment().isBefore(moment(recordDot?.thoiGianBatDau)) || moment().isAfter(moment(recordDot?.thoiGianKetThuc));
-	// const [currentStep, setCurrentStep] = useState<string>('0');
-	// const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1200px)' });
+	const { record: recordDot, getAllModel: getDotCapNhat } = useModel('daotao.dotcapnhathoso');
+	const choPhepSua =
+		record?.choPhepSua ||
+		(recordDot?.thoiGianBatDau &&
+			recordDot.thoiGianKetThuc &&
+			moment().isSameOrBefore(moment(recordDot?.thoiGianKetThuc), 'd') &&
+			moment().isSameOrAfter(moment(recordDot?.thoiGianBatDau), 'd'));
 
-	// useEffect(() => {
-	//   setCurrentStep('0');
-	// }, [record?.ssoId]);
-
-	// const onChangeStep = (step: string) => {
-	//   setCurrentStep(step);
-	// };
+	useEffect(() => {
+		if (!recordDot?._id) getDotCapNhat(true, undefined, { kichHoat: true });
+	}, []);
 
 	const onExport = () => {
 		if (record?.ssoId) {
@@ -51,30 +47,27 @@ const ThongTinSinhVienPage = () => {
 				</>
 			) : (
 				<>
-					{' '}
-					<Space style={{ marginBottom: 12 }} wrap>
-						<SelectDotCapNhat
-							style={{ width: 300 }}
-							isSetRecord
-							value={recordDot?._id}
-							onChange={(val: any, option: { rawData: any }) => {
-								const rawData = option?.rawData;
-								setRecordDot(rawData);
-							}}
+					{recordDot?._id && choPhepSua ? (
+						<Alert
+							type='info'
+							message={
+								<>
+									Đợt cập nhật hồ sơ &quot;<b>{recordDot.tenDot}</b>&quot; từ ngày{' '}
+									<b>{moment(recordDot.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến ngày{' '}
+									<b>{moment(recordDot.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+								</>
+							}
+							showIcon
+							style={{ marginBottom: 12 }}
 						/>
+					) : null}
+
+					<Space style={{ marginBottom: 12 }} wrap>
 						{record?.ssoId ? (
 							<>
-								<Tooltip
-									title={
-										ngoaiThoiGian && !record?.choPhepSua
-											? `Ngoài thời gian cập nhật hồ sơ (${moment(recordDot?.thoiGianBatDau).format(
-													'HH:mm DD/MM/YYYY',
-											  )} - ${moment(recordDot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})`
-											: 'Cập nhật hồ sơ'
-									}
-								>
+								<Tooltip title={!choPhepSua ? 'Ngoài thời gian cập nhật hồ sơ' : 'Cập nhật hồ sơ'}>
 									<Button
-										disabled={ngoaiThoiGian}
+										disabled={!choPhepSua}
 										type='primary'
 										icon={<EditOutlined />}
 										onClick={() => setIsCapNhat(true)}
@@ -82,12 +75,13 @@ const ThongTinSinhVienPage = () => {
 										Cập nhật hồ sơ
 									</Button>
 								</Tooltip>
-								<Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
+								{/* <Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
 									In hồ sơ
-								</Button>
+								</Button> */}
 							</>
 						) : null}
 					</Space>
+
 					<PreviewHoSo />
 				</>
 			)}

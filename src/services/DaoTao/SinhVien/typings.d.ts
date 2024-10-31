@@ -19,7 +19,6 @@ import type { ETrangThaiChungChiSinhVen, EVaiTroSvLhc } from './constants';
 
 declare module SinhVien {
 	export interface IRecord {
-		choPhepSua: boolean;
 		_id: string;
 		dotNhapHocId: string | null;
 		dotNhapHoc?: DotNhapHoc.IRecord;
@@ -84,44 +83,6 @@ declare module SinhVien {
 		chieuCao: number;
 		soBaoHiemSinhVien: string;
 		maBenhVienKhamChuaBenh: string;
-
-		// tenGiamHo: string;
-		// ngaySinhGiamHo: string;
-		// ngheNghiepGiamHo: string;
-		// soDienThoaiGiamHo: string;
-		// emailGiamHo: string;
-		// noiCongTacGiamHo: string;
-		// nguyenQuanGiamHo: string;
-		// diaChiGiamHo: string;
-		// tenChuHo: string;
-
-		// trangThaiCha: ETrangThaiThanhVienGiaDinh;
-		// tenCha: string;
-		// namSinhCha: number;
-		// soDienThoaiCha: string;
-		// ngheNghiepCha: string;
-		// emailCha: string;
-		// noiCongTacCha: string;
-		// nguyenQuanCha: string;
-		// diaChiCha: string;
-
-		// trangThaiMe: ETrangThaiThanhVienGiaDinh;
-		// tenMe: string;
-		// namSinhMe: number;
-		// soDienThoaiMe: string;
-		// ngheNghiepMe: string;
-		// emailMe: string;
-		// noiCongTacMe: string;
-		// nguyenQuanMe: string;
-		// diaChiMe: string;
-
-		// tenVoChong: string;
-		// ngheNghiepVoChong: string;
-		// diaChiVoChong: string;
-		// soDienThoaiVoChong: string;
-		// emailVoChong: string;
-		// thongTinAnhChiEm: string;
-		// thongTinCacCon: string;
 		thanhVienGiaDinh?: TThongTinGiaDinh[];
 
 		maKhoaNganh?: string;
@@ -130,13 +91,21 @@ declare module SinhVien {
 		khoaSinhVien?: KhoaSinhVien.IRecord;
 		maNganh: string;
 		nganh?: NganhDaoTao.IRecordCoSo;
+		maChuyenNganh?: string;
+		chuyenNganh?: NganhDaoTao.IRecordCoSo;
 
 		// SONG NGÀNH
 		maKhoaNganh2?: string;
 		maKhoaSinhVien2?: string;
 		maNganh2?: string;
-		hoKhauThuongTru: TDiaChi;
+		khoaNganh2: KhoaNganh.IRecord;
+		khoaSinhVien2: KhoaSinhVien.IRecord;
+		nganh2: NganhDaoTao.IRecordCoSo;
+		maChuyenNganh2?: string;
+		chuyenNganh2?: NganhDaoTao.IRecordCoSo;
+
 		lopHanhChinhList?: LopHanhChinh.IRecord[];
+		tenLopHanhChinhVirtual?: string;
 		maTrinhDo: string;
 		trinhDoDaoTao: TrinhDoDaoTao.IRecordCoSo;
 		maHinhThuc: string;
@@ -147,11 +116,15 @@ declare module SinhVien {
 		soQuyetDinhTrungTuyen: string;
 		ngayKyQuyetDinhTrungTuyen: string;
 		ngayNhapHoc: string;
+		ketQuaTuyenSinh: string;
 
 		//Kết quả học tập tích lũy
 		kqhtTichLuyList?: KetQuaHocKy.IKetQuaTichLuy[];
 		kqhtTichLuyNganh1?: KetQuaHocKy.IKetQuaTichLuy;
 		kqhtTichLuyNganh2?: KetQuaHocKy.IKetQuaTichLuy;
+
+		/** CTSV chủ động cho phép sửa */
+		choPhepSua: boolean;
 	}
 
 	export type TThongTinGiaDinh = {
