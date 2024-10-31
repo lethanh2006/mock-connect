@@ -1,6 +1,6 @@
 import { landingUrl } from '@/services/base/constant';
 import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Spin } from 'antd';
+import { Avatar, Button, Menu, notification, Spin } from 'antd';
 import { type ItemType } from 'antd/lib/menu/hooks/useItems';
 import React, { useEffect } from 'react';
 import { history, useModel } from 'umi';
@@ -18,7 +18,27 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 	const avatarUrl = recSinhVien?.anhDaiDienUrl ?? initialState?.currentUser?.picture;
 
 	useEffect(() => {
-		if (initialState?.currentUser?.ssoId) getThongTinCuaToiModel();
+		if (initialState?.currentUser?.ssoId)
+			getThongTinCuaToiModel().then((res) => {
+				// if (res.needUpdateFaceReg)
+				// 	notification.warn({
+				// 		message: 'Nhận diện khuôn mặt',
+				// 		description: 'Cần cập nhật ảnh nhận diện khuôn mặt',
+				// 		key: 'updateFaceRegNoti',
+				// 		btn: (
+				// 			<Button
+				// 				type='primary'
+				// 				size='small'
+				// 				onClick={() => {
+				// 					history.push('/thong-tin-ca-nhan');
+				// 					notification.close('updateFaceRegNoti');
+				// 				}}
+				// 			>
+				// 				Cập nhật ngay
+				// 			</Button>
+				// 		),
+				// 	});
+			});
 	}, [initialState?.currentUser?.ssoId]);
 
 	const loginOut = () => OIDCBounder?.getActions()?.dangXuat();
