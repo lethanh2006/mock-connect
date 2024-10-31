@@ -1,9 +1,9 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import UploadFile from '@/components/Upload/UploadFile';
 import SelectDonViHanhChinhTheoTen from '@/pages/Core/DonViHanhChinh/SelectTheoTen';
+import { EPhanLoaiCuTru, ETrangThaiKhaiBaoNoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru/constant';
 import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
-import { EPhanLoaiCuTru, ETrangThaiKhaiBaoNoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru/constant';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
@@ -23,7 +23,7 @@ const FormKhaiBao = (props: any) => {
 		visibleForm,
 		khaiBaoNoiNgoaiTruModel,
 	} = useModel('noingoaitru.khaibao');
-	const { record: recSinhVien, getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [listTinh, setListTinh] = useState<DonViHanhChinh.IRecord[]>();
 	const dangONoiTru = useWatch(['dangONoiTru'], form);
 
@@ -39,7 +39,6 @@ const FormKhaiBao = (props: any) => {
 	}, [recKhaiBao?._id, visibleForm]);
 
 	useEffect(() => {
-		getThongTinCuaToiModel();
 		getTinhThanhPho().then((data) => {
 			setListTinh(data.data.data);
 		});

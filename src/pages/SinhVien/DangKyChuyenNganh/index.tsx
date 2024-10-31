@@ -18,7 +18,6 @@ const DangKyChuyenNganhPage = () => {
 	const { getModel, page, limit, handleEdit, dotHienHanh, getDotHienHanhModel, danhSach } = useModel(
 		'sinhvien.dangkychuyennganh.sinhvien',
 	);
-	const { getThongTinCuaToiModel, record } = useModel('sinhvien.sinhvien');
 	const hasCreate =
 		!!dotHienHanh?._id &&
 		!danhSach.filter((i) => i.trangThaiDangKy !== ETrangThaiDangKyChuyenNganh.KHONG_DUYET)?.length;
@@ -27,7 +26,6 @@ const DangKyChuyenNganhPage = () => {
 
 	useEffect(() => {
 		if (!dotHienHanh) getDotHienHanhModel();
-		if (!record?._id) getThongTinCuaToiModel();
 	}, []);
 
 	const columns: IColumn<DangKyChuyenNganh.ISinhVienDangKy>[] = [

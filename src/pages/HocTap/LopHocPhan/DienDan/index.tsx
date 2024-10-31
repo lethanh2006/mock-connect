@@ -24,7 +24,6 @@ const DienDanLopPage = (props: IProps) => {
 		setLimit,
 		limit,
 	} = useModel('diendan.baidang');
-	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const { idBaiViet } = history?.location?.query ?? {};
 
 	const getData = () => {
@@ -35,10 +34,6 @@ const DienDanLopPage = (props: IProps) => {
 	useEffect(() => {
 		if (idLopHocPhan) getData();
 	}, [idLopHocPhan, idBaiViet, limit]);
-
-	useEffect(() => {
-		getThongTinCuaToiModel();
-	}, []);
 
 	return (
 		<div className='dien-dan'>

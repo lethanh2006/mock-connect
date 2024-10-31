@@ -13,11 +13,10 @@ type DescriptionItem = {
 };
 
 const PreviewHoSo = () => {
-	const { getThongTinCuaToiModel, record, loading } = useModel('sinhvien.sinhvien');
+	const { record, loading } = useModel('sinhvien.sinhvien');
 	const { danhSach: danhSachQuocTich, getAllModel } = useModel('core.quoctich');
 
 	useEffect(() => {
-		if (!record?._id) getThongTinCuaToiModel();
 		if (!danhSachQuocTich.length) getAllModel();
 	}, []);
 
@@ -48,6 +47,11 @@ const PreviewHoSo = () => {
 			md: 8,
 		},
 		{
+			label: 'Trạng thái học',
+			content: <Tag color={colorTrangThaiHocSv[record?.trangThaiHoc as ETrangThaiHocSv]}>{record?.trangThaiHoc}</Tag>,
+			md: 8,
+		},
+		{
 			label: 'CCCD/CMND',
 			content: `${record?.cccd ?? ''}, ngày cấp: ${
 				record?.ngayCapCccd ? moment(record.ngayCapCccd).format('DD/MM/YYYY') : '--'
@@ -60,12 +64,8 @@ const PreviewHoSo = () => {
 			md: 8,
 		},
 		{ label: 'Email', content: record?.email, md: 16 },
-		{
-			label: 'Trạng thái học',
-			content: <Tag color={colorTrangThaiHocSv[record?.trangThaiHoc as ETrangThaiHocSv]}>{record?.trangThaiHoc}</Tag>,
-			md: 8,
-		},
 		{ label: 'Khóa ngành', content: record?.khoaNganh?.ten, md: 16 },
+		{ label: 'Chuyên ngành', content: record?.chuyenNganh?.ten ?? record?.maChuyenNganh ?? '--', md: 8 },
 		{
 			label: 'Quốc tịch',
 			content: danhSachQuocTich?.find((item) => item?._id === record?.quocTich)?.tenQuocTich,
