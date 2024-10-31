@@ -1,17 +1,21 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
-import { Button, Form, Modal } from 'antd';
-import { useEffect } from 'react';
+import { resetFieldsForm } from '@/utils/utils';
+import { Button, Form, Modal, Segmented } from 'antd';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import WebcamNhanDienKhuonMat from './Webcam';
 
 const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
 	const { formSubmiting, updateFaceRegModel, record, setFormSubmiting } = useModel('sinhvien.sinhvien');
+	const [segmentValue, setSegmentValue] = useState('upload');
 	const [form] = Form.useForm();
 	const { visible, setVisible } = props;
 
 	useEffect(() => {
 		if (visible) form.setFieldsValue(record);
+		else resetFieldsForm(form);
 	}, [visible]);
 
 	const onFinish = async (values: any) => {
@@ -64,8 +68,18 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 			</ol>
 
 			<Form form={form} layout='vertical' onFinish={onFinish}>
+				<Segmented
+					value={segmentValue}
+					onChange={(val) => setSegmentValue(val as string)}
+					options={[
+						{ value: 'upload', label: 'Tải ảnh lên' },
+						{ value: 'webcam', label: 'Sử dụng webcam' },
+					]}
+					style={{ marginBottom: 12 }}
+				/>
+
 				<Form.Item name='faceRegImgUrl' label='Ảnh nhận diện' rules={[...rules.required, ...rules.fileRequired]}>
-					<UploadFile isAvatar resize />
+					{segmentValue === 'upload' ? <UploadFile isAvatar resize /> : <WebcamNhanDienKhuonMat />}
 				</Form.Item>
 
 				<div className='form-footer'>
