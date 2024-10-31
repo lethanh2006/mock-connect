@@ -24,6 +24,7 @@ export default {
 	'menu.HocTap.LichThi': 'Lịch thi',
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
 	'menu.HocTap.HocTapKhac': 'Khác',
+	'menu.HocTap.HocTapKhac.DangKyChuyenNganh': 'Đăng ký chuyên ngành',
 	'menu.HocTap.HocTapKhac.XetHocVu': 'Xét học vụ',
 	'menu.HocTap.HocTapKhac.QuyetDinh': 'Bảo lưu, thôi học',
 	'menu.HocTap.XetTotNghiep': 'Chứng chỉ, tốt nghiệp',
