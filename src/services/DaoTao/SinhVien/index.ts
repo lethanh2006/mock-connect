@@ -37,8 +37,6 @@ export async function getMyLopHanhChinh() {
 	return axios.get(`${ipDaoTao}/sinh-vien/me/lop-hanh-chinh`);
 }
 
-export const getThongTinSinhVienBySsoId = (ssoId: string) => axios.get(`${ipDaoTao}/sinh-vien/${ssoId}/info`);
-
 //Chứng chỉ
 
 export async function postChungChiSinhVien(payLoad: any) {
