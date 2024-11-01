@@ -16,7 +16,7 @@ import { useState } from 'react';
 
 export default () => {
 	const objInit = useInitModel<SinhVien.IRecord>('sinh-vien', undefined, undefined, ipDaoTao);
-	const { setLoading, setRecord, getService, setDanhSach } = objInit;
+	const { setLoading, setRecord, getService, setDanhSach, putModel } = objInit;
 	const [khoaNganhMe, setKhoaNganhMe] = useState<KhoaNganh.TMyKhoaNganh>();
 	const [maKhoaNganh, setMaKhoaNganh] = useState<string>();
 	const [danhSachAllSinhVien, setDanhSachAllSinhVien] = useState<SinhVien.IRecord[]>([]);
@@ -102,7 +102,11 @@ export default () => {
 		}
 	};
 
+	const updateFaceRegModel = (data: { faceRegImgUrl: string }, getData?: () => void) =>
+		putModel('me/face-reg', data, getData);
+
 	return {
+		...objInit,
 		danhSachAllSinhVien,
 		setDanhSachAllSinhVien,
 		searchSinhVienModel,
@@ -114,5 +118,6 @@ export default () => {
 		setMaKhoaNganh,
 		putLyLichMeModel,
 		...objInit,
+		updateFaceRegModel,
 	};
 };

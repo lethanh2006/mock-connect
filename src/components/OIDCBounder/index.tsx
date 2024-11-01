@@ -18,6 +18,7 @@ const OIDCBounder_: FC = ({ children }) => {
 	const { setInitialState, initialState } = useModel('@@initialState');
 	const auth = useAuth();
 	const actions = useAuthActions();
+	const isUnauth = unAuthPaths.some((path) => window.location.pathname.includes(path));
 
 	const handleAxios = (access_token: string) => {
 		axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
@@ -50,16 +51,16 @@ const OIDCBounder_: FC = ({ children }) => {
 				const isUncheckPath = unCheckPermissionPaths.some((path) => window.location.pathname.includes(path));
 				const hasRole = permissions.some((item) => item.rsname === currentRole);
 
+				setInitialState({
+					...initialState,
+					currentUser: { ...userInfo, ssoId: userInfo.sub },
+					authorizedPermissions: permissions,
+					permissionLoading: false,
+				});
+
 				if (!isUncheckPath && currentRole && permissions.length && !hasRole) {
 					history.replace('/403');
 				} else {
-					setInitialState({
-						...initialState,
-						currentUser: { ...userInfo, ssoId: userInfo.sub },
-						authorizedPermissions: permissions,
-						permissionLoading: false,
-					});
-
 					if (window.location.pathname === '/' || window.location.pathname === '/user/login') redirectLocation();
 				}
 			} catch {
@@ -80,7 +81,7 @@ const OIDCBounder_: FC = ({ children }) => {
 		// history.replace('/hold-on');
 		// return;
 
-		if (unAuthPaths.includes(window.location.pathname) || auth.isLoading) return;
+		if (isUnauth || auth.isLoading) return;
 
 		// Chưa login + chưa có auth params ==> Cần redirect keycloak để lấy auth params + cookie
 		if (!hasAuthParams() && !auth.isAuthenticated) {
@@ -103,7 +104,7 @@ const OIDCBounder_: FC = ({ children }) => {
 		OIDCBounderHandlers = actions;
 	}, [actions]);
 
-	return <>{auth.isLoading ? <LoadingPage /> : children}</>;
+	return <>{(auth.isLoading || initialState?.permissionLoading) && !isUnauth ? <LoadingPage /> : children}</>;
 };
 
 export const OIDCBounder: FC & { getActions: () => typeof OIDCBounderHandlers } = (props) => {
