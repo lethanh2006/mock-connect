@@ -143,7 +143,7 @@ const SelectDonViHanhChinh = (props: {
 						rules={[...(props.notRequiredDiaChiCuThe ? [] : rules.required), ...rules.text, ...rules.length(250)]}
 						label={hasLabel ? 'Số nhà, đường phố' : undefined}
 					>
-						<Input.TextArea placeholder='Nhập số nhà/tên đường' />
+						<Input placeholder='Nhập số nhà/tên đường' />
 					</Form.Item>
 				</Col>
 			) : null}

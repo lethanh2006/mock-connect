@@ -13,11 +13,11 @@ type DescriptionItem = {
 };
 
 const PreviewHoSo = () => {
-	const { getThongTinCuaToiModel, record, loading } = useModel('sinhvien.sinhvien');
-	const { danhSach, getAllModel } = useModel('core.quoctich');
+	const { record, loading } = useModel('sinhvien.sinhvien');
+	const { danhSach: danhSachQuocTich, getAllModel } = useModel('core.quoctich');
+
 	useEffect(() => {
-		getThongTinCuaToiModel();
-		getAllModel();
+		if (!danhSachQuocTich.length) getAllModel();
 	}, []);
 
 	const renderDescription = (data: DescriptionItem) => (
@@ -47,6 +47,11 @@ const PreviewHoSo = () => {
 			md: 8,
 		},
 		{
+			label: 'Trạng thái học',
+			content: <Tag color={colorTrangThaiHocSv[record?.trangThaiHoc as ETrangThaiHocSv]}>{record?.trangThaiHoc}</Tag>,
+			md: 8,
+		},
+		{
 			label: 'CCCD/CMND',
 			content: `${record?.cccd ?? ''}, ngày cấp: ${
 				record?.ngayCapCccd ? moment(record.ngayCapCccd).format('DD/MM/YYYY') : '--'
@@ -59,13 +64,13 @@ const PreviewHoSo = () => {
 			md: 8,
 		},
 		{ label: 'Email', content: record?.email, md: 16 },
+		{ label: 'Khóa ngành', content: record?.khoaNganh?.ten, md: 16 },
+		{ label: 'Chuyên ngành', content: record?.chuyenNganh?.ten ?? record?.maChuyenNganh ?? '--', md: 8 },
 		{
-			label: 'Trạng thái học',
-			content: <Tag color={colorTrangThaiHocSv[record?.trangThaiHoc as ETrangThaiHocSv]}>{record?.trangThaiHoc}</Tag>,
+			label: 'Quốc tịch',
+			content: danhSachQuocTich?.find((item) => item?._id === record?.quocTich)?.tenQuocTich,
 			md: 8,
 		},
-		{ label: 'Khóa ngành', content: record?.khoaNganh?.ten, md: 16 },
-		{ label: 'Quốc tịch', content: danhSach?.find((item) => item?._id === record?.quocTich)?.tenQuocTich, md: 8 },
 		{ label: 'Dân tộc', content: record?.danToc, md: 8 },
 		{ label: 'Tôn giáo', content: record?.tonGiao, md: 8 },
 	];
@@ -78,7 +83,7 @@ const PreviewHoSo = () => {
 				{ label: 'Tỉnh/Thành phố', content: record?.tinhTpThuongTru },
 				{ label: 'Quận/Huyện', content: record?.quanHuyenThuongTru },
 				{ label: 'Phường/Xã', content: record?.xaPhuongThuongTru },
-				{ label: 'Địa chỉ cụ thể', content: record?.soNhaTenDuongThuongTru },
+				{ label: 'Địa chỉ', content: record?.soNhaTenDuongThuongTru },
 			],
 		},
 		{

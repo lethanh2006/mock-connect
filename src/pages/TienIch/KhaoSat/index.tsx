@@ -9,19 +9,14 @@ import { EditOutlined } from '@ant-design/icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import Form from './components/Form';
 
 const DotKhaoSatPage = () => {
 	const { page, limit, getDotMeModel, handleEdit: handleDot, thoiGian, setThoiGian } = useModel('tienich.dotkhaosat');
 	const { getByIdModel: getBieuMau, loading } = useModel('tienich.bieumau');
-	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const [cauTraLoi, setCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
-
-	useEffect(() => {
-		getThongTinCuaToiModel();
-	}, []);
 
 	const getCauTraLoiMeModal = (rec: DotKhaoSat.IRecord) => {
 		getCauTraLoiMe(rec?.idKhaoSat ?? '', rec?._id ?? '')

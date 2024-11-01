@@ -18,94 +18,53 @@ import ThongTinGiaDinhFormItem from './GiaDinh';
 
 const FormSinhVien = (props: { onCancel?: () => void }) => {
 	const [form] = Form.useForm();
-	const { getThongTinCuaToiModel, putLyLichMeModel, record } = useModel('sinhvien.sinhvien');
+	const { getThongTinCuaToiModel, putModel, formSubmiting, setFormSubmiting } = useModel('sinhvien.sinhvien');
 	const [listTinh, setListTinh] = useState<DonViHanhChinh.IRecord[]>();
 	const loaiNoiSinh = Form.useWatch('loaiNoiSinh', form) ?? ELoaiNoiSinh.TRONG_NUOC;
+
+	useEffect(() => {
+		getTinhThanhPho().then((data) => setListTinh(data.data.data));
+
+		getThongTinCuaToiModel().then((rec) => form.setFieldsValue(rec));
+	}, []);
+
 	const onFinish = async (values: any) => {
 		if (!values.thanhVienGiaDinh || !values.thanhVienGiaDinh.length) {
 			message.error('Vui lòng khai thông tin thành viên gia đình');
 			return;
 		}
+
 		try {
+			setFormSubmiting(true);
 			const urlImg = await buildUpLoadFile(values, 'anhDaiDienUrl').catch(console.log);
+			setFormSubmiting(false);
 			const payload = { ...values, anhDaiDienUrl: urlImg };
-			putLyLichMeModel({ ...payload }).then(() => {
+			putModel('me', payload, getThongTinCuaToiModel).then(() => {
 				if (props?.onCancel) props?.onCancel();
 			});
 		} catch (e) {
 			console.log(e);
 		}
 	};
-	useEffect(() => {
-		getTinhThanhPho().then((data) => {
-			setListTinh(data.data.data);
-		});
-	}, []);
-
-	useEffect(() => {
-		getThongTinCuaToiModel().then((rec) => form.setFieldsValue({ ...rec }));
-	}, []);
 
 	return (
 		<Form
 			form={form}
 			layout='vertical'
 			onFinish={onFinish}
-			scrollToFirstError={{
-				behavior: 'smooth',
-				block: 'center',
-				inline: 'center',
-			}}
+			scrollToFirstError={{ behavior: 'smooth', block: 'center', inline: 'center' }}
 			onFinishFailed={() => {
 				message.warning('Một số trường thông tin còn thiếu vui lòng kiểm tra lại');
 			}}
 		>
-			<div className='button-section'>
-				{/* <Button
-          loading={formSubmiting}
-          htmlType="submit"
-          type="primary"
-          icon={edit ? <SaveOutlined /> : <PlusOutlined />}
-        >
-          {!edit ? <>Thêm mới và Tiếp tục</> : <>Lưu lại</>}
-        </Button>
-
-        {edit ? (
-          <Button icon={<PrinterOutlined />} onClick={onExport} loading={formSubmiting}>
-            In hồ sơ
-          </Button>
-        ) : null} */}
-			</div>
-
-			{/*<Divider orientation="center">Thông tin chung</Divider>*/}
 			<Row gutter={[12, 0]}>
-				{/*<Col span={24} md={6}>*/}
-				{/*  <Form.Item name="anhDaiDienUrl" label=" ">*/}
-				{/*    <UploadFile isAvatar otherProps={{ disabled: true }} />*/}
-				{/*  </Form.Item>*/}
-				{/*</Col>*/}
 				<Col span={24} sm={9} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
 					<Form.Item className='alignUploadCenter' name='anhDaiDienUrl' label={''}>
-						<UploadFile
-							disabled
-							otherProps={{
-								style: { textAlign: 'center' },
-							}}
-							isAvatar
-							resize
-						/>
+						<UploadFile otherProps={{ style: { textAlign: 'center' } }} isAvatar resize />
 					</Form.Item>
 				</Col>
 
 				<Col span={24} md={18}>
-					{/*<Row gutter={[12, 0]}>*/}
-					{/*	<Col span={24}>*/}
-					{/*		<Form.Item name='ma' label='Mã sinh viên' rules={[...rules.required, ...rules.text, ...rules.length(20)]}>*/}
-					{/*			<Input placeholder='Mã sinh viên' />*/}
-					{/*		</Form.Item>*/}
-					{/*	</Col>*/}
-					{/*</Row>*/}
-
 					<Row gutter={[12, 0]}>
 						<Col span={24} md={8}>
 							<Form.Item name='ma' label='Mã sinh viên' rules={[...rules.required, ...rules.text, ...rules.length(20)]}>
@@ -113,7 +72,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 							</Form.Item>
 						</Col>
 						<Col span={24} md={8}>
-							<Form.Item name='ten' label='Họ và tên' rules={[...rules.required, ...rules.text, ...rules.length(250)]}>
+							<Form.Item name='ten' label='Họ tên' rules={[...rules.required, ...rules.text, ...rules.length(250)]}>
 								<Input placeholder='Nhập họ tên sinh viên' />
 							</Form.Item>
 						</Col>
@@ -192,24 +151,6 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 			</Row>
 			<Collapse style={{ marginBottom: 12 }} defaultActiveKey={['1', '4']}>
 				<Collapse.Panel forceRender header={'Thông tin cá nhân chi tiết'} key={'1'}>
-					{/*<Row gutter={[12, 0]}>*/}
-					{/*	<Col span={12} md={8}>*/}
-					{/*		<Form.Item name='quocTich' label='Quốc tịch'>*/}
-					{/*			<SelectQuocTich allowClear />*/}
-					{/*		</Form.Item>*/}
-					{/*	</Col>*/}
-					{/*	<Col span={12} md={8}>*/}
-					{/*		<Form.Item name='danToc' label='Dân tộc'>*/}
-					{/*			<SelectDanToc allowClear />*/}
-					{/*		</Form.Item>*/}
-					{/*	</Col>*/}
-					{/*	<Col span={12} md={8}>*/}
-					{/*		<Form.Item name='tonGiao' label='Tôn giáo'>*/}
-					{/*			<SelectTonGiao allowClear />*/}
-					{/*		</Form.Item>*/}
-					{/*	</Col>*/}
-					{/*</Row>*/}
-
 					<Divider orientation='center'>Nơi sinh</Divider>
 					<Row gutter={[12, 0]}>
 						<Col span={12} md={12}>
@@ -247,16 +188,11 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 							)}
 						</Col>
 					</Row>
-					{/* <Row gutter={[12, 0]}>
-						<SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='NoiSinh' />
-					</Row> */}
 
 					<Divider orientation='center'>Quê quán</Divider>
-
 					<SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='QueQuan' hasLabel />
 
 					<Divider orientation='center'>Hộ khẩu thường trú</Divider>
-
 					<SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='ThuongTru' hasSoNha hasLabel />
 
 					<Divider orientation='center'>Thông tin liên lạc</Divider>
@@ -372,12 +308,11 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 					<FormSucKhoe />
 				</Collapse.Panel>
 			</Collapse>
-			<div style={{ display: 'flex', justifyContent: 'center' }}>
-				<Form.Item>
-					<Button type={'primary'} htmlType={'submit'}>
-						Lưu
-					</Button>
-				</Form.Item>
+
+			<div className='form-footer'>
+				<Button type='primary' htmlType='submit' loading={formSubmiting}>
+					Lưu lại
+				</Button>
 			</div>
 		</Form>
 	);

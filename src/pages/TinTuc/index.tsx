@@ -18,7 +18,6 @@ const TinTucPage = () => {
 	const { setPage } = useModel('tintuc.tintuc');
 	const { setPage: setPageWP } = useModel('tintuc.tintucwp');
 	const { getAllModel } = useModel('tienich.xemsau');
-	const { getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const hash = window.location.hash.slice(1, 25);
 	const [tabActive, setTabActive] = useState<string>('all');
 
@@ -35,7 +34,6 @@ const TinTucPage = () => {
 	};
 
 	useEffect(() => {
-		getThongTinCuaToiModel();
 		getData();
 	}, []);
 

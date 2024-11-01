@@ -1,8 +1,8 @@
 import { landingUrl } from '@/services/base/constant';
 import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Spin } from 'antd';
+import { Avatar, Button, Menu, notification, Spin } from 'antd';
 import { type ItemType } from 'antd/lib/menu/hooks/useItems';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
 import HeaderDropdown from './HeaderDropdown';
@@ -14,6 +14,32 @@ export type GlobalHeaderRightProps = {
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 	const { initialState } = useModel('@@initialState');
+	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const avatarUrl = recSinhVien?.anhDaiDienUrl ?? initialState?.currentUser?.picture;
+
+	useEffect(() => {
+		if (initialState?.currentUser?.ssoId)
+			getThongTinCuaToiModel().then((res) => {
+				// if (res.needUpdateFaceReg)
+				// 	notification.warn({
+				// 		message: 'Nhận diện khuôn mặt',
+				// 		description: 'Cần cập nhật ảnh nhận diện khuôn mặt',
+				// 		key: 'updateFaceRegNoti',
+				// 		btn: (
+				// 			<Button
+				// 				type='primary'
+				// 				size='small'
+				// 				onClick={() => {
+				// 					history.push('/thong-tin-ca-nhan');
+				// 					notification.close('updateFaceRegNoti');
+				// 				}}
+				// 			>
+				// 				Cập nhật ngay
+				// 			</Button>
+				// 		),
+				// 	});
+			});
+	}, [initialState?.currentUser?.ssoId]);
 
 	const loginOut = () => OIDCBounder?.getActions()?.dangXuat();
 
@@ -83,15 +109,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 				<span className={`${styles.action} ${styles.account}`}>
 					<Avatar
 						className={styles.avatar}
-						src={
-							initialState.currentUser?.picture ? (
-								<img
-									// style={currentUser?.avatar_path ? {} : { objectFit: 'cover' }}
-									src={initialState.currentUser?.picture}
-								/>
-							) : undefined
-						}
-						icon={!initialState.currentUser?.picture ? lastNameChar ?? <UserOutlined /> : undefined}
+						src={!!avatarUrl ? <img style={{ objectFit: 'cover' }} src={avatarUrl} /> : undefined}
+						icon={!avatarUrl ? lastNameChar ?? <UserOutlined /> : undefined}
 						alt='avatar'
 					/>
 					<span className={`${styles.name}`}>{fullName}</span>

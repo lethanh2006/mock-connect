@@ -42,9 +42,7 @@ const LichSuGuiDon = () => {
 		danhSach,
 		getAllBieuMauModel,
 	} = useModel('dvmc.dichvumotcuav2');
-
-	const { getThongTinCuaToiModel, record } = useModel('sinhvien.sinhvien');
-
+	const { record } = useModel('sinhvien.sinhvien');
 	const { setVisibleForm, visibleForm } = useModel('tienich.phanhoi');
 
 	const [recordView, setRecordView] = useState<DichVuMotCuaV2.Don>();
@@ -58,7 +56,6 @@ const LichSuGuiDon = () => {
 	const [data, setData] = useState<any>();
 
 	useEffect(() => {
-		getThongTinCuaToiModel();
 		setRecord({} as DichVuMotCuaV2.BieuMau);
 		// setLoaiDichVu('DVMC');
 		getAllBieuMauModel('DVMC');
