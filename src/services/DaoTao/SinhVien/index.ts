@@ -37,14 +37,8 @@ export async function getMyLopHanhChinh() {
 	return axios.get(`${ipDaoTao}/sinh-vien/me/lop-hanh-chinh`);
 }
 
-export const getThongTinSinhVienBySsoId = (ssoId: string) => axios.get(`${ipDaoTao}/sinh-vien/${ssoId}/info`);
-
 //Chứng chỉ
 
 export async function postChungChiSinhVien(payLoad: any) {
 	return axios.post(`${ipDaoTao}/chung-chi-sv/sinh-vien/dang-ky`, payLoad);
 }
-
-export const putLyLichMe = (payload: any) => {
-	return axios.put(`${ipDaoTao}/sinh-vien/me`, payload);
-};

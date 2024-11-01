@@ -63,8 +63,8 @@ const TableChungChiSinhVien = () => {
 		},
 	];
 
-	return recordChungChi?.chungChiDaDat ? (
-		<TableStaticData columns={columns} data={recordChungChi?.chungChiDaDat ?? []} size='small' addStt />
+	return recordChungChi?.chungChiDuDk ? (
+		<TableStaticData columns={columns} data={recordChungChi?.chungChiDuDk ?? []} size='small' addStt />
 	) : (
 		<Empty
 			description='Bạn chưa có chứng chỉ nào hoặc chứng chỉ không đủ điều kiện'
