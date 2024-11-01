@@ -1,7 +1,6 @@
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import type { ChungChi } from '../ChungChi/typing';
 import { type HocPhan } from '../HocPhan/typings';
-import type { SinhVien } from '../SinhVien/typings';
 import { type ELoaiHocPhanCTDT, type ETrangThaiHocTap } from '../constant';
 
 declare module ChuongTrinhDaoTao {
@@ -84,6 +83,7 @@ declare module ChuongTrinhDaoTao {
 		maLoaiChungChi: string;
 		loaiChungChi?: ChungChi.ILoaiChungChi;
 
+		soChungChiPhaiDat?: number;
 		danhSachChungChiCtdtCdr?: IChuanDauRa[];
 	}
 

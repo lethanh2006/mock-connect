@@ -234,7 +234,7 @@ declare module SinhVien {
 
 	export type TChungChiDauRaSv = ChuongTrinhDaoTao.IChungChiCTDT & {
 		/** Chứng chỉ sinh viên đã đạt và còn hiệu lực */
-		chungChiDaDat: ChungChi.IRecord[];
+		chungChiDuDk?: SinhVien.IChungChiSinhVien[];
 		/** Có đủ điều kiện đầu ra hay ko? */
 		datChuanDauRa: boolean;
 	};
