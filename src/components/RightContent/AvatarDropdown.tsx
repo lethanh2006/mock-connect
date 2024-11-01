@@ -109,7 +109,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 				<span className={`${styles.action} ${styles.account}`}>
 					<Avatar
 						className={styles.avatar}
-						src={!!avatarUrl ? <img style={{ objectFit: 'cover' }} src={avatarUrl} /> : undefined}
+						src={!!avatarUrl ? <img src={avatarUrl} /> : undefined}
 						icon={!avatarUrl ? lastNameChar ?? <UserOutlined /> : undefined}
 						alt='avatar'
 					/>

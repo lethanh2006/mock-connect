@@ -63,6 +63,7 @@ const TableBase = (props: TableBaseProps) => {
 		setSort,
 		setFilters,
 		deleteManyModel,
+		initFilter,
 	} = model;
 	const filters: TFilter<any>[] = model?.filters;
 	const loading = props?.loading || model?.loading;
@@ -86,7 +87,7 @@ const TableBase = (props: TableBaseProps) => {
 		return () => {
 			if (props.noCleanUp !== true) {
 				// setCondition(undefined);
-				setFilters(undefined);
+				setFilters(initFilter);
 				setSelectedIds(undefined);
 				// setSort(undefined);
 			}
