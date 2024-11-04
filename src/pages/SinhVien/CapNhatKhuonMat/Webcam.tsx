@@ -25,6 +25,7 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 		width: 960,
 		height: 1280,
 		facingMode: userCamera ? 'user' : 'environment',
+		aspectRatio: 0.75,
 	};
 
 	const blobToFile = (blob: any, fileName: string, type: string) => {
