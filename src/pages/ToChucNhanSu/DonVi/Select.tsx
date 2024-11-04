@@ -28,7 +28,7 @@ const SelectDonVi = (props: {
 		// 		operator: EOperatorType.EQUAL,
 		// 	},
 		// ];
-		getAllModel();
+		getAllModel(true, undefined, undefined, undefined, 'sinh-vien/many');
 	}, []);
 
 	return (

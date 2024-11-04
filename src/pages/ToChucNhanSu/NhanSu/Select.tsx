@@ -25,13 +25,14 @@ const SelectNhanSuDebounce = (props: {
 						{
 							active: true,
 							field: 'ssoId',
-							values: Array.isArray(value) ? value : [value],
+							values: Array.isArray(value) ? value : ([value] as any),
 							operator: EOperatorType.INCLUDE,
 						},
 					],
 					undefined,
 					1,
 					20,
+					'sinh-vien/page',
 				);
 		} else
 			getModel(
@@ -53,6 +54,7 @@ const SelectNhanSuDebounce = (props: {
 				undefined,
 				1,
 				20,
+				'sinh-vien/page',
 			);
 	}, [filters, value, JSON.stringify(condition)]);
 
@@ -70,7 +72,11 @@ const SelectNhanSuDebounce = (props: {
 	const dataView = danhSach.find((item) => item.ssoId === value);
 
 	return props.isView ? (
-		`${dataView?.hoDem ?? ''} ${dataView?.ten ?? ''} - ${dataView?.maCanBo ?? ''}`
+		dataView?.hoTen ? (
+			`${dataView?.hoTen ?? ''} - ${dataView?.maCanBo ?? ''}`
+		) : (
+			`${dataView?.hoDem ?? ''} ${dataView?.ten ?? ''} - ${dataView?.maCanBo ?? ''}`
+		)
 	) : (
 		<Select
 			allowClear
@@ -88,7 +94,9 @@ const SelectNhanSuDebounce = (props: {
 			options={danhSach.map((item) => ({
 				key: item._id,
 				value: item.ssoId,
-				label: `${item.hoDem ?? ''} ${item.ten ?? ''} - ${item.maCanBo ?? ''}`,
+				label: item.hoTen
+					? `${item.hoTen ?? ''} - ${item.maCanBo ?? ''}`
+					: `${item.hoDem ?? ''} ${item.ten ?? ''} - ${item.maCanBo ?? ''}`,
 			}))}
 			showSearch
 			optionFilterProp='label'
