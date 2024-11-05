@@ -75,7 +75,14 @@ const FormDangKyDeXuat = (props: { getData: any; type: ETypeTableDeTai; loaiDeTa
 				recSinhVien = res?.[0] ?? {};
 			}
 			if (!recCanBo?.ssoId) {
-				const res = await getModelCanBo({ ssoId: values?.chuTriDeTai?.userId });
+				const res = await getModelCanBo(
+					{ ssoId: values?.chuTriDeTai?.userId },
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					'sinh-vien/page',
+				);
 				recCanBo = res?.[0] ?? {};
 			}
 

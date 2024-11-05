@@ -20,6 +20,7 @@ import type { ETrangThaiChungChiSinhVen, EVaiTroSvLhc } from './constants';
 declare module SinhVien {
 	export interface IRecord {
 		_id: string;
+		hoKhauThuongTru: any;
 		dotNhapHocId: string | null;
 		dotNhapHoc?: DotNhapHoc.IRecord;
 		ssoId: string;
