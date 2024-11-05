@@ -67,6 +67,6 @@ export async function getSettingByKey(key: ESettingKey, ip?: string) {
 	return axios.get(`${ip ?? ip3}/setting/${key}/value`);
 }
 
-export async function putSetting(data: ISetting) {
-	return axios.put(`${ip3}/setting/value`, data);
+export async function putSetting(data: ISetting, ip?: string) {
+	return axios.put(`${ip ?? ip3}/setting/value`, data);
 }
