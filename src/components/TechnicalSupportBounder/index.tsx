@@ -1,3 +1,4 @@
+import { primaryColor } from '@/services/base/constant';
 import { ToolOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Modal, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
@@ -10,7 +11,7 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		// Đổi màu real time => Hỗ trợ đổi tenant
-		ConfigProvider.config({ theme: { primaryColor: APP_CONFIG_PRIMARY_COLOR } });
+		ConfigProvider.config({ theme: { primaryColor } });
 	}, []);
 
 	return (

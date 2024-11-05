@@ -24,12 +24,12 @@ export default () => {
 		}
 	};
 
-	const updateSettingModel = async (data: ISetting): Promise<ISetting> => {
+	const updateSettingModel = async (data: ISetting, ip?: string): Promise<ISetting> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 
 		try {
-			const res = await putSetting(data);
+			const res = await putSetting(data, ip);
 			const temp = Object.assign(settings, { [data.key]: data.value });
 			setSettings(temp);
 			message.success('Cập nhật thành công');
