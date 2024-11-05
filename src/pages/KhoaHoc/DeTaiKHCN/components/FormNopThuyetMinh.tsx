@@ -42,7 +42,7 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
 	const { danhSach: danhSachCanBo, getModel: getModelCanBo } = useModel('tochucnhansu.nhansu');
 	const [menhGia, setMenhGia] = useState(record?.dangKyKhcn?.kinhPhi?.menhGia ?? EMenhGia.VND);
-	const isDeTaiTapThe = record?.dangKyKhcn?.loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE;
+	const loaiCaNhan = Form.useWatch('loaiCaNhan', form);
 	useEffect(() => {
 		if (!visibleForm) resetFieldsForm(form);
 		else if (record?._id) {
@@ -167,7 +167,14 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 							<Input.TextArea placeholder='Tên đề tài' />
 						</Form.Item>
 					</Col>
-
+					<Col xs={24} lg={12}>
+						<Form.Item name='loaiCaNhan' label='Đề tài cá nhân/tập thể' rules={[...rules.required]}>
+							<Select
+								placeholder='Chọn loại'
+								options={Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item }))}
+							/>
+						</Form.Item>
+					</Col>
 					<Col xs={24} lg={12}>
 						<Form.Item
 							name={['chuTriDeTai', 'userId']}
@@ -280,7 +287,7 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 							<SelectDonVi />
 						</Form.Item>
 					</Col> */}
-					{isDeTaiTapThe && (
+					{loaiCaNhan === ELoaiDeTaiCaNhan.TAP_THE && (
 						<Col span={24}>
 							<div>Thành viên đề tài:</div>
 							<TableThanhVien
