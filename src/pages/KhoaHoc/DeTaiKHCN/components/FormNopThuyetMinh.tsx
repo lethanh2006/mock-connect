@@ -80,7 +80,14 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 			}
 			let recCanBo = danhSachCanBo.find((item) => item.ssoId === values?.nguoiHuongDan?.userId);
 			if (!recCanBo?.ssoId) {
-				const res = await getModelCanBo({ ssoId: values?.chuTriDeTai?.userId });
+				const res = await getModelCanBo(
+					{ ssoId: values?.chuTriDeTai?.userId },
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					'sinh-vien/page',
+				);
 				recCanBo = res?.[0] ?? {};
 			}
 			const payload = {
