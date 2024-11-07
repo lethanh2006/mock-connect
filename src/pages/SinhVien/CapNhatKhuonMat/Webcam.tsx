@@ -7,10 +7,11 @@ import './style.less';
 
 const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: any }) => {
 	const { initialState } = useModel('@@initialState');
-	const { onChange } = props;
+	const { onChange, value } = props;
 	const [userCamera, setUserCamera] = useState<boolean>(true);
 	const [devices, setDevices] = useState<any[]>([]);
 	const hasDevices = devices.some((i) => !!i.deviceId);
+	const faceUrl = typeof value === 'object' ? value?.fileList?.[0]?.url : value;
 
 	const handleDevices = useCallback(
 		(mediaDevices) => setDevices(mediaDevices.filter(({ kind }: any) => kind === 'videoinput')),
@@ -56,13 +57,8 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 												`captured-${initialState?.currentUser?.preferred_username ?? ''}.jpeg`,
 												'image/jpeg',
 											);
-											if (onChange) onChange({ fileList: [{ originFileObj: file, thumbUrl: imageSrc }] });
-
-											const myImage = document.getElementById('captured') as any;
-											if (blob && myImage) {
-												const objectURL = URL.createObjectURL(blob);
-												myImage.src = objectURL;
-											}
+											if (onChange)
+												onChange({ fileList: [{ originFileObj: file, thumbUrl: imageSrc, url: imageSrc }] });
 										}
 									}}
 								>
@@ -73,21 +69,18 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 						) : (
 							<div>
 								<i className='text-error'>
-									Thiết bị không hỗ trợ camera hoặc chưa cho phép website sử dụng camera. Vui lòng kiểm tra lại
+									Thiết bị không hỗ trợ camera hoặc chưa cho phép website sử dụng camera. Vui lòng kiểm tra lại sau đó
+									Tải lại trang web
 								</i>
 							</div>
 						)
 					}
 				</Webcam>
 
-				<div className='overlay' />
+				{hasDevices ? <div className='overlay' /> : null}
 			</div>
 
-			{hasDevices ? (
-				<div className='image'>
-					<img id='captured' />
-				</div>
-			) : null}
+			{hasDevices ? <div className='image'>{faceUrl ? <img id='captured' src={faceUrl} /> : null}</div> : null}
 		</div>
 	);
 };
