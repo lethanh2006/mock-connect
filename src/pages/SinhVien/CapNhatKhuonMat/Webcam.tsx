@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
 import { useModel } from 'umi';
 import './style.less';
+import classNames from 'classnames';
 
 const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: any }) => {
 	const { initialState } = useModel('@@initialState');
@@ -23,8 +24,8 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 	}, [handleDevices]);
 
 	const videoConstraints = {
-		width: 960,
-		height: 1280,
+		width: { min: 960 },
+		height: { min: 1280 },
 		facingMode: userCamera ? 'user' : 'environment',
 		aspectRatio: 0.75,
 	};
@@ -35,7 +36,7 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 
 	return (
 		<div className='webcam-face-reg'>
-			<div className='webcam'>
+			<div className={classNames({ webcam: true, mirror: userCamera })}>
 				<Webcam
 					audio={false}
 					screenshotFormat='image/jpeg'
