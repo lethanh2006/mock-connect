@@ -8,7 +8,7 @@ import { useModel } from 'umi';
 import WebcamNhanDienKhuonMat from './Webcam';
 
 const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
-	const { formSubmiting, updateFaceRegModel, record, setFormSubmiting } = useModel('sinhvien.sinhvien');
+	const { formSubmiting, updateFaceRegModel, record, setFormSubmiting, setRecord } = useModel('sinhvien.sinhvien');
 	const [segmentValue, setSegmentValue] = useState('upload');
 	const [form] = Form.useForm();
 	const { visible, setVisible } = props;
@@ -28,7 +28,10 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 		}
 		if (!!values.faceRegImgUrl && typeof values.faceRegImgUrl === 'string')
 			updateFaceRegModel(values, () => {})
-				.then(() => setVisible(false))
+				.then(() => {
+					if (record?._id) setRecord({ ...record, faceRegImgUrl: values.faceRegImgUrl });
+					setVisible(false);
+				})
 				.catch(console.log);
 	};
 
@@ -85,7 +88,7 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 
 				<div className='form-footer'>
 					<Button htmlType='submit' type='primary' loading={formSubmiting}>
-						Xác nhận
+						Lưu lại
 					</Button>
 					<Button onClick={() => setVisible(false)}>Hủy</Button>
 				</div>
