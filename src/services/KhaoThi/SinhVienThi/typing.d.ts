@@ -1,4 +1,5 @@
 import type { ChamThi } from '../ChamThi/typings';
+import type { EDinhDangBaiThi } from '../constant';
 import type { ELoaiThi, ETrangThaiChamLai, ETrangThaiSinhVienThi } from './constant';
 
 declare module SinhVienThi {
@@ -38,6 +39,16 @@ declare module SinhVienThi {
 			lyDo: string;
 		};
 		[k: string]: any;
+
+		//
+		thoiGianBatDau: Date;
+		thoiGianKetThuc: Date;
+		dungLuongToiDa: number;
+		ghiChuKhac: string;
+		dinhDangFileChoPhep: EDinhDangBaiThi[];
+
+		daNopBai: boolean;
+		urlBaiNop: string[] | null;
 	}
 
 	export interface IDiemThiHocKySinhVien {
