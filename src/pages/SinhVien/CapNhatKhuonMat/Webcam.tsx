@@ -1,10 +1,10 @@
 import { b64toBlob } from '@/utils/utils';
 import { Button } from 'antd';
+import classNames from 'classnames';
 import { useCallback, useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
 import { useModel } from 'umi';
 import './style.less';
-import classNames from 'classnames';
 
 const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: any }) => {
 	const { initialState } = useModel('@@initialState');
@@ -24,8 +24,10 @@ const WebcamNhanDienKhuonMat = (props: { onChange?: (val: any) => void; value?: 
 	}, [handleDevices]);
 
 	const videoConstraints = {
-		width: { min: 960 },
-		height: { min: 1280 },
+		video: {
+			width: 960,
+			height: 1280,
+		},
 		facingMode: userCamera ? 'user' : 'environment',
 		aspectRatio: 0.75,
 	};
