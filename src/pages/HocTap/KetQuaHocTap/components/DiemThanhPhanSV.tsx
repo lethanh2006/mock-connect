@@ -66,7 +66,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	};
 
 	useEffect(() => {
-		getDauDiem();
+		if (!danhSachDauDiem.length) getDauDiem();
 	}, []);
 
 	useEffect(() => {
