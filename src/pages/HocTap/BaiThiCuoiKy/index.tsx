@@ -64,6 +64,12 @@ const BaiThiCuoiKy = () => {
 			sortable: true,
 		},
 		{
+			title: 'Số lượng file',
+			align: 'center',
+			dataIndex: 'soFilePhaiNop',
+			width: 100,
+		},
+		{
 			title: 'Dung lượng tối đa',
 			align: 'center',
 			dataIndex: 'dungLuongToiDa',

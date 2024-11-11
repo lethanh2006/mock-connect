@@ -36,7 +36,7 @@ const FormBaiThiCuoiKy = (props: any) => {
 				<Row gutter={[12, 12]}>
 					<Col span={24}>
 						<Form.Item rules={[...rules.required]} name='urlBaiNop' label='File bài tập'>
-							<UploadFile maxFileSize={record?.dungLuongToiDa} />
+							<UploadFile maxCount={record?.soFilePhaiNop} maxFileSize={record?.dungLuongToiDa} />
 						</Form.Item>
 					</Col>
 				</Row>
