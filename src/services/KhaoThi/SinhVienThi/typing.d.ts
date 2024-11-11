@@ -43,6 +43,7 @@ declare module SinhVienThi {
 		//
 		thoiGianBatDau: Date;
 		thoiGianKetThuc: Date;
+		soFilePhaiNop: number;
 		dungLuongToiDa: number;
 		ghiChuKhac: string;
 		dinhDangFileChoPhep: EDinhDangBaiThi[];
