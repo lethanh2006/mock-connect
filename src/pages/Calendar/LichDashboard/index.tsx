@@ -157,7 +157,7 @@ const LichDashboard = () => {
 	return (
 		<>
 			<Card
-				className={styles.container}
+				className={styles.dashboard_calendar}
 				loading={loadingSuKien || loadingTKB || loadingThi}
 				title={
 					<div className={styles.title}>
