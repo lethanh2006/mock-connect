@@ -156,6 +156,7 @@
 				],
 			},
 			{ name: 'LichThi', path: 'lich-thi', component: './KhaoThi/LichThi' },
+			{ name: 'BaiThiCuoiKy', path: 'bai-thi-cuoi-ky', component: './HocTap/BaiThiCuoiKy' },
 			{
 				name: 'KetQuaHocTap',
 				path: './ket-qua-hoc-tap',
