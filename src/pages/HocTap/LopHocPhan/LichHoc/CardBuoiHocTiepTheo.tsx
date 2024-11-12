@@ -11,7 +11,8 @@ import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 
 const CardBuoiHocTiepTheo = () => {
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
-	const { getTheoLopHocPhan, setRecord, setVisibleForm, danhSach, loading } = useModel('daotao.thoikhoabieu');
+	const { getTheoLopHocPhan, setRecord, setVisibleForm, danhSach, loading, setDanhSach } =
+		useModel('daotao.thoikhoabieu');
 	const [buoiHocHienTai, setBuoiHocHienTai] = useState<ThoiKhoaBieu.IRecord>();
 	const [buoiHocTiepTheo, setBuoiHocTiepTheo] = useState<ThoiKhoaBieu.IRecord>();
 	const buoiHocTruoc = buoiHocTiepTheo?._id
@@ -20,20 +21,25 @@ const CardBuoiHocTiepTheo = () => {
 			: undefined
 		: danhSach.at(-1);
 
-	const getData = () => {
-		if (recLopHocPhan?.ten)
-			getTheoLopHocPhan(recLopHocPhan.ten).then((data) => {
-				data.every((item) => {
-					// Nếu có 1 buổi học đang diễn ra
-					if (moment().isSameOrAfter(item.thoiGianBatDau) && moment().isSameOrBefore(item.thoiGianKetThuc))
-						setBuoiHocHienTai(item);
-					else if (moment().isBefore(item.thoiGianBatDau)) {
-						setBuoiHocTiepTheo(item);
-						return false;
-					}
-					return true;
-				});
+	const getData = async () => {
+		if (recLopHocPhan?.ten) {
+			// Nếu trong lớp học phần đã populate rồi thì ko get lại TKB nữa
+			const tkbList = recLopHocPhan.thoiKhoaBieuList?.length
+				? _.sortBy(recLopHocPhan.thoiKhoaBieuList, (i) => i.ngay)
+				: await getTheoLopHocPhan(recLopHocPhan.ten);
+			setDanhSach(tkbList);
+
+			tkbList.every((item) => {
+				// Nếu có 1 buổi học đang diễn ra
+				if (moment().isSameOrAfter(item.thoiGianBatDau) && moment().isSameOrBefore(item.thoiGianKetThuc))
+					setBuoiHocHienTai(item);
+				else if (moment().isBefore(item.thoiGianBatDau)) {
+					setBuoiHocTiepTheo(item);
+					return false;
+				}
+				return true;
 			});
+		}
 	};
 
 	useEffect(() => {

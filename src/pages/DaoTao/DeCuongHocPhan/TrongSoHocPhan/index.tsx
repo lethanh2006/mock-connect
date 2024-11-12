@@ -21,7 +21,7 @@ const TrongSoHocPhanPage = () => {
 	const sum = _.sum(ts);
 
 	useEffect(() => {
-		getModel();
+		if (!danhSach.length) getModel();
 	}, []);
 
 	return (

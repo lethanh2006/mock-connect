@@ -1,4 +1,4 @@
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import TabsDeCuongHocPhan from './components/TabsDeCuongHocPhan';
@@ -10,8 +10,8 @@ const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any
 	const deCuongId = props.deCuongId || record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
 
 	useEffect(() => {
-		if (deCuongId) getByIdModel(deCuongId ?? '');
-	}, [deCuongId]);
+		if (deCuongId && visible) getByIdModel(deCuongId ?? '');
+	}, [deCuongId, visible]);
 
 	return (
 		<Modal
@@ -19,11 +19,14 @@ const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any
 			visible={visible}
 			width={1000}
 			onCancel={() => setVisible(false)}
-			okButtonProps={{ hidden: true }}
-			cancelText='Đóng'
+			footer={null}
 			bodyStyle={{ paddingTop: 0 }}
 		>
 			<TabsDeCuongHocPhan />
+
+			<div className='form-footer'>
+				<Button onClick={() => setVisible(false)}>Đóng</Button>
+			</div>
 		</Modal>
 	);
 };

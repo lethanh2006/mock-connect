@@ -130,6 +130,9 @@ export declare module LopHocPhan {
 		/** Khi get all điểm hphk của sinh viên */
 		infoKhoaNganh?: Record<string, TInfoKhoaNganh>; // `maKhoaNganh` 7380101_7_1_2022: { ... }
 
+		/** Đã đánh giá giảng viên? `true` => Cho xem điểm */
+		daDanhGiaGiangVien?: boolean;
+
 		// maKhoaNganh: string;
 		// khoaNganh?: KhoaNganh.IRecord;
 	}

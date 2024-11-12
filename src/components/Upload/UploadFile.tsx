@@ -46,6 +46,7 @@ const UploadFile = (props: {
 	/** Sử dụng khi `isAvatar` hoặc `isAvatarSmall`. */
 	resize?: boolean | TResizeProps;
 	maxFileSize?: number;
+	extra?: JSX.Element;
 }) => {
 	const {
 		value,
@@ -58,6 +59,7 @@ const UploadFile = (props: {
 		isAvatar,
 		isAvatarSmall,
 		maxFileSize = 5,
+		extra,
 	} = props;
 	const limit = props.maxCount || 1;
 	const disabled = props.disabled || props.otherProps?.disabled || false;
@@ -182,7 +184,7 @@ const UploadFile = (props: {
 						</p>
 						<p className='ant-upload-text'>Nhấn chuột hoặc kéo thả tài liệu để tải lên</p>
 						<p className='ant-upload-hint'>{buttonDescription}</p>
-						<Extra />
+						{extra ? extra : <Extra />}
 					</>
 				) : null}
 			</Upload.Dragger>
@@ -217,7 +219,7 @@ const UploadFile = (props: {
 						</div>
 					) : null}
 				</Upload>
-				<Extra />
+				{extra ? extra : <Extra />}
 
 				<Image
 					style={{ display: 'none' }}
@@ -251,7 +253,7 @@ const UploadFile = (props: {
 					</Button>
 				) : null}
 			</Upload>
-			<Extra />
+			{extra ? extra : <Extra />}
 		</>
 	);
 };
