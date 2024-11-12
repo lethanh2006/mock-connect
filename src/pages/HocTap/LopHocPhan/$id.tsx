@@ -121,7 +121,7 @@ const DetailLopTinChi = ({
 			) : tabActive === paths[3] ? (
 				<>
 					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
-					<DetailKetQuaHocTap lopHocPhanId={record?._id} />
+					<DetailKetQuaHocTap lopHocPhanId={record?._id} toDanhGiaGiangVien={() => onChangeTab(paths[4])} />
 				</>
 			) : tabActive === paths[4] ? (
 				<DanhGiaGiangVienPage />

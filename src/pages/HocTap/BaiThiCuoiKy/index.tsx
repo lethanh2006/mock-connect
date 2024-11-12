@@ -94,7 +94,9 @@ const BaiThiCuoiKy = () => {
 			width: 150,
 			render: (val, rec) =>
 				!val ? (
-					<Tag color='red'>Chưa nộp bài</Tag>
+					<div style={{ textAlign: 'center' }}>
+						<Tag color='red'>Chưa nộp bài</Tag>
+					</div>
 				) : (
 					rec?.urlBaiNop?.map((item: any) => (
 						<div key={item} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
