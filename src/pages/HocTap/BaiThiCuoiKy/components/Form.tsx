@@ -20,19 +20,24 @@ const FormBaiThiCuoiKy = (props: any) => {
 		const fileList = values.urlBaiNop?.fileList;
 		const allowedTypes = record?.dinhDangFileChoPhep || [];
 
+		// Kiểm tra loại file hợp lệ
 		if (fileList?.some((file: any) => !allowedTypes.includes(file.type))) {
 			const allowedFormats = allowedTypes.map((item) => mapNameDinhDangBaiThi[item]).join(', ');
 			message.error(`File không đúng định dạng. Định dạng cho phép (${allowedFormats})`);
 			return;
 		}
 
+		// Kiểm tra số lượng file
 		if (fileList?.length !== record?.soFilePhaiNop) {
 			message.error(`Số lượng file bắt buộc ${record?.soFilePhaiNop} file`);
 			return;
 		}
 
 		try {
-			const urlBaiNop = await uploadMultiPartModel(values?.urlBaiNop?.fileList?.[0]?.originFileObj);
+			// Gọi uploadMultiPartModel để tải nhiều file
+			const urlBaiNop = await uploadMultiPartModel(fileList.map((file: any) => file.originFileObj));
+
+			// Xử lý tiếp sau khi upload thành công
 			await nopBaiTapModel(record?._id ?? '', { urlBaiNop }, getData);
 			setVisibleForm(false);
 		} catch (err) {
