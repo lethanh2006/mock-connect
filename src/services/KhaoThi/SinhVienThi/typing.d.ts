@@ -57,4 +57,14 @@ declare module SinhVienThi {
 		diemThi: number;
 		kyThi: string;
 	}
+
+	export type TUploadMultiPartResponse = {
+		fileId: string;
+		multipartPartSize: number;
+		totalPart: number;
+		presignedUrls: {
+			partNumber: number;
+			presignedUrl: string;
+		}[];
+	};
 }

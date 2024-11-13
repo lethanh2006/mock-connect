@@ -1,16 +1,15 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { mapNameDinhDangBaiThi } from '@/services/KhaoThi/constant';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, message, Row } from 'antd';
+import { Button, Card, Col, Form, message, Progress, Row } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const FormBaiThiCuoiKy = (props: any) => {
 	const { getData } = props;
 	const [form] = Form.useForm();
-	const { record, setFormSubmiting, formSubmiting, visibleForm, setVisibleForm, nopBaiTapModel } =
+	const { record, formSubmiting, visibleForm, setVisibleForm, nopBaiTapModel, uploadMultiPartModel, uploadProgress } =
 		useModel('khaothi.sinhvienthi');
 
 	useEffect(() => {
@@ -31,17 +30,14 @@ const FormBaiThiCuoiKy = (props: any) => {
 			message.error(`Số lượng file bắt buộc ${record?.soFilePhaiNop} file`);
 			return;
 		}
-		setFormSubmiting(true);
 
 		try {
-			const urlBaiNop = await buildUpLoadMultiFile(values, 'urlBaiNop');
-			await nopBaiTapModel(record?._id ?? '', { urlBaiNop: urlBaiNop }, getData);
+			const urlBaiNop = await uploadMultiPartModel(values?.urlBaiNop?.fileList?.[0]?.originFileObj);
+			await nopBaiTapModel(record?._id ?? '', { urlBaiNop }, getData);
 			setVisibleForm(false);
 		} catch (err) {
 			console.error(err);
-			message.error('Đã xảy ra lỗi khi nộp bài.');
-		} finally {
-			setFormSubmiting(false);
+			message.error('Đã xảy ra lỗi khi nộp bài');
 		}
 	};
 
@@ -57,7 +53,8 @@ const FormBaiThiCuoiKy = (props: any) => {
 								extra={
 									<small style={{ color: '#999' }}>
 										<i>
-											Số lượng file {record?.soFilePhaiNop}, dung lượng mỗi file không được quá {record?.dungLuongToiDa}
+											Yêu cầu phải nộp {record?.soFilePhaiNop} file, dung lượng mỗi file không được quá{' '}
+											{record?.dungLuongToiDa}
 											MB
 										</i>
 									</small>
@@ -65,6 +62,13 @@ const FormBaiThiCuoiKy = (props: any) => {
 							/>
 						</Form.Item>
 					</Col>
+
+					{formSubmiting && uploadProgress?.totalPart ? (
+						<Col span={24} style={{ textAlign: 'center' }}>
+							<div> Đang upload file, vui lòng chờ đợi và không tắt form ...</div>
+							<Progress percent={(uploadProgress?.success / uploadProgress?.totalPart) * 100} status='active' />
+						</Col>
+					) : null}
 				</Row>
 
 				<div className='form-footer'>
