@@ -10,7 +10,6 @@ import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
 import { EFileScope } from '@/services/uploadFile';
 import { ipKhaoThi } from '@/utils/ip';
 import { message } from 'antd';
-import pLimit from 'p-limit';
 import { extname } from 'path';
 import { useState } from 'react';
 
@@ -63,51 +62,70 @@ export default () => {
 		}
 	};
 
-	const uploadMultiPartModel = async (file: any, scope: EFileScope = EFileScope.PUBLIC): Promise<string> => {
-		if (formSubmiting) return Promise.reject('form submiting');
+	const uploadMultiPartModel = async (files: any[], scope: EFileScope = EFileScope.PUBLIC): Promise<string[]> => {
+		if (formSubmiting) return Promise.reject('form submitting');
 		setFormSubmiting(true);
 
+		// Mảng lưu URL của các file đã upload thành công
+		const uploadUrls: string[] = [];
+		const uploadPromises = files.map(async (file: any) => {
+			try {
+				// Khởi tạo tải lên nhiều phần và lấy về các URL presigned cho từng phần của tệp
+				const res = await initFileMultiPart({
+					filename: file?.name,
+					size: file?.size,
+					mimetype: file?.type,
+					ext: extname(file?.name).toLowerCase(),
+					scope,
+				});
+				const response = res.data.data as SinhVienThi.TUploadMultiPartResponse;
+				if (!response.fileId) return Promise.reject('Có lỗi trong quá trình upload file');
+
+				setUploadProgress({ totalPart: response.totalPart, success: 0 });
+
+				// Lấy kích thước chunk size từ server
+				const chunkSize = response.multipartPartSize;
+				const totalParts = Math.ceil(file.size / chunkSize);
+				const parts: TUploadCompletePart[] = [];
+
+				// Tải lên từng phần của file
+				for (let partNumber = 0; partNumber < totalParts; partNumber++) {
+					const start = partNumber * chunkSize;
+					const end = Math.min(start + chunkSize, file.size);
+					const chunk = file.slice(start, end);
+					const arrayBuffer = await chunk.arrayBuffer();
+
+					// Tải phần lên server
+					const uploadRes = await uploadFileMultiPart(response.presignedUrls[partNumber].presignedUrl, arrayBuffer);
+
+					// Lưu lại thông tin phần đã tải lên
+					parts.push({ etag: uploadRes.headers.etag, part: partNumber + 1 });
+
+					// Cập nhật tiến trình
+					setUploadProgress((progress) => ({
+						totalPart: progress?.totalPart ?? totalParts,
+						success: (progress?.success ?? 0) + 1,
+					}));
+				}
+
+				// Hoàn thành upload nhiều phần của file
+				const resComplete = await uploadFileMultiPartComplete({
+					fileId: response?.fileId,
+					parts,
+				});
+				uploadUrls.push(resComplete?.data?.data?.url);
+			} catch (err) {
+				console.error(err);
+				throw err;
+			}
+		});
+
+		// Đợi tất cả các file tải lên
 		try {
-			const res = await initFileMultiPart({
-				filename: file?.name,
-				size: file?.size,
-				mimetype: file?.type,
-				ext: extname(file?.name).toLowerCase(),
-				scope,
-			});
-			const response = res.data.data as SinhVienThi.TUploadMultiPartResponse;
-			if (!response.fileId) return Promise.reject('Có lỗi trong quá trình upload file');
-			setUploadProgress({ totalPart: response.totalPart, success: 0 });
-
-			const arrayBuffer = await file.arrayBuffer(); // Convert to arraybuffer
-			const limit = pLimit(4); // Giới hạn tối đa upload 4 part cùng lúc
-			const parts: TUploadCompletePart[] = await Promise.all(
-				response.presignedUrls.map((presigned) =>
-					limit(async () => {
-						// Start index of current part in file
-						const startIndex = presigned.partNumber * response.multipartPartSize;
-						const newEnd = Math.min(startIndex + response.multipartPartSize, file?.size);
-						const chunk = arrayBuffer.slice(startIndex, newEnd); // Split file into multiple `chunk`
-						// Upload part hiện tại lên presigned url
-						const uploadRes = await uploadFileMultiPart(presigned.presignedUrl, chunk);
-
-						setUploadProgress((progress) => ({
-							totalPart: progress?.totalPart ?? 0,
-							success: (progress?.success ?? 0) + 1,
-						}));
-						return { etag: uploadRes.headers.etag, part: presigned.partNumber };
-					}),
-				),
-			);
-
-			// Call complete: Kiểm tra nếu tất cả các phần đều upload thành công thì mới complete
-			const resComplete = await uploadFileMultiPartComplete({
-				fileId: response?.fileId,
-				parts,
-			});
-			return resComplete?.data?.data?.url;
-		} catch (er) {
-			return Promise.reject(er);
+			await Promise.all(uploadPromises);
+			return uploadUrls;
+		} catch (error) {
+			return Promise.reject(error);
 		} finally {
 			setFormSubmiting(false);
 		}
