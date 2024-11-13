@@ -39,7 +39,7 @@ const BaiThiCuoiKy = () => {
 			filterType: 'string',
 		},
 		{
-			title: 'Mã học phần',
+			title: 'Mã HP',
 			align: 'center',
 			dataIndex: 'maHocPhan',
 			width: 90,
@@ -64,7 +64,7 @@ const BaiThiCuoiKy = () => {
 			sortable: true,
 		},
 		{
-			title: 'Số lượng file',
+			title: 'SL tập tin phải nộp',
 			align: 'center',
 			dataIndex: 'soFilePhaiNop',
 			width: 100,
@@ -155,6 +155,7 @@ const BaiThiCuoiKy = () => {
 				hideCard
 				Form={Form}
 				formProps={{ getData }}
+				destroyModal
 			/>
 		</Card>
 	);
