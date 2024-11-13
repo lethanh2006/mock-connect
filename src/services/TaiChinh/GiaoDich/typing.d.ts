@@ -90,4 +90,11 @@ declare module GiaoDich {
 		totalOut: number;
 		totalRemain: number;
 	};
+
+	export type TSetting = {
+		_id?: string;
+		tienToTaiKhoan?: string;
+		maNganHang?: string;
+		urlHuongDanThanhToan?: string;
+	};
 }

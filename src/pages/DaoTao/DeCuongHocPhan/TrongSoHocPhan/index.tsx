@@ -13,6 +13,7 @@ const TrongSoHocPhanPage = () => {
 			if (recDeCuong?.[`trongSo${i}` as keyof HocPhan.IDeCuongHocPhan])
 				thongTinTrongSo.push({
 					trongSo: recDeCuong?.[`trongSo${i}` as keyof HocPhan.IDeCuongHocPhan] as number,
+					field: i,
 				});
 		}
 	}
@@ -29,12 +30,12 @@ const TrongSoHocPhanPage = () => {
 			{thongTinTrongSo?.length
 				? thongTinTrongSo?.map((item, index) => (
 						// eslint-disable-next-line react/no-array-index-key
-						<Descriptions.Item label={danhSach[index]?.ten} key={index}>
+						<Descriptions.Item label={`Điểm thành phần ${index + 1}`} key={index}>
+							Mô tả: {item?.moTa ?? danhSach.find((i) => i.field === item.field)?.ten ?? danhSach[index]?.ten ?? '--'}
+							<br />
 							Trọng số: <b>{item?.trongSo}%</b>
 							<br />
 							Hình thức đánh giá: {item?.hinhThucDanhGia ?? '--'}
-							<br />
-							Mô tả: {item?.moTa ?? '--'}
 						</Descriptions.Item>
 				  ))
 				: null}
