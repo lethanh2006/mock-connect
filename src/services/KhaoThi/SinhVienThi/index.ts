@@ -18,6 +18,9 @@ export async function initFileMultiPart(payload: {
 	size: number;
 	mimetype: string;
 	ext: string;
+	maHocKy?: string;
+	maKyThi?: string;
+	maHocPhan?: string;
 	scope: EFileScope;
 }) {
 	return axios.post(`${ipKhaoThi}/file/multipart/init`, payload);

@@ -1,5 +1,6 @@
 import type { ChamThi } from '../ChamThi/typings';
 import type { EDinhDangBaiThi } from '../constant';
+import type { KyThi } from '../KyThi/typings';
 import type { ELoaiThi, ETrangThaiChamLai, ETrangThaiSinhVienThi } from './constant';
 
 declare module SinhVienThi {
