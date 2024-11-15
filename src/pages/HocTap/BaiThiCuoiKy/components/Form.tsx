@@ -35,7 +35,14 @@ const FormBaiThiCuoiKy = (props: any) => {
 
 		try {
 			// Gọi uploadMultiPartModel để tải nhiều file
-			const urlBaiNop = await uploadMultiPartModel(fileList.map((file: any) => file.originFileObj));
+			const urlBaiNop = await uploadMultiPartModel(
+				fileList.map((file: any) => file.originFileObj),
+				{
+					maHocKy: record?.maHocKyHoc ?? '',
+					maKyThi: record?.kyThiId ?? '',
+					maHocPhan: record?.maHocPhan ?? '',
+				},
+			);
 
 			// Xử lý tiếp sau khi upload thành công
 			await nopBaiTapModel(record?._id ?? '', { urlBaiNop }, getData);
