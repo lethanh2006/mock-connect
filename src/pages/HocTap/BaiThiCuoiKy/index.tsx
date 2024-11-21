@@ -46,7 +46,7 @@ const BaiThiCuoiKy = () => {
 			filterType: 'string',
 		},
 		{
-			title: 'Đề tài',
+			title: 'Đề bài',
 			dataIndex: 'fileDinhKem',
 			width: 150,
 			render: (val, rec) =>
