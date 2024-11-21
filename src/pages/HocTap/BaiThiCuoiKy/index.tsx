@@ -46,6 +46,22 @@ const BaiThiCuoiKy = () => {
 			filterType: 'string',
 		},
 		{
+			title: 'Đề tài',
+			dataIndex: 'fileDinhKem',
+			width: 150,
+			render: (val, rec) =>
+				rec?.fileDinhKem
+					? rec?.fileDinhKem?.map((item: any) => (
+							<div key={item} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+								-{' '}
+								<a href={item} target='_blank' rel='noreferrer'>
+									{getNameFile(item)}
+								</a>
+							</div>
+					  ))
+					: null,
+		},
+		{
 			title: 'Thời gian bắt đầu',
 			align: 'center',
 			dataIndex: 'thoiGianBatDau',
