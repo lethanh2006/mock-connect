@@ -40,6 +40,7 @@ declare module SinhVienThi {
 			lyDo: string;
 		};
 		[k: string]: any;
+		fileDinhKem: string[] | null;
 
 		//
 		thoiGianBatDau: Date;
