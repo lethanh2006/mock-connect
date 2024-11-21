@@ -50,7 +50,7 @@ const BaiThiCuoiKy = () => {
 			dataIndex: 'fileDinhKem',
 			width: 150,
 			render: (val, rec) =>
-				rec?.fileDinhKem
+				rec?.fileDinhKem?.length
 					? rec?.fileDinhKem?.map((item: any) => (
 							<div key={item} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
 								-{' '}
