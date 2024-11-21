@@ -62,7 +62,15 @@ export default () => {
 		}
 	};
 
-	const uploadMultiPartModel = async (files: any[], scope: EFileScope = EFileScope.PUBLIC): Promise<string[]> => {
+	const uploadMultiPartModel = async (
+		files: any[],
+		payLoad: {
+			maHocKy: string;
+			maKyThi: string;
+			maHocPhan: string;
+		},
+		scope: EFileScope = EFileScope.PUBLIC,
+	): Promise<string[]> => {
 		if (formSubmiting) return Promise.reject('form submitting');
 		setFormSubmiting(true);
 
@@ -76,6 +84,9 @@ export default () => {
 					size: file?.size,
 					mimetype: file?.type,
 					ext: extname(file?.name).toLowerCase(),
+					maHocKy: payLoad.maHocKy,
+					maKyThi: payLoad.maKyThi,
+					maHocPhan: payLoad.maHocPhan,
 					scope,
 				});
 				const response = res.data.data as SinhVienThi.TUploadMultiPartResponse;
