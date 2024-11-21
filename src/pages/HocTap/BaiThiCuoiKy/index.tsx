@@ -48,11 +48,11 @@ const BaiThiCuoiKy = () => {
 		{
 			title: 'Đề bài',
 			dataIndex: 'fileDinhKem',
-			width: 150,
+			width: 300,
 			render: (val, rec) =>
 				rec?.fileDinhKem?.length
 					? rec?.fileDinhKem?.map((item: any) => (
-							<div key={item} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+							<div key={item} style={{ maxWidth: 300 }}>
 								-{' '}
 								<a href={item} target='_blank' rel='noreferrer'>
 									{getNameFile(item)}
