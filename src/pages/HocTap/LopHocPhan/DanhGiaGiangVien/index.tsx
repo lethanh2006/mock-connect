@@ -22,7 +22,7 @@ const DanhGiaGiangVienPage = () => {
 
 	const getDotHienTai = () => {
 		setLoading(true);
-		getDotDanhGiaGiangVien(recLopHocPhan?.hocKy?.ma ?? '')
+		getDotDanhGiaGiangVien(recLopHocPhan?.maHocKy ?? '')
 			.then((res: any) => {
 				setRecord(res?.data?.data);
 			})
