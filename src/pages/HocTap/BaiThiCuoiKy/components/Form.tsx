@@ -16,12 +16,23 @@ const FormBaiThiCuoiKy = (props: any) => {
 		if (!visibleForm) resetFieldsForm(form);
 	}, [visibleForm]);
 
+	const isMimeTypeMatched = (fileType: string, allowedType: string): boolean => {
+		const fileKeywords = fileType.toLowerCase().split(/[\/\-;]/);
+		const allowedKeywords = allowedType.toLowerCase().split(/[\/\-;]/);
+
+		return allowedKeywords.every((keyword) => fileKeywords.includes(keyword));
+	};
+
 	const onFinish = async (values: any) => {
 		const fileList = values.urlBaiNop?.fileList;
 		const allowedTypes = record?.dinhDangFileChoPhep || [];
 
 		// Kiểm tra loại file hợp lệ
-		if (fileList?.some((file: any) => !allowedTypes.includes(file.type))) {
+		const invalidFiles = fileList?.filter(
+			(file: any) => !allowedTypes.some((allowedType) => isMimeTypeMatched(file.type, allowedType)),
+		);
+
+		if (invalidFiles?.length) {
 			const allowedFormats = allowedTypes.map((item) => mapNameDinhDangBaiThi[item]).join(', ');
 			message.error(`File không đúng định dạng. Định dạng cho phép (${allowedFormats})`);
 			return;
