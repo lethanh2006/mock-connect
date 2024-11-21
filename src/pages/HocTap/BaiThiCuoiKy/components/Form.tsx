@@ -89,7 +89,10 @@ const FormBaiThiCuoiKy = (props: any) => {
 					{formSubmiting && uploadProgress?.totalPart ? (
 						<Col span={24} style={{ textAlign: 'center' }}>
 							<div> Đang upload file, vui lòng chờ đợi và không tắt form ...</div>
-							<Progress percent={(uploadProgress?.success / uploadProgress?.totalPart) * 100} status='active' />
+							<Progress
+								percent={Math.round((uploadProgress?.success / uploadProgress?.totalPart) * 100)}
+								status='active'
+							/>
 						</Col>
 					) : null}
 				</Row>
