@@ -26,7 +26,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 	}, [visibleForm]);
 
 	const onFinish = async (values: HocPhanNhuCau.IRecord) => {
-		if (!!selectedIds?.length) {
+		if (!selectedIds?.length) {
 			message.error('Vui lòng chọn học phần!');
 			return;
 		}
