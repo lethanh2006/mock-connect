@@ -460,9 +460,9 @@ export const compareFullname = (a: any, b: any): number => {
 	if (typeof a !== 'string' || typeof b !== 'string') return 0;
 	const tenA = a.split(' ').pop()?.toLocaleLowerCase() ?? '';
 	const tenB = b.split(' ').pop()?.toLocaleLowerCase() ?? '';
-	const compareTen = tenA.localeCompare(tenB);
+	const compareTen = tenA.localeCompare(tenB, 'vi');
 
-	return compareTen === 0 ? a.toLocaleLowerCase().localeCompare(b.toLocaleLowerCase()) : compareTen;
+	return compareTen === 0 ? a.toLocaleLowerCase().localeCompare(b.toLocaleLowerCase(), 'vi') : compareTen;
 };
 
 /**
