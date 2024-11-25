@@ -51,11 +51,11 @@ const DetailKetQuaHocTap = (props: {
 									{recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk] ?? '--'}
 								</Descriptions.Item>
 							))}
-							<Descriptions.Item label='ĐKDT'>
+							{/* <Descriptions.Item label='ĐKDT'>
 								<span style={{ color: recDiem?.trangThaiThi === ETrangThaiThi.CAM_THI ? 'red' : undefined }}>
 									{recDiem?.trangThaiThi ?? '--'}
 								</span>
-							</Descriptions.Item>
+							</Descriptions.Item> */}
 							<Descriptions.Item label='Điểm thi'>{recDiem?.diemThi1 ?? '--'}</Descriptions.Item>
 							{/* <Descriptions.Item label='Điểm thẩm định'>{recDiem?.diemThamDinh ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Điểm phúc khảo'>{recDiem?.diemPhucKhao ?? '--'}</Descriptions.Item> */}
