@@ -3,7 +3,6 @@ import type { IColumn } from '@/components/Table/typing';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT, ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import '../style.less';
 
@@ -16,13 +15,11 @@ const TrongCTDT = (props: {
 	const { data } = props;
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
 	const { record: recDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
-	const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
 
 	const datas = [
 		...(data?.danhSachHocPhanDungTienTrinh ?? []),
 		...(data?.danhSachHocPhanCtdt ?? []).filter(
-			(itemCtdt) =>
-				!data?.danhSachHocPhanDungTienTrinh?.some((itemDungTien) => itemDungTien.maHocPhan === itemCtdt.maHocPhan),
+			(itemCtdt) => !data?.danhSachHocPhanDungTienTrinh?.some((itemDungTien) => itemDungTien._id === itemCtdt._id),
 		),
 	];
 
@@ -35,22 +32,6 @@ const TrongCTDT = (props: {
 		};
 		return statusOrder[a.hoc] - statusOrder[b.hoc];
 	});
-
-	useEffect(() => {
-		const autoExpandKeys = selectedIds
-			?.map((id) => {
-				const matchingItem = datas.find(
-					(item) =>
-						item.maHocPhan === id ||
-						item._id === id ||
-						item.hocPhanCtdtList?.some((subItem) => subItem.maHocPhan === id),
-				);
-				return matchingItem?._id;
-			})
-			.filter(Boolean) as React.Key[];
-
-		setExpandedRowKeys(autoExpandKeys);
-	}, [selectedIds, JSON.stringify(data)]);
 
 	const columns: IColumn<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>[] = [
 		{
@@ -82,10 +63,6 @@ const TrongCTDT = (props: {
 			render: (val, rec) => trangThaiHocTap[rec?.hoc],
 		},
 	];
-
-	const onExpandedRowsChange = (item: React.Key[]) => {
-		setExpandedRowKeys(item);
-	};
 
 	return (
 		<TableStaticData
@@ -185,8 +162,6 @@ const TrongCTDT = (props: {
 					rowExpandable: (record: any) =>
 						record.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && record.hocPhanCtdtList?.length > 0,
 					columnWidth: 40,
-					expandedRowKeys,
-					onExpandedRowsChange: onExpandedRowsChange,
 				},
 			}}
 		/>

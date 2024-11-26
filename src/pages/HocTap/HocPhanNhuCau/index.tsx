@@ -145,11 +145,11 @@ const DangKyNhuCauHocPhan = () => {
 								return (
 									<Table.Summary fixed>
 										<Table.Summary.Row>
-											<Table.Summary.Cell align='center' index={0} colSpan={8}>
-												<i>
+											<Table.Summary.Cell index={0} colSpan={8}>
+												<span>
 													Tổng số tín chỉ: <b>{tongSTC}</b> tín chỉ, trong đó <b>{hpTrongTienTrinh}</b> tín chỉ trong
 													tiến trình và <b>{hpNgoaiTienTrinh}</b> tín chỉ ngoài tiến trình
-												</i>
+												</span>
 											</Table.Summary.Cell>
 										</Table.Summary.Row>
 									</Table.Summary>
