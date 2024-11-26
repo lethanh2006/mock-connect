@@ -3,6 +3,11 @@ export enum ETrangThaiSinhVienDangKyHocPhanNhuCau {
 	DA_DUYET = 'Đã duyệt',
 }
 
+export const mapNameTrangThaiSinhVienDangKyHocPhanNhuCau: Record<ETrangThaiSinhVienDangKyHocPhanNhuCau, string> = {
+	[ETrangThaiSinhVienDangKyHocPhanNhuCau.CHUA_DUYET]: 'Chờ CVHT duyệt',
+	[ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET]: 'Đã duyệt',
+};
+
 export const colorTrangThaiSinhVienDangKyHocPhanNhuCau: Record<ETrangThaiSinhVienDangKyHocPhanNhuCau, string> = {
 	[ETrangThaiSinhVienDangKyHocPhanNhuCau.CHUA_DUYET]: 'blue',
 	[ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET]: 'green',
@@ -13,3 +18,9 @@ export enum ETinhChatHocPhanNhuCau {
 	TRONG_CTDT = 'Trong chương trình đào tạo',
 	NGOAI_CTDT = 'Ngoài chương trình đào tạo',
 }
+
+export const mapNameETinhChatHocPhanNhuCau: Record<ETinhChatHocPhanNhuCau, string> = {
+	[ETinhChatHocPhanNhuCau.TRONG_TIEN_TRINH]: 'HP trong tiến trình',
+	[ETinhChatHocPhanNhuCau.TRONG_CTDT]: 'HP trong tiến trình',
+	[ETinhChatHocPhanNhuCau.NGOAI_CTDT]: 'HP ngoài tiến trình',
+};
