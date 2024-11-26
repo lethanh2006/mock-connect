@@ -135,7 +135,7 @@ const DangKyNhuCauHocPhan = () => {
 					<FormHocPhanDangKyNhuCau getData={getData} ngoaiThoiGian={ngoaiThoiGian} />
 				</>
 			) : (
-				<Empty description='Không tồn tại đợt đăng ký nhu cầu học phần' style={{ margin: '18px 0px' }} />
+				<Empty description='Không có đợt đăng ký nhu cầu học phần' style={{ margin: '18px 0px' }} />
 			)}
 		</Card>
 	);
