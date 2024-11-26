@@ -59,8 +59,8 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 							<Descriptions.Item label='Đợt đăng ký nhu cầu'>{recDot?.tenDot ?? '--'}</Descriptions.Item>
 						</Descriptions>
 						<div style={{ marginBottom: 12 }}>
-							<i style={{ color: '#007EB9' }}>
-								Số lượng học phần cho phép đăng ký ngoài tiến trình trong đợt tối đa :{' '}
+							<i style={{ color: 'red' }}>
+								Số lượng học phần cho phép đăng ký ngoài tiến trình trong đợt tối đa:{' '}
 								<b>{recDot?.soHocPhanDangKyNgoaiTienTrinh}</b> học phần
 							</i>
 						</div>

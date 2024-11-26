@@ -3,10 +3,17 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { colorTrangThaiSinhVienDangKyHocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/constant';
+import {
+	colorTrangThaiSinhVienDangKyHocPhanNhuCau,
+	ETinhChatHocPhanNhuCau,
+	ETrangThaiSinhVienDangKyHocPhanNhuCau,
+	mapNameETinhChatHocPhanNhuCau,
+	mapNameTrangThaiSinhVienDangKyHocPhanNhuCau,
+} from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Card, Empty, Space } from 'antd';
+import { Alert, Card, Empty, Space, Table } from 'antd';
+import _ from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -37,6 +44,7 @@ const DangKyNhuCauHocPhan = () => {
 			dataIndex: 'maHocPhan',
 			width: 100,
 			align: 'center',
+			filterType: 'string',
 		},
 		{
 			title: 'Tên học phần',
@@ -56,6 +64,7 @@ const DangKyNhuCauHocPhan = () => {
 			dataIndex: 'tinhChatHocPhan',
 			width: 150,
 			align: 'center',
+			render: (val, rec) => mapNameETinhChatHocPhanNhuCau[val as ETinhChatHocPhanNhuCau],
 		},
 	];
 
@@ -63,12 +72,12 @@ const DangKyNhuCauHocPhan = () => {
 		<Card title='Đăng ký nhu cầu học phần'>
 			<Space wrap style={{ marginBottom: 12 }}>
 				<FilterHocKy isSetHocKy>
-					<SelectSongNganh style={{ width: 200 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
 					<SelectDotDangKyHocPhanNhuCau
 						isSetRecord
 						value={recDot?._id}
 						onChange={(val) => setRecDot(danhSachDot.find((item) => item._id === val))}
-						style={{ width: 200 }}
+						style={{ width: 250 }}
 					/>
 				</FilterHocKy>
 			</Space>
@@ -93,7 +102,7 @@ const DangKyNhuCauHocPhan = () => {
 					/>
 					{danhSach?.length ? (
 						<div style={{ marginBottom: 12 }}>
-							<i>
+							<span>
 								Trạng thái đăng ký nhu cầu học phần:{' '}
 								<b
 									style={{
@@ -101,15 +110,59 @@ const DangKyNhuCauHocPhan = () => {
 											colorTrangThaiSinhVienDangKyHocPhanNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai],
 									}}
 								>
-									{danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai}
+									{mapNameTrangThaiSinhVienDangKyHocPhanNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai]}
 								</b>
-								. Ý kiến cố vấn học tập : {danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.ghiChuCVHT ?? 'Chưa có ý kiến'}
-							</i>
+							</span>
+							<br />
+							<span>
+								Ý kiến cố vấn học tập : {danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.ghiChuCVHT ?? 'Chưa có ý kiến'}
+							</span>
 						</div>
 					) : null}
-					<TableStaticData columns={columns} data={danhSach} loading={loading} addStt hasTotal>
+					<TableStaticData
+						columns={columns}
+						data={danhSach}
+						loading={loading}
+						addStt
+						hasTotal
+						otherProps={{
+							scroll: { y: 500 },
+							pagination: false,
+							summary: (pageData: HocPhanNhuCau.IRecord[]) => {
+								const tongSTC = _.sumBy(pageData, (item) => item?.soTinChi);
+								const hpTrongTienTrinh = _.sumBy(
+									pageData?.filter(
+										(item) =>
+											item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.TRONG_TIEN_TRINH &&
+											item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.TRONG_TIEN_TRINH,
+									),
+									(item) => item?.soTinChi,
+								);
+								const hpNgoaiTienTrinh = _.sumBy(
+									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.NGOAI_CTDT),
+									(item) => item?.soTinChi,
+								);
+								return (
+									<Table.Summary fixed>
+										<Table.Summary.Row>
+											<Table.Summary.Cell align='center' index={0} colSpan={8}>
+												<i>
+													Tổng số tín chỉ: <b>{tongSTC}</b> tín chỉ, trong đó <b>{hpTrongTienTrinh}</b> tín chỉ trong
+													tiến trình và <b>{hpNgoaiTienTrinh}</b> tín chỉ ngoài tiến trình
+												</i>
+											</Table.Summary.Cell>
+										</Table.Summary.Row>
+									</Table.Summary>
+								);
+							},
+						}}
+					>
 						<Space>
 							<ButtonExtend
+								disabled={
+									danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai ===
+										ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET || ngoaiThoiGian
+								}
 								onClick={() => {
 									setVisibleForm(true);
 								}}
