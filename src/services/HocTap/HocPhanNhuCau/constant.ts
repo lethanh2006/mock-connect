@@ -3,6 +3,11 @@ export enum ETrangThaiSinhVienDangKyHocPhanNhuCau {
 	DA_DUYET = 'Đã duyệt',
 }
 
+export const mapNameTrangThaiSinhVienDangKyHocPhanNhuCau: Record<ETrangThaiSinhVienDangKyHocPhanNhuCau, string> = {
+	[ETrangThaiSinhVienDangKyHocPhanNhuCau.CHUA_DUYET]: 'Chờ CVHT duyệt',
+	[ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET]: 'Đã duyệt',
+};
+
 export const colorTrangThaiSinhVienDangKyHocPhanNhuCau: Record<ETrangThaiSinhVienDangKyHocPhanNhuCau, string> = {
 	[ETrangThaiSinhVienDangKyHocPhanNhuCau.CHUA_DUYET]: 'blue',
 	[ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET]: 'green',

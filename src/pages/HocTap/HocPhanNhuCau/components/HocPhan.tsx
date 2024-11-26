@@ -70,25 +70,26 @@ const HocPhanCTDT = (props: { segment: string }) => {
 		}
 	}, [JSON.stringify(danhSach), JSON.stringify(danhSachTrong)]);
 
-	const soHocPhanDungTienTrinh = selectedIds?.filter((id) =>
-		danhSachTrong?.danhSachHocPhanDungTienTrinh?.some((item) => item.maHocPhan === id),
-	).length;
+	const datas = [
+		...(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []),
+		...(danhSachTrong?.danhSachHocPhanCtdt ?? []).filter(
+			(itemCtdt) =>
+				!danhSachTrong?.danhSachHocPhanDungTienTrinh?.some(
+					(itemDungTien) => itemDungTien.maHocPhan === itemCtdt.maHocPhan,
+				),
+		),
+	];
 
-	const soHocPhanNgoaiTienTrinh = selectedIds?.filter(
-		(id) =>
-			!danhSachTrong?.danhSachHocPhanDungTienTrinh?.some((item) => item.maHocPhan === id) &&
-			!danhSachTrong?.danhSachHocPhanCtdt?.some((item) => item.maHocPhan === id),
-	).length;
+	const soHPTrongTienTrinh = selectedIds?.filter((id) => datas?.some((item) => item.maHocPhan === id)).length;
 
-	const soHocPhanNgoaiCTDT = selectedIds?.filter((id) => danhSachNgoai?.some((item) => item.ma === id)).length;
+	const soHPNgoaiTienTrinh = selectedIds?.filter((id) => danhSachNgoai?.some((item) => item.ma === id)).length;
 
 	return (
 		<Spin spinning={loadingTrong || loadingNgoai}>
 			{selectedIds?.length ? (
 				<i style={{ marginBottom: 8 }}>
-					Bạn đã đăng ký <b>{selectedIds?.length ?? 0}</b> học phần, trong đó có <b>{soHocPhanDungTienTrinh ?? 0}</b> HP
-					đúng tiến trình, <b>{soHocPhanNgoaiTienTrinh ?? 0}</b> HP ngoài tiến trình và <b>{soHocPhanNgoaiCTDT ?? 0}</b>{' '}
-					học phần ngoài CTĐT.
+					Bạn đã đăng ký <b>{selectedIds?.length ?? 0}</b> học phần, trong đó có <b>{soHPTrongTienTrinh ?? 0}</b> HP
+					trong tiến trình và <b>{soHPNgoaiTienTrinh ?? 0}</b> HP ngoài tiến trình.
 				</i>
 			) : null}
 
