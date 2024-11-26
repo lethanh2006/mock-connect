@@ -34,7 +34,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 		const data = {
 			maKhoaNganh: maKhoaNganh ?? '',
 			dotDangKyHocPhanNhuCauId: recDot?._id ?? '',
-			danhSachHocPhan: selectedIds ?? [],
+			danhSachHocPhan: selectedIds?.filter(Boolean) ?? [],
 		};
 		await dangKyHocPhanNhuCauNModel(data, getData)
 			.then(() => setVisibleForm(false))
