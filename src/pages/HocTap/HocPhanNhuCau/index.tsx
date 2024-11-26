@@ -123,6 +123,8 @@ const DangKyNhuCauHocPhan = () => {
 						addStt
 						hasTotal
 						otherProps={{
+							scroll: { y: 500 },
+							pagination: false,
 							summary: (pageData: HocPhanNhuCau.IRecord[]) => {
 								const tongSTC = _.sumBy(pageData, (item) => item?.soTinChi);
 								return (
