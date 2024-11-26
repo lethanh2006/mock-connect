@@ -18,3 +18,9 @@ export enum ETinhChatHocPhanNhuCau {
 	TRONG_CTDT = 'Trong chương trình đào tạo',
 	NGOAI_CTDT = 'Ngoài chương trình đào tạo',
 }
+
+export const mapNameETinhChatHocPhanNhuCau: Record<ETinhChatHocPhanNhuCau, string> = {
+	[ETinhChatHocPhanNhuCau.TRONG_TIEN_TRINH]: 'HP trong tiến trình',
+	[ETinhChatHocPhanNhuCau.TRONG_CTDT]: 'HP trong tiến trình',
+	[ETinhChatHocPhanNhuCau.NGOAI_CTDT]: 'HP ngoài tiến trình',
+};

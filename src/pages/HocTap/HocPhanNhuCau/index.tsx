@@ -5,7 +5,9 @@ import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import {
 	colorTrangThaiSinhVienDangKyHocPhanNhuCau,
+	ETinhChatHocPhanNhuCau,
 	ETrangThaiSinhVienDangKyHocPhanNhuCau,
+	mapNameETinhChatHocPhanNhuCau,
 	mapNameTrangThaiSinhVienDangKyHocPhanNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
@@ -62,6 +64,7 @@ const DangKyNhuCauHocPhan = () => {
 			dataIndex: 'tinhChatHocPhan',
 			width: 150,
 			align: 'center',
+			render: (val, rec) => mapNameETinhChatHocPhanNhuCau[val as ETinhChatHocPhanNhuCau],
 		},
 	];
 
@@ -127,11 +130,26 @@ const DangKyNhuCauHocPhan = () => {
 							pagination: false,
 							summary: (pageData: HocPhanNhuCau.IRecord[]) => {
 								const tongSTC = _.sumBy(pageData, (item) => item?.soTinChi);
+								const hpTrongTienTrinh = _.sumBy(
+									pageData?.filter(
+										(item) =>
+											item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.TRONG_TIEN_TRINH &&
+											item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.TRONG_TIEN_TRINH,
+									),
+									(item) => item?.soTinChi,
+								);
+								const hpNgoaiTienTrinh = _.sumBy(
+									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.NGOAI_CTDT),
+									(item) => item?.soTinChi,
+								);
 								return (
 									<Table.Summary fixed>
 										<Table.Summary.Row>
 											<Table.Summary.Cell align='center' index={0} colSpan={8}>
-												<b>Tổng số tín chỉ: {tongSTC} tín chỉ</b>
+												<i>
+													Tổng số tín chỉ: <b>{tongSTC}</b> tín chỉ, trong đó <b>{hpTrongTienTrinh}</b> tín chỉ trong
+													tiến trình và <b>{hpNgoaiTienTrinh}</b> tín chỉ ngoài tiến trình
+												</i>
 											</Table.Summary.Cell>
 										</Table.Summary.Row>
 									</Table.Summary>
