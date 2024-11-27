@@ -7,7 +7,6 @@ import {
 	colorTrangThaiSinhVienDangKyHocPhanNhuCau,
 	ETinhChatHocPhanNhuCau,
 	ETrangThaiSinhVienDangKyHocPhanNhuCau,
-	mapNameETinhChatHocPhanNhuCau,
 	mapNameTrangThaiSinhVienDangKyHocPhanNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
@@ -60,17 +59,17 @@ const DangKyNhuCauHocPhan = () => {
 			sortable: true,
 		},
 		{
-			title: 'Tính chất học phần',
-			dataIndex: 'tinhChatHocPhan',
-			width: 150,
-			align: 'center',
-			render: (val, rec) => mapNameETinhChatHocPhanNhuCau[val as ETinhChatHocPhanNhuCau],
-		},
-		{
 			title: 'Theo tiến trình',
 			align: 'center',
 			width: 80,
-			render: (val, rec) => <Checkbox checked={rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH} />,
+			render: (val, rec) => (
+				<Checkbox
+					checked={
+						rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH ||
+						rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.NGOAI_TIEN_TRINH
+					}
+				/>
+			),
 		},
 	];
 
@@ -153,9 +152,9 @@ const DangKyNhuCauHocPhan = () => {
 										<Table.Summary.Row>
 											<Table.Summary.Cell index={0} colSpan={8}>
 												<span>
-													Tổng số tín chỉ: <b>{tongSTC}</b> tín chỉ, trong đó <b>{hpDungTienTrinh}</b> tín chỉ HP đúng
-													tiến trình, <b>{hpNgoaiTienTrinh}</b> tín chỉ HP ngoài tiến trình và <b>{hpKhac}</b> tín chỉ
-													HP khác
+													Tổng số tín chỉ: <b>{tongSTC}</b> tín chỉ, trong đó{' '}
+													<b>{hpDungTienTrinh + hpNgoaiTienTrinh}</b> tín chỉ HP theo tiến trình và <b>{hpKhac}</b> tín
+													chỉ HP khác
 												</span>
 											</Table.Summary.Cell>
 										</Table.Summary.Row>
