@@ -46,7 +46,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 			visible={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			title='Đăng ký nhu cầu học phần'
-			width={900}
+			width={1000}
 			footer={null}
 			destroyOnClose
 		>

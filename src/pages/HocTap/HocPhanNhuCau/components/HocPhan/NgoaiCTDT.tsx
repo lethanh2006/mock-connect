@@ -4,7 +4,7 @@ import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { useModel } from 'umi';
 
-const NgoaiCTDT = (props: {
+const HocPhanNgoaiCTDT = (props: {
 	data: HocPhan.IRecord[];
 	danhSachTrong: {
 		danhSachHocPhanCtdt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
@@ -81,4 +81,4 @@ const NgoaiCTDT = (props: {
 	);
 };
 
-export default NgoaiCTDT;
+export default HocPhanNgoaiCTDT;
