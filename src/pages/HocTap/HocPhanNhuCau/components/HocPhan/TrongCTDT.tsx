@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import '../style.less';
 
-const TrongCTDT = (props: {
+const HocPhanTrongCTDT = (props: {
 	data: {
 		danhSachHocPhanCtdt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
 		danhSachHocPhanDungTienTrinh: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
@@ -88,10 +88,16 @@ const TrongCTDT = (props: {
 			sortable: true,
 		},
 		{
+			title: 'Chuyên ngành',
+			dataIndex: 'maChuyenNganh',
+			width: 180,
+			render: (val, rec) => rec?.chuyenNganh?.ten ?? val,
+		},
+		{
 			title: 'Loại',
 			dataIndex: 'loai' as any,
 			align: 'center',
-			width: 120,
+			width: 130,
 			filterType: 'string',
 		},
 		{
@@ -213,4 +219,4 @@ const TrongCTDT = (props: {
 	);
 };
 
-export default TrongCTDT;
+export default HocPhanTrongCTDT;

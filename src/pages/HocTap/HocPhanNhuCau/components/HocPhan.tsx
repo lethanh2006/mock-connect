@@ -4,8 +4,8 @@ import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import NgoaiCTDT from './HocPhan/NgoaiCTDT';
-import TrongCTDT from './HocPhan/TrongCTDT';
+import HocPhanNgoaiCTDT from './HocPhan/NgoaiCTDT';
+import HocPhanTrongCTDT from './HocPhan/TrongCTDT';
 
 const HocPhanCTDT = (props: { segment: string }) => {
 	const { segment } = props;
@@ -148,9 +148,9 @@ const HocPhanCTDT = (props: { segment: string }) => {
 			) : null}
 
 			{segment === '1' ? (
-				<TrongCTDT data={danhSachTrong as any} />
+				<HocPhanTrongCTDT data={danhSachTrong as any} />
 			) : (
-				<NgoaiCTDT data={filteredDanhSachNgoai} danhSachTrong={danhSachTrong as any} />
+				<HocPhanNgoaiCTDT data={filteredDanhSachNgoai} danhSachTrong={danhSachTrong as any} />
 			)}
 		</Spin>
 	);
