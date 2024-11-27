@@ -3,6 +3,7 @@ import type { IColumn } from '@/components/Table/typing';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT, ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import _ from 'lodash';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import '../style.less';
 
@@ -15,23 +16,46 @@ const TrongCTDT = (props: {
 	const { data } = props;
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
 	const { record: recDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
+	const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
+
+	const statusOrder = {
+		[ETrangThaiHocTap.CHUA_HOC]: 1,
+		[ETrangThaiHocTap.DANG_HOC]: 2,
+		[ETrangThaiHocTap.CHUA_DAT]: 3,
+		[ETrangThaiHocTap.DA_HOC]: 4,
+	};
+
+	const danhSachHocPhanDungTienTrinhSorted = _.orderBy(
+		data?.danhSachHocPhanDungTienTrinh ?? [],
+		[(item) => statusOrder[item.hoc], (item) => item.maHocPhan],
+		['asc', 'asc'],
+	);
+
+	const danhSachHocPhanCtdtSorted = _.orderBy(
+		data?.danhSachHocPhanCtdt ?? [],
+		[(item) => statusOrder[item.hoc], (item) => item.maHocPhan],
+		['asc', 'asc'],
+	);
 
 	const datas = [
-		...(data?.danhSachHocPhanDungTienTrinh ?? []),
-		...(data?.danhSachHocPhanCtdt ?? []).filter(
+		...danhSachHocPhanDungTienTrinhSorted,
+		...danhSachHocPhanCtdtSorted.filter(
 			(itemCtdt) => !data?.danhSachHocPhanDungTienTrinh?.some((itemDungTien) => itemDungTien._id === itemCtdt._id),
 		),
 	];
 
-	const sortedData = datas.sort((a, b) => {
-		const statusOrder = {
-			[ETrangThaiHocTap.CHUA_HOC]: 1,
-			[ETrangThaiHocTap.DANG_HOC]: 2,
-			[ETrangThaiHocTap.DA_HOC]: 3,
-			[ETrangThaiHocTap.CHUA_DAT]: 4,
-		};
-		return statusOrder[a.hoc] - statusOrder[b.hoc];
-	});
+	// Xác định các hàng cần mở rộng
+	useEffect(() => {
+		const defaultExpandedKeys = (data?.danhSachHocPhanCtdt ?? [])
+			.filter(
+				(item) =>
+					item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON &&
+					item.hocPhanCtdtList?.length &&
+					item.hocPhanCtdtList?.length > 0,
+			)
+			.map((item) => item.maHocPhan);
+		setExpandedRowKeys(defaultExpandedKeys);
+	}, [data]);
 
 	const columns: IColumn<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>[] = [
 		{
@@ -52,8 +76,23 @@ const TrongCTDT = (props: {
 			align: 'center',
 			width: 90,
 			filterType: 'number',
-			render: (val, rec) => rec?.hocPhan?.soTinChi ?? _.sumBy(rec?.hocPhanCtdtList, 'soTinChi'),
+			render: (val, rec) => rec?.hocPhan?.soTinChi ?? rec?.soTinChiTuChonPhaiHoc,
 			sortable: true,
+		},
+		{
+			title: 'STT kỳ',
+			dataIndex: 'soThuTuKy',
+			align: 'center',
+			width: 90,
+			filterType: 'number',
+			sortable: true,
+		},
+		{
+			title: 'Loại',
+			dataIndex: 'loai' as any,
+			align: 'center',
+			width: 120,
+			filterType: 'string',
 		},
 		{
 			title: 'Trạng thái học tập',
@@ -67,14 +106,14 @@ const TrongCTDT = (props: {
 	return (
 		<TableStaticData
 			columns={columns}
-			data={sortedData}
+			data={datas}
 			addStt
 			hasTotal
 			size='small'
 			otherProps={{
 				scroll: { y: 500 },
 				pagination: false,
-				rowKey: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => rec.maHocPhan ?? rec._id, // Sử dụng _id cho học phần tự chọn
+				rowKey: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => rec.maHocPhan,
 				rowClassName: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
 					const isDungTienTrinh = data?.danhSachHocPhanDungTienTrinh?.some(
 						(itemDungTien) => itemDungTien.maHocPhan === rec.maHocPhan,
@@ -121,6 +160,12 @@ const TrongCTDT = (props: {
 				expandable: {
 					expandRowByClick: true,
 					indentSize: 0,
+					expandedRowKeys: expandedRowKeys,
+					onExpand: (expanded: any, record: any) => {
+						setExpandedRowKeys((prev: any) =>
+							expanded ? [...prev, record.maHocPhan] : prev.filter((key: any) => key !== record.maHocPhan),
+						);
+					},
 					expandedRowRender: (record: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
 						if (record.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && record.hocPhanCtdtList?.length) {
 							return (
@@ -130,7 +175,7 @@ const TrongCTDT = (props: {
 									size='small'
 									otherProps={{
 										pagination: true,
-										rowKey: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => rec.maHocPhan ?? rec._id,
+										rowKey: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => rec.maHocPhan,
 										rowSelection: {
 											type: 'checkbox',
 											selectedRowKeys: selectedIds,
