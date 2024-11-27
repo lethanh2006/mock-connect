@@ -1,4 +1,5 @@
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
+import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { Spin } from 'antd';
 import { useEffect, useState } from 'react';
@@ -23,14 +24,38 @@ const HocPhanCTDT = (props: { segment: string }) => {
 	const getDataTrongCTDT = async () => {
 		try {
 			setLoadingTrong(true);
-			await getAllModel(
+			const rec: any = await getAllModel(
 				undefined,
 				undefined,
 				undefined,
 				undefined,
 				`khoa-nganh/${maKhoaNganh}/hoc-ky/${recHocKy?.ma}/me/trong-ctdt`,
 				false,
-			).then((res) => setDanhSachTrong(res as any));
+			);
+
+			if (rec) {
+				const danhSachHocPhanDungTienTrinh =
+					rec.danhSachHocPhanDungTienTrinh?.map((item: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => ({
+						...item,
+						loai: 'Đúng tiến trình',
+					})) || [];
+
+				const danhSachHocPhanCtdt =
+					rec.danhSachHocPhanCtdt?.map((item: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => ({
+						...item,
+						loai: 'Ngoài tiến trình',
+					})) || [];
+
+				setDanhSachTrong({
+					danhSachHocPhanDungTienTrinh,
+					danhSachHocPhanCtdt,
+				});
+			} else {
+				setDanhSachTrong({
+					danhSachHocPhanDungTienTrinh: [],
+					danhSachHocPhanCtdt: [],
+				});
+			}
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -62,41 +87,70 @@ const HocPhanCTDT = (props: { segment: string }) => {
 
 	useEffect(() => {
 		if (danhSach?.length !== 0) {
-			const autoSelectedIds = danhSach?.map((item) => item.maHocPhan);
+			const autoSelectedIds = danhSach?.map((item) => item.maHocPhan).filter((maHocPhan) => maHocPhan !== null);
 			setSelectedIds(autoSelectedIds);
 		} else {
-			const autoSelectedIds = (danhSachTrong?.danhSachHocPhanDungTienTrinh ?? [])?.map((item) => item.maHocPhan);
+			const autoSelectedIds = (danhSachTrong?.danhSachHocPhanDungTienTrinh ?? [])
+				?.map((item) => item.maHocPhan)
+				.filter((maHocPhan) => maHocPhan !== null);
 			setSelectedIds(autoSelectedIds);
 		}
 	}, [JSON.stringify(danhSach), JSON.stringify(danhSachTrong)]);
 
-	const datas = [
-		...(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []),
-		...(danhSachTrong?.danhSachHocPhanCtdt ?? []).filter(
-			(itemCtdt) =>
-				!danhSachTrong?.danhSachHocPhanDungTienTrinh?.some(
-					(itemDungTien) => itemDungTien.maHocPhan === itemCtdt.maHocPhan,
-				),
-		),
+	//Lọc ra những học phần nằm trong học phần tự chọn
+	const extractHocPhanCtdtListMaHocPhan = (danhSachHocPhan: any[]) => {
+		return danhSachHocPhan.flatMap((item: any) => {
+			if (item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && Array.isArray(item.hocPhanCtdtList)) {
+				return item.hocPhanCtdtList.map((hocPhan: any) => hocPhan.maHocPhan);
+			}
+			return [];
+		});
+	};
+
+	const danhSachHocPhanCtdtListMaHocPhan = [
+		...extractHocPhanCtdtListMaHocPhan(danhSachTrong?.danhSachHocPhanCtdt ?? []),
+		...extractHocPhanCtdtListMaHocPhan(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []),
 	];
 
-	const soHPTrongTienTrinh = selectedIds?.filter((id) => datas?.some((item) => item.maHocPhan === id)).length;
+	const filteredDanhSachNgoai = danhSachNgoai.filter(
+		(item: any) => !danhSachHocPhanCtdtListMaHocPhan.includes(item.ma),
+	);
 
-	const soHPNgoaiTienTrinh = selectedIds?.filter((id) => danhSachNgoai?.some((item) => item.ma === id)).length;
+	//Thống kê các học phần đã đăng ký
+	const extractMaHocPhan = (danhSachs: any) =>
+		danhSachs.flatMap((item: any) => {
+			if (item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && Array.isArray(item.hocPhanCtdtList)) {
+				return item.hocPhanCtdtList.map((hocPhan: any) => hocPhan.maHocPhan);
+			}
+			return item.maHocPhan ? [item.maHocPhan] : [];
+		});
+
+	const danhSachDungTienTrinhMaHocPhan = extractMaHocPhan(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []);
+
+	const danhSachCtdtMaHocPhan = extractMaHocPhan(danhSachTrong?.danhSachHocPhanCtdt ?? []);
+
+	const soHocPhanDungTienTrinh = selectedIds?.filter((id) => danhSachDungTienTrinhMaHocPhan.includes(id)).length;
+
+	const soHocPhanNgoaiTienTrinh = selectedIds?.filter(
+		(id) => !danhSachDungTienTrinhMaHocPhan.includes(id) && danhSachCtdtMaHocPhan.includes(id),
+	).length;
+
+	const soHocPhanKhac = selectedIds?.filter((id) => filteredDanhSachNgoai?.some((item) => item.ma === id)).length;
 
 	return (
 		<Spin spinning={loadingTrong || loadingNgoai}>
 			{selectedIds?.length ? (
 				<i style={{ marginBottom: 8 }}>
-					Bạn đã đăng ký <b>{selectedIds?.length ?? 0}</b> học phần, trong đó có <b>{soHPTrongTienTrinh ?? 0}</b> HP
-					trong tiến trình và <b>{soHPNgoaiTienTrinh ?? 0}</b> HP ngoài tiến trình.
+					Bạn đã đăng ký <b>{selectedIds?.length ?? 0}</b> học phần, trong đó có <b>{soHocPhanDungTienTrinh ?? 0}</b> HP
+					đúng tiến trình, <b>{soHocPhanNgoaiTienTrinh ?? 0}</b> HP ngoài tiến trình và <b>{soHocPhanKhac ?? 0}</b> HP
+					khác.
 				</i>
 			) : null}
 
 			{segment === '1' ? (
 				<TrongCTDT data={danhSachTrong as any} />
 			) : (
-				<NgoaiCTDT data={danhSachNgoai} danhSachTrong={danhSachTrong as any} />
+				<NgoaiCTDT data={filteredDanhSachNgoai} danhSachTrong={danhSachTrong as any} />
 			)}
 		</Spin>
 	);

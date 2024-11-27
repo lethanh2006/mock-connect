@@ -14,13 +14,13 @@ export const colorTrangThaiSinhVienDangKyHocPhanNhuCau: Record<ETrangThaiSinhVie
 };
 
 export enum ETinhChatHocPhanNhuCau {
-	TRONG_TIEN_TRINH = 'Trong tiến trình',
-	TRONG_CTDT = 'Trong chương trình đào tạo',
-	NGOAI_CTDT = 'Ngoài chương trình đào tạo',
+	DUNG_TIEN_TRINH = 'Trong tiến trình',
+	NGOAI_TIEN_TRINH = 'Trong chương trình đào tạo',
+	HOC_PHAN_KHAC = 'Ngoài chương trình đào tạo',
 }
 
 export const mapNameETinhChatHocPhanNhuCau: Record<ETinhChatHocPhanNhuCau, string> = {
-	[ETinhChatHocPhanNhuCau.TRONG_TIEN_TRINH]: 'HP trong tiến trình',
-	[ETinhChatHocPhanNhuCau.TRONG_CTDT]: 'HP trong tiến trình',
-	[ETinhChatHocPhanNhuCau.NGOAI_CTDT]: 'HP ngoài tiến trình',
+	[ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH]: 'HP đúng tiến trình',
+	[ETinhChatHocPhanNhuCau.NGOAI_TIEN_TRINH]: 'HP ngoài tiến trình',
+	[ETinhChatHocPhanNhuCau.HOC_PHAN_KHAC]: 'HP khác',
 };

@@ -12,7 +12,7 @@ import {
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Card, Empty, Space, Table } from 'antd';
+import { Alert, Card, Checkbox, Empty, Space, Table } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
@@ -66,6 +66,12 @@ const DangKyNhuCauHocPhan = () => {
 			align: 'center',
 			render: (val, rec) => mapNameETinhChatHocPhanNhuCau[val as ETinhChatHocPhanNhuCau],
 		},
+		{
+			title: 'Theo tiến trình',
+			align: 'center',
+			width: 80,
+			render: (val, rec) => <Checkbox checked={rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH} />,
+		},
 	];
 
 	return (
@@ -115,7 +121,7 @@ const DangKyNhuCauHocPhan = () => {
 							</span>
 							<br />
 							<span>
-								Ý kiến cố vấn học tập : {danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.ghiChuCVHT ?? 'Chưa có ý kiến'}
+								Ý kiến cố vấn học tập: {danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.ghiChuCVHT ?? 'Chưa có ý kiến'}
 							</span>
 						</div>
 					) : null}
@@ -130,16 +136,16 @@ const DangKyNhuCauHocPhan = () => {
 							pagination: false,
 							summary: (pageData: HocPhanNhuCau.IRecord[]) => {
 								const tongSTC = _.sumBy(pageData, (item) => item?.soTinChi);
-								const hpTrongTienTrinh = _.sumBy(
-									pageData?.filter(
-										(item) =>
-											item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.TRONG_TIEN_TRINH &&
-											item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.TRONG_TIEN_TRINH,
-									),
+								const hpDungTienTrinh = _.sumBy(
+									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH),
 									(item) => item?.soTinChi,
 								);
 								const hpNgoaiTienTrinh = _.sumBy(
-									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.NGOAI_CTDT),
+									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.NGOAI_TIEN_TRINH),
+									(item) => item?.soTinChi,
+								);
+								const hpKhac = _.sumBy(
+									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.HOC_PHAN_KHAC),
 									(item) => item?.soTinChi,
 								);
 								return (
@@ -147,8 +153,9 @@ const DangKyNhuCauHocPhan = () => {
 										<Table.Summary.Row>
 											<Table.Summary.Cell index={0} colSpan={8}>
 												<span>
-													Tổng số tín chỉ: <b>{tongSTC}</b> tín chỉ, trong đó <b>{hpTrongTienTrinh}</b> tín chỉ trong
-													tiến trình và <b>{hpNgoaiTienTrinh}</b> tín chỉ ngoài tiến trình
+													Tổng số tín chỉ: <b>{tongSTC}</b> tín chỉ, trong đó <b>{hpDungTienTrinh}</b> tín chỉ HP đúng
+													tiến trình, <b>{hpNgoaiTienTrinh}</b> tín chỉ HP ngoài tiến trình và <b>{hpKhac}</b> tín chỉ
+													HP khác
 												</span>
 											</Table.Summary.Cell>
 										</Table.Summary.Row>
