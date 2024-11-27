@@ -129,20 +129,20 @@ const HocPhanCTDT = (props: { segment: string }) => {
 
 	const danhSachCtdtMaHocPhan = extractMaHocPhan(danhSachTrong?.danhSachHocPhanCtdt ?? []);
 
-	const soHocPhanDungTienTrinh = selectedIds?.filter((id) => danhSachDungTienTrinhMaHocPhan.includes(id)).length;
+	const soHocPhanDungTienTrinh = selectedIds?.filter((id) => danhSachDungTienTrinhMaHocPhan.includes(id))?.length ?? 0;
 
-	const soHocPhanNgoaiTienTrinh = selectedIds?.filter(
-		(id) => !danhSachDungTienTrinhMaHocPhan.includes(id) && danhSachCtdtMaHocPhan.includes(id),
-	).length;
+	const soHocPhanNgoaiTienTrinh =
+		selectedIds?.filter((id) => !danhSachDungTienTrinhMaHocPhan.includes(id) && danhSachCtdtMaHocPhan.includes(id))
+			?.length ?? 0;
 
-	const soHocPhanKhac = selectedIds?.filter((id) => filteredDanhSachNgoai?.some((item) => item.ma === id)).length;
+	const soHocPhanKhac = selectedIds?.filter((id) => filteredDanhSachNgoai?.some((item) => item.ma === id))?.length ?? 0;
 
 	return (
 		<Spin spinning={loadingTrong || loadingNgoai}>
 			{selectedIds?.length ? (
 				<i style={{ marginBottom: 8 }}>
-					Bạn đã đăng ký <b>{selectedIds?.length ?? 0}</b> học phần, trong đó có <b>{soHocPhanDungTienTrinh ?? 0}</b> HP
-					đúng tiến trình, <b>{soHocPhanNgoaiTienTrinh ?? 0}</b> HP ngoài tiến trình và <b>{soHocPhanKhac ?? 0}</b> HP
+					Bạn đã đăng ký <b>{selectedIds?.length}</b> học phần, trong đó có{' '}
+					<b>{soHocPhanDungTienTrinh + soHocPhanNgoaiTienTrinh}</b> HP theo tiến trình và <b>{soHocPhanKhac}</b> HP
 					khác.
 				</i>
 			) : null}
