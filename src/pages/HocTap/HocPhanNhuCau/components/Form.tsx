@@ -78,8 +78,8 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 							value={segment}
 							onChange={(val) => setSegment(val.toString())}
 							options={[
-								{ value: '1', label: 'HP trong tiến trình' },
-								{ value: '2', label: 'HP ngoài tiến trình' },
+								{ value: '1', label: 'Theo tiến trình' },
+								{ value: '2', label: 'Các học phần khác' },
 							]}
 						/>
 						<HocPhanCTDT segment={segment} />
