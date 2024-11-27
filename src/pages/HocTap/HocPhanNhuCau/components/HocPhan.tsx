@@ -71,7 +71,7 @@ const HocPhanCTDT = (props: { segment: string }) => {
 				undefined,
 				undefined,
 				undefined,
-				`khoa-nganh/${maKhoaNganh}/me/ngoai-ctdt`,
+				`khoa-nganh/${maKhoaNganh}/hoc-ky/${recHocKy?.ma}/me/ngoai-ctdt`,
 				false,
 			).then((rec) => setDanhSachNgoai(rec as any));
 		} catch (error) {
