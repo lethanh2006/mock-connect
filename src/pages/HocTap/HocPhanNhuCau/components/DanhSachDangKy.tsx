@@ -6,32 +6,32 @@ import { exportSinhVienDangKyNhuCau } from '@/services/HocTap/HocPhanNhuCau';
 import { colorTrangThaiSvDkHpNhuCau, ETrangThaiSvDkHpNhuCau } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { getFilenameHeader } from '@/utils/utils';
-import { ExportOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Modal, Space, Tag } from 'antd';
+import { ExportOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, Descriptions, Modal, Space, Tag } from 'antd';
 import fileDownload from 'js-file-download';
 import _ from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import ChiTietSinhVienDangKy from './ChiTiet';
 import CardThongKe from './CardThongKe';
 
-const DanhSachDangKyLop = (props: { visible: boolean; setvisible: (val: boolean) => void }) => {
-	const { visible, setvisible } = props;
+const DanhSachDangKyLop = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
+	const { visible, setVisible: setvisible } = props;
+	const { record: recHocKy } = useModel('daotao.hocky');
 	const { record: recDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
-	const { getAllModel, handleView, danhSach, loading } = useModel('sinhvien.nhucauhocphan.phieudangky');
+	const { getAllModel, danhSach, loading } = useModel('sinhvien.nhucauhocphan.phieudangky');
 	const { recordDetail: recLHC } = useModel('daotao.lophanhchinh');
 	const [loadingExport, setLoadingExport] = useState<boolean>(false);
 
 	const getData = () => {
-		if (recDot?._id && recLHC?._id) {
+		if (recDot?._id && recLHC?.ten) {
 			getAllModel(undefined, undefined, { dotDangKyHocPhanNhuCauId: recDot?._id, tenLopHanhChinh: recLHC?.ten });
 		}
 	};
 
 	useEffect(() => {
-		getData();
-	}, []);
+		if (visible) getData();
+	}, [visible]);
 
 	const hanldeExport = () => {
 		setLoadingExport(true);
@@ -49,13 +49,13 @@ const DanhSachDangKyLop = (props: { visible: boolean; setvisible: (val: boolean)
 		{
 			title: 'Mã SV',
 			dataIndex: 'maSinhVien',
-			width: 100,
+			width: 120,
 			align: 'center',
 			filterType: 'string',
 		},
 		{
 			title: 'Họ tên',
-			width: 180,
+			width: 170,
 			dataIndex: 'hoTen',
 			filterType: 'string',
 		},
@@ -124,55 +124,58 @@ const DanhSachDangKyLop = (props: { visible: boolean; setvisible: (val: boolean)
 		// 	width: 180,
 		// 	render: (val, rec) => rec?.khoaNganh?.ten ?? val,
 		// },
-		{
-			title: 'Thao tác',
-			align: 'center',
-			width: 90,
-			fixed: 'right',
-			render: (val, rec) => (
-				<>
-					<ButtonExtend tooltip='Chi tiết' type='link' icon={<EyeOutlined />} onClick={() => handleView(rec)} />
-				</>
-			),
-		},
+		// {
+		// 	title: 'Thao tác',
+		// 	align: 'center',
+		// 	width: 90,
+		// 	fixed: 'right',
+		// 	render: (val, rec) => (
+		// 		<>
+		// 			<ButtonExtend tooltip='Chi tiết' type='link' icon={<EyeOutlined />} onClick={() => handleView(rec)} />
+		// 		</>
+		// 	),
+		// },
 	];
 
 	return (
 		<Modal
-			title={`Danh sách đăng ký nhu cầu lớp ${recLHC?.ten}`}
+			title='Danh sách phiếu đăng ký nhu cầu học phần'
 			visible={visible}
 			onCancel={() => setvisible(false)}
 			footer={null}
 			width={1000}
 		>
+			<Descriptions column={1}>
+				<Descriptions.Item label='Học kỳ'>{recHocKy?.ten}</Descriptions.Item>
+				<Descriptions.Item label='Đợt đăng ký'>{recDot?.tenDot}</Descriptions.Item>
+				<Descriptions.Item label='Tên lớp hành chính'>{recLHC?.ten}</Descriptions.Item>
+			</Descriptions>
+
 			<div style={{ marginBottom: 12 }}>
 				<CardThongKe />
 			</div>
+
 			<TableStaticData columns={columns} data={danhSach} loading={loading} addStt hasTotal>
-				<Space>
+				<Space wrap>
 					<ButtonExtend
-						key='export'
 						loading={loadingExport}
 						icon={<ExportOutlined />}
 						onClick={() => hanldeExport()}
 						disabled={!recLHC?._id}
 					>
-						Xuất dữ liệu
+						Xuất DS phiếu đăng ký
 					</ButtonExtend>
-					<ButtonExtend
-						key='reLoad'
-						onClick={() => {
-							getData();
-						}}
-						icon={<ReloadOutlined />}
-						notHideText
-						tooltip='Tải lại'
-					>
+					<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />} notHideText>
 						Tải lại
 					</ButtonExtend>
 				</Space>
 			</TableStaticData>
-			<ChiTietSinhVienDangKy />
+
+			{/* <ChiTietSinhVienDangKy /> */}
+
+			<div className='form-footer'>
+				<Button onClick={() => setvisible(false)}>Đóng</Button>
+			</div>
 		</Modal>
 	);
 };
