@@ -10,7 +10,7 @@ import {
 	mapNameTrangThaiSinhVienDangKyHocPhanNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
-import { PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { MenuOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Card, Checkbox, Empty, Space, Table } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
@@ -23,6 +23,7 @@ const DangKyNhuCauHocPhan = () => {
 	const { record: recDot, setRecord: setRecDot, danhSach: danhSachDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
 	const { getAllModel, danhSach, loading, setVisibleForm } = useModel('sinhvien.nhucauhocphan.sinhvienhocphannhucau');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
+	const isBanCanSu = false;
 
 	const ngoaiThoiGian =
 		!recDot?.thoiGianBatDauDangKy ||
@@ -74,7 +75,7 @@ const DangKyNhuCauHocPhan = () => {
 	];
 
 	return (
-		<Card title='Đăng ký nhu cầu học phần'>
+		<Card title='Đăng ký phiếu đăng ký nhu cầu học phần'>
 			<Space wrap style={{ marginBottom: 12 }}>
 				<FilterHocKy isSetHocKy>
 					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
@@ -124,6 +125,7 @@ const DangKyNhuCauHocPhan = () => {
 							</span>
 						</div>
 					) : null}
+
 					<TableStaticData
 						columns={columns}
 						data={danhSach}
@@ -169,28 +171,23 @@ const DangKyNhuCauHocPhan = () => {
 									danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai ===
 										ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET || ngoaiThoiGian
 								}
-								onClick={() => {
-									setVisibleForm(true);
-								}}
+								onClick={() => setVisibleForm(true)}
 								icon={<PlusCircleOutlined />}
 								type='primary'
 								notHideText
-								tooltip='Đăng ký học phần'
+								tooltip='Đăng ký nhu cầu học phần'
 							>
 								Đăng ký
 							</ButtonExtend>
-							<ButtonExtend
-								onClick={() => {
-									getData();
-								}}
-								icon={<ReloadOutlined />}
-								notHideText
-								tooltip='Tải lại'
-							>
+
+							{isBanCanSu ? <ButtonExtend icon={<MenuOutlined />}>DS đăng ký của Lớp</ButtonExtend> : null}
+
+							<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
 								Tải lại
 							</ButtonExtend>
 						</Space>
 					</TableStaticData>
+
 					<FormHocPhanDangKyNhuCau getData={getData} ngoaiThoiGian={ngoaiThoiGian} />
 				</>
 			) : (
