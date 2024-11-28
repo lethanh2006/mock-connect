@@ -1,16 +1,19 @@
-export enum ETrangThaiSinhVienDangKyHocPhanNhuCau {
+export enum ETrangThaiSvDkHpNhuCau {
+	CHUA_DANG_KY = 'Chưa đăng ký',
 	CHUA_DUYET = 'Chưa duyệt',
 	DA_DUYET = 'Đã duyệt',
 }
 
-export const mapNameTrangThaiSinhVienDangKyHocPhanNhuCau: Record<ETrangThaiSinhVienDangKyHocPhanNhuCau, string> = {
-	[ETrangThaiSinhVienDangKyHocPhanNhuCau.CHUA_DUYET]: 'Chờ CVHT duyệt',
-	[ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET]: 'Đã duyệt',
+export const mapNameTrangThaiSvDkHpNhuCau: Record<ETrangThaiSvDkHpNhuCau, string> = {
+	[ETrangThaiSvDkHpNhuCau.CHUA_DANG_KY]: 'Chưa đăng ký',
+	[ETrangThaiSvDkHpNhuCau.CHUA_DUYET]: 'Chờ CVHT duyệt',
+	[ETrangThaiSvDkHpNhuCau.DA_DUYET]: 'Đã duyệt',
 };
 
-export const colorTrangThaiSinhVienDangKyHocPhanNhuCau: Record<ETrangThaiSinhVienDangKyHocPhanNhuCau, string> = {
-	[ETrangThaiSinhVienDangKyHocPhanNhuCau.CHUA_DUYET]: 'blue',
-	[ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET]: 'green',
+export const colorTrangThaiSvDkHpNhuCau: Record<ETrangThaiSvDkHpNhuCau, string> = {
+	[ETrangThaiSvDkHpNhuCau.CHUA_DANG_KY]: 'orange',
+	[ETrangThaiSvDkHpNhuCau.CHUA_DUYET]: 'blue',
+	[ETrangThaiSvDkHpNhuCau.DA_DUYET]: 'green',
 };
 
 export enum ETinhChatHocPhanNhuCau {
