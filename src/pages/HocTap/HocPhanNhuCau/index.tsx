@@ -7,7 +7,7 @@ import { EVaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import {
 	colorTrangThaiSinhVienDangKyHocPhanNhuCau,
 	ETinhChatHocPhanNhuCau,
-	ETrangThaiSinhVienDangKyHocPhanNhuCau,
+	ETrangThaisvđkHocPhanNhuCau,
 	mapNameTrangThaiSinhVienDangKyHocPhanNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
@@ -15,10 +15,11 @@ import { MenuOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/ic
 import { Alert, Card, Checkbox, Empty, Space, Table } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SelectDotDangKyHocPhanNhuCau from './DotDangKy/Select';
 import FormHocPhanDangKyNhuCau from './components/Form';
+import DanhSachDangKyLop from './components/DanhSachDangKy';
 
 const DangKyNhuCauHocPhan = () => {
 	const { record: recDot, setRecord: setRecDot, danhSach: danhSachDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
@@ -31,6 +32,7 @@ const DangKyNhuCauHocPhan = () => {
 		setRecordDetail: setLopHc,
 	} = useModel('daotao.lophanhchinh');
 	const { record: recHocKy } = useModel('daotao.hocky');
+	const [visibleLop, setVisibleLop] = useState<boolean>(false);
 	const isBanCanSu =
 		recLopHanhChinh?.lopHcSvKy?.vaiTro === EVaiTroSvLhc.LOP_TRUONG ||
 		recLopHanhChinh?.lopHcSvKy?.vaiTro === EVaiTroSvLhc.LOP_PHO;
@@ -186,8 +188,8 @@ const DangKyNhuCauHocPhan = () => {
 						<Space>
 							<ButtonExtend
 								disabled={
-									danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai ===
-										ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET || ngoaiThoiGian
+									danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai === ETrangThaisvđkHocPhanNhuCau.DA_DUYET ||
+									ngoaiThoiGian
 								}
 								onClick={() => setVisibleForm(true)}
 								icon={<PlusCircleOutlined />}
@@ -198,7 +200,11 @@ const DangKyNhuCauHocPhan = () => {
 								Đăng ký
 							</ButtonExtend>
 
-							{isBanCanSu ? <ButtonExtend icon={<MenuOutlined />}>DS đăng ký của Lớp</ButtonExtend> : null}
+							{isBanCanSu ? (
+								<ButtonExtend onClick={() => setVisibleLop(true)} icon={<MenuOutlined />}>
+									DS đăng ký của Lớp
+								</ButtonExtend>
+							) : null}
 
 							<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
 								Tải lại
@@ -208,7 +214,7 @@ const DangKyNhuCauHocPhan = () => {
 
 					<FormHocPhanDangKyNhuCau getData={getData} ngoaiThoiGian={ngoaiThoiGian} />
 
-					{/* TODO: Show modal ds sinh viên + export chi tiết */}
+					<DanhSachDangKyLop visible={visibleLop} setvisible={setVisibleLop} />
 				</>
 			) : (
 				<Empty description='Không có đợt đăng ký nhu cầu học phần' style={{ margin: '18px 0px' }} />
