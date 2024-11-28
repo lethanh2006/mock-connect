@@ -20,7 +20,7 @@ export default {
 	'menu.HocTap.TienTrinhHocTap': 'Tiến trình học tập',
 	'menu.HocTap.DangKyNhuCau': 'Đăng ký học tập theo nhu cầu',
 	'menu.HocTap.DangKyTinChi': 'Đăng ký tín chỉ',
-	'menu.HocTap.nhucauhocphan': 'Nhu cầu học phần',
+	'menu.HocTap.NhuCauHocPhan': 'Phiếu ĐK nhu cầu học phần',
 	'menu.HocTap.LopHocPhan': 'Lớp tín chỉ',
 	'menu.HocTap.LichThi': 'Lịch thi',
 	'menu.HocTap.BaiThiCuoiKy': 'Nộp bài cuối kỳ',
