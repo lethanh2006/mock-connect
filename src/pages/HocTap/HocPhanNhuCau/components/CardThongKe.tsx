@@ -1,6 +1,6 @@
 import {
-	colorTrangThaiSinhVienDangKyHocPhanNhuCau as colorTrangThaisvđkHocPhanNhuCau,
-	ETrangThaisvđkHocPhanNhuCau as ETrangThaisvddkHocPhanNhuCau,
+	colorTrangThaiSvDkHpNhuCau as colorTrangThaisvđkHocPhanNhuCau,
+	ETrangThaiSvDkHpNhuCau as ETrangThaisvddkHocPhanNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import { Card, Col, Row, Spin } from 'antd';
 import { useModel } from 'umi';
