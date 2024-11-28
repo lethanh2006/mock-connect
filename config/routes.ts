@@ -135,9 +135,9 @@
 				path: 'tien-trinh-hoc-tap',
 				component: './HocTap/TienTrinhHocTap',
 			},
-			{ name: 'nhucauhocphan', path: 'dang-ky-hoc-phan-nhu-cau', component: './HocTap/HocPhanNhuCau' },
+			{ name: 'NhuCauHocPhan', path: 'dang-ky-hoc-phan-nhu-cau', component: './HocTap/HocPhanNhuCau' },
 			{ name: 'DangKyTinChi', path: 'dang-ky-tin-chi', component: './HocTap/DangKyTinChi' },
-			// { name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' }, // Sinh viên gửi đơn qua DVHC
+
 			{
 				name: 'LopHocPhan',
 				path: 'lop-tin-chi',
