@@ -3,6 +3,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
+import { EVaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import {
 	colorTrangThaiSinhVienDangKyHocPhanNhuCau,
 	ETinhChatHocPhanNhuCau,
@@ -23,7 +24,16 @@ const DangKyNhuCauHocPhan = () => {
 	const { record: recDot, setRecord: setRecDot, danhSach: danhSachDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
 	const { getAllModel, danhSach, loading, setVisibleForm } = useModel('sinhvien.nhucauhocphan.sinhvienhocphannhucau');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
-	const isBanCanSu = false;
+	const {
+		recordDetail: recLopHanhChinh,
+		sinhVienGetModel: getLopHc,
+		sinhVienGetByIdModel,
+		setRecordDetail: setLopHc,
+	} = useModel('daotao.lophanhchinh');
+	const { record: recHocKy } = useModel('daotao.hocky');
+	const isBanCanSu =
+		recLopHanhChinh?.lopHcSvKy?.vaiTro === EVaiTroSvLhc.LOP_TRUONG ||
+		recLopHanhChinh?.lopHcSvKy?.vaiTro === EVaiTroSvLhc.LOP_PHO;
 
 	const ngoaiThoiGian =
 		!recDot?.thoiGianBatDauDangKy ||
@@ -32,11 +42,19 @@ const DangKyNhuCauHocPhan = () => {
 		moment().isAfter(recDot?.thoiGianKetThucDangKy);
 
 	const getData = () =>
-		recDot?._id && getAllModel(undefined, undefined, undefined, undefined, `dot-dang-ky/${recDot?._id}/me`);
+		recDot?._id && getAllModel(true, undefined, undefined, undefined, `dot-dang-ky/${recDot?._id}/me`);
 
 	useEffect(() => {
 		getData();
 	}, [recDot?._id]);
+
+	useEffect(() => {
+		// Get thông tin lớp hành chính hiện tại
+		getLopHc({ maKhoaNganh }, recHocKy?.ma).then((res) => {
+			if (res.length) sinhVienGetByIdModel(res[0]._id, recHocKy?.ma);
+			else setLopHc(undefined);
+		});
+	}, []);
 
 	const columns: IColumn<HocPhanNhuCau.IRecord>[] = [
 		{
@@ -189,6 +207,8 @@ const DangKyNhuCauHocPhan = () => {
 					</TableStaticData>
 
 					<FormHocPhanDangKyNhuCau getData={getData} ngoaiThoiGian={ngoaiThoiGian} />
+
+					{/* TODO: Show modal ds sinh viên + export chi tiết */}
 				</>
 			) : (
 				<Empty description='Không có đợt đăng ký nhu cầu học phần' style={{ margin: '18px 0px' }} />
