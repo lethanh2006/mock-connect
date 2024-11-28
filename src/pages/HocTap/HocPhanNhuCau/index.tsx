@@ -213,7 +213,7 @@ const DangKyNhuCauHocPhan = () => {
 
 					<FormHocPhanDangKyNhuCau getData={getData} ngoaiThoiGian={ngoaiThoiGian} />
 
-					<DanhSachDangKyLop visible={visibleLop} setvisible={setVisibleLop} />
+					<DanhSachDangKyLop visible={visibleLop} setVisible={setVisibleLop} />
 				</>
 			) : (
 				<Empty description='Không có đợt đăng ký nhu cầu học phần' style={{ margin: '18px 0px' }} />
