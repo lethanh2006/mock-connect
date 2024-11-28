@@ -52,11 +52,12 @@ const DangKyNhuCauHocPhan = () => {
 
 	useEffect(() => {
 		// Get thông tin lớp hành chính hiện tại
-		getLopHc({ maKhoaNganh }, recHocKy?.ma).then((res) => {
-			if (res.length) sinhVienGetByIdModel(res[0]._id, recHocKy?.ma);
-			else setLopHc(undefined);
-		});
-	}, []);
+		if (maKhoaNganh && recHocKy?.ma)
+			getLopHc({ maKhoaNganh }, recHocKy?.ma).then((res) => {
+				if (res.length) sinhVienGetByIdModel(res[0]._id, recHocKy?.ma);
+				else setLopHc(undefined);
+			});
+	}, [maKhoaNganh, recHocKy?.ma]);
 
 	const columns: IColumn<HocPhanNhuCau.IRecord>[] = [
 		{
