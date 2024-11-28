@@ -1,9 +1,9 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import {
-	colorTrangThaiSinhVienDangKyHocPhanNhuCau as colorTrangThaiSvDkHpNhuCau,
+	colorTrangThaiSvDkHpNhuCau as colorTrangThaiSvDkHpNhuCau,
 	ETinhChatHocPhanNhuCau,
-	ETrangThaisvđkHocPhanNhuCau as ETrangThaiSvDkHpNhuCau,
+	ETrangThaiSvDkHpNhuCau as ETrangThaiSvDkHpNhuCau,
 	mapNameETinhChatHocPhanNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';

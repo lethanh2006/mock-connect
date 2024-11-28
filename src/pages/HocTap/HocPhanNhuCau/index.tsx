@@ -5,10 +5,10 @@ import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { EVaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import {
-	colorTrangThaiSinhVienDangKyHocPhanNhuCau,
+	colorTrangThaiSvDkHpNhuCau,
 	ETinhChatHocPhanNhuCau,
-	ETrangThaisvđkHocPhanNhuCau,
-	mapNameTrangThaiSinhVienDangKyHocPhanNhuCau,
+	ETrangThaiSvDkHpNhuCau,
+	mapNameTrangThaiSvDkHpNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { MenuOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -132,11 +132,10 @@ const DangKyNhuCauHocPhan = () => {
 								Trạng thái đăng ký nhu cầu học phần:{' '}
 								<b
 									style={{
-										color:
-											colorTrangThaiSinhVienDangKyHocPhanNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai],
+										color: colorTrangThaiSvDkHpNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai],
 									}}
 								>
-									{mapNameTrangThaiSinhVienDangKyHocPhanNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai]}
+									{mapNameTrangThaiSvDkHpNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai]}
 								</b>
 							</span>
 							<br />
@@ -188,7 +187,7 @@ const DangKyNhuCauHocPhan = () => {
 						<Space>
 							<ButtonExtend
 								disabled={
-									danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai === ETrangThaisvđkHocPhanNhuCau.DA_DUYET ||
+									danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai === ETrangThaiSvDkHpNhuCau.DA_DUYET ||
 									ngoaiThoiGian
 								}
 								onClick={() => setVisibleForm(true)}

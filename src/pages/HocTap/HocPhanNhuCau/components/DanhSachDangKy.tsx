@@ -3,10 +3,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { exportSinhVienDangKyNhuCau } from '@/services/HocTap/HocPhanNhuCau';
-import {
-	colorTrangThaiSinhVienDangKyHocPhanNhuCau,
-	ETrangThaisvđkHocPhanNhuCau,
-} from '@/services/HocTap/HocPhanNhuCau/constant';
+import { colorTrangThaiSvDkHpNhuCau, ETrangThaiSvDkHpNhuCau } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { getFilenameHeader } from '@/utils/utils';
 import { ExportOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -104,11 +101,9 @@ const DanhSachDangKyLop = (props: { visible: boolean; setvisible: (val: boolean)
 			dataIndex: 'trangThai',
 			width: 120,
 			align: 'center',
-			render: (val) => (
-				<Tag color={colorTrangThaiSinhVienDangKyHocPhanNhuCau[val as ETrangThaisvđkHocPhanNhuCau]}>{val}</Tag>
-			),
+			render: (val) => <Tag color={colorTrangThaiSvDkHpNhuCau[val as ETrangThaiSvDkHpNhuCau]}>{val}</Tag>,
 			filterType: 'select',
-			filterData: Object.values(ETrangThaisvđkHocPhanNhuCau).map((item) => ({ value: item, label: item })),
+			filterData: Object.values(ETrangThaiSvDkHpNhuCau).map((item) => ({ value: item, label: item })),
 		},
 		{
 			title: 'Thời gian đăng ký',

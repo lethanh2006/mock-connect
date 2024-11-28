@@ -2,7 +2,7 @@ import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import type { LopHanhChinh } from '../LopHanhChinh/typing';
-import type { ETrangThaisvđkHocPhanNhuCau } from './constant';
+import type { ETrangThaiSvDkHpNhuCau } from './constant';
 
 declare module HocPhanNhuCau {
 	export interface IRecord {
@@ -40,7 +40,7 @@ declare module HocPhanNhuCau {
 		dotDangKyHocPhanNhuCauId: string;
 		dotDangKyHocPhanNhuCau: IDotDangKy;
 		thoiGianDangKy: Date;
-		trangThai: ETrangThaisvđkHocPhanNhuCau;
+		trangThai: ETrangThaiSvDkHpNhuCau;
 		ghiChuCVHT: string;
 		cvhtSsoId: string;
 		maCanBoCVHT: string;
