@@ -26,7 +26,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 	}, [visibleForm]);
 
 	const onFinish = async (values: HocPhanNhuCau.IRecord) => {
-		if (!!selectedIds?.length) {
+		if (!selectedIds?.length) {
 			message.error('Vui lòng chọn học phần!');
 			return;
 		}
@@ -34,7 +34,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 		const data = {
 			maKhoaNganh: maKhoaNganh ?? '',
 			dotDangKyHocPhanNhuCauId: recDot?._id ?? '',
-			danhSachHocPhan: selectedIds ?? [],
+			danhSachHocPhan: selectedIds?.filter(Boolean) ?? [],
 		};
 		await dangKyHocPhanNhuCauNModel(data, getData)
 			.then(() => setVisibleForm(false))
@@ -46,7 +46,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 			visible={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			title='Đăng ký nhu cầu học phần'
-			width={900}
+			width={1000}
 			footer={null}
 			destroyOnClose
 		>
@@ -59,8 +59,8 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 							<Descriptions.Item label='Đợt đăng ký nhu cầu'>{recDot?.tenDot ?? '--'}</Descriptions.Item>
 						</Descriptions>
 						<div style={{ marginBottom: 12 }}>
-							<i style={{ color: '#007EB9' }}>
-								Số lượng học phần cho phép đăng ký ngoài tiến trình trong đợt tối đa :{' '}
+							<i style={{ color: 'red' }}>
+								Số lượng học phần cho phép đăng ký ngoài tiến trình trong đợt tối đa:{' '}
 								<b>{recDot?.soHocPhanDangKyNgoaiTienTrinh}</b> học phần
 							</i>
 						</div>
@@ -78,8 +78,8 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 							value={segment}
 							onChange={(val) => setSegment(val.toString())}
 							options={[
-								{ value: '1', label: 'HP trong CTĐT' },
-								{ value: '2', label: 'HP ngoài CTĐT' },
+								{ value: '1', label: 'Theo tiến trình' },
+								{ value: '2', label: 'Các học phần khác' },
 							]}
 						/>
 						<HocPhanCTDT segment={segment} />

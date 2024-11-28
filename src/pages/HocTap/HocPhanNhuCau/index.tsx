@@ -3,10 +3,16 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { colorTrangThaiSinhVienDangKyHocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/constant';
+import {
+	colorTrangThaiSinhVienDangKyHocPhanNhuCau,
+	ETinhChatHocPhanNhuCau,
+	ETrangThaiSinhVienDangKyHocPhanNhuCau,
+	mapNameTrangThaiSinhVienDangKyHocPhanNhuCau,
+} from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
-import { PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Card, Empty, Space } from 'antd';
+import { MenuOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Alert, Card, Checkbox, Empty, Space, Table } from 'antd';
+import _ from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -17,6 +23,7 @@ const DangKyNhuCauHocPhan = () => {
 	const { record: recDot, setRecord: setRecDot, danhSach: danhSachDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
 	const { getAllModel, danhSach, loading, setVisibleForm } = useModel('sinhvien.nhucauhocphan.sinhvienhocphannhucau');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
+	const isBanCanSu = false;
 
 	const ngoaiThoiGian =
 		!recDot?.thoiGianBatDauDangKy ||
@@ -37,6 +44,7 @@ const DangKyNhuCauHocPhan = () => {
 			dataIndex: 'maHocPhan',
 			width: 100,
 			align: 'center',
+			filterType: 'string',
 		},
 		{
 			title: 'Tên học phần',
@@ -52,23 +60,30 @@ const DangKyNhuCauHocPhan = () => {
 			sortable: true,
 		},
 		{
-			title: 'Tính chất học phần',
-			dataIndex: 'tinhChatHocPhan',
-			width: 150,
+			title: 'Theo tiến trình',
 			align: 'center',
+			width: 80,
+			render: (val, rec) => (
+				<Checkbox
+					checked={
+						rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH ||
+						rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.NGOAI_TIEN_TRINH
+					}
+				/>
+			),
 		},
 	];
 
 	return (
-		<Card title='Đăng ký nhu cầu học phần'>
+		<Card title='Đăng ký phiếu đăng ký nhu cầu học phần'>
 			<Space wrap style={{ marginBottom: 12 }}>
 				<FilterHocKy isSetHocKy>
-					<SelectSongNganh style={{ width: 200 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
 					<SelectDotDangKyHocPhanNhuCau
 						isSetRecord
 						value={recDot?._id}
 						onChange={(val) => setRecDot(danhSachDot.find((item) => item._id === val))}
-						style={{ width: 200 }}
+						style={{ width: 250 }}
 					/>
 				</FilterHocKy>
 			</Space>
@@ -93,7 +108,7 @@ const DangKyNhuCauHocPhan = () => {
 					/>
 					{danhSach?.length ? (
 						<div style={{ marginBottom: 12 }}>
-							<i>
+							<span>
 								Trạng thái đăng ký nhu cầu học phần:{' '}
 								<b
 									style={{
@@ -101,41 +116,82 @@ const DangKyNhuCauHocPhan = () => {
 											colorTrangThaiSinhVienDangKyHocPhanNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai],
 									}}
 								>
-									{danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai}
+									{mapNameTrangThaiSinhVienDangKyHocPhanNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai]}
 								</b>
-								. Ý kiến cố vấn học tập : {danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.ghiChuCVHT ?? 'Chưa có ý kiến'}
-							</i>
+							</span>
+							<br />
+							<span>
+								Ý kiến cố vấn học tập: {danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.ghiChuCVHT ?? 'Chưa có ý kiến'}
+							</span>
 						</div>
 					) : null}
-					<TableStaticData columns={columns} data={danhSach} loading={loading} addStt hasTotal>
+
+					<TableStaticData
+						columns={columns}
+						data={danhSach}
+						loading={loading}
+						addStt
+						hasTotal
+						otherProps={{
+							scroll: { y: 500 },
+							pagination: false,
+							summary: (pageData: HocPhanNhuCau.IRecord[]) => {
+								const tongSTC = _.sumBy(pageData, (item) => item?.soTinChi);
+								const hpDungTienTrinh = _.sumBy(
+									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH),
+									(item) => item?.soTinChi,
+								);
+								const hpNgoaiTienTrinh = _.sumBy(
+									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.NGOAI_TIEN_TRINH),
+									(item) => item?.soTinChi,
+								);
+								const hpKhac = _.sumBy(
+									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.HOC_PHAN_KHAC),
+									(item) => item?.soTinChi,
+								);
+								return (
+									<Table.Summary fixed>
+										<Table.Summary.Row>
+											<Table.Summary.Cell index={0} colSpan={8}>
+												<span>
+													Tổng số tín chỉ: <b>{tongSTC}</b> tín chỉ, trong đó{' '}
+													<b>{hpDungTienTrinh + hpNgoaiTienTrinh}</b> tín chỉ HP theo tiến trình và <b>{hpKhac}</b> tín
+													chỉ HP khác
+												</span>
+											</Table.Summary.Cell>
+										</Table.Summary.Row>
+									</Table.Summary>
+								);
+							},
+						}}
+					>
 						<Space>
 							<ButtonExtend
-								onClick={() => {
-									setVisibleForm(true);
-								}}
+								disabled={
+									danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai ===
+										ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET || ngoaiThoiGian
+								}
+								onClick={() => setVisibleForm(true)}
 								icon={<PlusCircleOutlined />}
 								type='primary'
 								notHideText
-								tooltip='Đăng ký học phần'
+								tooltip='Đăng ký nhu cầu học phần'
 							>
 								Đăng ký
 							</ButtonExtend>
-							<ButtonExtend
-								onClick={() => {
-									getData();
-								}}
-								icon={<ReloadOutlined />}
-								notHideText
-								tooltip='Tải lại'
-							>
+
+							{isBanCanSu ? <ButtonExtend icon={<MenuOutlined />}>DS đăng ký của Lớp</ButtonExtend> : null}
+
+							<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
 								Tải lại
 							</ButtonExtend>
 						</Space>
 					</TableStaticData>
+
 					<FormHocPhanDangKyNhuCau getData={getData} ngoaiThoiGian={ngoaiThoiGian} />
 				</>
 			) : (
-				<Empty description='Không tồn tại đợt đăng ký nhu cầu học phần' style={{ margin: '18px 0px' }} />
+				<Empty description='Không có đợt đăng ký nhu cầu học phần' style={{ margin: '18px 0px' }} />
 			)}
 		</Card>
 	);
