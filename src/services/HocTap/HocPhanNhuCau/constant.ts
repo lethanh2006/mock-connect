@@ -6,8 +6,8 @@ export enum ETrangThaiSvDkHpNhuCau {
 
 export const mapNameTrangThaiSvDkHpNhuCau: Record<ETrangThaiSvDkHpNhuCau, string> = {
 	[ETrangThaiSvDkHpNhuCau.CHUA_DANG_KY]: 'Chưa đăng ký',
-	[ETrangThaiSvDkHpNhuCau.CHUA_DUYET]: 'Chờ CVHT duyệt',
-	[ETrangThaiSvDkHpNhuCau.DA_DUYET]: 'Đã duyệt',
+	[ETrangThaiSvDkHpNhuCau.CHUA_DUYET]: 'Chờ CVHT xác nhận',
+	[ETrangThaiSvDkHpNhuCau.DA_DUYET]: 'Đã xác nhận',
 };
 
 export const colorTrangThaiSvDkHpNhuCau: Record<ETrangThaiSvDkHpNhuCau, string> = {

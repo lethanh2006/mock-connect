@@ -96,7 +96,7 @@ const DangKyNhuCauHocPhan = () => {
 	];
 
 	return (
-		<Card title='Đăng ký phiếu đăng ký nhu cầu học phần'>
+		<Card title='Phiếu đăng ký học phần'>
 			<Space wrap style={{ marginBottom: 12 }}>
 				<FilterHocKy isSetHocKy>
 					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
