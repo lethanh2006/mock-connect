@@ -1,10 +1,10 @@
 import useInitModel from '@/hooks/useInitModel';
-import type { DangKyNhuCau } from '@/services/DaoTao/DangKyNhuCau/typing';
+import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { ipDaoTao } from '@/utils/ip';
 
 export default () => {
-	const objInit = useInitModel<DangKyNhuCau.IDotDangKyKhoaNganh>(
-		'dot-dang-ky-nhu-cau-khoa-nganh',
+	const objInit = useInitModel<HocPhanNhuCau.IPhieuDangKy>(
+		'sinh-vien-dang-ky-hoc-phan-nhu-cau',
 		undefined,
 		undefined,
 		ipDaoTao,

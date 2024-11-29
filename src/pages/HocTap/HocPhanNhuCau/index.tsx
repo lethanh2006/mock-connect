@@ -3,27 +3,39 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
+import { EVaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import {
-	colorTrangThaiSinhVienDangKyHocPhanNhuCau,
+	colorTrangThaiSvDkHpNhuCau,
 	ETinhChatHocPhanNhuCau,
-	ETrangThaiSinhVienDangKyHocPhanNhuCau,
-	mapNameTrangThaiSinhVienDangKyHocPhanNhuCau,
+	ETrangThaiSvDkHpNhuCau,
+	mapNameTrangThaiSvDkHpNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { MenuOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Card, Checkbox, Empty, Space, Table } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SelectDotDangKyHocPhanNhuCau from './DotDangKy/Select';
 import FormHocPhanDangKyNhuCau from './components/Form';
+import DanhSachDangKyLop from './components/DanhSachDangKy';
 
 const DangKyNhuCauHocPhan = () => {
 	const { record: recDot, setRecord: setRecDot, danhSach: danhSachDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
 	const { getAllModel, danhSach, loading, setVisibleForm } = useModel('sinhvien.nhucauhocphan.sinhvienhocphannhucau');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
-	const isBanCanSu = false;
+	const {
+		recordDetail: recLopHanhChinh,
+		sinhVienGetModel: getLopHc,
+		sinhVienGetByIdModel,
+		setRecordDetail: setLopHc,
+	} = useModel('daotao.lophanhchinh');
+	const { record: recHocKy } = useModel('daotao.hocky');
+	const [visibleLop, setVisibleLop] = useState<boolean>(false);
+	const isBanCanSu =
+		recLopHanhChinh?.lopHcSvKy?.vaiTro === EVaiTroSvLhc.LOP_TRUONG ||
+		recLopHanhChinh?.lopHcSvKy?.vaiTro === EVaiTroSvLhc.LOP_PHO;
 
 	const ngoaiThoiGian =
 		!recDot?.thoiGianBatDauDangKy ||
@@ -32,11 +44,20 @@ const DangKyNhuCauHocPhan = () => {
 		moment().isAfter(recDot?.thoiGianKetThucDangKy);
 
 	const getData = () =>
-		recDot?._id && getAllModel(undefined, undefined, undefined, undefined, `dot-dang-ky/${recDot?._id}/me`);
+		recDot?._id && getAllModel(true, undefined, undefined, undefined, `dot-dang-ky/${recDot?._id}/me`);
 
 	useEffect(() => {
 		getData();
 	}, [recDot?._id]);
+
+	useEffect(() => {
+		// Get thông tin lớp hành chính hiện tại
+		if (maKhoaNganh && recHocKy?.ma)
+			getLopHc({ maKhoaNganh }, recHocKy?.ma).then((res) => {
+				if (res.length) sinhVienGetByIdModel(res[0]._id, recHocKy?.ma);
+				else setLopHc(undefined);
+			});
+	}, [maKhoaNganh, recHocKy?.ma]);
 
 	const columns: IColumn<HocPhanNhuCau.IRecord>[] = [
 		{
@@ -75,7 +96,7 @@ const DangKyNhuCauHocPhan = () => {
 	];
 
 	return (
-		<Card title='Đăng ký phiếu đăng ký nhu cầu học phần'>
+		<Card title='Phiếu đăng ký học phần'>
 			<Space wrap style={{ marginBottom: 12 }}>
 				<FilterHocKy isSetHocKy>
 					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
@@ -112,11 +133,10 @@ const DangKyNhuCauHocPhan = () => {
 								Trạng thái đăng ký nhu cầu học phần:{' '}
 								<b
 									style={{
-										color:
-											colorTrangThaiSinhVienDangKyHocPhanNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai],
+										color: colorTrangThaiSvDkHpNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai],
 									}}
 								>
-									{mapNameTrangThaiSinhVienDangKyHocPhanNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai]}
+									{mapNameTrangThaiSvDkHpNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai]}
 								</b>
 							</span>
 							<br />
@@ -168,8 +188,8 @@ const DangKyNhuCauHocPhan = () => {
 						<Space>
 							<ButtonExtend
 								disabled={
-									danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai ===
-										ETrangThaiSinhVienDangKyHocPhanNhuCau.DA_DUYET || ngoaiThoiGian
+									danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai === ETrangThaiSvDkHpNhuCau.DA_DUYET ||
+									ngoaiThoiGian
 								}
 								onClick={() => setVisibleForm(true)}
 								icon={<PlusCircleOutlined />}
@@ -180,7 +200,11 @@ const DangKyNhuCauHocPhan = () => {
 								Đăng ký
 							</ButtonExtend>
 
-							{isBanCanSu ? <ButtonExtend icon={<MenuOutlined />}>DS đăng ký của Lớp</ButtonExtend> : null}
+							{isBanCanSu ? (
+								<ButtonExtend onClick={() => setVisibleLop(true)} icon={<MenuOutlined />}>
+									DS đăng ký của Lớp
+								</ButtonExtend>
+							) : null}
 
 							<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
 								Tải lại
@@ -189,6 +213,8 @@ const DangKyNhuCauHocPhan = () => {
 					</TableStaticData>
 
 					<FormHocPhanDangKyNhuCau getData={getData} ngoaiThoiGian={ngoaiThoiGian} />
+
+					<DanhSachDangKyLop visible={visibleLop} setVisible={setVisibleLop} />
 				</>
 			) : (
 				<Empty description='Không có đợt đăng ký nhu cầu học phần' style={{ margin: '18px 0px' }} />

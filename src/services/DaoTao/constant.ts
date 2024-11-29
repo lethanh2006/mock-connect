@@ -1,12 +1,3 @@
-export enum ELoaiNhuCauHocPhan {
-	KHHT_CHUAN = 'Theo kế hoạch học tập chuẩn',
-	NGOAI_CT = 'Ngoài chương trình đào tạo',
-	HOC_LAI = 'Học lại',
-	HOC_CAI_THIEN = 'Học cải thiện',
-	HOC_VUOT = 'Học vượt',
-	HOC_VB2 = 'Học văn bằng 2',
-}
-
 export enum ELoaiHocPhanCTDT {
 	BAT_BUOC = 'Bắt buộc',
 	TU_CHON = 'Tự chọn',
@@ -100,26 +91,4 @@ export const colorTrangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> 
 	[ETrangThaiUserDiemDanh.VANG_CO_PHEP]: 'gold',
 	[ETrangThaiUserDiemDanh.VANG_KHONG_PHEP]: 'orange',
 	[ETrangThaiUserDiemDanh.CHUA_DIEM_DANH]: 'red',
-};
-
-//Đăng ký nhu cầu
-export enum ETrangThaiHocPhanDangKyNhuCau {
-	CHO_DUYET = 'CHO_DUYET',
-	DA_DUYET = 'DA_DUYET',
-	KHONG_DUYET = 'KHONG_DUYET',
-	DA_PHAN_LOP = 'DA_PHAN_LOP',
-}
-
-export const mapTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
-	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'Chờ duyệt',
-	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'Đã duyệt',
-	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'Không duyệt',
-	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'Đã phân lớp',
-};
-
-export const colorTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
-	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'blue',
-	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'orange',
-	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'red',
-	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'green',
 };
