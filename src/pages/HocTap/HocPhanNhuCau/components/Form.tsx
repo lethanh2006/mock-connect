@@ -92,7 +92,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 							Đăng ký
 						</Button>
 					</Tooltip>
-					<Button onClick={() => setVisibleForm(false)}>Đóng</Button>
+					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>
 			</Form>
 		</Modal>
