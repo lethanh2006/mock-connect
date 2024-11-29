@@ -49,7 +49,7 @@ declare module SinhVienThi {
 		dungLuongToiDa: number;
 		ghiChuKhac: string;
 		dinhDangFileChoPhep: EDinhDangBaiThi[];
-
+		choPhepNopNgoaiThoiGian: boolean;
 		daNopBai: boolean;
 		urlBaiNop: string[] | null;
 	}
