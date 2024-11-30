@@ -14,6 +14,7 @@ const TrongSoHocPhanPage = () => {
 				thongTinTrongSo.push({
 					trongSo: recDeCuong?.[`trongSo${i}` as keyof HocPhan.IDeCuongHocPhan] as number,
 					field: i,
+					nguongDiemDieuKien: 0.1,
 				});
 		}
 	}
@@ -29,9 +30,15 @@ const TrongSoHocPhanPage = () => {
 		<Descriptions title='Trọng số học phần' bordered column={1}>
 			{thongTinTrongSo?.length
 				? thongTinTrongSo?.map((item, index) => (
-						// eslint-disable-next-line react/no-array-index-key
-						<Descriptions.Item label={`Điểm thành phần ${index + 1}`} key={index}>
-							Mô tả: {item?.moTa ?? danhSach.find((i) => i.field === item.field)?.ten ?? danhSach[index]?.ten ?? '--'}
+						<Descriptions.Item
+							label={`Điểm thành phần ${index + 1} (${
+								item.field && item.field > 0 ? danhSach[item.field - 1].ma : ''
+							})`}
+							// eslint-disable-next-line react/no-array-index-key
+							key={index}
+						>
+							Mô tả:{' '}
+							<b>{item?.moTa ?? danhSach.find((i) => i.field === item.field)?.ten ?? danhSach[index]?.ten ?? '--'}</b>
 							<br />
 							Trọng số: <b>{item?.trongSo}%</b>
 							<br />
