@@ -137,10 +137,11 @@ const BaiThiCuoiKy = () => {
 			fixed: 'right',
 			render: (val, rec) => {
 				const ngoaiThoiGian =
-					!rec?.thoiGianBatDau ||
-					!rec?.thoiGianKetThuc ||
-					moment().isBefore(rec?.thoiGianBatDau) ||
-					moment().isAfter(rec?.thoiGianKetThuc);
+					rec?.choPhepNopNgoaiThoiGian !== true &&
+					(!rec?.thoiGianBatDau ||
+						!rec?.thoiGianKetThuc ||
+						moment().isBefore(rec?.thoiGianBatDau) ||
+						moment().isAfter(rec?.thoiGianKetThuc));
 				return (
 					<ButtonExtend
 						disabled={ngoaiThoiGian || !!rec?.daNopBai}
