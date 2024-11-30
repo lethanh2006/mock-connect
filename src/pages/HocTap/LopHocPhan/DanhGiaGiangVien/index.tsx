@@ -20,6 +20,8 @@ const DanhGiaGiangVienPage = () => {
 		moment().isBefore(recDot?.thoiGianBatDau, 'd') ||
 		moment().isAfter(recDot?.thoiGianKetThuc, 'd');
 
+	const giangVienKhaoSat = recDot?.thongTinCauTraLoi?.find((item) => item?.giangVienSsoId === giangVienSsoId);
+
 	const getDotHienTai = () => {
 		setLoading(true);
 		getDotDanhGiaGiangVien(recLopHocPhan?.maHocKy ?? '')
@@ -80,11 +82,11 @@ const DanhGiaGiangVienPage = () => {
 							showIcon
 						/>
 
-						{recDot?.thongTinCauTraLoi?.length ? (
+						{recDot?.thongTinCauTraLoi?.length && giangVienKhaoSat?._id ? (
 							<div style={{ marginTop: 8 }}>
 								<i style={{ color: primaryColor }}>
 									Bạn đã thực hiện khảo sát vào lúc{' '}
-									<b>{moment(recDot?.thongTinCauTraLoi?.[0]?.updatedAt).format('HH:mm, DD/MM/YYYY')}</b>{' '}
+									<b>{moment(giangVienKhaoSat?.updatedAt).format('HH:mm, DD/MM/YYYY')}</b>{' '}
 								</i>
 							</div>
 						) : null}
@@ -108,7 +110,7 @@ const DanhGiaGiangVienPage = () => {
 					</div>
 					<FormTraLoiKhaoSat
 						onOk={hanldeDanhGiaGiangVien}
-						cauTraLoi={recDot?.thongTinCauTraLoi?.[0]?.danhSachTraLoi}
+						cauTraLoi={giangVienKhaoSat?.danhSachTraLoi}
 						formSubmiting={formSubmiting}
 						hideCard
 						recBieuMauProps={recDot?.khaoSat}
