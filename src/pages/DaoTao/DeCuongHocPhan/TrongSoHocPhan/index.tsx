@@ -40,7 +40,7 @@ const TrongSoHocPhanPage = () => {
 							Mô tả:{' '}
 							<b>{item?.moTa ?? danhSach.find((i) => i.field === item.field)?.ten ?? danhSach[index]?.ten ?? '--'}</b>
 							<br />
-							Trọng số: <b>{item?.trongSo}%</b>
+							Trọng số: <b>{item?.trongSo}%</b>. Ngưỡng điểm đủ ĐKDT: <b>{item.nguongDiemDieuKien}</b>
 							<br />
 							Hình thức đánh giá: {item?.hinhThucDanhGia ?? '--'}
 						</Descriptions.Item>
