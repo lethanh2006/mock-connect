@@ -1,4 +1,5 @@
 import { Select } from 'antd';
+import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -8,8 +9,9 @@ const SelectSongNganh = (props: {
 	value?: string;
 	onChange?: (val: string) => void;
 	hideSelect?: boolean;
+	size?: SizeType;
 }) => {
-	const { style, disabled, value, onChange, hideSelect } = props;
+	const { style, disabled, value, onChange, hideSelect, size } = props;
 	const { getKhoaNganhMeModel, khoaNganhMe, loading } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
@@ -22,6 +24,7 @@ const SelectSongNganh = (props: {
 	return (
 		<Select
 			loading={loading}
+			size={size}
 			disabled={disabled}
 			placeholder='Chọn ngành đào tạo'
 			value={value}

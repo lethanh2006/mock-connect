@@ -185,4 +185,12 @@ export declare module LopHocPhan {
 		maLopHc: string;
 		lopHanhChinh?: LopHanhChinh.IRecord;
 	}
+
+	export type TViewDiemHocKy = IDiemHpSvHk & {
+		title?: string;
+		tenHocPhan?: string;
+		maHocPhanQuyDoi?: string;
+		tichLuy?: boolean;
+		trongChuongTrinh?: boolean;
+	};
 }
