@@ -80,9 +80,9 @@ const ThongTinSinhVienPage = () => {
 								Cập nhật hồ sơ
 							</ButtonExtend>
 
-							<ButtonExtend icon={<OrderedListOutlined />} onClick={() => setVisibleHocBa(true)}>
+							{/* <ButtonExtend icon={<OrderedListOutlined />} onClick={() => setVisibleHocBa(true)}>
 								Học bạ điện tử
-							</ButtonExtend>
+							</ButtonExtend> */}
 
 							{/* <ButtonExtend icon={<SmileOutlined />} onClick={() => setVisibleCapNhat(true)}>
 								Cập nhật ảnh nhận diện
