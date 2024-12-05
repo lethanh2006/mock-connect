@@ -140,11 +140,13 @@ const HocPhanCTDT = (props: { segment: string }) => {
 	return (
 		<Spin spinning={loadingTrong || loadingNgoai}>
 			{selectedIds?.length ? (
-				<i style={{ marginBottom: 8 }}>
-					Bạn đã đăng ký <b>{selectedIds?.length}</b> học phần, trong đó có{' '}
-					<b>{soHocPhanDungTienTrinh + soHocPhanNgoaiTienTrinh}</b> HP theo tiến trình và <b>{soHocPhanKhac}</b> HP
-					khác.
-				</i>
+				<div style={{ marginBottom: 12 }}>
+					<i>
+						Bạn đã đăng ký <b>{selectedIds?.length}</b> học phần, trong đó có{' '}
+						<b>{soHocPhanDungTienTrinh + soHocPhanNgoaiTienTrinh}</b> HP theo tiến trình và <b>{soHocPhanKhac}</b> HP
+						khác.
+					</i>
+				</div>
 			) : null}
 
 			{segment === '1' ? (
