@@ -1,4 +1,5 @@
 import { ESettingKey, unitName } from '@/services/base/constant';
+import { ELoaiHinhThucThanhToan } from '@/services/TaiChinh/HinhThucThanhToan/constant';
 import { ipTaiChinh } from '@/utils/ip';
 import { removeVietnameseTones } from '@/utils/utils';
 import { Col, Empty, Modal, Row, Space } from 'antd';
@@ -10,18 +11,32 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	const { visible, onOk } = props;
 	const { record } = useModel('taichinh.giaodich');
 	const { getByKeyModel, settings } = useModel('tienich.caidat');
+	const { getAllModel: getHinhThuc, defaultHinhThuc } = useModel('taichinh.hinhthucthanhtoan');
 	const { initialState } = useModel('@@initialState');
+	// thông tin người nộp tiền
 	const userFullname =
 		record?.userFullname ??
 		(initialState?.currentUser?.family_name
 			? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
 			: initialState?.currentUser?.name);
 	const userCode = record?.userCode ?? initialState?.currentUser?.preferred_username ?? '';
+	/** Nội dung chuyển khoản */
 	const addInfo = removeVietnameseTones(
 		`${userCode ?? ''} ${userFullname ?? ''} ${record?.name ?? 'Nộp tiền'}`,
 	).toUpperCase();
-	const unitInfo = removeVietnameseTones(unitName).toUpperCase();
+
+	// Thông tin thanh toán từ cài đặt
 	const { tienToTaiKhoan, maNganHang, urlHuongDanThanhToan } = settings[ESettingKey.THONG_TIN_THANH_TOAN] ?? {};
+	/** Hình thức thanh toán cuối cùng, theo thứ tự ưu tiên: Kênh từ Đợt thu => Kênh mặc định => Thông tin ở Setting */
+	const hinhThucFinal = record?.dotThu?.kenhThanhToan ??
+		defaultHinhThuc ?? {
+			loaiKenhThanhToan: ELoaiHinhThucThanhToan.DONG,
+			maNganHangVNPay: maNganHang,
+			tienToSTK: tienToTaiKhoan,
+			huongDanThanhToan: urlHuongDanThanhToan,
+		};
+	/** Tên ngân hàng: Lấy từ Hình thức hoặc Tên trường */
+	const unitInfo = removeVietnameseTones(hinhThucFinal.tenNganHang ?? unitName).toUpperCase();
 
 	// Define the start and end times
 	const start = moment('23:00', 'HH:mm'); // Từ 23h đến
@@ -34,6 +49,9 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 		getByKeyModel(ESettingKey.THONG_TIN_THANH_TOAN, ipTaiChinh)
 			.then()
 			.catch((er) => console.log(er));
+
+		// Chỉ get 1 lần
+		if (!defaultHinhThuc) getHinhThuc();
 	}, []);
 
 	const renderLopThuong = () => (
@@ -45,10 +63,17 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 					<b>
 						<u>Mã thanh toán QR liên ngân hàng:</u>
 					</b>
-					{maNganHang && tienToTaiKhoan ? (
+					{hinhThucFinal.loaiKenhThanhToan === ELoaiHinhThucThanhToan.CO_DINH &&
+					hinhThucFinal.maNganHangVNPay &&
+					hinhThucFinal.soTaiKhoanThanhToanCoDinh ? (
 						<img
 							style={{ maxWidth: '100%' }}
-							src={`https://img.vietqr.io/image/${maNganHang}-${tienToTaiKhoan}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
+							src={`https://img.vietqr.io/image/${hinhThucFinal.maNganHangVNPay}-${hinhThucFinal.soTaiKhoanThanhToanCoDinh}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
+						/>
+					) : hinhThucFinal.maNganHangVNPay && hinhThucFinal.tienToSTK ? (
+						<img
+							style={{ maxWidth: '100%' }}
+							src={`https://img.vietqr.io/image/${hinhThucFinal.maNganHangVNPay}-${hinhThucFinal.tienToSTK}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
 						/>
 					) : null}
 					<i>Sinh viên quét mã QR bằng Ứng dụng ngân hàng để thanh toán</i>
@@ -76,13 +101,27 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 							<br />
 						</>
 					) : null}
-					Mã thanh toán của sinh viên là: <b>{record?.identityCode}</b> <br />
-					Số tài khoản với sinh viên chuyển khoản 24/7:{' '}
-					<b>
-						{tienToTaiKhoan}
-						{record?.identityCode}
-					</b>
+					{hinhThucFinal.loaiKenhThanhToan === ELoaiHinhThucThanhToan.CO_DINH ? (
+						<>
+							- Ngân hàng: {hinhThucFinal.maNganHang}
+							<br />- Tên tài khoản thụ hưởng: {unitInfo}
+							<br />- Số tài khoản: <b>{hinhThucFinal.soTaiKhoanThanhToanCoDinh}</b>
+							<br />
+							- Nội dung chuyển khoản: [Mã sinh viên] [Họ tên] [Nội dung]
+							<br />- Ví dụ: <i>23123456P NGUYEN VAN A HocphiHK2NH20232024</i>
+						</>
+					) : (
+						<>
+							Mã thanh toán của sinh viên là: <b>{record?.identityCode}</b> <br />
+							Số tài khoản với sinh viên chuyển khoản 24/7:{' '}
+							<b>
+								{hinhThucFinal.tienToSTK}
+								{record?.identityCode}
+							</b>
+						</>
+					)}
 				</p>
+
 				<p>
 					<b>
 						Lưu ý: <br />
@@ -90,11 +129,15 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 						dụng hình thức còn lại, sinh viên lưu ý nhập chính xác số tiền yêu cầu (không làm tròn) để hệ thống ghi nhận
 						giao dịch là hợp lệ.
 						<br />
-						2. Mã QR được khởi tạo dành riêng cho cá nhân sinh viên và chỉ sử dụng để thanh toán một lần. Vui lòng không
-						sử dụng để thanh toán hộ người khác.
-						<br />
-						3. Sau khi thanh toán thành công, sinh viên vui lòng đợi để hệ thống xác nhận thông tin thanh toán từ ngân
+						2. Sau khi thanh toán thành công, sinh viên vui lòng đợi để hệ thống xác nhận thông tin thanh toán từ ngân
 						hàng.
+						{hinhThucFinal.loaiKenhThanhToan === ELoaiHinhThucThanhToan.DONG ? (
+							<>
+								<br />
+								3. Mã QR được khởi tạo dành riêng cho cá nhân sinh viên và chỉ sử dụng để thanh toán một lần. Vui lòng
+								không sử dụng để thanh toán hộ người khác.
+							</>
+						) : null}
 					</b>
 				</p>
 			</Col>
@@ -106,7 +149,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 		<Modal
 			visible={visible}
 			onCancel={() => onOk()}
-			title='Hướng dẫn thanh toán'
+			title='Hướng dẫn thanh toán không tiền mặt'
 			okButtonProps={{ hidden: true }}
 			width={1000}
 		>
