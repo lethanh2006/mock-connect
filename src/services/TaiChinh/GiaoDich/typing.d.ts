@@ -4,6 +4,7 @@ import type {
 	ETransactionStatus,
 	ETransactionType,
 } from '../constant';
+import type { DotThuTaiChinh } from '../DotThu/typing';
 
 declare module GiaoDich {
 	export interface IRecord extends IKhachHang, IChuyenVien {
@@ -11,7 +12,7 @@ declare module GiaoDich {
 		billIdentityCode: string;
 		name: string;
 		idDotThu: string;
-		dotThu?: DotThuTaiChinh.Record;
+		dotThu?: DotThuTaiChinh.IRecord;
 		paymentType: ETransactionPaymentType;
 		status: ETransactionStatus;
 		identityCode: string;

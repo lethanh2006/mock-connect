@@ -58,8 +58,11 @@ declare module HocPhan {
 	export interface IThongTinTrongSo {
 		field: number;
 		trongSo: number;
+		/** Ngưỡng điểm đủ điều kiện dự thi (mặc định: 0.1) => Điểm sinh viên >= ngưỡng thì mới đủ ĐKDT */
+		nguongDiemDieuKien?: number;
 		hinhThucDanhGia?: string;
 		moTa?: string;
+		chuanDauRa?: string;
 	}
 
 	export interface ITrongSoDeCuong {

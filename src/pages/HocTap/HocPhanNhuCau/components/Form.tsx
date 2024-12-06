@@ -61,7 +61,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 						<div style={{ marginBottom: 12 }}>
 							<i style={{ color: 'red' }}>
 								Số lượng học phần cho phép đăng ký ngoài tiến trình trong đợt tối đa:{' '}
-								<b>{recDot?.soHocPhanDangKyNgoaiTienTrinh}</b> học phần
+								<b>{recDot?.soHocPhanDangKyNgoaiTienTrinh}</b> học phần (<b>không đăng ký học lại, cải thiện</b>)
 							</i>
 						</div>
 					</Col>
