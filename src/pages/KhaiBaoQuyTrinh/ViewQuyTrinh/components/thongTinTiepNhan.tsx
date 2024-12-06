@@ -1,20 +1,20 @@
-import { IColumn } from '@/components/Table/typing';
+import TableStaticData from '@/components/Table/TableStaticData';
+import type { IColumn } from '@/components/Table/typing';
 import ThongTinThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
-import type { TrangThaiTiepNhanDon } from '@/services/QuyTrinh/KhaiBao/constants';
-import { MapColorTrangThaiTiepNhanDon } from '@/services/QuyTrinh/KhaiBao/constants';
+import { PhuongThucPhanCong } from '@/services/QuyTrinh/constant';
+import { MapColorTrangThaiTiepNhanDon, TrangThaiTiepNhanDon } from '@/services/QuyTrinh/KhaiBao/constants';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
+import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import {
 	EMauTrangThaiThanhToanTable,
 	ETrangThaiThanhToan,
 	type EMaTrangThaiThanhToan,
 } from '@/services/TaiChinh/constant';
+import { ETrangThaiChinhSuaNhanSu } from '@/services/ToChucNhanSu/constant';
 import { useModel } from '@@/plugin-model/useModel';
 import { Button, Collapse, Descriptions, Modal, Tag } from 'antd';
 import { useState } from 'react';
-import { QuyTrinh } from '@/services/QuyTrinh/typing';
-import TableStaticData from '@/components/Table/TableStaticData';
-import { PhuongThucPhanCong } from '@/services/QuyTrinh/constant';
-import { ETrangThaiChinhSuaNhanSu } from '@/services/ToChucNhanSu/constant';
+import ViewFromCauHinh from './ViewFormCauHinh';
 
 const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: any; isBuocNgoaiHeThong?: boolean }) => {
 	const { data, modelName } = props;
@@ -26,6 +26,14 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 	const buocHienTai = dataQuyTrinh?.quyTrinh?.danhSachBuocXuLy?.find((item: { ma: string }) => item?.ma === data?.ma);
 	const [recordBoPhanXuLy, setRecordBoPhanXuLy] = useState<QuyTrinh.IBoPhanXuLy>();
 	const [visibleDanhSachCanBoXuLy, setVisibleDanhSachCanBoXuLy] = useState<boolean>(false);
+	const [visibleThongTinDuyet, setVisibleThongTinDuyet] = useState<boolean>(false);
+	const maFormTiepNhan = buocHienTai?.maFormTiepNhan;
+	const cauHinhFormTiepNhan = dataQuyTrinh?.quyTrinh?.danhSachFormTiepNhan?.find(
+		(item: { ma: string }) => item?.ma === maFormTiepNhan,
+	)?.cauHinhLoaiHinh;
+	const dataFormTiepNhan = dataQuyTrinh?.danhSachBuocXuLy?.find(
+		(item: { ma: string }) => item.ma === buocHienTai?.ma,
+	)?.thongTinTiepNhan;
 
 	const columnCanBo: IColumn<QuyTrinh.IThanhVienXuLy>[] = [
 		{
@@ -138,6 +146,19 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 									>
 										{data?.trangThaiTiepNhan}
 									</Tag>
+									{data?.trangThaiTiepNhan === TrangThaiTiepNhanDon.DUYET && maFormTiepNhan ? (
+										<Button
+											onClick={() => {
+												setVisibleThongTinDuyet(true);
+											}}
+											type='link'
+											size='small'
+										>
+											(Xem chi tiết)
+										</Button>
+									) : (
+										''
+									)}
 								</Descriptions.Item>
 
 								{dataQuyTrinh?.trangThaiThanhToan && (
@@ -214,6 +235,16 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 					data={recordBoPhanXuLy?.danhSachThanhVienXuLy ?? []}
 					columns={columnCanBo}
 				/>
+			</Modal>
+			<Modal
+				title='Thông tin xử lý'
+				visible={visibleThongTinDuyet}
+				onCancel={() => setVisibleThongTinDuyet(false)}
+				footer={null}
+				width={1000}
+				destroyOnClose
+			>
+				<ViewFromCauHinh cauHinhLoaiHinh={cauHinhFormTiepNhan} thongTinKhaiBao={dataFormTiepNhan} />
 			</Modal>
 		</>
 	);
