@@ -108,7 +108,7 @@ const TinyEditor = (props: {
 						? 'undo redo | fontfamily fontsize | bold italic underline | forecolor backcolor removeformat | alignleft aligncenter alignright alignjustify | numlist bullist | emoticons'
 						: // Full toolbar
 						  'undo redo | styles fontfamily fontsize | bold italic underline strikethrough | forecolor backcolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | table image media link | charmap emoticons | fullscreen preview print',
-					toolbar_sticky: true,
+					// toolbar_sticky: true,
 					autosave_ask_before_unload: true,
 					image_advtab: true,
 					image_caption: true,

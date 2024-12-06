@@ -1,4 +1,3 @@
-import ViewRender from '@/pages/KhaiBaoQuyTrinh/MauDon/ViewRender';
 import ThongTinTiepNhan from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/thongTinTiepNhan';
 import ThongTinThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import {
@@ -8,16 +7,16 @@ import {
 	TrangThaiTiepNhanDon,
 } from '@/services/QuyTrinh/KhaiBao/constants';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
-import { EKieuDuLieu, ETextDisplay } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import { EditOutlined, LeftOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Collapse, Modal, Popconfirm, Row, Spin, Steps, Tag } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { useModel } from 'umi';
 import ViewDot from '../../DotQuyTrinh/ViewDot';
 import ThongTinHoiDong from './ThongTinHoiDong';
 import ThongTinQuyetDinh from './ThongTinQuyetDinh';
+import ViewFromCauHinh from './ViewFormCauHinh';
 
 const { Step } = Steps;
 interface Iprops {
@@ -284,59 +283,10 @@ const View = (props: Iprops) => {
 										}
 									>
 										<Row gutter={[0, 10]}>
-											{cauHinhForm?.cauHinhLoaiHinh.map((item) => {
-												if (
-													!item?.truongThongTinLienQuan ||
-													(item?.truongThongTinLienQuan &&
-														(dataForm?.thongTinKhaiBao?.[item?.truongThongTinLienQuan]?.value ===
-															item?.giaTriLienQuan ||
-															(item.giaTriLienQuan.includes &&
-																item?.giaTriLienQuan?.includes(
-																	dataForm?.thongTinKhaiBao?.[item?.truongThongTinLienQuan]?.value,
-																))))
-												) {
-													const isTable =
-														item.kieuDuLieu === EKieuDuLieu.TABLE || item.kieuDuLieu === EKieuDuLieu.DANHSACH;
-													const isHtml =
-														item.kieuDuLieu === EKieuDuLieu.TEXT && item.textDisplay === ETextDisplay.TEXT_EDITOR;
-													const isDoanVanBan = item.kieuDuLieu === EKieuDuLieu.DOAN_VAN_BAN;
-
-													return (
-														<Col key={item.ma} xs={24} sm={24} md={item.colspan || 24} lg={item.colspan || 24}>
-															<div
-																style={{
-																	display: 'flex',
-																	flexDirection: isHtml || isTable ? 'column' : 'row',
-																}}
-															>
-																{!isDoanVanBan && (
-																	<div style={{ marginRight: 4 }}>
-																		<b>{item.ten}: </b>
-																	</div>
-																)}
-																<div>
-																	{isDoanVanBan ? (
-																		<div>
-																			{item.customDefaultValue ? (
-																				<div dangerouslySetInnerHTML={{ __html: item.customDefaultValue }} />
-																			) : (
-																				<div>{item.ten}</div>
-																			)}
-																		</div>
-																	) : (
-																		<ViewRender
-																			cauHinh={item}
-																			recordSanPham={{
-																				thongTinKhaiBao: dataForm?.thongTinKhaiBao,
-																			}}
-																		/>
-																	)}
-																</div>
-															</div>
-														</Col>
-													);
-												} else return null;
-											})}
+											<ViewFromCauHinh
+												cauHinhLoaiHinh={cauHinhForm?.cauHinhLoaiHinh ?? []}
+												thongTinKhaiBao={dataForm?.thongTinKhaiBao ?? {}}
+											/>
 										</Row>
 										{!editFormKhaiBao && (
 											<div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>

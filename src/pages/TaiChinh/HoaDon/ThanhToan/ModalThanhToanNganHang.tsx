@@ -10,6 +10,7 @@ import { useModel } from 'umi';
 const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) => {
 	const { visible, onOk } = props;
 	const { record } = useModel('taichinh.giaodich');
+	const { record: recDotThu, getByIdModel: getDotThu } = useModel('taichinh.dotthu');
 	const { getByKeyModel, settings } = useModel('tienich.caidat');
 	const { getAllModel: getHinhThuc, defaultHinhThuc } = useModel('taichinh.hinhthucthanhtoan');
 	const { initialState } = useModel('@@initialState');
@@ -28,7 +29,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	// Thông tin thanh toán từ cài đặt
 	const { tienToTaiKhoan, maNganHang, urlHuongDanThanhToan } = settings[ESettingKey.THONG_TIN_THANH_TOAN] ?? {};
 	/** Hình thức thanh toán cuối cùng, theo thứ tự ưu tiên: Kênh từ Đợt thu => Kênh mặc định => Thông tin ở Setting */
-	const hinhThucFinal = record?.dotThu?.kenhThanhToan ??
+	const hinhThucFinal = recDotThu?.kenhThanhToan ??
 		defaultHinhThuc ?? {
 			loaiKenhThanhToan: ELoaiHinhThucThanhToan.DONG,
 			maNganHangVNPay: maNganHang,
@@ -53,6 +54,10 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 		// Chỉ get 1 lần
 		if (!defaultHinhThuc) getHinhThuc();
 	}, []);
+
+	useEffect(() => {
+		if (record?.idDotThu) getDotThu(record.idDotThu);
+	}, [record?.idDotThu]);
 
 	const renderLopThuong = () => (
 		<Row gutter={[12, 12]}>
