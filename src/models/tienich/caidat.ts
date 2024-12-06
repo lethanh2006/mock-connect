@@ -15,6 +15,7 @@ export default () => {
 	const [settings, setSettings] = useState<TSettingType>({});
 
 	const getByKeyModel = async (key: ESettingKey, ip?: string): Promise<any> => {
+		if (settings[key]) return settings[key];
 		setLoading(true);
 		try {
 			const res = await getSettingByKey(key, ip);

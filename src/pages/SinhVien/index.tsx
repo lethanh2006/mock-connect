@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import FormSinhVien from '@/pages/SinhVien/components/Form';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
-import { EditOutlined, LeftOutlined } from '@ant-design/icons';
+import { EditOutlined, LeftOutlined, OrderedListOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Space } from 'antd';
 import fileDownload from 'js-file-download';
 import moment from 'moment';
@@ -10,12 +10,14 @@ import { useModel } from 'umi';
 import ModalCapNhatAnhNhanDien from './CapNhatKhuonMat/Modal';
 import PreviewHoSo from './components/PreviewHoSo';
 import './components/style.less';
+import ModalHocBaSinhVien from './HocBa/components/Modal';
 
 const ThongTinSinhVienPage = () => {
 	const { record, loading, setLoading } = useModel('sinhvien.sinhvien');
 	const { record: recordDot, getAllModel: getDotCapNhat } = useModel('daotao.dotcapnhathoso');
 	const [isCapNhat, setIsCapNhat] = useState<boolean>(false);
 	const [visibleCapNhat, setVisibleCapNhat] = useState<boolean>(false);
+	const [visibleHocBa, setVisibleHocBa] = useState<boolean>(false);
 	const choPhepSua =
 		record?.choPhepSua ||
 		(recordDot?.thoiGianBatDau &&
@@ -78,6 +80,10 @@ const ThongTinSinhVienPage = () => {
 								Cập nhật hồ sơ
 							</ButtonExtend>
 
+							{/* <ButtonExtend icon={<OrderedListOutlined />} onClick={() => setVisibleHocBa(true)}>
+								Học bạ điện tử
+							</ButtonExtend> */}
+
 							{/* <ButtonExtend icon={<SmileOutlined />} onClick={() => setVisibleCapNhat(true)}>
 								Cập nhật ảnh nhận diện
 							</ButtonExtend> */}
@@ -127,6 +133,8 @@ const ThongTinSinhVienPage = () => {
       </div> */}
 
 			<ModalCapNhatAnhNhanDien visible={visibleCapNhat} setVisible={setVisibleCapNhat} />
+
+			<ModalHocBaSinhVien visible={visibleHocBa} setVisible={setVisibleHocBa} />
 		</Card>
 	);
 };

@@ -5,11 +5,11 @@ import { Button, Tag, Tooltip } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import {
 	ETrangThaiChamDiem,
-	EXepLoai,
+	EXepLoaiRenLuyen,
 	MapKeyColorTrangThaiChamDiem,
-	MapKeyColorXepLoai,
+	colorXepLoaiRenLuyen,
 	MapKeyNameTrangThaiChamDiem,
-	MapKeyNameXepLoai,
+	xepLoaiRenLuyen,
 } from '@/services/CongTacSinhVien/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
 import { useEffect } from 'react';
 import monent from 'moment';
@@ -100,12 +100,12 @@ const PhieuDiemRenLuyen = () => {
 			align: 'center',
 			width: 100,
 			filterType: 'select',
-			filterData: Object.values(EXepLoai).map((item) => ({
+			filterData: Object.values(EXepLoaiRenLuyen).map((item) => ({
 				value: item,
-				label: MapKeyNameXepLoai[item],
+				label: xepLoaiRenLuyen[item],
 			})),
 			render: (val, rec) => (
-				<Tag color={MapKeyColorXepLoai?.[val as EXepLoai]}>{MapKeyNameXepLoai?.[val as EXepLoai]}</Tag>
+				<Tag color={colorXepLoaiRenLuyen?.[val as EXepLoaiRenLuyen]}>{xepLoaiRenLuyen?.[val as EXepLoaiRenLuyen]}</Tag>
 			),
 		},
 		// {

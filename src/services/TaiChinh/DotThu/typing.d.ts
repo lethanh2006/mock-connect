@@ -1,5 +1,7 @@
+import type { HinhThucThanhToan } from '../HinhThucThanhToan/typing';
+
 declare module DotThuTaiChinh {
-	export interface Record {
+	export interface IRecord {
 		_id: string;
 		tenDot: string; // 'string';
 		thoiGianBatDau: string; // '2023-03-02T08:12:50.994Z';
@@ -15,5 +17,8 @@ declare module DotThuTaiChinh {
 		suDungVi: boolean; // true;
 		kichHoat: boolean; // true;
 		metadata?: Record;
+
+		kenhThanhToanId?: string;
+		kenhThanhToan?: HinhThucThanhToan.IRecord;
 	}
 }
