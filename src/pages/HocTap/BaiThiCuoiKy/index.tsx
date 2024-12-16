@@ -9,8 +9,8 @@ import { SaveOutlined } from '@ant-design/icons';
 import { Card, Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
+import FilterKyThi from '../../KhaoThi/KyThi/Filter';
 import Form from './components/Form';
-import FilterKyThi from './KyThi/Filter';
 
 const BaiThiCuoiKy = () => {
 	const { record: recordHocKy } = useModel('daotao.hocky');
