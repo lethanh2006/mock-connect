@@ -57,6 +57,8 @@ export enum EDinhDangBaiThi {
 	VIDEO_MPEG = 'video/mpeg',
 	OGG = 'application/ogg',
 	FORM_DATA = 'multipart/form-data',
+	XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+	DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 }
 
 export const mapNameDinhDangBaiThi: Record<EDinhDangBaiThi, string> = {
@@ -80,4 +82,6 @@ export const mapNameDinhDangBaiThi: Record<EDinhDangBaiThi, string> = {
 	[EDinhDangBaiThi.GZIP]: 'GZIP tệp nén',
 	[EDinhDangBaiThi.OGG]: 'OGG',
 	[EDinhDangBaiThi.FORM_DATA]: 'Dữ liệu biểu mẫu',
+	[EDinhDangBaiThi.XLSX]: 'Excel',
+	[EDinhDangBaiThi.DOCX]: 'Văn bản DOC'
 };
