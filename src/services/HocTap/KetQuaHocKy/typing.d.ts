@@ -27,6 +27,8 @@ declare module KetQuaHocKy {
 
 		trinhDo: ETrinhDoKqhtHocKy;
 		hocLuc: ELoaiHocLuc;
+		/** Trường tính toán: Xếp loại học lực trong học kỳ */
+		hocLucHocKy?: ELoaiHocLuc;
 		// lopHpSvList?: LopHocPhan.IRecordSinhVienLopHP[];
 
 		maKhoaNganh: string;
