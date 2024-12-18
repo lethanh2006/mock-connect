@@ -98,8 +98,8 @@ const ViewKetQuaHocKy = () => {
 								<Card className='ket-qua-card'>
 									<div className='ket-qua-content'>
 										<div className='title'>Xếp loại học lực</div>
-										<span className='sum-text' style={{ color: colorLoaiHocLuc[record.hocLuc] }}>
-											{record.hocLuc ?? '--'}
+										<span className='sum-text' style={{ color: colorLoaiHocLuc[record.hocLucHocKy ?? record.hocLuc] }}>
+											{record.hocLucHocKy ?? record.hocLuc ?? '--'}
 										</span>
 									</div>
 								</Card>

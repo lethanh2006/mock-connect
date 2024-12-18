@@ -1,10 +1,41 @@
 import UploadFile from '@/components/Upload/UploadFile';
-import { mapNameDinhDangBaiThi } from '@/services/KhaoThi/constant';
+import { EDinhDangBaiThi, mapNameDinhDangBaiThi } from '@/services/KhaoThi/constant';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, message, Progress, Row } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
+
+const mimeTypeMapping = {
+	[EDinhDangBaiThi.HTML]: ['text/html'],
+	[EDinhDangBaiThi.CSS]: ['text/css'],
+	[EDinhDangBaiThi.TEXT_PLAIN]: ['text/plain'],
+	[EDinhDangBaiThi.TEXT_CSV]: ['text/csv'],
+	[EDinhDangBaiThi.JSON]: ['application/json'],
+	[EDinhDangBaiThi.JS]: ['application/javascript', 'text/javascript'],
+	[EDinhDangBaiThi.XML]: ['application/xml', 'text/xml'],
+	[EDinhDangBaiThi.PDF]: ['application/pdf'],
+	[EDinhDangBaiThi.ZIP]: ['application/zip', 'application/x-zip-compressed', 'multipart/x-zip'], // ZIP
+	[EDinhDangBaiThi.GZIP]: ['application/gzip', 'application/x-gzip'],
+	[EDinhDangBaiThi.JPEG]: ['image/jpeg', 'image/pjpeg'],
+	[EDinhDangBaiThi.PNG]: ['image/png'],
+	[EDinhDangBaiThi.GIF]: ['image/gif'],
+	[EDinhDangBaiThi.WEBP]: ['image/webp'],
+	[EDinhDangBaiThi.AUDIO_MPEG]: ['audio/mpeg', 'audio/mp3'],
+	[EDinhDangBaiThi.AUDIO_WAV]: ['audio/wav'],
+	[EDinhDangBaiThi.VIDEO_MP4]: ['video/mp4'],
+	[EDinhDangBaiThi.VIDEO_MPEG]: ['video/mpeg'],
+	[EDinhDangBaiThi.OGG]: ['application/ogg', 'audio/ogg', 'video/ogg'],
+	[EDinhDangBaiThi.FORM_DATA]: ['multipart/form-data'],
+	[EDinhDangBaiThi.XLSX]: [
+		'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		'application/vnd.ms-excel',
+	],
+	[EDinhDangBaiThi.DOCX]: [
+		'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+		'application/msword',
+	],
+};
 
 const FormBaiThiCuoiKy = (props: any) => {
 	const { getData } = props;
@@ -16,23 +47,23 @@ const FormBaiThiCuoiKy = (props: any) => {
 		if (!visibleForm) resetFieldsForm(form);
 	}, [visibleForm]);
 
-	const isMimeTypeMatched = (fileType: string, allowedType: string): boolean => {
-		const fileKeywords = fileType.toLowerCase().split(/[\/\-;]/);
-		const allowedKeywords = allowedType.toLowerCase().split(/[\/\-;]/);
-
-		return allowedKeywords.every((keyword) => fileKeywords.includes(keyword));
+	const isMimeTypeAllowed = (fileType: string, allowedTypes: string[]): boolean => {
+		return allowedTypes.some((allowedType) => {
+			const allowedMimeTypes = mimeTypeMapping[allowedType as EDinhDangBaiThi] || [allowedType]; // Lấy danh sách MIME type tương đương
+			return allowedMimeTypes.includes(fileType);
+		});
 	};
 
 	const onFinish = async (values: any) => {
-		const fileList = values.urlBaiNop?.fileList;
+		const fileList = values.urlBaiNop?.fileList || [];
 		const allowedTypes = record?.dinhDangFileChoPhep || [];
 
-		// Kiểm tra loại file hợp lệ
-		const invalidFiles = fileList?.filter(
-			(file: any) => !allowedTypes.some((allowedType) => isMimeTypeMatched(file.type, allowedType)),
-		);
+		// Kiểm tra MIME type
+		const invalidFiles = fileList?.filter((file: any) => {
+			return !isMimeTypeAllowed(file.type, allowedTypes);
+		});
 
-		if (invalidFiles?.length) {
+		if (invalidFiles?.length > 0) {
 			const allowedFormats = allowedTypes.map((item) => mapNameDinhDangBaiThi[item]).join(', ');
 			message.error(`File không đúng định dạng. Định dạng cho phép (${allowedFormats})`);
 			return;
