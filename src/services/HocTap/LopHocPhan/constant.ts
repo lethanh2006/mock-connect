@@ -78,3 +78,10 @@ export const ColorDiemChu = {
 	[ELoaiDiemChu.CHUA_DU_DU_LIEU]: 'rgb(173 173 173)',
 	[ELoaiDiemChu.MIEN_THI]: '#399500',
 };
+
+//LMS
+export enum EModeLms {
+	MOODLE = 'moodle',
+	ODOO = 'odoo',
+	NONE = 'none',
+}
