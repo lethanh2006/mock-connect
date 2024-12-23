@@ -18,7 +18,7 @@ const CalendarLichHocLopHp = (props: {
 	const { items, onClickItem } = props;
 
 	useEffect(() => {
-		if (!recSetting) getSettingLich();
+		if (!recSetting?._id) getSettingLich();
 	}, []);
 
 	const eventPropGetter = (item: ThoiKhoaBieu.IRecord) => ({
@@ -26,7 +26,7 @@ const CalendarLichHocLopHp = (props: {
 			backgroundColor:
 				item.hinhThucGiangDay === EHinhThucGiangDay.ONLINE
 					? '#4ba2e9b3'
-					: recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.LICH_HOC)?.maMau ??
+					: recSetting?.danhSachSettingLich?.find((i) => i?.loaiLich === ELoaiSuKien.LICH_HOC)?.maMau ??
 					  ColorSuKien?.[ELoaiSuKien.LICH_HOC],
 		},
 	});
