@@ -59,12 +59,12 @@
 		component: './SinhVien',
 	},
 
-	{
-		name: 'KeHoachNamHoc',
-		path: '/ke-hoach-nam-hoc',
-		icon: 'TableOutlined',
-		component: './DaoTao/KeHoachNamHoc',
-	},
+	// {
+	// 	name: 'KeHoachNamHoc',
+	// 	path: '/ke-hoach-nam-hoc',
+	// 	icon: 'TableOutlined',
+	// 	component: './DaoTao/KeHoachNamHoc',
+	// },
 
 	{
 		name: 'Lich',
