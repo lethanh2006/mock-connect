@@ -5,11 +5,12 @@ import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
 import type { ETrangThaiThi } from '../constant';
-import {
-	type ELoaiDiemChu,
-	type ELoaiLopHocPhan,
-	type ETrangThaiDangKyGiangDay,
-	type ETrangThaiLopHocPhan,
+import type {
+	ELoaiDiemChu,
+	ELoaiLopHocPhan,
+	EModeLms,
+	ETrangThaiDangKyGiangDay,
+	ETrangThaiLopHocPhan,
 } from './constant';
 
 export declare module LopHocPhan {
@@ -192,5 +193,44 @@ export declare module LopHocPhan {
 		maHocPhanQuyDoi?: string;
 		tichLuy?: boolean;
 		trongChuongTrinh?: boolean;
+	};
+
+	export interface ILmsInfo {
+		_id?: string;
+		sinhVien: {
+			_id: string; //ssoId
+			id: number;
+			ma: string;
+			ten: string;
+			email: string;
+		};
+		hocPhan: {
+			_id: string;
+			id: number;
+			ten: string;
+			ma: string;
+		};
+		tiLeHoanThanh: number;
+		thoiGianTaoVao: Date;
+		thoiGianCapNhatGanNhatVao: '03:23:40 22-12-2024';
+		hocLieu: THocLieuLms[];
+	}
+
+	export type THocLieuLms = {
+		id: number;
+		hoanThanh: boolean;
+		soLanLamBaiKiemTra: number;
+		ten: string;
+		thoiGianHoanThanh: string;
+	};
+
+	export type TSettingLMS = {
+		_id?: string;
+		chucDanhGiamDoc: string;
+		lmsMode: EModeLms;
+		supervisingUnit: string;
+		tenGiamDoc: string;
+		tenTruongPhongQLDT: string;
+		university: string;
 	};
 }
