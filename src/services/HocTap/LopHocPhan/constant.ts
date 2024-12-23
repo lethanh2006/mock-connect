@@ -13,6 +13,16 @@ export enum ELoaiHinhHocTap {
 	BAI_TAP_LON = 'Bài tập lớn',
 }
 
+export enum EHinhThucGiangDay {
+	TRUC_TIEP = 'Trực tiếp',
+	ONLINE = 'Online',
+}
+
+export const colorHinhThucGiangDay: Record<EHinhThucGiangDay, string> = {
+	[EHinhThucGiangDay.TRUC_TIEP]: 'green',
+	[EHinhThucGiangDay.ONLINE]: 'blue',
+};
+
 export enum ELoaiLopHocPhan {
 	CHINH = 'C',
 	LY_THUYET = 'LT',
