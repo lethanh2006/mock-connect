@@ -2,6 +2,7 @@ import { type ELoaiHinhHocTap } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import type { HocPhan } from '../HocPhan/typings';
 import type { ETrangThaiLopDiemDanh, ETrangThaiUserDiemDanh } from '../constant';
+import type { EHinhThucGiangDay } from '@/services/HocTap/constant';
 
 declare module ThoiKhoaBieu {
 	export interface IRecord {
@@ -35,5 +36,7 @@ declare module ThoiKhoaBieu {
 		// Điểm danh
 		trangThaiDiemDanh?: ETrangThaiLopDiemDanh;
 		trangThaiDiemDanhCaNhan?: ETrangThaiUserDiemDanh;
+
+		hinhThucGiangDay: EHinhThucGiangDay;
 	}
 }
