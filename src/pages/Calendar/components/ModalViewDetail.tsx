@@ -4,6 +4,7 @@ import {
 	mapTrangThaiNopBaiTap,
 } from '@/services/DaoTao/BaiTap/constants';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap/constant';
 import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import { colorTrangThaiThi } from '@/services/KhaoThi/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
@@ -66,6 +67,12 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 					</a>
 				</Descriptions.Item>
 			) : null}
+
+			<Descriptions.Item label='Hình thức giảng dạy'>
+				<Tag color={colorHinhThucGiangDay[thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay]}>
+					{thoiKhoaBieu?.hinhThucGiangDay}
+				</Tag>
+			</Descriptions.Item>
 		</>
 	);
 
