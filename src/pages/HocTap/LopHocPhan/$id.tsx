@@ -94,8 +94,8 @@ const DetailLopTinChi = ({
 				<Tabs.TabPane tab='Lịch học' key={paths[1]} />
 				<Tabs.TabPane tab='Thông báo' key={paths[2]} />
 				<Tabs.TabPane tab='Diễn đàn' key={paths[5]} />
-				<Tabs.TabPane tab='Bài tập, Bài kiểm tra' key={paths[6]} />
 				{settings?.GENERAL_INFO?.lmsMode === 'odoo' ? <Tabs.TabPane tab='Kết quả LMS' key={paths[7]} /> : null}
+				<Tabs.TabPane tab='Bài tập, bài kiểm tra' key={paths[6]} />
 				<Tabs.TabPane tab='Kết quả học tập' key={paths[3]} />
 				<Tabs.TabPane tab='Đánh giá giảng viên' key={paths[4]} />
 			</Tabs>
