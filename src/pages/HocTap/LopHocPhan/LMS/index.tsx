@@ -59,7 +59,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 					icon={<ApiOutlined />}
 					onClick={() => {
 						if (idLopHocPhan) {
-							getByIdModel(`lop-hoc-phan/${idLopHocPhan}/url`, false).then((res: any) => {
+							getByIdModel(`lop-hoc-phan/${idLopHocPhan}/url/sv`, false).then((res: any) => {
 								if (res) {
 									window.open(res, '_blank');
 								} else {
