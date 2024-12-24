@@ -137,3 +137,14 @@ export enum EDinhDangFile {
 	TEXT = 'text',
 	UNKNOWN = 'unknown',
 }
+
+export enum EScopeFile {
+	PUBLIC = 'Public',
+	INTERNAL = 'Internal',
+	PRIVATE = 'Private',
+}
+
+export enum EStorageFile {
+	DATABASE = 'Database',
+	S3 = 'S3',
+}
