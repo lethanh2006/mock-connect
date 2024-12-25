@@ -3,7 +3,7 @@ import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { colorHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { ArrowRightOutlined, CheckSquareOutlined, EyeOutlined } from '@ant-design/icons';
-import { Card, Col, Descriptions, Empty, Progress, Row, Tag } from 'antd';
+import { Card, Col, Descriptions, Empty, Progress, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -66,10 +66,12 @@ const CardBuoiHocTiepTheo = () => {
 							: `Tiết ${buoiHoc.tietBatDau} - ${buoiHoc.tietKetThuc}`}
 					</Descriptions.Item>
 					<Descriptions.Item label='Phòng'>
-						{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}{' '}
-						{buoiHoc.hinhThucGiangDay ? (
-							<Tag color={colorHinhThucGiangDay[buoiHoc.hinhThucGiangDay]}>{buoiHoc.hinhThucGiangDay}</Tag>
-						) : null}
+						<Space>
+							{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}
+							{buoiHoc.hinhThucGiangDay ? (
+								<Tag color={colorHinhThucGiangDay[buoiHoc.hinhThucGiangDay]}>{buoiHoc.hinhThucGiangDay}</Tag>
+							) : null}
+						</Space>
 					</Descriptions.Item>
 				</Descriptions>
 
