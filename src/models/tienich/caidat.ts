@@ -32,7 +32,7 @@ export default () => {
 		}
 	};
 
-	const updateSettingModel = async (data: ISetting, ip?: string): Promise<ISetting> => {
+	const updateSettingModel = async (data: ISetting, ip?: string): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 
