@@ -1,8 +1,9 @@
 import { EDinhDangFile } from '@/services/base/constant';
+import type { IFile } from '@/services/base/typing';
 import { getFileInfo } from '@/services/uploadFile';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
-import { CopyOutlined, DownloadOutlined } from '@ant-design/icons';
+import { CopyOutlined, DownloadOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import { message, Space } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
@@ -15,8 +16,9 @@ const PreviewFile = (props: {
 	children?: React.ReactElement;
 	ip?: string;
 }) => {
-	const { file, width, height, children, ip = ip3 } = props;
+	const { file, width = '100%', height = '600px', children, ip = ip3 } = props;
 	const [fileType, setFileType] = useState<EDinhDangFile>(EDinhDangFile.UNKNOWN);
+	const [iframeSrc, setIframeSrc] = useState<string>('');
 
 	const getFileExtension = (url: string) => {
 		const arr = url.split('.');
@@ -30,36 +32,46 @@ const PreviewFile = (props: {
 		try {
 			if (idFile) {
 				const result = await getFileInfo(idFile, ip);
-				mime = result?.data?.file?.mimetype || EDinhDangFile.UNKNOWN;
+				const fileInfo: IFile = result?.data;
+				return fileInfo?.file?.mimetype || getFileExtension(url) || EDinhDangFile.UNKNOWN;
 			} else {
 				mime = getFileExtension(url) || EDinhDangFile.UNKNOWN;
 			}
 		} catch (error) {
-			console.error('Error fetching file type:', error);
+			console.error(error);
+			return EDinhDangFile.UNKNOWN;
 		}
 
-		return getFileType(mime);
+		return mime;
+	};
+
+	const getIframeSrc = (type: EDinhDangFile) => {
+		if (!file) return '';
+		const officeFileType = [EDinhDangFile.WORD, EDinhDangFile.EXCEL, EDinhDangFile.POWERPOINT];
+		if (type && officeFileType.includes(type)) {
+			return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(file)}`;
+		} else {
+			return file;
+		}
 	};
 
 	useEffect(() => {
 		const fetchFileType = async () => {
-			if (file) {
+			try {
 				const res = await getFileTypeFromUrl(file);
-				setFileType(res ?? EDinhDangFile.UNKNOWN);
+				setFileType(getFileType(res) as EDinhDangFile);
+
+				if (res) {
+					const val = getIframeSrc(getFileType(res) as EDinhDangFile);
+					setIframeSrc(val);
+				}
+			} catch (error) {
+				console.error(error);
 			}
 		};
 
 		fetchFileType();
 	}, [file]);
-
-	const getIframeSrc = () => {
-		if (!file) return '';
-		const officeFileType = [EDinhDangFile.WORD, EDinhDangFile.EXCEL, EDinhDangFile.POWERPOINT];
-		if (fileType && officeFileType.includes(fileType)) {
-			return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(file)}`;
-		}
-		return file;
-	};
 
 	const handleDownload = async () => {
 		if (file) {
@@ -103,11 +115,17 @@ const PreviewFile = (props: {
 				<Space wrap>
 					<ButtonExtend type='link' tooltip='Tải xuống' icon={<DownloadOutlined />} onClick={handleDownload} />
 					<ButtonExtend type='link' tooltip='Sao chép đường dẫn' icon={<CopyOutlined />} onClick={handleCopy} />
+					<ButtonExtend
+						type='link'
+						tooltip='Mở rộng'
+						icon={<FullscreenExitOutlined />}
+						onClick={() => window.open(iframeSrc, '_blank')}
+					/>
 					{children}
 				</Space>
 			</div>
 			{fileType !== EDinhDangFile.UNKNOWN ? (
-				<iframe src={getIframeSrc()} width={width ?? '100%'} height={height ?? '600px'} />
+				<iframe src={iframeSrc} width={width} height={height} />
 			) : (
 				<div
 					style={{

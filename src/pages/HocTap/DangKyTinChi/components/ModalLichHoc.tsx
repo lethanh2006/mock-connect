@@ -20,7 +20,7 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	const [endDate, setEndDate] = useState<Date>();
 
 	useEffect(() => {
-		getSettingLich();
+		if (!recSetting?._id) getSettingLich();
 	}, []);
 
 	const getData = () => {

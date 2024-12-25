@@ -1,4 +1,6 @@
 import { messagesCalendar } from '@/services/Calendar/constant';
+import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import moment from 'moment';
 import { useEffect } from 'react';
@@ -8,19 +10,24 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useModel } from 'umi';
 const localizer = momentLocalizer(moment);
 
-const CalendarLichHocLopHp = () => {
-	const { setVisibleForm, danhSach, setRecord } = useModel('daotao.thoikhoabieu');
+const CalendarLichHocLopHp = (props: {
+	items: ThoiKhoaBieu.IRecord[];
+	onClickItem: (val: ThoiKhoaBieu.IRecord) => void;
+}) => {
 	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
+	const { items, onClickItem } = props;
 
 	useEffect(() => {
-		getSettingLich();
+		if (!recSetting?._id) getSettingLich();
 	}, []);
 
-	const eventPropGetter = () => ({
+	const eventPropGetter = (item: ThoiKhoaBieu.IRecord) => ({
 		style: {
 			backgroundColor:
-				recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.LICH_HOC)?.maMau ??
-				ColorSuKien?.[ELoaiSuKien.LICH_HOC],
+				item.hinhThucGiangDay === EHinhThucGiangDay.ONLINE
+					? '#4ba2e9b3'
+					: recSetting?.danhSachSettingLich?.find((i) => i?.loaiLich === ELoaiSuKien.LICH_HOC)?.maMau ??
+					  ColorSuKien?.[ELoaiSuKien.LICH_HOC],
 		},
 	});
 
@@ -37,7 +44,7 @@ const CalendarLichHocLopHp = () => {
 				},
 			}}
 			localizer={localizer}
-			events={danhSach.map((j) => ({
+			events={items.map((j) => ({
 				...j,
 				title: j.tenLopHocPhan,
 				start: moment(j?.thoiGianBatDau).toDate(),
@@ -52,10 +59,7 @@ const CalendarLichHocLopHp = () => {
 			max={moment('2100', 'HHmm').toDate()}
 			eventPropGetter={eventPropGetter}
 			components={{ event: (event: any) => eventCustom(event) }}
-			onSelectEvent={(rec: any) => {
-				setRecord(rec);
-				setVisibleForm(true);
-			}}
+			onSelectEvent={(rec: any) => onClickItem(rec)}
 		/>
 	);
 };

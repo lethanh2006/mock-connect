@@ -6,7 +6,7 @@ const StatDiemDanh = () => {
 	const { danhSach } = useModel('daotao.thoikhoabieu');
 
 	return (
-		<Row gutter={[12, 12]} style={{ marginBottom: 18 }}>
+		<Row gutter={[8, 8]} style={{ marginBottom: 18 }}>
 			<Col span={12} md={8} xxl={4}>
 				<Card className='card-stat-small'>
 					<span className='num'>{danhSach.length}</span>

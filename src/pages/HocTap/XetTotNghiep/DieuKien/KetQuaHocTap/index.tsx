@@ -5,7 +5,7 @@ const DieuKienKqhtSection = () => {
 	const { record, dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
 
 	return (
-		<Row gutter={[12, 12]} style={{ marginBottom: 18 }}>
+		<Row gutter={[8, 8]} style={{ marginBottom: 18 }}>
 			<Col span={24}>
 				<div
 					style={{

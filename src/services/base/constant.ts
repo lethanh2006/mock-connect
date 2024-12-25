@@ -122,6 +122,7 @@ export const tenTruongVietTatTiengAnh = APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH
 /** Cài đặt hệ thống */
 export enum ESettingKey {
 	THONG_TIN_THANH_TOAN = 'THONG_TIN_THANH_TOAN',
+	GENERAL_INFO = 'GENERAL_INFO',
 }
 
 /** Định dạng file */
@@ -135,4 +136,15 @@ export enum EDinhDangFile {
 	AUDIO = 'audio',
 	TEXT = 'text',
 	UNKNOWN = 'unknown',
+}
+
+export enum EScopeFile {
+	PUBLIC = 'Public',
+	INTERNAL = 'Internal',
+	PRIVATE = 'Private',
+}
+
+export enum EStorageFile {
+	DATABASE = 'Database',
+	S3 = 'S3',
 }
