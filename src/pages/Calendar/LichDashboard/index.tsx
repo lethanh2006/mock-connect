@@ -150,12 +150,7 @@ const LichDashboard = () => {
 									{[
 										sukien.tenSuKien,
 										sukien.diaDiem,
-										sukien.loaiSuKien === ELoaiSuKien.LICH_HOC &&
-											sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
-												<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
-													{sukien.hinhThucGiangDay}
-												</Tag>
-											),
+										sukien.loaiSuKien === ELoaiSuKien.LICH_GIANG_DAY && `${sukien.hinhThucGiangDay}`,
 									]
 										.filter(Boolean)
 										.join(' - ')}

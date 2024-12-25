@@ -36,6 +36,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 		},
 		{
 			title: 'Thời gian hoàn thành',
+			dataIndex: 'thoiGianHoanThanh',
 			width: 130,
 			align: 'center',
 			render: (val, rec) => val && moment(val).format('HH:mm DD/MM/YYYY'),
