@@ -10,7 +10,7 @@ const CardThongKe = () => {
 
 	return (
 		<Spin spinning={loading}>
-			<Row gutter={[12, 12]} style={{ marginBottom: 12 }}>
+			<Row gutter={[8, 8]} style={{ marginBottom: 12 }}>
 				<Col span={12} md={8}>
 					<Card className='card-stat-small'>
 						<span

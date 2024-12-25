@@ -167,3 +167,13 @@ export const colorTrangThaiHocPhanQuyDoi: Record<ETrangThaiHocPhanQuyDoi, string
 	[ETrangThaiHocPhanQuyDoi.KHONG_CONG_NHAN]: 'red',
 	[ETrangThaiHocPhanQuyDoi.DA_RA_QUYET_DINH]: 'green',
 };
+
+export enum EHinhThucGiangDay {
+	TRUC_TIEP = 'Trực tiếp',
+	ONLINE = 'Online',
+}
+
+export const colorHinhThucGiangDay: Record<EHinhThucGiangDay, string> = {
+	[EHinhThucGiangDay.TRUC_TIEP]: 'green',
+	[EHinhThucGiangDay.ONLINE]: 'blue',
+};

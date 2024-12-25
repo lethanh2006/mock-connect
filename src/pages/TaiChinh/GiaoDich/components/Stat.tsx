@@ -11,7 +11,7 @@ const StatGiaoDich = () => {
 	}, []);
 
 	return (
-		<Row gutter={[12, 12]} style={{ marginBottom: 18 }}>
+		<Row gutter={[8, 8]} style={{ marginBottom: 18 }}>
 			<Col span={24} md={12}>
 				<Card className='card-stat-small'>
 					<span className='num text-success'>{`${inputFormat(soDuVi?.totalIn ?? 0)} VND`}</span>

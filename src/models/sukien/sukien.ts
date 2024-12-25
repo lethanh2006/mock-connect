@@ -1,4 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
+import type { EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { getSuKienTrongKhoang } from '@/services/SuKien';
 import { ELoaiSuKien, locationPathMappingToESuKienType, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
@@ -8,6 +9,7 @@ import { useState } from 'react';
 
 type Ngay = string;
 interface StateItem {
+	hinhThucGiangDay: EHinhThucGiangDay;
 	tenSuKien: string;
 	diaDiem: string;
 	loaiSuKien: ELoaiSuKien;

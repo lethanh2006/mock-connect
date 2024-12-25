@@ -1,13 +1,14 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import { colorHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
+import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { ArrowRightOutlined, CheckSquareOutlined, EyeOutlined } from '@ant-design/icons';
-import { Card, Col, Descriptions, Empty, Progress, Row } from 'antd';
+import { Card, Col, Descriptions, Empty, Progress, Row, Tag } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalThoiKhoaBieu from './Modal';
-import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 
 const CardBuoiHocTiepTheo = () => {
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
@@ -64,7 +65,12 @@ const CardBuoiHocTiepTheo = () => {
 							? `${moment(buoiHoc.thoiGianBatDau).format('HH:mm')} - ${moment(buoiHoc.thoiGianKetThuc).format('HH:mm')}`
 							: `Tiết ${buoiHoc.tietBatDau} - ${buoiHoc.tietKetThuc}`}
 					</Descriptions.Item>
-					<Descriptions.Item label='Phòng'>{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
+					<Descriptions.Item label='Phòng'>
+						{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}{' '}
+						{buoiHoc.hinhThucGiangDay ? (
+							<Tag color={colorHinhThucGiangDay[buoiHoc.hinhThucGiangDay]}>{buoiHoc.hinhThucGiangDay}</Tag>
+						) : null}
+					</Descriptions.Item>
 				</Descriptions>
 
 				<div style={{ textAlign: 'right' }}>

@@ -1,6 +1,7 @@
+import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Badge, Card, Col, Empty, Modal, Row, Space, Typography } from 'antd';
+import { Badge, Card, Col, Empty, Modal, Row, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -145,7 +146,15 @@ const LichDashboard = () => {
 										ColorSuKien[sukien.loaiSuKien],
 								}}
 							>
-								<div>{[sukien.tenSuKien, sukien.diaDiem].filter(Boolean).join(' - ')}</div>
+								<div>
+									{[
+										sukien.tenSuKien,
+										sukien.diaDiem,
+										sukien.loaiSuKien === ELoaiSuKien.LICH_GIANG_DAY && `${sukien.hinhThucGiangDay}`,
+									]
+										.filter(Boolean)
+										.join(' - ')}
+								</div>
 							</div>
 						</div>
 					))}

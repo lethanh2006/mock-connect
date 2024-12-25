@@ -7,19 +7,21 @@ import {
 	trangThaiUserDiemDanh,
 	type ETrangThaiUserDiemDanh,
 } from '@/services/DaoTao/constant';
+import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { Tag } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 
-const TableLichHocLopHP = () => {
-	const { setRecord, setVisibleForm, danhSach, loading } = useModel('daotao.thoikhoabieu');
+const TableLichHocLopHP = (props: {
+	items: ThoiKhoaBieu.IRecord[];
+	onClickItem: (val: ThoiKhoaBieu.IRecord) => void;
+}) => {
+	const { loading } = useModel('daotao.thoikhoabieu');
+	const { items, onClickItem } = props;
 
 	const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
-		onClick: () => {
-			setRecord(rec);
-			setVisibleForm(true);
-		},
+		onClick: () => onClickItem(rec),
 		style: {
 			cursor: 'pointer',
 			backgroundColor: moment().isSame(rec.ngay, 'D') ? '#005fcc1f' : undefined,
@@ -37,6 +39,7 @@ const TableLichHocLopHP = () => {
 		{
 			title: 'Ngày học',
 			dataIndex: 'ngay',
+			align: 'center',
 			width: 150,
 			render: (val) => (val ? `${THU_TRONG_TUAN[moment(val).day()]}, ${moment(val).format('DD/MM/YYYY')}` : null),
 			onCell,
@@ -54,6 +57,14 @@ const TableLichHocLopHP = () => {
 			align: 'center',
 			width: 100,
 			render: (val) => (val ? val : <i>Chưa cập nhật</i>),
+			onCell,
+		},
+		{
+			title: 'Hình thức',
+			dataIndex: 'hinhThucGiangDay',
+			align: 'center',
+			width: 100,
+			render: (val: EHinhThucGiangDay) => val && <Tag color={colorHinhThucGiangDay[val]}>{val}</Tag>,
 			onCell,
 		},
 		{
@@ -122,10 +133,7 @@ const TableLichHocLopHP = () => {
 		<>
 			<TableStaticData
 				hasTotal
-				data={danhSach.map((item, index) => ({
-					...item,
-					index: index + 1,
-				}))}
+				data={items}
 				columns={columns}
 				otherProps={{ pagination: false, loading, scroll: { y: 600 } }}
 			/>
