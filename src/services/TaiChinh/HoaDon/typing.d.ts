@@ -1,3 +1,4 @@
+import type { DotThuTaiChinh } from '../DotThu/typing';
 import type { UuDaiThanhToan } from '../UuDaiThanhToan/typing';
 import type { EMaTrangThaiThanhToan } from '../constant';
 
@@ -11,7 +12,7 @@ declare module HoaDon {
 		status: EMaTrangThaiThanhToan;
 		soTienThue: number;
 		idDotThu: string;
-		dotThu?: DotThuTaiChinh.Record;
+		dotThu?: DotThuTaiChinh.IRecord;
 		metadata?: Record;
 		moTa?: string;
 
