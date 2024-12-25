@@ -32,13 +32,15 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		thanhToanMomoModel,
 		huyThanhToanModel,
 	} = useModel('taichinh.giaodich');
+	const { record: recDotThu, getByIdModel: getDotThu } = useModel('taichinh.dotthu');
 	const [activeTab, setActiveTab] = useState('1');
 	const ngoaiThoiGianThanhToan =
 		!recHoaDon?.dotThu?._id ||
 		!recHoaDon?.dotThu?.thoiGianBatDau ||
 		!recHoaDon?.dotThu?.thoiGianKetThuc ||
 		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
-		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc);
+		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc) ||
+		!recHoaDon.dotThu.kichHoat;
 
 	/** Get giao dịch pending */
 	const getGiaoDich = () =>
@@ -58,10 +60,18 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		onChangeTab('1');
 	}, [recHoaDon?.identityCode]);
 
+	const handleShowModalThanhToan = async (tran: GiaoDich.IRecord) => {
+		// Get đợt thu trước khi hiển thị modal để lấy thông tin kênh thanh toán
+		if (recDotThu?._id !== tran.idDotThu || (!!recDotThu.kenhThanhToanId && !recDotThu.kenhThanhToan?._id))
+			await getDotThu(tran.idDotThu);
+		// Set record để hiển thị thông tin thanh toán
+		setRecord(tran);
+		setVisibleHuongDan(true);
+	};
+
 	const onPay = (rec: GiaoDich.IRecord) => {
 		if (rec?.paymentType === ETransactionPaymentType.BANK) {
-			setRecord(rec);
-			setVisibleHuongDan(true);
+			handleShowModalThanhToan(rec);
 		} else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET && rec.identityCode)
 			thanhToanMomoModel(rec.identityCode);
 	};
@@ -128,7 +138,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 										className='btn-success'
 										loading={loading}
 										notHideText
-										tooltip={ngoaiThoiGianThanhToan ? 'Ngoài thời gian thanh toán' : undefined}
+										tooltip={ngoaiThoiGianThanhToan ? 'Ngoài thời gian hoặc chưa mở đợt thanh toán' : undefined}
 									>
 										Thông tin thanh toán
 									</ButtonExtend>

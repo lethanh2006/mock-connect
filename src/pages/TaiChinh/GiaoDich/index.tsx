@@ -38,6 +38,7 @@ const GiaoDichPage = () => {
 		huyThanhToanModel,
 	} = useModel('taichinh.giaodich');
 	const { getModel: getModelDotThu, setRecord: setRecDotThu, loading } = useModel('taichinh.dotthutruochocphi');
+	const { record: recDotThu, getByIdModel: getDotThu } = useModel('taichinh.dotthu');
 	const [kieuThanhToan, setKieuThanhToan] = useState<ETransactionType | undefined>(ETransactionType.DEPOSIT);
 	const [visibleHocPhi, setVisibleHocPhi] = useState<boolean>(false);
 
@@ -51,10 +52,18 @@ const GiaoDichPage = () => {
 
 	const getData = () => getModel({ type: kieuThanhToan }, undefined, undefined, undefined, undefined, 'me/page');
 
+	const handleShowModalThanhToan = async (tran: GiaoDich.IRecord) => {
+		// Get đợt thu trước khi hiển thị modal để lấy thông tin kênh thanh toán
+		if (recDotThu?._id !== tran.idDotThu || (!!recDotThu.kenhThanhToanId && !recDotThu.kenhThanhToan?._id))
+			await getDotThu(tran.idDotThu);
+		// Set record để hiển thị thông tin thanh toán
+		setRecord(tran);
+		setVisibleHuongDan(true);
+	};
+
 	const onPay = (rec: GiaoDich.IRecord) => {
 		if (rec?.paymentType === ETransactionPaymentType.BANK) {
-			setRecord(rec);
-			setVisibleHuongDan(true);
+			handleShowModalThanhToan(rec);
 		} else if (rec?.paymentType === ETransactionPaymentType.MOMO_WALLET && rec.identityCode)
 			thanhToanMomoModel(rec.identityCode);
 	};
