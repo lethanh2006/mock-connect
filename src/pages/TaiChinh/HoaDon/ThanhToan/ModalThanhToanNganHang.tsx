@@ -10,7 +10,7 @@ import { useModel } from 'umi';
 const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) => {
 	const { visible, onOk } = props;
 	const { record } = useModel('taichinh.giaodich');
-	const { record: recDotThu, getByIdModel: getDotThu } = useModel('taichinh.dotthu');
+	const { record: recDotThu } = useModel('taichinh.dotthu');
 	const { getByKeyModel, settings } = useModel('tienich.caidat');
 	const { getAllModel: getHinhThuc, defaultHinhThuc } = useModel('taichinh.hinhthucthanhtoan');
 	const { initialState } = useModel('@@initialState');
@@ -54,10 +54,6 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 		// Chỉ get 1 lần
 		if (!defaultHinhThuc) getHinhThuc();
 	}, []);
-
-	useEffect(() => {
-		if (record?.idDotThu) getDotThu(record.idDotThu);
-	}, [record?.idDotThu]);
 
 	const renderLopThuong = () => (
 		<Row gutter={[12, 12]}>
