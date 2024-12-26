@@ -19,6 +19,7 @@ const ModalNopTruocHocPhi = (props: {
 	const { dongTruocHocPhiModel, formSubmiting, paymentType, setVisibleHuongDan, thanhToanMomoModel, setRecord } =
 		useModel('taichinh.giaodich');
 	const { record: recThuTruocHp } = useModel('taichinh.dotthutruochocphi');
+	const { record: recDotThu, getByIdModel: getDotThu } = useModel('taichinh.dotthu');
 	const { getMucThuHocPhiTheoNamModel, mucThuMe } = useModel('taichinh.mucthuhocphi');
 	const { initialState } = useModel('@@initialState');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
@@ -47,6 +48,15 @@ const ModalNopTruocHocPhi = (props: {
 	//Số tiền ưu đãi
 	const soTienUuDai = soTienPhaiDong * (recThuTruocHp?.uuDai?.phanTramUuDai / 100);
 
+	const handleShowModalThanhToan = async (tran: GiaoDich.IRecord) => {
+		// Get đợt thu trước khi hiển thị modal để lấy thông tin kênh thanh toán
+		if (recDotThu?._id !== tran.idDotThu || (!!recDotThu.kenhThanhToanId && !recDotThu.kenhThanhToan?._id))
+			await getDotThu(tran.idDotThu);
+		// Set record để hiển thị thông tin thanh toán
+		setRecord(tran);
+		setVisibleHuongDan(true);
+	};
+
 	const onFinish = (values: any) => {
 		const data: GiaoDich.TDongTruocHocPhi = {
 			...values,
@@ -70,8 +80,7 @@ const ModalNopTruocHocPhi = (props: {
 				if (getData) getData();
 				setVisibleForm(false);
 				if (rec.paymentType === ETransactionPaymentType.BANK) {
-					setRecord(rec);
-					setVisibleHuongDan(true);
+					handleShowModalThanhToan(rec);
 				} else if (rec.paymentType === ETransactionPaymentType.MOMO_WALLET && rec.identityCode)
 					thanhToanMomoModel(rec.identityCode);
 			})
