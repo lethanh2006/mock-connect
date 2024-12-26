@@ -31,7 +31,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 	const totalUuDai = _.sumBy(dataHienThi, (item) => item.amountDiscount);
 	const payList: Record<string, number> = Form.useWatch('payList', form);
 	const totalPay = _.sum(Object.values(payList ?? {})) ?? 0;
-	const soDuHienTai = soDuVi?.totalRemain ?? 0;
+	const soDuHienTai = soDuVi; //?.totalRemain ?? 0;
 	const topupAmount = totalPay > soDuHienTai ? totalPay - soDuHienTai : 0;
 	const totalSauThanhToan = soDuHienTai + topupAmount - totalPay;
 

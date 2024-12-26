@@ -15,7 +15,7 @@ import { useState } from 'react';
 
 export default () => {
 	const objInit = useInitModel<GiaoDich.IRecord>('transaction', undefined, undefined, ipTaiChinh);
-	const [soDuVi, setSoDuVi] = useState<GiaoDich.TUserWallet>();
+	const [soDuVi, setSoDuVi] = useState<number>(0);
 	const [visibleHuongDan, setVisibleHuongDan] = useState<boolean>(false);
 	const [paymentType, setPaymentType] = useState<ETransactionPaymentType>(ETransactionPaymentType.BANK);
 	const [momoConfig, setMomoConfig] = useState<GiaoDich.TMomoConfig>();
@@ -54,20 +54,33 @@ export default () => {
 		}
 	};
 
-	const getSoDuViSinhVienModel = async (idDotThu?: string | null): Promise<GiaoDich.TUserWallet> => {
+	const getSoDuViSinhVienModel = async (idDotThu?: string | null): Promise<number> => {
 		setLoading(true);
 		try {
 			const res = await getSoDuViSinhVien(idDotThu || null);
-			const temp: GiaoDich.TUserWallet = res.data?.data;
-
-			setSoDuVi({ ...temp, totalRemain: (temp.totalIn ?? 0) - (temp.totalOut ?? 0) });
-			return { ...temp, totalRemain: (temp.totalIn ?? 0) - (temp.totalOut ?? 0) };
+			setSoDuVi(res.data?.data ?? 0);
+			return res.data?.data ?? 0;
 		} catch (err) {
 			return Promise.reject(err);
 		} finally {
 			setLoading(false);
 		}
 	};
+
+	// const getSoDuViSinhVienModel = async (idDotThu?: string | null): Promise<GiaoDich.TUserWallet> => {
+	// 	setLoading(true);
+	// 	try {
+	// 		const res = await getSoDuViSinhVien(idDotThu || null);
+	// 		const temp: GiaoDich.TUserWallet = res.data?.data;
+
+	// 		setSoDuVi({ ...temp, totalRemain: (temp.totalIn ?? 0) - (temp.totalOut ?? 0) });
+	// 		return { ...temp, totalRemain: (temp.totalIn ?? 0) - (temp.totalOut ?? 0) };
+	// 	} catch (err) {
+	// 		return Promise.reject(err);
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// };
 
 	const dongTruocHocPhiModel = async (payLoad: GiaoDich.TDongTruocHocPhi): Promise<GiaoDich.IRecord> => {
 		if (formSubmiting) return Promise.reject('form submiting');
