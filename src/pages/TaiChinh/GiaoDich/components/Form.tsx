@@ -19,7 +19,17 @@ const FormDongTruocHocPhi = (props: { getData?: () => void; [key: string]: any }
 		thanhToanMomoModel,
 		setRecord,
 	} = useModel('taichinh.giaodich');
+	const { record: recDotThu, getByIdModel: getDotThu } = useModel('taichinh.dotthu');
 	const amount: number = Form.useWatch('amount', form) ?? 0;
+
+	const handleShowModalThanhToan = async (tran: GiaoDich.IRecord) => {
+		// Get đợt thu trước khi hiển thị modal để lấy thông tin kênh thanh toán
+		if (recDotThu?._id !== tran.idDotThu || (!!recDotThu.kenhThanhToanId && !recDotThu.kenhThanhToan?._id))
+			await getDotThu(tran.idDotThu);
+		// Set record để hiển thị thông tin thanh toán
+		setRecord(tran);
+		setVisibleHuongDan(true);
+	};
 
 	const onFinish = (values: GiaoDich.TDongTruocHocPhi) => {
 		dongTruocHocPhiModel({ ...values, paymentType })
@@ -29,8 +39,7 @@ const FormDongTruocHocPhi = (props: { getData?: () => void; [key: string]: any }
 				resetFieldsForm(form);
 
 				if (rec.paymentType === ETransactionPaymentType.BANK) {
-					setRecord(rec);
-					setVisibleHuongDan(true);
+					handleShowModalThanhToan(rec);
 				} else if (rec.paymentType === ETransactionPaymentType.MOMO_WALLET && rec.identityCode)
 					thanhToanMomoModel(rec.identityCode);
 			})
