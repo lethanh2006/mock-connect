@@ -57,7 +57,7 @@ export default () => {
 	const getSoDuViSinhVienModel = async (idDotThu?: string | null): Promise<GiaoDich.TUserWallet> => {
 		setLoading(true);
 		try {
-			const res = await getSoDuViSinhVien(idDotThu);
+			const res = await getSoDuViSinhVien(idDotThu || null);
 			const temp: GiaoDich.TUserWallet = res.data?.data;
 
 			setSoDuVi({ ...temp, totalRemain: (temp.totalIn ?? 0) - (temp.totalOut ?? 0) });
