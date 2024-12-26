@@ -13,7 +13,10 @@ const DesThongTinHoaDon = () => {
 		(moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) || moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc));
 	return (
 		<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
-			<Descriptions.Item label='Đợt thu'>{recHoaDon?.dotThu?.tenDot ?? <i>Đang cập nhật</i>}</Descriptions.Item>
+			<Descriptions.Item label='Đợt thu'>
+				{recHoaDon?.dotThu?.tenDot ?? <i>Đang cập nhật</i>} -{' '}
+				{!recHoaDon?.dotThu?.kichHoat ? <span className='text-error'>Chưa mở đợt</span> : null}
+			</Descriptions.Item>
 			<Descriptions.Item label='Thời gian thu'>
 				<span className={ngoaiThoiGianThanhToan ? 'text-error' : undefined}>
 					{recHoaDon?.dotThu?.thoiGianBatDau ? (
