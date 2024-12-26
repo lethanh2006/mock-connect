@@ -138,7 +138,7 @@ const LichDashboard = () => {
 							<div className={styles.su_kien__left}>
 								<div className={styles.su_kien__thoi_gian}>{moment(sukien.thoiGianBatDau).format('HH:mm')}</div>
 							</div>
-							<div
+							<Space
 								className={styles.su_kien__right}
 								style={{
 									borderColor:
@@ -146,16 +146,13 @@ const LichDashboard = () => {
 										ColorSuKien[sukien.loaiSuKien],
 								}}
 							>
-								<div>
-									{[
-										sukien.tenSuKien,
-										sukien.diaDiem,
-										sukien.loaiSuKien === ELoaiSuKien.LICH_GIANG_DAY && `${sukien.hinhThucGiangDay}`,
-									]
-										.filter(Boolean)
-										.join(' - ')}
-								</div>
-							</div>
+								<div>{[sukien.tenSuKien, sukien.diaDiem].filter(Boolean).join(' - ')}</div>
+								{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC && sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
+									<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
+										{sukien.hinhThucGiangDay}
+									</Tag>
+								)}
+							</Space>
 						</div>
 					))}
 				</div>
