@@ -1,7 +1,7 @@
 import { ConfigProvider, Tooltip } from 'antd';
 import { unChatMessagerSupportPaths } from '../constant';
 
-const ChatMessager = (props: { path: string }) => {
+const PanpageHoTro = (props: { path: string }) => {
 	const { path } = props;
 
 	return (
@@ -32,4 +32,4 @@ const ChatMessager = (props: { path: string }) => {
 	);
 };
 
-export default ChatMessager;
+export default PanpageHoTro;
