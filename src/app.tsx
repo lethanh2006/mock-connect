@@ -17,6 +17,7 @@ import NotFoundContent from './pages/exception/404';
 import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
 import { currentRole } from './utils/ip';
+import ChatMessager from './components/TechnicalSupportBounder/ChatMessager';
 
 /**  loading */
 export const initialStateConfig = {
@@ -121,6 +122,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 					<TechnicalSupportBounder>
 						<OneSignalBounder>{dom}</OneSignalBounder>
 					</TechnicalSupportBounder>
+					<ChatMessager path={APP_CONFIG_HO_TRO_KY_THUAT} />
 				</ErrorBoundary>
 			</OIDCBounder>
 		),
