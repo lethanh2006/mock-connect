@@ -1,22 +1,22 @@
-import { ConfigProvider, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import { unChatMessagerSupportPaths } from '../constant';
 
 const PanpageHoTro = (props: { path: string }) => {
 	const { path } = props;
 
 	return (
-		<ConfigProvider>
+		<>
 			{!unChatMessagerSupportPaths.includes(window.location.pathname) ? (
 				<>
-					<Tooltip title='Hỗ trợ kỹ thuật' placement='topLeft'>
+					<Tooltip title='Fanpage Messenger' placement='topLeft'>
 						<img
 							onClick={() => window.open(path, '_blank')}
 							style={{
 								cursor: 'pointer',
-								width: 45,
+								width: 40,
 								position: 'fixed',
 								bottom: 30,
-								right: 20,
+								right: 24,
 								zIndex: 10,
 								boxShadow: 'rgba(0, 0, 0, 0.2) 1px 1px 8px 3px',
 								padding: 0,
@@ -28,7 +28,7 @@ const PanpageHoTro = (props: { path: string }) => {
 					</Tooltip>
 				</>
 			) : null}
-		</ConfigProvider>
+		</>
 	);
 };
 
