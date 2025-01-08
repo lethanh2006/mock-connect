@@ -22,7 +22,7 @@ const PanpageHoTro = (props: { path: string }) => {
 								padding: 0,
 								borderRadius: '50%',
 							}}
-							src='images/messenger_icon.png'
+							src='/images/messenger_icon.png'
 							alt='mess'
 						/>
 					</Tooltip>
