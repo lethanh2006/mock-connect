@@ -24,6 +24,9 @@ const FormTraLoiKhaoSat = (props: {
 	hideCard?: boolean;
 	recBieuMauProps?: BieuMau.Record;
 	[key: string]: any;
+
+	/** Khảo sát bắt buộc */
+	isBatBuoc?: boolean;
 }) => {
 	const {
 		setVisibleForm,
@@ -32,6 +35,9 @@ const FormTraLoiKhaoSat = (props: {
 		visibleForm,
 		danhSach,
 		thoiGian,
+		isThanhCong,
+		setIsThanhCong,
+		setDsKhaoSatBatBuoc,
 	} = useModel('tienich.dotkhaosat');
 	const {
 		loading,
@@ -41,11 +47,17 @@ const FormTraLoiKhaoSat = (props: {
 	} = useModel('tienich.bieumau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
-	const { onOk, cauTraLoi, onCancel, hideCard } = props;
+	const { onOk, cauTraLoi, onCancel, hideCard, isBatBuoc } = props;
 	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
 	const [check, setCheck] = useState<boolean>(false);
 	const disabled = thoiGian !== EThoiGianDot.DANG_DIEN_RA || recordDot?.kichHoat === false;
 	const record = props?.recBieuMauProps ?? recBieuMau;
+
+	useEffect(() => {
+		if (!isThanhCong) {
+			resetFieldsForm(form);
+		}
+	}, [isThanhCong]);
 
 	useEffect(() => {
 		if (!visibleForm && !onOk) {
@@ -236,8 +248,18 @@ const FormTraLoiKhaoSat = (props: {
 				gioiTinh: recSinhVien?.gioiTinh,
 			})
 				.then(() => {
-					getDotMeModel();
-					setVisibleForm(false);
+					getDotMeModel().then((res) => {
+						if (isBatBuoc) {
+							const index = res?.filter((item) => item?.defaultOpenAuth && !item?.daLam);
+							setDsKhaoSatBatBuoc(index ?? []);
+						}
+					});
+
+					if (isBatBuoc) {
+						setIsThanhCong(true);
+					} else {
+						setVisibleForm(false);
+					}
 				})
 				.catch((er) => console.log(er));
 		}
@@ -281,8 +303,13 @@ const FormTraLoiKhaoSat = (props: {
 					>
 						Hoàn thành
 					</ButtonExtend>
-					{!onOk ? <Button onClick={() => setVisibleForm(false)}>Hủy</Button> : null}
-					{!!onCancel ? <Button onClick={() => onCancel()}>Hủy</Button> : null}
+
+					{!isBatBuoc ? (
+						<>
+							{!onOk ? <Button onClick={() => setVisibleForm(false)}>Hủy</Button> : null}
+							{!!onCancel ? <Button onClick={() => onCancel()}>Hủy</Button> : null}
+						</>
+					) : null}
 				</div>
 			</Form>
 		</Spin>

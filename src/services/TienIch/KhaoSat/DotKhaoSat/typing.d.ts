@@ -29,6 +29,9 @@ declare module DotKhaoSat {
 
 		thongTinCauTraLoi?: BieuMau.IDanhGiaGiangVien[];
 
+		//Khảo sát bắt buộc
+		defaultOpenAuth: boolean;
+
 		// Populate
 		daLam: boolean;
 		updatedAt: Date;
