@@ -1,18 +1,13 @@
-import { primaryColor } from '@/services/base/constant';
 import { ToolOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Modal, Tooltip } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { history } from 'umi';
+import PanpageHoTro from './FanpageHoTro';
 import FormPostIssue from './Form';
 import { unTechnicalSupportPaths } from './constant';
-import { history } from 'umi';
 
 const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 	const [visible, setVisible] = useState<boolean>(false);
-
-	useEffect(() => {
-		// Đổi màu real time => Hỗ trợ đổi tenant
-		ConfigProvider.config({ theme: { primaryColor } });
-	}, []);
 
 	return (
 		<ConfigProvider>
@@ -30,11 +25,7 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 								right: 24,
 								zIndex: 10,
 								boxShadow: 'rgba(0, 0, 0, 0.2) 1px 1px 8px 3px',
-								width: 44,
-								height: 44,
 								padding: 0,
-								lineHeight: '44px',
-								fontSize: 20,
 							}}
 							shape='circle'
 							size='large'
@@ -55,6 +46,8 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 					</Modal>
 				</>
 			) : null}
+
+			<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
 		</ConfigProvider>
 	);
 };

@@ -58,11 +58,12 @@ const HocLieuDeCuongPage = () => {
 			align: 'center',
 			fixed: 'right',
 			render: (val, rec) =>
-				val && APP_CONFIG_URL_THU_VIEN ? (
+				val ? (
 					<a href={APP_CONFIG_URL_THU_VIEN + val} target='_blank' rel='noreferrer' title='Xem chi tiết'>
 						<EyeOutlined />
 					</a>
 				) : null,
+			hide: !APP_CONFIG_URL_THU_VIEN,
 		},
 	];
 
