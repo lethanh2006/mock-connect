@@ -1,9 +1,10 @@
 import { ToolOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Modal, Tooltip } from 'antd';
 import { useState } from 'react';
+import { history } from 'umi';
+import PanpageHoTro from './FanpageHoTro';
 import FormPostIssue from './Form';
 import { unTechnicalSupportPaths } from './constant';
-import { history } from 'umi';
 
 const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 	const [visible, setVisible] = useState<boolean>(false);
@@ -45,6 +46,8 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 					</Modal>
 				</>
 			) : null}
+
+			<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
 		</ConfigProvider>
 	);
 };
