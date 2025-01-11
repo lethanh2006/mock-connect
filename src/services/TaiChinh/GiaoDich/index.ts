@@ -13,6 +13,10 @@ export const getSoDuViSinhVien = (idDotThu?: string | null) => {
 	return axios.get(`${ipTaiChinh}/transaction/wallet/me/dot-thu/${idDotThu}`);
 };
 
+export const getTongGiaoDichSinhVien = () => {
+	return axios.get(`${ipTaiChinh}/transaction/wallet/in-out/me`);
+};
+
 export const dongTruocHocPhi = (payLoad: any) => {
 	return axios.post(`${ipTaiChinh}/transaction/me/top-up`, payLoad);
 };
