@@ -63,35 +63,30 @@ const DanhGiaGiangVienPage = () => {
 		<Spin spinning={loading}>
 			{recDot?._id && danhSachNhanSu.length ? (
 				<>
-					<div style={{ marginBottom: 12 }}>
-						<Alert
-							type={ngoaiThoiGian ? 'warning' : 'info'}
-							message={
-								ngoaiThoiGian ? (
-									'Ngoài thời gian đánh giá khảo sát giảng viên !'
-								) : (
+					{recDot?.thongTinCauTraLoi?.length && giangVienKhaoSat?._id ? (
+						<i style={{ color: primaryColor }}>
+							Bạn đã thực hiện đánh giá giảng viên vào lúc{' '}
+							<b>{moment(giangVienKhaoSat?.updatedAt).format('HH:mm, DD/MM/YYYY')}</b>{' '}
+						</i>
+					) : (
+						<div style={{ marginBottom: 8 }}>
+							<Alert
+								type='warning'
+								message={
 									<>
-										<span>
-											Thời gian khảo sát đánh giá giảng viên từ{' '}
-											<b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-											<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
-										</span>
+										{ngoaiThoiGian
+											? 'Ngoài thời gian đánh giá khảo sát giảng viên,'
+											: 'Bạn chưa thực hiện đánh giá giảng viên,'}{' '}
+										Thời gian đánh giá giảng viên từ <b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+										<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
 									</>
-								)
-							}
-							showIcon
-						/>
+								}
+								showIcon
+							/>
+						</div>
+					)}
 
-						{recDot?.thongTinCauTraLoi?.length && giangVienKhaoSat?._id ? (
-							<div style={{ marginTop: 8 }}>
-								<i style={{ color: primaryColor }}>
-									Bạn đã thực hiện khảo sát vào lúc{' '}
-									<b>{moment(giangVienKhaoSat?.updatedAt).format('HH:mm, DD/MM/YYYY')}</b>{' '}
-								</i>
-							</div>
-						) : null}
-					</div>
-					<div style={{ marginBottom: 24 }}>
+					<div style={{ marginBottom: 12 }}>
 						<div className='ant-form-item-label' style={{ padding: 0 }}>
 							<label className='ant-form-item-required'>Giảng viên</label>
 						</div>
@@ -108,6 +103,7 @@ const DanhGiaGiangVienPage = () => {
 							onChange={(val) => setGiangVienSsoId(val)}
 						/>
 					</div>
+
 					<FormTraLoiKhaoSat
 						onOk={hanldeDanhGiaGiangVien}
 						cauTraLoi={giangVienKhaoSat?.danhSachTraLoi}
