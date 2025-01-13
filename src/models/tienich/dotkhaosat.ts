@@ -9,6 +9,9 @@ export default () => {
 	const objInit = useInitModel<DotKhaoSat.IRecord>('dot-khao-sat');
 	const [thoiGian, setThoiGian] = useState<EThoiGianDot>(EThoiGianDot.DANG_DIEN_RA);
 	const { getModel, setLoading, setRecord } = objInit;
+	const [visibleKhaoSatBatBuoc, setVisibleKhaoSatBatBuoc] = useState<boolean>(false);
+	const [dsKhaoSatBatBuoc, setDsKhaoSatBatBuoc] = useState<DotKhaoSat.IRecord[]>([]);
+	const [isThanhCong, setIsThanhCong] = useState<boolean>(false);
 
 	const getDotMeModel = () =>
 		getModel(
@@ -47,5 +50,11 @@ export default () => {
 		thoiGian,
 		setThoiGian,
 		getDotDanhGiaTietHocModel,
+		visibleKhaoSatBatBuoc,
+		setVisibleKhaoSatBatBuoc,
+		dsKhaoSatBatBuoc,
+		setDsKhaoSatBatBuoc,
+		isThanhCong,
+		setIsThanhCong,
 	};
 };

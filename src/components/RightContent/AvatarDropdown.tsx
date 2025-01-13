@@ -1,7 +1,9 @@
+import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
 import { landingUrl } from '@/services/base/constant';
 import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Menu, notification, Spin } from 'antd';
+import { Avatar, Button, Col, Menu, Modal, Row, Spin } from 'antd';
 import { type ItemType } from 'antd/lib/menu/hooks/useItems';
+import moment from 'moment';
 import React, { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
@@ -14,11 +16,71 @@ export type GlobalHeaderRightProps = {
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 	const { initialState } = useModel('@@initialState');
+	const { getDotMeModel, setVisibleKhaoSatBatBuoc, setRecord, setDsKhaoSatBatBuoc } = useModel('tienich.dotkhaosat');
 	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const avatarUrl = recSinhVien?.anhDaiDienUrl ?? initialState?.currentUser?.picture;
 
+	const handleCheckKhaoSatBatBuoc = async () => {
+		try {
+			const res = await getDotMeModel();
+			const index = res?.filter((item) => item?.defaultOpenAuth && !item?.daLam);
+			setDsKhaoSatBatBuoc(index);
+
+			if (index?.length) {
+				Modal.info({
+					bodyStyle: { padding: 0 },
+					icon: null,
+					okButtonProps: { hidden: true },
+					width: 600,
+					content: (
+						<>
+							<div>
+								<img
+									style={{ width: '100%', marginTop: -8, marginBottom: 12 }}
+									src='/logi-thong-bao.png'
+									alt={'image'}
+								/>
+							</div>
+
+							<Row gutter={[12, 12]} style={{ textAlign: 'center' }}>
+								<Col span={24}>
+									<div style={{ color: '#1890ff', fontSize: 20, fontWeight: 600 }}>ĐỢT KHẢO SÁT ĐANG DIỄN RA</div>
+								</Col>
+								<Col span={24}>
+									<div>Tên đợt: {index?.[0]?.ten}</div>
+									<div>
+										Thời gian diễn ra từ {moment(index?.[0]?.thoiGianBatDau).format('DD/MM')} đến{' '}
+										{moment(index?.[0]?.thoiGianKetThuc).format('DD/MM/YYYY')}.
+									</div>
+								</Col>
+								<Col span={24}>
+									<i>Vui lòng thực hiện hiện khảo sát trước khi sử dụng các dịch vụ khác!</i>
+								</Col>
+							</Row>
+
+							<div className='form-footer'>
+								<Button
+									type={'primary'}
+									onClick={() => {
+										Modal.destroyAll();
+										setRecord(index?.[0]);
+										setVisibleKhaoSatBatBuoc(true);
+									}}
+								>
+									Xem chi tiết
+								</Button>
+							</div>
+						</>
+					),
+				});
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
 	useEffect(() => {
-		if (initialState?.currentUser?.ssoId)
+		if (initialState?.currentUser?.ssoId) {
 			getThongTinCuaToiModel().then((res) => {
 				// if (res.needUpdateFaceReg)
 				// 	notification.warn({
@@ -39,6 +101,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 				// 		),
 				// 	});
 			});
+
+			handleCheckKhaoSatBatBuoc();
+		}
 	}, [initialState?.currentUser?.ssoId]);
 
 	const loginOut = () => OIDCBounder?.getActions()?.dangXuat();
@@ -116,6 +181,8 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 					<span className={`${styles.name}`}>{fullName}</span>
 				</span>
 			</HeaderDropdown>
+
+			<ModalKhaoSatBatBuoc />
 		</>
 	);
 };
