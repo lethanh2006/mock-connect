@@ -10,3 +10,6 @@ export async function getLichThiTrongKhoang(payload: { fromDate: string; toDate:
 export async function getLichThiByHocKy(payload: { maHocKy: string }) {
 	return axios.get(`${ipKhaoThi}/${url}/me/hoc-ky/${payload.maHocKy}`);
 }
+
+export const getDanhSachSinhVienThi = (idLichThi: string) =>
+	axios.get(`${ipKhaoThi}/lich-thi/me/lich-thi/${idLichThi}/sv-list`);
