@@ -13,6 +13,7 @@ declare module LichThi {
 	}
 
 	export interface IRecordMe {
+		lichThiId: string;
 		kyThi: string;
 		tenHocPhan: string;
 		maHocPhan: string;
@@ -22,6 +23,14 @@ declare module LichThi {
 		phong: string;
 		dieuKienKetQuaHocTap: EDKDTKetQuaHocTap;
 		dieuKienCongNo: EDKDTCongNo;
+		trangThai: ETrangThaiThi;
+	}
+
+	export interface SinhVienLichThi {
+		lop: string;
+		ma: string;
+		sbd: string;
+		ten: string;
 	}
 
 	export type TObject = Pick<HocPhan.IRecord, 'ma' | 'ten'>;

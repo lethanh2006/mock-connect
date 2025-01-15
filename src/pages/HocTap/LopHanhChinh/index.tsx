@@ -1,4 +1,3 @@
-import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import { Card, Col, Empty, Row, Spin, Tabs } from 'antd';
@@ -43,7 +42,7 @@ const LopHanhChinhPage = () => {
 			}
 		>
 			{/* Xem lớp hành chính theo từng học kỳ khác nhau */}
-			{/* <FilterHocKy style={{ marginBottom: 8 }} isSetHocKy fromLhc onChange={() => setRecord(undefined)}>
+			{/* <FilterHocKy style={{ marginBottom: 8 }} isSetHocKy fromLhc>
 				<SelectLopHanhChinhSinhVien
 					value={record?._id}
 					onChange={(val) => setRecord(danhSach.find((item) => item._id === val))}
@@ -51,7 +50,7 @@ const LopHanhChinhPage = () => {
 					hasDefault
 					maHocKy={recHocKy?.ma}
 				/>
-			</FilterHocKy> */}
+			</FilterHocKy>  */}
 
 			<Spin spinning={loading}>
 				{record?._id ? (

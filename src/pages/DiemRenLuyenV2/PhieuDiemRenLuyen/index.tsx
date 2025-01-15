@@ -1,6 +1,6 @@
 import TableBase from '@/components/Table';
 import { useModel } from '@@/plugin-model/useModel';
-import { IColumn } from '@/components/Table/typing';
+import type { IColumn } from '@/components/Table/typing';
 import { Button, Tag, Tooltip } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import {
