@@ -44,7 +44,7 @@ const QuyetDinh = (props: {
 
 	const getData = () => {
 		if (recordCheDoChinhSach?._id) {
-			getModel({ cheDoSinhVienId: recordCheDoChinhSach?._id, ssoId: props?.ssoId });
+			getModel({ cheDoSinhVienId: recordCheDoChinhSach?._id }, undefined, undefined, undefined, undefined, 'page/my');
 		} else setDanhSach([]);
 	};
 
