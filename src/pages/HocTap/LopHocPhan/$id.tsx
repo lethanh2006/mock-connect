@@ -1,6 +1,8 @@
 import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
 import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
+import { ESettingKey } from '@/services/base/constant';
+import { ipDaoTao } from '@/utils/ip';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
@@ -13,8 +15,6 @@ import ThongTinChung from './components/ThongTinChung';
 import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
-import { ESettingKey } from '@/services/base/constant';
-import { ipDaoTao } from '@/utils/ip';
 import LmsOdooPage from './LMS';
 
 const DetailLopTinChi = ({
@@ -25,8 +25,8 @@ const DetailLopTinChi = ({
 	match: { params: { id: string } };
 }) => {
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
-	const { record, sinhVienGetByIdModel, setRecord } = useModel('lophocphan.lophocphan');
-	const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
+	const { record, sinhVienGetByIdModel, setRecord, loading } = useModel('lophocphan.lophocphan');
+	// const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
 	const { settings, getByKeyModel: getSettings } = useModel('tienich.caidat');
 	const auth = useAuth();
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia', 'dien-dan', 'bai-tap', 'lms'];
@@ -46,7 +46,7 @@ const DetailLopTinChi = ({
 				.catch((er) => {
 					history.push('/hoc-tap/lop-tin-chi');
 				});
-			getAllNhanSu(false, undefined, { lopHocPhanId: id });
+			// getAllNhanSu(false, undefined, { lopHocPhanId: id });
 		}
 	};
 
@@ -108,7 +108,11 @@ const DetailLopTinChi = ({
 								<CardBuoiHocTiepTheo />
 							</Col>
 							<Col span={24}>
-								<CardGiangVienLop danhSachNhanSu={danhSachNhanSu} title='Giảng viên lớp học' loading={loading} />
+								<CardGiangVienLop
+									danhSachNhanSu={record?.nhanSuList ?? []}
+									title='Giảng viên lớp học'
+									loading={loading}
+								/>
 							</Col>
 							<Col span={24}>
 								<CardThongBao
@@ -133,7 +137,7 @@ const DetailLopTinChi = ({
 					<DetailKetQuaHocTap lopHocPhanId={record?._id} toDanhGiaGiangVien={() => onChangeTab(paths[4])} />
 				</>
 			) : tabActive === paths[4] ? (
-				<DanhGiaGiangVienPage />
+				<DanhGiaGiangVienPage danhSachNhanSu={record?.nhanSuList ?? []} />
 			) : tabActive === paths[5] ? (
 				<DienDan idLopHocPhan={record?._id ?? id} />
 			) : tabActive === paths[6] ? (
