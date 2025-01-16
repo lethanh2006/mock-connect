@@ -1,4 +1,5 @@
 import FormTraLoiKhaoSat from '@/pages/TienIch/KhaoSat/components/Form';
+import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { getDotDanhGiaGiangVien } from '@/services/TienIch/KhaoSat/DotKhaoSat';
 import { EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
@@ -8,9 +9,10 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
-const DanhGiaGiangVienPage = () => {
+const DanhGiaGiangVienPage = (props: { danhSachNhanSu: LopHocPhan.IRecordNhanSuLopHP[] }) => {
+	const { danhSachNhanSu } = props;
 	const { loading, setRecord, record: recDot, setLoading } = useModel('tienich.dotkhaosat');
-	const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
+	// const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
 	const { danhGiaGiangVienModel, formSubmiting } = useModel('lophocphan.danhgiagiangvien');
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const [giangVienSsoId, setGiangVienSsoId] = useState<string>(danhSachNhanSu[0]?.nhanSuSsoId ?? '');
@@ -35,11 +37,8 @@ const DanhGiaGiangVienPage = () => {
 		if (recLopHocPhan?._id) {
 			getDotHienTai();
 		}
-	}, [recLopHocPhan?._id]);
-
-	useEffect(() => {
 		setGiangVienSsoId(danhSachNhanSu?.[0]?.nhanSuSsoId);
-	}, [danhSachNhanSu.length]);
+	}, [recLopHocPhan?._id]);
 
 	const hanldeDanhGiaGiangVien = async (val: BieuMau.TraLoiRecord[]) => {
 		await danhGiaGiangVienModel({
