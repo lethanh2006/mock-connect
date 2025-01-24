@@ -1,5 +1,5 @@
-import type { ChamThi } from '../ChamThi/typings';
-import type { EDinhDangBaiThi } from '../constant';
+import type { EDinhDangBaiThi, EDKDTCongNo, EDKDTKetQuaHocTap } from '../constant';
+import type { HocPhanThi } from '../HocPhanThi/typings';
 import type { KyThi } from '../KyThi/typings';
 import type { ELoaiThi, ETrangThaiChamLai, ETrangThaiSinhVienThi } from './constant';
 
@@ -10,8 +10,8 @@ declare module SinhVienThi {
 		ma: string;
 		maHocPhan: string | any;
 		tenHocPhan: string;
-		dieuKienKetQuaHocTap: boolean;
-		dieuKienCongNo: boolean;
+		dieuKienKetQuaHocTap: EDKDTKetQuaHocTap;
+		dieuKienCongNo: EDKDTCongNo;
 		maPhachPhucKhao: string;
 		maPhachThamDinh: string;
 		maPhach: string;
@@ -55,9 +55,11 @@ declare module SinhVienThi {
 	}
 
 	export interface IDiemThiHocKySinhVien {
-		diemPhucKhao: number;
+		kyThi: KyThi.IRecord;
 		diemThi: number;
-		kyThi: string;
+		diemPhucKhao: number;
+		hocPhanThi: HocPhanThi.IRecord;
+		sinhVienThi: IRecord;
 	}
 
 	export type TUploadMultiPartResponse = {
