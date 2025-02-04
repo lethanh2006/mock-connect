@@ -3,15 +3,22 @@ import useInitModel from '@/hooks/useInitModel';
 import { getDotDanhGiaTietHoc } from '@/services/TienIch/KhaoSat/DotKhaoSat';
 import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
 import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
+import moment from 'moment';
 import { useState } from 'react';
 
 export default () => {
 	const objInit = useInitModel<DotKhaoSat.IRecord>('dot-khao-sat');
 	const [thoiGian, setThoiGian] = useState<EThoiGianDot>(EThoiGianDot.DANG_DIEN_RA);
-	const { getModel, setLoading, setRecord } = objInit;
+	const { getModel, setLoading, setRecord, record } = objInit;
 	const [visibleKhaoSatBatBuoc, setVisibleKhaoSatBatBuoc] = useState<boolean>(false);
 	const [dsKhaoSatBatBuoc, setDsKhaoSatBatBuoc] = useState<DotKhaoSat.IRecord[]>([]);
 	const [isThanhCong, setIsThanhCong] = useState<boolean>(false);
+
+	const ngoaiThoiGian =
+		!record?.thoiGianBatDau ||
+		!record?.thoiGianKetThuc ||
+		moment().isBefore(record?.thoiGianBatDau) ||
+		moment().isAfter(record?.thoiGianKetThuc);
 
 	const getDotMeModel = () =>
 		getModel(
@@ -56,5 +63,6 @@ export default () => {
 		setDsKhaoSatBatBuoc,
 		isThanhCong,
 		setIsThanhCong,
+		ngoaiThoiGian,
 	};
 };
