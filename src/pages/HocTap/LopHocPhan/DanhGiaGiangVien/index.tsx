@@ -11,16 +11,11 @@ import { useModel } from 'umi';
 
 const DanhGiaGiangVienPage = (props: { danhSachNhanSu: LopHocPhan.IRecordNhanSuLopHP[] }) => {
 	const { danhSachNhanSu } = props;
-	const { loading, setRecord, record: recDot, setLoading } = useModel('tienich.dotkhaosat');
+	const { loading, setRecord, record: recDot, setLoading, ngoaiThoiGian } = useModel('tienich.dotkhaosat');
 	// const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
 	const { danhGiaGiangVienModel, formSubmiting } = useModel('lophocphan.danhgiagiangvien');
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const [giangVienSsoId, setGiangVienSsoId] = useState<string>(danhSachNhanSu[0]?.nhanSuSsoId ?? '');
-	const ngoaiThoiGian =
-		!recDot?.thoiGianBatDau ||
-		!recDot?.thoiGianKetThuc ||
-		moment().isBefore(recDot?.thoiGianBatDau, 'd') ||
-		moment().isAfter(recDot?.thoiGianKetThuc, 'd');
 
 	const giangVienKhaoSat = recDot?.thongTinCauTraLoi?.find((item) => item?.giangVienSsoId === giangVienSsoId);
 
