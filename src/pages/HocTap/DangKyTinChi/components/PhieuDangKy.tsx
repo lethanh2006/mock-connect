@@ -15,8 +15,9 @@ import { CalendarOutlined, DeleteOutlined, ReloadOutlined, SendOutlined } from '
 import { Col, Divider, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
 import RenderLichHoc from './RenderLichHoc';
@@ -41,7 +42,9 @@ const PhieuDangKy = () => {
 		sinhVienDot,
 	} = useModel('daotao.dotdangkytinchi');
 	const { getMucThuHocPhiTheoNamModel, tinhHocPhi } = useModel('taichinh.mucthuhocphi');
+	const [visibleHuyLop, setVisibleHuyLop] = useState<boolean>(false);
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
+	const [recLopDangKy, setRecLopDangKy] = useState<DangKyTinChi.ILopDangKy>();
 	// Danh sách học phần có cả lớp Chính và lớp thực hành
 	const hocPhanCoLopThucHanh = danhSachLopDangKy.filter((item) => !!item.tenCha).map((item) => item.maHocPhan);
 	// Nếu có cả lớp chính và lớp thực hành thì chỉ hiện lớp thực hành
@@ -208,42 +211,54 @@ const PhieuDangKy = () => {
 			width: 60,
 			fixed: 'right',
 			align: 'center',
-			render: (val, rec) => (
-				<Popconfirm
-					title={
-						<>
-							Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ này?
-							{tongTinChi - rec.soTinChi < soTinChiToiThieu ? (
-								<>
-									<br />
-									<i className='text-error'>
-										Lưu ý: Sau khi hủy lớp, tổng số tín chỉ còn lại không thỏa mãn điều kiện số tín chỉ tối thiểu
-									</i>
-								</>
-							) : null}
-						</>
-					}
-					overlayStyle={{ maxWidth: 400 }}
-					placement='topRight'
-					onConfirm={() => onDeleteLop(rec)}
-					// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
-					disabled={
-						rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-						dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
-					}
-				>
+			render: (val, rec) =>
+				dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 					<ButtonExtend
 						icon={<DeleteOutlined />}
 						danger
 						type='link'
+						tooltip='Hủy lớp'
+						onClick={() => {
+							setRecLopDangKy(rec);
+							setVisibleHuyLop(true);
+						}}
+					/>
+				) : (
+					<Popconfirm
+						title={
+							<>
+								Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ này?
+								{tongTinChi - rec.soTinChi < soTinChiToiThieu ? (
+									<>
+										<br />
+										<i className='text-error'>
+											Lưu ý: Sau khi hủy lớp, tổng số tín chỉ còn lại không thỏa mãn điều kiện số tín chỉ tối thiểu
+										</i>
+									</>
+								) : null}
+							</>
+						}
+						overlayStyle={{ maxWidth: 400 }}
+						placement='topRight'
+						onConfirm={() => onDeleteLop(rec)}
+						// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
 						disabled={
 							rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
 							dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
 						}
-						tooltip='Hủy lớp'
-					/>
-				</Popconfirm>
-			),
+					>
+						<ButtonExtend
+							icon={<DeleteOutlined />}
+							danger
+							type='link'
+							disabled={
+								rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+								dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
+							}
+							tooltip='Hủy lớp'
+						/>
+					</Popconfirm>
+				),
 			hide: !dangTrongThoiGian,
 		},
 	];
@@ -324,6 +339,8 @@ const PhieuDangKy = () => {
 			<ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
 
 			<ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
+
+			<ConfirmKetHuyLopDKTC visible={visibleHuyLop} setVisible={setVisibleHuyLop} recLopDangKy={recLopDangKy} />
 		</>
 	);
 };
