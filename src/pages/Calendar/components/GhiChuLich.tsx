@@ -6,15 +6,8 @@ import { useModel } from 'umi';
 const GhiChuLich = (props: { isDashboard?: boolean }) => {
 	const { isDashboard } = props;
 	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
-	const {
-		selectSuKiens,
-		setSelectSuKiens,
-		dataLichDashboard,
-		setLichHienThiDashboardModel,
-		dataLich,
-		setDataCalendar,
-		setDataLichCalenderDashboard,
-	} = useModel('sukien.sukien');
+	const { selectSuKiens, setSelectSuKiens, dataLichDashboard, dataLich, setDataCalendar, setDataCalendarDashboard } =
+		useModel('sukien.sukien');
 	const loaiSuKien = [
 		ELoaiSuKien.CHUNG,
 		ELoaiSuKien.LICH_HOC,
@@ -44,8 +37,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 			setDataCalendar(filteredEvents);
 		} else {
 			const filteredEvents = dataLichDashboard?.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien));
-			setLichHienThiDashboardModel(filteredEvents ?? []);
-			setDataLichCalenderDashboard(filteredEvents ?? []);
+			setDataCalendarDashboard(filteredEvents ?? []);
 		}
 	};
 
