@@ -13,6 +13,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 		setLichHienThiDashboardModel,
 		dataLich,
 		setDataCalendar,
+		setDataLichCalenderDashboard,
 	} = useModel('sukien.sukien');
 	const loaiSuKien = [
 		ELoaiSuKien.CHUNG,
@@ -44,6 +45,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 		} else {
 			const filteredEvents = dataLichDashboard?.filter((event) => updatedSelectSuKiens.includes(event.loaiSuKien));
 			setLichHienThiDashboardModel(filteredEvents ?? []);
+			setDataLichCalenderDashboard(filteredEvents ?? []);
 		}
 	};
 
