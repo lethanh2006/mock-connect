@@ -38,8 +38,12 @@ export default () => {
 	const { getModel, setLoading, setDanhSach } = objInit;
 	const [dataCalendar, setDataCalendar] = useState<{ title: string; [x: string]: unknown }[]>([]);
 	const [dataLich, setDataLich] = useState<{ title: string; [x: string]: unknown }[]>([]);
-	const [dataCalendarDashboard, setDataCalendarDashboard] = useState<State>({});
 	const [dataLichDashboard, setDataLichDashboard] = useState<any[]>();
+
+	//data hiển thị lịch dashboard dạng list
+	const [dataLichListDashboard, setDataLichListDashboard] = useState<State>({});
+	//data hiển thị lịch dashboard dạng Calender
+	const [dataLichCalenderDashboard, setDataLichCalenderDashboard] = useState<any[]>();
 
 	const getSuKienType = () => {
 		const suKienType = last(window.location.pathname.split('/')) ?? '';
@@ -92,7 +96,7 @@ export default () => {
 				},
 			};
 		}, {});
-		if (nextState) setDataCalendarDashboard(nextState);
+		if (nextState) setDataLichListDashboard(nextState);
 	};
 
 	return {
@@ -101,8 +105,8 @@ export default () => {
 		setDataCalendar,
 		dataLich,
 		setDataLich,
-		dataCalendarDashboard,
-		setDataCalendarDashboard,
+		dataLichListDashboard,
+		setDataLichListDashboard,
 		dataLichDashboard,
 		setDataLichDashboard,
 		getModel: getModel_,
@@ -110,5 +114,7 @@ export default () => {
 		setSelectSuKiens,
 		getSuKienTrongKhoangModel,
 		setLichHienThiDashboardModel,
+		dataLichCalenderDashboard,
+		setDataLichCalenderDashboard,
 	};
 };
