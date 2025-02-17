@@ -1,19 +1,19 @@
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
-import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { ArrowRightOutlined, CalendarOutlined, MenuOutlined } from '@ant-design/icons';
 import { Badge, Card, Col, Empty, Modal, Row, Segmented, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Link, useModel } from 'umi';
 import FormLichCaNhan from '../components/FormLichCaNhan';
 import GhiChuLich from '../components/GhiChuLich';
 import ModalViewDetailCalendar from '../components/ModalViewDetail';
 import styles from './styles.less';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const tmp: any = Calendar;
 const DnDCalendar = withDragAndDrop(tmp);
@@ -31,12 +31,10 @@ const LichDashboard = () => {
 		setVisibleForm,
 		getSuKienTrongKhoangModel,
 		loading: loadingSuKien,
-		dataLichListDashboard,
 		setDataLichDashboard,
 		dataLichDashboard,
-		setLichHienThiDashboardModel,
-		dataLichCalenderDashboard,
-		setDataLichCalenderDashboard,
+		dataCalendarDashboard,
+		setDataCalendarDashboard,
 	} = useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
@@ -111,8 +109,7 @@ const LichDashboard = () => {
 	//#endregion
 
 	useEffect(() => {
-		setLichHienThiDashboardModel(dataLichDashboard ?? []);
-		setDataLichCalenderDashboard(dataLichDashboard ?? []);
+		setDataCalendarDashboard(dataLichDashboard ?? []);
 	}, [dataLichDashboard?.length]);
 
 	useEffect(() => {
@@ -120,13 +117,34 @@ const LichDashboard = () => {
 	}, []);
 
 	const renderContent = () => {
-		const keysSorted = sortBy(Object.keys(dataLichListDashboard));
-		if (!loadingSuKien && !loadingSuKien && isEmpty(dataLichListDashboard)) {
+		// Convert dữ liệu
+		const data = dataCalendarDashboard?.reduce<any>((result, item) => {
+			if (!item?.thoiGianBatDau) {
+				return result;
+			}
+			const ngayMoment = moment(item?.thoiGianBatDau);
+			const ngayString = ngayMoment.format('YYYY-MM-DD');
+
+			return {
+				...result,
+				[ngayString]: {
+					thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
+					cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
+						...item,
+						tenSuKien: item.title,
+						diaDiem: item.phongHoc ?? item.diaDiem,
+					}),
+				},
+			};
+		}, {});
+
+		const keysSorted = sortBy(Object.keys(data));
+		if (!loadingSuKien && !loadingSuKien && isEmpty(data)) {
 			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />;
 		}
 
 		return keysSorted.map((ngay) => {
-			const { cacSuKien, thuTrongTuan } = dataLichListDashboard[ngay];
+			const { cacSuKien, thuTrongTuan } = data[ngay];
 			const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
 			return (
 				<div key={ngay} className={styles.ngay}>
@@ -155,7 +173,7 @@ const LichDashboard = () => {
 								style={{
 									borderColor:
 										recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ??
-										ColorSuKien[sukien.loaiSuKien],
+										ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
 								}}
 							>
 								<div>{[sukien.tenSuKien ?? '', sukien.diaDiem ?? ''].filter(Boolean).join(' - ')}</div>
@@ -177,11 +195,11 @@ const LichDashboard = () => {
 	};
 
 	const renderContentCalender = () => {
-		return dataLichCalenderDashboard?.length ? (
+		return dataCalendarDashboard?.length ? (
 			<DnDCalendar
 				localizer={localizer}
 				events={
-					dataLichCalenderDashboard?.map((event) => {
+					dataCalendarDashboard?.map((event) => {
 						return {
 							...event,
 							tenSuKien: event.title,
@@ -211,7 +229,7 @@ const LichDashboard = () => {
 				toolbar={false}
 			/>
 		) : (
-			<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện nào' />
+			<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />
 		);
 	};
 
