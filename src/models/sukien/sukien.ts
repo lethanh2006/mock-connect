@@ -1,29 +1,9 @@
 import useInitModel from '@/hooks/useInitModel';
-import type { EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { getSuKienTrongKhoang } from '@/services/SuKien';
-import { ELoaiSuKien, locationPathMappingToESuKienType, THU_TRONG_TUAN } from '@/services/SuKien/constant';
+import { ELoaiSuKien, locationPathMappingToESuKienType } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import { last } from 'lodash';
-import moment from 'moment';
 import { useState } from 'react';
-
-type Ngay = string;
-interface StateItem {
-	hinhThucGiangDay: EHinhThucGiangDay;
-	tenSuKien: string;
-	diaDiem: string;
-	loaiSuKien: ELoaiSuKien;
-	thoiGianBatDau: string;
-	thoiGianKetThuc: string;
-	_id: string;
-}
-type State = Record<
-	Ngay,
-	{
-		thuTrongTuan: string;
-		cacSuKien: StateItem[];
-	}
->;
 
 export default () => {
 	const objInit = useInitModel<SuKien.IRecord>('su-kien/me');
@@ -39,11 +19,7 @@ export default () => {
 	const [dataCalendar, setDataCalendar] = useState<{ title: string; [x: string]: unknown }[]>([]);
 	const [dataLich, setDataLich] = useState<{ title: string; [x: string]: unknown }[]>([]);
 	const [dataLichDashboard, setDataLichDashboard] = useState<any[]>();
-
-	//data hiển thị lịch dashboard dạng list
-	const [dataLichListDashboard, setDataLichListDashboard] = useState<State>({});
-	//data hiển thị lịch dashboard dạng Calender
-	const [dataLichCalenderDashboard, setDataLichCalenderDashboard] = useState<any[]>();
+	const [dataCalendarDashboard, setDataCalendarDashboard] = useState<any[]>([]);
 
 	const getSuKienType = () => {
 		const suKienType = last(window.location.pathname.split('/')) ?? '';
@@ -76,45 +52,19 @@ export default () => {
 		}
 	};
 
-	const setLichHienThiDashboardModel = (data: any[]) => {
-		const nextState = data?.reduce<State>((result, item) => {
-			if (!item?.thoiGianBatDau) {
-				return result;
-			}
-			const ngayMoment = moment(item?.thoiGianBatDau);
-			const ngayString = ngayMoment.format('YYYY-MM-DD');
-
-			return {
-				...result,
-				[ngayString]: {
-					thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
-					cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
-						...item,
-						tenSuKien: item.title,
-						diaDiem: item.phongHoc ?? item.diaDiem,
-					}),
-				},
-			};
-		}, {});
-		if (nextState) setDataLichListDashboard(nextState);
-	};
-
 	return {
 		...objInit,
 		dataCalendar,
 		setDataCalendar,
 		dataLich,
 		setDataLich,
-		dataLichListDashboard,
-		setDataLichListDashboard,
 		dataLichDashboard,
 		setDataLichDashboard,
 		getModel: getModel_,
 		selectSuKiens,
 		setSelectSuKiens,
 		getSuKienTrongKhoangModel,
-		setLichHienThiDashboardModel,
-		dataLichCalenderDashboard,
-		setDataLichCalenderDashboard,
+		dataCalendarDashboard,
+		setDataCalendarDashboard,
 	};
 };
