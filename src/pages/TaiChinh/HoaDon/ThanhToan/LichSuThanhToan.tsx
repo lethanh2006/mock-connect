@@ -85,7 +85,7 @@ const LichSuThanhToan = (props: {
 		{
 			title: 'Thời gian cập nhật',
 			align: 'center',
-			dataIndex: 'updatedAt',
+			dataIndex: 'transactionDate',
 			width: 150,
 			sortable: true,
 			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
