@@ -11,7 +11,7 @@ import {
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { inputFormat } from '@/utils/utils';
-import { CalendarOutlined, DeleteOutlined, ReloadOutlined, RetweetOutlined, SendOutlined } from '@ant-design/icons';
+import { CalendarOutlined, DeleteOutlined, ReloadOutlined, SendOutlined } from '@ant-design/icons';
 import { Col, Divider, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
@@ -20,6 +20,7 @@ import { useModel } from 'umi';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
+import ModalLopDaHuy from './ModalLopDaHuy';
 import RenderLichHoc from './RenderLichHoc';
 
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
@@ -40,12 +41,10 @@ const PhieuDangKy = () => {
 		getPhieuDangKyModel,
 		getLopDangKyModel,
 		sinhVienDot,
-		getLopDaHuyDangKyTinChiModel,
-		danhSachLopDaHuy,
-		revertLopDangKyTinDaHuyModel,
 	} = useModel('daotao.dotdangkytinchi');
 	const { getMucThuHocPhiTheoNamModel, tinhHocPhi } = useModel('taichinh.mucthuhocphi');
 	const [visibleHuyLop, setVisibleHuyLop] = useState<boolean>(false);
+	const [visibleLopDaHuy, setVisibleLopDaHuy] = useState(false);
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const [recLopDangKy, setRecLopDangKy] = useState<DangKyTinChi.ILopDangKy>();
 	// Danh sách học phần có cả lớp Chính và lớp thực hành
@@ -91,8 +90,6 @@ const PhieuDangKy = () => {
 
 	const getData = () => recHocKy?.ma && getLopDangKyModel(recHocKy.ma);
 
-	const getDataLopHuy = () => phieuDangKy?._id && getLopDaHuyDangKyTinChiModel(phieuDangKy?._id);
-
 	useEffect(() => {
 		if (dotDangKyHienTai?._id && sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK)
 			getPhieuDangKyModel(dotDangKyHienTai._id);
@@ -106,10 +103,6 @@ const PhieuDangKy = () => {
 		// Get mức thu học phí của tôi theo năm học
 		if (recHocKy?.namBatDau) getMucThuHocPhiTheoNamModel(recHocKy.namBatDau.toString());
 	}, [recHocKy?.namBatDau]);
-
-	useEffect(() => {
-		getDataLopHuy();
-	}, [phieuDangKy?._id]);
 
 	const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
 		try {
@@ -272,107 +265,21 @@ const PhieuDangKy = () => {
 		},
 	];
 
-	const columnsLopHuy: IColumn<DangKyTinChi.AuditLog>[] = [
-		{
-			title: 'Mã HP',
-			align: 'center',
-			width: 80,
-			render: (val, rec) => rec?.lopHpSv?.lopHocPhan?.maHocPhan,
-		},
-		{
-			title: 'Tên học phần',
-			width: 170,
-			render: (val, rec) => rec?.lopHpSv?.lopHocPhan?.hocPhan?.ten,
-		},
-		{
-			title: 'TT lớp',
-			width: 80,
-			align: 'center',
-			render: (val, rec) =>
-				`${rec?.lopHpSv?.lopHocPhan?.soThuTuLop}${
-					rec.lopHpSv?.lopHocPhan?.soThuTuNhom ? ` (nhóm TH ${rec.lopHpSv?.lopHocPhan?.soThuTuNhom})` : ''
-				}`,
-		},
-		{
-			title: 'STC',
-			width: 60,
-			align: 'center',
-			sortable: true,
-			render: (val, rec) => (
-				<>
-					{rec?.lopHpSv?.lopHocPhan?.hocPhan?.soTinChi}{' '}
-					{rec.lopHpSv?.lopHocPhan?.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy === false ? <i>(không tính)</i> : null}
-				</>
-			),
-		},
-		{
-			title: 'Giảng viên',
-			width: 160,
-			render: (val, rec) => (
-				<ExpandText>
-					{rec.lopHpSv?.lopHocPhan?.nhanSuList
-						?.map((item) =>
-							item.nhanSu?.ten ? `${item.nhanSu?.hoDem ?? ''} ${item.nhanSu?.ten ?? ''}` : item.tenNhanSu,
-						)
-						.join(', ')}
-				</ExpandText>
-			),
-		},
-		{
-			title: 'Thông tin chi tiết',
-			width: 250,
-			render: (val, rec) => (
-				<RenderLichHoc lopHocPhan={{ ...rec?.lopHpSv?.lopHocPhan, loai: ELoaiLopHocPhan.CHINH } as any} />
-			),
-		},
-
-		{
-			title: 'Học phí (dự kiến)',
-			align: 'right',
-			width: 120,
-			render: (val, rec) => {
-				const due = tinhHocPhi(rec.lopHpSv?.lopHocPhan?.hocPhan?.soTinChi, rec.lopHpSv?.loai, '');
-				if (due) return `${inputFormat(due)} VND`;
-				return null;
-			},
-		},
-		{
-			title: 'Hủy',
-			width: 60,
-			fixed: 'right',
-			align: 'center',
-			render: (val, rec) => (
-				<Popconfirm
-					title='Bạn có chắc chắn muốn hoàn lại đăng ký lớp tín chỉ này?'
-					placement='topRight'
-					onConfirm={() =>
-						revertLopDangKyTinDaHuyModel(rec?._id, () => {
-							getData();
-							getDataLopHuy();
-						})
-					}
-				>
-					<ButtonExtend icon={<RetweetOutlined />} danger type='link' tooltip='Hoàn tác' />
-				</Popconfirm>
-			),
-		},
-	];
-
 	return (
 		<>
 			<Divider style={{ marginTop: 24 }}>Danh sách lớp tín chỉ đã đăng ký / đã chọn</Divider>
 			<Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
-				<Col span={24} md={8}>
+				<Col span={24} md={10}>
 					Tổng số tín chỉ (đã trừ các học phần không tính số tín chỉ):{' '}
 					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
 						{tongTinChi} tín chỉ
 					</b>
 				</Col>
-				<Col span={24} md={8}>
+				<Col span={24} md={7}>
 					Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
 				</Col>
 				{phieuDangKy ? (
-					<Col span={24} md={8}>
+					<Col span={24} md={7}>
 						<div
 							className={
 								tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
@@ -394,13 +301,23 @@ const PhieuDangKy = () => {
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
 			>
 				<Space wrap>
-					<ButtonExtend icon={<ReloadOutlined />} onClick={getData}>
+					<ButtonExtend  cooldownMs={10000} icon={<ReloadOutlined />} onClick={getData}>
 						Tải lại
 					</ButtonExtend>
 					{danhSachLopDangKy.length ? (
 						<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
 							Xem trước lịch học
 						</ButtonExtend>
+					) : null}
+
+					{dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+						<>
+							<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
+								Các lớp đã hủy đăng ký
+							</ButtonExtend>
+
+							<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
+						</>
 					) : null}
 
 					{tongTinChiChuaDk &&
@@ -430,28 +347,6 @@ const PhieuDangKy = () => {
 					) : null}
 				</Space>
 			</TableStaticData>
-
-			{dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
-				<>
-					<div style={{ marginTop: 12, marginBottom: 12 }} className='fw500'>
-						Danh sách lớp đã hủy
-					</div>
-					<TableStaticData
-						columns={columnsLopHuy}
-						data={danhSachLopDaHuy ?? []}
-						addStt
-						loading={loading}
-						hasTotal
-						otherProps={{ pagination: false, scroll: { y: 600 } }}
-					>
-						<Space wrap>
-							<ButtonExtend icon={<ReloadOutlined />} onClick={getDataLopHuy}>
-								Tải lại
-							</ButtonExtend>
-						</Space>
-					</TableStaticData>
-				</>
-			) : null}
 
 			<ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
 

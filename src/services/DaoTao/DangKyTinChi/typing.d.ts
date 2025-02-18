@@ -1,4 +1,3 @@
-import { ILopDangKy } from './typing.d';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { type HocPhan } from '../HocPhan/typings';
 import type { SinhVien } from '../SinhVien/typings';
@@ -97,7 +96,6 @@ declare module DangKyTinChi {
 		uName: string;
 		requestType: string;
 		action: string;
-		lopHpSv?: DangKyTinChi.ILopDangKy;
 		logResponse?: boolean;
 		ip?: string;
 		data?: unknown;
@@ -105,7 +103,7 @@ declare module DangKyTinChi {
 		param?: unknown;
 		ua?: unknown;
 		userAgent?: string;
-		response?: unknown;
+		response?: { data?: unknown | DangKyTinChi.ILopDangKy };
 		createdAt?: Date;
 	}
 }
