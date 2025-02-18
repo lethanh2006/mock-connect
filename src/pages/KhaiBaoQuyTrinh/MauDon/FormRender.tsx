@@ -274,8 +274,8 @@ const FormRender = (props: {
 			component = (
 				<UploadFile
 					maxCount={cauHinh.laDangMang ? 5 : 1}
+					accept={'image/*, .xls, .xlsx, .doc, .docx, .pdf'}
 					otherProps={{
-						accept: '.docx, .pdf',
 						showUploadList: { showDownloadIcon: false },
 					}}
 				/>
