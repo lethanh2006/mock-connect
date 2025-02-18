@@ -7,21 +7,22 @@ import {
 	ETransactionStatus,
 } from '@/services/TaiChinh/constant';
 import { AppstoreAddOutlined, DollarOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Col, Modal, Row, Space, Tabs } from 'antd';
+import { Alert, Button, Card, Checkbox, Col, Modal, Row, Space, Tabs } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import CanhBaoGiaoDich from '../../GiaoDich/components/CanhBao';
 import DesThongTinHoaDon from '../ChiTiet/DesThongTin';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
 import FormThanhToan from '../ThanhToan/FormThanhToan';
 import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
 import ModalThanhToanNganHang from './ModalThanhToanNganHang';
-import CanhBaoGiaoDich from '../../GiaoDich/components/CanhBao';
 
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const { setVisible, getData } = props;
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
-	const { visibleThanhToan, setVisibleThanhToan } = useModel('taichinh.hoadonchitiet');
+	const { visibleThanhToan, setVisibleThanhToan, xemRutGonChiTiet, setXemRutGonChiTiet } =
+		useModel('taichinh.hoadonchitiet');
 	const {
 		getAllModel,
 		record: recGiaoDich,
@@ -101,7 +102,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 					</Tabs>
 
 					{activeTab === '1' ? (
-						<>
+						<Space direction='vertical' style={{ width: '100%' }}>
 							{recGiaoDich?._id &&
 							recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
 							!ngoaiThoiGianThanhToan ? (
@@ -142,12 +143,16 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 									>
 										Thông tin thanh toán
 									</ButtonExtend>
+
+									<Checkbox checked={xemRutGonChiTiet} onChange={(e) => setXemRutGonChiTiet(e.target.checked)}>
+										Rút gọn
+									</Checkbox>
 									<i>(Xem chi tiết Số dư ví hiện tại, số tiền cần nộp và hướng dẫn thanh toán)</i>
 								</Space>
 							)}
 
 							<FormItemHoaDonChiTiet />
-						</>
+						</Space>
 					) : (
 						<>
 							<CanhBaoGiaoDich />

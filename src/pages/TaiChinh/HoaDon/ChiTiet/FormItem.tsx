@@ -5,18 +5,31 @@ import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan
 import { inputFormat } from '@/utils/utils';
 import { Col, Row, Table, Tag } from 'antd';
 import _ from 'lodash';
-import { useEffect } from 'react';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const FormItemHoaDonChiTiet = () => {
 	const { record } = useModel('taichinh.hoadon');
-	const { getAllModel, danhSach, loading } = useModel('taichinh.hoadonchitiet');
+	const { getAllModel, loading, danhSach, xemRutGonChiTiet } = useModel('taichinh.hoadonchitiet');
+	const [result, setResult] = useState<HoaDon.IBillItem[]>([]);
 
-	const getData = () => record?._id && getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode });
+	const setBillItemResult = (list: HoaDon.IBillItem[]) => {
+		setResult(list.filter((item) => !xemRutGonChiTiet || item.status !== EMaTrangThaiThanhToan.DONG));
+	};
+
+	const getData = () =>
+		record?._id &&
+		getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode }).then((list) =>
+			setBillItemResult(list),
+		);
+
 
 	useEffect(() => {
 		getData();
 	}, [record?._id]);
+
+	useEffect(() => setBillItemResult(danhSach), [xemRutGonChiTiet]);
 
 	const columns: IColumn<HoaDon.IBillItem & { index: number }>[] = [
 		{
@@ -27,12 +40,12 @@ const FormItemHoaDonChiTiet = () => {
 		{
 			title: 'Đơn giá',
 			dataIndex: 'unitAmount',
-			width: 120,
+			width: 110,
 			align: 'right',
 			render: (val, rec) => `${inputFormat(val)} VND${rec.unitLabel ? `/${rec.unitLabel}` : ''}`,
 		},
-		{ title: 'Hệ số', dataIndex: 'heSo', width: 50, align: 'center' },
-		{ title: 'SL', dataIndex: 'quantity', width: 50, align: 'center' },
+		{ title: 'Hệ số', dataIndex: 'heSo', width: 45, align: 'center' },
+		{ title: 'SL', dataIndex: 'quantity', width: 45, align: 'center' },
 		{
 			title: 'Thành tiền',
 			dataIndex: 'amountDue',
@@ -56,6 +69,13 @@ const FormItemHoaDonChiTiet = () => {
 			),
 		},
 		{
+			title: 'Thời gian tạo',
+			dataIndex: 'createdAt',
+			width: 110,
+			align: 'left',
+			render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
+		},
+		{
 			title: 'Trạng thái',
 			dataIndex: 'status',
 			align: 'center',
@@ -70,7 +90,7 @@ const FormItemHoaDonChiTiet = () => {
 			<Col span={24}>
 				<TableStaticData
 					columns={columns}
-					data={danhSach}
+					data={result}
 					loading={loading}
 					addStt
 					size='small'
