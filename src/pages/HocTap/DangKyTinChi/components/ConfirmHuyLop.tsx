@@ -48,7 +48,7 @@ const ConfirmKetHuyLopDKTC = (props: {
 			visible={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
-			width={450}
+			width={500}
 			maskClosable={false}
 		>
 			<Form form={form} layout='vertical'>
