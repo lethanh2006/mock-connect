@@ -76,6 +76,7 @@ const useInitModel = <T,>(
 		isSetDanhSach?: boolean,
 		isAbsolutePath?: boolean,
 		selectParams?: string[],
+		config?: { dataPartitionCode?: string },
 	): Promise<T[]> => {
 		setLoading(true);
 		const payload = {
@@ -94,7 +95,12 @@ const useInitModel = <T,>(
 			...(otherQuery ?? {}),
 		};
 		try {
-			const response = await getService(payload, path ?? 'page', isAbsolutePath ?? false);
+			const response = await getService(
+				payload,
+				path ?? 'page',
+				isAbsolutePath ?? false,
+				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+			);
 			const tempData: T[] = response?.data?.data?.result ?? [];
 			const tempTotal: number = response?.data?.data?.total ?? 0;
 
@@ -124,6 +130,7 @@ const useInitModel = <T,>(
 		isSetDanhSach?: boolean,
 		selectParams?: string[],
 		otherQuery?: Record<string, any>,
+		config?: { dataPartitionCode?: string },
 	): Promise<T[]> => {
 		setLoading(true);
 		try {
@@ -134,7 +141,11 @@ const useInitModel = <T,>(
 				select: selectParams?.join(' '),
 				...(otherQuery ?? {}),
 			};
-			const response = await getAllService(payload, pathParam);
+			const response = await getAllService(
+				payload,
+				pathParam,
+				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+			);
 			const data: T[] = response?.data?.data ?? [];
 			// if (sortParam) data.sort(sortParam);
 			if (isSetDanhSach !== false) setDanhSach(data);
