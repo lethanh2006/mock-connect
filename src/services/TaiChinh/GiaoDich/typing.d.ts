@@ -29,6 +29,8 @@ declare module GiaoDich {
 		requestData: Record;
 		responseData: Record;
 
+		updatedAt?: Date;
+
 		createdAt?: Date;
 	}
 

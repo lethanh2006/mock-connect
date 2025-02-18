@@ -57,5 +57,7 @@ declare module HoaDon {
 
 		listUserUuDai?: Partial<UuDaiThanhToan.IUuDaiUser>[];
 		status: EMaTrangThaiThanhToan;
+		createdAt?: Date;
+		updatedAt?: Date;
 	}
 }
