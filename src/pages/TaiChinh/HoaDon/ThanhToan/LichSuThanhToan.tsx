@@ -61,24 +61,32 @@ const LichSuThanhToan = (props: {
 		{
 			title: 'Hình thức',
 			dataIndex: 'paymentType',
-			width: 140,
+			width: 110,
 			render: (val: ETransactionPaymentType, rec) => transactionPaymentLabel?.[val as ETransactionPaymentType] ?? '',
 		},
 		{
 			title: 'Trạng thái',
 			dataIndex: 'status',
-			width: 140,
+			width: 120,
 			align: 'center',
 			render: (val: ETransactionStatus) => (
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
 			),
 		},
-		{ title: 'Người thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
+		{ title: 'Người thực hiện', dataIndex: 'manualUserFullname', width: 140, filterType: 'string' },
 		{
-			title: 'Thời gian',
+			title: 'Thời gian tạo',
 			align: 'center',
 			dataIndex: 'createdAt',
-			width: 120,
+			width: 140,
+			sortable: true,
+			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+		},
+		{
+			title: 'Thời gian cập nhật',
+			align: 'center',
+			dataIndex: 'updatedAt',
+			width: 150,
 			sortable: true,
 			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
 		},
