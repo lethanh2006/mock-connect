@@ -1,5 +1,4 @@
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
-import { YoutubeOutlined } from '@ant-design/icons';
 import { Card, Divider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
@@ -35,7 +34,7 @@ const DangKyTinChiPage = () => {
 					) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 						<Empty
 							description={
-								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép xóa lớp tín chỉ đã đăng ký trước đó!</i>
+								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép <b>XÓA</b> lớp tín chỉ đã đăng ký trước đó!</i>
 							}
 						/>
 					) : !!phieuDangKy?.soTinChiToiDa ? (
