@@ -12,8 +12,14 @@ const ConfirmKetHuyLopDKTC = (props: {
 }) => {
 	const [form] = Form.useForm();
 	const { visible, setVisible, recLopDangKy } = props;
-	const { deleteDangKyTinChiModel, phieuDangKy, danhSachLopDangKy, tinhDataLichHoc, setDanhSachLopDangKy } =
-		useModel('daotao.dotdangkytinchi');
+	const {
+		deleteDangKyTinChiModel,
+		phieuDangKy,
+		danhSachLopDangKy,
+		tinhDataLichHoc,
+		setDanhSachLopDangKy,
+		formSubmiting,
+	} = useModel('daotao.dotdangkytinchi');
 	const commit: boolean = Form.useWatch('commit', form);
 
 	useEffect(() => {
@@ -30,6 +36,7 @@ const ConfirmKetHuyLopDKTC = (props: {
 			const data = danhSachLopDangKy.filter((item) => item.maHocPhan !== recLopDangKy?.maHocPhan);
 			tinhDataLichHoc(data);
 			setDanhSachLopDangKy(data);
+			setVisible(false);
 		} catch (er) {
 			console.log(er);
 		}
@@ -78,7 +85,13 @@ const ConfirmKetHuyLopDKTC = (props: {
 				</Row>
 
 				<div className='form-footer'>
-					<Button type='primary' danger disabled={!commit} onClick={() => handleXoaDangKyTinChi()}>
+					<Button
+						type='primary'
+						danger
+						disabled={!commit}
+						loading={formSubmiting}
+						onClick={() => handleXoaDangKyTinChi()}
+					>
 						Xác nhận
 					</Button>
 					<Button onClick={() => setVisible(false)}>Hủy</Button>
