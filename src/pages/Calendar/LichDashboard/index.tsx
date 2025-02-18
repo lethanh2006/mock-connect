@@ -1,15 +1,22 @@
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
-import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
-import { ArrowRightOutlined } from '@ant-design/icons';
-import { Badge, Card, Col, Empty, Modal, Row, Space, Tag, Typography } from 'antd';
+import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
+import { ArrowRightOutlined, CalendarOutlined, MenuOutlined } from '@ant-design/icons';
+import { Badge, Card, Col, Empty, Modal, Row, Segmented, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Link, useModel } from 'umi';
 import FormLichCaNhan from '../components/FormLichCaNhan';
 import GhiChuLich from '../components/GhiChuLich';
 import ModalViewDetailCalendar from '../components/ModalViewDetail';
 import styles from './styles.less';
+
+const tmp: any = Calendar;
+const DnDCalendar = withDragAndDrop(tmp);
 
 const getThoiGianMotTuanKeTuHomNay = () => {
 	return {
@@ -24,10 +31,10 @@ const LichDashboard = () => {
 		setVisibleForm,
 		getSuKienTrongKhoangModel,
 		loading: loadingSuKien,
-		dataCalendarDashboard,
 		setDataLichDashboard,
 		dataLichDashboard,
-		setLichHienThiDashboardModel,
+		dataCalendarDashboard,
+		setDataCalendarDashboard,
 	} = useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
@@ -35,6 +42,8 @@ const LichDashboard = () => {
 	const { record: recSetting } = useModel('tienich.settinglich');
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
+	const localizer = momentLocalizer(moment);
+	const [segmentSelected, setSegmentSelected] = useState<string>(localStorage.getItem('loaiLich') ?? 'list');
 
 	//#region Get Data
 	const getThoiKhoaBieu = async () => {
@@ -100,7 +109,7 @@ const LichDashboard = () => {
 	//#endregion
 
 	useEffect(() => {
-		setLichHienThiDashboardModel(dataLichDashboard ?? []);
+		setDataCalendarDashboard(dataLichDashboard ?? []);
 	}, [dataLichDashboard?.length]);
 
 	useEffect(() => {
@@ -108,13 +117,34 @@ const LichDashboard = () => {
 	}, []);
 
 	const renderContent = () => {
-		const keysSorted = sortBy(Object.keys(dataCalendarDashboard));
-		if (!loadingSuKien && !loadingSuKien && isEmpty(dataCalendarDashboard)) {
+		// Convert dữ liệu
+		const data = dataCalendarDashboard?.reduce<any>((result, item) => {
+			if (!item?.thoiGianBatDau) {
+				return result;
+			}
+			const ngayMoment = moment(item?.thoiGianBatDau);
+			const ngayString = ngayMoment.format('YYYY-MM-DD');
+
+			return {
+				...result,
+				[ngayString]: {
+					thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
+					cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
+						...item,
+						tenSuKien: item.title,
+						diaDiem: item.phongHoc ?? item.diaDiem,
+					}),
+				},
+			};
+		}, {});
+
+		const keysSorted = sortBy(Object.keys(data));
+		if (!loadingSuKien && !loadingSuKien && isEmpty(data)) {
 			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />;
 		}
 
 		return keysSorted.map((ngay) => {
-			const { cacSuKien, thuTrongTuan } = dataCalendarDashboard[ngay];
+			const { cacSuKien, thuTrongTuan } = data[ngay];
 			const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
 			return (
 				<div key={ngay} className={styles.ngay}>
@@ -143,10 +173,10 @@ const LichDashboard = () => {
 								style={{
 									borderColor:
 										recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ??
-										ColorSuKien[sukien.loaiSuKien],
+										ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
 								}}
 							>
-								<div>{[sukien.tenSuKien, sukien.diaDiem].filter(Boolean).join(' - ')}</div>
+								<div>{[sukien.tenSuKien ?? '', sukien.diaDiem ?? ''].filter(Boolean).join(' - ')}</div>
 								{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC && sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
 									<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
 										{sukien.hinhThucGiangDay}
@@ -160,6 +190,49 @@ const LichDashboard = () => {
 		});
 	};
 
+	const getTitle = (event: any) => {
+		return <div>{[event.tenSuKien ?? '', event.diaDiem ?? ''].filter(Boolean).join(' - ')}</div>;
+	};
+
+	const renderContentCalender = () => {
+		return dataCalendarDashboard?.length ? (
+			<DnDCalendar
+				localizer={localizer}
+				events={
+					dataCalendarDashboard?.map((event) => {
+						return {
+							...event,
+							tenSuKien: event.title,
+							start: moment(event?.thoiGianBatDau).toDate(),
+							end: moment(event?.thoiGianKetThuc).toDate(),
+						};
+					}) ?? []
+				}
+				defaultView='week'
+				scrollToTime={new Date(1970, 1, 1, 6)}
+				date={moment().startOf('week').toDate()}
+				onSelectEvent={(event: any) => {
+					setSelectEvent(event);
+					setVisibleDetail(true);
+				}}
+				min={moment('0700', 'HHmm').toDate()}
+				max={moment('2300', 'HHmm').toDate()}
+				popup
+				eventPropGetter={(event: any) => ({
+					style: {
+						backgroundColor:
+							recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === event.loaiSuKien)?.maMau ??
+							ColorSuKien[event.loaiSuKien as ELoaiSuKien],
+					},
+				})}
+				titleAccessor={(event) => getTitle(event) as any}
+				toolbar={false}
+			/>
+		) : (
+			<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />
+		);
+	};
+
 	return (
 		<>
 			<Card
@@ -167,7 +240,21 @@ const LichDashboard = () => {
 				loading={loadingSuKien || loadingTKB || loadingThi}
 				title={
 					<div className={styles.title}>
-						<Typography.Text>Lịch sắp tới</Typography.Text>
+						<Space>
+							<Typography.Text>Lịch sắp tới</Typography.Text>
+							<Segmented
+								value={segmentSelected}
+								options={[
+									{ icon: <MenuOutlined />, value: 'list', title: 'Dạng danh sách' },
+									{ icon: <CalendarOutlined />, value: 'calendar', title: 'Dạng lịch tuần' },
+								]}
+								size='small'
+								onChange={(val) => {
+									localStorage.setItem('loaiLich', val.toString());
+									setSegmentSelected(val.toString());
+								}}
+							/>
+						</Space>
 						<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
 							Xem thêm <ArrowRightOutlined />
 						</Link>
@@ -176,7 +263,9 @@ const LichDashboard = () => {
 			>
 				<Row gutter={[12, 12]}>
 					<Col span={24}>
-						<div style={{ maxHeight: 450, overflowY: 'auto' }}>{renderContent()}</div>
+						<div style={{ maxHeight: 450, overflowY: 'auto' }}>
+							{segmentSelected === 'list' ? renderContent() : renderContentCalender()}
+						</div>
 					</Col>
 					{!isEmpty(dataLichDashboard) ? (
 						<Col span={24}>
