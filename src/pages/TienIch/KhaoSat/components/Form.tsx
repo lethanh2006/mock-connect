@@ -1,6 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { ELoaiCauHoi, EThoiGianDot, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
+import { ELoaiCauHoi, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { handleSingleFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, Spin } from 'antd';
@@ -34,10 +34,10 @@ const FormTraLoiKhaoSat = (props: {
 		getDotMeModel,
 		visibleForm,
 		danhSach,
-		thoiGian,
 		isThanhCong,
 		setIsThanhCong,
 		setDsKhaoSatBatBuoc,
+		ngoaiThoiGian,
 	} = useModel('tienich.dotkhaosat');
 	const {
 		loading,
@@ -50,8 +50,9 @@ const FormTraLoiKhaoSat = (props: {
 	const { onOk, cauTraLoi, onCancel, hideCard, isBatBuoc } = props;
 	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
 	const [check, setCheck] = useState<boolean>(false);
-	const disabled = thoiGian !== EThoiGianDot.DANG_DIEN_RA || recordDot?.kichHoat === false;
 	const record = props?.recBieuMauProps ?? recBieuMau;
+
+	const disabled = ngoaiThoiGian || recordDot?.kichHoat === false;
 
 	useEffect(() => {
 		if (!isThanhCong) {
@@ -144,45 +145,6 @@ const FormTraLoiKhaoSat = (props: {
 		}
 		return null;
 	};
-
-	// const handleConvertCauTraLoi = async (values: any) => {
-	// 	const danhSachTraLoi: BieuMau.TraLoiRecord[] = [];
-	// 	record?.danhSachKhoi?.forEach((khoi, indexKhoi) => {
-	// 		khoi?.danhSachCauHoi?.forEach(async (cauHoi, indexCauHoi) => {
-	// 			let traLoi: BieuMau.TraLoiRecord = {
-	// 				idCauHoi: cauHoi._id,
-	// 				listLuaChon: [],
-	// 				listLuaChonBang: [],
-	// 				luaChonTuyenTinh: 0,
-	// 				traLoiText: '',
-	// 			};
-	// 			if (cauHoi.loai === 'UploadFile') {
-	// 				const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`).then(() => {});
-	// 				console.log('lisst', listUrlFile);
-	// 				// traLoi = { ...traLoi, listUrlFile: listUrlFile };
-	// 			} else if (cauHoi.loai === 'SingleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
-	// 				traLoi = { ...traLoi, listLuaChon: [values[`${indexKhoi}||${indexCauHoi}`]] };
-	// 			else if (cauHoi.loai === 'MultipleChoice' && values?.[`${indexKhoi}||${indexCauHoi}`])
-	// 				traLoi = { ...traLoi, listLuaChon: values[`${indexKhoi}||${indexCauHoi}`] };
-	// 			else if (cauHoi.loai === 'Text') traLoi = { ...traLoi, traLoiText: values[`${indexKhoi}||${indexCauHoi}`] };
-	// 			else if (cauHoi.loai === 'GridMultipleChoice' || cauHoi.loai === 'GridSingleChoice')
-	// 				traLoi = {
-	// 					...traLoi,
-	// 					listLuaChonBang: listLuaChonBang?.[indexKhoi || indexCauHoi] ?? [],
-	// 				};
-	// 			else if (cauHoi.loai === 'NumericRange') {
-	// 				traLoi = { ...traLoi, luaChonTuyenTinh: values[`${indexKhoi}||${indexCauHoi}`] };
-	// 			}
-	// 			// else if (cauHoi.loai === 'UploadFile') {
-	// 			//   const listUrlFile = await buildUpLoadMultiFile(values, `${indexKhoi}||${indexCauHoi}`);
-	// 			//   console.log('listUrlFile',listUrlFile)
-	// 			//   traLoi = { ...traLoi, listUrlFile:listUrlFile };
-	// 			// }
-	// 			danhSachTraLoi.push(traLoi);
-	// 		});
-	// 	});
-	// 	return danhSachTraLoi;
-	// };
 
 	const onFinish = async (values: any) => {
 		const danhSachTraLoi: Partial<BieuMau.TraLoiRecord[]> = [];
