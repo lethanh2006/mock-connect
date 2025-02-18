@@ -16,11 +16,10 @@ export default () => {
 	 * @param maKhoaNganh Mã khóa ngành => Xác định ngành chính | ngành phụ
 	 * @returns Học phí dự kiến
 	 */
-	const tinhHocPhi = (soTinChi?: number, loaiHocPhan?: ELoaiHocPhanDangKyTinChi, maNganh?: string): number => {
+	const tinhHocPhi = (soTinChi?: number, loaiHocPhan?: ELoaiHocPhanDangKyTinChi, maNganh?: string | null): number => {
 		if (!mucThuMe) return 0;
 		let mucThu = Object.values(mucThuMe).find((item) => item && item.maNganh === maNganh);
 		if (!mucThu) mucThu = mucThuMe.mucThuKhoaNganhChinh;
-
 		const due = (mucThu?.unitAmount ?? 0) * (soTinChi ?? 0);
 		const heSo = {
 			[ELoaiHocPhanDangKyTinChi.CAI_THIEN]: mucThu?.heSoHocCaiThien ?? 1,

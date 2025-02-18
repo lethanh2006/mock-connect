@@ -24,3 +24,11 @@ export async function deleteDangKyTinChi(data: { phieuDktcId: string; lopHocPhan
 export async function getSinhVienDot(dotDangKyTinChiId: string) {
 	return axios.get(`${ipDaoTao}/dang-ky-tin-chi/dot-sinh-vien/me/dot/${dotDangKyTinChiId}`);
 }
+
+export async function getLopDaHuyDangKyTinChi(idPhieuDktc: string) {
+	return axios.get(`${ipDaoTao}/dang-ky-tin-chi/audit-log/sv-del-dk/phieu/${idPhieuDktc}/many/me`);
+}
+
+export async function revertLopDangKyTinDaHuy(idAuditLog: string) {
+	return axios.post(`${ipDaoTao}/dang-ky-tin-chi/audit-log/sv-del-dk/${idAuditLog}/revert/me`);
+}
