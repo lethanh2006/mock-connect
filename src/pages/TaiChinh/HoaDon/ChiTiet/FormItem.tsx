@@ -71,7 +71,7 @@ const FormItemHoaDonChiTiet = () => {
 		{
 			title: 'Thời gian tạo',
 			dataIndex: 'createdAt',
-			width: 110,
+			width: 120,
 			align: 'left',
 			render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
 		},
