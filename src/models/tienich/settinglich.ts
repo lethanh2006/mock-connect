@@ -8,7 +8,7 @@ export default () => {
 	const { getModel, setRecord, formSubmiting, setFormSubmiting, setVisibleForm } = objInit;
 
 	const getSettingLich = () => {
-		getModel(undefined, undefined, undefined, undefined, undefined, 'me')?.then((rec) => setRecord(rec[0]));
+		getModel(undefined, undefined, undefined, undefined, undefined, 'me')?.then((rec) => setRecord(rec[0] ?? {}));
 	};
 
 	const postMeSettingLichModel = async (

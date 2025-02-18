@@ -18,7 +18,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 	];
 
 	useEffect(() => {
-		if (!recSetting?._id) getSettingLich();
+		if (recSetting === undefined) getSettingLich();
 	}, []);
 
 	const handleToggleSuKien = (sukien: ELoaiSuKien) => {
