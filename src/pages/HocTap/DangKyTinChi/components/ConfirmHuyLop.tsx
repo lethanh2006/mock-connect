@@ -41,7 +41,7 @@ const ConfirmKetHuyLopDKTC = (props: {
 			visible={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
-			width={600}
+			width={450}
 			maskClosable={false}
 		>
 			<Form form={form} layout='vertical'>
@@ -58,24 +58,27 @@ const ConfirmKetHuyLopDKTC = (props: {
 							<div style={{ color: 'orange', fontSize: 48 }}>
 								<ExclamationCircleFilled />
 							</div>
-							<div style={{ width: 450, textAlign: 'center' }}>
-								Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ{' '}
-								{`${recLopDangKy?.hocPhan?.ten} (${recLopDangKy?.maHocPhan})`} này?
+							<div style={{ textAlign: 'center' }}>
+								Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ
+								<br />
+								{`${recLopDangKy?.hocPhan?.ten} - ${recLopDangKy?.ten}`}?
 							</div>
 
-							<i style={{ color: 'red' }}>Lưu ý: Thao tác không thể được hoàn tác</i>
+							<p style={{ color: 'red' }}>
+								<b>Lưu ý</b>: Thao tác không thể được hoàn tác
+							</p>
 						</div>
 					</Col>
 
 					<Col span={24}>
 						<Form.Item name='commit' valuePropName='checked' initialValue={false}>
-							<Checkbox>Tôi đã hiểu và xác nhận hủy lớp</Checkbox>
+							<Checkbox>Tôi đã hiểu và xác nhận hủy đăng ký</Checkbox>
 						</Form.Item>
 					</Col>
 				</Row>
 
 				<div className='form-footer'>
-					<Button type='primary' disabled={!commit} onClick={() => handleXoaDangKyTinChi()}>
+					<Button type='primary' danger disabled={!commit} onClick={() => handleXoaDangKyTinChi()}>
 						Xác nhận
 					</Button>
 					<Button onClick={() => setVisible(false)}>Hủy</Button>
