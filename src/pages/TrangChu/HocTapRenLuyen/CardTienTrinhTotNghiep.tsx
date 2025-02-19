@@ -9,7 +9,7 @@ const CardTienTrinhTotNghiep = () => {
 		<Card className='dashboard-stat-card' loading={loading}>
 			<div className='dashboard-stat-content'>
 				<div className='header'>
-					<div className='title'>Điều kiện chứng chỉ</div>
+					<div className='title'>Chứng chỉ cần đạt</div>
 					<Link to='/hoc-tap/xet-tot-nghiep/xet-tot-nghiep' title='Xem chi tiết'>
 						<ArrowRightOutlined />
 					</Link>
