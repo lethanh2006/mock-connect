@@ -72,7 +72,7 @@ const CardLopHocPhan = () => {
 						)}
 					/>
 				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' style={{ margin: '24px 0' }} />
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
 				)}
 			</div>
 		</Card>
