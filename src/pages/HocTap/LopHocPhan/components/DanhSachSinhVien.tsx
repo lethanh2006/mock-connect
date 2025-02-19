@@ -69,7 +69,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 	return (
 		<>
 			<TableStaticData
-				otherProps={{ loading, onRow, pagination: false, scoll: { y: 450 } }}
+				otherProps={{ loading, onRow, pagination: false, scroll: { y: 450 } }}
 				data={sinhVienList}
 				columns={columns}
 				addStt
