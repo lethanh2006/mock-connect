@@ -30,7 +30,7 @@ const ButtonExtend = (
 	const cooldownLabel = countdown > 0 && `(${countdown} giây)`;
 	const childrenValue = [children, cooldownLabel].filter(Boolean).join(' ');
 	return (
-		<Tooltip title={tooltip ?? children}>
+		<Tooltip title={tooltip ?? childrenValue}>
 			<Button {...otherProps} disabled={disableCooldown || disabled} onClick={handleOnclick}>
 				{!notHideText && !!children && !!otherProps.icon ? <span className='span-extend'>{childrenValue}</span> : childrenValue}
 			</Button>
