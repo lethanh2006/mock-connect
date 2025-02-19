@@ -84,11 +84,11 @@ const CardKetQuaHocTapDashboard = () => {
 											<span className='dot' />
 											<span>
 												STC
-												<span className='suffix'>(/{recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? 0})</span>
+												<span className='suffix'>(/{recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '-'})</span>
 											</span>
 										</Space>
 										<span className='sum-text' style={{ color: '#AAA' }}>
-											{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? 0}
+											{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '-'}
 										</span>
 									</div>
 								</Col>

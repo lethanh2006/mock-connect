@@ -4,6 +4,8 @@ import TinTucDashboardWrapper from '../TinTuc/Wrapper/Dashboard';
 import CardCongNoDashboard from './components/CardCongNo';
 import './components/style.less';
 import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
+import CardBaiTapDashboard from './HocTapRenLuyen/CardBaiTap';
+import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
 import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
 
 const TrangChu = () => {
@@ -28,6 +30,13 @@ const TrangChu = () => {
 
 						<Col xs={24}>
 							<LichDashboard />
+						</Col>
+
+						<Col span={24} md={12}>
+							<CardDienDanDashboard />
+						</Col>
+						<Col span={24} md={12}>
+							<CardBaiTapDashboard />
 						</Col>
 					</Row>
 				</Col>

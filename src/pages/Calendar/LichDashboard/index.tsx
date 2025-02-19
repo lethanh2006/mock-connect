@@ -241,7 +241,7 @@ const LichDashboard = () => {
 				title={
 					<div className={styles.title}>
 						<Space>
-							<Typography.Text>Lịch sắp tới</Typography.Text>
+							<Typography.Text>Sắp diễn ra</Typography.Text>
 							<Segmented
 								value={segmentSelected}
 								options={[
