@@ -4,7 +4,7 @@ import { Card, Dropdown, Empty, List, Menu, Progress, Space } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
-import './style.less';
+import '../components/style.less';
 
 const CardLopHocPhan = () => {
 	const { danhSach: danhSachLHP, sinhVienGetAllModel, loading } = useModel('lophocphan.lophocphan');

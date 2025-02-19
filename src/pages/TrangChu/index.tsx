@@ -1,19 +1,30 @@
 import { Col, Row } from 'antd';
 import LichDashboard from '../Calendar/LichDashboard';
 import TinTucDashboardWrapper from '../TinTuc/Wrapper/Dashboard';
-import CardLopHocPhan from './components/CardLopHocPhan';
-import CardTienTrinhTotNghiep from './components/CardTienTrinhTotNghiep';
+import CardCongNoDashboard from './components/CardCongNo';
 import './components/style.less';
+import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
+import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
 
 const TrangChu = () => {
 	return (
 		<>
+			<Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+				<Col span={24} md={16}>
+					<CardHocTapRenLuyenDashboard />
+				</Col>
+
+				<Col span={24} md={8}>
+					<CardCongNoDashboard />
+				</Col>
+			</Row>
+
 			<Row gutter={[16, 16]}>
 				<Col span={24} md={16}>
 					<Row gutter={[16, 16]}>
-						<Col span={24}>
+						{/* <Col span={24}>
 							<CardTienTrinhTotNghiep />
-						</Col>
+						</Col> */}
 
 						<Col xs={24}>
 							<LichDashboard />
