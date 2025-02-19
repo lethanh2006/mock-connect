@@ -116,3 +116,50 @@
     }
   }
 }
+
+
+.dashboard-list-lhp {
+  .description-3lines {
+    display: -webkit-box;
+    line-height: 1.35;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .countdown {
+    background-color: #14B8A6;
+    text-align: center;
+    border-radius: 6px;
+    padding: 3px 6px;
+
+    .ant-statistic-title {
+      color: #FFF;
+      font-size: 10px;
+    }
+
+    .ant-statistic-content {
+      color: #FFF;
+      font-size: 1rem;
+      line-height: 1.1;
+    }
+  }
+
+  &.ant-list-vertical .ant-list-item-meta {
+    margin-bottom: 6px;
+    align-items: center;
+
+    .ant-list-item-meta-avatar {
+      margin-right: 6px;
+    }
+
+    .ant-list-item-meta-title {
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+
+    .ant-list-item-meta-description {
+      font-size: 12px;
+    }
+  }
+}
