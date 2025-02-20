@@ -1,12 +1,17 @@
 import { ArrowRightOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Card, Empty, List } from 'antd';
 import moment from 'moment';
+import { useEffect } from 'react';
 import { history, Link, useModel } from 'umi';
 
 const CardDienDanDashboard = () => {
-	const { danhSach, loading } = useModel('diendan.baidang');
+	const { danhSach, loading, getAllModel } = useModel('diendan.baidang');
 
 	const lastNameChar = (ten: string) => ten.split(' ')?.at(-1)?.[0]?.toUpperCase();
+
+	useEffect(() => {
+		getAllModel(undefined, undefined, undefined, undefined, 'many/lop-hoc-phan/me');
+	}, []);
 
 	return (
 		<Card
