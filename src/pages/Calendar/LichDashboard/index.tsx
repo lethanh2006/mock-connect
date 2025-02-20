@@ -20,7 +20,7 @@ const DnDCalendar = withDragAndDrop(tmp);
 
 const getThoiGianMotTuanKeTuHomNay = () => {
 	return {
-		fromDate: moment().startOf('day').toISOString(),
+		fromDate: moment().startOf('week').toISOString(),
 		toDate: moment().add(7, 'day').endOf('day').toISOString(),
 	};
 };
