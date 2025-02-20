@@ -7,6 +7,7 @@ declare module HoaDon {
 		_id: string;
 		identityCode: string;
 		ma?: string;
+		name?: string;
 
 		callBackUrl?: string;
 		status: EMaTrangThaiThanhToan;

@@ -29,7 +29,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 			width: 80,
 			align: 'center',
 			render: (path, rec) => (
-				<Avatar src={path || `/images/${rec.gioiTinh === EGioiTinh.Nam ? 'male.svg' : 'female.svg'}`} />
+				<Avatar src={path || `/images/${rec.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`} />
 			),
 		},
 		{
@@ -69,7 +69,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 	return (
 		<>
 			<TableStaticData
-				otherProps={{ loading, onRow }}
+				otherProps={{ loading, onRow, pagination: false, scroll: { y: 450 } }}
 				data={sinhVienList}
 				columns={columns}
 				addStt
@@ -88,7 +88,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 				<Row align='middle' gutter={[0, 12]}>
 					<Col span={24} md={8} style={{ textAlign: 'center' }}>
 						<Avatar
-							src={record?.anhDaiDienUrl || `/images/${record?.gioiTinh === EGioiTinh.Nam ? 'male.svg' : 'female.svg'}`}
+							src={record?.anhDaiDienUrl || `/images/${record?.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>
 					</Col>
