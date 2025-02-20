@@ -1,3 +1,4 @@
+import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import type { SinhVien } from '../SinhVien/typings';
 import type { ETrangThaiNopBaiTap } from './constants';
 
@@ -12,6 +13,7 @@ declare module BaiTap {
 
 		lopHocPhanId: string;
 		tenLopHocPhan: string;
+		lopHocPhan?: LopHocPhan.IRecord;
 		thoiGianGiao: Date;
 		thoiGianBatDau: Date;
 		thoiGianKetThuc: Date;
