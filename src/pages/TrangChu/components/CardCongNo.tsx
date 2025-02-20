@@ -100,7 +100,7 @@ const CardCongNoDashboard = () => {
 			<div className='dashboard-stat-content'>
 				<div className='header'>
 					<div className='title'>
-						Dịch vụ
+						Công nợ sinh viên
 						<span className='subtitle'>(Triệu đồng)</span>
 					</div>
 					<Link to='/tai-chinh/cong-no' title='Xem chi tiết'>
@@ -110,7 +110,7 @@ const CardCongNoDashboard = () => {
 
 				{danhSach.length ? (
 					<Row gutter={[8, 0]}>
-						<Col span={12}>{renderContent(danhSach, 'Công nợ')}</Col>
+						<Col span={12}>{renderContent(danhSach, 'Công nợ chung')}</Col>
 						<Col span={12}>{renderContent([], 'Dịch vụ số')}</Col>
 					</Row>
 				) : (
