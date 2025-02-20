@@ -11,6 +11,8 @@ const CardCongNoDashboard = () => {
 	const { getModel: getCongNo, loading, danhSach } = useModel('taichinh.hoadon');
 	const colors = ['var(--ant-success-color)', 'var(--ant-error-color)'];
 	const xAxis = ['Đã thanh toán', 'Chưa thanh toán'];
+	const congNoList = danhSach.filter((bill) => !bill.name?.includes('dịch vụ hành chính'));
+	const dichVuList = danhSach.filter((bill) => bill.name?.includes('dịch vụ hành chính'));
 
 	useEffect(() => {
 		// Get công nợ
@@ -110,8 +112,8 @@ const CardCongNoDashboard = () => {
 
 				{danhSach.length ? (
 					<Row gutter={[8, 0]}>
-						<Col span={12}>{renderContent(danhSach, 'Công nợ chung')}</Col>
-						<Col span={12}>{renderContent([], 'Dịch vụ số')}</Col>
+						<Col span={12}>{renderContent(congNoList, 'Công nợ chung')}</Col>
+						<Col span={12}>{renderContent(dichVuList, 'Dịch vụ số')}</Col>
 					</Row>
 				) : (
 					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
