@@ -4,7 +4,7 @@ import { Card, Dropdown, Empty, List, Menu, Progress, Space } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
-import './style.less';
+import '../components/style.less';
 
 const CardLopHocPhan = () => {
 	const { danhSach: danhSachLHP, sinhVienGetAllModel, loading } = useModel('lophocphan.lophocphan');
@@ -72,7 +72,7 @@ const CardLopHocPhan = () => {
 						)}
 					/>
 				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' style={{ margin: '24px 0' }} />
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
 				)}
 			</div>
 		</Card>
