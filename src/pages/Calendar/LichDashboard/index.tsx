@@ -82,15 +82,18 @@ const LichDashboard = () => {
 	const getBaiTap = async () => {
 		return thongKeBaiTapModel(
 			moment().startOf('day').toISOString(),
-			moment().add(7, 'day').endOf('day').toISOString(),
+			moment().add(2, 'months').endOf('day').toISOString(),
 		).then((data) => {
-			const temp = data.map((item) => ({
-				...item,
-				title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
-				thoiGianBatDau: moment(item?.assignment?.thoiGianKetThuc).toDate(),
-				thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
-				loaiSuKien: ELoaiSuKien.BAI_TAP,
-			}));
+			const aWeekLater = moment().add(7, 'day').endOf('day').toDate();
+			const temp = data
+				.map((item) => ({
+					...item,
+					title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
+					thoiGianBatDau: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+					thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+					loaiSuKien: ELoaiSuKien.BAI_TAP,
+				}))
+				.filter((i) => i.thoiGianBatDau > new Date() && i.thoiGianKetThuc < aWeekLater);
 			return temp;
 		});
 	};
@@ -191,7 +194,9 @@ const LichDashboard = () => {
 	};
 
 	const getTitle = (event: any) => {
-		return <div>{[event.tenSuKien ?? '', event.diaDiem ?? ''].filter(Boolean).join(' - ')}</div>;
+		return (
+			<div style={{ fontSize: 12 }}>{[event.tenSuKien ?? '', event.diaDiem ?? ''].filter(Boolean).join(' - ')}</div>
+		);
 	};
 
 	const renderContentCalender = () => {
@@ -215,8 +220,9 @@ const LichDashboard = () => {
 					setSelectEvent(event);
 					setVisibleDetail(true);
 				}}
+				selectable={false}
 				min={moment('0700', 'HHmm').toDate()}
-				max={moment('2300', 'HHmm').toDate()}
+				// max={moment('2359', 'HHmm').toDate()}
 				popup
 				eventPropGetter={(event: any) => ({
 					style: {
@@ -241,7 +247,7 @@ const LichDashboard = () => {
 				title={
 					<div className={styles.title}>
 						<Space>
-							<Typography.Text>Lịch sắp tới</Typography.Text>
+							<Typography.Text>Sắp diễn ra</Typography.Text>
 							<Segmented
 								value={segmentSelected}
 								options={[
