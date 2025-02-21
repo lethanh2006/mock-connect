@@ -20,7 +20,7 @@ const DnDCalendar = withDragAndDrop(tmp);
 
 const getThoiGianMotTuanKeTuHomNay = () => {
 	return {
-		fromDate: moment().startOf('day').toISOString(),
+		fromDate: moment().startOf('week').toISOString(),
 		toDate: moment().add(7, 'day').endOf('day').toISOString(),
 	};
 };
@@ -81,7 +81,7 @@ const LichDashboard = () => {
 
 	const getBaiTap = async () => {
 		return thongKeBaiTapModel(
-			moment().startOf('day').toISOString(),
+			moment().startOf('week').toISOString(),
 			moment().add(2, 'months').endOf('day').toISOString(),
 		).then((data) => {
 			const aWeekLater = moment().add(7, 'day').endOf('day').toDate();
@@ -93,7 +93,8 @@ const LichDashboard = () => {
 					thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
 					loaiSuKien: ELoaiSuKien.BAI_TAP,
 				}))
-				.filter((i) => i.thoiGianBatDau > new Date() && i.thoiGianKetThuc < aWeekLater);
+				// Ở dashboard Chỉ show tối đa trong vòng 1 tuần
+				.filter((i) => i.thoiGianKetThuc < aWeekLater);
 			return temp;
 		});
 	};
@@ -121,25 +122,27 @@ const LichDashboard = () => {
 
 	const renderContent = () => {
 		// Convert dữ liệu
-		const data = dataCalendarDashboard?.reduce<any>((result, item) => {
-			if (!item?.thoiGianBatDau) {
-				return result;
-			}
-			const ngayMoment = moment(item?.thoiGianBatDau);
-			const ngayString = ngayMoment.format('YYYY-MM-DD');
+		const data = dataCalendarDashboard
+			?.filter((event) => moment(event.thoiGianBatDau).isSameOrAfter(moment(), 'd'))
+			?.reduce<any>((result, item) => {
+				if (!item?.thoiGianBatDau) {
+					return result;
+				}
+				const ngayMoment = moment(item?.thoiGianBatDau);
+				const ngayString = ngayMoment.format('YYYY-MM-DD');
 
-			return {
-				...result,
-				[ngayString]: {
-					thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
-					cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
-						...item,
-						tenSuKien: item.title,
-						diaDiem: item.phongHoc ?? item.diaDiem,
-					}),
-				},
-			};
-		}, {});
+				return {
+					...result,
+					[ngayString]: {
+						thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
+						cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
+							...item,
+							tenSuKien: item.title,
+							diaDiem: item.phongHoc ?? item.diaDiem,
+						}),
+					},
+				};
+			}, {});
 
 		const keysSorted = sortBy(Object.keys(data));
 		if (!loadingSuKien && !loadingSuKien && isEmpty(data)) {
@@ -153,7 +156,10 @@ const LichDashboard = () => {
 				<div key={ngay} className={styles.ngay}>
 					<Space style={{ marginBottom: 8 }}>
 						<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
-							<div className={styles.ngay__title}>
+							<div
+								className={styles.ngay__title}
+								style={{ color: moment().isSame(ngay, 'day') ? 'var(--primary-color)' : undefined }}
+							>
 								{thuTrongTuan}, ngày {moment(ngay).format('DD/MM')}
 							</div>
 						</Badge>
