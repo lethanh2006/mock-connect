@@ -175,9 +175,13 @@ const LichDashboard = () => {
 							}}
 						>
 							<div className={styles.su_kien__left}>
+								{moment().isSameOrAfter(sukien.thoiGianBatDau) && moment().isSameOrBefore(sukien.thoiGianKetThuc) ? (
+									<div className={styles.pulse} />
+								) : null}
 								<div className={styles.su_kien__thoi_gian}>{moment(sukien.thoiGianBatDau).format('HH:mm')}</div>
 							</div>
 							<Space
+								wrap
 								className={styles.su_kien__right}
 								style={{
 									borderColor:
