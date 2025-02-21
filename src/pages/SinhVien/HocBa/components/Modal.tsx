@@ -29,7 +29,7 @@ const ModalHocBaSinhVien = (props: { visible: boolean; setVisible: (val: boolean
 			<Card
 				title={
 					<>
-						Học bạ điện tử{' '}
+						Học bạ số{' '}
 						<SelectSongNganh
 							size='small'
 							style={{ width: 250 }}
