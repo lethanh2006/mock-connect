@@ -81,7 +81,7 @@ const LichDashboard = () => {
 
 	const getBaiTap = async () => {
 		return thongKeBaiTapModel(
-			moment().startOf('day').toISOString(),
+			moment().startOf('week').toISOString(),
 			moment().add(2, 'months').endOf('day').toISOString(),
 		).then((data) => {
 			const aWeekLater = moment().add(7, 'day').endOf('day').toDate();
@@ -93,7 +93,8 @@ const LichDashboard = () => {
 					thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
 					loaiSuKien: ELoaiSuKien.BAI_TAP,
 				}))
-				.filter((i) => i.thoiGianBatDau > new Date() && i.thoiGianKetThuc < aWeekLater);
+				// Ở dashboard Chỉ show tối đa trong vòng 1 tuần
+				.filter((i) => i.thoiGianKetThuc < aWeekLater);
 			return temp;
 		});
 	};
@@ -122,7 +123,7 @@ const LichDashboard = () => {
 	const renderContent = () => {
 		// Convert dữ liệu
 		const data = dataCalendarDashboard
-			?.filter((event) => moment(event.thoiGianBatDau).isSameOrAfter(moment().startOf('day')))
+			?.filter((event) => moment(event.thoiGianBatDau).isSameOrAfter(moment(), 'd'))
 			?.reduce<any>((result, item) => {
 				if (!item?.thoiGianBatDau) {
 					return result;
@@ -155,7 +156,10 @@ const LichDashboard = () => {
 				<div key={ngay} className={styles.ngay}>
 					<Space style={{ marginBottom: 8 }}>
 						<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
-							<div className={styles.ngay__title}>
+							<div
+								className={styles.ngay__title}
+								style={{ color: moment().isSame(ngay, 'day') ? 'var(--primary-color)' : undefined }}
+							>
 								{thuTrongTuan}, ngày {moment(ngay).format('DD/MM')}
 							</div>
 						</Badge>
