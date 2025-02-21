@@ -121,25 +121,27 @@ const LichDashboard = () => {
 
 	const renderContent = () => {
 		// Convert dữ liệu
-		const data = dataCalendarDashboard?.reduce<any>((result, item) => {
-			if (!item?.thoiGianBatDau) {
-				return result;
-			}
-			const ngayMoment = moment(item?.thoiGianBatDau);
-			const ngayString = ngayMoment.format('YYYY-MM-DD');
+		const data = dataCalendarDashboard
+			?.filter((event) => moment(event.thoiGianBatDau).isSameOrAfter(moment().startOf('day')))
+			?.reduce<any>((result, item) => {
+				if (!item?.thoiGianBatDau) {
+					return result;
+				}
+				const ngayMoment = moment(item?.thoiGianBatDau);
+				const ngayString = ngayMoment.format('YYYY-MM-DD');
 
-			return {
-				...result,
-				[ngayString]: {
-					thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
-					cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
-						...item,
-						tenSuKien: item.title,
-						diaDiem: item.phongHoc ?? item.diaDiem,
-					}),
-				},
-			};
-		}, {});
+				return {
+					...result,
+					[ngayString]: {
+						thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
+						cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
+							...item,
+							tenSuKien: item.title,
+							diaDiem: item.phongHoc ?? item.diaDiem,
+						}),
+					},
+				};
+			}, {});
 
 		const keysSorted = sortBy(Object.keys(data));
 		if (!loadingSuKien && !loadingSuKien && isEmpty(data)) {
