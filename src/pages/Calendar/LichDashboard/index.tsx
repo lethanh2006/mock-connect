@@ -275,7 +275,7 @@ const LichDashboard = () => {
 			>
 				<Row gutter={[12, 12]}>
 					<Col span={24}>
-						<div style={{ maxHeight: 450, overflowY: 'auto' }}>
+						<div style={{ maxHeight: 400, overflowY: 'auto' }}>
 							{segmentSelected === 'list' ? renderContent() : renderContentCalender()}
 						</div>
 					</Col>
