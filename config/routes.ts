@@ -403,34 +403,34 @@
 	// 	],
 	// },
 
-	{
-		name: 'ThuVien',
-		path: '/thu-vien',
-		icon: 'bank',
-		routes: [
-			{
-				name: 'MuonTraSach',
-				path: './muon-tra-sach',
-				routes: [
-					{
-						path: './',
-						hideInMenu: true,
-						component: './ThuVien/MuonTraSach',
-						exact: true,
-					},
-					{
-						path: './:id',
-						component: './ThuVien/MuonTraSach/$id',
-						hideInMenu: true,
-						exact: true,
-					},
-				],
-			},
+	// {
+	// 	name: 'ThuVien',
+	// 	path: '/thu-vien',
+	// 	icon: 'bank',
+	// 	routes: [
+	// 		{
+	// 			name: 'MuonTraSach',
+	// 			path: './muon-tra-sach',
+	// 			routes: [
+	// 				{
+	// 					path: './',
+	// 					hideInMenu: true,
+	// 					component: './ThuVien/MuonTraSach',
+	// 					exact: true,
+	// 				},
+	// 				{
+	// 					path: './:id',
+	// 					component: './ThuVien/MuonTraSach/$id',
+	// 					hideInMenu: true,
+	// 					exact: true,
+	// 				},
+	// 			],
+	// 		},
 
-			{ name: 'LichSuMuonTra', path: './lich-su-muon-tra', component: './ThuVien/MuonTraSach/LichSu/PhieuMuon.tsx' },
-			{ name: 'VaoRa', path: './vao-ra', component: './ThuVien/VaoRaThuVien' },
-		],
-	},
+	// 		{ name: 'LichSuMuonTra', path: './lich-su-muon-tra', component: './ThuVien/MuonTraSach/LichSu/PhieuMuon.tsx' },
+	// 		{ name: 'VaoRa', path: './vao-ra', component: './ThuVien/VaoRaThuVien' },
+	// 	],
+	// },
 
 	// TÀI CHÍNH
 	{
