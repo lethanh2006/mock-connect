@@ -99,7 +99,7 @@ const CardKetQuaHocTapDashboard = () => {
 
 				<div style={{ cursor: 'pointer' }} onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap#may-tinh')}>
 					<div className='row highlight text-primary'>
-						Máy tính thông minh
+						<span className='text'>Máy tính thông minh</span>
 						<Link to='/hoc-tap/ket-qua-hoc-tap#may-tinh' title='Xem chi tiết'>
 							<ArrowRightOutlined />
 						</Link>
