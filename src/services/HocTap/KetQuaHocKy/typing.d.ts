@@ -18,6 +18,7 @@ declare module KetQuaHocKy {
 		tongSoTinChiTichLuyHocKy: number; // Số tín chỉ tích lũy học kỳ
 		trungBinhHocBongHocKyThang4: number; // TBC học bổng trong kỳ
 		tongSoTinChiNoHocKy: number; // Số tín chỉ nợ trong kỳ
+		tongSoTinChiHocBongHocKy: number; // Số tín chỉ xét học bổng trong kỳ
 
 		// Toàn khóa
 		trungBinhTichLuyToanKhoa: number;
