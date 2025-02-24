@@ -2,6 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { CheckOutlined } from '@ant-design/icons';
 import { Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -122,6 +123,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
+			title: 'TL',
+			dataIndex: 'tichLuy',
+			width: 40,
+			align: 'center',
+			render: (val) => !!val && <CheckOutlined />,
+			onCell,
+		},
+		{
 			title: 'Điểm thi',
 			width: 80,
 			dataIndex: 'diemThi1',
@@ -181,7 +190,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 		// sortable: true,
 		onCell,
 	}));
-	columns.splice(4, 0, {
+	columns.splice(5, 0, {
 		title: 'Điểm thành phần',
 		width: cols.length * 80,
 		children: cols,
