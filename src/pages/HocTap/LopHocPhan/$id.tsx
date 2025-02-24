@@ -1,11 +1,22 @@
+import { TabViewPage } from '@/components/TabViewPage';
 import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
 import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import { ESettingKey } from '@/services/base/constant';
 import { ipDaoTao } from '@/utils/ip';
-import { TeamOutlined } from '@ant-design/icons';
-import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
-import { useEffect, useState } from 'react';
+import {
+	BarChartOutlined,
+	BellOutlined,
+	CalendarOutlined,
+	FileTextOutlined,
+	InfoCircleOutlined,
+	LaptopOutlined,
+	MessageOutlined,
+	StarOutlined,
+	TeamOutlined,
+} from '@ant-design/icons';
+import { Breadcrumb, Card, Col, Row } from 'antd';
+import { useEffect } from 'react';
 import { useAuth } from 'react-oidc-context';
 import { history, useModel } from 'umi';
 import CardThongBao from '../../ThongBao/ThongBaoLop/CardThongBao';
@@ -29,9 +40,17 @@ const DetailLopTinChi = ({
 	// const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
 	const { settings, getByKeyModel: getSettings } = useModel('tienich.caidat');
 	const auth = useAuth();
-	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'ket-qua', 'danh-gia', 'dien-dan', 'bai-tap', 'lms'];
-	const [tabActive, setTabActive] = useState<string>(paths[0]);
-	const hash = window.location.hash?.replace('#', '') ?? paths[0];
+	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'dien-dan', 'lms', 'bai-tap', 'ket-qua', 'danh-gia-giang-vien'];
+	const titles = [
+		'Thông tin chung',
+		'Lịch học',
+		'Thông báo',
+		'Diễn đàn',
+		'Kết quả LMS',
+		'Bài tập, bài kiểm tra',
+		'Kết quả học tập',
+		'Đánh giá giảng viên',
+	];
 
 	useEffect(() => {
 		getSettings(ESettingKey.GENERAL_INFO, ipDaoTao);
@@ -69,41 +88,11 @@ const DetailLopTinChi = ({
 		};
 	}, [auth.user?.access_token, id]);
 
-	useEffect(() => {
-		if (hash && paths.includes(hash)) setTabActive(hash);
-		else setTabActive(paths[0]);
-	}, [hash]);
-
-	const onChangeTab = (tab: string) => {
-		window.location.hash = tab === paths[0] ? '' : tab;
-	};
-
-	return (
-		<Card
-			bodyStyle={{ paddingTop: 4 }}
-			title={
-				<Breadcrumb style={{ cursor: 'pointer' }}>
-					<Breadcrumb.Item onClick={() => history.push('/hoc-tap/lop-tin-chi')}>
-						<TeamOutlined /> Lớp tín chỉ
-					</Breadcrumb.Item>
-					<Breadcrumb.Item>{record?.ten ?? ''}</Breadcrumb.Item>
-				</Breadcrumb>
-			}
-		>
-			<Tabs onChange={onChangeTab} activeKey={tabActive}>
-				<Tabs.TabPane tab='Thông tin chung' key={paths[0]} />
-				<Tabs.TabPane tab='Lịch học' key={paths[1]} />
-				<Tabs.TabPane tab='Thông báo' key={paths[2]} />
-				<Tabs.TabPane tab='Diễn đàn' key={paths[5]} />
-				{settings?.GENERAL_INFO?.lmsMode === 'odoo' && record?.syncLms ? (
-					<Tabs.TabPane tab='Kết quả LMS' key={paths[7]} />
-				) : null}
-				<Tabs.TabPane tab='Bài tập, bài kiểm tra' key={paths[6]} />
-				<Tabs.TabPane tab='Kết quả học tập' key={paths[3]} />
-				<Tabs.TabPane tab='Đánh giá giảng viên' key={paths[4]} />
-			</Tabs>
-
-			{tabActive === paths[0] ? (
+	const menus = [
+		{
+			title: titles[0],
+			menuKey: paths[0],
+			content: (
 				<Row gutter={[16, 16]}>
 					<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
 						<Row gutter={[16, 16]}>
@@ -130,24 +119,77 @@ const DetailLopTinChi = ({
 						<ThongTinChung />
 					</Col>
 				</Row>
-			) : tabActive === paths[1] ? (
-				<DanhSachBuoiHoc />
-			) : tabActive === paths[2] ? (
-				<ThongBaoLopPage loai='lop-hoc-phan' idLop={id} />
-			) : tabActive === paths[3] ? (
+			),
+			icon: <InfoCircleOutlined />,
+		},
+		{
+			title: titles[1],
+			menuKey: paths[1],
+			content: <DanhSachBuoiHoc />,
+			icon: <CalendarOutlined />,
+		},
+		{
+			title: titles[2],
+			menuKey: paths[2],
+			content: <ThongBaoLopPage loai='lop-hoc-phan' idLop={id} />,
+			icon: <BellOutlined />,
+		},
+		{
+			title: titles[3],
+			menuKey: paths[3],
+			content: <DienDan idLopHocPhan={record?._id ?? id} />,
+			icon: <MessageOutlined />,
+		},
+
+		{
+			title: titles[4],
+			menuKey: paths[4],
+			content: <LmsOdooPage idLopHocPhan={id} />,
+			hide: !(settings?.GENERAL_INFO?.lmsMode === 'odoo' && record?.syncLms),
+			icon: <LaptopOutlined />,
+		},
+
+		{
+			title: titles[5],
+			menuKey: paths[5],
+			content: <BaiTapPage lopHocPhanId={id} />,
+			icon: <FileTextOutlined />,
+		},
+		{
+			title: titles[6],
+			menuKey: paths[6],
+			content: (
 				<>
 					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
-					<DetailKetQuaHocTap lopHocPhanId={record?._id} toDanhGiaGiangVien={() => onChangeTab(paths[4])} />
+					<DetailKetQuaHocTap
+						lopHocPhanId={record?._id}
+						toDanhGiaGiangVien={() => (window.location.hash = 'danh-gia-giang-vien')}
+					/>
 				</>
-			) : tabActive === paths[4] ? (
-				<DanhGiaGiangVienPage danhSachNhanSu={record?.nhanSuList ?? []} />
-			) : tabActive === paths[5] ? (
-				<DienDan idLopHocPhan={record?._id ?? id} />
-			) : tabActive === paths[6] ? (
-				<BaiTapPage lopHocPhanId={id} />
-			) : tabActive === paths[7] ? (
-				<LmsOdooPage idLopHocPhan={id} />
-			) : null}
+			),
+			icon: <BarChartOutlined />,
+		},
+		{
+			title: titles[7],
+			menuKey: paths[7],
+			content: <DanhGiaGiangVienPage danhSachNhanSu={record?.nhanSuList ?? []} />,
+			icon: <StarOutlined />,
+		},
+	];
+
+	return (
+		<Card
+			bodyStyle={{ paddingTop: 4 }}
+			title={
+				<Breadcrumb style={{ cursor: 'pointer' }}>
+					<Breadcrumb.Item onClick={() => history.push('/hoc-tap/lop-tin-chi')}>
+						<TeamOutlined /> Lớp tín chỉ
+					</Breadcrumb.Item>
+					<Breadcrumb.Item>{record?.ten ?? ''}</Breadcrumb.Item>
+				</Breadcrumb>
+			}
+		>
+			<TabViewPage hideCard menu={menus} />
 		</Card>
 	);
 };

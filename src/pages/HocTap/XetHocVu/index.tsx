@@ -9,7 +9,7 @@ import {
 	type ELoaiXuLyKQHT,
 	type ETrangThaiDuyetXuLyKqht,
 } from '@/services/HocTap/constant';
-import { Card, Tag } from 'antd';
+import { Tag } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -88,11 +88,7 @@ const XetHocVuPage = () => {
 		},
 	];
 
-	return (
-		<Card title='Lịch sử xử lý kết quả học tập'>
-			<TableStaticData columns={columns} data={danhSach} hasTotal addStt loading={loading} />
-		</Card>
-	);
+	return <TableStaticData columns={columns} data={danhSach} hasTotal addStt loading={loading} />;
 };
 
 export default XetHocVuPage;
