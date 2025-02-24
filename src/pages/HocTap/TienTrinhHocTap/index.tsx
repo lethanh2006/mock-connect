@@ -1,7 +1,9 @@
+import { TabViewPage } from '@/components/TabViewPage';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { Alert, Card, Col, Row, Spin, Tabs } from 'antd';
+import { BookOutlined, CheckCircleOutlined, ScheduleOutlined } from '@ant-design/icons';
+import { Alert, Card, Col, Row, Spin } from 'antd';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import LichSuQuyDoiDiemPage from '../QuyDoiDiem';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
@@ -13,7 +15,6 @@ const TienTrinhHocTap = () => {
 	const { getAllModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 	const { record: recTienTrinh, getTienTrinhTotNghiepModel, loading } = useModel('sinhvien.tientrinhtotnghiep');
-	const [activeTabKey, setActiveTabKey] = useState<string>('2');
 
 	useEffect(() => {
 		//Get đợt me
@@ -77,19 +78,29 @@ const TienTrinhHocTap = () => {
 				/>
 			) : null}
 
-			<Tabs accessKey={activeTabKey} onChange={(tab) => setActiveTabKey(tab)} style={{ overflow: 'inherit' }}>
-				<Tabs.TabPane tab='Tiến trình thực tế' key='2'>
-					<TienTrinhThucTe />
-				</Tabs.TabPane>
-
-				<Tabs.TabPane tab='Chương trình đào tạo' key='1'>
-					<TienTrinhChuongTrinhKhung />
-				</Tabs.TabPane>
-
-				<Tabs.TabPane tab='Công nhận KQHT' key='3'>
-					<LichSuQuyDoiDiemPage />
-				</Tabs.TabPane>
-			</Tabs>
+			<TabViewPage
+				hideCard
+				menu={[
+					{
+						title: 'Tiến trình thực tế',
+						menuKey: 'tien-trinh-thuc-te',
+						content: <TienTrinhThucTe />,
+						icon: <ScheduleOutlined />,
+					},
+					{
+						title: 'Chương trình đào tạo',
+						menuKey: 'chuong-trinh-dao-tao',
+						content: <TienTrinhChuongTrinhKhung />,
+						icon: <BookOutlined />,
+					},
+					{
+						title: 'Công nhận KQHT',
+						menuKey: 'cong-nhan-kqht',
+						content: <LichSuQuyDoiDiemPage />,
+						icon: <CheckCircleOutlined />,
+					},
+				]}
+			/>
 		</Card>
 	);
 };
