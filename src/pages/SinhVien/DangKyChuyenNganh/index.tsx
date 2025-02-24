@@ -8,7 +8,7 @@ import {
 } from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import type { DangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/typing';
 import { EditOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Tag, Tooltip } from 'antd';
+import { Alert, Button, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -101,7 +101,7 @@ const DangKyChuyenNganhPage = () => {
 	];
 
 	return (
-		<Card title='Đăng ký chuyên ngành'>
+		<>
 			<div style={{ marginBottom: 12 }}>
 				{dotHienHanh?._id ? (
 					<Alert
@@ -137,7 +137,7 @@ const DangKyChuyenNganhPage = () => {
 				hideCard
 				buttons={{ create: hasCreate }}
 			/>
-		</Card>
+		</>
 	);
 };
 
