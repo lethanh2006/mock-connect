@@ -38,7 +38,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				const kqhk = kqhkList.find((j) => j.maHocKy === mahk);
 				let tenHocPhan = diemHpHkList[0]?.hocKy?.ten ?? `Học kỳ ${mahk}`;
 				if (kqhk)
-					tenHocPhan += ` (TB học kỳ: ${kqhk.trungBinhHocKy ?? '--'}, đạt: ${
+					tenHocPhan += ` (TB học kỳ: ${kqhk.trungBinhHocKyThang4 ?? '--'}, đạt: ${
 						kqhk.tongSoTinChiHocKy ?? '--'
 					} tín chỉ, tích lũy: ${kqhk.tongSoTinChiTichLuyToanKhoa ?? '--'} tín chỉ)`;
 				// Thêm 1 hàng trống => Tên học kỳ
