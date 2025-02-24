@@ -183,19 +183,7 @@
 			{
 				name: 'HocTapKhac',
 				path: './khac',
-				routes: [
-					{ name: 'DangKyChuyenNganh', path: 'dang-ky-chuyen-nganh', component: './SinhVien/DangKyChuyenNganh' },
-					{
-						name: 'XetHocVu',
-						path: './xet-hoc-vu',
-						component: './HocTap/XetHocVu',
-					},
-					{
-						name: 'QuyetDinh',
-						path: './bao-luu-thoi-hoc',
-						component: './HocTap/BaoLuuThoiHoc',
-					},
-				],
+				component: './HocTap/Khac',
 			},
 		],
 	},

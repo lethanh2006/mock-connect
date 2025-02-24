@@ -1,7 +1,8 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
-import { ArrowRightOutlined, CalendarOutlined, MenuOutlined } from '@ant-design/icons';
-import { Badge, Card, Col, Empty, Modal, Row, Segmented, Space, Tag, Typography } from 'antd';
+import { ArrowRightOutlined, CalendarOutlined, InfoCircleOutlined, MenuOutlined } from '@ant-design/icons';
+import { Badge, Card, Col, Empty, Modal, Popover, Row, Segmented, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -9,6 +10,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useMediaQuery } from 'react-responsive';
 import { Link, useModel } from 'umi';
 import FormLichCaNhan from '../components/FormLichCaNhan';
 import GhiChuLich from '../components/GhiChuLich';
@@ -44,6 +46,7 @@ const LichDashboard = () => {
 	const [selectEvent, setSelectEvent] = useState<any>();
 	const localizer = momentLocalizer(moment);
 	const [segmentSelected, setSegmentSelected] = useState<string>(localStorage.getItem('loaiLich') ?? 'list');
+	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
 	//#region Get Data
 	const getThoiKhoaBieu = async () => {
@@ -175,9 +178,13 @@ const LichDashboard = () => {
 							}}
 						>
 							<div className={styles.su_kien__left}>
+								{moment().isSameOrAfter(sukien.thoiGianBatDau) && moment().isSameOrBefore(sukien.thoiGianKetThuc) ? (
+									<div className={styles.pulse} />
+								) : null}
 								<div className={styles.su_kien__thoi_gian}>{moment(sukien.thoiGianBatDau).format('HH:mm')}</div>
 							</div>
 							<Space
+								wrap
 								className={styles.su_kien__right}
 								style={{
 									borderColor:
@@ -266,6 +273,19 @@ const LichDashboard = () => {
 									setSegmentSelected(val.toString());
 								}}
 							/>
+							{!isEmpty(dataLichDashboard) ? (
+								<Popover
+									content={
+										<div style={{ maxWidth: 350 }}>
+											<GhiChuLich />
+										</div>
+									}
+									placement={isMobile ? 'bottom' : 'right'}
+									title='Chọn lịch hiển thị'
+								>
+									<ButtonExtend type='link' icon={<InfoCircleOutlined />} />
+								</Popover>
+							) : null}
 						</Space>
 						<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
 							Xem thêm <ArrowRightOutlined />
@@ -275,15 +295,10 @@ const LichDashboard = () => {
 			>
 				<Row gutter={[12, 12]}>
 					<Col span={24}>
-						<div style={{ maxHeight: 450, overflowY: 'auto' }}>
+						<div style={{ maxHeight: 400, overflowY: 'auto' }}>
 							{segmentSelected === 'list' ? renderContent() : renderContentCalender()}
 						</div>
 					</Col>
-					{!isEmpty(dataLichDashboard) ? (
-						<Col span={24}>
-							<GhiChuLich />
-						</Col>
-					) : null}
 				</Row>
 			</Card>
 
