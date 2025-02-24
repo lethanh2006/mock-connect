@@ -8,7 +8,7 @@ import {
 	type ETrangThaiSinhVienBLTH,
 	type ETrangThaiSinhVienBaoLuu,
 } from '@/services/HocTap/constant';
-import { Card, Tag } from 'antd';
+import { Tag } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -100,11 +100,7 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 		},
 	];
 
-	return (
-		<Card title={`Lịch sử ${isThoiHoc ? 'thôi học' : 'bảo lưu'}`}>
-			<TableStaticData columns={columns} data={danhSach} hasTotal addStt />
-		</Card>
-	);
+	return <TableStaticData columns={columns} data={danhSach} hasTotal addStt />;
 };
 
 export default BaoLuuThoiHocTable;
