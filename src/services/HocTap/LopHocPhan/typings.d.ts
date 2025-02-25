@@ -18,8 +18,8 @@ export declare module LopHocPhan {
 		_id: string;
 		ten: string;
 		tenCha?: string;
-		// maLop: string;
-		// maLopCha?: string;
+		maLop: string;
+		maLopCha?: string;
 		maHocKy: string;
 		hocKy?: HocKy.IRecord;
 		maHocPhan: string;
