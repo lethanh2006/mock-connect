@@ -200,6 +200,7 @@ const TableStaticData = (props: TableStaticProps) => {
 							Thêm mới
 						</ButtonExtend>
 					)}
+					{props.otherButtons}
 				</div>
 
 				<div className='extra'>
