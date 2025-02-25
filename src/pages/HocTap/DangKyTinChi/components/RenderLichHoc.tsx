@@ -3,11 +3,16 @@ import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Tooltip } from 'antd';
 import './style.less';
 
-const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord; showAll?: boolean }) => {
-	const { lopHocPhan } = props;
-	const maHoaLichHoc = !!lopHocPhan?.lopGhepTkb?.maHoaLichHoc?.length
-		? lopHocPhan.lopGhepTkb.maHoaLichHoc
-		: lopHocPhan?.maHoaLichHoc;
+const RenderLichHoc = (props: {
+	lopHocPhan: LopHocPhan.IRecord;
+	lichThucHanh?: LopHocPhan.IRecord[];
+	showAll?: boolean;
+}) => {
+	const { lopHocPhan, lichThucHanh = [] } = props;
+
+	const maHoaLichHoc = [lopHocPhan, ...lichThucHanh]?.flatMap((val) =>
+		!!val?.lopGhepTkb?.maHoaLichHoc?.length ? val.lopGhepTkb.maHoaLichHoc : val?.maHoaLichHoc || [],
+	);
 
 	if (!maHoaLichHoc?.length) return <i style={{ color: '#999' }}>Không có thông tin lịch học</i>;
 
@@ -28,7 +33,9 @@ const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord; showAll?: boolea
 						{dsTuan.length} tuần ({dsTuan.join(',')})
 					</>
 				) : (
-					<Tooltip title={dsTuan.join(', ')}>{dsTuan.length} tuần</Tooltip>
+					<Tooltip title={dsTuan.join(', ')}>
+						<a>{dsTuan.length} tuần</a>
+					</Tooltip>
 				)}
 				, {[tenNhanSu, phongHoc].filter((j) => !!j).join(', ')}
 			</div>
