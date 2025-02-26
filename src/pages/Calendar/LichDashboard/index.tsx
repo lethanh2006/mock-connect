@@ -53,7 +53,9 @@ const LichDashboard = () => {
 		return getTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
-				title: item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || '',
+				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''} (${
+					item?.lopHocPhan?.ten || ''
+				} ${item?.phongHoc || ''})`,
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 			}));
 			return temp;
