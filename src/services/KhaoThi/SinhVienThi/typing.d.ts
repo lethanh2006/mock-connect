@@ -23,7 +23,7 @@ declare module SinhVienThi {
 		maHocKyHoc: string;
 		tenHocKyHoc: string;
 		lichThiId: any;
-		ketQuaChamChinhThuc: KetQuaChamThi;
+		ketQuaChamChinhThuc: ChamThi.KetQuaChamThi;
 		loaiThi: ELoaiThi;
 		daDongBoDiem: boolean;
 		chamXacNhan: {
