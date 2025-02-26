@@ -1,4 +1,3 @@
-import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { DownOutlined } from '@ant-design/icons';
 import { Card, Dropdown, Empty, List, Menu, Progress, Space } from 'antd';
 import moment from 'moment';
@@ -10,7 +9,7 @@ const CardLopHocPhan = () => {
 	const { danhSach: danhSachLHP, sinhVienGetAllModel, loading } = useModel('lophocphan.lophocphan');
 	const { getAllModel: getAllHocKy, danhSach, record: recHocKy, setRecord } = useModel('daotao.hocky');
 
-	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH });
+	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
 
 	useEffect(() => {
 		if (!danhSach.length) getAllHocKy(!recHocKy?._id, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me');
@@ -54,7 +53,7 @@ const CardLopHocPhan = () => {
 					<List
 						itemLayout='horizontal'
 						className='dashboard-list-lhp'
-						dataSource={danhSachLHP}
+						dataSource={danhSachLHP.filter((item) => item?.maLopCha === null)}
 						renderItem={(item) => (
 							<List.Item onClick={() => history.push(`/hoc-tap/lop-tin-chi/${item._id}`)}>
 								<List.Item.Meta title={item.hocPhan?.ten} description={`${item.ten}`} />

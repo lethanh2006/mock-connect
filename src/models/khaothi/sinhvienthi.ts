@@ -24,6 +24,7 @@ export default () => {
 	const objInit = useInitModel<SinhVienThi.IRecord>('sinh-vien-thi', undefined, undefined, ipKhaoThi);
 	const [uploadProgress, setUploadProgress] = useState<TUploadProgress>();
 	const { setLoading, formSubmiting, setFormSubmiting } = objInit;
+	const [diemThiHocKySinhVien, setDiemThiHocKySinhVien] = useState<SinhVienThi.IDiemThiHocKySinhVien[]>([]);
 
 	const getDiemThiHocKySinhVienModel = async (
 		maHocKy: string,
@@ -32,6 +33,7 @@ export default () => {
 		setLoading(true);
 		try {
 			const response = await getDiemThiHocKySinhVien(maHocKy, maHocPhan);
+			setDiemThiHocKySinhVien(response?.data?.data ?? null);
 			return response?.data?.data ?? [];
 		} catch (er) {
 			return Promise.reject(er);
@@ -144,6 +146,7 @@ export default () => {
 
 	return {
 		...objInit,
+		diemThiHocKySinhVien,
 		getDiemThiHocKySinhVienModel,
 		nopBaiTapModel,
 		uploadMultiPartModel,
