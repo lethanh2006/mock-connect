@@ -54,6 +54,7 @@ const LichDashboard = () => {
 			const temp = data.map((item) => ({
 				...item,
 				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''}`,
+				suffix: [item?.lopHocPhan?.ten, item?.phongHoc].filter(Boolean).join(', '),
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 			}));
 			return temp;
@@ -65,7 +66,7 @@ const LichDashboard = () => {
 			const temp = data.map((item) => ({
 				...item,
 				title: `Lịch thi: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
-				phongHoc: item.phong?.ma ?? '',
+				suffix: item.phong?.ma ?? '',
 				loaiSuKien: ELoaiSuKien.LICH_THI,
 			}));
 			return temp;
@@ -91,7 +92,8 @@ const LichDashboard = () => {
 			const temp = data
 				.map((item) => ({
 					...item,
-					title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
+					title: item?.assignment?.noiDung ?? '',
+					suffix: item?.assignment?.tenLopHocPhan,
 					thoiGianBatDau: moment(item?.assignment?.thoiGianKetThuc).toDate(),
 					thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
 					loaiSuKien: ELoaiSuKien.BAI_TAP,
@@ -141,7 +143,7 @@ const LichDashboard = () => {
 						cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
 							...item,
 							tenSuKien: item.title,
-							diaDiem: item.phongHoc ?? item.diaDiem,
+							suffix: item.suffix ?? item.diaDiem,
 						}),
 					},
 				};
@@ -193,15 +195,8 @@ const LichDashboard = () => {
 								}}
 							>
 								<div>
-									{[
-										sukien.tenSuKien ?? '',
-										sukien.diaDiem ? `(${sukien.diaDiem})` : '',
-										sukien.loaiSuKien === ELoaiSuKien.LICH_HOC
-											? `(${[sukien?.lopHocPhan?.ten, sukien?.phongHoc].filter(Boolean).join(', ')})`
-											: '',
-									]
-										.filter(Boolean)
-										.join(' ')}
+									{sukien.tenSuKien ?? ''}
+									{sukien.suffix ? <i> ({sukien.suffix})</i> : null}
 								</div>
 								{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC && sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
 									<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
