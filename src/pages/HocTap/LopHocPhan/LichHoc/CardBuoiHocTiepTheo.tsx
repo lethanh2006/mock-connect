@@ -73,6 +73,7 @@ const CardBuoiHocTiepTheo = () => {
 							) : null}
 						</Space>
 					</Descriptions.Item>
+					<Descriptions.Item label='Loại'>{buoiHoc?.loaiHinhHocTap}</Descriptions.Item>
 				</Descriptions>
 
 				<div style={{ textAlign: 'right' }}>
