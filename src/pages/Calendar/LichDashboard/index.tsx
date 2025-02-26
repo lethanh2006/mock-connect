@@ -53,9 +53,7 @@ const LichDashboard = () => {
 		return getTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
-				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''} (${
-					item?.lopHocPhan?.ten || ''
-				} ${item?.phongHoc || ''})`,
+				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''}`,
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 			}));
 			return temp;
@@ -194,7 +192,17 @@ const LichDashboard = () => {
 										ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
 								}}
 							>
-								<div>{[sukien.tenSuKien ?? '', sukien.diaDiem ?? ''].filter(Boolean).join(' - ')}</div>
+								<div>
+									{[
+										sukien.tenSuKien ?? '',
+										sukien.diaDiem ? `(${sukien.diaDiem})` : '',
+										sukien.loaiSuKien === ELoaiSuKien.LICH_HOC
+											? `(${[sukien?.lopHocPhan?.ten, sukien?.phongHoc].filter(Boolean).join(', ')})`
+											: '',
+									]
+										.filter(Boolean)
+										.join(' ')}
+								</div>
 								{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC && sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
 									<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
 										{sukien.hinhThucGiangDay}
