@@ -54,21 +54,24 @@ const CardLopHocPhan = () => {
 						itemLayout='horizontal'
 						className='dashboard-list-lhp'
 						dataSource={danhSachLHP.filter((item) => item?.maLopCha === null)}
-						renderItem={(item) => (
-							<List.Item onClick={() => history.push(`/hoc-tap/lop-tin-chi/${item._id}`)}>
-								<List.Item.Meta title={item.hocPhan?.ten} description={`${item.ten}`} />
-								<Progress
-									style={{ marginRight: 8, marginLeft: 8 }}
-									width={50}
-									type='dashboard'
-									percent={Math.round(
-										((item?.thoiKhoaBieuList || [])?.filter((items) => moment().isAfter(items?.ngay)).length /
-											(item?.thoiKhoaBieuList || [])?.length) *
-											100,
-									)}
-								/>
-							</List.Item>
-						)}
+						renderItem={(lop) => {
+							let allThoiKhoaBieu = lop.thoiKhoaBieuList ?? [];
+							allThoiKhoaBieu = allThoiKhoaBieu.concat(
+								lop.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? [],
+							);
+							const past = allThoiKhoaBieu.filter((i) => moment().isAfter(i?.ngay)).length;
+							return (
+								<List.Item onClick={() => history.push(`/hoc-tap/lop-tin-chi/${lop._id}`)}>
+									<List.Item.Meta title={lop.hocPhan?.ten} description={`${lop.ten}`} />
+									<Progress
+										style={{ marginRight: 8, marginLeft: 8 }}
+										width={50}
+										type='dashboard'
+										percent={Math.round((past / allThoiKhoaBieu.length) * 100)}
+									/>
+								</List.Item>
+							);
+						}}
 					/>
 				) : (
 					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />

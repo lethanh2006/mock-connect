@@ -3,14 +3,10 @@ import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Tooltip } from 'antd';
 import './style.less';
 
-const RenderLichHoc = (props: {
-	lopHocPhan: LopHocPhan.IRecord;
-	lichThucHanh?: LopHocPhan.IRecord[];
-	showAll?: boolean;
-}) => {
-	const { lopHocPhan, lichThucHanh = [] } = props;
+const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord; showAll?: boolean }) => {
+	const { lopHocPhan } = props;
 
-	const maHoaLichHoc = [lopHocPhan, ...lichThucHanh]?.flatMap((val) =>
+	const maHoaLichHoc = [lopHocPhan, ...(lopHocPhan.children ?? [])]?.flatMap((val) =>
 		!!val?.lopGhepTkb?.maHoaLichHoc?.length ? val.lopGhepTkb.maHoaLichHoc : val?.maHoaLichHoc || [],
 	);
 

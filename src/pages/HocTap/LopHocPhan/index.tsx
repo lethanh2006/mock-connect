@@ -78,10 +78,8 @@ const LopHocPhanPage = () => {
 			title: 'Lịch học',
 			width: 220,
 			render: (val, rec) => {
-				const lichThucHanh =
-					danhSach?.filter((item) => item?.maHocPhan === rec?.maHocPhan && item?.maLopCha === rec?.maLop) ?? [];
-
-				return <RenderLichHoc lopHocPhan={rec} lichThucHanh={lichThucHanh} />;
+				const lop = danhSach.find((i) => i._id === rec._id);
+				return <RenderLichHoc lopHocPhan={lop ?? rec} />;
 			},
 		},
 	];
@@ -90,7 +88,8 @@ const LopHocPhanPage = () => {
 		<Card title='Lớp tín chỉ'>
 			<TableStaticData
 				loading={loading}
-				data={danhSach.filter((item) => item?.maLopCha === null)}
+				data={danhSach.filter((item) => !item?.tenCha)}
+				hideChildrenRows
 				columns={columns}
 				addStt
 				otherProps={{ pagination: true }}
