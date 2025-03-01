@@ -1,4 +1,4 @@
-import { type Login } from './typing';
+import type { ColorType, Login } from './typing';
 
 export enum EModuleKey {
 	CONNECT = 'cong-hoc-vien',
@@ -11,6 +11,7 @@ export enum EModuleKey {
 	TC = 'tai-chinh',
 	QLKH = 'quan-ly-khoa-hoc',
 	KT = 'khao-thi',
+	CSVC = 'co-so-vat-chat',
 }
 
 export const AppModules: Record<EModuleKey, Login.TModule> = {
@@ -74,6 +75,30 @@ export const AppModules: Record<EModuleKey, Login.TModule> = {
 		url: APP_CONFIG_URL_KHAO_THI,
 		icon: EModuleKey.KT + '.svg',
 	},
+	[EModuleKey.CSVC]: {
+		title: APP_CONFIG_TITLE_CSVC,
+		clientId: `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}csvc`,
+		url: APP_CONFIG_URL_CSVC,
+		icon: EModuleKey.CSVC + '.svg',
+	},
+};
+
+export const moduleThuVien: Partial<Login.TModule> = {
+	title: APP_CONFIG_TITLE_THU_VIEN,
+	url: APP_CONFIG_URL_THU_VIEN,
+	icon: 'thu-vien.svg',
+};
+
+export const moduleQuanLyVanBan: Partial<Login.TModule> = {
+	title: APP_CONFIG_TITLE_QLVB,
+	url: APP_CONFIG_URL_QLVB,
+	icon: 'quan-ly-van-ban.svg',
+};
+
+export const moduleCongThongTin: Partial<Login.TModule> = {
+	title: APP_CONFIG_TITLE_LANDING,
+	url: APP_CONFIG_URL_LANDING,
+	icon: 'cong-thong-tin.svg',
 };
 
 /** Đường link landing page */
@@ -93,3 +118,66 @@ export const unitPrefix = APP_CONFIG_TIEN_TO_TRUONG;
 
 /** Tên tiếng anh của trường */
 export const tenTruongVietTatTiengAnh = APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH;
+
+/** Cài đặt hệ thống */
+export enum ESettingKey {
+	KEY = 'KEY',
+}
+
+/** Định dạng file */
+export enum EDinhDangFile {
+	WORD = 'word',
+	EXCEL = 'excel',
+	POWERPOINT = 'powerpoint',
+	PDF = 'pdf',
+	IMAGE = 'image',
+	VIDEO = 'video',
+	AUDIO = 'audio',
+	TEXT = 'text',
+	UNKNOWN = 'unknown',
+}
+
+export enum EScopeFile {
+	PUBLIC = 'Public',
+	INTERNAL = 'Internal',
+	PRIVATE = 'Private',
+}
+
+export enum EStorageFile {
+	DATABASE = 'Database',
+	S3 = 'S3',
+}
+
+/** Tên các màu mặc định của Tag's antd */
+export enum ETagColor {
+	MAGENTA = 'magenta',
+	RED = 'red',
+	VOLCANO = 'volcano',
+	ORANGE = 'orange',
+	GOLD = 'gold',
+	YELLOW = 'yellow',
+	LIME = 'lime',
+	GREEN = 'green',
+	CYAN = 'cyan',
+	BLUE = 'blue',
+	GEEKBLUE = 'geekblue',
+	PURPLE = 'purple',
+	DEFAULT = 'default',
+}
+
+/** Mapping từ màu tag antd sang color code */
+export const colorList: { [key in keyof typeof ETagColor]: ColorType } = {
+	MAGENTA: { name: 'magenta', hexColor: '#eb2f96' },
+	RED: { name: 'red', hexColor: '#f5222d' },
+	VOLCANO: { name: 'volcano', hexColor: '#fa541c' },
+	ORANGE: { name: 'orange', hexColor: '#fa8c16' },
+	GOLD: { name: 'gold', hexColor: '#faad14' },
+	YELLOW: { name: 'yellow', hexColor: '#fadb14' },
+	LIME: { name: 'lime', hexColor: '#a0d911' },
+	GREEN: { name: 'green', hexColor: '#52c41a' },
+	CYAN: { name: 'cyan', hexColor: '#13c2c2' },
+	BLUE: { name: 'blue', hexColor: '#1890ff' },
+	GEEKBLUE: { name: 'geekblue', hexColor: '#2f54eb' },
+	PURPLE: { name: 'purple', hexColor: '#722ed1' },
+	DEFAULT: { name: 'default', hexColor: '#bfbfbf' },
+};

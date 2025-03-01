@@ -8,9 +8,10 @@ const useInitService = (url: string, ip?: string) => {
 		payload: { page?: number; limit?: number; condition?: any },
 		path?: string,
 		isAbsolutePath?: boolean,
+		headers?: any,
 	) => {
 		const finalPath = isAbsolutePath ? `${finalIp}/${path}` : `${finalIp}/${url}/${path ?? ''}`;
-		return axios.get(finalPath, { params: payload });
+		return axios.get(finalPath, { params: payload, headers });
 	};
 
 	const postService = (payload: any) => {
@@ -21,12 +22,20 @@ const useInitService = (url: string, ip?: string) => {
 		return axios.put(`${finalIp}/${url}/${id}`, payload);
 	};
 
+	const putManyService = (ids: (string | number)[], update: any) => {
+		return axios.put(`${finalIp}/${url}/many/ids`, { ids, update });
+	};
+
 	const deleteService = (id: string | number, silent?: boolean) => {
 		return axios.delete(`${finalIp}/${url}/${id}`, { data: { silent } });
 	};
 
-	const getAllService = (payload?: { condition?: any; sort?: any }, path?: string) => {
-		return axios.get(`${finalIp}/${url}/${path || 'many'}`, { params: payload });
+	const deleteManyService = (ids: (string | number)[], silent?: boolean) => {
+		return axios.delete(`${finalIp}/${url}/many/ids`, { data: { silent, ids } });
+	};
+
+	const getAllService = (payload?: { condition?: any; sort?: any }, path?: string, headers?: any) => {
+		return axios.get(`${finalIp}/${url}/${path || 'many'}`, { params: payload, headers });
 	};
 
 	const getByIdService = (id: string | number) => {
@@ -67,7 +76,9 @@ const useInitService = (url: string, ip?: string) => {
 		getByIdService,
 		postService,
 		putService,
+		putManyService,
 		deleteService,
+		deleteManyService,
 		getAllService,
 		getImportHeaders,
 		getImportTemplate,

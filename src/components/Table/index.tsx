@@ -12,6 +12,7 @@ import {
 	SearchOutlined,
 } from '@ant-design/icons';
 import {
+	AutoComplete,
 	Button,
 	Card,
 	ConfigProvider,
@@ -27,6 +28,7 @@ import {
 	type PaginationProps,
 } from 'antd';
 import type { FilterValue, SortOrder } from 'antd/lib/table/interface';
+import classNames from 'classnames';
 import _ from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import type { SortEnd, SortableContainerProps } from 'react-sortable-hoc';
@@ -37,6 +39,7 @@ import ModalExport from './Export';
 import ModalImport from './Import';
 import ModalCustomFilter from './ModalCustomFilter';
 import { EOperatorType } from './constant';
+import { findFiltersInColumns, updateSearchStorage } from './function';
 import './style.less';
 import type { IColumn, TDataOption, TFilter, TableBaseProps } from './typing';
 
@@ -62,6 +65,7 @@ const TableBase = (props: TableBaseProps) => {
 		setSort,
 		setFilters,
 		deleteManyModel,
+		initFilter,
 	} = model;
 	const filters: TFilter<any>[] = model?.filters;
 	const getData = props.getData ?? model?.getModel;
@@ -84,7 +88,7 @@ const TableBase = (props: TableBaseProps) => {
 		return () => {
 			if (props.noCleanUp !== true) {
 				// setCondition(undefined);
-				setFilters(undefined);
+				setFilters(initFilter);
 				setSelectedIds(undefined);
 				// setSort(undefined);
 			}
@@ -100,7 +104,7 @@ const TableBase = (props: TableBaseProps) => {
 			(item) =>
 				JSON.stringify(item.field) === JSON.stringify(fieldName) &&
 				(operator === undefined || item.operator === operator) &&
-				(active === undefined || item.active === active),
+				(active === undefined || item.active === undefined || item.active === active),
 		);
 
 	//#region Get Sort Column Props
@@ -133,7 +137,9 @@ const TableBase = (props: TableBaseProps) => {
 			if (filter)
 				// Udpate current filter
 				tempFilters = tempFilters.map((item) =>
-					item.field === dataIndex ? { ...item, active: true, operator: EOperatorType.CONTAIN, values: [value] } : item,
+					JSON.stringify(item.field) === JSON.stringify(dataIndex)
+						? { ...item, active: true, operator: EOperatorType.CONTAIN, values: [value] }
+						: item,
 				);
 			// Add new filter rule for this column
 			else
@@ -151,39 +157,59 @@ const TableBase = (props: TableBaseProps) => {
 	const getColumnSearchProps = (dataIndex: any, columnTitle: any): Partial<IColumn<unknown>> => {
 		const filterColumn = getFilterColumn(dataIndex, EOperatorType.CONTAIN, true);
 		return {
-			filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => (
-				<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
-					<Input.Search
-						placeholder={`Tìm ${columnTitle}`}
-						allowClear
-						enterButton
-						value={selectedKeys[0]}
-						onChange={(e) => {
-							if (e.type === 'click') {
-								setSelectedKeys([]);
-								confirm();
-							} else {
-								setSelectedKeys(e.target.value ? [e.target.value] : []);
-							}
-						}}
-						onSearch={(value) => handleSearch(dataIndex, value, confirm)}
-						ref={searchInputRef}
-					/>
-					{buttons?.filter !== false && hasFilter ? (
-						<div>
-							Xem thêm{' '}
-							<a
-								onClick={() => {
-									setVisibleFilter(true);
-									confirm();
+			filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
+				const options = (JSON.parse(localStorage.getItem('dataTimKiem') || '{}')[dataIndex] || []).map(
+					(value: string) => ({
+						value,
+						label: value,
+					}),
+				);
+
+				return (
+					<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
+						<AutoComplete
+							options={options}
+							onSelect={(value: string) => {
+								setSelectedKeys([value]);
+								handleSearch(dataIndex, value, confirm);
+							}}
+						>
+							<Input.Search
+								placeholder={`Tìm ${columnTitle}`}
+								allowClear
+								enterButton
+								value={selectedKeys[0]}
+								onChange={(e) => {
+									if (e.type === 'click') {
+										setSelectedKeys([]);
+										confirm();
+									} else {
+										setSelectedKeys(e.target.value ? [e.target.value] : []);
+									}
 								}}
-							>
-								Bộ lọc tùy chỉnh
-							</a>
-						</div>
-					) : null}
-				</div>
-			),
+								onSearch={(value) => {
+									if (value) updateSearchStorage(dataIndex, value);
+									handleSearch(dataIndex, value, confirm);
+								}}
+								ref={searchInputRef}
+							/>
+						</AutoComplete>
+						{buttons?.filter !== false && hasFilter ? (
+							<div>
+								Xem thêm{' '}
+								<a
+									onClick={() => {
+										setVisibleFilter(true);
+										confirm();
+									}}
+								>
+									Bộ lọc tùy chỉnh
+								</a>
+							</div>
+						) : null}
+					</div>
+				);
+			},
 			filteredValue: filterColumn?.values ?? [],
 			filterIcon: () => {
 				const values = getFilterColumn(dataIndex, undefined, true)?.values;
@@ -200,7 +226,7 @@ const TableBase = (props: TableBaseProps) => {
 	const handleFilter = (dataIndex: any, values: string[]) => {
 		if (!values || !values.length) {
 			// Remove filter of this column
-			const tempFilters = filters?.filter((item) => item.field !== dataIndex);
+			const tempFilters = filters?.filter((item) => JSON.stringify(item.field) !== JSON.stringify(dataIndex));
 			setFilters(tempFilters);
 		} else {
 			const filter = getFilterColumn(dataIndex);
@@ -208,7 +234,9 @@ const TableBase = (props: TableBaseProps) => {
 			if (filter)
 				// Udpate current filter
 				tempFilters = tempFilters.map((item) =>
-					item.field === dataIndex ? { ...item, active: true, operator: EOperatorType.INCLUDE, values } : item,
+					JSON.stringify(item.field) === JSON.stringify(dataIndex)
+						? { ...item, active: true, operator: EOperatorType.INCLUDE, values }
+						: item,
 				);
 			// Add new filter rule for this column
 			else
@@ -361,12 +389,20 @@ const TableBase = (props: TableBaseProps) => {
 	 * @date 2023-04-13
 	 */
 	const onChange = (pagination: PaginationProps, fil: Record<string, FilterValue | null>, sorter: any) => {
+		const allColumns = finalColumns
+			.map((col) => {
+				if (col.children?.length) return [col, ...col.children];
+				else return [col];
+			})
+			.flat();
 		// Handle Filter in columns
 		Object.entries(fil).map(([field, values]) => {
-			const col = finalColumns.find((item) => item.dataIndex === field);
-			if (col?.filterType === 'select') handleFilter(field, values as any);
-			else if (col?.filterType === 'string') handleSearch(field, values?.[0] as any);
-			else if (col?.filterType === 'customselect') handleFilter(field, values as any);
+			// Field từ table => nếu dataIndex là Array => field1.subfield
+			const dataIndex = field.includes('.') ? field.split('.') : field;
+			const col = allColumns.find((item) => JSON.stringify(item.dataIndex) === JSON.stringify(dataIndex));
+			if (col?.filterType === 'select') handleFilter(dataIndex, values as any);
+			else if (col?.filterType === 'string') handleSearch(dataIndex, values?.[0] as any);
+			else if (col?.filterType === 'customselect') handleFilter(dataIndex, values as any);
 		});
 
 		const { order, field } = sorter;
@@ -411,12 +447,20 @@ const TableBase = (props: TableBaseProps) => {
 					) : null}
 
 					{buttons?.import ? (
-						<ButtonExtend icon={<ImportOutlined />} onClick={() => setVisibleImport(true)}>
+						<ButtonExtend
+							size={props?.otherProps?.size}
+							icon={<ImportOutlined />}
+							onClick={() => setVisibleImport(true)}
+						>
 							Nhập dữ liệu
 						</ButtonExtend>
 					) : null}
 					{buttons?.export ? (
-						<ButtonExtend icon={<ExportOutlined />} onClick={() => setVisibleExport(true)}>
+						<ButtonExtend
+							size={props?.otherProps?.size}
+							icon={<ExportOutlined />}
+							onClick={() => setVisibleExport(true)}
+						>
 							Xuất dữ liệu {selectedIds?.length > 0 ? `(${selectedIds.length})` : ''}
 						</ButtonExtend>
 					) : null}
@@ -435,6 +479,7 @@ const TableBase = (props: TableBaseProps) => {
 				<div className='extra'>
 					{buttons?.reload !== false ? (
 						<ButtonExtend
+							size={props?.otherProps?.size}
 							icon={<ReloadOutlined />}
 							onClick={() => getData(params)}
 							loading={loading}
@@ -446,7 +491,14 @@ const TableBase = (props: TableBaseProps) => {
 
 					{buttons?.filter !== false && hasFilter ? (
 						<ButtonExtend
-							icon={filters?.length ? <FilterTwoTone twoToneColor={primaryColor} /> : <FilterOutlined />}
+							size={props?.otherProps?.size}
+							icon={
+								findFiltersInColumns(finalColumns, filters)?.length ? (
+									<FilterTwoTone twoToneColor={primaryColor} />
+								) : (
+									<FilterOutlined />
+								)
+							}
 							onClick={() => setVisibleFilter(true)}
 							tooltip='Áp dụng bộ lọc tùy chỉnh'
 						>
@@ -456,7 +508,7 @@ const TableBase = (props: TableBaseProps) => {
 
 					{!props?.hideTotal ? (
 						<Tooltip title='Tổng số dữ liệu'>
-							<div className='total'>
+							<div className={classNames({ total: true, small: props?.otherProps?.size === 'small' })}>
 								Tổng số:
 								<span>{inputFormat(total || 0)}</span>
 							</div>
@@ -467,7 +519,11 @@ const TableBase = (props: TableBaseProps) => {
 
 			<ConfigProvider
 				renderEmpty={() => (
-					<Empty style={{ marginTop: 32, marginBottom: 32 }} description={props.emptyText ?? 'Không có dữ liệu'} />
+					<Empty
+						style={{ marginTop: 32, marginBottom: 32 }}
+						description={props.emptyText ?? 'Không có dữ liệu'}
+						image={props.otherProps?.size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
+					/>
 				)}
 			>
 				<Table

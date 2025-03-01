@@ -12,11 +12,13 @@ const OneSignalBounder = (props: { children: React.ReactNode }) => {
 	// let iframe: HTMLIFrameElement | null = null;
 
 	const getUserIdOnesignal = async () => {
-		await OneSignal.init({
-			appId: oneSignalClient,
-		});
-		const id = await OneSignal.getUserId();
-		setOneSignalId(id);
+		if (!!oneSignalClient) {
+			await OneSignal.init({
+				appId: oneSignalClient,
+			});
+			const id = await OneSignal.getUserId();
+			setOneSignalId(id);
+		}
 	};
 
 	/** Show Popup center screen */
@@ -81,7 +83,13 @@ const OneSignalBounder = (props: { children: React.ReactNode }) => {
 	 */
 	useEffect(() => {
 		if (oneSignalId) {
-			if (auth.user?.access_token) initOneSignal({ playerId: oneSignalId });
+			if (auth.user?.access_token) {
+				try {
+					initOneSignal({ playerId: oneSignalId });
+				} catch (er) {
+					console.log(er);
+				}
+			}
 		}
 	}, [oneSignalId, auth.user?.access_token]);
 

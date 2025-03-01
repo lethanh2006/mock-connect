@@ -21,6 +21,7 @@ import { currentRole } from './utils/ip';
 export async function getInitialState(): Promise<IInitialState> {
 	return {
 		settings: Settings,
+		permissionLoading: true,
 	};
 }
 
@@ -42,23 +43,35 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 		footerRender: () => <Footer />,
 
 		onPageChange: () => {
-			const { location } = history;
-			if (initialState?.currentUser)
+			if (initialState?.currentUser) {
+				const { location } = history;
+				const isUncheckPath = unCheckPermissionPaths.some((path) => window.location.pathname.includes(path));
+
 				if (location.pathname === '/') {
 					history.replace('/dashboard');
 				} else if (
-					!unCheckPermissionPaths.includes(window.location.pathname) &&
+					!isUncheckPath &&
 					currentRole &&
 					initialState?.authorizedPermissions?.length &&
 					!initialState?.authorizedPermissions?.find((item) => item.rsname === currentRole)
 				)
 					history.replace('/403');
+			}
 		},
 
 		menuItemRender: (item: any, dom: any) => (
-			<div key={item?.path} onClick={() => history.push(item?.path ?? '/')}>
+			<a
+				className='not-underline'
+				key={item?.path}
+				href={item?.path}
+				onClick={(e) => {
+					e.preventDefault();
+					history.push(item?.path ?? '/');
+				}}
+				style={{ display: 'block' }}
+			>
 				{dom}
-			</div>
+			</a>
 		),
 
 		childrenRender: (dom) => (

@@ -40,7 +40,9 @@ const useInitModel = <T,>(
 		getAllService,
 		postService,
 		putService,
+		putManyService,
 		deleteService,
+		deleteManyService,
 		getService,
 		getByIdService,
 		getImportHeaders,
@@ -74,6 +76,7 @@ const useInitModel = <T,>(
 		isSetDanhSach?: boolean,
 		isAbsolutePath?: boolean,
 		selectParams?: string[],
+		config?: { dataPartitionCode?: string },
 	): Promise<T[]> => {
 		setLoading(true);
 		const payload = {
@@ -85,7 +88,7 @@ const useInitModel = <T,>(
 				...paramCondition,
 			},
 			filters: [
-				...(filters?.filter((item) => item.active)?.map(({ active, ...item }) => item) || []),
+				...(filters?.filter((item) => item.active !== false)?.map(({ active, ...item }) => item) || []),
 				...(filterParams || []),
 			],
 			select: selectParams?.join(' '),
@@ -93,7 +96,12 @@ const useInitModel = <T,>(
 		};
 
 		try {
-			const response = await getService(payload, path ?? 'page', isAbsolutePath ?? false);
+			const response = await getService(
+				payload,
+				path ?? 'page',
+				isAbsolutePath ?? false,
+				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+			);
 			const tempData: T[] = response?.data?.data?.result ?? [];
 			const tempTotal: number = response?.data?.data?.total ?? 0;
 
@@ -104,6 +112,7 @@ const useInitModel = <T,>(
 			} else {
 				if (isSetDanhSach !== false) setDanhSach(tempData);
 				setTotal(tempTotal);
+
 				return tempData;
 			}
 		} catch (er) {
@@ -121,6 +130,8 @@ const useInitModel = <T,>(
 		pathParam?: string,
 		isSetDanhSach?: boolean,
 		selectParams?: string[],
+		otherQuery?: Record<string, any>,
+		config?: { dataPartitionCode?: string },
 	): Promise<T[]> => {
 		setLoading(true);
 		try {
@@ -129,8 +140,13 @@ const useInitModel = <T,>(
 				sort: sortParam,
 				filters: filterParam,
 				select: selectParams?.join(' '),
+				...(otherQuery ?? {}),
 			};
-			const response = await getAllService(payload, pathParam);
+			const response = await getAllService(
+				payload,
+				pathParam,
+				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+			);
 			const data: T[] = response?.data?.data ?? [];
 			// if (sortParam) data.sort(sortParam);
 			if (isSetDanhSach !== false) setDanhSach(data);
@@ -222,6 +238,32 @@ const useInitModel = <T,>(
 		}
 	};
 
+	const putManyModel = async (
+		ids: (string | number)[],
+		payload: Partial<T>,
+		getData?: any,
+		notGet?: boolean,
+		closeModal?: boolean,
+		messageText?: string,
+	): Promise<T> => {
+		if (formSubmiting) return Promise.reject('Form submiting');
+		setFormSubmiting(true);
+		try {
+			const res = await putManyService(ids, chuanHoaObject(payload));
+			message.success(messageText ?? 'Lưu thành công');
+			setLoading(false);
+			if (getData) getData();
+			else if (!notGet) getModel();
+			if (closeModal !== false) setVisibleForm(false);
+
+			return res.data?.data;
+		} catch (err) {
+			return Promise.reject(err);
+		} finally {
+			setFormSubmiting(false);
+		}
+	};
+
 	const deleteModel = async (id: string | number, getData?: () => void): Promise<any> => {
 		setLoading(true);
 		try {
@@ -248,24 +290,18 @@ const useInitModel = <T,>(
 		if (!ids.length) return;
 		setLoading(true);
 		try {
-			const arr = ids.map((id) => deleteService(id, true));
-			const res = await Promise.allSettled(arr);
-			const count = res.filter((i) => i.status === 'fulfilled').length;
-			if (count > 0) {
-				message.success(`Xóa thành công ${count} mục`);
+			const res = await deleteManyService(ids);
+			message.success(`Xóa thành công ${ids.length} mục`);
 
-				const maxPage = Math.ceil((total - count) / limit) || 1;
-				let newPage = page;
-				if (newPage > maxPage) {
-					newPage = maxPage;
-					setPage(newPage);
-				} else if (getData) getData();
-				else getModel(undefined, undefined, undefined, newPage);
-			} else {
-				message.error('Có lỗi xảy ra');
-				const err = res.filter((i) => i.status === 'rejected');
-				return Promise.reject(err);
-			}
+			const maxPage = Math.ceil((total - ids.length) / limit) || 1;
+			let newPage = page;
+			if (newPage > maxPage) {
+				newPage = maxPage;
+				setPage(newPage);
+			} else if (getData) getData();
+			else getModel(undefined, undefined, undefined, newPage);
+
+			return res.data;
 		} catch (err) {
 			return Promise.reject(err);
 		} finally {
@@ -393,7 +429,7 @@ const useInitModel = <T,>(
 			const res = await postExport(payload, {
 				condition: { ...condition, ...paramCondition },
 				filters: [
-					...(filters?.filter((item) => item.active)?.map(({ active, ...item }) => item) || []),
+					...(filters?.filter((item) => item.active !== false)?.map(({ active, ...item }) => item) || []),
 					...(paramFilters ?? []),
 				],
 				...(otherQuery ?? {}),
@@ -416,6 +452,7 @@ const useInitModel = <T,>(
 		deleteModel,
 		deleteManyModel,
 		putModel,
+		putManyModel,
 		postModel,
 		getAllModel,
 		page,
@@ -459,6 +496,7 @@ const useInitModel = <T,>(
 		postExportModel,
 		selectedIds,
 		setSelectedIds,
+		initFilter,
 	};
 };
 

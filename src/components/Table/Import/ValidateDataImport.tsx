@@ -1,12 +1,20 @@
-import { ArrowLeftOutlined, CheckCircleOutlined, SaveOutlined } from '@ant-design/icons';
+import { genExcelFile } from '@/utils/utils';
+import { ArrowLeftOutlined, CheckCircleOutlined, DownloadOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Col, Collapse, Popconfirm, Row, Space, Spin, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import ButtonExtend from '../ButtonExtend';
 import TableStaticData from '../TableStaticData';
-import { type IColumn, type TImportResponse, type TImportRowResponse } from '../typing';
+import type { TImportHeader, IColumn, TImportResponse, TImportRowResponse } from '../typing';
 
-const ValidateDataImport = (props: { onOk: () => void; onCancel: () => void; onBack: any; modelName: any }) => {
-	const { onOk, onCancel, onBack, modelName } = props;
+const ValidateDataImport = (props: {
+	onOk?: () => void;
+	onCancel: () => void;
+	onBack: any;
+	modelName: any;
+	importHeaders: TImportHeader[];
+}) => {
+	const { onOk, onCancel, onBack, modelName, importHeaders } = props;
 	const { dataImport, startLine } = useModel('import');
 	const { postValidateModel, postExecuteImpotModel, formSubmiting } = useModel(modelName);
 	const [importResponses, setImportResponses] = useState<TImportRowResponse[]>([]);
@@ -56,12 +64,26 @@ const ValidateDataImport = (props: { onOk: () => void; onCancel: () => void; onB
 				setStep(1);
 				setErrorCount(res.validate?.filter((item) => !!item.rowErrors?.length).length);
 				setIsError(res.error);
-				const temp = res.validate?.map((item) => ({ ...item, index: item.index + startLine }));
+				const temp = res.validate?.map((item) => ({ ...item, rowIndex: item.index + startLine }));
 				setImportResponses(temp ?? []);
-
-				onOk(); // Get data
 			})
 			.catch((err: any) => console.log(err));
+	};
+
+	const transformDataToExcelFormat = () => {
+		const headers = ['TT hàng', ...importHeaders.map((h) => h.label), 'Thông tin lỗi'];
+
+		const dataRows = importResponses.map((item) => {
+			const { row, rowErrors = [] }: { row: Record<string, any>; rowErrors?: string[] } = item;
+
+			return [
+				row.row ?? '',
+				...importHeaders.map((h) => row[h.field] ?? ''),
+				rowErrors.length > 0 ? rowErrors.join(', ') : '',
+			];
+		});
+
+		return [headers, ...dataRows];
 	};
 
 	return (
@@ -69,6 +91,18 @@ const ValidateDataImport = (props: { onOk: () => void; onCancel: () => void; onB
 			<Col span={24}>
 				<div className='fw500'>Kết quả kiểm tra</div>
 				<i>Dữ liệu đã được kiểm tra trên hệ thống. Vui lòng xem danh sách chi tiết dưới đây.</i>
+				<br />
+
+				{importResponses.length ? (
+					<ButtonExtend
+						size='small'
+						icon={<DownloadOutlined />}
+						onClick={() => genExcelFile(transformDataToExcelFormat(), 'Kết quả Import.xlsx')}
+						loading={formSubmiting}
+					>
+						Tải xuống kết quả
+					</ButtonExtend>
+				) : null}
 			</Col>
 
 			{!formSubmiting ? (
@@ -166,20 +200,27 @@ const ValidateDataImport = (props: { onOk: () => void; onCancel: () => void; onB
 								)
 							}
 							onConfirm={onExecute}
-							disabled={isError || !!errorCount}
+							// disabled={isError || !!errorCount}
 						>
 							<Button
 								htmlType='submit'
 								type='primary'
 								loading={formSubmiting}
 								icon={<SaveOutlined />}
-								disabled={isError || !!errorCount}
+								// disabled={isError || !!errorCount}
 							>
 								Lưu dữ liệu
 							</Button>
 						</Popconfirm>
 					) : (
-						<Button onClick={onCancel}>Hoàn thành</Button>
+						<Button
+							onClick={() => {
+								if (onOk) onOk(); // Get data
+								onCancel();
+							}}
+						>
+							Hoàn thành
+						</Button>
 					)}
 				</Space>
 			</Col>

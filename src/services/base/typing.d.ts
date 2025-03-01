@@ -1,10 +1,11 @@
 import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
-import { type EModuleKey } from './constant';
+import type { EModuleKey, EScopeFile, ESettingKey, EStorageFile } from './constant';
 
 declare module Login {
 	export interface IUser {
 		sub: string; // SsoId 'b323b6c8-2f1e-4a9b-941b-f1e466b9ba40';
 		ssoId: string;
+		email: string;
 		email_verified: boolean; // true;
 		realm_access: {
 			roles: string[];
@@ -43,4 +44,32 @@ export interface IInitialState {
 	settings?: Partial<LayoutSettings>;
 	currentUser?: Login.IUser;
 	authorizedPermissions?: Login.IPermission[];
+	permissionLoading?: boolean;
 }
+
+export interface ISetting {
+	key: ESettingKey;
+	value: any;
+}
+
+export interface IFile {
+	file: {
+		_id: string;
+		author: string;
+		authorName: string;
+		mimetype: string;
+		name: string;
+		scope: EScopeFile;
+		size: number;
+		storageType: EStorageFile;
+
+		updatedAt: Date;
+		createdAt: Date;
+	};
+	url: string;
+}
+
+export type ColorType = {
+	name: string;
+	hexColor: string;
+};

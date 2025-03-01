@@ -76,7 +76,13 @@
 		layout: false,
 	},
 	{
-		path: '/',
+		path: '/hold-on',
+		component: './exception/DangCapNhat',
+		layout: false,
+	},
+	{
+		path: '/*',
 		component: './exception/404',
+		layout: false,
 	},
 ];
