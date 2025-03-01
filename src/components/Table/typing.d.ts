@@ -1,4 +1,5 @@
 import type { ColumnType } from 'antd/lib/table';
+import React, { JSX } from 'react';
 import { type EOperatorType } from './constant';
 
 export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 'children'> {
@@ -136,6 +137,12 @@ export type TableBaseProps = {
 	onSortEnd?: (record: any, newIndex: number) => void;
 
 	hideChildrenRows?: boolean;
+
+	/** Có hiển thị modal title không? Mặc định: `Không` */
+	showModalTitle?: boolean;
+
+	/** Modal title thay thế, mặc định `Thêm mới`, `Chỉnh sửa`, `Chi tiết` + title */
+	modalTitle?: React.ReactNode;
 };
 
 export type TFilter<T> = {

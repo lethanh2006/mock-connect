@@ -30,7 +30,7 @@ import {
 import type { FilterValue, SortOrder } from 'antd/lib/table/interface';
 import classNames from 'classnames';
 import _ from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { JSX, useEffect, useRef, useState } from 'react';
 import type { SortEnd, SortableContainerProps } from 'react-sortable-hoc';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { useModel } from 'umi';
@@ -45,7 +45,7 @@ import type { IColumn, TDataOption, TFilter, TableBaseProps } from './typing';
 
 const TableBase = (props: TableBaseProps) => {
 	const { modelName, Form, title, dependencies = [], params, buttons, widthDrawer, destroyModal } = props;
-	const model = useModel(modelName);
+	const model = useModel(modelName) as any;
 	const {
 		visibleForm,
 		setVisibleForm,
@@ -66,6 +66,8 @@ const TableBase = (props: TableBaseProps) => {
 		setFilters,
 		deleteManyModel,
 		initFilter,
+		isView,
+		edit,
 	} = model;
 	const filters: TFilter<any>[] = model?.filters;
 	const getData = props.getData ?? model?.getModel;
@@ -315,20 +317,20 @@ const TableBase = (props: TableBaseProps) => {
 			...(item.filterType === 'string'
 				? getColumnSearchProps(item.dataIndex, item.title)
 				: item.filterType === 'select'
-				? getFilterColumnProps(item.dataIndex, item.filterData)
-				: item.filterType === 'customselect'
-				? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
-				: undefined),
+					? getFilterColumnProps(item.dataIndex, item.filterData)
+					: item.filterType === 'customselect'
+						? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
+						: undefined),
 			children: item.children?.map((child) => ({
 				...child,
 				...(child.sortable && getSort(child.dataIndex)),
 				...(child.filterType === 'string'
 					? getColumnSearchProps(child.dataIndex, child.title)
 					: child.filterType === 'select'
-					? getFilterColumnProps(child.dataIndex, child.filterData)
-					: child.filterType === 'customselect'
-					? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
-					: undefined),
+						? getFilterColumnProps(child.dataIndex, child.filterData)
+						: child.filterType === 'customselect'
+							? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
+							: undefined),
 			})),
 		}));
 
@@ -537,7 +539,7 @@ const TableBase = (props: TableBaseProps) => {
 									onChange: (selectedRowKeys) => setSelectedIds(selectedRowKeys),
 									columnWidth: 40,
 									...props.detailRow,
-							  }
+								}
 							: undefined
 					}
 					loading={loading}
@@ -587,7 +589,7 @@ const TableBase = (props: TableBaseProps) => {
 										wrapper: DraggableContainer,
 										row: DraggableBodyRow,
 									},
-							  }
+								}
 							: undefined
 					}
 					{...props.otherProps}
@@ -614,8 +616,8 @@ const TableBase = (props: TableBaseProps) => {
 							maskClosable={props.maskCloseableForm || false}
 							width={widthDrawer !== 'full' ? widthDrawer : undefined}
 							footer={false}
-							bodyStyle={{ padding: 0 }}
-							visible={visibleForm}
+							styles={{ body: { padding: 0 } }}
+							open={visibleForm}
 							destroyOnClose={destroyModal || false}
 						>
 							<Form title={title ?? ''} {...props.formProps} />
@@ -626,12 +628,19 @@ const TableBase = (props: TableBaseProps) => {
 						</Drawer>
 					) : (
 						<Modal
+							title={
+								props.showModalTitle
+									? (props.modalTitle ?? title)
+										? `${isView ? 'Chi tiết' : edit ? 'Chỉnh sửa' : 'Thêm mới'} ${title?.toString().toLocaleLowerCase()}`
+										: undefined
+									: undefined
+							}
 							className={widthDrawer === 'full' ? 'modal-full' : ''}
 							maskClosable={props.maskCloseableForm || false}
 							width={widthDrawer !== 'full' ? widthDrawer : undefined}
 							onCancel={() => setVisibleForm(false)}
-							footer={false}
-							styles={{ content: { padding: 0 } }}
+							footer={null}
+							styles={!props.showModalTitle ? { content: { padding: 0 } } : undefined}
 							open={visibleForm}
 							destroyOnClose={destroyModal || false}
 						>

@@ -88,8 +88,8 @@ const NoticeIcon: React.FC<NoticeIconProps> & {
 			overlay={notificationBox}
 			overlayClassName={styles.popover}
 			trigger={['click']}
-			visible={visible}
-			onVisibleChange={setVisible}
+			open={visible}
+			onOpenChange={(open) => setVisible(open)}
 			arrow
 		>
 			<Tooltip title='Thông báo' placement='bottom'>
@@ -101,10 +101,6 @@ const NoticeIcon: React.FC<NoticeIconProps> & {
 			</Tooltip>
 		</HeaderDropdown>
 	);
-};
-
-NoticeIcon.defaultProps = {
-	emptyImage: 'https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg',
 };
 
 NoticeIcon.Tab = NoticeList;

@@ -6,8 +6,9 @@ const Settings: LayoutSettings & {
 	siderWidth: number;
 } = {
 	navTheme: 'light',
+	// TODO: Cannot default?
 	colorPrimary: process.env.APP_CONFIG_PRIMARY_COLOR,
-	borderRadiusBase: '2px',
+	borderRadiusBase: '4px',
 	layout: 'mix',
 	contentWidth: 'Fluid',
 	fixedHeader: true,
@@ -16,8 +17,6 @@ const Settings: LayoutSettings & {
 	title: process.env.APP_CONFIG_TITLE_NHAN_SU ?? '',
 	logo: '/logo-text.png',
 	iconfontUrl: '',
-	// headerTheme: 'dark',
-	// headerHeight: 60,
 	siderWidth: 220,
 };
 

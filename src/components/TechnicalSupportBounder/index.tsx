@@ -1,5 +1,5 @@
 import { ToolOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Modal, Tooltip } from 'antd';
+import { ConfigProvider, FloatButton, Modal } from 'antd';
 import { useState } from 'react';
 import FormPostIssue from './Form';
 import { unTechnicalSupportPaths } from './constant';
@@ -8,29 +8,17 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 	const [visible, setVisible] = useState<boolean>(false);
 
 	return (
-		<ConfigProvider>
+		<ConfigProvider theme={{ token: { borderRadius: 4 }, hashed: false }}>
 			{props.children}
 
 			{!unTechnicalSupportPaths.includes(window.location.pathname) ? (
 				<>
-					<Tooltip title='Phản hồi kĩ thuật' placement='topLeft'>
-						<Button
-							onClick={() => setVisible(true)}
-							style={{
-								position: 'fixed',
-								bottom: 90,
-								right: 24,
-								zIndex: 10,
-								boxShadow: 'rgba(0, 0, 0, 0.2) 1px 1px 8px 3px',
-								padding: 0,
-							}}
-							shape='circle'
-							size='large'
-							type='primary'
-						>
-							<ToolOutlined />
-						</Button>
-					</Tooltip>
+					<FloatButton
+						tooltip='Phản hồi kĩ thuật'
+						onClick={() => setVisible(true)}
+						type='primary'
+						icon={<ToolOutlined />}
+					/>
 
 					<Modal
 						styles={{ content: { padding: 0 }, body: { padding: 0 } }}

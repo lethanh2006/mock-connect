@@ -66,10 +66,10 @@ const NoticeIconView = () => {
 
 			<Modal
 				width={800}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				destroyOnClose
 				onCancel={() => setVisibleDetail(false)}
-				visible={visibleDetail}
+				open={visibleDetail}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
 			>

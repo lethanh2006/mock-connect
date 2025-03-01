@@ -53,14 +53,14 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			type === 'DAY'
 				? [moment(startDate)?.startOf('days').toISOString(), moment(startDate)?.endOf('days').toISOString()]
 				: type === 'WEEK'
-				? [
-						moment(startDate)?.startOf('weeks')?.startOf('days').toISOString(),
-						moment(startDate)?.startOf('weeks')?.add(6, 'days')?.endOf('days').toISOString(),
-				  ]
-				: [
-						moment(startDate)?.startOf('months')?.startOf('days').toISOString(),
-						moment(startDate)?.startOf('months')?.add(1, 'month')?.endOf('days').toISOString(),
-				  ];
+					? [
+							moment(startDate)?.startOf('weeks')?.startOf('days').toISOString(),
+							moment(startDate)?.startOf('weeks')?.add(6, 'days')?.endOf('days').toISOString(),
+						]
+					: [
+							moment(startDate)?.startOf('months')?.startOf('days').toISOString(),
+							moment(startDate)?.startOf('months')?.add(1, 'month')?.endOf('days').toISOString(),
+						];
 		setSortTime([{ field: 'createdAt', operator: 'between', values: value }]);
 
 		//@ts-ignore
@@ -287,10 +287,10 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 
 			<Modal
 				width={800}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
-				visible={visible}
+				open={visible}
 				onCancel={() => setVisible(false)}
 				destroyOnClose
 			>
@@ -302,7 +302,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 				width={800}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
-				visible={visibleNguoiNhan}
+				open={visibleNguoiNhan}
 				onCancel={() => setVisibleNguoiNhan(false)}
 				destroyOnClose
 			>

@@ -10,7 +10,7 @@ import { type ModalImportProps } from './typing';
 const ModalImport = (props: ModalImportProps) => {
 	const { visible, onCancel, onOk, modelName, maskCloseableForm, extendData, getTemplate, titleTemplate } = props;
 	const { setFileData, setMatchedColumns, setDataImport } = useModel('import');
-	const { getImportHeaderModel, getImportTemplateModel, importHeaders } = useModel(modelName);
+	const { getImportHeaderModel, getImportTemplateModel, importHeaders } = useModel(modelName) as any;
 	const [currentStep, setCurrentStep] = useState(0);
 	const [isGetHeader, setIsGetHeader] = useState<boolean>(false);
 
@@ -40,7 +40,7 @@ const ModalImport = (props: ModalImportProps) => {
 	return (
 		<Modal
 			title='Nhập dữ liệu'
-			visible={visible}
+			open={visible}
 			onCancel={() => onCancelModal()}
 			footer={null}
 			width={800}

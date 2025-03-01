@@ -24,10 +24,10 @@ const ModalAuditLog = (props: {
 	setVisible: (val: boolean) => void;
 	title: string;
 	actions?: Record<any, string>;
-	modelName?: string;
+	modelName?: any;
 }) => {
 	const { visible, setVisible, actions = {}, title = 'Lịch sử thao tác', modelName = 'tienich.auditlog' } = props;
-	const { page, limit, getModel, setRecord, record } = useModel(modelName as any);
+	const { page, limit, getModel, setRecord, record } = useModel(modelName) as any;
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('50%');
 
@@ -112,14 +112,13 @@ const ModalAuditLog = (props: {
 	];
 
 	return (
-		<Modal title={title} visible={visible} onCancel={() => setVisible(false)} footer={null} width={1200}>
+		<Modal title={title} open={visible} onCancel={() => setVisible(false)} footer={null} width={1200}>
 			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
 				<Pane initialSize={paneSize} minSize='30%'>
 					<Card
 						title='Danh sách thao tác'
 						bordered={false}
-						bodyStyle={{ padding: '8px 0 0' }}
-						headStyle={{ padding: 0 }}
+						styles={{ body: { padding: '8px 0 0' }, header: { padding: 0 } }}
 					>
 						<TableBase
 							columns={columns}
@@ -139,8 +138,7 @@ const ModalAuditLog = (props: {
 					<Card
 						title='Chi tiết thao tác'
 						bordered={false}
-						bodyStyle={{ padding: '8px 0 0', maxHeight: 630, overflowY: 'auto' }}
-						headStyle={{ padding: 0 }}
+						styles={{ body: { padding: '8px 0 0', maxHeight: 630, overflowY: 'auto' }, header: { padding: 0 } }}
 					>
 						<Descriptions column={1}>
 							<Descriptions.Item label='Mã người dùng'>{record?.uCode ?? '--'}</Descriptions.Item>

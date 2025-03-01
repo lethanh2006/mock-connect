@@ -39,7 +39,7 @@ const ModalCustomFilter = (props: {
 	};
 
 	return (
-		<Modal visible={visible} onCancel={() => setVisible(false)} footer={null} title='Bộ lọc tùy chỉnh'>
+		<Modal open={visible} onCancel={() => setVisible(false)} footer={null} title='Bộ lọc tùy chỉnh'>
 			<p>Các điều kiện lọc đang được áp dụng:</p>
 			<Form form={form} layout='vertical' onFinish={onFinish}>
 				{filtersTemp.map((filter, index) => (

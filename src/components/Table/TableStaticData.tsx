@@ -72,8 +72,8 @@ const TableStaticData = (props: TableStaticProps) => {
 			typeof dataIndex === 'string'
 				? record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
 				: typeof dataIndex === 'object'
-				? record[dataIndex[0]][dataIndex?.[1]]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
-				: '',
+					? record[dataIndex[0]][dataIndex?.[1]]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
+					: '',
 		onFilterDropdownVisibleChange: (vis) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
 		render: (text: any, record: any) =>
 			render ? (
@@ -109,8 +109,8 @@ const TableStaticData = (props: TableStaticProps) => {
 			...(item?.filterType === 'string'
 				? getColumnSearchProps(item.dataIndex, item.title, item.render)
 				: item?.filterType === 'select'
-				? getFilterColumnProps(item.dataIndex, item.filterData)
-				: undefined),
+					? getFilterColumnProps(item.dataIndex, item.filterData)
+					: undefined),
 			...(item?.sortable && {
 				sorter: (a: any, b: any) => {
 					const aValue = _.get(a, item?.dataIndex ?? '', undefined);
@@ -124,15 +124,15 @@ const TableStaticData = (props: TableStaticProps) => {
 				...(child?.filterType === 'string'
 					? getColumnSearchProps(child.dataIndex, item.title, item.render)
 					: child?.filterType === 'select'
-					? getFilterColumnProps(child.dataIndex, child.filterData)
-					: undefined),
+						? getFilterColumnProps(child.dataIndex, child.filterData)
+						: undefined),
 				...(child?.sortable && {
 					sorter: (a: any, b: any) =>
 						child.customSort
 							? child.customSort(a[child.dataIndex as string], b[child.dataIndex as string])
 							: a[child.dataIndex as string] > b[child.dataIndex as string]
-							? 1
-							: -1,
+								? 1
+								: -1,
 				}),
 			})),
 		}));
@@ -240,7 +240,7 @@ const TableStaticData = (props: TableStaticProps) => {
 									wrapper: DraggableContainer,
 									row: DraggableBodyRow,
 								},
-						  }
+							}
 						: undefined
 				}
 				{...props?.otherProps}
@@ -255,7 +255,7 @@ const TableStaticData = (props: TableStaticProps) => {
 							}}
 							destroyOnClose
 							footer={false}
-							visible={showEdit}
+							open={showEdit}
 						>
 							<Form
 								onCancel={() => {
@@ -272,8 +272,8 @@ const TableStaticData = (props: TableStaticProps) => {
 							}}
 							destroyOnClose
 							footer={false}
-							bodyStyle={{ padding: 0 }}
-							visible={showEdit}
+							styles={{ body: { padding: 0 } }}
+							open={showEdit}
 						>
 							<Form
 								onCancel={() => {

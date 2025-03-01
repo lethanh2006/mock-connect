@@ -1,3 +1,4 @@
+import { primaryColor } from '@/services/base/constant';
 import Joyride, { type CallBackProps, STATUS, type Step } from 'react-joyride';
 
 interface JoyrideBaseProps {
@@ -55,9 +56,9 @@ const JoyrideBase = ({ run, setRun, customSteps = [], title }: JoyrideBaseProps)
 			}}
 			styles={{
 				options: { zIndex: 10000 },
-				buttonNext: { backgroundColor: '#1976d2', color: '#fff', borderRadius: '8px', fontWeight: 'bold' },
-				buttonBack: { color: '#d32f2f' },
-				buttonClose: { color: '#ff0000' },
+				buttonNext: { backgroundColor: primaryColor, color: '#fff', borderRadius: '4px' },
+				// buttonBack: { color: '#d32f2f' },
+				// buttonClose: { color: '#ff0000' },
 			}}
 		/>
 	);

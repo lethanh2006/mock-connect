@@ -7,11 +7,11 @@ export default defineConfig({
 	hash: true,
 	antd: {
 		theme: {
-			'primary-color': defaultSettings.colorPrimary,
+			'@primary-color': defaultSettings.colorPrimary,
 			'border-radius-base': defaultSettings.borderRadiusBase,
 		},
 		// Transform DayJS to MomentJS
-    momentPicker: true,
+		momentPicker: true,
 	},
 	access: {},
 	model: {},
@@ -31,30 +31,27 @@ export default defineConfig({
 		baseNavigator: false,
 		// baseSeparator: '_',
 	},
-	targets: {
-		ie: 11,
-	},
+	targets: { ie: 11 },
 	routes,
 	// Theme for antd: https://ant.design/docs/react/customize-theme-cn
 	theme: {
-		'primary-color': defaultSettings.colorPrimary,
+		'@primary-color': defaultSettings.colorPrimary,
 		'border-radius-base': defaultSettings.borderRadiusBase,
 	},
 	ignoreMomentLocale: true,
 	// proxy: proxy[REACT_APP_ENV || 'dev'],
+	// base: '/qldt', 		// Sub-path
 	manifest: {
 		basePath: '/',
 	},
 	// Fast Refresh 热更新
 	fastRefresh: true,
 
-	plugins: [    
-    '@react-dev-inspector/umi4-plugin',
-  ],
+	plugins: ['@react-dev-inspector/umi4-plugin'],
 
 	jsMinifier: 'terser',
 	exportStatic: {},
-	
+
 	define: Object.entries(process.env).reduce((result, [key, value]) => {
 		if (key.startsWith('APP_CONFIG_')) {
 			return {
