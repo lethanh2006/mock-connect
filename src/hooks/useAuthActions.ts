@@ -10,8 +10,10 @@ export const useAuthActions = () => {
 
 	const handleLogout = () => {
 		if (oneSignalRole.valueOf() === currentRole.valueOf()) {
-			OneSignal.getUserId((playerId) => deleteOneSignal({ playerId }));
-			OneSignal.setSubscription(false);
+			// FIXME: Update
+			OneSignal.logout();
+			// OneSignal.getUserId((playerId) => deleteOneSignal({ playerId }));
+			// OneSignal.setSubscription(false);
 		}
 
 		auth
@@ -33,6 +35,6 @@ export const useAuthActions = () => {
 	return {
 		dangXuat: handleLogout,
 		dangNhap: handleLogin,
-		isLoading: auth.isLoading,
+		isLoading: auth?.isLoading || false,
 	};
 };

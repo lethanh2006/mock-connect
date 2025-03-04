@@ -20,7 +20,7 @@ const LoginWithKeycloak = () => {
 		return <div>Đang chuyển tới trang đăng nhập...</div>;
 	}
 
-	if (auth.error) {
+	if (auth?.error) {
 		return (
 			<div>
 				Có lỗi xảy ra... <pre>{auth.error.message}</pre>

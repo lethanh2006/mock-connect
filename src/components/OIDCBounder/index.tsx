@@ -1,21 +1,21 @@
 import { useAuthActions } from '@/hooks/useAuthActions';
 import { getPermission, getUserInfo } from '@/services/base/api';
-import { primaryColor } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
 import { currentRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
-import { ConfigProvider, notification } from 'antd';
+import { notification } from 'antd';
 import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useModel } from 'umi';
 import LoadingPage from '../Loading';
+import ConfigBounder from '../TechnicalSupportBounder/ConfigBounder';
 import { unAuthPaths, unCheckPermissionPaths } from './constant';
 
 let OIDCBounderHandlers: ReturnType<typeof useAuthActions> | null = null;
 
-const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
+export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
 	const { setInitialState, initialState } = useModel('@@initialState');
 	const auth = useAuth();
 	const actions = useAuthActions();
@@ -115,11 +115,6 @@ const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
 		OIDCBounderHandlers = actions;
 	}, [actions]);
 
-	useEffect(() => {
-		// Đổi màu real time => Hỗ trợ đổi tenant
-		// ConfigProvider.config({ theme: { hashed: false } });
-	}, []);
-
 	return <>{(auth.isLoading || initialState?.permissionLoading) && !isUnauth ? <LoadingPage /> : children}</>;
 };
 
@@ -127,20 +122,14 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 	props,
 ) => {
 	return (
-		<ConfigProvider
-			theme={{
-				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
-				hashed: false,
-				cssVar: true,
-			}}
-		>
+		<ConfigBounder>
 			<AuthProvider
 				{...oidcConfig}
 				redirect_uri={window.location.pathname.includes('/user') ? window.location.origin : window.location.href}
 			>
 				<OIDCBounder_ {...props} />
 			</AuthProvider>
-		</ConfigProvider>
+		</ConfigBounder>
 	);
 };
 

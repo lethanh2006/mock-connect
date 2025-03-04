@@ -12,6 +12,12 @@ body,
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
+	// FIXME: Chưa nhận Config Provider
+	/* Hỗ trợ đổi màu realtime */
+	--primary-color: @blue-6;
+	/* Background selected */
+	--primary-1: @blue-1;
 }
 
 a {
@@ -92,51 +98,51 @@ a {
 }
 
 .btn-success {
-	border-color: var(--ant-success-color);
+	border-color: @green-6;
 
 	&.ant-btn-primary:not(:disabled) {
-		background-color: var(--ant-success-color);
+		background-color: @green-6;
 
 		&:hover {
-			background-color: var(--ant-success-color-hover);
+			background-color: @green-5;
 		}
 	}
 
 	&.ant-btn-link {
-		color: var(--ant-success-color);
+		color: @green-6;
 		border: none;
 	}
 
 	&:hover {
-		border-color: var(--ant-success-color-hover);
+		border-color: @green-5;
 
 		&:not(.ant-btn-primary) {
-			color: var(--ant-success-color-hover);
+			color: @green-5;
 		}
 	}
 }
 
 .btn-warning {
-	border-color: var(--ant-warning-color);
+	border-color: @gold-6;
 
 	&.ant-btn-primary:not(:disabled) {
-		background-color: var(--ant-warning-color);
+		background-color: @gold-6;
 
 		&:hover {
-			background-color: var(--ant-warning-color-hover);
+			background-color: @gold-5;
 		}
 	}
 
 	&.ant-btn-link {
-		color: var(--ant-warning-color);
+		color: @gold-6;
 		border: none;
 	}
 
 	&:hover {
-		border-color: var(--ant-warning-color-hover);
+		border-color: @gold-5;
 
 		&:not(.ant-btn-primary) {
-			color: var(--ant-warning-color-hover);
+			color: @gold-5;
 		}
 	}
 }
@@ -229,19 +235,19 @@ canvas {
 }
 
 .text-info {
-	color: var(--ant-info-color) !important;
+	color: @blue-6 !important;
 }
 
 .text-success {
-	color: var(--ant-success-color) !important;
+	color: @green-6 !important;
 }
 
 .text-warning {
-	color: var(--ant-warning-color) !important;
+	color: @gold-6 !important;
 }
 
 .text-error {
-	color: var(--ant-error-color) !important;
+	color: @red-5 !important;
 }
 
 .bg-highlight {

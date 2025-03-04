@@ -8,8 +8,8 @@ export default defineConfig({
 	antd: {
 		theme: {
 			'@primary-color': defaultSettings.colorPrimary,
-			'border-radius-base': defaultSettings.borderRadiusBase,
 		},
+		import: false,
 		// Transform DayJS to MomentJS
 		momentPicker: true,
 	},
@@ -36,7 +36,6 @@ export default defineConfig({
 	// Theme for antd: https://ant.design/docs/react/customize-theme-cn
 	theme: {
 		'@primary-color': defaultSettings.colorPrimary,
-		'border-radius-base': defaultSettings.borderRadiusBase,
 	},
 	ignoreMomentLocale: true,
 	// proxy: proxy[REACT_APP_ENV || 'dev'],
@@ -47,7 +46,7 @@ export default defineConfig({
 	// Fast Refresh 热更新
 	fastRefresh: true,
 
-	plugins: ['@react-dev-inspector/umi4-plugin'],
+	// plugins: ['@react-dev-inspector/umi4-plugin'],
 
 	jsMinifier: 'terser',
 	exportStatic: {},
