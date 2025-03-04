@@ -13,6 +13,7 @@ import HeaderContentPage from './components/RightContent/Header';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
 import NotAccessible from './pages/exception/403';
 import NotFoundContent from './pages/exception/404';
+import { AppModules } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
 import { currentRole } from './utils/ip';
@@ -38,7 +39,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 		noFound: <NotFoundContent />,
 		rightContentRender: () => <RightContent />,
 		headerContentRender: () => <HeaderContentPage />,
-		disableContentMargin: false,
+		disableContentMargin: true,
 
 		footerRender: () => <Footer />,
 
@@ -84,6 +85,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 			</OIDCBounder>
 		),
 		menuHeaderRender: undefined,
+		title: AppModules[currentRole].title,
 		...initialState?.settings,
 	};
 };

@@ -117,7 +117,7 @@ const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
 
 	useEffect(() => {
 		// Đổi màu real time => Hỗ trợ đổi tenant
-		ConfigProvider.config({ theme: { primaryColor } });
+		// ConfigProvider.config({ theme: { hashed: false } });
 	}, []);
 
 	return <>{(auth.isLoading || initialState?.permissionLoading) && !isUnauth ? <LoadingPage /> : children}</>;
@@ -127,12 +127,20 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 	props,
 ) => {
 	return (
-		<AuthProvider
-			{...oidcConfig}
-			redirect_uri={window.location.pathname.includes('/user') ? window.location.origin : window.location.href}
+		<ConfigProvider
+			theme={{
+				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
+				hashed: false,
+				cssVar: true,
+			}}
 		>
-			<OIDCBounder_ {...props} />
-		</AuthProvider>
+			<AuthProvider
+				{...oidcConfig}
+				redirect_uri={window.location.pathname.includes('/user') ? window.location.origin : window.location.href}
+			>
+				<OIDCBounder_ {...props} />
+			</AuthProvider>
+		</ConfigProvider>
 	);
 };
 
