@@ -1,7 +1,7 @@
 import { AppModules } from '@/services/base/constant';
 import { currentRole } from '@/utils/ip';
-import './style.less';
 import { Link, history } from 'umi';
+import './style.less';
 
 const HeaderContentPage = () => {
 	return (

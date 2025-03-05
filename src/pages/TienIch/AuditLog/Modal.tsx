@@ -45,7 +45,7 @@ const ModalAuditLog = (props: {
 		style: {
 			cursor: 'pointer',
 			fontWeight: rec._id === record?._id ? 600 : undefined,
-			backgroundColor: rec._id === record?._id ? 'var(--primary-1)' : undefined,
+			backgroundColor: rec._id === record?._id ? 'var(--color-primary-bg-hover)' : undefined,
 		},
 	});
 
@@ -117,7 +117,7 @@ const ModalAuditLog = (props: {
 				<Pane initialSize={paneSize} minSize='30%'>
 					<Card
 						title='Danh sách thao tác'
-						bordered={false}
+						variant='borderless'
 						styles={{ body: { padding: '8px 0 0' }, header: { padding: 0 } }}
 					>
 						<TableBase

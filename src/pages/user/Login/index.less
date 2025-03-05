@@ -1,16 +1,13 @@
-// @import '~antd/es/style/themes/default.less';
-@import '../../../styles/_variable.less';
-
 .container {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
 	overflow: hidden;
-	background-color: var(--primary-color);
+	background-color: var(--color-primary);
 }
 
 :global(.login-footer .ant-layout-footer) {
-	background-color: var(--primary-color);
+	background-color: var(--color-primary);
 }
 
 .lang {
@@ -18,6 +15,7 @@
 	height: 40px;
 	line-height: 44px;
 	text-align: right;
+
 	:global(.ant-dropdown-trigger) {
 		margin-right: 24px;
 	}
@@ -36,6 +34,7 @@
 .header {
 	margin-top: 50px;
 	line-height: 60px;
+
 	a {
 		text-decoration: none;
 	}
@@ -50,7 +49,7 @@
 .title2 {
 	position: relative;
 	top: 2px;
-	color: var(--primary-color);
+	color: var(--color-primary);
 	font-weight: 600;
 	font-size: 30px;
 	font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -59,7 +58,7 @@
 .title3 {
 	position: relative;
 	top: 2px;
-	color: var(--primary-color);
+	color: var(--color-primary);
 	font-weight: 600;
 	font-size: 30px;
 	font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -118,9 +117,11 @@
 
 	@media screen and (max-width: @screen-sm) {
 		max-width: 100%;
+
 		&::before {
 			display: none;
 		}
+
 		&::after {
 			top: 300px;
 			right: -66px;
@@ -143,7 +144,7 @@
 		transition: color 0.3s;
 
 		&:hover {
-			color: var(--primary-color);
+			color: var(--color-primary);
 		}
 	}
 
@@ -151,6 +152,7 @@
 		margin-top: 24px;
 		line-height: 22px;
 		text-align: left;
+
 		.register {
 			float: right;
 		}
@@ -158,7 +160,7 @@
 
 	.prefixIcon {
 		margin-right: 6px;
-		color: var(--primary-color);
+		color: var(--color-primary);
 		font-size: @font-size-base;
 	}
 }
@@ -179,10 +181,12 @@
 	.title1 {
 		font-size: 22px;
 	}
+
 	.title2 {
 		font-size: 18px;
 		line-height: 30px;
 	}
+
 	.title3 {
 		font-size: 22px;
 	}

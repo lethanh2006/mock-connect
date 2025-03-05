@@ -1,4 +1,3 @@
-import { deleteOneSignal } from '@/services/base/api';
 import { currentRole, oneSignalRole } from '@/utils/ip';
 import { useAuth } from 'react-oidc-context';
 import OneSignal from 'react-onesignal';

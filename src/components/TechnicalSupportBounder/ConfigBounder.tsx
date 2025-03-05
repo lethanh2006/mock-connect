@@ -7,8 +7,9 @@ const ConfigBounder = (props: { children?: any }) => {
 		// Đổi màu real time => Hỗ trợ đổi tenant
 		ConfigProvider.config({
 			theme: {
-				hashed: false,
 				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
+				hashed: false,
+				cssVar: { prefix: '' },
 			},
 		});
 	}, [primaryColor]);
@@ -18,6 +19,7 @@ const ConfigBounder = (props: { children?: any }) => {
 			theme={{
 				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
 				hashed: false,
+				cssVar: { prefix: '' },
 			}}
 		>
 			{props.children}

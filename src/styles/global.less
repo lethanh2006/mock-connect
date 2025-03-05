@@ -1,6 +1,3 @@
-// @import '~antd/es/style/themes/default.less';
-// @import '~antd/dist/antd.variable.min.css';
-@import '_variable.less';
 @import 'layout.less';
 @import 'split-panel.less';
 @import 'custom-antd.less';
@@ -13,11 +10,10 @@ body,
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	// FIXME: Chưa nhận Config Provider
-	/* Hỗ trợ đổi màu realtime */
-	--primary-color: @blue-6;
+	/* Replace all color */
+	// --primary-color => --color-primary
 	/* Background selected */
-	--primary-1: @blue-1;
+	// --primary-1 => --color-primary-bg-hover
 }
 
 a {
@@ -30,7 +26,7 @@ a {
 		left: 50%;
 		width: 0;
 		height: 1px;
-		background-color: var(--primary-color);
+		background-color: var(--color-primary);
 		transform: translateX(-50%);
 		opacity: 0;
 		transition: 0.3s;
@@ -46,6 +42,13 @@ a {
 	&.not-underline::after {
 		display: none;
 	}
+}
+
+::selection {
+	background-color: var(--color-primary);
+	/* Change the color to your preferred choice */
+	color: #fff;
+	/* Optional: Set the text color for selected text */
 }
 
 .fw500 {
@@ -152,7 +155,7 @@ canvas {
 }
 
 .filter-node {
-	color: var(--primary-color);
+	color: var(--color-primary);
 }
 
 // style select
@@ -199,7 +202,7 @@ canvas {
 		background-color: #f2fce1bf;
 
 		.text {
-			color: var(--primary-color);
+			color: var(--color-primary);
 			font-weight: 600;
 		}
 	}
@@ -220,18 +223,18 @@ canvas {
 	}
 
 	.num {
-		color: var(--primary-color);
+		color: var(--color-primary);
 		font-weight: 700;
 		font-size: 1.25rem;
 	}
 }
 
 .bg-primary-selected {
-	background-color: var(--primary-1) !important;
+	background-color: var(--color-primary-bg-hover) !important;
 }
 
 .text-primary {
-	color: var(--primary-color) !important;
+	color: var(--color-primary) !important;
 }
 
 .text-info {
@@ -267,7 +270,7 @@ canvas {
 
 		button {
 			padding: 4px 15px;
-			border-radius: @border-radius;
+			border-radius: var(--border-radius);
 			font-size: 14px;
 			height: 32px;
 
@@ -284,7 +287,7 @@ canvas {
 
 .card-highlight {
 	.ant-card-head {
-		background-color: var(--primary-color);
+		background-color: var(--color-primary);
 		color: white;
 
 		.ant-btn-link,

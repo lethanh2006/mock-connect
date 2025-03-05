@@ -5,7 +5,7 @@
 
 .ant-checkbox {
   .ant-checkbox-inner {
-    border-radius: @border-radius;
+    border-radius: var(--border-radius);
   }
 }
 
@@ -18,7 +18,7 @@
     padding: 2px 7px;
     font-size: 14px;
     border: 1px solid #f0f0f0;
-    border-radius: @border-radius;
+    border-radius: var(--border-radius);
 
     .ant-tag-checkable-checked {
       border: none;
@@ -39,11 +39,11 @@
 }
 
 .ant-input:hover {
-  border-color: var(--primary-color);
+  border-color: var(--color-primary);
 }
 
 .ant-input:focus {
-  border-color: var(--primary-color);
+  border-color: var(--color-primary);
 }
 
 .ant-table-cell .ant-btn {
@@ -237,7 +237,7 @@
 
 .ant-collapse-item-active>.ant-collapse-header>.ant-collapse-header-text {
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--color-primary);
 }
 
 .ant-image {
