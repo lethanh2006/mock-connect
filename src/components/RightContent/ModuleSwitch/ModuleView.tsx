@@ -26,39 +26,41 @@ const ModuleView = () => {
 		<div className='module-view'>
 			<div className='module-header'>Danh sách chức năng</div>
 
-			<Row gutter={[5, 5]}>
-				{Object.entries(AppModules)
-					.filter(([name, value]) => permissions?.includes(name as EModuleKey) && !!value.url)
-					.map(([name, value]) => (
-						<Col span={8} key={name}>
-							<a href={value?.url} target='_blank' rel='noreferrer'>
+			<div className='module-container' style={{ padding: '0 12px 12px' }}>
+				<Row gutter={[5, 5]}>
+					{Object.entries(AppModules)
+						.filter(([name, value]) => permissions?.includes(name as EModuleKey) && !!value.url)
+						.map(([name, value]) => (
+							<Col span={8} key={name}>
+								<a href={value?.url} target='_blank' rel='noreferrer'>
+									<div className='module-item'>
+										{value?.icon ? (
+											<img src={`${AppModules[EModuleKey.CORE].url}modules/${value.icon}`} />
+										) : (
+											<UserSwitchOutlined />
+										)}
+										<span className='module-name'>{value?.title ?? name}</span>
+									</div>
+								</a>
+							</Col>
+						))}
+
+					{extendModules.map((mod) => (
+						<Col span={8} key={mod.url}>
+							<a href={mod.url} target='_blank' rel='noreferrer'>
 								<div className='module-item'>
-									{value?.icon ? (
-										<img src={`${AppModules[EModuleKey.CORE].url}modules/${value.icon}`} />
+									{mod.icon ? (
+										<img src={`${AppModules[EModuleKey.CORE].url}modules/${mod.icon}`} />
 									) : (
 										<UserSwitchOutlined />
 									)}
-									<span className='module-name'>{value?.title ?? name}</span>
+									<span className='module-name'>{mod.title}</span>
 								</div>
 							</a>
 						</Col>
 					))}
-
-				{extendModules.map((mod) => (
-					<Col span={8} key={mod.url}>
-						<a href={mod.url} target='_blank' rel='noreferrer'>
-							<div className='module-item'>
-								{mod.icon ? (
-									<img src={`${AppModules[EModuleKey.CORE].url}modules/${mod.icon}`} />
-								) : (
-									<UserSwitchOutlined />
-								)}
-								<span className='module-name'>{mod.title}</span>
-							</div>
-						</a>
-					</Col>
-				))}
-			</Row>
+				</Row>
+			</div>
 		</div>
 	);
 };

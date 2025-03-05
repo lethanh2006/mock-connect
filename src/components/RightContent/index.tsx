@@ -19,7 +19,7 @@ const GlobalHeaderRight: React.FC = () => {
 
 	return (
 		<ConfigBounder>
-			<div className='css-var-ra'>
+			<div className='css-var-ra' style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center' }}>
 				<div className={styles.right}>
 					<ModuleSwitch />
 

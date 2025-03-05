@@ -45,7 +45,7 @@ const ModalAuditLog = (props: {
 		style: {
 			cursor: 'pointer',
 			fontWeight: rec._id === record?._id ? 600 : undefined,
-			backgroundColor: rec._id === record?._id ? 'var(--color-primary-bg-hover)' : undefined,
+			backgroundColor: rec._id === record?._id ? 'var(--color-primary-bg)' : undefined,
 		},
 	});
 

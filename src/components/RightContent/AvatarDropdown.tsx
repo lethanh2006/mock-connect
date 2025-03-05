@@ -1,11 +1,10 @@
 import { landingUrl } from '@/services/base/constant';
 import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Spin } from 'antd';
+import { Avatar, Dropdown, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
 import React from 'react';
 import { useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
-import HeaderDropdown from './HeaderDropdown';
 import styles from './index.less';
 
 export type GlobalHeaderRightProps = {
@@ -77,7 +76,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
 	return (
 		<>
-			<HeaderDropdown overlay={<Menu className={styles.menu} items={items} />}>
+			<Dropdown menu={{ items }} overlayClassName={styles.menu}>
 				<span className={`${styles.action} ${styles.account}`}>
 					<Avatar
 						className={styles.avatar}
@@ -87,7 +86,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 					/>
 					<span className={`${styles.name}`}>{fullName}</span>
 				</span>
-			</HeaderDropdown>
+			</Dropdown>
 		</>
 	);
 };
