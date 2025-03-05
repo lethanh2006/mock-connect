@@ -1,14 +1,10 @@
 import { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
-const Settings: LayoutSettings & {
+const defaultSettings: LayoutSettings & {
 	logo?: string;
-	// borderRadiusBase: string;
 	siderWidth: number;
 } = {
 	navTheme: 'light',
-	// TODO: Cannot default?
-	// colorPrimary: process.env.APP_CONFIG_PRIMARY_COLOR,
-	// borderRadiusBase: '4px',
 	layout: 'mix',
 	contentWidth: 'Fluid',
 	fixedHeader: true,
@@ -19,4 +15,4 @@ const Settings: LayoutSettings & {
 	siderWidth: 220,
 };
 
-export default Settings;
+export default defaultSettings;

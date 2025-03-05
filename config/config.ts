@@ -6,9 +6,6 @@ import routes from './routes';
 export default defineConfig({
 	hash: true,
 	antd: {
-		theme: {
-			'@primary-color': defaultSettings.colorPrimary,
-		},
 		import: false,
 		// Transform DayJS to MomentJS
 		momentPicker: true,
@@ -33,10 +30,7 @@ export default defineConfig({
 	},
 	targets: { ie: 11 },
 	routes,
-	// Theme for antd: https://ant.design/docs/react/customize-theme-cn
-	theme: {
-		'@primary-color': defaultSettings.colorPrimary,
-	},
+
 	ignoreMomentLocale: true,
 	// proxy: proxy[REACT_APP_ENV || 'dev'],
 	// base: '/qldt', 		// Sub-path

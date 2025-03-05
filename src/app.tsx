@@ -5,7 +5,7 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import ErrorBoundary from './components/ErrorBoundary';
 // import LoadingPage from './components/Loading';
-import Settings from '../config/defaultSettings';
+import defaultSettings from '../config/defaultSettings';
 import { OIDCBounder } from './components/OIDCBounder';
 import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
 import OneSignalBounder from './components/OneSignalBounder';
@@ -21,7 +21,7 @@ import { currentRole } from './utils/ip';
 // https://umijs.org/docs/api/runtime-config#getinitialstate
 export async function getInitialState(): Promise<IInitialState> {
 	return {
-		settings: Settings,
+		settings: defaultSettings,
 		permissionLoading: true,
 	};
 }
