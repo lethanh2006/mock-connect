@@ -7,8 +7,8 @@ export default defineConfig({
 	hash: true,
 	antd: {
 		import: false,
-		// Transform DayJS to MomentJS
-		momentPicker: true,
+			// Transform DayJS to MomentJS
+		momentPicker: false,
 	},
 	access: {},
 	model: {},
