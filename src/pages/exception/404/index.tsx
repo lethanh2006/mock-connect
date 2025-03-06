@@ -1,20 +1,19 @@
 import ConfigBounder from '@/components/TechnicalSupportBounder/ConfigBounder';
+import { HomeOutlined } from '@ant-design/icons';
 import { Button, Result } from 'antd';
-import { Link } from 'umi';
+import { history } from 'umi';
 
 const NotFoundContent = () => (
 	<ConfigBounder>
 		<Result
 			status='404'
 			title='404'
-			style={{
-				background: 'none',
-			}}
+			style={{ background: 'none' }}
 			subTitle='Xin lỗi, trang bạn yêu cầu không tồn tại.'
 			extra={
-				<Link to='/'>
-					<Button type='primary'>Về trang chủ</Button>
-				</Link>
+				<Button type='primary' onClick={() => history.push('/')} icon={<HomeOutlined />}>
+					Về trang chủ
+				</Button>
 			}
 		/>
 	</ConfigBounder>
