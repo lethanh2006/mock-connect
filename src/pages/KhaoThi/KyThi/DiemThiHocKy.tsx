@@ -1,12 +1,13 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import { trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Popover } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
-const DiemThiHocKy = (props: { sinhVienSsoId: string; maHocKy: string; maHocPhan: string }) => {
+const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 	const { maHocKy, maHocPhan } = props;
 	const { diemThiHocKySinhVien, loading, getDiemThiHocKySinhVienModel } = useModel('khaothi.sinhvienthi');
 
@@ -47,7 +48,11 @@ const DiemThiHocKy = (props: { sinhVienSsoId: string; maHocKy: string; maHocPhan
 			width: 100,
 			render: (val, rec) => (
 				<>
-					{rec?.sinhVienThi?.trangThaiDuThi ?? val ?? '--'}{' '}
+					{rec.sinhVienThi.trangThaiDuThi ? (
+						<span title={trangThaiDuThi[rec.sinhVienThi.trangThaiDuThi]}>{rec?.sinhVienThi?.trangThaiDuThi}</span>
+					) : (
+						val ?? '--'
+					)}{' '}
 					{val ? (
 						<Popover
 							content={

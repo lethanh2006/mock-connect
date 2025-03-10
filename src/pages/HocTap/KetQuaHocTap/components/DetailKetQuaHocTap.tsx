@@ -1,11 +1,11 @@
 import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { ETrangThaiThi } from '@/services/HocTap/constant';
+import { trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Divider, Empty, Spin, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: {
 	lopHocPhanId?: string;
@@ -59,12 +59,15 @@ const DetailKetQuaHocTap = (props: {
 							<Descriptions.Item label='Điểm thi'>{recDiem?.diemThi1 ?? '--'}</Descriptions.Item>
 							{/* <Descriptions.Item label='Điểm thẩm định'>{recDiem?.diemThamDinh ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Điểm phúc khảo'>{recDiem?.diemPhucKhao ?? '--'}</Descriptions.Item> */}
-							{recDiem?.diemThi2 ? (
-								<>
-									<Descriptions.Item label='Điểm thi lần 2'>{recDiem?.diemThi2 ?? '--'}</Descriptions.Item>
-									<Descriptions.Item label='Điểm cuối'>{recDiem?.diemKthp ?? '--'}</Descriptions.Item>
-								</>
-							) : null}
+
+							<Descriptions.Item label='Điểm thi lần 2'>{recDiem?.diemThi2 ?? '--'}</Descriptions.Item>
+							<Descriptions.Item label='Điểm cuối'>
+								{recDiem?.trangThaiDuThi ? (
+									<span title={trangThaiDuThi[recDiem.trangThaiDuThi]}>{recDiem?.trangThaiDuThi}</span>
+								) : (
+									recDiem?.diemKthp ?? '--'
+								)}
+							</Descriptions.Item>
 						</Descriptions>
 
 						{recDiem.diemKthp !== undefined ? (

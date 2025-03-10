@@ -3,6 +3,7 @@ import type { DiemHocPhan } from '@/services/DaoTao/DiemHocPhan/typing';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import type { ETrangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
 import type { ETrangThaiThi } from '../constant';
 import type {
@@ -165,6 +166,9 @@ export declare module LopHocPhan {
 	}
 
 	export interface IDiemTongKet {
+		/** Trạng thái dự thi */
+		trangThaiDuThi?: ETrangThaiDuThi;
+
 		diemKthp?: number;
 		diemTongKet?: number;
 		diemThang4?: number;
