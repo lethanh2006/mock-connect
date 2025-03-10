@@ -45,6 +45,7 @@ export enum ELoaiThi {
 }
 
 export enum ETrangThaiDuThi {
+	OK = 'OK',
 	C = 'C',
 	V = 'V',
 	DC = 'DC',
@@ -53,6 +54,7 @@ export enum ETrangThaiDuThi {
 }
 
 export const trangThaiDuThi: Record<ETrangThaiDuThi, string> = {
+	[ETrangThaiDuThi.OK]: 'Có dự thi',
 	[ETrangThaiDuThi.C]: 'Cấm thi',
 	[ETrangThaiDuThi.V]: 'Vắng thi',
 	[ETrangThaiDuThi.DC]: 'Đình chỉ thi',

@@ -1,6 +1,6 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
-import { trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
+import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Popover } from 'antd';
@@ -48,7 +48,7 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 			width: 100,
 			render: (val, rec) => (
 				<>
-					{rec.sinhVienThi.trangThaiDuThi ? (
+					{rec.sinhVienThi.trangThaiDuThi && rec.sinhVienThi.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
 						<span title={trangThaiDuThi[rec.sinhVienThi.trangThaiDuThi]}>{rec?.sinhVienThi?.trangThaiDuThi}</span>
 					) : (
 						val ?? '--'

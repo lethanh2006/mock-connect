@@ -1,7 +1,7 @@
 import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
+import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Divider, Empty, Spin, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
@@ -62,7 +62,7 @@ const DetailKetQuaHocTap = (props: {
 
 							<Descriptions.Item label='Điểm thi lần 2'>{recDiem?.diemThi2 ?? '--'}</Descriptions.Item>
 							<Descriptions.Item label='Điểm cuối'>
-								{recDiem?.trangThaiDuThi ? (
+								{recDiem?.trangThaiDuThi && recDiem.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
 									<span title={trangThaiDuThi[recDiem.trangThaiDuThi]}>{recDiem?.trangThaiDuThi}</span>
 								) : (
 									recDiem?.diemKthp ?? '--'
