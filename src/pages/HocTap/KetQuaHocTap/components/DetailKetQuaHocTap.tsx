@@ -18,7 +18,7 @@ const DetailKetQuaHocTap = (props: {
 	const [hienThiDiemThi, setHienThiDiemThi] = useState<boolean>(false);
 
 	const recDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
-	const hasTrongSo = !!recDiem?.trongSo1;
+	const hasTrongSo = !!recDiem?.trongSo1 || !!recDiem?.trongSo2 || !!recDiem?.trongSo3;
 	// Đầu điểm học phần theo đề cương
 	const dauDiemCoTrongSo = danhSachDauDiem.filter(
 		(item) =>
