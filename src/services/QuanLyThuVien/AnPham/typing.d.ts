@@ -8,13 +8,13 @@ declare module AnPham {
 		nhanDeConverse: string;
 		soLuong: number;
 
-		kieuBanGhiId: string;
+		maKieuBanGhi: string;
 		kieuBanGhi?: KieuBanGhi.IRecord;
-		capThuMucId: string;
+		MaCapThuMuc: string;
 		capThuMuc?: CapThuMuc.IRecord;
-		dangTaiLieuId: string;
+		maDangTaiLieu: string;
 		dangTaiLieu?: DangTaiLieu.IRecord;
-		vatMangTinId: string;
+		maVatMangTin: string;
 		vatMangTin?: VatMangTin.IRecord;
 		doMat: number;
 		mauBienMucId: string;

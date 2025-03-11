@@ -25,9 +25,8 @@ const DangTaiLieuPage = () => {
 		{
 			title: 'Dạng tài liệu',
 			dataIndex: 'ten',
-			width: 180,
+			width: 120,
 			filterType: 'string',
-			sortable: true,
 			onCell,
 		},
 	];
