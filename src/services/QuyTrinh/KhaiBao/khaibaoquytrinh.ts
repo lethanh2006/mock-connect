@@ -21,8 +21,8 @@ export const userUpdateBuoc = (
 	axios.put(`${ip3}/${url}/user/update-buoc/don/${donQuyTrinhId}/buoc/${maBuoc}`, {
 		...payload,
 	});
-export const createDonKhaiBaoUser = (quyTrinhId: string, dotQuyTrinhId?: string) =>
-	axios.post(`${ip3}/${url}/user/create/quy-trinh/${quyTrinhId}/dot-quy-trinh/${dotQuyTrinhId || ''}`);
+export const createDonKhaiBaoUser = (quyTrinhId: string, vaiTro: 'SINH_VIEN' | 'CBGV', dotQuyTrinhId?: string) =>
+	axios.post(`${ip3}/${url}/user/create/quy-trinh/${quyTrinhId}/${vaiTro}/dot-quy-trinh/${dotQuyTrinhId || ''}`);
 export async function getQuyTrinhChuyenVien(
 	loaiXuLyDon: string,
 	payload: { page: number; limit: number; condition: any },
