@@ -1,21 +1,19 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
-import { colorTrangThaiThi, EDKDTCongNo, EDKDTKetQuaHocTap, ETrangThaiThi } from '@/services/KhaoThi/constant';
+import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
-import { InfoCircleFilled } from '@ant-design/icons';
-import { Popover, Tag } from 'antd';
-import { useEffect, useState } from 'react';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Popover } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 	const { maHocKy, maHocPhan } = props;
-	const { loading, getDiemThiHocKySinhVienModel } = useModel('khaothi.sinhvienthi');
-	const [diemThiHocKySinhVien, setDiemThiHocKySinhVien] = useState<SinhVienThi.IDiemThiHocKySinhVien[]>([]);
+	const { diemThiHocKySinhVien, loading, getDiemThiHocKySinhVienModel } = useModel('khaothi.sinhvienthi');
 
 	useEffect(() => {
 		if (maHocKy && maHocPhan) {
-			getDiemThiHocKySinhVienModel(maHocKy, maHocPhan).then((res) => setDiemThiHocKySinhVien(res));
+			getDiemThiHocKySinhVienModel(maHocKy, maHocPhan);
 		}
 	}, []);
 
@@ -26,43 +24,22 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 			render: (val, rec) => rec?.kyThi?.ten ?? '--',
 		},
 		{
-			title: 'Hình thức thi',
-			width: 120,
-			render: (val, rec) => rec?.hocPhanThi?.tenHinhThucThi ?? '--',
+			title: 'HT thi',
+			dataIndex: ['hocPhanThi', 'tenHinhThucThi'],
+			align: 'center',
+			width: 100,
 		},
 		{
-			title: 'Số báo danh',
+			title: 'SBD',
+			dataIndex: ['sinhVienThi', 'sbd'],
 			align: 'center',
 			width: 80,
-			render: (val, rec) => rec?.sinhVienThi?.sbd ?? '--',
 		},
 		{
 			title: 'Trạng thái',
+			dataIndex: ['sinhVienThi', 'trangThai'],
 			align: 'center',
 			width: 120,
-			render: (val, rec) => {
-				const trangThai = rec?.sinhVienThi?.trangThai ?? '--';
-				const trangThaiColor = colorTrangThaiThi[trangThai as ETrangThaiThi];
-
-				let extraInfo = null;
-
-				if (trangThai === ETrangThaiThi.KHONG_DU) {
-					const dieuKienCongNo = rec?.sinhVienThi?.dieuKienCongNo;
-					const dieuKienHocTap = rec?.sinhVienThi?.dieuKienKetQuaHocTap;
-
-					if (dieuKienCongNo !== EDKDTCongNo.DU) {
-						extraInfo = dieuKienCongNo;
-					} else if (dieuKienHocTap !== EDKDTKetQuaHocTap.DAT) {
-						extraInfo = dieuKienHocTap;
-					}
-				}
-
-				return (
-					<Tag color={trangThaiColor}>
-						{trangThai} {extraInfo ? `(${extraInfo})` : null}
-					</Tag>
-				);
-			},
 		},
 		{
 			title: 'Điểm thi',
@@ -71,40 +48,36 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 			width: 100,
 			render: (val, rec) => (
 				<>
-					{val ?? '--'}{' '}
-					<Popover
-						content={
-							<div>
-								{(rec?.hocPhanThi?.danhSachDiemThanhPhan?.length ?? 0) > 0
-									? rec.hocPhanThi.danhSachDiemThanhPhan.map((item, index) => (
-											// eslint-disable-next-line react/no-array-index-key
-											<p key={index}>{`${item.tenDauDiem}: ${
-												rec?.sinhVienThi?.ketQuaChamChinhThuc?.danhSachDiem?.[0]?.diemThanhPhan?.[index] ?? '--'
-											}`}</p>
-									  ))
-									: rec?.sinhVienThi?.ketQuaChamChinhThuc?.danhSachDiem?.[0]?.diemThanhPhan?.map(
-											(item: any, index: number) => (
-												// eslint-disable-next-line react/no-array-index-key
-												<p key={index}>
-													Câu {index + 1}: {item}
-												</p>
-											),
-									  )}
-							</div>
-						}
-						title='Chi tiết'
-					>
-						<ButtonExtend type='link' icon={<InfoCircleFilled />} />
-					</Popover>
+					{rec.sinhVienThi.trangThaiDuThi && rec.sinhVienThi.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
+						<span title={trangThaiDuThi[rec.sinhVienThi.trangThaiDuThi]}>{rec?.sinhVienThi?.trangThaiDuThi}</span>
+					) : (
+						val ?? '--'
+					)}{' '}
+					{val ? (
+						<Popover
+							content={
+								<div>
+									{rec?.sinhVienThi?.ketQuaChamChinhThuc?.danhSachDiem?.[0]?.diemThanhPhan?.map((diem, ind) => (
+										// eslint-disable-next-line react/no-array-index-key
+										<p key={ind}>
+											{rec?.hocPhanThi?.danhSachDiemThanhPhan?.[ind]?.tenDauDiem ?? `Câu ${ind + 1}`}: {diem}
+										</p>
+									))}
+								</div>
+							}
+							title='Chi tiết'
+						>
+							<InfoCircleOutlined />
+						</Popover>
+					) : null}
 				</>
 			),
 		},
 		{
-			title: 'Điểm phúc khảo',
+			title: 'Phúc khảo',
 			dataIndex: 'diemPhucKhao',
 			align: 'center',
 			width: 100,
-			render: (val, rec) => val ?? '--',
 		},
 	];
 

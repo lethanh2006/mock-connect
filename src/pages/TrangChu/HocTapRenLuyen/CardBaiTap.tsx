@@ -6,6 +6,7 @@ import { history, Link, useModel } from 'umi';
 
 const CardBaiTapDashboard = () => {
 	const { danhSach, loading } = useModel('daotao.baitap');
+	// Data đã get ở LichDashboard rồi => ko cần get lại nữa
 
 	return (
 		<Card
@@ -18,7 +19,8 @@ const CardBaiTapDashboard = () => {
 			}
 		>
 			<div style={{ maxHeight: 300, overflow: 'auto' }}>
-				{danhSach.length ? (
+				{danhSach.filter((i) => i.assignment?.thoiGianKetThuc && moment().isSameOrBefore(i.assignment.thoiGianKetThuc))
+					.length ? (
 					<List
 						itemLayout='horizontal'
 						className='dashboard-list-lhp'

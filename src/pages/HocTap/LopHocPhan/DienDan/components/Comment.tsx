@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import { createTextLinks } from '@/utils/utils';
@@ -179,11 +180,13 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 												{moment(val?.ngayDang).calendar()}
 											</span>
 										</div>
-										<div
-											dangerouslySetInnerHTML={{
-												__html: createTextLinks(val?.noiDung ?? '')?.replace(/\n/g, '<br/>'),
-											}}
-										/>
+										<ExpandText>
+											<div
+												dangerouslySetInnerHTML={{
+													__html: createTextLinks(val?.noiDung ?? '')?.replace(/\n/g, '<br/>'),
+												}}
+											/>
+										</ExpandText>
 										{/*{typeof val?.fileDinhKem !== 'string' && val?.fileDinhKem && val?.fileDinhKem?.length > 0 && (*/}
 										{/*	<div*/}
 										{/*		style={{*/}

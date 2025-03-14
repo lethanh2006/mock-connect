@@ -1,7 +1,8 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
-import { ArrowRightOutlined, CalendarOutlined, MenuOutlined } from '@ant-design/icons';
-import { Badge, Card, Col, Empty, Modal, Row, Segmented, Space, Tag, Typography } from 'antd';
+import { ArrowRightOutlined, CalendarOutlined, InfoCircleOutlined, MenuOutlined } from '@ant-design/icons';
+import { Badge, Card, Col, Empty, Modal, Popover, Row, Segmented, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -9,6 +10,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useMediaQuery } from 'react-responsive';
 import { Link, useModel } from 'umi';
 import FormLichCaNhan from '../components/FormLichCaNhan';
 import GhiChuLich from '../components/GhiChuLich';
@@ -44,13 +46,15 @@ const LichDashboard = () => {
 	const [selectEvent, setSelectEvent] = useState<any>();
 	const localizer = momentLocalizer(moment);
 	const [segmentSelected, setSegmentSelected] = useState<string>(localStorage.getItem('loaiLich') ?? 'list');
+	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
 	//#region Get Data
 	const getThoiKhoaBieu = async () => {
 		return getTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
-				title: item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || '',
+				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''}`,
+				suffix: [item?.lopHocPhan?.ten, item?.phongHoc].filter(Boolean).join(', '),
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 			}));
 			return temp;
@@ -62,7 +66,7 @@ const LichDashboard = () => {
 			const temp = data.map((item) => ({
 				...item,
 				title: `Lịch thi: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
-				phongHoc: item.phong?.ma ?? '',
+				suffix: item.phong?.ma ?? '',
 				loaiSuKien: ELoaiSuKien.LICH_THI,
 			}));
 			return temp;
@@ -81,19 +85,21 @@ const LichDashboard = () => {
 
 	const getBaiTap = async () => {
 		return thongKeBaiTapModel(
-			moment().startOf('day').toISOString(),
+			moment().startOf('week').toISOString(),
 			moment().add(2, 'months').endOf('day').toISOString(),
 		).then((data) => {
 			const aWeekLater = moment().add(7, 'day').endOf('day').toDate();
 			const temp = data
 				.map((item) => ({
 					...item,
-					title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
+					title: item?.assignment?.noiDung ?? '',
+					suffix: item?.assignment?.tenLopHocPhan,
 					thoiGianBatDau: moment(item?.assignment?.thoiGianKetThuc).toDate(),
 					thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
 					loaiSuKien: ELoaiSuKien.BAI_TAP,
 				}))
-				.filter((i) => i.thoiGianBatDau > new Date() && i.thoiGianKetThuc < aWeekLater);
+				// Ở dashboard Chỉ show tối đa trong vòng 1 tuần
+				.filter((i) => i.thoiGianKetThuc < aWeekLater);
 			return temp;
 		});
 	};
@@ -122,7 +128,7 @@ const LichDashboard = () => {
 	const renderContent = () => {
 		// Convert dữ liệu
 		const data = dataCalendarDashboard
-			?.filter((event) => moment(event.thoiGianBatDau).isSameOrAfter(moment().startOf('day')))
+			?.filter((event) => moment(event.thoiGianBatDau).isSameOrAfter(moment(), 'd'))
 			?.reduce<any>((result, item) => {
 				if (!item?.thoiGianBatDau) {
 					return result;
@@ -137,7 +143,7 @@ const LichDashboard = () => {
 						cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
 							...item,
 							tenSuKien: item.title,
-							diaDiem: item.phongHoc ?? item.diaDiem,
+							suffix: item.suffix ?? item.diaDiem,
 						}),
 					},
 				};
@@ -155,7 +161,10 @@ const LichDashboard = () => {
 				<div key={ngay} className={styles.ngay}>
 					<Space style={{ marginBottom: 8 }}>
 						<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
-							<div className={styles.ngay__title}>
+							<div
+								className={styles.ngay__title}
+								style={{ color: moment().isSame(ngay, 'day') ? 'var(--primary-color)' : undefined }}
+							>
 								{thuTrongTuan}, ngày {moment(ngay).format('DD/MM')}
 							</div>
 						</Badge>
@@ -171,9 +180,13 @@ const LichDashboard = () => {
 							}}
 						>
 							<div className={styles.su_kien__left}>
+								{moment().isSameOrAfter(sukien.thoiGianBatDau) && moment().isSameOrBefore(sukien.thoiGianKetThuc) ? (
+									<div className={styles.pulse} />
+								) : null}
 								<div className={styles.su_kien__thoi_gian}>{moment(sukien.thoiGianBatDau).format('HH:mm')}</div>
 							</div>
 							<Space
+								wrap
 								className={styles.su_kien__right}
 								style={{
 									borderColor:
@@ -181,7 +194,10 @@ const LichDashboard = () => {
 										ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
 								}}
 							>
-								<div>{[sukien.tenSuKien ?? '', sukien.diaDiem ?? ''].filter(Boolean).join(' - ')}</div>
+								<div>
+									{sukien.tenSuKien ?? ''}
+									{sukien.suffix ? <i> ({sukien.suffix})</i> : null}
+								</div>
 								{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC && sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
 									<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
 										{sukien.hinhThucGiangDay}
@@ -262,6 +278,19 @@ const LichDashboard = () => {
 									setSegmentSelected(val.toString());
 								}}
 							/>
+							{!isEmpty(dataLichDashboard) ? (
+								<Popover
+									content={
+										<div style={{ maxWidth: 350 }}>
+											<GhiChuLich />
+										</div>
+									}
+									placement={isMobile ? 'bottom' : 'right'}
+									title='Chọn lịch hiển thị'
+								>
+									<ButtonExtend type='link' icon={<InfoCircleOutlined />} />
+								</Popover>
+							) : null}
 						</Space>
 						<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
 							Xem thêm <ArrowRightOutlined />
@@ -271,15 +300,10 @@ const LichDashboard = () => {
 			>
 				<Row gutter={[12, 12]}>
 					<Col span={24}>
-						<div style={{ maxHeight: 450, overflowY: 'auto' }}>
+						<div style={{ maxHeight: 400, overflowY: 'auto' }}>
 							{segmentSelected === 'list' ? renderContent() : renderContentCalender()}
 						</div>
 					</Col>
-					{!isEmpty(dataLichDashboard) ? (
-						<Col span={24}>
-							<GhiChuLich />
-						</Col>
-					) : null}
 				</Row>
 			</Card>
 

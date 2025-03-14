@@ -26,29 +26,23 @@ const FormThemMoiBaiViet = (props: IProps) => {
 	}, [visibleForm]);
 
 	const onFinish = async (values: any) => {
-		if (formSubmiting) return;
 		setFormSubmiting(true);
-		try {
-			const fileDinhKem = await buildUpLoadMultiFile(values, 'fileDinhKem');
-			setFormSubmiting(false);
-			const payload = {
-				...values,
-				lopHocPhanId: idLopHocPhan,
-				fileDinhKem: fileDinhKem,
-			};
-			if (edit) {
-				putModel(record?._id ?? '', payload, () => {
-					if (getData) getData();
-				});
-			} else {
-				postModel(payload, () => {
-					if (getData) getData();
-				});
-			}
-		} catch (e) {
-			console.log(e);
-		} finally {
-			setFormSubmiting(false);
+		const fileDinhKem = await buildUpLoadMultiFile(values, 'fileDinhKem');
+		const payload = {
+			...values,
+			lopHocPhanId: idLopHocPhan,
+			fileDinhKem: fileDinhKem,
+		};
+		setFormSubmiting(false);
+
+		if (edit) {
+			putModel(record?._id ?? '', payload, () => {
+				if (getData) getData();
+			});
+		} else {
+			postModel(payload, () => {
+				if (getData) getData();
+			});
 		}
 	};
 
@@ -83,7 +77,7 @@ const FormThemMoiBaiViet = (props: IProps) => {
 						</Form.Item>
 
 						<div className='form-footer'>
-							<Button type={'primary'} htmlType='submit'>
+							<Button type={'primary'} htmlType='submit' loading={formSubmiting}>
 								{edit ? 'Chỉnh sửa' : 'Đăng bài'}
 							</Button>
 							<Button onClick={() => setVisibleForm(false)}>Hủy</Button>

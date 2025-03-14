@@ -38,14 +38,36 @@
 		&:hover {
 			box-shadow: 1px 3px 5px rgba(163, 177, 191, 0.35);
 			transition: 0.3s;
+
+			.hover_link {
+				display: initial;
+			}
+		}
+
+		.hover_link {
+			display: none;
 		}
 	}
 
 	.su_kien__left {
+		position: relative;
 		display: flex;
 		align-items: center;
 		padding-left: 12px;
 		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+
+		.pulse {
+			position: absolute;
+			top: -8px;
+			left: -2px;
+			display: block;
+			width: 10px;
+			height: 10px;
+			background-color: var(--primary-color);
+			border-radius: 15px;
+			box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+			animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+		}
 	}
 
 	.su_kien__thoi_gian {
@@ -63,5 +85,22 @@
 		padding: 0 !important;
 		border-radius: 0 !important;
 		box-shadow: none !important;
+	}
+}
+
+@keyframes pulse-dot {
+	0% {
+		transform: scale(0.8);
+		opacity: 0.5;
+	}
+
+	50% {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	100% {
+		transform: scale(0.8);
+		opacity: 0.5;
 	}
 }
