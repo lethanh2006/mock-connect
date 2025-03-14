@@ -33,7 +33,7 @@ const QuyTrinhPage = () => {
 		try {
 			setLoading(true);
 			if (quyTrinh.cauHinhDotQuyTrinh.nguonDot === ENguonDot.KHONG_CO_DOT) {
-				const res2 = await createDonKhaiBaoUser(quyTrinh._id);
+				const res2 = await createDonKhaiBaoUser(quyTrinh._id, 'SINH_VIEN');
 				if (res2) {
 					history.push(`/khai-bao-quy-trinh/${res2?.data?.data?._id}?quyTrinh=${quyTrinh._id}`);
 				}
@@ -42,7 +42,7 @@ const QuyTrinhPage = () => {
 			const res = await getAllMyDotModel(quyTrinh._id);
 			if (res) {
 				if (res.length === 1) {
-					const res2 = await createDonKhaiBaoUser(quyTrinh._id, res?.[0]?._id);
+					const res2 = await createDonKhaiBaoUser(quyTrinh._id, 'SINH_VIEN', res?.[0]?._id);
 					if (res2) {
 						history.push(`/khai-bao-quy-trinh/${res2?.data?.data?._id}?quyTrinh=${quyTrinh._id}`);
 					}
