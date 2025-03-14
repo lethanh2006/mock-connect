@@ -102,4 +102,9 @@ export default {
 	'menu.NoiNgoaiTru.KhaiBao': 'Khai báo',
 
 	'menu.KeHoachNCKH': 'Kế hoạch NCKH',
+
+	'menu.ThuVien': 'Thư viện',
+	'menu.ThuVien.VaoRa': 'Lịch sử vào ra',
+	'menu.ThuVien.MuonTraSach': 'Tìm kiếm tài nguyên thư viện',
+	'menu.ThuVien.LichSuMuonTra': 'Lịch sử mượn trả',
 };
