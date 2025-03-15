@@ -41,7 +41,7 @@ declare module AnPham {
 		danhSachThongTin?: IThongTinAnPham[];
 
 		online: boolean;
-		dpsaceId: string;
+		thongTinAnPhamTrucTuyen: TDanhSachTaiLieuTrucTuyen[];
 
 		createdAt?: Date;
 		updatedAt?: Date;
@@ -49,6 +49,14 @@ declare module AnPham {
 		//fake
 		randomImageIndex?: any;
 	}
+
+	export type TDanhSachTaiLieuTrucTuyen = {
+		_id: string;
+		index: number;
+		ten: string;
+		moTa: string;
+		url: string | null;
+	};
 
 	export interface IThongTinAnPham {
 		_id: string;
