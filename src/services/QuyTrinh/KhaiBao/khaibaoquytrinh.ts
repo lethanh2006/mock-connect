@@ -22,11 +22,11 @@ export const userUpdateBuoc = (
 		...payload,
 	});
 
-// export const createDonKhaiBaoUser = (quyTrinhId: string, vaiTro: 'SINH_VIEN' | 'CBGV', dotQuyTrinhId?: string) =>
-// 	axios.post(`${ip3}/${url}/user/create/quy-trinh/${quyTrinhId}/${vaiTro}/dot-quy-trinh/${dotQuyTrinhId || ''}`);
+export const createDonKhaiBaoUser = (quyTrinhId: string, vaiTro: 'SINH_VIEN' | 'CBGV', dotQuyTrinhId?: string) =>
+	axios.post(`${ip3}/${url}/user/create/quy-trinh/${quyTrinhId}/${vaiTro}/dot-quy-trinh/${dotQuyTrinhId || ''}`);
 
-export const createDonKhaiBaoUser = (quyTrinhId: string, dotQuyTrinhId?: string) =>
-	axios.post(`${ip3}/${url}/user/create/quy-trinh/${quyTrinhId}/dot-quy-trinh/${dotQuyTrinhId || ''}`);
+// export const createDonKhaiBaoUser = (quyTrinhId: string, dotQuyTrinhId?: string) =>
+// 	axios.post(`${ip3}/${url}/user/create/quy-trinh/${quyTrinhId}/dot-quy-trinh/${dotQuyTrinhId || ''}`);
 
 export async function getQuyTrinhChuyenVien(
 	loaiXuLyDon: string,
