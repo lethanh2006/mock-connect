@@ -1,14 +1,15 @@
+import ExpandText from '@/components/ExpandText';
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { getDKCBKhaDung } from '@/services/QuanLyThuVien/AnPham';
 import { CarryOutOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Descriptions, Divider, Row, Space, Typography } from 'antd';
 import _ from 'lodash';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import ChiTietMarc from './components/ChiTietMarc';
 import ConfirmMuonSach from './components/ComfirmMuon';
-import { getDKCBKhaDung } from '@/services/QuanLyThuVien/AnPham';
-import moment from 'moment';
-import ExpandText from '@/components/ExpandText';
+import ChiTietTepTin from './components/ChiTietTepTin';
 const { Paragraph } = Typography;
 
 const DetailThongTinSach = ({
@@ -24,6 +25,7 @@ const DetailThongTinSach = ({
 	const [randomImage, setrandomImage] = useState<number>();
 	const [visible, setVisible] = useState<boolean>(false);
 	const [recXepGia, setRecXepGia] = useState<AnPham.IThongKeXepGia>();
+	const [visibleFile, setVisibleFile] = useState<boolean>(false);
 
 	const danhSach = record?.danhSachThongTin ?? [];
 
@@ -162,8 +164,15 @@ const DetailThongTinSach = ({
 										Đăng ký mượn
 									</ButtonExtend> */}
 									{record?.online && (
-										<ButtonExtend tooltip='Đường dẫn ấn phẩm số' type='primary'>
-											Ấn phẩm số
+										<ButtonExtend
+											disabled={!record?.thongTinAnPhamTrucTuyen?.length}
+											tooltip={!record?.thongTinAnPhamTrucTuyen?.length ? 'Không có tập tin' : 'Xem trước tập tin'}
+											type='primary'
+											onClick={(event) => {
+												setVisibleFile(true);
+											}}
+										>
+											Xem chi tiết
 										</ButtonExtend>
 									)}
 								</Space>
@@ -268,6 +277,8 @@ const DetailThongTinSach = ({
 			<ConfirmMuonSach id={id} />
 
 			<ChiTietMarc visible={visible} setVisible={setVisible} danhSach={danhSach} />
+
+			<ChiTietTepTin visible={visibleFile} setVisible={setVisibleFile} />
 		</Card>
 	);
 };
