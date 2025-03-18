@@ -1,11 +1,12 @@
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
+import { TabViewPage } from '@/components/TabViewPage';
 import ModalChiTiet from '@/pages/CongTacSinhVien/HoatDongCTSV/ModalChiTiet';
 import { ELoaiThongTinXemSau, mapLoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import type { XemSau } from '@/services/TienIch/XemSau/typing';
 import { CloseOutlined, EyeOutlined } from '@ant-design/icons';
-import { Card, Popconfirm, Tabs } from 'antd';
+import { Card, Popconfirm } from 'antd';
 import { useState } from 'react';
 import { history, useModel } from 'umi';
 
@@ -20,7 +21,7 @@ const XemSauPage = () => {
 			setVisibleForm(true);
 		} else if (tabActive === ELoaiThongTinXemSau.TIN_TUC) {
 			history.push({
-				pathname: 'tin-tuc/chi-tiet',
+				pathname: '/tin-tuc/chi-tiet',
 				query: rec?.idChuDe ? { _id: rec?.sourceId, cat: rec?.idChuDe } : { id: rec?.sourceId },
 			});
 		} else if (tabActive === ELoaiThongTinXemSau.VBHD) {
@@ -79,17 +80,13 @@ const XemSauPage = () => {
 		},
 	];
 
-	return (
-		<Card title='Danh sách xem sau'>
-			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as ELoaiThongTinXemSau)}>
-				{Object.values(ELoaiThongTinXemSau).map((item) => (
-					<Tabs.TabPane tab={mapLoaiThongTinXemSau[item]} key={item} />
-				))}
-			</Tabs>
-
+	const menus = Object.values(ELoaiThongTinXemSau)?.map((item) => ({
+		title: mapLoaiThongTinXemSau[item],
+		menuKey: item,
+		content: (
 			<TableBase
 				getData={getData}
-				dependencies={[page, limit, tabActive]}
+				dependencies={[page, limit]}
 				title='Danh sách xem sau'
 				columns={columns}
 				modelName='tienich.xemsau'
@@ -97,6 +94,18 @@ const XemSauPage = () => {
 				deleteMany
 				buttons={{ create: false }}
 				hideCard
+			/>
+		),
+	}));
+
+	return (
+		<Card title='Danh sách xem sau'>
+			<TabViewPage
+				hideCard
+				menu={menus}
+				onChange={(tab) => {
+					setTabActive(tab as ELoaiThongTinXemSau);
+				}}
 			/>
 
 			<ModalChiTiet />

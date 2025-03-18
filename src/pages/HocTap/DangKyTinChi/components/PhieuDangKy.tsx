@@ -20,6 +20,7 @@ import { useModel } from 'umi';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
+import ModalLopDaHuy from './ModalLopDaHuy';
 import RenderLichHoc from './RenderLichHoc';
 
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
@@ -43,6 +44,7 @@ const PhieuDangKy = () => {
 	} = useModel('daotao.dotdangkytinchi');
 	const { getMucThuHocPhiTheoNamModel, tinhHocPhi } = useModel('taichinh.mucthuhocphi');
 	const [visibleHuyLop, setVisibleHuyLop] = useState<boolean>(false);
+	const [visibleLopDaHuy, setVisibleLopDaHuy] = useState(false);
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const [recLopDangKy, setRecLopDangKy] = useState<DangKyTinChi.ILopDangKy>();
 	// Danh sách học phần có cả lớp Chính và lớp thực hành
@@ -267,17 +269,17 @@ const PhieuDangKy = () => {
 		<>
 			<Divider style={{ marginTop: 24 }}>Danh sách lớp tín chỉ đã đăng ký / đã chọn</Divider>
 			<Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
-				<Col span={24} md={8}>
+				<Col span={24} md={10}>
 					Tổng số tín chỉ (đã trừ các học phần không tính số tín chỉ):{' '}
 					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
 						{tongTinChi} tín chỉ
 					</b>
 				</Col>
-				<Col span={24} md={8}>
+				<Col span={24} md={7}>
 					Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
 				</Col>
 				{phieuDangKy ? (
-					<Col span={24} md={8}>
+					<Col span={24} md={7}>
 						<div
 							className={
 								tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
@@ -299,13 +301,23 @@ const PhieuDangKy = () => {
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
 			>
 				<Space wrap>
-					<ButtonExtend icon={<ReloadOutlined />} onClick={getData}>
+					<ButtonExtend  cooldownMs={10000} icon={<ReloadOutlined />} onClick={getData}>
 						Tải lại
 					</ButtonExtend>
 					{danhSachLopDangKy.length ? (
 						<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
 							Xem trước lịch học
 						</ButtonExtend>
+					) : null}
+
+					{dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+						<>
+							<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
+								Các lớp đã hủy đăng ký
+							</ButtonExtend>
+
+							<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
+						</>
 					) : null}
 
 					{tongTinChiChuaDk &&
