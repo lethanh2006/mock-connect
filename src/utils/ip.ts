@@ -12,6 +12,7 @@ const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
 const ipTaiChinh = ipRoot + 'tai-chinh-api';
 const ipKhaoThi = ipRoot + 'khao-thi';
+const ipThuVien = ipRoot + 'thu-vien'; // ip dev
 
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
@@ -36,6 +37,7 @@ export {
 	ipCore,
 	ipNotif,
 	ipTaiChinh,
+	ipThuVien,
 	currentRole,
 	oneSignalRole,
 	keycloakClientID,

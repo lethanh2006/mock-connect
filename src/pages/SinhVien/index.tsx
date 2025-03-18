@@ -81,7 +81,7 @@ const ThongTinSinhVienPage = () => {
 							</ButtonExtend>
 
 							{/* <ButtonExtend icon={<OrderedListOutlined />} onClick={() => setVisibleHocBa(true)}>
-								Học bạ điện tử
+								Học bạ số
 							</ButtonExtend> */}
 
 							{/* <ButtonExtend icon={<SmileOutlined />} onClick={() => setVisibleCapNhat(true)}>

@@ -6,7 +6,7 @@ import { message } from 'antd';
 
 export default () => {
 	const objInit = useInitModel<BaiTap.IDanhSachGiaoBaiTap>('assignment-user', undefined, undefined, ipDaoTao);
-	const { formSubmiting, setFormSubmiting, setLoading } = objInit;
+	const { formSubmiting, setFormSubmiting, setLoading, setDanhSach } = objInit;
 
 	const sinhVienNopBaiTapModal = async (
 		payLoad: {
@@ -38,6 +38,7 @@ export default () => {
 
 		try {
 			const res = await thongKeBaiTap(startDate, endDate);
+			setDanhSach(res.data?.data ?? []);
 
 			return res.data?.data;
 		} catch (err) {

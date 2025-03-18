@@ -1,5 +1,7 @@
+import { TabViewPage } from '@/components/TabViewPage';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { Card, Space, Tabs } from 'antd';
+import { PicCenterOutlined, SnippetsOutlined } from '@ant-design/icons';
+import { Card, Space } from 'antd';
 import { useModel } from 'umi';
 import KetQuaToanKhoaSinhVien from './KetQuaToanKhoa';
 import DiemThanhPhanSV from './components/DiemThanhPhanSV';
@@ -19,15 +21,26 @@ const KetQuaHocTap = () => {
 		>
 			<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} loadData={false} />
 
-			<Tabs style={{ marginTop: 8 }}>
-				<Tabs.TabPane tab='Điểm tổng kết' key='1'>
-					<DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />
-				</Tabs.TabPane>
-
-				<Tabs.TabPane tab='Máy tính thông minh' key='2'>
-					<MayTinhThongMinh maKhoaNganh={maKhoaNganh} />
-				</Tabs.TabPane>
-			</Tabs>
+			<div style={{ marginTop: 8 }}>
+				<TabViewPage
+					hideCard
+					destroyInactiveTab={false}
+					menu={[
+						{
+							title: 'Điểm tổng kết',
+							menuKey: 'diem',
+							content: <DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />,
+							icon: <PicCenterOutlined />,
+						},
+						{
+							title: 'Máy tính thông minh',
+							menuKey: 'may-tinh',
+							content: <MayTinhThongMinh maKhoaNganh={maKhoaNganh} />,
+							icon: <SnippetsOutlined />,
+						},
+					]}
+				/>
+			</div>
 		</Card>
 	);
 };
