@@ -1,13 +1,15 @@
+import ExpandText from '@/components/ExpandText';
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { getDKCBKhaDung } from '@/services/QuanLyThuVien/AnPham';
 import { CarryOutOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Descriptions, Divider, Row, Space, Typography } from 'antd';
 import _ from 'lodash';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import ChiTietMarc from './components/ChiTietMarc';
 import ConfirmMuonSach from './components/ComfirmMuon';
-import { getDKCBKhaDung } from '@/services/QuanLyThuVien/AnPham';
-import moment from 'moment';
+import ChiTietTepTin from './components/ChiTietTepTin';
 const { Paragraph } = Typography;
 
 const DetailThongTinSach = ({
@@ -23,6 +25,7 @@ const DetailThongTinSach = ({
 	const [randomImage, setrandomImage] = useState<number>();
 	const [visible, setVisible] = useState<boolean>(false);
 	const [recXepGia, setRecXepGia] = useState<AnPham.IThongKeXepGia>();
+	const [visibleFile, setVisibleFile] = useState<boolean>(false);
 
 	const danhSach = record?.danhSachThongTin ?? [];
 
@@ -139,8 +142,8 @@ const DetailThongTinSach = ({
 										{danhSach?.find((item) => item?.tagCode === '100')?.thuocTinhAnPham?.find((i) => i.code === '$a')
 											?.value ?? '--'}
 									</Descriptions.Item>
-									<Descriptions.Item label='Loại tài liệu'>
-										{danhSach?.find((item) => item?.tagCode === '927')?.thuocTinhAnPham?.[0]?.value ?? '--'}
+									<Descriptions.Item label='Dạng tài liệu'>
+										{danhSach?.find((item) => item?.tagCode === '927')?.value ?? '--'}
 									</Descriptions.Item>
 									<Descriptions.Item label='Nội dung tóm tắt'>
 										{danhSach
@@ -161,8 +164,15 @@ const DetailThongTinSach = ({
 										Đăng ký mượn
 									</ButtonExtend> */}
 									{record?.online && (
-										<ButtonExtend tooltip='Đường dẫn ấn phẩm số' type='primary'>
-											Ấn phẩm số
+										<ButtonExtend
+											disabled={!record?.thongTinAnPhamTrucTuyen?.length}
+											tooltip={!record?.thongTinAnPhamTrucTuyen?.length ? 'Không có tập tin' : 'Xem trước tập tin'}
+											type='primary'
+											onClick={(event) => {
+												setVisibleFile(true);
+											}}
+										>
+											Xem chi tiết
 										</ButtonExtend>
 									)}
 								</Space>
@@ -210,7 +220,7 @@ const DetailThongTinSach = ({
 								?.value ?? '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Xuất bản'>
-							{danhSach?.find((item) => item?.tagCode === '250')?.thuocTinhAnPham?.find((i) => i.code === '$a')
+							{danhSach?.find((item) => item?.tagCode === '260')?.thuocTinhAnPham?.find((i) => i.code === '$c')
 								?.value ?? '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Phát hành'>
@@ -240,13 +250,15 @@ const DetailThongTinSach = ({
 					</div>
 					<Descriptions column={1}>
 						<Descriptions.Item label='ĐKCB'>
-							{_.sortBy(
-								_.concat(
-									recXepGia?.thongTinAnPhamKhaDung?.map((item) => `${item.soDangKyCaBiet}`) || [],
-									recXepGia?.thongTinAnPhamDangMuon?.map((item) => `${item}`) || [],
-								),
-								(item) => item,
-							).join(', ')}
+							<ExpandText>
+								{_.sortBy(
+									_.concat(
+										recXepGia?.thongTinAnPhamKhaDung?.map((item) => `${item.soDangKyCaBiet}`) || [],
+										recXepGia?.thongTinAnPhamDangMuon?.map((item) => `${item}`) || [],
+									),
+									(item) => item,
+								).join(', ')}
+							</ExpandText>
 						</Descriptions.Item>
 
 						<Descriptions.Item label='Tổng số bản'>
@@ -265,6 +277,8 @@ const DetailThongTinSach = ({
 			<ConfirmMuonSach id={id} />
 
 			<ChiTietMarc visible={visible} setVisible={setVisible} danhSach={danhSach} />
+
+			<ChiTietTepTin visible={visibleFile} setVisible={setVisibleFile} />
 		</Card>
 	);
 };

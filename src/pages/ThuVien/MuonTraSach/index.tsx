@@ -1,7 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { EOperatorType } from '@/components/Table/constant';
 import { inputFormat } from '@/utils/utils';
-import { CustomerServiceOutlined, ReloadOutlined } from '@ant-design/icons';
+import { CustomerServiceOutlined, EyeOutlined, FieldTimeOutlined, ReloadOutlined } from '@ant-design/icons';
 import {
 	Card,
 	Col,
@@ -25,6 +24,7 @@ import ThoiGianVaoRaThuVien from '../VaoRaThuVien/components/ThoiGian';
 import ConfirmMuonSach from './components/ComfirmMuon';
 import './style.less';
 import TimKiemNangCao from './TimKiem/TimKiemNangCao';
+import ChiTietTepTin from './components/ChiTietTepTin';
 const { Paragraph } = Typography;
 
 const { Meta } = Card;
@@ -53,7 +53,9 @@ const MuonTraSachPage = () => {
 	const [searchField, setSearchField] = useState('nhanDe');
 	const [placeholder, setPlaceholder] = useState('Tìm kiếm sách theo nhan đề');
 	const [visibleSetting, setVisibleSetting] = useState<boolean>(false);
+	const [visibleFile, setVisibleFile] = useState<boolean>(false);
 	const [activeKey, setActiveKey] = useState<string>('1');
+	const [tabActive, setTabActive] = useState<string>('1');
 
 	const conMuonDuoc = Math.max(0, (settingMuonTra?.soLuongMuonToiDa ?? 0) - (dataThongKe?.dangThueMuon ?? 0));
 
@@ -63,39 +65,33 @@ const MuonTraSachPage = () => {
 	}, []);
 
 	const getData = () => {
-		getModel(
-			undefined,
-			[
+		if (recDangTaiLieu?.ma)
+			getModel(
+				{ maDangTaiLieu: recDangTaiLieu?.ma, online: tabActive === '1' ? false : true },
+				undefined,
+				undefined,
+				undefined,
+				8,
+				`search/${segment === '1' ? 'all' : 'kha-dung'}`,
 				{
-					active: true,
-					field: 'dangTaiLieuId',
-					values: [recDangTaiLieu?._id ?? ''],
-					operator: EOperatorType.INCLUDE,
+					thoiGianBatDau: moment().toISOString(),
+					thoiGianKetThuc: moment()
+						.add(typeof settingMuonTra === 'number' ? settingMuonTra : 150, 'day')
+						.toISOString(),
 				},
-			],
-			undefined,
-			undefined,
-			8,
-			`search/${segment === '1' ? 'all' : 'kha-dung'}`,
-			{
-				thoiGianBatDau: moment().toISOString(),
-				thoiGianKetThuc: moment()
-					.add(typeof settingMuonTra === 'number' ? settingMuonTra : 150, 'day')
-					.toISOString(),
-			},
-			false,
-		).then((data) => {
-			const updatedData = data.map((item) => ({
-				...item,
-				randomImageIndex: Math.floor(Math.random() * 8) + 2,
-			}));
-			setDanhSach(updatedData);
-		});
+				false,
+			).then((data) => {
+				const updatedData = data.map((item) => ({
+					...item,
+					randomImageIndex: Math.floor(Math.random() * 8) + 2,
+				}));
+				setDanhSach(updatedData);
+			});
 	};
 
 	useEffect(() => {
 		getData();
-	}, [page, limit, segment, condition, recDangTaiLieu?._id]);
+	}, [page, limit, segment, tabActive, condition, recDangTaiLieu?._id]);
 
 	const onChangePaging = (p: number, size: number) => {
 		setPage(p);
@@ -148,18 +144,20 @@ const MuonTraSachPage = () => {
 		<Card title='Tìm kiếm tài nguyên thư viện'>
 			<Row gutter={[12, 12]}>
 				<Col xs={24}>
-					<ButtonExtend
-						size='small'
-						type='primary'
-						icon={<CustomerServiceOutlined />}
-						onClick={() => window.open('https://slink-chatbot.ript.vn/admin/chatbot', '_blank')}
-					>
-						Tìm kiếm tài liệu thông minh
-					</ButtonExtend>
+					<Space wrap>
+						<ButtonExtend size='small' icon={<FieldTimeOutlined />} onClick={() => setVisibleSetting(true)}>
+							Thời gian ra vào thư viện
+						</ButtonExtend>
+						<ButtonExtend
+							size='small'
+							icon={<CustomerServiceOutlined />}
+							onClick={() => window.open('https://slink-chatbot.ript.vn/admin/chatbot', '_blank')}
+						>
+							Tìm kiếm tài liệu thông minh
+						</ButtonExtend>
+					</Space>
 				</Col>
-				<Col xs={24}>
-					Thời gian ra vào thư viện: <a onClick={() => setVisibleSetting(true)}>Xem chi tiết</a>
-				</Col>
+
 				{/* <Col xs={24}>
 					<Row gutter={[12, 12]}>
 						<Col span={24} md={6}>
@@ -197,7 +195,7 @@ const MuonTraSachPage = () => {
 					</Row>
 				</Col> */}
 				<Col xs={24}>
-					<div style={{ maxWidth: 700, margin: 'auto', marginBottom: 12 }}>
+					<div style={{ maxWidth: '70%', margin: 'auto', marginBottom: 12 }}>
 						<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
 							<Tabs.TabPane key='1' tab='Tìm nhanh' />
 							{/* <Tabs.TabPane key='2' tab='Cơ bản' /> */}
@@ -232,7 +230,7 @@ const MuonTraSachPage = () => {
 
 				<Col xs={24} style={{ marginTop: -10 }}>
 					<Row gutter={[12, 0]}>
-						<Col span={24} md={7}>
+						<Col span={24} md={6}>
 							<Card
 								title='Dạng tài liệu'
 								bordered={false}
@@ -242,8 +240,19 @@ const MuonTraSachPage = () => {
 								<DangTaiLieuPage />
 							</Card>
 						</Col>
-						<Col span={24} md={17}>
-							<Card title='Danh sách' bordered={false} bodyStyle={{ padding: '8px 0 0' }} headStyle={{ padding: 0 }}>
+						<Col span={24} md={18}>
+							<Card
+								title={`Danh sách ${recDangTaiLieu?.ten}`}
+								bordered={false}
+								bodyStyle={{ padding: '8px 0 0' }}
+								headStyle={{ padding: 0 }}
+							>
+								<div>
+									<Tabs onChange={(tab) => setTabActive(tab)} activeKey={tabActive}>
+										<Tabs.TabPane tab='Ấn phẩm vật lý' key='1' />
+										<Tabs.TabPane tab='Ấn phẩm số' key='2' />
+									</Tabs>
+								</div>
 								<div
 									style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
 								>
@@ -316,20 +325,37 @@ const MuonTraSachPage = () => {
 																		</strong>
 																	</div>
 																}
-																// actions={[
-																// 	<ButtonExtend
-																// 		disabled={item?.soLuong === 0 || conMuonDuoc === 0}
-																// 		type='link'
-																// 		tooltip={conMuonDuoc === 0 ? 'Quá hạn ngạch mượn' : 'Đăng ký mượn sách'}
-																// 		icon={<PlusOutlined />}
-																// 		key='add'
-																// 		onClick={(event) => {
-																// 			event.stopPropagation();
-																// 			setRecord(item);
-																// 			setVisibleMuon(true);
-																// 		}}
-																// 	/>,
-																// ]}
+																actions={[
+																	// <ButtonExtend
+																	// 	disabled={item?.soLuong === 0 || conMuonDuoc === 0}
+																	// 	type='link'
+																	// 	tooltip={conMuonDuoc === 0 ? 'Quá hạn ngạch mượn' : 'Đăng ký mượn sách'}
+																	// 	icon={<PlusOutlined />}
+																	// 	key='add'
+																	// 	onClick={(event) => {
+																	// 		event.stopPropagation();
+																	// 		setRecord(item);
+																	// 		setVisibleMuon(true);
+																	// 	}}
+																	item?.online ? (
+																		<ButtonExtend
+																			disabled={!item?.thongTinAnPhamTrucTuyen?.length}
+																			type='link'
+																			tooltip={
+																				!item?.thongTinAnPhamTrucTuyen?.length
+																					? 'Không có tập tin'
+																					: 'Xem trước tập tin'
+																			}
+																			icon={<EyeOutlined />}
+																			key='xem'
+																			onClick={(event) => {
+																				event.stopPropagation();
+																				setRecord(item);
+																				setVisibleFile(true);
+																			}}
+																		/>
+																	) : null,
+																]}
 															>
 																<Meta
 																	title={item?.nhanDeConverse}
@@ -372,6 +398,7 @@ const MuonTraSachPage = () => {
 
 			<ConfirmMuonSach />
 			<ThoiGianVaoRaThuVien visible={visibleSetting} setVisible={setVisibleSetting} />
+			<ChiTietTepTin visible={visibleFile} setVisible={setVisibleFile} />
 		</Card>
 	);
 };

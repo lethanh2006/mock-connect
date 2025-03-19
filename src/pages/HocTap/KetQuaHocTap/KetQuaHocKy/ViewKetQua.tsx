@@ -33,14 +33,24 @@ const ViewKetQuaHocKy = () => {
 											</Col>
 											<Col span={24} xxl={12}>
 												<div className='row'>
+													<span className='sum-text' style={{ color: '#9bd437' }}>
+														{record.tongSoTinChiTichLuyHocKy ?? '--'}
+													</span>
+													Số tín chỉ tích lũy học kỳ
+												</div>
+											</Col>
+											<Col span={24} xxl={12}>
+												<div className='row'>
 													<span className='sum-text'>{record.trungBinhHocBongHocKyThang4 ?? '--'}</span>
 													Trung bình học bổng
 												</div>
 											</Col>
 											<Col span={24} xxl={12}>
 												<div className='row'>
-													<span className='sum-text'>{record.tongSoTinChiTichLuyHocKy ?? '--'}</span>
-													Số tín chỉ tích lũy học kỳ
+													<span className='sum-text' style={{ color: '#9bd437' }}>
+														{record.tongSoTinChiHocBongHocKy ?? '--'}
+													</span>
+													STC xét học bổng
 												</div>
 											</Col>
 											{/* <Col span={24} xxl={12}>

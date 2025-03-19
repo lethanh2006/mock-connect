@@ -112,7 +112,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			width: 220,
 			onCell: (rec) => ({
 				...onCell(rec),
-				colSpan: rec._id === '-1' ? 8 + (danhSachDauDiem.length + 1) : 1,
+				colSpan: rec._id === '-1' ? 9 + (danhSachDauDiem.length + 1) : 1,
 			}),
 		},
 		{

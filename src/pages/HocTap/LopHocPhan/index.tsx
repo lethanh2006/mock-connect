@@ -1,15 +1,27 @@
-import TableBase from '@/components/Table';
+import ExpandText from '@/components/ExpandText';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { ReloadOutlined } from '@ant-design/icons';
+import { Card } from 'antd';
+import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import RenderLichHoc from '../DangKyTinChi/components/RenderLichHoc';
-import ExpandText from '@/components/ExpandText';
 
 const LopHocPhanPage = () => {
-	const { page, limit, sinhVienGetModel } = useModel('lophocphan.lophocphan');
+	const { danhSach, sinhVienGetAllModel, loading } = useModel('lophocphan.lophocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
+
+	const getData = () => {
+		if (recHocKy?.ma) sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
+	};
+
+	useEffect(() => {
+		getData();
+	}, [recHocKy?.ma]);
 
 	const onCell = (loptinchi: LopHocPhan.IRecord) => ({
 		onClick: () =>
@@ -30,12 +42,14 @@ const LopHocPhanPage = () => {
 			title: 'Mã HP',
 			dataIndex: ['hocPhan', 'ma'],
 			width: 100,
+			filterType: 'string',
 			onCell,
 		},
 		{
 			title: 'Tên học phần',
 			dataIndex: ['hocPhan', 'ten'],
 			width: 200,
+			filterType: 'string',
 			onCell,
 		},
 		{
@@ -43,6 +57,8 @@ const LopHocPhanPage = () => {
 			dataIndex: ['hocPhan', 'soTinChi'],
 			align: 'center',
 			width: 60,
+			filterType: 'number',
+			sortable: true,
 			onCell,
 		},
 		{
@@ -61,23 +77,31 @@ const LopHocPhanPage = () => {
 		{
 			title: 'Lịch học',
 			width: 220,
-			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
-			onCell,
+			render: (val, rec) => {
+				const lop = danhSach.find((i) => i._id === rec._id);
+				return <RenderLichHoc lopHocPhan={lop ?? rec} />;
+			},
 		},
 	];
 
 	return (
-		<TableBase
-			columns={columns}
-			dependencies={[page, limit, recHocKy?._id]}
-			params={{ maHocKy: recHocKy?.ma, loai: ELoaiLopHocPhan.CHINH }}
-			getData={sinhVienGetModel}
-			modelName='lophocphan.lophocphan'
-			title='Lớp tín chỉ'
-			buttons={{ create: false }}
-			otherButtons={[<FilterHocKy isSetHocKy key='1' />]}
-			hideChildrenRows
-		/>
+		<Card title='Lớp tín chỉ'>
+			<TableStaticData
+				loading={loading}
+				data={danhSach.filter((item) => !item?.tenCha)}
+				hideChildrenRows
+				columns={columns}
+				addStt
+				otherProps={{ pagination: true }}
+				otherButtons={[
+					<FilterHocKy isSetHocKy key='1' />,
+					<ButtonExtend key='2' icon={<ReloadOutlined />} onClick={() => getData()}>
+						Tải lại
+					</ButtonExtend>,
+				]}
+				hasTotal
+			/>
+		</Card>
 	);
 };
 

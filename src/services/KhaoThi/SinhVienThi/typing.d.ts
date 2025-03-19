@@ -1,7 +1,7 @@
 import type { EDinhDangBaiThi, EDKDTCongNo, EDKDTKetQuaHocTap } from '../constant';
 import type { HocPhanThi } from '../HocPhanThi/typings';
 import type { KyThi } from '../KyThi/typings';
-import type { ELoaiThi, ETrangThaiChamLai, ETrangThaiSinhVienThi } from './constant';
+import type { ELoaiThi, ETrangThaiChamLai, ETrangThaiDuThi, ETrangThaiSinhVienThi } from './constant';
 
 declare module SinhVienThi {
 	export interface IRecord {
@@ -23,7 +23,7 @@ declare module SinhVienThi {
 		maHocKyHoc: string;
 		tenHocKyHoc: string;
 		lichThiId: any;
-		ketQuaChamChinhThuc: KetQuaChamThi;
+		ketQuaChamChinhThuc: ChamThi.KetQuaChamThi;
 		loaiThi: ELoaiThi;
 		daDongBoDiem: boolean;
 		chamXacNhan: {
@@ -39,6 +39,10 @@ declare module SinhVienThi {
 			phanTram: number;
 			lyDo: string;
 		};
+
+		/** Trạng thái dự thi */
+		trangThaiDuThi?: ETrangThaiDuThi;
+
 		[k: string]: any;
 		fileDinhKem: string[] | null;
 

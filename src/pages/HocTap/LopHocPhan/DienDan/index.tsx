@@ -1,10 +1,11 @@
+import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
 import { Empty, Skeleton, Spin } from 'antd';
 import { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { history, Link, useModel } from 'umi';
-import './style.less';
 import CardAddStatus from './components/CardAddStatus';
 import CardStatus from './components/CardStatus';
+import './style.less';
 
 interface IProps {
 	idLopHocPhan: string;
@@ -18,6 +19,7 @@ const DienDanLopPage = (props: IProps) => {
 		handleEdit,
 		getByIdModel,
 		record,
+		setRecord,
 		loading,
 		putModel,
 		total,
@@ -43,6 +45,7 @@ const DienDanLopPage = (props: IProps) => {
 						to='#!'
 						onClick={(e) => {
 							e.preventDefault();
+							setRecord({} as BaiDang.IRecord);
 							history.push(`${history?.location?.pathname}${history?.location?.hash ?? ''}`);
 						}}
 					>
