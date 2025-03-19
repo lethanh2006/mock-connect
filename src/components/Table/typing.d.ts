@@ -167,6 +167,8 @@ export type TableStaticProps = {
 	loading?: boolean;
 	formType?: 'Modal' | 'Drawer';
 	widthDrawer?: number;
+	/** Danh sách các nút khác bên cạnh Thêm mới */
+	otherButtons?: JSX.Element[];
 
 	/** Có hiển thị thị kéo thả sắp xêp hàng ko? Mặc định: Không */
 	rowSortable?: boolean;

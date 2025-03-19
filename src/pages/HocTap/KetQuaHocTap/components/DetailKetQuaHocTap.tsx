@@ -1,11 +1,11 @@
 import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { ETrangThaiThi } from '@/services/HocTap/constant';
+import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Divider, Empty, Spin, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: {
 	lopHocPhanId?: string;
@@ -18,7 +18,7 @@ const DetailKetQuaHocTap = (props: {
 	const [hienThiDiemThi, setHienThiDiemThi] = useState<boolean>(false);
 
 	const recDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
-	const hasTrongSo = !!recDiem?.trongSo1;
+	const hasTrongSo = !!recDiem?.trongSo1 || !!recDiem?.trongSo2 || !!recDiem?.trongSo3;
 	// Đầu điểm học phần theo đề cương
 	const dauDiemCoTrongSo = danhSachDauDiem.filter(
 		(item) =>
@@ -59,12 +59,15 @@ const DetailKetQuaHocTap = (props: {
 							<Descriptions.Item label='Điểm thi'>{recDiem?.diemThi1 ?? '--'}</Descriptions.Item>
 							{/* <Descriptions.Item label='Điểm thẩm định'>{recDiem?.diemThamDinh ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Điểm phúc khảo'>{recDiem?.diemPhucKhao ?? '--'}</Descriptions.Item> */}
-							{recDiem?.diemThi2 ? (
-								<>
-									<Descriptions.Item label='Điểm thi lần 2'>{recDiem?.diemThi2 ?? '--'}</Descriptions.Item>
-									<Descriptions.Item label='Điểm cuối'>{recDiem?.diemKthp ?? '--'}</Descriptions.Item>
-								</>
-							) : null}
+
+							<Descriptions.Item label='Điểm thi lần 2'>{recDiem?.diemThi2 ?? '--'}</Descriptions.Item>
+							<Descriptions.Item label='Điểm cuối'>
+								{recDiem?.trangThaiDuThi && recDiem.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
+									<span title={trangThaiDuThi[recDiem.trangThaiDuThi]}>{recDiem?.trangThaiDuThi}</span>
+								) : (
+									recDiem?.diemKthp ?? '--'
+								)}
+							</Descriptions.Item>
 						</Descriptions>
 
 						{recDiem.diemKthp !== undefined ? (

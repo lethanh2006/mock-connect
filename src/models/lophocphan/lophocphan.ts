@@ -8,14 +8,33 @@ import { useState } from 'react';
 
 export default () => {
 	const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
-	const { getByIdModel, getModel, getAllModel, setLoading, page, limit, getService, setPage, setTotal } = objInit;
+	const { getByIdModel, getModel, getAllModel, setLoading, page, limit, getService, setPage, setTotal, setDanhSach } =
+		objInit;
 	const [danhSachLopDktc, setDanhSachLopDktc] = useState<LopHocPhan.IRecord[]>([]); // Dùng danh sách khác để tránh xung đột do delay
 
 	const sinhVienGetModel = async (params: any): Promise<LopHocPhan.IRecord[]> =>
 		params.maHocKy && getModel(params, undefined, undefined, undefined, undefined, 'sinh-vien/page');
 
-	const sinhVienGetAllModel = async (params?: any): Promise<LopHocPhan.IRecord[]> =>
-		getAllModel(undefined, undefined, params, undefined, 'sinh-vien/all');
+	const sinhVienGetAllModel = async (
+		params?: Partial<LopHocPhan.IRecord>,
+		mergeLopThucHanh?: boolean,
+	): Promise<LopHocPhan.IRecord[]> => {
+		const lopHp = await getAllModel(undefined, undefined, params, undefined, 'sinh-vien/all');
+		if (mergeLopThucHanh === false) return lopHp;
+
+		const lopChaObj = lopHp
+			.filter((i) => !i.tenCha)
+			.reduce<Record<string, LopHocPhan.IRecord>>((pre, cur) => {
+				pre[cur.ten] = { ...cur, children: cur.children ?? [] };
+				return pre;
+			}, {});
+		lopHp.forEach((lop) => {
+			if (lop.tenCha && lopChaObj[lop.tenCha]) lopChaObj[lop.tenCha].children?.push(lop);
+		});
+		const lopChaList = Object.values(lopChaObj);
+		setDanhSach(lopChaList);
+		return lopChaList;
+	};
 
 	const sinhVienGetByIdModel = async (idLop: string): Promise<LopHocPhan.IRecord> => getByIdModel(`${idLop}/sinh-vien`);
 

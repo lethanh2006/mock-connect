@@ -19,7 +19,8 @@ const CardBaiTapDashboard = () => {
 			}
 		>
 			<div style={{ maxHeight: 300, overflow: 'auto' }}>
-				{danhSach.filter((i) => i.assignment.thoiGianKetThuc >= new Date()).length ? (
+				{danhSach.filter((i) => i.assignment?.thoiGianKetThuc && moment().isSameOrBefore(i.assignment.thoiGianKetThuc))
+					.length ? (
 					<List
 						itemLayout='horizontal'
 						className='dashboard-list-lhp'
