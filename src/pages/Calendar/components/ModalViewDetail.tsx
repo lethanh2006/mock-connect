@@ -84,9 +84,9 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			<Descriptions.Item label='Thời gian bắt đầu'>
 				{moment(lichThi?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
 			</Descriptions.Item>
-			<Descriptions.Item label='Thời gian kết thúc'>
+			{/* <Descriptions.Item label='Thời gian kết thúc'>
 				{moment(lichThi?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
-			</Descriptions.Item>
+			</Descriptions.Item> */}
 			<Descriptions.Item label='Phòng thi'>{lichThi?.phong?.ma ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Điều kiện dự thi'>
 				{lichThi?.trangThai ? <Tag color={colorTrangThaiThi[lichThi.trangThai]}>{lichThi.trangThai}</Tag> : '--'}
