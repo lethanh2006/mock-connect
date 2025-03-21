@@ -28,7 +28,7 @@ export const useAuthActions = () => {
 	};
 
 	const handleLogin = () => {
-		auth.signinRedirect();
+		auth?.signinRedirect();
 	};
 
 	return {

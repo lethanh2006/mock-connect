@@ -9,10 +9,6 @@
 				name: 'login',
 				component: './user/Login',
 			},
-			{
-				path: '/user',
-				redirect: '/user/login',
-			},
 		],
 	},
 

@@ -11,7 +11,7 @@ const LoginWithKeycloak = () => {
 	const onClearCache = () => {
 		localStorage.clear();
 		sessionStorage.clear();
-		auth.removeUser();
+		auth?.removeUser();
 		window.location.href = '/';
 		// window.location.reload();
 	};
@@ -32,7 +32,7 @@ const LoginWithKeycloak = () => {
 	}
 
 	return (
-		<div>
+		<>
 			<Button
 				onClick={dangNhap}
 				type='primary'
@@ -44,7 +44,7 @@ const LoginWithKeycloak = () => {
 			>
 				Đăng nhập bằng {tenTruongVietTatTiengAnh.toUpperCase()} Connect
 			</Button>
-		</div>
+		</>
 	);
 };
 

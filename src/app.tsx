@@ -3,14 +3,14 @@ import RightContent from '@/components/RightContent';
 import 'dayjs/locale/vi';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
-import ErrorBoundary from './components/ErrorBoundary';
-// import LoadingPage from './components/Loading';
 import defaultSettings from '../config/defaultSettings';
+import ErrorBoundary from './components/ErrorBoundary';
 import { OIDCBounder } from './components/OIDCBounder';
 import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
 import OneSignalBounder from './components/OneSignalBounder';
 import HeaderContentPage from './components/RightContent/Header';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
+import ConfigBounder from './components/TechnicalSupportBounder/ConfigBounder';
 import NotAccessible from './pages/exception/403';
 import NotFoundContent from './pages/exception/404';
 import { AppModules, primaryColor } from './services/base/constant';
@@ -84,7 +84,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				</ErrorBoundary>
 			</OIDCBounder>
 		),
-		menuHeaderRender: undefined,
+
+		menuRender: (props, defaultDom) => <ConfigBounder>{defaultDom}</ConfigBounder>,
+
 		title: AppModules[currentRole].title,
 		colorPrimary: primaryColor,
 		...initialState?.settings,

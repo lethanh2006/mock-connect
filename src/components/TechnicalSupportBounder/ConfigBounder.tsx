@@ -2,6 +2,7 @@ import { primaryColor } from '@/services/base/constant';
 import { ConfigProvider } from 'antd';
 import { useEffect } from 'react';
 
+/** Chú ý các route để layout: false thì phải bọc bởi ConfigBound để nhận styles */
 const ConfigBounder = (props: { children?: any }) => {
 	useEffect(() => {
 		// Đổi màu real time => Hỗ trợ đổi tenant
