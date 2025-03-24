@@ -1,3 +1,4 @@
+import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import type { ColumnType } from 'antd/lib/table';
 import React, { JSX } from 'react';
 import { type EOperatorType } from './constant';
@@ -46,12 +47,12 @@ export type TDataOption = {
 
 export type TableBaseProps = {
 	/** Tên model */
-	modelName: any;
+	modelName: Namespaces;
 
 	/** Import dùng model khác? */
-	modelImportName?: any;
+	modelImportName?: Namespaces;
 	/** Export dùng model khác? */
-	modelExportName?: any;
+	modelExportName?: Namespaces;
 
 	Form?: React.FC;
 	formType?: 'Modal' | 'Drawer';
