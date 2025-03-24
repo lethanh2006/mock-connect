@@ -1,7 +1,7 @@
 import useCheckAccess from '@/hooks/useCheckAccess';
 import NotAccessible from '@/pages/exception/403';
 import { Affix, Card, Tabs } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import './style.less';
 import type { TabViewPageProps } from './typing';
 

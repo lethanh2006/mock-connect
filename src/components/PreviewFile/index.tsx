@@ -124,6 +124,7 @@ const PreviewFile = (props: {
 					{children}
 				</Space>
 			</div>
+
 			{fileType !== EDinhDangFile.UNKNOWN ? (
 				<iframe src={iframeSrc} width={width} height={height} />
 			) : (

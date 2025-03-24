@@ -163,7 +163,7 @@ const LichDashboard = () => {
 						<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
 							<div
 								className={styles.ngay__title}
-								style={{ color: moment().isSame(ngay, 'day') ? 'var(--primary-color)' : undefined }}
+								style={{ color: moment().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
 							>
 								{thuTrongTuan}, ngày {moment(ngay).format('DD/MM')}
 							</div>

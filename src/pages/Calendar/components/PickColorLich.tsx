@@ -1,6 +1,5 @@
 import { ColorSuKien, type ELoaiSuKien } from '@/services/SuKien/constant';
-import { Button, Form } from 'antd';
-import { Colorpicker } from 'antd-colorpicker';
+import { Button, ColorPicker, Form } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -58,7 +57,7 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 	return (
 		<Form form={form} onFinish={onFinish}>
 			<Form.Item name='maMau' label=''>
-				<Colorpicker onColorResult={(color) => color.rgb} />
+				<ColorPicker showText  />
 			</Form.Item>
 
 			<div className='form-footer'>

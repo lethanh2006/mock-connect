@@ -1,70 +1,30 @@
 import Footer from '@/components/Footer';
 import RightContent from '@/components/RightContent';
-import { notification } from 'antd';
-import 'moment/locale/vi';
-import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
-import { getIntl, getLocale, history } from 'umi';
-import type { RequestOptionsInit, ResponseError } from 'umi-request';
+import 'dayjs/locale/vi';
+import type { RunTimeLayoutConfig } from 'umi';
+import { history } from 'umi';
+import defaultSettings from '../config/defaultSettings';
 import ErrorBoundary from './components/ErrorBoundary';
-// import LoadingPage from './components/Loading';
 import { OIDCBounder } from './components/OIDCBounder';
 import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
 import OneSignalBounder from './components/OneSignalBounder';
 import HeaderContentPage from './components/RightContent/Header';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
+import ConfigBounder from './components/TechnicalSupportBounder/ConfigBounder';
 import NotAccessible from './pages/exception/403';
 import NotFoundContent from './pages/exception/404';
+import { AppModules, primaryColor } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
 import { currentRole } from './utils/ip';
 
-/**  loading */
-export const initialStateConfig = {
-	loading: <></>,
-};
-
-/**
- * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
- * // Tobe removed
- * */
+// https://umijs.org/docs/api/runtime-config#getinitialstate
 export async function getInitialState(): Promise<IInitialState> {
 	return {
+		settings: defaultSettings,
 		permissionLoading: true,
 	};
 }
-
-// Tobe removed
-const authHeaderInterceptor = (url: string, options: RequestOptionsInit) => ({});
-
-/**
- * @see https://beta-pro.ant.design/docs/request-cn
- */
-export const request: RequestConfig = {
-	errorHandler: (error: ResponseError) => {
-		const { messages } = getIntl(getLocale());
-		const { response } = error;
-
-		if (response && response.status) {
-			const { status, statusText, url } = response;
-			const requestErrorMessage = messages['app.request.error'];
-			const errorMessage = `${requestErrorMessage} ${status}: ${url}`;
-			const errorDescription = messages[`app.request.${status}`] || statusText;
-			notification.error({
-				message: errorMessage,
-				description: errorDescription,
-			});
-		}
-
-		if (!response) {
-			notification.error({
-				description: 'Yêu cầu gặp lỗi',
-				message: 'Bạn hãy thử lại sau',
-			});
-		}
-		throw error;
-	},
-	requestInterceptors: [authHeaderInterceptor],
-};
 
 // ProLayout  https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
@@ -79,7 +39,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 		noFound: <NotFoundContent />,
 		rightContentRender: () => <RightContent />,
 		headerContentRender: () => <HeaderContentPage />,
-		disableContentMargin: false,
+		disableContentMargin: true,
 
 		footerRender: () => <Footer />,
 
@@ -124,7 +84,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				</ErrorBoundary>
 			</OIDCBounder>
 		),
-		menuHeaderRender: undefined,
+
+		menuRender: (props, defaultDom) => <ConfigBounder>{defaultDom}</ConfigBounder>,
+
+		title: AppModules[currentRole].title,
+		colorPrimary: primaryColor,
 		...initialState?.settings,
 	};
 };

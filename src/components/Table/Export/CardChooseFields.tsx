@@ -24,7 +24,11 @@ const CardChooseFields = (props: {
 	const onUnCheckAll = () => setFields(fields.map((item) => ({ ...item, selected: false })));
 
 	return (
-		<Card title='Các trường khả dụng' bordered={false} bodyStyle={{ padding: '8px 0 0' }} headStyle={{ padding: 0 }}>
+		<Card
+			title='Các trường khả dụng'
+			bordered={false}
+			styles={{ header: { padding: 0 }, body: { padding: '8px 0 0' } }}
+		>
 			<Space style={{ marginBottom: 8 }} wrap>
 				<Button size='small' onClick={onCheckAll}>
 					Chọn tất cả
