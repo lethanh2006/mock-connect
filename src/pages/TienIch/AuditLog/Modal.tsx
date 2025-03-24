@@ -2,6 +2,7 @@ import TableBase from '@/components/Table';
 import { EOperatorType } from '@/components/Table/constant';
 import type { IColumn } from '@/components/Table/typing';
 import type { AuditLog } from '@/services/TienIch/AuditLog/typing';
+import type { models as rawModels } from '@@/plugin-model/model';
 import { Button, Card, Col, Descriptions, Modal, Row, Spin } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +10,14 @@ import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
 import { Link, useModel } from 'umi';
+
+type Models = typeof rawModels;
+
+type GetNamespaces<M> = {
+	[K in keyof M]: M[K] extends { namespace: string } ? M[K]['namespace'] : never;
+}[keyof M];
+
+export type Namespaces = GetNamespaces<Models>;
 
 const renderSection = (label: string, data: any) => (
 	<Col span={24}>
@@ -24,18 +33,18 @@ const ModalAuditLog = (props: {
 	actions?: Record<any, string>;
 	condition?: Partial<AuditLog.IRecord>;
 	/** Trường hợp sử dụng model auditLog khác mặc định (thay đổi IP chẳng hạn) */
-	modelName?: string;
+	modelName?: Namespaces;
 	children?: React.ReactNode;
 }) => {
 	const {
 		visible,
 		setVisible,
 		actions = {},
+		condition,
 		title = 'Lịch sử thao tác',
 		modelName = 'tienich.auditlog',
-		condition,
 	} = props;
-	const { page, limit, getModel, setRecord, record, loading, getByIdModel } = useModel(modelName as any);
+	const { page, limit, getModel, setRecord, record, getByIdModel, loading } = useModel(modelName) as any;
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [showDetail, setShowDetail] = useState<boolean>(false);
 	const [paneSize, setPaneSize] = useState('60%');
@@ -71,7 +80,7 @@ const ModalAuditLog = (props: {
 		style: {
 			cursor: 'pointer',
 			fontWeight: rec._id === record?._id ? 600 : undefined,
-			backgroundColor: rec._id === record?._id ? 'var(--primary-1)' : undefined,
+			backgroundColor: rec._id === record?._id ? 'var(--color-primary-bg)' : undefined,
 		},
 	});
 
@@ -145,16 +154,15 @@ const ModalAuditLog = (props: {
 	];
 
 	return (
-		<Modal title={title} visible={visible} onCancel={() => setVisible(false)} footer={null} width={1400}>
+		<Modal title={title} open={visible} onCancel={() => setVisible(false)} footer={null} width={1200}>
 			{props.children}
 
 			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
 				<Pane initialSize={paneSize} minSize='30%'>
 					<Card
 						title='Danh sách thao tác'
-						bordered={false}
-						bodyStyle={{ padding: '8px 0 0' }}
-						headStyle={{ padding: 0 }}
+						variant='borderless'
+						styles={{ body: { padding: '8px 0 0' }, header: { padding: 0 } }}
 					>
 						<TableBase
 							columns={columns}
@@ -172,9 +180,8 @@ const ModalAuditLog = (props: {
 				<Pane minSize='30%'>
 					<Card
 						title='Chi tiết thao tác'
-						bordered={false}
-						bodyStyle={{ padding: '8px 0 0', maxHeight: 630, overflowY: 'auto' }}
-						headStyle={{ padding: 0 }}
+						variant='borderless'
+						styles={{ body: { padding: '8px 0 0', maxHeight: 630, overflowY: 'auto' }, header: { padding: 0 } }}
 					>
 						<Spin spinning={loading}>
 							<Descriptions column={1}>

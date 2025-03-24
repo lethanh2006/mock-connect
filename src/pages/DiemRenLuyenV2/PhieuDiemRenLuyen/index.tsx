@@ -1,18 +1,17 @@
 import TableBase from '@/components/Table';
-import { useModel } from '@@/plugin-model/useModel';
 import { IColumn } from '@/components/Table/typing';
-import { Button, Tag, Tooltip } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
 import {
+	colorXepLoaiRenLuyen,
 	ETrangThaiChamDiem,
 	EXepLoaiRenLuyen,
 	MapKeyColorTrangThaiChamDiem,
-	colorXepLoaiRenLuyen,
 	MapKeyNameTrangThaiChamDiem,
 	xepLoaiRenLuyen,
 } from '@/services/CongTacSinhVien/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
-import { useEffect } from 'react';
+import { useModel } from '@umijs/max';
+import { Tag } from 'antd';
 import monent from 'moment';
+import { useEffect } from 'react';
 
 const PhieuDiemRenLuyen = () => {
 	const { condition, getModel } = useModel('diemrenluyenv2.phieudiemrenluyen');

@@ -1,6 +1,5 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
-import { Button, Col, Form, Modal, Row } from 'antd';
-import { Colorpicker } from 'antd-colorpicker';
+import { Button, Col, ColorPicker, Form, Modal, Row } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -84,7 +83,7 @@ const ModalSettingMauLich = () => {
 					{loaiSuKien?.map((item) => (
 						<Col span={24} md={12} key={item}>
 							<Form.Item name={mapFieldLoaiSuKien[item]} label={item}>
-								<Colorpicker popup onColorResult={(color) => color.rgb} />
+								<ColorPicker showText />
 							</Form.Item>
 						</Col>
 					))}

@@ -3,7 +3,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { useModel } from '@@/plugin-model/useModel';
+import { useModel } from '@umijs/max';
 import { Button, Form, Input } from 'antd';
 import { useEffect } from 'react';
 import AvatarBlog from './Avatar';

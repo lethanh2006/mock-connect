@@ -1,4 +1,4 @@
-import styles from '@/components/RightContent/NoticeIcon/NoticeList.less';
+import styles from '@/components/RightContent/NoticeIcon/index.less';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
 import type { ThongBao } from '@/services/ThongBao/typing';

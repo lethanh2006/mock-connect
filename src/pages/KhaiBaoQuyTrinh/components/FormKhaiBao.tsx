@@ -1,10 +1,9 @@
 import SelectDotQuyTrinh from '@/pages/KhaiBaoQuyTrinh/DotQuyTrinh/Select';
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
-import { useModel } from '@@/plugin-model/useModel';
 import { Button, Col, Form, Row, Spin } from 'antd';
 import type { SetStateAction } from 'react';
 import { useState } from 'react';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import SelectQuyTrinh from '../QuyTrinh/Select';
 
 const FormKhaiBao = (props: { quyTrinhId?: string }) => {

@@ -1,13 +1,12 @@
 import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
 import { landingUrl } from '@/services/base/constant';
 import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, Menu, Modal, Row, Spin } from 'antd';
+import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
 import { type ItemType } from 'antd/lib/menu/hooks/useItems';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
-import HeaderDropdown from './HeaderDropdown';
 import styles from './index.less';
 
 export type GlobalHeaderRightProps = {
@@ -117,7 +116,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
 	const fullName = initialState.currentUser?.family_name
 		? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
-		: initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || '');
+		: (initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || ''));
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
 	const items: ItemType[] = [
@@ -170,7 +169,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
 	return (
 		<>
-			<HeaderDropdown overlay={<Menu className={styles.menu} items={items} />}>
+			<Dropdown menu={{ items }} overlayClassName={styles.menu}>
 				<span className={`${styles.action} ${styles.account}`}>
 					<Avatar
 						className={styles.avatar}
@@ -180,9 +179,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 					/>
 					<span className={`${styles.name}`}>{fullName}</span>
 				</span>
-			</HeaderDropdown>
+			</Dropdown>
 
-			<ModalKhaoSatBatBuoc />
+				<ModalKhaoSatBatBuoc />
 		</>
 	);
 };

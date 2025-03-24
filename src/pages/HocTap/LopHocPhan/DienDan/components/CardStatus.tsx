@@ -129,7 +129,7 @@ const CardStatus = (props: IProps) => {
 					<div className='flex item-center' style={{ gap: 12 }}>
 						{data?.ghimBaiViet && (
 							<div style={{ fontSize: 18, transform: 'rotate(-45deg)' }}>
-								<PushpinFilled style={{ color: 'var(--primary-color)' }} />
+								<PushpinFilled style={{ color: 'var(--color-primary)' }} />
 							</div>
 						)}
 

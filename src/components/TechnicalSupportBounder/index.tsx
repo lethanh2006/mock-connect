@@ -1,5 +1,5 @@
 import { ToolOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Modal, Tooltip } from 'antd';
+import { FloatButton, Modal } from 'antd';
 import { useState } from 'react';
 import { history } from 'umi';
 import PanpageHoTro from './FanpageHoTro';
@@ -10,35 +10,25 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 	const [visible, setVisible] = useState<boolean>(false);
 
 	return (
-		<ConfigProvider>
+		<>
 			{props.children}
 
 			{!unTechnicalSupportPaths.includes(window.location.pathname) ? (
 				<>
-					<Tooltip title='Phản hồi' placement='topLeft'>
-						<Button
-							// onClick={() => setVisible(true)}
+					<FloatButton
+						tooltip='Phản hồi kĩ thuật'
+						// onClick={() => setVisible(true)}
 							onClick={() => history.push('/phan-hoi')}
-							style={{
-								position: 'fixed',
-								bottom: 90,
-								right: 24,
-								zIndex: 10,
-								boxShadow: 'rgba(0, 0, 0, 0.2) 1px 1px 8px 3px',
-								padding: 0,
-							}}
-							shape='circle'
-							size='large'
-							type='primary'
-						>
-							<ToolOutlined />
-						</Button>
-					</Tooltip>
+						type='primary'
+						icon={<ToolOutlined />}
+					/>
+
+					<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
 
 					<Modal
-						bodyStyle={{ padding: 0 }}
+						styles={{ content: { padding: 0 }, body: { padding: 0 } }}
 						footer={false}
-						visible={visible}
+						open={visible}
 						onCancel={() => setVisible(false)}
 						maskClosable={false}
 					>
@@ -47,8 +37,7 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 				</>
 			) : null}
 
-			<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
-		</ConfigProvider>
+		</>
 	);
 };
 

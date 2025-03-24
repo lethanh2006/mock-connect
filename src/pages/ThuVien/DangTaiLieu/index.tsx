@@ -16,7 +16,7 @@ const DangTaiLieuPage = () => {
 		style: {
 			cursor: 'pointer',
 			fontWeight: rec._id === record?._id ? 600 : undefined,
-			color: rec._id === record?._id ? 'var(--primary-color)' : undefined,
+			color: rec._id === record?._id ? 'var(--color-primary)' : undefined,
 			backgroundColor: rec._id === record?._id ? 'var(--primary-1)' : undefined,
 		},
 	});

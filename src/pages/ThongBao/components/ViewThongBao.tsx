@@ -72,7 +72,8 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 
 				{record?.thoiGianHieuLuc ? (
 					<Col span={24}>
-						Hiệu lực thông báo: <b style={{ color: 'red' }}>{moment(record?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>{' '}
+						Hiệu lực thông báo:{' '}
+						<b style={{ color: 'red' }}>{moment(record?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>{' '}
 					</Col>
 				) : null}
 

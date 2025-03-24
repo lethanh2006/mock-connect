@@ -36,7 +36,7 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 	};
 
 	return (
-		<Card title='Các trường để trích xuất' bordered={false} bodyStyle={{ padding: 0 }} headStyle={{ padding: 0 }}>
+		<Card title='Các trường để trích xuất' bordered={false} styles={{ body: { padding: 0 }, header: { padding: 0 } }}>
 			<TableStaticData
 				columns={columns}
 				data={fields.filter((item) => item.selected)}

@@ -10,7 +10,7 @@ import { type ModalExportProps } from './typing';
 
 const ModalExport = (props: ModalExportProps) => {
 	const { visible, onCancel, modelName, maskCloseableForm, fileName, condition, filters, otherQuery } = props;
-	const { getExportFieldsModel, postExportModel, formSubmiting, selectedIds } = useModel(modelName);
+	const { getExportFieldsModel, postExportModel, formSubmiting, selectedIds } = useModel(modelName) as any;
 	const [allFields, setAllFields] = useState<TExportField[]>([]); // Export Fields lấy từ API
 	const [exportFields, setExportFields] = useState<TExportField[]>([]);
 	const [isGetFields, setIsGetFields] = useState<boolean>(false);
@@ -69,7 +69,7 @@ const ModalExport = (props: ModalExportProps) => {
 	return (
 		<Modal
 			title='Xuất dữ liệu'
-			visible={visible}
+			open={visible}
 			onCancel={onCancelModal}
 			footer={null}
 			width={800}
