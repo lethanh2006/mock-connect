@@ -53,6 +53,9 @@ declare module HocPhan {
 		url?: string | null;
 
 		thongTinTrongSo: IThongTinTrongSo[];
+		/** Ngưỡng điểm THI KTHP đủ điều kiện đạt học phần (mặc định: 0.1)
+		 * => Điểm thi >= ngưỡng thì mới đủ đạt học phần (tương đương ngưỡng điểm THÀNH PHẦN) */
+		nguongDiemDieuKienKthp?: number;
 	}
 
 	export interface IThongTinTrongSo {
