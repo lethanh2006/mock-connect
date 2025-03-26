@@ -269,7 +269,7 @@ const FormTraLoiKhaoSat = (props: {
 					<Form.Item
 						name='duDoanSoNguoiThamDu'
 						rules={[...rules.required]}
-						label='Theo bạn, sẽ có bao nhiêu người tham gia cuộc thi này?'
+						label={recordDot?.textDuDoan || 'Theo bạn, sẽ có bao nhiêu người tham gia cuộc thi này?'}
 					>
 						<InputNumber style={{ width: '100%' }} disabled={disabled} placeholder='Nhập dự đoán' />
 					</Form.Item>
@@ -319,7 +319,7 @@ const FormTraLoiKhaoSat = (props: {
 						style={{ marginBottom: 18, paddingTop: 0 }}
 						onChange={onChangeStep}
 					>
-						<Steps.Step title='Gới thiệu' />
+						<Steps.Step title='Giới thiệu' />
 						<Steps.Step title='Nội dung khảo sát' />
 					</Steps>
 
