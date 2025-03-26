@@ -47,7 +47,7 @@ const ModalChiTietDiem = (
 					))}
 				</ul>
 			) : (
-				<i style={{ color: '#999' }}>Không có thông tin</i>
+				<i style={{ color: '#aaa' }}>Không có thông tin</i>
 			)}
 		</Descriptions.Item>
 	);
