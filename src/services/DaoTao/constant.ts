@@ -1,3 +1,5 @@
+import { ETagColor } from '../base/constant';
+
 export enum ELoaiHocPhanCTDT {
 	BAT_BUOC = 'Bắt buộc',
 	TU_CHON = 'Tự chọn',
@@ -17,6 +19,13 @@ export const trangThaiHocTap: Record<ETrangThaiHocTap, string> = {
 	[ETrangThaiHocTap.DANG_HOC]: 'Đang học',
 	[ETrangThaiHocTap.DA_HOC]: 'Đã học',
 	[ETrangThaiHocTap.CHUA_DAT]: 'Chưa đạt',
+};
+
+export const colorTrangThaiHocTap: Record<ETrangThaiHocTap, ETagColor> = {
+	[ETrangThaiHocTap.CHUA_HOC]: ETagColor.DEFAULT,
+	[ETrangThaiHocTap.DANG_HOC]: ETagColor.BLUE,
+	[ETrangThaiHocTap.DA_HOC]: ETagColor.GREEN,
+	[ETrangThaiHocTap.CHUA_DAT]: ETagColor.RED,
 };
 
 export enum EGioiTinh {

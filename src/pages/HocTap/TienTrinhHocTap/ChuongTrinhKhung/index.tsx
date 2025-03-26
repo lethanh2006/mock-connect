@@ -186,6 +186,9 @@ const TienTrinhChuongTrinhKhung = () => {
 				listDiem={recChuongTrinh?.lichSuDiem ?? []}
 				maKhoaNganh={maKhoaNganh}
 				khoiChuongTrinh={recChuongTrinh}
+				colorKhoiKienThuc={
+					recChuongTrinh?.maKhoiKienThuc ? mapColorKhoiKienThuc[recChuongTrinh?.maKhoiKienThuc] : undefined
+				}
 				trangThaiHoc={recChuongTrinh?.hoc}
 			/>
 		</>
