@@ -40,5 +40,7 @@ declare module DotKhaoSat {
 		daLam: boolean;
 		updatedAt: Date;
 		createdAt: Date;
+
+		textDuDoan?: string;
 	}
 }
