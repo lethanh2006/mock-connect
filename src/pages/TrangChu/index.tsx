@@ -5,6 +5,7 @@ import CardCongNoDashboard from './components/CardCongNo';
 import './components/style.less';
 import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
 import CardBaiTapDashboard from './HocTapRenLuyen/CardBaiTap';
+import CardCuocThiDashboard from './HocTapRenLuyen/CardCuocThi';
 import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
 import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
 
@@ -45,6 +46,9 @@ const TrangChu = () => {
 					<Row gutter={[16, 16]}>
 						<Col span={24}>
 							<CardLopHocPhan />
+						</Col>
+						<Col span={24}>
+							<CardCuocThiDashboard />
 						</Col>
 						<Col span={24}>
 							<TinTucDashboardWrapper />

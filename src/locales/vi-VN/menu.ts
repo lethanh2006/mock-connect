@@ -56,6 +56,7 @@ export default {
 	'menu.DichVuHanhChinh.TaoDon': 'Tạo đơn - Dịch vụ hành chính',
 	'menu.PhanHoi': 'Phản hồi',
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
+	'menu.CuocThi': 'Cuộc thi',
 	'menu.ThongBao': 'Thông báo',
 
 	'menu.TienIch': 'Tiện ích khác',
