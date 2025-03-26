@@ -32,6 +32,10 @@ declare module DotKhaoSat {
 		//Khảo sát bắt buộc
 		defaultOpenAuth: boolean;
 
+		noiDungGioiThieu?: string;
+		soLanTraLoiToiDa?: number;
+		bannerUrl?: string;
+
 		// Populate
 		daLam: boolean;
 		updatedAt: Date;

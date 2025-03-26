@@ -459,6 +459,12 @@
 		icon: 'table',
 	},
 	{
+		name: 'CuocThi',
+		path: './cuoc-thi',
+		component: './TienIch/CuocThi',
+		icon: 'TrophyOutlined',
+	},
+	{
 		name: 'ThongBao',
 		path: 'thong-bao',
 		component: './ThongBao',

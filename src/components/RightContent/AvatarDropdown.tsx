@@ -9,6 +9,7 @@ import { history, useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
 import HeaderDropdown from './HeaderDropdown';
 import styles from './index.less';
+import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
 
 const AvatarDropdown = () => {
 	const intl = useIntl();
@@ -19,7 +20,7 @@ const AvatarDropdown = () => {
 
 	const handleCheckKhaoSatBatBuoc = async () => {
 		try {
-			const res = await getDotMeModel();
+			const res = await getDotMeModel(ELoaiDot.BIEU_MAU);
 			const index = res?.filter((item) => item?.defaultOpenAuth && !item?.daLam);
 			setDsKhaoSatBatBuoc(index);
 
@@ -29,6 +30,7 @@ const AvatarDropdown = () => {
 					icon: null,
 					okButtonProps: { hidden: true },
 					width: 600,
+					keyboard: false,
 					content: (
 						<>
 							<div>
