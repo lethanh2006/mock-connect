@@ -56,9 +56,7 @@ const TienTrinhHocTap = () => {
 						</div>
 					</Col>
 					<Col span={4} md={2} style={{ marginTop: 8 }}>
-						<b>
-							<i>{recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--'} tín chỉ</i>
-						</b>
+						<b style={{ color: '#B31820' }}>{recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--'} tín chỉ</b>
 					</Col>
 				</Row>
 			</Spin>

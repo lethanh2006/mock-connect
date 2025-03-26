@@ -101,3 +101,14 @@ export const colorTrangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> 
 	[ETrangThaiUserDiemDanh.VANG_KHONG_PHEP]: 'orange',
 	[ETrangThaiUserDiemDanh.CHUA_DIEM_DANH]: 'red',
 };
+
+// CHƯƠNG TRÌNH ĐÀO TẠO
+export enum ELoaiChuongTrinhDaoTao {
+	CHUAN = 'Chuan',
+	KE_HOACH = 'KeHoach',
+}
+
+export const LoaiChuongTrinhDaoTao: Record<ELoaiChuongTrinhDaoTao, string> = {
+	[ELoaiChuongTrinhDaoTao.CHUAN]: 'Chuẩn',
+	[ELoaiChuongTrinhDaoTao.KE_HOACH]: 'Kế hoạch',
+};
