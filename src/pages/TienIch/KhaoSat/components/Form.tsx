@@ -1,9 +1,10 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { ELoaiCauHoi, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
+import { ELoaiCauHoi, ELoaiDot, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { handleSingleFile } from '@/services/uploadFile';
+import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Checkbox, Divider, Form, Spin } from 'antd';
+import { Button, Card, Checkbox, Divider, Form, InputNumber, Spin, Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FileChoice from './Question/FileChoice';
@@ -27,6 +28,12 @@ const FormTraLoiKhaoSat = (props: {
 
 	/** Khảo sát bắt buộc */
 	isBatBuoc?: boolean;
+
+	/** Loại đợt khảo sát */
+	loai?: ELoaiDot;
+
+	/** Thông tin câu trả lời khảo sát tổng */
+	khaoSat?: BieuMau.ICauTraLoiKhaoSat;
 }) => {
 	const {
 		setVisibleForm,
@@ -47,10 +54,11 @@ const FormTraLoiKhaoSat = (props: {
 	} = useModel('tienich.bieumau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
-	const { onOk, cauTraLoi, onCancel, hideCard, isBatBuoc } = props;
+	const { onOk, cauTraLoi, onCancel, hideCard, isBatBuoc, loai, khaoSat } = props;
 	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
 	const [check, setCheck] = useState<boolean>(false);
 	const record = props?.recBieuMauProps ?? recBieuMau;
+	const [currentStep, setCurrentStep] = useState<number>(0);
 
 	const disabled = ngoaiThoiGian || recordDot?.kichHoat === false;
 
@@ -208,9 +216,10 @@ const FormTraLoiKhaoSat = (props: {
 				trangThaiSinhVien: recSinhVien?.trangThaiHoc,
 				danToc: recSinhVien?.danToc,
 				gioiTinh: recSinhVien?.gioiTinh,
+				duDoanSoNguoiThamDu: values.duDoanSoNguoiThamDu,
 			})
 				.then(() => {
-					getDotMeModel().then((res) => {
+					getDotMeModel(loai ?? ELoaiDot.BIEU_MAU).then((res) => {
 						if (isBatBuoc) {
 							const index = res?.filter((item) => item?.defaultOpenAuth && !item?.daLam);
 							setDsKhaoSatBatBuoc(index ?? []);
@@ -227,9 +236,21 @@ const FormTraLoiKhaoSat = (props: {
 		}
 	};
 
+	const onChangeStep = (step: number) => {
+		setCurrentStep(step);
+	};
+
 	const mainContent = (
 		<Spin spinning={formSubmiting || loading}>
 			<Form scrollToFirstError onFinish={onFinish} layout='vertical' form={form}>
+				{recordDot?.loai === ELoaiDot.CUOC_THI && (
+					<div style={{ marginBottom: 8 }}>
+						<b>
+							Số lượt trả lời: {khaoSat?.soLuotDaTraLoi ?? '--'}/{khaoSat?.soLuotTraLoiToiDa ?? '--'}
+						</b>
+					</div>
+				)}
+
 				<h3>{record?.tieuDe}</h3>
 				<p>{record?.moTa}</p>
 
@@ -243,6 +264,16 @@ const FormTraLoiKhaoSat = (props: {
 						{item.danhSachCauHoi?.map((cauHoi, index) => renderQuestion(cauHoi, index))}
 					</div>
 				))}
+
+				{recordDot?.loai === ELoaiDot.CUOC_THI && (
+					<Form.Item
+						name='duDoanSoNguoiThamDu'
+						rules={[...rules.required]}
+						label='Theo bạn, sẽ có bao nhiêu người tham gia cuộc thi này?'
+					>
+						<InputNumber style={{ width: '100%' }} disabled={disabled} placeholder='Nhập dự đoán' />
+					</Form.Item>
+				)}
 
 				{record?.coCamKet && (
 					<Checkbox
@@ -278,7 +309,31 @@ const FormTraLoiKhaoSat = (props: {
 	);
 
 	if (hideCard) return mainContent;
-	return <Card title='Chi tiết khảo sát'>{mainContent}</Card>;
+	return (
+		<Card title='Chi tiết khảo sát'>
+			{recordDot?.loai === ELoaiDot.CUOC_THI ? (
+				<>
+					<Steps
+						current={currentStep}
+						type='navigation'
+						style={{ marginBottom: 18, paddingTop: 0 }}
+						onChange={onChangeStep}
+					>
+						<Steps.Step title='Gới thiệu' />
+						<Steps.Step title='Nội dung khảo sát' />
+					</Steps>
+
+					{currentStep === 0 ? (
+						<div dangerouslySetInnerHTML={{ __html: recordDot?.noiDungGioiThieu ?? '--' }} />
+					) : currentStep === 1 ? (
+						mainContent
+					) : null}
+				</>
+			) : (
+				mainContent
+			)}
+		</Card>
+	);
 };
 
 export default FormTraLoiKhaoSat;

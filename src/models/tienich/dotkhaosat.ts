@@ -2,7 +2,7 @@ import { EOperatorType } from '@/components/Table/constant';
 import useInitModel from '@/hooks/useInitModel';
 import { getDotDanhGiaTietHoc } from '@/services/TienIch/KhaoSat/DotKhaoSat';
 import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
-import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
+import { type ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import moment from 'moment';
 import { useState } from 'react';
 
@@ -20,7 +20,7 @@ export default () => {
 		moment().isBefore(record?.thoiGianBatDau) ||
 		moment().isAfter(record?.thoiGianKetThuc);
 
-	const getDotMeModel = () =>
+	const getDotMeModel = (loai: ELoaiDot) =>
 		getModel(
 			{ kichHoat: true },
 			[
@@ -28,7 +28,7 @@ export default () => {
 					active: true,
 					field: 'loai',
 					operator: EOperatorType.EQUAL,
-					values: [ELoaiDot.BIEU_MAU],
+					values: [loai],
 				},
 			],
 			{ updatedAt: -1 },
