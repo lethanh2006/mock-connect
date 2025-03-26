@@ -36,7 +36,7 @@ const ModalChiTietDiem = (
 	};
 
 	const renderHocPhanCt = (dsHocPhan?: ChuongTrinhDaoTao.THocPhanTuongQuan[], label?: string) => (
-		<Descriptions.Item label={label}>
+		<Descriptions.Item label={label} span={3}>
 			{dsHocPhan?.length ? (
 				<ul style={{ marginBottom: 0, paddingLeft: 14 }}>
 					{dsHocPhan?.map((item) => (
@@ -100,8 +100,9 @@ const ModalChiTietDiem = (
 				) : null}
 
 				{khoiChuongTrinh ? (
-					<Descriptions title='Chương trình học' column={1} style={{ marginTop: 12 }}>
-						<Descriptions.Item label='Khối kiến thức'>
+					<Descriptions title='Chương trình học' style={{ marginTop: 12 }}>
+						<Descriptions.Item label='TT học kỳ theo kế hoạch'>{khoiChuongTrinh.soThuTuKy}</Descriptions.Item>
+						<Descriptions.Item label='Khối kiến thức' span={2}>
 							{khoiChuongTrinh.khoiKienThuc?.ten ?? khoiChuongTrinh.maKhoiKienThuc}
 						</Descriptions.Item>
 						{renderHocPhanCt(khoiChuongTrinh.dsHocPhanTienQuyet, 'Học phần tiên quyết')}
