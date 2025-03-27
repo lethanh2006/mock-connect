@@ -16,7 +16,16 @@ const SanPhamNCKH = (props: IProps) => {
 	const { getAllModel: getAllDanhMucVaiTro } = useModel('khoahoc.danhmuc.vaitro');
 
 	useEffect(() => {
-		getAllModel(false, { createdAt: -1 }, { loai: ELoaiLoaiHinh.SP });
+		getAllModel(
+			false,
+			{ createdAt: -1 },
+			{
+				loai: ELoaiLoaiHinh.SP,
+				// doiTuong: {
+				// 	$in: [[EDoiTuongLoaiHinh.SINH_VIEN], [EDoiTuongLoaiHinh.SINH_VIEN, EDoiTuongLoaiHinh.CBGV], []],
+				// } as any,
+			},
+		);
 		getAllDanhMucChung();
 		getAllDanhMucVaiTro();
 

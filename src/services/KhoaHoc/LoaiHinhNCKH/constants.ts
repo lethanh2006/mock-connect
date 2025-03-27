@@ -74,3 +74,13 @@ export enum ELoaiTruongThongTinTinh {
 	SAN_PHAM_NCKH_LIEN_QUAN = 'Sản phẩm NCKH liên quan',
 	MINH_CHUNG_CHIA_GIO = 'Minh chứng yêu cầu giờ/điểm',
 }
+
+export enum EDoiTuongLoaiHinh {
+	SINH_VIEN = 'SINH_VIEN',
+	CBGV = 'CBGV',
+}
+
+export const MapNameDoiTuongLoaiHinh: Partial<Record<EDoiTuongLoaiHinh, string>> = {
+	[EDoiTuongLoaiHinh.CBGV]: 'Cán bộ, giảng viên',
+	[EDoiTuongLoaiHinh.SINH_VIEN]: 'Sinh viên',
+};
