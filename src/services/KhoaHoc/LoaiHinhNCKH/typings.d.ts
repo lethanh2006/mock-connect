@@ -154,6 +154,6 @@ declare module LoaiHinhNCKH {
 		searchKey2: string;
 		tinhDiem?: boolean;
 		tinhTheoTungNam: boolean;
-		doiTuong: EDoiTuongLoaiHinh[];
+		doiTuongs: EDoiTuongLoaiHinh[];
 	}
 }
