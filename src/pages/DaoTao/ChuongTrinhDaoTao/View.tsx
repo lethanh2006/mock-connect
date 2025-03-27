@@ -53,9 +53,9 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 						</Descriptions.Item>
 						<Descriptions.Item label='Tập tin'>
 							{recTienTrinh.ctdtKeHoach.url ? (
-								<Link to={recTienTrinh.ctdtKeHoach.url} target='_blank' rel='noreferrer'>
+								<a href={recTienTrinh.ctdtKeHoach.url} target='_blank' rel='noreferrer'>
 									Xem chi tiết
-								</Link>
+								</a>
 							) : null}
 						</Descriptions.Item>
 					</Descriptions>
