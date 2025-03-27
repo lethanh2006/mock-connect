@@ -36,6 +36,8 @@ export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 
 	 * Hàm sort tùy chỉnh (có thể dùng để sắp xếp họ tên theo AB)
 	 */
 	customSort?: (value1: any, value2: any) => number;
+
+	specialFilter?: boolean;
 }
 
 export type TDataOption = {
@@ -155,6 +157,7 @@ export type TableStaticProps = {
 	title?: React.ReactNode;
 	Form?: any;
 	formProps?: any;
+	totalComponent?: any;
 
 	showEdit?: boolean;
 	setShowEdit?: (vi: boolean) => void;
