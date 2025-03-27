@@ -21,9 +21,7 @@ const HoatDongNCKH = (props: IProps) => {
 			{ createdAt: -1 },
 			{
 				loai: ELoaiLoaiHinh.HD,
-				// doiTuong: {
-				// 	$in: [[EDoiTuongLoaiHinh.SINH_VIEN], [EDoiTuongLoaiHinh.SINH_VIEN, EDoiTuongLoaiHinh.CBGV], []],
-				// } as any,
+				// doiTuongs: EDoiTuongLoaiHinh.SINH_VIEN as any,
 			},
 		);
 		getAllDanhMucChung();
