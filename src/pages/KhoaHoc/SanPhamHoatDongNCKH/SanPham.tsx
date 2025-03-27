@@ -4,6 +4,7 @@ import { useModel } from 'umi';
 import TableSanPhamNCKH from './components/TableSanPhamNCKH';
 import { ELoaiLoaiHinh } from '@/services/QuyTrinh/LoaiHinh/constants';
 import { ETrangThaiSanPham } from '@/services/KhoaHoc/SanPhamNCKH/constants';
+import { EDoiTuongLoaiHinh } from '@/services/KhoaHoc/LoaiHinhNCKH/constants';
 
 interface IProps {
 	select?: boolean;
@@ -21,9 +22,7 @@ const SanPhamNCKH = (props: IProps) => {
 			{ createdAt: -1 },
 			{
 				loai: ELoaiLoaiHinh.SP,
-				// doiTuong: {
-				// 	$in: [[EDoiTuongLoaiHinh.SINH_VIEN], [EDoiTuongLoaiHinh.SINH_VIEN, EDoiTuongLoaiHinh.CBGV], []],
-				// } as any,
+				// doiTuongs: EDoiTuongLoaiHinh.SINH_VIEN as any,
 			},
 		);
 		getAllDanhMucChung();
