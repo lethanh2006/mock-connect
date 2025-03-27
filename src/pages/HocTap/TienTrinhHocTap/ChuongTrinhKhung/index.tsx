@@ -3,10 +3,11 @@ import { ELoaiHocPhanCTDT, LoaiChuongTrinhDaoTao } from '@/services/DaoTao/const
 import { Collapse, Descriptions, Spin, Tooltip } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhan from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
+import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 
 type TChuongTrinhHocKy = {
 	khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
@@ -29,6 +30,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 	const [visibleDiem, setVisibleDiem] = useState(false);
+	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
 
 	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
 		const listKhoi = _.uniq(listKhoiHpCt.map((item) => item.maKhoiKienThuc));
@@ -103,8 +105,16 @@ const TienTrinhChuongTrinhKhung = () => {
 			{recTienTrinh?.ctdtKeHoach?._id && (
 				<>
 					<Descriptions>
-						<Descriptions.Item label='Chương trình đào tạo' span={2}>
-							{recTienTrinh?.ctdtKeHoach?.ten}
+						<Descriptions.Item label='Chương trình/Kế hoạch' span={2}>
+							<Link
+								to=''
+								onClick={(e) => {
+									e.preventDefault();
+									setVisibleChuongTrinh(true);
+								}}
+							>
+								{recTienTrinh?.ctdtKeHoach?.ten}
+							</Link>
 						</Descriptions.Item>
 						<Descriptions.Item label='Loại chương trình'>
 							{recTienTrinh?.ctdtKeHoach?.loai && LoaiChuongTrinhDaoTao[recTienTrinh?.ctdtKeHoach?.loai]}
@@ -167,6 +177,8 @@ const TienTrinhChuongTrinhKhung = () => {
 				}
 				trangThaiHoc={recChuongTrinh?.hoc}
 			/>
+
+			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
 		</>
 	);
 };
