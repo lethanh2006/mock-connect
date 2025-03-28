@@ -4,17 +4,15 @@ import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '
 import { Avatar, Button, Col, Menu, Modal, Row, Spin } from 'antd';
 import { type ItemType } from 'antd/lib/menu/hooks/useItems';
 import moment from 'moment';
-import React, { useEffect } from 'react';
-import { history, useModel } from 'umi';
+import { useEffect } from 'react';
+import { history, useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
 import HeaderDropdown from './HeaderDropdown';
 import styles from './index.less';
+import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
 
-export type GlobalHeaderRightProps = {
-	menu?: boolean;
-};
-
-const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
+const AvatarDropdown = () => {
+	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const { getDotMeModel, setVisibleKhaoSatBatBuoc, setRecord, setDsKhaoSatBatBuoc } = useModel('tienich.dotkhaosat');
 	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
@@ -22,7 +20,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 
 	const handleCheckKhaoSatBatBuoc = async () => {
 		try {
-			const res = await getDotMeModel();
+			const res = await getDotMeModel(ELoaiDot.BIEU_MAU);
 			const index = res?.filter((item) => item?.defaultOpenAuth && !item?.daLam);
 			setDsKhaoSatBatBuoc(index);
 
@@ -32,6 +30,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 					icon: null,
 					okButtonProps: { hidden: true },
 					width: 600,
+					keyboard: false,
 					content: (
 						<>
 							<div>
@@ -144,20 +143,21 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
 		{
 			key: 'portal',
 			icon: <GlobalOutlined />,
-			label: APP_CONFIG_TITLE_LANDING ?? 'Cổng thông tin',
+			label:
+				APP_CONFIG_TITLE_LANDING ?? intl.formatMessage({ id: 'app.header.portal', defaultMessage: 'Cổng thông tin' }),
 			onClick: () => window.open(landingUrl),
 		},
 		{ type: 'divider', key: 'divider' },
 		{
 			key: 'logout',
 			icon: <LogoutOutlined />,
-			label: 'Đăng xuất',
+			label: intl.formatMessage({ id: 'app.header.logout', defaultMessage: 'Đăng xuất' }),
 			onClick: loginOut,
 			danger: true,
 		},
 	];
 
-	if (menu && !initialState.currentUser.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
+	if (!initialState.currentUser.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
 		items.splice(0, 1, {
 			key: 'center',
 			icon: <UserOutlined />,

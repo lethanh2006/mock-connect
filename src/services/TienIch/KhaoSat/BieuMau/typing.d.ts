@@ -1,6 +1,4 @@
-import { type EPhamViChuDe } from '@/services/TinTuc/constant';
-import { type ELoaiDoiTuong } from '../constant';
-import { type ELoaiCauHoi, type ELoaiBieuMau, type EVaiTroKhaoSat } from '../constants';
+import { type ELoaiBieuMau, type ELoaiCauHoi, type EVaiTroKhaoSat } from '../constants';
 
 declare module BieuMau {
 	export interface LuaChon {
@@ -144,6 +142,20 @@ declare module BieuMau {
 		listUrlFile?: string[] | null;
 
 		traLoiKhac?: string;
+	}
+
+	export interface ICauTraLoiKhaoSat {
+		id: string;
+		answered: boolean;
+		danhSachTraLoi: BieuMau.TraLoiRecord[];
+		idDot: string;
+		idKhaoSat: string;
+		saved: boolean;
+
+		soLuotDaTraLoi: number;
+		soLuotTraLoiToiDa: number;
+
+		userSsoId: string;
 	}
 
 	export interface IDanhGiaGiangVien {

@@ -23,7 +23,7 @@ const CardDienDanDashboard = () => {
 				</Link>
 			}
 		>
-			<div style={{ maxHeight: 300, overflow: 'auto' }}>
+			<div style={{ maxHeight: 250, overflow: 'auto' }}>
 				{danhSach.length ? (
 					<List
 						itemLayout='vertical'
