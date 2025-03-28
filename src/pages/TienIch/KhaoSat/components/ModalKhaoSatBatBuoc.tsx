@@ -18,7 +18,14 @@ const ModalKhaoSatBatBuoc = () => {
 	}, [record?._id]);
 
 	return (
-		<Modal title='Chi tiết khảo sát' visible={visibleKhaoSatBatBuoc} footer={null} width={800} closable={false}>
+		<Modal
+			title='Chi tiết khảo sát'
+			visible={visibleKhaoSatBatBuoc}
+			footer={null}
+			width={800}
+			closable={false}
+			keyboard={false}
+		>
 			{isThanhCong ? (
 				<>
 					<div style={{ marginTop: 12, textAlign: 'center' }}>

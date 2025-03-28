@@ -73,6 +73,8 @@ declare module DangKyTinChi {
 		error?: string;
 		// So sánh để tính học phí
 		maNganh?: string;
+
+		lopHocPhan?: LopHocPhan.IRecord;
 	}
 
 	export interface IHocPhanDangKy {
@@ -84,5 +86,24 @@ declare module DangKyTinChi {
 		trangThai: ETrangThaiHocPhanDangKyTinChi;
 		hpTienQuyet?: Partial<HocPhan.IRecord>;
 		hpHocTruoc?: Partial<HocPhan.IRecord>;
+	}
+
+	export interface AuditLog {
+		_id: string;
+		uId: string;
+		uCode: string;
+		uEmail: string;
+		uName: string;
+		requestType: string;
+		action: string;
+		logResponse?: boolean;
+		ip?: string;
+		data?: unknown;
+		query?: unknown;
+		param?: unknown;
+		ua?: unknown;
+		userAgent?: string;
+		response?: { data?: unknown | DangKyTinChi.ILopDangKy };
+		createdAt?: Date;
 	}
 }

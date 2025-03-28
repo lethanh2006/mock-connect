@@ -54,6 +54,10 @@ const View = (props: Iprops) => {
 
 	const [visibleViewDetailDot, setVisibleViewDetailDot] = useState<boolean>(false);
 
+	const allowChinhSua = !dataQuyTrinh?.danhSachBuocXuLy?.find(
+		(item) => item?.trangThaiTiepNhan === TrangThaiTiepNhanDon.DUYET,
+	);
+
 	useEffect(() => {
 		getDot();
 	}, []);
@@ -306,6 +310,7 @@ const View = (props: Iprops) => {
 													style={{ margin: '0 auto' }}
 													icon={<EditOutlined />}
 													type='primary'
+													disabled={!allowChinhSua}
 												>
 													Chỉnh sửa
 												</Button>

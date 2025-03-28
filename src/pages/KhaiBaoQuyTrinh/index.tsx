@@ -5,9 +5,9 @@ import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinCh
 import { MapColorTrangThaiTiepNhan, TrangThaiTiepNhan } from '@/services/QuyTrinh/KhaiBao/constants';
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
+import { EPhanHe } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
-import type { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import { EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import {
 	ArrowRightOutlined,
 	DeleteOutlined,
@@ -21,7 +21,6 @@ import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import ThongTinThanhToan from '../TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import FormKhaiBao from './components/FormKhaiBao';
-import { EPhanHe } from '@/services/QuyTrinh/constant';
 
 const KhaiBaoQuyTrinhPage = (props: {
 	title?: string;
@@ -232,6 +231,9 @@ const KhaiBaoQuyTrinhPage = (props: {
 				const formTiepNhan = recordVal?.quyTrinh?.danhSachFormTiepNhan?.find(
 					(item) => item.ma === buocHienTai?.maFormTiepNhan,
 				);
+				const allowDelete =
+					!!recordVal?.quyTrinh?.thongTinQuyTrinh?.choPhepHuyDonSauThanhToan ||
+					recordVal?.trangThaiThanhToan !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU;
 
 				return (
 					<>
@@ -282,12 +284,14 @@ const KhaiBaoQuyTrinhPage = (props: {
 						<Tooltip title='Xóa'>
 							<Popconfirm
 								// disabled={!(isBuocDauTien && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.CHUA_CO)}
+								disabled={!allowDelete}
 								onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
 								title='Bạn có chắc chắn muốn xóa?'
 								placement='topLeft'
 							>
 								<Button
 									// disabled={!(isBuocDauTien && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.CHUA_CO)}
+									disabled={!allowDelete}
 									danger
 									type='link'
 									icon={<DeleteOutlined />}

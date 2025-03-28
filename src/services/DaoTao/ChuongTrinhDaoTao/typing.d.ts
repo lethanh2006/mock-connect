@@ -1,7 +1,7 @@
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import type { ChungChi } from '../ChungChi/typing';
 import { type HocPhan } from '../HocPhan/typings';
-import { type ELoaiHocPhanCTDT, type ETrangThaiHocTap } from '../constant';
+import type { ELoaiChuongTrinhDaoTao, ELoaiHocPhanCTDT, ETrangThaiHocTap } from '../constant';
 
 declare module ChuongTrinhDaoTao {
 	export interface IRecord {
@@ -13,20 +13,32 @@ declare module ChuongTrinhDaoTao {
 		trinhDoDaoTao?: TrinhDoDaoTao.IRecordCoSo;
 		maNganh: string;
 		nganh?: NganhDaoTao.IRecordCoSo;
+		loai: ELoaiChuongTrinhDaoTao;
+		trangThai: ETrangThaiCtdt;
+
 		thoiGianDaoTao: number;
+		thoiGianDaoTaoToiDa?: number;
 		tongSoTinChi: number;
+		canCuId: string;
+		canCu?: VanBanQuyDinh.IRecord;
+		namBanHanh: number;
+		// active?: boolean;
+		// maLoaiChungChiList: string[];
+		loaiChungChiList?: LoaiChungChi.IRecord[];
+		url?: string | null;
+
+		mucTieuDaoTao: string;
+		chuanDauVao: string;
+		chuanDauRa: string;
+		viTriLamViec: string;
 
 		// Với Chương trình kế hoạch cho Khóa ngành cụ thể
+		maKhoaNganh?: string;
 		maKhoaSinhVien?: string;
 		khoaSinhVien?: KhoaSinhVien.IRecord;
 		maChuongTrinhDaoTaoChuan?: string;
 		chuongTrinhDaoTaoChuan?: IRecord;
 
-		mucTieuDaoTao: string;
-		doiTuongTuyenSinh: string;
-		thangDiem: string;
-		quyTrinhDaoTao: string;
-		dieuKienTotNghiep: string;
 		createdAt?: string;
 		updatedAt?: string;
 	}

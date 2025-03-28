@@ -1,5 +1,7 @@
+import { primaryColor } from '@/services/base/constant';
 import { colorLoaiHocLuc } from '@/services/HocTap/constant';
-import { Card, Col, Row } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Card, Col, Row, Tooltip } from 'antd';
 import { useModel } from 'umi';
 
 const StatKetQuaTichLuySinhVien = () => {
@@ -27,14 +29,21 @@ const StatKetQuaTichLuySinhVien = () => {
 							</Col>
 							<Col span={24} md={8}>
 								<div className='row'>
-									<span className='sum-text'>{record.tongSoTinChiTichLuyToanKhoa ?? '--'}</span>
+									<span className='sum-text' style={{ color: '#9bd437' }}>
+										{record.tongSoTinChiTichLuyToanKhoa ?? '--'}
+									</span>
 									Tổng số tín chỉ tích lũy
 								</div>
 							</Col>
 							<Col span={24} md={8}>
 								<div className='row'>
-									<span className='sum-text'>{record.tongSoTinChiNoToanKhoa ?? '--'}</span>
+									<span className='sum-text' style={{ color: '#fc7e4d' }}>
+										{record.tongSoTinChiNoToanKhoa ?? '--'}
+									</span>
 									Tổng STC chưa đạt toàn khóa
+									<Tooltip title='Tổng số tín chỉ các học phần sinh viên đã tham gia học tập nhưng kết quả học tập chưa đạt trong toàn khóa'>
+										<InfoCircleOutlined style={{ color: primaryColor }} />
+									</Tooltip>
 								</div>
 							</Col>
 						</Row>

@@ -3,6 +3,7 @@ import type { DiemHocPhan } from '@/services/DaoTao/DiemHocPhan/typing';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
+import type { ETrangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
 import type { ETrangThaiThi } from '../constant';
 import type {
@@ -18,14 +19,15 @@ export declare module LopHocPhan {
 		_id: string;
 		ten: string;
 		tenCha?: string;
-		// maLop: string;
-		// maLopCha?: string;
+		maLop: string;
+		maLopCha?: string;
 		maHocKy: string;
 		hocKy?: HocKy.IRecord;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
 		gioiThieuChung?: string;
 		lmsUrl?: string; // Link học trực tuyến
+		syncLms?: boolean;
 
 		siSoToiDa: number;
 		siSo?: number; // Sĩ số hiện tại
@@ -164,6 +166,9 @@ export declare module LopHocPhan {
 	}
 
 	export interface IDiemTongKet {
+		/** Trạng thái dự thi */
+		trangThaiDuThi?: ETrangThaiDuThi;
+
 		diemKthp?: number;
 		diemTongKet?: number;
 		diemThang4?: number;

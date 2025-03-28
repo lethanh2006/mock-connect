@@ -1,5 +1,6 @@
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { Descriptions } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Descriptions, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -44,11 +45,15 @@ const TrongSoHocPhanPage = () => {
 							<br />
 							Hình thức đánh giá: {item?.hinhThucDanhGia ?? '--'}
 						</Descriptions.Item>
-				  ))
+					))
 				: null}
 
 			<Descriptions.Item key={'2'} label='Điểm thi KTHP'>
-				Trọng số: <b>{100 - sum}%</b>
+				Trọng số: <b>{100 - sum}%</b> (Ngưỡng đạt: {recDeCuong?.nguongDiemDieuKienKthp ?? '--'}{' '}
+				<Tooltip title='Sinh viên phải đạt điểm thi từ ngưỡng điểm trở lên mới đủ điều kiện đạt học phần'>
+					<QuestionCircleOutlined />
+				</Tooltip>
+				)
 			</Descriptions.Item>
 		</Descriptions>
 	);

@@ -1,3 +1,5 @@
+import { ETagColor } from '../base/constant';
+
 export enum ELoaiHocPhanCTDT {
 	BAT_BUOC = 'Bắt buộc',
 	TU_CHON = 'Tự chọn',
@@ -17,6 +19,13 @@ export const trangThaiHocTap: Record<ETrangThaiHocTap, string> = {
 	[ETrangThaiHocTap.DANG_HOC]: 'Đang học',
 	[ETrangThaiHocTap.DA_HOC]: 'Đã học',
 	[ETrangThaiHocTap.CHUA_DAT]: 'Chưa đạt',
+};
+
+export const colorTrangThaiHocTap: Record<ETrangThaiHocTap, ETagColor> = {
+	[ETrangThaiHocTap.CHUA_HOC]: ETagColor.DEFAULT,
+	[ETrangThaiHocTap.DANG_HOC]: ETagColor.BLUE,
+	[ETrangThaiHocTap.DA_HOC]: ETagColor.GREEN,
+	[ETrangThaiHocTap.CHUA_DAT]: ETagColor.RED,
 };
 
 export enum EGioiTinh {
@@ -91,4 +100,15 @@ export const colorTrangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> 
 	[ETrangThaiUserDiemDanh.VANG_CO_PHEP]: 'gold',
 	[ETrangThaiUserDiemDanh.VANG_KHONG_PHEP]: 'orange',
 	[ETrangThaiUserDiemDanh.CHUA_DIEM_DANH]: 'red',
+};
+
+// CHƯƠNG TRÌNH ĐÀO TẠO
+export enum ELoaiChuongTrinhDaoTao {
+	CHUAN = 'Chuan',
+	KE_HOACH = 'KeHoach',
+}
+
+export const LoaiChuongTrinhDaoTao: Record<ELoaiChuongTrinhDaoTao, string> = {
+	[ELoaiChuongTrinhDaoTao.CHUAN]: 'Chuẩn',
+	[ELoaiChuongTrinhDaoTao.KE_HOACH]: 'Kế hoạch',
 };

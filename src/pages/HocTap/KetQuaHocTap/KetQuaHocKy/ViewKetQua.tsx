@@ -1,7 +1,9 @@
 import { colorLoaiHocLuc } from '@/services/HocTap/constant';
-import { Card, Col, Empty, Row, Spin } from 'antd';
+import { Card, Col, Empty, Row, Spin, Tooltip } from 'antd';
 import { useModel } from 'umi';
 import '../KetQuaToanKhoa/style.less';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { primaryColor } from '@/services/base/constant';
 
 const ViewKetQuaHocKy = () => {
 	const { record, loading } = useModel('daotao.ketquahocky');
@@ -31,14 +33,24 @@ const ViewKetQuaHocKy = () => {
 											</Col>
 											<Col span={24} xxl={12}>
 												<div className='row'>
+													<span className='sum-text' style={{ color: '#9bd437' }}>
+														{record.tongSoTinChiTichLuyHocKy ?? '--'}
+													</span>
+													Số tín chỉ tích lũy học kỳ
+												</div>
+											</Col>
+											<Col span={24} xxl={12}>
+												<div className='row'>
 													<span className='sum-text'>{record.trungBinhHocBongHocKyThang4 ?? '--'}</span>
 													Trung bình học bổng
 												</div>
 											</Col>
 											<Col span={24} xxl={12}>
 												<div className='row'>
-													<span className='sum-text'>{record.tongSoTinChiTichLuyHocKy ?? '--'}</span>
-													Số tín chỉ tích lũy học kỳ
+													<span className='sum-text' style={{ color: '#9bd437' }}>
+														{record.tongSoTinChiHocBongHocKy ?? '--'}
+													</span>
+													STC xét học bổng
 												</div>
 											</Col>
 											{/* <Col span={24} xxl={12}>
@@ -79,6 +91,9 @@ const ViewKetQuaHocKy = () => {
 												<div className='row'>
 													<span className='sum-text'>{record.tongSoTinChiNoToanKhoa ?? '--'}</span>
 													STC chưa đạt toàn khóa
+													<Tooltip title='Tổng số tín chỉ các học phần sinh viên đã tham gia học tập nhưng kết quả học tập chưa đạt trong toàn khóa'>
+														<InfoCircleOutlined style={{ color: primaryColor }} />
+													</Tooltip>
 												</div>
 											</Col>
 										</Row>
@@ -97,7 +112,7 @@ const ViewKetQuaHocKy = () => {
 							<Col span={24} md={12}>
 								<Card className='ket-qua-card'>
 									<div className='ket-qua-content'>
-										<div className='title'>Xếp loại học lực</div>
+										<div className='title'>Xếp loại học lực học kỳ</div>
 										<span className='sum-text' style={{ color: colorLoaiHocLuc[record.hocLucHocKy ?? record.hocLuc] }}>
 											{record.hocLucHocKy ?? record.hocLuc ?? '--'}
 										</span>
