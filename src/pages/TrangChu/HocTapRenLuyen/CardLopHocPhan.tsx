@@ -1,0 +1,84 @@
+import { DownOutlined } from '@ant-design/icons';
+import { Card, Dropdown, Empty, List, Menu, Progress, Space } from 'antd';
+import moment from 'moment';
+import { useEffect } from 'react';
+import { history, useModel } from 'umi';
+import '../components/style.less';
+
+const CardLopHocPhan = () => {
+	const { danhSach: danhSachLHP, sinhVienGetAllModel, loading } = useModel('lophocphan.lophocphan');
+	const { getAllModel: getAllHocKy, danhSach, record: recHocKy, setRecord } = useModel('daotao.hocky');
+
+	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
+
+	useEffect(() => {
+		if (!danhSach.length) getAllHocKy(!recHocKy?._id, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me');
+	}, []);
+
+	useEffect(() => {
+		getData();
+	}, [recHocKy?.ma]);
+
+	return (
+		<Card
+			title='Lớp tín chỉ'
+			loading={loading}
+			extra={
+				<Dropdown
+					overlay={
+						<Menu style={{ maxHeight: 250, overflowY: 'auto' }}>
+							{danhSach.map((item) => (
+								<Menu.Item onClick={() => setRecord(item)} key={item._id}>
+									{item.ten}
+								</Menu.Item>
+							))}
+						</Menu>
+					}
+					trigger={['click']}
+				>
+					<a onClick={(e) => e.preventDefault()}>
+						<Space>
+							<div>
+								HK{recHocKy?.soThuTu} {(recHocKy?.namHoc?.namBatDau?.toString() ?? '')?.slice(-2)}-
+								{(recHocKy?.namHoc?.namKetThuc?.toString() ?? '')?.slice(-2)}
+							</div>
+							<DownOutlined />
+						</Space>
+					</a>
+				</Dropdown>
+			}
+		>
+			<div id='scrollableDiv' style={{ maxHeight: 250, overflow: 'auto' }}>
+				{danhSachLHP.length ? (
+					<List
+						itemLayout='horizontal'
+						className='dashboard-list-lhp'
+						dataSource={danhSachLHP.filter((item) => item?.maLopCha === null)}
+						renderItem={(lop) => {
+							let allThoiKhoaBieu = lop.thoiKhoaBieuList ?? [];
+							allThoiKhoaBieu = allThoiKhoaBieu.concat(
+								lop.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? [],
+							);
+							const past = allThoiKhoaBieu.filter((i) => moment().isAfter(i?.ngay)).length;
+							return (
+								<List.Item onClick={() => history.push(`/hoc-tap/lop-tin-chi/${lop._id}`)}>
+									<List.Item.Meta title={lop.hocPhan?.ten} description={`${lop.ten}`} />
+									<Progress
+										style={{ marginRight: 8, marginLeft: 8 }}
+										width={50}
+										type='dashboard'
+										percent={Math.round((past / allThoiKhoaBieu.length) * 100)}
+									/>
+								</List.Item>
+							);
+						}}
+					/>
+				) : (
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
+				)}
+			</div>
+		</Card>
+	);
+};
+
+export default CardLopHocPhan;

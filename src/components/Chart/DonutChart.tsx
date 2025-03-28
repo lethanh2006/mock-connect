@@ -5,7 +5,7 @@ import './style.less';
 import vi from './vi.json';
 
 const DonutChart = (props: DataChartType) => {
-	const { xAxis, yAxis, height, colors, formatY, showTotal, width, otherOptions } = props;
+	const { xAxis, yAxis, height, colors, formatY, showTotal, width, otherOptions, type } = props;
 
 	const options = {
 		chart: {
@@ -62,7 +62,7 @@ const DonutChart = (props: DataChartType) => {
 		<Chart
 			options={{ ...options, ...otherOptions }}
 			series={series}
-			type='donut'
+			type={type === 'radian' ? 'radialBar' : 'donut'}
 			height={height ?? 350}
 			width={width}
 		/>

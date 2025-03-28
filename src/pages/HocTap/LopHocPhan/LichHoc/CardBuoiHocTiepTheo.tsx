@@ -26,7 +26,13 @@ const CardBuoiHocTiepTheo = () => {
 		if (recLopHocPhan?.ten) {
 			// Nếu trong lớp học phần đã populate rồi thì ko get lại TKB nữa
 			const tkbList = recLopHocPhan.thoiKhoaBieuList?.length
-				? _.sortBy(recLopHocPhan.thoiKhoaBieuList, (i) => i.ngay)
+				? _.sortBy(
+						[
+							...recLopHocPhan.thoiKhoaBieuList,
+							...(recLopHocPhan.children?.flatMap((i) => i.thoiKhoaBieuList ?? []) ?? []),
+						],
+						(i) => i.thoiGianBatDau,
+				  )
 				: await getTheoLopHocPhan(recLopHocPhan.ten);
 			setDanhSach(tkbList);
 

@@ -33,7 +33,7 @@ const CardKhoiHocPhan = (props: {
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
 			>
-				<i className='fw500'>Bạn phải đảm bảo học {soTinChi} tín chỉ trong số những học phần sau đây: </i>
+				<span className='fw500'>Bạn phải đảm bảo học {soTinChi} tín chỉ trong số những học phần sau đây: </span>
 				<div className='row-hoc-ky'>
 					<div className='col-chi-tiet' style={{ flexWrap: 'wrap' }}>
 						{khoi?.hocPhanCtdtList?.map((ctk) => (
@@ -42,7 +42,8 @@ const CardKhoiHocPhan = (props: {
 								hocPhan={ctk.hocPhan}
 								colorKhoiKienThuc={colorKhoiKienThuc}
 								onClick={() => {
-									setChuongTrinh({ ...khoi, ...ctk });
+									// Truyền tên khối tự chọn vào các khối học phần chương trình
+									setChuongTrinh({ ...khoi, ...ctk, ten: khoi.ten });
 									setVisible(false);
 									if (onClickHocPhan) onClickHocPhan();
 								}}

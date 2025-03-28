@@ -5,9 +5,10 @@ import './style.less';
 
 const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord; showAll?: boolean }) => {
 	const { lopHocPhan } = props;
-	const maHoaLichHoc = !!lopHocPhan?.lopGhepTkb?.maHoaLichHoc?.length
-		? lopHocPhan.lopGhepTkb.maHoaLichHoc
-		: lopHocPhan?.maHoaLichHoc;
+
+	const maHoaLichHoc = [lopHocPhan, ...(lopHocPhan.children ?? [])]?.flatMap((val) =>
+		!!val?.lopGhepTkb?.maHoaLichHoc?.length ? val.lopGhepTkb.maHoaLichHoc : val?.maHoaLichHoc || [],
+	);
 
 	if (!maHoaLichHoc?.length) return <i style={{ color: '#999' }}>Không có thông tin lịch học</i>;
 
@@ -28,7 +29,9 @@ const RenderLichHoc = (props: { lopHocPhan: LopHocPhan.IRecord; showAll?: boolea
 						{dsTuan.length} tuần ({dsTuan.join(',')})
 					</>
 				) : (
-					<Tooltip title={dsTuan.join(', ')}>{dsTuan.length} tuần</Tooltip>
+					<Tooltip title={dsTuan.join(', ')}>
+						<a>{dsTuan.length} tuần</a>
+					</Tooltip>
 				)}
 				, {[tenNhanSu, phongHoc].filter((j) => !!j).join(', ')}
 			</div>

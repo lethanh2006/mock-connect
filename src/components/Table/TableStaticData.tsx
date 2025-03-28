@@ -200,15 +200,18 @@ const TableStaticData = (props: TableStaticProps) => {
 							Thêm mới
 						</ButtonExtend>
 					)}
+					{props.otherButtons}
 				</div>
 
 				<div className='extra'>
 					{hasTotal ? (
 						<Tooltip title='Tổng số dữ liệu'>
-							<div className={classNames({ total: true, small: props?.size === 'small' })}>
-								Tổng số:
-								<span>{total || props.data?.length || 0}</span>
-							</div>
+							{props.totalComponent || (
+								<div className={classNames({ total: true, small: props?.size === 'small' })}>
+									Tổng số:
+									<span>{total || props.data?.length || 0}</span>
+								</div>
+							)}
 						</Tooltip>
 					) : null}
 				</div>

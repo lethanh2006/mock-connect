@@ -56,6 +56,7 @@ export default {
 	'menu.DichVuHanhChinh.TaoDon': 'Tạo đơn - Dịch vụ hành chính',
 	'menu.PhanHoi': 'Phản hồi',
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
+	'menu.CuocThi': 'Cuộc thi',
 	'menu.ThongBao': 'Thông báo',
 
 	'menu.TienIch': 'Tiện ích khác',
@@ -102,4 +103,9 @@ export default {
 	'menu.NoiNgoaiTru.KhaiBao': 'Khai báo',
 
 	'menu.KeHoachNCKH': 'Kế hoạch NCKH',
+
+	'menu.ThuVien': 'Thư viện',
+	'menu.ThuVien.VaoRa': 'Lịch sử vào ra',
+	'menu.ThuVien.MuonTraSach': 'Tìm kiếm tài nguyên thư viện',
+	'menu.ThuVien.LichSuMuonTra': 'Lịch sử mượn trả',
 };

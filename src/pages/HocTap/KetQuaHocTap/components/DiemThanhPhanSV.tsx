@@ -2,6 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { CheckOutlined } from '@ant-design/icons';
 import { Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -37,7 +38,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				const kqhk = kqhkList.find((j) => j.maHocKy === mahk);
 				let tenHocPhan = diemHpHkList[0]?.hocKy?.ten ?? `Học kỳ ${mahk}`;
 				if (kqhk)
-					tenHocPhan += ` (TB học kỳ: ${kqhk.trungBinhHocKy ?? '--'}, đạt: ${
+					tenHocPhan += ` (TB học kỳ: ${kqhk.trungBinhHocKyThang4 ?? '--'}, đạt: ${
 						kqhk.tongSoTinChiHocKy ?? '--'
 					} tín chỉ, tích lũy: ${kqhk.tongSoTinChiTichLuyToanKhoa ?? '--'} tín chỉ)`;
 				// Thêm 1 hàng trống => Tên học kỳ
@@ -111,7 +112,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			width: 220,
 			onCell: (rec) => ({
 				...onCell(rec),
-				colSpan: rec._id === '-1' ? 8 + (danhSachDauDiem.length + 1) : 1,
+				colSpan: rec._id === '-1' ? 9 + (danhSachDauDiem.length + 1) : 1,
 			}),
 		},
 		{
@@ -119,6 +120,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			width: 60,
 			align: 'center',
 			render: (val, rec) => rec?.hocPhan?.soTinChi,
+			onCell,
+		},
+		{
+			title: 'TL',
+			dataIndex: 'tichLuy',
+			width: 40,
+			align: 'center',
+			render: (val) => !!val && <CheckOutlined />,
 			onCell,
 		},
 		{
@@ -181,7 +190,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 		// sortable: true,
 		onCell,
 	}));
-	columns.splice(4, 0, {
+	columns.splice(5, 0, {
 		title: 'Điểm thành phần',
 		width: cols.length * 80,
 		children: cols,
