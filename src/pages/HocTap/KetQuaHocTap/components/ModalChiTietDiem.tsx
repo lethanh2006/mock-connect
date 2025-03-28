@@ -1,9 +1,9 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
+import { colorTrangThaiHocTap, ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { InfoCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Modal, Popover, Space, Tooltip, message } from 'antd';
+import { Button, Descriptions, Modal, Popover, Space, Tag, Tooltip, message } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
@@ -21,6 +21,7 @@ const ModalChiTietDiem = (
 		// Chương trình khung
 		trangThaiHoc?: ETrangThaiHocTap;
 		khoiChuongTrinh?: Partial<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>;
+		colorKhoiKienThuc?: string;
 		maKhoaNganh?: string;
 	} & Partial<Pick<ChuongTrinhDaoTao.TTienTrinhThucTe, 'hocPhan'>>,
 ) => {
@@ -36,7 +37,7 @@ const ModalChiTietDiem = (
 	};
 
 	const renderHocPhanCt = (dsHocPhan?: ChuongTrinhDaoTao.THocPhanTuongQuan[], label?: string) => (
-		<Descriptions.Item label={label}>
+		<Descriptions.Item label={label} span={3}>
 			{dsHocPhan?.length ? (
 				<ul style={{ marginBottom: 0, paddingLeft: 14 }}>
 					{dsHocPhan?.map((item) => (
@@ -46,7 +47,7 @@ const ModalChiTietDiem = (
 					))}
 				</ul>
 			) : (
-				<i style={{ color: '#999' }}>Không có thông tin</i>
+				<i style={{ color: '#aaa' }}>Không có thông tin</i>
 			)}
 		</Descriptions.Item>
 	);
@@ -94,16 +95,29 @@ const ModalChiTietDiem = (
 						<Descriptions.Item label='Mã học phần'>{hocPhan?.ma}</Descriptions.Item>
 						<Descriptions.Item label='Số tín chỉ'>{hocPhan?.soTinChi} tín chỉ</Descriptions.Item>
 						{trangThaiHoc ? (
-							<Descriptions.Item label='Trạng thái'>{trangThaiHocTap[trangThaiHoc]}</Descriptions.Item>
+							<Descriptions.Item label='Trạng thái'>
+								<Tag color={colorTrangThaiHocTap[trangThaiHoc]}>{trangThaiHocTap[trangThaiHoc]}</Tag>
+							</Descriptions.Item>
 						) : null}
 					</Descriptions>
 				) : null}
 
 				{khoiChuongTrinh ? (
-					<Descriptions title='Chương trình học' column={1} style={{ marginTop: 12 }}>
-						<Descriptions.Item label='Khối kiến thức'>
-							{khoiChuongTrinh.khoiKienThuc?.ten ?? khoiChuongTrinh.maKhoiKienThuc}
+					<Descriptions title='Chương trình học' style={{ marginTop: 12 }}>
+						<Descriptions.Item label='TT học kỳ theo kế hoạch'>
+							<b>{khoiChuongTrinh.soThuTuKy}</b>
 						</Descriptions.Item>
+						<Descriptions.Item label='Khối kiến thức' span={2}>
+							<span style={{ color: props.colorKhoiKienThuc }}>
+								{khoiChuongTrinh.khoiKienThuc?.ten ?? khoiChuongTrinh.maKhoiKienThuc}
+							</span>
+						</Descriptions.Item>
+						{/* Sẽ được truyền vào từ CardKhoiHocPhan.tsx */}
+						{khoiChuongTrinh.ten && (
+							<Descriptions.Item label='Khối học phần tự chọn' span={3}>
+								{khoiChuongTrinh.ten}
+							</Descriptions.Item>
+						)}
 						{renderHocPhanCt(khoiChuongTrinh.dsHocPhanTienQuyet, 'Học phần tiên quyết')}
 						{renderHocPhanCt(khoiChuongTrinh.dsHocPhanTruoc, 'Học phần trước')}
 						{renderHocPhanCt(khoiChuongTrinh.dsHocPhanSongHanh, 'Học phần song hành')}

@@ -247,6 +247,41 @@
 		path: 'hoat-dong-khcn',
 		icon: 'DotChartOutlined',
 		routes: [
+			// {
+			// 	name: 'QuanLyNCKH',
+			// 	icon: 'AuditOutlined',
+			// 	path: './quan-ly-khoa-hoc',
+			// 	routes: [
+			// 		// {
+			// 		// 	name: 'TongQuan',
+			// 		// 	path: './tongquan',
+			// 		// 	component: './KhoaHoc/ThongKe/TongQuanCBGV',
+			// 		// },
+			// 		{
+			// 			name: 'SanPham',
+			// 			icon: 'AuditOutlined',
+			// 			path: './sanpham',
+			// 			component: './KhoaHoc/SanPhamHoatDongNCKH/SanPham',
+			// 		},
+			// 		{
+			// 			name: 'HoatDong',
+			// 			icon: 'AuditOutlined',
+			// 			path: './hoatdong',
+			// 			component: './KhoaHoc/SanPhamHoatDongNCKH/HoatDong',
+			// 		},
+
+			// 		// {
+			// 		// 	name: 'KhaiBaoDiemNCKH',
+			// 		// 	path: './khaibao',
+			// 		// 	component: './QuanLyKhoaHoc/YeuCauQuyDoiDiem',
+			// 		// },
+			// 		// {
+			// 		// 	name: 'KhaiBaoGioChuan',
+			// 		// 	path: './kbgio',
+			// 		// 	component: './QuanLyKhoaHoc/YeuCauQuyDoiGio',
+			// 		// },
+			// 	],
+			// },
 			{
 				name: 'DeTaiHocVien',
 				icon: 'AuditOutlined',
@@ -457,6 +492,12 @@
 		path: './khao-sat',
 		component: './TienIch/KhaoSat',
 		icon: 'table',
+	},
+	{
+		name: 'CuocThi',
+		path: './cuoc-thi',
+		component: './TienIch/CuocThi',
+		icon: 'TrophyOutlined',
 	},
 	{
 		name: 'ThongBao',
