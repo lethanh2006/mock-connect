@@ -489,50 +489,33 @@ const FormRender = (props: {
 	}
 
 	const checkTruongThongTinLienQuan = useMemo(() => {
-		let check = false;
-		if (!cauHinh?.truongThongTinLienQuan) return true;
-		if (props?.formValues?.[cauHinh?.truongThongTinLienQuan] === cauHinh?.giaTriLienQuan) return true;
-		if (cauHinh.giaTriLienQuan.includes) {
-			if (cauHinh?.giaTriLienQuan?.includes(props?.formValues?.[cauHinh?.truongThongTinLienQuan])) return true;
-			if (props?.formValues?.[cauHinh?.truongThongTinLienQuan]?.map)
-				props?.formValues?.[cauHinh?.truongThongTinLienQuan]?.map((item: any) => {
-					if (cauHinh?.giaTriLienQuan?.includes(item)) {
-						check = true;
-					}
-				});
-		}
+		let check = true;
+		if (!cauHinh?.danhSachTruongThongTinLienQuan?.length) return true;
+		cauHinh?.danhSachTruongThongTinLienQuan?.map((thongTin) => {
+			const valueInForm = props?.formValues?.[thongTin?.truongThongTinLienQuan];
+			if (valueInForm === null || valueInForm === undefined || (_.isArray(valueInForm) && !valueInForm?.length)) {
+				check = false;
+			}
+			if (!thongTin.giaTriLienQuan.includes && valueInForm !== thongTin?.giaTriLienQuan) {
+				check = false;
+			}
+			if (thongTin.giaTriLienQuan.includes) {
+				if (!thongTin?.giaTriLienQuan?.includes(valueInForm) && !_.isArray(valueInForm)) {
+					check = false;
+				}
+
+				if (_.isArray(valueInForm)) {
+					check = false;
+					valueInForm?.map((item: any) => {
+						if (thongTin?.giaTriLienQuan?.includes(item)) {
+							check = true;
+						}
+					});
+				}
+			}
+		});
 		return check;
-	}, [
-		cauHinh?.truongThongTinLienQuan,
-		cauHinh?.giaTriLienQuan,
-		props?.formValues?.[cauHinh?.truongThongTinLienQuan],
-		recordSanPham?._id,
-	]);
-
-	// todo: Sửa data cấu hình sản phẩm trước rồi mới update đoạn này
-
-	// const checkTruongThongTinLienQuan = useMemo(() => {
-	// 	let check = true;
-	// 	if (!cauHinh?.danhSachTruongThongTinLienQuan?.length) return true;
-	// 	cauHinh?.danhSachTruongThongTinLienQuan?.map((thongTin) => {
-	// 		if (
-	// 			!thongTin.giaTriLienQuan.includes &&
-	// 			props?.formValues?.[thongTin?.truongThongTinLienQuan] !== thongTin?.giaTriLienQuan
-	// 		)
-	// 			check = false;
-	// 		if (thongTin.giaTriLienQuan.includes) {
-	// 			if (!thongTin?.giaTriLienQuan?.includes(props?.formValues?.[thongTin?.truongThongTinLienQuan])) check = false;
-	// 			if (props?.formValues?.[thongTin?.truongThongTinLienQuan]?.map)
-	// 				props?.formValues?.[thongTin?.truongThongTinLienQuan]?.map((item: any) => {
-	// 					if (!thongTin?.giaTriLienQuan?.includes(item)) {
-	// 						check = false;
-	// 					}
-	// 				});
-	// 		}
-	// 	});
-
-	// 	return check;
-	// }, [cauHinh?.danhSachTruongThongTinLienQuan, props?.formValues, recordSanPham?._id]);
+	}, [cauHinh?.danhSachTruongThongTinLienQuan, props?.formValues]);
 
 	const truongThongTinTinh = recordLoaiHinh?.danhSachCauHinhTruongThongTinTinh?.filter(
 		(item) => item.maTruongThongTinDungSau === cauHinh.ma,
