@@ -7,6 +7,7 @@ import {
 	MapNameVaiTroThanhVienNCKH,
 } from '@/services/KhoaHoc/SanPhamNCKH/constants';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
+import { ETrangThaiChinhSuaNhanSu } from '@/services/ToChucNhanSu/constant';
 import rules from '@/utils/rules';
 import { Button, Card, Col, Form, Input, Row, Select, message } from 'antd';
 import { nanoid } from 'nanoid';
@@ -36,8 +37,8 @@ const FormThanhVien = (props: {
 	const [maDonVi, setMaDonVi] = useState<string>(record?.maDonVi?.trim() ?? '');
 	const [maDinhDanh, setMaDinhDanh] = useState<string>(record?.maDinhDanh?.trim() ?? '');
 	const vaiTro = Form.useWatch('vaiTro', form);
-	const { danhSach } = useModel('tochucnhansu.nhansu');
-	const { danhSach: danhSachSinhVien } = useModel('sinhvien.sinhvien');
+	const { getModel: getGiangVien } = useModel('tochucnhansu.nhansu');
+	const { getModel: getSinhVien } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
 		if (record && edit) {
@@ -53,10 +54,31 @@ const FormThanhVien = (props: {
 	}, [record]);
 
 	const onFinish = async (values: SanPhamNCKH.ThanhVienNCKH) => {
-		const dsFinal = vaiTro === EVaiTroThanhVienNckh.CBGV ? danhSach : danhSachSinhVien;
-
-		const recNhanSu: any = dsFinal.find((item) => item.ssoId === values?.ssoId);
-
+		let recNhanSu: any = {};
+		if (vaiTro === EVaiTroThanhVienNckh.SINH_VIEN) {
+			const dataSV = await getSinhVien(
+				{ ssoId: values?.ssoId },
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				'sinh-vien/pageable',
+			);
+			recNhanSu = dataSV?.[0];
+		} else if (vaiTro === EVaiTroThanhVienNckh.CBGV) {
+			const dataGV = await getGiangVien(
+				{
+					ssoId: values?.ssoId,
+					trangThaiChinhSua: ETrangThaiChinhSuaNhanSu.DUYET_DANG_AP_DUNG,
+				},
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				'sinh-vien/page',
+			);
+			recNhanSu = dataGV?.[0];
+		}
 		const payload: any = {
 			...values,
 			ssoId: values?.ssoId ? values.ssoId : nanoid(),
@@ -64,9 +86,9 @@ const FormThanhVien = (props: {
 			maDinhDanh: recNhanSu?.ma || recNhanSu?.maCanBo || maDinhDanh?.trim() || record?.maDinhDanh,
 			hoVaTen:
 				vaiTro === EVaiTroThanhVienNckh.SINH_VIEN
-					? recNhanSu.ten
+					? recNhanSu?.ten
 					: recNhanSu
-					? `${recNhanSu?.hoDem ?? ''} ${recNhanSu?.ten ?? ''}`
+					? `${recNhanSu?.hoTen ?? ''}`
 					: values?.hoVaTen || hoVaTen?.trim() || record?.hoVaTen,
 		};
 
@@ -259,10 +281,10 @@ const FormThanhVien = (props: {
 				<Form.Item
 					rules={[...rules.required, ...rules.text, ...rules.length(200)]}
 					style={{ marginBottom: 10 }}
-					label='Cơ quan/đơn vị công tác'
+					label={vaiTro === EVaiTroThanhVienNckh.SINH_VIEN ? 'Đơn vị (Trường, lớp...)' : 'Cơ quan/đơn vị công tác'}
 					name={'donVi'}
 				>
-					<Input.TextArea rows={3} placeholder='Nhập tên cơ quan, đơn vị công tác' />
+					<Input.TextArea rows={3} placeholder='Nhập thông tin' />
 				</Form.Item>
 
 				<Row gutter={[10, 0]}>
