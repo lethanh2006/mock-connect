@@ -36,7 +36,7 @@ const SelectSinhVienDebounce = (props: {
 							{
 								active: true,
 								field: selectMa ? 'ma' : 'ssoId',
-								values: Array.isArray(value) ? value : [value],
+								values: Array.isArray(value) ? value : ([value] as any),
 								operator: EOperatorType.INCLUDE,
 							},
 						],
@@ -67,9 +67,9 @@ const SelectSinhVienDebounce = (props: {
 		}
 	}, [keyword, value]);
 
-	useEffect(() => {
-		if (value && onChange) onChange(value, 'SV');
-	}, [value]);
+	// useEffect(() => {
+	// 	if (value && onChange) onChange(value, 'SV');
+	// }, [value]);
 
 	const searchDebounceSinhVien = _.debounce((val) => {
 		setKeyword(val);
