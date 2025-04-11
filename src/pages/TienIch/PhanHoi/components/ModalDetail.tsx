@@ -1,10 +1,13 @@
+import PreviewFile from '@/components/PreviewFile';
 import { PaperClipOutlined } from '@ant-design/icons';
-import { Button, Card, Descriptions, Tag } from 'antd';
+import { Button, Card, Descriptions, Modal, Tag } from 'antd';
 import moment from 'moment';
+import { useState } from 'react';
 import { useModel } from 'umi';
 
 const ModalDetailPhanhoi = () => {
 	const { record, setVisibleForm } = useModel('tienich.phanhoi');
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	return (
 		<Card title='Chi tiết phản hồi'>
@@ -16,10 +19,7 @@ const ModalDetailPhanhoi = () => {
 				<Descriptions.Item label='File đính kèm'>
 					{record?.urlPhanAnh ? (
 						<>
-							<PaperClipOutlined />{' '}
-							<a href={record?.urlPhanAnh} target='_blank' rel='noreferrer'>
-								File đính kèm
-							</a>
+							<PaperClipOutlined /> <a onClick={() => setVisibleFormFile(true)}>File đính kèm</a>
 						</>
 					) : (
 						<i>Không có</i>
@@ -40,6 +40,20 @@ const ModalDetailPhanhoi = () => {
 					)}
 				</Descriptions.Item>
 			</Descriptions>
+
+			<Modal
+				title='Chi tiết tập tin'
+				width={800}
+				visible={visibleFormFile}
+				footer={
+					<div className='form-footer'>
+						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					</div>
+				}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<PreviewFile file={record?.urlPhanAnh ?? ''} />
+			</Modal>
 
 			<div className='form-footer'>
 				<Button onClick={() => setVisibleForm(false)}>Đóng</Button>
