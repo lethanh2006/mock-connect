@@ -1,4 +1,4 @@
-import ExpandText from '@/components/ExpandText';
+import PreviewFile from '@/components/PreviewFile';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
@@ -9,8 +9,9 @@ import {
 } from '@/services/DaoTao/constant';
 import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
-import { Tag } from 'antd';
+import { Button, Carousel, Modal, Tag } from 'antd';
 import moment from 'moment';
+import { useState } from 'react';
 import { useModel } from 'umi';
 
 const TableLichHocLopHP = (props: {
@@ -19,6 +20,8 @@ const TableLichHocLopHP = (props: {
 }) => {
 	const { loading } = useModel('daotao.thoikhoabieu');
 	const { items, onClickItem } = props;
+	const [url, setUrl] = useState<any[]>([]);
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
 		onClick: () => onClickItem(rec),
@@ -94,23 +97,17 @@ const TableLichHocLopHP = (props: {
 		{
 			title: 'Học liệu',
 			width: 140,
-			render: (val, rec) => (
-				<ExpandText>
-					{rec.hocLieuList?.map((item, ind) => (
-						// eslint-disable-next-line react/no-array-index-key
-						<div key={ind}>
-							-{' '}
-							{item.url ? (
-								<a href={item.url} target='_blank' rel='noreferrer'>
-									{item.ten ?? '--'}
-								</a>
-							) : (
-								item.ten
-							)}
-						</div>
-					))}
-				</ExpandText>
-			),
+			render: (val, rec) =>
+				rec.hocLieuList?.length ? (
+					<a
+						onClick={() => {
+							setUrl(rec?.hocLieuList ?? []);
+							setVisibleFormFile(true);
+						}}
+					>
+						Xem chi tiết
+					</a>
+				) : null,
 			onCell,
 		},
 		// {
@@ -137,6 +134,25 @@ const TableLichHocLopHP = (props: {
 				columns={columns}
 				otherProps={{ pagination: false, loading, scroll: { y: 600 } }}
 			/>
+
+			<Modal
+				title='Chi tiết học liệu'
+				width={800}
+				visible={visibleFormFile}
+				footer={
+					<div className='form-footer'>
+						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					</div>
+				}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<Carousel autoplay pauseOnDotsHover>
+					{url?.map((item) => (
+						// eslint-disable-next-line react/jsx-key
+						<PreviewFile file={item.url ?? ''} />
+					))}
+				</Carousel>
+			</Modal>
 		</>
 	);
 };

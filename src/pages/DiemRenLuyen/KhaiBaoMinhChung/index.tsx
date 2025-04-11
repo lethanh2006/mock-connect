@@ -10,15 +10,28 @@ import {
 } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/constants';
 import { type MinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/typing';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Tag, Tooltip } from 'antd';
+import { Button, Carousel, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import moment from 'moment';
 import { useModel } from 'umi';
 import { FormKhaiBaoMinhChung } from './components/Form';
 import ExpandText from '@/components/ExpandText';
+import { useState } from 'react';
+import PreviewFile from '@/components/PreviewFile';
 
 export default () => {
-	const { danhSach, page, limit, getLoaiMinhChung, handleView, handleEdit, deleteModel, getModel } =
-		useModel('diemrenluyen.minhchung');
+	const {
+		danhSach,
+		page,
+		limit,
+		getLoaiMinhChung,
+		handleView,
+		handleEdit,
+		deleteModel,
+		getModel,
+		record: recMinhChung,
+		setRecord,
+	} = useModel('diemrenluyen.minhchung');
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	const onCell = (rec: MinhChungDiemRenLuyen.IRecord) => ({
 		onClick: () => {
@@ -170,15 +183,19 @@ export default () => {
 			title: 'Tập tin',
 			dataIndex: 'urlFileList',
 			align: 'center',
-			render: (_, record) => {
-				return record.urlFileList?.map((item, index) => (
-					<div key={item}>
-						<Button type='link' href={item} target='_blank' rel='noreferrer'>
-							Xem tập tin {index + 1}
-						</Button>
-					</div>
-				));
-			},
+			render: (_, record) =>
+				record.urlFileList?.length ? (
+					<Button
+						type='link'
+						onClick={() => {
+							setRecord(record);
+							setVisibleFormFile(true);
+						}}
+					>
+						Xem tập tin
+					</Button>
+				) : null,
+
 			width: 120,
 			onCell,
 			hide: ![
@@ -239,18 +256,39 @@ export default () => {
 	];
 
 	return (
-		<TableBase
-			widthDrawer={600}
-			Form={FormKhaiBaoMinhChung}
-			title={ELoaiMinhChungDiemRenLuyenMappingToTitle[getLoaiMinhChung()]}
-			modelName='diemrenluyen.minhchung'
-			columns={columns}
-			dependencies={[page, limit]}
-			buttons={{
-				create:
-					getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU ||
-					!danhSach.find((item) => item.trangThai === ETrangThaiMinhChungDiemRenLuyen.DA_DUYET),
-			}}
-		/>
+		<>
+			<TableBase
+				widthDrawer={600}
+				Form={FormKhaiBaoMinhChung}
+				title={ELoaiMinhChungDiemRenLuyenMappingToTitle[getLoaiMinhChung()]}
+				modelName='diemrenluyen.minhchung'
+				columns={columns}
+				dependencies={[page, limit]}
+				buttons={{
+					create:
+						getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU ||
+						!danhSach.find((item) => item.trangThai === ETrangThaiMinhChungDiemRenLuyen.DA_DUYET),
+				}}
+			/>
+
+			<Modal
+				title='Chi tiết tập tin'
+				width={800}
+				visible={visibleFormFile}
+				footer={
+					<div className='form-footer'>
+						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					</div>
+				}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<Carousel autoplay pauseOnDotsHover>
+					{recMinhChung?.urlFileList?.map((item) => (
+						// eslint-disable-next-line react/jsx-key
+						<PreviewFile file={item ?? ''} />
+					))}
+				</Carousel>
+			</Modal>
+		</>
 	);
 };
