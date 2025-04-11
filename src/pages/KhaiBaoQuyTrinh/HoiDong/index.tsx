@@ -1,20 +1,20 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
-
-import { EyeOutlined } from '@ant-design/icons';
-import { Button, Modal, Tooltip } from 'antd';
+import { Button, Carousel, Modal } from 'antd';
 import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
 
+import PreviewFile from '@/components/PreviewFile';
 import type { HoiDong } from '@/services/QuyTrinh/HoiDong/typings';
 import TableDonHoiDong from './components/TableDonHoiDong';
 import TableThanhVien from './components/TableThanhVien';
 
 const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
-	const { getHoiDongThamGia, page, limit, condition, setRecord, setVisibleForm } = useModel('quytrinh.hoidong');
+	const { getHoiDongThamGia, page, limit, condition, record, setRecord, setVisibleForm } = useModel('quytrinh.hoidong');
 
 	const [visibleViewThanhVien, setVisibleViewThanhVien] = useState<boolean>(false);
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 	const onCancelViewThanhVien = useCallback(() => {
 		setVisibleViewThanhVien(false);
 	}, []);
@@ -35,26 +35,24 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 			title: 'Văn bản kèm theo',
 			dataIndex: 'danhSachVanBanLuuTru',
 			width: 200,
-			render: (val, rec) => {
-				return (
-					<div>
-						{rec.danhSachVanBanLuuTru.map((item, index) => (
-							<div key={item.url}>
-								<a href={item.url} target='_blank' rel='noreferrer'>
-									{index + 1}. {item.tenFile}
-								</a>
-							</div>
-						))}
-					</div>
-				);
-			},
+			render: (val, rec) =>
+				rec?.danhSachVanBanLuuTru?.length ? (
+					<a
+						onClick={() => {
+							setRecord(rec);
+							setVisibleFormFile(true);
+						}}
+					>
+						Xem chi tiết
+					</a>
+				) : null,
 		},
 		{
 			title: 'Thời gian',
 			width: 150,
-			render: (record: HoiDong.IRecord) => (
+			render: (rec: HoiDong.IRecord) => (
 				<div>
-					{moment(record.startDate).format('HH:mm DD/MM/YYYY')} - {moment(record.endDate).format('HH:mm DD/MM/YYYY')}
+					{moment(rec.startDate).format('HH:mm DD/MM/YYYY')} - {moment(rec.endDate).format('HH:mm DD/MM/YYYY')}
 				</div>
 			),
 		},
@@ -62,15 +60,15 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 			title: 'Danh sách thành viên',
 			width: 150,
 			align: 'center',
-			render: (record: HoiDong.IRecord) => (
+			render: (rec: HoiDong.IRecord) => (
 				<Button
 					onClick={() => {
-						setRecord(record);
+						setRecord(rec);
 						setVisibleViewThanhVien(true);
 					}}
 					type='link'
 				>
-					{record.danhSachThanhVien.length} thành viên
+					{rec.danhSachThanhVien.length} thành viên
 				</Button>
 			),
 		},
@@ -125,6 +123,25 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 				onCancel={onCancelViewThanhVien}
 			>
 				<TableThanhVien mode='view' />
+			</Modal>
+
+			<Modal
+				title='Chi tiết văn bản kèm theo'
+				width={800}
+				visible={visibleFormFile}
+				footer={
+					<div className='form-footer'>
+						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					</div>
+				}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<Carousel autoplay pauseOnDotsHover>
+					{record?.danhSachVanBanLuuTru?.map((item) => (
+						// eslint-disable-next-line react/jsx-key
+						<PreviewFile file={item?.url ?? ''} />
+					))}
+				</Carousel>
 			</Modal>
 		</>
 	);

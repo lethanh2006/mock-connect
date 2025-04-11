@@ -2,9 +2,13 @@ import { primaryColor } from '@/services/base/constant';
 import { Button, Descriptions, Modal, Tag } from 'antd';
 import { useModel } from 'umi';
 import TableDeTaiQuyetDinh from './DeTaiQuyetDinh';
+import { useState } from 'react';
+import PreviewFile from '@/components/PreviewFile';
 
 const ViewQuyetDinh = () => {
 	const { record, visibleViewDetail, setVisibleViewDetail } = useModel('khoahoc.quyetdinhgiao');
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
+
 	const handleCancel = () => {
 		setVisibleViewDetail(false);
 	};
@@ -30,7 +34,7 @@ const ViewQuyetDinh = () => {
 				</Descriptions.Item>
 				<Descriptions.Item span={3} label='File đính kèm'>
 					{record?.urlQuyetDinhGiao && (
-						<a href={record?.urlQuyetDinhGiao} target='_blank' rel='noreferrer'>
+						<a onClick={() => setVisibleFormFile(true)}>
 							<Tag color={primaryColor}>Xem tập tin</Tag>
 						</a>
 					)}
@@ -40,6 +44,20 @@ const ViewQuyetDinh = () => {
 				<b>Danh sách đề tài</b>
 			</div>
 			<TableDeTaiQuyetDinh mode='view' data={record?.danhSachDeTai ?? []} />
+
+			<Modal
+				title='Chi tiết tập tin'
+				width={800}
+				visible={visibleFormFile}
+				footer={
+					<div className='form-footer'>
+						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					</div>
+				}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<PreviewFile file={record?.urlQuyetDinhGiao ?? ''} />
+			</Modal>
 		</Modal>
 	);
 };
