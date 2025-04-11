@@ -1,12 +1,15 @@
 import { colorTrangThaiSinhVienQuyDoiDiem, type ETrangThaiPhieuQuyDoiDiem } from '@/services/HocTap/constant';
-import { Button, Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
+import { Button, Carousel, Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
 import { useModel } from 'umi';
 import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
 import moment from 'moment';
+import { useState } from 'react';
+import PreviewFile from '@/components/PreviewFile';
 
 const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
 	const { visible, setVisible } = props;
 	const { record } = useModel('daotao.quydoidiem.phieuquydoidiem');
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	const tiLeCongNhan = !record?.soTinChiChuongTrinhDaoTao
 		? 0
@@ -29,11 +32,7 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 						<Descriptions.Item label='Ngành đào tạo'>{record?.khoaNganh?.ten ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='File minh chứng'>
 							<Space>
-								{record?.urlsMinhChung?.map((item, index) => (
-									<a target='_blank' href={item} key={item} rel='noreferrer'>
-										Xem tệp tin {index + 1}
-									</a>
-								))}
+								{record?.urlsMinhChung?.length ? <a onClick={() => setVisibleFormFile(true)}>Xem tệp tin</a> : null}
 							</Space>
 						</Descriptions.Item>
 						<Descriptions.Item label='Tỷ lệ công nhận'>
@@ -60,6 +59,25 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 			<div className='form-footer'>
 				<Button onClick={() => setVisible(false)}>Đóng</Button>
 			</div>
+
+			<Modal
+				title='Chi tiết minh chứng'
+				width={800}
+				visible={visibleFormFile}
+				footer={
+					<div className='form-footer'>
+						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					</div>
+				}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<Carousel autoplay pauseOnDotsHover>
+					{record?.urlsMinhChung?.map((item) => (
+						// eslint-disable-next-line react/jsx-key
+						<PreviewFile file={item ?? ''} />
+					))}
+				</Carousel>
+			</Modal>
 		</Modal>
 	);
 };
