@@ -17,6 +17,7 @@ const ipThuVien = ipRoot + 'thu-vien'; // ip dev
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
 const currentRole = EModuleKey.CONNECT;
+const replaceRole: EModuleKey | undefined = undefined; //EModuleKey.CONG_CAN_BO; // Thay đổi theo từng phân hệ
 const oneSignalRole = EModuleKey.CONNECT;
 
 // DO NOT TOUCH
@@ -33,12 +34,13 @@ const moodleEndpoint = APP_CONFIG_MOODLE_ENDPOINT;
 export {
 	ipDaoTao,
 	ipNhanSu,
+	currentRole,
+	replaceRole,
 	ip3,
 	ipCore,
 	ipNotif,
 	ipTaiChinh,
 	ipThuVien,
-	currentRole,
 	oneSignalRole,
 	keycloakClientID,
 	resourceServerClientId,
