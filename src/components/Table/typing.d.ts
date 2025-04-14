@@ -141,6 +141,11 @@ export type TableBaseProps = {
 	onSortEnd?: (record: any, newIndex: number) => void;
 
 	hideChildrenRows?: boolean;
+
+	/** Hàm reload dữ liệu
+	 * @default getData
+	 */
+	onReload?: (params?: any) => void;
 };
 
 export type TFilter<T> = {
@@ -185,6 +190,11 @@ export type TableStaticProps = {
 	onSortEnd?: (record: any, newIndex: number) => void;
 
 	hideChildrenRows?: boolean;
+
+	/** Hàm reload dữ liệu
+	 * @default null
+	 */
+	onReload?: () => void;
 };
 
 // IMPORT HEADER

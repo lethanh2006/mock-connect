@@ -1,4 +1,4 @@
-import { MenuOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { MenuOutlined, PlusOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { AutoComplete, Drawer, Input, Modal, Table, Tooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -10,8 +10,10 @@ import ButtonExtend from './ButtonExtend';
 import { updateSearchStorage } from './function';
 import './style.less';
 import type { IColumn, TDataOption, TableStaticProps } from './typing';
+import { useIntl } from 'umi';
 
 const TableStaticData = (props: TableStaticProps) => {
+	const intl = useIntl();
 	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable } = props;
 	const [searchText, setSearchText] = useState<string>('');
 	const [searchedColumn, setSearchedColumn] = useState();
@@ -195,20 +197,32 @@ const TableStaticData = (props: TableStaticProps) => {
 							type='primary'
 							style={{ marginBottom: 8 }}
 							size={props?.size ?? 'middle'}
-							tooltip='Thêm mới dữ liệu'
+							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.themmoi.tooltip' })}
 						>
-							Thêm mới
+							{intl.formatMessage({ id: 'global.tablestatic.button.themmoi' })}
 						</ButtonExtend>
 					)}
 					{props.otherButtons}
 				</div>
 
 				<div className='extra'>
+					{!!props.onReload ? (
+						<ButtonExtend
+							size={props?.size}
+							icon={<ReloadOutlined />}
+							onClick={() => (props.onReload ? props.onReload() : null)}
+							loading={props.loading}
+							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.xoa.tooltip' })}
+						>
+							{intl.formatMessage({ id: 'global.tablestatic.button.xoa' })}
+						</ButtonExtend>
+					) : null}
+
 					{hasTotal ? (
-						<Tooltip title='Tổng số dữ liệu'>
+						<Tooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
 							{props.totalComponent || (
 								<div className={classNames({ total: true, small: props?.size === 'small' })}>
-									Tổng số:
+									{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
 									<span>{total || props.data?.length || 0}</span>
 								</div>
 							)}
