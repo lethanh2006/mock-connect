@@ -188,12 +188,12 @@ const BaiThiCuoiKy = () => {
 							}}
 							options={[
 								{ value: 'nopBai', label: 'Giao đề/Nộp bài' },
-								{ value: 'raDe', label: 'Ra đề' },
+								{ value: 'raDe', label: 'Giao đề' },
 							]}
 						/>
 						{type === 'raDe' && (
 							<div style={{ fontStyle: 'italic', color: primaryColor }}>
-								Với học phần ra đề, sinh viên <strong>không cần nộp bài</strong>.
+								Với học phần ra đề, sinh viên <strong>không cần nộp bài</strong> trên hệ thống.
 							</div>
 						)}
 					</Space>,
