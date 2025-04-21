@@ -2,12 +2,14 @@ import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
+import { primaryColor } from '@/services/base/constant';
 import { type EDinhDangBaiThi, mapNameDinhDangBaiThi } from '@/services/KhaoThi/constant';
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
 import { getNameFile } from '@/utils/utils';
 import { SaveOutlined } from '@ant-design/icons';
-import { Card, Tag } from 'antd';
+import { Card, Segmented, Space, Tag } from 'antd';
 import moment from 'moment';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import FilterKyThi from '../../KhaoThi/KyThi/Filter';
 import Form from './components/Form';
@@ -16,13 +18,14 @@ const BaiThiCuoiKy = () => {
 	const { record: recordHocKy } = useModel('daotao.hocky');
 	const { record: reckyThi } = useModel('khaothi.kythi');
 	const { getModel, page, limit, handleEdit } = useModel('khaothi.sinhvienthi');
+	const [type, setType] = useState<string>('nopBai');
 
 	const getData = () => {
 		if (recordHocKy?._id)
 			getModel(
-				{
-					kyThiId: reckyThi?._id,
-				},
+				type === 'nopBai'
+					? { kyThiId: reckyThi?._id, yeuCauNopBai: true }
+					: { kyThiId: reckyThi?._id, yeuCauRaDe: true },
 				undefined,
 				undefined,
 				undefined,
@@ -89,20 +92,21 @@ const BaiThiCuoiKy = () => {
 			title: 'Dung lượng tối đa',
 			align: 'center',
 			dataIndex: 'dungLuongToiDa',
-			render: (val, rec) => `${val} MB`,
+			render: (val, rec) => val && `${val} MB`,
 			width: 100,
 		},
 		{
 			title: 'Định dạng cho phép',
 			dataIndex: 'dinhDangFileChoPhep',
 			width: 200,
-			render: (val: EDinhDangBaiThi[], rec) => (
-				<div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-					{val?.map((item) => (
-						<Tag key={item}>{mapNameDinhDangBaiThi[item]}</Tag>
-					))}
-				</div>
-			),
+			render: (val: EDinhDangBaiThi[], rec) =>
+				val?.length && (
+					<div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+						{val?.map((item) => (
+							<Tag key={item}>{mapNameDinhDangBaiThi[item]}</Tag>
+						))}
+					</div>
+				),
 		},
 		{
 			title: 'Bài tập',
@@ -123,6 +127,7 @@ const BaiThiCuoiKy = () => {
 						</div>
 					))
 				),
+			hide: type === 'raDe',
 		},
 		{
 			title: 'Ghi chú',
@@ -152,11 +157,12 @@ const BaiThiCuoiKy = () => {
 					/>
 				);
 			},
+			hide: type === 'raDe',
 		},
 	];
 
 	return (
-		<Card title='Nộp bài cuối kỳ'>
+		<Card title='Bài cuối kỳ'>
 			<div style={{ marginBottom: 12 }}>
 				<FilterKyThi />
 			</div>
@@ -167,12 +173,31 @@ const BaiThiCuoiKy = () => {
 					create: false,
 				}}
 				columns={columns}
-				dependencies={[page, limit, reckyThi?._id, recordHocKy?.ma]}
+				dependencies={[page, limit, reckyThi?._id, recordHocKy?.ma, type]}
 				modelName='khaothi.sinhvienthi'
 				hideCard
 				Form={Form}
 				formProps={{ getData }}
 				destroyModal
+				otherButtons={[
+					<Space key={'1'} wrap>
+						<Segmented
+							value={type}
+							onChange={(val) => {
+								setType(val as string);
+							}}
+							options={[
+								{ value: 'nopBai', label: 'Giao đề/Nộp bài' },
+								{ value: 'raDe', label: 'Ra đề' },
+							]}
+						/>
+						{type === 'raDe' && (
+							<div style={{ fontStyle: 'italic', color: primaryColor }}>
+								Với học phần ra đề, sinh viên <strong>không cần nộp bài</strong>.
+							</div>
+						)}
+					</Space>,
+				]}
 			/>
 		</Card>
 	);
