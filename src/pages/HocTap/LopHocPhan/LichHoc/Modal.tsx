@@ -37,7 +37,7 @@ const ModalThoiKhoaBieu = () => {
 							<div dangerouslySetInnerHTML={{ __html: recThoiKhoaBieu?.noiDungBaiHoc ?? '--' }} />
 						</Descriptions.Item>
 						<Descriptions.Item label='Học liệu'>
-							{recThoiKhoaBieu?.hocLieuList?.length ? (
+							{recThoiKhoaBieu?.hocLieuList?.filter((item) => item?.url)?.length ? (
 								<a
 									onClick={() => {
 										setVisibleFormFile(true);
@@ -75,7 +75,7 @@ const ModalThoiKhoaBieu = () => {
 				<Carousel autoplay pauseOnDotsHover>
 					{recThoiKhoaBieu?.hocLieuList?.map((item) => (
 						// eslint-disable-next-line react/jsx-key
-						<PreviewFile file={item.url ?? ''} />
+						<PreviewFile file={item.url ?? ''} tenFile={item?.ten} />
 					))}
 				</Carousel>
 			</Modal>

@@ -98,7 +98,7 @@ const TableLichHocLopHP = (props: {
 			title: 'Học liệu',
 			width: 140,
 			render: (val, rec) =>
-				rec.hocLieuList?.length ? (
+				rec.hocLieuList?.filter((item) => item?.url)?.length ? (
 					<a
 						onClick={() => {
 							setUrl(rec?.hocLieuList ?? []);
@@ -108,7 +108,6 @@ const TableLichHocLopHP = (props: {
 						Xem chi tiết
 					</a>
 				) : null,
-			onCell,
 		},
 		// {
 		// 	title: 'Loại hình',
@@ -149,7 +148,7 @@ const TableLichHocLopHP = (props: {
 				<Carousel autoplay pauseOnDotsHover>
 					{url?.map((item) => (
 						// eslint-disable-next-line react/jsx-key
-						<PreviewFile file={item.url ?? ''} />
+						<PreviewFile file={item.url ?? ''} tenFile={item?.ten} />
 					))}
 				</Carousel>
 			</Modal>
