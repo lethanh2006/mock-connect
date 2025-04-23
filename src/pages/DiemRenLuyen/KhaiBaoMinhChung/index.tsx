@@ -197,7 +197,6 @@ export default () => {
 				) : null,
 
 			width: 120,
-			onCell,
 			hide: ![
 				ELoaiMinhChungDiemRenLuyen.THAM_GIA_CONG_TAC_XA_HOI,
 				ELoaiMinhChungDiemRenLuyen.THANH_TICH_DAC_BIET,

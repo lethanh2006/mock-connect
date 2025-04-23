@@ -20,7 +20,7 @@ type TFrameProps = {
 
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
-	const { file, width = '100%', height = '600px', children, ip = ip3, isFileId } = props;
+	const { file, width = '100%', height = '600px', children, ip = ip3, isFileId, tenFile } = props;
 	const [frameData, setFrameData] = useState<TFrameProps>();
 	const [loading, setLoading] = useState(false);
 
@@ -111,7 +111,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	return (
 		<Spin spinning={loading}>
 			<Space wrap align='center' style={{ justifyContent: 'space-between', marginBottom: 12, width: '100%' }}>
-				<b>{frameData?.name ?? '--'}</b>
+				<b>{tenFile ?? frameData?.name ?? '--'}</b>
 
 				<Space wrap>
 					{!!frameData?.url && (
