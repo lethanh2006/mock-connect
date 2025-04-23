@@ -36,7 +36,7 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 			dataIndex: 'danhSachVanBanLuuTru',
 			width: 200,
 			render: (val, rec) =>
-				rec?.danhSachVanBanLuuTru?.length ? (
+				rec?.danhSachVanBanLuuTru?.filter((item) => item?.url)?.length ? (
 					<a
 						onClick={() => {
 							setRecord(rec);
@@ -139,7 +139,7 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 				<Carousel autoplay pauseOnDotsHover>
 					{record?.danhSachVanBanLuuTru?.map((item) => (
 						// eslint-disable-next-line react/jsx-key
-						<PreviewFile file={item?.url ?? ''} />
+						<PreviewFile file={item?.url ?? ''} tenFile={item?.tenFile} />
 					))}
 				</Carousel>
 			</Modal>
