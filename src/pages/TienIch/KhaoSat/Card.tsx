@@ -133,7 +133,7 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 			title={loai === ELoaiDot.BIEU_MAU ? 'Đợt khảo sát' : loai === ELoaiDot.CUOC_THI ? 'Danh sách cuộc thi' : ''}
 			Form={Form}
 			formProps={{ khaoSat: cauTraLoi, cauTraLoi: cauTraLoi?.danhSachTraLoi, loai }}
-			widthDrawer={800}
+			widthDrawer={1100}
 			buttons={{ create: false }}
 			otherButtons={[
 				<Segmented
