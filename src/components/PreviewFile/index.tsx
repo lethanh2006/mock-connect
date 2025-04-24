@@ -3,7 +3,7 @@ import type { IFileInfo } from '@/services/base/typing';
 import { getFileInfo } from '@/services/uploadFile';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
-import { CopyOutlined, DownloadOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { CopyOutlined, DownloadOutlined, RightOutlined } from '@ant-design/icons';
 import { message, Space, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ type TFrameProps = {
 
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
-	const { file, width = '100%', height = '600px', children, ip = ip3, isFileId, tenFile } = props;
+	const { file, style = {}, children, ip = ip3, isFileId, tenFile } = props;
 	const [frameData, setFrameData] = useState<TFrameProps>();
 	const [loading, setLoading] = useState(false);
 
@@ -108,8 +108,14 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 		}
 	};
 
+	if (loading)
+		return (
+			<div style={{ width: '100%', height: '100%', ...style }}>
+				<Spin size='large' />
+			</div>
+		);
 	return (
-		<Spin spinning={loading}>
+		<div style={{ width: '100%', height: '100%', ...style }}>
 			<Space wrap align='center' style={{ justifyContent: 'space-between', marginBottom: 12, width: '100%' }}>
 				<b>{tenFile ?? frameData?.name ?? '--'}</b>
 
@@ -135,7 +141,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 						<ButtonExtend
 							type='link'
 							tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
-							icon={<FullscreenOutlined />}
+							icon={<RightOutlined />}
 							onClick={() => window.open(frameData?.src, '_blank')}
 						/>
 					)}
@@ -145,7 +151,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			</Space>
 
 			{frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
-				<iframe src={frameData.src} width={width} height={height} />
+				<iframe src={frameData.src} style={{ height: 'calc(100% - 44px)', width: '100%', minHeight: 500 }} />
 			) : (
 				<div
 					style={{
@@ -175,7 +181,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 					</p>
 				</div>
 			)}
-		</Spin>
+		</div>
 	);
 };
 
