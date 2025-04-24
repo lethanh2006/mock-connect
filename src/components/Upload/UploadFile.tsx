@@ -41,14 +41,18 @@ const UploadFile: React.FC<TUploadProps> = ({
 		let files: any[] = [];
 		// Single URL
 		if (typeof value === 'string') {
-			files = [{ url: value, remote: true, name: getNameFile(value) }];
+			files = [{ url: value, remote: true, name: props.previewFileProps?.isFileId ? 'Tập tin' : getNameFile(value) }];
 			setFileList(files);
 			// Callback về Form để Form Item có fileList => Phục vụ check rules fileRequired
 			if (onChange) onChange({ fileList: files });
 		}
 		// Array of URLs
 		else if (Array.isArray(value)) {
-			files = value.map((url) => ({ url, remote: true, name: getNameFile(url) }));
+			files = value.map((url, ind) => ({
+				url,
+				remote: true,
+				name: props.previewFileProps?.isFileId ? `Tập tin ${ind + 1}` : getNameFile(url),
+			}));
 			setFileList(files);
 			// Callback về Form để Form Item có fileList => Phục vụ check rules fileRequired
 			if (onChange) onChange({ fileList: files });
@@ -246,7 +250,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 			{hasPreviewFile && (
 				<Modal
 					title='Xem trước tập tin'
-					width={1000}
+					width={1200}
 					visible={previewOpen}
 					footer={null}
 					onCancel={() => setPreviewOpen(false)}
