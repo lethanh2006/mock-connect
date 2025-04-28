@@ -13,6 +13,7 @@ import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
+import '../style.css';
 
 const FormTraLoiKhaoSat = (props: {
 	/** Hàm xử lý bên ngoài truyền vào nếu ko sử dụng model `bieumau` */
@@ -134,12 +135,13 @@ const FormTraLoiKhaoSat = (props: {
 			questionEleMent = <FileChoice question={question} disabled={disabled} />;
 
 		return (
-			<div key={question._id} style={{ marginBottom: 12 }}>
-				<div className='fw500'>
-					<u>Câu {index + 1}:</u> {question.noiDungCauHoi}{' '}
-					{question.batBuoc ? <span style={{ color: 'red' }}>*</span> : null}
+			<div key={question._id} className='question-item'>
+				<div className='question-header'>
+					<div className='question-title'>
+						Câu {index + 1}: {question.noiDungCauHoi} {question.batBuoc && <span className='required'>*</span>}
+					</div>
 				</div>
-				{questionEleMent}
+				<div className='question-content'>{questionEleMent}</div>
 			</div>
 		);
 	};
@@ -268,10 +270,10 @@ const FormTraLoiKhaoSat = (props: {
 
 				{record?.danhSachKhoi?.map((item) => (
 					// eslint-disable-next-line react/no-array-index-key
-					<div key={item._id} style={{ marginBottom: 32 }}>
+					<div key={item._id} className='section-item'>
 						<Divider />
-						<div className='fw500'>{item.tieuDe}</div>
-						<div style={{ marginBottom: 12 }}>{item.moTa}</div>
+						<div className='section-title'>{item.tieuDe}</div>
+						<div className='section-description'>{item.moTa}</div>
 
 						{item.danhSachCauHoi?.map((cauHoi, index) => renderQuestion(cauHoi, index))}
 					</div>
@@ -322,7 +324,7 @@ const FormTraLoiKhaoSat = (props: {
 
 	if (hideCard) return mainContent;
 	return (
-		<Card title='Chi tiết khảo sát'>
+		<Card title='Chi tiết khảo sát' style={{ backgroundColor: '#f9f9f9' }}>
 			{recordDot?.loai === ELoaiDot.CUOC_THI ? (
 				<>
 					<Steps

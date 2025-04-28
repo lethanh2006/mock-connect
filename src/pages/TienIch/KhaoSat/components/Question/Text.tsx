@@ -31,7 +31,7 @@ const Text = (props: { question: BieuMau.CauHoi; disabled?: boolean; isDiemSo?: 
 					) : props.question?.loai === ELoaiCauHoi.RENDER_INPUT_RATING ? (
 						<InputNumber placeholder='Nhập câu trả lời' style={{ width: '100%' }} />
 					) : (
-						<Input.TextArea disabled={props.disabled} placeholder='Nhập câu trả lời' rows={3} />
+						<Input.TextArea disabled={props.disabled} placeholder='Nhập câu trả lời' rows={2} />
 					)}
 				</Form.Item>
 			</Col>
