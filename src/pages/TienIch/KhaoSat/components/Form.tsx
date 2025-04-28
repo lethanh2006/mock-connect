@@ -100,7 +100,13 @@ const FormTraLoiKhaoSat = (props: {
 							if (!values[question._id][idHang]) values[question._id][idHang] = {};
 							values[question._id][idHang][idCot] = true;
 						});
-					} else values[question._id] = traLoi;
+					} else if (question.loai === ELoaiCauHoi.RENDER_INPUT_RATING) {
+						values[question._id] = {
+							traLoiText: traLoi?.traLoiText !== undefined ? Number(traLoi?.traLoiText) : undefined,
+						};
+					} else {
+						values[question._id] = traLoi;
+					}
 				});
 			});
 			form.resetFields();
@@ -114,7 +120,11 @@ const FormTraLoiKhaoSat = (props: {
 			questionEleMent = <SingleChoice form={form} question={question} disabled={disabled} />;
 		else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
 			questionEleMent = <MultipleChoice question={question} disabled={disabled} />;
-		else if (question.loai === ELoaiCauHoi.TEXT || question.loai === ELoaiCauHoi.RENDER_INPUT)
+		else if (
+			question.loai === ELoaiCauHoi.TEXT ||
+			question.loai === ELoaiCauHoi.RENDER_INPUT ||
+			question.loai === ELoaiCauHoi.RENDER_INPUT_RATING
+		)
 			questionEleMent = <Text question={question} disabled={disabled} />;
 		else if (question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE || question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE)
 			questionEleMent = <GridChoice question={question} form={form} disabled={disabled} />;
@@ -198,6 +208,8 @@ const FormTraLoiKhaoSat = (props: {
 						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
 					)
 						tempTraLoi.listLuaChonBang = convertList(values[question._id]);
+					else if (question.loai === ELoaiCauHoi.RENDER_INPUT_RATING)
+						tempTraLoi = { ...tempTraLoi, traLoiText: String(values[question._id]?.traLoiText ?? '') };
 					else tempTraLoi = { ...tempTraLoi, ...values[question._id] };
 
 					danhSachTraLoi.push(tempTraLoi as BieuMau.TraLoiRecord);
