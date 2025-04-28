@@ -12,11 +12,10 @@ const Text = (props: { question: BieuMau.CauHoi; disabled?: boolean; isDiemSo?: 
 						props.question.batBuoc
 							? [
 									...rules.required,
-									...rules.text,
-									...rules.length(500),
 									...(props.question?.loai === ELoaiCauHoi.RENDER_INPUT_RATING
 										? rules.number(props.question.gioiHanTrenTuyenTinh, props.question.gioiHanDuoiTuyenTinh)
-										: []),
+										: rules.text,
+									rules.length(500)),
 							  ]
 							: [
 									...(props.question?.loai === ELoaiCauHoi.RENDER_INPUT_RATING
