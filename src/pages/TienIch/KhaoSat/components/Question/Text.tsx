@@ -12,11 +12,9 @@ const Text = (props: { question: BieuMau.CauHoi; disabled?: boolean; isDiemSo?: 
 						props.question.batBuoc
 							? [
 									...rules.required,
-									...rules.text,
-									...rules.length(500),
 									...(props.question?.loai === ELoaiCauHoi.RENDER_INPUT_RATING
 										? rules.number(props.question.gioiHanTrenTuyenTinh, props.question.gioiHanDuoiTuyenTinh)
-										: []),
+										: [...rules.text, ...rules.length(500)]),
 							  ]
 							: [
 									...(props.question?.loai === ELoaiCauHoi.RENDER_INPUT_RATING
@@ -25,6 +23,11 @@ const Text = (props: { question: BieuMau.CauHoi; disabled?: boolean; isDiemSo?: 
 							  ]
 					}
 					name={[props.question._id, 'traLoiText']}
+					extra={
+						props.question?.loai === ELoaiCauHoi.RENDER_INPUT_RATING
+							? `Nhập số trong khoảng ${props.question.gioiHanDuoiTuyenTinh} đến ${props.question.gioiHanTrenTuyenTinh}`
+							: undefined
+					}
 				>
 					{props?.question?.loai === ELoaiCauHoi.RENDER_INPUT ? (
 						<Input disabled={props.disabled} placeholder='Nhập câu trả lời' />
