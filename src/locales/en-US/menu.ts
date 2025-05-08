@@ -1,9 +1,9 @@
 export default {
 	'menu.login': 'Login',
 	'menu.account': 'Account',
-	'menu.account.center': 'Personal',
-	'menu.Dashboard': 'Dashboard',
-	'menu.About': `About ${APP_CONFIG_TIEN_TO_TRUONG.toLowerCase()}`,
+	'menu.account.center': 'Profile',
+	'menu.Dashboard': 'Home',
+	'menu.About': `Introduction ${APP_CONFIG_TIEN_TO_TRUONG.toLowerCase()}`,
 	'menu.News': 'News',
 
 	'menu.DanhMuc': 'Category',
