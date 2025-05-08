@@ -1,9 +1,10 @@
+import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { primaryColor } from '@/services/base/constant';
 import { Button, Descriptions, Modal, Tag } from 'antd';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import TableDeTaiQuyetDinh from './DeTaiQuyetDinh';
-import { useState } from 'react';
-import PreviewFile from '@/components/PreviewFile';
 
 const ViewQuyetDinh = () => {
 	const { record, visibleViewDetail, setVisibleViewDetail } = useModel('khoahoc.quyetdinhgiao');
@@ -45,9 +46,9 @@ const ViewQuyetDinh = () => {
 			</div>
 			<TableDeTaiQuyetDinh mode='view' data={record?.danhSachDeTai ?? []} />
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết tập tin'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
 				footer={
 					<div className='form-footer'>
@@ -57,7 +58,7 @@ const ViewQuyetDinh = () => {
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<PreviewFile file={record?.urlQuyetDinhGiao ?? ''} />
-			</Modal>
+			</ModalExpandable>
 		</Modal>
 	);
 };

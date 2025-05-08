@@ -1,5 +1,6 @@
 import PreviewFile from '@/components/PreviewFile';
-import { Button, Carousel, Descriptions, Empty, Modal, Tabs } from 'antd';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Button, Carousel, Descriptions, Empty, Tabs } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -18,7 +19,7 @@ const ModalThoiKhoaBieu = () => {
 	}, [chuaKetThuc]);
 
 	return (
-		<Modal
+		<ModalExpandable
 			width={800}
 			title='Thông tin buổi học'
 			visible={visibleForm}
@@ -61,15 +62,11 @@ const ModalThoiKhoaBieu = () => {
 				</Tabs.TabPane>
 			</Tabs>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết học liệu'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
-				footer={
-					<div className='form-footer'>
-						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
-					</div>
-				}
+				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<Carousel autoplay pauseOnDotsHover>
@@ -78,8 +75,12 @@ const ModalThoiKhoaBieu = () => {
 						<PreviewFile file={item.url ?? ''} tenFile={item?.ten} />
 					))}
 				</Carousel>
-			</Modal>
-		</Modal>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
+		</ModalExpandable>
 	);
 };
 

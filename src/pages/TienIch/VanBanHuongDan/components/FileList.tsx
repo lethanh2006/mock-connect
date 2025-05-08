@@ -1,12 +1,13 @@
 import ExpandText from '@/components/ExpandText';
 import PreviewFile from '@/components/PreviewFile';
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type VanBanHuongDan } from '@/services/TienIch/VanBanHuongDan/typing';
 import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import { FileExcelOutlined, PaperClipOutlined, SaveOutlined } from '@ant-design/icons';
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -125,9 +126,9 @@ const FileList = () => {
 				addStt
 			/>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết tập tin'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
 				footer={
 					<div className='form-footer'>
@@ -137,7 +138,7 @@ const FileList = () => {
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<PreviewFile file={url ?? ''} />
-			</Modal>
+			</ModalExpandable>
 		</>
 	);
 };

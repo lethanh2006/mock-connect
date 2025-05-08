@@ -1,6 +1,9 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 
+import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { primaryColor } from '@/services/base/constant';
 import {
 	EDoiTuongKeHoachNCKH,
 	ETrangThaiKeHoachNCKH,
@@ -8,12 +11,10 @@ import {
 } from '@/services/KhoaHoc/KeHoach/constants';
 import type { KeHoachNCKH } from '@/services/KhoaHoc/KeHoach/typings';
 import { Button, Carousel, Modal, Tag } from 'antd';
+import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ViewDetailKeHoachNCKH from './components/ViewDetail';
-import moment from 'moment';
-import { primaryColor } from '@/services/base/constant';
-import PreviewFile from '@/components/PreviewFile';
 
 const KeHoachNCKHComponent = () => {
 	const { getModel, page, limit, setRecord, record: recordKeHoach } = useModel('khoahoc.kehoach');
@@ -122,9 +123,9 @@ const KeHoachNCKHComponent = () => {
 				{recordKeHoach && <ViewDetailKeHoachNCKH record={recordKeHoach} />}
 			</Modal>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết tập tin'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
 				footer={
 					<div className='form-footer'>
@@ -139,7 +140,7 @@ const KeHoachNCKHComponent = () => {
 						<PreviewFile file={item ?? ''} />
 					))}
 				</Carousel>
-			</Modal>
+			</ModalExpandable>
 		</>
 	);
 };

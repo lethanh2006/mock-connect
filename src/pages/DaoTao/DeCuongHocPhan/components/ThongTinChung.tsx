@@ -1,9 +1,10 @@
-import { Button, Collapse, Descriptions, Modal } from 'antd';
+import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { getNameFile } from '@/utils/utils';
+import { Button, Collapse, Descriptions } from 'antd';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import TrongSoHocPhanPage from '../TrongSoHocPhan';
-import { useState } from 'react';
-import PreviewFile from '@/components/PreviewFile';
-import { getNameFile } from '@/utils/utils';
 
 const ThongTinChungPage = () => {
 	const { record } = useModel('hocphan.decuonghocphan');
@@ -72,19 +73,19 @@ const ThongTinChungPage = () => {
 				</Collapse.Panel> */}
 			</Collapse>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết đề cương chi tiết đính kèm'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
-				footer={
-					<div className='form-footer'>
-						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
-					</div>
-				}
+				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<PreviewFile file={record?.url ?? ''} />
-			</Modal>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
 		</>
 	);
 };

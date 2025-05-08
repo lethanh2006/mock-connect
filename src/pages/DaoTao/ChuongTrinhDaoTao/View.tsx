@@ -1,4 +1,5 @@
 import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
 import { getNameFile } from '@/utils/utils';
 import { Button, Descriptions, Divider, Empty, Modal } from 'antd';
@@ -95,19 +96,19 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 				)}
 			</Modal>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết tập tin'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
-				footer={
-					<div className='form-footer'>
-						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
-					</div>
-				}
+				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<PreviewFile file={recTienTrinh?.ctdtKeHoach?.url ?? ''} />
-			</Modal>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
 		</>
 	);
 };

@@ -1,10 +1,11 @@
+import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { colorTrangThaiSinhVienQuyDoiDiem, type ETrangThaiPhieuQuyDoiDiem } from '@/services/HocTap/constant';
 import { Button, Carousel, Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
-import { useModel } from 'umi';
-import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
 import moment from 'moment';
 import { useState } from 'react';
-import PreviewFile from '@/components/PreviewFile';
+import { useModel } from 'umi';
+import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
 
 const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
 	const { visible, setVisible } = props;
@@ -60,9 +61,9 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 				<Button onClick={() => setVisible(false)}>Đóng</Button>
 			</div>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết minh chứng'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
 				footer={
 					<div className='form-footer'>
@@ -77,7 +78,7 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 						<PreviewFile file={item ?? ''} />
 					))}
 				</Carousel>
-			</Modal>
+			</ModalExpandable>
 		</Modal>
 	);
 };
