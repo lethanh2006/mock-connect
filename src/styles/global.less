@@ -221,11 +221,18 @@ canvas {
 		height: 100vh;
 		overflow: hidden;
 
-		>.ant-modal-content {
+		>.ant-modal-content,
+		.ant-modal-body>.ant-card {
 			border-radius: 0;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
 
-			>.ant-modal-body {
-				height: 100vh;
+			>.ant-modal-body,
+			>.ant-card-body {
+				// height: 100vh;
+				overflow: auto;
+				flex: 1;
 			}
 		}
 	}
@@ -461,6 +468,15 @@ canvas {
 	.ant-alert-close-icon {
 		margin-left: 0;
 	}
+}
+
+// Hiệu ứng chuyển đổi cho mmodal và drawer khi nhấn Expand Button
+.ant-modal {
+	transition: top .3s ease, width .3s ease;
+}
+
+.ant-drawer-content-wrapper {
+	transition: top .3s ease, width .3s ease;
 }
 
 // Big calendar
