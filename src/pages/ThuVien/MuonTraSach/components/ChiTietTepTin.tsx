@@ -1,6 +1,7 @@
 import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Modal, Space } from 'antd';
+import { Button, Space } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 
@@ -20,7 +21,13 @@ const ChiTietTepTin = (props: { visible: boolean; setVisible: (val: boolean) => 
 	};
 
 	return (
-		<Modal title='Chi tiết tệp tin' visible={visible} onCancel={() => setVisible(false)} width={1000} footer={null}>
+		<ModalExpandable
+			title='Chi tiết tập tin'
+			visible={visible}
+			onCancel={() => setVisible(false)}
+			width={1000}
+			footer={null}
+		>
 			<Space wrap>
 				<Button onClick={prevSlide}>
 					<LeftOutlined />
@@ -32,10 +39,11 @@ const ChiTietTepTin = (props: { visible: boolean; setVisible: (val: boolean) => 
 					<RightOutlined />
 				</Button>
 			</Space>
+
 			<div style={{ marginTop: 12 }}>
 				<PreviewFile file={files[currentIndex]?.url ?? ''} />
 			</div>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

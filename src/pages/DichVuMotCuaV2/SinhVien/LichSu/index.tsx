@@ -2,6 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import PDFViewer from '@/components/PDFViewer';
 import PreviewFile from '@/components/PreviewFile';
 import TableBase from '@/components/Table';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { IColumn } from '@/components/Table/typing';
 import ThanhToanPage from '@/pages/DichVuMotCuaV2/ThanhToan';
 import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
@@ -429,15 +430,11 @@ const LichSuGuiDon = () => {
 				<FormGuiPhanHoi record={recordView} />
 			</Modal>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết tập tin'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
-				footer={
-					<div className='form-footer'>
-						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
-					</div>
-				}
+				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<Carousel autoplay pauseOnDotsHover>
@@ -446,7 +443,11 @@ const LichSuGuiDon = () => {
 						<PreviewFile file={item ?? ''} />
 					))}
 				</Carousel>
-			</Modal>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
 		</>
 	);
 };

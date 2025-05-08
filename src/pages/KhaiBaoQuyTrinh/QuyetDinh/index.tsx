@@ -1,8 +1,9 @@
 import PreviewFile from '@/components/PreviewFile';
 import TableBase from '@/components/Table';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { IColumn } from '@/components/Table/typing';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Carousel, Modal, Popconfirm, Tooltip } from 'antd';
+import { Button, Carousel, Popconfirm, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 
@@ -84,9 +85,9 @@ const QuanLyQuyetDinhGiao = (props: { viewTheoBuoc?: boolean }) => {
 				getData={getData}
 			/>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết văn bản kèm theo'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
 				footer={
 					<div className='form-footer'>
@@ -101,7 +102,7 @@ const QuanLyQuyetDinhGiao = (props: { viewTheoBuoc?: boolean }) => {
 						<PreviewFile file={item?.url ?? ''} tenFile={item?.tenFile} />
 					))}
 				</Carousel>
-			</Modal>
+			</ModalExpandable>
 		</>
 	);
 };

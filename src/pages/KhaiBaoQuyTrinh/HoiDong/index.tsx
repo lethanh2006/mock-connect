@@ -1,11 +1,12 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
-import { Button, Carousel, Modal } from 'antd';
+import { Button, Carousel } from 'antd';
 import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
 
 import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { HoiDong } from '@/services/QuyTrinh/HoiDong/typings';
 import TableDonHoiDong from './components/TableDonHoiDong';
 import TableThanhVien from './components/TableThanhVien';
@@ -111,8 +112,9 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 				widthDrawer={1200}
 				destroyModal
 			/>
-			<Modal
-				width={900}
+
+			<ModalExpandable
+				width={1000}
 				title='Danh sách thành viên'
 				footer={
 					<Button type='primary' onClick={onCancelViewThanhVien}>
@@ -123,11 +125,11 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 				onCancel={onCancelViewThanhVien}
 			>
 				<TableThanhVien mode='view' />
-			</Modal>
+			</ModalExpandable>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết văn bản kèm theo'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
 				footer={
 					<div className='form-footer'>
@@ -142,7 +144,7 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 						<PreviewFile file={item?.url ?? ''} tenFile={item?.tenFile} />
 					))}
 				</Carousel>
-			</Modal>
+			</ModalExpandable>
 		</>
 	);
 };

@@ -1,22 +1,23 @@
+import ExpandText from '@/components/ExpandText';
+import PreviewFile from '@/components/PreviewFile';
 import TableBase from '@/components/Table';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	ColorTrangThaiMinhChungDiemRenLuyen,
 	ELoaiMinhChungDiemRenLuyen,
 	ELoaiMinhChungDiemRenLuyenMappingToTitle,
 	EPhanLoaiNoiNgoaiTru,
-	ETrangThaiMinhChungDiemRenLuyen,
 	EPhanLoaiNoiNgoaiTruMappingToLabel,
+	ETrangThaiMinhChungDiemRenLuyen,
 } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/constants';
 import { type MinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/typing';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Carousel, Modal, Popconfirm, Tag, Tooltip } from 'antd';
+import { Button, Carousel, Popconfirm, Tag, Tooltip } from 'antd';
 import moment from 'moment';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import { FormKhaiBaoMinhChung } from './components/Form';
-import ExpandText from '@/components/ExpandText';
-import { useState } from 'react';
-import PreviewFile from '@/components/PreviewFile';
 
 export default () => {
 	const {
@@ -270,15 +271,11 @@ export default () => {
 				}}
 			/>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết tập tin'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
-				footer={
-					<div className='form-footer'>
-						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
-					</div>
-				}
+				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<Carousel autoplay pauseOnDotsHover>
@@ -287,7 +284,11 @@ export default () => {
 						<PreviewFile file={item ?? ''} />
 					))}
 				</Carousel>
-			</Modal>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
 		</>
 	);
 };

@@ -1,6 +1,7 @@
 import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { PaperClipOutlined } from '@ant-design/icons';
-import { Button, Card, Descriptions, Modal, Tag } from 'antd';
+import { Button, Card, Descriptions, Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -41,9 +42,9 @@ const ModalDetailPhanhoi = () => {
 				</Descriptions.Item>
 			</Descriptions>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết tập tin'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
 				footer={
 					<div className='form-footer'>
@@ -53,7 +54,7 @@ const ModalDetailPhanhoi = () => {
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<PreviewFile file={record?.urlPhanAnh ?? ''} />
-			</Modal>
+			</ModalExpandable>
 
 			<div className='form-footer'>
 				<Button onClick={() => setVisibleForm(false)}>Đóng</Button>

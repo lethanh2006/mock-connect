@@ -1,4 +1,5 @@
 import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
@@ -9,7 +10,7 @@ import {
 } from '@/services/DaoTao/constant';
 import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
-import { Button, Carousel, Modal, Tag } from 'antd';
+import { Button, Carousel, Tag } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -134,15 +135,11 @@ const TableLichHocLopHP = (props: {
 				otherProps={{ pagination: false, loading, scroll: { y: 600 } }}
 			/>
 
-			<Modal
+			<ModalExpandable
 				title='Chi tiết học liệu'
-				width={800}
+				width={1000}
 				visible={visibleFormFile}
-				footer={
-					<div className='form-footer'>
-						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
-					</div>
-				}
+				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<Carousel autoplay pauseOnDotsHover>
@@ -151,7 +148,11 @@ const TableLichHocLopHP = (props: {
 						<PreviewFile file={item.url ?? ''} tenFile={item?.ten} />
 					))}
 				</Carousel>
-			</Modal>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
 		</>
 	);
 };
