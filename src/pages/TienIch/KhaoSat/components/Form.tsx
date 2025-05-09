@@ -7,13 +7,13 @@ import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, InputNumber, Spin, Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import '../style.css';
 import FileChoice from './Question/FileChoice';
 import GridChoice from './Question/GridChoice';
 import MultipleChoice from './Question/MultipleChoice';
 import NumericChoice from './Question/NumericChoice';
 import SingleChoice from './Question/SingleChoice';
 import Text from './Question/Text';
-import '../style.css';
 
 const FormTraLoiKhaoSat = (props: {
 	/** Hàm xử lý bên ngoài truyền vào nếu ko sử dụng model `bieumau` */
@@ -90,6 +90,13 @@ const FormTraLoiKhaoSat = (props: {
 						} else {
 							values[question._id] = traLoi?.listLuaChon?.[0];
 						}
+					} else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE) {
+						const luaChon = traLoi?.listLuaChon || [];
+						if (traLoi?.traLoiKhac) {
+							luaChon.push('traLoiKhac');
+							values[`${question._id}_otherAnswer`] = traLoi.traLoiKhac;
+						}
+						values[question._id] = { listLuaChon: luaChon };
 					} else if (
 						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
 						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
@@ -197,7 +204,13 @@ const FormTraLoiKhaoSat = (props: {
 								})
 								.filter(Boolean);
 						}
-					} else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE)
+					} else if (question.loai === ELoaiCauHoi.MULTIPLE_CHOICE) {
+						if (traLoi?.listLuaChon?.find((item: any) => item === 'traLoiKhac')) {
+							const traLoiKhac = values[`${question._id}_otherAnswer`];
+							if (traLoiKhac) {
+								tempTraLoi.traLoiKhac = traLoiKhac;
+							}
+						}
 						tempTraLoi.listLuaChon = question?.luaChon
 							?.map((item: any) => {
 								if (traLoi?.listLuaChon?.includes(item.noiDung)) {
@@ -205,7 +218,7 @@ const FormTraLoiKhaoSat = (props: {
 								}
 							})
 							.filter(Boolean);
-					else if (
+					} else if (
 						question.loai === ELoaiCauHoi.GRID_MULTIPLE_CHOICE ||
 						question.loai === ELoaiCauHoi.GRID_SINGLE_CHOICE
 					)
