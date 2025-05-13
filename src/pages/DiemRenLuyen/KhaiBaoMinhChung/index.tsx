@@ -1,24 +1,38 @@
+import ExpandText from '@/components/ExpandText';
+import PreviewFile from '@/components/PreviewFile';
 import TableBase from '@/components/Table';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	ColorTrangThaiMinhChungDiemRenLuyen,
 	ELoaiMinhChungDiemRenLuyen,
 	ELoaiMinhChungDiemRenLuyenMappingToTitle,
 	EPhanLoaiNoiNgoaiTru,
-	ETrangThaiMinhChungDiemRenLuyen,
 	EPhanLoaiNoiNgoaiTruMappingToLabel,
+	ETrangThaiMinhChungDiemRenLuyen,
 } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/constants';
 import { type MinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/typing';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Tag, Tooltip } from 'antd';
+import { Button, Carousel, Popconfirm, Tag, Tooltip } from 'antd';
 import moment from 'moment';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import { FormKhaiBaoMinhChung } from './components/Form';
-import ExpandText from '@/components/ExpandText';
 
 export default () => {
-	const { danhSach, page, limit, getLoaiMinhChung, handleView, handleEdit, deleteModel, getModel } =
-		useModel('diemrenluyen.minhchung');
+	const {
+		danhSach,
+		page,
+		limit,
+		getLoaiMinhChung,
+		handleView,
+		handleEdit,
+		deleteModel,
+		getModel,
+		record: recMinhChung,
+		setRecord,
+	} = useModel('diemrenluyen.minhchung');
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	const onCell = (rec: MinhChungDiemRenLuyen.IRecord) => ({
 		onClick: () => {
@@ -170,17 +184,20 @@ export default () => {
 			title: 'Tập tin',
 			dataIndex: 'urlFileList',
 			align: 'center',
-			render: (_, record) => {
-				return record.urlFileList?.map((item, index) => (
-					<div key={item}>
-						<Button type='link' href={item} target='_blank' rel='noreferrer'>
-							Xem tập tin {index + 1}
-						</Button>
-					</div>
-				));
-			},
+			render: (_, record) =>
+				record.urlFileList?.length ? (
+					<Button
+						type='link'
+						onClick={() => {
+							setRecord(record);
+							setVisibleFormFile(true);
+						}}
+					>
+						Xem tập tin
+					</Button>
+				) : null,
+
 			width: 120,
-			onCell,
 			hide: ![
 				ELoaiMinhChungDiemRenLuyen.THAM_GIA_CONG_TAC_XA_HOI,
 				ELoaiMinhChungDiemRenLuyen.THANH_TICH_DAC_BIET,
@@ -239,18 +256,39 @@ export default () => {
 	];
 
 	return (
-		<TableBase
-			widthDrawer={600}
-			Form={FormKhaiBaoMinhChung}
-			title={ELoaiMinhChungDiemRenLuyenMappingToTitle[getLoaiMinhChung()]}
-			modelName='diemrenluyen.minhchung'
-			columns={columns}
-			dependencies={[page, limit]}
-			buttons={{
-				create:
-					getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU ||
-					!danhSach.find((item) => item.trangThai === ETrangThaiMinhChungDiemRenLuyen.DA_DUYET),
-			}}
-		/>
+		<>
+			<TableBase
+				widthDrawer={600}
+				Form={FormKhaiBaoMinhChung}
+				title={ELoaiMinhChungDiemRenLuyenMappingToTitle[getLoaiMinhChung()]}
+				modelName='diemrenluyen.minhchung'
+				columns={columns}
+				dependencies={[page, limit]}
+				buttons={{
+					create:
+						getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU ||
+						!danhSach.find((item) => item.trangThai === ETrangThaiMinhChungDiemRenLuyen.DA_DUYET),
+				}}
+			/>
+
+			<ModalExpandable
+				title='Chi tiết tập tin'
+				width={1000}
+				visible={visibleFormFile}
+				footer={null}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<Carousel autoplay pauseOnDotsHover>
+					{recMinhChung?.urlFileList?.map((item) => (
+						// eslint-disable-next-line react/jsx-key
+						<PreviewFile file={item ?? ''} />
+					))}
+				</Carousel>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
+		</>
 	);
 };

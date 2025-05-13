@@ -47,6 +47,8 @@ declare module SinhVienThi {
 		fileDinhKem: string[] | null;
 
 		//
+		yeuCauNopBai: boolean;
+		yeuCauRaDe: boolean;
 		thoiGianBatDau: Date;
 		thoiGianKetThuc: Date;
 		soFilePhaiNop: number;

@@ -191,7 +191,7 @@ const ThongTinTiepNhan = (props: { data: KhaiBaoQuyTrinh.IBuocXuLy; modelName: a
 								)}
 								{data?.ghiChu && (
 									<Descriptions.Item span={24} label='Ghi chú của bộ phận xử lý'>
-										{data?.ghiChu}
+										<div dangerouslySetInnerHTML={{ __html: data?.ghiChu }} />
 									</Descriptions.Item>
 								)}
 								{data?.vanBan?.url && (

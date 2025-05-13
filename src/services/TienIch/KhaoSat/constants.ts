@@ -38,6 +38,7 @@ export enum ELoaiCauHoi {
 	GRID_MULTIPLE_CHOICE = 'GridMultipleChoice',
 	GRID_SINGLE_CHOICE = 'GridSingleChoice',
 	NUMERIC_RANGE = 'NumericRange',
+	RENDER_INPUT_RATING = 'Numberinputrating',
 	UPLOAD_FILE = 'UploadFile',
 	RENDER_INPUT = 'RenderInput',
 }
