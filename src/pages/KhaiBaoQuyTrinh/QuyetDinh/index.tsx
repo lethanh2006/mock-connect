@@ -1,13 +1,17 @@
+import PreviewFile from '@/components/PreviewFile';
 import TableBase from '@/components/Table';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { IColumn } from '@/components/Table/typing';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Tooltip } from 'antd';
+import { Button, Carousel, Popconfirm, Tooltip } from 'antd';
+import { useState } from 'react';
 import { useModel } from 'umi';
 
 const QuanLyQuyetDinhGiao = (props: { viewTheoBuoc?: boolean }) => {
-	const { getModel, page, limit, condition, deleteModel, setRecord, setEdit, setVisibleForm } =
+	const { getModel, page, limit, condition, deleteModel, record, setRecord, setEdit, setVisibleForm } =
 		useModel('quytrinh.quyetdinh');
 	const { record: recordQuyTrinh } = useModel('quytrinh.quanlyquytrinh');
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	const getData = () => {
 		if (!props.viewTheoBuoc) getModel();
@@ -17,24 +21,24 @@ const QuanLyQuyetDinhGiao = (props: { viewTheoBuoc?: boolean }) => {
 			title: 'Quyết định',
 			dataIndex: 'danhSachVanBanLuuTru',
 			width: 150,
-			render: (val: { tenFile: string; url: string }[]) => (
-				<div>
-					{val.map((item) => (
-						<div key={item.url}>
-							<a href={item.url} target='_blank' rel='noreferrer'>
-								{item.tenFile}
-							</a>
-						</div>
-					))}
-				</div>
-			),
+			render: (val: { tenFile: string; url: string }[], rec) =>
+				val?.filter((item) => item?.url)?.length ? (
+					<a
+						onClick={() => {
+							setRecord(rec);
+							setVisibleFormFile(true);
+						}}
+					>
+						Xem chi tiết
+					</a>
+				) : null,
 		},
 		{
 			title: 'Bước',
 			width: 200,
 			align: 'center',
-			render: (record: QuyetDinhGiaoDeTai.IRecord) =>
-				recordQuyTrinh?.danhSachBuocXuLy?.find((item) => item.ma === record.maBuoc)?.ten,
+			render: (rec: QuyetDinhGiaoDeTai.IRecord) =>
+				recordQuyTrinh?.danhSachBuocXuLy?.find((item) => item.ma === rec.maBuoc)?.ten,
 		},
 		{
 			title: 'Thao tác',
@@ -80,6 +84,25 @@ const QuanLyQuyetDinhGiao = (props: { viewTheoBuoc?: boolean }) => {
 				dependencies={[page, limit, condition]}
 				getData={getData}
 			/>
+
+			<ModalExpandable
+				title='Chi tiết văn bản kèm theo'
+				width={1000}
+				visible={visibleFormFile}
+				footer={
+					<div className='form-footer'>
+						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					</div>
+				}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<Carousel autoplay pauseOnDotsHover>
+					{record?.danhSachVanBanLuuTru?.map((item) => (
+						// eslint-disable-next-line react/jsx-key
+						<PreviewFile file={item?.url ?? ''} tenFile={item?.tenFile} />
+					))}
+				</Carousel>
+			</ModalExpandable>
 		</>
 	);
 };

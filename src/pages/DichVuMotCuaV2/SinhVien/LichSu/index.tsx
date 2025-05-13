@@ -1,6 +1,8 @@
 import ExpandText from '@/components/ExpandText';
 import PDFViewer from '@/components/PDFViewer';
+import PreviewFile from '@/components/PreviewFile';
 import TableBase from '@/components/Table';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { IColumn } from '@/components/Table/typing';
 import ThanhToanPage from '@/pages/DichVuMotCuaV2/ThanhToan';
 import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
@@ -17,7 +19,7 @@ import {
 	PrinterOutlined,
 	QuestionOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip, message } from 'antd';
+import { Button, Carousel, Divider, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip, message } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -54,6 +56,7 @@ const LichSuGuiDon = () => {
 	//   useModel('hoctap.loptinchi');
 	// const { getAllMonHocSinhVienModel, setDanhSachMonHoc } = useModel('hoctap.loptinchi');
 	const [data, setData] = useState<any>();
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	useEffect(() => {
 		setRecord({} as DichVuMotCuaV2.BieuMau);
@@ -166,19 +169,20 @@ const LichSuGuiDon = () => {
 			title: 'File kết quả đính kèm',
 			dataIndex: 'ketQuaDinhKem',
 			width: 120,
-			render: (val: string[]) => (
-				<div>
-					{val?.map((item, index) => (
-						<>
-							<PaperClipOutlined />{' '}
-							<a href={item} target='_blank' rel='noreferrer'>
-								File kết quả {index + 1}
-							</a>
-							<br />
-						</>
-					))}
-				</div>
-			),
+			render: (val: string[], rec) =>
+				val?.length ? (
+					<>
+						<PaperClipOutlined />{' '}
+						<a
+							onClick={() => {
+								setRecordView(rec);
+								setVisibleFormFile(true);
+							}}
+						>
+							File kết quả
+						</a>
+					</>
+				) : null,
 		},
 		// {
 		//   title: 'Trạng thái',
@@ -425,6 +429,25 @@ const LichSuGuiDon = () => {
 			>
 				<FormGuiPhanHoi record={recordView} />
 			</Modal>
+
+			<ModalExpandable
+				title='Chi tiết tập tin'
+				width={1000}
+				visible={visibleFormFile}
+				footer={null}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<Carousel autoplay pauseOnDotsHover>
+					{recordView?.ketQuaDinhKem?.map((item) => (
+						// eslint-disable-next-line react/jsx-key
+						<PreviewFile file={item ?? ''} />
+					))}
+				</Carousel>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
 		</>
 	);
 };

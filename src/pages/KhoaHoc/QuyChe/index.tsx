@@ -8,11 +8,13 @@ import { useModel } from 'umi';
 import FormQuyChe from './components/Form';
 import ViewQuyChe from './components/View';
 import { EDoiTuongKeHoachNCKH, MapKeyDoiTuongKeHoachNCKH } from '@/services/KhoaHoc/KeHoach/constants';
+import PreviewFile from '@/components/PreviewFile';
 
 const QuyCheComponent = () => {
 	const { getModel, page, limit, setRecord, record: recordQuyChe } = useModel('khoahoc.quychenckh');
 
 	const [visibleView, setVisibleView] = useState<boolean>(false);
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	const getData = () => {
 		getModel({ maModule: 'QLKH', doiTuong: EDoiTuongKeHoachNCKH.SINH_VIEN as any });
@@ -68,8 +70,13 @@ const QuyCheComponent = () => {
 			dataIndex: 'fileDinhKem',
 			width: 150,
 			align: 'center',
-			render: (val: string) => (
-				<a href={val} target='_blank' rel='noreferrer'>
+			render: (val: string, rec) => (
+				<a
+					onClick={() => {
+						setRecord(rec);
+						setVisibleFormFile(true);
+					}}
+				>
 					Xem tập tin
 				</a>
 			),
@@ -111,6 +118,19 @@ const QuyCheComponent = () => {
 				footer={<Button onClick={() => setVisibleView(false)}>Đóng</Button>}
 			>
 				{recordQuyChe && <ViewQuyChe record={recordQuyChe} />}
+			</Modal>
+			<Modal
+				title='Chi tiết tập tin'
+				width={800}
+				visible={visibleFormFile}
+				footer={
+					<div className='form-footer'>
+						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					</div>
+				}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<PreviewFile file={recordQuyChe?.fileDinhKem ?? ''} />
 			</Modal>
 		</>
 	);

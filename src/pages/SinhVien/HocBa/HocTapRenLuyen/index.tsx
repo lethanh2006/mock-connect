@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 import TableDiemHocKyHocBa from './TableDiemHocKy';
 import ViewKqRenLuyenYKienHocBa from './ViewRenLuyen';
+import _ from 'lodash';
 
 const TabHocTapRenLuyenSinhVien = () => {
 	const { record: recSinhVien, maKhoaNganh } = useModel('sinhvien.sinhvien');
@@ -50,7 +51,7 @@ const TabHocTapRenLuyenSinhVien = () => {
 								),
 							}}
 						>
-							{danhSach.map((hk) => (
+							{_.orderBy(danhSach, ['maHocKy'], ['desc']).map((hk) => (
 								<Tabs.TabPane key={hk.maHocKy} tab={`${hk.maHocKy}`} />
 							))}
 						</Tabs>

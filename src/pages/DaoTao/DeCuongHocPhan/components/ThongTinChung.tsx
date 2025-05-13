@@ -1,10 +1,15 @@
-import { Collapse, Descriptions } from 'antd';
+import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { getNameFile } from '@/utils/utils';
+import { Button, Collapse, Descriptions } from 'antd';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import TrongSoHocPhanPage from '../TrongSoHocPhan';
 
 const ThongTinChungPage = () => {
 	const { record } = useModel('hocphan.decuonghocphan');
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	return (
 		<>
@@ -44,9 +49,7 @@ const ThongTinChungPage = () => {
 				</Descriptions.Item>
 				<Descriptions.Item label='Đề cương chi tiết đính kèm'>
 					{record?.url ? (
-						<a href={record.url} target='_blank' rel='noreferrer'>
-							Xem chi tiết
-						</a>
+						<a onClick={() => setVisibleFormFile(true)}>{getNameFile(record.url)}</a>
 					) : (
 						<i>Chưa cập nhật</i>
 					)}
@@ -69,6 +72,20 @@ const ThongTinChungPage = () => {
 					<div dangerouslySetInnerHTML={{ __html: record?.noiDungChiTiet ?? '--' }} />
 				</Collapse.Panel> */}
 			</Collapse>
+
+			<ModalExpandable
+				title='Chi tiết đề cương chi tiết đính kèm'
+				width={1000}
+				visible={visibleFormFile}
+				footer={null}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<PreviewFile file={record?.url ?? ''} />
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
 		</>
 	);
 };
