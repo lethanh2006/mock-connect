@@ -10,7 +10,7 @@ const ipDaoTao = ipRoot + 'qldt'; // ip dev
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
 const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
-const ipTaiChinh = ipRoot + 'tai-chinh-api';
+const ipTaiChinh = ipRoot + 'tai-chinh';
 const ipKhaoThi = ipRoot + 'khao-thi';
 const ipThuVien = ipRoot + 'thu-vien'; // ip dev
 
