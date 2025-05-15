@@ -19,6 +19,8 @@ declare module HocKy {
 		isToChucDangKyNhuCau: boolean;
 		sySoDuKienBatBuoc: number;
 		// sySoDuKienTuChon: number;
+
+		kyHienTai?: boolean;
 	}
 
 	export interface IQuyDinhSoTinChiDangKy {
