@@ -24,7 +24,7 @@ const SelectHocKy = (props: {
 
 	useEffect(() => {
 		// Đảm bảo chỉ get học kỳ 1 lần
-		if (!danhSachHienThi.length)
+		if (!danhSachHienThi.length) {
 			getAllModel(
 				!!isSetRecord,
 				{ ma: -1 },
@@ -35,13 +35,25 @@ const SelectHocKy = (props: {
 			).then((res) => {
 				if (fromLhc) setDanhSachHkLhc(res);
 				else setDanhSach(res);
-				const exist = record?._id && res.some((i) => i._id === record?._id);
-				if (!exist) setRecord(res?.[0]);
+
+				if (isSetRecord) {
+					// Nếu record._id không tồn tại hoặc không nằm trong danh sách
+					const exist = record?._id && res.some((i) => i._id === record._id);
+					if (!exist) {
+						const hocKy = res.find((i) => i.kyHienTai) ?? res?.[0];
+						setRecord(hocKy);
+					}
+				}
 			});
-		else {
+		} else {
 			// Set lại record nếu record hiện tại ko có trong danh sách
-			const exist = record?._id && danhSachHienThi.some((i) => i._id === record?._id);
-			if (!exist) setRecord(danhSachHienThi?.[0]);
+			if (isSetRecord) {
+				const exist = record?._id && danhSachHienThi.some((i) => i._id === record._id);
+				if (!exist) {
+					const hocKy = danhSachHienThi.find((i) => i.kyHienTai) ?? danhSachHienThi?.[0];
+					setRecord(hocKy);
+				}
+			}
 		}
 	}, [fromLhc]);
 
