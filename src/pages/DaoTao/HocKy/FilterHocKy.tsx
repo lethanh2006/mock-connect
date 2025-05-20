@@ -10,6 +10,7 @@ const FilterHocKy = (props: {
 	style?: React.CSSProperties;
 	fromLhc?: boolean;
 	onChange?: (val: string) => void;
+	selectLatest?: boolean;
 }) => {
 	const { record: recHocKy, danhSach: danhSachHocKy, setRecord: setHocKy } = useModel('daotao.hocky');
 	const width = props.width ?? 250;
@@ -26,6 +27,7 @@ const FilterHocKy = (props: {
 				}}
 				isSetRecord={props.isSetHocKy && !recHocKy?._id}
 				fromLhc={props.fromLhc}
+				selectLatest={props.selectLatest}
 			/>
 
 			{props.children}

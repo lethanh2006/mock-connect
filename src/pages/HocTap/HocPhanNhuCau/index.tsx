@@ -98,7 +98,7 @@ const DangKyNhuCauHocPhan = () => {
 	return (
 		<Card title='Phiếu đăng ký học phần'>
 			<Space wrap style={{ marginBottom: 12 }}>
-				<FilterHocKy isSetHocKy>
+				<FilterHocKy isSetHocKy selectLatest>
 					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
 					<SelectDotDangKyHocPhanNhuCau
 						isSetRecord
@@ -116,7 +116,7 @@ const DangKyNhuCauHocPhan = () => {
 						type={ngoaiThoiGian ? 'warning' : 'info'}
 						message={
 							ngoaiThoiGian ? (
-								'Ngoài thời gian đăng ký nhu cầu !'
+								'Ngoài thời gian đăng ký nhu cầu!'
 							) : (
 								<>
 									Thời gian đăng ký nhu cầu học phần từ{' '}

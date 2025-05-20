@@ -16,8 +16,20 @@ const SelectHocKy = (props: {
 	selectMa?: boolean;
 	/** Nếu căn cứ từ lớp hành chính thì chỉ lọc những HK có `sinh viên học kỳ`, còn ko mặc định sẽ lấy toàn bộ học kỳ theo `Khóa ngành` */
 	fromLhc?: boolean;
+	selectLatest?: boolean;
 }) => {
-	const { value, onChange, multiple, allowClear, style, isSetRecord, selectMa, disabled, fromLhc = false } = props;
+	const {
+		value,
+		onChange,
+		multiple,
+		allowClear,
+		style,
+		isSetRecord,
+		selectMa,
+		disabled,
+		fromLhc = false,
+		selectLatest,
+	} = props;
 	const { danhSach, getAllModel, loading, setRecord, record, danhSachHkLhc, setDanhSach, setDanhSachHkLhc } =
 		useModel('daotao.hocky');
 	const danhSachHienThi = fromLhc ? danhSachHkLhc : danhSach;
@@ -40,7 +52,7 @@ const SelectHocKy = (props: {
 					// Nếu record._id không tồn tại hoặc không nằm trong danh sách
 					const exist = record?._id && res.some((i) => i._id === record._id);
 					if (!exist) {
-						const hocKy = res.find((i) => i.kyHienTai) ?? res?.[0];
+						const hocKy = selectLatest ? res?.[0] : res.find((i) => i.kyHienTai) ?? res?.[0];
 						setRecord(hocKy);
 					}
 				}
@@ -50,7 +62,9 @@ const SelectHocKy = (props: {
 			if (isSetRecord) {
 				const exist = record?._id && danhSachHienThi.some((i) => i._id === record._id);
 				if (!exist) {
-					const hocKy = danhSachHienThi.find((i) => i.kyHienTai) ?? danhSachHienThi?.[0];
+					const hocKy = selectLatest
+						? danhSachHienThi?.[0]
+						: danhSachHienThi.find((i) => i.kyHienTai) ?? danhSachHienThi?.[0];
 					setRecord(hocKy);
 				}
 			}
