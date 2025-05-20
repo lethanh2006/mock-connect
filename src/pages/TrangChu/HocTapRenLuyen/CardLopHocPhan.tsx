@@ -12,7 +12,14 @@ const CardLopHocPhan = () => {
 	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
 
 	useEffect(() => {
-		if (!danhSach.length) getAllHocKy(!recHocKy?._id, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me');
+		if (!danhSach.length) {
+			getAllHocKy(!recHocKy?._id, { ma: -1 }, { active: true }, undefined, 'sinh-vien/me').then((res) => {
+				if (!recHocKy?._id) {
+					const hocKy = res.find((i) => i.kyHienTai) ?? res?.[0];
+					setRecord(hocKy);
+				}
+			});
+		}
 	}, []);
 
 	useEffect(() => {
