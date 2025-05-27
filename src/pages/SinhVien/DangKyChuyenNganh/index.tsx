@@ -20,7 +20,10 @@ const DangKyChuyenNganhPage = () => {
 	);
 	const hasCreate =
 		!!dotHienHanh?._id &&
-		!danhSach.filter((i) => i.trangThaiDangKy !== ETrangThaiDangKyChuyenNganh.KHONG_DUYET)?.length;
+		!danhSach.filter(
+			(i) =>
+				i.dotDangKyChuyenNganhId === dotHienHanh._id && i.trangThaiDangKy !== ETrangThaiDangKyChuyenNganh.KHONG_DUYET,
+		)?.length;
 
 	const getData = () => getModel(undefined, undefined, undefined, undefined, undefined, 'my/page');
 
@@ -37,7 +40,7 @@ const DangKyChuyenNganhPage = () => {
 		{
 			title: 'Chuyên ngành',
 			dataIndex: 'maChuyenNganh',
-			width: 200,
+			width: 160,
 			render: (val, rec) => rec.chuyenNganh?.ten ?? val,
 		},
 		{
