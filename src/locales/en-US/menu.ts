@@ -18,6 +18,7 @@ export default {
 	// STUDENT
 	'menu.HocTap': 'Study',
 	'menu.HocTap.TienTrinhHocTap': 'Study Progress',
+	'menu.HocTap.DangKyNhuCau': 'Register for on-demand learning',
 	'menu.HocTap.DangKyTinChi': 'Course Registration',
 	'menu.HocTap.NhuCauHocPhan': 'Course Enrollment Request',
 	'menu.HocTap.LopHocPhan': 'Credit Class',
