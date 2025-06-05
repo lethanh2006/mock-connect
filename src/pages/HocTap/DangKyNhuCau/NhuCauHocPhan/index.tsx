@@ -92,7 +92,7 @@ const NhuCauHocPhanPage = () =>
 				width: 60,
 				render: (val, rec) => (
 					<Popconfirm
-						onConfirm={() => deleteModel(`${rec?.id}/me`, getData)}
+						onConfirm={() => deleteModel(`${rec?._id}/me`, getData)}
 						title='Bạn có chắc chắn muốn xóa học phần này?'
 						placement='topLeft'
 					>
@@ -150,6 +150,7 @@ const NhuCauHocPhanPage = () =>
 					footer={false}
 					bodyStyle={{ padding: 0 }}
 					visible={visibleForm}
+					width={800}
 				>
 					<FormDangKyNhuCau getData={getData} title='Nhu cầu học phần' />
 				</ModalExpandable>
