@@ -1,4 +1,4 @@
-import SelectHocPhanKhoaNganh from '@/pages/DaoTao/ChuongTrinhDaoTao/SelectHocPhanKhoaNganh';
+import SelectHocPhanKhoaNganhDkNhuCau from '@/pages/DaoTao/ChuongTrinhDaoTao/SelectHocPhanKhoaNganhDkNhuCau';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import type { DangKyNhuCau } from '@/services/DaoTao/DangKyNhuCau/typing';
 import rules from '@/utils/rules';
@@ -54,7 +54,12 @@ const FormDangKyNhuCau = (props: any) => {
 
 					<Col xs={24}>
 						<Form.Item name='maHocPhan' label='Học phần' rules={[...rules.required]}>
-							<SelectHocPhanKhoaNganh disabled={!maKhoaNganh} maKhoaNganh={maKhoaNganh} selectMa />
+							<SelectHocPhanKhoaNganhDkNhuCau
+								disabled={!maKhoaNganh}
+								maKhoaNganh={maKhoaNganh}
+								idDotDkNhuCau={recDot?._id}
+								selectMa
+							/>
 						</Form.Item>
 					</Col>
 				</Row>
