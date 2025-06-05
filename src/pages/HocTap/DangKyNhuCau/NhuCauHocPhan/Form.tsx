@@ -3,16 +3,15 @@ import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import type { DangKyNhuCau } from '@/services/DaoTao/DangKyNhuCau/typing';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, Row } from 'antd';
+import { Button, Card, Col, Form, message, Row } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const FormDangKyNhuCau = (props: any) => {
 	const { getData, title } = props;
 	const [form] = Form.useForm();
-	const { record, setVisibleForm, edit, sinhVienDangKyNhuCauModel, putModel, formSubmiting, visibleForm } = useModel(
-		'daotao.dangkynhucau.hocphannhucau',
-	);
+	const { danhSach, record, setVisibleForm, edit, sinhVienDangKyNhuCauModel, putModel, formSubmiting, visibleForm } =
+		useModel('daotao.dangkynhucau.hocphannhucau');
 	const { record: recDot } = useModel('daotao.dangkynhucau.dotdangky');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 
@@ -25,6 +24,12 @@ const FormDangKyNhuCau = (props: any) => {
 	}, [record?._id, visibleForm]);
 
 	const onFinish = async (values: DangKyNhuCau.IHocPhanDangKyNhuCau) => {
+		const index = danhSach?.find((item) => item?.maHocPhan === values.maHocPhan);
+
+		if (index) {
+			return message.error('Đã tồn tại học phần trong bảng đăng ký!');
+		}
+
 		if (edit) {
 			putModel(record?._id ?? '', values, getData)
 				.then()
