@@ -92,7 +92,7 @@ const NhuCauHocPhanPage = () =>
 				width: 60,
 				render: (val, rec) => (
 					<Popconfirm
-						onConfirm={() => deleteModel(rec._id, getData)}
+						onConfirm={() => deleteModel(`${rec?.id}/me`, getData)}
 						title='Bạn có chắc chắn muốn xóa học phần này?'
 						placement='topLeft'
 					>
