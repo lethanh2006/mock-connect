@@ -52,7 +52,7 @@ const NhuCauHocPhanPage = () =>
 			recDot?._id,
 		]);
 
-		const columns: IColumn<DangKyNhuCau.IHocPhanDangKyNhuCau>[] = [
+		const columns: IColumn<DangKyNhuCau.IHocPhanDangKyNhuCau & { soLuongDangKy: number }>[] = [
 			{
 				title: 'Mã HP',
 				width: 80,
@@ -69,6 +69,17 @@ const NhuCauHocPhanPage = () =>
 				width: 60,
 				align: 'center',
 				render: (val, rec) => rec.hocPhan?.soTinChi,
+			},
+			{
+				title: 'Số SV đăng ký',
+				width: 60,
+				align: 'center',
+				dataIndex: 'soLuongDangKy',
+				render: (val) => (
+					<Tag color={val >= 30 ? 'green' : val >= 20 ? 'yellow' : 'red'}>
+						{val} SV
+					</Tag>
+				),
 			},
 			{
 				title: 'Khóa ngành',
