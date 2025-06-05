@@ -1,4 +1,6 @@
-import TableBase from '@/components/Table';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { DangKyNhuCau } from '@/services/DaoTao/DangKyNhuCau/typing';
 import {
@@ -6,8 +8,10 @@ import {
 	mapTrangThaiHocPhanDangKyNhuCau,
 	type ETrangThaiHocPhanDangKyNhuCau,
 } from '@/services/DaoTao/constant';
-import { Alert, Tag } from 'antd';
+import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Alert, Popconfirm, Tag } from 'antd';
 import moment from 'moment';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormDangKyNhuCau from './Form';
 
@@ -15,18 +19,38 @@ const NhuCauHocPhanPage = () =>
 	// props: { khoaNganhTrongDot: boolean }
 	{
 		const { record: recDot } = useModel('daotao.dangkynhucau.dotdangky');
-		const { getModel, page, limit } = useModel('daotao.dangkynhucau.hocphannhucau');
-		const { maKhoaNganh } = useModel('sinhvien.sinhvien');
+		const {
+			getModel,
+			// page,
+			// limit,
+			deleteModel,
+			danhSach,
+			loading,
+			setRecord,
+			setEdit,
+			setIsView,
+			setVisibleForm,
+			visibleForm,
+		} = useModel('daotao.dangkynhucau.hocphannhucau');
+		// const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 		// const { khoaNganhTrongDot } = props;
 
 		const getData = () =>
-			recDot?._id && getModel({ maKhoaNganh }, undefined, undefined, undefined, undefined, `me/dot/${recDot?._id}`);
+			// { maKhoaNganh }
+			recDot?._id && getModel(undefined, undefined, undefined, undefined, 100, `me/dot/${recDot?._id}`);
 
 		const ngoaiThoiGian =
 			!recDot?.thoiGianBatDau ||
 			!recDot?.thoiGianKetThuc ||
 			moment().isBefore(recDot?.thoiGianBatDau, 'd') ||
 			moment().isAfter(recDot?.thoiGianKetThuc, 'd');
+
+		useEffect(() => {
+			getData();
+		}, [
+			// maKhoaNganh,
+			recDot?._id,
+		]);
 
 		const columns: IColumn<DangKyNhuCau.IHocPhanDangKyNhuCau>[] = [
 			{
@@ -47,6 +71,11 @@ const NhuCauHocPhanPage = () =>
 				render: (val, rec) => rec.hocPhan?.soTinChi,
 			},
 			{
+				title: 'Khóa ngành',
+				width: 120,
+				render: (val, rec) => rec.phieuDangKyHocNhuCau?.khoaNganh?.ten,
+			},
+			{
 				title: 'Trạng thái',
 				dataIndex: 'trangThai',
 				align: 'center',
@@ -55,6 +84,20 @@ const NhuCauHocPhanPage = () =>
 					<Tag color={colorTrangThaiHocPhanDangKyNhuCau[val as ETrangThaiHocPhanDangKyNhuCau]}>
 						{mapTrangThaiHocPhanDangKyNhuCau[val as ETrangThaiHocPhanDangKyNhuCau]}
 					</Tag>
+				),
+			},
+			{
+				title: 'Thao tác',
+				align: 'center',
+				width: 60,
+				render: (val, rec) => (
+					<Popconfirm
+						onConfirm={() => deleteModel(rec._id, getData)}
+						title='Bạn có chắc chắn muốn xóa học phần này?'
+						placement='topLeft'
+					>
+						<ButtonExtend tooltip='Xóa' danger type='link' icon={<DeleteOutlined />} />
+					</Popconfirm>
 				),
 			},
 		];
@@ -78,7 +121,40 @@ const NhuCauHocPhanPage = () =>
 					/>
 				</div>
 
-				<TableBase
+				<TableStaticData
+					columns={columns}
+					data={danhSach ?? []}
+					loading={loading}
+					addStt
+					otherProps={{ pagination: true }}
+					hasTotal
+					onReload={getData}
+				>
+					<ButtonExtend
+						type='primary'
+						disabled={ngoaiThoiGian}
+						onClick={() => {
+							setRecord({} as DangKyNhuCau.IHocPhanDangKyNhuCau);
+							setEdit(false);
+							setIsView(false);
+							setVisibleForm(true);
+						}}
+						icon={<PlusCircleOutlined />}
+					>
+						Thêm mới
+					</ButtonExtend>
+				</TableStaticData>
+
+				<ModalExpandable
+					onCancel={() => setVisibleForm(false)}
+					footer={false}
+					bodyStyle={{ padding: 0 }}
+					visible={visibleForm}
+				>
+					<FormDangKyNhuCau getData={getData} title='Nhu cầu học phần' />
+				</ModalExpandable>
+
+				{/* <TableBase
 					columns={columns}
 					getData={getData}
 					formProps={{ getData }}
@@ -100,7 +176,7 @@ const NhuCauHocPhanPage = () =>
 					// 		  ]
 					// 		: undefined
 					// }
-				/>
+				/> */}
 			</>
 		);
 	};
