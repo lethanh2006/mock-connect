@@ -1,3 +1,4 @@
+import { ETrangThaiHocSv } from '@/services/DaoTao/constant';
 import {
 	EKetQuaXetTotNghiep,
 	ELoaiDoiTuongXetTotNghiep,
@@ -6,15 +7,16 @@ import {
 } from '@/services/HocTap/XetTotNghiep/constant';
 import { CloseOutlined, FormOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Col, Descriptions, Empty, Popconfirm, Row, Tag } from 'antd';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalYKien from './ModalYKien';
-import moment from 'moment';
 
 const CardXetTotNghiep = () => {
 	const { formSubmiting, record, dangKyXetTotNghiepModel, setVisibleForm, getDotHienHanhModel, loading } =
 		useModel('sinhvien.xettotnghiep');
 	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [type, setType] = useState<'phan-hoi' | 'hoan'>('phan-hoi');
 	const isQuaNgayChotSanhSach = !!record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach, 'day');
 
@@ -38,7 +40,7 @@ const CardXetTotNghiep = () => {
 		<Card title='Xét tốt nghiệp' loading={loading}>
 			{!record?._id ? (
 				<Empty
-					description='Không có đợt xét tốt nghiệp trong thời điểm hiện tại !'
+					description='Không có đợt xét tốt nghiệp trong thời điểm hiện tại!'
 					style={{ marginBottom: 32, marginTop: 32 }}
 				/>
 			) : (
@@ -107,7 +109,9 @@ const CardXetTotNghiep = () => {
 						)}
 					</Row>
 
-					{dieuKienTotNghiep?.isDuKieuKien && !isQuaNgayChotSanhSach ? (
+					{recSinhVien?.trangThaiHoc === ETrangThaiHocSv.DANG_HOC &&
+					dieuKienTotNghiep?.isDuKieuKien &&
+					!isQuaNgayChotSanhSach ? (
 						<div className='form-footer'>
 							{!record?.ketQuaXetTotNghiep?._id ? (
 								<>
