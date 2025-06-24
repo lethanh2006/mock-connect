@@ -114,7 +114,7 @@ const DetailKetQuaHocTap = (props: {
 						{recDiem && recDiem.diemKthp !== undefined && recDiem.diemKthp !== null && (
 							<div style={{ marginTop: 8 }}>
 								<a
-									href='#'
+									href=''
 									onClick={(e) => {
 										e.preventDefault();
 										setHienThiDiemThi(true);
