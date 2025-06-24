@@ -615,7 +615,7 @@ const TableBase = (props: TableBaseProps) => {
 										{selectedIds?.length > 0 ? (
 											<span>
 												(
-												<a href='#!' onClick={() => setSelectedIds(undefined)}>
+												<a href='' onClick={() => setSelectedIds(undefined)}>
 													Bỏ chọn tất cả
 												</a>
 												)
