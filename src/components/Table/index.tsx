@@ -563,7 +563,7 @@ const TableBase = (props: TableBaseProps) => {
 										{selectedIds?.length > 0 ? (
 											<span>
 												(
-												<a href='' onClick={() => setSelectedIds(undefined)}>
+												<a onClick={() => setSelectedIds(undefined)}>
 													{intl.formatMessage({ id: 'global.table.index.bochon' })}
 												</a>
 												)
