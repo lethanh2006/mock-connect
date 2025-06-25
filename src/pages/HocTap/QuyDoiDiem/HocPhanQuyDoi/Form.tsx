@@ -24,7 +24,7 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 		putModel(record?._id ?? '', { ...values, maHocPhan: record?.maHocPhan }, getData);
 	};
 
-	const renderDiem = (he10?: number, he4?: number, diemChu?: ELoaiDiemChu) => (
+	const renderDiem = (he10?: number, he4?: number, diemChu?: ELoaiDiemChu, tinhDiemTichLuy?: boolean) => (
 		<Space wrap>
 			{he10 ? (
 				<span>
@@ -39,6 +39,7 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 			<span>
 				Điểm chữ: <b style={diemChu ? { color: ColorDiemChu[diemChu] } : undefined}>{diemChu}</b>
 			</span>
+			{tinhDiemTichLuy ? <span className='text-success'>(Tính điểm tích lũy)</span> : null}
 		</Space>
 	);
 
@@ -58,7 +59,8 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 								{record?.hocPhan?.ten ?? ''} ({record?.maHocPhan ?? ''} - {record?.hocPhan?.soTinChi ?? ''} tín chỉ)
 							</Descriptions.Item>
 							<Descriptions.Item label='Kết quả quy đổi'>
-								{renderDiem(record?.diemHe10, record?.diemHe4, record?.diemChu)}
+								{renderDiem(record?.diemHe10, record?.diemHe4, record?.diemChu)}{' '}
+								{record?.tinhDiemTichLuy ? <span className='text-success'>(Tính điểm tích lũy)</span> : ''}
 							</Descriptions.Item>
 							<Descriptions.Item label='Khuyến nghị'>
 								{
@@ -75,6 +77,7 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 								) : null}
 							</Descriptions.Item>
 
+							<Descriptions.Item label='Loại minh chứng'>{record?.loai}</Descriptions.Item>
 							{record?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
 								<Descriptions.Item label='Thông tin chứng chỉ'>
 									<div>

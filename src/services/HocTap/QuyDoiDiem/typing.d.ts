@@ -100,5 +100,8 @@ declare module QuyDoiDiem {
 		tenDeTaiNckh?: string;
 		nguoiHuongDanNckh?: string;
 		diemNckh?: number;
+
+		// Minh chứng khác
+		tinhDiemTichLuy: boolean;
 	}
 }
