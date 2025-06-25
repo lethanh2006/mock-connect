@@ -127,6 +127,8 @@ export declare module LopHocPhan {
 		dotDangKyQuyDoiDiemId: string;
 		dotDangKyQuyDoiDiem?: QuyDoiDiem.IQuyDoiDiemSinhVien;
 		isCongNhanQuyDoiDiem?: boolean;
+		/** Điểm từ quy đổi điểm có tính vào tích lũy? */
+		coTichLuyQuyDoi?: boolean;
 
 		// trangThaiDuyetDiemThanhPhan?: ETrangThaiDuyetDiem;
 		// trangThaiDuyet?: ETrangThaiDuyetDiem;
