@@ -51,7 +51,7 @@ const FormItemHocPhanQuyDoi = () => {
 						? rec?.tenChungChi
 						: rec.loai === EMinhChungQuyDoiDiem.NCKH
 						? rec.tenDeTaiNckh
-						: rec?.tenHocPhan) ?? <i>Không có thông tin</i>}
+						: rec?.tenHocPhan) ?? ''}
 				</>
 			),
 			onCell,
@@ -65,6 +65,7 @@ const FormItemHocPhanQuyDoi = () => {
 				val ? (
 					<>
 						{rec.diemHe10 ?? ''} - {rec.diemHe4 ?? ''} - <b style={{ color: ColorDiemChu[val] }}>{val}</b>
+						{rec.tinhDiemTichLuy ? <span className='text-success'> (tích lũy)</span> : null}
 					</>
 				) : (
 					<i>Chưa có điểm</i>

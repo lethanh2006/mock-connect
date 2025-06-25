@@ -114,7 +114,6 @@ const DetailKetQuaHocTap = (props: {
 						{recDiem && recDiem.diemKthp !== undefined && recDiem.diemKthp !== null && (
 							<div style={{ marginTop: 8 }}>
 								<a
-									href=''
 									onClick={(e) => {
 										e.preventDefault();
 										setHienThiDiemThi(true);
@@ -132,7 +131,9 @@ const DetailKetQuaHocTap = (props: {
 							<Descriptions.Item label='Điểm hệ 4'>{recDiem?.diemThang4 ?? '--'}</Descriptions.Item>
 							<Descriptions.Item label='Điểm chữ'>
 								{recDiem?.diemChu ? <Tag color={ColorDiemChu[recDiem.diemChu]}>{recDiem.diemChu}</Tag> : '--'}{' '}
-								{recDiem?.isCongNhanQuyDoiDiem && <Tooltip title='Điểm quy đổi'>(R)</Tooltip>}
+								{recDiem?.isCongNhanQuyDoiDiem && (
+									<Tooltip title='Điểm quy đổi'>(R{recDiem.coTichLuyQuyDoi ? ' - Tích lũy' : ''})</Tooltip>
+								)}
 							</Descriptions.Item>
 						</Descriptions>
 					</>
