@@ -1,5 +1,6 @@
 import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
 import { landingUrl } from '@/services/base/constant';
+import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
 import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Menu, Modal, Row, Spin } from 'antd';
 import { type ItemType } from 'antd/lib/menu/hooks/useItems';
@@ -9,7 +10,6 @@ import { history, useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
 import HeaderDropdown from './HeaderDropdown';
 import styles from './index.less';
-import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
 
 const AvatarDropdown = () => {
 	const intl = useIntl();
@@ -21,7 +21,7 @@ const AvatarDropdown = () => {
 	const handleCheckKhaoSatBatBuoc = async () => {
 		try {
 			const res = await getDotMeModel(ELoaiDot.BIEU_MAU);
-			const index = res?.filter((item) => item?.defaultOpenAuth && !item?.daLam);
+			const index = res?.filter((item) => item?.kichHoat && item?.defaultOpenAuth && !item?.daLam);
 			setDsKhaoSatBatBuoc(index);
 
 			if (index?.length) {
