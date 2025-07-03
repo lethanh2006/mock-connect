@@ -64,6 +64,7 @@ export default {
 	'menu.TienIch.VanBanHuongDan': 'Văn bản hướng dẫn',
 	'menu.TienIch.CauHoiThuongGap': 'Câu hỏi thường gặp',
 	'menu.TienIch.XemSau': 'Đã lưu',
+	'menu.TienIch.LichSuMuonTraTinhVan': 'Lịch sử mượn trả',
 
 	'menu.HoatDongKHCN': 'Hoạt động KH&CN',
 	'menu.HoatDongKHCN.DeTaiHocVien': 'Đề tài NCKH cấp Học viện',
