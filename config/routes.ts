@@ -533,11 +533,11 @@
 				path: './xem-sau',
 				component: './TienIch/XemSau',
 			},
-			{
-				name: 'LichSuMuonTraTinhVan',
-				path: './lich-su-muon-tra',
-				component: './TienIch/LichSuMuonTraTinhVan',
-			},
+			// {
+			// 	name: 'LichSuMuonTraTinhVan',
+			// 	path: './lich-su-muon-tra',
+			// 	component: './TienIch/LichSuMuonTraTinhVan',
+			// },
 		],
 	},
 
