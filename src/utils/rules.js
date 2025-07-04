@@ -22,6 +22,21 @@ const rules = {
 			message: 'Không chứa kí tự đặc biệt',
 		},
 	],
+		json: [
+		{
+			validator: (__, value, callback) => {
+				try {
+					if (value) {
+						JSON.parse(value);
+					}
+					callback();
+				} catch {
+					callback('');
+				}
+			},
+			message: 'Json không hợp lệ',
+		},
+	],
 	ten: [
 		{
 			max: 50,
