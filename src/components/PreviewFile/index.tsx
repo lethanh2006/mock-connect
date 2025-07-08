@@ -11,12 +11,14 @@ import {
 	LeftOutlined,
 	RightOutlined,
 } from '@ant-design/icons';
-import { message, Space, Spin } from 'antd';
+import { message, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
+import PDFViewerV2 from '../PDFViewerV2';
 import ButtonExtend from '../Table/ButtonExtend';
 import type { TPreviewFileProps } from './typing';
+import './style.less';
 
 type TFrameProps = {
 	url: string;
@@ -27,7 +29,7 @@ type TFrameProps = {
 
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
-	const { file, style = {}, children, ip = ip3, isFileId, tenFile } = props;
+	const { file, style = {}, children, ip = ip3, isFileId, tenFile, height } = props;
 	const [frameData, setFrameData] = useState<TFrameProps>();
 	const [loading, setLoading] = useState(false);
 	const [currentFileIndex, setCurrentFileIndex] = useState(0);
@@ -176,101 +178,103 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 		return frameData?.name ?? '--';
 	};
 
-	if (loading)
+	if (loading) {
 		return (
-			<div style={{ width: '100%', height: '100%', ...style }}>
+			<div className='preview-loading' style={style}>
 				<Spin size='large' />
 			</div>
 		);
+	}
+
 	return (
-		<div style={{ width: '100%', height: '100%', ...style }}>
-			<Space wrap align='center' style={{ justifyContent: 'space-between', marginBottom: 12, width: '100%' }}>
-				<b>{getCurrentFileName()}</b>
+		<div style={{ height: height ?? '100vh' }}>
+			<div className='preview-container' style={style}>
+				<div className='preview-header'>
+					<div className='preview-title'>
+						<b>{getCurrentFileName()}</b>
+					</div>
 
-				<Space wrap>
-					{fileList.length > 1 && (
-						<Space>
-							<ButtonExtend
-								type='link'
-								disabled={currentFileIndex === 0}
-								icon={<LeftOutlined />}
-								onClick={handlePrev}
-							/>
-							<span>
-								{currentFileIndex + 1} / {fileList.length}
-							</span>
-							<ButtonExtend
-								type='link'
-								disabled={currentFileIndex === fileList.length - 1}
-								icon={<RightOutlined />}
-								onClick={handleNext}
-							/>
-						</Space>
-					)}
-
-					{!!frameData?.url && (
-						<>
-							<ButtonExtend
-								type='link'
-								tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
-								icon={<DownloadOutlined />}
-								onClick={handleDownloadOrView}
-							/>
-							<ButtonExtend
-								type='link'
-								tooltip={intl.formatMessage({ id: 'global.previewfile.button.saochep' })}
-								icon={<CopyOutlined />}
-								onClick={handleCopy}
-							/>
-						</>
-					)}
-
-					{!!frameData?.src && (
-						<ButtonExtend
-							type='link'
-							tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
-							icon={<ExpandOutlined />}
-							onClick={() => window.open(frameData?.src, '_blank')}
-						/>
-					)}
-
-					{children}
-				</Space>
-			</Space>
-
-			{frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
-				<iframe src={frameData.src} style={{ height: 'calc(100% - 44px)', width: '100%', minHeight: 560 }} />
-			) : (
-				<div
-					style={{
-						padding: '20px',
-						textAlign: 'center',
-						background: '#f8d7da',
-						color: '#721c24',
-						border: '1px solid #f5c6cb',
-						borderRadius: '5px',
-					}}
-				>
-					<p>
-						<strong>{intl.formatMessage({ id: 'global.previewfile.thongbao' })}</strong>
-						<br />
-						{!!frameData?.src && <span>Đường đẫn: {frameData?.src}</span>}
-						<br />
-
-						{!!frameData?.url && (
-							<ButtonExtend
-								notHideText
-								type='link'
-								tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
-								icon={<FileSearchOutlined />}
-								onClick={handleDownloadOrView}
-							>
-								{intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
-							</ButtonExtend>
+					<div className='preview-actions'>
+						{fileList.length > 1 && (
+							<div className='preview-pagination'>
+								<ButtonExtend
+									type='link'
+									disabled={currentFileIndex === 0}
+									icon={<LeftOutlined />}
+									onClick={handlePrev}
+								/>
+								<span>
+									{currentFileIndex + 1} / {fileList.length}
+								</span>
+								<ButtonExtend
+									type='link'
+									disabled={currentFileIndex === fileList.length - 1}
+									icon={<RightOutlined />}
+									onClick={handleNext}
+								/>
+							</div>
 						)}
-					</p>
+
+						<div className='preview-buttons'>
+							{!!frameData?.url && (
+								<>
+									<ButtonExtend
+										type='link'
+										tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
+										icon={<DownloadOutlined />}
+										onClick={handleDownloadOrView}
+									/>
+									<ButtonExtend
+										type='link'
+										tooltip={intl.formatMessage({ id: 'global.previewfile.button.saochep' })}
+										icon={<CopyOutlined />}
+										onClick={handleCopy}
+									/>
+								</>
+							)}
+
+							{!!frameData?.src && (
+								<ButtonExtend
+									type='link'
+									tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
+									icon={<ExpandOutlined />}
+									onClick={() => window.open(frameData?.src, '_blank')}
+								/>
+							)}
+
+							{children}
+						</div>
+					</div>
 				</div>
-			)}
+
+				<div className='preview-content'>
+					{frameData?.type === EDinhDangFile.PDF && frameData?.src ? (
+						<div className='preview-pdf'>
+							<PDFViewerV2 data={frameData?.src} />
+						</div>
+					) : frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
+						<iframe src={frameData.src} className='preview-iframe' title='File preview' />
+					) : (
+						<div className='preview-error'>
+							<p className='preview-error-message'>
+								<strong>{intl.formatMessage({ id: 'global.previewfile.thongbao' })}</strong>
+							</p>
+							{!!frameData?.src && <p className='preview-error-url'>Đường dẫn: {frameData?.src}</p>}
+							{!!frameData?.url && (
+								<ButtonExtend
+									notHideText
+									type='link'
+									tooltip={intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
+									icon={<FileSearchOutlined />}
+									onClick={handleDownloadOrView}
+								>
+									{intl.formatMessage({ id: 'global.previewfile.button.taixuong' })}
+								</ButtonExtend>
+							)}
+						</div>
+					)}
+				</div>
+			</div>
 		</div>
 	);
 };
