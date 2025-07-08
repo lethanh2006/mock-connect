@@ -74,10 +74,10 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 						>
 							<div
 								style={{
-									background: `url(${getImageSrc({
+									background: `url("${getImageSrc({
 										tinTuc: first(danhSach),
 										targetSize: 'large',
-									})}) center center/cover no-repeat`,
+									})}") center center/cover no-repeat`,
 									width: '100%',
 									height: '67%',
 									minHeight: 220,
@@ -161,10 +161,10 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 											<Col xs={8} style={{ height: '100%' }}>
 												<div
 													style={{
-														background: `url(${getImageSrc({
+														background: `url("${getImageSrc({
 															tinTuc: tintuc,
 															targetSize: 'medium',
-														})}) center center/ cover no-repeat`,
+														})}") center center/ cover no-repeat`,
 														width: '100%',
 														height: '100%',
 														minHeight: 130,
@@ -252,10 +252,10 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 										<Col xs={8}>
 											<div
 												style={{
-													background: `url(${getImageSrc({
+													background: `url("${getImageSrc({
 														tinTuc: tintuc,
 														targetSize: 'thumbnail',
-													})}) center center/ cover no-repeat`,
+													})}") center center/ cover no-repeat`,
 													width: '100%',
 													height: '100%',
 												}}

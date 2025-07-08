@@ -54,10 +54,10 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 												<Col xs={8}>
 													<div
 														style={{
-															background: `url(${getImageSrc({
+															background: `url("${getImageSrc({
 																tinTuc: tintuc,
 																targetSize: 'thumbnail',
-															})}) center center/ cover no-repeat`,
+															})}") center center/ cover no-repeat`,
 															width: '100%',
 															height: '100%',
 														}}
