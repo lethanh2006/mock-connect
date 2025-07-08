@@ -250,7 +250,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				<div className='preview-content'>
 					{frameData?.type === EDinhDangFile.PDF && frameData?.src ? (
 						<div className='preview-pdf'>
-							<PDFViewerV2 data={frameData?.src} />
+							<PDFViewerV2 url={frameData?.src} />
 						</div>
 					) : frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
 						<iframe src={frameData.src} className='preview-iframe' title='File preview' />

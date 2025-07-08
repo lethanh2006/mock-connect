@@ -4,15 +4,15 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 interface PDFViewerProps {
-	data: string;
+	url: string;
 }
 
-const PDFViewerV2 = ({ data }: PDFViewerProps) => {
+const PDFViewerV2 = ({ url }: PDFViewerProps) => {
 	const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
 	return (
 		<Worker workerUrl='/pdf.worker.min.js'>
-			<Viewer fileUrl={data} plugins={[defaultLayoutPluginInstance]} defaultScale={SpecialZoomLevel.PageFit} />
+			<Viewer fileUrl={url} plugins={[defaultLayoutPluginInstance]} defaultScale={SpecialZoomLevel.PageFit} />
 		</Worker>
 	);
 };
