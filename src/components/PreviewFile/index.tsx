@@ -29,7 +29,7 @@ type TFrameProps = {
 
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
-	const { file, style = {}, children, ip = ip3, isFileId, tenFile, height, width } = props;
+	const { file, style = {}, children, ip = ip3, isFileId, tenFile } = props;
 	const [frameData, setFrameData] = useState<TFrameProps>();
 	const [loading, setLoading] = useState(false);
 	const [currentFileIndex, setCurrentFileIndex] = useState(0);
@@ -187,7 +187,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	}
 
 	return (
-		<div className='preview-container' style={{ ...style, width: width ?? '100%', height: height ?? '100%' }}>
+		<div className='preview-container' style={{ ...style }}>
 			<div className='preview-header'>
 				<div className='preview-title'>
 					<b>{getCurrentFileName()}</b>
