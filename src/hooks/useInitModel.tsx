@@ -353,9 +353,9 @@ const useInitModel = <T,>(
 	 * Lấy file excel mẫu cho chức năng import
 	 * @returns {any}
 	 */
-	const getImportTemplateModel = async (): Promise<any> => {
+	const getImportTemplateModel = async (params?: any): Promise<any> => {
 		try {
-			const res = await getImportTemplate();
+			const res = await getImportTemplate(params);
 			return res.data;
 		} catch (err) {
 			return Promise.reject(err);
