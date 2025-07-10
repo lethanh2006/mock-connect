@@ -1,4 +1,5 @@
 // import { refreshAccesssToken } from '@/services/ant-design-pro/api';
+import '@ant-design/v5-patch-for-react-19';
 import { message, notification } from 'antd';
 import axios1 from 'axios';
 // import { history } from 'umi';
