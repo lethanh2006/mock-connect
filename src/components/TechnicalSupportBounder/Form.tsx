@@ -1,11 +1,11 @@
 import { ELoaiPhanHoi } from '@/services/TienIch/PhanHoi/constant';
 import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
-import { Button, Card, Form, Input } from 'antd';
+import { resetFieldsForm } from '@/utils/utils';
+import { Button, Form, Input } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormItemUrlOrUpload from '../Upload/FormItemUrlOrUpload';
-import { useEffect } from 'react';
-import { resetFieldsForm } from '@/utils/utils';
 
 const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
 	const { formSubmiting, postModel, setFormSubmiting } = useModel('tienich.phanhoi');
@@ -36,7 +36,7 @@ const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => 
 	};
 
 	return (
-		<Card title='Phản hồi kĩ thuật'>
+		<>
 			<Form layout='vertical' onFinish={onFinish} form={form}>
 				<Form.Item
 					rules={[...rules.required, ...rules.length(5000), ...rules.text]}
@@ -55,7 +55,7 @@ const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => 
 					<Button onClick={() => setVisible(false)}>Hủy</Button>
 				</div>
 			</Form>
-		</Card>
+		</>
 	);
 };
 

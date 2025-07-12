@@ -21,11 +21,11 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 					/>
 
 					<Modal
-						styles={{ content: { padding: 0 }, body: { padding: 0 } }}
-						footer={false}
+						footer={null}
 						open={visible}
 						onCancel={() => setVisible(false)}
 						maskClosable={false}
+						title='Phản hồi kĩ thuật'
 					>
 						<FormPostIssue setVisible={setVisible} visible={visible} />
 					</Modal>
