@@ -218,7 +218,9 @@ const TableBase = (props: TableBaseProps) => {
 				const filtered = values && values[0];
 				return <SearchOutlined className={filtered ? 'text-primary' : undefined} />;
 			},
-			onFilterDropdownVisibleChange: (vis) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
+			filterDropdownProps: {
+				onOpenChange: (vis) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
+			},
 		};
 	};
 	//#endregion
@@ -603,7 +605,7 @@ const TableBase = (props: TableBaseProps) => {
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<Card title={title || false} bordered={props.border || false}>
+				<Card title={title || false} variant={props.border ? 'outlined' : 'borderless'}>
 					{mainContent}
 				</Card>
 			)}

@@ -1,5 +1,4 @@
 import readAll from '@/assets/read-all.svg';
-import { BellOutlined } from '@ant-design/icons';
 import { Link } from '@umijs/max';
 import { Badge, Tooltip } from 'antd';
 import useMergedState from 'rc-util/es/hooks/useMergedState';
@@ -62,11 +61,11 @@ const NoticeIcon: React.FC<NoticeIconProps> = ({
 			onOpenChange={(open) => setVisible(open)}
 		>
 			<Tooltip title='Thông báo' placement='bottom'>
-				<Badge count={count ? (count < 100 ? count : '99+') : undefined} className={styles.noti_badge}>
-					<a>
-						<BellOutlined />
-					</a>
-				</Badge>
+				<div className='header-menu-item'>
+					<Badge count={count ? (count < 100 ? count : '99+') : undefined} className={styles.noti_badge}>
+						<img src='/icons/notification.svg' alt='notif' />
+					</Badge>
+				</div>
 			</Tooltip>
 		</HeaderDropdown>
 	);

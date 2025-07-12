@@ -26,7 +26,7 @@ const CardChooseFields = (props: {
 	return (
 		<Card
 			title='Các trường khả dụng'
-			bordered={false}
+			variant='borderless'
 			styles={{ header: { padding: 0 }, body: { padding: '8px 0 0' } }}
 		>
 			<Space style={{ marginBottom: 8 }} wrap>

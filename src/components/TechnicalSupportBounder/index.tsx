@@ -26,11 +26,11 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 					<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
 
 					<Modal
-						styles={{ content: { padding: 0 }, body: { padding: 0 } }}
-						footer={false}
+						footer={null}
 						open={visible}
 						onCancel={() => setVisible(false)}
 						maskClosable={false}
+						title='Phản hồi kĩ thuật'
 					>
 						<FormPostIssue setVisible={setVisible} visible={visible} />
 					</Modal>
