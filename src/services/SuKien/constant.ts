@@ -94,6 +94,7 @@ export const ColorSuKien: Partial<Record<ELoaiSuKien, string>> = {
 	[ELoaiSuKien.LICH_THI]: '#df4471b3',
 	[ELoaiSuKien.CA_NHAN]: '#57bf56b3',
 	[ELoaiSuKien.CHUNG]: '#2098c7b3',
+	[ELoaiSuKien.CAC_HOAT_DONG]: '#2098c7b3',
 	[ELoaiSuKien.BAI_TAP]: '#f1a32ab3',
 	[ELoaiSuKien.HOP_LOP]: '#9f44efb3',
 };
@@ -106,3 +107,25 @@ export enum EHoatDongChungType1 {
 	PHUC_VU_CONG_DONG = 'Phục vụ cộng đồng',
 	VAN_HOA_THE_THAO = 'Văn hóa, thể thao',
 }
+
+export enum ETrangThaiThamGia {
+	XAC_NHAN = 'Xác nhận',
+	CHUA_XAC_NHAN = 'Chưa xác nhận',
+	TU_CHOI = 'Từ chối',
+}
+
+export const MapColorETrangThaiThamGia = {
+	[ETrangThaiThamGia.XAC_NHAN]: 'green',
+	[ETrangThaiThamGia.CHUA_XAC_NHAN]: 'orange',
+	[ETrangThaiThamGia.TU_CHOI]: 'red',
+};
+
+export enum ELoaiQR {
+	THAM_GIA = 'Tham gia',
+	DANG_KY = 'Đăng ký',
+}
+
+export const MapTitleELoaiQR = {
+	[ELoaiQR.DANG_KY]: 'Đã đăng ký',
+	[ELoaiQR.THAM_GIA]: 'Đã tham gia',
+};

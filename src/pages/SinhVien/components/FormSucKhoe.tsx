@@ -5,12 +5,12 @@ const FormSucKhoe = () => {
 	return (
 		<Row gutter={[12, 0]}>
 			<Col span={12} md={8}>
-				<Form.Item name='chieuCao' label='Chiều cao (cm)' rules={[...rules.number(300, 0),...rules.required]}>
+				<Form.Item name='chieuCao' label='Chiều cao (cm)' rules={[...rules.number(300, 0), ...rules.required]}>
 					<InputNumber placeholder='Nhập chiều cao' style={{ width: '100%' }} />
 				</Form.Item>
 			</Col>
 			<Col span={12} md={8}>
-				<Form.Item name='canNang' label='Cân nặng (kg)' rules={[...rules.number(300, 0),...rules.required]}>
+				<Form.Item name='canNang' label='Cân nặng (kg)' rules={[...rules.number(300, 0), ...rules.required]}>
 					<InputNumber placeholder='Nhập cân nặng' style={{ width: '100%' }} />
 				</Form.Item>
 			</Col>
@@ -21,7 +21,7 @@ const FormSucKhoe = () => {
 			</Col>
 
 			<Col span={12} md={12}>
-				<Form.Item name='soBaoHiemSinhVien' label='Số thẻ BHYT' rules={[...rules.text, ...rules.length(20),...rules.required]}>
+				<Form.Item name='soBaoHiemSinhVien' label='Số thẻ BHYT' rules={[...rules.text, ...rules.length(20)]}>
 					<Input placeholder='Nhập số thẻ BHYT' />
 				</Form.Item>
 			</Col>

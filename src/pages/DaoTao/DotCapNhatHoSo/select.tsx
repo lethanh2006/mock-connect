@@ -1,5 +1,7 @@
 import { Select } from 'antd';
-import { CSSProperties, useEffect } from 'react';
+import moment from 'moment';
+import type { CSSProperties } from 'react';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 export const SelectDotCapNhat = (props: {
@@ -27,7 +29,9 @@ export const SelectDotCapNhat = (props: {
 					options={danhSach.map((item) => ({
 						key: item._id,
 						value: item._id,
-						label: `${item.tenDot}`,
+						label: `${item.tenDot} (${moment(item.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} - ${moment(
+							item.thoiGianKetThuc,
+						).format('HH:mm DD/MM/YYYY')})`,
 						rawData: item,
 					}))}
 					showSearch

@@ -1,4 +1,5 @@
-import { Button, Modal } from 'antd';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Button } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import TabsDeCuongHocPhan from './components/TabsDeCuongHocPhan';
@@ -14,7 +15,7 @@ const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any
 	}, [deCuongId, visible]);
 
 	return (
-		<Modal
+		<ModalExpandable
 			title={title ?? ''}
 			visible={visible}
 			width={1000}
@@ -27,7 +28,7 @@ const ModalHocPhan = (props: { title?: string; visible: boolean; setVisible: any
 			<div className='form-footer'>
 				<Button onClick={() => setVisible(false)}>Đóng</Button>
 			</div>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

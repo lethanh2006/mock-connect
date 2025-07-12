@@ -20,6 +20,7 @@ export default {
 	// SINH VIEN
 	'menu.HocTap': 'Học tập',
 	'menu.HocTap.TienTrinhHocTap': 'Tiến trình học tập',
+	'menu.HocTap.DangKyNhuCau': 'Đăng ký học tập theo nhu cầu',
 	'menu.HocTap.DangKyTinChi': 'Đăng ký tín chỉ',
 	'menu.HocTap.NhuCauHocPhan': 'Phiếu đăng ký học phần',
 	'menu.HocTap.LopHocPhan': 'Lớp tín chỉ',
@@ -58,12 +59,14 @@ export default {
 	'menu.DichVuHanhChinh.TaoDon': 'Tạo đơn - Dịch vụ hành chính',
 	'menu.PhanHoi': 'Phản hồi',
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
+	'menu.CuocThi': 'Cuộc thi',
 	'menu.ThongBao': 'Thông báo',
 
 	'menu.TienIch': 'Tiện ích khác',
 	'menu.TienIch.VanBanHuongDan': 'Văn bản hướng dẫn',
 	'menu.TienIch.CauHoiThuongGap': 'Câu hỏi thường gặp',
 	'menu.TienIch.XemSau': 'Đã lưu',
+	'menu.TienIch.LichSuMuonTraTinhVan': 'Lịch sử mượn trả',
 
 	'menu.HoatDongKHCN': 'Hoạt động KH&CN',
 	'menu.HoatDongKHCN.DeTaiHocVien': 'Đề tài NCKH cấp Học viện',

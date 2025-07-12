@@ -1,12 +1,13 @@
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
-import { Collapse, Spin, Tooltip } from 'antd';
+import { ELoaiHocPhanCTDT, LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
+import { Collapse, Descriptions, Spin, Tooltip } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhan from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
+import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 
 type TChuongTrinhHocKy = {
 	khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
@@ -25,18 +26,18 @@ const TienTrinhChuongTrinhKhung = () => {
 		setRecord: setChuongTrinh,
 	} = useModel('daotao.chuongtrinhdaotao');
 	const { khoaNganhMe, maKhoaNganh } = useModel('sinhvien.sinhvien');
-	const [count, setCount] = useState(0);
-	const [tongTinChi, setTongTinChi] = useState(0);
+	const { record: recTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 	const [visibleDiem, setVisibleDiem] = useState(false);
+	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
 
 	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
 		const listKhoi = _.uniq(listKhoiHpCt.map((item) => item.maKhoiKienThuc));
 		const temp: Record<string, string> = {};
 		listKhoi.forEach(
 			(khoi) =>
-				(temp[khoi] = `rgb(${Math.random() * 200 + 25}, ${Math.random() * 200 + 25}, ${Math.random() * 200 + 25})`),
+				(temp[khoi] = `rgb(${Math.random() * 190 + 15}, ${Math.random() * 190 + 15}, ${Math.random() * 190 + 15})`),
 		);
 		setMapColorKhoiKienThuc(temp);
 	};
@@ -45,22 +46,6 @@ const TienTrinhChuongTrinhKhung = () => {
 		await sinhVienGetTienTrinhKhungModel(maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma ? true : false).then((data) => {
 			// Các mã chuyên ngành (nếu có)
 			const uniqchuyenNganh = _.uniq(data?.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
-			// Học phần ko có chuyên ngành hoặc thuộc chuyên ngành đầu tiên
-			const da = data?.filter((item) => !item.maChuyenNganh || item.maChuyenNganh === uniqchuyenNganh?.[0]);
-			setTongTinChi(
-				_.sumBy(da, (item) =>
-					item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC
-						? (item.hocPhan?.loaiHocPhan?.isTinhSoTinChiTichLuy && item.hocPhan?.soTinChi) || 0
-						: (item.isTinhSoTinChiTichLuy && item.soTinChiTuChonPhaiHoc) || 0,
-				),
-			);
-			// TODO: Xem xét khối tự chọn cùng nhóm học phần, hoặc khác chuyên ngành
-			setCount(
-				_.sumBy(
-					data?.filter((item) => item.lichSuDiem?.length),
-					(item) => (item.hocPhan?.loaiHocPhan?.isTinhSoTinChiTichLuy && item.hocPhan?.soTinChi) || 0,
-				),
-			);
 
 			const gHocKy = _.groupBy(data, (item) => item.soThuTuKy);
 			const dataHocKy: TChuongTrinhHocKy[] = Object.values(gHocKy).map((hk) => {
@@ -117,25 +102,26 @@ const TienTrinhChuongTrinhKhung = () => {
 
 	return (
 		<>
-			{/* <Row>
-				<Col>Số tín chỉ đã tích lũy:</Col>
-			</Row>
-			<Row align='middle'>
-				<Col span={20} md={22}>
-					<div className='progress-wrapper'>
-						<div className='proress-bar' style={{ width: `${(count * 100) / tongTinChi}%` }}>
-							<div className='progress-label'>{count} tín</div>
-						</div>
-					</div>
-				</Col>
-				<Col span={4} md={2}>
-					<div className='progress-end'>
-						<img src={flag} />
-						<br />
-						{tongTinChi} tín chỉ
-					</div>
-				</Col>
-			</Row> */}
+			{recTienTrinh?.ctdtKeHoach?._id && (
+				<>
+					<Descriptions>
+						<Descriptions.Item label='Chương trình/Kế hoạch' span={2}>
+							<Link
+								to=''
+								onClick={(e) => {
+									e.preventDefault();
+									setVisibleChuongTrinh(true);
+								}}
+							>
+								{recTienTrinh?.ctdtKeHoach?.ten}
+							</Link>
+						</Descriptions.Item>
+						<Descriptions.Item label='Loại chương trình'>
+							{recTienTrinh?.ctdtKeHoach?.loai && LoaiChuongTrinhDaoTao[recTienTrinh?.ctdtKeHoach?.loai]}
+						</Descriptions.Item>
+					</Descriptions>
+				</>
+			)}
 
 			<Spin spinning={loading}>
 				{danhSachHocKy?.map((data) => (
@@ -186,8 +172,13 @@ const TienTrinhChuongTrinhKhung = () => {
 				listDiem={recChuongTrinh?.lichSuDiem ?? []}
 				maKhoaNganh={maKhoaNganh}
 				khoiChuongTrinh={recChuongTrinh}
+				colorKhoiKienThuc={
+					recChuongTrinh?.maKhoiKienThuc ? mapColorKhoiKienThuc[recChuongTrinh?.maKhoiKienThuc] : undefined
+				}
 				trangThaiHoc={recChuongTrinh?.hoc}
 			/>
+
+			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
 		</>
 	);
 };

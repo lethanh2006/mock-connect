@@ -41,7 +41,7 @@ const TinTucDashboardSlink = () => {
 												<div
 													style={{
 														background: tintuc?.urlAnhDaiDien
-															? `url(${tintuc?.urlAnhDaiDien}) center center/ cover no-repeat`
+															? `url("${tintuc?.urlAnhDaiDien}") center center/ cover no-repeat`
 															: `url(${anh}) center center/ cover no-repeat`,
 														width: '100%',
 														height: '100%',

@@ -22,10 +22,12 @@ export enum ELoaiBieuMau {
 	KHAI_BAO_Y_TE = 'Khai báo y tế',
 	DANH_GIA_GIANG_VIEN = 'Đánh giá giảng viên',
 	DANH_GIA_TIET_HOC = 'Khảo sát tiết học',
+	CUOC_THI = 'CUOC_THI',
 }
 
 export enum ELoaiDot {
 	BIEU_MAU = 'BIEU_MAU',
+	CUOC_THI = 'CUOC_THI',
 	DANH_GIA_GIANG_VIEN = 'DANH_GIA_GIANG_VIEN',
 }
 
@@ -36,6 +38,7 @@ export enum ELoaiCauHoi {
 	GRID_MULTIPLE_CHOICE = 'GridMultipleChoice',
 	GRID_SINGLE_CHOICE = 'GridSingleChoice',
 	NUMERIC_RANGE = 'NumericRange',
+	RENDER_INPUT_RATING = 'Numberinputrating',
 	UPLOAD_FILE = 'UploadFile',
 	RENDER_INPUT = 'RenderInput',
 }

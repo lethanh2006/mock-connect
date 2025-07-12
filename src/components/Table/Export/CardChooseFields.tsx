@@ -1,12 +1,14 @@
 import { DownOutlined } from '@ant-design/icons';
 import { Button, Card, Space, Tree } from 'antd';
 import { type TExportField } from '../typing';
+import { useIntl } from 'umi';
 
 const CardChooseFields = (props: {
 	allFields: TExportField[];
 	fields: TExportField[];
 	setFields: (val: TExportField[]) => void;
 }) => {
+	const intl = useIntl();
 	const { allFields, fields, setFields } = props;
 
 	const genTreeData = (data?: TExportField[]): any => {
@@ -25,16 +27,16 @@ const CardChooseFields = (props: {
 
 	return (
 		<Card
-			title='Các trường khả dụng'
+			title={intl.formatMessage({ id: 'global.table.export.khadung' })}
 			variant='borderless'
 			styles={{ header: { padding: 0 }, body: { padding: '8px 0 0' } }}
 		>
 			<Space style={{ marginBottom: 8 }} wrap>
 				<Button size='small' onClick={onCheckAll}>
-					Chọn tất cả
+					{intl.formatMessage({ id: 'global.table.export.choose.chontatca' })}
 				</Button>
 				<Button size='small' onClick={onUnCheckAll}>
-					Bỏ chọn tất cả
+					{intl.formatMessage({ id: 'global.table.export.choose.bochontatca' })}
 				</Button>
 			</Space>
 

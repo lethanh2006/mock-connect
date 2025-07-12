@@ -103,7 +103,12 @@ export declare module LopHocPhan {
 		diemHpSvHk?: IDiemHpSvHk;
 	}
 
-	export interface IDiemHpSvHk extends IDiemThanhPhan, IDiemThi, IDiemTongKet, HocPhan.ITrongSoDeCuong {
+	export interface IDiemHpSvHk
+		extends IDiemThanhPhan,
+			IDiemThi,
+			IDiemTongKet,
+			HocPhan.ITrongSoDeCuong,
+			HocPhan.ITrongSoThi {
 		_id: string;
 		sinhVienSsoId: string;
 		// maSinhVien: string;
@@ -122,6 +127,8 @@ export declare module LopHocPhan {
 		dotDangKyQuyDoiDiemId: string;
 		dotDangKyQuyDoiDiem?: QuyDoiDiem.IQuyDoiDiemSinhVien;
 		isCongNhanQuyDoiDiem?: boolean;
+		/** Điểm từ quy đổi điểm có tính vào tích lũy? */
+		coTichLuyQuyDoi?: boolean;
 
 		// trangThaiDuyetDiemThanhPhan?: ETrangThaiDuyetDiem;
 		// trangThaiDuyet?: ETrangThaiDuyetDiem;
@@ -160,9 +167,18 @@ export declare module LopHocPhan {
 
 	export interface IDiemThi {
 		diemThi1?: number;
-		// diemThamDinh?: number;
-		// diemPhucKhao?: number;
 		diemThi2?: number;
+
+		/** Điểm thi 1, 2 của trọng số thứ 2 */
+		diemThi12?: number;
+		diemThi22?: number;
+
+		diemThi13?: number;
+		diemThi23?: number;
+		diemThi14?: number;
+		diemThi24?: number;
+		diemThi15?: number;
+		diemThi25?: number;
 	}
 
 	export interface IDiemTongKet {

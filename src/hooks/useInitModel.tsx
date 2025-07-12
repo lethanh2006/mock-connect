@@ -192,11 +192,16 @@ const useInitModel = <T,>(
 		closeModal?: boolean,
 		messageText?: string,
 		path?: string,
+		config?: { dataPartitionCode?: string },
 	): Promise<T> => {
 		if (formSubmiting) Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await postService(chuanHoaObject(payload), path);
+			const res = await postService(
+				chuanHoaObject(payload),
+				path,
+				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+			);
 			message.success(messageText ?? 'Thêm mới thành công');
 			setLoading(false);
 			if (getData) getData();
@@ -321,6 +326,14 @@ const useInitModel = <T,>(
 		setEdit(false);
 		setIsView(true);
 		setVisibleForm(true);
+	};
+
+	/** Xóa dữ liệu model: `danhSach, record, page, total` */
+	const clearModel = () => {
+		setRecord(undefined);
+		setDanhSach([]);
+		setPage(1);
+		setTotal(0);
 	};
 
 	//#region BASE IMPORT
@@ -497,6 +510,7 @@ const useInitModel = <T,>(
 		selectedIds,
 		setSelectedIds,
 		initFilter,
+		clearModel,
 	};
 };
 
