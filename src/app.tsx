@@ -1,5 +1,6 @@
 import Footer from '@/components/Footer';
 import RightContent from '@/components/RightContent';
+import '@ant-design/v5-patch-for-react-19';
 import 'dayjs/locale/vi';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';

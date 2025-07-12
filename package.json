@@ -43,6 +43,7 @@
     "@ant-design/icons": "^5.6.1",
     "@ant-design/pro-components": "^2.8.6",
     "@ant-design/pro-layout": "7.22.3",
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@monaco-editor/react": "^4.7.0",
     "@sentry/react": "^9.3.0",
     "@tinymce/tinymce-react": "^6.0.0",
