@@ -59,23 +59,24 @@ axios.interceptors.response.use(
 			const decoder = new TextDecoder('utf-8');
 			er = JSON.parse(decoder.decode(er));
 		}
-		const descriptionError = Array.isArray(er?.detail?.exception?.response?.message)
-			? er?.detail?.exception?.response?.message?.join(', ')
-			: // Sequelize validation Errors
-			Array.isArray(er?.detail?.exception?.errors)
-			? er?.detail?.exception?.errors?.map((e: any) => e?.message)?.join(', ')
-			: data.error[er?.detail?.errorCode || er?.errorCode] ||
-			  er?.detail?.message ||
-			  er?.message ||
-			  er?.errorDescription;
 
 		const originalRequest = error.config;
 		let originData = originalRequest?.data;
 		if (typeof originData === 'string') originData = JSON.parse(originData);
-		if (typeof originData !== 'object' || !Object.keys(originData ?? {}).includes('silent') || !originData?.silent)
+		if (typeof originData !== 'object' || !Object.keys(originData ?? {}).includes('silent') || !originData?.silent) {
+			const descriptionError = Array.isArray(er?.detail?.exception?.response?.message)
+				? er?.detail?.exception?.response?.message?.join(', ')
+				: // Sequelize validation Errors
+					Array.isArray(er?.detail?.exception?.errors)
+					? er?.detail?.exception?.errors?.map((e: any) => e?.message)?.join(', ')
+					: data.error[er?.detail?.errorCode || er?.errorCode] ||
+						er?.detail?.message ||
+						er?.message ||
+						er?.errorDescription;
+
 			switch (error?.response?.status) {
 				case 400:
-					notification.error({
+					notification.open({
 						message: 'Dữ liệu chưa đúng (004)',
 						description: descriptionError,
 					});
@@ -176,6 +177,7 @@ axios.interceptors.response.use(
 					message.error('Hệ thống đang cập nhật. Vui lòng thử lại sau');
 					break;
 			}
+		}
 		// Do something with response error
 		return Promise.reject(error);
 	},
