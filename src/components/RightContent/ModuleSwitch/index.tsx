@@ -9,9 +9,9 @@ const ModuleSwitch = () => {
 	return (
 		<HeaderDropdown placement={isMobile ? 'bottom' : 'bottomRight'} content={<ModuleView />}>
 			<Tooltip title='Danh sách chức năng' placement='bottom'>
-				<a>
-					<img src='/icon-tien-ich.svg' alt='apps' />
-				</a>
+				<div className='header-menu-item'>
+					<img src='/icons/modules.svg' alt='apps' />
+				</div>
 			</Tooltip>
 		</HeaderDropdown>
 	);
