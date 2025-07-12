@@ -60,27 +60,19 @@ const axios = axios1.create({
 	 */
 	paramsSerializer: (params) => {
 		const cleanedParams: Record<string, any> = {};
-
-		console.log(params);
 		Object.entries(params || {}).forEach(([key, value]) => {
 			const isEmptyObject = typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0;
 			const isEmptyArray = Array.isArray(value) && value.length === 0;
-
 			if (value === undefined || value === null || isEmptyObject || isEmptyArray) return;
 
-			if (Array.isArray(value)) {
-				cleanedParams[key] = value.map((item) => JSON.stringify(item));
-			} else if (typeof value === 'object') {
-				cleanedParams[key] = JSON.stringify(value);
-			} else {
-				cleanedParams[key] = value;
-			}
+			cleanedParams[key] = Array.isArray(value)
+				? value.map((item) => JSON.stringify(item))
+				: typeof value === 'object'
+					? JSON.stringify(value)
+					: value;
 		});
 
-		return qs.stringify(cleanedParams, {
-			encode: false,
-			arrayFormat: 'brackets',
-		});
+		return qs.stringify(cleanedParams, { encode: false, arrayFormat: 'brackets' });
 	},
 });
 
@@ -190,7 +182,7 @@ axios.interceptors.response.use(
 
 				case 404:
 					notification.error({
-						message: 'Không tìm thấy dữ liệu (040)',
+						message: 'Không tìm thấy (040)',
 						description: descriptionError,
 					});
 					break;
@@ -205,13 +197,13 @@ axios.interceptors.response.use(
 				case 500:
 				case 502:
 					notification.error({
-						message: 'Hệ thống đang cập nhật (005)',
+						message: 'Máy chủ gặp lỗi (005)',
 						description: descriptionError,
 					});
 					break;
 
 				default:
-					message.error('Hệ thống đang cập nhật. Vui lòng thử lại sau');
+					message.error('Có lỗi xảy ra. Vui lòng thử lại sau!');
 					break;
 			}
 		}
