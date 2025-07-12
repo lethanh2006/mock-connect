@@ -17,7 +17,8 @@ import NotFoundContent from './pages/exception/404';
 import { AppModules, primaryColor } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
-import { currentRole } from './utils/ip';
+import { currentRole, replaceRole } from './utils/ip';
+import { AppModules } from './services/base/constant';
 
 // https://umijs.org/docs/api/runtime-config#getinitialstate
 export async function getInitialState(): Promise<IInitialState> {
@@ -56,8 +57,16 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 					currentRole &&
 					initialState?.authorizedPermissions?.length &&
 					!initialState?.authorizedPermissions?.find((item) => item.rsname === currentRole)
-				)
+				) {
+					const hasReplaceRole = initialState.authorizedPermissions.some((item) => item.rsname === replaceRole);
+					const linkReplace = !!replaceRole && AppModules[replaceRole]?.url;
+
+					if (!!linkReplace && hasReplaceRole) {
+						window.location.replace(linkReplace);
+						return;
+					}
 					history.replace('/403');
+				}
 			}
 		},
 

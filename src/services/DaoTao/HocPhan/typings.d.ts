@@ -31,7 +31,7 @@ declare module HocPhan {
 		khoiTotNghiep?: boolean;
 	}
 
-	export interface IDeCuongHocPhan extends ITrongSoDeCuong {
+	export interface IDeCuongHocPhan extends ITrongSoDeCuong, IHinhThucThi, ITrongSoThi {
 		_id: string;
 		ma: string;
 		maHocPhan: string;
@@ -52,7 +52,16 @@ declare module HocPhan {
 		updatedAt?: string;
 		url?: string | null;
 
+		trangThaiDuyet: ETrangThaiDuyetDeCuongHocPhan;
+
 		thongTinTrongSo: IThongTinTrongSo[];
+		thongTinTrongSoThi?: IThongTinTrongSo[];
+		/** Ngưỡng điểm THI KTHP đủ điều kiện đạt học phần (mặc định: 0.1)
+		 * => Điểm thi >= ngưỡng thì mới đủ đạt học phần (tương đương ngưỡng điểm THÀNH PHẦN) */
+		nguongDiemDieuKienKthp?: number;
+
+		//fake data
+		danhSachHinhThuc: string[];
 	}
 
 	export interface IThongTinTrongSo {
@@ -60,9 +69,31 @@ declare module HocPhan {
 		trongSo: number;
 		/** Ngưỡng điểm đủ điều kiện dự thi (mặc định: 0.1) => Điểm sinh viên >= ngưỡng thì mới đủ ĐKDT */
 		nguongDiemDieuKien?: number;
-		hinhThucDanhGia?: string;
 		moTa?: string;
+
+		hinhThucDanhGia?: string;
 		chuanDauRa?: string;
+	}
+
+	export interface ITrongSoThi {
+		trongSoThi1?: number;
+		trongSoThi2?: number;
+		trongSoThi3?: number;
+		trongSoThi4?: number;
+		trongSoThi5?: number;
+	}
+
+	export interface IHinhThucThi {
+		hinhThucThi1Id: string;
+		hinhThucThi2Id: string;
+		hinhThucThi3Id: string;
+		hinhThucThi4Id: string;
+		hinhThucThi5Id: string;
+		// hinhThucThi6Id: string;
+		// hinhThucThi7Id: string;
+		// hinhThucThi8Id: string;
+		// hinhThucThi9Id: string;
+		// hinhThucThi10Id: string;
 	}
 
 	export interface ITrongSoDeCuong {

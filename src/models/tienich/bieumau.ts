@@ -42,6 +42,7 @@ export default () => {
 		trangThaiSinhVien?: ETrangThaiHocSv;
 		danToc?: string;
 		gioiTinh?: string;
+		duDoanSoNguoiThamDu?: number;
 	}): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);

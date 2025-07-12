@@ -1,23 +1,26 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 
+import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { primaryColor } from '@/services/base/constant';
 import {
 	EDoiTuongKeHoachNCKH,
 	ETrangThaiKeHoachNCKH,
 	MapKeyDoiTuongKeHoachNCKH,
 } from '@/services/KhoaHoc/KeHoach/constants';
 import type { KeHoachNCKH } from '@/services/KhoaHoc/KeHoach/typings';
-import { Button, Modal, Tag } from 'antd';
+import { Button, Carousel, Modal, Tag } from 'antd';
+import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ViewDetailKeHoachNCKH from './components/ViewDetail';
-import moment from 'moment';
-import { primaryColor } from '@/services/base/constant';
 
 const KeHoachNCKHComponent = () => {
 	const { getModel, page, limit, setRecord, record: recordKeHoach } = useModel('khoahoc.kehoach');
 
 	const [visibleViewDetail, setVisibleViewDetail] = useState<boolean>(false);
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	const onCell = (record: KeHoachNCKH.IRecord) => ({
 		onClick: () => {
@@ -80,15 +83,17 @@ const KeHoachNCKHComponent = () => {
 			dataIndex: 'fileDinhKem',
 			width: 120,
 			align: 'center',
-			render: (val: string[]) => (
-				<div>
-					{val?.map((item) => (
-						<Tag color={primaryColor} key={item} onClick={() => window.open(item)}>
-							Xem tập tin
-						</Tag>
-					))}
-				</div>
-			),
+			render: (val: string[], rec) =>
+				val?.length ? (
+					<a
+						onClick={() => {
+							setRecord(rec);
+							setVisibleFormFile(true);
+						}}
+					>
+						<Tag color={primaryColor}>Xem tập tin</Tag>
+					</a>
+				) : null,
 		},
 	];
 
@@ -117,6 +122,25 @@ const KeHoachNCKHComponent = () => {
 			>
 				{recordKeHoach && <ViewDetailKeHoachNCKH record={recordKeHoach} />}
 			</Modal>
+
+			<ModalExpandable
+				title='Chi tiết tập tin'
+				width={1000}
+				visible={visibleFormFile}
+				footer={
+					<div className='form-footer'>
+						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					</div>
+				}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<Carousel autoplay pauseOnDotsHover>
+					{recordKeHoach?.fileDinhKem?.map((item) => (
+						// eslint-disable-next-line react/jsx-key
+						<PreviewFile file={item ?? ''} />
+					))}
+				</Carousel>
+			</ModalExpandable>
 		</>
 	);
 };

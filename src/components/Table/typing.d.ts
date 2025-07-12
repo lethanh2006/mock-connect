@@ -38,6 +38,8 @@ export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 
 	 * Hàm sort tùy chỉnh (có thể dùng để sắp xếp họ tên theo AB)
 	 */
 	customSort?: (value1: any, value2: any) => number;
+
+	specialFilter?: boolean;
 }
 
 export type TDataOption = {
@@ -59,6 +61,9 @@ export type TableBaseProps = {
 	columns: IColumn<any>[];
 	title?: React.ReactNode;
 	widthDrawer?: number | 'full';
+
+	/** Title cho modal Thêm mới, chỉnh sửa (nên dùng thay cho dùng card trong Form) */
+	modalTitle?: string;
 
 	/** Hàm getData tùy chỉnh, nếu ko có thì 'getModel' của model sẽ là mặc định */
 	getData?: (params: any) => void;
@@ -147,6 +152,10 @@ export type TableBaseProps = {
 
 	/** Modal title thay thế, mặc định `Thêm mới`, `Chỉnh sửa`, `Chi tiết` + title */
 	modalTitle?: React.ReactNode;
+	/** Hàm reload dữ liệu
+	 * @default getData
+	 */
+	onReload?: (params?: any) => void;
 };
 
 export type TFilter<T> = {
@@ -156,40 +165,35 @@ export type TFilter<T> = {
 	active?: boolean;
 };
 
-export type TableStaticProps = {
+export type TableStaticProps = Pick<
+	TableBaseProps,
+	| 'emptyText'
+	| 'columns'
+	| 'title'
+	| 'Form'
+	| 'formProps'
+	| 'addStt'
+	| 'children'
+	| 'otherProps'
+	| 'formType'
+	| 'widthDrawer'
+	| 'rowSortable'
+	| 'onSortEnd'
+	| 'hideChildrenRows'
+	| 'onReload'
+	| 'otherButtons'
+> & {
 	data: any[];
-	columns: IColumn<any>[];
-
-	title?: React.ReactNode;
-	Form?: any;
-	formProps?: any;
+	loading?: boolean;
 
 	showEdit?: boolean;
 	setShowEdit?: (vi: boolean) => void;
-	addStt?: boolean;
-	children?: any;
+
 	hasCreate?: boolean;
 	hasTotal?: boolean;
 	size?: 'small' | 'middle';
-	otherProps?: TableProps<any>;
-	loading?: boolean;
-	formType?: 'Modal' | 'Drawer';
-	widthDrawer?: number;
-	/** Danh sách các nút khác bên cạnh Thêm mới */
-	otherButtons?: JSX.Element[];
 
-	/** Có hiển thị thị kéo thả sắp xêp hàng ko? Mặc định: Không */
-	rowSortable?: boolean;
-
-	/**
-	 * Sự kiện khi hàng được kéo đến vị trí mới
-	 * @param record Record ứng với hàng được kéo thả
-	 * @param newIndex Vị trí mới được kéo đến: 0 -> (limit-1)
-	 * @returns
-	 */
-	onSortEnd?: (record: any, newIndex: number) => void;
-
-	hideChildrenRows?: boolean;
+	totalComponent?: any;
 };
 
 // IMPORT HEADER

@@ -1,12 +1,16 @@
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import React from 'react';
-import { useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import ConfigBounder from '../TechnicalSupportBounder/ConfigBounder';
 import AvatarDropdown from './AvatarDropdown';
+import styles from './index.less';
+import LocaleSwitch from './LocaleSwitch';
 import ModuleSwitch from './ModuleSwitch';
 import NoticeIconView from './NoticeIcon';
-import styles from './index.less';
 
 const GlobalHeaderRight: React.FC = () => {
+	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 
 	if (!initialState || !initialState.currentUser) {
@@ -21,11 +25,18 @@ const GlobalHeaderRight: React.FC = () => {
 
 					<NoticeIconView />
 
-					{/* <Tooltip title='Giới thiệu chung' placement='bottom'>
-						<Button onClick={() => history.push('/gioi-thieu')} icon={<InfoCircleOutlined />} />
-					</Tooltip> */}
+					{/* <Tooltip
+				title={intl.formatMessage({ id: 'app.header.introduce', defaultMessage: 'Giới thiệu chung' })}
+				placement='bottom'
+			>
+				<a onClick={() => history.push('/gioi-thieu')}>
+					<InfoCircleOutlined />
+				</a>
+			</Tooltip> */}
 
-					<AvatarDropdown menu />
+					<LocaleSwitch />
+
+					<AvatarDropdown  />
 				</div>
 			</div>
 		</ConfigBounder>

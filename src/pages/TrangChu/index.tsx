@@ -5,13 +5,15 @@ import CardCongNoDashboard from './components/CardCongNo';
 import './components/style.less';
 import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
 import CardBaiTapDashboard from './HocTapRenLuyen/CardBaiTap';
+import CardCuocThiDashboard from './HocTapRenLuyen/CardCuocThi';
 import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
 import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
+import CardTienTrinhTotNghiep from './components/CardTienTrinhTotNghiep';
 
 const TrangChu = () => {
 	return (
 		<>
-			<Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+			{/* <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
 				<Col span={24} md={16}>
 					<CardHocTapRenLuyenDashboard />
 				</Col>
@@ -19,14 +21,14 @@ const TrangChu = () => {
 				<Col span={24} md={8}>
 					<CardCongNoDashboard />
 				</Col>
-			</Row>
+			</Row> */}
 
 			<Row gutter={[16, 16]}>
 				<Col span={24} md={16}>
 					<Row gutter={[16, 16]}>
-						{/* <Col span={24}>
+						<Col span={24}>
 							<CardTienTrinhTotNghiep />
-						</Col> */}
+						</Col>
 
 						<Col xs={24}>
 							<LichDashboard />
@@ -45,6 +47,9 @@ const TrangChu = () => {
 					<Row gutter={[16, 16]}>
 						<Col span={24}>
 							<CardLopHocPhan />
+						</Col>
+						<Col span={24}>
+							<CardCuocThiDashboard />
 						</Col>
 						<Col span={24}>
 							<TinTucDashboardWrapper />

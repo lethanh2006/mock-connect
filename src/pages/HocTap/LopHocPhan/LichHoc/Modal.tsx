@@ -1,4 +1,6 @@
-import { Descriptions, Empty, Modal, Tabs } from 'antd';
+import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Button, Carousel, Descriptions, Empty, Tabs } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -9,6 +11,7 @@ const ModalThoiKhoaBieu = () => {
 	const { record: recThoiKhoaBieu, visibleForm, setVisibleForm } = useModel('daotao.thoikhoabieu');
 	const [activeKey, setActiveKey] = useState<string>('noidung');
 	const chuaKetThuc = moment().isBefore(recThoiKhoaBieu?.thoiGianKetThuc);
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!chuaKetThuc) setActiveKey('danhgia');
@@ -16,7 +19,7 @@ const ModalThoiKhoaBieu = () => {
 	}, [chuaKetThuc]);
 
 	return (
-		<Modal
+		<ModalExpandable
 			width={800}
 			title='Thông tin buổi học'
 			visible={visibleForm}
@@ -35,19 +38,17 @@ const ModalThoiKhoaBieu = () => {
 							<div dangerouslySetInnerHTML={{ __html: recThoiKhoaBieu?.noiDungBaiHoc ?? '--' }} />
 						</Descriptions.Item>
 						<Descriptions.Item label='Học liệu'>
-							{recThoiKhoaBieu?.hocLieuList?.map((item, ind) => (
-								// eslint-disable-next-line react/no-array-index-key
-								<div key={ind}>
-									-{' '}
-									{item.url ? (
-										<a href={item.url} target='_blank' rel='noreferrer'>
-											{item.ten ?? '--'}
-										</a>
-									) : (
-										item.ten
-									)}
-								</div>
-							)) ?? '--'}
+							{recThoiKhoaBieu?.hocLieuList?.filter((item) => item?.url)?.length ? (
+								<a
+									onClick={() => {
+										setVisibleFormFile(true);
+									}}
+								>
+									Xem chi tiết
+								</a>
+							) : (
+								'--'
+							)}
 						</Descriptions.Item>
 					</Descriptions>
 				</Tabs.TabPane>
@@ -60,7 +61,26 @@ const ModalThoiKhoaBieu = () => {
 					)}
 				</Tabs.TabPane>
 			</Tabs>
-		</Modal>
+
+			<ModalExpandable
+				title='Chi tiết học liệu'
+				width={1000}
+				visible={visibleFormFile}
+				footer={null}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<Carousel autoplay pauseOnDotsHover>
+					{recThoiKhoaBieu?.hocLieuList?.map((item) => (
+						// eslint-disable-next-line react/jsx-key
+						<PreviewFile file={item.url ?? ''} tenFile={item?.ten} />
+					))}
+				</Carousel>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
+		</ModalExpandable>
 	);
 };
 
