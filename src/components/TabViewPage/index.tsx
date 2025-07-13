@@ -1,6 +1,6 @@
 import useCheckAccess from '@/hooks/useCheckAccess';
 import NotAccessible from '@/pages/exception/403';
-import { Affix, Card, Steps, Tabs } from 'antd';
+import { Affix, Card, Space, Steps, Tabs } from 'antd';
 import React, { JSX, useEffect, useState } from 'react';
 import './style.less';
 import type { TabViewPageProps } from './typing';
@@ -63,10 +63,10 @@ export const TabViewPage = (props: {
 						{activeMenu.map((item) => (
 							<Tabs.TabPane
 								tab={
-									<>
+									<Space>
 										{item.icon}
 										{item.title}
-									</>
+									</Space>
 								}
 								key={item.menuKey}
 							/>

@@ -105,7 +105,7 @@ axios.interceptors.response.use(
 
 			switch (error?.response?.status) {
 				case 400:
-					notification.open({
+					notification.error({
 						message: 'Dữ liệu chưa đúng (004)',
 						description: descriptionError,
 					});
@@ -196,7 +196,7 @@ axios.interceptors.response.use(
 
 				case 500:
 				case 502:
-					notification.error({
+					notification.warning({
 						message: 'Máy chủ gặp lỗi (005)',
 						description: descriptionError,
 					});
