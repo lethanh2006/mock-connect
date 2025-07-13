@@ -4,10 +4,11 @@ import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Form, Input } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormItemUrlOrUpload from '../Upload/FormItemUrlOrUpload';
 
 const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
+	const intl = useIntl();
 	const { formSubmiting, postModel, setFormSubmiting } = useModel('tienich.phanhoi');
 	const [form] = Form.useForm();
 	const { visible, setVisible } = props;
@@ -41,18 +42,21 @@ const FormPostIssue = (props: { visible: boolean; setVisible: (val: boolean) => 
 				<Form.Item
 					rules={[...rules.required, ...rules.length(5000), ...rules.text]}
 					name='noiDungPhanHoi'
-					label='Mô tả chi tiết'
+					label={intl.formatMessage({ id: 'global.technical.form.mota' })}
 				>
-					<Input.TextArea rows={3} placeholder='Mô tả chi tiết' />
+					<Input.TextArea
+						rows={3}
+						placeholder={`${intl.formatMessage({ id: 'global.technical.form.mota.placeholder' })}`}
+					/>
 				</Form.Item>
 
 				<FormItemUrlOrUpload form={form} field='urlPhanAnh' />
 
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
-						Gửi phản hồi
+						{intl.formatMessage({ id: 'global.technical.button.gui' })}
 					</Button>
-					<Button onClick={() => setVisible(false)}>Hủy</Button>
+					<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.technical.button.huy' })}</Button>
 				</div>
 			</Form>
 		</>

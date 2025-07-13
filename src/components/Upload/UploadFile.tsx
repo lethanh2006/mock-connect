@@ -1,95 +1,72 @@
 import { blobToBase64, getNameFile } from '@/utils/utils';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Image, Upload, message, type UploadProps } from 'antd';
+import { Button, Image, Upload, message } from 'antd';
 import type { RcFile } from 'antd/es/upload';
-import type { UploadFile as UpFile } from 'antd/es/upload/interface';
-import { type SizeType } from 'antd/lib/config-provider/SizeContext';
 import { useEffect, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
+import { useIntl } from 'umi';
+import PreviewFile from '../PreviewFile';
+import ModalExpandable from '../Table/ModalExpandable';
 import './UploadAvatar.less';
+import type { TFileProps, TResizeProps, TUploadProps } from './typing';
 
-type TResizeProps = {
-	/** Chiều rộng tối đa của hình ảnh sau khi resize */
-	maxWidth?: number;
-	/** Chiều cao tối đa của hình ảnh sau khi resize */
-	maxHeight?: number;
-	/** Định dạng của hình ảnh mới */
-	compressFormat?: 'jpeg' | 'png' | 'webp';
-	/** Chất lượng của hình ảnh mới */
-	quality?: number;
-	/** Độ xoay theo chiều kim đồng hồ áp dụng cho hình ảnh được tải lên */
-	rotation?: number;
-	/** Loại đầu ra của hình ảnh mới */
-	outputType?: 'base64' | 'blob' | 'file';
-	/** Chiều rộng tối thiểu của hình ảnh mới */
-	minWidth?: number;
-	/** Chiều cao tối thiểu của hình ảnh mới */
-	minHeight?: number;
-};
-
-type TFile = UpFile & { resized?: boolean; remote?: boolean };
-
-const UploadFile = (props: {
-	fileList?: any;
-	value?: string | string[] | null | { fileList: UpFile[]; [key: string]: any };
-	onChange?: (val: { fileList: any[] | null }) => void;
-	maxCount?: number;
-	drag?: boolean;
-	accept?: string;
-	buttonDescription?: string;
-	buttonSize?: SizeType;
-	otherProps?: UploadProps;
-	isAvatar?: boolean;
-	isAvatarSmall?: boolean;
-	disabled?: boolean;
-	/** Sử dụng khi `isAvatar` hoặc `isAvatarSmall`. */
-	resize?: boolean | TResizeProps;
-	maxFileSize?: number;
+const UploadFile: React.FC<TUploadProps> = ({
+	value,
+	onChange,
+	otherProps,
+	drag,
+	buttonSize,
+	buttonDescription,
+	accept,
+	isAvatar,
+	isAvatarSmall,
+	maxFileSize = 5,
+	maxCount = 1,
+	disabled,
+	resize,
+	fileList: fileListProp,
+	extra,
+	isPortraitAvatar,
+	hasPreviewFile = true,
+	...props
 }) => {
-	const {
-		value,
-		onChange,
-		otherProps,
-		drag,
-		buttonSize,
-		buttonDescription,
-		accept,
-		isAvatar,
-		isAvatarSmall,
-		maxFileSize = 5,
-	} = props;
-	const limit = props.maxCount || 1;
-	const disabled = props.disabled || props.otherProps?.disabled || false;
+	const intl = useIntl();
+	const isDisabled = disabled || otherProps?.disabled || false;
 	const [fileList, setFileList] = useState<any[]>();
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
-	const resize: TResizeProps | undefined = typeof props.resize === 'boolean' ? {} : props.resize;
+	const resizeProps: TResizeProps | undefined = typeof resize === 'boolean' ? {} : resize;
+	const showImage = isAvatar || isAvatarSmall || isPortraitAvatar;
 
 	useEffect(() => {
 		let files: any[] = [];
 		// Single URL
 		if (typeof value === 'string') {
-			files = [{ url: value, remote: true, name: getNameFile(value) }];
+			files = [{ url: value, remote: true, name: props.previewFileProps?.isFileId ? 'Tập tin' : getNameFile(value) }];
 			setFileList(files);
 			// Callback về Form để Form Item có fileList => Phục vụ check rules fileRequired
 			if (onChange) onChange({ fileList: files });
 		}
 		// Array of URLs
 		else if (Array.isArray(value)) {
-			files = value.map((url) => ({ url, remote: true, name: getNameFile(url) }));
+			files = value.map((url, ind) => ({
+				url,
+				remote: true,
+				name: props.previewFileProps?.isFileId ? `Tập tin ${ind + 1}` : getNameFile(url),
+			}));
 			setFileList(files);
 			// Callback về Form để Form Item có fileList => Phục vụ check rules fileRequired
 			if (onChange) onChange({ fileList: files });
 		}
 		// Object of antd file upload
 		else {
-			files = props.fileList || (value && value.fileList) || [];
+			files = fileListProp || (value && value.fileList) || [];
 			setFileList(files);
 		}
-	}, [value, props.fileList]);
+	}, [value, fileListProp]);
 
 	/** Resize Hình ảnh */
-	const resizeImages = (files: TFile[]): TFile[] => {
+	const resizeImages = (files: TFileProps[]): TFileProps[] => {
 		let res = files;
 		try {
 			res = files?.map((file) => {
@@ -98,19 +75,19 @@ const UploadFile = (props: {
 					file.resized = true;
 					Resizer.imageFileResizer(
 						file.originFileObj as any,
-						resize?.maxWidth ?? 1024,
-						resize?.maxHeight ?? 1024,
-						resize?.compressFormat ?? type?.[1] ?? 'webp',
-						resize?.quality ?? 90,
-						resize?.rotation ?? 0,
+						resizeProps?.maxWidth ?? 1024,
+						resizeProps?.maxHeight ?? 1024,
+						resizeProps?.compressFormat ?? type?.[1] ?? 'webp',
+						resizeProps?.quality ?? 90,
+						resizeProps?.rotation ?? 0,
 						(blob: any) => {
 							// temp = [{ url: URL.createObjectURL(blob), remote: true, name: getNameFile(URL.createObjectURL(blob)) }];
 							// console.log('🚀 ~ useEffect ~ temp:', temp);
 							file.originFileObj = blob;
 						},
-						resize?.outputType ?? 'file',
-						resize?.minWidth,
-						resize?.minHeight,
+						resizeProps?.outputType ?? 'file',
+						resizeProps?.minWidth,
+						resizeProps?.minHeight,
 					);
 				}
 				return file;
@@ -122,10 +99,10 @@ const UploadFile = (props: {
 	};
 
 	const handleChange = (val: any) => {
-		let files = val.fileList as TFile[];
+		let files = val.fileList as TFileProps[];
 		const findLargeFile = files?.some((file) => file.size && file.size / 1024 / 1024 > maxFileSize);
 		if (findLargeFile) {
-			message.error(`Dung lượng tập tin không được quá ${maxFileSize}Mb`);
+			message.error(intl.formatMessage({ id: 'global.uploadfile.error.mb' }, { maxFileSize: maxFileSize }));
 			return;
 		}
 
@@ -134,30 +111,43 @@ const UploadFile = (props: {
 			return file?.remote !== true && !otherProps?.accept?.includes(arrFileName?.[arrFileName.length - 1]);
 		});
 		if (findWrongTypeFile && otherProps?.accept) {
-			message.error('Định dạng tập tin không cho phép');
+			message.error(intl.formatMessage({ id: 'global.uploadfile.error.format' }));
 			return;
 		}
 
-		if (files.length > limit) files.splice(0, files.length - limit);
-		if (!!props.resize) files = resizeImages(files);
+		if (files.length > maxCount) files.splice(0, files.length - maxCount);
+		if (!!resize) files = resizeImages(files);
+
 		setFileList(files);
 		if (onChange) onChange({ fileList: files });
 	};
 
 	/** Xem trước ảnh */
-	const handlePreviewImage = async (file: UpFile) => {
+	const handlePreviewImage = async (file: TFileProps) => {
+		// Nếu file mới up lên (chưa có url và preview) thì thêm preview vào file
 		if (!file.url && !file.preview) file.preview = await blobToBase64(file.originFileObj as RcFile);
 
 		setPreviewImage(file.url || (file.preview as string));
 		setPreviewOpen(true);
 	};
 
+	/** Xem trước file */
+	const handlePreviewFile = async (file: TFileProps) => {
+		if (file.url) {
+			setPreviewImage(file.url ?? '');
+			setPreviewOpen(true);
+		}
+	};
+
 	const Extra = () =>
-		disabled ? null : (
+		isDisabled ? null : (
 			<small style={{ color: '#999' }}>
-				<i>
-					Tối đa {limit} mục, dung lượng mỗi file không được quá {maxFileSize}Mb
-				</i>
+				<i>{intl.formatMessage({ id: 'global.uploadfile.toida' }, { maxCount: maxCount, maxFileSize: maxFileSize })}</i>
+				{extra && (
+					<div>
+						<i>{extra}</i>
+					</div>
+				)}
 			</small>
 		);
 
@@ -165,35 +155,38 @@ const UploadFile = (props: {
 	if (drag)
 		return (
 			<Upload.Dragger
-				disabled={disabled}
+				disabled={isDisabled}
 				customRequest={({ onSuccess }) => setTimeout(() => onSuccess && onSuccess('ok'), 0)}
 				fileList={fileList}
 				onChange={handleChange}
 				style={{ width: '100%' }}
-				multiple={limit > 1}
+				multiple={maxCount > 1}
 				accept={accept}
 				{...otherProps}
 			>
-				{!disabled ? (
+				{!isDisabled ? (
 					<>
 						<p className='ant-upload-drag-icon'>
 							<UploadOutlined />
 						</p>
-						<p className='ant-upload-text'>Nhấn chuột hoặc kéo thả tài liệu để tải lên</p>
+						<p className='ant-upload-text'>{intl.formatMessage({ id: 'global.uploadfile.text' })}</p>
 						<p className='ant-upload-hint'>{buttonDescription}</p>
 						<Extra />
 					</>
 				) : null}
 			</Upload.Dragger>
 		);
-	else if (isAvatar || isAvatarSmall)
+
+	if (showImage)
 		return (
 			<>
 				<Upload
-					disabled={disabled}
+					disabled={isDisabled}
 					customRequest={({ onSuccess }) => setTimeout(() => onSuccess && onSuccess('ok'), 0)}
 					listType='picture-card'
-					className={`avatar-uploader ${isAvatarSmall ? 'avatar-small' : undefined}`}
+					className={`avatar-uploader ${
+						isAvatarSmall ? 'avatar-small' : isPortraitAvatar ? 'avatar-portrait' : undefined
+					}`}
 					fileList={fileList}
 					onChange={handleChange}
 					style={{ width: '100%' }}
@@ -202,7 +195,7 @@ const UploadFile = (props: {
 					onPreview={handlePreviewImage}
 					{...otherProps}
 				>
-					{!disabled && !fileList?.length ? (
+					{!isDisabled && !fileList?.length ? (
 						<div
 							style={{
 								display: 'flex',
@@ -212,7 +205,9 @@ const UploadFile = (props: {
 							}}
 						>
 							<PlusOutlined />
-							<div className='ant-upload-text'>{buttonDescription || 'Thêm ảnh đại diện'}</div>
+							<div className='ant-upload-text'>
+								{buttonDescription || intl.formatMessage({ id: 'global.uploadfile.text1' })}
+							</div>
 						</div>
 					) : null}
 				</Upload>
@@ -233,24 +228,41 @@ const UploadFile = (props: {
 	return (
 		<>
 			<Upload
-				disabled={disabled}
+				disabled={isDisabled}
 				customRequest={({ onSuccess }) => {
 					setTimeout(() => onSuccess && onSuccess('ok'), 0);
 				}}
 				fileList={fileList}
 				onChange={handleChange}
 				style={{ width: '100%' }}
-				multiple={limit > 1}
+				multiple={maxCount > 1}
 				accept={accept}
+				onPreview={hasPreviewFile ? handlePreviewFile : undefined}
 				{...otherProps}
 			>
-				{!disabled ? (
+				{!isDisabled ? (
 					<Button size={buttonSize || 'small'} icon={<UploadOutlined />}>
-						{buttonDescription || 'Chọn tệp'}
+						{buttonDescription || intl.formatMessage({ id: 'global.uploadfile.button.chontep' }, { maxFileSize })}
 					</Button>
 				) : null}
 			</Upload>
 			<Extra />
+
+			{hasPreviewFile && (
+				<ModalExpandable
+					title='Xem trước tập tin'
+					width={1200}
+					visible={previewOpen}
+					footer={null}
+					onCancel={() => setPreviewOpen(false)}
+				>
+					<PreviewFile file={previewImage} {...props.previewFileProps} />
+
+					<div className='form-footer'>
+						<Button onClick={() => setPreviewOpen(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+					</div>
+				</ModalExpandable>
+			)}
 		</>
 	);
 };

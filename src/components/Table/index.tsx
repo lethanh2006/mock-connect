@@ -19,7 +19,6 @@ import {
 	Drawer,
 	Empty,
 	Input,
-	Modal,
 	Popconfirm,
 	Space,
 	Table,
@@ -33,17 +32,19 @@ import _ from 'lodash';
 import React, { JSX, useEffect, useRef, useState } from 'react';
 import type { SortEnd, SortableContainerProps } from 'react-sortable-hoc';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ButtonExtend from './ButtonExtend';
 import ModalExport from './Export';
 import ModalImport from './Import';
 import ModalCustomFilter from './ModalCustomFilter';
+import ModalExpandable from './ModalExpandable';
 import { EOperatorType } from './constant';
 import { findFiltersInColumns, updateSearchStorage } from './function';
 import './style.less';
 import type { IColumn, TDataOption, TFilter, TableBaseProps } from './typing';
 
 const TableBase = (props: TableBaseProps) => {
+	const intl = useIntl();
 	const { modelName, Form, title, dependencies = [], params, buttons, widthDrawer, destroyModal } = props;
 	const model = useModel(modelName) as any;
 	const {
@@ -444,9 +445,9 @@ const TableBase = (props: TableBaseProps) => {
 							icon={<PlusCircleOutlined />}
 							type='primary'
 							notHideText
-							tooltip='Thêm mới dữ liệu'
+							tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 						>
-							Thêm mới
+							{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
 						</ButtonExtend>
 					) : null}
 
@@ -456,7 +457,7 @@ const TableBase = (props: TableBaseProps) => {
 							icon={<ImportOutlined />}
 							onClick={() => setVisibleImport(true)}
 						>
-							Nhập dữ liệu
+							{intl.formatMessage({ id: 'global.table.index.button.nhapdulieu' })}
 						</ButtonExtend>
 					) : null}
 					{buttons?.export ? (
@@ -465,16 +466,20 @@ const TableBase = (props: TableBaseProps) => {
 							icon={<ExportOutlined />}
 							onClick={() => setVisibleExport(true)}
 						>
-							Xuất dữ liệu {selectedIds?.length > 0 ? `(${selectedIds.length})` : ''}
+							{intl.formatMessage({ id: 'global.table.index.button.xuatdulieu' })}{' '}
+							{selectedIds?.length > 0 ? `(${selectedIds.length})` : ''}
 						</ButtonExtend>
 					) : null}
 
 					{props.otherButtons}
 
 					{props.rowSelection && props.deleteMany && selectedIds?.length ? (
-						<Popconfirm title={`Xác nhận xóa ${selectedIds?.length} mục đã chọn?`} onConfirm={handleDeleteMany}>
+						<Popconfirm
+							title={intl.formatMessage({ id: 'global.table.index.button.xoa.title' }, { count: selectedIds?.length })}
+							onConfirm={handleDeleteMany}
+						>
 							<ButtonExtend type='link' danger>
-								Xóa {selectedIds?.length} mục
+								{intl.formatMessage({ id: 'global.table.index.button.xoa' }, { count: selectedIds?.length })}
 							</ButtonExtend>
 						</Popconfirm>
 					) : null}
@@ -485,11 +490,11 @@ const TableBase = (props: TableBaseProps) => {
 						<ButtonExtend
 							size={props?.otherProps?.size}
 							icon={<ReloadOutlined />}
-							onClick={() => getData(params)}
+							onClick={() => (props.onReload ? props.onReload(params) : getData(params))}
 							loading={loading}
-							tooltip='Tải lại dữ liệu'
+							tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
 						>
-							Tải lại
+							{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
 						</ButtonExtend>
 					) : null}
 
@@ -504,17 +509,16 @@ const TableBase = (props: TableBaseProps) => {
 								)
 							}
 							onClick={() => setVisibleFilter(true)}
-							tooltip='Áp dụng bộ lọc tùy chỉnh'
+							tooltip={intl.formatMessage({ id: 'global.table.index.button.boloc.tooltip' })}
 						>
-							Bộ lọc tùy chỉnh
+							{intl.formatMessage({ id: 'global.table.index.button.boloc' })}
 						</ButtonExtend>
 					) : null}
 
 					{!props?.hideTotal ? (
-						<Tooltip title='Tổng số dữ liệu'>
+						<Tooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
 							<div className={classNames({ total: true, small: props?.otherProps?.size === 'small' })}>
-								Tổng số:
-								<span>{inputFormat(total || 0)}</span>
+								{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:<span>{inputFormat(total || 0)}</span>
 							</div>
 						</Tooltip>
 					) : null}
@@ -525,7 +529,7 @@ const TableBase = (props: TableBaseProps) => {
 				renderEmpty={() => (
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
-						description={props.emptyText ?? 'Không có dữ liệu'}
+						description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
 						image={props.otherProps?.size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
 					/>
 				)}
@@ -557,19 +561,23 @@ const TableBase = (props: TableBaseProps) => {
 							<Space>
 								{props?.rowSelection ? (
 									<>
-										<span>Đã chọn: {selectedIds?.length ?? 0}</span>
+										<span>
+											{intl.formatMessage({ id: 'global.table.index.dachon' })}: {selectedIds?.length ?? 0}
+										</span>
 										{selectedIds?.length > 0 ? (
 											<span>
 												(
 												<a href='#!' onClick={() => setSelectedIds(undefined)}>
-													Bỏ chọn tất cả
+													{intl.formatMessage({ id: 'global.table.index.bochon' })}
 												</a>
 												)
 											</span>
 										) : null}
 									</>
 								) : null}
-								<span>Tổng số: {tongSo}</span>
+								<span>
+									{intl.formatMessage({ id: 'global.table.index.tongso' })}: {tongSo}
+								</span>
 							</Space>
 						),
 					}}
@@ -623,13 +631,15 @@ const TableBase = (props: TableBaseProps) => {
 							destroyOnClose={destroyModal || false}
 						>
 							<Form title={title ?? ''} {...props.formProps} />
-							<CloseOutlined
-								onClick={() => setVisibleForm(false)}
-								style={{ position: 'absolute', top: 24, right: 24, cursor: 'pointer' }}
-							/>
+
+							<div className='modal-buttons'>
+								<button className='button' onClick={() => setVisibleForm(false)}>
+									<CloseOutlined />
+								</button>
+							</div>
 						</Drawer>
 					) : (
-						<Modal
+						<ModalExpandable
 							title={
 								props.showModalTitle
 									? (props.modalTitle ?? title)
@@ -637,7 +647,7 @@ const TableBase = (props: TableBaseProps) => {
 										: undefined
 									: undefined
 							}
-							className={widthDrawer === 'full' ? 'modal-full' : ''}
+							fullScreen={widthDrawer === 'full'}
 							maskClosable={props.maskCloseableForm || false}
 							width={widthDrawer !== 'full' ? widthDrawer : undefined}
 							onCancel={() => setVisibleForm(false)}
@@ -647,7 +657,7 @@ const TableBase = (props: TableBaseProps) => {
 							destroyOnClose={destroyModal || false}
 						>
 							<Form title={title ?? ''} {...props.formProps} />
-						</Modal>
+						</ModalExpandable>
 					)}
 				</>
 			)}

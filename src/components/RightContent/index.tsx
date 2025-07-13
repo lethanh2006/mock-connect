@@ -1,12 +1,14 @@
 import React from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ConfigBounder from '../TechnicalSupportBounder/ConfigBounder';
 import AvatarDropdown from './AvatarDropdown';
+import styles from './index.less';
+import LocaleSwitch from './LocaleSwitch';
 import ModuleSwitch from './ModuleSwitch';
 import NoticeIconView from './NoticeIcon';
-import styles from './index.less';
 
 const GlobalHeaderRight: React.FC = () => {
+	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 
 	if (!initialState || !initialState.currentUser) {
@@ -21,11 +23,16 @@ const GlobalHeaderRight: React.FC = () => {
 
 					<NoticeIconView />
 
-					{/* <Tooltip title='Giới thiệu chung' placement='bottom'>
+					{/* <Tooltip
+						title={intl.formatMessage({ id: 'app.header.introduce', defaultMessage: 'Giới thiệu chung' })}
+						placement='bottom'
+					>
 						<Button onClick={() => history.push('/gioi-thieu')} icon={<InfoCircleOutlined />} />
 					</Tooltip> */}
 
-					<AvatarDropdown menu />
+					<LocaleSwitch />
+
+					<AvatarDropdown />
 				</div>
 			</div>
 		</ConfigBounder>

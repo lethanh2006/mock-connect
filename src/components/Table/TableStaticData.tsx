@@ -1,17 +1,20 @@
-import { MenuOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { AutoComplete, Drawer, Input, Modal, Table, Tooltip, type InputRef } from 'antd';
+import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import { AutoComplete, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import type { SortEnd, SortableContainerProps } from 'react-sortable-hoc';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+import { useIntl } from 'umi';
 import ButtonExtend from './ButtonExtend';
 import { updateSearchStorage } from './function';
+import ModalExpandable from './ModalExpandable';
 import './style.less';
 import type { IColumn, TDataOption, TableStaticProps } from './typing';
 
 const TableStaticData = (props: TableStaticProps) => {
+	const intl = useIntl();
 	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable } = props;
 	const [searchText, setSearchText] = useState<string>('');
 	const [searchedColumn, setSearchedColumn] = useState();
@@ -191,22 +194,35 @@ const TableStaticData = (props: TableStaticProps) => {
 							onClick={() => {
 								if (setShowEdit) setShowEdit(true);
 							}}
-							icon={<PlusOutlined />}
+							icon={<PlusCircleOutlined />}
 							type='primary'
-							style={{ marginBottom: 8 }}
 							size={props?.size ?? 'middle'}
-							tooltip='Thêm mới dữ liệu'
+							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.themmoi.tooltip' })}
 						>
-							Thêm mới
+							{intl.formatMessage({ id: 'global.tablestatic.button.themmoi' })}
 						</ButtonExtend>
 					)}
+
+					{props.otherButtons}
 				</div>
 
 				<div className='extra'>
+					{!!props.onReload ? (
+						<ButtonExtend
+							size={props?.size}
+							icon={<ReloadOutlined />}
+							onClick={() => (props.onReload ? props.onReload() : null)}
+							loading={props.loading}
+							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.xoa.tooltip' })}
+						>
+							{intl.formatMessage({ id: 'global.tablestatic.button.xoa' })}
+						</ButtonExtend>
+					) : null}
+
 					{hasTotal ? (
-						<Tooltip title='Tổng số dữ liệu'>
+						<Tooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
 							<div className={classNames({ total: true, small: props?.size === 'small' })}>
-								Tổng số:
+								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
 								<span>{total || props.data?.length || 0}</span>
 							</div>
 						</Tooltip>
@@ -214,37 +230,49 @@ const TableStaticData = (props: TableStaticProps) => {
 				</div>
 			</div>
 
-			<Table
-				title={props?.title ? () => props.title : false}
-				columns={columns}
-				dataSource={(props?.data ?? []).map((item, index) => ({
-					...item,
-					index: index + 1,
-					key: index,
-					children:
-						!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
-							? item.children
-							: undefined,
-				}))}
-				onChange={(pagination, filters, sorter, extra) => {
-					setTotal(extra.currentDataSource.length ?? pagination.total);
-				}}
-				loading={props?.loading}
-				size={props.size}
-				scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
-				bordered
-				components={
-					rowSortable
-						? {
-								body: {
-									wrapper: DraggableContainer,
-									row: DraggableBodyRow,
-								},
-							}
-						: undefined
-				}
-				{...props?.otherProps}
-			/>
+			<ConfigProvider
+				renderEmpty={() => (
+					<Empty
+						style={{ marginTop: 32, marginBottom: 32 }}
+						description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
+						image={
+							props.otherProps?.size === 'small' || props.size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined
+						}
+					/>
+				)}
+			>
+				<Table
+					columns={columns as any[]}
+					dataSource={(props?.data ?? []).map((item, index) => ({
+						...item,
+						index: index + 1,
+						key: index,
+						children:
+							!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
+								? item.children
+								: undefined,
+					}))}
+					onChange={(pagination, filters, sorter, extra) => {
+						setTotal(extra.currentDataSource.length ?? pagination.total);
+					}}
+					loading={props?.loading}
+					size={props.size}
+					scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
+					bordered
+					components={
+						rowSortable
+							? {
+									body: {
+										wrapper: DraggableContainer,
+										row: DraggableBodyRow,
+									},
+								}
+							: undefined
+					}
+					{...props?.otherProps}
+				/>
+			</ConfigProvider>
+
 			{Form && (
 				<>
 					{props?.formType === 'Drawer' ? (
@@ -265,7 +293,7 @@ const TableStaticData = (props: TableStaticProps) => {
 							/>
 						</Drawer>
 					) : (
-						<Modal
+						<ModalExpandable
 							width={props?.widthDrawer}
 							onCancel={() => {
 								if (setShowEdit) setShowEdit(false);
@@ -281,7 +309,7 @@ const TableStaticData = (props: TableStaticProps) => {
 								}}
 								{...props.formProps}
 							/>
-						</Modal>
+						</ModalExpandable>
 					)}
 				</>
 			)}

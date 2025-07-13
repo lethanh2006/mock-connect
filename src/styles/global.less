@@ -61,7 +61,25 @@ a {
 	display: flex;
 	gap: 12px;
 	justify-content: center;
+	flex-wrap: wrap;
 	margin-top: 12px;
+	text-align: center;
+}
+
+.ant-modal-footer {
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+	flex-wrap: wrap;
+	text-align: center;
+
+	.form-footer {
+		margin-top: 0;
+	}
+
+	.ant-btn+.ant-btn {
+		margin-left: 0 !important;
+	}
 }
 
 .sum-table {
@@ -184,11 +202,18 @@ canvas {
 		height: 100vh;
 		overflow: hidden;
 
-		>.ant-modal-content {
+		>.ant-modal-content,
+		.ant-modal-body>.ant-card {
 			border-radius: 0;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
 
-			>.ant-modal-body {
-				height: 100vh;
+			>.ant-modal-body,
+			>.ant-card-body {
+				// height: 100vh;
+				overflow: auto;
+				flex: 1;
 			}
 		}
 	}
@@ -255,6 +280,21 @@ canvas {
 	color: @red-5 !important;
 }
 
+.bg-success {
+	background-color: var(--ant-success-color) !important;
+	color: white;
+}
+
+.bg-error {
+	background-color: var(--ant-error-color) !important;
+	color: white;
+}
+
+.bg-warning {
+	background-color: var(--ant-warning-color) !important;
+	color: white;
+}
+
 .bg-highlight {
 	color: white;
 	background-color: #ffc069;
@@ -262,6 +302,15 @@ canvas {
 
 .text-line {
 	text-decoration: line-through;
+}
+
+// Hiệu ứng chuyển đổi cho mmodal và drawer khi nhấn Expand Button
+.ant-modal {
+	transition: top .3s ease, width .3s ease;
+}
+
+.ant-drawer-content-wrapper {
+	transition: top .3s ease, width .3s ease;
 }
 
 // Big calendar
