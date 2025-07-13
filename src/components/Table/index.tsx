@@ -652,7 +652,7 @@ const TableBase = (props: TableBaseProps) => {
 							width={widthDrawer !== 'full' ? widthDrawer : undefined}
 							onCancel={() => setVisibleForm(false)}
 							footer={null}
-							styles={!props.showModalTitle ? { content: { padding: 0 } } : undefined}
+							styles={!props.showModalTitle ? { body: { padding: 0 } } : undefined}
 							open={visibleForm}
 							destroyOnClose={destroyModal || false}
 						>
