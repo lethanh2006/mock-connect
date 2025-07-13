@@ -119,7 +119,7 @@ const PreviewDataImport = (props: {
 
 	useEffect(() => {
 		getData();
-	}, []);
+	}, [JSON.stringify(matchedColumns)]);
 
 	return (
 		<Row gutter={[12, 12]}>
