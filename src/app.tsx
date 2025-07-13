@@ -18,7 +18,6 @@ import { AppModules, primaryColor } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
 import { currentRole, replaceRole } from './utils/ip';
-import { AppModules } from './services/base/constant';
 
 // https://umijs.org/docs/api/runtime-config#getinitialstate
 export async function getInitialState(): Promise<IInitialState> {

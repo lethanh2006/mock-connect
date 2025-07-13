@@ -17,7 +17,7 @@ import { unAuthPaths, unCheckPermissionPaths } from './constant';
 let OIDCBounderHandlers: ReturnType<typeof useAuthActions> | null = null;
 
 export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
-		const intl = useIntl();
+	const intl = useIntl();
 	const { setInitialState, initialState } = useModel('@@initialState');
 	const auth = useAuth();
 	const actions = useAuthActions();

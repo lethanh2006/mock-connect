@@ -10,7 +10,7 @@ import {
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
 import { getIdBieuMauDaTraLoi, initBieuMauTracNghiem, traLoiBieuMau } from '@/services/TienIch/KhaoSat/BieuMau';
 import { ELoaiBieuMau } from '@/services/TienIch/KhaoSat/constants';
-import { useModel } from '@@/plugin-model/useModel';
+import { useModel } from '@umijs/max';
 import type { FormInstance } from 'antd';
 import { message } from 'antd';
 import { useState } from 'react';

@@ -231,37 +231,49 @@ const TableStaticData = (props: TableStaticProps) => {
 				</div>
 			</div>
 
-			<Table
-				title={props?.title ? () => props.title : false}
-				columns={columns}
-				dataSource={(props?.data ?? []).map((item, index) => ({
-					...item,
-					index: index + 1,
-					key: index,
-					children:
-						!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
-							? item.children
-							: undefined,
-				}))}
-				onChange={(pagination, filters, sorter, extra) => {
-					setTotal(extra.currentDataSource.length ?? pagination.total);
-				}}
-				loading={props?.loading}
-				size={props.size}
-				scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
-				bordered
-				components={
-					rowSortable
-						? {
-								body: {
-									wrapper: DraggableContainer,
-									row: DraggableBodyRow,
-								},
-							}
-						: undefined
-				}
-				{...props?.otherProps}
-			/>
+			<ConfigProvider
+				renderEmpty={() => (
+					<Empty
+						style={{ marginTop: 32, marginBottom: 32 }}
+						description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
+						image={
+							props.otherProps?.size === 'small' || props.size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined
+						}
+					/>
+				)}
+			>
+				<Table
+					columns={columns as any[]}
+					dataSource={(props?.data ?? []).map((item, index) => ({
+						...item,
+						index: index + 1,
+						key: index,
+						children:
+							!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
+								? item.children
+								: undefined,
+					}))}
+					onChange={(pagination, filters, sorter, extra) => {
+						setTotal(extra.currentDataSource.length ?? pagination.total);
+					}}
+					loading={props?.loading}
+					size={props.size}
+					scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
+					bordered
+					components={
+						rowSortable
+							? {
+									body: {
+										wrapper: DraggableContainer,
+										row: DraggableBodyRow,
+									},
+								}
+							: undefined
+					}
+					{...props?.otherProps}
+				/>
+			</ConfigProvider>
+
 			{Form && (
 				<>
 					{props?.formType === 'Drawer' ? (

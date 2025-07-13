@@ -499,7 +499,7 @@
 	},
 	{
 		name: 'CuocThi',
-		path: './cuoc-thi',
+		path: 'cuoc-thi',
 		component: './TienIch/CuocThi',
 		icon: 'TrophyOutlined',
 	},
