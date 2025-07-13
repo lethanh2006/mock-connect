@@ -55,8 +55,8 @@ const ModalImport = (props: ModalImportProps) => {
 	};
 
 	return (
-		<Modal
-					title={intl.formatMessage({ id: 'global.table.import.index.title' })}
+		<ModalExpandable
+			title={intl.formatMessage({ id: 'global.table.import.index.title' })}
 			open={visible}
 			onCancel={() => onCancelModal()}
 			footer={null}

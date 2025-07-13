@@ -1,7 +1,7 @@
 import { DownOutlined } from '@ant-design/icons';
 import { Button, Card, Space, Tree } from 'antd';
-import { type TExportField } from '../typing';
 import { useIntl } from 'umi';
+import { type TExportField } from '../typing';
 
 const CardChooseFields = (props: {
 	allFields: TExportField[];

@@ -3,7 +3,7 @@ import { landingUrl } from '@/services/base/constant';
 import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
 import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
-import { type ItemType } from 'antd/lib/menu/hooks/useItems';
+import { ItemType } from 'antd/es/menu/interface';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useIntl, useModel } from 'umi';

@@ -107,9 +107,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 12px;
+	gap: 2px;
 	height: 56px;
-	padding: 18px;
+	padding: 12px;
 
 	@media (max-width: @screen-xs) {
 		padding: 12px;
@@ -127,8 +127,14 @@
 		font-size: 16px;
 		padding: 0;
 
+		border-radius: var(--border-radius-sm);
+		width: var(--control-height);
+		height: var(--control-height);
+		transition: color var(--motion-duration-mid), background-color var(--motion-duration-mid);
+
 		&:hover {
-			color: rgba(0, 0, 0, .75);
+			color: var(--color-icon-hover) rgba(0, 0, 0, 0.88);
+			background-color: var(--color-bg-text-hover);
 		}
 	}
 }

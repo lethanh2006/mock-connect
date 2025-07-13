@@ -155,7 +155,7 @@ const ModalAuditLog = (props: {
 	];
 
 	return (
-		<ModalExpandable title={title} visible={visible} onCancel={() => setVisible(false)} footer={null} width={1400}>
+		<ModalExpandable title={title} open={visible} onCancel={() => setVisible(false)} footer={null} width={1400}>
 			{props.children}
 
 			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>

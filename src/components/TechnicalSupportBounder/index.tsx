@@ -1,4 +1,5 @@
 import { ToolOutlined } from '@ant-design/icons';
+import { useIntl } from '@umijs/max';
 import { FloatButton, Modal } from 'antd';
 import { useState } from 'react';
 import { history } from 'umi';
@@ -7,6 +8,7 @@ import FormPostIssue from './Form';
 import { unTechnicalSupportPaths } from './constant';
 
 const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
+	const intl = useIntl();
 	const [visible, setVisible] = useState<boolean>(false);
 
 	return (
@@ -16,9 +18,9 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 			{!unTechnicalSupportPaths.includes(window.location.pathname) ? (
 				<>
 					<FloatButton
-						tooltip='Phản hồi kĩ thuật'
+						tooltip={intl.formatMessage({ id: 'global.technical.title' })}
 						// onClick={() => setVisible(true)}
-							onClick={() => history.push('/phan-hoi')}
+						onClick={() => history.push('/phan-hoi')}
 						type='primary'
 						icon={<ToolOutlined />}
 					/>
@@ -30,7 +32,7 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 						open={visible}
 						onCancel={() => setVisible(false)}
 						maskClosable={false}
-						title='Phản hồi kĩ thuật'
+						title={intl.formatMessage({ id: 'global.technical.title' })}
 					>
 						<FormPostIssue setVisible={setVisible} visible={visible} />
 					</Modal>

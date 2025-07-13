@@ -647,12 +647,12 @@ const TableBase = (props: TableBaseProps) => {
 										: undefined
 									: undefined
 							}
-							className={widthDrawer === 'full' ? 'modal-full' : ''}
+							fullScreen={widthDrawer === 'full'}
 							maskClosable={props.maskCloseableForm || false}
 							width={widthDrawer !== 'full' ? widthDrawer : undefined}
 							onCancel={() => setVisibleForm(false)}
 							footer={null}
-							styles={!props.showModalTitle ? { content: { padding: 0 } } : undefined}
+							styles={!props.showModalTitle ? { body: { padding: 0 } } : undefined}
 							open={visibleForm}
 							destroyOnClose={destroyModal || false}
 						>

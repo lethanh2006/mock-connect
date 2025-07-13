@@ -10,7 +10,10 @@ const ModuleSwitch = () => {
 
 	return (
 		<HeaderDropdown placement={isMobile ? 'bottom' : 'bottomRight'} content={<ModuleView />}>
-			<Tooltip title={intl.formatMessage({ id: 'app.header.appdrawer', defaultMessage: 'Danh sách chức năng' })} placement='bottom'>
+			<Tooltip
+				title={intl.formatMessage({ id: 'app.header.appdrawer', defaultMessage: 'Danh sách chức năng' })}
+				placement='bottom'
+			>
 				<div className='header-menu-item'>
 					<img src='/icons/modules.svg' alt='apps' />
 				</div>
