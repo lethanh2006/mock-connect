@@ -4,14 +4,16 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import type { SortEnd, SortableContainerProps } from 'react-sortable-hoc';
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { useIntl } from 'umi';
 import ButtonExtend from './ButtonExtend';
 import { updateSearchStorage } from './function';
 import ModalExpandable from './ModalExpandable';
 import './style.less';
-import type { IColumn, TDataOption, TableStaticProps } from './typing';
+import type { IColumn, TableStaticProps, TDataOption } from './typing';
+// Thêm dnd-kit
+import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const TableStaticData = (props: TableStaticProps) => {
 	const intl = useIntl();
@@ -21,10 +23,34 @@ const TableStaticData = (props: TableStaticProps) => {
 	const [total, setTotal] = useState<number>();
 	const searchInputRef = useRef<InputRef>(null);
 
+	// State cho tableData để sortable
+	const [tableData, setTableData] = useState(
+		(props?.data ?? []).map((item, index) => ({
+			...item,
+			key: String(index),
+			index: index + 1,
+			children:
+				!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
+					? item.children
+					: undefined,
+		})),
+	);
+
 	useEffect(() => {
 		setTotal(data?.length);
 		setSearchText('');
 		setSearchedColumn(undefined);
+		setTableData(
+			(props?.data ?? []).map((item, index) => ({
+				...item,
+				key: String(index),
+				index: index + 1,
+				children:
+					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
+						? item.children
+						: undefined,
+			})),
+		);
 	}, [data?.length]);
 
 	const handleSearch = (confirm: any, dataIndex: any) => {
@@ -150,39 +176,43 @@ const TableStaticData = (props: TableStaticProps) => {
 		});
 
 	//#region Get Drag Sortable column
-	const DragHandle = SortableHandle(() => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />);
-
-	const SortableItem = SortableElement((props1: React.HTMLAttributes<HTMLTableRowElement>) => <tr {...props1} />);
-	const SortableBody = SortableContainer((props1: React.HTMLAttributes<HTMLTableSectionElement>) => (
-		<tbody {...props1} />
-	));
-
 	if (rowSortable)
 		columns.unshift({
 			title: '',
 			width: 30,
 			align: 'center',
 			children: undefined,
-			render: () => <DragHandle />,
+			render: () => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />,
 		});
 
-	const onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
-		if (oldIndex !== newIndex) {
-			const record = props.data?.[oldIndex];
-			if (props.onSortEnd) props.onSortEnd(record, newIndex);
+	// dnd-kit: sensors và handleDragEnd
+	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+
+	const handleDragEnd = (event: any) => {
+		const { active, over } = event;
+		if (active && over && active.id !== over.id) {
+			const oldIndex = tableData.findIndex((i) => i.key === active.id);
+			const newIndex = tableData.findIndex((i) => i.key === over.id);
+			const newData = arrayMove(tableData, oldIndex, newIndex);
+			setTableData(newData);
+			if (props.onSortEnd) props.onSortEnd(tableData[oldIndex], newIndex);
 		}
 	};
 
-	const DraggableContainer = (props1: SortableContainerProps) => (
-		<SortableBody useDragHandle disableAutoscroll helperClass='row-dragging' onSortEnd={onSortEnd} {...props1} />
-	);
-
-	const DraggableBodyRow: React.FC<any> = ({ className, style, ...restProps }) => {
-		// function findIndex base on Table rowKey props and should always be a right array index
-		const index = restProps['data-row-key'];
-		return <SortableItem index={index ?? 0} {...restProps} />;
+	// dnd-kit: SortableRow component
+	const SortableRow = (props: any) => {
+		const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+			id: props['data-row-key'],
+		});
+		const style = {
+			...props.style,
+			transform: CSS.Transform.toString(transform),
+			transition,
+			cursor: rowSortable ? 'grab' : undefined,
+			...(isDragging ? { background: '#fafafa' } : {}),
+		};
+		return <tr {...props} ref={setNodeRef} style={style} {...(rowSortable ? { ...attributes, ...listeners } : {})} />;
 	};
-	//#endregion
 
 	return (
 		<div className='table-base'>
@@ -241,36 +271,44 @@ const TableStaticData = (props: TableStaticProps) => {
 					/>
 				)}
 			>
-				<Table
-					columns={columns as any[]}
-					dataSource={(props?.data ?? []).map((item, index) => ({
-						...item,
-						index: index + 1,
-						key: index,
-						children:
-							!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
-								? item.children
-								: undefined,
-					}))}
-					onChange={(pagination, filters, sorter, extra) => {
-						setTotal(extra.currentDataSource.length ?? pagination.total);
-					}}
-					loading={props?.loading}
-					size={props.size}
-					scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
-					bordered
-					components={
-						rowSortable
-							? {
+				{rowSortable ? (
+					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+						<SortableContext items={tableData.map((item) => item.key)} strategy={verticalListSortingStrategy}>
+							<Table
+								columns={columns as any[]}
+								dataSource={tableData}
+								rowKey='key'
+								onChange={(pagination, filters, sorter, extra) => {
+									setTotal(extra.currentDataSource.length ?? pagination.total);
+								}}
+								loading={props?.loading}
+								size={props.size}
+								scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
+								bordered
+								components={{
 									body: {
-										wrapper: DraggableContainer,
-										row: DraggableBodyRow,
+										row: SortableRow,
 									},
-								}
-							: undefined
-					}
-					{...props?.otherProps}
-				/>
+								}}
+								{...props?.otherProps}
+							/>
+						</SortableContext>
+					</DndContext>
+				) : (
+					<Table
+						columns={columns as any[]}
+						dataSource={tableData}
+						rowKey='key'
+						onChange={(pagination, filters, sorter, extra) => {
+							setTotal(extra.currentDataSource.length ?? pagination.total);
+						}}
+						loading={props?.loading}
+						size={props.size}
+						scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
+						bordered
+						{...props?.otherProps}
+					/>
+				)}
 			</ConfigProvider>
 
 			{Form && (
