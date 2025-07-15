@@ -29,6 +29,7 @@ const CardChooseFields = (props: {
 		<Card
 			title={intl.formatMessage({ id: 'global.table.export.khadung' })}
 			variant='borderless'
+			className='card-borderless'
 			styles={{ header: { padding: 0 }, body: { padding: '8px 0 0' } }}
 		>
 			<Space style={{ marginBottom: 8 }} wrap>
