@@ -49,7 +49,6 @@ const CardChooseFields = (props: {
 					onCheck={(keys) => {
 						if (Array.isArray(keys)) setFields(fields.map((item) => ({ ...item, selected: keys.includes(item._id) })));
 					}}
-					checkStrictly
 				/>
 			</div>
 		</Card>
