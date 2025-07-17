@@ -41,7 +41,7 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 		<Card
 			title={intl.formatMessage({ id: 'global.table.export.field.title' })}
 			variant='borderless'
-			styles={{ body: { padding: 0 }, header: { padding: 0 } }}
+			className='card-borderless'
 		>
 			<TableStaticData
 				columns={columns}

@@ -29,7 +29,7 @@ const CardChooseFields = (props: {
 		<Card
 			title={intl.formatMessage({ id: 'global.table.export.khadung' })}
 			variant='borderless'
-			styles={{ header: { padding: 0 }, body: { padding: '8px 0 0' } }}
+			className='card-borderless'
 		>
 			<Space style={{ marginBottom: 8 }} wrap>
 				<Button size='small' onClick={onCheckAll}>
@@ -43,13 +43,13 @@ const CardChooseFields = (props: {
 			<div style={{ maxHeight: 385, overflowY: 'scroll', border: '1px solid #f0f0f0' }}>
 				<Tree
 					treeData={treeData}
-					defaultExpandAll
 					switcherIcon={<DownOutlined />}
 					checkable
 					checkedKeys={fields.filter((item) => item.selected).map((item) => item._id)}
 					onCheck={(keys) => {
 						if (Array.isArray(keys)) setFields(fields.map((item) => ({ ...item, selected: keys.includes(item._id) })));
 					}}
+					checkStrictly
 				/>
 			</div>
 		</Card>
