@@ -177,6 +177,18 @@
   .ant-modal .ant-card-body {
     padding-top: 12px;
   }
+
+  &.card-borderless {
+    box-shadow: none;
+
+    .ant-card-body {
+      padding: 8px 0 0;
+    }
+
+    .ant-card-head {
+      padding: 0;
+    }
+  }
 }
 
 .ant-modal-content {
@@ -317,14 +329,4 @@
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
-}
-
-.card-borderless {
-  box-shadow: none !important;
-  .ant-card-body {
-    padding: 12px 16px;
-  }
-  .ant-card-head {
-    padding: 10px 16px;
-  }
 }

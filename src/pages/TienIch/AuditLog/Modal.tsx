@@ -160,11 +160,7 @@ const ModalAuditLog = (props: {
 
 			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
 				<Pane initialSize={paneSize} minSize='30%'>
-					<Card
-						title='Danh sách thao tác'
-						variant='borderless'
-						styles={{ body: { padding: '8px 0 0' }, header: { padding: 0 } }}
-					>
+					<Card title='Danh sách thao tác' variant='borderless' className='card-borderless'>
 						<TableBase
 							columns={columns}
 							dependencies={[page, limit, JSON.stringify(condition)]}
@@ -182,7 +178,8 @@ const ModalAuditLog = (props: {
 					<Card
 						title='Chi tiết thao tác'
 						variant='borderless'
-						styles={{ body: { padding: '8px 0 0', maxHeight: 630, overflowY: 'auto' }, header: { padding: 0 } }}
+						className='card-borderless'
+						styles={{ body: { maxHeight: 630, overflowY: 'auto' } }}
 					>
 						<Spin spinning={loading}>
 							<Descriptions column={1}>
