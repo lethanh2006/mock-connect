@@ -7,7 +7,7 @@ const HeaderContentPage = () => {
 	const intl = useIntl();
 
 	return (
-		<div className='css-var-ra header-content'>
+		<div className='header-content'>
 			<img src='/logo.png' alt='logo' onClick={() => history.push('/')} />
 			<div>
 				<div className='text-error'>{intl.formatMessage({ id: 'global.rightcontent.header.title' })}</div>

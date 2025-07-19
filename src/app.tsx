@@ -1,7 +1,9 @@
 import Footer from '@/components/Footer';
 import RightContent from '@/components/RightContent';
 import '@ant-design/v5-patch-for-react-19';
+import { App, ConfigProvider } from 'antd';
 import 'dayjs/locale/vi';
+import React from 'react'; // Bổ sung import React
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
@@ -11,7 +13,6 @@ import { unCheckPermissionPaths } from './components/OIDCBounder/constant';
 import OneSignalBounder from './components/OneSignalBounder';
 import HeaderContentPage from './components/RightContent/Header';
 import TechnicalSupportBounder from './components/TechnicalSupportBounder';
-import ConfigBounder from './components/TechnicalSupportBounder/ConfigBounder';
 import NotAccessible from './pages/exception/403';
 import NotFoundContent from './pages/exception/404';
 import { AppModules, primaryColor } from './services/base/constant';
@@ -19,7 +20,24 @@ import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
 import { currentRole, replaceRole } from './utils/ip';
 
-// https://umijs.org/docs/api/runtime-config#getinitialstate
+export function rootContainer(container: React.ReactNode) {
+	return (
+		<ConfigProvider
+			theme={{
+				token: {
+					borderRadius: 4,
+					colorPrimary: primaryColor,
+					colorLink: primaryColor,
+				},
+				hashed: false,
+				cssVar: { prefix: '' },
+			}}
+		>
+			<App>{container}</App>
+		</ConfigProvider>
+	);
+}
+
 export async function getInitialState(): Promise<IInitialState> {
 	return {
 		settings: defaultSettings,
@@ -94,10 +112,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 			</OIDCBounder>
 		),
 
-		menuRender: (props, defaultDom) => <ConfigBounder>{defaultDom}</ConfigBounder>,
-
 		title: AppModules[currentRole].title,
-		colorPrimary: primaryColor,
 		...initialState?.settings,
 	};
 };

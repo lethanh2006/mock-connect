@@ -1,6 +1,5 @@
 import React from 'react';
 import { useIntl, useModel } from 'umi';
-import ConfigBounder from '../TechnicalSupportBounder/ConfigBounder';
 import AvatarDropdown from './AvatarDropdown';
 import styles from './index.less';
 import LocaleSwitch from './LocaleSwitch';
@@ -16,8 +15,8 @@ const GlobalHeaderRight: React.FC = () => {
 	}
 
 	return (
-		<ConfigBounder>
-			<div className='css-var-ra' style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center' }}>
+		<>
+			<div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center' }}>
 				<div className={styles.menu_right}>
 					<ModuleSwitch />
 
@@ -35,7 +34,7 @@ const GlobalHeaderRight: React.FC = () => {
 					<AvatarDropdown />
 				</div>
 			</div>
-		</ConfigBounder>
+		</>
 	);
 };
 
