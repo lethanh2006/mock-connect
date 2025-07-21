@@ -28,6 +28,38 @@
 
 .ant-layout-sider {
 	box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.05);
+
+	// Menu màu trắng với text tương phản cao --------------
+	.ant-menu {
+		.ant-menu-item {
+			font-weight: 500;
+
+			&:hover {
+				color: var(--color-primary) !important;
+			}
+
+			&.ant-menu-item-selected {
+				color: var(--color-primary) !important;
+			}
+		}
+
+		.ant-menu-submenu {
+			.ant-menu-submenu-title {
+				font-weight: 500;
+
+				&:hover {
+					color: var(--color-primary) !important;
+				}
+			}
+		}
+
+		.ant-menu-item-group-title {
+			font-weight: 600;
+		}
+	}
+
+	// Sidebar background trắng
+	background-color: #ffffff !important;
 }
 
 // Style for the sidebar
@@ -49,7 +81,7 @@
 			margin-bottom: 6px;
 
 			// Áp dụng cho item có path chứa "/__group__/"
-			a[href^="/__group__/"] {
+			a[href^='/__group__/'] {
 				color: rgba(223, 223, 225, 1) !important;
 				font-weight: 500;
 				text-transform: uppercase;
@@ -137,7 +169,6 @@
 // }
 
 .ant-pro-sider-menu.ant-menu-inline-collapsed {
-
 	// .ant-menu-item,
 	// .ant-menu-submenu-title {
 	// 	height: 40px !important;
@@ -163,9 +194,8 @@
 // }
 
 // Compatible with IE11
-@media screen and(-ms-high-contrast: active),
-(-ms-high-contrast: none) {
-	body .ant-design-pro>.ant-layout {
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+	body .ant-design-pro > .ant-layout {
 		min-height: 100vh;
 	}
 }
@@ -173,7 +203,8 @@
 // Ẩn title, logo
 .ant-pro-sider-logo {
 	justify-content: center;
-	padding: 12px 14px;
+	// padding: 12px 14px;
+	padding: 0px;
 
 	&.ant-pro-sider-collapsed {
 		padding: 14px !important;
@@ -182,6 +213,10 @@
 			display: none;
 		}
 	}
+
+	// img {
+	// 	height: 60px;
+	// }
 
 	h1 {
 		display: none;
