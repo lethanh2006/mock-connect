@@ -16,7 +16,7 @@ const PermissionWrapper = (props: { content: JSX.Element; accessCode?: string })
 export const getTitle = (title?: string, menuTitle?: string) => [title, menuTitle].filter(Boolean).join(' - ');
 
 export const TabViewPage = (props: TabViewPageComponentProps) => {
-	const { menu = [], hideCard, children, onChange, cardTitle, type = 'tab', tabtype = 'card', tabStyle, style } = props;
+	const { menu = [], hideCard, children, onChange, cardTitle, type = 'tab', tabType = 'card', tabStyle, style } = props;
 	const activeMenu = menu?.filter((i) => !i.hide);
 	const paths = activeMenu?.map((item) => item.menuKey);
 	const hash = window.location.hash?.replace('#', '') || paths[0];
@@ -56,7 +56,7 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 						activeKey={tabActive}
 						onChange={(key) => onChangeTab(key)}
 						className='tab-view-menu'
-						type={tabtype}
+						type={tabType}
 						style={{ ...tabStyle }}
 					>
 						{activeMenu.map((item) => (
