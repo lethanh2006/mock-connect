@@ -1,6 +1,5 @@
 import Footer from '@/components/Footer';
 import { OIDCBounder } from '@/components/OIDCBounder';
-import ConfigBounder from '@/components/TechnicalSupportBounder/ConfigBounder';
 import { landingUrl } from '@/services/base/constant';
 import { currentRole } from '@/utils/ip';
 import { GlobalOutlined, LogoutOutlined } from '@ant-design/icons';
@@ -19,40 +18,38 @@ const NotAccessible = () => {
 	const onLogout = (): void => OIDCBounder?.getActions()?.dangXuat();
 
 	return (
-		<ConfigBounder>
-			<OIDCBounder>
-				<div
+		<OIDCBounder>
+			<div
+				style={{
+					minHeight: '100vh',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					flexDirection: 'column',
+				}}
+			>
+				<Result
+					status='403'
+					title='Truy cập bị từ chối'
 					style={{
-						minHeight: '100vh',
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'space-between',
-						flexDirection: 'column',
+						background: 'none',
 					}}
-				>
-					<Result
-						status='403'
-						title='Truy cập bị từ chối'
-						style={{
-							background: 'none',
-						}}
-						subTitle='Xin lỗi, bạn không có quyền truy cập trang này.'
-						extra={
-							<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-								<Button type='primary' onClick={() => (window.location.href = landingUrl)} icon={<GlobalOutlined />}>
-									Tới trang Cổng thông tin
-								</Button>
-								<Button icon={<LogoutOutlined />} onClick={onLogout}>
-									Đăng xuất
-								</Button>
-							</div>
-						}
-					/>
+					subTitle='Xin lỗi, bạn không có quyền truy cập trang này.'
+					extra={
+						<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+							<Button type='primary' onClick={() => (window.location.href = landingUrl)} icon={<GlobalOutlined />}>
+								Tới trang Cổng thông tin
+							</Button>
+							<Button icon={<LogoutOutlined />} onClick={onLogout}>
+								Đăng xuất
+							</Button>
+						</div>
+					}
+				/>
 
-					<Footer />
-				</div>
-			</OIDCBounder>
-		</ConfigBounder>
+				<Footer />
+			</div>
+		</OIDCBounder>
 	);
 };
 export default NotAccessible;
