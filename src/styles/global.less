@@ -184,10 +184,10 @@ canvas {
 		height: 100vh;
 		overflow: hidden;
 
-		>.ant-modal-content {
+		> .ant-modal-content {
 			border-radius: 0;
 
-			>.ant-modal-body {
+			> .ant-modal-body {
 				height: 100vh;
 			}
 		}
@@ -280,10 +280,10 @@ canvas {
 			font-size: 14px;
 			height: 32px;
 
-			box-shadow: 0 2px 0 rgba(0, 0, 0, .015);
+			box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
 			cursor: pointer;
-			transition: all .3s cubic-bezier(.645, .045, .355, 1);
-			color: rgba(0, 0, 0, .85);
+			transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+			color: rgba(0, 0, 0, 0.85);
 			border: 1px solid #d9d9d9;
 
 			line-height: 1.5715;
@@ -299,6 +299,136 @@ canvas {
 		.ant-btn-link,
 		a {
 			color: white;
+		}
+	}
+}
+
+// ============= STATISTICS COMPONENT BASE STYLES =============
+
+// Container wrapper chung
+.statistics-wrapper {
+	margin-bottom: 16px;
+	background-color: #fff;
+	padding: 20px;
+	box-shadow: 0px 0px 12px 0px #0000000a;
+	border-radius: 8px;
+}
+
+// Layout 2 cột cho statistics item
+.statistics-item-layout {
+	display: flex;
+	justify-content: space-between;
+	align-items: stretch;
+	padding: 16px;
+}
+
+// Cột trái - icon + title
+.statistics-left-column {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	justify-content: flex-start;
+}
+
+// Cột phải - value
+.statistics-right-column {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-end;
+}
+
+// Style cho value number
+.statistics-value {
+	font-size: 28px;
+	font-weight: bold;
+	margin-bottom: -4px;
+}
+
+// Hover effect cho card
+.statistics-card-hover {
+	transition: all 0.2s ease;
+
+	&:hover {
+		transform: scale(1.005);
+		box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+	}
+}
+
+// Border trái với màu accent
+.statistics-border-accent {
+	border-left: 4px solid var(--color-primary);
+	border-radius: 0px 8px 8px 0px;
+}
+
+// Shadow nhẹ cho item
+.statistics-shadow {
+	box-shadow: 0 0 6px #00000010;
+}
+
+// Responsive
+@media (max-width: @screen-xs) {
+	.statistics-wrapper {
+		padding: 12px;
+	}
+
+	.statistics-item-layout {
+		padding: 12px;
+	}
+
+	.statistics-value {
+		font-size: 24px;
+	}
+}
+
+// ============= STATUS MODIFIERS FOR STATISTICS =============
+
+// Success
+.statistics--success {
+	border-left: 4px solid #52c41a; // green
+	background-color: #f6ffed;
+}
+
+// Warning
+.statistics--warning {
+	border-left: 4px solid #faad14; // gold
+	background-color: #fffbe6;
+}
+
+// Error
+.statistics--error {
+	border-left: 4px solid #ff4d4f; // red
+	background-color: #fff1f0;
+}
+
+// Info
+.statistics--info {
+	border-left: 4px solid #1890ff; // blue
+	background-color: #e6f7ff;
+}
+
+// Default
+.statistics--default {
+	border-left: 4px solid #d9d9d9; // gray
+	background-color: #fafafa;
+}
+
+.xem-tat-ca-link {
+	cursor: pointer;
+	display: inline-block;
+
+	.inner {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		padding: 2px 8px;
+		border-radius: var(--border-radius);
+		background-color: var(--color-primary-bg, #e6f7ff);
+
+		span {
+			color: var(--color-primary, #1890ff);
+			font-size: 14px;
+			font-weight: 400;
 		}
 	}
 }

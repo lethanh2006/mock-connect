@@ -22,9 +22,17 @@
 // 	}
 // }
 
+.ant-layout-header {
+	border: none !important;
+}
+
+.ant-layout-sider {
+	box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.05);
+}
+
+// Style for the sidebar
 .ant-layout-sider-children {
 	padding: 0 2px !important;
-	background-color: #001529;
 
 	.ant-menu-light.ant-pro-sider-menu,
 	.ant-menu-dark.ant-pro-sider-menu {
@@ -40,23 +48,12 @@
 			border-radius: var(--border-radius);
 			margin-bottom: 6px;
 
-			color: hsla(0, 0%, 100%, .65);
-
-			&:not(.ant-menu-item-selected):hover {
-				color: white;
-			}
-
-			&.ant-menu-item-selected {
-				// padding-left: 12px !important;
-				color: white;
-				background-color: var(--color-primary);
-				box-shadow: 0 2px 4px #000;
-			}
-		}
-
-		.ant-menu-submenu-selected {
-			.ant-menu-submenu-title {
-				color: white;
+			// Áp dụng cho item có path chứa "/__group__/"
+			a[href^='/__group__/'] {
+				color: rgba(223, 223, 225, 1) !important;
+				font-weight: 500;
+				text-transform: uppercase;
+				font-size: 13px;
 			}
 		}
 
@@ -108,8 +105,38 @@
 	}
 }
 
-.ant-pro-sider-menu.ant-menu-inline-collapsed {
+// DARK SIDEBAR
+// .ant-layout-sider-children {
+// 	background-color: #001529;
 
+// 	.ant-menu-light.ant-pro-sider-menu,
+// 	.ant-menu-dark.ant-pro-sider-menu {
+
+// 		.ant-menu-item,
+// 		.ant-menu-submenu-title {
+// 			color: hsla(0, 0%, 100%, .65);
+
+// 			&:not(.ant-menu-item-selected):hover {
+// 				color: white;
+// 			}
+
+// 			&.ant-menu-item-selected {
+// 				// padding-left: 12px !important;
+// 				color: white;
+// 				background-color: var(--color-primary);
+// 				box-shadow: 0 2px 4px #000;
+// 			}
+// 		}
+
+// 		.ant-menu-submenu-selected {
+// 			.ant-menu-submenu-title {
+// 				color: white;
+// 			}
+// 		}
+// 	}
+// }
+
+.ant-pro-sider-menu.ant-menu-inline-collapsed {
 	// .ant-menu-item,
 	// .ant-menu-submenu-title {
 	// 	height: 40px !important;
@@ -120,6 +147,7 @@
 
 .ant-layout-content {
 	padding: 18px 12px !important;
+	background-color: #fafbfd !important;
 
 	@media (max-width: @screen-xs) {
 		padding: 12px 6px !important;
@@ -135,9 +163,8 @@
 // }
 
 // Compatible with IE11
-@media screen and(-ms-high-contrast: active),
-(-ms-high-contrast: none) {
-	body .ant-design-pro>.ant-layout {
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+	body .ant-design-pro > .ant-layout {
 		min-height: 100vh;
 	}
 }
@@ -145,7 +172,8 @@
 // Ẩn title, logo
 .ant-pro-sider-logo {
 	justify-content: center;
-	padding: 12px 14px;
+	// padding: 12px 14px;
+	padding: 0px;
 
 	&.ant-pro-sider-collapsed {
 		padding: 14px !important;
@@ -154,6 +182,10 @@
 			display: none;
 		}
 	}
+
+	// img {
+	// 	height: 60px;
+	// }
 
 	h1 {
 		display: none;
