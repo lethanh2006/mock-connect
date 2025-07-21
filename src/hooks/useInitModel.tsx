@@ -115,6 +115,12 @@ const useInitModel = <T,>(
 				return tempData;
 			}
 		} catch (er) {
+			if (isSetDanhSach !== false) {
+				setDanhSach([]);
+				setTotal(0);
+				setPage(1);
+			}
+
 			return Promise.reject(er);
 		} finally {
 			setLoading(false);
@@ -153,6 +159,11 @@ const useInitModel = <T,>(
 
 			return data;
 		} catch (er) {
+			if (isSetDanhSach !== false) {
+				setDanhSach([]);
+				setTotal(0);
+			}
+
 			return Promise.reject(er);
 		} finally {
 			setLoading(false);
@@ -167,6 +178,7 @@ const useInitModel = <T,>(
 			if (isSetRecord !== false) setRecord(response?.data?.data ?? null);
 			return response?.data?.data;
 		} catch (er) {
+			if (isSetRecord !== false) setRecord(undefined);
 			return Promise.reject(er);
 		} finally {
 			setLoading(false);
@@ -181,6 +193,7 @@ const useInitModel = <T,>(
 			setRecord(response?.data?.data ?? null);
 			return response?.data?.data;
 		} catch (er) {
+			setRecord(undefined);
 			return Promise.reject(er);
 		} finally {
 			setLoading(false);
@@ -192,11 +205,15 @@ const useInitModel = <T,>(
 		getData?: any,
 		closeModal?: boolean,
 		messageText?: string,
+		config?: { dataPartitionCode?: string },
 	): Promise<T> => {
 		if (formSubmiting) Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await postService(chuanHoaObject(payload));
+			const res = await postService(
+				chuanHoaObject(payload),
+				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+			);
 			message.success(messageText ?? 'Thêm mới thành công');
 			setLoading(false);
 			if (getData) getData();
@@ -322,6 +339,14 @@ const useInitModel = <T,>(
 		setVisibleForm(true);
 	};
 
+	/** Xóa dữ liệu model: `danhSach, record, page, total` */
+	const clearModel = () => {
+		setRecord(undefined);
+		setDanhSach([]);
+		setPage(1);
+		setTotal(0);
+	};
+
 	//#region BASE IMPORT
 	/**
 	 * Lấy header cho chức năng import
@@ -333,6 +358,7 @@ const useInitModel = <T,>(
 			setImportHeaders(res.data?.data ?? []);
 			return res.data?.data ?? [];
 		} catch (err) {
+			setImportHeaders([]);
 			return Promise.reject(err);
 		}
 	};
@@ -341,9 +367,9 @@ const useInitModel = <T,>(
 	 * Lấy file excel mẫu cho chức năng import
 	 * @returns {any}
 	 */
-	const getImportTemplateModel = async (): Promise<any> => {
+	const getImportTemplateModel = async (params?: any): Promise<any> => {
 		try {
-			const res = await getImportTemplate();
+			const res = await getImportTemplate(params);
 			return res.data;
 		} catch (err) {
 			return Promise.reject(err);
@@ -496,6 +522,7 @@ const useInitModel = <T,>(
 		selectedIds,
 		setSelectedIds,
 		initFilter,
+		clearModel,
 	};
 };
 

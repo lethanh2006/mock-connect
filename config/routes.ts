@@ -12,6 +12,13 @@
 		],
 	},
 
+	// GROUP TITLE
+	// {
+	// 	name: 'DashboardGroup',
+	// 	path: '/__group__/dashboard',
+	// 	disabled: true,
+	// },
+
 	///////////////////////////////////
 
 	{

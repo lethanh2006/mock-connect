@@ -1,21 +1,22 @@
 import { useAuthActions } from '@/hooks/useAuthActions';
 import { getPermission, getUserInfo } from '@/services/base/api';
+import { AppModules } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
-import { currentRole } from '@/utils/ip';
+import { currentRole, replaceRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
 import { notification } from 'antd';
 import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import LoadingPage from '../Loading';
-import ConfigBounder from '../TechnicalSupportBounder/ConfigBounder';
 import { unAuthPaths, unCheckPermissionPaths } from './constant';
 
 let OIDCBounderHandlers: ReturnType<typeof useAuthActions> | null = null;
 
 export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
+	const intl = useIntl();
 	const { setInitialState, initialState } = useModel('@@initialState');
 	const auth = useAuth();
 	const actions = useAuthActions();
@@ -61,6 +62,13 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 				});
 
 				if (!isUncheckPath && currentRole && permissions.length && !hasRole) {
+					const hasReplaceRole = permissions.some((item) => item.rsname === replaceRole);
+					const linkReplace = !!replaceRole && AppModules[replaceRole]?.url;
+
+					if (!!linkReplace && hasReplaceRole) {
+						window.location.replace(linkReplace);
+						return;
+					}
 					history.replace('/403');
 				} else {
 					if (window.location.pathname === '/' || window.location.pathname === '/user/login') redirectLocation();
@@ -69,8 +77,8 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 				if (auth.isAuthenticated) auth.removeUser();
 				else {
 					notification.warning({
-						message: 'Xác thực người dùng',
-						description: 'Vui lòng đợi trong giây lát. Đang chuyển hướng...',
+						message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
+						description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
 					});
 					history.replace('/user/login');
 				}
@@ -126,14 +134,12 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 	props,
 ) => {
 	return (
-		<ConfigBounder>
-			<AuthProvider
-				{...oidcConfig}
-				redirect_uri={window.location.pathname.includes('/user') ? window.location.origin : window.location.href}
-			>
-				<OIDCBounder_ {...props} />
-			</AuthProvider>
-		</ConfigBounder>
+		<AuthProvider
+			{...oidcConfig}
+			redirect_uri={window.location.pathname.includes('/user') ? window.location.origin : window.location.href}
+		>
+			<OIDCBounder_ {...props} />
+		</AuthProvider>
 	);
 };
 
