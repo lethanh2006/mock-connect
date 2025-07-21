@@ -11,7 +11,6 @@ import { useEffect, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useIntl, useModel } from 'umi';
 import LoadingPage from '../Loading';
-import ConfigBounder from '../TechnicalSupportBounder/ConfigBounder';
 import { unAuthPaths, unCheckPermissionPaths } from './constant';
 
 let OIDCBounderHandlers: ReturnType<typeof useAuthActions> | null = null;
@@ -135,14 +134,12 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 	props,
 ) => {
 	return (
-		<ConfigBounder>
-			<AuthProvider
-				{...oidcConfig}
-				redirect_uri={window.location.pathname.includes('/user') ? window.location.origin : window.location.href}
-			>
-				<OIDCBounder_ {...props} />
-			</AuthProvider>
-		</ConfigBounder>
+		<AuthProvider
+			{...oidcConfig}
+			redirect_uri={window.location.pathname.includes('/user') ? window.location.origin : window.location.href}
+		>
+			<OIDCBounder_ {...props} />
+		</AuthProvider>
 	);
 };
 
