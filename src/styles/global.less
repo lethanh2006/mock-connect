@@ -202,14 +202,19 @@ canvas {
 		height: 100vh;
 		overflow: hidden;
 
-		> .ant-modal-content {
+		> .ant-modal-content,
+		> div .ant-modal-content,
+		.ant-modal-body > .ant-card {
 			border-radius: 0;
 			height: 100vh;
 			display: flex;
 			flex-direction: column;
 
-			> .ant-modal-body {
-				height: 100vh;
+			> .ant-modal-body,
+			> .ant-card-body {
+				// height: 100vh;
+				overflow: auto;
+				flex: 1;
 			}
 		}
 	}
