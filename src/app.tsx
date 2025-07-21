@@ -1,6 +1,9 @@
 import Footer from '@/components/Footer';
 import RightContent from '@/components/RightContent';
+import '@ant-design/v5-patch-for-react-19';
+import { App } from 'antd';
 import 'dayjs/locale/vi';
+import React from 'react'; // Bổ sung import React
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
@@ -13,12 +16,19 @@ import TechnicalSupportBounder from './components/TechnicalSupportBounder';
 import ConfigBounder from './components/TechnicalSupportBounder/ConfigBounder';
 import NotAccessible from './pages/exception/403';
 import NotFoundContent from './pages/exception/404';
-import { AppModules, primaryColor } from './services/base/constant';
+import { AppModules } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
-import { currentRole } from './utils/ip';
+import { currentRole, replaceRole } from './utils/ip';
 
-// https://umijs.org/docs/api/runtime-config#getinitialstate
+export function rootContainer(container: React.ReactNode) {
+	return (
+		<ConfigBounder>
+			<App>{container}</App>
+		</ConfigBounder>
+	);
+}
+
 export async function getInitialState(): Promise<IInitialState> {
 	return {
 		settings: defaultSettings,
@@ -55,8 +65,16 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 					currentRole &&
 					initialState?.authorizedPermissions?.length &&
 					!initialState?.authorizedPermissions?.find((item) => item.rsname === currentRole)
-				)
+				) {
+					const hasReplaceRole = initialState.authorizedPermissions.some((item) => item.rsname === replaceRole);
+					const linkReplace = !!replaceRole && AppModules[replaceRole]?.url;
+
+					if (!!linkReplace && hasReplaceRole) {
+						window.location.replace(linkReplace);
+						return;
+					}
 					history.replace('/403');
+				}
 			}
 		},
 
@@ -85,10 +103,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 			</OIDCBounder>
 		),
 
-		menuRender: (props, defaultDom) => <ConfigBounder>{defaultDom}</ConfigBounder>,
-
 		title: AppModules[currentRole].title,
-		colorPrimary: primaryColor,
 		...initialState?.settings,
 	};
 };

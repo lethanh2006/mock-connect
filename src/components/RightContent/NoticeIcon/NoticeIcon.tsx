@@ -1,6 +1,5 @@
 import readAll from '@/assets/read-all.svg';
-import { BellOutlined } from '@ant-design/icons';
-import { Link } from '@umijs/max';
+import { Link, useIntl } from '@umijs/max';
 import { Badge, Tooltip } from 'antd';
 import useMergedState from 'rc-util/es/hooks/useMergedState';
 import React from 'react';
@@ -27,6 +26,7 @@ const NoticeIcon: React.FC<NoticeIconProps> = ({
 	popupVisible,
 	onPopupVisibleChange,
 }) => {
+	const intl = useIntl();
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [visible, setVisible] = useMergedState<boolean>(false, {
 		value: popupVisible,
@@ -61,12 +61,12 @@ const NoticeIcon: React.FC<NoticeIconProps> = ({
 			open={visible}
 			onOpenChange={(open) => setVisible(open)}
 		>
-			<Tooltip title='Thông báo' placement='bottom'>
-				<Badge count={count ? (count < 100 ? count : '99+') : undefined} className={styles.noti_badge}>
-					<a>
-						<BellOutlined />
-					</a>
-				</Badge>
+			<Tooltip title={intl.formatMessage({ id: 'app.header.notice', defaultMessage: 'Thông báo' })} placement='bottom'>
+				<div className='header-menu-item'>
+					<Badge count={count ? (count < 100 ? count : '99+') : undefined} className={styles.noti_badge}>
+						<img src='/icons/notification.svg' alt='notif' />
+					</Badge>
+				</div>
 			</Tooltip>
 		</HeaderDropdown>
 	);
