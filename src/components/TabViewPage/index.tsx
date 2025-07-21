@@ -1,9 +1,9 @@
 import useCheckAccess from '@/hooks/useCheckAccess';
 import NotAccessible from '@/pages/exception/403';
 import { Affix, Card, Space, Steps, Tabs } from 'antd';
-import React, { JSX, useEffect, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import './style.less';
-import type { TabViewPageProps } from './typing';
+import type { TabViewPageComponentProps } from './typing';
 
 const PermissionWrapper = (props: { content: JSX.Element; accessCode?: string }) => {
 	const { accessCode, content } = props;
@@ -15,15 +15,8 @@ const PermissionWrapper = (props: { content: JSX.Element; accessCode?: string })
 
 export const getTitle = (title?: string, menuTitle?: string) => [title, menuTitle].filter(Boolean).join(' - ');
 
-export const TabViewPage = (props: {
-	menu: TabViewPageProps[];
-	cardTitle?: string;
-	hideCard?: boolean;
-	onChange?: (key: string) => void;
-	children?: React.ReactNode;
-	type?: 'tab' | 'step';
-}) => {
-	const { menu = [], hideCard, children, onChange, cardTitle, type = 'tab' } = props;
+export const TabViewPage = (props: TabViewPageComponentProps) => {
+	const { menu = [], hideCard, children, onChange, cardTitle, type = 'tab', tabType = 'card', tabStyle, style } = props;
 	const activeMenu = menu?.filter((i) => !i.hide);
 	const paths = activeMenu?.map((item) => item.menuKey);
 	const hash = window.location.hash?.replace('#', '') || paths[0];
@@ -42,7 +35,7 @@ export const TabViewPage = (props: {
 	};
 
 	const mainContent = () => (
-		<>
+		<div style={{ ...style }}>
 			{children}
 
 			{/* Chiều cao của header => Có thể tùy chỉnh tùy tenant */}
@@ -59,7 +52,13 @@ export const TabViewPage = (props: {
 						))}
 					</Steps>
 				) : (
-					<Tabs activeKey={tabActive} onChange={(key) => onChangeTab(key)} className='tab-view-menu' type='card'>
+					<Tabs
+						activeKey={tabActive}
+						onChange={(key) => onChangeTab(key)}
+						className='tab-view-menu'
+						type={tabType}
+						style={{ ...tabStyle }}
+					>
 						{activeMenu.map((item) => (
 							<Tabs.TabPane
 								tab={
@@ -81,7 +80,7 @@ export const TabViewPage = (props: {
 				}
 				return null;
 			})}
-		</>
+		</div>
 	);
 
 	if (hideCard) return mainContent();
