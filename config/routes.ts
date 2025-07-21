@@ -21,12 +21,6 @@
 
 	///////////////////////////////////
 
-	{
-		name: 'DefaultMenu',
-		path: '/__group__/dashboard',
-		disabled: true,
-	},
-
 	// DEFAULT MENU
 	{
 		path: '/dashboard',
@@ -39,12 +33,6 @@
 		name: 'About',
 		component: './TienIch/GioiThieu',
 		hideInMenu: true,
-	},
-
-	{
-		name: 'DanhMucHeThong',
-		path: '/__group__/dashboard',
-		disabled: true,
 	},
 
 	// DANH MUC HE THONG

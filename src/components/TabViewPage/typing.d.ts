@@ -45,7 +45,7 @@ export type TabViewPageComponentProps = {
 	type?: 'tab' | 'step';
 
 	/** Kiểu tab của antd: card / editable-card / line */
-	tabtype?: 'editable-card' | 'card' | 'line';
+	tabType?: 'editable-card' | 'card' | 'line';
 
 	/** Style riêng cho Tabs */
 	tabStyle?: CSSProperties;
