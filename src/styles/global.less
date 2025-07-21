@@ -303,114 +303,64 @@ canvas {
 	}
 }
 
-// ============= STATISTICS COMPONENT BASE STYLES =============
-
-// Container wrapper chung
+// Statistics Card Styles
 .statistics-wrapper {
 	margin-bottom: 16px;
 	background-color: #fff;
 	padding: 20px;
 	box-shadow: 0px 0px 12px 0px #0000000a;
 	border-radius: 8px;
-}
 
-// Layout 2 cột cho statistics item
-.statistics-item-layout {
-	display: flex;
-	justify-content: space-between;
-	align-items: stretch;
-	padding: 16px;
-}
+	.statistics-card-item {
+		transition: all 0.2s ease;
+		&:hover {
+			transform: scale(1.005);
+			box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+		}
+		box-shadow: 0 0 6px #00000010;
 
-// Cột trái - icon + title
-.statistics-left-column {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	justify-content: flex-start;
-}
+		&--success {
+			color: #52c41a;
+			border-left: 4px solid #52c41a;
+			background-color: #f6ffed;
+		}
 
-// Cột phải - value
-.statistics-right-column {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-	align-items: flex-end;
-}
+		&--warning {
+			color: #faad14;
+			border-left: 4px solid #faad14;
+			background-color: #fffbe6;
+		}
 
-// Style cho value number
-.statistics-value {
-	font-size: 28px;
-	font-weight: bold;
-	margin-bottom: -4px;
-}
+		&--error {
+			color: #ff4d4f;
+			border-left: 4px solid #ff4d4f;
+			background-color: #fff1f0;
+		}
 
-// Hover effect cho card
-.statistics-card-hover {
-	transition: all 0.2s ease;
+		&--info {
+			color: #1890ff;
+			border-left: 4px solid #1890ff;
+			background-color: #e6f7ff;
+		}
 
-	&:hover {
-		transform: scale(1.005);
-		box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+		&--default {
+			color: #d9d9d9;
+			border-left: 4px solid #d9d9d9;
+			background-color: #fafafa;
+		}
 	}
-}
-
-// Border trái với màu accent
-.statistics-border-accent {
-	border-left: 4px solid var(--color-primary);
-	border-radius: 0px 8px 8px 0px;
-}
-
-// Shadow nhẹ cho item
-.statistics-shadow {
-	box-shadow: 0 0 6px #00000010;
-}
-
-// Responsive
-@media (max-width: @screen-xs) {
-	.statistics-wrapper {
+	// Responsive
+	@media (max-width: @screen-xs) {
 		padding: 12px;
+
+		.statistics-item-layout {
+			padding: 12px;
+		}
+
+		.statistics-value {
+			font-size: 24px;
+		}
 	}
-
-	.statistics-item-layout {
-		padding: 12px;
-	}
-
-	.statistics-value {
-		font-size: 24px;
-	}
-}
-
-// ============= STATUS MODIFIERS FOR STATISTICS =============
-
-// Success
-.statistics--success {
-	border-left: 4px solid #52c41a; // green
-	background-color: #f6ffed;
-}
-
-// Warning
-.statistics--warning {
-	border-left: 4px solid #faad14; // gold
-	background-color: #fffbe6;
-}
-
-// Error
-.statistics--error {
-	border-left: 4px solid #ff4d4f; // red
-	background-color: #fff1f0;
-}
-
-// Info
-.statistics--info {
-	border-left: 4px solid #1890ff; // blue
-	background-color: #e6f7ff;
-}
-
-// Default
-.statistics--default {
-	border-left: 4px solid #d9d9d9; // gray
-	background-color: #fafafa;
 }
 
 .xem-tat-ca-link {
