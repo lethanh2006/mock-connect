@@ -1,5 +1,4 @@
 import Footer from '@/components/Footer';
-import ConfigBounder from '@/components/TechnicalSupportBounder/ConfigBounder';
 import { landingUrl } from '@/services/base/constant';
 import { GlobalOutlined } from '@ant-design/icons';
 import { history } from '@umijs/max';
@@ -13,31 +12,29 @@ const DangCapNhatPage = () => {
 	}, []);
 
 	return (
-		<ConfigBounder>
-			<div
-				style={{
-					minHeight: '100vh',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'space-between',
-					flexDirection: 'column',
-				}}
-			>
-				<Result
-					status='404'
-					title='Đang cập nhật'
-					style={{ background: 'none' }}
-					subTitle='Hệ thống đang cập nhật. Vui lòng thử lại sau!'
-					extra={
-						<Button type='primary' href={landingUrl} icon={<GlobalOutlined />} className='not-underline'>
-							Tới trang Cổng thông tin
-						</Button>
-					}
-				/>
+		<div
+			style={{
+				minHeight: '100vh',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'space-between',
+				flexDirection: 'column',
+			}}
+		>
+			<Result
+				status='404'
+				title='Đang cập nhật'
+				style={{ background: 'none' }}
+				subTitle='Hệ thống đang cập nhật. Vui lòng thử lại sau!'
+				extra={
+					<Button type='primary' href={landingUrl} icon={<GlobalOutlined />} className='not-underline'>
+						Tới trang Cổng thông tin
+					</Button>
+				}
+			/>
 
-				<Footer />
-			</div>
-		</ConfigBounder>
+			<Footer />
+		</div>
 	);
 };
 export default DangCapNhatPage;
