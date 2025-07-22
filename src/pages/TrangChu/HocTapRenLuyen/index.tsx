@@ -1,9 +1,9 @@
-import { Col, Row } from 'antd';
+import { Card, Col, Row, Skeleton } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
+import CardCongNoDashboard from '../components/CardCongNo';
 import CardKetQuaHocTapDashboard from './CardHocTap';
 import CardRenLuyenDashboard from './CardRenLuyen';
-import CardTienTrinhTotNghiep from './CardTienTrinhTotNghiep';
 import './style.less';
 
 const CardHocTapRenLuyenDashboard = () => {
@@ -16,20 +16,50 @@ const CardHocTapRenLuyenDashboard = () => {
 		});
 	}, []);
 
+	const { loading } = useModel('lophocphan.lophocphan');
+
 	return (
-		<Row gutter={[16, 16]} style={{ height: '100%' }}>
-			<Col span={24} md={8}>
-				<CardKetQuaHocTapDashboard />
-			</Col>
+		<Card
+			title={<span style={{ fontSize: 18 }}>Thống kê dữ liệu</span>}
+			style={{
+				background: 'transparent',
+				border: 'none',
+				marginBottom: 0,
+				boxShadow: 'none',
+				height: '100%',
+			}}
+			headStyle={{
+				borderBottom: 'none',
+				background: 'transparent',
+				marginBottom: 0,
+				paddingBottom: 0,
+			}}
+			bodyStyle={{ paddingTop: 0 }}
+		>
+			{/* Nội dung bên trong Card */}
 
-			<Col span={24} md={8}>
-				<CardRenLuyenDashboard />
-			</Col>
+			{loading ? (
+				<Skeleton active />
+			) : (
+				<Row gutter={[16, 16]} style={{ height: '100%', margin: '0 -16px' }}>
+					<Col span={24} md={8}>
+						<CardKetQuaHocTapDashboard />
+					</Col>
 
-			<Col span={24} md={8}>
-				<CardTienTrinhTotNghiep />
-			</Col>
-		</Row>
+					<Col span={24} md={8}>
+						<CardRenLuyenDashboard />
+					</Col>
+
+					{/* <Col span={24} md={8}>
+						<CardTienTrinhTotNghiep />
+					</Col> */}
+
+					<Col span={24} md={8}>
+						<CardCongNoDashboard />
+					</Col>
+				</Row>
+			)}
+		</Card>
 	);
 };
 

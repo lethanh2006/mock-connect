@@ -1,63 +1,106 @@
+// import ChatbotBanner from '@/components/TechnicalSupportBounder/Chatbot/Banner';
 import { Col, Row } from 'antd';
-import LichDashboard from '../Calendar/LichDashboard';
-import TinTucDashboardWrapper from '../TinTuc/Wrapper/Dashboard';
-import CardCongNoDashboard from './components/CardCongNo';
-import './components/style.less';
 import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
-import CardBaiTapDashboard from './HocTapRenLuyen/CardBaiTap';
-import CardCuocThiDashboard from './HocTapRenLuyen/CardCuocThi';
-import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
+
 import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
-import CardTienTrinhTotNghiep from './components/CardTienTrinhTotNghiep';
+import './styles.less';
+
+import CardDichVuSinhVien from './components/CardDichVu';
+import VaoRaThuVienDashboardCard from './components/CardRaVaoThuVien';
+import CardSuKienSapToi from './components/CardSuKienSapToi/CardSuKienSapToi';
+import CardThongBaoDashboard from './components/CardThongBao/CardThongBao';
+import WelcomeCard from './components/CardXinChao/CardXinChao';
+import LichDashboard from './components/LichDashboard';
+import TinTucDashboardWrapper from './components/TinTuc/TinTucDashboardWrapper';
+import CardBaiTapDashboard from './HocTapRenLuyen/CardBaiTap';
+import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
 
 const TrangChu = () => {
 	return (
-		<>
-			{/* <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
-				<Col span={24} md={16}>
-					<CardHocTapRenLuyenDashboard />
+		<div className='trang-chu'>
+			<Row className='xinchao-thongbao-sukien' gutter={[16, 16]} style={{ margin: ' 0 4px' }}>
+				<Col span={24} md={12} style={{ height: '100%' }}>
+					<WelcomeCard />
 				</Col>
 
-				<Col span={24} md={8}>
-					<CardCongNoDashboard />
-				</Col>
-			</Row> */}
-
-			<Row gutter={[16, 16]}>
-				<Col span={24} md={16}>
-					<Row gutter={[16, 16]}>
-						<Col span={24}>
-							<CardTienTrinhTotNghiep />
+				<Col span={24} md={12} style={{ height: '100%' }}>
+					<Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+						<Col span={24} md={12} style={{ height: '100%' }}>
+							<CardThongBaoDashboard />
 						</Col>
-
-						<Col xs={24}>
-							<LichDashboard />
-						</Col>
-
-						<Col span={24} md={12}>
-							<CardDienDanDashboard />
-						</Col>
-						<Col span={24} md={12}>
-							<CardBaiTapDashboard />
-						</Col>
-					</Row>
-				</Col>
-
-				<Col span={24} md={8}>
-					<Row gutter={[16, 16]}>
-						<Col span={24}>
-							<CardLopHocPhan />
-						</Col>
-						<Col span={24}>
-							<CardCuocThiDashboard />
-						</Col>
-						<Col span={24}>
-							<TinTucDashboardWrapper />
+						<Col span={24} md={12} style={{ height: '100%' }}>
+							<CardSuKienSapToi />
 						</Col>
 					</Row>
 				</Col>
 			</Row>
-		</>
+
+			<Row className='card-loptinchi' gutter={[0, 0]}>
+				<Col span={24} md={24} style={{ height: '100%' }}>
+					<CardLopHocPhan />
+				</Col>
+			</Row>
+
+			<Row className='card-baitap-and-lich' gutter={[0, 0]} style={{ margin: '0 10px', marginBottom: 24 }}>
+				<Col span={24}>
+					<Row gutter={[0, 0]}>
+						<Col span={24} md={18}>
+							<CardBaiTapDashboard />
+						</Col>
+						<Col xs={24} md={6} className='card-lich'>
+							<LichDashboard />
+						</Col>
+					</Row>
+				</Col>
+			</Row>
+
+			<Row className='card-thongkedulieu' gutter={[0, 0]} style={{ marginBottom: 16 }}>
+				<Col span={24} md={18} style={{ height: '100%' }}>
+					<CardHocTapRenLuyenDashboard />
+				</Col>
+
+				<Col span={24} md={6} style={{ height: '100%' }}>
+					<CardDichVuSinhVien />
+				</Col>
+			</Row>
+
+			<Row className='diendan-thuvien-banner' gutter={[16, 16]} style={{ margin: '0 4px 24px' }}>
+				<Col span={24} md={12}>
+					<Row gutter={[16, 16]}>
+						{/* <Col span={24} className='nq57-ptit'>
+							<img
+								src='/images/nq57-ptit.png'
+								alt='Tuổi trẻ PTIT với Nghị quyết 57'
+								title='Tuổi trẻ PTIT với Nghị quyết 57'
+								onClick={() => {}}
+							/>
+						</Col> */}
+
+						<Col className='card-diendan' span={24}>
+							<CardDienDanDashboard />
+						</Col>
+					</Row>
+				</Col>
+
+				<Col span={24} md={12}>
+					<Row gutter={[16, 16]}>
+						{/* <Col span={24}>
+							<CardCuocThiDashboard />
+						</Col> */}
+						<Col span={24}>
+							<VaoRaThuVienDashboardCard />
+						</Col>
+						<Col span={24}>{/* <ChatbotBanner /> */}</Col>
+					</Row>
+				</Col>
+			</Row>
+
+			<Row className='tintuc-dashboard' style={{ marginTop: 16 }}>
+				<Col span={24}>
+					<TinTucDashboardWrapper />
+				</Col>
+			</Row>
+		</div>
 	);
 };
 

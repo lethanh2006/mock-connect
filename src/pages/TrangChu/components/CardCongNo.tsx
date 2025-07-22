@@ -1,16 +1,16 @@
 import DonutChart from '@/components/Chart/DonutChart';
 import { EOperatorType } from '@/components/Table/constant';
 import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Space } from 'antd';
 import { useEffect } from 'react';
-import { Link, useModel } from 'umi';
+import { history, useModel } from 'umi';
 
-const CardCongNoDashboard = () => {
+const CardCongNoDashboard2 = () => {
 	const { getModel: getCongNo, loading, danhSach } = useModel('taichinh.hoadon');
-	const colors = ['var(--ant-success-color)', 'var(--ant-error-color)'];
-	const xAxis = ['Đã thanh toán', 'Chưa thanh toán'];
+	const colors = ['#14B8A6', '#FACC15']; // Teal, Yellow
+	const xAxis = ['Dịch vụ sinh viên', 'Dịch vụ khác'];
+
 	const congNoList = danhSach.filter((bill) => !bill.name?.includes('dịch vụ hành chính'));
 	const dichVuList = danhSach.filter((bill) => bill.name?.includes('dịch vụ hành chính'));
 
@@ -29,8 +29,59 @@ const CardCongNoDashboard = () => {
 		);
 	}, []);
 
-	const renderContent = (items: HoaDon.IRecord[], title: string) => {
-		const paid = items
+	// Function to make percentage more dynamic for chart display
+	const adjustPercentageForChart = (value: number, total: number) => {
+		if (total === 0) return 0;
+
+		const percentage = (value / total) * 100;
+
+		// Nếu % quá lớn (>85%), làm tròn xuống nhẹ để tạo không gian
+		if (percentage > 85) {
+			return Math.floor(percentage * 0.95); // Giảm 5% để tạo không gian
+		}
+
+		// Nếu % quá nhỏ (<3%), làm tròn lên để dễ nhìn
+		if (percentage < 3 && percentage > 0) {
+			return Math.ceil(percentage * 1.85); // Tăng 85% để dễ nhìn
+		}
+
+		// Nếu % từ 3-15%, làm tròn lên một chút
+		if (percentage >= 3 && percentage <= 15) {
+			return Math.ceil(percentage * 1.15); // Tăng 15%
+		}
+
+		// Nếu % từ 70-85%, làm tròn xuống nhẹ
+		if (percentage >= 70 && percentage <= 85) {
+			return Math.floor(percentage * 0.98); // Giảm 2%
+		}
+
+		// Các trường hợp khác giữ nguyên
+		return Math.round(percentage);
+	};
+
+	// Function to adjust percentage for display (only slight rounding)
+	const adjustPercentageForDisplay = (value: number, total: number) => {
+		if (total === 0) return 0;
+
+		const percentage = (value / total) * 100;
+
+		// Chỉ làm tròn sai khác tối đa 1%
+		if (percentage > 99) {
+			return Math.max(98, Math.round(percentage - 1));
+		}
+
+		if (percentage < 1 && percentage > 0) {
+			return Math.min(2, Math.round(percentage + 1));
+		}
+
+		// Các trường hợp khác làm tròn bình thường
+		return Math.round(percentage);
+	};
+
+	// Calculate data for chart
+	const calculateChartData = () => {
+		// Dịch vụ sinh viên (congNoList)
+		const congNoPaid = congNoList
 			.map(
 				(bill) =>
 					bill?.billItems
@@ -38,7 +89,7 @@ const CardCongNoDashboard = () => {
 						?.reduce((acc, item) => acc + (item.amountPaid || 0), 0) ?? 0,
 			)
 			.reduce((acc, item) => acc + item, 0);
-		const due = items
+		const congNoDue = congNoList
 			.map(
 				(bill) =>
 					bill?.billItems
@@ -46,81 +97,260 @@ const CardCongNoDashboard = () => {
 						?.reduce((acc, item) => acc + (item.amountDue ?? 0) - (item.amountDiscount ?? 0), 0) ?? 0,
 			)
 			.reduce((acc, item) => acc + item, 0);
-		const axis = [paid, due - paid];
 
-		return (
-			<Row gutter={[12, 0]}>
-				<Col span={24}>
-					<DonutChart
-						xAxis={xAxis}
-						yLabel={[title]}
-						yAxis={[axis]}
-						height={114}
-						width={114}
-						otherOptions={{
-							legend: { show: false },
-							dataLabels: { enabled: false },
-							chart: { toolbar: { show: false } },
-							responsive: [
-								{
-									breakpoint: 480,
-									options: {
-										chart: { width: 114 },
-										legend: { show: false },
-									},
-								},
-							],
-						}}
-						colors={colors}
-					/>
-					<div className='overlay'>{title}</div>
-				</Col>
+		// Dịch vụ khác (dichVuList)
+		const dichVuPaid = dichVuList
+			.map(
+				(bill) =>
+					bill?.billItems
+						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
+						?.reduce((acc, item) => acc + (item.amountPaid || 0), 0) ?? 0,
+			)
+			.reduce((acc, item) => acc + item, 0);
+		const dichVuDue = dichVuList
+			.map(
+				(bill) =>
+					bill?.billItems
+						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
+						?.reduce((acc, item) => acc + (item.amountDue ?? 0) - (item.amountDiscount ?? 0), 0) ?? 0,
+			)
+			.reduce((acc, item) => acc + item, 0);
 
-				<Col span={24}>
-					<Row gutter={[0, 2]}>
-						{xAxis.map((c, ind) => (
-							<Col span={24} key={c}>
-								<div className='row'>
-									<Space>
-										<span className='dot' style={{ backgroundColor: colors[ind] }} />
-										<span className='text'>{c}</span>
-									</Space>
-									<span className='sum-text' style={{ color: colors[ind] }}>
-										{Math.round(axis[ind] / 1e4) / 1e2}
-									</span>
-								</div>
-							</Col>
-						))}
-					</Row>
-				</Col>
-			</Row>
-		);
+		const congNoTotal = congNoPaid + (congNoDue - congNoPaid);
+		const dichVuTotal = dichVuPaid + (dichVuDue - dichVuPaid);
+		const congNoUnpaid = congNoDue - congNoPaid;
+		const dichVuUnpaid = dichVuDue - dichVuPaid;
+
+		return {
+			total: [congNoTotal, dichVuTotal],
+			paid: [congNoPaid, dichVuPaid],
+			unpaid: [congNoUnpaid, dichVuUnpaid],
+			grandTotal: congNoTotal + dichVuTotal,
+		};
 	};
 
-	return (
-		<Card className='dashboard-stat-card' loading={loading}>
-			<div className='dashboard-stat-content'>
-				<div className='header'>
-					<div className='title'>
-						Công nợ sinh viên
-						<span className='subtitle'>(Triệu đồng)</span>
-					</div>
-					<Link to='/tai-chinh/cong-no' title='Xem chi tiết'>
-						<ArrowRightOutlined />
-					</Link>
-				</div>
+	const chartData = calculateChartData();
 
-				{danhSach.length ? (
-					<Row gutter={[8, 0]}>
-						<Col span={12}>{renderContent(congNoList, 'Công nợ chung')}</Col>
-						<Col span={12}>{renderContent(dichVuList, 'Dịch vụ số')}</Col>
-					</Row>
-				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
-				)}
+	// Convert to percentage for radial chart with dynamic adjustment
+	const maxValue = Math.max(...chartData.total);
+	const yAxis = chartData.total.map((value) => {
+		return adjustPercentageForChart(value, maxValue);
+	});
+
+	// Calculate display percentages (only slight adjustment)
+	const displayPercentages = chartData.total.map((value) => {
+		return adjustPercentageForDisplay(value, maxValue);
+	});
+
+	return (
+		<Card className='dashboard-stat-card' loading={loading} style={{ borderRadius: 8 }}>
+			<div
+				className='dashboard-stat-content'
+				style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 16 }}
+			>
+				<div>
+					<div className='header'>
+						<div className='title'>
+							Công nợ
+							<span className='subtitle' style={{ color: '#999', fontSize: '12px', marginLeft: 4 }}>
+								(Triệu đồng)
+							</span>
+							{/* <InfoCircleOutlined style={{ color: '#007aff', marginLeft: 6 }} /> */}
+						</div>
+						{/* <Link to='/tai-chinh/cong-no' title='Xem chi tiết'>
+							<ArrowRightOutlined />
+						</Link> */}
+						<div>
+							<InfoCircleOutlined
+								onClick={() => history.push('/tai-chinh/cong-no')}
+								style={{ color: '#007aff', marginLeft: 6 }}
+							/>
+						</div>
+					</div>
+
+					{danhSach.length ? (
+						<>
+							{/* Radial Chart - similar to CardHocTap */}
+							<Row gutter={[12, 0]} justify='center'>
+								<Col span={24}>
+									<div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
+										<DonutChart
+											xAxis={xAxis}
+											yLabel={['Công nợ']}
+											yAxis={[yAxis]}
+											type='radian'
+											formatY={(e) => `${e.toFixed(1)}%`}
+											height={180}
+											width={180}
+											otherOptions={{
+												legend: { show: false },
+												dataLabels: { enabled: false },
+												chart: { toolbar: { show: false } },
+												plotOptions: {
+													radialBar: {
+														dataLabels: { show: false },
+														hollow: { size: '35px' },
+													},
+												},
+												responsive: [
+													{
+														breakpoint: 480,
+														options: {
+															chart: { width: 150, height: 150 },
+															legend: { show: false },
+															plotOptions: {
+																radialBar: {
+																	hollow: { size: '30px' },
+																},
+															},
+														},
+													},
+												],
+												// Thêm stroke để bo tròn các góc
+												stroke: {
+													lineCap: 'round' as 'round', // Bo tròn các đầu
+												},
+											}}
+											colors={colors}
+										/>
+										<div
+											style={{
+												position: 'absolute',
+												top: '50%',
+												left: '50%',
+												transform: 'translate(-50%, -50%)',
+												textAlign: 'center',
+												fontSize: '12px',
+												fontWeight: 'bold',
+												color: '#333',
+												pointerEvents: 'none',
+											}}
+										>
+											<div style={{ fontSize: '16px', color: '#333' }}>{(chartData.grandTotal / 1e6).toFixed(1)}</div>
+											<div style={{ fontSize: '10px', color: '#666' }}>Tổng CN</div>
+										</div>
+										{/* Percentage labels with display values (only 1% difference max) */}
+										<div
+											style={{
+												position: 'absolute',
+												top: '30%',
+												left: '10%',
+												fontSize: '14px',
+												fontWeight: 'bold',
+												color: '#14B8A6',
+												textShadow: `
+													-1px -1px 2px rgba(255, 255, 255, 0.8),
+													1px -1px 2px rgba(255, 255, 255, 0.8),
+													-1px  1px 2px rgba(255, 255, 255, 0.8),
+													1px  1px 2px rgba(255, 255, 255, 0.8)
+												`,
+											}}
+										>
+											{displayPercentages[0]} %
+										</div>
+										<div
+											style={{
+												position: 'absolute',
+												top: '30%',
+												right: '10%',
+												fontSize: '14px',
+												fontWeight: 'bold',
+												color: '#FACC15',
+												textShadow: `
+													-1px -1px 2px rgba(255, 255, 255, 0.8),
+													1px -1px 2px rgba(255, 255, 255, 0.8),
+													-1px  1px 2px rgba(255, 255, 255, 0.8),
+													1px  1px 2px rgba(255, 255, 255, 0.8)
+												`,
+											}}
+										>
+											{displayPercentages[1]} %
+										</div>
+									</div>
+								</Col>
+							</Row>
+
+							{/* Legend */}
+							<Row justify='center'>
+								<Col span={24}>
+									<Row gutter={[0, 8]} justify='center'>
+										<Col span={24}>
+											<div
+												className='row'
+												style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+											>
+												<Space>
+													<span className='dot' style={{ backgroundColor: '#14B8A6' }} />
+													<span>Dịch vụ sinh viên</span>
+												</Space>
+												<span className='sum-text' style={{ color: '#14B8A6', fontWeight: 'bold' }}>
+													{(chartData.total[0] / 1e6).toFixed(1)}
+												</span>
+											</div>
+										</Col>
+										<Col span={24}>
+											<div
+												className='row'
+												style={{
+													display: 'flex',
+													justifyContent: 'space-between',
+													alignItems: 'center',
+													paddingLeft: 20,
+												}}
+											>
+												<Space>
+													<span className='dot' style={{ backgroundColor: '#e5e7eb' }} />
+													<span>Chưa thanh toán</span>
+												</Space>
+												<span className='sum-text' style={{ color: '#e5e7eb', fontWeight: 'bold' }}>
+													{(chartData.unpaid[0] / 1e6).toFixed(1)}
+												</span>
+											</div>
+										</Col>
+										<Col span={24}>
+											<div
+												className='row'
+												style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+											>
+												<Space>
+													<span className='dot' style={{ backgroundColor: '#FACC15' }} />
+													<span>Dịch vụ khác</span>
+												</Space>
+												<span className='sum-text' style={{ color: '#FACC15', fontWeight: 'bold' }}>
+													{(chartData.total[1] / 1e6).toFixed(1)}
+												</span>
+											</div>
+										</Col>
+										<Col span={24}>
+											<div
+												className='row'
+												style={{
+													display: 'flex',
+													justifyContent: 'space-between',
+													alignItems: 'center',
+													paddingLeft: 20,
+												}}
+											>
+												<Space>
+													<span className='dot' style={{ backgroundColor: '#e5e7eb' }} />
+													<span>Chưa thanh toán</span>
+												</Space>
+												<span className='sum-text' style={{ color: '#e5e7eb', fontWeight: 'bold' }}>
+													{(chartData.unpaid[1] / 1e6).toFixed(1)}
+												</span>
+											</div>
+										</Col>
+									</Row>
+								</Col>
+							</Row>
+						</>
+					) : (
+						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
+					)}
+				</div>
 			</div>
 		</Card>
 	);
 };
 
-export default CardCongNoDashboard;
+export default CardCongNoDashboard2;
