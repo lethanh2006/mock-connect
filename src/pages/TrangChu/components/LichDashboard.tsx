@@ -1,9 +1,8 @@
-import XemTatCaLink from '@/pages/TrangChu/components/ViewMore';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { Button, Card, Modal, Space, Typography } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import SlideButtonIcon from './SlideButtonIcon';
 
 // Type definitions
@@ -425,7 +424,9 @@ const LichDashboard = () => {
 						<Space>
 							<Typography.Text style={{ fontSize: 18 }}>Lịch</Typography.Text>
 						</Space>
-						<XemTatCaLink to='/calendar' />
+						<Link to='/calendar' className='xem-tat-ca-link'>
+							Xem tất cả
+						</Link>
 					</div>
 				}
 			>
