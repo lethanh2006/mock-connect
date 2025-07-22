@@ -1,6 +1,7 @@
 import { Card, Tabs } from 'antd';
 import { useState } from 'react';
-import XemTatCaLink from '../ViewMore';
+
+import { Link } from 'umi';
 import TinTucDashboard2 from './TinTucDashboard';
 import TinTucDashboardWP2 from './TinTucDashboardWP';
 
@@ -22,7 +23,9 @@ const TinTucDashboardWrapper = () => {
 				</Tabs>
 
 				{/* Nút "Xem tất cả" */}
-				<XemTatCaLink to='/tin-tuc' />
+				<Link to='/tin-tuc' className='xem-tat-ca-link'>
+					Xem tất cả
+				</Link>
 			</div>
 
 			{/* Chỉ PTIT */}

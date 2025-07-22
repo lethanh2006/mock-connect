@@ -12,9 +12,8 @@ import {
 import { Button, Carousel, Empty, List, Modal, Popover, Space, Typography } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, Link, useModel } from 'umi';
 import SlideButtonIcon from '../components/SlideButtonIcon';
-import XemTatCaLink from '../components/ViewMore';
 
 const { Text } = Typography;
 
@@ -562,7 +561,9 @@ const CardBaiTapDashboard = () => {
 								WebkitBackdropFilter: 'blur(2px)',
 							}}
 						/>
-						<XemTatCaLink to='/hoc-tap/lop-tin-chi' />
+						<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
+							Xem tất cả
+						</Link>
 					</Space>
 				</div>
 
@@ -665,7 +666,9 @@ const CardBaiTapDashboard = () => {
 							WebkitBackdropFilter: 'blur(2px)',
 						}}
 					/>
-					<XemTatCaLink to='/hoc-tap/lop-tin-chi' />
+					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
+						Xem thêm
+					</Link>
 				</Space>
 			</div>
 
