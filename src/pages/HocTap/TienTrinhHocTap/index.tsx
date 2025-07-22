@@ -7,9 +7,9 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 import LichSuQuyDoiDiemPage from '../QuyDoiDiem';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
-import TienTrinhThucTe from './TienTrinhThucTe';
 import flag from './components/flag.svg';
 import './components/style.less';
+import TienTrinhThucTe from './TienTrinhThucTe';
 
 const TienTrinhHocTap = () => {
 	const { getAllModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');

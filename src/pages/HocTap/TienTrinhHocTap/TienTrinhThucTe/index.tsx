@@ -1,12 +1,14 @@
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { Empty, Spin } from 'antd';
+import { Divider, Empty, Spin, Typography } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
-import CardHocPhan from '../components/CardHocPhan';
+import CardHocPhanV2 from '../components/CardHocPhan';
 
-const TienTrinhThucTe = () => {
+const { Title, Text } = Typography;
+
+const TienTrinhThucTeV2 = () => {
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [tienTrinhHocKy, setTienTrinhHocKy] = useState<ChuongTrinhDaoTao.TTienTrinhThucTe[][]>();
@@ -27,31 +29,53 @@ const TienTrinhThucTe = () => {
 	}, [maKhoaNganh]);
 
 	return (
-		<>
+		<div style={{ backgroundColor: 'transparent', minHeight: '100vh' }}>
 			<Spin spinning={loading}>
 				{tienTrinhHocKy?.length ? (
 					tienTrinhHocKy.map((data, index) => (
-						// eslint-disable-next-line react/no-array-index-key
-						<div className='row-hoc-ky' key={index}>
-							<div className='col-hoc-ky'>
-								{/* <Tooltip
-                title={
-                  <>
-                    Tổng số tín chỉ cần học: {hocKy.tongSoTinCanHoc}
-                    <br />
-                    Số tín chỉ tự chọn: {hocKy.so_tin_chi_tu_chon_phai_hoc}
-                    <br />
-                    Số tín chỉ đã đạt: {hocKy.tongSoTinDaDat}
-                  </>
-                }
-              > */}
-								<h4>{data[0].kyHoc?.ten}</h4>
-								<span className='tin-chi'>({_.sumBy(data, (i) => i.soTinChi ?? 0)} tín chỉ)</span>
-								{/* </Tooltip> */}
+						<div key={index} style={{ marginBottom: '32px' }}>
+							{/* Header học kỳ */}
+							<div
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									marginBottom: '16px',
+								}}
+							>
+								<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+									<Title level={5} style={{ margin: 0, color: '#262626' }}>
+										{data[0].kyHoc?.ten}
+									</Title>
+									<div
+										style={{
+											width: '8px',
+											height: '8px',
+											backgroundColor: '#ff4d4f',
+											borderRadius: '50%',
+										}}
+									/>
+									<div
+										style={{
+											color: 'red',
+											padding: '2px',
+											fontWeight: 500,
+										}}
+									>
+										{_.sumBy(data, (i) => i.soTinChi ?? 0)} tín chỉ
+									</div>
+								</div>
 							</div>
-							<div className='col-chi-tiet'>
+
+							{/* Grid các môn học */}
+							<div
+								style={{
+									display: 'grid',
+									gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
+									gap: '16px',
+								}}
+							>
 								{data.map((sv) => (
-									<CardHocPhan
+									<CardHocPhanV2
 										key={sv.diemHpSvHk._id}
 										hocPhan={sv.hocPhan}
 										onClick={() => {
@@ -62,10 +86,23 @@ const TienTrinhThucTe = () => {
 									/>
 								))}
 							</div>
+
+							{/* Divider giữa các học kỳ */}
+							{index < tienTrinhHocKy.length - 1 && <Divider style={{ margin: '32px 0', borderColor: '#e8e8e8' }} />}
 						</div>
 					))
 				) : (
-					<Empty description='Không có dữ liệu' style={{ marginTop: 50, marginBottom: 32 }} />
+					<Empty
+						description={<Text style={{ color: '#8c8c8c', fontSize: '16px' }}>Không có dữ liệu</Text>}
+						style={{
+							marginTop: '100px',
+							marginBottom: '32px',
+							backgroundColor: '#fff',
+							padding: '40px',
+							borderRadius: '8px',
+							boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+						}}
+					/>
 				)}
 			</Spin>
 
@@ -77,8 +114,8 @@ const TienTrinhThucTe = () => {
 				deCuongId={recTienTrinh?.lopHocPhan?.deCuong?.deCuongId}
 				maKhoaNganh={maKhoaNganh}
 			/>
-		</>
+		</div>
 	);
 };
 
-export default TienTrinhThucTe;
+export default TienTrinhThucTeV2;
