@@ -57,7 +57,7 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 	return (
 		<Form form={form} onFinish={onFinish}>
 			<Form.Item name='maMau' label=''>
-				<ColorPicker showText  />
+				<ColorPicker showText />
 			</Form.Item>
 
 			<div className='form-footer'>
