@@ -7,8 +7,8 @@ interface ArrowIconProps {
 }
 
 const ArrowIcon: React.FC<ArrowIconProps> = ({ direction = 'right', size = '100%', disabled = false }) => {
-	const ArrowLeft = 'images/arrow-left.png';
-	const ArrowRight = 'images/arrow-right.png';
+	const ArrowLeft = '/images/arrow-left.png';
+	const ArrowRight = '/images/arrow-right.png';
 	const src = direction === 'left' ? ArrowLeft : ArrowRight;
 
 	return (
