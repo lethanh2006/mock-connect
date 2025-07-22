@@ -1,0 +1,27 @@
+// Statistics Card Styles
+.statistics-wrapper {
+	margin-bottom: 16px;
+	background-color: #fff;
+	padding: 20px;
+	box-shadow: 0px 0px 12px 0px #0000000a;
+	border-radius: 8px;
+	width: 100%;
+
+	// Border trái với màu accent
+	.border-accent {
+		border-left: 4px solid var(--color-primary);
+		border-radius: 0px 8px 8px 0px;
+	}
+	// Responsive
+	@media (max-width: @screen-xs) {
+		padding: 12px;
+
+		.statistics-item-layout {
+			padding: 12px;
+		}
+
+		.statistics-value {
+			font-size: 24px;
+		}
+	}
+}

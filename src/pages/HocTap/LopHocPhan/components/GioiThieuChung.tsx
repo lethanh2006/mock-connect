@@ -1,3 +1,4 @@
+import { Empty } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import './style.less';
@@ -7,9 +8,9 @@ const GioiThieuChungLopHp = () => {
 	const [expand, setExpand] = useState(false);
 
 	return (
-		<div>
-			<div className='fw500' style={{ marginBottom: 5 }}>
-				Giới thiệu chung:
+		<div style={{ minHeight: '150px' }}>
+			<div className='fw500' style={{ marginBottom: '16px' }}>
+				Giới thiệu môn học
 			</div>
 
 			<div
@@ -21,7 +22,9 @@ const GioiThieuChungLopHp = () => {
 				<a onClick={() => setExpand((v) => !v)} style={{ marginTop: 8 }}>
 					{expand ? 'Thu gọn' : 'Xem thêm'}
 				</a>
-			) : null}
+			) : (
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa có thông tin' />
+			)}
 		</div>
 	);
 };

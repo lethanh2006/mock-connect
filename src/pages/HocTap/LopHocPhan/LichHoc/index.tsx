@@ -1,15 +1,15 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
-import { Segmented, Space, Spin } from 'antd';
+import { CalendarOutlined, TableOutlined } from '@ant-design/icons';
+import { Card, Segmented, Space, Spin } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import CalendarLichHocLopHp from './CalendarLichHoc';
 import ModalThoiKhoaBieu from './Modal';
-import StatDiemDanh from './Stat';
+import StatDiemDanhV2 from './StatV2';
 import TableLichHocLopHP from './TableLichHoc';
 import ThongTinBuoiHoc from './ThongTinBuoiHoc';
-import { CalendarOutlined, TableOutlined } from '@ant-design/icons';
 
 const DanhSachBuoiHoc = () => {
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
@@ -43,8 +43,8 @@ const DanhSachBuoiHoc = () => {
 	};
 
 	return (
-		<Spin spinning={loading}>
-			<StatDiemDanh />
+		<Spin spinning={loading} s>
+			<StatDiemDanhV2 />
 
 			{buoiHocGanNhat?._id ? (
 				<>
@@ -64,35 +64,37 @@ const DanhSachBuoiHoc = () => {
 				</>
 			) : null}
 
-			<Space wrap style={{ marginBottom: 12, justifyContent: 'space-between', width: '100%' }}>
-				<Space wrap size={12}>
-					<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
+			<Card style={{ borderRadius: '8px' }}>
+				<Space wrap style={{ marginBottom: 12, justifyContent: 'space-between', width: '100%' }}>
+					<Space wrap size={12}>
+						<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
+						<Segmented
+							options={[
+								{ value: 'all', label: 'Tất cả' },
+								...Object.values(EHinhThucGiangDay).map((item) => ({ value: item, label: item })),
+							]}
+							onChange={(val) => setHinhThucFilter(val as any)}
+							value={hinhThucFilter}
+						/>
+					</Space>
 					<Segmented
+						value={show}
+						onChange={(val) => setShow(val.toString())}
 						options={[
-							{ value: 'all', label: 'Tất cả' },
-							...Object.values(EHinhThucGiangDay).map((item) => ({ value: item, label: item })),
+							{ value: 'table', title: 'Danh sách chi tiết', icon: <TableOutlined /> },
+							{ value: 'calendar', title: 'Lịch học', icon: <CalendarOutlined /> },
 						]}
-						onChange={(val) => setHinhThucFilter(val as any)}
-						value={hinhThucFilter}
 					/>
 				</Space>
-				<Segmented
-					value={show}
-					onChange={(val) => setShow(val.toString())}
-					options={[
-						{ value: 'table', title: 'Danh sách chi tiết', icon: <TableOutlined /> },
-						{ value: 'calendar', title: 'Lịch học', icon: <CalendarOutlined /> },
-					]}
-				/>
-			</Space>
 
-			{show === 'calendar' ? (
-				<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
-			) : (
-				<TableLichHocLopHP items={danhSachHienThi} onClickItem={onClickViewTkb} />
-			)}
+				{show === 'calendar' ? (
+					<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
+				) : (
+					<TableLichHocLopHP items={danhSachHienThi} onClickItem={onClickViewTkb} />
+				)}
 
-			<ModalThoiKhoaBieu />
+				<ModalThoiKhoaBieu />
+			</Card>
 		</Spin>
 	);
 };
