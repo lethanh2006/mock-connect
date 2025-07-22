@@ -14,7 +14,7 @@ export default () => {
 		setLoading(true);
 		const payload = {
 			page: 1,
-			per_page: 5,
+			per_page: 8,
 			categories: categories?.length ? categories : [],
 		};
 

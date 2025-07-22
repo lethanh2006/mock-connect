@@ -1,9 +1,8 @@
-import XemTatCaLink from '@/pages/TrangChu/components/ViewMore';
 import { ArrowRightOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Empty, Tag, Typography } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, Link, useModel } from 'umi';
 
 const { Text } = Typography;
 
@@ -207,7 +206,10 @@ const CardDienDanDashboard = () => {
 					>
 						Diễn đàn thảo luận <Tag>{displayData.length} alo</Tag>
 					</Text>
-					<XemTatCaLink to='/hoc-tap/lop-tin-chi' label='Xem thêm' />
+
+					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
+						Xem tất cả
+					</Link>
 				</div>
 
 				{/* Content - Empty State */}
@@ -265,7 +267,9 @@ const CardDienDanDashboard = () => {
 						{displayData.length}
 					</Tag>
 				</Text>
-				<XemTatCaLink to='/hoc-tap/lop-tin-chi' label='Xem thêm' />
+				<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
+					Xem thêm
+				</Link>
 			</div>
 
 			{/* Content */}

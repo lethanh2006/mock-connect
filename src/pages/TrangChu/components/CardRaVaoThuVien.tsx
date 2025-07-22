@@ -1,10 +1,9 @@
 import { Card, Carousel, Col, Empty, Row } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import ChartVaoRaThuVien from '../../ThuVien/VaoRaThuVien/Dashboard/Chart';
 import StatVaoRaThuVien from '../../ThuVien/VaoRaThuVien/Dashboard/Stat';
 import '../../ThuVien/VaoRaThuVien/Dashboard/style.less';
-import XemTatCaLink from './ViewMore';
 
 const VaoRaThuVienDashboardCard2 = () => {
 	const { loading, thongKeVaoRaModel, thongKeVaoRa } = useModel('thuvien.vaorathuvien');
@@ -18,7 +17,11 @@ const VaoRaThuVienDashboardCard2 = () => {
 	return (
 		<Card
 			title='Lượt vào thư viện'
-			extra={<XemTatCaLink label='Xem thêm' to='/thu-vien/vao-ra' />}
+			extra={
+				<Link to='/thu-vien/vao-ra' className='xem-tat-ca-link'>
+					Xem thêm
+				</Link>
+			}
 			bodyStyle={{
 				padding: 0, // Reset padding bên trong Card
 				margin: 0, // AntD không có `margin` trong `bodyStyle` nhưng thêm để chắc chắn
