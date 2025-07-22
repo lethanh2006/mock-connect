@@ -440,22 +440,18 @@ canvas {
 .xem-tat-ca-link {
 	cursor: pointer;
 	display: inline-block;
+	padding: 2px 8px;
+	border-radius: var(--border-radius);
+	background-color: #e6f7ff;
+	color: #1890ff;
+	font-size: 14px;
+	font-weight: 400;
+	text-decoration: none;
+	transition: all 0.2s;
 
-	.inner {
-		display: inline-flex;
-		align-items: center;
-		gap: 4px;
-		padding: 2px 8px;
-		border-radius: var(--border-radius);
-		// background-color: var(--color-primary-bg, #e6f7ff);
-		background-color: #e6f7ff;
-
-		span {
-			// color: var(--color-primary, #1890ff);
-			color: #1890ff;
-
-			font-size: 14px;
-			font-weight: 400;
-		}
+	&:hover {
+		background-color: #cce4ff;
+		color: #1890ff;
+		text-decoration: none;
 	}
 }

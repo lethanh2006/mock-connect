@@ -1,9 +1,8 @@
-import XemTatCaLink from '@/pages/TrangChu/components/ViewMore';
 import { DownOutlined } from '@ant-design/icons';
 import { Button, Card, Carousel, Dropdown, Empty, Menu, Space } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
 import { useEffect, useRef, useState } from 'react';
-import { useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import CardLopHocPhanItem from '../../HocTap/LopHocPhan/components/CardLopHocPhanItem';
 import SlideButtonIcon from '../components/SlideButtonIcon';
 
@@ -161,7 +160,10 @@ const CardLopHocPhan = () => {
 							</span>
 						</Dropdown>
 					</div>
-					<XemTatCaLink to='/hoc-tap/lop-tin-chi' />
+
+					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
+						Xem tất cả
+					</Link>
 				</div>
 			}
 		>

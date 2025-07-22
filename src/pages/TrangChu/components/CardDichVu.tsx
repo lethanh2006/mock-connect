@@ -1,6 +1,6 @@
 import FormKhaiBao from '@/pages/KhaiBaoQuyTrinh/components/FormKhaiBao';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
-import XemTatCaLink from '@/pages/TrangChu/components/ViewMore';
+
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import { ENguonDot } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
@@ -8,7 +8,7 @@ import { ArrowRightOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Card, Col, message, Modal, Popconfirm, Row, Skeleton, Space, Tooltip } from 'antd';
 
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, Link, useModel } from 'umi';
 
 const CardDichVuSinhVien = () => {
 	const {
@@ -163,7 +163,9 @@ const CardDichVuSinhVien = () => {
 							Dịch vụ sinh viên
 						</div>
 
-						<XemTatCaLink to='/khai-bao-quy-trinh/dang-ky' />
+						<Link to='/khai-bao-quy-trinh/dang-ky' className='xem-tat-ca-link'>
+							Xem thêm
+						</Link>
 					</div>
 				}
 				style={{
