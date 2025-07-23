@@ -1,6 +1,6 @@
 import { colorTrangThaiHocSv, type ETrangThaiHocSv } from '@/services/DaoTao/constant';
 import { formatPhoneNumber } from '@/utils/utils';
-import { Col, Image, Row, Spin, Tag } from 'antd';
+import { Col, Image, Row, Space, Spin, Tag } from 'antd';
 import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -64,8 +64,37 @@ const PreviewHoSo = () => {
 			md: 8,
 		},
 		{ label: 'Email', content: record?.email, md: 16 },
-		{ label: 'Khóa ngành', content: record?.khoaNganh?.ten, md: 16 },
-		{ label: 'Chuyên ngành', content: record?.chuyenNganh?.ten ?? record?.maChuyenNganh ?? '--', md: 8 },
+		{
+			label: 'Khóa ngành',
+			content: (
+				<div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+					{[
+						[record?.khoaNganh?.ten, record?.trangThaiHocNganh1],
+						[record?.khoaNganh2?.ten, record?.trangThaiHocNganh2],
+					]
+						.filter(([ten]) => ten)
+						.map(([ten, trangThai], index) => (
+							// eslint-disable-next-line react/jsx-key
+							<Space>
+								{ten}
+								{trangThai && (
+									<Tag color={colorTrangThaiHocSv[trangThai as ETrangThaiHocSv]} style={{ marginLeft: 8 }}>
+										{trangThai}
+									</Tag>
+								)}
+							</Space>
+						))}
+				</div>
+			),
+			md: 12,
+		},
+		{
+			label: 'Chuyên ngành',
+			content: [record?.chuyenNganh?.ten ?? record?.maChuyenNganh, record?.chuyenNganh2?.ten ?? record?.maChuyenNganh2]
+				.filter(Boolean)
+				.join(', '),
+			md: 12,
+		},
 		{
 			label: 'Quốc tịch',
 			content: danhSachQuocTich?.find((item) => item?._id === record?.quocTich)?.tenQuocTich,
