@@ -34,17 +34,17 @@ const SelectSongNganh = (props: {
 					? [
 							{
 								value: khoaNganhMe?.khoaNganhChinh?.ma,
-								label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten}`,
+								label: `${khoaNganhMe?.khoaNganhChinh?.ten}`,
 							},
 							{
 								value: khoaNganhMe?.khoaNganhPhu?.ma,
-								label: `${khoaNganhMe?.khoaNganhPhu?.nganh?.ten}`,
+								label: `${khoaNganhMe?.khoaNganhPhu?.ten}`,
 							},
 					  ]
 					: [
 							{
 								value: khoaNganhMe?.khoaNganhChinh?.ma,
-								label: `${khoaNganhMe?.khoaNganhChinh?.nganh?.ten}`,
+								label: `${khoaNganhMe?.khoaNganhChinh?.ten}`,
 							},
 					  ]
 			}
