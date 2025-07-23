@@ -49,9 +49,10 @@ const useInitService = (url: string, ip?: string) => {
 		return axios.get(`${finalIp}/${url}/import/definition`, { data: { silent: true } });
 	};
 
-	const getImportTemplate = (headers?: any) => {
+	const getImportTemplate = (params?: any, headers?: any) => {
 		return axios.get(`${finalIp}/${url}/import/template/xlsx`, {
 			responseType: 'arraybuffer',
+			params,
 			headers,
 		});
 	};

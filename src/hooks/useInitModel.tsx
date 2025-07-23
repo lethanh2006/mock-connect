@@ -114,6 +114,12 @@ const useInitModel = <T,>(
 				return tempData;
 			}
 		} catch (er) {
+			if (isSetDanhSach !== false) {
+				setDanhSach([]);
+				setTotal(0);
+				setPage(1);
+			}
+
 			return Promise.reject(er);
 		} finally {
 			setLoading(false);
@@ -152,6 +158,11 @@ const useInitModel = <T,>(
 
 			return data;
 		} catch (er) {
+			if (isSetDanhSach !== false) {
+				setDanhSach([]);
+				setTotal(0);
+			}
+
 			return Promise.reject(er);
 		} finally {
 			setLoading(false);
@@ -166,6 +177,7 @@ const useInitModel = <T,>(
 			if (isSetRecord !== false) setRecord(response?.data?.data ?? null);
 			return response?.data?.data;
 		} catch (er) {
+			if (isSetRecord !== false) setRecord(undefined);
 			return Promise.reject(er);
 		} finally {
 			setLoading(false);
@@ -180,6 +192,7 @@ const useInitModel = <T,>(
 			setRecord(response?.data?.data ?? null);
 			return response?.data?.data;
 		} catch (er) {
+			setRecord(undefined);
 			return Promise.reject(er);
 		} finally {
 			setLoading(false);
@@ -347,6 +360,7 @@ const useInitModel = <T,>(
 			setImportHeaders(res.data?.data ?? []);
 			return res.data?.data ?? [];
 		} catch (err) {
+			setImportHeaders([]);
 			return Promise.reject(err);
 		}
 	};
@@ -355,9 +369,9 @@ const useInitModel = <T,>(
 	 * Lấy file excel mẫu cho chức năng import
 	 * @returns {any}
 	 */
-	const getImportTemplateModel = async (): Promise<any> => {
+	const getImportTemplateModel = async (params?: any): Promise<any> => {
 		try {
-			const res = await getImportTemplate();
+			const res = await getImportTemplate(params);
 			return res.data;
 		} catch (err) {
 			return Promise.reject(err);
