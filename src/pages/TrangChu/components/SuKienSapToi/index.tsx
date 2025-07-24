@@ -1,12 +1,12 @@
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
-import { Button, Empty, Space, Tag, Typography } from 'antd';
+import { Button, Card, Empty, Space, Tag, Typography } from 'antd';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
-import './CardSuKienSapToi.less';
+import './style.less';
 
 const { Title } = Typography;
 
@@ -142,7 +142,7 @@ const CardSuKienSapToi = () => {
 		if (isEmpty(suKienSapToi)) {
 			return (
 				<div className='event-empty'>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện sắp tới' />
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
 				</div>
 			);
 		}
@@ -198,9 +198,11 @@ const CardSuKienSapToi = () => {
 
 	return (
 		<>
-			<div
+			<Card
 				className='sukien-wrapper'
-				//  style={{ border: '1px solid #ebebeb' }}
+				variant='borderless'
+				loading={loadingSuKien || loadingTKB || loadingThi}
+				styles={{ body: { padding: 0 } }}
 			>
 				{/* Header */}
 				<div className='sukien-header'>
@@ -228,7 +230,7 @@ const CardSuKienSapToi = () => {
 
 				{/* Current Event */}
 				{renderCurrentEvent()}
-			</div>
+			</Card>
 
 			{/* Modal xem chi tiết sự kiện */}
 			{selectEvent && (

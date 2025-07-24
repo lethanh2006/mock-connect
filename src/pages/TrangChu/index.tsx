@@ -1,19 +1,16 @@
-// import ChatbotBanner from '@/components/TechnicalSupportBounder/Chatbot/Banner';
 import { Col, Row } from 'antd';
-import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
-
-import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
-import './styles.less';
-
 import CardDichVuSinhVien from './components/CardDichVu';
 import VaoRaThuVienDashboardCard from './components/CardRaVaoThuVien';
-import CardSuKienSapToi from './components/CardSuKienSapToi/CardSuKienSapToi';
-import CardThongBaoDashboard from './components/CardThongBao/CardThongBao';
-import WelcomeCard from './components/CardXinChao/CardXinChao';
 import LichDashboard from './components/LichDashboard';
+import CardSuKienSapToi from './components/SuKienSapToi';
+import CardThongBaoDashboard from './components/ThongBao';
 import TinTucDashboardWrapper from './components/TinTuc/TinTucDashboardWrapper';
+import WelcomeCard from './components/XinChao';
+import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
 import CardBaiTapDashboard from './HocTapRenLuyen/CardBaiTap';
 import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
+import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
+import './styles.less';
 
 const TrangChu = () => {
 	return (
