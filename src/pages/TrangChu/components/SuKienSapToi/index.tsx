@@ -140,11 +140,7 @@ const CardSuKienSapToi = () => {
 		const suKienSapToi = getSuKienSapToi();
 
 		if (isEmpty(suKienSapToi)) {
-			return (
-				<div className='event-empty'>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
-				</div>
-			);
+			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' className='event-empty' />;
 		}
 
 		const currentEvent = suKienSapToi[currentIndex];
@@ -167,8 +163,8 @@ const CardSuKienSapToi = () => {
 						)} */}
 						<div className='event-footer'>
 							{/* <div className="event-time">
-                                {moment(currentEvent.thoiGianBatDau).format('HH:mm')}
-                            </div> */}
+										{moment(currentEvent.thoiGianBatDau).format('HH:mm')}
+								</div> */}
 							<div className='event-date'>{moment(currentEvent.thoiGianBatDau).format('DD/MM/YYYY')}</div>
 							<div className='event-tags'>
 								<Space size={4} wrap>

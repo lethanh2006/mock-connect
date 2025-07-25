@@ -1,5 +1,6 @@
 import { Col, Row } from 'antd';
 
+import { useMediaQuery } from 'react-responsive';
 import VaoRaThuVienDashboardCard from '../ThuVien/VaoRaThuVien/Dashboard/Card';
 import CardDichVuSinhVien from './components/DichVu';
 import LichDashboard from './components/Lich';
@@ -14,6 +15,8 @@ import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
 import './styles.less';
 
 const TrangChu = () => {
+	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+
 	return (
 		<div className='trang-chu'>
 			<Row className='xinchao-thongbao-sukien' gutter={[16, 16]} style={{ margin: ' 0 4px' }}>
@@ -39,20 +42,24 @@ const TrangChu = () => {
 				</Col>
 			</Row>
 
-			<Row className='card-baitap-and-lich' gutter={[0, 0]} style={{ margin: '0 10px', marginBottom: 24 }}>
-				<Col span={24}>
-					<Row gutter={[0, 0]}>
-						<Col span={24} md={18}>
-							<CardBaiTapDashboard />
-						</Col>
-						<Col xs={24} md={6} className='card-lich'>
-							<LichDashboard />
-						</Col>
-					</Row>
+			<Row
+				className='card-baitap-and-lich'
+				gutter={[0, 0]}
+				style={{ margin: isMobile ? '0 6px' : '0 10px', marginBottom: 24 }}
+			>
+				<Col span={24} md={18}>
+					<CardBaiTapDashboard />
+				</Col>
+				<Col span={24} md={6} className='card-lich'>
+					<LichDashboard />
 				</Col>
 			</Row>
 
-			<Row className='card-thongkedulieu' gutter={[0, 0]} style={{ marginBottom: 16 }}>
+			<Row
+				className='card-thongkedulieu'
+				gutter={[0, 0]}
+				style={{ margin: isMobile ? '0 6px' : undefined, marginBottom: 16 }}
+			>
 				<Col span={24} md={18} style={{ height: '100%' }}>
 					<CardHocTapRenLuyenDashboard />
 				</Col>
