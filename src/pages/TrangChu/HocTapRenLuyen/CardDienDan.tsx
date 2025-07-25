@@ -3,7 +3,6 @@ import { Avatar, Empty, Tag, Typography } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
-
 const { Text } = Typography;
 
 const CardDienDanDashboard = () => {
@@ -225,7 +224,7 @@ const CardDienDanDashboard = () => {
 						boxShadow: '0px 0px 6px 0px #0000000A',
 					}}
 				>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có diễn đàn' />
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
 				</div>
 			</div>
 		);
