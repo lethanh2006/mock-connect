@@ -2,13 +2,13 @@ import { Col, Row } from 'antd';
 
 import VaoRaThuVienDashboardCard from '../ThuVien/VaoRaThuVien/Dashboard/Card';
 import CardDichVuSinhVien from './components/DichVu';
-import LichDashboard from './components/LichDashboard';
+import LichDashboard from './components/Lich';
 import CardSuKienSapToi from './components/SuKienSapToi';
 import CardThongBaoDashboard from './components/ThongBao';
 import TinTucDashboardWrapper from './components/TinTuc/TinTucDashboardWrapper';
 import WelcomeCard from './components/XinChao';
 import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
-import CardBaiTapDashboard from './HocTapRenLuyen/CardBaiTap';
+import CardBaiTapDashboard from './HocTapRenLuyen/BaiTap';
 import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
 import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
 import './styles.less';
