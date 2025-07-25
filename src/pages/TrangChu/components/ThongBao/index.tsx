@@ -11,6 +11,7 @@ const CardThongBaoDashboard = () => {
 	const { danhSach: danhSachThongBao, setRecord, record, loading } = useModel('thongbao.noticeicon');
 	const [visibleThongBao, setVisibleThongBao] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
+
 	const currentNotice = danhSachThongBao[currentIndex];
 
 	const handlePrevious = () => {
@@ -67,9 +68,7 @@ const CardThongBaoDashboard = () => {
 					</div>
 				</>
 			) : (
-				<div className='notice-empty'>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
-				</div>
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' className='notice-empty' />
 			)}
 
 			{/* Modal */}
