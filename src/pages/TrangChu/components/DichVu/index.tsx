@@ -29,7 +29,7 @@ const CardDichVuSinhVien = () => {
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 
-	const documentIc = 'images/document-background.png';
+	const documentIc = 'images/document-background.svg';
 	const playIc = 'images/play-icon.png';
 
 	useEffect(() => {

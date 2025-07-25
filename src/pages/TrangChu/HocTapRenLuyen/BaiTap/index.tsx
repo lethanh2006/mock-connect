@@ -38,7 +38,7 @@ const CardBaiTapDashboard = () => {
 		height: window.innerHeight,
 	});
 
-	const assignmentBg = 'images/assignment-background.png';
+	const assignmentBg = 'images/assignment-background.svg';
 
 	// Responsive logic
 	const getItemsPerPage = () => {
