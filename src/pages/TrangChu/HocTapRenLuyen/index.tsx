@@ -1,7 +1,7 @@
 import { Card, Col, Row, Skeleton } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import CardCongNoDashboard from '../components/CardCongNo';
+import CardCongNoDashboard from '../components/CongNo';
 import CardKetQuaHocTapDashboard from './CardHocTap';
 import CardRenLuyenDashboard from './CardRenLuyen';
 import './style.less';
