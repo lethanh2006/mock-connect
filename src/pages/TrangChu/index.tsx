@@ -1,6 +1,7 @@
 import { Col, Row } from 'antd';
-import CardDichVuSinhVien from './components/CardDichVu';
-import VaoRaThuVienDashboardCard from './components/CardRaVaoThuVien';
+
+import VaoRaThuVienDashboardCard from '../ThuVien/VaoRaThuVien/Dashboard/Card';
+import CardDichVuSinhVien from './components/DichVu';
 import LichDashboard from './components/LichDashboard';
 import CardSuKienSapToi from './components/SuKienSapToi';
 import CardThongBaoDashboard from './components/ThongBao';

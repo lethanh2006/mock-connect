@@ -1,0 +1,168 @@
+.card-dichvu {
+	background: transparent;
+	border: none;
+	margin-bottom: 0;
+	box-shadow: none;
+	height: 100%;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	margin: 0 -8px;
+	min-height: 300px;
+
+	.ant-card-head {
+		border-bottom: none;
+		background: transparent;
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+
+	.ant-card-body {
+		padding-top: 0;
+	}
+
+	.card-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		align-content: baseline;
+
+		.title {
+			display: flex;
+			align-items: center;
+			font-size: 18px;
+		}
+	}
+
+	.services-container {
+		height: 100%;
+		background: #fff;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		padding: 16px;
+		border-radius: 8px;
+		min-height: 382px;
+		background-size: 75% auto;
+		background-position: bottom right;
+		background-repeat: no-repeat;
+		box-shadow: 0px 0px 6px 0px #0000000a;
+
+		&.with-bg {
+			// Background image will be set dynamically in component
+		}
+	}
+
+	.service-item {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		min-height: 76px;
+		transition: transform 0.3s ease;
+
+		&:hover {
+			transform: scale(1.01);
+		}
+
+		// Áp dụng riêng cho phần tử cuối cùng
+		&:last-child {
+			min-height: 79px;
+		}
+	}
+
+	.service-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 8px 0;
+		cursor: pointer;
+		border-radius: 4px;
+		transition: background-color 0.2s;
+
+		&.with-popconfirm {
+			padding: 8px 2px;
+			gap: 8px;
+		}
+
+		.service-content {
+			border-bottom: 2px solid #f0f0f0;
+			padding-bottom: 8px;
+			width: 100%;
+			justify-content: space-between;
+
+			.service-info {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				flex: 1;
+			}
+
+			.service-name {
+				font-size: 14px;
+				font-weight: 600;
+				overflow: hidden;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				line-height: 1.4;
+				max-height: 2.8em; // 2 lines * 1.4 line-height
+				word-break: break-word;
+				text-overflow: ellipsis;
+				width: 100%;
+				max-width: 300px; // Giới hạn chiều rộng tối đa
+			}
+		}
+
+		.right-arrow {
+			color: #999;
+			font-size: 12px;
+			flex-shrink: 0; // Không cho phép icon bị co lại
+		}
+
+		.play-button {
+			all: unset; // Xóa mọi style mặc định
+			cursor: pointer;
+			display: inline-flex;
+			align-items: flex-start;
+			justify-content: flex-start;
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			flex-shrink: 0; // Không cho phép button bị co lại
+		}
+	}
+
+	.loading-skeleton {
+		border: 1px solid #ebebeb;
+	}
+
+	.empty-state {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+
+		.empty-text {
+			color: #999;
+			font-size: 14px;
+		}
+	}
+}
+
+// Modal styles
+.modal-dot-selection {
+	.ant-modal-header {
+		// Custom header styles if needed
+	}
+}
+
+.modal-thong-tin-chung {
+	.ant-modal-header {
+		// Custom header styles if needed
+	}
+
+	.modal-footer {
+		// Custom footer styles if needed
+	}
+}
