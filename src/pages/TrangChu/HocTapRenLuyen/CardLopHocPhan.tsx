@@ -18,10 +18,12 @@ const CardLopHocPhan = () => {
 	const [currentSlide, setCurrentSlide] = useState(0);
 
 	// Assets
-	const Isolation_Mode_1 = 'images/isolation-mode-1.png';
-	const Isolation_Mode_2 = 'images/isolation-mode-2.png';
-	const Isolation_Mode_3 = 'images/isolation-mode-3.png';
-	const Isolation_Mode_4 = 'images/isolation-mode-4.png';
+	const Isolation_Mode_1 = 'images/isolation-mode-1.svg';
+	const Isolation_Mode_2 = 'images/isolation-mode-2.svg';
+	const Isolation_Mode_3 = 'images/isolation-mode-3.svg';
+	const Isolation_Mode_4 = 'images/isolation-mode-4.svg';
+	const Isolation_Mode_5 = 'images/isolation-mode-5.svg';
+	const Isolation_Mode_6 = 'images/isolation-mode-6.svg';
 
 	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
 
@@ -40,7 +42,14 @@ const CardLopHocPhan = () => {
 		getData();
 	}, [recHocKy?.ma]);
 
-	const backgrounds = [Isolation_Mode_1, Isolation_Mode_2, Isolation_Mode_3, Isolation_Mode_4];
+	const backgrounds = [
+		Isolation_Mode_1,
+		Isolation_Mode_2,
+		Isolation_Mode_3,
+		Isolation_Mode_4,
+		Isolation_Mode_5,
+		Isolation_Mode_6,
+	];
 
 	// Tạo mảng background cố định cho mỗi item để tránh bị giật hình
 	const getBackgroundForItem = (itemId: string, index: number) => {

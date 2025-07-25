@@ -5,8 +5,9 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Space } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
+import './style.less';
 
-const CardCongNoDashboard2 = () => {
+const CardCongNoDashboard = () => {
 	const { getModel: getCongNo, loading, danhSach } = useModel('taichinh.hoadon');
 	const colors = ['#14B8A6', '#FACC15']; // Teal, Yellow
 	const xAxis = ['Dịch vụ sinh viên', 'Dịch vụ khác'];
@@ -144,27 +145,15 @@ const CardCongNoDashboard2 = () => {
 
 	return (
 		<Card className='dashboard-stat-card' loading={loading} style={{ borderRadius: 8 }}>
-			<div
-				className='dashboard-stat-content'
-				style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 16 }}
-			>
+			<div className='dashboard-stat-content'>
 				<div>
 					<div className='header'>
 						<div className='title'>
 							Công nợ
-							<span className='subtitle' style={{ color: '#999', fontSize: '12px', marginLeft: 4 }}>
-								(Triệu đồng)
-							</span>
-							{/* <InfoCircleOutlined style={{ color: '#007aff', marginLeft: 6 }} /> */}
+							<span className='subtitle'>(Triệu đồng)</span>
 						</div>
-						{/* <Link to='/tai-chinh/cong-no' title='Xem chi tiết'>
-							<ArrowRightOutlined />
-						</Link> */}
 						<div>
-							<InfoCircleOutlined
-								onClick={() => history.push('/tai-chinh/cong-no')}
-								style={{ color: '#007aff', marginLeft: 6 }}
-							/>
+							<InfoCircleOutlined className='info-icon' onClick={() => history.push('/tai-chinh/cong-no')} />
 						</div>
 					</div>
 
@@ -173,7 +162,7 @@ const CardCongNoDashboard2 = () => {
 							{/* Radial Chart - similar to CardHocTap */}
 							<Row gutter={[12, 0]} justify='center'>
 								<Col span={24}>
-									<div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
+									<div className='chart-container'>
 										<DonutChart
 											xAxis={xAxis}
 											yLabel={['Công nợ']}
@@ -213,59 +202,13 @@ const CardCongNoDashboard2 = () => {
 											}}
 											colors={colors}
 										/>
-										<div
-											style={{
-												position: 'absolute',
-												top: '50%',
-												left: '50%',
-												transform: 'translate(-50%, -50%)',
-												textAlign: 'center',
-												fontSize: '12px',
-												fontWeight: 'bold',
-												color: '#333',
-												pointerEvents: 'none',
-											}}
-										>
-											<div style={{ fontSize: '16px', color: '#333' }}>{(chartData.grandTotal / 1e6).toFixed(1)}</div>
-											<div style={{ fontSize: '10px', color: '#666' }}>Tổng CN</div>
+										<div className='center-label'>
+											<div className='total-value'>{(chartData.grandTotal / 1e6).toFixed(1)}</div>
+											<div className='total-text'>Tổng CN</div>
 										</div>
 										{/* Percentage labels with display values (only 1% difference max) */}
-										<div
-											style={{
-												position: 'absolute',
-												top: '30%',
-												left: '10%',
-												fontSize: '14px',
-												fontWeight: 'bold',
-												color: '#14B8A6',
-												textShadow: `
-													-1px -1px 2px rgba(255, 255, 255, 0.8),
-													1px -1px 2px rgba(255, 255, 255, 0.8),
-													-1px  1px 2px rgba(255, 255, 255, 0.8),
-													1px  1px 2px rgba(255, 255, 255, 0.8)
-												`,
-											}}
-										>
-											{displayPercentages[0]} %
-										</div>
-										<div
-											style={{
-												position: 'absolute',
-												top: '30%',
-												right: '10%',
-												fontSize: '14px',
-												fontWeight: 'bold',
-												color: '#FACC15',
-												textShadow: `
-													-1px -1px 2px rgba(255, 255, 255, 0.8),
-													1px -1px 2px rgba(255, 255, 255, 0.8),
-													-1px  1px 2px rgba(255, 255, 255, 0.8),
-													1px  1px 2px rgba(255, 255, 255, 0.8)
-												`,
-											}}
-										>
-											{displayPercentages[1]} %
-										</div>
+										<div className='percentage-label left'>{displayPercentages[0]} %</div>
+										<div className='percentage-label right'>{displayPercentages[1]} %</div>
 									</div>
 								</Col>
 							</Row>
@@ -273,74 +216,46 @@ const CardCongNoDashboard2 = () => {
 							{/* Legend */}
 							<Row justify='center'>
 								<Col span={24}>
-									<Row gutter={[0, 8]} justify='center'>
-										<Col span={24}>
-											<div
-												className='row'
-												style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-											>
-												<Space>
-													<span className='dot' style={{ backgroundColor: '#14B8A6' }} />
-													<span>Dịch vụ sinh viên</span>
-												</Space>
-												<span className='sum-text' style={{ color: '#14B8A6', fontWeight: 'bold' }}>
-													{(chartData.total[0] / 1e6).toFixed(1)}
-												</span>
-											</div>
-										</Col>
-										<Col span={24}>
-											<div
-												className='row'
-												style={{
-													display: 'flex',
-													justifyContent: 'space-between',
-													alignItems: 'center',
-													paddingLeft: 20,
-												}}
-											>
-												<Space>
-													<span className='dot' style={{ backgroundColor: '#e5e7eb' }} />
-													<span>Chưa thanh toán</span>
-												</Space>
-												<span className='sum-text' style={{ color: '#e5e7eb', fontWeight: 'bold' }}>
-													{(chartData.unpaid[0] / 1e6).toFixed(1)}
-												</span>
-											</div>
-										</Col>
-										<Col span={24}>
-											<div
-												className='row'
-												style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-											>
-												<Space>
-													<span className='dot' style={{ backgroundColor: '#FACC15' }} />
-													<span>Dịch vụ khác</span>
-												</Space>
-												<span className='sum-text' style={{ color: '#FACC15', fontWeight: 'bold' }}>
-													{(chartData.total[1] / 1e6).toFixed(1)}
-												</span>
-											</div>
-										</Col>
-										<Col span={24}>
-											<div
-												className='row'
-												style={{
-													display: 'flex',
-													justifyContent: 'space-between',
-													alignItems: 'center',
-													paddingLeft: 20,
-												}}
-											>
-												<Space>
-													<span className='dot' style={{ backgroundColor: '#e5e7eb' }} />
-													<span>Chưa thanh toán</span>
-												</Space>
-												<span className='sum-text' style={{ color: '#e5e7eb', fontWeight: 'bold' }}>
-													{(chartData.unpaid[1] / 1e6).toFixed(1)}
-												</span>
-											</div>
-										</Col>
-									</Row>
+									<div className='legend'>
+										<Row gutter={[0, 8]} justify='center'>
+											<Col span={24}>
+												<div className='row'>
+													<Space>
+														<span className='dot teal' />
+														<span>Dịch vụ sinh viên</span>
+													</Space>
+													<span className='sum-text teal'>{(chartData.total[0] / 1e6).toFixed(1)}</span>
+												</div>
+											</Col>
+											<Col span={24}>
+												<div className='row indented'>
+													<Space>
+														<span className='dot gray' />
+														<span>Chưa thanh toán</span>
+													</Space>
+													<span className='sum-text gray'>{(chartData.unpaid[0] / 1e6).toFixed(1)}</span>
+												</div>
+											</Col>
+											<Col span={24}>
+												<div className='row'>
+													<Space>
+														<span className='dot yellow' />
+														<span>Dịch vụ khác</span>
+													</Space>
+													<span className='sum-text yellow'>{(chartData.total[1] / 1e6).toFixed(1)}</span>
+												</div>
+											</Col>
+											<Col span={24}>
+												<div className='row indented'>
+													<Space>
+														<span className='dot gray' />
+														<span>Chưa thanh toán</span>
+													</Space>
+													<span className='sum-text gray'>{(chartData.unpaid[1] / 1e6).toFixed(1)}</span>
+												</div>
+											</Col>
+										</Row>
+									</div>
 								</Col>
 							</Row>
 						</>
@@ -353,4 +268,4 @@ const CardCongNoDashboard2 = () => {
 	);
 };
 
-export default CardCongNoDashboard2;
+export default CardCongNoDashboard;

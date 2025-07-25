@@ -9,6 +9,7 @@ import { Button, Card, Col, message, Modal, Popconfirm, Row, Skeleton, Space, To
 
 import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
+import './style.less';
 
 const CardDichVuSinhVien = () => {
 	const {
@@ -28,7 +29,7 @@ const CardDichVuSinhVien = () => {
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 
-	const documentIc = 'images/document-background.png';
+	const documentIc = 'images/document-background.svg';
 	const playIc = 'images/play-icon.png';
 
 	useEffect(() => {
@@ -136,6 +137,24 @@ const CardDichVuSinhVien = () => {
 		handleRedirect(quyTrinh);
 	};
 
+	// Handle mouse events for service items
+	const handleServiceItemMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+		e.currentTarget.style.transform = 'scale(1.02)';
+		e.currentTarget.style.transition = 'all 0.3s ease';
+	};
+
+	const handleServiceItemMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+		e.currentTarget.style.transform = 'scale(1)';
+	};
+
+	const handleServiceRowMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+		e.currentTarget.style.backgroundColor = '#f5f5f5';
+	};
+
+	const handleServiceRowMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+		e.currentTarget.style.backgroundColor = 'transparent';
+	};
+
 	// Chỉ hiển thị 5 dịch vụ đầu tiên trong card
 	const displayServices = danhSachQuyTrinh?.slice(0, 5) || [];
 
@@ -144,75 +163,22 @@ const CardDichVuSinhVien = () => {
 			<Card
 				className='card-dichvu'
 				title={
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'center',
-							alignContent: 'baseline',
-						}}
-					>
-						<div
-							className='title'
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								fontSize: 18,
-							}}
-						>
-							Dịch vụ sinh viên
-						</div>
-
+					<div className='card-header'>
+						<div className='title'>Dịch vụ sinh viên</div>
 						<Link to='/khai-bao-quy-trinh/dang-ky' className='xem-tat-ca-link'>
 							Xem thêm
 						</Link>
 					</div>
 				}
-				style={{
-					background: 'transparent',
-					border: 'none',
-					marginBottom: 0,
-					boxShadow: 'none',
-					height: '100%',
-					display: 'flex',
-					flex: 1,
-					flexDirection: 'column',
-					margin: '0 -8px',
-					minHeight: 300,
-				}}
-				headStyle={{
-					borderBottom: 'none',
-					background: 'transparent',
-					marginBottom: 0,
-					paddingBottom: 0,
-				}}
-				bodyStyle={{ paddingTop: 0 }}
 			>
 				{loading ? (
-					<Skeleton
-						active
-						style={{
-							border: '1px solid #ebebeb',
-						}}
-					/>
+					<Skeleton active className='loading-skeleton' />
 				) : (
 					<Row
 						gutter={[0, 4]}
+						className='services-container'
 						style={{
-							height: '100%',
-							background: '#fff',
-							display: 'flex',
-							flexDirection: 'column',
-							flex: 1,
-							padding: 16,
-							borderRadius: 8,
-							minHeight: 382,
 							backgroundImage: `url(${documentIc})`,
-							backgroundSize: '75% auto',
-							backgroundPosition: 'bottom right',
-							backgroundRepeat: 'no-repeat',
-							// border: '1px solid #ebebeb',
-							boxShadow: '0px 0px 6px 0px #0000000A',
 						}}
 					>
 						{displayServices.length > 0 ? (
@@ -220,86 +186,31 @@ const CardDichVuSinhVien = () => {
 								<Col
 									span={24}
 									key={quyTrinh._id}
-									style={{
-										height: '100%',
-										display: 'flex',
-										flexDirection: 'column',
-										flex: 1,
-										minHeight: 72,
-									}}
-									onMouseEnter={(e) => {
-										e.currentTarget.style.transform = 'scale(1.02)';
-										e.currentTarget.style.transition = 'all 0.3s ease';
-									}}
-									onMouseLeave={(e) => {
-										e.currentTarget.style.transform = 'scale(1)';
-									}}
+									className='service-item'
+									onMouseEnter={handleServiceItemMouseEnter}
+									onMouseLeave={handleServiceItemMouseLeave}
 								>
 									{/* Kiểm tra xem có thông tin chung hay không để quyết định có dùng Popconfirm */}
 									{quyTrinh?.danhSachCauHinhThongTinChung && quyTrinh?.danhSachCauHinhThongTinChung?.length > 0 ? (
 										// Nếu có thông tin chung, click trực tiếp
 										<div
-											className='row'
+											className='service-row'
 											onClick={() => handleServiceClick(quyTrinh)}
-											style={{
-												display: 'flex',
-												justifyContent: 'space-between',
-												alignItems: 'center',
-												padding: '8px 0',
-												cursor: 'pointer',
-												borderRadius: 4,
-												transition: 'background-color 0.2s',
-											}}
-											onMouseEnter={(e) => {
-												e.currentTarget.style.backgroundColor = '#f5f5f5';
-											}}
-											onMouseLeave={(e) => {
-												e.currentTarget.style.backgroundColor = 'transparent';
-											}}
+											onMouseEnter={handleServiceRowMouseEnter}
+											onMouseLeave={handleServiceRowMouseLeave}
 										>
-											<Space
-												style={{
-													borderBottom: '2px solid #f0f0f0',
-													paddingBottom: 8,
-													width: '100%',
-													justifyContent: 'space-between',
-												}}
-											>
-												<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+											<Space className='service-content'>
+												<div className='service-info'>
 													<Tooltip title={quyTrinh.ten} placement='topLeft'>
-														<span
-															style={{
-																fontSize: '14px',
-																fontWeight: 600,
-																overflow: 'hidden',
-																display: '-webkit-box',
-																WebkitLineClamp: 2,
-																WebkitBoxOrient: 'vertical',
-																lineHeight: '1.4',
-																maxHeight: '2.8em', // 2 lines * 1.4 line-height
-																wordBreak: 'break-word',
-																textOverflow: 'ellipsis',
-																width: '100%',
-																maxWidth: '300px', // Giới hạn chiều rộng tối đa
-															}}
-														>
-															{quyTrinh.ten}
-														</span>
+														<span className='service-name'>{quyTrinh.ten}</span>
 													</Tooltip>
 												</div>
 											</Space>
-											<RightOutlined
-												style={{
-													color: '#999',
-													fontSize: '12px',
-													flexShrink: 0, // Không cho phép icon bị co lại
-												}}
-											/>
+											<RightOutlined className='right-arrow' />
 										</div>
 									) : (
 										// Nếu không có thông tin chung, sử dụng Popconfirm
 										<Popconfirm
-											// title={`Bạn có muốn sử dụng dịch vụ "${quyTrinh.ten}"?`}
 											title={`Bạn có muốn sử dụng dịch vụ ?`}
 											onConfirm={() => handleConfirmUse(quyTrinh)}
 											okText='Sử dụng'
@@ -307,63 +218,18 @@ const CardDichVuSinhVien = () => {
 											overlayStyle={{ maxWidth: '500px' }}
 											placement='topRight'
 										>
-											<div
-												className='row'
-												style={{
-													display: 'flex',
-													justifyContent: 'space-between',
-													alignItems: 'center',
-													padding: '8px 2px',
-													cursor: 'pointer',
-													borderRadius: 4,
-													gap: '8px',
-													transition: 'background-color 0.2s',
-												}}
-											>
-												<Space
-													style={{
-														borderBottom: '2px solid #f0f0f0',
-														paddingBottom: 8,
-														width: '100%',
-														justifyContent: 'space-between',
-													}}
-												>
-													<div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1 }}>
+											<div className='service-row with-popconfirm'>
+												<Space className='service-content'>
+													<div className='service-info'>
 														<Tooltip title={quyTrinh.ten} placement='topLeft'>
-															<span
-																style={{
-																	fontSize: '14px',
-																	fontWeight: 600,
-																	overflow: 'hidden',
-																	display: '-webkit-box',
-																	WebkitLineClamp: 2,
-																	WebkitBoxOrient: 'vertical',
-																	lineHeight: '1.4',
-																	maxHeight: '2.8em', // 2 lines * 1.4 line-height
-																	wordBreak: 'break-word',
-																	textOverflow: 'ellipsis',
-																	width: '100%',
-																}}
-															>
-																{quyTrinh.ten}
-															</span>
+															<span className='service-name'>{quyTrinh.ten}</span>
 														</Tooltip>
 													</div>
 												</Space>
 												<Button
 													type='text'
 													icon={<img src={playIc} alt='' width={'100%'} height={'100%'} />}
-													style={{
-														all: 'unset', // Xóa mọi style mặc định
-														cursor: 'pointer',
-														display: 'inline-flex',
-														alignItems: 'flex-start',
-														justifyContent: 'flex-start',
-														width: 20,
-														height: 20,
-														borderRadius: '50%',
-														flexShrink: 0, // Không cho phép button bị co lại
-													}}
+													className='play-button'
 												/>
 											</div>
 										</Popconfirm>
@@ -371,16 +237,8 @@ const CardDichVuSinhVien = () => {
 								</Col>
 							))
 						) : (
-							<Col
-								span={24}
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center',
-									height: '100%',
-								}}
-							>
-								<span style={{ color: '#999', fontSize: '14px' }}>Không có dịch vụ nào</span>
+							<Col span={24} className='empty-state'>
+								<span className='empty-text'>Không có dịch vụ nào</span>
 							</Col>
 						)}
 					</Row>
@@ -395,6 +253,7 @@ const CardDichVuSinhVien = () => {
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				destroyOnClose
+				className='modal-dot-selection'
 			>
 				<FormKhaiBao quyTrinhId={quyTrinhIdSelect} />
 			</Modal>
@@ -406,7 +265,7 @@ const CardDichVuSinhVien = () => {
 				visible={visibleThongTinChung}
 				onCancel={() => setVisibleThongTinChung(false)}
 				footer={
-					<>
+					<div className='modal-footer'>
 						<Button
 							icon={<ArrowRightOutlined />}
 							type={'primary'}
@@ -422,9 +281,10 @@ const CardDichVuSinhVien = () => {
 						>
 							Tiếp theo
 						</Button>
-					</>
+					</div>
 				}
 				destroyOnClose
+				className='modal-thong-tin-chung'
 			>
 				<ViewThongTinChung dataThongTinChung={recordThongTinChung} />
 			</Modal>

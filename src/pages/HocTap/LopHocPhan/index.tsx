@@ -1,7 +1,8 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/CardBaiTap';
+
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/CardDienDan';
 
+import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Card, Col, Row, Typography } from 'antd';
@@ -24,11 +25,13 @@ const LopHocPhanPage = () => {
 	});
 
 	// Background images array
-	const bg1 = '/images/isolation-mode-1.png';
-	const bg2 = '/images/isolation-mode-2.png';
-	const bg3 = '/images/isolation-mode-3.png';
-	const bg4 = '/images/isolation-mode-4.png';
-	const backgrounds = [bg1, bg2, bg3, bg4];
+	const bg1 = '/images/isolation-mode-1.svg';
+	const bg2 = '/images/isolation-mode-2.svg';
+	const bg3 = '/images/isolation-mode-3.svg';
+	const bg4 = '/images/isolation-mode-4.svg';
+	const bg5 = '/images/isolation-mode-5.svg';
+	const bg6 = '/images/isolation-mode-6.svg';
+	const backgrounds = [bg1, bg2, bg3, bg4, bg5, bg6];
 
 	// Handle window resize
 	useEffect(() => {
