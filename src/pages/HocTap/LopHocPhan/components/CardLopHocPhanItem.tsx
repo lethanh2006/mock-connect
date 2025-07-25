@@ -1,5 +1,6 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Progress, Tag, Typography } from 'antd';
+import { createHash } from 'crypto';
 import moment from 'moment';
 import { history } from 'umi';
 
@@ -13,22 +14,20 @@ interface CardLopHocPhanItemProps {
 
 const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, backgrounds }) => {
 	// Tạo mảng background cố định cho mỗi item để tránh bị giật hình
-	const getBackgroundForItem = (itemId: string, index: number) => {
-		// Sử dụng hash từ ID hoặc index để đảm bảo background cố định cho mỗi item
-		const hash = itemId
-			? itemId.split('').reduce((a, b) => {
-					a = (a << 5) - a + b.charCodeAt(0);
-					return a & a;
-				}, 0)
-			: index;
 
-		const backgroundIndex = Math.abs(hash) % backgrounds.length;
+	const getBackgroundForItem = (itemId: string, index: number) => {
+		const hash = createHash('md5').update(itemId).digest('hex');
+		// Lấy 2 ký tự đầu tiên chuyển thành số, sau đó % với số hình nền
+		const hashNum = parseInt(hash.slice(0, 4), 16);
+		const backgroundIndex = hashNum % backgrounds.length;
 		return backgrounds[backgroundIndex];
 	};
 
 	let allThoiKhoaBieu = lop.thoiKhoaBieuList ?? [];
-	allThoiKhoaBieu = allThoiKhoaBieu.concat(lop.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? []);
-	const past = allThoiKhoaBieu.filter((i) => moment().isAfter(i?.ngay)).length;
+	allThoiKhoaBieu = allThoiKhoaBieu.concat(
+		lop.children?.flatMap((child: { thoiKhoaBieuList: any }) => child.thoiKhoaBieuList ?? []) ?? [],
+	);
+	const past = allThoiKhoaBieu.filter((i: { ngay: moment.MomentInput }) => moment().isAfter(i?.ngay)).length;
 	const progress = Math.round((past / allThoiKhoaBieu.length) * 100) || 0;
 
 	const isCompleted = progress === 100 || lop?.diem?.diemHpSvHk?.diemKthp;

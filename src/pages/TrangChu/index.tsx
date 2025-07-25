@@ -1,21 +1,22 @@
-// import ChatbotBanner from '@/components/TechnicalSupportBounder/Chatbot/Banner';
 import { Col, Row } from 'antd';
-import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
 
+import { useMediaQuery } from 'react-responsive';
+import VaoRaThuVienDashboardCard from '../ThuVien/VaoRaThuVien/Dashboard/Card';
+import CardDichVuSinhVien from './components/DichVu';
+import LichDashboard from './components/Lich';
+import CardSuKienSapToi from './components/SuKienSapToi';
+import CardThongBaoDashboard from './components/ThongBao';
+import TinTucDashboardWrapper from './components/TinTuc/TinTucDashboardWrapper';
+import WelcomeCard from './components/XinChao';
+import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
+import CardBaiTapDashboard from './HocTapRenLuyen/BaiTap';
+import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
 import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
 import './styles.less';
 
-import CardDichVuSinhVien from './components/CardDichVu';
-import VaoRaThuVienDashboardCard from './components/CardRaVaoThuVien';
-import CardSuKienSapToi from './components/CardSuKienSapToi/CardSuKienSapToi';
-import CardThongBaoDashboard from './components/CardThongBao/CardThongBao';
-import WelcomeCard from './components/CardXinChao/CardXinChao';
-import LichDashboard from './components/LichDashboard';
-import TinTucDashboardWrapper from './components/TinTuc/TinTucDashboardWrapper';
-import CardBaiTapDashboard from './HocTapRenLuyen/CardBaiTap';
-import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
-
 const TrangChu = () => {
+	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+
 	return (
 		<div className='trang-chu'>
 			<Row className='xinchao-thongbao-sukien' gutter={[16, 16]} style={{ margin: ' 0 4px' }}>
@@ -41,20 +42,24 @@ const TrangChu = () => {
 				</Col>
 			</Row>
 
-			<Row className='card-baitap-and-lich' gutter={[0, 0]} style={{ margin: '0 10px', marginBottom: 24 }}>
-				<Col span={24}>
-					<Row gutter={[0, 0]}>
-						<Col span={24} md={18}>
-							<CardBaiTapDashboard />
-						</Col>
-						<Col xs={24} md={6} className='card-lich'>
-							<LichDashboard />
-						</Col>
-					</Row>
+			<Row
+				className='card-baitap-and-lich'
+				gutter={[0, 0]}
+				style={{ margin: isMobile ? '0 6px' : '0 10px', marginBottom: 24 }}
+			>
+				<Col span={24} md={18}>
+					<CardBaiTapDashboard />
+				</Col>
+				<Col span={24} md={6} className='card-lich'>
+					<LichDashboard />
 				</Col>
 			</Row>
 
-			<Row className='card-thongkedulieu' gutter={[0, 0]} style={{ marginBottom: 16 }}>
+			<Row
+				className='card-thongkedulieu'
+				gutter={[0, 0]}
+				style={{ margin: isMobile ? '0 6px' : undefined, marginBottom: 16 }}
+			>
 				<Col span={24} md={18} style={{ height: '100%' }}>
 					<CardHocTapRenLuyenDashboard />
 				</Col>

@@ -1,0 +1,336 @@
+.calendar-container {
+	background-color: #fff;
+	border-radius: 8px;
+	height: 100%;
+	min-height: 100%;
+	margin-top: -16px;
+	margin-bottom: 16px;
+	overflow: hidden;
+	box-shadow: 0px 0px 6px 0px #0000000a;
+}
+
+// Header styles
+.calendar-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 8px;
+	flex-wrap: wrap;
+
+	&.mobile {
+		padding: 12px 8px 8px;
+	}
+
+	&.tablet {
+		padding: 16px 15px 12px;
+	}
+
+	&.desktop {
+		padding: 20px 20px 16px;
+	}
+}
+
+.calendar-title {
+	margin: 0 8px !important;
+	font-weight: 600 !important;
+
+	&.mobile {
+		font-size: 14px !important;
+	}
+
+	&.desktop {
+		font-size: 16px !important;
+	}
+}
+
+.calendar-nav {
+	display: flex;
+
+	&.mobile {
+		gap: 4px;
+	}
+
+	&.desktop {
+		gap: 0;
+	}
+}
+
+// Week header styles
+.week-header {
+	display: flex;
+	height: 20px;
+
+	&.mobile {
+		padding: 0 8px;
+	}
+
+	&.tablet {
+		padding: 0 15px;
+	}
+
+	&.desktop {
+		padding: 0 20px;
+	}
+}
+
+.day-header {
+	flex: 1;
+	text-align: center;
+	color: #999;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&.mobile,
+	&.tablet {
+		font-size: 10px;
+	}
+
+	&.desktop {
+		font-size: 11px;
+	}
+}
+
+// Calendar grid styles
+.calendar-grid {
+	flex: 1;
+	padding-bottom: 20px;
+
+	&.mobile {
+		padding: 0 8px;
+		min-height: 200px;
+		padding-bottom: 8px;
+	}
+
+	&.tablet {
+		padding: 0 15px;
+		min-height: 220px;
+	}
+
+	&.desktop {
+		padding: 0 20px;
+		min-height: 255px;
+	}
+}
+
+.calendar-week {
+	display: flex;
+	min-height: 30px;
+
+	&.mobile {
+		min-height: 25px;
+	}
+}
+
+// Date cell styles
+.date-cell {
+	flex: 1;
+	cursor: pointer;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	&.mobile {
+		padding: 1px 0.5px;
+	}
+
+	&.desktop {
+		padding: 2px 1px;
+	}
+}
+
+.date-number {
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 2px;
+	font-weight: normal;
+	background-color: transparent;
+
+	&.mobile {
+		width: 20px;
+		height: 20px;
+		font-size: 10px;
+
+		&.small-month {
+			width: 24px;
+			height: 24px;
+			font-size: 11px;
+		}
+	}
+
+	&.tablet {
+		width: 22px;
+		height: 22px;
+		font-size: 11px;
+
+		&.small-month {
+			width: 26px;
+			height: 26px;
+			font-size: 12px;
+		}
+	}
+
+	&.desktop {
+		width: 24px;
+		height: 24px;
+		font-size: 12px;
+
+		&.small-month {
+			width: 28px;
+			height: 28px;
+			font-size: 13px;
+		}
+	}
+
+	&.today {
+		background-color: #d32f2f !important;
+		color: #fff !important;
+		font-weight: 600 !important;
+	}
+
+	&.selected {
+		background-color: #f0f0f0 !important;
+	}
+
+	&.current-month {
+		color: #333;
+	}
+
+	&.other-month {
+		color: #ccc;
+	}
+}
+
+// Event dots container
+.event-dots-container {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 1px;
+	flex-wrap: wrap;
+
+	&.mobile {
+		height: 6px;
+
+		&.small-month {
+			height: 8px;
+		}
+	}
+
+	&.tablet {
+		height: 7px;
+
+		&.small-month {
+			height: 9px;
+		}
+	}
+
+	&.desktop {
+		height: 8px;
+
+		&.small-month {
+			height: 10px;
+		}
+	}
+}
+
+.event-dot {
+	border-radius: 50%;
+
+	&.mobile,
+	&.tablet {
+		width: 3px;
+		height: 3px;
+	}
+
+	&.tablet {
+		width: 3.5px;
+		height: 3.5px;
+	}
+
+	&.desktop {
+		width: 4px;
+		height: 4px;
+	}
+}
+
+.event-more {
+	color: #666;
+	margin-left: 1px;
+
+	&.mobile {
+		font-size: 8px;
+	}
+
+	&.desktop {
+		font-size: 9px;
+	}
+}
+
+.empty-dot-space {
+	height: 3px;
+}
+
+// Card styles
+.calendar-card {
+	border-radius: 8px !important;
+	background-color: transparent !important;
+	border: none !important;
+	min-height: 350px !important;
+	height: 350px !important;
+	margin-right: -16px !important;
+
+	.ant-card-head {
+		border-bottom: none !important;
+	}
+}
+
+.card-header {
+	display: flex;
+	justify-content: space-between;
+	background-color: transparent;
+	border-bottom: none;
+}
+
+.card-title {
+	font-size: 18px !important;
+}
+
+// Modal styles
+.event-modal {
+	.ant-modal-body {
+		max-height: 400px;
+		overflow-y: auto;
+	}
+}
+
+.event-item {
+	padding: 12px;
+	border: 1px solid #f0f0f0;
+	border-radius: 4px;
+	border-left-width: 4px;
+	border-left-style: solid;
+
+	&:not(:last-child) {
+		margin-bottom: 8px;
+	}
+}
+
+.event-title {
+	font-weight: 600;
+	margin-bottom: 4px;
+}
+
+.event-time {
+	font-size: 12px;
+	color: #666;
+}
+
+.event-location {
+	font-size: 12px;
+	color: #666;
+}
