@@ -211,14 +211,14 @@ const CardSuKienSapToi = () => {
 					<div className='navigation-buttons'>
 						<Button
 							type='text'
-							icon={<SlideButtonIcon direction='left' />}
+							icon={<SlideButtonIcon direction='left' disabled={getSuKienSapToi().length <= 1} />}
 							onClick={handlePrevious}
 							disabled={getSuKienSapToi().length <= 1}
 							className='nav-btn'
 						/>
 						<Button
 							type='text'
-							icon={<SlideButtonIcon direction='right' />}
+							icon={<SlideButtonIcon direction='right' disabled={getSuKienSapToi().length <= 1} />}
 							onClick={handleNext}
 							disabled={getSuKienSapToi().length <= 1}
 							className='nav-btn'
