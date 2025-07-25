@@ -1,4 +1,3 @@
-import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Carousel, Col, Empty, Row } from 'antd';
 import { useEffect } from 'react';
 import { Link, useModel } from 'umi';
@@ -19,12 +18,19 @@ const VaoRaThuVienDashboardCard = () => {
 		<Card
 			title='Lượt vào thư viện'
 			extra={
-				<Link to={'/thu-vien/vao-ra'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
-					Xem thêm <ArrowRightOutlined />
+				<Link to={'/thu-vien/vao-ra'} type='link' className='xem-tat-ca-link'>
+					Xem thêm
 				</Link>
 			}
-			bodyStyle={{ paddingBottom: 5 }}
+			bodyStyle={{
+				paddingBottom: 5,
+				backgroundColor: 'white',
+				borderRadius: 8,
+				boxShadow: '0px 0px 6px 0px #0000000A',
+			}}
 			loading={loading}
+			headStyle={{ border: 'none', padding: '18px 0' }}
+			style={{ backgroundColor: 'transparent', border: 'none' }}
 		>
 			{thongKeVaoRa.length ? (
 				<Carousel autoplay pauseOnDotsHover>
