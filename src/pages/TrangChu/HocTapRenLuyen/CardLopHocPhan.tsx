@@ -82,27 +82,12 @@ const CardLopHocPhan = () => {
 
 	return (
 		<Card
-			title={<span className='card-loptinchi-title'>Lớp tín chỉ</span>}
-			style={{
-				background: 'transparent',
-				border: 'none',
-				marginBottom: 0,
-				boxShadow: 'none',
-				height: '100%',
-				margin: '0 -16px',
-			}}
-			headStyle={{
-				borderBottom: 'none',
-				background: 'transparent',
-				marginBottom: '-20px',
-				paddingBottom: 0,
-				padding: '0 16px',
-				fontSize: 18,
-				marginLeft: 16,
-			}}
+			variant='borderless'
+			className='card-borderless card-big-title'
+			title='Lớp tín chỉ'
 			loading={loading}
 			extra={
-				<div style={{ display: 'flex', gap: 16, marginRight: 8, alignItems: 'center' }}>
+				<div style={{ display: 'flex', gap: 8, marginRight: 8, alignItems: 'center' }}>
 					{/* Custom Carousel Navigation */}
 					{danhSachLHP.length > 0 && (
 						<div style={{ display: 'flex', gap: 8 }}>
@@ -215,7 +200,9 @@ const CardLopHocPhan = () => {
 					))}
 				</Carousel>
 			) : (
-				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
+				<Card variant='borderless' style={{ borderRadius: 8 }}>
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
+				</Card>
 			)}
 		</Card>
 	);

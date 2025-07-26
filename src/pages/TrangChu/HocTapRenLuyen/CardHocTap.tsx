@@ -1,10 +1,11 @@
 import DonutChart from '@/components/Chart/DonutChart';
-import { ArrowRightOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { colorLoaiHocLuc, ELoaiHocLuc } from '@/services/HocTap/constant';
+import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Space } from 'antd';
 import { history, Link, useModel } from 'umi';
 
 const CardKetQuaHocTapDashboard = () => {
-	const { record: recTienTrinh, loading, setRecord } = useModel('sinhvien.tientrinhtotnghiep');
+	const { record: recTienTrinh, loading } = useModel('sinhvien.tientrinhtotnghiep');
 	const colors = ['#14B8A6', '#FACC15'];
 	const xAxis = ['GPA', 'CPA'];
 	const yAxis = [
@@ -13,40 +14,26 @@ const CardKetQuaHocTapDashboard = () => {
 	];
 
 	return (
-		<Card className='dashboard-stat-card' loading={loading} style={{ borderRadius: 8 }}>
+		<Card className='dashboard-stat-card' variant='borderless' loading={loading}>
 			<div
 				className='dashboard-stat-content'
-				style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 16 }}
+				style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12 }}
 			>
 				<div>
 					<div className='header'>
 						<div className='title'>
-							Kết quả học tập <InfoCircleOutlined style={{ color: '#007aff', marginLeft: 6 }} />{' '}
+							Kết quả học tập{' '}
+							<Link to='/hoc-tap/ket-qua-hoc-tap'>
+								<ArrowRightOutlined />
+							</Link>
 						</div>
 						<div
 							className='header-tag'
 							style={{
-								background:
-									recTienTrinh?.kqhtHocKy?.hocLucHocKy === 'Xuất sắc'
-										? 'rgb(8, 167, 207)'
-										: recTienTrinh?.kqhtHocKy?.hocLucHocKy === 'Giỏi'
-											? '#22c55e'
-											: recTienTrinh?.kqhtHocKy?.hocLucHocKy === 'Khá'
-												? '#f59e42'
-												: recTienTrinh?.kqhtHocKy?.hocLucHocKy === 'Trung bình'
-													? '#facc15'
-													: recTienTrinh?.kqhtHocKy?.hocLucHocKy === 'Yếu'
-														? '#ef4444'
-														: '#e5e7eb',
-								color: '#fff',
-								borderRadius: 8,
-								display: 'inline-block',
-								fontWeight: 500,
-								fontSize: 13,
-								marginLeft: 12,
+								background: colorLoaiHocLuc[recTienTrinh?.kqhtHocKy?.hocLucHocKy ?? ELoaiHocLuc.EMPTY],
 							}}
 						>
-							{recTienTrinh?.kqhtHocKy?.hocLucHocKy || 'Chưa có'}
+							{recTienTrinh?.kqhtHocKy?.hocLucHocKy || ELoaiHocLuc.EMPTY}
 						</div>
 					</div>
 

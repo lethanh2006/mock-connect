@@ -1,4 +1,6 @@
 .dashboard-stat-card {
+  border-radius: 8px;
+
   .header {
     display: flex;
     justify-content: space-between;
@@ -26,25 +28,23 @@
   }
 
   .color-line:first-child {
-      border-top-left-radius: 8px; 
-      border-bottom-left-radius: 8px; 
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
   }
 
   .color-line:last-child {
-      border-top-right-radius: 8px; 
-      border-bottom-right-radius: 8px; 
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
   }
 
   .header-tag {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
     padding: 2px 6px;
     border-radius: 8px;
-    // background-color: #f0f0f0;
     color: white;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 400;
+    text-shadow: 1px 1px 3px rgba(0, 0, 50, 0.1);
   }
 
   .description {
@@ -68,7 +68,7 @@
     }
 
     &.highlight {
-      background-color: #fde6e6;
+      background-color: #f3f3f3b6;
       padding: 8px 14px;
       transition: .3s;
 
@@ -196,67 +196,67 @@
     width: 300px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
   .training-title {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 16px;
   }
-  
+
   .progress-bar-container {
     position: relative;
     margin-bottom: 16px;
   }
-  
+
   .score-badge {
     position: absolute;
     top: -10px;
     left: 68%;
     transform: translateX(-50%);
   }
-  
+
   .score-legend {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 8px;
     font-size: 12px;
   }
-  
+
   .legend-item {
     display: flex;
     align-items: center;
   }
-  
+
   .color-dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
     margin-right: 8px;
   }
-  
+
   .low {
     background-color: #d9d9d9;
   }
-  
+
   .weak {
     background-color: #ff4d4f;
   }
-  
+
   .average {
     background-color: #ffec3d;
   }
-  
+
   .good {
     background-color: #40a9ff;
   }
-  
+
   .great {
     background-color: #73d13d;
   }
-  
+
   .excellent {
     background-color: #237804;
   }
-  
+
 
 }
