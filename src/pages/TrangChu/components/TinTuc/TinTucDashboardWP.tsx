@@ -1,7 +1,7 @@
 import { Title } from '@/pages/TinTuc/Wordpress/components/Title';
 import { getImageSrc } from '@/pages/TinTuc/Wordpress/utils/getImageSrc';
 import { landingUrl } from '@/services/base/constant';
-import { Col, Empty, Row, Spin } from 'antd';
+import { Card, Col, Empty, Row, Spin } from 'antd';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect } from 'react';
@@ -28,18 +28,7 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 
 	return (
 		<>
-			<div
-				style={{
-					maxHeight: 400,
-					overflowY: 'auto',
-					overflowX: 'hidden',
-					// padding: '0 5px 0 2px'
-					padding: 0,
-					margin: 0,
-					backgroundColor: '#fff',
-					borderRadius: 8,
-				}}
-			>
+			<Card variant='borderless' style={{ borderRadius: 8 }}>
 				<Spin spinning={loading}>
 					{isEmpty(danhSachTinTuc) ? (
 						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ paddingTop: 32 }} description='Chưa có tin tức' />
@@ -182,7 +171,7 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 						</Row>
 					)}
 				</Spin>
-			</div>
+			</Card>
 		</>
 	);
 };

@@ -438,7 +438,7 @@ const CardBaiTapDashboard = () => {
 			{/* Modal xem trước file */}
 			<Modal
 				title={`Xem trước: ${previewModal.fileName}`}
-				visible={previewModal.visible}
+				open={previewModal.visible}
 				onCancel={() => setPreviewModal({ ...previewModal, visible: false })}
 				width='90%'
 				className='preview-modal'
