@@ -76,6 +76,11 @@ const ColumnChart = (props: DataChartType) => {
 				formatter: (val: number) => (formatY ? formatY(val) : tienVietNam(val)),
 			},
 		},
+		grid: {
+			borderColor: '#e0e0e0',
+			strokeDashArray: 4,
+			xaxis: { lines: { show: false } },
+		},
 	};
 
 	const series = yLabel.map((y, index) => ({
