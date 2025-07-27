@@ -190,7 +190,7 @@ const CardDienDanDashboard = () => {
 			}
 			loading={loading}
 		>
-			<Card variant='borderless' style={{ borderRadius: 8 }}>
+			<Card variant='borderless' style={{ borderRadius: 8, maxHeight: '400px', overflowX: 'scroll' }}>
 				{displayData.length ? (
 					displayData.map((item, index) => renderDiscussionItem(item, index))
 				) : (
