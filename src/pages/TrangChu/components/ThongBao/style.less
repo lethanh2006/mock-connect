@@ -57,7 +57,7 @@
 	flex: 1; /* Chiếm hết không gian còn lại */
 	display: flex;
 	height: 100%;
-	margin-top: 16px;
+	margin-top: 8px; /* Giảm từ 16px xuống 8px */
 	justify-content: space-between;
 	// align-items: center; /* Căn giữa nội dung theo chiều dọc */
 
@@ -65,7 +65,7 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
+		justify-content: flex-start; /* Thay đổi từ space-between thành flex-start */
 
 		.notice-title {
 			font-size: 14px;
@@ -77,6 +77,8 @@
 			-webkit-line-clamp: 2;
 			-webkit-box-orient: vertical;
 			overflow: hidden;
+			min-height: 48px;
+			margin-bottom: 8px; /* Thêm margin-bottom để tạo khoảng cách với date */
 		}
 
 		.notice-date {
