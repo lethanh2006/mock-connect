@@ -59,10 +59,13 @@ const BarChart = (props: DataChartType) => {
 		xaxis: { categories: xAxis },
 		tooltip: {
 			y: { formatter: (val: number) => (formatY ? formatY(val) : tienVietNam(val)) },
+			intersect: false,
+			shared: true,
 		},
 		grid: {
 			borderColor: '#e0e0e0',
-			strokeDashArray: 4,
+			strokeDashArray: 2,
+			xaxis: { lines: { show: true } },
 			yaxis: { lines: { show: false } },
 		},
 		legend: { show: yLabel.length > 1 },
