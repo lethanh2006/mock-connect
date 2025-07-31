@@ -19,7 +19,7 @@ import './style.less';
 const { Text } = Typography;
 
 const CardBaiTapDashboard = () => {
-	const { danhSach, loading } = useModel('daotao.baitap');
+	const { danhSach } = useModel('daotao.baitap');
 	const [currentPage, setCurrentPage] = useState(0);
 	const [carouselRef, setCarouselRef] = useState<any>(null);
 	const [previewModal, setPreviewModal] = useState<{
@@ -106,30 +106,12 @@ const CardBaiTapDashboard = () => {
 		}
 	};
 
-	// Hàm lấy kích thước file (nếu có thể)
-	const getFileSize = async (url: string): Promise<string> => {
-		try {
-			const response = await fetch(url, { method: 'HEAD' });
-			const contentLength = response.headers.get('content-length');
-			if (contentLength) {
-				const bytes = parseInt(contentLength);
-				if (bytes < 1024) return `${bytes} B`;
-				if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-				return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-			}
-		} catch (error) {
-			console.error('Error getting file size:', error);
-		}
-		return 'Unknown';
-	};
-
 	// Thêm hàm helper để cắt tên file
 	const truncateFileName = (fileName: string, maxLength: number = 25): string => {
 		if (fileName.length <= maxLength) return fileName;
 
 		const lastDotIndex = fileName.lastIndexOf('.');
 		if (lastDotIndex === -1) {
-			// Không có extension
 			return fileName.substring(0, maxLength - 3) + '...';
 		}
 
@@ -242,16 +224,11 @@ const CardBaiTapDashboard = () => {
 	// Component hiển thị file
 	const FileItem = ({ fileUrl, index }: { fileUrl: string; index: number }) => {
 		const fileName = getFileNameFromUrl(fileUrl);
-		const [fileSize, setFileSize] = useState<string>('...');
 		const isMobile = screenSize.width <= 768;
 
 		// Xác định độ dài tối đa dựa trên kích thước màn hình
 		const maxFileNameLength = isMobile ? 20 : 30;
 		const displayFileName = truncateFileName(fileName, maxFileNameLength);
-
-		useEffect(() => {
-			getFileSize(fileUrl).then(setFileSize);
-		}, [fileUrl]);
 
 		return (
 			<div key={index} className={`file-item ${isMobile ? 'mobile' : ''}`}>
@@ -263,7 +240,7 @@ const CardBaiTapDashboard = () => {
 					>
 						{displayFileName}
 					</Text>
-					<Text className={`file-size ${isMobile ? 'mobile' : ''}`}>{fileSize}</Text>
+					{/* <Text className={`file-size ${isMobile ? 'mobile' : ''}`}>{fileSize}</Text> */}
 				</div>
 				<FileActionPopover fileUrl={fileUrl} fileName={fileName} />
 			</div>
@@ -349,19 +326,19 @@ const CardBaiTapDashboard = () => {
 			<div className={`card-baitap-dashboard ${isMobile ? 'mobile' : ''}`}>
 				{/* Header */}
 				<div className={`header ${isMobile ? 'mobile' : ''}`}>
-					<Text className={`title ${isMobile ? 'mobile' : ''} card-baitap-title`}>Bài tập, bài kiểm tra</Text>
+					<Text className={`title ${isMobile ? 'mobile' : ''}`}>Bài tập, bài kiểm tra</Text>
 					<Space size={isMobile ? 'small' : 'middle'} className='navigation-buttons'>
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='left' disabled={filteredData.length == 0} />}
 							disabled
-							className='nav-button'
+							className='nav-btn'
 						/>
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='right' disabled={filteredData.length == 0} />}
 							disabled
-							className='nav-button'
+							className='nav-btn'
 						/>
 						<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
 							Xem tất cả
@@ -400,14 +377,14 @@ const CardBaiTapDashboard = () => {
 						icon={<SlideButtonIcon direction='left' disabled={currentPage === 0} />}
 						onClick={handlePrevious}
 						disabled={currentPage === 0}
-						className='nav-button'
+						className='nav-btn'
 					/>
 					<Button
 						type='text'
 						icon={<SlideButtonIcon direction='right' disabled={currentPage >= totalPages - 1} />}
 						onClick={handleNext}
 						disabled={currentPage >= totalPages - 1}
-						className='nav-button'
+						className='nav-btn'
 					/>
 					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
 						Xem thêm

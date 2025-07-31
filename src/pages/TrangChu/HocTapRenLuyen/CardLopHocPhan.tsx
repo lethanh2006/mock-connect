@@ -90,36 +90,21 @@ const CardLopHocPhan = () => {
 				<div style={{ display: 'flex', gap: 8, marginRight: 8, alignItems: 'center' }}>
 					{/* Custom Carousel Navigation */}
 					{danhSachLHP.length > 0 && (
-						<div style={{ display: 'flex', gap: 8 }}>
+						<div className='navigation-buttons'>
 							<Button
 								type='text'
-								icon={<SlideButtonIcon direction='left' />}
+								icon={<SlideButtonIcon direction='left' disabled={filteredData.length == 0} />}
+								disabled={filteredData.length == 0}
 								onClick={handlePrevSlide}
-								style={{
-									color: '#8d8d8d',
-									width: 32,
-									height: 32,
-									borderRadius: 4,
-									border: 'none',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}
+								className='nav-btn'
 							/>
+
 							<Button
 								type='text'
-								icon={<SlideButtonIcon direction='right' />}
+								icon={<SlideButtonIcon direction='right' disabled={filteredData.length == 0} />}
+								disabled={filteredData.length == 0}
 								onClick={handleNextSlide}
-								style={{
-									width: 32,
-									color: '#8d8d8d',
-									height: 32,
-									borderRadius: 4,
-									border: 'none',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}
+								className='nav-btn'
 							/>
 						</div>
 					)}

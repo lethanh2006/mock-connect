@@ -7,12 +7,12 @@ import {
 	ENguoiTraLoiDrl,
 	TU_DANH_GIA_PREFIX,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Space, Tooltip } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { history, useModel } from 'umi';
 
 const CardRenLuyenDashboard = () => {
 	const { getAllModel, record: recDot, setRecord, loading } = useModel('diemrenluyenv2.dot');
@@ -183,9 +183,15 @@ const CardRenLuyenDashboard = () => {
 					<div className='title'>
 						Kết quả rèn luyện <span style={{ fontWeight: 400, fontSize: '12px', color: '#ababab' }}>(Hiện tại)</span>
 					</div>
-					<Link to='/diem-ren-luyen/phieu-diem-ren-luyen' title='Xem chi tiết'>
-						<ArrowRightOutlined />
-					</Link>
+
+					<div>
+						<Tooltip title='Xem chi tiết'>
+							<InfoCircleOutlined
+								className='more-info'
+								onClick={() => history.push('/diem-ren-luyen/phieu-diem-ren-luyen')}
+							/>
+						</Tooltip>
+					</div>
 				</div>
 
 				<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
