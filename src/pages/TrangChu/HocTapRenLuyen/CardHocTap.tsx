@@ -1,7 +1,7 @@
 import DonutChart from '@/components/Chart/DonutChart';
 import { colorLoaiHocLuc, ELoaiHocLuc } from '@/services/HocTap/constant';
-import { ArrowRightOutlined } from '@ant-design/icons';
-import { Card, Col, Row, Space } from 'antd';
+import { ArrowRightOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Card, Col, Row, Space, Tooltip } from 'antd';
 import { history, Link, useModel } from 'umi';
 
 const CardKetQuaHocTapDashboard = () => {
@@ -23,9 +23,9 @@ const CardKetQuaHocTapDashboard = () => {
 					<div className='header'>
 						<div className='title'>
 							Kết quả học tập{' '}
-							<Link to='/hoc-tap/ket-qua-hoc-tap'>
-								<ArrowRightOutlined />
-							</Link>
+							<Tooltip title='Xem chi tiết'>
+								<InfoCircleOutlined className='more-info' onClick={() => history.push(`/hoc-tap/ket-qua-hoc-tap`)} />
+							</Tooltip>
 						</div>
 						<div
 							className='header-tag'

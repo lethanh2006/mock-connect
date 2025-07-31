@@ -24,3 +24,41 @@
 		margin: 0 10px;
 	}
 }
+
+.card-title {
+	font-size: 18px;
+	@media (max-width: 768px) {
+		font-size: 14px;
+		white-space: nowrap; // Không cho xuống dòng
+		overflow: hidden; // Ẩn phần vượt quá
+		text-overflow: ellipsis; // Thêm dấu "..." nếu bị cắt
+		margin-left: 4px;
+	}
+}
+
+.navigation-buttons {
+	display: flex;
+	gap: 4px;
+
+	.nav-btn {
+		border: none;
+		box-shadow: none;
+		color: #8c8c8c;
+		width: 32px;
+		height: 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 6px;
+
+		&:disabled {
+			color: #d9d9d9;
+			background: transparent;
+		}
+	}
+}
+
+.more-info {
+	color: #007aff;
+	margin-left: 8px;
+}

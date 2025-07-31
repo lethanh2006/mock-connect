@@ -1,10 +1,10 @@
 import DonutChart from '@/components/Chart/DonutChart';
 import { EOperatorType } from '@/components/Table/constant';
 import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import { ArrowRightOutlined } from '@ant-design/icons';
-import { Card, Col, Empty, Row, Space } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Card, Col, Empty, Row, Space, Tooltip } from 'antd';
 import { useEffect } from 'react';
-import { Link, useModel } from 'umi';
+import { history, useModel } from 'umi';
 import './style.less';
 
 const CardCongNoDashboard = () => {
@@ -152,9 +152,12 @@ const CardCongNoDashboard = () => {
 							Công nợ
 							<span className='subtitle'>(Triệu đồng)</span>
 						</div>
-						<Link to='/tai-chinh/cong-no' title='Xem chi tiết'>
-							<ArrowRightOutlined />
-						</Link>
+
+						<div>
+							<Tooltip title='Xem chi tiết'>
+								<InfoCircleOutlined className='more-info' onClick={() => history.push('/tai-chinh/cong-no')} />
+							</Tooltip>
+						</div>
 					</div>
 
 					{danhSach.length ? (

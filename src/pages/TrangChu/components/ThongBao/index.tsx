@@ -4,7 +4,8 @@ import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
-import './style.less'; // CSS file for custom styling
+import '../style.less';
+
 const { Title } = Typography;
 
 const CardThongBaoDashboard = () => {
@@ -28,10 +29,10 @@ const CardThongBaoDashboard = () => {
 	};
 
 	return (
-		<Card className='thongbao-wrapper' variant='borderless' loading={loading} styles={{ body: { padding: 0 } }}>
+		<Card className='wrapper' variant='borderless' loading={loading} styles={{ body: { padding: 0 } }}>
 			{/* Header */}
-			<div className='thongbao-header'>
-				<Title level={4} className='thongbao-title'>
+			<div className='header-tb-sk'>
+				<Title level={5} className='title'>
 					Thông báo
 				</Title>
 				<div className='navigation-buttons'>
@@ -54,21 +55,22 @@ const CardThongBaoDashboard = () => {
 
 			{/* Nội dung chính */}
 			{danhSachThongBao.length > 0 ? (
-				<>
-					{/* Current Notice Card */}
-					<div
-						key={currentNotice?._id || currentIndex}
-						className='notice-card fade-in'
-						onClick={() => handleNoticeClick(currentNotice)}
-					>
-						<div className='notice-content'>
-							<div className='notice-title'>{currentNotice.title}</div>
-							<div className='notice-date'>{moment(currentNotice.createdAt).format('DD/MM/YYYY')}</div>
+				<div
+					key={currentNotice?._id || currentIndex}
+					className='card fade-in'
+					onClick={() => handleNoticeClick(currentNotice)}
+				>
+					<div className='content'>
+						<div className='details'>
+							<div className='title'>{currentNotice.title}</div>
+							<div className='footer'>
+								<div className='date'>{moment(currentNotice.createdAt).format('DD/MM/YYYY')}</div>
+							</div>
 						</div>
 					</div>
-				</>
+				</div>
 			) : (
-				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' className='notice-empty' />
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' className='empty' />
 			)}
 
 			{/* Modal */}

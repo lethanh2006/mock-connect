@@ -190,21 +190,23 @@ const LichDashboard = () => {
 			<div className='calendar-container'>
 				{/* Header với tên tháng và navigation */}
 				<div className={`calendar-header ${responsiveClass}`}>
-					<Typography.Title level={isMobile ? 5 : 5} className={`calendar-title ${responsiveClass}`}>
+					<Typography.Title level={5} className={`calendar-title ${responsiveClass}`}>
 						Tháng {currentMonth.format('M/YYYY')}
 					</Typography.Title>
-					<div className={`calendar-nav ${responsiveClass}`}>
+					<div className={`${responsiveClass} navigation-buttons`}>
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='left' />}
 							onClick={() => setCurrentMonth(currentMonth.clone().subtract(1, 'month'))}
 							size={isMobile ? 'small' : 'middle'}
+							className='nav-btn'
 						/>
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='right' />}
 							onClick={() => setCurrentMonth(currentMonth.clone().add(1, 'month'))}
 							size={isMobile ? 'small' : 'middle'}
+							className='nav-btn'
 						/>
 					</div>
 				</div>
