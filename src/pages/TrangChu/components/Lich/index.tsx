@@ -235,6 +235,7 @@ const LichDashboard = () => {
 								const isCurrentMonth = date.month() === currentMonth.month();
 								const isToday = date.isSame(moment(), 'day');
 								const isSelected = date.isSame(selectedDate, 'day');
+								const isSelectedToday = isToday && isSelected;
 
 								return (
 									<div
@@ -250,8 +251,8 @@ const LichDashboard = () => {
 									>
 										<div
 											className={`date-number ${responsiveClass} ${isSmallMonth ? 'small-month' : ''} ${
-												isToday ? 'today' : ''
-											} ${isSelected ? 'selected' : ''} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
+												isSelectedToday ? 'selected-today' : isToday ? 'today' : isSelected ? 'selected' : ''
+											} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
 										>
 											{date.format('DD')}
 										</div>
