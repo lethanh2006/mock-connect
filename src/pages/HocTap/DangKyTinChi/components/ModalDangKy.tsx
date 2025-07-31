@@ -2,15 +2,14 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	ColorTrangThaiDangKyTinChi,
-	ETrangThaiDangKyTinChi,
-	LoaiHocPhanDangKyTinChi,
-	type ELoaiHocPhanDangKyTinChi,
+	ETrangThaiDangKyTinChi
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { SyncOutlined } from '@ant-design/icons';
 import { Button, Card, Modal, Tag, message } from 'antd';
 import pLimit from 'p-limit';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import ReCAPTCHA from "react-google-recaptcha";
 import { useModel } from 'umi';
 
 const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.ILopDangKy[] }) => {
@@ -27,7 +26,17 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 	} = useModel('daotao.dotdangkytinchi');
 	const [danhSachDangKy, setDanhSachDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp mới thêm
 	const [formSubmiting, setFormSubmiting] = useState<boolean>();
+	const [isVerified, setIsVerified] = useState<boolean>(false);
+	const captchaRef = useRef<ReCAPTCHA>(null);
 	const canRegister = danhSachDangKy.filter((item) => item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY).length > 0;
+
+	const handleCaptchaChange = (token: string | null) => {
+    if (token) {
+      setIsVerified(true);
+    } else {
+      setIsVerified(false);
+    }
+  };
 
 	const postDangKy = async () => {
 		setFormSubmiting(true);
@@ -59,7 +68,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 						);
 			}),
 		);
-
+		if (isVerified) {
 		Promise.all(promises)
 			.then()
 			.finally(() => {
@@ -72,7 +81,16 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 					setFormSubmiting(false);
 				}, 1000);
 			});
+		}
 	};
+
+	useEffect(() => {
+		if (visibleRegister) {
+			debugger
+			setIsVerified(false);
+			captchaRef.current?.reset();
+		}
+	}, [visibleRegister]);
 
 	useEffect(() => {
 		// Lấy lại danh sách các lớp tín chỉ mới chọn
@@ -100,7 +118,11 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 					) : null}
 				</>
 			),
-			onOk: postDangKy,
+			onOk: async () => {
+				await postDangKy();
+				setIsVerified(false);
+				captchaRef.current?.reset();
+			},
 		});
 	};
 
@@ -172,8 +194,19 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 					otherProps={{ pagination: false, scroll: { y: 600 } }}
 				/>
 
+				<ReCAPTCHA 
+					ref={captchaRef}
+					style={{
+						margin: '12px auto',
+						display: 'flex',
+						justifyContent: 'center',
+					}} 
+					sitekey='6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh' 
+					onChange={handleCaptchaChange}
+				/>
+
 				<div className='form-footer'>
-					<Button onClick={onRegister} type='primary' loading={formSubmiting} disabled={!canRegister}>
+					<Button onClick={onRegister} type='primary' loading={formSubmiting} disabled={!canRegister || !isVerified}>
 						Xác nhận
 					</Button>
 					<Button onClick={() => setVisibleRegister(false)} disabled={formSubmiting}>
