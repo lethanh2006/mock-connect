@@ -1,7 +1,7 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/CardBaiTap';
-import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/CardDienDan';
 
+import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
+import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Card, Col, Row, Typography } from 'antd';
@@ -24,11 +24,13 @@ const LopHocPhanPage = () => {
 	});
 
 	// Background images array
-	const bg1 = '/images/isolation-mode-1.png';
-	const bg2 = '/images/isolation-mode-2.png';
-	const bg3 = '/images/isolation-mode-3.png';
-	const bg4 = '/images/isolation-mode-4.png';
-	const backgrounds = [bg1, bg2, bg3, bg4];
+	const bg1 = '/images/isolation-mode-1.svg';
+	const bg2 = '/images/isolation-mode-2.svg';
+	const bg3 = '/images/isolation-mode-3.svg';
+	const bg4 = '/images/isolation-mode-4.svg';
+	const bg5 = '/images/isolation-mode-5.svg';
+	const bg6 = '/images/isolation-mode-6.svg';
+	const backgrounds = [bg1, bg2, bg3, bg4, bg5, bg6];
 
 	// Handle window resize
 	useEffect(() => {
@@ -48,8 +50,8 @@ const LopHocPhanPage = () => {
 			sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
 			// Gọi API lấy dữ liệu bài tập cho thống kê
 			// Có thể điều chỉnh startDate và endDate theo nhu cầu
-			const startDate = new Date(recHocKy?.ngayBatDau || Date.now());
-			const endDate = new Date(recHocKy?.ngayKetThuc || Date.now());
+			const startDate = new Date(recHocKy?.thoiGianBatDau || Date.now());
+			const endDate = new Date(recHocKy?.thoiGianKetThuc || Date.now());
 			thongKeBaiTapModel(startDate, endDate);
 		}
 	};

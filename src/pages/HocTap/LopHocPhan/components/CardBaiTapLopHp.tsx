@@ -104,6 +104,7 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 	return (
 		<Card
 			title='Bài tập, bài kiểm tra'
+			variant='borderless'
 			headStyle={{ border: 'none' }}
 			style={{ borderRadius: '8px', boxShadow: '0px 0px 12px 0px #0000000A' }}
 			extra={
