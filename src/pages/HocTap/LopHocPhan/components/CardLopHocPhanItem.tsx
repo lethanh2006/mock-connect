@@ -55,23 +55,25 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, bac
 				</Title>
 
 				<div className='card-lhp-row'>
-					<Text>Mã lớp (nhóm):</Text>
+					<span>Mã lớp (nhóm):</span>
 					<Text strong>{lop.maLop}</Text>
 				</div>
 
 				<div className='card-lhp-row'>
-					<Text>Tên lớp:</Text>
+					<span>Tên lớp:</span>
 					<Text strong>{lop.ten}</Text>
 				</div>
 
 				{lop?.diem?.diemHpSvHk?.diemKthp ? (
-					<Text className='card-lhp-score'>
-						<span>Điểm thi: </span>
-						<span>{lop?.diem?.diemHpSvHk?.diemKthp}</span>
-					</Text>
+					<div className='card-lhp-row'>
+						<span>Điểm thi:</span>
+						<Text strong style={{ color: '#007aff' }}>
+							{lop?.diem?.diemHpSvHk?.diemKthp}
+						</Text>
+					</div>
 				) : (
 					<div className='card-lhp-row'>
-						<Text>Tiến trình: </Text>
+						<span>Tiến trình: </span>
 						<Text strong>
 							{past} / {allThoiKhoaBieu.length}
 						</Text>
