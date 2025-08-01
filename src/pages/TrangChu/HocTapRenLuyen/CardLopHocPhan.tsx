@@ -82,59 +82,29 @@ const CardLopHocPhan = () => {
 
 	return (
 		<Card
-			title={<span className='card-loptinchi-title'>Lớp tín chỉ</span>}
-			style={{
-				background: 'transparent',
-				border: 'none',
-				marginBottom: 0,
-				boxShadow: 'none',
-				height: '100%',
-				margin: '0 -16px',
-			}}
-			headStyle={{
-				borderBottom: 'none',
-				background: 'transparent',
-				marginBottom: '-20px',
-				paddingBottom: 0,
-				padding: '0 16px',
-				fontSize: 18,
-				marginLeft: 16,
-			}}
+			variant='borderless'
+			className='card-borderless card-big-title'
+			title='Lớp tín chỉ'
 			loading={loading}
 			extra={
-				<div style={{ display: 'flex', gap: 16, marginRight: 8, alignItems: 'center' }}>
+				<div style={{ display: 'flex', gap: 8, marginRight: 8, alignItems: 'center' }}>
 					{/* Custom Carousel Navigation */}
 					{danhSachLHP.length > 0 && (
-						<div style={{ display: 'flex', gap: 8 }}>
+						<div className='navigation-buttons'>
 							<Button
 								type='text'
-								icon={<SlideButtonIcon direction='left' />}
+								icon={<SlideButtonIcon direction='left' disabled={filteredData.length == 0} />}
+								disabled={filteredData.length == 0}
 								onClick={handlePrevSlide}
-								style={{
-									color: '#8d8d8d',
-									width: 32,
-									height: 32,
-									borderRadius: 4,
-									border: 'none',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}
+								className='nav-btn'
 							/>
+
 							<Button
 								type='text'
-								icon={<SlideButtonIcon direction='right' />}
+								icon={<SlideButtonIcon direction='right' disabled={filteredData.length == 0} />}
+								disabled={filteredData.length == 0}
 								onClick={handleNextSlide}
-								style={{
-									width: 32,
-									color: '#8d8d8d',
-									height: 32,
-									borderRadius: 4,
-									border: 'none',
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-								}}
+								className='nav-btn'
 							/>
 						</div>
 					)}
@@ -215,7 +185,9 @@ const CardLopHocPhan = () => {
 					))}
 				</Carousel>
 			) : (
-				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
+				<Card variant='borderless' style={{ borderRadius: 8 }}>
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
+				</Card>
 			)}
 		</Card>
 	);

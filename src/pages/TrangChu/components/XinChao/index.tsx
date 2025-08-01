@@ -9,7 +9,7 @@ const WelcomeCard = () => {
 	const gif = 'images/welcome.gif';
 
 	return (
-		<Card className='welcome-card' loading={loading}>
+		<Card variant='borderless' className='welcome-card' loading={loading}>
 			{/* Background geometric shapes */}
 			<img className='background-frame' src={frame} alt='Background frame' />
 

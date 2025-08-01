@@ -2,7 +2,7 @@ import DonutChart from '@/components/Chart/DonutChart';
 import { EOperatorType } from '@/components/Table/constant';
 import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Col, Empty, Row, Space } from 'antd';
+import { Card, Col, Empty, Row, Space, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import './style.less';
@@ -144,7 +144,7 @@ const CardCongNoDashboard = () => {
 	});
 
 	return (
-		<Card className='dashboard-stat-card' loading={loading} style={{ borderRadius: 8 }}>
+		<Card className='dashboard-stat-card' variant='borderless' loading={loading}>
 			<div className='dashboard-stat-content'>
 				<div>
 					<div className='header'>
@@ -152,8 +152,11 @@ const CardCongNoDashboard = () => {
 							Công nợ
 							<span className='subtitle'>(Triệu đồng)</span>
 						</div>
+
 						<div>
-							<InfoCircleOutlined className='info-icon' onClick={() => history.push('/tai-chinh/cong-no')} />
+							<Tooltip title='Xem chi tiết'>
+								<InfoCircleOutlined className='more-info' onClick={() => history.push('/tai-chinh/cong-no')} />
+							</Tooltip>
 						</div>
 					</div>
 
