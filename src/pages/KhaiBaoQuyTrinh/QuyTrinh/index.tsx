@@ -119,7 +119,7 @@ const QuyTrinhPage = () => {
 	return (
 		<>
 			<div style={{ padding: '16px' }}>
-				<Title level={3} style={{ marginBottom: '24px' }}>
+				<Title level={4} style={{ marginBottom: '24px' }}>
 					Biểu mẫu dịch vụ
 				</Title>
 

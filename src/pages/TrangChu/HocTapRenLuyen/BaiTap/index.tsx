@@ -13,12 +13,13 @@ import { Button, Carousel, Empty, List, Modal, Popover, Space, Typography } from
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
-import SlideButtonIcon from '../components/SlideButtonIcon';
+import SlideButtonIcon from '../../components/SlideButtonIcon';
+import './style.less';
 
 const { Text } = Typography;
 
 const CardBaiTapDashboard = () => {
-	const { danhSach, loading } = useModel('daotao.baitap');
+	const { danhSach } = useModel('daotao.baitap');
 	const [currentPage, setCurrentPage] = useState(0);
 	const [carouselRef, setCarouselRef] = useState<any>(null);
 	const [previewModal, setPreviewModal] = useState<{
@@ -37,7 +38,7 @@ const CardBaiTapDashboard = () => {
 		height: window.innerHeight,
 	});
 
-	const assignmentBg = 'images/assignment-background.png';
+	const assignmentBg = 'images/assignment-background.svg';
 
 	// Responsive logic
 	const getItemsPerPage = () => {
@@ -105,30 +106,12 @@ const CardBaiTapDashboard = () => {
 		}
 	};
 
-	// Hàm lấy kích thước file (nếu có thể)
-	const getFileSize = async (url: string): Promise<string> => {
-		try {
-			const response = await fetch(url, { method: 'HEAD' });
-			const contentLength = response.headers.get('content-length');
-			if (contentLength) {
-				const bytes = parseInt(contentLength);
-				if (bytes < 1024) return `${bytes} B`;
-				if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-				return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-			}
-		} catch (error) {
-			console.error('Error getting file size:', error);
-		}
-		return 'Unknown';
-	};
-
 	// Thêm hàm helper để cắt tên file
 	const truncateFileName = (fileName: string, maxLength: number = 25): string => {
 		if (fileName.length <= maxLength) return fileName;
 
 		const lastDotIndex = fileName.lastIndexOf('.');
 		if (lastDotIndex === -1) {
-			// Không có extension
 			return fileName.substring(0, maxLength - 3) + '...';
 		}
 
@@ -153,23 +136,23 @@ const CardBaiTapDashboard = () => {
 		const ext = fileName.split('.').pop()?.toLowerCase();
 		switch (ext) {
 			case 'pdf':
-				return <FilePdfOutlined style={{ color: '#ff4d4f', fontSize: '18px' }} />;
+				return <FilePdfOutlined className='file-icon pdf' />;
 			case 'ppt':
 			case 'pptx':
-				return <FilePptOutlined style={{ color: '#ff7a45', fontSize: '18px' }} />;
+				return <FilePptOutlined className='file-icon ppt' />;
 			case 'doc':
 			case 'docx':
-				return <FileTextOutlined style={{ color: '#1890ff', fontSize: '18px' }} />;
+				return <FileTextOutlined className='file-icon doc' />;
 			case 'xls':
 			case 'xlsx':
-				return <FileTextOutlined style={{ color: '#52c41a', fontSize: '18px' }} />;
+				return <FileTextOutlined className='file-icon excel' />;
 			case 'jpg':
 			case 'jpeg':
 			case 'png':
 			case 'gif':
-				return <FileTextOutlined style={{ color: '#722ed1', fontSize: '18px' }} />;
+				return <FileTextOutlined className='file-icon image' />;
 			default:
-				return <FileTextOutlined style={{ color: '#1890ff', fontSize: '18px' }} />;
+				return <FileTextOutlined className='file-icon default' />;
 		}
 	};
 
@@ -218,21 +201,7 @@ const CardBaiTapDashboard = () => {
 				size='small'
 				dataSource={fileActions}
 				renderItem={(item) => (
-					<List.Item
-						style={{
-							cursor: 'pointer',
-							padding: '8px 16px',
-							borderRadius: '4px',
-							transition: 'background-color 0.2s',
-							border: 'none',
-							display: 'flex',
-							alignItems: 'center',
-							gap: '8px',
-						}}
-						onClick={() => handleAction(item.key)}
-						onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
-						onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-					>
+					<List.Item className='action-item' onClick={() => handleAction(item.key)}>
 						{item.icon}
 						{item.label}
 					</List.Item>
@@ -241,11 +210,11 @@ const CardBaiTapDashboard = () => {
 		);
 
 		return (
-			<Popover content={content} trigger='click' placement='bottomRight' overlayStyle={{ minWidth: '140px' }}>
+			<Popover content={content} trigger='click' placement='bottomRight' overlayClassName='file-action-popover'>
 				<Button
 					type='text'
 					icon={<MoreOutlined />}
-					style={{ color: '#8c8c8c', marginRight: '-6px' }}
+					className='file-action-button'
 					onClick={(e) => e.stopPropagation()}
 				/>
 			</Popover>
@@ -255,54 +224,23 @@ const CardBaiTapDashboard = () => {
 	// Component hiển thị file
 	const FileItem = ({ fileUrl, index }: { fileUrl: string; index: number }) => {
 		const fileName = getFileNameFromUrl(fileUrl);
-		const [fileSize, setFileSize] = useState<string>('...');
 		const isMobile = screenSize.width <= 768;
 
 		// Xác định độ dài tối đa dựa trên kích thước màn hình
 		const maxFileNameLength = isMobile ? 20 : 30;
 		const displayFileName = truncateFileName(fileName, maxFileNameLength);
 
-		useEffect(() => {
-			getFileSize(fileUrl).then(setFileSize);
-		}, [fileUrl]);
-
 		return (
-			<div
-				key={index}
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					gap: isMobile ? '8px' : '12px',
-					padding: isMobile ? '8px 10px' : '4px 12px',
-					borderRadius: '6px',
-					border: '1px solid rgba(240, 240, 240, 0.3)',
-					marginBottom: '8px',
-					backgroundColor: '#EFF1F9',
-				}}
-			>
+			<div key={index} className={`file-item ${isMobile ? 'mobile' : ''}`}>
 				{getFileIcon(fileName)}
-				<div style={{ flex: 1, minWidth: 0 }}>
+				<div className='file-info'>
 					<Text
-						style={{
-							fontSize: isMobile ? '13px' : '14px',
-							fontWeight: 500,
-							color: '#262626',
-							display: 'block',
-							wordBreak: 'break-all',
-						}}
+						className={`file-name ${isMobile ? 'mobile' : ''}`}
 						title={fileName} // Hiển thị tên file đầy đủ khi hover
 					>
 						{displayFileName}
 					</Text>
-					<Text
-						style={{
-							fontSize: isMobile ? '11px' : '12px',
-							color: '#8c8c8c',
-							display: 'block',
-						}}
-					>
-						{fileSize}
-					</Text>
+					{/* <Text className={`file-size ${isMobile ? 'mobile' : ''}`}>{fileSize}</Text> */}
 				</div>
 				<FileActionPopover fileUrl={fileUrl} fileName={fileName} />
 			</div>
@@ -314,106 +252,34 @@ const CardBaiTapDashboard = () => {
 		const isMobile = screenSize.width <= 768;
 
 		return (
-			<div
-				key={item._id + index}
-				style={{
-					backgroundColor: 'transparent',
-					borderRadius: '8px',
-					padding: isMobile ? '16px' : '20px',
-					border: '1px solid #ebebeb',
-					transition: 'all 0.2s ease',
-					height: isMobile ? 'auto' : '350px',
-					minHeight: isMobile ? '300px' : '350px',
-					display: 'flex',
-					flexDirection: 'column',
-					margin: isMobile ? '0' : '0 0.5px',
-					width: '100%',
-					boxSizing: 'border-box',
-				}}
-			>
+			<div key={item._id + index} className={`assignment-card ${isMobile ? 'mobile' : ''}`}>
 				{/* Top section: Subject Tag + Assignment Content */}
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						flex: 1,
-						backgroundColor: 'transparent',
-					}}
-				>
+				<div className='top-section'>
 					{/* Subject Tag */}
 					<div
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							gap: '8px',
-							marginBottom: '16px',
-							justifyContent: 'space-between',
-							cursor: 'pointer',
-							backgroundColor: 'transparent',
-						}}
+						className='subject-tag'
 						onClick={() => history.push(`/hoc-tap/lop-tin-chi/${item.assignment.lopHocPhanId}#bai-tap`)}
 					>
-						<Text
-							style={{
-								color: '#1890ff',
-								fontSize: isMobile ? '13px' : '14px',
-								fontWeight: 500,
-								backgroundColor: 'transparent',
-								overflow: 'hidden',
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								maxWidth: '80%',
-							}}
-						>
-							#{item.assignment.tenLopHocPhan}
-						</Text>
-						<ArrowRightOutlined style={{ fontSize: '12px', color: '#1890ff', flexShrink: 0 }} />
+						<Text className={`subject-name ${isMobile ? 'mobile' : ''}`}>#{item.assignment.tenLopHocPhan}</Text>
+						<ArrowRightOutlined className='arrow-icon' />
 					</div>
 
 					{/* Assignment Content - Giới hạn 3 dòng */}
-					<div style={{ flex: 1, minHeight: isMobile ? '60px' : '63px' }}>
-						<Text
-							style={{
-								fontSize: isMobile ? '13px' : '14px',
-								color: '#121212',
-								lineHeight: '1.5',
-								display: '-webkit-box',
-								WebkitLineClamp: 2,
-								WebkitBoxOrient: 'vertical',
-								overflow: 'hidden',
-								textOverflow: 'ellipsis',
-								fontWeight: 600,
-								maxHeight: isMobile ? '58px' : '63px',
-							}}
-						>
-							{item.assignment.noiDung}
-						</Text>
+					<div className={`assignment-content ${isMobile ? 'mobile' : ''}`}>
+						<Text className={`content-text ${isMobile ? 'mobile' : ''}`}>{item.assignment.noiDung}</Text>
 					</div>
 				</div>
 
 				{/* Bottom section: Files + Deadline */}
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						marginTop: isMobile ? '16px' : '20px',
-					}}
-				>
+				<div className={`bottom-section ${isMobile ? 'mobile' : ''}`}>
 					{/* Files Section */}
 					{files.length > 0 && (
-						<div style={{ marginBottom: isMobile ? '16px' : '20px' }}>
+						<div className={`files-section ${isMobile ? 'mobile' : ''}`}>
 							{files.slice(0, 2).map((fileUrl, fileIndex) => (
 								<FileItem key={fileIndex} fileUrl={fileUrl} index={fileIndex} />
 							))}
 							{files.length > 2 && (
-								<Text
-									style={{
-										fontSize: isMobile ? '12px' : '13px',
-										color: '#8c8c8c',
-										fontStyle: 'italic',
-										marginTop: '4px',
-									}}
-								>
+								<Text className={`more-files-text ${isMobile ? 'mobile' : ''}`}>
 									...và {files.length - 2} file khác
 								</Text>
 							)}
@@ -421,33 +287,9 @@ const CardBaiTapDashboard = () => {
 					)}
 
 					{/* Deadline */}
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'center',
-							paddingTop: isMobile ? '12px' : '16px',
-							borderTop: '1px solid rgba(240, 240, 240, 0.3)',
-							gap: '8px',
-						}}
-					>
-						<Text
-							style={{
-								fontSize: isMobile ? '13px' : '14px',
-								color: '#8c8c8c',
-								flexShrink: 0,
-							}}
-						>
-							Hạn nộp bài:
-						</Text>
-						<Text
-							style={{
-								fontSize: isMobile ? '13px' : '14px',
-								fontWeight: 500,
-								color: '#262626',
-								textAlign: 'right',
-							}}
-						>
+					<div className={`deadline-section ${isMobile ? 'mobile' : ''}`}>
+						<Text className={`deadline-label ${isMobile ? 'mobile' : ''}`}>Hạn nộp bài:</Text>
+						<Text className={`deadline-time ${isMobile ? 'mobile' : ''}`}>
 							{moment(item.assignment.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 						</Text>
 					</div>
@@ -460,40 +302,14 @@ const CardBaiTapDashboard = () => {
 		const isMobile = screenSize.width <= 768;
 
 		return (
-			<div
-				style={{
-					display: 'grid',
-					gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
-					gap: isMobile ? '16px' : '1px',
-					minHeight: isMobile ? 'auto' : '350px',
-					height: isMobile ? 'auto' : '350px',
-					borderRadius: 8,
-					padding: '0',
-					backgroundColor: 'transparent',
-					border: isMobile ? 'none' : '1px solid #f0f0f0',
-				}}
-			>
+			<div className={`page-cards ${isMobile ? 'mobile' : ''}`}>
 				{pageItems.map((item, index) => renderAssignmentCard(item, index))}
 
 				{/* Fill empty space if only 1 card on desktop */}
 				{pageItems.length === 1 && !isMobile && (
-					<div
-						style={{
-							background: 'transparent',
-							borderRadius: '8px',
-							border: '1px solid #f0f0f0',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							height: '350px',
-							minHeight: 350,
-							margin: '0 0.5px',
-						}}
-					>
+					<div className='empty-container'>
 						<Empty
-							style={{
-								margin: 'auto',
-							}}
+							style={{ margin: 'auto' }}
 							image={Empty.PRESENTED_IMAGE_SIMPLE}
 							description='Không còn bài tập khác'
 						/>
@@ -507,59 +323,22 @@ const CardBaiTapDashboard = () => {
 
 	if (!filteredData.length) {
 		return (
-			<div
-				style={{
-					borderRadius: '8px',
-					overflow: 'hidden',
-					border: 'none',
-					backgroundColor: 'transparent',
-					padding: isMobile ? '0 8px' : '0',
-				}}
-			>
+			<div className={`card-baitap-dashboard ${isMobile ? 'mobile' : ''}`}>
 				{/* Header */}
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-						backgroundColor: 'transparent',
-						flexWrap: isMobile ? 'wrap' : 'nowrap',
-						gap: isMobile ? '12px' : '0',
-					}}
-				>
-					<Text
-						className='card-baitap-title'
-						style={{
-							fontSize: isMobile ? '16px' : '18px',
-							fontWeight: 600,
-							color: '#000',
-							padding: '16px 0',
-							backgroundColor: 'transparent',
-							flexShrink: 0,
-						}}
-					>
-						Bài tập, bài kiểm tra
-					</Text>
-					<Space size={isMobile ? 'small' : 'middle'} style={{ gap: 8 }}>
+				<div className={`header ${isMobile ? 'mobile' : ''}`}>
+					<Text className={`title ${isMobile ? 'mobile' : ''}`}>Bài tập, bài kiểm tra</Text>
+					<Space size={isMobile ? 'small' : 'middle'} className='navigation-buttons'>
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='left' disabled={filteredData.length == 0} />}
 							disabled
-							style={{
-								color: '#bfbfbf',
-								backdropFilter: 'blur(2px)',
-								WebkitBackdropFilter: 'blur(2px)',
-							}}
+							className='nav-btn'
 						/>
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='right' disabled={filteredData.length == 0} />}
 							disabled
-							style={{
-								color: '#bfbfbf',
-								backdropFilter: 'blur(2px)',
-								WebkitBackdropFilter: 'blur(2px)',
-							}}
+							className='nav-btn'
 						/>
 						<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
 							Xem tất cả
@@ -569,37 +348,16 @@ const CardBaiTapDashboard = () => {
 
 				{/* Content - Empty State */}
 				<div
+					className='content-wrapper'
 					style={{
-						overflow: 'hidden',
-						backgroundColor: '#fff',
-						borderRadius: 8,
 						backgroundImage: isMobile ? 'none' : `url(${assignmentBg})`,
 						backgroundPosition: 'right',
 						backgroundRepeat: 'no-repeat',
 						backgroundSize: 'contain',
-						boxShadow: '0px 0px 6px 0px #0000000A',
 					}}
 				>
-					<div
-						style={{
-							gap: '1px',
-							minHeight: isMobile ? '200px' : '350px',
-							borderRadius: 8,
-							padding: '0',
-							backgroundColor: 'transparent',
-						}}
-					>
-						<div
-							style={{
-								background: 'transparent',
-								borderRadius: '8px',
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
-								height: isMobile ? '200px' : '350px',
-								margin: '0 0.5px',
-							}}
-						>
+					<div className={`empty-state-wrapper ${isMobile ? 'mobile' : ''}`}>
+						<div className={`empty-container ${isMobile ? 'mobile' : ''}`}>
 							<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập' />
 						</div>
 					</div>
@@ -609,62 +367,24 @@ const CardBaiTapDashboard = () => {
 	}
 
 	return (
-		<div
-			style={{
-				borderRadius: '8px',
-				overflow: 'hidden',
-				border: 'none',
-				backgroundColor: 'transparent',
-				padding: isMobile ? '6px' : '0',
-			}}
-		>
+		<div className={`card-baitap-dashboard ${isMobile ? 'mobile' : ''}`}>
 			{/* Header */}
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					backgroundColor: 'transparent',
-					flexWrap: isMobile ? 'wrap' : 'nowrap',
-					gap: isMobile ? '12px' : '0',
-				}}
-			>
-				<Text
-					style={{
-						fontSize: isMobile ? '16px' : '18px',
-						fontWeight: 600,
-						color: '#000',
-						padding: '16px 0',
-						backgroundColor: 'transparent',
-						flexShrink: 0,
-					}}
-				>
-					Bài tập, bài kiểm tra
-				</Text>
-				<Space size={isMobile ? 'small' : 'middle'} style={{ gap: 8 }}>
+			<div className={`header ${isMobile ? 'mobile' : ''}`}>
+				<Text className={`title ${isMobile ? 'mobile' : ''}`}>Bài tập, bài kiểm tra</Text>
+				<Space size={isMobile ? 'small' : 'middle'} className='navigation-buttons'>
 					<Button
 						type='text'
 						icon={<SlideButtonIcon direction='left' disabled={currentPage === 0} />}
 						onClick={handlePrevious}
 						disabled={currentPage === 0}
-						style={{
-							color: currentPage === 0 ? '#bfbfbf' : '#666',
-							backgroundColor: 'rgba(255, 255, 255, 0.7)',
-							backdropFilter: 'blur(2px)',
-							WebkitBackdropFilter: 'blur(2px)',
-						}}
+						className='nav-btn'
 					/>
 					<Button
 						type='text'
 						icon={<SlideButtonIcon direction='right' disabled={currentPage >= totalPages - 1} />}
 						onClick={handleNext}
 						disabled={currentPage >= totalPages - 1}
-						style={{
-							color: currentPage >= totalPages - 1 ? '#bfbfbf' : '#666',
-							backgroundColor: 'rgba(255, 255, 255, 0.7)',
-							backdropFilter: 'blur(2px)',
-							WebkitBackdropFilter: 'blur(2px)',
-						}}
+						className='nav-btn'
 					/>
 					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
 						Xem thêm
@@ -673,14 +393,7 @@ const CardBaiTapDashboard = () => {
 			</div>
 
 			{/* Content - Carousel */}
-			<div
-				style={{
-					overflow: 'hidden',
-					backgroundColor: '#fff',
-					borderRadius: 8,
-					boxShadow: '0px 0px 6px 0px #0000000A',
-				}}
-			>
+			<div className='content-wrapper'>
 				<Carousel
 					ref={setCarouselRef}
 					dots={false}
@@ -688,12 +401,9 @@ const CardBaiTapDashboard = () => {
 					speed={300}
 					easing='ease-in-out'
 					afterChange={handleSlideChange}
+					className={`carousel-container ${isMobile ? 'mobile' : ''}`}
 					style={{
 						backgroundImage: isMobile ? 'none' : `url(${assignmentBg})`,
-						borderRadius: 8,
-						backgroundPosition: 'right',
-						backgroundRepeat: 'no-repeat',
-						backgroundSize: 'contain',
 					}}
 				>
 					{pageData.map((pageItems, pageIndex) => (
@@ -705,10 +415,10 @@ const CardBaiTapDashboard = () => {
 			{/* Modal xem trước file */}
 			<Modal
 				title={`Xem trước: ${previewModal.fileName}`}
-				visible={previewModal.visible}
+				open={previewModal.visible}
 				onCancel={() => setPreviewModal({ ...previewModal, visible: false })}
 				width='90%'
-				style={{ top: 20 }}
+				className='preview-modal'
 				footer={[
 					<Button
 						key='download'
@@ -722,11 +432,11 @@ const CardBaiTapDashboard = () => {
 					</Button>,
 				]}
 			>
-				<div style={{ height: '70vh' }}>
+				<div className='modal-content'>
 					{previewModal.fileType === 'pdf' ? (
 						<PDFViewerV2 url={previewModal.fileUrl} height='100%' />
 					) : (
-						<div style={{ textAlign: 'center', padding: '50px' }}>
+						<div className='unsupported-preview'>
 							<Text>Không hỗ trợ xem trước loại file này</Text>
 						</div>
 					)}

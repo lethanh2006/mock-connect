@@ -1,12 +1,12 @@
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
-import { Button, Empty, Space, Tag, Typography } from 'antd';
+import { Button, Card, Empty, Space, Tag, Typography } from 'antd';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
-import './CardSuKienSapToi.less';
+import '../style.less';
 
 const { Title } = Typography;
 
@@ -140,11 +140,7 @@ const CardSuKienSapToi = () => {
 		const suKienSapToi = getSuKienSapToi();
 
 		if (isEmpty(suKienSapToi)) {
-			return (
-				<div className='event-empty'>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện sắp tới' />
-				</div>
-			);
+			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' className='empty' />;
 		}
 
 		const currentEvent = suKienSapToi[currentIndex];
@@ -153,24 +149,24 @@ const CardSuKienSapToi = () => {
 		return (
 			<div
 				key={currentEvent?._id || currentIndex}
-				className={`event-card fade-in`}
+				className={`card fade-in`}
 				onClick={() => handleEventClick(currentEvent)}
 			>
-				<div className='event-content'>
-					<div className='event-details'>
-						<div className='event-title'>{currentEvent.title || currentEvent.tenSuKien}</div>
+				<div className='content'>
+					<div className='details'>
+						<div className='title'>{currentEvent.title || currentEvent.tenSuKien}</div>
 
 						{/* {currentEvent.suffix && (
-							<div className="event-suffix">
+							<div className="suffix">
 								{currentEvent.suffix}
 							</div>
 						)} */}
-						<div className='event-footer'>
-							{/* <div className="event-time">
-                                {moment(currentEvent.thoiGianBatDau).format('HH:mm')}
-                            </div> */}
-							<div className='event-date'>{moment(currentEvent.thoiGianBatDau).format('DD/MM/YYYY')}</div>
-							<div className='event-tags'>
+						<div className='footer'>
+							{/* <div className="time">
+										{moment(currentEvent.thoiGianBatDau).format('HH:mm')}
+								</div> */}
+							<div className='date'>{moment(currentEvent.thoiGianBatDau).format('DD/MM/YYYY')}</div>
+							<div className='tags'>
 								<Space size={4} wrap>
 									<Tag
 										color={
@@ -198,27 +194,29 @@ const CardSuKienSapToi = () => {
 
 	return (
 		<>
-			<div
-				className='sukien-wrapper'
-				//  style={{ border: '1px solid #ebebeb' }}
+			<Card
+				className='wrapper'
+				variant='borderless'
+				loading={loadingSuKien || loadingTKB || loadingThi}
+				styles={{ body: { padding: 0 } }}
 			>
 				{/* Header */}
-				<div className='sukien-header'>
-					<Title level={4} className='sukien-title'>
+				<div className='header-tb-sk'>
+					<Title level={5} className='title'>
 						Sự kiện
 						{/* {!dataLichDashboard?.length && <span style={{ fontSize: '12px', color: '#999' }}>(Demo)</span>} */}
 					</Title>
 					<div className='navigation-buttons'>
 						<Button
 							type='text'
-							icon={<SlideButtonIcon direction='left' />}
+							icon={<SlideButtonIcon direction='left' disabled={getSuKienSapToi().length <= 1} />}
 							onClick={handlePrevious}
 							disabled={getSuKienSapToi().length <= 1}
 							className='nav-btn'
 						/>
 						<Button
 							type='text'
-							icon={<SlideButtonIcon direction='right' />}
+							icon={<SlideButtonIcon direction='right' disabled={getSuKienSapToi().length <= 1} />}
 							onClick={handleNext}
 							disabled={getSuKienSapToi().length <= 1}
 							className='nav-btn'
@@ -228,7 +226,7 @@ const CardSuKienSapToi = () => {
 
 				{/* Current Event */}
 				{renderCurrentEvent()}
-			</div>
+			</Card>
 
 			{/* Modal xem chi tiết sự kiện */}
 			{selectEvent && (

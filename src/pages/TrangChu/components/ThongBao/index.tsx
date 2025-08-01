@@ -1,18 +1,19 @@
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
-import { Button, Empty, Modal, Typography } from 'antd';
+import { Button, Card, Empty, Modal, Typography } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
-import './CardThongBao.less'; // CSS file for custom styling
+import '../style.less';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
-const CardThongBao = () => {
-	// const { danhSach: danhSachThongBao, setRecord, record } = useModel('thongbao.noticeicon');
-	const { danhSach: danhSachThongBao, setRecord, record } = useModel('thongbao.noticeicon');
+const CardThongBaoDashboard = () => {
+	const { danhSach: danhSachThongBao, setRecord, record, loading } = useModel('thongbao.noticeicon');
 	const [visibleThongBao, setVisibleThongBao] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
+
+	const currentNotice = danhSachThongBao[currentIndex];
 
 	const handlePrevious = () => {
 		setCurrentIndex((prev) => (prev > 0 ? prev - 1 : danhSachThongBao.length - 1));
@@ -27,16 +28,11 @@ const CardThongBao = () => {
 		setVisibleThongBao(true);
 	};
 
-	const currentNotice = danhSachThongBao[currentIndex];
-
 	return (
-		<div
-			className='thongbao-wrapper'
-			// style={{ border: '1px solid #ebebeb' }}
-		>
+		<Card className='wrapper' variant='borderless' loading={loading} styles={{ body: { padding: 0 } }}>
 			{/* Header */}
-			<div className='thongbao-header'>
-				<Title level={4} className='thongbao-title'>
+			<div className='header-tb-sk'>
+				<Title level={5} className='title'>
 					Thông báo
 				</Title>
 				<div className='navigation-buttons'>
@@ -59,23 +55,22 @@ const CardThongBao = () => {
 
 			{/* Nội dung chính */}
 			{danhSachThongBao.length > 0 ? (
-				<>
-					{/* Current Notice Card */}
-					<div
-						key={currentNotice?._id || currentIndex}
-						className='notice-card fade-in'
-						onClick={() => handleNoticeClick(currentNotice)}
-					>
-						<div className='notice-content'>
-							<div className='notice-title'>{currentNotice.title}</div>
-							<div className='notice-date'>{moment(currentNotice.createdAt).format('DD/MM/YYYY')}</div>
+				<div
+					key={currentNotice?._id || currentIndex}
+					className='card fade-in'
+					onClick={() => handleNoticeClick(currentNotice)}
+				>
+					<div className='content'>
+						<div className='details'>
+							<div className='title'>{currentNotice.title}</div>
+							<div className='footer'>
+								<div className='date'>{moment(currentNotice.createdAt).format('DD/MM/YYYY')}</div>
+							</div>
 						</div>
 					</div>
-				</>
-			) : (
-				<div className='notice-empty'>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có thông báo' />
 				</div>
+			) : (
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' className='empty' />
 			)}
 
 			{/* Modal */}
@@ -89,8 +84,8 @@ const CardThongBao = () => {
 			>
 				<ViewThongBao record={record} />
 			</Modal>
-		</div>
+		</Card>
 	);
 };
 
-export default CardThongBao;
+export default CardThongBaoDashboard;

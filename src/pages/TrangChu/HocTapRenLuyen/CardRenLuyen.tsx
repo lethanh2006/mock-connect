@@ -26,7 +26,6 @@ const CardRenLuyenDashboard = () => {
 		handleGetDiemMinhChungDRL,
 		dataDiemMinhChung,
 	} = useModel('diemrenluyenv2.bieumau');
-
 	const { initialState } = useModel('@@initialState');
 
 	const getData = async () => {
@@ -161,7 +160,7 @@ const CardRenLuyenDashboard = () => {
 		handleTinhDiemVaPhanLoai(formValues as any);
 	}, [formValuesTuDanhGiaVaDonViDanhGia, dataDiemMinhChung]);
 
-	const colors = ['#ecedf4', '#da2128', '#f2a11a', '#3583f0', '#0cb8ac', '#489e19'];
+	const colors = ['#d1d1d4', '#da2128', '#f2a11a', '#3583f0', '#0cb8ac', '#489e19'];
 	const text = ['Kém', 'Yếu', 'Trung bình', 'Khá', 'Tốt', 'Xuất sắc'];
 	const point = [
 		{ min: 0, max: 35 },
@@ -178,40 +177,20 @@ const CardRenLuyenDashboard = () => {
 	};
 
 	return (
-		<Card
-			className='dashboard-stat-card'
-			loading={loading}
-			style={{
-				height: '100%',
-				display: 'flex',
-				flexDirection: 'column',
-				borderRadius: 8,
-				justifyContent: 'space-between',
-			}}
-		>
-			<div
-				className='dashboard-stat-content'
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					justifyContent: 'space-between',
-					flex: 1,
-					height: '100%',
-					marginTop: 'auto',
-				}}
-			>
+		<Card variant='borderless' className='dashboard-stat-card' loading={loading}>
+			<div className='dashboard-stat-content'>
 				<div className='header'>
 					<div className='title'>
 						Kết quả rèn luyện <span style={{ fontWeight: 400, fontSize: '12px', color: '#ababab' }}>(Hiện tại)</span>
 					</div>
-					{/* <Link to='/diem-ren-luyen/phieu-diem-ren-luyen' title='Xem chi tiết'>
-						<ArrowRightOutlined />
-					</Link> */}
+
 					<div>
-						<InfoCircleOutlined
-							onClick={() => history.push('/diem-ren-luyen/phieu-diem-ren-luyen')}
-							style={{ color: '#007aff', marginLeft: 6 }}
-						/>
+						<Tooltip title='Xem chi tiết'>
+							<InfoCircleOutlined
+								className='more-info'
+								onClick={() => history.push('/diem-ren-luyen/phieu-diem-ren-luyen')}
+							/>
+						</Tooltip>
 					</div>
 				</div>
 
@@ -228,7 +207,8 @@ const CardRenLuyenDashboard = () => {
 									zIndex={10}
 									color={getColorBadge()}
 									key={item}
-									visible={show}
+									placement='top'
+									open={show}
 									title={`${tongDiemCTSVDanhGia} điểm`}
 									style={{ position: 'absolute', top: 0, left: 0, marginBottom: 8 }}
 								>
@@ -262,7 +242,7 @@ const CardRenLuyenDashboard = () => {
 				</div>
 
 				{/* Thanh màu và mốc điểm */}
-				<div style={{ position: 'relative', margin: '12px 0 8px 0', height: 40 }}>
+				<div style={{ position: 'relative', height: 40 }}>
 					{/* Mốc điểm */}
 					<div
 						style={{
