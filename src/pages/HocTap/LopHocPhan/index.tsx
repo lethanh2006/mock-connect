@@ -1,8 +1,7 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 
-import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/CardDienDan';
-
 import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
+import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Card, Col, Row, Typography } from 'antd';
@@ -51,8 +50,8 @@ const LopHocPhanPage = () => {
 			sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
 			// Gọi API lấy dữ liệu bài tập cho thống kê
 			// Có thể điều chỉnh startDate và endDate theo nhu cầu
-			const startDate = new Date(recHocKy?.ngayBatDau || Date.now());
-			const endDate = new Date(recHocKy?.ngayKetThuc || Date.now());
+			const startDate = new Date(recHocKy?.thoiGianBatDau || Date.now());
+			const endDate = new Date(recHocKy?.thoiGianKetThuc || Date.now());
 			thongKeBaiTapModel(startDate, endDate);
 		}
 	};
