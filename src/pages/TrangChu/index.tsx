@@ -8,8 +8,8 @@ import TinTucDashboardWrapper from './components/TinTuc/TinTucDashboardWrapper';
 import WelcomeCard from './components/XinChao';
 import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
 import CardBaiTapDashboard from './HocTapRenLuyen/BaiTap';
-import CardDienDanDashboard from './HocTapRenLuyen/CardDienDan';
 import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
+import CardDienDanDashboard from './HocTapRenLuyen/DienDan';
 import './styles.less';
 
 const TrangChu = () => {
