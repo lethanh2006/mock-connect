@@ -1,5 +1,75 @@
 .gioi-thieu-chung-content {
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+	overflow: hidden;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+}
+
+.card-lhp {
+	padding: 0;
+	margin: 0;
+
+	&-inner {
+		border-radius: 8px;
+		height: 100%;
+		cursor: pointer;
+		margin: 8px;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: right center;
+		background-color: #fceeee;
+		transition: all 0.3s ease;
+
+		&:hover {
+			transform: scale(1.005) translateY(-3px);
+		}
+	}
+
+	&-tag {
+		border-radius: 4px;
+		font-size: 12px;
+		padding: 2px 10px;
+		font-weight: 500;
+		background-color: transparent;
+		margin-bottom: 8px;
+	}
+
+	&-tag-completed {
+		color: #ff7677;
+		border: 1px solid rgb(253, 197, 191);
+	}
+
+	&-tag-progressing {
+		color: #52c41a;
+		border: 1px solid #b7eb8f;
+	}
+
+	&-title {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 100%;
+		margin-bottom: 8px;
+	}
+
+	&-row {
+		display: flex;
+		justify-content: space-between;
+		color: #6f6f6f;
+
+		strong {
+			font-weight: bold;
+		}
+	}
+
+	&-score {
+		color: #6f6f6f;
+		font-weight: 400;
+		display: flex;
+		justify-content: space-between;
+
+		span:last-child {
+			font-weight: bold;
+			color: #007aff;
+		}
+	}
 }
