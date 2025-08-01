@@ -7,6 +7,7 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Card, Modal, Pagination, Popconfirm, Tag, Typography, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
+import './style.less';
 
 const { Title, Text } = Typography;
 
@@ -118,74 +119,36 @@ const QuyTrinhPage = () => {
 
 	return (
 		<>
-			<div style={{ padding: '16px' }}>
-				<Title level={4} style={{ marginBottom: '24px' }}>
+			<div className='quy-trinh-page'>
+				<Title level={4} className='page-title'>
 					Biểu mẫu dịch vụ
 				</Title>
 
 				{/* Hiển thị loading state */}
 				{loading ? (
-					<div style={{ textAlign: 'center', padding: '40px' }}>
+					<div className='loading-container'>
 						<Text>Đang tải dữ liệu...</Text>
 					</div>
 				) : (
 					<>
 						{/* Danh sách quy trình */}
 						{danhSachQuyTrinh && danhSachQuyTrinh.length > 0 ? (
-							<div style={{ display: 'grid', gap: '16px' }}>
+							<div className='quy-trinh-grid'>
 								{danhSachQuyTrinh.map((quyTrinh: QuyTrinh.IRecord, index: number) => (
-									<Card
-										key={quyTrinh._id}
-										style={{
-											borderRadius: '8px',
-											border: '1px solid #f0f0f0',
-											boxShadow: '0px 0px 12px 0px #0000000A',
-										}}
-										bodyStyle={{ padding: '16px' }}
-									>
-										<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-											<div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
-												<div
-													style={{
-														width: '40px',
-														height: '40px',
-														backgroundColor: '#FFF2F2',
-														borderRadius: '4px',
-														display: 'flex',
-														alignItems: 'center',
-														justifyContent: 'center',
-														color: 'white',
-														fontSize: '16px',
-													}}
-												>
+									<Card key={quyTrinh._id} className='quy-trinh-card' bodyStyle={{ padding: '16px' }}>
+										<div className='card-content'>
+											<div className='card-main'>
+												<div className='card-icon'>
 													<img src='/images/folder-icon.png' alt='' width={24} />
 												</div>
 
-												<div style={{ flex: 1 }}>
-													<div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-														<Tag
-															color={getStatusColor(quyTrinh.order)}
-															style={{
-																borderRadius: '12px',
-																fontSize: '12px',
-																fontWeight: 500,
-																border: 'none',
-															}}
-														>
+												<div className='card-info'>
+													<div className='card-tags'>
+														<Tag color={getStatusColor(quyTrinh.order)} className='status-tag'>
 															● {getStatusText(quyTrinh.order)}
 														</Tag>
 													</div>
-													<Text
-														style={{
-															fontSize: '14px',
-															fontWeight: 600,
-															color: '#1f1f1f',
-															textTransform: 'uppercase',
-															letterSpacing: '0.5px',
-														}}
-													>
-														{quyTrinh.ten}
-													</Text>
+													<Text className='card-title'>{quyTrinh.ten}</Text>
 												</div>
 											</div>
 
@@ -199,15 +162,7 @@ const QuyTrinhPage = () => {
 															setRecordQuyTrinh(quyTrinh);
 															setVisibleThongTinChung(true);
 														}}
-														style={{
-															backgroundColor: '#FDE6E6',
-															color: '#DA2128',
-															borderRadius: '6px',
-															fontWeight: 500,
-															height: '36px',
-															paddingLeft: '16px',
-															paddingRight: '16px',
-														}}
+														className='use-button'
 													>
 														Sử dụng
 													</Button>
@@ -218,18 +173,7 @@ const QuyTrinhPage = () => {
 														okText='Sử dụng'
 														cancelText='Đóng'
 													>
-														<Button
-															type='primary'
-															style={{
-																backgroundColor: '#FDE6E6',
-																color: '#DA2128',
-																borderRadius: '6px',
-																fontWeight: 500,
-																height: '36px',
-																paddingLeft: '16px',
-																paddingRight: '16px',
-															}}
-														>
+														<Button type='primary' className='use-button'>
 															Sử dụng
 														</Button>
 													</Popconfirm>
@@ -240,7 +184,7 @@ const QuyTrinhPage = () => {
 								))}
 							</div>
 						) : (
-							<div style={{ textAlign: 'center', padding: '40px' }}>
+							<div className='empty-state'>
 								<Text type='secondary'>Không tìm thấy biểu mẫu nào</Text>
 							</div>
 						)}
@@ -249,24 +193,24 @@ const QuyTrinhPage = () => {
 
 				{/* Phân trang - chỉ hiển thị khi có dữ liệu */}
 				{total > 0 && (
-					<div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center' }}>
+					<div className='pagination-container'>
 						<Pagination
 							current={page}
 							pageSize={limit || 10}
 							total={total}
 							onChange={handlePaginationChange}
 							onShowSizeChange={handlePageSizeChange}
-							showSizeChanger
-							showQuickJumper
-							showTotal={(total, range) => (
-								<span style={{ marginRight: '16px' }}>
-									{range[0]}-{range[1]} của {total} mục
-								</span>
-							)}
+							// showSizeChanger
+							// showQuickJumper
+							// showTotal={(total, range) => (
+							// 	<span style={{ marginRight: '16px' }}>
+							// 		{range[0]}-{range[1]} của {total} mục
+							// 	</span>
+							// )}
 							pageSizeOptions={['5', '10', '20', '50']}
 							disabled={loading} // Disable phân trang khi đang loading
 							size='default'
-							style={{ marginTop: '16px' }}
+							className='pagination'
 						/>
 					</div>
 				)}
