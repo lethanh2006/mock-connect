@@ -1,9 +1,8 @@
 import { ArrowRightOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Empty, Tag, Typography } from 'antd';
+import { Avatar, Card, Empty, Tag, Typography } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
-
 const { Text } = Typography;
 
 const CardDienDanDashboard = () => {
@@ -172,123 +171,33 @@ const CardDienDanDashboard = () => {
 		);
 	};
 
-	if (!displayData.length) {
-		return (
-			<div
-				style={{
-					borderRadius: '8px',
-					overflow: 'hidden',
-					border: 'none',
-					backgroundColor: 'transparent',
-					// padding: '0 16px',
-				}}
-			>
-				{/* Header */}
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-						backgroundColor: 'transparent',
-						flexWrap: isMobile ? 'wrap' : 'nowrap',
-						gap: isMobile ? '12px' : '0',
-					}}
-				>
-					<Text
-						style={{
-							fontSize: isMobile ? '16px' : '18px',
-							fontWeight: 600,
-							color: '#000',
-							padding: '16px 0',
-							backgroundColor: 'transparent',
-							flexShrink: 0,
-						}}
-					>
-						Diễn đàn thảo luận <Tag>{displayData.length} alo</Tag>
-					</Text>
-
-					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
-						Xem tất cả
-					</Link>
-				</div>
-
-				{/* Content - Empty State */}
-				<div
-					style={{
-						overflow: 'hidden',
-						backgroundColor: '#fff',
-						borderRadius: 8,
-						minHeight: isMobile ? 'auto' : '350px',
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'center',
-						boxShadow: '0px 0px 6px 0px #0000000A',
-					}}
-				>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có diễn đàn' />
-				</div>
-			</div>
-		);
-	}
-
 	return (
-		<div
-			style={{
-				borderRadius: '8px',
-				overflow: 'hidden',
-				border: 'none',
-				backgroundColor: 'transparent',
-				padding: '0',
-			}}
-		>
-			{/* Header */}
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					backgroundColor: 'transparent',
-					flexWrap: isMobile ? 'wrap' : 'nowrap',
-					gap: isMobile ? '12px' : '0',
-				}}
-			>
-				<Text
-					style={{
-						fontSize: isMobile ? '16px' : '18px',
-						fontWeight: 600,
-						color: '#000',
-						padding: '16px 0',
-						backgroundColor: 'transparent',
-						flexShrink: 0,
-					}}
-				>
+		<Card
+			variant='borderless'
+			className='card-borderless card-big-title'
+			title={
+				<>
 					Diễn đàn thảo luận{' '}
 					<Tag color={displayData.length > 0 ? 'green' : ''} style={{ marginLeft: 8 }}>
 						{displayData.length}
 					</Tag>
-				</Text>
+				</>
+			}
+			extra={
 				<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
 					Xem thêm
 				</Link>
-			</div>
-
-			{/* Content */}
-			<div
-				style={{
-					overflow: 'hidden',
-					backgroundColor: '#fff',
-					borderRadius: 8,
-					padding: isMobile ? '16px' : '20px',
-					// maxHeight: isMobile ? '400px' : '450px',
-					overflowY: 'auto',
-					minHeight: isMobile ? '300px' : '350px',
-					height: '350px',
-					boxShadow: '0px 0px 6px 0px #0000000A',
-				}}
-			>
-				{displayData.map((item, index) => renderDiscussionItem(item, index))}
-			</div>
-		</div>
+			}
+			loading={loading}
+		>
+			<Card variant='borderless' style={{ borderRadius: 8, maxHeight: '400px', overflowX: 'scroll' }}>
+				{displayData.length ? (
+					displayData.map((item, index) => renderDiscussionItem(item, index))
+				) : (
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
+				)}
+			</Card>
+		</Card>
 	);
 };
 
