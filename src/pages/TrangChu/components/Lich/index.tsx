@@ -1,5 +1,5 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
-import { Button, Card, Modal, Space, Typography } from 'antd';
+import { Button, Card, Modal, Typography } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
@@ -190,21 +190,23 @@ const LichDashboard = () => {
 			<div className='calendar-container'>
 				{/* Header với tên tháng và navigation */}
 				<div className={`calendar-header ${responsiveClass}`}>
-					<Typography.Title level={isMobile ? 5 : 5} className={`calendar-title ${responsiveClass}`}>
+					<Typography.Title level={5} className={`calendar-title ${responsiveClass}`}>
 						Tháng {currentMonth.format('M/YYYY')}
 					</Typography.Title>
-					<div className={`calendar-nav ${responsiveClass}`}>
+					<div className={`${responsiveClass} navigation-buttons`}>
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='left' />}
 							onClick={() => setCurrentMonth(currentMonth.clone().subtract(1, 'month'))}
 							size={isMobile ? 'small' : 'middle'}
+							className='nav-btn'
 						/>
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='right' />}
 							onClick={() => setCurrentMonth(currentMonth.clone().add(1, 'month'))}
 							size={isMobile ? 'small' : 'middle'}
+							className='nav-btn'
 						/>
 					</div>
 				</div>
@@ -233,6 +235,7 @@ const LichDashboard = () => {
 								const isCurrentMonth = date.month() === currentMonth.month();
 								const isToday = date.isSame(moment(), 'day');
 								const isSelected = date.isSame(selectedDate, 'day');
+								const isSelectedToday = isToday && isSelected;
 
 								return (
 									<div
@@ -248,8 +251,8 @@ const LichDashboard = () => {
 									>
 										<div
 											className={`date-number ${responsiveClass} ${isSmallMonth ? 'small-month' : ''} ${
-												isToday ? 'today' : ''
-											} ${isSelected ? 'selected' : ''} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
+												isSelectedToday ? 'selected-today' : isToday ? 'today' : isSelected ? 'selected' : ''
+											} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
 										>
 											{date.format('DD')}
 										</div>
@@ -288,20 +291,19 @@ const LichDashboard = () => {
 	return (
 		<>
 			<Card
-				className='calendar-card'
+				variant='borderless'
+				className='card-borderless card-big-title'
 				loading={loadingSuKien || loadingTKB || loadingThi}
-				title={
-					<div className='card-header'>
-						<Space>
-							<Typography.Text className='card-title'>Lịch</Typography.Text>
-						</Space>
-						<Link to='/calendar' className='xem-tat-ca-link'>
-							Xem tất cả
-						</Link>
-					</div>
+				title='Lịch'
+				extra={
+					<Link to='/calendar' className='xem-tat-ca-link'>
+						Xem tất cả
+					</Link>
 				}
 			>
-				{renderCalendar()}
+				<Card variant='borderless' className='calendar-card'>
+					{renderCalendar()}
+				</Card>
 			</Card>
 
 			{/* Modal xem chi tiết sự kiện */}

@@ -1,12 +1,10 @@
 import FormKhaiBao from '@/pages/KhaiBaoQuyTrinh/components/FormKhaiBao';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
-
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
 import { ENguonDot } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { ArrowRightOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Card, Col, message, Modal, Popconfirm, Row, Skeleton, Space, Tooltip } from 'antd';
-
+import { Button, Card, Col, message, Modal, Popconfirm, Row, Space, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
 import './style.less';
@@ -20,7 +18,6 @@ const CardDichVuSinhVien = () => {
 		record: recordQuyTrinh,
 		setRecord: setRecordQuyTrinh,
 	} = useModel('quytrinh.quytrinh');
-
 	const { visibleForm, setVisibleForm, setCurrent, setCurrentFormKhaiBao, setDataQuyTrinh } =
 		useModel('quytrinh.khaibaoquytrinh');
 	const { getAllMyDotModel } = useModel('quytrinh.dotkhaibao');
@@ -29,7 +26,6 @@ const CardDichVuSinhVien = () => {
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 
-	const documentIc = 'images/document-background.svg';
 	const playIc = 'images/play-icon.png';
 
 	useEffect(() => {
@@ -137,68 +133,31 @@ const CardDichVuSinhVien = () => {
 		handleRedirect(quyTrinh);
 	};
 
-	// Handle mouse events for service items
-	const handleServiceItemMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-		e.currentTarget.style.transform = 'scale(1.02)';
-		e.currentTarget.style.transition = 'all 0.3s ease';
-	};
-
-	const handleServiceItemMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-		e.currentTarget.style.transform = 'scale(1)';
-	};
-
-	const handleServiceRowMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-		e.currentTarget.style.backgroundColor = '#f5f5f5';
-	};
-
-	const handleServiceRowMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-		e.currentTarget.style.backgroundColor = 'transparent';
-	};
-
 	// Chỉ hiển thị 5 dịch vụ đầu tiên trong card
 	const displayServices = danhSachQuyTrinh?.slice(0, 5) || [];
 
 	return (
 		<>
 			<Card
-				className='card-dichvu'
-				title={
-					<div className='card-header'>
-						<div className='title'>Dịch vụ sinh viên</div>
-						<Link to='/khai-bao-quy-trinh/dang-ky' className='xem-tat-ca-link'>
-							Xem thêm
-						</Link>
-					</div>
+				variant='borderless'
+				className='card-borderless card-big-title card-dichvu'
+				title='Dịch vụ sinh viên'
+				extra={
+					<Link to='/khai-bao-quy-trinh/dang-ky' className='xem-tat-ca-link'>
+						Xem thêm
+					</Link>
 				}
+				loading={loading}
 			>
-				{loading ? (
-					<Skeleton active className='loading-skeleton' />
-				) : (
-					<Row
-						gutter={[0, 4]}
-						className='services-container'
-						style={{
-							backgroundImage: `url(${documentIc})`,
-						}}
-					>
+				<Card variant='borderless' className='dashboard-stat-card services-container'>
+					<Row gutter={[0, 4]}>
 						{displayServices.length > 0 ? (
 							displayServices.map((quyTrinh: QuyTrinh.IRecord, index: number) => (
-								<Col
-									span={24}
-									key={quyTrinh._id}
-									className='service-item'
-									onMouseEnter={handleServiceItemMouseEnter}
-									onMouseLeave={handleServiceItemMouseLeave}
-								>
+								<Col span={24} key={quyTrinh._id} className='service-item'>
 									{/* Kiểm tra xem có thông tin chung hay không để quyết định có dùng Popconfirm */}
 									{quyTrinh?.danhSachCauHinhThongTinChung && quyTrinh?.danhSachCauHinhThongTinChung?.length > 0 ? (
 										// Nếu có thông tin chung, click trực tiếp
-										<div
-											className='service-row'
-											onClick={() => handleServiceClick(quyTrinh)}
-											onMouseEnter={handleServiceRowMouseEnter}
-											onMouseLeave={handleServiceRowMouseLeave}
-										>
+										<div className='service-row' onClick={() => handleServiceClick(quyTrinh)}>
 											<Space className='service-content'>
 												<div className='service-info'>
 													<Tooltip title={quyTrinh.ten} placement='topLeft'>
@@ -242,14 +201,14 @@ const CardDichVuSinhVien = () => {
 							</Col>
 						)}
 					</Row>
-				)}
+				</Card>
 			</Card>
 
 			{/* Modal chọn đợt khai báo */}
 			<Modal
 				title={'Chọn đợt khai báo'}
 				width={500}
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				destroyOnClose
@@ -262,7 +221,7 @@ const CardDichVuSinhVien = () => {
 			<Modal
 				title={'Thông tin chung'}
 				width={1000}
-				visible={visibleThongTinChung}
+				open={visibleThongTinChung}
 				onCancel={() => setVisibleThongTinChung(false)}
 				footer={
 					<div className='modal-footer'>

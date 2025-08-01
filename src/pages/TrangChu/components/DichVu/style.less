@@ -1,73 +1,17 @@
 .card-dichvu {
-	background: transparent;
-	border: none;
-	margin-bottom: 0;
-	box-shadow: none;
-	height: 100%;
-	display: flex;
-	flex: 1;
-	flex-direction: column;
-	margin: 0 -8px;
-	min-height: 300px;
-
-	.ant-card-head {
-		border-bottom: none;
-		background: transparent;
-		margin-bottom: 0;
-		padding-bottom: 0;
-	}
-
-	.ant-card-body {
-		padding-top: 0;
-	}
-
-	.card-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		align-content: baseline;
-
-		.title {
-			display: flex;
-			align-items: center;
-			font-size: 18px;
-		}
-	}
-
 	.services-container {
-		height: 100%;
-		background: #fff;
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		padding: 16px;
-		border-radius: 8px;
-		min-height: 382px;
+		background-image: url('/images/document-background.svg');
 		background-size: 75% auto;
 		background-position: bottom right;
 		background-repeat: no-repeat;
-		box-shadow: 0px 0px 6px 0px #0000000a;
-
-		&.with-bg {
-			// Background image will be set dynamically in component
-		}
 	}
 
 	.service-item {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		min-height: 76px;
 		transition: transform 0.3s ease;
+		min-height: 72px;
 
 		&:hover {
 			transform: scale(1.01);
-		}
-
-		// Áp dụng riêng cho phần tử cuối cùng
-		&:last-child {
-			min-height: 79px;
 		}
 	}
 
