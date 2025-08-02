@@ -1,9 +1,9 @@
-import { Col, Row } from 'antd';
+import { Card, Col, Row } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
+import CardCongNoDashboard from '../components/CongNo';
 import CardKetQuaHocTapDashboard from './CardHocTap';
 import CardRenLuyenDashboard from './CardRenLuyen';
-import CardTienTrinhTotNghiep from './CardTienTrinhTotNghiep';
 import './style.less';
 
 const CardHocTapRenLuyenDashboard = () => {
@@ -17,19 +17,30 @@ const CardHocTapRenLuyenDashboard = () => {
 	}, []);
 
 	return (
-		<Row gutter={[16, 16]} style={{ height: '100%' }}>
-			<Col span={24} md={8}>
-				<CardKetQuaHocTapDashboard />
-			</Col>
+		<Card
+			title='Thống kê dữ liệu'
+			variant='borderless'
+			className='card-borderless card-big-title'
+			style={{ height: '100%' }}
+		>
+			<Row gutter={[16, 16]} style={{ height: '100%' }}>
+				<Col span={24} md={8}>
+					<CardKetQuaHocTapDashboard />
+				</Col>
 
-			<Col span={24} md={8}>
-				<CardRenLuyenDashboard />
-			</Col>
+				<Col span={24} md={8}>
+					<CardRenLuyenDashboard />
+				</Col>
 
-			<Col span={24} md={8}>
-				<CardTienTrinhTotNghiep />
-			</Col>
-		</Row>
+				{/* <Col span={24} md={8}>
+						<CardTienTrinhTotNghiep />
+					</Col> */}
+
+				<Col span={24} md={8}>
+					<CardCongNoDashboard />
+				</Col>
+			</Row>
+		</Card>
 	);
 };
 

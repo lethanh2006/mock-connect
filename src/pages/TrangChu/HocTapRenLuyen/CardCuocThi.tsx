@@ -15,7 +15,6 @@ const CardCuocThiDashboard = () => {
 		<Spin spinning={loading}>
 			<Carousel autoplay pauseOnDotsHover>
 				{danhSach?.map((item) => (
-					// eslint-disable-next-line react/jsx-key
 					<Card
 						hoverable
 						cover={<img alt='example' src={item?.bannerUrl} style={{ height: 120, objectFit: 'cover' }} />}
