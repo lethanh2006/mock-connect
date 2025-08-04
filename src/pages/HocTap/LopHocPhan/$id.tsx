@@ -14,17 +14,16 @@ import {
 	MessageOutlined,
 	StarOutlined,
 } from '@ant-design/icons';
-import { Card, Col, Row, Tabs } from 'antd';
+import { Col, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 import { history, useModel, useParams } from 'umi';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
-import ThongTinChungHeaderCard from './components/ThongTinChungHeaderCard';
-import DanhGiaGiangVienPage from './DanhGiaGiangVien';
-
 import DanhSachGiangVien from './components/DanhSachGiangVien';
 import DanhSachSinhVien from './components/DanhSachSinhVien';
 import ThongTinChungV2 from './components/ThongTinChung';
+import ThongTinChungHeaderCard from './components/ThongTinChungHeaderCard';
+import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import LmsOdooPage from './LMS';
 
@@ -112,7 +111,10 @@ const DetailLopTinChi = () => {
 			menuKey: paths[0],
 			content: (
 				<Row gutter={[16, 16]}>
-					<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
+					<Col span={24} md={{ span: 16 }} xxl={{ span: 18 }}>
+						<ThongTinChungV2 />
+					</Col>
+					<Col span={24} md={{ span: 8 }} xxl={{ span: 6 }}>
 						<Row
 							gutter={[16, 16]}
 							style={{
@@ -144,9 +146,6 @@ const DetailLopTinChi = () => {
 							</Col>
 						</Row>
 					</Col>
-					<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
-						<ThongTinChungV2 />
-					</Col>
 				</Row>
 			),
 			icon: <InfoCircleOutlined />,
@@ -160,20 +159,20 @@ const DetailLopTinChi = () => {
 		{
 			title: titles[2],
 			menuKey: paths[2],
-			content: <ThongBaoLopPage loai='lop-hoc-phan' idLop={id} />,
+			content: <ThongBaoLopPage loai='lop-hoc-phan' idLop={id as string} />,
 			icon: <BellOutlined />,
 		},
 		{
 			title: titles[3],
 			menuKey: paths[3],
-			content: <DienDan idLopHocPhan={record?._id ?? id} />,
+			content: <DienDan idLopHocPhan={record?._id ?? (id as string)} />,
 			icon: <MessageOutlined />,
 		},
 
 		{
 			title: titles[4],
 			menuKey: paths[4],
-			content: <LmsOdooPage idLopHocPhan={id} />,
+			content: <LmsOdooPage idLopHocPhan={id as string} />,
 			hide: !(settings?.GENERAL_INFO?.lmsMode === 'odoo' && record?.syncLms),
 			icon: <LaptopOutlined />,
 		},
@@ -181,7 +180,7 @@ const DetailLopTinChi = () => {
 		{
 			title: titles[5],
 			menuKey: paths[5],
-			content: <BaiTapPage lopHocPhanId={id} />,
+			content: <BaiTapPage lopHocPhanId={id as string} />,
 			icon: <FileTextOutlined />,
 		},
 		{
@@ -207,7 +206,7 @@ const DetailLopTinChi = () => {
 	];
 
 	return (
-		<Card bodyStyle={{ paddingTop: 4 }} style={{ backgroundColor: 'transparent', border: 'none' }}>
+		<>
 			<ThongTinChungHeaderCard />
 			<TabViewPage
 				hideCard
@@ -215,10 +214,10 @@ const DetailLopTinChi = () => {
 				tabType='line'
 				tabStyle={{
 					backgroundColor: 'transparent',
-					marginTop: '-48px',
+					marginTop: '-48px', // để phần Tabpane nằm bên trong ThongTinChungHeaderCard
 				}}
 			/>
-		</Card>
+		</>
 	);
 };
 

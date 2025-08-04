@@ -4,12 +4,13 @@ import { colorHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { Card, Descriptions, Tag } from 'antd';
 import moment from 'moment';
+import { JSX } from 'react';
 
 const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord; title?: string | JSX.Element }) => {
 	const { buoiHoc, title } = props;
 
 	return (
-		<Card style={{ borderRadius: '8px' }}>
+		<Card style={{ borderRadius: '8px' }} variant='borderless'>
 			<Descriptions column={{ xs: 1, md: 3 }} title={title ?? 'Thông tin buổi học'}>
 				<Descriptions.Item label='Ngày học'>
 					{THU_TRONG_TUAN[moment(buoiHoc?.ngay).day()]}, {moment(buoiHoc?.ngay).format('DD/MM/YYYY')}

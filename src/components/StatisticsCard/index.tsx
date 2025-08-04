@@ -1,5 +1,5 @@
 import { Card, Col, Row, Typography } from 'antd';
-import React from 'react';
+import React, { isValidElement, ReactElement } from 'react';
 import './style.less';
 import { StatisticsCardProps, StatisticsItem } from './typing';
 
@@ -28,12 +28,24 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 		const clickableClass = onClick ? 'pointer' : '';
 		const borderAccentClass = borderAccent ? 'border-accent' : '';
 
+		const finalValueColor = valueColor || '#595959';
+
 		const customStyle: React.CSSProperties = {
 			backgroundColor,
-			color: valueColor,
-			borderLeft: borderAccent ? `4px solid ${borderColor || valueColor || 'currentColor'}` : undefined,
+			color: finalValueColor,
+			borderLeft: borderAccent ? `4px solid ${borderColor || finalValueColor}` : undefined,
 			...cardStyle,
 		};
+
+		const iconWithColor =
+			icon && isValidElement(icon)
+				? React.cloneElement(icon as ReactElement<any>, {
+						style: {
+							color: finalValueColor,
+							...((icon as ReactElement<any>).props.style || {}),
+						},
+					})
+				: icon;
 
 		return (
 			<div
@@ -42,11 +54,11 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 				onClick={onClick}
 			>
 				<Col>
-					<div>{icon}</div>
+					<div>{iconWithColor}</div>
 					<Text className='text'>{title}</Text>
 				</Col>
 
-				<Col className='num' style={{ color: valueColor }}>
+				<Col className='num' style={{ color: finalValueColor }}>
 					{value}
 				</Col>
 			</div>
