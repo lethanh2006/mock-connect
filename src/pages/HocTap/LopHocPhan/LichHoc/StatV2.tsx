@@ -17,15 +17,15 @@ const StatDiemDanhV2 = () => {
 	const getIconForStatus = (status: ETrangThaiUserDiemDanh) => {
 		switch (status) {
 			case ETrangThaiUserDiemDanh.CO_MAT:
-				return <CheckCircleOutlined />;
+				return <CheckCircleOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
 			case ETrangThaiUserDiemDanh.VANG_CO_PHEP:
-				return <ExclamationCircleOutlined />;
+				return <ExclamationCircleOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
 			case ETrangThaiUserDiemDanh.VANG_KHONG_PHEP:
-				return <MinusCircleOutlined />;
+				return <MinusCircleOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
 			case ETrangThaiUserDiemDanh.CHUA_DIEM_DANH:
-				return <ClockCircleOutlined />;
+				return <ClockCircleOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
 			default:
-				return <CalendarOutlined />;
+				return <CalendarOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
 		}
 	};
 

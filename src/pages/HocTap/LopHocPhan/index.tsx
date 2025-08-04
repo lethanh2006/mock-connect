@@ -4,7 +4,7 @@ import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Card, Col, Row, Typography } from 'antd';
+import { Card, Col, Empty, Row, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import CardLopHocPhanItem from '../LopHocPhan/components/CardLopHocPhanItem';
@@ -69,7 +69,7 @@ const LopHocPhanPage = () => {
 	});
 
 	return (
-		<div style={{ padding: '16px' }}>
+		<>
 			{/* Header */}
 			<div style={{ marginBottom: '24px' }}>
 				{isMobile ? (
@@ -99,11 +99,12 @@ const LopHocPhanPage = () => {
 			<Statistics danhSach={danhSachBaiTap} />
 
 			{/* Class List */}
-			<div style={{ marginBottom: '24px' }}>
-				<Text style={{ fontSize: '18px', fontWeight: 600, display: 'block', marginBottom: '12px' }}>
-					Danh sách lớp tín chỉ
-				</Text>
-
+			<Card
+				style={{ marginBottom: '24px' }}
+				variant='borderless'
+				className='card-borderless card-big-title'
+				title='Danh sách lớp tín chỉ'
+			>
 				{danhSach.length > 0 ? (
 					<Row gutter={[0, 0]} style={{ margin: '0 -8px' }}>
 						{danhSach.map((lop, index) => (
@@ -122,11 +123,15 @@ const LopHocPhanPage = () => {
 						))}
 					</Row>
 				) : (
-					<Card style={{ textAlign: 'center', padding: '40px' }}>
-						<Text type='secondary'>Không có lớp tín chỉ nào</Text>
+					<Card style={{ textAlign: 'center' }}>
+						<Empty
+							description='Không có lớp tín chỉ'
+							style={{ padding: '40px' }}
+							image={Empty.PRESENTED_IMAGE_SIMPLE}
+						/>
 					</Card>
 				)}
-			</div>
+			</Card>
 
 			{/* Assignments and Forum */}
 			<Row gutter={[24, 24]}>
@@ -137,7 +142,7 @@ const LopHocPhanPage = () => {
 					<CardDienDanDashboard />
 				</Col>
 			</Row>
-		</div>
+		</>
 	);
 };
 

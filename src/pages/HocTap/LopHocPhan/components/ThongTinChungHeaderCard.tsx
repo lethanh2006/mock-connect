@@ -82,11 +82,9 @@ const ThongTinChungHeaderCard = () => {
 		<Spin spinning={loading}>
 			<div
 				style={{
-					// padding: '20px 20px 0',
-					padding: '20px 36px 0',
-
+					padding: '20px 20px 0',
 					backgroundColor: ' #FFE9E9',
-					margin: '-24px -32px 0',
+					margin: '-24px -16px 0', // để phần Header này theo đúng thiết kế (sát vào lề)
 					backgroundImage: `url(${randomBackground})`,
 					backgroundSize: 'contain',
 					backgroundRepeat: 'no-repeat',
