@@ -1,8 +1,8 @@
-import KhaiBaoQuyTrinhPageV2 from '.';
+import KhaiBaoQuyTrinhPage from '.';
 
 const DichVuHanhChinh = () => {
 	return (
-		<KhaiBaoQuyTrinhPageV2
+		<KhaiBaoQuyTrinhPage
 			title='Dịch vụ hành chính - đơn đã gửi'
 			hasColumnTenQuyTrinh
 			hasFilterHoatDong

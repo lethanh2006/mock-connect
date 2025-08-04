@@ -64,7 +64,7 @@ const QuyTrinhPage = () => {
 						setQuyTrinhIdSelect(quyTrinh._id);
 						setVisibleForm(true);
 					} else {
-						message.warn('Chưa có đợt');
+						message.error('Chưa có đợt');
 					}
 				}
 			}
@@ -83,7 +83,7 @@ const QuyTrinhPage = () => {
 			undefined,
 			undefined,
 			'page/SINH_VIEN',
-			{ page, limit: limit || 10 }, // Mặc định là 10 nếu limit chưa được set
+			{ page, limit: limit || 10 },
 		);
 	};
 
@@ -200,15 +200,8 @@ const QuyTrinhPage = () => {
 							total={total}
 							onChange={handlePaginationChange}
 							onShowSizeChange={handlePageSizeChange}
-							// showSizeChanger
-							// showQuickJumper
-							// showTotal={(total, range) => (
-							// 	<span style={{ marginRight: '16px' }}>
-							// 		{range[0]}-{range[1]} của {total} mục
-							// 	</span>
-							// )}
 							pageSizeOptions={['5', '10', '20', '50']}
-							disabled={loading} // Disable phân trang khi đang loading
+							disabled={loading}
 							size='default'
 							className='pagination'
 						/>
