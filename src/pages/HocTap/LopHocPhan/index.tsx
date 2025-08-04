@@ -75,7 +75,7 @@ const LopHocPhanPage = () => {
 				{isMobile ? (
 					// Mobile layout: 2 rows
 					<div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-						<Title level={3} style={{ margin: 0, marginBottom: '16px' }}>
+						<Title level={3} style={{ margin: 0 }}>
 							Lớp tín chỉ
 						</Title>
 						<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -84,7 +84,7 @@ const LopHocPhanPage = () => {
 					</div>
 				) : (
 					// Desktop layout: 1 row (unchanged)
-					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 						<Title level={3} style={{ margin: 0 }}>
 							Lớp tín chỉ
 						</Title>
