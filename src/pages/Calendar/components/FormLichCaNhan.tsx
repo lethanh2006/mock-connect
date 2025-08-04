@@ -89,7 +89,7 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 							<MyDatePicker
 								format='DD/MM/YYYY'
 								showTime={false}
-								disabledDate={startDate ? (cur) => moment(cur).isBefore(startDate, 'day') : undefined}
+								disabledDate={startDate ? (cur) => moment(cur as any).isBefore(startDate, 'day') : undefined}
 							/>
 						</Form.Item>
 					</Col>
@@ -112,12 +112,13 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 						</Form.Item>
 					</Col>
 
+					{/* Hiện tại chưa có chức năng cho thêm người tham gia */}
 					<Col span={24}>
 						<Form.Item name='nguoiThamGia' label='Thêm người tham gia'>
 							<Select
-								mode='tags' // Đây là quan trọng nhất để nhập text tự do
+								mode='tags'
 								placeholder='Chọn hoặc nhập người tham gia'
-								tokenSeparators={[',']} // Ngăn cách nếu người dùng nhập "Enter" hoặc dấu phẩy
+								tokenSeparators={[',']}
 								style={{ width: '100%' }}
 								options={[
 									{ label: 'Nguyễn Đức Minh', value: 'Nguyễn Đức Minh' },

@@ -3,34 +3,32 @@ import { messagesCalendar } from '@/services/Calendar/constant';
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
-import { ArrowRightOutlined, CalendarOutlined, MenuOutlined } from '@ant-design/icons';
-import { Badge, Card, Col, Empty, Modal, Row, Segmented, Space, Tag } from 'antd';
+import {
+	ArrowRightOutlined,
+	CalendarOutlined,
+	MenuOutlined,
+	PlusCircleOutlined,
+	SettingOutlined,
+} from '@ant-design/icons';
+import { Badge, Button, Card, Col, Empty, Modal, Row, Segmented, Space, Spin, Tag } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
-import moment from 'moment';
+import moment, { type Moment } from 'moment';
 import { useEffect, useState } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import type { DateRange, View } from 'react-big-calendar';
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useMediaQuery } from 'react-responsive';
-import { Link, useModel } from 'umi';
-
-import styles from './LichDashboard/styles.less';
-
-import { PlusCircleOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Spin } from 'antd';
-import { type Moment } from 'moment';
-import type { DateRange, View } from 'react-big-calendar';
-import { Views } from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
-
+import { Link, useModel } from 'umi';
 import FilterColumn from './components/FilterColumn';
 import FormLichCaNhan from './components/FormLichCaNhan';
 import GhiChuLich from './components/GhiChuLich';
 import LichSapToi from './components/LichSapToi';
 import ModalViewDetailCalendar from './components/ModalViewDetail';
 import ModalSettingMauLich from './components/SettingLich';
+import styles from './LichDashboard/styles.less';
 
 const localizer = momentLocalizer(moment);
 
@@ -317,6 +315,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 	return (
 		<Card
+			variant='borderless'
+			className='card-borderless card-big-title'
 			title={
 				<>
 					Lịch{' '}
@@ -408,7 +408,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				maskClosable={false}
-				width={900}
+				width={800}
 				bodyStyle={{ padding: 0 }}
 				modalRender={(node) => <div style={{ borderRadius: 12, overflow: 'hidden' }}>{node}</div>}
 			>
