@@ -2,7 +2,8 @@ import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { Card, Modal, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
-import CardHocPhanV2 from './CardHocPhan';
+import CardHocPhan from './CardHocPhan';
+import './CardStyles.less';
 
 const CardKhoiHocPhan = (props: {
 	khoi?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
@@ -16,85 +17,24 @@ const CardKhoiHocPhan = (props: {
 
 	return (
 		<>
-			<div style={{ position: 'relative', marginBottom: '4px' }}>
-				<Card
-					hoverable
-					onClick={() => setVisible(true)}
-					style={{
-						borderRadius: '8px',
-						position: 'relative',
-						overflow: 'hidden',
-						background: '#fff',
-						minHeight: '120px',
-						boxShadow: '0px 0px 12px 0px #0000000A',
-						cursor: 'pointer',
-					}}
-					bodyStyle={{
-						padding: '20px',
-						position: 'relative',
-						height: '100%',
-					}}
-				>
+			<div className='base-card'>
+				<Card hoverable onClick={() => setVisible(true)}>
 					{/* Folder icon background */}
-					<div
-						style={{
-							position: 'absolute',
-							bottom: 0,
-							right: 0,
-							width: '60%',
-							height: '60%',
-							// backgroundImage: `url(/images/folder-khoi-hp.svg)`,
-							backgroundSize: 'contain',
-							backgroundRepeat: 'no-repeat',
-							backgroundPosition: 'bottom right',
-							zIndex: 1,
-						}}
-					/>
+					<div className='card-background-image' />
 
 					{/* Content */}
-					<div style={{ position: 'relative', zIndex: 2 }}>
+					<div className='card-content'>
 						{/* Course name */}
-						<h4
-							style={{
-								fontSize: '18px',
-								fontWeight: '600',
-								color: '#262626',
-								marginBottom: '12px',
-								marginTop: '0',
-								paddingRight: '60px',
-								lineHeight: '1.4',
-							}}
-							title={khoi?.ten}
-						>
+						<h4 className='card-title default' title={khoi?.ten}>
 							{khoi?.ten}
 						</h4>
 
 						{/* Credits */}
-						<Tag
-							style={{
-								background: '#fff2f0',
-								color: '#ff4d4f',
-								border: '1px solid #ffccc7',
-								padding: '1px 6px',
-								fontWeight: '500',
-							}}
-						>
-							{soTinChi} tín chỉ
-						</Tag>
+						<Tag className='credits-tag'>{soTinChi} tín chỉ</Tag>
 					</div>
 
 					{/* Color indicator */}
-					<div
-						style={{
-							position: 'absolute',
-							left: 0,
-							top: 0,
-							bottom: 0,
-							width: '4px',
-							backgroundColor: colorKhoiKienThuc,
-							borderRadius: '8px 0 0 8px',
-						}}
-					/>
+					<div className='color-indicator' style={{ backgroundColor: colorKhoiKienThuc }} />
 				</Card>
 			</div>
 
@@ -105,34 +45,28 @@ const CardKhoiHocPhan = (props: {
 				width={680}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
+				className='khoi-modal'
 			>
-				<span style={{ fontWeight: 500 }}>
+				<span className='modal-description'>
 					Bạn phải đảm bảo học {soTinChi} tín chỉ trong số những học phần sau đây:{' '}
 				</span>
-				<div style={{ marginTop: '16px' }}>
-					<div
-						style={{
-							display: 'grid',
-							gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-							gap: '16px',
-						}}
-					>
-						{khoi?.hocPhanCtdtList?.map((ctk) => (
-							<CardHocPhanV2
-								key={ctk._id}
-								hocPhan={ctk.hocPhan}
-								colorKhoiKienThuc={colorKhoiKienThuc}
-								onClick={() => {
-									// Truyền tên khối tự chọn vào các khối học phần chương trình
-									setChuongTrinh({ ...khoi, ...ctk, ten: khoi.ten });
-									setVisible(false);
-									if (onClickHocPhan) onClickHocPhan();
-								}}
-								trangThaiHoc={ctk.hoc}
-								listDiem={ctk.lichSuDiem}
-							/>
-						))}
-					</div>
+
+				<div className='modal-grid'>
+					{khoi?.hocPhanCtdtList?.map((ctk) => (
+						<CardHocPhan
+							key={ctk._id}
+							hocPhan={ctk.hocPhan}
+							colorKhoiKienThuc={colorKhoiKienThuc}
+							onClick={() => {
+								// Truyền tên khối tự chọn vào các khối học phần chương trình
+								setChuongTrinh({ ...khoi, ...ctk, ten: khoi.ten });
+								setVisible(false);
+								if (onClickHocPhan) onClickHocPhan();
+							}}
+							trangThaiHoc={ctk.hoc}
+							listDiem={ctk.lichSuDiem}
+						/>
+					))}
 				</div>
 			</Modal>
 		</>

@@ -1,0 +1,111 @@
+// CardStyles.less - Shared styles for CardHocPhan and CardKhoiHocPhan
+
+// Base card styles
+.base-card {
+	position: relative;
+	margin-bottom: 4px;
+
+	.ant-card {
+		border-radius: 8px;
+		position: relative;
+		overflow: hidden;
+		background: #fff;
+		min-height: 120px;
+		box-shadow: 0px 0px 12px 0px #0000000a;
+		cursor: pointer;
+		transition: all 0.3s ease;
+
+		&:hover {
+			transform: scale(1.005) translateY(-3px);
+		}
+
+		.ant-card-body {
+			padding: 20px;
+			position: relative;
+			height: 100%;
+		}
+	}
+}
+
+// Background image styles
+.card-background-image {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 60%;
+	height: 60%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: bottom right;
+	z-index: 1;
+}
+
+// Content wrapper
+.card-content {
+	position: relative;
+	z-index: 2;
+}
+
+// Title styles
+.card-title {
+	font-size: 18px;
+	font-weight: 600;
+	margin-bottom: 12px;
+	margin-top: 0;
+	padding-right: 60px;
+	line-height: 1.4;
+
+	&.not-studied {
+		color: #8c8c8c;
+	}
+
+	&.default {
+		color: #262626;
+	}
+}
+
+// Credits tag styles
+.credits-tag {
+	background: #fff2f0;
+	color: #ff4d4f;
+	border: 1px solid #ffccc7;
+	padding: 1px 6px;
+	font-weight: 500;
+}
+
+// Currently studying indicator
+.studying-indicator {
+	position: absolute;
+	top: -6px;
+	right: -6px;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background-color: #52c41a;
+	border: 2px solid #fff;
+	z-index: 10;
+}
+
+// Color indicator (for khoi hoc phan)
+.color-indicator {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 4px;
+	border-radius: 8px 0 0 8px;
+}
+
+// Modal styles
+.khoi-modal {
+	.modal-description {
+		font-weight: 500;
+	}
+
+	.modal-grid {
+		margin-top: 16px;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+		gap: 16px;
+	}
+}
