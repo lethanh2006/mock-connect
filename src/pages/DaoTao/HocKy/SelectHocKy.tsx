@@ -38,7 +38,7 @@ const SelectHocKy = (props: {
 		// Đảm bảo chỉ get học kỳ 1 lần
 		if (!danhSachHienThi.length) {
 			getAllModel(
-				!!isSetRecord,
+				undefined,
 				{ ma: -1 },
 				undefined,
 				undefined,
