@@ -333,7 +333,6 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 					/>
 				</>
 			}
-			bordered
 			extra={
 				isDashboard ? (
 					<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
@@ -366,7 +365,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 						cursor: 'col-resize',
 					}}
 				>
-					{!isMobile && <Pane>{segmentSelected ? mainContent() : renderContent()}</Pane>}
+					{!isMobile && (
+						<Pane>
+							<Card variant='borderless'>{segmentSelected ? mainContent() : renderContent()}</Card>
+						</Pane>
+					)}
 
 					<Pane initialSize='300px' minSize='250px' maxSize='40%'>
 						<Button
@@ -399,7 +402,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 						</div>
 					</Pane>
 
-					{isMobile && <Pane>{segmentSelected ? mainContent() : renderContent()}</Pane>}
+					{isMobile && (
+						<Pane>
+							<Card variant='borderless'>{segmentSelected ? mainContent() : renderContent()}</Card>
+						</Pane>
+					)}
 				</SplitPane>
 			)}
 
