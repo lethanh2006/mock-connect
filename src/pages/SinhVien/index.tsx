@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import FormSinhVien from '@/pages/SinhVien/components/Form';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
-import { EditOutlined, LeftOutlined, OrderedListOutlined } from '@ant-design/icons';
+import { EditOutlined, LeftOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Space } from 'antd';
 import fileDownload from 'js-file-download';
 import moment from 'moment';
@@ -40,63 +40,65 @@ const ThongTinSinhVienPage = () => {
 	};
 
 	return (
-		<Card title='Thông tin cá nhân'>
-			{isCapNhat ? (
-				<>
-					<Space style={{ marginBottom: 12 }} wrap>
-						<Button icon={<LeftOutlined />} onClick={() => setIsCapNhat(false)}>
-							Quay lại
-						</Button>
-					</Space>
-					<FormSinhVien onCancel={() => setIsCapNhat(false)} />
-				</>
-			) : (
-				<>
-					{recordDot?._id && choPhepSua ? (
-						<Alert
-							type='info'
-							message={
-								<>
-									Đợt cập nhật hồ sơ &quot;<b>{recordDot.tenDot}</b>&quot; từ ngày{' '}
-									<b>{moment(recordDot.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến ngày{' '}
-									<b>{moment(recordDot.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
-								</>
-							}
-							showIcon
-							style={{ marginBottom: 12 }}
-						/>
-					) : null}
-
-					{record?.ssoId ? (
+		<Card title='Thông tin cá nhân' variant='borderless' className='card-borderless card-big-title' loading={loading}>
+			<Card variant='borderless'>
+				{isCapNhat ? (
+					<>
 						<Space style={{ marginBottom: 12 }} wrap>
-							<ButtonExtend
-								disabled={!choPhepSua}
-								type='primary'
-								icon={<EditOutlined />}
-								onClick={() => setIsCapNhat(true)}
-								tooltip={!choPhepSua ? 'Ngoài thời gian cập nhật hồ sơ' : 'Cập nhật hồ sơ'}
-								notHideText
-							>
-								Cập nhật hồ sơ
-							</ButtonExtend>
+							<Button icon={<LeftOutlined />} onClick={() => setIsCapNhat(false)}>
+								Quay lại
+							</Button>
+						</Space>
+						<FormSinhVien onCancel={() => setIsCapNhat(false)} />
+					</>
+				) : (
+					<>
+						{recordDot?._id && choPhepSua ? (
+							<Alert
+								type='info'
+								message={
+									<>
+										Đợt cập nhật hồ sơ &quot;<b>{recordDot.tenDot}</b>&quot; từ ngày{' '}
+										<b>{moment(recordDot.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến ngày{' '}
+										<b>{moment(recordDot.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+									</>
+								}
+								showIcon
+								style={{ marginBottom: 12 }}
+							/>
+						) : null}
 
-							{/* <ButtonExtend icon={<OrderedListOutlined />} onClick={() => setVisibleHocBa(true)}>
+						{record?.ssoId ? (
+							<Space style={{ marginBottom: 12 }} wrap>
+								<ButtonExtend
+									disabled={!choPhepSua}
+									type='primary'
+									icon={<EditOutlined />}
+									onClick={() => setIsCapNhat(true)}
+									tooltip={!choPhepSua ? 'Ngoài thời gian cập nhật hồ sơ' : 'Cập nhật hồ sơ'}
+									notHideText
+								>
+									Cập nhật hồ sơ
+								</ButtonExtend>
+
+								{/* <ButtonExtend icon={<OrderedListOutlined />} onClick={() => setVisibleHocBa(true)}>
 								Học bạ số
 							</ButtonExtend> */}
 
-							{/* <ButtonExtend icon={<SmileOutlined />} onClick={() => setVisibleCapNhat(true)}>
+								{/* <ButtonExtend icon={<SmileOutlined />} onClick={() => setVisibleCapNhat(true)}>
 								Cập nhật ảnh nhận diện
 							</ButtonExtend> */}
 
-							{/* <Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
+								{/* <Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
 									In hồ sơ
 								</Button> */}
-						</Space>
-					) : null}
+							</Space>
+						) : null}
 
-					<PreviewHoSo />
-				</>
-			)}
+						<PreviewHoSo />
+					</>
+				)}
+			</Card>
 
 			{/* <Tabs
         activeKey={currentStep}
