@@ -1,0 +1,155 @@
+// File styles cho component LichSapToi
+.lich-sap-toi {
+	&-card {
+		height: 100%;
+		margin: 0 -16px;
+		border: none;
+		@media (max-width: 576px) {
+			margin: 0 -12px; // margin ở mobile
+		}
+	}
+
+	// Header Section - Now in Card title
+	&-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		cursor: pointer;
+
+		&-title {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-weight: 600;
+			font-size: 16px;
+		}
+
+		&-toggle-btn {
+			border-radius: 6px;
+			height: 28px;
+			width: 28px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.3s ease;
+
+			.anticon {
+				transition: all 0.3s ease;
+				font-size: 12px;
+				font-weight: 600;
+			}
+		}
+	}
+
+	// Empty state
+	&-empty {
+		text-align: center;
+		color: #999;
+		padding: 20px;
+		overflow: hidden;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+		&.expanded {
+			max-height: 200px;
+			opacity: 1;
+		}
+
+		&.collapsed {
+			max-height: 0px;
+			opacity: 0;
+		}
+
+		.anticon {
+			font-size: 24px;
+			margin-bottom: 8px;
+		}
+	}
+
+	// Content container
+	&-content {
+		overflow: hidden;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+		&.expanded {
+			opacity: 1;
+		}
+
+		&.collapsed {
+			max-height: 0px;
+			opacity: 0;
+		}
+	}
+
+	// List item
+	&-list-item {
+		padding: 4px;
+		border: none;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+		// bỏ boreder bottom mặc định List của antd
+		border-bottom: none !important;
+
+		&.expanded {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		&.collapsed {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+	}
+
+	// Event card
+	&-event-card {
+		width: 100%;
+		padding: 16px 20px;
+		border-radius: 8px;
+		cursor: pointer;
+
+		// Date and Time Row
+		&-date-row {
+			display: flex;
+			align-items: center;
+			margin-bottom: 16px;
+			gap: 8px;
+
+			&-dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background-color: #1890ff;
+				flex-shrink: 0;
+			}
+
+			&-date-text {
+				font-size: 14px;
+				font-weight: 500;
+				color: #262626;
+			}
+
+			&-time-badge {
+				background-color: #f6ffed;
+				border: 1px solid #b7eb8f;
+				border-radius: 4px;
+				padding: 0px 6px;
+				margin-left: auto;
+
+				.time-text {
+					font-size: 12px;
+					color: #52c41a;
+					font-weight: 400;
+				}
+			}
+		}
+
+		// Event Title
+		&-title {
+			font-size: 14px;
+			font-weight: 600;
+			display: block;
+			color: #262626;
+			line-height: 1.5;
+		}
+	}
+}
