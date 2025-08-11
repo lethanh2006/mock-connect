@@ -15,24 +15,23 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>{title ?? 'Giảng viên'}</h4>
 			{danhSachNhanSu?.length ? (
 				<List
-					grid={{ gutter: 16, xs: 1, sm: 1, md: 1, lg: 2, xl: 2, xxl: 3 }}
-					itemLayout='vertical'
+					itemLayout='horizontal'
 					size='small'
 					dataSource={danhSachNhanSu}
 					renderItem={(item) => (
-						<List.Item>
+						<List.Item style={{ padding: '12px 0', borderBottom: '1px solid #f0f0f0' }}>
 							<div
 								style={{
 									display: 'flex',
-									flexDirection: 'column',
 									alignItems: 'center',
-									textAlign: 'center',
+									width: '100%',
+									gap: 12,
 								}}
 							>
 								<div
 									style={{
 										cursor: item.nhanSu?.urlAnhDaiDien ? 'pointer' : 'default',
-										marginBottom: 8,
+										flexShrink: 0,
 									}}
 									onClick={() => {
 										if (item.nhanSu?.urlAnhDaiDien) {
@@ -42,7 +41,7 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 									}}
 								>
 									<Avatar
-										size={64}
+										size={48}
 										src={
 											item.nhanSu?.urlAnhDaiDien ||
 											(item.nhanSu?.gioiTinh === 'Nữ' ? '/images/teacher-female.svg' : '/images/teacher-male.svg')
@@ -50,37 +49,36 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 									/>
 								</div>
 
-								<div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4 }}>
-									{item.nhanSu?.ten || item.tenNhanSu ? (
-										<span>{item.nhanSu?.ten ? [item.nhanSu?.hoDem, item.nhanSu?.ten].join(' ') : item.tenNhanSu}</span>
-									) : (
-										<i>Không tìm thấy thông tin</i>
-									)}
-								</div>
+								<div style={{ flex: 1, minWidth: 0 }}>
+									<div style={{ fontWeight: 600, fontSize: 14, marginBottom: 4, color: '#333' }}>
+										{item.nhanSu?.ten || item.tenNhanSu ? (
+											<span>
+												{item.nhanSu?.ten ? [item.nhanSu?.hoDem, item.nhanSu?.ten].join(' ') : item.tenNhanSu}
+											</span>
+										) : (
+											<i>Không tìm thấy thông tin</i>
+										)}
+									</div>
 
-								<div
-									style={{
-										fontSize: 13,
-										color: '#555',
-										display: 'flex',
-										justifyContent: 'flex-start',
-										alignItems: 'flex-start',
-										flexDirection: 'column',
-									}}
-								>
 									<div
 										style={{
-											borderBottom: '1px solid #ccc',
+											fontSize: 13,
+											color: '#666',
+											display: 'flex',
+											flexDirection: 'column',
+											gap: 2,
 										}}
 									>
-										{item.nhanSu?.email ? <a href={`mailto:${item.nhanSu.email}`}>{item.nhanSu.email}</a> : <i>--</i>}
-									</div>
-									<div>
-										{item.nhanSu?.sdtCaNhan ? (
-											<a href={`tel:${item.nhanSu.sdtCaNhan}`}>{formatPhoneNumber(item.nhanSu.sdtCaNhan)}</a>
-										) : (
-											<i>--</i>
-										)}
+										<div>
+											{item.nhanSu?.email ? <a href={`mailto:${item.nhanSu.email}`}>{item.nhanSu.email}</a> : <i>--</i>}
+										</div>
+										<div>
+											{item.nhanSu?.sdtCaNhan ? (
+												<a href={`tel:${item.nhanSu.sdtCaNhan}`}>{formatPhoneNumber(item.nhanSu.sdtCaNhan)}</a>
+											) : (
+												<i>--</i>
+											)}
+										</div>
 									</div>
 								</div>
 							</div>

@@ -10,13 +10,13 @@ import { history, useModel } from 'umi';
 import CardLopHocPhanItem from '../LopHocPhan/components/CardLopHocPhanItem';
 import Statistics from './components/Statistics';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const LopHocPhanPage = () => {
-	const { danhSach, sinhVienGetAllModel, loading } = useModel('lophocphan.lophocphan');
+	const { danhSach, sinhVienGetAllModel } = useModel('lophocphan.lophocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
 	// Lấy dữ liệu bài tập từ model baitap để truyền vào Statistics
-	const { danhSach: danhSachBaiTap, thongKeBaiTapModel, setDanhSach } = useModel('daotao.baitap');
+	const { danhSach: danhSachBaiTap, thongKeBaiTapModel } = useModel('daotao.baitap');
 
 	const [screenSize, setScreenSize] = useState({
 		width: window.innerWidth,
@@ -71,11 +71,11 @@ const LopHocPhanPage = () => {
 	return (
 		<>
 			{/* Header */}
-			<div style={{ marginBottom: '24px' }}>
+			<div style={{ marginBottom: '16px' }}>
 				{isMobile ? (
 					// Mobile layout: 2 rows
 					<div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-						<Title level={3} style={{ margin: 0 }}>
+						<Title level={4} style={{ margin: 0 }}>
 							Lớp tín chỉ
 						</Title>
 						<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -85,7 +85,7 @@ const LopHocPhanPage = () => {
 				) : (
 					// Desktop layout: 1 row (unchanged)
 					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-						<Title level={3} style={{ margin: 0 }}>
+						<Title level={4} style={{ margin: 0 }}>
 							Lớp tín chỉ
 						</Title>
 						<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -100,7 +100,7 @@ const LopHocPhanPage = () => {
 
 			{/* Class List */}
 			<Card
-				style={{ marginBottom: '24px' }}
+				style={{ marginBottom: '16px' }}
 				variant='borderless'
 				className='card-borderless card-big-title'
 				title='Danh sách lớp tín chỉ'

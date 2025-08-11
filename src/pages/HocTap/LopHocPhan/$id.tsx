@@ -14,14 +14,14 @@ import {
 	MessageOutlined,
 	StarOutlined,
 } from '@ant-design/icons';
-import { Col, Row, Tabs } from 'antd';
+import { Card, Col, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 import { history, useModel, useParams } from 'umi';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
 import DanhSachGiangVien from './components/DanhSachGiangVien';
 import DanhSachSinhVien from './components/DanhSachSinhVien';
-import ThongTinChungV2 from './components/ThongTinChung';
+import ThongTinChung from './components/ThongTinChung';
 import ThongTinChungHeaderCard from './components/ThongTinChungHeaderCard';
 import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
@@ -112,7 +112,7 @@ const DetailLopTinChi = () => {
 			content: (
 				<Row gutter={[16, 16]}>
 					<Col span={24} md={{ span: 16 }} xxl={{ span: 18 }}>
-						<ThongTinChungV2 />
+						<ThongTinChung />
 					</Col>
 					<Col span={24} md={{ span: 8 }} xxl={{ span: 6 }}>
 						<Row
@@ -125,24 +125,26 @@ const DetailLopTinChi = () => {
 							}}
 						>
 							<Col span={24}>
-								<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)} style={{ marginTop: 16 }}>
-									<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
-									{danhSachLopThucHanh?.map((item) => (
-										<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
-									))}
-								</Tabs>
+								<Card variant='borderless' bodyStyle={{ paddingTop: 0 }}>
+									<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
+										<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
+										{danhSachLopThucHanh?.map((item) => (
+											<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
+										))}
+									</Tabs>
 
-								{activeKey !== '-1' ? (
-									<DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} title='Giảng viên phụ trách nhóm lớp' />
-								) : null}
+									{activeKey !== '-1' ? (
+										<DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} title='Giảng viên phụ trách nhóm lớp' />
+									) : null}
 
-								<DanhSachSinhVien
-									sinhVienList={
-										activeKey !== '-1' ? (recLopThucHanh?.sinhVienList ?? []) : (record?.sinhVienList ?? [])
-									}
-									loading={loading || loadingThucHanh}
-									fromLopHocPhan
-								/>
+									<DanhSachSinhVien
+										sinhVienList={
+											activeKey !== '-1' ? (recLopThucHanh?.sinhVienList ?? []) : (record?.sinhVienList ?? [])
+										}
+										loading={loading || loadingThucHanh}
+										fromLopHocPhan
+									/>
+								</Card>
 							</Col>
 						</Row>
 					</Col>

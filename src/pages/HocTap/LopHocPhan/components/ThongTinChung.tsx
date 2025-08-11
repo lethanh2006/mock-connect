@@ -20,6 +20,7 @@ import { useModel } from 'umi';
 
 import CardBaiTapLopHp from './CardBaiTapLopHp';
 import GioiThieuChungLopHp from './GioiThieuChung';
+import './style.less';
 
 const { Text } = Typography;
 
@@ -40,9 +41,12 @@ interface GiangVien {
 
 const ThongTinChung = () => {
 	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
-	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
-	const { danhSach: danhSachHocLieu, loading: loadingHocLieu, getAllModel } = useModel('hocphan.hoclieudecuong');
+	const { record: recDeCuong, getByIdModel } = useModel('hocphan.decuonghocphan');
+	const { danhSach: danhSachHocLieu, loading: loadingHocLieu } = useModel('hocphan.hoclieudecuong');
 	const { danhSach: danhSachNoiDungHocPhan } = useModel('hocphan.noidunghp');
+
+	const deCuongId = record?._id || record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
+
 	const {
 		record: recLopThucHanh,
 		danhSach: danhSachLopThucHanh,
@@ -52,6 +56,7 @@ const ThongTinChung = () => {
 		getAllNhanSuModel: getNhanSuLopTH,
 		loading: loadingThucHanh,
 	} = useModel('daotao.lopthuchanh');
+
 	const [activeKey, setActiveKey] = useState<string>('-1');
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [visibleHocLieu, setVisibleHocLieu] = useState<boolean>(false);
@@ -74,11 +79,9 @@ const ThongTinChung = () => {
 
 	useEffect(() => {
 		setActiveKey('-1');
-		if (record?._id) {
-			getLopThucHanh({ tenCha: record?.ten });
-		}
-		getAllModel();
-	}, [record?._id]);
+
+		if (deCuongId) getByIdModel(deCuongId ?? '');
+	}, [deCuongId]);
 
 	useEffect(() => {
 		if (activeKey !== '-1') {
@@ -97,6 +100,7 @@ const ThongTinChung = () => {
 
 	let allThoiKhoaBieu = record?.thoiKhoaBieuList ?? [];
 	allThoiKhoaBieu = allThoiKhoaBieu.concat(record?.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? []);
+
 	const past = allThoiKhoaBieu.filter((i) => moment().isAfter(i?.ngay)).length;
 	const progress = Math.round((past / allThoiKhoaBieu.length) * 100) || 0;
 
@@ -109,92 +113,35 @@ const ThongTinChung = () => {
 
 	// Render kỹ năng item với thiết kế cải tiến
 	const renderKyNangItem = (item: any, index: number, isPreview: boolean = false) => (
-		<div
-			key={index}
-			style={{
-				display: 'flex',
-				alignItems: 'flex-start',
-				padding: isPreview ? '12px 0' : '16px 0',
-				borderBottom: index < displayKyNang.length - 1 ? '1px solid #f0f0f0' : 'none',
-				borderRadius: isPreview ? '8px' : '0px',
-				backgroundColor: isPreview ? '#fafafa' : 'transparent',
-				marginBottom: isPreview ? '0' : '8px',
-			}}
-		>
-			<div
-				style={{
-					minWidth: '32px',
-					height: '32px',
-					backgroundColor: '#1677ff',
-					borderRadius: '50%',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					marginRight: 16,
-					marginTop: 2,
-					boxShadow: '0 2px 4px rgba(22, 119, 255, 0.2)',
-				}}
-			>
-				<Text style={{ color: 'white', fontSize: '14px', fontWeight: 'bold' }}>{index + 1}</Text>
+		<div key={index} className={`ky-nang-item ${isPreview ? 'preview' : 'detail'}`}>
+			<div className='ky-nang-number'>
+				<Text>{index + 1}</Text>
 			</div>
-			<div style={{ flex: 1 }}>
-				<div
-					style={{
-						fontWeight: 600,
-						fontSize: '15px',
-						marginBottom: 6,
-						color: '#262626',
-						lineHeight: '1.4',
-					}}
-				>
-					{item.tieuDe || item.ten || item.kyNang || 'Không có tiêu đề'}
-				</div>
+			<div className='ky-nang-content'>
+				<div className='ky-nang-title'>{item.tieuDe || item.ten || item.kyNang || 'Không có tiêu đề'}</div>
 				{item.moTa && (
-					<div
-						style={{
-							color: '#595959',
-							fontSize: '14px',
-							lineHeight: '1.6',
-							marginBottom: 8,
-						}}
-					>
+					<div className='ky-nang-description'>
 						{isPreview && item.moTa.length > 120 ? `${item.moTa.substring(0, 120)}...` : item.moTa}
 					</div>
 				)}
-				<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+				<div className='ky-nang-tags'>
 					{item.mucDo && (
 						<Tag
+							className={`ky-nang-tag ${
+								item.mucDo === 'Cao' ? 'muc-do-cao' : item.mucDo === 'Trung bình' ? 'muc-do-trung-binh' : 'muc-do-thap'
+							}`}
 							color={item.mucDo === 'Cao' ? 'red' : item.mucDo === 'Trung bình' ? 'orange' : 'green'}
-							style={{
-								borderRadius: '4px',
-								fontWeight: 500,
-								fontSize: '12px',
-							}}
 						>
 							Mức độ: {item.mucDo}
 						</Tag>
 					)}
 					{item.loaiKyNang && (
-						<Tag
-							color='blue'
-							style={{
-								borderRadius: '4px',
-								fontWeight: 500,
-								fontSize: '12px',
-							}}
-						>
+						<Tag color='blue' className='ky-nang-tag'>
 							{item.loaiKyNang}
 						</Tag>
 					)}
 					{item.thoiGianHoc && (
-						<Tag
-							color='purple'
-							style={{
-								borderRadius: '4px',
-								fontWeight: 500,
-								fontSize: '12px',
-							}}
-						>
+						<Tag color='purple' className='ky-nang-tag'>
 							{item.thoiGianHoc}h
 						</Tag>
 					)}
@@ -207,8 +154,8 @@ const ThongTinChung = () => {
 	const renderKyNangModal = () => (
 		<Modal
 			title={
-				<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-					<AimOutlined style={{ color: '#1677ff' }} />
+				<div className='modal-title'>
+					<AimOutlined />
 					<span>Kỹ năng & Nội dung học phần</span>
 				</div>
 			}
@@ -216,9 +163,9 @@ const ThongTinChung = () => {
 			onCancel={() => setVisibleKyNang(false)}
 			footer={null}
 			width={1200}
-			style={{ top: 20 }}
+			className='modal-ky-nang'
 		>
-			<Tabs activeKey={activeKyNangTab} onChange={setActiveKyNangTab} size='large' style={{ minHeight: '500px' }}>
+			<Tabs activeKey={activeKyNangTab} onChange={setActiveKyNangTab} size='large'>
 				<Tabs.TabPane
 					tab={
 						<span>
@@ -228,9 +175,7 @@ const ThongTinChung = () => {
 					}
 					key='content'
 				>
-					<div style={{ padding: '16px 0' }}>
-						<NoiDungHocPhanPage />
-					</div>
+					<NoiDungHocPhanPage />
 				</Tabs.TabPane>
 
 				<Tabs.TabPane
@@ -242,25 +187,16 @@ const ThongTinChung = () => {
 					}
 					key='skills'
 				>
-					<div style={{ padding: '16px 0' }}>
-						{kyNangDatDuoc.length > 0 ? (
-							<div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-								{kyNangDatDuoc.map((item: any, index: number) => renderKyNangItem(item, index, false))}
-							</div>
-						) : (
-							<div
-								style={{
-									textAlign: 'center',
-									color: '#999',
-									padding: '60px 0',
-									fontSize: '16px',
-								}}
-							>
-								<AimOutlined style={{ fontSize: '48px', marginBottom: '16px', color: '#d9d9d9' }} />
-								<div>Chưa có thông tin kỹ năng đạt được</div>
-							</div>
-						)}
-					</div>
+					{kyNangDatDuoc.length > 0 ? (
+						<div className='ky-nang-items'>
+							{kyNangDatDuoc.map((item: any, index: number) => renderKyNangItem(item, index, false))}
+						</div>
+					) : (
+						<div className='empty-ky-nang-modal'>
+							<AimOutlined />
+							<div>Chưa có thông tin kỹ năng đạt được</div>
+						</div>
+					)}
 				</Tabs.TabPane>
 
 				<Tabs.TabPane
@@ -272,9 +208,7 @@ const ThongTinChung = () => {
 					}
 					key='general'
 				>
-					<div style={{ padding: '16px 0' }}>
-						<ThongTinChungPage />
-					</div>
+					<ThongTinChungPage />
 				</Tabs.TabPane>
 			</Tabs>
 		</Modal>
@@ -282,39 +216,12 @@ const ThongTinChung = () => {
 
 	return (
 		<Spin spinning={loading}>
-			<div
-				style={{
-					backgroundColor: 'white',
-					padding: '16px 16px 0px 16px',
-					margin: '0px 0 -16px 0',
-					borderRadius: '8px',
-				}}
-			>
-				<div
-					style={{
-						borderBottom: '1px dashed transparent',
-						borderImage: 'repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px)',
-						borderImageSlice: 1,
-						marginBottom: '16px',
-					}}
-				>
+			<div className='thong-tin-chung-container'>
+				<div className='gioi-thieu-section'>
 					<GioiThieuChungLopHp />
 				</div>
-				<div
-					style={{
-						borderBottom: '1px dashed transparent',
-						borderImage: 'repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px)',
-						borderImageSlice: 1,
-						marginBottom: '16px',
-						paddingBottom: '16px',
-					}}
-				>
-					<Row
-						gutter={[16, 16]}
-						style={{
-							padding: '8px 0',
-						}}
-					>
+				<div className='thong-tin-co-ban'>
+					<Row gutter={[16, 16]} className='thong-tin-row'>
 						{/* Mã học phần */}
 						<Col xs={24} sm={12} md={6}>
 							<Text style={{ color: '#888' }}>Mã học phần:</Text>
@@ -335,7 +242,6 @@ const ThongTinChung = () => {
 											<span key={index}>
 												<span
 													className='hover-giangvien'
-													style={{ cursor: 'pointer', marginRight: 4 }}
 													onClick={() => {
 														setSelectedGiangVien(item?.nhanSu);
 														setVisibleGvDetailModal(true);
@@ -357,19 +263,7 @@ const ThongTinChung = () => {
 						<Col xs={24} sm={12} md={6}>
 							<Text style={{ color: '#888' }}>Số tín chỉ:</Text>
 							<div>
-								<Tag
-									color='red'
-									style={{
-										borderRadius: 4,
-										fontWeight: 500,
-										padding: '1px 8px',
-										backgroundColor: 'rgba(255, 85, 85, 0.05)',
-										border: '1px solid #ffccc7',
-										color: '#ff4d4f',
-									}}
-								>
-									{record?.hocPhan?.soTinChi ?? '--'} tín chỉ
-								</Tag>
+								<Tag className='tag-so-tin-chi'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Tag>
 							</div>
 						</Col>
 
@@ -378,38 +272,15 @@ const ThongTinChung = () => {
 							<Text style={{ color: '#888' }}>Tiến trình môn học:</Text>
 							<div>
 								{isCompleted ? (
-									<Tag
-										style={{
-											borderRadius: 4,
-											fontWeight: 500,
-											padding: '1px 8px',
-											backgroundColor: 'rgba(255, 85, 85, 0.05)',
-											border: '1px solid #ffccc7',
-											color: '#ff4d4f',
-										}}
-									>
-										Đã kết thúc
-									</Tag>
+									<Tag className='tag-da-ket-thuc'>Đã kết thúc</Tag>
 								) : (
-									<Tag
-										style={{
-											borderRadius: '4px',
-											fontSize: 12,
-											padding: '1px 10px',
-											fontWeight: 500,
-											backgroundColor: 'transparent',
-											border: '1px solid #B7EB8F',
-											color: '#52c41a',
-										}}
-									>
-										Đang học
-									</Tag>
+									<Tag className='tag-dang-hoc'>Đang học</Tag>
 								)}
 							</div>
 						</Col>
 					</Row>
 				</div>
-				<Space wrap style={{ marginTop: 8 }}>
+				<Space wrap className='button-space'>
 					{record?.lmsUrl ? (
 						<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
 							Học trực tuyến
@@ -424,51 +295,28 @@ const ThongTinChung = () => {
 				{/* Tài liệu môn học */}
 				<Card
 					title='Tài liệu môn học'
-					headStyle={{ border: 'none' }}
 					size='small'
-					style={{
-						marginBottom: 16,
-						border: 'none',
-						padding: 0,
-						borderBottom: '1px dashed transparent',
-						borderImage: 'repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px)',
-						borderImageSlice: 1,
-						margin: '-16px',
-						// backgroundColor: 'transparent',
-					}}
+					className='tai-lieu-card'
 					extra={
-						<Button type='link' onClick={() => setVisibleHocLieu(true)} style={{ padding: 0 }}>
+						<Button type='link' className='btn-extra' onClick={() => setVisibleHocLieu(true)}>
 							Xem tất cả
 						</Button>
 					}
 				>
 					<Spin spinning={loadingHocLieu}>
 						{displayHocLieu.length > 0 ? (
-							<div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+							<div>
 								{displayHocLieu.map((item, index) => (
-									<div
-										key={index}
-										style={{
-											display: 'flex',
-											alignItems: 'flex-start',
-											justifyContent: 'space-between',
-											padding: '8px 0',
-											borderBottom: index < displayHocLieu.length - 1 ? '1px solid #f0f0f0' : 'none',
-										}}
-									>
-										<div style={{ flex: 1 }}>
-											<div style={{ fontWeight: 500, fontSize: '14px', marginBottom: 4 }}>
-												{item.tieuDe || 'Không có tiêu đề'}
-											</div>
-											<div style={{ color: '#666', fontSize: '12px', marginBottom: 2 }}>
-												Tác giả: {item.tacGia || 'Chưa cập nhật'}
-											</div>
-											<div style={{ color: '#666', fontSize: '12px', marginBottom: 2 }}>
+									<div key={index} className='hoc-lieu-item'>
+										<div className='hoc-lieu-content'>
+											<div className='hoc-lieu-title'>{item.tieuDe || 'Không có tiêu đề'}</div>
+											<div className='hoc-lieu-author'>Tác giả: {item.tacGia || 'Chưa cập nhật'}</div>
+											<div className='hoc-lieu-publisher'>
 												NXB: {item.tenNhaXuatBan || 'Chưa cập nhật'}
 												{item.namXuatBan && ` (${item.namXuatBan})`}
 											</div>
 											{item.moTa && (
-												<div style={{ color: '#999', fontSize: '12px', fontStyle: 'italic' }}>
+												<div className='hoc-lieu-description'>
 													{item.moTa.length > 50 ? `${item.moTa.substring(0, 50)}...` : item.moTa}
 												</div>
 											)}
@@ -513,17 +361,7 @@ const ThongTinChung = () => {
 						</div>
 					}
 					size='small'
-					headStyle={{ border: 'none' }}
-					style={{
-						border: 'none',
-						borderBottom: '1px dashed transparent',
-						borderImage: 'repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px)',
-						borderImageSlice: 1,
-						margin: '-16px',
-						marginBottom: 32,
-						// backgroundColor: 'transparent',
-						marginTop: 32,
-					}}
+					className='ky-nang-card'
 					extra={
 						kyNangDatDuoc.length > 0 && (
 							<Button
@@ -532,7 +370,7 @@ const ThongTinChung = () => {
 									setVisibleKyNang(true);
 									setActiveKyNangTab('skills');
 								}}
-								style={{ padding: 0, fontWeight: 500 }}
+								className='btn-extra detail-btn'
 								icon={<AimOutlined />}
 							>
 								Xem chi tiết
@@ -541,19 +379,11 @@ const ThongTinChung = () => {
 					}
 				>
 					{displayKyNang.length > 0 ? (
-						<div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+						<div className='ky-nang-items'>
 							{displayKyNang.map((item: any, index: number) => renderKyNangItem(item, index, true))}
 							{kyNangDatDuoc.length > 3 && (
-								<div
-									style={{
-										textAlign: 'center',
-										marginTop: 16,
-										padding: '12px',
-										backgroundColor: '#f8f9fa',
-										borderRadius: '6px',
-									}}
-								>
-									<Text type='secondary' style={{ fontSize: '14px' }}>
+								<div className='more-skills'>
+									<Text type='secondary' className='more-skills-text'>
 										và {kyNangDatDuoc.length - 3} kỹ năng khác...
 									</Text>
 									<Button
@@ -571,17 +401,9 @@ const ThongTinChung = () => {
 							)}
 						</div>
 					) : (
-						<div
-							style={{
-								textAlign: 'center',
-								color: '#999',
-								padding: '40px 0',
-								backgroundColor: '#fafafa',
-								borderRadius: '6px',
-							}}
-						>
-							<AimOutlined style={{ fontSize: '32px', marginBottom: '12px', color: '#d9d9d9' }} />
-							<div style={{ fontSize: '14px' }}>Chưa có thông tin kỹ năng đạt được</div>
+						<div className='empty-ky-nang'>
+							<AimOutlined />
+							<div>Chưa có thông tin kỹ năng đạt được</div>
 							<Button
 								type='link'
 								size='small'
@@ -615,7 +437,7 @@ const ThongTinChung = () => {
 				fromLopHocPhan
 			/> */}
 
-			<Row gutter={[16, 16]} style={{ marginTop: '16px' }}>
+			<Row gutter={[16, 16]} className='card-content'>
 				<Col xs={24} lg={12}>
 					<CardBaiTapLopHp lopHocPhanId={record?._id ?? ''} />
 				</Col>
@@ -636,7 +458,7 @@ const ThongTinChung = () => {
 				footer={null}
 			>
 				{selectedGiangVien ? (
-					<div style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 8 }}>
+					<div className='giang-vien-info'>
 						<Row>
 							<Col span={8}>
 								<Text strong>Họ tên:</Text>
@@ -703,7 +525,7 @@ const ThongTinChung = () => {
 						</Row>
 					</div>
 				) : (
-					<div style={{ textAlign: 'center', color: '#999' }}>Không có thông tin giảng viên</div>
+					<div className='giang-vien-empty'>Không có thông tin giảng viên</div>
 				)}
 			</Modal>
 			{/* Modal Học liệu */}
