@@ -2,10 +2,10 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
 import { Col, Row, Table, Tag } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -23,7 +23,6 @@ const FormItemHoaDonChiTiet = () => {
 		getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode }).then((list) =>
 			setBillItemResult(list),
 		);
-
 
 	useEffect(() => {
 		getData();
@@ -73,7 +72,7 @@ const FormItemHoaDonChiTiet = () => {
 			dataIndex: 'createdAt',
 			width: 120,
 			align: 'left',
-			render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Trạng thái',

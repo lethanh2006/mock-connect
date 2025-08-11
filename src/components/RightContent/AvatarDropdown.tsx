@@ -1,10 +1,10 @@
 import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
 import { landingUrl } from '@/services/base/constant';
 import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
+import dayjs from '@/utils/dayjs';
 import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
@@ -47,8 +47,8 @@ const AvatarDropdown = () => {
 								<Col span={24}>
 									<div>Tên đợt: {index?.[0]?.ten}</div>
 									<div>
-										Thời gian diễn ra từ {moment(index?.[0]?.thoiGianBatDau).format('DD/MM')} đến{' '}
-										{moment(index?.[0]?.thoiGianKetThuc).format('DD/MM/YYYY')}.
+										Thời gian diễn ra từ {dayjs(index?.[0]?.thoiGianBatDau).format('DD/MM')} đến{' '}
+										{dayjs(index?.[0]?.thoiGianKetThuc).format('DD/MM/YYYY')}.
 									</div>
 								</Col>
 								<Col span={24}>
@@ -174,14 +174,14 @@ const AvatarDropdown = () => {
 					<Avatar
 						className={styles.avatar}
 						src={!!avatarUrl ? <img src={avatarUrl} /> : undefined}
-						icon={!avatarUrl ? lastNameChar ?? <UserOutlined /> : undefined}
+						icon={!avatarUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
 						alt='avatar'
 					/>
 					<span className={`${styles.name}`}>{fullName}</span>
 				</span>
 			</Dropdown>
 
-				<ModalKhaoSatBatBuoc />
+			<ModalKhaoSatBatBuoc />
 		</>
 	);
 };

@@ -5,12 +5,12 @@ import type { IColumn } from '@/components/Table/typing';
 import { exportSinhVienDangKyNhuCau } from '@/services/HocTap/HocPhanNhuCau';
 import { colorTrangThaiSvDkHpNhuCau, ETrangThaiSvDkHpNhuCau } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
+import dayjs from '@/utils/dayjs';
 import { getFilenameHeader } from '@/utils/utils';
 import { ExportOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Modal, Space, Tag } from 'antd';
 import fileDownload from 'js-file-download';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import CardThongKe from './CardThongKe';
@@ -110,7 +110,7 @@ const DanhSachDangKyLop = (props: { visible: boolean; setVisible: (val: boolean)
 			dataIndex: 'thoiGianDangKy',
 			width: 140,
 			align: 'center',
-			render: (val, rec) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Ghi chú CVHT',

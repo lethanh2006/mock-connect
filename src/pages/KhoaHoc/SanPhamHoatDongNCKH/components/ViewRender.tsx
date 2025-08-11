@@ -1,14 +1,13 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import { primaryColor } from '@/services/base/constant';
 import { EKieuDuLieu } from '@/services/KhoaHoc/LoaiHinhNCKH/constants';
 import type { LoaiHinhNCKH } from '@/services/KhoaHoc/LoaiHinhNCKH/typings';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
+import dayjs from '@/utils/dayjs';
 import { Tag } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 import { buildFilter } from './BuildFilter';
-import Settings from 'config/defaultSettings';
-import { primaryColor } from '@/services/base/constant';
 
 const ViewRender = (props: {
 	cauHinh: LoaiHinhNCKH.TruongThongTin | LoaiHinhNCKH.Cot;
@@ -89,13 +88,13 @@ const ViewRender = (props: {
 			break;
 
 		case EKieuDuLieu.HOUR:
-			value = <div>{moment(recordSanPhamFinal?.[cauHinh.ma]).format('HH:mm DD/MM/YYYY')}</div>;
+			value = <div>{dayjs(recordSanPhamFinal?.[cauHinh.ma]).format('HH:mm DD/MM/YYYY')}</div>;
 			break;
 		case EKieuDuLieu.DATE:
-			value = <div>{moment(recordSanPhamFinal?.[cauHinh.ma]).format('DD/MM/YYYY')}</div>;
+			value = <div>{dayjs(recordSanPhamFinal?.[cauHinh.ma]).format('DD/MM/YYYY')}</div>;
 			break;
 		case EKieuDuLieu.MONTH:
-			value = <div>{moment(recordSanPhamFinal?.[cauHinh.ma]).format('MM/YYYY')}</div>;
+			value = <div>{dayjs(recordSanPhamFinal?.[cauHinh.ma]).format('MM/YYYY')}</div>;
 			break;
 		case EKieuDuLieu.FILE:
 			value = (

@@ -8,9 +8,9 @@ import {
 	mapTrangThaiHocPhanDangKyNhuCau,
 	type ETrangThaiHocPhanDangKyNhuCau,
 } from '@/services/DaoTao/constant';
+import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Alert, Popconfirm, Tag } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormDangKyNhuCau from './Form';
@@ -42,8 +42,8 @@ const NhuCauHocPhanPage = () =>
 		const ngoaiThoiGian =
 			!recDot?.thoiGianBatDau ||
 			!recDot?.thoiGianKetThuc ||
-			moment().isBefore(recDot?.thoiGianBatDau, 'd') ||
-			moment().isAfter(recDot?.thoiGianKetThuc, 'd');
+			dayjs().isBefore(dayjs(recDot?.thoiGianBatDau), 'day') ||
+			dayjs().isAfter(dayjs(recDot?.thoiGianKetThuc), 'day');
 
 		useEffect(() => {
 			getData();
@@ -75,11 +75,7 @@ const NhuCauHocPhanPage = () =>
 				width: 60,
 				align: 'center',
 				dataIndex: 'soLuongDangKy',
-				render: (val) => (
-					<Tag color={val >= 30 ? 'green' : val >= 20 ? 'yellow' : 'red'}>
-						{val} SV
-					</Tag>
-				),
+				render: (val) => <Tag color={val >= 30 ? 'green' : val >= 20 ? 'yellow' : 'red'}>{val} SV</Tag>,
 			},
 			{
 				title: 'Khóa ngành',
@@ -123,8 +119,8 @@ const NhuCauHocPhanPage = () =>
 								'Ngoài thời gian đăng ký nhu cầu !'
 							) : (
 								<>
-									Thời gian đăng ký nhu cầu từ <b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-									<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+									Thời gian đăng ký nhu cầu từ <b>{dayjs(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+									<b>{dayjs(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
 								</>
 							)
 						}

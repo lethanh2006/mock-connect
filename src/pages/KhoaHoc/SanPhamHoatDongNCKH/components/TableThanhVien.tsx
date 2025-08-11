@@ -329,7 +329,7 @@ const TableThanhVien = (props: {
 				data={
 					props?.data
 						? props.data
-						: recordSanPham?.danhSachThanhVien?.map((item, index) => ({ ...item, index: index + 1 })) ?? []
+						: (recordSanPham?.danhSachThanhVien?.map((item, index) => ({ ...item, index: index + 1 })) ?? [])
 				}
 				otherProps={{
 					pagination: false,

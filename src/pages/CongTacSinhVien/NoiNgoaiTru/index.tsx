@@ -6,8 +6,8 @@ import {
 	colorETrangThaiKhaiBaoNoiNgoaiTru,
 } from '@/services/CongTacSinhVien/NoiNgoaiTru/constant';
 import type { NoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru/typing';
+import dayjs from '@/utils/dayjs';
 import { Card, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import Form from './components/Form';
@@ -46,8 +46,8 @@ const NoiNgoaiTruPage = () => {
 			width: 250,
 			render: (val, rec) => (
 				<>
-					{moment(rec.dotKhaiBao?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
-					{moment(rec.dotKhaiBao?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+					{dayjs(rec.dotKhaiBao?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
+					{dayjs(rec.dotKhaiBao?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 				</>
 			),
 			onCell,
@@ -58,10 +58,10 @@ const NoiNgoaiTruPage = () => {
 			align: 'center',
 			width: 130,
 			render: (val, rec) => {
-				if (moment().isBefore(rec.dotKhaiBao?.thoiGianBatDau)) {
+				if (dayjs().isBefore(rec.dotKhaiBao?.thoiGianBatDau)) {
 					return <Tag color={'blue'}>Chưa diễn ra</Tag>;
 				} else {
-					if (moment().isAfter(rec.dotKhaiBao?.thoiGianBatDau) && moment().isBefore(rec.dotKhaiBao?.thoiGianKetThuc)) {
+					if (dayjs().isAfter(rec.dotKhaiBao?.thoiGianBatDau) && dayjs().isBefore(rec.dotKhaiBao?.thoiGianKetThuc)) {
 						return <Tag color={'green'}>Đang diễn ra</Tag>;
 					} else {
 						return <Tag color={'red'}>Đã diễn ra</Tag>;
@@ -91,8 +91,7 @@ const NoiNgoaiTruPage = () => {
 						<ButtonExtend
 							disabled={
 								!(
-									moment().isAfter(rec?.dotKhaiBao?.thoiGianBatDau) &&
-									moment().isBefore(rec?.dotKhaiBao?.thoiGianKetThuc)
+									dayjs().isAfter(rec?.dotKhaiBao?.thoiGianBatDau) && dayjs().isBefore(rec?.dotKhaiBao?.thoiGianKetThuc)
 								)
 							}
 							tooltip='Khai báo'
@@ -106,8 +105,7 @@ const NoiNgoaiTruPage = () => {
 						<ButtonExtend
 							disabled={
 								!(
-									moment().isAfter(rec?.dotKhaiBao?.thoiGianBatDau) &&
-									moment().isBefore(rec?.dotKhaiBao?.thoiGianKetThuc)
+									dayjs().isAfter(rec?.dotKhaiBao?.thoiGianBatDau) && dayjs().isBefore(rec?.dotKhaiBao?.thoiGianKetThuc)
 								)
 							}
 							tooltip='Cập nhật'

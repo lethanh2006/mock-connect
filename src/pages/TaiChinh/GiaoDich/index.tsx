@@ -16,7 +16,8 @@ import {
 import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Popconfirm, Segmented, Tag, notification } from 'antd';
-import moment from 'moment';
+
+import dayjs from '@/utils/dayjs';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
@@ -141,7 +142,7 @@ const GiaoDichPage = () => {
 			align: 'center',
 			filterType: 'datetime',
 			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Hoàn thành',
@@ -150,7 +151,7 @@ const GiaoDichPage = () => {
 			align: 'center',
 			filterType: 'datetime',
 			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Thao tác',

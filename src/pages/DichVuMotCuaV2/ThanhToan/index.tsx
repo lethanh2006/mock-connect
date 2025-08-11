@@ -2,9 +2,9 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type ThanhToan } from '@/services/DVMC/ThanhToan/typings';
 import { TrangThaiThanhToan } from '@/services/DVMC/constant';
+import dayjs from '@/utils/dayjs';
 import { currencyFormat } from '@/utils/utils';
 import { Divider, Empty, Table, Tabs } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ChiTietDichVu from './ChiTietDichVu';
@@ -44,7 +44,7 @@ const ThanhToanPage = (props: { identityCode: string; trangThaiThanhToan?: strin
 			width: 120,
 			dataIndex: 'transactionDate',
 			align: 'center',
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Người thực hiện',
@@ -67,8 +67,8 @@ const ThanhToanPage = (props: { identityCode: string; trangThaiThanhToan?: strin
 					props?.trangThaiThanhToan
 						? props.trangThaiThanhToan
 						: record?.status
-						? TrangThaiThanhToan?.[record.status] ?? ''
-						: ''
+							? (TrangThaiThanhToan?.[record.status] ?? '')
+							: ''
 				}
 			/>
 			{record?.metadata?.loai !== 'DVMC' && record?.metadata?.thongTinChiTiet?.length ? (

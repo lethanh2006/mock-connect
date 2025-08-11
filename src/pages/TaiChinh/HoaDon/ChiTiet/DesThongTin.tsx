@@ -1,7 +1,7 @@
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
 import { Descriptions, Tag } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 
 const DesThongTinHoaDon = () => {
@@ -10,7 +10,9 @@ const DesThongTinHoaDon = () => {
 		!!recHoaDon?.dotThu?._id &&
 		!!recHoaDon?.dotThu?.thoiGianBatDau &&
 		!!recHoaDon.dotThu.thoiGianKetThuc &&
-		(moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) || moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc));
+		(dayjs().isBefore(dayjs(recHoaDon.dotThu.thoiGianBatDau)) ||
+			dayjs().isAfter(dayjs(recHoaDon.dotThu.thoiGianKetThuc)));
+
 	return (
 		<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
 			<Descriptions.Item label='Đợt thu'>
@@ -20,7 +22,7 @@ const DesThongTinHoaDon = () => {
 			<Descriptions.Item label='Thời gian thu'>
 				<span className={ngoaiThoiGianThanhToan ? 'text-error' : undefined}>
 					{recHoaDon?.dotThu?.thoiGianBatDau ? (
-						`${moment(recHoaDon.dotThu.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} - ${moment(
+						`${dayjs(recHoaDon.dotThu.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} - ${dayjs(
 							recHoaDon.dotThu.thoiGianKetThuc,
 						).format('HH:mm DD/MM/YYYY')}`
 					) : (

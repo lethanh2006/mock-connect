@@ -1,14 +1,14 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 
+import PreviewFile from '@/components/PreviewFile';
+import { EDoiTuongKeHoachNCKH, MapKeyDoiTuongKeHoachNCKH } from '@/services/KhoaHoc/KeHoach/constants';
+import dayjs from '@/utils/dayjs';
 import { Button, Modal } from 'antd';
-import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
 import FormQuyChe from './components/Form';
 import ViewQuyChe from './components/View';
-import { EDoiTuongKeHoachNCKH, MapKeyDoiTuongKeHoachNCKH } from '@/services/KhoaHoc/KeHoach/constants';
-import PreviewFile from '@/components/PreviewFile';
 
 const QuyCheComponent = () => {
 	const { getModel, page, limit, setRecord, record: recordQuyChe } = useModel('khoahoc.quychenckh');
@@ -63,7 +63,7 @@ const QuyCheComponent = () => {
 			sortable: true,
 			onCell,
 			align: 'center',
-			render: (val) => (val ? moment(val).format('DD/MM/YYYY') : ''),
+			render: (val) => (val ? dayjs(val).format('DD/MM/YYYY') : ''),
 		},
 		{
 			title: 'File đính kèm',

@@ -5,9 +5,9 @@ import {
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { currencyFormat } from '@/utils/utils';
 import { Button, Descriptions, Tag } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 import TableSanPham from './TableSanPham';
 import TableThanhVien from './TableThanhVien';
@@ -121,7 +121,7 @@ const ViewThuyetMinh = (props: {
 				</Descriptions.Item>
 
 				<Descriptions.Item span={3} label='Ngày sinh'>
-					{moment(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
+					{dayjs(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
 				</Descriptions.Item>
 				<Descriptions.Item span={3} label='Khoa'>
 					{dangKyKhcn.chuTriDeTai.tenDonVi}
@@ -195,8 +195,8 @@ const ViewThuyetMinh = (props: {
 			) : null}
 			<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
 				<Descriptions.Item span={3} label='Thời gian thực hiện đề tài'>
-					{moment(dangKyKhcn.thoiGianThucHienBatDau).format('DD/MM/YYYY')} -{' '}
-					{moment(dangKyKhcn.thoiGianThucHienKetThuc).format('DD/MM/YYYY')}
+					{dayjs(dangKyKhcn.thoiGianThucHienBatDau).format('DD/MM/YYYY')} -{' '}
+					{dayjs(dangKyKhcn.thoiGianThucHienKetThuc).format('DD/MM/YYYY')}
 				</Descriptions.Item>
 				<Descriptions.Item span={3} label='Tổng kinh phí đề nghị của đề tài'>
 					{currencyFormat(dangKyKhcn.kinhPhi.kinhPhi)} {dangKyKhcn.kinhPhi.menhGia}

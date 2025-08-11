@@ -3,10 +3,9 @@ import type { IColumn } from '@/components/Table/typing';
 
 import { ELoaiDeTaiCaNhan } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
+import dayjs from '@/utils/dayjs';
 import { currencyFormat } from '@/utils/utils';
-import moment from 'moment';
 import { useModel } from 'umi';
-
 const DeTaiNgoaiHoiDong = () => {
 	const { danhSach, setVisibleViewDetail, setRecord, setSelectedIds, selectedIds } = useModel('khoahoc.detaikhcn');
 	const { record: recHoiDong } = useModel('khoahoc.hoidongkhcn');
@@ -59,8 +58,8 @@ const DeTaiNgoaiHoiDong = () => {
 			align: 'center',
 			render: (val: DeTaiKHCN.IRecord) => (
 				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
 				</div>
 			),
 			onCell,

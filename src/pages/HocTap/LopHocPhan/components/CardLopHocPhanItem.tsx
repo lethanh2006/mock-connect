@@ -1,7 +1,7 @@
+import dayjs from '@/utils/dayjs';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Progress, Tag, Typography } from 'antd';
 import { createHash } from 'crypto';
-import moment from 'moment';
 import { history } from 'umi';
 
 const { Title, Text } = Typography;
@@ -27,7 +27,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, bac
 	allThoiKhoaBieu = allThoiKhoaBieu.concat(
 		lop.children?.flatMap((child: { thoiKhoaBieuList: any }) => child.thoiKhoaBieuList ?? []) ?? [],
 	);
-	const past = allThoiKhoaBieu.filter((i: { ngay: moment.MomentInput }) => moment().isAfter(i?.ngay)).length;
+	const past = allThoiKhoaBieu.filter((i: { ngay: string | Date }) => dayjs().isAfter(dayjs(i?.ngay))).length;
 	const progress = Math.round((past / allThoiKhoaBieu.length) * 100) || 0;
 
 	const isCompleted = progress === 100 || lop?.diem?.diemHpSvHk?.diemKthp;

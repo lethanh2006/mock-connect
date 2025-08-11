@@ -1,12 +1,12 @@
 import { EDangSanPham, MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { Button, Descriptions, Tag } from 'antd';
 import { useModel } from 'umi';
 import TableKeHoachUngDung from './TableKeHoachUngDung';
 import TableSanPham from './TableSanPham';
 import TableUngDungTrongHocVien from './TableUngDungTrongHocVien';
-import moment from 'moment';
 
 const ViewHoSoNghiemThu = (props: {
 	rec: DeTaiKHCN.IRecord;
@@ -149,7 +149,7 @@ const ViewHoSoNghiemThu = (props: {
 					{dangKyKhcn.chuTriDeTai.tenDonVi}
 				</Descriptions.Item>
 				<Descriptions.Item span={2} label='Ngày sinh'>
-					{moment(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
+					{dayjs(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
 				</Descriptions.Item>
 				<Descriptions.Item span={2} label='Nơi sinh'>
 					{dangKyKhcn.chuTriDeTai.noiSinh}

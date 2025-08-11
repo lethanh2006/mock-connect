@@ -1,8 +1,8 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
+import dayjs from '@/utils/dayjs';
 import { Col, Empty, Row, Tooltip } from 'antd';
 import { first } from 'lodash';
-import moment from 'moment';
 import { history, useModel } from 'umi';
 import { CardTinTuc, ContentLargeCard } from '../components/TinTuc.style';
 import { Excerpt } from './components/Excerpt';
@@ -96,7 +96,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 								<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 									{danhSach?.[0]?.date && (
 										<span className='thoi-gian'>
-											{moment(danhSach?.[0]?.date).format('DD/MM/YYYY')} -{' '}
+											{dayjs(danhSach?.[0]?.date).format('DD/MM/YYYY')} -{' '}
 											<a
 												type='link'
 												onClick={(e) => {
@@ -184,7 +184,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 												<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 													{tintuc.date && (
 														<span className='thoi-gian'>
-															{moment(tintuc.date).format('DD/MM/YYYY')} -{' '}
+															{dayjs(tintuc.date).format('DD/MM/YYYY')} -{' '}
 															<a
 																type='link'
 																onClick={(e) => {
@@ -277,7 +277,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 												{tintuc?.date && (
 													<span className='thoi-gian'>
-														{moment(tintuc?.date).format('DD/MM/YYYY')} -{' '}
+														{dayjs(tintuc?.date).format('DD/MM/YYYY')} -{' '}
 														<a
 															type='link'
 															onClick={(e) => {

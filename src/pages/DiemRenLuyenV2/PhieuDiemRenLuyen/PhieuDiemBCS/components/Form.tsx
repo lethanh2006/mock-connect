@@ -1,22 +1,22 @@
+import type { FormDanhGiaValues } from '@/models/diemrenluyenv2/bieumau';
+import type { BieuMau } from '@/services/DiemRenLuyenV2/BieuMau/typing';
 import {
+	BCS_DANH_GIA_PREFIX,
 	CTSV_DANH_GIA_PREFIX,
 	CVHT_DANH_GIA_PREFIX,
 	ENguoiTraLoiDrl,
 	ETrangThaiPhieuDiemRL,
-	BCS_DANH_GIA_PREFIX,
 	MapColorETrangThaiPhieuDiemRL,
-	TU_DANH_GIA_PREFIX,
 	MapTitleETrangThaiPhieuDiemRL,
+	TU_DANH_GIA_PREFIX,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
+import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { Card, Descriptions, Form, message, Space, Spin, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import type { FormDanhGiaValues } from '@/models/diemrenluyenv2/bieumau';
-import type { BieuMau } from '@/services/DiemRenLuyenV2/BieuMau/typing';
-import moment from 'moment';
 import { Footer } from '../../Footer';
 import { FieldsNhapDiem } from '../../components/FieldsNhapDiem';
-import { primaryColor } from '@/services/base/constant';
 
 const FormNhapPhieuDiem = (props: { getData: any }) => {
 	const [form] = Form.useForm();
@@ -43,8 +43,8 @@ const FormNhapPhieuDiem = (props: { getData: any }) => {
 
 	const ngoaiThoiGian =
 		recordDot?.thoiGianBCSChamDiem &&
-		(moment().isAfter(recordDot.thoiGianBCSChamDiem.thoiGianKetThuc) ||
-			moment().isBefore(recordDot?.thoiGianBCSChamDiem?.thoiGianBatDau));
+		(dayjs().isAfter(dayjs(recordDot.thoiGianBCSChamDiem.thoiGianKetThuc)) ||
+			dayjs().isBefore(dayjs(recordDot?.thoiGianBCSChamDiem?.thoiGianBatDau)));
 
 	const handleTinhDiemVaPhanLoai = (formValues_?: Partial<any>) => {
 		const formValues = formValues_ ?? form.getFieldsValue();

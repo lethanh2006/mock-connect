@@ -1,6 +1,6 @@
+import dayjs from '@/utils/dayjs';
 import { CalendarOutlined } from '@ant-design/icons';
 import { Col, Divider, Row, Spin } from 'antd';
-import moment from 'moment';
 import { history, useModel } from 'umi';
 import '../components/styles.less';
 
@@ -20,7 +20,7 @@ const ChiTietTinTucWpPage = () => {
 					<div id='content'>
 						<h4 dangerouslySetInnerHTML={{ __html: record?.title?.rendered ?? '' }} />
 						<p className='ngay-dang'>
-							<CalendarOutlined /> {record?.date && moment(record?.date).format('DD MMMM YYYY, HH:mm ')}
+							<CalendarOutlined /> {record?.date && dayjs(record?.date).format('DD MMMM YYYY, HH:mm ')}
 							<Divider type='vertical' />{' '}
 							<a type='link' onClick={() => changeMenu()}>
 								{recChuDe?.name}
