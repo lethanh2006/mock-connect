@@ -1,11 +1,11 @@
 import { EModuleKey } from '@/services/base/constant';
 import { type ESourceTypeNotification, mapModuleKey } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
+import dayjs from '@/utils/dayjs';
 import { currentRole } from '@/utils/ip';
 import { getNameFile } from '@/utils/utils';
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Divider, Row } from 'antd';
-import moment from 'moment';
 import { history } from 'umi';
 import './style.less';
 
@@ -25,6 +25,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 			[EModuleKey.QLKH]: APP_CONFIG_URL_QLKH,
 			[EModuleKey.KT]: APP_CONFIG_URL_KHAO_THI,
 			[EModuleKey.CSVC]: APP_CONFIG_URL_CSVC,
+			[EModuleKey.VBCC]: '',
 		};
 
 		const sourceType = mapModuleKey[record?.sourceType as ESourceTypeNotification];
@@ -32,12 +33,14 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 
 		if (sourceType === currentRole) {
 			if (afterViewDetail) afterViewDetail();
-			history.push(`/${record?.metadata?.pathWeb}`);
+			if (record?.metadata?.pathWeb) {
+				history.push(`${record.metadata.pathWeb.replace(/^\/+/, '')}`);
+			}
 		} else {
 			const baseUrl = urlMap[sourceModule as EModuleKey];
 			if (baseUrl && record?.metadata?.pathWeb) {
-				const pathWeb = record.metadata.pathWeb.replace(/^\/+/, ''); // Loại bỏ dấu '/' ở đầu chuỗi pathWeb nếu có
-				window.open(baseUrl + pathWeb, '_blank');
+				const pathWeb = record.metadata.pathWeb.replace(/^\/+/, '');
+				window.location.href = `${baseUrl}/${pathWeb}`;
 			}
 		}
 	};
@@ -50,7 +53,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 					<>
 						<div style={{ marginBottom: 8 }}>{record?.description}</div>
 						<UserOutlined /> {record?.senderName ?? ''} <Divider type='vertical' />
-						<CalendarOutlined /> {moment(record?.createdAt).format('HH:mm DD/MM/YYYY')}
+						<CalendarOutlined /> {dayjs(record?.createdAt).format('HH:mm DD/MM/YYYY')}
 					</>
 				}
 			/>
@@ -73,7 +76,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 				{record?.thoiGianHieuLuc ? (
 					<Col span={24}>
 						Hiệu lực thông báo:{' '}
-						<b style={{ color: 'red' }}>{moment(record?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>{' '}
+						<b style={{ color: 'red' }}>{dayjs(record?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>{' '}
 					</Col>
 				) : null}
 
