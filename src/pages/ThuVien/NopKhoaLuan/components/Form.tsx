@@ -3,10 +3,10 @@ import UploadFile from '@/components/Upload/UploadFile';
 import SelectNganhCoSo from '@/pages/DaoTao/Nganh/SelectNganh';
 import { ETrangThaiNopThuVien } from '@/services/QuanLyThuVien/constant';
 import { EFileScope, uploadFile } from '@/services/uploadFile';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, Row } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -28,7 +28,7 @@ const FormThuVien = (props: any) => {
 			});
 		} else {
 			form.setFieldsValue({
-				thoiGianNop: moment().toISOString(),
+				thoiGianNop: dayjs().toISOString(),
 				ssoId: recSinhVien?.ssoId,
 				maSinhVien: recSinhVien?.ma,
 				hoTenTacGia: recSinhVien?.ten,

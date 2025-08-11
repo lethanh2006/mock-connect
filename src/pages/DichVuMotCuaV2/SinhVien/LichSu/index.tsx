@@ -8,6 +8,7 @@ import ThanhToanPage from '@/pages/DichVuMotCuaV2/ThanhToan';
 import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import { TrangThaiDonDVMC } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
+import dayjs from '@/utils/dayjs';
 import { ip3 } from '@/utils/ip';
 import {
 	DeleteOutlined,
@@ -21,7 +22,6 @@ import {
 } from '@ant-design/icons';
 import { Button, Carousel, Divider, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip, message } from 'antd';
 import axios from 'axios';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import FormGuiPhanHoi from '../../QuanLyDon/components/FormGuiPhanHoi';
@@ -212,7 +212,7 @@ const LichSuGuiDon = () => {
 			title: 'Ngày tạo',
 			dataIndex: 'createdAt',
 			width: 100,
-			render: (val) => <div>{moment(val).format('HH:mm DD/MM/YYYY')}</div>,
+			render: (val) => <div>{dayjs(val).format('HH:mm DD/MM/YYYY')}</div>,
 			align: 'center',
 			onCell,
 		},

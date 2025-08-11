@@ -12,9 +12,9 @@ import {
 	ETrangThaiMinhChungDiemRenLuyen,
 } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/constants';
 import { type MinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/typing';
+import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Carousel, Popconfirm, Tag, Tooltip } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import { FormKhaiBaoMinhChung } from './components/Form';
@@ -50,7 +50,7 @@ export default () => {
 			dataIndex: 'createdAt',
 			onCell,
 			hide: getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU,
-			render: (value) => (value ? moment(value).format('DD/MM/YYYY') : null),
+			render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : null),
 		},
 		{
 			width: 100,
@@ -151,7 +151,7 @@ export default () => {
 			dataIndex: 'ngayThamGia',
 			align: 'center',
 			width: 120,
-			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 			onCell,
 			hide: ![
 				ELoaiMinhChungDiemRenLuyen.THAM_GIA_CONG_TAC_XA_HOI,

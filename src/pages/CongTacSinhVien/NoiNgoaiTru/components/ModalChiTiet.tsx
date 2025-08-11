@@ -1,5 +1,5 @@
+import dayjs from '@/utils/dayjs';
 import { Col, Descriptions, Divider, Image, Modal, Row } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 
 const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boolean) => void }) => {
@@ -29,7 +29,7 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 						</Descriptions.Item>
 						<Descriptions.Item label='Ngày sinh'>
 							{record?.thongTinSinhVien?.ngaySinh
-								? moment(record?.thongTinSinhVien?.ngaySinh).format('DD/MM/YYYY')
+								? dayjs(record?.thongTinSinhVien?.ngaySinh).format('DD/MM/YYYY')
 								: 'Chưa khai báo'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Giới tính'>
@@ -94,7 +94,7 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 				<Descriptions.Item label='Họ tên'>{record?.thongTinNguoiThan?.hoTen ?? 'Chưa khai báo'}</Descriptions.Item>
 				<Descriptions.Item label='Ngày sinh'>
 					{record?.thongTinNguoiThan?.namSinh
-						? moment(record?.thongTinNguoiThan?.namSinh).format('DD/MM/YYYY')
+						? dayjs(record?.thongTinNguoiThan?.namSinh).format('DD/MM/YYYY')
 						: 'Chưa khai báo'}
 				</Descriptions.Item>
 				<Descriptions.Item label='Số điện thoại'>
@@ -122,4 +122,5 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 		</Modal>
 	);
 };
+
 export default ModalChiTiet;

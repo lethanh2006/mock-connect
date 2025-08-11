@@ -1,14 +1,15 @@
 import { messagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import dayjs from '@/utils/dayjs';
 import { Card, Modal } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import type { DateRange, View } from 'react-big-calendar';
-import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
+import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useModel } from 'umi';
-const localizer = momentLocalizer(moment);
+
+const localizer = dayjsLocalizer(dayjs);
 
 const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	const { visibleModal, setVisibleModal, danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
@@ -28,8 +29,8 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 			.map((item) =>
 				(item.thoiKhoaBieuList ?? []).map((j) => ({
 					title: `${item?.hocPhan?.ten || item?.maHocPhan} - ${item?.ten || ''}`,
-					start: moment(j?.thoiGianBatDau).toDate(),
-					end: moment(j?.thoiGianKetThuc).toDate(),
+					start: dayjs(j?.thoiGianBatDau).toDate(),
+					end: dayjs(j?.thoiGianKetThuc).toDate(),
 				})),
 			)
 			.flat();
@@ -71,8 +72,8 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 			<Card title='Lịch học dự kiến'>
 				<p>
 					Bạn đã đăng ký / đã chọn <b>{props.soLopHienThi} lớp tín chỉ</b>, tổng cộng có{' '}
-					<b>{dataCalendar.length} buổi học</b>, từ ngày {moment(startDate).format('DD/MM/YYYY')} đến ngày{' '}
-					{moment(endDate).format('DD/MM/YYYY')}
+					<b>{dataCalendar.length} buổi học</b>, từ ngày {dayjs(startDate).format('DD/MM/YYYY')} đến ngày{' '}
+					{dayjs(endDate).format('DD/MM/YYYY')}
 					<br />
 					Cụ thể như sau:
 				</p>
@@ -80,7 +81,7 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 				<Calendar
 					formats={{
 						dayRangeHeaderFormat: (range: DateRange) => {
-							return `${moment(range.start).format('DD/MM')} - ${moment(range.end).format('DD/MM')}`;
+							return `${dayjs(range.start).format('DD/MM')} - ${dayjs(range.end).format('DD/MM')}`;
 						},
 					}}
 					localizer={localizer}
@@ -95,8 +96,8 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 					selectable={false}
 					messages={messagesCalendar}
 					style={{ height: 600, overflow: 'auto' }}
-					min={moment('0600', 'HHmm').toDate()}
-					max={moment('2100', 'HHmm').toDate()}
+					min={dayjs('0600', 'HHmm').toDate()}
+					max={dayjs('2100', 'HHmm').toDate()}
 					eventPropGetter={eventPropGetter}
 					components={{ event: (event: any) => eventCustom(event) }}
 					onShowMore={(events: any[], d) => {

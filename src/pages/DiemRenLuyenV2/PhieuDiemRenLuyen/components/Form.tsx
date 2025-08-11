@@ -15,9 +15,9 @@ import {
 	MapTitleETrangThaiPhieuDiemRL,
 	TU_DANH_GIA_PREFIX,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
+import dayjs from '@/utils/dayjs';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Form, message, Modal, Spin, Tag } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { Footer } from '../Footer';
@@ -64,8 +64,8 @@ const FormNhapPhieuDiem = () => {
 	const [tongDiemBCSDanhGia, setTongDiemBCSDanhGia] = useState(0);
 	const ngoaiThoiGian =
 		recordDot?.thoiGianSVChamDiem &&
-		(moment().isAfter(recordDot.thoiGianSVChamDiem.thoiGianKetThuc) ||
-			moment().isBefore(recordDot?.thoiGianSVChamDiem?.thoiGianBatDau));
+		(dayjs().isAfter(dayjs(recordDot.thoiGianSVChamDiem.thoiGianKetThuc)) ||
+			dayjs().isBefore(dayjs(recordDot?.thoiGianSVChamDiem?.thoiGianBatDau)));
 
 	const handleTinhDiemVaPhanLoai = (formValues_?: Partial<any>) => {
 		const formValues = formValues_ ?? form.getFieldsValue();

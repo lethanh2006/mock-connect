@@ -10,9 +10,9 @@ import {
 	ETrangThaiNopThuVien,
 } from '@/services/QuanLyThuVien/constant';
 import type { QuanLyThuVien } from '@/services/QuanLyThuVien/typing';
+import dayjs from '@/utils/dayjs';
 import { CloudUploadOutlined, DeleteOutlined, EditOutlined, EyeOutlined, MenuOutlined } from '@ant-design/icons';
 import { Button, Card, Popconfirm, Popover, Space, Tabs, Tag } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ChiTietThuVien from './components/ChiTiet';
@@ -36,7 +36,7 @@ const QuanLyThuVienPage = () => {
 			{
 				active: true,
 				field: 'thoiGianNop',
-				values: [moment(datePicker?.[0]).startOf('date'), moment(datePicker?.[1]).endOf('date')],
+				values: [dayjs(datePicker?.[0]).startOf('date'), dayjs(datePicker?.[1]).endOf('date')],
 				operator: EOperatorType.BETWEEN,
 			},
 		];
@@ -66,8 +66,8 @@ const QuanLyThuVienPage = () => {
 				rec?.dot?.thoiGianBatDau &&
 				rec?.dot?.thoiGianKetThuc && (
 					<>
-						{moment(rec?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
-						{moment(rec?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+						{dayjs(rec?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
+						{dayjs(rec?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 					</>
 				),
 			onCell,
@@ -129,7 +129,7 @@ const QuanLyThuVienPage = () => {
 			dataIndex: 'thoiGianNop',
 			align: 'center',
 			width: 150,
-			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 			filterType: 'date',
 			sortable: true,
 			onCell,
@@ -213,15 +213,16 @@ const QuanLyThuVienPage = () => {
 							) : (
 								<ButtonExtend
 									tooltip={`${
-										moment().isBefore(rec?.dot?.thoiGianBatDau) || moment().isAfter(rec?.dot?.thoiGianKetThuc)
+										dayjs().isBefore(dayjs(rec?.dot?.thoiGianBatDau)) ||
+										dayjs().isAfter(dayjs(rec?.dot?.thoiGianKetThuc))
 											? 'Ngoài thời gian nộp tài liệu'
 											: 'Nộp tài liệu'
 									}`}
 									disabled={
 										rec?.trangThai === ETrangThaiNopThuVien.TU_CHOI ||
 										rec?.trangThai === ETrangThaiNopThuVien.DA_DUYET ||
-										moment().isBefore(rec?.dot?.thoiGianBatDau) ||
-										moment().isAfter(rec?.dot?.thoiGianKetThuc)
+										dayjs().isBefore(dayjs(rec?.dot?.thoiGianBatDau)) ||
+										dayjs().isAfter(dayjs(rec?.dot?.thoiGianKetThuc))
 									}
 									type='link'
 									icon={<CloudUploadOutlined />}
@@ -269,8 +270,8 @@ const QuanLyThuVienPage = () => {
 					tabActive === ELoaiDotQuanLyThuvien.LUAN_AN
 						? 'Danh sách luận án'
 						: tabActive === ELoaiDotQuanLyThuvien.LUAN_VAN
-						? 'Danh sách luận văn'
-						: 'Danh sách khóa luận/đồ án'
+							? 'Danh sách luận văn'
+							: 'Danh sách khóa luận/đồ án'
 				}
 				widthDrawer={1000}
 				hideCard

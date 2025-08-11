@@ -6,9 +6,9 @@ import {
 	ETransactionSourceType,
 	ETransactionStatus,
 } from '@/services/TaiChinh/constant';
+import dayjs from '@/utils/dayjs';
 import { AppstoreAddOutlined, DollarOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Checkbox, Col, Modal, Row, Space, Tabs } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import CanhBaoGiaoDich from '../../GiaoDich/components/CanhBao';
@@ -39,8 +39,8 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		!recHoaDon?.dotThu?._id ||
 		!recHoaDon?.dotThu?.thoiGianBatDau ||
 		!recHoaDon?.dotThu?.thoiGianKetThuc ||
-		moment().isBefore(recHoaDon.dotThu.thoiGianBatDau) ||
-		moment().isAfter(recHoaDon.dotThu.thoiGianKetThuc) ||
+		dayjs().isBefore(dayjs(recHoaDon.dotThu.thoiGianBatDau)) ||
+		dayjs().isAfter(dayjs(recHoaDon.dotThu.thoiGianKetThuc)) ||
 		!recHoaDon.dotThu.kichHoat;
 
 	/** Get giao dịch pending */

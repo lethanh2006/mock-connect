@@ -1,9 +1,9 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { EFileScope, uploadFile } from '@/services/uploadFile';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Checkbox, Col, Form, message, Modal, Row, Statistic } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -32,7 +32,6 @@ const ModalNopTaiLieu = (props: { visible: boolean; setVisible: (val: boolean) =
 
 		setFormSubmiting(true);
 
-		// Tạo danh sách các promise tải file
 		const uploadPromises = filesToUpload.map(async ({ field, idField }) => {
 			const fileData = values[field]?.fileList?.[0];
 			if (fileData?.originFileObj) {
@@ -74,11 +73,11 @@ const ModalNopTaiLieu = (props: { visible: boolean; setVisible: (val: boolean) =
 						<div style={{ textAlign: 'center', marginBottom: '8px' }}>
 							<h1 style={{ color: '#CC0D00' }}>Tên đợt: {record?.dot?.tenDot}</h1>
 							<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-								<span>Thời gian : {moment(record?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</span> -{' '}
-								<span>{moment(record?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</span>
+								<span>Thời gian : {dayjs(record?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</span> -{' '}
+								<span>{dayjs(record?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</span>
 								<span>
-									{moment(record?.dot?.thoiGianKetThuc).isAfter(moment()) &&
-										moment(record?.dot?.thoiGianBatDau).isBefore(moment()) && (
+									{dayjs(record?.dot?.thoiGianKetThuc).isAfter(dayjs()) &&
+										dayjs(record?.dot?.thoiGianBatDau).isBefore(dayjs()) && (
 											<div
 												style={{
 													display: 'flex',
@@ -100,8 +99,7 @@ const ModalNopTaiLieu = (props: { visible: boolean; setVisible: (val: boolean) =
 												</p>
 												<Countdown
 													valueStyle={{ fontSize: 16 }}
-													value={moment(record?.dot?.thoiGianKetThuc).unix() * 1000}
-													// onFinish={() => setUpdateTrangThai('finish')}
+													value={dayjs(record?.dot?.thoiGianKetThuc).valueOf()}
 													format='D Ngày H Giờ m Phút s giây )'
 												/>
 											</div>
@@ -111,6 +109,8 @@ const ModalNopTaiLieu = (props: { visible: boolean; setVisible: (val: boolean) =
 							{record?.dot?.ghiChu && record?.dot?.ghiChu !== '' && <div>Ghi chú: {record?.dot?.ghiChu}</div>}
 						</div>
 					</Col>
+
+					{/* Upload fields below */}
 					<Col span={24}>
 						<Form.Item
 							rules={[...rules.required, ...rules.fileRequired]}

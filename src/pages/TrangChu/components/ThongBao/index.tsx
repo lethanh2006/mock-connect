@@ -1,6 +1,6 @@
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
+import dayjs from '@/utils/dayjs';
 import { Button, Card, Empty, Modal, Typography } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
@@ -64,7 +64,7 @@ const CardThongBaoDashboard = () => {
 						<div className='details'>
 							<div className='title'>{currentNotice.title}</div>
 							<div className='footer'>
-								<div className='date'>{moment(currentNotice.createdAt).format('DD/MM/YYYY')}</div>
+								<div className='date'>{dayjs(currentNotice.createdAt).format('DD/MM/YYYY')}</div>
 							</div>
 						</div>
 					</div>

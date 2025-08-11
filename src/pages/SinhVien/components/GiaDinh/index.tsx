@@ -1,12 +1,12 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
-import { formatPhoneNumber } from '@/utils/utils';
-import moment from 'moment';
-import Form from './Form';
-import { useState } from 'react';
-import { Tooltip, Button, Popconfirm } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
+import dayjs from '@/utils/dayjs';
+import { formatPhoneNumber } from '@/utils/utils';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Popconfirm, Tooltip } from 'antd';
+import { useState } from 'react';
+import Form from './Form';
 
 const ThongTinGiaDinhFormItem = (props: {
 	value?: SinhVien.TThongTinGiaDinh[];
@@ -29,7 +29,7 @@ const ThongTinGiaDinhFormItem = (props: {
 	const handleDelete = (rec: SinhVien.TThongTinGiaDinh) => {
 		if (value?.length && rec && onChange) {
 			const temp = [...value];
-			temp.splice(rec?.key??0, 1);
+			temp.splice(rec?.key ?? 0, 1);
 			onChange(temp);
 		}
 	};
@@ -63,7 +63,7 @@ const ThongTinGiaDinhFormItem = (props: {
 			dataIndex: 'ngaySinh',
 			align: 'center',
 			width: 120,
-			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Nghề nghiệp',

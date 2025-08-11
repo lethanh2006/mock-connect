@@ -8,6 +8,7 @@ import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EPhanHe } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import dayjs from '@/utils/dayjs';
 import {
 	ArrowRightOutlined,
 	DeleteOutlined,
@@ -16,7 +17,6 @@ import {
 	EyeOutlined,
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu, Modal, Popconfirm, Tag, Tooltip, message } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import ThongTinThanhToan from '../TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
@@ -156,8 +156,8 @@ const KhaiBaoQuyTrinhPage = (props: {
 						</span>
 						{buocHienTai && cauHinhThoiGianDotBuocHienTai && (
 							<span style={{ marginLeft: 4, fontWeight: 'bold' }}>
-								({moment(cauHinhThoiGianDotBuocHienTai.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
-								{moment(cauHinhThoiGianDotBuocHienTai.thoiGianKetThuc).format('DD/MM/YYYY')})
+								{dayjs(cauHinhThoiGianDotBuocHienTai.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
+								{dayjs(cauHinhThoiGianDotBuocHienTai.thoiGianKetThuc).format('DD/MM/YYYY')}
 							</span>
 						)}
 					</div>
@@ -213,7 +213,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			width: 150,
 			align: 'center',
 			render: (val) => {
-				return val ? moment(val).format('DD/MM/YYYY') : 'Không có dữ liệu';
+				return val ? dayjs(val).format('DD/MM/YYYY') : 'Không có dữ liệu';
 			},
 			onCell,
 		},

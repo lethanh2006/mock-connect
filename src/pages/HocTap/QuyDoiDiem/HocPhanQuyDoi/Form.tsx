@@ -1,9 +1,9 @@
 import { ColorDiemChu, type ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { EMinhChungQuyDoiDiem, colorTrangThaiHocPhanQuyDoi } from '@/services/HocTap/constant';
+import dayjs from '@/utils/dayjs';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Descriptions, Form, Modal, Row, Space, Tag } from 'antd';
-import monent from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import FormQuyDoiDiem from '../components/Form';
@@ -85,7 +85,7 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 										<br />- Điểm/bậc chứng chỉ: <b>{record?.bacChungChi ?? ''}</b>
 										<br />- Đơn vị cấp: <b>{record?.donViCap ?? ''}</b>
 										<br />- Thời gian hiệu lực:{' '}
-										<b>{record?.thoiGianHieuLuc ? monent(record?.thoiGianHieuLuc).format('DD/MM/YYYY') : '--'}</b>
+										<b>{record?.thoiGianHieuLuc ? dayjs(record?.thoiGianHieuLuc).format('DD/MM/YYYY') : '--'}</b>
 									</div>
 								</Descriptions.Item>
 							) : record?.loai === EMinhChungQuyDoiDiem.NCKH ? (

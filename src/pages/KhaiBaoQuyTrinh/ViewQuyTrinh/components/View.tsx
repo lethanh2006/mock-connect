@@ -8,9 +8,9 @@ import {
 } from '@/services/QuyTrinh/KhaiBao/constants';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
+import dayjs from '@/utils/dayjs';
 import { EditOutlined, LeftOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Collapse, Modal, Popconfirm, Row, Spin, Steps, Tag } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ViewDot from '../../DotQuyTrinh/ViewDot';
@@ -209,25 +209,21 @@ const View = (props: Iprops) => {
 									let tienDo;
 									const coKhaiBao = dataQuyTrinh?.danhSachBuocXuLy?.find((item) => item?.ma === value?.ma)?.coKhaiBao;
 
-									if (
-										cauHinhThoiGianDot &&
-										moment().isAfter(moment(cauHinhThoiGianDot.thoiGianKetThuc)) &&
-										!coKhaiBao
-									) {
+									if (cauHinhThoiGianDot && dayjs().isAfter(dayjs(cauHinhThoiGianDot.thoiGianKetThuc)) && !coKhaiBao) {
 										tienDo = ETienDoQuyTrinh.QUA_HAN;
 									} else if (
 										cauHinhThoiGianDot &&
-										moment(cauHinhThoiGianDot.thoiGianBatDau).isBefore(moment()) &&
-										moment().isBefore(cauHinhThoiGianDot.thoiGianKetThuc)
+										dayjs(cauHinhThoiGianDot.thoiGianBatDau).isBefore(dayjs()) &&
+										dayjs().isBefore(cauHinhThoiGianDot.thoiGianKetThuc)
 									) {
 										tienDo = ETienDoQuyTrinh.DANG_DIEN_RA;
 									} else if (
 										cauHinhThoiGianDot &&
-										moment().isBefore(moment(cauHinhThoiGianDot.thoiGianBatDau)) &&
-										moment(cauHinhThoiGianDot.thoiGianBatDau).diff(moment(), 'days') === 7
+										dayjs().isBefore(dayjs(cauHinhThoiGianDot.thoiGianBatDau)) &&
+										dayjs(cauHinhThoiGianDot.thoiGianBatDau).diff(dayjs(), 'days') === 7
 									) {
 										tienDo = ETienDoQuyTrinh.SAP_TOI;
-									} else if (cauHinhThoiGianDot && moment().isAfter(moment(cauHinhThoiGianDot.thoiGianKetThuc))) {
+									} else if (cauHinhThoiGianDot && dayjs().isAfter(dayjs(cauHinhThoiGianDot.thoiGianKetThuc))) {
 										tienDo = ETienDoQuyTrinh.DA_DIEN_RA;
 									}
 
@@ -245,8 +241,8 @@ const View = (props: Iprops) => {
 													{value.ten}{' '}
 													{cauHinhThoiGianDot && (
 														<b>
-															({moment(cauHinhThoiGianDot?.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
-															{moment(cauHinhThoiGianDot?.thoiGianKetThuc).format('DD/MM/YYYY')})
+															{dayjs(cauHinhThoiGianDot?.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
+															{dayjs(cauHinhThoiGianDot?.thoiGianKetThuc).format('DD/MM/YYYY')}
 														</b>
 													)}
 												</div>

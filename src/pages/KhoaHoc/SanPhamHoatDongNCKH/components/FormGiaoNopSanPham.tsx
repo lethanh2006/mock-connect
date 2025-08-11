@@ -14,12 +14,12 @@ import {
 } from '@/services/KhoaHoc/SanPhamNCKH/constants';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm, toISOString } from '@/utils/utils';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Col, Descriptions, Form, InputNumber, Popconfirm, Row, Tag, message } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FormRender from './FormRender';
@@ -62,7 +62,7 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 		...recordSanPham,
 		...recordSanPham?.thongTinKhaiBao,
 		vaiTro: recordSanPham?.nguoiKhaiBao?.danhSachVaiTro,
-		thoiGian: [moment(recordSanPham?.thongTinThoiGian?.start), moment(recordSanPham?.thongTinThoiGian?.end)],
+		thoiGian: [dayjs(recordSanPham?.thongTinThoiGian?.start), dayjs(recordSanPham?.thongTinThoiGian?.end)],
 	});
 	const dataLocal = localStorage.getItem('sanPham');
 	const sanPhamLocal = dataLocal ? JSON.parse(dataLocal) : {};
@@ -86,7 +86,7 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 			...paramSanPham,
 			...buildRecSanPham,
 			vaiTro: paramSanPham?.nguoiKhaiBao?.danhSachVaiTro,
-			thoiGian: [moment(paramSanPham?.thongTinThoiGian?.start), moment(paramSanPham?.thongTinThoiGian?.end)],
+			thoiGian: [dayjs(paramSanPham?.thongTinThoiGian?.start), dayjs(paramSanPham?.thongTinThoiGian?.end)],
 		};
 		form.setFieldsValue(initValueForm);
 		setFormValues(initValueForm);
@@ -177,8 +177,8 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 						value: [EKieuDuLieu.TABLE, EKieuDuLieu.DANHSACH].includes(item?.kieuDuLieu)
 							? recordSanPham?.thongTinKhaiBao?.find((ele) => ele?.ma === item?.ma)?.value
 							: arrKey.includes(item.ma)
-							? formValuesFinal?.[item?.ma ?? '']
-							: recordSanPham?.thongTinKhaiBao?.find((ele) => ele?.ma === item?.ma)?.value,
+								? formValuesFinal?.[item?.ma ?? '']
+								: recordSanPham?.thongTinKhaiBao?.find((ele) => ele?.ma === item?.ma)?.value,
 					}))
 					?.filter((item) => item?.value !== null && item?.value !== undefined) ?? [];
 			let trangThaiSanPham = recordSanPham?.trangThaiSanPham;
@@ -196,8 +196,8 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 				soLuongThanhVien: formValuesFinal?.soLuongThanhVien ?? 1,
 				danhSachMinhChung:
 					isChinhSuaSauDuyet || props.isDangThucHien
-						? recordSanPham?.danhSachMinhChung ?? []
-						: formValuesFinal?.danhSachMinhChung ?? [],
+						? (recordSanPham?.danhSachMinhChung ?? [])
+						: (formValuesFinal?.danhSachMinhChung ?? []),
 				loaiHinhNckhId: record?._id ?? '',
 				danhSachKetQuaQuyDoiDiem: _.uniqBy(
 					recordSanPham?.danhSachKetQuaQuyDoiDiem?.sort(
@@ -236,7 +236,7 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 
 			if (!props.isDangThucHien && ((edit && !isChinhSuaSauDuyet) || (!edit && res?._id) || isXacNhanHoanThanh)) {
 				await createYeuCauQuyDoiGioModel(
-					edit ? recordSanPham?._id ?? '' : res?._id ?? '',
+					edit ? (recordSanPham?._id ?? '') : (res?._id ?? ''),
 					{
 						namHocId: recordNamHoc?._id || recordSanPham?.dotId || '',
 						danhSachKetQuaTinhGioThanhVien,
@@ -246,7 +246,7 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 				);
 				if (record?.tinhDiem && formValuesFinal?.diem) {
 					await createYeuCauQuyDoiGioModel(
-						edit ? recordSanPham?._id ?? '' : res?._id ?? '',
+						edit ? (recordSanPham?._id ?? '') : (res?._id ?? ''),
 						{
 							namHocId: recordNamHoc?._id || recordSanPham?.dotId || '',
 							danhSachKetQuaTinhGioThanhVien: danhSachKetQuaTinhDiemThanhVien,
@@ -415,16 +415,16 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 										record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 											? 'YYYY'
 											: record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
-											? 'MM/YYYY'
-											: 'DD/MM/YYYY'
+												? 'MM/YYYY'
+												: 'DD/MM/YYYY'
 									}
 									placeholder={['Từ', 'đến']}
 									picker={
 										record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 											? 'year'
 											: record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
-											? 'month'
-											: 'date'
+												? 'month'
+												: 'date'
 									}
 								/>
 							</Form.Item>
@@ -451,15 +451,15 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 										record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 											? 'YYYY'
 											: record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
-											? 'MM/YYYY'
-											: 'DD/MM/YYYY'
+												? 'MM/YYYY'
+												: 'DD/MM/YYYY'
 									}
 									pickerStyle={
 										record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 											? 'year'
 											: record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
-											? 'month'
-											: 'date'
+												? 'month'
+												: 'date'
 									}
 									placeholder={'Chọn thời gian'}
 								/>
@@ -508,9 +508,9 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 							<div className='ant-descriptions-title' style={{ marginBottom: 12 }}>
 								{props.isDangThucHien
 									? 'Chủ biên và thành viên'
-									: record?.danhSachCauHinhTruongThongTinTinh?.find(
+									: (record?.danhSachCauHinhTruongThongTinTinh?.find(
 											(item) => item.loaiTruongThongTinTinh === ELoaiTruongThongTinTinh.DANH_SACH_THANH_VIEN,
-									  )?.label ?? 'Danh sách thành viên'}
+										)?.label ?? 'Danh sách thành viên')}
 							</div>
 							<TableThanhVien
 								isDangThucHien={props.isDangThucHien}

@@ -1,8 +1,8 @@
 import { colorTrangThaiHocSv, type ETrangThaiHocSv } from '@/services/DaoTao/constant';
+import dayjs from '@/utils/dayjs';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Col, Image, Row, Space, Spin, Tag } from 'antd';
-import moment from 'moment';
-import { useEffect } from 'react';
+import { JSX, useEffect } from 'react';
 import { useModel } from 'umi';
 
 type DescriptionItem = {
@@ -43,7 +43,7 @@ const PreviewHoSo = () => {
 		{ label: 'Giới tính', content: record?.gioiTinh, md: 8 },
 		{
 			label: 'Ngày sinh',
-			content: record?.ngaySinh ? moment(record.ngaySinh).format('DD/MM/YYYY') : '',
+			content: record?.ngaySinh ? dayjs(record.ngaySinh).format('DD/MM/YYYY') : '',
 			md: 8,
 		},
 		{
@@ -54,7 +54,7 @@ const PreviewHoSo = () => {
 		{
 			label: 'CCCD/CMND',
 			content: `${record?.cccd ?? ''}, ngày cấp: ${
-				record?.ngayCapCccd ? moment(record.ngayCapCccd).format('DD/MM/YYYY') : '--'
+				record?.ngayCapCccd ? dayjs(record.ngayCapCccd).format('DD/MM/YYYY') : '--'
 			}, nơi cấp: ${record?.noiCapCccd ?? ''}`,
 			md: 24,
 		},
@@ -121,12 +121,12 @@ const PreviewHoSo = () => {
 			children: [
 				{
 					label: 'Ngày vào Đảng dự bị',
-					content: record?.ngayVaoDang ? moment(record.ngayVaoDang).format('DD/MM/YYYY') : '',
+					content: record?.ngayVaoDang ? dayjs(record.ngayVaoDang).format('DD/MM/YYYY') : '',
 					md: 12,
 				},
 				{
 					label: 'Ngày vào Đảng chính thức',
-					content: record?.ngayVaoDangChinhThuc ? moment(record.ngayVaoDangChinhThuc).format('DD/MM/YYYY') : '',
+					content: record?.ngayVaoDangChinhThuc ? dayjs(record.ngayVaoDangChinhThuc).format('DD/MM/YYYY') : '',
 					md: 12,
 				},
 			],

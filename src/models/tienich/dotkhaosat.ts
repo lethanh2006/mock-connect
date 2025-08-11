@@ -3,7 +3,7 @@ import useInitModel from '@/hooks/useInitModel';
 import { getDotDanhGiaTietHoc } from '@/services/TienIch/KhaoSat/DotKhaoSat';
 import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
 import { type ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
-import moment from 'moment';
+import dayjs from '@/utils/dayjs';
 import { useState } from 'react';
 
 export default () => {
@@ -17,8 +17,8 @@ export default () => {
 	const ngoaiThoiGian =
 		!record?.thoiGianBatDau ||
 		!record?.thoiGianKetThuc ||
-		moment().isBefore(record?.thoiGianBatDau) ||
-		moment().isAfter(record?.thoiGianKetThuc);
+		dayjs().isBefore(record?.thoiGianBatDau) ||
+		dayjs().isAfter(record?.thoiGianKetThuc);
 
 	const getDotMeModel = (loai: ELoaiDot) =>
 		getModel(

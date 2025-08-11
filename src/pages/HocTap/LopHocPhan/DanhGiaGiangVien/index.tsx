@@ -4,8 +4,8 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { getDotDanhGiaGiangVien } from '@/services/TienIch/KhaoSat/DotKhaoSat';
 import { EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { Alert, Empty, Select, Spin } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -60,7 +60,7 @@ const DanhGiaGiangVienPage = (props: { danhSachNhanSu: LopHocPhan.IRecordNhanSuL
 					{recDot?.thongTinCauTraLoi?.length && giangVienKhaoSat?._id ? (
 						<i style={{ color: primaryColor }}>
 							Bạn đã thực hiện đánh giá giảng viên vào lúc{' '}
-							<b>{moment(giangVienKhaoSat?.updatedAt).format('HH:mm, DD/MM/YYYY')}</b>{' '}
+							<b>{dayjs(giangVienKhaoSat?.updatedAt).format('HH:mm, DD/MM/YYYY')}</b>
 						</i>
 					) : (
 						<div style={{ marginBottom: 8 }}>
@@ -71,8 +71,8 @@ const DanhGiaGiangVienPage = (props: { danhSachNhanSu: LopHocPhan.IRecordNhanSuL
 										{ngoaiThoiGian
 											? 'Ngoài thời gian đánh giá khảo sát giảng viên,'
 											: 'Bạn chưa thực hiện đánh giá giảng viên,'}{' '}
-										Thời gian đánh giá giảng viên từ <b>{moment(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-										<b>{moment(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+										Thời gian đánh giá giảng viên từ <b>{dayjs(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+										<b>{dayjs(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
 									</>
 								}
 								showIcon

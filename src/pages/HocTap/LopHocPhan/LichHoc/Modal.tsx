@@ -1,7 +1,7 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import dayjs from '@/utils/dayjs';
 import { Button, Carousel, Descriptions, Empty, Tabs } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import DanhGiaTietHocPage from '../DanhGiaTietHoc';
@@ -10,7 +10,7 @@ import ThongTinBuoiHoc from './ThongTinBuoiHoc';
 const ModalThoiKhoaBieu = () => {
 	const { record: recThoiKhoaBieu, visibleForm, setVisibleForm } = useModel('daotao.thoikhoabieu');
 	const [activeKey, setActiveKey] = useState<string>('noidung');
-	const chuaKetThuc = moment().isBefore(recThoiKhoaBieu?.thoiGianKetThuc);
+	const chuaKetThuc = dayjs().isBefore(dayjs(recThoiKhoaBieu?.thoiGianKetThuc));
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	useEffect(() => {

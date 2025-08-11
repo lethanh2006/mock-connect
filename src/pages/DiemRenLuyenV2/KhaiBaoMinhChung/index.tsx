@@ -1,8 +1,8 @@
 import DanhSachMinhChung from '@/pages/DiemRenLuyenV2/MinhChung/CauHinh/DanhSach';
+import dayjs from '@/utils/dayjs';
 import { useModel } from '@@/plugin-model/useModel';
 import { Alert, Card, Space } from 'antd';
-import moment from 'moment';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
@@ -16,8 +16,8 @@ const KhaiBaoMinhChungPage = () => {
 	const [paneSize, setPaneSize] = useState('25%');
 	const ngoaiThoiGian =
 		recDot?.thoiGianTiepNhanMinhChung &&
-		(moment().isAfter(recDot.thoiGianTiepNhanMinhChung.thoiGianKetThuc) ||
-			moment().isBefore(recDot?.thoiGianTiepNhanMinhChung?.thoiGianBatDau));
+		(dayjs().isAfter(dayjs(recDot.thoiGianTiepNhanMinhChung.thoiGianKetThuc)) ||
+			dayjs().isBefore(dayjs(recDot.thoiGianTiepNhanMinhChung.thoiGianBatDau)));
 
 	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
 
@@ -53,7 +53,7 @@ const KhaiBaoMinhChungPage = () => {
 					</Pane>
 
 					<Pane minSize='40%'>
-            <KhaiBaoMinhChung />
+						<KhaiBaoMinhChung />
 					</Pane>
 				</SplitPane>
 			</Card>
