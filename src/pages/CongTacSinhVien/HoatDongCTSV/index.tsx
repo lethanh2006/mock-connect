@@ -136,29 +136,31 @@ const SinhVienHoatDongCTSV = () => {
 	];
 
 	return (
-		<Card title='Danh sách sự kiện'>
-			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EHoatDongChungType1)}>
-				{Object.values(EHoatDongChungType1).map((item) => (
-					<Tabs.TabPane tab={item} key={item} />
-				))}
-			</Tabs>
+		<Card title='Danh sách sự kiện' className='card-big-title card-borderless' variant='borderless'>
+			<Card>
+				<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EHoatDongChungType1)}>
+					{Object.values(EHoatDongChungType1).map((item) => (
+						<Tabs.TabPane tab={item} key={item} />
+					))}
+				</Tabs>
 
-			<TableStaticData
-				columns={columns}
-				data={danhSach ?? []}
-				loading={loading}
-				addStt
-				otherProps={{ pagination: true }}
-				hasTotal
-			>
-				<div style={{ position: 'absolute', right: 130 }}>
-					<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
-						Tải lại
-					</ButtonExtend>
-				</div>
-			</TableStaticData>
+				<TableStaticData
+					columns={columns}
+					data={danhSach ?? []}
+					loading={loading}
+					addStt
+					otherProps={{ pagination: true }}
+					hasTotal
+				>
+					<div style={{ position: 'absolute', right: 130 }}>
+						<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
+							Tải lại
+						</ButtonExtend>
+					</div>
+				</TableStaticData>
 
-			<ModalChiTiet />
+				<ModalChiTiet />
+			</Card>
 		</Card>
 	);
 };
