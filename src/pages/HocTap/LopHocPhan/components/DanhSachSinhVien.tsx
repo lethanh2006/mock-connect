@@ -1,13 +1,11 @@
 import { vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
-import { EyeOutlined, FileOutlined, MoreOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row, Tooltip } from 'antd';
+import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row } from 'antd';
 
-import { saveAs } from 'file-saver';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import * as XLSX from 'xlsx';
 
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
 
@@ -47,37 +45,11 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 
 	const isMobile = screenSize.width <= 768;
 
-	const handleExport = () => {
-		const data = sinhVienList.map((sv) => ({
-			'Họ tên': sv.ten,
-			'Mã sinh viên': sv.ma,
-			Email: sv.email,
-			'Giới tính': sv.gioiTinh,
-			'Ngày sinh': sv.ngaySinh ? moment(sv.ngaySinh).format('DD/MM/YYYY') : '',
-			'Số điện thoại': sv.soDienThoai,
-			...(fromLopHocPhan
-				? {}
-				: {
-						'Vai trò': sv.vaiTro ? vaiTroSvLhc[sv.vaiTro] : '',
-					}),
-		}));
-
-		const worksheet = XLSX.utils.json_to_sheet(data);
-		const workbook = XLSX.utils.book_new();
-		XLSX.utils.book_append_sheet(workbook, worksheet, 'DanhSachSinhVien');
-
-		const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-		const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-		saveAs(blob, 'DanhSachSinhVien.xlsx');
-	};
-
 	const renderStudentList = () => (
 		<Card
+			className='card-big-title card-borderless'
+			variant='borderless'
 			style={{
-				overflow: 'auto',
-				scrollbarWidth: 'none',
-				msOverflowStyle: 'none',
-				maxHeight: '120vh',
 				borderRadius: '8px',
 			}}
 			title={
@@ -97,34 +69,18 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 							{sinhVienList.length}
 						</span>
 					</div>
-					<Tooltip title='Xuất danh sách'>
-						<Button
-							onClick={handleExport}
-							size='small'
-							style={{
-								border: 'none',
-							}}
-							icon={
-								<FileOutlined
-									style={{
-										position: 'relative',
-										display: 'inline-block',
-										fontSize: 16,
-										color: '#1677ff',
-									}}
-								/>
-							}
-						></Button>
-					</Tooltip>
 				</div>
 			}
 			bodyStyle={{ padding: 0 }}
 			loading={loading}
 		>
+			{/* Di chuyển scroll xuống đây - chỉ áp dụng cho phần danh sách */}
 			<div
 				style={{
-					maxHeight: isMobile ? 450 : 'unset',
-					overflowY: isMobile ? 'auto' : 'unset',
+					maxHeight: '60vh',
+					overflowY: 'auto',
+					scrollbarWidth: 'none', // Firefox
+					msOverflowStyle: 'none', // IE 10+
 				}}
 			>
 				<List
