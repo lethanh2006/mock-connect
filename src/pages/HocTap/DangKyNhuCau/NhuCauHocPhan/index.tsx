@@ -75,11 +75,7 @@ const NhuCauHocPhanPage = () =>
 				width: 60,
 				align: 'center',
 				dataIndex: 'soLuongDangKy',
-				render: (val) => (
-					<Tag color={val >= 30 ? 'green' : val >= 20 ? 'yellow' : 'red'}>
-						{val} SV
-					</Tag>
-				),
+				render: (val) => <Tag color={val >= 30 ? 'green' : val >= 20 ? 'yellow' : 'red'}>{val} SV</Tag>,
 			},
 			{
 				title: 'Khóa ngành',

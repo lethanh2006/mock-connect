@@ -13,8 +13,8 @@ const KhaiBaoMinhChungPage = () => {
 	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
 
 	return (
-		<>
-			<Card title={'Phiếu điểm rèn luyện'}>
+		<Card title={'Phiếu điểm rèn luyện'} className='card-big-title card-borderless' variant='borderless'>
+			<Card style={{ paddingTop: 32 }}>
 				<StepDotChamDiemRenLuyen />
 				<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
 					<Pane initialSize={paneSize} minSize='20%'>
@@ -26,7 +26,7 @@ const KhaiBaoMinhChungPage = () => {
 					</Pane>
 				</SplitPane>
 			</Card>
-		</>
+		</Card>
 	);
 };
 export default KhaiBaoMinhChungPage;

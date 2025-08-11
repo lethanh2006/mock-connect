@@ -2,11 +2,11 @@ import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao
 import { YoutubeOutlined } from '@ant-design/icons';
 import { Card, Divider, Empty, Spin } from 'antd';
 import { useEffect, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { history, useModel } from 'umi';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
 import PhieuDangKy from './components/PhieuDangKy';
-import ReCAPTCHA from "react-google-recaptcha";
 import './components/style.less';
 
 const DangKyTinChiPage = () => {
@@ -15,22 +15,20 @@ const DangKyTinChiPage = () => {
 	const [isVerified, setIsVerified] = useState<boolean>(false);
 
 	const handleCaptchaChange = (token: string | null) => {
-    if (token) {
-      setIsVerified(true);
-    } else {
-      setIsVerified(false);
-    }
-  };
+		if (token) {
+			setIsVerified(true);
+		} else {
+			setIsVerified(false);
+		}
+	};
 
 	useEffect(() => {
 		if (isVerified) {
 			getLopHc();
 		}
 	}, [isVerified]);
-	
 
-	return isVerified ?  (
-	
+	return isVerified ? (
 		<Card title='Đăng ký tín chỉ'>
 			<FilterDotDangKy />
 
@@ -49,7 +47,9 @@ const DangKyTinChiPage = () => {
 					) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 						<Empty
 							description={
-								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép <b>XÓA</b> lớp tín chỉ đã đăng ký trước đó!</i>
+								<i style={{ color: '#999' }}>
+									Đợt đăng ký chỉ cho phép <b>XÓA</b> lớp tín chỉ đã đăng ký trước đó!
+								</i>
 							}
 						/>
 					) : !!phieuDangKy?.soTinChiToiDa ? (
@@ -102,16 +102,19 @@ const DangKyTinChiPage = () => {
 				/>
 			</div>
 		</Card>
-	) : <Card><ReCAPTCHA
-					style={{
-						margin: '12px auto',
-						display: 'flex',
-						justifyContent: 'center',
-					}}
-					sitekey='6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh'
-					onChange={handleCaptchaChange}
-				/>
-				</Card>
+	) : (
+		<Card>
+			<ReCAPTCHA
+				style={{
+					margin: '12px auto',
+					display: 'flex',
+					justifyContent: 'center',
+				}}
+				sitekey='6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh'
+				onChange={handleCaptchaChange}
+			/>
+		</Card>
+	);
 };
 
 export default DangKyTinChiPage;
