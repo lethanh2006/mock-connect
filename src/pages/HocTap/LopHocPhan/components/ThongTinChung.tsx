@@ -1,6 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ThongTinChungPage from '@/pages/DaoTao/DeCuongHocPhan/components/ThongTinChung';
-import HocLieuDeCuongPage from '@/pages/DaoTao/DeCuongHocPhan/HocLieuDeCuong';
 import NoiDungHocPhanPage from '@/pages/DaoTao/DeCuongHocPhan/LichTrinhChung';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 
@@ -41,11 +40,15 @@ interface GiangVien {
 
 const ThongTinChung = () => {
 	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
-	const { record: recDeCuong, getByIdModel } = useModel('hocphan.decuonghocphan');
-	const { danhSach: danhSachHocLieu, loading: loadingHocLieu } = useModel('hocphan.hoclieudecuong');
+	const { record: recDeCuong, getByIdModel, setRecord: setRecDeCuong } = useModel('hocphan.decuonghocphan');
+	const {
+		danhSach: danhSachHocLieu,
+		loading: loadingHocLieu,
+		getModel: getHocLieuDeCuong,
+	} = useModel('hocphan.hoclieudecuong');
 	const { danhSach: danhSachNoiDungHocPhan } = useModel('hocphan.noidunghp');
 
-	const deCuongId = record?._id || record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
+	const deCuongId = record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
 
 	const {
 		record: recLopThucHanh,
@@ -63,7 +66,7 @@ const ThongTinChung = () => {
 	const [visibleKyNang, setVisibleKyNang] = useState<boolean>(false);
 	const [activeKyNangTab, setActiveKyNangTab] = useState<string>('content');
 
-	// Lấy dữ liệu kỹ năng từ nhiều nguồn
+	// Lấy dữ liệu kỹ năng
 	const kyNangDatDuoc = recDeCuong?.kyNangDatDuoc || recDeCuong?.ketQuaDatDuoc || [];
 	const mucTieuHocPhan = recDeCuong?.mucTieuHocPhan || '';
 	const chuanDauRa = recDeCuong?.chuanDauRa || '';
@@ -80,7 +83,10 @@ const ThongTinChung = () => {
 	useEffect(() => {
 		setActiveKey('-1');
 
-		if (deCuongId) getByIdModel(deCuongId ?? '');
+		// if (deCuongId) {
+		getByIdModel(deCuongId ?? '');
+		getHocLieuDeCuong({ deCuongId: deCuongId });
+		// }
 	}, [deCuongId]);
 
 	useEffect(() => {
@@ -298,7 +304,12 @@ const ThongTinChung = () => {
 					size='small'
 					className='tai-lieu-card'
 					extra={
-						<Button type='link' className='btn-extra' onClick={() => setVisibleHocLieu(true)}>
+						<Button
+							type='link'
+							className='btn-extra'
+							onClick={() => setVisibleHocLieu(true)}
+							disabled={danhSachHocLieu.length === 0}
+						>
 							Xem tất cả
 						</Button>
 					}
@@ -343,8 +354,9 @@ const ThongTinChung = () => {
 						)}
 					</Spin>
 				</Card>
-				{/* Kỹ năng đạt được */}
-				<Card
+				{/* Kỹ năng đạt được  */}
+				{/* Tạm thời chưa có api và dữ liệu nên comment lại */}
+				{/* <Card
 					title={
 						<div style={{ display: 'flex', alignItems: 'center', gap: 8, border: 'none' }}>
 							<span>Kỹ năng đạt được</span>
@@ -417,25 +429,8 @@ const ThongTinChung = () => {
 							</Button>
 						</div>
 					)}
-				</Card>
+				</Card> */}
 			</div>
-
-			{/* <Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)} style={{ marginTop: 16 }}>
-				<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
-				{danhSachLopThucHanh?.map((item) => (
-					<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
-				))}
-			</Tabs>
-
-			{activeKey !== '-1' ? (
-				<DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} title='Giảng viên phụ trách nhóm lớp' />
-			) : null}
-
-			<DanhSachSinhVien
-				sinhVienList={activeKey !== '-1' ? (recLopThucHanh?.sinhVienList ?? []) : (record?.sinhVienList ?? [])}
-				loading={loading || loadingThucHanh}
-				fromLopHocPhan
-			/> */}
 
 			<Row gutter={[16, 16]} className='card-content'>
 				<Col xs={24} lg={12}>
@@ -529,18 +524,27 @@ const ThongTinChung = () => {
 				)}
 			</Modal>
 			{/* Modal Học liệu */}
-			<Modal
+			{/* <Modal
 				title='Học liệu đề cương'
 				open={visibleHocLieu}
-				onCancel={() => setVisibleHocLieu(false)}
+				onCancel={() => {
+					setVisibleHocLieu(false);
+				}}
 				footer={null}
 				width={1200}
-			>
-				<HocLieuDeCuongPage />
-			</Modal>
+			> */}
+			{/* <HocLieuDeCuongPage /> */}
+			<ModalHocPhan
+				visible={visibleHocLieu}
+				setVisible={() => {
+					setVisibleHocLieu(false);
+				}}
+				title='Chi tiết đề cương học phần'
+				activeKey={'3'}
+			/>
+			{/* </Modal> */}
 			{/* Modal Kỹ năng đạt được với TabPane */}
 			{renderKyNangModal()}
-			<ModalHocPhan visible={visibleDeCuong} setVisible={setVisibleDeCuong} title='Chi tiết đề cương học phần' />
 		</Spin>
 	);
 };
