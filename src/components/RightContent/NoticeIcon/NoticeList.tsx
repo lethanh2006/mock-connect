@@ -1,8 +1,9 @@
 import { type ThongBao } from '@/services/ThongBao/typing';
+import dayjs from '@/utils/dayjs';
 import { ArrowDownOutlined } from '@ant-design/icons';
 import { Avatar, Divider, List, Skeleton } from 'antd';
 import classNames from 'classnames';
-import moment from 'moment';
+
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link, useModel } from 'umi';
@@ -67,7 +68,7 @@ const NoticeList: React.FC<NoticeIconTabProps> = ({
 										description={
 											<>
 												<div className={styles.description}>{item.description}</div>
-												<div className={styles.datetime}>{moment(item.createdAt).fromNow()}</div>
+												<div className={styles.datetime}>{dayjs(item.createdAt).fromNow()}</div>
 											</>
 										}
 									/>
