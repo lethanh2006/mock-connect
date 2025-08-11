@@ -132,8 +132,8 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 						maxHeight: 400,
 						overflowY: 'auto',
 						paddingRight: 8,
-						msOverflowStyle: 'none', // IE, Edge
-						scrollbarWidth: 'none', // Firefox
+						// msOverflowStyle: 'none', // IE, Edge
+						// scrollbarWidth: 'none', // Firefox
 						margin: '-16px',
 						boxShadow: '0px 0px 6px 0px #0000000A',
 					}}
