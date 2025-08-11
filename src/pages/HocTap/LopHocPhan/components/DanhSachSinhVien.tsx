@@ -79,8 +79,8 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 				style={{
 					maxHeight: '60vh',
 					overflowY: 'auto',
-					scrollbarWidth: 'none', // Firefox
-					msOverflowStyle: 'none', // IE 10+
+					// scrollbarWidth: 'none', // Firefox
+					// msOverflowStyle: 'none', // IE 10+
 				}}
 			>
 				<List
