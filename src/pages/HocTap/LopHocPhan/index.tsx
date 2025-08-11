@@ -106,7 +106,7 @@ const LopHocPhanPage = () => {
 				title='Danh sách lớp tín chỉ'
 			>
 				{danhSach.length > 0 ? (
-					<Row gutter={[0, 0]} style={{ margin: '0 -8px' }}>
+					<Row gutter={[0, 0]} style={{ margin: '-8px' }}>
 						{danhSach.map((lop, index) => (
 							<Col
 								key={lop._id}

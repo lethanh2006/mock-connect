@@ -189,20 +189,24 @@ const DetailLopTinChi = () => {
 			title: titles[6],
 			menuKey: paths[6],
 			content: (
-				<>
+				<Card variant='borderless' style={{ backgroundColor: '#fff' }}>
 					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
 					<DetailKetQuaHocTap
 						lopHocPhanId={record?._id}
 						toDanhGiaGiangVien={() => (window.location.hash = 'danh-gia-giang-vien')}
 					/>
-				</>
+				</Card>
 			),
 			icon: <BarChartOutlined />,
 		},
 		{
 			title: titles[7],
 			menuKey: paths[7],
-			content: <DanhGiaGiangVienPage danhSachNhanSu={record?.nhanSuList ?? []} />,
+			content: (
+				<Card variant='borderless' style={{ backgroundColor: '#fff' }}>
+					<DanhGiaGiangVienPage danhSachNhanSu={record?.nhanSuList ?? []} />{' '}
+				</Card>
+			),
 			icon: <StarOutlined />,
 		},
 	];
@@ -216,7 +220,7 @@ const DetailLopTinChi = () => {
 				tabType='line'
 				tabStyle={{
 					backgroundColor: 'transparent',
-					marginTop: '-48px', // để phần Tabpane nằm bên trong ThongTinChungHeaderCard
+					marginTop: '-50px', // để phần Tabpane nằm bên trong ThongTinChungHeaderCard
 				}}
 			/>
 		</>

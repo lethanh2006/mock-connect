@@ -6,8 +6,8 @@ import NoiDungHocPhanPage from '../LichTrinhChung';
 import LichTrinhCuTheList from '../LichTrinhCuThe';
 import ThongTinChungPage from './ThongTinChung';
 
-const TabsDeCuongHocPhan = () => {
-	const [activeKey, setActiveKey] = useState<string>('0');
+const TabsDeCuongHocPhan = (props: { activeKey?: string }) => {
+	const [activeKey, setActiveKey] = useState<string>(props.activeKey || '0');
 
 	return (
 		<>

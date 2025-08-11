@@ -87,7 +87,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 					dataSource={sinhVienList}
 					renderItem={(student) => (
 						<List.Item
-							style={{ padding: '16px 24px', borderBottom: '1px solid #f0f0f0' }}
+							style={{ padding: '16px 0px', borderBottom: '1px solid #f0f0f0' }}
 							actions={[
 								<Dropdown overlay={getDropdownMenu(student)} trigger={['click']} placement='bottomRight'>
 									<Button type='text' icon={<MoreOutlined />} style={{ color: '#666' }} />
