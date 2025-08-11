@@ -40,7 +40,7 @@ interface GiangVien {
 
 const ThongTinChung = () => {
 	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
-	const { record: recDeCuong, getByIdModel, setRecord: setRecDeCuong } = useModel('hocphan.decuonghocphan');
+	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 	const {
 		danhSach: danhSachHocLieu,
 		loading: loadingHocLieu,
@@ -61,30 +61,26 @@ const ThongTinChung = () => {
 	} = useModel('daotao.lopthuchanh');
 
 	const [activeKey, setActiveKey] = useState<string>('-1');
-	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [visibleHocLieu, setVisibleHocLieu] = useState<boolean>(false);
 	const [visibleKyNang, setVisibleKyNang] = useState<boolean>(false);
 	const [activeKyNangTab, setActiveKyNangTab] = useState<string>('content');
 
 	// Lấy dữ liệu kỹ năng
 	const kyNangDatDuoc = recDeCuong?.kyNangDatDuoc || recDeCuong?.ketQuaDatDuoc || [];
-	const mucTieuHocPhan = recDeCuong?.mucTieuHocPhan || '';
-	const chuanDauRa = recDeCuong?.chuanDauRa || '';
 
 	// Hiển thị 3 kỹ năng đầu tiên trong card
-	const displayKyNang = kyNangDatDuoc.slice(0, 3);
+	// const displayKyNang = kyNangDatDuoc.slice(0, 3);
 
 	// Tính toán tổng số giờ học từ nội dung học phần
-	const totalHours =
-		danhSachNoiDungHocPhan?.reduce((total, item) => {
-			return total + (item.gioLyThuyet || 0) + (item.gioBaiTapTL || 0) + (item.gioThucHanh || 0) + (item.gioTuHoc || 0);
-		}, 0) || 0;
+	// const totalHours =
+	// 	danhSachNoiDungHocPhan?.reduce((total, item) => {
+	// 		return total + (item.gioLyThuyet || 0) + (item.gioBaiTapTL || 0) + (item.gioThucHanh || 0) + (item.gioTuHoc || 0);
+	// 	}, 0) || 0;
 
 	useEffect(() => {
 		setActiveKey('-1');
 
 		// if (deCuongId) {
-		getByIdModel(deCuongId ?? '');
 		getHocLieuDeCuong({ deCuongId: deCuongId });
 		// }
 	}, [deCuongId]);
