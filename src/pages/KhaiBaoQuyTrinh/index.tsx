@@ -21,6 +21,7 @@ import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import ThongTinThanhToan from '../TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import FormKhaiBao from './components/FormKhaiBao';
+import ThongKeDichVu from './components/ThongKeDichVu';
 
 const KhaiBaoQuyTrinhPage = (props: {
 	title?: string;
@@ -129,16 +130,18 @@ const KhaiBaoQuyTrinhPage = (props: {
 			onCell,
 			hide: !props.hasColumnTenQuyTrinh,
 		},
-		{
-			title: 'Chi tiết',
-			dataIndex: 'moTa',
-			width: 250,
-			onCell,
-		},
+		// {
+		// 	title: 'Chi tiết',
+		// 	dataIndex: 'moTa',
+		// 	width: 250,
+		// 	onCell,
+		// },
 		{
 			title: 'Tiến trình',
 			dataIndex: 'quyTrinh',
 			width: 250,
+			filterType: 'select',
+
 			align: 'center',
 			render: (val, recordVal: KhaiBaoQuyTrinh.IRecord) => {
 				const buocHienTai = recordVal?.danhSachBuocXuLy?.find((item) => item.laBuocHienTai);
@@ -148,7 +151,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 				);
 
 				return (
-					<div>
+					<div style={{ color: '#007AFF', fontWeight: '400' }}>
 						<span>
 							{' '}
 							Bước {recordVal?.danhSachBuocXuLy?.length}/{val?.danhSachBuocXuLy?.length}:{' '}
@@ -170,27 +173,51 @@ const KhaiBaoQuyTrinhPage = (props: {
 			dataIndex: 'quyTrinh',
 			width: 200,
 			align: 'center',
-			render: (val, recordVal) => (
-				<Tag
-					color={
-						MapColorTrangThaiTiepNhan?.[
-							recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]
-								?.trangThaiTiepNhan as TrangThaiTiepNhan
-						] ?? 'yellow'
-					}
-				>
-					{recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.trangThaiTiepNhan}
-				</Tag>
-			),
+			render: (val, recordVal) => {
+				const color =
+					MapColorTrangThaiTiepNhan[
+						recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]
+							?.trangThaiTiepNhan as TrangThaiTiepNhan
+					] || '#faad14'; // mặc định là vàng
+
+				return (
+					<Tag
+						style={{
+							color,
+							borderColor: color + '40',
+							backgroundColor: color + '16', // màu nhạt (hex + alpha)
+							fontWeight: 400,
+						}}
+					>
+						{recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.trangThaiTiepNhan ||
+							'Chưa có kết quả tiếp nhận'}
+					</Tag>
+				);
+			},
 		},
 		{
 			title: 'Trạng thái thực hiện',
 			dataIndex: 'coKhaiBao',
 			width: 200,
 			align: 'center',
+
 			render: (val, recordVal) => {
 				const coKhaiBao = recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.coKhaiBao ?? false;
-				return <Tag color={coKhaiBao ? '#1fba36' : '#ffca2c'}>{coKhaiBao ? 'Đã thực hiện' : 'Chưa thực hiện'}</Tag>;
+
+				const color = coKhaiBao ? '#1fba36' : '#ffca2c';
+
+				return (
+					<Tag
+						style={{
+							color,
+							borderColor: color + '40',
+							backgroundColor: color + '16', // màu nhạt trong nền
+							fontWeight: 400,
+						}}
+					>
+						{coKhaiBao ? 'Đã thực hiện' : 'Chưa thực hiện'}
+					</Tag>
+				);
 			},
 			onCell,
 		},
@@ -254,7 +281,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 										setVisibleModal(true);
 									}}
 									type='link'
-									icon={<DollarCircleOutlined />}
+									icon={<DollarCircleOutlined style={{ color: '#FFAF0B' }} />}
 								/>
 							</Tooltip>
 						)}
@@ -277,7 +304,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 									}
 									placement='bottomLeft'
 								>
-									<Button loading={loading} type='link' icon={<DownloadOutlined />} />
+									<Button loading={loading} type='link' icon={<DownloadOutlined style={{ color: '#007AFF' }} />} />
 								</Dropdown>
 							</Tooltip>
 						)}
@@ -305,6 +332,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 	];
 	return (
 		<div>
+			<ThongKeDichVu />
 			<TableBase
 				modelName={'quytrinh.khaibaoquytrinh'}
 				columns={columns}
