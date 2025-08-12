@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from './dayjs'; // Import dayjs đã được cấu hình
 import _ from 'lodash';
 import { trim, removeHtmlTags, urlRegex } from '@/utils/utils';
 
@@ -78,21 +78,6 @@ const rules = {
 		{
 			pattern: new RegExp(`^[0-9${allCharacters} \n]+$`),
 			message: 'Không chứa kí tự đặc biệt',
-		},
-	],
-		json: [
-		{
-			validator: (__, value, callback) => {
-				try {
-					if (value) {
-						JSON.parse(value);
-					}
-					callback();
-				} catch {
-					callback('');
-				}
-			},
-			message: 'Json không hợp lệ',
 		},
 	],
 	ten: [
@@ -186,7 +171,7 @@ const rules = {
 	ngaySinh: [
 		{
 			validator: (_, value, callback) => {
-				if (moment(value).isAfter(moment())) callback('');
+				if (dayjs(value).isAfter(dayjs())) callback('');
 				callback();
 			},
 			message: 'Ngày sinh chưa đúng',
@@ -195,7 +180,7 @@ const rules = {
 	sauHomNay: [
 		{
 			validator: (_, value, callback) => {
-				if (value && moment(value).isBefore(moment().set({ hour: 0, minute: 0, second: 0 }))) callback('');
+				if (value && dayjs(value).isBefore(dayjs().startOf('day'))) callback('');
 				callback();
 			},
 			message: 'Không được trước thời điểm hiện tại',
@@ -204,7 +189,7 @@ const rules = {
 	sauThoiDiem: (mo, label) => [
 		{
 			validator: (_, value, callback) => {
-				if (mo && value && moment(value).isBefore(moment(mo))) callback('');
+				if (mo && value && dayjs(value).isBefore(dayjs(mo))) callback('');
 				callback();
 			},
 			message: 'Không được trước ' + label,
@@ -213,7 +198,7 @@ const rules = {
 	sauNgay: (mo, label) => [
 		{
 			validator: (_, value, callback) => {
-				if (mo && value && moment(value).isBefore(moment(mo).set({ hour: 0, minute: 0, second: 0 }))) callback('');
+				if (mo && value && dayjs(value).isBefore(dayjs(mo).startOf('day'))) callback('');
 				callback();
 			},
 			message: 'Không được trước ' + label,
@@ -222,7 +207,7 @@ const rules = {
 	truocHomNay: [
 		{
 			validator: (_, value, callback) => {
-				if (value && moment(value).isAfter(moment().set({ hour: 0, minute: 0, second: 0 }))) callback('');
+				if (value && dayjs(value).isAfter(dayjs().startOf('day'))) callback('');
 				callback();
 			},
 			message: 'Không được sau thời điểm hiện tại',
@@ -231,7 +216,7 @@ const rules = {
 	truocThoiDiem: (mo, label) => [
 		{
 			validator: (_, value, callback) => {
-				if (mo && value && moment(value).isAfter(moment(mo))) callback('');
+				if (mo && value && dayjs(value).isAfter(dayjs(mo))) callback('');
 				callback();
 			},
 			message: 'Không được trước ' + label,
@@ -240,7 +225,7 @@ const rules = {
 	truocNgay: (mo, label) => [
 		{
 			validator: (_, value, callback) => {
-				if (mo && value && moment(value).isAfter(moment(mo).set({ hour: 0, minute: 0, second: 0 }))) callback('');
+				if (mo && value && dayjs(value).isAfter(dayjs(mo).startOf('day'))) callback('');
 				callback();
 			},
 			message: 'Không được sau ' + label,
