@@ -4,11 +4,16 @@ import { type IColumn } from '@/components/Table/typing';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { EyeOutlined } from '@ant-design/icons';
 import { Checkbox } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const HocLieuDeCuongPage = () => {
-	const { page, limit } = useModel('hocphan.hoclieudecuong');
+	const { page, limit, getModel: getHocLieuDeCuong } = useModel('hocphan.hoclieudecuong');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
+
+	useEffect(() => {
+		getHocLieuDeCuong();
+	}, []);
 
 	const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
 		{
