@@ -623,8 +623,12 @@ const TableBase = (props: TableBaseProps) => {
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<Card title={title || false} variant={props.border ? 'outlined' : 'borderless'}>
-					{mainContent}
+				<Card
+					title={title || false}
+					variant={props.border ? 'outlined' : 'borderless'}
+					className='card-big-title card-borderless'
+				>
+					<Card variant='borderless'>{mainContent}</Card>
 				</Card>
 			)}
 
