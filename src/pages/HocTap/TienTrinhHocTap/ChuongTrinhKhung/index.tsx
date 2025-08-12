@@ -1,13 +1,15 @@
+import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT, LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
-import { Collapse, Descriptions, Spin, Tooltip } from 'antd';
+import { Collapse, Descriptions, Divider, Spin, Typography } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
-import CardHocPhan from '../components/CardHocPhan';
+import CardHocPhanV2 from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
-import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
+
+const { Title } = Typography;
 
 type TChuongTrinhHocKy = {
 	khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
@@ -74,10 +76,16 @@ const TienTrinhChuongTrinhKhung = () => {
 	}, [maKhoaNganh]);
 
 	const renderHocPhan = (data: TChuongTrinhHocKy) => (
-		<div className='col-chi-tiet'>
+		<div
+			style={{
+				display: 'grid',
+				gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
+				gap: '16px',
+			}}
+		>
 			{data.khoiHocPhan.map((ctk) =>
 				ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC ? (
-					<CardHocPhan
+					<CardHocPhanV2
 						key={ctk._id}
 						hocPhan={ctk.hocPhan}
 						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
@@ -101,7 +109,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	);
 
 	return (
-		<>
+		<div style={{ backgroundColor: 'transparent', minHeight: '100vh' }}>
 			{recTienTrinh?.ctdtKeHoach?._id && (
 				<>
 					<Descriptions>
@@ -124,43 +132,64 @@ const TienTrinhChuongTrinhKhung = () => {
 			)}
 
 			<Spin spinning={loading}>
-				{danhSachHocKy?.map((data) => (
+				{danhSachHocKy?.map((data, index) => (
 					<React.Fragment key={data.soThuTuKy}>
-						<div className='row-hoc-ky'>
-							<div className='col-hoc-ky'>
-								<Tooltip
-									title={
-										<>
-											Tổng số tín chỉ cần học: {data.soTinChiPhaiHoc}
-											<br />
-											Số tín chỉ tự chọn: {data.soTinChiTuChon}
-											<br />
-											Số tín chỉ đã đạt: {data.soTinChiDaDat}
-										</>
-									}
-								>
-									<h4>Học kỳ {data.soThuTuKy}</h4>
-									<span className='tin-chi'>({data.soTinChiPhaiHoc} tín chỉ)</span>
-								</Tooltip>
+						<div style={{ marginBottom: '32px' }}>
+							{/* Header học kỳ */}
+							<div
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									marginBottom: '16px',
+								}}
+							>
+								<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+									<Title level={5} style={{ margin: 0, color: '#262626' }}>
+										Học kỳ {data.soThuTuKy}
+									</Title>
+									<div
+										style={{
+											width: '8px',
+											height: '8px',
+											backgroundColor: '#ff4d4f',
+											borderRadius: '50%',
+										}}
+									/>
+									<div
+										style={{
+											color: 'red',
+											padding: '2px',
+											fontWeight: 500,
+										}}
+									>
+										{data.soTinChiPhaiHoc} tín chỉ
+									</div>
+								</div>
 							</div>
 
+							{/* Grid các môn học */}
 							{renderHocPhan(data)}
 						</div>
 
 						{data.chuyenNganhList?.length ? (
-							<Collapse bordered={false} style={{ marginTop: 8, marginBottom: 8 }}>
-								{data.chuyenNganhList.map((chuyenNganh) => (
-									<Collapse.Panel
-										key={chuyenNganh.khoiHocPhan[0]._id}
-										header={`Chuyên ngành: ${
-											chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
-										}`}
-									>
-										<div className='row-hoc-ky'>{renderHocPhan(chuyenNganh)}</div>
-									</Collapse.Panel>
-								))}
-							</Collapse>
+							<div style={{ marginBottom: '32px' }}>
+								<Collapse bordered={false}>
+									{data.chuyenNganhList.map((chuyenNganh) => (
+										<Collapse.Panel
+											key={chuyenNganh.khoiHocPhan[0]._id}
+											header={`Chuyên ngành: ${
+												chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
+											}`}
+										>
+											{renderHocPhan(chuyenNganh)}
+										</Collapse.Panel>
+									))}
+								</Collapse>
+							</div>
 						) : null}
+
+						{/* Divider giữa các học kỳ */}
+						{index < danhSachHocKy.length - 1 && <Divider style={{ margin: '32px 0', borderColor: '#e8e8e8' }} />}
 					</React.Fragment>
 				))}
 			</Spin>
@@ -179,7 +208,7 @@ const TienTrinhChuongTrinhKhung = () => {
 			/>
 
 			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
-		</>
+		</div>
 	);
 };
 
