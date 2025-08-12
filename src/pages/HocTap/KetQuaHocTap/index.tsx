@@ -12,6 +12,8 @@ const KetQuaHocTap = () => {
 
 	return (
 		<Card
+			className='card-big-title card-borderless'
+			variant='borderless'
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
 					<span>Kết quả học tập</span>
@@ -19,28 +21,30 @@ const KetQuaHocTap = () => {
 				</Space>
 			}
 		>
-			<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} loadData={false} />
+			<Card>
+				<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} loadData={false} />
 
-			<div style={{ marginTop: 8 }}>
-				<TabViewPage
-					hideCard
-					destroyInactiveTab={false}
-					menu={[
-						{
-							title: 'Điểm tổng kết',
-							menuKey: 'diem',
-							content: <DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />,
-							icon: <PicCenterOutlined />,
-						},
-						{
-							title: 'Máy tính thông minh',
-							menuKey: 'may-tinh',
-							content: <MayTinhThongMinh maKhoaNganh={maKhoaNganh} />,
-							icon: <SnippetsOutlined />,
-						},
-					]}
-				/>
-			</div>
+				<div style={{ marginTop: 8 }}>
+					<TabViewPage
+						hideCard
+						destroyInactiveTab={false}
+						menu={[
+							{
+								title: 'Điểm tổng kết',
+								menuKey: 'diem',
+								content: <DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />,
+								icon: <PicCenterOutlined />,
+							},
+							{
+								title: 'Máy tính thông minh',
+								menuKey: 'may-tinh',
+								content: <MayTinhThongMinh maKhoaNganh={maKhoaNganh} />,
+								icon: <SnippetsOutlined />,
+							},
+						]}
+					/>
+				</div>
+			</Card>
 		</Card>
 	);
 };
