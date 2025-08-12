@@ -2,7 +2,23 @@ import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ETrangThaiHocTap } from '@/services/DaoTao/constant';
 import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import classNames from 'classnames';
+import { Card, Tag } from 'antd';
+import './CardStyles.less';
+
+// Grade images mapping
+const GRADE_IMAGES = {
+	'A+': '/images/mark-a-plus.svg',
+	A: '/images/mark-a.svg',
+	'B+': '/images/mark-b-plus.svg',
+	B: '/images/mark-b.svg',
+	'C+': '/images/mark-c-plus.svg',
+	C: '/images/mark-c.svg',
+	'D+': '/images/mark-d-plus.svg',
+	D: '/images/mark-d.svg',
+	F: '/images/mark-f.svg',
+	P: '/images/mark-p.svg',
+	DEFAULT: '/images/mark-default.svg',
+} as const;
 
 const CardHocPhan = (props: {
 	hocPhan?: Partial<HocPhan.IRecord>;
@@ -14,51 +30,48 @@ const CardHocPhan = (props: {
 	const { hocPhan, listDiem, colorKhoiKienThuc, trangThaiHoc, onClick } = props;
 	const soTinChi = hocPhan?.soTinChi ?? 0;
 	const listDiemChu = listDiem?.map((item) => item.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU);
-	// Chỉ hiển thị 2 mục
-	const listDiemHienThi: any[] = listDiemChu?.slice(0, 2) ?? [];
-	if (listDiemChu?.length && listDiemChu.length > 2) {
-		listDiemHienThi.pop();
-		listDiemHienThi?.push(`+${listDiemChu.length - 1}`);
-	}
+
+	// Chỉ hiển thị điểm đầu tiên
+	const diemHienThi = listDiemChu?.[0];
+
+	// Function to get grade image
+	const getGradeImage = (grade: string) => {
+		if (isNotStudied) return null;
+		return GRADE_IMAGES[grade as keyof typeof GRADE_IMAGES] || GRADE_IMAGES.DEFAULT;
+	};
+
+	// Check status
+	const isNotStudied = trangThaiHoc === ETrangThaiHocTap.CHUA_HOC;
+	const isCurrentlyStudying = trangThaiHoc === ETrangThaiHocTap.DANG_HOC;
+
+	const gradeImage = diemHienThi ? getGradeImage(diemHienThi) : null;
 
 	return (
-		<div className='col-hoc-phan'>
-			<div
-				title={hocPhan?.ten}
-				className={classNames({
-					'card-hoc-phan': true,
-					'card-chua-hoc': trangThaiHoc === ETrangThaiHocTap.CHUA_HOC,
-					'card-truot': listDiemChu?.length && listDiemChu.every((diem) => diem === ELoaiDiemChu.F),
-				})}
-				onClick={() => onClick()}
-			>
-				<h4>{hocPhan?.ten}</h4>
-				<span className='tin-chi'>{soTinChi} tín chỉ</span>
-				<div className='khoi-kien-thuc' style={{ borderLeftColor: colorKhoiKienThuc }} />
-				{/* <img src='/images/img-card-hoc-phan.svg' /> */}
-			</div>
-			{listDiemHienThi?.map((diem, index) => (
-				<div
-					className={`bookmark bookmark-diem ${
-						diem.includes('A') || diem.includes('B') || diem === ELoaiDiemChu.PASS || diem === ELoaiDiemChu.MIEN_THI
-							? 'diem-green'
-							: diem.includes('C') || diem.includes('D')
-							? 'diem-yellow'
-							: diem?.includes('F')
-							? 'diem-red'
-							: 'diem-gray'
-					}`}
-					style={{ right: 1 + index * 2.3 + 'rem' }}
-					// eslint-disable-next-line react/no-array-index-key
-					key={index}
-				>
-					{diem}
-				</div>
-			))}
+		<div className='base-card'>
+			<Card hoverable onClick={onClick}>
+				{/* Background Image - Dùng ảnh điểm làm background */}
+				{gradeImage && <div className='card-background-image' style={{ backgroundImage: `url(${gradeImage})` }} />}
 
-			{trangThaiHoc === ETrangThaiHocTap.DANG_HOC ? (
-				<div className='bookmark bookmark-dang-hoc' title='Đang học/Chưa có KQHT' />
-			) : null}
+				{/* Content */}
+				<div className='card-content'>
+					{/* Course name */}
+					<h4 className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`} title={hocPhan?.ten}>
+						{hocPhan?.ten}
+					</h4>
+
+					{/* Credits */}
+					<Tag className='credits-tag'>{soTinChi} tín chỉ</Tag>
+				</div>
+
+				{/* Currently studying indicator */}
+				{isCurrentlyStudying && (
+					<div
+						className='studying-indicator'
+						title='Đang học/Chưa có KQHT'
+						// style={{ backgroundColor: colorKhoiKienThuc }}
+					/>
+				)}
+			</Card>
 		</div>
 	);
 };
