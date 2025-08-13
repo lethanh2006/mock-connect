@@ -2,6 +2,7 @@ import { ToolOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider, Modal, Tooltip } from 'antd';
 import { useState } from 'react';
 import { history } from 'umi';
+import ChatbotOverlay from './Chatbot';
 import PanpageHoTro from './FanpageHoTro';
 import FormPostIssue from './Form';
 import { unTechnicalSupportPaths } from './constant';
@@ -46,6 +47,8 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 					</Modal>
 				</>
 			) : null}
+
+			<ChatbotOverlay />
 
 			<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
 		</ConfigProvider>
