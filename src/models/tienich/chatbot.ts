@@ -9,6 +9,8 @@ export default () => {
 	const [boxChatVisible, setBoxChatVisible] = useState(false);
 	const [videoRefs, setVideoRefs] = useState<Record<string, any>>({});
 	const [playedVideos, setPlayedVideos] = useState<Set<string>>(new Set());
+	const [formSubmitingUser, setFormSubmitingUser] = useState(false);
+	const [formSubmitingThread, setFormSubmitingThread] = useState(false);
 
 	const [recordUser, setRecordUser] = useState<ChatbotAmi.IUser>();
 
@@ -64,25 +66,25 @@ export default () => {
 	// };
 
 	const createUserChatBotModel = async (payLoad: ChatbotAmi.IUser) => {
-		if (formSubmiting) return Promise.reject('form submiting');
-		setFormSubmiting(true);
+		if (formSubmitingUser) return Promise.reject('form submiting');
+		setFormSubmitingUser(true);
 		try {
 			const res = await createUserChatBot(payLoad);
 			setRecordUser(res?.data?.data);
 			return res?.data?.data;
 		} finally {
-			setFormSubmiting(false);
+			setFormSubmitingUser(false);
 		}
 	};
 
 	const createThreadChatBotModel = async (payLoad: ChatbotAmi.IThread) => {
-		if (formSubmiting) return Promise.reject('form submiting');
-		setFormSubmiting(true);
+		if (formSubmitingThread) return Promise.reject('form submiting');
+		setFormSubmitingThread(true);
 		try {
 			const res = await createThreadChatBot(payLoad);
 			return res?.data;
 		} finally {
-			setFormSubmiting(false);
+			setFormSubmitingThread(false);
 		}
 	};
 
@@ -113,6 +115,8 @@ export default () => {
 	};
 
 	return {
+		formSubmitingUser,
+		formSubmitingThread,
 		formSubmiting,
 		setFormSubmiting,
 		danhSach,

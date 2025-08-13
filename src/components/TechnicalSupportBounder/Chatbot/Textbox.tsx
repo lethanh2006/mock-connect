@@ -3,10 +3,16 @@ import { Form, Input } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 
-const quickReplies = ['Đăng ký học phần', 'Thông tin học phí', 'Liên hệ phòng đào tạo'];
+const quickReplies = [
+	'Hướng dẫn đăng ký học phần',
+	'Thông tin học phí và lịch thanh toán',
+	'Liên hệ phòng đào tạo',
+	'Lịch học và lịch thi',
+];
 
 const TextboxChatbot = () => {
-	const { postChatBotModel, formSubmiting, createThreadChatBotModel, recordUser } = useModel('tienich.chatbot');
+	const { postChatBotModel, formSubmiting, createThreadChatBotModel, recordUser, danhSach } =
+		useModel('tienich.chatbot');
 	const [form] = Form.useForm();
 	const [showInput, setShowInput] = useState(false);
 	const [threadId, setThreadId] = useState<number | null>(null);
@@ -34,13 +40,15 @@ const TextboxChatbot = () => {
 
 	return (
 		<div className='textbox'>
-			<div className='quick-replies'>
-				{quickReplies.map((q) => (
-					<span key={q} onClick={() => onFinish({ question: q })}>
-						{q}
-					</span>
-				))}
-			</div>
+			{danhSach?.length === 1 ? (
+				<div className='quick-replies'>
+					{quickReplies.map((q) => (
+						<button key={q} className='quick-reply-btn' onClick={() => onFinish({ question: q })}>
+							{q}
+						</button>
+					))}
+				</div>
+			) : null}
 
 			<Form form={form} onFinish={onFinish} disabled={formSubmiting}>
 				{showInput ? (

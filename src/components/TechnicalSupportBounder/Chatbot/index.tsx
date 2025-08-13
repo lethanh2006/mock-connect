@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { defaultVoiceMessages } from '@/services/TienIch/Chatbot/constant';
 import { RightOutlined } from '@ant-design/icons';
-import { Card } from 'antd';
+import { Card, Spin } from 'antd';
 import { nanoid } from 'nanoid';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -10,8 +10,15 @@ import './style.less';
 import TextboxChatbot from './Textbox';
 
 const ChatbotOverlay = () => {
-	const { danhSach, setDanhSach, boxChatVisible, setBoxChatVisible, createUserChatBotModel, recordUser } =
-		useModel('tienich.chatbot');
+	const {
+		danhSach,
+		setDanhSach,
+		boxChatVisible,
+		setBoxChatVisible,
+		createUserChatBotModel,
+		recordUser,
+		formSubmitingUser,
+	} = useModel('tienich.chatbot');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 
 	useEffect(() => {
@@ -43,19 +50,29 @@ const ChatbotOverlay = () => {
 		<Card
 			className='card-highlight card-chatbot'
 			size='small'
-			title='Giải đáp thắc mắc cùng Ami'
+			title={
+				<div className='chatbot-header'>
+					<div className='chatbot-title'>
+						<span className='chatbot-name'>Giải đáp thắc mắc cùng Ami</span>
+						<span className='chatbot-status'>Online</span>
+					</div>
+				</div>
+			}
 			extra={
 				<ButtonExtend
-					tooltip='Ẩn hộp thoại'
 					icon={<RightOutlined />}
 					onClick={() => setBoxChatVisible(false)}
-					type='link'
+					type='text'
+					className='minimize-btn'
+					tooltip='Ẩn hộp thoại'
 				/>
 			}
 		>
 			<div className='content'>
-				<ContentBoxChat />
-				<TextboxChatbot />
+				<Spin spinning={formSubmitingUser} tip='Loading...'>
+					<ContentBoxChat />
+					<TextboxChatbot />
+				</Spin>
 			</div>
 		</Card>
 	) : (
