@@ -1,94 +1,135 @@
-import type { ChatbotAmi } from '@/services/TienIch/Chatbot/typing';
-import { UserOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import classNames from 'classnames';
 import moment from 'moment';
-import { useEffect } from 'react';
-import { useModel } from 'umi';
+import React, { useEffect } from 'react';
+import { Link, useModel } from 'umi';
 
 const ContentBoxChat = () => {
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
-	const { danhSach, formSubmiting, formSubmitingThread } = useModel('tienich.chatbot');
+	const { danhSach, formSubmiting, genVideoMessageModel, videoRefs, setVideoRefs, playedVideos, setPlayedVideos } =
+		useModel('tienich.chatbot');
 	const lastNameChar = recSinhVien?.ten?.split(' ')?.at(-1)?.[0];
 
 	useEffect(() => {
-		let targetId: string | null = null;
-
-		if (formSubmiting || formSubmitingThread) {
-			targetId = 'tidot_loading';
-		} else {
-			targetId = danhSach.at(-1)?._id || null;
+		// Tạo mới các refs cho video
+		if (!formSubmiting) {
+			danhSach
+				.filter((i) => !!i.urlVideo)
+				.forEach((i) => {
+					setVideoRefs((refs) => {
+						if (!refs?.[i._id]) refs[i._id] = React.createRef();
+						return refs;
+					});
+				});
 		}
+	}, [formSubmiting]);
 
-		if (targetId) {
-			const el = document.getElementById(targetId);
-			if (el) {
-				setTimeout(() => {
-					el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-				}, 100);
-			}
+	useEffect(() => {
+		const latestId = danhSach.at(-1)?._id;
+		if (!!latestId) {
+			const element = document.getElementById(latestId);
+			element?.scrollIntoView({ behavior: 'smooth' });
 		}
-	}, [danhSach.length, formSubmiting, formSubmitingThread]);
+	}, [danhSach.length]);
 
-	const MyMessage = ({ message }: { message: ChatbotAmi.IRecord }) => (
-		<div className='message-content user-message'>
-			<div className='message-text'>
-				<div className='message-bubble'>{message.content}</div>
-				<div className='message-time'>{moment(message.createdAt).format('HH:mm')}</div>
-			</div>
-			<div className='message-avatar' style={{ marginLeft: 8 }}>
-				<Avatar
-					src={recSinhVien?.anhDaiDienUrl}
-					icon={!recSinhVien?.anhDaiDienUrl ? lastNameChar || <UserOutlined /> : undefined}
-					className='user-avatar'
-				/>
-			</div>
-		</div>
-	);
-
-	const BotMessage = ({ message }: { message: ChatbotAmi.IRecord }) => (
-		<div className='message-content bot-message'>
-			<div className='message-avatar' style={{ marginRight: 8 }}>
-				<Avatar src='/images/chatbot_ava.png' className='bot-avatar' />
-			</div>
-			<div className='message-text'>
-				<div className='message-bubble' dangerouslySetInnerHTML={{ __html: message.content }} />
-				<div className='message-meta'>
-					<span className='message-time'>{moment(message.createdAt).format('HH:mm')}</span>
-					<span className='message-name'>Ami</span>
+	const MyMessage = (props: { message: ChatbotAmi.IRecord }) => {
+		const { message } = props;
+		return (
+			<>
+				<div className='text'>{message.content}</div>
+				<div className='avatar'>
+					<Avatar
+						src={recSinhVien?.anhDaiDienUrl ? <img alt='avatar' src={recSinhVien?.anhDaiDienUrl} /> : undefined}
+						icon={!recSinhVien?.anhDaiDienUrl ? lastNameChar ?? <UserOutlined /> : undefined}
+						alt='avatar'
+					/>
 				</div>
-			</div>
-		</div>
-	);
+			</>
+		);
+	};
+
+	const BotMessage = (props: { message: ChatbotAmi.IRecord }) => {
+		const { message } = props;
+		return (
+			<>
+				<div className='avatar'>
+					<Avatar src='/images/chatbot_ava.png' />
+				</div>
+
+				<div className='content-text'>
+					{message.content ? <div className='text' dangerouslySetInnerHTML={{ __html: message.content }} /> : null}
+
+					{message.urlVideo ? (
+						<video
+							id={message._id}
+							width='256'
+							height='256'
+							controls
+							controlsList='nodownload nofullscreen noremoteplayback'
+							autoPlay={!playedVideos.has(message._id)}
+							ref={videoRefs?.[message._id]}
+							onPlay={(e) => {
+								// Khi play thì pause các video khác lại
+								Object.keys(videoRefs).map((id) => {
+									if (id !== message._id) videoRefs[id]?.current?.pause();
+								});
+								setPlayedVideos((i) => i.add(message._id));
+							}}
+						>
+							<source src={message.urlVideo} type='video/mp4' />
+							{message.urlVideo}
+						</video>
+					) : !!message.content ? (
+						<Link
+							to='#!'
+							onClick={(e) => {
+								e.preventDefault();
+								genVideoMessageModel(message).catch(console.log);
+							}}
+						>
+							Video <PlayCircleOutlined />
+						</Link>
+					) : null}
+				</div>
+			</>
+		);
+	};
 
 	return (
-		<div className='messages-container'>
-			<div className='messages'>
-				{danhSach.map((item) => (
-					<div className={classNames('message-wrapper', { bot: !item.isUser })} key={item._id} id={item._id}>
-						{item.isUser ? <MyMessage message={item} /> : <BotMessage message={item} />}
+		<div className='messages'>
+			<span className='note'>Cuộc hội thoại này không được lưu lại. Các thông tin chỉ mang tính chất tham khảo!</span>
+
+			{danhSach.map((item) => (
+				<div
+					className={classNames({ message: true, bot: !item.isUser })}
+					key={item._id}
+					id={item._id}
+					title={moment(item.createdAt).fromNow()}
+				>
+					{item.isUser ? <MyMessage message={item} /> : <BotMessage message={item} />}
+				</div>
+			))}
+
+			{formSubmiting ? (
+				<div className='message bot' id='tidot_loading'>
+					<div className='avatar'>
+						<Avatar src='/images/chatbot_ava.png' />
 					</div>
-				))}
-				{(formSubmiting || formSubmitingThread) && (
-					<div className='message-wrapper bot' id='tidot_loading'>
-						<div className='message-content bot-message'>
-							<div className='message-avatar' style={{ marginRight: 8 }}>
-								<Avatar src='/images/chatbot_ava.png' className='bot-avatar' />
-							</div>
-							<div className='message-text'>
-								<div className='typing-indicator'>
-									<div className='dot' />
-									<div className='dot' />
-									<div className='dot' />
-								</div>
+					<div className='text'>
+						<div className='ticontainer'>
+							<div className='tiblock'>
+								<div className='tidot' />
+								<div className='tidot' />
+								<div className='tidot' />
 							</div>
 						</div>
 					</div>
-				)}
-			</div>
-			<div className='chat-disclaimer'>
-				<span>Cuộc hội thoại này không được lưu lại. Các thông tin chỉ mang tính chất tham khảo!</span>
-			</div>
+				</div>
+			) : null}
+
+			{/* Fake to scroll to end */}
+			<div id='end_message' />
 		</div>
 	);
 };
