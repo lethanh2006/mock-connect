@@ -3,63 +3,44 @@ import { Form, Input } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 
-const quickReplies = [
-	'Hướng dẫn đăng ký học phần',
-	'Thông tin học phí và lịch thanh toán',
-	'Liên hệ phòng đào tạo',
-	'Lịch học và lịch thi',
-];
-
 const TextboxChatbot = () => {
-	const { postChatBotModel, formSubmiting, createThreadChatBotModel, recordUser, danhSach } =
-		useModel('tienich.chatbot');
+	const { postChatMessageModel, formSubmiting } = useModel('tienich.chatbot');
 	const [form] = Form.useForm();
-	const [showInput, setShowInput] = useState(false);
-	const [threadId, setThreadId] = useState<number | null>(null);
+	const [showCommentEdit, setShowCommendEdit] = useState<boolean>(false);
 
-	const onFinish = async ({ question }: { question: string }) => {
-		if (!question) return;
+	const onFinish = (values: any) => {
+		if (!values.question) return;
 		resetFieldsForm(form);
 
-		try {
-			let currentThreadId = threadId;
-			if (!currentThreadId && recordUser?.id) {
-				const threadRes = await createThreadChatBotModel({ user_id: recordUser.id, title: question } as any);
-				currentThreadId = threadRes?.id;
-				setThreadId(currentThreadId);
-			}
-
-			if (recordUser?.id && currentThreadId) {
-				await postChatBotModel({ user_id: recordUser.id, thread_id: currentThreadId, message: question });
-			}
-			setShowInput(false);
-		} catch (err) {
-			console.error('Lỗi gửi tin nhắn:', err);
-		}
+		postChatMessageModel(values.question, () => {
+			const element = document.getElementById('end_message');
+			element?.scrollIntoView({ behavior: 'smooth' });
+		})
+			.then(() => {
+				setShowCommendEdit(false);
+			})
+			.catch(console.log);
 	};
 
 	return (
 		<div className='textbox'>
-			{danhSach?.length === 1 ? (
-				<div className='quick-replies'>
-					{quickReplies.map((q) => (
-						<button key={q} className='quick-reply-btn' onClick={() => onFinish({ question: q })}>
-							{q}
-						</button>
-					))}
-				</div>
-			) : null}
-
 			<Form form={form} onFinish={onFinish} disabled={formSubmiting}>
-				{showInput ? (
+				{showCommentEdit ? (
 					<Form.Item name='question' noStyle>
-						<Input autoFocus placeholder='Nhập câu hỏi...' onBlur={(e) => !e.target.value && setShowInput(false)} />
+						<Input
+							autoFocus
+							placeholder='Nhập câu hỏi...'
+							onBlur={(e) => {
+								if (!e.target.value) setShowCommendEdit(false);
+							}}
+						/>
 					</Form.Item>
 				) : (
-					<div className='fake-input' onClick={() => setShowInput(true)}>
+					<div className='fake-input' onClick={() => setShowCommendEdit(true)}>
 						Bạn muốn hỏi gì?
 					</div>
 				)}
+
 				<svg
 					onClick={() => form.submit()}
 					xmlns='http://www.w3.org/2000/svg'
@@ -67,7 +48,14 @@ const TextboxChatbot = () => {
 					viewBox='0 0 24 24'
 					strokeWidth={1.5}
 					stroke='currentColor'
-					style={{ width: 24, height: 24, marginLeft: 12, color: 'var(--primary-color)', cursor: 'pointer' }}
+					style={{
+						width: 24,
+						height: 24,
+						marginLeft: 12,
+						color: 'var(--primary-color)',
+						flexShrink: 0,
+						cursor: 'pointer',
+					}}
 				>
 					<path
 						strokeLinecap='round'
