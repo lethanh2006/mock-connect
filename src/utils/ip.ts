@@ -13,6 +13,7 @@ const ipCore = ipRoot + 'core';
 const ipTaiChinh = ipRoot + 'tai-chinh-api-v2';
 const ipKhaoThi = ipRoot + 'khao-thi';
 const ipThuVien = ipRoot + 'thu-vien'; // ip dev
+const ipChatbot = ipRoot + 'chatbot-api';
 
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
@@ -32,25 +33,26 @@ const oneSignalClient = APP_CONFIG_ONE_SIGNAL_ID;
 const moodleEndpoint = APP_CONFIG_MOODLE_ENDPOINT;
 
 export {
-	ipDaoTao,
-	ipNhanSu,
 	currentRole,
-	replaceRole,
 	ip3,
+	ipChatbot,
 	ipCore,
+	ipDaoTao,
+	ipKhaoThi,
+	ipNewsWP,
+	ipNhanSu,
 	ipNotif,
 	ipTaiChinh,
 	ipThuVien,
-	oneSignalRole,
-	keycloakClientID,
-	resourceServerClientId,
 	keycloakAuthEndpoint,
 	keycloakAuthority,
+	keycloakClientID,
 	keycloakTokenEndpoint,
 	keycloakUserInfoEndpoint,
-	oneSignalClient,
-	sentryDSN,
-	ipNewsWP,
 	moodleEndpoint,
-	ipKhaoThi,
+	oneSignalClient,
+	oneSignalRole,
+	replaceRole,
+	resourceServerClientId,
+	sentryDSN,
 };
