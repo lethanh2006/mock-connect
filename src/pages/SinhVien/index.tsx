@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import FormSinhVien from '@/pages/SinhVien/components/Form';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
-import { EditOutlined, LeftOutlined, OrderedListOutlined } from '@ant-design/icons';
+import { EditOutlined, LeftOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Space } from 'antd';
 import fileDownload from 'js-file-download';
 import moment from 'moment';
