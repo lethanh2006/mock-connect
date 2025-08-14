@@ -130,6 +130,25 @@
 			.textbox {
 				padding: 10px 5px;
 
+				.quick-replies {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 8px;
+					margin-bottom: 12px;
+
+					.quick-reply-btn {
+						padding: 6px 12px;
+						font-size: 12px;
+						border: none;
+						border-radius: 16px;
+						cursor: pointer;
+
+						&:hover {
+							transform: translateY(-1px);
+						}
+					}
+				}
+
 				form {
 					display: flex;
 					align-items: center;

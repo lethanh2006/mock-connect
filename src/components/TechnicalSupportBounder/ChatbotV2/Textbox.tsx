@@ -3,8 +3,16 @@ import { Form, Input } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 
+const quickReplies = [
+	'Hướng dẫn đăng ký học phần',
+	'Thông tin học phí và lịch thanh toán',
+	'Liên hệ phòng đào tạo',
+	'Lịch học và lịch thi',
+];
+
 const TextboxChatbotV2 = () => {
-	const { postChatBotModel, formSubmiting, createThreadChatBotModel, recordUser } = useModel('tienich.chatbotv2');
+	const { postChatBotModel, formSubmiting, createThreadChatBotModel, recordUser, danhSach } =
+		useModel('tienich.chatbotv2');
 	const [form] = Form.useForm();
 	const [showCommentEdit, setShowCommendEdit] = useState<boolean>(false);
 	const [threadId, setThreadId] = useState<number | null>(null);
@@ -32,6 +40,16 @@ const TextboxChatbotV2 = () => {
 
 	return (
 		<div className='textbox'>
+			{danhSach?.length === 1 ? (
+				<div className='quick-replies'>
+					{quickReplies.map((q) => (
+						<button key={q} className='quick-reply-btn' onClick={() => onFinish({ question: q })}>
+							{q}
+						</button>
+					))}
+				</div>
+			) : null}
+
 			<Form form={form} onFinish={onFinish} disabled={formSubmiting}>
 				{showCommentEdit ? (
 					<Form.Item name='question' noStyle>
