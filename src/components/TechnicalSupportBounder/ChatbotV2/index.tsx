@@ -1,6 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { RightOutlined } from '@ant-design/icons';
-import { Card } from 'antd';
+import { Card, Spin } from 'antd';
 import { nanoid } from 'nanoid';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -17,6 +17,8 @@ const ChatbotOverlayV2 = () => {
 		createUserChatBotModel,
 		recordUser,
 		formSubmitingUser,
+		getUserChatBotModel,
+		loading,
 	} = useModel('tienich.chatbotv2');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 
@@ -31,19 +33,23 @@ const ChatbotOverlayV2 = () => {
 					isUser: false,
 				},
 			]);
-		}
 
-		if (boxChatVisible && !recordUser?.id) {
-			const randomSuffix = nanoid(5);
-			const baseName = recSinhVien?.ten?.replace(/\s+/g, '') || 'user';
-			const baseEmailName = recSinhVien?.email?.split('@')[0] || 'user';
-			createUserChatBotModel({
-				password: 'abc@1234',
-				username: `${baseName}_${randomSuffix}`,
-				email: `${baseEmailName}_${randomSuffix}@${recSinhVien?.email?.split('@')[1] || 'example.com'}`,
-			} as any);
+			if (recSinhVien?.ssoId) {
+				getUserChatBotModel(recSinhVien.ssoId);
+			}
 		}
 	}, [boxChatVisible]);
+
+	useEffect(() => {
+		if (boxChatVisible && recSinhVien?.ssoId && !recordUser?.id) {
+			createUserChatBotModel({
+				password: 'abc@1234',
+				username: recSinhVien.ten,
+				email: recSinhVien.email,
+				sso_sub: recSinhVien.ssoId,
+			} as any);
+		}
+	}, [recordUser?.id]);
 
 	return (
 		<>
@@ -60,13 +66,14 @@ const ChatbotOverlayV2 = () => {
 							type='link'
 						/>
 					}
-					loading={formSubmitingUser}
 				>
-					<div className='content'>
-						<ContentBoxChatV2 />
+					<Spin spinning={formSubmitingUser || loading}>
+						<div className='content'>
+							<ContentBoxChatV2 />
 
-						<TextboxChatbotV2 />
-					</div>
+							<TextboxChatbotV2 />
+						</div>
+					</Spin>
 				</Card>
 			) : (
 				<div className='chatbot-button'>
