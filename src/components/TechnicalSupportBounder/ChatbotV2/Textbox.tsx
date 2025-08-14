@@ -11,11 +11,10 @@ const quickReplies = [
 ];
 
 const TextboxChatbotV2 = () => {
-	const { postChatBotModel, formSubmiting, createThreadChatBotModel, recordUser, danhSach } =
+	const { postChatBotModel, formSubmiting, createThreadChatBotModel, recordUser, danhSach, threadId, setThreadId } =
 		useModel('tienich.chatbotv2');
 	const [form] = Form.useForm();
 	const [showCommentEdit, setShowCommendEdit] = useState<boolean>(false);
-	const [threadId, setThreadId] = useState<number | null>(null);
 
 	const onFinish = async ({ question }: { question: string }) => {
 		if (!question) return;
