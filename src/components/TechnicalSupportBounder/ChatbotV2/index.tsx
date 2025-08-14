@@ -17,7 +17,7 @@ const ChatbotOverlayV2 = () => {
 		createUserChatBotModel,
 		recordUser,
 		formSubmitingUser,
-		getUserChatBotModel,
+		// getUserChatBotModel,
 		loading,
 	} = useModel('tienich.chatbotv2');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
@@ -34,22 +34,28 @@ const ChatbotOverlayV2 = () => {
 				},
 			]);
 
-			if (recSinhVien?.ssoId) {
-				getUserChatBotModel(recSinhVien.ssoId);
+			if (recSinhVien?.ssoId && !recordUser?.id) {
+				// getUserChatBotModel(recSinhVien.ssoId);
+				createUserChatBotModel({
+					password: 'abc@1234',
+					username: recSinhVien.ten,
+					email: recSinhVien.email,
+					sso_sub: recSinhVien.ssoId,
+				} as any);
 			}
 		}
 	}, [boxChatVisible]);
 
-	useEffect(() => {
-		if (boxChatVisible && recSinhVien?.ssoId && !recordUser?.id) {
-			createUserChatBotModel({
-				password: 'abc@1234',
-				username: recSinhVien.ten,
-				email: recSinhVien.email,
-				sso_sub: recSinhVien.ssoId,
-			} as any);
-		}
-	}, [recordUser?.id]);
+	// useEffect(() => {
+	// 	if (boxChatVisible && recSinhVien?.ssoId && !recordUser?.id) {
+	// 		createUserChatBotModel({
+	// 			password: 'abc@1234',
+	// 			username: recSinhVien.ten,
+	// 			email: recSinhVien.email,
+	// 			sso_sub: recSinhVien.ssoId,
+	// 		} as any);
+	// 	}
+	// }, [recordUser?.id]);
 
 	return (
 		<>
