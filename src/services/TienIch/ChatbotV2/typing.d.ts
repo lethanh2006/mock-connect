@@ -1,6 +1,11 @@
 import type { ERolesUsers } from './constant';
 
 declare module ChatbotAmiV2 {
+	export interface ISourceItem {
+		source: any;
+		content: string;
+	}
+
 	export interface IRecord {
 		_id: string;
 		content: string;
@@ -8,6 +13,9 @@ declare module ChatbotAmiV2 {
 		createdAt: string;
 		urlVideo?: string;
 		sendFail?: boolean;
+
+		recommendQuestions?: string[];
+		sources?: ISourceItem[];
 	}
 
 	export interface IUser {

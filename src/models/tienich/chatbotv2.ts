@@ -14,6 +14,7 @@ export default () => {
 	const [formSubmitingThread, setFormSubmitingThread] = useState(false);
 
 	const [recordUser, setRecordUser] = useState<ChatbotAmiV2.IUser>();
+	const [threadId, setThreadId] = useState<number | null>(null);
 
 	const convertMarkdown = (text: string) => {
 		const updatedText = text
@@ -67,18 +68,40 @@ export default () => {
 
 		setDanhSach((prev) => [
 			...prev,
-			{ _id: nanoid(), content: message, isUser: true, createdAt: new Date().toISOString() },
+			{
+				_id: nanoid(),
+				content: message,
+				isUser: true,
+				createdAt: new Date().toISOString(),
+			} as ChatbotAmiV2.IRecord,
 		]);
+
 		preAction?.();
 
 		try {
 			const res = await postChatBot(user_id, thread_id, message);
+
 			const content = res.data?.response ?? 'Không có kết quả';
+
+			const recommendQuestions: string[] = res.data?.recommend_questions ?? [];
+			const sources: ChatbotAmiV2.ISourceItem[] = res.data?.sources ?? [];
+
 			setDanhSach((prev) => [
 				...prev,
-				{ _id: nanoid(), content: convertMarkdown(content), isUser: false, createdAt: new Date().toISOString() },
+				{
+					_id: nanoid(),
+					content: convertMarkdown(content),
+					isUser: false,
+					createdAt: new Date().toISOString(),
+					recommendQuestions,
+					sources,
+				} as ChatbotAmiV2.IRecord,
 			]);
+
 			return content;
+		} catch (error) {
+			console.error('Lỗi khi gửi tin nhắn chatbot:', error);
+			throw error;
 		} finally {
 			setFormSubmiting(false);
 		}
@@ -103,5 +126,7 @@ export default () => {
 		createThreadChatBotModel,
 		postChatBotModel,
 		getUserChatBotModel,
+		threadId,
+		setThreadId,
 	};
 };
