@@ -39,9 +39,9 @@ const ChatbotOverlayV2 = () => {
 			// getUserChatBotModel(recSinhVien.ssoId);
 			createUserChatBotModel({
 				password: 'abc@1234',
-				username: infoMe.hoTen ?? 'admin',
-				email: infoMe.emailCanBo ?? infoMe.email365 ?? 'admin@ufm.edu.vn',
-				sso_sub: infoMe.ssoId ?? 'admin_ssoId',
+				username: recSinhVien?.ten ?? 'admin',
+				email: recSinhVien?.email ?? 'admin@ufm.edu.vn',
+				sso_sub: recSinhVien?.ssoId ?? 'admin_ssoId',
 			} as any);
 		}
 	}, [boxChatVisible]);
