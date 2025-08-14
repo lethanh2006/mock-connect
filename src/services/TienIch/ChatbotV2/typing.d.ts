@@ -26,6 +26,7 @@ declare module ChatbotAmiV2 {
 		username: string;
 		email: string;
 		is_active: true;
+		sso_sub: string;
 		roles?: ERolesUsers[];
 	}
 
