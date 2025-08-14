@@ -21,6 +21,7 @@ const ChatbotOverlayV2 = () => {
 		loading,
 	} = useModel('tienich.chatbotv2');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { initialState } = useModel('@@initialState');
 
 	useEffect(() => {
 		if (boxChatVisible && !danhSach.length) {
@@ -40,8 +41,10 @@ const ChatbotOverlayV2 = () => {
 			createUserChatBotModel({
 				password: 'abc@1234',
 				username: recSinhVien?.ten ?? 'admin',
-				email: recSinhVien?.email ?? 'admin@ufm.edu.vn',
-				sso_sub: recSinhVien?.ssoId ?? 'admin_ssoId',
+				email:
+					recSinhVien.email ??
+					`${recSinhVien.ten}@${APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH.toLocaleLowerCase()}.edu.vn`,
+				sso_sub: recSinhVien.ssoId ?? initialState?.currentUser?.ssoId ?? 'admin_ssoId',
 			} as any);
 		}
 	}, [boxChatVisible]);
