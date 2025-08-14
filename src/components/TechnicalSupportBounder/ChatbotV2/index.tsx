@@ -33,16 +33,15 @@ const ChatbotOverlayV2 = () => {
 					isUser: false,
 				},
 			]);
-
-			if (recSinhVien?.ssoId && !recordUser?.id) {
-				// getUserChatBotModel(recSinhVien.ssoId);
-				createUserChatBotModel({
-					password: 'abc@1234',
-					username: recSinhVien.ten,
-					email: recSinhVien.email,
-					sso_sub: recSinhVien.ssoId,
-				} as any);
-			}
+		}
+		if (boxChatVisible && recSinhVien?.ssoId && !recordUser?.id) {
+			// getUserChatBotModel(recSinhVien.ssoId);
+			createUserChatBotModel({
+				password: 'abc@1234',
+				username: recSinhVien.ten,
+				email: recSinhVien.email,
+				sso_sub: recSinhVien.ssoId,
+			} as any);
 		}
 	}, [boxChatVisible]);
 
