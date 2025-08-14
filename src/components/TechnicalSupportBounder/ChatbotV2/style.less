@@ -236,3 +236,84 @@
 .tidot:nth-child(3) {
 	animation-delay: 400ms;
 }
+
+.quick-replies {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 8px;
+
+	.quick-reply-btn {
+		padding: 6px 12px;
+		font-size: 13px;
+		background: #f8f8f8;
+		border: 1px solid #ddd;
+		border-radius: 18px;
+		cursor: pointer;
+		transition: all 0.2s ease;
+
+		&:hover {
+			color: #fff;
+			background: var(--primary-color);
+			border-color: var(--primary-color);
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+			transform: translateY(-1px);
+		}
+
+		&:active {
+			transform: scale(0.97);
+		}
+	}
+}
+
+.sources {
+	margin-top: 12px;
+	padding-left: 10px;
+	color: #444;
+	font-size: 13px;
+	border-left: 3px solid var(--primary-color);
+
+	strong {
+		display: inline-flex;
+		gap: 6px;
+		align-items: center;
+		color: var(--primary-color);
+		font-weight: 600;
+
+		&::before {
+			font-size: 14px;
+			content: '📄';
+		}
+	}
+
+	p {
+		margin: 4px 0;
+		line-height: 1.6;
+	}
+
+	ul,
+	ol {
+		margin: 4px 0 0 18px;
+		padding: 0;
+	}
+
+	li {
+		margin-bottom: 8px;
+	}
+
+	a {
+		color: var(--primary-color);
+		text-decoration: none;
+		transition: color 0.2s;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	hr {
+		margin: 10px 0;
+		border: none;
+		border-top: 1px dashed #ddd;
+	}
+}

@@ -1,3 +1,4 @@
+import type { ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import classNames from 'classnames';
@@ -5,9 +6,14 @@ import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
+import { Collapse } from 'antd';
+import ReactMarkdown from 'react-markdown';
+
+const { Panel } = Collapse;
+
 const ContentBoxChatV2 = () => {
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
-	const { danhSach, formSubmiting } = useModel('tienich.chatbotv2');
+	const { danhSach, formSubmiting, postChatBotModel, recordUser, threadId } = useModel('tienich.chatbotv2');
 	const lastNameChar = recSinhVien?.ten?.split(' ')?.at(-1)?.[0];
 
 	useEffect(() => {
@@ -18,7 +24,7 @@ const ContentBoxChatV2 = () => {
 		}
 	}, [danhSach.length]);
 
-	const MyMessage = (props: { message: ChatbotAmi.IRecord }) => {
+	const MyMessage = (props: { message: ChatbotAmiV2.IRecord }) => {
 		const { message } = props;
 		return (
 			<>
@@ -34,7 +40,7 @@ const ContentBoxChatV2 = () => {
 		);
 	};
 
-	const BotMessage = (props: { message: ChatbotAmi.IRecord }) => {
+	const BotMessage = (props: { message: ChatbotAmiV2.IRecord }) => {
 		const { message } = props;
 		return (
 			<>
@@ -44,6 +50,62 @@ const ContentBoxChatV2 = () => {
 
 				<div className='content-text'>
 					{message.content ? <div className='text' dangerouslySetInnerHTML={{ __html: message.content }} /> : null}
+
+					{(message?.recommendQuestions?.length ?? 0) > 0 && (
+						<div className='quick-replies'>
+							{message?.recommendQuestions?.map((q, idx) => (
+								<button
+									// eslint-disable-next-line react/no-array-index-key
+									key={idx}
+									className='quick-reply-btn'
+									onClick={() =>
+										postChatBotModel({
+											message: q,
+											user_id: recordUser?.id ?? 0,
+											thread_id: threadId ?? 0,
+										})
+									}
+								>
+									{q}
+								</button>
+							))}
+						</div>
+					)}
+
+					{message.sources?.length ? (
+						<Collapse ghost>
+							<Panel header='Nguồn tham khảo' key='1'>
+								<div className='sources'>
+									<ReactMarkdown
+										components={{
+											li: ({ children }) => <li>{children}</li>,
+											p: ({ children }) => <p>{children}</p>,
+											// eslint-disable-next-line @typescript-eslint/no-shadow
+											a: ({ node, ...props }) => <a {...props} target='_blank' rel='noopener noreferrer' />,
+											// eslint-disable-next-line @typescript-eslint/no-shadow
+											img: ({ node, ...props }) => <img {...props} style={{ maxWidth: '100%', height: 'auto' }} />,
+										}}
+									>
+										{message.sources
+											.map((src) => {
+												const soQD = src.source?.['Số QĐ'] ?? '';
+												const ngayBanHanh = src.source?.['Ngày ban hành']
+													? moment(src.source['Ngày ban hành']).format('DD/MM/YYYY')
+													: '';
+												const header1 = src.source?.['Header 1'] ?? '';
+												const header2 = src.source?.['Header 2'] ?? '';
+												const content = src.content || '';
+
+												const headerLine = `**${soQD}**${ngayBanHanh ? ` (${ngayBanHanh})` : ''}`;
+												const titleLine = `${header1}${header2 ? ` - ${header2}` : ''}`;
+												return `${headerLine} ${titleLine} ${content}`;
+											})
+											.join('\n\n---\n\n')}
+									</ReactMarkdown>
+								</div>
+							</Panel>
+						</Collapse>
+					) : null}
 				</div>
 			</>
 		);
@@ -51,8 +113,6 @@ const ContentBoxChatV2 = () => {
 
 	return (
 		<div className='messages'>
-			{/* <span className='note'>Cuộc hội thoại này không được lưu lại. Các thông tin chỉ mang tính chất tham khảo!</span> */}
-
 			{danhSach.map((item) => (
 				<div
 					className={classNames({ message: true, bot: !item.isUser })}
@@ -81,7 +141,7 @@ const ContentBoxChatV2 = () => {
 				</div>
 			) : null}
 
-			{/* Fake to scroll to end */}
+			{/* Fake để scroll xuống cuối */}
 			<div id='end_message' />
 		</div>
 	);
