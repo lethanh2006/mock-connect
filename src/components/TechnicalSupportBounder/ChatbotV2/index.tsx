@@ -34,6 +34,7 @@ const ChatbotOverlayV2 = () => {
 				},
 			]);
 		}
+
 		if (boxChatVisible && recSinhVien?.ssoId && !recordUser?.id) {
 			// getUserChatBotModel(recSinhVien.ssoId);
 			createUserChatBotModel({
