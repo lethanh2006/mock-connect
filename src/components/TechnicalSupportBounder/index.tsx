@@ -3,6 +3,7 @@ import { useIntl } from '@umijs/max';
 import { FloatButton, Modal } from 'antd';
 import { useState } from 'react';
 import { history } from 'umi';
+import ChatbotOverlayV2 from './ChatbotV2';
 import PanpageHoTro from './FanpageHoTro';
 import FormPostIssue from './Form';
 import { unTechnicalSupportPaths } from './constant';
@@ -39,6 +40,10 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 				</>
 			) : null}
 
+			{/* <ChatbotOverlayV2 /> */}
+			{/* <ChatbotOverlay /> */}
+
+			<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
 		</>
 	);
 };
