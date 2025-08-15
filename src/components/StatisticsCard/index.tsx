@@ -12,6 +12,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 	containerStyle = {},
 	cardStyle,
 	colSpan = { xs: 24, sm: 12, md: 8 },
+	hideCard,
 }) => {
 	const renderStatisticItem = ({
 		title,
@@ -23,49 +24,70 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 		backgroundColor,
 		valueColor,
 		borderColor,
+		statShadow = false,
 	}: StatisticsItem) => {
 		const statusClass = status || 'gray';
 		const clickableClass = onClick ? 'pointer' : '';
 		const borderAccentClass = borderAccent ? 'border-accent' : '';
 
-		const finalValueColor = valueColor || '#595959';
+		// Nếu có status thì sử dụng CSS class, không dùng màu tùy chỉnh
+		let customStyle: React.CSSProperties = { ...cardStyle };
+		let iconElement = icon;
 
-		const customStyle: React.CSSProperties = {
-			backgroundColor,
-			color: finalValueColor,
-			borderLeft: borderAccent ? `4px solid ${borderColor || finalValueColor}` : undefined,
-			...cardStyle,
-		};
+		if (status) {
+			// Khi có status, chỉ áp dụng cardStyle
+			customStyle = { ...cardStyle };
+			iconElement = icon; // Giữ nguyên icon, không thay đổi màu
+		} else {
+			// Khi không có status, áp dụng màu tùy chỉnh như cũ
+			const finalValueColor = valueColor || '#595959';
+			customStyle = {
+				backgroundColor,
+				color: finalValueColor,
+				borderLeft: !status && borderAccent ? `4px solid ${borderColor || finalValueColor}` : undefined,
+				...cardStyle,
+			};
 
-		const iconWithColor =
-			icon && isValidElement(icon)
-				? React.cloneElement(icon as ReactElement<any>, {
-						style: {
-							color: finalValueColor,
-							...((icon as ReactElement<any>).props.style || {}),
-						},
-					})
-				: icon;
+			iconElement =
+				icon && isValidElement(icon)
+					? React.cloneElement(icon as ReactElement<any>, {
+							style: {
+								color: finalValueColor,
+								...((icon as ReactElement<any>).props.style || {}),
+							},
+						})
+					: icon;
+		}
 
 		return (
 			<div
-				className={`statistics-item ${statusClass} ${clickableClass} ${borderAccentClass}`}
-				style={customStyle}
+				className={`statistics-item ${statusClass} ${clickableClass} ${borderAccentClass} ${statShadow && 'statistics-shadow'}`}
+				style={{ ...customStyle }}
 				onClick={onClick}
 			>
 				<Col>
-					<div>{iconWithColor}</div>
+					<div>{iconElement}</div>
 					<Text className='text'>{title}</Text>
 				</Col>
 
-				<Col className='num' style={{ color: finalValueColor }}>
+				<Col className='num' style={status ? {} : { color: customStyle.color }}>
 					{value}
 				</Col>
 			</div>
 		);
 	};
 
-	return (
+	return hideCard ? (
+		<div style={{ ...containerStyle }}>
+			<Row gutter={[16, 16]} wrap>
+				{data.map((item, index) => (
+					<Col {...colSpan} key={index}>
+						{renderStatisticItem(item)}
+					</Col>
+				))}
+			</Row>
+		</div>
+	) : (
 		<Card
 			className='card-big-title card-borderless '
 			loading={loading}

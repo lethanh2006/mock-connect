@@ -50,6 +50,8 @@ const StatDiemDanhV2 = () => {
 			icon: <CalendarOutlined />,
 			valueColor: '#1890ff',
 			backgroundColor: '#e6f7ff',
+			// borderAccent: false,
+			// statShadow: true,
 		},
 		...Object.values(ETrangThaiUserDiemDanh).map((status) => ({
 			title: trangThaiUserDiemDanh[status],
@@ -57,11 +59,14 @@ const StatDiemDanhV2 = () => {
 			icon: getIconForStatus(status),
 			valueColor: colorTrangThaiUserDiemDanh[status],
 			backgroundColor: getBackgroundColor(status),
+			// borderAccent: false,
+			// statShadow: true,
 		})),
 	];
 
 	return (
 		<StatisticsCard
+			// hideCard
 			title='Thống kê điểm danh'
 			data={statisticsData}
 			colSpan={{ xs: 24, sm: 12, md: 8, lg: 6, xl: 4, xxl: 4 }}
