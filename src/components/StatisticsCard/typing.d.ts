@@ -16,7 +16,7 @@ export interface StatisticsItem {
 	value: string | number;
 
 	/** Icon hiển thị bên trái item */
-	icon: JSX.Element;
+	icon?: JSX.Element;
 
 	/** Màu của giá trị và border trái
 	 * @example '#17C229', '#FFAF0B', '#DA2128'
