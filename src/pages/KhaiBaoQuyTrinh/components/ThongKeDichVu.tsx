@@ -1,4 +1,6 @@
-import StatisticsCard, { StatisticsItem } from '@/components/StatisticsCard';
+import StatisticsCard from '@/components/StatisticsCard';
+import { StatisticsItem } from '@/components/StatisticsCard/typing';
+
 import {
 	CheckCircleOutlined,
 	DollarCircleOutlined,
@@ -131,25 +133,11 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 						data={thongKeDichVuData}
 						loading={loading}
 						colSpan={{ xs: 24, sm: 12, md: 8 }}
-						containerStyle={{
-							marginBottom: '16px',
-							backgroundColor: '#fff',
-							padding: '20px',
-							boxShadow: '0px 0px 12px 0px #0000000A',
-							borderRadius: '8px',
-						}}
 					/>
 				</Col>
 
 				<Col xs={24} lg={12}>
 					<StatisticsCard
-						containerStyle={{
-							marginBottom: '16px',
-							backgroundColor: '#fff',
-							padding: '20px',
-							boxShadow: '0px 0px 12px 0px #0000000A',
-							borderRadius: '8px',
-						}}
 						title='Thống kê chi phí'
 						data={thongKeChiPhiData}
 						loading={loading}

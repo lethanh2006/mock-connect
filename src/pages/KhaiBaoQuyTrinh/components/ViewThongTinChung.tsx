@@ -1,6 +1,5 @@
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { useEffect, useState } from 'react';
-import { Descriptions } from 'antd';
 
 const ViewThongTinChung = (props: { dataThongTinChung: QuyTrinh.IDanhSachCauHinhThongTinChung[] }) => {
 	const [dataBasic, setDatabasic] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
