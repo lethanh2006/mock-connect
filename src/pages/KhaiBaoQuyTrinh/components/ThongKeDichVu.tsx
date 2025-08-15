@@ -129,6 +129,7 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 			<Row gutter={[16, 32]} wrap>
 				<Col xs={24} lg={12}>
 					<StatisticsCard
+						borderleft
 						title='Thống kê dịch vụ'
 						data={thongKeDichVuData}
 						loading={loading}
@@ -138,6 +139,7 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 
 				<Col xs={24} lg={12}>
 					<StatisticsCard
+						borderleft
 						title='Thống kê chi phí'
 						data={thongKeChiPhiData}
 						loading={loading}

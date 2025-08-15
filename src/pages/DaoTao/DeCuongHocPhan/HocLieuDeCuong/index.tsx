@@ -10,6 +10,8 @@ const HocLieuDeCuongPage = () => {
 	const { page, limit, getModel } = useModel('hocphan.hoclieudecuong');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 
+	const getData = () => recDeCuong?._id && getModel({ deCuongId: recDeCuong?._id });
+
 	const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
 		{
 			title: 'Tiêu đề',
@@ -70,9 +72,9 @@ const HocLieuDeCuongPage = () => {
 	return (
 		<>
 			<TableBase
+				getData={getData}
 				columns={columns}
-				dependencies={[page, limit]}
-				params={{ deCuongId: recDeCuong?._id }}
+				dependencies={[page, limit, recDeCuong?._id]}
 				modelName='hocphan.hoclieudecuong'
 				title='Đề cương học liệu'
 				hideCard

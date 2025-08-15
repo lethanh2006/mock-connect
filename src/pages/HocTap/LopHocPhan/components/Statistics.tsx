@@ -95,15 +95,11 @@ const Statistics: React.FC<StatisticsProps> = ({ danhSach }) => {
 
 	return (
 		<StatisticsCard
+			hideCard
+			rowGutter={16}
+			borderleft
 			title='Thống kê số liệu cho bài tập, bài kiểm tra'
 			data={statisticsData}
-			containerStyle={{
-				marginBottom: '16px',
-				backgroundColor: '#fff',
-				padding: '20px',
-				boxShadow: '0px 0px 12px 0px #0000000A',
-				borderRadius: '8px',
-			}}
 			colSpan={{ xs: 12, sm: 6 }}
 		/>
 	);
