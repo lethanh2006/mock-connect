@@ -19,12 +19,12 @@ export interface StatisticsItem {
 	/** Màu của giá trị và border trái
 	 * @example '#17C229', '#FFAF0B', '#DA2128'
 	 */
-	valueColor: string;
+	valueColor?: string;
 
 	/** Màu nền của card
 	 * @example '#EAFFDF', '#fffbe6', '#fff2e8'
 	 */
-	backgroundColor: string;
+	backgroundColor?: string;
 
 	/** Màu border (tùy chọn)
 	 * @example '#b7eb8f', '#ffe58f', '#ffbb96'
@@ -42,6 +42,9 @@ export interface StatisticsItem {
 
 	/** Hiển thị borderleft 4px (tùy chọn) */
 	borderAccent?: boolean;
+
+	/** Hiển thị statShadow (tùy chọn) */
+	statShadow?: boolean;
 }
 
 /**
@@ -65,6 +68,8 @@ export interface StatisticsCardProps {
 
 	/** Custom style cho từng card item */
 	cardStyle?: React.CSSProperties;
+
+	hideCard?: boolean;
 
 	/** Cấu hình responsive breakpoints cho columns
 	 * @default { xs: 24, sm: 12, md: 8 }
