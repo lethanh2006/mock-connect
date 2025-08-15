@@ -215,11 +215,12 @@ const DetailLopTinChi = () => {
 		<>
 			<ThongTinChungHeaderCard />
 			<TabViewPage
+				offsetTop={106}
 				hideCard
 				menu={menus}
 				tabType='line'
 				tabStyle={{
-					backgroundColor: 'transparent',
+					backgroundColor: 'var(--color-primary-bg)',
 					marginTop: '-50px', // để phần Tabpane nằm bên trong ThongTinChungHeaderCard
 				}}
 			/>

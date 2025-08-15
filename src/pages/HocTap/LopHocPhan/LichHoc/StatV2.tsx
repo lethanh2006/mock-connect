@@ -17,15 +17,15 @@ const StatDiemDanhV2 = () => {
 	const getIconForStatus = (status: ETrangThaiUserDiemDanh) => {
 		switch (status) {
 			case ETrangThaiUserDiemDanh.CO_MAT:
-				return <CheckCircleOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
+				return <CheckCircleOutlined />;
 			case ETrangThaiUserDiemDanh.VANG_CO_PHEP:
-				return <ExclamationCircleOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
+				return <ExclamationCircleOutlined />;
 			case ETrangThaiUserDiemDanh.VANG_KHONG_PHEP:
-				return <MinusCircleOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
+				return <MinusCircleOutlined />;
 			case ETrangThaiUserDiemDanh.CHUA_DIEM_DANH:
-				return <ClockCircleOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
+				return <ClockCircleOutlined />;
 			default:
-				return <CalendarOutlined style={{ color: colorTrangThaiUserDiemDanh[status] }} />;
+				return <CalendarOutlined />;
 		}
 	};
 
@@ -50,8 +50,8 @@ const StatDiemDanhV2 = () => {
 			icon: <CalendarOutlined />,
 			valueColor: '#1890ff',
 			backgroundColor: '#e6f7ff',
-			// borderAccent: false,
-			// statShadow: true,
+
+			// status: 'success',
 		},
 		...Object.values(ETrangThaiUserDiemDanh).map((status) => ({
 			title: trangThaiUserDiemDanh[status],
@@ -59,17 +59,17 @@ const StatDiemDanhV2 = () => {
 			icon: getIconForStatus(status),
 			valueColor: colorTrangThaiUserDiemDanh[status],
 			backgroundColor: getBackgroundColor(status),
-			// borderAccent: false,
-			// statShadow: true,
 		})),
 	];
 
 	return (
 		<StatisticsCard
-			// hideCard
+			borderleft
+			hideCard
+			rowGutter={16}
 			title='Thống kê điểm danh'
 			data={statisticsData}
-			colSpan={{ xs: 24, sm: 12, md: 8, lg: 6, xl: 4, xxl: 4 }}
+			colSpan={{ xs: 24, sm: 12, md: 8, lg: 8, xl: 4, xxl: 4 }}
 			containerStyle={{
 				marginBottom: 18,
 			}}
