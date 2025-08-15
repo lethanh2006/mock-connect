@@ -23,6 +23,10 @@ const ChatbotOverlayV2 = () => {
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { initialState } = useModel('@@initialState');
 
+	const fullName = initialState?.currentUser?.family_name
+		? `${initialState?.currentUser.family_name} ${initialState?.currentUser?.given_name ?? ''}`
+		: initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || '');
+
 	useEffect(() => {
 		if (boxChatVisible && !danhSach.length) {
 			setDanhSach([
@@ -40,10 +44,10 @@ const ChatbotOverlayV2 = () => {
 			// getUserChatBotModel(recSinhVien.ssoId);
 			createUserChatBotModel({
 				password: 'abc@1234',
-				username: recSinhVien?.ten ?? 'admin',
+				username: fullName ?? 'admin',
 				email:
 					recSinhVien.email ??
-					`${recSinhVien.ten}@${APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH.toLocaleLowerCase()}.edu.vn`,
+					`${fullName ?? 'admin'}@${APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH.toLocaleLowerCase()}.edu.vn`,
 				sso_sub: recSinhVien.ssoId ?? initialState?.currentUser?.ssoId ?? 'admin_ssoId',
 			} as any);
 		}
