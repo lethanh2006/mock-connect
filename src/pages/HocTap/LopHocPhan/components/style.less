@@ -17,6 +17,7 @@
 		background-repeat: no-repeat;
 		background-position: right center;
 		background-color: #fceeee;
+		// background-color: var(--color-primary-bg);
 		transition: all 0.3s ease;
 
 		&:hover {
@@ -25,11 +26,7 @@
 	}
 
 	&-tag {
-		border-radius: 4px;
-		font-size: 12px;
-		padding: 2px 10px;
-		font-weight: 500;
-		background-color: transparent;
+		background-color: transparent !important;
 		margin-bottom: 8px;
 	}
 
@@ -124,35 +121,6 @@
 	}
 }
 
-// Tag styles
-.tag-so-tin-chi {
-	border-radius: 4px;
-	font-weight: 500;
-	padding: 1px 8px;
-	background-color: rgba(255, 85, 85, 0.05);
-	border: 1px solid #ffccc7;
-	color: #ff4d4f;
-}
-
-.tag-da-ket-thuc {
-	border-radius: 4px;
-	font-weight: 500;
-	padding: 1px 8px;
-	background-color: rgba(255, 85, 85, 0.05);
-	border: 1px solid #ffccc7;
-	color: #ff4d4f;
-}
-
-.tag-dang-hoc {
-	border-radius: 4px;
-	font-size: 12px;
-	padding: 1px 10px;
-	font-weight: 500;
-	background-color: transparent;
-	border: 1px solid #b7eb8f;
-	color: #52c41a;
-}
-
 // Card styles
 .tai-lieu-card {
 	margin-bottom: 16px;
@@ -222,168 +190,172 @@
 	font-style: italic;
 }
 
-// Kỹ năng item
-.ky-nang-items {
-	display: flex;
-	flex-direction: column;
-	gap: 0;
-}
+// <=============== KỸ NĂNG ===============>
 
-.ky-nang-item {
-	display: flex;
-	align-items: flex-start;
+// // Kỹ năng item
+// .ky-nang-items {
+// 	display: flex;
+// 	flex-direction: column;
+// 	gap: 0;
+// }
 
-	&.preview {
-		padding: 12px 0;
-		border-radius: 8px;
-		background-color: #fafafa;
-		margin-bottom: 0;
-	}
+// .ky-nang-item {
+// 	display: flex;
+// 	align-items: flex-start;
 
-	&.detail {
-		padding: 16px 0;
-		border-radius: 0px;
-		background-color: transparent;
-		margin-bottom: 8px;
-	}
+// 	&.preview {
+// 		padding: 12px 0;
+// 		border-radius: 8px;
+// 		background-color: #fafafa;
+// 		margin-bottom: 0;
+// 	}
 
-	&:not(:last-child) {
-		border-bottom: 1px solid #f0f0f0;
-	}
-}
+// 	&.detail {
+// 		padding: 16px 0;
+// 		border-radius: 0px;
+// 		background-color: transparent;
+// 		margin-bottom: 8px;
+// 	}
 
-.ky-nang-number {
-	min-width: 32px;
-	height: 32px;
-	background-color: #1677ff;
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-right: 16px;
-	margin-top: 2px;
-	box-shadow: 0 2px 4px rgba(22, 119, 255, 0.2);
+// 	&:not(:last-child) {
+// 		border-bottom: 1px solid #f0f0f0;
+// 	}
+// }
 
-	.ant-typography {
-		color: white;
-		font-size: 14px;
-		font-weight: bold;
-	}
-}
+// .ky-nang-number {
+// 	min-width: 32px;
+// 	height: 32px;
+// 	background-color: #1677ff;
+// 	border-radius: 50%;
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: center;
+// 	margin-right: 16px;
+// 	margin-top: 2px;
+// 	box-shadow: 0 2px 4px rgba(22, 119, 255, 0.2);
 
-.ky-nang-content {
-	flex: 1;
-}
+// 	.ant-typography {
+// 		color: white;
+// 		font-size: 14px;
+// 		font-weight: bold;
+// 	}
+// }
 
-.ky-nang-title {
-	font-weight: 600;
-	font-size: 15px;
-	margin-bottom: 6px;
-	color: #262626;
-	line-height: 1.4;
-}
+// .ky-nang-content {
+// 	flex: 1;
+// }
 
-.ky-nang-description {
-	color: #595959;
-	font-size: 14px;
-	line-height: 1.6;
-	margin-bottom: 8px;
-}
+// .ky-nang-title {
+// 	font-weight: 600;
+// 	font-size: 15px;
+// 	margin-bottom: 6px;
+// 	color: #262626;
+// 	line-height: 1.4;
+// }
 
-.ky-nang-tags {
-	display: flex;
-	gap: 8px;
-	flex-wrap: wrap;
-	align-items: center;
-}
+// .ky-nang-description {
+// 	color: #595959;
+// 	font-size: 14px;
+// 	line-height: 1.6;
+// 	margin-bottom: 8px;
+// }
 
-.ky-nang-tag {
-	border-radius: 4px;
-	font-weight: 500;
-	font-size: 12px;
+// .ky-nang-tags {
+// 	display: flex;
+// 	gap: 8px;
+// 	flex-wrap: wrap;
+// 	align-items: center;
+// }
 
-	&.muc-do-cao {
-		color: red;
-	}
+// .ky-nang-tag {
+// 	border-radius: 4px;
+// 	font-weight: 500;
+// 	font-size: 12px;
 
-	&.muc-do-trung-binh {
-		color: orange;
-	}
+// 	&.muc-do-cao {
+// 		color: red;
+// 	}
 
-	&.muc-do-thap {
-		color: green;
-	}
-}
+// 	&.muc-do-trung-binh {
+// 		color: orange;
+// 	}
 
-// More skills section
-.more-skills {
-	text-align: center;
-	margin-top: 16px;
-	padding: 12px;
-	background-color: #f8f9fa;
-	border-radius: 6px;
-}
+// 	&.muc-do-thap {
+// 		color: green;
+// 	}
+// }
 
-.more-skills-text {
-	font-size: 14px;
-}
+// // More skills section
+// .more-skills {
+// 	text-align: center;
+// 	margin-top: 16px;
+// 	padding: 12px;
+// 	background-color: #f8f9fa;
+// 	border-radius: 6px;
+// }
 
-// Empty states
-.empty-ky-nang {
-	text-align: center;
-	color: #999;
-	padding: 40px 0;
-	background-color: #fafafa;
-	border-radius: 6px;
+// .more-skills-text {
+// 	font-size: 14px;
+// }
 
-	.anticon {
-		font-size: 32px;
-		margin-bottom: 12px;
-		color: #d9d9d9;
-	}
+// // Empty states
+// .empty-ky-nang {
+// 	text-align: center;
+// 	color: #999;
+// 	padding: 40px 0;
+// 	background-color: #fafafa;
+// 	border-radius: 6px;
 
-	div {
-		font-size: 14px;
-	}
-}
+// 	.anticon {
+// 		font-size: 32px;
+// 		margin-bottom: 12px;
+// 		color: #d9d9d9;
+// 	}
 
-.empty-ky-nang-modal {
-	text-align: center;
-	color: #999;
-	padding: 60px 0;
-	font-size: 16px;
+// 	div {
+// 		font-size: 14px;
+// 	}
+// }
 
-	.anticon {
-		font-size: 48px;
-		margin-bottom: 16px;
-		color: #d9d9d9;
-	}
-}
+// .empty-ky-nang-modal {
+// 	text-align: center;
+// 	color: #999;
+// 	padding: 60px 0;
+// 	font-size: 16px;
+
+// 	.anticon {
+// 		font-size: 48px;
+// 		margin-bottom: 16px;
+// 		color: #d9d9d9;
+// 	}
+// }
 
 // Modal styles
-.modal-ky-nang {
-	.ant-modal {
-		top: 20px;
-	}
+// .modal-ky-nang {
+// 	.ant-modal {
+// 		top: 20px;
+// 	}
 
-	.ant-tabs {
-		min-height: 500px;
-	}
+// 	.ant-tabs {
+// 		min-height: 500px;
+// 	}
 
-	.ant-tabs-content {
-		padding: 16px 0;
-	}
-}
+// 	.ant-tabs-content {
+// 		padding: 16px 0;
+// 	}
+// }
 
-.modal-title {
-	display: flex;
-	align-items: center;
-	gap: 8px;
+// .modal-title {
+// 	display: flex;
+// 	align-items: center;
+// 	gap: 8px;
 
-	.anticon {
-		color: #1677ff;
-	}
-}
+// 	.anticon {
+// 		color: #1677ff;
+// 	}
+// }
+
+// <=============== END KỸ NĂNG ===============>
 
 // Giảng viên modal
 .giang-vien-info {
@@ -413,9 +385,4 @@
 // Space for buttons
 .button-space {
 	margin-top: 8px;
-}
-
-// Card content spacing
-.card-content {
-	margin-top: 32px;
 }

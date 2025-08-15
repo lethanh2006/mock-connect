@@ -1,18 +1,9 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import ThongTinChungPage from '@/pages/DaoTao/DeCuongHocPhan/components/ThongTinChung';
-import NoiDungHocPhanPage from '@/pages/DaoTao/DeCuongHocPhan/LichTrinhChung';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
-import {
-	AimOutlined,
-	BookOutlined,
-	DesktopOutlined,
-	DownloadOutlined,
-	FileTextOutlined,
-	GlobalOutlined,
-} from '@ant-design/icons';
-import { Button, Card, Col, Empty, message, Modal, Row, Space, Spin, Tabs, Tag, Typography } from 'antd';
+import { DesktopOutlined, DownloadOutlined, GlobalOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Empty, message, Modal, Row, Space, Spin, Tag, Typography } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -40,13 +31,13 @@ interface GiangVien {
 
 const ThongTinChung = () => {
 	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
-	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
+	// const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 	const {
 		danhSach: danhSachHocLieu,
 		loading: loadingHocLieu,
 		getModel: getHocLieuDeCuong,
 	} = useModel('hocphan.hoclieudecuong');
-	const { danhSach: danhSachNoiDungHocPhan } = useModel('hocphan.noidunghp');
+	// const { danhSach: danhSachNoiDungHocPhan } = useModel('hocphan.noidunghp');
 
 	const deCuongId = record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
 
@@ -62,11 +53,11 @@ const ThongTinChung = () => {
 
 	const [activeKey, setActiveKey] = useState<string>('-1');
 	const [visibleHocLieu, setVisibleHocLieu] = useState<boolean>(false);
-	const [visibleKyNang, setVisibleKyNang] = useState<boolean>(false);
-	const [activeKyNangTab, setActiveKyNangTab] = useState<string>('content');
+	// const [visibleKyNang, setVisibleKyNang] = useState<boolean>(false);
+	// const [activeKyNangTab, setActiveKyNangTab] = useState<string>('content');
 
 	// Lấy dữ liệu kỹ năng
-	const kyNangDatDuoc = recDeCuong?.kyNangDatDuoc || recDeCuong?.ketQuaDatDuoc || [];
+	// const kyNangDatDuoc = recDeCuong?.kyNangDatDuoc || recDeCuong?.ketQuaDatDuoc || [];
 
 	// Hiển thị 3 kỹ năng đầu tiên trong card
 	// const displayKyNang = kyNangDatDuoc.slice(0, 3);
@@ -114,107 +105,107 @@ const ThongTinChung = () => {
 	const displayHocLieu = (danhSachHocLieu || []).slice(0, 3);
 
 	// Render kỹ năng item với thiết kế cải tiến
-	const renderKyNangItem = (item: any, index: number, isPreview: boolean = false) => (
-		<div key={index} className={`ky-nang-item ${isPreview ? 'preview' : 'detail'}`}>
-			<div className='ky-nang-number'>
-				<Text>{index + 1}</Text>
-			</div>
-			<div className='ky-nang-content'>
-				<div className='ky-nang-title'>{item.tieuDe || item.ten || item.kyNang || 'Không có tiêu đề'}</div>
-				{item.moTa && (
-					<div className='ky-nang-description'>
-						{isPreview && item.moTa.length > 120 ? `${item.moTa.substring(0, 120)}...` : item.moTa}
-					</div>
-				)}
-				<div className='ky-nang-tags'>
-					{item.mucDo && (
-						<Tag
-							className={`ky-nang-tag ${
-								item.mucDo === 'Cao' ? 'muc-do-cao' : item.mucDo === 'Trung bình' ? 'muc-do-trung-binh' : 'muc-do-thap'
-							}`}
-							color={item.mucDo === 'Cao' ? 'red' : item.mucDo === 'Trung bình' ? 'orange' : 'green'}
-						>
-							Mức độ: {item.mucDo}
-						</Tag>
-					)}
-					{item.loaiKyNang && (
-						<Tag color='blue' className='ky-nang-tag'>
-							{item.loaiKyNang}
-						</Tag>
-					)}
-					{item.thoiGianHoc && (
-						<Tag color='purple' className='ky-nang-tag'>
-							{item.thoiGianHoc}h
-						</Tag>
-					)}
-				</div>
-			</div>
-		</div>
-	);
+	// const renderKyNangItem = (item: any, index: number, isPreview: boolean = false) => (
+	// 	<div key={index} className={`ky-nang-item ${isPreview ? 'preview' : 'detail'}`}>
+	// 		<div className='ky-nang-number'>
+	// 			<Text>{index + 1}</Text>
+	// 		</div>
+	// 		<div className='ky-nang-content'>
+	// 			<div className='ky-nang-title'>{item.tieuDe || item.ten || item.kyNang || 'Không có tiêu đề'}</div>
+	// 			{item.moTa && (
+	// 				<div className='ky-nang-description'>
+	// 					{isPreview && item.moTa.length > 120 ? `${item.moTa.substring(0, 120)}...` : item.moTa}
+	// 				</div>
+	// 			)}
+	// 			<div className='ky-nang-tags'>
+	// 				{item.mucDo && (
+	// 					<Tag
+	// 						className={`ky-nang-tag ${
+	// 							item.mucDo === 'Cao' ? 'muc-do-cao' : item.mucDo === 'Trung bình' ? 'muc-do-trung-binh' : 'muc-do-thap'
+	// 						}`}
+	// 						color={item.mucDo === 'Cao' ? 'red' : item.mucDo === 'Trung bình' ? 'orange' : 'green'}
+	// 					>
+	// 						Mức độ: {item.mucDo}
+	// 					</Tag>
+	// 				)}
+	// 				{item.loaiKyNang && (
+	// 					<Tag color='blue' className='ky-nang-tag'>
+	// 						{item.loaiKyNang}
+	// 					</Tag>
+	// 				)}
+	// 				{item.thoiGianHoc && (
+	// 					<Tag color='purple' className='ky-nang-tag'>
+	// 						{item.thoiGianHoc}h
+	// 					</Tag>
+	// 				)}
+	// 			</div>
+	// 		</div>
+	// 	</div>
+	// );
 
 	// Render modal với TabPane
-	const renderKyNangModal = () => (
-		<Modal
-			title={
-				<div className='modal-title'>
-					<AimOutlined />
-					<span>Kỹ năng & Nội dung học phần</span>
-				</div>
-			}
-			open={visibleKyNang}
-			onCancel={() => setVisibleKyNang(false)}
-			footer={null}
-			width={1200}
-			className='modal-ky-nang'
-		>
-			<Tabs activeKey={activeKyNangTab} onChange={setActiveKyNangTab} size='large'>
-				<Tabs.TabPane
-					tab={
-						<span>
-							<BookOutlined />
-							Nội dung học phần
-						</span>
-					}
-					key='content'
-				>
-					<NoiDungHocPhanPage />
-				</Tabs.TabPane>
+	// const renderKyNangModal = () => (
+	// 	<Modal
+	// 		title={
+	// 			<div className='modal-title'>
+	// 				<AimOutlined />
+	// 				<span>Kỹ năng & Nội dung học phần</span>
+	// 			</div>
+	// 		}
+	// 		open={visibleKyNang}
+	// 		onCancel={() => setVisibleKyNang(false)}
+	// 		footer={null}
+	// 		width={1200}
+	// 		className='modal-ky-nang'
+	// 	>
+	// 		<Tabs activeKey={activeKyNangTab} onChange={setActiveKyNangTab} size='large'>
+	// 			<Tabs.TabPane
+	// 				tab={
+	// 					<span>
+	// 						<BookOutlined />
+	// 						Nội dung học phần
+	// 					</span>
+	// 				}
+	// 				key='content'
+	// 			>
+	// 				<NoiDungHocPhanPage />
+	// 			</Tabs.TabPane>
 
-				<Tabs.TabPane
-					tab={
-						<span>
-							<AimOutlined />
-							Kỹ năng đạt được ({kyNangDatDuoc.length})
-						</span>
-					}
-					key='skills'
-				>
-					{kyNangDatDuoc.length > 0 ? (
-						<div className='ky-nang-items'>
-							{kyNangDatDuoc.map((item: any, index: number) => renderKyNangItem(item, index, false))}
-						</div>
-					) : (
-						<div className='empty-ky-nang-modal'>
-							<AimOutlined />
-							<div>Chưa có thông tin kỹ năng đạt được</div>
-						</div>
-					)}
-				</Tabs.TabPane>
+	// 			<Tabs.TabPane
+	// 				tab={
+	// 					<span>
+	// 						<AimOutlined />
+	// 						Kỹ năng đạt được ({kyNangDatDuoc.length})
+	// 					</span>
+	// 				}
+	// 				key='skills'
+	// 			>
+	// 				{kyNangDatDuoc.length > 0 ? (
+	// 					<div className='ky-nang-items'>
+	// 						{kyNangDatDuoc.map((item: any, index: number) => renderKyNangItem(item, index, false))}
+	// 					</div>
+	// 				) : (
+	// 					<div className='empty-ky-nang-modal'>
+	// 						<AimOutlined />
+	// 						<div>Chưa có thông tin kỹ năng đạt được</div>
+	// 					</div>
+	// 				)}
+	// 			</Tabs.TabPane>
 
-				<Tabs.TabPane
-					tab={
-						<span>
-							<FileTextOutlined />
-							Thông tin chung
-						</span>
-					}
-					key='general'
-				>
-					<ThongTinChungPage />
-				</Tabs.TabPane>
-			</Tabs>
-		</Modal>
-	);
+	// 			<Tabs.TabPane
+	// 				tab={
+	// 					<span>
+	// 						<FileTextOutlined />
+	// 						Thông tin chung
+	// 					</span>
+	// 				}
+	// 				key='general'
+	// 			>
+	// 				<ThongTinChungPage />
+	// 			</Tabs.TabPane>
+	// 		</Tabs>
+	// 	</Modal>
+	// );
 
 	return (
 		<Spin spinning={loading}>
@@ -265,20 +256,14 @@ const ThongTinChung = () => {
 						<Col xs={24} sm={12} md={6}>
 							<Text style={{ color: '#888' }}>Số tín chỉ:</Text>
 							<div>
-								<Tag className='tag-so-tin-chi'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Tag>
+								<Tag color='red'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Tag>
 							</div>
 						</Col>
 
 						{/* Tiến trình */}
 						<Col xs={24} sm={12} md={6}>
 							<Text style={{ color: '#888' }}>Tiến trình môn học:</Text>
-							<div>
-								{isCompleted ? (
-									<Tag className='tag-da-ket-thuc'>Đã kết thúc</Tag>
-								) : (
-									<Tag className='tag-dang-hoc'>Đang học</Tag>
-								)}
-							</div>
+							<div>{isCompleted ? <Tag color='red'>Đã kết thúc</Tag> : <Tag color='green'>Đang học</Tag>}</div>
 						</Col>
 					</Row>
 				</div>
@@ -428,7 +413,7 @@ const ThongTinChung = () => {
 				</Card> */}
 			</div>
 
-			<Row gutter={[16, 16]} className='card-content'>
+			<Row gutter={[16, 16]} style={{ marginTop: '32px' }}>
 				<Col xs={24} lg={12}>
 					<CardBaiTapLopHp lopHocPhanId={record?._id ?? ''} />
 				</Col>
@@ -540,7 +525,7 @@ const ThongTinChung = () => {
 			/>
 			{/* </Modal> */}
 			{/* Modal Kỹ năng đạt được với TabPane */}
-			{renderKyNangModal()}
+			{/* {renderKyNangModal()} */}
 		</Spin>
 	);
 };

@@ -16,6 +16,8 @@ declare module GiaoDich {
 		paymentType: ETransactionPaymentType;
 		status: ETransactionStatus;
 		identityCode: string;
+		/** Mã thanh toán ngân hàng SHB, dùng cho UFM */
+		shbAliasAccountNo?: string;
 
 		idDotThuTruocHocPhi?: string;
 		fromAccount: ETransactionSourceType;

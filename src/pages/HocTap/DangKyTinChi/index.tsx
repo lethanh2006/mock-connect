@@ -1,7 +1,8 @@
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { YoutubeOutlined } from '@ant-design/icons';
 import { Card, Divider, Empty, Spin } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { history, useModel } from 'umi';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
@@ -11,12 +12,23 @@ import './components/style.less';
 const DangKyTinChiPage = () => {
 	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy } = useModel('daotao.dotdangkytinchi');
 	const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
+	const [isVerified, setIsVerified] = useState<boolean>(false);
+
+	const handleCaptchaChange = (token: string | null) => {
+		if (token) {
+			setIsVerified(true);
+		} else {
+			setIsVerified(false);
+		}
+	};
 
 	useEffect(() => {
-		getLopHc();
-	}, []);
+		if (isVerified) {
+			getLopHc();
+		}
+	}, [isVerified]);
 
-	return (
+	return isVerified ? (
 		<Card title='Đăng ký tín chỉ'>
 			<FilterDotDangKy />
 
@@ -35,7 +47,9 @@ const DangKyTinChiPage = () => {
 					) : dotDangKyHienTai.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 						<Empty
 							description={
-								<i style={{ color: '#999' }}>Đợt đăng ký chỉ cho phép <b>XÓA</b> lớp tín chỉ đã đăng ký trước đó!</i>
+								<i style={{ color: '#999' }}>
+									Đợt đăng ký chỉ cho phép <b>XÓA</b> lớp tín chỉ đã đăng ký trước đó!
+								</i>
 							}
 						/>
 					) : !!phieuDangKy?.soTinChiToiDa ? (
@@ -87,6 +101,18 @@ const DangKyTinChiPage = () => {
 					onClick={() => window.open('https://www.youtube.com/watch?v=2xghlws7tAk&t=2s')}
 				/>
 			</div>
+		</Card>
+	) : (
+		<Card>
+			<ReCAPTCHA
+				style={{
+					margin: '12px auto',
+					display: 'flex',
+					justifyContent: 'center',
+				}}
+				sitekey='6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh'
+				onChange={handleCaptchaChange}
+			/>
 		</Card>
 	);
 };

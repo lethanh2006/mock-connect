@@ -83,7 +83,7 @@ const ThongTinChungHeaderCard = () => {
 			<div
 				style={{
 					padding: '20px 20px 0',
-					backgroundColor: ' #FFE9E9',
+					backgroundColor: 'var(--color-primary-bg)',
 					margin: '-24px -16px 0', // để phần Header này theo đúng thiết kế (sát vào lề)
 					backgroundImage: `url(${randomBackground})`,
 					backgroundSize: 'contain',
@@ -113,48 +113,8 @@ const ThongTinChungHeaderCard = () => {
 						)}
 					</Title>
 
-					<Tag
-						style={{
-							borderRadius: '4px',
-							fontSize: 12,
-							padding: '1px 10px',
-							fontWeight: 500,
-							backgroundColor: 'transparent',
-							color: '#ff7677',
-							border: '1px solid rgb(253, 197, 191)',
-						}}
-					>
-						{record?.hocPhan?.soTinChi ?? '--'} tín chỉ
-					</Tag>
-					{isCompleted ? (
-						<Tag
-							style={{
-								borderRadius: '4px',
-								fontSize: 12,
-								padding: '1px 10px',
-								fontWeight: 500,
-								backgroundColor: 'transparent',
-								color: '#ff7677',
-								border: '1px solid rgb(253, 197, 191)',
-							}}
-						>
-							Đã kết thúc
-						</Tag>
-					) : (
-						<Tag
-							style={{
-								borderRadius: '4px',
-								fontSize: 12,
-								padding: '1px 10px',
-								fontWeight: 500,
-								backgroundColor: 'transparent',
-								border: '1px solid #B7EB8F',
-								color: '#52c41a',
-							}}
-						>
-							Đang học
-						</Tag>
-					)}
+					<Tag color='red'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Tag>
+					{isCompleted ? <Tag color='red'>Đã kết thúc</Tag> : <Tag color='green'>Đang học</Tag>}
 				</div>
 
 				{/* Info Row */}
