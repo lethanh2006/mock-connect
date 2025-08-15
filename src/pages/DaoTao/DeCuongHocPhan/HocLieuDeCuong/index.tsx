@@ -7,7 +7,7 @@ import { Checkbox } from 'antd';
 import { useModel } from 'umi';
 
 const HocLieuDeCuongPage = () => {
-	const { page, limit } = useModel('hocphan.hoclieudecuong');
+	const { page, limit, getModel } = useModel('hocphan.hoclieudecuong');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 
 	const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [

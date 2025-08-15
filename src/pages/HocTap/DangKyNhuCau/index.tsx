@@ -1,6 +1,5 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
-import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { Card, Empty } from 'antd';
+import { Card, Empty, Space } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import NhuCauHocPhanPage from './NhuCauHocPhan';
@@ -21,23 +20,32 @@ const DangKyNhuCauPage = () => {
 	}, [recHocKy?._id]);
 
 	return (
-		<>
-			<Card title='Đăng ký học tập theo nhu cầu'>
-				<div style={{ marginBottom: 12 }}>
-					<FilterHocKy isSetHocKy>
-						{/* <SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} /> */}
-					</FilterHocKy>
-				</div>
-
-				{record?._id ? (
-					<NhuCauHocPhanPage
-					// khoaNganhTrongDot={khoaNganhTrongDot}
-					/>
-				) : (
+		<Card
+			className='card-big-title card-borderless'
+			title={
+				<>
+					<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
+						<span>Đăng ký học tập theo nhu cầu</span>
+						<div style={{ marginBottom: 12 }}>
+							<FilterHocKy isSetHocKy>
+								{/* <SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} /> */}
+							</FilterHocKy>
+						</div>
+					</Space>
+				</>
+			}
+			variant='borderless'
+		>
+			{record?._id ? (
+				<NhuCauHocPhanPage
+				// khoaNganhTrongDot={khoaNganhTrongDot}
+				/>
+			) : (
+				<Card variant='borderless'>
 					<Empty description='Không có đợt đăng ký trong kỳ học' style={{ marginTop: 32 }} />
-				)}
-			</Card>
-		</>
+				</Card>
+			)}
+		</Card>
 	);
 };
 

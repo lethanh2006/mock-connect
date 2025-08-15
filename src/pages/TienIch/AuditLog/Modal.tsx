@@ -3,9 +3,9 @@ import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { IColumn } from '@/components/Table/typing';
 import type { AuditLog } from '@/services/TienIch/AuditLog/typing';
+import dayjs from '@/utils/dayjs';
 import type { models as rawModels } from '@@/plugin-model/model';
 import { Button, Card, Col, Descriptions, Row, Spin } from 'antd';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
@@ -126,7 +126,7 @@ const ModalAuditLog = (props: {
 			width: 150,
 			filterType: 'datetime',
 			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm:ss, DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm:ss, DD/MM/YYYY'),
 			onCell,
 		},
 		// {
