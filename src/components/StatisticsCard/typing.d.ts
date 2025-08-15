@@ -1,4 +1,6 @@
-import { ReactNode } from 'react';
+import { Breakpoint } from 'antd';
+import { ColSize } from 'antd/es/col';
+import { JSX } from 'react';
 
 /**
  * Interface cho một item thống kê
@@ -14,7 +16,7 @@ export interface StatisticsItem {
 	value: string | number;
 
 	/** Icon hiển thị bên trái item */
-	icon: ReactNode;
+	icon: JSX.Element;
 
 	/** Màu của giá trị và border trái
 	 * @example '#17C229', '#FFAF0B', '#DA2128'
@@ -26,11 +28,6 @@ export interface StatisticsItem {
 	 */
 	backgroundColor?: string;
 
-	/** Màu border (tùy chọn)
-	 * @example '#b7eb8f', '#ffe58f', '#ffbb96'
-	 */
-	borderColor?: string;
-
 	/** Trạng thái của item, dùng để xác định màu sắc
 	 * @default 'gray'
 	 * @example 'success', 'warning', 'error', 'info', 'gray'
@@ -39,12 +36,6 @@ export interface StatisticsItem {
 
 	/** Hàm callback khi click vào item (tùy chọn) */
 	onClick?: () => void;
-
-	/** Hiển thị borderleft 4px (tùy chọn) */
-	borderAccent?: boolean;
-
-	/** Hiển thị statShadow (tùy chọn) */
-	statShadow?: boolean;
 }
 
 /**
@@ -57,6 +48,8 @@ export interface StatisticsCardProps {
 
 	/** Mảng dữ liệu thống kê cần hiển thị */
 	data: StatisticsItem[];
+
+	rowGutter?: number;
 
 	/** Trạng thái loading của card
 	 * @default false
@@ -76,18 +69,11 @@ export interface StatisticsCardProps {
 	 * @default { xs: 24, sm: 12, md: 8 }
 	 * @example { xs: 12, sm: 6, md: 4, lg: 3 }
 	 */
-	colSpan?: {
-		/** Extra small devices (<576px) */
-		xs?: number;
-		/** Small devices (≥576px) */
-		sm?: number;
-		/** Medium devices (≥768px) */
-		md?: number;
-		/** Large devices (≥992px) */
-		lg?: number;
-		/** Extra large devices (≥1200px) */
-		xl?: number;
-		/** Extra extra large devices (≥1600px) */
-		xxl?: number;
-	};
+	colSpan?: Partial<Record<Breakpoint, number | string | ColSize>>;
+
+	/** Hiển thị borderleft 4px (tùy chọn) */
+	borderleft?: boolean;
+
+	/** Hiển thị statShadow (tùy chọn) */
+	statShadow?: boolean;
 }
