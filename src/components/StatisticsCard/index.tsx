@@ -66,30 +66,16 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 	};
 
 	return (
-		<div className='statistics-wrapper' style={containerStyle}>
-			<Card
-				style={{
-					padding: 0,
-					margin: 0,
-					border: 'none',
-					borderRadius: '8px',
-				}}
-				bodyStyle={{
-					padding: 0,
-					margin: 0,
-				}}
-				loading={loading}
-			>
-				<Text style={{ fontSize: 16, fontWeight: 500, marginBottom: 16, display: 'block' }}>{title}</Text>
-				<Row gutter={[16, 16]} wrap>
-					{data.map((item, index) => (
-						<Col {...colSpan} key={index}>
-							{renderStatisticItem(item)}
-						</Col>
-					))}
-				</Row>
-			</Card>
-		</div>
+		<Card className='card-big-title card-borderless' loading={loading} variant='borderless' style={containerStyle}>
+			<Text style={{ fontSize: 16, fontWeight: 500, marginBottom: 16, display: 'block' }}>{title}</Text>
+			<Row gutter={[16, 16]} wrap>
+				{data.map((item, index) => (
+					<Col {...colSpan} key={index}>
+						{renderStatisticItem(item)}
+					</Col>
+				))}
+			</Row>
+		</Card>
 	);
 };
 
