@@ -13,11 +13,11 @@
 	},
 
 	// GROUP TITLE
-	// {
-	// 	name: 'DashboardGroup',
-	// 	path: '/__group__/dashboard',
-	// 	disabled: true,
-	// },
+	{
+		name: 'Dashboard & Học tập',
+		path: '/__group__/dashboard',
+		disabled: true,
+	},
 
 	///////////////////////////////////
 
@@ -82,42 +82,6 @@
 		icon: 'hdd',
 		path: 'lop-hanh-chinh',
 		component: 'HocTap/LopHanhChinh',
-	},
-
-	//quy trinh
-	{
-		name: 'KhaiBaoQuyTrinh',
-		icon: 'AuditOutlined',
-		path: 'khai-bao-quy-trinh',
-		// component: 'KhaiBaoQuyTrinh',
-		routes: [
-			{
-				name: 'DangKy',
-				icon: 'AuditOutlined',
-				path: 'dang-ky',
-				component: 'KhaiBaoQuyTrinh/QuyTrinh',
-			},
-			{
-				name: 'LichSu',
-				icon: 'AuditOutlined',
-				path: 'lich-su',
-				component: 'KhaiBaoQuyTrinh/DichVuHanhChinh',
-			},
-			// {
-			// 	name: 'DanhSachQuyTrinh',
-			// 	icon: 'AuditOutlined',
-			// 	hideInMenu: true,
-			// 	path: '',
-			// 	component: 'KhaiBaoQuyTrinh',
-			// },
-			{
-				name: 'KhaiBaoQuyTrinh',
-				icon: 'AuditOutlined',
-				hideInMenu: true,
-				path: ':id',
-				component: 'KhaiBaoQuyTrinh/ViewQuyTrinh/$id',
-			},
-		],
 	},
 
 	// {
@@ -418,6 +382,13 @@
 		],
 	},
 
+	// GROUP TITLE
+	{
+		name: 'Khác',
+		path: '/__group__/dashboard',
+		disabled: true,
+	},
+
 	// {
 	// 	name: 'NoiNgoaiTru',
 	// 	icon: 'DeploymentUnitOutlined',
@@ -430,6 +401,42 @@
 	// 		},
 	// 	],
 	// },
+
+	//quy trinh
+	{
+		name: 'KhaiBaoQuyTrinh',
+		icon: 'AuditOutlined',
+		path: 'khai-bao-quy-trinh',
+		// component: 'KhaiBaoQuyTrinh',
+		routes: [
+			{
+				name: 'DangKy',
+				icon: 'AuditOutlined',
+				path: 'dang-ky',
+				component: 'KhaiBaoQuyTrinh/QuyTrinh',
+			},
+			{
+				name: 'LichSu',
+				icon: 'AuditOutlined',
+				path: 'lich-su',
+				component: 'KhaiBaoQuyTrinh/DichVuHanhChinh',
+			},
+			// {
+			// 	name: 'DanhSachQuyTrinh',
+			// 	icon: 'AuditOutlined',
+			// 	hideInMenu: true,
+			// 	path: '',
+			// 	component: 'KhaiBaoQuyTrinh',
+			// },
+			{
+				name: 'KhaiBaoQuyTrinh',
+				icon: 'AuditOutlined',
+				hideInMenu: true,
+				path: ':id',
+				component: 'KhaiBaoQuyTrinh/ViewQuyTrinh/$id',
+			},
+		],
+	},
 
 	// {
 	// 	name: 'ThuVien',
