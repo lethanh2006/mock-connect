@@ -1,0 +1,219 @@
+@import '~antd/es/style/themes/default.less';
+
+.chatbot-button {
+  position: fixed;
+  right: 14px;
+  bottom: 150px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover .title-huong-dan {
+    display: block;
+  }
+
+  .title-huong-dan {
+    display: none;
+    margin-right: 5px;
+    padding: 10px;
+    color: white;
+    background: var(--primary-color);
+    border-radius: 12px;
+  }
+
+  .pulse {
+    color: var(--primary-color);
+    animation: pulse 1s infinite ease-in-out alternate;
+
+    img {
+      width: 64px;
+    }
+  }
+
+  @keyframes pulse {
+    from {
+      transform: scale(0.9);
+    }
+
+    to {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.card-chatbot {
+  position: fixed !important;
+  right: 75px;
+  bottom: 0;
+  z-index: 99;
+  height: inherit !important;
+
+  max-width: 400px;
+  width: calc(100% - 20px);
+  margin: 6px 10px 0 !important;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+
+  .ant-card-head {
+    box-shadow: 0 3px 4px -3px rgba(0, 0, 0, 0.5);
+    margin-bottom: 0;
+  }
+
+  .ant-card-body {
+    padding: 0 !important;
+
+    .content {
+      height: 420px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .messages {
+        overflow-y: scroll;
+        padding: 8px;
+        display: flex;
+        gap: 8px;
+        flex-direction: column;
+        scroll-behavior: smooth;
+        transition: .3s;
+
+        .message {
+          display: flex;
+          gap: 5px;
+          justify-content: flex-end;
+          margin-left: 37px;
+          white-space: break-spaces;
+          overflow-wrap: anywhere;
+
+          &.bot {
+            justify-content: flex-start;
+            margin-left: 0;
+            margin-right: 37px;
+
+            .text {
+              background-color: var(--primary-color);
+              color: white;
+            }
+          }
+
+          .content-text {
+            display: flex;
+            gap: 5px;
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .text {
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: rgba(136, 136, 136, 0.14);
+          }
+
+          video {
+            border-radius: 12px;
+          }
+        }
+
+        .note {
+          text-align: center;
+          margin-bottom: 12px;
+          font-size: 12px;
+          color: #888;
+        }
+
+        #end_message {
+          margin-top: 32px;
+        }
+      }
+
+      .textbox {
+        padding: 10px 5px;
+
+        form {
+          display: flex;
+          align-items: center;
+
+          textarea,
+          input {
+            min-height: 1lh;
+            max-height: 3lh;
+            field-sizing: content;
+          }
+
+          .fake-input {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 6px 12px;
+            background: rgba(136, 136, 136, 0.14);
+            border-radius: 12px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: @screen-md) {
+    right: 0px;
+  }
+}
+
+.chatbot-banner {
+  cursor: pointer;
+  transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  border: 3px solid white;
+  border-radius: 12px;
+  box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
+// MESENGER TYPING EFFECT
+
+.ticontainer .tidot {
+  background-color: white;
+}
+
+.tidot {
+  animation: mercuryTypingAnimation 1.5s infinite ease-in-out;
+  border-radius: 2px;
+  display: inline-block;
+  height: 4px;
+  margin-right: 2px;
+  width: 4px;
+}
+
+@keyframes mercuryTypingAnimation {
+  0% {
+    -webkit-transform: translateY(0px)
+  }
+
+  28% {
+    -webkit-transform: translateY(-5px)
+  }
+
+  44% {
+    -webkit-transform: translateY(0px)
+  }
+}
+
+.tidot:nth-child(1) {
+  animation-delay: 200ms;
+}
+
+.tidot:nth-child(2) {
+  animation-delay: 300ms;
+}
+
+.tidot:nth-child(3) {
+  animation-delay: 400ms;
+}
