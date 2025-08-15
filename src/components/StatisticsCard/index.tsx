@@ -66,7 +66,12 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 	};
 
 	return (
-		<Card className='card-big-title card-borderless' loading={loading} variant='borderless' style={containerStyle}>
+		<Card
+			className='card-big-title card-borderless '
+			loading={loading}
+			variant='borderless'
+			style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '8px', ...containerStyle }}
+		>
 			<Text style={{ fontSize: 16, fontWeight: 500, marginBottom: 16, display: 'block' }}>{title}</Text>
 			<Row gutter={[16, 16]} wrap>
 				{data.map((item, index) => (

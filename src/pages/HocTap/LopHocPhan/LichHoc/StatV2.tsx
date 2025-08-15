@@ -31,20 +31,15 @@ const StatDiemDanhV2 = () => {
 
 	// Tạo background color cho từng trạng thái (màu nhạt hơn)
 	const getBackgroundColor = (status: ETrangThaiUserDiemDanh) => {
-		const color = colorTrangThaiUserDiemDanh[status];
-		// Chuyển đổi màu sang màu nền nhạt hơn
-		switch (status) {
-			case ETrangThaiUserDiemDanh.CO_MAT:
-				return '#f6ffed';
-			case ETrangThaiUserDiemDanh.VANG_CO_PHEP:
-				return '#fffbe6';
-			case ETrangThaiUserDiemDanh.VANG_KHONG_PHEP:
-				return '#fff2e8';
-			case ETrangThaiUserDiemDanh.CHUA_DIEM_DANH:
-				return '#f0f0f0';
-			default:
-				return '#fafafa';
-		}
+		const backgroundMapping = {
+			[ETrangThaiUserDiemDanh.CO_MAT]: '#f6ffed', // green -> nhạt
+			[ETrangThaiUserDiemDanh.MUON_VE_SOM]: '#e6f7ff', // blue -> nhạt
+			[ETrangThaiUserDiemDanh.VANG_CO_PHEP]: '#fffbe6', // gold -> nhạt
+			[ETrangThaiUserDiemDanh.VANG_KHONG_PHEP]: '#fff2e8', // orange -> nhạt
+			[ETrangThaiUserDiemDanh.CHUA_DIEM_DANH]: '#fff1f0', // red -> nhạt
+		};
+
+		return backgroundMapping[status] || '#fafafa';
 	};
 
 	// Tạo dữ liệu thống kê
@@ -72,10 +67,6 @@ const StatDiemDanhV2 = () => {
 			colSpan={{ xs: 24, sm: 12, md: 8, lg: 6, xl: 4, xxl: 4 }}
 			containerStyle={{
 				marginBottom: 18,
-				backgroundColor: '#fff',
-				padding: '20px',
-				boxShadow: '0px 0px 12px 0px #0000000A',
-				borderRadius: '8px',
 			}}
 		/>
 	);

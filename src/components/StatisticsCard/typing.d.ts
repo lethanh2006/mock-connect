@@ -77,77 +77,11 @@ export interface StatisticsCardProps {
 		sm?: number;
 		/** Medium devices (≥768px) */
 		md?: number;
-		/** Large devices (≥992px) */
+		/** Large devices (≥992px) *
 		lg?: number;
 		/** Extra large devices (≥1200px) */
 		xl?: number;
 		/** Extra extra large devices (≥1600px) */
 		xxl?: number;
 	};
-}
-
-/**
- * Props cho ThongKeDichVu component
- * @interface ThongKeProps
- */
-export interface ThongKeProps {
-	/** Dữ liệu thống kê từ bên ngoài truyền vào (tùy chọn) */
-	data?: any[];
-
-	/** Tên quy trình (tùy chọn) */
-	tenQuyTrinh?: string;
-}
-
-/**
- * Cấu trúc dữ liệu thống kê cho ThongKeDichVu
- * @interface ThongKeData
- */
-export interface ThongKeData {
-	/** Tổng số đơn */
-	tongSoDon: number;
-
-	/** Số đơn đã hoàn thành */
-	daHoanThanh: number;
-
-	/** Số đơn chưa thanh toán */
-	chuaThanhToan: number;
-
-	/** Tổng số tiền đã thu */
-	tongSoTien: number;
-
-	/** Tổng tiền chưa thanh toán */
-	tongTienChuaThanhToan: number;
-
-	/** Tổng số tiền đã format hiển thị */
-	tongSoTienFormatted: string;
-
-	/** Tổng tiền chưa thanh toán đã format hiển thị */
-	tongTienChuaThanhToanFormatted: string;
-}
-
-/**
- * Props cho Statistics component (bài tập)
- * @interface StatisticsProps
- */
-export interface StatisticsProps {
-	/** Danh sách bài tập được giao */
-	danhSach: BaiTap.IDanhSachGiaoBaiTap[];
-}
-
-/**
- * Cấu trúc dữ liệu thống kê cho bài tập
- * @interface BaiTapStatistics
- */
-export interface BaiTapStatistics {
-	/** Số bài tập đã hoàn thành */
-	completed: number;
-
-	/** Số bài tập đến hạn */
-	pending: number;
-
-	/** Số bài tập chưa hoàn thành */
-	notStarted: number;
-
-	/** Số bài tập quá hạn nộp bài */
-	overdue: number;
 }
