@@ -82,7 +82,7 @@ export interface StatisticsCardProps {
 		sm?: number;
 		/** Medium devices (≥768px) */
 		md?: number;
-		/** Large devices (≥992px) *
+		/** Large devices (≥992px) */
 		lg?: number;
 		/** Extra large devices (≥1200px) */
 		xl?: number;
