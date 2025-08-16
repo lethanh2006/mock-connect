@@ -39,10 +39,10 @@ const CardKhoiHocPhan = (props: {
 			</div>
 
 			<Modal
-				visible={visible}
+				open={visible}
 				title={khoi?.ten ?? 'Khối học phần'}
 				onCancel={() => setVisible(false)}
-				width={680}
+				width={850}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
 				className='khoi-modal'
