@@ -16,7 +16,18 @@ const PermissionWrapper = (props: { content: JSX.Element; accessCode?: string })
 export const getTitle = (title?: string, menuTitle?: string) => [title, menuTitle].filter(Boolean).join(' - ');
 
 export const TabViewPage = (props: TabViewPageComponentProps) => {
-	const { menu = [], hideCard, children, onChange, cardTitle, type = 'tab', tabType = 'card', tabStyle, style } = props;
+	const {
+		menu = [],
+		hideCard,
+		children,
+		onChange,
+		cardTitle,
+		type = 'tab',
+		tabType = 'card',
+		tabStyle,
+		style,
+		offsetTop = 60,
+	} = props;
 	const activeMenu = menu?.filter((i) => !i.hide);
 	const paths = activeMenu?.map((item) => item.menuKey);
 	const hash = window.location.hash?.replace('#', '') || paths[0];
@@ -39,7 +50,7 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 			{children}
 
 			{/* Chiều cao của header => Có thể tùy chỉnh tùy tenant */}
-			<Affix offsetTop={60}>
+			<Affix offsetTop={offsetTop}>
 				{type === 'step' ? (
 					<Steps
 						type='navigation'

@@ -1,9 +1,8 @@
-import { Card, Col, Row, Typography } from 'antd';
+import { Card, Col, Row } from 'antd';
+import classNames from 'classnames';
 import React, { isValidElement, ReactElement } from 'react';
 import './style.less';
 import { StatisticsCardProps, StatisticsItem } from './typing';
-
-const { Text } = Typography;
 
 const StatisticsCard: React.FC<StatisticsCardProps> = ({
 	title,
@@ -11,7 +10,11 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 	loading = false,
 	containerStyle = {},
 	cardStyle,
-	colSpan = { xs: 24, sm: 12, md: 8 },
+	colSpan = { span: 24, sm: 12, md: 8 },
+	hideCard,
+	rowGutter = 8,
+	borderleft = false,
+	statShadow = true,
 }) => {
 	const renderStatisticItem = ({
 		title,
@@ -19,29 +22,16 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 		icon,
 		status,
 		onClick,
-		borderAccent = true,
 		backgroundColor,
 		valueColor,
-		borderColor,
 	}: StatisticsItem) => {
-		const statusClass = status || 'gray';
-		const clickableClass = onClick ? 'pointer' : '';
-		const borderAccentClass = borderAccent ? 'border-accent' : '';
+		const statusClass = status || '';
 
-		const finalValueColor = valueColor || '#595959';
-
-		const customStyle: React.CSSProperties = {
-			backgroundColor,
-			color: finalValueColor,
-			borderLeft: borderAccent ? `4px solid ${borderColor || finalValueColor}` : undefined,
-			...cardStyle,
-		};
-
-		const iconWithColor =
+		const iconElement =
 			icon && isValidElement(icon)
 				? React.cloneElement(icon as ReactElement<any>, {
 						style: {
-							color: finalValueColor,
+							color: valueColor,
 							...((icon as ReactElement<any>).props.style || {}),
 						},
 					})
@@ -49,47 +39,54 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 
 		return (
 			<div
-				className={`statistics-item ${statusClass} ${clickableClass} ${borderAccentClass}`}
-				style={customStyle}
+				className={`${classNames({
+					'statistics-item': true,
+					pointer: !!onClick,
+					border: borderleft,
+					shadow: statShadow,
+				})} ${statusClass}`}
+				style={{ ...cardStyle, backgroundColor: backgroundColor, borderColor: valueColor }}
 				onClick={onClick}
 			>
-				<Col>
-					<div>{iconWithColor}</div>
-					<Text className='text'>{title}</Text>
-				</Col>
+				<div className='text'>
+					<span className='anticon'>{iconElement}</span>
+					<span>{title}</span>
+				</div>
 
-				<Col className='num' style={{ color: finalValueColor }}>
+				<div className='num' style={status ? {} : { color: valueColor }}>
 					{value}
-				</Col>
+				</div>
 			</div>
 		);
 	};
 
-	return (
-		<div className='statistics-wrapper' style={containerStyle}>
-			<Card
-				style={{
-					padding: 0,
-					margin: 0,
-					border: 'none',
-					borderRadius: '8px',
-				}}
-				bodyStyle={{
-					padding: 0,
-					margin: 0,
-				}}
-				loading={loading}
-			>
-				<Text style={{ fontSize: 16, fontWeight: 500, marginBottom: 16, display: 'block' }}>{title}</Text>
-				<Row gutter={[16, 16]} wrap>
-					{data.map((item, index) => (
-						<Col {...colSpan} key={index}>
-							{renderStatisticItem(item)}
-						</Col>
-					))}
-				</Row>
-			</Card>
+	return hideCard ? (
+		<div style={{ ...containerStyle }}>
+			<Row gutter={[rowGutter, rowGutter]}>
+				{data.map((item, index) => (
+					<Col {...colSpan} key={index}>
+						{renderStatisticItem(item)}
+					</Col>
+				))}
+			</Row>
 		</div>
+	) : (
+		<Card
+			style={{ borderRadius: 8, ...containerStyle }}
+			// className='card-big-title card-borderless'
+			loading={loading}
+			variant='borderless'
+		>
+			<div style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>{title}</div>
+
+			<Row gutter={[rowGutter, rowGutter]} wrap>
+				{data.map((item, index) => (
+					<Col {...colSpan} key={index}>
+						{renderStatisticItem(item)}
+					</Col>
+				))}
+			</Row>
+		</Card>
 	);
 };
 

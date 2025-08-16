@@ -52,4 +52,6 @@ export type TabViewPageComponentProps = {
 
 	/** Style bọc toàn bộ */
 	style?: CSSProperties;
+
+	offsetTop?: number;
 };
