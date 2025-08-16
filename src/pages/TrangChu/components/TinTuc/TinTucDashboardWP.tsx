@@ -1,9 +1,9 @@
 import { Title } from '@/pages/TinTuc/Wordpress/components/Title';
 import { getImageSrc } from '@/pages/TinTuc/Wordpress/utils/getImageSrc';
 import { landingUrl } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { Card, Col, Empty, Row, Spin } from 'antd';
 import { isEmpty } from 'lodash';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import './style.less';
@@ -59,7 +59,7 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 												<Title data={tintuc} rows={2} style={{ margin: 0 }} />
 											</div>
 										</div>
-										{tintuc?.date && <span className='thoi-gian'>{moment(tintuc?.date).format('DD/MM/YYYY')}</span>}
+										{tintuc?.date && <span className='thoi-gian'>{dayjs(tintuc?.date).format('DD/MM/YYYY')}</span>}
 									</div>
 								</div>
 							</Col>

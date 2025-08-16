@@ -7,9 +7,9 @@ import {
 	trangThaiDangKyChuyenNganh,
 } from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import type { DangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/typing';
+import dayjs from '@/utils/dayjs';
 import { EditOutlined } from '@ant-design/icons';
 import { Alert, Button, Tag, Tooltip } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import Form from './Form';
@@ -64,14 +64,14 @@ const DangKyChuyenNganhPage = () => {
 			width: 120,
 			align: 'center',
 			dataIndex: 'createdAt',
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Cập nhật',
 			width: 120,
 			align: 'center',
 			dataIndex: 'updatedAt',
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		// {
 		// 	title: 'Khóa ngành sinh viên',
@@ -113,8 +113,8 @@ const DangKyChuyenNganhPage = () => {
 							<>
 								Đợt đăng ký chuyên ngành &quot;<b>{dotHienHanh.ten}</b>&quot; đang diễn ra từ{' '}
 								<b>
-									{moment(dotHienHanh.thoiGianBatDau).format('HH:mm:ss DD/MM')} -{' '}
-									{moment(dotHienHanh.thoiGianKetThuc).format('HH:mm:ss DD/MM')}
+									{dayjs(dotHienHanh.thoiGianBatDau).format('HH:mm:ss DD/MM')} -{' '}
+									{dayjs(dotHienHanh.thoiGianKetThuc).format('HH:mm:ss DD/MM')}
 								</b>
 								. Vui lòng đăng ký đúng thời hạn
 							</>

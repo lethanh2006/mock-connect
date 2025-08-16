@@ -2,7 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import type { UuDaiThanhToan } from '@/services/TaiChinh/UuDaiThanhToan/typing';
-import moment from 'moment';
+import dayjs from '@/utils/dayjs';
 import { useModel } from 'umi';
 
 const UuDaiThanhToanPage = () => {
@@ -57,14 +57,14 @@ const UuDaiThanhToanPage = () => {
 			dataIndex: 'createdAt',
 			align: 'center',
 			width: 100,
-			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Thời gian sử dụng',
 			dataIndex: 'thoiGianSuDung',
 			align: 'center',
 			width: 100,
-			render: (val) => (val ? moment(val).format('DD/MM/YYYY') : <i>Chưa sử dụng</i>),
+			render: (val) => (val ? dayjs(val).format('DD/MM/YYYY') : <i>Chưa sử dụng</i>),
 		},
 	];
 

@@ -1,16 +1,16 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import {
-	colorTrangThaiSvDkHpNhuCau as colorTrangThaiSvDkHpNhuCau,
+	colorTrangThaiSvDkHpNhuCau,
 	ETinhChatHocPhanNhuCau,
-	ETrangThaiSvDkHpNhuCau as ETrangThaiSvDkHpNhuCau,
+	ETrangThaiSvDkHpNhuCau,
 	mapNameETinhChatHocPhanNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
+import dayjs from '@/utils/dayjs';
 
 import { Button, Checkbox, Col, Descriptions, Modal, Row, Tag } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useIntl, useModel } from 'umi';
 
 const ChiTietSinhVienDangKy = () => {
@@ -85,7 +85,7 @@ const ChiTietSinhVienDangKy = () => {
 							{_.sumBy(record?.danhSachHocPhanDangKy ?? [], 'soTinChi')}
 						</Descriptions.Item>
 						<Descriptions.Item label='Thời gian đăng ký'>
-							{record?.thoiGianDangKy ? moment(record?.thoiGianDangKy).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianDangKy ? dayjs(record?.thoiGianDangKy).format('DD/MM/YYYY') : '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Ghi chú CVHT' span={2}>
 							{record?.ghiChuCVHT ?? '--'}

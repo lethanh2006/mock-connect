@@ -8,8 +8,8 @@ import {
 	mapNameTrangThaiMuonSach,
 } from '@/services/QuanLyThuVien/constant';
 import type { MuonSach } from '@/services/QuanLyThuVien/MuonSach/typing';
+import dayjs from '@/utils/dayjs';
 import { Card, Col, Descriptions, Row, Segmented, Tabs, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ChiTietMuonTraSach from '../components/ChiTiet';
@@ -28,15 +28,15 @@ const LichSuMuonTraPage = (props: any) => {
 						{
 							active: true,
 							field: 'expired',
-							values: [moment().toISOString(), moment().add(7, 'day').toISOString()],
+							values: [dayjs().toISOString(), dayjs().add(7, 'day').toISOString()],
 							operator: EOperatorType.BETWEEN,
 						},
-				  ]
+					]
 				: activeKey === '3'
-				? [{ active: true, field: 'expired', values: [moment().toISOString()], operator: EOperatorType.LESS_THAN }]
-				: activeKey === '4'
-				? [{ active: true, field: 'daLaySach', values: [false], operator: EOperatorType.EQUAL }]
-				: [];
+					? [{ active: true, field: 'expired', values: [dayjs().toISOString()], operator: EOperatorType.LESS_THAN }]
+					: activeKey === '4'
+						? [{ active: true, field: 'daLaySach', values: [false], operator: EOperatorType.EQUAL }]
+						: [];
 
 		getModel(
 			!tatCaLichSu && recPhieu?._id ? { phieuMuonTraId: recPhieu?._id, trangThai } : undefined,
@@ -81,9 +81,9 @@ const LichSuMuonTraPage = (props: any) => {
 			width: 150,
 			render: (val, rec) => {
 				if (!val) return null;
-				const formattedTime = moment(val).startOf('day').format('DD/MM/YYYY');
-				const expirationTime = rec?.expired ? moment(rec.expired).startOf('day') : moment().startOf('day');
-				const now = moment().startOf('day');
+				const formattedTime = dayjs(val).startOf('day').format('DD/MM/YYYY');
+				const expirationTime = rec?.expired ? dayjs(rec.expired).startOf('day') : dayjs().startOf('day');
+				const now = dayjs().startOf('day');
 				const isOverdue = now.isAfter(expirationTime);
 				const isApproachingDeadline = !isOverdue && expirationTime.diff(now, 'days') <= 7;
 				const color = isOverdue ? 'red' : isApproachingDeadline ? 'orange' : 'inherit';
@@ -120,7 +120,7 @@ const LichSuMuonTraPage = (props: any) => {
 			align: 'center',
 			dataIndex: 'expired',
 			width: 130,
-			render: (val, rec) => val && moment(val).format('DD/MM/YYYY'),
+			render: (val, rec) => val && dayjs(val).format('DD/MM/YYYY'),
 			filterType: 'date',
 			sortable: true,
 			onCell,
@@ -152,9 +152,9 @@ const LichSuMuonTraPage = (props: any) => {
 			width: 150,
 			render: (val, rec) => {
 				if (!val) return null;
-				const formattedTime = moment(val).startOf('day').format('DD/MM/YYYY');
-				const expirationTime = rec?.expired ? moment(rec.expired).startOf('day') : moment().startOf('day');
-				const isOverdue = moment().startOf('day').isAfter(expirationTime);
+				const formattedTime = dayjs(val).startOf('day').format('DD/MM/YYYY');
+				const expirationTime = rec?.expired ? dayjs(rec.expired).startOf('day') : dayjs().startOf('day');
+				const isOverdue = dayjs().startOf('day').isAfter(expirationTime);
 				return (
 					<span style={{ color: isOverdue ? 'red' : 'inherit', fontWeight: isOverdue ? 600 : 0 }}>{formattedTime}</span>
 				);
@@ -226,7 +226,7 @@ const LichSuMuonTraPage = (props: any) => {
 									// { value: '4', label: 'Chưa lấy sách' },
 								]}
 							/>,
-					  ]
+						]
 					: []
 			}
 		/>
@@ -247,7 +247,7 @@ const LichSuMuonTraPage = (props: any) => {
 						<Descriptions.Item label='Mã sinh viên'>{recPhieu?.maDinhDanhNguoiMuon ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Họ tên'>{recPhieu?.hoTenNguoiMuon ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Thời gian đăng ký'>
-							{recPhieu?.thoiGianDangKy ? moment(recPhieu?.thoiGianDangKy).format('DD/MM/YYYY') : '--'}
+							{recPhieu?.thoiGianDangKy ? dayjs(recPhieu?.thoiGianDangKy).format('DD/MM/YYYY') : '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Khóa sinh viên'>{recPhieu?.tenKhoaSinhVienNguoiMuon ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Khóa ngành'>{recPhieu?.tenNganhNguoiMuon ?? '--'}</Descriptions.Item>

@@ -1,6 +1,6 @@
-import { Alert, Card, Divider, Empty, Spin } from 'antd';
+import dayjs from '@/utils/dayjs'; // ✅ Sử dụng dayjs
+import { Card, Divider, Empty, Spin } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
 import SelectNamHoc from '../NamHoc/Select';
@@ -18,16 +18,12 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 	const { getAllModel: getNganh } = useModel('daotao.nganhdaotao');
 	const [data, setData] = useState<KeHoachNamHoc.TKeHoachData[]>([]);
 	const [header, setHeader] = useState<KeHoachNamHoc.TGridHeader>();
-	// Để lấy dữ liệu đầy đủ của toàn bộ khóa, ngành
 	const mapNganh = useRef<Record<string, NganhDaoTao.IRecordCoSo>>();
 	const mapKhoa = useRef<Record<string, KhoaSinhVien.IRecord>>();
 
-	/** Lấy danh sách học kỳ, tính toán giá trị tháng, tuần, ngày
-	 * Lấy toàn bộ kế hoạch năm học & group by `Khóa ngành`N
-	 */
 	const getData = async () => {
 		getHocKy({ sort: { soThuTu: 1 }, condition: { namHocId: recNam?._id } }).then((hocKyList) => {
-			const day = moment(recNam?.thoiGianBatDau).startOf('isoWeek');
+			const day = dayjs(recNam?.thoiGianBatDau).startOf('isoWeek'); // ✅ thay thế
 			const head = calHeader(day, hocKyList.data?.data ?? [], recNam?.soTuan ?? 0);
 			setHeader(head);
 		});
@@ -37,7 +33,6 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 				_.sortBy(res, (item) => [item.khoaNganh?.maKhoaSinhVien, item.khoaNganh?.maNganh]),
 				(item) => item.maKhoaNganh,
 			);
-			/** Với khóa mới thì chỉ hiển thị của 1 khóa ngành đầu tiên */
 			const khoaMoiMap = new Set();
 			const dat: KeHoachNamHoc.TKeHoachData[] = [];
 			Object.entries(gKhoaNganh)?.forEach(([maKhoaNganh, keHoachList]) => {
@@ -123,8 +118,8 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 													!!kh.ghiChu
 														? 'highlight1'
 														: index && header?.days?.[index - 1]?.isBreak && !kh.hoatDongTuan?._id
-														? 'break'
-														: ''
+															? 'break'
+															: ''
 												}`}
 												key={kh._id}
 												title={kh.ghiChu ?? kh.hoatDongTuan?.ten}

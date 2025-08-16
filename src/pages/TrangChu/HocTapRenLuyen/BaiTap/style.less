@@ -1,13 +1,4 @@
 .card-baitap-dashboard {
-	border-radius: 8px;
-	overflow: hidden;
-	border: none;
-	background-color: transparent;
-	padding: 0;
-
-	&.mobile {
-		padding: 6px;
-	}
 
 	// Header styles
 	.header {
@@ -39,10 +30,9 @@
 
 	// Content wrapper
 	.content-wrapper {
-		overflow: hidden;
 		background-color: #fff;
 		border-radius: 8px;
-		box-shadow: 0px 0px 6px 0px #0000000a;
+		box-shadow: var(--box-shadow-tertiary);
 	}
 
 	// Carousel styles
@@ -335,15 +325,12 @@
 
 	// Empty state
 	.empty-container {
-		background: transparent;
 		border-radius: 8px;
-		border: 1px solid #f0f0f0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		height: 350px;
 		min-height: 350px;
-		margin: 0 0.5px;
 
 		&.mobile {
 			height: 200px;

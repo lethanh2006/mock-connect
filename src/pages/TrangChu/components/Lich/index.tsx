@@ -1,6 +1,6 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import dayjs from '@/utils/dayjs'; // Import dayjs đã config
 import { Button, Card, Modal, Typography } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 
@@ -47,8 +47,8 @@ const getEventColor = (loaiSuKien: string): string => {
 };
 
 const LichDashboard = () => {
-	const [currentMonth, setCurrentMonth] = useState(moment());
-	const [selectedDate, setSelectedDate] = useState(moment());
+	const [currentMonth, setCurrentMonth] = useState(dayjs());
+	const [selectedDate, setSelectedDate] = useState(dayjs());
 	const [visibleDetail, setVisibleDetail] = useState(false);
 	const [selectedEvents, setSelectedEvents] = useState<SuKienItem[]>([]);
 
@@ -70,8 +70,8 @@ const LichDashboard = () => {
 	// Logic API từ code gốc
 	const getThoiGianMotTuanKeTuHomNay = () => {
 		return {
-			fromDate: moment().startOf('week').toISOString(),
-			toDate: moment().add(7, 'day').endOf('day').toISOString(),
+			fromDate: dayjs().startOf('week').toISOString(),
+			toDate: dayjs().add(7, 'day').endOf('day').toISOString(),
 		};
 	};
 
@@ -112,17 +112,17 @@ const LichDashboard = () => {
 
 	const getBaiTap = async () => {
 		return thongKeBaiTapModel(
-			moment().startOf('week').toISOString(),
-			moment().add(2, 'months').endOf('day').toISOString(),
+			dayjs().startOf('week').toISOString(),
+			dayjs().add(2, 'months').endOf('day').toISOString(),
 		).then((data) => {
-			const aWeekLater = moment().add(7, 'day').endOf('day').toDate();
+			const aWeekLater = dayjs().add(7, 'day').endOf('day').toDate();
 			const temp = data
 				.map((item) => ({
 					...item,
 					title: item?.assignment?.noiDung ?? '',
 					suffix: item?.assignment?.tenLopHocPhan,
-					thoiGianBatDau: moment(item?.assignment?.thoiGianKetThuc).toDate(),
-					thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+					thoiGianBatDau: dayjs(item?.assignment?.thoiGianKetThuc).toDate(),
+					thoiGianKetThuc: dayjs(item?.assignment?.thoiGianKetThuc).toDate(),
 					loaiSuKien: ELoaiSuKien.BAI_TAP,
 				}))
 				.filter((i) => i.thoiGianKetThuc < aWeekLater);
@@ -148,9 +148,9 @@ const LichDashboard = () => {
 	}, []);
 
 	// Lấy các sự kiện theo ngày - SỬ DỤNG TRỰC TIẾP dataLichDashboard
-	const getEventsForDate = (date: moment.Moment): SuKienItem[] => {
+	const getEventsForDate = (date: dayjs.Dayjs): SuKienItem[] => {
 		const events = (dataLichDashboard || []).filter(
-			(event) => moment(event.thoiGianBatDau).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'),
+			(event) => dayjs(event.thoiGianBatDau).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'),
 		);
 
 		return events;
@@ -158,17 +158,17 @@ const LichDashboard = () => {
 
 	// Tạo calendar grid
 	const renderCalendar = () => {
-		const startOfMonth = currentMonth.clone().startOf('month');
-		const endOfMonth = currentMonth.clone().endOf('month');
-		const startDate = startOfMonth.clone().startOf('week');
-		const endDate = endOfMonth.clone().endOf('week');
+		const startOfMonth = currentMonth.startOf('month');
+		const endOfMonth = currentMonth.endOf('month');
+		const startDate = startOfMonth.startOf('week');
+		const endDate = endOfMonth.endOf('week');
 
 		const dateArray = [];
-		const current = startDate.clone();
+		let current = startDate;
 
 		while (current.isSameOrBefore(endDate)) {
-			dateArray.push(current.clone());
-			current.add(1, 'day');
+			dateArray.push(current);
+			current = current.add(1, 'day');
 		}
 
 		const weeks = [];
@@ -197,14 +197,14 @@ const LichDashboard = () => {
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='left' />}
-							onClick={() => setCurrentMonth(currentMonth.clone().subtract(1, 'month'))}
+							onClick={() => setCurrentMonth(currentMonth.subtract(1, 'month'))}
 							size={isMobile ? 'small' : 'middle'}
 							className='nav-btn'
 						/>
 						<Button
 							type='text'
 							icon={<SlideButtonIcon direction='right' />}
-							onClick={() => setCurrentMonth(currentMonth.clone().add(1, 'month'))}
+							onClick={() => setCurrentMonth(currentMonth.add(1, 'month'))}
 							size={isMobile ? 'small' : 'middle'}
 							className='nav-btn'
 						/>
@@ -233,7 +233,7 @@ const LichDashboard = () => {
 							{week.map((date, dayIndex) => {
 								const events = getEventsForDate(date);
 								const isCurrentMonth = date.month() === currentMonth.month();
-								const isToday = date.isSame(moment(), 'day');
+								const isToday = date.isSame(dayjs(), 'day');
 								const isSelected = date.isSame(selectedDate, 'day');
 								const isSelectedToday = isToday && isSelected;
 
@@ -326,7 +326,7 @@ const LichDashboard = () => {
 						>
 							<div className='event-title'>{event.title}</div>
 							<div className='event-time'>
-								{moment(event.thoiGianBatDau).format('HH:mm')} - {moment(event.thoiGianKetThuc).format('HH:mm')}
+								{dayjs(event.thoiGianBatDau).format('HH:mm')} - {dayjs(event.thoiGianKetThuc).format('HH:mm')}
 							</div>
 							{event.diaDiem && <div className='event-location'>📍 {event.diaDiem}</div>}
 						</div>

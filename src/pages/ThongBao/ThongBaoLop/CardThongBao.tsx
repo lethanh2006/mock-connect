@@ -2,9 +2,9 @@ import styles from '@/components/RightContent/NoticeIcon/index.less';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
 import type { ThongBao } from '@/services/ThongBao/typing';
+import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Avatar, Card, List, Modal } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -61,7 +61,7 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 								description={
 									<>
 										<div className={styles.description}>{item.description}</div>
-										<div className={styles.datetime}>{moment(item.createdAt).fromNow()}</div>
+										<div className={styles.datetime}>{dayjs(item.createdAt).fromNow()}</div>
 									</>
 								}
 							/>

@@ -10,11 +10,11 @@ import {
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
+import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
 import { CalendarOutlined, DeleteOutlined, ReloadOutlined, SendOutlined } from '@ant-design/icons';
 import { Col, Divider, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
@@ -62,7 +62,7 @@ const PhieuDangKy = () => {
 								?.filter((j) => j.maHocPhan === item.maHocPhan)
 								?.map((j) => j.maHoaLichHoc ?? [])
 								?.flat() ?? [],
-				  }
+					}
 				: item,
 		);
 	const tongTinChi = _.sumBy(
@@ -77,15 +77,15 @@ const PhieuDangKy = () => {
 	const dangTrongThoiGian =
 		dotDangKyHienTai?.thoiGianBatDau &&
 		dotDangKyHienTai?.thoiGianKetThuc &&
-		moment().isSameOrAfter(dotDangKyHienTai?.thoiGianBatDau) &&
-		moment().isSameOrBefore(dotDangKyHienTai?.thoiGianKetThuc);
+		dayjs().isAfter(dayjs(dotDangKyHienTai?.thoiGianBatDau).subtract(1, 'second')) &&
+		dayjs().isBefore(dayjs(dotDangKyHienTai?.thoiGianKetThuc).add(1, 'second'));
 	// Tổng học phí dự kiến
 	const tongHocPhi = _.sumBy(danhSachLopHienThi, (lop) => tinhHocPhi(lop.soTinChi, lop.loai, lop.maNganh));
 	// Số tín chỉ tối đa
 	const soTinChiToiDa =
 		khoaNganhMe?.khoaNganhPhu && phieuDangKy?.soTinChiToiDaSongNganh
 			? phieuDangKy.soTinChiToiDaSongNganh
-			: phieuDangKy?.soTinChiToiDa ?? 0;
+			: (phieuDangKy?.soTinChiToiDa ?? 0);
 	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
 
 	const getData = () => recHocKy?.ma && getLopDangKyModel(recHocKy.ma);
@@ -301,7 +301,7 @@ const PhieuDangKy = () => {
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
 			>
 				<Space wrap>
-					<ButtonExtend  cooldownMs={10000} icon={<ReloadOutlined />} onClick={getData}>
+					<ButtonExtend cooldownMs={10000} icon={<ReloadOutlined />} onClick={getData}>
 						Tải lại
 					</ButtonExtend>
 					{danhSachLopDangKy.length ? (
@@ -328,10 +328,10 @@ const PhieuDangKy = () => {
 								tongTinChi > soTinChiToiDa
 									? 'Bạn đã đăng ký quá số tín chỉ tối đa'
 									: tongTinChi < soTinChiToiThieu
-									? 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu'
-									: !dangTrongThoiGian
-									? 'Ngoài thời gian đăng ký tín chỉ'
-									: 'Đăng ký tín chỉ'
+										? 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu'
+										: !dangTrongThoiGian
+											? 'Ngoài thời gian đăng ký tín chỉ'
+											: 'Đăng ký tín chỉ'
 							}
 							type='primary'
 							icon={<SendOutlined />}

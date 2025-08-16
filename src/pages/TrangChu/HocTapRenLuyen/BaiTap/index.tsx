@@ -1,5 +1,6 @@
 import PDFViewerV2 from '@/components/PDFViewerV2';
 import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
+import dayjs from '@/utils/dayjs';
 import {
 	ArrowRightOutlined,
 	DownloadOutlined,
@@ -10,7 +11,6 @@ import {
 	MoreOutlined,
 } from '@ant-design/icons';
 import { Button, Carousel, Empty, List, Modal, Popover, Space, Typography } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
 import SlideButtonIcon from '../../components/SlideButtonIcon';
@@ -67,7 +67,7 @@ const CardBaiTapDashboard = () => {
 	}, [itemsPerPage]);
 
 	const filteredData = danhSach.filter(
-		(i) => i.assignment?.thoiGianKetThuc && moment().isSameOrBefore(i.assignment.thoiGianKetThuc),
+		(i) => i.assignment?.thoiGianKetThuc && dayjs().isSameOrBefore(dayjs(i.assignment.thoiGianKetThuc)),
 	);
 
 	const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -290,7 +290,7 @@ const CardBaiTapDashboard = () => {
 					<div className={`deadline-section ${isMobile ? 'mobile' : ''}`}>
 						<Text className={`deadline-label ${isMobile ? 'mobile' : ''}`}>Hạn nộp bài:</Text>
 						<Text className={`deadline-time ${isMobile ? 'mobile' : ''}`}>
-							{moment(item.assignment.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+							{dayjs(item.assignment.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 						</Text>
 					</div>
 				</div>

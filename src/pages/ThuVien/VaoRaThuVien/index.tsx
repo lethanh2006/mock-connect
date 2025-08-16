@@ -4,9 +4,9 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { EOperatorType } from '@/components/Table/constant';
 import type { IColumn } from '@/components/Table/typing';
 import type { QuanLyThuVien } from '@/services/QuanLyThuVien/typing';
+import dayjs from '@/utils/dayjs';
 import { StockOutlined, UserOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalThongKeVaoRaThuVien from './components/ModalThongKe';
@@ -16,8 +16,8 @@ const VaoRaThuVienPage = () => {
 	const { getModel, page, limit, setVisibleForm } = useModel('thuvien.vaorathuvien');
 	const [visibleStat, setVisibleStat] = useState<boolean>(false);
 	const [dateRange, setDateRange] = useState<string[]>([
-		moment().startOf('M').toISOString(),
-		moment().endOf('M').toISOString(),
+		dayjs().startOf('month').toISOString(),
+		dayjs().endOf('month').toISOString(),
 	]);
 
 	const getData = () => {
@@ -49,7 +49,7 @@ const VaoRaThuVienPage = () => {
 			dataIndex: 'thoiGianCheckIn',
 			align: 'center',
 			width: 130,
-			render: (val, rec) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa vào</Tag>),
+			render: (val, rec) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa vào</Tag>),
 			filterType: 'date',
 			sortable: true,
 		},
@@ -58,7 +58,7 @@ const VaoRaThuVienPage = () => {
 			dataIndex: 'thoiGianCheckOut',
 			align: 'center',
 			width: 130,
-			render: (val, rec) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa ra</Tag>),
+			render: (val, rec) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa ra</Tag>),
 			filterType: 'date',
 			sortable: true,
 		},
@@ -76,12 +76,12 @@ const VaoRaThuVienPage = () => {
 				otherButtons={[
 					<MyDateRangePicker
 						key='1'
-						value={[moment(dateRange[0]), moment(dateRange[1])]}
+						value={[dayjs(dateRange[0]), dayjs(dateRange[1])]}
 						onChange={(val: any) => setDateRange(val)}
 						ranges={{
-							'Hôm nay': [moment(), moment()],
-							'Tuần này': [moment().startOf('week'), moment().endOf('week')],
-							'Tháng này': [moment().startOf('M'), moment().endOf('M')],
+							'Hôm nay': [dayjs(), dayjs()],
+							'Tuần này': [dayjs().startOf('week'), dayjs().endOf('week')],
+							'Tháng này': [dayjs().startOf('month'), dayjs().endOf('month')],
 						}}
 						style={{ width: 250 }}
 					/>,

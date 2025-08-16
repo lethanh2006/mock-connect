@@ -8,8 +8,8 @@ import {
 	type ETrangThaiSinhVienBLTH,
 	type ETrangThaiSinhVienBaoLuu,
 } from '@/services/HocTap/constant';
+import dayjs from '@/utils/dayjs';
 import { Tag } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -36,7 +36,7 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 			align: 'center',
 			dataIndex: 'quyetDinhId',
 			width: 120,
-			render: (val, rec) => rec.quyetDinh?.ngayBanHanh && moment(rec.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY'),
+			render: (val, rec) => rec.quyetDinh?.ngayBanHanh && dayjs(rec.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Kỳ học',

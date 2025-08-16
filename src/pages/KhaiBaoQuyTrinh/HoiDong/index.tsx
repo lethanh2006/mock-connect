@@ -1,13 +1,13 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import { Button, Carousel } from 'antd';
-import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
 
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { HoiDong } from '@/services/QuyTrinh/HoiDong/typings';
+import dayjs from '@/utils/dayjs';
 import TableDonHoiDong from './components/TableDonHoiDong';
 import TableThanhVien from './components/TableThanhVien';
 
@@ -53,7 +53,7 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 			width: 150,
 			render: (rec: HoiDong.IRecord) => (
 				<div>
-					{moment(rec.startDate).format('HH:mm DD/MM/YYYY')} - {moment(rec.endDate).format('HH:mm DD/MM/YYYY')}
+					{dayjs(rec.startDate).format('HH:mm DD/MM/YYYY')} - {dayjs(rec.endDate).format('HH:mm DD/MM/YYYY')}
 				</div>
 			),
 		},

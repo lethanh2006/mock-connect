@@ -14,7 +14,7 @@
 
 	// GROUP TITLE
 	{
-		name: 'Dashboard & Học tập',
+		name: 'DashboardGroup',
 		path: '/__group__/dashboard',
 		disabled: true,
 	},
@@ -384,8 +384,8 @@
 
 	// GROUP TITLE
 	{
-		name: 'Khác',
-		path: '/__group__/dashboard',
+		name: 'OtherGroup',
+		path: '/__group__/khac',
 		disabled: true,
 	},
 

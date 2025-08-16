@@ -1,50 +1,19 @@
 // FilterColumn styles
 .filter-column {
+	display: flex;
+	gap: 5px;
+	flex-direction: column;
+
 	.date-button {
-		width: 100%;
-		height: 40px;
-		border: 1px solid #d9d9d9;
-		border-top: none;
-		border-bottom-left-radius: 6px;
-		border-bottom-right-radius: 6px;
-		border-top-left-radius: 0px;
-		border-top-right-radius: 0px;
-		background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		position: relative;
 		overflow: hidden;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding-left: 16px;
-		padding-right: 16px;
-		font-size: 14px;
-		font-weight: 500;
-		color: #262626;
 
-		&:hover {
-			background: linear-gradient(0deg, #f0f0f0 0%, #e6e6e6 100%);
-			border-color: var(--primary-color);
-			box-shadow: 0 2px 8px rgba(64, 169, 255, 0.15);
-			transform: translateY(-1px);
-		}
-
-		&:focus,
-		&:active {
-			outline: none;
-			box-shadow: none;
-			border-color: var(--primary-color);
-		}
-
-		.button-content {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-
-			.calendar-icon {
-				font-size: 16px;
-				color: #1890ff;
-			}
+		.calendar-icon {
+			font-size: 16px;
+			color: #1890ff;
 		}
 
 		.down-arrow {
@@ -62,51 +31,15 @@
 	}
 
 	.filter-button {
-		width: 100%;
-		height: 40px;
-		border: 1px solid #d9d9d9;
-		border-top: none;
-		border-radius: 0;
-		background: linear-gradient(0deg, #fafafa 0%, #f5f5f5 100%);
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		position: relative;
 		overflow: hidden;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding-left: 16px;
-		padding-right: 16px;
-		font-size: 14px;
-		font-weight: 500;
-		color: #262626;
 
-		&:hover {
-			background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
-			border-color: var(--primary-color);
-			box-shadow: 0 2px 8px rgba(64, 169, 255, 0.15);
-			transform: translateY(-1px);
-		}
-
-		&.expanded {
-			border-bottom-left-radius: 0;
-			border-bottom-right-radius: 0;
-			border-bottom: none;
-		}
-
-		&.collapsed {
-			border-bottom-left-radius: 6px;
-			border-bottom-right-radius: 6px;
-		}
-
-		.button-content {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-
-			.filter-icon {
-				font-size: 16px;
-				color: #52c41a;
-			}
+		.filter-icon {
+			font-size: 16px;
+			color: #52c41a;
 		}
 
 		.down-arrow {
@@ -130,11 +63,9 @@
 		border-radius: 6px;
 
 		&.expanded {
-			margin-bottom: 8px;
 			border: 1px solid #e8e8e8;
 			max-height: 500px;
 			opacity: 1;
-			margin-top: 8px;
 			padding: 16px;
 		}
 
@@ -143,7 +74,6 @@
 			border: none;
 			max-height: 0;
 			opacity: 0;
-			margin-top: 0;
 			padding: 0;
 		}
 
@@ -165,9 +95,6 @@
 
 		&.expanded {
 			border: 1px solid #e8e8e8;
-			border-top: none;
-			border-bottom-left-radius: 6px;
-			border-bottom-right-radius: 6px;
 			max-height: 500px;
 			opacity: 1;
 			padding: 16px;
@@ -201,7 +128,7 @@
 
 				.event-label {
 					color: white;
-					padding: 8px 12px;
+					padding: 6px 12px;
 					border-radius: 6px;
 					margin-left: 8px;
 					flex: 1;

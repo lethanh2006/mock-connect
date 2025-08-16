@@ -1,5 +1,5 @@
+import dayjs from '@/utils/dayjs';
 import { Descriptions, Modal } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 
 const ModalChiTiet = () => {
@@ -17,12 +17,12 @@ const ModalChiTiet = () => {
 				<Descriptions.Item label='Số lượng tham gia'>{record?.hoatDongCtsv?.soLuongThamGia}</Descriptions.Item>
 				<Descriptions.Item label='Thời gian bắt đầu'>
 					{record?.hoatDongCtsv?.thoiGianBatDau
-						? moment(record?.hoatDongCtsv?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')
+						? dayjs(record?.hoatDongCtsv?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')
 						: '--'}
 				</Descriptions.Item>
 				<Descriptions.Item label='Thời gian kết thúc'>
 					{record?.hoatDongCtsv?.thoiGianKetThuc
-						? moment(record?.hoatDongCtsv?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
+						? dayjs(record?.hoatDongCtsv?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
 						: '--'}
 				</Descriptions.Item>
 				<Descriptions.Item label='Địa điểm'>{record?.hoatDongCtsv?.diaDiem ?? '--'}</Descriptions.Item>

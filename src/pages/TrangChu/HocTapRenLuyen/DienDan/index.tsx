@@ -1,6 +1,6 @@
+import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Card, Empty, Tag, Typography } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
 import './style.less';
@@ -79,7 +79,7 @@ const CardDienDanDashboard = () => {
 									title='Giảng viên'
 								/>
 							)}
-							{moment(item?.ngayDang ?? item.createdAt).format('HH:mm DD/MM/YYYY')}
+							{dayjs(item?.ngayDang ?? item.createdAt).format('HH:mm DD/MM/YYYY')}
 						</Text>
 					</div>
 				</div>

@@ -10,8 +10,8 @@ import {
 } from '@/services/DaoTao/constant';
 import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
+import dayjs from '@/utils/dayjs';
 import { Button, Carousel, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 
@@ -28,7 +28,7 @@ const TableLichHocLopHP = (props: {
 		onClick: () => onClickItem(rec),
 		style: {
 			cursor: 'pointer',
-			backgroundColor: moment().isSame(rec.ngay, 'D') ? '#005fcc1f' : undefined,
+			backgroundColor: dayjs().isSame(dayjs(rec.ngay), 'day') ? '#005fcc1f' : undefined,
 		},
 	});
 
@@ -45,7 +45,7 @@ const TableLichHocLopHP = (props: {
 			dataIndex: 'ngay',
 			align: 'center',
 			width: 150,
-			render: (val) => (val ? `${THU_TRONG_TUAN[moment(val).day()]}, ${moment(val).format('DD/MM/YYYY')}` : null),
+			render: (val) => (val ? `${THU_TRONG_TUAN[dayjs(val).day()]}, ${dayjs(val).format('DD/MM/YYYY')}` : null),
 			onCell,
 		},
 		{
@@ -85,7 +85,7 @@ const TableLichHocLopHP = (props: {
 			dataIndex: 'nhanSuSsoId',
 			width: 140,
 			render: (val, rec) =>
-				rec.nhanSu?.ten ? [rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ') : rec.tenNhanSu ?? <i>Chưa cập nhật</i>,
+				rec.nhanSu?.ten ? [rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ') : (rec.tenNhanSu ?? <i>Chưa cập nhật</i>),
 			onCell,
 		},
 		{

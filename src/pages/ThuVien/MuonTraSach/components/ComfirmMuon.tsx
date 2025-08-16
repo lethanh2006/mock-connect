@@ -1,9 +1,9 @@
 import MyDatePicker from '@/components/MyDatePicker';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Col, Form, Input, Modal, Row } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 
@@ -19,9 +19,9 @@ const ConfirmMuonSach = (props: { id?: string }) => {
 			resetFieldsForm(form);
 		} else {
 			form.setFieldsValue({
-				thoiGianMuonDuKien: moment().toISOString(),
-				thoiGianTraDuKien: moment()
-					.add(settingMuonTra?.thoiHanMuonTraSach || 150, 'days')
+				thoiGianMuonDuKien: dayjs().toISOString(),
+				thoiGianTraDuKien: dayjs()
+					.add(settingMuonTra?.thoiHanMuonTraSach || 150, 'day')
 					.toISOString(),
 			});
 		}

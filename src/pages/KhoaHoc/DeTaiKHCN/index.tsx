@@ -13,6 +13,7 @@ import {
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { currencyFormat } from '@/utils/utils';
 import {
 	DeleteOutlined,
@@ -23,7 +24,6 @@ import {
 	UnlockOutlined,
 } from '@ant-design/icons';
 import { Button, Modal, Popconfirm, Tag, Tooltip } from 'antd';
-import moment from 'moment';
 import { useCallback } from 'react';
 import { useModel } from 'umi';
 import ViewHoiDong from '../HoiDongKHCN/components/ViewHoiDong';
@@ -540,8 +540,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			align: 'center',
 			render: (val: DeTaiKHCN.IRecord) => (
 				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
 				</div>
 			),
 			onCell,
@@ -753,8 +753,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			align: 'center',
 			render: (val: DeTaiKHCN.IRecord) => (
 				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
 				</div>
 			),
 			onCell,
@@ -948,8 +948,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			align: 'center',
 			render: (val: DeTaiKHCN.IRecord) => (
 				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
 				</div>
 			),
 			onCell,
@@ -1052,8 +1052,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			align: 'center',
 			render: (val: DeTaiKHCN.IRecord) => (
 				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
 				</div>
 			),
 			onCell,

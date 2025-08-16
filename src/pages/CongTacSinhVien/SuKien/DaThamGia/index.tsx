@@ -1,10 +1,10 @@
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { ColorSuKien, ELoaiQR, MapTitleELoaiQR, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import type { SuKien } from '@/services/SuKien/typings';
+import dayjs from '@/utils/dayjs';
 import { useModel } from '@@/plugin-model/useModel';
 import { Badge, Card, Empty, Pagination, Segmented, Space, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
-import moment from 'moment/moment';
 import { useEffect, useState } from 'react';
 import styles from './styles.less';
 
@@ -48,7 +48,7 @@ const SuKienDaThamGia = () => {
 					if (!item?.suKien?.thoiGianBatDau) {
 						return result;
 					}
-					const ngayMoment = moment(item?.suKien?.thoiGianBatDau);
+					const ngayMoment = dayjs(item?.suKien?.thoiGianBatDau);
 					const ngayString = ngayMoment.format('YYYY-MM-DD');
 					return {
 						...result,
@@ -101,7 +101,7 @@ const SuKienDaThamGia = () => {
 					<Space style={{ marginBottom: 8 }}>
 						<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
 							<div className={styles.ngay__title}>
-								{thuTrongTuan}, ngày {moment(ngay).format('DD/MM/YYYY')}
+								{thuTrongTuan}, ngày {dayjs(ngay).format('DD/MM/YYYY')}
 							</div>
 						</Badge>
 					</Space>
@@ -116,9 +116,7 @@ const SuKienDaThamGia = () => {
 							}}
 						>
 							<div className={styles.su_kien__left}>
-								<div className={styles.su_kien__thoi_gian}>
-									{moment(sukien?.suKien?.thoiGianBatDau).format('HH:mm')}
-								</div>
+								<div className={styles.su_kien__thoi_gian}>{dayjs(sukien?.suKien?.thoiGianBatDau).format('HH:mm')}</div>
 							</div>
 							<div
 								className={styles.su_kien__right}

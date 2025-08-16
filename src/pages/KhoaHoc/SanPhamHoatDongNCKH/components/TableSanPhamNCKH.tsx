@@ -30,7 +30,7 @@ import { useModel } from 'umi';
 import TableBase from '@/components/Table';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { primaryColor } from '@/services/base/constant';
-import moment from 'moment';
+import dayjs from '@/utils/dayjs';
 import SelectNamHoc from '../../components/SelectNamHoc';
 import { buildFilter } from './BuildFilter';
 import FormChonDot from './FormChonDot';
@@ -236,30 +236,30 @@ const TableSanPhamNCKH = (props: {
 					recordLoaiHinhNCKH?.loaiThoiGianThucHien,
 				) ? (
 					<Descriptions.Item span={6} label={`${recordLoaiHinhNCKH.startLabel} - ${recordLoaiHinhNCKH.endLabel}`}>
-						{moment(rec?.thongTinThoiGian?.start).format(
+						{dayjs(rec?.thongTinThoiGian?.start).format(
 							recordLoaiHinhNCKH.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 								? 'YYYY'
 								: recordLoaiHinhNCKH.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
-								? 'MM/YYYY'
-								: 'DD/MM/YYYY',
+									? 'MM/YYYY'
+									: 'DD/MM/YYYY',
 						)}{' '}
 						-{' '}
-						{moment(rec?.thongTinThoiGian?.end).format(
+						{dayjs(rec?.thongTinThoiGian?.end).format(
 							recordLoaiHinhNCKH.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 								? 'YYYY'
 								: recordLoaiHinhNCKH.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
-								? 'MM/YYYY'
-								: 'DD/MM/YYYY',
+									? 'MM/YYYY'
+									: 'DD/MM/YYYY',
 						)}
 					</Descriptions.Item>
 				) : (
 					<Descriptions.Item span={6} label={recordLoaiHinhNCKH?.timelineLabel}>
-						{moment(rec?.thongTinThoiGian?.timeline).format(
+						{dayjs(rec?.thongTinThoiGian?.timeline).format(
 							recordLoaiHinhNCKH?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 								? 'YYYY'
 								: recordLoaiHinhNCKH?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
-								? 'MM/YYYY'
-								: 'DD/MM/YYYY',
+									? 'MM/YYYY'
+									: 'DD/MM/YYYY',
 						)}
 					</Descriptions.Item>
 				),
@@ -360,19 +360,19 @@ const TableSanPhamNCKH = (props: {
 										isDangThucHien
 											? false
 											: (isNguoiKhaiBao &&
-													[
-														ETrangThaiSanPham.CHINH_SUA_LAI,
-														ETrangThaiSanPham.CHUA_TIEP_NHAN,
-														ETrangThaiSanPham.DANG_THUC_HIEN,
-														ETrangThaiSanPham.DA_CHINH_SUA_LAI,
-													].includes(record.trangThaiSanPham)) ||
-											  (isNguoiKhaiBao &&
-													recordLoaiHinhNCKH?.cauHinhChinhSuaSauDuyet?.choPhepChinhSuaSauDuyet &&
-													[ETrangThaiSanPham.DUYET].includes(record.trangThaiSanPham)) ||
-											  props.role === 'admin' ||
-											  (isAdminKhaiHo && kieuDuLieu === EKieuDuLieuSanPham.CUA_TOI)
-											? false
-											: true
+														[
+															ETrangThaiSanPham.CHINH_SUA_LAI,
+															ETrangThaiSanPham.CHUA_TIEP_NHAN,
+															ETrangThaiSanPham.DANG_THUC_HIEN,
+															ETrangThaiSanPham.DA_CHINH_SUA_LAI,
+														].includes(record.trangThaiSanPham)) ||
+												  (isNguoiKhaiBao &&
+														recordLoaiHinhNCKH?.cauHinhChinhSuaSauDuyet?.choPhepChinhSuaSauDuyet &&
+														[ETrangThaiSanPham.DUYET].includes(record.trangThaiSanPham)) ||
+												  props.role === 'admin' ||
+												  (isAdminKhaiHo && kieuDuLieu === EKieuDuLieuSanPham.CUA_TOI)
+												? false
+												: true
 									}
 									onClick={() => {
 										setCurrent(0);
@@ -390,7 +390,7 @@ const TableSanPhamNCKH = (props: {
 										isGiamDocHocVien
 											? false
 											: !isNguoiKhaiBao ||
-											  (record.trangThaiSanPham !== ETrangThaiSanPham.CHUA_TIEP_NHAN &&
+												(record.trangThaiSanPham !== ETrangThaiSanPham.CHUA_TIEP_NHAN &&
 													record.trangThaiSanPham !== ETrangThaiSanPham.DANG_THUC_HIEN &&
 													props.role === 'cbgv')
 									}
@@ -403,7 +403,7 @@ const TableSanPhamNCKH = (props: {
 											isGiamDocHocVien
 												? false
 												: !isNguoiKhaiBao ||
-												  (record.trangThaiSanPham !== ETrangThaiSanPham.CHUA_TIEP_NHAN &&
+													(record.trangThaiSanPham !== ETrangThaiSanPham.CHUA_TIEP_NHAN &&
 														record.trangThaiSanPham !== ETrangThaiSanPham.DANG_THUC_HIEN &&
 														props.role === 'cbgv')
 										}
@@ -633,7 +633,7 @@ const TableSanPhamNCKH = (props: {
 									disabled: false,
 									name: record._id,
 								}),
-						  }
+							}
 						: undefined
 				}
 				buttons={{ create: props?.select ? false : props.hasCreate ? true : false, import: props.role === 'admin' }}

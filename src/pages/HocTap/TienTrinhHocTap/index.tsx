@@ -1,8 +1,8 @@
 import { TabViewPage } from '@/components/TabViewPage';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
+import dayjs from '@/utils/dayjs';
 import { BookOutlined, CheckCircleOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Alert, Card, Col, Row, Spin } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import LichSuQuyDoiDiemPage from '../QuyDoiDiem';
@@ -68,8 +68,8 @@ const TienTrinhHocTap = () => {
 					message={
 						<>
 							Đợt công nhận kết quả học tập <b>{recDotQuyDoi?.tenDot}</b> đang diễn ra từ{' '}
-							<b>{moment(recDotQuyDoi?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-							<b>{moment(recDotQuyDoi?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>. Bạn có thể đăng ký quy đổi điểm các
+							<b>{dayjs(recDotQuyDoi?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
+							<b>{dayjs(recDotQuyDoi?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>. Bạn có thể đăng ký quy đổi điểm các
 							học phần trong chương trình đào tạo
 						</>
 					}

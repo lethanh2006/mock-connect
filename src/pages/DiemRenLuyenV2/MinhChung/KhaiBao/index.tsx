@@ -7,10 +7,10 @@ import {
 	MapColorETrangThaiTiepNhanMinhChung,
 } from '@/services/DiemRenLuyenV2/MinhChung/KhaiBao/constants';
 import type { KhaiBaoDRL } from '@/services/DiemRenLuyenV2/MinhChung/KhaiBao/typing';
+import dayjs from '@/utils/dayjs';
 import { useModel } from '@@/plugin-model/useModel';
 import { DeleteOutlined, EditOutlined, MenuOutlined } from '@ant-design/icons';
 import { Button, Card, Divider, Popconfirm, Popover, Tag } from 'antd';
-import moment from 'moment/moment';
 import { useEffect } from 'react';
 
 const KhaiBaoMinhChung = () => {
@@ -24,8 +24,8 @@ const KhaiBaoMinhChung = () => {
 
 	const ngoaiThoiGian = recordDot
 		? recordDot?.thoiGianTiepNhanMinhChung &&
-		  (moment().isAfter(recordDot.thoiGianTiepNhanMinhChung.thoiGianKetThuc) ||
-				moment().isBefore(recordDot?.thoiGianTiepNhanMinhChung?.thoiGianBatDau))
+			(dayjs().isAfter(dayjs(recordDot.thoiGianTiepNhanMinhChung.thoiGianKetThuc)) ||
+				dayjs().isBefore(dayjs(recordDot?.thoiGianTiepNhanMinhChung?.thoiGianBatDau)))
 		: true;
 
 	const getData = () => {
