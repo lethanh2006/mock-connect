@@ -2,9 +2,9 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
+import dayjs from '@/utils/dayjs';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Empty, Tag } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 
 const TableChungChiSinhVien = () => {
@@ -42,7 +42,7 @@ const TableChungChiSinhVien = () => {
 			dataIndex: 'ngayCap',
 			width: 100,
 			align: 'center',
-			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Thời hạn',
@@ -51,9 +51,9 @@ const TableChungChiSinhVien = () => {
 			render: (val, rec) => {
 				if (rec.chungChi && rec.ngayCap)
 					if (rec.chungChi?.chungChiCoThoiHan) {
-						const endDate = moment(rec.ngayCap).add(rec.chungChi.thoiHanChungChi, 'y');
+						const endDate = dayjs(rec.ngayCap).add(rec.chungChi.thoiHanChungChi ?? 0, 'year');
 						return (
-							<span style={moment().isAfter(endDate) ? { color: 'red' } : undefined}>
+							<span style={dayjs().isAfter(endDate) ? { color: 'red' } : undefined}>
 								{endDate.format('DD/MM/YYYY')}
 							</span>
 						);

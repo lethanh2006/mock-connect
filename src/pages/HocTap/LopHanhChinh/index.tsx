@@ -25,7 +25,6 @@ const LopHanhChinhPage = () => {
 
 	return (
 		<Card
-			bodyStyle={{ paddingTop: 4 }}
 			title='Lớp hành chính'
 			variant={'borderless'}
 			className='card-big-title card-borderless'
@@ -49,7 +48,7 @@ const LopHanhChinhPage = () => {
 				/>
 			</FilterHocKy>  */}
 
-			<Card>
+			<Card variant='borderless'>
 				<Spin spinning={loading}>
 					{record?._id ? (
 						<>

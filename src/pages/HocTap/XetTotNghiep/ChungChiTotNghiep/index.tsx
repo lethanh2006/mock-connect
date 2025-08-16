@@ -10,9 +10,9 @@ import {
 } from '@/services/DaoTao/SinhVien/constants';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
+import dayjs from '@/utils/dayjs';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 import Form from './components/Form';
 
@@ -83,7 +83,7 @@ const ChungChiTotNghiepPage = () => {
 			filterType: 'date',
 			align: 'center',
 			sortable: true,
-			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 			onCell,
 		},
 		{
@@ -94,9 +94,9 @@ const ChungChiTotNghiepPage = () => {
 			render: (val, rec) => {
 				if (rec.chungChi && rec.ngayCap)
 					if (rec.chungChi?.chungChiCoThoiHan) {
-						const endDate = moment(rec.ngayCap).add(rec.chungChi.thoiHanChungChi, 'y');
+						const endDate = dayjs(rec.ngayCap).add(rec.chungChi.thoiHanChungChi ?? 0, 'year');
 						return (
-							<span className={moment().isAfter(endDate) ? 'text-error' : undefined}>
+							<span className={dayjs().isAfter(endDate) ? 'text-error' : undefined}>
 								{endDate.format('DD/MM/YYYY')}
 							</span>
 						);

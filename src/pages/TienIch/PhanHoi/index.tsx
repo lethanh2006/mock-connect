@@ -3,9 +3,9 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
+import dayjs from '@/utils/dayjs';
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import FormGuiPhanHoi from './components/FormGuiPhanHoi';
@@ -41,7 +41,7 @@ const PhanHoiPage = () => {
 			title: 'Ngày gửi',
 			dataIndex: 'createdAt',
 			align: 'center',
-			render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => dayjs(val).format('HH:mm DD/MM/YYYY'),
 			width: 120,
 			sortable: true,
 			filterType: 'datetime',
@@ -83,7 +83,7 @@ const PhanHoiPage = () => {
 			dataIndex: 'thoiGianTraLoi',
 			align: 'center',
 			render: (val, rec) =>
-				rec.daTraLoiPhanHoi && val ? moment(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa trả lời</Tag>,
+				rec.daTraLoiPhanHoi && val ? dayjs(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa trả lời</Tag>,
 			width: 120,
 			hide: daTraLoi === 'chua',
 			sortable: true,

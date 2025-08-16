@@ -8,8 +8,8 @@ import {
 	colorTrangThaiSinhVienQuyDoiDiem,
 	type ETrangThaiPhieuQuyDoiDiem,
 } from '@/services/HocTap/constant';
+import dayjs from '@/utils/dayjs';
 import { Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ViewPhieuQuyDoiDiem from './components/View';
@@ -84,7 +84,7 @@ const LichSuQuyDoiDiemPage = () => {
 				val && (
 					<>
 						{rec.quyetDinh?.soQuyetDinh ?? ''},{' '}
-						{rec.quyetDinh?.ngayBanHanh ? moment(rec.quyetDinh.ngayBanHanh).format('DD/MM/YYYY') : ''}
+						{rec.quyetDinh?.ngayBanHanh ? dayjs(rec.quyetDinh.ngayBanHanh).format('DD/MM/YYYY') : ''}
 					</>
 				),
 			onCell,

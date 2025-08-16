@@ -1,8 +1,8 @@
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import dayjs from '@/utils/dayjs';
 import { Button, Card, Empty, Space, Tag, Typography } from 'antd';
 import { isEmpty } from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
@@ -28,8 +28,8 @@ const CardSuKienSapToi = () => {
 
 	const getThoiGianMotTuanKeTuHomNay = () => {
 		return {
-			fromDate: moment().startOf('week').toISOString(),
-			toDate: moment().add(7, 'day').endOf('day').toISOString(),
+			fromDate: dayjs().startOf('week').toISOString(),
+			toDate: dayjs().add(7, 'day').endOf('day').toISOString(),
 		};
 	};
 
@@ -69,20 +69,20 @@ const CardSuKienSapToi = () => {
 
 	const getBaiTap = async () => {
 		return thongKeBaiTapModel(
-			moment().startOf('week').toISOString(),
-			moment().add(2, 'months').endOf('day').toISOString(),
+			dayjs().startOf('week').toISOString(),
+			dayjs().add(2, 'months').endOf('day').toISOString(),
 		).then((data) => {
-			const aWeekLater = moment().add(7, 'day').endOf('day').toDate();
+			const aWeekLater = dayjs().add(7, 'day').endOf('day');
 			const temp = data
 				.map((item) => ({
 					...item,
 					title: item?.assignment?.noiDung ?? '',
 					suffix: item?.assignment?.tenLopHocPhan,
-					thoiGianBatDau: moment(item?.assignment?.thoiGianKetThuc).toDate(),
-					thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+					thoiGianBatDau: dayjs(item?.assignment?.thoiGianKetThuc),
+					thoiGianKetThuc: dayjs(item?.assignment?.thoiGianKetThuc),
 					loaiSuKien: ELoaiSuKien.BAI_TAP,
 				}))
-				.filter((i) => i.thoiGianKetThuc < aWeekLater);
+				.filter((i) => i.thoiGianKetThuc.isBefore(aWeekLater));
 			return temp;
 		});
 	};
@@ -103,22 +103,20 @@ const CardSuKienSapToi = () => {
 		getData();
 	}, []);
 
-	// Lấy sự kiện sắp tới (trong vòng 24h tới)
 	const getSuKienSapToi = () => {
-		// Sử dụng dữ liệu thực nếu có, không thì dùng dữ liệu mẫu
 		const dataToUse = dataLichDashboard;
 
 		if (!dataToUse?.length) return [];
 
-		const now = moment();
-		const next24Hours = moment().add(24, 'hours');
+		const now = dayjs();
+		const next24Hours = now.add(24, 'hour');
 
 		return dataToUse
 			.filter((event) => {
-				const eventTime = moment(event.thoiGianBatDau);
+				const eventTime = dayjs(event.thoiGianBatDau);
 				return eventTime.isAfter(now) && eventTime.isBefore(next24Hours);
 			})
-			.sort((a, b) => moment(a.thoiGianBatDau).diff(moment(b.thoiGianBatDau)));
+			.sort((a, b) => dayjs(a.thoiGianBatDau).diff(dayjs(b.thoiGianBatDau)));
 	};
 
 	const handlePrevious = () => {
@@ -156,16 +154,8 @@ const CardSuKienSapToi = () => {
 					<div className='details'>
 						<div className='title'>{currentEvent.title || currentEvent.tenSuKien}</div>
 
-						{/* {currentEvent.suffix && (
-							<div className="suffix">
-								{currentEvent.suffix}
-							</div>
-						)} */}
 						<div className='footer'>
-							{/* <div className="time">
-										{moment(currentEvent.thoiGianBatDau).format('HH:mm')}
-								</div> */}
-							<div className='date'>{moment(currentEvent.thoiGianBatDau).format('DD/MM/YYYY')}</div>
+							<div className='date'>{dayjs(currentEvent.thoiGianBatDau).format('DD/MM/YYYY')}</div>
 							<div className='tags'>
 								<Space size={4} wrap>
 									<Tag
@@ -200,11 +190,9 @@ const CardSuKienSapToi = () => {
 				loading={loadingSuKien || loadingTKB || loadingThi}
 				styles={{ body: { padding: 0 } }}
 			>
-				{/* Header */}
 				<div className='header-tb-sk'>
 					<Title level={5} className='title'>
 						Sự kiện
-						{/* {!dataLichDashboard?.length && <span style={{ fontSize: '12px', color: '#999' }}>(Demo)</span>} */}
 					</Title>
 					<div className='navigation-buttons'>
 						<Button
@@ -224,11 +212,9 @@ const CardSuKienSapToi = () => {
 					</div>
 				</div>
 
-				{/* Current Event */}
 				{renderCurrentEvent()}
 			</Card>
 
-			{/* Modal xem chi tiết sự kiện */}
 			{selectEvent && (
 				<ModalViewDetailCalendar
 					visible={visibleDetail}

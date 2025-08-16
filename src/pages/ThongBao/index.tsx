@@ -2,8 +2,8 @@ import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import type { ThongBao } from '@/services/ThongBao/typing';
+import dayjs from '@/utils/dayjs';
 import { Modal } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import news from '../../assets/new6.gif';
@@ -41,7 +41,7 @@ const ThongBaoPage = () => {
 				<>
 					<ExpandText>
 						{val}{' '}
-						{moment().diff(moment(recordVal?.createdAt), 'days') < 3 ? (
+						{dayjs().diff(dayjs(recordVal?.createdAt), 'days') < 3 ? (
 							<img style={{ width: 30, height: 20 }} src={news} />
 						) : (
 							''
@@ -78,7 +78,7 @@ const ThongBaoPage = () => {
 			filterType: 'datetime',
 			sortable: true,
 			onCell,
-			render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 	];
 

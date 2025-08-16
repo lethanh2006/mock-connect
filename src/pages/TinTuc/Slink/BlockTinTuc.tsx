@@ -1,8 +1,8 @@
 import anh from '@/assets/noimg.png';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
+import dayjs from '@/utils/dayjs';
 import { Col, Empty, Row, Tooltip, Typography } from 'antd';
-import moment from 'moment';
 import { history, useModel } from 'umi';
 import { CardTinTuc, ContentLargeCard } from '../components/TinTuc.style';
 
@@ -100,7 +100,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 								>
 									{danhSach?.[0]?.ngayDang && (
 										<span className='thoi-gian'>
-											{moment(danhSach?.[0]?.ngayDang).format('DD/MM/YYYY')} -{' '}
+											{dayjs(danhSach?.[0]?.ngayDang).format('DD/MM/YYYY')} -{' '}
 											<a
 												type='link'
 												onClick={(e) => {
@@ -178,7 +178,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 												{tintuc.ngayDang && (
 													<span className='thoi-gian'>
-														{moment(tintuc.ngayDang).format('DD/MM/YYYY')} -{' '}
+														{dayjs(tintuc.ngayDang).format('DD/MM/YYYY')} -{' '}
 														<a
 															type='link'
 															onClick={(e) => {
@@ -257,7 +257,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 										<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 											{tintuc?.ngayDang && (
 												<span className='thoi-gian'>
-													{moment(tintuc?.ngayDang).format('DD/MM/YYYY')} -{' '}
+													{dayjs(tintuc?.ngayDang).format('DD/MM/YYYY')} -{' '}
 													<a
 														type='link'
 														onClick={(e) => {

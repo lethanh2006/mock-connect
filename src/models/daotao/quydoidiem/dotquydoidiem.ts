@@ -1,7 +1,7 @@
 import useInitModel from '@/hooks/useInitModel';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
+import dayjs from '@/utils/dayjs';
 import { ipDaoTao } from '@/utils/ip';
-import moment from 'moment';
 
 export default () => {
 	const objInit = useInitModel<QuyDoiDiem.DotQuyDoiDiem>('dot-quy-doi-diem-sinh-vien', undefined, undefined, ipDaoTao);
@@ -9,8 +9,8 @@ export default () => {
 	const ngoaiQuyDoiDiem =
 		!record?.thoiGianBatDau ||
 		!record?.thoiGianKetThuc ||
-		moment().isBefore(record?.thoiGianBatDau, 'd') ||
-		moment().isAfter(record?.thoiGianKetThuc, 'd');
+		dayjs().isBefore(dayjs(record?.thoiGianBatDau), 'day') ||
+		dayjs().isAfter(dayjs(record?.thoiGianKetThuc), 'day');
 
 	return {
 		...objInit,

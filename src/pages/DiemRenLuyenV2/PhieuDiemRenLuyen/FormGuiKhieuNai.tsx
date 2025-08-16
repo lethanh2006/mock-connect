@@ -2,8 +2,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 import rules from '@/utils/rules';
 import { toISOString, uploadMultiFile } from '@/utils/utils';
 import { Button, Form, Input, Modal } from 'antd';
-import moment from 'moment';
-import { useModel } from 'umi';
+import dayjs from 'dayjs';
 
 const FormGuiKhieuNai = (props: { getData: any }) => {
 	const [form] = Form.useForm();
@@ -16,7 +15,7 @@ const FormGuiKhieuNai = (props: { getData: any }) => {
 			setLoading(true);
 			const urlFileDinhKem = await uploadMultiFile(values?.urlFileDinhKem?.fileList ?? []);
 			const payload = {
-				thoiGianGuiKhieuNai: toISOString(moment()),
+				thoiGianGuiKhieuNai: toISOString(dayjs()),
 				...values,
 				urlFileDinhKem,
 				info: {

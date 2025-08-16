@@ -1,7 +1,7 @@
+import dayjs from '@/utils/dayjs';
 import { Steps } from 'antd';
-import { useModel } from 'umi';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useModel } from 'umi';
 
 const StepDotChamDiemRenLuyen = () => {
 	const { record } = useModel('diemrenluyenv2.dot');
@@ -17,11 +17,11 @@ const StepDotChamDiemRenLuyen = () => {
 			thoiGianKetThuc: record?.thoiGianSVChamDiem?.thoiGianKetThuc,
 			title: 'Sinh viên đánh giá',
 		},
-    {
-      thoiGian: record?.thoiGianBCSChamDiem?.thoiGianBatDau,
-      thoiGianKetThuc: record?.thoiGianBCSChamDiem?.thoiGianKetThuc,
-      title: 'Ban cán sự đánh giá',
-    },
+		{
+			thoiGian: record?.thoiGianBCSChamDiem?.thoiGianBatDau,
+			thoiGianKetThuc: record?.thoiGianBCSChamDiem?.thoiGianKetThuc,
+			title: 'Ban cán sự đánh giá',
+		},
 		{
 			thoiGian: record?.thoiGianCoVanChamDiem?.thoiGianBatDau,
 			thoiGianKetThuc: record?.thoiGianCoVanChamDiem?.thoiGianKetThuc,
@@ -43,7 +43,7 @@ const StepDotChamDiemRenLuyen = () => {
 	useEffect(() => {
 		let s = -1;
 		steps.some((item) => {
-			if (moment().isBefore(item.thoiGian)) return true;
+			if (dayjs().isBefore(dayjs(item.thoiGian))) return true;
 			s++;
 			return false;
 		});
@@ -58,8 +58,8 @@ const StepDotChamDiemRenLuyen = () => {
 						description={item.title}
 						title={
 							<b style={{ fontSize: 13 }}>
-								{moment(item.thoiGian).format('HH:mm DD/MM/YYYY')}
-								{item?.thoiGianKetThuc ? ` - ${moment(item.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}` : ''}
+								{dayjs(item.thoiGian).format('HH:mm DD/MM/YYYY')}
+								{item?.thoiGianKetThuc ? ` - ${dayjs(item.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}` : ''}
 							</b>
 						}
 						key={item.title}

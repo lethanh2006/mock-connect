@@ -1,9 +1,9 @@
 import { ESettingKey, unitName } from '@/services/base/constant';
 import { ELoaiHinhThucThanhToan } from '@/services/TaiChinh/HinhThucThanhToan/constant';
+import dayjs from '@/utils/dayjs';
 import { ipTaiChinh } from '@/utils/ip';
 import { removeVietnameseTones } from '@/utils/utils';
 import { Col, Empty, Modal, Row, Space } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -40,11 +40,11 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 	const unitInfo = removeVietnameseTones(hinhThucFinal.tenNganHang ?? unitName).toUpperCase();
 
 	// Define the start and end times
-	const start = moment('23:00', 'HH:mm'); // Từ 23h đến
-	const end = moment('00:00', 'HH:mm').add(1, 'day'); // 0h ngày hôm sau
-	const start1 = moment('00:00', 'HH:mm'); // Hoặc từ 0h đến
-	const end1 = moment('01:00', 'HH:mm'); // 1h hôm nay
-	const nganHangBaoTri = moment().isBetween(start, end) || moment().isBetween(start1, end1);
+	const start = dayjs('23:00', 'HH:mm'); // Từ 23h đến
+	const end = dayjs('00:00', 'HH:mm').add(1, 'day'); // 0h ngày hôm sau
+	const start1 = dayjs('00:00', 'HH:mm'); // Hoặc từ 0h đến
+	const end1 = dayjs('01:00', 'HH:mm'); // 1h hôm nay
+	const nganHangBaoTri = dayjs().isBetween(start, end) || dayjs().isBetween(start1, end1);
 
 	useEffect(() => {
 		getByKeyModel(ESettingKey.THONG_TIN_THANH_TOAN, ipTaiChinh)

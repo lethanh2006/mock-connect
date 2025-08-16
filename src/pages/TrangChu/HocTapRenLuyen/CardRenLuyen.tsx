@@ -7,10 +7,10 @@ import {
 	ENguoiTraLoiDrl,
 	TU_DANH_GIA_PREFIX,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
+import dayjs from '@/utils/dayjs';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Space, Tooltip } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 
@@ -34,8 +34,8 @@ const CardRenLuyenDashboard = () => {
 				const dataDot = res;
 				const currentDot = dataDot?.find(
 					(item) =>
-						moment().isAfter(moment(item?.thoiGianSVChamDiem.thoiGianBatDau)) &&
-						moment().isBefore(moment(item?.thoiGianSVChamDiem?.thoiGianKetThuc)),
+						dayjs().isAfter(dayjs(item?.thoiGianSVChamDiem?.thoiGianBatDau)) &&
+						dayjs().isBefore(dayjs(item?.thoiGianSVChamDiem?.thoiGianKetThuc)),
 				);
 				if (currentDot) setRecord(currentDot);
 				else setRecord(dataDot?.[0]);

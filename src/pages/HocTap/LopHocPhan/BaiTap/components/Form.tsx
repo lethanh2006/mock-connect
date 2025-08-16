@@ -8,21 +8,22 @@ import { getCauTraLoiMeBaiTap } from '@/services/TienIch/KhaoSat/BieuMau';
 import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { buildUpLoadMultiFile, handleSingleFile } from '@/services/uploadFile';
+import dayjs from '@/utils/dayjs';
 import { resetFieldsForm } from '@/utils/utils';
 import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Spin, Tag, Tooltip } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
 import '../../DienDan/style.less';
 import FormQuiz from './FormQuiz';
+
 const FormBaiTap = (props: any) => {
 	const { getData } = props;
 	const [form] = Form.useForm();
 	const { record, visibleForm, setVisibleForm, sinhVienNopBaiTapModal, formSubmiting } = useModel('daotao.baitap');
 	const { record: recBieuMau, getBieuMauKhaoSatSinhVienModel, loading } = useModel('tienich.bieumau');
 	const [trangThaiNopBai, setTrangThaiNopBai] = useState<string>();
-	const quaThoiHanNopBai = moment().isAfter(record?.assignment?.thoiGianKetThuc);
+	const quaThoiHanNopBai = dayjs().isAfter(record?.assignment?.thoiGianKetThuc);
 	const [cauTraLoi, setRecCauTraLoi] = useState<BieuMau.TraLoiRecord[]>([]);
 	const [remainingTime, setRemainingTime] = useState('');
 
@@ -88,19 +89,21 @@ const FormBaiTap = (props: any) => {
 
 		// Hàm đếm ngược
 		const countdown = () => {
-			const endTime = moment(record?.assignment?.thoiGianKetThuc);
-			const now = moment();
-			const duration = moment.duration(endTime.diff(now));
+			const endTime = dayjs(record?.assignment?.thoiGianKetThuc);
+			const now = dayjs();
+			const diff = endTime.diff(now);
 
-			if (duration.asSeconds() <= 0) {
+			if (diff <= 0) {
 				setRemainingTime('Thời hạn đã hết');
 				return;
 			}
 
-			const days = Math.floor(duration.asDays());
-			const hours = Math.floor(duration.hours());
-			const minutes = Math.floor(duration.minutes());
-			const seconds = Math.floor(duration.seconds());
+			const dur = dayjs.duration(diff);
+			const days = Math.floor(dur.asDays());
+			const hours = dur.hours();
+			const minutes = dur.minutes();
+			const seconds = dur.seconds();
+
 			setRemainingTime(`${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`);
 		};
 
@@ -191,7 +194,7 @@ const FormBaiTap = (props: any) => {
 					? {
 							danhSachTraLoi,
 							idKhaoSat: record?.assignment?.khaoSatId,
-					  }
+						}
 					: null,
 			assignmentId: record?.assignmentId,
 			noiDungTraLoi: values.noiDungTraLoi,
@@ -217,7 +220,7 @@ const FormBaiTap = (props: any) => {
 						message={
 							<>
 								Thời gian còn lại để nộp bài: <b style={{ color: 'red' }}>{remainingTime}</b>{' '}
-								<b>({moment(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})</b>
+								<b>({dayjs(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})</b>
 							</>
 						}
 					/>
@@ -227,7 +230,7 @@ const FormBaiTap = (props: any) => {
 					<Alert
 						type='error'
 						showIcon
-						message={<>Quá thời hạn nộp bài {moment(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</>}
+						message={<>Quá thời hạn nộp bài {dayjs(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</>}
 					/>
 				</div>
 			) : null}
@@ -242,7 +245,7 @@ const FormBaiTap = (props: any) => {
 							<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
 								<Descriptions.Item label='Giảng viên giao bài'>{record?.assignment?.hoTenNguoiGiao}</Descriptions.Item>
 								<Descriptions.Item label='Thời gian giao bài'>
-									{moment(record?.assignment?.thoiGianGiao ?? record?.assignment?.updatedAt).format('HH:mm DD/MM/YYYY')}
+									{dayjs(record?.assignment?.thoiGianGiao ?? record?.assignment?.updatedAt).format('HH:mm DD/MM/YYYY')}
 								</Descriptions.Item>
 							</Descriptions>
 							<Row gutter={[12, 12]} style={{ marginTop: 8 }}>
@@ -280,7 +283,7 @@ const FormBaiTap = (props: any) => {
 								</Tag>
 							</Descriptions.Item>
 							<Descriptions.Item label='Thời gian cập nhật'>
-								{record?.thoiGianTraLoi ? moment(record?.thoiGianTraLoi).format('HH:mm DD/MM/YYYY') : '--'}
+								{record?.thoiGianTraLoi ? dayjs(record?.thoiGianTraLoi).format('HH:mm DD/MM/YYYY') : '--'}
 							</Descriptions.Item>
 						</Descriptions>
 					</Col>
@@ -325,8 +328,8 @@ const FormBaiTap = (props: any) => {
 							disable || disableIsQuiz
 								? 'Đã nộp bài tập hoặc quá thời hạn nộp bài'
 								: !!record?.tongDiem
-								? 'Đã có điểm bài tập'
-								: 'Nộp bài'
+									? 'Đã có điểm bài tập'
+									: 'Nộp bài'
 						}
 					>
 						<Button

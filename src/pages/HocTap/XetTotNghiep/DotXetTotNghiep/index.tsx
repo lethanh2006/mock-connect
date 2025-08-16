@@ -5,9 +5,9 @@ import {
 	colorKetQuaXetTotNghiep,
 	colorTrangThaiXetTotNghiep,
 } from '@/services/HocTap/XetTotNghiep/constant';
+import dayjs from '@/utils/dayjs';
 import { CloseOutlined, FormOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Col, Descriptions, Empty, Popconfirm, Row, Tag } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalYKien from './ModalYKien';
@@ -18,7 +18,7 @@ const CardXetTotNghiep = () => {
 	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [type, setType] = useState<'phan-hoi' | 'hoan'>('phan-hoi');
-	const isQuaNgayChotSanhSach = !!record?.ngayChotDanhSach && moment().isAfter(record?.ngayChotDanhSach, 'day');
+	const isQuaNgayChotSanhSach = !!record?.ngayChotDanhSach && dayjs().isAfter(dayjs(record?.ngayChotDanhSach), 'day');
 
 	useEffect(() => {
 		if (!record?._id) getDotHienHanhModel();
@@ -54,7 +54,7 @@ const CardXetTotNghiep = () => {
 										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra{' '}
 										{record?.ngayChotDanhSach ? (
 											<>
-												, ngày chốt danh sách sinh viên <b>{moment(record?.ngayChotDanhSach).format('DD/MM/YYYY')}</b>
+												, ngày chốt danh sách sinh viên <b>{dayjs(record?.ngayChotDanhSach).format('DD/MM/YYYY')}</b>
 											</>
 										) : null}
 									</>

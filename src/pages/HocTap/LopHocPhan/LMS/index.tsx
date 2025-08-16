@@ -2,9 +2,9 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import dayjs from '@/utils/dayjs';
 import { ApiOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Col, Descriptions, Progress, Row, Spin, Tag } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -39,7 +39,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 			dataIndex: 'thoiGianHoanThanh',
 			width: 130,
 			align: 'center',
-			render: (val, rec) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 			sortable: true,
 		},
 		{

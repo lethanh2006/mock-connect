@@ -82,10 +82,9 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 
 	return (
 		<div className='filter-column'>
-			<Button className={`date-button`} onClick={() => setExpandMiniCalendar(!expandMiniCalendar)}>
-				<span className='button-content'>
-					<CalendarOutlined className='calendar-icon' />
-				</span>
+			<Button block className={`date-button`} onClick={() => setExpandMiniCalendar(!expandMiniCalendar)}>
+				<CalendarOutlined className='calendar-icon' />
+
 				<div>{moment(date).format('DD/MM/YYYY')}</div>
 				<DownOutlined className={`down-arrow ${expandMiniCalendar ? 'expanded' : 'collapsed'}`} />
 			</Button>
@@ -143,12 +142,12 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 
 			{/* Filter Header Button */}
 			<Button
+				block
 				className={`filter-button ${expandFilter ? 'expanded' : 'collapsed'}`}
 				onClick={() => setExpandFilter(!expandFilter)}
 			>
-				<div className='button-content'>
-					<FilterOutlined className='filter-icon' />
-				</div>
+				<FilterOutlined className='filter-icon' />
+
 				<div>Bộ lọc sự kiện</div>
 				<DownOutlined className={`down-arrow ${expandFilter ? 'expanded' : 'collapsed'}`} />
 			</Button>

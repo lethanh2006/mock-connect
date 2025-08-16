@@ -1,4 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
 import { CustomerServiceOutlined, EyeOutlined, FieldTimeOutlined, ReloadOutlined } from '@ant-design/icons';
 import {
@@ -16,15 +17,14 @@ import {
 	Tooltip,
 	Typography,
 } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import DangTaiLieuPage from '../DangTaiLieu';
 import ThoiGianVaoRaThuVien from '../VaoRaThuVien/components/ThoiGian';
+import ChiTietTepTin from './components/ChiTietTepTin';
 import ConfirmMuonSach from './components/ComfirmMuon';
 import './style.less';
 import TimKiemNangCao from './TimKiem/TimKiemNangCao';
-import ChiTietTepTin from './components/ChiTietTepTin';
 const { Paragraph } = Typography;
 
 const { Meta } = Card;
@@ -74,8 +74,8 @@ const MuonTraSachPage = () => {
 				8,
 				`search/${segment === '1' ? 'all' : 'kha-dung'}`,
 				{
-					thoiGianBatDau: moment().toISOString(),
-					thoiGianKetThuc: moment()
+					thoiGianBatDau: dayjs().toISOString(),
+					thoiGianKetThuc: dayjs()
 						.add(typeof settingMuonTra === 'number' ? settingMuonTra : 150, 'day')
 						.toISOString(),
 				},

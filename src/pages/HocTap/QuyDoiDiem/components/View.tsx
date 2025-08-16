@@ -1,8 +1,8 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { colorTrangThaiSinhVienQuyDoiDiem, type ETrangThaiPhieuQuyDoiDiem } from '@/services/HocTap/constant';
+import dayjs from '@/utils/dayjs';
 import { Button, Carousel, Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
@@ -43,7 +43,7 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 						</Descriptions.Item>
 						<Descriptions.Item label='Số quyết định'>{record?.quyetDinh?.soQuyetDinh}</Descriptions.Item>
 						<Descriptions.Item label='Ngày ban hành'>
-							{record?.quyetDinh?.ngayBanHanh ? moment(record?.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY') : ''}
+							{record?.quyetDinh?.ngayBanHanh ? dayjs(record?.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY') : ''}
 						</Descriptions.Item>
 						<Descriptions.Item label='Trạng thái'>
 							<Tag color={colorTrangThaiSinhVienQuyDoiDiem[record?.trangThai as ETrangThaiPhieuQuyDoiDiem]}>

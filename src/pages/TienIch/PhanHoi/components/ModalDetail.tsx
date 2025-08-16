@@ -1,8 +1,8 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import dayjs from '@/utils/dayjs';
 import { PaperClipOutlined } from '@ant-design/icons';
 import { Button, Card, Descriptions, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 
@@ -26,7 +26,7 @@ const ModalDetailPhanhoi = () => {
 						<i>Không có</i>
 					)}
 				</Descriptions.Item>
-				<Descriptions.Item label='Ngày gửi'>{moment(record?.createdAt).format('HH:mm DD/MM/YYYY')}</Descriptions.Item>
+				<Descriptions.Item label='Ngày gửi'>{dayjs(record?.createdAt).format('HH:mm DD/MM/YYYY')}</Descriptions.Item>
 
 				<Descriptions.Item label='Tiêu đề'>{record?.tieuDe ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Chủ đề'>{record?.tenLinhVuc ?? '--'}</Descriptions.Item>
@@ -35,7 +35,7 @@ const ModalDetailPhanhoi = () => {
 				<Descriptions.Item label='Người trả lời'>{record?.maChuyenVien}</Descriptions.Item>
 				<Descriptions.Item label='Thời gian trả lời'>
 					{record?.thoiGianTraLoi ? (
-						moment(record.thoiGianTraLoi).format('HH:mm DD/MM/YYYY')
+						dayjs(record.thoiGianTraLoi).format('HH:mm DD/MM/YYYY')
 					) : (
 						<Tag color='red'>Chưa trả lời</Tag>
 					)}

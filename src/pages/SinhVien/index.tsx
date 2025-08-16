@@ -1,10 +1,10 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import FormSinhVien from '@/pages/SinhVien/components/Form';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
+import dayjs from '@/utils/dayjs';
 import { EditOutlined, LeftOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Space } from 'antd';
 import fileDownload from 'js-file-download';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalCapNhatAnhNhanDien from './CapNhatKhuonMat/Modal';
@@ -22,8 +22,8 @@ const ThongTinSinhVienPage = () => {
 		record?.choPhepSua ||
 		(recordDot?.thoiGianBatDau &&
 			recordDot.thoiGianKetThuc &&
-			moment().isSameOrBefore(moment(recordDot?.thoiGianKetThuc), 'd') &&
-			moment().isSameOrAfter(moment(recordDot?.thoiGianBatDau), 'd'));
+			dayjs().isSameOrBefore(dayjs(recordDot?.thoiGianKetThuc), 'day') &&
+			dayjs().isSameOrAfter(dayjs(recordDot?.thoiGianBatDau), 'day'));
 
 	useEffect(() => {
 		if (!recordDot?._id) getDotCapNhat(true, undefined, { kichHoat: true });
@@ -55,16 +55,13 @@ const ThongTinSinhVienPage = () => {
 					<>
 						{recordDot?._id && choPhepSua ? (
 							<Alert
-								type='info'
 								message={
 									<>
-										Đợt cập nhật hồ sơ &quot;<b>{recordDot.tenDot}</b>&quot; từ ngày{' '}
-										<b>{moment(recordDot.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến ngày{' '}
-										<b>{moment(recordDot.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+										Đợt cập nhật hồ sơ "<b>{recordDot.tenDot}</b>" từ ngày{' '}
+										<b>{dayjs(recordDot.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến ngày{' '}
+										<b>{dayjs(recordDot.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
 									</>
 								}
-								showIcon
-								style={{ marginBottom: 12 }}
 							/>
 						) : null}
 

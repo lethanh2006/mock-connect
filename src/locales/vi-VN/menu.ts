@@ -8,6 +8,9 @@ export default {
 	'menu.DanhMuc': 'Danh mục',
 	'menu.DanhMuc.ChucVu': 'Chức vụ',
 
+	'menu.DashboardGroup': 'Dashboard & Học tập',
+	'menu.OtherGroup': 'Khác',
+
 	// DEFAULT
 	'menu.Lich': 'Lịch',
 	'menu.ThongTinCaNhan': 'Thông tin cá nhân',

@@ -5,8 +5,8 @@ import {
 	mapTrangThaiNopBaiTap,
 } from '@/services/DaoTao/BaiTap/constants';
 import type { BaiTap } from '@/services/DaoTao/BaiTap/typing';
+import dayjs from '@/utils/dayjs';
 import { Col, Divider, Row, Space, Tag } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
 
@@ -42,13 +42,13 @@ const CardStatusBaiTap = (props: IProps) => {
 								<span>
 									{`${data?.assignment?.thoiGianLamBaiQuiz} phút `}{' '}
 									{data?.assignment?.active ? (
-										<span>(Hạn {moment(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})</span>
+										<span>(Hạn {dayjs(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})</span>
 									) : (
 										<span style={{ color: 'red' }}>(Chưa kích hoạt)</span>
 									)}
 								</span>
 							) : (
-								`Hạn ${moment(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}`
+								`Hạn ${dayjs(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}`
 							)}
 						</span>
 					</Col>
@@ -70,7 +70,7 @@ const CardStatusBaiTap = (props: IProps) => {
 							<Col xs={12} md={24}>
 								<div style={{ marginTop: 8, fontSize: 28, fontWeight: 'bold', color: 'green' }}>
 									{(data?.assignment?.isQuiz && data?.assignment?.congBoDiemSauNop) || !data?.assignment?.isQuiz
-										? data?.tongDiem ?? '--'
+										? (data?.tongDiem ?? '--')
 										: '--'}
 								</div>
 								<div>Điểm số</div>

@@ -1,8 +1,8 @@
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
+import dayjs from '@/utils/dayjs';
 import { CalendarOutlined, TableOutlined } from '@ant-design/icons';
 import { Card, Segmented, Space, Spin } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import CalendarLichHocLopHp from './CalendarLichHoc';
@@ -25,7 +25,7 @@ const DanhSachBuoiHoc = () => {
 		if (recLopHocPhan?.ten)
 			getTheoLopHocPhan(recLopHocPhan.ten).then((data) => {
 				const end = data.every((item) => {
-					if (moment().isSameOrBefore(item.ngay, 'day')) {
+					if (dayjs().isSameOrBefore(dayjs(item.ngay), 'day')) {
 						setBuoiHocGanNhat(item);
 						return false;
 					}

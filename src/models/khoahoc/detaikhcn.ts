@@ -41,9 +41,9 @@ import {
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 
+import dayjs from '@/utils/dayjs';
 import { message } from 'antd';
 import { default as FileDownload, default as fileDownload } from 'js-file-download';
-import moment from 'moment';
 import { useState } from 'react';
 export default () => {
 	const [danhSachDeTaiElasticSearch, setDanhSachDeTaiElasticSearch] = useState<DeTaiKHCN.IRecord[]>([]);
@@ -286,7 +286,7 @@ export default () => {
 		try {
 			setLoading(true);
 			const response = await exportQuyetDinhGiao(idDeTai);
-			FileDownload(response.data, `quyetdinhgiao_${moment().format('HH:mm_DDMMYYYY')}.pdf`);
+			FileDownload(response.data, `quyetdinhgiao_${dayjs().format('HH:mm_DDMMYYYY')}.pdf`);
 			setLoading(false);
 		} catch (err) {
 			setLoading(false);
@@ -297,7 +297,7 @@ export default () => {
 		try {
 			setLoading(true);
 			const response = await exportDeTaiById(idDeTai);
-			FileDownload(response.data, `DeTai_${trangThaiDeTai}_${moment().format('YYYYMMDDHHmm')}.pdf`);
+			FileDownload(response.data, `DeTai_${trangThaiDeTai}_${dayjs().format('YYYYMMDDHHmm')}.pdf`);
 			setLoading(false);
 		} catch (err) {
 			message.error('Không tìm thấy mẫu đơn của của đợt đăng ký cho đề tài này');
@@ -309,7 +309,7 @@ export default () => {
 		try {
 			setLoading(true);
 			const response = await exportAllDeTaiByTrangThai({ condition: paramCondition });
-			FileDownload(response.data, `DeTai_${moment().format('YYYYMMDDHHmm')}.zip`);
+			FileDownload(response.data, `DeTai_${dayjs().format('YYYYMMDDHHmm')}.zip`);
 			setLoading(false);
 		} catch (err) {
 			message.error('Không tìm thấy mẫu đơn của của đợt đăng ký cho đề tài này');
@@ -327,7 +327,7 @@ export default () => {
 			if (!idDot) return;
 			setLoading(true);
 			const response = await exportBangTongHopDangKyDeTaiNhomAB(idDot, loaiExport, trangThaiDangKy, donViIds);
-			FileDownload(response.data, `BangTongHop_${moment().format('YYYYMMDDHHmm')}.xlsx`);
+			FileDownload(response.data, `BangTongHop_${dayjs().format('YYYYMMDDHHmm')}.xlsx`);
 			setLoading(false);
 		} catch (err) {
 			setLoading(false);
@@ -339,7 +339,7 @@ export default () => {
 			if (!idDot || !maDonVi) return;
 			setLoading(true);
 			const response = await exportAllQuyetDinhGiaoByDotByMaDonVi(idDot, maDonVi);
-			FileDownload(response.data, `QuyetDinhGiao_${maDonVi}_${moment().format('YYYYMMDDHHmm')}.pdf`);
+			FileDownload(response.data, `QuyetDinhGiao_${maDonVi}_${dayjs().format('YYYYMMDDHHmm')}.pdf`);
 			setLoading(false);
 		} catch (err) {
 			setLoading(false);

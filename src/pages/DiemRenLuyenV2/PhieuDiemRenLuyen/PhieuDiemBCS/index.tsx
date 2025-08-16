@@ -7,9 +7,9 @@ import {
 	MapColorETrangThaiPhieuDiemRL,
 	MapTitleETrangThaiPhieuDiemRL,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
+import dayjs from '@/utils/dayjs';
 import { EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Tag, Tooltip } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -33,8 +33,8 @@ const PhieuDiemBCS = (props: { idLopHanhChinh: string }) => {
 
 	const isTrongThoiGianChamDiem =
 		recordDot?._id &&
-		moment().isAfter(recordDot?.thoiGianBCSChamDiem?.thoiGianBatDau) &&
-		moment().isBefore(recordDot?.thoiGianBCSChamDiem?.thoiGianKetThuc);
+		dayjs().isAfter(dayjs(recordDot?.thoiGianBCSChamDiem?.thoiGianBatDau)) &&
+		dayjs().isBefore(dayjs(recordDot?.thoiGianBCSChamDiem?.thoiGianKetThuc));
 
 	const columns: IColumn<PhieuDiemRenLuyenV2.IRecord>[] = [
 		{

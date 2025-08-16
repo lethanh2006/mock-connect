@@ -1,15 +1,15 @@
 import ExpandText from '@/components/ExpandText';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { getDKCBKhaDung } from '@/services/QuanLyThuVien/AnPham';
+import dayjs from '@/utils/dayjs';
 import { CarryOutOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Descriptions, Divider, Row, Space, Typography } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import ChiTietMarc from './components/ChiTietMarc';
-import ConfirmMuonSach from './components/ComfirmMuon';
 import ChiTietTepTin from './components/ChiTietTepTin';
+import ConfirmMuonSach from './components/ComfirmMuon';
 const { Paragraph } = Typography;
 
 const DetailThongTinSach = ({
@@ -44,9 +44,9 @@ const DetailThongTinSach = ({
 					.catch((er) => history.push('/thu-vien/muon-tra-sach'));
 			}
 			getDKCBKhaDung(`${id}`, {
-				thoiGianBatDau: moment().toISOString(),
-				thoiGianKetThuc: moment()
-					.add(settingMuonTra?.thoiHanMuonTraSach ?? 150, 'd')
+				thoiGianBatDau: dayjs().toISOString(),
+				thoiGianKetThuc: dayjs()
+					.add(settingMuonTra?.thoiHanMuonTraSach ?? 150, 'day')
 					.toISOString(),
 			})
 				.then((res) => setRecXepGia(res?.data?.data as any))

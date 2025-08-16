@@ -5,10 +5,10 @@ import { type IColumn } from '@/components/Table/typing';
 import { primaryColor } from '@/services/base/constant';
 import { type EDinhDangBaiThi, mapNameDinhDangBaiThi } from '@/services/KhaoThi/constant';
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
+import dayjs from '@/utils/dayjs';
 import { getNameFile } from '@/utils/utils';
 import { SaveOutlined } from '@ant-design/icons';
 import { Card, Segmented, Space, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import FilterKyThi from '../../KhaoThi/KyThi/Filter';
@@ -69,7 +69,7 @@ const BaiThiCuoiKy = () => {
 			align: 'center',
 			dataIndex: 'thoiGianBatDau',
 			width: 120,
-			render: (val, rec) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 			filterType: 'date',
 			sortable: true,
 		},
@@ -78,7 +78,7 @@ const BaiThiCuoiKy = () => {
 			align: 'center',
 			dataIndex: 'thoiGianKetThuc',
 			width: 120,
-			render: (val, rec) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 			filterType: 'date',
 			sortable: true,
 		},
@@ -143,8 +143,9 @@ const BaiThiCuoiKy = () => {
 					rec?.choPhepNopNgoaiThoiGian !== true &&
 					(!rec?.thoiGianBatDau ||
 						!rec?.thoiGianKetThuc ||
-						moment().isBefore(rec?.thoiGianBatDau) ||
-						moment().isAfter(rec?.thoiGianKetThuc));
+						dayjs().isBefore(dayjs(rec?.thoiGianBatDau)) ||
+						dayjs().isAfter(dayjs(rec?.thoiGianKetThuc)));
+
 				return (
 					<ButtonExtend
 						disabled={ngoaiThoiGian || !!rec?.daNopBai}

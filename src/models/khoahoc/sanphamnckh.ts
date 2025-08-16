@@ -14,10 +14,10 @@ import {
 import { ETrangThaiSanPham } from '@/services/KhoaHoc/SanPhamNCKH/constants';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
 import { gioNCKHBySsoId } from '@/services/KhoaHoc/ThongKe';
+import dayjs from '@/utils/dayjs';
 import { chuanHoaObject } from '@/utils/utils';
 import { message } from 'antd';
 import fileDownload from 'js-file-download';
-import moment from 'moment';
 import { useState } from 'react';
 
 export default () => {
@@ -247,7 +247,7 @@ export default () => {
 		try {
 			setLoading(true);
 			const res = await exportSanPham({ condition: { ...condition, ...paramCondition }, filters });
-			fileDownload(res?.data, `${loaiSanPham}_${moment().format('HH:mm DD/MM/YYYY')}.xlsx`);
+			fileDownload(res?.data, `${loaiSanPham}_${dayjs().format('HH:mm DD/MM/YYYY')}.xlsx`);
 			setLoading(false);
 		} catch (err) {
 			setLoading(false);
