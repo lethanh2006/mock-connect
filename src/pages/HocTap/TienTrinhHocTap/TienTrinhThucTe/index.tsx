@@ -5,8 +5,7 @@ import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhanV2 from '../components/CardHocPhan';
-
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const TienTrinhThucTeV2 = () => {
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
@@ -29,11 +28,11 @@ const TienTrinhThucTeV2 = () => {
 	}, [maKhoaNganh]);
 
 	return (
-		<div style={{ backgroundColor: 'transparent', minHeight: '100vh' }}>
+		<div>
 			<Spin spinning={loading}>
 				{tienTrinhHocKy?.length ? (
 					tienTrinhHocKy.map((data, index) => (
-						<div key={index} style={{ marginBottom: '32px' }}>
+						<div key={index} style={{ marginBottom: '16px' }}>
 							{/* Header học kỳ */}
 							<div
 								style={{
@@ -71,7 +70,7 @@ const TienTrinhThucTeV2 = () => {
 								style={{
 									display: 'grid',
 									gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-									gap: '16px',
+									gap: '12px',
 								}}
 							>
 								{data.map((sv) => (
@@ -88,12 +87,12 @@ const TienTrinhThucTeV2 = () => {
 							</div>
 
 							{/* Divider giữa các học kỳ */}
-							{index < tienTrinhHocKy.length - 1 && <Divider style={{ margin: '32px 0', borderColor: '#e8e8e8' }} />}
+							{index < tienTrinhHocKy.length - 1 && <Divider />}
 						</div>
 					))
 				) : (
 					<Empty
-						description={<Text style={{ color: '#8c8c8c', fontSize: '16px' }}>Không có dữ liệu</Text>}
+						description='Không có dữ liệu'
 						style={{
 							marginTop: '100px',
 							marginBottom: '32px',

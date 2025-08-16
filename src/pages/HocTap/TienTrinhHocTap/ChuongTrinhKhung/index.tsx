@@ -80,7 +80,7 @@ const TienTrinhChuongTrinhKhung = () => {
 			style={{
 				display: 'grid',
 				gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-				gap: '16px',
+				gap: '12px',
 			}}
 		>
 			{data.khoiHocPhan.map((ctk) =>
@@ -109,7 +109,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	);
 
 	return (
-		<div style={{ backgroundColor: 'transparent', minHeight: '100vh' }}>
+		<div>
 			{recTienTrinh?.ctdtKeHoach?._id && (
 				<>
 					<Descriptions>
@@ -134,7 +134,7 @@ const TienTrinhChuongTrinhKhung = () => {
 			<Spin spinning={loading}>
 				{danhSachHocKy?.map((data, index) => (
 					<React.Fragment key={data.soThuTuKy}>
-						<div style={{ marginBottom: '32px' }}>
+						<div style={{ marginBottom: '16px' }}>
 							{/* Header học kỳ */}
 							<div
 								style={{
@@ -172,24 +172,22 @@ const TienTrinhChuongTrinhKhung = () => {
 						</div>
 
 						{data.chuyenNganhList?.length ? (
-							<div style={{ marginBottom: '32px' }}>
-								<Collapse bordered={false}>
-									{data.chuyenNganhList.map((chuyenNganh) => (
-										<Collapse.Panel
-											key={chuyenNganh.khoiHocPhan[0]._id}
-											header={`Chuyên ngành: ${
-												chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
-											}`}
-										>
-											{renderHocPhan(chuyenNganh)}
-										</Collapse.Panel>
-									))}
-								</Collapse>
-							</div>
+							<Collapse bordered={false}>
+								{data.chuyenNganhList.map((chuyenNganh) => (
+									<Collapse.Panel
+										key={chuyenNganh.khoiHocPhan[0]._id}
+										header={`Chuyên ngành: ${
+											chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
+										}`}
+									>
+										{renderHocPhan(chuyenNganh)}
+									</Collapse.Panel>
+								))}
+							</Collapse>
 						) : null}
 
 						{/* Divider giữa các học kỳ */}
-						{index < danhSachHocKy.length - 1 && <Divider style={{ margin: '32px 0', borderColor: '#e8e8e8' }} />}
+						{index < danhSachHocKy.length - 1 && <Divider />}
 					</React.Fragment>
 				))}
 			</Spin>
