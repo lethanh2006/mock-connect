@@ -126,7 +126,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 											options={_.range(0, 12).map((m) => ({
 												key: m,
 												value: m,
-												label: `Tháng ${m + 1}`,
+												label: `Tháng ${m + 1} `,
 											}))}
 										/>
 									</Col>

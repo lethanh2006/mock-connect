@@ -417,7 +417,6 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				maskClosable={false}
 				width={800}
 				bodyStyle={{ padding: 0 }}
-				modalRender={(node) => <div style={{ borderRadius: 12, overflow: 'hidden' }}>{node}</div>}
 			>
 				<FormLichCaNhan getData={getData} />
 			</Modal>
