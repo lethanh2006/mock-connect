@@ -246,7 +246,6 @@ const DetailKetQuaHocTap = (props: {
 							)}
 
 							<Divider>Điểm tổng kết</Divider>
-							<Divider>Điểm tổng kết</Divider>
 							<Descriptions bordered>
 								<Descriptions.Item label='Điểm hệ 10'>{renderDiem(recDiem?.diemTongKet)}</Descriptions.Item>
 								<Descriptions.Item label='Điểm hệ 4'>{renderDiem(recDiem?.diemThang4)}</Descriptions.Item>
