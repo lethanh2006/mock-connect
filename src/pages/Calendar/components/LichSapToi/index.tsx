@@ -1,7 +1,7 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import dayjs from '@/utils/dayjs';
 import { ClockCircleOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Card, List, Typography } from 'antd';
-import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
 import './style.less';
 
@@ -21,8 +21,8 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 
 	// Lọc và sắp xếp lịch sắp tới
 	const upcomingEvents = dataCalendar
-		.filter((event) => moment(event.start).isAfter(moment()))
-		.sort((a, b) => moment(a.start).valueOf() - moment(b.start).valueOf())
+		.filter((event) => dayjs(event.start).isAfter(dayjs()))
+		.sort((a, b) => dayjs(a.start).valueOf() - dayjs(b.start).valueOf())
 		.slice(0, limit);
 
 	// Update content height when events change
@@ -33,8 +33,8 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 	}, [upcomingEvents]);
 
 	const formatTime = (start: Date, end: Date) => {
-		const startMoment = moment(start);
-		const endMoment = moment(end);
+		const startMoment = dayjs(start);
+		const endMoment = dayjs(end);
 
 		if (startMoment.isSame(endMoment, 'day')) {
 			return `${startMoment.format('HH:mm')} - ${endMoment.format('HH:mm')}`;
@@ -114,7 +114,7 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 										<div className='lich-sap-toi-event-card-date-row'>
 											<div className='lich-sap-toi-event-card-date-row-dot' />
 											<Text className='lich-sap-toi-event-card-date-row-date-text'>
-												{moment(event.start).format('DD/MM/YYYY')}
+												{dayjs(event.start).format('DD/MM/YYYY')}
 											</Text>
 											<div className='lich-sap-toi-event-card-date-row-time-badge'>
 												<Text className='time-text'>{formatTime(event.start, event.end)}</Text>

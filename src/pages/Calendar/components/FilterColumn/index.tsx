@@ -1,10 +1,10 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import dayjs from '@/utils/dayjs';
 import { CalendarOutlined, DownOutlined, EditFilled, FilterOutlined } from '@ant-design/icons';
 import { Calendar as AntdCalendar, Button, Card, Checkbox, Col, Popover, Row, Select } from 'antd';
-import dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import PickColorLich from '../PickColorLich';
@@ -32,7 +32,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 		return () => window.removeEventListener('resize', checkIsMobile);
 	}, []);
 
-	const pickDate = (val: moment.Moment) => setDate(val.toDate());
+	const pickDate = (val: Dayjs) => setDate(val.toDate());
 
 	const changeLoaiSuKien = (checkedValue: any) => {
 		setSelectSuKiens(checkedValue as ELoaiSuKien[]);
@@ -85,7 +85,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 			<Button block className={`date-button`} onClick={() => setExpandMiniCalendar(!expandMiniCalendar)}>
 				<CalendarOutlined className='calendar-icon' />
 
-				<div>{moment(date).format('DD/MM/YYYY')}</div>
+				<div>{dayjs(date).format('DD/MM/YYYY')}</div>
 				<DownOutlined className={`down-arrow ${expandMiniCalendar ? 'expanded' : 'collapsed'}`} />
 			</Button>
 
@@ -107,7 +107,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 												onChange(now);
 											}}
 											value={value.year()}
-											options={_.range(2020, moment().year() + 1).map((y) => ({
+											options={_.range(2020, dayjs().year() + 1).map((y) => ({
 												key: y,
 												value: y,
 												label: y,

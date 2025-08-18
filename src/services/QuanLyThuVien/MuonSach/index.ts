@@ -1,5 +1,5 @@
+import axios from '@/utils/axios';
 import { ipThuVien } from '@/utils/ip';
-import axios from 'axios';
 
 export async function dangKyAnPham(payload: any) {
 	return axios.post(`${ipThuVien}/thue-muon-an-pham/dang-ky`, payload);

@@ -1,6 +1,6 @@
-import axios from 'axios';
-import type { SanPhamNCKH } from '../SanPhamNCKH/typings';
+import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import type { SanPhamNCKH } from '../SanPhamNCKH/typings';
 
 const url = 'nckh/yeu-cau-quy-doi-gio';
 

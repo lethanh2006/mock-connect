@@ -185,7 +185,7 @@ const CardSuKienSapToi = () => {
 	return (
 		<>
 			<Card
-				className='wrapper'
+				className='tb-sk-wrapper'
 				variant='borderless'
 				loading={loadingSuKien || loadingTKB || loadingThi}
 				styles={{ body: { padding: 0 } }}

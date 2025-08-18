@@ -1,7 +1,7 @@
+import dayjs from '@/utils/dayjs';
 import { PlayCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import classNames from 'classnames';
-import moment from 'moment';
 import React, { useEffect } from 'react';
 import { Link, useModel } from 'umi';
 
@@ -41,7 +41,7 @@ const ContentBoxChat = () => {
 				<div className='avatar'>
 					<Avatar
 						src={recSinhVien?.anhDaiDienUrl ? <img alt='avatar' src={recSinhVien?.anhDaiDienUrl} /> : undefined}
-						icon={!recSinhVien?.anhDaiDienUrl ? lastNameChar ?? <UserOutlined /> : undefined}
+						icon={!recSinhVien?.anhDaiDienUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
 						alt='avatar'
 					/>
 				</div>
@@ -105,7 +105,7 @@ const ContentBoxChat = () => {
 					className={classNames({ message: true, bot: !item.isUser })}
 					key={item._id}
 					id={item._id}
-					title={moment(item.createdAt).fromNow()}
+					title={dayjs(item.createdAt).fromNow()}
 				>
 					{item.isUser ? <MyMessage message={item} /> : <BotMessage message={item} />}
 				</div>

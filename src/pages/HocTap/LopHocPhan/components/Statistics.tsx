@@ -2,8 +2,8 @@ import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { ETrangThaiNopBaiTap } from '@/services/DaoTao/BaiTap/constants';
 import { type BaiTap } from '@/services/DaoTao/BaiTap/typing';
+import dayjs from '@/utils/dayjs';
 import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, StopOutlined } from '@ant-design/icons';
-import moment from 'moment';
 
 interface StatisticsProps {
 	danhSach: BaiTap.IDanhSachGiaoBaiTap[];
@@ -12,7 +12,7 @@ interface StatisticsProps {
 const Statistics: React.FC<StatisticsProps> = ({ danhSach }) => {
 	// Calculate statistics
 	const getStatistics = () => {
-		const now = moment();
+		const now = dayjs();
 
 		// Đã hoàn thành: đã nộp bài (có trangThai là đã nộp)
 		const completedCount = danhSach.filter(
