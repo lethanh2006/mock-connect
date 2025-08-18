@@ -50,9 +50,9 @@
 	height: 30px;
 }
 
-.ant-tabs-card>.ant-tabs-nav {
-	&>.ant-tabs-nav-wrap>.ant-tabs-nav-list {
-		&>.ant-tabs-tab {
+.ant-tabs-card > .ant-tabs-nav {
+	& > .ant-tabs-nav-wrap > .ant-tabs-nav-list {
+		& > .ant-tabs-tab {
 			border-radius: 4px 4px 0 0;
 
 			// >.ant-tabs-tab-btn {
@@ -66,7 +66,6 @@
 	font-weight: 600;
 
 	&.ant-divider-with-text-center {
-
 		&::before,
 		&::after {
 			flex: 1;
@@ -94,7 +93,6 @@
 }
 
 .ant-descriptions {
-
 	.ant-descriptions-item-label,
 	.ant-descriptions-title {
 		font-weight: 600 !important;
@@ -135,7 +133,7 @@
 	}
 }
 
-.ant-form-item-label>label {
+.ant-form-item-label > label {
 	height: auto;
 	margin: 4px 0 !important;
 }
@@ -181,11 +179,11 @@
 	&.card-borderless {
 		box-shadow: none;
 
-		>.ant-card-body {
+		> .ant-card-body {
 			padding: 8px 0 0;
 		}
 
-		>.ant-card-head {
+		> .ant-card-head {
 			padding: 0;
 		}
 	}
@@ -193,15 +191,15 @@
 	&.card-big-title {
 		background: transparent;
 
-		>.ant-card-head {
+		> .ant-card-head {
 			border-bottom: none;
 
-			>.ant-card-head-wrapper>.ant-card-head-title {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 18px;
 			}
 		}
 
-		>.ant-card-body {
+		> .ant-card-body {
 			padding: 0;
 		}
 	}
@@ -235,13 +233,13 @@
 .ant-modal .ant-card-body,
 .ant-drawer .ant-card-body {
 	@media (min-width: @screen-xl) {
-		.ant-tabs-left>.ant-tabs-nav {
-			.ant-tabs-tab+.ant-tabs-tab {
+		.ant-tabs-left > .ant-tabs-nav {
+			.ant-tabs-tab + .ant-tabs-tab {
 				margin: 10px 0 0 0;
 			}
 		}
 
-		.ant-tabs-left>.ant-tabs-content-holder>.ant-tabs-content>.ant-tabs-tabpane {
+		.ant-tabs-left > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane {
 			padding-left: 18px;
 		}
 	}
@@ -292,11 +290,15 @@
 
 // Hiệu ứng chuyển đổi cho mmodal và drawer khi nhấn Expand Button
 .ant-modal {
-	transition: top .3s ease, width .3s ease;
+	transition:
+		top 0.3s ease,
+		width 0.3s ease;
 }
 
 .ant-drawer-content-wrapper {
-	transition: top .3s ease, width .3s ease;
+	transition:
+		top 0.3s ease,
+		width 0.3s ease;
 }
 
 @media (max-width: @screen-xs) {
@@ -312,14 +314,12 @@
 		width: 100%;
 		overflow-x: auto;
 
-		&-thead>tr,
-		&-tbody>tr {
-
-			>th,
-			>td {
-
+		&-thead > tr,
+		&-tbody > tr {
+			> th,
+			> td {
 				// white-space: pre;
-				>span {
+				> span {
 					display: block;
 				}
 			}
@@ -327,11 +327,11 @@
 	}
 }
 
-.ant-card-small>.ant-card-head>.ant-card-head-wrapper>.ant-card-extra {
+.ant-card-small > .ant-card-head > .ant-card-head-wrapper > .ant-card-extra {
 	padding: 3px 0 !important;
 }
 
-.ant-collapse-item-active>.ant-collapse-header>.ant-collapse-header-text {
+.ant-collapse-item-active > .ant-collapse-header > .ant-collapse-header-text {
 	font-weight: 600;
 	color: var(--color-primary);
 }
@@ -354,4 +354,9 @@
 	display: flex;
 	gap: 5px;
 	flex-wrap: wrap;
+}
+
+.ant-carousel .slick-dots li button,
+.ant-carousel .slick-dots li.slick-active::after {
+	background: #222 !important;
 }
