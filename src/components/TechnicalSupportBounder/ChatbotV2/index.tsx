@@ -30,7 +30,6 @@ const ChatbotOverlayV2 = () => {
 		createUserChatBotModel,
 		recordUser,
 		formSubmitingUser,
-		// getUserChatBotModel,
 		loading,
 	} = useModel('tienich.chatbotv2');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
@@ -54,7 +53,6 @@ const ChatbotOverlayV2 = () => {
 		}
 
 		if (boxChatVisible && !recordUser?.id) {
-			// getUserChatBotModel(recSinhVien.ssoId);
 			createUserChatBotModel({
 				password: 'abc@1234',
 				username: fullName ?? 'admin',
@@ -65,17 +63,6 @@ const ChatbotOverlayV2 = () => {
 			} as any);
 		}
 	}, [boxChatVisible]);
-
-	// useEffect(() => {
-	// 	if (boxChatVisible && recSinhVien?.ssoId && !recordUser?.id) {
-	// 		createUserChatBotModel({
-	// 			password: 'abc@1234',
-	// 			username: recSinhVien.ten,
-	// 			email: recSinhVien.email,
-	// 			sso_sub: recSinhVien.ssoId,
-	// 		} as any);
-	// 	}
-	// }, [recordUser?.id]);
 
 	return (
 		<>
