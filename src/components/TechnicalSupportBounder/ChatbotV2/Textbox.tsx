@@ -1,5 +1,5 @@
 import { resetFieldsForm } from '@/utils/utils';
-import { Form, Input } from 'antd';
+import { Empty, Form, Input } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 
@@ -36,6 +36,17 @@ const TextboxChatbotV2 = () => {
 			console.error('Lỗi gửi tin nhắn:', err);
 		}
 	};
+
+	if (!recordUser?.id) {
+		return (
+			<div className='textbox'>
+				<Empty
+					description='Không tìm thấy thông tin người dùng. Vui lòng quay lại sau để sử dụng Ami!'
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+				/>
+			</div>
+		);
+	}
 
 	return (
 		<div className='textbox'>
