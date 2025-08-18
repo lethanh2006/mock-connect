@@ -1,4 +1,5 @@
-import { Card, Carousel, Col, Empty, Row } from 'antd';
+import StatisticsCard from '@/components/StatisticsCard';
+import { Card, Empty } from 'antd';
 import { useEffect } from 'react';
 import { Link, useModel } from 'umi';
 import ChartVaoRaThuVien from './Chart';
@@ -26,60 +27,51 @@ const VaoRaThuVienDashboardCard = () => {
 			}
 			loading={loading}
 		>
-			<Card variant='borderless' style={{ borderRadius: 8 }}>
-				{thongKeVaoRa.length ? (
-					<Carousel autoplay pauseOnDotsHover>
-						<div>
-							<StatVaoRaThuVien />
-						</div>
-						<div>
-							<ChartVaoRaThuVien />
-						</div>
-						<div>
-							<Row gutter={[12, 12]}>
-								<Col span={24} md={12}>
-									<Card className='card-stat-small'>
-										<span className='num' style={{ color: 'blue' }}>
-											{dataThongKe?.choXuLy ?? 0}
-										</span>
-										<span>Chờ xử lý</span>
-									</Card>
-								</Col>
-								<Col span={24} md={12}>
-									<Card className='card-stat-small'>
-										<span className='num' style={{ color: 'orange' }}>
-											{dataThongKe?.dangThueMuon}
-										</span>
-										<span>Đang mượn</span>
-									</Card>
-								</Col>
-							</Row>
-						</div>
-						<div>
-							<Row gutter={[12, 12]}>
-								<Col span={24} md={12}>
-									<Card className='card-stat-small'>
-										<span className='num' style={{ color: 'rec' }}>
-											{dataThongKe?.quaHan}
-										</span>
-										<span>Quá hạn mượn</span>
-									</Card>
-								</Col>
-								<Col span={24} md={12}>
-									<Card className='card-stat-small'>
-										<span className='num' style={{ color: 'green' }}>
-											{dataThongKe?.daTra}
-										</span>
-										<span>Đã trả</span>
-									</Card>
-								</Col>
-							</Row>
-						</div>
-					</Carousel>
-				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
-				)}
-			</Card>
+			{thongKeVaoRa.length ? (
+				<div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+					{/* Thống kê vào ra thư viện */}
+					<Card variant='borderless' style={{ borderRadius: 8 }}>
+						<StatVaoRaThuVien />
+					</Card>
+
+					{/* Biểu đồ */}
+					<Card variant='borderless' style={{ borderRadius: 8 }}>
+						<ChartVaoRaThuVien />
+					</Card>
+
+					{/* Thống kê mượn sách */}
+					<StatisticsCard
+						title='Thống kê mượn sách'
+						hideCard={false}
+						colSpan={{ xs: 24, sm: 12, md: 12 }}
+						rowGutter={12}
+						data={[
+							{
+								title: 'Chờ xử lý',
+								value: dataThongKe?.choXuLy ?? 0,
+								valueColor: 'blue',
+							},
+							{
+								title: 'Đang mượn',
+								value: dataThongKe?.dangThueMuon ?? 0,
+								valueColor: 'orange',
+							},
+							{
+								title: 'Quá hạn mượn',
+								value: dataThongKe?.quaHan ?? 0,
+								valueColor: 'red',
+							},
+							{
+								title: 'Đã trả',
+								value: dataThongKe?.daTra ?? 0,
+								valueColor: 'green',
+							},
+						]}
+					/>
+				</div>
+			) : (
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
+			)}
 		</Card>
 	);
 };
