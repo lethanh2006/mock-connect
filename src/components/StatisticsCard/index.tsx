@@ -1,8 +1,46 @@
 import { Card, Col, Row } from 'antd';
 import classNames from 'classnames';
+import { lighten, rgba } from 'polished';
 import React, { isValidElement, ReactElement } from 'react';
 import './style.less';
-import { StatisticsCardProps, StatisticsItem } from './typing';
+import { AutoBackgroundConfig, StatisticsCardProps, StatisticsItem } from './typing';
+
+/**
+ * Tự động sinh màu nền từ valueColor với Polished
+ * @param color - Màu gốc (hex, rgb, hsl, named color)
+ * @param config - Cấu hình lighten và alpha
+ * @returns Màu nền đã được xử lý
+ */
+const generateAutoBackground = (color: string | undefined, config: AutoBackgroundConfig = {}): string => {
+	if (!color || !config.enabled) return 'transparent';
+
+	const { lightenAmount = 0.4, alphaAmount = 0.15 } = config;
+
+	// Special cases - handle first for performance
+	const specialCases: Record<string, string> = {
+		transparent: 'transparent',
+		currentColor: 'rgba(0,0,0,0.05)',
+		inherit: 'transparent',
+	};
+
+	const lowerColor = color.toLowerCase();
+	if (specialCases[lowerColor]) {
+		return specialCases[lowerColor];
+	}
+
+	// CSS Variables fallback
+	if (color.startsWith('var(')) {
+		return 'rgba(0,0,0,0.05)';
+	}
+
+	// Use Polished for color manipulation
+	try {
+		return rgba(lighten(lightenAmount, color), alphaAmount);
+	} catch (error) {
+		console.warn('Invalid color format:', color);
+		return 'transparent';
+	}
+};
 
 const StatisticsCard: React.FC<StatisticsCardProps> = ({
 	title,
@@ -15,6 +53,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 	rowGutter = 8,
 	borderleft = false,
 	statShadow = true,
+	autoBackground = { enabled: true, lightenAmount: 0.15, alphaAmount: 0.15 },
 }) => {
 	const renderStatisticItem = ({
 		title,
@@ -26,6 +65,9 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 		valueColor,
 	}: StatisticsItem) => {
 		const statusClass = status || '';
+
+		// Tự động sinh backgroundColor nếu không được cung cấp
+		const computedBackgroundColor = backgroundColor || generateAutoBackground(valueColor, autoBackground);
 
 		const iconElement =
 			icon && isValidElement(icon)
@@ -45,7 +87,11 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 					border: borderleft,
 					shadow: statShadow,
 				})} ${statusClass}`}
-				style={{ ...cardStyle, backgroundColor: backgroundColor, borderColor: valueColor }}
+				style={{
+					...cardStyle,
+					backgroundColor: computedBackgroundColor,
+					borderColor: valueColor,
+				}}
 				onClick={onClick}
 			>
 				<div className='text'>
