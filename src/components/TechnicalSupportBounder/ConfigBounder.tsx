@@ -18,7 +18,11 @@ const ConfigBounder = (props: { children?: any }) => {
 	return (
 		<ConfigProvider
 			theme={{
-				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
+				token: {
+					borderRadius: 4,
+					colorPrimary: primaryColor,
+					colorLink: primaryColor,
+				},
 				hashed: false,
 				cssVar: { prefix: '' },
 				components: {
