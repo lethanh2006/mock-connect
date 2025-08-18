@@ -267,18 +267,21 @@ const ThongTinChung = () => {
 						</Col>
 					</Row>
 				</div>
-				<Space wrap className='button-space'>
-					{record?.lmsUrl ? (
-						<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
-							Học trực tuyến
-						</ButtonExtend>
-					) : null}
-					{record?.moodleShortname ? (
-						<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
-							Lớp học LMS
-						</ButtonExtend>
-					) : null}
-				</Space>
+				{record?.lmsUrl || record?.moodleShortname ? (
+					<Space wrap className='button-space'>
+						{record?.lmsUrl ? (
+							<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
+								Học trực tuyến
+							</ButtonExtend>
+						) : null}
+						{record?.moodleShortname ? (
+							<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
+								Lớp học LMS
+							</ButtonExtend>
+						) : null}
+					</Space>
+				) : null}
+
 				{/* Tài liệu môn học */}
 				<Card
 					title='Tài liệu môn học'
