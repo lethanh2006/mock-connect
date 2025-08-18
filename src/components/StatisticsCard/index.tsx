@@ -123,7 +123,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 			loading={loading}
 			variant='borderless'
 		>
-			<div style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>{title}</div>
+			{title && <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>{title}</div>}
 
 			<Row gutter={[rowGutter, rowGutter]} wrap>
 				{data.map((item, index) => (

@@ -8,7 +8,7 @@ import { JSX } from 'react';
  */
 export interface StatisticsItem {
 	/** Tiêu đề hiển thị của item thống kê */
-	title: string;
+	title?: string;
 
 	/** Giá trị hiển thị, có thể là số hoặc chuỗi (đã format)
 	 * @example 100, '1,234 VNĐ', '50%'
