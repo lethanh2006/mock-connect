@@ -29,7 +29,7 @@ const CardThongBaoDashboard = () => {
 	};
 
 	return (
-		<Card className='wrapper' variant='borderless' loading={loading} styles={{ body: { padding: 0 } }}>
+		<Card className='tb-sk-wrapper' variant='borderless' loading={loading} styles={{ body: { padding: 0 } }}>
 			{/* Header */}
 			<div className='header-tb-sk'>
 				<Title level={5} className='title'>

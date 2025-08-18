@@ -1,5 +1,5 @@
+import axios from '@/utils/axios';
 import { ip3, ipDaoTao } from '@/utils/ip';
-import axios from 'axios';
 
 export async function nopTaiLieu(id: string, payLoad: any) {
 	return axios.put(`${ipDaoTao}/quan-ly-la-lv-kl/${id}/nop`, payLoad);
