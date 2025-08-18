@@ -8,6 +8,19 @@ import ContentBoxChatV2 from './Content';
 import './style.less';
 import TextboxChatbotV2 from './Textbox';
 
+const toCamelCase = (str: string) => {
+	return str
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/[^a-zA-Z0-9 ]/g, ' ')
+		.trim()
+		.split(/\s+/)
+		.map((word, index) =>
+			index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+		)
+		.join('');
+};
+
 const ChatbotOverlayV2 = () => {
 	const {
 		danhSach,
@@ -40,15 +53,15 @@ const ChatbotOverlayV2 = () => {
 			]);
 		}
 
-		if (boxChatVisible && recSinhVien?.ssoId && !recordUser?.id) {
+		if (boxChatVisible && !recordUser?.id) {
 			// getUserChatBotModel(recSinhVien.ssoId);
 			createUserChatBotModel({
 				password: 'abc@1234',
 				username: fullName ?? 'admin',
 				email:
-					recSinhVien.email ??
-					`${fullName ?? 'admin'}@${APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH.toLocaleLowerCase()}.edu.vn`,
-				sso_sub: recSinhVien.ssoId ?? initialState?.currentUser?.ssoId ?? 'admin_ssoId',
+					recSinhVien?.email ??
+					`${toCamelCase(fullName ?? 'admin')}@${APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH.toLowerCase()}.edu.vn`,
+				sso_sub: recSinhVien?.ssoId ?? initialState?.currentUser?.ssoId ?? 'admin_ssoId',
 			} as any);
 		}
 	}, [boxChatVisible]);

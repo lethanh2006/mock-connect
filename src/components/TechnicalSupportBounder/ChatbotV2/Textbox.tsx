@@ -1,5 +1,5 @@
 import { resetFieldsForm } from '@/utils/utils';
-import { Form, Input } from 'antd';
+import { Form, Input, message } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 
@@ -30,6 +30,8 @@ const TextboxChatbotV2 = () => {
 
 			if (recordUser?.id && currentThreadId) {
 				await postChatBotModel({ user_id: recordUser.id, thread_id: currentThreadId, message: question });
+			} else {
+				message.error('Có lỗi xảy ra, vui lòng quy lại sau!!');
 			}
 			setShowCommendEdit(false);
 		} catch (err) {
