@@ -1,5 +1,5 @@
+import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
-import axios from 'axios';
 import type { ExportType } from '../DeTaiKHCN/constants';
 
 export const giaoQuyetDinh = (idQuyetDinhGiao: string) => {

@@ -1,5 +1,5 @@
+import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
-import axios from 'axios';
 
 export async function postMeSettingLich(payload: any) {
 	return axios.post(`${ip3}/setting-lich/me`, payload);

@@ -1,5 +1,5 @@
 import { ip3 } from '@/utils/ip';
-import axios from 'axios';
+import axios from '@/utils/axios';
 
 const url = 'don-quy-trinh-dong';
 

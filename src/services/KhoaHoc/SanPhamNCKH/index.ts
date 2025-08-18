@@ -1,8 +1,8 @@
-import axios from 'axios';
-import type { ETrangThaiSanPham } from './constants';
+import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
-import type { SanPhamNCKH } from './typings';
 import type { LoaiHinhNCKH } from '../LoaiHinhNCKH/typings';
+import type { ETrangThaiSanPham } from './constants';
+import type { SanPhamNCKH } from './typings';
 
 const url = 'nckh/san-pham-nckh';
 
