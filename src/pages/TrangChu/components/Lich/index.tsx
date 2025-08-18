@@ -187,7 +187,7 @@ const LichDashboard = () => {
 		const isSmallMonth = weeks.length <= 5;
 
 		return (
-			<div className='calendar-container'>
+			<div className='calendar-dashboard-container'>
 				{/* Header với tên tháng và navigation */}
 				<div className={`calendar-header ${responsiveClass}`}>
 					<Typography.Title level={5} className={`calendar-title ${responsiveClass}`}>
