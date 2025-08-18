@@ -1,5 +1,5 @@
+import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
-import axios from 'axios';
 
 export const getDonHoiDong = (
 	idHoiDong: string,

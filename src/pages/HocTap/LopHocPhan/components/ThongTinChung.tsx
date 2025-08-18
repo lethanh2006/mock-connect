@@ -4,10 +4,10 @@ import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import { DesktopOutlined, DownloadOutlined, GlobalOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, message, Modal, Row, Space, Spin, Tag, Typography } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
+import dayjs from '@/utils/dayjs';
 import CardBaiTapLopHp from './CardBaiTapLopHp';
 import GioiThieuChungLopHp from './GioiThieuChung';
 import './style.less';
@@ -94,7 +94,7 @@ const ThongTinChung = () => {
 	let allThoiKhoaBieu = record?.thoiKhoaBieuList ?? [];
 	allThoiKhoaBieu = allThoiKhoaBieu.concat(record?.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? []);
 
-	const past = allThoiKhoaBieu.filter((i) => moment().isAfter(i?.ngay)).length;
+	const past = allThoiKhoaBieu.filter((i) => dayjs().isAfter(dayjs(i?.ngay))).length;
 	const progress = Math.round((past / allThoiKhoaBieu.length) * 100) || 0;
 
 	const isCompleted = progress === 100 || record?.diem?.diemHpSvHk?.diemKthp;
@@ -459,7 +459,7 @@ const ThongTinChung = () => {
 								<Text strong>Ngày sinh:</Text>
 							</Col>
 							<Col span={16}>
-								<Text>{moment(selectedGiangVien.ngaySinh).format('DD/MM/YYYY')}</Text>
+								<Text>{dayjs(selectedGiangVien.ngaySinh).format('DD/MM/YYYY')}</Text>
 							</Col>
 						</Row>
 						<Row>
