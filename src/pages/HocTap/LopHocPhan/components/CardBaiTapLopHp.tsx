@@ -1,6 +1,6 @@
+import dayjs from '@/utils/dayjs';
 import { DownloadOutlined, EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Button, Card, Empty, List, Modal, Popover, Segmented, Typography } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 
@@ -189,7 +189,7 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 										style={{ marginTop: 12, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
 									>
 										<Text type='secondary'>Hạn nộp bài: </Text>
-										<Text strong>{moment(item.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</Text>
+										<Text strong>{dayjs(item.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</Text>
 									</div>
 
 									<div style={{ marginTop: 16 }}>

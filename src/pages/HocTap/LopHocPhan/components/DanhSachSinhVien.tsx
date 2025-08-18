@@ -1,10 +1,10 @@
 import { vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
+import dayjs from '@/utils/dayjs';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row } from 'antd';
 
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
@@ -145,7 +145,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 							<Descriptions.Item label='Email'>{record?.email}</Descriptions.Item>
 							<Descriptions.Item label='Giới tính'>{record?.gioiTinh ?? ''}</Descriptions.Item>
 							<Descriptions.Item label='Ngày sinh'>
-								{record?.ngaySinh && moment(record.ngaySinh).format('DD/MM/YYYY')}
+								{record?.ngaySinh && dayjs(record.ngaySinh).format('DD/MM/YYYY')}
 							</Descriptions.Item>
 							<Descriptions.Item label='Số điện thoại'>{record?.soDienThoai}</Descriptions.Item>
 							{!fromLopHocPhan ? (
