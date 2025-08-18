@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd';
+import ThongKeMuonSachCard from '../ThuVien/MuonTraSach/Dashboard/Card';
 import VaoRaThuVienDashboardCard from '../ThuVien/VaoRaThuVien/Dashboard/Card';
 import CardDichVuSinhVien from './components/DichVu';
 import LichDashboard from './components/Lich';
@@ -83,7 +84,10 @@ const TrangChu = () => {
 							<Col span={24}>
 								<VaoRaThuVienDashboardCard />
 							</Col>
-							<Col span={24}>{/* <ChatbotBanner /> */}</Col>
+							<Col span={24}>
+								{/* <ChatbotBanner /> */}
+								<ThongKeMuonSachCard />
+							</Col>
 						</Row>
 					</Col>
 				</Row>

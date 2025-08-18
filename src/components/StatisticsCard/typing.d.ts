@@ -67,7 +67,7 @@ export interface AutoBackgroundConfig {
  */
 export interface StatisticsCardProps {
 	/** Tiêu đề của card thống kê */
-	title: string;
+	title?: string;
 
 	/** Mảng dữ liệu thống kê cần hiển thị */
 	data: StatisticsItem[];
