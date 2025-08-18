@@ -84,7 +84,7 @@ const ThongTinChungHeaderCard = () => {
 			<Spin spinning={loading}>
 				<div
 					style={{
-						padding: '20px 20px 0',
+						padding: '20px 20px',
 						backgroundColor: 'var(--color-primary-bg)',
 						margin: '-24px -16px 0', // để phần Header này theo đúng thiết kế (sát vào lề)
 						backgroundImage: `url(${randomBackground})`,
@@ -166,21 +166,27 @@ const ThongTinChungHeaderCard = () => {
 								<Text style={{ marginLeft: 8, color: '#999' }}>Không có</Text>
 							)}
 						</Col>
+						<Col>
+							{/* Action Buttons */}
+							<Space wrap className='header-action-buttons'>
+								{record?.lmsUrl ? (
+									<ButtonExtend
+										className='button-extend'
+										notHideText
+										icon={<GlobalOutlined />}
+										onClick={() => window.open(record.lmsUrl, '_blank')}
+									>
+										Học trực tuyến
+									</ButtonExtend>
+								) : null}
+								{record?.moodleShortname ? (
+									<ButtonExtend className='button-extend' notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
+										Lớp học LMS
+									</ButtonExtend>
+								) : null}
+							</Space>
+						</Col>
 					</Row>
-
-					{/* Action Buttons */}
-					<Space wrap style={{ marginBottom: '16px' }}>
-						{record?.lmsUrl ? (
-							<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
-								Học trực tuyến
-							</ButtonExtend>
-						) : null}
-						{record?.moodleShortname ? (
-							<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
-								Lớp học LMS
-							</ButtonExtend>
-						) : null}
-					</Space>
 
 					{activeKey !== '-1' ? (
 						<DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} title='Giảng viên phụ trách nhóm lớp' />
