@@ -50,7 +50,7 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 
 			{!unChatBotSupportPaths.includes(window.location.pathname) ? (
 				<>
-					<ChatbotOverlayV2 />
+					{/* <ChatbotOverlayV2 /> */}
 					{/* <ChatbotOverlay /> */}
 				</>
 			) : null}
