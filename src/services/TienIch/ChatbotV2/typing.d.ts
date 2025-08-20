@@ -42,5 +42,7 @@ declare module ChatbotAmiV2 {
 		id: number;
 		user_id: number;
 		title: string;
+		status: string;
+		updated_at: Date;
 	}
 }
