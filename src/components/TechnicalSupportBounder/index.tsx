@@ -5,7 +5,7 @@ import { history } from 'umi';
 import ChatbotOverlayV2 from './ChatbotV2';
 import PanpageHoTro from './FanpageHoTro';
 import FormPostIssue from './Form';
-import { unTechnicalSupportPaths } from './constant';
+import { unChatBotSupportPaths, unTechnicalSupportPaths } from './constant';
 
 const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 	const [visible, setVisible] = useState<boolean>(false);
@@ -48,8 +48,12 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 				</>
 			) : null}
 
-			<ChatbotOverlayV2 />
-			{/* <ChatbotOverlay /> */}
+			{!unChatBotSupportPaths.includes(window.location.pathname) ? (
+				<>
+					<ChatbotOverlayV2 />
+					{/* <ChatbotOverlay /> */}
+				</>
+			) : null}
 
 			<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
 		</ConfigProvider>
