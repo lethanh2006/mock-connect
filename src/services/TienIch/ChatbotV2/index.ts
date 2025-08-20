@@ -45,3 +45,43 @@ export async function postChatBot(user_id: number, thread_id: number, message: s
 		},
 	);
 }
+
+export async function getThreadUser(user_id: number) {
+	return axios.get(`${ipChatbot}/api/v1/thread/user/${user_id}`, {
+		transformRequest: (data, headers) => {
+			delete headers.common.Authorization;
+			headers['Content-Type'] = 'application/json';
+			return data;
+		},
+	});
+}
+
+export async function getChiTietThread(thread_id: number) {
+	return axios.get(`${ipChatbot}/api/v1/thread/detail/${thread_id}`, {
+		transformRequest: (data, headers) => {
+			delete headers.common.Authorization;
+			headers['Content-Type'] = 'application/json';
+			return data;
+		},
+	});
+}
+
+export async function updateTitleThread(payLoad: any) {
+	return axios.put(`${ipChatbot}/api/v1/thread/update-title`, payLoad, {
+		transformRequest: (data, headers) => {
+			delete headers.common.Authorization;
+			headers['Content-Type'] = 'application/json';
+			return JSON.stringify(payLoad);
+		},
+	});
+}
+
+export async function deleteThread(thread_id: number) {
+	return axios.delete(`${ipChatbot}/api/v1/thread/delete/${thread_id}`, {
+		transformRequest: (data, headers) => {
+			delete headers.common.Authorization;
+			headers['Content-Type'] = 'application/json';
+			return JSON.stringify({ thread_id });
+		},
+	});
+}
