@@ -506,6 +506,12 @@
 		component: './ThongBao',
 		icon: 'BellOutlined',
 	},
+	{
+		name: 'ChatBot',
+		path: 'chat-bot',
+		component: './ChatBot',
+		icon: 'RobotOutlined',
+	},
 	// {
 	// 	name: 'KhaiBaoSucKhoe',
 	// 	icon: 'HeartOutlined',
