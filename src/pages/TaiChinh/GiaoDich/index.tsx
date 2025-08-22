@@ -216,8 +216,10 @@ const GiaoDichPage = () => {
 					<ButtonExtend
 						loading={loading}
 						onClick={() => {
-							getModelDotThu(undefined, undefined, { _id: 1 })
-								.then((res) => setRecDotThu(res?.[0]))
+							getModelDotThu(undefined, undefined, { _id: -1 })
+								.then((res) => {
+									setRecDotThu(res?.[0]);
+								})
 								.then(() => setVisibleHocPhi(true));
 						}}
 						icon={<PlusCircleOutlined />}
