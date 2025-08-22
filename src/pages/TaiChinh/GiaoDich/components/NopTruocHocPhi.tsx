@@ -31,6 +31,7 @@ const ModalNopTruocHocPhi = (props: {
 		!recThuTruocHp?.thoiGianKetThuc ||
 		moment().isBefore(recThuTruocHp?.thoiGianBatDau) ||
 		moment().isAfter(recThuTruocHp?.thoiGianKetThuc);
+	console.log(ngoaiThoiGian, recThuTruocHp)
 
 	useEffect(() => {
 		if (recThuTruocHp?._id) getMucThuHocPhiTheoNamModel(recThuTruocHp?.maNamHoc);
