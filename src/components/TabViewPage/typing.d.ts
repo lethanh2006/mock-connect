@@ -54,4 +54,6 @@ export type TabViewPageComponentProps = {
 	style?: CSSProperties;
 
 	offsetTop?: number;
+
+	cardBigTitle?: boolean;
 };

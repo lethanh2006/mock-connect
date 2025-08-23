@@ -11,8 +11,8 @@ import { AutoBackgroundConfig, StatisticsCardProps, StatisticsItem } from './typ
  * @param config - Cấu hình lighten và alpha
  * @returns Màu nền đã được xử lý
  */
-const generateAutoBackground = (color: string | undefined, config: AutoBackgroundConfig = {}): string => {
-	if (!color || !config.enabled) return 'transparent';
+const generateAutoBackground = (color: string | undefined, config: AutoBackgroundConfig = {}): string | undefined => {
+	if (!color || !config.enabled) return undefined;
 
 	const { lightenAmount = 0.4, alphaAmount = 0.15 } = config;
 
@@ -53,7 +53,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 	rowGutter = 8,
 	borderleft = false,
 	statShadow = true,
-	autoBackground = { enabled: true, lightenAmount: 0.15, alphaAmount: 0.15 },
+	autoBackground = { enabled: true, lightenAmount: 0.1, alphaAmount: 0.1 },
 }) => {
 	const renderStatisticItem = ({
 		title,
