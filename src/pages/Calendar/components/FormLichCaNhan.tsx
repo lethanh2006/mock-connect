@@ -3,7 +3,7 @@ import { ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, Input, Row } from 'antd';
+import { Button, Col, Form, Input, Row } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -34,7 +34,7 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 	};
 
 	return (
-		<Card title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}>
+		<>
 			<Form form={form} layout='vertical' onFinish={onFinish}>
 				<Row gutter={[12, 0]}>
 					<Col xs={24}>
@@ -92,7 +92,7 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>
 			</Form>
-		</Card>
+		</>
 	);
 };
 

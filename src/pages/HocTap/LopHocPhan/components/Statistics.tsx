@@ -1,23 +1,21 @@
 import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { ETrangThaiNopBaiTap } from '@/services/DaoTao/BaiTap/constants';
-import { type BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, StopOutlined } from '@ant-design/icons';
+import { useEffect } from 'react';
+import { useModel } from 'umi';
 
-interface StatisticsProps {
-	danhSach: BaiTap.IDanhSachGiaoBaiTap[];
-}
+const BaiTapStatistics = () => {
+	const { danhSach, thongKeBaiTapModel, loading } = useModel('daotao.baitap');
+	const { record: recHocKy } = useModel('daotao.hocky');
 
-const Statistics: React.FC<StatisticsProps> = ({ danhSach }) => {
 	// Calculate statistics
 	const getStatistics = () => {
 		const now = dayjs();
 
 		// Đã hoàn thành: đã nộp bài (có trangThai là đã nộp)
-		const completedCount = danhSach.filter(
-			(item) => item.trangThai === ETrangThaiNopBaiTap.DA_NOP || item.trangThai === ETrangThaiNopBaiTap?.DA_CHAM,
-		).length;
+		const completedCount = danhSach.filter((item) => item.trangThai === ETrangThaiNopBaiTap.DA_NOP).length;
 
 		// Đến hạn: chưa nộp bài và thời gian hiện tại nằm trong khoảng thời gian làm bài
 		const pendingCount = danhSach.filter((item) => {
@@ -61,48 +59,51 @@ const Statistics: React.FC<StatisticsProps> = ({ danhSach }) => {
 		};
 	};
 
+	const getData = () => {
+		if (recHocKy?.ma) {
+			const startDate = new Date(recHocKy?.thoiGianBatDau || Date.now());
+			const endDate = dayjs(recHocKy?.thoiGianBatDau || Date.now())
+				.add(recHocKy.soTuan || 1, 'week')
+				.toDate();
+			thongKeBaiTapModel(startDate, endDate);
+		}
+	};
+
+	useEffect(() => {
+		getData();
+	}, [recHocKy?.ma]);
+
 	const statistics = getStatistics();
 	const statisticsData: StatisticsItem[] = [
 		{
 			title: 'Đã hoàn thành',
 			value: statistics.completed,
-			icon: <CheckCircleOutlined style={{ color: '#17C229' }} />,
+			icon: <CheckCircleOutlined />,
 			valueColor: '#17C229',
-			backgroundColor: '#EAFFDF',
 		},
 		{
 			title: 'Đến hạn',
 			value: statistics.pending,
-			icon: <ClockCircleOutlined style={{ color: '#FFAF0B' }} />,
+			icon: <ClockCircleOutlined />,
 			valueColor: '#FFAF0B',
-			backgroundColor: '#fffbe6',
 		},
 		{
 			title: 'Chưa hoàn thành',
 			value: statistics.notStarted,
-			icon: <ExclamationCircleOutlined style={{ color: '#DA2128' }} />,
+			icon: <ExclamationCircleOutlined />,
 			valueColor: '#DA2128',
-			backgroundColor: '#fff2e8',
 		},
 		{
 			title: 'Quá hạn nộp bài',
 			value: statistics.overdue,
-			icon: <StopOutlined style={{ color: '#121212' }} />,
+			icon: <StopOutlined />,
 			valueColor: '#121212',
-			backgroundColor: '#f6f6f6',
 		},
 	];
 
 	return (
-		<StatisticsCard
-			hideCard
-			rowGutter={16}
-			borderleft
-			title='Thống kê số liệu cho bài tập, bài kiểm tra'
-			data={statisticsData}
-			colSpan={{ xs: 12, sm: 6 }}
-		/>
+		<StatisticsCard title='Bài tập, bài kiểm tra' data={statisticsData} loading={loading} colSpan={{ xs: 12, md: 6 }} />
 	);
 };
 
-export default Statistics;
+export default BaiTapStatistics;

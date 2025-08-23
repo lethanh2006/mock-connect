@@ -12,9 +12,6 @@ const CardCongNoDashboard = () => {
 	const colors = ['#14B8A6', '#FACC15']; // Teal, Yellow
 	const xAxis = ['Dịch vụ sinh viên', 'Dịch vụ khác'];
 
-	const congNoList = danhSach.filter((bill) => !bill.name?.includes('dịch vụ hành chính'));
-	const dichVuList = danhSach.filter((bill) => bill.name?.includes('dịch vụ hành chính'));
-
 	useEffect(() => {
 		// Get công nợ
 		getCongNo(
@@ -30,57 +27,11 @@ const CardCongNoDashboard = () => {
 		);
 	}, []);
 
-	// Function to make percentage more dynamic for chart display
-	const adjustPercentageForChart = (value: number, total: number) => {
-		if (total === 0) return 0;
-
-		const percentage = (value / total) * 100;
-
-		// Nếu % quá lớn (>85%), làm tròn xuống nhẹ để tạo không gian
-		if (percentage > 85) {
-			return Math.floor(percentage * 0.95); // Giảm 5% để tạo không gian
-		}
-
-		// Nếu % quá nhỏ (<3%), làm tròn lên để dễ nhìn
-		if (percentage < 3 && percentage > 0) {
-			return Math.ceil(percentage * 1.85); // Tăng 85% để dễ nhìn
-		}
-
-		// Nếu % từ 3-15%, làm tròn lên một chút
-		if (percentage >= 3 && percentage <= 15) {
-			return Math.ceil(percentage * 1.15); // Tăng 15%
-		}
-
-		// Nếu % từ 70-85%, làm tròn xuống nhẹ
-		if (percentage >= 70 && percentage <= 85) {
-			return Math.floor(percentage * 0.98); // Giảm 2%
-		}
-
-		// Các trường hợp khác giữ nguyên
-		return Math.round(percentage);
-	};
-
-	// Function to adjust percentage for display (only slight rounding)
-	const adjustPercentageForDisplay = (value: number, total: number) => {
-		if (total === 0) return 0;
-
-		const percentage = (value / total) * 100;
-
-		// Chỉ làm tròn sai khác tối đa 1%
-		if (percentage > 99) {
-			return Math.max(98, Math.round(percentage - 1));
-		}
-
-		if (percentage < 1 && percentage > 0) {
-			return Math.min(2, Math.round(percentage + 1));
-		}
-
-		// Các trường hợp khác làm tròn bình thường
-		return Math.round(percentage);
-	};
-
 	// Calculate data for chart
 	const calculateChartData = () => {
+		const congNoList = danhSach.filter((bill) => !bill.name?.includes('dịch vụ hành chính'));
+		const dichVuList = danhSach.filter((bill) => bill.name?.includes('dịch vụ hành chính'));
+
 		// Dịch vụ sinh viên (congNoList)
 		const congNoPaid = congNoList
 			.map(
@@ -117,31 +68,18 @@ const CardCongNoDashboard = () => {
 			)
 			.reduce((acc, item) => acc + item, 0);
 
-		const congNoTotal = congNoPaid + (congNoDue - congNoPaid);
-		const dichVuTotal = dichVuPaid + (dichVuDue - dichVuPaid);
 		const congNoUnpaid = congNoDue - congNoPaid;
 		const dichVuUnpaid = dichVuDue - dichVuPaid;
-
 		return {
-			total: [congNoTotal, dichVuTotal],
+			total: [congNoDue, dichVuDue],
 			paid: [congNoPaid, dichVuPaid],
 			unpaid: [congNoUnpaid, dichVuUnpaid],
-			grandTotal: congNoTotal + dichVuTotal,
+			grandTotal: congNoDue + dichVuDue,
 		};
 	};
 
 	const chartData = calculateChartData();
-
-	// Convert to percentage for radial chart with dynamic adjustment
-	const maxValue = Math.max(...chartData.total);
-	const yAxis = chartData.total.map((value) => {
-		return adjustPercentageForChart(value, maxValue);
-	});
-
-	// Calculate display percentages (only slight adjustment)
-	const displayPercentages = chartData.total.map((value) => {
-		return adjustPercentageForDisplay(value, maxValue);
-	});
+	const yAxis = chartData.total.map((value, index) => (chartData.paid[index] / value) * 100);
 
 	return (
 		<Card className='dashboard-stat-card' variant='borderless' loading={loading}>
@@ -178,6 +116,7 @@ const CardCongNoDashboard = () => {
 												legend: { show: false },
 												dataLabels: { enabled: false },
 												chart: { toolbar: { show: false } },
+												tooltip: { enabled: true },
 												plotOptions: {
 													radialBar: {
 														dataLabels: { show: false },
@@ -207,11 +146,11 @@ const CardCongNoDashboard = () => {
 										/>
 										<div className='center-label'>
 											<div className='total-value'>{(chartData.grandTotal / 1e6).toFixed(1)}</div>
-											<div className='total-text'>Tổng CN</div>
+											<div className='total-text'>Tổng số</div>
 										</div>
-										{/* Percentage labels with display values (only 1% difference max) */}
-										<div className='percentage-label left'>{displayPercentages[0]} %</div>
-										<div className='percentage-label right'>{displayPercentages[1]} %</div>
+
+										<div className='percentage-label left'>{yAxis[0]}%</div>
+										<div className='percentage-label right'>{yAxis[1]}%</div>
 									</div>
 								</Col>
 							</Row>
@@ -224,10 +163,12 @@ const CardCongNoDashboard = () => {
 											<Col span={24}>
 												<div className='row'>
 													<Space>
-														<span className='dot teal' />
+														<span className='dot' style={{ backgroundColor: colors[0] }} />
 														<span>Dịch vụ sinh viên</span>
 													</Space>
-													<span className='sum-text teal'>{(chartData.total[0] / 1e6).toFixed(1)}</span>
+													<span className='sum-text' style={{ color: colors[0] }}>
+														{Math.round(chartData.total[0] / 1e4) / 100}
+													</span>
 												</div>
 											</Col>
 											<Col span={24}>
@@ -236,16 +177,18 @@ const CardCongNoDashboard = () => {
 														<span className='dot gray' />
 														<span>Chưa thanh toán</span>
 													</Space>
-													<span className='sum-text gray'>{(chartData.unpaid[0] / 1e6).toFixed(1)}</span>
+													<span className='sum-text gray'>{Math.round(chartData.unpaid[0] / 1e4) / 100}</span>
 												</div>
 											</Col>
 											<Col span={24}>
 												<div className='row'>
 													<Space>
-														<span className='dot yellow' />
+														<span className='dot' style={{ backgroundColor: colors[1] }} />
 														<span>Dịch vụ khác</span>
 													</Space>
-													<span className='sum-text yellow'>{(chartData.total[1] / 1e6).toFixed(1)}</span>
+													<span className='sum-text' style={{ color: colors[1] }}>
+														{Math.round(chartData.total[1] / 1e4) / 100}
+													</span>
 												</div>
 											</Col>
 											<Col span={24}>
@@ -254,7 +197,7 @@ const CardCongNoDashboard = () => {
 														<span className='dot gray' />
 														<span>Chưa thanh toán</span>
 													</Space>
-													<span className='sum-text gray'>{(chartData.unpaid[1] / 1e6).toFixed(1)}</span>
+													<span className='sum-text gray'>{Math.round(chartData.unpaid[1] / 1e4) / 100}</span>
 												</div>
 											</Col>
 										</Row>

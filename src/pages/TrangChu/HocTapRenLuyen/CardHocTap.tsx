@@ -40,7 +40,7 @@ const CardKetQuaHocTapDashboard = () => {
 					{/* Biểu đồ to hơn và căn giữa */}
 					<Row gutter={[12, 0]} justify='center'>
 						<Col span={24}>
-							<div style={{ display: 'flex', justifyContent: 'center' }}>
+							<div className='chart-container'>
 								<DonutChart
 									xAxis={xAxis}
 									yLabel={['Điểm']}
@@ -53,6 +53,13 @@ const CardKetQuaHocTapDashboard = () => {
 										legend: { show: false },
 										dataLabels: { enabled: false },
 										chart: { toolbar: { show: false } },
+										tooltip: { enabled: true },
+										plotOptions: {
+											radialBar: {
+												dataLabels: { show: false },
+												hollow: { size: '35px' },
+											},
+										},
 										responsive: [
 											{
 												breakpoint: 480,
@@ -67,23 +74,6 @@ const CardKetQuaHocTapDashboard = () => {
 												},
 											},
 										],
-										plotOptions: {
-											radialBar: {
-												dataLabels: { show: false },
-												hollow: { size: '35px' },
-												// Bo tròn các góc cho radial bar
-												startAngle: 0,
-												endAngle: 360,
-												track: {
-													background: '#f2f2f2',
-													strokeWidth: '97%',
-													margin: 5,
-													dropShadow: {
-														enabled: false,
-													},
-												},
-											},
-										},
 										// Thêm stroke để bo tròn các góc
 										stroke: {
 											lineCap: 'round' as 'round', // Bo tròn các đầu
@@ -91,6 +81,11 @@ const CardKetQuaHocTapDashboard = () => {
 									}}
 									colors={colors}
 								/>
+
+								<div className='center-label'>
+									<div className='total-value'>{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '-'}</div>
+									<div className='total-text'>Tín chỉ</div>
+								</div>
 							</div>
 						</Col>
 					</Row>

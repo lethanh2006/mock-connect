@@ -37,6 +37,7 @@ const LichDashboard = () => {
 		dataLichDashboard,
 		dataCalendarDashboard,
 		setDataCalendarDashboard,
+		edit,
 	} = useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
@@ -292,11 +293,11 @@ const LichDashboard = () => {
 			</Card>
 
 			<Modal
-				visible={visibleForm}
-				bodyStyle={{ padding: 0 }}
+				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				maskClosable={false}
+				title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}
 			>
 				<FormLichCaNhan getData={getData} />
 			</Modal>

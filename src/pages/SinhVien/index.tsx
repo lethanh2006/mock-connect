@@ -1,13 +1,13 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import FormSinhVien from '@/pages/SinhVien/components/Form';
 import { exportLyLich } from '@/services/DaoTao/SinhVien';
 import dayjs from '@/utils/dayjs';
 import { EditOutlined, LeftOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Space } from 'antd';
+import { Alert, Button, Card, Space, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalCapNhatAnhNhanDien from './CapNhatKhuonMat/Modal';
+import FormSinhVien from './components/Form';
 import PreviewHoSo from './components/PreviewHoSo';
 import './components/style.less';
 import ModalHocBaSinhVien from './HocBa/components/Modal';
@@ -40,8 +40,21 @@ const ThongTinSinhVienPage = () => {
 	};
 
 	return (
-		<Card title='Thông tin cá nhân' variant='borderless' className='card-borderless card-big-title' loading={loading}>
+		<Card title='Thông tin cá nhân' variant='borderless' className='card-borderless card-big-title'>
 			<Card variant='borderless'>
+				{recordDot?._id && choPhepSua ? (
+					<Alert
+						message={
+							<>
+								Đợt cập nhật hồ sơ "<b>{recordDot.tenDot}</b>" từ ngày{' '}
+								<b>{dayjs(recordDot.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến ngày{' '}
+								<b>{dayjs(recordDot.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
+							</>
+						}
+						style={{ marginBottom: 12 }}
+					/>
+				) : null}
+
 				{isCapNhat ? (
 					<>
 						<Space style={{ marginBottom: 12 }} wrap>
@@ -49,22 +62,13 @@ const ThongTinSinhVienPage = () => {
 								Quay lại
 							</Button>
 						</Space>
-						<FormSinhVien onCancel={() => setIsCapNhat(false)} />
+
+						<Spin spinning={loading}>
+							<FormSinhVien onCancel={() => setIsCapNhat(false)} />
+						</Spin>
 					</>
 				) : (
 					<>
-						{recordDot?._id && choPhepSua ? (
-							<Alert
-								message={
-									<>
-										Đợt cập nhật hồ sơ "<b>{recordDot.tenDot}</b>" từ ngày{' '}
-										<b>{dayjs(recordDot.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến ngày{' '}
-										<b>{dayjs(recordDot.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
-									</>
-								}
-							/>
-						) : null}
-
 						{record?.ssoId ? (
 							<Space style={{ marginBottom: 12 }} wrap>
 								<ButtonExtend

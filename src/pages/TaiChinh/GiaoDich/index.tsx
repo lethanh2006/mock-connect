@@ -48,7 +48,7 @@ const GiaoDichPage = () => {
 		if (window.location.href.includes('orderType=momo_wallet'))
 			if (window.location.href.includes('resultCode=0'))
 				notification.success({ message: 'Thành công', description: 'Thanh toán công nợ thành công' });
-			else notification.warn({ message: 'Thất bại', description: 'Thanh toán thất bại' });
+			else notification.warning({ message: 'Thất bại', description: 'Thanh toán thất bại' });
 	}, []);
 
 	const getData = () => getModel({ type: kieuThanhToan }, undefined, undefined, undefined, undefined, 'me/page');
