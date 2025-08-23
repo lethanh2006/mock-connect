@@ -1,7 +1,7 @@
 import { colorTrangThaiHocSv, type ETrangThaiHocSv } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { formatPhoneNumber } from '@/utils/utils';
-import { Col, Image, Row, Space, Spin, Tag } from 'antd';
+import { Col, Image, Row, Spin, Tag } from 'antd';
 import { JSX, useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -67,33 +67,33 @@ const PreviewHoSo = () => {
 		{
 			label: 'Khóa ngành',
 			content: (
-				<div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+				<>
 					{[
 						[record?.khoaNganh?.ten, record?.trangThaiHocNganh1],
 						[record?.khoaNganh2?.ten, record?.trangThaiHocNganh2],
 					]
 						.filter(([ten]) => ten)
-						.map(([ten, trangThai], index) => (
+						.map(([ten, trangThai]) => (
 							// eslint-disable-next-line react/jsx-key
-							<Space>
-								{ten}
+							<div>
+								{ten}{' '}
 								{trangThai && (
 									<Tag color={colorTrangThaiHocSv[trangThai as ETrangThaiHocSv]} style={{ marginLeft: 8 }}>
 										{trangThai}
 									</Tag>
 								)}
-							</Space>
+							</div>
 						))}
-				</div>
+				</>
 			),
-			md: 12,
+			md: 16,
 		},
 		{
 			label: 'Chuyên ngành',
 			content: [record?.chuyenNganh?.ten ?? record?.maChuyenNganh, record?.chuyenNganh2?.ten ?? record?.maChuyenNganh2]
 				.filter(Boolean)
 				.join(', '),
-			md: 12,
+			md: 8,
 		},
 		{
 			label: 'Quốc tịch',

@@ -27,7 +27,7 @@ const ThongKeMuonSachCard = () => {
 		{
 			title: 'Quá hạn mượn',
 			value: dataThongKe?.quaHan ?? 0,
-			valueColor: 'red', // Sửa từ 'rec' thành 'red'
+			valueColor: 'red',
 		},
 		{
 			title: 'Đã trả',

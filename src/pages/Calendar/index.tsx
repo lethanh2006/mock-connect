@@ -44,6 +44,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		setDataCalendar,
 		dataCalendarDashboard,
 		setDataLich,
+		edit,
 	} = useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
@@ -400,7 +401,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				footer={null}
 				maskClosable={false}
 				width={800}
-				bodyStyle={{ padding: 0 }}
+				title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}
 			>
 				<FormLichCaNhan getData={getData} />
 			</Modal>

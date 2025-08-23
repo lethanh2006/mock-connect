@@ -1,5 +1,6 @@
 import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
+import { tienVietNam } from '@/utils/utils';
 
 import {
 	CheckCircleOutlined,
@@ -34,8 +35,6 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 		const dataToProcess = data || danhSach || [];
 		calculateThongKe(dataToProcess);
 	}, [data, danhSach]);
-
-	const formatNumber = (num: number) => num.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
 
 	const calculateThongKe = async (dataList: any[]) => {
 		let tongSoDon = dataList.length;
@@ -78,8 +77,8 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 			chuaThanhToan,
 			tongSoTien: tongSoTienDaThu,
 			tongTienChuaThanhToan: tongSoTienConLai,
-			tongSoTienFormatted: formatNumber(tongSoTienDaThu),
-			tongTienChuaThanhToanFormatted: formatNumber(tongSoTienConLai),
+			tongSoTienFormatted: tienVietNam(tongSoTienDaThu),
+			tongTienChuaThanhToanFormatted: tienVietNam(tongSoTienConLai),
 		});
 	};
 
@@ -87,23 +86,20 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 		{
 			title: 'Tổng số đơn',
 			value: thongKe.tongSoDon,
-			icon: <FileTextOutlined style={{ color: '#FFAF0B' }} />,
+			icon: <FileTextOutlined />,
 			valueColor: '#FFAF0B',
-			backgroundColor: '#fffbe6',
 		},
 		{
 			title: 'Đã hoàn thành',
 			value: thongKe.daHoanThanh,
-			icon: <CheckCircleOutlined style={{ color: '#17C229' }} />,
+			icon: <CheckCircleOutlined />,
 			valueColor: '#17C229',
-			backgroundColor: '#EAFFDF',
 		},
 		{
 			title: 'Chưa thanh toán',
 			value: thongKe.chuaThanhToan,
-			icon: <ExclamationCircleOutlined style={{ color: '#DA2128' }} />,
+			icon: <ExclamationCircleOutlined />,
 			valueColor: '#DA2128',
-			backgroundColor: '#fff2e8',
 		},
 	];
 
@@ -111,39 +107,35 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 		{
 			title: 'Tổng số tiền',
 			value: thongKe.tongSoTienFormatted,
-			icon: <DollarCircleOutlined style={{ color: '#17C229' }} />,
+			icon: <DollarCircleOutlined />,
 			valueColor: '#17C229',
-			backgroundColor: '#EAFFDF',
 		},
 		{
 			title: 'Chưa thanh toán',
 			value: thongKe.tongTienChuaThanhToanFormatted,
-			icon: <StopOutlined style={{ color: '#DA2128' }} />,
+			icon: <StopOutlined />,
 			valueColor: '#DA2128',
-			backgroundColor: '#fff2e8',
 		},
 	];
 
 	return (
 		<div style={{ marginBottom: '16px' }}>
-			<Row gutter={[16, 32]} wrap>
+			<Row gutter={[12, 12]} wrap>
 				<Col xs={24} lg={12}>
 					<StatisticsCard
-						borderleft
 						title='Thống kê dịch vụ'
 						data={thongKeDichVuData}
 						loading={loading}
-						colSpan={{ xs: 24, sm: 12, md: 8 }}
+						colSpan={{ xs: 24, md: 8 }}
 					/>
 				</Col>
 
 				<Col xs={24} lg={12}>
 					<StatisticsCard
-						borderleft
 						title='Thống kê chi phí'
 						data={thongKeChiPhiData}
 						loading={loading}
-						colSpan={{ xs: 24, sm: 12 }}
+						colSpan={{ xs: 24, md: 12 }}
 					/>
 				</Col>
 			</Row>

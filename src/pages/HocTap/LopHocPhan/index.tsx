@@ -1,19 +1,15 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
-import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
-import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Card, Col, Empty, Row } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import CardLopHocPhanItem from '../LopHocPhan/components/CardLopHocPhanItem';
-import Statistics from './components/Statistics';
+import BaiTapStatistics from './components/Statistics';
 
 const LopHocPhanPage = () => {
 	const { danhSach, sinhVienGetAllModel, loading } = useModel('lophocphan.lophocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
-	// Lấy dữ liệu bài tập từ model baitap để truyền vào Statistics
-	const { danhSach: danhSachBaiTap, thongKeBaiTapModel } = useModel('daotao.baitap');
 
 	// Background images array
 	const bg1 = '/images/isolation-mode-1.svg';
@@ -27,23 +23,12 @@ const LopHocPhanPage = () => {
 	const getData = () => {
 		if (recHocKy?.ma) {
 			sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
-			// Gọi API lấy dữ liệu bài tập cho thống kê
-			// Có thể điều chỉnh startDate và endDate theo nhu cầu
-			const startDate = new Date(recHocKy?.thoiGianBatDau || Date.now());
-			const endDate = new Date(recHocKy?.thoiGianKetThuc || Date.now());
-			thongKeBaiTapModel(startDate, endDate);
 		}
 	};
 
 	useEffect(() => {
 		getData();
 	}, [recHocKy?.ma]);
-
-	const onCell = (loptinchi: LopHocPhan.IRecord) => ({
-		onClick: () =>
-			loptinchi.loai === ELoaiLopHocPhan.CHINH ? history.push(`/hoc-tap/lop-tin-chi/${loptinchi._id}`) : undefined,
-		style: { cursor: loptinchi.loai === ELoaiLopHocPhan.CHINH ? 'pointer' : undefined },
-	});
 
 	return (
 		<Card
@@ -54,7 +39,7 @@ const LopHocPhanPage = () => {
 		>
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
-					<Statistics danhSach={danhSachBaiTap} />
+					<BaiTapStatistics />
 				</Col>
 
 				<Col span={24}>

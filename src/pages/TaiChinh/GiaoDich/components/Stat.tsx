@@ -1,30 +1,35 @@
-import { inputFormat } from '@/utils/utils';
-import { Card, Col, Row } from 'antd';
+import StatisticsCard from '@/components/StatisticsCard';
+import { StatisticsItem } from '@/components/StatisticsCard/typing';
+import { tienVietNam } from '@/utils/utils';
+import { DollarCircleOutlined, ImportOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const StatGiaoDich = () => {
-	const { getTongGiaoDichSinhVienModel, tongGiaoDich } = useModel('taichinh.giaodich');
+	const { getTongGiaoDichSinhVienModel, tongGiaoDich, loading } = useModel('taichinh.giaodich');
 
 	useEffect(() => {
 		getTongGiaoDichSinhVienModel();
 	}, []);
 
+	const thongKeSoTienData: StatisticsItem[] = [
+		{
+			title: 'Tổng tiền đã nộp',
+			value: tienVietNam(tongGiaoDich?.totalIn ?? 0),
+			icon: <ImportOutlined />,
+			status: 'success',
+		},
+		{
+			title: 'Số dư hiện tại',
+			value: tienVietNam(tongGiaoDich?.totalRemain ?? 0),
+			icon: <DollarCircleOutlined />,
+		},
+	];
+
 	return (
-		<Row gutter={[8, 8]} style={{ marginBottom: 18 }}>
-			<Col span={24} md={12}>
-				<Card className='card-stat-small'>
-					<span className='num text-success'>{`${inputFormat(tongGiaoDich?.totalIn ?? 0)} VND`}</span>
-					<span>Tổng tiền đã nộp</span>
-				</Card>
-			</Col>
-			<Col span={24} md={12}>
-				<Card className='card-stat-small'>
-					<span className='num'>{`${inputFormat(tongGiaoDich?.totalRemain ?? 0)} VND`}</span>
-					<span>Số dư hiện tại</span>
-				</Card>
-			</Col>
-		</Row>
+		<div style={{ marginBottom: 18 }}>
+			<StatisticsCard data={thongKeSoTienData} loading={loading} colSpan={{ xs: 24, md: 12 }} hideCard />
+		</div>
 	);
 };
 
