@@ -22,7 +22,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const isCompleted = progress === 100 || record?.diem?.diemHpSvHk?.diemKthp;
 
 	return (
-		<div className='thong-tin-chung__header'>
+		<div>
 			<Spin spinning={loading}>
 				<div
 					style={{
