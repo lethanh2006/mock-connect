@@ -6,11 +6,12 @@ import './style.less';
 
 const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void; deCuongId?: string }) => {
 	const { record } = useModel('lophocphan.lophocphan');
-	const { record: recDeCuong, getByIdModel: getDeCuong } = useModel('hocphan.decuonghocphan');
+	const { record: recDeCuong, getByIdModel: getDeCuong, setRecord: setDeCuong } = useModel('hocphan.decuonghocphan');
 	const {
 		danhSach: danhSachHocLieu,
 		loading: loadingHocLieu,
 		getModel: getHocLieuDeCuong,
+		setDanhSach: setHocLieu,
 	} = useModel('hocphan.hoclieudecuong');
 	const [expand, setExpand] = useState(false);
 	const { onShowDeCuong, deCuongId } = props;
@@ -21,12 +22,15 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 		if (deCuongId) {
 			getDeCuong(deCuongId);
 			getHocLieuDeCuong({ deCuongId: deCuongId });
+		} else {
+			setDeCuong(undefined);
+			setHocLieu([]);
 		}
 	}, [deCuongId]);
 
 	return (
 		<>
-			<div style={{ minHeight: '150px' }} className='gioi-thieu-section'>
+			<div className='gioi-thieu-section'>
 				<div className='thong-tin-header'>Giới thiệu lớp học phần</div>
 
 				<div
@@ -44,7 +48,7 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 			</div>
 
 			{recDeCuong?.mucTieuHocPhan && (
-				<div style={{ minHeight: '150px' }} className='gioi-thieu-section'>
+				<div className='gioi-thieu-section'>
 					<div className='thong-tin-header'>
 						Mục tiêu học phần
 						<a onClick={() => onShowDeCuong('0')}>Xem chi tiết</a>
@@ -52,7 +56,7 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 
 					<div
 						className='gioi-thieu-chung-content'
-						style={{ display: expand ? 'block' : '-webkit-box' }}
+						style={{ display: '-webkit-box' }}
 						dangerouslySetInnerHTML={{ __html: recDeCuong?.mucTieuHocPhan ?? '' }}
 					/>
 				</div>

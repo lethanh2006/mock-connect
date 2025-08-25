@@ -3,6 +3,7 @@ import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
 import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
+import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import { ESettingKey } from '@/services/base/constant';
 import { ipDaoTao } from '@/utils/ip';
 import {
@@ -20,6 +21,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
 import { history, useModel, useParams } from 'umi';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
+import CardBaiTapLopHp from './components/CardBaiTapLopHp';
 import DanhSachGiangVien from './components/DanhSachGiangVien';
 import DanhSachSinhVien from './components/DanhSachSinhVien';
 import ThongTinChung from './components/ThongTinChung';
@@ -124,41 +126,41 @@ const DetailLopTinChi = () => {
 			content: (
 				<Row gutter={[16, 16]}>
 					<Col span={24} md={{ span: 16 }} xxl={{ span: 18 }}>
-						<ThongTinChung onShowDeCuong={(tab) => setVisibleDeCuongHp([true, tab])} />
-					</Col>
-					<Col span={24} md={{ span: 8 }} xxl={{ span: 6 }}>
-						<Row
-							gutter={[16, 16]}
-							style={{
-								// maxHeight: '120vh',
-								overflowX: 'auto',
-								scrollbarWidth: 'none', // Firefox
-								msOverflowStyle: 'none', // IE 10+
-							}}
-						>
+						<Row gutter={[16, 16]}>
 							<Col span={24}>
-								<Card variant='borderless' bodyStyle={{ paddingTop: 0 }}>
-									<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
-										<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
-										{danhSachLopThucHanh?.map((item) => (
-											<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
-										))}
-									</Tabs>
-
-									{activeKey !== '-1' ? (
-										<DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} title='Giảng viên phụ trách nhóm lớp' />
-									) : null}
-
-									<DanhSachSinhVien
-										sinhVienList={
-											activeKey !== '-1' ? (recLopThucHanh?.sinhVienList ?? []) : (record?.sinhVienList ?? [])
-										}
-										loading={loading || loadingThucHanh}
-										fromLopHocPhan
-									/>
-								</Card>
+								<ThongTinChung onShowDeCuong={(tab) => setVisibleDeCuongHp([true, tab])} />
+							</Col>
+							<Col span={24} lg={12}>
+								<CardBaiTapLopHp lopHocPhanId={record?._id ?? ''} />
+							</Col>
+							<Col span={24} lg={12}>
+								<CardThongBao
+									loai='lop-hoc-phan'
+									idLop={record?._id}
+									onShowAll={() => (window.location.hash = 'thong-bao')}
+								/>
 							</Col>
 						</Row>
+					</Col>
+					<Col span={24} md={{ span: 8 }} xxl={{ span: 6 }}>
+						<Card variant='borderless' styles={{ body: { paddingTop: 0 } }}>
+							<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
+								<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
+								{danhSachLopThucHanh?.map((item) => (
+									<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
+								))}
+							</Tabs>
+
+							{activeKey !== '-1' ? (
+								<DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} title='Giảng viên phụ trách nhóm lớp' />
+							) : null}
+
+							<DanhSachSinhVien
+								sinhVienList={activeKey !== '-1' ? (recLopThucHanh?.sinhVienList ?? []) : (record?.sinhVienList ?? [])}
+								loading={loading || loadingThucHanh}
+								fromLopHocPhan
+							/>
+						</Card>
 					</Col>
 				</Row>
 			),
@@ -173,7 +175,11 @@ const DetailLopTinChi = () => {
 		{
 			title: titles[2],
 			menuKey: paths[2],
-			content: <ThongBaoLopPage loai='lop-hoc-phan' idLop={id as string} />,
+			content: (
+				<Card variant='borderless'>
+					<ThongBaoLopPage loai='lop-hoc-phan' idLop={id as string} />
+				</Card>
+			),
 			icon: <BellOutlined />,
 		},
 		{
@@ -201,7 +207,7 @@ const DetailLopTinChi = () => {
 			title: titles[6],
 			menuKey: paths[6],
 			content: (
-				<Card variant='borderless' style={{ backgroundColor: '#fff' }}>
+				<Card variant='borderless'>
 					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
 					<DetailKetQuaHocTap
 						lopHocPhanId={record?._id}
@@ -215,7 +221,7 @@ const DetailLopTinChi = () => {
 			title: titles[7],
 			menuKey: paths[7],
 			content: (
-				<Card variant='borderless' style={{ backgroundColor: '#fff' }}>
+				<Card variant='borderless'>
 					<DanhGiaGiangVienPage danhSachNhanSu={record?.nhanSuList ?? []} />{' '}
 				</Card>
 			),

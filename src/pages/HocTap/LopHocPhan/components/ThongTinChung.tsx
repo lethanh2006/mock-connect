@@ -1,9 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import { DesktopOutlined, GlobalOutlined } from '@ant-design/icons';
-import { Col, message, Row, Space, Spin } from 'antd';
+import { Card, message, Space, Spin } from 'antd';
 import { useModel } from 'umi';
-import CardBaiTapLopHp from './CardBaiTapLopHp';
 import GioiThieuChungLopHp from './GioiThieuChung';
 import './style.less';
 
@@ -141,22 +139,22 @@ const ThongTinChung = (props: { onShowDeCuong: (activeTab: string) => void }) =>
 
 	return (
 		<Spin spinning={loading}>
-			<div className='thong-tin-chung-container'>
-				{record?.lmsUrl || record?.moodleShortname ? (
-					<Space wrap className='button-space'>
-						{record?.lmsUrl ? (
-							<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
-								Học trực tuyến
-							</ButtonExtend>
-						) : null}
-						{record?.moodleShortname ? (
-							<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
-								Lớp học LMS
-							</ButtonExtend>
-						) : null}
-					</Space>
-				) : null}
+			{record?.lmsUrl || record?.moodleShortname ? (
+				<Space wrap className='button-space'>
+					{record?.lmsUrl ? (
+						<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
+							Học trực tuyến
+						</ButtonExtend>
+					) : null}
+					{record?.moodleShortname ? (
+						<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
+							Lớp học LMS
+						</ButtonExtend>
+					) : null}
+				</Space>
+			) : null}
 
+			<Card variant='borderless' className='thong-tin-chung-container'>
 				<GioiThieuChungLopHp onShowDeCuong={props.onShowDeCuong} deCuongId={deCuongId} />
 
 				{/* Kỹ năng đạt được  */}
@@ -235,20 +233,7 @@ const ThongTinChung = (props: { onShowDeCuong: (activeTab: string) => void }) =>
 						</div>
 					)}
 				</Card> */}
-			</div>
-
-			<Row gutter={[16, 16]} style={{ marginTop: '32px' }}>
-				<Col xs={24} lg={12}>
-					<CardBaiTapLopHp lopHocPhanId={record?._id ?? ''} />
-				</Col>
-				<Col xs={24} lg={12}>
-					<CardThongBao
-						loai='lop-hoc-phan'
-						idLop={record?._id}
-						onShowAll={() => (window.location.hash = 'thong-bao')}
-					/>
-				</Col>
-			</Row>
+			</Card>
 		</Spin>
 	);
 };
