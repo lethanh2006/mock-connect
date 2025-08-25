@@ -40,8 +40,8 @@ const DanhSachDot = () => {
 		style: {
 			cursor: 'pointer',
 			fontWeight: recordVal._id === record?._id ? 600 : undefined,
-			color: recordVal._id === record?._id ? 'var(--primary-color)' : undefined,
-			backgroundColor: recordVal._id === record?._id ? 'var(--primary-1)' : undefined,
+			color: recordVal._id === record?._id ? 'var(--color-primary)' : undefined,
+			backgroundColor: recordVal._id === record?._id ? 'var(--color-primary-bg)' : undefined,
 		},
 	});
 

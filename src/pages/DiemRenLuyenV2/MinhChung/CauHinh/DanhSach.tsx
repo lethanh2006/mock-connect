@@ -1,9 +1,9 @@
+import { EOperatorType } from '@/components/Table/constant';
+import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import type { MinhChungDrl } from '@/services/DiemRenLuyenV2/MinhChung/typing';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import TableStaticData from '@/components/Table/TableStaticData';
-import type { MinhChungDrl } from '@/services/DiemRenLuyenV2/MinhChung/typing';
-import { EOperatorType } from '@/components/Table/constant';
 
 const DanhSachMinhChung = () => {
 	const { getAllModel, danhSach, record, setRecord } = useModel('diemrenluyenv2.minhchung.cauhinh');
@@ -23,8 +23,8 @@ const DanhSachMinhChung = () => {
 		style: {
 			cursor: 'pointer',
 			fontWeight: recordVal.maMinhChung === record?.maMinhChung ? 600 : undefined,
-			color: recordVal.maMinhChung === record?.maMinhChung ? 'var(--primary-color)' : undefined,
-			backgroundColor: recordVal.maMinhChung === record?.maMinhChung ? 'var(--primary-1)' : undefined,
+			color: recordVal.maMinhChung === record?.maMinhChung ? 'var(--color-primary)' : undefined,
+			backgroundColor: recordVal.maMinhChung === record?.maMinhChung ? 'var(--color-primary-bg)' : undefined,
 		},
 	});
 
