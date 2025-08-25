@@ -1,7 +1,7 @@
 import DonutChart from '@/components/Chart/DonutChart';
 import { EOperatorType } from '@/components/Table/constant';
 import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Space, Tooltip } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
@@ -93,7 +93,7 @@ const CardCongNoDashboard = () => {
 
 						<div>
 							<Tooltip title='Xem chi tiết'>
-								<InfoCircleOutlined className='more-info' onClick={() => history.push('/tai-chinh/cong-no')} />
+								<ArrowRightOutlined className='more-info' onClick={() => history.push('/tai-chinh/cong-no')} />
 							</Tooltip>
 						</div>
 					</div>
@@ -101,109 +101,101 @@ const CardCongNoDashboard = () => {
 					{danhSach.length ? (
 						<>
 							{/* Radial Chart - similar to CardHocTap */}
-							<Row gutter={[12, 0]} justify='center'>
-								<Col span={24}>
-									<div className='chart-container'>
-										<DonutChart
-											xAxis={xAxis}
-											yLabel={['Công nợ']}
-											yAxis={[yAxis]}
-											type='radian'
-											formatY={(e) => `${e.toFixed(1)}%`}
-											height={180}
-											width={180}
-											otherOptions={{
-												legend: { show: false },
-												dataLabels: { enabled: false },
-												chart: { toolbar: { show: false } },
-												tooltip: { enabled: true },
-												plotOptions: {
-													radialBar: {
-														dataLabels: { show: false },
-														hollow: { size: '35px' },
-													},
-												},
-												responsive: [
-													{
-														breakpoint: 480,
-														options: {
-															chart: { width: 150, height: 150 },
-															legend: { show: false },
-															plotOptions: {
-																radialBar: {
-																	hollow: { size: '30px' },
-																},
-															},
+							<div className='chart-container'>
+								<DonutChart
+									xAxis={xAxis}
+									yLabel={['Công nợ']}
+									yAxis={[yAxis]}
+									type='radian'
+									formatY={(e) => `${e.toFixed(1)}%`}
+									height={180}
+									width={180}
+									otherOptions={{
+										legend: { show: false },
+										dataLabels: { enabled: false },
+										chart: { toolbar: { show: false } },
+										tooltip: { enabled: true },
+										plotOptions: {
+											radialBar: {
+												dataLabels: { show: false },
+												hollow: { size: '35px' },
+											},
+										},
+										responsive: [
+											{
+												breakpoint: 480,
+												options: {
+													chart: { width: 150, height: 150 },
+													legend: { show: false },
+													plotOptions: {
+														radialBar: {
+															hollow: { size: '30px' },
 														},
 													},
-												],
-												// Thêm stroke để bo tròn các góc
-												stroke: {
-													lineCap: 'round' as 'round', // Bo tròn các đầu
 												},
-											}}
-											colors={colors}
-										/>
-										<div className='center-label'>
-											<div className='total-value'>{(chartData.grandTotal / 1e6).toFixed(1)}</div>
-											<div className='total-text'>Tổng số</div>
-										</div>
+											},
+										],
+										// Thêm stroke để bo tròn các góc
+										stroke: {
+											lineCap: 'round' as 'round', // Bo tròn các đầu
+										},
+									}}
+									colors={colors}
+								/>
+								<div className='center-label'>
+									<div className='total-value'>{(chartData.grandTotal / 1e6).toFixed(1)}</div>
+									<div className='total-text'>Tổng số</div>
+								</div>
 
-										<div className='percentage-label left'>{yAxis[0]}%</div>
-										<div className='percentage-label right'>{yAxis[1]}%</div>
-									</div>
-								</Col>
-							</Row>
+								<div className='percentage-label left'>{yAxis[0]}%</div>
+								<div className='percentage-label right'>{yAxis[1]}%</div>
+							</div>
 
 							{/* Legend */}
-							<Row justify='center'>
-								<Col span={24}>
-									<div className='legend'>
-										<Row gutter={[0, 8]} justify='center'>
-											<Col span={24}>
-												<div className='row'>
-													<Space>
-														<span className='dot' style={{ backgroundColor: colors[0] }} />
-														<span>Dịch vụ sinh viên</span>
-													</Space>
-													<span className='sum-text' style={{ color: colors[0] }}>
-														{Math.round(chartData.total[0] / 1e4) / 100}
-													</span>
-												</div>
-											</Col>
-											<Col span={24}>
-												<div className='row indented'>
-													<Space>
-														<span className='dot gray' />
-														<span>Chưa thanh toán</span>
-													</Space>
-													<span className='sum-text gray'>{Math.round(chartData.unpaid[0] / 1e4) / 100}</span>
-												</div>
-											</Col>
-											<Col span={24}>
-												<div className='row'>
-													<Space>
-														<span className='dot' style={{ backgroundColor: colors[1] }} />
-														<span>Dịch vụ khác</span>
-													</Space>
-													<span className='sum-text' style={{ color: colors[1] }}>
-														{Math.round(chartData.total[1] / 1e4) / 100}
-													</span>
-												</div>
-											</Col>
-											<Col span={24}>
-												<div className='row indented'>
-													<Space>
-														<span className='dot gray' />
-														<span>Chưa thanh toán</span>
-													</Space>
-													<span className='sum-text gray'>{Math.round(chartData.unpaid[1] / 1e4) / 100}</span>
-												</div>
-											</Col>
-										</Row>
-									</div>
-								</Col>
-							</Row>
+							<div className='legend'>
+								<Row gutter={[0, 4]} justify='center'>
+									<Col span={24}>
+										<div className='row'>
+											<Space>
+												<span className='dot' style={{ backgroundColor: colors[0] }} />
+												<span>Dịch vụ sinh viên</span>
+											</Space>
+											<span className='sum-text' style={{ color: colors[0] }}>
+												{Math.round(chartData.total[0] / 1e4) / 100}
+											</span>
+										</div>
+									</Col>
+									<Col span={24}>
+										<div className='row indented'>
+											<Space>
+												<span className='dot gray' />
+												<span>Chưa thanh toán</span>
+											</Space>
+											<span className='sum-text gray'>{Math.round(chartData.unpaid[0] / 1e4) / 100}</span>
+										</div>
+									</Col>
+									<Col span={24}>
+										<div className='row'>
+											<Space>
+												<span className='dot' style={{ backgroundColor: colors[1] }} />
+												<span>Dịch vụ khác</span>
+											</Space>
+											<span className='sum-text' style={{ color: colors[1] }}>
+												{Math.round(chartData.total[1] / 1e4) / 100}
+											</span>
+										</div>
+									</Col>
+									<Col span={24}>
+										<div className='row indented'>
+											<Space>
+												<span className='dot gray' />
+												<span>Chưa thanh toán</span>
+											</Space>
+											<span className='sum-text gray'>{Math.round(chartData.unpaid[1] / 1e4) / 100}</span>
+										</div>
+									</Col>
+								</Row>
+							</div>
 						</>
 					) : (
 						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
