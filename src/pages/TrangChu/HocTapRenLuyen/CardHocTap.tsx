@@ -1,8 +1,8 @@
 import DonutChart from '@/components/Chart/DonutChart';
+import ChartPloToanKhoa from '@/pages/HocTap/KetQuaHocTap/KetQuaToanKhoa/ChartPlo';
 import { colorLoaiHocLuc, ELoaiHocLuc } from '@/services/HocTap/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Carousel, Col, Row, Space, Tooltip } from 'antd';
-import Chart from 'react-apexcharts';
 import { history, Link, useModel } from 'umi';
 
 const CardKetQuaHocTapDashboard = () => {
@@ -125,26 +125,7 @@ const CardKetQuaHocTapDashboard = () => {
 
 					<div>
 						<div className='chart-container'>
-							<Chart
-								options={{
-									chart: {
-										height: 350,
-										type: 'radar',
-									},
-									title: {
-										text: 'Basic Radar Chart',
-									},
-									yaxis: {
-										stepSize: 20,
-									},
-									xaxis: {
-										categories: ['January', 'February', 'March', 'April', 'May', 'June'],
-									},
-								}}
-								series={[3, 3.5, 4.2, 4.5]}
-								height={200}
-								width={200}
-							/>
+							<ChartPloToanKhoa title='' />
 						</div>
 					</div>
 				</Carousel>
