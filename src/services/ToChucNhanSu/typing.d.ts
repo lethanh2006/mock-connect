@@ -39,7 +39,8 @@ declare module ToChucNhanSu {
 		hoTen?: string;
 		// tenGoiKhac: string;
 		// biDanh: string;
-		email: string;
+		email?: string;
+		emailCanBo?: string;
 		gioiTinh: string;
 		ngaySinh: string;
 		// noiSinhSoNha: string;
@@ -102,6 +103,7 @@ declare module ToChucNhanSu {
 		// ngoaiNguId: string;
 		// khungNangLucNgoaiNguId: string;
 		urlAnhDaiDien?: string;
+		trinhDoDaoTao?: string;
 
 		donViViTri?: {
 			capChucVu: string; //'Cán bộ, giảng viên';

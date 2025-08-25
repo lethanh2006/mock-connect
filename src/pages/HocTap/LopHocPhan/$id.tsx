@@ -1,4 +1,5 @@
 import { TabViewPage } from '@/components/TabViewPage';
+import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
 import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
@@ -54,6 +55,7 @@ const DetailLopTinChi = () => {
 		'Kết quả học tập',
 		'Đánh giá giảng viên',
 	];
+	const [visibleDeCuongHp, setVisibleDeCuongHp] = useState<[boolean, string]>([false, '3']);
 
 	useEffect(() => {
 		getSettings(ESettingKey.GENERAL_INFO, ipDaoTao);
@@ -72,23 +74,15 @@ const DetailLopTinChi = () => {
 		}
 	};
 
-	// useEffect(() => {
-	// 	if (auth.user?.access_token && id) {
-	// 		getData();
-	// 	}
-
-	// 	return () => {
-	// 		setRecord(undefined);
-	// 	};
-	// }, [auth.user?.access_token, id]);
-
-	// useEffect(() => {
-	// 	if (id) sinhVienGetByIdModel(id);
-	// }, [id]);
-
 	useEffect(() => {
-		if (id) getData();
-	}, [id]);
+		if (auth.user?.access_token && id) {
+			getData();
+		}
+
+		return () => {
+			setRecord(undefined);
+		};
+	}, [auth.user?.access_token, id]);
 
 	useEffect(() => {
 		if (auth.user?.access_token) {
@@ -130,7 +124,7 @@ const DetailLopTinChi = () => {
 			content: (
 				<Row gutter={[16, 16]}>
 					<Col span={24} md={{ span: 16 }} xxl={{ span: 18 }}>
-						<ThongTinChung />
+						<ThongTinChung onShowDeCuong={(tab) => setVisibleDeCuongHp([true, tab])} />
 					</Col>
 					<Col span={24} md={{ span: 8 }} xxl={{ span: 6 }}>
 						<Row
@@ -231,7 +225,8 @@ const DetailLopTinChi = () => {
 
 	return (
 		<>
-			<ThongTinChungHeaderCard />
+			<ThongTinChungHeaderCard onShowDeCuong={() => setVisibleDeCuongHp([true, '0'])} />
+
 			<TabViewPage
 				offsetTop={106}
 				hideCard
@@ -241,6 +236,13 @@ const DetailLopTinChi = () => {
 					backgroundColor: 'var(--color-primary-bg)',
 					marginTop: '-50px', // để phần Tabpane nằm bên trong ThongTinChungHeaderCard
 				}}
+			/>
+
+			<ModalHocPhan
+				visible={visibleDeCuongHp[0]}
+				setVisible={() => setVisibleDeCuongHp([false, '0'])}
+				title='Chi tiết đề cương học phần'
+				activeKey={visibleDeCuongHp[1]}
 			/>
 		</>
 	);

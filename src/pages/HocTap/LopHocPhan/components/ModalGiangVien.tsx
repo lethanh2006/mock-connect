@@ -1,20 +1,5 @@
+import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import { Avatar, Col, Descriptions, Modal, Row, Typography } from 'antd';
-
-interface GiangVien {
-	hoTen: string;
-	emailCanBo: string;
-	ngaySinh: string;
-	gioiTinh: string;
-	hocHam?: string;
-	trinhDoDaoTao?: string;
-	donViViTri?: {
-		tenChucVu?: string;
-	};
-	donViChinh?: {
-		ten?: string;
-	};
-	anhDaiDienUrl?: string;
-}
 
 const ModalThongTinGiangVien = ({
 	visible,
@@ -23,15 +8,22 @@ const ModalThongTinGiangVien = ({
 }: {
 	visible: boolean;
 	onCancel: () => void;
-	giangVien?: GiangVien | null;
+	giangVien?: ToChucNhanSu.INhanSu | null;
 }) => {
 	return (
-		<Modal title='Thông tin giảng viên' open={visible} onCancel={onCancel} footer={null} width={800}>
+		<Modal
+			title='Thông tin giảng viên'
+			open={visible}
+			onCancel={onCancel}
+			okButtonProps={{ hidden: true }}
+			cancelText='Đóng'
+			width={800}
+		>
 			{giangVien ? (
-				<Row gutter={[0, 12]}>
+				<Row gutter={[0, 12]} align='middle'>
 					<Col span={24} md={8} style={{ textAlign: 'center' }}>
 						<Avatar
-							src={giangVien?.anhDaiDienUrl || `/images/${giangVien?.gioiTinh === 'Nữ' ? 'female.svg' : 'male.svg'}`}
+							src={giangVien?.urlAnhDaiDien || `/images/${giangVien?.gioiTinh === 'Nữ' ? 'female.svg' : 'male.svg'}`}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>
 					</Col>

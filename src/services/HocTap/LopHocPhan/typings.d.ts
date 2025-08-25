@@ -4,6 +4,7 @@ import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import type { ETrangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
+import type { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
 import type { ETrangThaiThi } from '../constant';
 import type {

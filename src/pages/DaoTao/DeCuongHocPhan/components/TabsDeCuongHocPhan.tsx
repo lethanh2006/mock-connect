@@ -1,5 +1,5 @@
 import { Tabs } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GiangVienDeCuongPage from '../GiangVienDeCuong';
 import HocLieuDeCuongPage from '../HocLieuDeCuong';
 import NoiDungHocPhanPage from '../LichTrinhChung';
@@ -8,6 +8,10 @@ import ThongTinChungPage from './ThongTinChung';
 
 const TabsDeCuongHocPhan = (props: { activeKey?: string }) => {
 	const [activeKey, setActiveKey] = useState<string>(props.activeKey || '0');
+
+	useEffect(() => {
+		setActiveKey(props.activeKey || '0');
+	}, [props.activeKey]);
 
 	return (
 		<>

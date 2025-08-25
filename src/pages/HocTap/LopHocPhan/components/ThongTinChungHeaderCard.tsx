@@ -1,77 +1,18 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
+import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import dayjs from '@/utils/dayjs';
-import { DesktopOutlined, GlobalOutlined } from '@ant-design/icons';
-import { Col, message, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
-import { useEffect, useRef, useState } from 'react';
-import { useModel } from 'umi';
-import ModalThongTinGiangVien from './CardGiangVienLopHp';
-import DanhSachGiangVien from './DanhSachGiangVien';
+import { Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
+import { useRef, useState } from 'react';
+import { Link, useModel } from 'umi';
+import ModalThongTinGiangVien from './ModalGiangVien';
 import './style.less';
-
-interface GiangVien {
-	hoTen: string;
-	emailCanBo: string;
-	ngaySinh: string;
-	gioiTinh: string;
-	hocHam?: string;
-	trinhDoDaoTao?: string;
-	donViViTri?: {
-		tenChucVu?: string;
-	};
-	donViChinh?: {
-		ten?: string;
-	};
-}
-
 const { Title, Text } = Typography;
 
-const ThongTinChungHeaderCard = () => {
-	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
-	const {
-		record: recLopThucHanh,
-		danhSach: danhSachLopThucHanh,
-		sinhVienGetByIdModel: getByIdLopThucHanh,
-		sinhVienGetModel: getLopThucHanh,
-		danhSachNhanSu: danhSachNhanSuLopTH,
-		getAllNhanSuModel: getNhanSuLopTH,
-		loading: loadingThucHanh,
-	} = useModel('daotao.lopthuchanh');
-	const [activeKey, setActiveKey] = useState<string>('-1');
-	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
-
-	const [selectedGiangVien, setSelectedGiangVien] = useState<GiangVien | null>(null);
+const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
+	const { loading, record } = useModel('lophocphan.lophocphan');
+	const [selectedGiangVien, setSelectedGiangVien] = useState<ToChucNhanSu.INhanSu>();
 	const [visibleGvDetailModal, setVisibleGvDetailModal] = useState(false);
-
-	const Isolation_Mode_1 = '/images/isolation-mode-1.png';
-	const Isolation_Mode_2 = '/images/isolation-mode-2.png';
-	const Isolation_Mode_3 = '/images/isolation-mode-3.png';
-	const Isolation_Mode_4 = '/images/isolation-mode-4.png';
-	const backgrounds = [Isolation_Mode_1, Isolation_Mode_2, Isolation_Mode_3, Isolation_Mode_4];
-	const backgroundRef = useRef(backgrounds[Math.floor(Math.random() * backgrounds.length)]);
-	const randomBackground = backgroundRef.current;
-
-	useEffect(() => {
-		setActiveKey('-1');
-		if (record?._id) {
-			getLopThucHanh({ tenCha: record?.ten });
-		}
-	}, [record?._id]);
-
-	useEffect(() => {
-		if (activeKey !== '-1') {
-			getByIdLopThucHanh(activeKey);
-			getNhanSuLopTH(activeKey);
-		}
-	}, [activeKey]);
-
-	const handleMoodle = () => {
-		if (record?.moodleShortname && record?._id)
-			getMoodleLopHocPhanModel(record._id).then((data) => {
-				if (data?.url) window.open(`${data.url}`);
-				else message.error('Có lỗi, vui lòng thử lại sau');
-			});
-	};
+	const backgroundRef = useRef(Math.floor(Math.random() * 6));
+	const randomBackground = `/images/isolation-mode-${backgroundRef.current}.svg`;
 
 	let allThoiKhoaBieu = record?.thoiKhoaBieuList ?? [];
 	allThoiKhoaBieu = allThoiKhoaBieu.concat(record?.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? []);
@@ -107,7 +48,7 @@ const ThongTinChungHeaderCard = () => {
 						<Title level={4} style={{ margin: 0, color: '#333' }}>
 							{record?.hocPhan?.ten ? (
 								<Tooltip title='Xem đề cương chi tiết học phần'>
-									<a onClick={() => setVisibleDeCuong(true)} style={{ color: '#333' }}>
+									<a onClick={() => props.onShowDeCuong?.()} style={{ color: '#333' }}>
 										{record?.hocPhan?.ten ?? ''}
 									</a>
 								</Tooltip>
@@ -146,22 +87,15 @@ const ThongTinChungHeaderCard = () => {
 								<Text strong style={{ marginLeft: 8 }}>
 									{(record?.nhanSuList ?? []).map((item, index) => (
 										<span key={index}>
-											<Typography.Link
-												style={{
-													cursor: 'pointer',
-													marginRight: 4,
-													transition: 'color 0.3s ease',
-													color: 'black',
-												}}
+											<Link
+												to='#!'
 												onClick={() => {
 													setSelectedGiangVien(item?.nhanSu);
 													setVisibleGvDetailModal(true);
 												}}
-												onMouseEnter={(e) => (e.currentTarget.style.color = '#1890ff')}
-												onMouseLeave={(e) => (e.currentTarget.style.color = 'black')}
 											>
 												{item?.nhanSu?.hoTen}
-											</Typography.Link>
+											</Link>
 											{index < (record?.nhanSuList?.length ?? 0) - 1 && <span>, </span>}
 										</span>
 									))}
@@ -170,33 +104,8 @@ const ThongTinChungHeaderCard = () => {
 								<Text style={{ marginLeft: 8, color: '#999' }}>Không có</Text>
 							)}
 						</Col>
-						<Col>
-							{/* Action Buttons */}
-							<Space wrap className='header-action-buttons'>
-								{record?.lmsUrl ? (
-									<ButtonExtend
-										className='button-extend'
-										notHideText
-										icon={<GlobalOutlined />}
-										onClick={() => window.open(record.lmsUrl, '_blank')}
-									>
-										Học trực tuyến
-									</ButtonExtend>
-								) : null}
-								{record?.moodleShortname ? (
-									<ButtonExtend className='button-extend' notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
-										Lớp học LMS
-									</ButtonExtend>
-								) : null}
-							</Space>
-						</Col>
 					</Row>
 
-					{activeKey !== '-1' ? (
-						<DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} title='Giảng viên phụ trách nhóm lớp' />
-					) : null}
-
-					<ModalHocPhan visible={visibleDeCuong} setVisible={setVisibleDeCuong} title='Chi tiết đề cương học phần' />
 					<ModalThongTinGiangVien
 						visible={visibleGvDetailModal}
 						onCancel={() => setVisibleGvDetailModal(false)}
