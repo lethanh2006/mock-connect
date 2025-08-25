@@ -12,7 +12,7 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Space, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { Link, useModel } from 'umi';
 
 const CardRenLuyenDashboard = () => {
 	const { getAllModel, record: recDot, setRecord, loading } = useModel('diemrenluyenv2.dot');
@@ -184,14 +184,11 @@ const CardRenLuyenDashboard = () => {
 						Kết quả rèn luyện <span style={{ fontWeight: 400, fontSize: '12px', color: '#ababab' }}>(Hiện tại)</span>
 					</div>
 
-					<div>
-						<Tooltip title='Xem chi tiết'>
-							<ArrowRightOutlined
-								className='more-info'
-								onClick={() => history.push('/diem-ren-luyen/phieu-diem-ren-luyen')}
-							/>
-						</Tooltip>
-					</div>
+					<Tooltip title='Xem chi tiết'>
+						<Link to='/diem-ren-luyen/phieu-diem-ren-luyen'>
+							<ArrowRightOutlined />
+						</Link>
+					</Tooltip>
 				</div>
 
 				<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 12 }}>
