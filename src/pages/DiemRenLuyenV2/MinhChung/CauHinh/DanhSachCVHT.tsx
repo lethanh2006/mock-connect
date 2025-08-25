@@ -39,7 +39,7 @@ const DanhSachMinhChungCVHT = React.forwardRef((props: { idLopHanhChinh?: string
 		style: {
 			cursor: 'pointer',
 			fontWeight: recordVal.maMinhChung === record?.maMinhChung ? 700 : 600,
-			color: recordVal.maMinhChung === record?.maMinhChung ? 'var(--primary-color)' : undefined,
+			color: recordVal.maMinhChung === record?.maMinhChung ? 'var(--color-primary)' : undefined,
 			backgroundColor: recordVal.maMinhChung === record?.maMinhChung ? '#f0f0f0' : undefined,
 		},
 	});
