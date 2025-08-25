@@ -381,3 +381,15 @@
 		border-color: currentColor;
 	}
 }
+.ant-list-item {
+	.card-hover {
+		transition: all 0.2s ease; // mượt cả background lẫn transform
+
+		&:hover {
+			background-color: #fafafa;
+			cursor: pointer;
+			transform: translateY(-1px); // di chuyển nhẹ lên trên
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); // optional: thêm bóng nhẹ
+		}
+	}
+}
