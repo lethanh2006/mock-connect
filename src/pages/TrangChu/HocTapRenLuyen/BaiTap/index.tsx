@@ -1,16 +1,14 @@
 import PDFViewerV2 from '@/components/PDFViewerV2';
+import BoxFile from '@/pages/HocTap/LopHocPhan/DienDan/components/BoxFile';
+import {
+	colorTrangThaiNopBaiTap,
+	ETrangThaiNopBaiTap,
+	mapTrangThaiNopBaiTap,
+} from '@/services/DaoTao/BaiTap/constants';
 import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
-import {
-	ArrowRightOutlined,
-	DownloadOutlined,
-	EyeOutlined,
-	FilePdfOutlined,
-	FilePptOutlined,
-	FileTextOutlined,
-	MoreOutlined,
-} from '@ant-design/icons';
-import { Button, Carousel, Empty, List, Modal, Popover, Space, Typography } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
+import { Button, Carousel, Empty, Modal, Space, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
 import SlideButtonIcon from '../../components/SlideButtonIcon';
@@ -95,66 +93,66 @@ const CardBaiTapDashboard = () => {
 	};
 
 	// Hàm lấy tên file từ URL
-	const getFileNameFromUrl = (url: string): string => {
-		try {
-			const urlObj = new URL(url);
-			const pathname = urlObj.pathname;
-			const fileName = pathname.split('/').pop() || 'file';
-			return decodeURIComponent(fileName);
-		} catch {
-			return url.split('/').pop() || 'file';
-		}
-	};
+	// const getFileNameFromUrl = (url: string): string => {
+	// 	try {
+	// 		const urlObj = new URL(url);
+	// 		const pathname = urlObj.pathname;
+	// 		const fileName = pathname.split('/').pop() || 'file';
+	// 		return decodeURIComponent(fileName);
+	// 	} catch {
+	// 		return url.split('/').pop() || 'file';
+	// 	}
+	// };
 
 	// Thêm hàm helper để cắt tên file
-	const truncateFileName = (fileName: string, maxLength: number = 25): string => {
-		if (fileName.length <= maxLength) return fileName;
+	// const truncateFileName = (fileName: string, maxLength: number = 25): string => {
+	// 	if (fileName.length <= maxLength) return fileName;
 
-		const lastDotIndex = fileName.lastIndexOf('.');
-		if (lastDotIndex === -1) {
-			return fileName.substring(0, maxLength - 3) + '...';
-		}
+	// 	const lastDotIndex = fileName.lastIndexOf('.');
+	// 	if (lastDotIndex === -1) {
+	// 		return fileName.substring(0, maxLength - 3) + '...';
+	// 	}
 
-		const name = fileName.substring(0, lastDotIndex);
-		const extension = fileName.substring(lastDotIndex);
+	// 	const name = fileName.substring(0, lastDotIndex);
+	// 	const extension = fileName.substring(lastDotIndex);
 
-		if (extension.length >= maxLength - 3) {
-			// Extension quá dài
-			return fileName.substring(0, maxLength - 3) + '...';
-		}
+	// 	if (extension.length >= maxLength - 3) {
+	// 		// Extension quá dài
+	// 		return fileName.substring(0, maxLength - 3) + '...';
+	// 	}
 
-		const availableLength = maxLength - extension.length - 3; // -3 cho "..."
-		if (availableLength <= 0) {
-			return '...' + extension;
-		}
+	// 	const availableLength = maxLength - extension.length - 3; // -3 cho "..."
+	// 	if (availableLength <= 0) {
+	// 		return '...' + extension;
+	// 	}
 
-		return name.substring(0, availableLength) + '...' + extension;
-	};
+	// 	return name.substring(0, availableLength) + '...' + extension;
+	// };
 
 	// Hàm lấy icon file dựa trên extension
-	const getFileIcon = (fileName: string) => {
-		const ext = fileName.split('.').pop()?.toLowerCase();
-		switch (ext) {
-			case 'pdf':
-				return <FilePdfOutlined className='file-icon pdf' />;
-			case 'ppt':
-			case 'pptx':
-				return <FilePptOutlined className='file-icon ppt' />;
-			case 'doc':
-			case 'docx':
-				return <FileTextOutlined className='file-icon doc' />;
-			case 'xls':
-			case 'xlsx':
-				return <FileTextOutlined className='file-icon excel' />;
-			case 'jpg':
-			case 'jpeg':
-			case 'png':
-			case 'gif':
-				return <FileTextOutlined className='file-icon image' />;
-			default:
-				return <FileTextOutlined className='file-icon default' />;
-		}
-	};
+	// const getFileIcon = (fileName: string) => {
+	// 	const ext = fileName.split('.').pop()?.toLowerCase();
+	// 	switch (ext) {
+	// 		case 'pdf':
+	// 			return <FilePdfOutlined className='file-icon pdf' />;
+	// 		case 'ppt':
+	// 		case 'pptx':
+	// 			return <FilePptOutlined className='file-icon ppt' />;
+	// 		case 'doc':
+	// 		case 'docx':
+	// 			return <FileTextOutlined className='file-icon doc' />;
+	// 		case 'xls':
+	// 		case 'xlsx':
+	// 			return <FileTextOutlined className='file-icon excel' />;
+	// 		case 'jpg':
+	// 		case 'jpeg':
+	// 		case 'png':
+	// 		case 'gif':
+	// 			return <FileTextOutlined className='file-icon image' />;
+	// 		default:
+	// 			return <FileTextOutlined className='file-icon default' />;
+	// 	}
+	// };
 
 	// Hàm xử lý download file
 	const handleDownloadFile = (url: string, fileName: string) => {
@@ -179,73 +177,73 @@ const CardBaiTapDashboard = () => {
 	};
 
 	// Component action popover cho file
-	const FileActionPopover = ({ fileUrl, fileName }: { fileUrl: string; fileName: string }) => {
-		const fileType = fileName.split('.').pop()?.toLowerCase() || '';
-		const canPreview = ['pdf'].includes(fileType);
+	// const FileActionPopover = ({ fileUrl, fileName }: { fileUrl: string; fileName: string }) => {
+	// 	const fileType = fileName.split('.').pop()?.toLowerCase() || '';
+	// 	const canPreview = ['pdf'].includes(fileType);
 
-		const fileActions = [
-			{ key: 'download', label: 'Tải xuống', icon: <DownloadOutlined /> },
-			...(canPreview ? [{ key: 'preview', label: 'Xem trước', icon: <EyeOutlined /> }] : []),
-		];
+	// 	const fileActions = [
+	// 		{ key: 'download', label: 'Tải xuống', icon: <DownloadOutlined /> },
+	// 		...(canPreview ? [{ key: 'preview', label: 'Xem trước', icon: <EyeOutlined /> }] : []),
+	// 	];
 
-		const handleAction = (key: string) => {
-			if (key === 'download') {
-				handleDownloadFile(fileUrl, fileName);
-			} else if (key === 'preview') {
-				handlePreviewFile(fileUrl, fileName);
-			}
-		};
+	// 	const handleAction = (key: string) => {
+	// 		if (key === 'download') {
+	// 			handleDownloadFile(fileUrl, fileName);
+	// 		} else if (key === 'preview') {
+	// 			handlePreviewFile(fileUrl, fileName);
+	// 		}
+	// 	};
 
-		const content = (
-			<List
-				size='small'
-				dataSource={fileActions}
-				renderItem={(item) => (
-					<List.Item className='action-item' onClick={() => handleAction(item.key)}>
-						{item.icon}
-						{item.label}
-					</List.Item>
-				)}
-			/>
-		);
+	// 	const content = (
+	// 		<List
+	// 			size='small'
+	// 			dataSource={fileActions}
+	// 			renderItem={(item) => (
+	// 				<List.Item className='action-item' onClick={() => handleAction(item.key)}>
+	// 					{item.icon}
+	// 					{item.label}
+	// 				</List.Item>
+	// 			)}
+	// 		/>
+	// 	);
 
-		return (
-			<Popover content={content} trigger='click' placement='bottomRight' overlayClassName='file-action-popover'>
-				<Button
-					type='text'
-					icon={<MoreOutlined />}
-					className='file-action-button'
-					onClick={(e) => e.stopPropagation()}
-				/>
-			</Popover>
-		);
-	};
+	// 	return (
+	// 		<Popover content={content} trigger='click' placement='bottomRight' overlayClassName='file-action-popover'>
+	// 			<Button
+	// 				type='text'
+	// 				icon={<MoreOutlined />}
+	// 				className='file-action-button'
+	// 				onClick={(e) => e.stopPropagation()}
+	// 			/>
+	// 		</Popover>
+	// 	);
+	// };
 
 	// Component hiển thị file
-	const FileItem = ({ fileUrl, index }: { fileUrl: string; index: number }) => {
-		const fileName = getFileNameFromUrl(fileUrl);
-		const isMobile = screenSize.width <= 768;
+	// const FileItem = ({ fileUrl, index }: { fileUrl: string; index: number }) => {
+	// 	const fileName = getFileNameFromUrl(fileUrl);
+	// 	const isMobile = screenSize.width <= 768;
 
-		// Xác định độ dài tối đa dựa trên kích thước màn hình
-		const maxFileNameLength = isMobile ? 20 : 30;
-		const displayFileName = truncateFileName(fileName, maxFileNameLength);
+	// 	// Xác định độ dài tối đa dựa trên kích thước màn hình
+	// 	const maxFileNameLength = isMobile ? 20 : 30;
+	// 	const displayFileName = truncateFileName(fileName, maxFileNameLength);
 
-		return (
-			<div key={index} className={`file-item ${isMobile ? 'mobile' : ''}`}>
-				{getFileIcon(fileName)}
-				<div className='file-info'>
-					<Text
-						className={`file-name ${isMobile ? 'mobile' : ''}`}
-						title={fileName} // Hiển thị tên file đầy đủ khi hover
-					>
-						{displayFileName}
-					</Text>
-					{/* <Text className={`file-size ${isMobile ? 'mobile' : ''}`}>{fileSize}</Text> */}
-				</div>
-				<FileActionPopover fileUrl={fileUrl} fileName={fileName} />
-			</div>
-		);
-	};
+	// 	return (
+	// 		<div key={index} className={`file-item ${isMobile ? 'mobile' : ''}`}>
+	// 			{getFileIcon(fileName)}
+	// 			<div className='file-info'>
+	// 				<Text
+	// 					className={`file-name ${isMobile ? 'mobile' : ''}`}
+	// 					title={fileName} // Hiển thị tên file đầy đủ khi hover
+	// 				>
+	// 					{displayFileName}
+	// 				</Text>
+	// 				{/* <Text className={`file-size ${isMobile ? 'mobile' : ''}`}>{fileSize}</Text> */}
+	// 			</div>
+	// 			<FileActionPopover fileUrl={fileUrl} fileName={fileName} />
+	// 		</div>
+	// 	);
+	// };
 
 	const renderAssignmentCard = (item: BaiTap.IDanhSachGiaoBaiTap, index: number) => {
 		const files = item.assignment.urlTepDinhKem || [];
@@ -278,7 +276,8 @@ const CardBaiTapDashboard = () => {
 					{files.length > 0 && (
 						<div className={`files-section ${isMobile ? 'mobile' : ''}`}>
 							{files.slice(0, 2).map((fileUrl, fileIndex) => (
-								<FileItem key={fileIndex} fileUrl={fileUrl} index={fileIndex} />
+								// <FileItem key={fileIndex} fileUrl={fileUrl} index={fileIndex} />
+								<BoxFile url={fileUrl} />
 							))}
 							{files.length > 2 && (
 								<Text className={`more-files-text ${isMobile ? 'mobile' : ''}`}>
@@ -293,6 +292,9 @@ const CardBaiTapDashboard = () => {
 						<Text className={`deadline-label ${isMobile ? 'mobile' : ''}`}>Hạn nộp bài:</Text>
 						<Text className={`deadline-time ${isMobile ? 'mobile' : ''}`}>
 							{dayjs(item.assignment.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+							<Tag color={colorTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}>
+								{mapTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
+							</Tag>
 						</Text>
 					</div>
 				</div>
