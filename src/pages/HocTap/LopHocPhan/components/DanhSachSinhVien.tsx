@@ -4,6 +4,7 @@ import { EGioiTinh } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row } from 'antd';
+import './style.less';
 
 import { useEffect, useState } from 'react';
 
@@ -79,43 +80,87 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 				style={{
 					maxHeight: '60vh',
 					overflowY: 'auto',
-					// scrollbarWidth: 'none', // Firefox
-					// msOverflowStyle: 'none', // IE 10+
+					overflowX: 'hidden', // ẩn scroll ngang
 				}}
 			>
-				<List
-					dataSource={sinhVienList}
-					renderItem={(student) => (
-						<List.Item
-							style={{ padding: '12px 0px', borderBottom: '1px solid #f0f0f0', cursor: 'pointer' }}
-							onClick={() => showStudentDetail(student)}
-							actions={[
-								<Dropdown overlay={getDropdownMenu(student)} trigger={['click']} placement='bottomRight'>
-									<Button type='text' icon={<MoreOutlined />} style={{ color: '#666' }} />
-								</Dropdown>,
-							]}
-						>
-							<List.Item.Meta
-								avatar={
-									<Avatar
-										src={
-											student.anhDaiDienUrl ||
-											`/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
-										}
-										size={48}
-									/>
-								}
-								title={<div style={{ fontSize: '16px', fontWeight: 500, color: '#333' }}>{student.ten}</div>}
-								description={
-									<div style={{ color: '#666', fontSize: '14px' }}>
-										{student.ma} • {student.gioiTinh}
-										{!fromLopHocPhan && student.vaiTro && <> • {vaiTroSvLhc[student.vaiTro]}</>}
-									</div>
-								}
-							/>
-						</List.Item>
-					)}
-				/>
+				{fromLopHocPhan || isMobile ? (
+					<List
+						dataSource={sinhVienList}
+						renderItem={(student) => (
+							<List.Item
+								style={{ padding: '12px 0px', borderBottom: '1px solid #f0f0f0' }}
+								actions={[
+									<Dropdown overlay={getDropdownMenu(student)} trigger={['click']} placement='bottomRight'>
+										<Button type='text' icon={<MoreOutlined />} style={{ color: '#666' }} />
+									</Dropdown>,
+								]}
+							>
+								<List.Item.Meta
+									avatar={
+										<Avatar
+											src={
+												student.anhDaiDienUrl ||
+												`/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+											}
+											size={48}
+										/>
+									}
+									title={<div style={{ fontSize: '16px', fontWeight: 500, color: '#333' }}>{student.ten}</div>}
+									description={
+										<div style={{ color: '#666', fontSize: '14px' }}>
+											{student.ma} • {student.gioiTinh}
+											{!fromLopHocPhan && student.vaiTro && <> • {vaiTroSvLhc[student.vaiTro]}</>}
+										</div>
+									}
+								/>
+							</List.Item>
+						)}
+					/>
+				) : (
+					<List
+						grid={{ gutter: 8, column: 3 }}
+						dataSource={sinhVienList}
+						style={{ padding: '4px' }}
+						renderItem={(student) => (
+							<List.Item
+								style={{
+									borderBottom: 'none',
+									padding: '0px 2px',
+								}}
+							>
+								<Card
+									className='card-hover'
+									style={{
+										borderRadius: '8px',
+										textAlign: 'left',
+										padding: '8px 12px',
+									}}
+									bodyStyle={{ padding: 0 }}
+									onClick={() => showStudentDetail(student)}
+								>
+									<Row align='middle' gutter={12}>
+										<Col>
+											<Avatar
+												src={
+													student.anhDaiDienUrl ||
+													`/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+												}
+												size={48}
+											/>
+										</Col>
+										<Col flex='1'>
+											<div style={{ fontSize: 16, fontWeight: 500 }}>{student.ten}</div>
+											<div style={{ color: '#666', fontSize: 14 }}>
+												{student.ma} • {student.gioiTinh}
+											</div>
+											{!fromLopHocPhan && student.vaiTro && <> • {vaiTroSvLhc[student.vaiTro]}</>}
+										</Col>
+									</Row>
+								</Card>
+							</List.Item>
+						)}
+					/>
+				)}
 			</div>
 		</Card>
 	);
@@ -149,11 +194,11 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 								{record?.ngaySinh && dayjs(record.ngaySinh).format('DD/MM/YYYY')}
 							</Descriptions.Item>
 							<Descriptions.Item label='Số điện thoại'>{record?.soDienThoai}</Descriptions.Item>
-							{!fromLopHocPhan ? (
-								<Descriptions.Item label='Vai trò trong lớp'>
-									{record?.vaiTro ? vaiTroSvLhc[record.vaiTro] : '--'}
-								</Descriptions.Item>
-							) : null}
+							{/* {!fromLopHocPhan ? ( */}
+							<Descriptions.Item label='Vai trò trong lớp'>
+								{record?.vaiTro ? vaiTroSvLhc[record.vaiTro] : '--'}
+							</Descriptions.Item>
+							{/* ) : null} */}
 						</Descriptions>
 					</Col>
 				</Row>
