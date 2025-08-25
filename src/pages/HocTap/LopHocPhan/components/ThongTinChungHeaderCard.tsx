@@ -86,7 +86,7 @@ const ThongTinChungHeaderCard = () => {
 					style={{
 						padding: '20px 20px',
 						backgroundColor: 'var(--color-primary-bg)',
-						margin: '-24px -16px 0', // để phần Header này theo đúng thiết kế (sát vào lề)
+						margin: '-24px -12px 0', // để phần Header này theo đúng thiết kế (sát vào lề)
 						backgroundImage: `url(${randomBackground})`,
 						backgroundSize: 'contain',
 						backgroundRepeat: 'no-repeat',
