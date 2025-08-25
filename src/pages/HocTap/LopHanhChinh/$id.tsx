@@ -1,10 +1,10 @@
+import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
-import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
-import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
+import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
 const DetailLopHanhChinh = ({
 	match: {

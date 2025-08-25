@@ -72,6 +72,24 @@ const DetailLopTinChi = () => {
 		}
 	};
 
+	// useEffect(() => {
+	// 	if (auth.user?.access_token && id) {
+	// 		getData();
+	// 	}
+
+	// 	return () => {
+	// 		setRecord(undefined);
+	// 	};
+	// }, [auth.user?.access_token, id]);
+
+	// useEffect(() => {
+	// 	if (id) sinhVienGetByIdModel(id);
+	// }, [id]);
+
+	useEffect(() => {
+		if (id) getData();
+	}, [id]);
+
 	useEffect(() => {
 		if (auth.user?.access_token) {
 			const path = window.location.pathname;

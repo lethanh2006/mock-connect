@@ -1,5 +1,4 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
-import { Button } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import TabsDeCuongHocPhan from './components/TabsDeCuongHocPhan';
@@ -31,9 +30,9 @@ const ModalHocPhan = (props: {
 		>
 			<TabsDeCuongHocPhan activeKey={activeKey} />
 
-			<div className='form-footer'>
+			{/* <div className='form-footer'>
 				<Button onClick={() => setVisible(false)}>Đóng</Button>
-			</div>
+			</div> */}
 		</ModalExpandable>
 	);
 };

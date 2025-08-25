@@ -66,7 +66,8 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 							onClick={() => {
 								history.push({
 									pathname: url + '/chi-tiet',
-									query: { _id: danhSach?.[0]?.id as any, cat: chuDe01?._id as any },
+									// query: { _id: danhSach?.[0]?.id as any, cat: chuDe01?._id as any },
+									search: `?_id=${danhSach?.[0]?.id}${chuDe01?._id ? `&cat=${chuDe01?._id}` : ''}`,
 								});
 							}}
 							first={true}
@@ -152,7 +153,8 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 										onClick={() => {
 											history.push({
 												pathname: url + '/chi-tiet',
-												query: { _id: tintuc?.id as any, cat: chuDe?._id as any },
+												// query: { _id: tintuc?.id as any, cat: chuDe?._id as any },
+												search: `?_id=${tintuc?.id}${chuDe?._id ? `&cat=${chuDe?._id}` : ''}`,
 											});
 										}}
 										style={{ height: '33.33%' }}
@@ -244,7 +246,8 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 									onClick={() => {
 										history.push({
 											pathname: url + '/chi-tiet',
-											query: { _id: tintuc?.id as any, cat: chuDe?._id as any },
+											// query: { _id: tintuc?.id as any, cat: chuDe?._id as any },
+											search: `?_id=${tintuc?.id}${chuDe?._id ? `&cat=${chuDe?._id}` : ''}`,
 										});
 									}}
 								>
