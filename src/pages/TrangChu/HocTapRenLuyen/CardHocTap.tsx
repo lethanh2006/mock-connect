@@ -20,18 +20,20 @@ const CardKetQuaHocTapDashboard = () => {
 				<div className='header'>
 					<div className='title'>
 						Kết quả học tập{' '}
-						<Tooltip title='Xem chi tiết'>
-							<ArrowRightOutlined className='more-info' onClick={() => history.push(`/hoc-tap/ket-qua-hoc-tap`)} />
-						</Tooltip>
+						<div
+							className='header-tag'
+							style={{
+								background: colorLoaiHocLuc[recTienTrinh?.kqhtHocKy?.hocLucHocKy ?? ELoaiHocLuc.EMPTY],
+							}}
+						>
+							{recTienTrinh?.kqhtHocKy?.hocLucHocKy || ELoaiHocLuc.EMPTY}
+						</div>
 					</div>
-					<div
-						className='header-tag'
-						style={{
-							background: colorLoaiHocLuc[recTienTrinh?.kqhtHocKy?.hocLucHocKy ?? ELoaiHocLuc.EMPTY],
-						}}
-					>
-						{recTienTrinh?.kqhtHocKy?.hocLucHocKy || ELoaiHocLuc.EMPTY}
-					</div>
+					<Tooltip title='Xem chi tiết'>
+						<Link to={`/hoc-tap/ket-qua-hoc-tap`}>
+							<ArrowRightOutlined />
+						</Link>
+					</Tooltip>
 				</div>
 
 				<Carousel autoplay pauseOnDotsHover autoplaySpeed={2500} infinite>

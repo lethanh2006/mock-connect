@@ -4,7 +4,7 @@ import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Space, Tooltip } from 'antd';
 import { useEffect } from 'react';
-import { history, useModel } from 'umi';
+import { Link, useModel } from 'umi';
 import './style.less';
 
 const CardCongNoDashboard = () => {
@@ -91,11 +91,11 @@ const CardCongNoDashboard = () => {
 							<span className='subtitle'>(Triệu đồng)</span>
 						</div>
 
-						<div>
-							<Tooltip title='Xem chi tiết'>
-								<ArrowRightOutlined className='more-info' onClick={() => history.push('/tai-chinh/cong-no')} />
-							</Tooltip>
-						</div>
+						<Tooltip title='Xem chi tiết'>
+							<Link to='/tai-chinh/cong-no'>
+								<ArrowRightOutlined />
+							</Link>
+						</Tooltip>
 					</div>
 
 					{danhSach.length ? (
