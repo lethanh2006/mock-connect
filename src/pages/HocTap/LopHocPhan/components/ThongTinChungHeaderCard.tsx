@@ -65,13 +65,13 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 					<Row gutter={[24, 0]} style={{ marginBottom: '36px' }}>
 						<Col>
 							<Text>Mã học phần:</Text>
-							<Text strong style={{ marginLeft: '8px', color: 'var(--color-primary)' }}>
+							<Text strong style={{ marginLeft: '8px' }}>
 								{record?.hocPhan?.ma ?? ''}
 							</Text>
 						</Col>
 						<Col>
-							<Text>Nhóm lớp:</Text>
-							<Text strong style={{ marginLeft: '8px', color: 'var(--color-primary)' }}>
+							<Text>Mã lớp (nhóm):</Text>
+							<Text strong style={{ marginLeft: '8px' }}>
 								{record?.soThuTuLop ?? ''}
 							</Text>
 						</Col>
@@ -89,7 +89,8 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 										<span key={index}>
 											<Link
 												to='#!'
-												onClick={() => {
+												onClick={(e) => {
+													e.preventDefault();
 													setSelectedGiangVien(item?.nhanSu);
 													setVisibleGvDetailModal(true);
 												}}
