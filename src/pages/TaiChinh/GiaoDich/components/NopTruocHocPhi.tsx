@@ -31,7 +31,7 @@ const ModalNopTruocHocPhi = (props: {
 		!recThuTruocHp?.thoiGianKetThuc ||
 		moment().isBefore(recThuTruocHp?.thoiGianBatDau) ||
 		moment().isAfter(recThuTruocHp?.thoiGianKetThuc);
-	console.log(ngoaiThoiGian, recThuTruocHp)
+	// console.log(ngoaiThoiGian, recThuTruocHp);
 
 	useEffect(() => {
 		if (recThuTruocHp?._id) getMucThuHocPhiTheoNamModel(recThuTruocHp?.maNamHoc);
@@ -51,8 +51,9 @@ const ModalNopTruocHocPhi = (props: {
 
 	const handleShowModalThanhToan = async (tran: GiaoDich.IRecord) => {
 		// Get đợt thu trước khi hiển thị modal để lấy thông tin kênh thanh toán
-		if (recDotThu?._id !== tran.idDotThu || (!!recDotThu.kenhThanhToanId && !recDotThu.kenhThanhToan?._id))
-			await getDotThu(tran.idDotThu);
+		if (recDotThu?._id !== tran?.idDotThu || (!!recDotThu?.kenhThanhToanId && !recDotThu?.kenhThanhToan?._id)) {
+			await getDotThu(tran?.idDotThu);
+		}
 		// Set record để hiển thị thông tin thanh toán
 		setRecord(tran);
 		setVisibleHuongDan(true);
