@@ -1,8 +1,15 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import {
+	colorTrangThaiNopBaiTap,
+	ETrangThaiNopBaiTap,
+	mapTrangThaiNopBaiTap,
+} from '@/services/DaoTao/BaiTap/constants';
 import dayjs from '@/utils/dayjs';
-import { DownloadOutlined, EyeOutlined, MoreOutlined } from '@ant-design/icons';
-import { Button, Card, Empty, List, Modal, Popover, Segmented, Typography } from 'antd';
+import { ArrowRightOutlined, DownloadOutlined, EyeOutlined, MoreOutlined } from '@ant-design/icons';
+import { Button, Card, Empty, List, Modal, Popover, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
+import BoxFile from '../DienDan/components/BoxFile';
 
 const { Text } = Typography;
 
@@ -103,20 +110,23 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 
 	return (
 		<Card
-			title='Bài tập, bài kiểm tra'
+			size='small'
+			title={'Bài tập, bài kiểm tra'}
 			variant='borderless'
-			headStyle={{ border: 'none' }}
 			style={{ borderRadius: '8px', boxShadow: '0px 0px 12px 0px #0000000A' }}
 			extra={
-				<Segmented
-					options={[
-						{ label: 'Đang diễn ra', value: '1' },
-						{ label: 'Đã kết thúc', value: '2' },
-					]}
-					value={segment}
-					onChange={(value) => setSegment(value as string)}
-					size='small'
-				/>
+				// <Segmented
+				// 	options={[
+				// 		{ label: 'Đang diễn ra', value: '1' },
+				// 		{ label: 'Đã kết thúc', value: '2' },
+				// 	]}
+				// 	value={segment}
+				// 	onChange={(value) => setSegment(value as string)}
+				// 	size='small'
+				// />
+				<Link to={`/hoc-tap/lop-tin-chi/${lopHocPhanId}#bai-tap`}>
+					<ButtonExtend key='all' type='link' icon={<ArrowRightOutlined />} tooltip='Xem tất cả' />
+				</Link>
 			}
 		>
 			{loading ? (
@@ -124,7 +134,7 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 					<Text>Đang tải dữ liệu...</Text>
 				</div>
 			) : danhSach?.length === 0 ? (
-				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập' />
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập nào đang diễn ra' />
 			) : (
 				<div
 					className='card-boderless'
@@ -151,14 +161,14 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 										borderRadius: '0px',
 									}}
 								>
-									<Text strong style={{ fontSize: 15 }}>
-										{item.assignment?.noiDung}
+									<Text strong style={{ fontSize: 14 }}>
+										<span style={{ marginRight: 8 }}>{item.assignment?.noiDung}</span>
 									</Text>
 
 									{files.length > 0 && (
 										<div style={{ marginTop: 12 }}>
 											{files.slice(0, 2).map((url, idx) => {
-												const fileName = getFileNameFromUrl(url);
+												// const fileName = getFileNameFromUrl(url);
 												return (
 													<div
 														key={idx}
@@ -172,8 +182,8 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 															marginBottom: 8,
 														}}
 													>
-														<Text>{fileName}</Text>
-														<FileActionPopover fileUrl={url} fileName={fileName} />
+														<BoxFile url={url} />
+														{/* <FileActionPopover fileUrl={url} fileName={fileName} /> */}
 													</div>
 												);
 											})}
@@ -189,12 +199,21 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 										style={{ marginTop: 12, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
 									>
 										<Text type='secondary'>Hạn nộp bài: </Text>
-										<Text strong>{dayjs(item.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</Text>
-									</div>
 
+										<Text strong>
+											{dayjs(item.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}{' '}
+											<Tag
+												color={colorTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
+												style={{ marginLeft: item.trangThai == ETrangThaiNopBaiTap.DA_NOP ? 16 : 2 }}
+											>
+												{mapTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
+											</Tag>
+										</Text>
+									</div>
+									{/* 
 									<div style={{ marginTop: 16 }}>
 										<Link to={`/hoc-tap/lop-tin-chi/${lopHocPhanId}#bai-tap`}>Xem chi tiết</Link>
-									</div>
+									</div> */}
 								</Card>
 							);
 						})}
