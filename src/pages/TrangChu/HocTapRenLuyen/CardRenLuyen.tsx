@@ -8,7 +8,7 @@ import {
 	TU_DANH_GIA_PREFIX,
 } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
 import dayjs from '@/utils/dayjs';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Space, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -186,7 +186,7 @@ const CardRenLuyenDashboard = () => {
 
 					<div>
 						<Tooltip title='Xem chi tiết'>
-							<InfoCircleOutlined
+							<ArrowRightOutlined
 								className='more-info'
 								onClick={() => history.push('/diem-ren-luyen/phieu-diem-ren-luyen')}
 							/>
@@ -194,7 +194,7 @@ const CardRenLuyenDashboard = () => {
 					</div>
 				</div>
 
-				<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 8 }}>
+				<div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 12 }}>
 					{_.range(0, 18).map((item) => {
 						const indexTemp = Math.floor(item / 3);
 						const show =
