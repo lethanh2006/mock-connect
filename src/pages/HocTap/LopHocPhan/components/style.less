@@ -76,6 +76,7 @@
 		}
 	}
 }
+
 // ThongTinChung
 // Style cho component ThongTinChung
 
@@ -85,6 +86,7 @@
 	padding: 16px 16px 0px 16px;
 	margin: 0px 0 -16px 0;
 	border-radius: 8px;
+
 	// Đường phân cách dạng gạch ngang
 	.dashed-border {
 		border-bottom: 1px dashed transparent;
@@ -98,16 +100,18 @@
 		.dashed-border();
 	}
 
-	// Thông tin cơ bản
-	.de-cuong-section {
-		.dashed-border();
-		padding-bottom: 16px;
-	}
+	.thong-tin-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
 
-	// Thông tin cơ bản
-	.thong-tin-co-ban {
-		.dashed-border();
-		padding-bottom: 16px;
+		font-weight: 600;
+		margin-bottom: 12px;
+
+		a {
+			font-weight: 400;
+		}
 	}
 
 	.thong-tin-row {
@@ -381,11 +385,13 @@
 
 .header-action-buttons {
 	margin-top: -8px;
+
 	.button-extend {
 		background-color: transparent;
 		border-color: currentColor;
 	}
 }
+
 .ant-list-item {
 	.card-hover {
 		transition: all 0.2s ease; // mượt cả background lẫn transform

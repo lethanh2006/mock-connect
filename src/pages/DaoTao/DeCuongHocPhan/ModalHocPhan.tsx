@@ -22,17 +22,13 @@ const ModalHocPhan = (props: {
 	return (
 		<ModalExpandable
 			title={title ?? ''}
-			visible={visible}
+			open={visible}
 			width={1000}
 			onCancel={() => setVisible(false)}
-			footer={null}
-			bodyStyle={{ paddingTop: 0 }}
+			okButtonProps={{ hidden: true }}
+			cancelText='Đóng'
 		>
 			<TabsDeCuongHocPhan activeKey={activeKey} />
-
-			{/* <div className='form-footer'>
-				<Button onClick={() => setVisible(false)}>Đóng</Button>
-			</div> */}
 		</ModalExpandable>
 	);
 };
