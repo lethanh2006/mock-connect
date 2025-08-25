@@ -124,8 +124,14 @@ const ThongTinChungHeaderCard = () => {
 					<Row gutter={[24, 0]} style={{ marginBottom: '36px' }}>
 						<Col>
 							<Text>Mã học phần:</Text>
-							<Text strong style={{ marginLeft: '8px', color: '#1890ff' }}>
+							<Text strong style={{ marginLeft: '8px', color: 'var(--color-primary)' }}>
 								{record?.hocPhan?.ma ?? ''}
+							</Text>
+						</Col>
+						<Col>
+							<Text>Nhóm lớp:</Text>
+							<Text strong style={{ marginLeft: '8px', color: 'var(--color-primary)' }}>
+								{record?.soThuTuLop ?? ''}
 							</Text>
 						</Col>
 						<Col>

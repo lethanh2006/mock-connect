@@ -48,8 +48,8 @@ const StatDiemDanhV2 = () => {
 			title: 'Tổng số buổi học',
 			value: danhSach.length,
 			icon: <CalendarOutlined />,
-			valueColor: '#1890ff',
-			backgroundColor: '#e6f7ff',
+			// valueColor: '#1890ff',
+			// backgroundColor: '#e6f7ff',
 
 			// status: 'success',
 		},

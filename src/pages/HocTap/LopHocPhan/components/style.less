@@ -85,109 +85,114 @@
 	padding: 16px 16px 0px 16px;
 	margin: 0px 0 -16px 0;
 	border-radius: 8px;
-}
-
-// Đường phân cách dạng gạch ngang
-.dashed-border {
-	border-bottom: 1px dashed transparent;
-	border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
-	border-image-slice: 1;
-	margin-bottom: 16px;
-}
-
-// Giới thiệu chung
-.gioi-thieu-section {
-	.dashed-border();
-}
-
-// Thông tin cơ bản
-.thong-tin-co-ban {
-	.dashed-border();
-	padding-bottom: 16px;
-}
-
-.thong-tin-row {
-	padding: 8px 0;
-}
-
-// Hover effect cho giảng viên
-.hover-giangvien {
-	cursor: pointer;
-	margin-right: 4px;
-
-	&:hover {
-		color: #1677ff;
-		text-decoration: underline;
+	// Đường phân cách dạng gạch ngang
+	.dashed-border {
+		border-bottom: 1px dashed transparent;
+		border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
+		border-image-slice: 1;
+		margin-bottom: 16px;
 	}
-}
 
-// Card styles
-.tai-lieu-card {
-	margin-bottom: 16px;
-	border: none;
-	padding: 0;
-	// border-bottom: 1px dashed transparent;
-	// border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
-	border-image-slice: 1;
-	margin: -16px;
+	// Giới thiệu chung
+	.gioi-thieu-section {
+		.dashed-border();
+	}
 
-	.ant-card-head {
+	// Thông tin cơ bản
+	.de-cuong-section {
+		.dashed-border();
+		padding-bottom: 16px;
+	}
+
+	// Thông tin cơ bản
+	.thong-tin-co-ban {
+		.dashed-border();
+		padding-bottom: 16px;
+	}
+
+	.thong-tin-row {
+		padding: 8px 0;
+	}
+
+	// Hover effect cho giảng viên
+	.hover-giangvien {
+		cursor: pointer;
+		margin-right: 4px;
+
+		&:hover {
+			color: #1677ff;
+			text-decoration: underline;
+		}
+	}
+
+	// Card styles
+	.tai-lieu-card {
+		margin-bottom: 16px;
 		border: none;
+		padding: 0;
+		// border-bottom: 1px dashed transparent;
+		// border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
+		border-image-slice: 1;
+		margin: -16px;
+
+		.ant-card-head {
+			border: none;
+		}
 	}
-}
 
-.ky-nang-card {
-	border: none;
-	border-bottom: 1px dashed transparent;
-	border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
-	border-image-slice: 1;
-	margin: -16px;
-	margin-bottom: 32px;
-	margin-top: 32px;
-
-	.ant-card-head {
+	.ky-nang-card {
 		border: none;
+		border-bottom: 1px dashed transparent;
+		border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
+		border-image-slice: 1;
+		margin: -16px;
+		margin-bottom: 32px;
+		margin-top: 32px;
+
+		.ant-card-head {
+			border: none;
+		}
 	}
-}
 
-// Học liệu item
-.hoc-lieu-item {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	padding: 8px 0;
+	// Học liệu item
+	.hoc-lieu-item {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		padding: 8px 0;
 
-	&:not(:last-child) {
-		border-bottom: 1px solid #f0f0f0;
+		&:not(:last-child) {
+			border-bottom: 1px solid #f0f0f0;
+		}
 	}
-}
 
-.hoc-lieu-content {
-	flex: 1;
-}
+	.hoc-lieu-content {
+		flex: 1;
+	}
 
-.hoc-lieu-title {
-	font-weight: 500;
-	font-size: 14px;
-	margin-bottom: 4px;
-}
+	.hoc-lieu-title {
+		font-weight: 500;
+		font-size: 14px;
+		margin-bottom: 4px;
+	}
 
-.hoc-lieu-author {
-	color: #666;
-	font-size: 12px;
-	margin-bottom: 2px;
-}
+	.hoc-lieu-author {
+		color: #666;
+		font-size: 12px;
+		margin-bottom: 2px;
+	}
 
-.hoc-lieu-publisher {
-	color: #666;
-	font-size: 12px;
-	margin-bottom: 2px;
-}
+	.hoc-lieu-publisher {
+		color: #666;
+		font-size: 12px;
+		margin-bottom: 2px;
+	}
 
-.hoc-lieu-description {
-	color: #999;
-	font-size: 12px;
-	font-style: italic;
+	.hoc-lieu-description {
+		color: #999;
+		font-size: 12px;
+		font-style: italic;
+	}
 }
 
 // <=============== KỸ NĂNG ===============>

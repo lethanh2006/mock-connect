@@ -105,7 +105,14 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 											size={48}
 										/>
 									}
-									title={<div style={{ fontSize: '16px', fontWeight: 500, color: '#333' }}>{student.ten}</div>}
+									title={
+										<div
+											style={{ fontSize: '16px', fontWeight: 500, color: '#333', cursor: 'pointer' }}
+											onClick={() => showStudentDetail(student)}
+										>
+											{student.ten}
+										</div>
+									}
 									description={
 										<div style={{ color: '#666', fontSize: '14px' }}>
 											{student.ma} • {student.gioiTinh}
@@ -153,7 +160,9 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 											<div style={{ color: '#666', fontSize: 14 }}>
 												{student.ma} • {student.gioiTinh}
 											</div>
-											{!fromLopHocPhan && student.vaiTro && <> • {vaiTroSvLhc[student.vaiTro]}</>}
+											{!fromLopHocPhan && student.vaiTro && (
+												<div style={{ color: '#666', fontSize: 14 }}> • {vaiTroSvLhc[student.vaiTro]}</div>
+											)}
 										</Col>
 									</Row>
 								</Card>
