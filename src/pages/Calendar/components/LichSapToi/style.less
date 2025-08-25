@@ -82,9 +82,13 @@
 
 	// List item
 	&-list-item {
-		padding: 4px;
 		border: none;
 		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+		padding: 4px 16px !important;
+
+		@media (max-width: 576px) {
+			padding: 4px 12px !important;
+		}
 
 		// bỏ boreder bottom mặc định List của antd
 		border-bottom: none !important;
@@ -103,9 +107,10 @@
 	// Event card
 	&-event-card {
 		width: 100%;
-		padding: 16px 20px;
+		padding: 8px;
 		border-radius: 8px;
 		cursor: pointer;
+		background-color: #fff;
 
 		// Date and Time Row
 		&-date-row {
