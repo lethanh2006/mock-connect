@@ -47,7 +47,7 @@ const ModalThongTinGiangVien = ({
 							</Descriptions.Item> */}
 							<Descriptions.Item label='Học hàm'>{giangVien?.hocHam || 'Chưa cập nhật'}</Descriptions.Item>
 							<Descriptions.Item label='Trình độ'>{giangVien?.trinhDoDaoTao || 'Chưa cập nhật'}</Descriptions.Item>
-							<Descriptions.Item label='Số điện thoại'>{giangVien?.sdtCaNhan || 'Chưa cập nhật'}</Descriptions.Item>
+							{/* <Descriptions.Item label='Số điện thoại'>{giangVien?.sdtCaNhan || 'Chưa cập nhật'}</Descriptions.Item> */}
 
 							{/* <Descriptions.Item label='Chức vụ'>
 								{giangVien?.donViViTri?.tenChucVu || 'Chưa cập nhật'}
