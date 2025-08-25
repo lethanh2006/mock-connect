@@ -22,7 +22,6 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 			size='small'
 			title='Thông báo'
 			variant='borderless'
-			bodyStyle={{ padding: 0 }}
 			extra={[
 				<ButtonExtend
 					key='all'
