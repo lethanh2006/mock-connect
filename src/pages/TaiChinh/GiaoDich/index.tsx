@@ -54,8 +54,11 @@ const GiaoDichPage = () => {
 
 	const handleShowModalThanhToan = async (tran: GiaoDich.IRecord) => {
 		// Get đợt thu trước khi hiển thị modal để lấy thông tin kênh thanh toán
-		if (recDotThu?._id !== tran.idDotThu || (!!recDotThu.kenhThanhToanId && !recDotThu.kenhThanhToan?._id))
-			await getDotThu(tran.idDotThu);
+		const idDotThu = tran.idDotThu || tran.idDotThuTruocHocPhi;
+		if (recDotThu?._id !== idDotThu || (!!recDotThu?.kenhThanhToanId && !recDotThu?.kenhThanhToan?._id)) {
+			await getDotThu(idDotThu!);
+		}
+		
 		// Set record để hiển thị thông tin thanh toán
 		setRecord(tran);
 		setVisibleHuongDan(true);
