@@ -3,12 +3,13 @@ import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import { DesktopOutlined, DownloadOutlined, GlobalOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, message, Modal, Row, Space, Spin, Tag, Typography } from 'antd';
+import { Button, Card, Col, Empty, message, Row, Space, Spin, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 import dayjs from '@/utils/dayjs';
 import CardBaiTapLopHp from './CardBaiTapLopHp';
+import ModalThongTinGiangVien from './CardGiangVienLopHp';
 import GioiThieuChungLopHp from './GioiThieuChung';
 import './style.less';
 
@@ -233,15 +234,21 @@ const ThongTinChung = () => {
 									<Text strong>
 										{(record?.nhanSuList ?? []).map((item, index) => (
 											<span key={index}>
-												<span
-													className='hover-giangvien'
+												<Typography.Link
+													style={{
+														cursor: 'pointer',
+														transition: 'color 0.3s ease',
+														color: 'black', // giữ nguyên màu strong
+													}}
 													onClick={() => {
 														setSelectedGiangVien(item?.nhanSu);
 														setVisibleGvDetailModal(true);
 													}}
+													onMouseEnter={(e) => (e.currentTarget.style.color = '#1890ff')}
+													onMouseLeave={(e) => (e.currentTarget.style.color = 'black')}
 												>
 													{item?.nhanSu?.hoTen}
-												</span>
+												</Typography.Link>
 												{index < (record?.nhanSuList?.length ?? 0) - 1 && <span>, </span>}
 											</span>
 										))}
@@ -430,83 +437,11 @@ const ThongTinChung = () => {
 			</Row>
 
 			{/* Modal Thông tin giảng viên */}
-			<Modal
-				title='Thông tin giảng viên'
-				open={visibleGvDetailModal}
+			<ModalThongTinGiangVien
+				visible={visibleGvDetailModal}
 				onCancel={() => setVisibleGvDetailModal(false)}
-				footer={null}
-			>
-				{selectedGiangVien ? (
-					<div className='giang-vien-info'>
-						<Row>
-							<Col span={8}>
-								<Text strong>Họ tên:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien.hoTen}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Email:</Text>
-							</Col>
-							<Col span={16}>
-								<Text copyable>{selectedGiangVien.emailCanBo}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Ngày sinh:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{dayjs(selectedGiangVien.ngaySinh).format('DD/MM/YYYY')}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Giới tính:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien.gioiTinh}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Học hàm:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien.hocHam || <i>Chưa cập nhật</i>}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Trình độ:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien.trinhDoDaoTao || <i>Chưa cập nhật</i>}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Chức vụ:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien?.donViViTri?.tenChucVu || <i>Chưa cập nhật</i>}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Đơn vị:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien?.donViChinh?.ten || <i>Chưa cập nhật</i>}</Text>
-							</Col>
-						</Row>
-					</div>
-				) : (
-					<div className='giang-vien-empty'>Không có thông tin giảng viên</div>
-				)}
-			</Modal>
+				giangVien={selectedGiangVien}
+			/>
 			{/* Modal Học liệu */}
 			{/* <Modal
 				title='Học liệu đề cương'
