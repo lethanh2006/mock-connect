@@ -10,7 +10,7 @@ const GioiThieuChungLopHp = () => {
 	return (
 		<div style={{ minHeight: '150px' }}>
 			<div className='fw500' style={{ marginBottom: '16px' }}>
-				Giới thiệu môn học
+				Giới thiệu lớp học phần
 			</div>
 
 			<div
