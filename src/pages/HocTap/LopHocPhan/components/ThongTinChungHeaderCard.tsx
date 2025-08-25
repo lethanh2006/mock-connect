@@ -2,9 +2,10 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import dayjs from '@/utils/dayjs';
 import { DesktopOutlined, GlobalOutlined } from '@ant-design/icons';
-import { Col, message, Modal, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import { Col, message, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
+import ModalThongTinGiangVien from './CardGiangVienLopHp';
 import DanhSachGiangVien from './DanhSachGiangVien';
 import './style.less';
 
@@ -139,25 +140,22 @@ const ThongTinChungHeaderCard = () => {
 								<Text strong style={{ marginLeft: 8 }}>
 									{(record?.nhanSuList ?? []).map((item, index) => (
 										<span key={index}>
-											<Text
+											<Typography.Link
 												style={{
 													cursor: 'pointer',
 													marginRight: 4,
 													transition: 'color 0.3s ease',
+													color: 'black',
 												}}
 												onClick={() => {
 													setSelectedGiangVien(item?.nhanSu);
 													setVisibleGvDetailModal(true);
 												}}
-												onMouseEnter={(e) => {
-													e.currentTarget.style.color = '#1890ff';
-												}}
-												onMouseLeave={(e) => {
-													e.currentTarget.style.color = '';
-												}}
+												onMouseEnter={(e) => (e.currentTarget.style.color = '#1890ff')}
+												onMouseLeave={(e) => (e.currentTarget.style.color = 'black')}
 											>
 												{item?.nhanSu?.hoTen}
-											</Text>
+											</Typography.Link>
 											{index < (record?.nhanSuList?.length ?? 0) - 1 && <span>, </span>}
 										</span>
 									))}
@@ -193,83 +191,11 @@ const ThongTinChungHeaderCard = () => {
 					) : null}
 
 					<ModalHocPhan visible={visibleDeCuong} setVisible={setVisibleDeCuong} title='Chi tiết đề cương học phần' />
-					<Modal
-						title='Thông tin giảng viên'
-						open={visibleGvDetailModal}
+					<ModalThongTinGiangVien
+						visible={visibleGvDetailModal}
 						onCancel={() => setVisibleGvDetailModal(false)}
-						footer={null}
-					>
-						{selectedGiangVien ? (
-							<div style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 8 }}>
-								<Row>
-									<Col span={8}>
-										<Text strong>Họ tên:</Text>
-									</Col>
-									<Col span={16}>
-										<Text>{selectedGiangVien.hoTen}</Text>
-									</Col>
-								</Row>
-								<Row>
-									<Col span={8}>
-										<Text strong>Email:</Text>
-									</Col>
-									<Col span={16}>
-										<Text copyable>{selectedGiangVien.emailCanBo}</Text>
-									</Col>
-								</Row>
-								<Row>
-									<Col span={8}>
-										<Text strong>Ngày sinh:</Text>
-									</Col>
-									<Col span={16}>
-										<Text>{dayjs(selectedGiangVien.ngaySinh).format('DD/MM/YYYY')}</Text>
-									</Col>
-								</Row>
-								<Row>
-									<Col span={8}>
-										<Text strong>Giới tính:</Text>
-									</Col>
-									<Col span={16}>
-										<Text>{selectedGiangVien.gioiTinh}</Text>
-									</Col>
-								</Row>
-								<Row>
-									<Col span={8}>
-										<Text strong>Học hàm:</Text>
-									</Col>
-									<Col span={16}>
-										<Text>{selectedGiangVien.hocHam || <i>Chưa cập nhật</i>}</Text>
-									</Col>
-								</Row>
-								<Row>
-									<Col span={8}>
-										<Text strong>Trình độ:</Text>
-									</Col>
-									<Col span={16}>
-										<Text>{selectedGiangVien.trinhDoDaoTao || <i>Chưa cập nhật</i>}</Text>
-									</Col>
-								</Row>
-								<Row>
-									<Col span={8}>
-										<Text strong>Chức vụ:</Text>
-									</Col>
-									<Col span={16}>
-										<Text>{selectedGiangVien?.donViViTri?.tenChucVu || <i>Chưa cập nhật</i>}</Text>
-									</Col>
-								</Row>
-								<Row>
-									<Col span={8}>
-										<Text strong>Đơn vị:</Text>
-									</Col>
-									<Col span={16}>
-										<Text>{selectedGiangVien?.donViChinh?.ten || <i>Chưa cập nhật</i>}</Text>
-									</Col>
-								</Row>
-							</div>
-						) : (
-							<div style={{ textAlign: 'center', color: '#999' }}>Không có thông tin giảng viên</div>
-						)}
-					</Modal>
+						giangVien={selectedGiangVien}
+					/>
 				</div>
 			</Spin>
 		</div>

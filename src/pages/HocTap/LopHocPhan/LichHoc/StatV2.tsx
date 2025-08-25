@@ -64,7 +64,6 @@ const StatDiemDanhV2 = () => {
 
 	return (
 		<StatisticsCard
-			borderleft
 			hideCard
 			rowGutter={16}
 			title='Thống kê điểm danh'

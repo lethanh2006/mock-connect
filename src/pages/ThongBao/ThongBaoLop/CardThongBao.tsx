@@ -75,7 +75,7 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 				bodyStyle={{ padding: 0 }}
 				destroyOnClose
 				onCancel={() => setVisibleThongBao(false)}
-				visible={visibleThongBao}
+				open={visibleThongBao}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
 			>
