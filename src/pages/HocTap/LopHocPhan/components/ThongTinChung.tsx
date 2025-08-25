@@ -3,12 +3,14 @@ import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
 import { DesktopOutlined, DownloadOutlined, GlobalOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, message, Modal, Row, Space, Spin, Tag, Typography } from 'antd';
+import { Button, Card, Col, Empty, message, Row, Space, Spin, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 import dayjs from '@/utils/dayjs';
+import { removeHtmlTags } from '@/utils/utils';
 import CardBaiTapLopHp from './CardBaiTapLopHp';
+import ModalThongTinGiangVien from './CardGiangVienLopHp';
 import GioiThieuChungLopHp from './GioiThieuChung';
 import './style.less';
 
@@ -31,16 +33,12 @@ interface GiangVien {
 
 const ThongTinChung = () => {
 	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
-	// const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
+	const { record: recDeCuong, getByIdModel: getDeCuong } = useModel('hocphan.decuonghocphan');
 	const {
 		danhSach: danhSachHocLieu,
 		loading: loadingHocLieu,
 		getModel: getHocLieuDeCuong,
 	} = useModel('hocphan.hoclieudecuong');
-	// const { danhSach: danhSachNoiDungHocPhan } = useModel('hocphan.noidunghp');
-
-	const deCuongId = record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
-
 	const {
 		record: recLopThucHanh,
 		danhSach: danhSachLopThucHanh,
@@ -50,11 +48,12 @@ const ThongTinChung = () => {
 		getAllNhanSuModel: getNhanSuLopTH,
 		loading: loadingThucHanh,
 	} = useModel('daotao.lopthuchanh');
-
+	// const { danhSach: danhSachNoiDungHocPhan } = useModel('hocphan.noidunghp');
 	const [activeKey, setActiveKey] = useState<string>('-1');
-	const [visibleHocLieu, setVisibleHocLieu] = useState<boolean>(false);
+	const [visibleHocLieu, setVisibleHocLieu] = useState<[boolean, string]>([false, '3']);
 	// const [visibleKyNang, setVisibleKyNang] = useState<boolean>(false);
 	// const [activeKyNangTab, setActiveKyNangTab] = useState<string>('content');
+	const deCuongId = record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
 
 	// Lấy dữ liệu kỹ năng
 	// const kyNangDatDuoc = recDeCuong?.kyNangDatDuoc || recDeCuong?.ketQuaDatDuoc || [];
@@ -71,9 +70,10 @@ const ThongTinChung = () => {
 	useEffect(() => {
 		setActiveKey('-1');
 
-		// if (deCuongId) {
-		getHocLieuDeCuong({ deCuongId: deCuongId });
-		// }
+		if (deCuongId) {
+			getDeCuong(deCuongId);
+			getHocLieuDeCuong({ deCuongId: deCuongId });
+		}
 	}, [deCuongId]);
 
 	useEffect(() => {
@@ -213,13 +213,84 @@ const ThongTinChung = () => {
 				<div className='gioi-thieu-section'>
 					<GioiThieuChungLopHp />
 				</div>
+
+				<div className='de-cuong-section'>
+					<div style={{ marginTop: 12 }}>
+						{/* Hiển thị tóm tắt hoặc 2 dòng đầu của Mục tiêu học phần */}
+						{recDeCuong?.mucTieuHocPhan && (
+							<div>
+								<div
+									style={{
+										marginBottom: '16px',
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+										alignItems: 'center',
+									}}
+								>
+									<div className='fw500'>Mục tiêu học phần</div>
+									{/* Nút xem tất cả mở ModalHocPhan */}
+									<Button
+										type='link'
+										style={{ marginTop: 8, padding: 0 }}
+										onClick={() => {
+											setVisibleHocLieu([true, '0']);
+										}}
+									>
+										Xem tất cả
+									</Button>
+								</div>
+
+								<div
+									dangerouslySetInnerHTML={{
+										__html: recDeCuong?.mucTieuHocPhan ? recDeCuong.mucTieuHocPhan + '...' : '--',
+									}}
+								/>
+							</div>
+						)}
+
+						{recDeCuong?.chuanDauRa && (
+							<div style={{ marginTop: 8 }}>
+								<div
+									style={{
+										marginBottom: '16px',
+										display: 'flex',
+										flexDirection: 'row',
+										justifyContent: 'space-between',
+										alignItems: 'center',
+									}}
+								>
+									<div className='fw500'>Chuẩn đầu ra</div>
+									{/* Nút xem tất cả mở ModalHocPhan */}
+									<Button
+										type='link'
+										style={{ marginTop: 8, padding: 0 }}
+										onClick={() => {
+											setVisibleHocLieu([true, '0']);
+										}}
+									>
+										Xem tất cả
+									</Button>
+								</div>
+								<div
+									dangerouslySetInnerHTML={{
+										__html: recDeCuong?.chuanDauRa
+											? removeHtmlTags(recDeCuong.mucTieuHocPhan).substring(0, 600) + '...'
+											: '--',
+									}}
+								/>
+							</div>
+						)}
+					</div>
+				</div>
+
 				<div className='thong-tin-co-ban'>
 					<Row gutter={[16, 16]} className='thong-tin-row'>
 						{/* Mã học phần */}
 						<Col xs={24} sm={12} md={6}>
 							<Text style={{ color: '#888' }}>Mã học phần:</Text>
 							<div>
-								<Text strong style={{ color: '#1677ff' }}>
+								<Text strong style={{ color: 'var(--color-primary)' }}>
 									{record?.hocPhan?.ma ?? '--'}
 								</Text>
 							</div>
@@ -233,15 +304,21 @@ const ThongTinChung = () => {
 									<Text strong>
 										{(record?.nhanSuList ?? []).map((item, index) => (
 											<span key={index}>
-												<span
-													className='hover-giangvien'
+												<Typography.Link
+													style={{
+														cursor: 'pointer',
+														transition: 'color 0.3s ease',
+														color: 'black', // giữ nguyên màu strong
+													}}
 													onClick={() => {
 														setSelectedGiangVien(item?.nhanSu);
 														setVisibleGvDetailModal(true);
 													}}
+													onMouseEnter={(e) => (e.currentTarget.style.color = '#1890ff')}
+													onMouseLeave={(e) => (e.currentTarget.style.color = 'black')}
 												>
 													{item?.nhanSu?.hoTen}
-												</span>
+												</Typography.Link>
 												{index < (record?.nhanSuList?.length ?? 0) - 1 && <span>, </span>}
 											</span>
 										))}
@@ -267,6 +344,7 @@ const ThongTinChung = () => {
 						</Col>
 					</Row>
 				</div>
+
 				{record?.lmsUrl || record?.moodleShortname ? (
 					<Space wrap className='button-space'>
 						{record?.lmsUrl ? (
@@ -280,18 +358,20 @@ const ThongTinChung = () => {
 							</ButtonExtend>
 						) : null}
 					</Space>
-				) : null}
+				) : (
+					<div style={{ marginBottom: 16, height: 1 }}></div>
+				)}
 
-				{/* Tài liệu môn học */}
+				{/* Học liệu học phần' */}
 				<Card
-					title='Tài liệu môn học'
+					title='Học liệu học phần'
 					size='small'
 					className='tai-lieu-card'
 					extra={
 						<Button
 							type='link'
 							className='btn-extra'
-							onClick={() => setVisibleHocLieu(true)}
+							onClick={() => setVisibleHocLieu([true, '0'])}
 							disabled={danhSachHocLieu.length === 0}
 						>
 							Xem tất cả
@@ -430,83 +510,11 @@ const ThongTinChung = () => {
 			</Row>
 
 			{/* Modal Thông tin giảng viên */}
-			<Modal
-				title='Thông tin giảng viên'
-				open={visibleGvDetailModal}
+			<ModalThongTinGiangVien
+				visible={visibleGvDetailModal}
 				onCancel={() => setVisibleGvDetailModal(false)}
-				footer={null}
-			>
-				{selectedGiangVien ? (
-					<div className='giang-vien-info'>
-						<Row>
-							<Col span={8}>
-								<Text strong>Họ tên:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien.hoTen}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Email:</Text>
-							</Col>
-							<Col span={16}>
-								<Text copyable>{selectedGiangVien.emailCanBo}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Ngày sinh:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{dayjs(selectedGiangVien.ngaySinh).format('DD/MM/YYYY')}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Giới tính:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien.gioiTinh}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Học hàm:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien.hocHam || <i>Chưa cập nhật</i>}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Trình độ:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien.trinhDoDaoTao || <i>Chưa cập nhật</i>}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Chức vụ:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien?.donViViTri?.tenChucVu || <i>Chưa cập nhật</i>}</Text>
-							</Col>
-						</Row>
-						<Row>
-							<Col span={8}>
-								<Text strong>Đơn vị:</Text>
-							</Col>
-							<Col span={16}>
-								<Text>{selectedGiangVien?.donViChinh?.ten || <i>Chưa cập nhật</i>}</Text>
-							</Col>
-						</Row>
-					</div>
-				) : (
-					<div className='giang-vien-empty'>Không có thông tin giảng viên</div>
-				)}
-			</Modal>
+				giangVien={selectedGiangVien}
+			/>
 			{/* Modal Học liệu */}
 			{/* <Modal
 				title='Học liệu đề cương'
@@ -519,12 +527,12 @@ const ThongTinChung = () => {
 			> */}
 			{/* <HocLieuDeCuongPage /> */}
 			<ModalHocPhan
-				visible={visibleHocLieu}
+				visible={visibleHocLieu[0]}
 				setVisible={() => {
-					setVisibleHocLieu(false);
+					setVisibleHocLieu([false, '3']);
 				}}
 				title='Chi tiết đề cương học phần'
-				activeKey={'3'}
+				activeKey={visibleHocLieu[1]}
 			/>
 			{/* </Modal> */}
 			{/* Modal Kỹ năng đạt được với TabPane */}
