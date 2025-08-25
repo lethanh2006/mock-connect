@@ -69,7 +69,8 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 							onClick={() => {
 								history.push({
 									pathname: url + '/chi-tiet',
-									query: { id: danhSach?.[0]?._id },
+									// query: { id: danhSach?.[0]?._id },
+									search: `?id=${danhSach?.[0]?._id}`,
 								});
 							}}
 							first={true}
@@ -148,7 +149,8 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 									onClick={() => {
 										history.push({
 											pathname: url + '/chi-tiet',
-											query: { id: tintuc?._id },
+											// query: { id: tintuc?._id },
+											search: `?id=${tintuc?._id}`,
 										});
 									}}
 									style={{ height: '33.33%' }}
@@ -230,7 +232,8 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 								onClick={() => {
 									history.push({
 										pathname: url + '/chi-tiet',
-										query: { id: tintuc?._id },
+										// query: { id: tintuc?._id },
+										search: `?id=${tintuc?._id}`,
 									});
 								}}
 							>

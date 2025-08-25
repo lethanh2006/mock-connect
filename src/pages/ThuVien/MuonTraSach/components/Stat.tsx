@@ -1,6 +1,7 @@
-import { ETrangThaiMuonSach } from '@/services/QuanLyThuVien/constant';
-import { Card, Col, Row, Spin } from 'antd';
-import { useEffect } from 'react';
+import StatisticsCard from '@/components/StatisticsCard';
+import { BookOutlined, CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
+import { useEffect, useMemo } from 'react';
 import { useModel } from 'umi';
 
 const StatMuonTraSach = () => {
@@ -10,42 +11,54 @@ const StatMuonTraSach = () => {
 		if (!dataThongKe) thongKeMuonTraSachModel();
 	}, []);
 
+	const statisticsData = useMemo(
+		() => [
+			{
+				title: 'Chờ xử lý',
+				value: dataThongKe?.choXuLy ?? 0,
+				valueColor: 'blue',
+				icon: <ClockCircleOutlined />,
+			},
+			{
+				title: 'Đang mượn',
+				value: dataThongKe?.dangThueMuon ?? 0,
+				valueColor: 'orange',
+				icon: <BookOutlined />,
+				onClick: () => {
+					console.log('Xem chi tiết Đang mượn');
+				},
+			},
+			{
+				title: 'Quá hạn mượn',
+				value: dataThongKe?.quaHan ?? 0,
+				valueColor: 'red',
+				icon: <ExclamationCircleOutlined />,
+				onClick: () => {
+					console.log('Xem chi tiết Quá hạn');
+				},
+			},
+			{
+				title: 'Đã trả',
+				value: dataThongKe?.daTra ?? 0,
+				valueColor: 'green',
+				icon: <CheckCircleOutlined />,
+			},
+		],
+		[dataThongKe],
+	);
+
 	return (
 		<Spin spinning={loadingThongKe}>
-			<Row gutter={[12, 12]} style={{ marginBottom: 12 }}>
-				<Col span={24} md={6}>
-					<Card className='card-stat-small'>
-						<span className='num' style={{ color: 'blue' }}>
-							{dataThongKe?.choXuLy ?? 0}
-						</span>
-						<span>Chờ xử lý</span>
-					</Card>
-				</Col>
-				<Col span={24} md={6}>
-					<Card className='card-stat-small' style={{ cursor: 'pointer' }}>
-						<span className='num' style={{ color: 'orange' }}>
-							{dataThongKe?.dangThueMuon ?? 0}
-						</span>
-						<span>Đang mượn</span>
-					</Card>
-				</Col>
-				<Col span={24} md={6}>
-					<Card className='card-stat-small' style={{ cursor: 'pointer' }}>
-						<span className='num' style={{ color: 'rec' }}>
-							{dataThongKe?.quaHan ?? 0}
-						</span>
-						<span>Quá hạn mượn</span>
-					</Card>
-				</Col>
-				<Col span={24} md={6}>
-					<Card className='card-stat-small'>
-						<span className='num' style={{ color: 'green' }}>
-							{dataThongKe?.daTra ?? 0}
-						</span>
-						<span>Đã trả</span>
-					</Card>
-				</Col>
-			</Row>
+			<StatisticsCard
+				// borderleft
+				hideCard
+				title='Thống kê mượn trả sách'
+				data={statisticsData}
+				rowGutter={12}
+				colSpan={{ md: 6 }}
+				containerStyle={{ marginBottom: 12 }}
+				cardStyle={{ cursor: 'pointer' }}
+			/>
 		</Spin>
 	);
 };
