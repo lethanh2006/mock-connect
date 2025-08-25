@@ -266,7 +266,9 @@ const CardBaiTapDashboard = () => {
 
 					{/* Assignment Content - Giới hạn 3 dòng */}
 					<div className={`assignment-content ${isMobile ? 'mobile' : ''}`}>
-						<Text className={`content-text ${isMobile ? 'mobile' : ''}`}>{item.assignment.noiDung}</Text>
+						<Text className={`content-text ${isMobile ? 'mobile' : ''}`}>
+							<div dangerouslySetInnerHTML={{ __html: item.assignment.noiDung ?? '' }} />
+						</Text>
 					</div>
 				</div>
 
