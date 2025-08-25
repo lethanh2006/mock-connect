@@ -42,7 +42,7 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 										history.push({
 											pathname: 'tin-tuc/chi-tiet',
 											// query: { _id: tintuc?.id as any, cat: linkWp?._id as any },
-											search: `?_id=${tintuc?.id}&cat=${linkWp?._id}`,
+											search: `?_id=${tintuc?.id}${linkWp?._id ? `&cat=${linkWp?._id}` : ''}`,
 										});
 										window.scrollTo({ top: 0, behavior: 'smooth' });
 									}}

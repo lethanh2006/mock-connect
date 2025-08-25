@@ -1,6 +1,6 @@
 import DanhSachMinhChung from '@/pages/DiemRenLuyenV2/MinhChung/CauHinh/DanhSach';
 import dayjs from '@/utils/dayjs';
-import { useModel } from '@@/plugin-model/useModel';
+import { useModel } from '@umijs/max';
 import { Alert, Card, Space } from 'antd';
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -22,20 +22,22 @@ const KhaiBaoMinhChungPage = () => {
 	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
 
 	return (
-		<>
-			<Card
-				title={
-					<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-						<span>Khai báo minh chứng</span>
-						<SelectDotDiemRenLuyen
-							style={{ width: 300 }}
-							value={recDot?._id}
-							onChange={(val) => setDot(danhSachDot.find((i) => i._id === val))}
-							isSetRecord={true}
-						/>
-					</Space>
-				}
-			>
+		<Card
+			className='card-big-title card-borderless'
+			variant='borderless'
+			title={
+				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
+					<span>Khai báo minh chứng</span>
+					<SelectDotDiemRenLuyen
+						style={{ width: 300 }}
+						value={recDot?._id}
+						onChange={(val) => setDot(danhSachDot.find((i) => i._id === val))}
+						isSetRecord={true}
+					/>
+				</Space>
+			}
+		>
+			<Card variant='borderless' style={{ padding: '32px 0 0 0' }}>
 				{!recDot || ngoaiThoiGian ? (
 					<Alert
 						showIcon
@@ -57,7 +59,7 @@ const KhaiBaoMinhChungPage = () => {
 					</Pane>
 				</SplitPane>
 			</Card>
-		</>
+		</Card>
 	);
 };
 export default KhaiBaoMinhChungPage;
