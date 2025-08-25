@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const CardTinTuc = styled.div`
+interface CardTinTucProps {
+	first?: boolean;
+}
+
+export const CardTinTuc = styled.div<CardTinTucProps>`
 	width: 100%;
 	border-radius: 6px;
 	padding: 8px 10px;

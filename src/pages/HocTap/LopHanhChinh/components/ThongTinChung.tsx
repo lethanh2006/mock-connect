@@ -24,7 +24,7 @@ const ThongTinChungLopHanhChinh = () => {
 				) : null}
 			</Descriptions>
 
-			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8, marginTop: 18 }}>Danh sách sinh viên</h4>
+			{/* <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8, marginTop: 18 }}>Danh sách sinh viên</h4> */}
 			<DanhSachSinhVien
 				sinhVienList={
 					recordDetail?.lopHcSvKyList?.map((i) => ({ ...i, ...i.sinhVien })) ?? recordDetail?.sinhVienList ?? []

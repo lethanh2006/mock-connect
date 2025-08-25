@@ -22,7 +22,10 @@ const XemSauPage = () => {
 		} else if (tabActive === ELoaiThongTinXemSau.TIN_TUC) {
 			history.push({
 				pathname: '/tin-tuc/chi-tiet',
-				query: rec?.idChuDe ? { _id: rec?.sourceId, cat: rec?.idChuDe } : { id: rec?.sourceId },
+				// query: rec?.idChuDe ? { _id: rec?.sourceId, cat: rec?.idChuDe } : { id: rec?.sourceId },
+				search: rec?.idChuDe
+					? `?_id=${rec?.sourceId}${rec?.idChuDe ? `&cat=${rec?.idChuDe}` : ''}`
+					: `?id=${rec?.sourceId}`,
 			});
 		} else if (tabActive === ELoaiThongTinXemSau.VBHD) {
 			window.open(rec?.thongTin?.url, '_blank');
