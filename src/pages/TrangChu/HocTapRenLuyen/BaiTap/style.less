@@ -1,49 +1,20 @@
 .card-baitap-dashboard {
 
-	// Header styles
-	.header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		background-color: transparent;
-		flex-wrap: nowrap;
-		gap: 0;
-
-		&.mobile {
-			flex-wrap: wrap;
-			gap: 12px;
-		}
-
-		.title {
-			font-size: 18px;
-			font-weight: 600;
-			color: #000;
-			padding: 13px 0;
-			background-color: transparent;
-			flex-shrink: 0;
-
-			&.mobile {
-				font-size: 16px;
-			}
-		}
-	}
-
 	// Content wrapper
 	.content-wrapper {
-		background-color: #fff;
 		border-radius: 8px;
-		box-shadow: var(--box-shadow-tertiary);
-	}
 
-	// Carousel styles
-	.carousel-container {
-		border-radius: 8px;
 		background-position: right;
 		background-repeat: no-repeat;
 		background-size: contain;
+		background-image: url(/images/assignment-background.svg);
 
-		&.mobile {
-			background-image: none !important;
+		height: 350px;
+		min-height: 350px;
+
+		@media (max-width: @screen-xs) {
+			height: auto;
+			min-height: 300px;
 		}
 	}
 
@@ -51,17 +22,13 @@
 	.page-cards {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 1px;
 		min-height: 350px;
 		height: 350px;
 		border-radius: 8px;
-		padding: 0;
 		background-color: transparent;
-		border: 1px solid #f0f0f0;
 
 		&.mobile {
 			grid-template-columns: 1fr;
-			gap: 16px;
 			min-height: auto;
 			height: auto;
 			border: none;
@@ -74,16 +41,13 @@
 		padding: 20px;
 		border: 1px solid #ebebeb;
 		transition: all 0.2s ease;
-		height: 350px;
-		min-height: 350px;
+
 		display: flex;
 		flex-direction: column;
 	}
 
 	@media (max-width: @screen-xs) {
 		padding: 12px 6px !important;
-		height: auto;
-		min-height: 300px;
 	}
 
 	// Top section
@@ -173,32 +137,5 @@
 				}
 			}
 		}
-	}
-}
-
-// Empty state
-.empty-container {
-	border-radius: 8px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 350px;
-	min-height: 350px;
-
-	&.mobile {
-		height: 200px;
-		min-height: 200px;
-	}
-}
-
-.empty-state-wrapper {
-	gap: 1px;
-	min-height: 350px;
-	border-radius: 8px;
-	padding: 0;
-	background-color: transparent;
-
-	&.mobile {
-		min-height: 200px;
 	}
 }
