@@ -64,7 +64,7 @@ const BoxFile = (props: { url: string }) => {
 
 			<ModalExpandable
 				centered
-				title='Chi tiết tài liệu'
+				title='Chi tiết tệp tin'
 				width={1000}
 				open={visibleFormFile}
 				footer={null}
