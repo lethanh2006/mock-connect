@@ -11,7 +11,7 @@ import {
 	LeftOutlined,
 	RightOutlined,
 } from '@ant-design/icons';
-import { message, Spin } from 'antd';
+import { Empty, message, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
@@ -185,6 +185,11 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			</div>
 		);
 	}
+
+	if (!file) {
+		return <Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không tồn tại dữ liệu tệp tin' />;
+	}
+
 
 	return (
 		<div className='preview-container' style={{ ...style }}>
