@@ -71,8 +71,8 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 						</Col>
 						<Col>
 							<Text>Mã lớp (nhóm):</Text>
-							<Text strong style={{ marginLeft: '8px' }}>
-								{record?.soThuTuLop ?? ''}
+							<Text strong style={{ marginLeft: '8px' }} copyable>
+								{record?.ten ?? ''}
 							</Text>
 						</Col>
 						<Col>

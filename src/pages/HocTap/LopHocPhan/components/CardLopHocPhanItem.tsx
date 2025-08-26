@@ -47,7 +47,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, bac
 					{isCompleted ? 'Đã kết thúc' : 'Đang học'}
 				</Tag>
 
-				<InfoCircleOutlined style={{ color: '#007aff', marginLeft: 8 }} />
+				<InfoCircleOutlined style={{ color: 'var(--color-primary)', marginLeft: 8 }} />
 
 				<br />
 				<Title level={4} className='card-lhp-title'>
@@ -56,18 +56,13 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, bac
 
 				<div className='card-lhp-row'>
 					<span>Mã lớp (nhóm):</span>
-					<Text strong>{lop.maLop}</Text>
-				</div>
-
-				<div className='card-lhp-row'>
-					<span>Tên lớp:</span>
 					<Text strong>{lop.ten}</Text>
 				</div>
 
 				{lop?.diem?.diemHpSvHk?.diemKthp ? (
 					<div className='card-lhp-row'>
 						<span>Điểm thi:</span>
-						<Text strong style={{ color: '#007aff' }}>
+						<Text strong className='text-primary'>
 							{lop?.diem?.diemHpSvHk?.diemKthp}
 						</Text>
 					</div>

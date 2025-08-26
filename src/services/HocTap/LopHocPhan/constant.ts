@@ -74,19 +74,19 @@ export enum ELoaiDiemChu {
 }
 
 export const ColorDiemChu = {
-	[ELoaiDiemChu.A_PLUS]: '#399500',
-	[ELoaiDiemChu.A]: '#399500',
-	[ELoaiDiemChu.B_PLUS]: '#399500',
-	[ELoaiDiemChu.B]: '#399500',
-	[ELoaiDiemChu.C_PLUS]: '#ffaf0b',
-	[ELoaiDiemChu.C]: '#ffaf0b',
-	[ELoaiDiemChu.D_PLUS]: '#ffaf0b',
-	[ELoaiDiemChu.D]: '#ffaf0b',
+	[ELoaiDiemChu.A_PLUS]: '#13b755',
+	[ELoaiDiemChu.A]: '#13b755',
+	[ELoaiDiemChu.B_PLUS]: '#33adff',
+	[ELoaiDiemChu.B]: '#33adff',
+	[ELoaiDiemChu.C_PLUS]: '#ffab50',
+	[ELoaiDiemChu.C]: '#ffab50',
+	[ELoaiDiemChu.D_PLUS]: '#ff7171',
+	[ELoaiDiemChu.D]: '#ff7171',
 	[ELoaiDiemChu.F]: '#a90b00',
-	[ELoaiDiemChu.PASS]: '#399500',
+	[ELoaiDiemChu.PASS]: '#13b755',
 	[ELoaiDiemChu.HOAN_THI]: 'rgb(173 173 173)',
 	[ELoaiDiemChu.CHUA_DU_DU_LIEU]: 'rgb(173 173 173)',
-	[ELoaiDiemChu.MIEN_THI]: '#399500',
+	[ELoaiDiemChu.MIEN_THI]: '#13b755',
 };
 
 //LMS

@@ -210,7 +210,7 @@ const FormBaiTap = (props: any) => {
 		<>
 			{record?.trangThai === ETrangThaiNopBaiTap.DA_NOP ? (
 				<div style={{ marginBottom: 12 }}>
-					<Alert type='success' showIcon message='Đã nộp bài' />
+					<Alert type='success' showIcon message='Bạn đã nộp bài!' />
 				</div>
 			) : !quaThoiHanNopBai ? (
 				<div style={{ marginBottom: 12 }}>

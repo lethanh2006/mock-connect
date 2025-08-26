@@ -10,6 +10,7 @@ import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Carousel, Empty, Space, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { history, Link, useModel } from 'umi';
 import SlideButtonIcon from '../../components/SlideButtonIcon';
 import './style.less';
@@ -20,61 +21,24 @@ const CardBaiTapDashboard = () => {
 	const { danhSach } = useModel('daotao.baitap');
 	const [currentPage, setCurrentPage] = useState(0);
 	const [carouselRef, setCarouselRef] = useState<any>(null);
-	const [previewModal, setPreviewModal] = useState<{
-		visible: boolean;
-		fileUrl: string;
-		fileName: string;
-		fileType: string;
-	}>({
-		visible: false,
-		fileUrl: '',
-		fileName: '',
-		fileType: '',
-	});
-	const [screenSize, setScreenSize] = useState({
-		width: window.innerWidth,
-		height: window.innerHeight,
-	});
+	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
 	const assignmentBg = 'images/assignment-background.svg';
-
-	// Responsive logic
-	const getItemsPerPage = () => {
-		if (screenSize.width <= 768) return 1; // Mobile: 1 card per page
-		return 2; // Desktop: 2 cards per page
-	};
-
-	const itemsPerPage = getItemsPerPage();
-
-	// Handle window resize
-	useEffect(() => {
-		const handleResize = () => {
-			setScreenSize({
-				width: window.innerWidth,
-				height: window.innerHeight,
-			});
-		};
-
-		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
-	}, []);
-
-	// Reset current page when items per page changes
-	useEffect(() => {
-		setCurrentPage(0);
-	}, [itemsPerPage]);
-
+	const itemsPerPage = isMobile ? 1 : 2;
 	const filteredData = danhSach.filter(
 		(i) => i.assignment?.thoiGianKetThuc && dayjs().isSameOrBefore(dayjs(i.assignment.thoiGianKetThuc)),
 	);
-
 	const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
 	// Tạo các trang dữ liệu
 	const pageData = [];
 	for (let i = 0; i < totalPages; i++) {
 		pageData.push(filteredData.slice(i * itemsPerPage, (i + 1) * itemsPerPage));
 	}
+
+	// Reset current page when items per page changes
+	useEffect(() => {
+		setCurrentPage(0);
+	}, [itemsPerPage]);
 
 	const handlePrevious = () => {
 		if (currentPage > 0) {
@@ -92,37 +56,27 @@ const CardBaiTapDashboard = () => {
 		setCurrentPage(current);
 	};
 
-	// Hàm xử lý download file
-	const handleDownloadFile = (url: string, fileName: string) => {
-		const link = document.createElement('a');
-		link.href = url;
-		link.download = fileName;
-		link.target = '_blank';
-		document.body.appendChild(link);
-		link.click();
-		document.body.removeChild(link);
-	};
-
 	const renderAssignmentCard = (item: BaiTap.IDanhSachGiaoBaiTap, index: number) => {
 		const files = item.assignment.urlTepDinhKem || [];
-		const isMobile = screenSize.width <= 768;
 
 		return (
-			<div key={item._id + index} className={`assignment-card ${isMobile ? 'mobile' : ''}`}>
-				{/* Top section: Subject Tag + Assignment Content */}
+			<div key={item._id + index} className='assignment-card'>
 				<div className='top-section'>
-					{/* Subject Tag */}
 					<div
 						className='subject-tag'
 						onClick={() => history.push(`/hoc-tap/lop-tin-chi/${item.assignment.lopHocPhanId}#bai-tap`)}
 					>
-						<Text className={`subject-name ${isMobile ? 'mobile' : ''}`}>#{item.assignment.tenLopHocPhan}</Text>
-						<ArrowRightOutlined className='arrow-icon' />
+						<Link to={`/hoc-tap/lop-tin-chi/${item.assignment.lopHocPhanId}#bai-tap`}>
+							#{item.assignment.tenLopHocPhan}
+						</Link>
+						<Link to={`/hoc-tap/lop-tin-chi/${item.assignment.lopHocPhanId}#bai-tap`}>
+							<ArrowRightOutlined className='arrow-icon' />
+						</Link>
 					</div>
 
 					{/* Assignment Content - Giới hạn 3 dòng */}
-					<div className={`assignment-content ${isMobile ? 'mobile' : ''}`}>
-						<Text className={`content-text ${isMobile ? 'mobile' : ''}`}>
+					<div className='assignment-content'>
+						<Text className='content-text'>
 							<div dangerouslySetInnerHTML={{ __html: item.assignment.noiDung ?? '' }} />
 						</Text>
 					</div>
@@ -132,15 +86,14 @@ const CardBaiTapDashboard = () => {
 				<div className={`bottom-section ${isMobile ? 'mobile' : ''}`}>
 					{/* Files Section */}
 					{files.length > 0 && (
-						<div className={`files-section ${isMobile ? 'mobile' : ''}`}>
+						<div className='files-section'>
 							{files.slice(0, 2).map((fileUrl, fileIndex) => (
-								// <FileItem key={fileIndex} fileUrl={fileUrl} index={fileIndex} />
-								<div style={{ margin: '6px', background: '#eff1f9', borderRadius: 4 }}>
+								<div key={fileIndex}>
 									<BoxFile url={fileUrl} />
 								</div>
 							))}
 							{files.length > 2 && (
-								<Text className={`more-files-text ${isMobile ? 'mobile' : ''}`}>
+								<Text type='secondary' italic>
 									...và {files.length - 2} file khác
 								</Text>
 							)}
@@ -163,8 +116,6 @@ const CardBaiTapDashboard = () => {
 	};
 
 	const renderPageCards = (pageItems: BaiTap.IDanhSachGiaoBaiTap[]) => {
-		const isMobile = screenSize.width <= 768;
-
 		return (
 			<div className={`page-cards ${isMobile ? 'mobile' : ''}`}>
 				{pageItems.map((item, index) => renderAssignmentCard(item, index))}
@@ -182,8 +133,6 @@ const CardBaiTapDashboard = () => {
 			</div>
 		);
 	};
-
-	const isMobile = screenSize.width <= 768;
 
 	if (!filteredData.length) {
 		return (
@@ -214,7 +163,7 @@ const CardBaiTapDashboard = () => {
 				<div
 					className='content-wrapper'
 					style={{
-						backgroundImage: isMobile ? 'none' : `url(${assignmentBg})`,
+						backgroundImage: `url(${assignmentBg})`,
 						backgroundPosition: 'right',
 						backgroundRepeat: 'no-repeat',
 						backgroundSize: 'contain',
@@ -266,46 +215,13 @@ const CardBaiTapDashboard = () => {
 					easing='ease-in-out'
 					afterChange={handleSlideChange}
 					className={`carousel-container ${isMobile ? 'mobile' : ''}`}
-					style={{
-						backgroundImage: isMobile ? 'none' : `url(${assignmentBg})`,
-					}}
+					style={{ backgroundImage: `url(${assignmentBg})` }}
 				>
 					{pageData.map((pageItems, pageIndex) => (
 						<div key={pageIndex}>{renderPageCards(pageItems)}</div>
 					))}
 				</Carousel>
 			</div>
-
-			{/* Modal xem trước file */}
-			{/* <Modal
-				title={`Xem trước: ${previewModal.fileName}`}
-				open={previewModal.visible}
-				onCancel={() => setPreviewModal({ ...previewModal, visible: false })}
-				width='90%'
-				className='preview-modal'
-				footer={[
-					<Button
-						key='download'
-						type='primary'
-						onClick={() => handleDownloadFile(previewModal.fileUrl, previewModal.fileName)}
-					>
-						Tải xuống
-					</Button>,
-					<Button key='close' onClick={() => setPreviewModal({ ...previewModal, visible: false })}>
-						Đóng
-					</Button>,
-				]}
-			>
-				<div className='modal-content'>
-					{previewModal.fileType === 'pdf' ? (
-						<PDFViewerV2 url={previewModal.fileUrl} height='100%' />
-					) : (
-						<div className='unsupported-preview'>
-							<Text>Không hỗ trợ xem trước loại file này</Text>
-						</div>
-					)}
-				</div>
-			</Modal> */}
 		</div>
 	);
 };
