@@ -207,7 +207,7 @@ const DetailLopTinChi = () => {
 			title: titles[6],
 			menuKey: paths[6],
 			content: (
-				<Card variant='borderless'>
+				<Card variant='borderless' style={{ maxWidth: 1000, margin: 'auto' }}>
 					<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10 }}>Chi tiết điểm học phần</h4>
 					<DetailKetQuaHocTap
 						lopHocPhanId={record?._id}

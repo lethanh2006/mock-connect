@@ -233,7 +233,7 @@ export declare module LopHocPhan {
 			ma: string;
 		};
 		tiLeHoanThanh: number;
-		thoiGianTaoVao: Date;
+		thoiGianTaoVao: string;
 		thoiGianCapNhatGanNhatVao: '03:23:40 22-12-2024';
 		hocLieu: THocLieuLms[];
 	}

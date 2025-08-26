@@ -5,8 +5,8 @@ import {
 	mapTrangThaiNopBaiTap,
 } from '@/services/DaoTao/BaiTap/constants';
 import dayjs from '@/utils/dayjs';
-import { ArrowRightOutlined, DownloadOutlined, EyeOutlined, MoreOutlined } from '@ant-design/icons';
-import { Button, Card, Empty, List, Modal, Popover, Tag, Typography } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
+import { Card, Empty, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
 import BoxFile from '../DienDan/components/BoxFile';
@@ -18,14 +18,8 @@ interface IProps {
 }
 
 const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
-	const { getModel, danhSach, loading, setVisibleForm, setRecord } = useModel('daotao.baitap');
+	const { getModel, danhSach } = useModel('daotao.baitap');
 	const [segment, setSegment] = useState<string>('1');
-	const [previewModal, setPreviewModal] = useState({
-		visible: false,
-		fileUrl: '',
-		fileName: '',
-		fileType: '',
-	});
 
 	const fetchData = () => {
 		if (lopHocPhanId) {
@@ -44,76 +38,11 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 		fetchData();
 	}, [lopHocPhanId, segment]);
 
-	const getFileNameFromUrl = (url: string): string => {
-		try {
-			const urlObj = new URL(url);
-			const pathname = urlObj.pathname;
-			return decodeURIComponent(pathname.split('/').pop() || 'file');
-		} catch {
-			return url.split('/').pop() || 'file';
-		}
-	};
-
-	const handleDownloadFile = (url: string, fileName: string) => {
-		const link = document.createElement('a');
-		link.href = url;
-		link.download = fileName;
-		link.target = '_blank';
-		document.body.appendChild(link);
-		link.click();
-		document.body.removeChild(link);
-	};
-
-	const handlePreviewFile = (url: string, fileName: string) => {
-		const fileType = fileName.split('.').pop()?.toLowerCase() || '';
-		setPreviewModal({
-			visible: true,
-			fileUrl: url,
-			fileName,
-			fileType,
-		});
-	};
-
-	const FileActionPopover = ({ fileUrl, fileName }: { fileUrl: string; fileName: string }) => {
-		const fileType = fileName.split('.').pop()?.toLowerCase() || '';
-		const canPreview = ['pdf'].includes(fileType);
-
-		const fileActions = [
-			{ key: 'download', label: 'Tải xuống', icon: <DownloadOutlined /> },
-			...(canPreview ? [{ key: 'preview', label: 'Xem trước', icon: <EyeOutlined /> }] : []),
-		];
-
-		const handleAction = (key: string) => {
-			if (key === 'download') handleDownloadFile(fileUrl, fileName);
-			else if (key === 'preview') handlePreviewFile(fileUrl, fileName);
-		};
-
-		return (
-			<Popover
-				content={
-					<List
-						size='small'
-						dataSource={fileActions}
-						renderItem={(item) => (
-							<List.Item style={{ cursor: 'pointer' }} onClick={() => handleAction(item.key)}>
-								{item.icon} {item.label}
-							</List.Item>
-						)}
-					/>
-				}
-				trigger='click'
-			>
-				<Button type='text' icon={<MoreOutlined />} />
-			</Popover>
-		);
-	};
-
 	return (
 		<Card
 			size='small'
 			title={'Bài tập, bài kiểm tra'}
 			variant='borderless'
-			style={{ borderRadius: '8px', boxShadow: '0px 0px 12px 0px #0000000A' }}
 			extra={
 				// <Segmented
 				// 	options={[
@@ -129,116 +58,51 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 				</Link>
 			}
 		>
-			{loading ? (
-				<div style={{ textAlign: 'center', padding: '40px 0' }}>
-					<Text>Đang tải dữ liệu...</Text>
-				</div>
-			) : danhSach?.length === 0 ? (
+			{!danhSach?.length ? (
 				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập nào đang diễn ra' />
 			) : (
-				<div
-					className='card-boderless'
-					style={{
-						maxHeight: 400,
-						overflowY: 'auto',
-						paddingRight: 8,
-						// msOverflowStyle: 'none', // IE, Edge
-						// scrollbarWidth: 'none', // Firefox
-						margin: '-16px',
-						boxShadow: '0px 0px 6px 0px #0000000A',
-					}}
-				>
-					<div style={{ display: 'flex', flexDirection: 'column', gap: 16, borderRadius: '0px' }}>
-						{danhSach.map((item) => {
-							const files = item.assignment?.urlTepDinhKem || [];
-							return (
-								<Card
-									key={item._id}
-									size='small'
-									style={{
-										border: 'none',
-										borderBottom: '1px solid #ddd',
-										borderRadius: '0px',
-									}}
-								>
-									<Text strong style={{ fontSize: 14 }}>
-										<span style={{ marginRight: 8 }}>{item.assignment?.noiDung}</span>
-									</Text>
+				<div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+					{danhSach.map((item) => {
+						const files = item.assignment?.urlTepDinhKem || [];
+						return (
+							<div key={item._id} style={{ borderBottom: '1px solid #ddd', paddingBottom: 8 }}>
+								<Text strong>{item.assignment?.noiDung}</Text>
 
-									{files.length > 0 && (
-										<div style={{ marginTop: 12 }}>
-											{files.slice(0, 2).map((url, idx) => {
-												// const fileName = getFileNameFromUrl(url);
-												return (
-													<div
-														key={idx}
-														style={{
-															display: 'flex',
-															justifyContent: 'space-between',
-															alignItems: 'center',
-															backgroundColor: '#EFF1F9',
-															padding: '6px 12px',
-															borderRadius: 6,
-															marginBottom: 8,
-														}}
-													>
-														<BoxFile url={url} />
-														{/* <FileActionPopover fileUrl={url} fileName={fileName} /> */}
-													</div>
-												);
-											})}
-											{files.length > 2 && (
-												<Text type='secondary' italic style={{ display: 'block', marginTop: 4 }}>
-													...và {files.length - 2} file khác
-												</Text>
-											)}
-										</div>
-									)}
-
-									<div
-										style={{ marginTop: 12, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
-									>
-										<Text type='secondary'>Hạn nộp bài: </Text>
-
-										<Text strong>
-											{dayjs(item.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}{' '}
-											<Tag
-												color={colorTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
-												style={{ marginLeft: item.trangThai == ETrangThaiNopBaiTap.DA_NOP ? 16 : 2 }}
-											>
-												{mapTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
-											</Tag>
-										</Text>
+								{files.length > 0 && (
+									<div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
+										{files.slice(0, 2).map((url, idx) => {
+											return (
+												<div key={idx}>
+													<BoxFile url={url} />
+												</div>
+											);
+										})}
+										{files.length > 2 && (
+											<Text type='secondary' italic>
+												...và {files.length - 2} file khác
+											</Text>
+										)}
 									</div>
-									{/* 
-									<div style={{ marginTop: 16 }}>
-										<Link to={`/hoc-tap/lop-tin-chi/${lopHocPhanId}#bai-tap`}>Xem chi tiết</Link>
-									</div> */}
-								</Card>
-							);
-						})}
-					</div>
+								)}
+
+								<div style={{ marginTop: 12, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+									<Text type='secondary'>Hạn nộp bài: </Text>
+
+									<Text strong>
+										{dayjs(item.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}{' '}
+										<Tag
+											color={colorTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
+											style={{ marginLeft: item.trangThai == ETrangThaiNopBaiTap.DA_NOP ? 16 : 2 }}
+										>
+											{mapTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
+										</Tag>
+									</Text>
+								</div>
+							</div>
+						);
+					})}
 				</div>
 			)}
-
-			{/* Modal xem trước */}
-			<Modal
-				title={`Xem trước: ${previewModal.fileName}`}
-				open={previewModal.visible}
-				onCancel={() => setPreviewModal({ ...previewModal, visible: false })}
-				footer={null}
-				width='80%'
-			>
-				{previewModal.fileType === 'pdf' ? (
-					<iframe
-						src={previewModal.fileUrl}
-						style={{ width: '100%', height: '70vh', border: 'none' }}
-						title='PDF Preview'
-					/>
-				) : (
-					<Text>Không hỗ trợ xem trước loại file này.</Text>
-				)}
-			</Modal>
 		</Card>
 	);
 };

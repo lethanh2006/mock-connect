@@ -64,7 +64,7 @@ const DanhSachBuoiHoc = () => {
 				</>
 			) : null}
 
-			<Card style={{ borderRadius: '8px' }} variant='borderless'>
+			<Card variant='borderless'>
 				<Space wrap style={{ marginBottom: 12, justifyContent: 'space-between', width: '100%' }}>
 					<Space wrap size={12}>
 						<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
