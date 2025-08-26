@@ -1,5 +1,9 @@
+import PreviewFile from '@/components/PreviewFile';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { getNameFile } from '@/utils/utils';
 import { FileExcelOutlined, FileOutlined, FilePdfOutlined, FileWordOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const PrimaryColor = APP_CONFIG_PRIMARY_COLOR;
@@ -25,6 +29,7 @@ const BoxFileWrapper = styled.div`
 `;
 
 const BoxFile = (props: { url: string }) => {
+	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 	const getFileNameExtention = (fileName: string) => {
 		return fileName?.split('.').pop();
 	};
@@ -61,6 +66,21 @@ const BoxFile = (props: { url: string }) => {
 				<div style={{ marginRight: 4 }}>{renderIconWithFile(getFileNameExtention(fileName ?? '') ?? '')}</div>
 				<div className={'name-file'}>{getNameFile(props?.url)}</div>
 			</div>
+
+			<ModalExpandable
+				centered
+				title='Chi tiết tài liệu'
+				width={1000}
+				visible={visibleFormFile}
+				footer={null}
+				onCancel={() => setVisibleFormFile(false)}
+			>
+				<PreviewFile file={props?.url ?? ''} />
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+				</div>
+			</ModalExpandable>
 		</BoxFileWrapper>
 	);
 };
