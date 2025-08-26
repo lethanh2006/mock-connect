@@ -112,10 +112,10 @@ const TienTrinhChuongTrinhKhung = () => {
 		<div>
 			{recTienTrinh?.ctdtKeHoach?._id && (
 				<>
-					<Descriptions>
+					<Descriptions style={{ marginBottom: 16 }} layout='vertical' className='highlight' colon={false}>
 						<Descriptions.Item label='Chương trình/Kế hoạch' span={2}>
 							<Link
-								to=''
+								to='#'
 								onClick={(e) => {
 									e.preventDefault();
 									setVisibleChuongTrinh(true);
