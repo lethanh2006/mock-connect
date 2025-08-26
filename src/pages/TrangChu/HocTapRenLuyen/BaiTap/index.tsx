@@ -8,7 +8,7 @@ import {
 import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Carousel, Empty, Space, Tag, Typography } from 'antd';
+import { Button, Card, Carousel, Empty, Space, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { history, Link, useModel } from 'umi';
@@ -22,8 +22,6 @@ const CardBaiTapDashboard = () => {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [carouselRef, setCarouselRef] = useState<any>(null);
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
-
-	const assignmentBg = 'images/assignment-background.svg';
 	const itemsPerPage = isMobile ? 1 : 2;
 	const filteredData = danhSach.filter(
 		(i) => i.assignment?.thoiGianKetThuc && dayjs().isSameOrBefore(dayjs(i.assignment.thoiGianKetThuc)),
@@ -120,109 +118,63 @@ const CardBaiTapDashboard = () => {
 			<div className={`page-cards ${isMobile ? 'mobile' : ''}`}>
 				{pageItems.map((item, index) => renderAssignmentCard(item, index))}
 
-				{/* Fill empty space if only 1 card on desktop */}
 				{pageItems.length === 1 && !isMobile && (
-					<div className='empty-container'>
-						<Empty
-							style={{ margin: 'auto' }}
-							image={Empty.PRESENTED_IMAGE_SIMPLE}
-							description='Không còn bài tập khác'
-						/>
-					</div>
+					<Empty style={{ margin: 'auto' }} image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không còn bài tập khác' />
 				)}
 			</div>
 		);
 	};
 
-	if (!filteredData.length) {
-		return (
-			<div className={`card-baitap-dashboard ${isMobile ? 'mobile' : ''}`}>
-				{/* Header */}
-				<div className={`header ${isMobile ? 'mobile' : ''}`}>
-					<Text className={`title ${isMobile ? 'mobile' : ''}`}>Bài tập, bài kiểm tra</Text>
-					<Space size={isMobile ? 'small' : 'middle'} className='navigation-buttons'>
-						<Button
-							type='text'
-							icon={<SlideButtonIcon direction='left' disabled={filteredData.length == 0} />}
-							disabled
-							className='nav-btn'
-						/>
-						<Button
-							type='text'
-							icon={<SlideButtonIcon direction='right' disabled={filteredData.length == 0} />}
-							disabled
-							className='nav-btn'
-						/>
-						<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
-							Xem tất cả
-						</Link>
-					</Space>
-				</div>
-
-				{/* Content - Empty State */}
-				<div
-					className='content-wrapper'
-					style={{
-						backgroundImage: `url(${assignmentBg})`,
-						backgroundPosition: 'right',
-						backgroundRepeat: 'no-repeat',
-						backgroundSize: 'contain',
-					}}
-				>
-					<div className={`empty-state-wrapper ${isMobile ? 'mobile' : ''}`}>
-						<div className={`empty-container ${isMobile ? 'mobile' : ''}`}>
-							<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập' />
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
-
 	return (
-		<div className={`card-baitap-dashboard ${isMobile ? 'mobile' : ''}`}>
-			{/* Header */}
-			<div className={`header ${isMobile ? 'mobile' : ''}`}>
-				<Text className={`title ${isMobile ? 'mobile' : ''}`}>Bài tập, bài kiểm tra</Text>
+		<Card
+			variant='borderless'
+			className='card-borderless card-big-title card-baitap-dashboard'
+			title='Bài tập, bài kiểm tra'
+			extra={
 				<Space size={isMobile ? 'small' : 'middle'} className='navigation-buttons'>
-					<Button
-						type='text'
-						icon={<SlideButtonIcon direction='left' disabled={currentPage === 0} />}
-						onClick={handlePrevious}
-						disabled={currentPage === 0}
-						className='nav-btn'
-					/>
-					<Button
-						type='text'
-						icon={<SlideButtonIcon direction='right' disabled={currentPage >= totalPages - 1} />}
-						onClick={handleNext}
-						disabled={currentPage >= totalPages - 1}
-						className='nav-btn'
-					/>
+					{!!filteredData.length && (
+						<>
+							<Button
+								type='text'
+								icon={<SlideButtonIcon direction='left' disabled={currentPage === 0} />}
+								onClick={handlePrevious}
+								disabled={currentPage === 0}
+								className='nav-btn'
+							/>
+							<Button
+								type='text'
+								icon={<SlideButtonIcon direction='right' disabled={currentPage >= totalPages - 1} />}
+								onClick={handleNext}
+								disabled={currentPage >= totalPages - 1}
+								className='nav-btn'
+							/>
+						</>
+					)}
 					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
 						Xem thêm
 					</Link>
 				</Space>
-			</div>
-
-			{/* Content - Carousel */}
-			<div className='content-wrapper'>
-				<Carousel
-					ref={setCarouselRef}
-					dots={false}
-					infinite={false}
-					speed={300}
-					easing='ease-in-out'
-					afterChange={handleSlideChange}
-					className={`carousel-container ${isMobile ? 'mobile' : ''}`}
-					style={{ backgroundImage: `url(${assignmentBg})` }}
-				>
-					{pageData.map((pageItems, pageIndex) => (
-						<div key={pageIndex}>{renderPageCards(pageItems)}</div>
-					))}
-				</Carousel>
-			</div>
-		</div>
+			}
+		>
+			<Card variant='borderless' className='content-wrapper' styles={{ body: { padding: 0 } }}>
+				{!!filteredData.length ? (
+					<Carousel
+						ref={setCarouselRef}
+						dots={false}
+						infinite={false}
+						speed={300}
+						easing='ease-in-out'
+						afterChange={handleSlideChange}
+					>
+						{pageData.map((pageItems, pageIndex) => (
+							<div key={pageIndex}>{renderPageCards(pageItems)}</div>
+						))}
+					</Carousel>
+				) : (
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập' />
+				)}
+			</Card>
+		</Card>
 	);
 };
 
