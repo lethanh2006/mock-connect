@@ -1,18 +1,32 @@
-import { Button, Card, Descriptions } from 'antd';
+import { Button, Card, Col, Descriptions, Divider, Row } from 'antd';
 import { useModel } from 'umi';
 
 const ViewLichTrinhDeCuong = () => {
 	const { record, setVisibleForm } = useModel('hocphan.noidunghp');
 
 	return (
-		<Card title='Nội dung học phần'>
-			<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
-				<Descriptions.Item label='Tiêu đề' span={2}>
-					{record?.tieuDe ?? '--'}
-				</Descriptions.Item>
-				<Descriptions.Item label='Nội dung' span={2}>
+		<Card title='Mô tả tóm tắt học phần/Kế hoạch giảng dạy'>
+			<Row gutter={[0, 12]}>
+				<Col span={24}>
+					<span className='fw500'>Tiêu đề: </span> {record?.tieuDe ?? '--'}
+				</Col>
+				<Col span={24}>
+					<span className='fw500'>Giai đoạn dạy học: </span> {record?.giaiDoanDayHoc ?? '--'}
+				</Col>
+				<Col span={24}>
+					<div className='fw500'>Nội dung: </div>
 					<div dangerouslySetInnerHTML={{ __html: record?.ten ?? '--' }} />
-				</Descriptions.Item>
+				</Col>
+				<Col span={24}>
+					<span className='fw500'>Đáp ứng chuẩn đầu ra: </span> {record?.listMaChuanDauRa?.join(', ') ?? '--'}
+				</Col>
+				<Col span={24}>
+					<span className='fw500'>Bài đánh giá: </span> {record?.listTrongSoTuongUng?.join(', ') ?? '--'}
+				</Col>
+			</Row>
+
+			<Divider>Thời gian tổ chức giảng dạy</Divider>
+			<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
 				<Descriptions.Item label='Lý thuyết'>{record?.gioLyThuyet ?? '--'} tiết</Descriptions.Item>
 				<Descriptions.Item label='Bài tập / Thảo luận'>{record?.gioBaiTapTL ?? '--'} tiết</Descriptions.Item>
 				<Descriptions.Item label='Thực hành'>{record?.gioThucHanh ?? '--'} tiết</Descriptions.Item>
