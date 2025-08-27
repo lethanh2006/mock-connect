@@ -1,5 +1,5 @@
 import { primaryColor } from '@/services/base/constant';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Spin } from 'antd';
 import { useEffect } from 'react';
 
 /** Chú ý các route để layout: false thì phải bọc bởi ConfigBound để nhận styles */
@@ -13,6 +13,8 @@ const ConfigBounder = (props: { children?: any }) => {
 				cssVar: { prefix: '' },
 			},
 		});
+
+		Spin.setDefaultIndicator(<div className='circle-loader' />);
 	}, [primaryColor]);
 
 	return (
@@ -23,8 +25,13 @@ const ConfigBounder = (props: { children?: any }) => {
 				cssVar: { prefix: '' },
 				components: {
 					Carousel: {
-						dotHeight: 5,
-						dotOffset: 0, // khoảng cách từ bottom
+						dotHeight: 6,
+						dotOffset: 2, // khoảng cách từ bottom
+					},
+					Spin: {
+						dotSize: 50,
+						dotSizeSM: 35,
+						dotSizeLG: 65,
 					},
 				},
 			}}
