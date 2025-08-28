@@ -98,13 +98,7 @@ const CardStatusBaiTap = (props: IProps) => {
 							</Col>
 
 							<Col span={24} style={{ lineHeight: 1 }}>
-								<Row gutter={[12, 12]}>
-									{data?.assignment?.urlTepDinhKem?.map((val) => (
-										<Col span={24} md={12} key={val}>
-											<BoxFile url={val} />
-										</Col>
-									))}
-								</Row>
+								<BoxFile url={data?.assignment?.urlTepDinhKem} />
 							</Col>
 						</Row>
 					</Col>

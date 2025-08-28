@@ -9,62 +9,88 @@ import styled from 'styled-components';
 const PrimaryColor = APP_CONFIG_PRIMARY_COLOR;
 
 const BoxFileWrapper = styled.div`
+	.list-file {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+
 	.box-file {
 		display: flex;
+		flex: 1 1 auto;
+		align-items: center;
+		min-width: 140px;
+		max-width: 240px;
 		padding: 8px;
 		border: 1px solid #f0f0f0;
 		border-radius: 8px;
 		cursor: pointer;
+		transition: all 0.2s ease;
+
 		&:hover {
 			color: ${PrimaryColor};
 			background: #f5f5f5;
+			border-color: ${PrimaryColor};
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 		}
 	}
+
+	.icon {
+		flex-shrink: 0;
+		margin-right: 8px;
+		color: #666;
+		font-size: 24px;
+	}
+
 	.name-file {
 		display: -webkit-box;
+		flex: 1;
 		overflow: hidden;
+		color: #333;
+		font-size: 14px;
+		word-break: break-word;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 1;
 	}
 `;
 
-const BoxFile = (props: { url: string }) => {
-	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
-	const getFileNameExtention = (fileName: string) => {
-		return fileName?.split('.').pop();
-	};
-	const fileName = getNameFile(props?.url);
+type BoxFileProps = {
+	url: string | string[];
+};
+
+const BoxFile = ({ url }: BoxFileProps) => {
+	const [visibleFormFile, setVisibleFormFile] = useState(false);
+
+	const getFileNameExtention = (fileName: string) => fileName?.split('.').pop();
 
 	const renderIconWithFile = (type: string) => {
 		switch (type) {
 			case 'docx':
-				return <FileWordOutlined style={{ fontSize: 24 }} />;
-				break;
-			case 'pdf':
-				return <FilePdfOutlined style={{ fontSize: 24 }} />;
-				break;
 			case 'doc':
-				return <FileWordOutlined style={{ fontSize: 24 }} />;
-				break;
+				return <FileWordOutlined />;
+			case 'pdf':
+				return <FilePdfOutlined />;
 			case 'xlsx':
-				return <FileExcelOutlined style={{ fontSize: 24 }} />;
-				break;
+				return <FileExcelOutlined />;
 			default:
-				return <FileOutlined style={{ fontSize: 24 }} />;
-				break;
+				return <FileOutlined />;
 		}
 	};
 
+	const urls = Array.isArray(url) ? url : [url];
+
 	return (
 		<BoxFileWrapper>
-			<div
-				className='box-file item-center shadow'
-				onClick={() => {
-					window.open(props?.url);
-				}}
-			>
-				<div style={{ marginRight: 4 }}>{renderIconWithFile(getFileNameExtention(fileName ?? '') ?? '')}</div>
-				<div className={'name-file'}>{getNameFile(props?.url)}</div>
+			<div className='list-file' onClick={() => setVisibleFormFile(true)}>
+				{urls.map((fileUrl) => {
+					const fileName = getNameFile(fileUrl);
+					return (
+						<div key={fileUrl} className='box-file shadow'>
+							<div className='icon'>{renderIconWithFile(getFileNameExtention(fileName ?? '') ?? '')}</div>
+							<div className='name-file'>{fileName}</div>
+						</div>
+					);
+				})}
 			</div>
 
 			<ModalExpandable
@@ -75,8 +101,7 @@ const BoxFile = (props: { url: string }) => {
 				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>
-				<PreviewFile file={props?.url ?? ''} />
-
+				<PreviewFile file={urls} />
 				<div className='form-footer'>
 					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
 				</div>
@@ -84,4 +109,5 @@ const BoxFile = (props: { url: string }) => {
 		</BoxFileWrapper>
 	);
 };
+
 export default BoxFile;
