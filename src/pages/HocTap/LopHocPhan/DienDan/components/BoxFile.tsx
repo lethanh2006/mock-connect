@@ -28,44 +28,51 @@ const BoxFileWrapper = styled.div`
 	}
 `;
 
-const BoxFile = (props: { url: string }) => {
-	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
-	const getFileNameExtention = (fileName: string) => {
-		return fileName?.split('.').pop();
-	};
-	const fileName = getNameFile(props?.url);
+type BoxFileProps = {
+	url: string | string[];
+};
+
+const BoxFile = ({ url }: BoxFileProps) => {
+	const [visibleFormFile, setVisibleFormFile] = useState(false);
+
+	const getFileNameExtention = (fileName: string) => fileName?.split('.').pop();
 
 	const renderIconWithFile = (type: string) => {
 		switch (type) {
 			case 'docx':
-				return <FileWordOutlined style={{ fontSize: 24 }} />;
-				break;
-			case 'pdf':
-				return <FilePdfOutlined style={{ fontSize: 24 }} />;
-				break;
 			case 'doc':
-				return <FileWordOutlined style={{ fontSize: 24 }} />;
-				break;
+				return <FileWordOutlined />;
+			case 'pdf':
+				return <FilePdfOutlined />;
 			case 'xlsx':
-				return <FileExcelOutlined style={{ fontSize: 24 }} />;
-				break;
+				return <FileExcelOutlined />;
 			default:
-				return <FileOutlined style={{ fontSize: 24 }} />;
-				break;
+				return <FileOutlined />;
 		}
 	};
 
+	const urls = Array.isArray(url) ? url : [url];
+
 	return (
-		<BoxFileWrapper>
-			<div
-				className='box-file item-center shadow'
-				onClick={() => {
-					window.open(props?.url);
-				}}
-			>
-				<div style={{ marginRight: 4 }}>{renderIconWithFile(getFileNameExtention(fileName ?? '') ?? '')}</div>
-				<div className={'name-file'}>{getNameFile(props?.url)}</div>
-			</div>
+		<div
+			style={{
+				display: 'grid',
+				gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+				gap: 12,
+			}}
+		>
+			{urls.map((fileUrl) => {
+				const fileName = getNameFile(fileUrl);
+				return (
+					// eslint-disable-next-line react/jsx-key
+					<BoxFileWrapper>
+						<div className='box-file item-center shadow' onClick={() => setVisibleFormFile(true)}>
+							<div style={{ marginRight: 4 }}>{renderIconWithFile(getFileNameExtention(fileName ?? '') ?? '')}</div>
+							<div className='name-file'>{fileName}</div>
+						</div>
+					</BoxFileWrapper>
+				);
+			})}
 
 			<ModalExpandable
 				centered
@@ -75,13 +82,13 @@ const BoxFile = (props: { url: string }) => {
 				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>
-				<PreviewFile file={props?.url ?? ''} />
-
+				<PreviewFile file={urls} />
 				<div className='form-footer'>
 					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
 				</div>
 			</ModalExpandable>
-		</BoxFileWrapper>
+		</div>
 	);
 };
+
 export default BoxFile;
