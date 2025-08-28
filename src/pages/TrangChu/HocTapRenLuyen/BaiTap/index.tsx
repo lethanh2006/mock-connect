@@ -85,11 +85,8 @@ const CardBaiTapDashboard = () => {
 					{/* Files Section */}
 					{files.length > 0 && (
 						<div className='files-section'>
-							{files.slice(0, 2).map((fileUrl, fileIndex) => (
-								<div key={fileIndex}>
-									<BoxFile url={fileUrl} />
-								</div>
-							))}
+							<BoxFile url={files} />
+							
 							{files.length > 2 && (
 								<Text type='secondary' italic>
 									...và {files.length - 2} file khác
