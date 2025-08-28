@@ -50,8 +50,9 @@ const ModalNopTruocHocPhi = (props: {
 
 	const handleShowModalThanhToan = async (tran: GiaoDich.IRecord) => {
 		// Get đợt thu trước khi hiển thị modal để lấy thông tin kênh thanh toán
-		if (recDotThu?._id !== tran.idDotThu || (!!recDotThu.kenhThanhToanId && !recDotThu.kenhThanhToan?._id))
-			await getDotThu(tran.idDotThu);
+		if (recDotThu?._id !== tran?.idDotThu || (!!recDotThu?.kenhThanhToanId && !recDotThu?.kenhThanhToan?._id)) {
+			await getDotThu(tran?.idDotThu);
+		}
 		// Set record để hiển thị thông tin thanh toán
 		setRecord(tran);
 		setVisibleHuongDan(true);

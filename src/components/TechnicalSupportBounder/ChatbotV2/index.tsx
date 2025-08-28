@@ -1,4 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { toCamelCase } from '@/utils/utils';
 import { RightOutlined } from '@ant-design/icons';
 import { Card, Spin } from 'antd';
 import { nanoid } from 'nanoid';
@@ -17,7 +18,6 @@ const ChatbotOverlayV2 = () => {
 		createUserChatBotModel,
 		recordUser,
 		formSubmitingUser,
-		// getUserChatBotModel,
 		loading,
 	} = useModel('tienich.chatbotv2');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
@@ -40,29 +40,17 @@ const ChatbotOverlayV2 = () => {
 			]);
 		}
 
-		if (boxChatVisible && recSinhVien?.ssoId && !recordUser?.id) {
-			// getUserChatBotModel(recSinhVien.ssoId);
+		if (boxChatVisible && !recordUser?.id) {
 			createUserChatBotModel({
 				password: 'abc@1234',
 				username: fullName ?? 'admin',
 				email:
-					recSinhVien.email ??
-					`${fullName ?? 'admin'}@${APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH.toLocaleLowerCase()}.edu.vn`,
-				sso_sub: recSinhVien.ssoId ?? initialState?.currentUser?.ssoId ?? 'admin_ssoId',
+					recSinhVien?.email ??
+					`${toCamelCase(fullName ?? 'admin')}@${APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH.toLowerCase()}.edu.vn`,
+				sso_sub: recSinhVien?.ssoId ?? initialState?.currentUser?.ssoId ?? 'admin_ssoId',
 			} as any);
 		}
 	}, [boxChatVisible]);
-
-	// useEffect(() => {
-	// 	if (boxChatVisible && recSinhVien?.ssoId && !recordUser?.id) {
-	// 		createUserChatBotModel({
-	// 			password: 'abc@1234',
-	// 			username: recSinhVien.ten,
-	// 			email: recSinhVien.email,
-	// 			sso_sub: recSinhVien.ssoId,
-	// 		} as any);
-	// 	}
-	// }, [recordUser?.id]);
 
 	return (
 		<>

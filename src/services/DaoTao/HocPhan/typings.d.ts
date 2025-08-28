@@ -131,6 +131,11 @@ declare module HocPhan {
 		gioBaiTapTL: number;
 		gioThucHanh: number;
 		gioTuHoc: number;
+
+		giaiDoanDayHoc?: string; // Giai đoạn dạy học (1, 2, 3, 4, trước khi đến lớp, trên lớp...)
+		listMaChuanDauRa?: string[]; // Danh sách mã chuẩn đầu ra CLO
+		listTrongSoTuongUng?: string[]; // [trongSo1, trongSo2, trongSoThi1, trongSoThi2...]
+		thuTuHienThi?: number; // Thứ tự hiển thị (1, 2, 3, 4, 5...)
 	}
 
 	export interface ITienTrinhHocPhan {
@@ -170,5 +175,33 @@ declare module HocPhan {
 		namXuatBan?: number;
 		batBuoc: boolean;
 		url?: string;
+	}
+
+		/** Chuẩn đầu ra học phần (CLO) */
+	export interface IChuanDauRa {
+		_id: string;
+		/** Mã Chuẩn đầu ra (CLO1, CLO2...), unique trong CTĐT */
+		ma: string;
+		ten: string;
+		diemToiThieu?: number;
+
+		deCuongId: string;
+		deCuong?: IDeCuongHocPhan;
+
+		moTa?: string;
+	}
+
+	export interface ICdrHinhThuc {
+		_id?: string;
+		cloId: string; // CLO
+		dmMucTieuHocPhan?: IChuanDauRa;
+		trongSoTuongUng: string; // trongSo1, trongSo2, trongSoThi1, trongSoThi2...
+
+		tyLeAnhHuong?: number;
+		/** Có tính điểm hay không
+		 * Chỉ cần nhập điểm cho những hình thức đánh giá có isTinhDiem = true
+		 */
+		isTinhDiem?: boolean;
+		diemToiThieu?: number; // Ngưỡng điểm tối thiểu để tính đạt CLO
 	}
 }

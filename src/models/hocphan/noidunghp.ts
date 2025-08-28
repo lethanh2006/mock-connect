@@ -3,7 +3,9 @@ import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ipDaoTao } from '@/utils/ip';
 
 export default () => {
-	const objInit = useInitModel<HocPhan.ILichTrinhChung>('noi-dung-hp', undefined, undefined, ipDaoTao);
+	const objInit = useInitModel<HocPhan.ILichTrinhChung>('noi-dung-hp', undefined, undefined, ipDaoTao, {
+		thuTuHienThi: 1,
+	});
 
 	return {
 		...objInit,

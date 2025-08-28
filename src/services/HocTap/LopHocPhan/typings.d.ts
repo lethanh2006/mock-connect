@@ -134,9 +134,21 @@ export declare module LopHocPhan {
 		// trangThaiDuyetDiemThanhPhan?: ETrangThaiDuyetDiem;
 		// trangThaiDuyet?: ETrangThaiDuyetDiem;
 
+		dat?: boolean; // Có đạt học phần này không?
 		khoa: boolean; // Khóa điểm thành phần
 		khoaDiemThi: boolean; // Khóa điểm thi
 		public: boolean;
+		/** Điểm nhập cứng, ko tính toán từ data? */
+		isStatic?: boolean;
+		/** Bỏ qua HP ko tính vào điểm tích lũy */
+		skip?: boolean;
+
+		/** Chi tiết điểm chuẩn đầu ra học phần phục vụ tính chuẩn đầu ra CLO, PLO */
+		danhSachDiemChuanDauRaThanhPhan?: TChiTietDiemCdr[];
+		danhSachDiemChuanDauRaThi?: TChiTietDiemCdr[];
+		danhSachDiemChuanDauRaThiCuoi?: TChiTietDiemCdr[];
+		/** Danh sách điểm chuẩn đầu ra học phần theo CLO */
+		danhSachDiemMucTieuDauRa?: TDiemChuanDauRa[];
 
 		/** Khi get all điểm hphk của sinh viên */
 		infoKhoaNganh?: Record<string, TInfoKhoaNganh>; // `maKhoaNganh` 7380101_7_1_2022: { ... }
@@ -147,6 +159,23 @@ export declare module LopHocPhan {
 		// maKhoaNganh: string;
 		// khoaNganh?: KhoaNganh.IRecord;
 	}
+
+	export type TChiTietDiemCdr = {
+		// listChuanDauRa?: ChuongTrinhDaoTao.ICdrMucTieuHocPhan[]; // PLO - CLO
+		maClo: string; // CLO1
+		trongSo: number; // Trọng số của CLO này
+		/** diemThanhPhan1, diemThanhPhan2, diemThi1, diemThi2 ... */
+		field: keyof IDiemThanhPhan | keyof IDiemThi;
+		diem?: number;
+	};
+
+	export type TDiemChuanDauRa = {
+		maClo: string; // CLO1
+		diem?: number;
+
+		pass?: boolean; // Có đạt CLO này không?
+		diemToiThieu?: number; // Điểm tối thiểu để đạt CLO này
+	};
 
 	type TInfoKhoaNganh = Pick<DiemHocPhan.IDiemSinhVien, 'maHocKyDat' | 'maHocKyCaiThien' | 'soLanHoc' | 'trongCtdt'> & {
 		maHocPhanQuyDoi?: string;
