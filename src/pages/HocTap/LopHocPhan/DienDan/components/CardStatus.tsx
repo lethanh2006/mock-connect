@@ -10,7 +10,7 @@ import {
 	PushpinFilled,
 	PushpinOutlined,
 } from '@ant-design/icons';
-import { Col, message, Popconfirm, Popover, Row, Tooltip } from 'antd';
+import { message, Popconfirm, Popover, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useRef } from 'react';
 import { history, Link, useModel } from 'umi';
@@ -207,19 +207,7 @@ const CardStatus = (props: IProps) => {
 						</div>
 					)}
 
-					{typeof data?.fileDinhKem === 'string' ? (
-						<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12, marginTop: 8 }}>
-							<BoxFile url={data?.fileDinhKem} />
-						</div>
-					) : (
-						<Row gutter={[12, 12]} style={{ marginTop: 8 }}>
-							{data?.fileDinhKem?.map((val) => (
-								<Col span={24} md={12} key={val}>
-									<BoxFile url={val} />
-								</Col>
-							))}
-						</Row>
-					)}
+					<BoxFile url={data?.fileDinhKem} />
 				</div>
 				<div ref={cardRef}>
 					<div className='action flex justify-between '>
