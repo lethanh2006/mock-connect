@@ -256,13 +256,7 @@ const FormBaiTap = (props: any) => {
 									<div dangerouslySetInnerHTML={{ __html: record?.assignment?.huongDanNop ?? '' }} />
 								</Col>
 								<Col xs={24}>
-									<Row gutter={[12, 12]} style={{ marginTop: 8 }}>
-										{record?.assignment?.urlTepDinhKem?.map((val) => (
-											<Col span={24} md={12} key={val}>
-												<BoxFile url={val} />
-											</Col>
-										))}
-									</Row>
+									<BoxFile url={record?.assignment?.urlTepDinhKem ?? []} />
 								</Col>
 							</Row>
 						</div>
