@@ -61,6 +61,7 @@ export default {
 	'menu.KhaoSatTrucTuyen': 'Khảo sát',
 	'menu.CuocThi': 'Cuộc thi',
 	'menu.ThongBao': 'Thông báo',
+	'menu.ChatBot': 'Thắc mắc Amin',
 
 	'menu.TienIch': 'Tiện ích khác',
 	'menu.TienIch.VanBanHuongDan': 'Văn bản hướng dẫn',

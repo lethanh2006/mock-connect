@@ -64,6 +64,7 @@ const BoxFile = ({ url }: BoxFileProps) => {
 			{urls.map((fileUrl) => {
 				const fileName = getNameFile(fileUrl);
 				return (
+					// eslint-disable-next-line react/jsx-key
 					<BoxFileWrapper>
 						<div className='box-file item-center shadow' onClick={() => setVisibleFormFile(true)}>
 							<div style={{ marginRight: 4 }}>{renderIconWithFile(getFileNameExtention(fileName ?? '') ?? '')}</div>

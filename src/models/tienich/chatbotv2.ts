@@ -1,4 +1,13 @@
-import { createThreadChatBot, createUserChatBot, getUserChatBot, postChatBot } from '@/services/TienIch/ChatbotV2';
+import {
+	createThreadChatBot,
+	createUserChatBot,
+	deleteThread,
+	getChiTietThread,
+	getThreadUser,
+	getUserChatBot,
+	postChatBot,
+	updateTitleThread,
+} from '@/services/TienIch/ChatbotV2';
 import { type ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
@@ -6,6 +15,9 @@ import { useState } from 'react';
 export default () => {
 	const [formSubmiting, setFormSubmiting] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [loadingThreads, setLoadingThreads] = useState(false);
+	const [loadingMessages, setLoadingMessages] = useState(false);
+
 	const [danhSach, setDanhSach] = useState<ChatbotAmiV2.IRecord[]>([]);
 	const [boxChatVisible, setBoxChatVisible] = useState(false);
 	const [videoRefs, setVideoRefs] = useState<Record<string, any>>({});
@@ -15,6 +27,7 @@ export default () => {
 
 	const [recordUser, setRecordUser] = useState<ChatbotAmiV2.IUser>();
 	const [threadId, setThreadId] = useState<number | null>(null);
+	const [dsThread, setDSThread] = useState<ChatbotAmiV2.IThread[]>([]);
 
 	const convertMarkdown = (text: string) => {
 		const updatedText = text
@@ -48,11 +61,13 @@ export default () => {
 		}
 	};
 
-	const createThreadChatBotModel = async (payLoad: ChatbotAmiV2.IThread) => {
+	const createThreadChatBotModel = async (payLoad: ChatbotAmiV2.IThread, getData?: () => void) => {
 		if (formSubmitingThread) return Promise.reject('form submiting');
 		setFormSubmitingThread(true);
 		try {
 			const res = await createThreadChatBot(payLoad);
+
+			if (getData) getData();
 			return res?.data;
 		} finally {
 			setFormSubmitingThread(false);
@@ -107,8 +122,64 @@ export default () => {
 		}
 	};
 
+	const getThreadUserModel = async (user_id: number) => {
+		setLoadingThreads(true);
+		try {
+			const res = await getThreadUser(user_id);
+			setDSThread(res?.data);
+			return res?.data;
+		} finally {
+			setLoadingThreads(false);
+		}
+	};
+
+	const getChiTietThreadModel = async (thread_id: number) => {
+		setLoadingMessages(true);
+		try {
+			const res = await getChiTietThread(thread_id);
+			setDanhSach(
+				(res?.data?.chat_history || []).map((item: any) => ({
+					...item,
+					isUser: item?.sender === 'user',
+					recommendQuestions: item?.meta_info?.recommendations,
+					sources: item?.meta_info?.sources,
+				})),
+			);
+
+			return res?.data?.chat_history;
+		} finally {
+			setLoadingMessages(false);
+		}
+	};
+
+	const updateTitleThreadModel = async (payLoad: ChatbotAmiV2.IThread, getData: () => void) => {
+		setLoadingThreads(true);
+		try {
+			const res = await updateTitleThread(payLoad);
+
+			if (getData) getData();
+			return res?.data;
+		} finally {
+			setLoadingThreads(false);
+		}
+	};
+
+	const deleteThreadModel = async (thread_id: number, getData: () => void) => {
+		setLoadingThreads(true);
+		try {
+			const res = await deleteThread(thread_id);
+
+			if (getData) getData();
+			return res?.data;
+		} finally {
+			setLoadingThreads(false);
+		}
+	};
+
 	return {
 		loading,
+		loadingThreads,
+		loadingMessages,
 		formSubmitingUser,
 		formSubmitingThread,
 		formSubmiting,
@@ -128,5 +199,10 @@ export default () => {
 		getUserChatBotModel,
 		threadId,
 		setThreadId,
+		getThreadUserModel,
+		dsThread,
+		getChiTietThreadModel,
+		updateTitleThreadModel,
+		deleteThreadModel,
 	};
 };

@@ -1,14 +1,8 @@
+import { quickReplies } from '@/services/TienIch/ChatbotV2/constant';
 import { resetFieldsForm } from '@/utils/utils';
-import { Form, Input } from 'antd';
+import { Empty, Form, Input } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
-
-const quickReplies = [
-	'Hướng dẫn đăng ký học phần',
-	'Thông tin học phí và lịch thanh toán',
-	'Liên hệ phòng đào tạo',
-	'Lịch học và lịch thi',
-];
 
 const TextboxChatbotV2 = () => {
 	const { postChatBotModel, formSubmiting, createThreadChatBotModel, recordUser, danhSach, threadId, setThreadId } =
@@ -36,6 +30,17 @@ const TextboxChatbotV2 = () => {
 			console.error('Lỗi gửi tin nhắn:', err);
 		}
 	};
+
+	if (!recordUser?.id) {
+		return (
+			<div className='textbox'>
+				<Empty
+					description='Không tìm thấy thông tin người dùng. Vui lòng quay lại sau để sử dụng Ami!'
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+				/>
+			</div>
+		);
+	}
 
 	return (
 		<div className='textbox'>

@@ -9,6 +9,7 @@ import { useModel } from 'umi';
 const ModalDetailPhanhoi = () => {
 	const { record, setVisibleForm } = useModel('tienich.phanhoi');
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
+	const [filePhanHoi, setFilePhanHoi] = useState<string | string[]>();
 
 	return (
 		<Card title='Chi tiết phản hồi'>
@@ -20,7 +21,15 @@ const ModalDetailPhanhoi = () => {
 				<Descriptions.Item label='File đính kèm'>
 					{record?.urlPhanAnh ? (
 						<>
-							<PaperClipOutlined /> <a onClick={() => setVisibleFormFile(true)}>File đính kèm</a>
+							<PaperClipOutlined />{' '}
+							<a
+								onClick={() => {
+									setFilePhanHoi(record?.urlPhanAnh ?? '');
+									setVisibleFormFile(true);
+								}}
+							>
+								File đính kèm
+							</a>
 						</>
 					) : (
 						<i>Không có</i>
@@ -40,21 +49,38 @@ const ModalDetailPhanhoi = () => {
 						<Tag color='red'>Chưa trả lời</Tag>
 					)}
 				</Descriptions.Item>
+				<Descriptions.Item label='File đính kèm trả lời'>
+					{record?.urlChuyenVienPhanAnh?.length ? (
+						<>
+							<PaperClipOutlined />{' '}
+							<a
+								onClick={() => {
+									setFilePhanHoi(record?.urlChuyenVienPhanAnh ?? []);
+									setVisibleFormFile(true);
+								}}
+							>
+								File đính kèm
+							</a>
+						</>
+					) : null}
+				</Descriptions.Item>
 			</Descriptions>
 
-			<ModalExpandable
-				title='Chi tiết tập tin'
-				width={1000}
-				visible={visibleFormFile}
-				footer={
-					<div className='form-footer'>
-						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
-					</div>
-				}
-				onCancel={() => setVisibleFormFile(false)}
-			>
-				<PreviewFile file={record?.urlPhanAnh ?? ''} />
-			</ModalExpandable>
+			{filePhanHoi ? (
+				<ModalExpandable
+					title='Chi tiết file đính kèm'
+					width={1000}
+					visible={visibleFormFile}
+					footer={
+						<div className='form-footer'>
+							<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+						</div>
+					}
+					onCancel={() => setVisibleFormFile(false)}
+				>
+					<PreviewFile file={filePhanHoi} />
+				</ModalExpandable>
+			) : null}
 
 			<div className='form-footer'>
 				<Button onClick={() => setVisibleForm(false)}>Đóng</Button>

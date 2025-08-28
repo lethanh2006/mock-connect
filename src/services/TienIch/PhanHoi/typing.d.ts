@@ -18,6 +18,7 @@ declare module PhanHoi {
 		maChuyenVien: string;
 		tenDonVi: string;
 		thoiGianTraLoi: string;
+		urlChuyenVienPhanAnh?: string[] | null;
 
 		//Sinh Viên
 		maSv: string;

@@ -361,7 +361,7 @@ export const disabledRangeTime = (current: dayjs.Dayjs, type: 'start' | 'end', h
 				disabledHours: () => range(0, Number(hour)),
 				disabledMinutes: () => range(0, hour === current.format('HH') ? Number(minute) : 0),
 				disabledSeconds: () => [55, 56],
-			}
+		  }
 		: {};
 };
 
@@ -682,4 +682,17 @@ export const numberToVietnameseWords = (num: number, capitalizeFirst?: boolean):
 		? finalResult.replace(/^\w/, (c) => c.toUpperCase())
 		: finalResult.charAt(0).toUpperCase() + finalResult.slice(1);
 	return finalResult;
+};
+
+export const toCamelCase = (str: string) => {
+	return str
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.replace(/[^a-zA-Z0-9 ]/g, ' ')
+		.trim()
+		.split(/\s+/)
+		.map((word, index) =>
+			index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+		)
+		.join('');
 };

@@ -1,5 +1,6 @@
 import { Tabs } from 'antd';
 import { useEffect, useState } from 'react';
+import ChuanDauRaHocPhanPage from '../ChuanDauRa';
 import GiangVienDeCuongPage from '../GiangVienDeCuong';
 import HocLieuDeCuongPage from '../HocLieuDeCuong';
 import NoiDungHocPhanPage from '../LichTrinhChung';
@@ -17,6 +18,7 @@ const TabsDeCuongHocPhan = (props: { activeKey?: string }) => {
 		<>
 			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
 				<Tabs.TabPane key='0' tab='Thông tin chung' />
+				<Tabs.TabPane key='5' tab='Chuẩn đầu ra' />
 				<Tabs.TabPane key='4' tab='Tóm tắt học phần' />
 				{/* <Tabs.TabPane key='2' tab='Lịch trình cụ thể' /> */}
 				<Tabs.TabPane key='1' tab='Giảng viên' />
@@ -33,6 +35,8 @@ const TabsDeCuongHocPhan = (props: { activeKey?: string }) => {
 				<HocLieuDeCuongPage />
 			) : activeKey === '4' ? (
 				<NoiDungHocPhanPage />
+			) : activeKey === '5' ? (
+				<ChuanDauRaHocPhanPage />
 			) : null}
 		</>
 	);

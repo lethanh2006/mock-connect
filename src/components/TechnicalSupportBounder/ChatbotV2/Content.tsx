@@ -14,7 +14,12 @@ const { Panel } = Collapse;
 const ContentBoxChatV2 = () => {
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { danhSach, formSubmiting, postChatBotModel, recordUser, threadId } = useModel('tienich.chatbotv2');
-	const lastNameChar = recSinhVien?.ten?.split(' ')?.at(-1)?.[0];
+	const { initialState } = useModel('@@initialState');
+
+	const fullName = initialState?.currentUser?.family_name
+		? `${initialState?.currentUser.family_name} ${initialState?.currentUser?.given_name ?? ''}`
+		: initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || '');
+	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
 	useEffect(() => {
 		const latestId = danhSach.at(-1)?._id;
