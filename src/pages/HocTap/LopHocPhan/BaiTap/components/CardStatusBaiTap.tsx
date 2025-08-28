@@ -97,7 +97,7 @@ const CardStatusBaiTap = (props: IProps) => {
 								)}
 							</Col>
 
-							<Col span={24} style={{ lineHeight: 1 }}>
+							<Col span={24}>
 								<BoxFile url={data?.assignment?.urlTepDinhKem} />
 							</Col>
 						</Row>
