@@ -206,8 +206,11 @@ const CardStatus = (props: IProps) => {
 							</Link>
 						</div>
 					)}
-
-					<BoxFile url={data?.fileDinhKem} />
+					{data?.fileDinhKem && (
+						<div style={{ marginTop: 8 }}>
+							<BoxFile url={data?.fileDinhKem} />
+						</div>
+					)}
 				</div>
 				<div ref={cardRef}>
 					<div className='action flex justify-between '>
