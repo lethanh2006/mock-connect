@@ -6,19 +6,14 @@ import { CarryOutOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Descriptions, Divider, Row, Space, Typography } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, useModel, useParams } from 'umi';
 import ChiTietMarc from './components/ChiTietMarc';
 import ChiTietTepTin from './components/ChiTietTepTin';
 import ConfirmMuonSach from './components/ComfirmMuon';
 const { Paragraph } = Typography;
 
-const DetailThongTinSach = ({
-	match: {
-		params: { id },
-	},
-}: {
-	match: { params: { id: string } };
-}) => {
+const DetailThongTinSach = () => {
+	const { id } = useParams<{ id: string }>();
 	const { record, getByIdModel, loading, setCondition } = useModel('thuvien.anpham');
 	const { getSettingModel, settingMuonTra, setVisibleMuon } = useModel('thuvien.muonsach');
 	const { thongKeMuonTraSachModel, dataThongKe } = useModel('thuvien.muonsach');
