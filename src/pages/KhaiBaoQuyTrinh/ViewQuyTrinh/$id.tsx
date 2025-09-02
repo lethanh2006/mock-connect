@@ -2,20 +2,19 @@ import FormQuyTrinh from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/Form';
 import View from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/View';
 import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
 import { getDonByUserId } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
-import qs from 'qs';
+import { useSearchParams } from '@umijs/max';
 import { useEffect, useState } from 'react';
-import { useLocation, useModel, useParams } from 'umi';
+import { useModel, useParams } from 'umi';
 
 const QuyTrinhView = () => {
+	const [searchParams] = useSearchParams();
 	const { current, setCurrent, setDataQuyTrinh, dataQuyTrinh, setCurrentFormKhaiBao, setEditFormKhaiBao } =
 		useModel('quytrinh.khaibaoquytrinh');
 	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
 	const [loadingForm, setLoadingForm] = useState<boolean>(false);
 	const { id } = useParams<{ id: string }>();
-	const location = useLocation();
-	const query = qs.parse(location.search);
 
-	const { quyTrinh } = query;
+	const quyTrinh = searchParams.get('quyTrinh');
 	const getData = async (ids: string) => {
 		try {
 			setLoadingForm(true);
