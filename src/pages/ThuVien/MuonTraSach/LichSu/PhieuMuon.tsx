@@ -2,8 +2,8 @@ import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import { colorTrangThaiDuyeMuonSach, ETrangThaiDuyetMuonSach } from '@/services/QuanLyThuVien/constant';
 import type { PhieuMuonTra } from '@/services/QuanLyThuVien/PhieuMuonTra/typing';
+import dayjs from '@/utils/dayjs';
 import { Card, Tabs, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import LichSuMuonTraPage from '.';
@@ -51,7 +51,7 @@ const PhieuMuonPage = () => {
 			dataIndex: 'thoiGianDangKy',
 			align: 'center',
 			width: 120,
-			render: (val, rec) => val && moment(val).format('DD/MM/YYYY'),
+			render: (val, rec) => val && dayjs(val).format('DD/MM/YYYY'),
 			filterType: 'date',
 			sortable: true,
 			onCell,
@@ -69,9 +69,10 @@ const PhieuMuonPage = () => {
 	];
 
 	return (
-		<Card title='Danh sách phiếu mượn'>
-			<div style={{ marginBottom: 12 }}>
-				{/* <div style={{ marginBottom: 8 }}>
+		<Card title='Danh sách phiếu mượn' variant='borderless' className='card-big-title card-borderless'>
+			<Card variant='borderless'>
+				<div style={{ marginBottom: 12 }}>
+					{/* <div style={{ marginBottom: 8 }}>
 					<i>
 						<b>Hạn ngạch mượn:</b> {settingMuonTra?.soLuongMuonToiDa}
 					</i>
@@ -81,33 +82,34 @@ const PhieuMuonPage = () => {
 						{Math.max(0, (settingMuonTra?.soLuongMuonToiDa ?? 0) - (dataThongKe?.dangThueMuon ?? 0))}
 					</i>
 				</div> */}
-				<StatMuonTraSach />
-			</div>
-			{/* <div>
+					<StatMuonTraSach />
+				</div>
+				{/* <div>
 				<i>
 					Khi chuyên viên xác nhận cho mượn sẽ có thông báo sinh viên lưu ý chú ý thông báo để lên thư viện nhận sách
 				</i>
 			</div> */}
 
-			<Tabs onChange={(tab) => setTabActive(tab)} activeKey={tabActive}>
-				<Tabs.TabPane tab='Phiếu mượn' key='1' />
-				<Tabs.TabPane tab='Tất cả lịch sử' key='2' />
-			</Tabs>
+				<Tabs onChange={(tab) => setTabActive(tab)} activeKey={tabActive}>
+					<Tabs.TabPane tab='Phiếu mượn' key='1' />
+					<Tabs.TabPane tab='Tất cả lịch sử' key='2' />
+				</Tabs>
 
-			{tabActive === '1' ? (
-				<TableBase
-					getData={getData}
-					columns={columns}
-					dependencies={[page, limit]}
-					modelName='thuvien.phieumuonsach'
-					widthDrawer={1100}
-					Form={LichSuMuonTraPage}
-					hideCard
-					buttons={{ create: false }}
-				/>
-			) : (
-				<LichSuMuonTraPage tatCaLichSu />
-			)}
+				{tabActive === '1' ? (
+					<TableBase
+						getData={getData}
+						columns={columns}
+						dependencies={[page, limit]}
+						modelName='thuvien.phieumuonsach'
+						widthDrawer={1100}
+						Form={LichSuMuonTraPage}
+						hideCard
+						buttons={{ create: false }}
+					/>
+				) : (
+					<LichSuMuonTraPage tatCaLichSu />
+				)}
+			</Card>
 		</Card>
 	);
 };
