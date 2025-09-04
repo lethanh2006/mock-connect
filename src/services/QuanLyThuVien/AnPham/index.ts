@@ -1,5 +1,5 @@
+import axios from '@/utils/axios';
 import { ipThuVien } from '@/utils/ip';
-import axios from 'axios';
 
 export async function getChiTietAnPham(idAnPham: string) {
 	return axios.get(`${ipThuVien}/an-pham/${idAnPham}/tag`);

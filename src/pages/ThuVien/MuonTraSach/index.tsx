@@ -1,7 +1,9 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
 import { CustomerServiceOutlined, EyeOutlined, FieldTimeOutlined, ReloadOutlined } from '@ant-design/icons';
 import {
+	Badge,
 	Card,
 	Col,
 	Empty,
@@ -16,15 +18,14 @@ import {
 	Tooltip,
 	Typography,
 } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import DangTaiLieuPage from '../DangTaiLieu';
 import ThoiGianVaoRaThuVien from '../VaoRaThuVien/components/ThoiGian';
+import ChiTietTepTin from './components/ChiTietTepTin';
 import ConfirmMuonSach from './components/ComfirmMuon';
 import './style.less';
 import TimKiemNangCao from './TimKiem/TimKiemNangCao';
-import ChiTietTepTin from './components/ChiTietTepTin';
 const { Paragraph } = Typography;
 
 const { Meta } = Card;
@@ -74,8 +75,8 @@ const MuonTraSachPage = () => {
 				8,
 				`search/${segment === '1' ? 'all' : 'kha-dung'}`,
 				{
-					thoiGianBatDau: moment().toISOString(),
-					thoiGianKetThuc: moment()
+					thoiGianBatDau: dayjs().toISOString(),
+					thoiGianKetThuc: dayjs()
 						.add(typeof settingMuonTra === 'number' ? settingMuonTra : 150, 'day')
 						.toISOString(),
 				},
@@ -141,24 +142,25 @@ const MuonTraSachPage = () => {
 	};
 
 	return (
-		<Card title='Tìm kiếm tài nguyên thư viện'>
-			<Row gutter={[12, 12]}>
-				<Col xs={24}>
-					<Space wrap>
-						<ButtonExtend size='small' icon={<FieldTimeOutlined />} onClick={() => setVisibleSetting(true)}>
-							Thời gian ra vào thư viện
-						</ButtonExtend>
-						<ButtonExtend
-							size='small'
-							icon={<CustomerServiceOutlined />}
-							onClick={() => window.open('https://slink-chatbot.ript.vn/admin/chatbot', '_blank')}
-						>
-							Tìm kiếm tài liệu thông minh
-						</ButtonExtend>
-					</Space>
-				</Col>
+		<Card title='Tìm kiếm tài nguyên thư viện' className='card-big-title card-borderless' variant='borderless'>
+			<Card variant='borderless'>
+				<Row gutter={[12, 12]}>
+					<Col xs={24}>
+						<Space wrap>
+							<ButtonExtend size='small' icon={<FieldTimeOutlined />} onClick={() => setVisibleSetting(true)}>
+								Thời gian ra vào thư viện
+							</ButtonExtend>
+							<ButtonExtend
+								size='small'
+								icon={<CustomerServiceOutlined />}
+								onClick={() => window.open('https://slink-chatbot.ript.vn/admin/chatbot', '_blank')}
+							>
+								Tìm kiếm tài liệu thông minh
+							</ButtonExtend>
+						</Space>
+					</Col>
 
-				{/* <Col xs={24}>
+					{/* <Col xs={24}>
 					<Row gutter={[12, 12]}>
 						<Col span={24} md={6}>
 							<Card className='card-stat-small'>
@@ -194,96 +196,95 @@ const MuonTraSachPage = () => {
 						</Col>
 					</Row>
 				</Col> */}
-				<Col xs={24}>
-					<div style={{ maxWidth: '70%', margin: 'auto', marginBottom: 12 }}>
-						<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
-							<Tabs.TabPane key='1' tab='Tìm nhanh' />
-							{/* <Tabs.TabPane key='2' tab='Cơ bản' /> */}
-							<Tabs.TabPane key='3' tab='Nâng cao' />
-						</Tabs>
-						{activeKey === '1' ? (
-							<Search
-								placeholder={placeholder}
-								onSearch={onSearch}
-								enterButton
-								allowClear
-								size='large'
-								addonBefore={
-									<Select defaultValue='nhanDe' onChange={handleFieldChange}>
-										<Option value='nhanDe'>Nhan đề</Option>
-										<Option value='tacGia'>Tác giả</Option>
-										<Option value='namXuatBan'>Năm xuất bản</Option>
-										<Option value='nhaXuatBan'>Nhà xuất bản</Option>
-										<Option value='tuKhoa'>Từ khóa</Option>
-										<Option value='kyKieuPhanLoai'>Ký hiệu phân loại</Option>
-									</Select>
-								}
-							/>
-						) : (
-							// : activeKey === '2' ? (
-							// 	<TimKiemCoBan />
-							// )
-							<TimKiemNangCao />
-						)}
-					</div>
-				</Col>
+					<Col xs={24}>
+						<div style={{ maxWidth: '70%', margin: 'auto', marginBottom: 12 }}>
+							<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
+								<Tabs.TabPane key='1' tab='Tìm nhanh' />
+								{/* <Tabs.TabPane key='2' tab='Cơ bản' /> */}
+								<Tabs.TabPane key='3' tab='Nâng cao' />
+							</Tabs>
+							{activeKey === '1' ? (
+								<Search
+									placeholder={placeholder}
+									onSearch={onSearch}
+									enterButton
+									allowClear
+									size='large'
+									addonBefore={
+										<Select defaultValue='nhanDe' onChange={handleFieldChange}>
+											<Option value='nhanDe'>Nhan đề</Option>
+											<Option value='tacGia'>Tác giả</Option>
+											<Option value='namXuatBan'>Năm xuất bản</Option>
+											<Option value='nhaXuatBan'>Nhà xuất bản</Option>
+											<Option value='tuKhoa'>Từ khóa</Option>
+											<Option value='kyKieuPhanLoai'>Ký hiệu phân loại</Option>
+										</Select>
+									}
+								/>
+							) : (
+								// : activeKey === '2' ? (
+								// 	<TimKiemCoBan />
+								// )
+								<TimKiemNangCao />
+							)}
+						</div>
+					</Col>
 
-				<Col xs={24} style={{ marginTop: -10 }}>
-					<Row gutter={[12, 0]}>
-						<Col span={24} md={6}>
-							<Card
-								title='Dạng tài liệu'
-								bordered={false}
-								bodyStyle={{ padding: '8px 0 0' }}
-								headStyle={{ padding: 0 }}
-							>
-								<DangTaiLieuPage />
-							</Card>
-						</Col>
-						<Col span={24} md={18}>
-							<Card
-								title={`Danh sách ${recDangTaiLieu?.ten}`}
-								bordered={false}
-								bodyStyle={{ padding: '8px 0 0' }}
-								headStyle={{ padding: 0 }}
-							>
-								<div>
-									<Tabs onChange={(tab) => setTabActive(tab)} activeKey={tabActive}>
-										<Tabs.TabPane tab='Ấn phẩm vật lý' key='1' />
-										<Tabs.TabPane tab='Ấn phẩm số' key='2' />
-									</Tabs>
-								</div>
-								<div
-									style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+					<Col xs={24} style={{ marginTop: -10 }}>
+						<Row gutter={[12, 0]}>
+							<Col span={24} md={6}>
+								<Card
+									title='Dạng tài liệu'
+									bordered={false}
+									bodyStyle={{ padding: '8px 0 0' }}
+									headStyle={{ padding: 0 }}
 								>
-									<Segmented
-										value={segment}
-										onChange={(val) => setSegment(val.toString())}
-										options={[
-											{ value: '2', label: 'Khả dụng' },
-											{ value: '1', label: 'Tất cả' },
-										]}
-									/>
+									<DangTaiLieuPage />
+								</Card>
+							</Col>
+							<Col span={24} md={18}>
+								<Card
+									title={`Danh sách ${recDangTaiLieu?.ten}`}
+									bordered={false}
+									bodyStyle={{ padding: '8px 0 0' }}
+									headStyle={{ padding: 0 }}
+								>
+									<div>
+										<Tabs onChange={(tab) => setTabActive(tab)} activeKey={tabActive}>
+											<Tabs.TabPane tab='Ấn phẩm vật lý' key='1' />
+											<Tabs.TabPane tab='Ấn phẩm số' key='2' />
+										</Tabs>
+									</div>
+									<div
+										style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+									>
+										<Segmented
+											value={segment}
+											onChange={(val) => setSegment(val.toString())}
+											options={[
+												{ value: '2', label: 'Khả dụng' },
+												{ value: '1', label: 'Tất cả' },
+											]}
+										/>
 
-									<Space wrap>
-										<ButtonExtend icon={<ReloadOutlined />} onClick={() => getData()}>
-											Tải lại
-										</ButtonExtend>
-										<Tooltip title='Tổng số dữ liệu'>
-											<div className='total'>
-												Tổng số:
-												<span>{inputFormat(total || 0)}</span>
-											</div>
-										</Tooltip>
-									</Space>
-								</div>
-								<Spin spinning={loading}>
-									{danhSach?.length ? (
-										<>
-											<Row gutter={[12, 12]}>
-												{danhSach?.map((item) => {
-													return (
-														<Col xs={24} sm={12} md={12} lg={8} xxl={6} key={item?._id}>
+										<Space wrap>
+											<ButtonExtend icon={<ReloadOutlined />} onClick={() => getData()}>
+												Tải lại
+											</ButtonExtend>
+											<Tooltip title='Tổng số dữ liệu'>
+												<div className='total'>
+													Tổng số:
+													<span>{inputFormat(total || 0)}</span>
+												</div>
+											</Tooltip>
+										</Space>
+									</div>
+									<Spin spinning={loading}>
+										{danhSach?.length ? (
+											<>
+												<Row gutter={[12, 12]}>
+													{danhSach?.map((item) => {
+														const CardContent = (
 															<Card
 																onClick={() => {
 																	setRecord(item);
@@ -306,12 +307,12 @@ const MuonTraSachPage = () => {
 																	>
 																		<strong>
 																			<Paragraph style={{ color: 'white' }} ellipsis={{ rows: 2, expandable: false }}>
-																				{item?.nhanDeConverse}
+																				{item?.nhanDe}
 																			</Paragraph>
 																		</strong>
 
 																		<strong>
-																			<p>{item?.tacGiaConverse}</p>
+																			<p>{item?.tacGia}</p>
 																		</strong>
 
 																		<strong>
@@ -325,44 +326,46 @@ const MuonTraSachPage = () => {
 																		</strong>
 																	</div>
 																}
-																actions={[
-																	// <ButtonExtend
-																	// 	disabled={item?.soLuong === 0 || conMuonDuoc === 0}
-																	// 	type='link'
-																	// 	tooltip={conMuonDuoc === 0 ? 'Quá hạn ngạch mượn' : 'Đăng ký mượn sách'}
-																	// 	icon={<PlusOutlined />}
-																	// 	key='add'
-																	// 	onClick={(event) => {
-																	// 		event.stopPropagation();
-																	// 		setRecord(item);
-																	// 		setVisibleMuon(true);
-																	// 	}}
-																	item?.online ? (
-																		<ButtonExtend
-																			disabled={!item?.thongTinAnPhamTrucTuyen?.length}
-																			type='link'
-																			tooltip={
-																				!item?.thongTinAnPhamTrucTuyen?.length
-																					? 'Không có tập tin'
-																					: 'Xem trước tập tin'
-																			}
-																			icon={<EyeOutlined />}
-																			key='xem'
-																			onClick={(event) => {
-																				event.stopPropagation();
-																				setRecord(item);
-																				setVisibleFile(true);
-																			}}
-																		/>
-																	) : null,
-																]}
+																// <ButtonExtend
+																// 	disabled={item?.soLuong === 0 || conMuonDuoc === 0}
+																// 	type='link'
+																// 	tooltip={conMuonDuoc === 0 ? 'Quá hạn ngạch mượn' : 'Đăng ký mượn sách'}
+																// 	icon={<PlusOutlined />}
+																// 	key='add'
+																// 	onClick={(event) => {
+																// 		event.stopPropagation();
+																// 		setRecord(item);
+																// 		setVisibleMuon(true);
+																// 	}}
+																actions={
+																	item?.online
+																		? [
+																				<ButtonExtend
+																					disabled={!item?.thongTinAnPhamTrucTuyen?.length}
+																					type='link'
+																					tooltip={
+																						!item?.thongTinAnPhamTrucTuyen?.length
+																							? 'Không có tập tin'
+																							: 'Xem trước tập tin'
+																					}
+																					icon={<EyeOutlined />}
+																					key='xem'
+																					onClick={(event) => {
+																						event.stopPropagation();
+																						setRecord(item);
+																						setVisibleFile(true);
+																					}}
+																				/>,
+																			]
+																		: []
+																}
 															>
 																<Meta
-																	title={item?.nhanDeConverse}
+																	title={item?.nhanDe}
 																	description={
 																		<div>
 																			<div>
-																				<span>{item?.tacGiaConverse}</span>
+																				<span>{item?.tacGia}</span>
 																			</div>
 																			<div>
 																				<span>
@@ -373,32 +376,44 @@ const MuonTraSachPage = () => {
 																	}
 																/>
 															</Card>
-														</Col>
-													);
-												})}
-											</Row>
-											<Pagination
-												size='default'
-												onChange={onChangePaging}
-												current={page}
-												pageSize={limit}
-												total={total}
-												style={{ marginTop: 12, textAlign: 'right' }}
-											/>
-										</>
-									) : (
-										<Empty description='Không có thông tin sách' style={{ marginTop: 32, marginBottom: 32 }} />
-									)}
-								</Spin>
-							</Card>
-						</Col>
-					</Row>
-				</Col>
-			</Row>
+														);
 
-			<ConfirmMuonSach />
-			<ThoiGianVaoRaThuVien visible={visibleSetting} setVisible={setVisibleSetting} />
-			<ChiTietTepTin visible={visibleFile} setVisible={setVisibleFile} />
+														return (
+															<Col xs={24} sm={12} md={12} lg={8} xxl={6} key={item?._id}>
+																{item?.isSachHay ? (
+																	<Badge.Ribbon text='Sách hay' color='gold'>
+																		{CardContent}
+																	</Badge.Ribbon>
+																) : (
+																	CardContent
+																)}
+															</Col>
+														);
+													})}
+												</Row>
+												<Pagination
+													size='default'
+													onChange={onChangePaging}
+													current={page}
+													pageSize={limit}
+													total={total}
+													style={{ marginTop: 12, textAlign: 'right' }}
+												/>
+											</>
+										) : (
+											<Empty description='Không có thông tin sách' style={{ marginTop: 32, marginBottom: 32 }} />
+										)}
+									</Spin>
+								</Card>
+							</Col>
+						</Row>
+					</Col>
+				</Row>
+
+				<ConfirmMuonSach />
+				<ThoiGianVaoRaThuVien visible={visibleSetting} setVisible={setVisibleSetting} />
+				<ChiTietTepTin visible={visibleFile} setVisible={setVisibleFile} />
+			</Card>
 		</Card>
 	);
 };

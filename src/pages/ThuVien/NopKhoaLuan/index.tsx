@@ -10,9 +10,9 @@ import {
 	ETrangThaiNopThuVien,
 } from '@/services/QuanLyThuVien/constant';
 import type { QuanLyThuVien } from '@/services/QuanLyThuVien/typing';
+import dayjs from '@/utils/dayjs';
 import { CloudUploadOutlined, DeleteOutlined, EditOutlined, EyeOutlined, MenuOutlined } from '@ant-design/icons';
 import { Button, Card, Popconfirm, Popover, Space, Tabs, Tag } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ChiTietThuVien from './components/ChiTiet';
@@ -36,7 +36,7 @@ const QuanLyThuVienPage = () => {
 			{
 				active: true,
 				field: 'thoiGianNop',
-				values: [moment(datePicker?.[0]).startOf('date'), moment(datePicker?.[1]).endOf('date')],
+				values: [dayjs(datePicker?.[0]).startOf('date'), dayjs(datePicker?.[1]).endOf('date')],
 				operator: EOperatorType.BETWEEN,
 			},
 		];
@@ -66,8 +66,8 @@ const QuanLyThuVienPage = () => {
 				rec?.dot?.thoiGianBatDau &&
 				rec?.dot?.thoiGianKetThuc && (
 					<>
-						{moment(rec?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
-						{moment(rec?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+						{dayjs(rec?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
+						{dayjs(rec?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 					</>
 				),
 			onCell,
@@ -129,7 +129,7 @@ const QuanLyThuVienPage = () => {
 			dataIndex: 'thoiGianNop',
 			align: 'center',
 			width: 150,
-			render: (val) => val && moment(val).format('DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 			filterType: 'date',
 			sortable: true,
 			onCell,
@@ -213,15 +213,16 @@ const QuanLyThuVienPage = () => {
 							) : (
 								<ButtonExtend
 									tooltip={`${
-										moment().isBefore(rec?.dot?.thoiGianBatDau) || moment().isAfter(rec?.dot?.thoiGianKetThuc)
+										dayjs().isBefore(dayjs(rec?.dot?.thoiGianBatDau)) ||
+										dayjs().isAfter(dayjs(rec?.dot?.thoiGianKetThuc))
 											? 'Ngoài thời gian nộp tài liệu'
 											: 'Nộp tài liệu'
 									}`}
 									disabled={
 										rec?.trangThai === ETrangThaiNopThuVien.TU_CHOI ||
 										rec?.trangThai === ETrangThaiNopThuVien.DA_DUYET ||
-										moment().isBefore(rec?.dot?.thoiGianBatDau) ||
-										moment().isAfter(rec?.dot?.thoiGianKetThuc)
+										dayjs().isBefore(dayjs(rec?.dot?.thoiGianBatDau)) ||
+										dayjs().isAfter(dayjs(rec?.dot?.thoiGianKetThuc))
 									}
 									type='link'
 									icon={<CloudUploadOutlined />}
@@ -241,41 +242,48 @@ const QuanLyThuVienPage = () => {
 	];
 
 	return (
-		<Card title='Nộp luận án, luận văn, khóa luận/đồ án'>
-			<Tabs onChange={(tab) => setTabActive(tab as ELoaiDotQuanLyThuvien)} activeKey={tabActive}>
-				<Tabs.TabPane tab='Luận án' key={ELoaiDotQuanLyThuvien.LUAN_AN} />
-				<Tabs.TabPane tab='Luận văn' key={ELoaiDotQuanLyThuvien.LUAN_VAN} />
-				<Tabs.TabPane tab='Khóa luận/đồ án' key={ELoaiDotQuanLyThuvien.KHOA_LUAN} />
-			</Tabs>
-			{tabActive === ELoaiDotQuanLyThuvien.LUAN_AN ? (
-				<Space style={{ marginBottom: 12 }}>
-					<MyDateRangePicker
-						value={datePicker}
-						onChange={(val) => setDatePicker(val)}
-						allowClear
-						style={{ width: 300 }}
-					/>
-				</Space>
-			) : null}
+		<Card
+			title='Nộp luận án, luận văn, khóa luận/đồ án'
+			variant='borderless'
+			className='card-borderless card-big-title'
+		>
+			<Card variant='borderless'>
+				<Tabs onChange={(tab) => setTabActive(tab as ELoaiDotQuanLyThuvien)} activeKey={tabActive}>
+					<Tabs.TabPane tab='Luận án' key={ELoaiDotQuanLyThuvien.LUAN_AN} />
+					<Tabs.TabPane tab='Luận văn' key={ELoaiDotQuanLyThuvien.LUAN_VAN} />
+					<Tabs.TabPane tab='Khóa luận/đồ án' key={ELoaiDotQuanLyThuvien.KHOA_LUAN} />
+				</Tabs>
 
-			<TableBase
-				getData={getData}
-				columns={columns}
-				dependencies={[page, limit, datePicker, tabActive]}
-				modelName='thuvien.danhsachdot'
-				Form={isView ? ChiTietThuVien : FormThuVien}
-				formProps={{ getData, tabActive }}
-				title={
-					tabActive === ELoaiDotQuanLyThuvien.LUAN_AN
-						? 'Danh sách luận án'
-						: tabActive === ELoaiDotQuanLyThuvien.LUAN_VAN
-						? 'Danh sách luận văn'
-						: 'Danh sách khóa luận/đồ án'
-				}
-				widthDrawer={1000}
-				hideCard
-				buttons={{ create: tabActive === ELoaiDotQuanLyThuvien.LUAN_AN ? true : false }}
-			/>
+				{tabActive === ELoaiDotQuanLyThuvien.LUAN_AN ? (
+					<Space style={{ marginBottom: 12 }}>
+						<MyDateRangePicker
+							value={datePicker}
+							onChange={(val) => setDatePicker(val)}
+							allowClear
+							style={{ width: 300 }}
+						/>
+					</Space>
+				) : null}
+
+				<TableBase
+					getData={getData}
+					columns={columns}
+					dependencies={[page, limit, datePicker, tabActive]}
+					modelName='thuvien.danhsachdot'
+					Form={isView ? ChiTietThuVien : FormThuVien}
+					formProps={{ getData, tabActive }}
+					title={
+						tabActive === ELoaiDotQuanLyThuvien.LUAN_AN
+							? 'Danh sách luận án'
+							: tabActive === ELoaiDotQuanLyThuvien.LUAN_VAN
+								? 'Danh sách luận văn'
+								: 'Danh sách khóa luận/đồ án'
+					}
+					widthDrawer={1000}
+					hideCard
+					buttons={{ create: tabActive === ELoaiDotQuanLyThuvien.LUAN_AN ? true : false }}
+				/>
+			</Card>
 
 			<ModalNopTaiLieu visible={visibleNopBai} setVisible={setVisibleNopBao} getData={getData} />
 		</Card>
