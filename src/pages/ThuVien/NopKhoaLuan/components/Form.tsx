@@ -3,10 +3,10 @@ import UploadFile from '@/components/Upload/UploadFile';
 import SelectNganhCoSo from '@/pages/DaoTao/Nganh/SelectNganh';
 import { ETrangThaiNopThuVien } from '@/services/QuanLyThuVien/constant';
 import { EFileScope, uploadFile } from '@/services/uploadFile';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, Row } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -28,7 +28,7 @@ const FormThuVien = (props: any) => {
 			});
 		} else {
 			form.setFieldsValue({
-				thoiGianNop: moment().toISOString(),
+				thoiGianNop: dayjs().toISOString(),
 				ssoId: recSinhVien?.ssoId,
 				maSinhVien: recSinhVien?.ma,
 				hoTenTacGia: recSinhVien?.ten,
@@ -150,31 +150,33 @@ const FormThuVien = (props: any) => {
 						<Form.Item
 							rules={[...rules.required, ...rules.fileRequired]}
 							name='urlTaiLieu'
-							label='Tài liệu toàn bộ đề tài (docx)'
+							label='Tài liệu toàn bộ đề tài (docx, pdf)'
 						>
 							<UploadFile
 								otherProps={{
 									maxCount: 1,
-									accept: '.docx',
+									accept: '.docx, .pdf',
 									multiple: false,
 									showUploadList: { showDownloadIcon: false },
 								}}
+								maxFileSize={15}
 							/>
 						</Form.Item>
 					</Col>
 					<Col span={24}>
 						<Form.Item
-							rules={[...rules.required, ...rules.fileRequired]}
+							// rules={[...rules.required, ...rules.fileRequired]}
 							name='urlTomTat'
-							label='Tài liệu tóm tắt đề tài (docx)'
+							label='Tài liệu tóm tắt đề tài (docx, pdf)'
 						>
 							<UploadFile
 								otherProps={{
 									maxCount: 1,
-									accept: '.docx',
+									accept: '.docx, .pdf',
 									multiple: false,
 									showUploadList: { showDownloadIcon: false },
 								}}
+								maxFileSize={15}
 							/>
 						</Form.Item>
 					</Col>
@@ -185,12 +187,13 @@ const FormThuVien = (props: any) => {
 							label='Tài liệu minh chứng đề tài (pdf)'
 						>
 							<UploadFile
+								maxCount={1}
 								otherProps={{
-									maxCount: 1,
 									accept: '.pdf',
 									multiple: false,
 									showUploadList: { showDownloadIcon: false },
 								}}
+								maxFileSize={15}
 							/>
 						</Form.Item>
 					</Col>

@@ -4,19 +4,19 @@ declare module AnPham {
 		maTaiLieu: string;
 		nhanDe: string;
 		tacGia: string;
-		tacGiaConverse: string;
-		nhanDeConverse: string;
 		soLuong: number;
 
+		canBoBienMuc: string;
 		maKieuBanGhi: string;
 		kieuBanGhi?: KieuBanGhi.IRecord;
-		MaCapThuMuc: string;
+		maCapThuMuc: string;
 		capThuMuc?: CapThuMuc.IRecord;
 		maDangTaiLieu: string;
 		dangTaiLieu?: DangTaiLieu.IRecord;
 		maVatMangTin: string;
 		vatMangTin?: VatMangTin.IRecord;
 		doMat: number;
+		maNgonNgu: string;
 		mauBienMucId: string;
 		mauBienMuc?: MauBienMuc.IRecord;
 		ISBN: string;
@@ -29,7 +29,7 @@ declare module AnPham {
 		lanXuatBan: string;
 		noiXuatBan: string;
 		namXuatBan: number;
-		soTrang: number;
+		soTrang: string;
 		dacDiemVatLy: string;
 		khuonKho: string;
 		tuLieuDiKem: string;
@@ -38,10 +38,21 @@ declare module AnPham {
 
 		trangThai: ETrangThaiBienMuc;
 
-		danhSachThongTin?: IThongTinAnPham[];
-
 		online: boolean;
+		dpsaceId: string;
+		collectionId: string;
+		communityId: string;
+
 		thongTinAnPhamTrucTuyen: TDanhSachTaiLieuTrucTuyen[];
+
+		dotNhapSachId: string;
+		dotNhapSach: IDotNhapSach;
+		isSachHay: boolean;
+		moTa: string;
+		urlScanBia?: string;
+
+		danhSachAnPhamVatLy?: IAnPhamXepGia[];
+		danhSachThongTin?: IThongTinAnPham[];
 
 		createdAt?: Date;
 		updatedAt?: Date;
