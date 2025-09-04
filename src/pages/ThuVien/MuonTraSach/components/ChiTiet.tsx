@@ -4,8 +4,8 @@ import {
 	type ETrangThaiDuyetMuonSach,
 	type ETrangThaiMuonSach,
 } from '@/services/QuanLyThuVien/constant';
+import dayjs from '@/utils/dayjs';
 import { Button, Card, Col, Descriptions, Row, Tag } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 
 const ChiTietMuonTraSach = () => {
@@ -28,10 +28,10 @@ const ChiTietMuonTraSach = () => {
 							<> */}
 						<Descriptions.Item label='Đăng ký cá biệt'>{record?.soDangKyCaBiet ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Thời gian mượn'>
-							{record?.thoiGianMuon ? moment(record?.thoiGianMuon).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianMuon ? dayjs(record?.thoiGianMuon).format('DD/MM/YYYY') : '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Hạn trả'>
-							{record?.expired ? moment(record?.expired).format('DD/MM/YYYY') : '--'}
+							{record?.expired ? dayjs(record?.expired).format('DD/MM/YYYY') : '--'}
 						</Descriptions.Item>
 
 						{/* <Descriptions.Item label='Trạng thái'>
@@ -43,24 +43,24 @@ const ChiTietMuonTraSach = () => {
 						</Descriptions.Item> */}
 
 						<Descriptions.Item label='Thời gian gia hạn'>
-							{record?.thoiGianGiaHan ? moment(record?.thoiGianGiaHan).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianGiaHan ? dayjs(record?.thoiGianGiaHan).format('DD/MM/YYYY') : '--'}
 						</Descriptions.Item>
 
 						<Descriptions.Item label='Thời gian trả'>
-							{record?.thoiGianTra ? moment(record?.thoiGianTra).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianTra ? dayjs(record?.thoiGianTra).format('DD/MM/YYYY') : '--'}
 						</Descriptions.Item>
 						{/* </>
 						)} */}
 						<Descriptions.Item label='Thời gian đăng ký'>
 							{record?.phieuMuonTra?.thoiGianDangKy
-								? moment(record?.phieuMuonTra?.thoiGianDangKy).format('DD/MM/YYYY')
+								? dayjs(record?.phieuMuonTra?.thoiGianDangKy).format('DD/MM/YYYY')
 								: '--'}
 						</Descriptions.Item>
 						{/* <Descriptions.Item label='Thời gian dự kiến mượn'>
-							{record?.thoiGianMuonDuKien ? moment(record?.thoiGianMuonDuKien).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianMuonDuKien ? dayjs(record?.thoiGianMuonDuKien).format('DD/MM/YYYY') : '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Thời gian dự kiến trả'>
-							{record?.thoiGianTraDuKien ? moment(record?.thoiGianTraDuKien).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianTraDuKien ? dayjs(record?.thoiGianTraDuKien).format('DD/MM/YYYY') : '--'}
 						</Descriptions.Item> */}
 
 						<Descriptions.Item label='Ghi chú đăng ký'>{record?.ghiChuDangKy ?? '--'}</Descriptions.Item>

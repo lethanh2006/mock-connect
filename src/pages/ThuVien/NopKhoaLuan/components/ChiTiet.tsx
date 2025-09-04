@@ -3,13 +3,13 @@ import {
 	ELoaiDotQuanLyThuvien,
 	type ETrangThaiNopThuVien,
 } from '@/services/QuanLyThuVien/constant';
-import { Card, Descriptions, Tag } from 'antd';
-import moment from 'moment';
+import dayjs from '@/utils/dayjs';
+import { Button, Card, Descriptions, Tag } from 'antd';
 import { useModel } from 'umi';
 
 const ChiTietThuVien = (props: any) => {
 	const { title, loai } = props;
-	const { record } = useModel('thuvien.danhsachdot');
+	const { record, setVisibleForm } = useModel('thuvien.danhsachdot');
 
 	return (
 		<Card title={`Chi tiết ${title?.toLowerCase()}`}>
@@ -22,8 +22,8 @@ const ChiTietThuVien = (props: any) => {
 						<Descriptions.Item label='Thời gian' span={24}>
 							{record?.dot?.thoiGianBatDau && record?.dot?.thoiGianKetThuc ? (
 								<>
-									{moment(record?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
-									{moment(record?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+									{dayjs(record?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
+									{dayjs(record?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 								</>
 							) : (
 								'--'
@@ -42,7 +42,7 @@ const ChiTietThuVien = (props: any) => {
 				<Descriptions.Item label='Mã học viên'>{record?.maSinhVien ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Họ tên tác giả'>{record?.hoTenTacGia ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Ngày sinh'>
-					{record?.sinhVien?.ngaySinh ? moment(record?.sinhVien?.ngaySinh).format('DD/MM/YYYY') : '--'}
+					{record?.sinhVien?.ngaySinh ? dayjs(record?.sinhVien?.ngaySinh).format('DD/MM/YYYY') : '--'}
 				</Descriptions.Item>
 				<Descriptions.Item label='Số điện thoại'>{record?.sinhVien?.soDienThoai ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Chức danh'>{record?.chucDanh ?? '--'}</Descriptions.Item>
@@ -55,7 +55,7 @@ const ChiTietThuVien = (props: any) => {
 					)}
 				</Descriptions.Item>
 				<Descriptions.Item label='Thời gian nộp'>
-					{record?.thoiGianNop ? moment(record?.thoiGianNop).format('DD/MM/YYYY') : '--'}
+					{record?.thoiGianNop ? dayjs(record?.thoiGianNop).format('DD/MM/YYYY') : '--'}
 				</Descriptions.Item>
 				<Descriptions.Item label='Chuyên ngành'>{record?.nganh?.ten ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Mã chuyên ngành'>{record?.maNganh ?? '--'}</Descriptions.Item>
@@ -87,6 +87,10 @@ const ChiTietThuVien = (props: any) => {
 					)}
 				</Descriptions.Item>
 			</Descriptions>
+
+			<div className='form-footer'>
+				<Button onClick={() => setVisibleForm(false)}>Đóng</Button>
+			</div>
 		</Card>
 	);
 };
