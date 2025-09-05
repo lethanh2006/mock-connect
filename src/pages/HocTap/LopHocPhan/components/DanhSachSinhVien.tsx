@@ -1,12 +1,13 @@
-import { vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
+import { EVaiTroSvLhc, vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
-import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row } from 'antd';
+import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row, Typography } from 'antd';
 import './style.less';
 
 import { useEffect, useState } from 'react';
+const { Text } = Typography;
 
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
 
@@ -125,14 +126,13 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 					/>
 				) : (
 					<List
-						grid={{ gutter: 8, column: 3 }}
+						grid={{ gutter: 12, column: 3 }}
 						dataSource={sinhVienList}
-						style={{ padding: '4px' }}
 						renderItem={(student) => (
 							<List.Item
 								style={{
 									borderBottom: 'none',
-									padding: '0px 2px',
+									padding: 0,
 								}}
 							>
 								<Card
@@ -141,6 +141,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 										borderRadius: '8px',
 										textAlign: 'left',
 										padding: '8px 12px',
+										margin: 0,
 									}}
 									bodyStyle={{ padding: 0 }}
 									onClick={() => showStudentDetail(student)}
@@ -158,11 +159,23 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 										<Col flex='1'>
 											<div style={{ fontSize: 16, fontWeight: 500 }}>{student.ten}</div>
 											<div style={{ color: '#666', fontSize: 14 }}>
-												{student.ma} • {student.gioiTinh}
+												{student.ma} • {student.gioiTinh}{' '}
+												{!fromLopHocPhan && student.vaiTro && (
+													<div>
+														<Text
+															style={{
+																color: [EVaiTroSvLhc.LOP_TRUONG, EVaiTroSvLhc.LOP_PHO].includes(student.vaiTro)
+																	? 'var(--color-primary)'
+																	: '#666',
+																fontSize: 14,
+															}}
+															strong
+														>
+															{vaiTroSvLhc[student.vaiTro]}
+														</Text>
+													</div>
+												)}
 											</div>
-											{!fromLopHocPhan && student.vaiTro && (
-												<div style={{ color: '#666', fontSize: 14 }}> • {vaiTroSvLhc[student.vaiTro]}</div>
-											)}
 										</Col>
 									</Row>
 								</Card>
@@ -180,7 +193,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 
 			<Modal
 				title='Thông tin sinh viên'
-				visible={modalVisible}
+				open={modalVisible}
 				onCancel={() => setModalVisible(false)}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
@@ -205,7 +218,21 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 							<Descriptions.Item label='Số điện thoại'>{record?.soDienThoai}</Descriptions.Item>
 							{/* {!fromLopHocPhan ? ( */}
 							<Descriptions.Item label='Vai trò trong lớp'>
-								{record?.vaiTro ? vaiTroSvLhc[record.vaiTro] : '--'}
+								{record?.vaiTro ? (
+									<Text
+										style={{
+											color: [EVaiTroSvLhc.LOP_TRUONG, EVaiTroSvLhc.LOP_PHO].includes(record.vaiTro)
+												? 'var(--color-primary)'
+												: '#666',
+											fontSize: 14,
+										}}
+										strong
+									>
+										{vaiTroSvLhc[record.vaiTro]}
+									</Text>
+								) : (
+									'--'
+								)}
 							</Descriptions.Item>
 							{/* ) : null} */}
 						</Descriptions>
