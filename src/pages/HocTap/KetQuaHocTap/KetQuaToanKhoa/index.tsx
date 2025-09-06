@@ -38,7 +38,7 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolea
 						</div>
 						<div>
 							<div style={{ marginBottom: 8 }}>
-								<ChartPloToanKhoa height={300} />
+								<ChartPloToanKhoa maKhoaNganh={maKhoaNganh ?? ''} />
 							</div>
 						</div>
 					</Carousel>

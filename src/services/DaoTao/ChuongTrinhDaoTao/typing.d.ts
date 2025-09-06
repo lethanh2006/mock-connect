@@ -115,4 +115,14 @@ declare module ChuongTrinhDaoTao {
 		lopHocPhan: Pick<LopHocPhan.IRecord, 'ten' | 'soThuTuLop' | 'deCuong'>;
 		soTinChi: number;
 	};
+
+	export type TThongKePloSinhVien = {
+		ma: string;
+		ssoId: string;
+		ten: string;
+
+		danhSachDiemPlo: TDiemPlo[];
+
+		danhSachChuanDauRaMucTieu: TDiemPi[];
+	};
 }
