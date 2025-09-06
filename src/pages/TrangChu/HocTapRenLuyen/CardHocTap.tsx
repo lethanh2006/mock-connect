@@ -1,5 +1,4 @@
 import DonutChart from '@/components/Chart/DonutChart';
-import ChartPloToanKhoa from '@/pages/HocTap/KetQuaHocTap/KetQuaToanKhoa/ChartPlo';
 import { colorLoaiHocLuc, ELoaiHocLuc } from '@/services/HocTap/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Carousel, Col, Row, Space, Tooltip } from 'antd';
@@ -124,12 +123,12 @@ const CardKetQuaHocTapDashboard = () => {
 							</Col>
 						</Row>
 					</div>
-
-					<div>
+					{/* Không có thông tin khóa ngành lên tạm ẩn */}
+					{/* <div>
 						<div className='chart-container'>
-							<ChartPloToanKhoa title='' />
+							<ChartPloToanKhoa maKhoaNganh='' />
 						</div>
-					</div>
+					</div> */}
 				</Carousel>
 
 				<div
