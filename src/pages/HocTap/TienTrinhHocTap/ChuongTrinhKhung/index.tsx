@@ -27,7 +27,7 @@ const TienTrinhChuongTrinhKhung = () => {
 		record: recChuongTrinh,
 		setRecord: setChuongTrinh,
 	} = useModel('daotao.chuongtrinhdaotao');
-	const { khoaNganhMe, maKhoaNganh } = useModel('sinhvien.sinhvien');
+	const { khoaNganhMe, maKhoaNganh, record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { record: recTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
@@ -127,6 +127,11 @@ const TienTrinhChuongTrinhKhung = () => {
 						<Descriptions.Item label='Loại chương trình'>
 							{recTienTrinh?.ctdtKeHoach?.loai && LoaiChuongTrinhDaoTao[recTienTrinh?.ctdtKeHoach?.loai]}
 						</Descriptions.Item>
+						{recSinhVien?.chuyenNganh && (
+							<Descriptions.Item label='Chuyên ngành'>
+								{(recSinhVien?.chuyenNganh as any) ? (recSinhVien?.chuyenNganh as any) : 'Chưa đăng ký chuyên ngành'}
+							</Descriptions.Item>
+						)}
 					</Descriptions>
 				</>
 			)}
@@ -172,10 +177,13 @@ const TienTrinhChuongTrinhKhung = () => {
 						</div>
 
 						{data.chuyenNganhList?.length ? (
-							<Collapse bordered={false}>
+							<Collapse
+								bordered={false}
+								defaultActiveKey={recSinhVien?.maChuyenNganh ? [recSinhVien.maChuyenNganh] : []}
+							>
 								{data.chuyenNganhList.map((chuyenNganh) => (
 									<Collapse.Panel
-										key={chuyenNganh.khoiHocPhan[0]._id}
+										key={(chuyenNganh.khoiHocPhan[0].maChuyenNganh as string) || chuyenNganh.khoiHocPhan[0]._id}
 										header={`Chuyên ngành: ${
 											chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
 										}`}
