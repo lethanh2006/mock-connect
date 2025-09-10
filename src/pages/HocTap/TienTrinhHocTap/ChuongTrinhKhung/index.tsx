@@ -33,6 +33,8 @@ const TienTrinhChuongTrinhKhung = () => {
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 	const [visibleDiem, setVisibleDiem] = useState(false);
 	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
+	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
+	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh : recSinhVien?.chuyenNganh;
 
 	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
 		const listKhoi = _.uniq(listKhoiHpCt.map((item) => item.maKhoiKienThuc));
@@ -45,7 +47,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	};
 
 	const fetch = async () => {
-		await sinhVienGetTienTrinhKhungModel(maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma ? true : false).then((data) => {
+		await sinhVienGetTienTrinhKhungModel(isSongNganh).then((data) => {
 			// Các mã chuyên ngành (nếu có)
 			const uniqchuyenNganh = _.uniq(data?.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
 
@@ -127,9 +129,10 @@ const TienTrinhChuongTrinhKhung = () => {
 						<Descriptions.Item label='Loại chương trình'>
 							{recTienTrinh?.ctdtKeHoach?.loai && LoaiChuongTrinhDaoTao[recTienTrinh?.ctdtKeHoach?.loai]}
 						</Descriptions.Item>
-						{recSinhVien?.chuyenNganh && (
+
+						{chuyenNganhHienTai && (
 							<Descriptions.Item label='Chuyên ngành'>
-								{(recSinhVien?.chuyenNganh as any) ? (recSinhVien?.chuyenNganh as any) : 'Chưa đăng ký chuyên ngành'}
+								{chuyenNganhHienTai.ten ?? <i>Chưa đăng ký chuyên ngành</i>}
 							</Descriptions.Item>
 						)}
 					</Descriptions>
@@ -177,13 +180,10 @@ const TienTrinhChuongTrinhKhung = () => {
 						</div>
 
 						{data.chuyenNganhList?.length ? (
-							<Collapse
-								bordered={false}
-								defaultActiveKey={recSinhVien?.maChuyenNganh ? [recSinhVien.maChuyenNganh] : []}
-							>
+							<Collapse bordered={false} defaultActiveKey={[chuyenNganhHienTai?.ma ?? '']}>
 								{data.chuyenNganhList.map((chuyenNganh) => (
 									<Collapse.Panel
-										key={(chuyenNganh.khoiHocPhan[0].maChuyenNganh as string) || chuyenNganh.khoiHocPhan[0]._id}
+										key={chuyenNganh.khoiHocPhan[0].maChuyenNganh || chuyenNganh.khoiHocPhan[0]._id}
 										header={`Chuyên ngành: ${
 											chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
 										}`}
