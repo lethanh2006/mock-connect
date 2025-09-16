@@ -9,12 +9,13 @@ import { useEffect } from 'react';
 import AvatarBlog from './Avatar';
 
 interface IProps {
-	idLopHocPhan: string;
+	idLopHocPhan?: string;
+	idLopHanhChinh?: string;
 	getData?: () => void;
 }
 
 const FormThemMoiBaiViet = (props: IProps) => {
-	const { idLopHocPhan, getData } = props;
+	const { idLopHocPhan, idLopHanhChinh, getData } = props;
 	const { visibleForm, postModel, edit, record, putModel, setVisibleForm, formSubmiting, setFormSubmiting } =
 		useModel('diendan.baidang');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
@@ -30,7 +31,8 @@ const FormThemMoiBaiViet = (props: IProps) => {
 		const fileDinhKem = await buildUpLoadMultiFile(values, 'fileDinhKem');
 		const payload = {
 			...values,
-			lopHocPhanId: idLopHocPhan,
+			// lopHocPhanId: idLopHocPhan,
+			...(idLopHocPhan ? { lopHocPhanId: idLopHocPhan } : idLopHanhChinh ? { lopHanhChinhId: idLopHanhChinh } : {}),
 			fileDinhKem: fileDinhKem,
 		};
 		setFormSubmiting(false);

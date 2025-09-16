@@ -5,6 +5,7 @@ import { history, useModel } from 'umi';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
+import DienDanLopPage from '../LopHocPhan/DienDan';
 
 const DetailLopHanhChinh = ({
 	match: {
@@ -54,6 +55,9 @@ const DetailLopHanhChinh = ({
 				</Tabs.TabPane>
 				<Tabs.TabPane tab='Thông báo' key={1}>
 					<ThongBaoLopPage loai='lop-hanh-chinh' idLop={id} />
+				</Tabs.TabPane>
+				<Tabs.TabPane tab='Diễn đàn' key={2}>
+					<DienDanLopPage idLopHanhChinh={id} />
 				</Tabs.TabPane>
 			</Tabs>
 		</Card>
