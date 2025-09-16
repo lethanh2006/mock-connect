@@ -8,10 +8,12 @@ import CardStatus from './components/CardStatus';
 import './style.less';
 
 interface IProps {
-	idLopHocPhan: string;
+	idLopHocPhan?: string;
+	idLopHanhChinh?: string;
 }
 const DienDanLopPage = (props: IProps) => {
-	const { idLopHocPhan } = props;
+	const { idLopHocPhan, idLopHanhChinh } = props;
+	const idLop = idLopHocPhan ?? idLopHanhChinh;
 	const {
 		getModel,
 		danhSach,
@@ -30,12 +32,15 @@ const DienDanLopPage = (props: IProps) => {
 
 	const getData = () => {
 		if (idBaiViet) getByIdModel(idBaiViet?.toString(), true);
-		else getModel({ lopHocPhanId: idLopHocPhan }, undefined, { ghimBaiViet: -1 });
+		else {
+			if (idLopHocPhan) getModel({ lopHocPhanId: idLopHocPhan }, undefined, { ghimBaiViet: -1 });
+			else if (idLopHanhChinh) getModel({ lopHanhChinhId: idLopHanhChinh }, undefined, { ghimBaiViet: -1 });
+		}
 	};
 
 	useEffect(() => {
-		if (idLopHocPhan) getData();
-	}, [idLopHocPhan, idBaiViet, limit]);
+		if (idLop) getData();
+	}, [idLop, idBaiViet, limit]);
 
 	return (
 		<div className='dien-dan'>
@@ -56,7 +61,12 @@ const DienDanLopPage = (props: IProps) => {
 
 			<Spin spinning={loading}>
 				<div className='main-content'>
-					<CardAddStatus hiddenAdd={!!idBaiViet} idLopHocPhan={idLopHocPhan} getData={getData} />
+					<CardAddStatus
+						hiddenAdd={!!idBaiViet}
+						idLopHocPhan={idLopHocPhan}
+						idLopHanhChinh={idLopHanhChinh}
+						getData={getData}
+					/>
 
 					{!idBaiViet ? (
 						<InfiniteScroll

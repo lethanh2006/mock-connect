@@ -8,6 +8,7 @@ import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
 import SelectLopHanhChinhSinhVien from './components/Select';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 import { InfoCircleOutlined, NotificationOutlined } from '@ant-design/icons';
+import DienDanLopPage from '../LopHocPhan/DienDan';
 
 const LopHanhChinhPage = () => {
 	// const { record: recHocKy } = useModel('daotao.hocky');
@@ -94,6 +95,11 @@ const LopHanhChinhPage = () => {
 									menuKey: 'thong-bao',
 									content: <ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />,
 									icon: <NotificationOutlined />,
+								},
+								{
+									title: 'Diễn đàn',
+									menuKey: 'dien-dan',
+									content: <DienDanLopPage idLopHanhChinh={record?._id} />,
 								},
 							]}
 						/>
