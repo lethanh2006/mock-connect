@@ -24,11 +24,11 @@ const CardHocTapRenLuyenDashboard = () => {
 			style={{ height: '100%' }}
 		>
 			<Row gutter={[16, 16]} style={{ height: '100%' }}>
-				<Col span={24} md={8}>
+				<Col xs={24} sm={24} md={12} lg={8} xl={8}>
 					<CardKetQuaHocTapDashboard />
 				</Col>
 
-				<Col span={24} md={8}>
+				<Col xs={24} sm={24} md={12} lg={8} xl={8}>
 					<CardRenLuyenDashboard />
 				</Col>
 
@@ -36,7 +36,7 @@ const CardHocTapRenLuyenDashboard = () => {
 						<CardTienTrinhTotNghiep />
 					</Col> */}
 
-				<Col span={24} md={8}>
+				<Col xs={24} sm={24} md={24} lg={8} xl={8}>
 					<CardCongNoDashboard />
 				</Col>
 			</Row>
