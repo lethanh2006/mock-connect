@@ -36,10 +36,10 @@ const TrangChu = () => {
 
 			<Col span={24}>
 				<Row gutter={[16, 16]}>
-					<Col span={24} md={18}>
+					<Col xs={24} sm={12} md={16} lg={16} xl={18}>
 						<CardBaiTapDashboard />
 					</Col>
-					<Col span={24} md={6}>
+					<Col xs={24} sm={12} md={8} lg={8} xl={6}>
 						<LichDashboard />
 					</Col>
 				</Row>
@@ -47,11 +47,11 @@ const TrangChu = () => {
 
 			<Col span={24}>
 				<Row gutter={[16, 16]}>
-					<Col span={24} md={18}>
+					<Col xs={24} sm={12} md={16} lg={18} xl={18}>
 						<CardHocTapRenLuyenDashboard />
 					</Col>
 
-					<Col span={24} md={6}>
+					<Col xs={24} sm={12} md={8} lg={6} xl={6}>
 						<CardDichVuSinhVien />
 					</Col>
 				</Row>

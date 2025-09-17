@@ -161,19 +161,19 @@ const CardLopHocPhan = () => {
 					beforeChange={(from, to) => setCurrentSlide(to)}
 					responsive={[
 						{
-							breakpoint: 1024,
+							breakpoint: 1400,
 							settings: {
 								slidesToShow: 3,
 							},
 						},
 						{
-							breakpoint: 768,
+							breakpoint: 1200,
 							settings: {
 								slidesToShow: 2,
 							},
 						},
 						{
-							breakpoint: 480,
+							breakpoint: 768,
 							settings: {
 								slidesToShow: 1,
 							},
