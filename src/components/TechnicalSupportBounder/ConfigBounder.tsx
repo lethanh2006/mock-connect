@@ -37,6 +37,9 @@ const ConfigBounder = (props: { children?: any }) => {
 						dotSizeSM: 35,
 						dotSizeLG: 65,
 					},
+					Divider: {
+						orientationMargin: 0,
+					},
 				},
 			}}
 		>
