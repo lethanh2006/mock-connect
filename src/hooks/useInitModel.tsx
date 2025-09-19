@@ -1,4 +1,4 @@
-import { type TExportField, type TFilter, type TImportHeader, type TImportResponse } from '@/components/Table/typing';
+import { type TExportField, type TFilter, type TImportHeader, type TImportResponse, type QueryCondition } from '@/components/Table/typing';
 import { chuanHoaObject } from '@/utils/utils';
 import { message } from 'antd';
 import { useState } from 'react';
@@ -12,10 +12,10 @@ import useInitService from './useInitService';
  * @param upService Ip của dịch vụ bên thứ 3
  * @returns
  */
-const useInitModel = <T,>(
+const useInitModel = <T extends object>(
 	url: string,
 	fieldNameCondtion?: 'condition' | 'cond',
-	initCondition?: Partial<T>,
+	initCondition?: QueryCondition<T>,
 	ipService?: string,
 	initSort?: { [k in keyof T]?: 1 | -1 },
 	initFilter?: TFilter<T>[],
@@ -27,7 +27,7 @@ const useInitModel = <T,>(
 	const [loading, setLoading] = useState<boolean>(false);
 	const [formSubmiting, setFormSubmiting] = useState<boolean>(false);
 	const [filters, setFilters] = useState<TFilter<T>[]>(initFilter ?? []);
-	const [condition, setCondition] = useState<{ [k in keyof T]?: any } | any>(initCondition);
+	const [condition, setCondition] = useState<QueryCondition<T>>(initCondition ?? {});
 	const [sort, setSort] = useState<{ [k in keyof T]?: 1 | -1 } | undefined>(initSort);
 	const [edit, setEdit] = useState<boolean>(false);
 	const [isView, setIsView] = useState<boolean>(true);
@@ -66,7 +66,7 @@ const useInitModel = <T,>(
 	 * @returns {any} Các IRecord
 	 */
 	const getModel = async (
-		paramCondition?: Partial<T>,
+		paramCondition?: QueryCondition<T>,
 		filterParams?: TFilter<T>[],
 		sortParam?: { [k in keyof T]?: 1 | -1 },
 		paramPage?: number,
@@ -130,7 +130,7 @@ const useInitModel = <T,>(
 	const getAllModel = async (
 		isSetRecord?: boolean,
 		sortParam?: { [k in keyof T]?: 1 | -1 },
-		conditionParam?: Partial<T>,
+		conditionParam?: QueryCondition<T>,
 		filterParam?: TFilter<T>[],
 		pathParam?: string,
 		isSetDanhSach?: boolean,
@@ -185,7 +185,7 @@ const useInitModel = <T,>(
 		}
 	};
 
-	const getOneModel = async (conditionParam: Partial<T>): Promise<T> => {
+	const getOneModel = async (conditionParam: QueryCondition<T>): Promise<T> => {
 		if (!conditionParam) return Promise.reject('condition is required');
 		setLoading(true);
 		try {
@@ -444,7 +444,7 @@ const useInitModel = <T,>(
 	 */
 	const postExportModel = async (
 		payload: { ids?: string[]; definitions: TExportField[] },
-		paramCondition?: Partial<T>,
+		paramCondition?: QueryCondition<T>,
 		paramFilters?: TFilter<T>[],
 		otherQuery?: Record<string, any>,
 	): Promise<Blob> => {
