@@ -1,4 +1,4 @@
-import { getPhuongXa, getQuanHuyen } from '@/services/Core/DonViHanhChinh';
+import { getPhuongXa } from '@/services/Core/DonViHanhChinh';
 import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import rules from '@/utils/rules';
 import { Col, Form, Input, Row, Select, type FormInstance } from 'antd';
@@ -50,24 +50,24 @@ const SelectDonViHanhChinh = (props: {
 		form.setFieldsValue({ [suffix ? 'xaPhuong' + suffix : 'xaPhuong']: undefined });
 	};
 
-	useEffect(() => {
-		if (idTinh)
-			getQuanHuyen(idTinh).then((data) => {
-				setListHuyen(data.data.data);
-			});
-	}, [idTinh]);
+	// useEffect(() => {
+	// 	if (idTinh)
+	// 		getQuanHuyen(idTinh).then((data) => {
+	// 			setListHuyen(data.data.data);
+	// 		});
+	// }, [idTinh]);
 
 	useEffect(() => {
-		if (idHuyen)
-			getPhuongXa(idHuyen).then((data) => {
+		if (idTinh)
+			getPhuongXa(idTinh).then((data) => {
 				setListXa(data.data.data);
 			});
-	}, [idHuyen]);
+	}, [idTinh]);
 
 	return (
 		<Row gutter={[12, 0]}>
 			{!hideTinh && (
-				<Col span={8}>
+				<Col span={12}>
 					<Form.Item
 						name={suffix ? 'tinhTp' + suffix : 'tinhTp'}
 						label={hasLabel ? 'Tỉnh/Thành phố' : undefined}
@@ -89,7 +89,7 @@ const SelectDonViHanhChinh = (props: {
 					</Form.Item>
 				</Col>
 			)}
-			{!hideQuanHuyen && (
+			{/* {!hideQuanHuyen && (
 				<Col span={8}>
 					<Form.Item
 						initialValue={props.initialValue?.quanHuyen}
@@ -111,10 +111,10 @@ const SelectDonViHanhChinh = (props: {
 						/>
 					</Form.Item>
 				</Col>
-			)}
+			)} */}
 
 			{!hideXaPhuong && (
-				<Col span={8}>
+				<Col span={12}>
 					<Form.Item
 						initialValue={props.initialValue?.xaPhuong}
 						name={suffix ? 'xaPhuong' + suffix : 'xaPhuong'}
