@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { getPhuongXa } from '@/services/Core/DonViHanhChinh';
+import { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import type { IRecordTinh } from '@/services/DonViHanhChinh/typing';
 import rules from '@/utils/rules';
 import { Col, Form, Input, Row, Select } from 'antd';
 import type { FormInstance } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
-import { getPhuongXa, getQuanHuyen } from '@/services/Core/DonViHanhChinh';
-import { DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 
 type Props = {
   disabled?: boolean;
@@ -40,27 +40,26 @@ const SelectDonViHanhChinhWithDinamicForm = (props: Props) => {
   const [listHuyen, setListHuyen] = useState<DonViHanhChinh.IRecord[]>([]);
   const [listXa, setListXa] = useState<DonViHanhChinh.IRecord[]>([]);
 
-  useEffect(() => {
-    if (idTinh)
-      getQuanHuyen(idTinh).then((data) => {
-        setListHuyen(data.data.data);
-      });
-  }, [idTinh]);
+  // useEffect(() => {
+  //   if (idTinh)
+  //     getQuanHuyen(idTinh).then((data) => {
+  //       setListHuyen(data.data.data);
+  //     });
+  // }, [idTinh]);
 
   useEffect(() => {
-    if (idHuyen)
-      getPhuongXa(idHuyen).then((data) => {
+    if (idTinh)
+      getPhuongXa(idTinh).then((data) => {
         setListXa(data.data.data);
       });
-  }, [idHuyen]);
+  }, [idTinh]);
 
   return (
     <Row gutter={[20, 12]}>
       {!props.hideTinh && (
         <Col
           xs={24}
-          md={props.hideQuanHuyen && props.hideXaPhuong ? 12 : 24}
-          lg={props.hideQuanHuyen && props.hideXaPhuong ? 24 : 8}
+          md={ props.hideXaPhuong ? 24 : 12}
         >
           <Form.Item
             style={{ marginBottom: props.hideDiaChiCuThe ? 0 : 8 }}
@@ -97,7 +96,7 @@ const SelectDonViHanhChinhWithDinamicForm = (props: Props) => {
           </Form.Item>
         </Col>
       )}
-      {!props.hideQuanHuyen && (
+      {/* {!props.hideQuanHuyen && (
         <Col xs={24} md={12} lg={8}>
           <Form.Item
             style={{ marginBottom: props.hideDiaChiCuThe ? 0 : 8 }}
@@ -131,9 +130,9 @@ const SelectDonViHanhChinhWithDinamicForm = (props: Props) => {
             ></Select>
           </Form.Item>
         </Col>
-      )}
+      )} */}
       {!props.hideXaPhuong && (
-        <Col xs={24} md={12} lg={8}>
+        <Col xs={24} md={12}>
           <Form.Item
             style={{ marginBottom: props.hideDiaChiCuThe ? 0 : 8 }}
             initialValue={props?.initialValue?.maPhuongXa}
