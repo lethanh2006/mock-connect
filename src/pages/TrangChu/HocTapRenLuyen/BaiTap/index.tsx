@@ -86,7 +86,7 @@ const CardBaiTapDashboard = () => {
 					{files.length > 0 && (
 						<div className='files-section'>
 							<BoxFile url={files} />
-							
+
 							{files.length > 2 && (
 								<Text type='secondary' italic>
 									...và {files.length - 2} file khác
@@ -168,7 +168,7 @@ const CardBaiTapDashboard = () => {
 						))}
 					</Carousel>
 				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập' />
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập' className='empty' />
 				)}
 			</Card>
 		</Card>
