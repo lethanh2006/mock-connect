@@ -3,6 +3,7 @@ import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
 import { CustomerServiceOutlined, EyeOutlined, FieldTimeOutlined, ReloadOutlined } from '@ant-design/icons';
 import {
+	Badge,
 	Card,
 	Col,
 	Empty,
@@ -283,97 +284,109 @@ const MuonTraSachPage = () => {
 											<>
 												<Row gutter={[12, 12]}>
 													{danhSach?.map((item) => {
-														return (
-															<Col xs={24} sm={12} md={12} lg={8} xxl={6} key={item?._id}>
-																<Card
-																	onClick={() => {
-																		setRecord(item);
-																		history.push(`/thu-vien/muon-tra-sach/${item?._id}`);
-																	}}
-																	hoverable
-																	style={{ margin: 'auto', width: 220 }}
-																	cover={
-																		<div
-																			style={{
-																				width: '220px',
-																				height: '250px',
-																				color: 'white',
-																				backgroundImage: `url(/thuvien/sach2-${item?.randomImageIndex}.png)`,
-																				display: 'flex',
-																				flexDirection: 'column',
-																				justifyContent: 'space-between',
-																				padding: '10px',
-																			}}
-																		>
-																			<strong>
-																				<Paragraph style={{ color: 'white' }} ellipsis={{ rows: 2, expandable: false }}>
-																					{item?.nhanDeConverse}
-																				</Paragraph>
-																			</strong>
+														const CardContent = (
+															<Card
+																onClick={() => {
+																	setRecord(item);
+																	history.push(`/thu-vien/muon-tra-sach/${item?._id}`);
+																}}
+																hoverable
+																style={{ margin: 'auto', width: 220 }}
+																cover={
+																	<div
+																		style={{
+																			width: '220px',
+																			height: '250px',
+																			color: 'white',
+																			backgroundImage: `url(/thuvien/sach2-${item?.randomImageIndex}.png)`,
+																			display: 'flex',
+																			flexDirection: 'column',
+																			justifyContent: 'space-between',
+																			padding: '10px',
+																		}}
+																	>
+																		<strong>
+																			<Paragraph style={{ color: 'white' }} ellipsis={{ rows: 2, expandable: false }}>
+																				{item?.nhanDe}
+																			</Paragraph>
+																		</strong>
 
-																			<strong>
-																				<p>{item?.tacGiaConverse}</p>
-																			</strong>
+																		<strong>
+																			<p>{item?.tacGia}</p>
+																		</strong>
 
-																			<strong>
-																				<div>
-																					<p style={{ textAlign: 'right' }}>
-																						{item?.danhSachThongTin
-																							?.find((val) => val?.tagCode === '260')
-																							?.thuocTinhAnPham?.find((i) => i.code === '$c')?.value ?? ''}
-																					</p>
-																				</div>
-																			</strong>
+																		<strong>
+																			<div>
+																				<p style={{ textAlign: 'right' }}>
+																					{item?.danhSachThongTin
+																						?.find((val) => val?.tagCode === '260')
+																						?.thuocTinhAnPham?.find((i) => i.code === '$c')?.value ?? ''}
+																				</p>
+																			</div>
+																		</strong>
+																	</div>
+																}
+																// <ButtonExtend
+																// 	disabled={item?.soLuong === 0 || conMuonDuoc === 0}
+																// 	type='link'
+																// 	tooltip={conMuonDuoc === 0 ? 'Quá hạn ngạch mượn' : 'Đăng ký mượn sách'}
+																// 	icon={<PlusOutlined />}
+																// 	key='add'
+																// 	onClick={(event) => {
+																// 		event.stopPropagation();
+																// 		setRecord(item);
+																// 		setVisibleMuon(true);
+																// 	}}
+																actions={
+																	item?.online
+																		? [
+																				<ButtonExtend
+																					disabled={!item?.thongTinAnPhamTrucTuyen?.length}
+																					type='link'
+																					tooltip={
+																						!item?.thongTinAnPhamTrucTuyen?.length
+																							? 'Không có tập tin'
+																							: 'Xem trước tập tin'
+																					}
+																					icon={<EyeOutlined />}
+																					key='xem'
+																					onClick={(event) => {
+																						event.stopPropagation();
+																						setRecord(item);
+																						setVisibleFile(true);
+																					}}
+																				/>,
+																			]
+																		: []
+																}
+															>
+																<Meta
+																	title={item?.nhanDe}
+																	description={
+																		<div>
+																			<div>
+																				<span>{item?.tacGia}</span>
+																			</div>
+																			<div>
+																				<span>
+																					Khả dụng: <b>{item?.soLuong}</b>
+																				</span>
+																			</div>
 																		</div>
 																	}
-																	actions={[
-																		// <ButtonExtend
-																		// 	disabled={item?.soLuong === 0 || conMuonDuoc === 0}
-																		// 	type='link'
-																		// 	tooltip={conMuonDuoc === 0 ? 'Quá hạn ngạch mượn' : 'Đăng ký mượn sách'}
-																		// 	icon={<PlusOutlined />}
-																		// 	key='add'
-																		// 	onClick={(event) => {
-																		// 		event.stopPropagation();
-																		// 		setRecord(item);
-																		// 		setVisibleMuon(true);
-																		// 	}}
-																		item?.online ? (
-																			<ButtonExtend
-																				disabled={!item?.thongTinAnPhamTrucTuyen?.length}
-																				type='link'
-																				tooltip={
-																					!item?.thongTinAnPhamTrucTuyen?.length
-																						? 'Không có tập tin'
-																						: 'Xem trước tập tin'
-																				}
-																				icon={<EyeOutlined />}
-																				key='xem'
-																				onClick={(event) => {
-																					event.stopPropagation();
-																					setRecord(item);
-																					setVisibleFile(true);
-																				}}
-																			/>
-																		) : null,
-																	]}
-																>
-																	<Meta
-																		title={item?.nhanDeConverse}
-																		description={
-																			<div>
-																				<div>
-																					<span>{item?.tacGiaConverse}</span>
-																				</div>
-																				<div>
-																					<span>
-																						Khả dụng: <b>{item?.soLuong}</b>
-																					</span>
-																				</div>
-																			</div>
-																		}
-																	/>
-																</Card>
+																/>
+															</Card>
+														);
+
+														return (
+															<Col xs={24} sm={12} md={12} lg={8} xxl={6} key={item?._id}>
+																{item?.isSachHay ? (
+																	<Badge.Ribbon text='Sách hay' color='gold'>
+																		{CardContent}
+																	</Badge.Ribbon>
+																) : (
+																	CardContent
+																)}
 															</Col>
 														);
 													})}

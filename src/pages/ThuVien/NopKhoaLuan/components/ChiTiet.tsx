@@ -4,12 +4,12 @@ import {
 	type ETrangThaiNopThuVien,
 } from '@/services/QuanLyThuVien/constant';
 import dayjs from '@/utils/dayjs';
-import { Card, Descriptions, Tag } from 'antd';
+import { Button, Card, Descriptions, Tag } from 'antd';
 import { useModel } from 'umi';
 
 const ChiTietThuVien = (props: any) => {
 	const { title, loai } = props;
-	const { record } = useModel('thuvien.danhsachdot');
+	const { record, setVisibleForm } = useModel('thuvien.danhsachdot');
 
 	return (
 		<Card title={`Chi tiết ${title?.toLowerCase()}`}>
@@ -87,6 +87,10 @@ const ChiTietThuVien = (props: any) => {
 					)}
 				</Descriptions.Item>
 			</Descriptions>
+
+			<div className='form-footer'>
+				<Button onClick={() => setVisibleForm(false)}>Đóng</Button>
+			</div>
 		</Card>
 	);
 };
