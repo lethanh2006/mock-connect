@@ -8,8 +8,6 @@ import { type IColumn, type TDataOption, type TFilter, type RowFilterProps } fro
 
 const { Text } = Typography;
 
-
-
 const RowFilter = (props: RowFilterProps) => {
 	const {
 		index,
