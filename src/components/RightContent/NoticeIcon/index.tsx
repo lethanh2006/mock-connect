@@ -1,6 +1,5 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
-import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import NoticeIcon from './NoticeIcon';
@@ -43,11 +42,11 @@ const NoticeIconView = () => {
 
 			<ModalExpandable
 				width={800}
-				styles={{ body: { padding: 0 } }}
-				destroyOnClose
 				onCancel={() => setVisibleDetail(false)}
 				open={visibleDetail}
-				footer={null}
+				okButtonProps={{ hidden: true }}
+				cancelText={intl.formatMessage({ id: 'global.button.dong', defaultMessage: 'Đóng' })}
+				title={record?.title || 'Thông báo'}
 			>
 				<ViewThongBao
 					record={record}
@@ -55,13 +54,8 @@ const NoticeIconView = () => {
 						setVisibleDetail(false);
 						setVisiblePopup(false);
 					}}
+					hideCard
 				/>
-
-				<div className='form-footer'>
-					<Button onClick={() => setVisibleDetail(false)}>
-						{intl.formatMessage({ id: 'global.button.dong', defaultMessage: 'Đóng' })}
-					</Button>
-				</div>
 			</ModalExpandable>
 		</>
 	);
