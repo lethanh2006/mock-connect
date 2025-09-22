@@ -4,6 +4,7 @@ import { Descriptions, Space, Spin, Tabs, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
+import BoxFile from '../DienDan/components/BoxFile';
 import DanhSachGiangVien from './DanhSachGiangVien';
 import DanhSachSinhVien from './DanhSachSinhVien';
 import GioiThieuChungLopHp from './GioiThieuChung';
@@ -64,6 +65,12 @@ const ThongTinChung = () => {
 			</Descriptions>
 
 			<GioiThieuChungLopHp />
+
+			{record?.listTaiLieu?.length ? (
+				<div style={{ marginTop: 8 }}>
+					<BoxFile url={record?.listTaiLieu} />
+				</div>
+			) : null}
 
 			<Space wrap style={{ marginTop: 8 }}>
 				{record?.lmsUrl ? (

@@ -28,6 +28,7 @@ export declare module LopHocPhan {
 		gioiThieuChung?: string;
 		lmsUrl?: string; // Link học trực tuyến
 		syncLms?: boolean;
+		listTaiLieu?: string[] | null; // Tài liệu học tập
 
 		siSoToiDa: number;
 		siSo?: number; // Sĩ số hiện tại
