@@ -2,6 +2,7 @@ import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Empty, Spin, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
+import BoxFile from '../DienDan/components/BoxFile';
 import './style.less';
 
 const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void; deCuongId?: string }) => {
@@ -45,6 +46,12 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 				) : (
 					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa có thông tin' />
 				)}
+
+				{record?.listTaiLieu?.length ? (
+					<div style={{ marginTop: 8 }}>
+						<BoxFile url={record?.listTaiLieu} />
+					</div>
+				) : null}
 			</div>
 
 			{recDeCuong?.mucTieuHocPhan && (
