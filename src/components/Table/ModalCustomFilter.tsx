@@ -1,5 +1,5 @@
 import { CloseOutlined, FilterFilled, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Modal, Radio, Typography, Select } from 'antd';
+import { Button, Form, Modal, Radio, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import { EOperatorType } from './constant';
@@ -19,7 +19,6 @@ const ModalCustomFilter = (props: {
 	const intl = useIntl();
 	const { visible, setVisible, columns, filters, setFilters } = props;
 	const [filtersTemp, setFiltersTemp] = useState<TFilter<any>[]>([]);
-	const [logicOperator, setLogicOperator] = useState<'and' | 'or'>('and');
 	const [form] = Form.useForm();
 	const fieldsFiltered = filtersTemp.map((item) => JSON.stringify(item.field));
 	const fieldsFilterable = columns
@@ -45,12 +44,9 @@ const ModalCustomFilter = (props: {
 				}
 				return filter.values && Array.isArray(filter.values) && filter.values.length > 0;
 			});
+
 		if (filtered && filtered.length > 1) {
-			const filtersWithLogic = filtered.map((filter: TFilter<any>, index: number) => ({
-				...filter,
-				logicOperator: index === 0 ? undefined : logicOperator
-			}));
-			setFilters(filtersWithLogic);
+			setFilters(filtered);
 		} else {
 			setFilters(filtered || []);
 		}
@@ -72,7 +68,6 @@ const ModalCustomFilter = (props: {
 					onClick={() => {
 						form.resetFields();
 						setFiltersTemp([]);
-						setLogicOperator('and');
 						setFilters(undefined);
 						setVisible(false);
 					}}
@@ -90,36 +85,33 @@ const ModalCustomFilter = (props: {
 				{intl.formatMessage({ id: 'global.table.customfilter.dieukien' })}:
 			</Text>
 
-			{filtersTemp.length > 1 && (
-				<div style={{ marginBottom: '16px' }}>
-					<Text strong>Điều kiện: </Text>
-					<Select
-						value={logicOperator}
-						onChange={(value) => setLogicOperator(value)}
-						size="small"
-						style={{ width: 100 }}
-					>
-						<Select.Option value="and">Và</Select.Option>
-						<Select.Option value="or">Hoặc</Select.Option>
-					</Select>
-				</div>
-			)}
+
 
 			<Form form={form} layout='vertical' onFinish={onFinish} id='custom-filter-form'>
-				{filtersTemp.map((filter, index) => (
-					<RowFilter
-						index={index}
-						columns={columns}
-						key={(filter.field ?? '').toString()}
-						filter={filter}
-						fieldsFilterable={fieldsFilterable}
-						onChange={(fil) => {
-							const temp = [...filtersTemp];
-							temp[index] = fil;
-							setFiltersTemp(temp);
-						}}
-					/>
-				))}
+				{filtersTemp.length > 0 && (
+					<div style={{ padding: '8px', border: '1px dashed #d9d9d9', borderRadius: '4px', maxHeight: '400px', overflowY: 'auto', marginBottom: '16px' }}>
+						{filtersTemp.map((filter, index) => (
+							<RowFilter
+								index={index}
+								columns={columns}
+								key={(filter.field ?? '').toString()}
+								filter={filter}
+								fieldsFilterable={fieldsFilterable}
+								onChange={(fil) => {
+									const temp = [...filtersTemp];
+									temp[index] = fil;
+									setFiltersTemp(temp);
+								}}
+								onRemove={() => {
+									const temp = [...filtersTemp];
+									temp.splice(index, 1);
+									setFiltersTemp(temp);
+								}}
+								allowGrouping={true}
+							/>
+						))}
+					</div>
+				)}
 
 				<Form.Item>
 					<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -148,7 +140,6 @@ const ModalCustomFilter = (props: {
 							onClick={() => {
 								const newGroup: TFilter<any> = {
 									active: true,
-									logicOperator: 'and',
 									filters: [],
 								};
 								setFiltersTemp([

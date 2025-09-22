@@ -127,7 +127,7 @@ const RowFilter = (props: RowFilterProps) => {
 					</Space>
 				}
 				extra={
-					onRemove && level > 0 && (
+					onRemove && (
 						<Button
 							type="text"
 							size="small"
@@ -231,6 +231,7 @@ const RowFilter = (props: RowFilterProps) => {
 						valuePropName='checked'
 						initialValue={true}
 						style={{ margin: 0 }}
+						noStyle
 					>
 						<Checkbox />
 					</Form.Item>
