@@ -28,13 +28,14 @@ const CardAddStatusWrapper = styled.div`
 `;
 
 interface IProps {
-	idLopHocPhan: string;
+	idLopHocPhan?: string;
+	idLopHanhChinh?: string;
 	getData?: () => void;
 	hiddenAdd?: boolean;
 }
 
 const CardAddStatus = (props: IProps) => {
-	const { idLopHocPhan, getData, hiddenAdd } = props;
+	const { idLopHocPhan, idLopHanhChinh, getData, hiddenAdd } = props;
 	const { visibleForm, setVisibleForm, setEdit, setRecord } = useModel('diendan.baidang');
 	const { record: recNhanSu } = useModel('sinhvien.sinhvien');
 
@@ -72,7 +73,7 @@ const CardAddStatus = (props: IProps) => {
 				width={800}
 				destroyOnClose
 			>
-				<FormThemMoiBaiViet idLopHocPhan={idLopHocPhan} getData={getData} />
+				<FormThemMoiBaiViet idLopHocPhan={idLopHocPhan} idLopHanhChinh={idLopHanhChinh} getData={getData} />
 			</Modal>
 		</CardAddStatusWrapper>
 	);

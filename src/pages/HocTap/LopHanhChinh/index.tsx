@@ -6,6 +6,7 @@ import { Card, Col, Empty, Row, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
+import DienDanLopPage from '../LopHocPhan/DienDan';
 import SelectLopHanhChinhSinhVien from './components/Select';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
@@ -96,6 +97,11 @@ const LopHanhChinhPage = () => {
 										menuKey: 'thong-bao',
 										content: <ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />,
 										icon: <NotificationOutlined />,
+									},
+									{
+										title: 'Diễn đàn',
+										menuKey: 'dien-dan',
+										content: <DienDanLopPage idLopHanhChinh={record?._id} />,
 									},
 								]}
 							/>

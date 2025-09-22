@@ -115,7 +115,7 @@ const ModalNopTaiLieu = (props: { visible: boolean; setVisible: (val: boolean) =
 						<Form.Item
 							rules={[...rules.required, ...rules.fileRequired]}
 							name='urlTaiLieu'
-							label={'Tài liệu toàn bộ đề tài (docx)'}
+							label={'Tài liệu toàn bộ đề tài (docx, pdf)'}
 						>
 							<UploadFile
 								otherProps={{
@@ -130,9 +130,9 @@ const ModalNopTaiLieu = (props: { visible: boolean; setVisible: (val: boolean) =
 					</Col>
 					<Col span={24}>
 						<Form.Item
-							rules={[...rules.required, ...rules.fileRequired]}
+							// rules={[...rules.required, ...rules.fileRequired]}
 							name='urlTomTat'
-							label={'Tài liệu tóm tắt đề tài (docx)'}
+							label={'Tài liệu tóm tắt đề tài (docx, pdf)'}
 						>
 							<UploadFile
 								otherProps={{
@@ -152,8 +152,8 @@ const ModalNopTaiLieu = (props: { visible: boolean; setVisible: (val: boolean) =
 							label={'Tài liệu minh chứng đề tài (pdf)'}
 						>
 							<UploadFile
+								maxCount={1}
 								otherProps={{
-									maxCount: 2,
 									accept: '.pdf',
 									multiple: false,
 									showUploadList: { showDownloadIcon: false },

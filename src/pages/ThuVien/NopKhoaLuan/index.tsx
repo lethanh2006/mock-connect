@@ -242,41 +242,48 @@ const QuanLyThuVienPage = () => {
 	];
 
 	return (
-		<Card title='Nộp luận án, luận văn, khóa luận/đồ án'>
-			<Tabs onChange={(tab) => setTabActive(tab as ELoaiDotQuanLyThuvien)} activeKey={tabActive}>
-				<Tabs.TabPane tab='Luận án' key={ELoaiDotQuanLyThuvien.LUAN_AN} />
-				<Tabs.TabPane tab='Luận văn' key={ELoaiDotQuanLyThuvien.LUAN_VAN} />
-				<Tabs.TabPane tab='Khóa luận/đồ án' key={ELoaiDotQuanLyThuvien.KHOA_LUAN} />
-			</Tabs>
-			{tabActive === ELoaiDotQuanLyThuvien.LUAN_AN ? (
-				<Space style={{ marginBottom: 12 }}>
-					<MyDateRangePicker
-						value={datePicker}
-						onChange={(val) => setDatePicker(val)}
-						allowClear
-						style={{ width: 300 }}
-					/>
-				</Space>
-			) : null}
+		<Card
+			title='Nộp luận án, luận văn, khóa luận/đồ án'
+			variant='borderless'
+			className='card-borderless card-big-title'
+		>
+			<Card variant='borderless'>
+				<Tabs onChange={(tab) => setTabActive(tab as ELoaiDotQuanLyThuvien)} activeKey={tabActive}>
+					<Tabs.TabPane tab='Luận án' key={ELoaiDotQuanLyThuvien.LUAN_AN} />
+					<Tabs.TabPane tab='Luận văn' key={ELoaiDotQuanLyThuvien.LUAN_VAN} />
+					<Tabs.TabPane tab='Khóa luận/đồ án' key={ELoaiDotQuanLyThuvien.KHOA_LUAN} />
+				</Tabs>
 
-			<TableBase
-				getData={getData}
-				columns={columns}
-				dependencies={[page, limit, datePicker, tabActive]}
-				modelName='thuvien.danhsachdot'
-				Form={isView ? ChiTietThuVien : FormThuVien}
-				formProps={{ getData, tabActive }}
-				title={
-					tabActive === ELoaiDotQuanLyThuvien.LUAN_AN
-						? 'Danh sách luận án'
-						: tabActive === ELoaiDotQuanLyThuvien.LUAN_VAN
-							? 'Danh sách luận văn'
-							: 'Danh sách khóa luận/đồ án'
-				}
-				widthDrawer={1000}
-				hideCard
-				buttons={{ create: tabActive === ELoaiDotQuanLyThuvien.LUAN_AN ? true : false }}
-			/>
+				{tabActive === ELoaiDotQuanLyThuvien.LUAN_AN ? (
+					<Space style={{ marginBottom: 12 }}>
+						<MyDateRangePicker
+							value={datePicker}
+							onChange={(val) => setDatePicker(val)}
+							allowClear
+							style={{ width: 300 }}
+						/>
+					</Space>
+				) : null}
+
+				<TableBase
+					getData={getData}
+					columns={columns}
+					dependencies={[page, limit, datePicker, tabActive]}
+					modelName='thuvien.danhsachdot'
+					Form={isView ? ChiTietThuVien : FormThuVien}
+					formProps={{ getData, tabActive }}
+					title={
+						tabActive === ELoaiDotQuanLyThuvien.LUAN_AN
+							? 'Danh sách luận án'
+							: tabActive === ELoaiDotQuanLyThuvien.LUAN_VAN
+								? 'Danh sách luận văn'
+								: 'Danh sách khóa luận/đồ án'
+					}
+					widthDrawer={1000}
+					hideCard
+					buttons={{ create: tabActive === ELoaiDotQuanLyThuvien.LUAN_AN ? true : false }}
+				/>
+			</Card>
 
 			<ModalNopTaiLieu visible={visibleNopBai} setVisible={setVisibleNopBao} getData={getData} />
 		</Card>

@@ -4,6 +4,7 @@ import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel, useParams } from 'umi';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
+import DienDanLopPage from '../LopHocPhan/DienDan';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
 const DetailLopHanhChinh = () => {
@@ -49,6 +50,9 @@ const DetailLopHanhChinh = () => {
 				</Tabs.TabPane>
 				<Tabs.TabPane tab='Thông báo' key={1}>
 					<ThongBaoLopPage loai='lop-hanh-chinh' idLop={id} />
+				</Tabs.TabPane>
+				<Tabs.TabPane tab='Diễn đàn' key={2}>
+					<DienDanLopPage idLopHanhChinh={id} />
 				</Tabs.TabPane>
 			</Tabs>
 		</Card>
