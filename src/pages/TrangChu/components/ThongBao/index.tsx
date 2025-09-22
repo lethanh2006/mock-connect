@@ -106,11 +106,11 @@ const CardThongBaoDashboard = () => {
 					}}
 				/>
 
-				<div className='form-footer'>
+				{/* <div className='form-footer'>
 					<Button onClick={() => setVisibleThongBao(false)}>
 						{intl.formatMessage({ id: 'global.button.dong', defaultMessage: 'Đóng' })}
 					</Button>
-				</div>
+				</div> */}
 			</ModalExpandable>
 		</Card>
 	);
