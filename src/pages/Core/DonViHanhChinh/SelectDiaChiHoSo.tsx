@@ -95,7 +95,7 @@ const SelectDiaChiHoSoFormItem = (props: {
 							value: item.ma,
 							label: item.tenDonVi,
 						}))}
-						notFoundContent={!value?.maQH ? 'Chọn quận/huyện phố trước' : undefined}
+						notFoundContent={!value?.maTP ? 'Chọn tỉnh/thành phố trước' : undefined}
 						value={value?.maXaPhuong}
 						onChange={(val, opt: any) => onChangeXaPhuong(opt.value, opt.label)}
 						optionFilterProp='label'
