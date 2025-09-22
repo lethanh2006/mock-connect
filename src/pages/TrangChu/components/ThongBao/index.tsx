@@ -93,24 +93,20 @@ const CardThongBaoDashboard = () => {
 
 			<ModalExpandable
 				width={800}
-				styles={{ body: { padding: 0 } }}
 				destroyOnClose
 				onCancel={() => setVisibleThongBao(false)}
 				open={visibleThongBao}
-				footer={null}
+				cancelText={intl.formatMessage({ id: 'global.button.dong', defaultMessage: 'Đóng' })}
+				okButtonProps={{ hidden: true }}
+				title={record?.title || 'Thông báo'}
 			>
 				<ViewThongBao
 					record={record}
 					afterViewDetail={() => {
 						setVisibleThongBao(false);
 					}}
+					hideCard
 				/>
-
-				{/* <div className='form-footer'>
-					<Button onClick={() => setVisibleThongBao(false)}>
-						{intl.formatMessage({ id: 'global.button.dong', defaultMessage: 'Đóng' })}
-					</Button>
-				</div> */}
 			</ModalExpandable>
 		</Card>
 	);
