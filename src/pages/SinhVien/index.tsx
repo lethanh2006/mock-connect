@@ -70,7 +70,7 @@ const ThongTinSinhVienPage = () => {
 					{record?.ssoId ? (
 						<Space style={{ marginBottom: 12 }} wrap>
 							<ButtonExtend
-								// disabled={!choPhepSua}
+								disabled={!choPhepSua}
 								type='primary'
 								icon={<EditOutlined />}
 								onClick={() => setIsCapNhat(true)}
