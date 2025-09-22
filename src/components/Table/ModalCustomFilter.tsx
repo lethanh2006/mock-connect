@@ -1,5 +1,5 @@
-import { CloseOutlined, FilterFilled, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Modal, Radio, Typography } from 'antd';
+import { CloseOutlined, FilterFilled, PlusOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import { Button, Form, Modal, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import { EOperatorType } from './constant';
@@ -81,15 +81,13 @@ const ModalCustomFilter = (props: {
 			title={intl.formatMessage({ id: 'global.table.customfilter.title' })}
 			width={800}
 		>
-			<Text type="secondary" style={{ marginBottom: '16px', display: 'block' }}>
+			<Text type='secondary' style={{ marginBottom: '16px', display: 'block' }}>
 				{intl.formatMessage({ id: 'global.table.customfilter.dieukien' })}:
 			</Text>
 
-
-
 			<Form form={form} layout='vertical' onFinish={onFinish} id='custom-filter-form'>
 				{filtersTemp.length > 0 && (
-					<div style={{ padding: '8px', border: '1px dashed #d9d9d9', borderRadius: '4px', maxHeight: '400px', overflowY: 'auto', marginBottom: '16px' }}>
+					<div style={{ marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
 						{filtersTemp.map((filter, index) => (
 							<RowFilter
 								index={index}
@@ -113,47 +111,39 @@ const ModalCustomFilter = (props: {
 					</div>
 				)}
 
-				<Form.Item>
-					<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-						<Button
-							block
-							type='dashed'
-							disabled={!fieldsFilterable.length}
-							icon={<PlusOutlined />}
-							onClick={() => {
-								setFiltersTemp([
-									...filtersTemp,
-									{
-										active: true,
-										field: fieldsFilterable[0]?.replace(/"/g, '') ?? '',
-										values: [],
-									},
-								]);
-							}}
-						>
-							{intl.formatMessage({ id: 'global.table.customfilter.button.them' })}
-						</Button>
-						<Button
-							type="dashed"
-							block
-							icon={<PlusOutlined />}
-							onClick={() => {
-								const newGroup: TFilter<any> = {
-									active: true,
-									filters: [],
-								};
-								setFiltersTemp([
-									...filtersTemp,
-									newGroup
-								]);
-							}}
-							style={{ marginLeft: '8px' }}
-						>
-							Thêm nhóm
-						</Button>
-					</div>
-
-				</Form.Item>
+				<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+					<Button
+						block
+						type='dashed'
+						disabled={!fieldsFilterable.length}
+						icon={<PlusOutlined />}
+						onClick={() => {
+							setFiltersTemp([
+								...filtersTemp,
+								{
+									field: fieldsFilterable[0]?.replace(/"/g, '') ?? '',
+									values: [],
+								},
+							]);
+						}}
+					>
+						{intl.formatMessage({ id: 'global.table.customfilter.button.them' })}
+					</Button>
+					<Button
+						type='dashed'
+						block
+						disabled={!fieldsFilterable.length}
+						icon={<PlusSquareOutlined />}
+						onClick={() => {
+							const newGroup: TFilter<any> = {
+								filters: [],
+							};
+							setFiltersTemp([...filtersTemp, newGroup]);
+						}}
+					>
+						Thêm nhóm
+					</Button>
+				</div>
 			</Form>
 		</Modal>
 	);

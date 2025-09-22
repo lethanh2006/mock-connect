@@ -162,6 +162,7 @@ export type TFilter<T> = {
 	filters?: TFilter<T>[];
 	logicOperator?: 'or' | 'and';
 };
+
 export type RowFilterProps = {
 	index: number;
 	columns: IColumn<any>[];
@@ -171,7 +172,7 @@ export type RowFilterProps = {
 	onRemove?: () => void;
 	allowGrouping?: boolean;
 	level?: number;
-}
+};
 
 export type TableStaticProps = Pick<
 	TableBaseProps,
