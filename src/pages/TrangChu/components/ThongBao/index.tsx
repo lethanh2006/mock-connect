@@ -1,17 +1,26 @@
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
+import { ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
-import { Button, Card, Empty, Modal, Space, Tag, Typography } from 'antd';
+import { Button, Card, Empty, Space, Tag, Typography } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
 import '../style.less';
 
 const { Title } = Typography;
 
 const CardThongBaoDashboard = () => {
-	const { danhSach: danhSachThongBao, setRecord, record, loading } = useModel('thongbao.noticeicon');
+	const {
+		danhSach: danhSachThongBao,
+		setRecord,
+		record,
+		loading,
+		readNotificationModel,
+	} = useModel('thongbao.noticeicon');
 	const [visibleThongBao, setVisibleThongBao] = useState(false);
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const intl = useIntl();
 
 	const currentNotice = danhSachThongBao[currentIndex];
 
@@ -23,9 +32,10 @@ const CardThongBaoDashboard = () => {
 		setCurrentIndex((prev) => (prev < danhSachThongBao.length - 1 ? prev + 1 : 0));
 	};
 
-	const handleNoticeClick = (item: any) => {
+	const handleNoticeClick = (item: ThongBao.IRecord) => {
 		setRecord(item);
 		setVisibleThongBao(true);
+		if (!item.read) readNotificationModel('ONE', item?._id);
 	};
 
 	return (
@@ -68,7 +78,9 @@ const CardThongBaoDashboard = () => {
 								<div className='tags'>
 									{/* cân bằng với Card Sự kiện - Lịch sắp tới */}
 									<Space size={4} wrap>
-										<Tag style={{ display: 'none' }}></Tag>
+										<Tag color={currentNotice?.read ? 'default' : 'var(--color-primary)'} style={{ fontSize: 11 }}>
+											{currentNotice?.read ? 'Đã đọc' : 'Mới'}
+										</Tag>
 									</Space>
 								</div>
 							</div>
@@ -79,17 +91,23 @@ const CardThongBaoDashboard = () => {
 				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' className='empty' />
 			)}
 
-			{/* Modal */}
-			<Modal
+			<ModalExpandable
 				width={800}
-				bodyStyle={{ padding: 0 }}
 				destroyOnClose
 				onCancel={() => setVisibleThongBao(false)}
 				open={visibleThongBao}
-				footer={null}
+				cancelText={intl.formatMessage({ id: 'global.button.dong', defaultMessage: 'Đóng' })}
+				okButtonProps={{ hidden: true }}
+				title={record?.title || 'Thông báo'}
 			>
-				<ViewThongBao record={record} />
-			</Modal>
+				<ViewThongBao
+					record={record}
+					afterViewDetail={() => {
+						setVisibleThongBao(false);
+					}}
+					hideCard
+				/>
+			</ModalExpandable>
 		</Card>
 	);
 };
