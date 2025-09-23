@@ -43,15 +43,16 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 					<a onClick={() => setExpand((v) => !v)} style={{ marginTop: 8 }}>
 						{expand ? 'Thu gọn' : 'Xem thêm'}
 					</a>
+				) : record?.listTaiLieu?.length ? (
+					<div style={{ marginTop: 8 }}>
+						<div className='fw500' style={{ marginBottom: 5 }}>
+							Tài liệu học tập:
+						</div>
+						<BoxFile url={record?.listTaiLieu} />
+					</div>
 				) : (
 					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa có thông tin' />
 				)}
-
-				{record?.listTaiLieu?.length ? (
-					<div style={{ marginTop: 8 }}>
-						<BoxFile url={record?.listTaiLieu} />
-					</div>
-				) : null}
 			</div>
 
 			{recDeCuong?.mucTieuHocPhan && (
