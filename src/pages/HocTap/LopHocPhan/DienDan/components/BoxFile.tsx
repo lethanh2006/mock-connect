@@ -34,6 +34,7 @@ type BoxFileProps = {
 
 const BoxFile = ({ url }: BoxFileProps) => {
 	const [visibleFormFile, setVisibleFormFile] = useState(false);
+	const [currentFile, setCurrentFile] = useState<string | null>(null);
 
 	const getFileNameExtention = (fileName: string) => fileName?.split('.').pop();
 
@@ -61,12 +62,18 @@ const BoxFile = ({ url }: BoxFileProps) => {
 				gap: 12,
 			}}
 		>
-			{urls.map((fileUrl) => {
+			{urls.map((fileUrl, index) => {
 				const fileName = getNameFile(fileUrl);
 				return (
-					// eslint-disable-next-line react/jsx-key
-					<BoxFileWrapper>
-						<div className='box-file item-center shadow' onClick={() => setVisibleFormFile(true)}>
+					// eslint-disable-next-line react/jsx-key, react/no-array-index-key
+					<BoxFileWrapper key={index}>
+						<div
+							className='box-file item-center shadow'
+							onClick={() => {
+								setCurrentFile(fileUrl);
+								setVisibleFormFile(true);
+							}}
+						>
 							<div style={{ marginRight: 4 }}>{renderIconWithFile(getFileNameExtention(fileName ?? '') ?? '')}</div>
 							<div className='name-file'>{fileName}</div>
 						</div>
@@ -80,11 +87,21 @@ const BoxFile = ({ url }: BoxFileProps) => {
 				width={1000}
 				visible={visibleFormFile}
 				footer={null}
-				onCancel={() => setVisibleFormFile(false)}
+				onCancel={() => {
+					setVisibleFormFile(false);
+					setCurrentFile(null);
+				}}
 			>
-				<PreviewFile file={urls} />
+				{currentFile && <PreviewFile file={currentFile} />}
 				<div className='form-footer'>
-					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					<Button
+						onClick={() => {
+							setVisibleFormFile(false);
+							setCurrentFile(null);
+						}}
+					>
+						Đóng
+					</Button>
 				</div>
 			</ModalExpandable>
 		</div>
