@@ -45,6 +45,10 @@ export default defineConfig({
 
 	// plugins: ['@react-dev-inspector/umi4-plugin'],
 
+	alias: {
+		'pdfjs-dist': require.resolve('@react-pdf-viewer/pdfjs-dist-signature'),
+	},
+
 	jsMinifier: 'terser',
 	exportStatic: {},
 
