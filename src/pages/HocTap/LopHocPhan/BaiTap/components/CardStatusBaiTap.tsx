@@ -94,16 +94,25 @@ const CardStatusBaiTap = (props: IProps) => {
 								{data?.assignment?.huongDanNop ? (
 									<div
 										className='noi-dung-post'
-										dangerouslySetInnerHTML={{ __html: data?.assignment?.huongDanNop ?? '' }}
+										dangerouslySetInnerHTML={{
+											__html: data?.assignment?.huongDanNop
+												? data.assignment?.huongDanNop.replace(
+														/<img/g,
+														'<img style="max-width:100%;height:auto;display:block;margin:10px 0;"',
+												  )
+												: '',
+										}}
 									/>
 								) : (
 									<i>Không có mô tả</i>
 								)}
 							</Col>
 
-							<Col span={24}>
-								<BoxFile url={data?.assignment?.urlTepDinhKem} />
-							</Col>
+							{data?.assignment?.urlTepDinhKem?.length && (
+								<Col span={24}>
+									<BoxFile url={data?.assignment?.urlTepDinhKem} />
+								</Col>
+							)}
 						</Row>
 					</Col>
 				</Row>
