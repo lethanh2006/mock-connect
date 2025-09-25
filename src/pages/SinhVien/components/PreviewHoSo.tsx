@@ -65,39 +65,30 @@ const PreviewHoSo = () => {
 		},
 		{ label: 'Email', content: record?.email, md: 16 },
 		{
-			label: 'Khóa ngành',
+			label: 'Khóa ngành đào tạo',
 			content: (
 				<div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
 					{[
-						[record?.khoaNganh?.ten, record?.trangThaiHocNganh1],
-						[record?.khoaNganh2?.ten, record?.trangThaiHocNganh2],
+						[record?.khoaNganh?.ten, record?.trangThaiHocNganh1, record?.chuyenNganh?.ten ?? record?.maChuyenNganh],
+						[record?.khoaNganh2?.ten, record?.trangThaiHocNganh2, record?.chuyenNganh2?.ten ?? record?.maChuyenNganh2],
 					]
 						.filter(([ten]) => ten)
-						.map(([ten, trangThai], index) => (
+						.map(([ten, trangThai, chuyenNganh], index) => (
 							// eslint-disable-next-line react/jsx-key
-							<Space>
+							<Space key={index} wrap>
 								{ten}
-								{trangThai && (
-									<Tag color={colorTrangThaiHocSv[trangThai as ETrangThaiHocSv]} style={{ marginLeft: 8 }}>
-										{trangThai}
-									</Tag>
-								)}
+								{trangThai && <Tag color={colorTrangThaiHocSv[trangThai as ETrangThaiHocSv]}>{trangThai}</Tag>}
+								<span>(Chuyên ngành: {chuyenNganh ?? <i>Chưa cập nhật</i>})</span>
 							</Space>
 						))}
 				</div>
 			),
-			md: 12,
-		},
-		{
-			label: 'Chuyên ngành',
-			content: [record?.chuyenNganh?.ten ?? record?.maChuyenNganh, record?.chuyenNganh2?.ten ?? record?.maChuyenNganh2]
-				.filter(Boolean)
-				.join(', '),
-			md: 12,
+			md: 24,
 		},
 		{
 			label: 'Quốc tịch',
-			content: danhSachQuocTich?.find((item) => item?._id === record?.quocTich)?.tenQuocTich,
+			content: record?.quocTich,
+			// content: danhSachQuocTich?.find((item) => item?._id === record?.quocTich)?.tenQuocTich,
 			md: 8,
 		},
 		{ label: 'Dân tộc', content: record?.danToc, md: 8 },
