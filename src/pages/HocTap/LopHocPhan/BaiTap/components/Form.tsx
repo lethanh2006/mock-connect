@@ -16,6 +16,7 @@ import { useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
 import '../../DienDan/style.less';
 import FormQuiz from './FormQuiz';
+
 const FormBaiTap = (props: any) => {
 	const { getData } = props;
 	const [form] = Form.useForm();
@@ -253,7 +254,17 @@ const FormBaiTap = (props: any) => {
 									)}
 								</Col>
 								<Col xs={24}>
-									<div dangerouslySetInnerHTML={{ __html: record?.assignment?.huongDanNop ?? '' }} />
+									<div
+										className='detail-noi-dong-post'
+										dangerouslySetInnerHTML={{
+											__html: record?.assignment?.huongDanNop
+												? record?.assignment.huongDanNop.replace(
+														/<img/g,
+														'<img style="max-width:100%;height:auto;display:block;margin:10px 0;"',
+												  )
+												: '',
+										}}
+									/>
 								</Col>
 								{record?.assignment?.urlTepDinhKem && (
 									<Col xs={24}>
