@@ -74,6 +74,10 @@ const CardStatusBaiTap = (props: IProps) => {
 										: '--'}
 								</div>
 								<div>Điểm số</div>
+
+								{data?.ghiChu ? (
+									<div style={{ marginTop: 8, fontStyle: 'italic', color: '#555' }}>Ghi chú: {data.ghiChu}</div>
+								) : null}
 							</Col>
 
 							<Col xs={24}>
