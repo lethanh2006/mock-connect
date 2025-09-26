@@ -256,7 +256,17 @@ const FormBaiTap = (props: any) => {
 									)}
 								</Col>
 								<Col xs={24}>
-									<div dangerouslySetInnerHTML={{ __html: record?.assignment?.huongDanNop ?? '' }} />
+									<div
+										className='detail-noi-dong-post'
+										dangerouslySetInnerHTML={{
+											__html: record?.assignment?.huongDanNop
+												? record?.assignment.huongDanNop.replace(
+														/<img/g,
+														'<img style="max-width:100%;height:auto;display:block;margin:10px 0;"',
+												  )
+												: '',
+										}}
+									/>
 								</Col>
 								{record?.assignment?.urlTepDinhKem && (
 									<Col xs={24}>

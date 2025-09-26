@@ -50,6 +50,8 @@ declare module BaiTap {
 		thoiGianTraLoi: Date;
 		trangThai: ETrangThaiNopBaiTap;
 
+		ghiChu?: string;
+
 		cauTraLoiId: string;
 		tongDiem: number;
 
