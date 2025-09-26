@@ -44,6 +44,7 @@
 				hideInMenu: true,
 			},
 			{
+				name: 'News',
 				path: './chi-tiet',
 				hideInMenu: true,
 				component: './TinTuc/Detail.tsx',
@@ -150,6 +151,7 @@
 						exact: true,
 					},
 					{
+						name: 'LopHocPhan',
 						path: './:id',
 						component: './HocTap/LopHocPhan/$id',
 						hideInMenu: true,
@@ -189,7 +191,13 @@
 		],
 	},
 	// Trường hợp copy link từ giảng viên => Tự động redirect tới học tập
-	{ path: 'giang-day/lop-tin-chi/:id', component: './HocTap/LopHocPhan/$id', hideInMenu: true, exact: true },
+	{
+		path: 'giang-day/lop-tin-chi/:id',
+		component: './HocTap/LopHocPhan/$id',
+		name: 'ChiTietLopHocPhan',
+		hideInMenu: true,
+		exact: true,
+	},
 
 	// DRL
 	{

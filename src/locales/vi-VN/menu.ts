@@ -5,7 +5,7 @@ export default {
 	'menu.Dashboard': 'Trang chủ',
 	'menu.About': `Giới thiệu ${APP_CONFIG_TIEN_TO_TRUONG.toLowerCase()}`,
 	'menu.News': 'Tin tức',
-
+	'menu.News.News': 'Tin tức',
 	'menu.DanhMuc': 'Danh mục',
 	'menu.DanhMuc.ChucVu': 'Chức vụ',
 
@@ -22,6 +22,8 @@ export default {
 	'menu.HocTap.DangKyTinChi': 'Đăng ký tín chỉ',
 	'menu.HocTap.NhuCauHocPhan': 'Phiếu đăng ký học phần',
 	'menu.HocTap.LopHocPhan': 'Lớp tín chỉ',
+	'menu.HocTap.LopHocPhan.LopHocPhan': 'Lớp tín chỉ',
+	'menu.ChiTietLopHocPhan': 'Lớp tín chỉ',
 	'menu.HocTap.LichThi': 'Lịch thi',
 	'menu.HocTap.BaiThiCuoiKy': 'Nộp bài cuối kỳ',
 	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
