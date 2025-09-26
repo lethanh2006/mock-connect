@@ -27,6 +27,7 @@ import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
 import LmsOdooPage from './LMS';
+import usePageTitle from '@/hooks/usePageTitle';
 
 const DetailLopTinChi = ({
 	match: {
@@ -40,6 +41,8 @@ const DetailLopTinChi = ({
 	// const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
 	const { settings, getByKeyModel: getSettings } = useModel('tienich.caidat');
 	const auth = useAuth();
+	usePageTitle(record?.ten ? `${record.ten} - Cổng người học` : undefined);
+
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'dien-dan', 'lms', 'bai-tap', 'ket-qua', 'danh-gia-giang-vien'];
 	const titles = [
 		'Thông tin chung',

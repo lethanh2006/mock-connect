@@ -6,6 +6,7 @@ import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import DienDanLopPage from '../LopHocPhan/DienDan';
+import usePageTitle from '@/hooks/usePageTitle';
 
 const DetailLopHanhChinh = ({
 	match: {
@@ -15,6 +16,7 @@ const DetailLopHanhChinh = ({
 	match: { params: { id: string } };
 }) => {
 	const { record, sinhVienGetByIdModel, loading } = useModel('daotao.lophanhchinh');
+	usePageTitle(record?.ten ? `${record.ten} - Cổng người học` : undefined);
 
 	useEffect(() => {
 		if (id) sinhVienGetByIdModel(id);
