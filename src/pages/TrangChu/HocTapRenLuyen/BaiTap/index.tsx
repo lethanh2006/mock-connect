@@ -17,7 +17,7 @@ import './style.less';
 
 const { Text } = Typography;
 
-const CardBaiTapDashboard = () => {
+const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	const { danhSach } = useModel('daotao.baitap');
 	const [currentPage, setCurrentPage] = useState(0);
 	const [carouselRef, setCarouselRef] = useState<any>(null);
@@ -26,6 +26,7 @@ const CardBaiTapDashboard = () => {
 	const filteredData = danhSach.filter(
 		(i) => i.assignment?.thoiGianKetThuc && dayjs().isSameOrBefore(dayjs(i.assignment.thoiGianKetThuc)),
 	);
+	const { isDashBoard } = props;
 	const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 	// Tạo các trang dữ liệu
 	const pageData = [];
@@ -147,9 +148,11 @@ const CardBaiTapDashboard = () => {
 							/>
 						</>
 					)}
-					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
-						Xem thêm
-					</Link>
+					{isDashBoard && (
+						<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
+							Xem thêm
+						</Link>
+					)}
 				</Space>
 			}
 		>
