@@ -37,7 +37,7 @@ const TrangChu = () => {
 			<Col span={24}>
 				<Row gutter={[16, 16]}>
 					<Col xs={24} sm={12} md={16} lg={16} xl={18}>
-						<CardBaiTapDashboard />
+						<CardBaiTapDashboard isDashBoard />
 					</Col>
 					<Col xs={24} sm={12} md={8} lg={8} xl={6}>
 						<LichDashboard />

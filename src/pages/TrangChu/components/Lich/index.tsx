@@ -56,7 +56,6 @@ const LichDashboard = () => {
 	const isMobile = screenSize.width <= 768;
 	const isTablet = screenSize.width > 768 && screenSize.width <= 1024;
 
-	// Sử dụng useModel để lấy dữ liệu từ API
 	const {
 		getSuKienTrongKhoangModel,
 		loading: loadingSuKien,
@@ -67,7 +66,6 @@ const LichDashboard = () => {
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 
-	// Logic API từ code gốc
 	const getThoiGianMotTuanKeTuHomNay = () => {
 		return {
 			fromDate: dayjs().startOf('week').toISOString(),
@@ -309,7 +307,7 @@ const LichDashboard = () => {
 			{/* Modal xem chi tiết sự kiện */}
 			<Modal
 				title={`Sự kiện ngày ${selectedDate.format('DD/MM/YYYY')}`}
-				visible={visibleDetail}
+				open={visibleDetail}
 				onCancel={() => setVisibleDetail(false)}
 				footer={null}
 				width={600}
