@@ -3,7 +3,7 @@ import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { Button, Card, Empty, Space, Tag, Typography } from 'antd';
 import { isEmpty } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
 import '../style.less';
@@ -11,101 +11,17 @@ import '../style.less';
 const { Title } = Typography;
 
 const CardSuKienSapToi = () => {
-	const {
-		getSuKienTrongKhoangModel,
-		loading: loadingSuKien,
-		dataLichDashboard,
-		setDataLichDashboard,
-	} = useModel('sukien.sukien');
-	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
-	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
-	const { thongKeBaiTapModel } = useModel('daotao.baitap');
+	const { loading: loadingSuKien, dataLichDashboard } = useModel('sukien.sukien');
+	const { loading: loadingTKB } = useModel('daotao.thoikhoabieu');
+	const { loading: loadingThi } = useModel('khaothi.lichthi');
 	const { record: recSetting } = useModel('tienich.settinglich');
 
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
 	const [currentIndex, setCurrentIndex] = useState(0);
 
-	const getThoiGianMotTuanKeTuHomNay = () => {
-		return {
-			fromDate: dayjs().startOf('week').toISOString(),
-			toDate: dayjs().add(7, 'day').endOf('day').toISOString(),
-		};
-	};
-
-	const getThoiKhoaBieu = async () => {
-		return getTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
-			const temp = data.map((item) => ({
-				...item,
-				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''}`,
-				suffix: [item?.lopHocPhan?.ten, item?.phongHoc].filter(Boolean).join(', '),
-				loaiSuKien: ELoaiSuKien.LICH_HOC,
-			}));
-			return temp;
-		});
-	};
-
-	const getLichThi = async () => {
-		return getLichThiModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
-			const temp = data.map((item) => ({
-				...item,
-				title: `Lịch thi: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
-				suffix: item.phong?.ma ?? '',
-				loaiSuKien: ELoaiSuKien.LICH_THI,
-			}));
-			return temp;
-		});
-	};
-
-	const getSuKien = async () => {
-		return getSuKienTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
-			const temp = data.map((item) => ({
-				...item,
-				title: item?.tenSuKien ?? '',
-			}));
-			return temp;
-		});
-	};
-
-	const getBaiTap = async () => {
-		return thongKeBaiTapModel(
-			dayjs().startOf('week').toISOString(),
-			dayjs().add(2, 'months').endOf('day').toISOString(),
-		).then((data) => {
-			const aWeekLater = dayjs().add(7, 'day').endOf('day');
-			const temp = data
-				.map((item) => ({
-					...item,
-					title: item?.assignment?.noiDung ?? '',
-					suffix: item?.assignment?.tenLopHocPhan,
-					thoiGianBatDau: dayjs(item?.assignment?.thoiGianKetThuc),
-					thoiGianKetThuc: dayjs(item?.assignment?.thoiGianKetThuc),
-					loaiSuKien: ELoaiSuKien.BAI_TAP,
-				}))
-				.filter((i) => i.thoiGianKetThuc.isBefore(aWeekLater));
-			return temp;
-		});
-	};
-
-	const getData = () => {
-		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
-
-		Promise.allSettled(promises)
-			.then((values) => {
-				const responses = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
-				const data = responses.flat();
-				setDataLichDashboard(data);
-			})
-			.catch((er) => console.log(er));
-	};
-
-	useEffect(() => {
-		getData();
-	}, []);
-
 	const getSuKienSapToi = () => {
 		const dataToUse = dataLichDashboard;
-
 		if (!dataToUse?.length) return [];
 
 		const now = dayjs();
@@ -220,7 +136,8 @@ const CardSuKienSapToi = () => {
 					visible={visibleDetail}
 					setVisible={setVisibleDetail}
 					event={selectEvent}
-					getData={getData}
+					// Không cần truyền getData nữa vì không có function này
+					getData={() => {}}
 				/>
 			)}
 		</>
