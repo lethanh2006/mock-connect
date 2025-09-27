@@ -1,10 +1,9 @@
-import { useModel, history } from 'umi';
-import { getDonByUserId } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
-import { useEffect, useState } from 'react';
 import FormQuyTrinh from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/Form';
 import View from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/View';
 import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
-import usePageTitle from '@/hooks/usePageTitle';
+import { getDonByUserId } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
+import { useEffect, useState } from 'react';
+import { history, useModel } from 'umi';
 
 const QuyTrinhView = ({
 	match: {
@@ -19,7 +18,6 @@ const QuyTrinhView = ({
 	const [loadingForm, setLoadingForm] = useState<boolean>(false);
 	const { query = {} } = history.location;
 	const { quyTrinh } = query;
-	usePageTitle(record?.ten ? `${record.ten} - Cổng người học` : undefined);
 
 	const getData = async (ids: string) => {
 		try {

@@ -2,8 +2,8 @@ import { TabViewPage } from '@/components/TabViewPage';
 import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
 import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
-import { ESettingKey } from '@/services/base/constant';
-import { ipDaoTao } from '@/utils/ip';
+import { AppModules, ESettingKey } from '@/services/base/constant';
+import { currentRole, ipDaoTao } from '@/utils/ip';
 import {
 	BarChartOutlined,
 	BellOutlined,
@@ -27,7 +27,6 @@ import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import CardBuoiHocTiepTheo from './LichHoc/CardBuoiHocTiepTheo';
 import LmsOdooPage from './LMS';
-import usePageTitle from '@/hooks/usePageTitle';
 
 const DetailLopTinChi = ({
 	match: {
@@ -41,7 +40,6 @@ const DetailLopTinChi = ({
 	// const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
 	const { settings, getByKeyModel: getSettings } = useModel('tienich.caidat');
 	const auth = useAuth();
-	usePageTitle(record?.ten ? `${record.ten} - Cổng người học` : undefined);
 
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'dien-dan', 'lms', 'bai-tap', 'ket-qua', 'danh-gia-giang-vien'];
 	const titles = [
@@ -54,6 +52,10 @@ const DetailLopTinChi = ({
 		'Kết quả học tập',
 		'Đánh giá giảng viên',
 	];
+
+	useEffect(() => {
+		document.title = [record?.ten, AppModules[currentRole].title].filter(Boolean).join(' - ');
+	}, [record?.ten]);
 
 	useEffect(() => {
 		getSettings(ESettingKey.GENERAL_INFO, ipDaoTao);
