@@ -158,12 +158,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 				variant='borderless'
 			>
 				<Checkbox.Group value={selectSuKiens} onChange={changeLoaiSuKien} className='checkbox-group'>
-					{renderCheckboxItem(ELoaiSuKien.CHUNG, 'Sự kiện chung')}
-					{renderCheckboxItem(ELoaiSuKien.LICH_HOC, 'Lịch học')}
-					{renderCheckboxItem(ELoaiSuKien.BAI_TAP, 'Bài tập')}
-					{renderCheckboxItem(ELoaiSuKien.LICH_THI, 'Lịch thi')}
-					{renderCheckboxItem(ELoaiSuKien.HOP_LOP, 'Họp lớp')}
-					{renderCheckboxItem(ELoaiSuKien.CA_NHAN, 'Sự kiện cá nhân')}
+					{Object.values(ELoaiSuKien).map((loaiSuKien) => renderCheckboxItem(loaiSuKien, loaiSuKien))}
 				</Checkbox.Group>
 			</Card>
 		</div>
