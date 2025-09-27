@@ -4,8 +4,8 @@ import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
 import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
-import { ESettingKey } from '@/services/base/constant';
-import { ipDaoTao } from '@/utils/ip';
+import { AppModules, ESettingKey } from '@/services/base/constant';
+import { currentRole, ipDaoTao } from '@/utils/ip';
 import {
 	BarChartOutlined,
 	BellOutlined,
@@ -46,6 +46,7 @@ const DetailLopTinChi = () => {
 	} = useModel('daotao.lopthuchanh');
 	const [activeKey, setActiveKey] = useState<string>('-1');
 	const auth = useAuth();
+
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'dien-dan', 'lms', 'bai-tap', 'ket-qua', 'danh-gia-giang-vien'];
 	const titles = [
 		'Thông tin chung',
@@ -58,6 +59,10 @@ const DetailLopTinChi = () => {
 		'Đánh giá giảng viên',
 	];
 	const [visibleDeCuongHp, setVisibleDeCuongHp] = useState<[boolean, string]>([false, '3']);
+
+	useEffect(() => {
+		document.title = [record?.ten, AppModules[currentRole].title].filter(Boolean).join(' - ');
+	}, [record?.ten]);
 
 	useEffect(() => {
 		getSettings(ESettingKey.GENERAL_INFO, ipDaoTao);
