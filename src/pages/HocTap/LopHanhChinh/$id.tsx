@@ -1,4 +1,6 @@
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
+import { AppModules } from '@/services/base/constant';
+import { currentRole } from '@/utils/ip';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect } from 'react';
@@ -10,6 +12,10 @@ import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 const DetailLopHanhChinh = () => {
 	const { record, sinhVienGetByIdModel, loading } = useModel('daotao.lophanhchinh');
 	const { id } = useParams<{ id: string }>();
+
+	useEffect(() => {
+		document.title = [record?.ten, AppModules[currentRole].title].filter(Boolean).join(' - ');
+	}, [record?.ten]);
 
 	useEffect(() => {
 		if (id) sinhVienGetByIdModel(id);
