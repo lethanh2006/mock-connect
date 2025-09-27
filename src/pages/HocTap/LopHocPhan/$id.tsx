@@ -2,8 +2,8 @@ import { TabViewPage } from '@/components/TabViewPage';
 import BaiTapPage from '@/pages/HocTap/LopHocPhan/BaiTap';
 import DienDan from '@/pages/HocTap/LopHocPhan/DienDan';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
-import { ESettingKey } from '@/services/base/constant';
-import { ipDaoTao } from '@/utils/ip';
+import { AppModules, ESettingKey } from '@/services/base/constant';
+import { currentRole, ipDaoTao } from '@/utils/ip';
 import {
 	BarChartOutlined,
 	BellOutlined,
@@ -40,6 +40,7 @@ const DetailLopTinChi = ({
 	// const { getAllModel: getAllNhanSu, danhSach: danhSachNhanSu, loading } = useModel('lophocphan.nhansulophocphan');
 	const { settings, getByKeyModel: getSettings } = useModel('tienich.caidat');
 	const auth = useAuth();
+
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'dien-dan', 'lms', 'bai-tap', 'ket-qua', 'danh-gia-giang-vien'];
 	const titles = [
 		'Thông tin chung',
@@ -51,6 +52,10 @@ const DetailLopTinChi = ({
 		'Kết quả học tập',
 		'Đánh giá giảng viên',
 	];
+
+	useEffect(() => {
+		document.title = [record?.ten, AppModules[currentRole].title].filter(Boolean).join(' - ');
+	}, [record?.ten]);
 
 	useEffect(() => {
 		getSettings(ESettingKey.GENERAL_INFO, ipDaoTao);

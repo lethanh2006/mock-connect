@@ -1,11 +1,13 @@
+import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
+import { AppModules } from '@/services/base/constant';
+import { currentRole } from '@/utils/ip';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
-import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
-import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import DienDanLopPage from '../LopHocPhan/DienDan';
+import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
 const DetailLopHanhChinh = ({
 	match: {
@@ -15,6 +17,10 @@ const DetailLopHanhChinh = ({
 	match: { params: { id: string } };
 }) => {
 	const { record, sinhVienGetByIdModel, loading } = useModel('daotao.lophanhchinh');
+
+	useEffect(() => {
+		document.title = [record?.ten, AppModules[currentRole].title].filter(Boolean).join(' - ');
+	}, [record?.ten]);
 
 	useEffect(() => {
 		if (id) sinhVienGetByIdModel(id);

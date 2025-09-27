@@ -1,9 +1,9 @@
-import { useModel, history } from 'umi';
-import { getDonByUserId } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
-import { useEffect, useState } from 'react';
 import FormQuyTrinh from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/Form';
 import View from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/View';
 import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
+import { getDonByUserId } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
+import { useEffect, useState } from 'react';
+import { history, useModel } from 'umi';
 
 const QuyTrinhView = ({
 	match: {
@@ -12,12 +12,13 @@ const QuyTrinhView = ({
 }: {
 	match: { params: { id: string } };
 }) => {
-	const { current, setCurrent, setDataQuyTrinh, dataQuyTrinh, setCurrentFormKhaiBao, setEditFormKhaiBao } =
+	const { record, current, setCurrent, setDataQuyTrinh, dataQuyTrinh, setCurrentFormKhaiBao, setEditFormKhaiBao } =
 		useModel('quytrinh.khaibaoquytrinh');
 	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
 	const [loadingForm, setLoadingForm] = useState<boolean>(false);
 	const { query = {} } = history.location;
 	const { quyTrinh } = query;
+
 	const getData = async (ids: string) => {
 		try {
 			setLoadingForm(true);
