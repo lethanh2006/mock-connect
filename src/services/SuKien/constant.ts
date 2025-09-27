@@ -57,20 +57,36 @@ export enum ESuKienRole {
 	CAN_BO = 'nhan_vien',
 }
 
+// ELoaiSuKien và ColorSuKien phải tương ứng nhau
 export enum ELoaiSuKien {
 	LICH_HOC = 'Lịch học',
 	LICH_THI = 'Lịch thi',
 	CA_NHAN = 'Cá nhân',
 	CHUNG = 'Chung',
-	CAC_HOAT_DONG = 'Các hoạt động cho sinh viên',
-	DAO_TAO_BOI_DUONG = 'Đào tạo bồi dưỡng',
-	HOP_TAC_NGUYEN_CUU_CHUYEN_GAO = 'Hợp tác - Nghiên cứu - chuyển giao',
-	THUC_THI_CHINH_SACH = 'Thực thi, phát triển chính sách',
-	HOAT_DONG_XA_HOI = 'Hoạt động xã hội',
-	KHAC = 'Khác',
 	BAI_TAP = 'Bài tập',
 	HOP_LOP = 'Họp lớp',
+	// CAC_HOAT_DONG = 'Các hoạt động cho sinh viên',
+	// DAO_TAO_BOI_DUONG = 'Đào tạo bồi dưỡng',
+	// HOP_TAC_NGUYEN_CUU_CHUYEN_GAO = 'Hợp tác - Nghiên cứu - chuyển giao',
+	// THUC_THI_CHINH_SACH = 'Thực thi, phát triển chính sách',
+	// HOAT_DONG_XA_HOI = 'Hoạt động xã hội',
+	// KHAC = 'Khác',
 }
+
+export const ColorSuKien: Partial<Record<ELoaiSuKien, string>> = {
+	[ELoaiSuKien.LICH_HOC]: '#31becbb3',
+	[ELoaiSuKien.LICH_THI]: '#df4471b3',
+	[ELoaiSuKien.CA_NHAN]: '#57bf56b3',
+	[ELoaiSuKien.CHUNG]: '#2098c7b3',
+	[ELoaiSuKien.BAI_TAP]: '#f1a32ab3',
+	[ELoaiSuKien.HOP_LOP]: '#9f44efb3',
+	// [ELoaiSuKien.CAC_HOAT_DONG]: '#2098c7b3',
+	// [ELoaiSuKien.DAO_TAO_BOI_DUONG]: '#ef4452b3',
+	// [ELoaiSuKien.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO]: '#fa8f47b3',
+	// [ELoaiSuKien.THUC_THI_CHINH_SACH]: '#fa8f47ff',
+	// [ELoaiSuKien.HOAT_DONG_XA_HOI]: '#2a1affff',
+	// [ELoaiSuKien.KHAC]: '#09ff00ff',
+};
 
 export enum ELoaiSuKienSinhVien {
 	TUAN_LE_CONG_DAN = 'Tuần lễ công dân',
@@ -87,16 +103,6 @@ export const locationPathMappingToESuKienType: Partial<Record<string, ELoaiSuKie
 	'thuc-thi-chinh-sach': ELoaiSuKien.THUC_THI_CHINH_SACH,
 	'hoat-dong-xa-hoi': ELoaiSuKien.HOAT_DONG_XA_HOI,
 	khac: ELoaiSuKien.KHAC,
-};
-
-export const ColorSuKien: Partial<Record<ELoaiSuKien, string>> = {
-	[ELoaiSuKien.LICH_HOC]: '#31becbb3',
-	[ELoaiSuKien.LICH_THI]: '#df4471b3',
-	[ELoaiSuKien.CA_NHAN]: '#57bf56b3',
-	[ELoaiSuKien.CHUNG]: '#2098c7b3',
-	[ELoaiSuKien.CAC_HOAT_DONG]: '#2098c7b3',
-	[ELoaiSuKien.BAI_TAP]: '#f1a32ab3',
-	[ELoaiSuKien.HOP_LOP]: '#9f44efb3',
 };
 
 export const THU_TRONG_TUAN = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];

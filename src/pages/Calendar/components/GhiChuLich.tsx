@@ -8,14 +8,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 	const { selectSuKiens, setSelectSuKiens, dataLichDashboard, dataLich, setDataCalendar, setDataCalendarDashboard } =
 		useModel('sukien.sukien');
-	const loaiSuKien = [
-		ELoaiSuKien.CHUNG,
-		ELoaiSuKien.LICH_HOC,
-		ELoaiSuKien.BAI_TAP,
-		ELoaiSuKien.LICH_THI,
-		ELoaiSuKien.HOP_LOP,
-		ELoaiSuKien.CA_NHAN,
-	];
+	const loaiSuKien = Object.values(ELoaiSuKien);
 
 	useEffect(() => {
 		if (recSetting === undefined) getSettingLich();
@@ -47,7 +40,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 			{loaiSuKien.map((sukien) => {
 				const isSelected = selectSuKiens.includes(sukien);
 				const bgColor = isSelected
-					? recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien)?.maMau ?? ColorSuKien[sukien]
+					? (recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien)?.maMau ?? ColorSuKien[sukien])
 					: '#d3d3d3b3';
 
 				return (
