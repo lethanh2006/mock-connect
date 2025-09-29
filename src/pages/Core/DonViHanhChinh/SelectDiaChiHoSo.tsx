@@ -85,9 +85,9 @@ const SelectDiaChiHoSoFormItem = (props: {
 				</Form.Item>
 			</Col> */}
 			<Col span={12} md={hasSoNha ? 8 : 12}>
-				<Form.Item label='Phường/Xã' rules={required ? [...rules.required] : []}>
+				<Form.Item label='Xã/Phường/Đặc khu' rules={required ? [...rules.required] : []}>
 					<Select
-						placeholder='Chọn phường/xã'
+						placeholder='Chọn phường/xã/đặc khu'
 						allowClear
 						showSearch
 						options={(listXa ?? []).map((item) => ({
