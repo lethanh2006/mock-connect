@@ -21,7 +21,7 @@
 	overflow: hidden;
 
 	:global(.anticon),
-	a>img {
+	a > img {
 		display: flex;
 		align-items: center;
 		height: 48px;
@@ -34,7 +34,7 @@
 		}
 	}
 
-	a>img {
+	a > img {
 		padding: 12px 8px;
 	}
 
@@ -46,7 +46,7 @@
 		cursor: pointer;
 		transition: all 0.3s;
 
-		>span {
+		> span {
 			vertical-align: middle;
 		}
 
@@ -70,11 +70,11 @@
 
 	.account {
 		.avatar {
-			margin-right: 8px;
-			height: 42px;
 			width: 42px;
-			line-height: 42px;
+			height: 42px;
+			margin-right: 8px;
 			font-size: 22px;
+			line-height: 42px;
 
 			img {
 				object-fit: cover;
@@ -97,6 +97,36 @@
 		&:global(.opened) {
 			background: #252a3d;
 		}
+	}
+}
+
+.activePartition {
+	font-weight: bold;
+	background-color: var(--primary-1);
+	border-left: 3px solid var(--primary-color);
+}
+
+.avatarWrapper {
+	position: relative;
+	display: inline-block;
+
+	.partitionBadge {
+		position: absolute;
+		right: 8px;
+		bottom: 5px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		width: 16px;
+		height: 16px;
+
+		color: #fff;
+		font-size: 10px;
+
+		background-color: var(--primary-color);
+		border-radius: 50%;
+		box-shadow: 0 0 0 2px #fff;
 	}
 }
 
@@ -124,10 +154,16 @@
 			display: none;
 		}
 	}
+
+	.avatarWrapper {
+		.partitionBadge {
+			right: 0px;
+		}
+	}
 }
 
 @media (max-width: @screen-xs) {
 	.right {
-		gap: 0
+		gap: 0;
 	}
 }
