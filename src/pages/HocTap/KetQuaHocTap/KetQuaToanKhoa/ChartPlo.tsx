@@ -54,21 +54,21 @@ const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 		},
 		tooltip: {
 			custom: ({ series, dataPointIndex }: any) => {
-				const plo = ploData[dataPointIndex];
+				const plo = sortedPloData[dataPointIndex];
 				return `
 					<div style="padding:6px 8px;max-width:260px;white-space:normal;word-break:break-word;font-size:12px;">
 						<div>
-						<strong>${plo.maPlo}</strong>
-						<span style="font-size:11px; color:#666; margin-left:6px;">${plo.ten}</span>
+							<strong>${plo.maPlo}</strong>
+							<span style="font-size:11px; color:#666; margin-left:6px;">${plo.ten}</span>
 						</div>
 						<div style="margin-top:4px">
-						<span style="color:#3b82f6;">●</span> Trung bình PLO đã đạt: 
-						<b>${series[0][dataPointIndex].toFixed(2)}</b><br/>
-						<span style="color:#10b981;">●</span> Điểm tối thiểu: 
-						<b>${series[1][dataPointIndex]}</b>
+							<span style="color:#3b82f6;">●</span> Trung bình PLO đã đạt: 
+							<b>${series[0][dataPointIndex].toFixed(2)}</b><br/>
+							<span style="color:#10b981;">●</span> Điểm tối thiểu: 
+							<b>${series[1][dataPointIndex]}</b>
 						</div>
 					</div>
-   					 `;
+				`;
 			},
 		},
 	};
@@ -76,11 +76,11 @@ const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 	const chartSeries = [
 		{
 			name: 'Trung bình PLO đã đạt',
-			data: ploData.map((plo: any) => Number(plo.trungBinhPi.toFixed(2))),
+			data: sortedPloData.map((plo: any) => Number(plo.trungBinhPi.toFixed(2))),
 		},
 		{
 			name: 'Điểm tối thiểu',
-			data: ploData.map((plo: any) => plo.diemPloToiThieu),
+			data: sortedPloData.map((plo: any) => plo.diemPloToiThieu),
 		},
 	];
 
