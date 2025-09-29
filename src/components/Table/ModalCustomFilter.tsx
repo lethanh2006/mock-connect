@@ -31,8 +31,24 @@ const ModalCustomFilter = (props: {
 		if (visible) form.setFieldsValue({ filters: fil });
 	}, [filters, visible]);
 
+	const normalizeFilter = (filter: any): TFilter<any> => {
+		// Đảm bảo field đúng kiểu (keyof T | [keyof T, string])
+		let field = filter.field;
+		if (typeof field === 'string' && field.includes('.')) {
+			field = field.split('.');
+		}
+		const result: TFilter<any> = {
+			...filter,
+			field,
+		};
+		if (filter.filters && Array.isArray(filter.filters)) {
+			result.filters = filter.filters.map(normalizeFilter);
+		}
+		return result;
+	};
+
 	const onFinish = (values: any) => {
-		const filtered = values.filters
+		let filtered = values.filters
 			?.map((filter: TFilter<any>, index: number) => ({
 				...filter,
 				...filtersTemp[index],
@@ -44,6 +60,10 @@ const ModalCustomFilter = (props: {
 				}
 				return filter.values && Array.isArray(filter.values) && filter.values.length > 0;
 			});
+
+		if (filtered) {
+			filtered = filtered.map(normalizeFilter);
+		}
 
 		if (filtered && filtered.length > 1) {
 			setFilters(filtered);

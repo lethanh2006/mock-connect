@@ -228,7 +228,12 @@ const RowFilter = (props: RowFilterProps) => {
 											style={{ margin: 0 }}
 											noStyle
 										>
-											<Checkbox />
+											<Checkbox
+												checked={filter.active}
+												onChange={(e) => {
+													onChange({ ...filter, active: e.target.checked });
+												}}
+											/>
 										</Form.Item>{' '}
 										Thuộc tính
 									</Space>
@@ -279,8 +284,8 @@ const RowFilter = (props: RowFilterProps) => {
 						</Col>
 
 						{!!filter.operator &&
-						filter.operator !== EOperatorType.NULL &&
-						filter.operator !== EOperatorType.NOT_NULL ? (
+							filter.operator !== EOperatorType.NULL &&
+							filter.operator !== EOperatorType.NOT_NULL ? (
 							<>
 								<Col
 									span={24}
