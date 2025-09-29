@@ -123,10 +123,10 @@ const SelectDonViHanhChinhTheoTen = (props: {
 					<Form.Item
 						name={[...prefix, 'tenPhuongXa']}
 						rules={props.notRequiredXaPhuong === true ? [] : [...rules.required]}
-						label={hasLabel ? 'Phường/Xã' : undefined}
+						label={hasLabel ? 'Xã/Phường/Đặc khu' : undefined}
 					>
 						<Select
-							placeholder='Chọn phường/xã'
+							placeholder='Chọn phường/xã/đặc khu'
 							allowClear
 							showSearch
 							options={(listXa ?? []).map((item) => ({

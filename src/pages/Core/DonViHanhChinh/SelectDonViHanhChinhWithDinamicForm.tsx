@@ -142,7 +142,7 @@ const SelectDonViHanhChinhWithDinamicForm = (props: Props) => {
 							onChange={(val: string, option: any) => {
 								props.setTen?.setTenXaPhuong(option?.key);
 							}}
-							placeholder='Chọn phường/xã'
+							placeholder='Chọn phường/xã/đặc khu'
 							allowClear
 							showSearch
 							options={(listXa ?? []).map((item) => ({

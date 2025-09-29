@@ -21,17 +21,7 @@ const SelectDonViHanhChinh = (props: {
 	hasLabel?: boolean;
 	keyValue?: keyof DonViHanhChinh.IRecord;
 }) => {
-	const {
-		form,
-		suffix,
-		listTinh,
-		hasSoNha,
-		hideTinh,
-		hideQuanHuyen,
-		hideXaPhuong,
-		hasLabel,
-		keyValue = 'tenDonVi',
-	} = props;
+	const { form, suffix, listTinh, hasSoNha, hideTinh, hideQuanHuyen, hideXaPhuong, hasLabel, keyValue = 'ma' } = props;
 	const [idTinh, setIdTinh] = useState<string | undefined>(props?.initialValue?.tinhTp);
 	const [idHuyen, setIdHuyen] = useState<string | undefined>(props?.initialValue?.quanHuyen);
 	const [listHuyen, setListHuyen] = useState<DonViHanhChinh.IRecord[]>([]);
@@ -119,10 +109,10 @@ const SelectDonViHanhChinh = (props: {
 						initialValue={props.initialValue?.xaPhuong}
 						name={suffix ? 'xaPhuong' + suffix : 'xaPhuong'}
 						rules={props.notRequiredXaPhuong === true ? [] : [...rules.required]}
-						label={hasLabel ? 'Phường/Xã' : undefined}
+						label={hasLabel ? 'Xã/Phường/Đặc khu' : undefined}
 					>
 						<Select
-							placeholder='Chọn phường/xã'
+							placeholder='Chọn phường/xã/đặc khu'
 							allowClear
 							showSearch
 							options={(listXa ?? []).map((item) => ({
