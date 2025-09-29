@@ -219,3 +219,81 @@
 		color: var(--primary-color);
 	}
 }
+
+
+//Bình chọn 
+.poll-display-card {
+  margin-bottom: 12px;
+  margin-top: 12px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  width: auto;
+  max-width: 100%;
+
+  .card-title {
+    margin: 0;
+  }
+
+  .vote-form {
+    .ant-form-item {
+      margin-bottom: 8px;
+    }
+
+    .vote-checkbox,
+    .vote-radio {
+      width: 100%;
+
+      .ant-space {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    .vote-submit {
+      margin-bottom: 6px;
+    }
+  }
+
+  .vote-results {
+    width: 100%;
+
+    .result-item {
+      width: 100%;
+
+      .ant-space {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .ant-progress {
+        margin-top: 4px;
+      }
+    }
+
+    .vote-edit-btn {
+      margin-top: 4px;
+    }
+  }
+}
+
+.poll-display-userlist {
+  max-height: 200px;
+  overflow-y: auto;
+  min-width: 200px;
+  padding: 8px;
+
+  .title {
+    margin: 0;
+    margin-bottom: 8px;
+  }
+
+  .user-item {
+    display: flex;
+    align-items: center;
+
+    .user-name {
+      margin-left: 8px;
+    }
+  }
+}
+
