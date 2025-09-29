@@ -195,7 +195,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 						listTinh={listTinh}
 						suffix='QueQuan'
 						hasLabel
-						initialValue={record?.maTinhTpQueQuan as any}
+						initialValue={{ tinhTp: record?.maTinhTpQueQuan }}
 					/>
 
 					<Divider orientation='center'>Hộ khẩu thường trú</Divider>
@@ -205,7 +205,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 						suffix='ThuongTru'
 						hasSoNha
 						hasLabel
-						initialValue={record?.maTinhTpThuongTru as any}
+						initialValue={{ tinhTp: record?.maTinhTpThuongTru }}
 					/>
 
 					<Divider orientation='center'>Thông tin liên lạc</Divider>
