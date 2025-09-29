@@ -58,11 +58,13 @@ declare module SinhVien {
 		// quanHuyenNoiSinh: string;
 		// xaPhuongNoiSinh: string;
 
+		maTinhTpQueQuan: string;
 		tinhTpQueQuan: string;
 		quanHuyenQueQuan: string;
 		xaPhuongQueQuan: string;
 		// soNhaTenDuongQueQuan: string;
 
+		maTinhTpThuongTru: string;
 		tinhTpThuongTru: string;
 		quanHuyenThuongTru: string;
 		xaPhuongThuongTru: string;

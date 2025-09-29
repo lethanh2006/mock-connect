@@ -18,7 +18,7 @@ import ThongTinGiaDinhFormItem from './GiaDinh';
 
 const FormSinhVien = (props: { onCancel?: () => void }) => {
 	const [form] = Form.useForm();
-	const { getThongTinCuaToiModel, putModel, formSubmiting, setFormSubmiting } = useModel('sinhvien.sinhvien');
+	const { getThongTinCuaToiModel, putModel, formSubmiting, setFormSubmiting, record } = useModel('sinhvien.sinhvien');
 	const [listTinh, setListTinh] = useState<DonViHanhChinh.IRecord[]>();
 	const loaiNoiSinh = Form.useWatch('loaiNoiSinh', form) ?? ELoaiNoiSinh.TRONG_NUOC;
 
@@ -190,10 +190,23 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 					</Row>
 
 					<Divider orientation='center'>Quê quán</Divider>
-					<SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='QueQuan' hasLabel />
+					<SelectDonViHanhChinh
+						form={form}
+						listTinh={listTinh}
+						suffix='QueQuan'
+						hasLabel
+						initialValue={{ tinhTp: record?.maTinhTpQueQuan }}
+					/>
 
 					<Divider orientation='center'>Hộ khẩu thường trú</Divider>
-					<SelectDonViHanhChinh form={form} listTinh={listTinh} suffix='ThuongTru' hasSoNha hasLabel />
+					<SelectDonViHanhChinh
+						form={form}
+						listTinh={listTinh}
+						suffix='ThuongTru'
+						hasSoNha
+						hasLabel
+						initialValue={{ tinhTp: record?.maTinhTpThuongTru }}
+					/>
 
 					<Divider orientation='center'>Thông tin liên lạc</Divider>
 					<Row gutter={[12, 0]}>
