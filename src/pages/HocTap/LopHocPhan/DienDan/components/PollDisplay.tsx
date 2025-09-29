@@ -94,8 +94,16 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 				return { ...o, count: voters.length, voters };
 			}) || [];
 		const maxVotes = Math.max(...optionVotes.map((o) => o.count), 0);
-		return optionVotes.map((o) => ({ ...o, percentage: maxVotes ? (o.count / maxVotes) * 100 : 0 }));
+		return optionVotes
+			.map((o) => ({ ...o, percentage: maxVotes ? (o.count / maxVotes) * 100 : 0 }))
+			.sort((a, b) => b.count - a.count);
 	}, [baiDang]);
+
+	const ChuaBinhChonText = ({ count }: { count: number | undefined }) => (
+		<Text style={{ marginTop: 8 }}>
+			Chưa bình chọn: <Text strong>{count}</Text>
+		</Text>
+	);
 
 	const renderUserAvatars = (users: any[]) =>
 		users?.length ? (
@@ -184,12 +192,12 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 			{(!hasVoted || isEditingVote) && !pollExpired ? (
 				<Form form={form} size='small' onFinish={handleVote}>
 					<Form.Item name='luaChon'>{renderChoices(baiDang.isChonNhieu ?? false)}</Form.Item>
-					<Button type='primary' htmlType='submit' size='small'>
-						{hasVoted ? 'Cập nhật' : 'Bình chọn'}
-					</Button>
-					<Text>
-						Chưa bình chọn: <Text strong>{baiDang.soNguoiChuaBinhChon}</Text>
-					</Text>
+					<Space align='center' style={{ marginTop: 8 }}>
+						<Button type='primary' htmlType='submit' size='small'>
+							{hasVoted ? 'Cập nhật' : 'Bình chọn'}
+						</Button>
+						<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
+					</Space>
 				</Form>
 			) : (
 				<Space direction='vertical' style={{ width: '100%' }}>
@@ -202,9 +210,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 							<Progress percent={+o.percentage.toFixed(1)} size='small' />
 						</div>
 					))}
-					<Text>
-						Chưa bình chọn: <Text strong>{baiDang.soNguoiChuaBinhChon}</Text>
-					</Text>
+					<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
 					<Row gutter={8}>
 						{!pollExpired && (
 							<Col>
