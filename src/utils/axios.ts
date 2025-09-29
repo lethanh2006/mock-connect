@@ -2,6 +2,7 @@
 import { message, notification } from 'antd';
 import axios from 'axios';
 // import { history } from 'umi';
+import { excludedPaths } from './constants';
 import data from './data';
 
 // function routeLogin(errorCode: string) {
@@ -33,19 +34,28 @@ import data from './data';
  * Chuyển sang xử lý access_token with OIDC auth ở Technical Support
  */
 // Add a request interceptor
-// axios.interceptors.request.use(
-//   (config) => {
-//     if (!config.headers.Authorization) {
-//       const token = localStorage.getItem('token');
-//       if (token) {
-//         // eslint-disable-next-line no-param-reassign
-//         config.headers.Authorization = `Bearer ${token}`;
-//       }
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error),
-// );
+axios.interceptors.request.use(
+	(config) => {
+		// if (!config.headers.Authorization) {
+		// 	const token = localStorage.getItem('token');
+		// 	if (token) {
+		// 		config.headers.Authorization = `Bearer ${token}`;
+		// 	}
+		// }
+
+		const isExcluded = excludedPaths.some((path) => config.url?.startsWith(path));
+
+		if (!isExcluded) {
+			const partitionCode = localStorage.getItem('partitionCode');
+			if (partitionCode) {
+				config.headers['x-data-partition-code'] = partitionCode;
+			}
+		}
+
+		return config;
+	},
+	(error) => Promise.reject(error),
+);
 
 // Add a response interceptor
 axios.interceptors.response.use(
@@ -62,12 +72,12 @@ axios.interceptors.response.use(
 		const descriptionError = Array.isArray(er?.detail?.exception?.response?.message)
 			? er?.detail?.exception?.response?.message?.join(', ')
 			: // Sequelize validation Errors
-			Array.isArray(er?.detail?.exception?.errors)
-			? er?.detail?.exception?.errors?.map((e: any) => e?.message)?.join(', ')
-			: data.error[er?.detail?.errorCode || er?.errorCode] ||
-			  er?.detail?.message ||
-			  er?.message ||
-			  er?.errorDescription;
+				Array.isArray(er?.detail?.exception?.errors)
+				? er?.detail?.exception?.errors?.map((e: any) => e?.message)?.join(', ')
+				: data.error[er?.detail?.errorCode || er?.errorCode] ||
+					er?.detail?.message ||
+					er?.message ||
+					er?.errorDescription;
 
 		const originalRequest = error.config;
 		let originData = originalRequest?.data;
