@@ -102,7 +102,7 @@ const PreviewHoSo = () => {
 			children: [
 				{ label: 'Tỉnh/Thành phố', content: record?.tinhTpThuongTru },
 				// { label: 'Quận/Huyện', content: record?.quanHuyenThuongTru },
-				{ label: 'Phường/Xã', content: record?.xaPhuongThuongTru },
+				{ label: 'Xã/Phường/Đặc khu', content: record?.xaPhuongThuongTru },
 				{ label: 'Địa chỉ', content: record?.soNhaTenDuongThuongTru },
 			],
 		},
