@@ -35,51 +35,21 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 	const { initialState } = useModel('@@initialState');
 	const [form] = Form.useForm();
 	const currentUserSsoId = initialState?.currentUser?.ssoId;
+	const { edit, setEdit } = useModel('diendan.baidang');
 
-	const [hasVoted, setHasVoted] = useState(false);
-	const [isEditingVote, setIsEditingVote] = useState(false);
-	const [userChoices, setUserChoices] = useState<string[]>([]);
-	const [pollExpired, setPollExpired] = useState(false);
-
-	const deriveUserChoices = useCallback(
-		() =>
-			baiDang?.isBinhChon && currentUserSsoId
-				? baiDang.danhSachBinhChon?.filter((v) => v.ssoId === currentUserSsoId).map((v) => v.luaChonId) || []
-				: [],
-		[baiDang, currentUserSsoId],
-	);
-
-	useEffect(() => {
-		if (!baiDang?.isBinhChon) {
-			setHasVoted(false);
-			setUserChoices([]);
-			setPollExpired(false);
-			setIsEditingVote(false);
-			return;
-		}
-		const choices = deriveUserChoices();
-		setHasVoted(choices.length > 0);
-		setUserChoices(choices);
-		setPollExpired(moment(baiDang.ngayKetThucBinhChon).isBefore(moment()));
-		setIsEditingVote(false);
-	}, [baiDang, deriveUserChoices]);
-
-	useEffect(() => {
-		if (isEditingVote && userChoices.length) {
-			form.setFieldsValue({
-				luaChon: baiDang.isChonNhieu ?? false ? userChoices : userChoices[0],
-			});
-		} else if (!hasVoted && !pollExpired) {
-			form.resetFields();
-		}
-	}, [isEditingVote, userChoices, baiDang.isChonNhieu, hasVoted, pollExpired, form]);
+	const userChoices =
+		baiDang?.isBinhChon && currentUserSsoId
+			? baiDang.danhSachBinhChon?.filter((v) => v.ssoId === currentUserSsoId).map((v) => v.luaChonId) || []
+			: [];
+	const hasVoted = userChoices.length > 0;
+	const pollExpired = moment(baiDang.ngayKetThucBinhChon).isBefore(moment());
 
 	const handleVote = async (values: { luaChon: string | string[] }) => {
 		const selected = Array.isArray(values.luaChon) ? values.luaChon : [values.luaChon];
 		const res = await votePoll(baiDang._id, selected);
 		if (res) {
 			message.success('Bình chọn thành công!');
-			setIsEditingVote(false);
+			setEdit(false);
 			getDataPost?.();
 		} else {
 			message.error('Bình chọn thất bại!');
@@ -189,9 +159,11 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 				</Space>
 			}
 		>
-			{(!hasVoted || isEditingVote) && !pollExpired ? (
+			{(!hasVoted || edit) && !pollExpired ? (
 				<Form form={form} size='small' onFinish={handleVote}>
-					<Form.Item name='luaChon'>{renderChoices(baiDang.isChonNhieu ?? false)}</Form.Item>
+					<Form.Item name='luaChon' initialValue={baiDang.isChonNhieu ? userChoices : userChoices[0]}>
+						{renderChoices(baiDang.isChonNhieu ?? false)}
+					</Form.Item>
 					<Space align='center' style={{ marginTop: 8 }}>
 						<Button type='primary' htmlType='submit' size='small'>
 							{hasVoted ? 'Cập nhật' : 'Bình chọn'}
@@ -210,7 +182,6 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 							<Progress percent={+o.percentage.toFixed(1)} size='small' />
 						</div>
 					))}
-					<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
 					<Row gutter={8}>
 						{!pollExpired && (
 							<Col>
@@ -218,7 +189,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 									type='primary'
 									size='small'
 									onClick={() => {
-										setIsEditingVote(true);
+										setEdit(true);
 										form.setFieldsValue({
 											luaChon: userChoices.length
 												? baiDang.isChonNhieu ?? false
@@ -232,10 +203,15 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 								</Button>
 							</Col>
 						)}
+						{currentUserSsoId === baiDang.thongTinNguoiDang?.ssoId && (
+							<Col>
+								<Button type='default' size='small' onClick={handleExportData} icon={<ExportOutlined />}>
+									Xuất dữ liệu
+								</Button>
+							</Col>
+						)}
 						<Col>
-							<Button type='default' size='small' onClick={handleExportData} icon={<ExportOutlined />}>
-								Xuất dữ liệu
-							</Button>
+							<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
 						</Col>
 					</Row>
 				</Space>
