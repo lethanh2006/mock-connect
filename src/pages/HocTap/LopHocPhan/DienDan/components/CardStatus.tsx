@@ -17,6 +17,7 @@ import { history, Link, useModel } from 'umi';
 import AvatarBlog from './Avatar';
 import BoxFile from './BoxFile';
 import Comment from './Comment';
+import PollDisplay from './PollDisplay';
 
 interface IProps {
 	handleDoubleClick?: () => void;
@@ -212,7 +213,11 @@ const CardStatus = (props: IProps) => {
 							<BoxFile url={data?.fileDinhKem} />
 						</div>
 					)}
+
+					{/* PollDisplay */}
+					{data.isBinhChon && <PollDisplay baiDang={data} getDataPost={getDataPost} />}
 				</div>
+
 				<div ref={cardRef}>
 					<div className='action flex justify-between '>
 						<div className='flex item-canter pointer'>
