@@ -1,11 +1,14 @@
+import MyDatePicker from '@/components/MyDatePicker';
 import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useModel } from '@umijs/max';
-import { Button, Form, Input } from 'antd';
-import { useEffect } from 'react';
+import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
+import React, { useEffect } from 'react';
 import AvatarBlog from './Avatar';
 
 interface IProps {
@@ -29,11 +32,29 @@ const FormThemMoiBaiViet = (props: IProps) => {
 	const onFinish = async (values: any) => {
 		setFormSubmiting(true);
 		const fileDinhKem = await buildUpLoadMultiFile(values, 'fileDinhKem');
+
+		let danhSachLuaChonPayload = null;
+		if (values?.isBinhChon) {
+			const raw = values?.danhSachLuaChon ?? [];
+			danhSachLuaChonPayload = raw
+				.map((it: any) => (typeof it === 'string' ? { noiDung: it } : it))
+				.filter((it: any) => it?.noiDung?.trim());
+		}
+
+		console.log('Loại:', typeof values.ngayKetThucBinhChon);
+		console.log('Giá trị:', values.ngayKetThucBinhChon);
+
 		const payload = {
 			...values,
 			// lopHocPhanId: idLopHocPhan,
 			...(idLopHocPhan ? { lopHocPhanId: idLopHocPhan } : idLopHanhChinh ? { lopHanhChinhId: idLopHanhChinh } : {}),
 			fileDinhKem: fileDinhKem,
+
+			isBinhChon: !!values?.isBinhChon,
+			isChonNhieu: !!values?.isChonNhieu,
+			anDanh: !!values?.anDanh,
+			ngayKetThucBinhChon: values?.ngayKetThucBinhChon || undefined,
+			danhSachLuaChon: danhSachLuaChonPayload,
 		};
 		setFormSubmiting(false);
 
@@ -74,6 +95,107 @@ const FormThemMoiBaiViet = (props: IProps) => {
 						<Form.Item name={'noiDung'} label='Nội dung chi tiết' rules={[...rules.text, ...rules.requiredHtml]}>
 							<TinyEditor hideMenubar miniToolbar height={500} minHeight={350} />
 						</Form.Item>
+
+						{/* Bình chọn */}
+						<Form.Item shouldUpdate={(prev, cur) => prev.isBinhChon !== cur.isBinhChon} noStyle>
+							{() => {
+								const isBinhChon = form.getFieldValue('isBinhChon');
+								return (
+									<Row gutter={[12, 0]}>
+										<Col span={24} md={8}>
+											<Form.Item name='isBinhChon' valuePropName='checked'>
+												<Checkbox>Tạo bình chọn?</Checkbox>
+											</Form.Item>
+										</Col>
+
+										{isBinhChon && (
+											<>
+												<Col span={24} md={8}>
+													<Form.Item name='isChonNhieu' valuePropName='checked'>
+														<Checkbox>Cho phép chọn nhiều lựa chọn?</Checkbox>
+													</Form.Item>
+												</Col>
+												<Col span={24} md={8}>
+													<Form.Item name='anDanh' valuePropName='checked'>
+														<Checkbox>Lựa chọn ẩn danh?</Checkbox>
+													</Form.Item>
+												</Col>
+												<Col span={24} md={8}>
+													<Form.Item
+														label='Thời gian kết thúc bình chọn'
+														name='ngayKetThucBinhChon'
+														rules={[...rules.required, ...rules.sauThoiDiem(dayjs(), 'Hôm nay')]}
+													>
+														<MyDatePicker
+															showTime={{ format: 'HH:mm' }}
+															format='DD/MM/YYYY HH:mm'
+															disabledDate={(mo) => dayjs().isAfter(mo)}
+														/>
+													</Form.Item>
+												</Col>
+
+												<Col span={24}>
+													<Form.List
+														name='danhSachLuaChon'
+														rules={[
+															{
+																validator: async (_, list) => {
+																	if (!list || list.length < 2) {
+																		return Promise.reject(new Error('Cần ít nhất 2 lựa chọn'));
+																	}
+																},
+															},
+														]}
+													>
+														{(fields, { add, remove }, { errors }) => (
+															<Row gutter={[8, 0]}>
+																{fields.map((field, idx) => (
+																	<React.Fragment key={field.key}>
+																		<Col span={22}>
+																			<Form.Item
+																				{...field}
+																				name={[field.name, 'noiDung']}
+																				rules={[...rules.required, ...rules.length(100)]}
+																			>
+																				<Input placeholder={`Lựa chọn ${idx + 1}`} />
+																			</Form.Item>
+																		</Col>
+																		<Col span={2}>
+																			<Button
+																				type='text'
+																				size='small'
+																				onClick={() => remove(field.name)}
+																				danger
+																				icon={<MinusCircleOutlined />}
+																			/>
+																		</Col>
+																	</React.Fragment>
+																))}
+
+																<Col span={24}>
+																	<Button
+																		type='dashed'
+																		onClick={() => add()}
+																		icon={<PlusOutlined />}
+																		size='small'
+																		block
+																	>
+																		Thêm lựa chọn
+																	</Button>
+																	<Form.ErrorList errors={errors} />
+																</Col>
+															</Row>
+														)}
+													</Form.List>
+												</Col>
+											</>
+										)}
+									</Row>
+								);
+							}}
+						</Form.Item>
+						{/* ket thuc binh chon */}
+
 						<Form.Item name={'fileDinhKem'} label='File đính kèm'>
 							<UploadFile resize maxCount={5} accept={'.png, .jpg, .doc, .docx, .pdf'} />
 						</Form.Item>
