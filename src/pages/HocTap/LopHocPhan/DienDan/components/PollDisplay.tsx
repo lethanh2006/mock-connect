@@ -1,27 +1,27 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { exportPollData, votePoll } from '@/services/HocTap/DienDan/BaiDang/index';
+import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
+import { ClockCircleOutlined, ExportOutlined } from '@ant-design/icons';
 import {
+	Avatar,
 	Button,
-	Radio,
+	Card,
 	Checkbox,
+	Col,
 	Form,
+	Popover,
 	Progress,
+	Radio,
+	Row,
 	Space,
 	Tag,
-	Card,
 	Typography,
-	Avatar,
-	Popover,
 	message,
-	Col,
-	Row,
 } from 'antd';
-import moment from 'moment';
-import { useModel } from '@@/plugin-model/useModel';
-import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
-import { exportPollData, votePoll } from '@/services/HocTap/DienDan/BaiDang/index';
-import { ClockCircleOutlined, ExportOutlined } from '@ant-design/icons';
 import fileDownload from 'js-file-download';
 import groupBy from 'lodash/groupBy';
+import moment from 'moment';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useModel } from 'umi';
 import '../style.less';
 
 const { Text, Title } = Typography;
