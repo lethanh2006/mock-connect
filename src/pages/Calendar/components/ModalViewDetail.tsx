@@ -9,9 +9,9 @@ import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import { colorTrangThaiThi } from '@/services/KhaoThi/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
+import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Modal, Popconfirm, Space, Tag, message } from 'antd';
-import dayjs from 'dayjs';
 import { history, useModel } from 'umi';
 
 const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; event: any; getData: () => void }) => {

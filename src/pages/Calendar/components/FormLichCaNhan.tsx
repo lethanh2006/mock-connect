@@ -1,10 +1,10 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import { ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Col, Form, Input, Row } from 'antd';
-import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
