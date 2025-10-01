@@ -42,6 +42,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 			? baiDang.danhSachBinhChon?.filter((v) => v.ssoId === currentUserSsoId).map((v) => v.luaChonId) || []
 			: [];
 	const hasVoted = userChoices.length > 0;
+
 	const pollExpired = moment(baiDang.ngayKetThucBinhChon).isBefore(moment());
 
 	const handleVote = async (values: { luaChon: string | string[] }) => {
@@ -108,14 +109,23 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 			<Text type='secondary'>0 người</Text>
 		);
 
-	const handleExportData = async () => {
-		try {
-			const res = await exportPollData(baiDang._id);
-			fileDownload(res.data, `Kết quả bình chọn ${baiDang.tieuDe}.xlsx`);
-		} catch {
-			message.error('Xuất dữ liệu thất bại');
-		}
-	};
+	const ExportDataButton = ({ id }: { id: string }) => (
+		<Button
+			type='default'
+			size='small'
+			icon={<ExportOutlined />}
+			onClick={async () => {
+				try {
+					const res = await exportPollData(id);
+					fileDownload(res.data, `Kết quả bình chọn ${id}.xlsx`);
+				} catch {
+					message.error('Xuất dữ liệu thất bại');
+				}
+			}}
+		>
+			Xuất dữ liệu
+		</Button>
+	);
 
 	const renderChoices = (isMultiple: boolean) =>
 		isMultiple ? (
@@ -165,10 +175,19 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 						{renderChoices(baiDang.isChonNhieu ?? false)}
 					</Form.Item>
 					<Space align='center' style={{ marginTop: 8 }}>
-						<Button type='primary' htmlType='submit' size='small'>
-							{hasVoted ? 'Cập nhật' : 'Bình chọn'}
-						</Button>
-						<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
+						<Row gutter={8}>
+							<Col>
+								<Button type='primary' htmlType='submit' size='small'>
+									{hasVoted ? 'Cập nhật' : 'Bình chọn'}
+								</Button>
+							</Col>
+							<Col>
+								{currentUserSsoId === baiDang.thongTinNguoiDang?.ssoId && <ExportDataButton id={baiDang._id} />}
+							</Col>
+							<Col>
+								<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
+							</Col>
+						</Row>
 					</Space>
 				</Form>
 			) : (
@@ -203,13 +222,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 								</Button>
 							</Col>
 						)}
-						{currentUserSsoId === baiDang.thongTinNguoiDang?.ssoId && (
-							<Col>
-								<Button type='default' size='small' onClick={handleExportData} icon={<ExportOutlined />}>
-									Xuất dữ liệu
-								</Button>
-							</Col>
-						)}
+						{currentUserSsoId === baiDang.thongTinNguoiDang?.ssoId && <ExportDataButton id={baiDang._id} />}
 						<Col>
 							<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
 						</Col>
