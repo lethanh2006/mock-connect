@@ -1,9 +1,9 @@
 import type { DotQuyTrinh } from '@/services/QuyTrinh/DotQuyTrinh/typing';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { SyncOutlined } from '@ant-design/icons';
 import { Card, Timeline } from 'antd';
-import dayjs from 'dayjs';
 
 const ViewDot = (props: { recDot: DotQuyTrinh.IRecord; recQuyTrinh: QuyTrinh.IRecord }) => {
 	const { recDot, recQuyTrinh } = props;

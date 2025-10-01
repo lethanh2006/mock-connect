@@ -1,5 +1,6 @@
 import { exportPollData, votePoll } from '@/services/HocTap/DienDan/BaiDang/index';
 import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
+import dayjs from '@/utils/dayjs';
 import { ClockCircleOutlined, ExportOutlined } from '@ant-design/icons';
 import {
 	Avatar,
@@ -19,7 +20,6 @@ import {
 } from 'antd';
 import fileDownload from 'js-file-download';
 import groupBy from 'lodash/groupBy';
-import moment from 'moment';
 import { useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import '../style.less';
@@ -45,7 +45,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 			: [];
 	const hasVoted = userChoices.length > 0;
 
-	const pollExpired = moment(baiDang.ngayKetThucBinhChon).isBefore(moment());
+	const pollExpired = dayjs(baiDang.ngayKetThucBinhChon).isBefore(dayjs());
 
 	const handleVote = async (values: { luaChon: string | string[] }) => {
 		const selected = Array.isArray(values.luaChon) ? values.luaChon : [values.luaChon];
@@ -166,7 +166,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 			extra={
 				<Space size='small' wrap>
 					<ClockCircleOutlined style={{ fontSize: 12 }} />
-					<Text type='secondary'>Kết thúc: {moment(baiDang.ngayKetThucBinhChon).format('HH:mm DD/MM/YYYY')}</Text>
+					<Text type='secondary'>Kết thúc: {dayjs(baiDang.ngayKetThucBinhChon).format('HH:mm DD/MM/YYYY')}</Text>
 					{pollExpired && <Tag color='error'>Đã kết thúc</Tag>}
 				</Space>
 			}

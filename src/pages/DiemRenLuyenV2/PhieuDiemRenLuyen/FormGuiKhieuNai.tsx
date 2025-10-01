@@ -1,8 +1,8 @@
 import UploadFile from '@/components/Upload/UploadFile';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { toISOString, uploadMultiFile } from '@/utils/utils';
 import { Button, Form, Input, Modal } from 'antd';
-import dayjs from 'dayjs';
 import { useModel } from 'umi';
 
 const FormGuiKhieuNai = (props: { getData: any }) => {
