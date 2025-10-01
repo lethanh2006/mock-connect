@@ -20,7 +20,7 @@ import {
 import fileDownload from 'js-file-download';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import '../style.less';
 
@@ -35,44 +35,17 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 	const { initialState } = useModel('@@initialState');
 	const [form] = Form.useForm();
 	const currentUserSsoId = initialState?.currentUser?.ssoId;
-
-	const [hasVoted, setHasVoted] = useState(false);
 	const [isEditingVote, setIsEditingVote] = useState(false);
-	const [userChoices, setUserChoices] = useState<string[]>([]);
-	const [pollExpired, setPollExpired] = useState(false);
 
-	const deriveUserChoices = useCallback(
-		() =>
-			baiDang?.isBinhChon && currentUserSsoId
-				? baiDang.danhSachBinhChon?.filter((v) => v.ssoId === currentUserSsoId).map((v) => v.luaChonId) || []
-				: [],
-		[baiDang, currentUserSsoId],
-	);
+	const luaChonValue = Form.useWatch('luaChon', form);
 
-	useEffect(() => {
-		if (!baiDang?.isBinhChon) {
-			setHasVoted(false);
-			setUserChoices([]);
-			setPollExpired(false);
-			setIsEditingVote(false);
-			return;
-		}
-		const choices = deriveUserChoices();
-		setHasVoted(choices.length > 0);
-		setUserChoices(choices);
-		setPollExpired(moment(baiDang.ngayKetThucBinhChon).isBefore(moment()));
-		setIsEditingVote(false);
-	}, [baiDang, deriveUserChoices]);
+	const userChoices =
+		baiDang?.isBinhChon && currentUserSsoId
+			? baiDang.danhSachBinhChon?.filter((v) => v.ssoId === currentUserSsoId).map((v) => v.luaChonId) || []
+			: [];
+	const hasVoted = userChoices.length > 0;
 
-	useEffect(() => {
-		if (isEditingVote && userChoices.length) {
-			form.setFieldsValue({
-				luaChon: baiDang.isChonNhieu ?? false ? userChoices : userChoices[0],
-			});
-		} else if (!hasVoted && !pollExpired) {
-			form.resetFields();
-		}
-	}, [isEditingVote, userChoices, baiDang.isChonNhieu, hasVoted, pollExpired, form]);
+	const pollExpired = moment(baiDang.ngayKetThucBinhChon).isBefore(moment());
 
 	const handleVote = async (values: { luaChon: string | string[] }) => {
 		const selected = Array.isArray(values.luaChon) ? values.luaChon : [values.luaChon];
@@ -138,14 +111,23 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 			<Text type='secondary'>0 người</Text>
 		);
 
-	const handleExportData = async () => {
-		try {
-			const res = await exportPollData(baiDang._id);
-			fileDownload(res.data, `Kết quả bình chọn ${baiDang.tieuDe}.xlsx`);
-		} catch {
-			message.error('Xuất dữ liệu thất bại');
-		}
-	};
+	const ExportDataButton = ({ id }: { id: string }) => (
+		<Button
+			type='default'
+			size='small'
+			icon={<ExportOutlined />}
+			onClick={async () => {
+				try {
+					const res = await exportPollData(id);
+					fileDownload(res.data, `Kết quả bình chọn ${id}.xlsx`);
+				} catch {
+					message.error('Xuất dữ liệu thất bại');
+				}
+			}}
+		>
+			Xuất dữ liệu
+		</Button>
+	);
 
 	const renderChoices = (isMultiple: boolean) =>
 		isMultiple ? (
@@ -191,12 +173,23 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 		>
 			{(!hasVoted || isEditingVote) && !pollExpired ? (
 				<Form form={form} size='small' onFinish={handleVote}>
-					<Form.Item name='luaChon'>{renderChoices(baiDang.isChonNhieu ?? false)}</Form.Item>
+					<Form.Item name='luaChon' initialValue={baiDang.isChonNhieu ? userChoices : userChoices[0]}>
+						{renderChoices(baiDang.isChonNhieu ?? false)}
+					</Form.Item>
 					<Space align='center' style={{ marginTop: 8 }}>
-						<Button type='primary' htmlType='submit' size='small'>
-							{hasVoted ? 'Cập nhật' : 'Bình chọn'}
-						</Button>
-						<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
+						<Row gutter={8}>
+							<Col>
+								<Button type='primary' htmlType='submit' size='small' disabled={!hasVoted && !luaChonValue?.length}>
+									{hasVoted ? 'Cập nhật' : 'Bình chọn'}
+								</Button>
+							</Col>
+							<Col>
+								{currentUserSsoId === baiDang.thongTinNguoiDang?.ssoId && <ExportDataButton id={baiDang._id} />}
+							</Col>
+							<Col>
+								<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
+							</Col>
+						</Row>
 					</Space>
 				</Form>
 			) : (
@@ -210,7 +203,6 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 							<Progress percent={+o.percentage.toFixed(1)} size='small' />
 						</div>
 					))}
-					<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
 					<Row gutter={8}>
 						{!pollExpired && (
 							<Col>
@@ -221,7 +213,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 										setIsEditingVote(true);
 										form.setFieldsValue({
 											luaChon: userChoices.length
-												? baiDang.isChonNhieu ?? false
+												? (baiDang.isChonNhieu ?? false)
 													? userChoices
 													: userChoices[0]
 												: undefined,
@@ -232,10 +224,9 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 								</Button>
 							</Col>
 						)}
+						{currentUserSsoId === baiDang.thongTinNguoiDang?.ssoId && <ExportDataButton id={baiDang._id} />}
 						<Col>
-							<Button type='default' size='small' onClick={handleExportData} icon={<ExportOutlined />}>
-								Xuất dữ liệu
-							</Button>
+							<ChuaBinhChonText count={baiDang.soNguoiChuaBinhChon} />
 						</Col>
 					</Row>
 				</Space>
