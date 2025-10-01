@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import {
 	Button,
 	Radio,
@@ -35,7 +35,9 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 	const { initialState } = useModel('@@initialState');
 	const [form] = Form.useForm();
 	const currentUserSsoId = initialState?.currentUser?.ssoId;
-	const { edit, setEdit } = useModel('diendan.baidang');
+	const [isEditingVote, setIsEditingVote] = useState(false);
+
+	const luaChonValue = Form.useWatch('luaChon', form);
 
 	const userChoices =
 		baiDang?.isBinhChon && currentUserSsoId
@@ -50,7 +52,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 		const res = await votePoll(baiDang._id, selected);
 		if (res) {
 			message.success('Bình chọn thành công!');
-			setEdit(false);
+			setIsEditingVote(false);
 			getDataPost?.();
 		} else {
 			message.error('Bình chọn thất bại!');
@@ -169,7 +171,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 				</Space>
 			}
 		>
-			{(!hasVoted || edit) && !pollExpired ? (
+			{(!hasVoted || isEditingVote) && !pollExpired ? (
 				<Form form={form} size='small' onFinish={handleVote}>
 					<Form.Item name='luaChon' initialValue={baiDang.isChonNhieu ? userChoices : userChoices[0]}>
 						{renderChoices(baiDang.isChonNhieu ?? false)}
@@ -177,7 +179,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 					<Space align='center' style={{ marginTop: 8 }}>
 						<Row gutter={8}>
 							<Col>
-								<Button type='primary' htmlType='submit' size='small'>
+								<Button type='primary' htmlType='submit' size='small' disabled={!hasVoted && !luaChonValue?.length}>
 									{hasVoted ? 'Cập nhật' : 'Bình chọn'}
 								</Button>
 							</Col>
@@ -208,7 +210,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 									type='primary'
 									size='small'
 									onClick={() => {
-										setEdit(true);
+										setIsEditingVote(true);
 										form.setFieldsValue({
 											luaChon: userChoices.length
 												? baiDang.isChonNhieu ?? false
