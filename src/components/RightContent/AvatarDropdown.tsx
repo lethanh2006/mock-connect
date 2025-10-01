@@ -1,7 +1,8 @@
 import { landingUrl } from '@/services/base/constant';
-import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
+import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
 import styles from './index.less';
@@ -9,6 +10,27 @@ import styles from './index.less';
 const AvatarDropdown = () => {
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
+	const { danhSach, getAllModel } = useModel('core.phanvunguser');
+
+	const currentPartition = localStorage.getItem('partitionCode');
+
+	//Phân vùng dữ liệu
+	useEffect(() => {
+		if (initialState?.currentUser?.ssoId) {
+			getAllModel(undefined, undefined, undefined, undefined, 'many/me').then((res) => {
+				if (!res || res.length === 0) {
+					localStorage.removeItem('partitionCode');
+					return;
+				}
+
+				const exists = res.some((item) => item?.dataPartitionCode?.toString() === currentPartition);
+
+				if (!currentPartition || !exists) {
+					localStorage.setItem('partitionCode', res?.[0]?.dataPartitionCode?.toString());
+				}
+			});
+		}
+	}, [initialState?.currentUser?.ssoId]);
 
 	const loginOut = () => OIDCBounder?.getActions()?.dangXuat();
 
@@ -24,7 +46,26 @@ const AvatarDropdown = () => {
 		: (initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || ''));
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
+	const partitionItems: ItemType[] =
+		danhSach?.map((item) => {
+			const code = item?.dataPartitionCode?.toString();
+			const isActive = code === currentPartition;
+
+			return {
+				key: `partition-${code}`,
+				icon: <DatabaseOutlined />,
+				label: item?.dataPartition?.name ?? item?.dataPartition?.ma,
+				className: isActive ? styles.activePartition : undefined,
+				onClick: () => {
+					localStorage.setItem('partitionCode', code);
+					window.location.reload();
+				},
+			};
+		}) ?? [];
+
 	const items: ItemType[] = [
+		...(partitionItems as any),
+		...(partitionItems.length > 0 ? [{ type: 'divider', key: 'divider' } as ItemType] : []),
 		{
 			key: 'name',
 			icon: <UserOutlined />,
@@ -75,12 +116,21 @@ const AvatarDropdown = () => {
 		<>
 			<Dropdown menu={{ items }}>
 				<span className={`${styles.action} ${styles.account}`}>
-					<Avatar
-						className={styles.avatar}
-						src={initialState.currentUser?.picture ? <img src={initialState.currentUser?.picture} /> : undefined}
-						icon={!initialState.currentUser?.picture ? (lastNameChar ?? <UserOutlined />) : undefined}
-						alt='avatar'
-					/>
+					<div className={styles.avatarWrapper}>
+						<Avatar
+							className={styles.avatar}
+							src={initialState.currentUser?.picture ? <img src={initialState.currentUser?.picture} /> : undefined}
+							icon={!initialState.currentUser?.picture ? (lastNameChar ?? <UserOutlined />) : undefined}
+							alt='avatar'
+						/>
+						{danhSach?.length >= 2 && (
+							<span className={styles.partitionBadge}>
+								{danhSach
+									.find((item) => item?.dataPartitionCode?.toString() === currentPartition)
+									?.dataPartition?.name?.[0]?.toUpperCase() ?? ''}
+							</span>
+						)}
+					</div>
 					<span className={`${styles.name}`}>{fullName}</span>
 				</span>
 			</Dropdown>

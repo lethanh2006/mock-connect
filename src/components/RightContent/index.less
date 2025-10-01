@@ -29,6 +29,20 @@
 		}
 	}
 
+	:global(.anticon),
+	a>img {
+		display: flex;
+
+		&:hover {
+			background-color: @pro-header-hover-bg;
+			transition: .3s;
+		}
+	}
+
+	a>img {
+		padding: 12px 8px;
+	}
+
 	.action {
 		display: flex;
 		align-items: center;
@@ -53,10 +67,11 @@
 		padding: 0 5px;
 
 		.avatar {
-			height: 42px;
 			width: 42px;
-			line-height: 42px;
+			height: 42px;
+			margin-right: 8px;
 			font-size: 22px;
+			line-height: 42px;
 
 			img {
 				object-fit: cover;
@@ -82,6 +97,36 @@
 	}
 }
 
+.activePartition {
+	font-weight: bold;
+	background-color: var(--primary-1);
+	border-left: 3px solid var(--primary-color);
+}
+
+.avatarWrapper {
+	position: relative;
+	display: inline-block;
+
+	.partitionBadge {
+		position: absolute;
+		right: 8px;
+		bottom: 5px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		width: 16px;
+		height: 16px;
+
+		color: #fff;
+		font-size: 10px;
+
+		background-color: var(--primary-color);
+		border-radius: 50%;
+		box-shadow: 0 0 0 2px #fff;
+	}
+}
+
 @media only screen and (max-width: @screen-md) {
 	:global(.ant-divider-vertical) {
 		vertical-align: unset;
@@ -99,10 +144,16 @@
 			padding: 0;
 		}
 	}
+
+	.avatarWrapper {
+		.partitionBadge {
+			right: 0px;
+		}
+	}
 }
 
 @media (max-width: @screen-xs) {
 	.right {
-		gap: 0
+		gap: 0;
 	}
 }
