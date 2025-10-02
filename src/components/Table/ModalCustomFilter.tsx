@@ -31,45 +31,75 @@ const ModalCustomFilter = (props: {
 		if (visible) form.setFieldsValue({ filters: fil });
 	}, [filters, visible]);
 
-	const normalizeFilter = (filter: any): TFilter<any> => {
-		// Đảm bảo field đúng kiểu (keyof T | [keyof T, string])
-		let field = filter.field;
+	const getFormValueByPath = (formValues: any, path: (string | number)[]): any => {
+		let value = formValues;
+		for (const key of path) {
+			value = value?.[key];
+		}
+		return value;
+	};
+
+	const normalizeFilter = (tempFilter: TFilter<any>, formValues: any, path: (string | number)[]): TFilter<any> => {
+
+		let field: any = tempFilter.field;
 		if (typeof field === 'string' && field.includes('.')) {
-			field = field.split('.');
+			const parts = field.split('.');
+			field = parts.length === 2 ? [parts[0], parts[1]] : parts[0];
 		}
+
+
+		if (tempFilter.filters && Array.isArray(tempFilter.filters)) {
+			return {
+				logicOperator: tempFilter.logicOperator || 'and',
+				filters: tempFilter.filters.map((subTempFilter, subIndex) => {
+					const subPath = [...path, 'filters', subIndex];
+					return normalizeFilter(subTempFilter, formValues, subPath);
+				}),
+			};
+		}
+
+
 		const result: TFilter<any> = {
-			...filter,
 			field,
+			operator: tempFilter.operator,
+			active: tempFilter.active,
 		};
-		if (filter.filters && Array.isArray(filter.filters)) {
-			result.filters = filter.filters.map(normalizeFilter);
+
+
+		const valuesPath = [...path, 'values'];
+		let formFilterValues = getFormValueByPath(formValues, valuesPath);
+
+
+		if (formFilterValues && Array.isArray(formFilterValues[0])) {
+			formFilterValues = formFilterValues[0];
 		}
+
+		if (tempFilter.operator !== EOperatorType.NULL && tempFilter.operator !== EOperatorType.NOT_NULL) {
+			result.values = formFilterValues || [];
+		}
+
 		return result;
 	};
 
 	const onFinish = (values: any) => {
-		let filtered = values.filters
-			?.map((filter: TFilter<any>, index: number) => ({
-				...filter,
-				...filtersTemp[index],
-				values: filter.values && Array.isArray(filter.values[0]) ? filter.values[0] : filter.values,
-			}))
+		const filtered = filtersTemp
+			?.map((tempFilter, index) => {
+				const path = ['filters', index];
+				return normalizeFilter(tempFilter, values, path);
+			})
 			?.filter((filter: TFilter<any>) => {
+
+				if (filter.filters) {
+					return filter.filters.length > 0;
+				}
+
 				if (filter.operator === EOperatorType.NULL || filter.operator === EOperatorType.NOT_NULL) {
 					return true;
 				}
 				return filter.values && Array.isArray(filter.values) && filter.values.length > 0;
 			});
 
-		if (filtered) {
-			filtered = filtered.map(normalizeFilter);
-		}
-
-		if (filtered && filtered.length > 1) {
-			setFilters(filtered);
-		} else {
-			setFilters(filtered || []);
-		}
+		setFilters(filtered || []);
 		setVisible(false);
 	};
 
@@ -126,6 +156,7 @@ const ModalCustomFilter = (props: {
 									setFiltersTemp(temp);
 								}}
 								allowGrouping={true}
+								path={['filters', index]}
 							/>
 						))}
 					</div>

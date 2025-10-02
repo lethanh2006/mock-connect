@@ -10,7 +10,7 @@ import { type RowFilterProps, type TDataOption, type TFilter } from './typing';
 const { Text } = Typography;
 
 const RowFilter = (props: RowFilterProps) => {
-	const { index, columns, filter, onChange, fieldsFilterable, onRemove, allowGrouping = false, level = 0 } = props;
+	const { index, columns, filter, onChange, fieldsFilterable, onRemove, allowGrouping = false, level = 0, path = ['filters', index] } = props;
 	const [operators, setOperators] = useState<EOperatorType[]>([]);
 	const filterColumn = columns.find((item) => JSON.stringify(item.dataIndex) === JSON.stringify(filter.field));
 	const filterType = filterColumn?.filterType;
@@ -147,6 +147,7 @@ const RowFilter = (props: RowFilterProps) => {
 							filter={subFilter}
 							fieldsFilterable={fieldsFilterable}
 							level={level + 1}
+							path={[...path, 'filters', subIndex]}
 							onChange={(updatedFilter) => {
 								const updatedFilters = [...(filter.filters || [])];
 								updatedFilters[subIndex] = updatedFilter;
@@ -222,7 +223,7 @@ const RowFilter = (props: RowFilterProps) => {
 								label={
 									<Space>
 										<Form.Item
-											name={['filters', index, 'active']}
+											name={[...path, 'active']}
 											valuePropName='checked'
 											initialValue={true}
 											style={{ margin: 0 }}
@@ -296,8 +297,8 @@ const RowFilter = (props: RowFilterProps) => {
 									<Form.Item
 										name={
 											filter.operator === EOperatorType.INCLUDE || filter.operator === EOperatorType.NOT_INCLUDE
-												? ['filters', index, 'values']
-												: ['filters', index, 'values', 0]
+												? [...path, 'values']
+												: [...path, 'values', 0]
 										}
 										rules={[...rules.required]}
 										label='Giá trị'
@@ -308,7 +309,7 @@ const RowFilter = (props: RowFilterProps) => {
 
 								{filter.operator === EOperatorType.BETWEEN || filter.operator === EOperatorType.NOT_BETWEEN ? (
 									<Col span={24} md={12}>
-										<Form.Item name={['filters', index, 'values', 1]} rules={[...rules.required]} label='Giá trị đến'>
+										<Form.Item name={[...path, 'values', 1]} rules={[...rules.required]} label='Giá trị đến'>
 											{renderDataComponent()}
 										</Form.Item>
 									</Col>

@@ -172,6 +172,7 @@ export type RowFilterProps = {
 	onRemove?: () => void;
 	allowGrouping?: boolean;
 	level?: number;
+	path?: (string | number)[];
 };
 
 export type TableStaticProps = Pick<
