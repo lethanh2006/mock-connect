@@ -21,7 +21,7 @@ const SelectDotDangKyHocPhanNhuCau = (props: {
 
 	useEffect(() => {
 		if (recHocKy?._id && maKhoaNganh)
-			getAllModel(isSetRecord, undefined, condition, undefined, `hoc-ky/${recHocKy?.ma}/khoa-nganh/${maKhoaNganh}/me`);
+			getAllModel(isSetRecord, undefined, {...condition, active: true}, undefined, `hoc-ky/${recHocKy?.ma}/khoa-nganh/${maKhoaNganh}/me`);
 	}, [JSON.stringify(condition), recHocKy?._id, maKhoaNganh]);
 
 	return (
