@@ -25,6 +25,8 @@ declare module HocPhanNhuCau {
 		thoiGianBatDauCVHTDuyet: Date;
 		thoiGianKetThucCVHTDuyet: Date;
 		soHocPhanDangKyNgoaiTienTrinh: number;
+
+			active: boolean;
 	}
 
 	export interface IPhieuDangKy {
