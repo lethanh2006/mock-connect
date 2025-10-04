@@ -1,7 +1,7 @@
 import { colorTrangThaiHocSv, type ETrangThaiHocSv } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { formatPhoneNumber } from '@/utils/utils';
-import { Col, Image, Row, Spin, Tag } from 'antd';
+import { Col, Image, Row, Space, Spin, Tag } from 'antd';
 import { JSX, useEffect } from 'react';
 import { useModel } from 'umi';
 
