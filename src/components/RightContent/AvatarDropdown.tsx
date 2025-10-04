@@ -2,7 +2,7 @@ import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSat
 import { landingUrl } from '@/services/base/constant';
 import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
 import dayjs from '@/utils/dayjs';
-import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
 import { useEffect } from 'react';
@@ -15,7 +15,9 @@ const AvatarDropdown = () => {
 	const { initialState } = useModel('@@initialState');
 	const { getDotMeModel, setVisibleKhaoSatBatBuoc, setRecord, setDsKhaoSatBatBuoc } = useModel('tienich.dotkhaosat');
 	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { danhSach, getAllModel } = useModel('core.phanvunguser');
 	const avatarUrl = recSinhVien?.anhDaiDienUrl ?? initialState?.currentUser?.picture;
+	const currentPartition = localStorage.getItem('partitionCode');
 
 	const handleCheckKhaoSatBatBuoc = async () => {
 		try {
@@ -101,6 +103,20 @@ const AvatarDropdown = () => {
 			});
 
 			handleCheckKhaoSatBatBuoc();
+
+			//Phân vùng dữ liệu
+			getAllModel(undefined, undefined, undefined, undefined, 'many/me').then((res) => {
+				if (!res || res.length === 0) {
+					localStorage.removeItem('partitionCode');
+					return;
+				}
+
+				const exists = res.some((item) => item?.dataPartitionCode?.toString() === currentPartition);
+
+				if (!currentPartition || !exists) {
+					localStorage.setItem('partitionCode', res?.[0]?.dataPartitionCode?.toString());
+				}
+			});
 		}
 	}, [initialState?.currentUser?.ssoId]);
 
@@ -118,7 +134,26 @@ const AvatarDropdown = () => {
 		: (initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || ''));
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
+	const partitionItems: ItemType[] =
+		danhSach?.map((item) => {
+			const code = item?.dataPartitionCode?.toString();
+			const isActive = code === currentPartition;
+
+			return {
+				key: `partition-${code}`,
+				icon: <DatabaseOutlined />,
+				label: item?.dataPartition?.name ?? item?.dataPartition?.ma,
+				className: isActive ? styles.activePartition : undefined,
+				onClick: () => {
+					localStorage.setItem('partitionCode', code);
+					window.location.reload();
+				},
+			};
+		}) ?? [];
+
 	const items: ItemType[] = [
+		...(partitionItems as any),
+		...(partitionItems.length > 0 ? [{ type: 'divider', key: 'divider' } as ItemType] : []),
 		{
 			key: 'name',
 			icon: <UserOutlined />,
@@ -171,12 +206,21 @@ const AvatarDropdown = () => {
 		<>
 			<Dropdown menu={{ items }}>
 				<span className={`${styles.action} ${styles.account}`}>
-					<Avatar
-						className={styles.avatar}
-						src={!!avatarUrl ? <img src={avatarUrl} /> : undefined}
-						icon={!avatarUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
-						alt='avatar'
-					/>
+					<div className={styles.avatarWrapper}>
+						<Avatar
+							className={styles.avatar}
+							src={!!avatarUrl ? <img src={avatarUrl} /> : undefined}
+							icon={!avatarUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
+							alt='avatar'
+						/>
+						{danhSach?.length >= 2 && (
+							<span className={styles.partitionBadge}>
+								{danhSach
+									.find((item) => item?.dataPartitionCode?.toString() === currentPartition)
+									?.dataPartition?.name?.[0]?.toUpperCase() ?? ''}
+							</span>
+						)}
+					</div>
 					<span className={`${styles.name}`}>{fullName}</span>
 				</span>
 			</Dropdown>

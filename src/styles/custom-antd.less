@@ -98,6 +98,10 @@
 		&::after {
 			flex: 1;
 		}
+
+		.ant-divider-inner-text {
+			padding: 0 1em 0 0;
+		}
 	}
 }
 
@@ -112,6 +116,10 @@
 	}
 }
 
+.ant-descriptions-title {
+	font-weight: 600 !important;
+}
+
 .ant-descriptions {
 
 	.ant-descriptions-item-label,
@@ -119,12 +127,9 @@
 		font-weight: 600 !important;
 	}
 
-	.ant-descriptions-bordered .ant-descriptions-item-label,
-	.ant-descriptions-bordered .ant-descriptions-item-content {
+	&.ant-descriptions-bordered .ant-descriptions-item-label,
+	&.ant-descriptions-bordered .ant-descriptions-item-content {
 		padding: 13px 20px !important;
-	}
-
-	.ant-descriptions-item-content {
 		word-break: normal;
 	}
 
