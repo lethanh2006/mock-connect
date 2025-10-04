@@ -90,7 +90,7 @@ const ModalNopTruocHocPhi = (props: {
 
 	return (
 		<Modal
-			visible={visibleForm}
+			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			title='Nộp trước học phí'
 			footer={null}

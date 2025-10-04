@@ -114,10 +114,10 @@ const KeHoachNCKHComponent = () => {
 			/>
 			<Modal
 				destroyOnClose
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				width={1200}
 				footer={<Button onClick={handleCancelViewDetail}>Đóng</Button>}
-				visible={visibleViewDetail}
+				open={visibleViewDetail}
 				onCancel={handleCancelViewDetail}
 			>
 				{recordKeHoach && <ViewDetailKeHoachNCKH record={recordKeHoach} />}
@@ -126,7 +126,7 @@ const KeHoachNCKHComponent = () => {
 			<ModalExpandable
 				title='Chi tiết tập tin'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={
 					<div className='form-footer'>
 						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>

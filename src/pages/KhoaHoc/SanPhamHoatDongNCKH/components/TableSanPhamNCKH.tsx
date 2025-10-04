@@ -773,7 +773,7 @@ const TableSanPhamNCKH = (props: {
 						Đóng
 					</Button>
 				}
-				visible={visibleViewThanhVien}
+				open={visibleViewThanhVien}
 				onCancel={onCancelViewThanhVien}
 			>
 				<TableThanhVien mode='view' />
@@ -784,7 +784,7 @@ const TableSanPhamNCKH = (props: {
 				width={900}
 				title='Chi tiết sản phẩm, hoạt động NCKH'
 				footer={false}
-				visible={visibleViewSanPham}
+				open={visibleViewSanPham}
 				onCancel={onCancelViewSanPham}
 			>
 				<ViewSanPham
@@ -796,17 +796,17 @@ const TableSanPhamNCKH = (props: {
 			</Modal>
 			<Modal
 				footer={false}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				onCancel={() => setVisibleSelectDot(false)}
-				visible={visibleSelectDot}
+				open={visibleSelectDot}
 			>
 				<FormChonDot title={props?.title} onCancel={() => setVisibleSelectDot(false)} />
 			</Modal>
 			<Modal
 				footer={false}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				onCancel={() => setVisibleChuyenDot(false)}
-				visible={visibleChuyenDot}
+				open={visibleChuyenDot}
 			>
 				<FormChuyenDot getData={getData} onCancel={() => setVisibleChuyenDot(false)} />
 			</Modal>
@@ -814,9 +814,9 @@ const TableSanPhamNCKH = (props: {
 				destroyOnClose
 				width={900}
 				title={mode === 'GIO' ? 'Giờ chuẩn NCKH' : 'Điểm công trình khoa học'}
-				bodyStyle={{ paddingTop: 4 }}
+				styles={{ body: { padding: 4 } }}
 				footer={false}
-				visible={visibleViewQuyDoiGio}
+				open={visibleViewQuyDoiGio}
 				onCancel={onCancelViewQuyDoiGio}
 			>
 				{/* <Tabs activeKey={loaiDuLieuQuyDoiGio} onChange={(val: any) => setLoaiDuLieuQuyDoiGio(val)}>

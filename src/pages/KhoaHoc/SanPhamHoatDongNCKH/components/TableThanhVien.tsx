@@ -395,7 +395,7 @@ const TableThanhVien = (props: {
 					</Space>
 				)}
 			</TableStaticData>
-			<Modal destroyOnClose visible={visibleForm} onCancel={onCancelForm} footer={false} bodyStyle={{ padding: 0 }}>
+			<Modal destroyOnClose open={visibleForm} onCancel={onCancelForm} footer={false} bodyStyle={{ padding: 0 }}>
 				<FormThanhVien isDangThucHien={props?.isDangThucHien} record={record} edit={edit} onCancel={onCancelForm} />
 			</Modal>
 		</>

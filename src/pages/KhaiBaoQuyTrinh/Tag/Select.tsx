@@ -56,8 +56,8 @@ const SelectTags = (props: {
 						<Button icon={<PlusOutlined />} onClick={onAddNew} />
 						<Modal
 							destroyOnClose
-							visible={visibleForm}
-							bodyStyle={{ padding: 0 }}
+							open={visibleForm}
+							styles={{ body: { padding: 0 } }}
 							footer={null}
 							onCancel={() => setVisibleForm(false)}
 						>

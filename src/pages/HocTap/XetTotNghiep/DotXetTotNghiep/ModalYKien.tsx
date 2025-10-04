@@ -19,7 +19,7 @@ const ModalYKien = (props: { type: 'phan-hoi' | 'hoan' }) => {
 		<Modal
 			width={600}
 			destroyOnClose
-			visible={visibleForm}
+			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			footer={null}
 			title={`${props.type === 'hoan' ? 'Yêu cầu hoãn tốt nghiệp' : 'Gửi phản hồi'}`}

@@ -41,7 +41,7 @@ const ConfirmMuonSach = (props: { id?: string }) => {
 
 	return (
 		<Modal
-			visible={visibleMuon}
+			open={visibleMuon}
 			onCancel={() => setVisibleMuon(false)}
 			title='Xác nhận đăng ký mượn sách'
 			footer={null}

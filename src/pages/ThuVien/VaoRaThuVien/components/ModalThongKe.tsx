@@ -14,7 +14,7 @@ const ModalThongKeVaoRaThuVien = (props: { visible: boolean; setVisible: (val: b
 
 	return (
 		<Modal
-			visible={visible}
+			open={visible}
 			onCancel={() => setVisible(false)}
 			title='Thống kê vào ra thư viện'
 			width={800}

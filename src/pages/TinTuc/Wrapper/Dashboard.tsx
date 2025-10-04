@@ -30,10 +30,10 @@ const TinTucDashboardWrapper = () => {
 
 				<Modal
 					width={800}
-					bodyStyle={{ padding: 0 }}
+					styles={{ body: { padding: 0 } }}
 					destroyOnClose
 					onCancel={() => setVisibleThongBao(false)}
-					visible={visibleThongBao}
+					open={visibleThongBao}
 					okButtonProps={{ hidden: true }}
 					cancelText='Đóng'
 				>

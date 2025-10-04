@@ -152,10 +152,10 @@ const TableThanhVien = (props: {
 			<Modal
 				zIndex={1002}
 				destroyOnClose
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={onCancelForm}
 				footer={false}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 			>
 				<FormThanhVien record={record} edit={edit} onCancel={onCancelForm} />
 			</Modal>

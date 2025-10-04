@@ -325,7 +325,7 @@ const HoiDongKHCNPage = (props: {
 							? 'Danh sách thành viên hội đồng'
 							: 'Danh sách thành viên tham gia'
 				}
-				visible={visibleView}
+				open={visibleView}
 				onCancel={handleCancelView}
 				footer={
 					<Button type='primary' onClick={handleCancelView}>

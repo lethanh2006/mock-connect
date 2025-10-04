@@ -140,7 +140,7 @@ const DanhSachDangKyLop = (props: { visible: boolean; setVisible: (val: boolean)
 	return (
 		<Modal
 			title='Danh sách phiếu đăng ký nhu cầu học phần'
-			visible={visible}
+			open={visible}
 			onCancel={() => setvisible(false)}
 			footer={null}
 			width={1000}

@@ -20,7 +20,7 @@ const ModalKhaoSatBatBuoc = () => {
 	return (
 		<Modal
 			title='Chi tiết khảo sát'
-			visible={visibleKhaoSatBatBuoc}
+			open={visibleKhaoSatBatBuoc}
 			footer={null}
 			width={800}
 			closable={false}

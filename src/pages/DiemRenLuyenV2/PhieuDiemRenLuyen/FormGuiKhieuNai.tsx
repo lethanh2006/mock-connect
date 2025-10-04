@@ -36,7 +36,7 @@ const FormGuiKhieuNai = (props: { getData: any }) => {
 	return (
 		<Modal
 			footer={false}
-			visible={visibleFormGuiKhieuNai}
+			open={visibleFormGuiKhieuNai}
 			onCancel={() => setVisibleFormGuiKhieuNai(false)}
 			title={'Gửi khiếu nại điểm rèn luyện'}
 		>

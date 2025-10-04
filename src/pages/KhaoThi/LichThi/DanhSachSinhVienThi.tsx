@@ -51,7 +51,7 @@ const DanhSachSinhVienThi = (props: { recLichThi: LichThi.IRecordMe; visible: bo
 	return (
 		<Modal
 			width={700}
-			visible={visible}
+			open={visible}
 			title='Danh sách sinh viên thi'
 			onCancel={handleCancel}
 			footer={

@@ -19,7 +19,7 @@ const ViewHoiDong = (props: { rec: HoiDongKHCN.IRecord; zIndex?: number }) => {
 			zIndex={props?.zIndex}
 			width={1100}
 			title='Thông tin hội đồng'
-			visible={visibleViewDetail}
+			open={visibleViewDetail}
 			onCancel={handleCancel}
 			footer={
 				<Button type='primary' onClick={handleCancel}>

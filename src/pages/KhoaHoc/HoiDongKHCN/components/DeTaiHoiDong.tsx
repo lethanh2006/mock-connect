@@ -52,21 +52,21 @@ const TableDeTaiHoiDong = (props: {
 						? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter((item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I)
 						: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I,
-						  ),
+							),
 					sanPhamDeCuongDangII: recordDeTai?.nghiemThuKhcn?.baoCaoUrl?.length
 						? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II,
-						  )
+							)
 						: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II,
-						  ),
+							),
 					sanPhamDeCuongDangIII: recordDeTai?.nghiemThuKhcn?.baoCaoUrl?.length
 						? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
-						  )
+							)
 						: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
-						  ),
+							),
 				},
 			});
 		},
@@ -103,9 +103,7 @@ const TableDeTaiHoiDong = (props: {
 					<div>
 						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
 					</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.ten}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.ten}</div>)}
 				</div>
 			),
 			onCell,
@@ -119,9 +117,7 @@ const TableDeTaiHoiDong = (props: {
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -275,8 +271,8 @@ const TableDeTaiHoiDong = (props: {
 		props.type === ELoaiHoiDongKHCN.XET_DUYET
 			? columnsHoiDongXetChonDeXuat
 			: props.type === ELoaiHoiDongKHCN.DE_CUONG
-			? columnsHoiDongXetDuyetThuyetMinh
-			: columnsHoiDongNghiemThu;
+				? columnsHoiDongXetDuyetThuyetMinh
+				: columnsHoiDongNghiemThu;
 
 	return (
 		<>
@@ -308,7 +304,7 @@ const TableDeTaiHoiDong = (props: {
 				width={1000}
 				zIndex={1002}
 				destroyOnClose
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={onCancelForm}
 				footer={[
 					<Button

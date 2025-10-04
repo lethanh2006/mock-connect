@@ -54,7 +54,7 @@ const ModalSettingMauLich = () => {
 
 	return (
 		<Modal
-			visible={visibleForm}
+			open={visibleForm}
 			title='Cấu hình màu lịch'
 			destroyOnClose
 			width={600}

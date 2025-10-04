@@ -23,7 +23,7 @@ const ChiTietTepTin = (props: { visible: boolean; setVisible: (val: boolean) => 
 	return (
 		<ModalExpandable
 			title='Chi tiết tập tin'
-			visible={visible}
+			open={visible}
 			onCancel={() => setVisible(false)}
 			width={1000}
 			footer={null}

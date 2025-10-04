@@ -300,7 +300,7 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 
 	return (
 		<Modal
-			visible={visiblePhieuDiem}
+			open={visiblePhieuDiem}
 			onCancel={() => setVisiblePhieuDiem(false)}
 			width={1200}
 			footer={null}

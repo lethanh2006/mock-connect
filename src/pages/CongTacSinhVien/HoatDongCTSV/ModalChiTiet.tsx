@@ -7,7 +7,7 @@ const ModalChiTiet = () => {
 	const { danhSach: danhSachHocKy } = useModel('daotao.hocky');
 
 	return (
-		<Modal title='Chi tiết hoạt động' visible={visibleForm} onCancel={() => setVisibleForm(false)} footer={null}>
+		<Modal title='Chi tiết hoạt động' open={visibleForm} onCancel={() => setVisibleForm(false)} footer={null}>
 			<Descriptions column={1}>
 				<Descriptions.Item label='Tên hoạt động'>{record?.hoatDongCtsv?.ten ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Loại'>{record?.hoatDongCtsv?.loai ?? '--'}</Descriptions.Item>

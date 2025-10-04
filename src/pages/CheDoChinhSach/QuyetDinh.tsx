@@ -201,7 +201,7 @@ const QuyetDinh = (props: {
 				modelName={'chedochinhsach.quyetdinhchedosinhvien'}
 				columns={columns}
 			/>
-			<Modal destroyOnClose width={900} title='Chi tiết' footer={false} visible={visibleView} onCancel={onCancelView}>
+			<Modal destroyOnClose width={900} title='Chi tiết' footer={false} open={visibleView} onCancel={onCancelView}>
 				<ViewQuyetDinh />
 			</Modal>
 		</>

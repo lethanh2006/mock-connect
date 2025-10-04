@@ -129,7 +129,7 @@ const FileList = () => {
 			<ModalExpandable
 				title='Chi tiết tập tin'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={
 					<div className='form-footer'>
 						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>

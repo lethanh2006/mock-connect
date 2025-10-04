@@ -138,7 +138,7 @@ const TableLichHocLopHP = (props: {
 			<ModalExpandable
 				title='Chi tiết học liệu'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>

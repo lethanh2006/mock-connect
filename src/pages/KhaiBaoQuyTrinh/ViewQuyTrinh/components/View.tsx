@@ -336,10 +336,10 @@ const View = (props: Iprops) => {
 				</Spin>
 
 				<Modal
-					visible={visibleForm}
+					open={visibleForm}
 					onCancel={() => setVisibleForm(false)}
 					footer={null}
-					bodyStyle={{ padding: 0 }}
+					styles={{ body: { padding: 0 } }}
 					width={1000}
 					destroyOnClose
 				>
@@ -356,8 +356,8 @@ const View = (props: Iprops) => {
 							OK
 						</Button>
 					}
-					bodyStyle={{ padding: 0 }}
-					visible={visibleViewDetailDot}
+					styles={{ body: { padding: 0 } }}
+					open={visibleViewDetailDot}
 					onCancel={() => setVisibleViewDetailDot(false)}
 				>
 					{dotCurrent && dataQuyTrinh.quyTrinh && <ViewDot recDot={dotCurrent} recQuyTrinh={dataQuyTrinh.quyTrinh} />}

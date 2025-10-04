@@ -46,7 +46,7 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 	return (
 		<Modal
 			title={`${isView ? 'Chi tiết học phần' : 'Chỉnh sửa minh chứng'}`}
-			visible={visibleForm}
+			open={visibleForm}
 			width={isView ? 700 : 800}
 			footer={null}
 			onCancel={() => setVisibleForm(false)}
