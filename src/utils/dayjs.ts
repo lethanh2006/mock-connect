@@ -73,11 +73,7 @@ dayjs.extend(weekday);
 dayjs.extend(localeData);
 
 // Set locale + timezone
-dayjs.locale({
-	...dayjs.Ls['vi'],
-	weekStart: 0,
-});
-
+dayjs.locale('vi');
 dayjs.tz.setDefault('Asia/Ho_Chi_Minh');
 
 export default dayjs;
