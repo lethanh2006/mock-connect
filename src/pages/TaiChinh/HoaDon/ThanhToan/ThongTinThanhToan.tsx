@@ -168,7 +168,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 			<Modal
 				title='Thông tin thanh toán'
-				visible={visibleThanhToan}
+				open={visibleThanhToan}
 				onCancel={() => setVisibleThanhToan(false)}
 				footer={null}
 				width={1000}
@@ -183,7 +183,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			</Modal>
 
 			<ModalThanhToanNganHang
-				visible={visibleHuongDan}
+				open={visibleHuongDan}
 				onOk={() => {
 					if (activeTab === '1') getGiaoDich();
 					if (getData) getData();

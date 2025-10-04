@@ -43,7 +43,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 
 	return (
 		<Modal
-			visible={visibleForm}
+			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			title='Đăng ký nhu cầu học phần'
 			width={1000}

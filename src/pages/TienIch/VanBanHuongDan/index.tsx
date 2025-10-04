@@ -157,7 +157,7 @@ const VanBanHuongDanComponent = () => {
 				footer={<Button onClick={() => setVisibleFileList(false)}>Đóng</Button>}
 				width={1000}
 				onCancel={() => setVisibleFileList(false)}
-				visible={visibleFileList}
+				open={visibleFileList}
 			>
 				<FileList />
 			</Modal>

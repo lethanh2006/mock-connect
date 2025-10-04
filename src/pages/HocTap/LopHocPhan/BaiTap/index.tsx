@@ -75,15 +75,13 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 								}
 								scrollableTarget='body'
 							>
-								{danhSach?.map((val) => (
-									<CardStatusBaiTap key={val._id} data={val} />
-								))}
+								{danhSach?.map((val) => <CardStatusBaiTap key={val._id} data={val} />)}
 							</InfiniteScroll>
 						</>
 					)}
 				</div>
 			</Spin>
-			<Modal visible={visibleForm} onCancel={() => setVisibleForm(false)} footer={null} width={800} title='Nộp bài tập'>
+			<Modal open={visibleForm} onCancel={() => setVisibleForm(false)} footer={null} width={800} title='Nộp bài tập'>
 				<FormBaiTap getData={getData} />
 			</Modal>
 		</div>

@@ -43,7 +43,7 @@ const SoLuongTopVaoRaThuVien = () => {
 	return (
 		<Modal
 			title='Bạn đọc có số lượt vào thư viện nhiều nhất'
-			visible={visibleForm}
+			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			footer={null}
 			width={700}

@@ -62,7 +62,7 @@ const ModalQuyDoiDiem = (props: {
 	return (
 		<Modal
 			width={900}
-			visible={visible}
+			open={visible}
 			onCancel={() => {
 				setVisible(false);
 			}}

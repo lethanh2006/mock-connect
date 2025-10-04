@@ -191,7 +191,7 @@ const TableTimeline = (props: {
 			<Modal
 				zIndex={1002}
 				destroyOnClose
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={onCancelForm}
 				footer={false}
 				bodyStyle={{ padding: 0 }}

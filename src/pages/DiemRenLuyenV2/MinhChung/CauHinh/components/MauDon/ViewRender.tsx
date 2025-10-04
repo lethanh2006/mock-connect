@@ -151,7 +151,7 @@ const ViewRender = (props: {
 						width={700}
 						footer={false}
 						title={`${editFormTable ? 'Chỉnh sửa' : 'Thêm mới'} ${cauHinh.ten}`}
-						visible={visibleFormTable}
+						open={visibleFormTable}
 						onCancel={() => setVisibleFormTable(false)}
 					>
 						<FormTable

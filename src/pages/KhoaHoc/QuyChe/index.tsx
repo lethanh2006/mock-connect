@@ -110,7 +110,7 @@ const QuyCheComponent = () => {
 			/>
 			<Modal
 				width={800}
-				visible={visibleView}
+				open={visibleView}
 				onCancel={() => {
 					setVisibleView(false);
 				}}
@@ -122,7 +122,7 @@ const QuyCheComponent = () => {
 			<Modal
 				title='Chi tiết tập tin'
 				width={800}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={
 					<div className='form-footer'>
 						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>

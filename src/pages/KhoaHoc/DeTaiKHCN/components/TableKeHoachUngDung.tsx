@@ -138,10 +138,10 @@ const TableKeHoachUngDung = (props: { mode: 'view' | 'edit'; data: DeTaiKHCN.KeH
 			<Modal
 				zIndex={1002}
 				destroyOnClose
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={onCancelForm}
 				footer={false}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 			>
 				<FormKeHoachUngDung record={record} edit={edit} onCancel={onCancelForm} />
 			</Modal>

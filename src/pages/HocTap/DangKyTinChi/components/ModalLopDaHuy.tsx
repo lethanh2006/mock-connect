@@ -126,10 +126,12 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 				<Popconfirm
 					title='Bạn có muốn đăng ký lại đăng ký lớp tín chỉ này?'
 					placement='topRight'
-					onConfirm={() => revertLopDangKyTinDaHuyModel(rec?._id, () => {
-						getDataDangKy();
-						getDataHuy();
-					})}
+					onConfirm={() =>
+						revertLopDangKyTinDaHuyModel(rec?._id, () => {
+							getDataDangKy();
+							getDataHuy();
+						})
+					}
 				>
 					<ButtonExtend icon={<RedoOutlined />} type='link' tooltip='Hoàn tác' />
 				</Popconfirm>
@@ -140,7 +142,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 	return (
 		<Modal
 			title='Danh sách lớp đã hủy đăng ký'
-			visible={visible}
+			open={visible}
 			onCancel={() => setVisible(false)}
 			width={1100}
 			footer={null}

@@ -1,14 +1,14 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import { EKieuDuLieu } from '@/services/KhoaHoc/LoaiHinhNCKH/constants';
 import type { LoaiHinhNCKH } from '@/services/KhoaHoc/LoaiHinhNCKH/typings';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
 import { Button, Modal, Select } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import ViewRender from './ViewRender';
 import TableThanhVien from './TableThanhVien';
+import ViewRender from './ViewRender';
 import ViewSanPham from './ViewSanPham';
-import { EKieuDuLieu } from '@/services/KhoaHoc/LoaiHinhNCKH/constants';
 
 const KetQuaSearch = (props: { handleSubmit: any }) => {
 	const { ketQuaSearch, visibleKetQuaSearch, setVisibleKetQuaSearch, loading, formSubmiting, record } =
@@ -103,7 +103,7 @@ const KetQuaSearch = (props: { handleSubmit: any }) => {
 	return (
 		<Modal
 			width={1000}
-			visible={visibleKetQuaSearch}
+			open={visibleKetQuaSearch}
 			title='Các hoạt động, sản phẩm NCKH tương đồng'
 			onCancel={handleCancel}
 			footer={
@@ -150,7 +150,7 @@ const KetQuaSearch = (props: { handleSubmit: any }) => {
 						Đóng
 					</Button>
 				}
-				visible={visibleViewThanhVien}
+				open={visibleViewThanhVien}
 				onCancel={onCancelViewThanhVien}
 			>
 				<TableThanhVien data={recordSanPham?.danhSachThanhVien} mode='view' />
@@ -160,7 +160,7 @@ const KetQuaSearch = (props: { handleSubmit: any }) => {
 				width={900}
 				title='Chi tiết sản phẩm, hoạt động NCKH'
 				footer={false}
-				visible={visibleViewSanPham}
+				open={visibleViewSanPham}
 				onCancel={onCancelViewSanPham}
 			>
 				<ViewSanPham

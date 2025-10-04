@@ -14,6 +14,7 @@ import {
 	MapKeyTextTrangThaiSanPham,
 } from '@/services/KhoaHoc/SanPhamNCKH/constants';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
+import dayjs from '@/utils/dayjs';
 import { CheckOutlined, CloseOutlined, EditOutlined, StopOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Modal, Select, Tag } from 'antd';
 import { useCallback, useState } from 'react';
@@ -21,7 +22,6 @@ import { useModel } from 'umi';
 import FormXetDuyet from './FormXetDuyet';
 import TableThanhVien from './TableThanhVien';
 import ViewRender from './ViewRender';
-import dayjs from '@/utils/dayjs';
 
 const ViewSanPham = (props: {
 	getData: any;
@@ -405,7 +405,7 @@ const ViewSanPham = (props: {
 
 			<Modal
 				footer={false}
-				visible={visibleFormDuyet}
+				open={visibleFormDuyet}
 				onCancel={onCancelFormDuyet}
 				title={`${trangThai} sản phẩm, hoạt động NCKH`}
 			>

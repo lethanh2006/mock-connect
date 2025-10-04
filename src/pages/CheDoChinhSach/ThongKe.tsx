@@ -115,8 +115,8 @@ const ThongKeBaoCao = () => {
 				onCancel={() => setVisibleForm(false)}
 				width={700}
 				footer={false}
-				bodyStyle={{ padding: 0 }}
-				visible={visibleForm}
+				styles={{ body: { padding: 0 } }}
+				open={visibleForm}
 			>
 				<Form modelName={'chedochinhsach.thongke'} />
 			</Modal>

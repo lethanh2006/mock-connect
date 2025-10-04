@@ -297,7 +297,7 @@ const FormRender = (props: {
 							message: 'Bắt buộc',
 							required: true,
 						},
-				  ]
+					]
 				: [];
 			component = (
 				<>
@@ -333,7 +333,7 @@ const FormRender = (props: {
 						width={1000}
 						footer={false}
 						title={`${editFormTable ? 'Chỉnh sửa' : 'Thêm mới'} ${cauHinh.ten}`}
-						visible={visibleFormTable}
+						open={visibleFormTable}
 						onCancel={onCancelFormTable}
 					>
 						<SelectSanPhamNCKH
@@ -434,7 +434,7 @@ const FormRender = (props: {
 							message: 'Bắt buộc',
 							required: true,
 						},
-				  ]
+					]
 				: [];
 
 			component = (
@@ -475,7 +475,7 @@ const FormRender = (props: {
 						width={700}
 						footer={false}
 						title={`${editFormTable ? 'Chỉnh sửa' : 'Thêm mới'} ${cauHinh.ten}`}
-						visible={visibleFormTable}
+						open={visibleFormTable}
 						onCancel={onCancelFormTable}
 					>
 						<FormTable record={recordTable} onCancel={onCancelFormTable} edit={editFormTable} cauHinh={cauHinh} />
@@ -595,16 +595,16 @@ const FormRender = (props: {
 										recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 											? 'YYYY'
 											: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
-											? 'MM/YYYY'
-											: 'DD/MM/YYYY'
+												? 'MM/YYYY'
+												: 'DD/MM/YYYY'
 									}
 									placeholder={['Từ', 'đến']}
 									picker={
 										recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 											? 'year'
 											: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
-											? 'month'
-											: 'date'
+												? 'month'
+												: 'date'
 									}
 								/>
 							</Form.Item>
@@ -624,15 +624,15 @@ const FormRender = (props: {
 										recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 											? 'YYYY'
 											: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
-											? 'MM/YYYY'
-											: 'DD/MM/YYYY'
+												? 'MM/YYYY'
+												: 'DD/MM/YYYY'
 									}
 									pickerStyle={
 										recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 											? 'year'
 											: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
-											? 'month'
-											: 'date'
+												? 'month'
+												: 'date'
 									}
 									placeholder={'Chọn thời gian'}
 								/>
@@ -657,7 +657,7 @@ const FormRender = (props: {
 
 							<Col span={24}>
 								<div className='ant-descriptions-title' style={{ marginBottom: 12 }}>
-									{props.isDangThucHien ? 'Chủ biên và thành viên' : item?.label ?? 'Danh sách thành viên'}
+									{props.isDangThucHien ? 'Chủ biên và thành viên' : (item?.label ?? 'Danh sách thành viên')}
 								</div>
 								<TableThanhVien
 									isDangThucHien={props.isDangThucHien}

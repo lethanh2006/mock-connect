@@ -76,7 +76,7 @@ const ThongTinChungPage = () => {
 			<ModalExpandable
 				title='Chi tiết đề cương chi tiết đính kèm'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>

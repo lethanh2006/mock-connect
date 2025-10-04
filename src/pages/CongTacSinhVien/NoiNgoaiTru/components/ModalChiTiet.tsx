@@ -8,7 +8,7 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 
 	return (
 		<Modal
-			visible={visibleForm}
+			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			footer={null}
 			width={1000}

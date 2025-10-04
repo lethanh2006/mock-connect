@@ -62,12 +62,12 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 
 	return (
 		<Modal
-			visible={visibleModal}
+			open={visibleModal}
 			onCancel={() => setVisibleModal(false)}
 			okButtonProps={{ hidden: true }}
 			cancelText='Đóng'
 			width={1000}
-			bodyStyle={{ padding: 0 }}
+			styles={{ body: { padding: 0 } }}
 		>
 			<Card title='Lịch học dự kiến'>
 				<p>

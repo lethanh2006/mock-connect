@@ -108,7 +108,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 						setQuyTrinhIdSelect(quyTrinhId);
 						setVisibleForm(true);
 					} else {
-						message.warn('Chưa có đợt');
+						message.warning('Chưa có đợt');
 					}
 				}
 			}
@@ -383,7 +383,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			<Modal
 				title={'Chọn đợt khai báo'}
 				width={500}
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				destroyOnClose
@@ -393,7 +393,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			<Modal
 				title={'Thông tin chung'}
 				width={1000}
-				visible={visibleThongTinChung}
+				open={visibleThongTinChung}
 				onCancel={() => setVisibleThongTinChung(false)}
 				footer={
 					<>
@@ -414,10 +414,10 @@ const KhaiBaoQuyTrinhPage = (props: {
 			</Modal>
 
 			<Modal
-				visible={visibleModal}
+				open={visibleModal}
 				onCancel={() => setVisibleModal(false)}
 				footer={null}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				width={1000}
 				destroyOnClose
 			>

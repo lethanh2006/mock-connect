@@ -22,7 +22,7 @@ const ModalThoiKhoaBieu = () => {
 		<ModalExpandable
 			width={800}
 			title='Thông tin buổi học'
-			visible={visibleForm}
+			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			okButtonProps={{ hidden: true }}
 			cancelText='Đóng'
@@ -65,7 +65,7 @@ const ModalThoiKhoaBieu = () => {
 			<ModalExpandable
 				title='Chi tiết học liệu'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>

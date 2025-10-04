@@ -1,8 +1,8 @@
+import FormVanBan from '@/pages/KhaiBaoQuyTrinh/VanBan/components/Form';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal, Select, Spin } from 'antd';
 import { CSSProperties, useEffect } from 'react';
 import { useModel } from 'umi';
-import FormVanBan from '@/pages/KhaiBaoQuyTrinh/VanBan/components/Form';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem
@@ -21,9 +21,8 @@ const SelectVanBan = (props: {
 	style?: CSSProperties;
 }) => {
 	const { value, onChange, multiple, loadData, allowClear, placeholder, disabled, style, dataState, hasCreate } = props;
-	const { danhSach, getAllModel, loading, setRecord, setEdit, setVisibleForm, visibleForm } = useModel(
-		'quytrinh.vanban',
-	);
+	const { danhSach, getAllModel, loading, setRecord, setEdit, setVisibleForm, visibleForm } =
+		useModel('quytrinh.vanban');
 
 	useEffect(() => {
 		if (loadData !== false) getAllModel();
@@ -58,8 +57,8 @@ const SelectVanBan = (props: {
 						<Button icon={<PlusOutlined />} onClick={onAddNew} />
 						<Modal
 							destroyOnClose
-							visible={visibleForm}
-							bodyStyle={{ padding: 0 }}
+							open={visibleForm}
+							styles={{ body: { padding: 0 } }}
 							footer={null}
 							onCancel={() => setVisibleForm(false)}
 						>

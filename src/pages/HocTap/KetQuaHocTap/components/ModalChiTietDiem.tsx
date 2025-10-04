@@ -56,7 +56,7 @@ const ModalChiTietDiem = (
 		<>
 			<Modal
 				title='Kết quả học tập'
-				visible={visible}
+				open={visible}
 				onCancel={() => setVisible(false)}
 				footer={
 					<Space wrap>

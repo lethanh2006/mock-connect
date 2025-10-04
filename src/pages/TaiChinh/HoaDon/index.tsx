@@ -58,9 +58,7 @@ const HoaDonPage = () => {
 				<ExpandText>
 					{rec?.billItems
 						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.map((item) => (
-							<div key={item._id}>- {item.ten ?? item?.tenKhoanThu}</div>
-						))}
+						?.map((item) => <div key={item._id}>- {item.ten ?? item?.tenKhoanThu}</div>)}
 				</ExpandText>
 			),
 		},
@@ -129,10 +127,10 @@ const HoaDonPage = () => {
 			/>
 
 			<Modal
-				visible={visibleModal}
+				open={visibleModal}
 				onCancel={() => setVisibleModal(false)}
 				footer={null}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				width={1000}
 			>
 				<ThongTinThanhToan setVisible={setVisibleModal} getData={getData} />

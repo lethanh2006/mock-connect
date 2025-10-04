@@ -89,7 +89,7 @@ export const FormKhaiBaoMinhChung = () => {
 			values.urlFileList = urlFileList;
 
 			if (!values.urlFileList?.length && !values.duongDan) {
-				message.warn('Phải nhập tối thiểu 1 trong 2 loại: Đường dẫn hoặc Tập tin minh chứng');
+				message.warning('Phải nhập tối thiểu 1 trong 2 loại: Đường dẫn hoặc Tập tin minh chứng');
 				return;
 			}
 		}

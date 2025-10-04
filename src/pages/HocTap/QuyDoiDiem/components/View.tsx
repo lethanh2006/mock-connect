@@ -19,7 +19,7 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 	return (
 		<Modal
 			width={1000}
-			visible={visible}
+			open={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
 			title='Lịch sử công nhận kết quả học tập'

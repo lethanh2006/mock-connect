@@ -55,7 +55,7 @@ const ChiTietSinhVienDangKy = () => {
 	return (
 		<Modal
 			title='Sinh viên đăng ký nhu cầu học phần'
-			visible={visibleForm}
+			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			footer={null}
 			width={900}

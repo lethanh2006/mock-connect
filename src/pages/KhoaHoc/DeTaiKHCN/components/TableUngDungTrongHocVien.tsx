@@ -147,10 +147,10 @@ const TableUngDungTrongHocVien = (props: { mode: 'view' | 'edit'; data: DeTaiKHC
 			<Modal
 				zIndex={1002}
 				destroyOnClose
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={onCancelForm}
 				footer={false}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 			>
 				<FormUngDungTrongHocVien record={record} edit={edit} onCancel={onCancelForm} />
 			</Modal>

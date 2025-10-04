@@ -274,7 +274,7 @@ export default () => {
 			<ModalExpandable
 				title='Chi tiết tập tin'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>

@@ -54,14 +54,14 @@ const ModalNopTaiLieu = (props: { visible: boolean; setVisible: (val: boolean) =
 				.then(() => setVisible(false))
 				.catch((err) => console.log(err));
 		} else {
-			message.warn('Vui lòng xác nhận quy định');
+			message.warning('Vui lòng xác nhận quy định');
 		}
 	};
 
 	return (
 		<Modal
 			title='Nộp tài liệu'
-			visible={visible}
+			open={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
 			destroyOnClose

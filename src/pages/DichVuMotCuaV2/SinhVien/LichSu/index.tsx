@@ -340,7 +340,7 @@ const LichSuGuiDon = () => {
 				destroyOnClose
 				width='850px'
 				footer={false}
-				visible={visibleFormChinhSuaDon}
+				open={visibleFormChinhSuaDon}
 				onCancel={() => {
 					setVisibleFormChinhSuaDon(false);
 				}}
@@ -360,8 +360,7 @@ const LichSuGuiDon = () => {
 				destroyOnClose
 				width='850px'
 				footer={false}
-				visible={visibleFormBieuMau}
-				bodyStyle={{ padding: 18 }}
+				open={visibleFormBieuMau}
 				onCancel={() => {
 					setVisibleFormBieuMau(false);
 				}}
@@ -389,7 +388,7 @@ const LichSuGuiDon = () => {
 				</Tabs>
 			</Modal>
 			<Modal
-				visible={visibleViewInDon}
+				open={visibleViewInDon}
 				onCancel={() => {
 					setVisibleViewInDon(false);
 				}}
@@ -418,8 +417,8 @@ const LichSuGuiDon = () => {
 				<PDFViewer data={data} />
 			</Modal>
 			<Modal
-				bodyStyle={{ padding: 0 }}
-				visible={visibleForm}
+				styles={{ body: { padding: 0 } }}
+				open={visibleForm}
 				onCancel={() => {
 					setVisibleForm(false);
 				}}
@@ -433,7 +432,7 @@ const LichSuGuiDon = () => {
 			<ModalExpandable
 				title='Chi tiết tập tin'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>

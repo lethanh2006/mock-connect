@@ -125,7 +125,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 
 	return (
 		<Modal
-			visible={visible}
+			open={visible}
 			title='Chi tiết lịch'
 			destroyOnClose
 			width={600}

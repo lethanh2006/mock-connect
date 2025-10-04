@@ -61,8 +61,8 @@ const SinhVienTaoDon = () => {
 				}}
 				footer={false}
 				width='800px'
-				bodyStyle={{ padding: 0 }}
-				visible={visibleFormBieuMau}
+				styles={{ body: { padding: 0 } }}
+				open={visibleFormBieuMau}
 			>
 				<FormBieuMau
 					type='create'

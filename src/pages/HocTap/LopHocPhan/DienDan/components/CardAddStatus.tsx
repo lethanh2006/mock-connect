@@ -9,7 +9,10 @@ const CardAddStatusWrapper = styled.div`
 		padding: 18px;
 		overflow: hidden;
 		border-radius: 2px;
-		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08), 0 1px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+		box-shadow:
+			0 1px 2px 0 rgba(0, 0, 0, 0.08),
+			0 1px 6px -1px rgba(0, 0, 0, 0.06),
+			0 2px 4px 0 rgba(0, 0, 0, 0.08);
 	}
 	.image {
 		margin-right: 8px;
@@ -67,7 +70,7 @@ const CardAddStatus = (props: IProps) => {
 
 			<Modal
 				title='Thêm mới bài viết'
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				width={800}

@@ -155,8 +155,8 @@ const NhuCauHocPhanPage = () =>
 				<ModalExpandable
 					onCancel={() => setVisibleForm(false)}
 					footer={false}
-					bodyStyle={{ padding: 0 }}
-					visible={visibleForm}
+					styles={{ body: { padding: 0 } }}
+					open={visibleForm}
 					width={800}
 				>
 					<FormDangKyNhuCau getData={getData} title='Nhu cầu học phần' />

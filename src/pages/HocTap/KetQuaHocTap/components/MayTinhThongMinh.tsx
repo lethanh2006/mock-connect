@@ -44,7 +44,7 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 		});
 		const tongTinChi = _.sumBy(data, (item) =>
 			loaiHpTinhDiem.includes(item.maLoaiHocPhan) && (item.diemDuKienThang4 || item.diemThang4)
-				? item.soTinChi ?? 0
+				? (item.soTinChi ?? 0)
 				: 0,
 		);
 		setTongKet(Math.round(tongTinChi === 0 ? 0 : (tongDiem * 100) / tongTinChi) / 100);
@@ -77,7 +77,7 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 						...record,
 						diemDuKien: parseFloat(values.diemDuKien) || undefined,
 						diemDuKienThang4: parseFloat(convertNumberScoreToAlphabet(values.diemDuKien)[1]) || undefined,
-				  }
+					}
 				: item,
 		);
 		tinhDiemTongKet(data ?? []);
@@ -242,11 +242,11 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 			</Row>
 
 			<Modal
-				visible={modalVisible}
+				open={modalVisible}
 				onCancel={() => setModalVisible(false)}
 				width={600}
 				footer={null}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 			>
 				<Card title='Giả lập điểm'>
 					<Descriptions column={1}>

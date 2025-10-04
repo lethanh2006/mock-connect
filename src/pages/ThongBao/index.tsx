@@ -93,10 +93,10 @@ const ThongBaoPage = () => {
 			/>
 			<Modal
 				width={800}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'
-				visible={visible}
+				open={visible}
 				onCancel={() => setVisible(false)}
 				destroyOnClose
 			>

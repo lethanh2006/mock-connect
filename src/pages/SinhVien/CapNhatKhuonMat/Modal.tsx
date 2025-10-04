@@ -38,7 +38,7 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 	return (
 		<Modal
 			title='Cập nhật ảnh nhận diện khuôn mặt'
-			visible={visible}
+			open={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
 			width={800}
