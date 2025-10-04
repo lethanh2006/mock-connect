@@ -21,10 +21,20 @@ const SelectDonViHanhChinh = (props: {
 	hasLabel?: boolean;
 	keyValue?: keyof DonViHanhChinh.IRecord;
 }) => {
-	const { form, suffix, listTinh, hasSoNha, hideTinh, hideQuanHuyen, hideXaPhuong, hasLabel, keyValue = 'ma' } = props;
+	const {
+		form,
+		suffix,
+		listTinh,
+		hasSoNha,
+		hideTinh,
+		// hideQuanHuyen,
+		hideXaPhuong,
+		hasLabel,
+		keyValue = 'tenDonVi',
+	} = props;
 	const [idTinh, setIdTinh] = useState<string | undefined>(props?.initialValue?.tinhTp);
-	const [idHuyen, setIdHuyen] = useState<string | undefined>(props?.initialValue?.quanHuyen);
-	const [listHuyen, setListHuyen] = useState<DonViHanhChinh.IRecord[]>([]);
+	// const [idHuyen, setIdHuyen] = useState<string | undefined>(props?.initialValue?.quanHuyen);
+	// const [listHuyen, setListHuyen] = useState<DonViHanhChinh.IRecord[]>([]);
 	const [listXa, setListXa] = useState<DonViHanhChinh.IRecord[]>([]);
 
 	const onchangeTinhThanhPho = (e: string) => {
@@ -32,13 +42,21 @@ const SelectDonViHanhChinh = (props: {
 		form.setFieldsValue({
 			[suffix ? 'quanHuyen' + suffix : 'quanHuyen']: undefined,
 			[suffix ? 'xaPhuong' + suffix : 'xaPhuong']: undefined,
+
+			[suffix ? 'maTinhTp' + suffix : 'maTinhTp']: e,
 		});
 	};
 
-	const onchangeQuanHuyen = (e: string) => {
-		setIdHuyen(e);
-		form.setFieldsValue({ [suffix ? 'xaPhuong' + suffix : 'xaPhuong']: undefined });
+	const onchangePhuongXa = (e: string) => {
+		form.setFieldsValue({
+			[suffix ? 'maXaPhuong' + suffix : 'maXaPhuong']: e,
+		});
 	};
+
+	// const onchangeQuanHuyen = (e: string) => {
+	// 	setIdHuyen(e);
+	// 	form.setFieldsValue({ [suffix ? 'xaPhuong' + suffix : 'xaPhuong']: undefined });
+	// };
 
 	// useEffect(() => {
 	// 	if (idTinh)
@@ -77,6 +95,8 @@ const SelectDonViHanhChinh = (props: {
 							optionFilterProp='label'
 						/>
 					</Form.Item>
+
+					<Form.Item name={suffix ? 'maTinhTp' + suffix : 'maTinhTp'} />
 				</Col>
 			)}
 			{/* {!hideQuanHuyen && (
@@ -121,8 +141,11 @@ const SelectDonViHanhChinh = (props: {
 								label: item.tenDonVi,
 							}))}
 							optionFilterProp='label'
+							onChange={(val, opt: any) => onchangePhuongXa(opt?.key)}
 						/>
 					</Form.Item>
+
+					<Form.Item name={suffix ? 'maXaPhuong' + suffix : 'maXaPhuong'} />
 				</Col>
 			)}
 			{hasSoNha ? (
