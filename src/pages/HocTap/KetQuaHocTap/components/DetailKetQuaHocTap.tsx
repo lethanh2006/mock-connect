@@ -165,7 +165,7 @@ const DetailKetQuaHocTap = (props: {
 							tab={
 								<>
 									Điểm GPA
-									{recDiem?.dat !== undefined && (
+									{recDiem?.dat !== undefined && recDiem.dat !== null && (
 										<Tag color={recDiem.dat ? 'green' : 'red'} style={{ marginLeft: 8 }}>
 											{recDiem.dat ? 'Đạt' : 'Không đạt'}
 										</Tag>
