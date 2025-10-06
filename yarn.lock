@@ -2352,10 +2352,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-big-calendar@^1.16.1":
-  version "1.16.1"
-  resolved "https://registry.yarnpkg.com/@types/react-big-calendar/-/react-big-calendar-1.16.1.tgz#b7e9e0f225b936829679671b054248e71f13678b"
-  integrity sha512-pDHFcVWx+BvZbX6U39R4l8c9930vKnfx+09lf4W8r8HuxBDLzGk7Q63ncBmqqnQImEFNDKfwa6MDyu90cfzJ2A==
+"@types/react-big-calendar@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@types/react-big-calendar/-/react-big-calendar-1.6.0.tgz#3060b86788c6b636b8b70feaba843fb83a744491"
+  integrity sha512-ZdewX362GjB8MIVweVw+XR/6qkpkTVJvlTTyhqcLbEVI/zEUxPSX+9OlSDIJG3IONkvq+QqGPJbhyLkiDBQ7Jg==
   dependencies:
     "@types/date-arithmetic" "*"
     "@types/prop-types" "*"
@@ -10372,10 +10372,10 @@ react-beautiful-dnd@^13.1.0:
     redux "^4.0.4"
     use-memo-one "^1.1.1"
 
-react-big-calendar@^1.18.0:
-  version "1.18.0"
-  resolved "https://registry.yarnpkg.com/react-big-calendar/-/react-big-calendar-1.18.0.tgz#feace5727cca7b65f9b6e314529fa512a49c9ad1"
-  integrity sha512-bGrCdyfnCGe2qnIdEoGkGgQdEFOiGO1Tq7RLkI1a2t8ZudyEAKekFtneO2/ltKQEQK6zH76YdJ7vR9UMyD+ULw==
+react-big-calendar@1.16.1:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/react-big-calendar/-/react-big-calendar-1.16.1.tgz#a9062a7aa26bf6dfce54b7e7cab95feaf44757e3"
+  integrity sha512-xpERBOa7+2nSMCTO6rTCsG5Is3DTZoOT0xuXeKAN4GzyZd06MlxIZilzho7SE+LGAzK2RcpM0+YMrzorgIO4BQ==
   dependencies:
     "@babel/runtime" "^7.20.7"
     clsx "^1.2.1"
