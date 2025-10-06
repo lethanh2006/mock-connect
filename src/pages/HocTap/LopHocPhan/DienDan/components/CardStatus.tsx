@@ -1,6 +1,6 @@
 import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
 import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
-import dayjs from '@/utils/dayjs';
+import dayjs, { vietnameseCalendarConfig } from '@/utils/dayjs';
 import { copyToClipboard } from '@/utils/utils';
 import {
 	CheckCircleOutlined,
@@ -123,7 +123,9 @@ const CardStatus = (props: IProps) => {
 								{/*)}*/}
 							</div>
 							<div className='time'>
-								{data?.ngayDang ? dayjs(data?.ngayDang).calendar() : dayjs(data?.createdAt).calendar()}
+								{data?.ngayDang
+									? dayjs(data?.ngayDang).calendar(null, vietnameseCalendarConfig)
+									: dayjs(data?.createdAt).calendar(null, vietnameseCalendarConfig)}
 							</div>
 						</div>
 					</div>

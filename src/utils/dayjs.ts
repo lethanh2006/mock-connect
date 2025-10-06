@@ -17,6 +17,15 @@ import utc from 'dayjs/plugin/utc';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 
+const vietnameseCalendarConfig = {
+	sameDay: '[Hôm nay lúc] HH:mm',
+	nextDay: '[Ngày mai lúc] HH:mm',
+	nextWeek: 'dddd [tuần tới lúc] HH:mm',
+	lastDay: '[Hôm qua lúc] HH:mm',
+	lastWeek: 'dddd [tuần trước lúc] HH:mm',
+	sameElse: 'DD/MM/YYYY [lúc] HH:mm',
+};
+
 // mirgrate from moment to dayjs:
 
 // tmp =
@@ -75,5 +84,7 @@ dayjs.extend(localeData);
 // Set locale + timezone
 dayjs.locale('vi');
 dayjs.tz.setDefault('Asia/Ho_Chi_Minh');
+
+export { vietnameseCalendarConfig };
 
 export default dayjs;
