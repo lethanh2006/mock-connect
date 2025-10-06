@@ -159,6 +159,12 @@ declare module HocPhan {
 		soTiet: number;
 	}
 
+	// Setting thư viện
+	export interface ISettingThuVien {
+		enable?: boolean;
+		thuVienUrl?: string;
+	}
+
 	export interface IHocLieuDeCuong {
 		_id: string;
 		deCuongId: string;
@@ -177,7 +183,7 @@ declare module HocPhan {
 		url?: string;
 	}
 
-		/** Chuẩn đầu ra học phần (CLO) */
+	/** Chuẩn đầu ra học phần (CLO) */
 	export interface IChuanDauRa {
 		_id: string;
 		/** Mã Chuẩn đầu ra (CLO1, CLO2...), unique trong CTĐT */
