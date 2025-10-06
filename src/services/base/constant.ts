@@ -130,6 +130,7 @@ export const tenTruongVietTatTiengAnh = APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH
 export enum ESettingKey {
 	THONG_TIN_THANH_TOAN = 'THONG_TIN_THANH_TOAN',
 	GENERAL_INFO = 'GENERAL_INFO',
+	THU_VIEN_HOC_LIEU = 'THU_VIEN_HOC_LIEU',
 }
 
 /** Định dạng file */
