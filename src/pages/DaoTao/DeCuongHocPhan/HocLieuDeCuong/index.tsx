@@ -1,26 +1,15 @@
 import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
-import { ESettingKey } from '@/services/base/constant';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { EyeOutlined } from '@ant-design/icons';
 import { Checkbox } from 'antd';
-import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 const HocLieuDeCuongPage = () => {
 	const { page, limit } = useModel('hocphan.hoclieudecuong');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
-	const { getByKeyModel } = useModel('tienich.caidat');
-	const [setting, setSetting] = useState({ enable: false, thuVienUrl: '' });
-
-	useEffect(() => {
-		getByKeyModel(ESettingKey.THU_VIEN_HOC_LIEU)
-			.then((settingValue) => {
-				if (settingValue) setSetting(settingValue);
-			})
-			.catch((er) => console.log(er));
-	}, []);
+	const { settings } = useModel('tienich.caidat');
 
 	const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
 		{
@@ -71,16 +60,10 @@ const HocLieuDeCuongPage = () => {
 			fixed: 'right',
 			render: (val) =>
 				val ? (
-					<a
-						href={`${setting?.enable ? APP_CONFIG_URL_THU_VIEN : setting?.thuVienUrl}${val}`}
-						target='_blank'
-						rel='noreferrer'
-						title='Xem chi tiết'
-					>
+					<a href={APP_CONFIG_URL_THU_VIEN + val} target='_blank' rel='noreferrer' title='Xem chi tiết'>
 						<EyeOutlined />
 					</a>
 				) : null,
-			hide: !(setting?.enable ? APP_CONFIG_URL_THU_VIEN : setting?.thuVienUrl),
 		},
 	];
 
