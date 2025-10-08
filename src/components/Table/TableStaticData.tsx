@@ -1,3 +1,4 @@
+import { getPartitionCode } from '@/utils/constants';
 import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -7,7 +8,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { useIntl } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ButtonExtend from './ButtonExtend';
 import { updateSearchStorage } from './function';
 import ModalExpandable from './ModalExpandable';
@@ -17,10 +18,13 @@ import type { IColumn, TableStaticProps, TDataOption } from './typing';
 const TableStaticData = (props: TableStaticProps) => {
 	const intl = useIntl();
 	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable } = props;
+	const { danhSach: dsPhanVung } = useModel('core.phanvunguser');
 	const [searchText, setSearchText] = useState<string>('');
 	const [searchedColumn, setSearchedColumn] = useState();
 	const [total, setTotal] = useState<number>();
 	const searchInputRef = useRef<InputRef>(null);
+	const phanVungHienTai = dsPhanVung?.find((item) => item?.dataPartitionCode === getPartitionCode())?.dataPartition;
+
 	// dnd-kit: sensors
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
@@ -161,6 +165,32 @@ const TableStaticData = (props: TableStaticProps) => {
 			align: 'center',
 			width: 40,
 			children: undefined,
+			render: (val: string) => {
+				const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
+				return (
+					<div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+						<span>{val}</span>
+						{phanVungHienTai?._id && (
+							<Tooltip title={phanVungHienTai?.name}>
+								<div
+									style={{
+										position: 'absolute',
+										left: 4,
+										top: '50%',
+										transform: 'translateY(-50%)',
+										width: 8,
+										height: 8,
+										borderRadius: '50%',
+										backgroundColor: maMau,
+										boxShadow: '0 0 3px rgba(0,0,0,0.2)',
+										cursor: 'pointer',
+									}}
+								/>
+							</Tooltip>
+						)}
+					</div>
+				);
+			},
 		});
 
 	//#region Get Drag Sortable column
