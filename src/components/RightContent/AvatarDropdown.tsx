@@ -2,6 +2,7 @@ import { landingUrl } from '@/services/base/constant';
 import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
+import { rgba } from 'polished';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
@@ -10,25 +11,14 @@ import styles from './index.less';
 const AvatarDropdown = () => {
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
-	const { danhSach, getAllModel } = useModel('core.phanvunguser');
+	const { danhSach: dsPhanVung, getPartitionCodeMeModel } = useModel('core.phanvunguser');
 
 	const currentPartition = localStorage.getItem('partitionCode');
 
 	//Phân vùng dữ liệu
 	useEffect(() => {
 		if (initialState?.currentUser?.ssoId) {
-			getAllModel(undefined, undefined, undefined, undefined, 'many/me').then((res) => {
-				if (!res || res.length === 0) {
-					localStorage.removeItem('partitionCode');
-					return;
-				}
-
-				const exists = res.some((item) => item?.dataPartitionCode === currentPartition);
-
-				if (!currentPartition || !exists) {
-					localStorage.setItem('partitionCode', res?.[0]?.dataPartitionCode);
-				}
-			});
+			getPartitionCodeMeModel(currentPartition?.toString());
 		}
 	}, [initialState?.currentUser?.ssoId]);
 
@@ -46,18 +36,18 @@ const AvatarDropdown = () => {
 		: (initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || ''));
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
-	const currentPartitionInfo = danhSach?.find((item) => item?.dataPartitionCode === currentPartition);
+	const currentPartitionInfo = dsPhanVung?.find((item) => item?.dataPartitionCode === currentPartition);
 	const currentPartitionColor = currentPartitionInfo?.dataPartition?.maMau;
 	const currentPartitionName = currentPartitionInfo?.dataPartition?.name;
 
 	const partitionItems: ItemType[] =
-		danhSach?.map((item) => {
+		dsPhanVung?.map((item) => {
 			const code = item?.dataPartitionCode;
 			const isActive = code === currentPartition;
 			const partitionColor = item?.dataPartition?.maMau;
 
 			const activeColor = partitionColor || 'var(--color-primary)';
-			const activeBgColor = partitionColor ? `${partitionColor}15` : 'var(--color-primary-bg)';
+			const activeBgColor = partitionColor ? rgba(partitionColor, 0.1) : 'var(--color-primary-bg)';
 
 			return {
 				key: `partition-${code}`,
@@ -138,7 +128,7 @@ const AvatarDropdown = () => {
 							icon={!initialState.currentUser?.picture ? (lastNameChar ?? <UserOutlined />) : undefined}
 							alt='avatar'
 						/>
-						{danhSach?.length >= 2 && (
+						{dsPhanVung?.length >= 2 && (
 							<span
 								className={styles.partitionBadge}
 								style={{
