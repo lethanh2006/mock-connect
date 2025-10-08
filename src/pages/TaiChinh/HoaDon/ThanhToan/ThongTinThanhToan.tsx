@@ -183,7 +183,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			</Modal>
 
 			<ModalThanhToanNganHang
-				open={visibleHuongDan}
+				visible={visibleHuongDan}
 				onOk={() => {
 					if (activeTab === '1') getGiaoDich();
 					if (getData) getData();
