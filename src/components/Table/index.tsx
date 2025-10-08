@@ -1,4 +1,5 @@
 import { primaryColor } from '@/services/base/constant';
+import { getPartitionCode } from '@/utils/constants';
 import { inputFormat } from '@/utils/utils';
 import {
 	CloseOutlined,
@@ -71,6 +72,7 @@ const TableBase = (props: TableBaseProps) => {
 		isView,
 		edit,
 	} = model;
+	const { danhSach: dsPhanVung } = useModel('core.phanvunguser');
 	const filters: TFilter<any>[] = model?.filters;
 	const getData = props.getData ?? model?.getModel;
 	const hasFilter = props.columns?.filter((item) => item.filterType)?.length;
@@ -79,6 +81,8 @@ const TableBase = (props: TableBaseProps) => {
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const searchInputRef = useRef<InputRef>(null);
+	const phanVungHienTai = dsPhanVung?.find((item) => item?.dataPartitionCode === getPartitionCode())?.dataPartition;
+
 	// dnd-kit: sensors
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
@@ -358,6 +362,32 @@ const TableBase = (props: TableBaseProps) => {
 				dataIndex: 'index',
 				align: 'center',
 				width: 50,
+				render: (val) => {
+					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
+					return (
+						<div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+							<span>{val}</span>
+							{phanVungHienTai?._id && (
+								<Tooltip title={phanVungHienTai?.name}>
+									<div
+										style={{
+											position: 'absolute',
+											left: 4,
+											top: '50%',
+											transform: 'translateY(-50%)',
+											width: 8,
+											height: 8,
+											borderRadius: '50%',
+											backgroundColor: maMau,
+											boxShadow: '0 0 3px rgba(0,0,0,0.2)',
+											cursor: 'pointer',
+										}}
+									/>
+								</Tooltip>
+							)}
+						</div>
+					);
+				},
 			});
 
 		setColumns(final);

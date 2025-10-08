@@ -23,10 +23,10 @@ const AvatarDropdown = () => {
 					return;
 				}
 
-				const exists = res.some((item) => item?.dataPartitionCode?.toString() === currentPartition);
+				const exists = res.some((item) => item?.dataPartitionCode === currentPartition);
 
 				if (!currentPartition || !exists) {
-					localStorage.setItem('partitionCode', res?.[0]?.dataPartitionCode?.toString());
+					localStorage.setItem('partitionCode', res?.[0]?.dataPartitionCode);
 				}
 			});
 		}
@@ -46,16 +46,31 @@ const AvatarDropdown = () => {
 		: (initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || ''));
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
+	const currentPartitionInfo = danhSach?.find((item) => item?.dataPartitionCode === currentPartition);
+	const currentPartitionColor = currentPartitionInfo?.dataPartition?.maMau;
+	const currentPartitionName = currentPartitionInfo?.dataPartition?.name;
+
 	const partitionItems: ItemType[] =
 		danhSach?.map((item) => {
-			const code = item?.dataPartitionCode?.toString();
+			const code = item?.dataPartitionCode;
 			const isActive = code === currentPartition;
+			const partitionColor = item?.dataPartition?.maMau;
+
+			const activeColor = partitionColor || 'var(--color-primary)';
+			const activeBgColor = partitionColor ? `${partitionColor}15` : 'var(--color-primary-bg)';
 
 			return {
 				key: `partition-${code}`,
 				icon: <DatabaseOutlined />,
 				label: item?.dataPartition?.name ?? item?.dataPartition?.ma,
-				className: isActive ? styles.activePartition : undefined,
+				style: isActive
+					? {
+							backgroundColor: activeBgColor,
+							borderLeft: `3px solid ${activeColor}`,
+							color: activeColor,
+							fontWeight: 'bold',
+						}
+					: undefined,
 				onClick: () => {
 					localStorage.setItem('partitionCode', code);
 					window.location.reload();
@@ -124,10 +139,14 @@ const AvatarDropdown = () => {
 							alt='avatar'
 						/>
 						{danhSach?.length >= 2 && (
-							<span className={styles.partitionBadge}>
-								{danhSach
-									.find((item) => item?.dataPartitionCode?.toString() === currentPartition)
-									?.dataPartition?.name?.[0]?.toUpperCase() ?? ''}
+							<span
+								className={styles.partitionBadge}
+								style={{
+									backgroundColor: currentPartitionColor || 'var(--color-primary)',
+									color: '#fff',
+								}}
+							>
+								{currentPartitionName?.[0]?.toUpperCase() ?? ''}
 							</span>
 						)}
 					</div>
