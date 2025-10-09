@@ -1,5 +1,4 @@
 import { primaryColor } from '@/services/base/constant';
-import { getPartitionCode } from '@/utils/constants';
 import { inputFormat } from '@/utils/utils';
 import {
 	CloseOutlined,
@@ -72,7 +71,7 @@ const TableBase = (props: TableBaseProps) => {
 		isView,
 		edit,
 	} = model;
-	const { danhSach: dsPhanVung } = useModel('core.phanvunguser');
+	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
 	const filters: TFilter<any>[] = model?.filters;
 	const getData = props.getData ?? model?.getModel;
 	const hasFilter = props.columns?.filter((item) => item.filterType)?.length;
@@ -81,7 +80,6 @@ const TableBase = (props: TableBaseProps) => {
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const searchInputRef = useRef<InputRef>(null);
-	const phanVungHienTai = dsPhanVung?.find((item) => item?.dataPartitionCode === getPartitionCode())?.dataPartition;
 
 	// dnd-kit: sensors
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
@@ -362,7 +360,8 @@ const TableBase = (props: TableBaseProps) => {
 				dataIndex: 'index',
 				align: 'center',
 				width: 50,
-				render: (val) => {
+				render: (val, rec) => {
+					const phanVungHienTai = dsPhanVung?.find((item) => item?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
 					return (
 						<div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>

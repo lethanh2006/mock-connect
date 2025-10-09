@@ -30,7 +30,7 @@ const Tags = () => {
 			width: 60,
 			fixed: 'right',
 			render: (recordVal: ThongBao.Tags) => {
-				const isPhanVung = !recordVal?.dataPartitionCode || recordVal?.dataPartitionCode === getPartitionCode();
+				const isPhanVung = recordVal?.dataPartitionCode === getPartitionCode();
 
 				return (
 					<>

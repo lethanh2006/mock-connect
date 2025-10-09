@@ -151,8 +151,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			width: 90,
 			fixed: 'right',
 			render: (recordThongBao: ThongBao.IRecord) => {
-				const isPhanVung =
-					!recordThongBao?.dataPartitionCode || recordThongBao?.dataPartitionCode === getPartitionCode();
+				const isPhanVung = recordThongBao?.dataPartitionCode === getPartitionCode();
 
 				return (
 					<>
