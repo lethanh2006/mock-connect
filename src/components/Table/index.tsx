@@ -363,25 +363,14 @@ const TableBase = (props: TableBaseProps) => {
 				render: (val, rec) => {
 					const phanVungHienTai = dsPhanVung?.find((item) => item?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
+
 					return (
-						<div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+						<div className='ttCellWrapper'>
 							<span>{val}</span>
+
 							{phanVungHienTai?._id && (
 								<Tooltip title={phanVungHienTai?.name}>
-									<div
-										style={{
-											position: 'absolute',
-											left: 4,
-											top: '50%',
-											transform: 'translateY(-50%)',
-											width: 8,
-											height: 8,
-											borderRadius: '50%',
-											backgroundColor: maMau,
-											boxShadow: '0 0 3px rgba(0,0,0,0.2)',
-											cursor: 'pointer',
-										}}
-									/>
+									<div className='cornerTriangle' style={{ backgroundColor: maMau }} />
 								</Tooltip>
 							)}
 						</div>
