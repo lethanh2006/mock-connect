@@ -60,7 +60,16 @@ const HocLieuDeCuongPage = () => {
 			fixed: 'right',
 			render: (val) =>
 				val ? (
-					<a href={APP_CONFIG_URL_THU_VIEN + val} target='_blank' rel='noreferrer' title='Xem chi tiết'>
+					<a
+						href={`${
+							settings?.THU_VIEN_HOC_LIEU?.enable
+								? settings?.THU_VIEN_HOC_LIEU?.thuVienUrl + '/chi-tiet/'
+								: APP_CONFIG_URL_THU_VIEN
+						}${val}`}
+						target='_blank'
+						rel='noreferrer'
+						title='Xem chi tiết'
+					>
 						<EyeOutlined />
 					</a>
 				) : null,
