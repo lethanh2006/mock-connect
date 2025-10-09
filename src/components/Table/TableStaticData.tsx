@@ -1,4 +1,3 @@
-import { getPartitionCode } from '@/utils/constants';
 import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -18,12 +17,11 @@ import type { IColumn, TableStaticProps, TDataOption } from './typing';
 const TableStaticData = (props: TableStaticProps) => {
 	const intl = useIntl();
 	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable } = props;
-	const { danhSach: dsPhanVung } = useModel('core.phanvunguser');
+	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
 	const [searchText, setSearchText] = useState<string>('');
 	const [searchedColumn, setSearchedColumn] = useState();
 	const [total, setTotal] = useState<number>();
 	const searchInputRef = useRef<InputRef>(null);
-	const phanVungHienTai = dsPhanVung?.find((item) => item?.dataPartitionCode === getPartitionCode())?.dataPartition;
 
 	// dnd-kit: sensors
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
@@ -165,27 +163,17 @@ const TableStaticData = (props: TableStaticProps) => {
 			align: 'center',
 			width: 40,
 			children: undefined,
-			render: (val: string) => {
+			render: (val: string, rec: any) => {
+				const phanVungHienTai = dsPhanVung?.find((item) => item?.ma === rec?.dataPartitionCode);
 				const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
+
 				return (
-					<div style={{ position: 'relative', display: 'inline-block', width: '100%' }}>
+					<div className='ttCellWrapper'>
 						<span>{val}</span>
+
 						{phanVungHienTai?._id && (
 							<Tooltip title={phanVungHienTai?.name}>
-								<div
-									style={{
-										position: 'absolute',
-										left: 4,
-										top: '50%',
-										transform: 'translateY(-50%)',
-										width: 8,
-										height: 8,
-										borderRadius: '50%',
-										backgroundColor: maMau,
-										boxShadow: '0 0 3px rgba(0,0,0,0.2)',
-										cursor: 'pointer',
-									}}
-								/>
+								<div className='cornerTriangle' style={{ backgroundColor: maMau }} />
 							</Tooltip>
 						)}
 					</div>
