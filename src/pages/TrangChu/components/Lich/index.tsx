@@ -48,6 +48,12 @@ const getEventColor = (loaiSuKien: string): string => {
 
 const LichDashboard = () => {
 	const [currentMonth, setCurrentMonth] = useState(dayjs());
+	const [dateRange, setDateRange] = useState({
+		fromDate: currentMonth.startOf('month').startOf('week'),
+		toDate: currentMonth.endOf('month').endOf('week'),
+	});
+	const [preloadedData, setPreloadedData] = useState<Record<string, SuKienItem[]>>({});
+
 	const [selectedDate, setSelectedDate] = useState(dayjs());
 	const [visibleDetail, setVisibleDetail] = useState(false);
 	const [selectedEvents, setSelectedEvents] = useState<SuKienItem[]>([]);
@@ -66,6 +72,15 @@ const LichDashboard = () => {
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 
+	// Cập nhật lại range khi đổi tháng
+	useEffect(() => {
+		setDateRange({
+			fromDate: currentMonth.startOf('month').startOf('week'),
+			toDate: currentMonth.endOf('month').endOf('week'),
+		});
+	}, [currentMonth]);
+
+	// Logic API từ code gốc
 	const getThoiGianMotTuanKeTuHomNay = () => {
 		return {
 			fromDate: dayjs().startOf('week').toISOString(),
@@ -73,8 +88,14 @@ const LichDashboard = () => {
 		};
 	};
 
-	const getThoiKhoaBieu = async () => {
-		return getTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
+	const getKhoangThoiGian = (month = currentMonth) => ({
+		fromDate: month.startOf('month').startOf('week').toISOString(),
+		toDate: month.endOf('month').endOf('week').toISOString(),
+	});
+
+	const getThoiKhoaBieu = async (timeRange?: { fromDate: string; toDate: string }) => {
+		const range = timeRange || getKhoangThoiGian();
+		return getTrongKhoangModel(range).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
 				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''}`,
@@ -85,8 +106,9 @@ const LichDashboard = () => {
 		});
 	};
 
-	const getLichThi = async () => {
-		return getLichThiModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
+	const getLichThi = async (timeRange?: { fromDate: string; toDate: string }) => {
+		const range = timeRange || getKhoangThoiGian();
+		return getLichThiModel(range).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
 				title: `Lịch thi: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
@@ -97,8 +119,9 @@ const LichDashboard = () => {
 		});
 	};
 
-	const getSuKien = async () => {
-		return getSuKienTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
+	const getSuKien = async (timeRange?: { fromDate: string; toDate: string }) => {
+		const range = timeRange || getKhoangThoiGian();
+		return getSuKienTrongKhoangModel(range).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
 				title: item?.tenSuKien ?? '',
@@ -108,11 +131,9 @@ const LichDashboard = () => {
 		});
 	};
 
-	const getBaiTap = async () => {
-		return thongKeBaiTapModel(
-			dayjs().startOf('week').toISOString(),
-			dayjs().add(2, 'months').endOf('day').toISOString(),
-		).then((data) => {
+	const getBaiTap = async (timeRange?: { fromDate: string; toDate: string }) => {
+		const range = timeRange || getKhoangThoiGian();
+		return thongKeBaiTapModel(range.fromDate, range.toDate).then((data) => {
 			const aWeekLater = dayjs().add(7, 'day').endOf('day').toDate();
 			const temp = data
 				.map((item) => ({
@@ -128,22 +149,60 @@ const LichDashboard = () => {
 		});
 	};
 
-	const getData = () => {
-		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
+	const getData = (month = currentMonth) => {
+		const timeRange = getKhoangThoiGian(month);
+		const promises = [getThoiKhoaBieu(timeRange), getSuKien(timeRange), getLichThi(timeRange), getBaiTap(timeRange)];
 
-		Promise.allSettled(promises)
+		return Promise.allSettled(promises)
 			.then((values) => {
 				const responses = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
 				const data = responses.flat();
-				setDataLichDashboard(data);
+				return data;
 			})
-			.catch((er) => console.log(er));
+			.catch((er) => {
+				console.log(er);
+				return [];
+			});
 	};
 
 	// Lấy dữ liệu khi component mount
 	useEffect(() => {
-		getData();
-	}, []);
+		const currentMonthKey = currentMonth.format('YYYY-MM');
+
+		// Kiểm tra nếu dữ liệu đã được preload
+		if (preloadedData[currentMonthKey]) {
+			setDataLichDashboard(preloadedData[currentMonthKey]);
+		} else {
+			// Nếu chưa preload, gọi API
+			getData(currentMonth).then((data) => {
+				setDataLichDashboard(data);
+			});
+		}
+
+		// Preload tháng tiếp theo
+		const nextMonth = currentMonth.add(1, 'month');
+		const nextMonthKey = nextMonth.format('YYYY-MM');
+		if (!preloadedData[nextMonthKey]) {
+			getData(nextMonth).then((data) => {
+				setPreloadedData((prev) => ({
+					...prev,
+					[nextMonthKey]: data,
+				}));
+			});
+		}
+
+		// Preload tháng trước đó (optional, để khi click back không bị loading)
+		const prevMonth = currentMonth.subtract(1, 'month');
+		const prevMonthKey = prevMonth.format('YYYY-MM');
+		if (!preloadedData[prevMonthKey]) {
+			getData(prevMonth).then((data) => {
+				setPreloadedData((prev) => ({
+					...prev,
+					[prevMonthKey]: data,
+				}));
+			});
+		}
+	}, [currentMonth, preloadedData]);
 
 	// Lấy các sự kiện theo ngày - SỬ DỤNG TRỰC TIẾP dataLichDashboard
 	const getEventsForDate = (date: dayjs.Dayjs): SuKienItem[] => {
@@ -291,7 +350,7 @@ const LichDashboard = () => {
 			<Card
 				variant='borderless'
 				className='card-borderless card-big-title'
-				loading={loadingSuKien || loadingTKB || loadingThi}
+				// loading={loadingSuKien || loadingTKB || loadingThi}
 				title='Lịch'
 				extra={
 					<Link to='/calendar' className='xem-tat-ca-link'>
