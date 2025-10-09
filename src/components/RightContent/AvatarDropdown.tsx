@@ -12,12 +12,15 @@ const AvatarDropdown = () => {
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const { danhSach: dsPhanVung, getPartitionCodeMeModel } = useModel('core.phanvunguser');
+	const { getAllModel: getAllPhanVung } = useModel('core.phanvungdulieu');
 
 	const currentPartition = localStorage.getItem('partitionCode');
 
 	//Phân vùng dữ liệu
 	useEffect(() => {
 		if (initialState?.currentUser?.ssoId) {
+			//Get All phân vùng để lấy mã màu
+			getAllPhanVung();
 			getPartitionCodeMeModel(currentPartition?.toString());
 		}
 	}, [initialState?.currentUser?.ssoId]);
