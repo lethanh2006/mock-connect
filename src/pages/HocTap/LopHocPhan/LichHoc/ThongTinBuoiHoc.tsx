@@ -4,46 +4,59 @@ import { colorHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { Card, Descriptions, Tag } from 'antd';
-import { JSX } from 'react';
+import type { JSX } from 'react';
 
-const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord; title?: string | JSX.Element }) => {
-	const { buoiHoc, title } = props;
+const ThongTinBuoiHoc = (props: {
+	buoiHoc?: ThoiKhoaBieu.IRecord;
+	title?: string | JSX.Element;
+	hideCard?: boolean;
+}) => {
+	const { buoiHoc, title, hideCard } = props;
 
-	return (
-		<Card variant='borderless'>
-			<Descriptions column={{ xs: 1, md: 3 }} title={title ?? 'Thông tin buổi học'}>
-				<Descriptions.Item label='Ngày học'>
-					{THU_TRONG_TUAN[dayjs(buoiHoc?.ngay).day()]}, {dayjs(buoiHoc?.ngay).format('DD/MM/YYYY')}
-				</Descriptions.Item>
-				<Descriptions.Item label='Tiết học'>
-					{buoiHoc?.tietBatDau} - {buoiHoc?.tietKetThuc}
-				</Descriptions.Item>
-				<Descriptions.Item label='Hình thức'>
-					{buoiHoc?.hinhThucGiangDay ? (
-						<Tag color={colorHinhThucGiangDay[buoiHoc.hinhThucGiangDay]}>{buoiHoc.hinhThucGiangDay}</Tag>
-					) : (
-						'--'
-					)}
-				</Descriptions.Item>
+	const content = (
+		<Descriptions
+			column={{ xs: 1, md: 3 }}
+			title={!hideCard && (title ?? 'Thông tin buổi học')}
+			style={hideCard ? { padding: 0, margin: 0, border: 'none' } : {}}
+		>
+			<Descriptions.Item label='Ngày học'>
+				{THU_TRONG_TUAN[dayjs(buoiHoc?.ngay).day()]}, {dayjs(buoiHoc?.ngay).format('DD/MM/YYYY')}
+			</Descriptions.Item>
+			<Descriptions.Item label='Tiết học'>
+				{buoiHoc?.tietBatDau} - {buoiHoc?.tietKetThuc}
+			</Descriptions.Item>
+			<Descriptions.Item label='Hình thức'>
+				{buoiHoc?.hinhThucGiangDay ? (
+					<Tag color={colorHinhThucGiangDay[buoiHoc.hinhThucGiangDay]}>{buoiHoc.hinhThucGiangDay}</Tag>
+				) : (
+					'--'
+				)}
+			</Descriptions.Item>
 
-				<Descriptions.Item label='Phòng học'>{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
-				<Descriptions.Item label='Giảng viên' span={2}>
-					{buoiHoc?.nhanSu?.ten
-						? [buoiHoc.nhanSu?.hoDem, buoiHoc.nhanSu?.ten].join(' ')
-						: (buoiHoc?.tenNhanSu ?? <i>Chưa cập nhật</i>)}
-				</Descriptions.Item>
-				<Descriptions.Item label='Loại hình'>{buoiHoc?.loaiHinhHocTap ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
-				<Descriptions.Item label='Điểm danh'>
-					{buoiHoc?.trangThaiDiemDanhCaNhan ? (
-						<Tag color={colorTrangThaiUserDiemDanh[buoiHoc.trangThaiDiemDanhCaNhan]}>
-							{trangThaiUserDiemDanh[buoiHoc.trangThaiDiemDanhCaNhan]}
-						</Tag>
-					) : (
-						''
-					)}
-				</Descriptions.Item>
-			</Descriptions>
-		</Card>
+			<Descriptions.Item label='Phòng học'>{buoiHoc?.phongHoc ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
+			<Descriptions.Item label='Giảng viên' span={2}>
+				{buoiHoc?.nhanSu?.ten
+					? [buoiHoc.nhanSu?.hoDem, buoiHoc.nhanSu?.ten].join(' ')
+					: (buoiHoc?.tenNhanSu ?? <i>Chưa cập nhật</i>)}
+			</Descriptions.Item>
+			<Descriptions.Item label='Loại hình'>{buoiHoc?.loaiHinhHocTap ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
+			<Descriptions.Item label='Điểm danh'>
+				{buoiHoc?.trangThaiDiemDanhCaNhan ? (
+					<Tag color={colorTrangThaiUserDiemDanh[buoiHoc.trangThaiDiemDanhCaNhan]}>
+						{trangThaiUserDiemDanh[buoiHoc.trangThaiDiemDanhCaNhan]}
+					</Tag>
+				) : (
+					''
+				)}
+			</Descriptions.Item>
+		</Descriptions>
+	);
+
+	return hideCard ? (
+		<div style={{ padding: 0, margin: 0 }}>{content}</div>
+	) : (
+		<Card variant='borderless'>{content}</Card>
 	);
 };
+
 export default ThongTinBuoiHoc;
