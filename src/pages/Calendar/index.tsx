@@ -209,61 +209,66 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />;
 		}
 
-		return keysSorted.map((ngay) => {
-			const { cacSuKien, thuTrongTuan } = data[ngay];
-			const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
-			return (
-				<div key={ngay} className={styles.ngay}>
-					<Space style={{ marginBottom: 8 }}>
-						<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
-							<div
-								className={styles.ngay__title}
-								style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
-							>
-								{thuTrongTuan}, ngày {dayjs(ngay).format('DD/MM')}
-							</div>
-						</Badge>
-					</Space>
-					{cacSuKienSorted.map((sukien) => (
-						<div
-							key={sukien._id}
-							className={styles.su_kien}
-							// style={{ background: ColorSuKien[sukien.loaiSuKien] }}
-							onClick={() => {
-								setSelectEvent(sukien);
-								setVisibleDetail(true);
-							}}
-						>
-							<div className={styles.su_kien__left}>
-								{dayjs().isSameOrAfter(sukien.thoiGianBatDau) && dayjs().isSameOrBefore(sukien.thoiGianKetThuc) ? (
-									<div className={styles.pulse} />
-								) : null}
-								<div className={styles.su_kien__thoi_gian}>{dayjs(sukien.thoiGianBatDau).format('HH:mm')}</div>
-							</div>
-							<Space
-								wrap
-								className={styles.su_kien__right}
-								style={{
-									borderColor:
-										recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ??
-										ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
-								}}
-							>
-								<div>
-									{sukien.tenSuKien ?? ''}
-									{sukien.suffix ? <i> ({sukien.suffix})</i> : null}
-								</div>
-								{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC && sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
-									<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
-										{sukien.hinhThucGiangDay}
-									</Tag>
-								)}
+		return (
+			<div className={styles.dashboard_calendar}>
+				{keysSorted.map((ngay) => {
+					const { cacSuKien, thuTrongTuan } = data[ngay];
+					const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
+					return (
+						<div key={ngay} className={styles.ngay}>
+							<Space style={{ marginBottom: 8 }}>
+								<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
+									<div
+										className={styles.ngay__title}
+										style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
+									>
+										{thuTrongTuan}, ngày {dayjs(ngay).format('DD/MM')}
+									</div>
+								</Badge>
 							</Space>
+							{cacSuKienSorted.map((sukien) => (
+								<div
+									key={sukien._id}
+									className={styles.su_kien}
+									// style={{ background: ColorSuKien[sukien.loaiSuKien] }}
+									onClick={() => {
+										setSelectEvent(sukien);
+										setVisibleDetail(true);
+									}}
+								>
+									<div className={styles.su_kien__left}>
+										{dayjs().isSameOrAfter(sukien.thoiGianBatDau) && dayjs().isSameOrBefore(sukien.thoiGianKetThuc) ? (
+											<div className={styles.pulse} />
+										) : null}
+										<div className={styles.su_kien__thoi_gian}>{dayjs(sukien.thoiGianBatDau).format('HH:mm')}</div>
+									</div>
+									<Space
+										wrap
+										className={styles.su_kien__right}
+										style={{
+											borderColor:
+												recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ??
+												ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
+										}}
+									>
+										<div>
+											{sukien.tenSuKien ?? ''}
+											{sukien.suffix ? <i> ({sukien.suffix})</i> : null}
+										</div>
+										{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC &&
+											sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
+												<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
+													{sukien.hinhThucGiangDay}
+												</Tag>
+											)}
+									</Space>
+								</div>
+							))}
 						</div>
-					))}
-				</div>
-			);
-		});
+					);
+				})}
+			</div>
+		);
 	};
 
 	const mainContent = () => (
@@ -417,7 +422,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			) : null}
 
 			<Modal
-				visible={visibleXemThem}
+				open={visibleXemThem}
 				title={'Lịch ' + dayjs(dateXemThem).format('dddd, ngà\y DD/MM/YYYY')}
 				onCancel={() => setVisibleXemThem(false)}
 				footer={null}
