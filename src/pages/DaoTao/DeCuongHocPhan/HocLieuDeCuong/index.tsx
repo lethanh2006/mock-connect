@@ -62,9 +62,7 @@ const HocLieuDeCuongPage = () => {
 				val ? (
 					<a
 						href={`${
-							settings?.THU_VIEN_HOC_LIEU?.enable
-								? settings?.THU_VIEN_HOC_LIEU?.thuVienUrl + '/chi-tiet/'
-								: APP_CONFIG_URL_THU_VIEN
+							settings?.THU_VIEN_HOC_LIEU?.enable ? settings?.THU_VIEN_HOC_LIEU?.thuVienUrl : APP_CONFIG_URL_THU_VIEN
 						}${val}`}
 						target='_blank'
 						rel='noreferrer'
