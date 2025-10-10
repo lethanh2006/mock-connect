@@ -111,15 +111,6 @@ const AvatarDropdown = () => {
 		},
 	];
 
-	if (!initialState.currentUser.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
-		// items.splice(1, 0, {
-		//   key: 'center',
-		//   icon: <UserOutlined />,
-		//   label: intl.formatMessage({ id: 'app.header.userpage', defaultMessage: 'Trang cá nhân' }),
-		//   onClick: () => history.push('/account/center'),
-		// });
-	}
-
 	return (
 		<>
 			<Dropdown menu={{ items }}>
