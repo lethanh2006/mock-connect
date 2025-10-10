@@ -11,7 +11,7 @@ const ThongTinBuoiHoc = (props: { buoiHoc?: ThoiKhoaBieu.IRecord; title?: string
 
 	return (
 		<Card variant='borderless'>
-			<Descriptions column={{ xs: 1, md: 3 }} title={title ?? 'Thông tin buổi học'}>
+			<Descriptions column={{ xs: 1, md: 3, lg: 3, xl: 3, xxl: 3 }} title={title ?? 'Thông tin buổi học'}>
 				<Descriptions.Item label='Ngày học'>
 					{THU_TRONG_TUAN[dayjs(buoiHoc?.ngay).day()]}, {dayjs(buoiHoc?.ngay).format('DD/MM/YYYY')}
 				</Descriptions.Item>

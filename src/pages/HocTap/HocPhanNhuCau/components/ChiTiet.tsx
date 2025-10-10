@@ -62,7 +62,7 @@ const ChiTietSinhVienDangKy = () => {
 		>
 			<Row gutter={[12, 0]}>
 				<Col span={24}>
-					<Descriptions column={{ xs: 1, sm: 1, md: 2 }}>
+					<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
 						<Descriptions.Item label='Mã sinh viên'>{record?.maSinhVien ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Họ tên'>{record?.hoTen ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Lớp hành chính'>{record?.tenLopHanhChinh ?? '--'}</Descriptions.Item>
