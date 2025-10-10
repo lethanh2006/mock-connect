@@ -64,8 +64,8 @@ const DanhSachBuoiHoc = () => {
 				</>
 			) : null}
 
-			<Card variant='borderless'>
-				<Space wrap style={{ marginBottom: 12, justifyContent: 'space-between', width: '100%' }}>
+			<Card
+				title={
 					<Space wrap size={12}>
 						<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
 						<Segmented
@@ -77,6 +77,8 @@ const DanhSachBuoiHoc = () => {
 							value={hinhThucFilter}
 						/>
 					</Space>
+				}
+				extra={
 					<Segmented
 						value={show}
 						onChange={(val) => setShow(val.toString())}
@@ -85,16 +87,20 @@ const DanhSachBuoiHoc = () => {
 							{ value: 'calendar', title: 'Lịch học', icon: <CalendarOutlined /> },
 						]}
 					/>
-				</Space>
-
-				{show === 'calendar' ? (
-					<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
-				) : (
-					<TableLichHocLopHP items={danhSachHienThi} onClickItem={onClickViewTkb} />
-				)}
-
-				<ModalThoiKhoaBieu />
+				}
+				className='card-big-title card-borderless'
+				variant='borderless'
+			>
+				<Card variant='borderless'>
+					{show === 'calendar' ? (
+						<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
+					) : (
+						<TableLichHocLopHP items={danhSachHienThi} onClickItem={onClickViewTkb} />
+					)}
+				</Card>
 			</Card>
+
+			<ModalThoiKhoaBieu />
 		</Spin>
 	);
 };

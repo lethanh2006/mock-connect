@@ -4,7 +4,7 @@ import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrin
 import { ENguonDot } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Card, Modal, Pagination, Popconfirm, Tag, Typography, message } from 'antd';
+import { Button, Card, Empty, Modal, Pagination, Popconfirm, Tag, Typography, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import './style.less';
@@ -185,7 +185,7 @@ const QuyTrinhPage = () => {
 							</div>
 						) : (
 							<div className='empty-state'>
-								<Text type='secondary'>Không tìm thấy biểu mẫu nào</Text>
+								<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không tìm thấy biểu mẫu nào' />
 							</div>
 						)}
 					</>

@@ -11,14 +11,10 @@ const ThongTinBuoiHoc = (props: {
 	title?: string | JSX.Element;
 	hideCard?: boolean;
 }) => {
-	const { buoiHoc, title, hideCard } = props;
+	const { buoiHoc, title = 'Thông tin buổi học', hideCard } = props;
 
 	const content = (
-		<Descriptions
-			column={{ xs: 1, md: 3 }}
-			title={!hideCard && (title ?? 'Thông tin buổi học')}
-			style={hideCard ? { padding: 0, margin: 0, border: 'none' } : {}}
-		>
+		<Descriptions column={{ xs: 1, sm: 1, md: 3, lg: 3, xl: 3, xxl: 3 }}>
 			<Descriptions.Item label='Ngày học'>
 				{THU_TRONG_TUAN[dayjs(buoiHoc?.ngay).day()]}, {dayjs(buoiHoc?.ngay).format('DD/MM/YYYY')}
 			</Descriptions.Item>
@@ -52,10 +48,13 @@ const ThongTinBuoiHoc = (props: {
 		</Descriptions>
 	);
 
-	return hideCard ? (
-		<div style={{ padding: 0, margin: 0 }}>{content}</div>
-	) : (
-		<Card variant='borderless'>{content}</Card>
+	if (!buoiHoc) return null;
+	if (hideCard) return content;
+
+	return (
+		<Card title={title} className='card-big-title card-borderless' variant='borderless'>
+			<Card variant='borderless'>{content}</Card>
+		</Card>
 	);
 };
 
