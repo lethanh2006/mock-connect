@@ -5,6 +5,7 @@ import dayjs from '@/utils/dayjs';
 import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
+import { rgba } from 'polished';
 import { useEffect } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
@@ -15,7 +16,9 @@ const AvatarDropdown = () => {
 	const { initialState } = useModel('@@initialState');
 	const { getDotMeModel, setVisibleKhaoSatBatBuoc, setRecord, setDsKhaoSatBatBuoc } = useModel('tienich.dotkhaosat');
 	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
-	const { danhSach, getAllModel } = useModel('core.phanvunguser');
+	const { danhSach: dsPhanVung, getPartitionCodeMeModel } = useModel('core.phanvunguser');
+	const { getAllModel: getAllPhanVung } = useModel('core.phanvungdulieu');
+	
 	const avatarUrl = recSinhVien?.anhDaiDienUrl ?? initialState?.currentUser?.picture;
 	const currentPartition = localStorage.getItem('partitionCode');
 
@@ -81,7 +84,7 @@ const AvatarDropdown = () => {
 
 	useEffect(() => {
 		if (initialState?.currentUser?.ssoId) {
-			getThongTinCuaToiModel().then((res) => {
+				getThongTinCuaToiModel().then((res) => {
 				// if (res.needUpdateFaceReg)
 				// 	notification.warn({
 				// 		message: 'Nhận diện khuôn mặt',
@@ -103,20 +106,10 @@ const AvatarDropdown = () => {
 			});
 
 			handleCheckKhaoSatBatBuoc();
-
-			//Phân vùng dữ liệu
-			getAllModel(undefined, undefined, undefined, undefined, 'many/me').then((res) => {
-				if (!res || res.length === 0) {
-					localStorage.removeItem('partitionCode');
-					return;
-				}
-
-				const exists = res.some((item) => item?.dataPartitionCode?.toString() === currentPartition);
-
-				if (!currentPartition || !exists) {
-					localStorage.setItem('partitionCode', res?.[0]?.dataPartitionCode?.toString());
-				}
-			});
+			
+			//Get All phân vùng để lấy mã màu
+			getAllPhanVung();
+			getPartitionCodeMeModel(currentPartition?.toString());
 		}
 	}, [initialState?.currentUser?.ssoId]);
 
@@ -134,16 +127,31 @@ const AvatarDropdown = () => {
 		: (initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || ''));
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
+	const currentPartitionInfo = dsPhanVung?.find((item) => item?.dataPartitionCode === currentPartition);
+	const currentPartitionColor = currentPartitionInfo?.dataPartition?.maMau;
+	const currentPartitionName = currentPartitionInfo?.dataPartition?.name;
+
 	const partitionItems: ItemType[] =
-		danhSach?.map((item) => {
-			const code = item?.dataPartitionCode?.toString();
+		dsPhanVung?.map((item) => {
+			const code = item?.dataPartitionCode;
 			const isActive = code === currentPartition;
+			const partitionColor = item?.dataPartition?.maMau;
+
+			const activeColor = partitionColor || 'var(--color-primary)';
+			const activeBgColor = partitionColor ? rgba(partitionColor, 0.1) : 'var(--color-primary-bg)';
 
 			return {
 				key: `partition-${code}`,
 				icon: <DatabaseOutlined />,
 				label: item?.dataPartition?.name ?? item?.dataPartition?.ma,
-				className: isActive ? styles.activePartition : undefined,
+				style: isActive
+					? {
+							backgroundColor: activeBgColor,
+							borderLeft: `3px solid ${activeColor}`,
+							color: activeColor,
+							fontWeight: 'bold',
+						}
+					: undefined,
 				onClick: () => {
 					localStorage.setItem('partitionCode', code);
 					window.location.reload();
@@ -207,11 +215,15 @@ const AvatarDropdown = () => {
 							icon={!avatarUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
 							alt='avatar'
 						/>
-						{danhSach?.length >= 2 && (
-							<span className={styles.partitionBadge}>
-								{danhSach
-									.find((item) => item?.dataPartitionCode?.toString() === currentPartition)
-									?.dataPartition?.name?.[0]?.toUpperCase() ?? ''}
+						{dsPhanVung?.length >= 2 && (
+							<span
+								className={styles.partitionBadge}
+								style={{
+									backgroundColor: currentPartitionColor || 'var(--color-primary)',
+									color: '#fff',
+								}}
+							>
+								{currentPartitionName?.[0]?.toUpperCase() ?? ''}
 							</span>
 						)}
 					</div>

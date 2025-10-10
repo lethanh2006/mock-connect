@@ -15,3 +15,7 @@ export const excludedPaths = [
 	sentryDSN,
 	oneSignalClient,
 ].filter(Boolean);
+
+export const getPartitionCode = (): string | null => {
+	return localStorage.getItem('partitionCode');
+};
