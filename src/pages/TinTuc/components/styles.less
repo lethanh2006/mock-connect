@@ -188,7 +188,7 @@
 	h4 {
 		display: flex;
 		align-items: center;
-		color: var(--color-primary);
+		color: var(--primary-color);
 		font-size: 24px;
 	}
 
@@ -209,7 +209,7 @@
 	.noi-dung {
 		margin-top: 20px;
 		overflow: auto;
-		font-size: calc(0.95em + 0.2vw);
+		font-size: calc(0.95em + 0.15vw);
 		text-align: justify;
 
 		p::first-letter {
@@ -235,12 +235,29 @@
 			text-align: center;
 		}
 
-		td,
+		// td,
 		figcaption {
 			color: #999;
 			font-size: 13px;
 			font-style: italic;
 			text-align: center;
+		}
+
+		table {
+			border-spacing: 0;
+			border: 1px solid #ededed;
+			height: 100% !important;
+			max-width: 100% !important;
+			margin: 0 0 20px;
+
+			td {
+				padding: 5px 10px;
+				text-align: left;
+			}
+
+			p::first-letter {
+				margin-left: 0 !important;
+			}
 		}
 
 		iframe {
@@ -271,7 +288,7 @@
 
 .card-relate {
 	.ant-card-head-title {
-		color: var(--color-primary);
+		color: var(--primary-color);
 		font-weight: bold;
 		font-size: 20px;
 	}

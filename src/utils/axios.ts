@@ -73,7 +73,7 @@ axios.interceptors.request.use(
 		// }
 
 		const isExcluded = excludedPaths.some((path) => config.url?.startsWith(path));
-		if (!isExcluded) {
+		if (!isExcluded && !config.url?.includes('wp-json')) {
 			const partitionCode = localStorage.getItem('partitionCode');
 			if (partitionCode) {
 				config.headers['x-data-partition-code'] = partitionCode;

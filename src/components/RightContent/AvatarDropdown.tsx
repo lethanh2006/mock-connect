@@ -158,6 +158,11 @@ const AvatarDropdown = () => {
 			key: 'name',
 			icon: <UserOutlined />,
 			label: fullName,
+			onClick: () => {
+				if (!initialState?.currentUser?.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
+					history.push('/thong-tin-ca-nhan');
+				}
+			},
 		},
 		// {
 		// 	key: 'password',
@@ -190,17 +195,6 @@ const AvatarDropdown = () => {
 			danger: true,
 		},
 	];
-
-	if (!initialState.currentUser.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
-		items.splice(0, 1, {
-			key: 'center',
-			icon: <UserOutlined />,
-			label: fullName
-				? `${fullName} - ${initialState.currentUser?.preferred_username || ''}`
-				: initialState.currentUser?.preferred_username || '',
-			onClick: () => history.push('/thong-tin-ca-nhan'),
-		});
-	}
 
 	return (
 		<>
