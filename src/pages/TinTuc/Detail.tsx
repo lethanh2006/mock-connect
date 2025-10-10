@@ -9,8 +9,8 @@ import ChiTietTinTucWpPage from './Wordpress/ChiTietTinTuc';
 
 const ChiTietTinTucPage = () => {
 	const { getByIdModel, record: recChuDe } = useModel('tintuc.chude');
-	const { getByIdModel: getIdTinTucWP } = useModel('tintuc.tintucwp');
-	const { getByIdModel: getIdTinTucSlink } = useModel('tintuc.tintuc');
+	const { getByIdModel: getIdTinTucWP, setRecord: setRecordWP } = useModel('tintuc.tintucwp');
+	const { getByIdModel: getIdTinTucSlink, setRecord: setRecordSlink } = useModel('tintuc.tintuc');
 	const { location } = window;
 
 	const { _id: idWordPess, id: idSlink, cat: idChuDe } = queryString.parse(location.search);
@@ -26,10 +26,10 @@ const ChiTietTinTucPage = () => {
 								window.scrollTo({ top: 0, behavior: 'smooth' });
 							});
 						}
-				  })
+					})
 				: getIdTinTucWP(idWordPess as string, undefined, recChuDe?.linkWP ?? APP_CONFIG_URL_LANDING).then(() => {
 						window.scrollTo({ top: 0, behavior: 'smooth' });
-				  });
+					});
 		} else {
 			getIdTinTucSlink(idSlink as string).then(() => {
 				window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -39,6 +39,11 @@ const ChiTietTinTucPage = () => {
 
 	useEffect(() => {
 		fetchData();
+
+		return () => {
+			setRecordWP(undefined);
+			setRecordSlink(undefined);
+		};
 	}, [idWordPess, idSlink]);
 
 	return (
