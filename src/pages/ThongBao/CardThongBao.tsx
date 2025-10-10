@@ -6,6 +6,7 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import { type IColumn } from '@/components/Table/typing';
 import { type ESourceTypeNotification, mapModuleKeyToSourceType, NotificationType } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
+import { getPartitionCode } from '@/utils/constants';
 import dayjs from '@/utils/dayjs';
 import { currentRole } from '@/utils/ip';
 import { DeleteOutlined, EyeOutlined, LeftOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
@@ -149,37 +150,40 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			align: 'center',
 			width: 90,
 			fixed: 'right',
-			render: (recordThongBao: ThongBao.IRecord) => (
-				<>
-					<ButtonExtend
-						tooltip='Xem chi tiết'
-						onClick={() => {
-							setRecord(recordThongBao);
-							setVisible(true);
-						}}
-						type='link'
-						icon={<EyeOutlined />}
-					/>
-					{notiType === NotificationType.ONESIGNAL ? (
-						<Popconfirm
-							disabled={activeKey === 'tu_dong'}
-							onConfirm={() => {
-								deleteModel(recordThongBao._id, getData);
+			render: (recordThongBao: ThongBao.IRecord) => {
+				const isPhanVung = recordThongBao?.dataPartitionCode === getPartitionCode();
+
+				return (
+					<>
+						<ButtonExtend
+							tooltip='Xem chi tiết'
+							onClick={() => {
+								setRecord(recordThongBao);
+								setVisible(true);
 							}}
-							title='Bạn có chắc chắn muốn xóa?'
-						>
-							<ButtonExtend
-								tooltip='Xóa'
-								disabled={activeKey === 'tu_dong'}
-								shape='circle'
-								type='link'
-								danger
-								icon={<DeleteOutlined />}
-							/>
-						</Popconfirm>
-					) : null}
-				</>
-			),
+							type='link'
+							icon={<EyeOutlined />}
+						/>
+						{notiType === NotificationType.ONESIGNAL ? (
+							<Popconfirm
+								onConfirm={() => {
+									deleteModel(recordThongBao._id, getData);
+								}}
+								title='Bạn có chắc chắn muốn xóa?'
+							>
+								<ButtonExtend
+									tooltip='Xóa'
+									disabled={activeKey === 'tu_dong' || !isPhanVung}
+									shape='circle'
+									type='link'
+									danger
+									icon={<DeleteOutlined />}
+								/>
+							</Popconfirm>
+						) : null}
+					</>
+				);
+			},
 		},
 	];
 
