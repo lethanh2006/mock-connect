@@ -65,7 +65,7 @@ const CardXetTotNghiep = () => {
 						{record?.ketQuaXetTotNghiep?._id ? (
 							<>
 								<Col span={24}>Bạn có trong danh sách xét tốt nghiệp đợt này.</Col>
-								<Descriptions column={{ xs: 1, sm: 1, md: 1 }}>
+								<Descriptions column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }}>
 									{record.ketQuaXetTotNghiep?.ketQua ? (
 										<Descriptions.Item label='Kết quả rà soát sơ bộ'>
 											<Tag color={colorKetQuaXetTotNghiep[record.ketQuaXetTotNghiep?.ketQua]}>

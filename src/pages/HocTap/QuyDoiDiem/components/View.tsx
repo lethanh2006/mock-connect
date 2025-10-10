@@ -26,7 +26,7 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 		>
 			<Row gutter={[12, 0]}>
 				<Col xs={24}>
-					<Descriptions column={{ xs: 1, sm: 1, md: 2 }}>
+					<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
 						<Descriptions.Item label='Đợt quy đổi điểm'>
 							{record?.dotDangKyQuyDoiDiem?.tenDot ?? '--'}
 						</Descriptions.Item>
