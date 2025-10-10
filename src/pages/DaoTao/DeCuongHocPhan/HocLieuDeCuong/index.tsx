@@ -9,6 +9,7 @@ import { useModel } from 'umi';
 const HocLieuDeCuongPage = () => {
 	const { page, limit } = useModel('hocphan.hoclieudecuong');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
+	const { settings } = useModel('tienich.caidat');
 
 	const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
 		{
@@ -57,13 +58,19 @@ const HocLieuDeCuongPage = () => {
 			width: 60,
 			align: 'center',
 			fixed: 'right',
-			render: (val, rec) =>
+			render: (val) =>
 				val ? (
-					<a href={APP_CONFIG_URL_THU_VIEN + val} target='_blank' rel='noreferrer' title='Xem chi tiết'>
+					<a
+						href={`${
+							settings?.THU_VIEN_HOC_LIEU?.enable ? settings?.THU_VIEN_HOC_LIEU?.thuVienUrl : APP_CONFIG_URL_THU_VIEN
+						}${val}`}
+						target='_blank'
+						rel='noreferrer'
+						title='Xem chi tiết'
+					>
 						<EyeOutlined />
 					</a>
 				) : null,
-			hide: !APP_CONFIG_URL_THU_VIEN,
 		},
 	];
 
