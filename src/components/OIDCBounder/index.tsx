@@ -54,12 +54,20 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 				const isUncheckPath = unCheckPermissionPaths.some((path) => window.location.pathname.includes(path));
 				const hasRole = permissions.some((item) => item.rsname === currentRole);
 
-				setInitialState({
-					...initialState,
+				// Ensure permission is fully set before marking as loaded
+				setInitialState((prev) => ({
+					...prev,
 					currentUser: { ...userInfo, ssoId: userInfo.sub },
 					authorizedPermissions: permissions,
-					permissionLoading: false,
-				});
+				}));
+
+				// Use setTimeout to ensure state update is completed before setting permissionLoading to false
+				setTimeout(() => {
+					setInitialState((prev) => ({
+						...prev,
+						permissionLoading: false,
+					}));
+				}, 0);
 
 				if (!isUncheckPath && currentRole && permissions.length && !hasRole) {
 					const hasReplaceRole = permissions.some((item) => item.rsname === replaceRole);
