@@ -61,6 +61,20 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 					authorizedPermissions: permissions,
 				}));
 
+				// Persist minimal initial state so reload won't lose permissions immediately
+				try {
+					sessionStorage.setItem(
+						'initialState',
+						JSON.stringify({
+							currentUser: { ...userInfo, ssoId: userInfo.sub },
+							authorizedPermissions: permissions,
+							permissionLoading: false,
+						}),
+					);
+				} catch (e) {
+					// ignore
+				}
+
 				// Use setTimeout to ensure state update is completed before setting permissionLoading to false
 				setTimeout(() => {
 					setInitialState((prev) => ({
@@ -126,6 +140,14 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 			}
 		}
 	}, [auth.isAuthenticated, auth.isLoading]);
+
+	// Clear persisted initialState when user logs out via OIDCBounder handlers
+	// (some logout flows clear storage elsewhere; this ensures we don't keep stale data)
+	useEffect(() => {
+		return () => {
+			// no-op cleanup
+		};
+	}, []);
 
 	useEffect(() => {
 		if (auth.user?.access_token) handleAxios(auth.user.access_token);

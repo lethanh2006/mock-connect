@@ -21,6 +21,8 @@ export const useAuthActions = () => {
 				id_token_hint: auth.user?.id_token,
 			})
 			.then(() => {
+				sessionStorage.removeItem('initialState');
+				// keep clearing other storages as before
 				sessionStorage.clear();
 				localStorage.clear();
 				setInitialState({ ...initialState, currentUser: undefined });

@@ -20,6 +20,7 @@ import { AppModules } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
 import { currentRole, replaceRole } from './utils/ip';
+import LoadingPage from './components/Loading';
 
 export function rootContainer(container: React.ReactNode) {
 	return (
@@ -30,6 +31,22 @@ export function rootContainer(container: React.ReactNode) {
 }
 
 export async function getInitialState(): Promise<IInitialState> {
+	try {
+		const raw = sessionStorage.getItem('initialState');
+		if (raw) {
+			const parsed = JSON.parse(raw) as Partial<IInitialState>;
+			return {
+				settings: defaultSettings,
+				permissionLoading: parsed.permissionLoading ?? false,
+				currentUser: parsed.currentUser,
+				authorizedPermissions: parsed.authorizedPermissions,
+				...parsed,
+			} as IInitialState;
+		}
+	} catch (e) {
+		// ignore parse errors and fallthrough to default
+	}
+
 	return {
 		settings: defaultSettings,
 		permissionLoading: true,
@@ -41,9 +58,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 	return {
 		unAccessible: (
 			<OIDCBounder>
-				<TechnicalSupportBounder>
+				{initialState?.permissionLoading ? <LoadingPage /> : <TechnicalSupportBounder>
 					<NotAccessible />
-				</TechnicalSupportBounder>
+				</TechnicalSupportBounder>}
 			</OIDCBounder>
 		),
 		noFound: <NotFoundContent />,
