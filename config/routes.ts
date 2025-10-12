@@ -44,8 +44,6 @@
 			{
 				name: 'ChucVu',
 				path: 'chuc-vu',
-				access: 'accessFilter',
-				maChucNang: 'khao-thi|ql-nhap-diem-chinh-thuc',
 				component: './DanhMuc/ChucVu',
 			},
 		],
