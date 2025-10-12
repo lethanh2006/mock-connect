@@ -2184,11 +2184,6 @@
   resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.6.0.tgz#eac397f28bf1d6ae0ae081363eca2f425bedf0d5"
   integrity sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==
 
-"@types/date-arithmetic@*":
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/@types/date-arithmetic/-/date-arithmetic-4.1.4.tgz#bdb441f61a916f11af1874a8c2cf787f77ffcb94"
-  integrity sha512-p9eZ2X9B80iKiTW4ukVj8B4K6q9/+xFtQ5MGYA5HWToY9nL4EkhV9+6ftT2VHpVMEZb5Tv00Iel516bVdO+yRw==
-
 "@types/estree@^1.0.6":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.6.tgz#628effeeae2064a1b4e79f78e81d87b7e5fc7b50"
@@ -2297,11 +2292,6 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.2.tgz#5950e50960793055845e956c427fc2b0d70c5239"
   integrity sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==
 
-"@types/prop-types@*":
-  version "15.7.14"
-  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.14.tgz#1433419d73b2a7ebfc6918dcefd2ec0d5cd698f2"
-  integrity sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==
-
 "@types/qs@^6.14.0":
   version "6.14.0"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.14.0.tgz#d8b60cecf62f2db0fb68e5e006077b9178b85de5"
@@ -2312,15 +2302,6 @@
   resolved "https://registry.yarnpkg.com/@types/react-beautiful-dnd/-/react-beautiful-dnd-13.1.8.tgz#f52d3ea07e1e19159d6c3c4a48c8da3d855e60b4"
   integrity sha512-E3TyFsro9pQuK4r8S/OL6G99eq7p8v29sX0PM7oT8Z+PJfZvSQTx4zTQbUJ+QZXioAF0e7TGBEcA1XhYhCweyQ==
   dependencies:
-    "@types/react" "*"
-
-"@types/react-big-calendar@1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@types/react-big-calendar/-/react-big-calendar-1.6.0.tgz#3060b86788c6b636b8b70feaba843fb83a744491"
-  integrity sha512-ZdewX362GjB8MIVweVw+XR/6qkpkTVJvlTTyhqcLbEVI/zEUxPSX+9OlSDIJG3IONkvq+QqGPJbhyLkiDBQ7Jg==
-  dependencies:
-    "@types/date-arithmetic" "*"
-    "@types/prop-types" "*"
     "@types/react" "*"
 
 "@types/react-dom@^19.0.4":
@@ -9748,10 +9729,10 @@ react-beautiful-dnd@^13.1.0:
     redux "^4.0.4"
     use-memo-one "^1.1.1"
 
-react-big-calendar@1.16.1:
-  version "1.16.1"
-  resolved "https://registry.yarnpkg.com/react-big-calendar/-/react-big-calendar-1.16.1.tgz#a9062a7aa26bf6dfce54b7e7cab95feaf44757e3"
-  integrity sha512-xpERBOa7+2nSMCTO6rTCsG5Is3DTZoOT0xuXeKAN4GzyZd06MlxIZilzho7SE+LGAzK2RcpM0+YMrzorgIO4BQ==
+react-big-calendar@1.18.0:
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/react-big-calendar/-/react-big-calendar-1.18.0.tgz#feace5727cca7b65f9b6e314529fa512a49c9ad1"
+  integrity sha512-bGrCdyfnCGe2qnIdEoGkGgQdEFOiGO1Tq7RLkI1a2t8ZudyEAKekFtneO2/ltKQEQK6zH76YdJ7vR9UMyD+ULw==
   dependencies:
     "@babel/runtime" "^7.20.7"
     clsx "^1.2.1"
