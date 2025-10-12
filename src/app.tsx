@@ -34,6 +34,7 @@ export async function getInitialState(): Promise<IInitialState> {
 		const raw = sessionStorage.getItem('initialState');
 		if (raw) {
 			const parsed = JSON.parse(raw) as Partial<IInitialState>;
+			delete parsed.currentUser;
 			return { settings: defaultSettings, ...parsed };
 		}
 	} catch (e) {}
