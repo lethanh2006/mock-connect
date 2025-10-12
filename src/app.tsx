@@ -30,6 +30,14 @@ export function rootContainer(container: React.ReactNode) {
 }
 
 export async function getInitialState(): Promise<IInitialState> {
+	try {
+		const raw = sessionStorage.getItem('initialState');
+		if (raw) {
+			const parsed = JSON.parse(raw) as Partial<IInitialState>;
+			return { settings: defaultSettings, ...parsed };
+		}
+	} catch (e) {}
+
 	return {
 		settings: defaultSettings,
 		permissionLoading: true,
