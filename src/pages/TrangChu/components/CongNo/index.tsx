@@ -147,8 +147,8 @@ const CardCongNoDashboard = () => {
 									<div className='total-text'>Tổng số</div>
 								</div>
 
-								<div className='percentage-label left'>{yAxis[0]}%</div>
-								<div className='percentage-label right'>{yAxis[1]}%</div>
+								<div className='percentage-label left'>{yAxis[0].toFixed(1)}%</div>
+								<div className='percentage-label right'>{yAxis[1].toFixed(1)}%</div>
 							</div>
 
 							{/* Legend */}
