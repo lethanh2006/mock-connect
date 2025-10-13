@@ -1,8 +1,8 @@
 import UploadFile from '@/components/Upload/UploadFile';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { toISOString, uploadMultiFile } from '@/utils/utils';
 import { Button, Form, Input, Modal } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 
 const FormGuiKhieuNai = (props: { getData: any }) => {
@@ -16,7 +16,7 @@ const FormGuiKhieuNai = (props: { getData: any }) => {
 			setLoading(true);
 			const urlFileDinhKem = await uploadMultiFile(values?.urlFileDinhKem?.fileList ?? []);
 			const payload = {
-				thoiGianGuiKhieuNai: toISOString(moment()),
+				thoiGianGuiKhieuNai: toISOString(dayjs()),
 				...values,
 				urlFileDinhKem,
 				info: {
@@ -36,7 +36,7 @@ const FormGuiKhieuNai = (props: { getData: any }) => {
 	return (
 		<Modal
 			footer={false}
-			visible={visibleFormGuiKhieuNai}
+			open={visibleFormGuiKhieuNai}
 			onCancel={() => setVisibleFormGuiKhieuNai(false)}
 			title={'Gửi khiếu nại điểm rèn luyện'}
 		>

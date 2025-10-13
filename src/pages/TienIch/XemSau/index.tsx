@@ -22,7 +22,10 @@ const XemSauPage = () => {
 		} else if (tabActive === ELoaiThongTinXemSau.TIN_TUC) {
 			history.push({
 				pathname: '/tin-tuc/chi-tiet',
-				query: rec?.idChuDe ? { _id: rec?.sourceId, cat: rec?.idChuDe } : { id: rec?.sourceId },
+				// query: rec?.idChuDe ? { _id: rec?.sourceId, cat: rec?.idChuDe } : { id: rec?.sourceId },
+				search: rec?.idChuDe
+					? `?_id=${rec?.sourceId}${rec?.idChuDe ? `&cat=${rec?.idChuDe}` : ''}`
+					: `?id=${rec?.sourceId}`,
 			});
 		} else if (tabActive === ELoaiThongTinXemSau.VBHD) {
 			window.open(rec?.thongTin?.url, '_blank');
@@ -99,16 +102,18 @@ const XemSauPage = () => {
 	}));
 
 	return (
-		<Card title='Danh sách xem sau'>
-			<TabViewPage
-				hideCard
-				menu={menus}
-				onChange={(tab) => {
-					setTabActive(tab as ELoaiThongTinXemSau);
-				}}
-			/>
+		<Card title='Danh sách xem sau' className='card-big-title card-borderless' variant='borderless'>
+			<Card variant='borderless'>
+				<TabViewPage
+					hideCard
+					menu={menus}
+					onChange={(tab) => {
+						setTabActive(tab as ELoaiThongTinXemSau);
+					}}
+				/>
 
-			<ModalChiTiet />
+				<ModalChiTiet />
+			</Card>
 		</Card>
 	);
 };

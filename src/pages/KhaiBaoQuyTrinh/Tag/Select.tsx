@@ -1,8 +1,8 @@
+import FormTag from '@/pages/KhaiBaoQuyTrinh/Tag/components/Form';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal, Select, Spin } from 'antd';
 import { CSSProperties, useEffect } from 'react';
 import { useModel } from 'umi';
-import FormTag from '@/pages/KhaiBaoQuyTrinh/Tag/components/Form';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem
@@ -21,8 +21,7 @@ const SelectTags = (props: {
 	style?: CSSProperties;
 }) => {
 	const { value, onChange, multiple, loadData, allowClear, placeholder, disabled, style, dataState, hasCreate } = props;
-	const { danhSach, getAllModel, loading, setRecord, setEdit, setVisibleForm, visibleForm } =
-		useModel('quytrinh.tags');
+	const { danhSach, getAllModel, loading, setRecord, setEdit, setVisibleForm, visibleForm } = useModel('quytrinh.tags');
 
 	useEffect(() => {
 		if (loadData !== false) getAllModel();
@@ -57,8 +56,8 @@ const SelectTags = (props: {
 						<Button icon={<PlusOutlined />} onClick={onAddNew} />
 						<Modal
 							destroyOnClose
-							visible={visibleForm}
-							bodyStyle={{ padding: 0 }}
+							open={visibleForm}
+							styles={{ body: { padding: 0 } }}
 							footer={null}
 							onCancel={() => setVisibleForm(false)}
 						>

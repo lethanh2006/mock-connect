@@ -4,9 +4,9 @@ import { type IColumn } from '@/components/Table/typing';
 import { EHoatDongChungType1 } from '@/services/SuKien/constant';
 import type { SuKien } from '@/services/SuKien/typings';
 import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
+import dayjs from '@/utils/dayjs';
 import { EyeOutlined, FileExcelOutlined, ReloadOutlined, SaveOutlined } from '@ant-design/icons';
 import { Card, Tabs } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalChiTiet from './ModalChiTiet';
@@ -89,15 +89,16 @@ const SinhVienHoatDongCTSV = () => {
 			align: 'center',
 			width: 100,
 			render: (val, rec) =>
-				rec?.hoatDongCtsv?.thoiGianBatDau && moment(rec?.hoatDongCtsv?.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
+				rec?.hoatDongCtsv?.thoiGianBatDau && dayjs(rec?.hoatDongCtsv?.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Thời gian kết thúc',
 			align: 'center',
 			width: 100,
 			render: (val, rec) =>
-				rec?.hoatDongCtsv?.thoiGianKetThuc && moment(rec?.hoatDongCtsv?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
+				rec?.hoatDongCtsv?.thoiGianKetThuc && dayjs(rec?.hoatDongCtsv?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
 		},
+
 		{
 			title: 'Trạng thái',
 			align: 'center',
@@ -136,29 +137,31 @@ const SinhVienHoatDongCTSV = () => {
 	];
 
 	return (
-		<Card title='Danh sách sự kiện'>
-			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EHoatDongChungType1)}>
-				{Object.values(EHoatDongChungType1).map((item) => (
-					<Tabs.TabPane tab={item} key={item} />
-				))}
-			</Tabs>
+		<Card title='Danh sách sự kiện' className='card-big-title card-borderless' variant='borderless'>
+			<Card>
+				<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EHoatDongChungType1)}>
+					{Object.values(EHoatDongChungType1).map((item) => (
+						<Tabs.TabPane tab={item} key={item} />
+					))}
+				</Tabs>
 
-			<TableStaticData
-				columns={columns}
-				data={danhSach ?? []}
-				loading={loading}
-				addStt
-				otherProps={{ pagination: true }}
-				hasTotal
-			>
-				<div style={{ position: 'absolute', right: 130 }}>
-					<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
-						Tải lại
-					</ButtonExtend>
-				</div>
-			</TableStaticData>
+				<TableStaticData
+					columns={columns}
+					data={danhSach ?? []}
+					loading={loading}
+					addStt
+					otherProps={{ pagination: true }}
+					hasTotal
+				>
+					<div style={{ position: 'absolute', right: 130 }}>
+						<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
+							Tải lại
+						</ButtonExtend>
+					</div>
+				</TableStaticData>
 
-			<ModalChiTiet />
+				<ModalChiTiet />
+			</Card>
 		</Card>
 	);
 };

@@ -1,0 +1,195 @@
+// FilterColumn styles
+.filter-column {
+	display: flex;
+	gap: 5px;
+	flex-direction: column;
+
+	.date-button {
+		position: relative;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		.calendar-icon {
+			font-size: 16px;
+			color: #1890ff;
+		}
+
+		.down-arrow {
+			font-size: 12px;
+			transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+			&.expanded {
+				transform: rotate(180deg);
+			}
+
+			&.collapsed {
+				transform: rotate(0deg);
+			}
+		}
+	}
+
+	.filter-button {
+		position: relative;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		.filter-icon {
+			font-size: 16px;
+			color: #52c41a;
+		}
+
+		.down-arrow {
+			font-size: 12px;
+			transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+			&.expanded {
+				transform: rotate(180deg);
+			}
+
+			&.collapsed {
+				transform: rotate(0deg);
+			}
+		}
+	}
+
+	.calendar-container {
+		overflow: hidden;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+		background: white;
+		border-radius: 6px;
+
+		&.expanded {
+			border: 1px solid #e8e8e8;
+			max-height: 500px;
+			opacity: 1;
+			padding: 16px;
+		}
+
+		&.collapsed {
+			box-shadow: none;
+			border: none;
+			max-height: 0;
+			opacity: 0;
+			padding: 0;
+		}
+
+		.calendar-header {
+			margin-top: 12px;
+			margin-bottom: 8px;
+			width: 100%;
+
+			.year-select,
+			.month-select {
+				width: 100%;
+			}
+		}
+	}
+
+	.filter-container {
+		overflow: hidden;
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+		background: white;
+
+		&.expanded {
+			border: 1px solid #e8e8e8;
+			max-height: 400px;
+			opacity: 1;
+			padding: 16px;
+			overflow: scroll;
+		}
+
+		&.collapsed {
+			box-shadow: none;
+			border: none;
+			max-height: 0;
+			opacity: 0;
+			padding: 0;
+		}
+
+		.checkbox-group {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			margin: 0;
+
+			.checkbox-item {
+				display: flex;
+				align-items: center;
+				user-select: none;
+				width: 100%;
+				transition: all 0.2s ease;
+
+				.checkbox {
+					flex-shrink: 0;
+				}
+
+				.event-label {
+					color: white;
+					padding: 6px 12px;
+					border-radius: 6px;
+					margin-left: 8px;
+					flex: 1;
+					text-align: left;
+					padding-left: 16px;
+					position: relative;
+					font-weight: 500;
+					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+					transition: all 0.2s ease;
+					cursor: pointer;
+
+					&:hover {
+						transform: translateX(2px);
+					}
+
+					.edit-button {
+						position: absolute;
+						right: 8px;
+						top: 50%;
+						transform: translateY(-50%);
+						color: white;
+						padding: 4px;
+						height: auto;
+						min-width: auto;
+						border-radius: 4px;
+						opacity: 0.8;
+						transition: all 0.2s ease;
+
+						&:hover {
+							opacity: 1;
+							background: rgba(255, 255, 255, 0.2);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Responsive behavior
+	@media (max-width: 767px) {
+		.filter-container.expanded {
+			padding: 12px;
+		}
+
+		.checkbox-group {
+			gap: 10px;
+
+			.checkbox-item {
+				.event-label {
+					padding: 6px 10px;
+					font-size: 13px;
+				}
+			}
+		}
+	}
+
+	@media (min-width: 768px) {
+		.filter-container {
+			// Auto expanded on desktop - handled by React state
+		}
+	}
+}

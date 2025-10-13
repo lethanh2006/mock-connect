@@ -1,15 +1,15 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import SelectSinhVienDebounce from '@/pages/SinhVien/components/Select';
+import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
+import { primaryColor } from '@/services/base/constant';
+import { EKieuDuLieu, ETextDisplay } from '@/services/FormDong/LoaiHinh/constants';
+import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
+import dayjs from '@/utils/dayjs';
+import { currencyFormat } from '@/utils/utils';
 import { Modal, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import FormTable from './FormTable';
-import { currencyFormat } from '@/utils/utils';
-import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
-import { EKieuDuLieu, ETextDisplay } from '@/services/FormDong/LoaiHinh/constants';
-import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
-import SelectSinhVienDebounce from '@/pages/SinhVien/components/Select';
-import { primaryColor } from '@/services/base/constant';
 
 const ViewRender = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
@@ -81,14 +81,14 @@ const ViewRender = (props: {
 			break;
 
 		case EKieuDuLieu.HOUR:
-			value = <div>{moment(valueFinal)?.format('HH:mm DD/MM/YYYY')}</div>;
+			value = <div>{dayjs(valueFinal)?.format('HH:mm DD/MM/YYYY')}</div>;
 			break;
 		case EKieuDuLieu.DATE:
-			value = <div>{moment(valueFinal)?.format('DD/MM/YYYY')}</div>;
+			value = <div>{dayjs(valueFinal)?.format('DD/MM/YYYY')}</div>;
 			// value = <div>{valueFinal}</div>;
 			break;
 		case EKieuDuLieu.MONTH:
-			value = <div>{moment(valueFinal)?.format('MM/YYYY')}</div>;
+			value = <div>{dayjs(valueFinal)?.format('MM/YYYY')}</div>;
 			// value = <div>{valueFinal}</div>;
 			break;
 		case EKieuDuLieu.FILE:
@@ -151,7 +151,7 @@ const ViewRender = (props: {
 						width={700}
 						footer={false}
 						title={`${editFormTable ? 'Chỉnh sửa' : 'Thêm mới'} ${cauHinh.ten}`}
-						visible={visibleFormTable}
+						open={visibleFormTable}
 						onCancel={() => setVisibleFormTable(false)}
 					>
 						<FormTable

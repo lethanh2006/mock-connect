@@ -1,6 +1,7 @@
 import DonutChart from '@/components/Chart/DonutChart';
+import { colorLoaiHocLuc, ELoaiHocLuc } from '@/services/HocTap/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Card, Col, Row, Space } from 'antd';
+import { Card, Carousel, Col, Row, Space, Tooltip } from 'antd';
 import { history, Link, useModel } from 'umi';
 
 const CardKetQuaHocTapDashboard = () => {
@@ -13,91 +14,127 @@ const CardKetQuaHocTapDashboard = () => {
 	];
 
 	return (
-		<Card className='dashboard-stat-card' loading={loading}>
-			<div
-				className='dashboard-stat-content'
-				style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 8 }}
-			>
-				<div>
-					<div className='header'>
-						<div className='title'>Kết quả học tập</div>
+		<Card className='dashboard-stat-card' variant='borderless' loading={loading}>
+			<div className='dashboard-stat-content'>
+				<div className='header'>
+					<div className='title'>
+						Kết quả học tập{' '}
+						<div
+							className='header-tag'
+							style={{
+								background: colorLoaiHocLuc[recTienTrinh?.kqhtHocKy?.hocLucHocKy ?? ELoaiHocLuc.EMPTY],
+							}}
+						>
+							{recTienTrinh?.kqhtHocKy?.hocLucHocKy || ELoaiHocLuc.EMPTY}
+						</div>
 					</div>
+					<Tooltip title='Xem chi tiết'>
+						<Link to={`/hoc-tap/ket-qua-hoc-tap`}>
+							<ArrowRightOutlined />
+						</Link>
+					</Tooltip>
+				</div>
 
-					<Row gutter={[12, 0]}>
-						<Col span={8}>
-							<div style={{ margin: '-7px' }}>
-								<DonutChart
-									xAxis={xAxis}
-									yLabel={['Điểm']}
-									yAxis={[yAxis.map((i) => (i * 100) / 4)]}
-									type='radian'
-									formatY={(e) => `${e}`}
-									height={120}
-									width={120}
-									otherOptions={{
-										legend: { show: false },
-										dataLabels: { enabled: false },
-										chart: { toolbar: { show: false } },
-										plotOptions: {
-											radialBar: {
-												dataLabels: { show: false },
-												hollow: { size: '28px' },
-											},
+				<Carousel autoplay pauseOnDotsHover autoplaySpeed={2500} infinite>
+					<div>
+						{/* Biểu đồ to hơn và căn giữa */}
+						<div className='chart-container'>
+							<DonutChart
+								xAxis={xAxis}
+								yLabel={['Điểm']}
+								yAxis={[yAxis.map((i) => (i * 100) / 4)]}
+								type='radian'
+								formatY={(e) => `${e}`}
+								height={180}
+								width={180}
+								otherOptions={{
+									legend: { show: false },
+									dataLabels: { enabled: false },
+									chart: { toolbar: { show: false } },
+									tooltip: { enabled: true },
+									plotOptions: {
+										radialBar: {
+											dataLabels: { show: false },
+											hollow: { size: '35px' },
 										},
-										responsive: [
-											{
-												breakpoint: 480,
-												options: {
-													chart: { width: 120 },
-													legend: { show: false },
+									},
+									responsive: [
+										{
+											breakpoint: 480,
+											options: {
+												chart: { width: 150, height: 150 },
+												legend: { show: false },
+												plotOptions: {
+													radialBar: {
+														hollow: { size: '30px' },
+													},
 												},
 											},
-										],
-									}}
-									colors={colors}
-								/>
+										},
+									],
+									// Thêm stroke để bo tròn các góc
+									stroke: {
+										lineCap: 'round' as 'round', // Bo tròn các đầu
+									},
+								}}
+								colors={colors}
+							/>
+
+							<div className='center-label'>
+								<div className='total-value'>{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '-'}</div>
+								<div className='total-text'>Tín chỉ</div>
 							</div>
-						</Col>
+						</div>
 
-						<Col span={16}>
-							<Row gutter={[0, 4]}>
-								{colors.map((c, ind) => (
-									<Col span={24} key={c}>
-										<div className='row'>
-											<Space>
-												<span className='dot' style={{ backgroundColor: c }} />
-												<span>
-													{xAxis[ind]}
-													<span className='suffix'>(/4)</span>
-												</span>
-											</Space>
-											<span className='sum-text' style={{ color: c }}>
-												{yAxis[ind]}
-											</span>
-										</div>
-									</Col>
-								))}
-
-								<Col span={24}>
-									<div className='row'>
+						<Row gutter={[0, 4]} justify='center'>
+							{colors.map((c, ind) => (
+								<Col span={24} key={c}>
+									<div
+										className='row'
+										style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+									>
 										<Space>
-											<span className='dot' />
+											<span className='dot' style={{ backgroundColor: c }} />
 											<span>
-												STC
-												<span className='suffix'>(/{recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '-'})</span>
+												{xAxis[ind]}
+												<span className='suffix'>(/4)</span>
 											</span>
 										</Space>
-										<span className='sum-text' style={{ color: '#AAA' }}>
-											{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '-'}
+										<span className='sum-text' style={{ color: c, fontWeight: 'bold' }}>
+											{yAxis[ind]}
 										</span>
 									</div>
 								</Col>
-							</Row>
-						</Col>
-					</Row>
-				</div>
+							))}
 
-				<div style={{ cursor: 'pointer' }} onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap#may-tinh')}>
+							<Col span={24}>
+								<div className='row' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+									<Space>
+										<span className='dot' />
+										<span>
+											STC
+											<span className='suffix'>(/{recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '-'})</span>
+										</span>
+									</Space>
+									<span className='sum-text' style={{ color: '#AAA', fontWeight: 'bold' }}>
+										{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '-'}
+									</span>
+								</div>
+							</Col>
+						</Row>
+					</div>
+					{/* Không có thông tin khóa ngành lên tạm ẩn */}
+					{/* <div>
+						<div className='chart-container'>
+							<ChartPloToanKhoa maKhoaNganh='' />
+						</div>
+					</div> */}
+				</Carousel>
+
+				<div
+					style={{ cursor: 'pointer', marginTop: 8 }}
+					onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap#may-tinh')}
+				>
 					<div className='row highlight text-primary'>
 						<span className='text'>Máy tính thông minh</span>
 						<Link to='/hoc-tap/ket-qua-hoc-tap#may-tinh' title='Xem chi tiết'>

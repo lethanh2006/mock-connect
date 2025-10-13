@@ -14,12 +14,12 @@ import {
 } from '@/services/FormDong/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 import { LoaiDefaultValue } from '@/services/FormDong/QuyTrinh/constants';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, InputNumber, Modal, Popconfirm, Radio, Select, Space, Tooltip } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import FormTable from './FormTable';
@@ -112,7 +112,7 @@ const FormRender = (props: {
 					const isDate = cauHinh.kieuDuLieu === EKieuDuLieu.DATE;
 					const isMonth = cauHinh.kieuDuLieu === EKieuDuLieu.MONTH;
 					form.setFieldsValue({
-						[cauHinh.ma]: isDate || isMonth ? moment(khaiBao, isDate ? 'DD/MM/YYYY' : 'MM/YYYY') : khaiBao,
+						[cauHinh.ma]: isDate || isMonth ? dayjs(khaiBao, isDate ? 'DD/MM/YYYY' : 'MM/YYYY') : khaiBao,
 					});
 				} else {
 					setRecordQuyTrinhForm({
@@ -323,7 +323,7 @@ const FormRender = (props: {
 							message: 'Bắt buộc',
 							required: true,
 						},
-				  ]
+					]
 				: [];
 
 			component = (
@@ -359,7 +359,7 @@ const FormRender = (props: {
 						width={700}
 						footer={false}
 						title={`${editFormTable ? 'Chỉnh sửa' : 'Thêm mới'} ${cauHinh.ten}`}
-						visible={visibleFormTable}
+						open={visibleFormTable}
 						onCancel={onCancelFormTable}
 					>
 						<FormTable record={recordTable} onCancel={onCancelFormTable} edit={editFormTable} cauHinh={cauHinh} />
@@ -443,16 +443,16 @@ const FormRender = (props: {
 									recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 										? 'YYYY'
 										: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
-										? 'MM/YYYY'
-										: 'DD/MM/YYYY'
+											? 'MM/YYYY'
+											: 'DD/MM/YYYY'
 								}
 								placeholder={['Từ', 'đến']}
 								picker={
 									recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 										? 'year'
 										: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
-										? 'month'
-										: 'date'
+											? 'month'
+											: 'date'
 								}
 							/>
 						</Form.Item>
@@ -471,15 +471,15 @@ const FormRender = (props: {
 									recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 										? 'YYYY'
 										: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
-										? 'MM/YYYY'
-										: 'DD/MM/YYYY'
+											? 'MM/YYYY'
+											: 'DD/MM/YYYY'
 								}
 								pickerStyle={
 									recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 										? 'year'
 										: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
-										? 'month'
-										: 'date'
+											? 'month'
+											: 'date'
 								}
 								placeholder={'Chọn thời gian'}
 							/>

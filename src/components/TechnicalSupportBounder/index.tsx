@@ -1,5 +1,6 @@
 import { ToolOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Modal, Tooltip } from 'antd';
+import { useIntl } from '@umijs/max';
+import { FloatButton, Modal } from 'antd';
 import { useState } from 'react';
 import { history } from 'umi';
 import ChatbotOverlayV2 from './ChatbotV2';
@@ -8,40 +9,31 @@ import FormPostIssue from './Form';
 import { unChatBotSupportPaths, unTechnicalSupportPaths } from './constant';
 
 const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
+	const intl = useIntl();
 	const [visible, setVisible] = useState<boolean>(false);
 
 	return (
-		<ConfigProvider>
+		<>
 			{props.children}
 
 			{!unTechnicalSupportPaths.includes(window.location.pathname) ? (
 				<>
-					<Tooltip title='Phản hồi' placement='topLeft'>
-						<Button
-							// onClick={() => setVisible(true)}
-							onClick={() => history.push('/phan-hoi')}
-							style={{
-								position: 'fixed',
-								bottom: 90,
-								right: 24,
-								zIndex: 10,
-								boxShadow: 'rgba(0, 0, 0, 0.2) 1px 1px 8px 3px',
-								padding: 0,
-							}}
-							shape='circle'
-							size='large'
-							type='primary'
-						>
-							<ToolOutlined />
-						</Button>
-					</Tooltip>
+					<FloatButton
+						tooltip={intl.formatMessage({ id: 'global.technical.title' })}
+						// onClick={() => setVisible(true)}
+						onClick={() => history.push('/phan-hoi')}
+						type='primary'
+						icon={<ToolOutlined />}
+					/>
+
+					<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
 
 					<Modal
-						bodyStyle={{ padding: 0 }}
-						footer={false}
-						visible={visible}
+						footer={null}
+						open={visible}
 						onCancel={() => setVisible(false)}
 						maskClosable={false}
+						title={intl.formatMessage({ id: 'global.technical.title' })}
 					>
 						<FormPostIssue setVisible={setVisible} visible={visible} />
 					</Modal>
@@ -56,7 +48,7 @@ const TechnicalSupportBounder = (props: { children: React.ReactNode }) => {
 			) : null}
 
 			<PanpageHoTro path={APP_CONFIG_HO_TRO_KY_THUAT} />
-		</ConfigProvider>
+		</>
 	);
 };
 

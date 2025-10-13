@@ -499,10 +499,10 @@ const FormCauHinh = (props: { onCancel: any; dataState?: string; dataSetState?: 
 			</Form>
 			<Modal
 				width={700}
-				visible={visibleCot}
+				open={visibleCot}
 				destroyOnClose
 				footer={false}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				onCancel={onCancelFormCot}
 			>
 				<FormCot onCancel={onCancelFormCot} />

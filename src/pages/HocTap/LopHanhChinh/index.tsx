@@ -1,14 +1,14 @@
 import { TabViewPage } from '@/components/TabViewPage';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
+import { InfoCircleOutlined, NotificationOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
+import DienDanLopPage from '../LopHocPhan/DienDan';
 import SelectLopHanhChinhSinhVien from './components/Select';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
-import { InfoCircleOutlined, NotificationOutlined } from '@ant-design/icons';
-import DienDanLopPage from '../LopHocPhan/DienDan';
 
 const LopHanhChinhPage = () => {
 	// const { record: recHocKy } = useModel('daotao.hocky');
@@ -26,8 +26,9 @@ const LopHanhChinhPage = () => {
 
 	return (
 		<Card
-			bodyStyle={{ paddingTop: 4 }}
 			title='Lớp hành chính'
+			variant={'borderless'}
+			className='card-big-title card-borderless'
 			extra={
 				<SelectLopHanhChinhSinhVien
 					value={record?._id}
@@ -48,66 +49,68 @@ const LopHanhChinhPage = () => {
 				/>
 			</FilterHocKy>  */}
 
-			<Spin spinning={loading}>
-				{record?._id ? (
-					<>
-						<TabViewPage
-							hideCard
-							menu={[
-								{
-									title: 'Thông tin chung',
-									menuKey: 'thong-tin',
-									content: (
-										<Row gutter={[16, 16]}>
-											<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
-												<Row gutter={[16, 16]}>
-													<Col span={24}>
-														<CardGiangVienLop
-															loading={loading}
-															title='Cố vấn học tập'
-															danhSachNhanSu={
-																recordDetail?.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
-																(recordDetail?.giangVien?.ssoId
-																	? [{ nhanSu: recordDetail.giangVien, nhanSuSsoId: recordDetail.giangVien.ssoId }]
-																	: [])
-															}
-															isHighlight
-														/>
-													</Col>
-													<Col span={24}>
-														<CardThongBao
-															loai='lop-hanh-chinh'
-															idLop={record?._id}
-															onShowAll={() => (window.location.hash = 'thong-bao')}
-														/>
-													</Col>
-												</Row>
-											</Col>
-											<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
-												<ThongTinChungLopHanhChinh />
-											</Col>
-										</Row>
-									),
-									icon: <InfoCircleOutlined />,
-								},
-								{
-									title: 'Thông báo',
-									menuKey: 'thong-bao',
-									content: <ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />,
-									icon: <NotificationOutlined />,
-								},
-								{
-									title: 'Diễn đàn',
-									menuKey: 'dien-dan',
-									content: <DienDanLopPage idLopHanhChinh={record?._id} />,
-								},
-							]}
-						/>
-					</>
-				) : (
-					<Empty description='Vui lòng chọn lớp hành chính' style={{ margin: '32px 0' }} />
-				)}
-			</Spin>
+			<Card variant='borderless'>
+				<Spin spinning={loading}>
+					{record?._id ? (
+						<>
+							<TabViewPage
+								hideCard
+								menu={[
+									{
+										title: 'Thông tin chung',
+										menuKey: 'thong-tin',
+										content: (
+											<Row gutter={[16, 16]}>
+												<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
+													<Row gutter={[16, 16]}>
+														<Col span={24}>
+															<CardGiangVienLop
+																loading={loading}
+																title='Cố vấn học tập'
+																danhSachNhanSu={
+																	recordDetail?.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
+																	(recordDetail?.giangVien?.ssoId
+																		? [{ nhanSu: recordDetail.giangVien, nhanSuSsoId: recordDetail.giangVien.ssoId }]
+																		: [])
+																}
+																isHighlight
+															/>
+														</Col>
+														<Col span={24}>
+															<CardThongBao
+																loai='lop-hanh-chinh'
+																idLop={record?._id}
+																onShowAll={() => (window.location.hash = 'thong-bao')}
+															/>
+														</Col>
+													</Row>
+												</Col>
+												<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
+													<ThongTinChungLopHanhChinh />
+												</Col>
+											</Row>
+										),
+										icon: <InfoCircleOutlined />,
+									},
+									{
+										title: 'Thông báo',
+										menuKey: 'thong-bao',
+										content: <ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />,
+										icon: <NotificationOutlined />,
+									},
+									{
+										title: 'Diễn đàn',
+										menuKey: 'dien-dan',
+										content: <DienDanLopPage idLopHanhChinh={record?._id} />,
+									},
+								]}
+							/>
+						</>
+					) : (
+						<Empty description='Vui lòng chọn lớp hành chính' style={{ margin: '32px 0' }} />
+					)}
+				</Spin>
+			</Card>
 		</Card>
 	);
 };

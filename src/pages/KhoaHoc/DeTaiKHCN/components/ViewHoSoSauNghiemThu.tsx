@@ -1,7 +1,7 @@
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { Descriptions, Tag } from 'antd';
-import moment from 'moment';
 
 const ViewHoSoSauNghiemThu = (props: { rec: DeTaiKHCN.IRecord }) => {
 	const { dangKyKhcn } = props.rec;
@@ -37,7 +37,7 @@ const ViewHoSoSauNghiemThu = (props: { rec: DeTaiKHCN.IRecord }) => {
 					{dangKyKhcn.chuTriDeTai.tenDonVi}
 				</Descriptions.Item>
 				<Descriptions.Item span={2} label='Ngày sinh'>
-					{moment(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
+					{dayjs(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
 				</Descriptions.Item>
 				<Descriptions.Item span={2} label='Nơi sinh'>
 					{dangKyKhcn.chuTriDeTai.noiSinh}

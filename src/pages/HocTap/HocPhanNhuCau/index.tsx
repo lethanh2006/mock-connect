@@ -11,15 +11,15 @@ import {
 	mapNameTrangThaiSvDkHpNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
+import dayjs from '@/utils/dayjs';
 import { MenuOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Card, Checkbox, Empty, Space, Table } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import SelectDotDangKyHocPhanNhuCau from './DotDangKy/Select';
-import FormHocPhanDangKyNhuCau from './components/Form';
 import DanhSachDangKyLop from './components/DanhSachDangKy';
+import FormHocPhanDangKyNhuCau from './components/Form';
 
 const DangKyNhuCauHocPhan = () => {
 	const { record: recDot, setRecord: setRecDot, danhSach: danhSachDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
@@ -40,8 +40,8 @@ const DangKyNhuCauHocPhan = () => {
 	const ngoaiThoiGian =
 		!recDot?.thoiGianBatDauDangKy ||
 		!recDot?.thoiGianKetThucDangKy ||
-		moment().isBefore(recDot?.thoiGianBatDauDangKy) ||
-		moment().isAfter(recDot?.thoiGianKetThucDangKy);
+		dayjs().isBefore(dayjs(recDot?.thoiGianBatDauDangKy)) ||
+		dayjs().isAfter(dayjs(recDot?.thoiGianKetThucDangKy));
 
 	const getData = () =>
 		recDot?._id && getAllModel(true, undefined, undefined, undefined, `dot-dang-ky/${recDot?._id}/me`);
@@ -120,8 +120,8 @@ const DangKyNhuCauHocPhan = () => {
 							) : (
 								<>
 									Thời gian đăng ký nhu cầu học phần từ{' '}
-									<b>{moment(recDot?.thoiGianBatDauDangKy).format('DD/MM/YYYY')}</b> đến{' '}
-									<b>{moment(recDot?.thoiGianKetThucDangKy).format('DD/MM/YYYY')}</b>
+									<b>{dayjs(recDot?.thoiGianBatDauDangKy).format('DD/MM/YYYY')}</b> đến{' '}
+									<b>{dayjs(recDot?.thoiGianKetThucDangKy).format('DD/MM/YYYY')}</b>
 								</>
 							)
 						}

@@ -3,8 +3,8 @@ import TableBase from '@/components/Table';
 import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import type { UuDaiThanhToan } from '@/services/TaiChinh/UuDaiThanhToan/typing';
+import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
-import moment from 'moment';
 import { useModel } from 'umi';
 
 const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord) => void }) => {
@@ -13,8 +13,8 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 
 	const getData = () =>
 		getModel({ active: true }, [
-			{ active: true, field: 'thoiGianBatDau', values: [moment().toISOString()], operator: EOperatorType.LESS_EQUAL },
-			{ active: true, field: 'thoiGianKetThuc', values: [moment().toISOString()], operator: EOperatorType.GREAT_EQUAL },
+			{ active: true, field: 'thoiGianBatDau', values: [dayjs().toISOString()], operator: EOperatorType.LESS_EQUAL },
+			{ active: true, field: 'thoiGianKetThuc', values: [dayjs().toISOString()], operator: EOperatorType.GREAT_EQUAL },
 		]);
 
 	const onCell = (rec: UuDaiThanhToan.IRecord) => ({
@@ -35,8 +35,8 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 			align: 'center',
 			width: 140,
 			render: (val, rec) =>
-				`${rec.thoiGianBatDau ? moment(rec.thoiGianBatDau).format('DD/MM/YYYY') : ''} - ${
-					rec.thoiGianKetThuc ? moment(rec.thoiGianKetThuc).format('DD/MM/YYYY') : ''
+				`${rec.thoiGianBatDau ? dayjs(rec.thoiGianBatDau).format('DD/MM/YYYY') : ''} - ${
+					rec.thoiGianKetThuc ? dayjs(rec.thoiGianKetThuc).format('DD/MM/YYYY') : ''
 				}`,
 			onCell,
 		},

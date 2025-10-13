@@ -7,9 +7,9 @@ import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import { EKieuDuLieu, ETextDisplay } from '@/services/QuyTrinh/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { currencyFormat } from '@/utils/utils';
 import { Modal, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 
 const ViewRender = (props: {
@@ -82,14 +82,14 @@ const ViewRender = (props: {
 			break;
 
 		case EKieuDuLieu.HOUR:
-			value = <div>{moment(valueFinal).format('HH:mm DD/MM/YYYY')}</div>;
+			value = <div>{dayjs(valueFinal).format('HH:mm DD/MM/YYYY')}</div>;
 			break;
 		case EKieuDuLieu.DATE:
-			value = <div>{moment(valueFinal).format('DD/MM/YYYY')}</div>;
+			value = <div>{dayjs(valueFinal).format('DD/MM/YYYY')}</div>;
 			// value = <div>{valueFinal}</div>;
 			break;
 		case EKieuDuLieu.MONTH:
-			value = <div>{moment(valueFinal).format('MM/YYYY')}</div>;
+			value = <div>{dayjs(valueFinal).format('MM/YYYY')}</div>;
 			// value = <div>{valueFinal}</div>;
 			break;
 		case EKieuDuLieu.FILE:
@@ -143,7 +143,7 @@ const ViewRender = (props: {
 						width={700}
 						footer={false}
 						title={`${editFormTable ? 'Chỉnh sửa' : 'Thêm mới'} ${cauHinh.ten}`}
-						visible={visibleFormTable}
+						open={visibleFormTable}
 						onCancel={() => setVisibleFormTable(false)}
 					>
 						<FormTable

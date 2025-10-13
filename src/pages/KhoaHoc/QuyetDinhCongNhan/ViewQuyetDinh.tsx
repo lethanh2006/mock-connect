@@ -18,7 +18,7 @@ const ViewQuyetDinh = () => {
 		<Modal
 			width={900}
 			title='Chi tiết quyết định công nhận'
-			visible={visibleViewDetail}
+			open={visibleViewDetail}
 			onCancel={handleCancel}
 			footer={
 				<Button type='primary' onClick={handleCancel}>
@@ -49,7 +49,7 @@ const ViewQuyetDinh = () => {
 			<ModalExpandable
 				title='Chi tiết tập tin'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={
 					<div className='form-footer'>
 						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>

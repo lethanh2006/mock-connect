@@ -8,3 +8,7 @@ export async function getDiemLopHocPhan(lopHocPhanId: string) {
 export async function getMoodleLopHocPhan(lopHocPhanId: string) {
 	return axios.get(`${ipDaoTao}/lop-hoc-phan/${lopHocPhanId}/moodle/course`);
 }
+
+export async function thongKeDiemPLOSinhVien(maKhoaNganh: string) {
+	return axios.get(`${ipDaoTao}/diem-hp-sv-hk/thong-ke-diem-pi/me/khoa-nganh/${maKhoaNganh}`);
+}

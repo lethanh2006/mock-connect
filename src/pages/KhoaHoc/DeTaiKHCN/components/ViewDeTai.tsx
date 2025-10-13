@@ -1,11 +1,11 @@
 import { EPhaseDeTaiKHCN, MapKeyNamePhaseDeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/constants';
-import { Modal, Tabs, Button } from 'antd';
-import ViewDangKyDeXuat from './ViewDangKyDeXuat';
+import { Button, Modal, Tabs } from 'antd';
 import { useModel } from 'umi';
-import ViewThuyetMinh from './ViewThuyetMinh';
-import ViewThucHienDeTai from './ViewThucHienDeTai';
+import ViewDangKyDeXuat from './ViewDangKyDeXuat';
 import ViewHoSoNghiemThu from './ViewHoSoNghiemThu';
 import ViewHoSoSauNghiemThu from './ViewHoSoSauNghiemThu';
+import ViewThucHienDeTai from './ViewThucHienDeTai';
+import ViewThuyetMinh from './ViewThuyetMinh';
 
 const ViewDeTai = (props: { phaseDeTai: EPhaseDeTaiKHCN }) => {
 	const { record, visibleViewDetail, setVisibleViewDetail } = useModel('khoahoc.detaikhcn');
@@ -69,7 +69,7 @@ const ViewDeTai = (props: { phaseDeTai: EPhaseDeTaiKHCN }) => {
 	};
 	return (
 		<Modal
-			bodyStyle={{ paddingTop: 4 }}
+			styles={{ body: { paddingTop: 4 } }}
 			width={1000}
 			footer={
 				<Button type='primary' onClick={handleCancel}>
@@ -77,7 +77,7 @@ const ViewDeTai = (props: { phaseDeTai: EPhaseDeTaiKHCN }) => {
 				</Button>
 			}
 			title='Thông tin chi tiết đề tài KHCN'
-			visible={visibleViewDetail}
+			open={visibleViewDetail}
 			onCancel={handleCancel}
 		>
 			<Tabs defaultActiveKey={props.phaseDeTai}>

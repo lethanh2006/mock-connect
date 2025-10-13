@@ -1,6 +1,6 @@
 import type { EFileScope } from '@/services/uploadFile';
+import axios from '@/utils/axios';
 import { ipKhaoThi } from '@/utils/ip';
-import axios from 'axios';
 
 const defaultAxios = axios.create();
 

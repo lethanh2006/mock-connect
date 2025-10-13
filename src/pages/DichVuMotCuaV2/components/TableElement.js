@@ -1,7 +1,7 @@
 import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Input, Table, Drawer, Modal, Tooltip, Divider, Popconfirm } from 'antd';
 import React from 'react';
-import moment from 'moment';
+import dayjs from '@/utils/dayjs';
 
 class App extends React.Component {
   state = {
@@ -82,7 +82,7 @@ class App extends React.Component {
         break;
       }
       case 'DATE_PICKER': {
-        valueFinal = values?.value ? moment(values?.value)?.format('HH:mm DD/MM/YYYY') : undefined;
+        valueFinal = values?.value ? dayjs(values?.value).format('HH:mm DD/MM/YYYY') : undefined;
         break;
       }
       case 'DON_VI_HANH_CHINH': {
@@ -115,9 +115,9 @@ class App extends React.Component {
     const columns = this.props.columns?.map((item) => {
       return item?.search === 'search'
         ? {
-            ...item,
-            ...this.getColumnSearchProps(item.dataIndex),
-          }
+          ...item,
+          ...this.getColumnSearchProps(item.dataIndex),
+        }
         : { ...item };
     });
     if (!['view', 'handle'].includes(this.props?.type)) {
@@ -202,7 +202,7 @@ class App extends React.Component {
               style={{ width: '90px', fontWeight: 600, fontSize: 14, marginLeft: 10 }}
               value={this.state?.data?.length ?? 0}
               readOnly
-              // ref={this.setTableBaseRef}
+            // ref={this.setTableBaseRef}
             />
           </h4>
         )}

@@ -5,10 +5,10 @@ import { type IColumn } from '@/components/Table/typing';
 import { primaryColor } from '@/services/base/constant';
 import { type EDinhDangBaiThi, mapNameDinhDangBaiThi } from '@/services/KhaoThi/constant';
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
+import dayjs from '@/utils/dayjs';
 import { getNameFile } from '@/utils/utils';
 import { SaveOutlined } from '@ant-design/icons';
 import { Card, Segmented, Space, Tag } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import FilterKyThi from '../../KhaoThi/KyThi/Filter';
@@ -61,7 +61,7 @@ const BaiThiCuoiKy = () => {
 									{getNameFile(item)}
 								</a>
 							</div>
-					  ))
+						))
 					: null,
 		},
 		{
@@ -69,7 +69,7 @@ const BaiThiCuoiKy = () => {
 			align: 'center',
 			dataIndex: 'thoiGianBatDau',
 			width: 120,
-			render: (val, rec) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 			filterType: 'date',
 			sortable: true,
 		},
@@ -78,7 +78,7 @@ const BaiThiCuoiKy = () => {
 			align: 'center',
 			dataIndex: 'thoiGianKetThuc',
 			width: 120,
-			render: (val, rec) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 			filterType: 'date',
 			sortable: true,
 		},
@@ -102,9 +102,7 @@ const BaiThiCuoiKy = () => {
 			render: (val: EDinhDangBaiThi[], rec) =>
 				val?.length && (
 					<div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-						{val?.map((item) => (
-							<Tag key={item}>{mapNameDinhDangBaiThi[item]}</Tag>
-						))}
+						{val?.map((item) => <Tag key={item}>{mapNameDinhDangBaiThi[item]}</Tag>)}
 					</div>
 				),
 		},
@@ -145,8 +143,9 @@ const BaiThiCuoiKy = () => {
 					rec?.choPhepNopNgoaiThoiGian !== true &&
 					(!rec?.thoiGianBatDau ||
 						!rec?.thoiGianKetThuc ||
-						moment().isBefore(rec?.thoiGianBatDau) ||
-						moment().isAfter(rec?.thoiGianKetThuc));
+						dayjs().isBefore(dayjs(rec?.thoiGianBatDau)) ||
+						dayjs().isAfter(dayjs(rec?.thoiGianKetThuc)));
+
 				return (
 					<ButtonExtend
 						disabled={ngoaiThoiGian || !!rec?.daNopBai}
@@ -162,43 +161,50 @@ const BaiThiCuoiKy = () => {
 	];
 
 	return (
-		<Card title='Bài cuối kỳ'>
-			<div style={{ marginBottom: 12 }}>
-				<FilterKyThi />
-			</div>
-
-			<TableBase
-				getData={getData}
-				buttons={{
-					create: false,
-				}}
-				columns={columns}
-				dependencies={[page, limit, reckyThi?._id, recordHocKy?.ma, type]}
-				modelName='khaothi.sinhvienthi'
-				hideCard
-				Form={Form}
-				formProps={{ getData }}
-				destroyModal
-				otherButtons={[
-					<Space key={'1'} wrap>
-						<Segmented
-							value={type}
-							onChange={(val) => {
-								setType(val as string);
-							}}
-							options={[
-								{ value: 'nopBai', label: 'Giao đề/Nộp bài' },
-								{ value: 'raDe', label: 'Giao đề' },
-							]}
-						/>
-						{type === 'raDe' && (
-							<div style={{ fontStyle: 'italic', color: primaryColor }}>
-								Với học phần ra đề, sinh viên <strong>không cần nộp bài</strong> trên hệ thống.
-							</div>
-						)}
-					</Space>,
-				]}
-			/>
+		<Card
+			title={
+				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
+					<span>Bài cuối kỳ</span>
+					<FilterKyThi />
+				</Space>
+			}
+			className='card-big-title card-borderless'
+			variant='borderless'
+		>
+			<Card variant='borderless'>
+				<TableBase
+					getData={getData}
+					buttons={{
+						create: false,
+					}}
+					columns={columns}
+					dependencies={[page, limit, reckyThi?._id, recordHocKy?.ma, type]}
+					modelName='khaothi.sinhvienthi'
+					hideCard
+					Form={Form}
+					formProps={{ getData }}
+					destroyModal
+					otherButtons={[
+						<Space key={'1'} wrap>
+							<Segmented
+								value={type}
+								onChange={(val) => {
+									setType(val as string);
+								}}
+								options={[
+									{ value: 'nopBai', label: 'Giao đề/Nộp bài' },
+									{ value: 'raDe', label: 'Giao đề' },
+								]}
+							/>
+							{type === 'raDe' && (
+								<div style={{ fontStyle: 'italic', color: primaryColor }}>
+									Với học phần ra đề, sinh viên <strong>không cần nộp bài</strong> trên hệ thống.
+								</div>
+							)}
+						</Space>,
+					]}
+				/>
+			</Card>
 		</Card>
 	);
 };

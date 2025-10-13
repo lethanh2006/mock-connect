@@ -2,23 +2,19 @@ import FormQuyTrinh from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/Form';
 import View from '@/pages/KhaiBaoQuyTrinh/ViewQuyTrinh/components/View';
 import { ELoaiDanhMucChung } from '@/services/QuyTrinh/DanhMuc/constants';
 import { getDonByUserId } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
+import { useSearchParams } from '@umijs/max';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { useModel, useParams } from 'umi';
 
-const QuyTrinhView = ({
-	match: {
-		params: { id },
-	},
-}: {
-	match: { params: { id: string } };
-}) => {
-	const { record, current, setCurrent, setDataQuyTrinh, dataQuyTrinh, setCurrentFormKhaiBao, setEditFormKhaiBao } =
+const QuyTrinhView = () => {
+	const [searchParams] = useSearchParams();
+	const { current, setCurrent, setDataQuyTrinh, dataQuyTrinh, setCurrentFormKhaiBao, setEditFormKhaiBao } =
 		useModel('quytrinh.khaibaoquytrinh');
 	const { getAllModel: getAllDanhMucChung } = useModel('quytrinh.danhmuc');
 	const [loadingForm, setLoadingForm] = useState<boolean>(false);
-	const { query = {} } = history.location;
-	const { quyTrinh } = query;
+	const { id } = useParams<{ id: string }>();
 
+	const quyTrinh = searchParams.get('quyTrinh');
 	const getData = async (ids: string) => {
 		try {
 			setLoadingForm(true);
@@ -64,7 +60,7 @@ const QuyTrinhView = ({
 					loadingForm={loadingForm}
 					modalName={'quytrinh.khaibaoquytrinh'}
 					FormModal={() => {
-						return <FormQuyTrinh idQuyTrinh={quyTrinh as string} getData={() => getData(id)} />;
+						return <FormQuyTrinh idQuyTrinh={quyTrinh as string} getData={() => id && getData(id)} />;
 					}}
 				/>
 			)}

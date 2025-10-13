@@ -1,8 +1,8 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
+import dayjs from '@/utils/dayjs';
 import { Col, Empty, Row, Tooltip } from 'antd';
 import { first } from 'lodash';
-import moment from 'moment';
 import { history, useModel } from 'umi';
 import { CardTinTuc, ContentLargeCard } from '../components/TinTuc.style';
 import { Excerpt } from './components/Excerpt';
@@ -66,7 +66,8 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 							onClick={() => {
 								history.push({
 									pathname: url + '/chi-tiet',
-									query: { _id: danhSach?.[0]?.id as any, cat: chuDe01?._id as any },
+									// query: { _id: danhSach?.[0]?.id as any, cat: chuDe01?._id as any },
+									search: `?_id=${danhSach?.[0]?.id}${chuDe01?._id ? `&cat=${chuDe01?._id}` : ''}`,
 								});
 							}}
 							first={true}
@@ -96,7 +97,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 								<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 									{danhSach?.[0]?.date && (
 										<span className='thoi-gian'>
-											{moment(danhSach?.[0]?.date).format('DD/MM/YYYY')} -{' '}
+											{dayjs(danhSach?.[0]?.date).format('DD/MM/YYYY')} -{' '}
 											<a
 												type='link'
 												onClick={(e) => {
@@ -152,7 +153,8 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 										onClick={() => {
 											history.push({
 												pathname: url + '/chi-tiet',
-												query: { _id: tintuc?.id as any, cat: chuDe?._id as any },
+												// query: { _id: tintuc?.id as any, cat: chuDe?._id as any },
+												search: `?_id=${tintuc?.id}${chuDe?._id ? `&cat=${chuDe?._id}` : ''}`,
 											});
 										}}
 										style={{ height: '33.33%' }}
@@ -184,7 +186,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 												<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 													{tintuc.date && (
 														<span className='thoi-gian'>
-															{moment(tintuc.date).format('DD/MM/YYYY')} -{' '}
+															{dayjs(tintuc.date).format('DD/MM/YYYY')} -{' '}
 															<a
 																type='link'
 																onClick={(e) => {
@@ -244,7 +246,8 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 									onClick={() => {
 										history.push({
 											pathname: url + '/chi-tiet',
-											query: { _id: tintuc?.id as any, cat: chuDe?._id as any },
+											// query: { _id: tintuc?.id as any, cat: chuDe?._id as any },
+											search: `?_id=${tintuc?.id}${chuDe?._id ? `&cat=${chuDe?._id}` : ''}`,
 										});
 									}}
 								>
@@ -277,7 +280,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 												{tintuc?.date && (
 													<span className='thoi-gian'>
-														{moment(tintuc?.date).format('DD/MM/YYYY')} -{' '}
+														{dayjs(tintuc?.date).format('DD/MM/YYYY')} -{' '}
 														<a
 															type='link'
 															onClick={(e) => {

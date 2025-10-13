@@ -1,11 +1,11 @@
 import { useAuthActions } from '@/hooks/useAuthActions';
 import { getPermission, getUserInfo } from '@/services/base/api';
-import { AppModules, primaryColor } from '@/services/base/constant';
+import { AppModules } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
 import { currentRole, replaceRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
-import { ConfigProvider, notification } from 'antd';
+import { notification } from 'antd';
 import queryString from 'query-string';
 import { useEffect, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
@@ -15,7 +15,7 @@ import { unAuthPaths, unCheckPermissionPaths } from './constant';
 
 let OIDCBounderHandlers: ReturnType<typeof useAuthActions> | null = null;
 
-const OIDCBounder_: FC = ({ children }) => {
+export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
 	const intl = useIntl();
 	const { setInitialState, initialState } = useModel('@@initialState');
 	const auth = useAuth();
@@ -53,13 +53,26 @@ const OIDCBounder_: FC = ({ children }) => {
 				const permissions: Login.IPermission[] = getPermissionsResponse.data;
 				const isUncheckPath = unCheckPermissionPaths.some((path) => window.location.pathname.includes(path));
 				const hasRole = permissions.some((item) => item.rsname === currentRole);
-
-				setInitialState({
-					...initialState,
+				const tmpInitialState = {
 					currentUser: { ...userInfo, ssoId: userInfo.sub },
 					authorizedPermissions: permissions,
-					permissionLoading: false,
-				});
+				};
+
+				// Ensure permission is fully set before marking as loaded
+				setInitialState((prev) => ({
+					...prev,
+					...tmpInitialState,
+				}));
+
+				// Persist minimal initial state so reload won't lose permissions immediately
+				try {
+					sessionStorage.setItem('initialState', JSON.stringify({ ...tmpInitialState, permissionLoading: false }));
+				} catch (e) {}
+
+				// Use setTimeout to ensure state update is completed before setting permissionLoading to false
+				setTimeout(() => {
+					setInitialState((prev) => ({ ...prev, permissionLoading: false }));
+				}, 0);
 
 				if (!isUncheckPath && currentRole && permissions.length && !hasRole) {
 					const hasReplaceRole = permissions.some((item) => item.rsname === replaceRole);
@@ -76,7 +89,7 @@ const OIDCBounder_: FC = ({ children }) => {
 			} catch {
 				if (auth.isAuthenticated) auth.removeUser();
 				else {
-					notification.warn({
+					notification.warning({
 						message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
 						description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
 					});
@@ -127,15 +140,12 @@ const OIDCBounder_: FC = ({ children }) => {
 		OIDCBounderHandlers = actions;
 	}, [actions]);
 
-	useEffect(() => {
-		// Đổi màu real time => Hỗ trợ đổi tenant
-		ConfigProvider.config({ theme: { primaryColor } });
-	}, []);
-
 	return <>{(auth.isLoading || initialState?.permissionLoading) && !isUnauth ? <LoadingPage /> : children}</>;
 };
 
-export const OIDCBounder: FC & { getActions: () => typeof OIDCBounderHandlers } = (props) => {
+export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: () => typeof OIDCBounderHandlers } = (
+	props,
+) => {
 	return (
 		<AuthProvider
 			{...oidcConfig}

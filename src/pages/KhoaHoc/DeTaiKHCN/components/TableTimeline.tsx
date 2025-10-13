@@ -3,9 +3,9 @@ import type { IColumn } from '@/components/Table/typing';
 import UploadFile from '@/components/Upload/UploadFile';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Divider, Form, Modal, Popconfirm, Space, Tag, Tooltip } from 'antd';
-import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
 import FormTimeline from './FormTimeline';
@@ -44,7 +44,7 @@ const TableTimeline = (props: {
 			align: 'center',
 			render: (val: string, rec) => (
 				<div>
-					{moment(val).format('DD/MM/YYYY')} - {moment(rec.endDate).format('DD/MM/YYYY')}
+					{dayjs(val).format('DD/MM/YYYY')} - {dayjs(rec.endDate).format('DD/MM/YYYY')}
 				</div>
 			),
 		},
@@ -53,11 +53,7 @@ const TableTimeline = (props: {
 			width: 200,
 			align: 'center',
 			render: (rec: DeTaiKHCN.TimelineThuyetMinh) => (
-				<div>
-					{rec?.danhSachNguoiThucHien?.map((item) => (
-						<div key={item?.userId || item?.ten}>{item?.ten}</div>
-					))}
-				</div>
+				<div>{rec?.danhSachNguoiThucHien?.map((item) => <div key={item?.userId || item?.ten}>{item?.ten}</div>)}</div>
 			),
 		},
 		{
@@ -101,7 +97,7 @@ const TableTimeline = (props: {
 							</Form.Item>
 						);
 					},
-			  }
+				}
 			: {
 					title: 'Thao tác',
 					align: 'center',
@@ -145,7 +141,7 @@ const TableTimeline = (props: {
 							</Tooltip>
 						</>
 					),
-			  },
+				},
 	);
 
 	const onSortEnd = (recordTemp: DeTaiKHCN.TimelineThuyetMinh, newIndex: number): void => {
@@ -195,7 +191,7 @@ const TableTimeline = (props: {
 			<Modal
 				zIndex={1002}
 				destroyOnClose
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={onCancelForm}
 				footer={false}
 				bodyStyle={{ padding: 0 }}

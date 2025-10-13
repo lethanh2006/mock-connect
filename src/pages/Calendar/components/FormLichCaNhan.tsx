@@ -1,10 +1,10 @@
 import MyDatePicker from '@/components/MyDatePicker';
 import { ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { Button, Card, Col, Form, Input, Row } from 'antd';
-import moment from 'moment';
+import { Button, Col, Form, Input, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -34,7 +34,7 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 	};
 
 	return (
-		<Card title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}>
+		<>
 			<Form form={form} layout='vertical' onFinish={onFinish}>
 				<Row gutter={[12, 0]}>
 					<Col xs={24}>
@@ -53,7 +53,7 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 								showTime={{ showHour: true, showMinute: true }}
 								format='HH:mm DD/MM/YYYY'
 								onChange={(e: any) => {
-									setStartDate(e);
+									setStartDate(e?.toISOString?.() ?? e); // fallback nếu là string
 									form.validateFields(['thoiGianKetThuc']);
 								}}
 							/>
@@ -68,7 +68,7 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 							<MyDatePicker
 								showTime={{ showHour: true, showMinute: true }}
 								format='HH:mm DD/MM/YYYY'
-								disabledDate={startDate ? (cur) => moment(cur).isBefore(startDate) : undefined}
+								disabledDate={startDate ? (cur) => dayjs(cur).isBefore(dayjs(startDate)) : undefined}
 							/>
 						</Form.Item>
 					</Col>
@@ -92,7 +92,7 @@ const FormLichCaNhan = (props: { getData: () => void }) => {
 					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
 				</div>
 			</Form>
-		</Card>
+		</>
 	);
 };
 

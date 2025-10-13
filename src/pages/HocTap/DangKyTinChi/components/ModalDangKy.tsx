@@ -1,15 +1,12 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-import {
-	ColorTrangThaiDangKyTinChi,
-	ETrangThaiDangKyTinChi
-} from '@/services/DaoTao/DangKyTinChi/constant';
+import { ColorTrangThaiDangKyTinChi, ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { SyncOutlined } from '@ant-design/icons';
 import { Button, Card, Modal, Tag, message } from 'antd';
 import pLimit from 'p-limit';
 import { useEffect, useRef, useState } from 'react';
-import ReCAPTCHA from "react-google-recaptcha";
+import ReCAPTCHA from 'react-google-recaptcha';
 import { useModel } from 'umi';
 
 const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.ILopDangKy[] }) => {
@@ -31,12 +28,12 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 	const canRegister = danhSachDangKy.filter((item) => item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY).length > 0;
 
 	const handleCaptchaChange = (token: string | null) => {
-    if (token) {
-      setIsVerified(true);
-    } else {
-      setIsVerified(false);
-    }
-  };
+		if (token) {
+			setIsVerified(true);
+		} else {
+			setIsVerified(false);
+		}
+	};
 
 	const postDangKy = async () => {
 		setFormSubmiting(true);
@@ -69,24 +66,24 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			}),
 		);
 		if (isVerified) {
-		Promise.all(promises)
-			.then()
-			.finally(() => {
-				setTimeout(() => {
-					message.info('Đã hoàn thành đăng ký');
-					if (dotDangKyHienTai?._id) {
-						getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
-						getLopDangKyModel(dotDangKyHienTai.maHocKy);
-					}
-					setFormSubmiting(false);
-				}, 1000);
-			});
+			Promise.all(promises)
+				.then()
+				.finally(() => {
+					setTimeout(() => {
+						message.info('Đã hoàn thành đăng ký');
+						if (dotDangKyHienTai?._id) {
+							getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
+							getLopDangKyModel(dotDangKyHienTai.maHocKy);
+						}
+						setFormSubmiting(false);
+					}, 1000);
+				});
 		}
 	};
 
 	useEffect(() => {
 		if (visibleRegister) {
-			debugger
+			debugger;
 			setIsVerified(false);
 			captchaRef.current?.reset();
 		}
@@ -178,11 +175,11 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 
 	return (
 		<Modal
-			visible={visibleRegister}
+			open={visibleRegister}
 			closable={false}
 			footer={null}
 			width={1000}
-			bodyStyle={{ padding: 0 }}
+			styles={{ body: { padding: 0 } }}
 			maskClosable={false}
 		>
 			<Card title='Danh sách đăng ký mới'>
@@ -194,14 +191,14 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 					otherProps={{ pagination: false, scroll: { y: 600 } }}
 				/>
 
-				<ReCAPTCHA 
+				<ReCAPTCHA
 					ref={captchaRef}
 					style={{
 						margin: '12px auto',
 						display: 'flex',
 						justifyContent: 'center',
-					}} 
-					sitekey='6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh' 
+					}}
+					sitekey='6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh'
 					onChange={handleCaptchaChange}
 				/>
 

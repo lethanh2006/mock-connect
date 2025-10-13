@@ -2,6 +2,7 @@ import { Carousel, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import ChartDiemTrungBinh from './ChartDiemTrungBinh';
+import ChartPloToanKhoa from './ChartPlo';
 import ChartSoTinChi from './ChartSoTinChi';
 import StatKetQuaTichLuySinhVien from './StatKetQuaTichLuy';
 import './style.less';
@@ -33,6 +34,11 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolea
 						<div>
 							<div style={{ marginBottom: 8 }}>
 								<ChartDiemTrungBinh />
+							</div>
+						</div>
+						<div>
+							<div style={{ marginBottom: 8 }}>
+								<ChartPloToanKhoa maKhoaNganh={maKhoaNganh ?? ''} />
 							</div>
 						</div>
 					</Carousel>

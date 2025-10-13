@@ -2,10 +2,10 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { colorHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
+import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined, CheckSquareOutlined, EyeOutlined } from '@ant-design/icons';
 import { Card, Col, Descriptions, Empty, Progress, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalThoiKhoaBieu from './Modal';
@@ -32,15 +32,15 @@ const CardBuoiHocTiepTheo = () => {
 							...(recLopHocPhan.children?.flatMap((i) => i.thoiKhoaBieuList ?? []) ?? []),
 						],
 						(i) => i.thoiGianBatDau,
-				  )
+					)
 				: await getTheoLopHocPhan(recLopHocPhan.ten);
 			setDanhSach(tkbList);
 
 			tkbList.every((item) => {
 				// Nếu có 1 buổi học đang diễn ra
-				if (moment().isSameOrAfter(item.thoiGianBatDau) && moment().isSameOrBefore(item.thoiGianKetThuc))
+				if (dayjs().isSameOrAfter(dayjs(item.thoiGianBatDau)) && dayjs().isSameOrBefore(dayjs(item.thoiGianKetThuc)))
 					setBuoiHocHienTai(item);
-				else if (moment().isBefore(item.thoiGianBatDau)) {
+				else if (dayjs().isBefore(dayjs(item.thoiGianBatDau))) {
 					setBuoiHocTiepTheo(item);
 					return false;
 				}
@@ -64,11 +64,11 @@ const CardBuoiHocTiepTheo = () => {
 
 				<Descriptions column={1} size='small'>
 					<Descriptions.Item label='Ngày học' span={2}>
-						{THU_TRONG_TUAN[moment(buoiHoc.ngay).day()]}, {moment(buoiHoc.ngay).format('DD/MM/YYYY')}
+						{THU_TRONG_TUAN[dayjs(buoiHoc.ngay).day()]}, {dayjs(buoiHoc.ngay).format('DD/MM/YYYY')}
 					</Descriptions.Item>
 					<Descriptions.Item label='Thời gian'>
 						{buoiHoc.thoiGianBatDau && buoiHoc.thoiGianKetThuc
-							? `${moment(buoiHoc.thoiGianBatDau).format('HH:mm')} - ${moment(buoiHoc.thoiGianKetThuc).format('HH:mm')}`
+							? `${dayjs(buoiHoc.thoiGianBatDau).format('HH:mm')} - ${dayjs(buoiHoc.thoiGianKetThuc).format('HH:mm')}`
 							: `Tiết ${buoiHoc.tietBatDau} - ${buoiHoc.tietKetThuc}`}
 					</Descriptions.Item>
 					<Descriptions.Item label='Phòng'>

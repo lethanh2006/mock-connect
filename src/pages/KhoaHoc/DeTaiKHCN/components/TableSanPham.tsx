@@ -31,8 +31,8 @@ const TableSanPham = (props: {
 		props.type === EDangSanPham.DANG_SAN_PHAM_I
 			? 'sanPhamDeCuongDangI'
 			: props.type === EDangSanPham.DANG_SAN_PHAM_II
-			? 'sanPhamDeCuongDangII'
-			: 'sanPhamDeCuongDangIII';
+				? 'sanPhamDeCuongDangII'
+				: 'sanPhamDeCuongDangIII';
 
 	const columnsDangI: IColumn<DeTaiKHCN.SanPhamThuyetMinh>[] = [
 		{
@@ -172,8 +172,8 @@ const TableSanPham = (props: {
 		props.type === EDangSanPham.DANG_SAN_PHAM_I
 			? columnsDangI
 			: props.type === EDangSanPham.DANG_SAN_PHAM_II
-			? columnsDangII
-			: columnsDangIII;
+				? columnsDangII
+				: columnsDangIII;
 
 	if (props.showMinhChung && props.mode === 'view') {
 		finalColumn.push({
@@ -217,7 +217,7 @@ const TableSanPham = (props: {
 							</Form.Item>
 						);
 					},
-			  }
+				}
 			: {
 					title: 'Thao tác',
 					align: 'center',
@@ -261,7 +261,7 @@ const TableSanPham = (props: {
 							</Tooltip>
 						</>
 					),
-			  },
+				},
 	);
 
 	const onSortEnd = (recordTemp: DeTaiKHCN.SanPhamThuyetMinh, newIndex: number): void => {
@@ -311,10 +311,10 @@ const TableSanPham = (props: {
 			<Modal
 				zIndex={1002}
 				destroyOnClose
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={onCancelForm}
 				footer={false}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 			>
 				{props.type === EDangSanPham.DANG_SAN_PHAM_I && (
 					<FormSanPhamDangI type={props.phase} record={record} edit={edit} onCancel={onCancelForm} />

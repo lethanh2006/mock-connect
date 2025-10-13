@@ -4,20 +4,15 @@ import DanhMuc from '@/pages/DichVuMotCuaV2/components/DanhMuc';
 import FormBieuMau from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
+import { history } from '@umijs/max';
 import { Button, Card, Modal } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
-import { history } from '@@/core/history';
+import { useModel, useParams } from 'umi';
 
-const SinhVienTaoDon = ({
-	match: {
-		params: { id },
-	},
-}: {
-	match: { params: { id: string } };
-}) => {
+const SinhVienTaoDon = () => {
 	const { visibleFormBieuMau, setVisibleFormBieuMau, record, getBieuMauByIdModel, recordDon } =
 		useModel('dvmc.dichvumotcuav2');
+	const { id } = useParams<{ id: string }>();
 	// const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('daotao.hocky');
 	// const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('daotao.namhoc');
 
@@ -34,7 +29,7 @@ const SinhVienTaoDon = ({
 
 	useEffect(() => {
 		window.scroll({ top: 0 });
-		getBieuMauByIdModel(id);
+		id && getBieuMauByIdModel(id);
 		// if (access.sinhVien) {
 		//   getAllKyHocSinhVienModel();
 		//   getAllNamHocSinhVienModel();
@@ -66,8 +61,8 @@ const SinhVienTaoDon = ({
 				}}
 				footer={false}
 				width='800px'
-				bodyStyle={{ padding: 0 }}
-				visible={visibleFormBieuMau}
+				styles={{ body: { padding: 0 } }}
+				open={visibleFormBieuMau}
 			>
 				<FormBieuMau
 					type='create'
@@ -100,7 +95,7 @@ const SinhVienTaoDon = ({
 						</Button>
 					}
 					width='800px'
-					visible={visibleForm}
+					open={visibleForm}
 				>
 					<ThanhToan identityCode={recordDon?.identityCode ?? ''} trangThaiThanhToan={recordDon?.trangThaiThanhToan} />
 				</Modal>

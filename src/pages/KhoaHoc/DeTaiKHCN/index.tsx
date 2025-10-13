@@ -12,8 +12,8 @@ import {
 	MapKeyNamePhaseDeTaiKHCN,
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
-import { ELoaiDeTai } from '@/services/KhoaHoc/KeHoachDeTai/constants';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { currencyFormat } from '@/utils/utils';
 import {
 	DeleteOutlined,
@@ -24,14 +24,13 @@ import {
 	UnlockOutlined,
 } from '@ant-design/icons';
 import { Button, Modal, Popconfirm, Tag, Tooltip } from 'antd';
-import moment from 'moment';
 import { useCallback } from 'react';
 import { useModel } from 'umi';
 import ViewHoiDong from '../HoiDongKHCN/components/ViewHoiDong';
 import SelectKeHoachDeTai from '../KeHoachDeTai/components/SelectKeHoachDeTai';
 import ViewMocThoiGianDot from '../KeHoachDeTai/components/ViewMocThoiGianDot';
-import ViewQuyetDinhGiao from '../QuyetDinhGiao/ViewQuyetDinh';
 import ViewQuyetDinhCongNhan from '../QuyetDinhCongNhan/ViewQuyetDinh';
+import ViewQuyetDinhGiao from '../QuyetDinhGiao/ViewQuyetDinh';
 import FormDangKyDeXuat from './components/FormDangKyDeXuat';
 import FormNopHoSoNghiemThu from './components/FormNopHoSoNghiemThu';
 import FormNopHoSoSauNghiemThu from './components/FormNopHoSoSauNghiemThu';
@@ -104,21 +103,21 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 						? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter((item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I)
 						: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I,
-						  ),
+							),
 					sanPhamDeCuongDangII: recordDeTai?.nghiemThuKhcn?.baoCaoUrl?.length
 						? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II,
-						  )
+							)
 						: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II,
-						  ),
+							),
 					sanPhamDeCuongDangIII: recordDeTai?.nghiemThuKhcn?.baoCaoUrl?.length
 						? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
-						  )
+							)
 						: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
 								(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
-						  ),
+							),
 				},
 			});
 		},
@@ -145,9 +144,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 					<div>
 						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
 					</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.ten}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.ten}</div>)}
 				</div>
 			),
 			onCell,
@@ -161,9 +158,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -336,9 +331,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.ten}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.ten}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.ten}</div>)}
 				</div>
 			),
 			onCell,
@@ -352,9 +345,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -521,9 +512,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -551,8 +540,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			align: 'center',
 			render: (val: DeTaiKHCN.IRecord) => (
 				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
 				</div>
 			),
 			onCell,
@@ -736,9 +725,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -766,8 +753,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			align: 'center',
 			render: (val: DeTaiKHCN.IRecord) => (
 				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
 				</div>
 			),
 			onCell,
@@ -919,9 +906,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 					<div>
 						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
 					</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.ten}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.ten}</div>)}
 				</div>
 			),
 			onCell,
@@ -935,9 +920,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -965,8 +948,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			align: 'center',
 			render: (val: DeTaiKHCN.IRecord) => (
 				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
 				</div>
 			),
 			onCell,
@@ -1027,9 +1010,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 					<div>
 						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
 					</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.ten}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.ten}</div>)}
 				</div>
 			),
 			onCell,
@@ -1043,9 +1024,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -1073,8 +1052,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			align: 'center',
 			render: (val: DeTaiKHCN.IRecord) => (
 				<div>
-					{moment(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
-					{moment(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienBatDau).format('MM/YYYY')} -{' '}
+					{dayjs(val.dangKyKhcn.thoiGianThucHienKetThuc).format('MM/YYYY')}
 				</div>
 			),
 			onCell,
@@ -1129,9 +1108,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -1324,9 +1301,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -1476,24 +1451,24 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 											sanPhamDeCuongDangI: record?.nghiemThuKhcn?.baoCaoUrl?.length
 												? record.nghiemThuKhcn.sanPhamChinh.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I,
-												  )
+													)
 												: record.deCuongKhcn.sanPhamDeCuong.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I,
-												  ),
+													),
 											sanPhamDeCuongDangII: record?.nghiemThuKhcn?.baoCaoUrl?.length
 												? record.nghiemThuKhcn.sanPhamChinh.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II,
-												  )
+													)
 												: record.deCuongKhcn.sanPhamDeCuong.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II,
-												  ),
+													),
 											sanPhamDeCuongDangIII: record?.nghiemThuKhcn?.baoCaoUrl?.length
 												? record.nghiemThuKhcn.sanPhamChinh.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
-												  )
+													)
 												: record.deCuongKhcn.sanPhamDeCuong.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
-												  ),
+													),
 										},
 									});
 								}}
@@ -1586,9 +1561,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -1738,24 +1711,24 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 											sanPhamDeCuongDangI: record?.nghiemThuKhcn?.baoCaoUrl?.length
 												? record.nghiemThuKhcn.sanPhamChinh.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I,
-												  )
+													)
 												: record.deCuongKhcn.sanPhamDeCuong.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I,
-												  ),
+													),
 											sanPhamDeCuongDangII: record?.nghiemThuKhcn?.baoCaoUrl?.length
 												? record.nghiemThuKhcn.sanPhamChinh.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II,
-												  )
+													)
 												: record.deCuongKhcn.sanPhamDeCuong.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II,
-												  ),
+													),
 											sanPhamDeCuongDangIII: record?.nghiemThuKhcn?.baoCaoUrl?.length
 												? record.nghiemThuKhcn.sanPhamChinh.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
-												  )
+													)
 												: record.deCuongKhcn.sanPhamDeCuong.filter(
 														(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
-												  ),
+													),
 										},
 									});
 								}}
@@ -1823,9 +1796,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			render: (val, rec) => (
 				<div>
 					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
-					{rec.dangKyKhcn?.danhSachCTV?.map((item) => (
-						<div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>
-					))}
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
 				</div>
 			),
 			onCell,
@@ -2020,22 +1991,22 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 				props.type === ETypeTableDeTai.DangKyDeXuat
 					? columnsDangKyDeXuat
 					: props.type === ETypeTableDeTai.HoiDongXetChonDeXuat
-					? columnsHoiDongXetChonDeXuat
-					: props.type === ETypeTableDeTai.NopThuyetMinh
-					? columnsNopThuyetMinh
-					: props.type === ETypeTableDeTai.HoiDongXetDuyetThuyetMinh
-					? columnsHoiDongXetDuyetThuyetMinh
-					: props.type === ETypeTableDeTai.QuyetDinhGiao
-					? columnsQuyetDinhGiao
-					: props.type === ETypeTableDeTai.QuyetDinhCongNhan
-					? columnsQuyetDinhCongNhan
-					: props.type === ETypeTableDeTai.ThucHienDeTai
-					? columnsThucHienDeTai
-					: props.type === ETypeTableDeTai.NopHoSoNghiemThu
-					? columnsNopHoSoNghiemThu
-					: props.type === ETypeTableDeTai.HoiDongNghiemThu
-					? columnsHoiDongNghiemThu
-					: columnsNopHoSoSauNghiemThu
+						? columnsHoiDongXetChonDeXuat
+						: props.type === ETypeTableDeTai.NopThuyetMinh
+							? columnsNopThuyetMinh
+							: props.type === ETypeTableDeTai.HoiDongXetDuyetThuyetMinh
+								? columnsHoiDongXetDuyetThuyetMinh
+								: props.type === ETypeTableDeTai.QuyetDinhGiao
+									? columnsQuyetDinhGiao
+									: props.type === ETypeTableDeTai.QuyetDinhCongNhan
+										? columnsQuyetDinhCongNhan
+										: props.type === ETypeTableDeTai.ThucHienDeTai
+											? columnsThucHienDeTai
+											: props.type === ETypeTableDeTai.NopHoSoNghiemThu
+												? columnsNopHoSoNghiemThu
+												: props.type === ETypeTableDeTai.HoiDongNghiemThu
+													? columnsHoiDongNghiemThu
+													: columnsNopHoSoSauNghiemThu
 			}
 			modelName={'khoahoc.detaikhcn'}
 			getData={getData}
@@ -2047,18 +2018,18 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 						props.type === ETypeTableDeTai.DangKyDeXuat
 							? EPhaseDeTaiKHCN.DANG_KY
 							: props.type === ETypeTableDeTai.HoiDongXetChonDeXuat
-							? EPhaseDeTaiKHCN.XET_DUYET_DANG_KY
-							: props.type === ETypeTableDeTai.NopThuyetMinh
-							? EPhaseDeTaiKHCN.NOP_DE_CUONG
-							: props.type === ETypeTableDeTai.HoiDongXetDuyetThuyetMinh
-							? EPhaseDeTaiKHCN.XET_DUYET_DE_CUONG
-							: props.type === ETypeTableDeTai.ThucHienDeTai
-							? EPhaseDeTaiKHCN.THUC_HIEN
-							: props.type === ETypeTableDeTai.NopHoSoNghiemThu
-							? EPhaseDeTaiKHCN.NOP_NGHIEM_THU
-							: props.title === ETypeTableDeTai.HoiDongNghiemThu
-							? EPhaseDeTaiKHCN.NGHIEM_THU
-							: EPhaseDeTaiKHCN.SAU_NGHIEM_THU
+								? EPhaseDeTaiKHCN.XET_DUYET_DANG_KY
+								: props.type === ETypeTableDeTai.NopThuyetMinh
+									? EPhaseDeTaiKHCN.NOP_DE_CUONG
+									: props.type === ETypeTableDeTai.HoiDongXetDuyetThuyetMinh
+										? EPhaseDeTaiKHCN.XET_DUYET_DE_CUONG
+										: props.type === ETypeTableDeTai.ThucHienDeTai
+											? EPhaseDeTaiKHCN.THUC_HIEN
+											: props.type === ETypeTableDeTai.NopHoSoNghiemThu
+												? EPhaseDeTaiKHCN.NOP_NGHIEM_THU
+												: props.title === ETypeTableDeTai.HoiDongNghiemThu
+													? EPhaseDeTaiKHCN.NGHIEM_THU
+													: EPhaseDeTaiKHCN.SAU_NGHIEM_THU
 					}
 				/>
 			)}

@@ -18,7 +18,7 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 	return (
 		<>
 			<Modal
-				visible={visible}
+				open={visible}
 				onCancel={() => setVisible(false)}
 				okButtonProps={{ hidden: true }}
 				cancelText='Đóng'

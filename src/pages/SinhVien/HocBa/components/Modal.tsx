@@ -20,11 +20,11 @@ const ModalHocBaSinhVien = (props: { visible: boolean; setVisible: (val: boolean
 	return (
 		<Modal
 			width={1100}
-			visible={visible}
+			open={visible}
 			onCancel={() => setVisible(false)}
 			maskClosable={false}
 			footer={null}
-			bodyStyle={{ padding: 0 }}
+			styles={{ body: { padding: 0 } }}
 		>
 			<Card
 				title={

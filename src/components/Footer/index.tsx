@@ -14,7 +14,7 @@ export default () => {
 			copyright={`2025 ${defaultMessage} - ${APP_CONFIG_APP_VERSION}`}
 			links={[
 				{
-					key: 'github',
+					key: 'link',
 					title: unitName.toUpperCase(),
 					href: landingUrl,
 					blankTarget: true,

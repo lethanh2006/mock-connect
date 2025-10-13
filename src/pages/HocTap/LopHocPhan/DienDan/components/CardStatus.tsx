@@ -1,5 +1,6 @@
 import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
 import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
+import dayjs, { vietnameseCalendarConfig } from '@/utils/dayjs';
 import { copyToClipboard } from '@/utils/utils';
 import {
 	CheckCircleOutlined,
@@ -11,7 +12,6 @@ import {
 } from '@ant-design/icons';
 import { message, Popconfirm, Popover, Tooltip } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useRef } from 'react';
 import { history, Link, useModel } from 'umi';
 import AvatarBlog from './Avatar';
@@ -65,7 +65,7 @@ const CardStatus = (props: IProps) => {
 
 	const findClosestDate = (arr: BinhLuan.IRecord[]): BinhLuan.IRecord[] => {
 		// Get the current time using moment.js
-		const now = moment();
+		const now = dayjs();
 
 		// Initialize the closest element and the minimum difference
 		let closestElement = null;
@@ -74,7 +74,7 @@ const CardStatus = (props: IProps) => {
 		// Loop through the array
 		for (const element of arr) {
 			// Parse the ngayDang to a moment object
-			const ngayDangMoment = moment(element?.ngayDang);
+			const ngayDangMoment = dayjs(element?.ngayDang);
 
 			// Calculate the difference in milliseconds
 			const difference = Math.abs(now.diff(ngayDangMoment));
@@ -123,14 +123,16 @@ const CardStatus = (props: IProps) => {
 								{/*)}*/}
 							</div>
 							<div className='time'>
-								{data?.ngayDang ? moment(data?.ngayDang).calendar() : moment(data?.createdAt).calendar()}
+								{data?.ngayDang
+									? dayjs(data?.ngayDang).calendar(null, vietnameseCalendarConfig)
+									: dayjs(data?.createdAt).calendar(null, vietnameseCalendarConfig)}
 							</div>
 						</div>
 					</div>
 					<div className='flex item-center' style={{ gap: 12 }}>
 						{data?.ghimBaiViet && (
 							<div style={{ fontSize: 18, transform: 'rotate(-45deg)' }}>
-								<PushpinFilled style={{ color: 'var(--primary-color)' }} />
+								<PushpinFilled style={{ color: 'var(--color-primary)' }} />
 							</div>
 						)}
 
@@ -207,7 +209,6 @@ const CardStatus = (props: IProps) => {
 							</Link>
 						</div>
 					)}
-
 					{data?.fileDinhKem && (
 						<div style={{ marginTop: 8 }}>
 							<BoxFile url={data?.fileDinhKem} />

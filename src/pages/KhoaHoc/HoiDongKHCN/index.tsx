@@ -10,7 +10,6 @@ import type { HoiDongKHCN } from '@/services/KhoaHoc/HoiDongKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
 import { DeleteOutlined, ExportOutlined, FormOutlined, MenuOutlined, RetweetOutlined } from '@ant-design/icons';
 import { Button, Divider, Modal, Popconfirm, Popover, Tooltip } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import TableThanhVien from '../DeTaiKHCN/components/TableThanhVien';
@@ -18,6 +17,7 @@ import ViewDeTai from '../DeTaiKHCN/components/ViewDeTai';
 import SelectKeHoachDeTai from '../KeHoachDeTai/components/SelectKeHoachDeTai';
 import TableDeTaiHoiDong from './components/DeTaiHoiDong';
 
+import dayjs from '@/utils/dayjs';
 import ViewHoiDong from './components/ViewHoiDong';
 
 const HoiDongKHCNPage = (props: {
@@ -105,7 +105,7 @@ const HoiDongKHCNPage = (props: {
 			dataIndex: 'thoiGianBatDau',
 			width: 150,
 			align: 'center',
-			render: (val) => <div>{val ? moment(val).format('HH:mm DD/MM/YYYY') : ''}</div>,
+			render: (val) => <div>{val ? dayjs(val).format('HH:mm DD/MM/YYYY') : ''}</div>,
 			onCell,
 		},
 		{
@@ -206,7 +206,7 @@ const HoiDongKHCNPage = (props: {
 			width: 80,
 			align: 'center',
 			render: (recordHoiDongTemp: HoiDongKHCN.IRecord) => {
-				const isDaDienRa = moment(recordHoiDongTemp.thoiGianBatDau).isBefore();
+				const isDaDienRa = dayjs(recordHoiDongTemp.thoiGianBatDau).isBefore(dayjs());
 				return (
 					<Popover
 						placement='left'
@@ -322,10 +322,10 @@ const HoiDongKHCNPage = (props: {
 					typeView === 'DeTai'
 						? 'Danh sách đề tài'
 						: typeView === 'ThanhVienHoiDong'
-						? 'Danh sách thành viên hội đồng'
-						: 'Danh sách thành viên tham gia'
+							? 'Danh sách thành viên hội đồng'
+							: 'Danh sách thành viên tham gia'
 				}
-				visible={visibleView}
+				open={visibleView}
 				onCancel={handleCancelView}
 				footer={
 					<Button type='primary' onClick={handleCancelView}>
@@ -359,8 +359,8 @@ const HoiDongKHCNPage = (props: {
 						props.loaiHoiDongKhcn === ELoaiHoiDongKHCN.XET_DUYET
 							? EPhaseDeTaiKHCN.XET_DUYET_DANG_KY
 							: props.loaiHoiDongKhcn === ELoaiHoiDongKHCN.DE_CUONG
-							? EPhaseDeTaiKHCN.NOP_DE_CUONG
-							: EPhaseDeTaiKHCN.NGHIEM_THU
+								? EPhaseDeTaiKHCN.NOP_DE_CUONG
+								: EPhaseDeTaiKHCN.NGHIEM_THU
 					}
 				/>
 			)}

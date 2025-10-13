@@ -1,6 +1,6 @@
 import { ColorSuKien, type ELoaiSuKien } from '@/services/SuKien/constant';
-import { Button, Form } from 'antd';
-import { Colorpicker } from 'antd-colorpicker';
+import { Button, ColorPicker, Form } from 'antd';
+import type { Color } from 'antd/es/color-picker';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -27,9 +27,9 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 
 	const onFinish = (values: any) => {
 		let danhSachLich = [];
-
 		const color = values?.maMau;
-		const hexColor = rgbaToHex(color?.r, color?.g, color?.b, color?.a);
+
+		const hexColor = typeof color === 'string' ? color : (color as Color).toHexString(); // Sử dụng hàm toHexString của TinyColor
 
 		if (recSetting?._id) {
 			danhSachLich = recSetting.danhSachSettingLich.map((item) =>
@@ -58,7 +58,7 @@ const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
 	return (
 		<Form form={form} onFinish={onFinish}>
 			<Form.Item name='maMau' label=''>
-				<Colorpicker onColorResult={(color) => color.rgb} />
+				<ColorPicker showText />
 			</Form.Item>
 
 			<div className='form-footer'>

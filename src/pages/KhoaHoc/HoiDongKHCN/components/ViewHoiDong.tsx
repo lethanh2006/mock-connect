@@ -1,10 +1,9 @@
 import type { HoiDongKHCN } from '@/services/KhoaHoc/HoiDongKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { Button, Descriptions, Modal, Tag } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 import TableDeTaiHoiDong from './DeTaiHoiDong';
-import TableThanhVien from '../../DeTaiKHCN/components/TableThanhVien';
 
 const ViewHoiDong = (props: { rec: HoiDongKHCN.IRecord; zIndex?: number }) => {
 	const { visibleViewDetail, setVisibleViewDetail } = useModel('khoahoc.hoidongkhcn');
@@ -20,7 +19,7 @@ const ViewHoiDong = (props: { rec: HoiDongKHCN.IRecord; zIndex?: number }) => {
 			zIndex={props?.zIndex}
 			width={1100}
 			title='Thông tin hội đồng'
-			visible={visibleViewDetail}
+			open={visibleViewDetail}
 			onCancel={handleCancel}
 			footer={
 				<Button type='primary' onClick={handleCancel}>
@@ -33,7 +32,7 @@ const ViewHoiDong = (props: { rec: HoiDongKHCN.IRecord; zIndex?: number }) => {
 					{rec.ten}
 				</Descriptions.Item>
 				<Descriptions.Item span={3} label='Ngày tổ chức'>
-					{moment(rec.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+					{dayjs(rec.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
 				</Descriptions.Item>
 				<Descriptions.Item span={3} label='Địa điểm'>
 					{rec.diaDiem}

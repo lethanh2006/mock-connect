@@ -2,9 +2,9 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { type DotChamDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/DotChamDiem/typing';
 import { EVaiTroPhieuDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/constants';
+import dayjs from '@/utils/dayjs';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
-import moment from 'moment';
 import { useModel } from 'umi';
 import ModalPhieuDiem from './components/ModalPhieuDiem';
 import TrangThaiPhieuDiem from './components/TrangThaiPhieuDiem';
@@ -34,7 +34,7 @@ const PhieuDiemRenLuyenSinhVienPage = () => {
 			title: 'Thời gian bắt đầu',
 			render: (_, rec) =>
 				rec.thoiGianSVChamDiem?.thoiGianBatDau &&
-				moment(rec.thoiGianSVChamDiem.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
+				dayjs(rec.thoiGianSVChamDiem.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
 			width: 120,
 			align: 'center',
 		},
@@ -42,7 +42,7 @@ const PhieuDiemRenLuyenSinhVienPage = () => {
 			title: 'Thời gian kết thúc',
 			render: (_, rec) =>
 				rec.thoiGianSVChamDiem?.thoiGianKetThuc &&
-				moment(rec.thoiGianSVChamDiem.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
+				dayjs(rec.thoiGianSVChamDiem.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
 			width: 120,
 			align: 'center',
 		},

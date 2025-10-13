@@ -4,19 +4,14 @@ import { currentRole } from '@/utils/ip';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect } from 'react';
-import { history, useModel } from 'umi';
+import { history, useModel, useParams } from 'umi';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
 import DienDanLopPage from '../LopHocPhan/DienDan';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
-const DetailLopHanhChinh = ({
-	match: {
-		params: { id },
-	},
-}: {
-	match: { params: { id: string } };
-}) => {
+const DetailLopHanhChinh = () => {
 	const { record, sinhVienGetByIdModel, loading } = useModel('daotao.lophanhchinh');
+	const { id } = useParams<{ id: string }>();
 
 	useEffect(() => {
 		document.title = [record?.ten, AppModules[currentRole].title].filter(Boolean).join(' - ');

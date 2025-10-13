@@ -89,7 +89,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 
 				// Mapping { mimetype : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"} sang EDinhDangFile
 				frame.type =
-					getFileType(fileInfo?.mimetype ? fileInfo.mimetype : getFileExtension(frame.url) ?? '') ||
+					getFileType(fileInfo?.mimetype ? fileInfo.mimetype : (getFileExtension(frame.url) ?? '')) ||
 					EDinhDangFile.UNKNOWN;
 			} else {
 				frame.type = getFileType(getFileExtension(srcUrl) ?? '') || EDinhDangFile.UNKNOWN;
@@ -189,7 +189,6 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	if (!file) {
 		return <Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không tồn tại dữ liệu tệp tin' />;
 	}
-
 
 	return (
 		<div className='preview-container' style={{ ...style }}>

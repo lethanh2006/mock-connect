@@ -1,8 +1,8 @@
 import DanhSachMinhChung from '@/pages/DiemRenLuyenV2/MinhChung/CauHinh/DanhSach';
-import { useModel } from '@@/plugin-model/useModel';
+import dayjs from '@/utils/dayjs';
+import { useModel } from '@umijs/max';
 import { Alert, Card, Space } from 'antd';
-import moment from 'moment';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
@@ -16,26 +16,28 @@ const KhaiBaoMinhChungPage = () => {
 	const [paneSize, setPaneSize] = useState('25%');
 	const ngoaiThoiGian =
 		recDot?.thoiGianTiepNhanMinhChung &&
-		(moment().isAfter(recDot.thoiGianTiepNhanMinhChung.thoiGianKetThuc) ||
-			moment().isBefore(recDot?.thoiGianTiepNhanMinhChung?.thoiGianBatDau));
+		(dayjs().isAfter(dayjs(recDot.thoiGianTiepNhanMinhChung.thoiGianKetThuc)) ||
+			dayjs().isBefore(dayjs(recDot.thoiGianTiepNhanMinhChung.thoiGianBatDau)));
 
 	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
 
 	return (
-		<>
-			<Card
-				title={
-					<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-						<span>Khai báo minh chứng</span>
-						<SelectDotDiemRenLuyen
-							style={{ width: 300 }}
-							value={recDot?._id}
-							onChange={(val) => setDot(danhSachDot.find((i) => i._id === val))}
-							isSetRecord={true}
-						/>
-					</Space>
-				}
-			>
+		<Card
+			className='card-big-title card-borderless'
+			variant='borderless'
+			title={
+				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
+					<span>Khai báo minh chứng</span>
+					<SelectDotDiemRenLuyen
+						style={{ width: 300 }}
+						value={recDot?._id}
+						onChange={(val) => setDot(danhSachDot.find((i) => i._id === val))}
+						isSetRecord={true}
+					/>
+				</Space>
+			}
+		>
+			<Card variant='borderless' style={{ padding: '32px 0 0 0' }}>
 				{!recDot || ngoaiThoiGian ? (
 					<Alert
 						showIcon
@@ -53,11 +55,11 @@ const KhaiBaoMinhChungPage = () => {
 					</Pane>
 
 					<Pane minSize='40%'>
-            <KhaiBaoMinhChung />
+						<KhaiBaoMinhChung />
 					</Pane>
 				</SplitPane>
 			</Card>
-		</>
+		</Card>
 	);
 };
 export default KhaiBaoMinhChungPage;

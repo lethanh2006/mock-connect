@@ -77,7 +77,7 @@ const TableQuyDoiGio = (props: {
 			? quyDoiFinal?.[recordNamHoc._id]?.reduce(
 					(preVal, curVal: SanPhamNCKH.KetQuaTinhGioThanhVien) => preVal + curVal.tongGio,
 					0,
-			  )
+				)
 			: 0;
 		return tong;
 	}, [quyDoiGio?.[recordNamHoc?._id ?? ''], quyDoiDiem?.[recordNamHoc?._id ?? '']]);
@@ -247,12 +247,12 @@ const TableQuyDoiGio = (props: {
 									Trên đây là dữ liệu do Hệ thống đề xuất, cán bộ/giảng viên có thể chỉnh sửa khai báo giờ chuẩn NCKH
 									dựa trên dữ liệu do Hệ thống đề xuất
 								</div>
-						  )
+							)
 						: undefined,
 				}}
 				addStt
 				hasTotal
-				data={recordNamHoc?._id ? quyDoi?.[recordNamHoc._id] ?? [] : []}
+				data={recordNamHoc?._id ? (quyDoi?.[recordNamHoc._id] ?? []) : []}
 				columns={columns}
 			>
 				{isHandle && (
@@ -282,10 +282,10 @@ const TableQuyDoiGio = (props: {
 			</TableStaticData>
 			<Modal
 				width={900}
-				visible={visibleKetQuaTinhGioThanhVien}
+				open={visibleKetQuaTinhGioThanhVien}
 				destroyOnClose
 				footer={false}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				onCancel={onCancelFormKetQuaTinhGioThanhVien}
 			>
 				<FormKetQuaTinhGioThanhVien
