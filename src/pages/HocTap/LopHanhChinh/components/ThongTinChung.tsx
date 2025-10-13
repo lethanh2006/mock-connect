@@ -8,7 +8,7 @@ const ThongTinChungLopHanhChinh = () => {
 
 	return (
 		<>
-			<Descriptions column={{ xs: 1, md: 2 }} title='Thông tin lớp'>
+			<Descriptions column={{ xs: 1,sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} title='Thông tin lớp'>
 				<Descriptions.Item label='Tên lớp'>{record?.ten ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Khóa sinh viên'>{recordDetail?.khoaSinhVien?.ten ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Ngành đào tạo'>{recordDetail?.nganh?.ten ?? '--'}</Descriptions.Item>
@@ -24,7 +24,7 @@ const ThongTinChungLopHanhChinh = () => {
 				) : null}
 			</Descriptions>
 
-			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8, marginTop: 18 }}>Danh sách sinh viên</h4>
+			{/* <h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 8, marginTop: 18 }}>Danh sách sinh viên</h4> */}
 			<DanhSachSinhVien
 				sinhVienList={
 					recordDetail?.lopHcSvKyList?.map((i) => ({ ...i, ...i.sinhVien })) ?? recordDetail?.sinhVienList ?? []

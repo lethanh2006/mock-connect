@@ -2,7 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
 import rules from '@/utils/rules';
-import { EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Card, Form, Modal, Popconfirm, Select, Space, Tooltip, message } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useModel } from 'umi';
@@ -217,10 +217,10 @@ const FormKetQuaTinhGioThanhVien = (props: {
 
 				<Modal
 					width={700}
-					visible={visibleThongTinGio}
+					open={visibleThongTinGio}
 					destroyOnClose
 					footer={false}
-					bodyStyle={{ padding: 0 }}
+					styles={{ body: { padding: 0 } }}
 					onCancel={onCancelFormThongTinGio}
 				>
 					<FormThongTinGio fieldName={props.fieldName} onCancel={onCancelFormThongTinGio} />

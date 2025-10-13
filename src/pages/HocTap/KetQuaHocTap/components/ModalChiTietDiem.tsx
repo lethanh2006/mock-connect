@@ -3,7 +3,7 @@ import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { colorTrangThaiHocTap, ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { InfoCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Modal, Popover, Space, Tag, Tooltip, message } from 'antd';
+import { Button, Descriptions, message, Modal, Popover, Space, Tag, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
@@ -56,7 +56,7 @@ const ModalChiTietDiem = (
 		<>
 			<Modal
 				title='Kết quả học tập'
-				visible={visible}
+				open={visible}
 				onCancel={() => setVisible(false)}
 				footer={
 					<Space wrap>

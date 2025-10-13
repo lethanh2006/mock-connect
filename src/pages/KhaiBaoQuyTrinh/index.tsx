@@ -8,6 +8,7 @@ import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EPhanHe } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import dayjs from '@/utils/dayjs';
 import {
 	ArrowRightOutlined,
 	DeleteOutlined,
@@ -16,11 +17,11 @@ import {
 	EyeOutlined,
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu, Modal, Popconfirm, Tag, Tooltip, message } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import ThongTinThanhToan from '../TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import FormKhaiBao from './components/FormKhaiBao';
+import ThongKeDichVu from './components/ThongKeDichVu';
 
 const KhaiBaoQuyTrinhPage = (props: {
 	title?: string;
@@ -107,7 +108,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 						setQuyTrinhIdSelect(quyTrinhId);
 						setVisibleForm(true);
 					} else {
-						message.warn('Chưa có đợt');
+						message.warning('Chưa có đợt');
 					}
 				}
 			}
@@ -129,16 +130,18 @@ const KhaiBaoQuyTrinhPage = (props: {
 			onCell,
 			hide: !props.hasColumnTenQuyTrinh,
 		},
-		{
-			title: 'Chi tiết',
-			dataIndex: 'moTa',
-			width: 250,
-			onCell,
-		},
+		// {
+		// 	title: 'Chi tiết',
+		// 	dataIndex: 'moTa',
+		// 	width: 250,
+		// 	onCell,
+		// },
 		{
 			title: 'Tiến trình',
 			dataIndex: 'quyTrinh',
 			width: 250,
+			filterType: 'select',
+
 			align: 'center',
 			render: (val, recordVal: KhaiBaoQuyTrinh.IRecord) => {
 				const buocHienTai = recordVal?.danhSachBuocXuLy?.find((item) => item.laBuocHienTai);
@@ -148,7 +151,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 				);
 
 				return (
-					<div>
+					<div style={{ color: '#007AFF', fontWeight: '400' }}>
 						<span>
 							{' '}
 							Bước {recordVal?.danhSachBuocXuLy?.length}/{val?.danhSachBuocXuLy?.length}:{' '}
@@ -156,8 +159,8 @@ const KhaiBaoQuyTrinhPage = (props: {
 						</span>
 						{buocHienTai && cauHinhThoiGianDotBuocHienTai && (
 							<span style={{ marginLeft: 4, fontWeight: 'bold' }}>
-								({moment(cauHinhThoiGianDotBuocHienTai.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
-								{moment(cauHinhThoiGianDotBuocHienTai.thoiGianKetThuc).format('DD/MM/YYYY')})
+								{dayjs(cauHinhThoiGianDotBuocHienTai.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
+								{dayjs(cauHinhThoiGianDotBuocHienTai.thoiGianKetThuc).format('DD/MM/YYYY')}
 							</span>
 						)}
 					</div>
@@ -170,27 +173,51 @@ const KhaiBaoQuyTrinhPage = (props: {
 			dataIndex: 'quyTrinh',
 			width: 200,
 			align: 'center',
-			render: (val, recordVal) => (
-				<Tag
-					color={
-						MapColorTrangThaiTiepNhan?.[
-							recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]
-								?.trangThaiTiepNhan as TrangThaiTiepNhan
-						] ?? 'yellow'
-					}
-				>
-					{recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.trangThaiTiepNhan}
-				</Tag>
-			),
+			render: (val, recordVal) => {
+				const color =
+					MapColorTrangThaiTiepNhan[
+						recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]
+							?.trangThaiTiepNhan as TrangThaiTiepNhan
+					] || '#faad14'; // mặc định là vàng
+
+				return (
+					<Tag
+						style={{
+							color,
+							borderColor: color + '40',
+							backgroundColor: color + '16', // màu nhạt (hex + alpha)
+							fontWeight: 400,
+						}}
+					>
+						{recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.trangThaiTiepNhan ||
+							'Chưa có kết quả tiếp nhận'}
+					</Tag>
+				);
+			},
 		},
 		{
 			title: 'Trạng thái thực hiện',
 			dataIndex: 'coKhaiBao',
 			width: 200,
 			align: 'center',
+
 			render: (val, recordVal) => {
 				const coKhaiBao = recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.coKhaiBao ?? false;
-				return <Tag color={coKhaiBao ? '#1fba36' : '#ffca2c'}>{coKhaiBao ? 'Đã thực hiện' : 'Chưa thực hiện'}</Tag>;
+
+				const color = coKhaiBao ? '#1fba36' : '#ffca2c';
+
+				return (
+					<Tag
+						style={{
+							color,
+							borderColor: color + '40',
+							backgroundColor: color + '16', // màu nhạt trong nền
+							fontWeight: 400,
+						}}
+					>
+						{coKhaiBao ? 'Đã thực hiện' : 'Chưa thực hiện'}
+					</Tag>
+				);
 			},
 			onCell,
 		},
@@ -213,7 +240,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			width: 150,
 			align: 'center',
 			render: (val) => {
-				return val ? moment(val).format('DD/MM/YYYY') : 'Không có dữ liệu';
+				return val ? dayjs(val).format('DD/MM/YYYY') : 'Không có dữ liệu';
 			},
 			onCell,
 		},
@@ -254,7 +281,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 										setVisibleModal(true);
 									}}
 									type='link'
-									icon={<DollarCircleOutlined />}
+									icon={<DollarCircleOutlined style={{ color: '#FFAF0B' }} />}
 								/>
 							</Tooltip>
 						)}
@@ -277,7 +304,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 									}
 									placement='bottomLeft'
 								>
-									<Button loading={loading} type='link' icon={<DownloadOutlined />} />
+									<Button loading={loading} type='link' icon={<DownloadOutlined style={{ color: '#007AFF' }} />} />
 								</Dropdown>
 							</Tooltip>
 						)}
@@ -305,6 +332,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 	];
 	return (
 		<div>
+			<ThongKeDichVu />
 			<TableBase
 				modelName={'quytrinh.khaibaoquytrinh'}
 				columns={columns}
@@ -355,7 +383,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			<Modal
 				title={'Chọn đợt khai báo'}
 				width={500}
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				destroyOnClose
@@ -365,7 +393,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			<Modal
 				title={'Thông tin chung'}
 				width={1000}
-				visible={visibleThongTinChung}
+				open={visibleThongTinChung}
 				onCancel={() => setVisibleThongTinChung(false)}
 				footer={
 					<>
@@ -386,10 +414,10 @@ const KhaiBaoQuyTrinhPage = (props: {
 			</Modal>
 
 			<Modal
-				visible={visibleModal}
+				open={visibleModal}
 				onCancel={() => setVisibleModal(false)}
 				footer={null}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				width={1000}
 				destroyOnClose
 			>

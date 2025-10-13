@@ -1,13 +1,22 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { messagesCalendar } from '@/services/Calendar/constant';
-import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
+import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
-import { ArrowRightOutlined, PlusCircleOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Modal, Row, Spin } from 'antd';
-import moment, { type Moment } from 'moment';
+import dayjs from '@/utils/dayjs';
+import {
+	ArrowRightOutlined,
+	CalendarOutlined,
+	MenuOutlined,
+	PlusCircleOutlined,
+	SettingOutlined,
+} from '@ant-design/icons';
+import { Badge, Button, Card, Col, Empty, Modal, Row, Segmented, Space, Spin, Tag } from 'antd';
+import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import type { DateRange, View } from 'react-big-calendar';
-import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
+import { Calendar, dayjsLocalizer, Views } from 'react-big-calendar';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
@@ -16,9 +25,11 @@ import { Link, useModel } from 'umi';
 import FilterColumn from './components/FilterColumn';
 import FormLichCaNhan from './components/FormLichCaNhan';
 import GhiChuLich from './components/GhiChuLich';
+import LichSapToi from './components/LichSapToi';
 import ModalViewDetailCalendar from './components/ModalViewDetail';
 import ModalSettingMauLich from './components/SettingLich';
-const localizer = momentLocalizer(moment);
+import styles from './LichDashboard/styles.less';
+const localizer = dayjsLocalizer(dayjs);
 
 const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const {
@@ -31,14 +42,16 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		loading,
 		dataCalendar,
 		setDataCalendar,
+		dataCalendarDashboard,
 		setDataLich,
+		edit,
 	} = useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
 	const { record: recSetting, setVisibleForm: setVisibleMauLich, getSettingLich } = useModel('tienich.settinglich');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 	const [date, setDate] = useState(new Date());
-	const [dateRange, setDateRange] = useState<Moment[]>([moment().startOf('week'), moment().endOf('week')]);
+	const [dateRange, setDateRange] = useState([dayjs().startOf('week'), dayjs().endOf('week')]);
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [visibleXemThem, setVisibleXemThem] = useState<boolean>(false);
@@ -48,6 +61,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const { isDashboard } = props;
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('300px');
+	const [segmentSelected, setSegmentSelected] = useState(true);
 
 	useEffect(() => {
 		if (!recSetting?._id) getSettingLich();
@@ -69,8 +83,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 					item.phongHoc ?? ''
 				}`,
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
-				start: moment(item?.thoiGianBatDau).toDate(),
-				end: moment(item?.thoiGianKetThuc).toDate(),
+				start: dayjs(item?.thoiGianBatDau).toDate(),
+				end: dayjs(item?.thoiGianKetThuc).toDate(),
 			}));
 			return temp;
 		});
@@ -84,8 +98,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				...item,
 				title: `${item.danhSachHocPhan?.map((i) => i.ten)?.join(', ') || ''} - ${item.phong?.ma ?? ''}`,
 				loaiSuKien: ELoaiSuKien.LICH_THI,
-				start: moment(item?.thoiGianBatDau).toDate(),
-				end: moment(item?.thoiGianKetThuc).toDate(),
+				start: dayjs(item?.thoiGianBatDau).toDate(),
+				end: dayjs(item?.thoiGianKetThuc).toDate(),
 			}));
 			return temp;
 		});
@@ -99,8 +113,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			const temp = data.map((item) => ({
 				...item,
 				title: item?.tenSuKien ?? '',
-				start: moment(item?.thoiGianBatDau).toDate(),
-				end: moment(item?.thoiGianKetThuc).toDate(),
+				start: dayjs(item?.thoiGianBatDau).toDate(),
+				end: dayjs(item?.thoiGianKetThuc).toDate(),
 			}));
 			return temp;
 		});
@@ -110,8 +124,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			const temp = data.map((item) => ({
 				...item,
 				title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
-				start: moment(item?.assignment?.thoiGianKetThuc).toDate(),
-				end: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+				start: dayjs(item?.assignment?.thoiGianKetThuc).toDate(),
+				end: dayjs(item?.assignment?.thoiGianKetThuc).toDate(),
 				loaiSuKien: ELoaiSuKien.BAI_TAP,
 			}));
 			return temp;
@@ -129,7 +143,6 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			})
 			.catch((er) => console.log(er));
 	};
-
 	//#endregion
 
 	useEffect(() => {
@@ -145,14 +158,14 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	});
 
 	const eventCustom = ({ event }: any) => {
-		const { title } = event; // loaiSuKien
+		const { title } = event;
 		return <div style={{ width: '100%', fontSize: 13 }}>{title || '--'}</div>;
 	};
 
 	const onChangeFilterDate = (val: Date) => {
-		if (calendarView === Views.DAY) setDateRange([moment(val).startOf('day'), moment(val).endOf('day')]);
-		else if (calendarView === Views.WEEK) setDateRange([moment(val).startOf('week'), moment(val).endOf('week')]);
-		else setDateRange([moment(val).startOf('month'), moment(val).endOf('month')]);
+		if (calendarView === Views.DAY) setDateRange([dayjs(val).startOf('day'), dayjs(val).endOf('day')]);
+		else if (calendarView === Views.WEEK) setDateRange([dayjs(val).startOf('week'), dayjs(val).endOf('week')]);
+		else setDateRange([dayjs(val).startOf('month'), dayjs(val).endOf('month')]);
 
 		setDate(val);
 	};
@@ -167,13 +180,104 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		setVisibleForm(true);
 	};
 
+	const renderContent = () => {
+		// Convert dữ liệu
+		const data = dataCalendarDashboard
+			?.filter((event) => dayjs(event.thoiGianBatDau).isSameOrAfter(dayjs(), 'd'))
+			?.reduce<any>((result, item) => {
+				if (!item?.thoiGianBatDau) {
+					return result;
+				}
+				const ngayDayjs = dayjs(item?.thoiGianBatDau);
+				const ngayString = ngayDayjs.format('YYYY-MM-DD');
+
+				return {
+					...result,
+					[ngayString]: {
+						thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayDayjs.toDate().getDay()],
+						cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
+							...item,
+							tenSuKien: item.title,
+							suffix: item.suffix ?? item.diaDiem,
+						}),
+					},
+				};
+			}, {});
+
+		const keysSorted = sortBy(Object.keys(data));
+		if (!loading && !loading && isEmpty(data)) {
+			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />;
+		}
+
+		return (
+			<div className={styles.dashboard_calendar}>
+				{keysSorted.map((ngay) => {
+					const { cacSuKien, thuTrongTuan } = data[ngay];
+					const cacSuKienSorted = sortBy(cacSuKien, (suKien) => new Date(suKien.thoiGianBatDau));
+					return (
+						<div key={ngay} className={styles.ngay}>
+							<Space style={{ marginBottom: 8 }}>
+								<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
+									<div
+										className={styles.ngay__title}
+										style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
+									>
+										{thuTrongTuan}, ngày {dayjs(ngay).format('DD/MM')}
+									</div>
+								</Badge>
+							</Space>
+							{cacSuKienSorted.map((sukien) => (
+								<div
+									key={sukien._id}
+									className={styles.su_kien}
+									// style={{ background: ColorSuKien[sukien.loaiSuKien] }}
+									onClick={() => {
+										setSelectEvent(sukien);
+										setVisibleDetail(true);
+									}}
+								>
+									<div className={styles.su_kien__left}>
+										{dayjs().isSameOrAfter(sukien.thoiGianBatDau) && dayjs().isSameOrBefore(sukien.thoiGianKetThuc) ? (
+											<div className={styles.pulse} />
+										) : null}
+										<div className={styles.su_kien__thoi_gian}>{dayjs(sukien.thoiGianBatDau).format('HH:mm')}</div>
+									</div>
+									<Space
+										wrap
+										className={styles.su_kien__right}
+										style={{
+											borderColor:
+												recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === sukien.loaiSuKien)?.maMau ??
+												ColorSuKien[sukien.loaiSuKien as ELoaiSuKien],
+										}}
+									>
+										<div>
+											{sukien.tenSuKien ?? ''}
+											{sukien.suffix ? <i> ({sukien.suffix})</i> : null}
+										</div>
+										{sukien.loaiSuKien === ELoaiSuKien.LICH_HOC &&
+											sukien.hinhThucGiangDay === EHinhThucGiangDay.ONLINE && (
+												<Tag color={colorHinhThucGiangDay[sukien.hinhThucGiangDay as EHinhThucGiangDay]}>
+													{sukien.hinhThucGiangDay}
+												</Tag>
+											)}
+									</Space>
+								</div>
+							))}
+						</div>
+					);
+				})}
+			</div>
+		);
+	};
+
 	const mainContent = () => (
 		<Spin spinning={loading || loadingTKB || loadingThi}>
 			<Calendar
 				formats={{
 					dayHeaderFormat: 'dddd DD/MM/YYYY',
 					dayRangeHeaderFormat: (range: DateRange) => {
-						return `${moment(range.start).format('DD/MM')} - ${moment(range.end).format('DD/MM')}`;
+						return `${dayjs(range.start).format('DD/MM')} - ${dayjs(range.end).format('DD/MM')}`;
 					},
 				}}
 				localizer={localizer}
@@ -181,8 +285,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				defaultView={Views.WEEK}
 				onView={(view) => setCalendarView(view)}
 				onRangeChange={(val) => {
-					if (Array.isArray(val)) setDateRange([moment(val[0]).startOf('d'), moment(val.at(-1)).endOf('d')]);
-					else setDateRange([moment(val.start).startOf('d'), moment(val.end).endOf('d')]);
+					if (Array.isArray(val)) setDateRange([dayjs(val[0]).startOf('d'), dayjs(val.at(-1)).endOf('d')]);
+					else setDateRange([dayjs(val.start).startOf('d'), dayjs(val.end).endOf('d')]);
 				}}
 				onNavigate={(newDate) => setDate(newDate)}
 				selectable={!isDashboard}
@@ -190,17 +294,17 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				defaultDate={new Date()}
 				date={date}
 				messages={messagesCalendar}
-				views={['month', 'week', 'day']}
+				views={['month', 'week', 'day', 'agenda']}
 				style={{ height: isDashboard ? 500 : 700, overflow: 'auto' }}
-				// min={moment('0600', 'HHmm').toDate()}
-				// max={moment('2300', 'HHmm').toDate()}
 				eventPropGetter={eventPropGetter}
 				onSelectSlot={handleSelect}
 				onSelectEvent={(rec: any) => {
 					setSelectEvent(rec);
 					setVisibleDetail(true);
 				}}
-				components={{ event: (event: any) => eventCustom(event) }}
+				components={{
+					event: (event: any) => eventCustom(event),
+				}}
 				popup
 				onShowMore={(events: any[], d) => {
 					setEventRecord(events);
@@ -213,19 +317,47 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 	return (
 		<Card
-			title='Lịch'
-			bordered
+			variant='borderless'
+			className='card-borderless card-big-title'
+			title={
+				<>
+					Lịch{' '}
+					<Segmented
+						value={segmentSelected}
+						options={[
+							{ icon: <CalendarOutlined />, value: true, title: 'Dạng lịch tuần' },
+							{ icon: <MenuOutlined />, value: false, title: 'Dạng danh sách' },
+						]}
+						size='small'
+						onChange={(val) => {
+							setSegmentSelected(val);
+						}}
+					/>
+				</>
+			}
 			extra={
 				isDashboard ? (
 					<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
 						Xem thêm <ArrowRightOutlined />
 					</Link>
 				) : (
-					<ButtonExtend
-						tooltip='Cấu hình màu lịch'
-						icon={<SettingOutlined />}
-						onClick={() => setVisibleMauLich(true)}
-					/>
+					<Space wrap>
+						<Button
+							type='primary'
+							onClick={() => {
+								setRecord(undefined);
+								setVisibleForm(true);
+							}}
+							icon={<PlusCircleOutlined />}
+						>
+							Thêm sự kiện cá nhân
+						</Button>
+						<ButtonExtend
+							tooltip='Cấu hình màu lịch'
+							icon={<SettingOutlined />}
+							onClick={() => setVisibleMauLich(true)}
+						/>
+					</Space>
 				)
 			}
 		>
@@ -238,32 +370,43 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				</Row>
 			) : (
 				<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
-					<Pane initialSize={paneSize} minSize='250px' maxSize='40%'>
-						<Button
-							type='primary'
-							block
-							onClick={() => {
-								setRecord(undefined);
-								setVisibleForm(true);
-							}}
-						>
-							<PlusCircleOutlined /> Thêm sự kiện cá nhân
-						</Button>
+					{!isMobile && (
+						<Pane>
+							<Card variant='borderless'>{segmentSelected ? mainContent() : renderContent()}</Card>
+						</Pane>
+					)}
 
+					<Pane initialSize='300px' minSize='250px' maxSize='40%'>
 						{/* Bộ lọc */}
 						<FilterColumn date={date} setDate={onChangeFilterDate} />
+
+						{/* Card Lịch sắp tới */}
+						<div style={{ marginTop: 12 }}>
+							<LichSapToi
+								dataCalendar={dataCalendar}
+								onEventClick={(event) => {
+									setSelectEvent(event);
+									setVisibleDetail(true);
+								}}
+							/>
+						</div>
 					</Pane>
 
-					<Pane>{mainContent()}</Pane>
+					{isMobile && (
+						<Pane>
+							<Card variant='borderless'>{segmentSelected ? mainContent() : renderContent()}</Card>
+						</Pane>
+					)}
 				</SplitPane>
 			)}
 
 			<Modal
-				visible={visibleForm}
-				bodyStyle={{ padding: 0 }}
+				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				maskClosable={false}
+				width={800}
+				title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}
 			>
 				<FormLichCaNhan getData={getData} />
 			</Modal>
@@ -279,8 +422,8 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			) : null}
 
 			<Modal
-				visible={visibleXemThem}
-				title={'Lịch ' + moment(dateXemThem).format('dddd, ngà\\y DD/MM/YYYY')}
+				open={visibleXemThem}
+				title={'Lịch ' + dayjs(dateXemThem).format('dddd, ngà\y DD/MM/YYYY')}
 				onCancel={() => setVisibleXemThem(false)}
 				footer={null}
 			>

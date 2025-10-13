@@ -15,7 +15,7 @@ const PanpageHoTro = (props: { path: string }) => {
 								cursor: 'pointer',
 								width: 40,
 								position: 'fixed',
-								bottom: 30,
+								bottom: 108,
 								right: 24,
 								zIndex: 10,
 								boxShadow: 'rgba(0, 0, 0, 0.2) 1px 1px 8px 3px',

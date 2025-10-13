@@ -82,7 +82,7 @@ const TextboxChatbotV2 = () => {
 						width: 24,
 						height: 24,
 						marginLeft: 12,
-						color: 'var(--primary-color)',
+						color: 'var(--color-primary)',
 						flexShrink: 0,
 						cursor: 'pointer',
 					}}

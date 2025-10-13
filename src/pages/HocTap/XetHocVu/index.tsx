@@ -9,8 +9,8 @@ import {
 	type ELoaiXuLyKQHT,
 	type ETrangThaiDuyetXuLyKqht,
 } from '@/services/HocTap/constant';
+import dayjs from '@/utils/dayjs';
 import { Tag } from 'antd';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -82,7 +82,7 @@ const XetHocVuPage = () => {
 			render: (val, rec) =>
 				val && (
 					<>
-						{rec.quyetDinh?.soQuyetDinh}, {moment(rec?.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY')}
+						{rec.quyetDinh?.soQuyetDinh}, {dayjs(rec?.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY')}
 					</>
 				),
 		},

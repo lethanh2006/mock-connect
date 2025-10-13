@@ -13,10 +13,10 @@ import {
 	type ETransactionPaymentType,
 	type ETransactionType,
 } from '@/services/TaiChinh/constant';
+import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -80,7 +80,7 @@ const LichSuThanhToan = (props: {
 			dataIndex: 'createdAt',
 			width: 120,
 			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Hoàn thành',
@@ -88,7 +88,7 @@ const LichSuThanhToan = (props: {
 			dataIndex: 'transactionDate',
 			width: 120,
 			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Thao tác',

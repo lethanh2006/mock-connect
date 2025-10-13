@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 import DieuKienChungChiSection from './ChungChi';
 import DieuKienKqhtSection from './KetQuaHocTap';
-import DieuKienKhacSection from './Khac';
 
 const CardDieuKienTotNghiep = () => {
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
@@ -27,6 +26,8 @@ const CardDieuKienTotNghiep = () => {
 
 	return (
 		<Card
+			className='card-big-title card-borderless'
+			variant='borderless'
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
 					<span>Điều kiện xét tốt nghiệp</span>
@@ -34,19 +35,21 @@ const CardDieuKienTotNghiep = () => {
 				</Space>
 			}
 		>
-			<Spin spinning={loading}>
-				<DieuKienKqhtSection />
+			<Card variant='borderless'>
+				<Spin spinning={loading}>
+					<DieuKienKqhtSection />
 
-				<DieuKienChungChiSection />
+					<DieuKienChungChiSection />
 
-				{/* <DieuKienKhacSection /> */}
-			</Spin>
+					{/* <DieuKienKhacSection /> */}
+				</Spin>
 
-			{dieuKienTotNghiep?.isDuKieuKien ? (
-				<Alert type='success' description='Bạn đã đủ điều kiện để xét tốt nghiệp!' showIcon />
-			) : (
-				<Alert type='warning' description='Bạn chưa đủ điều kiện để xét tốt nghiệp!' showIcon />
-			)}
+				{dieuKienTotNghiep?.isDuKieuKien ? (
+					<Alert type='success' description='Bạn đã đủ điều kiện để xét tốt nghiệp!' showIcon />
+				) : (
+					<Alert type='warning' description='Bạn chưa đủ điều kiện để xét tốt nghiệp!' showIcon />
+				)}
+			</Card>
 		</Card>
 	);
 };

@@ -3,6 +3,7 @@ import ModalExport from '@/components/Table/Export';
 import ModalImport from '@/components/Table/Import';
 import ModalCustomFilter from '@/components/Table/ModalCustomFilter';
 import { EOperatorType } from '@/components/Table/constant';
+import '@/components/Table/style.less';
 import type { IColumn, TDataOption, TFilter, TableBaseProps } from '@/components/Table/typing';
 import { primaryColor } from '@/services/base/constant';
 import { inputFormat } from '@/utils/utils';
@@ -38,7 +39,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { SortEnd, SortableContainerProps } from 'react-sortable-hoc';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import { useModel } from 'umi';
-import '@/components/Table/style.less';
 
 const TableBase = (props: TableBaseProps) => {
 	const { modelName, Form, title, dependencies = [], params, buttons, widthDrawer, destroyModal } = props;
@@ -171,7 +171,7 @@ const TableBase = (props: TableBaseProps) => {
 										},
 									};
 								return item;
-						  })
+							})
 						: [
 								...(condition?.$and ?? []),
 								{
@@ -185,7 +185,7 @@ const TableBase = (props: TableBaseProps) => {
 										},
 									},
 								},
-						  ],
+							],
 				});
 			} else {
 				const filter = getFilterColumn(dataIndex);
@@ -199,7 +199,7 @@ const TableBase = (props: TableBaseProps) => {
 									active: true,
 									operator: EOperatorType.CONTAIN,
 									values: [value],
-							  }
+								}
 							: item,
 					);
 				// Add new filter rule for this column
@@ -263,7 +263,7 @@ const TableBase = (props: TableBaseProps) => {
 				specialFilter &&
 				getSearchColumn(dataIndex?.replace('thongTinKhaiBao.', ''))?.thongTinKhaiBao?.$elemMatch?.value?.$regex
 					? [getSearchColumn(dataIndex?.replace('thongTinKhaiBao.', ''))?.thongTinKhaiBao?.$elemMatch?.value?.$regex]
-					: filterColumn?.values ?? [],
+					: (filterColumn?.values ?? []),
 			filterIcon: () => {
 				const values = specialFilter
 					? [getSearchColumn(dataIndex?.replace('thongTinKhaiBao.', ''))?.thongTinKhaiBao?.$elemMatch?.value?.$regex]
@@ -303,9 +303,9 @@ const TableBase = (props: TableBaseProps) => {
 									? values?.map((ele) => ({
 											ma: dataIndex?.replace('thongTinKhaiBao.', ''),
 											value: ele,
-									  }))
+										}))
 									: values,
-						  }
+							}
 						: item,
 				);
 			// Add new filter rule for this column
@@ -318,7 +318,7 @@ const TableBase = (props: TableBaseProps) => {
 						? values?.map((item) => ({
 								ma: dataIndex?.replace('thongTinKhaiBao.', ''),
 								value: item,
-						  }))
+							}))
 						: values,
 				});
 			setFilters(tempFilters);
@@ -397,20 +397,20 @@ const TableBase = (props: TableBaseProps) => {
 			...(item.filterType === 'string'
 				? getColumnSearchProps(item.dataIndex, item.title)
 				: item.filterType === 'select'
-				? getFilterColumnProps(item.dataIndex, item.filterData)
-				: item.filterType === 'customselect'
-				? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
-				: undefined),
+					? getFilterColumnProps(item.dataIndex, item.filterData)
+					: item.filterType === 'customselect'
+						? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
+						: undefined),
 			children: item.children?.map((child) => ({
 				...child,
 				...(child.sortable && getSort(child.dataIndex)),
 				...(child.filterType === 'string'
 					? getColumnSearchProps(child.dataIndex, child.title)
 					: child.filterType === 'select'
-					? getFilterColumnProps(child.dataIndex, child.filterData)
-					: item.filterType === 'customselect'
-					? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
-					: undefined),
+						? getFilterColumnProps(child.dataIndex, child.filterData)
+						: item.filterType === 'customselect'
+							? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
+							: undefined),
 			})),
 		}));
 
@@ -595,7 +595,7 @@ const TableBase = (props: TableBaseProps) => {
 									onChange: (selectedRowKeys) => setSelectedIds(selectedRowKeys),
 									columnWidth: 40,
 									...props.detailRow,
-							  }
+								}
 							: undefined
 					}
 					loading={loading}
@@ -641,7 +641,7 @@ const TableBase = (props: TableBaseProps) => {
 										wrapper: DraggableContainer,
 										row: DraggableBodyRow,
 									},
-							  }
+								}
 							: undefined
 					}
 					{...props.otherProps}
@@ -668,8 +668,8 @@ const TableBase = (props: TableBaseProps) => {
 							maskClosable={props.maskCloseableForm || false}
 							width={widthDrawer !== 'full' ? widthDrawer : undefined}
 							footer={false}
-							bodyStyle={{ padding: 0 }}
-							visible={visibleForm}
+							styles={{ body: { padding: 0 } }}
+							open={visibleForm}
 							destroyOnClose={destroyModal || false}
 						>
 							<Form title={title ?? ''} {...props.formProps} />
@@ -685,8 +685,8 @@ const TableBase = (props: TableBaseProps) => {
 							width={widthDrawer !== 'full' ? widthDrawer : undefined}
 							onCancel={() => setVisibleForm(false)}
 							footer={false}
-							bodyStyle={{ padding: 0 }}
-							visible={visibleForm}
+							styles={{ body: { padding: 0 } }}
+							open={visibleForm}
 							destroyOnClose={destroyModal || false}
 						>
 							<Form title={title ?? ''} {...props.formProps} />

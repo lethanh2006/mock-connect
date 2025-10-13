@@ -1,9 +1,9 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
+import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Divider, Modal, Popconfirm, Space, Tooltip } from 'antd';
-import moment from 'moment';
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
 import FormKeHoachUngDung from './FormKeHoachUngDung';
@@ -32,7 +32,7 @@ const TableKeHoachUngDung = (props: { mode: 'view' | 'edit'; data: DeTaiKHCN.KeH
 			dataIndex: 'thoiGian',
 			width: 120,
 			align: 'center',
-			render: (val: string, rec) => <div>{moment(val).format('DD/MM/YYYY')}</div>,
+			render: (val: string, rec) => <div>{dayjs(val).format('DD/MM/YYYY')}</div>,
 		},
 		{
 			title: 'Địa điểm tiếp nhận ứng dụng',
@@ -138,10 +138,10 @@ const TableKeHoachUngDung = (props: { mode: 'view' | 'edit'; data: DeTaiKHCN.KeH
 			<Modal
 				zIndex={1002}
 				destroyOnClose
-				visible={visibleForm}
+				open={visibleForm}
 				onCancel={onCancelForm}
 				footer={false}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 			>
 				<FormKeHoachUngDung record={record} edit={edit} onCancel={onCancelForm} />
 			</Modal>

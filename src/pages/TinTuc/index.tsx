@@ -58,21 +58,23 @@ const TinTucPage = () => {
 	];
 
 	return (
-		<Card title='Tin tức' bodyStyle={{ paddingTop: 0 }}>
-			{danhSachChuDe && danhSachChuDe.length > 0 ? (
-				<TabViewPage
-					hideCard
-					menu={menus as any}
-					onChange={(key) => {
-						setTabActive(key);
-						setChuDe(danhSachChuDe.find((item) => item._id === key));
-						setPageWP(1);
-						setPage(1);
-					}}
-				/>
-			) : (
-				<Empty style={{ paddingTop: 32 }} description='Chưa có tin tức' />
-			)}
+		<Card title='Tin tức' className='card-big-title card-borderless' variant='borderless' bodyStyle={{ paddingTop: 0 }}>
+			<Card variant='borderless'>
+				{danhSachChuDe && danhSachChuDe.length > 0 ? (
+					<TabViewPage
+						hideCard
+						menu={menus as any}
+						onChange={(key) => {
+							setTabActive(key);
+							setChuDe(danhSachChuDe.find((item) => item._id === key));
+							setPageWP(1);
+							setPage(1);
+						}}
+					/>
+				) : (
+					<Empty style={{ paddingTop: 32 }} description='Chưa có tin tức' />
+				)}
+			</Card>
 		</Card>
 	);
 };

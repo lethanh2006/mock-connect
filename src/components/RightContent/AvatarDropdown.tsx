@@ -1,14 +1,14 @@
 import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
 import { landingUrl } from '@/services/base/constant';
 import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
-import { FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, Menu, Modal, Row, Spin } from 'antd';
-import { type ItemType } from 'antd/lib/menu/hooks/useItems';
-import moment from 'moment';
+import dayjs from '@/utils/dayjs';
+import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
+import { ItemType } from 'antd/es/menu/interface';
+import { rgba } from 'polished';
 import { useEffect } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
-import HeaderDropdown from './HeaderDropdown';
 import styles from './index.less';
 
 const AvatarDropdown = () => {
@@ -16,7 +16,11 @@ const AvatarDropdown = () => {
 	const { initialState } = useModel('@@initialState');
 	const { getDotMeModel, setVisibleKhaoSatBatBuoc, setRecord, setDsKhaoSatBatBuoc } = useModel('tienich.dotkhaosat');
 	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { danhSach: dsPhanVung, getPartitionCodeMeModel } = useModel('core.phanvunguser');
+	const { getAllModel: getAllPhanVung } = useModel('core.phanvungdulieu');
+	
 	const avatarUrl = recSinhVien?.anhDaiDienUrl ?? initialState?.currentUser?.picture;
+	const currentPartition = localStorage.getItem('partitionCode');
 
 	const handleCheckKhaoSatBatBuoc = async () => {
 		try {
@@ -48,8 +52,8 @@ const AvatarDropdown = () => {
 								<Col span={24}>
 									<div>Tên đợt: {index?.[0]?.ten}</div>
 									<div>
-										Thời gian diễn ra từ {moment(index?.[0]?.thoiGianBatDau).format('DD/MM')} đến{' '}
-										{moment(index?.[0]?.thoiGianKetThuc).format('DD/MM/YYYY')}.
+										Thời gian diễn ra từ {dayjs(index?.[0]?.thoiGianBatDau).format('DD/MM')} đến{' '}
+										{dayjs(index?.[0]?.thoiGianKetThuc).format('DD/MM/YYYY')}.
 									</div>
 								</Col>
 								<Col span={24}>
@@ -80,7 +84,7 @@ const AvatarDropdown = () => {
 
 	useEffect(() => {
 		if (initialState?.currentUser?.ssoId) {
-			getThongTinCuaToiModel().then((res) => {
+				getThongTinCuaToiModel().then((res) => {
 				// if (res.needUpdateFaceReg)
 				// 	notification.warn({
 				// 		message: 'Nhận diện khuôn mặt',
@@ -102,6 +106,10 @@ const AvatarDropdown = () => {
 			});
 
 			handleCheckKhaoSatBatBuoc();
+			
+			//Get All phân vùng để lấy mã màu
+			getAllPhanVung();
+			getPartitionCodeMeModel(currentPartition?.toString());
 		}
 	}, [initialState?.currentUser?.ssoId]);
 
@@ -116,14 +124,53 @@ const AvatarDropdown = () => {
 
 	const fullName = initialState.currentUser?.family_name
 		? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
-		: initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || '');
+		: (initialState.currentUser?.name ?? (initialState.currentUser?.preferred_username || ''));
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
+	const currentPartitionInfo = dsPhanVung?.find((item) => item?.dataPartitionCode === currentPartition);
+	const currentPartitionColor = currentPartitionInfo?.dataPartition?.maMau;
+	const currentPartitionName = currentPartitionInfo?.dataPartition?.name;
+
+	const partitionItems: ItemType[] =
+		dsPhanVung?.map((item) => {
+			const code = item?.dataPartitionCode;
+			const isActive = code === currentPartition;
+			const partitionColor = item?.dataPartition?.maMau;
+
+			const activeColor = partitionColor || 'var(--color-primary)';
+			const activeBgColor = partitionColor ? rgba(partitionColor, 0.1) : 'var(--color-primary-bg)';
+
+			return {
+				key: `partition-${code}`,
+				icon: <DatabaseOutlined />,
+				label: item?.dataPartition?.name ?? item?.dataPartition?.ma,
+				style: isActive
+					? {
+							backgroundColor: activeBgColor,
+							borderLeft: `3px solid ${activeColor}`,
+							color: activeColor,
+							fontWeight: 'bold',
+						}
+					: undefined,
+				onClick: () => {
+					localStorage.setItem('partitionCode', code);
+					window.location.reload();
+				},
+			};
+		}) ?? [];
+
 	const items: ItemType[] = [
+		...(partitionItems as any),
+		...(partitionItems.length > 0 ? [{ type: 'divider', key: 'divider' } as ItemType] : []),
 		{
 			key: 'name',
 			icon: <UserOutlined />,
 			label: fullName,
+			onClick: () => {
+				if (!initialState?.currentUser?.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
+					history.push('/thong-tin-ca-nhan');
+				}
+			},
 		},
 		// {
 		// 	key: 'password',
@@ -157,30 +204,32 @@ const AvatarDropdown = () => {
 		},
 	];
 
-	if (!initialState.currentUser.realm_access?.roles?.includes('QUAN_TRI_VIEN')) {
-		items.splice(0, 1, {
-			key: 'center',
-			icon: <UserOutlined />,
-			label: fullName
-				? `${fullName} - ${initialState.currentUser?.preferred_username || ''}`
-				: initialState.currentUser?.preferred_username || '',
-			onClick: () => history.push('/thong-tin-ca-nhan'),
-		});
-	}
-
 	return (
 		<>
-			<HeaderDropdown overlay={<Menu className={styles.menu} items={items} />}>
+			<Dropdown menu={{ items }}>
 				<span className={`${styles.action} ${styles.account}`}>
-					<Avatar
-						className={styles.avatar}
-						src={!!avatarUrl ? <img src={avatarUrl} /> : undefined}
-						icon={!avatarUrl ? lastNameChar ?? <UserOutlined /> : undefined}
-						alt='avatar'
-					/>
+					<div className={styles.avatarWrapper}>
+						<Avatar
+							className={styles.avatar}
+							src={!!avatarUrl ? <img src={avatarUrl} /> : undefined}
+							icon={!avatarUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
+							alt='avatar'
+						/>
+						{dsPhanVung?.length >= 2 && (
+							<span
+								className={styles.partitionBadge}
+								style={{
+									backgroundColor: currentPartitionColor || 'var(--color-primary)',
+									color: '#fff',
+								}}
+							>
+								{currentPartitionName?.[0]?.toUpperCase() ?? ''}
+							</span>
+						)}
+					</div>
 					<span className={`${styles.name}`}>{fullName}</span>
 				</span>
-			</HeaderDropdown>
+			</Dropdown>
 
 			<ModalKhaoSatBatBuoc />
 		</>

@@ -4,6 +4,7 @@ import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import type { ETrangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
+import type { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import type { QuyDoiDiem } from '../QuyDoiDiem/typing';
 import type { ETrangThaiThi } from '../constant';
 import type {
@@ -262,7 +263,7 @@ export declare module LopHocPhan {
 			ma: string;
 		};
 		tiLeHoanThanh: number;
-		thoiGianTaoVao: Date;
+		thoiGianTaoVao: string;
 		thoiGianCapNhatGanNhatVao: '03:23:40 22-12-2024';
 		hocLieu: THocLieuLms[];
 	}

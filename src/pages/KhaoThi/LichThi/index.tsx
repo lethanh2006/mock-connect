@@ -11,7 +11,7 @@ import {
 	colorTrangThaiThi,
 } from '@/services/KhaoThi/constant';
 import { TeamOutlined } from '@ant-design/icons';
-import { Button, Card, Tag, Tooltip } from 'antd';
+import { Button, Card, Space, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import DanhSachSinhVienThi from './DanhSachSinhVienThi';
@@ -142,13 +142,26 @@ const LichThiPage = () => {
 	];
 
 	return (
-		<Card title='Lịch thi học kỳ'>
-			<TableStaticData columns={columns} data={danhSachMe} addStt loading={loading}>
-				<FilterHocKy isSetHocKy />
-			</TableStaticData>
-			{recLichThi && (
-				<DanhSachSinhVienThi recLichThi={recLichThi} visible={visibleDSSV} handleCancel={() => setVisibleDSSV(false)} />
-			)}
+		<Card
+			title={
+				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
+					<span>Lịch thi học kỳ </span>
+					<FilterHocKy isSetHocKy />
+				</Space>
+			}
+			className='card-big-title card-borderless'
+			variant='borderless'
+		>
+			<Card variant='borderless'>
+				<TableStaticData columns={columns} data={danhSachMe} addStt loading={loading}></TableStaticData>
+				{recLichThi && (
+					<DanhSachSinhVienThi
+						recLichThi={recLichThi}
+						visible={visibleDSSV}
+						handleCancel={() => setVisibleDSSV(false)}
+					/>
+				)}
+			</Card>
 		</Card>
 	);
 };

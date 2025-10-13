@@ -1,7 +1,7 @@
 import {
 	colorTrangThaiNopBaiTap,
-	type ETrangThaiNopBaiTap,
 	mapTrangThaiNopBaiTap,
+	type ETrangThaiNopBaiTap,
 } from '@/services/DaoTao/BaiTap/constants';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap/constant';
@@ -9,9 +9,9 @@ import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import { colorTrangThaiThi } from '@/services/KhaoThi/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
+import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Modal, Popconfirm, Space, Tag, message } from 'antd';
-import moment from 'moment';
 import { history, useModel } from 'umi';
 
 const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; event: any; getData: () => void }) => {
@@ -40,17 +40,16 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			<Descriptions.Item label='Lớp tín chỉ'>{thoiKhoaBieu?.tenLopHocPhan}</Descriptions.Item>
 			<Descriptions.Item label='Tên học phần'>{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}</Descriptions.Item>
 			<Descriptions.Item label='Thời gian bắt đầu'>
-				{moment(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+				{dayjs(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
 			</Descriptions.Item>
 			<Descriptions.Item label='Thời gian kết thúc'>
-				{moment(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+				{dayjs(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 			</Descriptions.Item>
-			{/* <Descriptions.Item label='Loại hình học tập'>{thoiKhoaBieu?.loaiHinhHocTap ?? '--'}</Descriptions.Item> */}
 			<Descriptions.Item label='Phòng học'>{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Giảng viên'>
 				{thoiKhoaBieu?.giangVien?.ten
 					? [thoiKhoaBieu.giangVien?.hoDem, thoiKhoaBieu.giangVien?.ten].join(' ')
-					: thoiKhoaBieu?.tenNhanSu ?? '--'}
+					: (thoiKhoaBieu?.tenNhanSu ?? '--')}
 			</Descriptions.Item>
 			<Descriptions.Item label='Tiêu đề bài học'>{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
 			{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (
@@ -80,11 +79,8 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 				{lichThi?.danhSachHocPhan?.map((item) => `${item.ma} - ${item.ten}`).join(', ')}
 			</Descriptions.Item>
 			<Descriptions.Item label='Thời gian bắt đầu'>
-				{moment(lichThi?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+				{dayjs(lichThi?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
 			</Descriptions.Item>
-			{/* <Descriptions.Item label='Thời gian kết thúc'>
-				{moment(lichThi?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
-			</Descriptions.Item> */}
 			<Descriptions.Item label='Phòng thi'>{lichThi?.phong?.ma ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Điều kiện dự thi'>
 				{lichThi?.trangThai ? <Tag color={colorTrangThaiThi[lichThi.trangThai]}>{lichThi.trangThai}</Tag> : '--'}
@@ -98,11 +94,11 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			<Descriptions.Item label='Lớp học phần'>{event?.assignment?.tenLopHocPhan ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Giảng viên'>{event?.assignment?.hoTenNguoiGiao ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Thời gian giao bài tập'>
-				{event?.assignment?.createdAt ? moment(event?.assignment?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
+				{event?.assignment?.createdAt ? dayjs(event?.assignment?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
 			</Descriptions.Item>
 			<Descriptions.Item label='Thời hạn bài tập'>
 				{event?.assignment?.thoiGianKetThuc
-					? moment(event?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
+					? dayjs(event?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
 					: '--'}
 			</Descriptions.Item>
 			<Descriptions.Item label='Trạng thái nộp bài'>
@@ -117,10 +113,10 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 		<>
 			<Descriptions.Item label='Tên sự kiện'>{suKien?.tenSuKien}</Descriptions.Item>
 			<Descriptions.Item label='Thời gian bắt đầu'>
-				{moment(suKien?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+				{dayjs(suKien?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
 			</Descriptions.Item>
 			<Descriptions.Item label='Thời gian kết thúc'>
-				{moment(suKien?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+				{dayjs(suKien?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 			</Descriptions.Item>
 			<Descriptions.Item label='Địa điểm'>{suKien?.diaDiem ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Ghi chú'>{suKien?.ghiChu ?? '--'}</Descriptions.Item>
@@ -129,7 +125,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 
 	return (
 		<Modal
-			visible={visible}
+			open={visible}
 			title='Chi tiết lịch'
 			destroyOnClose
 			width={600}
@@ -203,10 +199,10 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 				{isThoiKhoaBieu
 					? renderThoiKhoaBieu()
 					: isLichThi
-					? renderLichThi()
-					: isBaiTap
-					? renderBaiTap()
-					: renderSuKien()}
+						? renderLichThi()
+						: isBaiTap
+							? renderBaiTap()
+							: renderSuKien()}
 			</Descriptions>
 		</Modal>
 	);

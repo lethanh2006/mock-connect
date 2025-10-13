@@ -38,7 +38,7 @@ const ChiTietMarc = (props: {
 	];
 
 	return (
-		<Modal title='Thông tin dữ liệu' visible={visible} onCancel={() => setVisible(false)} footer={null} width={800}>
+		<Modal title='Thông tin dữ liệu' open={visible} onCancel={() => setVisible(false)} footer={null} width={800}>
 			<TableStaticData
 				columns={columns}
 				data={danhSach ?? []}

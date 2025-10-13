@@ -1,12 +1,12 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
+import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined, CalendarOutlined, InfoCircleOutlined, MenuOutlined } from '@ant-design/icons';
 import { Badge, Card, Col, Empty, Modal, Popover, Row, Segmented, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -22,8 +22,8 @@ const DnDCalendar = withDragAndDrop(tmp);
 
 const getThoiGianMotTuanKeTuHomNay = () => {
 	return {
-		fromDate: moment().startOf('week').toISOString(),
-		toDate: moment().add(7, 'day').endOf('day').toISOString(),
+		fromDate: dayjs().startOf('week').toISOString(),
+		toDate: dayjs().add(7, 'day').endOf('day').toISOString(),
 	};
 };
 
@@ -37,6 +37,7 @@ const LichDashboard = () => {
 		dataLichDashboard,
 		dataCalendarDashboard,
 		setDataCalendarDashboard,
+		edit,
 	} = useModel('sukien.sukien');
 	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
@@ -44,69 +45,62 @@ const LichDashboard = () => {
 	const { record: recSetting } = useModel('tienich.settinglich');
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);
 	const [selectEvent, setSelectEvent] = useState<any>();
-	const localizer = momentLocalizer(moment);
+	const localizer = dayjsLocalizer(dayjs);
 	const [segmentSelected, setSegmentSelected] = useState<string>(localStorage.getItem('loaiLich') ?? 'list');
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
-	//#region Get Data
 	const getThoiKhoaBieu = async () => {
 		return getTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
-			const temp = data.map((item) => ({
+			return data.map((item) => ({
 				...item,
 				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''}`,
 				suffix: [item?.lopHocPhan?.ten, item?.phongHoc].filter(Boolean).join(', '),
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 			}));
-			return temp;
 		});
 	};
 
 	const getLichThi = async () => {
 		return getLichThiModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
-			const temp = data.map((item) => ({
+			return data.map((item) => ({
 				...item,
 				title: `Lịch thi: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
 				suffix: item.phong?.ma ?? '',
 				loaiSuKien: ELoaiSuKien.LICH_THI,
 			}));
-			return temp;
 		});
 	};
 
 	const getSuKien = async () => {
 		return getSuKienTrongKhoangModel(getThoiGianMotTuanKeTuHomNay()).then((data) => {
-			const temp = data.map((item) => ({
+			return data.map((item) => ({
 				...item,
 				title: item?.tenSuKien ?? '',
 			}));
-			return temp;
 		});
 	};
 
 	const getBaiTap = async () => {
 		return thongKeBaiTapModel(
-			moment().startOf('week').toISOString(),
-			moment().add(2, 'months').endOf('day').toISOString(),
+			dayjs().startOf('week').toISOString(),
+			dayjs().add(2, 'months').endOf('day').toISOString(),
 		).then((data) => {
-			const aWeekLater = moment().add(7, 'day').endOf('day').toDate();
-			const temp = data
+			const aWeekLater = dayjs().add(7, 'day').endOf('day').toDate();
+			return data
 				.map((item) => ({
 					...item,
 					title: item?.assignment?.noiDung ?? '',
 					suffix: item?.assignment?.tenLopHocPhan,
-					thoiGianBatDau: moment(item?.assignment?.thoiGianKetThuc).toDate(),
-					thoiGianKetThuc: moment(item?.assignment?.thoiGianKetThuc).toDate(),
+					thoiGianBatDau: dayjs(item?.assignment?.thoiGianKetThuc).toDate(),
+					thoiGianKetThuc: dayjs(item?.assignment?.thoiGianKetThuc).toDate(),
 					loaiSuKien: ELoaiSuKien.BAI_TAP,
 				}))
-				// Ở dashboard Chỉ show tối đa trong vòng 1 tuần
 				.filter((i) => i.thoiGianKetThuc < aWeekLater);
-			return temp;
 		});
 	};
 
 	const getData = () => {
 		const promises = [getThoiKhoaBieu(), getSuKien(), getLichThi(), getBaiTap()];
-
 		Promise.allSettled(promises)
 			.then((values) => {
 				const responses = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
@@ -115,7 +109,6 @@ const LichDashboard = () => {
 			})
 			.catch((er) => console.log(er));
 	};
-	//#endregion
 
 	useEffect(() => {
 		setDataCalendarDashboard(dataLichDashboard ?? []);
@@ -126,20 +119,16 @@ const LichDashboard = () => {
 	}, []);
 
 	const renderContent = () => {
-		// Convert dữ liệu
 		const data = dataCalendarDashboard
-			?.filter((event) => moment(event.thoiGianBatDau).isSameOrAfter(moment(), 'd'))
+			?.filter((event) => dayjs(event.thoiGianBatDau).isSameOrAfter(dayjs(), 'day'))
 			?.reduce<any>((result, item) => {
-				if (!item?.thoiGianBatDau) {
-					return result;
-				}
-				const ngayMoment = moment(item?.thoiGianBatDau);
-				const ngayString = ngayMoment.format('YYYY-MM-DD');
-
+				if (!item?.thoiGianBatDau) return result;
+				const ngay = dayjs(item.thoiGianBatDau);
+				const ngayString = ngay.format('YYYY-MM-DD');
 				return {
 					...result,
 					[ngayString]: {
-						thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngayMoment.toDate().getDay()],
+						thuTrongTuan: result[ngayString]?.thuTrongTuan ?? THU_TRONG_TUAN[ngay.toDate().getDay()],
 						cacSuKien: (result[ngayString]?.cacSuKien ?? []).concat({
 							...item,
 							tenSuKien: item.title,
@@ -150,7 +139,7 @@ const LichDashboard = () => {
 			}, {});
 
 		const keysSorted = sortBy(Object.keys(data));
-		if (!loadingSuKien && !loadingSuKien && isEmpty(data)) {
+		if (!loadingSuKien && isEmpty(data)) {
 			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />;
 		}
 
@@ -163,9 +152,9 @@ const LichDashboard = () => {
 						<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
 							<div
 								className={styles.ngay__title}
-								style={{ color: moment().isSame(ngay, 'day') ? 'var(--primary-color)' : undefined }}
+								style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
 							>
-								{thuTrongTuan}, ngày {moment(ngay).format('DD/MM')}
+								{thuTrongTuan}, ngày {dayjs(ngay).format('DD/MM')}
 							</div>
 						</Badge>
 					</Space>
@@ -173,17 +162,16 @@ const LichDashboard = () => {
 						<div
 							key={sukien._id}
 							className={styles.su_kien}
-							// style={{ background: ColorSuKien[sukien.loaiSuKien] }}
 							onClick={() => {
 								setSelectEvent(sukien);
 								setVisibleDetail(true);
 							}}
 						>
 							<div className={styles.su_kien__left}>
-								{moment().isSameOrAfter(sukien.thoiGianBatDau) && moment().isSameOrBefore(sukien.thoiGianKetThuc) ? (
+								{dayjs().isSameOrAfter(sukien.thoiGianBatDau) && dayjs().isSameOrBefore(sukien.thoiGianKetThuc) && (
 									<div className={styles.pulse} />
-								) : null}
-								<div className={styles.su_kien__thoi_gian}>{moment(sukien.thoiGianBatDau).format('HH:mm')}</div>
+								)}
+								<div className={styles.su_kien__thoi_gian}>{dayjs(sukien.thoiGianBatDau).format('HH:mm')}</div>
 							</div>
 							<Space
 								wrap
@@ -222,25 +210,22 @@ const LichDashboard = () => {
 			<DnDCalendar
 				localizer={localizer}
 				events={
-					dataCalendarDashboard?.map((event) => {
-						return {
-							...event,
-							tenSuKien: event.title,
-							start: moment(event?.thoiGianBatDau).toDate(),
-							end: moment(event?.thoiGianKetThuc).toDate(),
-						};
-					}) ?? []
+					dataCalendarDashboard?.map((event) => ({
+						...event,
+						tenSuKien: event.title,
+						start: dayjs(event.thoiGianBatDau).toDate(),
+						end: dayjs(event.thoiGianKetThuc).toDate(),
+					})) ?? []
 				}
 				defaultView='week'
 				scrollToTime={new Date(1970, 1, 1, 6)}
-				date={moment().startOf('week').toDate()}
+				date={dayjs().startOf('week').toDate()}
 				onSelectEvent={(event: any) => {
 					setSelectEvent(event);
 					setVisibleDetail(true);
 				}}
 				selectable={false}
-				min={moment('0700', 'HHmm').toDate()}
-				// max={moment('2359', 'HHmm').toDate()}
+				min={dayjs('0700', 'HHmm').toDate()}
 				popup
 				eventPropGetter={(event: any) => ({
 					style: {
@@ -308,16 +293,15 @@ const LichDashboard = () => {
 			</Card>
 
 			<Modal
-				visible={visibleForm}
-				bodyStyle={{ padding: 0 }}
+				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				maskClosable={false}
+				title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}
 			>
 				<FormLichCaNhan getData={getData} />
 			</Modal>
 
-			{/* Modal xem chi tiết lịch */}
 			{selectEvent ? (
 				<ModalViewDetailCalendar
 					visible={visibleDetail}

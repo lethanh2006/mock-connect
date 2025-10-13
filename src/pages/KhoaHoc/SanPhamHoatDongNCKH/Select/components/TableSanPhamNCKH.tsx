@@ -461,7 +461,7 @@ const TableSanPhamNCKHStatic = (props: {
 									disabled: false,
 									name: record._id,
 								}),
-						  }
+							}
 						: undefined
 				}
 				buttons={{ create: false }}
@@ -527,7 +527,7 @@ const TableSanPhamNCKHStatic = (props: {
 						Đóng
 					</Button>
 				}
-				visible={visibleViewThanhVien}
+				open={visibleViewThanhVien}
 				onCancel={onCancelViewThanhVien}
 			>
 				<TableThanhVien mode='view' />
@@ -537,7 +537,7 @@ const TableSanPhamNCKHStatic = (props: {
 				width={900}
 				title='Chi tiết sản phẩm, hoạt động NCKH'
 				footer={false}
-				visible={visibleViewSanPham}
+				open={visibleViewSanPham}
 				onCancel={onCancelViewSanPham}
 			>
 				<ViewSanPham
@@ -551,7 +551,7 @@ const TableSanPhamNCKHStatic = (props: {
 				width={900}
 				title='Giờ chuẩn NCKH'
 				footer={false}
-				visible={visibleViewQuyDoiGio}
+				open={visibleViewQuyDoiGio}
 				onCancel={onCancelViewQuyDoiGio}
 			>
 				<Tabs activeKey={loaiDuLieuQuyDoiGio} onChange={(val: any) => setLoaiDuLieuQuyDoiGio(val)}>

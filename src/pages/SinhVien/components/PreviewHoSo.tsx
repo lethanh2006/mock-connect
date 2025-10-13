@@ -1,8 +1,8 @@
 import { colorTrangThaiHocSv, type ETrangThaiHocSv } from '@/services/DaoTao/constant';
+import dayjs from '@/utils/dayjs';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Col, Image, Row, Space, Spin, Tag } from 'antd';
-import moment from 'moment';
-import { useEffect } from 'react';
+import { JSX, useEffect } from 'react';
 import { useModel } from 'umi';
 
 type DescriptionItem = {
@@ -43,7 +43,7 @@ const PreviewHoSo = () => {
 		{ label: 'Giới tính', content: record?.gioiTinh, md: 8 },
 		{
 			label: 'Ngày sinh',
-			content: record?.ngaySinh ? moment(record.ngaySinh).format('DD/MM/YYYY') : '',
+			content: record?.ngaySinh ? dayjs(record.ngaySinh).format('DD/MM/YYYY') : '',
 			md: 8,
 		},
 		{
@@ -54,7 +54,7 @@ const PreviewHoSo = () => {
 		{
 			label: 'CCCD/CMND',
 			content: `${record?.cccd ?? ''}, ngày cấp: ${
-				record?.ngayCapCccd ? moment(record.ngayCapCccd).format('DD/MM/YYYY') : '--'
+				record?.ngayCapCccd ? dayjs(record.ngayCapCccd).format('DD/MM/YYYY') : '--'
 			}, nơi cấp: ${record?.noiCapCccd ?? ''}`,
 			md: 24,
 		},
@@ -67,7 +67,7 @@ const PreviewHoSo = () => {
 		{
 			label: 'Khóa ngành đào tạo',
 			content: (
-				<div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+				<>
 					{[
 						[record?.khoaNganh?.ten, record?.trangThaiHocNganh1, record?.chuyenNganh?.ten ?? record?.maChuyenNganh],
 						[record?.khoaNganh2?.ten, record?.trangThaiHocNganh2, record?.chuyenNganh2?.ten ?? record?.maChuyenNganh2],
@@ -81,7 +81,7 @@ const PreviewHoSo = () => {
 								<span>(Chuyên ngành: {chuyenNganh ?? <i>Chưa cập nhật</i>})</span>
 							</Space>
 						))}
-				</div>
+				</>
 			),
 			md: 24,
 		},
@@ -112,12 +112,12 @@ const PreviewHoSo = () => {
 			children: [
 				{
 					label: 'Ngày vào Đảng dự bị',
-					content: record?.ngayVaoDang ? moment(record.ngayVaoDang).format('DD/MM/YYYY') : '',
+					content: record?.ngayVaoDang ? dayjs(record.ngayVaoDang).format('DD/MM/YYYY') : '',
 					md: 12,
 				},
 				{
 					label: 'Ngày vào Đảng chính thức',
-					content: record?.ngayVaoDangChinhThuc ? moment(record.ngayVaoDangChinhThuc).format('DD/MM/YYYY') : '',
+					content: record?.ngayVaoDangChinhThuc ? dayjs(record.ngayVaoDangChinhThuc).format('DD/MM/YYYY') : '',
 					md: 12,
 				},
 			],

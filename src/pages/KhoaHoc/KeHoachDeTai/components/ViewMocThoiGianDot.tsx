@@ -4,9 +4,9 @@ import {
 	MapKeyNameMocThoiGianDot,
 } from '@/services/KhoaHoc/KeHoachDeTai/constants';
 import type { KeHoachDeTai } from '@/services/KhoaHoc/KeHoachDeTai/typings';
+import dayjs from '@/utils/dayjs';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Timeline } from 'antd';
-import moment from 'moment';
 
 const ViewMocThoiGianDot = (props: { rec: KeHoachDeTai.IRecord }) => {
 	const { rec }: any = props;
@@ -14,8 +14,8 @@ const ViewMocThoiGianDot = (props: { rec: KeHoachDeTai.IRecord }) => {
 	return (
 		<Timeline>
 			{Object.values(EMocThoiGianDot).map((item) => {
-				const isPass = moment().isAfter(moment(rec?.[MapKeyFieldMocThoiGianDot[item][1]]));
-				const isFuture = moment().isBefore(moment(rec?.[MapKeyFieldMocThoiGianDot[item][0]]));
+				const isPass = dayjs().isAfter(dayjs(rec?.[MapKeyFieldMocThoiGianDot[item][1]]));
+				const isFuture = dayjs().isBefore(dayjs(rec?.[MapKeyFieldMocThoiGianDot[item][0]]));
 
 				return (
 					<Timeline.Item
@@ -26,8 +26,8 @@ const ViewMocThoiGianDot = (props: { rec: KeHoachDeTai.IRecord }) => {
 						<div>
 							<div>{MapKeyNameMocThoiGianDot[item]}</div>
 							<div>
-								{moment(rec?.[MapKeyFieldMocThoiGianDot[item][0]]).format('DD/MM/YYYY')} -{' '}
-								{moment(rec?.[MapKeyFieldMocThoiGianDot[item][1]]).format('DD/MM/YYYY')}
+								{dayjs(rec?.[MapKeyFieldMocThoiGianDot[item][0]]).format('DD/MM/YYYY')} -{' '}
+								{dayjs(rec?.[MapKeyFieldMocThoiGianDot[item][1]]).format('DD/MM/YYYY')}
 							</div>
 						</div>
 					</Timeline.Item>

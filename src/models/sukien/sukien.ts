@@ -7,14 +7,7 @@ import { useState } from 'react';
 
 export default () => {
 	const objInit = useInitModel<SuKien.IRecord>('su-kien/me');
-	const [selectSuKiens, setSelectSuKiens] = useState<ELoaiSuKien[]>([
-		ELoaiSuKien.LICH_HOC,
-		ELoaiSuKien.LICH_THI,
-		ELoaiSuKien.CA_NHAN,
-		ELoaiSuKien.CHUNG,
-		ELoaiSuKien.BAI_TAP,
-		ELoaiSuKien.HOP_LOP,
-	]);
+	const [selectSuKiens, setSelectSuKiens] = useState<ELoaiSuKien[]>(Object.values(ELoaiSuKien));
 	const { getModel, setLoading, setDanhSach } = objInit;
 	const [dataCalendar, setDataCalendar] = useState<{ title: string; [x: string]: unknown }[]>([]);
 	const [dataLich, setDataLich] = useState<{ title: string; [x: string]: unknown }[]>([]);

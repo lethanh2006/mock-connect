@@ -16,7 +16,8 @@ import {
 import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Popconfirm, Segmented, Tag, notification } from 'antd';
-import moment from 'moment';
+
+import dayjs from '@/utils/dayjs';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
@@ -47,7 +48,7 @@ const GiaoDichPage = () => {
 		if (window.location.href.includes('orderType=momo_wallet'))
 			if (window.location.href.includes('resultCode=0'))
 				notification.success({ message: 'Thành công', description: 'Thanh toán công nợ thành công' });
-			else notification.warn({ message: 'Thất bại', description: 'Thanh toán thất bại' });
+			else notification.warning({ message: 'Thất bại', description: 'Thanh toán thất bại' });
 	}, []);
 
 	const getData = () => getModel({ type: kieuThanhToan }, undefined, undefined, undefined, undefined, 'me/page');
@@ -144,7 +145,7 @@ const GiaoDichPage = () => {
 			align: 'center',
 			filterType: 'datetime',
 			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Hoàn thành',
@@ -153,7 +154,7 @@ const GiaoDichPage = () => {
 			align: 'center',
 			filterType: 'datetime',
 			sortable: true,
-			render: (val) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
 			title: 'Thao tác',

@@ -1,4 +1,6 @@
+import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import type { ColumnType } from 'antd/lib/table';
+import React, { JSX } from 'react';
 import { type EOperatorType } from './constant';
 
 export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 'children'> {
@@ -47,12 +49,12 @@ export type TDataOption = {
 
 export type TableBaseProps = {
 	/** Tên model */
-	modelName: any;
+	modelName: Namespaces;
 
 	/** Import dùng model khác? */
-	modelImportName?: any;
+	modelImportName?: Namespaces;
 	/** Export dùng model khác? */
-	modelExportName?: any;
+	modelExportName?: Namespaces;
 
 	Form?: React.FC;
 	formType?: 'Modal' | 'Drawer';
@@ -145,6 +147,11 @@ export type TableBaseProps = {
 
 	hideChildrenRows?: boolean;
 
+	/** Có hiển thị modal title không? Mặc định: `Không` */
+	showModalTitle?: boolean;
+
+	/** Modal title thay thế, mặc định `Thêm mới`, `Chỉnh sửa`, `Chi tiết` + title */
+	modalTitle?: React.ReactNode;
 	/** Hàm reload dữ liệu
 	 * @default getData
 	 */
@@ -152,10 +159,24 @@ export type TableBaseProps = {
 };
 
 export type TFilter<T> = {
-	field: keyof T | [keyof T, string];
+	field?: keyof T | [keyof T, string];
 	operator?: EOperatorType;
-	values: (string | number)[];
+	values?: (string | number)[];
 	active?: boolean;
+	filters?: TFilter<T>[];
+	logicOperator?: 'or' | 'and';
+};
+
+export type RowFilterProps = {
+	index: number;
+	columns: IColumn<any>[];
+	filter: TFilter<any>;
+	onChange: (filter: TFilter<any>) => void;
+	fieldsFilterable: string[];
+	onRemove?: () => void;
+	allowGrouping?: boolean;
+	level?: number;
+	path?: (string | number)[];
 };
 
 

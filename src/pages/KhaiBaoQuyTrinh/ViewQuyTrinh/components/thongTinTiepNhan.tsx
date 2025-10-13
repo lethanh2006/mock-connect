@@ -11,7 +11,7 @@ import {
 	type EMaTrangThaiThanhToan,
 } from '@/services/TaiChinh/constant';
 import { ETrangThaiChinhSuaNhanSu } from '@/services/ToChucNhanSu/constant';
-import { useModel } from '@@/plugin-model/useModel';
+import { useModel } from '@umijs/max';
 import { Button, Collapse, Descriptions, Modal, Tag } from 'antd';
 import { useState } from 'react';
 import ViewFromCauHinh from './ViewFormCauHinh';

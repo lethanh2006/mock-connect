@@ -9,7 +9,7 @@ const ModalChungChiCTDT = () => {
 	return (
 		<Modal
 			width={800}
-			visible={visibleForm}
+			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			okButtonProps={{ hidden: true }}
 			cancelText='Đóng'

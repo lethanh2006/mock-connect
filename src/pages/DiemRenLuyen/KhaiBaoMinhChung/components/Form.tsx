@@ -1,4 +1,9 @@
+import MyDatePicker from '@/components/MyDatePicker';
+import UploadFile from '@/components/Upload/UploadFile';
+import { SelectSuKien } from '@/pages/CongTacSinhVien/SuKien/components/Select';
+import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
 import { ELoaiDanhMucChung } from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/constant';
+import { type DotChamDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/DotChamDiem/typing';
 import {
 	ELoaiMinhChungDiemRenLuyen,
 	ELoaiMinhChungDiemRenLuyenMappingToTitle,
@@ -7,22 +12,17 @@ import {
 	EPhanLoaiNoiNgoaiTruMappingToLabel,
 } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/constants';
 import { type MinhChungDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/MinhChung/typing';
+import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
+import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm, uploadMultiFile } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, Radio, Row, Select, message } from 'antd';
+import { useWatch } from 'antd/lib/form/Form';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import { SelectDanhMucDiemRenLuyen } from '../../DanhMuc/components/Select';
 import { SelectDotChamDiem } from '../../DotChamDiem/components/Select';
-import MyDatePicker from '@/components/MyDatePicker';
-import moment from 'moment';
-import UploadFile from '@/components/Upload/UploadFile';
-import { SelectSuKien } from '@/pages/CongTacSinhVien/SuKien/components/Select';
-import { useWatch } from 'antd/lib/form/Form';
-import SelectDonViHanhChinh from '@/pages/Core/DonViHanhChinh/SelectDonViHanhChinh';
-import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
-import { getTinhThanhPho } from '@/services/Core/DonViHanhChinh';
-import { type DotChamDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/DotChamDiem/typing';
 
 interface FormValues extends Omit<MinhChungDiemRenLuyen.IRecord, 'urlFileList'> {
 	urlFileList: any;
@@ -69,8 +69,8 @@ export const FormKhaiBaoMinhChung = () => {
 
 	const disabledForm = isView;
 	const isNgoaiThoiGianTiepNhan =
-		moment().isBefore(dotChamDiem?.thoiGianTiepNhanMinhChung?.thoiGianBatDau) ||
-		moment().isAfter(dotChamDiem?.thoiGianTiepNhanMinhChung?.thoiGianKetThuc);
+		dayjs().isBefore(dotChamDiem?.thoiGianTiepNhanMinhChung?.thoiGianBatDau) ||
+		dayjs().isAfter(dotChamDiem?.thoiGianTiepNhanMinhChung?.thoiGianKetThuc);
 
 	useEffect(() => {
 		resetFieldsForm(form, {
@@ -89,7 +89,7 @@ export const FormKhaiBaoMinhChung = () => {
 			values.urlFileList = urlFileList;
 
 			if (!values.urlFileList?.length && !values.duongDan) {
-				message.warn('Phải nhập tối thiểu 1 trong 2 loại: Đường dẫn hoặc Tập tin minh chứng');
+				message.warning('Phải nhập tối thiểu 1 trong 2 loại: Đường dẫn hoặc Tập tin minh chứng');
 				return;
 			}
 		}
@@ -202,7 +202,7 @@ export const FormKhaiBaoMinhChung = () => {
 											? 'chia sẻ'
 											: 'tham gia'
 									}`}
-									disabledDate={(cur) => moment(cur).isAfter(moment())}
+									disabledDate={(cur) => dayjs(cur).isAfter(dayjs())}
 								/>
 							</Form.Item>
 						</Col>

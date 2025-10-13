@@ -1,16 +1,17 @@
-@import '~antd/es/style/themes/default.less';
-
 .dien-dan {
 	.main-content {
 		width: 100%;
-		max-width: 800px;
+		max-width: 1000px;
 		margin: auto;
 	}
 
 	.card {
 		margin-bottom: 18px;
 		border-radius: 2px;
-		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08), 0 1px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+		box-shadow:
+			0 1px 2px 0 rgba(0, 0, 0, 0.08),
+			0 1px 6px -1px rgba(0, 0, 0, 0.06),
+			0 2px 4px 0 rgba(0, 0, 0, 0.08);
 	}
 
 	.header-card {
@@ -115,7 +116,10 @@
 	}
 
 	.shadow {
-		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.08), 0 1px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+		box-shadow:
+			0 1px 2px 0 rgba(0, 0, 0, 0.08),
+			0 1px 6px -1px rgba(0, 0, 0, 0.06),
+			0 2px 4px 0 rgba(0, 0, 0, 0.08);
 	}
 
 	.avatar-class {
@@ -224,84 +228,82 @@
 	}
 
 	&:hover {
-		color: var(--primary-color);
+		color: var(--color-primary);
 	}
 }
 
-
 //Bình chọn 
 .poll-display-card {
-  margin-bottom: 12px;
-  margin-top: 12px;
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  width: auto;
-  max-width: 100%;
+	margin-bottom: 12px;
+	margin-top: 12px;
+	border-radius: 6px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+	width: auto;
+	max-width: 100%;
 
-  .card-title {
-    margin: 0;
-  }
+	.card-title {
+		margin: 0;
+	}
 
-  .vote-form {
-    .ant-form-item {
-      margin-bottom: 8px;
-    }
+	.vote-form {
+		.ant-form-item {
+			margin-bottom: 8px;
+		}
 
-    .vote-checkbox,
-    .vote-radio {
-      width: 100%;
+		.vote-checkbox,
+		.vote-radio {
+			width: 100%;
 
-      .ant-space {
-        width: 100%;
-        justify-content: space-between;
-      }
-    }
+			.ant-space {
+				width: 100%;
+				justify-content: space-between;
+			}
+		}
 
-    .vote-submit {
-      margin-bottom: 6px;
-    }
-  }
+		.vote-submit {
+			margin-bottom: 6px;
+		}
+	}
 
-  .vote-results {
-    width: 100%;
+	.vote-results {
+		width: 100%;
 
-    .result-item {
-      width: 100%;
+		.result-item {
+			width: 100%;
 
-      .ant-space {
-        width: 100%;
-        justify-content: space-between;
-      }
+			.ant-space {
+				width: 100%;
+				justify-content: space-between;
+			}
 
-      .ant-progress {
-        margin-top: 4px;
-      }
-    }
+			.ant-progress {
+				margin-top: 4px;
+			}
+		}
 
-    .vote-edit-btn {
-      margin-top: 4px;
-    }
-  }
+		.vote-edit-btn {
+			margin-top: 4px;
+		}
+	}
 }
 
 .poll-display-userlist {
-  max-height: 200px;
-  overflow-y: auto;
-  min-width: 200px;
-  padding: 8px;
+	max-height: 200px;
+	overflow-y: auto;
+	min-width: 200px;
+	padding: 8px;
 
-  .title {
-    margin: 0;
-    margin-bottom: 8px;
-  }
+	.title {
+		margin: 0;
+		margin-bottom: 8px;
+	}
 
-  .user-item {
-    display: flex;
-    align-items: center;
+	.user-item {
+		display: flex;
+		align-items: center;
 
-    .user-name {
-      margin-left: 8px;
-    }
-  }
+		.user-name {
+			margin-left: 8px;
+		}
+	}
 }
-

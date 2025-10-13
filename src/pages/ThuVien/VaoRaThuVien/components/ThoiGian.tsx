@@ -89,7 +89,7 @@ const ThoiGianVaoRaThuVien = (props: { visible: boolean; setVisible: (val: boole
 	return (
 		<Modal
 			title='Thông tin thời gian vào ra thư viện'
-			visible={visible}
+			open={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
 			width={1000}

@@ -1,12 +1,12 @@
 import { Card, Form, Row } from 'antd';
+import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import FormRender from './FormRender';
-import { useEffect, useState } from 'react';
 // import TableThanhVien from './TableThanhVien';
-import { resetFieldsForm } from '@/utils/utils';
-import moment from 'moment';
-import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
+import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import dayjs from '@/utils/dayjs';
+import { resetFieldsForm } from '@/utils/utils';
 
 const PreviewForm = (props: { isView?: boolean; getData: any; mode: 'quytrinh' | 'loaihinh' }) => {
 	const [form] = Form.useForm();
@@ -17,7 +17,7 @@ const PreviewForm = (props: { isView?: boolean; getData: any; mode: 'quytrinh' |
 		...recordQuyTrinhForm,
 		...recordQuyTrinhForm?.thongTinKhaiBao,
 		vaiTro: recordQuyTrinhForm?.nguoiKhaiBao?.danhSachVaiTro,
-		thoiGian: [moment(recordQuyTrinhForm?.thongTinThoiGian?.start), moment(recordQuyTrinhForm?.thongTinThoiGian?.end)],
+		thoiGian: [dayjs(recordQuyTrinhForm?.thongTinThoiGian?.start), dayjs(recordQuyTrinhForm?.thongTinThoiGian?.end)],
 	});
 
 	useEffect(() => {
@@ -28,8 +28,8 @@ const PreviewForm = (props: { isView?: boolean; getData: any; mode: 'quytrinh' |
 				...recordQuyTrinhForm?.thongTinKhaiBao,
 				vaiTro: recordQuyTrinhForm?.nguoiKhaiBao?.danhSachVaiTro,
 				thoiGian: [
-					moment(recordQuyTrinhForm?.thongTinThoiGian?.start),
-					moment(recordQuyTrinhForm?.thongTinThoiGian?.end),
+					dayjs(recordQuyTrinhForm?.thongTinThoiGian?.start),
+					dayjs(recordQuyTrinhForm?.thongTinThoiGian?.end),
 				],
 			});
 	}, [recordQuyTrinhForm?._id, visibleForm]);

@@ -5,10 +5,10 @@ import { getCauTraLoiMe, getCauTraLoiMeTracNghiem } from '@/services/TienIch/Kha
 import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { type DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
 import { ELoaiDot, EThoiGianDot, textThucHienKhaoSat, thoiGianDot } from '@/services/TienIch/KhaoSat/constants';
+import dayjs from '@/utils/dayjs';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import Form from './components/Form';
@@ -82,7 +82,7 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 			dataIndex: 'thoiGianBatDau',
 			width: 120,
 			align: 'center',
-			render: (val) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : ''),
+			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : ''),
 			filterType: 'datetime',
 			sortable: true,
 			onCell,
@@ -92,7 +92,7 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 			dataIndex: 'thoiGianKetThuc',
 			width: 120,
 			align: 'center',
-			render: (val) => (val ? moment(val).format('HH:mm DD/MM/YYYY') : ''),
+			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : ''),
 			filterType: 'datetime',
 			sortable: true,
 			onCell,

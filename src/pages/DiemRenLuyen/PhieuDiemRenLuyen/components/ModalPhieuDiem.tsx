@@ -7,11 +7,11 @@ import {
 	vaiTroPhieuDiem,
 } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/constants';
 import { type PhieuDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/typing';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { SaveOutlined, SendOutlined } from '@ant-design/icons';
 import { Alert, Button, Form, InputNumber, Modal, Select, Space } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import StepDotChamDiemRenLuyen from '../../DotChamDiem/components/Step';
@@ -35,15 +35,15 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 	const ngoaiThoiGian =
 		role === EVaiTroPhieuDiem.SINH_VIEN
 			? recDot?.thoiGianSVChamDiem &&
-			  (moment().isAfter(recDot.thoiGianSVChamDiem.thoiGianKetThuc) ||
-					moment().isBefore(recDot?.thoiGianSVChamDiem?.thoiGianBatDau))
+				(dayjs().isAfter(recDot.thoiGianSVChamDiem.thoiGianKetThuc) ||
+					dayjs().isBefore(recDot?.thoiGianSVChamDiem?.thoiGianBatDau))
 			: role === EVaiTroPhieuDiem.CAN_SU
-			? recDot?.thoiGianCanSuLopChamDiem &&
-			  (moment().isAfter(recDot.thoiGianCanSuLopChamDiem.thoiGianKetThuc) ||
-					moment().isBefore(recDot?.thoiGianCanSuLopChamDiem?.thoiGianBatDau))
-			: recDot?.thoiGianCVHTChamDiem &&
-			  (moment().isAfter(recDot.thoiGianCVHTChamDiem.thoiGianKetThuc) ||
-					moment().isBefore(recDot?.thoiGianCVHTChamDiem?.thoiGianBatDau));
+				? recDot?.thoiGianCanSuLopChamDiem &&
+					(dayjs().isAfter(recDot.thoiGianCanSuLopChamDiem.thoiGianKetThuc) ||
+						dayjs().isBefore(recDot?.thoiGianCanSuLopChamDiem?.thoiGianBatDau))
+				: recDot?.thoiGianCVHTChamDiem &&
+					(dayjs().isAfter(recDot.thoiGianCVHTChamDiem.thoiGianKetThuc) ||
+						dayjs().isBefore(recDot?.thoiGianCVHTChamDiem?.thoiGianBatDau));
 	const editable = !daNop && !ngoaiThoiGian;
 
 	const getCauHinhPhieu = () => {
@@ -177,7 +177,7 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 						daNop
 							? `Phiếu điểm đã được gửi đi, vui lòng chờ ${
 									role === EVaiTroPhieuDiem.SINH_VIEN ? 'cán sự lớp,' : ''
-							  } CVHT đánh giá`
+								} CVHT đánh giá`
 							: `Ngoài thời gian ${vaiTroPhieuDiem[role].title.toLocaleLowerCase()} đánh giá điểm rèn luyện`
 					}
 				/>
@@ -263,7 +263,7 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 										...(rec.loaiNhapTay === ELoaiNhapTayPhieuDiem.PHAM_VI
 											? rules.number(rec.tapGiaTri?.[1] ?? 10, rec.tapGiaTri?.[0] ?? 0, false)
 											: []),
-								  ]
+									]
 						}
 					>
 						{rec.loaiNhapTay === ELoaiNhapTayPhieuDiem.PHAM_VI ? (
@@ -300,7 +300,7 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 
 	return (
 		<Modal
-			visible={visiblePhieuDiem}
+			open={visiblePhieuDiem}
 			onCancel={() => setVisiblePhieuDiem(false)}
 			width={1200}
 			footer={null}

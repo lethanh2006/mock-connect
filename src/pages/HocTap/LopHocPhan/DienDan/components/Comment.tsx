@@ -1,10 +1,10 @@
 import ExpandText from '@/components/ExpandText';
 import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import dayjs from '@/utils/dayjs';
 import { createTextLinks } from '@/utils/utils';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Form, Input, Popconfirm, Popover } from 'antd';
-import moment from 'moment';
 import { nanoid } from 'nanoid';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useModel } from 'umi';
@@ -177,7 +177,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 												)}
 											</div>
 											<span style={{ fontSize: 11, color: 'rgba(68,68,68,0.84)', marginLeft: 6 }}>
-												{moment(val?.ngayDang).calendar()}
+												{dayjs(val?.ngayDang).calendar()}
 											</span>
 										</div>
 										<ExpandText>
@@ -264,7 +264,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 								</Popover>
 							)}
 						</div>
-				  ))
+					))
 				: null}
 
 			<div ref={cardRef} className='comment-box'>
@@ -337,7 +337,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 								width: 24,
 								height: 24,
 								marginLeft: 12,
-								color: 'var(--primary-color)',
+								color: 'var(--color-primary)',
 								flexShrink: 0,
 								cursor: 'pointer',
 							}}

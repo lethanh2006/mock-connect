@@ -1,6 +1,6 @@
-import axios from 'axios';
-import type { ETrangThaiKeHoachNCKH } from './constants';
+import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
+import type { ETrangThaiKeHoachNCKH } from './constants';
 
 export const duyetKeHoach = (
 	idKeHoach: string,

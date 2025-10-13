@@ -62,7 +62,7 @@ const ModalQuyDoiDiem = (props: {
 	return (
 		<Modal
 			width={900}
-			visible={visible}
+			open={visible}
 			onCancel={() => {
 				setVisible(false);
 			}}
@@ -70,7 +70,7 @@ const ModalQuyDoiDiem = (props: {
 			title='Công nhận kết quả học tập'
 		>
 			<Form onFinish={onFinish} form={form} layout='vertical'>
-				<Descriptions column={{ xs: 1, md: 2, sm: 1, lg: 2, xl: 2 }}>
+				<Descriptions column={{ xs: 1, md: 2, sm: 1, lg: 2, xl: 2, xxl: 2 }}>
 					<Descriptions.Item span={2} label='Đợt công nhận kết quả học tập'>
 						{recDot?.tenDot ?? ''}
 					</Descriptions.Item>

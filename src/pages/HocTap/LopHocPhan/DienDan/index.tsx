@@ -2,7 +2,7 @@ import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
 import { Empty, Skeleton, Spin } from 'antd';
 import { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { history, Link, useModel } from 'umi';
+import { history, Link, useModel, useSearchParams } from 'umi';
 import CardAddStatus from './components/CardAddStatus';
 import CardStatus from './components/CardStatus';
 import './style.less';
@@ -28,7 +28,9 @@ const DienDanLopPage = (props: IProps) => {
 		setLimit,
 		limit,
 	} = useModel('diendan.baidang');
-	const { idBaiViet } = history?.location?.query ?? {};
+	const [searchParams] = useSearchParams();
+	const idBaiViet = searchParams.get('idBaiViet');
+	// const { idBaiViet } = history?.location?.query ?? {}; thì ra là nó
 
 	const getData = () => {
 		if (idBaiViet) getByIdModel(idBaiViet?.toString(), true);

@@ -1,0 +1,147 @@
+.card-baitap-dashboard {
+	// Content wrapper
+	.content-wrapper {
+		border-radius: 8px;
+		background-position: right;
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-image: url(/images/assignment-background.svg);
+		height: 350px;
+		min-height: 350px;
+
+		.empty {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			height: 300px;
+		}
+
+		@media (max-width: @screen-xs) {
+			height: auto;
+			min-height: 300px;
+		}
+	}
+
+	// Page cards container
+	.page-cards {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		min-height: 350px;
+		height: 350px;
+		border-radius: 8px;
+		background-color: transparent;
+
+		&.mobile {
+			grid-template-columns: 1fr;
+			min-height: auto;
+			height: auto;
+			border: none;
+		}
+	}
+
+	// Assignment card
+	.assignment-card {
+		border-radius: 8px;
+		padding: 20px;
+		border: 1px solid #ebebeb;
+		transition: all 0.2s ease;
+
+		display: flex;
+		flex-direction: column;
+	}
+
+	@media (max-width: @screen-xs) {
+		padding: 12px 6px !important;
+	}
+
+	// Top section
+	.top-section {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		background-color: transparent;
+
+		// Subject tag
+		.subject-tag {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 16px;
+			justify-content: space-between;
+			font-weight: 600;
+
+			.arrow-icon {
+				font-size: 16px;
+				font-weight: 400;
+			}
+		}
+
+		// Assignment content
+		.assignment-content {
+			flex: 1;
+			min-height: 63px;
+
+			.content-text {
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				font-weight: 600;
+				max-height: 63px;
+			}
+		}
+	}
+
+	// Bottom section
+	.bottom-section {
+		display: flex;
+		flex-direction: column;
+		margin-top: 20px;
+
+		// Files section
+		.files-section {
+			margin-bottom: 20px;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		// Deadline
+		.deadline-section {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding-top: 16px;
+			border-top: 1px solid rgba(240, 240, 240, 0.3);
+			gap: 8px;
+
+			&.mobile {
+				padding-top: 12px;
+			}
+
+			.deadline-label {
+				font-size: 14px;
+				color: #8c8c8c;
+				flex-shrink: 0;
+
+				&.mobile {
+					font-size: 13px;
+				}
+			}
+
+			.deadline-time {
+				font-size: 14px;
+				font-weight: 500;
+				color: #262626;
+				text-align: right;
+
+				&.mobile {
+					font-size: 13px;
+				}
+			}
+		}
+	}
+}

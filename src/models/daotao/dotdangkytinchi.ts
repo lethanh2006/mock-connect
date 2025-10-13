@@ -13,8 +13,8 @@ import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import dayjs from '@/utils/dayjs';
 import { message } from 'antd';
-import moment from 'moment';
 import { useState } from 'react';
 
 export default () => {
@@ -63,7 +63,7 @@ export default () => {
 		const data: Record<string, boolean[]> = {};
 		const allThoiKhoaBieu = lopDangKy.map((item) => item.thoiKhoaBieuList ?? []).flat();
 		allThoiKhoaBieu.forEach((item) => {
-			const date = moment(item.ngay).format('DDMMYY');
+			const date = dayjs(item.ngay).format('DDMMYY');
 			if (!(date in data)) data[date] = [];
 
 			for (let tiet = item.tietBatDau; tiet <= item.tietKetThuc; tiet++) data[date][tiet - 1] = true;
@@ -79,7 +79,7 @@ export default () => {
 	 */
 	const checkTrungLich = (thoiKhoaBieuList: ThoiKhoaBieu.IRecord[]): boolean => {
 		const isTrung = thoiKhoaBieuList.some((item) => {
-			const date = moment(item.ngay).format('DDMMYY');
+			const date = dayjs(item.ngay).format('DDMMYY');
 			if (!(date in dataLichHoc)) return false;
 
 			for (let tiet = item.tietBatDau; tiet <= item.tietKetThuc; tiet++) if (dataLichHoc[date][tiet - 1]) return true;

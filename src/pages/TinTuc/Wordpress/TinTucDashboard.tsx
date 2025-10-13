@@ -1,8 +1,8 @@
 import { landingUrl } from '@/services/base/constant';
+import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Col, Empty, Row, Spin, Tooltip } from 'antd';
 import { isEmpty } from 'lodash';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { Link, history, useModel } from 'umi';
 import '../components/styles.less';
@@ -45,7 +45,8 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 											onClick={() => {
 												history.push({
 													pathname: 'tin-tuc/chi-tiet',
-													query: { _id: tintuc?.id as any, cat: linkWp?._id as any },
+													// query: { _id: tintuc?.id as any, cat: linkWp?._id as any },
+													search: `?_id=${tintuc?.id}${linkWp?._id ? `&cat=${linkWp?._id}` : ''}`,
 												});
 												window.scrollTo({ top: 0, behavior: 'smooth' });
 											}}
@@ -76,7 +77,7 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 														/>
 													</Tooltip>
 													{tintuc?.date && (
-														<span className='thoi-gian'>{moment(tintuc?.date).format('DD/MM/YYYY')}</span>
+														<span className='thoi-gian'>{dayjs(tintuc?.date).format('DD/MM/YYYY')}</span>
 													)}
 												</Col>
 											</Row>

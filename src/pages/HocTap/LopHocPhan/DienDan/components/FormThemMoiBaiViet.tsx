@@ -1,16 +1,15 @@
+import MyDatePicker from '@/components/MyDatePicker';
 import TinyEditor from '@/components/TinyEditor';
 import UploadFile from '@/components/Upload/UploadFile';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { useModel } from '@@/plugin-model/useModel';
-import { Button, Checkbox, Col, Form, Input, Row, Tooltip } from 'antd';
-import { useEffect } from 'react';
-import AvatarBlog from './Avatar';
-import MyDatePicker from '@/components/MyDatePicker';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import moment from 'moment';
-import React from 'react';
+import { useModel } from '@umijs/max';
+import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
+import React, { useEffect } from 'react';
+import AvatarBlog from './Avatar';
 
 interface IProps {
 	idLopHocPhan?: string;
@@ -125,12 +124,12 @@ const FormThemMoiBaiViet = (props: IProps) => {
 													<Form.Item
 														label='Thời gian kết thúc bình chọn'
 														name='ngayKetThucBinhChon'
-														rules={[...rules.required, ...rules.sauThoiDiem(moment(), 'Hôm nay')]}
+														rules={[...rules.required, ...rules.sauThoiDiem(dayjs(), 'Hôm nay')]}
 													>
 														<MyDatePicker
 															showTime={{ format: 'HH:mm' }}
 															format='DD/MM/YYYY HH:mm'
-															disabledDate={(mo) => moment().isAfter(mo)}
+															disabledDate={(mo) => dayjs().isAfter(mo)}
 														/>
 													</Form.Item>
 												</Col>

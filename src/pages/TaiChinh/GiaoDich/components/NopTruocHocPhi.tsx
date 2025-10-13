@@ -1,10 +1,10 @@
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
+import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { inputFormat } from '@/utils/utils';
 import { Alert, Button, Col, Descriptions, Form, Modal, Popconfirm, Row } from 'antd';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 import HuongDanThanhToan from '../../HoaDon/ThanhToan/HuongDanThanhToan';
@@ -29,9 +29,8 @@ const ModalNopTruocHocPhi = (props: {
 		!recThuTruocHp?._id ||
 		!recThuTruocHp?.thoiGianBatDau ||
 		!recThuTruocHp?.thoiGianKetThuc ||
-		moment().isBefore(recThuTruocHp?.thoiGianBatDau) ||
-		moment().isAfter(recThuTruocHp?.thoiGianKetThuc);
-	// console.log(ngoaiThoiGian, recThuTruocHp);
+		dayjs().isBefore(dayjs(recThuTruocHp?.thoiGianBatDau)) ||
+		dayjs().isAfter(dayjs(recThuTruocHp?.thoiGianKetThuc));
 
 	useEffect(() => {
 		if (recThuTruocHp?._id) getMucThuHocPhiTheoNamModel(recThuTruocHp?.maNamHoc);
@@ -40,8 +39,8 @@ const ModalNopTruocHocPhi = (props: {
 	//Số tiền trên 1 tín chỉ
 	const soTienTinChi =
 		khoaNganhMe?.khoaNganhChinh?.ma === maKhoaNganh
-			? mucThuMe?.mucThuKhoaNganhChinh?.unitAmount ?? 0
-			: mucThuMe?.mucThuKhoaNganhPhu?.unitAmount ?? 0;
+			? (mucThuMe?.mucThuKhoaNganhChinh?.unitAmount ?? 0)
+			: (mucThuMe?.mucThuKhoaNganhPhu?.unitAmount ?? 0);
 
 	//Số tiền phải đóng để được hưởng ưu đãi
 	const soTienPhaiDong = soTienTinChi * (recThuTruocHp?.soTinChiNhanUuDai ?? 0);
@@ -91,7 +90,7 @@ const ModalNopTruocHocPhi = (props: {
 
 	return (
 		<Modal
-			visible={visibleForm}
+			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			title='Nộp trước học phí'
 			footer={null}
@@ -113,8 +112,8 @@ const ModalNopTruocHocPhi = (props: {
 									<div>
 										<div>Nộp trước học phí cả năm để được hưởng những ưu đãi hấp dẫn!</div>
 										<div>
-											Thời gian từ {<b>{moment(recThuTruocHp?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</b>} đến
-											{<b>{moment(recThuTruocHp?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</b>}.
+											Thời gian từ <b>{dayjs(recThuTruocHp?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</b> đến
+											<b>{dayjs(recThuTruocHp?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</b>
 										</div>
 									</div>
 								}

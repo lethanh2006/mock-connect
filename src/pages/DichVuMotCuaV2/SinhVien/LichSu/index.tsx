@@ -8,6 +8,8 @@ import ThanhToanPage from '@/pages/DichVuMotCuaV2/ThanhToan';
 import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import { TrangThaiDonDVMC } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
+import axios from '@/utils/axios';
+import dayjs from '@/utils/dayjs';
 import { ip3 } from '@/utils/ip';
 import {
 	DeleteOutlined,
@@ -20,8 +22,6 @@ import {
 	QuestionOutlined,
 } from '@ant-design/icons';
 import { Button, Carousel, Divider, Modal, Popconfirm, Popover, Tabs, Tag, Tooltip, message } from 'antd';
-import axios from 'axios';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import FormGuiPhanHoi from '../../QuanLyDon/components/FormGuiPhanHoi';
@@ -212,7 +212,7 @@ const LichSuGuiDon = () => {
 			title: 'Ngày tạo',
 			dataIndex: 'createdAt',
 			width: 100,
-			render: (val) => <div>{moment(val).format('HH:mm DD/MM/YYYY')}</div>,
+			render: (val) => <div>{dayjs(val).format('HH:mm DD/MM/YYYY')}</div>,
 			align: 'center',
 			onCell,
 		},
@@ -340,7 +340,7 @@ const LichSuGuiDon = () => {
 				destroyOnClose
 				width='850px'
 				footer={false}
-				visible={visibleFormChinhSuaDon}
+				open={visibleFormChinhSuaDon}
 				onCancel={() => {
 					setVisibleFormChinhSuaDon(false);
 				}}
@@ -360,8 +360,7 @@ const LichSuGuiDon = () => {
 				destroyOnClose
 				width='850px'
 				footer={false}
-				visible={visibleFormBieuMau}
-				bodyStyle={{ padding: 18 }}
+				open={visibleFormBieuMau}
 				onCancel={() => {
 					setVisibleFormBieuMau(false);
 				}}
@@ -389,7 +388,7 @@ const LichSuGuiDon = () => {
 				</Tabs>
 			</Modal>
 			<Modal
-				visible={visibleViewInDon}
+				open={visibleViewInDon}
 				onCancel={() => {
 					setVisibleViewInDon(false);
 				}}
@@ -418,8 +417,8 @@ const LichSuGuiDon = () => {
 				<PDFViewer data={data} />
 			</Modal>
 			<Modal
-				bodyStyle={{ padding: 0 }}
-				visible={visibleForm}
+				styles={{ body: { padding: 0 } }}
+				open={visibleForm}
 				onCancel={() => {
 					setVisibleForm(false);
 				}}
@@ -433,7 +432,7 @@ const LichSuGuiDon = () => {
 			<ModalExpandable
 				title='Chi tiết tập tin'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>

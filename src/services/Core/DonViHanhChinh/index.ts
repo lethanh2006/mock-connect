@@ -1,8 +1,8 @@
+import axios from '@/utils/axios';
 import { ipCore } from '@/utils/ip';
-import axios from 'axios';
 
 export async function getQuanHuyen(maTinh: string) {
-  return axios.get(`${ipCore}/don-vi-hanh-chinh/quan-huyen/maTinh/${maTinh}`);
+	return axios.get(`${ipCore}/don-vi-hanh-chinh/quan-huyen/maTinh/${maTinh}`);
 }
 
 // export async function getTinhThanhPho() {

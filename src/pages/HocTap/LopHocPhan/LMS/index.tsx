@@ -2,9 +2,9 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { ApiOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Col, Descriptions, Progress, Row, Spin, Tag } from 'antd';
-import moment from 'moment';
+import dayjs from '@/utils/dayjs';
+import { ApiOutlined } from '@ant-design/icons';
+import { Card, Col, Descriptions, Progress, Row, Space, Spin, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -24,7 +24,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 		{
 			title: 'Tên bài giảng/ Học liệu',
 			dataIndex: 'ten',
-			width: 180,
+			width: 220,
 			filterType: 'string',
 		},
 		{
@@ -39,7 +39,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 			dataIndex: 'thoiGianHoanThanh',
 			width: 130,
 			align: 'center',
-			render: (val, rec) => val && moment(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 			sortable: true,
 		},
 		{
@@ -53,9 +53,8 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 
 	return (
 		<Spin spinning={loading}>
-			<div style={{ marginBottom: 12 }}>
+			<Space wrap className='button-space'>
 				<ButtonExtend
-					key={'2'}
 					type='primary'
 					icon={<ApiOutlined />}
 					onClick={() => {
@@ -72,35 +71,35 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 				>
 					Lớp học LMS
 				</ButtonExtend>
-			</div>
-			<Row gutter={[12, 0]}>
-				<Col span={24}>
-					<Descriptions column={{ xs: 1, sm: 1, md: 2 }}>
-						<Descriptions.Item label='Tên học phần'>{record?.hocPhan?.ten ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Tiến trình hoàn thiện'>
-							<Progress percent={record?.tiLeHoanThanh ?? 0} />
-						</Descriptions.Item>
-						<Descriptions.Item label='Vào lớp'>{record?.thoiGianTaoVao ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Cập nhật gần nhất'>{record?.thoiGianCapNhatGanNhatVao ?? '--'}</Descriptions.Item>
-					</Descriptions>
-				</Col>
-				<Col span={24}>
-					<div className='fw500' style={{ marginBottom: 12 }}>
-						Danh sách bài giảng/ Học liệu
-					</div>
+			</Space>
 
-					<TableStaticData
-						columns={columns}
-						data={record?.hocLieu ?? []}
-						addStt
-						size='small'
-						otherProps={{ pagination: true }}
-						hasTotal
-					>
-						<ButtonExtend size='small' icon={<ReloadOutlined />} onClick={() => getData()}>
-							Tải lại
-						</ButtonExtend>
-					</TableStaticData>
+			<Row gutter={[16, 16]}>
+				<Col span={24}>
+					<Card variant='borderless'>
+						<div className='fw500' style={{ marginBottom: 12, fontSize: 16 }}>
+							Thông tin lớp
+						</div>
+						<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
+							<Descriptions.Item label='Tên học phần'>{record?.hocPhan?.ten ?? '--'}</Descriptions.Item>
+							<Descriptions.Item label='Tiến trình hoàn thiện'>
+								<Progress percent={record?.tiLeHoanThanh ?? 0} />
+							</Descriptions.Item>
+							<Descriptions.Item label='Vào lớp'>{record?.thoiGianTaoVao ?? '--'}</Descriptions.Item>
+							<Descriptions.Item label='Cập nhật gần nhất'>
+								{record?.thoiGianCapNhatGanNhatVao ?? '--'}
+							</Descriptions.Item>
+						</Descriptions>
+					</Card>
+				</Col>
+
+				<Col span={24}>
+					<Card variant='borderless'>
+						<div className='fw500' style={{ marginBottom: 12, fontSize: 16 }}>
+							Danh sách bài giảng/ Học liệu
+						</div>
+
+						<TableStaticData columns={columns} data={record?.hocLieu ?? []} addStt hasTotal onReload={getData} />
+					</Card>
 				</Col>
 			</Row>
 		</Spin>

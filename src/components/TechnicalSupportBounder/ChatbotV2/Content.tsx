@@ -2,10 +2,10 @@ import type { ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import classNames from 'classnames';
-import moment from 'moment';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
+import dayjs from '@/utils/dayjs';
 import { Collapse } from 'antd';
 import ReactMarkdown from 'react-markdown';
 
@@ -37,7 +37,7 @@ const ContentBoxChatV2 = () => {
 				<div className='avatar'>
 					<Avatar
 						src={recSinhVien?.anhDaiDienUrl ? <img alt='avatar' src={recSinhVien?.anhDaiDienUrl} /> : undefined}
-						icon={!recSinhVien?.anhDaiDienUrl ? lastNameChar ?? <UserOutlined /> : undefined}
+						icon={!recSinhVien?.anhDaiDienUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
 						alt='avatar'
 					/>
 				</div>
@@ -95,7 +95,7 @@ const ContentBoxChatV2 = () => {
 											.map((src) => {
 												const soQD = src.source?.['Số QĐ'] ?? '';
 												const ngayBanHanh = src.source?.['Ngày ban hành']
-													? moment(src.source['Ngày ban hành']).format('DD/MM/YYYY')
+													? dayjs(src.source['Ngày ban hành']).format('DD/MM/YYYY')
 													: '';
 												const header1 = src.source?.['Header 1'] ?? '';
 												const header2 = src.source?.['Header 2'] ?? '';
@@ -123,7 +123,7 @@ const ContentBoxChatV2 = () => {
 					className={classNames({ message: true, bot: !item.isUser })}
 					key={item._id}
 					id={item._id}
-					title={moment(item.createdAt).fromNow()}
+					title={dayjs(item.createdAt).fromNow()}
 				>
 					{item.isUser ? <MyMessage message={item} /> : <BotMessage message={item} />}
 				</div>

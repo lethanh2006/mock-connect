@@ -45,7 +45,7 @@ const ConfirmKetHuyLopDKTC = (props: {
 	return (
 		<Modal
 			title='Xác nhận hủy đăng ký lớp tín chỉ'
-			visible={visible}
+			open={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
 			width={500}

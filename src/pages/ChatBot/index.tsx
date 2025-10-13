@@ -1,9 +1,10 @@
+import { quickReplies } from '@/services/TienIch/ChatbotV2/constant';
 import type { ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
+import dayjs from '@/utils/dayjs';
 import { resetFieldsForm, toCamelCase } from '@/utils/utils';
 import { SendOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Collapse, Form, Input, Spin } from 'antd';
 import classNames from 'classnames';
-import moment from 'moment';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -13,7 +14,6 @@ import Pane from 'react-split-pane/lib/Pane';
 import { useModel } from 'umi';
 import TheardsPage from './components/Theards';
 import './style.less';
-import { quickReplies } from '@/services/TienIch/ChatbotV2/constant';
 
 const { Panel } = Collapse;
 
@@ -39,7 +39,7 @@ const ChatBotPage = () => {
 
 	const fullName = initialState?.currentUser?.family_name
 		? `${initialState?.currentUser.family_name} ${initialState?.currentUser?.given_name ?? ''}`
-		: initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || '');
+		: (initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || ''));
 	const lastNameChar = fullName.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
 	useEffect(() => {
@@ -110,7 +110,7 @@ const ChatBotPage = () => {
 				<div className='avatar'>
 					<Avatar
 						src={recSinhVien?.anhDaiDienUrl ? <img alt='avatar' src={recSinhVien?.anhDaiDienUrl} /> : undefined}
-						icon={!recSinhVien?.anhDaiDienUrl ? lastNameChar ?? <UserOutlined /> : undefined}
+						icon={!recSinhVien?.anhDaiDienUrl ? (lastNameChar ?? <UserOutlined />) : undefined}
 						alt='avatar'
 					/>
 				</div>
@@ -169,7 +169,7 @@ const ChatBotPage = () => {
 											.map((src) => {
 												const soQD = src.source?.['Số QĐ'] ?? '';
 												const ngayBanHanh = src.source?.['Ngày ban hành']
-													? moment(src.source['Ngày ban hành']).format('DD/MM/YYYY')
+													? dayjs(src.source['Ngày ban hành']).format('DD/MM/YYYY')
 													: '';
 												const header1 = src.source?.['Header 1'] ?? '';
 												const header2 = src.source?.['Header 2'] ?? '';
@@ -219,7 +219,7 @@ const ChatBotPage = () => {
 											className={classNames({ message: true, bot: !item.isUser })}
 											key={item._id}
 											id={item._id}
-											title={moment(item.createdAt).fromNow()}
+											title={dayjs(item.createdAt).fromNow()}
 										>
 											{item.isUser ? <MyMessage message={item} /> : <BotMessage message={item} />}
 										</div>

@@ -7,9 +7,11 @@ import { Checkbox } from 'antd';
 import { useModel } from 'umi';
 
 const HocLieuDeCuongPage = () => {
-	const { page, limit } = useModel('hocphan.hoclieudecuong');
+	const { page, limit, getModel } = useModel('hocphan.hoclieudecuong');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 	const { settings } = useModel('tienich.caidat');
+
+	const getData = () => recDeCuong?._id && getModel({ deCuongId: recDeCuong?._id });
 
 	const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
 		{
@@ -77,9 +79,9 @@ const HocLieuDeCuongPage = () => {
 	return (
 		<>
 			<TableBase
+				getData={getData}
 				columns={columns}
-				dependencies={[page, limit]}
-				params={{ deCuongId: recDeCuong?._id }}
+				dependencies={[page, limit, recDeCuong?._id]}
 				modelName='hocphan.hoclieudecuong'
 				title='Đề cương học liệu'
 				hideCard

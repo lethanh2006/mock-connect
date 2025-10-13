@@ -85,7 +85,7 @@ const BoxFile = ({ url }: BoxFileProps) => {
 				centered
 				title='Chi tiết tài liệu'
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={null}
 				onCancel={() => {
 					setVisibleFormFile(false);

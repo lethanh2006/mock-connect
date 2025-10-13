@@ -1,8 +1,8 @@
+import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
+import dayjs from '@/utils/dayjs';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
-import TableStaticData from '@/components/Table/TableStaticData';
-import moment from 'moment';
 
 const DanhSachDot = () => {
 	const { getAllModel, danhSach, record, setRecord } = useModel('diemrenluyenv2.dot');
@@ -14,8 +14,8 @@ const DanhSachDot = () => {
 				const dataDot = res;
 				const currentDot = dataDot?.find(
 					(item) =>
-						moment().isAfter(moment(item?.thoiGianSVChamDiem.thoiGianBatDau)) &&
-						moment().isBefore(moment(item?.thoiGianSVChamDiem?.thoiGianKetThuc)),
+						dayjs().isAfter(dayjs(item?.thoiGianSVChamDiem.thoiGianBatDau)) &&
+						dayjs().isBefore(dayjs(item?.thoiGianSVChamDiem?.thoiGianKetThuc)),
 				);
 				if (currentDot) setRecord(currentDot);
 				else setRecord(dataDot?.[0]);
@@ -40,8 +40,8 @@ const DanhSachDot = () => {
 		style: {
 			cursor: 'pointer',
 			fontWeight: recordVal._id === record?._id ? 600 : undefined,
-			color: recordVal._id === record?._id ? 'var(--primary-color)' : undefined,
-			backgroundColor: recordVal._id === record?._id ? 'var(--primary-1)' : undefined,
+			color: recordVal._id === record?._id ? 'var(--color-primary)' : undefined,
+			backgroundColor: recordVal._id === record?._id ? 'var(--color-primary-bg)' : undefined,
 		},
 	});
 

@@ -1,9 +1,9 @@
-import { Card, Form, Tag } from 'antd';
-import { useModel } from '@@/plugin-model/useModel';
-import { useEffect, useState } from 'react';
+import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
 import { TrangThaiKhaiBao } from '@/services/QuyTrinh/KhaiBao/constants';
 import type { LoaiHinh } from '@/services/QuyTrinh/LoaiHinh/typing';
-import FormRender from '@/pages/KhaiBaoQuyTrinh/MauDon/FormRender';
+import { useModel } from '@umijs/max';
+import { Card, Form, Tag } from 'antd';
+import { useEffect, useState } from 'react';
 
 const ViewResult = (props: { danhSachKhaiBao: any; modelName: any; type?: 'dieu_phoi' | 'tiep_nhan' }) => {
 	const { danhSachKhaiBao, modelName } = props;
