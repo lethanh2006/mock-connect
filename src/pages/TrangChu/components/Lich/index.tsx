@@ -1,13 +1,12 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
-import dayjs from '@/utils/dayjs'; // Import dayjs đã config
+import dayjs from '@/utils/dayjs';
 import { Button, Card, Modal, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 
 import SlideButtonIcon from '../SlideButtonIcon';
 import './style.less';
 
-// Type definitions
 interface SuKienItem {
 	_id: string;
 	title: string;
@@ -48,94 +47,65 @@ const getEventColor = (loaiSuKien: string): string => {
 
 const LichDashboard = () => {
 	const [currentMonth, setCurrentMonth] = useState(dayjs());
-	const [dateRange, setDateRange] = useState({
-		fromDate: currentMonth.startOf('month').startOf('week'),
-		toDate: currentMonth.endOf('month').endOf('week'),
-	});
-	const [preloadedData, setPreloadedData] = useState<Record<string, SuKienItem[]>>({});
-
 	const [selectedDate, setSelectedDate] = useState(dayjs());
 	const [visibleDetail, setVisibleDetail] = useState(false);
 	const [selectedEvents, setSelectedEvents] = useState<SuKienItem[]>([]);
+	const [loading, setLoading] = useState(false);
+
+	// Cache để lưu dữ liệu theo tháng
+	const cacheRef = useRef<Record<string, SuKienItem[]>>({});
+	// Set để track các tháng đang được fetch (tránh duplicate calls)
+	const fetchingRef = useRef<Set<string>>(new Set());
 
 	const screenSize = useScreenSize();
 	const isMobile = screenSize.width <= 768;
 	const isTablet = screenSize.width > 768 && screenSize.width <= 1024;
 
-	const {
-		getSuKienTrongKhoangModel,
-		loading: loadingSuKien,
-		dataLichDashboard,
-		setDataLichDashboard,
-	} = useModel('sukien.sukien');
-	const { getTrongKhoangModel, loading: loadingTKB } = useModel('daotao.thoikhoabieu');
-	const { getTrongKhoangModel: getLichThiModel, loading: loadingThi } = useModel('khaothi.lichthi');
+	const { getSuKienTrongKhoangModel, dataLichDashboard, setDataLichDashboard } = useModel('sukien.sukien');
+	const { getTrongKhoangModel } = useModel('daotao.thoikhoabieu');
+	const { getTrongKhoangModel: getLichThiModel } = useModel('khaothi.lichthi');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
-
-	// Cập nhật lại range khi đổi tháng
-	useEffect(() => {
-		setDateRange({
-			fromDate: currentMonth.startOf('month').startOf('week'),
-			toDate: currentMonth.endOf('month').endOf('week'),
-		});
-	}, [currentMonth]);
-
-	// Logic API từ code gốc
-	const getThoiGianMotTuanKeTuHomNay = () => {
-		return {
-			fromDate: dayjs().startOf('week').toISOString(),
-			toDate: dayjs().add(7, 'day').endOf('day').toISOString(),
-		};
-	};
 
 	const getKhoangThoiGian = (month = currentMonth) => ({
 		fromDate: month.startOf('month').startOf('week').toISOString(),
 		toDate: month.endOf('month').endOf('week').toISOString(),
 	});
 
-	const getThoiKhoaBieu = async (timeRange?: { fromDate: string; toDate: string }) => {
-		const range = timeRange || getKhoangThoiGian();
-		return getTrongKhoangModel(range).then((data) => {
-			const temp = data.map((item) => ({
+	const getThoiKhoaBieu = async (timeRange: { fromDate: string; toDate: string }) => {
+		return getTrongKhoangModel(timeRange).then((data) => {
+			return data.map((item) => ({
 				...item,
 				title: `${item.lopHocPhan?.hocPhan?.ten || item.lopHocPhan?.maHocPhan || item?.tenLopHocPhan || ''}`,
 				suffix: [item?.lopHocPhan?.ten, item?.phongHoc].filter(Boolean).join(', '),
 				loaiSuKien: ELoaiSuKien.LICH_HOC,
 			}));
-			return temp;
 		});
 	};
 
-	const getLichThi = async (timeRange?: { fromDate: string; toDate: string }) => {
-		const range = timeRange || getKhoangThoiGian();
-		return getLichThiModel(range).then((data) => {
-			const temp = data.map((item) => ({
+	const getLichThi = async (timeRange: { fromDate: string; toDate: string }) => {
+		return getLichThiModel(timeRange).then((data) => {
+			return data.map((item) => ({
 				...item,
 				title: `Lịch thi: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
 				suffix: item.phong?.ma ?? '',
 				loaiSuKien: ELoaiSuKien.LICH_THI,
 			}));
-			return temp;
 		});
 	};
 
-	const getSuKien = async (timeRange?: { fromDate: string; toDate: string }) => {
-		const range = timeRange || getKhoangThoiGian();
-		return getSuKienTrongKhoangModel(range).then((data) => {
-			const temp = data.map((item) => ({
+	const getSuKien = async (timeRange: { fromDate: string; toDate: string }) => {
+		return getSuKienTrongKhoangModel(timeRange).then((data) => {
+			return data.map((item) => ({
 				...item,
 				title: item?.tenSuKien ?? '',
-				// Giữ nguyên loaiSuKien từ API
 			}));
-			return temp;
 		});
 	};
 
-	const getBaiTap = async (timeRange?: { fromDate: string; toDate: string }) => {
-		const range = timeRange || getKhoangThoiGian();
-		return thongKeBaiTapModel(range.fromDate, range.toDate).then((data) => {
+	const getBaiTap = async (timeRange: { fromDate: string; toDate: string }) => {
+		return thongKeBaiTapModel(timeRange.fromDate, timeRange.toDate).then((data) => {
 			const aWeekLater = dayjs().add(7, 'day').endOf('day').toDate();
-			const temp = data
+			return data
 				.map((item) => ({
 					...item,
 					title: item?.assignment?.noiDung ?? '',
@@ -145,72 +115,95 @@ const LichDashboard = () => {
 					loaiSuKien: ELoaiSuKien.BAI_TAP,
 				}))
 				.filter((i) => i.thoiGianKetThuc < aWeekLater);
-			return temp;
 		});
 	};
 
-	const getData = (month = currentMonth) => {
+	const getData = async (month: dayjs.Dayjs) => {
 		const timeRange = getKhoangThoiGian(month);
 		const promises = [getThoiKhoaBieu(timeRange), getSuKien(timeRange), getLichThi(timeRange), getBaiTap(timeRange)];
 
 		return Promise.allSettled(promises)
 			.then((values) => {
 				const responses = values.filter((item) => item.status === 'fulfilled').map((item: any) => item.value);
-				const data = responses.flat();
-				return data;
+				return responses.flat().filter(Boolean);
 			})
 			.catch((er) => {
-				console.log(er);
+				console.error('Error fetching data:', er);
 				return [];
 			});
 	};
 
-	// Lấy dữ liệu khi component mount
+	// Hàm load dữ liệu cho một tháng với cache
+	const loadMonthData = async (month: dayjs.Dayjs) => {
+		const monthKey = month.format('YYYY-MM');
+
+		// Nếu đã có trong cache, return ngay
+		if (cacheRef.current[monthKey]) {
+			return cacheRef.current[monthKey];
+		}
+
+		// Nếu đang fetch, đợi để tránh duplicate calls
+		if (fetchingRef.current.has(monthKey)) {
+			return new Promise<SuKienItem[]>((resolve) => {
+				const checkInterval = setInterval(() => {
+					if (cacheRef.current[monthKey]) {
+						clearInterval(checkInterval);
+						resolve(cacheRef.current[monthKey]);
+					}
+				}, 100);
+
+				// Timeout sau 10 giây để tránh infinite loop
+				setTimeout(() => {
+					clearInterval(checkInterval);
+					resolve([]);
+				}, 10000);
+			});
+		}
+
+		// Đánh dấu đang fetch
+		fetchingRef.current.add(monthKey);
+
+		try {
+			const data = await getData(month);
+			cacheRef.current[monthKey] = data;
+			return data;
+		} catch (error) {
+			console.error('Error loading month data:', error);
+			return [];
+		} finally {
+			fetchingRef.current.delete(monthKey);
+		}
+	};
+
+	// Load dữ liệu khi đổi tháng
 	useEffect(() => {
-		const currentMonthKey = currentMonth.format('YYYY-MM');
-
-		// Kiểm tra nếu dữ liệu đã được preload
-		if (preloadedData[currentMonthKey]) {
-			setDataLichDashboard(preloadedData[currentMonthKey]);
-		} else {
-			// Nếu chưa preload, gọi API
-			getData(currentMonth).then((data) => {
+		const loadCurrentMonth = async () => {
+			setLoading(true);
+			try {
+				const data = await loadMonthData(currentMonth);
 				setDataLichDashboard(data);
-			});
-		}
 
-		// Preload tháng tiếp theo
-		const nextMonth = currentMonth.add(1, 'month');
-		const nextMonthKey = nextMonth.format('YYYY-MM');
-		if (!preloadedData[nextMonthKey]) {
-			getData(nextMonth).then((data) => {
-				setPreloadedData((prev) => ({
-					...prev,
-					[nextMonthKey]: data,
-				}));
-			});
-		}
+				// Preload tháng kế tiếp trong background (không block UI)
+				setTimeout(() => {
+					loadMonthData(currentMonth.add(1, 'month'));
+				}, 500);
 
-		// Preload tháng trước đó (optional, để khi click back không bị loading)
-		const prevMonth = currentMonth.subtract(1, 'month');
-		const prevMonthKey = prevMonth.format('YYYY-MM');
-		if (!preloadedData[prevMonthKey]) {
-			getData(prevMonth).then((data) => {
-				setPreloadedData((prev) => ({
-					...prev,
-					[prevMonthKey]: data,
-				}));
-			});
-		}
-	}, [currentMonth, preloadedData]);
+				// Optional: Preload tháng trước (nếu user thích lướt ngược)
+				setTimeout(() => {
+					loadMonthData(currentMonth.subtract(1, 'month'));
+				}, 1000);
+			} finally {
+				setLoading(false);
+			}
+		};
 
-	// Lấy các sự kiện theo ngày - SỬ DỤNG TRỰC TIẾP dataLichDashboard
+		loadCurrentMonth();
+	}, [currentMonth]);
+
 	const getEventsForDate = (date: dayjs.Dayjs): SuKienItem[] => {
-		const events = (dataLichDashboard || []).filter(
+		return (dataLichDashboard || []).filter(
 			(event) => dayjs(event.thoiGianBatDau).format('YYYY-MM-DD') === date.format('YYYY-MM-DD'),
 		);
-
-		return events;
 	};
 
 	// Tạo calendar grid
@@ -233,7 +226,7 @@ const LichDashboard = () => {
 			weeks.push(dateArray.slice(i, i + 7));
 		}
 
-		// Xác định responsive class names
+		// Xác định responsive class names\
 		const getResponsiveClass = () => {
 			if (isMobile) return 'mobile';
 			if (isTablet) return 'tablet';
@@ -257,6 +250,7 @@ const LichDashboard = () => {
 							onClick={() => setCurrentMonth(currentMonth.subtract(1, 'month'))}
 							size={isMobile ? 'small' : 'middle'}
 							className='nav-btn'
+							disabled={loading}
 						/>
 						<Button
 							type='text'
@@ -264,6 +258,7 @@ const LichDashboard = () => {
 							onClick={() => setCurrentMonth(currentMonth.add(1, 'month'))}
 							size={isMobile ? 'small' : 'middle'}
 							className='nav-btn'
+							disabled={loading}
 						/>
 					</div>
 				</div>
@@ -323,7 +318,7 @@ const LichDashboard = () => {
 															key={index}
 															className={`event-dot ${responsiveClass}`}
 															style={{
-																backgroundColor: getEventColor(event.loaiSuKien), // Sử dụng hàm helper
+																backgroundColor: getEventColor(event.loaiSuKien),
 															}}
 														/>
 													))}
@@ -350,7 +345,7 @@ const LichDashboard = () => {
 			<Card
 				variant='borderless'
 				className='card-borderless card-big-title'
-				// loading={loadingSuKien || loadingTKB || loadingThi}
+				loading={loading}
 				title='Lịch'
 				extra={
 					<Link to='/calendar' className='xem-tat-ca-link'>
@@ -378,7 +373,7 @@ const LichDashboard = () => {
 							key={index}
 							className='event-item'
 							style={{
-								borderLeftColor: getEventColor(event.loaiSuKien), // Sử dụng hàm helper
+								borderLeftColor: getEventColor(event.loaiSuKien),
 							}}
 						>
 							<div className='event-title'>{event.title}</div>
@@ -388,6 +383,10 @@ const LichDashboard = () => {
 							{event.diaDiem && <div className='event-location'>📍 {event.diaDiem}</div>}
 						</div>
 					))}
+				</div>
+
+				<div className='form-footer'>
+					<Button onClick={() => setVisibleDetail(false)}>Đóng</Button>
 				</div>
 			</Modal>
 		</>
