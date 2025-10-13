@@ -25,6 +25,7 @@ import {
 	Popconfirm,
 	Space,
 	Table,
+	TableProps,
 	Tooltip,
 	type InputRef,
 	type PaginationProps,
@@ -493,7 +494,7 @@ const TableBase = (props: TableBaseProps) => {
 				dataSource={tableData}
 				columns={finalColumns as any[]}
 				components={rowSortable ? { body: { row: SortableRow } } : undefined}
-				{...props.otherProps}
+				{...(props?.otherProps as Partial<TableProps<any>>)}
 			/>
 		);
 	};
