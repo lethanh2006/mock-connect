@@ -1820,10 +1820,10 @@
   dependencies:
     "@react-pdf-viewer/core" "2.4.2"
 
-"@react-pdf-viewer/pdfjs-dist-signature@^2.7.570":
-  version "2.7.570"
-  resolved "https://registry.yarnpkg.com/@react-pdf-viewer/pdfjs-dist-signature/-/pdfjs-dist-signature-2.7.570.tgz#962f780b0dbdc67d1401209a490fdaf73e41b7ad"
-  integrity sha512-QKRvN2K8w5ShwTC8R4/3xXZwmyM56S+9SfgNFIXlJSk6TJwEIU9QxN3jKnqGpvF3RgBRLyHACj10RB7IvYZMWQ==
+"@react-pdf-viewer/pdfjs-dist-signature@2.5.207":
+  version "2.5.207"
+  resolved "https://registry.yarnpkg.com/@react-pdf-viewer/pdfjs-dist-signature/-/pdfjs-dist-signature-2.5.207.tgz#48ff94c5155c7c9cf13622c9d305d5a84f4f75f5"
+  integrity sha512-kpmYFF2FtIGBBq5wsMKi635BK0d0v7ZvUHNecsR1/Xz5amMq7pjON7q+kOWlUOMnLOcnbIKhTGnzeVckwJoJBA==
 
 "@react-pdf-viewer/print@2.4.2":
   version "2.4.2"
