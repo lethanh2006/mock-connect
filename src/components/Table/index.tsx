@@ -370,7 +370,10 @@ const TableBase = (props: TableBaseProps) => {
 
 							{phanVungHienTai?._id && (
 								<Tooltip title={phanVungHienTai?.name}>
-									<div className='cornerTriangle' style={{ backgroundColor: maMau }} />
+									<div
+										className='cornerTriangle'
+										style={{ backgroundColor: maMau, top: props?.otherProps?.size === 'small' ? -4 : -8 }}
+									/>
 								</Tooltip>
 							)}
 						</div>
