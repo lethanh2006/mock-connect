@@ -88,16 +88,13 @@ const DanhSachBuoiHoc = () => {
 						]}
 					/>
 				}
-				className='card-big-title card-borderless'
 				variant='borderless'
 			>
-				<Card variant='borderless'>
-					{show === 'calendar' ? (
-						<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
-					) : (
-						<TableLichHocLopHP items={danhSachHienThi} onClickItem={onClickViewTkb} />
-					)}
-				</Card>
+				{show === 'calendar' ? (
+					<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
+				) : (
+					<TableLichHocLopHP items={danhSachHienThi} onClickItem={onClickViewTkb} />
+				)}
 			</Card>
 
 			<ModalThoiKhoaBieu />
