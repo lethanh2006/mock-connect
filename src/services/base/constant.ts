@@ -116,6 +116,12 @@ export const moduleCongThongTin: Partial<Login.TModule> = {
 	icon: 'cong-thong-tin.svg',
 };
 
+export const moduleTapChiKhoaHoc: Partial<Login.TModule> = {
+	title: APP_CONFIG_TITLE_TAP_CHI_KH,
+	url: APP_CONFIG_URL_TAP_CHI_KH,
+	icon: 'tap-chi-khoa-hoc.svg',
+};
+
 /** Đường link landing page */
 export const landingUrl = APP_CONFIG_URL_LANDING;
 
