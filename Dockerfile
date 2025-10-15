@@ -32,6 +32,7 @@ ENV APP_CONFIG_URL_THU_VIEN=https://thuvien.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_QLVB=https://sso.hvpnvn.edu.vn/realms/vwa/protocol/openid-connect/auth?response_type=token&client_id=vwa-odoo-qlvb&redirect_uri=http%3A%2F%2Fqlvb.hvpnvn.edu.vn%2Fauth_oauth%2Fsignin&scope=profile+openid+email&state=%7B%22d%22%3A+%22qlvb1%22%2C+%22p%22%3A+4%2C+%22r%22%3A+%22http%253A%252F%252Fqlvb.hvpnvn.edu.vn%252Fweb%22%7D
 ENV APP_CONFIG_URL_VBCC=https://vbcc.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_QLND=https://iam.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_TAP_CHI_KH=https://tapchikhoahoc.hvpnvn.edu.vn/
 
 ENV APP_CONFIG_TITLE_LANDING='Cổng thông tin'
 ENV APP_CONFIG_TITLE_CONNECT='Cổng người học'
@@ -49,6 +50,7 @@ ENV APP_CONFIG_TITLE_THU_VIEN='Thư viện'
 ENV APP_CONFIG_TITLE_QLVB='Quản lý văn bản'
 ENV APP_CONFIG_TITLE_VBCC='Văn bằng chứng chỉ'
 ENV APP_CONFIG_TITLE_QLND='Người dùng & phân quyền'
+ENV APP_CONFIG_TITLE_TAP_CHI_KH='Tạp chí khoa học'
 
 
 # Set working directory
