@@ -47,7 +47,7 @@ const DanhSachBuoiHoc = () => {
 			<StatDiemDanhV2 />
 
 			{buoiHocGanNhat?._id ? (
-				<>
+				<div style={{ marginBottom: 16 }}>
 					<ThongTinBuoiHoc
 						buoiHoc={buoiHocGanNhat}
 						title={
@@ -60,38 +60,33 @@ const DanhSachBuoiHoc = () => {
 							</>
 						}
 					/>
-					<br />
-				</>
+				</div>
 			) : null}
 
-			<Card
-				title={
-					<Space wrap size={12}>
-						<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
-						<Segmented
-							options={[
-								{ value: 'all', label: 'Tất cả' },
-								...Object.values(EHinhThucGiangDay).map((item) => ({ value: item, label: item })),
-							]}
-							onChange={(val) => setHinhThucFilter(val as any)}
-							value={hinhThucFilter}
-						/>
-					</Space>
-				}
-				extra={
-					<Segmented
-						value={show}
-						onChange={(val) => setShow(val.toString())}
-						options={[
-							{ value: 'table', title: 'Danh sách chi tiết', icon: <TableOutlined /> },
-							{ value: 'calendar', title: 'Lịch học', icon: <CalendarOutlined /> },
-						]}
-					/>
-				}
-				className='card-big-title card-borderless'
-				variant='borderless'
-			>
+			<Card className='card-big-title card-borderless' variant='borderless'>
 				<Card variant='borderless'>
+					<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+						<Space wrap size={12}>
+							<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
+							<Segmented
+								options={[
+									{ value: 'all', label: 'Tất cả' },
+									...Object.values(EHinhThucGiangDay).map((item) => ({ value: item, label: item })),
+								]}
+								onChange={(val) => setHinhThucFilter(val as any)}
+								value={hinhThucFilter}
+							/>
+						</Space>
+
+						<Segmented
+							value={show}
+							onChange={(val) => setShow(val.toString())}
+							options={[
+								{ value: 'table', title: 'Danh sách chi tiết', icon: <TableOutlined /> },
+								{ value: 'calendar', title: 'Lịch học', icon: <CalendarOutlined /> },
+							]}
+						/>
+					</div>
 					{show === 'calendar' ? (
 						<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
 					) : (
