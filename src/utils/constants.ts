@@ -19,3 +19,7 @@ export const excludedPaths = [
 export const getPartitionCode = (): string | null => {
 	return localStorage.getItem('partitionCode');
 };
+
+export const kiemTraPhanVung = (dataPartitionCode: string | null) => {
+	return !dataPartitionCode || dataPartitionCode === localStorage.getItem('partitionCode');
+};
