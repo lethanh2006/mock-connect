@@ -4,7 +4,7 @@ import type { IColumn } from '@/components/Table/typing';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { ApiOutlined } from '@ant-design/icons';
-import { Card, Col, Descriptions, Progress, Row, Space, Spin, Tag } from 'antd';
+import { Card, Col, Descriptions, Progress, Row, Spin, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
@@ -53,25 +53,24 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 
 	return (
 		<Spin spinning={loading}>
-			<Space wrap className='button-space'>
-				<ButtonExtend
-					type='primary'
-					icon={<ApiOutlined />}
-					onClick={() => {
-						if (idLopHocPhan) {
-							getByIdModel(`lop-hoc-phan/${idLopHocPhan}/url/sv`, false).then((res: any) => {
-								if (res) {
-									window.open(res, '_blank');
-								} else {
-									console.error('URL not found in response:', res);
-								}
-							});
-						}
-					}}
-				>
-					Lớp học LMS
-				</ButtonExtend>
-			</Space>
+			<ButtonExtend
+				style={{ marginBottom: 16 }}
+				type='primary'
+				icon={<ApiOutlined />}
+				onClick={() => {
+					if (idLopHocPhan) {
+						getByIdModel(`lop-hoc-phan/${idLopHocPhan}/url/sv`, false).then((res: any) => {
+							if (res) {
+								window.open(res, '_blank');
+							} else {
+								console.error('URL not found in response:', res);
+							}
+						});
+					}
+				}}
+			>
+				Lớp học LMS
+			</ButtonExtend>
 
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
@@ -84,9 +83,13 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 							<Descriptions.Item label='Tiến trình hoàn thiện'>
 								<Progress percent={record?.tiLeHoanThanh ?? 0} />
 							</Descriptions.Item>
-							<Descriptions.Item label='Vào lớp'>{record?.thoiGianTaoVao ?? '--'}</Descriptions.Item>
-							<Descriptions.Item label='Cập nhật gần nhất'>
-								{record?.thoiGianCapNhatGanNhatVao ?? '--'}
+							<Descriptions.Item label='Thời gian vào lớp'>
+								{record?.thoiGianTaoVao ? dayjs(record?.thoiGianTaoVao).format('HH:mm DD/MM/YYYY') : '--'}
+							</Descriptions.Item>
+							<Descriptions.Item label='Thời gian cập nhật gần nhất'>
+								{record?.thoiGianCapNhatGanNhatVao
+									? dayjs(record?.thoiGianCapNhatGanNhatVao).format('HH:mm DD/MM/YYYY')
+									: '--'}
 							</Descriptions.Item>
 						</Descriptions>
 					</Card>
