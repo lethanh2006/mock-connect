@@ -3,12 +3,8 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import {
-	colorTrangThaiUserDiemDanh,
-	trangThaiUserDiemDanh,
-	type ETrangThaiUserDiemDanh,
-} from '@/services/DaoTao/constant';
-import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
+import { colorTrangThaiUserDiemDanh, ETrangThaiUserDiemDanh, trangThaiUserDiemDanh } from '@/services/DaoTao/constant';
+import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { Button, Carousel, Tag } from 'antd';
@@ -46,6 +42,7 @@ const TableLichHocLopHP = (props: {
 			align: 'center',
 			width: 150,
 			render: (val) => (val ? `${THU_TRONG_TUAN[dayjs(val).day()]}, ${dayjs(val).format('DD/MM/YYYY')}` : null),
+			filterType: 'string',
 			onCell,
 		},
 		{
@@ -61,6 +58,7 @@ const TableLichHocLopHP = (props: {
 			align: 'center',
 			width: 100,
 			render: (val) => (val ? val : <i>Chưa cập nhật</i>),
+			filterType: 'string',
 			onCell,
 		},
 		{
@@ -69,6 +67,8 @@ const TableLichHocLopHP = (props: {
 			align: 'center',
 			width: 100,
 			render: (val: EHinhThucGiangDay) => val && <Tag color={colorHinhThucGiangDay[val]}>{val}</Tag>,
+			filterType: 'select',
+			filterData: Object.values(EHinhThucGiangDay),
 			onCell,
 		},
 		{
@@ -78,6 +78,9 @@ const TableLichHocLopHP = (props: {
 			width: 120,
 			render: (val: ETrangThaiUserDiemDanh) =>
 				val ? <Tag color={colorTrangThaiUserDiemDanh[val]}>{trangThaiUserDiemDanh[val]}</Tag> : null,
+
+			filterType: 'select',
+			filterData: Object.values(ETrangThaiUserDiemDanh),
 			onCell,
 		},
 		{
@@ -86,6 +89,7 @@ const TableLichHocLopHP = (props: {
 			width: 140,
 			render: (val, rec) =>
 				rec.nhanSu?.ten ? [rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ') : (rec.tenNhanSu ?? <i>Chưa cập nhật</i>),
+			filterType: 'string',
 			onCell,
 		},
 		{
@@ -93,6 +97,7 @@ const TableLichHocLopHP = (props: {
 			dataIndex: 'tieuDeBaiHoc',
 			width: 180,
 			// render: (val, rec) => rec.noiDungHp?.tieuDe ?? '',
+			filterType: 'string',
 			onCell,
 		},
 		{

@@ -8,7 +8,7 @@ const CardAddStatusWrapper = styled.div`
 	.card {
 		padding: 18px;
 		overflow: hidden;
-		border-radius: 2px;
+		border-radius: 6px;
 		box-shadow:
 			0 1px 2px 0 rgba(0, 0, 0, 0.08),
 			0 1px 6px -1px rgba(0, 0, 0, 0.06),
