@@ -108,7 +108,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		getSuKienTrongKhoangModel({
 			fromDate: dateRange[0].toISOString(),
 			toDate: dateRange[1].toISOString(),
-			types: selectSuKiens,
+			// types: selectSuKiens, // Fix Tạm Thời
 		}).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
