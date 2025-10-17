@@ -2,7 +2,7 @@ import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AutoComplete, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
+import { AutoComplete, ConfigProvider, Drawer, Empty, Input, Table, TableProps, Tooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
@@ -211,7 +211,7 @@ const TableStaticData = (props: TableStaticProps) => {
 				scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
 				bordered
 				components={rowSortable ? { body: { row: SortableRow } } : undefined}
-				{...props?.otherProps}
+				{...(props?.otherProps as Partial<TableProps<any>>)}
 			/>
 		);
 	};

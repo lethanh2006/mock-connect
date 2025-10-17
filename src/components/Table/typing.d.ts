@@ -152,6 +152,8 @@ export type TableBaseProps = {
 	 * @default getData
 	 */
 	onReload?: (params?: any) => void;
+
+	otherProps?: Partial<TableProps<RecordType>>;
 };
 
 export type TFilter<T> = {
@@ -160,7 +162,6 @@ export type TFilter<T> = {
 	values: (string | number)[];
 	active?: boolean;
 };
-
 
 export type ConditionCriteria<T> = {
 	/** Giá trị nằm trong danh sách */
@@ -210,6 +211,7 @@ export type TableStaticProps = Pick<
 	| 'hideChildrenRows'
 	| 'onReload'
 	| 'otherButtons'
+	| 'otherProps'
 > & {
 	data: any[];
 	loading?: boolean;
