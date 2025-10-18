@@ -59,12 +59,12 @@ export enum ESuKienRole {
 
 // ELoaiSuKien và ColorSuKien phải tương ứng nhau
 export enum ELoaiSuKien {
+	CHUNG = 'Chung',
 	LICH_HOC = 'Lịch học',
 	LICH_THI = 'Lịch thi',
-	CA_NHAN = 'Cá nhân',
-	CHUNG = 'Chung',
 	BAI_TAP = 'Bài tập',
 	HOP_LOP = 'Họp lớp',
+	CA_NHAN = 'Cá nhân',
 	// CAC_HOAT_DONG = 'Các hoạt động cho sinh viên',
 	// DAO_TAO_BOI_DUONG = 'Đào tạo bồi dưỡng',
 	// HOP_TAC_NGUYEN_CUU_CHUYEN_GAO = 'Hợp tác - Nghiên cứu - chuyển giao',
