@@ -90,7 +90,7 @@
 	}
 
 	&.desktop {
-		padding: 0 20px;
+		padding: 8px 20px;
 		min-height: 255px;
 	}
 }
@@ -270,6 +270,24 @@
 
 	.ant-card-body {
 		padding: 0;
+	}
+
+	// Responsive cho mobile
+	@media (max-width: 767px) {
+		min-height: 268px !important;
+		height: 268px !important;
+	}
+
+	// Tablet (nếu muốn)
+	@media (min-width: 768px) and (max-width: 1023px) {
+		min-height: 300px !important;
+		height: 300px !important;
+	}
+
+	// Desktop (giữ nguyên)
+	@media (min-width: 1024px) {
+		min-height: 350px !important;
+		height: 350px !important;
 	}
 }
 
