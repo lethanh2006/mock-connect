@@ -124,7 +124,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			const temp = data.map((item) => ({
 				...item,
 				title: `${item?.assignment?.noiDung} - ${item?.assignment?.tenLopHocPhan}`,
-				start: dayjs(item?.assignment?.thoiGianKetThuc).toDate(),
+				start: dayjs(item?.assignment?.thoiGianGiao ?? item.assignment.thoiGianBatDau).toDate(),
 				end: dayjs(item?.assignment?.thoiGianKetThuc).toDate(),
 				loaiSuKien: ELoaiSuKien.BAI_TAP,
 			}));
