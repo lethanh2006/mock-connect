@@ -514,7 +514,7 @@ const TableBase = (props: TableBaseProps) => {
 				dataSource={tableData}
 				columns={finalColumns as any[]}
 				components={rowSortable ? { body: { row: SortableRow } } : undefined}
-				{...props.otherProps}
+				{...props?.otherProps}
 			/>
 		);
 	};
