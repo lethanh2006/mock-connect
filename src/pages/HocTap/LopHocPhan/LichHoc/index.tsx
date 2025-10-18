@@ -63,36 +63,37 @@ const DanhSachBuoiHoc = () => {
 				</div>
 			) : null}
 
-			<Card className='card-big-title card-borderless' variant='borderless'>
-				<Card variant='borderless'>
-					<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-						<Space wrap size={12}>
-							<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
-							<Segmented
-								options={[
-									{ value: 'all', label: 'Tất cả' },
-									...Object.values(EHinhThucGiangDay).map((item) => ({ value: item, label: item })),
-								]}
-								onChange={(val) => setHinhThucFilter(val as any)}
-								value={hinhThucFilter}
-							/>
-						</Space>
-
+			<Card
+				title={
+					<Space wrap size={12}>
+						<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
 						<Segmented
-							value={show}
-							onChange={(val) => setShow(val.toString())}
 							options={[
-								{ value: 'table', title: 'Danh sách chi tiết', icon: <TableOutlined /> },
-								{ value: 'calendar', title: 'Lịch học', icon: <CalendarOutlined /> },
+								{ value: 'all', label: 'Tất cả' },
+								...Object.values(EHinhThucGiangDay).map((item) => ({ value: item, label: item })),
 							]}
+							onChange={(val) => setHinhThucFilter(val as any)}
+							value={hinhThucFilter}
 						/>
-					</div>
-					{show === 'calendar' ? (
-						<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
-					) : (
-						<TableLichHocLopHP items={danhSachHienThi} onClickItem={onClickViewTkb} />
-					)}
-				</Card>
+					</Space>
+				}
+				extra={
+					<Segmented
+						value={show}
+						onChange={(val) => setShow(val.toString())}
+						options={[
+							{ value: 'table', title: 'Danh sách chi tiết', icon: <TableOutlined /> },
+							{ value: 'calendar', title: 'Lịch học', icon: <CalendarOutlined /> },
+						]}
+					/>
+				}
+				variant='borderless'
+			>
+				{show === 'calendar' ? (
+					<CalendarLichHocLopHp items={danhSachHienThi} onClickItem={onClickViewTkb} />
+				) : (
+					<TableLichHocLopHP items={danhSachHienThi} onClickItem={onClickViewTkb} />
+				)}
 			</Card>
 
 			<ModalThoiKhoaBieu />

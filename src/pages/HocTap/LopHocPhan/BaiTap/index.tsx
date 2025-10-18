@@ -1,6 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { ReloadOutlined } from '@ant-design/icons';
-import { Modal, Segmented, Skeleton, Spin } from 'antd';
+import { Segmented, Skeleton, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useModel } from 'umi';
@@ -81,9 +82,15 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 					)}
 				</div>
 			</Spin>
-			<Modal open={visibleForm} onCancel={() => setVisibleForm(false)} footer={null} width={800} title='Nộp bài tập'>
+			<ModalExpandable
+				open={visibleForm}
+				onCancel={() => setVisibleForm(false)}
+				footer={null}
+				width={800}
+				title='Nộp bài tập'
+			>
 				<FormBaiTap getData={getData} />
-			</Modal>
+			</ModalExpandable>
 		</div>
 	);
 };
