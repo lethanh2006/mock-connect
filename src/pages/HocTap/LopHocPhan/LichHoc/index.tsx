@@ -47,7 +47,7 @@ const DanhSachBuoiHoc = () => {
 			<StatDiemDanhV2 />
 
 			{buoiHocGanNhat?._id ? (
-				<>
+				<div style={{ marginBottom: 16 }}>
 					<ThongTinBuoiHoc
 						buoiHoc={buoiHocGanNhat}
 						title={
@@ -60,8 +60,7 @@ const DanhSachBuoiHoc = () => {
 							</>
 						}
 					/>
-					<br />
-				</>
+				</div>
 			) : null}
 
 			<Card

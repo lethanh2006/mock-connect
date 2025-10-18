@@ -27,7 +27,7 @@ const ModalThoiKhoaBieu = () => {
 			okButtonProps={{ hidden: true }}
 			cancelText='Đóng'
 		>
-			<ThongTinBuoiHoc buoiHoc={recThoiKhoaBieu} hideCard />
+			<ThongTinBuoiHoc buoiHoc={recThoiKhoaBieu} hideCard column={2} />
 
 			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
 				<Tabs.TabPane tab='Nội dung bài học' key='noidung'>
