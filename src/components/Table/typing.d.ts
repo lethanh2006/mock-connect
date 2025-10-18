@@ -1,4 +1,5 @@
 import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
+import { TableProps } from 'antd';
 import type { ColumnType } from 'antd/lib/table';
 import React, { JSX } from 'react';
 import { type EOperatorType } from './constant';
@@ -152,8 +153,6 @@ export type TableBaseProps = {
 	 * @default getData
 	 */
 	onReload?: (params?: any) => void;
-
-	otherProps?: Partial<TableProps<RecordType>>;
 };
 
 export type TFilter<T> = {
@@ -211,7 +210,6 @@ export type TableStaticProps = Pick<
 	| 'hideChildrenRows'
 	| 'onReload'
 	| 'otherButtons'
-	| 'otherProps'
 > & {
 	data: any[];
 	loading?: boolean;
