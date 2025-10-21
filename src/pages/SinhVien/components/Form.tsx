@@ -116,7 +116,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 
 						<Col span={12} md={8}>
 							<Form.Item name='quocTich' label='Quốc tịch' rules={[...rules.required]}>
-								<SelectQuocTich allowClear />
+								<SelectQuocTich allowClear selectTen />
 							</Form.Item>
 						</Col>
 						<Col span={12} md={8}>
