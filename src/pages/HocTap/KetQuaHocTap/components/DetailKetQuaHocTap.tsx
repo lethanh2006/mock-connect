@@ -175,23 +175,30 @@ const DetailKetQuaHocTap = (props: {
 							key='1'
 						>
 							<Divider>Điểm thành phần & ĐKDT</Divider>
-							<Descriptions bordered>
-								{dauDiemCoTrongSo?.map((item) => (
-									<Descriptions.Item
-										label={`${item.ten}${
-											hasTrongSo ? ` (${recDiem?.[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}%)` : ''
-										}`}
-										key={item._id}
-									>
-										{renderDiem(recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk])}
+							{trongSoThanhPhan > 0 ? (
+								<Descriptions bordered>
+									{dauDiemCoTrongSo?.map((item) => (
+										<Descriptions.Item
+											label={`${item.ten}${
+												hasTrongSo ? ` (${recDiem?.[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk]}%)` : ''
+											}`}
+											key={item._id}
+										>
+											{renderDiem(recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk])}
+										</Descriptions.Item>
+									))}
+									<Descriptions.Item label='Điều kiện dự thi'>
+										<span style={{ color: recDiem?.trangThaiThi === ETrangThaiThi.CAM_THI ? 'red' : undefined }}>
+											{recDiem?.trangThaiThi ?? '--'}
+										</span>
 									</Descriptions.Item>
-								))}
-								<Descriptions.Item label='Điều kiện dự thi'>
-									<span style={{ color: recDiem?.trangThaiThi === ETrangThaiThi.CAM_THI ? 'red' : undefined }}>
-										{recDiem?.trangThaiThi ?? '--'}
-									</span>
-								</Descriptions.Item>
-							</Descriptions>
+								</Descriptions>
+							) : (
+								<Empty
+									image={Empty.PRESENTED_IMAGE_SIMPLE}
+									description='Học phần không có điểm thành phần (100% KTHP)'
+								/>
+							)}
 
 							<Divider>Điểm thi kết thúc học phần</Divider>
 							<Descriptions bordered>

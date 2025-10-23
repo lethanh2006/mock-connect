@@ -3,10 +3,10 @@ import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { IColumn } from '@/components/Table/typing';
 import { ThongBao } from '@/services/ThongBao/typing';
-import { getPartitionCode } from '@/utils/constants';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Popconfirm } from 'antd';
 import { useModel } from 'umi';
+import { kiemTraPhanVung } from '../../../utils/constants';
 import FormTags from './components/Form';
 
 const Tags = () => {
@@ -30,7 +30,7 @@ const Tags = () => {
 			width: 60,
 			fixed: 'right',
 			render: (recordVal: ThongBao.Tags) => {
-				const isPhanVung = recordVal?.dataPartitionCode === getPartitionCode();
+				const isPhanVung = kiemTraPhanVung(recordVal?.dataPartitionCode ?? null);
 
 				return (
 					<>
