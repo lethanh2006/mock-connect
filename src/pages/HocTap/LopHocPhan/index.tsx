@@ -8,7 +8,8 @@ import CardLopHocPhanItem from '../LopHocPhan/components/CardLopHocPhanItem';
 import BaiTapStatistics from './components/Statistics';
 
 const LopHocPhanPage = () => {
-	const { danhSach, sinhVienGetAllModel, loading } = useModel('lophocphan.lophocphan');
+	const { danhSach, sinhVienGetAllModel, loading, sinhVienGetModel, lopHienTai, lopKeTiep } =
+		useModel('lophocphan.lophocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
 
 	// Background images array
@@ -22,7 +23,7 @@ const LopHocPhanPage = () => {
 
 	const getData = () => {
 		if (recHocKy?.ma) {
-			sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
+			sinhVienGetModel({ maHocKy: recHocKy?.ma });
 		}
 	};
 
@@ -62,7 +63,12 @@ const LopHocPhanPage = () => {
 										xxl={6}
 										onClick={() => history.push(`/hoc-tap/lop-tin-chi/${lop._id}`)}
 									>
-										<CardLopHocPhanItem lop={lop} index={index} backgrounds={backgrounds} />
+										<CardLopHocPhanItem
+											lop={lop}
+											index={index}
+											backgrounds={backgrounds}
+											isKeTiep={lopKeTiep?._id === lop._id && lopHienTai?._id !== lopKeTiep?._id}
+										/>
 									</Col>
 								))}
 							</Row>

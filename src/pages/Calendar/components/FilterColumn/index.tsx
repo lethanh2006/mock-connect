@@ -1,5 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { CalendarOutlined, DownOutlined, EditFilled, FilterOutlined } from '@ant-design/icons';
 import { Calendar as AntdCalendar, Button, Card, Checkbox, Col, Popover, Row, Select } from 'antd';
@@ -14,10 +14,11 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 	const { date, setDate } = props;
 	const { selectSuKiens, setSelectSuKiens, setDataCalendar, dataLich } = useModel('sukien.sukien');
 	const { record: recSetting } = useModel('tienich.settinglich');
-	const [hovered, setHovered] = useState<ELoaiSuKien | null>(null);
+	const [hovered, setHovered] = useState<ELoaiSuKien | ELoaiSuKienKhac | null>(null);
 	const [expandMiniCalendar, setExpandMiniCalendar] = useState(false);
 	const [expandFilter, setExpandFilter] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
+	const [dataLichFull, setDataLichFull] = useState<any[]>([]);
 
 	// Check if device is mobile
 	useEffect(() => {
@@ -32,16 +33,22 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 		return () => window.removeEventListener('resize', checkIsMobile);
 	}, []);
 
+	useEffect(() => {
+		if (dataLich.length > 0) {
+			setDataLichFull(dataLich);
+		}
+	}, [dataLich]);
+
 	const pickDate = (val: Dayjs) => setDate(val.toDate());
 
-	const changeLoaiSuKien = (checkedValue: any) => {
-		setSelectSuKiens(checkedValue as ELoaiSuKien[]);
-		const filteredEvents = dataLich.filter((event) => checkedValue.includes(event.loaiSuKien));
-		setDataCalendar(filteredEvents);
-	};
+	// const changeLoaiSuKien = (checkedValue: any) => {
+	// 	setSelectSuKiens(checkedValue as ELoaiSuKien[]);
+	// 	const filteredEvents = dataLich.filter((event) => checkedValue.includes(event.loaiSuKien));
+	// 	setDataCalendar(filteredEvents);
+	// };
 
 	// Handle clicking on event label to toggle checkbox
-	const handleLabelClick = (loaiSuKien: ELoaiSuKien, event: React.MouseEvent) => {
+	const handleLabelClick = (loaiSuKien: ELoaiSuKien | ELoaiSuKienKhac, event: React.MouseEvent) => {
 		// Prevent event bubbling to avoid conflicts with edit button
 		event.stopPropagation();
 
@@ -53,7 +60,36 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 		changeLoaiSuKien(newSelectSuKiens);
 	};
 
-	const renderCheckboxItem = (loaiSuKien: ELoaiSuKien, label: string) => (
+	const allLoaiSuKienChinh = Object.values(ELoaiSuKien);
+	const allLoaiSuKienKhac = Object.values(ELoaiSuKienKhac);
+
+	const changeLoaiSuKien = (checkedValue: any) => {
+		let newSelect = [...checkedValue];
+
+		// Nếu tick "Khác", chỉ thêm 'Khác' và cho phép undefined
+		if (checkedValue.includes(ELoaiSuKienKhac.KHAC)) {
+			newSelect = _.uniq([...checkedValue]);
+		} else {
+			newSelect = newSelect.filter((i) => !allLoaiSuKienKhac.includes(i));
+		}
+
+		setSelectSuKiens(newSelect as (ELoaiSuKien | ELoaiSuKienKhac)[]);
+
+		const filteredEvents = dataLichFull.filter((event) => {
+			// Nếu chọn "Khác", cho phép cả undefined và 'Khác'
+			if (
+				newSelect.includes(ELoaiSuKienKhac.KHAC) &&
+				(!event.loaiSuKien || event.loaiSuKien === ELoaiSuKienKhac.KHAC)
+			) {
+				return true;
+			}
+			return newSelect.includes(event.loaiSuKien);
+		});
+
+		setDataCalendar(filteredEvents);
+	};
+
+	const renderCheckboxItem = (loaiSuKien: ELoaiSuKien | ELoaiSuKienKhac, label: string) => (
 		<div className='checkbox-item' onMouseEnter={() => setHovered(loaiSuKien)}>
 			<Checkbox value={loaiSuKien} className='checkbox' />
 			<div
@@ -158,7 +194,11 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 				variant='borderless'
 			>
 				<Checkbox.Group value={selectSuKiens} onChange={changeLoaiSuKien} className='checkbox-group'>
-					{Object.values(ELoaiSuKien).map((loaiSuKien) => renderCheckboxItem(loaiSuKien, loaiSuKien))}
+					{/* Hiển thị các loại chính */}
+					{allLoaiSuKienChinh.map((loaiSuKien) => renderCheckboxItem(loaiSuKien, loaiSuKien))}
+
+					{/* Một checkbox duy nhất cho "Khác" */}
+					{renderCheckboxItem(ELoaiSuKienKhac.KHAC, 'Khác')}
 				</Checkbox.Group>
 			</Card>
 		</div>

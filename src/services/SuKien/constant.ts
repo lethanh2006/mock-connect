@@ -59,12 +59,12 @@ export enum ESuKienRole {
 
 // ELoaiSuKien và ColorSuKien phải tương ứng nhau
 export enum ELoaiSuKien {
+	CHUNG = 'Chung',
 	LICH_HOC = 'Lịch học',
 	LICH_THI = 'Lịch thi',
-	CA_NHAN = 'Cá nhân',
-	CHUNG = 'Chung',
 	BAI_TAP = 'Bài tập',
 	HOP_LOP = 'Họp lớp',
+	CA_NHAN = 'Cá nhân',
 	// CAC_HOAT_DONG = 'Các hoạt động cho sinh viên',
 	// DAO_TAO_BOI_DUONG = 'Đào tạo bồi dưỡng',
 	// HOP_TAC_NGUYEN_CUU_CHUYEN_GAO = 'Hợp tác - Nghiên cứu - chuyển giao',
@@ -73,7 +73,16 @@ export enum ELoaiSuKien {
 	// KHAC = 'Khác',
 }
 
-export const ColorSuKien: Partial<Record<ELoaiSuKien, string>> = {
+export enum ELoaiSuKienKhac {
+	CAC_HOAT_DONG = 'Các hoạt động cho sinh viên',
+	DAO_TAO_BOI_DUONG = 'Đào tạo bồi dưỡng',
+	HOP_TAC_NGUYEN_CUU_CHUYEN_GAO = 'Hợp tác - Nghiên cứu - chuyển giao',
+	THUC_THI_CHINH_SACH = 'Thực thi, phát triển chính sách',
+	HOAT_DONG_XA_HOI = 'Hoạt động xã hội',
+	KHAC = 'Khác',
+}
+
+export const ColorSuKien: Partial<Record<ELoaiSuKien | ELoaiSuKienKhac, string>> = {
 	[ELoaiSuKien.LICH_HOC]: '#31becbb3',
 	[ELoaiSuKien.LICH_THI]: '#df4471b3',
 	[ELoaiSuKien.CA_NHAN]: '#57bf56b3',
@@ -86,6 +95,7 @@ export const ColorSuKien: Partial<Record<ELoaiSuKien, string>> = {
 	// [ELoaiSuKien.THUC_THI_CHINH_SACH]: '#fa8f47ff',
 	// [ELoaiSuKien.HOAT_DONG_XA_HOI]: '#2a1affff',
 	// [ELoaiSuKien.KHAC]: '#09ff00ff',
+	[ELoaiSuKienKhac.KHAC]: '#09ff00ff',
 };
 
 export enum ELoaiSuKienSinhVien {
@@ -96,13 +106,13 @@ export enum ELoaiSuKienSinhVien {
 	KHAC = 'Khác',
 }
 
-export const locationPathMappingToESuKienType: Partial<Record<string, ELoaiSuKien>> = {
-	'cac-hoat-dong-cho-sinh-vien': ELoaiSuKien.CAC_HOAT_DONG,
-	'dao-tao-boi-duong': ELoaiSuKien.DAO_TAO_BOI_DUONG,
-	'hop-tac-nghien-cuu-chuyen-giao': ELoaiSuKien.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO,
-	'thuc-thi-chinh-sach': ELoaiSuKien.THUC_THI_CHINH_SACH,
-	'hoat-dong-xa-hoi': ELoaiSuKien.HOAT_DONG_XA_HOI,
-	khac: ELoaiSuKien.KHAC,
+export const locationPathMappingToESuKienType: Partial<Record<string, ELoaiSuKien | ELoaiSuKienKhac>> = {
+	'cac-hoat-dong-cho-sinh-vien': ELoaiSuKienKhac.CAC_HOAT_DONG,
+	'dao-tao-boi-duong': ELoaiSuKienKhac.DAO_TAO_BOI_DUONG,
+	'hop-tac-nghien-cuu-chuyen-giao': ELoaiSuKienKhac.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO,
+	'thuc-thi-chinh-sach': ELoaiSuKienKhac.THUC_THI_CHINH_SACH,
+	'hoat-dong-xa-hoi': ELoaiSuKienKhac.HOAT_DONG_XA_HOI,
+	khac: ELoaiSuKienKhac.KHAC,
 };
 
 export const THU_TRONG_TUAN = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];

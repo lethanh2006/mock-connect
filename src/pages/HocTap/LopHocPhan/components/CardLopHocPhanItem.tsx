@@ -1,7 +1,8 @@
-import dayjs from '@/utils/dayjs';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Progress, Tag, Typography } from 'antd';
+import { Badge, Card, Progress, Tag, Typography } from 'antd';
 import { createHash } from 'crypto';
+import dayjs from 'dayjs';
+import React from 'react';
 import { history } from 'umi';
 import './style.less';
 
@@ -11,11 +12,12 @@ interface CardLopHocPhanItemProps {
 	lop: any;
 	index: number;
 	backgrounds: string[];
+	isHienTai?: boolean;
+	isKeTiep?: boolean;
 }
 
-const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, backgrounds }) => {
+const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, backgrounds, isHienTai, isKeTiep }) => {
 	// Tạo mảng background cố định cho mỗi item để tránh bị giật hình
-
 	const getBackgroundForItem = (itemId: string, index: number) => {
 		const hash = createHash('md5').update(itemId).digest('hex');
 		// Lấy 2 ký tự đầu tiên chuyển thành số, sau đó % với số hình nền
@@ -35,6 +37,14 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, bac
 
 	return (
 		<div className='card-lhp'>
+			{isHienTai ||
+				(isKeTiep && (
+					<Badge.Ribbon
+						text={isKeTiep ? 'Sắp tới' : 'Hiện tại'}
+						color={isKeTiep ? 'red' : 'green'}
+						className='ribbon'
+					/>
+				))}
 			<Card
 				variant='borderless'
 				className='card-lhp-inner'
@@ -75,7 +85,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, bac
 					</div>
 				)}
 
-				<Progress percent={progress} size='small' strokeColor={progress === 100 ? '#52c41a' : '#007AFF'} />
+				<Progress percent={progress} size='small' strokeColor={isCompleted ? '#52c41a' : '#007AFF'} />
 			</Card>
 		</div>
 	);
