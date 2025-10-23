@@ -6,7 +6,6 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import { type IColumn } from '@/components/Table/typing';
 import { type ESourceTypeNotification, mapModuleKeyToSourceType, NotificationType } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
-import { getPartitionCode } from '@/utils/constants';
 import dayjs from '@/utils/dayjs';
 import { currentRole } from '@/utils/ip';
 import { DeleteOutlined, EyeOutlined, LeftOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
@@ -14,6 +13,7 @@ import { Button, DatePicker, Popconfirm, Segmented, Space } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import news from '../../assets/new6.gif';
+import { kiemTraPhanVung } from '../../utils/constants';
 import Form from './components/Form';
 import CardFormThongBaoTuyChinh from './ThongBaoTuyChinh/CardForm';
 import ViewThongBao from './ViewThongBao/CardView';
@@ -151,7 +151,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			width: 90,
 			fixed: 'right',
 			render: (recordThongBao: ThongBao.IRecord) => {
-				const isPhanVung = recordThongBao?.dataPartitionCode === getPartitionCode();
+				const isPhanVung = kiemTraPhanVung(recordThongBao?.dataPartitionCode ?? null);
 
 				return (
 					<>

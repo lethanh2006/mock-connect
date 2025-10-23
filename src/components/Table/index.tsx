@@ -370,7 +370,10 @@ const TableBase = (props: TableBaseProps) => {
 
 							{phanVungHienTai?._id && (
 								<Tooltip title={phanVungHienTai?.name}>
-									<div className='cornerTriangle' style={{ backgroundColor: maMau }} />
+									<div
+										className='cornerTriangle'
+										style={{ backgroundColor: maMau, top: props?.otherProps?.size === 'small' ? -4 : -8 }}
+									/>
 								</Tooltip>
 							)}
 						</div>
@@ -511,7 +514,7 @@ const TableBase = (props: TableBaseProps) => {
 				dataSource={tableData}
 				columns={finalColumns as any[]}
 				components={rowSortable ? { body: { row: SortableRow } } : undefined}
-				{...props.otherProps}
+				{...props?.otherProps}
 			/>
 		);
 	};
