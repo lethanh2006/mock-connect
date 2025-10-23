@@ -45,7 +45,7 @@ declare module SuKien {
 
 	export interface IRecord {
 		_id: string;
-		loaiSuKien: ELoaiSuKien;
+		loaiSuKien: ELoaiSuKien | ELoaiSuKienKhac;
 		tenSuKien: string;
 		maSuKien?: string;
 		listNguoiDaThamDa?: IUser[];

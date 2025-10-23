@@ -1,10 +1,10 @@
-import { ColorSuKien, type ELoaiSuKien } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKienKhac, type ELoaiSuKien } from '@/services/SuKien/constant';
 import { Button, ColorPicker, Form } from 'antd';
 import type { Color } from 'antd/es/color-picker';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
 
-const PickColorLich = (props: { loaiLich: ELoaiSuKien }) => {
+const PickColorLich = (props: { loaiLich: ELoaiSuKien | ELoaiSuKienKhac }) => {
 	const { loaiLich } = props;
 	const [form] = Form.useForm();
 	const {
