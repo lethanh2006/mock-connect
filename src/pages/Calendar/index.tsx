@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { messagesCalendar } from '@/services/Calendar/constant';
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
-import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
 import {
@@ -108,7 +108,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 		getSuKienTrongKhoangModel({
 			fromDate: dateRange[0].toISOString(),
 			toDate: dateRange[1].toISOString(),
-			// types: selectSuKiens, // Fix Tạm Thời
+			// types: selectSuKiens,
 		}).then((data) => {
 			const temp = data.map((item) => ({
 				...item,
@@ -432,7 +432,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 						<div
 							key={item._id}
 							style={{
-								backgroundColor: ColorSuKien?.[item?.loaiSuKien],
+								backgroundColor: ColorSuKien?.[item?.loaiSuKien as ELoaiSuKien | ELoaiSuKienKhac] || '#f0f0f0',
 								color: 'white',
 								padding: 5,
 								marginBottom: 10,

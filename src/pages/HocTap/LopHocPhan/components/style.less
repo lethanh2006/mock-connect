@@ -2,6 +2,13 @@
 	padding: 0;
 	margin: 0;
 
+	.ribbon {
+		z-index: 1;
+		position: absolute;
+		top: 10;
+		right: 0;
+	}
+
 	&-inner {
 		border-radius: 8px;
 		height: 100%;
@@ -76,14 +83,13 @@
 
 // Container chính
 .thong-tin-chung-container {
-
 	// Đường phân cách dạng gạch ngang
 	.dashed-border {
 		border-bottom: 1px dashed transparent;
 		border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
 		border-image-slice: 1;
 		margin-bottom: 16px;
-		padding-bottom: 8px
+		padding-bottom: 8px;
 	}
 
 	// Giới thiệu chung

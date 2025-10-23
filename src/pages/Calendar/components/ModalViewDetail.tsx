@@ -7,7 +7,7 @@ import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap/constant';
 import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import { colorTrangThaiThi } from '@/services/KhaoThi/constant';
-import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
+import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -19,12 +19,12 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	const { deleteModel, handleEdit } = useModel('sukien.sukien');
 	const { getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
 	const { record: recSetting } = useModel('tienich.settinglich');
-	const loaiSuKien = event.loaiSuKien as ELoaiSuKien;
+	const loaiSuKien = event.loaiSuKien as ELoaiSuKien | ELoaiSuKienKhac;
 	const isThoiKhoaBieu = loaiSuKien === ELoaiSuKien.LICH_HOC;
 	const thoiKhoaBieu = isThoiKhoaBieu ? (event as ThoiKhoaBieu.IRecord) : undefined;
 	const isLichThi = loaiSuKien === ELoaiSuKien.LICH_THI;
 	const lichThi = isLichThi ? (event as LichThi.IRecord) : undefined;
-	const isBaiTap = loaiSuKien === ELoaiSuKien.BAI_TAP;
+	const isBaiTap = loaiSuKien === ELoaiSuKienKhac.BAI_TAP;
 	const suKien = !isThoiKhoaBieu && !isLichThi ? (event as SuKien.IRecord) : undefined;
 
 	const handleMoodle = (lopHocPhanId?: string) => {
@@ -33,6 +33,12 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 				if (data?.url) window.open(`${data.url}`);
 				else message.error('Có lỗi, vui lòng thử lại sau');
 			});
+	};
+
+	const getColorSuKien = (loai: ELoaiSuKien | ELoaiSuKienKhac) => {
+		return (
+			recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === loai)?.maMau ?? ColorSuKien?.[loai] ?? '#ccc'
+		);
 	};
 
 	const renderThoiKhoaBieu = () => (
@@ -182,18 +188,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 		>
 			<Descriptions column={1}>
 				<Descriptions.Item label='Loại sự kiện'>
-					{loaiSuKien ? (
-						<Tag
-							color={
-								recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === event?.loaiSuKien)?.maMau ??
-								ColorSuKien?.[event?.loaiSuKien as ELoaiSuKien]
-							}
-						>
-							{loaiSuKien}
-						</Tag>
-					) : (
-						'--'
-					)}
+					{loaiSuKien ? <Tag color={getColorSuKien(loaiSuKien)}>{loaiSuKien}</Tag> : '--'}
 				</Descriptions.Item>
 
 				{isThoiKhoaBieu
