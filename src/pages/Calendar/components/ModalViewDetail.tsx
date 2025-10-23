@@ -24,7 +24,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	const thoiKhoaBieu = isThoiKhoaBieu ? (event as ThoiKhoaBieu.IRecord) : undefined;
 	const isLichThi = loaiSuKien === ELoaiSuKien.LICH_THI;
 	const lichThi = isLichThi ? (event as LichThi.IRecord) : undefined;
-	const isBaiTap = loaiSuKien === ELoaiSuKienKhac.BAI_TAP;
+	const isBaiTap = loaiSuKien === ELoaiSuKien.BAI_TAP;
 	const suKien = !isThoiKhoaBieu && !isLichThi ? (event as SuKien.IRecord) : undefined;
 
 	const handleMoodle = (lopHocPhanId?: string) => {
