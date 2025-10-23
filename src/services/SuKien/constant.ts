@@ -95,7 +95,7 @@ export const ColorSuKien: Partial<Record<ELoaiSuKien | ELoaiSuKienKhac, string>>
 	// [ELoaiSuKien.THUC_THI_CHINH_SACH]: '#fa8f47ff',
 	// [ELoaiSuKien.HOAT_DONG_XA_HOI]: '#2a1affff',
 	// [ELoaiSuKien.KHAC]: '#09ff00ff',
-	[ELoaiSuKienKhac.KHAC]: '#09ff00ff',
+	[ELoaiSuKienKhac.KHAC]: '#b3b0afc5',
 };
 
 export enum ELoaiSuKienSinhVien {
