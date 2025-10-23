@@ -10,8 +10,11 @@ const CardLopHocPhan = () => {
 	const {
 		danhSach: danhSachLHP,
 		sinhVienGetAllModel,
+		sinhVienGetModel,
 		loading,
 		setDanhSach: setDanhSachLHP,
+		lopHienTai,
+		lopKeTiep,
 	} = useModel('lophocphan.lophocphan');
 	const { getAllModel: getAllHocKy, danhSach, record: recHocKy, setRecord } = useModel('daotao.hocky');
 	const carouselRef = useRef<CarouselRef>(null);
@@ -25,7 +28,7 @@ const CardLopHocPhan = () => {
 	const Isolation_Mode_5 = 'images/isolation-mode-5.svg';
 	const Isolation_Mode_6 = 'images/isolation-mode-6.svg';
 
-	const getData = () => recHocKy?.ma && sinhVienGetAllModel({ maHocKy: recHocKy?.ma });
+	const getData = () => recHocKy?.ma && sinhVienGetModel({ maHocKy: recHocKy?.ma });
 
 	useEffect(() => {
 		if (!danhSach.length) {
@@ -180,9 +183,18 @@ const CardLopHocPhan = () => {
 						},
 					]}
 				>
-					{filteredData.map((lop, index) => (
-						<CardLopHocPhanItem key={lop._id} lop={lop} index={index} backgrounds={backgrounds} />
-					))}
+					{filteredData.map((lop, index) => {
+						return (
+							<CardLopHocPhanItem
+								key={lop._id}
+								lop={lop}
+								index={index}
+								backgrounds={backgrounds}
+								isHienTai={lopHienTai?._id === lop._id}
+								isKeTiep={lopKeTiep?._id === lop._id && lopHienTai?._id !== lopKeTiep?._id}
+							/>
+						);
+					})}
 				</Carousel>
 			) : (
 				<Card variant='borderless' style={{ borderRadius: 8 }}>

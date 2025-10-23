@@ -50,7 +50,7 @@
 	}
 
 	&.desktop {
-		padding: 0 20px;
+		padding: 0 12px;
 	}
 }
 
@@ -62,15 +62,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
-	&.mobile,
-	&.tablet {
-		font-size: 10px;
-	}
-
-	&.desktop {
-		font-size: 11px;
-	}
+	font-size: 13px;
 }
 
 // Calendar grid styles
@@ -90,7 +82,7 @@
 	}
 
 	&.desktop {
-		padding: 0 20px;
+		padding: 10px 12px;
 		min-height: 255px;
 	}
 }
@@ -112,14 +104,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
-	&.mobile {
-		padding: 1px 0.5px;
-	}
-
-	&.desktop {
-		padding: 2px 1px;
-	}
+	padding: 2px 1px;
 }
 
 .date-number {
@@ -131,39 +116,43 @@
 	font-weight: normal;
 	background-color: transparent;
 
+	&.mobile,
+	&.tablet,
+	&.desktop {
+		font-size: 14px;
+
+		&.small-month {
+			font-size: 14px;
+		}
+	}
+
 	&.mobile {
 		width: 20px;
 		height: 20px;
-		font-size: 10px;
 
 		&.small-month {
 			width: 24px;
 			height: 24px;
-			font-size: 11px;
 		}
 	}
 
 	&.tablet {
 		width: 22px;
 		height: 22px;
-		font-size: 11px;
 
 		&.small-month {
 			width: 26px;
 			height: 26px;
-			font-size: 12px;
 		}
 	}
 
 	&.desktop {
 		width: 24px;
 		height: 24px;
-		font-size: 12px;
 
 		&.small-month {
 			width: 28px;
 			height: 28px;
-			font-size: 13px;
 		}
 	}
 
@@ -271,14 +260,32 @@
 	.ant-card-body {
 		padding: 0;
 	}
+
+	// Responsive cho mobile
+	@media (max-width: 767px) {
+		min-height: 278px !important;
+		height: 278px !important;
+	}
+
+	// Tablet (nếu muốn)
+	@media (min-width: 768px) and (max-width: 1023px) {
+		min-height: 300px !important;
+		height: 300px !important;
+	}
+
+	// Desktop (giữ nguyên)
+	@media (min-width: 1024px) {
+		min-height: 350px !important;
+		height: 350px !important;
+	}
 }
 
 // Modal styles
 .event-modal {
-	.ant-modal-body {
-		// max-height: 400px;
-		// overflow-y: auto;
-	}
+	// .ant-modal-body {
+	// 	max-height: 400px;
+	// 	overflow-y: auto;
+	// }
 }
 
 .event-item {
