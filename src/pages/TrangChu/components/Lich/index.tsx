@@ -4,6 +4,7 @@ import { Button, Card, Modal, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 
+import FormLichCaNhan from '@/pages/Calendar/components/FormLichCaNhan';
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import SlideButtonIcon from '../SlideButtonIcon';
 import './style.less';
@@ -64,7 +65,8 @@ const LichDashboard = () => {
 	const isMobile = screenSize.width <= 768;
 	const isTablet = screenSize.width > 768 && screenSize.width <= 1024;
 
-	const { getSuKienTrongKhoangModel, dataLichDashboard, setDataLichDashboard } = useModel('sukien.sukien');
+	const { getSuKienTrongKhoangModel, dataLichDashboard, setDataLichDashboard, visibleForm, setVisibleForm, edit } =
+		useModel('sukien.sukien');
 	const { getTrongKhoangModel } = useModel('daotao.thoikhoabieu');
 	const { getTrongKhoangModel: getLichThiModel } = useModel('khaothi.lichthi');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
@@ -400,12 +402,25 @@ const LichDashboard = () => {
 			</Modal>
 
 			{/* Modal xem chi tiết sự kiện */}
-			<ModalViewDetailCalendar
-				visible={visibleDetailEvent}
-				setVisible={setVisibleDetailEvent}
-				event={selectEvent}
-				getData={getData}
-			/>
+			{selectEvent && (
+				<ModalViewDetailCalendar
+					visible={visibleDetailEvent}
+					setVisible={setVisibleDetailEvent}
+					event={selectEvent}
+					getData={getData}
+				/>
+			)}
+
+			<Modal
+				open={visibleForm}
+				onCancel={() => setVisibleForm(false)}
+				footer={null}
+				maskClosable={false}
+				width={800}
+				title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}
+			>
+				<FormLichCaNhan getData={getData} />
+			</Modal>
 		</>
 	);
 };
