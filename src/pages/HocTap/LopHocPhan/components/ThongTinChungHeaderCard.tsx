@@ -1,8 +1,9 @@
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import dayjs from '@/utils/dayjs';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useModel, useNavigate } from 'umi';
 import ModalThongTinGiangVien from './ModalGiangVien';
 import './style.less';
 const { Title, Text } = Typography;
@@ -13,6 +14,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const [visibleGvDetailModal, setVisibleGvDetailModal] = useState(false);
 	const backgroundRef = useRef(Math.floor(Math.random() * 6));
 	const randomBackground = `/images/isolation-mode-${backgroundRef.current}.svg`;
+	const navigate = useNavigate();
 
 	let allThoiKhoaBieu = record?.thoiKhoaBieuList ?? [];
 	allThoiKhoaBieu = allThoiKhoaBieu.concat(record?.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? []);
@@ -45,6 +47,20 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 							gap: '16px',
 						}}
 					>
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								cursor: 'pointer',
+							}}
+							onClick={() => navigate('/hoc-tap/lop-tin-chi')}
+						>
+							<Tooltip title='Quay lại'>
+								<ArrowLeftOutlined style={{ color: '#333', fontSize: 14 }} />
+							</Tooltip>
+						</div>
+
 						<Title level={4} style={{ margin: 0, color: '#333' }}>
 							{record?.hocPhan?.ten ? (
 								<Tooltip title='Xem đề cương chi tiết học phần'>
