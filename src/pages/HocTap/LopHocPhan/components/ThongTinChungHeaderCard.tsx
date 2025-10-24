@@ -1,6 +1,7 @@
+import { primaryColor } from '@/services/base/constant';
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import dayjs from '@/utils/dayjs';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
 import { Link, useModel, useNavigate } from 'umi';
@@ -61,12 +62,13 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 							</Tooltip>
 						</div>
 
-						<Title level={4} style={{ margin: 0, color: '#333' }}>
+						<Title level={4} style={{ margin: 0 }}>
 							{record?.hocPhan?.ten ? (
 								<Tooltip title='Xem đề cương chi tiết học phần'>
 									<a onClick={() => props.onShowDeCuong?.()} style={{ color: '#333' }}>
 										{record?.hocPhan?.ten ?? ''}
 									</a>
+									<InfoCircleOutlined style={{ marginLeft: 16, color: primaryColor }} />
 								</Tooltip>
 							) : (
 								<i>Chưa cập nhật</i>

@@ -89,12 +89,11 @@ export const ColorSuKien: Partial<Record<ELoaiSuKien | ELoaiSuKienKhac, string>>
 	[ELoaiSuKien.CHUNG]: '#2098c7b3',
 	[ELoaiSuKien.BAI_TAP]: '#f1a32ab3',
 	[ELoaiSuKien.HOP_LOP]: '#9f44efb3',
-	// [ELoaiSuKien.CAC_HOAT_DONG]: '#2098c7b3',
-	// [ELoaiSuKien.DAO_TAO_BOI_DUONG]: '#ef4452b3',
-	// [ELoaiSuKien.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO]: '#fa8f47b3',
-	// [ELoaiSuKien.THUC_THI_CHINH_SACH]: '#fa8f47ff',
-	// [ELoaiSuKien.HOAT_DONG_XA_HOI]: '#2a1affff',
-	// [ELoaiSuKien.KHAC]: '#09ff00ff',
+	[ELoaiSuKienKhac.CAC_HOAT_DONG]: '#2098c7b3',
+	[ELoaiSuKienKhac.DAO_TAO_BOI_DUONG]: '#ef4452b3',
+	[ELoaiSuKienKhac.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO]: '#fa8f47b3',
+	[ELoaiSuKienKhac.THUC_THI_CHINH_SACH]: '#fa8f47ff',
+	[ELoaiSuKienKhac.HOAT_DONG_XA_HOI]: '#2a1affff',
 	[ELoaiSuKienKhac.KHAC]: '#b3b0afc5',
 };
 
