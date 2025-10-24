@@ -19,7 +19,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	const { deleteModel, handleEdit } = useModel('sukien.sukien');
 	const { getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
 	const { record: recSetting } = useModel('tienich.settinglich');
-	const loaiSuKien = event.loaiSuKien as ELoaiSuKien | ELoaiSuKienKhac;
+	const loaiSuKien = event?.loaiSuKien as ELoaiSuKien | ELoaiSuKienKhac;
 	const isThoiKhoaBieu = loaiSuKien === ELoaiSuKien.LICH_HOC;
 	const thoiKhoaBieu = isThoiKhoaBieu ? (event as ThoiKhoaBieu.IRecord) : undefined;
 	const isLichThi = loaiSuKien === ELoaiSuKien.LICH_THI;
