@@ -4,6 +4,7 @@ import { Button, Card, Modal, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 
+import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import SlideButtonIcon from '../SlideButtonIcon';
 import './style.less';
 
@@ -49,8 +50,10 @@ const LichDashboard = () => {
 	const [currentMonth, setCurrentMonth] = useState(dayjs());
 	const [selectedDate, setSelectedDate] = useState(dayjs());
 	const [visibleDetail, setVisibleDetail] = useState(false);
+	const [visibleDetailEvent, setVisibleDetailEvent] = useState(false);
 	const [selectedEvents, setSelectedEvents] = useState<SuKienItem[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [selectEvent, setSelectEvent] = useState<SuKienItem | null>(null);
 
 	// Cache để lưu dữ liệu theo tháng
 	const cacheRef = useRef<Record<string, SuKienItem[]>>({});
@@ -66,9 +69,10 @@ const LichDashboard = () => {
 	const { getTrongKhoangModel: getLichThiModel } = useModel('khaothi.lichthi');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 
+	// Get khoảng thời gian hiển thị dựa trên tháng hiện tại +- 1 tuần
 	const getKhoangThoiGian = (month = currentMonth) => ({
-		fromDate: month.startOf('month').startOf('week').toISOString(),
-		toDate: month.endOf('month').endOf('week').toISOString(),
+		fromDate: month.startOf('month').startOf('week').subtract(1, 'week').toISOString(),
+		toDate: month.endOf('month').endOf('week').add(1, 'week').toISOString(),
 	});
 
 	const getThoiKhoaBieu = async (timeRange: { fromDate: string; toDate: string }) => {
@@ -118,8 +122,8 @@ const LichDashboard = () => {
 		});
 	};
 
-	const getData = async (month: dayjs.Dayjs) => {
-		const timeRange = getKhoangThoiGian(month);
+	const getData = async (month?: dayjs.Dayjs) => {
+		const timeRange = month ? getKhoangThoiGian(month) : getKhoangThoiGian();
 		const promises = [getThoiKhoaBieu(timeRange), getSuKien(timeRange), getLichThi(timeRange), getBaiTap(timeRange)];
 
 		return Promise.allSettled(promises)
@@ -183,15 +187,14 @@ const LichDashboard = () => {
 				const data = await loadMonthData(currentMonth);
 				setDataLichDashboard(data);
 
-				// Preload tháng kế tiếp trong background (không block UI)
-				setTimeout(() => {
-					loadMonthData(currentMonth.add(1, 'month'));
-				}, 500);
+				// Bỏ preload tháng kế tiếp và tháng trước
+				// setTimeout(() => {
+				// 	loadMonthData(currentMonth.add(1, 'month'));
+				// }, 500);
 
-				// Optional: Preload tháng trước (nếu user thích lướt ngược)
-				setTimeout(() => {
-					loadMonthData(currentMonth.subtract(1, 'month'));
-				}, 1000);
+				// setTimeout(() => {
+				// 	loadMonthData(currentMonth.subtract(1, 'month'));
+				// }, 1000);
 			} finally {
 				setLoading(false);
 			}
@@ -340,6 +343,11 @@ const LichDashboard = () => {
 		);
 	};
 
+	const handleViewDetail = (event: SuKienItem) => {
+		setSelectEvent(event);
+		setVisibleDetailEvent(true);
+	};
+
 	return (
 		<>
 			<Card
@@ -358,7 +366,7 @@ const LichDashboard = () => {
 				</Card>
 			</Card>
 
-			{/* Modal xem chi tiết sự kiện */}
+			{/* Modal xem list sự kiện */}
 			<Modal
 				title={`Sự kiện ngày ${selectedDate.format('DD/MM/YYYY')}`}
 				open={visibleDetail}
@@ -373,8 +381,9 @@ const LichDashboard = () => {
 							key={index}
 							className='event-item'
 							style={{
-								borderLeftColor: getEventColor(event.loaiSuKien),
+								borderLeftColor: getEventColor(event?.loaiSuKien),
 							}}
+							onClick={() => handleViewDetail(event)}
 						>
 							<div className='event-title'>{event.title}</div>
 							<div className='event-time'>
@@ -389,6 +398,14 @@ const LichDashboard = () => {
 					<Button onClick={() => setVisibleDetail(false)}>Đóng</Button>
 				</div>
 			</Modal>
+
+			{/* Modal xem chi tiết sự kiện */}
+			<ModalViewDetailCalendar
+				visible={visibleDetailEvent}
+				setVisible={setVisibleDetailEvent}
+				event={selectEvent}
+				getData={getData}
+			/>
 		</>
 	);
 };
