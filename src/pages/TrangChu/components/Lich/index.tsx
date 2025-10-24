@@ -66,9 +66,10 @@ const LichDashboard = () => {
 	const { getTrongKhoangModel: getLichThiModel } = useModel('khaothi.lichthi');
 	const { thongKeBaiTapModel } = useModel('daotao.baitap');
 
+	// Get khoảng thời gian hiển thị dựa trên tháng hiện tại +- 1 tuần
 	const getKhoangThoiGian = (month = currentMonth) => ({
-		fromDate: month.startOf('month').startOf('week').toISOString(),
-		toDate: month.endOf('month').endOf('week').toISOString(),
+		fromDate: month.startOf('month').startOf('week').subtract(1, 'week').toISOString(),
+		toDate: month.endOf('month').endOf('week').add(1, 'week').toISOString(),
 	});
 
 	const getThoiKhoaBieu = async (timeRange: { fromDate: string; toDate: string }) => {
@@ -183,15 +184,14 @@ const LichDashboard = () => {
 				const data = await loadMonthData(currentMonth);
 				setDataLichDashboard(data);
 
-				// Preload tháng kế tiếp trong background (không block UI)
-				setTimeout(() => {
-					loadMonthData(currentMonth.add(1, 'month'));
-				}, 500);
+				// Bỏ preload tháng kế tiếp và tháng trước
+				// setTimeout(() => {
+				// 	loadMonthData(currentMonth.add(1, 'month'));
+				// }, 500);
 
-				// Optional: Preload tháng trước (nếu user thích lướt ngược)
-				setTimeout(() => {
-					loadMonthData(currentMonth.subtract(1, 'month'));
-				}, 1000);
+				// setTimeout(() => {
+				// 	loadMonthData(currentMonth.subtract(1, 'month'));
+				// }, 1000);
 			} finally {
 				setLoading(false);
 			}
