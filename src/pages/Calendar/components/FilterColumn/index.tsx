@@ -66,24 +66,31 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 	const changeLoaiSuKien = (checkedValue: any) => {
 		let newSelect = [...checkedValue];
 
-		// Nếu tick "Khác", chỉ thêm 'Khác' và cho phép undefined
+		// Nếu tick "Khác" thì giữ nguyên và không xóa nhóm loại khác
 		if (checkedValue.includes(ELoaiSuKienKhac.KHAC)) {
 			newSelect = _.uniq([...checkedValue]);
 		} else {
+			// Nếu bỏ tick "Khác", loại bỏ toàn bộ các loại trong nhóm Khác
 			newSelect = newSelect.filter((i) => !allLoaiSuKienKhac.includes(i));
 		}
 
 		setSelectSuKiens(newSelect as (ELoaiSuKien | ELoaiSuKienKhac)[]);
 
 		const filteredEvents = dataLichFull.filter((event) => {
-			// Nếu chọn "Khác", cho phép cả undefined và 'Khác'
-			if (
-				newSelect.includes(ELoaiSuKienKhac.KHAC) &&
-				(!event.loaiSuKien || event.loaiSuKien === ELoaiSuKienKhac.KHAC)
-			) {
-				return true;
+			const eventLoai = event.loaiSuKien;
+
+			// Nếu tick "Khác": hiển thị tất cả loại trong nhóm ELoaiSuKienKhac
+			if (newSelect.includes(ELoaiSuKienKhac.KHAC)) {
+				if (
+					Object.values(ELoaiSuKienKhac).includes(eventLoai as any) ||
+					!Object.values(ELoaiSuKien).includes(eventLoai as any)
+				) {
+					return true;
+				}
 			}
-			return newSelect.includes(event.loaiSuKien);
+
+			// Hiển thị các loại được tick khác
+			return newSelect.includes(eventLoai);
 		});
 
 		setDataCalendar(filteredEvents);
