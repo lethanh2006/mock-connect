@@ -6,7 +6,14 @@ import { message } from 'antd';
 
 export default () => {
 	const objInit = useInitModel<BaiTap.IDanhSachGiaoBaiTap>('assignment-user', undefined, undefined, ipDaoTao);
-	const { formSubmiting, setFormSubmiting, setLoading, setDanhSach } = objInit;
+	const { formSubmiting, setFormSubmiting, setLoading, setDanhSach, getModel } = objInit;
+
+	const getBaiTapSinhVienModel = async (): Promise<BaiTap.IDanhSachGiaoBaiTap[]> => {
+		return getModel(undefined, undefined, undefined, undefined, undefined, 'sinh-vien/me/page').then((res) => {
+			setDanhSach(res);
+			return res;
+		});
+	};
 
 	const sinhVienNopBaiTapModal = async (
 		payLoad: {
@@ -52,5 +59,6 @@ export default () => {
 		...objInit,
 		sinhVienNopBaiTapModal,
 		thongKeBaiTapModel,
+		getBaiTapSinhVienModel,
 	};
 };

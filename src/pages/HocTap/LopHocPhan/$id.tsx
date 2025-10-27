@@ -252,7 +252,7 @@ const DetailLopTinChi = () => {
 			<ModalHocPhan
 				visible={visibleDeCuongHp[0]}
 				setVisible={() => setVisibleDeCuongHp([false, '0'])}
-				title='Chi tiết đề cương học phần'
+				title={`Chi tiết đề cương học phần ${record?.hocKy?.ten ? `- ${record?.hocKy?.ten ?? ''}` : ''}`}
 				activeKey={visibleDeCuongHp[1]}
 			/>
 		</>

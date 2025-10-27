@@ -88,7 +88,7 @@ const LopHocPhanPage = () => {
 					<CardBaiTapDashboard />
 				</Col>
 				<Col span={24} md={8}>
-					<CardDienDanDashboard />
+					<CardDienDanDashboard typeLop={'lop-hoc-phan'} />
 				</Col>
 			</Row>
 		</Card>

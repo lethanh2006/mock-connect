@@ -18,6 +18,8 @@ interface SuKienItem {
 	thoiGianKetThuc: string;
 	diaDiem: string;
 	suffix: string;
+	tenLopHocPhan?: string;
+	phongHoc?: string;
 }
 
 // Hook để detect screen size
@@ -384,14 +386,20 @@ const LichDashboard = () => {
 							className='event-item'
 							style={{
 								borderLeftColor: getEventColor(event?.loaiSuKien),
+								cursor: 'pointer',
 							}}
 							onClick={() => handleViewDetail(event)}
 						>
-							<div className='event-title'>{event.title}</div>
+							<div className='event-title'>
+								{event.title}
+								{event?.tenLopHocPhan ? `- ${event?.tenLopHocPhan}` : ''}
+							</div>
 							<div className='event-time'>
 								{dayjs(event.thoiGianBatDau).format('HH:mm')} - {dayjs(event.thoiGianKetThuc).format('HH:mm')}
 							</div>
-							{event.diaDiem && <div className='event-location'>📍 {event.diaDiem}</div>}
+							{(event.diaDiem || event.phongHoc) && (
+								<div className='event-location'>📍 {event.diaDiem ? event.diaDiem : `Phòng ${event.phongHoc}`}</div>
+							)}
 						</div>
 					))}
 				</div>
