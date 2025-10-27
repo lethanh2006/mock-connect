@@ -6,8 +6,9 @@ import { history, Link, useModel } from 'umi';
 import './style.less';
 const { Text } = Typography;
 
-const CardDienDanDashboard = () => {
-	const { danhSach, loading, getAllModel } = useModel('diendan.baidang');
+const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-hanh-chinh' }) => {
+	const { record: recHocKy } = useModel('daotao.hocky');
+	const { danhSach, loading, getAllModel, getDienDanSinhVienModel } = useModel('diendan.baidang');
 	const [screenSize, setScreenSize] = useState({
 		width: window.innerWidth,
 		height: window.innerHeight,
@@ -29,8 +30,8 @@ const CardDienDanDashboard = () => {
 	}, []);
 
 	useEffect(() => {
-		getAllModel(undefined, undefined, undefined, undefined, 'many/lop-hoc-phan/me');
-	}, []);
+		getDienDanSinhVienModel(undefined, recHocKy?.ma, { ghimBaiViet: -1 }, props.typeLop);
+	}, [recHocKy?.ma, props.typeLop]);
 
 	const isMobile = screenSize.width <= 768;
 
