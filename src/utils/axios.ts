@@ -1,6 +1,6 @@
 // import { refreshAccesssToken } from '@/services/ant-design-pro/api';
 import '@ant-design/v5-patch-for-react-19';
-import { message, notification } from 'antd';
+import { notification } from 'antd';
 import axios1 from 'axios';
 // import { history } from 'umi';
 import qs from 'qs';
@@ -116,6 +116,7 @@ axios.interceptors.response.use(
 					notification.error({
 						message: 'Dữ liệu chưa đúng (004)',
 						description: descriptionError,
+						key: 'error400',
 					});
 					break;
 
@@ -125,6 +126,7 @@ axios.interceptors.response.use(
 						notification.error({
 							message: 'Phiên đăng nhập đã thay đổi (104)',
 							description: 'Vui lòng tải lại trang (F5) để cập nhật. Chú ý các dữ liệu chưa lưu sẽ bị mất!',
+							key: 'error401',
 						});
 					if (originalRequest._retry) break;
 					break;
@@ -185,6 +187,7 @@ axios.interceptors.response.use(
 					notification.error({
 						message: 'Thao tác không được phép (304)',
 						description: descriptionError,
+						key: 'error403',
 					});
 					break;
 
@@ -192,6 +195,7 @@ axios.interceptors.response.use(
 					notification.error({
 						message: 'Không tìm thấy (040)',
 						description: descriptionError,
+						key: 'error404',
 					});
 					break;
 
@@ -199,6 +203,7 @@ axios.interceptors.response.use(
 					notification.error({
 						message: 'Dữ liệu chưa đúng (904)',
 						description: descriptionError,
+						key: 'error409',
 					});
 					break;
 
@@ -207,11 +212,16 @@ axios.interceptors.response.use(
 					notification.warning({
 						message: 'Máy chủ gặp lỗi (005)',
 						description: descriptionError,
+						key: 'error500',
 					});
 					break;
 
 				default:
-					message.error('Có lỗi xảy ra. Vui lòng thử lại sau!');
+					notification.warning({
+						message: 'Lỗi xảy ra',
+						description: 'Có lỗi xảy ra. Vui lòng thử lại sau!',
+						key: 'global_error',
+					});
 					break;
 			}
 		}
