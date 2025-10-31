@@ -36,6 +36,8 @@ export interface StatisticsItem {
 
 	/** Hàm callback khi click vào item (tùy chọn) */
 	onClick?: () => void;
+
+	selected?: boolean;
 }
 
 /**
