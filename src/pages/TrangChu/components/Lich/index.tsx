@@ -1,6 +1,6 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
-import { Button, Card, Modal, Typography } from 'antd';
+import { Button, Card, Modal, Spin, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 
@@ -280,69 +280,73 @@ const LichDashboard = () => {
 				</div>
 
 				{/* Calendar grid với chiều cao cố định */}
-				<div className={`calendar-grid ${responsiveClass}`}>
-					{weeks.map((week, weekIndex) => (
-						<div
-							key={weekIndex}
-							className={`calendar-week ${responsiveClass}`}
-							style={{
-								height: `calc(100% / ${weeks.length})`,
-							}}
-						>
-							{week.map((date, dayIndex) => {
-								const events = getEventsForDate(date);
-								const isCurrentMonth = date.month() === currentMonth.month();
-								const isToday = date.isSame(dayjs(), 'day');
-								const isSelected = date.isSame(selectedDate, 'day');
-								const isSelectedToday = isToday && isSelected;
+				<Spin spinning={loading}>
+					<div className={`calendar-grid ${responsiveClass}`}>
+						{weeks.map((week, weekIndex) => (
+							<div
+								key={weekIndex}
+								className={`calendar-week ${responsiveClass}`}
+								style={{
+									height: `calc(100% / ${weeks.length})`,
+								}}
+							>
+								{week.map((date, dayIndex) => {
+									const events = getEventsForDate(date);
+									const isCurrentMonth = date.month() === currentMonth.month();
+									const isToday = date.isSame(dayjs(), 'day');
+									const isSelected = date.isSame(selectedDate, 'day');
+									const isSelectedToday = isToday && isSelected;
 
-								return (
-									<div
-										key={dayIndex}
-										className={`date-cell ${responsiveClass}`}
-										onClick={() => {
-											setSelectedDate(date);
-											if (events.length > 0) {
-												setSelectedEvents(events);
-												setVisibleDetail(true);
-											}
-										}}
-									>
+									return (
 										<div
-											className={`date-number ${responsiveClass} ${isSmallMonth ? 'small-month' : ''} ${
-												isSelectedToday ? 'selected-today' : isToday ? 'today' : isSelected ? 'selected' : ''
-											} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
+											key={dayIndex}
+											className={`date-cell ${responsiveClass}`}
+											onClick={() => {
+												setSelectedDate(date);
+												if (events.length > 0) {
+													setSelectedEvents(events);
+													setVisibleDetail(true);
+												}
+											}}
 										>
-											{date.format('DD')}
-										</div>
+											<div
+												className={`date-number ${responsiveClass} ${isSmallMonth ? 'small-month' : ''} ${
+													isSelectedToday ? 'selected-today' : isToday ? 'today' : isSelected ? 'selected' : ''
+												} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
+											>
+												{date.format('DD')}
+											</div>
 
-										{/* Vùng hiển thị dấu chấm với chiều cao cố định */}
-										<div className={`event-dots-container ${responsiveClass} ${isSmallMonth ? 'small-month' : ''}`}>
-											{events.length > 0 ? (
-												<>
-													{events.slice(0, isMobile ? 3 : 4).map((event, index) => (
-														<div
-															key={index}
-															className={`event-dot ${responsiveClass}`}
-															style={{
-																backgroundColor: getEventColor(event.loaiSuKien),
-															}}
-														/>
-													))}
-													{events.length > (isMobile ? 3 : 4) && (
-														<div className={`event-more ${responsiveClass}`}>+{events.length - (isMobile ? 3 : 4)}</div>
-													)}
-												</>
-											) : (
-												<div className='empty-dot-space' />
-											)}
+											{/* Vùng hiển thị dấu chấm với chiều cao cố định */}
+											<div className={`event-dots-container ${responsiveClass} ${isSmallMonth ? 'small-month' : ''}`}>
+												{events.length > 0 ? (
+													<>
+														{events.slice(0, isMobile ? 3 : 4).map((event, index) => (
+															<div
+																key={index}
+																className={`event-dot ${responsiveClass}`}
+																style={{
+																	backgroundColor: getEventColor(event.loaiSuKien),
+																}}
+															/>
+														))}
+														{events.length > (isMobile ? 3 : 4) && (
+															<div className={`event-more ${responsiveClass}`}>
+																+{events.length - (isMobile ? 3 : 4)}
+															</div>
+														)}
+													</>
+												) : (
+													<div className='empty-dot-space' />
+												)}
+											</div>
 										</div>
-									</div>
-								);
-							})}
-						</div>
-					))}
-				</div>
+									);
+								})}
+							</div>
+						))}
+					</div>
+				</Spin>
 			</div>
 		);
 	};
@@ -357,7 +361,6 @@ const LichDashboard = () => {
 			<Card
 				variant='borderless'
 				className='card-borderless card-big-title'
-				loading={loading}
 				title='Lịch'
 				extra={
 					<Link to='/calendar' className='xem-tat-ca-link'>

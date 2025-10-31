@@ -10,8 +10,8 @@ import { colorTrangThaiThi } from '@/services/KhaoThi/constant';
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Modal, Popconfirm, Space, Tag, message } from 'antd';
+import { DeleteOutlined, DownOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Descriptions, Dropdown, Modal, Popconfirm, Space, Tag, message } from 'antd';
 import { history, useModel } from 'umi';
 
 const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; event: any; getData: () => void }) => {
@@ -70,7 +70,6 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 					</a>
 				</Descriptions.Item>
 			) : null}
-
 			<Descriptions.Item label='Hình thức giảng dạy'>
 				<Tag color={colorHinhThucGiangDay[thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay]}>
 					{thoiKhoaBieu?.hinhThucGiangDay}
@@ -138,6 +137,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			onCancel={() => setVisible(false)}
 			footer={
 				<Space wrap>
+					{/* --- Sự kiện cá nhân --- */}
 					{suKien && suKien.loaiSuKien === ELoaiSuKien.CA_NHAN ? (
 						<>
 							<Button
@@ -163,25 +163,144 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 							</Popconfirm>
 						</>
 					) : null}
+
+					{/* --- Lịch học --- */}
+					{/* --- Lịch học (Dropdown giống Bài tập) --- */}
 					{isThoiKhoaBieu ? (
-						<Button
+						<Dropdown.Button
 							type='primary'
+							trigger={['click']}
+							placement='topRight'
+							menu={{
+								items: [
+									{
+										key: 'thong-bao',
+										label: (
+											<span
+												onClick={() => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}#thong-bao`)}
+											>
+												Thông báo
+											</span>
+										),
+									},
+									{
+										key: 'dien-dan',
+										label: (
+											<span
+												onClick={() => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}#dien-dan`)}
+											>
+												Diễn đàn thảo luận
+											</span>
+										),
+									},
+									{
+										key: 'tai-lieu',
+										label: (
+											<span
+												onClick={() => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}#tai-lieu`)}
+											>
+												Tài liệu học tập
+											</span>
+										),
+									},
+									{
+										key: 'bai-tap',
+										label: (
+											<span
+												onClick={() => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}#bai-tap`)}
+											>
+												Bài tập
+											</span>
+										),
+									},
+								],
+							}}
 							onClick={() => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}`)}
+							icon={<DownOutlined />}
 						>
 							Xem chi tiết
-						</Button>
-					) : isLichThi ? (
+						</Dropdown.Button>
+					) : null}
+
+					{/* --- Lịch thi --- */}
+					{isLichThi ? (
 						<Button type='primary' onClick={() => history.push('/hoc-tap/lich-thi')}>
 							Xem lịch thi
 						</Button>
-					) : isBaiTap ? (
-						<Button
-							type='primary'
-							onClick={() => history.push(`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}#bai-tap`)}
-						>
-							Xem chi tiết
-						</Button>
 					) : null}
+
+					{/* --- Bài tập (Dropdown giống Lịch giảng dạy) --- */}
+					{isBaiTap ? (
+						<Space>
+							<Dropdown.Button
+								type='default'
+								trigger={['click']}
+								placement='topRight'
+								menu={{
+									items: [
+										{
+											key: 'thong-bao',
+											label: (
+												<span
+													onClick={() =>
+														history.push(`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}#thong-bao`)
+													}
+												>
+													Thông báo
+												</span>
+											),
+										},
+										{
+											key: 'dien-dan',
+											label: (
+												<span
+													onClick={() =>
+														history.push(`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}#dien-dan`)
+													}
+												>
+													Diễn đàn thảo luận
+												</span>
+											),
+										},
+										{
+											key: 'bai-tap',
+											label: (
+												<span
+													onClick={() =>
+														history.push(
+															`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}?idBaiTap=${event?.assignment?._id}#bai-tap`,
+														)
+													}
+												>
+													Bài tập
+												</span>
+											),
+										},
+									],
+								}}
+								onClick={() =>
+									history.push(
+										`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}?idBaiTap=${event?.assignment?._id}#bai-tap`,
+									)
+								}
+								icon={<DownOutlined />}
+							>
+								Xem chi tiết
+							</Dropdown.Button>
+
+							<Button
+								type='primary'
+								onClick={() =>
+									history.push(
+										`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}?idBaiTap=${event?.assignment?._id}#nop-bai`,
+									)
+								}
+							>
+								Nộp bài
+							</Button>
+						</Space>
+					) : null}
+
 					<Button onClick={() => setVisible(false)}>Đóng</Button>
 				</Space>
 			}

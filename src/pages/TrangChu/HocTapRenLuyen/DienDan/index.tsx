@@ -1,18 +1,28 @@
 import dayjs from '@/utils/dayjs';
-import { ArrowRightOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Card, Empty, Tag, Typography } from 'antd';
+import { ArrowRightOutlined, CheckCircleOutlined, FilterOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Dropdown, Empty, Space, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
 import './style.less';
+
 const { Text } = Typography;
+
+type FilterType = 'ngay-dang' | 'chua-xem' | 'hoat-dong-moi-nhat';
 
 const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-hanh-chinh' }) => {
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { danhSach, loading, getAllModel, getDienDanSinhVienModel } = useModel('diendan.baidang');
+	const { initialState } = useModel('@@initialState');
+	const { record: recordSinhVien } = useModel('sinhvien.sinhvien');
+	const [sortMode, setSortMode] = useState<'ngay-dang' | 'chua-xem' | 'hoat-dong-moi-nhat'>('ngay-dang');
+
 	const [screenSize, setScreenSize] = useState({
 		width: window.innerWidth,
 		height: window.innerHeight,
 	});
+	const [currentFilter, setCurrentFilter] = useState<FilterType>('ngay-dang');
+
+	const currentUserSsoId = recordSinhVien?.ssoId || initialState?.currentUser?.ssoId;
 
 	const lastNameChar = (ten: string) => ten.split(' ')?.at(-1)?.[0]?.toUpperCase();
 
@@ -30,20 +40,84 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 	}, []);
 
 	useEffect(() => {
-		getDienDanSinhVienModel(undefined, recHocKy?.ma, { ghimBaiViet: -1 }, props.typeLop);
-	}, [recHocKy?.ma, props.typeLop]);
+		getDienDanSinhVienModel(undefined, sortMode, recHocKy?.ma, { ghimBaiViet: -1 }, props.typeLop);
+	}, [recHocKy?.ma, props.typeLop, sortMode]);
+
+	useEffect(() => {
+		getAllModel(undefined, undefined, undefined, undefined, 'many/lop-hoc-phan/me');
+	}, []);
 
 	const isMobile = screenSize.width <= 768;
 
-	// Lấy 6 bài đăng mới nhất
-	const displayData = danhSach;
-	// .slice(0, 6);
+	// ======= Filter & Sort =======
+	const getFilteredData = () => {
+		let filteredData = [...danhSach];
+
+		switch (currentFilter) {
+			case 'ngay-dang':
+				filteredData.sort(
+					(a, b) => dayjs(b.ngayDang || b.createdAt).valueOf() - dayjs(a.ngayDang || a.createdAt).valueOf(),
+				);
+				break;
+
+			case 'chua-xem':
+				filteredData = filteredData.filter(
+					(item) =>
+						!item.danhSachDaXem?.some(
+							(viewer) => viewer.ssoId === currentUserSsoId || viewer.ssoId === recordSinhVien?.ssoId,
+						),
+				);
+				break;
+
+			case 'hoat-dong-moi-nhat':
+				filteredData.sort((a, b) => {
+					const aLatest =
+						a.danhSachBinhLuan?.length > 0
+							? Math.max(
+									dayjs(a.ngayDang || a.createdAt).valueOf(),
+									...a.danhSachBinhLuan.map((c) => dayjs(c.ngayDang || c.createdAt).valueOf()),
+								)
+							: dayjs(a.ngayDang || a.createdAt).valueOf();
+
+					const bLatest =
+						b.danhSachBinhLuan?.length > 0
+							? Math.max(
+									dayjs(b.ngayDang || b.createdAt).valueOf(),
+									...b.danhSachBinhLuan.map((c) => dayjs(c.ngayDang || c.createdAt).valueOf()),
+								)
+							: dayjs(b.ngayDang || b.createdAt).valueOf();
+
+					return bLatest - aLatest;
+				});
+				break;
+		}
+
+		return filteredData;
+	};
+
+	const displayData = getFilteredData();
+
+	const filterOptions = [
+		{ key: 'ngay-dang', label: 'Ngày đăng', icon: <ArrowRightOutlined /> },
+		{ key: 'chua-xem', label: 'Chưa xem', icon: <CheckCircleOutlined /> },
+		{ key: 'hoat-dong-moi-nhat', label: 'Mới nhất', icon: <FilterOutlined /> },
+	];
+
+	const getFilterLabel = () => filterOptions.find((f) => f.key === currentFilter)?.label || 'Sắp xếp';
+
+	const handleFilterChange = (filterType: FilterType) => {
+		// setCurrentFilter(filterType);
+		setSortMode(filterType);
+	};
 
 	const renderDiscussionItem = (item: any, index: number) => {
+		const isUnread =
+			currentUserSsoId && !item.danhSachDaXem?.some((viewer: { ssoId: string }) => viewer.ssoId === currentUserSsoId);
+
 		return (
 			<div
 				key={item._id}
-				className='card-diendan-wrapper'
+				className={`card-diendan-wrapper ${isUnread ? 'card-diendan-unread' : ''}`}
 				onClick={() => history.push(`/hoc-tap/lop-tin-chi/${item.lopHocPhanId}?idBaiViet=${item._id}#dien-dan`)}
 			>
 				{/* Tên lớp học phần */}
@@ -70,6 +144,9 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 						{/* Tên người đăng */}
 						<div className='card-diendan-user-info'>
 							<Text className='card-diendan-user-info-name'>{item?.thongTinNguoiDang?.hoTen}</Text>
+							<Tag color={isUnread ? 'red' : ''} style={{ marginLeft: 4 }}>
+								{isUnread ? 'Mới' : 'Đã xem'}
+							</Tag>
 						</div>
 
 						{/* Thời gian */}
@@ -81,6 +158,17 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 								/>
 							)}
 							{dayjs(item?.ngayDang ?? item.createdAt).format('HH:mm DD/MM/YYYY')}
+							{item.danhSachBinhLuan?.length > 0 && (
+								<Text
+									style={{
+										marginLeft: 8,
+										fontSize: '12px',
+										color: '#8c8c8c',
+									}}
+								>
+									({item.danhSachBinhLuan.length} bình luận)
+								</Text>
+							)}
 						</Text>
 					</div>
 				</div>
@@ -96,17 +184,33 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 			variant='borderless'
 			className='card-borderless card-big-title'
 			title={
-				<>
-					Diễn đàn thảo luận{' '}
-					<Tag color={displayData.length > 0 ? 'green' : ''} style={{ marginLeft: 8 }}>
-						{displayData.length}
-					</Tag>
-				</>
+				<Space>
+					Diễn đàn thảo luận
+					<Tag color={displayData.length > 0 ? 'green' : ''}>{displayData.length}</Tag>
+				</Space>
 			}
 			extra={
-				<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
-					Xem thêm
-				</Link>
+				<Space>
+					<Dropdown
+						menu={{
+							items: filterOptions.map((option) => ({
+								key: option.key,
+								label: option.label,
+								icon: option.icon,
+								onClick: () => handleFilterChange(option.key as FilterType),
+							})),
+						}}
+						trigger={['click']}
+						placement='bottomRight'
+					>
+						<Button size='small' icon={<FilterOutlined />} type={currentFilter !== 'ngay-dang' ? 'primary' : 'default'}>
+							{isMobile ? '' : getFilterLabel()}
+						</Button>
+					</Dropdown>
+					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
+						Xem thêm
+					</Link>
+				</Space>
 			}
 			loading={loading}
 		>
@@ -114,7 +218,11 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 				{displayData.length ? (
 					displayData.map((item, index) => renderDiscussionItem(item, index))
 				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
+					<Empty
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+						style={{ margin: '16px 0' }}
+						description={currentFilter === 'chua-xem' ? 'Không có bài viết chưa xem' : 'Không có dữ liệu'}
+					/>
 				)}
 			</Card>
 		</Card>
