@@ -1,4 +1,10 @@
-import { type TExportField, type TFilter, type TImportHeader, type TImportResponse, type QueryCondition } from '@/components/Table/typing';
+import {
+	type QueryCondition,
+	type TExportField,
+	type TFilter,
+	type TImportHeader,
+	type TImportResponse,
+} from '@/components/Table/typing';
 import { chuanHoaObject } from '@/utils/utils';
 import { message } from 'antd';
 import { useState } from 'react';
@@ -76,7 +82,7 @@ const useInitModel = <T extends object>(
 		isSetDanhSach?: boolean,
 		isAbsolutePath?: boolean,
 		selectParams?: string[],
-		config?: { dataPartitionCode?: string },
+		config?: { dataPartitionCode?: string | null | undefined },
 	): Promise<T[]> => {
 		setLoading(true);
 		const payload = {
@@ -94,12 +100,9 @@ const useInitModel = <T extends object>(
 			...(otherQuery ?? {}),
 		};
 		try {
-			const response = await getService(
-				payload,
-				path ?? 'page',
-				isAbsolutePath ?? false,
-				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
-			);
+			const response = await getService(payload, path ?? 'page', isAbsolutePath ?? false, {
+				'x-data-partition-code': config?.dataPartitionCode,
+			});
 			const tempData: T[] = response?.data?.data?.result ?? [];
 			const tempTotal: number = response?.data?.data?.total ?? 0;
 
@@ -135,7 +138,7 @@ const useInitModel = <T extends object>(
 		isSetDanhSach?: boolean,
 		selectParams?: string[],
 		otherQuery?: Record<string, any>,
-		config?: { dataPartitionCode?: string },
+		config?: { dataPartitionCode?: string | null | string },
 	): Promise<T[]> => {
 		setLoading(true);
 		try {
@@ -146,11 +149,7 @@ const useInitModel = <T extends object>(
 				select: selectParams?.join(' '),
 				...(otherQuery ?? {}),
 			};
-			const response = await getAllService(
-				payload,
-				pathParam,
-				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
-			);
+			const response = await getAllService(payload, pathParam, { 'x-data-partition-code': config?.dataPartitionCode });
 			const data: T[] = response?.data?.data ?? [];
 			// if (sortParam) data.sort(sortParam);
 			if (isSetDanhSach !== false) setDanhSach(data);
@@ -169,11 +168,15 @@ const useInitModel = <T extends object>(
 		}
 	};
 
-	const getByIdModel = async (id: string | number, isSetRecord?: boolean): Promise<T> => {
+	const getByIdModel = async (
+		id: string | number,
+		isSetRecord?: boolean,
+		config?: { dataPartitionCode?: string | null | string },
+	): Promise<T> => {
 		if (!id) return Promise.reject('Invalid id');
 		setLoading(true);
 		try {
-			const response = await getByIdService(id);
+			const response = await getByIdService(id, { 'x-data-partition-code': config?.dataPartitionCode });
 			if (isSetRecord !== false) setRecord(response?.data?.data ?? null);
 			return response?.data?.data;
 		} catch (er) {
@@ -184,11 +187,16 @@ const useInitModel = <T extends object>(
 		}
 	};
 
-	const getOneModel = async (conditionParam: QueryCondition<T>): Promise<T> => {
+	const getOneModel = async (
+		conditionParam: QueryCondition<T>,
+		config?: { dataPartitionCode?: string | null | string },
+	): Promise<T> => {
 		if (!conditionParam) return Promise.reject('condition is required');
 		setLoading(true);
 		try {
-			const response = await getService({ condition: conditionParam }, 'one');
+			const response = await getService({ condition: conditionParam }, 'one', undefined, {
+				'x-data-partition-code': config?.dataPartitionCode,
+			});
 			setRecord(response?.data?.data ?? null);
 			return response?.data?.data;
 		} catch (er) {
@@ -205,16 +213,14 @@ const useInitModel = <T extends object>(
 		closeModal?: boolean,
 		messageText?: string,
 		path?: string,
-		config?: { dataPartitionCode?: string },
+		config?: { dataPartitionCode?: string | null | undefined },
 	): Promise<T> => {
 		if (formSubmiting) Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await postService(
-				chuanHoaObject(payload),
-				path,
-				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
-			);
+			const res = await postService(chuanHoaObject(payload), path, {
+				'x-data-partition-code': config?.dataPartitionCode,
+			});
 			message.success(messageText ?? 'Thêm mới thành công');
 			setLoading(false);
 			if (getData) getData();
@@ -237,11 +243,14 @@ const useInitModel = <T extends object>(
 		closeModal?: boolean,
 		messageText?: string,
 		path?: string,
+		config?: { dataPartitionCode?: string | null | undefined },
 	): Promise<T> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await putService(id, chuanHoaObject(payload), path);
+			const res = await putService(id, chuanHoaObject(payload), path, {
+				'x-data-partition-code': config?.dataPartitionCode,
+			});
 			message.success(messageText ?? 'Lưu thành công');
 			setLoading(false);
 			if (getData) getData();
@@ -263,11 +272,14 @@ const useInitModel = <T extends object>(
 		notGet?: boolean,
 		closeModal?: boolean,
 		messageText?: string,
+		config?: { dataPartitionCode?: string | null | string },
 	): Promise<T> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await putManyService(ids, chuanHoaObject(payload));
+			const res = await putManyService(ids, chuanHoaObject(payload), {
+				'x-data-partition-code': config?.dataPartitionCode,
+			});
 			message.success(messageText ?? 'Lưu thành công');
 			setLoading(false);
 			if (getData) getData();
@@ -282,10 +294,15 @@ const useInitModel = <T extends object>(
 		}
 	};
 
-	const deleteModel = async (id: string | number, getData?: () => void, path?: string): Promise<any> => {
+	const deleteModel = async (
+		id: string | number,
+		getData?: () => void,
+		path?: string,
+		config?: { dataPartitionCode?: string | null | string },
+	): Promise<any> => {
 		setLoading(true);
 		try {
-			const res = await deleteService(id, undefined, path);
+			const res = await deleteService(id, undefined, path, { 'x-data-partition-code': config?.dataPartitionCode });
 			message.success('Xóa thành công');
 
 			const maxPage = Math.ceil((total - 1) / limit) || 1;
@@ -304,11 +321,15 @@ const useInitModel = <T extends object>(
 		}
 	};
 
-	const deleteManyModel = async (ids: (string | number)[], getData?: () => void): Promise<any> => {
+	const deleteManyModel = async (
+		ids: (string | number)[],
+		getData?: () => void,
+		config?: { dataPartitionCode?: string | null | undefined },
+	): Promise<any> => {
 		if (!ids.length) return;
 		setLoading(true);
 		try {
-			const res = await deleteManyService(ids);
+			const res = await deleteManyService(ids, undefined, { 'x-data-partition-code': config?.dataPartitionCode });
 			message.success(`Xóa thành công ${ids.length} mục`);
 
 			const maxPage = Math.ceil((total - ids.length) / limit) || 1;
@@ -354,9 +375,11 @@ const useInitModel = <T extends object>(
 	 * Lấy header cho chức năng import
 	 * @returns {any}
 	 */
-	const getImportHeaderModel = async (): Promise<TImportHeader[]> => {
+	const getImportHeaderModel = async (config?: {
+		dataPartitionCode?: string | null | undefined;
+	}): Promise<TImportHeader[]> => {
 		try {
-			const res = await getImportHeaders();
+			const res = await getImportHeaders({ 'x-data-partition-code': config?.dataPartitionCode });
 			setImportHeaders(res.data?.data ?? []);
 			return res.data?.data ?? [];
 		} catch (err) {
@@ -369,9 +392,12 @@ const useInitModel = <T extends object>(
 	 * Lấy file excel mẫu cho chức năng import
 	 * @returns {any}
 	 */
-	const getImportTemplateModel = async (params?: any): Promise<any> => {
+	const getImportTemplateModel = async (
+		params?: any,
+		config?: { dataPartitionCode?: string | null | undefined },
+	): Promise<any> => {
 		try {
-			const res = await getImportTemplate(params);
+			const res = await getImportTemplate(params, { 'x-data-partition-code': config?.dataPartitionCode });
 			return res.data;
 		} catch (err) {
 			return Promise.reject(err);
@@ -382,11 +408,14 @@ const useInitModel = <T extends object>(
 	 * Validate dữ liệu cần import
 	 * @returns {any}
 	 */
-	const postValidateModel = async (payload: any[]): Promise<TImportResponse> => {
+	const postValidateModel = async (
+		payload: any[],
+		config?: { dataPartitionCode?: string | null | undefined },
+	): Promise<TImportResponse> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await postValidateImport({ rows: payload });
+			const res = await postValidateImport({ rows: payload }, { 'x-data-partition-code': config?.dataPartitionCode });
 			message.success('Đã kiểm tra dữ liệu');
 			return res.data?.data ?? [];
 		} catch (err) {
@@ -400,11 +429,14 @@ const useInitModel = <T extends object>(
 	 * Thực thi import dữ liệu
 	 * @returns {any}
 	 */
-	const postExecuteImpotModel = async (payload: any[]): Promise<TImportResponse> => {
+	const postExecuteImpotModel = async (
+		payload: any[],
+		config?: { dataPartitionCode?: string | null | undefined },
+	): Promise<TImportResponse> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await postExecuteImport({ rows: payload });
+			const res = await postExecuteImport({ rows: payload }, { 'x-data-partition-code': config?.dataPartitionCode });
 			message.success('Đã nhập dữ liệu');
 			return res.data?.data ?? [];
 		} catch (err) {
@@ -420,7 +452,9 @@ const useInitModel = <T extends object>(
 	 * Lấy fields cho chức năng export
 	 * @returns {any}
 	 */
-	const getExportFieldsModel = async (): Promise<TExportField[]> => {
+	const getExportFieldsModel = async (config?: {
+		dataPartitionCode?: string | null | undefined;
+	}): Promise<TExportField[]> => {
 		const genIdField = (data?: TExportField[], prefix?: string): TExportField[] | undefined => {
 			if (!data?.length) return undefined;
 			return data?.map((f, index) => ({
@@ -431,7 +465,7 @@ const useInitModel = <T extends object>(
 		};
 
 		try {
-			const res = await getExportFields();
+			const res = await getExportFields({ 'x-data-partition-code': config?.dataPartitionCode });
 			const fields = genIdField(res.data?.data) ?? [];
 
 			return fields;
@@ -449,17 +483,23 @@ const useInitModel = <T extends object>(
 		paramCondition?: QueryCondition<T>,
 		paramFilters?: TFilter<T>[],
 		otherQuery?: Record<string, any>,
+		config?: { dataPartitionCode?: string | null | undefined },
 	): Promise<Blob> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
+			const queryParams = {
+				...(otherQuery ?? {}),
+				...(config ?? {}),
+			};
+
 			const res = await postExport(payload, {
 				condition: { ...condition, ...paramCondition },
 				filters: [
 					...(filters?.filter((item) => item.active !== false)?.map(({ active, ...item }) => item) || []),
 					...(paramFilters ?? []),
 				],
-				...(otherQuery ?? {}),
+				...queryParams,
 			});
 			return res.data;
 		} catch (err) {
