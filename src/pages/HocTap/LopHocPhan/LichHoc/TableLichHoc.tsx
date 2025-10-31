@@ -10,6 +10,10 @@ import dayjs from '@/utils/dayjs';
 import { Button, Carousel, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
+import ModalXinNghi from '../components/ModalXinNghi';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { MailOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 const TableLichHocLopHP = (props: {
 	items: ThoiKhoaBieu.IRecord[];
@@ -19,6 +23,8 @@ const TableLichHocLopHP = (props: {
 	const { items, onClickItem } = props;
 	const [url, setUrl] = useState<any[]>([]);
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
+	const [visibleXinNghi, setVisibleXinNghi] = useState(false);
+	const [recXinNghi, setRecXinNghi] = useState<ThoiKhoaBieu.IRecord | undefined>();
 
 	const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
 		onClick: () => onClickItem(rec),
@@ -129,6 +135,30 @@ const TableLichHocLopHP = (props: {
 		// 	render: (val, rec) => !!rec.lopHocPhan?.tenCha && `Nhóm ${rec.lopHocPhan?.loai} ${rec.lopHocPhan?.soThuTuNhom}`,
 		// 	onCell,
 		// },
+		{
+			title: 'Thao tác',
+			width: 80,
+			align: 'center',
+			render: (val, rec) => {
+				const isBefore = moment().isBefore(rec.ngay, 'day');
+				return (
+					<>
+						{isBefore && (
+							<ButtonExtend
+								type='link'
+								tooltip='Xin nghỉ học'
+								onClick={(e) => {
+									e.stopPropagation();
+									setRecXinNghi(rec);
+									setVisibleXinNghi(true);
+								}}
+								icon={<MailOutlined />}
+							/>
+						)}
+					</>
+				);
+			},
+		},
 	];
 
 	return (
@@ -158,6 +188,8 @@ const TableLichHocLopHP = (props: {
 					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
 				</div>
 			</ModalExpandable>
+
+			<ModalXinNghi visible={visibleXinNghi} onClose={() => setVisibleXinNghi(false)} buoiHoc={recXinNghi} />
 		</>
 	);
 };
