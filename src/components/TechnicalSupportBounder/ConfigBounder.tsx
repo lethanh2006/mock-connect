@@ -40,6 +40,10 @@ const ConfigBounder = (props: { children?: any }) => {
 					Divider: {
 						orientationMargin: 0,
 					},
+					Table: {
+						borderColor: '#e8e8e8',
+						headerBg: '#f8f8f8',
+					},
 				},
 			}}
 		>
