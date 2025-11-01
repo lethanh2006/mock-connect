@@ -18,7 +18,7 @@ import './style.less';
 const { Text } = Typography;
 
 const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
-	const { danhSach } = useModel('daotao.baitap');
+	const { danhSach, getBaiTapSinhVienModel } = useModel('daotao.baitap');
 	const [currentPage, setCurrentPage] = useState(0);
 	const [carouselRef, setCarouselRef] = useState<any>(null);
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
@@ -26,6 +26,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	const filteredData = danhSach.filter(
 		(i) => i.assignment?.thoiGianKetThuc && dayjs().isSameOrBefore(dayjs(i.assignment.thoiGianKetThuc)),
 	);
+
 	const { isDashBoard } = props;
 	const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 	// Tạo các trang dữ liệu
@@ -38,6 +39,10 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	useEffect(() => {
 		setCurrentPage(0);
 	}, [itemsPerPage]);
+
+	useEffect(() => {
+		getBaiTapSinhVienModel();
+	}, []);
 
 	const handlePrevious = () => {
 		if (currentPage > 0) {
@@ -56,7 +61,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	};
 
 	const renderAssignmentCard = (item: BaiTap.IDanhSachGiaoBaiTap, index: number) => {
-		const files = item.assignment.urlTepDinhKem || [];
+		const files = item.assignment?.urlTepDinhKem || [];
 
 		return (
 			<div key={item._id + index} className='assignment-card'>
