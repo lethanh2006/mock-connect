@@ -34,7 +34,6 @@ const QuyTrinhPage = () => {
 	useEffect(() => {
 		setCurrentFormKhaiBao(undefined);
 		setCurrent(undefined);
-		getDataQuyTrinh();
 	}, []);
 
 	// Thêm useEffect để lắng nghe thay đổi page và limit
