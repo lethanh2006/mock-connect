@@ -63,6 +63,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 		onClick,
 		backgroundColor,
 		valueColor,
+		selected,
 	}: StatisticsItem) => {
 		const statusClass = status || '';
 
@@ -86,6 +87,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 					pointer: !!onClick,
 					border: borderleft,
 					shadow: statShadow,
+					selected,
 				})} ${statusClass}`}
 				style={{
 					...cardStyle,
