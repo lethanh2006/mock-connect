@@ -40,11 +40,12 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 	}, []);
 
 	useEffect(() => {
-		getDienDanSinhVienModel(undefined, sortMode, recHocKy?.ma, { ghimBaiViet: -1 }, props.typeLop);
+		// TODO: Fix getData
+		// getDienDanSinhVienModel(undefined, sortMode, recHocKy?.ma, { ghimBaiViet: -1 }, props.typeLop);
 	}, [recHocKy?.ma, props.typeLop, sortMode]);
 
 	useEffect(() => {
-		getAllModel(undefined, undefined, undefined, undefined, 'many/lop-hoc-phan/me');
+		// getAllModel(undefined, undefined, undefined, undefined, 'many/lop-hoc-phan/me');
 	}, []);
 
 	const isMobile = screenSize.width <= 768;

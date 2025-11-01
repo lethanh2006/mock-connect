@@ -13,7 +13,7 @@ export default {
 	'menu.OtherGroup': 'Khác',
 
 	// DEFAULT
-	'menu.Lich': 'Lịch',
+	'menu.Lich': 'Lịch & Sự kiện',
 	'menu.ThongTinCaNhan': 'Thông tin cá nhân',
 
 	'menu.LopHanhChinh': 'Lớp hành chính',
