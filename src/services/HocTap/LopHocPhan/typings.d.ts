@@ -61,6 +61,9 @@ export declare module LopHocPhan {
 
 		// Đề cương học phần học kỳ
 		deCuong?: { deCuong?: Partial<HocPhan.IDeCuongHocPhan>; deCuongId: string };
+
+		// Sinh viên get Lớp học phần
+		diem?: IRecordSinhVienLopHP;
 	}
 
 	export type TMaHoaLichHoc = {
