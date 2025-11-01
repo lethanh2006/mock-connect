@@ -66,9 +66,8 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 							{record?.hocPhan?.ten ? (
 								<Tooltip title='Xem đề cương chi tiết học phần'>
 									<a onClick={() => props.onShowDeCuong?.()} style={{ color: '#333' }}>
-										{record?.hocPhan?.ten ?? ''}
+										{record?.hocPhan?.ten ?? ''} <InfoCircleOutlined style={{ color: primaryColor }} />
 									</a>
-									<InfoCircleOutlined style={{ marginLeft: 16, color: primaryColor }} />
 								</Tooltip>
 							) : (
 								<i>Chưa cập nhật</i>
