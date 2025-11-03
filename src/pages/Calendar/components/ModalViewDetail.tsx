@@ -96,7 +96,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	const renderBaiTap = () => (
 		<>
 			<Descriptions.Item label='Tên bài tập'>{event?.assignment?.noiDung ?? '--'}</Descriptions.Item>
-			<Descriptions.Item label='Lớp học phần'>{event?.assignment?.tenLopHocPhan ?? '--'}</Descriptions.Item>
+			<Descriptions.Item label='Lớp tín chỉ'>{event?.assignment?.tenLopHocPhan ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Giảng viên'>{event?.assignment?.hoTenNguoiGiao ?? '--'}</Descriptions.Item>
 			<Descriptions.Item label='Thời gian giao bài tập'>
 				{event?.assignment?.createdAt ? dayjs(event?.assignment?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
