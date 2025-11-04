@@ -39,7 +39,10 @@
 		outline: 2px solid var(--color-primary);
 		box-shadow: var(--box-shadow-secondary);
 		outline-offset: 2px;
-		transition: all 0.1s linear;
+		transition:
+			outline 0.1s linear,
+			box-shadow 0.3s ease,
+			outline-offset 0.3s ease;
 	}
 
 	&.success {
