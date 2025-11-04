@@ -2,6 +2,7 @@ import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { Card, Col, Empty, Row } from 'antd';
+import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import CardLopHocPhanItem from '../LopHocPhan/components/CardLopHocPhanItem';
@@ -67,7 +68,11 @@ const LopHocPhanPage = () => {
 											lop={lop}
 											index={index}
 											backgrounds={backgrounds}
-											isKeTiep={lopKeTiep?._id === lop._id && lopHienTai?._id !== lopKeTiep?._id}
+											isKeTiep={
+												lopKeTiep?._id === lop._id &&
+												lopHienTai?._id !== lopKeTiep?._id &&
+												(lop.thoiKhoaBieuList ?? []).some((tkb) => dayjs(tkb.ngay).isAfter(dayjs()))
+											}
 										/>
 									</Col>
 								))}

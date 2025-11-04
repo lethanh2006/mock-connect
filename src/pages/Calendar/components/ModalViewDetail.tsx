@@ -8,24 +8,35 @@ import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap
 import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import { colorTrangThaiThi } from '@/services/KhaoThi/constant';
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
-import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Dropdown, Modal, Popconfirm, Space, Tag, message } from 'antd';
+import { JSX } from 'react';
 import { history, useModel } from 'umi';
+
+// Configuration interface for event type handlers
+interface EventTypeConfig {
+	type: ELoaiSuKien | ELoaiSuKienKhac;
+	checker: (event: any) => boolean;
+	renderer: (event: any) => JSX.Element;
+	actionButtons?: (event: any, handlers: any) => JSX.Element[];
+}
 
 const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; event: any; getData: () => void }) => {
 	const { visible, setVisible, event, getData } = props;
 	const { deleteModel, handleEdit } = useModel('sukien.sukien');
 	const { getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
 	const { record: recSetting } = useModel('tienich.settinglich');
+
 	const loaiSuKien = event?.loaiSuKien as ELoaiSuKien | ELoaiSuKienKhac;
-	const isThoiKhoaBieu = loaiSuKien === ELoaiSuKien.LICH_HOC;
-	const thoiKhoaBieu = isThoiKhoaBieu ? (event as ThoiKhoaBieu.IRecord) : undefined;
-	const isLichThi = loaiSuKien === ELoaiSuKien.LICH_THI;
-	const lichThi = isLichThi ? (event as LichThi.IRecord) : undefined;
-	const isBaiTap = loaiSuKien === ELoaiSuKien.BAI_TAP;
-	const suKien = !isThoiKhoaBieu && !isLichThi ? (event as SuKien.IRecord) : undefined;
+
+	if (!event) return null;
+
+	const getColorSuKien = (loai: ELoaiSuKien | ELoaiSuKienKhac) => {
+		return (
+			recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === loai)?.maMau ?? ColorSuKien?.[loai] ?? '#ccc'
+		);
+	};
 
 	const handleMoodle = (lopHocPhanId?: string) => {
 		if (lopHocPhanId)
@@ -35,98 +46,246 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			});
 	};
 
-	const getColorSuKien = (loai: ELoaiSuKien | ELoaiSuKienKhac) => {
-		return (
-			recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === loai)?.maMau ?? ColorSuKien?.[loai] ?? '#ccc'
-		);
+	// Event type configurations
+	const eventConfigs: EventTypeConfig[] = [
+		{
+			type: ELoaiSuKien.LICH_HOC,
+			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.LICH_HOC,
+			renderer: (evt) => {
+				const thoiKhoaBieu = evt as ThoiKhoaBieu.IRecord;
+				return (
+					<>
+						<Descriptions.Item label='Lớp tín chỉ'>{thoiKhoaBieu?.tenLopHocPhan}</Descriptions.Item>
+						<Descriptions.Item label='Tên học phần'>{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}</Descriptions.Item>
+						<Descriptions.Item label='Thời gian bắt đầu'>
+							{dayjs(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+						</Descriptions.Item>
+						<Descriptions.Item label='Thời gian kết thúc'>
+							{dayjs(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+						</Descriptions.Item>
+						<Descriptions.Item label='Phòng học'>{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label='Giảng viên'>
+							{thoiKhoaBieu?.giangVien?.ten
+								? [thoiKhoaBieu.giangVien?.hoDem, thoiKhoaBieu.giangVien?.ten].join(' ')
+								: (thoiKhoaBieu?.tenNhanSu ?? '--')}
+						</Descriptions.Item>
+						<Descriptions.Item label='Tiêu đề bài học'>{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
+						{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (
+							<Descriptions.Item label='Lớp học LMS'>
+								<a onClick={() => handleMoodle(thoiKhoaBieu.lopHocPhan?._id)}>Đường dẫn</a>
+							</Descriptions.Item>
+						) : null}
+						{thoiKhoaBieu?.lopHocPhan?.lmsUrl ? (
+							<Descriptions.Item label='Học trực tuyến'>
+								<a href={thoiKhoaBieu?.lopHocPhan?.lmsUrl} target='_blank' rel='noreferrer'>
+									Đường dẫn
+								</a>
+							</Descriptions.Item>
+						) : null}
+						<Descriptions.Item label='Hình thức giảng dạy'>
+							<Tag color={colorHinhThucGiangDay[thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay]}>
+								{thoiKhoaBieu?.hinhThucGiangDay}
+							</Tag>
+						</Descriptions.Item>
+					</>
+				);
+			},
+			actionButtons: (evt) => [
+				<Dropdown.Button
+					key='actions'
+					type='primary'
+					menu={{
+						items: [
+							{
+								key: 'thong-bao',
+								label: 'Thông báo',
+								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#thong-bao`),
+							},
+							{
+								key: 'dien-dan',
+								label: 'Diễn đàn thảo luận',
+								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#dien-dan`),
+							},
+							{
+								key: 'bai-tap',
+								label: 'Bài tập, bài kiểm tra',
+								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#bai-tap`),
+							},
+						],
+					}}
+					onClick={() => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}`)}
+				>
+					Xem chi tiết
+				</Dropdown.Button>,
+			],
+		},
+		{
+			type: ELoaiSuKien.LICH_THI,
+			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.LICH_THI,
+			renderer: (evt) => {
+				const lichThi = evt as LichThi.IRecord;
+				return (
+					<>
+						<Descriptions.Item label='Môn thi'>
+							{lichThi?.danhSachHocPhan?.map((item) => `${item.ma} - ${item.ten}`).join(', ')}
+						</Descriptions.Item>
+						<Descriptions.Item label='Thời gian bắt đầu'>
+							{dayjs(lichThi?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+						</Descriptions.Item>
+						<Descriptions.Item label='Phòng thi'>{lichThi?.phong?.ma ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label='Điều kiện dự thi'>
+							{lichThi?.trangThai ? <Tag color={colorTrangThaiThi[lichThi.trangThai]}>{lichThi.trangThai}</Tag> : '--'}
+						</Descriptions.Item>
+					</>
+				);
+			},
+			actionButtons: (evt) => [
+				<Button key='exam-schedule' type='primary' onClick={() => history.push('/hoc-tap/lich-thi')}>
+					Xem lịch thi
+				</Button>,
+			],
+		},
+		{
+			type: ELoaiSuKien.BAI_TAP,
+			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.BAI_TAP,
+			renderer: (evt) => (
+				<>
+					<Descriptions.Item label='Tên bài tập'>{evt?.assignment?.noiDung ?? '--'}</Descriptions.Item>
+					<Descriptions.Item label='Lớp tín chỉ'>{evt?.assignment?.tenLopHocPhan ?? '--'}</Descriptions.Item>
+					<Descriptions.Item label='Giảng viên'>{evt?.assignment?.hoTenNguoiGiao ?? '--'}</Descriptions.Item>
+					<Descriptions.Item label='Thời gian giao bài tập'>
+						{evt?.assignment?.createdAt ? dayjs(evt?.assignment?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
+					</Descriptions.Item>
+					<Descriptions.Item label='Thời hạn bài tập'>
+						{evt?.assignment?.thoiGianKetThuc
+							? dayjs(evt?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
+							: '--'}
+					</Descriptions.Item>
+					<Descriptions.Item label='Trạng thái nộp bài'>
+						<Tag color={colorTrangThaiNopBaiTap[evt.trangThai as ETrangThaiNopBaiTap]}>
+							{mapTrangThaiNopBaiTap[evt.trangThai as ETrangThaiNopBaiTap]}
+						</Tag>
+					</Descriptions.Item>
+				</>
+			),
+			actionButtons: (evt) => [
+				<Dropdown.Button
+					key='actions'
+					type='primary'
+					menu={{
+						items: [
+							{
+								key: 'thong-bao',
+								label: 'Thông báo',
+								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}#thong-bao`),
+							},
+							{
+								key: 'dien-dan',
+								label: 'Diễn đàn thảo luận',
+								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}#dien-dan`),
+							},
+							{
+								key: 'bai-tap',
+								label: 'Bài tập, bài kiểm tra',
+								onClick: () =>
+									history.push(
+										`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}?idBaiTap=${evt?.assignment?._id}#bai-tap`,
+									),
+							},
+						],
+					}}
+					onClick={() =>
+						history.push(
+							`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}?idBaiTap=${evt?.assignment?._id}#bai-tap`,
+						)
+					}
+				>
+					Xem chi tiết
+				</Dropdown.Button>,
+			],
+		},
+		{
+			type: ELoaiSuKien.CA_NHAN,
+			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.CA_NHAN,
+			renderer: (evt) => (
+				<>
+					<Descriptions.Item label='Tên sự kiện'>{evt?.tenSuKien}</Descriptions.Item>
+					<Descriptions.Item label='Thời gian bắt đầu'>
+						{dayjs(evt?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+					</Descriptions.Item>
+					<Descriptions.Item label='Thời gian kết thúc'>
+						{dayjs(evt?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+					</Descriptions.Item>
+					<Descriptions.Item label='Địa điểm'>{evt?.diaDiem ?? '--'}</Descriptions.Item>
+					<Descriptions.Item label='Ghi chú'>{evt?.ghiChu ?? '--'}</Descriptions.Item>
+				</>
+			),
+			actionButtons: (evt) => [
+				<Button
+					key='edit'
+					type='primary'
+					onClick={() => {
+						handleEdit(evt);
+						setVisible(false);
+					}}
+					icon={<EditOutlined />}
+				>
+					Chỉnh sửa
+				</Button>,
+				<Popconfirm
+					key='delete'
+					title='Bạn có chắc chắn muốn xóa sự kiện này không?'
+					onConfirm={() => {
+						deleteModel(evt?._id ?? '', getData);
+						setVisible(false);
+					}}
+				>
+					<Button danger icon={<DeleteOutlined />}>
+						Xóa
+					</Button>
+				</Popconfirm>,
+			],
+		},
+	];
+
+	// Find the appropriate config for current event
+	const getCurrentEventConfig = (): EventTypeConfig | null => {
+		return eventConfigs.find((config) => config.checker(event)) || null;
 	};
 
-	const renderThoiKhoaBieu = () => (
-		<>
-			<Descriptions.Item label='Lớp tín chỉ'>{thoiKhoaBieu?.tenLopHocPhan}</Descriptions.Item>
-			<Descriptions.Item label='Tên học phần'>{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}</Descriptions.Item>
-			<Descriptions.Item label='Thời gian bắt đầu'>
-				{dayjs(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
-			</Descriptions.Item>
-			<Descriptions.Item label='Thời gian kết thúc'>
-				{dayjs(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
-			</Descriptions.Item>
-			<Descriptions.Item label='Phòng học'>{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
-			<Descriptions.Item label='Giảng viên'>
-				{thoiKhoaBieu?.giangVien?.ten
-					? [thoiKhoaBieu.giangVien?.hoDem, thoiKhoaBieu.giangVien?.ten].join(' ')
-					: (thoiKhoaBieu?.tenNhanSu ?? '--')}
-			</Descriptions.Item>
-			<Descriptions.Item label='Tiêu đề bài học'>{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
-			{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (
-				<Descriptions.Item label='Lớp học LMS'>
-					<a onClick={() => handleMoodle(thoiKhoaBieu.lopHocPhan?._id)}>Đường dẫn</a>
-				</Descriptions.Item>
-			) : null}
-			{thoiKhoaBieu?.lopHocPhan?.lmsUrl ? (
-				<Descriptions.Item label='Học trực tuyến'>
-					<a href={thoiKhoaBieu?.lopHocPhan?.lmsUrl} target='_blank' rel='noreferrer'>
-						Đường dẫn
-					</a>
-				</Descriptions.Item>
-			) : null}
-			<Descriptions.Item label='Hình thức giảng dạy'>
-				<Tag color={colorHinhThucGiangDay[thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay]}>
-					{thoiKhoaBieu?.hinhThucGiangDay}
-				</Tag>
-			</Descriptions.Item>
-		</>
+	const currentConfig = getCurrentEventConfig();
+
+	// Render event type tag
+	const renderEventTypeTag = () => (
+		<Descriptions.Item label='Loại sự kiện'>
+			{loaiSuKien ? <Tag color={getColorSuKien(loaiSuKien)}>{loaiSuKien}</Tag> : '--'}
+		</Descriptions.Item>
 	);
 
-	const renderLichThi = () => (
-		<>
-			<Descriptions.Item label='Môn thi'>
-				{lichThi?.danhSachHocPhan?.map((item) => `${item.ma} - ${item.ten}`).join(', ')}
-			</Descriptions.Item>
-			<Descriptions.Item label='Thời gian bắt đầu'>
-				{dayjs(lichThi?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
-			</Descriptions.Item>
-			<Descriptions.Item label='Phòng thi'>{lichThi?.phong?.ma ?? '--'}</Descriptions.Item>
-			<Descriptions.Item label='Điều kiện dự thi'>
-				{lichThi?.trangThai ? <Tag color={colorTrangThaiThi[lichThi.trangThai]}>{lichThi.trangThai}</Tag> : '--'}
-			</Descriptions.Item>
-		</>
-	);
+	// Render action buttons
+	const renderActionButtons = () => {
+		const buttons: JSX.Element[] = [];
 
-	const renderBaiTap = () => (
-		<>
-			<Descriptions.Item label='Tên bài tập'>{event?.assignment?.noiDung ?? '--'}</Descriptions.Item>
-			<Descriptions.Item label='Lớp tín chỉ'>{event?.assignment?.tenLopHocPhan ?? '--'}</Descriptions.Item>
-			<Descriptions.Item label='Giảng viên'>{event?.assignment?.hoTenNguoiGiao ?? '--'}</Descriptions.Item>
-			<Descriptions.Item label='Thời gian giao bài tập'>
-				{event?.assignment?.createdAt ? dayjs(event?.assignment?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
-			</Descriptions.Item>
-			<Descriptions.Item label='Thời hạn bài tập'>
-				{event?.assignment?.thoiGianKetThuc
-					? dayjs(event?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
-					: '--'}
-			</Descriptions.Item>
-			<Descriptions.Item label='Trạng thái nộp bài'>
-				<Tag color={colorTrangThaiNopBaiTap[event.trangThai as ETrangThaiNopBaiTap]}>
-					{mapTrangThaiNopBaiTap[event.trangThai as ETrangThaiNopBaiTap]}
-				</Tag>
-			</Descriptions.Item>
-		</>
-	);
+		if (currentConfig?.actionButtons) {
+			buttons.push(
+				...currentConfig.actionButtons(event, {
+					deleteModel,
+					handleEdit,
+					getData,
+					setVisible,
+					history,
+				}),
+			);
+		}
 
-	const renderSuKien = () => (
-		<>
-			<Descriptions.Item label='Tên sự kiện'>{suKien?.tenSuKien}</Descriptions.Item>
-			<Descriptions.Item label='Thời gian bắt đầu'>
-				{dayjs(suKien?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
-			</Descriptions.Item>
-			<Descriptions.Item label='Thời gian kết thúc'>
-				{dayjs(suKien?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
-			</Descriptions.Item>
-			<Descriptions.Item label='Địa điểm'>{suKien?.diaDiem ?? '--'}</Descriptions.Item>
-			<Descriptions.Item label='Ghi chú'>{suKien?.ghiChu ?? '--'}</Descriptions.Item>
-		</>
-	);
+		buttons.push(
+			<Button key='close' onClick={() => setVisible(false)}>
+				Đóng
+			</Button>,
+		);
+
+		return buttons;
+	};
 
 	return (
 		<Modal
@@ -135,126 +294,11 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			destroyOnClose
 			width={600}
 			onCancel={() => setVisible(false)}
-			footer={
-				<Space wrap>
-					{/* --- Sự kiện cá nhân --- */}
-					{suKien && suKien.loaiSuKien === ELoaiSuKien.CA_NHAN ? (
-						<>
-							<Button
-								type='primary'
-								onClick={() => {
-									handleEdit(suKien);
-									setVisible(false);
-								}}
-								icon={<EditOutlined />}
-							>
-								Chỉnh sửa
-							</Button>
-							<Popconfirm
-								title='Bạn có chắc chắn muốn xóa sự kiện này không?'
-								onConfirm={() => {
-									deleteModel(suKien?._id ?? '', getData);
-									setVisible(false);
-								}}
-							>
-								<Button danger icon={<DeleteOutlined />}>
-									Xóa
-								</Button>
-							</Popconfirm>
-						</>
-					) : null}
-
-					{/* --- Lịch học --- */}
-					{/* --- Lịch học (Dropdown giống Bài tập) --- */}
-					{isThoiKhoaBieu ? (
-						<Dropdown.Button
-							type='primary'
-							menu={{
-								items: [
-									{
-										key: 'thong-bao',
-										label: 'Thông báo',
-										onClick: () => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}#thong-bao`),
-									},
-									{
-										key: 'dien-dan',
-										label: 'Diễn đàn thảo luận',
-										onClick: () => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}#dien-dan`),
-									},
-									{
-										key: 'bai-tap',
-										label: 'Bài tập, bài kiểm tra',
-										onClick: () => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}#bai-tap`),
-									},
-								],
-							}}
-							onClick={() => history.push(`/hoc-tap/lop-tin-chi/${thoiKhoaBieu?.lopHocPhan?._id}`)}
-						>
-							Xem chi tiết
-						</Dropdown.Button>
-					) : null}
-
-					{/* --- Lịch thi --- */}
-					{isLichThi ? (
-						<Button type='primary' onClick={() => history.push('/hoc-tap/lich-thi')}>
-							Xem lịch thi
-						</Button>
-					) : null}
-
-					{/* --- Bài tập (Dropdown giống Lịch giảng dạy) --- */}
-					{isBaiTap ? (
-						<Space>
-							<Dropdown.Button
-								type='primary'
-								menu={{
-									items: [
-										{
-											key: 'thong-bao',
-											label: 'Thông báo',
-											onClick: () => history.push(`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}#thong-bao`),
-										},
-										{
-											key: 'dien-dan',
-											label: 'Diễn đàn thảo luận',
-											onClick: () => history.push(`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}#dien-dan`),
-										},
-										{
-											key: 'bai-tap',
-											label: 'Bài tập, bài kiểm tra',
-											onClick: () =>
-												history.push(
-													`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}?idBaiTap=${event?.assignment?._id}#bai-tap`,
-												),
-										},
-									],
-								}}
-								onClick={() =>
-									history.push(
-										`/hoc-tap/lop-tin-chi/${event?.assignment?.lopHocPhanId}?idBaiTap=${event?.assignment?._id}#bai-tap`,
-									)
-								}
-							>
-								Xem chi tiết
-							</Dropdown.Button>
-						</Space>
-					) : null}
-
-					<Button onClick={() => setVisible(false)}>Đóng</Button>
-				</Space>
-			}
+			footer={<Space wrap>{renderActionButtons()}</Space>}
 		>
 			<Descriptions column={1}>
-				<Descriptions.Item label='Loại sự kiện'>
-					{loaiSuKien ? <Tag color={getColorSuKien(loaiSuKien)}>{loaiSuKien}</Tag> : '--'}
-				</Descriptions.Item>
-
-				{isThoiKhoaBieu
-					? renderThoiKhoaBieu()
-					: isLichThi
-						? renderLichThi()
-						: isBaiTap
-							? renderBaiTap()
-							: renderSuKien()}
+				{renderEventTypeTag()}
+				{currentConfig?.renderer(event)}
 			</Descriptions>
 		</Modal>
 	);
