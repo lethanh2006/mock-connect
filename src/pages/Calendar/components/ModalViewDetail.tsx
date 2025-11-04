@@ -46,6 +46,25 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			});
 	};
 
+	// Default config for unmatched event types
+	const defaultEventConfig: EventTypeConfig = {
+		type: ELoaiSuKien.CA_NHAN,
+		checker: () => true,
+		renderer: (evt) => (
+			<>
+				<Descriptions.Item label='Tên sự kiện'>{evt?.tenSuKien}</Descriptions.Item>
+				<Descriptions.Item label='Thời gian bắt đầu'>
+					{dayjs(evt?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+				</Descriptions.Item>
+				<Descriptions.Item label='Thời gian kết thúc'>
+					{dayjs(evt?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+				</Descriptions.Item>
+				<Descriptions.Item label='Địa điểm'>{evt?.diaDiem ?? '--'}</Descriptions.Item>
+				<Descriptions.Item label='Ghi chú'>{evt?.ghiChu ?? '--'}</Descriptions.Item>
+			</>
+		),
+	};
+
 	// Event type configurations
 	const eventConfigs: EventTypeConfig[] = [
 		{
@@ -249,8 +268,8 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	];
 
 	// Find the appropriate config for current event
-	const getCurrentEventConfig = (): EventTypeConfig | null => {
-		return eventConfigs.find((config) => config.checker(event)) || null;
+	const getCurrentEventConfig = (): EventTypeConfig => {
+		return eventConfigs.find((config) => config.checker(event)) || defaultEventConfig;
 	};
 
 	const currentConfig = getCurrentEventConfig();
