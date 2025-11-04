@@ -44,7 +44,8 @@ const axios = axios1.create({
 	paramsSerializer: (params) => {
 		const cleanedParams: Record<string, any> = {};
 		Object.entries(params || {}).forEach(([key, value]) => {
-			const isEmptyObject = typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0;
+			const isEmptyObject =
+				value !== null && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0;
 			const isEmptyArray = Array.isArray(value) && value.length === 0;
 			if (value === undefined || value === null || isEmptyObject || isEmptyArray) return;
 
