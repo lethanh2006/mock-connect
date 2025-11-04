@@ -1,0 +1,140 @@
+.tiet_hoc_sap_toi {
+	max-height: 320px;
+	overflow: auto;
+
+	&.has_button {
+		:global(.ant-card-head-title) {
+			padding: 8px 0;
+		}
+	}
+
+	.title {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		color: red;
+	}
+
+	.ngay {
+		margin-bottom: 12px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.ngay__title {
+		color: rgba(0, 0, 0, 0.5);
+		font-weight: 600;
+		font-size: 14px;
+	}
+
+	.tiet_hoc {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		margin: 0 4px 6px 0;
+		padding: 6px 8px;
+		color: #333;
+		background-color: #fafafa;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: 0.3s all;
+
+		&:hover {
+			box-shadow: 1px 3px 5px rgba(163, 177, 191, 0.35);
+			transition: 0.3s;
+
+			.hover_link {
+				display: initial;
+			}
+		}
+
+		.hover_link {
+			justify-self: flex-end;
+			justify-content: end;
+			color: var(--color-primary);
+			align-items: end;
+			text-align: end;
+		}
+	}
+
+	.tiet_hoc__left {
+		position: relative;
+		display: flex;
+		align-items: center;
+		padding-left: 4px;
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+
+		.pulse {
+			position: absolute;
+			top: -6px;
+			left: -2px;
+			display: block;
+			width: 8px;
+			height: 8px;
+			background-color: red;
+			border-radius: 15px;
+			box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+			animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+		}
+	}
+
+	.tiet_hoc__thoi_gian {
+		font-weight: 600;
+		font-size: 14px;
+		width: 32px;
+	}
+
+	.tiet_hoc__right {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: 4px 6px;
+		border-left: 4px solid;
+		border-radius: 4px;
+		width: 100%;
+		align-self: start;
+		align-items: start;
+
+		.tiet_hoc__right_header {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+			width: 100%;
+			margin-left: 8px;
+		}
+
+		.tiet_hoc__right_QR {
+			width: 100%;
+			display: flex;
+			gap: 12px;
+			justify-content: space-between;
+			align-items: center;
+			margin-left: 8px;
+		}
+	}
+
+	.sketch-picker {
+		padding: 0 !important;
+		border-radius: 0 !important;
+		box-shadow: none !important;
+	}
+}
+
+@keyframes pulse-dot {
+	0% {
+		transform: scale(0.8);
+		opacity: 0.5;
+	}
+
+	50% {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	100% {
+		transform: scale(0.8);
+		opacity: 0.5;
+	}
+}
