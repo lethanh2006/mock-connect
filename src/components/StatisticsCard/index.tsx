@@ -98,7 +98,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 			>
 				<div className='text'>
 					{iconElement && <span className='anticon'>{iconElement}</span>}
-					<span>{title}</span>
+					<div>{title}</div>
 				</div>
 
 				<div className='num' style={status ? {} : { color: valueColor }}>
