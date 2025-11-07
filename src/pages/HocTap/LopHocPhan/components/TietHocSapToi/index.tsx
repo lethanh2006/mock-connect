@@ -13,13 +13,13 @@ import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
 import styles from './style.less';
 
-interface RenderLichGiangDayProps {
+interface RenderLichHocProps {
 	dataCalendar?: ThoiKhoaBieu.IRecord[];
 	loading?: boolean;
 	onClick?: (val: ThoiKhoaBieu.IRecord) => void;
 }
 
-const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
+const RenderLichHoc = (props: RenderLichHocProps) => {
 	const { dataCalendar: dataCalendarProp, loading: loadingProp, onClick } = props;
 	const {
 		setRecord: setTkb,
@@ -63,7 +63,10 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 
 	// Lọc và nhóm dữ liệu theo ngày
 	const data = dataCalendar
-		?.filter((event) => dayjs(event.thoiGianBatDau).isSameOrAfter(dayjs(), 'd'))
+		?.filter(
+			(event) =>
+				dayjs(event.thoiGianKetThuc).isAfter(dayjs(), 'minute') || dayjs(event.thoiGianBatDau).isSame(dayjs(), 'day'),
+		)
 		?.reduce<any>((result, item) => {
 			if (!item?.thoiGianBatDau) {
 				return result;
@@ -100,7 +103,7 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 		return (
 			<Card title='Tiết học sắp tới' className='card-big-title card-borderless' variant='borderless'>
 				<Card variant='borderless'>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có lịch giảng dạy' />
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có lịch học' />
 				</Card>
 			</Card>
 		);
@@ -248,4 +251,4 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 	);
 };
 
-export default RenderLichGiangDay;
+export default RenderLichHoc;

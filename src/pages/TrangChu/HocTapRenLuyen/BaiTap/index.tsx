@@ -18,6 +18,7 @@ import './style.less';
 const { Text } = Typography;
 
 const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
+	const { record: recHocKy } = useModel('daotao.hocky');
 	const { danhSach, getBaiTapSinhVienModel } = useModel('daotao.baitap');
 	const [currentPage, setCurrentPage] = useState(0);
 	const [carouselRef, setCarouselRef] = useState<any>(null);
@@ -25,6 +26,10 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	const [itemsPerPage, setItemsPerPage] = useState(2);
 	const [segment, setSegment] = useState<string>('1');
 	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		getBaiTapSinhVienModel(1, 20, recHocKy?.ma);
+	}, [recHocKy?.ma]);
 
 	// Theo dõi độ rộng container và tự động điều chỉnh số lượng items hiển thị
 	useEffect(() => {
@@ -62,10 +67,6 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	useEffect(() => {
 		setCurrentPage(0);
 	}, [itemsPerPage]);
-
-	useEffect(() => {
-		getBaiTapSinhVienModel();
-	}, []);
 
 	const handlePrevious = () => {
 		if (currentPage > 0) {

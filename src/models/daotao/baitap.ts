@@ -6,13 +6,23 @@ import { message } from 'antd';
 
 export default () => {
 	const objInit = useInitModel<BaiTap.IDanhSachGiaoBaiTap>('assignment-user', undefined, undefined, ipDaoTao);
-	const { formSubmiting, setFormSubmiting, setLoading, setDanhSach, getModel } = objInit;
+	const { formSubmiting, setFormSubmiting, setLoading, setDanhSach, getModel, setPage, setLimit } = objInit;
 
-	const getBaiTapSinhVienModel = async (): Promise<BaiTap.IDanhSachGiaoBaiTap[]> => {
-		return getModel(undefined, undefined, undefined, undefined, undefined, 'sinh-vien/me/page').then((res) => {
-			setDanhSach(res);
-			return res;
-		});
+	const getBaiTapSinhVienModel = async (
+		page?: number,
+		limit?: number,
+		maHocKy?: string,
+	): Promise<BaiTap.IDanhSachGiaoBaiTap[]> => {
+		page && setPage(page);
+		limit && setLimit(limit);
+
+		const path = `hoc-ky/${maHocKy}/sinh-vien/me/page`;
+
+		const res = await getModel(undefined, undefined, undefined, undefined, undefined, path);
+
+		setDanhSach(res);
+
+		return res;
 	};
 
 	const sinhVienNopBaiTapModal = async (

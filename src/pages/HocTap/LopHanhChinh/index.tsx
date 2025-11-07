@@ -1,6 +1,7 @@
 import { TabViewPage } from '@/components/TabViewPage';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
+import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { InfoCircleOutlined, NotificationOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Spin } from 'antd';
 import { useEffect } from 'react';
@@ -82,6 +83,9 @@ const LopHanhChinhPage = () => {
 																idLop={record?._id}
 																onShowAll={() => (window.location.hash = 'thong-bao')}
 															/>
+														</Col>
+														<Col span={24}>
+															<CardDienDanDashboard typeLop={'lop-hanh-chinh'} />
 														</Col>
 													</Row>
 												</Col>
