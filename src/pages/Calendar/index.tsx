@@ -294,7 +294,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				defaultDate={new Date()}
 				date={date}
 				messages={messagesCalendar}
-				views={['month', 'week', 'day', 'agenda']}
+				views={['month', 'week', 'day']}
 				style={{ height: isDashboard ? 500 : 700, overflow: 'auto' }}
 				eventPropGetter={eventPropGetter}
 				onSelectSlot={handleSelect}

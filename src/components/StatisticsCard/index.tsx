@@ -63,6 +63,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 		onClick,
 		backgroundColor,
 		valueColor,
+		selected,
 	}: StatisticsItem) => {
 		const statusClass = status || '';
 
@@ -86,6 +87,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 					pointer: !!onClick,
 					border: borderleft,
 					shadow: statShadow,
+					selected,
 				})} ${statusClass}`}
 				style={{
 					...cardStyle,
@@ -95,8 +97,8 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 				onClick={onClick}
 			>
 				<div className='text'>
-					<span className='anticon'>{iconElement}</span>
-					<span>{title}</span>
+					{iconElement && <span className='anticon'>{iconElement}</span>}
+					<div>{title}</div>
 				</div>
 
 				<div className='num' style={status ? {} : { color: valueColor }}>

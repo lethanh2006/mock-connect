@@ -26,6 +26,8 @@ const ModalChiTietDiem = (
 	} & Partial<Pick<ChuongTrinhDaoTao.TTienTrinhThucTe, 'hocPhan'>>,
 ) => {
 	const { ngoaiQuyDoiDiem } = useModel('daotao.quydoidiem.dotquydoidiem');
+	const { record } = useModel('lophocphan.lophocphan');
+
 	const { visible, setVisible, hocPhan, listDiem, trangThaiHoc, khoiChuongTrinh, maKhoaNganh } = props;
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
@@ -155,7 +157,7 @@ const ModalChiTietDiem = (
 			<ModalHocPhan
 				visible={visibleDeCuong}
 				setVisible={setVisibleDeCuong}
-				title='Chi tiết đề cương học phần'
+				title={`Chi tiết đề cương học phần ${record?.hocKy?.ten ? `- ${record?.hocKy?.ten ?? ''}` : ''}`}
 				deCuongId={deCuongId}
 			/>
 

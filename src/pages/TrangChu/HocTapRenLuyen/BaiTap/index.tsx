@@ -9,7 +9,7 @@ import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Card, Carousel, Empty, Space, Tag, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { history, Link, useModel } from 'umi';
 import SlideButtonIcon from '../../components/SlideButtonIcon';
@@ -18,14 +18,38 @@ import './style.less';
 const { Text } = Typography;
 
 const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
-	const { danhSach } = useModel('daotao.baitap');
+	const { danhSach, getBaiTapSinhVienModel } = useModel('daotao.baitap');
 	const [currentPage, setCurrentPage] = useState(0);
 	const [carouselRef, setCarouselRef] = useState<any>(null);
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
-	const itemsPerPage = isMobile ? 1 : 2;
+	const [itemsPerPage, setItemsPerPage] = useState(2);
+	const [segment, setSegment] = useState<string>('1');
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	// Theo dõi độ rộng container và tự động điều chỉnh số lượng items hiển thị
+	useEffect(() => {
+		const container = containerRef.current;
+		if (!container) return;
+
+		const resizeObserver = new ResizeObserver(() => {
+			const width = container.offsetWidth;
+			if (width < 600) {
+				setItemsPerPage(1);
+			} else if (width < 1200) {
+				setItemsPerPage(2);
+			} else {
+				setItemsPerPage(3);
+			}
+		});
+
+		resizeObserver.observe(container);
+		return () => resizeObserver.disconnect();
+	}, []);
+
 	const filteredData = danhSach.filter(
 		(i) => i.assignment?.thoiGianKetThuc && dayjs().isSameOrBefore(dayjs(i.assignment.thoiGianKetThuc)),
 	);
+
 	const { isDashBoard } = props;
 	const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 	// Tạo các trang dữ liệu
@@ -38,6 +62,10 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	useEffect(() => {
 		setCurrentPage(0);
 	}, [itemsPerPage]);
+
+	useEffect(() => {
+		getBaiTapSinhVienModel();
+	}, []);
 
 	const handlePrevious = () => {
 		if (currentPage > 0) {
@@ -56,7 +84,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	};
 
 	const renderAssignmentCard = (item: BaiTap.IDanhSachGiaoBaiTap, index: number) => {
-		const files = item.assignment.urlTepDinhKem || [];
+		const files = item.assignment?.urlTepDinhKem || [];
 
 		return (
 			<div key={item._id + index} className='assignment-card'>
@@ -86,7 +114,8 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 					{/* Files Section */}
 					{files.length > 0 && (
 						<div className='files-section'>
-							<BoxFile url={files} />
+							{/* Luôn cắt lấy tối đa 2 file đầu tiên */}
+							<BoxFile url={files.slice(0, 2)} />
 
 							{files.length > 2 && (
 								<Text type='secondary' italic>
@@ -113,12 +142,25 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 	const renderPageCards = (pageItems: BaiTap.IDanhSachGiaoBaiTap[]) => {
 		return (
-			<div className={`page-cards ${isMobile ? 'mobile' : ''}`}>
+			<div
+				className='page-cards'
+				style={{
+					gridTemplateColumns: `repeat(${itemsPerPage}, 1fr)`,
+				}}
+			>
 				{pageItems.map((item, index) => renderAssignmentCard(item, index))}
 
-				{pageItems.length === 1 && !isMobile && (
-					<Empty style={{ margin: 'auto' }} image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không còn bài tập khác' />
-				)}
+				{/* Nếu chỉ có 1 item và có chỗ trống => thêm Empty filler */}
+				{pageItems.length < itemsPerPage &&
+					Array.from({ length: itemsPerPage - pageItems.length }).map((_, i) => (
+						<div key={`empty-${i}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+							<Empty
+								style={{ margin: 'auto' }}
+								image={Empty.PRESENTED_IMAGE_SIMPLE}
+								description='Không còn bài tập khác'
+							/>
+						</div>
+					))}
 			</div>
 		);
 	};
@@ -130,6 +172,24 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 			title='Bài tập, bài kiểm tra'
 			extra={
 				<Space size={isMobile ? 'small' : 'middle'} className='navigation-buttons'>
+					{
+						// isDashBoard &&
+						!isMobile && (
+							<>
+								{/* Mong muốn: có một cái để xem lại bài tập ngay trang chủ (không cần vào trang của lớp) && giao diện không bị trống  => tạm thời để đây */}
+								{/* <Segmented
+									options={[
+										{ label: 'Đang diễn ra', value: '1' },
+										{ label: 'Đã kết thúc', value: '2' },
+									]}
+									value={segment}
+									onChange={(value) => setSegment(value as string)}
+									size='small'
+								/> */}
+							</>
+						)
+					}
+
 					{!!filteredData.length && (
 						<>
 							<Button
@@ -148,6 +208,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 							/>
 						</>
 					)}
+
 					{isDashBoard && (
 						<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
 							Xem thêm
@@ -157,22 +218,24 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 			}
 		>
 			<Card variant='borderless' className='content-wrapper' styles={{ body: { padding: 0 } }}>
-				{!!filteredData.length ? (
-					<Carousel
-						ref={setCarouselRef}
-						dots={false}
-						infinite={false}
-						speed={300}
-						easing='ease-in-out'
-						afterChange={handleSlideChange}
-					>
-						{pageData.map((pageItems, pageIndex) => (
-							<div key={pageIndex}>{renderPageCards(pageItems)}</div>
-						))}
-					</Carousel>
-				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập' className='empty' />
-				)}
+				<div ref={containerRef}>
+					{!!filteredData.length ? (
+						<Carousel
+							ref={setCarouselRef}
+							dots={false}
+							infinite={false}
+							speed={300}
+							easing='ease-in-out'
+							afterChange={handleSlideChange}
+						>
+							{pageData.map((pageItems, pageIndex) => (
+								<div key={pageIndex}>{renderPageCards(pageItems)}</div>
+							))}
+						</Carousel>
+					) : (
+						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập' className='empty' />
+					)}
+				</div>
 			</Card>
 		</Card>
 	);

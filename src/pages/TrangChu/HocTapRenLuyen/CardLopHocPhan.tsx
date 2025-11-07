@@ -1,6 +1,8 @@
+import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { DownOutlined } from '@ant-design/icons';
 import { Button, Card, Carousel, Dropdown, Empty, Menu, Space } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
+import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useModel } from 'umi';
 import CardLopHocPhanItem from '../../HocTap/LopHocPhan/components/CardLopHocPhanItem';
@@ -191,7 +193,11 @@ const CardLopHocPhan = () => {
 								index={index}
 								backgrounds={backgrounds}
 								isHienTai={lopHienTai?._id === lop._id}
-								isKeTiep={lopKeTiep?._id === lop._id && lopHienTai?._id !== lopKeTiep?._id}
+								isKeTiep={
+									lopKeTiep?._id === lop._id &&
+									lopHienTai?._id !== lopKeTiep?._id &&
+									(lop.thoiKhoaBieuList ?? []).some((tkb: ThoiKhoaBieu.IRecord) => dayjs(tkb.ngay).isAfter(dayjs()))
+								}
 							/>
 						);
 					})}

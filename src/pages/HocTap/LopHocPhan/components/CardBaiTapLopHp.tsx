@@ -71,7 +71,7 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 								{files.length > 0 && (
 									<div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8 }}>
 										<BoxFile url={files} />
-										
+
 										{files.length > 2 && (
 											<Text type='secondary' italic>
 												...và {files.length - 2} file khác

@@ -37,14 +37,8 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, bac
 
 	return (
 		<div className='card-lhp'>
-			{isHienTai ||
-				(isKeTiep && (
-					<Badge.Ribbon
-						text={isKeTiep ? 'Sắp tới' : 'Hiện tại'}
-						color={isKeTiep ? 'red' : 'green'}
-						className='ribbon'
-					/>
-				))}
+			{isHienTai && <Badge.Ribbon text='Hiện tại' color='green' className='ribbon' />}
+			{isKeTiep && !isHienTai && <Badge.Ribbon text='Sắp tới' color='red' className='ribbon' />}
 			<Card
 				variant='borderless'
 				className='card-lhp-inner'
