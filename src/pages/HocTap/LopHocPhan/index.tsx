@@ -1,11 +1,14 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
+import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { Card, Col, Empty, Row } from 'antd';
+import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import CardLopHocPhanItem from '../LopHocPhan/components/CardLopHocPhanItem';
 import BaiTapStatistics from './components/Statistics';
+import CardTietHocSapToi from './components/TietHocSapToi';
 
 const LopHocPhanPage = () => {
 	const { danhSach, sinhVienGetAllModel, loading, sinhVienGetModel, lopHienTai, lopKeTiep } =
@@ -67,7 +70,14 @@ const LopHocPhanPage = () => {
 											lop={lop}
 											index={index}
 											backgrounds={backgrounds}
-											isKeTiep={lopKeTiep?._id === lop._id && lopHienTai?._id !== lopKeTiep?._id}
+											isKeTiep={
+												lopKeTiep?._id === lop._id &&
+												lopHienTai?._id !== lopKeTiep?._id &&
+												(lop.thoiKhoaBieuList ?? []).some((tkb: ThoiKhoaBieu.IRecord) =>
+													dayjs(tkb.ngay).isAfter(dayjs()),
+												)
+											}
+											isHienTai={lopHienTai?._id === lop._id}
 										/>
 									</Col>
 								))}
@@ -84,11 +94,14 @@ const LopHocPhanPage = () => {
 					</Card>
 				</Col>
 
-				<Col span={24} md={16}>
+				<Col span={24} md={8}>
 					<CardBaiTapDashboard />
 				</Col>
 				<Col span={24} md={8}>
-					<CardDienDanDashboard />
+					<CardDienDanDashboard typeLop={'lop-hoc-phan'} />
+				</Col>
+				<Col span={24} md={8}>
+					<CardTietHocSapToi />
 				</Col>
 			</Row>
 		</Card>

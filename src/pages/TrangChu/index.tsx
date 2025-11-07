@@ -71,7 +71,7 @@ const TrangChu = () => {
 						</Col> */}
 
 							<Col className='card-diendan' span={24}>
-								<CardDienDanDashboard />
+								<CardDienDanDashboard typeLop='all' />
 							</Col>
 						</Row>
 					</Col>

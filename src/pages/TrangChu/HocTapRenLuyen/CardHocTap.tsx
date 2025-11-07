@@ -51,7 +51,16 @@ const CardKetQuaHocTapDashboard = () => {
 									legend: { show: false },
 									dataLabels: { enabled: false },
 									chart: { toolbar: { show: false } },
-									tooltip: { enabled: true },
+									tooltip: {
+										enabled: true,
+										y: {
+											formatter: function (value: number, opts: any) {
+												const realValue = (value * 4) / 100;
+												const label = opts?.w?.globals?.labels?.[opts.seriesIndex] ?? '';
+												return `${label}: ${realValue.toFixed(2)} / 4.0`;
+											},
+										},
+									},
 									plotOptions: {
 										radialBar: {
 											dataLabels: { show: false },
@@ -72,9 +81,8 @@ const CardKetQuaHocTapDashboard = () => {
 											},
 										},
 									],
-									// Thêm stroke để bo tròn các góc
 									stroke: {
-										lineCap: 'round' as 'round', // Bo tròn các đầu
+										lineCap: 'round' as 'round',
 									},
 								}}
 								colors={colors}

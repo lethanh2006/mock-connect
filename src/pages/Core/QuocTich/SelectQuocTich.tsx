@@ -14,7 +14,7 @@ const SelectQuocTich = (props: {
 	placeholder?: string;
 	selectTen?: boolean;
 }) => {
-	const { value, onChange, multiple, loadData, allowClear, placeholder } = props;
+	const { value, onChange, multiple, loadData, allowClear, placeholder, selectTen } = props;
 	const { danhSach, getAllModel } = useModel('core.quoctich');
 
 	useEffect(() => {
