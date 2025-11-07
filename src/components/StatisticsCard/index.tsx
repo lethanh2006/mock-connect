@@ -1,3 +1,4 @@
+import { inputFormat } from '@/utils/utils';
 import { Card, Col, Row } from 'antd';
 import classNames from 'classnames';
 import { lighten, rgba } from 'polished';
@@ -102,7 +103,7 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 				</div>
 
 				<div className='num' style={status ? {} : { color: valueColor }}>
-					{value}
+					{typeof value === 'number' ? inputFormat(value) : value}
 				</div>
 			</div>
 		);
@@ -110,6 +111,8 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 
 	return hideCard ? (
 		<div style={{ ...containerStyle }}>
+			{title && <div style={{ fontWeight: 600, marginBottom: 8 }}>{title}</div>}
+
 			<Row gutter={[rowGutter, rowGutter]}>
 				{data.map((item, index) => (
 					<Col {...colSpan} key={index}>
