@@ -65,13 +65,14 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 				{/* <InfoCircleOutlined style={{ color: 'var(--color-primary)', marginLeft: 8 }} /> */}
 
 				<Tag className={`card-lhp-tag card-lhp-tag-completed`}>
-					<Text
-						className='card-lhp-malop_copyable'
-						copyable={{ text: lop.ten, tooltips: ['Sao chép mã (nhóm) lớp ', 'Đã sao chép mã (nhóm) lớp '] }}
-					>
-						{lop.maLop}
-					</Text>
+					<Text className='card-lhp-malop_copyable'>{lop.maLop}</Text>
 				</Tag>
+
+				<Text
+					style={{ marginLeft: 8 }}
+					className='card-lhp-malop_copyable'
+					copyable={{ text: lop.ten, tooltips: ['Sao chép mã (nhóm) lớp ', 'Đã sao chép mã (nhóm) lớp '] }}
+				/>
 
 				<br />
 				<Title level={4} className='card-lhp-title'>
