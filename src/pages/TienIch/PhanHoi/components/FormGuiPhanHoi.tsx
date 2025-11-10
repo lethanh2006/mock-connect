@@ -2,7 +2,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { ELoaiPhanHoi } from '@/services/TienIch/PhanHoi/constant';
 import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
-import { buildUpLoadFile } from '@/services/uploadFile';
+import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Form, Input } from 'antd';
@@ -11,9 +11,10 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 import SelectChuDePhanHoi from '../../ChuDePhanHoi/Select';
 
-const FormGuiPhanHoi = () => {
+const FormGuiPhanHoi = (props: any) => {
+	const { getData } = props;
 	const [form] = Form.useForm();
-	const { loading, setVisibleForm, postModel, record, getModel, setFormSubmiting, formSubmiting, visibleForm } =
+	const { loading, setVisibleForm, postModel, record, setFormSubmiting, formSubmiting, visibleForm } =
 		useModel('tienich.phanhoi');
 	const { danhSach } = useModel('tienich.chudephanhoi');
 	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
@@ -32,21 +33,17 @@ const FormGuiPhanHoi = () => {
 	};
 
 	const onFinish = async (values: PhanHoi.IRecord) => {
-		setFormSubmiting(true);
 		try {
-			const urlPhanAnh = await buildUpLoadFile(values, 'urlPhanAnh');
+			setFormSubmiting(true);
+			const urlPhanAnh = await buildUpLoadMultiFile(values, 'urlPhanAnh');
 			values.urlPhanAnh = urlPhanAnh;
 			setFormSubmiting(false);
 
 			values.loaiPhanHoi = ELoaiPhanHoi.KHAC;
 			postModel(
 				{ ...values, tenLinhVuc: danhSach?.find((item) => item._id === values.tenLinhVuc)?.tenLinhVuc ?? 'Khác' },
-				() => {
-					getModel(undefined, undefined, undefined, undefined, undefined, 'me');
-				},
+				getData,
 			);
-			// .then(() => getModel(undefined, undefined, undefined, undefined, undefined, 'me'))
-			// .catch((er) => console.log(er));
 		} catch (er) {
 			console.log(er);
 		} finally {
@@ -88,14 +85,7 @@ const FormGuiPhanHoi = () => {
 					<Input.TextArea rows={4} placeholder='Nhập nội dung' />
 				</Form.Item>
 				<Form.Item name='urlPhanAnh' label='File đính kèm'>
-					<UploadFile
-						otherProps={{
-							maxCount: 1,
-							multiple: false,
-							showUploadList: { showDownloadIcon: false },
-						}}
-						resize
-					/>
+					<UploadFile maxCount={5} />
 				</Form.Item>
 
 				<div className='form-footer'>
