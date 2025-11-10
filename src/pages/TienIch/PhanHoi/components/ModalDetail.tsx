@@ -36,9 +36,7 @@ const ModalDetailPhanhoi = () => {
 								File đính kèm
 							</a>
 						</>
-					) : (
-						<i>Không có</i>
-					)}
+					) : null}
 				</Descriptions.Item>
 				<Descriptions.Item label='Ngày gửi'>{dayjs(record?.createdAt).format('HH:mm DD/MM/YYYY')}</Descriptions.Item>
 				<Descriptions.Item label='Tiêu đề'>{record?.tieuDe ?? '--'}</Descriptions.Item>
@@ -74,9 +72,7 @@ const ModalDetailPhanhoi = () => {
 								File đính kèm
 							</a>
 						</>
-					) : (
-						<i>Không có</i>
-					)}
+					) : null}
 				</Descriptions.Item>
 			</Descriptions>
 
