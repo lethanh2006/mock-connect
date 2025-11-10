@@ -1,4 +1,5 @@
 import PreviewFile from '@/components/PreviewFile';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
@@ -7,24 +8,21 @@ import { colorTrangThaiUserDiemDanh, ETrangThaiUserDiemDanh, trangThaiUserDiemDa
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { MailOutlined } from '@ant-design/icons';
 import { Button, Carousel, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import ModalXinNghi from '../components/ModalXinNghi';
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import { MailOutlined } from '@ant-design/icons';
-import moment from 'moment';
 
 const TableLichHocLopHP = (props: {
 	items: ThoiKhoaBieu.IRecord[];
 	onClickItem: (val: ThoiKhoaBieu.IRecord) => void;
 }) => {
-	const { loading } = useModel('daotao.thoikhoabieu');
+	const { loading, setRecord } = useModel('daotao.thoikhoabieu');
 	const { items, onClickItem } = props;
 	const [url, setUrl] = useState<any[]>([]);
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 	const [visibleXinNghi, setVisibleXinNghi] = useState(false);
-	const [recXinNghi, setRecXinNghi] = useState<ThoiKhoaBieu.IRecord | undefined>();
 
 	const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
 		onClick: () => onClickItem(rec),
@@ -139,25 +137,19 @@ const TableLichHocLopHP = (props: {
 			title: 'Thao tác',
 			width: 80,
 			align: 'center',
-			render: (val, rec) => {
-				const isBefore = moment().isBefore(rec.ngay, 'day');
-				return (
-					<>
-						{isBefore && (
-							<ButtonExtend
-								type='link'
-								tooltip='Xin nghỉ học'
-								onClick={(e) => {
-									e.stopPropagation();
-									setRecXinNghi(rec);
-									setVisibleXinNghi(true);
-								}}
-								icon={<MailOutlined />}
-							/>
-						)}
-					</>
-				);
-			},
+			render: (_, rec) => (
+				<ButtonExtend
+					type='link'
+					tooltip='Xin nghỉ học'
+					icon={<MailOutlined />}
+					disabled={!dayjs().isBefore(rec.ngay, 'day')}
+					onClick={(e) => {
+						e.stopPropagation();
+						setRecord(rec);
+						setVisibleXinNghi(true);
+					}}
+				/>
+			),
 		},
 	];
 
@@ -189,7 +181,7 @@ const TableLichHocLopHP = (props: {
 				</div>
 			</ModalExpandable>
 
-			<ModalXinNghi visible={visibleXinNghi} onClose={() => setVisibleXinNghi(false)} buoiHoc={recXinNghi} />
+			<ModalXinNghi visible={visibleXinNghi} onClose={() => setVisibleXinNghi(false)} />
 		</>
 	);
 };

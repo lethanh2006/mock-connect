@@ -103,7 +103,8 @@ const DanhSachBuoiHoc = () => {
 			</Card>
 
 			<ModalThoiKhoaBieu />
-			<LichSuDonXinNghi visible={visibleDonXinNghi} setVisible={setVisibleDonXinNghi} tenLop={recLopHocPhan?.ten} />
+
+			<LichSuDonXinNghi visible={visibleDonXinNghi} setVisible={setVisibleDonXinNghi} />
 		</Spin>
 	);
 };
