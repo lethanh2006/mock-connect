@@ -22,6 +22,30 @@ const CardLopHocPhan = () => {
 	const carouselRef = useRef<CarouselRef>(null);
 	const [currentSlide, setCurrentSlide] = useState(0);
 
+	const [itemsPerPage, setItemsPerPage] = useState(4);
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	// Theo dõi độ rộng container và tự động điều chỉnh số lượng items hiển thị
+	useEffect(() => {
+		const container = containerRef.current;
+		if (!container) return;
+
+		const resizeObserver = new ResizeObserver(() => {
+			const width = container.offsetWidth;
+			// if (width < 600) {
+			// 	setItemsPerPage(3);
+			// } else if (width < 1200) {
+			// 	setItemsPerPage(4);
+			// } else {
+			// 	setItemsPerPage(4);
+			// }
+			setItemsPerPage(4);
+		});
+
+		resizeObserver.observe(container);
+		return () => resizeObserver.disconnect();
+	}, []);
+
 	// Assets
 	const Isolation_Mode_1 = 'images/isolation-mode-1.svg';
 	const Isolation_Mode_2 = 'images/isolation-mode-2.svg';
@@ -151,68 +175,70 @@ const CardLopHocPhan = () => {
 				</div>
 			}
 		>
-			{danhSachLHP.length ? (
-				<Carousel
-					ref={carouselRef}
-					className='custom-carousel'
-					dots={false}
-					arrows={false}
-					slidesToShow={4}
-					slidesToScroll={3}
-					infinite={true}
-					swipe={true}
-					autoplay
-					autoplaySpeed={3000}
-					beforeChange={(from, to) => setCurrentSlide(to)}
-					responsive={[
-						{
-							breakpoint: 1400,
-							settings: {
-								slidesToShow: 3,
+			<div ref={containerRef}>
+				{danhSachLHP.length ? (
+					<Carousel
+						ref={carouselRef}
+						className='custom-carousel'
+						dots={false}
+						arrows={false}
+						slidesToShow={itemsPerPage}
+						slidesToScroll={3}
+						infinite={true}
+						swipe={true}
+						autoplay
+						autoplaySpeed={3000}
+						beforeChange={(from, to) => setCurrentSlide(to)}
+						responsive={[
+							{
+								breakpoint: 1400,
+								settings: {
+									slidesToShow: 3,
+								},
 							},
-						},
-						{
-							breakpoint: 1200,
-							settings: {
-								slidesToShow: 2,
+							{
+								breakpoint: 1200,
+								settings: {
+									slidesToShow: 2,
+								},
 							},
-						},
-						{
-							breakpoint: 768,
-							settings: {
-								slidesToShow: 1,
+							{
+								breakpoint: 768,
+								settings: {
+									slidesToShow: 1,
+								},
 							},
-						},
-					]}
-				>
-					{filteredData.map((lop, index) => {
-						return (
-							<CardLopHocPhanItem
-								key={lop._id}
-								lop={lop}
-								index={index}
-								backgrounds={backgrounds}
-								diemDanh={{
-									coMat: lop?.thongKeDiemDanhLhp?.coMat,
-									chuaDiemDanh: lop?.thongKeDiemDanhLhp?.chuaDiemDanh,
-								}}
-								soBaiTap={lop?.thongKeBaiTap?.tongSo}
-								soBaiDang={lop?.soBaiDang}
-								isHienTai={lopHienTai?._id === lop._id}
-								isKeTiep={
-									lopKeTiep?._id === lop._id &&
-									lopHienTai?._id !== lopKeTiep?._id &&
-									(lop.thoiKhoaBieuList ?? []).some((tkb: ThoiKhoaBieu.IRecord) => dayjs(tkb.ngay).isAfter(dayjs()))
-								}
-							/>
-						);
-					})}
-				</Carousel>
-			) : (
-				<Card variant='borderless' style={{ borderRadius: 8 }}>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
-				</Card>
-			)}
+						]}
+					>
+						{filteredData.map((lop, index) => {
+							return (
+								<CardLopHocPhanItem
+									key={lop._id}
+									lop={lop}
+									index={index}
+									backgrounds={backgrounds}
+									diemDanh={{
+										coMat: lop?.thongKeDiemDanhLhp?.coMat,
+										chuaDiemDanh: lop?.thongKeDiemDanhLhp?.chuaDiemDanh,
+									}}
+									soBaiTap={lop?.thongKeBaiTap?.tongSo}
+									soBaiDang={lop?.soBaiDang}
+									isHienTai={lopHienTai?._id === lop._id}
+									isKeTiep={
+										lopKeTiep?._id === lop._id &&
+										lopHienTai?._id !== lopKeTiep?._id &&
+										(lop.thoiKhoaBieuList ?? []).some((tkb: ThoiKhoaBieu.IRecord) => dayjs(tkb.ngay).isAfter(dayjs()))
+									}
+								/>
+							);
+						})}
+					</Carousel>
+				) : (
+					<Card variant='borderless' style={{ borderRadius: 8 }}>
+						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
+					</Card>
+				)}
+			</div>
 		</Card>
 	);
 };
