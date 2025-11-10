@@ -192,6 +192,12 @@ const CardLopHocPhan = () => {
 								lop={lop}
 								index={index}
 								backgrounds={backgrounds}
+								diemDanh={{
+									coMat: lop?.thongKeDiemDanhLhp?.coMat,
+									chuaDiemDanh: lop?.thongKeDiemDanhLhp?.chuaDiemDanh,
+								}}
+								soBaiTap={lop?.thongKeBaiTap?.tongSo}
+								soBaiDang={lop?.soBaiDang}
 								isHienTai={lopHienTai?._id === lop._id}
 								isKeTiep={
 									lopKeTiep?._id === lop._id &&

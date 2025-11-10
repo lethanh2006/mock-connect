@@ -47,6 +47,17 @@
 		.hover_link {
 			display: none;
 		}
+
+		&.on_progress {
+			outline: 2px solid var(--color-primary);
+			// box-shadow: var(--box-shadow-secondary); // comment lại cho sạch
+			outline-offset: 2px;
+			transition:
+				outline 0.1s linear,
+				box-shadow 0.3s ease,
+				outline-offset 0.3s ease;
+			margin-bottom: 12px;
+		}
 	}
 
 	.su_kien__left {

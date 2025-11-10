@@ -1,5 +1,5 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Badge, Card, Progress, Tag, Typography } from 'antd';
+import { MessageOutlined, ReadOutlined, ScheduleOutlined } from '@ant-design/icons';
+import { Badge, Card, Progress, Tag, Tooltip, Typography } from 'antd';
 import { createHash } from 'crypto';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -14,9 +14,21 @@ interface CardLopHocPhanItemProps {
 	backgrounds: string[];
 	isHienTai?: boolean;
 	isKeTiep?: boolean;
+	diemDanh?: { coMat?: number; chuaDiemDanh?: number };
+	soBaiTap?: number;
+	soBaiDang?: number;
 }
 
-const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, backgrounds, isHienTai, isKeTiep }) => {
+const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
+	lop,
+	index,
+	backgrounds,
+	isHienTai,
+	isKeTiep,
+	diemDanh,
+	soBaiTap,
+	soBaiDang,
+}) => {
 	// Tạo mảng background cố định cho mỗi item để tránh bị giật hình
 	const getBackgroundForItem = (itemId: string, index: number) => {
 		const hash = createHash('md5').update(itemId).digest('hex');
@@ -47,20 +59,63 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({ lop, index, bac
 				}}
 				onClick={() => history.push(`/hoc-tap/lop-tin-chi/${lop._id}`)}
 			>
-				<Tag className={`card-lhp-tag ${isCompleted ? 'card-lhp-tag-completed' : 'card-lhp-tag-progressing'}`}>
+				{/* <Tag className={`card-lhp-tag ${isCompleted ? 'card-lhp-tag-completed' : 'card-lhp-tag-progressing'}`}>
 					{isCompleted ? 'Đã kết thúc' : 'Đang học'}
-				</Tag>
+				</Tag> */}
+				{/* <InfoCircleOutlined style={{ color: 'var(--color-primary)', marginLeft: 8 }} /> */}
 
-				<InfoCircleOutlined style={{ color: 'var(--color-primary)', marginLeft: 8 }} />
+				<Tag className={`card-lhp-tag card-lhp-tag-completed`}>
+					<Text
+						className='card-lhp-malop_copyable'
+						copyable={{ text: lop.ten, tooltips: ['Sao chép mã (nhóm) lớp ', 'Đã sao chép mã (nhóm) lớp '] }}
+					>
+						{lop.maLop}
+					</Text>
+				</Tag>
 
 				<br />
 				<Title level={4} className='card-lhp-title'>
 					{lop.hocPhan?.ten}
 				</Title>
 
-				<div className='card-lhp-row'>
-					<span>Mã lớp (nhóm):</span>
-					<Text strong>{lop.ten}</Text>
+				{/* <div className='card-lhp-row'> */}
+				{/* <span>Mã lớp (nhóm):</span> */}
+				{/* <Text strong>{lop.ten}</Text> */}
+				{/* </div> */}
+
+				{/* <div className='card-lhp-row'>
+					<span>Điểm danh:</span>
+					<Text strong>
+						{diemDanh?.coMat !== undefined ? diemDanh.coMat : '-'} /{' '}
+						{diemDanh?.chuaDiemDanh ? allThoiKhoaBieu.length - (diemDanh?.chuaDiemDanh ?? 0) : '-'}
+					</Text>
+				</div> */}
+
+				{/* 3 ô thống kê */}
+				<div className='card-lhp-row' style={{ marginBottom: 4 }}>
+					<Tooltip title='Có mặt / buổi điểm danh'>
+						<div className='stat'>
+							<ScheduleOutlined className='anticon' />
+							<Text strong>
+								{diemDanh?.coMat !== undefined ? diemDanh.coMat : '-'} /{' '}
+								{diemDanh?.chuaDiemDanh ? allThoiKhoaBieu.length - (diemDanh?.chuaDiemDanh ?? 0) : '-'}
+							</Text>
+						</div>
+					</Tooltip>
+
+					<Tooltip title='Bài tập & bài kiểm tra'>
+						<div className='stat'>
+							<ReadOutlined className='anticon' />
+							<Text strong>{soBaiTap ?? 0}</Text>
+						</div>
+					</Tooltip>
+
+					<Tooltip title='Bài đăng / thảo luận trên diễn đàn'>
+						<div className='stat'>
+							<MessageOutlined className='anticon' />
+							<Text strong>{soBaiDang ?? 0}</Text>
+						</div>
+					</Tooltip>
 				</div>
 
 				{lop?.diem?.diemHpSvHk?.diemKthp ? (

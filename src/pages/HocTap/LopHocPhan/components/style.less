@@ -31,6 +31,11 @@
 		margin-bottom: 8px;
 	}
 
+	&-malop_copyable {
+		color: var(--color-primary);
+		font-weight: 500;
+	}
+
 	&-tag-completed {
 		color: #ff7677;
 		border: 1px solid rgb(253, 197, 191);
@@ -54,6 +59,27 @@
 		justify-content: space-between;
 		color: #6f6f6f !important;
 		font-weight: 600;
+		gap: 8px;
+
+		.stat {
+			flex: 1;
+			text-align: center;
+			border: 1px solid transparent;
+			border-radius: 4px;
+			padding: 8px;
+			border: 1px solid #fff;
+			background-color: fade(@background-color-light, 50%);
+			font-size: 16px;
+
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+
+			box-shadow: 0 2px 6px rgba(116, 116, 116, 0.1);
+
+			.anticon {
+				margin-right: 8px;
+			}
+		}
 
 		strong {
 			font-weight: 600;

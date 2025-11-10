@@ -66,9 +66,9 @@ const CardSuKienSapToi = () => {
 				className={`card fade-in`}
 				onClick={() => handleEventClick(currentEvent)}
 			>
-				<Spin spinning={loadingSuKien || loadingTKB || loadingThi}>
-					<div className='content'>
-						<div className='details'>
+				<div className='content'>
+					<div className='details'>
+						<Spin spinning={loadingSuKien || loadingTKB || loadingThi}>
 							<div className='title'>{currentEvent.title || currentEvent.tenSuKien}</div>
 
 							<div className='footer'>
@@ -93,9 +93,9 @@ const CardSuKienSapToi = () => {
 									</Space>
 								</div>
 							</div>
-						</div>
+						</Spin>
 					</div>
-				</Spin>
+				</div>
 			</div>
 		);
 	};

@@ -133,7 +133,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 			className='card-borderless card-big-title'
 			title={
 				<Space>
-					Diễn đàn thảo luận
+					Diễn đàn
 					<Tag color={danhSach.length > 0 ? 'green' : ''}>{danhSach.length}</Tag>
 				</Space>
 			}
