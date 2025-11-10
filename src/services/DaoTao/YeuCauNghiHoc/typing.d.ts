@@ -1,5 +1,4 @@
 import type { ETrangThaiDonNghiHoc } from '../constant';
-import type { SinhVien } from '../SinhVien/typings';
 import type { ThoiKhoaBieu } from '../ThoiKhoaBieu/typing';
 
 declare module YeuCauNghiHoc {
@@ -12,7 +11,8 @@ declare module YeuCauNghiHoc {
 		tenSinhVien: string;
 		emailSinhVien: string;
 		lyDo: string;
-		urlMinhChung: string;
+		urlMinhChung: string | null;
+
 		trangThai?: ETrangThaiDonNghiHoc;
 		ghiChuGiangVien?: string;
 		giangVienDuyetSsoId?: string;
