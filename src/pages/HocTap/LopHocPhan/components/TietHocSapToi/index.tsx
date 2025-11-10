@@ -158,7 +158,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 										return (
 											<div
 												key={buoiHoc._id}
-												className={styles.tiet_hoc}
+												className={`${styles.tiet_hoc} ${onProgress ? styles.on_progress : ''}`}
 												onClick={() => {
 													setSelectEvent(buoiHoc);
 													setVisibleDetail(true);
