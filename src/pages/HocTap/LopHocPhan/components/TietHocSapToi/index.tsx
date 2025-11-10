@@ -141,7 +141,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 							return (
 								<div key={ngay} className={styles.ngay}>
 									<Space style={{ marginBottom: 8 }}>
-										<Badge count={cacBuoiHoc.length} size='small' offset={[15, 11]} color='#D66'>
+										<Badge count={cacBuoiHoc.length} size='small' offset={[15, 8]} color='#D66'>
 											<div
 												className={styles.ngay__title}
 												style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
