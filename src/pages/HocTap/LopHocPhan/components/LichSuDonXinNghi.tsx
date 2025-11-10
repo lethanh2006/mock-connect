@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Modal, Popconfirm, Space, Tag, message } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
-import { useModel } from 'umi';
-import TableStaticData from '@/components/Table/TableStaticData';
-import ModalExpandable from '@/components/Table/ModalExpandable';
 import PreviewFile from '@/components/PreviewFile';
-import type { IColumn } from '@/components/Table/typing';
-import { getMeByTenLop, huyDonXinNghi } from '@/services/DaoTao/YeuCauNghiHoc';
-import type { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import TableStaticData from '@/components/Table/TableStaticData';
+import type { IColumn } from '@/components/Table/typing';
 import type { ETrangThaiDonNghiHoc } from '@/services/DaoTao/constant';
 import { TrangThaiDonNghiHoc } from '@/services/DaoTao/constant';
+import { getMeByTenLop, huyDonXinNghi } from '@/services/DaoTao/YeuCauNghiHoc';
+import type { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
+import { CloseOutlined } from '@ant-design/icons';
+import { Modal, Popconfirm, Space, Tag, message } from 'antd';
 import moment from 'moment';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useModel } from 'umi';
 
 interface LichSuDonXinNghiProps {
 	tenLop?: string;
@@ -59,27 +59,36 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ tenLop, visible, se
 
 	const onViewFiles = (raw?: any) => {
 		if (!raw) return;
-		setFile(typeof raw === 'string' ? raw : raw.url ?? '');
+		setFile(typeof raw === 'string' ? raw : (raw.url ?? ''));
 		setFilesVisible(true);
 	};
 
 	const columns: IColumn<YeuCauNghiHoc.IRecord>[] = [
 		{
-			title: 'Buổi',
-			dataIndex: ['thoiKhoaBieu', 'ngay'],
-			width: 180,
-			render: (_, r) =>
-				r.thoiKhoaBieu?.ngay
-					? `${r.thoiKhoaBieu.tenLopHocPhan ?? ''} - ${moment(r.thoiKhoaBieu.ngay).format('DD/MM/YY')} - ca (${
-							r.thoiKhoaBieu.tietBatDau ?? ''
-					  } - ${r.thoiKhoaBieu.tietKetThuc ?? ''})`
-					: '',
+			title: 'Lớp',
+			dataIndex: 'tenLopHocPhan',
+			sorter: true,
+			width: 80,
 		},
-		{ title: 'Lý do', dataIndex: 'lyDo', width: 150, render: (v) => v || '' },
+		{
+			title: 'Ngày nghỉ',
+			dataIndex: ['thoiKhoaBieu', 'ngay'],
+			width: 80,
+			filterType: 'date',
+			render: (value: string) => (value ? moment(value).format('DD/MM/YYYY') : ''),
+		},
+		{
+			title: 'Ca nghỉ',
+			dataIndex: ['thoiKhoaBieu', 'tietBatDau'],
+			width: 100,
+			render: (_: any, record: YeuCauNghiHoc.IRecord) =>
+				`Tiết: ${record.thoiKhoaBieu?.tietBatDau ?? ''} - ${record.thoiKhoaBieu?.tietKetThuc ?? ''}`,
+		},
+		{ title: 'Lý do', dataIndex: 'lyDo', width: 140, render: (v) => v || '' },
 		{
 			title: 'Minh chứng',
 			dataIndex: 'urlMinhChung',
-			width: 120,
+			width: 100,
 			align: 'center',
 			render: (v) => (
 				<a
