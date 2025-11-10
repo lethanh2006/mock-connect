@@ -8,7 +8,7 @@ declare module PhanHoi {
 		idDonDVMC?: string;
 		loaiPhanHoi: ELoaiPhanHoi;
 		noiDungPhanHoi: string;
-		urlPhanAnh?: string | null;
+		urlPhanAnh?: string[] | null;
 
 		tieuDe?: string;
 		maDonVi?: string;
