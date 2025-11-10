@@ -51,11 +51,13 @@ export default () => {
 		let lopKeTiep: TData | undefined;
 
 		for (let i = 0; i < newLopList.length; i++) {
-			const element = newLopList[i];
-			if (now.isSameOrAfter(element.tkbGanNhat?.thoiGianBatDau) && now.isBefore(element.tkbGanNhat?.thoiGianKetThuc)) {
-				lopHienTai = element;
-			} else if (!lopKeTiep && now.isBefore(element.tkbGanNhat?.thoiGianBatDau)) {
-				lopKeTiep = element;
+			const lop = newLopList[i];
+			if (!lop.tkbGanNhat?.thoiGianBatDau || !lop.tkbGanNhat?.thoiGianKetThuc) continue;
+
+			if (now.isSameOrAfter(lop.tkbGanNhat?.thoiGianBatDau) && now.isBefore(lop.tkbGanNhat?.thoiGianKetThuc)) {
+				lopHienTai = lop;
+			} else if (!lopKeTiep && now.isBefore(lop.tkbGanNhat?.thoiGianBatDau)) {
+				lopKeTiep = lop;
 			}
 		}
 
