@@ -9,7 +9,7 @@ import { useModel } from 'umi';
 const ModalDetailPhanhoi = () => {
 	const { record, setVisibleForm } = useModel('tienich.phanhoi');
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
-	const [filePhanHoi, setFilePhanHoi] = useState<string | string[]>();
+	const [filePhanHoi, setFilePhanHoi] = useState<string[]>();
 
 	return (
 		<Card title='Chi tiết phản hồi'>
@@ -19,24 +19,26 @@ const ModalDetailPhanhoi = () => {
 					{record?.loaiPhanHoi} {record?.loaiPhanHoi === ELoaiPhanHoi.DVMC ? <a>(xem chi tiết đơn)</a> : null}
 				</Descriptions.Item> */}
 				<Descriptions.Item label='File đính kèm'>
-					{record?.urlPhanAnh ? (
+					{(Array.isArray(record?.urlPhanAnh) ? record.urlPhanAnh : [record?.urlPhanAnh]).filter(Boolean).length ? (
 						<>
 							<PaperClipOutlined />{' '}
 							<a
 								onClick={() => {
-									setFilePhanHoi(record?.urlPhanAnh ?? '');
+									const files = Array.isArray(record?.urlPhanAnh)
+										? record.urlPhanAnh
+										: record?.urlPhanAnh
+											? [record.urlPhanAnh]
+											: [];
+									setFilePhanHoi(files);
 									setVisibleFormFile(true);
 								}}
 							>
 								File đính kèm
 							</a>
 						</>
-					) : (
-						<i>Không có</i>
-					)}
+					) : null}
 				</Descriptions.Item>
 				<Descriptions.Item label='Ngày gửi'>{dayjs(record?.createdAt).format('HH:mm DD/MM/YYYY')}</Descriptions.Item>
-
 				<Descriptions.Item label='Tiêu đề'>{record?.tieuDe ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Chủ đề'>{record?.tenLinhVuc ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Bộ phận xử lý'>{record?.donVi?.ten ?? record?.maDonVi}</Descriptions.Item>
@@ -50,12 +52,20 @@ const ModalDetailPhanhoi = () => {
 					)}
 				</Descriptions.Item>
 				<Descriptions.Item label='File đính kèm trả lời'>
-					{record?.urlChuyenVienPhanAnh?.length ? (
+					{(Array.isArray(record?.urlChuyenVienPhanAnh)
+						? record.urlChuyenVienPhanAnh
+						: [record?.urlChuyenVienPhanAnh]
+					).filter(Boolean).length ? (
 						<>
 							<PaperClipOutlined />{' '}
 							<a
 								onClick={() => {
-									setFilePhanHoi(record?.urlChuyenVienPhanAnh ?? []);
+									const files = Array.isArray(record?.urlChuyenVienPhanAnh)
+										? record.urlChuyenVienPhanAnh
+										: record?.urlChuyenVienPhanAnh
+											? [record.urlChuyenVienPhanAnh]
+											: [];
+									setFilePhanHoi(files);
 									setVisibleFormFile(true);
 								}}
 							>

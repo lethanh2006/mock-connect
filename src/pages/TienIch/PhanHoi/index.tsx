@@ -15,6 +15,10 @@ const PhanHoiPage = () => {
 	const { setCondition, handleEdit, edit, getModel } = useModel('tienich.phanhoi');
 	const [daTraLoi, setDaTraLoi] = useState<string>('all');
 
+	const getData = () => {
+		getModel(undefined, undefined, undefined, undefined, undefined, 'me');
+	};
+
 	const onCell = (rec: PhanHoi.IRecord) => ({
 		onClick: () => handleEdit(rec),
 		style: { cursor: 'pointer' },
@@ -112,11 +116,12 @@ const PhanHoiPage = () => {
 
 	return (
 		<TableBase
+			getData={getData}
 			columns={columns}
 			modelName='tienich.phanhoi'
 			title='Phản hồi'
-			getData={() => getModel(undefined, undefined, undefined, undefined, undefined, 'me')}
 			Form={edit ? ModalDetailPhanhoi : FormGuiPhanHoi}
+			formProps={{ getData }}
 			widthDrawer={600}
 			destroyModal
 			otherButtons={[
