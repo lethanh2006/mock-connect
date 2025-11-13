@@ -11,7 +11,7 @@ import {
 	LeftOutlined,
 	RightOutlined,
 } from '@ant-design/icons';
-import { Empty, message, Spin } from 'antd';
+import { Empty, Image, message, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
@@ -190,7 +190,6 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 		return <Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không tồn tại dữ liệu tệp tin' />;
 	}
 
-
 	return (
 		<div className='preview-container' style={{ ...style }}>
 			<div className='preview-header'>
@@ -255,6 +254,18 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				{frameData?.type === EDinhDangFile.PDF && frameData?.src ? (
 					<div className='preview-pdf'>
 						<PDFViewerV2 url={frameData?.src} {...props.viewerProps} />
+					</div>
+				) : frameData?.type === EDinhDangFile.IMAGE && frameData?.src ? (
+					<div className='preview-image-container'>
+						<Image
+							src={frameData.src}
+							alt={frameData.name}
+							style={{
+								maxWidth: '100%',
+								maxHeight: '100%',
+								objectFit: 'contain',
+							}}
+						/>
 					</div>
 				) : frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
 					<iframe src={frameData.src} className='preview-iframe' title='File preview' />
