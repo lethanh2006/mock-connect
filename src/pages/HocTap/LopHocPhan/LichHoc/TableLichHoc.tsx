@@ -142,7 +142,7 @@ const TableLichHocLopHP = (props: {
 					type='link'
 					tooltip='Xin nghỉ học'
 					icon={<MailOutlined />}
-					disabled={!dayjs().isBefore(rec.ngay, 'day')}
+					disabled={dayjs().isAfter(rec.ngay, 'day')}
 					onClick={(e) => {
 						e.stopPropagation();
 						setRecord(rec);
