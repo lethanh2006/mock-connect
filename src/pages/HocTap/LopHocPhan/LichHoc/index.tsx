@@ -3,7 +3,7 @@ import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
 import { CalendarOutlined, FileTextOutlined, TableOutlined } from '@ant-design/icons';
-import { Badge, Card, Segmented, Space, Spin } from 'antd';
+import { Card, Segmented, Space, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import LichSuDonXinNghi from '../components/LichSuDonXinNghi';
@@ -16,7 +16,6 @@ import ThongTinBuoiHoc from './ThongTinBuoiHoc';
 const DanhSachBuoiHoc = () => {
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const { setRecord, setVisibleForm, getTheoLopHocPhan, loading, danhSach } = useModel('daotao.thoikhoabieu');
-	const { soDonChoDuyet } = useModel('daotao.yeucaunghihoc');
 	const [buoiHocGanNhat, setBuoiHocGanNhat] = useState<ThoiKhoaBieu.IRecord>();
 	const [visibleDonXinNghi, setVisibleDonXinNghi] = useState<boolean>(false);
 	const [show, setShow] = useState<string>('table');
@@ -71,16 +70,9 @@ const DanhSachBuoiHoc = () => {
 				title={
 					<Space wrap size={12}>
 						<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
-						<Badge count={soDonChoDuyet} offset={[-4, 0]}>
-							<ButtonExtend
-								icon={<FileTextOutlined />}
-								danger={!!soDonChoDuyet}
-								notHideText
-								onClick={() => setVisibleDonXinNghi(true)}
-							>
-								Đơn xin nghỉ học
-							</ButtonExtend>
-						</Badge>
+						<ButtonExtend icon={<FileTextOutlined />} onClick={() => setVisibleDonXinNghi(true)}>
+							Đơn xin nghỉ học
+						</ButtonExtend>
 						<Segmented
 							options={[
 								{ value: 'all', label: 'Tất cả' },
