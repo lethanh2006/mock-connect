@@ -8,7 +8,7 @@ import {
 import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Card, Carousel, Empty, Space, Tag, Typography } from 'antd';
+import { Button, Card, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { history, Link, useModel } from 'umi';
@@ -55,12 +55,14 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 		(i) => i.assignment?.thoiGianKetThuc && dayjs().isSameOrBefore(dayjs(i.assignment.thoiGianKetThuc)),
 	);
 
+	const dataToUse = segment === '1' ? filteredData : danhSach;
+
 	const { isDashBoard } = props;
-	const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+	const totalPages = Math.ceil(dataToUse.length / itemsPerPage);
 	// Tạo các trang dữ liệu
 	const pageData = [];
 	for (let i = 0; i < totalPages; i++) {
-		pageData.push(filteredData.slice(i * itemsPerPage, (i + 1) * itemsPerPage));
+		pageData.push(dataToUse.slice(i * itemsPerPage, (i + 1) * itemsPerPage));
 	}
 
 	// Reset current page when items per page changes
@@ -173,42 +175,62 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 			title='Bài tập, bài kiểm tra'
 			extra={
 				<Space size={isMobile ? 'small' : 'middle'} className='navigation-buttons'>
-					{
-						// isDashBoard &&
-						!isMobile && (
-							<>
-								{/* Mong muốn: có một cái để xem lại bài tập ngay trang chủ (không cần vào trang của lớp) && giao diện không bị trống  => tạm thời để đây */}
-								{/* <Segmented
-									options={[
-										{ label: 'Đang diễn ra', value: '1' },
-										{ label: 'Đã kết thúc', value: '2' },
-									]}
-									value={segment}
-									onChange={(value) => setSegment(value as string)}
-									size='small'
-								/> */}
-							</>
-						)
-					}
-
-					{!!filteredData.length && (
+					{isDashBoard && !isMobile && (
 						<>
-							<Button
-								type='text'
-								icon={<SlideButtonIcon direction='left' disabled={currentPage === 0} />}
-								onClick={handlePrevious}
-								disabled={currentPage === 0}
-								className='nav-btn'
-							/>
-							<Button
-								type='text'
-								icon={<SlideButtonIcon direction='right' disabled={currentPage >= totalPages - 1} />}
-								onClick={handleNext}
-								disabled={currentPage >= totalPages - 1}
-								className='nav-btn'
+							{/* Mong muốn: có một cái để xem lại bài tập ngay trang chủ (không cần vào trang của lớp) && giao diện không bị trống  => tạm thời để đây */}
+							<Segmented
+								options={[
+									{
+										label: (
+											<span>
+												Đang diễn ra <span style={{ color: '#999' }}>({filteredData.length})</span>
+											</span>
+										),
+										value: '1',
+									},
+									{
+										label: (
+											<span>
+												Tất cả <span style={{ color: '#999' }}>({danhSach.length})</span>
+											</span>
+										),
+										value: '2',
+									},
+								]}
+								value={segment}
+								onChange={(value) => {
+									setSegment(value as string);
+									setCurrentPage(0);
+									carouselRef?.goTo(0);
+								}}
+								size='small'
 							/>
 						</>
 					)}
+
+					{/* {!!dataToUse.length && ( */}
+					<>
+						<Button
+							type='text'
+							icon={<SlideButtonIcon direction='left' disabled={currentPage === 0} />}
+							onClick={handlePrevious}
+							disabled={currentPage === 0}
+							className='nav-btn'
+						/>
+						{isDashBoard && !isMobile && (
+							<Text type='secondary' style={{ minWidth: 40, textAlign: 'center' }}>
+								{currentPage + 1}/{totalPages}
+							</Text>
+						)}
+						<Button
+							type='text'
+							icon={<SlideButtonIcon direction='right' disabled={currentPage >= totalPages - 1} />}
+							onClick={handleNext}
+							disabled={currentPage >= totalPages - 1}
+							className='nav-btn'
+						/>
+					</>
+					{/* )} */}
 
 					{isDashBoard && (
 						<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
@@ -220,7 +242,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 		>
 			<Card variant='borderless' className={`${isDashBoard && 'content-wrapper'} `} styles={{ body: { padding: 0 } }}>
 				<div ref={containerRef}>
-					{!!filteredData.length ? (
+					{!!dataToUse.length ? (
 						<Carousel
 							ref={setCarouselRef}
 							dots={false}
