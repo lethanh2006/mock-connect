@@ -9,11 +9,19 @@
 	.ngay {
 		.dashboard_calendar .ngay();
 		margin-bottom: 12px;
+
+		@media (max-width: 768px) {
+			margin-bottom: 8px;
+		}
 	}
 
 	.ngay__title {
 		.dashboard_calendar .ngay__title();
 		font-size: 14px;
+
+		@media (max-width: 768px) {
+			font-size: 12px;
+		}
 	}
 
 	.sketch-picker {
@@ -27,6 +35,10 @@
 	&.has_button {
 		:global(.ant-card-head-title) {
 			padding: 8px 0;
+
+			@media (max-width: 768px) {
+				padding: 6px 0;
+			}
 		}
 	}
 
@@ -36,8 +48,15 @@
 		margin: 0 4px 6px 4px;
 		padding: 6px 8px;
 
+		@media (max-width: 768px) {
+			gap: 6px;
+			margin: 0 2px 4px 2px;
+			padding: 4px 6px;
+		}
+
 		.hover_link {
 			display: initial;
+			word-break: break-word;
 		}
 
 		.hover_link {
@@ -53,11 +72,20 @@
 		.dashboard_calendar .su_kien__left();
 		padding-left: 4px;
 
+		@media (max-width: 768px) {
+			padding-left: 2px;
+		}
+
 		.pulse {
 			top: -6px;
 			width: 8px;
 			height: 8px;
 			background-color: red;
+
+			@media (max-width: 768px) {
+				width: 6px;
+				height: 6px;
+			}
 		}
 	}
 
@@ -65,6 +93,11 @@
 		.dashboard_calendar .su_kien__thoi_gian();
 		font-size: 14px;
 		width: 32px;
+
+		@media (max-width: 768px) {
+			font-size: 12px;
+			width: 24px;
+		}
 	}
 
 	.tiet_hoc__right {
@@ -78,21 +111,41 @@
 		align-self: start;
 		align-items: start;
 
+		@media (max-width: 768px) {
+			gap: 6px;
+			padding: 3px 4px;
+			border-left-width: 3px;
+		}
+
 		.tiet_hoc__right_header {
 			display: flex;
 			gap: 8px;
 			align-items: center;
 			width: 100%;
 			margin-left: 8px;
+			word-wrap: break-word;
+			overflow-wrap: break-word;
+
+			@media (max-width: 768px) {
+				gap: 6px;
+				margin-left: 4px;
+				font-size: 13px;
+			}
 		}
 
 		.tiet_hoc__right_QR {
 			width: 100%;
 			display: flex;
-			gap: 12px;
+			gap: 8px;
 			justify-content: space-between;
 			align-items: center;
-			margin-left: 8px;
+			margin-left: 4px;
+			flex-wrap: wrap;
+
+			@media (max-width: 768px) {
+				gap: 4px;
+				margin-left: 4px;
+			}
 		}
 	}
 }
