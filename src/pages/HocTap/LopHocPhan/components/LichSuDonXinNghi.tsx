@@ -9,7 +9,7 @@ import { TrangThaiDonNghiHoc } from '@/services/DaoTao/constant';
 import type { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
 import { CloseOutlined } from '@ant-design/icons';
 import { Modal, Popconfirm, Tag } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { useModel } from 'umi';
 
@@ -42,8 +42,8 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 		{
 			title: 'Ngày nghỉ',
 			dataIndex: ['thoiKhoaBieu', 'ngay'],
-			width: 80,
-			render: (value: string) => (value ? moment(value).format('DD/MM/YYYY') : ''),
+			width: 100,
+			render: (value) => value && dayjs(value).format('DD/MM/YYYY'),
 			filterType: 'date',
 			sortable: true,
 		},
@@ -57,7 +57,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 		{
 			title: 'Lý do',
 			dataIndex: 'lyDo',
-			width: 140,
+			width: 120,
 			render: (val) => <ExpandText>{val}</ExpandText>,
 			filterType: 'string',
 		},
@@ -67,22 +67,24 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			width: 100,
 			align: 'center',
 			render: (val) =>
-				val && (
+				val ? (
 					<a
 						onClick={(e) => {
 							setFile(val);
 							setFilesVisible(true);
 						}}
 					>
-						Xem minh chứng
+						Xem chi tiết
 					</a>
+				) : (
+					'Không có'
 				),
 		},
 		{
 			title: 'Trạng thái',
 			dataIndex: 'trangThai',
 			align: 'center',
-			width: 90,
+			width: 120,
 			render: (val: ETrangThaiDonNghiHoc) => {
 				const { text, color } = TrangThaiDonNghiHoc[val] || { text: val, color: 'default' };
 				return <Tag color={color}>{text}</Tag>;
