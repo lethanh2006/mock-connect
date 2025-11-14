@@ -1,10 +1,9 @@
-import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import FilterLopHocPhan from '@/pages/DaoTao/LopHocPhan/FilterLopHocPhan';
 import { primaryColor } from '@/services/base/constant';
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import dayjs from '@/utils/dayjs';
-import { ArrowLeftOutlined, InfoCircleOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import { ArrowLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Card, Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link, useModel, useNavigate } from 'umi';
@@ -20,7 +19,6 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const randomBackground = `/images/isolation-mode-${backgroundRef.current}.svg`;
 	const navigate = useNavigate();
 	const visibleFilter = useMediaQuery({ query: '(max-width: 1200px)' });
-	const [showFilterHocKy, setShowFilterHocKy] = useState(false);
 
 	let allThoiKhoaBieu = record?.thoiKhoaBieuList ?? [];
 	allThoiKhoaBieu = allThoiKhoaBieu.concat(record?.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? []);
@@ -90,30 +88,18 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 							</>
 						}
 						extra={
-							!visibleFilter ? (
-								<Space>
-									{/* Nút toggle */}
-									<Tooltip title={showFilterHocKy ? 'Ẩn bộ lọc học kỳ' : 'Hiện bộ lọc học kỳ'}>
-										<Button
-											type='dashed'
-											icon={showFilterHocKy ? <MinusOutlined /> : <PlusOutlined />}
-											onClick={() => setShowFilterHocKy(!showFilterHocKy)}
-										/>
-									</Tooltip>
-
-									{/* FilterHocKy chỉ hiện khi mở */}
-									{showFilterHocKy && <FilterHocKy isSetHocKy />}
-
-									{/* Filter mặc định */}
+							<>
+								{!visibleFilter ? (
 									<FilterLopHocPhan
-										width={200}
+										miniHocKy // bật chế độ mini => FilterHocKy ẩn mặc định
+										width={220}
 										label='ten'
 										onChange={(id) => {
 											if (id) navigate(`/hoc-tap/lop-tin-chi/${id}${window.location.hash}`);
 										}}
 									/>
-								</Space>
-							) : null
+								) : null}
+							</>
 						}
 					>
 						{/* Info Row */}
