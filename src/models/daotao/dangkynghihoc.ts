@@ -1,4 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
+import { ETrangThaiDonNghiHoc } from '@/services/DaoTao/constant';
 import { huyDonXinNghi } from '@/services/DaoTao/YeuCauNghiHoc';
 import type { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
 import { ipDaoTao } from '@/utils/ip';
@@ -6,7 +7,8 @@ import { message } from 'antd';
 
 export default () => {
 	const objInit = useInitModel<YeuCauNghiHoc.IRecord>('dang-ky-nghi-hoc', undefined, undefined, ipDaoTao);
-	const { formSubmiting, setFormSubmiting } = objInit;
+	const { formSubmiting, setFormSubmiting, danhSach } = objInit;
+	const soDonChoDuyet = danhSach?.filter((i) => i.trangThai === ETrangThaiDonNghiHoc.CHO_DUYET)?.length ?? 0;
 
 	const huyDonXinNghiModal = async (idDon: string, getData?: () => void): Promise<YeuCauNghiHoc.IRecord> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
@@ -27,5 +29,6 @@ export default () => {
 	return {
 		...objInit,
 		huyDonXinNghiModal,
+		soDonChoDuyet,
 	};
 };
