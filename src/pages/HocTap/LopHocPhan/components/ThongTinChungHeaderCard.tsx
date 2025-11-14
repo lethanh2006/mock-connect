@@ -3,8 +3,8 @@ import FilterLopHocPhan from '@/pages/DaoTao/LopHocPhan/FilterLopHocPhan';
 import { primaryColor } from '@/services/base/constant';
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import dayjs from '@/utils/dayjs';
-import { ArrowLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Col, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import { ArrowLeftOutlined, InfoCircleOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link, useModel, useNavigate } from 'umi';
@@ -20,6 +20,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const randomBackground = `/images/isolation-mode-${backgroundRef.current}.svg`;
 	const navigate = useNavigate();
 	const visibleFilter = useMediaQuery({ query: '(max-width: 1200px)' });
+	const [showFilterHocKy, setShowFilterHocKy] = useState(false);
 
 	let allThoiKhoaBieu = record?.thoiKhoaBieuList ?? [];
 	allThoiKhoaBieu = allThoiKhoaBieu.concat(record?.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? []);
@@ -89,20 +90,30 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 							</>
 						}
 						extra={
-							<>
-								{!visibleFilter ? (
-									<Space>
-										<FilterHocKy isSetHocKy />{' '}
-										<FilterLopHocPhan
-											width={200}
-											label='ten'
-											onChange={(id) => {
-												if (id) navigate(`/hoc-tap/lop-tin-chi/${id}${window.location.hash}`);
-											}}
+							!visibleFilter ? (
+								<Space>
+									{/* Nút toggle */}
+									<Tooltip title={showFilterHocKy ? 'Ẩn bộ lọc học kỳ' : 'Hiện bộ lọc học kỳ'}>
+										<Button
+											type='dashed'
+											icon={showFilterHocKy ? <MinusOutlined /> : <PlusOutlined />}
+											onClick={() => setShowFilterHocKy(!showFilterHocKy)}
 										/>
-									</Space>
-								) : null}
-							</>
+									</Tooltip>
+
+									{/* FilterHocKy chỉ hiện khi mở */}
+									{showFilterHocKy && <FilterHocKy isSetHocKy />}
+
+									{/* Filter mặc định */}
+									<FilterLopHocPhan
+										width={200}
+										label='ten'
+										onChange={(id) => {
+											if (id) navigate(`/hoc-tap/lop-tin-chi/${id}${window.location.hash}`);
+										}}
+									/>
+								</Space>
+							) : null
 						}
 					>
 						{/* Info Row */}
@@ -114,9 +125,13 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 								</Text>
 							</Col>
 							<Col>
-								<Text>Mã lớp (nhóm):</Text>
-								<Text strong style={{ marginLeft: '8px' }} copyable>
-									{record?.ten ?? ''}
+								<Text>Nhóm lớp:</Text>
+								<Text
+									strong
+									style={{ marginLeft: '8px' }}
+									copyable={{ text: record?.ten, tooltips: ['Sao chép mã (nhóm) lớp ', 'Đã sao chép mã (nhóm) lớp '] }}
+								>
+									{record?.soThuTuLop ?? ''}
 								</Text>
 							</Col>
 							<Col>
