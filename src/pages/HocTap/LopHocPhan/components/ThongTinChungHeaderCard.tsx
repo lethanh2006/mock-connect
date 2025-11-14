@@ -1,9 +1,12 @@
+import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
+import FilterLopHocPhan from '@/pages/DaoTao/LopHocPhan/FilterLopHocPhan';
 import { primaryColor } from '@/services/base/constant';
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import dayjs from '@/utils/dayjs';
 import { ArrowLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
+import { Card, Col, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { Link, useModel, useNavigate } from 'umi';
 import ModalThongTinGiangVien from './ModalGiangVien';
 import './style.less';
@@ -16,6 +19,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const backgroundRef = useRef(Math.floor(Math.random() * 6));
 	const randomBackground = `/images/isolation-mode-${backgroundRef.current}.svg`;
 	const navigate = useNavigate();
+	const visibleFilter = useMediaQuery({ query: '(max-width: 1200px)' });
 
 	let allThoiKhoaBieu = record?.thoiKhoaBieuList ?? [];
 	allThoiKhoaBieu = allThoiKhoaBieu.concat(record?.children?.flatMap((child) => child.thoiKhoaBieuList ?? []) ?? []);
@@ -38,97 +42,121 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 						backgroundPosition: 'right center',
 					}}
 				>
-					{/* Header Title */}
-					<div
-						style={{
-							marginBottom: '16px',
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'baseline',
-							gap: '16px',
-						}}
+					<Card
+						className='card-big-title card-borderless'
+						variant='borderless'
+						title={
+							<>
+								{/* Header Title */}
+								<div
+									style={{
+										marginBottom: '16px',
+										display: 'flex',
+										flexDirection: 'row',
+										alignItems: 'baseline',
+										gap: '16px',
+									}}
+								>
+									<div
+										style={{
+											display: 'flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+											cursor: 'pointer',
+										}}
+										onClick={() => navigate('/hoc-tap/lop-tin-chi')}
+									>
+										<Tooltip title='Quay lại'>
+											<ArrowLeftOutlined style={{ color: '#333', fontSize: 14 }} />
+										</Tooltip>
+									</div>
+
+									<Title level={4} style={{ margin: 0 }}>
+										{record?.hocPhan?.ten ? (
+											<Tooltip title='Xem đề cương chi tiết học phần'>
+												<a onClick={() => props.onShowDeCuong?.()} style={{ color: '#333' }}>
+													{record?.hocPhan?.ten ?? ''} <InfoCircleOutlined style={{ color: primaryColor }} />
+												</a>
+											</Tooltip>
+										) : (
+											<i>Chưa cập nhật</i>
+										)}
+									</Title>
+
+									<Tag color='red'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Tag>
+									{isCompleted ? <Tag color='red'>Đã kết thúc</Tag> : <Tag color='green'>Đang học</Tag>}
+								</div>
+							</>
+						}
+						extra={
+							<>
+								{!visibleFilter ? (
+									<Space>
+										<FilterHocKy isSetHocKy />{' '}
+										<FilterLopHocPhan
+											width={200}
+											label='ten'
+											onChange={(id) => {
+												if (id) navigate(`/hoc-tap/lop-tin-chi/${id}${window.location.hash}`);
+											}}
+										/>
+									</Space>
+								) : null}
+							</>
+						}
 					>
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
-								cursor: 'pointer',
-							}}
-							onClick={() => navigate('/hoc-tap/lop-tin-chi')}
-						>
-							<Tooltip title='Quay lại'>
-								<ArrowLeftOutlined style={{ color: '#333', fontSize: 14 }} />
-							</Tooltip>
-						</div>
-
-						<Title level={4} style={{ margin: 0 }}>
-							{record?.hocPhan?.ten ? (
-								<Tooltip title='Xem đề cương chi tiết học phần'>
-									<a onClick={() => props.onShowDeCuong?.()} style={{ color: '#333' }}>
-										{record?.hocPhan?.ten ?? ''} <InfoCircleOutlined style={{ color: primaryColor }} />
-									</a>
-								</Tooltip>
-							) : (
-								<i>Chưa cập nhật</i>
-							)}
-						</Title>
-
-						<Tag color='red'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Tag>
-						{isCompleted ? <Tag color='red'>Đã kết thúc</Tag> : <Tag color='green'>Đang học</Tag>}
-					</div>
-
-					{/* Info Row */}
-					<Row gutter={[24, 0]} style={{ marginBottom: '36px' }}>
-						<Col>
-							<Text>Mã học phần:</Text>
-							<Text strong style={{ marginLeft: '8px' }}>
-								{record?.hocPhan?.ma ?? ''}
-							</Text>
-						</Col>
-						<Col>
-							<Text>Mã lớp (nhóm):</Text>
-							<Text strong style={{ marginLeft: '8px' }} copyable>
-								{record?.ten ?? ''}
-							</Text>
-						</Col>
-						<Col>
-							<Text>Kỳ học:</Text>
-							<Text strong style={{ marginLeft: '8px' }}>
-								{record?.hocKy?.ten ?? ''}
-							</Text>
-						</Col>
-						<Col>
-							<Text>Giảng viên:</Text>
-							{(record?.nhanSuList ?? []).length > 0 ? (
-								<Text strong style={{ marginLeft: 8 }}>
-									{(record?.nhanSuList ?? []).map((item, index) => (
-										<span key={index}>
-											<Link
-												to='#!'
-												onClick={(e) => {
-													e.preventDefault();
-													setSelectedGiangVien(item?.nhanSu);
-													setVisibleGvDetailModal(true);
-												}}
-											>
-												{item?.nhanSu?.hoTen}
-											</Link>
-											{index < (record?.nhanSuList?.length ?? 0) - 1 && <span>, </span>}
-										</span>
-									))}
+						{/* Info Row */}
+						<Row gutter={[24, 0]} style={{ marginBottom: '36px' }}>
+							<Col>
+								<Text>Mã học phần:</Text>
+								<Text strong style={{ marginLeft: '8px' }}>
+									{record?.hocPhan?.ma ?? ''}
 								</Text>
-							) : (
-								<Text style={{ marginLeft: 8, color: '#999' }}>Không có</Text>
-							)}
-						</Col>
-					</Row>
+							</Col>
+							<Col>
+								<Text>Mã lớp (nhóm):</Text>
+								<Text strong style={{ marginLeft: '8px' }} copyable>
+									{record?.ten ?? ''}
+								</Text>
+							</Col>
+							<Col>
+								<Text>Kỳ học:</Text>
+								<Text strong style={{ marginLeft: '8px' }}>
+									{record?.hocKy?.ten ?? ''}
+								</Text>
+							</Col>
+							<Col>
+								<Text>Giảng viên:</Text>
+								{(record?.nhanSuList ?? []).length > 0 ? (
+									<Text strong style={{ marginLeft: 8 }}>
+										{(record?.nhanSuList ?? []).map((item, index) => (
+											<span key={index}>
+												<Link
+													to='#!'
+													onClick={(e) => {
+														e.preventDefault();
+														setSelectedGiangVien(item?.nhanSu);
+														setVisibleGvDetailModal(true);
+													}}
+												>
+													{item?.nhanSu?.hoTen}
+												</Link>
+												{index < (record?.nhanSuList?.length ?? 0) - 1 && <span>, </span>}
+											</span>
+										))}
+									</Text>
+								) : (
+									<Text style={{ marginLeft: 8, color: '#999' }}>Không có</Text>
+								)}
+							</Col>
+						</Row>
 
-					<ModalThongTinGiangVien
-						visible={visibleGvDetailModal}
-						onCancel={() => setVisibleGvDetailModal(false)}
-						giangVien={selectedGiangVien}
-					/>
+						<ModalThongTinGiangVien
+							visible={visibleGvDetailModal}
+							onCancel={() => setVisibleGvDetailModal(false)}
+							giangVien={selectedGiangVien}
+						/>
+					</Card>
 				</div>
 			</Spin>
 		</div>
