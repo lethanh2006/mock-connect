@@ -1,4 +1,5 @@
-import { Card, Col, Row } from 'antd';
+import { inputFormat } from '@/utils/utils';
+import { Card, Col, Row, Spin } from 'antd';
 import classNames from 'classnames';
 import { lighten, rgba } from 'polished';
 import React, { isValidElement, ReactElement } from 'react';
@@ -102,22 +103,26 @@ const StatisticsCard: React.FC<StatisticsCardProps> = ({
 				</div>
 
 				<div className='num' style={status ? {} : { color: valueColor }}>
-					{value}
+					{typeof value === 'number' ? inputFormat(value) : value}
 				</div>
 			</div>
 		);
 	};
 
 	return hideCard ? (
-		<div style={{ ...containerStyle }}>
-			<Row gutter={[rowGutter, rowGutter]}>
-				{data.map((item, index) => (
-					<Col {...colSpan} key={index}>
-						{renderStatisticItem(item)}
-					</Col>
-				))}
-			</Row>
-		</div>
+		<Spin spinning={loading}>
+			<div style={{ ...containerStyle }}>
+				{title && <div style={{ fontWeight: 600, marginBottom: 8 }}>{title}</div>}
+
+				<Row gutter={[rowGutter, rowGutter]}>
+					{data.map((item, index) => (
+						<Col {...colSpan} key={index}>
+							{renderStatisticItem(item)}
+						</Col>
+					))}
+				</Row>
+			</div>
+		</Spin>
 	) : (
 		<Card
 			style={{ borderRadius: 8, ...containerStyle }}
