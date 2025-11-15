@@ -52,7 +52,7 @@ const SelectHocKy = (props: {
 					// Nếu record._id không tồn tại hoặc không nằm trong danh sách
 					const exist = record?._id && res.some((i) => i._id === record._id);
 					if (!exist) {
-						const hocKy = selectLatest ? res?.[0] : res.find((i) => i.kyHienTai) ?? res?.[0];
+						const hocKy = selectLatest ? res?.[0] : (res.find((i) => i.kyHienTai) ?? res?.[0]);
 						setRecord(hocKy);
 					}
 				}
@@ -64,7 +64,7 @@ const SelectHocKy = (props: {
 				if (!exist) {
 					const hocKy = selectLatest
 						? danhSachHienThi?.[0]
-						: danhSachHienThi.find((i) => i.kyHienTai) ?? danhSachHienThi?.[0];
+						: (danhSachHienThi.find((i) => i.kyHienTai) ?? danhSachHienThi?.[0]);
 					setRecord(hocKy);
 				}
 			}
