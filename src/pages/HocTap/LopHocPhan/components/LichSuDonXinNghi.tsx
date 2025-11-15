@@ -4,8 +4,7 @@ import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { IColumn } from '@/components/Table/typing';
-import type { ETrangThaiDonNghiHoc } from '@/services/DaoTao/constant';
-import { TrangThaiDonNghiHoc } from '@/services/DaoTao/constant';
+import { ETrangThaiDonNghiHoc, TrangThaiDonNghiHoc } from '@/services/DaoTao/constant';
 import type { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
 import { CloseOutlined } from '@ant-design/icons';
 import { Modal, Popconfirm, Tag } from 'antd';
@@ -16,10 +15,9 @@ import { useModel } from 'umi';
 interface LichSuDonXinNghiProps {
 	visible: boolean;
 	setVisible: (visible: boolean) => void;
-	getData?: () => void;
 }
 
-const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible, getData: getDataExternal }) => {
+const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible }) => {
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const { getModel, page, limit, huyDonXinNghiModal } = useModel('daotao.dangkynghihoc');
 	const [filesVisible, setFilesVisible] = useState(false);
@@ -35,7 +33,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 		{
 			title: 'Lớp',
 			dataIndex: 'tenLopHocPhan',
-			sorter: true,
+			sortable: true,
 			width: 80,
 			filterType: 'string',
 		},
@@ -93,6 +91,14 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			filterData: Object.values(TrangThaiDonNghiHoc).map((item) => item.text),
 		},
 		{
+			title: 'Ngày gửi',
+			dataIndex: 'createdAt',
+			width: 120,
+			align: 'center',
+			sortable: true,
+			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+		},
+		{
 			title: 'Thao tác',
 			width: 60,
 			align: 'center',
@@ -102,12 +108,11 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 					onConfirm={() =>
 						huyDonXinNghiModal(rec?._id, () => {
 							getData();
-							if (getDataExternal) getDataExternal();
 						})
 					}
 				>
 					<ButtonExtend
-						disabled={rec?.trangThai !== 'cho_duyet'}
+						disabled={rec?.trangThai !== ETrangThaiDonNghiHoc.CHO_DUYET}
 						type='link'
 						danger
 						tooltip='Hủy đơn'
@@ -119,7 +124,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 	];
 
 	return (
-		<Modal open={visible} title='Đơn xin nghỉ học' onCancel={() => setVisible(false)} footer={null} width={900}>
+		<Modal open={visible} title='Đơn xin nghỉ học' onCancel={() => setVisible(false)} footer={null} width={1000}>
 			<TableBase
 				columns={columns}
 				getData={getData}

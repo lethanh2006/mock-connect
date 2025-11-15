@@ -12,6 +12,7 @@ declare module YeuCauNghiHoc {
 		emailSinhVien: string;
 		lyDo: string;
 		urlMinhChung: string | null;
+		createdAt: string | Date;
 
 		trangThai?: ETrangThaiDonNghiHoc;
 		ghiChuGiangVien?: string;
