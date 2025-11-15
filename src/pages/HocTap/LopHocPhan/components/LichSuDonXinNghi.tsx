@@ -88,7 +88,10 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 				return <Tag color={color}>{text}</Tag>;
 			},
 			filterType: 'select',
-			filterData: Object.values(TrangThaiDonNghiHoc).map((item) => item.text),
+			filterData: Object.entries(TrangThaiDonNghiHoc).map(([key, item]) => ({
+				label: item.text,
+				value: key,
+			})),
 		},
 		{
 			title: 'Ngày gửi',
