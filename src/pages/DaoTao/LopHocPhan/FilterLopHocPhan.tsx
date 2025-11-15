@@ -49,6 +49,7 @@ const FilterLopHocPhan = (props: {
 					setLhp(danhSachLhp.find((item) => item._id === val));
 				}}
 				label={props.label}
+				filterHocKy
 			/>
 
 			{props.children}
