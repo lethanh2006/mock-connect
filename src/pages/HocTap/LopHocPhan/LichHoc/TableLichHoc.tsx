@@ -19,10 +19,10 @@ const TableLichHocLopHP = (props: {
 	onClickItem: (val: ThoiKhoaBieu.IRecord) => void;
 }) => {
 	const { loading, setRecord } = useModel('daotao.thoikhoabieu');
+	const { visibleForm, setVisibleForm, daXinNghiHoc } = useModel('daotao.dangkynghihoc');
 	const { items, onClickItem } = props;
 	const [url, setUrl] = useState<any[]>([]);
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
-	const [visibleXinNghi, setVisibleXinNghi] = useState(false);
 
 	const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
 		onClick: () => onClickItem(rec),
@@ -135,18 +135,18 @@ const TableLichHocLopHP = (props: {
 		// },
 		{
 			title: 'Thao tác',
-			width: 80,
+			width: 60,
 			align: 'center',
 			render: (_, rec) => (
 				<ButtonExtend
 					type='link'
-					tooltip='Xin nghỉ học'
+					tooltip={daXinNghiHoc(rec._id) ? 'Đã gửi đơn' : 'Xin nghỉ học'}
 					icon={<MailOutlined />}
-					disabled={dayjs().isAfter(rec.ngay, 'day')}
+					disabled={dayjs().isAfter(dayjs(rec.ngay).add(1, 'day').endOf('day')) || daXinNghiHoc(rec._id)}
 					onClick={(e) => {
 						e.stopPropagation();
 						setRecord(rec);
-						setVisibleXinNghi(true);
+						setVisibleForm(true);
 					}}
 				/>
 			),
@@ -181,7 +181,7 @@ const TableLichHocLopHP = (props: {
 				</div>
 			</ModalExpandable>
 
-			<ModalXinNghi visible={visibleXinNghi} onClose={() => setVisibleXinNghi(false)} />
+			<ModalXinNghi visible={visibleForm} onClose={() => setVisibleForm(false)} />
 		</>
 	);
 };

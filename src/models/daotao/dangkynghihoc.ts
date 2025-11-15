@@ -8,7 +8,6 @@ import { message } from 'antd';
 export default () => {
 	const objInit = useInitModel<YeuCauNghiHoc.IRecord>('dang-ky-nghi-hoc', undefined, undefined, ipDaoTao);
 	const { formSubmiting, setFormSubmiting, danhSach } = objInit;
-	const soDonChoDuyet = danhSach?.filter((i) => i.trangThai === ETrangThaiDonNghiHoc.CHO_DUYET)?.length ?? 0;
 
 	const huyDonXinNghiModal = async (idDon: string, getData?: () => void): Promise<YeuCauNghiHoc.IRecord> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
@@ -26,9 +25,15 @@ export default () => {
 		}
 	};
 
+	const daXinNghiHoc = (thoiKhoaBieuId: string) => {
+		return danhSach?.some(
+			(i) => i.thoiKhoaBieuId === thoiKhoaBieuId && i.trangThai && i.trangThai !== ETrangThaiDonNghiHoc.DA_HUY,
+		);
+	};
+
 	return {
 		...objInit,
 		huyDonXinNghiModal,
-		soDonChoDuyet,
+		daXinNghiHoc,
 	};
 };
