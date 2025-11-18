@@ -19,7 +19,8 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 
 	// Lấy dữ liệu học liệu thực tế (giới hạn 3 item đầu tiên để hiển thị)
 	const displayHocLieu = (danhSachHocLieu || []).slice(0, 3);
-	const displayTaiLieu = (record?.listTaiLieu || []).slice(0, 6);
+	const displayTaiLieu = record?.listTaiLieu || [];
+	// .slice(0, 6);
 
 	useEffect(() => {
 		if (deCuongId) {
