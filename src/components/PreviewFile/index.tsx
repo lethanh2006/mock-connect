@@ -30,6 +30,21 @@ type TFrameProps = {
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
 	const { file, style = {}, children, ip = ip3, isFileId, tenFile } = props;
+
+	const isValidStringArray = (value: any): value is string[] => {
+		return Array.isArray(value) && value.every((item) => typeof item === 'string');
+	};
+
+	const isValidSingleString = typeof file === 'string';
+
+	if (file && !isValidSingleString && !isValidStringArray(file)) {
+		return (
+			<div className='preview-error'>
+				<p style={{ color: 'red', fontWeight: 600 }}>File không hợp lệ</p>
+			</div>
+		);
+	}
+
 	const [frameData, setFrameData] = useState<TFrameProps>();
 	const [loading, setLoading] = useState(false);
 	const [currentFileIndex, setCurrentFileIndex] = useState(0);
@@ -40,9 +55,11 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 		if (Array.isArray(file)) {
 			setFileList(file);
 			setCurrentFileIndex(0);
-		} else {
+		} else if (typeof file === 'string') {
 			setFileList([file]);
 			setCurrentFileIndex(0);
+		} else {
+			setFileList([]);
 		}
 
 		if (tenFile) {
@@ -58,7 +75,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 
 	const getFileExtension = (url: string) => {
 		const arr = url.split('.');
-		return arr.length > 1 ? arr.at(-1) : '';
+		return arr.length > 1 ? arr.at(-1)!.toLowerCase() : '';
 	};
 
 	const getIframeSrc = (type: EDinhDangFile, fileUrl?: string) => {
