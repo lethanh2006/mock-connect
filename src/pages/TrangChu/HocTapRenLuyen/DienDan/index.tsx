@@ -64,7 +64,11 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 			<div
 				key={item._id}
 				className={`card-diendan-wrapper ${isUnread ? 'card-diendan-unread' : ''}`}
-				onClick={() => history.push(`/hoc-tap/lop-tin-chi/${item.lopHocPhanId}?idBaiViet=${item._id}#dien-dan`)}
+				onClick={() => {
+					item.lopHocPhanId
+						? history.push(`/hoc-tap/lop-tin-chi/${item.lopHocPhanId}?idBaiViet=${item._id}#dien-dan`)
+						: history.push(`/lop-hanh-chinh/${item.lopHanhChinhId}?idBaiViet=${item._id}#dien-dan`);
+				}}
 			>
 				{/* Tên lớp học phần */}
 				<div className='card-diendan-lop'>

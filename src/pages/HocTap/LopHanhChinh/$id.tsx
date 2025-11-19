@@ -1,4 +1,5 @@
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
+import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { AppModules } from '@/services/base/constant';
 import { currentRole } from '@/utils/ip';
 import { TeamOutlined } from '@ant-design/icons';
@@ -46,6 +47,10 @@ const DetailLopHanhChinh = () => {
 											record?.giangVien?._id ? [{ nhanSu: record.giangVien, nhanSuSsoId: record.giangVien.ssoId }] : []
 										}
 									/>
+								</Col>
+
+								<Col span={24}>
+									<CardDienDanDashboard typeLop='lop-hanh-chinh' />
 								</Col>
 							</Row>
 						</Col>
