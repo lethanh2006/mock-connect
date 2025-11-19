@@ -174,7 +174,8 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 			className='card-borderless card-big-title card-baitap-dashboard'
 			title={
 				<>
-					Bài tập, bài kiểm tra <Tag color={danhSach.length > 0 ? 'green' : ''}>{danhSach.length}</Tag>
+					Bài tập, bài kiểm tra{' '}
+					<Tag color={danhSach.length > 0 ? 'green' : ''}>{segment == '1' ? filteredData.length : danhSach.length}</Tag>
 				</>
 			}
 			style={danhSach ? { width: '100%', height: 300 } : {}}
