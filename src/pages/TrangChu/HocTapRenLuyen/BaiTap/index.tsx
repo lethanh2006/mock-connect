@@ -178,7 +178,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 					<Tag color={danhSach.length > 0 ? 'green' : ''}>{segment == '1' ? filteredData.length : danhSach.length}</Tag>
 				</>
 			}
-			style={danhSach ? { width: '100%', height: 300 } : {}}
+			styles={danhSach.length ? {} : { body: { height: '100%' } }}
 			extra={
 				<Space size={isMobile ? 'small' : 'middle'} className='navigation-buttons'>
 					{isDashBoard && !isMobile && (

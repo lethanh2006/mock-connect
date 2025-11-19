@@ -106,6 +106,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 			title='Tiết học sắp tới'
 			className='card-big-title card-borderless'
 			variant='borderless'
+			styles={{ body: { height: '100%', maxHeight: 348 } }}
 			extra={
 				tietGanNhat && (
 					<Link

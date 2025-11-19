@@ -141,6 +141,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 					<Tag color={danhSach.length > 0 ? 'green' : ''}>{danhSach.length}</Tag>
 				</Space>
 			}
+			styles={danhSach.length ? {} : { body: { height: '100%' } }}
 			extra={
 				<Space>
 					<Dropdown
