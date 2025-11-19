@@ -72,7 +72,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 			>
 				{/* Tên lớp học phần */}
 				<div className='card-diendan-lop'>
-					<Text className='card-diendan-lop-text'>#{item.lopHocPhan?.ten}</Text>
+					<Text className='card-diendan-lop-text'>#{item.lopHocPhan?.ten || item.lopHanhChinh?.ten}</Text>
 					<ArrowRightOutlined style={{ fontSize: '10px', color: '#1890ff' }} />
 				</div>
 
