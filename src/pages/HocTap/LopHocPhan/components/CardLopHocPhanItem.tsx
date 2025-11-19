@@ -65,7 +65,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 				{/* <InfoCircleOutlined style={{ color: 'var(--color-primary)', marginLeft: 8 }} /> */}
 
 				<Tag className={`card-lhp-tag card-lhp-tag-completed`}>
-					<Text className='card-lhp-malop_copyable'>{lop.maLop}</Text>
+					<Text className='card-lhp-malop_copyable'>{lop.maLop || '--'}</Text>
 				</Tag>
 
 				<Text
@@ -95,7 +95,13 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 				{/* 3 ô thống kê */}
 				<div className='card-lhp-row' style={{ marginBottom: 4 }}>
 					<Tooltip title='Có mặt / buổi điểm danh'>
-						<div className='stat'>
+						<div
+							className='stat'
+							onClick={(e) => {
+								e.stopPropagation();
+								history.push(`/hoc-tap/lop-tin-chi/${lop?._id}#buoi-hoc`);
+							}}
+						>
 							<ScheduleOutlined className='anticon' />
 							<Text strong>
 								{diemDanh?.coMat !== undefined ? diemDanh.coMat : '-'} /{' '}
@@ -105,14 +111,26 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 					</Tooltip>
 
 					<Tooltip title='Bài tập & bài kiểm tra'>
-						<div className='stat'>
+						<div
+							className='stat'
+							onClick={(e) => {
+								e.stopPropagation();
+								history.push(`/hoc-tap/lop-tin-chi/${lop?._id}#bai-tap`);
+							}}
+						>
 							<ReadOutlined className='anticon' />
 							<Text strong>{soBaiTap ?? '--'}</Text>
 						</div>
 					</Tooltip>
 
 					<Tooltip title='Bài đăng / thảo luận trên diễn đàn'>
-						<div className='stat'>
+						<div
+							className='stat'
+							onClick={(e) => {
+								e.stopPropagation();
+								history.push(`/hoc-tap/lop-tin-chi/${lop?._id}#dien-dan`);
+							}}
+						>
 							<MessageOutlined className='anticon' />
 							<Text strong>{soBaiDang ?? '--'}</Text>
 						</div>
