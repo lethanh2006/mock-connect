@@ -107,14 +107,14 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 					<Tooltip title='Bài tập & bài kiểm tra'>
 						<div className='stat'>
 							<ReadOutlined className='anticon' />
-							<Text strong>{soBaiTap ?? 0}</Text>
+							<Text strong>{soBaiTap ?? '--'}</Text>
 						</div>
 					</Tooltip>
 
 					<Tooltip title='Bài đăng / thảo luận trên diễn đàn'>
 						<div className='stat'>
 							<MessageOutlined className='anticon' />
-							<Text strong>{soBaiDang ?? 0}</Text>
+							<Text strong>{soBaiDang ?? '--'}</Text>
 						</div>
 					</Tooltip>
 				</div>
