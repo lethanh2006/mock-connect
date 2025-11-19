@@ -172,7 +172,12 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 		<Card
 			variant='borderless'
 			className='card-borderless card-big-title card-baitap-dashboard'
-			title='Bài tập, bài kiểm tra'
+			title={
+				<>
+					Bài tập, bài kiểm tra <Tag color={danhSach.length > 0 ? 'green' : ''}>{danhSach.length}</Tag>
+				</>
+			}
+			style={danhSach ? { width: '100%', height: 300 } : {}}
 			extra={
 				<Space size={isMobile ? 'small' : 'middle'} className='navigation-buttons'>
 					{isDashBoard && !isMobile && (
