@@ -118,7 +118,8 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 							);
 						}}
 					>
-						{tietGanNhat.tenBuoiHoc} - {dayjs(tietGanNhat.thoiGianBatDau).format('HH:mm DD/MM')} <ArrowRightOutlined />
+						{tietGanNhat.tenBuoiHoc} {/* - {dayjs(tietGanNhat.thoiGianBatDau).format('HH:mm DD/MM')}  */}
+						<ArrowRightOutlined />
 					</Link>
 				)
 			}
