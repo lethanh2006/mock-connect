@@ -1,6 +1,6 @@
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { primaryColor } from '@/services/base/constant';
-import { colorTrangThaiLopDiemDanh, ETrangThaiLopDiemDanh, trangThaiLopDiemDanh } from '@/services/DaoTao/constant';
+import { colorTrangThaiUserDiemDanh, ETrangThaiUserDiemDanh, trangThaiUserDiemDanh } from '@/services/DaoTao/constant';
 import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
@@ -13,13 +13,13 @@ import { useEffect, useState } from 'react';
 import { history, Link, useModel } from 'umi';
 import styles from './style.less';
 
-interface RenderLichGiangDayProps {
+interface RenderLichHocProps {
 	dataCalendar?: ThoiKhoaBieu.IRecord[];
 	loading?: boolean;
 	onClick?: (val: ThoiKhoaBieu.IRecord) => void;
 }
 
-const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
+const RenderLichHoc = (props: RenderLichHocProps) => {
 	const { dataCalendar: dataCalendarProp, loading: loadingProp, onClick } = props;
 	const {
 		setRecord: setTkb,
@@ -63,7 +63,10 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 
 	// Lọc và nhóm dữ liệu theo ngày
 	const data = dataCalendar
-		?.filter((event) => dayjs(event.thoiGianBatDau).isSameOrAfter(dayjs(), 'd'))
+		?.filter(
+			(event) =>
+				dayjs(event.thoiGianKetThuc).isAfter(dayjs(), 'minute') || dayjs(event.thoiGianBatDau).isSame(dayjs(), 'day'),
+		)
 		?.reduce<any>((result, item) => {
 			if (!item?.thoiGianBatDau) {
 				return result;
@@ -86,21 +89,13 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 
 	const keysSorted = sortBy(Object.keys(data || {}));
 	const loading = loadingProp ?? loadingModel;
-
-	// Lấy tiết học gần nhất
-	const getTietGanNhat = () => {
-		const allBuoiHoc = keysSorted.flatMap((ngay) => data[ngay].cacBuoiHoc);
-		const sortedBuoiHoc = sortBy(allBuoiHoc, (buoiHoc) => new Date(buoiHoc.thoiGianBatDau));
-		return sortedBuoiHoc[0];
-	};
-
-	const tietGanNhat = !isEmpty(data) ? getTietGanNhat() : null;
+	const tietGanNhat = !isEmpty(data) && keysSorted.length > 0 ? data[keysSorted[0]].cacBuoiHoc[0] : null;
 
 	if (!loading && isEmpty(data)) {
 		return (
 			<Card title='Tiết học sắp tới' className='card-big-title card-borderless' variant='borderless'>
 				<Card variant='borderless'>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có lịch giảng dạy' />
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có lịch học' />
 				</Card>
 			</Card>
 		);
@@ -111,6 +106,7 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 			title='Tiết học sắp tới'
 			className='card-big-title card-borderless'
 			variant='borderless'
+			styles={{ body: { height: '100%', maxHeight: 348 } }}
 			extra={
 				tietGanNhat && (
 					<Link
@@ -123,7 +119,8 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 							);
 						}}
 					>
-						{tietGanNhat.tenBuoiHoc} - {dayjs(tietGanNhat.thoiGianBatDau).format('HH:mm DD/MM')} <ArrowRightOutlined />
+						{tietGanNhat.tenBuoiHoc} {/* - {dayjs(tietGanNhat.thoiGianBatDau).format('HH:mm DD/MM')}  */}
+						<ArrowRightOutlined />
 					</Link>
 				)
 			}
@@ -138,7 +135,7 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 							return (
 								<div key={ngay} className={styles.ngay}>
 									<Space style={{ marginBottom: 8 }}>
-										<Badge count={cacBuoiHoc.length} size='small' offset={[15, 11]} color='#D66'>
+										<Badge count={cacBuoiHoc.length} size='small' offset={[15, 8]} color='#D66'>
 											<div
 												className={styles.ngay__title}
 												style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
@@ -155,7 +152,7 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 										return (
 											<div
 												key={buoiHoc._id}
-												className={styles.tiet_hoc}
+												className={`${styles.tiet_hoc} ${onProgress ? styles.on_progress : ''}`}
 												onClick={() => {
 													setSelectEvent(buoiHoc);
 													setVisibleDetail(true);
@@ -208,16 +205,20 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 																);
 															}}
 														>
-															<BookOutlined /> Xem buổi học
+															<BookOutlined /> Xem tiết
 														</Link>
 
 														{/* Hiển thị trạng thái điểm danh */}
-														{buoiHoc.trangThaiDiemDanh && (
+														{buoiHoc.trangThaiDiemDanhCaNhan ? (
 															<Tag
-																color={colorTrangThaiLopDiemDanh[buoiHoc.trangThaiDiemDanh as ETrangThaiLopDiemDanh]}
+																color={
+																	colorTrangThaiUserDiemDanh[buoiHoc.trangThaiDiemDanhCaNhan as ETrangThaiUserDiemDanh]
+																}
 															>
-																{trangThaiLopDiemDanh[buoiHoc.trangThaiDiemDanh as ETrangThaiLopDiemDanh]}
+																{trangThaiUserDiemDanh[buoiHoc.trangThaiDiemDanhCaNhan as ETrangThaiUserDiemDanh]}
 															</Tag>
+														) : (
+															<></>
 														)}
 
 														<Tag color={colorHinhThucGiangDay[buoiHoc.hinhThucGiangDay as EHinhThucGiangDay]}>
@@ -248,4 +249,4 @@ const RenderLichGiangDay = (props: RenderLichGiangDayProps) => {
 	);
 };
 
-export default RenderLichGiangDay;
+export default RenderLichHoc;

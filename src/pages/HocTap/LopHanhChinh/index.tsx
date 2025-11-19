@@ -1,7 +1,8 @@
 import { TabViewPage } from '@/components/TabViewPage';
 import ThongBaoLopPage from '@/pages/ThongBao/ThongBaoLop';
 import CardThongBao from '@/pages/ThongBao/ThongBaoLop/CardThongBao';
-import { InfoCircleOutlined, NotificationOutlined } from '@ant-design/icons';
+import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
+import { InfoCircleOutlined, MessageOutlined, NotificationOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -83,6 +84,9 @@ const LopHanhChinhPage = () => {
 																onShowAll={() => (window.location.hash = 'thong-bao')}
 															/>
 														</Col>
+														<Col span={24}>
+															<CardDienDanDashboard typeLop={'lop-hanh-chinh'} />
+														</Col>
 													</Row>
 												</Col>
 												<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
@@ -102,6 +106,7 @@ const LopHanhChinhPage = () => {
 										title: 'Diễn đàn',
 										menuKey: 'dien-dan',
 										content: <DienDanLopPage idLopHanhChinh={record?._id} />,
+										icon: <MessageOutlined />,
 									},
 								]}
 							/>

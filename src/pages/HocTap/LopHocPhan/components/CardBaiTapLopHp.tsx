@@ -41,7 +41,7 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 	return (
 		<Card
 			size='small'
-			title={'Bài tập, bài kiểm tra'}
+			title='Bài tập, bài kiểm tra'
 			variant='borderless'
 			extra={
 				// <Segmented

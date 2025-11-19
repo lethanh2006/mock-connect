@@ -2,7 +2,7 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
 import { ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
-import { Button, Card, Empty, Space, Tag, Typography } from 'antd';
+import { Button, Card, Empty, Space, Spin, Tag, Typography } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
@@ -39,28 +39,30 @@ const CardThongBaoDashboard = () => {
 	};
 
 	return (
-		<Card className='tb-sk-wrapper' variant='borderless' loading={loading} styles={{ body: { padding: 0 } }}>
+		<Card className='tb-sk-wrapper' variant='borderless' styles={{ body: { padding: 0 } }}>
 			{/* Header */}
 			<div className='header-tb-sk'>
 				<Title level={5} className='title'>
 					Thông báo
 				</Title>
-				<div className='navigation-buttons'>
-					<Button
-						type='text'
-						icon={<SlideButtonIcon direction='left' disabled={danhSachThongBao.length <= 1} />}
-						onClick={handlePrevious}
-						disabled={danhSachThongBao.length <= 1}
-						className='nav-btn'
-					/>
-					<Button
-						type='text'
-						icon={<SlideButtonIcon direction='right' disabled={danhSachThongBao.length <= 1} />}
-						onClick={handleNext}
-						disabled={danhSachThongBao.length <= 1}
-						className='nav-btn'
-					/>
-				</div>
+				<Spin spinning={loading}>
+					<div className='navigation-buttons'>
+						<Button
+							type='text'
+							icon={<SlideButtonIcon direction='left' disabled={danhSachThongBao.length <= 1} />}
+							onClick={handlePrevious}
+							disabled={danhSachThongBao.length <= 1}
+							className='nav-btn'
+						/>
+						<Button
+							type='text'
+							icon={<SlideButtonIcon direction='right' disabled={danhSachThongBao.length <= 1} />}
+							onClick={handleNext}
+							disabled={danhSachThongBao.length <= 1}
+							className='nav-btn'
+						/>
+					</div>
+				</Spin>
 			</div>
 
 			{/* Nội dung chính */}
