@@ -70,6 +70,12 @@ const LopHocPhanPage = () => {
 											lop={lop}
 											index={index}
 											backgrounds={backgrounds}
+											diemDanh={{
+												coMat: lop?.thongKeDiemDanhLhp?.coMat,
+												chuaDiemDanh: lop?.thongKeDiemDanhLhp?.chuaDiemDanh,
+											}}
+											soBaiTap={lop?.thongKeBaiTap?.tongSo}
+											soBaiDang={lop?.soBaiDang}
 											isKeTiep={
 												lopKeTiep?._id === lop._id &&
 												lopHienTai?._id !== lopKeTiep?._id &&
