@@ -1,15 +1,15 @@
 import ExpandText from '@/components/ExpandText';
 import PreviewFile from '@/components/PreviewFile';
-import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
+import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { ETrangThaiDonNghiHoc, TrangThaiDonNghiHoc } from '@/services/DaoTao/constant';
 import type { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
 import { CloseOutlined } from '@ant-design/icons';
-import { Modal, Popconfirm, Tag } from 'antd';
+import { Popconfirm, Tag } from 'antd';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
 interface LichSuDonXinNghiProps {
@@ -19,43 +19,43 @@ interface LichSuDonXinNghiProps {
 
 const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible }) => {
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
-	const { getModel, page, limit, huyDonXinNghiModal } = useModel('daotao.dangkynghihoc');
+	const { getModel, danhSach, huyDonXinNghiModel } = useModel('daotao.dangkynghihoc');
 	const [filesVisible, setFilesVisible] = useState(false);
 	const [file, setFile] = useState<string | null>(null);
 
-	const getData = () => {
-		if (recLopHocPhan?._id && !!visible) {
-			getModel(undefined, undefined, undefined, undefined, undefined, `me/${recLopHocPhan?.ten}`);
-		}
-	};
+	const getData = () => getModel(recLopHocPhan?.ten ?? '');
+
+	useEffect(() => {
+		getData();
+	}, [recLopHocPhan?.ten]);
 
 	const columns: IColumn<YeuCauNghiHoc.IRecord>[] = [
-		{
-			title: 'Lớp',
-			dataIndex: 'tenLopHocPhan',
-			sortable: true,
-			width: 80,
-			filterType: 'string',
-		},
+		// {
+		// 	title: 'Lớp',
+		// 	dataIndex: 'tenLopHocPhan',
+		// 	sortable: true,
+		// 	width: 120,
+		// 	filterType: 'string',
+		// },
 		{
 			title: 'Ngày nghỉ',
 			dataIndex: ['thoiKhoaBieu', 'ngay'],
+			align: 'center',
 			width: 100,
 			render: (value) => value && dayjs(value).format('DD/MM/YYYY'),
-			filterType: 'date',
 			sortable: true,
 		},
 		{
 			title: 'Ca nghỉ',
 			dataIndex: ['thoiKhoaBieu', 'tietBatDau'],
+			align: 'center',
 			width: 100,
-			render: (_: any, record: YeuCauNghiHoc.IRecord) =>
-				`Tiết: ${record.thoiKhoaBieu?.tietBatDau ?? ''} - ${record.thoiKhoaBieu?.tietKetThuc ?? ''}`,
+			render: (val, rec) => `Tiết: ${rec.thoiKhoaBieu?.tietBatDau ?? ''} - ${rec.thoiKhoaBieu?.tietKetThuc ?? ''}`,
 		},
 		{
 			title: 'Lý do',
 			dataIndex: 'lyDo',
-			width: 120,
+			width: 140,
 			render: (val) => <ExpandText>{val}</ExpandText>,
 			filterType: 'string',
 		},
@@ -106,14 +106,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			width: 60,
 			align: 'center',
 			render: (val, rec) => (
-				<Popconfirm
-					title='Bạn chắc chắn muốn hủy đơn?'
-					onConfirm={() =>
-						huyDonXinNghiModal(rec?._id, () => {
-							getData();
-						})
-					}
-				>
+				<Popconfirm title='Bạn chắc chắn muốn hủy đơn?' onConfirm={() => huyDonXinNghiModel(rec?._id, getData)}>
 					<ButtonExtend
 						disabled={rec?.trangThai !== ETrangThaiDonNghiHoc.CHO_DUYET}
 						type='link'
@@ -127,26 +120,27 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 	];
 
 	return (
-		<Modal open={visible} title='Đơn xin nghỉ học' onCancel={() => setVisible(false)} footer={null} width={1000}>
-			<TableBase
-				columns={columns}
-				getData={getData}
-				modelName='daotao.dangkynghihoc'
-				dependencies={[page, limit, recLopHocPhan?._id, visible]}
-				hideCard
-				buttons={{ create: false }}
-			/>
+		<ModalExpandable
+			open={visible}
+			title={`Lịch sử đơn xin nghỉ học - ${recLopHocPhan?.ten ?? ''}`}
+			onCancel={() => setVisible(false)}
+			okButtonProps={{ hidden: true }}
+			cancelText='Đóng'
+			width={1000}
+		>
+			<TableStaticData columns={columns} data={danhSach} addStt hasTotal onReload={getData} />
 
 			<ModalExpandable
-				title='Minh chứng'
+				title='Tập tin minh chứng'
 				open={filesVisible}
 				width={1000}
-				footer={null}
+				okButtonProps={{ hidden: true }}
+				cancelText='Đóng'
 				onCancel={() => setFilesVisible(false)}
 			>
 				<PreviewFile file={file ?? ''} />
 			</ModalExpandable>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 
