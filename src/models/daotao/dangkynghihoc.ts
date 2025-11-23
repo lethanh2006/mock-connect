@@ -7,9 +7,12 @@ import { message } from 'antd';
 
 export default () => {
 	const objInit = useInitModel<YeuCauNghiHoc.IRecord>('dang-ky-nghi-hoc', undefined, undefined, ipDaoTao);
-	const { formSubmiting, setFormSubmiting, danhSach } = objInit;
+	const { formSubmiting, setFormSubmiting, danhSach, getModel: _getModel } = objInit;
 
-	const huyDonXinNghiModal = async (idDon: string, getData?: () => void): Promise<YeuCauNghiHoc.IRecord> => {
+	const getModel = (tenLopHocPhan: string) =>
+		tenLopHocPhan && _getModel(undefined, undefined, { createdAt: -1 }, 1, 20, `me/${tenLopHocPhan}`);
+
+	const huyDonXinNghiModel = async (idDon: string, getData?: () => void): Promise<YeuCauNghiHoc.IRecord> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
 		setFormSubmiting(true);
 		try {
@@ -33,7 +36,8 @@ export default () => {
 
 	return {
 		...objInit,
-		huyDonXinNghiModal,
+		getModel,
+		huyDonXinNghiModel,
 		daXinNghiHoc,
 	};
 };

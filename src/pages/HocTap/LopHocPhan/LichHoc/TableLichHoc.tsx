@@ -12,7 +12,7 @@ import { MailOutlined } from '@ant-design/icons';
 import { Button, Carousel, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
-import ModalXinNghi from '../components/ModalXinNghi';
+import ModalXinNghi from '../YeuCauNghiHoc/ModalXinNghi';
 
 const TableLichHocLopHP = (props: {
 	items: ThoiKhoaBieu.IRecord[];
@@ -24,12 +24,17 @@ const TableLichHocLopHP = (props: {
 	const [url, setUrl] = useState<any[]>([]);
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
-	const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
+	const onCellStyle = (rec: ThoiKhoaBieu.IRecord) => ({
 		onClick: () => onClickItem(rec),
 		style: {
 			cursor: 'pointer',
 			backgroundColor: dayjs().isSame(dayjs(rec.ngay), 'day') ? '#005fcc1f' : undefined,
 		},
+	});
+
+	const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
+		...onCellStyle(rec),
+		onClick: () => onClickItem(rec),
 	});
 
 	const columns: IColumn<ThoiKhoaBieu.IRecord>[] = [
@@ -118,6 +123,7 @@ const TableLichHocLopHP = (props: {
 						Xem chi tiết
 					</a>
 				) : null,
+			onCell: onCellStyle,
 		},
 		// {
 		// 	title: 'Loại hình',
@@ -142,7 +148,8 @@ const TableLichHocLopHP = (props: {
 					type='link'
 					tooltip={daXinNghiHoc(rec._id) ? 'Đã gửi đơn' : 'Xin nghỉ học'}
 					icon={<MailOutlined />}
-					disabled={dayjs().isAfter(dayjs(rec.ngay).add(1, 'day').endOf('day')) || daXinNghiHoc(rec._id)}
+					// TODO: Chỉ cho phép gửi đơn chậm nhất 1 ngày sau buổi học => TH Muốn gửi lại/Hủy đơn thì sao?
+					// disabled={dayjs().isAfter(dayjs(rec.ngay).add(1, 'day').endOf('day')) || daXinNghiHoc(rec._id)}
 					onClick={(e) => {
 						e.stopPropagation();
 						setRecord(rec);

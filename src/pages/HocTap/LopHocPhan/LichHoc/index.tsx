@@ -2,11 +2,11 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
-import { CalendarOutlined, FileTextOutlined, TableOutlined } from '@ant-design/icons';
+import { CalendarOutlined, MailOutlined, TableOutlined } from '@ant-design/icons';
 import { Card, Segmented, Space, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import LichSuDonXinNghi from '../components/LichSuDonXinNghi';
+import LichSuDonXinNghi from '../YeuCauNghiHoc/LichSuDonXinNghi';
 import CalendarLichHocLopHp from './CalendarLichHoc';
 import ModalThoiKhoaBieu from './Modal';
 import StatDiemDanhV2 from './StatV2';
@@ -70,7 +70,7 @@ const DanhSachBuoiHoc = () => {
 				title={
 					<Space wrap size={12}>
 						<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
-						<ButtonExtend icon={<FileTextOutlined />} onClick={() => setVisibleDonXinNghi(true)}>
+						<ButtonExtend icon={<MailOutlined />} onClick={() => setVisibleDonXinNghi(true)}>
 							Đơn xin nghỉ học
 						</ButtonExtend>
 						<Segmented
