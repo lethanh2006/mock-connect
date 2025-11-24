@@ -27,7 +27,7 @@ const ModalXinNghi = (props: { visible: boolean; onClose: () => void }) => {
 
 			const payload = {
 				...values,
-				tenLopHocPhan: recTKB?.tenLopHocPhan,
+				tenLopHocPhan: recLopHocPhan?.ten,
 				thoiKhoaBieuId: recTKB?._id,
 				urlMinhChung: urlMinhChung,
 			};
