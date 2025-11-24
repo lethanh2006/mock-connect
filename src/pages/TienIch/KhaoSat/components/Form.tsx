@@ -70,7 +70,10 @@ const FormTraLoiKhaoSat = (props: {
 	}, [isThanhCong]);
 
 	useEffect(() => {
-		if (!visibleForm && !onOk) {
+		if (
+			!visibleForm
+			// && !onOk
+		) {
 			resetFieldsForm(form);
 			setCheck(false);
 		}

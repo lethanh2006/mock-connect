@@ -1,117 +1,147 @@
-import FormTraLoiKhaoSat from '@/pages/TienIch/KhaoSat/components/Form';
-import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { getDotDanhGiaGiangVien } from '@/services/TienIch/KhaoSat/DotKhaoSat';
-import { EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
-import { primaryColor } from '@/services/base/constant';
-import dayjs from '@/utils/dayjs';
-import { Alert, Empty, Select, Spin } from 'antd';
-import { useEffect, useState } from 'react';
+import ExpandText from '@/components/ExpandText';
+import TableBase from '@/components/Table';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { EOperatorType } from '@/components/Table/constant';
+import { IColumn } from '@/components/Table/typing';
+import { ELoaiDot, EThoiGianDot, mapNameLoaiDot, thoiGianDot } from '@/services/TienIch/KhaoSat/constants';
+import { DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
+import { EditOutlined } from '@ant-design/icons';
+import { Segmented, Switch, Tag } from 'antd';
+import dayjs from 'dayjs';
 import { useModel } from 'umi';
+import Form from './components/Form';
 
-const DanhGiaGiangVienPage = (props: { danhSachNhanSu: LopHocPhan.IRecordNhanSuLopHP[] }) => {
-	const { danhSachNhanSu } = props;
-	const { loading, setRecord, record: recDot, setLoading, ngoaiThoiGian } = useModel('tienich.dotkhaosat');
-	// const { danhSach: danhSachNhanSu } = useModel('lophocphan.nhansulophocphan');
-	const { danhGiaGiangVienModel, formSubmiting } = useModel('lophocphan.danhgiagiangvien');
-	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
-	const [giangVienSsoId, setGiangVienSsoId] = useState<string>(danhSachNhanSu[0]?.nhanSuSsoId ?? '');
+const DanhGiaGiangVienPage = () => {
+	const { record: recHocPhan } = useModel('lophocphan.lophocphan');
+	const { getModel, page, limit, handleEdit, thoiGian, setThoiGian } = useModel('tienich.dotkhaosat');
 
-	const giangVienKhaoSat = recDot?.thongTinCauTraLoi?.find((item) => item?.giangVienSsoId === giangVienSsoId);
-
-	const getDotHienTai = () => {
-		setLoading(true);
-		getDotDanhGiaGiangVien(recLopHocPhan?.maHocKy ?? '')
-			.then((res: any) => {
-				setRecord(res?.data?.data);
-			})
-			.finally(() => setLoading(false));
-	};
-
-	useEffect(() => {
-		if (recLopHocPhan?._id) {
-			getDotHienTai();
+	const getData = () => {
+		if (recHocPhan?._id) {
+			getModel(
+				{
+					maHocKy: recHocPhan?.maHocKy,
+				},
+				[
+					{
+						active: true,
+						field: 'loai',
+						values: [ELoaiDot.DANH_GIA_GIANG_VIEN, ELoaiDot.KHAO_SAT_LOP_HOC_PHAN],
+						operator: EOperatorType.INCLUDE,
+					},
+				],
+				{ updatedAt: -1 },
+				undefined,
+				undefined,
+				'my/page',
+				{ thoiGian },
+			);
 		}
-		setGiangVienSsoId(danhSachNhanSu?.[0]?.nhanSuSsoId);
-	}, [recLopHocPhan?._id]);
-
-	const hanldeDanhGiaGiangVien = async (val: BieuMau.TraLoiRecord[]) => {
-		await danhGiaGiangVienModel({
-			idKhaoSat: recDot?.idKhaoSat ?? '',
-			danhSachTraLoi: val,
-			idDot: recDot?._id,
-			maLop: recLopHocPhan?.ten,
-			lopHocPhanId: recLopHocPhan?._id,
-			giangVienSsoId: giangVienSsoId,
-			maGiangVien: danhSachNhanSu.find((item) => item.nhanSuSsoId === giangVienSsoId)?.maNhanSu,
-			hoTenGiangVien: danhSachNhanSu.find((item) => item.nhanSuSsoId === giangVienSsoId)?.tenNhanSu,
-			vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
-		})
-			.then(() => {
-				getDotHienTai();
-			})
-			.catch((er) => console.log(er));
 	};
+
+	const columns: IColumn<DotKhaoSat.IRecord>[] = [
+		{
+			title: 'Loại',
+			dataIndex: 'loai',
+			width: 120,
+			render: (val, rec) => mapNameLoaiDot[val as ELoaiDot],
+			filterType: 'select',
+			filterData: Object.values([ELoaiDot.DANH_GIA_GIANG_VIEN, ELoaiDot.KHAO_SAT_LOP_HOC_PHAN]).map((item) => ({
+				value: item,
+				label: mapNameLoaiDot[item],
+			})),
+		},
+		{
+			title: 'Tên đợt',
+			dataIndex: 'ten',
+			width: 200,
+			filterType: 'string',
+		},
+		{
+			title: 'Mô tả',
+			dataIndex: 'moTa',
+			width: 250,
+			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			filterType: 'string',
+		},
+		{
+			title: 'Thời gian bắt đầu',
+			dataIndex: 'thoiGianBatDau',
+			align: 'center',
+			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : ''),
+			sortable: true,
+			filterType: 'datetime',
+			width: 120,
+		},
+		{
+			title: 'Thời gian kết thúc',
+			dataIndex: 'thoiGianKetThuc',
+			align: 'center',
+			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : ''),
+			sortable: true,
+			filterType: 'datetime',
+			width: 120,
+		},
+		{
+			title: 'Thời gian khảo sát',
+			dataIndex: 'updatedAt',
+			align: 'center',
+			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : ''),
+			sortable: true,
+			filterType: 'datetime',
+			width: 120,
+		},
+		{
+			title: 'Kích hoạt',
+			dataIndex: 'kichHoat',
+			width: 60,
+			align: 'center',
+			render: (val, record) => <Switch checked={record.kichHoat} size='small' />,
+		},
+		{
+			title: 'Trạng thái',
+			dataIndex: 'daLam',
+			align: 'center',
+			width: 120,
+			render: (val) => (val ? <Tag color='green'>Đã thực hiện</Tag> : <Tag color='red'>Chưa thực hiện</Tag>),
+			fixed: 'right',
+		},
+		{
+			title: 'Thao tác',
+			align: 'center',
+			width: 60,
+			fixed: 'right',
+			render: (val, rec) => (
+				<ButtonExtend
+					tooltip='Khảo sát'
+					onClick={() => handleEdit(rec)}
+					type='link'
+					icon={<EditOutlined />}
+					disabled={thoiGian !== EThoiGianDot.DANG_DIEN_RA || !rec?.kichHoat}
+				/>
+			),
+		},
+	];
 
 	return (
-		<Spin spinning={loading}>
-			{recDot?._id && danhSachNhanSu.length ? (
-				<>
-					{recDot?.thongTinCauTraLoi?.length && giangVienKhaoSat?._id ? (
-						<i style={{ color: primaryColor }}>
-							Bạn đã thực hiện đánh giá giảng viên vào lúc{' '}
-							<b>{dayjs(giangVienKhaoSat?.updatedAt).format('HH:mm, DD/MM/YYYY')}</b>
-						</i>
-					) : (
-						<div style={{ marginBottom: 8 }}>
-							<Alert
-								type='warning'
-								message={
-									<>
-										{ngoaiThoiGian
-											? 'Ngoài thời gian đánh giá khảo sát giảng viên,'
-											: 'Bạn chưa thực hiện đánh giá giảng viên,'}{' '}
-										Thời gian đánh giá giảng viên từ <b>{dayjs(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-										<b>{dayjs(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
-									</>
-								}
-								showIcon
-							/>
-						</div>
-					)}
-
-					<div style={{ marginBottom: 12 }}>
-						<div className='ant-form-item-label' style={{ padding: 0 }}>
-							<label className='ant-form-item-required'>Giảng viên</label>
-						</div>
-						<br />
-						<Select
-							value={giangVienSsoId}
-							style={{ width: 250 }}
-							placeholder='Chọn giảng viên'
-							options={danhSachNhanSu.map((item) => ({
-								key: item.nhanSuSsoId,
-								value: item.nhanSuSsoId,
-								label: `${item.tenNhanSu}`,
-							}))}
-							onChange={(val) => setGiangVienSsoId(val)}
-						/>
-					</div>
-
-					<FormTraLoiKhaoSat
-						onOk={hanldeDanhGiaGiangVien}
-						cauTraLoi={giangVienKhaoSat?.danhSachTraLoi}
-						formSubmiting={formSubmiting}
-						hideCard
-						recBieuMauProps={recDot?.khaoSat}
-					/>
-				</>
-			) : !recDot?._id ? (
-				<Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không có đợt khảo sát đánh giá giảng viên' />
-			) : (
-				<Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không có giảng viên trong đợt khảo sát này' />
-			)}
-		</Spin>
+		<TableBase
+			getData={getData}
+			columns={columns}
+			dependencies={[page, limit, recHocPhan?._id, thoiGian]}
+			modelName='tienich.dotkhaosat'
+			hideCard
+			buttons={{ create: false }}
+			Form={Form}
+			formProps={{ getData }}
+			widthDrawer={1000}
+			otherButtons={[
+				<Segmented
+					key='1'
+					value={thoiGian}
+					onChange={(val) => setThoiGian(val as EThoiGianDot)}
+					options={Object.values(EThoiGianDot).map((item) => ({ value: item, label: thoiGianDot[item] }))}
+				/>,
+			]}
+		/>
 	);
 };
 
