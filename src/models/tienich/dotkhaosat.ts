@@ -36,6 +36,7 @@ export default () => {
 			undefined,
 			'my/page',
 			{ thoiGian },
+			false,
 		);
 
 	const getDotDanhGiaTietHocModel = async (maHocKy: string): Promise<DotKhaoSat.IRecord> => {

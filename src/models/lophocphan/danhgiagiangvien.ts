@@ -25,6 +25,7 @@ export default () => {
 
 	const danhGiaGiangVienModel = async (
 		payload: Partial<BieuMau.IDanhGiaGiangVien>,
+		getData?: () => void,
 	): Promise<BieuMau.IDanhGiaGiangVien> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
@@ -32,6 +33,7 @@ export default () => {
 			const res = await danhGiaGiangVien(payload);
 			message.success('Gửi câu trả lời thành công');
 
+			if (getData) getData();
 			return res.data;
 		} catch (er) {
 			return Promise.reject(er);
