@@ -1,7 +1,7 @@
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
-import { Button, Card, Empty, Space, Tag, Typography } from 'antd';
+import { Button, Card, Empty, Space, Spin, Tag, Typography } from 'antd';
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -68,30 +68,32 @@ const CardSuKienSapToi = () => {
 			>
 				<div className='content'>
 					<div className='details'>
-						<div className='title'>{currentEvent.title || currentEvent.tenSuKien}</div>
+						<Spin spinning={loadingSuKien || loadingTKB || loadingThi}>
+							<div className='title'>{currentEvent.title || currentEvent.tenSuKien}</div>
 
-						<div className='footer'>
-							<div className='date'>{dayjs(currentEvent.thoiGianBatDau).format('DD/MM/YYYY')}</div>
-							<div className='tags'>
-								<Space size={4} wrap>
-									<Tag
-										color={
-											recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === currentEvent.loaiSuKien)
-												?.maMau ?? ColorSuKien[currentEvent.loaiSuKien as ELoaiSuKien]
-										}
-										style={{ fontSize: 11 }}
-									>
-										{currentEvent.loaiSuKien}
-									</Tag>
-
-									{currentEvent?.isQRDangKy && (
-										<Tag color={currentEvent?.isDangKy ? 'green' : 'red'} style={{ fontSize: 11 }}>
-											{currentEvent?.isDangKy ? 'Đã đăng ký' : 'Chưa đăng ký'}
+							<div className='footer'>
+								<div className='date'>{dayjs(currentEvent.thoiGianBatDau).format('DD/MM/YYYY')}</div>
+								<div className='tags'>
+									<Space size={4} wrap>
+										<Tag
+											color={
+												recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === currentEvent.loaiSuKien)
+													?.maMau ?? ColorSuKien[currentEvent.loaiSuKien as ELoaiSuKien]
+											}
+											style={{ fontSize: 11 }}
+										>
+											{currentEvent.loaiSuKien}
 										</Tag>
-									)}
-								</Space>
+
+										{currentEvent?.isQRDangKy && (
+											<Tag color={currentEvent?.isDangKy ? 'green' : 'red'} style={{ fontSize: 11 }}>
+												{currentEvent?.isDangKy ? 'Đã đăng ký' : 'Chưa đăng ký'}
+											</Tag>
+										)}
+									</Space>
+								</div>
 							</div>
-						</div>
+						</Spin>
 					</div>
 				</div>
 			</div>
@@ -100,12 +102,7 @@ const CardSuKienSapToi = () => {
 
 	return (
 		<>
-			<Card
-				className='tb-sk-wrapper'
-				variant='borderless'
-				loading={loadingSuKien || loadingTKB || loadingThi}
-				styles={{ body: { padding: 0 } }}
-			>
+			<Card className='tb-sk-wrapper' variant='borderless' styles={{ body: { padding: 0 } }}>
 				<div className='header-tb-sk'>
 					<Title level={5} className='title'>
 						Sự kiện
