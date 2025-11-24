@@ -1,6 +1,7 @@
 import { TabViewPage } from '@/components/TabViewPage';
 import DangKyChuyenNganhPage from '@/pages/SinhVien/DangKyChuyenNganh';
-import { CheckCircleOutlined, ProfileOutlined, StopOutlined } from '@ant-design/icons';
+import TheChatPage from '@/pages/TienIch/TheChat';
+import { CheckCircleOutlined, ProfileOutlined, SmileOutlined, StopOutlined } from '@ant-design/icons';
 import BaoLuuThoiHoc from '../BaoLuuThoiHoc';
 import XetHocVuPage from '../XetHocVu';
 
@@ -26,6 +27,12 @@ const HocTapKhacPage = () => {
 					title: 'Bảo lưu, thôi học',
 					menuKey: 'baoluu-thoihoc',
 					content: <BaoLuuThoiHoc />,
+				},
+				{
+					icon: <SmileOutlined />,
+					title: 'Thể chất sinh viên',
+					menuKey: 'thechat',
+					content: <TheChatPage />,
 				},
 			]}
 		/>
