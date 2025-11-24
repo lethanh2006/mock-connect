@@ -1,5 +1,5 @@
 import { MessageOutlined, ReadOutlined, ScheduleOutlined } from '@ant-design/icons';
-import { Badge, Card, Progress, Tag, Tooltip, Typography } from 'antd';
+import { Badge, Card, Progress, Space, Tag, Tooltip, Typography } from 'antd';
 import { createHash } from 'crypto';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -64,15 +64,21 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 				</Tag> */}
 				{/* <InfoCircleOutlined style={{ color: 'var(--color-primary)', marginLeft: 8 }} /> */}
 
-				<Tag className={`card-lhp-tag card-lhp-tag-completed`}>
-					<Text className='card-lhp-malop_copyable'>{lop.maLop || '--'}</Text>
-				</Tag>
+				<Space wrap style={{ alignItems: 'baseline' }}>
+					<Tag
+						className='card-lhp-tag card-lhp-tag-completed'
+						style={{ display: 'inline-flex', alignItems: 'baseline' }}
+					>
+						<Text className='card-lhp-malop_copyable'>{lop.maLop || '--'}</Text>
+					</Tag>
 
-				<Text
-					style={{ marginLeft: 8 }}
-					className='card-lhp-malop_copyable'
-					copyable={{ text: lop.ten, tooltips: ['Sao chép mã (nhóm) lớp ', 'Đã sao chép mã (nhóm) lớp '] }}
-				/>
+					<Text className='color-secondary'>{lop.maHocPhan || '--'}</Text>
+
+					<Text
+						className='card-lhp-malop_copyable'
+						copyable={{ text: lop.ten, tooltips: ['Sao chép mã (nhóm) lớp ', 'Đã sao chép mã (nhóm) lớp '] }}
+					/>
+				</Space>
 
 				<br />
 				<Title level={4} className='card-lhp-title'>
