@@ -1,4 +1,5 @@
 import PreviewFile from '@/components/PreviewFile';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
@@ -7,25 +8,33 @@ import { colorTrangThaiUserDiemDanh, ETrangThaiUserDiemDanh, trangThaiUserDiemDa
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { MailOutlined } from '@ant-design/icons';
 import { Button, Carousel, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
+import ModalXinNghi from '../YeuCauNghiHoc/ModalXinNghi';
 
 const TableLichHocLopHP = (props: {
 	items: ThoiKhoaBieu.IRecord[];
 	onClickItem: (val: ThoiKhoaBieu.IRecord) => void;
 }) => {
-	const { loading } = useModel('daotao.thoikhoabieu');
+	const { loading, setRecord } = useModel('daotao.thoikhoabieu');
+	const { visibleForm, setVisibleForm, daXinNghiHoc } = useModel('daotao.dangkynghihoc');
 	const { items, onClickItem } = props;
 	const [url, setUrl] = useState<any[]>([]);
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
-	const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
+	const onCellStyle = (rec: ThoiKhoaBieu.IRecord) => ({
 		onClick: () => onClickItem(rec),
 		style: {
 			cursor: 'pointer',
 			backgroundColor: dayjs().isSame(dayjs(rec.ngay), 'day') ? '#005fcc1f' : undefined,
 		},
+	});
+
+	const onCell = (rec: ThoiKhoaBieu.IRecord) => ({
+		...onCellStyle(rec),
+		onClick: () => onClickItem(rec),
 	});
 
 	const columns: IColumn<ThoiKhoaBieu.IRecord>[] = [
@@ -114,6 +123,7 @@ const TableLichHocLopHP = (props: {
 						Xem chi tiết
 					</a>
 				) : null,
+			onCell: onCellStyle,
 		},
 		// {
 		// 	title: 'Loại hình',
@@ -129,6 +139,25 @@ const TableLichHocLopHP = (props: {
 		// 	render: (val, rec) => !!rec.lopHocPhan?.tenCha && `Nhóm ${rec.lopHocPhan?.loai} ${rec.lopHocPhan?.soThuTuNhom}`,
 		// 	onCell,
 		// },
+		{
+			title: 'Thao tác',
+			width: 60,
+			align: 'center',
+			render: (_, rec) => (
+				<ButtonExtend
+					type='link'
+					tooltip={daXinNghiHoc(rec._id) ? 'Đã gửi đơn' : 'Xin nghỉ học'}
+					icon={<MailOutlined />}
+					// TODO: Chỉ cho phép gửi đơn chậm nhất 1 ngày sau buổi học => TH Muốn gửi lại/Hủy đơn thì sao?
+					// disabled={dayjs().isAfter(dayjs(rec.ngay).add(1, 'day').endOf('day')) || daXinNghiHoc(rec._id)}
+					onClick={(e) => {
+						e.stopPropagation();
+						setRecord(rec);
+						setVisibleForm(true);
+					}}
+				/>
+			),
+		},
 	];
 
 	return (
@@ -158,6 +187,8 @@ const TableLichHocLopHP = (props: {
 					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
 				</div>
 			</ModalExpandable>
+
+			<ModalXinNghi visible={visibleForm} onClose={() => setVisibleForm(false)} />
 		</>
 	);
 };
