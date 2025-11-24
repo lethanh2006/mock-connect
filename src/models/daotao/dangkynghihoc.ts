@@ -10,7 +10,7 @@ export default () => {
 	const { formSubmiting, setFormSubmiting, danhSach, getModel: _getModel } = objInit;
 
 	const getModel = (tenLopHocPhan: string) =>
-		tenLopHocPhan && _getModel(undefined, undefined, { createdAt: -1 }, 1, 20, `me/${tenLopHocPhan}`);
+		tenLopHocPhan && _getModel(undefined, undefined, { createdAt: -1 }, 1, 20, `me/lopHocPhan/${tenLopHocPhan}/all`);
 
 	const huyDonXinNghiModel = async (idDon: string, getData?: () => void): Promise<YeuCauNghiHoc.IRecord> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
