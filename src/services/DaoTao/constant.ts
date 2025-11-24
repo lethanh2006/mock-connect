@@ -23,6 +23,13 @@ export enum ETrangThaiHocTap {
 	CHUA_DAT = 'CHUA_DAT',
 }
 
+export enum ETrangThaiDonNghiHoc {
+	CHO_DUYET = 'cho_duyet',
+	DA_DUYET = 'da_duyet',
+	TU_CHOI = 'tu_choi',
+	DA_HUY = 'da_huy',
+}
+
 export const trangThaiHocTap: Record<ETrangThaiHocTap, string> = {
 	[ETrangThaiHocTap.CHUA_HOC]: 'Chưa học',
 	[ETrangThaiHocTap.DANG_HOC]: 'Đang học',
@@ -142,4 +149,11 @@ export const colorTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNh
 	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'orange',
 	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'red',
 	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'green',
+};
+
+export const TrangThaiDonNghiHoc: Record<ETrangThaiDonNghiHoc, { text: string; color: string }> = {
+	[ETrangThaiDonNghiHoc.CHO_DUYET]: { text: 'Chờ duyệt', color: 'orange' },
+	[ETrangThaiDonNghiHoc.DA_DUYET]: { text: 'Đã duyệt', color: 'green' },
+	[ETrangThaiDonNghiHoc.TU_CHOI]: { text: 'Từ chối', color: 'red' },
+	[ETrangThaiDonNghiHoc.DA_HUY]: { text: 'Đã hủy', color: 'gray' },
 };
