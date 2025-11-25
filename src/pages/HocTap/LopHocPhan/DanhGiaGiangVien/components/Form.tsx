@@ -3,14 +3,14 @@ import { getCauTraLoiMe } from '@/services/TienIch/KhaoSat/BieuMau';
 import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiDot, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { getBieuMauPLOKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat';
-import { Card, Select, Spin } from 'antd';
+import { Select, Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
-const FormDanhGiaGiangVien = (props: any) => {
+const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 	const { getData } = props;
-	const { record: recDot, visibleForm, setVisibleForm } = useModel('tienich.dotkhaosat');
+	const { record: recDot } = useModel('tienich.dotkhaosat');
 	const { danhGiaGiangVienModel, formSubmiting } = useModel('lophocphan.danhgiagiangvien');
 	const { traLoiBieuMauModel, formSubmiting: submit } = useModel('tienich.bieumau');
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
@@ -59,11 +59,11 @@ const FormDanhGiaGiangVien = (props: any) => {
 	};
 
 	useEffect(() => {
-		if (visibleForm) {
+		if (recDot?._id) {
 			getCauTraLoi();
 			getBieuMauKhaoSat();
 		}
-	}, [visibleForm]);
+	}, [recDot?._id]);
 
 	const hanldeKhaoSat = async (val: BieuMau.TraLoiRecord[]) => {
 		recDot?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN
@@ -80,7 +80,9 @@ const FormDanhGiaGiangVien = (props: any) => {
 						vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
 					},
 					getData,
-				).then(() => setVisibleForm(false))
+				)
+					.then()
+					.catch((err) => console.log(err))
 			: await traLoiBieuMauModel(
 					{
 						idKhaoSat: recBieuMau?._id ?? '',
@@ -94,11 +96,13 @@ const FormDanhGiaGiangVien = (props: any) => {
 						gioiTinh: recSinhVien?.gioiTinh,
 					},
 					getData,
-				).then(() => setVisibleForm(false));
+				)
+					.then()
+					.catch((err) => console.log(err));
 	};
 
 	return (
-		<Card title='Thực hiện khảo sát'>
+		<>
 			{recDot?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && (
 				<Select
 					value={giangVienSsoId}
@@ -122,7 +126,7 @@ const FormDanhGiaGiangVien = (props: any) => {
 					recBieuMauProps={recDot?.loai === ELoaiDot.KHAO_SAT_LOP_HOC_PHAN ? recBieuMau : recDot?.khaoSat}
 				/>
 			</Spin>
-		</Card>
+		</>
 	);
 };
 
