@@ -399,11 +399,15 @@ const useInitModel = <T extends object>(
 	 * Lấy header cho chức năng import
 	 * @returns {any}
 	 */
-	const getImportHeaderModel = async (config?: {
-		dataPartitionCode?: string | null | undefined;
-	}): Promise<TImportHeader[]> => {
+	const getImportHeaderModel = async (
+		query?: any,
+		config?: {
+			dataPartitionCode?: string | null | undefined;
+		},
+	): Promise<TImportHeader[]> => {
 		try {
 			const res = await getImportHeaders(
+				query,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
 			setImportHeaders(res.data?.data ?? []);

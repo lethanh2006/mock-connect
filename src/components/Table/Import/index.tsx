@@ -34,7 +34,7 @@ const ModalImport = (props: ModalImportProps) => {
 				await getHeader().then((headers) => {
 					setImportHeaders(headers);
 				});
-			else if (getImportHeaderModel) await getImportHeaderModel();
+			else if (getImportHeaderModel) await getImportHeaderModel(extendData);
 			setIsGetHeader(true);
 		} finally {
 			setLoading(false);

@@ -11,7 +11,7 @@ const PreviewDataImport = (props: {
 	onChange: () => void;
 	onBack: any;
 	importHeaders: TImportHeader[];
-	extendData?: Record<string, string | number | boolean>;
+	extendData?: Record<string, string | number | boolean | null | undefined>;
 }) => {
 	const intl = useIntl();
 	const { onChange, onBack, importHeaders, extendData } = props;
