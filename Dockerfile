@@ -62,7 +62,7 @@ RUN yarn install
 COPY . /app
 
 FROM development AS build
-RUN npm run build
+RUN yarn build
 
 FROM nginx:alpine
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf

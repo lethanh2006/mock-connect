@@ -54,7 +54,7 @@ export default {
 	'global.table.export.index.choncactruong': 'Chọn các trường dữ liệu cần trích xuất',
 	'global.table.export.index.button.taixuong': 'Tải xuống dữ liệu',
 	'global.table.export.index.button.huy': 'Hủy',
-	'global.table.export.index.empty': 'Chức năng chưa được hỗ trợ',
+	'global.table.export.index.empty': 'Có lỗi xảy ra hoặc chức năng chưa được hỗ trợ. Vui lòng thử lại sau!',
 
 	'global.table.import.choose.message1': 'Trình duyệt không hỗ trợ',
 	'global.table.import.choose.message2': 'Không lấy được dữ liệu',
@@ -71,7 +71,7 @@ export default {
 	'global.table.import.choose.button.tieptheo': 'Tiếp theo',
 
 	'global.table.import.index.title': 'Nhập dữ liệu',
-	'global.table.import.index.empty': 'Chức năng chưa được hỗ trợ',
+	'global.table.import.index.empty': 'Có lỗi xảy ra hoặc chức năng chưa được hỗ trợ. Vui lòng thử lại sau!',
 	'global.table.import.index.step.chontaptin': 'Chọn tập tin',
 	'global.table.import.index.step.ghepcotdulieu': 'Ghép cột dữ liệu',
 	'global.table.import.index.step.xemtruocdulieu': 'Xem trước dữ liệu',
