@@ -72,9 +72,9 @@ const LopHocPhanPage = () => {
 											backgrounds={backgrounds}
 											diemDanh={{
 												coMat: lop?.thongKeDiemDanhLhp?.coMat,
-												chuaDiemDanh: lop?.thongKeDiemDanhLhp?.chuaDiemDanh,
+												chuaDiemDanh: lop?.thongKeDiemDanhLhp?.soBuoiChuaDiemDanh,
 											}}
-											soBaiTap={lop?.thongKeBaiTap?.tongSo}
+											soBaiTap={lop?.soBaiTap}
 											soBaiDang={lop?.soBaiDang}
 											isKeTiep={
 												lopKeTiep?._id === lop._id &&

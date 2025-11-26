@@ -219,9 +219,9 @@ const CardLopHocPhan = () => {
 									backgrounds={backgrounds}
 									diemDanh={{
 										coMat: lop?.thongKeDiemDanhLhp?.coMat,
-										chuaDiemDanh: lop?.thongKeDiemDanhLhp?.chuaDiemDanh,
+										chuaDiemDanh: lop?.thongKeDiemDanhLhp?.soBuoiChuaDiemDanh,
 									}}
-									soBaiTap={lop?.thongKeBaiTap?.tongSo}
+									soBaiTap={lop?.soBaiTap}
 									soBaiDang={lop?.soBaiDang}
 									isHienTai={lopHienTai?._id === lop._id}
 									isKeTiep={

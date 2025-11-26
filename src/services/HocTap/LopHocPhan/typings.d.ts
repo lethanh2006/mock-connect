@@ -64,6 +64,20 @@ export declare module LopHocPhan {
 
 		// Sinh viên get Lớp học phần
 		diem?: IRecordSinhVienLopHP;
+
+		thongKeDiemDanhLhp?: ThongKeDiemDanhLhp;
+		soBaiTap?: number;
+		soBaiDang?: number;
+	}
+
+	export interface ThongKeDiemDanhLhp {
+		soBuoi?: number;
+		soBuoiChuaDiemDanh?: number;
+		soBuoiDaDiemDanh?: number;
+		coMat?: number;
+		vangCoPhep?: number;
+		monVeSom?: number;
+		vangKhongPhep?: number;
 	}
 
 	export type TMaHoaLichHoc = {
