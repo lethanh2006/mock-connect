@@ -8,3 +8,7 @@ export async function sinhVienNopBai(payLoad: any) {
 export async function thongKeBaiTap(startDate: any, endDate: any) {
 	return axios.get(`${ipDaoTao}/assignment/lich/sinh-vien/from/${startDate}/to/${endDate}`);
 }
+
+export async function getThongKeBaiTapSinhVien(maHocKy: string) {
+	return axios.get(`${ipDaoTao}/assignment-user/hoc-ky/${maHocKy}/sinh-vien/me/thong-ke`);
+}

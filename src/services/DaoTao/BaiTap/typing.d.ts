@@ -58,4 +58,11 @@ declare module BaiTap {
 		createdAt: Date;
 		updatedAt: Date;
 	}
+
+	export type IThongKeBaiTap = {
+		soBaiTapDuocGiao?: number;
+		soBaiTapDangDienRa?: number;
+		soBaiTapDaNop?: number;
+		soBaiTapDaChamDiem?: number;
+	};
 }
