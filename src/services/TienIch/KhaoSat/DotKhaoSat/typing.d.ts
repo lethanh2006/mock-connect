@@ -1,5 +1,5 @@
-import { type BieuMau } from '../BieuMau/typing';
 import { type EPhamViChuDe } from '@/services/TinTuc/constant';
+import { type BieuMau } from '../BieuMau/typing';
 import type { ELoaiDot } from '../constants';
 
 declare module DotKhaoSat {
@@ -16,6 +16,7 @@ declare module DotKhaoSat {
 		idKhaoSat: string;
 		khaoSat?: BieuMau.Record;
 		maHocKy: string;
+		maLopHocPhan: string;
 
 		danhSachLopTinChi: BieuMau.GeneralInfo[];
 		danhSachLopHanhChinh: BieuMau.GeneralInfo[];

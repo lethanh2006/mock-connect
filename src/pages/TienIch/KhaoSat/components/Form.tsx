@@ -70,7 +70,10 @@ const FormTraLoiKhaoSat = (props: {
 	}, [isThanhCong]);
 
 	useEffect(() => {
-		if (!visibleForm && !onOk) {
+		if (
+			!visibleForm
+			// && !onOk
+		) {
 			resetFieldsForm(form);
 			setCheck(false);
 		}
@@ -319,7 +322,13 @@ const FormTraLoiKhaoSat = (props: {
 						loading={formSubmiting}
 						htmlType='submit'
 						type='primary'
-						tooltip={disabled ? 'Ngoài thời gian đợt khảo sát' : undefined}
+						tooltip={
+							recordDot?.kichHoat === false
+								? 'Đợt khảo sát chưa kích khoạt'
+								: disabled
+									? 'Ngoài thời gian đợt khảo sát'
+									: undefined
+						}
 					>
 						Hoàn thành
 					</ButtonExtend>

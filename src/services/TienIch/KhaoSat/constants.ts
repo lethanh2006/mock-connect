@@ -27,9 +27,17 @@ export enum ELoaiBieuMau {
 
 export enum ELoaiDot {
 	BIEU_MAU = 'BIEU_MAU',
-	CUOC_THI = 'CUOC_THI',
 	DANH_GIA_GIANG_VIEN = 'DANH_GIA_GIANG_VIEN',
+	KHAO_SAT_LOP_HOC_PHAN = 'LOP_HOC_PHAN',
+	CUOC_THI = 'CUOC_THI',
 }
+
+export const mapNameLoaiDot: Record<ELoaiDot, string> = {
+	[ELoaiDot.BIEU_MAU]: 'Khảo sát',
+	[ELoaiDot.DANH_GIA_GIANG_VIEN]: 'Đánh giá giảng viên',
+	[ELoaiDot.KHAO_SAT_LOP_HOC_PHAN]: 'Khảo sát lớp tín chỉ',
+	[ELoaiDot.CUOC_THI]: 'Cuộc thi',
+};
 
 export enum ELoaiCauHoi {
 	SINGLE_CHOICE = 'SingleChoice',
