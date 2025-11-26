@@ -91,6 +91,37 @@ export default () => {
 				if (lop.tenCha && lopChaObj[lop.tenCha]) lopChaObj[lop.tenCha].children?.push(lop);
 			});
 			const lopChaList = Object.values(lopChaObj);
+
+			// Gộp thống kê điểm danh + bài tập + bài đăng từ lớp con lên lớp cha
+			lopChaList.forEach((cha) => {
+				const children = cha.children ?? [];
+
+				const sum = <T extends number>(getter: (i: LopHocPhan.IRecord) => T | undefined) =>
+					children.reduce((acc, item) => acc + (getter(item) ?? 0), 0);
+
+				// Danh sách toàn bộ trường trong thongKeDiemDanhLhp cần cộng
+				const diemDanhFields: (keyof NonNullable<LopHocPhan.IRecord['thongKeDiemDanhLhp']>)[] = [
+					'soBuoi',
+					'soBuoiDaDiemDanh',
+					'soBuoiChuaDiemDanh',
+					'coMat',
+					'vangCoPhep',
+					'monVeSom',
+					'vangKhongPhep',
+				];
+
+				cha.thongKeDiemDanhLhp = cha.thongKeDiemDanhLhp ?? {};
+
+				diemDanhFields.forEach((field) => {
+					cha.thongKeDiemDanhLhp![field] =
+						(cha.thongKeDiemDanhLhp![field] ?? 0) +
+						children.reduce((acc, child) => acc + (child.thongKeDiemDanhLhp?.[field] ?? 0), 0);
+				});
+
+				cha.soBaiTap = (cha.soBaiTap ?? 0) + sum((c) => c.soBaiTap);
+				cha.soBaiDang = (cha.soBaiDang ?? 0) + sum((c) => c.soBaiDang);
+			});
+
 			setDanhSach(lopChaList);
 
 			// Calculate nearest Lớp => setState
