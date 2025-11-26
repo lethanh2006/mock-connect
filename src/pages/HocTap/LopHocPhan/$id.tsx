@@ -56,7 +56,7 @@ const DetailLopTinChi = () => {
 		'Kết quả LMS',
 		'Bài tập, bài kiểm tra',
 		'Kết quả học tập',
-		'Đánh giá giảng viên',
+		'Khảo sát sinh viên',
 	];
 	const [visibleDeCuongHp, setVisibleDeCuongHp] = useState<[boolean, string]>([false, '3']);
 
@@ -227,7 +227,7 @@ const DetailLopTinChi = () => {
 			menuKey: paths[7],
 			content: (
 				<Card variant='borderless'>
-					<DanhGiaGiangVienPage danhSachNhanSu={record?.nhanSuList ?? []} />{' '}
+					<DanhGiaGiangVienPage />
 				</Card>
 			),
 			icon: <StarOutlined />,
