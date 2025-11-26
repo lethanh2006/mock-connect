@@ -29,6 +29,9 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 	useEffect(() => {
 		getBaiTapSinhVienModel(1, 20, recHocKy?.ma);
+		if (filteredData.length == 0) {
+			setSegment('2');
+		}
 	}, [recHocKy?.ma]);
 
 	// Theo dõi độ rộng container và tự động điều chỉnh số lượng items hiển thị
