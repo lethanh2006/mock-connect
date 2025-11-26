@@ -54,7 +54,7 @@ export default {
 	'global.table.export.index.choncactruong': 'Select the fields to export',
 	'global.table.export.index.button.taixuong': 'Download data',
 	'global.table.export.index.button.huy': 'Cancel',
-	'global.table.export.index.empty': 'Feature not supported',
+	'global.table.export.index.empty': 'An error occurred or the feature is not supported. Please try again later!',
 
 	'global.table.import.choose.message1': 'Browser not supported',
 	'global.table.import.choose.message2': 'Unable to fetch data',
@@ -70,7 +70,7 @@ export default {
 	'global.table.import.choose.button.tieptheo': 'Next',
 
 	'global.table.import.index.title': 'Import data',
-	'global.table.import.index.empty': 'Feature not supported',
+	'global.table.import.index.empty': 'An error occurred or the feature is not supported. Please try again later!',
 	'global.table.import.index.step.chontaptin': 'Select file',
 	'global.table.import.index.step.ghepcotdulieu': 'Match data columns',
 	'global.table.import.index.step.xemtruocdulieu': 'Preview data',

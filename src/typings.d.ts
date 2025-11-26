@@ -46,6 +46,8 @@ declare const APP_CONFIG_URL_CSVC: string;
 declare const APP_CONFIG_URL_THU_VIEN: string;
 declare const APP_CONFIG_URL_QLVB: string;
 declare const APP_CONFIG_URL_VBCC: string;
+declare const APP_CONFIG_URL_QLND: string;
+declare const APP_CONFIG_URL_TAP_CHI_KH: string;
 
 declare const APP_CONFIG_TITLE_LANDING: string;
 declare const APP_CONFIG_TITLE_CONNECT: string;
@@ -62,6 +64,8 @@ declare const APP_CONFIG_TITLE_CSVC: string;
 declare const APP_CONFIG_TITLE_THU_VIEN: string;
 declare const APP_CONFIG_TITLE_QLVB: string;
 declare const APP_CONFIG_TITLE_VBCC: string;
+declare const APP_CONFIG_TITLE_QLND: string;
+declare const APP_CONFIG_TITLE_TAP_CHI_KH: string;
 
 declare const APP_CONFIG_MOODLE_ENDPOINT: string;
 declare const APP_CONFIG_TIN_TUC_WP_CATEGORY: number;

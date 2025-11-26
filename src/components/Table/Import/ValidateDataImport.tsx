@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ButtonExtend from '../ButtonExtend';
 import TableStaticData from '../TableStaticData';
-import type { TImportHeader, IColumn, TImportResponse, TImportRowResponse } from '../typing';
+import type { IColumn, TImportHeader, TImportResponse, TImportRowResponse } from '../typing';
 
 const ValidateDataImport = (props: {
 	onOk?: () => void;
@@ -17,7 +17,7 @@ const ValidateDataImport = (props: {
 	const intl = useIntl();
 	const { onOk, onCancel, onBack, modelName, importHeaders } = props;
 	const { dataImport, startLine } = useModel('import');
-	const { postValidateModel, postExecuteImpotModel, formSubmiting } = useModel(modelName);
+	const { postValidateModel, postExecuteImpotModel, formSubmiting } = useModel(modelName) as any;
 	const [importResponses, setImportResponses] = useState<TImportRowResponse[]>([]);
 	const [errorCount, setErrorCount] = useState<number>();
 	const [isError, setIsError] = useState<boolean>();
