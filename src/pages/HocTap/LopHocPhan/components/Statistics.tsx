@@ -7,7 +7,8 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 const BaiTapStatistics = () => {
-	const { danhSach, thongKeBaiTapModel, loading } = useModel('daotao.baitap');
+	const { danhSach, thongKeBaiTapModel, thongKeBaiTap, getThongKeBaiTapSinhVienModel, loading } =
+		useModel('daotao.baitap');
 	const { record: recHocKy } = useModel('daotao.hocky');
 
 	// Calculate statistics
@@ -51,11 +52,16 @@ const BaiTapStatistics = () => {
 			return isNotSubmitted && isOverdue;
 		}).length;
 
+		console.log(thongKeBaiTap);
+
 		return {
+			total: thongKeBaiTap?.soBaiTapDuocGiao,
 			completed: completedCount,
 			pending: pendingCount,
 			notStarted: notStartedCount,
 			overdue: overdueCount,
+			inprogress: thongKeBaiTap?.soBaiTapDangDienRa,
+			graded: thongKeBaiTap?.soBaiTapDaChamDiem,
 		};
 	};
 
@@ -66,6 +72,8 @@ const BaiTapStatistics = () => {
 				.add(recHocKy.soTuan || 1, 'week')
 				.toDate();
 			thongKeBaiTapModel(startDate, endDate);
+
+			getThongKeBaiTapSinhVienModel(recHocKy.ma);
 		}
 	};
 
@@ -76,22 +84,39 @@ const BaiTapStatistics = () => {
 	const statistics = getStatistics();
 	const statisticsData: StatisticsItem[] = [
 		{
+			title: 'Tổng số',
+			value: statistics.total || 0,
+			icon: <CheckCircleOutlined />,
+		},
+		{
 			title: 'Đã hoàn thành',
 			value: statistics.completed,
 			icon: <CheckCircleOutlined />,
-			valueColor: '#17C229',
+			status: 'success',
 		},
+		// {
+		// 	title: 'Đến hạn',
+		// 	value: statistics.pending,
+		// 	icon: <ClockCircleOutlined />,
+		// 	valueColor: '#FFAF0B',
+		// },
 		{
-			title: 'Đến hạn',
-			value: statistics.pending,
+			title: 'Đang diễn ra',
+			value: statistics.inprogress || 0,
 			icon: <ClockCircleOutlined />,
 			valueColor: '#FFAF0B',
+		},
+		{
+			title: 'Đã chấm điểm',
+			value: statistics.graded || 0,
+			icon: <ClockCircleOutlined />,
+			status: 'info',
 		},
 		{
 			title: 'Chưa hoàn thành',
 			value: statistics.notStarted,
 			icon: <ExclamationCircleOutlined />,
-			valueColor: '#DA2128',
+			status: 'error',
 		},
 		{
 			title: 'Quá hạn nộp bài',
@@ -102,7 +127,7 @@ const BaiTapStatistics = () => {
 	];
 
 	return (
-		<StatisticsCard title='Bài tập, bài kiểm tra' data={statisticsData} loading={loading} colSpan={{ xs: 12, md: 6 }} />
+		<StatisticsCard title='Bài tập, bài kiểm tra' data={statisticsData} loading={loading} colSpan={{ xs: 12, md: 4 }} />
 	);
 };
 

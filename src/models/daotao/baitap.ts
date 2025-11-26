@@ -1,12 +1,14 @@
 import useInitModel from '@/hooks/useInitModel';
-import { sinhVienNopBai, thongKeBaiTap } from '@/services/DaoTao/BaiTap';
+import { thongKeBaiTap as getThongKeBaiTap, getThongKeBaiTapSinhVien, sinhVienNopBai } from '@/services/DaoTao/BaiTap';
 import type { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import { ipDaoTao } from '@/utils/ip';
 import { message } from 'antd';
+import { useState } from 'react';
 
 export default () => {
 	const objInit = useInitModel<BaiTap.IDanhSachGiaoBaiTap>('assignment-user', undefined, undefined, ipDaoTao);
 	const { formSubmiting, setFormSubmiting, setLoading, setDanhSach, getModel, setPage, setLimit } = objInit;
+	const [thongKeBaiTap, setThongKeBaiTap] = useState<BaiTap.IThongKeBaiTap>();
 
 	const getBaiTapSinhVienModel = async (
 		page?: number,
@@ -54,7 +56,7 @@ export default () => {
 		setLoading(true);
 
 		try {
-			const res = await thongKeBaiTap(startDate, endDate);
+			const res = await getThongKeBaiTap(startDate, endDate);
 			setDanhSach(res.data?.data ?? []);
 
 			return res.data?.data;
@@ -65,10 +67,19 @@ export default () => {
 		}
 	};
 
+	const getThongKeBaiTapSinhVienModel = async (maHocKy: string): Promise<BaiTap.IThongKeBaiTap> => {
+		const res = await getThongKeBaiTapSinhVien(maHocKy);
+
+		setThongKeBaiTap(res?.data?.data);
+		return res?.data?.data;
+	};
+
 	return {
 		...objInit,
+		thongKeBaiTap,
 		sinhVienNopBaiTapModal,
 		thongKeBaiTapModel,
 		getBaiTapSinhVienModel,
+		getThongKeBaiTapSinhVienModel,
 	};
 };
