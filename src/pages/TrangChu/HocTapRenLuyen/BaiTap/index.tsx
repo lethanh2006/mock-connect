@@ -29,6 +29,8 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 	useEffect(() => {
 		getBaiTapSinhVienModel(1, 20, recHocKy?.ma);
+
+		// lần đầu tiên sẽ để segment Tất cả khi không có bài tập  => cho đẹp, bài tập không bị trống
 		if (filteredData.length == 0) {
 			setSegment('2');
 		}
