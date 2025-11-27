@@ -34,6 +34,11 @@ export default () => {
 			duDoanSoNguoiThamDu?: number;
 			maLop?: string;
 			lopHocPhanId?: string;
+
+			//Sự kiện
+			idSuKien?: string;
+			loaiKhaoSatSuKien?: string;
+			ssoId?: string;
 		},
 		getData?: () => void,
 	): Promise<any> => {
