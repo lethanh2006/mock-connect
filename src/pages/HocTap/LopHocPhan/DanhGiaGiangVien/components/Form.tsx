@@ -59,46 +59,45 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 	};
 
 	useEffect(() => {
-		if (recDot?._id) {
-			getCauTraLoi();
-			getBieuMauKhaoSat();
-		}
+		getCauTraLoi();
+		getBieuMauKhaoSat();
 	}, [recDot?._id]);
 
 	const hanldeKhaoSat = async (val: BieuMau.TraLoiRecord[]) => {
-		recDot?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN
-			? await danhGiaGiangVienModel(
-					{
-						idKhaoSat: recDot?.idKhaoSat ?? '',
-						danhSachTraLoi: val,
-						idDot: recDot?._id,
-						maLop: recLopHocPhan?.ten,
-						lopHocPhanId: recLopHocPhan?._id,
-						giangVienSsoId: giangVienSsoId ?? '',
-						maGiangVien: recLopHocPhan?.nhanSuList?.find((item) => item.nhanSuSsoId === giangVienSsoId)?.maNhanSu,
-						hoTenGiangVien: recLopHocPhan?.nhanSuList?.find((item) => item.nhanSuSsoId === giangVienSsoId)?.tenNhanSu,
-						vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
-					},
-					getData,
-				)
-					.then()
-					.catch((err) => console.log(err))
-			: await traLoiBieuMauModel(
-					{
-						idKhaoSat: recBieuMau?._id ?? '',
-						danhSachTraLoi: val,
-						idDot: recDot?._id ?? '',
-						maLop: recLopHocPhan?.ten,
-						lopHocPhanId: recLopHocPhan?._id,
-						vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
-						trangThaiSinhVien: recSinhVien?.trangThaiHoc,
-						danToc: recSinhVien?.danToc,
-						gioiTinh: recSinhVien?.gioiTinh,
-					},
-					getData,
-				)
-					.then()
-					.catch((err) => console.log(err));
+		const data = {
+			danhSachTraLoi: val,
+			idDot: recDot?._id,
+			maLop: recLopHocPhan?.ten,
+			lopHocPhanId: recLopHocPhan?._id,
+			vaiTroNguoiKhaoSat: EVaiTroKhaoSat.SINH_VIEN,
+			trangThaiSinhVien: recSinhVien?.trangThaiHoc,
+			danToc: recSinhVien?.danToc,
+			gioiTinh: recSinhVien?.gioiTinh,
+		};
+		if (recDot?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN) {
+			await danhGiaGiangVienModel(
+				{
+					...data,
+					idKhaoSat: recDot?.idKhaoSat ?? '',
+					giangVienSsoId: giangVienSsoId ?? '',
+					maGiangVien: recLopHocPhan?.nhanSuList?.find((item) => item.nhanSuSsoId === giangVienSsoId)?.maNhanSu,
+					hoTenGiangVien: recLopHocPhan?.nhanSuList?.find((item) => item.nhanSuSsoId === giangVienSsoId)?.tenNhanSu,
+				},
+				getData,
+			)
+				.then()
+				.catch((err) => console.log(err));
+		} else {
+			await traLoiBieuMauModel(
+				{
+					...data,
+					idKhaoSat: recBieuMau?._id ?? '',
+				} as any,
+				getData,
+			)
+				.then()
+				.catch((err) => console.log(err));
+		}
 	};
 
 	return (

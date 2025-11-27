@@ -4,7 +4,7 @@ import { EOperatorType } from '@/components/Table/constant';
 import { IColumn } from '@/components/Table/typing';
 import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
 import { DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
-import { Descriptions, Empty, Tag } from 'antd';
+import { Descriptions, Empty, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -16,7 +16,7 @@ import FormDanhGiaGiangVien from './components/Form';
 
 const DanhGiaGiangVienPage = () => {
 	const { record: recLopHp } = useModel('lophocphan.lophocphan');
-	const { getModel, page, limit, record, setRecord } = useModel('tienich.dotkhaosat');
+	const { getModel, page, limit, record, setRecord, ngoaiThoiGian } = useModel('tienich.dotkhaosat');
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('30%');
 
@@ -41,7 +41,13 @@ const DanhGiaGiangVienPage = () => {
 				undefined,
 				undefined,
 				'my/page',
-			).then((res) => setRecord(res[0]));
+			).then((res) => {
+				if (record?._id) {
+					setRecord(res?.find((item) => item?._id === record?._id));
+				} else {
+					setRecord(res[0]);
+				}
+			});
 		}
 	};
 
@@ -115,8 +121,19 @@ const DanhGiaGiangVienPage = () => {
 								colon={false}
 							>
 								<Descriptions.Item label='Đợt khảo sát' span={2}>
-									{record?.ten ?? '--'}{' '}
-									{record?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && <Tag color='green'>Đánh giá giảng viên</Tag>}
+									<Space wrap>
+										{record?.ten ?? '--'}
+										{record?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && <Tag color='green'>Đánh giá giảng viên</Tag>}
+									</Space>
+								</Descriptions.Item>
+								<Descriptions.Item label='Trạng thái' span={2}>
+									{record?.kichHoat === false ? (
+										<Tag color='default'>Đợt khảo sát chưa kích hoạt</Tag>
+									) : ngoaiThoiGian ? (
+										<Tag color='gold'>Ngoài thời gian đợt khảo sát</Tag>
+									) : (
+										<Tag color='green'>Đang trong thời gian khảo sát</Tag>
+									)}
 								</Descriptions.Item>
 								<Descriptions.Item label='Bắt đầu thực hiện'>
 									{record?.thoiGianBatDau ? dayjs(record?.thoiGianBatDau).format('HH:mm DD/MM/YYYY') : '--'}
@@ -126,7 +143,7 @@ const DanhGiaGiangVienPage = () => {
 								</Descriptions.Item>
 							</Descriptions>
 
-							<FormDanhGiaGiangVien />
+							<FormDanhGiaGiangVien getData={getData} />
 						</>
 					) : (
 						<div style={{ paddingTop: 16 }}>
