@@ -1,7 +1,7 @@
 import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
-import { Button, Col, Descriptions, Form, message, Modal, Row, Segmented, Tooltip } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Col, Descriptions, Form, message, Modal, Row, Tooltip } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
 import HocPhanCTDT from './HocPhan';
 
@@ -15,7 +15,6 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { record: recDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
-	const [segment, setSegment] = useState<string>('1');
 
 	const khoaNganh = Object.values(khoaNganhMe as Record<string, KhoaNganh.IRecord>)?.find(
 		(item) => item?.ma === maKhoaNganh,
@@ -73,16 +72,8 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 								nhu cầu hệ thống sẽ tự động chọn học phần sinh viên đã đăng ký
 							</i>
 						</div>
-						<Segmented
-							style={{ marginBottom: 12 }}
-							value={segment}
-							onChange={(val) => setSegment(val.toString())}
-							options={[
-								{ value: '1', label: 'Theo tiến trình' },
-								{ value: '2', label: 'Các học phần khác' },
-							]}
-						/>
-						<HocPhanCTDT segment={segment} />
+
+						<HocPhanCTDT />
 					</Col>
 				</Row>
 
