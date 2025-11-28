@@ -76,7 +76,7 @@ const DanhGiaGiangVienPage = () => {
 			width: 200,
 			render: (val, rec) => (
 				<ExpandText>
-					{val} {rec?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && <Tag color='green'>Đánh giá giảng viên</Tag>}
+					{val} {rec?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && <Tag color='blue'>Đánh giá giảng viên</Tag>}
 				</ExpandText>
 			),
 			filterType: 'string',
@@ -123,7 +123,7 @@ const DanhGiaGiangVienPage = () => {
 								<Descriptions.Item label='Đợt khảo sát' span={2}>
 									<Space wrap>
 										{record?.ten ?? '--'}
-										{record?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && <Tag color='green'>Đánh giá giảng viên</Tag>}
+										{record?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && <Tag color='blue'>Đánh giá giảng viên</Tag>}
 									</Space>
 								</Descriptions.Item>
 								<Descriptions.Item label='Trạng thái' span={2}>

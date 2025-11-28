@@ -156,6 +156,7 @@ declare module BieuMau {
 		soLuotTraLoiToiDa: number;
 
 		userSsoId: string;
+		giangVienSsoId: string;
 	}
 
 	export interface IDanhGiaGiangVien {

@@ -4,7 +4,6 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiDot, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { getBieuMauPLOKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat';
 import { Select, Spin } from 'antd';
-import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 
@@ -27,20 +26,18 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 	const getCauTraLoi = () => {
 		if (recDot?._id) {
 			setLoadingCauTraLoi(true);
-			getCauTraLoiMe(
-				recDot?.idKhaoSat ?? '',
-				recDot?._id ?? '',
-				recDot?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN
-					? {
-							condition: {
-								giangVienSsoId: giangVienSsoId,
-							},
-						}
-					: undefined,
-			)
+			getCauTraLoiMe(recDot?.idKhaoSat ?? '', recDot?._id ?? '')
 				.then((res) => {
-					const sortedData = _.orderBy(res.data?.data, ['updatedAt'], ['desc']);
-					setCauTraLoi(sortedData[0]);
+					if (recDot?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN) {
+						setCauTraLoi(
+							res.data?.data?.find(
+								(item: BieuMau.ICauTraLoiKhaoSat) =>
+									item?.giangVienSsoId === giangVienSsoId && item?.idDot === recDot?._id,
+							) ?? {},
+						);
+					} else {
+						setCauTraLoi(res.data?.data?.find((item: BieuMau.ICauTraLoiKhaoSat) => item?.idDot === recDot?._id) ?? {});
+					}
 				})
 				.catch((err) => console.log(err))
 				.finally(() => setLoadingCauTraLoi(false));
@@ -61,7 +58,7 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 	useEffect(() => {
 		getCauTraLoi();
 		getBieuMauKhaoSat();
-	}, [recDot?._id]);
+	}, [recDot?._id, giangVienSsoId]);
 
 	const hanldeKhaoSat = async (val: BieuMau.TraLoiRecord[]) => {
 		const data = {

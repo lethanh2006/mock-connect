@@ -122,6 +122,8 @@ const FormTraLoiKhaoSat = (props: {
 			});
 			form.resetFields();
 			form.setFieldsValue(values);
+		} else {
+			form.resetFields();
 		}
 	}, [record?._id, JSON.stringify(cauTraLoi), visibleForm]);
 
