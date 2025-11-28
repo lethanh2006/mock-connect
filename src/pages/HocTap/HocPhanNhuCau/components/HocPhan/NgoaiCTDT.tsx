@@ -2,7 +2,6 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { Space, Tag } from 'antd';
 import { useModel } from 'umi';
 
 const HocPhanNgoaiCTDT = (props: {
@@ -11,8 +10,9 @@ const HocPhanNgoaiCTDT = (props: {
 		danhSachHocPhanCtdt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
 		danhSachHocPhanDungTienTrinh: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
 	};
+	otherButtons?: any[];
 }) => {
-	const { data, danhSachTrong } = props;
+	const { data, danhSachTrong, otherButtons } = props;
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
 	const { record: recDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
 
@@ -28,7 +28,6 @@ const HocPhanNgoaiCTDT = (props: {
 			title: 'Tên HP',
 			dataIndex: 'ten',
 			width: 200,
-
 			filterType: 'string',
 		},
 		{
@@ -37,60 +36,47 @@ const HocPhanNgoaiCTDT = (props: {
 			align: 'center',
 			width: 90,
 			filterType: 'number',
-
 			sortable: true,
 		},
 	];
 
 	return (
-		<>
-			<Space style={{ marginBottom: 8, flexWrap: 'wrap', display: 'flex' }}>
-				{data
-					?.filter((item) => selectedIds?.includes(item?.ma))
-					?.map((items) => (
-						<Tag key={items?.ma} closable onClose={() => setSelectedIds(selectedIds?.filter((id) => id !== items?.ma))}>
-							{items?.ten ?? ''}
-						</Tag>
-					))}
-			</Space>
+		<TableStaticData
+			columns={columns}
+			data={data}
+			addStt
+			hasTotal
+			size='small'
+			otherProps={{
+				rowKey: (rec: HocPhan.IRecord) => rec.ma,
+				rowSelection: {
+					type: 'checkbox',
+					selectedRowKeys: selectedIds,
+					preserveSelectedRowKeys: true,
+					onChange: (selectedRowKeys: any[]) => setSelectedIds(selectedRowKeys),
+					getCheckboxProps: (rec: HocPhan.IRecord) => {
+						const isDungTienTrinh = danhSachTrong?.danhSachHocPhanDungTienTrinh?.some(
+							(itemDungTien) => itemDungTien.maHocPhan === rec.ma,
+						);
 
-			<TableStaticData
-				columns={columns}
-				data={data}
-				addStt
-				hasTotal
-				size='small'
-				otherProps={{
-					pagination: true,
-					rowKey: (rec: HocPhan.IRecord) => rec.ma,
-					rowSelection: {
-						type: 'checkbox',
-						selectedRowKeys: selectedIds,
-						preserveSelectedRowKeys: true,
-						onChange: (selectedRowKeys: string[]) => setSelectedIds(selectedRowKeys),
-						getCheckboxProps: (rec: HocPhan.IRecord) => {
-							const isDungTienTrinh = danhSachTrong?.danhSachHocPhanDungTienTrinh?.some(
-								(itemDungTien) => itemDungTien.maHocPhan === rec.ma,
-							);
+						const isNgoaiLimit =
+							(selectedIds ?? []).filter(
+								(id) =>
+									!danhSachTrong?.danhSachHocPhanDungTienTrinh?.some((itemDungTien) => itemDungTien.maHocPhan === id),
+							).length >= (recDot?.soHocPhanDangKyNgoaiTienTrinh ?? 0);
 
-							const isNgoaiLimit =
-								(selectedIds ?? []).filter(
-									(id) =>
-										!danhSachTrong?.danhSachHocPhanDungTienTrinh?.some((itemDungTien) => itemDungTien.maHocPhan === id),
-								).length >= (recDot?.soHocPhanDangKyNgoaiTienTrinh ?? 0);
+						const isSelected = selectedIds?.includes(rec.ma);
 
-							const isSelected = selectedIds?.includes(rec.ma);
-
-							return {
-								disabled: !isSelected && !isDungTienTrinh && isNgoaiLimit,
-							};
-						},
-						columnWidth: 40,
-						hideSelectAll: true,
+						return {
+							disabled: !isSelected && !isDungTienTrinh && isNgoaiLimit,
+						};
 					},
-				}}
-			/>
-		</>
+					columnWidth: 40,
+					hideSelectAll: true,
+				},
+			}}
+			otherButtons={otherButtons}
+		/>
 	);
 };
 
