@@ -2,7 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT, ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
-import { Space, Tag } from 'antd';
+import { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
@@ -13,11 +13,15 @@ const HocPhanTrongCTDT = (props: {
 		danhSachHocPhanCtdt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
 		danhSachHocPhanDungTienTrinh: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
 	};
+	filteredDanhSachNgoai: HocPhan.IRecord[];
+	otherButtons?: any[];
 }) => {
-	const { data } = props;
+	const { data, filteredDanhSachNgoai, otherButtons } = props;
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
 	const { record: recDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
 	const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
+
+	const dsMaHocPhanNgoai = filteredDanhSachNgoai?.map((item) => item?.ma);
 
 	const statusOrder = {
 		[ETrangThaiHocTap.CHUA_HOC]: 1,
@@ -28,13 +32,21 @@ const HocPhanTrongCTDT = (props: {
 
 	const danhSachHocPhanDungTienTrinhSorted = _.orderBy(
 		data?.danhSachHocPhanDungTienTrinh ?? [],
-		[(item) => statusOrder[item.hoc], (item) => item.maHocPhan],
+		[(item) => statusOrder[item.hoc], (item) => item.soThuTuKy],
 		['asc', 'asc'],
 	);
 
 	const danhSachHocPhanCtdtSorted = _.orderBy(
-		data?.danhSachHocPhanCtdt ?? [],
-		[(item) => statusOrder[item.hoc], (item) => item.maHocPhan],
+		data?.danhSachHocPhanCtdt
+			?.filter(
+				(item) => dsMaHocPhanNgoai?.includes(item?.maHocPhan) || item.loaiHocPhanCtdt !== ELoaiHocPhanCTDT.BAT_BUOC,
+			)
+			.map((i) => {
+				if (i.loaiHocPhanCtdt !== ELoaiHocPhanCTDT.BAT_BUOC)
+					i.hocPhanCtdtList = i.hocPhanCtdtList?.filter((o) => dsMaHocPhanNgoai.includes(o.maHocPhan));
+				return i;
+			}) ?? [],
+		[(item) => statusOrder[item.hoc], (item) => item.soThuTuKy],
 		['asc', 'asc'],
 	);
 
@@ -73,32 +85,28 @@ const HocPhanTrongCTDT = (props: {
 			filterType: 'string',
 		},
 		{
-			title: 'Số tín chỉ',
+			title: 'STC',
 			align: 'center',
-			width: 90,
-			filterType: 'number',
+			width: 40,
 			render: (val, rec) => rec?.hocPhan?.soTinChi ?? rec?.soTinChiTuChonPhaiHoc,
-			sortable: true,
 		},
 		{
-			title: 'STT kỳ',
+			title: 'Kỳ',
 			dataIndex: 'soThuTuKy',
 			align: 'center',
-			width: 90,
-			filterType: 'number',
-			sortable: true,
+			width: 40,
 		},
 		{
 			title: 'Chuyên ngành',
 			dataIndex: 'maChuyenNganh',
-			width: 180,
+			width: 160,
 			render: (val, rec) => rec?.chuyenNganh?.ten ?? val,
 		},
 		{
 			title: 'Loại',
 			dataIndex: 'loai' as any,
 			align: 'center',
-			width: 130,
+			width: 140,
 			filterType: 'string',
 		},
 		{
@@ -111,134 +119,112 @@ const HocPhanTrongCTDT = (props: {
 	];
 
 	return (
-		<>
-			<Space
-				style={{
-					marginBottom: 8,
-					flexWrap: 'wrap',
-					display: 'flex',
-				}}
-			>
-				{datas
-					?.filter((item) => selectedIds?.includes(item?.maHocPhan))
-					?.map((items) => (
-						<Tag
-							key={items?.maHocPhan}
-							closable
-							onClose={() => setSelectedIds(selectedIds?.filter((id) => id !== items?.maHocPhan))}
-						>
-							{items?.hocPhan?.ten ?? ''}
-						</Tag>
-					))}
-			</Space>
+		<TableStaticData
+			columns={columns}
+			data={datas}
+			addStt
+			hasTotal
+			size='small'
+			otherProps={{
+				scroll: { y: 500 },
+				pagination: false,
+				rowKey: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => rec.maHocPhan,
+				rowClassName: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
+					const isDungTienTrinh = data?.danhSachHocPhanDungTienTrinh?.some(
+						(itemDungTien) => itemDungTien.maHocPhan === rec.maHocPhan,
+					);
+					const isDaHoc = rec.hoc === ETrangThaiHocTap.DA_HOC;
 
-			<TableStaticData
-				columns={columns}
-				data={datas}
-				addStt
-				hasTotal
-				size='small'
-				otherProps={{
-					scroll: { y: 500 },
-					pagination: false,
-					rowKey: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => rec.maHocPhan,
-					rowClassName: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
+					let classNames = '';
+					if (isDaHoc) {
+						classNames = 'gray-row';
+					}
+					if (isDungTienTrinh) {
+						classNames += classNames ? ' fw500' : 'fw500';
+					}
+					return classNames;
+				},
+
+				rowSelection: {
+					type: 'checkbox',
+					selectedRowKeys: selectedIds,
+					preserveSelectedRowKeys: true,
+					onChange: (selectedRowKeys: any[]) => setSelectedIds(selectedRowKeys),
+					getCheckboxProps: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
+						if (!rec || !rec.maHocPhan) {
+							return { disabled: true };
+						}
+
 						const isDungTienTrinh = data?.danhSachHocPhanDungTienTrinh?.some(
-							(itemDungTien) => itemDungTien.maHocPhan === rec.maHocPhan,
+							(item) => item.maHocPhan === rec.maHocPhan,
 						);
-						const isDaHoc = rec.hoc === ETrangThaiHocTap.DA_HOC;
+						const isNgoaiLimit =
+							(selectedIds ?? []).filter(
+								(id) => !data?.danhSachHocPhanDungTienTrinh?.some((item) => item.maHocPhan === id),
+							).length >= (recDot?.soHocPhanDangKyNgoaiTienTrinh ?? 0);
 
-						let classNames = '';
-						if (isDaHoc) {
-							classNames = 'gray-row';
-						}
-						if (isDungTienTrinh) {
-							classNames += classNames ? ' fw500' : 'fw500';
-						}
-						return classNames;
+						const isSelected = selectedIds?.includes(rec.maHocPhan);
+						return {
+							disabled: !isSelected && !isDungTienTrinh && isNgoaiLimit,
+						};
 					},
+					columnWidth: 40,
+					hideSelectAll: true,
+				},
 
-					rowSelection: {
-						type: 'checkbox',
-						selectedRowKeys: selectedIds,
-						preserveSelectedRowKeys: true,
-						onChange: (selectedRowKeys: string[]) => setSelectedIds(selectedRowKeys),
-						getCheckboxProps: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
-							if (!rec || !rec.maHocPhan) {
-								return { disabled: true };
-							}
-
-							const isDungTienTrinh = data?.danhSachHocPhanDungTienTrinh?.some(
-								(item) => item.maHocPhan === rec.maHocPhan,
-							);
-							const isNgoaiLimit =
-								(selectedIds ?? []).filter(
-									(id) => !data?.danhSachHocPhanDungTienTrinh?.some((item) => item.maHocPhan === id),
-								).length >= (recDot?.soHocPhanDangKyNgoaiTienTrinh ?? 0);
-
-							const isSelected = selectedIds?.includes(rec.maHocPhan);
-							return {
-								disabled: !isSelected && !isDungTienTrinh && isNgoaiLimit,
-							};
-						},
-						columnWidth: 40,
-						hideSelectAll: true,
+				expandable: {
+					expandRowByClick: true,
+					indentSize: 0,
+					expandedRowKeys: expandedRowKeys,
+					onExpand: (expanded: any, record: any) => {
+						setExpandedRowKeys((prev: any) =>
+							expanded ? [...prev, record.maHocPhan] : prev.filter((key: any) => key !== record.maHocPhan),
+						);
 					},
+					expandedRowRender: (record: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
+						if (record.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && record.hocPhanCtdtList?.length) {
+							return (
+								<TableStaticData
+									columns={columns}
+									data={record.hocPhanCtdtList}
+									size='small'
+									otherProps={{
+										rowKey: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => rec.maHocPhan,
+										rowSelection: {
+											type: 'checkbox',
+											selectedRowKeys: selectedIds,
+											preserveSelectedRowKeys: true,
+											onChange: (selectedRowKeys: any[]) => setSelectedIds(selectedRowKeys),
+											getCheckboxProps: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
+												const isDungTienTrinh = data?.danhSachHocPhanDungTienTrinh?.some(
+													(item) => item.maHocPhan === rec.maHocPhan,
+												);
+												const isNgoaiLimit =
+													(selectedIds ?? []).filter(
+														(id) => !data?.danhSachHocPhanDungTienTrinh?.some((item) => item.maHocPhan === id),
+													).length >= (recDot?.soHocPhanDangKyNgoaiTienTrinh ?? 0);
 
-					expandable: {
-						expandRowByClick: true,
-						indentSize: 0,
-						expandedRowKeys: expandedRowKeys,
-						onExpand: (expanded: any, record: any) => {
-							setExpandedRowKeys((prev: any) =>
-								expanded ? [...prev, record.maHocPhan] : prev.filter((key: any) => key !== record.maHocPhan),
-							);
-						},
-						expandedRowRender: (record: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
-							if (record.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && record.hocPhanCtdtList?.length) {
-								return (
-									<TableStaticData
-										columns={columns}
-										data={record.hocPhanCtdtList}
-										size='small'
-										otherProps={{
-											pagination: true,
-											rowKey: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => rec.maHocPhan,
-											rowSelection: {
-												type: 'checkbox',
-												selectedRowKeys: selectedIds,
-												preserveSelectedRowKeys: true,
-												onChange: (selectedRowKeys: string[]) => setSelectedIds(selectedRowKeys),
-												getCheckboxProps: (rec: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
-													const isDungTienTrinh = data?.danhSachHocPhanDungTienTrinh?.some(
-														(item) => item.maHocPhan === rec.maHocPhan,
-													);
-													const isNgoaiLimit =
-														(selectedIds ?? []).filter(
-															(id) => !data?.danhSachHocPhanDungTienTrinh?.some((item) => item.maHocPhan === id),
-														).length >= (recDot?.soHocPhanDangKyNgoaiTienTrinh ?? 0);
-
-													const isSelected = selectedIds?.includes(rec.maHocPhan);
-													return {
-														disabled: !isSelected && !isDungTienTrinh && isNgoaiLimit,
-													};
-												},
-												columnWidth: 40,
-												hideSelectAll: true,
+												const isSelected = selectedIds?.includes(rec.maHocPhan);
+												return {
+													disabled: !isSelected && !isDungTienTrinh && isNgoaiLimit,
+												};
 											},
-										}}
-									/>
-								);
-							}
-							return null;
-						},
-						rowExpandable: (record: any) =>
-							record.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && record.hocPhanCtdtList?.length > 0,
-						columnWidth: 40,
+											columnWidth: 40,
+											hideSelectAll: true,
+										},
+									}}
+								/>
+							);
+						}
+						return null;
 					},
-				}}
-			/>
-		</>
+					rowExpandable: (record: any) =>
+						record.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && record.hocPhanCtdtList?.length > 0,
+					columnWidth: 40,
+				},
+			}}
+			otherButtons={otherButtons}
+		/>
 	);
 };
 
