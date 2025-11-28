@@ -8,7 +8,6 @@ import { ELoaiDot, EThoiGianDot, textThucHienKhaoSat, thoiGianDot } from '@/serv
 import dayjs from '@/utils/dayjs';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
-import _ from 'lodash';
 import { useState } from 'react';
 import { useModel } from 'umi';
 import Form from './components/Form';
@@ -32,8 +31,7 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 		} else {
 			getCauTraLoiMe(rec?.idKhaoSat ?? '', rec?._id ?? '')
 				.then((res) => {
-					const sortedData = _.orderBy(res.data?.data, ['updatedAt'], ['desc']);
-					setCauTraLoi(sortedData[0]);
+					setCauTraLoi(res.data?.data?.find((item: BieuMau.ICauTraLoiKhaoSat) => item?.idDot === rec?._id) ?? {});
 				})
 				.catch((err) => console.log(err));
 		}

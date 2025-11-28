@@ -1,6 +1,6 @@
 import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
 import { landingUrl } from '@/services/base/constant';
-import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
+import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
 import dayjs from '@/utils/dayjs';
 import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
@@ -9,22 +9,40 @@ import { rgba } from 'polished';
 import { useEffect } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
+import { EOperatorType } from '../Table/constant';
 import styles from './index.less';
 
 const AvatarDropdown = () => {
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
-	const { getDotMeModel, setVisibleKhaoSatBatBuoc, setRecord, setDsKhaoSatBatBuoc } = useModel('tienich.dotkhaosat');
+	const { getModel, setVisibleKhaoSatBatBuoc, setRecord, setDsKhaoSatBatBuoc } = useModel('tienich.dotkhaosat');
 	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { danhSach: dsPhanVung, getPartitionCodeMeModel } = useModel('core.phanvunguser');
 	const { getAllModel: getAllPhanVung } = useModel('core.phanvungdulieu');
-	
+
 	const avatarUrl = recSinhVien?.anhDaiDienUrl ?? initialState?.currentUser?.picture;
 	const currentPartition = localStorage.getItem('partitionCode');
 
 	const handleCheckKhaoSatBatBuoc = async () => {
 		try {
-			const res = await getDotMeModel(ELoaiDot.BIEU_MAU);
+			//Get riêng để tránh xung đột danhSach khảo sát chung
+			const res = await getModel(
+				{ kichHoat: true },
+				[
+					{
+						active: true,
+						field: 'loai',
+						operator: EOperatorType.EQUAL,
+						values: [ELoaiDot.BIEU_MAU],
+					},
+				],
+				{ updatedAt: -1 },
+				undefined,
+				undefined,
+				'my/page',
+				{ thoiGian: EThoiGianDot.DANG_DIEN_RA },
+				false,
+			);
 			const index = res?.filter((item) => item?.kichHoat && item?.defaultOpenAuth && !item?.daLam);
 			setDsKhaoSatBatBuoc(index);
 
@@ -84,7 +102,7 @@ const AvatarDropdown = () => {
 
 	useEffect(() => {
 		if (initialState?.currentUser?.ssoId) {
-				getThongTinCuaToiModel().then((res) => {
+			getThongTinCuaToiModel().then((res) => {
 				// if (res.needUpdateFaceReg)
 				// 	notification.warn({
 				// 		message: 'Nhận diện khuôn mặt',
@@ -106,7 +124,7 @@ const AvatarDropdown = () => {
 			});
 
 			handleCheckKhaoSatBatBuoc();
-			
+
 			//Get All phân vùng để lấy mã màu
 			getAllPhanVung();
 			getPartitionCodeMeModel(currentPartition?.toString());
