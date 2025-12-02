@@ -138,8 +138,8 @@ const HocPhanCTDT = () => {
 	const soHocPhanKhac = selectedIds?.filter((id) => filteredDanhSachNgoai?.some((item) => item.ma === id))?.length ?? 0;
 
 	const filteredDanhSachTrong = [
-		...(danhSachTrong?.danhSachHocPhanCtdt ?? []),
-		...(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []).filter(
+		...(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []),
+		...(danhSachTrong?.danhSachHocPhanCtdt ?? [])?.filter(
 			(itemCtdt) =>
 				!danhSachTrong?.danhSachHocPhanDungTienTrinh?.some((itemDungTien) => itemDungTien._id === itemCtdt._id),
 		),
@@ -168,25 +168,18 @@ const HocPhanCTDT = () => {
 			) : null}
 
 			<Space style={{ marginBottom: 12, flexWrap: 'wrap', display: 'flex' }}>
-				{[
-					...(filteredDanhSachNgoai
-						?.filter((item) => selectedIds?.includes(item?.ma))
-						?.map((item) => ({
-							key: item?.ma,
-							label: item?.ten ?? '',
-						})) ?? []),
+				{selectedIds?.map((id) => {
+					const itemNgoai = filteredDanhSachNgoai?.find((x) => x.ma === id);
+					const itemTrong = filteredDanhSachTrong?.find((x) => x.maHocPhan === id);
 
-					...(filteredDanhSachTrong
-						?.filter((item) => selectedIds?.includes(item?.maHocPhan))
-						?.map((item) => ({
-							key: item?.maHocPhan,
-							label: item?.hocPhan?.ten ?? '',
-						})) ?? []),
-				].map((tag) => (
-					<Tag key={tag.key} closable onClose={() => setSelectedIds(selectedIds?.filter((id) => id !== tag.key))}>
-						{tag.label}
-					</Tag>
-				))}
+					const label = itemNgoai?.ten ?? itemTrong?.hocPhan?.ten ?? '';
+
+					return (
+						<Tag key={id} closable onClose={() => setSelectedIds(selectedIds.filter((x) => x !== id))}>
+							{label}
+						</Tag>
+					);
+				})}
 			</Space>
 
 			{segment === '1' ? (
