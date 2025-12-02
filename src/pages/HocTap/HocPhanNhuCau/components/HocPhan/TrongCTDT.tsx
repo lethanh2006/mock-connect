@@ -13,15 +13,15 @@ const HocPhanTrongCTDT = (props: {
 		danhSachHocPhanCtdt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
 		danhSachHocPhanDungTienTrinh: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
 	};
-	filteredDanhSachNgoai: HocPhan.IRecord[];
+	danhSachNgoai: HocPhan.IRecord[];
 	otherButtons?: any[];
 }) => {
-	const { data, filteredDanhSachNgoai, otherButtons } = props;
+	const { data, danhSachNgoai, otherButtons } = props;
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
 	const { record: recDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
 	const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
-	const dsMaHocPhanNgoai = filteredDanhSachNgoai?.map((item) => item?.ma);
+	const dsMaHocPhanNgoai = danhSachNgoai?.map((item) => item?.ma);
 
 	const statusOrder = {
 		[ETrangThaiHocTap.CHUA_HOC]: 1,
