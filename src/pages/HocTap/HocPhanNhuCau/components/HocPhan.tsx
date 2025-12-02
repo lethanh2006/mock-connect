@@ -1,7 +1,7 @@
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { Segmented, Space, Spin, Tag } from 'antd';
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import HocPhanNgoaiCTDT from './HocPhan/NgoaiCTDT';
@@ -12,6 +12,7 @@ const HocPhanCTDT = () => {
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
+
 	const [loadingTrong, setLoadingTrong] = useState<boolean>(false);
 	const [loadingNgoai, setLoadingNgoai] = useState<boolean>(false);
 	const [danhSachTrong, setDanhSachTrong] = useState<{
@@ -22,8 +23,8 @@ const HocPhanCTDT = () => {
 	const [segment, setSegment] = useState<string>('1');
 
 	const getDataTrongCTDT = async () => {
+		setLoadingTrong(true);
 		try {
-			setLoadingTrong(true);
 			const rec: any = await getAllModel(
 				undefined,
 				undefined,
@@ -35,20 +36,14 @@ const HocPhanCTDT = () => {
 
 			if (rec) {
 				const danhSachHocPhanDungTienTrinh =
-					rec.danhSachHocPhanDungTienTrinh?.map((item: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => ({
-						...item,
-						loai: 'Đúng tiến trình',
-					})) || [];
+					rec?.danhSachHocPhanDungTienTrinh?.map((item: any) => ({ ...item, loai: 'Đúng tiến trình' })) || [];
 
 				const danhSachHocPhanCtdt =
-					rec.danhSachHocPhanCtdt?.map((item: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => ({
-						...item,
-						loai: 'Trong chương trình',
-					})) || [];
+					rec?.danhSachHocPhanCtdt?.map((item: any) => ({ ...item, loai: 'Trong chương trình' })) || [];
 
 				setDanhSachTrong({
-					danhSachHocPhanDungTienTrinh,
-					danhSachHocPhanCtdt,
+					danhSachHocPhanDungTienTrinh: _.uniqBy(danhSachHocPhanDungTienTrinh, 'maHocPhan') as any,
+					danhSachHocPhanCtdt: _.uniqBy(danhSachHocPhanCtdt, 'maHocPhan') as any,
 				});
 			} else {
 				setDanhSachTrong({
@@ -58,22 +53,24 @@ const HocPhanCTDT = () => {
 			}
 		} catch (error) {
 			console.error(error);
+			setDanhSachTrong({ danhSachHocPhanDungTienTrinh: [], danhSachHocPhanCtdt: [] });
 		} finally {
 			setLoadingTrong(false);
 		}
 	};
 
 	const getDataNgoaiCTDT = async () => {
+		setLoadingNgoai(true);
 		try {
-			setLoadingNgoai(true);
-			await getAllModel(
+			const rec = await getAllModel(
 				undefined,
 				undefined,
 				undefined,
 				undefined,
 				`khoa-nganh/${maKhoaNganh}/hoc-ky/${recHocKy?.ma}/me/ngoai-ctdt`,
 				false,
-			).then((rec) => setDanhSachNgoai(rec as any));
+			);
+			setDanhSachNgoai(_.uniqBy(rec, 'ma') as any);
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -86,67 +83,44 @@ const HocPhanCTDT = () => {
 	}, [maKhoaNganh, recHocKy?._id]);
 
 	useEffect(() => {
-		if (danhSach?.length !== 0) {
-			const autoSelectedIds = danhSach?.map((item) => item.maHocPhan).filter((maHocPhan) => maHocPhan !== null);
-			setSelectedIds(autoSelectedIds);
-		} else {
-			const autoSelectedIds = (danhSachTrong?.danhSachHocPhanDungTienTrinh ?? [])
-				?.map((item) => item.maHocPhan)
-				.filter((maHocPhan) => maHocPhan !== null);
-			setSelectedIds(autoSelectedIds);
-		}
+		const idsFromDanhSach = danhSach?.map((i) => i.maHocPhan).filter(Boolean) || [];
+		const idsFromTrong =
+			(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []).flatMap((i) => [
+				i.maHocPhan,
+				...(i.hocPhanCtdtList?.map((hp) => hp.maHocPhan) || []),
+			]) || [];
+
+		setSelectedIds(idsFromDanhSach.length ? idsFromDanhSach : idsFromTrong);
 	}, [JSON.stringify(danhSach), JSON.stringify(danhSachTrong)]);
 
-	//Lọc ra những học phần nằm trong học phần tự chọn
-	const extractHocPhanCtdtListMaHocPhan = (danhSachHocPhan: any[]) => {
-		return danhSachHocPhan.flatMap((item: any) => {
-			if (item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && Array.isArray(item.hocPhanCtdtList)) {
-				return item.hocPhanCtdtList.map((hocPhan: any) => hocPhan.maHocPhan);
-			}
-			return [];
-		});
-	};
+	const flattenHocPhan = (list: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[] = []) =>
+		list?.flatMap((item) => [item?.maHocPhan, ...(item?.hocPhanCtdtList?.map((hp) => hp?.maHocPhan) || [])]);
 
-	const danhSachHocPhanCtdtListMaHocPhan = [
-		...extractHocPhanCtdtListMaHocPhan(danhSachTrong?.danhSachHocPhanCtdt ?? []),
-		...extractHocPhanCtdtListMaHocPhan(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []),
+	const maHocPhanTrong = [
+		...flattenHocPhan(danhSachTrong?.danhSachHocPhanCtdt),
+		...flattenHocPhan(danhSachTrong?.danhSachHocPhanDungTienTrinh),
 	];
 
-	const filteredDanhSachNgoai = danhSachNgoai.filter(
-		(item: any) => !danhSachHocPhanCtdtListMaHocPhan.includes(item.ma),
-	);
+	const filteredDanhSachNgoai = danhSachNgoai?.filter((item) => !maHocPhanTrong?.includes(item?.ma));
 
-	//Thống kê các học phần đã đăng ký
-	const extractMaHocPhan = (danhSachs: any) =>
-		danhSachs.flatMap((item: any) => {
-			if (item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON && Array.isArray(item.hocPhanCtdtList)) {
-				return item.hocPhanCtdtList.map((hocPhan: any) => hocPhan.maHocPhan);
-			}
-			return item.maHocPhan ? [item.maHocPhan] : [];
-		});
+	const danhSachDungTienTrinhMaHocPhan = flattenHocPhan(danhSachTrong?.danhSachHocPhanDungTienTrinh);
+	const danhSachCtdtMaHocPhan = flattenHocPhan(danhSachTrong?.danhSachHocPhanCtdt);
 
-	const danhSachDungTienTrinhMaHocPhan = extractMaHocPhan(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []);
-
-	const danhSachCtdtMaHocPhan = extractMaHocPhan(danhSachTrong?.danhSachHocPhanCtdt ?? []);
-
-	const soHocPhanDungTienTrinh = selectedIds?.filter((id) => danhSachDungTienTrinhMaHocPhan.includes(id))?.length ?? 0;
-
+	const soHocPhanDungTienTrinh = selectedIds?.filter((id) => danhSachDungTienTrinhMaHocPhan?.includes(id))?.length || 0;
 	const soHocPhanNgoaiTienTrinh =
-		selectedIds?.filter((id) => !danhSachDungTienTrinhMaHocPhan.includes(id) && danhSachCtdtMaHocPhan.includes(id))
-			?.length ?? 0;
-
-	const soHocPhanKhac = selectedIds?.filter((id) => filteredDanhSachNgoai?.some((item) => item.ma === id))?.length ?? 0;
+		selectedIds?.filter((id) => !danhSachDungTienTrinhMaHocPhan?.includes(id) && danhSachCtdtMaHocPhan?.includes(id))
+			?.length || 0;
+	const soHocPhanKhac =
+		selectedIds?.filter((id) => filteredDanhSachNgoai?.some((item) => item?.ma === id))?.length || 0;
 
 	const filteredDanhSachTrong = [
 		...(danhSachTrong?.danhSachHocPhanDungTienTrinh ?? []),
-		...(danhSachTrong?.danhSachHocPhanCtdt ?? [])?.filter(
-			(itemCtdt) =>
-				!danhSachTrong?.danhSachHocPhanDungTienTrinh?.some((itemDungTien) => itemDungTien._id === itemCtdt._id),
-		),
-	];
+		...(danhSachTrong?.danhSachHocPhanCtdt ?? []),
+	].flatMap((item) => [item, ...(item?.hocPhanCtdtList || [])]);
 
 	const renderButton = [
 		<Segmented
+			key='segmented'
 			value={segment}
 			onChange={(val) => setSegment(val.toString())}
 			options={[
@@ -169,13 +143,11 @@ const HocPhanCTDT = () => {
 
 			<Space style={{ marginBottom: 12, flexWrap: 'wrap', display: 'flex' }}>
 				{selectedIds?.map((id) => {
-					const itemNgoai = filteredDanhSachNgoai?.find((x) => x.ma === id);
-					const itemTrong = filteredDanhSachTrong?.find((x) => x.maHocPhan === id);
-
-					const label = itemNgoai?.ten ?? itemTrong?.hocPhan?.ten ?? '';
-
+					const itemNgoai = filteredDanhSachNgoai?.find((x) => x?.ma === id);
+					const itemTrong = filteredDanhSachTrong?.find((x) => x?.maHocPhan === id);
+					const label = itemNgoai?.ten || itemTrong?.hocPhan?.ten || '';
 					return (
-						<Tag key={id} closable onClose={() => setSelectedIds(selectedIds.filter((x) => x !== id))}>
+						<Tag key={id} closable onClose={() => setSelectedIds(selectedIds?.filter((x) => x !== id))}>
 							{label}
 						</Tag>
 					);
@@ -183,11 +155,7 @@ const HocPhanCTDT = () => {
 			</Space>
 
 			{segment === '1' ? (
-				<HocPhanTrongCTDT
-					data={danhSachTrong as any}
-					filteredDanhSachNgoai={filteredDanhSachNgoai}
-					otherButtons={renderButton}
-				/>
+				<HocPhanTrongCTDT data={danhSachTrong as any} danhSachNgoai={danhSachNgoai} otherButtons={renderButton} />
 			) : (
 				<HocPhanNgoaiCTDT
 					data={filteredDanhSachNgoai}
