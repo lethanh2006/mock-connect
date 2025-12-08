@@ -1,16 +1,19 @@
 import { HocKy } from '@/services/HocKy/HocKy/typing';
-import { EDoiTuongTheChat, EDonViDoLuongTheChat, EMucDanhGiaTheChat, EXepLoaiTheChat } from './constant';
+import { EChiSoSoSanh, EDoiTuongTheChat, EMucDanhGiaTheChat, EXepLoaiTheChat } from './constant';
 
 declare module TheChat {
 	export interface IDanhMucTheChat {
 		_id: string;
 		ma: string;
 		ten: string;
-		donViDoLuong: EDonViDoLuongTheChat;
+		donViDoLuong: string;
 		ghiChu: string;
 		tieuChiTheChat: ITieuChiTheChat[];
-		ghiChu: string;
-		soSanh: 'Lớn' | 'Nhỏ';
+		moTa: string;
+		soSanh: EChiSoSoSanh;
+
+		batBuoc: boolean;
+		suDungThietBiNgoaiVi: boolean;
 
 		createdAt: Date;
 		updateAt: Date;
@@ -71,9 +74,12 @@ declare module TheChat {
 		danhMuc: IDanhMucTheChat;
 		noiDung: string;
 		giaTri: number;
-		donViDoLuong: EDonViDoLuongTheChat;
+		donViDoLuong: string;
 		xepLoai: EXepLoaiTheChat;
 		lanDanhGia: number;
+		thoiGianDanhGia: Date;
+
+		metadata: IMetaData;
 
 		createdAt: Date;
 		updatedAt: Date;
@@ -127,5 +133,28 @@ declare module TheChat {
 			giaTri: number;
 			xepLoai: string;
 		}[];
+	}
+
+	export interface IThongKeSinhVienTheChatDanhGia {
+		soBaiDanhGia: number;
+		soLuotDanhGiaChuaDat: number;
+		soLuotDanhGiaDat: number;
+		soLuotDanhGiaTot: number;
+		soSinhVienChuaDanhGia: number;
+		soSinhVienDaDanhGia: number;
+		soSinhVienDanhGiaLai: number;
+		soSinhVienDanhGiaTheHinh: number;
+	}
+
+	export interface IMetaData {
+		STUDENT_CODE: string;
+		EXAM_ID: number;
+		DEVICE_ID: number;
+		STUDENT_DISTANCE: number;
+		STUDENT_MINS: number;
+		STUDENT_SCORE: number;
+		STUDENT_MAP: string;
+		STUDENT_HEART_START: number;
+		STUDENT_HEART_END: number;
 	}
 }
