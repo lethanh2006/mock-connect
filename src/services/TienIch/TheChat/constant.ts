@@ -5,16 +5,6 @@ export enum EMucDanhGiaTheChat {
 	DAT = 'Đạt',
 }
 
-export enum EDonViDoLuongTheChat {
-	LAN = 'lần',
-	GIAY = 'giây',
-	LAN_30_GIAY = 'lần/30 giây',
-	MET = 'mét',
-	KG = 'kg',
-	CM = 'cm',
-	KHAC = 'Khác',
-}
-
 export enum EDoiTuongTheChat {
 	TAT_CA = 'Tất cả',
 	NAM = 'Nam',
@@ -26,7 +16,6 @@ export enum EXepLoaiTheChat {
 	DAT = 'Đạt',
 	CHUA_DAT = 'Chưa đạt',
 	CHUA_DANH_GIA = 'Chưa đánh giá',
-	KHONG_DANH_GIA = 'Không đánh giá',
 }
 
 export const colorXepLoaiTheChat: Record<EXepLoaiTheChat, ETagColor> = {
@@ -34,5 +23,11 @@ export const colorXepLoaiTheChat: Record<EXepLoaiTheChat, ETagColor> = {
 	[EXepLoaiTheChat.DAT]: ETagColor.BLUE,
 	[EXepLoaiTheChat.CHUA_DAT]: ETagColor.RED,
 	[EXepLoaiTheChat.CHUA_DANH_GIA]: ETagColor.PURPLE,
-	[EXepLoaiTheChat.KHONG_DANH_GIA]: ETagColor.DEFAULT,
 };
+
+export enum EChiSoSoSanh {
+	LON = 'Lớn',
+	NHO = 'Nhỏ',
+	LON_HON_HOAC_BANG = 'Lớn hơn hoặc bằng',
+	NHO_HON_HOAC_BANG = 'Nhỏ hơn hoặc bằng',
+}
