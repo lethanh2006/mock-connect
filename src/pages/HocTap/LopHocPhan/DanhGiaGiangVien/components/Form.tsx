@@ -11,7 +11,6 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 	const { getData } = props;
 	const { record: recDot } = useModel('tienich.dotkhaosat');
 	const { danhGiaGiangVienModel, formSubmiting } = useModel('lophocphan.danhgiagiangvien');
-	const { traLoiBieuMauModel, formSubmiting: submit } = useModel('tienich.bieumau');
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [giangVienSsoId, setGiangVienSsoId] = useState<string | null>(
@@ -45,7 +44,7 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 	};
 
 	const getBieuMauKhaoSat = () => {
-		if (recLopHocPhan?._id && recDot?._id && recDot?.loai === ELoaiDot.KHAO_SAT_LOP_HOC_PHAN) {
+		if (recLopHocPhan?._id && recDot?._id) {
 			setLoadingBieuMau(true);
 			getBieuMauPLOKhaoSat(recLopHocPhan?.ten, recDot?._id)
 				.then((res) => {
@@ -71,30 +70,18 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 			danToc: recSinhVien?.danToc,
 			gioiTinh: recSinhVien?.gioiTinh,
 		};
-		if (recDot?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN) {
-			await danhGiaGiangVienModel(
-				{
-					...data,
-					idKhaoSat: recDot?.idKhaoSat ?? '',
-					giangVienSsoId: giangVienSsoId ?? '',
-					maGiangVien: recLopHocPhan?.nhanSuList?.find((item) => item.nhanSuSsoId === giangVienSsoId)?.maNhanSu,
-					hoTenGiangVien: recLopHocPhan?.nhanSuList?.find((item) => item.nhanSuSsoId === giangVienSsoId)?.tenNhanSu,
-				},
-				getData,
-			)
-				.then()
-				.catch((err) => console.log(err));
-		} else {
-			await traLoiBieuMauModel(
-				{
-					...data,
-					idKhaoSat: recBieuMau?._id ?? '',
-				} as any,
-				getData,
-			)
-				.then()
-				.catch((err) => console.log(err));
-		}
+		await danhGiaGiangVienModel(
+			{
+				...data,
+				idKhaoSat: recBieuMau?._id ?? '',
+				giangVienSsoId: giangVienSsoId ?? '',
+				maGiangVien: recLopHocPhan?.nhanSuList?.find((item) => item.nhanSuSsoId === giangVienSsoId)?.maNhanSu,
+				hoTenGiangVien: recLopHocPhan?.nhanSuList?.find((item) => item.nhanSuSsoId === giangVienSsoId)?.tenNhanSu,
+			},
+			getData,
+		)
+			.then()
+			.catch((err) => console.log(err));
 	};
 
 	return (
@@ -117,9 +104,9 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 				<FormTraLoiKhaoSat
 					onOk={hanldeKhaoSat}
 					cauTraLoi={cauTraLoi?.danhSachTraLoi}
-					formSubmiting={formSubmiting || submit}
+					formSubmiting={formSubmiting}
 					hideCard
-					recBieuMauProps={recDot?.loai === ELoaiDot.KHAO_SAT_LOP_HOC_PHAN ? recBieuMau : recDot?.khaoSat}
+					recBieuMauProps={recBieuMau}
 				/>
 			</Spin>
 		</>
