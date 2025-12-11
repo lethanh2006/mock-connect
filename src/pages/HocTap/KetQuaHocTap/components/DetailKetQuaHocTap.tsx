@@ -1,6 +1,6 @@
 import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ETrangThaiThi } from '@/services/HocTap/constant';
-import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
+import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
@@ -165,11 +165,15 @@ const DetailKetQuaHocTap = (props: {
 							tab={
 								<>
 									Điểm GPA
-									{recDiem?.dat !== undefined && recDiem.dat !== null && (
-										<Tag color={recDiem.dat ? 'green' : 'red'} style={{ marginLeft: 8 }}>
-											{recDiem.dat ? 'Đạt' : 'Không đạt'}
+									{recDiem?.diemChu === ELoaiDiemChu.F ? (
+										<Tag color={'red'} style={{ marginLeft: 8 }}>
+											Không đạt
 										</Tag>
-									)}
+									) : recDiem?.dat === true ? (
+										<Tag color={'green'} style={{ marginLeft: 8 }}>
+											Đạt
+										</Tag>
+									) : null}
 								</>
 							}
 							key='1'
