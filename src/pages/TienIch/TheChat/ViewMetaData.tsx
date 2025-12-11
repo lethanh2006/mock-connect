@@ -12,7 +12,7 @@ const ViewMetaData = ({ visible, setVisible, data }: IProps) => {
 	const intl = useIntl();
 
 	return (
-		<Modal title='Thông tin chi tiết' visible={visible} onCancel={() => setVisible(false)} footer={null} width={700}>
+		<Modal title='Thông tin chi tiết' open={visible} onCancel={() => setVisible(false)} footer={null} width={700}>
 			<Descriptions bordered column={2} size='middle' labelStyle={{ fontWeight: 600, width: 180 }}>
 				<Descriptions.Item label='Mã sinh viên'>{data?.STUDENT_CODE ?? '--'}</Descriptions.Item>
 
