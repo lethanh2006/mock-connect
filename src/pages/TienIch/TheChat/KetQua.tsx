@@ -104,7 +104,7 @@ const ChiTietKetQuaDanhGia: React.FC<KetQuaDanhGiaCollapseProps> = ({ danhSachKe
 									>
 										<div>
 											<div style={{ fontWeight: 'bold' }}>
-												{item?.giaTri} {item?.donViDoLuong}
+												{item?.giaTri} {item?.danhMuc?.donViDoLuong}
 											</div>
 
 											<div style={{ fontSize: '12px', color: '#666', marginTop: 4 }}>
