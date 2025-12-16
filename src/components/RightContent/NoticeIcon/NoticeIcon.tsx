@@ -84,7 +84,7 @@ const NoticeIcon: React.FC<NoticeIconProps> = ({
 			<Tooltip title={intl.formatMessage({ id: 'app.header.notice', defaultMessage: 'Thông báo' })} placement='bottom'>
 				<div className='header-menu-item'>
 					<Badge count={count ? (count < 100 ? count : '99+') : undefined} className={styles.noti_badge}>
-						<img src='/icons/notification.svg' alt='notif' />
+						<img src='/icons/notification.svg' alt='notif' className={count ? styles.ringing : undefined} />
 					</Badge>
 				</div>
 			</Tooltip>
