@@ -6,12 +6,14 @@ import { formatPhoneNumber } from '@/utils/utils';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Tooltip } from 'antd';
 import { useState } from 'react';
+import { useIntl } from 'umi';
 import Form from './Form';
 
 const ThongTinGiaDinhFormItem = (props: {
 	value?: SinhVien.TThongTinGiaDinh[];
 	onChange?: (list?: SinhVien.TThongTinGiaDinh[]) => void;
 }) => {
+	const intl = useIntl();
 	const { value, onChange } = props;
 	const [record, setRecord] = useState<SinhVien.TThongTinGiaDinh>();
 	const [visibleForm, setVisibleForm] = useState<boolean>(false);
@@ -44,41 +46,41 @@ const ThongTinGiaDinhFormItem = (props: {
 
 	const columns: IColumn<SinhVien.TThongTinGiaDinh>[] = [
 		{
-			title: 'Loại thành viên',
+			title: intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.loai' }),
 			dataIndex: 'loaiThanhVien',
 			width: 100,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.trangthai' }),
 			dataIndex: 'trangThaiThanhVien',
 			width: 120,
 		},
 		{
-			title: 'Họ tên',
+			title: intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.hoten' }),
 			width: 150,
 			render: (val, rec) => [rec.hoDem, rec.ten].join(' '),
 		},
 		{
-			title: 'Ngày sinh',
+			title: intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.ngaysinh' }),
 			dataIndex: 'ngaySinh',
 			align: 'center',
 			width: 120,
 			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 		},
 		{
-			title: 'Nghề nghiệp',
+			title: intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.nghenghiep' }),
 			dataIndex: 'ngheNghiep',
 			width: 150,
 		},
 		{
-			title: 'SĐT',
+			title: intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.sdt' }),
 			dataIndex: 'soDienThoai',
 			align: 'center',
 			width: 120,
 			render: (val) => val && formatPhoneNumber(val),
 		},
 		{
-			title: 'Địa chỉ',
+			title: intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.diachi' }),
 			dataIndex: 'diaChiHienNay',
 			width: 180,
 			render: (val, rec) =>
@@ -87,19 +89,19 @@ const ThongTinGiaDinhFormItem = (props: {
 					.join(', '),
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.thaotac' }),
 			align: 'center',
 			width: 90,
 			fixed: 'right',
 			render: (val, rec) => (
 				<>
-					<Tooltip title='Chỉnh sửa'>
+					<Tooltip title={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.chinhsua' })}>
 						<Button onClick={() => handleEdit(rec)} type='link' icon={<EditOutlined />} />
 					</Tooltip>
-					<Tooltip title='Xóa'>
+					<Tooltip title={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.xoa' })}>
 						<Popconfirm
 							onConfirm={() => handleDelete(rec)}
-							title='Bạn có chắc chắn muốn xóa thành viên này?'
+							title={intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.xoa.xacnhan' })}
 							placement='topRight'
 						>
 							<Button danger type='link' icon={<DeleteOutlined />} />
@@ -118,7 +120,7 @@ const ThongTinGiaDinhFormItem = (props: {
 				addStt
 				size='small'
 				hasCreate
-				Form={Form}
+				Form={Form as any}
 				showEdit={visibleForm}
 				setShowEdit={showCreate}
 				formProps={{ visible: visibleForm, record, onOk: handleForm }}
