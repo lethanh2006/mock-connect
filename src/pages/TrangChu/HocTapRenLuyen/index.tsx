@@ -1,12 +1,13 @@
 import { Card, Col, Row } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import CardCongNoDashboard from '../components/CongNo';
 import CardKetQuaHocTapDashboard from './CardHocTap';
 import CardRenLuyenDashboard from './CardRenLuyen';
 import './style.less';
 
 const CardHocTapRenLuyenDashboard = () => {
+	const intl = useIntl();
 	const { getTienTrinhTotNghiepModel } = useModel('sinhvien.tientrinhtotnghiep');
 	const { getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
 
@@ -18,7 +19,7 @@ const CardHocTapRenLuyenDashboard = () => {
 
 	return (
 		<Card
-			title='Thống kê dữ liệu'
+			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.title' })}
 			variant='borderless'
 			className='card-borderless card-big-title'
 			style={{ height: '100%' }}
