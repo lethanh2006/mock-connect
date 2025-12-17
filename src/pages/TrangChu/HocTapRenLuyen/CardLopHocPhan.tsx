@@ -4,11 +4,12 @@ import { Button, Card, Carousel, Dropdown, Empty, Menu, Space } from 'antd';
 import { CarouselRef } from 'antd/es/carousel';
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useIntl, useModel } from 'umi';
 import CardLopHocPhanItem from '../../HocTap/LopHocPhan/components/CardLopHocPhanItem';
 import SlideButtonIcon from '../components/SlideButtonIcon';
 
 const CardLopHocPhan = () => {
+	const intl = useIntl();
 	const {
 		danhSach: danhSachLHP,
 		sinhVienGetAllModel,
@@ -113,7 +114,7 @@ const CardLopHocPhan = () => {
 		<Card
 			variant='borderless'
 			className='card-borderless card-big-title'
-			title='Lớp tín chỉ'
+			title={intl.formatMessage({ id: 'trangchu.loptinchi.title' })}
 			loading={loading}
 			extra={
 				<div style={{ display: 'flex', gap: 8, marginRight: 8, alignItems: 'center' }}>
@@ -170,7 +171,7 @@ const CardLopHocPhan = () => {
 					</div>
 
 					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
-						Xem tất cả
+						{intl.formatMessage({ id: 'trangchu.loptinchi.xemtatca' })}
 					</Link>
 				</div>
 			}
@@ -235,7 +236,11 @@ const CardLopHocPhan = () => {
 					</Carousel>
 				) : (
 					<Card variant='borderless' style={{ borderRadius: 8 }}>
-						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
+						<Empty
+							image={Empty.PRESENTED_IMAGE_SIMPLE}
+							style={{ margin: '16px 0' }}
+							description={intl.formatMessage({ id: 'global.table.index.empty' })}
+						/>
 					</Card>
 				)}
 			</div>

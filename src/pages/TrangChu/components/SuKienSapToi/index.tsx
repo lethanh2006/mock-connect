@@ -4,13 +4,14 @@ import dayjs from '@/utils/dayjs';
 import { Button, Card, Empty, Space, Spin, Tag, Typography } from 'antd';
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import SlideButtonIcon from '../SlideButtonIcon';
 import '../style.less';
 
 const { Title } = Typography;
 
 const CardSuKienSapToi = () => {
+	const intl = useIntl();
 	const { loading: loadingSuKien, dataLichDashboard } = useModel('sukien.sukien');
 	const { loading: loadingTKB } = useModel('daotao.thoikhoabieu');
 	const { loading: loadingThi } = useModel('khaothi.lichthi');
@@ -54,7 +55,13 @@ const CardSuKienSapToi = () => {
 		const suKienSapToi = getSuKienSapToi();
 
 		if (isEmpty(suKienSapToi)) {
-			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' className='empty' />;
+			return (
+				<Empty
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+					description={intl.formatMessage({ id: 'global.table.index.empty' })}
+					className='empty'
+				/>
+			);
 		}
 
 		const currentEvent = suKienSapToi[currentIndex];
@@ -87,7 +94,9 @@ const CardSuKienSapToi = () => {
 
 										{currentEvent?.isQRDangKy && (
 											<Tag color={currentEvent?.isDangKy ? 'green' : 'red'} style={{ fontSize: 11 }}>
-												{currentEvent?.isDangKy ? 'Đã đăng ký' : 'Chưa đăng ký'}
+												{currentEvent?.isDangKy
+													? intl.formatMessage({ id: 'trangchu.sukien.tag.dadangky' })
+													: intl.formatMessage({ id: 'trangchu.sukien.tag.chuadangky' })}
 											</Tag>
 										)}
 									</Space>
@@ -105,7 +114,7 @@ const CardSuKienSapToi = () => {
 			<Card className='tb-sk-wrapper' variant='borderless' styles={{ body: { padding: 0 } }}>
 				<div className='header-tb-sk'>
 					<Title level={5} className='title'>
-						Sự kiện
+						{intl.formatMessage({ id: 'trangchu.sukien.title' })}
 					</Title>
 					<div className='navigation-buttons'>
 						<Button

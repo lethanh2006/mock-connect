@@ -1,7 +1,8 @@
 import LineChart from '@/components/Chart/LineChart';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ChartVaoRaThuVien = () => {
+	const intl = useIntl();
 	const { thongKeVaoRa } = useModel('thuvien.vaorathuvien');
 
 	return (
@@ -9,7 +10,7 @@ const ChartVaoRaThuVien = () => {
 			<LineChart
 				xAxis={thongKeVaoRa.map((i) => `${i.thang + 1}/${i.nam}`)}
 				yAxis={[thongKeVaoRa.map((i) => i.totalCI)]}
-				yLabel={['Số lượt']}
+				yLabel={[intl.formatMessage({ id: 'trangchu.hoctaprenluyen.thuvien.soluot' })]}
 				height={100}
 				otherOptions={{
 					chart: { zoom: { enabled: false }, toolbar: { show: false }, animations: { enabled: false } },
