@@ -1,5 +1,5 @@
 export default {
-	'trangchu.title.xinchao': 'Xin chào',
+	'trangchu.title.xinchao': 'Xin chào {ten}',
 	'trangchu.title.quaylai': 'mừng bạn quay lại',
 
 	'trangchu.thongbao.title': 'Thông báo',
