@@ -4,10 +4,11 @@ import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Form, Modal, Segmented } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import WebcamNhanDienKhuonMat from './Webcam';
 
 const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
+	const intl = useIntl();
 	const { formSubmiting, updateFaceRegModel, record, setFormSubmiting, setRecord } = useModel('sinhvien.sinhvien');
 	const [segmentValue, setSegmentValue] = useState('upload');
 	const [form] = Form.useForm();
@@ -37,37 +38,36 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 
 	return (
 		<Modal
-			title='Cập nhật ảnh nhận diện khuôn mặt'
+			title={intl.formatMessage({ id: 'thongtincanhan.khuonmat.title' })}
 			open={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
 			width={800}
 			destroyOnClose
 		>
-			<div style={{ marginBottom: 12 }}>
-				Cập nhật ảnh nhận diện khuôn mặt phục vụ việc checkin tự động khi ra vào Thư viện
-			</div>
+			<div style={{ marginBottom: 12 }}>{intl.formatMessage({ id: 'thongtincanhan.khuonmat.desc' })}</div>
 
-			<div className='fw500'>Điều kiện với ảnh:</div>
+			<div className='fw500'>{intl.formatMessage({ id: 'thongtincanhan.khuonmat.dieukien' })}</div>
 			<ol>
 				<li>
-					<b>Ánh sáng:</b> Ánh sáng đồng đều, không quá sáng hoặc quá tối. Tránh chụp ngược sáng. Nên chụp trong điều
-					kiện ánh sáng tự nhiên hoặc ánh sáng nhân tạo ổn định.
+					<b>{intl.formatMessage({ id: 'thongtincanhan.khuonmat.anhsang' })}</b>{' '}
+					{intl.formatMessage({ id: 'thongtincanhan.khuonmat.anhsang.decs' })}
 				</li>
 				<li>
-					<b>Tư thế khuôn mặt:</b> Nhìn thẳng vào camera. Giữ đầu thẳng, không nghiêng hoặc quay sang bên. Mắt mở to tự
-					nhiên Biểu cảm trung tính.
+					<b>{intl.formatMessage({ id: 'thongtincanhan.khuonmat.tuthe' })}</b>{' '}
+					{intl.formatMessage({ id: 'thongtincanhan.khuonmat.tuthe.desc' })}
 				</li>
 				<li>
-					<b>Khoảng cách và góc chụp:</b> Khoảng cách từ mặt đến camera khoảng 40-80cm. Chụp ở tầm ngang mắt Khuôn mặt
-					chiếm khoảng 70-80% khung hình.
+					<b>{intl.formatMessage({ id: 'thongtincanhan.khuonmat.khoangcach' })}</b>{' '}
+					{intl.formatMessage({ id: 'thongtincanhan.khuonmat.khoangcach.desc' })}
 				</li>
 				<li>
-					<b>Yêu cầu về hình ảnh:</b> Không đeo kính râm hoặc kính phản quang. Không đeo khẩu trang Không đội mũ che
-					khuất trán. Tóc không che khuất mặt Nền đơn giản, tương phản với khuôn mặt.
+					<b>{intl.formatMessage({ id: 'thongtincanhan.khuonmat.yeucau' })}</b>{' '}
+					{intl.formatMessage({ id: 'thongtincanhan.khuonmat.yeucau.desc' })}
 				</li>
 				<li>
-					<b>Chất lượng ảnh:</b> Độ phân giải tối thiểu 640x480 pixel. Ảnh rõ nét, không bị mờ. Định dạng ảnh JPG/JPEG.
+					<b>{intl.formatMessage({ id: 'thongtincanhan.khuonmat.chatluong' })}</b>{' '}
+					{intl.formatMessage({ id: 'thongtincanhan.khuonmat.chatluong.desc' })}
 				</li>
 			</ol>
 
@@ -76,21 +76,25 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 					value={segmentValue}
 					onChange={(val) => setSegmentValue(val as string)}
 					options={[
-						{ value: 'upload', label: 'Tải ảnh lên' },
-						{ value: 'webcam', label: 'Sử dụng webcam' },
+						{ value: 'upload', label: intl.formatMessage({ id: 'thongtincanhan.khuonmat.tailen' }) },
+						{ value: 'webcam', label: intl.formatMessage({ id: 'thongtincanhan.khuonmat.webcam' }) },
 					]}
 					style={{ marginBottom: 12 }}
 				/>
 
-				<Form.Item name='faceRegImgUrl' label='Ảnh nhận diện' rules={[...rules.required, ...rules.fileRequired]}>
+				<Form.Item
+					name='faceRegImgUrl'
+					label={intl.formatMessage({ id: 'thongtincanhan.khuonmat.image' })}
+					rules={[...rules.required, ...rules.fileRequired]}
+				>
 					{segmentValue === 'upload' ? <UploadFile isAvatar resize /> : <WebcamNhanDienKhuonMat />}
 				</Form.Item>
 
 				<div className='form-footer'>
 					<Button htmlType='submit' type='primary' loading={formSubmiting}>
-						Lưu lại
+						{intl.formatMessage({ id: 'global.button.luulai' })}
 					</Button>
-					<Button onClick={() => setVisible(false)}>Hủy</Button>
+					<Button onClick={() => setVisible(false)}> {intl.formatMessage({ id: 'global.button.huy' })}</Button>
 				</div>
 			</Form>
 		</Modal>

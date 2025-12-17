@@ -3,7 +3,7 @@ import dayjs from '@/utils/dayjs';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Col, Image, Row, Space, Spin, Tag } from 'antd';
 import { JSX, useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 type DescriptionItem = {
 	label?: string;
@@ -13,6 +13,7 @@ type DescriptionItem = {
 };
 
 const PreviewHoSo = () => {
+	const intl = useIntl();
 	const { record, loading } = useModel('sinhvien.sinhvien');
 	const { danhSach: danhSachQuocTich, getAllModel } = useModel('core.quoctich');
 
@@ -38,34 +39,34 @@ const PreviewHoSo = () => {
 	);
 
 	const dataChung: DescriptionItem[] = [
-		{ label: 'Mã sinh viên', content: record?.ma, md: 8 },
-		{ label: 'Họ và tên', content: record?.ten, md: 16 },
-		{ label: 'Giới tính', content: record?.gioiTinh, md: 8 },
+		{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.masv' }), content: record?.ma, md: 8 },
+		{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.hoten' }), content: record?.ten, md: 16 },
+		{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.gioitinh' }), content: record?.gioiTinh, md: 8 },
 		{
-			label: 'Ngày sinh',
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.ngaysinh' }),
 			content: record?.ngaySinh ? dayjs(record.ngaySinh).format('DD/MM/YYYY') : '',
 			md: 8,
 		},
 		{
-			label: 'Trạng thái học',
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.trangthaihoc' }),
 			content: <Tag color={colorTrangThaiHocSv[record?.trangThaiHoc as ETrangThaiHocSv]}>{record?.trangThaiHoc}</Tag>,
 			md: 8,
 		},
 		{
-			label: 'CCCD/CMND',
-			content: `${record?.cccd ?? ''}, ngày cấp: ${
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.cccd' }),
+			content: `${record?.cccd ?? ''}, ${intl.formatMessage({ id: 'thongtincanhan.hoso.ngaycap' })}: ${
 				record?.ngayCapCccd ? dayjs(record.ngayCapCccd).format('DD/MM/YYYY') : '--'
-			}, nơi cấp: ${record?.noiCapCccd ?? ''}`,
+			}, ${intl.formatMessage({ id: 'thongtincanhan.hoso.noicap' })}: ${record?.noiCapCccd ?? ''}`,
 			md: 24,
 		},
 		{
-			label: 'Số điện thoại',
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.sdt' }),
 			content: record?.soDienThoai ? formatPhoneNumber(record.soDienThoai) : '',
 			md: 8,
 		},
-		{ label: 'Email', content: record?.email, md: 16 },
+		{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.email' }), content: record?.email, md: 16 },
 		{
-			label: 'Khóa ngành đào tạo',
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.khoanganh' }),
 			content: (
 				<>
 					{[
@@ -78,7 +79,10 @@ const PreviewHoSo = () => {
 							<Space key={index} wrap>
 								{ten}
 								{trangThai && <Tag color={colorTrangThaiHocSv[trangThai as ETrangThaiHocSv]}>{trangThai}</Tag>}
-								<span>(Chuyên ngành: {chuyenNganh ?? <i>Chưa cập nhật</i>})</span>
+								<span>
+									({intl.formatMessage({ id: 'thongtincanhan.hoso.chuyennganh' })}:{' '}
+									{chuyenNganh ?? <i>{intl.formatMessage({ id: 'thongtincanhan.hoso.chuacapnhat' })}</i>})
+								</span>
 							</Space>
 						))}
 				</>
@@ -86,49 +90,60 @@ const PreviewHoSo = () => {
 			md: 24,
 		},
 		{
-			label: 'Quốc tịch',
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.quoctich' }),
 			content: record?.quocTich,
 			// content: danhSachQuocTich?.find((item) => item?._id === record?.quocTich)?.tenQuocTich,
 			md: 8,
 		},
-		{ label: 'Dân tộc', content: record?.danToc, md: 8 },
-		{ label: 'Tôn giáo', content: record?.tonGiao, md: 8 },
+		{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.dantoc' }), content: record?.danToc, md: 8 },
+		{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.tongiao' }), content: record?.tonGiao, md: 8 },
 	];
 
 	const dataThem: DescriptionItem[] = [
 		{
-			label: 'Địa chỉ thường trú',
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.diachi' }),
 			md: 24,
 			children: [
-				{ label: 'Tỉnh/Thành phố', content: record?.tinhTpThuongTru },
+				{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.tp' }), content: record?.tinhTpThuongTru },
 				// { label: 'Quận/Huyện', content: record?.quanHuyenThuongTru },
-				{ label: 'Xã/Phường/Đặc khu', content: record?.xaPhuongThuongTru },
-				{ label: 'Địa chỉ', content: record?.soNhaTenDuongThuongTru },
+				{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.xa' }), content: record?.xaPhuongThuongTru },
+				{
+					label: intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.chitiet' }),
+					content: record?.soNhaTenDuongThuongTru,
+				},
 			],
 		},
 		{
-			label: 'Đảng',
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.dang' }),
 			md: 24,
 			children: [
 				{
-					label: 'Ngày vào Đảng dự bị',
+					label: intl.formatMessage({ id: 'thongtincanhan.hoso.dang.dubi' }),
 					content: record?.ngayVaoDang ? dayjs(record.ngayVaoDang).format('DD/MM/YYYY') : '',
 					md: 12,
 				},
 				{
-					label: 'Ngày vào Đảng chính thức',
+					label: intl.formatMessage({ id: 'thongtincanhan.hoso.dang.chinhthuc' }),
 					content: record?.ngayVaoDangChinhThuc ? dayjs(record.ngayVaoDangChinhThuc).format('DD/MM/YYYY') : '',
 					md: 12,
 				},
 			],
 		},
-		{ label: 'Số bảo hiểm sinh viên', content: record?.soBaoHiemSinhVien, md: 12 },
-		{ label: 'Mã bệnh viện khám chữa bệnh', content: record?.maBenhVienKhamChuaBenh, md: 12 },
+		{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.baohiem' }), content: record?.soBaoHiemSinhVien, md: 12 },
 		{
-			label: 'Tài khoản ngân hàng',
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.benhvien' }),
+			content: record?.maBenhVienKhamChuaBenh,
+			md: 12,
+		},
+		{
+			label: intl.formatMessage({ id: 'thongtincanhan.hoso.nganhang' }),
 			children: [
-				{ label: 'Tên ngân hàng', content: record?.tenNganHang, md: 12 },
-				{ label: 'Số tài khoản', content: record?.soTaiKhoanNganHang, md: 12 },
+				{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.nganhang.ten' }), content: record?.tenNganHang, md: 12 },
+				{
+					label: intl.formatMessage({ id: 'thongtincanhan.hoso.nganhang.stk' }),
+					content: record?.soTaiKhoanNganHang,
+					md: 12,
+				},
 			],
 			md: 24,
 		},
@@ -136,7 +151,9 @@ const PreviewHoSo = () => {
 
 	return (
 		<Spin spinning={loading}>
-			<h2 style={{ textAlign: 'center', marginBottom: 32 }}>SƠ YẾU LÝ LỊCH</h2>
+			<h2 style={{ textAlign: 'center', marginBottom: 32 }}>
+				{intl.formatMessage({ id: 'thongtincanhan.hoso.title' })}
+			</h2>
 
 			<Row gutter={[18, 18]} style={{ maxWidth: 1200, margin: 'auto' }}>
 				<Col span={24} sm={6} style={{ display: 'flex', justifyContent: 'center' }}>

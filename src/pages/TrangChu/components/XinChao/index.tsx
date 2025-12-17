@@ -22,8 +22,12 @@ const WelcomeCard = () => {
 				{/* Text content */}
 				<div className='text-content'>
 					<h2 className='greeting-text'>
-						{intl.formatMessage({ id: 'trangchu.title.xinchao' })}
-						{/* {recSinhVien?.lastName}  */} {recSinhVien?.firstName ?? initialState?.currentUser?.given_name ?? 'bạn'},
+						{intl.formatMessage(
+							{ id: 'trangchu.title.xinchao' },
+							{
+								ten: recSinhVien?.firstName ?? initialState?.currentUser?.given_name ?? 'bạn',
+							},
+						)}
 					</h2>
 
 					<p className='welcome-text'>{intl.formatMessage({ id: 'trangchu.title.quaylai' })}</p>
