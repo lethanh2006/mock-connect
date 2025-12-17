@@ -3,6 +3,7 @@ import { type DonViHanhChinh } from '@/services/Core/DonViHanhChinh/typing';
 import rules from '@/utils/rules';
 import { Col, Form, Input, Row, Select, type FormInstance } from 'antd';
 import { useEffect, useState } from 'react';
+import { useIntl } from 'umi';
 
 const SelectDonViHanhChinh = (props: {
 	form: FormInstance<any>;
@@ -21,6 +22,7 @@ const SelectDonViHanhChinh = (props: {
 	hasLabel?: boolean;
 	keyValue?: keyof DonViHanhChinh.IRecord;
 }) => {
+	const intl = useIntl();
 	const {
 		form,
 		suffix,
@@ -78,12 +80,12 @@ const SelectDonViHanhChinh = (props: {
 				<Col span={12}>
 					<Form.Item
 						name={suffix ? 'tinhTp' + suffix : 'tinhTp'}
-						label={hasLabel ? 'Tỉnh/Thành phố' : undefined}
+						label={hasLabel ? intl.formatMessage({ id: 'donvihanhchinh.tp' }) : undefined}
 						initialValue={props.initialValue?.tinhTp}
 						rules={props.notRequiredTinh === true ? [] : [...rules.required]}
 					>
 						<Select
-							placeholder='Chọn tỉnh/thành phố'
+							placeholder={intl.formatMessage({ id: 'donvihanhchinh.tp.place' })}
 							options={listTinh?.map((item) => ({
 								key: item.ma,
 								value: item[keyValue],
@@ -129,10 +131,10 @@ const SelectDonViHanhChinh = (props: {
 						initialValue={props.initialValue?.xaPhuong}
 						name={suffix ? 'xaPhuong' + suffix : 'xaPhuong'}
 						rules={props.notRequiredXaPhuong === true ? [] : [...rules.required]}
-						label={hasLabel ? 'Xã/Phường/Đặc khu' : undefined}
+						label={hasLabel ? intl.formatMessage({ id: 'donvihanhchinh.xa' }) : undefined}
 					>
 						<Select
-							placeholder='Chọn phường/xã/đặc khu'
+							placeholder={intl.formatMessage({ id: 'donvihanhchinh.xa.place' })}
 							allowClear
 							showSearch
 							options={(listXa ?? []).map((item) => ({
@@ -154,9 +156,9 @@ const SelectDonViHanhChinh = (props: {
 						name={suffix ? 'soNhaTenDuong' + suffix : 'soNhaTenDuong'}
 						initialValue={props.initialValue?.soNhaTenDuong}
 						rules={[...(props.notRequiredDiaChiCuThe ? [] : rules.required), ...rules.text, ...rules.length(250)]}
-						label={hasLabel ? 'Số nhà, đường phố' : undefined}
+						label={hasLabel ? intl.formatMessage({ id: 'donvihanhchinh.sonha' }) : undefined}
 					>
-						<Input placeholder='Nhập số nhà/tên đường' />
+						<Input placeholder={intl.formatMessage({ id: 'donvihanhchinh.sonha.place' })} />
 					</Form.Item>
 				</Col>
 			) : null}
