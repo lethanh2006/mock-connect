@@ -2,7 +2,7 @@ import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined, CheckCircleOutlined, FilterOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Dropdown, Empty, Space, Spin, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
-import { history, Link, useModel } from 'umi';
+import { history, Link, useIntl, useModel } from 'umi';
 import './style.less';
 
 const { Text } = Typography;
@@ -10,6 +10,7 @@ const { Text } = Typography;
 type FilterType = 'ngay-dang' | 'chua-xem' | 'hoat-dong-moi-nhat';
 
 const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-hanh-chinh' }) => {
+	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { danhSach, loading, getDienDanSinhVienModel } = useModel('diendan.baidang');
 	const { initialState } = useModel('@@initialState');
@@ -45,12 +46,26 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 	const isMobile = screenSize.width <= 768;
 
 	const filterOptions = [
-		{ key: 'ngay-dang', label: 'Ngày đăng', icon: <ArrowRightOutlined /> },
-		{ key: 'chua-xem', label: 'Chưa xem', icon: <CheckCircleOutlined /> },
-		{ key: 'hoat-dong-moi-nhat', label: 'Mới nhất', icon: <FilterOutlined /> },
+		{
+			key: 'ngay-dang',
+			label: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.ngaydang' }),
+			icon: <ArrowRightOutlined />,
+		},
+		{
+			key: 'chua-xem',
+			label: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.chuaxem' }),
+			icon: <CheckCircleOutlined />,
+		},
+		{
+			key: 'hoat-dong-moi-nhat',
+			label: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.moinhat' }),
+			icon: <FilterOutlined />,
+		},
 	];
 
-	const getFilterLabel = () => filterOptions.find((f) => f.key === sortMode)?.label || 'Sắp xếp';
+	const getFilterLabel = () =>
+		filterOptions.find((f) => f.key === sortMode)?.label ||
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.xapsep' });
 
 	const handleFilterChange = (filterType: FilterType) => {
 		setSortMode(filterType);
@@ -97,7 +112,9 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 						<div className='card-diendan-user-info'>
 							<Text className='card-diendan-user-info-name'>{item?.thongTinNguoiDang?.hoTen}</Text>
 							<Tag color={isUnread ? 'red' : ''} style={{ marginLeft: 4 }}>
-								{isUnread ? 'Mới' : 'Đã xem'}
+								{isUnread
+									? intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.moi' })
+									: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.daxem' })}
 							</Tag>
 						</div>
 
@@ -106,7 +123,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 							{item?.thongTinNguoiDang?.isGiaoVien && (
 								<CheckCircleOutlined
 									style={{ color: '#52c41a', fontSize: '12px', marginRight: 4 }}
-									title='Giảng viên'
+									title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.giangvien' })}
 								/>
 							)}
 							{dayjs(item?.ngayDang ?? item.createdAt).format('HH:mm DD/MM/YYYY')}
@@ -118,7 +135,8 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 										color: '#8c8c8c',
 									}}
 								>
-									({item.danhSachBinhLuan.length} bình luận)
+									({item.danhSachBinhLuan.length}{' '}
+									{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.binhluan' })})
 								</Text>
 							)}
 						</Text>
@@ -137,7 +155,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 			className='card-borderless card-big-title'
 			title={
 				<Space>
-					Diễn đàn
+					{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.title' })}{' '}
 					<Tag color={danhSach.length > 0 ? 'green' : ''}>{danhSach.length}</Tag>
 				</Space>
 			}
@@ -166,7 +184,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 					</Dropdown>
 
 					<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
-						Xem thêm
+						{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.xemthem' })}
 					</Link>
 				</Space>
 			}
@@ -179,7 +197,11 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 						<Empty
 							image={Empty.PRESENTED_IMAGE_SIMPLE}
 							style={{ margin: '16px 0' }}
-							description={sortMode === 'chua-xem' ? 'Không có bài viết chưa xem' : 'Không có dữ liệu'}
+							description={
+								sortMode === 'chua-xem'
+									? intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.empty' })
+									: intl.formatMessage({ id: 'global.table.index.empty' })
+							}
 						/>
 					)}
 				</Spin>

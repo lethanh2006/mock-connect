@@ -11,13 +11,14 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Card, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { history, Link, useModel } from 'umi';
+import { history, Link, useIntl, useModel } from 'umi';
 import SlideButtonIcon from '../../components/SlideButtonIcon';
 import './style.less';
 
 const { Text } = Typography;
 
 const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
+	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { danhSach, getBaiTapSinhVienModel } = useModel('daotao.baitap');
 	const [currentPage, setCurrentPage] = useState(0);
@@ -127,7 +128,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 							{files.length > 2 && (
 								<Text type='secondary' italic>
-									...và {files.length - 2} file khác
+									...{intl.formatMessage({ id: 'trangchu.baitap.filekhac' }, { count: files.length - 2 })}
 								</Text>
 							)}
 						</div>
@@ -135,7 +136,9 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 					{/* Deadline */}
 					<div className={`deadline-section ${isMobile ? 'mobile' : ''}`}>
-						<Text className={`deadline-label ${isMobile ? 'mobile' : ''}`}>Hạn nộp bài:</Text>
+						<Text className={`deadline-label ${isMobile ? 'mobile' : ''}`}>
+							{intl.formatMessage({ id: 'trangchu.baitap.hannopbai' })}:
+						</Text>
 						<Text className={`deadline-time ${isMobile ? 'mobile' : ''}`}>
 							{dayjs(item.assignment.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 							<Tag color={colorTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]} style={{ marginLeft: 4 }}>
@@ -165,7 +168,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 							<Empty
 								style={{ margin: 'auto' }}
 								image={Empty.PRESENTED_IMAGE_SIMPLE}
-								description='Không còn bài tập khác'
+								description={intl.formatMessage({ id: 'trangchu.baitap.empty' })}
 							/>
 						</div>
 					))}
@@ -179,7 +182,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 			className='card-borderless card-big-title card-baitap-dashboard'
 			title={
 				<>
-					Bài tập, bài kiểm tra{' '}
+					{intl.formatMessage({ id: 'trangchu.baitap.title' })}{' '}
 					<Tag color={danhSach.length > 0 ? 'green' : ''}>{segment == '1' ? filteredData.length : danhSach.length}</Tag>
 				</>
 			}
@@ -194,7 +197,8 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 									{
 										label: (
 											<span>
-												Đang diễn ra <span style={{ color: '#999' }}>({filteredData.length})</span>
+												{intl.formatMessage({ id: 'trangchu.baitap.dangdienra' })}{' '}
+												<span style={{ color: '#999' }}>({filteredData.length})</span>
 											</span>
 										),
 										value: '1',
@@ -202,7 +206,8 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 									{
 										label: (
 											<span>
-												Tất cả <span style={{ color: '#999' }}>({danhSach.length})</span>
+												{intl.formatMessage({ id: 'trangchu.baitap.tatca' })}{' '}
+												<span style={{ color: '#999' }}>({danhSach.length})</span>
 											</span>
 										),
 										value: '2',
@@ -245,7 +250,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 					{isDashBoard && (
 						<Link to='/hoc-tap/lop-tin-chi' className='xem-tat-ca-link'>
-							Xem thêm
+							{intl.formatMessage({ id: 'trangchu.baitap.xemthem' })}
 						</Link>
 					)}
 				</Space>
@@ -267,7 +272,11 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 							))}
 						</Carousel>
 					) : (
-						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập' className='empty' />
+						<Empty
+							image={Empty.PRESENTED_IMAGE_SIMPLE}
+							description={intl.formatMessage({ id: 'trangchu.baitap.empty2' })}
+							className='empty'
+						/>
 					)}
 				</div>
 			</Card>
