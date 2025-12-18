@@ -12,7 +12,7 @@ import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Dropdown, Modal, Popconfirm, Space, Tag, message } from 'antd';
 import { JSX } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 
 // Configuration interface for event type handlers
 interface EventTypeConfig {
@@ -23,6 +23,7 @@ interface EventTypeConfig {
 }
 
 const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; event: any; getData: () => void }) => {
+	const intl = useIntl();
 	const { visible, setVisible, event, getData } = props;
 	const { deleteModel, handleEdit } = useModel('sukien.sukien');
 	const { getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
@@ -52,15 +53,21 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 		checker: () => true,
 		renderer: (evt) => (
 			<>
-				<Descriptions.Item label='Tên sự kiện'>{evt?.tenSuKien}</Descriptions.Item>
-				<Descriptions.Item label='Thời gian bắt đầu'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tensukien' })}>
+					{evt?.tenSuKien}
+				</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
 					{dayjs(evt?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
 				</Descriptions.Item>
-				<Descriptions.Item label='Thời gian kết thúc'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
 					{dayjs(evt?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 				</Descriptions.Item>
-				<Descriptions.Item label='Địa điểm'>{evt?.diaDiem ?? '--'}</Descriptions.Item>
-				<Descriptions.Item label='Ghi chú'>{evt?.ghiChu ?? '--'}</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.diadiem' })}>
+					{evt?.diaDiem ?? '--'}
+				</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.ghichu' })}>
+					{evt?.ghiChu ?? '--'}
+				</Descriptions.Item>
 			</>
 		),
 	};
@@ -74,34 +81,44 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 				const thoiKhoaBieu = evt as ThoiKhoaBieu.IRecord;
 				return (
 					<>
-						<Descriptions.Item label='Lớp tín chỉ'>{thoiKhoaBieu?.tenLopHocPhan}</Descriptions.Item>
-						<Descriptions.Item label='Tên học phần'>{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}</Descriptions.Item>
-						<Descriptions.Item label='Thời gian bắt đầu'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.loptinchi' })}>
+							{thoiKhoaBieu?.tenLopHocPhan}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tenhocphan' })}>
+							{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
 							{dayjs(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
 						</Descriptions.Item>
-						<Descriptions.Item label='Thời gian kết thúc'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
 							{dayjs(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 						</Descriptions.Item>
-						<Descriptions.Item label='Phòng học'>{thoiKhoaBieu?.phongHoc ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Giảng viên'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.phonghoc' })}>
+							{thoiKhoaBieu?.phongHoc ?? '--'}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.giangvien' })}>
 							{thoiKhoaBieu?.giangVien?.ten
 								? [thoiKhoaBieu.giangVien?.hoDem, thoiKhoaBieu.giangVien?.ten].join(' ')
 								: (thoiKhoaBieu?.tenNhanSu ?? '--')}
 						</Descriptions.Item>
-						<Descriptions.Item label='Tiêu đề bài học'>{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tieude' })}>
+							{thoiKhoaBieu?.tieuDeBaiHoc ?? '--'}
+						</Descriptions.Item>
 						{thoiKhoaBieu?.lopHocPhan?.moodleShortname ? (
-							<Descriptions.Item label='Lớp học LMS'>
-								<a onClick={() => handleMoodle(thoiKhoaBieu.lopHocPhan?._id)}>Đường dẫn</a>
-							</Descriptions.Item>
-						) : null}
-						{thoiKhoaBieu?.lopHocPhan?.lmsUrl ? (
-							<Descriptions.Item label='Học trực tuyến'>
-								<a href={thoiKhoaBieu?.lopHocPhan?.lmsUrl} target='_blank' rel='noreferrer'>
-									Đường dẫn
+							<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.lms' })}>
+								<a onClick={() => handleMoodle(thoiKhoaBieu.lopHocPhan?._id)}>
+									{intl.formatMessage({ id: 'lichsukien.chitiet.duongdan' })}
 								</a>
 							</Descriptions.Item>
 						) : null}
-						<Descriptions.Item label='Hình thức giảng dạy'>
+						{thoiKhoaBieu?.lopHocPhan?.lmsUrl ? (
+							<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.hoctructuyen' })}>
+								<a href={thoiKhoaBieu?.lopHocPhan?.lmsUrl} target='_blank' rel='noreferrer'>
+									{intl.formatMessage({ id: 'lichsukien.chitiet.duongdan' })}
+								</a>
+							</Descriptions.Item>
+						) : null}
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.hinhthuc' })}>
 							<Tag color={colorHinhThucGiangDay[thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay]}>
 								{thoiKhoaBieu?.hinhThucGiangDay}
 							</Tag>
@@ -117,24 +134,24 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 						items: [
 							{
 								key: 'thong-bao',
-								label: 'Thông báo',
+								label: intl.formatMessage({ id: 'lichsukien.chitiet.thongbao' }),
 								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#thong-bao`),
 							},
 							{
 								key: 'dien-dan',
-								label: 'Diễn đàn thảo luận',
+								label: intl.formatMessage({ id: 'lichsukien.chitiet.diendan' }),
 								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#dien-dan`),
 							},
 							{
 								key: 'bai-tap',
-								label: 'Bài tập, bài kiểm tra',
+								label: intl.formatMessage({ id: 'lichsukien.chitiet.baitap' }),
 								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#bai-tap`),
 							},
 						],
 					}}
 					onClick={() => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}`)}
 				>
-					Xem chi tiết
+					{intl.formatMessage({ id: 'lichsukien.chitiet.xemchitiet' })}
 				</Dropdown.Button>,
 			],
 		},
@@ -145,14 +162,16 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 				const lichThi = evt as LichThi.IRecord;
 				return (
 					<>
-						<Descriptions.Item label='Môn thi'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.monthi' })}>
 							{lichThi?.danhSachHocPhan?.map((item) => `${item.ma} - ${item.ten}`).join(', ')}
 						</Descriptions.Item>
-						<Descriptions.Item label='Thời gian bắt đầu'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
 							{dayjs(lichThi?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
 						</Descriptions.Item>
-						<Descriptions.Item label='Phòng thi'>{lichThi?.phong?.ma ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Điều kiện dự thi'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.phongthi' })}>
+							{lichThi?.phong?.ma ?? '--'}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.dieukien' })}>
 							{lichThi?.trangThai ? <Tag color={colorTrangThaiThi[lichThi.trangThai]}>{lichThi.trangThai}</Tag> : '--'}
 						</Descriptions.Item>
 					</>
@@ -160,7 +179,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			},
 			actionButtons: (evt) => [
 				<Button key='exam-schedule' type='primary' onClick={() => history.push('/hoc-tap/lich-thi')}>
-					Xem lịch thi
+					{intl.formatMessage({ id: 'lichsukien.chitiet.xemlichthi' })}
 				</Button>,
 			],
 		},
@@ -169,18 +188,24 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.BAI_TAP,
 			renderer: (evt) => (
 				<>
-					<Descriptions.Item label='Tên bài tập'>{evt?.assignment?.noiDung ?? '--'}</Descriptions.Item>
-					<Descriptions.Item label='Lớp tín chỉ'>{evt?.assignment?.tenLopHocPhan ?? '--'}</Descriptions.Item>
-					<Descriptions.Item label='Giảng viên'>{evt?.assignment?.hoTenNguoiGiao ?? '--'}</Descriptions.Item>
-					<Descriptions.Item label='Thời gian giao bài tập'>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tenbaitap' })}>
+						{evt?.assignment?.noiDung ?? '--'}
+					</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.loptinchi' })}>
+						{evt?.assignment?.tenLopHocPhan ?? '--'}
+					</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.giangvien' })}>
+						{evt?.assignment?.hoTenNguoiGiao ?? '--'}
+					</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tggiaobai' })}>
 						{evt?.assignment?.createdAt ? dayjs(evt?.assignment?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
 					</Descriptions.Item>
-					<Descriptions.Item label='Thời hạn bài tập'>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.thoihan' })}>
 						{evt?.assignment?.thoiGianKetThuc
 							? dayjs(evt?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
 							: '--'}
 					</Descriptions.Item>
-					<Descriptions.Item label='Trạng thái nộp bài'>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.trangthai' })}>
 						<Tag color={colorTrangThaiNopBaiTap[evt.trangThai as ETrangThaiNopBaiTap]}>
 							{mapTrangThaiNopBaiTap[evt.trangThai as ETrangThaiNopBaiTap]}
 						</Tag>
@@ -195,17 +220,17 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 						items: [
 							{
 								key: 'thong-bao',
-								label: 'Thông báo',
+								label: intl.formatMessage({ id: 'lichsukien.chitiet.thongbao' }),
 								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}#thong-bao`),
 							},
 							{
 								key: 'dien-dan',
-								label: 'Diễn đàn thảo luận',
+								label: intl.formatMessage({ id: 'lichsukien.chitiet.diendan' }),
 								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}#dien-dan`),
 							},
 							{
 								key: 'bai-tap',
-								label: 'Bài tập, bài kiểm tra',
+								label: intl.formatMessage({ id: 'lichsukien.chitiet.baitap' }),
 								onClick: () =>
 									history.push(
 										`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}?idBaiTap=${evt?.assignment?._id}#bai-tap`,
@@ -219,7 +244,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 						)
 					}
 				>
-					Xem chi tiết
+					{intl.formatMessage({ id: 'lichsukien.chitiet.xemchitiet' })}
 				</Dropdown.Button>,
 			],
 		},
@@ -228,15 +253,21 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.CA_NHAN,
 			renderer: (evt) => (
 				<>
-					<Descriptions.Item label='Tên sự kiện'>{evt?.tenSuKien}</Descriptions.Item>
-					<Descriptions.Item label='Thời gian bắt đầu'>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tensukien' })}>
+						{evt?.tenSuKien}
+					</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
 						{dayjs(evt?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
 					</Descriptions.Item>
-					<Descriptions.Item label='Thời gian kết thúc'>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
 						{dayjs(evt?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
 					</Descriptions.Item>
-					<Descriptions.Item label='Địa điểm'>{evt?.diaDiem ?? '--'}</Descriptions.Item>
-					<Descriptions.Item label='Ghi chú'>{evt?.ghiChu ?? '--'}</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.diadiem' })}>
+						{evt?.diaDiem ?? '--'}
+					</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.ghichu' })}>
+						{evt?.ghiChu ?? '--'}
+					</Descriptions.Item>
 				</>
 			),
 			actionButtons: (evt) => [
@@ -249,18 +280,18 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 					}}
 					icon={<EditOutlined />}
 				>
-					Chỉnh sửa
+					{intl.formatMessage({ id: 'lichsukien.chitiet.chinhsua' })}
 				</Button>,
 				<Popconfirm
 					key='delete'
-					title='Bạn có chắc chắn muốn xóa sự kiện này không?'
+					title={intl.formatMessage({ id: 'lichsukien.chitiet.xoa.xacnhan' })}
 					onConfirm={() => {
 						deleteModel(evt?._id ?? '', getData);
 						setVisible(false);
 					}}
 				>
 					<Button danger icon={<DeleteOutlined />}>
-						Xóa
+						{intl.formatMessage({ id: 'lichsukien.chitiet.xoa' })}
 					</Button>
 				</Popconfirm>,
 			],
@@ -276,7 +307,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 
 	// Render event type tag
 	const renderEventTypeTag = () => (
-		<Descriptions.Item label='Loại sự kiện'>
+		<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.loai' })}>
 			{loaiSuKien ? <Tag color={getColorSuKien(loaiSuKien)}>{loaiSuKien}</Tag> : '--'}
 		</Descriptions.Item>
 	);
@@ -299,7 +330,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 
 		buttons.push(
 			<Button key='close' onClick={() => setVisible(false)}>
-				Đóng
+				{intl.formatMessage({ id: 'global.button.dong' })}
 			</Button>,
 		);
 
@@ -309,7 +340,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	return (
 		<Modal
 			open={visible}
-			title='Chi tiết lịch'
+			title={intl.formatMessage({ id: 'lichsukien.chitiet.title' })}
 			destroyOnClose
 			width={600}
 			onCancel={() => setVisible(false)}

@@ -21,7 +21,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
-import { Link, useModel } from 'umi';
+import { Link, useIntl, useModel } from 'umi';
 import FilterColumn from './components/FilterColumn';
 import FormLichCaNhan from './components/FormLichCaNhan';
 import GhiChuLich from './components/GhiChuLich';
@@ -29,9 +29,11 @@ import LichSapToi from './components/LichSapToi';
 import ModalViewDetailCalendar from './components/ModalViewDetail';
 import ModalSettingMauLich from './components/SettingLich';
 import styles from './LichDashboard/styles.less';
+
 const localizer = dayjsLocalizer(dayjs);
 
 const CalendarPage = (props: { isDashboard?: boolean }) => {
+	const intl = useIntl();
 	const {
 		visibleForm,
 		setVisibleForm,
@@ -206,7 +208,9 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 		const keysSorted = sortBy(Object.keys(data));
 		if (!loading && !loading && isEmpty(data)) {
-			return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có sự kiện' />;
+			return (
+				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={intl.formatMessage({ id: 'lichsukien.empty' })} />
+			);
 		}
 
 		return (
@@ -321,12 +325,12 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			className='card-borderless card-big-title'
 			title={
 				<>
-					Lịch{' '}
+					{intl.formatMessage({ id: 'lichsukien.title' })}{' '}
 					<Segmented
 						value={segmentSelected}
 						options={[
-							{ icon: <CalendarOutlined />, value: true, title: 'Dạng lịch tuần' },
-							{ icon: <MenuOutlined />, value: false, title: 'Dạng danh sách' },
+							{ icon: <CalendarOutlined />, value: true, title: intl.formatMessage({ id: 'lichsukien.danglich' }) },
+							{ icon: <MenuOutlined />, value: false, title: intl.formatMessage({ id: 'lichsukien.danhsach' }) },
 						]}
 						size='small'
 						onChange={(val) => {
@@ -338,7 +342,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			extra={
 				isDashboard ? (
 					<Link to={'/calendar'} type='link' style={{ fontSize: 14, fontWeight: 400 }}>
-						Xem thêm <ArrowRightOutlined />
+						{intl.formatMessage({ id: 'lichsukien.xemthem' })} <ArrowRightOutlined />
 					</Link>
 				) : (
 					<Space wrap>
@@ -350,10 +354,10 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 							}}
 							icon={<PlusCircleOutlined />}
 						>
-							Thêm sự kiện cá nhân
+							{intl.formatMessage({ id: 'lichsukien.themmoi' })}
 						</Button>
 						<ButtonExtend
-							tooltip='Cấu hình màu lịch'
+							tooltip={intl.formatMessage({ id: 'lichsukien.cauhinh' })}
 							icon={<SettingOutlined />}
 							onClick={() => setVisibleMauLich(true)}
 						/>
@@ -406,7 +410,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				footer={null}
 				maskClosable={false}
 				width={800}
-				title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}
+				title={
+					edit
+						? intl.formatMessage({ id: 'lichsukien.form.chinhsua' })
+						: intl.formatMessage({ id: 'lichsukien.form.themmoi' })
+				}
 			>
 				<FormLichCaNhan getData={getData} />
 			</Modal>
@@ -423,7 +431,9 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 
 			<Modal
 				open={visibleXemThem}
-				title={'Lịch ' + dayjs(dateXemThem).format('dddd, ngà\y DD/MM/YYYY')}
+				title={
+					`${intl.formatMessage({ id: 'lichsukien.title' })} ` + dayjs(dateXemThem).format('dddd, ngà\y DD/MM/YYYY')
+				}
 				onCancel={() => setVisibleXemThem(false)}
 				footer={null}
 			>
