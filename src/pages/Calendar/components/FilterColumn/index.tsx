@@ -6,11 +6,12 @@ import { Calendar as AntdCalendar, Button, Card, Checkbox, Col, Popover, Row, Se
 import { Dayjs } from 'dayjs';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import PickColorLich from '../PickColorLich';
 import './style.less';
 
 const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
+	const intl = useIntl();
 	const { date, setDate } = props;
 	const { selectSuKiens, setSelectSuKiens, setDataCalendar, dataLich } = useModel('sukien.sukien');
 	const { record: recSetting } = useModel('tienich.settinglich');
@@ -191,7 +192,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 			>
 				<FilterOutlined className='filter-icon' />
 
-				<div>Bộ lọc sự kiện</div>
+				<div>{intl.formatMessage({ id: 'lichsukien.boloc' })}</div>
 				<DownOutlined className={`down-arrow ${expandFilter ? 'expanded' : 'collapsed'}`} />
 			</Button>
 
