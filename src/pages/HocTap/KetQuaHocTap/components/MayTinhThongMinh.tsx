@@ -21,9 +21,10 @@ import {
 } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
+	const intl = useIntl();
 	const { maKhoaNganh } = props;
 	const { getDiemSinhVienModel, loading, tongTuChon } = useModel('daotao.diemhocphan');
 	const { getAllModel: getLoaiHp, danhSach: danhSachLoaiHp } = useModel('daotao.loaihocphan');
@@ -110,7 +111,7 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 		},
 		{
 			dataIndex: 'ma',
-			title: 'Mã HP',
+			title: intl.formatMessage({ id: 'ketquahoctap.maytinh.table.mahp' }),
 			filterType: 'string',
 			sortable: true,
 			width: 100,
@@ -118,21 +119,21 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 		},
 		{
 			dataIndex: 'ten',
-			title: 'Tên học phần',
+			title: intl.formatMessage({ id: 'ketquahoctap.maytinh.table.tenhp' }),
 			filterType: 'string',
 			width: 200,
 			onCell,
 		},
 		{
 			dataIndex: 'soTinChi',
-			title: 'STC',
+			title: intl.formatMessage({ id: 'ketquahoctap.maytinh.table.stc' }),
 			width: 60,
 			align: 'center',
 			onCell,
 		},
 		{
 			dataIndex: 'loaiHocPhanCtdt',
-			title: 'Loại HP',
+			title: intl.formatMessage({ id: 'ketquahoctap.maytinh.table.loaihp' }),
 			width: 80,
 			align: 'center',
 			// render: (val: ELoaiHocPhanCTDT) =>
@@ -140,7 +141,7 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			title: 'HP tính điểm',
+			title: intl.formatMessage({ id: 'ketquahoctap.maytinh.table.hpTinhDiem' }),
 			width: 60,
 			align: 'center',
 			render: (val, rec) => <Checkbox disabled checked={loaiHpTinhDiem.includes(rec.maLoaiHocPhan)} />,
@@ -148,14 +149,14 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 		},
 		{
 			dataIndex: 'diemThang4',
-			title: 'Điểm tổng kết (hệ 4)',
+			title: intl.formatMessage({ id: 'ketquahoctap.maytinh.table.diem4' }),
 			width: 80,
 			align: 'center',
 			onCell,
 		},
 		{
 			dataIndex: 'diemDuKien',
-			title: 'Điểm dự kiến (hệ 10)',
+			title: intl.formatMessage({ id: 'ketquahoctap.maytinh.table.diemDuKien10' }),
 			render: (s) => <b>{s}</b>,
 			width: 80,
 			align: 'center',
@@ -163,7 +164,7 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 		},
 		{
 			dataIndex: 'diemDuKienThang4',
-			title: 'Điểm dự kiến (hệ 4)',
+			title: intl.formatMessage({ id: 'ketquahoctap.maytinh.table.diemDuKien4' }),
 			render: (s) => <b>{s}</b>,
 			width: 80,
 			align: 'center',
@@ -179,27 +180,26 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
         xem điểm!
       </Text> */}
 				<Col span={24}>
-					Tại đây sinh viên có thể thực hiện &quot;giả lập điểm&quot;, để chủ động trong việc đăng ký học lại, học cải
-					thiện.{' '}
+					{intl.formatMessage({ id: 'ketquahoctap.maytinh.title.intro' })}
 					<Popover
 						content={
 							<div style={{ maxWidth: 600 }}>
-								Bước 1: Sinh viên ấn vào môn muốn nhập điểm cải thiện;
+								{intl.formatMessage({ id: 'ketquahoctap.maytinh.guide.step1' })}
 								<br />
-								Bước 2: Tại popup Giả lập điểm, sinh viên nhập điểm mong muốn (chỉ nhập điểm từ 4 - 10) tại trường{' '}
-								<b>Điểm dự kiến sau khi học lại / cải thiện (hệ 10)</b>;
+								{intl.formatMessage({ id: 'ketquahoctap.maytinh.guide.step2' })}{' '}
+								<b>{intl.formatMessage({ id: 'ketquahoctap.maytinh.guide.step2.bold' })}</b>;
 								<br />
-								Bước 3: Ấn OK.
+								{intl.formatMessage({ id: 'ketquahoctap.maytinh.guide.step3' })}
 								<br />
-								Hệ thống sẽ tự động quy đổi điểm từ hệ 10 sang hệ 4 và tính lại điểm trung bình tích lũy hệ 4
+								{intl.formatMessage({ id: 'ketquahoctap.maytinh.guide.step4' })}
 							</div>
 						}
 					>
-						<a>(Xem thêm)</a>
+						<a>{intl.formatMessage({ id: 'ketquahoctap.maytinh.more' })}</a>
 					</Popover>
 				</Col>
 				<Col span={24}>
-					Điểm tổng kết dự kiến sau khi đã cải thiện và học lại:{' '}
+					{intl.formatMessage({ id: 'ketquahoctap.maytinh.tongket.label' })}:{' '}
 					{/* Hệ 10:{' '}
         <b style={{ fontSize: '1.5rem',  }}>{tongKet}</b>
         <Divider type="vertical" /> */}
@@ -211,11 +211,11 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
         Dạng chữ: <b style={{ fontSize: '1.5rem',  }}>{chuDuKien}</b> */}
 				</Col>
 				<Col span={24}>
-					Số tín chỉ tự chọn đã có điểm:{' '}
+					{intl.formatMessage({ id: 'ketquahoctap.maytinh.tuchon.label' })}:{' '}
 					<b className={tuChonCoDiem === tongTuChon ? 'text-success' : 'text-error'}>
 						{tuChonCoDiem} / {tongTuChon}
 					</b>{' '}
-					(tổng số tín chỉ tự chọn phải học).
+					{intl.formatMessage({ id: 'ketquahoctap.maytinh.tuchon.tongstc' })}.
 				</Col>
 
 				<Col span={24} style={{ marginTop: 12 }}>
@@ -233,8 +233,8 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 							value={showAll}
 							onChange={(val) => setShowAll(val.toString())}
 							options={[
-								{ value: 'none', label: 'Các môn đã học' },
-								{ value: 'all', label: 'Tất cả các môn học' },
+								{ value: 'none', label: intl.formatMessage({ id: 'ketquahoctap.maytinh.segment.learned' }) },
+								{ value: 'all', label: intl.formatMessage({ id: 'ketquahoctap.maytinh.segment.all' }) },
 							]}
 						/>
 					</TableStaticData>
@@ -248,33 +248,50 @@ const MayTinhThongMinh = (props: { maKhoaNganh?: string }) => {
 				footer={null}
 				styles={{ body: { padding: 0 } }}
 			>
-				<Card title='Giả lập điểm'>
+				<Card title={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.title' })}>
 					<Descriptions column={1}>
-						<Descriptions.Item label='Mã học phần'>{record?.ma}</Descriptions.Item>
-						<Descriptions.Item label='Tên học phần'>{record?.ten}</Descriptions.Item>
-						<Descriptions.Item label='Số tín chỉ'>{record?.soTinChi} tín chỉ</Descriptions.Item>
-						<Descriptions.Item label='Điểm tổng kết (hệ 10)'>{record?.diemTongKet}</Descriptions.Item>
-						<Descriptions.Item label='Điểm tổng kết (hệ 4)'>{record?.diemThang4}</Descriptions.Item>
-						<Descriptions.Item label='Điểm tổng kết (dạng chữ)'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.mahp' })}>
+							{record?.ma}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.tenhp' })}>
+							{record?.ten}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.stc' })}>
+							{record?.soTinChi} {intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.tinchi' })}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.diem10' })}>
+							{record?.diemTongKet}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.diem4' })}>
+							{record?.diemThang4}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.diemchu' })}>
 							{record?.diemChu ? <Tag color={ColorDiemChu[record?.diemChu]}>{record?.diemChu}</Tag> : null}
 						</Descriptions.Item>
-						<Descriptions.Item label='Trạng thái'>{record?.trangThai}</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.maytinh.modal.trangthai' })}>
+							{record?.trangThai}
+						</Descriptions.Item>
 					</Descriptions>
 
 					<Form form={form} onFinish={onOk}>
 						<Form.Item
 							name='diemDuKien'
-							label={<span className='fw500'>Điểm dự kiến sau khi học lại / cải thiện (hệ 10)</span>}
+							label={<span className='fw500'>{intl.formatMessage({ id: 'ketquahoctap.maytinh.form.label' })}</span>}
 							rules={[...rules.number(10, 4)]}
 						>
-							<InputNumber placeholder='Nhập điểm dự kiến' min={4} max={10} style={{ width: '100%' }} />
+							<InputNumber
+								placeholder={intl.formatMessage({ id: 'ketquahoctap.maytinh.form.placeholder' })}
+								min={4}
+								max={10}
+								style={{ width: '100%' }}
+							/>
 						</Form.Item>
 
 						<div className='form-footer' style={{ width: '100%' }}>
 							<Button htmlType='submit' type='primary'>
-								Đồng ý
+								{intl.formatMessage({ id: 'ketquahoctap.maytinh.common.ok' })}
 							</Button>
-							<Button onClick={() => setModalVisible(false)}>Hủy</Button>
+							<Button onClick={() => setModalVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 						</div>
 					</Form>
 				</Card>
