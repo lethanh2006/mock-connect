@@ -1,3 +1,4 @@
+import ExpandText from '@/components/ExpandText';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
@@ -12,11 +13,11 @@ import {
 import { EditOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormHocPhanQuyDoiDiem from './Form';
-import ExpandText from '@/components/ExpandText';
 
 const FormItemHocPhanQuyDoi = () => {
+	const intl = useIntl();
 	const { getModel, danhSach, loading, handleView, handleEdit } = useModel('daotao.quydoidiem.sinhvienquydoidiem');
 	const { record: recPhieu } = useModel('daotao.quydoidiem.phieuquydoidiem');
 
@@ -33,16 +34,33 @@ const FormItemHocPhanQuyDoi = () => {
 
 	const columns: IColumn<QuyDoiDiem.IQuyDoiDiemSinhVien>[] = [
 		{
-			title: 'Học phần xin công nhận',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.hocphan' }),
 			width: 300,
 			children: [
-				{ title: 'Mã HP', width: 80, dataIndex: 'maHocPhan', align: 'center', onCell },
-				{ title: 'Tên học phần', width: 160, render: (val, rec) => rec.hocPhan?.ten, onCell },
-				{ title: 'STC', width: 60, align: 'center', render: (val, rec) => rec.hocPhan?.soTinChi, onCell },
+				{
+					title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.mahp' }),
+					width: 80,
+					dataIndex: 'maHocPhan',
+					align: 'center',
+					onCell,
+				},
+				{
+					title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.tenhp' }),
+					width: 160,
+					render: (val, rec) => rec.hocPhan?.ten,
+					onCell,
+				},
+				{
+					title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.stc' }),
+					width: 60,
+					align: 'center',
+					render: (val, rec) => rec.hocPhan?.soTinChi,
+					onCell,
+				},
 			],
 		},
 		{
-			title: 'Minh chứng',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.minhchung' }),
 			width: 220,
 			render: (val, rec) => (
 				<>
@@ -50,14 +68,14 @@ const FormItemHocPhanQuyDoi = () => {
 					{(rec?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI
 						? rec?.tenChungChi
 						: rec.loai === EMinhChungQuyDoiDiem.NCKH
-						? rec.tenDeTaiNckh
-						: rec?.tenHocPhan) ?? ''}
+							? rec.tenDeTaiNckh
+							: rec?.tenHocPhan) ?? ''}
 				</>
 			),
 			onCell,
 		},
 		{
-			title: 'Kết quả quy đổi',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.ketqua' }),
 			dataIndex: 'diemChu',
 			align: 'center',
 			width: 120,
@@ -65,22 +83,27 @@ const FormItemHocPhanQuyDoi = () => {
 				val ? (
 					<>
 						{rec.diemHe10 ?? ''} - {rec.diemHe4 ?? ''} - <b style={{ color: ColorDiemChu[val] }}>{val}</b>
-						{rec.tinhDiemTichLuy ? <span className='text-success'> (tích lũy)</span> : null}
+						{rec.tinhDiemTichLuy ? (
+							<span className='text-success'>
+								{' '}
+								{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.tichluy' })}
+							</span>
+						) : null}
 					</>
 				) : (
-					<i>Chưa có điểm</i>
+					<i>{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.chuacodiem' })}</i>
 				),
 			onCell,
 		},
 		{
-			title: 'Ghi chú',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.ghichu' }),
 			dataIndex: 'ghiChu',
 			width: 180,
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,
 			onCell,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.trangthai' }),
 			dataIndex: 'trangThai',
 			align: 'center',
 			width: 130,
@@ -88,7 +111,7 @@ const FormItemHocPhanQuyDoi = () => {
 			onCell,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.thaotac' }),
 			align: 'center',
 			width: 60,
 			fixed: 'right',
@@ -98,7 +121,7 @@ const FormItemHocPhanQuyDoi = () => {
 						rec?.trangThai !== ETrangThaiHocPhanQuyDoi.CHO_XU_LY ||
 						recPhieu?.trangThai !== ETrangThaiPhieuQuyDoiDiem.CHO_XU_LY
 					}
-					tooltip='Chỉnh sửa'
+					tooltip={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.edit' })}
 					onClick={() => handleEdit(rec)}
 					type='link'
 					icon={<EditOutlined />}
@@ -110,7 +133,7 @@ const FormItemHocPhanQuyDoi = () => {
 	return (
 		<>
 			<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
-				Danh sách học phần xin công nhận
+				{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.title' })}
 			</div>
 
 			<TableStaticData

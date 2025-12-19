@@ -11,10 +11,11 @@ import {
 import dayjs from '@/utils/dayjs';
 import { Tag } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ViewPhieuQuyDoiDiem from './components/View';
 
 const LichSuQuyDoiDiemPage = () => {
+	const intl = useIntl();
 	const { page, limit, getModel, setRecord } = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [visibleView, setVisibleView] = useState<boolean>(false);
@@ -33,22 +34,26 @@ const LichSuQuyDoiDiemPage = () => {
 
 	const columns: IColumn<QuyDoiDiem.IPhieuDangKyQuyDoiDiem>[] = [
 		{
-			title: 'Đợt quy đổi điểm',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.dot' }),
 			dataIndex: 'dotDangKyQuyDoiDiemId',
 			width: 150,
 			render: (val, rec) => rec?.dotDangKyQuyDoiDiem?.tenDot,
 			onCell,
 		},
 		{
-			title: 'Học phần xin công nhận',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hp' }),
 			width: 320,
 			render: (val, rec) => (
 				<ExpandText>
 					{rec.danhSachHocPhan?.map((item) => (
 						<>
 							- {item.hocPhan?.ten} -{' '}
-							{item.diemChu ? <b style={{ color: ColorDiemChu[item.diemChu] }}>{item.diemChu}</b> : 'Chưa có điểm'} -{' '}
-							<i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i>
+							{item.diemChu ? (
+								<b style={{ color: ColorDiemChu[item.diemChu] }}>{item.diemChu}</b>
+							) : (
+								intl.formatMessage({ id: 'tientrinhhoctap.congnhan.chuacodiem' })
+							)}{' '}
+							- <i style={{ color: colorTrangThaiHocPhanQuyDoi[item.trangThai] }}>{item.trangThai}</i>
 							{item?.khuyenNghi?.length ? (
 								<>
 									{' '}
@@ -68,7 +73,7 @@ const LichSuQuyDoiDiemPage = () => {
 			onCell,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.trangthai' }),
 			dataIndex: 'trangThai',
 			align: 'center',
 			width: 140,
@@ -76,7 +81,7 @@ const LichSuQuyDoiDiemPage = () => {
 			onCell,
 		},
 		{
-			title: 'Số QĐ',
+			title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan.soqd' }),
 			dataIndex: 'soQuyetDinhId',
 			width: 100,
 			align: 'center',
@@ -98,7 +103,7 @@ const LichSuQuyDoiDiemPage = () => {
 				columns={columns}
 				dependencies={[page, limit, maKhoaNganh]}
 				modelName='daotao.quydoidiem.phieuquydoidiem'
-				title='Lịch sử công nhận kết quả'
+				title={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.title' })}
 				buttons={{
 					create: false,
 				}}

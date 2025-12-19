@@ -4,7 +4,7 @@ import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
 import { getNameFile } from '@/utils/utils';
 import { Button, Descriptions, Divider, Empty, Modal } from 'antd';
 import React, { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 type TProps = {
 	visible: boolean;
@@ -12,8 +12,11 @@ type TProps = {
 };
 
 const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) => {
+	const intl = useIntl();
 	const { record: recTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
+
+	const updatingHtml = intl.formatMessage({ id: 'tientrinhhoctap.ctdt.updating' });
 
 	return (
 		<>
@@ -21,92 +24,94 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 				open={visible}
 				onCancel={() => setVisible(false)}
 				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				cancelText={intl.formatMessage({ id: 'global.button.close' })}
 				width={1000}
-				title='Chi tiết chương trình đào tạo/Kế hoạch học tập'
+				title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.title' })}
 			>
 				{recTienTrinh?.ctdtKeHoach?._id ? (
 					<>
 						<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
-							<Descriptions.Item label='Tên chương trình' span={2}>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.ten' })} span={2}>
 								{recTienTrinh.ctdtKeHoach.ten}
 							</Descriptions.Item>
-							<Descriptions.Item label='Tên chương trình (tiếng Anh)' span={2}>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tenEn' })} span={2}>
 								{recTienTrinh.ctdtKeHoach.tenTiengAnh ?? '--'}
 							</Descriptions.Item>
-							<Descriptions.Item label='Mã chương trình'>{recTienTrinh.ctdtKeHoach.ma}</Descriptions.Item>
-							<Descriptions.Item label='Loại chương trình'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.ma' })}>
+								{recTienTrinh.ctdtKeHoach.ma}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loaict' })}>
 								{recTienTrinh.ctdtKeHoach.loai ? LoaiChuongTrinhDaoTao[recTienTrinh.ctdtKeHoach.loai] : ''}
 							</Descriptions.Item>
 
-							<Descriptions.Item label='Khóa sinh viên'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoasv' })}>
 								{recTienTrinh.ctdtKeHoach.khoaSinhVien?.ten ?? recTienTrinh.ctdtKeHoach.maKhoaSinhVien}
 							</Descriptions.Item>
-							<Descriptions.Item label='Ngành'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.nganh' })}>
 								{recTienTrinh.ctdtKeHoach.nganh?.ten ?? recTienTrinh.ctdtKeHoach.maNganh}
 							</Descriptions.Item>
 
-							<Descriptions.Item label='Thời gian đào tạo'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.thoigian' })}>
 								{recTienTrinh.ctdtKeHoach.thoiGianDaoTao ?? '--'} năm
 							</Descriptions.Item>
-							<Descriptions.Item label='Thời gian đào tạo tối đa'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.thoigiantoida' })}>
 								{recTienTrinh.ctdtKeHoach.thoiGianDaoTaoToiDa ?? '--'} năm
 							</Descriptions.Item>
 
-							<Descriptions.Item label='Tổng số tín chỉ phải học'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tongsotinchi' })}>
 								{recTienTrinh.ctdtKeHoach.tongSoTinChi ?? '--'} tín chỉ
 							</Descriptions.Item>
-							<Descriptions.Item label='Tập tin'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.file' })}>
 								{recTienTrinh.ctdtKeHoach.url ? (
 									<a onClick={() => setVisibleFormFile(true)}>{getNameFile(recTienTrinh.ctdtKeHoach.url)}</a>
 								) : null}
 							</Descriptions.Item>
 						</Descriptions>
 
-						<Divider>Mục tiêu đào tạo</Divider>
+						<Divider>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.muctieu' })}</Divider>
 						<div
 							dangerouslySetInnerHTML={{
-								__html: recTienTrinh.ctdtKeHoach.mucTieuDaoTao ?? '<p><i>Đang cập nhật</i></p>',
+								__html: recTienTrinh.ctdtKeHoach.mucTieuDaoTao ?? updatingHtml,
 							}}
 						/>
 
-						<Divider>Chuẩn đầu vào</Divider>
+						<Divider>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuandauvao' })}</Divider>
 						<div
 							dangerouslySetInnerHTML={{
-								__html: recTienTrinh.ctdtKeHoach.chuanDauVao ?? '<p><i>Đang cập nhật</i></p>',
+								__html: recTienTrinh.ctdtKeHoach.chuanDauVao ?? updatingHtml,
 							}}
 						/>
 
-						<Divider>Chuẩn đầu ra</Divider>
+						<Divider>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuandaura' })}</Divider>
 						<div
 							dangerouslySetInnerHTML={{
-								__html: recTienTrinh.ctdtKeHoach.chuanDauRa ?? '<p><i>Đang cập nhật</i></p>',
+								__html: recTienTrinh.ctdtKeHoach.chuanDauRa ?? updatingHtml,
 							}}
 						/>
 
-						<Divider>Vị trí việc làm sau tốt nghiệp</Divider>
+						<Divider>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.vitri' })}</Divider>
 						<div
 							dangerouslySetInnerHTML={{
-								__html: recTienTrinh.ctdtKeHoach.viTriLamViec ?? '<p><i>Đang cập nhật</i></p>',
+								__html: recTienTrinh.ctdtKeHoach.viTriLamViec ?? updatingHtml,
 							}}
 						/>
 					</>
 				) : (
-					<Empty description='Không có thông tin' />
+					<Empty description={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.empty' })} />
 				)}
 			</Modal>
 
 			<ModalExpandable
-				title='Chi tiết tập tin'
+				title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.fileDetail' })}
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={null}
 				onCancel={() => setVisibleFormFile(false)}
 			>
 				<PreviewFile file={recTienTrinh?.ctdtKeHoach?.url ?? ''} />
 
 				<div className='form-footer'>
-					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					<Button onClick={() => setVisibleFormFile(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 				</div>
 			</ModalExpandable>
 		</>
