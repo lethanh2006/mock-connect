@@ -8,9 +8,10 @@ import {
 	ExclamationCircleOutlined,
 	MinusCircleOutlined,
 } from '@ant-design/icons';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const StatDiemDanhV2 = () => {
+	const intl = useIntl();
 	const { danhSach } = useModel('daotao.thoikhoabieu');
 
 	// Tạo icon mapping cho từng trạng thái
@@ -45,7 +46,7 @@ const StatDiemDanhV2 = () => {
 	// Tạo dữ liệu thống kê
 	const statisticsData: StatisticsItem[] = [
 		{
-			title: 'Tổng số buổi học',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.diemdanh' }),
 			value: danhSach.length,
 			icon: <CalendarOutlined />,
 			// valueColor: '#1890ff',
@@ -66,7 +67,7 @@ const StatDiemDanhV2 = () => {
 		<StatisticsCard
 			hideCard
 			rowGutter={16}
-			title='Thống kê điểm danh'
+			title={intl.formatMessage({ id: 'lophocphan.id.lichhoc.thongkediemdanh' })}
 			data={statisticsData}
 			colSpan={{ xs: 24, sm: 12, md: 8, lg: 8, xl: 4, xxl: 4 }}
 			containerStyle={{

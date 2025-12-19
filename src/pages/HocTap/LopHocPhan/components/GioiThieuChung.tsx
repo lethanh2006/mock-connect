@@ -1,11 +1,12 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Col, Empty, Row, Spin, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import BoxFile from '../DienDan/components/BoxFile';
 import './style.less';
 
 const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void; deCuongId?: string }) => {
+	const intl = useIntl();
 	const { record } = useModel('lophocphan.lophocphan');
 	const { record: recDeCuong, getByIdModel: getDeCuong, setRecord: setDeCuong } = useModel('hocphan.decuonghocphan');
 	const {
@@ -36,10 +37,10 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 		<>
 			<div className='gioi-thieu-section'>
 				<div className='thong-tin-header' style={{ fontSize: 16 }}>
-					Giới thiệu lớp tín chỉ
+					{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu' })}
 				</div>
 
-				<span className='fw500'>Giới thiệu chung</span>
+				<span className='fw500'>{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieuchung' })}</span>
 				<div
 					className='gioi-thieu-chung-content'
 					style={{ display: expand ? 'block' : '-webkit-box' }}
@@ -47,17 +48,19 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 				/>
 				{record?.gioiThieuChung ? (
 					<a onClick={() => setExpand((v) => !v)} style={{ marginTop: 8 }}>
-						{expand ? 'Thu gọn' : 'Xem thêm'}
+						{expand
+							? intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.thugon' })
+							: intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.xemthem' })}
 					</a>
 				) : null}
 
 				{record?.lmsUrl ? (
 					<>
 						<span className='fw500' style={{ marginTop: 12 }}>
-							Đường dẫn học trực tuyến:{' '}
+							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.hoctructuyen' })}:{' '}
 						</span>
 						<a href={record.lmsUrl} target='_blank' rel='noreferrer'>
-							Đường dẫn
+							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.duongdan' })}
 						</a>
 					</>
 				) : null}
@@ -66,8 +69,10 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 			{recDeCuong?.mucTieuHocPhan && (
 				<div className='gioi-thieu-section'>
 					<div className='thong-tin-header'>
-						Mục tiêu học phần
-						<a onClick={() => onShowDeCuong('0')}>Xem chi tiết</a>
+						{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.muctieu' })}
+						<a onClick={() => onShowDeCuong('0')}>
+							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.chitiet' })}
+						</a>
 					</div>
 
 					<div
@@ -81,7 +86,9 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 			<div className='gioi-thieu-section'>
 				<Row gutter={[16, 16]}>
 					<Col span={24} md={12}>
-						<div className='thong-tin-header'>Tài liệu học tập</div>
+						<div className='thong-tin-header'>
+							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.tailieu' })}
+						</div>
 						<Spin spinning={loadingHocLieu}>
 							{displayTaiLieu.length > 0 ? (
 								<div>
@@ -92,15 +99,20 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 									))}
 								</div>
 							) : (
-								<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa có tài liệu' />
+								<Empty
+									image={Empty.PRESENTED_IMAGE_SIMPLE}
+									description={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.empty' })}
+								/>
 							)}
 						</Spin>
 					</Col>
 
 					<Col span={24} md={12}>
 						<div className='thong-tin-header'>
-							Học liệu học phần
-							<a onClick={() => onShowDeCuong('3')}>Xem chi tiết</a>
+							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.hoclieu' })}
+							<a onClick={() => onShowDeCuong('3')}>
+								{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.chitiet' })}
+							</a>
 						</div>
 						<Spin spinning={loadingHocLieu}>
 							{displayHocLieu.length > 0 ? (
@@ -129,14 +141,17 @@ const GioiThieuChungLopHp = (props: { onShowDeCuong: (activeTab: string) => void
 													size='small'
 													icon={<DownloadOutlined />}
 													onClick={() => window.open(APP_CONFIG_URL_THU_VIEN + item.url, '_blank')}
-													title='Xem chi tiết'
+													title={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.chitiet' })}
 												/>
 											)}
 										</div>
 									))}
 								</div>
 							) : (
-								<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Chưa có tài liệu' />
+								<Empty
+									image={Empty.PRESENTED_IMAGE_SIMPLE}
+									description={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.gioithieu.empty' })}
+								/>
 							)}
 						</Spin>
 					</Col>

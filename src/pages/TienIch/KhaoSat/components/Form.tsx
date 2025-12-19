@@ -6,7 +6,7 @@ import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, InputNumber, Spin, Steps } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import '../style.css';
 import FileChoice from './Question/FileChoice';
 import GridChoice from './Question/GridChoice';
@@ -36,6 +36,7 @@ const FormTraLoiKhaoSat = (props: {
 	/** Thông tin câu trả lời khảo sát tổng */
 	khaoSat?: BieuMau.ICauTraLoiKhaoSat;
 }) => {
+	const intl = useIntl();
 	const {
 		setVisibleForm,
 		record: recordDot,
@@ -150,7 +151,8 @@ const FormTraLoiKhaoSat = (props: {
 			<div key={question._id} className='question-item'>
 				<div className='question-header'>
 					<div className='question-title'>
-						Câu {index + 1}: {question.noiDungCauHoi} {question.batBuoc && <span className='required'>*</span>}
+						{intl.formatMessage({ id: 'lophocphan.id.khaosat.cau' })} {index + 1}: {question.noiDungCauHoi}{' '}
+						{question.batBuoc && <span className='required'>*</span>}
 					</div>
 				</div>
 				<div className='question-content'>{questionEleMent}</div>
@@ -278,7 +280,8 @@ const FormTraLoiKhaoSat = (props: {
 				{recordDot?.loai === ELoaiDot.CUOC_THI && (
 					<div style={{ marginBottom: 8 }}>
 						<b>
-							Số lượt trả lời: {khaoSat?.soLuotDaTraLoi ?? '--'}/{khaoSat?.soLuotTraLoiToiDa ?? '--'}
+							{intl.formatMessage({ id: 'lophocphan.id.khaosat.sl' })}: {khaoSat?.soLuotDaTraLoi ?? '--'}/
+							{khaoSat?.soLuotTraLoiToiDa ?? '--'}
 						</b>
 					</div>
 				)}
@@ -301,9 +304,13 @@ const FormTraLoiKhaoSat = (props: {
 					<Form.Item
 						name='duDoanSoNguoiThamDu'
 						rules={[...rules.required]}
-						label={recordDot?.textDuDoan || 'Theo bạn, sẽ có bao nhiêu người tham gia cuộc thi này?'}
+						label={recordDot?.textDuDoan || intl.formatMessage({ id: 'lophocphan.id.khaosat.dudoan' })}
 					>
-						<InputNumber style={{ width: '100%' }} disabled={disabled} placeholder='Nhập dự đoán' />
+						<InputNumber
+							style={{ width: '100%' }}
+							disabled={disabled}
+							placeholder={intl.formatMessage({ id: 'lophocphan.id.khaosat.dudoan.place' })}
+						/>
 					</Form.Item>
 				)}
 
@@ -326,19 +333,23 @@ const FormTraLoiKhaoSat = (props: {
 						type='primary'
 						tooltip={
 							recordDot?.kichHoat === false
-								? 'Đợt khảo sát chưa kích khoạt'
+								? intl.formatMessage({ id: 'lophocphan.id.khaosat.tooltip1' })
 								: disabled
-									? 'Ngoài thời gian đợt khảo sát'
+									? intl.formatMessage({ id: 'lophocphan.id.khaosat.tooltip2' })
 									: undefined
 						}
 					>
-						Hoàn thành
+						{intl.formatMessage({ id: 'lophocphan.id.khaosat.hoanthanh' })}
 					</ButtonExtend>
 
 					{!isBatBuoc ? (
 						<>
-							{!onOk ? <Button onClick={() => setVisibleForm(false)}>Hủy</Button> : null}
-							{!!onCancel ? <Button onClick={() => onCancel()}>Hủy</Button> : null}
+							{!onOk ? (
+								<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
+							) : null}
+							{!!onCancel ? (
+								<Button onClick={() => onCancel()}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
+							) : null}
 						</>
 					) : null}
 				</div>
@@ -348,7 +359,7 @@ const FormTraLoiKhaoSat = (props: {
 
 	if (hideCard) return mainContent;
 	return (
-		<Card title='Chi tiết khảo sát' style={{ backgroundColor: '#f9f9f9' }}>
+		<Card title={intl.formatMessage({ id: 'lophocphan.id.khaosat.title' })} style={{ backgroundColor: '#f9f9f9' }}>
 			{recordDot?.loai === ELoaiDot.CUOC_THI ? (
 				<>
 					<Steps
@@ -357,8 +368,8 @@ const FormTraLoiKhaoSat = (props: {
 						style={{ marginBottom: 18, paddingTop: 0 }}
 						onChange={onChangeStep}
 					>
-						<Steps.Step title='Giới thiệu' />
-						<Steps.Step title='Nội dung khảo sát' />
+						<Steps.Step title={intl.formatMessage({ id: 'lophocphan.id.khaosat.gt' })} />
+						<Steps.Step title={intl.formatMessage({ id: 'lophocphan.id.khaosat.nd' })} />
 					</Steps>
 
 					{currentStep === 0 ? (
