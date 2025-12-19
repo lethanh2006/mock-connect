@@ -5,10 +5,11 @@ import dayjs from '@/utils/dayjs';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Descriptions, Form, Modal, Row, Space, Tag } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormQuyDoiDiem from '../components/Form';
 
 const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
+	const intl = useIntl();
 	const { getData } = props;
 	const [form] = Form.useForm();
 	const { setVisibleForm, record, visibleForm, isView, putModel, formSubmiting } = useModel(
@@ -28,24 +29,27 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 		<Space wrap>
 			{he10 ? (
 				<span>
-					Điểm hệ 10: <b>{he10 ?? ''}</b>
+					{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.diem.he10' })}: <b>{he10 ?? ''}</b>
 				</span>
 			) : null}
 			{he4 ? (
 				<span>
-					Điểm hệ 4: <b>{he4}</b>
+					{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.diem.he4' })}: <b>{he4}</b>
 				</span>
 			) : null}
 			<span>
-				Điểm chữ: <b style={diemChu ? { color: ColorDiemChu[diemChu] } : undefined}>{diemChu}</b>
+				{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.diem.chu' })}:{' '}
+				<b style={diemChu ? { color: ColorDiemChu[diemChu] } : undefined}>{diemChu}</b>
 			</span>
-			{tinhDiemTichLuy ? <span className='text-success'>(Tính điểm tích lũy)</span> : null}
+			{tinhDiemTichLuy ? (
+				<span className='text-success'>{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.diem.tichluy' })}</span>
+			) : null}
 		</Space>
 	);
 
 	return (
 		<Modal
-			title={`${isView ? 'Chi tiết học phần' : 'Chỉnh sửa minh chứng'}`}
+			title={`${isView ? intl.formatMessage({ id: 'tientrinhhoctap.congnhan.form.viewTitle' }) : intl.formatMessage({ id: 'tientrinhhoctap.congnhan.form.editTitle' })}`}
 			open={visibleForm}
 			width={isView ? 700 : 800}
 			footer={null}
@@ -55,14 +59,21 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 				{isView ? (
 					<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
 						<Descriptions column={1}>
-							<Descriptions.Item label='Học phần xin công nhận'>
-								{record?.hocPhan?.ten ?? ''} ({record?.maHocPhan ?? ''} - {record?.hocPhan?.soTinChi ?? ''} tín chỉ)
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.desc.hocphan' })}>
+								{record?.hocPhan?.ten ?? ''} ({record?.maHocPhan ?? ''} - {record?.hocPhan?.soTinChi ?? ''}{' '}
+								{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hocphan.tinchi' })})
 							</Descriptions.Item>
-							<Descriptions.Item label='Kết quả quy đổi'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.desc.ketqua' })}>
 								{renderDiem(record?.diemHe10, record?.diemHe4, record?.diemChu)}{' '}
-								{record?.tinhDiemTichLuy ? <span className='text-success'>(Tính điểm tích lũy)</span> : ''}
+								{record?.tinhDiemTichLuy ? (
+									<span className='text-success'>
+										{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.diem.tichluy' })}
+									</span>
+								) : (
+									''
+								)}
 							</Descriptions.Item>
-							<Descriptions.Item label='Khuyến nghị'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.desc.khuyennghi' })}>
 								{
 									<div
 										dangerouslySetInnerHTML={{
@@ -71,46 +82,65 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 									/>
 								}
 							</Descriptions.Item>
-							<Descriptions.Item label='Trạng thái'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.desc.trangthai' })}>
 								{record?.trangThai ? (
 									<Tag color={colorTrangThaiHocPhanQuyDoi[record?.trangThai]}>{record?.trangThai}</Tag>
 								) : null}
 							</Descriptions.Item>
 
-							<Descriptions.Item label='Loại minh chứng'>{record?.loai}</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.desc.loaiminhchung' })}>
+								{record?.loai}
+							</Descriptions.Item>
 							{record?.loai === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
-								<Descriptions.Item label='Thông tin chứng chỉ'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.chungchi.title' })}>
 									<div>
-										- Tên chứng chỉ: <b>{record?.tenChungChi ?? ''}</b>
-										<br />- Điểm/bậc chứng chỉ: <b>{record?.bacChungChi ?? ''}</b>
-										<br />- Đơn vị cấp: <b>{record?.donViCap ?? ''}</b>
-										<br />- Thời gian hiệu lực:{' '}
+										- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.chungchi.ten' })}:{' '}
+										<b>{record?.tenChungChi ?? ''}</b>
+										<br />- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.chungchi.bac' })}:{' '}
+										<b>{record?.bacChungChi ?? ''}</b>
+										<br />- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.chungchi.donvi' })}:{' '}
+										<b>{record?.donViCap ?? ''}</b>
+										<br />- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.chungchi.hieuluc' })}:{' '}
 										<b>{record?.thoiGianHieuLuc ? dayjs(record?.thoiGianHieuLuc).format('DD/MM/YYYY') : '--'}</b>
 									</div>
 								</Descriptions.Item>
 							) : record?.loai === EMinhChungQuyDoiDiem.NCKH ? (
-								<Descriptions.Item label='Thông tin NCKH'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.nckh.title' })}>
 									<div>
-										- Tên đề tài: <b>{record?.tenDeTaiNckh ?? ''}</b>
-										<br />- Người hướng dẫn: <b>{record?.nguoiHuongDanNckh ?? ''}</b>
-										<br />- Điểm NCKH: <b>{record?.diemNckh ?? ''}</b>
+										- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.nckh.tendetai' })}:{' '}
+										<b>{record?.tenDeTaiNckh ?? ''}</b>
+										<br />- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.nckh.huongdan' })}:{' '}
+										<b>{record?.nguoiHuongDanNckh ?? ''}</b>
+										<br />- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.nckh.diem' })}:{' '}
+										<b>{record?.diemNckh ?? ''}</b>
 									</div>
 								</Descriptions.Item>
 							) : (
-								<Descriptions.Item label='Thông tin học phần đã học'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hp.title' })}>
 									<div>
-										- Tên học phần: {record?.tenHocPhan ? <b>{record.tenHocPhan}</b> : <i>Không có tên học phần</i>} (
-										{record?.maHocPhanMinhChung} - {record?.soTinChi} tín chỉ)
-										<br />- Học tại trường: <b>{record?.tenTruong ?? ''}</b>. Trình độ:{' '}
-										<b>{record?.trinhDoDaoTao ?? ''}</b>. Ngành học: <b>{record?.nganh ?? ''}</b>. Năm tốt nghiệp:{' '}
+										- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hp.ten' })}:{' '}
+										{record?.tenHocPhan ? (
+											<b>{record.tenHocPhan}</b>
+										) : (
+											<i>{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hp.noten' })}</i>
+										)}{' '}
+										({record?.maHocPhanMinhChung} - {record?.soTinChi} tín chỉ)
+										<br />- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hp.truong' })}:{' '}
+										<b>{record?.tenTruong ?? ''}</b>.{' '}
+										{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hp.trinhdo' })}:{' '}
+										<b>{record?.trinhDoDaoTao ?? ''}</b>.{' '}
+										{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hp.nganhhoc' })}: <b>{record?.nganh ?? ''}</b>.
+										{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hp.namtotnghiep' })}:{' '}
 										<b>{record?.namTotNghiep ?? ''}</b>
-										<br />- Kết quả học tập:{' '}
+										<br />- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.hp.ketqua' })}:{' '}
 										{renderDiem(record?.diemHe10MinhChung, record?.diemHe4MinhChung, record?.diemChuMinhChung)}
 									</div>
 								</Descriptions.Item>
 							)}
 
-							<Descriptions.Item label='Ghi chú'>{record?.ghiChu ?? '--'}</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.desc.ghichu' })}>
+								{record?.ghiChu ?? '--'}
+							</Descriptions.Item>
 						</Descriptions>
 					</Row>
 				) : (
@@ -120,10 +150,10 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 				<div className='form-footer'>
 					{!isView ? (
 						<Button loading={formSubmiting} htmlType='submit' type='primary'>
-							Lưu lại
+							{intl.formatMessage({ id: 'global.button.luulai' })}
 						</Button>
 					) : null}
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 				</div>
 			</Form>
 		</Modal>

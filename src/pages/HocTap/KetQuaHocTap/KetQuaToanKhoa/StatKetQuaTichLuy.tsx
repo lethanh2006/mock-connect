@@ -2,9 +2,10 @@ import { primaryColor } from '@/services/base/constant';
 import { colorLoaiHocLuc } from '@/services/HocTap/constant';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Tooltip } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const StatKetQuaTichLuySinhVien = () => {
+	const intl = useIntl();
 	const { record } = useModel('daotao.ketquahocky');
 
 	if (!record?._id) return <></>;
@@ -13,7 +14,7 @@ const StatKetQuaTichLuySinhVien = () => {
 			<Col span={24} xxl={12}>
 				<Card className='ket-qua-card'>
 					<div className='ket-qua-content'>
-						<div className='title'>Kết quả tích lũy</div>
+						<div className='title'>{intl.formatMessage({ id: 'ketquahoctap.stat.ketqua' })}</div>
 						<Row gutter={[8, 0]}>
 							{/* <Col span={24} lg={12}>
 								<div className='row'>
@@ -24,7 +25,7 @@ const StatKetQuaTichLuySinhVien = () => {
 							<Col span={24} md={8}>
 								<div className='row'>
 									<span className='sum-text'>{record.trungBinhTichLuyToanKhoaThang4 ?? '--'}</span>
-									TBC tích lũy (hệ 4)
+									{intl.formatMessage({ id: 'ketquahoctap.stat.tbc' })}
 								</div>
 							</Col>
 							<Col span={24} md={8}>
@@ -32,7 +33,7 @@ const StatKetQuaTichLuySinhVien = () => {
 									<span className='sum-text' style={{ color: '#9bd437' }}>
 										{record.tongSoTinChiTichLuyToanKhoa ?? '--'}
 									</span>
-									Tổng số tín chỉ tích lũy
+									{intl.formatMessage({ id: 'ketquahoctap.stat.tichluy' })}
 								</div>
 							</Col>
 							<Col span={24} md={8}>
@@ -40,8 +41,8 @@ const StatKetQuaTichLuySinhVien = () => {
 									<span className='sum-text' style={{ color: '#fc7e4d' }}>
 										{record.tongSoTinChiNoToanKhoa ?? '--'}
 									</span>
-									Tổng STC chưa đạt toàn khóa
-									<Tooltip title='Tổng số tín chỉ các học phần sinh viên đã tham gia học tập nhưng kết quả học tập chưa đạt trong toàn khóa'>
+									{intl.formatMessage({ id: 'ketquahoctap.stat.toankhoa' })}
+									<Tooltip title={intl.formatMessage({ id: 'ketquahoctap.stat.toankhoa.tooltip' })}>
 										<InfoCircleOutlined style={{ color: primaryColor }} />
 									</Tooltip>
 								</div>
@@ -54,7 +55,7 @@ const StatKetQuaTichLuySinhVien = () => {
 			<Col span={24} md={12} xxl={6}>
 				<Card className='ket-qua-card'>
 					<div className='ket-qua-content'>
-						<div className='title'>Trình độ (theo KQHT hiện tại)</div>
+						<div className='title'>{intl.formatMessage({ id: 'ketquahoctap.stat.trinhdo' })}</div>
 						<span className='sum-text'>{record.trinhDo ?? '--'}</span>
 					</div>
 				</Card>
@@ -62,7 +63,7 @@ const StatKetQuaTichLuySinhVien = () => {
 			<Col span={24} md={12} xxl={6}>
 				<Card className='ket-qua-card'>
 					<div className='ket-qua-content'>
-						<div className='title'>Xếp loại học lực</div>
+						<div className='title'>{intl.formatMessage({ id: 'ketquahoctap.stat.xeploai' })}</div>
 						<span className='sum-text' style={{ color: colorLoaiHocLuc[record.hocLuc] }}>
 							{record.hocLuc ?? '--'}
 						</span>

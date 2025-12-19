@@ -2,12 +2,13 @@ import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { Divider, Empty, Spin, Typography } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhanV2 from '../components/CardHocPhan';
 const { Title } = Typography;
 
 const TienTrinhThucTeV2 = () => {
+	const intl = useIntl();
 	const { loading, sinhVienGetTienTrinhThucTeModel } = useModel('daotao.chuongtrinhdaotao');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const [tienTrinhHocKy, setTienTrinhHocKy] = useState<ChuongTrinhDaoTao.TTienTrinhThucTe[][]>();
@@ -60,7 +61,7 @@ const TienTrinhThucTeV2 = () => {
 											fontWeight: 500,
 										}}
 									>
-										{_.sumBy(data, (i) => i.soTinChi ?? 0)} tín chỉ
+										{_.sumBy(data, (i) => i.soTinChi ?? 0)} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
 									</div>
 								</div>
 							</div>
@@ -92,7 +93,7 @@ const TienTrinhThucTeV2 = () => {
 					))
 				) : (
 					<Empty
-						description='Không có dữ liệu'
+						description={intl.formatMessage({ id: 'tientrinhhoctap.empty' })}
 						style={{
 							marginTop: '100px',
 							marginBottom: '32px',

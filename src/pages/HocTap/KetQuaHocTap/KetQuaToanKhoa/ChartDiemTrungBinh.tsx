@@ -1,7 +1,8 @@
 import LineChart from '@/components/Chart/LineChart';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ChartDiemTrungBinh = () => {
+	const intl = useIntl();
 	const { danhSach } = useModel('daotao.ketquahocky');
 
 	return (
@@ -11,7 +12,10 @@ const ChartDiemTrungBinh = () => {
 				danhSach.map((item) => item.trungBinhHocKyThang4 ?? 0),
 				danhSach.map((item) => item.trungBinhTichLuyToanKhoaThang4 ?? 0),
 			]}
-			yLabel={['TB học kỳ', 'TB tích lũy']}
+			yLabel={[
+				intl.formatMessage({ id: 'ketquahoctap.diemtb.hk' }),
+				intl.formatMessage({ id: 'ketquahoctap.diemtb.tl' }),
+			]}
 			colors={['#0982c9', '#18b903']}
 			title='Điểm trung bình'
 			formatY={(val) => (Math.round(val * 100) / 100).toString()}
