@@ -1,29 +1,30 @@
 import vi from '@/components/Chart/vi.json';
 import { type ApexOptions } from 'apexcharts';
 import Chart from 'react-apexcharts';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ChartSoTinChi = () => {
+	const intl = useIntl();
 	const { danhSach } = useModel('daotao.ketquahocky');
 
 	const series = [
 		{
-			name: 'Số TC tích lũy HK',
+			name: intl.formatMessage({ id: 'ketquahoctap.chart.tichluy' }),
 			group: 'dat',
 			data: danhSach.map((item) => item.tongSoTinChiTichLuyHocKy),
 		},
 		{
-			name: 'Tổng STC tích luỹ',
+			name: intl.formatMessage({ id: 'ketquahoctap.chart.tongtichluy' }),
 			group: 'tichluy',
 			data: danhSach.map((item) => item.tongSoTinChiTichLuyToanKhoa),
 		},
 		{
-			name: 'Số TC chưa đạt HK',
+			name: intl.formatMessage({ id: 'ketquahoctap.chart.chuadat' }),
 			group: 'dat',
 			data: danhSach.map((item) => item.tongSoTinChiNoHocKy),
 		},
 		{
-			name: 'Tổng STC chưa đạt',
+			name: intl.formatMessage({ id: 'ketquahoctap.chart.tongchuadat' }),
 			group: 'tichluy',
 			data: danhSach.map((item) => item.tongSoTinChiNoToanKhoa),
 		},
@@ -36,7 +37,7 @@ const ChartSoTinChi = () => {
 			stacked: true,
 		},
 		title: {
-			text: 'Số tín chỉ',
+			text: intl.formatMessage({ id: 'ketquahoctap.chart.stc' }),
 			align: 'left',
 			style: {
 				fontSize: '14px',

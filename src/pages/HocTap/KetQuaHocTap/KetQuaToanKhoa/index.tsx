@@ -1,6 +1,6 @@
 import { Carousel, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ChartDiemTrungBinh from './ChartDiemTrungBinh';
 import ChartPloToanKhoa from './ChartPlo';
 import ChartSoTinChi from './ChartSoTinChi';
@@ -8,6 +8,7 @@ import StatKetQuaTichLuySinhVien from './StatKetQuaTichLuy';
 import './style.less';
 
 const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolean }) => {
+	const intl = useIntl();
 	const { maKhoaNganh, loadData } = props;
 	const { getKetQuaHocKy, danhSach, loading } = useModel('daotao.ketquahocky');
 
@@ -45,7 +46,7 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolea
 				</>
 			) : (
 				<Empty
-					description='Chưa có kết quả học tập!'
+					description={intl.formatMessage({ id: 'ketquahoctap.empty' })}
 					image={Empty.PRESENTED_IMAGE_SIMPLE}
 					style={{ marginTop: 50, marginBottom: 32 }}
 				/>
