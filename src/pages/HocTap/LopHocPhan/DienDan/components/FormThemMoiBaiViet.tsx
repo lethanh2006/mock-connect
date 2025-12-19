@@ -9,6 +9,7 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useModel } from '@umijs/max';
 import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
 import React, { useEffect } from 'react';
+import { useIntl } from 'umi';
 import AvatarBlog from './Avatar';
 
 interface IProps {
@@ -18,6 +19,7 @@ interface IProps {
 }
 
 const FormThemMoiBaiViet = (props: IProps) => {
+	const intl = useIntl();
 	const { idLopHocPhan, idLopHanhChinh, getData } = props;
 	const { visibleForm, postModel, edit, record, putModel, setVisibleForm, formSubmiting, setFormSubmiting } =
 		useModel('diendan.baidang');
@@ -40,9 +42,6 @@ const FormThemMoiBaiViet = (props: IProps) => {
 				.map((it: any) => (typeof it === 'string' ? { noiDung: it } : it))
 				.filter((it: any) => it?.noiDung?.trim());
 		}
-
-		console.log('Loại:', typeof values.ngayKetThucBinhChon);
-		console.log('Giá trị:', values.ngayKetThucBinhChon);
 
 		const payload = {
 			...values,
@@ -87,12 +86,16 @@ const FormThemMoiBaiViet = (props: IProps) => {
 					<Form layout={'vertical'} onFinish={onFinish} form={form}>
 						<Form.Item
 							name={'tieuDe'}
-							label='Tiêu đề bài đăng'
+							label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.tieuDe' })}
 							rules={[...rules.required, ...rules.text, ...rules.length(250)]}
 						>
-							<Input placeholder='Tiêu đề' />
+							<Input placeholder={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.tieude.place' })} />
 						</Form.Item>
-						<Form.Item name={'noiDung'} label='Nội dung chi tiết' rules={[...rules.text, ...rules.requiredHtml]}>
+						<Form.Item
+							name={'noiDung'}
+							label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.noidung' })}
+							rules={[...rules.text, ...rules.requiredHtml]}
+						>
 							<TinyEditor hideMenubar miniToolbar height={500} minHeight={350} />
 						</Form.Item>
 
@@ -104,7 +107,9 @@ const FormThemMoiBaiViet = (props: IProps) => {
 									<Row gutter={[12, 0]}>
 										<Col span={24} md={8}>
 											<Form.Item name='isBinhChon' valuePropName='checked'>
-												<Checkbox>Tạo bình chọn?</Checkbox>
+												<Checkbox>
+													{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.taobinhchon' })}
+												</Checkbox>
 											</Form.Item>
 										</Col>
 
@@ -112,17 +117,21 @@ const FormThemMoiBaiViet = (props: IProps) => {
 											<>
 												<Col span={24} md={8}>
 													<Form.Item name='isChonNhieu' valuePropName='checked'>
-														<Checkbox>Cho phép chọn nhiều lựa chọn?</Checkbox>
+														<Checkbox>
+															{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.nhieuchon' })}
+														</Checkbox>
 													</Form.Item>
 												</Col>
 												<Col span={24} md={8}>
 													<Form.Item name='anDanh' valuePropName='checked'>
-														<Checkbox>Lựa chọn ẩn danh?</Checkbox>
+														<Checkbox>
+															{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.anDanh' })}
+														</Checkbox>
 													</Form.Item>
 												</Col>
 												<Col span={24} md={8}>
 													<Form.Item
-														label='Thời gian kết thúc bình chọn'
+														label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.tgkt' })}
 														name='ngayKetThucBinhChon'
 														rules={[...rules.required, ...rules.sauThoiDiem(dayjs(), 'Hôm nay')]}
 													>
@@ -141,7 +150,11 @@ const FormThemMoiBaiViet = (props: IProps) => {
 															{
 																validator: async (_, list) => {
 																	if (!list || list.length < 2) {
-																		return Promise.reject(new Error('Cần ít nhất 2 lựa chọn'));
+																		return Promise.reject(
+																			new Error(
+																				intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.vali' }),
+																			),
+																		);
 																	}
 																},
 															},
@@ -180,7 +193,7 @@ const FormThemMoiBaiViet = (props: IProps) => {
 																		size='small'
 																		block
 																	>
-																		Thêm lựa chọn
+																		{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.themchon' })}
 																	</Button>
 																	<Form.ErrorList errors={errors} />
 																</Col>
@@ -196,15 +209,20 @@ const FormThemMoiBaiViet = (props: IProps) => {
 						</Form.Item>
 						{/* ket thuc binh chon */}
 
-						<Form.Item name={'fileDinhKem'} label='File đính kèm'>
+						<Form.Item
+							name={'fileDinhKem'}
+							label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.file' })}
+						>
 							<UploadFile resize maxCount={5} accept={'.png, .jpg, .doc, .docx, .pdf'} />
 						</Form.Item>
 
 						<div className='form-footer'>
 							<Button type={'primary'} htmlType='submit' loading={formSubmiting}>
-								{edit ? 'Chỉnh sửa' : 'Đăng bài'}
+								{edit
+									? intl.formatMessage({ id: 'global.button.chinhsua' })
+									: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.form.dangbai' })}
 							</Button>
-							<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+							<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 						</div>
 					</Form>
 				</div>

@@ -1,6 +1,7 @@
 import donvihanhchinh from './donvihanhchinh';
 import lichsukien from './lichsukien';
 import login from './login';
+import lophanhchinh from './lophanhchinh';
 import thongtincanhan from './thongtincanhan';
 import trangchu from './trangchu';
 
@@ -10,4 +11,5 @@ export default {
 	...thongtincanhan,
 	...donvihanhchinh,
 	...lichsukien,
+	...lophanhchinh,
 };
