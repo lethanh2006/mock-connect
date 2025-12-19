@@ -12,25 +12,62 @@ const ViewMetaData = ({ visible, setVisible, data }: IProps) => {
 	const intl = useIntl();
 
 	return (
-		<Modal title='Thông tin chi tiết' open={visible} onCancel={() => setVisible(false)} footer={null} width={700}>
+		<Modal
+			title={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.thongtinchitiet.title' })}
+			open={visible}
+			onCancel={() => setVisible(false)}
+			footer={null}
+			width={700}
+		>
 			<Descriptions bordered column={2} size='middle' labelStyle={{ fontWeight: 600, width: 180 }}>
-				<Descriptions.Item label='Mã sinh viên'>{data?.STUDENT_CODE ?? '--'}</Descriptions.Item>
+				<Descriptions.Item
+					label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.masinhvien.title' })}
+				>
+					{data?.STUDENT_CODE ?? '--'}
+				</Descriptions.Item>
 
-				<Descriptions.Item label='Mã bài thi'>{data?.EXAM_ID ?? '--'}</Descriptions.Item>
+				<Descriptions.Item
+					label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.mabaithi.title' })}
+				>
+					{data?.EXAM_ID ?? '--'}
+				</Descriptions.Item>
 
-				<Descriptions.Item label='Thiết bị'>{data?.DEVICE_ID ?? '--'}</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.thietbi.title' })}>
+					{data?.DEVICE_ID ?? '--'}
+				</Descriptions.Item>
 
-				<Descriptions.Item label='Khoảng cách'>{data?.STUDENT_DISTANCE ?? '--'} m</Descriptions.Item>
+				<Descriptions.Item
+					label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.khoangcach.title' })}
+				>
+					{data?.STUDENT_DISTANCE ?? '--'} m
+				</Descriptions.Item>
 
-				<Descriptions.Item label='Thời gian làm'>{data?.STUDENT_MINS ?? '--'} phút</Descriptions.Item>
+				<Descriptions.Item
+					label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.thoigianlam.title' })}
+				>
+					{data?.STUDENT_MINS ?? '--'} phút
+				</Descriptions.Item>
 
-				<Descriptions.Item label='Điểm số'>{data?.STUDENT_SCORE ?? '--'}</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.diemso.title' })}>
+					{data?.STUDENT_SCORE ?? '--'}
+				</Descriptions.Item>
 
-				<Descriptions.Item label='Nhịp tim bắt đầu'>{data?.STUDENT_HEART_START ?? '--'}</Descriptions.Item>
+				<Descriptions.Item
+					label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.nhiptimbatdau.title' })}
+				>
+					{data?.STUDENT_HEART_START ?? '--'}
+				</Descriptions.Item>
 
-				<Descriptions.Item label='Nhịp tim kết thúc'>{data?.STUDENT_HEART_END ?? '--'}</Descriptions.Item>
+				<Descriptions.Item
+					label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.nhiptimketthuc.title' })}
+				>
+					{data?.STUDENT_HEART_END ?? '--'}
+				</Descriptions.Item>
 
-				<Descriptions.Item label='MAP (Google Map)' span={2}>
+				<Descriptions.Item
+					label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.googlemap.title' })}
+					span={2}
+				>
 					{data?.STUDENT_MAP ? (
 						<Image
 							src={`data:image/png;base64,${data?.STUDENT_MAP}`}
@@ -39,7 +76,7 @@ const ViewMetaData = ({ visible, setVisible, data }: IProps) => {
 							style={{ borderRadius: 6 }}
 						/>
 					) : (
-						'Không có dữ liệu MAP'
+						`${intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.khongcodulieumap.title' })}`
 					)}
 				</Descriptions.Item>
 			</Descriptions>

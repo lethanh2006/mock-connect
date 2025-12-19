@@ -5,12 +5,13 @@ import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
 import Sticky from 'react-stickynode';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import DotTheChatPage from './Dot';
 import ChiTietKetQuaDanhGia from './KetQua';
 import './style.less';
 
 const TheChatPage = () => {
+	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const { record: recDot } = useModel('tienich.thechat.dot');
 	const { record, getOneModel, loading: loadingChiSo } = useModel('tienich.thechat.chisothehinh');
@@ -57,18 +58,32 @@ const TheChatPage = () => {
 								layout='vertical'
 								colon={false}
 							>
-								<Descriptions.Item label='Đợt dánh giá thể chất' span={2}>
+								<Descriptions.Item
+									label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.dotdanhgiathechat.description' })}
+									span={2}
+								>
 									{recDot?.tenDot ?? '--'}
 								</Descriptions.Item>
-								<Descriptions.Item label='Năm học'>{recDot?.namHoc ?? '--'}</Descriptions.Item>
-								<Descriptions.Item label='Học kỳ'>{recDot?.hocKy?.ten ?? recDot?.maHocKy}</Descriptions.Item>
-								<Descriptions.Item label='Thời gian bắt đầu'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.namhoc.description' })}>
+									{recDot?.namHoc ?? '--'}
+								</Descriptions.Item>
+								<Descriptions.Item label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.hocky.description' })}>
+									{recDot?.hocKy?.ten ?? recDot?.maHocKy}
+								</Descriptions.Item>
+								<Descriptions.Item
+									label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.thoigianbatdau.description' })}
+								>
 									{recDot?.thoiGianBatDau ? dayjs(recDot?.thoiGianBatDau).format('DD/MM/YYYY') : '--'}
 								</Descriptions.Item>
-								<Descriptions.Item label='Thời gian kết thúc'>
+								<Descriptions.Item
+									label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.thoigianketthuc.description' })}
+								>
 									{recDot?.thoiGianKetThuc ? dayjs(recDot?.thoiGianKetThuc).format('DD/MM/YYYY') : '--'}
 								</Descriptions.Item>
-								<Descriptions.Item label='Tiêu chí đánh giá' span={2}>
+								<Descriptions.Item
+									label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.tieuchidanhgia.description' })}
+									span={2}
+								>
 									{recDot?.danhMucTheChat
 										?.map((item) => item?.danhMuc?.ten)
 										.filter(Boolean)
@@ -84,7 +99,9 @@ const TheChatPage = () => {
 
 							{record?._id && (
 								<div style={{ fontSize: '14px', lineHeight: '1.8', color: '#333' }}>
-									<Divider orientation='left'>Chỉ số thể hình</Divider>
+									<Divider orientation='left'>
+										{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.title' })}
+									</Divider>
 									<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '15px' }}>
 										<div className='height-card' style={{ background: '#DCFFFF' }}>
 											<div className='left'>
@@ -95,7 +112,9 @@ const TheChatPage = () => {
 													style={{ color: '#18BBC2' }}
 												/>
 
-												<div className='label'>Chiều cao</div>
+												<div className='label'>
+													{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.chieucao.title' })}
+												</div>
 											</div>
 
 											<div className='right'>
@@ -115,7 +134,9 @@ const TheChatPage = () => {
 													style={{ color: '#E20404' }}
 												/>
 
-												<div className='label'>Cân nặng</div>
+												<div className='label'>
+													{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.cannang.title' })}
+												</div>
 											</div>
 
 											<div className='right'>
@@ -137,7 +158,9 @@ const TheChatPage = () => {
 													style={{ color: '#FFAF0B' }}
 												/>
 
-												<div className='label'>Vòng eo</div>
+												<div className='label'>
+													{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.vongeo.title' })}
+												</div>
 											</div>
 
 											<div className='right'>
@@ -156,7 +179,9 @@ const TheChatPage = () => {
 													style={{ color: '#A61ADE' }}
 												/>
 
-												<div className='label'>Vòng mông</div>
+												<div className='label'>
+													{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.vongmong.title' })}
+												</div>
 											</div>
 
 											<div className='right'>
