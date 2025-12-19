@@ -5,9 +5,10 @@ import { ELoaiDot, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { getBieuMauPLOKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat';
 import { Select, Spin } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
+	const intl = useIntl();
 	const { getData } = props;
 	const { record: recDot } = useModel('tienich.dotkhaosat');
 	const { danhGiaGiangVienModel, formSubmiting } = useModel('lophocphan.danhgiagiangvien');
@@ -90,7 +91,7 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 				<Select
 					value={giangVienSsoId}
 					style={{ width: 250, marginBottom: 12 }}
-					placeholder='Chọn giảng viên'
+					placeholder={intl.formatMessage({ id: 'lophocphan.id.khaosat.chongv' })}
 					options={recLopHocPhan?.nhanSuList?.map((item) => ({
 						key: item.nhanSuSsoId,
 						value: item.nhanSuSsoId,

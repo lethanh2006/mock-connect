@@ -3,11 +3,12 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import dayjs from '@/utils/dayjs';
 import { Button, Carousel, Descriptions, Empty, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import DanhGiaTietHocPage from '../DanhGiaTietHoc';
 import ThongTinBuoiHoc from './ThongTinBuoiHoc';
 
 const ModalThoiKhoaBieu = () => {
+	const intl = useIntl();
 	const { record: recThoiKhoaBieu, visibleForm, setVisibleForm } = useModel('daotao.thoikhoabieu');
 	const [activeKey, setActiveKey] = useState<string>('noidung');
 	const chuaKetThuc = dayjs().isBefore(dayjs(recThoiKhoaBieu?.thoiGianKetThuc));
@@ -21,30 +22,34 @@ const ModalThoiKhoaBieu = () => {
 	return (
 		<ModalExpandable
 			width={800}
-			title='Thông tin buổi học'
+			title={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.title' })}
 			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			okButtonProps={{ hidden: true }}
-			cancelText='Đóng'
+			cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 		>
 			<ThongTinBuoiHoc buoiHoc={recThoiKhoaBieu} hideCard column={2} />
 
 			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
-				<Tabs.TabPane tab='Nội dung bài học' key='noidung'>
+				<Tabs.TabPane tab={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.baihoc' })} key='noidung'>
 					<Descriptions column={1} title='' style={{ marginTop: 12 }}>
-						<Descriptions.Item label='Nội dung học phần'>{recThoiKhoaBieu?.noiDungHp?.ten ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Tiêu đề bài học'>{recThoiKhoaBieu?.tieuDeBaiHoc ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Nội dung'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.hocphan' })}>
+							{recThoiKhoaBieu?.noiDungHp?.ten ?? '--'}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.tieude' })}>
+							{recThoiKhoaBieu?.tieuDeBaiHoc ?? '--'}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.noidung' })}>
 							<div dangerouslySetInnerHTML={{ __html: recThoiKhoaBieu?.noiDungBaiHoc ?? '--' }} />
 						</Descriptions.Item>
-						<Descriptions.Item label='Học liệu'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.hoclieu' })}>
 							{recThoiKhoaBieu?.hocLieuList?.filter((item) => item?.url)?.length ? (
 								<a
 									onClick={() => {
 										setVisibleFormFile(true);
 									}}
 								>
-									Xem chi tiết
+									{intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.xemchitiet' })}
 								</a>
 							) : (
 								'--'
@@ -53,9 +58,12 @@ const ModalThoiKhoaBieu = () => {
 					</Descriptions>
 				</Tabs.TabPane>
 
-				<Tabs.TabPane tab='Đánh giá buổi học' key='danhgia'>
+				<Tabs.TabPane tab={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.danhgia' })} key='danhgia'>
 					{chuaKetThuc ? (
-						<Empty style={{ marginTop: 32, marginBottom: 32 }} description='Buổi học chưa kết thúc' />
+						<Empty
+							style={{ marginTop: 32, marginBottom: 32 }}
+							description={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.ketthuc' })}
+						/>
 					) : (
 						<DanhGiaTietHocPage />
 					)}
@@ -63,7 +71,7 @@ const ModalThoiKhoaBieu = () => {
 			</Tabs>
 
 			<ModalExpandable
-				title='Chi tiết học liệu'
+				title={intl.formatMessage({ id: 'lophocphan.id.lichhoc.tkb.chitiethoclieu' })}
 				width={1000}
 				open={visibleFormFile}
 				footer={null}
@@ -77,7 +85,7 @@ const ModalThoiKhoaBieu = () => {
 				</Carousel>
 
 				<div className='form-footer'>
-					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					<Button onClick={() => setVisibleFormFile(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 				</div>
 			</ModalExpandable>
 		</ModalExpandable>

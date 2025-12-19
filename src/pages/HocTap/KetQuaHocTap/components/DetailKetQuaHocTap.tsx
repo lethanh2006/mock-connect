@@ -7,13 +7,14 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Divider, Empty, Space, Spin, Tabs, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: {
 	lopHocPhanId?: string;
 	diemHpSvHk?: LopHocPhan.IDiemHpSvHk;
 	toDanhGiaGiangVien?: () => void;
 }) => {
+	const intl = useIntl();
 	const { lopHocPhanId, diemHpSvHk, toDanhGiaGiangVien } = props;
 	const { danhSach: danhSachDauDiem, getModel } = useModel('daotao.daudiemhocphan');
 	const { sinhVienGetDiemLHPModel, record: recSinhVienLhp, loading } = useModel('lophocphan.sinhvienlophocphan');
@@ -61,12 +62,15 @@ const DetailKetQuaHocTap = (props: {
 
 		return (
 			<>
-				<Divider>Đánh giá quá trình</Divider>
+				<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.danhgia' })}</Divider>
 				<Descriptions bordered>
 					{Object.keys(gClos).map((field, index) => {
 						const cdrs = gClos[field];
 						return (
-							<Descriptions.Item label={`Bài đánh giá ${index + 1}`} key={field}>
+							<Descriptions.Item
+								label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.baodanhgia' })} ${index + 1}`}
+								key={field}
+							>
 								{cdrs.map((cdr) => (
 									<div key={cdr.maClo}>
 										{cdr.maClo}: <b>{cdr.diem ?? '--'}</b> <small>({cdr.trongSo}%)</small>
@@ -101,7 +105,10 @@ const DetailKetQuaHocTap = (props: {
 					{Object.keys(gClos).map((field, index) => {
 						const cdrs = gClos[field];
 						return (
-							<Descriptions.Item label={`Bài đánh giá ${index + 1}`} key={field}>
+							<Descriptions.Item
+								label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.baidanhgia' })} ${index + 1}`}
+								key={field}
+							>
 								{cdrs.map((cdr) => (
 									<div key={cdr.maClo}>
 										{cdr.maClo}: <b>{cdr.diem ?? '--'}</b> <small>({cdr.trongSo}%)</small>
@@ -120,14 +127,14 @@ const DetailKetQuaHocTap = (props: {
 			<>
 				{!!Object.keys(gClosThiLan1).length && (
 					<>
-						<Divider>Đánh giá KTHP</Divider>
+						<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp' })}</Divider>
 						{render(gClosThiLan1)}
 					</>
 				)}
 
 				{!!Object.keys(gClosThiLan2).length && (
 					<>
-						<Divider>Đánh giá KTHP (thi lần 2)</Divider>
+						<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp2' })}</Divider>
 						{render(gClosThiLan2)}
 					</>
 				)}
@@ -141,7 +148,7 @@ const DetailKetQuaHocTap = (props: {
 
 		return (
 			<>
-				<Divider>Điểm trung bình</Divider>
+				<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtb' })}</Divider>
 				<Descriptions bordered>
 					{trungBinhClos.map((cdr) => (
 						<Descriptions.Item label={cdr.maClo} key={cdr.maClo}>
@@ -164,21 +171,21 @@ const DetailKetQuaHocTap = (props: {
 						<Tabs.TabPane
 							tab={
 								<>
-									Điểm GPA
+									{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemGPA' })}
 									{recDiem?.diemChu === ELoaiDiemChu.F ? (
 										<Tag color={'red'} style={{ marginLeft: 8 }}>
-											Không đạt
+											{intl.formatMessage({ id: 'lophocphan.id.ketqua.khongdat' })}
 										</Tag>
 									) : recDiem?.dat === true ? (
 										<Tag color={'green'} style={{ marginLeft: 8 }}>
-											Đạt
+											{intl.formatMessage({ id: 'lophocphan.id.ketqua.dat' })}
 										</Tag>
 									) : null}
 								</>
 							}
 							key='1'
 						>
-							<Divider>Điểm thành phần & ĐKDT</Divider>
+							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtp' })}</Divider>
 							{trongSoThanhPhan > 0 ? (
 								<Descriptions bordered>
 									{dauDiemCoTrongSo?.map((item) => (
@@ -191,7 +198,7 @@ const DetailKetQuaHocTap = (props: {
 											{renderDiem(recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk])}
 										</Descriptions.Item>
 									))}
-									<Descriptions.Item label='Điều kiện dự thi'>
+									<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.dkthi' })}>
 										<span style={{ color: recDiem?.trangThaiThi === ETrangThaiThi.CAM_THI ? 'red' : undefined }}>
 											{recDiem?.trangThaiThi ?? '--'}
 										</span>
@@ -200,37 +207,43 @@ const DetailKetQuaHocTap = (props: {
 							) : (
 								<Empty
 									image={Empty.PRESENTED_IMAGE_SIMPLE}
-									description='Học phần không có điểm thành phần (100% KTHP)'
+									description={intl.formatMessage({ id: 'lophocphan.id.ketqua.empty' })}
 								/>
 							)}
 
-							<Divider>Điểm thi kết thúc học phần</Divider>
+							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemthi' })}</Divider>
 							<Descriptions bordered>
 								{hasTrongTrongSoThi && (
-									<Descriptions.Item label='Trọng số'>
+									<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.trongso' })}>
 										<div>{hasTrongTrongSoThi ? recDiem.trongSoThi1 : 100 - trongSoThanhPhan}%</div>
 									</Descriptions.Item>
 								)}
-								<Descriptions.Item label='Thi lần 1'>{renderDiem(recDiem?.diemThi1)}</Descriptions.Item>
-								<Descriptions.Item label='Thi lần 2'>{renderDiem(recDiem?.diemThi2)}</Descriptions.Item>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi1' })}>
+									{renderDiem(recDiem?.diemThi1)}
+								</Descriptions.Item>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi2' })}>
+									{renderDiem(recDiem?.diemThi2)}
+								</Descriptions.Item>
 
 								{_.range(2, 6).map((i) =>
 									recDiem?.[`trongSoThi${i}` as keyof LopHocPhan.IDiemHpSvHk] ? (
 										<>
-											<Descriptions.Item label={`Trọng số đầu điểm ${i}`}>
-												<div>{recDiem?.[`trongSoThi${i}` as keyof LopHocPhan.IDiemHpSvHk]}%</div>
+											<Descriptions.Item label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.trongso' })} ${i}`}>
+												<div>{recDiem?.[`trongSoThi${i}` as keyof LopHocPhan.IDiemHpSvHk] as any}%</div>
 											</Descriptions.Item>
-											<Descriptions.Item label='Thi lần 1'>
+											<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi1' })}>
 												{renderDiem(recDiem?.[`diemThi1${i}` as keyof LopHocPhan.IDiemHpSvHk])}
 											</Descriptions.Item>
-											<Descriptions.Item label='Thi lần 2'>
+											<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi2' })}>
 												{renderDiem(recDiem?.[`diemThi2${i}` as keyof LopHocPhan.IDiemHpSvHk])}
 											</Descriptions.Item>
 										</>
 									) : null,
 								)}
 
-								<Descriptions.Item label={`Điểm cuối (${100 - trongSoThanhPhan}%)`}>
+								<Descriptions.Item
+									label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.diemcuoi' })} (${100 - trongSoThanhPhan}%)`}
+								>
 									{recDiem?.trangThaiDuThi && recDiem.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
 										<span title={trangThaiDuThi[recDiem.trangThaiDuThi]}>{recDiem?.trangThaiDuThi}</span>
 									) : (
@@ -248,7 +261,7 @@ const DetailKetQuaHocTap = (props: {
 												setHienThiDiemThi(true);
 											}}
 										>
-											Xem chi tiết lịch sử thi
+											{intl.formatMessage({ id: 'lophocphan.id.ketqua.chitiet' })}
 										</a>
 									) : (
 										<DiemThiHocKy maHocKy={recDiem?.maHocKy} maHocPhan={recDiem?.maHocPhan} />
@@ -256,14 +269,24 @@ const DetailKetQuaHocTap = (props: {
 								</div>
 							)}
 
-							<Divider>Điểm tổng kết</Divider>
+							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtongket' })}</Divider>
 							<Descriptions bordered>
-								<Descriptions.Item label='Điểm hệ 10'>{renderDiem(recDiem?.diemTongKet)}</Descriptions.Item>
-								<Descriptions.Item label='Điểm hệ 4'>{renderDiem(recDiem?.diemThang4)}</Descriptions.Item>
-								<Descriptions.Item label='Điểm chữ'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diem10' })}>
+									{renderDiem(recDiem?.diemTongKet)}
+								</Descriptions.Item>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diem4' })}>
+									{renderDiem(recDiem?.diemThang4)}
+								</Descriptions.Item>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diemchu' })}>
 									{recDiem?.diemChu ? <Tag color={ColorDiemChu[recDiem.diemChu]}>{recDiem.diemChu}</Tag> : '--'}{' '}
 									{recDiem?.isCongNhanQuyDoiDiem && (
-										<Tooltip title='Điểm quy đổi'>(R{recDiem.coTichLuyQuyDoi ? ' - Tích lũy' : ''})</Tooltip>
+										<Tooltip title={intl.formatMessage({ id: 'lophocphan.id.ketqua.diemquydoi' })}>
+											(R
+											{recDiem.coTichLuyQuyDoi
+												? ` - ${intl.formatMessage({ id: 'lophocphan.id.ketqua.tichluy' })}`
+												: ''}
+											)
+										</Tooltip>
 									)}
 								</Descriptions.Item>
 							</Descriptions>
@@ -275,7 +298,7 @@ const DetailKetQuaHocTap = (props: {
 							<Tabs.TabPane
 								tab={
 									<>
-										Điểm CLO
+										{intl.formatMessage({ id: 'lophocphan.id.ketqua.clo' })}
 										{!!recDiem.danhSachDiemMucTieuDauRa?.length && (
 											<Tag
 												color={recDiem?.danhSachDiemMucTieuDauRa?.every((i) => i.pass) ? 'green' : 'red'}
@@ -301,11 +324,11 @@ const DetailKetQuaHocTap = (props: {
 					<Empty
 						description={
 							<>
-								Vui lòng Đánh giá giảng viên trước khi xem điểm học phần
+								{intl.formatMessage({ id: 'lophocphan.id.ketqua.noti' })}
 								{toDanhGiaGiangVien ? (
 									<div style={{ marginTop: 12 }}>
 										<Button type='link' onClick={() => toDanhGiaGiangVien()}>
-											Đánh giá ngay <ArrowRightOutlined />
+											{intl.formatMessage({ id: 'lophocphan.id.ketqua.danhgiangay' })} <ArrowRightOutlined />
 										</Button>
 									</div>
 								) : null}
@@ -315,7 +338,10 @@ const DetailKetQuaHocTap = (props: {
 					/>
 				)
 			) : (
-				<Empty description='Chưa có kết quả học tập' style={{ margin: '18px 0' }} />
+				<Empty
+					description={intl.formatMessage({ id: 'lophocphan.id.ketqua.emptyhoctap' })}
+					style={{ margin: '18px 0' }}
+				/>
 			)}
 		</Spin>
 	);

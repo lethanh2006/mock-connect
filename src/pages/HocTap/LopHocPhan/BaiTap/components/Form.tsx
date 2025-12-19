@@ -12,12 +12,13 @@ import dayjs from '@/utils/dayjs';
 import { resetFieldsForm } from '@/utils/utils';
 import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Spin, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
 import '../../DienDan/style.less';
 import FormQuiz from './FormQuiz';
 
 const FormBaiTap = (props: any) => {
+	const intl = useIntl();
 	const { getData } = props;
 	const [form] = Form.useForm();
 	const { record, visibleForm, setVisibleForm, sinhVienNopBaiTapModal, formSubmiting } = useModel('daotao.baitap');
@@ -94,7 +95,7 @@ const FormBaiTap = (props: any) => {
 			const diff = endTime.diff(now);
 
 			if (diff <= 0) {
-				setRemainingTime('Thời hạn đã hết');
+				setRemainingTime(intl.formatMessage({ id: 'lophocphan.id.baitap.thoihan' }));
 				return;
 			}
 
@@ -104,7 +105,9 @@ const FormBaiTap = (props: any) => {
 			const minutes = dur.minutes();
 			const seconds = dur.seconds();
 
-			setRemainingTime(`${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`);
+			setRemainingTime(
+				`${days} ${intl.formatMessage({ id: 'lophocphan.id.baitap.ngay' })} ${hours} ${intl.formatMessage({ id: 'lophocphan.id.baitap.gio' })} ${minutes} ${intl.formatMessage({ id: 'lophocphan.id.baitap.phut' })} ${seconds} ${intl.formatMessage({ id: 'lophocphan.id.baitap.giay' })}`,
+			);
 		};
 
 		// Chạy hàm đếm ngược mỗi giây
@@ -210,7 +213,7 @@ const FormBaiTap = (props: any) => {
 		<>
 			{record?.trangThai === ETrangThaiNopBaiTap.DA_NOP ? (
 				<div style={{ marginBottom: 12 }}>
-					<Alert type='success' showIcon message='Bạn đã nộp bài!' />
+					<Alert type='success' showIcon message={intl.formatMessage({ id: 'lophocphan.id.baitap.danopbai' })} />
 				</div>
 			) : !quaThoiHanNopBai ? (
 				<div style={{ marginBottom: 12 }}>
@@ -219,7 +222,8 @@ const FormBaiTap = (props: any) => {
 						showIcon
 						message={
 							<>
-								Thời gian còn lại để nộp bài: <b style={{ color: 'red' }}>{remainingTime}</b>{' '}
+								{intl.formatMessage({ id: 'lophocphan.id.baitap.tgconlai' })}:{' '}
+								<b style={{ color: 'red' }}>{remainingTime}</b>{' '}
 								<b>({dayjs(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})</b>
 							</>
 						}
@@ -230,7 +234,12 @@ const FormBaiTap = (props: any) => {
 					<Alert
 						type='error'
 						showIcon
-						message={<>Quá thời hạn nộp bài {dayjs(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</>}
+						message={
+							<>
+								{intl.formatMessage({ id: 'lophocphan.id.baitap.tgquahan' })}{' '}
+								{dayjs(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+							</>
+						}
 					/>
 				</div>
 			) : null}
@@ -238,13 +247,15 @@ const FormBaiTap = (props: any) => {
 			<Form onFinish={onFinish} form={form} layout='vertical'>
 				<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
 					<Col span={24}>
-						<Divider>Chi tiết bài tập</Divider>
+						<Divider>{intl.formatMessage({ id: 'lophocphan.id.baitap.chitietbt' })}</Divider>
 					</Col>
 					<div className='dien-dan'>
 						<div className='content'>
 							<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
-								<Descriptions.Item label='Giảng viên giao bài'>{record?.assignment?.hoTenNguoiGiao}</Descriptions.Item>
-								<Descriptions.Item label='Thời gian giao bài'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.baitap.gv' })}>
+									{record?.assignment?.hoTenNguoiGiao}
+								</Descriptions.Item>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.baitap.tggiaobai' })}>
 									{dayjs(record?.assignment?.thoiGianGiao ?? record?.assignment?.updatedAt).format('HH:mm DD/MM/YYYY')}
 								</Descriptions.Item>
 							</Descriptions>
@@ -252,7 +263,9 @@ const FormBaiTap = (props: any) => {
 								<Col xs={24}>
 									<b>{record?.assignment?.noiDung}</b>{' '}
 									{record?.assignment?.choPhepCapNhatSauNop && (
-										<i style={{ color: APP_CONFIG_PRIMARY_COLOR }}>(Cho phép nộp bài sau thời gian hết hạn)</i>
+										<i style={{ color: APP_CONFIG_PRIMARY_COLOR }}>
+											{intl.formatMessage({ id: 'lophocphan.id.baitap.chophep' })}
+										</i>
 									)}
 								</Col>
 								<Col xs={24}>
@@ -263,7 +276,7 @@ const FormBaiTap = (props: any) => {
 												? record?.assignment.huongDanNop.replace(
 														/<img/g,
 														'<img style="max-width:100%;height:auto;display:block;margin:10px 0;"',
-												  )
+													)
 												: '',
 										}}
 									/>
@@ -278,30 +291,30 @@ const FormBaiTap = (props: any) => {
 					</div>
 
 					<Col span={24}>
-						<Divider>Câu trả lời của bạn</Divider>
+						<Divider>{intl.formatMessage({ id: 'lophocphan.id.baitap.cautl ' })}</Divider>
 					</Col>
 
 					<Col span={24}>
 						<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
-							<Descriptions.Item label='Trạng thái'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.baitap.trangthai' })}>
 								<Tag color={colorTrangThaiNopBaiTap[record?.trangThai as ETrangThaiNopBaiTap]}>
 									{mapTrangThaiNopBaiTap[record?.trangThai as ETrangThaiNopBaiTap]}
 								</Tag>
 							</Descriptions.Item>
-							<Descriptions.Item label='Thời gian cập nhật'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.baitap.tgcapnhat' })}>
 								{record?.thoiGianTraLoi ? dayjs(record?.thoiGianTraLoi).format('HH:mm DD/MM/YYYY') : '--'}
 							</Descriptions.Item>
 						</Descriptions>
 					</Col>
 
 					<Col span={24}>
-						<Form.Item name='noiDungTraLoi' label='Nội dung trả lời'>
+						<Form.Item name='noiDungTraLoi' label={intl.formatMessage({ id: 'lophocphan.id.baitap.ndtraloi' })}>
 							<Input.TextArea rows={3} disabled={disable || disableIsQuiz} />
 						</Form.Item>
 					</Col>
 
 					<Col span={24}>
-						<Form.Item name='urlImages' label='Tệp đính kèm'>
+						<Form.Item name='urlImages' label={intl.formatMessage({ id: 'lophocphan.id.baitap.tepdinhkem' })}>
 							<UploadFile
 								maxCount={5}
 								otherProps={{
@@ -322,9 +335,7 @@ const FormBaiTap = (props: any) => {
 
 				{record?.assignment?.isQuiz && record?.trangThai === ETrangThaiNopBaiTap.CHUA_NOP && !quaThoiHanNopBai && (
 					<Col span={24}>
-						<i style={{ color: 'red' }}>
-							Đối với bài Quiz, chỉ cho phép sinh viên làm bài và nộp bài 1 lần, không thể chỉnh sửa sau khi nộp bài
-						</i>
+						<i style={{ color: 'red' }}>{intl.formatMessage({ id: 'lophocphan.id.baitap.notiQ' })}</i>
 					</Col>
 				)}
 
@@ -332,10 +343,10 @@ const FormBaiTap = (props: any) => {
 					<Tooltip
 						title={
 							disable || disableIsQuiz
-								? 'Đã nộp bài tập hoặc quá thời hạn nộp bài'
+								? intl.formatMessage({ id: 'lophocphan.id.baitap.tooltip1' })
 								: !!record?.tongDiem
-									? 'Đã có điểm bài tập'
-									: 'Nộp bài'
+									? intl.formatMessage({ id: 'lophocphan.id.baitap.tooltip2' })
+									: intl.formatMessage({ id: 'lophocphan.id.baitap.nopbai' })
 						}
 					>
 						<Button
@@ -345,15 +356,15 @@ const FormBaiTap = (props: any) => {
 							type='primary'
 							onClick={() => setTrangThaiNopBai('1')}
 						>
-							Nộp bài
+							{intl.formatMessage({ id: 'lophocphan.id.baitap.nopbai' })}
 						</Button>
 					</Tooltip>
 					{!record?.assignment?.isQuiz && (
 						<Tooltip
 							title={
 								record?.trangThai === ETrangThaiNopBaiTap.DA_NOP || disable
-									? 'Đã nộp bài tập hoặc quá thời hạn nộp bài'
-									: 'Lưu bài'
+									? intl.formatMessage({ id: 'lophocphan.id.baitap.tooltip3' })
+									: intl.formatMessage({ id: 'lophocphan.id.baitap.luulai' })
 							}
 						>
 							<Button
@@ -363,11 +374,11 @@ const FormBaiTap = (props: any) => {
 								type='primary'
 								onClick={() => setTrangThaiNopBai('2')}
 							>
-								Lưu lại
+								{intl.formatMessage({ id: 'global.button.luulai' })}
 							</Button>
 						</Tooltip>
 					)}
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 				</div>
 			</Form>
 		</>

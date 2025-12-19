@@ -11,13 +11,14 @@ import dayjs from '@/utils/dayjs';
 import { MailOutlined } from '@ant-design/icons';
 import { Button, Carousel, Tag } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ModalXinNghi from '../YeuCauNghiHoc/ModalXinNghi';
 
 const TableLichHocLopHP = (props: {
 	items: ThoiKhoaBieu.IRecord[];
 	onClickItem: (val: ThoiKhoaBieu.IRecord) => void;
 }) => {
+	const intl = useIntl();
 	const { loading, setRecord } = useModel('daotao.thoikhoabieu');
 	const { visibleForm, setVisibleForm, daXinNghiHoc } = useModel('daotao.dangkynghihoc');
 	const { items, onClickItem } = props;
@@ -46,7 +47,7 @@ const TableLichHocLopHP = (props: {
 			onCell,
 		},
 		{
-			title: 'Ngày học',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.ngayhoc' }),
 			dataIndex: 'ngay',
 			align: 'center',
 			width: 150,
@@ -55,23 +56,23 @@ const TableLichHocLopHP = (props: {
 			onCell,
 		},
 		{
-			title: 'Tiết học',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.tiethoc' }),
 			width: 60,
 			align: 'center',
 			render: (val, rec) => `${rec.tietBatDau} - ${rec.tietKetThuc}`,
 			onCell,
 		},
 		{
-			title: 'Phòng học',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.phonghoc' }),
 			dataIndex: 'phongHoc',
 			align: 'center',
 			width: 100,
-			render: (val) => (val ? val : <i>Chưa cập nhật</i>),
+			render: (val) => (val ? val : <i>{intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.chuacapnhat' })}</i>),
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Hình thức',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.hinhthuc' }),
 			dataIndex: 'hinhThucGiangDay',
 			align: 'center',
 			width: 100,
@@ -81,7 +82,7 @@ const TableLichHocLopHP = (props: {
 			onCell,
 		},
 		{
-			title: 'Điểm danh',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.diemdanh' }),
 			dataIndex: 'trangThaiDiemDanhCaNhan',
 			align: 'center',
 			width: 120,
@@ -93,16 +94,18 @@ const TableLichHocLopHP = (props: {
 			onCell,
 		},
 		{
-			title: 'Giảng viên',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.giangvien' }),
 			dataIndex: 'nhanSuSsoId',
 			width: 140,
 			render: (val, rec) =>
-				rec.nhanSu?.ten ? [rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ') : (rec.tenNhanSu ?? <i>Chưa cập nhật</i>),
+				rec.nhanSu?.ten
+					? [rec.nhanSu?.hoDem, rec.nhanSu?.ten].join(' ')
+					: (rec.tenNhanSu ?? <i>{intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.chuacapnhat' })}</i>),
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Tiêu đề',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.tieude' }),
 			dataIndex: 'tieuDeBaiHoc',
 			width: 180,
 			// render: (val, rec) => rec.noiDungHp?.tieuDe ?? '',
@@ -110,7 +113,7 @@ const TableLichHocLopHP = (props: {
 			onCell,
 		},
 		{
-			title: 'Học liệu',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.hoclieu' }),
 			width: 140,
 			render: (val, rec) =>
 				rec.hocLieuList?.filter((item) => item?.url)?.length ? (
@@ -120,7 +123,7 @@ const TableLichHocLopHP = (props: {
 							setVisibleFormFile(true);
 						}}
 					>
-						Xem chi tiết
+						{intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.xemchitiet' })}
 					</a>
 				) : null,
 			onCell: onCellStyle,
@@ -140,13 +143,17 @@ const TableLichHocLopHP = (props: {
 		// 	onCell,
 		// },
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.thaotac' }),
 			width: 60,
 			align: 'center',
 			render: (_, rec) => (
 				<ButtonExtend
 					type='link'
-					tooltip={daXinNghiHoc(rec._id) ? 'Đã gửi đơn' : 'Xin nghỉ học'}
+					tooltip={
+						daXinNghiHoc(rec._id)
+							? intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.dagoidon' })
+							: intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.xinnghihoc' })
+					}
 					icon={<MailOutlined />}
 					// TODO: Chỉ cho phép gửi đơn chậm nhất 1 ngày sau buổi học => TH Muốn gửi lại/Hủy đơn thì sao?
 					// disabled={dayjs().isAfter(dayjs(rec.ngay).add(1, 'day').endOf('day')) || daXinNghiHoc(rec._id)}
@@ -170,7 +177,7 @@ const TableLichHocLopHP = (props: {
 			/>
 
 			<ModalExpandable
-				title='Chi tiết học liệu'
+				title={intl.formatMessage({ id: 'lophocphan.id.lichhoc.table.chitiet' })}
 				width={1000}
 				open={visibleFormFile}
 				footer={null}
@@ -184,7 +191,7 @@ const TableLichHocLopHP = (props: {
 				</Carousel>
 
 				<div className='form-footer'>
-					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					<Button onClick={() => setVisibleFormFile(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 				</div>
 			</ModalExpandable>
 
