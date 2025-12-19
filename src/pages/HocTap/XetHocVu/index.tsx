@@ -12,9 +12,10 @@ import {
 import dayjs from '@/utils/dayjs';
 import { Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const XetHocVuPage = () => {
+	const intl = useIntl();
 	const { getAllModel, loading } = useModel('daotao.xulykqht');
 	const [danhSach, setDanhSach] = useState<XetHocVu.IRecord[]>([]);
 
@@ -27,55 +28,55 @@ const XetHocVuPage = () => {
 
 	const columns: IColumn<XetHocVu.IRecord>[] = [
 		{
-			title: 'Học kỳ',
+			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.hocky.tablecolumntitle' }),
 			dataIndex: 'maHocKy',
 			width: 140,
 			render: (val, rec) => rec.hocKy?.ten ?? val,
 		},
 		// {
-		// 	title: 'Mã SV',
+		// 	title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.masv.tablecolumntitle' }),
 		// 	dataIndex: 'maSinhVien',
 		// 	width: 120,
 		// 	align: 'center',
 		// },
 		// {
-		// 	title: 'Họ tên',
+		// 	title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.hoten.tablecolumntitle' }),
 		// 	dataIndex: 'hoTen',
 		// 	width: 180,
 		// },
 		{
-			title: 'Khóa ngành',
+			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.khoanganh.tablecolumntitle' }),
 			dataIndex: 'maKhoaNganh',
 			width: 140,
 			render: (val, rec) => rec?.khoaNganh?.ten,
 		},
 		{
-			title: 'Lớp hành chính',
+			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.lophanhchinh.tablecolumntitle' }),
 			dataIndex: 'tenLopHanhChinh',
 			width: 120,
 		},
 		{
-			title: 'Loại xử lý',
+			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.loaixuly.tablecolumntitle' }),
 			dataIndex: 'loaiXuLy',
 			align: 'center',
 			width: 120,
 			render: (val: ELoaiXuLyKQHT) => val && <Tag color={colorLoaiXuLyKQHT[val]}>{loaiXuLyKQHT[val]}</Tag>,
 		},
 		{
-			title: 'Lý do',
+			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.lydo.tablecolumntitle' }),
 			dataIndex: 'lyDo',
 			width: 280,
 			render: (val) => val && <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.trangThai.tablecolumntitle' }),
 			dataIndex: 'trangThai',
 			align: 'center',
 			render: (val: ETrangThaiDuyetXuLyKqht) => <Tag color={colorTrangThaiDuyetXuLyKqht[val]}>{val}</Tag>,
 			width: 120,
 		},
 		{
-			title: 'Quyết định',
+			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.quyetdinh.tablecolumntitle' }),
 			dataIndex: 'quyetDinhId',
 			align: 'center',
 			width: 120,

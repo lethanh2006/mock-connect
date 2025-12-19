@@ -3,9 +3,10 @@ import { IColumn } from '@/components/Table/typing';
 import { TheChat } from '@/services/TienIch/TheChat/typing';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const DotTheChatPage = () => {
+	const intl = useIntl();
 	const { danhSach, getAllModel, loading, setRecord, record } = useModel('tienich.thechat.dot');
 
 	const getData = () => {
@@ -35,28 +36,28 @@ const DotTheChatPage = () => {
 
 	const columns: IColumn<TheChat.IDotDanhGiaTheChat>[] = [
 		{
-			title: 'TT',
+			title: intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.thutu.tablecolumntitle' }),
 			dataIndex: 'index',
 			align: 'center',
 			width: 40,
 			onCell,
 		},
 		{
-			title: 'Tên đợt',
+			title: intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.tendot.tablecolumntitle' }),
 			dataIndex: 'tenDot',
 			width: 200,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Thời gian bắt đầu',
+			title: intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.thoigianbatdau.tablecolumntitle' }),
 			align: 'center',
 			width: 120,
 			render: (_, rec) => (rec?.thoiGianBatDau ? dayjs(rec.thoiGianBatDau).format('DD/MM/YYYY') : '--'),
 			onCell,
 		},
 		{
-			title: 'Thời gian kết thúc',
+			title: intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.thoigianketthuc.tablecolumntitle' }),
 			align: 'center',
 			width: 120,
 			render: (_, rec) => (rec?.thoiGianKetThuc ? dayjs(rec.thoiGianKetThuc).format('DD/MM/YYYY') : '--'),
