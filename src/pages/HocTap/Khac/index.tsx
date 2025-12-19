@@ -2,35 +2,37 @@ import { TabViewPage } from '@/components/TabViewPage';
 import DangKyChuyenNganhPage from '@/pages/SinhVien/DangKyChuyenNganh';
 import TheChatPage from '@/pages/TienIch/TheChat';
 import { CheckCircleOutlined, ProfileOutlined, SmileOutlined, StopOutlined } from '@ant-design/icons';
+import { useIntl } from 'umi';
 import BaoLuuThoiHoc from '../BaoLuuThoiHoc';
 import XetHocVuPage from '../XetHocVu';
 
 const HocTapKhacPage = () => {
+	const intl = useIntl();
 	return (
 		<TabViewPage
-			cardTitle='Học tập khác'
+			cardTitle={intl.formatMessage({ id: 'hoctapkhac.title' })}
 			menu={[
 				{
 					icon: <ProfileOutlined />,
-					title: 'Đăng ký chuyên ngành',
+					title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
 					menuKey: 'dang-ky-chuyen-nganh',
 					content: <DangKyChuyenNganhPage />,
 				},
 				{
 					icon: <CheckCircleOutlined />,
-					title: 'Xét học vụ',
+					title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.title' }),
 					menuKey: 'xet-hoc-vu',
 					content: <XetHocVuPage />,
 				},
 				{
 					icon: <StopOutlined />,
-					title: 'Bảo lưu, thôi học',
+					title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.title' }),
 					menuKey: 'baoluu-thoihoc',
 					content: <BaoLuuThoiHoc />,
 				},
 				{
 					icon: <SmileOutlined />,
-					title: 'Thể chất sinh viên',
+					title: intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.title' }),
 					menuKey: 'thechat',
 					content: <TheChatPage />,
 				},

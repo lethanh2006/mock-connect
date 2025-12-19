@@ -11,10 +11,11 @@ import dayjs from '@/utils/dayjs';
 import { EditOutlined } from '@ant-design/icons';
 import { Alert, Button, Tag, Tooltip } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import Form from './Form';
 
 const DangKyChuyenNganhPage = () => {
+	const intl = useIntl();
 	const { getModel, page, limit, handleEdit, dotHienHanh, getDotHienHanhModel, danhSach } = useModel(
 		'sinhvien.dangkychuyennganh.sinhvien',
 	);
@@ -33,18 +34,18 @@ const DangKyChuyenNganhPage = () => {
 
 	const columns: IColumn<DangKyChuyenNganh.ISinhVienDangKy>[] = [
 		{
-			title: 'Đợt đăng ký',
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.dotangky.tablecolumntitle' }),
 			width: 200,
 			render: (val, rec) => rec.dotDangKyChuyenNganh?.ten,
 		},
 		{
-			title: 'Chuyên ngành',
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.chuyennganh.tablecolumntitle' }),
 			dataIndex: 'maChuyenNganh',
 			width: 160,
 			render: (val, rec) => rec.chuyenNganh?.ten ?? val,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.trangthai.tablecolumntitle' }),
 			dataIndex: 'trangThaiDangKy',
 			align: 'center',
 			width: 150,
@@ -53,40 +54,40 @@ const DangKyChuyenNganhPage = () => {
 			),
 		},
 		{
-			title: 'Ghi chú',
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.ghichu.tablecolumntitle' }),
 			dataIndex: 'ghiChu',
 			filterType: 'string',
 			width: 180,
 			render: (val) => <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Đăng ký',
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.dangky.tablecolumntitle' }),
 			width: 120,
 			align: 'center',
 			dataIndex: 'createdAt',
 			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
-			title: 'Cập nhật',
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.capnhat.tablecolumntitle' }),
 			width: 120,
 			align: 'center',
 			dataIndex: 'updatedAt',
 			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		// {
-		// 	title: 'Khóa ngành sinh viên',
+		// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.khoanganhsinhvien.tablecolumntitle' }),
 		// 	width: 200,
 		// 	render: (val, rec) => rec.sinhVien?.khoaNganh?.ten,
 		// 	onCell,
 		// },
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.thaotac.tablecolumntitle' }),
 			align: 'center',
 			width: 60,
 			fixed: 'right',
 			render: (val, rec) => (
 				<>
-					<Tooltip title='Chỉnh sửa'>
+					<Tooltip title={intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.thaotac.chinhsua.tooltiptitle' })}>
 						<Button
 							disabled={
 								rec.trangThaiDangKy === ETrangThaiDangKyChuyenNganh.DA_DUYET ||
@@ -111,12 +112,14 @@ const DangKyChuyenNganhPage = () => {
 						showIcon
 						message={
 							<>
-								Đợt đăng ký chuyên ngành &quot;<b>{dotHienHanh.ten}</b>&quot; đang diễn ra từ{' '}
+								{intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.alert.success.beginningofsentence' })} &quot;
+								<b>{dotHienHanh.ten}</b>&quot;{' '}
+								{intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.alert.success.endofsentence' })}{' '}
 								<b>
 									{dayjs(dotHienHanh.thoiGianBatDau).format('HH:mm:ss DD/MM')} -{' '}
 									{dayjs(dotHienHanh.thoiGianKetThuc).format('HH:mm:ss DD/MM')}
 								</b>
-								. Vui lòng đăng ký đúng thời hạn
+								. {intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.alert.success.conclusionofsentence' })}
 							</>
 						}
 						type='success'
@@ -124,7 +127,7 @@ const DangKyChuyenNganhPage = () => {
 				) : (
 					<Alert
 						showIcon
-						message='Hiện không có đợt đăng ký chuyên ngành phù hợp, vui lòng thử lại sau'
+						message={intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.alert.warning' })}
 						type='warning'
 					/>
 				)}
