@@ -19,7 +19,7 @@ import {
 import { Card, Col, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
-import { history, useModel, useParams } from 'umi';
+import { history, useIntl, useModel, useParams } from 'umi';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
 import CardBaiTapLopHp from './components/CardBaiTapLopHp';
 import DanhSachGiangVien from './components/DanhSachGiangVien';
@@ -31,6 +31,7 @@ import DanhSachBuoiHoc from './LichHoc';
 import LmsOdooPage from './LMS';
 
 const DetailLopTinChi = () => {
+	const intl = useIntl();
 	const { id } = useParams<{ id: string }>();
 	const { record: recHocKy, getModel: getHocKy } = useModel('daotao.hocky');
 	const { record, sinhVienGetByIdModel, setRecord, loading } = useModel('lophocphan.lophocphan');
@@ -49,14 +50,14 @@ const DetailLopTinChi = () => {
 
 	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'dien-dan', 'lms', 'bai-tap', 'ket-qua', 'danh-gia-giang-vien'];
 	const titles = [
-		'Thông tin chung',
-		'Lịch học',
-		'Thông báo',
-		'Diễn đàn',
-		'Kết quả LMS',
-		'Bài tập, bài kiểm tra',
-		'Kết quả học tập',
-		'Khảo sát sinh viên',
+		intl.formatMessage({ id: 'lophocphan.id.thongtinchung' }),
+		intl.formatMessage({ id: 'lophocphan.id.lichhoc' }),
+		intl.formatMessage({ id: 'lophocphan.id.thongbao' }),
+		intl.formatMessage({ id: 'lophocphan.id.diendan' }),
+		intl.formatMessage({ id: 'lophocphan.id.lms' }),
+		intl.formatMessage({ id: 'lophocphan.id.baitap' }),
+		intl.formatMessage({ id: 'lophocphan.id.ketqua' }),
+		intl.formatMessage({ id: 'lophocphan.id.khaosat' }),
 	];
 	const [visibleDeCuongHp, setVisibleDeCuongHp] = useState<[boolean, string]>([false, '3']);
 
@@ -150,14 +151,17 @@ const DetailLopTinChi = () => {
 					<Col span={24} md={{ span: 8 }} xxl={{ span: 6 }}>
 						<Card variant='borderless' styles={{ body: { paddingTop: 0 } }}>
 							<Tabs activeKey={activeKey} onChange={(val) => setActiveKey(val)}>
-								<Tabs.TabPane tab='Danh sách sinh viên' key='-1' />
+								<Tabs.TabPane tab={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv' })} key='-1' />
 								{danhSachLopThucHanh?.map((item) => (
 									<Tabs.TabPane tab={`Nhóm ${item.loai} ${item.soThuTuNhom}`} key={item._id} />
 								))}
 							</Tabs>
 
 							{activeKey !== '-1' ? (
-								<DanhSachGiangVien danhSachNhanSu={danhSachNhanSuLopTH} title='Giảng viên phụ trách nhóm lớp' />
+								<DanhSachGiangVien
+									danhSachNhanSu={danhSachNhanSuLopTH}
+									title={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv.gv' })}
+								/>
 							) : null}
 
 							<DanhSachSinhVien
@@ -252,7 +256,7 @@ const DetailLopTinChi = () => {
 			<ModalHocPhan
 				visible={visibleDeCuongHp[0]}
 				setVisible={() => setVisibleDeCuongHp([false, '0'])}
-				title={`Chi tiết đề cương học phần ${record?.hocKy?.ten ? `- ${record?.hocKy?.ten ?? ''}` : ''}`}
+				title={`${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} ${record?.hocKy?.ten ? `- ${record?.hocKy?.ten ?? ''}` : ''}`}
 				activeKey={visibleDeCuongHp[1]}
 			/>
 		</>

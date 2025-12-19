@@ -6,12 +6,13 @@ import { ArrowLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { Link, useModel, useNavigate } from 'umi';
+import { Link, useIntl, useModel, useNavigate } from 'umi';
 import ModalThongTinGiangVien from './ModalGiangVien';
 import './style.less';
 const { Title, Text } = Typography;
 
 const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
+	const intl = useIntl();
 	const { loading, record } = useModel('lophocphan.lophocphan');
 	const [selectedGiangVien, setSelectedGiangVien] = useState<ToChucNhanSu.INhanSu>();
 	const [visibleGvDetailModal, setVisibleGvDetailModal] = useState(false);
@@ -65,25 +66,32 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 										}}
 										onClick={() => navigate('/hoc-tap/lop-tin-chi')}
 									>
-										<Tooltip title='Quay lại'>
+										<Tooltip title={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.quaylai' })}>
 											<ArrowLeftOutlined style={{ color: '#333', fontSize: 14 }} />
 										</Tooltip>
 									</div>
 
 									<Title level={4} style={{ margin: 0 }}>
 										{record?.hocPhan?.ten ? (
-											<Tooltip title='Xem đề cương chi tiết học phần'>
+											<Tooltip title={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.chitiet' })}>
 												<a onClick={() => props.onShowDeCuong?.()} style={{ color: '#333' }}>
 													{record?.hocPhan?.ten ?? ''} <InfoCircleOutlined style={{ color: primaryColor }} />
 												</a>
 											</Tooltip>
 										) : (
-											<i>Chưa cập nhật</i>
+											<i>{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.chuacapnhat' })}</i>
 										)}
 									</Title>
 
-									<Tag color='red'>{record?.hocPhan?.soTinChi ?? '--'} tín chỉ</Tag>
-									{isCompleted ? <Tag color='red'>Đã kết thúc</Tag> : <Tag color='green'>Đang học</Tag>}
+									<Tag color='red'>
+										{record?.hocPhan?.soTinChi ?? '--'}{' '}
+										{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.tinchi' })}
+									</Tag>
+									{isCompleted ? (
+										<Tag color='red'>{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.dakt' })}</Tag>
+									) : (
+										<Tag color='green'>{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.danghoc' })}</Tag>
+									)}
 								</div>
 							</>
 						}
@@ -105,29 +113,35 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 						{/* Info Row */}
 						<Row gutter={[24, 0]} style={{ marginBottom: '36px' }}>
 							<Col>
-								<Text>Mã học phần:</Text>
+								<Text>{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.mahp' })}</Text>
 								<Text strong style={{ marginLeft: '8px' }}>
 									{record?.hocPhan?.ma ?? ''}
 								</Text>
 							</Col>
 							<Col>
-								<Text>Nhóm lớp:</Text>
+								<Text>{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.nhomlop' })}</Text>
 								<Text
 									strong
 									style={{ marginLeft: '8px' }}
-									copyable={{ text: record?.ten, tooltips: ['Sao chép mã (nhóm) lớp ', 'Đã sao chép mã (nhóm) lớp '] }}
+									copyable={{
+										text: record?.ten,
+										tooltips: [
+											intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.saochep1' }),
+											intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.saochep2' }),
+										],
+									}}
 								>
 									{record?.soThuTuLop ?? ''}
 								</Text>
 							</Col>
 							<Col>
-								<Text>Kỳ học:</Text>
+								<Text>{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.kyhoc' })}</Text>
 								<Text strong style={{ marginLeft: '8px' }}>
 									{record?.hocKy?.ten ?? ''}
 								</Text>
 							</Col>
 							<Col>
-								<Text>Giảng viên:</Text>
+								<Text>{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.gv' })}</Text>
 								{(record?.nhanSuList ?? []).length > 0 ? (
 									<Text strong style={{ marginLeft: 8 }}>
 										{(record?.nhanSuList ?? []).map((item, index) => (
@@ -147,7 +161,9 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 										))}
 									</Text>
 								) : (
-									<Text style={{ marginLeft: 8, color: '#999' }}>Không có</Text>
+									<Text style={{ marginLeft: 8, color: '#999' }}>
+										{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.khongco' })}
+									</Text>
 								)}
 							</Col>
 						</Row>

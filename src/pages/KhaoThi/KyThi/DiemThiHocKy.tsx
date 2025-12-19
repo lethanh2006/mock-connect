@@ -5,9 +5,10 @@ import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Popover } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
+	const intl = useIntl();
 	const { maHocKy, maHocPhan } = props;
 	const { diemThiHocKySinhVien, loading, getDiemThiHocKySinhVienModel } = useModel('khaothi.sinhvienthi');
 
@@ -19,30 +20,30 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 
 	const columns: IColumn<SinhVienThi.IDiemThiHocKySinhVien>[] = [
 		{
-			title: 'Kỳ thi',
+			title: intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.kythi' }),
 			width: 250,
 			render: (val, rec) => rec?.kyThi?.ten ?? '--',
 		},
 		{
-			title: 'HT thi',
+			title: intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.htthi' }),
 			dataIndex: ['hocPhanThi', 'tenHinhThucThi'],
 			align: 'center',
 			width: 100,
 		},
 		{
-			title: 'SBD',
+			title: intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.sbd' }),
 			dataIndex: ['sinhVienThi', 'sbd'],
 			align: 'center',
 			width: 80,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.trangthai' }),
 			dataIndex: ['sinhVienThi', 'trangThai'],
 			align: 'center',
 			width: 120,
 		},
 		{
-			title: 'Điểm thi',
+			title: intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.diemthi' }),
 			dataIndex: 'diemThi',
 			align: 'center',
 			width: 100,
@@ -51,7 +52,7 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 					{rec.sinhVienThi.trangThaiDuThi && rec.sinhVienThi.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
 						<span title={trangThaiDuThi[rec.sinhVienThi.trangThaiDuThi]}>{rec?.sinhVienThi?.trangThaiDuThi}</span>
 					) : (
-						val ?? '--'
+						(val ?? '--')
 					)}{' '}
 					{val ? (
 						<Popover
@@ -60,12 +61,14 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 									{rec?.sinhVienThi?.ketQuaChamChinhThuc?.danhSachDiem?.[0]?.diemThanhPhan?.map((diem, ind) => (
 										// eslint-disable-next-line react/no-array-index-key
 										<p key={ind}>
-											{rec?.hocPhanThi?.danhSachDiemThanhPhan?.[ind]?.tenDauDiem ?? `Câu ${ind + 1}`}: {diem}
+											{rec?.hocPhanThi?.danhSachDiemThanhPhan?.[ind]?.tenDauDiem ??
+												`${intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.cau' })} ${ind + 1}`}
+											: {diem}
 										</p>
 									))}
 								</div>
 							}
-							title='Chi tiết'
+							title={intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.chitiet' })}
 						>
 							<InfoCircleOutlined />
 						</Popover>
@@ -74,7 +77,7 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 			),
 		},
 		{
-			title: 'Phúc khảo',
+			title: intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.phuckhao' }),
 			dataIndex: 'diemPhucKhao',
 			align: 'center',
 			width: 100,
