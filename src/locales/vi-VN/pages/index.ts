@@ -4,6 +4,7 @@ import login from './login';
 import lophanhchinh from './lophanhchinh';
 import lophocphan from './lophocphan';
 import thongtincanhan from './thongtincanhan';
+import tientrinhhoctap from './tientrinhhoctap';
 import trangchu from './trangchu';
 
 export default {
@@ -14,4 +15,5 @@ export default {
 	...lichsukien,
 	...lophanhchinh,
 	...lophocphan,
+	...tientrinhhoctap,
 };
