@@ -2,12 +2,13 @@ import { TabViewPage } from '@/components/TabViewPage';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { PicCenterOutlined, SnippetsOutlined } from '@ant-design/icons';
 import { Card, Space } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import KetQuaToanKhoaSinhVien from './KetQuaToanKhoa';
 import DiemThanhPhanSV from './components/DiemThanhPhanSV';
 import MayTinhThongMinh from './components/MayTinhThongMinh';
 
 const KetQuaHocTap = () => {
+	const intl = useIntl();
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 
 	return (
@@ -16,7 +17,7 @@ const KetQuaHocTap = () => {
 			variant='borderless'
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-					<span>Kết quả học tập</span>
+					<span>{intl.formatMessage({ id: 'ketquahoctap.title' })}</span>
 					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
 				</Space>
 			}
@@ -27,16 +28,15 @@ const KetQuaHocTap = () => {
 				<div style={{ marginTop: 8 }}>
 					<TabViewPage
 						hideCard
-						destroyInactiveTab={false}
 						menu={[
 							{
-								title: 'Điểm tổng kết',
+								title: intl.formatMessage({ id: 'ketquahoctap.diemtongket' }),
 								menuKey: 'diem',
 								content: <DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />,
 								icon: <PicCenterOutlined />,
 							},
 							{
-								title: 'Máy tính thông minh',
+								title: intl.formatMessage({ id: 'ketquahoctap.maytinh' }),
 								menuKey: 'may-tinh',
 								content: <MayTinhThongMinh maKhoaNganh={maKhoaNganh} />,
 								icon: <SnippetsOutlined />,
