@@ -31,7 +31,7 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 					onClick={() => onShowAll && onShowAll()}
 					type='link'
 					icon={<ArrowRightOutlined />}
-					tooltip={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.xemtatca' })}
+					tooltip={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.xemtatca' })}
 				/>,
 			]}
 		>

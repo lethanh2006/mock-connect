@@ -3,7 +3,7 @@ import { Badge, Card, Progress, Space, Tag, Tooltip, Typography } from 'antd';
 import { createHash } from 'crypto';
 import dayjs from 'dayjs';
 import React from 'react';
-import { history } from 'umi';
+import { history, useIntl } from 'umi';
 import './style.less';
 
 const { Title, Text } = Typography;
@@ -29,6 +29,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 	soBaiTap,
 	soBaiDang,
 }) => {
+	const intl = useIntl();
 	// Tạo mảng background cố định cho mỗi item để tránh bị giật hình
 	const getBackgroundForItem = (itemId: string, index: number) => {
 		const hash = createHash('md5').update(itemId).digest('hex');
@@ -49,8 +50,12 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 
 	return (
 		<div className='card-lhp'>
-			{isHienTai && <Badge.Ribbon text='Hiện tại' color='green' className='ribbon' />}
-			{isKeTiep && !isHienTai && <Badge.Ribbon text='Sắp tới' color='red' className='ribbon' />}
+			{isHienTai && (
+				<Badge.Ribbon text={intl.formatMessage({ id: 'lophocphan.card.hientai' })} color='green' className='ribbon' />
+			)}
+			{isKeTiep && !isHienTai && (
+				<Badge.Ribbon text={intl.formatMessage({ id: 'lophocphan.card.saptoi' })} color='red' className='ribbon' />
+			)}
 			<Card
 				variant='borderless'
 				className='card-lhp-inner'
@@ -76,7 +81,13 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 
 					<Text
 						className='card-lhp-malop_copyable'
-						copyable={{ text: lop.ten, tooltips: ['Sao chép mã (nhóm) lớp ', 'Đã sao chép mã (nhóm) lớp '] }}
+						copyable={{
+							text: lop.ten,
+							tooltips: [
+								intl.formatMessage({ id: 'lophocphan.card.saochep' }),
+								intl.formatMessage({ id: 'lophocphan.card.dasaochep' }),
+							],
+						}}
 					/>
 				</Space>
 
@@ -100,7 +111,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 
 				{/* 3 ô thống kê */}
 				<div className='card-lhp-row' style={{ marginBottom: 4 }}>
-					<Tooltip title='Có mặt / buổi điểm danh'>
+					<Tooltip title={intl.formatMessage({ id: 'lophocphan.card.comat' })}>
 						<div
 							className='stat'
 							onClick={(e) => {
@@ -116,7 +127,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 						</div>
 					</Tooltip>
 
-					<Tooltip title='Bài tập & bài kiểm tra'>
+					<Tooltip title={intl.formatMessage({ id: 'lophocphan.card.baitap' })}>
 						<div
 							className='stat'
 							onClick={(e) => {
@@ -129,7 +140,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 						</div>
 					</Tooltip>
 
-					<Tooltip title='Bài đăng / thảo luận trên diễn đàn'>
+					<Tooltip title={intl.formatMessage({ id: 'lophocphan.card.baidang' })}>
 						<div
 							className='stat'
 							onClick={(e) => {
@@ -145,14 +156,14 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 
 				{lop?.diem?.diemHpSvHk?.diemKthp ? (
 					<div className='card-lhp-row'>
-						<span>Điểm thi:</span>
+						<span>{intl.formatMessage({ id: 'lophocphan.card.diemthi' })}:</span>
 						<Text strong className='text-primary'>
 							{lop?.diem?.diemHpSvHk?.diemKthp}
 						</Text>
 					</div>
 				) : (
 					<div className='card-lhp-row'>
-						<span>Tiến trình: </span>
+						<span>{intl.formatMessage({ id: 'lophocphan.card.tientrinh' })}: </span>
 						<Text strong>
 							{past} / {allThoiKhoaBieu.length}
 						</Text>

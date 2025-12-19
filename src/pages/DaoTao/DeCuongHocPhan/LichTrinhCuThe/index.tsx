@@ -2,10 +2,11 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { MenuOutlined } from '@ant-design/icons';
 import { Col, Collapse, Empty, Row, Space } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import './style.less';
 
 const LichTrinhCuTheList = () => {
+	const intl = useIntl();
 	const { getAllModel, danhSach } = useModel('hocphan.tientrinhhp');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 	const [activeKeys, setActiveKeys] = useState<string[]>();
@@ -26,7 +27,7 @@ const LichTrinhCuTheList = () => {
 			<Col span={24}>
 				<Space wrap>
 					<ButtonExtend icon={<MenuOutlined />} disabled={!danhSach.length} onClick={onExpandAll}>
-						Xem đầy đủ
+						{intl.formatMessage({ id: 'lophocphan.id.decuong.lichthi.xemdaydu' })}
 					</ButtonExtend>
 				</Space>
 			</Col>
@@ -38,28 +39,32 @@ const LichTrinhCuTheList = () => {
 							<Collapse.Panel
 								header={
 									<span className='fw500'>
-										Tuần {rec.tuanBatDau}-{rec.tuanKetThuc}: {rec.noiDung}
+										{intl.formatMessage({ id: 'lophocphan.id.decuong.lichthi.tuan' })} {rec.tuanBatDau}-
+										{rec.tuanKetThuc}: {rec.noiDung}
 									</span>
 								}
 								key={rec._id}
 							>
 								<ol className='noi-dung'>
 									<li>
-										<span className='fw500'>Nội dung chính:</span>
+										<span className='fw500'>{intl.formatMessage({ id: 'lophocphan.id.decuong.lichthi.noidung' })}</span>
 										<p>{rec.noiDungChinh}</p>
 									</li>
 									<li>
-										<span className='fw500'>Yêu cầu đối với sinh viên:</span>
+										<span className='fw500'>{intl.formatMessage({ id: 'lophocphan.id.decuong.lichthi.yeucau' })}</span>
 										<p>{rec.yeuCauSinhVien}</p>
 									</li>
 									<li>
-										<span className='fw500'>Hình thức tổ chức dạy học:</span>
+										<span className='fw500'>
+											{intl.formatMessage({ id: 'lophocphan.id.decuong.lichthi.hinhthuc' })}
+										</span>
 										<p>
 											<ul>
 												{rec.ndTienTrinhList?.map((nd) =>
 													nd.soTiet ? (
 														<li key={nd._id}>
-															{nd.loaiToChucDayHoc} ({nd.soTiet} tiết)
+															{nd.loaiToChucDayHoc} ({nd.soTiet}{' '}
+															{intl.formatMessage({ id: 'lophocphan.id.decuong.lichthi.tiet' })})
 														</li>
 													) : null,
 												)}
@@ -67,7 +72,7 @@ const LichTrinhCuTheList = () => {
 										</p>
 									</li>
 									<li>
-										<span className='fw500'>Ghi chú:</span>
+										<span className='fw500'>{intl.formatMessage({ id: 'lophocphan.id.decuong.lichthi.ghichu' })}</span>
 										<p>{rec.ghiChu}</p>
 									</li>
 								</ol>
@@ -75,7 +80,10 @@ const LichTrinhCuTheList = () => {
 						))}
 					</Collapse>
 				) : (
-					<Empty description='Không có thông tin lịch trình' style={{ marginTop: 32, marginBottom: 32 }} />
+					<Empty
+						description={intl.formatMessage({ id: 'lophocphan.id.decuong.lichthi.empty' })}
+						style={{ marginTop: 32, marginBottom: 32 }}
+					/>
 				)}
 			</Col>
 		</Row>

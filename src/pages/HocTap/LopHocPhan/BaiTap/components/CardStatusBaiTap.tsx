@@ -7,7 +7,7 @@ import {
 import type { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { Col, Divider, Row, Space, Tag } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
 
 interface IProps {
@@ -15,6 +15,7 @@ interface IProps {
 }
 
 const CardStatusBaiTap = (props: IProps) => {
+	const intl = useIntl();
 	const { data } = props;
 	const { handleEdit } = useModel('daotao.baitap');
 
@@ -42,19 +43,24 @@ const CardStatusBaiTap = (props: IProps) => {
 								<span>
 									{`${data?.assignment?.thoiGianLamBaiQuiz} phút `}{' '}
 									{data?.assignment?.active ? (
-										<span>(Hạn {dayjs(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})</span>
+										<span>
+											({intl.formatMessage({ id: 'lophocphan.id.baitap.han' })}{' '}
+											{dayjs(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})
+										</span>
 									) : (
-										<span style={{ color: 'red' }}>(Chưa kích hoạt)</span>
+										<span style={{ color: 'red' }}>
+											{intl.formatMessage({ id: 'lophocphan.id.baitap.chuakichhoat' })}
+										</span>
 									)}
 								</span>
 							) : (
-								`Hạn ${dayjs(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}`
+								`${intl.formatMessage({ id: 'lophocphan.id.baitap.han' })} ${dayjs(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}`
 							)}
 						</span>
 					</Col>
 				</Row>
 
-				{data?.assignment?.choPhepCapNhatSauNop && <i>(Cho phép nộp bài sau thời gian hết hạn)</i>}
+				{data?.assignment?.choPhepCapNhatSauNop && <i>{intl.formatMessage({ id: 'lophocphan.id.baitap.noti' })}</i>}
 
 				<Divider />
 
@@ -73,16 +79,18 @@ const CardStatusBaiTap = (props: IProps) => {
 										? (data?.tongDiem ?? '--')
 										: '--'}
 								</div>
-								<div>Điểm số</div>
+								<div>{intl.formatMessage({ id: 'lophocphan.id.baitap.diemdo' })}</div>
 
 								{data?.ghiChu ? (
-									<div style={{ marginTop: 8, fontStyle: 'italic', color: '#555' }}>Ghi chú: {data.ghiChu}</div>
+									<div style={{ marginTop: 8, fontStyle: 'italic', color: '#555' }}>
+										{intl.formatMessage({ id: 'lophocphan.id.baitap.ghichu' })}: {data.ghiChu}
+									</div>
 								) : null}
 							</Col>
 
 							<Col xs={24}>
 								<ButtonExtend type='primary' onClick={() => handleEdit(data)} notHideText>
-									Xem chi tiết và làm bài
+									{intl.formatMessage({ id: 'lophocphan.id.baitap.chitiet' })}
 								</ButtonExtend>
 							</Col>
 						</Row>
@@ -99,12 +107,12 @@ const CardStatusBaiTap = (props: IProps) => {
 												? data.assignment?.huongDanNop.replace(
 														/<img/g,
 														'<img style="max-width:100%;height:auto;display:block;margin:10px 0;"',
-												  )
+													)
 												: '',
 										}}
 									/>
 								) : (
-									<i>Không có mô tả</i>
+									<i>{intl.formatMessage({ id: 'lophocphan.id.baitap.empty' })}</i>
 								)}
 							</Col>
 

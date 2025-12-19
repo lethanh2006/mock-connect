@@ -8,7 +8,7 @@ import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Empty, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useIntl, useModel } from 'umi';
 import BoxFile from '../DienDan/components/BoxFile';
 
 const { Text } = Typography;
@@ -18,6 +18,7 @@ interface IProps {
 }
 
 const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
+	const intl = useIntl();
 	const { getModel, danhSach } = useModel('daotao.baitap');
 	const [segment, setSegment] = useState<string>('1');
 
@@ -41,7 +42,7 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 	return (
 		<Card
 			size='small'
-			title='Bài tập, bài kiểm tra'
+			title={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.baitap' })}
 			variant='borderless'
 			extra={
 				// <Segmented
@@ -54,12 +55,20 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 				// 	size='small'
 				// />
 				<Link to={`/hoc-tap/lop-tin-chi/${lopHocPhanId}#bai-tap`}>
-					<ButtonExtend key='all' type='link' icon={<ArrowRightOutlined />} tooltip='Xem tất cả' />
+					<ButtonExtend
+						key='all'
+						type='link'
+						icon={<ArrowRightOutlined />}
+						tooltip={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.baitap.xemtatca' })}
+					/>
 				</Link>
 			}
 		>
 			{!danhSach?.length ? (
-				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có bài tập nào đang diễn ra' />
+				<Empty
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+					description={intl.formatMessage({ id: 'lophocphan.id.thongtinchung.baitap.empty' })}
+				/>
 			) : (
 				<div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
 					{danhSach.map((item) => {
@@ -74,14 +83,17 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 
 										{files.length > 2 && (
 											<Text type='secondary' italic>
-												...và {files.length - 2} file khác
+												...và {files.length - 2}{' '}
+												{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.baitap.filekhac' })}
 											</Text>
 										)}
 									</div>
 								)}
 
 								<div style={{ marginTop: 12, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-									<Text type='secondary'>Hạn nộp bài: </Text>
+									<Text type='secondary'>
+										{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.baitap.hannopbai' })}:{' '}
+									</Text>
 
 									<Text strong>
 										{dayjs(item.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}{' '}

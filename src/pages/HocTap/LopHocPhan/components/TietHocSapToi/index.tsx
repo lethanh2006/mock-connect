@@ -10,7 +10,7 @@ import { Badge, Card, Empty, Space, Spin, Tag } from 'antd';
 import { type Dayjs } from 'dayjs';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
-import { history, Link, useModel } from 'umi';
+import { history, Link, useIntl, useModel } from 'umi';
 import styles from './style.less';
 
 interface RenderLichHocProps {
@@ -20,6 +20,7 @@ interface RenderLichHocProps {
 }
 
 const RenderLichHoc = (props: RenderLichHocProps) => {
+	const intl = useIntl();
 	const { dataCalendar: dataCalendarProp, loading: loadingProp, onClick } = props;
 	const {
 		setRecord: setTkb,
@@ -93,9 +94,16 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 
 	if (!loading && isEmpty(data)) {
 		return (
-			<Card title='Tiết học sắp tới' className='card-big-title card-borderless' variant='borderless'>
+			<Card
+				title={intl.formatMessage({ id: 'lophocphan.hocsaptoi.title' })}
+				className='card-big-title card-borderless'
+				variant='borderless'
+			>
 				<Card variant='borderless'>
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có lịch học' />
+					<Empty
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+						description={intl.formatMessage({ id: 'lophocphan.hocsaptoi.empty' })}
+					/>
 				</Card>
 			</Card>
 		);
@@ -103,7 +111,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 
 	return (
 		<Card
-			title='Tiết học sắp tới'
+			title={intl.formatMessage({ id: 'lophocphan.hocsaptoi.title' })}
 			className='card-big-title card-borderless'
 			variant='borderless'
 			styles={{ body: { height: '100%', maxHeight: 348 } }}
@@ -205,7 +213,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 																);
 															}}
 														>
-															<BookOutlined /> Xem tiết
+															<BookOutlined /> {intl.formatMessage({ id: 'lophocphan.hocsaptoi.xemchitiet' })}
 														</Link>
 
 														{/* Hiển thị trạng thái điểm danh */}
