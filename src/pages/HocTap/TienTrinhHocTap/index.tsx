@@ -4,7 +4,7 @@ import dayjs from '@/utils/dayjs';
 import { BookOutlined, CheckCircleOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Alert, Card, Col, Row, Spin } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import LichSuQuyDoiDiemPage from '../QuyDoiDiem';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import flag from './components/flag.svg';
@@ -12,6 +12,7 @@ import './components/style.less';
 import TienTrinhThucTe from './TienTrinhThucTe';
 
 const TienTrinhHocTap = () => {
+	const intl = useIntl();
 	const { getAllModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 	const { record: recTienTrinh, getTienTrinhTotNghiepModel, loading } = useModel('sinhvien.tientrinhtotnghiep');
@@ -29,13 +30,13 @@ const TienTrinhHocTap = () => {
 	return (
 		<Card
 			variant='borderless'
-			title='Tiến trình học tập'
+			title={intl.formatMessage({ id: 'tientrinhhoctap.title' })}
 			className='card-tien-trinh card-big-title card-borderless'
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<Card variant='borderless'>
 				<Spin spinning={loading}>
-					<div>Số tín chỉ đã tích lũy/Tổng số tín chỉ toàn khóa</div>
+					<div>{intl.formatMessage({ id: 'tientrinhhoctap.scttichluy' })}</div>
 
 					<Row align='middle' gutter={[12, 12]}>
 						<Col span={20} md={22}>
@@ -51,7 +52,8 @@ const TienTrinhHocTap = () => {
 								>
 									<div className='progress-dot' />
 									<div className='progress-label'>
-										{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '--'} tín
+										{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '--'}{' '}
+										{intl.formatMessage({ id: 'tientrinhhoctap.tin' })} /
 									</div>
 								</div>
 								<div className='progress-img'>
@@ -60,7 +62,9 @@ const TienTrinhHocTap = () => {
 							</div>
 						</Col>
 						<Col span={4} md={2} style={{ marginTop: 8 }}>
-							<b style={{ color: '#B31820' }}>{recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--'} tín chỉ</b>
+							<b style={{ color: '#B31820' }}>
+								{recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--'} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
+							</b>
 						</Col>
 					</Row>
 				</Spin>
@@ -69,14 +73,15 @@ const TienTrinhHocTap = () => {
 					<Alert
 						style={{ marginBottom: 12 }}
 						type='info'
-						message={
-							<>
-								Đợt công nhận kết quả học tập <b>{recDotQuyDoi?.tenDot}</b> đang diễn ra từ{' '}
-								<b>{dayjs(recDotQuyDoi?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-								<b>{dayjs(recDotQuyDoi?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>. Bạn có thể đăng ký quy đổi điểm các
-								học phần trong chương trình đào tạo
-							</>
-						}
+						message={intl.formatMessage(
+							{ id: 'tientrinhhoctap.message' },
+							{
+								tenDot: recDotQuyDoi?.tenDot,
+								start: dayjs(recDotQuyDoi?.thoiGianBatDau).format('DD/MM/YYYY'),
+								end: dayjs(recDotQuyDoi?.thoiGianKetThuc).format('DD/MM/YYYY'),
+								b: (chunks) => <b>{chunks}</b>,
+							},
+						)}
 					/>
 				) : null}
 
@@ -84,19 +89,19 @@ const TienTrinhHocTap = () => {
 					hideCard
 					menu={[
 						{
-							title: 'Tiến trình thực tế',
+							title: intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte' }),
 							menuKey: 'tien-trinh-thuc-te',
 							content: <TienTrinhThucTe />,
 							icon: <ScheduleOutlined />,
 						},
 						{
-							title: 'Chương trình đào tạo',
+							title: intl.formatMessage({ id: 'tientrinhhoctap.ctdt' }),
 							menuKey: 'chuong-trinh-dao-tao',
 							content: <TienTrinhChuongTrinhKhung />,
 							icon: <BookOutlined />,
 						},
 						{
-							title: 'Công nhận KQHT',
+							title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan' }),
 							menuKey: 'cong-nhan-kqht',
 							content: <LichSuQuyDoiDiemPage />,
 							icon: <CheckCircleOutlined />,

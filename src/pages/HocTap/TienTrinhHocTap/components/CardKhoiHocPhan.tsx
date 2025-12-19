@@ -1,7 +1,7 @@
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { Card, Modal, Tag } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import CardHocPhan from './CardHocPhan';
 import './CardStyles.less';
 
@@ -10,6 +10,7 @@ const CardKhoiHocPhan = (props: {
 	colorKhoiKienThuc?: string;
 	onClickHocPhan: () => void;
 }) => {
+	const intl = useIntl();
 	const { khoi, colorKhoiKienThuc, onClickHocPhan } = props;
 	const { setRecord: setChuongTrinh } = useModel('daotao.chuongtrinhdaotao');
 	const soTinChi = khoi?.soTinChiTuChonPhaiHoc ?? 0;
@@ -30,7 +31,9 @@ const CardKhoiHocPhan = (props: {
 						</h4>
 
 						{/* Credits */}
-						<Tag className='credits-tag'>{soTinChi} tín chỉ</Tag>
+						<Tag className='credits-tag'>
+							{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tinchi' })}
+						</Tag>
 					</div>
 
 					{/* Color indicator */}
@@ -40,15 +43,15 @@ const CardKhoiHocPhan = (props: {
 
 			<Modal
 				open={visible}
-				title={khoi?.ten ?? 'Khối học phần'}
+				title={khoi?.ten ?? intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoihp' })}
 				onCancel={() => setVisible(false)}
 				width={850}
 				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 				className='khoi-modal'
 			>
 				<span className='modal-description'>
-					Bạn phải đảm bảo học {soTinChi} tín chỉ trong số những học phần sau đây:{' '}
+					{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.noti' }, { soTinChi })}:{' '}
 				</span>
 
 				<div className='modal-grid'>

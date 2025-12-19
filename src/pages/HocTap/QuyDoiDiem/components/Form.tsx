@@ -10,11 +10,12 @@ import {
 } from '@/services/HocTap/constant';
 import rules from '@/utils/rules';
 import { Col, Form, type FormInstance, Input, InputNumber, Row, Select } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import AutoHocPhanQuyDoi from './AutoHocPhan';
 import AutoTruongHocQuyDoi from './AutoTruongHoc';
 
 const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
+	const intl = useIntl();
 	const { form, isHocPhan } = props;
 	const { danhSach: danhSachQuyDoiDiem } = useModel('daotao.dmquydoidiem');
 	const { danhSach: danhSachHocPhan } = useModel('hocphan.hocphan');
@@ -54,12 +55,12 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 			<Col xs={24}>
 				<Form.Item
 					name='loai'
-					label='Loại minh chứng'
+					label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.loai' })}
 					rules={[...rules.required]}
-					extra='Đối với minh chứng NCKH, kết quả quy đổi sẽ được tính vào Điểm TBC'
+					extra={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.loai.extra' })}
 				>
 					<Select
-						placeholder='Chọn minh chứng'
+						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.loai.place' })}
 						options={Object.values(EMinhChungQuyDoiDiem).map((item) => ({
 							key: item,
 							label: item,
@@ -72,17 +73,19 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 			{loaiMinhChung === EMinhChungQuyDoiDiem.HOC_PHAN ? (
 				<>
 					<Col xs={24}>
-						<div className='fw500'>Thông tin học phần đã học</div>
+						<div className='fw500'>
+							{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.thongtin' })}
+						</div>
 					</Col>
 					<Col xs={24} md={12}>
 						<Form.Item
 							initialValue={ELoaiHocPhanMinhChung.NGOAI_CHUONG_TRINH}
 							name='loaiHocPhan'
-							label='Loại học phần'
+							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.loaihp' })}
 							rules={[...rules.required]}
 						>
 							<Select
-								placeholder='Chọn loại học phần'
+								placeholder={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.loaihp.place' })}
 								options={Object.values(ELoaiHocPhanMinhChung).map((item) => ({
 									key: item,
 									value: item,
@@ -105,10 +108,16 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 					{loaiHocPhan === ELoaiHocPhanMinhChung.NGOAI_CHUONG_TRINH ? (
 						<>
 							<Col xs={24} md={12}>
-								<Form.Item name='trinhDoDaoTao' label='Trình độ' rules={[...rules.required]}>
+								<Form.Item
+									name='trinhDoDaoTao'
+									label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.trinhdo' })}
+									rules={[...rules.required]}
+								>
 									<Select
 										onSelect={() => form.setFieldsValue({ tenTruong: undefined, tenHocPhan: undefined })}
-										placeholder='Chọn trình độ'
+										placeholder={intl.formatMessage({
+											id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.trinhdo.place',
+										})}
 										options={Object.values(ETrinhDoMinhChungQuyDoiDiem).map((item) => ({
 											key: item,
 											label: item,
@@ -120,7 +129,7 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 							<Col xs={24} md={12}>
 								<Form.Item
 									name='tenTruong'
-									label='Trường học'
+									label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.truonghoc' })}
 									rules={[...rules.required, ...rules.text, ...rules.length(500)]}
 								>
 									<AutoTruongHocQuyDoi
@@ -132,16 +141,20 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 							<Col xs={24} md={12}>
 								<Form.Item
 									name='nganh'
-									label='Ngành học'
+									label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.nganh' })}
 									rules={[...rules.required, ...rules.text, ...rules.length(500)]}
 								>
-									<Input placeholder='Nhập tên ngành học' />
+									<Input
+										placeholder={intl.formatMessage({
+											id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.nganh.place',
+										})}
+									/>
 								</Form.Item>
 							</Col>
 							<Col xs={24} md={12}>
 								<Form.Item
 									name='tenHocPhan'
-									label='Tên học phần'
+									label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.tenhp' })}
 									rules={[...rules.required, ...rules.text, ...rules.length(250)]}
 								>
 									<AutoHocPhanQuyDoi
@@ -157,43 +170,71 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 								</Form.Item>
 							</Col>
 							<Col xs={24} md={12}>
-								<Form.Item name='maHocPhanMinhChung' label='Mã học phần' rules={[...rules.text, ...rules.length(20)]}>
-									<Input placeholder='Nhập mã học phần' />
+								<Form.Item
+									name='maHocPhanMinhChung'
+									label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.mahp' })}
+									rules={[...rules.text, ...rules.length(20)]}
+								>
+									<Input
+										placeholder={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.mahp.place' })}
+									/>
 								</Form.Item>
 							</Col>
 							<Col xs={24} md={8}>
 								<Form.Item
 									name='soDVHT'
-									label='Số đơn vị học trình'
+									label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.sodv' })}
 									extra={
 										<small style={{ color: '#999' }}>
-											<i>1,5 đơn vị học trình = 1 tín chỉ</i>
+											<i>{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.sodv.extra' })}</i>
 										</small>
 									}
 								>
 									<InputNumber
 										style={{ width: '100%' }}
-										placeholder='Nhập số đơn vị học trình'
+										placeholder={intl.formatMessage({
+											id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.sodv.place',
+										})}
 										min={0}
 										onChange={(val) => form.setFieldsValue({ soTinChi: Math.round((val ?? 0) / 1.5) })}
 									/>
 								</Form.Item>
 							</Col>
 							<Col xs={24} md={8}>
-								<Form.Item name='soTinChi' label='Số tín chỉ'>
-									<InputNumber style={{ width: '100%' }} placeholder='Nhập số tín chỉ' min={0} />
+								<Form.Item
+									name='soTinChi'
+									label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.stc' })}
+								>
+									<InputNumber
+										style={{ width: '100%' }}
+										placeholder={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.stc.place' })}
+										min={0}
+									/>
 								</Form.Item>
 							</Col>
 							<Col xs={24} md={8}>
-								<Form.Item name='namTotNghiep' label='Năm tốt nghiệp'>
-									<InputNumber style={{ width: '100%' }} placeholder='Nhập năm tốt nghiệp' min={0} />
+								<Form.Item
+									name='namTotNghiep'
+									label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.nam' })}
+								>
+									<InputNumber
+										style={{ width: '100%' }}
+										placeholder={intl.formatMessage({
+											id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.nam.place',
+										})}
+										min={0}
+									/>
 								</Form.Item>
 							</Col>
 						</>
 					) : loaiHocPhan === ELoaiHocPhanMinhChung.TRONG_CHUONG_TRINH ? (
 						<>
 							<Col xs={24} md={12}>
-								<Form.Item name='maHocPhanMinhChung' label='Học phần đã học' rules={[...rules.required]}>
+								<Form.Item
+									name='maHocPhanMinhChung'
+									label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.hpdahoc' })}
+									rules={[...rules.required]}
+								>
 									<SelectHocPhan selectMa onChange={(val) => onChangeHocPhanMinhChung(val?.toString())} />
 								</Form.Item>
 								<Form.Item name='tenHocPhan' hidden />
@@ -205,13 +246,18 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 					) : null}
 
 					<Col xs={24}>
-						<div className='fw500'>Kết quả học tập/quy đổi</div>
+						<div className='fw500'>
+							{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.kq' })}
+						</div>
 					</Col>
 					<Col xs={12} md={8}>
-						<Form.Item name='diemHe10MinhChung' label='Điểm hệ 10'>
+						<Form.Item
+							name='diemHe10MinhChung'
+							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.diem10' })}
+						>
 							<InputNumber
 								style={{ width: '100%' }}
-								placeholder='Nhập điểm (hệ 10)'
+								placeholder={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.diem10.place' })}
 								min={0}
 								max={10}
 								onChange={(val) => onChangeDiem10(Number(val))}
@@ -219,21 +265,28 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 						</Form.Item>
 					</Col>
 					<Col xs={12} md={8}>
-						<Form.Item name='diemHe4MinhChung' label='Điểm hệ 4'>
+						<Form.Item
+							name='diemHe4MinhChung'
+							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.diem4' })}
+						>
 							<Select
 								options={danhSachQuyDoiDiem.map((item) => ({
 									key: item._id,
 									value: item.diemThang4,
 									label: item.diemThang4,
 								}))}
-								placeholder='Nhập điểm hệ 4'
+								placeholder={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.diem4.place' })}
 								onChange={(val) => onChangeDiem4(val)}
 								disabled={!!diemHe10MinhChung}
 							/>
 						</Form.Item>
 					</Col>
 					<Col span={12} md={8}>
-						<Form.Item name='diemChuMinhChung' label='Điểm chữ' rules={[...rules.required]}>
+						<Form.Item
+							name='diemChuMinhChung'
+							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.diemchu' })}
+							rules={[...rules.required]}
+						>
 							<SelectQuyDoiDiem
 								disabled={!!diemHe4MinhChung}
 								onChange={(val) => form.setFieldsValue({ diemChu: val })}
@@ -244,64 +297,109 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 			) : loaiMinhChung === EMinhChungQuyDoiDiem.CHUNG_CHI ? (
 				<>
 					<Col xs={24}>
-						<div className='fw500'>Thông tin chứng chỉ</div>
+						<div className='fw500'>
+							{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.ttchungchi' })}
+						</div>
 					</Col>
 					<Col xs={24} md={12}>
 						<Form.Item
 							name='tenChungChi'
-							label='Tên chứng chỉ'
+							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.tenchungchi' })}
 							rules={[...rules.required, ...rules.text, ...rules.length(250)]}
 						>
-							<Input placeholder='Nhập tên chứng chỉ' />
+							<Input
+								placeholder={intl.formatMessage({
+									id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.tenchungchi.place',
+								})}
+							/>
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={12}>
 						<Form.Item
 							name='bacChungChi'
-							label='Điểm/Bậc chứng chỉ'
+							label={intl.formatMessage({
+								id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.bac',
+							})}
 							rules={[...rules.required, ...rules.text, ...rules.length(20)]}
 						>
-							<Input placeholder='Nhập điểm/bậc chứng chỉ' />
+							<Input
+								placeholder={intl.formatMessage({
+									id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.bac.place',
+								})}
+							/>
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={12}>
 						<Form.Item
 							name='donViCap'
-							label='Đơn vị cấp'
+							label={intl.formatMessage({
+								id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.dvcap',
+							})}
 							rules={[...rules.required, ...rules.text, ...rules.length(250)]}
 						>
-							<Input placeholder='Nhập đơn vị cấp' />
+							<Input
+								placeholder={intl.formatMessage({
+									id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.dvcap.place',
+								})}
+							/>
 						</Form.Item>
 					</Col>
 
 					<Col xs={24} md={12}>
-						<Form.Item name='thoiGianHieuLuc' label='Thời gian có hiệu lực'>
-							<MyDatePicker />
+						<Form.Item
+							name='thoiGianHieuLuc'
+							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.tghieuluc' })}
+						>
+							<MyDatePicker
+								placeholder={intl.formatMessage({
+									id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.tghieuluc.place',
+								})}
+							/>
 						</Form.Item>
 					</Col>
 				</>
 			) : (
 				<>
 					<Col xs={24}>
-						<div className='fw500'>Thông tin Nghiên cứu khoa học</div>
+						<div className='fw500'>
+							{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.nghiencuu' })}
+						</div>
 					</Col>
 					<Col xs={24}>
 						<Form.Item
 							name='tenDeTaiNckh'
-							label='Tên đề tài'
+							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.tendetai' })}
 							rules={[...rules.required, ...rules.text, ...rules.length(500)]}
 						>
-							<Input placeholder='Nhập tên đề tài' />
+							<Input
+								placeholder={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.tendetai.place' })}
+							/>
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={12}>
-						<Form.Item name='nguoiHuongDanNckh' label='Người hướng dẫn' rules={[...rules.text, ...rules.length(100)]}>
-							<Input placeholder='Nhập tên người hướng dẫn' />
+						<Form.Item
+							name='nguoiHuongDanNckh'
+							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.nguoihuongdan' })}
+							rules={[...rules.text, ...rules.length(100)]}
+						>
+							<Input
+								placeholder={intl.formatMessage({
+									id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.nguoihuongdan.place',
+								})}
+							/>
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={12}>
-						<Form.Item name='diemNckh' label='Điểm NCKH' rules={[...rules.required]}>
-							<InputNumber placeholder='Nhập điểm NCKH' style={{ width: '100%' }} min={0} />
+						<Form.Item
+							name='diemNckh'
+							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.diemnckh' })}
+							rules={[...rules.required]}
+						>
+							<InputNumber
+								placeholder={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.diemnckh.place' })}
+								style={{ width: '100%' }}
+								min={0}
+							/>
 						</Form.Item>
 					</Col>
 				</>
@@ -309,14 +407,23 @@ const FormQuyDoiDiem = (props: { form: FormInstance; isHocPhan?: boolean }) => {
 
 			{!isHocPhan ? (
 				<Col xs={24} md={12}>
-					<Form.Item name='urlsMinhChung' label='File minh chứng' rules={[...rules.required]}>
+					<Form.Item
+						name='urlsMinhChung'
+						label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.fileminhchung' })}
+						rules={[...rules.required]}
+					>
 						<UploadFile resize maxCount={5} />
 					</Form.Item>
 				</Col>
 			) : (
 				<Col xs={24}>
-					<Form.Item name='ghiChu' label='Ghi chú'>
-						<Input placeholder='Nhập ghi chú' />
+					<Form.Item
+						name='ghiChu'
+						label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.ghichu' })}
+					>
+						<Input
+							placeholder={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.form.ghichu.place' })}
+						/>
 					</Form.Item>
 				</Col>
 			)}
