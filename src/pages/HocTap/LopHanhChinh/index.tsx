@@ -5,13 +5,14 @@ import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
 import { InfoCircleOutlined, MessageOutlined, NotificationOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Spin } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
 import DienDanLopPage from '../LopHocPhan/DienDan';
 import SelectLopHanhChinhSinhVien from './components/Select';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
 const LopHanhChinhPage = () => {
+	const intl = useIntl();
 	// const { record: recHocKy } = useModel('daotao.hocky');
 	const { record, sinhVienGetByIdModel, setRecord, danhSach, loading, recordDetail } = useModel('daotao.lophanhchinh');
 
@@ -27,7 +28,7 @@ const LopHanhChinhPage = () => {
 
 	return (
 		<Card
-			title='Lớp hành chính'
+			title={intl.formatMessage({ id: 'lophanhchinh.title' })}
 			variant={'borderless'}
 			className='card-big-title card-borderless'
 			extra={
@@ -58,7 +59,7 @@ const LopHanhChinhPage = () => {
 								hideCard
 								menu={[
 									{
-										title: 'Thông tin chung',
+										title: intl.formatMessage({ id: 'lophanhchinh.title' }),
 										menuKey: 'thong-tin',
 										content: (
 											<Row gutter={[16, 16]}>
@@ -67,7 +68,7 @@ const LopHanhChinhPage = () => {
 														<Col span={24}>
 															<CardGiangVienLop
 																loading={loading}
-																title='Cố vấn học tập'
+																title={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.covanhoctap' })}
 																danhSachNhanSu={
 																	recordDetail?.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
 																	(recordDetail?.giangVien?.ssoId
@@ -97,13 +98,13 @@ const LopHanhChinhPage = () => {
 										icon: <InfoCircleOutlined />,
 									},
 									{
-										title: 'Thông báo',
+										title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao' }),
 										menuKey: 'thong-bao',
 										content: <ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />,
 										icon: <NotificationOutlined />,
 									},
 									{
-										title: 'Diễn đàn',
+										title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan' }),
 										menuKey: 'dien-dan',
 										content: <DienDanLopPage idLopHanhChinh={record?._id} />,
 										icon: <MessageOutlined />,
@@ -112,7 +113,10 @@ const LopHanhChinhPage = () => {
 							/>
 						</>
 					) : (
-						<Empty description='Vui lòng chọn lớp hành chính' style={{ margin: '32px 0' }} />
+						<Empty
+							description={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.empty' })}
+							style={{ margin: '32px 0' }}
+						/>
 					)}
 				</Spin>
 			</Card>

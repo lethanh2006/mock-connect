@@ -2,6 +2,7 @@ import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Avatar, Card, Empty, List } from 'antd';
 import classNames from 'classnames';
+import { useIntl } from 'umi';
 
 type TNhanSu = Pick<LopHocPhan.IRecordNhanSuLopHP, 'tenNhanSu' | 'maNhanSu' | 'nhanSu' | 'nhanSuSsoId'>;
 
@@ -11,7 +12,13 @@ const CardGiangVienLop = (props: {
 	loading?: boolean;
 	isHighlight?: boolean;
 }) => {
-	const { title = 'Giảng viên', danhSachNhanSu, loading, isHighlight } = props;
+	const intl = useIntl();
+	const {
+		title = intl.formatMessage({ id: 'lophanhchinh.thongtinchung.giangvien' }),
+		danhSachNhanSu,
+		loading,
+		isHighlight,
+	} = props;
 
 	return (
 		<Card title={title} size='small' loading={loading} className={classNames({ 'card-highlight': isHighlight })}>
@@ -37,7 +44,7 @@ const CardGiangVienLop = (props: {
 									item.nhanSu?.ten || item.tenNhanSu ? (
 										`${item.nhanSu?.ten ? [item.nhanSu.hoDem, item.nhanSu.ten].join(' ') : item.tenNhanSu}`
 									) : (
-										<i>Không tìm thấy thông tin</i>
+										<i>{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.covanhoctap.empty' })}</i>
 									)
 								}
 								description={
@@ -56,7 +63,10 @@ const CardGiangVienLop = (props: {
 				/>
 			) : (
 				<div>
-					<Empty description='Không có thông tin giảng viên' image={Empty.PRESENTED_IMAGE_SIMPLE} />
+					<Empty
+						description={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.giangvien.empty' })}
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+					/>
 				</div>
 			)}
 		</Card>

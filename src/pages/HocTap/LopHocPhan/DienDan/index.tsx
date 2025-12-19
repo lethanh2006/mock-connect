@@ -2,7 +2,7 @@ import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
 import { Empty, Skeleton, Spin } from 'antd';
 import { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { history, Link, useModel, useSearchParams } from 'umi';
+import { history, Link, useIntl, useModel, useSearchParams } from 'umi';
 import CardAddStatus from './components/CardAddStatus';
 import CardStatus from './components/CardStatus';
 import './style.less';
@@ -12,6 +12,7 @@ interface IProps {
 	idLopHanhChinh?: string;
 }
 const DienDanLopPage = (props: IProps) => {
+	const intl = useIntl();
 	const { idLopHocPhan, idLopHanhChinh } = props;
 	const idLop = idLopHocPhan ?? idLopHanhChinh;
 	const {
@@ -56,7 +57,7 @@ const DienDanLopPage = (props: IProps) => {
 							history.push(`${history?.location?.pathname}${history?.location?.hash ?? ''}`);
 						}}
 					>
-						← Quay lại
+						← {intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.quaylai' })}
 					</Link>
 				</div>
 			) : null}
@@ -98,12 +99,15 @@ const DienDanLopPage = (props: IProps) => {
 									/>
 								))
 							) : (
-								<Empty description='Diễn đàn chưa có bài đăng nào!' style={{ marginTop: 32 }} />
+								<Empty
+									description={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.empty2' })}
+									style={{ marginTop: 32 }}
+								/>
 							)}
 
 							{!!danhSach.length && danhSach?.length === total ? (
 								<div className='flex justify-center' style={{ marginTop: 24, color: '#a7abaf' }}>
-									Đã xem hết bản tin
+									{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.xemhet' })}
 								</div>
 							) : null}
 						</InfiniteScroll>
@@ -122,7 +126,7 @@ const DienDanLopPage = (props: IProps) => {
 							getDataPost={getData}
 						/>
 					) : (
-						<Empty description='Không tìm thấy bài viết' />
+						<Empty description={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.empty' })} />
 					)}
 				</div>
 			</Spin>
