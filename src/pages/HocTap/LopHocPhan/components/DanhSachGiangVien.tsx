@@ -2,17 +2,21 @@ import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Avatar, Image, List } from 'antd';
 import { useState } from 'react';
+import { useIntl } from 'umi';
 
 type TNhanSu = Pick<LopHocPhan.IRecordNhanSuLopHP, 'tenNhanSu' | 'maNhanSu' | 'nhanSu' | 'nhanSuSsoId'>;
 
 const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?: string }) => {
+	const intl = useIntl();
 	const { title, danhSachNhanSu } = props;
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 
 	return (
 		<div>
-			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>{title ?? 'Giảng viên'}</h4>
+			<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>
+				{title ?? intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv.gv2' })}
+			</h4>
 			{danhSachNhanSu?.length ? (
 				<List
 					itemLayout='horizontal'
@@ -56,7 +60,7 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 												{item.nhanSu?.ten ? [item.nhanSu?.hoDem, item.nhanSu?.ten].join(' ') : item.tenNhanSu}
 											</span>
 										) : (
-											<i>Không tìm thấy thông tin</i>
+											<i>{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv.empty' })}</i>
 										)}
 									</div>
 
@@ -87,7 +91,7 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 				/>
 			) : (
 				<div>
-					<i>Không có thông tin</i>
+					<i>{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.dssv.empty2' })}</i>
 				</div>
 			)}
 

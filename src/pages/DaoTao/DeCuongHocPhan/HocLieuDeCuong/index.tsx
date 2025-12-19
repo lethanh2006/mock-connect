@@ -4,9 +4,10 @@ import { type IColumn } from '@/components/Table/typing';
 import { type HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { EyeOutlined } from '@ant-design/icons';
 import { Checkbox } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const HocLieuDeCuongPage = () => {
+	const intl = useIntl();
 	const { page, limit, getModel } = useModel('hocphan.hoclieudecuong');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 	const { settings } = useModel('tienich.caidat');
@@ -15,26 +16,26 @@ const HocLieuDeCuongPage = () => {
 
 	const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
 		{
-			title: 'Tiêu đề',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.tieuDe' }),
 			dataIndex: 'tieuDe',
 			width: 200,
 			filterType: 'string',
 			render: (val) => val && <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Tác giả',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.tacgia' }),
 			dataIndex: 'tacGia',
 			width: 120,
 			filterType: 'string',
 		},
 		{
-			title: 'Nhà xuất bản',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.nxb' }),
 			dataIndex: 'tenNhaXuatBan',
 			width: 120,
 			filterType: 'string',
 		},
 		{
-			title: 'Năm xuất bản',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.namxb' }),
 			dataIndex: 'namXuatBan',
 			align: 'center',
 			width: 100,
@@ -42,20 +43,20 @@ const HocLieuDeCuongPage = () => {
 			sortable: true,
 		},
 		{
-			title: 'Mô tả',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.mota' }),
 			dataIndex: 'moTa',
 			width: 250,
 			render: (val) => val && <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Bắt buộc',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.batbuoc' }),
 			width: 100,
 			dataIndex: 'batBuoc',
 			align: 'center',
 			render: (val) => <Checkbox checked={val} disabled />,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.thaotac' }),
 			dataIndex: 'url',
 			width: 60,
 			align: 'center',
@@ -68,7 +69,7 @@ const HocLieuDeCuongPage = () => {
 						}${val}`}
 						target='_blank'
 						rel='noreferrer'
-						title='Xem chi tiết'
+						title={intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.xemchitiet' })}
 					>
 						<EyeOutlined />
 					</a>
@@ -83,7 +84,7 @@ const HocLieuDeCuongPage = () => {
 				columns={columns}
 				dependencies={[page, limit, recDeCuong?._id]}
 				modelName='hocphan.hoclieudecuong'
-				title='Đề cương học liệu'
+				title={intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.title' })}
 				hideCard
 				buttons={{ create: false }}
 			/>

@@ -10,7 +10,7 @@ import { CloseOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 interface LichSuDonXinNghiProps {
 	visible: boolean;
@@ -18,6 +18,7 @@ interface LichSuDonXinNghiProps {
 }
 
 const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible }) => {
+	const intl = useIntl();
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const { getModel, danhSach, huyDonXinNghiModel } = useModel('daotao.dangkynghihoc');
 	const [filesVisible, setFilesVisible] = useState(false);
@@ -38,7 +39,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 		// 	filterType: 'string',
 		// },
 		{
-			title: 'Ngày nghỉ',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.ngaynghi' }),
 			dataIndex: ['thoiKhoaBieu', 'ngay'],
 			align: 'center',
 			width: 100,
@@ -46,21 +47,21 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			sortable: true,
 		},
 		{
-			title: 'Ca nghỉ',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.canghi' }),
 			dataIndex: ['thoiKhoaBieu', 'tietBatDau'],
 			align: 'center',
 			width: 100,
 			render: (val, rec) => `Tiết: ${rec.thoiKhoaBieu?.tietBatDau ?? ''} - ${rec.thoiKhoaBieu?.tietKetThuc ?? ''}`,
 		},
 		{
-			title: 'Lý do',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.lydo' }),
 			dataIndex: 'lyDo',
 			width: 140,
 			render: (val) => <ExpandText>{val}</ExpandText>,
 			filterType: 'string',
 		},
 		{
-			title: 'Minh chứng',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.minhchung' }),
 			dataIndex: 'urlMinhChung',
 			width: 100,
 			align: 'center',
@@ -72,14 +73,14 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 							setFilesVisible(true);
 						}}
 					>
-						Xem chi tiết
+						{intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.chitiet' })}
 					</a>
 				) : (
-					'Không có'
+					intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.khongco' })
 				),
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.trangthai' }),
 			dataIndex: 'trangThai',
 			align: 'center',
 			width: 120,
@@ -94,7 +95,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			})),
 		},
 		{
-			title: 'Ngày gửi',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.ngaygui' }),
 			dataIndex: 'createdAt',
 			width: 120,
 			align: 'center',
@@ -102,16 +103,19 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.thaotac' }),
 			width: 60,
 			align: 'center',
 			render: (val, rec) => (
-				<Popconfirm title='Bạn chắc chắn muốn hủy đơn?' onConfirm={() => huyDonXinNghiModel(rec?._id, getData)}>
+				<Popconfirm
+					title={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.pop' })}
+					onConfirm={() => huyDonXinNghiModel(rec?._id, getData)}
+				>
 					<ButtonExtend
 						disabled={rec?.trangThai !== ETrangThaiDonNghiHoc.CHO_DUYET}
 						type='link'
 						danger
-						tooltip='Hủy đơn'
+						tooltip={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.huydon' })}
 						icon={<CloseOutlined />}
 					/>
 				</Popconfirm>
@@ -122,7 +126,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 	return (
 		<ModalExpandable
 			open={visible}
-			title={`Lịch sử đơn xin nghỉ học - ${recLopHocPhan?.ten ?? ''}`}
+			title={`${intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.title' })} - ${recLopHocPhan?.ten ?? ''}`}
 			onCancel={() => setVisible(false)}
 			okButtonProps={{ hidden: true }}
 			cancelText='Đóng'
@@ -131,11 +135,11 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			<TableStaticData columns={columns} data={danhSach} addStt hasTotal onReload={getData} />
 
 			<ModalExpandable
-				title='Tập tin minh chứng'
+				title={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.teptin' })}
 				open={filesVisible}
 				width={1000}
 				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 				onCancel={() => setFilesVisible(false)}
 			>
 				<PreviewFile file={file ?? ''} />

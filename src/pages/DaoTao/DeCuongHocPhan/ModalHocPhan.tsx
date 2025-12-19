@@ -1,6 +1,6 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import TabsDeCuongHocPhan from './components/TabsDeCuongHocPhan';
 
 const ModalHocPhan = (props: {
@@ -10,6 +10,7 @@ const ModalHocPhan = (props: {
 	deCuongId?: string;
 	activeKey?: string;
 }) => {
+	const intl = useIntl();
 	const { title, visible, setVisible, activeKey } = props;
 	const { record } = useModel('lophocphan.lophocphan');
 	const { getByIdModel } = useModel('hocphan.decuonghocphan');
@@ -26,7 +27,7 @@ const ModalHocPhan = (props: {
 			width={1000}
 			onCancel={() => setVisible(false)}
 			okButtonProps={{ hidden: true }}
-			cancelText='Đóng'
+			cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 		>
 			<TabsDeCuongHocPhan activeKey={activeKey} />
 		</ModalExpandable>
