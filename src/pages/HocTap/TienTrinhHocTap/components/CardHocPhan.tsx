@@ -3,6 +3,7 @@ import { ETrangThaiHocTap } from '@/services/DaoTao/constant';
 import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Card, Tag } from 'antd';
+import { useIntl } from 'umi';
 import './CardStyles.less';
 
 // Grade images mapping
@@ -27,6 +28,7 @@ const CardHocPhan = (props: {
 	colorKhoiKienThuc?: string;
 	trangThaiHoc?: ETrangThaiHocTap;
 }) => {
+	const intl = useIntl();
 	const { hocPhan, listDiem, colorKhoiKienThuc, trangThaiHoc, onClick } = props;
 	const soTinChi = hocPhan?.soTinChi ?? 0;
 	const listDiemChu = listDiem?.map((item) => item.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU);
@@ -60,14 +62,16 @@ const CardHocPhan = (props: {
 					</h4>
 
 					{/* Credits */}
-					<Tag className='credits-tag'>{soTinChi} tín chỉ</Tag>
+					<Tag className='credits-tag'>
+						{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
+					</Tag>
 				</div>
 
 				{/* Currently studying indicator */}
 				{isCurrentlyStudying && (
 					<div
 						className='studying-indicator'
-						title='Đang học/Chưa có KQHT'
+						title={intl.formatMessage({ id: 'tientrinhhoctap.danghoc' })}
 						// style={{ backgroundColor: colorKhoiKienThuc }}
 					/>
 				)}

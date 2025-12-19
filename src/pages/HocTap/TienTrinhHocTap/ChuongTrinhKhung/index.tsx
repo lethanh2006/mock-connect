@@ -4,7 +4,7 @@ import { ELoaiHocPhanCTDT, LoaiChuongTrinhDaoTao } from '@/services/DaoTao/const
 import { Collapse, Descriptions, Divider, Spin, Typography } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useIntl, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhanV2 from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
@@ -21,6 +21,7 @@ type TChuongTrinhHocKy = {
 };
 
 const TienTrinhChuongTrinhKhung = () => {
+	const intl = useIntl();
 	const {
 		loading,
 		sinhVienGetTienTrinhKhungModel,
@@ -115,7 +116,7 @@ const TienTrinhChuongTrinhKhung = () => {
 			{recTienTrinh?.ctdtKeHoach?._id && (
 				<>
 					<Descriptions style={{ marginBottom: 16 }} layout='vertical' className='highlight' colon={false}>
-						<Descriptions.Item label='Chương trình/Kế hoạch' span={2}>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })} span={2}>
 							<Link
 								to='#'
 								onClick={(e) => {
@@ -126,13 +127,13 @@ const TienTrinhChuongTrinhKhung = () => {
 								{recTienTrinh?.ctdtKeHoach?.ten}
 							</Link>
 						</Descriptions.Item>
-						<Descriptions.Item label='Loại chương trình'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loai' })}>
 							{recTienTrinh?.ctdtKeHoach?.loai && LoaiChuongTrinhDaoTao[recTienTrinh?.ctdtKeHoach?.loai]}
 						</Descriptions.Item>
 
 						{chuyenNganhHienTai && (
-							<Descriptions.Item label='Chuyên ngành'>
-								{chuyenNganhHienTai.ten ?? <i>Chưa đăng ký chuyên ngành</i>}
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
+								{chuyenNganhHienTai.ten ?? <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuadk' })}</i>}
 							</Descriptions.Item>
 						)}
 					</Descriptions>
@@ -153,7 +154,7 @@ const TienTrinhChuongTrinhKhung = () => {
 							>
 								<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 									<Title level={5} style={{ margin: 0, color: '#262626' }}>
-										Học kỳ {data.soThuTuKy}
+										{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} {data.soThuTuKy}
 									</Title>
 									<div
 										style={{
@@ -170,7 +171,7 @@ const TienTrinhChuongTrinhKhung = () => {
 											fontWeight: 500,
 										}}
 									>
-										{data.soTinChiPhaiHoc} tín chỉ
+										{data.soTinChiPhaiHoc} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tinchi' })}
 									</div>
 								</div>
 							</div>
@@ -184,7 +185,7 @@ const TienTrinhChuongTrinhKhung = () => {
 								{data.chuyenNganhList.map((chuyenNganh) => (
 									<Collapse.Panel
 										key={chuyenNganh.khoiHocPhan[0].maChuyenNganh || chuyenNganh.khoiHocPhan[0]._id}
-										header={`Chuyên ngành: ${
+										header={`${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}: ${
 											chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
 										}`}
 									>
