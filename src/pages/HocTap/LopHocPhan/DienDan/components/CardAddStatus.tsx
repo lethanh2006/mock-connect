@@ -1,6 +1,6 @@
 import { Modal } from 'antd';
 import styled from 'styled-components';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import AvatarBlog from './Avatar';
 import FormThemMoiBaiViet from './FormThemMoiBaiViet';
 
@@ -38,6 +38,7 @@ interface IProps {
 }
 
 const CardAddStatus = (props: IProps) => {
+	const intl = useIntl();
 	const { idLopHocPhan, idLopHanhChinh, getData, hiddenAdd } = props;
 	const { visibleForm, setVisibleForm, setEdit, setRecord } = useModel('diendan.baidang');
 	const { record: recNhanSu } = useModel('sinhvien.sinhvien');
@@ -62,14 +63,14 @@ const CardAddStatus = (props: IProps) => {
 								setVisibleForm(true);
 							}}
 						>
-							Bạn có muốn chia sẻ điều gì với mọi người không?
+							{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.chiase' })}
 						</div>
 					</div>
 				</div>
 			)}
 
 			<Modal
-				title='Thêm mới bài viết'
+				title={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.themmoi' })}
 				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
