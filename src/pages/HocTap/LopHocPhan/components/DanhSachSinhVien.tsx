@@ -4,6 +4,7 @@ import { EGioiTinh } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row, Typography } from 'antd';
+import { useIntl } from 'umi';
 import './style.less';
 
 import { useEffect, useState } from 'react';
@@ -12,6 +13,7 @@ const { Text } = Typography;
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
 
 const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; fromLopHocPhan?: boolean }) => {
+	const intl = useIntl();
 	const { sinhVienList, loading, fromLopHocPhan } = props;
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 	const [record, setRecord] = useState<TSinhVien>();
@@ -40,7 +42,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 	const getDropdownMenu = (student: TSinhVien) => (
 		<Menu>
 			<Menu.Item key='detail' icon={<EyeOutlined />} onClick={() => showStudentDetail(student)}>
-				Xem thông tin chi tiết
+				{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.chitiet' })}
 			</Menu.Item>
 		</Menu>
 	);
@@ -57,7 +59,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 			title={
 				<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 					<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-						<span>Danh sách sinh viên</span>
+						<span>{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.dssv' })}</span>
 						<span
 							style={{
 								backgroundColor: '#f6ffed',
@@ -192,7 +194,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 			{renderStudentList()}
 
 			<Modal
-				title='Thông tin sinh viên'
+				title={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.thongtin' })}
 				open={modalVisible}
 				onCancel={() => setModalVisible(false)}
 				okButtonProps={{ hidden: true }}
@@ -208,16 +210,32 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 					</Col>
 					<Col span={24} md={16}>
 						<Descriptions bordered column={1} size='small'>
-							<Descriptions.Item label='Họ tên'>{record?.ten}</Descriptions.Item>
-							<Descriptions.Item label='Mã sinh viên'>{record?.ma}</Descriptions.Item>
-							<Descriptions.Item label='Email'>{record?.email}</Descriptions.Item>
-							<Descriptions.Item label='Giới tính'>{record?.gioiTinh ?? ''}</Descriptions.Item>
-							<Descriptions.Item label='Ngày sinh'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.hoten' })}>
+								{record?.ten}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.masv' })}>
+								{record?.ma}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.email' })}>
+								{record?.email}
+							</Descriptions.Item>
+							<Descriptions.Item
+								label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.gioitinh' })}
+							>
+								{record?.gioiTinh ?? ''}
+							</Descriptions.Item>
+							<Descriptions.Item
+								label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.ngaysinh' })}
+							>
 								{record?.ngaySinh && dayjs(record.ngaySinh).format('DD/MM/YYYY')}
 							</Descriptions.Item>
-							<Descriptions.Item label='Số điện thoại'>{record?.soDienThoai}</Descriptions.Item>
+							<Descriptions.Item
+								label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.dienthoai' })}
+							>
+								{record?.soDienThoai}
+							</Descriptions.Item>
 							{/* {!fromLopHocPhan ? ( */}
-							<Descriptions.Item label='Vai trò trong lớp'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.vaitro' })}>
 								{record?.vaiTro ? (
 									<Text
 										style={{
