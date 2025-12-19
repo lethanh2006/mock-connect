@@ -3,10 +3,11 @@ import ModalExpandable from '@/components/Table/ModalExpandable';
 import { getNameFile } from '@/utils/utils';
 import { Button, Collapse, Descriptions } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import TrongSoHocPhanPage from '../TrongSoHocPhan';
 
 const ThongTinChungPage = () => {
+	const intl = useIntl();
 	const { record } = useModel('hocphan.decuonghocphan');
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
@@ -16,19 +17,19 @@ const ThongTinChungPage = () => {
 			<Descriptions
 				style={{ marginBottom: '15px', marginTop: '5px' }}
 				size='small'
-				title='Thông tin học phần'
+				title={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.title' })}
 				column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
 			>
-				<Descriptions.Item label='Tên học phần'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.tenhp' })}>
 					{record?.hocPhan?.ten ?? recLopHocPhan?.hocPhan?.ten ?? <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
-				<Descriptions.Item label='Tên học phần (tiếng Anh)'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.tenhpta' })}>
 					{record?.hocPhan?.tenTiengAnh ?? recLopHocPhan?.hocPhan?.tenTiengAnh ?? <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
-				<Descriptions.Item label='Mã học phần'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.mahp' })}>
 					{record?.hocPhan?.ma ?? recLopHocPhan?.hocPhan?.ma ?? <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
-				<Descriptions.Item label='Số tín chỉ'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.stc' })}>
 					{record?.hocPhan?.soTinChi ? record.hocPhan.soTinChi + ' tín chỉ' : <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
 			</Descriptions>
@@ -36,18 +37,20 @@ const ThongTinChungPage = () => {
 			<Descriptions
 				style={{ marginBottom: '15px', marginTop: '5px' }}
 				size='small'
-				title='Thông tin đề cương'
+				title={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.decuong' })}
 				bordered={false}
 				column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
 			>
-				<Descriptions.Item label='Phiên bản đề cương'>{record?.ma ?? <i>Chưa cập nhật</i>}</Descriptions.Item>
-				<Descriptions.Item label='Thời điểm ban hành'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.phienban' })}>
+					{record?.ma ?? <i>Chưa cập nhật</i>}
+				</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.banhanh' })}>
 					{record?.thoiDiemApDung ?? <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
-				<Descriptions.Item label='Quyết định ban hành đề cương'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.quyetdinh' })}>
 					{record?.canCu?.ten ?? <i>Chưa cập nhật</i>}
 				</Descriptions.Item>
-				<Descriptions.Item label='Đề cương chi tiết đính kèm'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.dinhkem' })}>
 					{record?.url ? (
 						<a onClick={() => setVisibleFormFile(true)}>{getNameFile(record.url)}</a>
 					) : (
@@ -59,10 +62,10 @@ const ThongTinChungPage = () => {
 			<TrongSoHocPhanPage />
 
 			<Collapse style={{ marginTop: 12 }}>
-				<Collapse.Panel header='Mục tiêu học phần' key='1'>
+				<Collapse.Panel header={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.muctieu' })} key='1'>
 					<div dangerouslySetInnerHTML={{ __html: record?.mucTieuHocPhan ?? '--' }} />
 				</Collapse.Panel>
-				<Collapse.Panel header='Chuẩn đầu ra' key='2'>
+				<Collapse.Panel header={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.cdr' })} key='2'>
 					<div dangerouslySetInnerHTML={{ __html: record?.chuanDauRa ?? '--' }} />
 				</Collapse.Panel>
 				{/* <Collapse.Panel header='Nội dung tóm tắt' key='2'>
@@ -74,7 +77,7 @@ const ThongTinChungPage = () => {
 			</Collapse>
 
 			<ModalExpandable
-				title='Chi tiết đề cương chi tiết đính kèm'
+				title={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.chitiet' })}
 				width={1000}
 				open={visibleFormFile}
 				footer={null}
@@ -83,7 +86,7 @@ const ThongTinChungPage = () => {
 				<PreviewFile file={record?.url ?? ''} />
 
 				<div className='form-footer'>
-					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					<Button onClick={() => setVisibleFormFile(false)}>{intl.formatMessage({ id: 'golbal.button.dong' })}</Button>
 				</div>
 			</ModalExpandable>
 		</>

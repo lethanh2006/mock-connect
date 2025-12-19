@@ -83,7 +83,7 @@ const ThongBaoLopPage = (props: { idLop: string; loai: 'lop-hanh-chinh' | 'lop-h
 				onCancel={() => setVisibleThongBao(false)}
 				open={visibleThongBao}
 				okButtonProps={{ hidden: true }}
-				cancelText={intl.formatMessage({ id: 'gloal.button.dong' })}
+				cancelText={intl.formatMessage({ id: 'global.button.dong', defaultMessage: 'Đóng' })}
 			>
 				<ViewThongBao record={record} />
 			</Modal>

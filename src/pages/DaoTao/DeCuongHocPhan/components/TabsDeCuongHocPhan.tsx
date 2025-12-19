@@ -1,5 +1,6 @@
 import { Tabs } from 'antd';
 import { useEffect, useState } from 'react';
+import { useIntl } from 'umi';
 import ChuanDauRaHocPhanPage from '../ChuanDauRa';
 import GiangVienDeCuongPage from '../GiangVienDeCuong';
 import HocLieuDeCuongPage from '../HocLieuDeCuong';
@@ -8,6 +9,7 @@ import LichTrinhCuTheList from '../LichTrinhCuThe';
 import ThongTinChungPage from './ThongTinChung';
 
 const TabsDeCuongHocPhan = (props: { activeKey?: string }) => {
+	const intl = useIntl();
 	const [activeKey, setActiveKey] = useState<string>(props.activeKey || '0');
 
 	useEffect(() => {
@@ -17,12 +19,12 @@ const TabsDeCuongHocPhan = (props: { activeKey?: string }) => {
 	return (
 		<>
 			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
-				<Tabs.TabPane key='0' tab='Thông tin chung' />
-				<Tabs.TabPane key='5' tab='Chuẩn đầu ra' />
-				<Tabs.TabPane key='4' tab='Tóm tắt học phần' />
+				<Tabs.TabPane key='0' tab={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung' })} />
+				<Tabs.TabPane key='5' tab={intl.formatMessage({ id: 'lophocphan.id.decuong.chuandaura' })} />
+				<Tabs.TabPane key='4' tab={intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat' })} />
 				{/* <Tabs.TabPane key='2' tab='Lịch trình cụ thể' /> */}
-				<Tabs.TabPane key='1' tab='Giảng viên' />
-				<Tabs.TabPane key='3' tab='Học liệu' />
+				<Tabs.TabPane key='1' tab={intl.formatMessage({ id: 'lophocphan.id.decuong.gv' })} />
+				<Tabs.TabPane key='3' tab={intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu' })} />
 			</Tabs>
 
 			{activeKey === '0' ? (

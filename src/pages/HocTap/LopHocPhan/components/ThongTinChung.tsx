@@ -1,11 +1,12 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { DesktopOutlined, GlobalOutlined } from '@ant-design/icons';
 import { Card, message, Space, Spin } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import GioiThieuChungLopHp from './GioiThieuChung';
 import './style.less';
 
 const ThongTinChung = (props: { onShowDeCuong: (activeTab: string) => void }) => {
+	const intl = useIntl();
 	const { loading, record, getMoodleLopHocPhanModel } = useModel('lophocphan.lophocphan');
 	// const { danhSach: danhSachNoiDungHocPhan } = useModel('hocphan.noidunghp');
 	// const [visibleKyNang, setVisibleKyNang] = useState<boolean>(false);
@@ -143,12 +144,12 @@ const ThongTinChung = (props: { onShowDeCuong: (activeTab: string) => void }) =>
 				<Space wrap className='button-space'>
 					{record?.lmsUrl ? (
 						<ButtonExtend notHideText icon={<GlobalOutlined />} onClick={() => window.open(record.lmsUrl, '_blank')}>
-							Học trực tuyến
+							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.hoctructuyen' })}
 						</ButtonExtend>
 					) : null}
 					{record?.moodleShortname ? (
 						<ButtonExtend notHideText icon={<DesktopOutlined />} onClick={handleMoodle}>
-							Lớp học LMS
+							{intl.formatMessage({ id: 'lophocphan.id.thongtinchung.lms' })}
 						</ButtonExtend>
 					) : null}
 				</Space>

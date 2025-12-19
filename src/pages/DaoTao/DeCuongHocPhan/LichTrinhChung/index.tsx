@@ -3,10 +3,11 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { decodeHtmlEntities, removeHtmlTags } from '@/utils/utils';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ViewLichTrinhDeCuong from './View';
 
 const NoiDungHocPhanPage = () => {
+	const intl = useIntl();
 	const { page, limit, handleView } = useModel('hocphan.noidunghp');
 	const { record: recDeCuong } = useModel('hocphan.decuonghocphan');
 
@@ -17,7 +18,7 @@ const NoiDungHocPhanPage = () => {
 
 	const columns: IColumn<HocPhan.ILichTrinhChung>[] = [
 		{
-			title: 'Tiêu đề',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.tieuDe' }),
 			dataIndex: 'tieuDe',
 			width: 180,
 			filterType: 'string',
@@ -25,46 +26,46 @@ const NoiDungHocPhanPage = () => {
 			onCell,
 		},
 		{
-			title: 'Giai đoạn',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.giaidoan' }),
 			dataIndex: 'giaiDoanDayHoc',
 			width: 120,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Thời lượng (tiết)',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.thoiluong' }),
 			width: 300,
 			children: [
 				{
-					title: 'Lý thuyết',
+					title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.lythuyet' }),
 					dataIndex: 'gioLyThuyet',
 					width: 60,
 					align: 'center',
 					onCell,
 				},
 				{
-					title: 'BT-TL',
+					title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.bt' }),
 					dataIndex: 'gioBaiTapTL',
 					width: 60,
 					align: 'center',
 					onCell,
 				},
 				{
-					title: 'Thực hành',
+					title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.thuchanh' }),
 					dataIndex: 'gioThucHanh',
 					width: 60,
 					align: 'center',
 					onCell,
 				},
 				{
-					title: 'Tự học',
+					title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.tuhoc' }),
 					dataIndex: 'gioTuHoc',
 					width: 60,
 					align: 'center',
 					onCell,
 				},
 				{
-					title: 'Tổng',
+					title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.tong' }),
 					width: 60,
 					align: 'center',
 					render: (val, rec) => rec.gioLyThuyet + rec.gioBaiTapTL + rec.gioThucHanh + rec.gioTuHoc,
@@ -73,7 +74,7 @@ const NoiDungHocPhanPage = () => {
 			],
 		},
 		{
-			title: 'Nội dung',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.noidung' }),
 			dataIndex: 'ten',
 			width: 220,
 			render: (val) =>
@@ -81,14 +82,14 @@ const NoiDungHocPhanPage = () => {
 			onCell,
 		},
 		{
-			title: 'CLO',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.CLO' }),
 			dataIndex: 'listMaChuanDauRa',
 			width: 120,
 			render: (val) => val && <ExpandText ellipsis={{ expandable: false }}>{val.join(', ')}</ExpandText>,
 			onCell,
 		},
 		{
-			title: 'Bài đánh giá',
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.baidanhgia' }),
 			dataIndex: 'listTrongSoTuongUng',
 			width: 120,
 			render: (val) => val && <ExpandText ellipsis={{ expandable: false }}>{val.join(', ')}</ExpandText>,
@@ -103,7 +104,7 @@ const NoiDungHocPhanPage = () => {
 				params={{ deCuongHpId: recDeCuong?._id }}
 				dependencies={[page, limit, recDeCuong?._id]}
 				modelName='hocphan.noidunghp'
-				title='Nội dung học phần'
+				title={intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.title' })}
 				Form={ViewLichTrinhDeCuong}
 				widthDrawer={800}
 				hideCard
