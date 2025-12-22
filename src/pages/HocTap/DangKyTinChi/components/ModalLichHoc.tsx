@@ -7,11 +7,12 @@ import { useEffect, useState } from 'react';
 import type { DateRange, View } from 'react-big-calendar';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const localizer = dayjsLocalizer(dayjs);
 
 const ModalLichHoc = (props: { soLopHienThi: number }) => {
+	const intl = useIntl();
 	const { visibleModal, setVisibleModal, danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
 	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
@@ -65,17 +66,27 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 			open={visibleModal}
 			onCancel={() => setVisibleModal(false)}
 			okButtonProps={{ hidden: true }}
-			cancelText='Đóng'
+			cancelText={intl.formatMessage({ id: 'dangkytinchi.action.dong' })}
 			width={1000}
 			styles={{ body: { padding: 0 } }}
 		>
-			<Card title='Lịch học dự kiến'>
+			<Card title={intl.formatMessage({ id: 'dangkytinchi.modallichhoc.title' })}>
 				<p>
-					Bạn đã đăng ký / đã chọn <b>{props.soLopHienThi} lớp tín chỉ</b>, tổng cộng có{' '}
-					<b>{dataCalendar.length} buổi học</b>, từ ngày {dayjs(startDate).format('DD/MM/YYYY')} đến ngày{' '}
-					{dayjs(endDate).format('DD/MM/YYYY')}
+					{intl.formatMessage(
+						{ id: 'dangkytinchi.modallichhoc.description.dangkyloptinchi' },
+						{
+							countLop: props.soLopHienThi,
+							countBuoi: dataCalendar.length,
+							start: dayjs(startDate).format('DD/MM/YYYY'),
+							end: dayjs(endDate).format('DD/MM/YYYY'),
+
+							b: (chunks: any) => <b>{chunks}</b>,
+						},
+					)}
 					<br />
-					Cụ thể như sau:
+					{intl.formatMessage({
+						id: 'dangkytinchi.modallichhoc.description.cuthenhusau',
+					})}
 				</p>
 
 				<Calendar

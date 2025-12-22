@@ -3,13 +3,14 @@ import { resetFieldsForm } from '@/utils/utils';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, Modal, Row } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ConfirmKetHuyLopDKTC = (props: {
 	visible: boolean;
 	setVisible: (val: boolean) => void;
 	recLopDangKy?: DangKyTinChi.ILopDangKy;
 }) => {
+	const intl = useIntl();
 	const [form] = Form.useForm();
 	const { visible, setVisible, recLopDangKy } = props;
 	const {
@@ -44,7 +45,7 @@ const ConfirmKetHuyLopDKTC = (props: {
 
 	return (
 		<Modal
-			title='Xác nhận hủy đăng ký lớp tín chỉ'
+			title={intl.formatMessage({ id: 'dangkytinchi.modalconfimhuylop.title' })}
 			open={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
@@ -66,20 +67,25 @@ const ConfirmKetHuyLopDKTC = (props: {
 								<ExclamationCircleFilled />
 							</div>
 							<div style={{ textAlign: 'center' }}>
-								Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ
+								{intl.formatMessage({ id: 'dangkytinchi.modalconfimhuylop.confirm.cochacmuonhuy' })}
 								<br />
 								{`${recLopDangKy?.hocPhan?.ten} - ${recLopDangKy?.ten}`}?
 							</div>
 
 							<p style={{ color: 'red' }}>
-								<b>Lưu ý</b>: Thao tác không thể được hoàn tác
+								{intl.formatMessage(
+									{ id: 'dangkytinchi.modalconfimhuylop.luuy.thaotackhonthehuy' },
+									{
+										b: (chunks) => <b>{chunks}</b>,
+									},
+								)}{' '}
 							</p>
 						</div>
 					</Col>
 
 					<Col span={24}>
 						<Form.Item name='commit' valuePropName='checked' initialValue={false}>
-							<Checkbox>Tôi đã hiểu và xác nhận hủy đăng ký</Checkbox>
+							<Checkbox>{intl.formatMessage({ id: 'dangkytinchi.modalconfimhuylop.check.dahieuvaxacnhan' })}</Checkbox>
 						</Form.Item>
 					</Col>
 				</Row>
@@ -92,9 +98,11 @@ const ConfirmKetHuyLopDKTC = (props: {
 						loading={formSubmiting}
 						onClick={() => handleXoaDangKyTinChi()}
 					>
-						Xác nhận
+						{intl.formatMessage({ id: 'dangkytinchi.action.xacnhan' })}
 					</Button>
-					<Button onClick={() => setVisible(false)}>Hủy</Button>
+					<Button onClick={() => setVisible(false)}>
+						{intl.formatMessage({ id: 'dangkytinchi.modalconfimhuylop.check.dahieuvaxacnhan' })}
+					</Button>
 				</div>
 			</Form>
 		</Modal>
