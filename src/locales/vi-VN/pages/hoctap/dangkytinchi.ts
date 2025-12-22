@@ -1,0 +1,131 @@
+export default {
+    'dangkytinchi.title': 'Đăng ký tín chỉ',
+
+    'dangkytinchi.filter.btn.xemchitiet': 'Xem chi tiết',
+    'dangkytinchi.filter.thoigiandangky.title':
+        'Thời gian đăng ký từ <span>{thoigianbatdau}</span> đến <span>{thoigianketthuc}</span>',
+    'dangkytinchi.filter.step.thoigianbatdaudk.title': 'Thời gian bắt đầu đăng ký',
+    'dangkytinchi.filter.step.thoigianketthucdk.title': 'Thời gian kết thúc đăng ký',
+
+    // chi tiết học kỳ
+    'dangkytinchi.chitiethocky.description.tenhocky': 'Tên học kỳ',
+    'dangkytinchi.chitiethocky.description.sotuanhoc': 'Số tuần học',
+    'dangkytinchi.chitiethocky.description.thoigianbatdauhocky': 'Thời gian bắt đầu học kỳ',
+    'dangkytinchi.chitiethocky.description.tendotdangkytinchi': 'Tên đợt đăng ký tín chỉ',
+
+    'dangkytinchi.empty.khongduocphepdangky': 'Bạn không được phép đăng ký tín chỉ trong đợt này!',
+    'dangkytinchi.empty.ghichu': 'Ghi chú',
+    'dangkytinchi.empty.alert': 'Đợt đăng ký chỉ cho phép <b>XÓA</b> lớp tín chỉ đã đăng ký trước đó!',
+
+    'dangkytinchi.thongtindangky.title': 'Thông tin đăng ký',
+    'dangkytinchi.thongtindangky.alert':
+        'Sinh viên chủ động theo dõi <link_tien_trinh>Tiến trình học tập</link_tien_trinh> và <link_ket_qua>Kết quả học tập</link_ket_qua> để lựa chọn các lớp theo đúng tiến trình; học phần cần học lại, học cải thiện; khóa luận tốt nghiệp hoặc học phần thay thế...',
+    'dangkytinchi.thongtindangky.empty.error': 'Có lỗi xảy ra, vui lòng thử lại!',
+    'dangkytinchi.thongtindangky.empty.khongcodotdangky': 'Không có đợt đăng ký tín chỉ trong học kỳ này!',
+    'dangkytinchi.thongtindangky.huongdandangky.title': 'Xem video hướng dẫn đăng ký tín chỉ',
+
+    'dangkytinchi.dankylophocphan.columntable.thutulop': 'Thứ tự lớp',
+    'dangkytinchi.dankylophocphan.columntable.giangvien': 'Giảng viên',
+    'dangkytinchi.dankylophocphan.columntable.thongtinchitiet': 'Thông tin chi tiết',
+    'dangkytinchi.dankylophocphan.columntable.sisotoida': 'Sĩ số tối đa',
+    'dangkytinchi.dankylophocphan.columntable.controng': 'Còn trống',
+    'dangkytinchi.dankylophocphan.columntable.hinhthucdt': 'Hình thức ĐT',
+    'dangkytinchi.dankylophocphan.columntable.csdt': 'CSĐT',
+    'dangkytinchi.dankylophocphan.columntable.tinhchat': 'Tính chất',
+    'dangkytinchi.dankylophocphan.btn.segmented.lopgoiy': 'Lớp gợi ý',
+    'dangkytinchi.dankylophocphan.btn.segmented.luachonkhac': 'Lựa chọn khác',
+    'dangkytinchi.dankylophocphan.table.empty.khongcolop': 'Không có lớp mở trong học kỳ này!',
+    'dangkytinchi.dankylophocphan.table.empty.chonhocphanmuondangky': 'Vui lòng chọn học phần muốn đăng ký !',
+
+    'dangkytinchi.dankylophocphan.filterhocphan.columntable.thutu': 'TT',
+    'dangkytinchi.dankylophocphan.filterhocphan.columntable.mahp': 'Mã HP',
+    'dangkytinchi.dankylophocphan.filterhocphan.columntable.tenhocphan': 'Tên học phần',
+    'dangkytinchi.dankylophocphan.filterhocphan.columntable.sotinchi': 'Số TC',
+    'dangkytinchi.dankylophocphan.filterhocphan.btn.huongdandangky': 'Hướng dẫn Đăng ký',
+
+    'dangkytinchi.phieudangky.columntable.mahocphan': 'Mã HP',
+    'dangkytinchi.phieudangky.columntable.tenhocphan': 'Tên học phần',
+    'dangkytinchi.phieudangky.columntable.sothutulop': 'TT lớp',
+    'dangkytinchi.phieudangky.columntable.sotinchi': 'STC',
+    'dangkytinchi.phieudangky.columntable.giangvien': 'Giảng viên',
+    'dangkytinchi.phieudangky.columntable.thongtinchitiet': 'Thông tin chi tiết',
+    'dangkytinchi.phieudangky.columntable.hocphi': 'Học phí (dự kiến)',
+    'dangkytinchi.phieudangky.columntable.trangthai': 'Trạng thái',
+    'dangkytinchi.phieudangky.columntable.huy': 'Hủy',
+    'dangkytinchi.phieudangky.columntable.huy.tooltip': 'Hủy lớp',
+    'dangkytinchi.phieudangky.columntable.huy.confirm': 'Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ này?',
+    'dangkytinchi.phieudangky.columntable.huy.luuy':
+        'Lưu ý: Sau khi hủy lớp, tổng số tín chỉ còn lại không thỏa mãn điều kiện số tín chỉ tối thiểu',
+
+    'dangkytinchi.phieudangky.danhsachdadangky.title': 'Danh sách lớp tín chỉ đã đăng ký / đã chọn',
+    'dangkytinchi.phieudangky.tongtinchi.title': 'Tổng số tín chỉ (đã trừ các học phần không tính số tín chỉ)',
+    'dangkytinchi.phieudangky.tinchi.title': 'tín chỉ',
+    'dangkytinchi.phieudangky.hocphidukien.title': 'Học phí dự kiến',
+    'dangkytinchi.phieudangky.alert.khoangtinchi': 'Bạn được đăng ký trong khoảng tín chỉ',
+
+    'dangkytinchi.phieudangky.table.btn.tailai': 'Tải lại',
+    'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc': 'Xem trước lịch học',
+    'dangkytinchi.phieudangky.table.btn.caclopdahuy': 'Các lớp đã hủy đăng ký',
+    'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin': 'Bạn đã đăng ký quá số tín chỉ tối đa',
+    'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin': 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu',
+    'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi': 'Ngoài thời gian đăng ký tín chỉ',
+    'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc': 'Đăng ký tín chỉ',
+    'dangkytinchi.phieudangky.table.btn.dangky': 'Đăng ký',
+    'dangkytinchi.phieudangky.table.alert.luuy': 'Lưu ý: Bạn chưa đăng ký đủ số tín chỉ tối thiểu',
+
+    // modal lớp đã hủy
+    'dangkytinchi.modallophuy.columntable.mahp': 'Mã HP',
+    'dangkytinchi.modallophuy.columntable.tenhocphan': 'Tên học phần',
+    'dangkytinchi.modallophuy.columntable.ttlop': 'TT lớp',
+    'dangkytinchi.modallophuy.columntable.sotinchi': 'STC',
+    'dangkytinchi.modallophuy.columntable.label.khongtinh': '(không tính)',
+    'dangkytinchi.modallophuy.columntable.giangvien': 'Giảng viên',
+    'dangkytinchi.modallophuy.columntable.thongtinchitiet': 'Thông tin chi tiết',
+    'dangkytinchi.modallophuy.columntable.hocphidukien': 'Học phí (dự kiến)',
+    'dangkytinchi.modallophuy.columntable.thaotac': 'Thao tác',
+    'dangkytinchi.modallophuy.columntable.tooltip.banmuondangkylai': 'Bạn có muốn đăng ký lại đăng ký lớp tín chỉ này?',
+    'dangkytinchi.modallophuy.columntable.btn.tooltip.hoantac': 'Hoàn tác',
+    'dangkytinchi.modallophuy.title': 'Danh sách lớp đã hủy đăng ký',
+    // modal lịch học
+    'dangkytinchi.modallichhoc.title': 'Lịch học dự kiến',
+    'dangkytinchi.modallichhoc.description.dangkyloptinchi':
+        'Bạn đã đăng ký / đã chọn <b>{countLop} lớp tín chỉ</b>, tổng cộng có <b>{countBuoi} buổi học</b>, từ ngày {start} đến ngày {end}',
+    'dangkytinchi.modallichhoc.description.cuthenhusau': 'Cụ thể như sau:',
+    // modal đăng ký
+    'dangkytinchi.modaldangky.title': 'Danh sách đăng ký mới',
+    'dangkytinchi.modaldangky.columntable.mahocphan': 'Mã HP',
+    'dangkytinchi.modaldangky.columntable.tenhocphan': 'Tên học phần',
+    'dangkytinchi.modaldangky.columntable.loptinchi': 'Lớp tín chỉ',
+    'dangkytinchi.modaldangky.columntable.trangthai': 'Trạng thái',
+    'dangkytinchi.modaldangky.success.hoanthanhdangky': 'Đã hoàn thành đăng ký',
+    'dangkytinchi.modaldangky.dangky.title': 'Xác nhận đăng ký',
+    'dangkytinchi.modaldangky.dangky.alert': 'Xác nhận đăng ký các lớp tín chỉ đã chọn?',
+    'dangkytinchi.modaldangky.dangky.warning':
+        'Lưu ý: Tổng số tín chỉ đăng ký hiện tại đang thấp hơn quy định số tín chỉ tối thiểu đăng ký trong học kỳ!',
+    // confirm kq hủy lớp
+    'dangkytinchi.modalconfimhuylop.title': 'Xác nhận hủy đăng ký lớp tín chỉ',
+    'dangkytinchi.modalconfimhuylop.confirm.cochacmuonhuy': 'Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ',
+    'dangkytinchi.modalconfimhuylop.luuy.thaotackhonthehuy': '<b>Lưu ý</b>: Thao tác không thể được hoàn tác',
+    'dangkytinchi.modalconfimhuylop.check.dahieuvaxacnhan': 'Tôi đã hiểu và xác nhận hủy đăng ký',
+    // action
+    'dangkytinchi.action.dong': 'Đóng',
+    'dangkytinchi.action.xacnhan': 'Xác nhận',
+    'dangkytinchi.action.huy': 'Hủy',
+
+    // render lịch học
+    'dangkytinchi.renderlichhoc.khongcothongtin': 'Không có thông tin lịch học',
+    // ghi chú đăng ký tín chỉ
+    'dangkytinchi.ghichudangkytinchi.step1': 'Bước 1: Chọn Loại học phần',
+    'dangkytinchi.ghichudangkytinchi.step2': 'Bước 2: Tương ứng với loại đã chọn, chọn Học phần cần đăng ký',
+    'dangkytinchi.ghichudangkytinchi.step3':
+        'Bước 3: Tích chọn Lớp tín chỉ mong muốn (<i>chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống</i>)',
+    'dangkytinchi.ghichudangkytinchi.step4': 'Bước 4: Xem lại danh sách và ấn nút <b>Đăng ký</b>',
+    'dangkytinchi.ghichudangkytinchi.link.xemhuongdan':
+        "Xem video hướng dẫn <a>tại đây</a>",
+    'dangkytinchi.ghichudangkytinchi.ghichu': 'Ghi chú',
+    'dangkytinchi.ghichudangkytinchi.description.lopdadangky': 'Lớp đã đăng ký / đã chọn',
+    'dangkytinchi.ghichudangkytinchi.description.lopbitrunglichhoc': 'Lớp bị trùng lịch học',
+    'dangkytinchi.ghichudangkytinchi.description.lopkhongconchotrong': 'Lớp không còn chỗ trống',
+    'dangkytinchi.ghichudangkytinchi.description.lopgoiy': 'Lớp gợi ý theo kế hoạch giảng dạy',
+    'dangkytinchi.ghichudangkytinchi.description.chudam': 'Chữ đậm'
+};

@@ -7,9 +7,10 @@ import { Button, Card, Modal, Tag, message } from 'antd';
 import pLimit from 'p-limit';
 import { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.ILopDangKy[] }) => {
+	const intl = useIntl();
 	const { tongTinChi } = props;
 	const {
 		visibleRegister,
@@ -70,7 +71,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 				.then()
 				.finally(() => {
 					setTimeout(() => {
-						message.info('Đã hoàn thành đăng ký');
+						message.info(intl.formatMessage({ id: 'dangkytinchi.modaldangky.success.hoanthanhdangky' }));
 						if (dotDangKyHienTai?._id) {
 							getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
 							getLopDangKyModel(dotDangKyHienTai.maHocKy);
@@ -104,13 +105,13 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			})),
 		);
 		Modal.confirm({
-			title: 'Xác nhận đăng ký',
+			title: intl.formatMessage({ id: 'dangkytinchi.modaldangky.dangky.title' }),
 			content: (
 				<>
-					Xác nhận đăng ký các lớp tín chỉ đã chọn?
+					{intl.formatMessage({ id: 'dangkytinchi.modaldangky.dangky.alert' })}
 					{tongTinChi < (phieuDangKy?.soTinChiToiThieu ?? 0) ? (
 						<div style={{ color: 'orange' }}>
-							Lưu ý: Tổng số tín chỉ đăng ký hiện tại đang thấp hơn quy định số tín chỉ tối thiểu đăng ký trong học kỳ!
+							{intl.formatMessage({ id: 'dangkytinchi.modaldangky.dangky.warning' })}
 						</div>
 					) : null}
 				</>
@@ -125,18 +126,18 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 
 	const columns: IColumn<DangKyTinChi.ILopDangKy>[] = [
 		{
-			title: 'Mã HP',
+			title: intl.formatMessage({ id: 'dangkytinchi.modaldangky.dangky.title' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
 			width: 100,
 		},
 		{
-			title: 'Tên học phần',
+			title: intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
 			width: 170,
 		},
 		{
-			title: 'Lớp tín chỉ',
+			title: intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.loptinchi' }),
 			dataIndex: 'ten',
 			width: 150,
 		},
@@ -153,7 +154,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 		// 	render: (val: ELoaiHocPhanDangKyTinChi) => LoaiHocPhanDangKyTinChi[val],
 		// },
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.trangthai' }),
 			dataIndex: 'trangThai',
 			width: 170,
 			align: 'center',
@@ -182,7 +183,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			styles={{ body: { padding: 0 } }}
 			maskClosable={false}
 		>
-			<Card title='Danh sách đăng ký mới'>
+			<Card title={intl.formatMessage({ id: 'dangkytinchi.modaldangky.title' })}>
 				<TableStaticData
 					columns={columns}
 					data={danhSachDangKy}
@@ -204,10 +205,10 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 
 				<div className='form-footer'>
 					<Button onClick={onRegister} type='primary' loading={formSubmiting} disabled={!canRegister || !isVerified}>
-						Xác nhận
+						{intl.formatMessage({ id: 'dangkytinchi.action.xacnhan' })}
 					</Button>
 					<Button onClick={() => setVisibleRegister(false)} disabled={formSubmiting}>
-						Đóng
+						{intl.formatMessage({ id: 'dangkytinchi.action.dong' })}
 					</Button>
 				</div>
 			</Card>

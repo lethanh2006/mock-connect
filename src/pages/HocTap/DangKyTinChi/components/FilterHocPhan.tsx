@@ -8,10 +8,12 @@ import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ViewGhiChuDangKyTinChi from './ViewGhiChuDangKyTinChi';
 
 const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
+	const intl = useIntl();
+
 	const { khoaNganhMe, getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
 	const {
 		record: recHocPhan,
@@ -54,9 +56,15 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 	});
 
 	const columns: IColumn<HocPhan.IRecord & { index: number }>[] = [
-		{ title: 'TT', dataIndex: 'index', width: 60, align: 'center', onCell },
 		{
-			title: 'Mã HP',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.thutu' }),
+			dataIndex: 'index',
+			width: 60,
+			align: 'center',
+			onCell,
+		},
+		{
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.mahp' }),
 			dataIndex: 'ma',
 			width: 80,
 			align: 'center',
@@ -64,14 +72,14 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 			onCell,
 		},
 		{
-			title: 'Tên học phần',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.tenhocphan' }),
 			dataIndex: 'ten',
 			width: 170,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Số TC',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.sotinchi' }),
 			dataIndex: 'soTinChi',
 			width: 60,
 			align: 'center',
@@ -99,7 +107,7 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 				/>
 				<Popover content={<ViewGhiChuDangKyTinChi />}>
 					<Button type='link' icon={<QuestionCircleOutlined />}>
-						Hướng dẫn Đăng ký
+						{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.btn.huongdandangky' })}
 					</Button>
 				</Popover>
 			</Space>
