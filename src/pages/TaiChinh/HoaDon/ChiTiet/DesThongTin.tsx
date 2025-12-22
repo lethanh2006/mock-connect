@@ -2,9 +2,10 @@ import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan
 import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
 import { Descriptions, Tag } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const DesThongTinHoaDon = () => {
+	const intl = useIntl();
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
 	const ngoaiThoiGianThanhToan =
 		!!recHoaDon?.dotThu?._id &&
@@ -15,34 +16,40 @@ const DesThongTinHoaDon = () => {
 
 	return (
 		<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
-			<Descriptions.Item label='Đợt thu'>
-				{recHoaDon?.dotThu?.tenDot ?? <i>Đang cập nhật</i>} -{' '}
-				{!recHoaDon?.dotThu?.kichHoat ? <span className='text-error'>Chưa mở đợt</span> : null}
+			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.dotthu' })}>
+				{recHoaDon?.dotThu?.tenDot ?? <i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>} -{' '}
+				{!recHoaDon?.dotThu?.kichHoat ? (
+					<span className='text-error'>{intl.formatMessage({ id: 'taichinh.hoadon.status.notOpen' })}</span>
+				) : null}
 			</Descriptions.Item>
-			<Descriptions.Item label='Thời gian thu'>
+			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.thoigianthu' })}>
 				<span className={ngoaiThoiGianThanhToan ? 'text-error' : undefined}>
 					{recHoaDon?.dotThu?.thoiGianBatDau ? (
 						`${dayjs(recHoaDon.dotThu.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} - ${dayjs(
 							recHoaDon.dotThu.thoiGianKetThuc,
 						).format('HH:mm DD/MM/YYYY')}`
 					) : (
-						<i>Đang cập nhật</i>
+						<i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>
 					)}
 				</span>
 			</Descriptions.Item>
-			<Descriptions.Item label='Trạng thái'>
+			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.trangthai' })}>
 				{recHoaDon?.status ? (
 					<Tag color={EMauTrangThaiThanhToanTable?.[recHoaDon.status]}>
 						{ETrangThaiThanhToan?.[recHoaDon.status] ?? ''}
 					</Tag>
 				) : (
-					<i>Đang cập nhật</i>
+					<i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>
 				)}
 			</Descriptions.Item>
-			<Descriptions.Item label='Người nộp tiền'>
-				{recHoaDon?.userFullname ? `${recHoaDon.userFullname} - ${recHoaDon.userCode}` : <i>Đang cập nhật</i>}
+			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.nguoinop' })}>
+				{recHoaDon?.userFullname ? (
+					`${recHoaDon.userFullname} - ${recHoaDon.userCode}`
+				) : (
+					<i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>
+				)}
 			</Descriptions.Item>
-			<Descriptions.Item label='Tổng thành tiền'>
+			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.tongtien' })}>
 				{inputFormat(
 					recHoaDon?.billItems
 						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
@@ -50,7 +57,7 @@ const DesThongTinHoaDon = () => {
 				)}{' '}
 				VNĐ
 			</Descriptions.Item>
-			<Descriptions.Item label='Số tiền ưu đãi'>
+			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.uudai' })}>
 				{inputFormat(
 					recHoaDon?.billItems
 						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
@@ -58,7 +65,7 @@ const DesThongTinHoaDon = () => {
 				)}{' '}
 				VNĐ
 			</Descriptions.Item>
-			<Descriptions.Item label='Số tiền đã nộp'>
+			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.danop' })}>
 				{inputFormat(
 					recHoaDon?.billItems
 						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
@@ -66,7 +73,7 @@ const DesThongTinHoaDon = () => {
 				)}{' '}
 				VNĐ
 			</Descriptions.Item>
-			<Descriptions.Item label='Số tiền còn lại phải nộp'>
+			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.conlai' })}>
 				{inputFormat(
 					recHoaDon?.billItems
 						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)

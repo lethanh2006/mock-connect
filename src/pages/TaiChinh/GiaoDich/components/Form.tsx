@@ -2,12 +2,13 @@ import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat, inputParse, resetFieldsForm } from '@/utils/utils';
 import { Alert, Button, Card, Col, Form, InputNumber, Popconfirm, Row } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import HuongDanThanhToan from '../../HoaDon/ThanhToan/HuongDanThanhToan';
 import TableUuDaiHienHanh from '../../UuDaiThanhToan/TableUuDaiHienHanh';
 
 /** Form đóng trước học phí */
 const FormDongTruocHocPhi = (props: { getData?: () => void; [key: string]: any }) => {
+	const intl = useIntl();
 	const { getData } = props;
 	const [form] = Form.useForm();
 	const {
@@ -48,23 +49,27 @@ const FormDongTruocHocPhi = (props: { getData?: () => void; [key: string]: any }
 
 	return (
 		<>
-			<Card title='Nộp trước học phí'>
+			<Card title={intl.formatMessage({ id: 'uudaithanhtoan.noptruochocphi.title' })}>
 				<Form layout='vertical' form={form} onFinish={onFinish}>
 					<Row gutter={[12, 12]}>
 						<Col span={24}>
-							<Alert showIcon description='Nộp trước học phí cả năm để được hưởng những ưu đãi hấp dẫn !' />
+							<Alert showIcon description={intl.formatMessage({ id: 'uudaithanhtoan.noptruochocphi.alert' })} />
 						</Col>
 						<Col span={24}>
-							<div className='fw500'>Danh sách ưu đãi có hiệu lực</div>
+							<div className='fw500'>{intl.formatMessage({ id: 'uudaithanhtoan.noptruochocphi.ds' })}</div>
 						</Col>
 						<Col span={24}>
 							<TableUuDaiHienHanh onCellClick={(rec) => form.setFieldsValue({ amount: rec.mucPhiApDung })} />
 						</Col>
 
 						<Col span={24} md={8}>
-							<Form.Item name='amount' label='Số tiền nộp trước' extra='Nộp tối thiểu Ngưỡng hưởng để nhận được ưu đãi'>
+							<Form.Item
+								name='amount'
+								label={intl.formatMessage({ id: 'uudaithanhtoan.noptruochocphi.sotien' })}
+								extra={intl.formatMessage({ id: 'uudaithanhtoan.noptruochocphi.sotien.extra' })}
+							>
 								<InputNumber
-									placeholder='Nhập số tiền nộp'
+									placeholder={intl.formatMessage({ id: 'uudaithanhtoan.noptruochocphi.sotien.place' })}
 									addonAfter='VND'
 									formatter={inputFormat}
 									parser={inputParse}
@@ -76,7 +81,7 @@ const FormDongTruocHocPhi = (props: { getData?: () => void; [key: string]: any }
 						</Col>
 
 						<Col span={24}>
-							<div className='fw500'>Hình thức thanh toán</div>
+							<div className='fw500'>{intl.formatMessage({ id: 'uudaithanhtoan.noptruochocphi.hinhthuc' })}</div>
 						</Col>
 						<Col span={24}>
 							<HuongDanThanhToan amount={amount} isRequired />
@@ -84,13 +89,17 @@ const FormDongTruocHocPhi = (props: { getData?: () => void; [key: string]: any }
 					</Row>
 
 					<div className='form-footer'>
-						<Popconfirm title='Xác nhận thanh toán?' disabled={!amount} onConfirm={() => form.submit()}>
+						<Popconfirm
+							title={intl.formatMessage({ id: 'uudaithanhtoan.noptruochocphi.xacnhan' })}
+							disabled={!amount}
+							onConfirm={() => form.submit()}
+						>
 							<Button loading={formSubmiting} type='primary' htmlType='submit' disabled={!amount}>
-								Thanh toán
+								{intl.formatMessage({ id: 'uudaithanhtoan.noptruochocphi.thanhtoan' })}
 							</Button>
 						</Popconfirm>
 
-						<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+						<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 					</div>
 				</Form>
 			</Card>

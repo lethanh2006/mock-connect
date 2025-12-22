@@ -8,10 +8,11 @@ import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Form, Input } from 'antd';
 import { useWatch } from 'antd/lib/form/Form';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import SelectChuDePhanHoi from '../../ChuDePhanHoi/Select';
 
 const FormGuiPhanHoi = (props: any) => {
+	const intl = useIntl();
 	const { getData } = props;
 	const [form] = Form.useForm();
 	const { loading, setVisibleForm, postModel, record, setFormSubmiting, formSubmiting, visibleForm } =
@@ -52,14 +53,18 @@ const FormGuiPhanHoi = (props: any) => {
 	};
 
 	return (
-		<Card loading={loading} title='Gửi phản hồi'>
+		<Card loading={loading} title={intl.formatMessage({ id: 'phanhoi.form.title' })}>
 			<Form layout='vertical' onFinish={onFinish} form={form}>
-				<Form.Item name='tieuDe' label='Tiêu đề'>
-					<Input placeholder='Nhập tiêu đề' />
+				<Form.Item name='tieuDe' label={intl.formatMessage({ id: 'phanhoi.form.tieude.label' })}>
+					<Input placeholder={intl.formatMessage({ id: 'phanhoi.form.tieude.place' })} />
 				</Form.Item>
-				<Form.Item name='tenLinhVuc' label='Chủ đề câu hỏi' rules={[...rules.required]}>
+				<Form.Item
+					name='tenLinhVuc'
+					label={intl.formatMessage({ id: 'phanhoi.form.chude.label' })}
+					rules={[...rules.required]}
+				>
 					<SelectChuDePhanHoi
-						placeholder='Chọn chủ đề câu hỏi'
+						placeholder={intl.formatMessage({ id: 'phanhoi.form.chude.place' })}
 						onChange={(val) => {
 							form.setFieldsValue({
 								['maDonVi']: danhSach.find((item) => item._id === val)?.maDonVi,
@@ -67,7 +72,7 @@ const FormGuiPhanHoi = (props: any) => {
 						}}
 					/>
 				</Form.Item>
-				<Form.Item name='maDonVi' label='Bộ phận xử lý'>
+				<Form.Item name='maDonVi' label={intl.formatMessage({ id: 'phanhoi.form.xuly.label' })}>
 					<SelectDonVi
 						onChange={(val) => {
 							onChangeDonVi(val?.toString());
@@ -79,20 +84,20 @@ const FormGuiPhanHoi = (props: any) => {
 				<Form.Item name='tenDonVi' hidden />
 				<Form.Item
 					name='noiDungPhanHoi'
-					label='Nội dung phản hồi'
+					label={intl.formatMessage({ id: 'phanhoi.form.noidung.label' })}
 					rules={[...rules.required, ...rules.text, ...rules.length(2000)]}
 				>
-					<Input.TextArea rows={4} placeholder='Nhập nội dung' />
+					<Input.TextArea rows={4} placeholder={intl.formatMessage({ id: 'phanhoi.form.noidung.place' })} />
 				</Form.Item>
-				<Form.Item name='urlPhanAnh' label='File đính kèm'>
+				<Form.Item name='urlPhanAnh' label={intl.formatMessage({ id: 'phanhoi.form.dinhkem.label' })}>
 					<UploadFile maxCount={5} />
 				</Form.Item>
 
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
-						Gửi
+						{intl.formatMessage({ id: 'phanhoi.form.gui' })}
 					</Button>
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 				</div>
 			</Form>
 		</Card>

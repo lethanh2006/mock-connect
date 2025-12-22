@@ -19,7 +19,7 @@ import { Popconfirm, Segmented, Tag, notification } from 'antd';
 
 import dayjs from '@/utils/dayjs';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
 import CanhBaoGiaoDich from './components/CanhBao';
 import Form from './components/Form';
@@ -27,6 +27,7 @@ import ModalNopTruocHocPhi from './components/NopTruocHocPhi';
 import StatGiaoDich from './components/Stat';
 
 const GiaoDichPage = () => {
+	const intl = useIntl();
 	const {
 		getModel,
 		page,
@@ -47,8 +48,15 @@ const GiaoDichPage = () => {
 	useEffect(() => {
 		if (window.location.href.includes('orderType=momo_wallet'))
 			if (window.location.href.includes('resultCode=0'))
-				notification.success({ message: 'Thành công', description: 'Thanh toán công nợ thành công' });
-			else notification.warning({ message: 'Thất bại', description: 'Thanh toán thất bại' });
+				notification.success({
+					message: intl.formatMessage({ id: 'lichsugiaodich.notify.success.title' }),
+					description: intl.formatMessage({ id: 'lichsugiaodich.notify.success.desc' }),
+				});
+			else
+				notification.warning({
+					message: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.title' }),
+					description: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.des' }),
+				});
 	}, []);
 
 	const getData = () => getModel({ type: kieuThanhToan }, undefined, undefined, undefined, undefined, 'me/page');
@@ -59,7 +67,7 @@ const GiaoDichPage = () => {
 		if (recDotThu?._id !== idDotThu || (!!recDotThu?.kenhThanhToanId && !recDotThu?.kenhThanhToan?._id)) {
 			await getDotThu(idDotThu!);
 		}
-		
+
 		// Set record để hiển thị thông tin thanh toán
 		setRecord(tran);
 		setVisibleHuongDan(true);
@@ -83,20 +91,20 @@ const GiaoDichPage = () => {
 
 	const columns: IColumn<GiaoDich.IRecord>[] = [
 		{
-			title: 'Mã GD',
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.magd' }),
 			dataIndex: 'identityCode',
 			width: 120,
 			align: 'center',
 			filterType: 'string',
 		},
 		{
-			title: 'Nội dung',
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.noidung' }),
 			dataIndex: 'name',
 			width: 150,
 			filterType: 'string',
 		},
 		{
-			title: 'Phân loại',
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.phanloai' }),
 			dataIndex: 'type',
 			align: 'center',
 			width: 100,
@@ -104,7 +112,7 @@ const GiaoDichPage = () => {
 			hide: !!kieuThanhToan,
 		},
 		{
-			title: 'Số tiền',
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.sotien' }),
 			dataIndex: 'amount',
 			width: 120,
 			filterType: 'number',
@@ -113,7 +121,7 @@ const GiaoDichPage = () => {
 			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
-			title: 'Hình thức',
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.hinhthuc' }),
 			dataIndex: 'paymentType',
 			width: 140,
 			filterType: 'select',
@@ -124,7 +132,7 @@ const GiaoDichPage = () => {
 			render: (val: ETransactionPaymentType) => transactionPaymentLabel[val] ?? '',
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.trangthai' }),
 			dataIndex: 'status',
 			width: 140,
 			align: 'center',
@@ -137,9 +145,14 @@ const GiaoDichPage = () => {
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
 			),
 		},
-		{ title: 'Người thực hiện', dataIndex: 'manualUserFullname', width: 150, filterType: 'string' },
 		{
-			title: 'Thực hiện',
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.nguoithuchien' }),
+			dataIndex: 'manualUserFullname',
+			width: 150,
+			filterType: 'string',
+		},
+		{
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.thuchien' }),
 			dataIndex: 'createdAt',
 			width: 120,
 			align: 'center',
@@ -148,7 +161,7 @@ const GiaoDichPage = () => {
 			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
-			title: 'Hoàn thành',
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.hoanthanh' }),
 			dataIndex: 'transactionDate',
 			width: 120,
 			align: 'center',
@@ -157,7 +170,7 @@ const GiaoDichPage = () => {
 			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'lichsugiaodich.column.thaotac' }),
 			width: 90,
 			align: 'center',
 			fixed: 'right',
@@ -166,12 +179,12 @@ const GiaoDichPage = () => {
 					<ButtonExtend
 						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
 						icon={<DollarOutlined />}
-						tooltip='Thanh toán'
+						tooltip={intl.formatMessage({ id: 'lichsugiaodich.column.thanhtoan' })}
 						onClick={() => onPay && onPay(rec)}
 						type='link'
 					/>
 					<Popconfirm
-						title='Xác nhận hủy giao dịch này?'
+						title={intl.formatMessage({ id: 'lichsugiaodich.confirm.huy' })}
 						placement='topRight'
 						onConfirm={() => onCancel && onCancel(rec)}
 						disabled={rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL}
@@ -181,7 +194,7 @@ const GiaoDichPage = () => {
 								rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL
 							}
 							icon={<CloseOutlined />}
-							tooltip='Hủy'
+							tooltip={intl.formatMessage({ id: 'lichsugiaodich.column.huy' })}
 							type='link'
 							danger
 						/>
@@ -202,7 +215,7 @@ const GiaoDichPage = () => {
 				dependencies={[page, limit, kieuThanhToan]}
 				formProps={{ getData }}
 				modelName='taichinh.giaodich'
-				title='Lịch sử thanh toán'
+				title={intl.formatMessage({ id: 'lichsugiaodich.title' })}
 				otherButtons={[
 					<Segmented
 						value={kieuThanhToan || '1'}
@@ -212,7 +225,7 @@ const GiaoDichPage = () => {
 								value: item,
 								label: transactionType[item],
 							})),
-							{ value: '1', label: 'Tất cả giao dịch' },
+							{ value: '1', label: intl.formatMessage({ id: 'lichsugiaodich.button.tatca' }) },
 						]}
 						key='select'
 					/>,
@@ -231,7 +244,7 @@ const GiaoDichPage = () => {
 						className='btn-success'
 						key='topup'
 					>
-						Nộp trước học phí
+						{intl.formatMessage({ id: 'lichsugiaodich.button.noptruoc' })}
 					</ButtonExtend>,
 				]}
 			>
