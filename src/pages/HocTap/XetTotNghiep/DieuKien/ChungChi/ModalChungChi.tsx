@@ -1,9 +1,10 @@
 import { Divider, Modal } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import TableChungChiDauRa from './TableChungChiDauRa';
 import TableChungChiSinhVien from './TableChungChiSinhVien';
 
 const ModalChungChiCTDT = () => {
+	const intl = useIntl();
 	const { visibleForm, setVisibleForm, recordChungChi } = useModel('sinhvien.tientrinhtotnghiep');
 
 	return (
@@ -13,16 +14,16 @@ const ModalChungChiCTDT = () => {
 			onCancel={() => setVisibleForm(false)}
 			okButtonProps={{ hidden: true }}
 			cancelText='Đóng'
-			title={`Loại chứng chỉ ${recordChungChi?.loaiChungChi?.ten.toLocaleLowerCase()}`}
+			title={`${intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.title.loaichungchi' })} ${recordChungChi?.loaiChungChi?.ten.toLocaleLowerCase()}`}
 		>
 			<div style={{ marginBottom: 12 }} className='text-error'>
-				Sinh viên chủ động đăng ký các chứng chỉ đã đạt được để đảm bảo đủ điều kiện xét tốt nghiệp đúng tiến độ
+				{intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.alert.warning' })}
 			</div>
 
-			<Divider>Chứng chỉ đã đạt, đủ điều kiện xét</Divider>
+			<Divider>{intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.title.chungchidadat' })}</Divider>
 			<TableChungChiSinhVien />
 
-			<Divider>Chuẩn đầu ra</Divider>
+			<Divider>{intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.title.chuandaura' })}</Divider>
 			<TableChungChiDauRa />
 		</Modal>
 	);

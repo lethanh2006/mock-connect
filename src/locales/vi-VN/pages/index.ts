@@ -9,6 +9,7 @@ import lophocphan from './lophocphan';
 import thongtincanhan from './thongtincanhan';
 import tientrinhhoctap from './tientrinhhoctap';
 import trangchu from './trangchu';
+import dieukientotnghiep from './hoctap/dieukientotnghiep'
 
 export default {
 	...login,
@@ -22,4 +23,5 @@ export default {
 	...tientrinhhoctap,
 	...ketquahoctap,
 	...chungchitotnghiep,
+	...dieukientotnghiep
 };
