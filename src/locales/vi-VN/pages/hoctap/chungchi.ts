@@ -1,0 +1,31 @@
+export default {
+    "chungchitotnghiep.title": "Chứng chỉ xét tốt nghiệp",
+
+    "chungchitotnghiep.columntable.chungchi": "Chứng chỉ",
+    "chungchitotnghiep.columntable.donvicap": "Đơn vị cấp",
+    "chungchitotnghiep.columntable.trinhdo": "Trình độ",
+    "chungchitotnghiep.columntable.trangthai": "Trạng thái",
+    "chungchitotnghiep.columntable.ngaycap": "Ngày cấp",
+    "chungchitotnghiep.columntable.thoihan": "Thời hạn",
+    "chungchitotnghiep.columntable.thoihan.tag.khongthoihan": "Không thời hạn ",
+    "chungchitotnghiep.columntable.ghichu": "Ghi chú",
+    "chungchitotnghiep.columntable.thaotac": "Thao tác",
+    "chungchitotnghiep.columntable.thaotac.tooltip.edit": "Chỉnh sửa",
+    "chungchitotnghiep.columntable.thaotac.tooltip.delete": "Xóa",
+    "chungchitotnghiep.columntable.thaotac.confirm": "Bạn có chắc chắn muốn xóa chứng chỉ này?",
+
+    "chungchitotnghiep.formitem.label.chungchi": "Chứng chỉ",
+    "chungchitotnghiep.formitem.label.ngaycap": "Ngày cấp",
+    "chungchitotnghiep.formitem.label.donvicap": "Đơn vị cấp",
+    "chungchitotnghiep.formitem.input.donvicap.placeholder": "Nhập đơn vị cấp",
+    "chungchitotnghiep.formitem.label.bacchungchi": "Bậc chứng chỉ",
+    "chungchitotnghiep.formitem.select.bacchungchi.placeholder": "Chọn bậc chứng chỉ",
+    "chungchitotnghiep.formitem.label.mucdiem": "Mức điểm",
+    "chungchitotnghiep.formitem.input.mucdiem.placeholder": "Nhập điểm đạt được",
+    "chungchitotnghiep.formitem.label.minhchung": "Minh chứng",
+
+    "chungchitotnghiep.action.edit": "Chỉnh sửa",
+    "chungchitotnghiep.action.addnew": "Thêm mới",
+    "chungchitotnghiep.action.save": "Lưu lại",
+    "chungchitotnghiep.action.cancel": "Hủy",
+}
