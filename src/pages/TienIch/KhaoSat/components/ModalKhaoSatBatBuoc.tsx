@@ -1,10 +1,11 @@
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Select } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormTraLoiKhaoSat from './Form';
 
 const ModalKhaoSatBatBuoc = () => {
+	const intl = useIntl();
 	const { visibleKhaoSatBatBuoc, record, dsKhaoSatBatBuoc, isThanhCong, setIsThanhCong, setVisibleKhaoSatBatBuoc } =
 		useModel('tienich.dotkhaosat');
 	const { getByIdModel: getBieuMau } = useModel('tienich.bieumau');
@@ -19,7 +20,7 @@ const ModalKhaoSatBatBuoc = () => {
 
 	return (
 		<Modal
-			title='Chi tiết khảo sát'
+			title={intl.formatMessage({ id: 'khaosat.batbuoc.title' })}
 			open={visibleKhaoSatBatBuoc}
 			footer={null}
 			width={800}
@@ -36,23 +37,30 @@ const ModalKhaoSatBatBuoc = () => {
 							/>
 						</div>
 
-						<div style={{ color: '#1890ff', fontSize: 20, fontWeight: 600 }}>THÀNH CÔNG</div>
+						<div style={{ color: '#1890ff', fontSize: 20, fontWeight: 600 }}>
+							{intl.formatMessage({ id: 'khaosat.batbuoc.thanhcong' })}
+						</div>
 
 						<div>
 							{dsKhaoSatBatBuoc?.length ? (
 								<i>
-									Bạn còn <b>{dsKhaoSatBatBuoc?.length}</b> đợt khảo sát chưa thực hiện, vui lòng tiếp tục thực thiện để
-									sử dụng các dịch vụ trong hệ thống!
+									{intl.formatMessage(
+										{ id: 'khaosat.batbuoc.noti' },
+										{
+											count: dsKhaoSatBatBuoc?.length,
+											b: (chunks) => <b>{chunks}</b>,
+										},
+									)}
 								</i>
 							) : (
-								<i>Đã thực hiện khảo sát thành công, bạn có thể tiếp tục sử dụng các dịch vụ trong hệ thống!</i>
+								<i>{intl.formatMessage({ id: 'khaosat.batbuoc.noti1' })}</i>
 							)}
 						</div>
 					</div>
 					<div className='form-footer'>
 						{dsKhaoSatBatBuoc?.length ? (
 							<Button type='primary' onClick={() => setIsThanhCong(false)}>
-								Xem chi tiết
+								{intl.formatMessage({ id: 'khaosat.batbuoc.chitiet' })}
 							</Button>
 						) : (
 							<Button
@@ -61,7 +69,7 @@ const ModalKhaoSatBatBuoc = () => {
 									setVisibleKhaoSatBatBuoc(false);
 								}}
 							>
-								Đóng
+								{intl.formatMessage({ id: 'global.button.dong' })}
 							</Button>
 						)}
 					</div>
@@ -72,7 +80,7 @@ const ModalKhaoSatBatBuoc = () => {
 						<Select
 							style={{ width: 300 }}
 							value={record?._id}
-							placeholder='Chọn đợt khảo sát'
+							placeholder={intl.formatMessage({ id: 'khaosat.batbuoc.place' })}
 							options={dsKhaoSatBatBuoc?.map((item) => ({
 								value: item._id,
 								label: item.ten,

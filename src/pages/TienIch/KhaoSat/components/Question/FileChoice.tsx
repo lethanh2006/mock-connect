@@ -2,8 +2,11 @@ import UploadFile from '@/components/Upload/UploadFile';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
 import { Col, Form, InputNumber, Row } from 'antd';
+import { useIntl } from 'umi';
 
 const FileChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean; isDiemSo?: boolean }) => {
+	const intl = useIntl();
+
 	return (
 		<Row gutter={[12, 0]}>
 			<Col span={props.isDiemSo ? 20 : 24}>
@@ -12,7 +15,7 @@ const FileChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean; isDie
 					name={[props.question._id, 'listUrlFile']}
 					extra={
 						<i>
-							<small>Định dạng cho phép: file ảnh, file PDF, file Word</small>
+							<small>{intl.formatMessage({ id: 'khaosat.filechoice.form.upload' })}</small>
 						</i>
 					}
 				>
@@ -26,8 +29,15 @@ const FileChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean; isDie
 			</Col>
 			{props.isDiemSo && (
 				<Col span={4}>
-					<Form.Item name={[props.question._id, 'diem']} label='Điểm số'>
-						<InputNumber disabled style={{ width: '100%' }} placeholder='Chưa có điểm số' />
+					<Form.Item
+						name={[props.question._id, 'diem']}
+						label={intl.formatMessage({ id: 'khaosat.filechoice.form.diemso' })}
+					>
+						<InputNumber
+							disabled
+							style={{ width: '100%' }}
+							placeholder={intl.formatMessage({ id: 'khaosat.filechoice.form.diemso.place' })}
+						/>
 					</Form.Item>
 				</Col>
 			)}
