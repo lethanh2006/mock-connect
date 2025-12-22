@@ -8,6 +8,8 @@ import lophanhchinh from './lophanhchinh';
 import lophocphan from './lophocphan';
 import phanhoi from './phanhoi';
 import congno from './taichinh/congno';
+import lichsugiaodich from './taichinh/lichsugiaodich';
+import uudaithanhtoan from './taichinh/uudaithanhtoan';
 import thongbao from './thongbao';
 import thongtincanhan from './thongtincanhan';
 import cauhoithuonggap from './tienichkhac/cauhoithuonggap';
@@ -34,4 +36,6 @@ export default {
 	...vanbanhuongdan,
 	...xemsau,
 	...congno,
+	...lichsugiaodich,
+	...uudaithanhtoan,
 };
