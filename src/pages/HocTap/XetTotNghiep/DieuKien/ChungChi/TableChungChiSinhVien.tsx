@@ -5,25 +5,26 @@ import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Empty, Tag } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const TableChungChiSinhVien = () => {
+	const intl = useIntl();
 	const { recordChungChi } = useModel('sinhvien.tientrinhtotnghiep');
 
 	const columns: IColumn<SinhVien.IChungChiSinhVien>[] = [
 		{
-			title: 'Chứng chỉ',
+			title: intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.table.chungchi.columntable' }),
 			dataIndex: 'maChungChi',
 			width: 180,
 			render: (val, rec) => `${rec.chungChi?.loaiChungChi?.ten ?? val} - ${rec.chungChi?.ten ?? val}`,
 		},
 		{
-			title: 'Đơn vị cấp',
+			title: intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.table.donvicap.columntable' }),
 			dataIndex: 'donViCap',
 			width: 200,
 		},
 		{
-			title: 'Trình độ',
+			title: intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.table.trinhdo.columntable' }),
 			dataIndex: 'diem',
 			width: 80,
 			align: 'center',
@@ -38,14 +39,14 @@ const TableChungChiSinhVien = () => {
 			},
 		},
 		{
-			title: 'Ngày cấp',
+			title: intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.table.ngaycap.columntable' }),
 			dataIndex: 'ngayCap',
 			width: 100,
 			align: 'center',
 			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 		},
 		{
-			title: 'Thời hạn',
+			title: intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.table.thoihan.columntable' }),
 			width: 130,
 			align: 'center',
 			render: (val, rec) => {
@@ -57,7 +58,12 @@ const TableChungChiSinhVien = () => {
 								{endDate.format('DD/MM/YYYY')}
 							</span>
 						);
-					} else return <Tag color='green'>Không thời hạn</Tag>;
+					} else
+						return (
+							<Tag color='green'>
+								{intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.table.khongthoihan.tag' })}
+							</Tag>
+						);
 				else return null;
 			},
 		},
@@ -67,7 +73,7 @@ const TableChungChiSinhVien = () => {
 		<TableStaticData columns={columns} data={recordChungChi?.chungChiDuDk ?? []} size='small' addStt />
 	) : (
 		<Empty
-			description='Bạn chưa có chứng chỉ nào hoặc chứng chỉ không đủ điều kiện'
+			description={intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.table.empty' })}
 			image={Empty.PRESENTED_IMAGE_SIMPLE}
 		/>
 	);

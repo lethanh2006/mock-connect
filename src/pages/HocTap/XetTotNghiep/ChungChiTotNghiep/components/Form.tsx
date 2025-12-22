@@ -9,9 +9,10 @@ import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const FormChungChiSinhVien = (props: any) => {
+	const intl = useIntl();
 	const [form] = Form.useForm();
 	const {
 		record,
@@ -55,31 +56,51 @@ const FormChungChiSinhVien = (props: any) => {
 	};
 
 	return (
-		<Card title={`${edit ? 'Chỉnh sửa' : 'Thêm mới'} ${title?.toLowerCase()}`}>
+		<Card
+			title={`${edit ? intl.formatMessage({ id: 'chungchitotnghiep.action.edit' }) : intl.formatMessage({ id: 'chungchitotnghiep.action.addnew' })} ${title?.toLowerCase()}`}
+		>
 			<Form onFinish={onFinish} form={form} layout='vertical'>
 				<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
 					<Col xs={24} md={12}>
-						<Form.Item name='maChungChi' label='Chứng chỉ' rules={[...rules.required]}>
+						<Form.Item
+							name='maChungChi'
+							label={intl.formatMessage({ id: 'chungchitotnghiep.formitem.label.chungchi' })}
+							rules={[...rules.required]}
+						>
 							<SelectChungChi selectMa onChange={() => form.setFieldsValue({ diem: undefined })} />
 						</Form.Item>
 					</Col>
 
 					<Col xs={24} md={12}>
-						<Form.Item name='ngayCap' label='Ngày cấp' rules={[...rules.required]}>
+						<Form.Item
+							name='ngayCap'
+							label={intl.formatMessage({ id: 'chungchitotnghiep.formitem.label.ngaycap' })}
+							rules={[...rules.required]}
+						>
 							<MyDatePicker />
 						</Form.Item>
 					</Col>
 					<Col xs={24} md={12}>
-						<Form.Item name='donViCap' label='Đơn vị cấp' rules={[...rules.required]}>
-							<Input placeholder='Nhập đơn vị cấp' />
+						<Form.Item
+							name='donViCap'
+							label={intl.formatMessage({ id: 'chungchitotnghiep.formitem.label.donvicap' })}
+							rules={[...rules.required]}
+						>
+							<Input
+								placeholder={intl.formatMessage({ id: 'chungchitotnghiep.formitem.input.donvicap.placeholder' })}
+							/>
 						</Form.Item>
 					</Col>
 
 					{recChungChi?.phuongThucTinhDiem === EPhuongThucTinhDiem.BAC ? (
 						<Col xs={24} md={12}>
-							<Form.Item name='diem' label='Bậc chứng chỉ' rules={[...rules.required]}>
+							<Form.Item
+								name='diem'
+								label={intl.formatMessage({ id: 'chungchitotnghiep.formitem.label.bacchungchi' })}
+								rules={[...rules.required]}
+							>
 								<Select
-									placeholder='Chọn bậc chứng chỉ'
+									placeholder={intl.formatMessage({ id: 'chungchitotnghiep.formitem.select.bacchungchi.placeholder' })}
 									options={recChungChi?.bac?.map((item) => ({
 										key: item.order,
 										label: item.ten,
@@ -93,7 +114,7 @@ const FormChungChiSinhVien = (props: any) => {
 							<Col xs={24} md={12}>
 								<Form.Item
 									name='diem'
-									label='Mức điểm'
+									label={intl.formatMessage({ id: 'chungchitotnghiep.formitem.label.mucdiem' })}
 									rules={[...rules.required, ...rules.number(recChungChi.max, recChungChi.min)]}
 								>
 									<InputNumber
@@ -101,14 +122,18 @@ const FormChungChiSinhVien = (props: any) => {
 										min={recChungChi.min}
 										max={recChungChi.max}
 										step={recChungChi.step}
-										placeholder='Nhập điểm đạt được'
+										placeholder={intl.formatMessage({ id: 'chungchitotnghiep.formitem.input.mucdiem.placeholder' })}
 									/>
 								</Form.Item>
 							</Col>
 						</>
 					) : null}
 					<Col xs={24}>
-						<Form.Item name='urlMinhChung' label='Minh chứng' rules={[...rules.required]}>
+						<Form.Item
+							name='urlMinhChung'
+							label={intl.formatMessage({ id: 'chungchitotnghiep.formitem.label.minhchung' })}
+							rules={[...rules.required]}
+						>
 							<UploadFile resize maxCount={1} accept='image/*, .docx, .doc, .xls, .xlsx, .pdf' />
 						</Form.Item>
 					</Col>
@@ -124,9 +149,13 @@ const FormChungChiSinhVien = (props: any) => {
 						htmlType='submit'
 						type='primary'
 					>
-						{!edit ? 'Thêm mới' : 'Lưu lại'}
+						{!edit
+							? intl.formatMessage({ id: 'chungchitotnghiep.action.addnew' })
+							: intl.formatMessage({ id: 'chungchitotnghiep.action.save' })}
 					</Button>
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button onClick={() => setVisibleForm(false)}>
+						{intl.formatMessage({ id: 'chungchitotnghiep.action.cancel' })}
+					</Button>
 				</div>
 			</Form>
 		</Card>
