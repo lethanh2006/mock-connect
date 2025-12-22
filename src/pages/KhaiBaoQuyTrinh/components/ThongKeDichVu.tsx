@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 interface ThongKeProps {
 	data?: any[];
@@ -19,6 +19,7 @@ interface ThongKeProps {
 }
 
 const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
+	const intl = useIntl();
 	const { danhSach, loading } = useModel('quytrinh.khaibaoquytrinh');
 	const { getOneModel: getHoaDon } = useModel('taichinh.hoadon');
 	const [thongKe, setThongKe] = useState({
@@ -84,19 +85,19 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 
 	const thongKeDichVuData: StatisticsItem[] = [
 		{
-			title: 'Tổng số đơn',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.tongdon' }),
 			value: thongKe.tongSoDon,
 			icon: <FileTextOutlined />,
 			valueColor: '#FFAF0B',
 		},
 		{
-			title: 'Đã hoàn thành',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.dahoanthanh' }),
 			value: thongKe.daHoanThanh,
 			icon: <CheckCircleOutlined />,
 			valueColor: '#17C229',
 		},
 		{
-			title: 'Chưa thanh toán',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.chuahoanthanh' }),
 			value: thongKe.chuaThanhToan,
 			icon: <ExclamationCircleOutlined />,
 			valueColor: '#DA2128',
@@ -105,13 +106,13 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 
 	const thongKeChiPhiData: StatisticsItem[] = [
 		{
-			title: 'Tổng số tiền',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.tongtien' }),
 			value: thongKe.tongSoTienFormatted,
 			icon: <DollarCircleOutlined />,
 			valueColor: '#17C229',
 		},
 		{
-			title: 'Chưa thanh toán',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.chuathanhtoan' }),
 			value: thongKe.tongTienChuaThanhToanFormatted,
 			icon: <StopOutlined />,
 			valueColor: '#DA2128',
@@ -123,7 +124,7 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 			<Row gutter={[12, 12]} wrap>
 				<Col xs={24} lg={12}>
 					<StatisticsCard
-						title='Thống kê dịch vụ'
+						title={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.dichvu' })}
 						data={thongKeDichVuData}
 						loading={loading}
 						colSpan={{ xs: 24, md: 8 }}
@@ -132,7 +133,7 @@ const ThongKeDichVu = ({ data, tenQuyTrinh }: ThongKeProps) => {
 
 				<Col xs={24} lg={12}>
 					<StatisticsCard
-						title='Thống kê chi phí'
+						title={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongke.chiphi' })}
 						data={thongKeChiPhiData}
 						loading={loading}
 						colSpan={{ xs: 24, md: 12 }}

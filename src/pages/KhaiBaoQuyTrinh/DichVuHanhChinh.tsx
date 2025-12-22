@@ -1,9 +1,12 @@
+import { useIntl } from 'umi';
 import KhaiBaoQuyTrinhPage from '.';
 
 const DichVuHanhChinh = () => {
+	const intl = useIntl();
+
 	return (
 		<KhaiBaoQuyTrinhPage
-			title='Dịch vụ hành chính - đơn đã gửi'
+			title={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.title' })}
 			hasColumnTenQuyTrinh
 			hasFilterHoatDong
 			linhVuc='Dịch vụ hành chính'
