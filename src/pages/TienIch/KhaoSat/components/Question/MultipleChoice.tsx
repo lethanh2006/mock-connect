@@ -1,8 +1,10 @@
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
 import { Checkbox, Form, Input } from 'antd';
+import { useIntl } from 'umi';
 
 const MultipleChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean }) => {
+	const intl = useIntl();
 	const check = Form.useWatch(props.question._id);
 	// const [idCauTraLoi, setIdCauTraLoi] = useState<string[]>([]);
 
@@ -40,7 +42,11 @@ const MultipleChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean })
 						</div>
 					))}
 
-					{props.question.cauTraLoiKhac ? <Checkbox value='traLoiKhac'>Câu trả lời khác</Checkbox> : null}
+					{props.question.cauTraLoiKhac ? (
+						<Checkbox value='traLoiKhac'>
+							{intl.formatMessage({ id: 'khaosat.multipleChoice.form.cautlkhac' })}
+						</Checkbox>
+					) : null}
 				</Checkbox.Group>
 			</Form.Item>
 
@@ -48,9 +54,9 @@ const MultipleChoice = (props: { question: BieuMau.CauHoi; disabled?: boolean })
 				<Form.Item
 					name={`${props.question._id}_otherAnswer`}
 					rules={props.question.batBuoc ? [...rules.required] : []}
-					label='Câu trả lời khác'
+					label={intl.formatMessage({ id: 'khaosat.multipleChoice.form.cautlkhac' })}
 				>
-					<Input placeholder='Nhập câu trả lời khác' />
+					<Input placeholder={intl.formatMessage({ id: 'khaosat.multipleChoice.form.cautlkhac.place' })} />
 				</Form.Item>
 			) : null}
 		</>

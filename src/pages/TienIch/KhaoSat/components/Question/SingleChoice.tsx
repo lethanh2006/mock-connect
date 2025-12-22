@@ -1,8 +1,10 @@
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import rules from '@/utils/rules';
 import { Form, Input, Radio, type FormInstance } from 'antd';
+import { useIntl } from 'umi';
 
 const SingleChoice = (props: { question: BieuMau.CauHoi; form: FormInstance; disabled?: boolean }) => {
+	const intl = useIntl();
 	const check = Form.useWatch(props.question._id);
 
 	return (
@@ -14,7 +16,9 @@ const SingleChoice = (props: { question: BieuMau.CauHoi; form: FormInstance; dis
 							<Radio value={item.noiDung}>{item.noiDung}</Radio>
 						</div>
 					))}
-					{props.question.cauTraLoiKhac ? <Radio value='traLoiKhac'>Câu trả lời khác</Radio> : null}
+					{props.question.cauTraLoiKhac ? (
+						<Radio value='traLoiKhac'>{intl.formatMessage({ id: 'khaosat.multipleChoice.form.cautlkhac' })}</Radio>
+					) : null}
 				</Radio.Group>
 			</Form.Item>
 
@@ -22,9 +26,12 @@ const SingleChoice = (props: { question: BieuMau.CauHoi; form: FormInstance; dis
 				<Form.Item
 					name={`${props.question._id}_otherAnswer`}
 					rules={props.question.batBuoc ? [...rules.required] : []}
-					label='Câu trả lời khác'
+					label={intl.formatMessage({ id: 'khaosat.multipleChoice.form.cautlkhac' })}
 				>
-					<Input disabled={props.disabled} placeholder='Nhập câu trả lời khác' />
+					<Input
+						disabled={props.disabled}
+						placeholder={intl.formatMessage({ id: 'khaosat.multipleChoice.form.cautlkhac.place' })}
+					/>
 				</Form.Item>
 			) : null}
 		</>
