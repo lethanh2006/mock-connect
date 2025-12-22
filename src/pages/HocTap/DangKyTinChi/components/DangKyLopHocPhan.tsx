@@ -11,11 +11,12 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Empty, Segmented } from 'antd';
 import { type TableRowSelection } from 'antd/lib/table/interface';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FilterHocPhanDKTC from './FilterHocPhan';
 import RenderLichHoc from './RenderLichHoc';
 
 const DangKyLopHocPhan = () => {
+	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel } = useModel('lophocphan.lophocphan');
 	const { danhSachLopDangKy, setDanhSachLopDangKy, tinhDataLichHoc, checkTrungLich } =
@@ -66,10 +67,10 @@ const DangKyLopHocPhan = () => {
 			background: !!danhSachLopDangKy.find((item) => item._id === rec._id)
 				? undefined
 				: rec.siSoToiDa - (rec.siSo ?? 0) <= 0
-				? EColorLopDangKy.FULL_LOP
-				: checkTrungLich(rec.thoiKhoaBieuList ?? [])
-				? EColorLopDangKy.TRUNG_LICH
-				: undefined,
+					? EColorLopDangKy.FULL_LOP
+					: checkTrungLich(rec.thoiKhoaBieuList ?? [])
+						? EColorLopDangKy.TRUNG_LICH
+						: undefined,
 			// fontWeight: rec.lopHpHcList?.some((item) => danhSachMaLopHc?.includes(item.maLopHc ?? '')) ? 600 : undefined,
 		},
 	});
@@ -141,7 +142,7 @@ const DangKyLopHocPhan = () => {
 
 	const columns: IColumn<LopHocPhan.IRecord>[] = [
 		{
-			title: 'Thứ tự lớp',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.thutulop' }),
 			dataIndex: 'soThuTuLop',
 			width: 100,
 			align: 'center',
@@ -149,7 +150,7 @@ const DangKyLopHocPhan = () => {
 			onCell,
 		},
 		{
-			title: 'Giảng viên',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.giangvien' }),
 			width: 160,
 			render: (val, rec) => (
 				<ExpandText>
@@ -163,41 +164,41 @@ const DangKyLopHocPhan = () => {
 			onCell,
 		},
 		{
-			title: 'Thông tin chi tiết',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.thongtinchitiet' }),
 			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
 			onCell,
 		},
 		{
-			title: 'Sĩ số tối đa',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.sisotoida' }),
 			dataIndex: 'siSoToiDa',
 			align: 'center',
 			width: 60,
 			onCell,
 		},
 		{
-			title: 'Còn trống',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.controng' }),
 			align: 'center',
 			width: 60,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
 			onCell,
 		},
 		{
-			title: 'Hình thức ĐT',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.hinhthucdt' }),
 			dataIndex: 'maHinhThuc',
 			width: 80,
 			render: (val, rec) => rec.hinhThuc?.ten ?? val,
 			onCell,
 		},
 		{
-			title: 'CSĐT',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.csdt' }),
 			dataIndex: 'maCSDT',
 			align: 'center',
 			width: 60,
 			onCell,
 		},
 		{
-			title: 'Tính chất',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.tinhchat' }),
 			dataIndex: 'maTinhChat',
 			align: 'center',
 			width: 60,
@@ -235,14 +236,17 @@ const DangKyLopHocPhan = () => {
 								? [
 										<Segmented
 											key='1'
-											options={['Lớp gợi ý', 'Lựa chọn khác']}
+											options={[
+												intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.btn.segmented.lopgoiy' }),
+												intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.btn.segmented.luachonkhac' }),
+											]}
 											value={typeLop}
 											onChange={(val) => setTypeLop(val.toString())}
 										/>,
-								  ]
+									]
 								: undefined
 						}
-						emptyText='Không có lớp mở trong học kỳ này!'
+						emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
 					/>
 				</div>
 			) : (
@@ -271,7 +275,11 @@ const DangKyLopHocPhan = () => {
 				// 	/>
 				// )
 				<Empty
-					description={<i style={{ color: '#999' }}>Vui lòng chọn học phần muốn đăng ký !</i>}
+					description={
+						<i style={{ color: '#999' }}>
+							{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.chonhocphanmuondangky' })}
+						</i>
+					}
 					style={{ marginTop: 30, marginBottom: 30 }}
 				/>
 			)}

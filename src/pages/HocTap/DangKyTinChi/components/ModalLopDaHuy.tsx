@@ -8,10 +8,12 @@ import { inputFormat } from '@/utils/utils';
 import { RedoOutlined } from '@ant-design/icons';
 import { Button, Modal, Popconfirm } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import RenderLichHoc from './RenderLichHoc';
 
 const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
+	const intl = useIntl();
+
 	const { visible, setVisible } = props;
 	const { phieuDangKy, getLopDaHuyDangKyTinChiModel, danhSachLopDaHuy, loading, revertLopDangKyTinDaHuyModel } =
 		useModel('daotao.dotdangkytinchi');
@@ -43,7 +45,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 
 	const columnsLopHuy: IColumn<DangKyTinChi.AuditLog>[] = [
 		{
-			title: 'Mã HP',
+			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.mahp' }),
 			align: 'center',
 			dataIndex: ['response', 'data'],
 			width: 80,
@@ -52,13 +54,13 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 			},
 		},
 		{
-			title: 'Tên học phần',
+			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.tenhocphan' }),
 			dataIndex: ['response', 'data'],
 			width: 170,
 			render: (val: DangKyTinChi.ILopDangKy) => val?.lopHocPhan?.hocPhan?.ten,
 		},
 		{
-			title: 'TT lớp',
+			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.ttlop' }),
 			width: 80,
 			dataIndex: ['response', 'data'],
 			align: 'center',
@@ -68,7 +70,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 				}`,
 		},
 		{
-			title: 'STC',
+			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.sotinchi' }),
 			width: 60,
 			dataIndex: ['response', 'data'],
 			align: 'center',
@@ -76,12 +78,14 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 			render: (val: DangKyTinChi.ILopDangKy) => (
 				<>
 					{val?.lopHocPhan?.hocPhan?.soTinChi}{' '}
-					{val?.lopHocPhan?.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy === false ? <i>(không tính)</i> : null}
+					{val?.lopHocPhan?.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy === false ? (
+						<i>{intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.label.khongtinh' })}</i>
+					) : null}
 				</>
 			),
 		},
 		{
-			title: 'Giảng viên',
+			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.giangvien' }),
 			dataIndex: ['response', 'data'],
 			width: 160,
 			render: (val: DangKyTinChi.ILopDangKy) => (
@@ -95,7 +99,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 			),
 		},
 		{
-			title: 'Thông tin chi tiết',
+			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.thongtinchitiet' }),
 			dataIndex: ['response', 'data'],
 			width: 250,
 			render: (val: DangKyTinChi.ILopDangKy) => (
@@ -104,7 +108,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 		},
 
 		{
-			title: 'Học phí (dự kiến)',
+			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.hocphidukien' }),
 			dataIndex: ['response', 'data'],
 			align: 'right',
 			width: 120,
@@ -117,14 +121,14 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 			},
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.thaotac' }),
 			width: 60,
 			dataIndex: ['response', 'data'],
 			fixed: 'right',
 			align: 'center',
 			render: (val: DangKyTinChi.ILopDangKy, rec) => (
 				<Popconfirm
-					title='Bạn có muốn đăng ký lại đăng ký lớp tín chỉ này?'
+					title={intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.tooltip.banmuondangkylai' })}
 					placement='topRight'
 					onConfirm={() =>
 						revertLopDangKyTinDaHuyModel(rec?._id, () => {
@@ -133,7 +137,11 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 						})
 					}
 				>
-					<ButtonExtend icon={<RedoOutlined />} type='link' tooltip='Hoàn tác' />
+					<ButtonExtend
+						icon={<RedoOutlined />}
+						type='link'
+						tooltip={intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.btn.tooltip.hoantac' })}
+					/>
 				</Popconfirm>
 			),
 		},
@@ -141,7 +149,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 
 	return (
 		<Modal
-			title='Danh sách lớp đã hủy đăng ký'
+			title={intl.formatMessage({ id: 'dangkytinchi.modallophuy.title' })}
 			open={visible}
 			onCancel={() => setVisible(false)}
 			width={1100}
@@ -163,7 +171,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 			</TableStaticData>
 
 			<div className='form-footer'>
-				<Button onClick={() => setVisible(false)}>Đóng</Button>
+				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'dangkytinchi.action.dong' })}</Button>
 			</div>
 		</Modal>
 	);
