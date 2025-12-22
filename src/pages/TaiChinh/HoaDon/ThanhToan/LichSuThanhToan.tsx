@@ -18,13 +18,14 @@ import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const LichSuThanhToan = (props: {
 	onPay: (rec: GiaoDich.IRecord) => void;
 	onCancel: (rec: GiaoDich.IRecord) => Promise<unknown>;
 	ngoaiThoiGianThanhToan?: boolean;
 }) => {
+	const intl = useIntl();
 	const { record } = useModel('taichinh.hoadon');
 	const { getAllModel, danhSach, loading } = useModel('taichinh.giaodich');
 	const { onPay, onCancel, ngoaiThoiGianThanhToan } = props;
@@ -38,34 +39,34 @@ const LichSuThanhToan = (props: {
 
 	const columns: IColumn<GiaoDich.IRecord>[] = [
 		{
-			title: 'Mã GD',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.magd' }),
 			dataIndex: 'identityCode',
 			width: 120,
 			align: 'center',
 			filterType: 'string',
 		},
 		{
-			title: 'Phân loại',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.phanloai' }),
 			dataIndex: 'type',
 			align: 'center',
 			width: 100,
 			render: (val: ETransactionType) => val && <Tag color={colorTransactionType[val]}>{transactionType[val]}</Tag>,
 		},
 		{
-			title: 'Số tiền',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.sotien' }),
 			dataIndex: 'amount',
 			align: 'right',
 			width: 120,
 			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
-			title: 'Hình thức',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.hinhthuc' }),
 			dataIndex: 'paymentType',
 			width: 110,
 			render: (val: ETransactionPaymentType, rec) => transactionPaymentLabel?.[val as ETransactionPaymentType] ?? '',
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.trangthai' }),
 			dataIndex: 'status',
 			width: 120,
 			align: 'center',
@@ -73,9 +74,14 @@ const LichSuThanhToan = (props: {
 				<Tag color={colorTransactionStatus[val]}>{transactionStatus[val] ?? ''}</Tag>
 			),
 		},
-		{ title: 'Người thực hiện', dataIndex: 'manualUserFullname', width: 140, filterType: 'string' },
 		{
-			title: 'Thực hiện',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.nguoithuchien' }),
+			dataIndex: 'manualUserFullname',
+			width: 140,
+			filterType: 'string',
+		},
+		{
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.thuchien' }),
 			align: 'center',
 			dataIndex: 'createdAt',
 			width: 120,
@@ -83,7 +89,7 @@ const LichSuThanhToan = (props: {
 			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
-			title: 'Hoàn thành',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.hoanthanh' }),
 			align: 'center',
 			dataIndex: 'transactionDate',
 			width: 120,
@@ -91,7 +97,7 @@ const LichSuThanhToan = (props: {
 			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.thaotac' }),
 			width: 90,
 			align: 'center',
 			fixed: 'right',
@@ -104,12 +110,12 @@ const LichSuThanhToan = (props: {
 							ngoaiThoiGianThanhToan
 						}
 						icon={<DollarOutlined />}
-						tooltip='Thanh toán'
+						tooltip={intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.thanhtoan' })}
 						onClick={() => onPay && onPay(rec)}
 						type='link'
 					/>
 					<Popconfirm
-						title='Xác nhận hủy giao dịch này?'
+						title={intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.huy.xacnhan' })}
 						onConfirm={() => {
 							if (onCancel)
 								onCancel(rec).then(() => {
@@ -124,7 +130,7 @@ const LichSuThanhToan = (props: {
 								rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL
 							}
 							icon={<CloseOutlined />}
-							tooltip='Hủy'
+							tooltip={intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.huy' })}
 							type='link'
 							danger
 						/>

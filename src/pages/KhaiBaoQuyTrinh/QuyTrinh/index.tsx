@@ -6,12 +6,13 @@ import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Card, Empty, Modal, Pagination, Popconfirm, Tag, Typography, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import './style.less';
 
 const { Title, Text } = Typography;
 
 const QuyTrinhPage = () => {
+	const intl = useIntl();
 	const { visibleForm, setVisibleForm, setCurrent, setCurrentFormKhaiBao } = useModel('quytrinh.khaibaoquytrinh');
 	const {
 		getModel: getQuyTrinh,
@@ -94,10 +95,10 @@ const QuyTrinhPage = () => {
 	};
 
 	const getStatusText = (order: number) => {
-		if (order >= 2 && order < 5) return 'Quan trọng';
-		if (order >= 5 && order < 10) return 'Đang tăng cao';
-		if (order >= 10) return 'Phổ biến nhất';
-		return 'Thông thường';
+		if (order >= 2 && order < 5) return intl.formatMessage({ id: 'dichvuhanhchinh.dangky.status.quantrong' });
+		if (order >= 5 && order < 10) return intl.formatMessage({ id: 'dichvuhanhchinh.dangky.status.tangcao' });
+		if (order >= 10) return intl.formatMessage({ id: 'dichvuhanhchinh.dangky.status.phobien' });
+		return intl.formatMessage({ id: 'dichvuhanhchinh.dangky.status.thongthuong' });
 	};
 
 	const handlePaginationChange = (newPage: number, newPageSize: number) => {
@@ -120,13 +121,13 @@ const QuyTrinhPage = () => {
 		<>
 			<div className='quy-trinh-page'>
 				<Title level={4} className='page-title'>
-					Biểu mẫu dịch vụ
+					{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.title' })}
 				</Title>
 
 				{/* Hiển thị loading state */}
 				{loading ? (
 					<div className='loading-container'>
-						<Text>Đang tải dữ liệu...</Text>
+						<Text>{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.loading' })}</Text>
 					</div>
 				) : (
 					<>
@@ -134,7 +135,7 @@ const QuyTrinhPage = () => {
 						{danhSachQuyTrinh && danhSachQuyTrinh.length > 0 ? (
 							<div className='quy-trinh-grid'>
 								{danhSachQuyTrinh.map((quyTrinh: QuyTrinh.IRecord, index: number) => (
-									<Card key={quyTrinh._id} className='quy-trinh-card' bodyStyle={{ padding: '16px' }}>
+									<Card key={quyTrinh._id} className='quy-trinh-card' styles={{ body: { padding: '16px' } }}>
 										<div className='card-content'>
 											<div className='card-main'>
 												<div className='card-icon'>
@@ -163,17 +164,17 @@ const QuyTrinhPage = () => {
 														}}
 														className='use-button'
 													>
-														Sử dụng
+														{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung' })}
 													</Button>
 												) : (
 													<Popconfirm
-														title='Bạn có muốn sử dụng dịch vụ này?'
+														title={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung.xacnhan' })}
 														onConfirm={() => handleRedirect(quyTrinh)}
-														okText='Sử dụng'
-														cancelText='Đóng'
+														okText={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung' })}
+														cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 													>
 														<Button type='primary' className='use-button'>
-															Sử dụng
+															{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung' })}
 														</Button>
 													</Popconfirm>
 												)}
@@ -184,7 +185,10 @@ const QuyTrinhPage = () => {
 							</div>
 						) : (
 							<div className='empty-state'>
-								<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không tìm thấy biểu mẫu nào' />
+								<Empty
+									image={Empty.PRESENTED_IMAGE_SIMPLE}
+									description={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.empty' })}
+								/>
 							</div>
 						)}
 					</>
@@ -209,7 +213,7 @@ const QuyTrinhPage = () => {
 			</div>
 
 			<Modal
-				title={'Chọn đợt khai báo'}
+				title={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.modal.title' })}
 				width={500}
 				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
@@ -220,7 +224,7 @@ const QuyTrinhPage = () => {
 			</Modal>
 
 			<Modal
-				title={'Thông tin chung'}
+				title={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.modal.thongtin' })}
 				width={1000}
 				open={visibleThongTinChung}
 				onCancel={() => setVisibleThongTinChung(false)}
@@ -232,7 +236,7 @@ const QuyTrinhPage = () => {
 							if (recordQuyTrinh) handleRedirect(recordQuyTrinh);
 						}}
 					>
-						Tiếp theo
+						{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.tieptheo' })}
 					</Button>
 				}
 				destroyOnClose

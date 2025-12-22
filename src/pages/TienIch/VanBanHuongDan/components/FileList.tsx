@@ -9,9 +9,10 @@ import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import { FileExcelOutlined, PaperClipOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const FileList = () => {
+	const intl = useIntl();
 	const { record } = useModel('tienich.vanbanhuongdan');
 	const {
 		postModel: postXemSau,
@@ -56,19 +57,19 @@ const FileList = () => {
 
 	const columns: IColumn<VanBanHuongDan.IFile>[] = [
 		{
-			title: 'Tên văn bản',
+			title: intl.formatMessage({ id: 'vanbanhuongdan.form.tenvanban' }),
 			dataIndex: 'ten',
 			filterType: 'string',
 			width: 150,
 		},
 		{
-			title: 'Mô tả',
+			title: intl.formatMessage({ id: 'vanbanhuongdan.form.mota' }),
 			dataIndex: 'moTa',
 			width: 250,
 			render: (val) => <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Tệp đính kèm',
+			title: intl.formatMessage({ id: 'vanbanhuongdan.form.tep' }),
 			dataIndex: 'url',
 			render: (val, rec) =>
 				val ? (
@@ -80,14 +81,14 @@ const FileList = () => {
 								setVisibleFormFile(true);
 							}}
 						>
-							Tệp đính kèm
+							{intl.formatMessage({ id: 'vanbanhuongdan.form.tep' })}
 						</a>
 					</>
 				) : null,
 			width: 120,
 		},
 		{
-			title: 'Lưu',
+			title: intl.formatMessage({ id: 'vanbanhuongdan.form.save' }),
 			align: 'center',
 			width: 90,
 			render: (val, rec) => (
@@ -98,7 +99,7 @@ const FileList = () => {
 							type='link'
 							danger
 							icon={<FileExcelOutlined />}
-							tooltip='Bỏ lưu'
+							tooltip={intl.formatMessage({ id: 'vanbanhuongdan.form.unsave' })}
 							onClick={() => handleBoXemSau(danhSachXemSau?.find((items) => items?.sourceId === rec?._id))}
 						/>
 					) : (
@@ -107,7 +108,7 @@ const FileList = () => {
 							loading={loadingXemSau}
 							type='link'
 							icon={<SaveOutlined />}
-							tooltip='Lưu'
+							tooltip={intl.formatMessage({ id: 'vanbanhuongdan.form.save' })}
 							onClick={() => handleXemSau(rec)}
 						/>
 					)}
@@ -127,12 +128,14 @@ const FileList = () => {
 			/>
 
 			<ModalExpandable
-				title='Chi tiết tập tin'
+				title={intl.formatMessage({ id: 'vanbanhuongdan.form.chitiet' })}
 				width={1000}
 				open={visibleFormFile}
 				footer={
 					<div className='form-footer'>
-						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+						<Button onClick={() => setVisibleFormFile(false)}>
+							{intl.formatMessage({ id: 'global.button.dong' })}
+						</Button>
 					</div>
 				}
 				onCancel={() => setVisibleFormFile(false)}

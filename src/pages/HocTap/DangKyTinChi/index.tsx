@@ -1,5 +1,5 @@
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
-import { YoutubeOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
 import { Card, Divider, Empty, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -65,11 +65,16 @@ const DangKyTinChiPage = () => {
 							<Divider style={{ marginTop: 24 }}>
 								{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.title' })}
 							</Divider>
+							{sinhVienDot?.ghiChu && (
+								<div>
+									{<QuestionCircleOutlined />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
+									<i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
+								</div>
+							)}
 							<div style={{ marginBottom: 12 }}>
 								{intl.formatMessage(
 									{ id: 'dangkytinchi.thongtindangky.alert' },
 									{
-										// Định nghĩa thẻ link_tien_trinh
 										link_tien_trinh: (chunks: any) => (
 											<a
 												href='./tien-trinh-hoc-tap'
