@@ -1,6 +1,8 @@
 import dangky from './dichvuhanhchinh/dangky';
 import lichsu from './dichvuhanhchinh/lichsu';
 import donvihanhchinh from './donvihanhchinh';
+import chungchitotnghiep from './hoctap/chungchi';
+import dieukientotnghiep from './hoctap/dieukientotnghiep';
 import hoctapkhac from './hoctap/khac';
 import ketquahoctap from './ketquahoctap';
 import khaosat from './khaosat';
@@ -31,6 +33,8 @@ export default {
 	...lophocphan,
 	...tientrinhhoctap,
 	...ketquahoctap,
+	...chungchitotnghiep,
+	...dieukientotnghiep,
 	...khaosat,
 	...phanhoi,
 	...thongbao,

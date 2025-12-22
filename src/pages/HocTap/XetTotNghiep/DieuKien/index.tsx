@@ -1,11 +1,12 @@
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { Alert, Card, Space, Spin } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import DieuKienChungChiSection from './ChungChi';
 import DieuKienKqhtSection from './KetQuaHocTap';
 
 const CardDieuKienTotNghiep = () => {
+	const intl = useIntl();
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
 	const { record: recDot, getDotHienHanhModel } = useModel('sinhvien.xettotnghiep');
 	const { getTienTrinhTotNghiepModel, loading, dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
@@ -30,7 +31,7 @@ const CardDieuKienTotNghiep = () => {
 			variant='borderless'
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-					<span>Điều kiện xét tốt nghiệp</span>
+					<span>{intl.formatMessage({ id: 'dieukienxettotnghiep.title' })}</span>
 					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
 				</Space>
 			}
@@ -45,9 +46,17 @@ const CardDieuKienTotNghiep = () => {
 				</Spin>
 
 				{dieuKienTotNghiep?.isDuKieuKien ? (
-					<Alert type='success' description='Bạn đã đủ điều kiện để xét tốt nghiệp!' showIcon />
+					<Alert
+						type='success'
+						description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.success.dudieukien' })}
+						showIcon
+					/>
 				) : (
-					<Alert type='warning' description='Bạn chưa đủ điều kiện để xét tốt nghiệp!' showIcon />
+					<Alert
+						type='warning'
+						description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.warning.chuadudieukien' })}
+						showIcon
+					/>
 				)}
 			</Card>
 		</Card>

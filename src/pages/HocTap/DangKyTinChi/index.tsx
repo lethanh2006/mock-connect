@@ -1,5 +1,5 @@
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
-import { YoutubeOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
 import { Card, Divider, Empty, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -55,6 +55,11 @@ const DangKyTinChiPage = () => {
 					) : !!phieuDangKy?.soTinChiToiDa ? (
 						<>
 							<Divider style={{ marginTop: 24 }}>Thông tin đăng ký</Divider>
+							{sinhVienDot?.ghiChu && (
+								<div>
+									{<QuestionCircleOutlined />} Ghi chú: <i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
+								</div>
+							)}
 							<div style={{ marginBottom: 12 }}>
 								Sinh viên chủ động theo dõi{' '}
 								<a
@@ -77,7 +82,7 @@ const DangKyTinChiPage = () => {
 									Kết quả học tập
 								</a>{' '}
 								để lựa chọn các lớp theo đúng tiến trình; học phần cần học lại, học cải thiện; khóa luận tốt nghiệp hoặc
-								học phần thay thế...
+								học phần thay thế.
 							</div>
 							<DangKyLopHocPhan />
 						</>
