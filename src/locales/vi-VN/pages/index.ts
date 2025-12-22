@@ -9,6 +9,9 @@ import lophocphan from './lophocphan';
 import phanhoi from './phanhoi';
 import thongbao from './thongbao';
 import thongtincanhan from './thongtincanhan';
+import cauhoithuonggap from './tienichkhac/cauhoithuonggap';
+import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
+import xemsau from './tienichkhac/xemsau';
 import tientrinhhoctap from './tientrinhhoctap';
 import trangchu from './trangchu';
 
@@ -26,4 +29,7 @@ export default {
 	...khaosat,
 	...phanhoi,
 	...thongbao,
+	...cauhoithuonggap,
+	...vanbanhuongdan,
+	...xemsau,
 };
