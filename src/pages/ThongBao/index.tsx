@@ -5,11 +5,12 @@ import type { ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
 import { Modal } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import news from '../../assets/new6.gif';
 import ViewThongBao from './components/ViewThongBao';
 
 const ThongBaoPage = () => {
+	const intl = useIntl();
 	const { setRecord, record, getModel } = useModel('thongbao.thongbao');
 	const getData = () => {
 		getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
@@ -25,14 +26,14 @@ const ThongBaoPage = () => {
 
 	const column: IColumn<ThongBao.IRecord>[] = [
 		{
-			title: 'Người gửi',
+			title: intl.formatMessage({ id: 'thongbao.column.nguoigui' }),
 			dataIndex: 'senderName',
 			width: 150,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Tiêu đề',
+			title: intl.formatMessage({ id: 'thongbao.column.tieude' }),
 			dataIndex: 'title',
 			width: 200,
 			filterType: 'string',
@@ -51,7 +52,7 @@ const ThongBaoPage = () => {
 			),
 		},
 		{
-			title: 'Mô tả',
+			title: intl.formatMessage({ id: 'thongbao.column.mota' }),
 			dataIndex: 'description',
 			width: 280,
 			filterType: 'string',
@@ -71,7 +72,7 @@ const ThongBaoPage = () => {
 		// 	render: (val: EReceiverType) => LoaiDoiTuongThongBao?.[val],
 		// },
 		{
-			title: 'Thời gian gửi',
+			title: intl.formatMessage({ id: 'thongbao.column.thoigian' }),
 			dataIndex: 'createdAt',
 			width: 120,
 			align: 'center',
@@ -89,13 +90,13 @@ const ThongBaoPage = () => {
 				getData={getData}
 				modelName={'thongbao.thongbao'}
 				columns={column}
-				title='Thông báo'
+				title={intl.formatMessage({ id: 'thongbao.title' })}
 			/>
 			<Modal
 				width={800}
 				styles={{ body: { padding: 0 } }}
 				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 				open={visible}
 				onCancel={() => setVisible(false)}
 				destroyOnClose

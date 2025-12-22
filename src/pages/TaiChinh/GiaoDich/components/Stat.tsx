@@ -3,9 +3,10 @@ import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { tienVietNam } from '@/utils/utils';
 import { DollarCircleOutlined, ImportOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const StatGiaoDich = () => {
+	const intl = useIntl();
 	const { getTongGiaoDichSinhVienModel, tongGiaoDich, loading } = useModel('taichinh.giaodich');
 
 	useEffect(() => {
@@ -14,13 +15,13 @@ const StatGiaoDich = () => {
 
 	const thongKeSoTienData: StatisticsItem[] = [
 		{
-			title: 'Tổng tiền đã nộp',
+			title: intl.formatMessage({ id: 'lichsugiaodich.stat.tongtien' }),
 			value: tienVietNam(tongGiaoDich?.totalIn ?? 0),
 			icon: <ImportOutlined />,
 			status: 'success',
 		},
 		{
-			title: 'Số dư hiện tại',
+			title: intl.formatMessage({ id: 'lichsugiaodich.stat.sodu' }),
 			value: tienVietNam(tongGiaoDich?.totalRemain ?? 0),
 			icon: <DollarCircleOutlined />,
 		},

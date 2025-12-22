@@ -3,42 +3,43 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import type { UuDaiThanhToan } from '@/services/TaiChinh/UuDaiThanhToan/typing';
 import dayjs from '@/utils/dayjs';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const UuDaiThanhToanPage = () => {
+	const intl = useIntl();
 	const { page, limit, getModel } = useModel('taichinh.uudaiuser');
 
 	const getData = () => getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
 
 	const columns: IColumn<UuDaiThanhToan.IUuDaiUser>[] = [
 		{
-			title: 'Năm học',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.column.namhoc' }),
 			dataIndex: 'tenNamHoc',
 			// filterType: 'string',
 			width: 120,
 			render: (val, rec) => val && rec?.maNamHoc,
 		},
 		{
-			title: 'Tên ưu đãi',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.column.tenuudai' }),
 			dataIndex: ['uuDai', 'ten'],
 			// filterType: 'string',
 			width: 180,
 		},
 		{
-			title: 'Loại khoản thu áp dụng',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.column.loaikhoanthu' }),
 			dataIndex: ['uuDai', 'maKhoanThuApDung'],
 			width: 140,
 			render: (val, rec) => rec.uuDai?.khoanThuApDung?.name ?? val,
 		},
 		{
-			title: 'Giá trị ưu đãi',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.column.giatri' }),
 			dataIndex: ['uuDai', 'phanTramUuDai'],
 			align: 'center',
 			width: 80,
 			render: (val) => val && `${val}%`,
 		},
 		{
-			title: 'Tổng tiền ưu đãi',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.column.tongtien' }),
 			dataIndex: 'tongTienUuDai',
 			align: 'center',
 			width: 120,
@@ -47,24 +48,25 @@ const UuDaiThanhToanPage = () => {
 			sortable: true,
 		},
 		{
-			title: 'Mô tả',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.column.mota' }),
 			dataIndex: ['uuDai', 'moTa'],
 			width: 220,
 			render: (val) => val && <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Ngày nhận',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.column.ngaynhan' }),
 			dataIndex: 'createdAt',
 			align: 'center',
 			width: 100,
 			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
 		},
 		{
-			title: 'Thời gian sử dụng',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.column.thoigiansudung' }),
 			dataIndex: 'thoiGianSuDung',
 			align: 'center',
 			width: 100,
-			render: (val) => (val ? dayjs(val).format('DD/MM/YYYY') : <i>Chưa sử dụng</i>),
+			render: (val) =>
+				val ? dayjs(val).format('DD/MM/YYYY') : <i>{intl.formatMessage({ id: 'uudaithanhtoan.chuasudung' })}</i>,
 		},
 	];
 
@@ -75,7 +77,7 @@ const UuDaiThanhToanPage = () => {
 			getData={getData}
 			dependencies={[page, limit]}
 			modelName='taichinh.uudaiuser'
-			title='Ưu đãi thanh toán đã nhận được'
+			title={intl.formatMessage({ id: 'uudaithanhtoan.title' })}
 		/>
 	);
 };
