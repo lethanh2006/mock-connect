@@ -1,3 +1,5 @@
+import dangky from './dichvuhanhchinh/dangky';
+import lichsu from './dichvuhanhchinh/lichsu';
 import donvihanhchinh from './donvihanhchinh';
 import hoctapkhac from './hoctap/khac';
 import ketquahoctap from './ketquahoctap';
@@ -38,4 +40,6 @@ export default {
 	...congno,
 	...lichsugiaodich,
 	...uudaithanhtoan,
+	...dangky,
+	...lichsu,
 };
