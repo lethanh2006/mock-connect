@@ -1,4 +1,5 @@
 import donvihanhchinh from './donvihanhchinh';
+import chungchitotnghiep from './hoctap/chungchi';
 import hoctapkhac from './hoctap/khac';
 import ketquahoctap from './ketquahoctap';
 import lichsukien from './lichsukien';
@@ -20,4 +21,5 @@ export default {
 	...lophocphan,
 	...tientrinhhoctap,
 	...ketquahoctap,
+	...chungchitotnghiep,
 };
