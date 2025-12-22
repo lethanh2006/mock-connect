@@ -7,10 +7,11 @@ import { inputFormat, inputParse } from '@/utils/utils';
 import { Button, Col, Form, InputNumber, Row, Table } from 'antd';
 import _ from 'lodash';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import HuongDanThanhToan from './HuongDanThanhToan';
 
 const FormThanhToan = (props: { getData?: () => void }) => {
+	const intl = useIntl();
 	const { getData } = props;
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
 	const { danhSach, visibleThanhToan, setVisibleThanhToan, getAllModel } = useModel('taichinh.hoadonchitiet');
@@ -89,40 +90,40 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 
 	const columns: IColumn<HoaDon.IBillItem & { index: number }>[] = [
 		{
-			title: 'Nội dung',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.form.noidung' }),
 			dataIndex: 'ten',
 			width: 200,
 		},
 		{
-			title: 'Thành tiền',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.form.thanhtien' }),
 			dataIndex: 'amountDue',
 			width: 110,
 			align: 'right',
 			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
-			title: 'Ưu đãi',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.form.uudai' }),
 			dataIndex: 'amountDiscount',
 			width: 110,
 			align: 'right',
 			render: (val) => `${inputFormat(val ?? 0)} VND`,
 		},
 		{
-			title: 'Đã nộp',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.form.danop' }),
 			dataIndex: 'amountPaid',
 			width: 110,
 			align: 'right',
 			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
-			title: 'Còn lại',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.form.conlai' }),
 			dataIndex: 'amountRemaining',
 			width: 110,
 			align: 'right',
 			render: (val) => `${inputFormat(val)} VND`,
 		},
 		{
-			title: 'Thanh toán',
+			title: intl.formatMessage({ id: 'taichinh.thanhtoan.form.thanhtoan' }),
 			width: 140,
 			align: 'right',
 			render: (val, rec) => (
@@ -134,7 +135,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 						formatter={inputFormat}
 						parser={inputParse}
 						style={{ width: '100%' }}
-						placeholder='Nhập số tiền'
+						placeholder={intl.formatMessage({ id: 'taichinh.thanhtoan.form.thanhtoan.place' })}
 						addonAfter='VND'
 						disabled
 					/>
@@ -149,8 +150,8 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 				<Row gutter={[12, 12]}>
 					<Col span={24} md={8}>
 						<Form.Item
-							label='Số dư ví khả dụng'
-							tooltip='Là số tiền nộp dư tính đến thời điểm hiện tại, khả dụng trong đợt thu này'
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.form.sodu' })}
+							tooltip={intl.formatMessage({ id: 'taichinh.thanhtoan.form.sodu.tooltip' })}
 						>
 							<InputNumber
 								value={soDuHienTai}
@@ -166,7 +167,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 				<Row gutter={[12, 8]}>
 					<Col span={24}>
 						<div className='fw500' style={{ marginTop: 12 }}>
-							Danh sách khoản phí
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.form.title' })}
 						</div>
 						<TableStaticData
 							data={dataHienThi}
@@ -183,7 +184,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 									return (
 										<Table.Summary.Row>
 											<Table.Summary.Cell index={0} colSpan={2}>
-												<b>Tổng</b>
+												<b>{intl.formatMessage({ id: 'taichinh.thanhtoan.form.tong' })}</b>
 											</Table.Summary.Cell>
 											<Table.Summary.Cell align={'right'} index={1}>
 												<b> {inputFormat(totalDue ?? 0)} VND</b>
@@ -209,7 +210,7 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 
 					<Col span={24}>
 						<div className='fw500' style={{ marginTop: 12 }}>
-							Hình thức thanh toán
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.form.hinhthuc' })}
 						</div>
 					</Col>
 					<Col span={24}>
@@ -222,18 +223,16 @@ const FormThanhToan = (props: { getData?: () => void }) => {
 					</Col>
 					<Col span={24}>
 						<div className='text-error' style={{ marginTop: 12 }}>
-							Lưu ý: Sinh viên kiểm tra lại Số dư hiện tại của mình, danh sách chi tiết các khoản phí cần nộp, mức Ưu
-							đãi được hưởng và Tổng tiền phải nộp trước khi thực hiện Thanh toán. Trong trường hợp số liệu chưa chính
-							xác vui lòng liên hệ ngay với Phòng Tài chính kế toán!
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.form.luuy' })}
 						</div>
 					</Col>
 				</Row>
 
 				<div className='form-footer' style={{ marginTop: 18 }}>
 					<Button loading={formSubmiting} type='primary' htmlType='submit'>
-						Thanh toán
+						{intl.formatMessage({ id: 'taichinh.thanhtoan.form.thanhtoan' })}
 					</Button>
-					<Button onClick={() => setVisibleThanhToan(false)}>Hủy</Button>
+					<Button onClick={() => setVisibleThanhToan(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 				</div>
 			</Form>
 		</>

@@ -2,7 +2,7 @@ import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
 import { Col, Descriptions, Radio, Row, Spin } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import './style.less';
 
 const HuongDanThanhToan = (props: {
@@ -12,6 +12,7 @@ const HuongDanThanhToan = (props: {
 	duNo?: number;
 	isRequired?: boolean;
 }) => {
+	const intl = useIntl();
 	const { thanhToan, tongUuDai, amount, duNo, isRequired } = props;
 	const { paymentType, setPaymentType, momoConfig, getMomoConfigModel, loading } = useModel('taichinh.giaodich');
 	const [userFee, setUserFee] = useState<number>(0);
@@ -43,12 +44,14 @@ const HuongDanThanhToan = (props: {
 						disabled={!amount}
 					>
 						{!amount && !isRequired ? (
-							<Radio value={ETransactionPaymentType.MANUAL}>Số dư ví hiện tại</Radio>
+							<Radio value={ETransactionPaymentType.MANUAL}>
+								{intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.sodu' })}
+							</Radio>
 						) : (
 							<>
 								<Radio value={ETransactionPaymentType.BANK}>
 									<img src='/images/vietqr.png' alt='vietqr' />
-									Thẻ nội địa
+									{intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.thenoidia' })}
 								</Radio>
 								{/* <Radio value={ETransactionPaymentType.MOMO_WALLET}>
 									<img src='/images/momo.svg' alt='momo' />
@@ -62,26 +65,46 @@ const HuongDanThanhToan = (props: {
 				<Col span={24} md={16}>
 					<Descriptions column={1} bordered labelStyle={{ width: '50%' }}>
 						{thanhToan ? (
-							<Descriptions.Item label='Số tiền thanh toán'>{inputFormat(thanhToan)} VNĐ</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.sotien' })}>
+								{inputFormat(thanhToan)} VNĐ
+							</Descriptions.Item>
 						) : null}
-						{tongUuDai ? <Descriptions.Item label='Tổng ưu đãi'>{inputFormat(tongUuDai)} VNĐ</Descriptions.Item> : null}
-						<Descriptions.Item label={thanhToan ? 'Số tiền cần nộp thêm' : 'Số tiền sinh viên nộp'}>
+						{tongUuDai ? (
+							<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.tonguudau' })}>
+								{inputFormat(tongUuDai)} VNĐ
+							</Descriptions.Item>
+						) : null}
+						<Descriptions.Item
+							label={
+								thanhToan
+									? intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.sotiencannop' })
+									: intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.svnop' })
+							}
+						>
 							{inputFormat(amount)} VNĐ
 						</Descriptions.Item>
 						{duNo ? (
-							<Descriptions.Item label='Số tiền dư nợ sau khi thanh toán'>{inputFormat(duNo)} VNĐ</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.tiendu' })}>
+								{inputFormat(duNo)} VNĐ
+							</Descriptions.Item>
 						) : null}
 
 						{paymentType === ETransactionPaymentType.MOMO_WALLET && !!momoConfig ? (
 							<>
 								<Descriptions.Item
-									label={`Phí người dùng (${momoConfig?.userFeePercent ?? 0}%, tối đa ${inputFormat(
-										momoConfig?.userFeeMax ?? 0,
-									)} VNĐ)`}
+									label={intl.formatMessage(
+										{ id: 'taichinh.thanhtoan.huongdan.phi' },
+										{
+											userFeePercent: momoConfig.userFeePercent ?? 0,
+											userFeeMax: momoConfig?.userFeeMax ?? 0,
+										},
+									)}
 								>
 									{inputFormat(userFee)} VNĐ
 								</Descriptions.Item>
-								<Descriptions.Item label='Tổng tiền thanh toán'>{inputFormat(amount + userFee)} VNĐ</Descriptions.Item>
+								<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.tongthanhtoan' })}>
+									{inputFormat(amount + userFee)} VNĐ
+								</Descriptions.Item>
 							</>
 						) : null}
 					</Descriptions>

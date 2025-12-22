@@ -5,9 +5,10 @@ import { ipTaiChinh } from '@/utils/ip';
 import { removeVietnameseTones } from '@/utils/utils';
 import { Col, Empty, Modal, Row, Space } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) => {
+	const intl = useIntl();
 	const { visible, onOk } = props;
 	const { record } = useModel('taichinh.giaodich');
 	const { record: recDotThu } = useModel('taichinh.dotthu');
@@ -57,12 +58,12 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 
 	const renderLopThuong = () => (
 		<Row gutter={[12, 12]}>
-			<Col span={24}>SINH VIÊN CÓ THỂ SỬ DỤNG PHƯƠNG THỨC THANH TOÁN QUA MÃ ĐỊNH DANH HOẶC MÃ QR</Col>
+			<Col span={24}>{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.moTaChung' })}</Col>
 
 			<Col span={24} md={{ span: 10, push: 14 }}>
 				<Space direction='vertical' style={{ alignItems: 'center' }}>
 					<b>
-						<u>Mã thanh toán QR liên ngân hàng:</u>
+						<u>{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.qrTitle' })}:</u>
 					</b>
 					{hinhThucFinal.loaiKenhThanhToan === ELoaiHinhThucThanhToan.CO_DINH &&
 					hinhThucFinal.maNganHangVNPay &&
@@ -77,44 +78,47 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 							src={`https://img.vietqr.io/image/${hinhThucFinal.maNganHangVNPay}-${hinhThucFinal.tienToSTK}${record?.identityCode}-compact2.png?amount=${record?.amount}&addInfo=${addInfo}&accountName=${unitInfo}`}
 						/>
 					) : null}
-					<i>Sinh viên quét mã QR bằng Ứng dụng ngân hàng để thanh toán</i>
+					<i>{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.qrNote' })}</i>
 				</Space>
 			</Col>
 
 			<Col span={24} md={{ span: 14, pull: 10 }}>
 				<b>
-					<u>Hướng dẫn thanh toán:</u>
+					<u>{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.huongDanTitle' })}:</u>
 				</b>
 				<p>
-					1. QUÉT MÃ QR:
+					{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.buoc1Title' })}:
 					<br />
-					Sinh viên sử dụng ứng dụng smartbanking của các ngân hàng hoặc ví điện tử và quét mã QR bên phải
+					{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.buoc1Desc' })}
 				</p>
 				<p>
-					2. SỬ DỤNG ỨNG DỤNG SMARTBANKING CỦA NGÂN HÀNG HOẶC QUẦY GIAO DỊCH:
+					{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.buoc2Title' })}:
 					<br />
 					{urlHuongDanThanhToan ? (
 						<>
-							Sinh viên thực hiện thanh toán theo hướng dẫn chi tiết{' '}
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.huongDanChiTiet' })}{' '}
 							<a target='_blank' href={urlHuongDanThanhToan} rel='noreferrer'>
-								tại đây
+								{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.here' })}
 							</a>
 							<br />
 						</>
 					) : null}
 					{hinhThucFinal.loaiKenhThanhToan === ELoaiHinhThucThanhToan.CO_DINH ? (
 						<>
-							- Ngân hàng: {hinhThucFinal.maNganHang}
-							<br />- Tên tài khoản thụ hưởng: {unitInfo}
-							<br />- Số tài khoản: <b>{hinhThucFinal.soTaiKhoanThanhToanCoDinh}</b>
-							<br />
-							- Nội dung chuyển khoản: [Mã sinh viên] [Họ tên] [Nội dung]
-							<br />- Ví dụ: <i>23123456P NGUYEN VAN A HocphiHK2NH20232024</i>
+							- {intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.nganHang' })}: {hinhThucFinal.maNganHang}
+							<br />- {intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.tenTaiKhoan' })}: {unitInfo}
+							<br />- {intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.soTaiKhoan' })}:{' '}
+							<b>{hinhThucFinal.soTaiKhoanThanhToanCoDinh}</b>
+							<br />- {intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.noiDungCK' })}: [Mã sinh viên] [Họ tên]
+							[Nội dung]
+							<br />- {intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.viDu' })}:{' '}
+							<i>23123456P NGUYEN VAN A HocphiHK2NH20232024</i>
 						</>
 					) : (
 						<>
-							Mã thanh toán của sinh viên là: <b>{record?.identityCode}</b> <br />
-							Số tài khoản với sinh viên chuyển khoản 24/7:{' '}
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.maThanhToanSV' })}: <b>{record?.identityCode}</b>
+							<br />
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.soTK24_7' })}:{' '}
 							<b>
 								{hinhThucFinal.tienToSTK}
 								{record?.identityCode}
@@ -125,20 +129,16 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 
 				<p>
 					<b>
-						Lưu ý: <br />
-						1. Sinh viên nên sử dụng thanh toán theo mã QR để thực hiện thanh toán được chính xác. Trong trường hợp sử
-						dụng hình thức còn lại, sinh viên lưu ý nhập chính xác số tiền yêu cầu (không làm tròn) để hệ thống ghi nhận
-						giao dịch là hợp lệ.
+						{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.luuY' })}:<br />
+						1. {intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.luuY1' })}
 						<br />
-						2. Sau khi thanh toán thành công, sinh viên vui lòng đợi để hệ thống xác nhận thông tin thanh toán từ ngân
-						hàng.
-						{hinhThucFinal.loaiKenhThanhToan === ELoaiHinhThucThanhToan.DONG ? (
+						2. {intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.luuY2' })}
+						{hinhThucFinal.loaiKenhThanhToan === ELoaiHinhThucThanhToan.DONG && (
 							<>
 								<br />
-								3. Mã QR được khởi tạo dành riêng cho cá nhân sinh viên và chỉ sử dụng để thanh toán một lần. Vui lòng
-								không sử dụng để thanh toán hộ người khác.
+								3. {intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.luuY3' })}
 							</>
-						) : null}
+						)}
 					</b>
 				</p>
 			</Col>
@@ -150,12 +150,12 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 		<Modal
 			open={visible}
 			onCancel={() => onOk()}
-			title='Hướng dẫn thanh toán không tiền mặt'
+			title={intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.title' })}
 			okButtonProps={{ hidden: true }}
 			width={1000}
 		>
 			{nganHangBaoTri ? (
-				<Empty description='Hệ thống đang sao lưu dữ liệu, vui lòng thực hiện thanh toán từ 01:00 đến 23:00' />
+				<Empty description={intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.baotri' })} />
 			) : (
 				renderLopThuong()
 			)}

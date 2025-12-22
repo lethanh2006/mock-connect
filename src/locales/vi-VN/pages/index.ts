@@ -7,6 +7,7 @@ import login from './login';
 import lophanhchinh from './lophanhchinh';
 import lophocphan from './lophocphan';
 import phanhoi from './phanhoi';
+import congno from './taichinh/congno';
 import thongbao from './thongbao';
 import thongtincanhan from './thongtincanhan';
 import cauhoithuonggap from './tienichkhac/cauhoithuonggap';
@@ -32,4 +33,5 @@ export default {
 	...cauhoithuonggap,
 	...vanbanhuongdan,
 	...xemsau,
+	...congno,
 };
