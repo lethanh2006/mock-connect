@@ -3,10 +3,11 @@ import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrin
 import { Button, Col, Form, Row, Spin } from 'antd';
 import type { SetStateAction } from 'react';
 import { useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import SelectQuyTrinh from '../QuyTrinh/Select';
 
 const FormKhaiBao = (props: { quyTrinhId?: string }) => {
+	const intl = useIntl();
 	const { setVisibleForm } = useModel('quytrinh.khaibaoquytrinh');
 	const [loading, setLoading] = useState<boolean>(false);
 	const [currentQuyTrinh, setCurrentQuyTrinh] = useState<string>();
@@ -30,7 +31,11 @@ const FormKhaiBao = (props: { quyTrinhId?: string }) => {
 			<Form onFinish={onFinish} layout={'vertical'}>
 				<Row gutter={16}>
 					<Col span={24}>
-						<Form.Item name={'quyTrinhId'} label={'Dịch vụ'} initialValue={props?.quyTrinhId}>
+						<Form.Item
+							name={'quyTrinhId'}
+							label={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.khaobao.dichvu' })}
+							initialValue={props?.quyTrinhId}
+						>
 							<SelectQuyTrinh
 								loadData={false}
 								disabled={!!props?.quyTrinhId}
@@ -41,7 +46,7 @@ const FormKhaiBao = (props: { quyTrinhId?: string }) => {
 						</Form.Item>
 					</Col>
 					<Col span={24}>
-						<Form.Item name={'dotQuyTrinhId'} label={'Đợt khai báo'}>
+						<Form.Item name={'dotQuyTrinhId'} label={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.khaobao.dot' })}>
 							<SelectDotQuyTrinh loadData={false} initQuery={{ quyTrinhId: props?.quyTrinhId }} />
 						</Form.Item>
 					</Col>
@@ -49,9 +54,9 @@ const FormKhaiBao = (props: { quyTrinhId?: string }) => {
 						<Form.Item>
 							<div style={{ display: 'flex', justifyContent: 'center' }}>
 								<Button style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
-									Tạo
+									{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.khaobao.button.tao' })}
 								</Button>
-								<Button onClick={() => setVisibleForm(false)}>Huỷ</Button>
+								<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 							</div>
 						</Form.Item>
 					</Col>

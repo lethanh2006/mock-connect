@@ -13,10 +13,11 @@ import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import Form from './components/Form';
 
 const ChungChiTotNghiepPage = () => {
+	const intl = useIntl();
 	const { page, limit, deleteModel, handleEdit, getModel } = useModel('sinhvien.chungchi');
 
 	const onCell = (rec: SinhVien.IChungChiSinhVien) => ({
@@ -26,7 +27,7 @@ const ChungChiTotNghiepPage = () => {
 
 	const columns: IColumn<SinhVien.IChungChiSinhVien>[] = [
 		{
-			title: 'Chứng chỉ',
+			title: intl.formatMessage({ id: 'chungchitotnghiep.columntable.chungchi' }),
 			dataIndex: 'maChungChi',
 			width: 180,
 			filterType: 'customselect',
@@ -35,7 +36,7 @@ const ChungChiTotNghiepPage = () => {
 			onCell,
 		},
 		{
-			title: 'Đơn vị cấp',
+			title: intl.formatMessage({ id: 'chungchitotnghiep.columntable.donvicap' }),
 			dataIndex: 'donViCap',
 			width: 200,
 			filterType: 'string',
@@ -43,7 +44,7 @@ const ChungChiTotNghiepPage = () => {
 			onCell,
 		},
 		{
-			title: 'Trình độ',
+			title: intl.formatMessage({ id: 'chungchitotnghiep.columntable.trinhdo' }),
 			dataIndex: 'diem',
 			width: 100,
 			align: 'center',
@@ -60,7 +61,7 @@ const ChungChiTotNghiepPage = () => {
 			onCell,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'chungchitotnghiep.columntable.trangthai' }),
 			dataIndex: 'trangThaiDuyet',
 			align: 'center',
 			width: 130,
@@ -77,7 +78,7 @@ const ChungChiTotNghiepPage = () => {
 			onCell,
 		},
 		{
-			title: 'Ngày cấp',
+			title: intl.formatMessage({ id: 'chungchitotnghiep.columntable.ngaycap' }),
 			dataIndex: 'ngayCap',
 			width: 100,
 			filterType: 'date',
@@ -87,7 +88,7 @@ const ChungChiTotNghiepPage = () => {
 			onCell,
 		},
 		{
-			title: 'Thời hạn',
+			title: intl.formatMessage({ id: 'chungchitotnghiep.columntable.thoihan' }),
 			width: 130,
 			filterType: 'date',
 			align: 'center',
@@ -100,21 +101,26 @@ const ChungChiTotNghiepPage = () => {
 								{endDate.format('DD/MM/YYYY')}
 							</span>
 						);
-					} else return <Tag color='green'>Không thời hạn</Tag>;
+					} else
+						return (
+							<Tag color='green'>
+								{intl.formatMessage({ id: 'chungchitotnghiep.columntable.thoihan.tag.khongthoihan' })}
+							</Tag>
+						);
 				else return null;
 			},
 			sortable: true,
 			onCell,
 		},
 		{
-			title: 'Ghi chú',
+			title: intl.formatMessage({ id: 'chungchitotnghiep.columntable.ghichu' }),
 			dataIndex: 'ghiChu',
 			width: 180,
 			render: (val) => <ExpandText>{val}</ExpandText>,
 			onCell,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'chungchitotnghiep.columntable.thaotac' }),
 			align: 'center',
 			width: 90,
 			fixed: 'right',
@@ -126,14 +132,14 @@ const ChungChiTotNghiepPage = () => {
 							record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.KHONG_DUYET ||
 							!record.chungChi?.choPhepDangKy
 						}
-						tooltip='Chỉnh sửa'
+						tooltip={intl.formatMessage({ id: 'chungchitotnghiep.columntable.thaotac.tooltip.edit' })}
 						onClick={() => handleEdit(record)}
 						type='link'
 						icon={<EditOutlined />}
 					/>
 					<Popconfirm
 						onConfirm={() => deleteModel(record._id, getModel)}
-						title='Bạn có chắc chắn muốn xóa chứng chỉ này?'
+						title={intl.formatMessage({ id: 'chungchitotnghiep.columntable.thaotac.confirm' })}
 						placement='topRight'
 					>
 						<ButtonExtend
@@ -142,7 +148,7 @@ const ChungChiTotNghiepPage = () => {
 								record?.trangThaiDuyet === ETrangThaiChungChiSinhVen.KHONG_DUYET ||
 								!record.chungChi?.choPhepDangKy
 							}
-							tooltip='Xóa'
+							tooltip={intl.formatMessage({ id: 'chungchitotnghiep.columntable.thaotac.tooltip.delete' })}
 							danger
 							type='link'
 							icon={<DeleteOutlined />}
@@ -155,7 +161,7 @@ const ChungChiTotNghiepPage = () => {
 
 	return (
 		<TableBase
-			title='Chứng chỉ xét tốt nghiệp'
+			title={intl.formatMessage({ id: 'chungchitotnghiep.title' })}
 			columns={columns}
 			dependencies={[page, limit]}
 			modelName='sinhvien.chungchi'

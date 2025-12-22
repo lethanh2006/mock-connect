@@ -9,10 +9,11 @@ import dayjs from '@/utils/dayjs';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import Form from './components/Form';
 
 const CardKhaoSat = (props: { loai: ELoaiDot }) => {
+	const intl = useIntl();
 	const { loai } = props;
 	const { page, limit, getDotMeModel, handleEdit: handleDot, thoiGian, setThoiGian } = useModel('tienich.dotkhaosat');
 	const { getByIdModel: getBieuMau, loading } = useModel('tienich.bieumau');
@@ -51,7 +52,7 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 
 	const renderTrangThaiDot = (recordVal: DotKhaoSat.IRecord) => {
 		if (!recordVal?.kichHoat) {
-			return 'Đợt chưa kích hoạt';
+			return intl.formatMessage({ id: 'khaosat.trangthai.chuakichhoat' });
 		} else return textThucHienKhaoSat[thoiGian];
 	};
 
@@ -62,21 +63,21 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 
 	const columns: IColumn<DotKhaoSat.IRecord>[] = [
 		{
-			title: 'Tên đợt',
+			title: intl.formatMessage({ id: 'khaosat.column.ten' }),
 			dataIndex: 'ten',
 			width: 200,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Mô tả',
+			title: intl.formatMessage({ id: 'khaosat.column.mota' }),
 			dataIndex: 'moTa',
 			width: 250,
 			render: (val) => <ExpandText>{val}</ExpandText>,
 			onCell,
 		},
 		{
-			title: 'Bắt đầu',
+			title: intl.formatMessage({ id: 'khaosat.column.batdau' }),
 			dataIndex: 'thoiGianBatDau',
 			width: 120,
 			align: 'center',
@@ -86,7 +87,7 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 			onCell,
 		},
 		{
-			title: 'Kết thúc',
+			title: intl.formatMessage({ id: 'khaosat.column.ketthuc' }),
 			dataIndex: 'thoiGianKetThuc',
 			width: 120,
 			align: 'center',
@@ -96,15 +97,20 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 			onCell,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'khaosat.column.trangthai' }),
 			dataIndex: 'daLam',
 			align: 'center',
 			width: 120,
-			render: (val) => (val ? <Tag color='green'>Đã thực hiện</Tag> : <Tag color='red'>Chưa thực hiện</Tag>),
+			render: (val) =>
+				val ? (
+					<Tag color='green'>{intl.formatMessage({ id: 'khaosat.trangthai.dathuchien' })}</Tag>
+				) : (
+					<Tag color='red'>{intl.formatMessage({ id: 'khaosat.trangthai.chuathuchien' })}</Tag>
+				),
 			onCell,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'khaosat.column.thaotac' }),
 			align: 'center',
 			width: 60,
 			fixed: 'right',
@@ -128,7 +134,13 @@ const CardKhaoSat = (props: { loai: ELoaiDot }) => {
 			getData={() => getDotMeModel(loai)}
 			dependencies={[page, limit, thoiGian]}
 			modelName='tienich.dotkhaosat'
-			title={loai === ELoaiDot.BIEU_MAU ? 'Đợt khảo sát' : loai === ELoaiDot.CUOC_THI ? 'Danh sách cuộc thi' : ''}
+			title={
+				loai === ELoaiDot.BIEU_MAU
+					? intl.formatMessage({ id: 'khaosat.title.dot' })
+					: loai === ELoaiDot.CUOC_THI
+						? intl.formatMessage({ id: 'khaosat.title.cuocthi' })
+						: ''
+			}
 			Form={Form}
 			formProps={{ khaoSat: cauTraLoi, cauTraLoi: cauTraLoi?.danhSachTraLoi, loai }}
 			widthDrawer={1100}

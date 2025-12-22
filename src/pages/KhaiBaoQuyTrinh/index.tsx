@@ -18,7 +18,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu, Modal, Popconfirm, Tag, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import ThongTinThanhToan from '../TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
 import FormKhaiBao from './components/FormKhaiBao';
 import ThongKeDichVu from './components/ThongKeDichVu';
@@ -31,6 +31,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 	hasCreate?: boolean;
 	linhVuc?: string;
 }) => {
+	const intl = useIntl();
 	const {
 		page,
 		limit,
@@ -99,7 +100,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			const res = await getDot(undefined, undefined, { quyTrinhId: quyTrinhId });
 			if (res) {
 				if (res.length === 1) {
-					const res2 = await createDonKhaiBaoUser(quyTrinhId, res?.[0]?._id);
+					const res2 = await createDonKhaiBaoUser(quyTrinhId, 'SINH_VIEN', res?.[0]?._id);
 					if (res2) {
 						history.push(`/khai-bao-quy-trinh/${res2?.data?.data?._id}`);
 					}
@@ -121,7 +122,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 
 	const columns: IColumn<KhaiBaoQuyTrinh.IRecord>[] = [
 		{
-			title: 'Tên dịch vụ',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.tendichvu' }),
 			dataIndex: 'quyTrinhId',
 			width: 250,
 			render: (val, recordVal) => {
@@ -137,7 +138,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 		// 	onCell,
 		// },
 		{
-			title: 'Tiến trình',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.tientrinh' }),
 			dataIndex: 'quyTrinh',
 			width: 250,
 			filterType: 'select',
@@ -154,8 +155,8 @@ const KhaiBaoQuyTrinhPage = (props: {
 					<div style={{ color: '#007AFF', fontWeight: '400' }}>
 						<span>
 							{' '}
-							Bước {recordVal?.danhSachBuocXuLy?.length}/{val?.danhSachBuocXuLy?.length}:{' '}
-							{recordVal?.danhSachBuocXuLy?.find((item) => item.laBuocHienTai)?.ten}
+							{intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.buoc' })} {recordVal?.danhSachBuocXuLy?.length}/
+							{val?.danhSachBuocXuLy?.length}: {recordVal?.danhSachBuocXuLy?.find((item) => item.laBuocHienTai)?.ten}
 						</span>
 						{buocHienTai && cauHinhThoiGianDotBuocHienTai && (
 							<span style={{ marginLeft: 4, fontWeight: 'bold' }}>
@@ -169,7 +170,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			onCell,
 		},
 		{
-			title: 'Kết quả',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.ketqua' }),
 			dataIndex: 'quyTrinh',
 			width: 200,
 			align: 'center',
@@ -190,13 +191,13 @@ const KhaiBaoQuyTrinhPage = (props: {
 						}}
 					>
 						{recordVal?.danhSachBuocXuLy?.[recordVal?.danhSachBuocXuLy?.length - 1]?.trangThaiTiepNhan ||
-							'Chưa có kết quả tiếp nhận'}
+							intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.chuacokq' })}
 					</Tag>
 				);
 			},
 		},
 		{
-			title: 'Trạng thái thực hiện',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.trangthai' }),
 			dataIndex: 'coKhaiBao',
 			width: 200,
 			align: 'center',
@@ -215,37 +216,41 @@ const KhaiBaoQuyTrinhPage = (props: {
 							fontWeight: 400,
 						}}
 					>
-						{coKhaiBao ? 'Đã thực hiện' : 'Chưa thực hiện'}
+						{coKhaiBao
+							? intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.dathuchien' })
+							: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.chuathuchien' })}
 					</Tag>
 				);
 			},
 			onCell,
 		},
 		{
-			title: 'Trạng thái thanh toán',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.thanhtoan' }),
 			dataIndex: 'trangThaiThanhToan',
 			width: 200,
 			align: 'center',
 			hide: props?.tenQuyTrinh ? true : false,
 			render: (val: EMaTrangThaiThanhToan) => (
 				<Tag color={EMauTrangThaiThanhToanTable?.[val] ?? 'gray'}>
-					{val ? ETrangThaiThanhToan[val] : 'Dịch vụ không tính phí'}
+					{val ? ETrangThaiThanhToan[val] : intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.dv' })}
 				</Tag>
 			),
 		},
 		{
-			title: 'Ngày tạo',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.ngaytao' }),
 			dataIndex: 'createdAt',
 			hide: props?.tenQuyTrinh ? true : false,
 			width: 150,
 			align: 'center',
 			render: (val) => {
-				return val ? dayjs(val).format('DD/MM/YYYY') : 'Không có dữ liệu';
+				return val
+					? dayjs(val).format('DD/MM/YYYY')
+					: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.khongdl' });
 			},
 			onCell,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.thaotac' }),
 			align: 'center',
 			width: 150,
 			fixed: 'right',
@@ -264,7 +269,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 
 				return (
 					<>
-						<Tooltip title='Xem chi tiết'>
+						<Tooltip title={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.xemchitiet' })}>
 							<Button
 								onClick={() => {
 									history.push(`/khai-bao-quy-trinh/${recordVal?._id}`);
@@ -274,7 +279,13 @@ const KhaiBaoQuyTrinhPage = (props: {
 							/>
 						</Tooltip>
 						{recordVal.identityCode && (
-							<Tooltip title={<div style={{ maxWidth: 100 }}>Thông tin thanh toán</div>}>
+							<Tooltip
+								title={
+									<div style={{ maxWidth: 100 }}>
+										{intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.ttthanhtoan' })}
+									</div>
+								}
+							>
 								<Button
 									onClick={() => {
 										getHoaDon({ identityCode: recordVal.identityCode });
@@ -286,7 +297,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 							</Tooltip>
 						)}
 						{(formKhai?.fileId || formTiepNhan?.fileId) && (
-							<Tooltip title='Tải mẫu đơn'>
+							<Tooltip title={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.taimaudon' })}>
 								<Dropdown
 									overlay={
 										<Menu
@@ -296,9 +307,15 @@ const KhaiBaoQuyTrinhPage = (props: {
 												else exportMauTraKetQuaTheoBuocModel(recordVal._id, buocHienTai.ma, formTiepNhan?.ten ?? '');
 											}}
 										>
-											{formKhai?.fileId && <Menu.Item key={'MAU_DON'}>Mẫu đơn</Menu.Item>}
+											{formKhai?.fileId && (
+												<Menu.Item key={'MAU_DON'}>
+													{intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.maudon' })}
+												</Menu.Item>
+											)}
 											{formTiepNhan?.fileId && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.DA_DUYET && (
-												<Menu.Item key={'MAU_TRA_KET_QUA'}>Mẫu trả kết quả</Menu.Item>
+												<Menu.Item key={'MAU_TRA_KET_QUA'}>
+													{intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.mauketqua' })}
+												</Menu.Item>
 											)}
 										</Menu>
 									}
@@ -308,12 +325,12 @@ const KhaiBaoQuyTrinhPage = (props: {
 								</Dropdown>
 							</Tooltip>
 						)}
-						<Tooltip title='Xóa'>
+						<Tooltip title={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.xoa' })}>
 							<Popconfirm
 								// disabled={!(isBuocDauTien && buocHienTai?.trangThaiTiepNhan === TrangThaiTiepNhan.CHUA_CO)}
 								disabled={!allowDelete}
 								onConfirm={() => deleteModel(recordVal._id ?? '', getData)}
-								title='Bạn có chắc chắn muốn xóa?'
+								title={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.xoa.xacnhan' })}
 								placement='topLeft'
 							>
 								<Button
@@ -338,7 +355,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 				columns={columns}
 				getData={getData}
 				dependencies={[page, limit, condition, props.tenQuyTrinh, danhSachQuyTrinh.length]}
-				title={props.title || 'Đơn đã gửi'}
+				title={props.title || intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.don' })}
 				destroyModal
 				buttons={{ create: false }}
 				otherButtons={[
@@ -360,12 +377,12 @@ const KhaiBaoQuyTrinhPage = (props: {
 								type='primary'
 								key={'add'}
 							>
-								Thêm mới
+								{intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.button.themmoi' })}
 							</Button>
 						) : null}
 						{props.hasFilterHoatDong && (
 							<SelectQuyTrinh
-								placeholder='Lọc theo dịch vụ'
+								placeholder={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.loc' })}
 								loadData={false}
 								allowClear
 								style={{ width: 320, marginBottom: 8 }}
@@ -381,7 +398,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 				]}
 			/>
 			<Modal
-				title={'Chọn đợt khai báo'}
+				title={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.chondot' })}
 				width={500}
 				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
@@ -391,7 +408,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 				<FormKhaiBao quyTrinhId={quyTrinhIdSelect} />
 			</Modal>
 			<Modal
-				title={'Thông tin chung'}
+				title={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.thongtinchung' })}
 				width={1000}
 				open={visibleThongTinChung}
 				onCancel={() => setVisibleThongTinChung(false)}
@@ -404,7 +421,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 								handleRedirect(recordQuyTrinh?._id ?? '');
 							}}
 						>
-							Tiếp theo
+							{intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.button.tieptheo' })}
 						</Button>
 					</>
 				}
