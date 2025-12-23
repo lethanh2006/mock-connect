@@ -23,6 +23,7 @@ import xemsau from './tienichkhac/xemsau';
 import tientrinhhoctap from './tientrinhhoctap';
 import trangchu from './trangchu';
 import dangkynhucau from './hoctap/dangkynhucau';
+import tintuc from './tintuc'
 
 export default {
 	...login,
@@ -50,4 +51,5 @@ export default {
 	...dangky,
 	...lichsu,
 	...dangkynhucau,
+	...tintuc
 };
