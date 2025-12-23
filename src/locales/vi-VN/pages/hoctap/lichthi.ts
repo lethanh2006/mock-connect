@@ -1,0 +1,22 @@
+export default {
+    'lichthi.title': 'Lịch thi học kỳ',
+    'lichthi.table.dotThi': 'Đợt thi',
+    'lichthi.table.ngayThi': 'Ngày thi',
+    'lichthi.table.gioThi': 'Giờ thi',
+    'lichthi.table.maHP': 'Mã HP',
+    'lichthi.table.tenHocPhan': 'Tên học phần',
+    'lichthi.table.phongThi': 'Phòng thi',
+    'lichthi.table.soSV': 'Số SV',
+    'lichthi.table.dieuKienDuThi': 'Điều kiện dự thi',
+    'lichthi.table.kqht': 'KQHT',
+    'lichthi.table.congNo': 'Công nợ',
+    'lichthi.table.trangThaiThi': 'Trạng thái thi',
+    'lichthi.table.thaoTac': 'Thao tác',
+    'lichthi.tooltip.xemDSSV': 'Xem danh sách sinh viên thi',
+
+    'lichthi.modal.title': 'Danh sách sinh viên thi',
+    'lichthi.modal.sbd': 'Số báo danh',
+    'lichthi.modal.maSV': 'Mã sinh viên',
+    'lichthi.modal.hoTen': 'Họ và tên',
+    'lichthi.modal.lop': 'Lớp',
+};
