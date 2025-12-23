@@ -2,12 +2,13 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
 import queryString from 'query-string';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import './components/styles.less';
 import ChiTietTinSlink from './Slink/ChiTietTinTuc';
 import ChiTietTinTucWpPage from './Wordpress/ChiTietTinTuc';
 
 const ChiTietTinTucPage = () => {
+	const intl = useIntl();
 	const { getByIdModel, record: recChuDe } = useModel('tintuc.chude');
 	const { getByIdModel: getIdTinTucWP, setRecord: setRecordWP } = useModel('tintuc.tintucwp');
 	const { getByIdModel: getIdTinTucSlink, setRecord: setRecordSlink } = useModel('tintuc.tintuc');
@@ -50,7 +51,7 @@ const ChiTietTinTucPage = () => {
 		<Card
 			title={
 				<span onClick={() => window.history.back()} style={{ cursor: 'pointer' }}>
-					<ArrowLeftOutlined /> Quay lại
+					<ArrowLeftOutlined /> {intl.formatMessage({ id: 'global.button.quaylai' })}
 				</span>
 			}
 		>

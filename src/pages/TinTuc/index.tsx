@@ -4,12 +4,13 @@ import { CommonTopicType } from '@/services/TinTuc/constant';
 import { ellipse } from '@/utils/utils';
 import { Card, Empty, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import './components/styles.less';
 import TinTucSlinkPage from './Slink';
 import TinTucWpPage from './Wordpress';
 
 const TinTucPage = () => {
+	const intl = useIntl();
 	const {
 		getAllModel: getAllChuDe,
 		danhSach: danhSachChuDe,
@@ -46,7 +47,7 @@ const TinTucPage = () => {
 
 	const menus = [
 		{
-			title: 'Tất cả',
+			title: intl.formatMessage({ id: 'tintuc.tab.all' }),
 			menuKey: 'all',
 			content: main(),
 		},
@@ -58,7 +59,12 @@ const TinTucPage = () => {
 	];
 
 	return (
-		<Card title='Tin tức' className='card-big-title card-borderless' variant='borderless' bodyStyle={{ paddingTop: 0 }}>
+		<Card
+			title={intl.formatMessage({ id: 'tintuc.title' })}
+			className='card-big-title card-borderless'
+			variant='borderless'
+			bodyStyle={{ paddingTop: 0 }}
+		>
 			<Card variant='borderless'>
 				{danhSachChuDe && danhSachChuDe.length > 0 ? (
 					<TabViewPage
@@ -72,7 +78,7 @@ const TinTucPage = () => {
 						}}
 					/>
 				) : (
-					<Empty style={{ paddingTop: 32 }} description='Chưa có tin tức' />
+					<Empty style={{ paddingTop: 32 }} description={intl.formatMessage({ id: 'tintuc.empty' })} />
 				)}
 			</Card>
 		</Card>
