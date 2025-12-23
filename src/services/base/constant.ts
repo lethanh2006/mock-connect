@@ -128,6 +128,9 @@ export const landingUrl = APP_CONFIG_URL_LANDING;
 /** Màu sắc chủ đạo */
 export const primaryColor = APP_CONFIG_PRIMARY_COLOR;
 
+/** Màu sắc nổi bật */
+export const highlightColor = APP_CONFIG_HIGHLIGHT_COLOR;
+
 /** Tên trường Học viện */
 export const unitName = APP_CONFIG_TEN_TRUONG;
 
