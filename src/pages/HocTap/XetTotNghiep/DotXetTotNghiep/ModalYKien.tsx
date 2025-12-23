@@ -2,9 +2,10 @@ import { type DotXetTotNghiep } from '@/services/HocTap/XetTotNghiep/typing';
 import rules from '@/utils/rules';
 import { WarningFilled } from '@ant-design/icons';
 import { Alert, Button, Col, Form, Input, Modal, Row } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ModalYKien = (props: { type: 'phan-hoi' | 'hoan' }) => {
+	const intl = useIntl();
 	const [form] = Form.useForm();
 	const { yKienXetTotNghiepModel, record, visibleForm, setVisibleForm, formSubmiting, getDotHienHanhModel } =
 		useModel('sinhvien.xettotnghiep');
@@ -22,12 +23,12 @@ const ModalYKien = (props: { type: 'phan-hoi' | 'hoan' }) => {
 			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			footer={null}
-			title={`${props.type === 'hoan' ? 'Yêu cầu hoãn tốt nghiệp' : 'Gửi phản hồi'}`}
+			title={`${props.type === 'hoan' ? intl.formatMessage({ id: 'xettotnghiep.modal.ykien.yeucauhoantn.title' }) : intl.formatMessage({ id: 'xettotnghiep.modal.ykien.guiphanhoi.title' })}`}
 		>
 			{props.type === 'hoan' ? (
 				<Alert
 					type='error'
-					description='Bạn có chắc hoãn xét tối nghiệp trong đợt này, vui lòng cho biết lý do'
+					description={intl.formatMessage({ id: 'xettotnghiep.modal.ykien.hoan.error' })}
 					style={{ marginBottom: 10 }}
 					showIcon
 					icon={<WarningFilled />}
@@ -39,19 +40,23 @@ const ModalYKien = (props: { type: 'phan-hoi' | 'hoan' }) => {
 					<Col xs={24}>
 						<Form.Item
 							name='yKienSinhVien'
-							label='Phản hồi của bạn'
+							label={intl.formatMessage({ id: 'xettotnghiep.modal.ykien.form.phanhoi.label' })}
 							rules={[...rules.required, ...rules.text, ...rules.length(2000)]}
 						>
-							<Input.TextArea placeholder='Nhập phản hồi của bạn' />
+							<Input.TextArea
+								placeholder={intl.formatMessage({ id: 'xettotnghiep.modal.ykien.form.phanhoi.placeholder' })}
+							/>
 						</Form.Item>
 					</Col>
 				</Row>
 
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
-						Lưu lại
+						{intl.formatMessage({ id: 'xettotnghiep.modal.ykien.action.save' })}
 					</Button>
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button onClick={() => setVisibleForm(false)}>
+						{intl.formatMessage({ id: 'xettotnghiep.modal.ykien.action.cancel' })}
+					</Button>
 				</div>
 			</Form>
 		</Modal>

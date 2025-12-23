@@ -12,9 +12,10 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Space, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useIntl, useModel } from 'umi';
 
 const CardRenLuyenDashboard = () => {
+	const intl = useIntl();
 	const { getAllModel, record: recDot, setRecord, loading } = useModel('diemrenluyenv2.dot');
 	const [tongDiemTuDanhGia, setTongDiemTuDanhGia] = useState(0);
 	const [tongDiemCVHTDanhGia, setTongDiemCVHTDanhGia] = useState(0);
@@ -161,7 +162,14 @@ const CardRenLuyenDashboard = () => {
 	}, [formValuesTuDanhGiaVaDonViDanhGia, dataDiemMinhChung]);
 
 	const colors = ['#d1d1d4', '#da2128', '#f2a11a', '#3583f0', '#0cb8ac', '#489e19'];
-	const text = ['Kém', 'Yếu', 'Trung bình', 'Khá', 'Tốt', 'Xuất sắc'];
+	const text = [
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.kem' }),
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.yeu' }),
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.trungbinh' }),
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.kha' }),
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.tot' }),
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.xuatsac' }),
+	];
 	const point = [
 		{ min: 0, max: 35 },
 		{ min: 35, max: 50 },
@@ -181,10 +189,13 @@ const CardRenLuyenDashboard = () => {
 			<div className='dashboard-stat-content'>
 				<div className='header'>
 					<div className='title'>
-						Kết quả rèn luyện <span style={{ fontWeight: 400, fontSize: '12px', color: '#ababab' }}>(Hiện tại)</span>
+						{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.title' })}{' '}
+						<span style={{ fontWeight: 400, fontSize: '12px', color: '#ababab' }}>
+							({intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.hientai' })})
+						</span>
 					</div>
 
-					<Tooltip title='Xem chi tiết'>
+					<Tooltip title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.xemchitiet' })}>
 						<Link to='/diem-ren-luyen/phieu-diem-ren-luyen'>
 							<ArrowRightOutlined />
 						</Link>
@@ -206,7 +217,7 @@ const CardRenLuyenDashboard = () => {
 									key={item}
 									placement='top'
 									open={show}
-									title={`${tongDiemCTSVDanhGia} điểm`}
+									title={`${tongDiemCTSVDanhGia} ${intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.diem' })}`}
 									style={{ position: 'absolute', top: 0, left: 0, marginBottom: 8 }}
 								>
 									<div
@@ -270,7 +281,10 @@ const CardRenLuyenDashboard = () => {
 											className='dot'
 											style={{ backgroundColor: item, width: 16, height: 12, borderRadius: 2, display: 'inline-block' }}
 										/>
-										<span className='text' style={{ fontWeight: 500 }}>{`Loại ${text[index].toLowerCase()}`}</span>
+										<span
+											className='text'
+											style={{ fontWeight: 500 }}
+										>{`${intl.formatMessage({ id: 'trangchu.hoctaprenluyen.renluyen.loai' })} ${text[index].toLowerCase()}`}</span>
 									</Space>
 									<span style={{ marginLeft: 'auto', color: '#ababab', fontSize: 13 }}>
 										{index === 0 && '<35'}

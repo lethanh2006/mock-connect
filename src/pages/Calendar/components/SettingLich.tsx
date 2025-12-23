@@ -1,9 +1,10 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { Button, Col, ColorPicker, Form, Modal, Row } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ModalSettingMauLich = () => {
+	const intl = useIntl();
 	const { formSubmiting, visibleForm, setVisibleForm, record, putMeSettingLichModel, postMeSettingLichModel } =
 		useModel('tienich.settinglich');
 	const [form] = Form.useForm();
@@ -55,7 +56,7 @@ const ModalSettingMauLich = () => {
 	return (
 		<Modal
 			open={visibleForm}
-			title='Cấu hình màu lịch'
+			title={intl.formatMessage({ id: 'lichsukien.cauhinh' })}
 			destroyOnClose
 			width={600}
 			onCancel={() => setVisibleForm(false)}
@@ -74,10 +75,10 @@ const ModalSettingMauLich = () => {
 
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
-						Lưu lại
+						{intl.formatMessage({ id: 'global.button.luulai' })}
 					</Button>
-					<Button onClick={handleResetToDefault}>Đặt về mặc định</Button>
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button onClick={handleResetToDefault}> {intl.formatMessage({ id: 'lichsukien.cauhinh.macdinh' })}</Button>
+					<Button onClick={() => setVisibleForm(false)}> {intl.formatMessage({ id: 'global.button.huy' })}</Button>
 				</div>
 			</Form>
 		</Modal>

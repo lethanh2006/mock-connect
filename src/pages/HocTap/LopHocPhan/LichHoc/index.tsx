@@ -5,7 +5,7 @@ import dayjs from '@/utils/dayjs';
 import { CalendarOutlined, MailOutlined, TableOutlined } from '@ant-design/icons';
 import { Card, Segmented, Space, Spin } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import LichSuDonXinNghi from '../YeuCauNghiHoc/LichSuDonXinNghi';
 import CalendarLichHocLopHp from './CalendarLichHoc';
 import ModalThoiKhoaBieu from './Modal';
@@ -14,6 +14,7 @@ import TableLichHocLopHP from './TableLichHoc';
 import ThongTinBuoiHoc from './ThongTinBuoiHoc';
 
 const DanhSachBuoiHoc = () => {
+	const intl = useIntl();
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
 	const { setRecord, setVisibleForm, getTheoLopHocPhan, loading, danhSach } = useModel('daotao.thoikhoabieu');
 	const [buoiHocGanNhat, setBuoiHocGanNhat] = useState<ThoiKhoaBieu.IRecord>();
@@ -55,9 +56,9 @@ const DanhSachBuoiHoc = () => {
 						buoiHoc={buoiHocGanNhat}
 						title={
 							<>
-								Buổi học gần nhất (
+								{intl.formatMessage({ id: 'lophocphan.id.lichhoc.hocgannhat' })} (
 								<a onClick={() => onClickViewTkb(buoiHocGanNhat)} style={{ fontSize: 14, fontWeight: 400 }}>
-									xem chi tiết
+									{intl.formatMessage({ id: 'lophocphan.id.lichhoc.xemchitiet' })}
 								</a>
 								)
 							</>
@@ -71,11 +72,11 @@ const DanhSachBuoiHoc = () => {
 					<Space wrap size={12}>
 						<span style={{ fontWeight: 600, fontSize: 16 }}>Danh sách buổi học</span>
 						<ButtonExtend icon={<MailOutlined />} onClick={() => setVisibleDonXinNghi(true)}>
-							Đơn xin nghỉ học
+							{intl.formatMessage({ id: 'lophocphan.id.lichhoc.nghihoc' })}
 						</ButtonExtend>
 						<Segmented
 							options={[
-								{ value: 'all', label: 'Tất cả' },
+								{ value: 'all', label: intl.formatMessage({ id: 'lophocphan.id.lichhoc.tatca' }) },
 								...Object.values(EHinhThucGiangDay).map((item) => ({ value: item, label: item })),
 							]}
 							onChange={(val) => setHinhThucFilter(val as any)}
@@ -88,8 +89,16 @@ const DanhSachBuoiHoc = () => {
 						value={show}
 						onChange={(val) => setShow(val.toString())}
 						options={[
-							{ value: 'table', title: 'Danh sách chi tiết', icon: <TableOutlined /> },
-							{ value: 'calendar', title: 'Lịch học', icon: <CalendarOutlined /> },
+							{
+								value: 'table',
+								title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.dschitiet' }),
+								icon: <TableOutlined />,
+							},
+							{
+								value: 'calendar',
+								title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.lichhoc' }),
+								icon: <CalendarOutlined />,
+							},
 						]}
 					/>
 				}

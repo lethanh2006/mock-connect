@@ -9,10 +9,11 @@ import dayjs from '@/utils/dayjs';
 import { CloseOutlined, FormOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Col, Descriptions, Empty, Popconfirm, Row, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ModalYKien from './ModalYKien';
 
 const CardXetTotNghiep = () => {
+	const intl = useIntl();
 	const { formSubmiting, record, dangKyXetTotNghiepModel, setVisibleForm, getDotHienHanhModel, loading } =
 		useModel('sinhvien.xettotnghiep');
 	const { dieuKienTotNghiep } = useModel('sinhvien.tientrinhtotnghiep');
@@ -37,10 +38,10 @@ const CardXetTotNghiep = () => {
 	};
 
 	return (
-		<Card title='Xét tốt nghiệp' loading={loading}>
+		<Card title={intl.formatMessage({ id: 'xettotnghiep.title' })} loading={loading}>
 			{!record?._id ? (
 				<Empty
-					description='Không có đợt xét tốt nghiệp trong thời điểm hiện tại!'
+					description={intl.formatMessage({ id: 'xettotnghiep.empty.khongcodotxet' })}
 					style={{ marginBottom: 32, marginTop: 32 }}
 				/>
 			) : (
@@ -51,10 +52,23 @@ const CardXetTotNghiep = () => {
 								type='info'
 								message={
 									<>
-										Đợt xét tốt nghiệp <b>{record?.ten}</b> đang diễn ra{' '}
+										{intl.formatMessage(
+											{ id: 'xettotnghiep.alert.dotxettotnghiep' },
+											{
+												ten: record?.ten,
+												b: (chunks) => <b>{chunks}</b>,
+											},
+										)}
 										{record?.ngayChotDanhSach ? (
 											<>
-												, ngày chốt danh sách sinh viên <b>{dayjs(record?.ngayChotDanhSach).format('DD/MM/YYYY')}</b>
+												,
+												{intl.formatMessage(
+													{ id: 'xettotnghiep.alert.ngaychotdanhsach' },
+													{
+														ngay: dayjs(record?.ngayChotDanhSach).format('DD/MM/YYYY'),
+														b: (chunks) => <b>{chunks}</b>,
+													},
+												)}{' '}
 											</>
 										) : null}
 									</>
@@ -64,10 +78,10 @@ const CardXetTotNghiep = () => {
 
 						{record?.ketQuaXetTotNghiep?._id ? (
 							<>
-								<Col span={24}>Bạn có trong danh sách xét tốt nghiệp đợt này.</Col>
+								<Col span={24}>{intl.formatMessage({ id: 'xettotnghiep.description.danhsachxettotnghiep' })}</Col>
 								<Descriptions column={{ xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1 }}>
 									{record.ketQuaXetTotNghiep?.ketQua ? (
-										<Descriptions.Item label='Kết quả rà soát sơ bộ'>
+										<Descriptions.Item label={intl.formatMessage({ id: 'xettotnghiep.description.ketquasobo' })}>
 											<Tag color={colorKetQuaXetTotNghiep[record.ketQuaXetTotNghiep?.ketQua]}>
 												{record?.ketQuaXetTotNghiep?.ketQua}
 											</Tag>
@@ -75,11 +89,13 @@ const CardXetTotNghiep = () => {
 									) : null}
 
 									{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.KHONG_DU_DK ? (
-										<Descriptions.Item label='Lý do'>{record?.ketQuaXetTotNghiep?.lyDo}</Descriptions.Item>
+										<Descriptions.Item label={intl.formatMessage({ id: 'xettotnghiep.description.lydo' })}>
+											{record?.ketQuaXetTotNghiep?.lyDo}
+										</Descriptions.Item>
 									) : null}
 
 									{record?.ketQuaXetTotNghiep?.yKienSinhVien ? (
-										<Descriptions.Item label='Ý kiến phản hồi'>
+										<Descriptions.Item label={intl.formatMessage({ id: 'xettotnghiep.description.ykienphanhoi' })}>
 											{record?.ketQuaXetTotNghiep?.yKienSinhVien}
 										</Descriptions.Item>
 									) : null}
@@ -89,12 +105,12 @@ const CardXetTotNghiep = () => {
 										<>
 											<Descriptions.Item>
 												{record?.ketQuaXetTotNghiep?.loaiDoiTuong === ELoaiDoiTuongXetTotNghiep.HOAN
-													? 'Bạn đã đăng ký hoãn xét tốt nghiệp đợt này'
-													: 'Bạn đã đăng ký xét tốt nghiệp đợt này theo nhu cầu'}
+													? intl.formatMessage({ id: 'xettotnghiep.description.alert.hoanxettotnghiep' })
+													: intl.formatMessage({ id: 'xettotnghiep.description.alert.dadangkyxettotnghiep' })}
 											</Descriptions.Item>
 
 											{record.ketQuaXetTotNghiep?.trangThaiDuyet ? (
-												<Descriptions.Item label='Trạng thái'>
+												<Descriptions.Item label={intl.formatMessage({ id: 'xettotnghiep.description.trangthai' })}>
 													<Tag color={colorTrangThaiXetTotNghiep[record.ketQuaXetTotNghiep?.trangThaiDuyet]}>
 														{record?.ketQuaXetTotNghiep?.trangThaiDuyet}
 													</Tag>
@@ -105,7 +121,7 @@ const CardXetTotNghiep = () => {
 								</Descriptions>
 							</>
 						) : (
-							<Col span={24}>Bạn không có trong đợt xét tốt nghiệp này</Col>
+							<Col span={24}>{intl.formatMessage({ id: 'xettotnghiep.description.alert.khongcotrongdotxettn' })}</Col>
 						)}
 					</Row>
 
@@ -115,9 +131,12 @@ const CardXetTotNghiep = () => {
 						<div className='form-footer'>
 							{!record?.ketQuaXetTotNghiep?._id ? (
 								<>
-									<Popconfirm title='Xác nhận đăng ký xét tốt nghiệp đợt này?' onConfirm={handleRegister}>
+									<Popconfirm
+										title={intl.formatMessage({ id: 'xettotnghiep.confirm.xacnhandangky' })}
+										onConfirm={handleRegister}
+									>
 										<Button loading={formSubmiting} icon={<FormOutlined />}>
-											Đăng ký xét tốt nghiệp
+											{intl.formatMessage({ id: 'xettotnghiep.btn.dangkyxettn' })}
 										</Button>
 									</Popconfirm>
 								</>
@@ -125,12 +144,12 @@ const CardXetTotNghiep = () => {
 								<>
 									{/* Trong đợt xét */}
 									<Button onClick={handlePhanHoi} icon={<FormOutlined />}>
-										Gửi phản hồi
+										{intl.formatMessage({ id: 'xettotnghiep.btn.guiphanhoi' })}
 									</Button>
 									{/* Đủ điều kiện xét tốt nghiệp */}
 									{record?.ketQuaXetTotNghiep?.ketQua === EKetQuaXetTotNghiep.DU_DK ? (
 										<Button onClick={handleHoan} danger icon={<CloseOutlined />}>
-											Yêu cầu hoãn tốt nghiệp
+											{intl.formatMessage({ id: 'xettotnghiep.btn.yeucauhoantn' })}
 										</Button>
 									) : null}
 								</>

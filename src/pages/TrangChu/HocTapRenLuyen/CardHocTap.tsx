@@ -2,9 +2,10 @@ import DonutChart from '@/components/Chart/DonutChart';
 import { colorLoaiHocLuc, ELoaiHocLuc } from '@/services/HocTap/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Carousel, Col, Row, Space, Tooltip } from 'antd';
-import { history, Link, useModel } from 'umi';
+import { history, Link, useIntl, useModel } from 'umi';
 
 const CardKetQuaHocTapDashboard = () => {
+	const intl = useIntl();
 	const { record: recTienTrinh, loading } = useModel('sinhvien.tientrinhtotnghiep');
 	const colors = ['#14B8A6', '#FACC15'];
 	const xAxis = ['GPA', 'CPA'];
@@ -18,7 +19,7 @@ const CardKetQuaHocTapDashboard = () => {
 			<div className='dashboard-stat-content'>
 				<div className='header'>
 					<div className='title'>
-						Kết quả học tập{' '}
+						{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.ketquahoctap.title' })}{' '}
 						<div
 							className='header-tag'
 							style={{
@@ -28,7 +29,7 @@ const CardKetQuaHocTapDashboard = () => {
 							{recTienTrinh?.kqhtHocKy?.hocLucHocKy || ELoaiHocLuc.EMPTY}
 						</div>
 					</div>
-					<Tooltip title='Xem chi tiết'>
+					<Tooltip title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.ketquahoctap.xemchitiet' })}>
 						<Link to={`/hoc-tap/ket-qua-hoc-tap`}>
 							<ArrowRightOutlined />
 						</Link>
@@ -41,7 +42,7 @@ const CardKetQuaHocTapDashboard = () => {
 						<div className='chart-container'>
 							<DonutChart
 								xAxis={xAxis}
-								yLabel={['Điểm']}
+								yLabel={[`${intl.formatMessage({ id: 'trangchu.hoctaprenluyen.ketquahoctap.diem' })}`]}
 								yAxis={[yAxis.map((i) => (i * 100) / 4)]}
 								type='radian'
 								formatY={(e) => `${e}`}
@@ -90,7 +91,9 @@ const CardKetQuaHocTapDashboard = () => {
 
 							<div className='center-label'>
 								<div className='total-value'>{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '-'}</div>
-								<div className='total-text'>Tín chỉ</div>
+								<div className='total-text'>
+									{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.ketquahoctap.tinchi' })}
+								</div>
 							</div>
 						</div>
 
@@ -144,8 +147,11 @@ const CardKetQuaHocTapDashboard = () => {
 					onClick={() => history.push('/hoc-tap/ket-qua-hoc-tap#may-tinh')}
 				>
 					<div className='row highlight text-primary'>
-						<span className='text'>Máy tính thông minh</span>
-						<Link to='/hoc-tap/ket-qua-hoc-tap#may-tinh' title='Xem chi tiết'>
+						<span className='text'>{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.ketquahoctap.maytinh' })}</span>
+						<Link
+							to='/hoc-tap/ket-qua-hoc-tap#may-tinh'
+							title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.ketquahoctap.xemchitiet' })}
+						>
 							<ArrowRightOutlined />
 						</Link>
 					</div>

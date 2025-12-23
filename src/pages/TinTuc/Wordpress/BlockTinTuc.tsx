@@ -3,13 +3,14 @@ import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
 import dayjs from '@/utils/dayjs';
 import { Col, Empty, Row, Tooltip } from 'antd';
 import { first } from 'lodash';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import { CardTinTuc, ContentLargeCard } from '../components/TinTuc.style';
 import { Excerpt } from './components/Excerpt';
 import { Title } from './components/Title';
 import { getImageSrc } from './utils/getImageSrc';
 
 const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
+	const intl = useIntl();
 	const { danhSach: danhSachChuDe, setRecord: setChuDe } = useModel('tintuc.chude');
 	const { danhSach, setPage } = useModel('tintuc.tintucwp');
 	const { postModel, danhSach: danhSachXemSau, deleteModel } = useModel('tienich.xemsau');
@@ -31,7 +32,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 			idChuDe: idChuDe,
 			thongTin: rec,
 		};
-		postModel(data, props.getData, undefined, 'Lưu thành công')
+		postModel(data, props.getData, undefined, intl.formatMessage({ id: 'tintuc.save.success' }))
 			.then()
 			.catch((err) => console.log(err));
 	};
@@ -49,7 +50,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 		setPage(1);
 	};
 
-	if (danhSach?.length === 0) return <Empty description={empty ?? 'Chưa có tin tức'} />;
+	if (danhSach?.length === 0) return <Empty description={empty ?? intl.formatMessage({ id: 'tintuc.empty' })} />;
 	else
 		return (
 			<div style={{ marginBottom: 20 }}>
@@ -118,7 +119,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 											}}
 											danger
 										>
-											Bỏ lưu
+											{intl.formatMessage({ id: 'tintuc.unsave' })}
 										</ButtonExtend>
 									) : (
 										<ButtonExtend
@@ -127,9 +128,9 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 												event.stopPropagation();
 												handleXemSau(danhSach?.[0], chuDe01?._id);
 											}}
-											tooltip='Lưu xem sau'
+											tooltip={intl.formatMessage({ id: 'tintuc.save.tooltip' })}
 										>
-											Lưu
+											{intl.formatMessage({ id: 'tintuc.save' })}
 										</ButtonExtend>
 									)}
 								</div>
@@ -207,7 +208,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 															}}
 															danger
 														>
-															Bỏ lưu
+															{intl.formatMessage({ id: 'tintuc.unsave' })}
 														</ButtonExtend>
 													) : (
 														<ButtonExtend
@@ -216,9 +217,9 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 																event.stopPropagation();
 																handleXemSau(tintuc, chuDe?._id);
 															}}
-															tooltip='Lưu xem sau'
+															tooltip={intl.formatMessage({ id: 'tintuc.save.tooltip' })}
 														>
-															Lưu
+															{intl.formatMessage({ id: 'tintuc.save' })}
 														</ButtonExtend>
 													)}
 												</div>
@@ -301,7 +302,7 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 														}}
 														danger
 													>
-														Bỏ lưu
+														{intl.formatMessage({ id: 'tintuc.unsave' })}
 													</ButtonExtend>
 												) : (
 													<ButtonExtend
@@ -310,9 +311,9 @@ const BlockTinTuc = (props: { empty?: string; getData?: () => void }) => {
 															event.stopPropagation();
 															handleXemSau(tintuc, chuDe?._id);
 														}}
-														tooltip='Lưu xem sau'
+														tooltip={intl.formatMessage({ id: 'tintuc.save.tooltip' })}
 													>
-														Lưu
+														{intl.formatMessage({ id: 'tintuc.save' })}
 													</ButtonExtend>
 												)}
 											</div>

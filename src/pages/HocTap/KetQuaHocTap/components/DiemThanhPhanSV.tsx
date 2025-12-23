@@ -6,7 +6,7 @@ import { CheckOutlined } from '@ant-design/icons';
 import { Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 
 interface DataType extends LopHocPhan.IDiemHpSvHk {
 	title?: string;
@@ -17,6 +17,7 @@ interface DataType extends LopHocPhan.IDiemHpSvHk {
 }
 
 const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
+	const intl = useIntl();
 	const { maKhoaNganh } = props;
 	const { getKetQuaHocKy } = useModel('daotao.ketquahocky');
 	const { danhSach, getDiemSvHk, loading } = useModel('daotao.diemhpsvhk');
@@ -91,7 +92,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			title: 'Mã HP',
+			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.maHp' }),
 			dataIndex: 'maHocPhan',
 			width: 80,
 			align: 'center',
@@ -100,14 +101,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				rec.trongChuongTrinh ? (
 					val
 				) : (
-					<Tooltip title='Không trong chương trình đào tạo'>
+					<Tooltip title={intl.formatMessage({ id: 'ketquahoctap.diemtp.notInProgram' })}>
 						<u className='text-warning'>{val}</u>
 					</Tooltip>
 				),
 			onCell,
 		},
 		{
-			title: 'Tên học phần',
+			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tenHp' }),
 			dataIndex: 'tenHocPhan',
 			width: 220,
 			onCell: (rec) => ({
@@ -116,14 +117,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			}),
 		},
 		{
-			title: 'Số TC',
+			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.soTc' }),
 			width: 60,
 			align: 'center',
 			render: (val, rec) => rec?.hocPhan?.soTinChi,
 			onCell,
 		},
 		{
-			title: 'TL',
+			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tichLuy' }),
 			dataIndex: 'tichLuy',
 			width: 40,
 			align: 'center',
@@ -131,7 +132,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			title: 'Điểm thi',
+			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.diemThi1' }),
 			width: 80,
 			dataIndex: 'diemThi1',
 			align: 'center',
@@ -139,7 +140,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			title: 'Thi lần 2',
+			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.diemThi2' }),
 			width: 80,
 			dataIndex: 'diemThi2',
 			align: 'center',
@@ -147,7 +148,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			title: 'Tổng kết (hệ 10)',
+			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tongKet10' }),
 			dataIndex: 'diemTongKet',
 			align: 'center',
 			render: (val) => <b style={(val || val === 0) && val < 4 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
@@ -156,7 +157,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			title: 'Tổng kết (hệ 4)',
+			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tongKet4' }),
 			width: 80,
 			dataIndex: 'diemThang4',
 			align: 'center',
@@ -165,7 +166,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			onCell,
 		},
 		{
-			title: 'Tổng kết (chữ)',
+			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tongKetChu' }),
 			width: 80,
 			dataIndex: 'diemChu',
 			align: 'center',
@@ -175,7 +176,9 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			render: (val, rec) => (
 				<>
 					<Tag color={ColorDiemChu?.[val as ELoaiDiemChu]}>{val === ELoaiDiemChu.CHUA_DU_DU_LIEU ? '--' : val}</Tag>{' '}
-					{rec?.isCongNhanQuyDoiDiem && <Tooltip title='Điểm quy đổi'>(R)</Tooltip>}
+					{rec?.isCongNhanQuyDoiDiem && (
+						<Tooltip title={intl.formatMessage({ id: 'ketquahoctap.diemtp.convertedScore' })}>(R)</Tooltip>
+					)}
 				</>
 			),
 			onCell,
@@ -191,7 +194,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 		onCell,
 	}));
 	columns.splice(5, 0, {
-		title: 'Điểm thành phần',
+		title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.diemThanhPhan' }),
 		width: cols.length * 80,
 		children: cols,
 	});
@@ -199,10 +202,9 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	return (
 		<>
 			<div style={{ marginBottom: 12 }}>
-				Danh sách kết quả học tập các học phần được tích lũy qua từng kỳ học (chỉ tính học phần có trong chương trình
-				đào tạo của ngành).
+				{intl.formatMessage({ id: 'ketquahoctap.diemtp.title' })}
 				<br />
-				Xem chi tiết tiến trình học tập{' '}
+				{intl.formatMessage({ id: 'ketquahoctap.diemtp.viewProgress' })}{' '}
 				<a
 					href='./tien-trinh-hoc-tap'
 					onClick={(e) => {
@@ -210,7 +212,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 						history.push('./tien-trinh-hoc-tap');
 					}}
 				>
-					tại đây
+					{intl.formatMessage({ id: 'ketquahoctap.diemtp.here' })}
 				</a>
 				.
 			</div>

@@ -1,21 +1,32 @@
 import dayjs from '@/utils/dayjs';
 import { Descriptions } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ViewDetailHocKy = () => {
+	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
 
 	return (
 		<Descriptions style={{ maxWidth: 400 }} column={1}>
-			<Descriptions.Item label='Tên học kỳ'>{recHocKy?.ten}</Descriptions.Item>
-			<Descriptions.Item label='Số tuần học'>{recHocKy?.soTuan}</Descriptions.Item>
-			<Descriptions.Item label='Thời gian bắt đầu học kỳ'>
+			<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.chitiethocky.description.tenhocky' })}>
+				{recHocKy?.ten}
+			</Descriptions.Item>
+			<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.chitiethocky.description.sotuanhoc' })}>
+				{recHocKy?.soTuan}
+			</Descriptions.Item>
+			<Descriptions.Item
+				label={intl.formatMessage({ id: 'dangkytinchi.chitiethocky.description.thoigianbatdauhocky' })}
+			>
 				{recHocKy?.thoiGianBatDau ? dayjs(recHocKy.thoiGianBatDau).format('DD/MM/YYYY') : null}
 			</Descriptions.Item>
 			{dotDangKyHienTai ? (
 				<>
-					<Descriptions.Item label='Tên đợt đăng ký tín chỉ'>{dotDangKyHienTai.ten}</Descriptions.Item>
+					<Descriptions.Item
+						label={intl.formatMessage({ id: 'dangkytinchi.chitiethocky.description.tendotdangkytinchi' })}
+					>
+						{dotDangKyHienTai.ten}
+					</Descriptions.Item>
 					{/* <Descriptions.Item label='Tính chất đợt'>
 						{tinhChatDangKyTC?.[dotDangKyHienTai.tinhChatDangKy]}
 					</Descriptions.Item> */}

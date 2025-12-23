@@ -11,9 +11,10 @@ import {
 import dayjs from '@/utils/dayjs';
 import { Tag } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
+	const intl = useIntl();
 	const { isThoiHoc } = props;
 	const { getAllModel, danhSach, setDanhSach } = useModel(isThoiHoc ? 'quyetdinh.thoihoc' : 'quyetdinh.baoluu');
 
@@ -26,33 +27,33 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 
 	const columns: IColumn<QuyetDinh.ISinhVienBaoLuuThoiHoc>[] = [
 		{
-			title: 'Số quyết định',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.soquyetdinh.tablecolumntitle' }),
 			dataIndex: 'quyetDinhId',
 			width: 150,
 			render: (val, rec) => rec.quyetDinh?.soQuyetDinh ?? rec.soQuyetDinh,
 		},
 		{
-			title: 'Ngày ban hành',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.ngaybanhanh.tablecolumntitle' }),
 			align: 'center',
 			dataIndex: 'quyetDinhId',
 			width: 120,
 			render: (val, rec) => rec.quyetDinh?.ngayBanHanh && dayjs(rec.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY'),
 		},
 		{
-			title: 'Kỳ học',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.kyhoc.tablecolumntitle' }),
 			dataIndex: 'maHocKy',
 			width: 150,
 			render: (val, rec) => rec?.hocKy?.ten ?? val,
 		},
 		{
-			title: 'Số kỳ BL',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.sokybaoluu.tablecolumntitle' }),
 			dataIndex: 'soKyBaoLuu',
 			width: 100,
 			align: 'center',
 			hide: isThoiHoc,
 		},
 		{
-			title: 'Trạng thái BL',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.trangthaibaoluu.tablecolumntitle' }),
 			dataIndex: 'trangThaiBaoLuu',
 			width: 120,
 			align: 'center',
@@ -60,7 +61,7 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 			render: (val: ETrangThaiSinhVienBaoLuu) => val && <Tag color={colorTrangThaiSinhVienBaoLuu[val]}>{val}</Tag>,
 		},
 		{
-			title: 'Quyết định QLH',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.quyetdinhquaylaihoc.tablecolumntitle' }),
 			dataIndex: 'idDonQuayLaiHoc',
 			align: 'center',
 			width: 120,
@@ -68,32 +69,32 @@ const BaoLuuThoiHocTable = (props: { isThoiHoc?: boolean }) => {
 			hide: isThoiHoc,
 		},
 		{
-			title: 'Ghi chú',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.ghichu.tablecolumntitle' }),
 			dataIndex: 'ghiChu',
 			width: 180,
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Khóa',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.khoasinhvien.tablecolumntitle' }),
 			dataIndex: 'maKhoaSinhVien',
 			width: 100,
 			render: (val, rec) => rec.khoaSinhVien?.ten,
 		},
 		{
-			title: 'Ngành',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.nganh.tablecolumntitle' }),
 			dataIndex: 'maNganh',
 			width: 150,
 			render: (val, rec) => rec.nganh?.ten,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.trangthai.tablecolumntitle' }),
 			dataIndex: 'trangThaiBaoLuu',
 			align: 'center',
 			render: (val) => <Tag color={colorTrangThaiSinhVienBLTH[val as ETrangThaiSinhVienBLTH]}>{val}</Tag>,
 			width: 120,
 		},
 		{
-			title: 'Ghi chú',
+			title: intl.formatMessage({ id: 'hoctapkhac.baoluuthoihoc.ghichu.tablecolumntitle' }),
 			dataIndex: 'ghiChu',
 			width: 150,
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,

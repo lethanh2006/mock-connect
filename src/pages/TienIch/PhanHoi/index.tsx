@@ -7,11 +7,12 @@ import dayjs from '@/utils/dayjs';
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormGuiPhanHoi from './components/FormGuiPhanHoi';
 import ModalDetailPhanhoi from './components/ModalDetail';
 
 const PhanHoiPage = () => {
+	const intl = useIntl();
 	const { setCondition, handleEdit, edit, getModel } = useModel('tienich.phanhoi');
 	const [daTraLoi, setDaTraLoi] = useState<string>('all');
 
@@ -26,7 +27,7 @@ const PhanHoiPage = () => {
 
 	const columns: IColumn<PhanHoi.IRecord>[] = [
 		{
-			title: 'Nội dung phản hồi',
+			title: intl.formatMessage({ id: 'phanhoi.column.noidung' }),
 			dataIndex: 'noiDungPhanHoi',
 			width: 250,
 			render: (val) => <ExpandText ellipsis={{ expandable: false }}>{val}</ExpandText>,
@@ -42,7 +43,7 @@ const PhanHoiPage = () => {
 		// 	onCell,
 		// },
 		{
-			title: 'Ngày gửi',
+			title: intl.formatMessage({ id: 'phanhoi.column.ngaygui' }),
 			dataIndex: 'createdAt',
 			align: 'center',
 			render: (val) => dayjs(val).format('HH:mm DD/MM/YYYY'),
@@ -52,23 +53,24 @@ const PhanHoiPage = () => {
 			onCell,
 		},
 		{
-			title: 'Chủ đề',
+			title: intl.formatMessage({ id: 'phanhoi.column.chude' }),
 			dataIndex: 'tenLinhVuc',
 			width: 150,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Bộ phận xử lý',
+			title: intl.formatMessage({ id: 'phanhoi.column.donvi' }),
 			dataIndex: 'maDonVi',
 			width: 150,
 			filterType: 'customselect',
 			filterCustomSelect: <SelectDonVi multiple />,
-			render: (val, rec) => `${val ? (rec.tenDonVi ? `${rec.tenDonVi} (${val})` : val) : 'Không có thông tin'}`,
+			render: (val, rec) =>
+				`${val ? (rec.tenDonVi ? `${rec.tenDonVi} (${val})` : val) : intl.formatMessage({ id: 'phanhoi.trangthai.khongthongtin' })}`,
 			onCell,
 		},
 		{
-			title: 'Trả lời',
+			title: intl.formatMessage({ id: 'phanhoi.column.traloi' }),
 			dataIndex: 'noiDungTraLoiPhanHoi',
 			hide: daTraLoi === 'chua',
 			width: 250,
@@ -76,18 +78,22 @@ const PhanHoiPage = () => {
 			onCell,
 		},
 		{
-			title: 'Người trả lời',
+			title: intl.formatMessage({ id: 'phanhoi.column.nguoitraloi' }),
 			dataIndex: 'maChuyenVien',
 			hide: daTraLoi === 'chua',
 			width: 120,
 			onCell,
 		},
 		{
-			title: 'Thời gian trả lời',
+			title: intl.formatMessage({ id: 'phanhoi.column.thoigiantraloi' }),
 			dataIndex: 'thoiGianTraLoi',
 			align: 'center',
 			render: (val, rec) =>
-				rec.daTraLoiPhanHoi && val ? dayjs(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa trả lời</Tag>,
+				rec.daTraLoiPhanHoi && val ? (
+					dayjs(val).format('HH:mm DD/MM/YYYY')
+				) : (
+					<Tag color='red'>{intl.formatMessage({ id: 'phanhoi.trangthai.chuatraloi' })}</Tag>
+				),
 			width: 120,
 			hide: daTraLoi === 'chua',
 			sortable: true,
@@ -95,13 +101,13 @@ const PhanHoiPage = () => {
 			onCell,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'phanhoi.column.thaotac' }),
 			width: 60,
 			align: 'center',
 			fixed: 'right',
 			render: (val, rec) => (
 				<>
-					<Tooltip title='Chi tiết'>
+					<Tooltip title={intl.formatMessage({ id: 'phanhoi.action.detail' })}>
 						<Button type='link' icon={<EyeOutlined />} onClick={() => handleEdit(rec)} />
 					</Tooltip>
 				</>
@@ -119,7 +125,7 @@ const PhanHoiPage = () => {
 			getData={getData}
 			columns={columns}
 			modelName='tienich.phanhoi'
-			title='Phản hồi'
+			title={intl.formatMessage({ id: 'phanhoi.title' })}
 			Form={edit ? ModalDetailPhanhoi : FormGuiPhanHoi}
 			formProps={{ getData }}
 			widthDrawer={600}
@@ -130,9 +136,9 @@ const PhanHoiPage = () => {
 					value={daTraLoi}
 					onChange={(val) => onChangeTrangThai(val.toString())}
 					options={[
-						{ value: 'all', label: 'Tất cả' },
-						{ value: 'chua', label: 'Chưa trả lời' },
-						{ value: 'roi', label: 'Đã trả lời' },
+						{ value: 'all', label: intl.formatMessage({ id: 'phanhoi.filter.tatca' }) },
+						{ value: 'chua', label: intl.formatMessage({ id: 'phanhoi.filter.chuatraloi' }) },
+						{ value: 'roi', label: intl.formatMessage({ id: 'phanhoi.filter.datraloi' }) },
 					]}
 				/>,
 			]}

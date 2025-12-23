@@ -4,13 +4,17 @@ import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Space, Tooltip } from 'antd';
 import { useEffect } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useIntl, useModel } from 'umi';
 import './style.less';
 
 const CardCongNoDashboard = () => {
+	const intl = useIntl();
 	const { getModel: getCongNo, loading, danhSach } = useModel('taichinh.hoadon');
 	const colors = ['#14B8A6', '#FACC15']; // Teal, Yellow
-	const xAxis = ['Dịch vụ sinh viên', 'Dịch vụ khác'];
+	const xAxis = [
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.dichvu' }),
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.dichvukhac' }),
+	];
 
 	useEffect(() => {
 		// Get công nợ
@@ -87,11 +91,13 @@ const CardCongNoDashboard = () => {
 				<div>
 					<div className='header'>
 						<div className='title'>
-							Công nợ
-							<span className='subtitle'>(Triệu đồng)</span>
+							{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.title' })}{' '}
+							<span className='subtitle'>
+								({intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.trieudong' })})
+							</span>
 						</div>
 
-						<Tooltip title='Xem chi tiết'>
+						<Tooltip title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.xemchitiet' })}>
 							<Link to='/tai-chinh/cong-no'>
 								<ArrowRightOutlined />
 							</Link>
@@ -104,7 +110,7 @@ const CardCongNoDashboard = () => {
 							<div className='chart-container'>
 								<DonutChart
 									xAxis={xAxis}
-									yLabel={['Công nợ']}
+									yLabel={[`${intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.title' })}`]}
 									yAxis={[yAxis]}
 									type='radian'
 									formatY={(e) => `${e.toFixed(1)}%`}
@@ -144,7 +150,9 @@ const CardCongNoDashboard = () => {
 								/>
 								<div className='center-label'>
 									<div className='total-value'>{(chartData.grandTotal / 1e6).toFixed(1)}</div>
-									<div className='total-text'>Tổng số</div>
+									<div className='total-text'>
+										{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.tongso' })}
+									</div>
 								</div>
 
 								<div className='percentage-label left'>{yAxis[0].toFixed(1)}%</div>
@@ -158,7 +166,7 @@ const CardCongNoDashboard = () => {
 										<div className='row'>
 											<Space>
 												<span className='dot' style={{ backgroundColor: colors[0] }} />
-												<span>Dịch vụ sinh viên</span>
+												<span>{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.dichvu' })}</span>
 											</Space>
 											<span className='sum-text' style={{ color: colors[0] }}>
 												{Math.round(chartData.total[0] / 1e4) / 100}
@@ -169,7 +177,7 @@ const CardCongNoDashboard = () => {
 										<div className='row indented'>
 											<Space>
 												<span className='dot gray' />
-												<span>Chưa thanh toán</span>
+												<span>{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.chuathanhtoan' })}</span>
 											</Space>
 											<span className='sum-text gray'>{Math.round(chartData.unpaid[0] / 1e4) / 100}</span>
 										</div>
@@ -178,7 +186,7 @@ const CardCongNoDashboard = () => {
 										<div className='row'>
 											<Space>
 												<span className='dot' style={{ backgroundColor: colors[1] }} />
-												<span>Dịch vụ khác</span>
+												<span>{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.dichvukhac' })}</span>
 											</Space>
 											<span className='sum-text' style={{ color: colors[1] }}>
 												{Math.round(chartData.total[1] / 1e4) / 100}
@@ -189,7 +197,7 @@ const CardCongNoDashboard = () => {
 										<div className='row indented'>
 											<Space>
 												<span className='dot gray' />
-												<span>Chưa thanh toán</span>
+												<span>{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.congno.chuathanhtoan' })}</span>
 											</Space>
 											<span className='sum-text gray'>{Math.round(chartData.unpaid[1] / 1e4) / 100}</span>
 										</div>
@@ -198,7 +206,10 @@ const CardCongNoDashboard = () => {
 							</div>
 						</>
 					) : (
-						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
+						<Empty
+							image={Empty.PRESENTED_IMAGE_SIMPLE}
+							description={intl.formatMessage({ id: 'global.table.index.empty' })}
+						/>
 					)}
 				</div>
 			</div>

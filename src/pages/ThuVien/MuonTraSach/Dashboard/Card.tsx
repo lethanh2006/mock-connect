@@ -3,9 +3,10 @@ import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { Card } from 'antd';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ThongKeMuonSachCard = () => {
+	const intl = useIntl();
 	const { thongKeMuonTraSachModel, dataThongKe } = useModel('thuvien.muonsach');
 
 	useEffect(() => {
@@ -15,22 +16,22 @@ const ThongKeMuonSachCard = () => {
 	// Chuẩn bị data cho StatisticsCard
 	const statisticsData: StatisticsItem[] = [
 		{
-			title: 'Chờ xử lý',
+			title: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.muontra.choxuly' }),
 			value: dataThongKe?.choXuLy ?? 0,
 			valueColor: 'blue',
 		},
 		{
-			title: 'Đang mượn',
+			title: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.muontra.dangmuon' }),
 			value: dataThongKe?.dangThueMuon ?? 0,
 			valueColor: 'orange',
 		},
 		{
-			title: 'Quá hạn mượn',
+			title: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.muontra.quahan' }),
 			value: dataThongKe?.quaHan ?? 0,
 			valueColor: 'red',
 		},
 		{
-			title: 'Đã trả',
+			title: intl.formatMessage({ id: 'trangchu.hoctaprenluyen.muontra.datra' }),
 			value: dataThongKe?.daTra ?? 0,
 			valueColor: 'green',
 		},
@@ -40,10 +41,10 @@ const ThongKeMuonSachCard = () => {
 		<Card
 			variant='borderless'
 			className='card-borderless card-big-title'
-			title='Thống kê mượn sách'
+			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.muontra.title' })}
 			extra={
 				<Link to={'/thu-vien/lich-su-muon-tra'} type='link' className='xem-tat-ca-link'>
-					Xem thêm
+					{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.muontra.xemthem' })}
 				</Link>
 			}
 		>

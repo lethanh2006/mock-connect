@@ -4,9 +4,10 @@ import { ETrangThaiNopBaiTap } from '@/services/DaoTao/BaiTap/constants';
 import dayjs from '@/utils/dayjs';
 import { CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, StopOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const BaiTapStatistics = () => {
+	const intl = useIntl();
 	const { danhSach, thongKeBaiTapModel, thongKeBaiTap, getThongKeBaiTapSinhVienModel, loading } =
 		useModel('daotao.baitap');
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -52,8 +53,6 @@ const BaiTapStatistics = () => {
 			return isNotSubmitted && isOverdue;
 		}).length;
 
-		console.log(thongKeBaiTap);
-
 		return {
 			total: thongKeBaiTap?.soBaiTapDuocGiao,
 			completed: completedCount,
@@ -84,12 +83,12 @@ const BaiTapStatistics = () => {
 	const statistics = getStatistics();
 	const statisticsData: StatisticsItem[] = [
 		{
-			title: 'Tổng số',
+			title: intl.formatMessage({ id: 'lophocphan.thongke.tongso' }),
 			value: statistics.total || 0,
 			icon: <CheckCircleOutlined />,
 		},
 		{
-			title: 'Đã hoàn thành',
+			title: intl.formatMessage({ id: 'lophocphan.thongke.dahoanthanh' }),
 			value: statistics.completed,
 			icon: <CheckCircleOutlined />,
 			status: 'success',
@@ -101,25 +100,25 @@ const BaiTapStatistics = () => {
 		// 	valueColor: '#FFAF0B',
 		// },
 		{
-			title: 'Đang diễn ra',
+			title: intl.formatMessage({ id: 'lophocphan.thongke.dangdien' }),
 			value: statistics.inprogress || 0,
 			icon: <ClockCircleOutlined />,
 			valueColor: '#FFAF0B',
 		},
 		{
-			title: 'Đã chấm điểm',
+			title: intl.formatMessage({ id: 'lophocphan.thongke.dachamdiem' }),
 			value: statistics.graded || 0,
 			icon: <ClockCircleOutlined />,
 			status: 'info',
 		},
 		{
-			title: 'Chưa hoàn thành',
+			title: intl.formatMessage({ id: 'lophocphan.thongke.chuahoanthanh' }),
 			value: statistics.notStarted,
 			icon: <ExclamationCircleOutlined />,
 			status: 'error',
 		},
 		{
-			title: 'Quá hạn nộp bài',
+			title: intl.formatMessage({ id: 'lophocphan.thongke.quahannopbai' }),
 			value: statistics.overdue,
 			icon: <StopOutlined />,
 			valueColor: '#121212',
@@ -127,7 +126,12 @@ const BaiTapStatistics = () => {
 	];
 
 	return (
-		<StatisticsCard title='Bài tập, bài kiểm tra' data={statisticsData} loading={loading} colSpan={{ xs: 12, md: 4 }} />
+		<StatisticsCard
+			title={intl.formatMessage({ id: 'lophocphan.thongke.title' })}
+			data={statisticsData}
+			loading={loading}
+			colSpan={{ xs: 12, md: 4 }}
+		/>
 	);
 };
 

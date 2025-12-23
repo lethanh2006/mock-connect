@@ -1,6 +1,6 @@
 import { Select, Spin } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem
@@ -16,6 +16,7 @@ const SelectDotQuyTrinh = (props: {
 	placeholder?: string;
 	hienThiMaQuocTich?: boolean;
 }) => {
+	const intl = useIntl();
 	const { value, onChange, multiple, loadData, allowClear, placeholder, disabled, initQuery } = props;
 	const { danhSach, getAllModel, loading } = useModel('quytrinh.dotkhaibao');
 
@@ -38,7 +39,7 @@ const SelectDotQuyTrinh = (props: {
 			}))}
 			showSearch
 			optionFilterProp='label'
-			placeholder={placeholder ?? 'Chọn đợt khai báo'}
+			placeholder={placeholder ?? intl.formatMessage({ id: 'dichvuhanhchinh.dangky.khaobao.dot.place' })}
 		/>
 	);
 };

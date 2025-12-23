@@ -5,6 +5,7 @@ import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Collapse, Descriptions, Space, Tag } from 'antd';
 import moment from 'moment';
 import React, { useState } from 'react';
+import { useIntl } from 'umi';
 import ViewMetaData from './ViewMetaData';
 
 const { Panel } = Collapse;
@@ -14,6 +15,8 @@ interface KetQuaDanhGiaCollapseProps {
 }
 
 const ChiTietKetQuaDanhGia: React.FC<KetQuaDanhGiaCollapseProps> = ({ danhSachKetQua = [] }) => {
+	const intl = useIntl();
+
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 	const [data, setData] = useState<TheChat.IMetaData>();
 
@@ -86,7 +89,10 @@ const ChiTietKetQuaDanhGia: React.FC<KetQuaDanhGiaCollapseProps> = ({ danhSachKe
 										label={
 											<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
 												<Space>
-													<span>Lần {item?.lanDanhGia}</span>
+													<span>
+														{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.landanhgia.title' })}{' '}
+														{item?.lanDanhGia}
+													</span>
 													{danhMuc?.suDungThietBiNgoaiVi && (
 														<ButtonExtend
 															type='link'
@@ -104,11 +110,11 @@ const ChiTietKetQuaDanhGia: React.FC<KetQuaDanhGiaCollapseProps> = ({ danhSachKe
 									>
 										<div>
 											<div style={{ fontWeight: 'bold' }}>
-												{item?.giaTri} {item?.donViDoLuong}
+												{item?.giaTri} {item?.danhMuc?.donViDoLuong}
 											</div>
 
 											<div style={{ fontSize: '12px', color: '#666', marginTop: 4 }}>
-												Thời gian đánh giá:{' '}
+												{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.thoigiandanhgia.title' })}:{' '}
 												{item?.thoiGianDanhGia && moment(item?.thoiGianDanhGia).format('HH:mm DD/MM/YYYY')}
 											</div>
 										</div>

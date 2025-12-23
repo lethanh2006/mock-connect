@@ -5,9 +5,10 @@ import { type IColumn } from '@/components/Table/typing';
 import type { UuDaiThanhToan } from '@/services/TaiChinh/UuDaiThanhToan/typing';
 import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord) => void }) => {
+	const intl = useIntl();
 	const { page, limit, getModel } = useModel('taichinh.uudai');
 	const { onCellClick } = props;
 
@@ -24,14 +25,14 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 
 	const columns: IColumn<UuDaiThanhToan.IRecord>[] = [
 		{
-			title: 'Tên ưu đãi',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.hienhanh.tenuudai' }),
 			dataIndex: 'ten',
 			width: 150,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Thời gian áp dụng',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.hienhanh.tgapdung' }),
 			align: 'center',
 			width: 140,
 			render: (val, rec) =>
@@ -41,14 +42,14 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 			onCell,
 		},
 		{
-			title: 'Loại khoản thu áp dụng',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.hienhanh.loai' }),
 			dataIndex: 'maKhoanThuApDung',
 			width: 140,
 			render: (val, rec) => rec.khoanThuApDung?.name ?? val,
 			onCell,
 		},
 		{
-			title: 'Ngưỡng hưởng ưu đãi',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.hienhanh.nguong' }),
 			dataIndex: 'mucPhiApDung',
 			align: 'right',
 			width: 120,
@@ -57,7 +58,7 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 			onCell,
 		},
 		{
-			title: 'Giá trị ưu đãi',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.hienhanh.giatri' }),
 			dataIndex: 'phanTramUuDai',
 			align: 'center',
 			width: 80,
@@ -66,7 +67,7 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 			onCell,
 		},
 		{
-			title: 'Mô tả',
+			title: intl.formatMessage({ id: 'uudaithanhtoan.hienhanh.mota' }),
 			dataIndex: 'moTa',
 			width: 220,
 			render: (val) => val && <ExpandText>{val}</ExpandText>,

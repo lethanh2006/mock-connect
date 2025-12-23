@@ -7,10 +7,11 @@ import dayjs from '@/utils/dayjs';
 import { EyeOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ViewThongBao from '../components/ViewThongBao';
 
 const ThongBaoLopPage = (props: { idLop: string; loai: 'lop-hanh-chinh' | 'lop-hoc-phan' }) => {
+	const intl = useIntl();
 	const { page, limit, getThongBaoLopModel, setRecord, record } = useModel('thongbao.thongbaolop');
 	const { readNotificationModel } = useModel('thongbao.noticeicon');
 	const [visibleThongBao, setVisibleThongBao] = useState<boolean>(false);
@@ -20,21 +21,21 @@ const ThongBaoLopPage = (props: { idLop: string; loai: 'lop-hanh-chinh' | 'lop-h
 
 	const columns: IColumn<ThongBao.IRecord>[] = [
 		{
-			title: 'Tiêu đề',
+			title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.tieude' }),
 			dataIndex: 'title',
 			width: 200,
 			filterType: 'string',
 			render: (val, recordVal) => val && <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Mô tả',
+			title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.mota' }),
 			dataIndex: 'description',
 			width: 280,
 			filterType: 'string',
 			render: (val) => <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Thời gian gửi',
+			title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.thoigiangui' }),
 			dataIndex: 'createdAt',
 			width: 120,
 			align: 'center',
@@ -43,13 +44,13 @@ const ThongBaoLopPage = (props: { idLop: string; loai: 'lop-hanh-chinh' | 'lop-h
 			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.thaotac' }),
 			align: 'center',
 			width: 60,
 			fixed: 'right',
 			render: (val, rec) => (
 				<ButtonExtend
-					tooltip='Xem chi tiết'
+					tooltip={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.xemchitiet' })}
 					onClick={() => {
 						setRecord(rec);
 						setVisibleThongBao(true);
@@ -82,7 +83,7 @@ const ThongBaoLopPage = (props: { idLop: string; loai: 'lop-hanh-chinh' | 'lop-h
 				onCancel={() => setVisibleThongBao(false)}
 				open={visibleThongBao}
 				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				cancelText={intl.formatMessage({ id: 'global.button.dong', defaultMessage: 'Đóng' })}
 			>
 				<ViewThongBao record={record} />
 			</Modal>

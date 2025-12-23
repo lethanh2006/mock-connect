@@ -1,10 +1,11 @@
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row } from 'antd';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import ModalChungChiCTDT from './ModalChungChi';
 
 const DieuKienChungChiSection = () => {
+	const intl = useIntl();
 	const { record, setRecordChungChi, setVisibleForm } = useModel('sinhvien.tientrinhtotnghiep');
 
 	const handleView = (rec: SinhVien.TChungChiDauRaSv) => {
@@ -24,7 +25,7 @@ const DieuKienChungChiSection = () => {
 						alignItems: 'center',
 					}}
 				>
-					<div className='fw500'>Chứng chỉ chuẩn đầu ra</div>
+					<div className='fw500'>{intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.title' })}</div>
 					<a
 						href='/hoc-tap/xet-tot-nghiep/chung-chi-tot-nghiep'
 						onClick={(e) => {
@@ -32,7 +33,7 @@ const DieuKienChungChiSection = () => {
 							history.push('/hoc-tap/xet-tot-nghiep/chung-chi-tot-nghiep');
 						}}
 					>
-						Xem chi tiết →
+						{intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.btn.xemchitiet' })} →
 					</a>
 				</div>
 			</Col>
@@ -56,7 +57,7 @@ const DieuKienChungChiSection = () => {
 			) : (
 				<Empty
 					image={Empty.PRESENTED_IMAGE_SIMPLE}
-					description={<i>Không có thông tin</i>}
+					description={<i>{intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.empty.description' })}</i>}
 					style={{ margin: 'auto' }}
 				/>
 			)}

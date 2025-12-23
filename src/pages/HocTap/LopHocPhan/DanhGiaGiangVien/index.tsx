@@ -11,10 +11,11 @@ import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
 import Sticky from 'react-stickynode';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormDanhGiaGiangVien from './components/Form';
 
 const DanhGiaGiangVienPage = () => {
+	const intl = useIntl();
 	const { record: recLopHp } = useModel('lophocphan.lophocphan');
 	const { getModel, page, limit, record, setRecord, ngoaiThoiGian } = useModel('tienich.dotkhaosat');
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
@@ -71,23 +72,31 @@ const DanhGiaGiangVienPage = () => {
 			onCell,
 		},
 		{
-			title: 'Tên đợt',
+			title: intl.formatMessage({ id: 'lophocphan.id.khaosat.tendot' }),
 			dataIndex: 'ten',
 			width: 200,
 			render: (val, rec) => (
 				<ExpandText>
-					{val} {rec?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && <Tag color='blue'>Đánh giá giảng viên</Tag>}
+					{val}{' '}
+					{rec?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && (
+						<Tag color='blue'>{intl.formatMessage({ id: 'lophocphan.id.khaosat.dggv' })}</Tag>
+					)}
 				</ExpandText>
 			),
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'lophocphan.id.khaosat.trangthai' }),
 			dataIndex: 'daLam',
 			align: 'center',
 			width: 120,
-			render: (val) => (val ? <Tag color='green'>Đã thực hiện</Tag> : <Tag color='red'>Chưa thực hiện</Tag>),
+			render: (val) =>
+				val ? (
+					<Tag color='green'>{intl.formatMessage({ id: 'lophocphan.id.khaosat.dathuchien' })}</Tag>
+				) : (
+					<Tag color='red'>{intl.formatMessage({ id: 'lophocphan.id.khaosat.chuathuchien' })}</Tag>
+				),
 			fixed: 'right',
 			onCell,
 		},
@@ -120,25 +129,27 @@ const DanhGiaGiangVienPage = () => {
 								layout='vertical'
 								colon={false}
 							>
-								<Descriptions.Item label='Đợt khảo sát' span={2}>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.khaosat.dot' })} span={2}>
 									<Space wrap>
 										{record?.ten ?? '--'}
-										{record?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && <Tag color='blue'>Đánh giá giảng viên</Tag>}
+										{record?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && (
+											<Tag color='blue'>{intl.formatMessage({ id: 'lophocphan.id.khaosat.dggv' })}</Tag>
+										)}
 									</Space>
 								</Descriptions.Item>
-								<Descriptions.Item label='Trạng thái' span={2}>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.khaosat.trangthai' })} span={2}>
 									{record?.kichHoat === false ? (
-										<Tag color='default'>Đợt khảo sát chưa kích hoạt</Tag>
+										<Tag color='default'>{intl.formatMessage({ id: 'lophocphan.id.khaosat.kichhoat' })}</Tag>
 									) : ngoaiThoiGian ? (
-										<Tag color='gold'>Ngoài thời gian đợt khảo sát</Tag>
+										<Tag color='gold'>{intl.formatMessage({ id: 'lophocphan.id.khaosat.ngoaithoigian' })}</Tag>
 									) : (
-										<Tag color='green'>Đang trong thời gian khảo sát</Tag>
+										<Tag color='green'>{intl.formatMessage({ id: 'lophocphan.id.khaosat.trongthoigian' })}</Tag>
 									)}
 								</Descriptions.Item>
-								<Descriptions.Item label='Bắt đầu thực hiện'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.khaosat.tgbt' })}>
 									{record?.thoiGianBatDau ? dayjs(record?.thoiGianBatDau).format('HH:mm DD/MM/YYYY') : '--'}
 								</Descriptions.Item>
-								<Descriptions.Item label='Thời gian kết thúc'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.khaosat.tgkt' })}>
 									{record?.thoiGianKetThuc ? dayjs(record?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY') : '--'}
 								</Descriptions.Item>
 							</Descriptions>
@@ -147,7 +158,10 @@ const DanhGiaGiangVienPage = () => {
 						</>
 					) : (
 						<div style={{ paddingTop: 16 }}>
-							<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' />
+							<Empty
+								image={Empty.PRESENTED_IMAGE_SIMPLE}
+								description={intl.formatMessage({ id: 'lophocphan.id.khaosat.empty' })}
+							/>
 						</div>
 					)}
 				</div>

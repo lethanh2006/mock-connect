@@ -2,7 +2,7 @@ import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { Button, Card, Modal, Spin, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useIntl, useModel } from 'umi';
 
 import FormLichCaNhan from '@/pages/Calendar/components/FormLichCaNhan';
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
@@ -50,6 +50,7 @@ const getEventColor = (loaiSuKien: string): string => {
 };
 
 const LichDashboard = () => {
+	const intl = useIntl();
 	const [currentMonth, setCurrentMonth] = useState(dayjs());
 	const [selectedDate, setSelectedDate] = useState(dayjs());
 	const [visibleDetail, setVisibleDetail] = useState(false);
@@ -94,7 +95,7 @@ const LichDashboard = () => {
 		return getLichThiModel(timeRange).then((data) => {
 			return data.map((item) => ({
 				...item,
-				title: `Lịch thi: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
+				title: `${intl.formatMessage({ id: 'trangchu.lich.lichthi' })}: ${item.danhSachHocPhan?.map((i) => i.ten).join(', ')}`,
 				suffix: item.phong?.ma ?? '',
 				loaiSuKien: ELoaiSuKien.LICH_THI,
 			}));
@@ -248,7 +249,7 @@ const LichDashboard = () => {
 				{/* Header với tên tháng và navigation */}
 				<div className={`calendar-header ${responsiveClass}`}>
 					<Typography.Title level={5} className={`calendar-title ${responsiveClass}`}>
-						Tháng {currentMonth.format('M/YYYY')}
+						{intl.formatMessage({ id: 'trangchu.lich.thang' })} {currentMonth.format('M/YYYY')}
 					</Typography.Title>
 					<div className={`${responsiveClass} navigation-buttons`}>
 						<Button
@@ -361,10 +362,10 @@ const LichDashboard = () => {
 			<Card
 				variant='borderless'
 				className='card-borderless card-big-title'
-				title='Lịch'
+				title={intl.formatMessage({ id: 'trangchu.lich.title' })}
 				extra={
 					<Link to='/calendar' className='xem-tat-ca-link'>
-						Xem tất cả
+						{intl.formatMessage({ id: 'trangchu.lich.xemtatca' })}
 					</Link>
 				}
 			>
@@ -375,7 +376,7 @@ const LichDashboard = () => {
 
 			{/* Modal xem list sự kiện */}
 			<Modal
-				title={`Sự kiện ngày ${selectedDate.format('DD/MM/YYYY')}`}
+				title={`${intl.formatMessage({ id: 'trangchu.lich.modal.title' })} ${selectedDate.format('DD/MM/YYYY')}`}
 				open={visibleDetail}
 				onCancel={() => setVisibleDetail(false)}
 				footer={null}
@@ -401,14 +402,19 @@ const LichDashboard = () => {
 								{dayjs(event.thoiGianBatDau).format('HH:mm')} - {dayjs(event.thoiGianKetThuc).format('HH:mm')}
 							</div>
 							{(event.diaDiem || event.phongHoc) && (
-								<div className='event-location'>📍 {event.diaDiem ? event.diaDiem : `Phòng ${event.phongHoc}`}</div>
+								<div className='event-location'>
+									📍{' '}
+									{event.diaDiem
+										? event.diaDiem
+										: `${intl.formatMessage({ id: 'trangchu.lich.modal.phong' })} ${event.phongHoc}`}
+								</div>
 							)}
 						</div>
 					))}
 				</div>
 
 				<div className='form-footer'>
-					<Button onClick={() => setVisibleDetail(false)}>Đóng</Button>
+					<Button onClick={() => setVisibleDetail(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 				</div>
 			</Modal>
 
@@ -428,7 +434,11 @@ const LichDashboard = () => {
 				footer={null}
 				maskClosable={false}
 				width={800}
-				title={edit ? 'Chỉnh sửa sự kiện' : 'Thêm mới sự kiện'}
+				title={
+					edit
+						? intl.formatMessage({ id: 'trangchu.lich.modal.themmoi' })
+						: intl.formatMessage({ id: 'trangchu.lich.modal.chinhsua' })
+				}
 			>
 				<FormLichCaNhan getData={getData} />
 			</Modal>

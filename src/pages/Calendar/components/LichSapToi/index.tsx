@@ -3,6 +3,7 @@ import dayjs from '@/utils/dayjs';
 import { ClockCircleOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Card, List, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import { useIntl } from 'umi';
 import './style.less';
 
 const { Text } = Typography;
@@ -15,6 +16,7 @@ interface LichSapToiProps {
 }
 
 const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEventClick, setExpandMiniCalendar }) => {
+	const intl = useIntl();
 	const [expandLichSapToi, setExpandLichSapToi] = useState(true);
 	const [contentHeight, setContentHeight] = useState<number>(0);
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -65,7 +67,9 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 
 	const cardTitle = (
 		<div className='lich-sap-toi-header' onClick={() => setExpandLichSapToi(!expandLichSapToi)}>
-			<div className='lich-sap-toi-header-title card-big-title'>Lịch sắp tới</div>
+			<div className='lich-sap-toi-header-title card-big-title'>
+				{intl.formatMessage({ id: 'lichsukien.lichsaptoi' })}
+			</div>
 
 			<Button
 				type='text'
@@ -85,7 +89,7 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 			{upcomingEvents.length === 0 ? (
 				<div className={`lich-sap-toi-empty ${expandLichSapToi ? 'expanded' : 'collapsed'}`}>
 					<ClockCircleOutlined />
-					<div>Không có lịch sắp tới</div>
+					<div>{intl.formatMessage({ id: 'lichsukien.lichsaptoi.empty' })}</div>
 				</div>
 			) : (
 				<div

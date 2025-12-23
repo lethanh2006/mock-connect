@@ -8,9 +8,10 @@ import type { XemSau } from '@/services/TienIch/XemSau/typing';
 import { CloseOutlined, EyeOutlined } from '@ant-design/icons';
 import { Card, Popconfirm } from 'antd';
 import { useState } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 
 const XemSauPage = () => {
+	const intl = useIntl();
 	const { getModel, page, limit, deleteModel } = useModel('tienich.xemsau');
 	const { setVisibleForm, setRecord } = useModel('sukien.sinhvienhoatdongctsv');
 	const [tabActive, setTabActive] = useState<ELoaiThongTinXemSau>(ELoaiThongTinXemSau.SU_KIEN);
@@ -42,7 +43,7 @@ const XemSauPage = () => {
 
 	const columns: IColumn<XemSau.IRecord>[] = [
 		{
-			title: 'Nội dung',
+			title: intl.formatMessage({ id: 'xemsau.noidung' }),
 			dataIndex: 'thongTin',
 			width: 250,
 			render: (val, rec) => {
@@ -57,7 +58,7 @@ const XemSauPage = () => {
 			onCell,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'xemsau.thaotac' }),
 			align: 'center',
 			width: 60,
 			fixed: 'right',
@@ -65,13 +66,18 @@ const XemSauPage = () => {
 				<>
 					<Popconfirm
 						onConfirm={() => deleteModel(rec?._id, getData)}
-						title='Bạn có chắc chắn muốn bỏ lưu thông tin này?'
+						title={intl.formatMessage({ id: 'xemsau.boluu.place' })}
 						placement='topRight'
 					>
-						<ButtonExtend tooltip='Bỏ lưu' type='link' danger icon={<CloseOutlined />} />
+						<ButtonExtend
+							tooltip={intl.formatMessage({ id: 'xemsau.boluu' })}
+							type='link'
+							danger
+							icon={<CloseOutlined />}
+						/>
 					</Popconfirm>
 					<ButtonExtend
-						tooltip='Xem'
+						tooltip={intl.formatMessage({ id: 'xemsau.xem' })}
 						type='link'
 						icon={<EyeOutlined />}
 						onClick={() => {
@@ -90,7 +96,7 @@ const XemSauPage = () => {
 			<TableBase
 				getData={getData}
 				dependencies={[page, limit]}
-				title='Danh sách xem sau'
+				title={intl.formatMessage({ id: 'xemsau.title' })}
 				columns={columns}
 				modelName='tienich.xemsau'
 				rowSelection
@@ -102,7 +108,11 @@ const XemSauPage = () => {
 	}));
 
 	return (
-		<Card title='Danh sách xem sau' className='card-big-title card-borderless' variant='borderless'>
+		<Card
+			title={intl.formatMessage({ id: 'xemsau.title' })}
+			className='card-big-title card-borderless'
+			variant='borderless'
+		>
 			<Card variant='borderless'>
 				<TabViewPage
 					hideCard

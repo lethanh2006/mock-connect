@@ -43,7 +43,7 @@ const CardThongBaoDashboard = () => {
 			{/* Header */}
 			<div className='header-tb-sk'>
 				<Title level={5} className='title'>
-					Thông báo
+					{intl.formatMessage({ id: 'trangchu.thongbao.title' })}
 				</Title>
 				<Spin spinning={loading}>
 					<div className='navigation-buttons'>
@@ -81,7 +81,9 @@ const CardThongBaoDashboard = () => {
 									{/* cân bằng với Card Sự kiện - Lịch sắp tới */}
 									<Space size={4} wrap>
 										<Tag color={currentNotice?.read ? 'default' : 'var(--color-primary)'} style={{ fontSize: 11 }}>
-											{currentNotice?.read ? 'Đã đọc' : 'Mới'}
+											{currentNotice?.read
+												? intl.formatMessage({ id: 'trangchu.thongbao.tag.dadoc' })
+												: intl.formatMessage({ id: 'trangchu.thongbao.tag.moi' })}
 										</Tag>
 									</Space>
 								</div>
@@ -90,7 +92,11 @@ const CardThongBaoDashboard = () => {
 					</div>
 				</div>
 			) : (
-				<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu' className='empty' />
+				<Empty
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+					description={intl.formatMessage({ id: 'global.table.index.empty' })}
+					className='empty'
+				/>
 			)}
 
 			<ModalExpandable
@@ -100,7 +106,7 @@ const CardThongBaoDashboard = () => {
 				open={visibleThongBao}
 				cancelText={intl.formatMessage({ id: 'global.button.dong', defaultMessage: 'Đóng' })}
 				okButtonProps={{ hidden: true }}
-				title={record?.title || 'Thông báo'}
+				title={record?.title || intl.formatMessage({ id: 'trangchu.thongbao.title' })}
 			>
 				<ViewThongBao
 					record={record}

@@ -1,9 +1,10 @@
 import { inputFormat } from '@/utils/utils';
 import { Col, Row } from 'antd';
 import _ from 'lodash';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const StatVaoRaThuVien = () => {
+	const intl = useIntl();
 	const { thongKeVaoRa } = useModel('thuvien.vaorathuvien');
 	const sum = _.sumBy(thongKeVaoRa, (i) => i.totalCI);
 	const lastOne = thongKeVaoRa.at(-1);
@@ -37,7 +38,7 @@ const StatVaoRaThuVien = () => {
 
 			<Col span={12}>
 				<div className='number text-primary'>{inputFormat(sum)}</div>
-				<div className='text'>Tổng số</div>
+				<div className='text'>{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.thuvien.tongso' })}</div>
 			</Col>
 		</Row>
 	);

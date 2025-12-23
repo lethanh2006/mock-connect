@@ -1,6 +1,6 @@
 import { Select } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 /**
  * Secect Căn cứ pháp lý để cho vào FormItem
@@ -14,6 +14,7 @@ const SelectQuocTich = (props: {
 	placeholder?: string;
 	selectTen?: boolean;
 }) => {
+	const intl = useIntl();
 	const { value, onChange, multiple, loadData, allowClear, placeholder, selectTen } = props;
 	const { danhSach, getAllModel } = useModel('core.quoctich');
 
@@ -34,7 +35,7 @@ const SelectQuocTich = (props: {
 			}))}
 			showSearch
 			optionFilterProp='label'
-			placeholder={placeholder ?? 'Chọn quốc tịch'}
+			placeholder={placeholder ?? intl.formatMessage({ id: 'thongtincanhan.form.quoctich.place' })}
 		/>
 	);
 };

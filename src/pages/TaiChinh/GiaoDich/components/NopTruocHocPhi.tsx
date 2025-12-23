@@ -6,7 +6,7 @@ import rules from '@/utils/rules';
 import { inputFormat } from '@/utils/utils';
 import { Alert, Button, Col, Descriptions, Form, Modal, Popconfirm, Row } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import HuongDanThanhToan from '../../HoaDon/ThanhToan/HuongDanThanhToan';
 
 const ModalNopTruocHocPhi = (props: {
@@ -14,6 +14,7 @@ const ModalNopTruocHocPhi = (props: {
 	setVisibleForm: (val: boolean) => void;
 	getData: () => void;
 }) => {
+	const intl = useIntl();
 	const [form] = Form.useForm();
 	const { visibleForm, setVisibleForm, getData } = props;
 	const { dongTruocHocPhiModel, formSubmiting, paymentType, setVisibleHuongDan, thanhToanMomoModel, setRecord } =
@@ -92,7 +93,7 @@ const ModalNopTruocHocPhi = (props: {
 		<Modal
 			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
-			title='Nộp trước học phí'
+			title={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.title' })}
 			footer={null}
 			width={800}
 		>
@@ -100,7 +101,7 @@ const ModalNopTruocHocPhi = (props: {
 				<Alert
 					type='warning'
 					showIcon
-					description='Không có thông tin nộp trước học phí, vui lòng thanh toán học phí khi có thông báo cụ thể!'
+					description={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.empty' })}
 				/>
 			) : (
 				<Form layout='vertical' form={form} onFinish={onFinish}>
@@ -110,10 +111,16 @@ const ModalNopTruocHocPhi = (props: {
 								showIcon
 								description={
 									<div>
-										<div>Nộp trước học phí cả năm để được hưởng những ưu đãi hấp dẫn!</div>
+										<div>{intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.alert.title' })}</div>
 										<div>
-											Thời gian từ <b>{dayjs(recThuTruocHp?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</b> đến
-											<b>{dayjs(recThuTruocHp?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</b>
+											{intl.formatMessage(
+												{ id: 'lichsugiaodich.noptruochocphi.alert.thoigian' },
+												{
+													form: dayjs(recThuTruocHp?.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
+													to: dayjs(recThuTruocHp?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
+													b: (chunks) => <b>{chunks}</b>,
+												},
+											)}
 										</div>
 									</div>
 								}
@@ -121,38 +128,54 @@ const ModalNopTruocHocPhi = (props: {
 						</Col>
 
 						<Col span={24} md={12}>
-							<Form.Item name='maKhoaNganh' label='Ngành đào tạo' rules={[...rules.required]}>
+							<Form.Item
+								name='maKhoaNganh'
+								label={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.form.nganh' })}
+								rules={[...rules.required]}
+							>
 								<SelectSongNganh />
 							</Form.Item>
 						</Col>
 						<Col span={24}>
 							<div style={{ fontSize: 16 }}>
-								Sinh viên nộp học phí 1 lần cho cả năm học, tương đương với học phí cho{' '}
-								<b>{recThuTruocHp?.soTinChiNhanUuDai} tín chỉ</b> sẽ được Học viện miễn giảm học phí bằng{' '}
-								<b>{recThuTruocHp?.uuDai?.phanTramUuDai}%</b> trên tổng số tiền nộp.
+								{intl.formatMessage(
+									{ id: 'lichsugiaodich.noptruochocphi.desc.intro' },
+									{
+										form: recThuTruocHp?.soTinChiNhanUuDai,
+										to: recThuTruocHp?.uuDai?.phanTramUuDai,
+										b: (chunks) => <b>{chunks}</b>,
+									},
+								)}
 							</div>
 						</Col>
 						<Col span={24}>
 							<Descriptions column={1}>
-								<Descriptions.Item label='Năm học'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.desc.namhoc' })}>
 									<b style={{ color: 'red' }}>{recThuTruocHp?.tenNamHoc}</b>
 								</Descriptions.Item>
-								<Descriptions.Item label='Định mức tín chỉ theo ngành'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.desc.dinhmuc' })}>
 									{inputFormat(soTienTinChi)} VNĐ
 								</Descriptions.Item>
-								<Descriptions.Item label='Số tín chỉ cần nộp để được hưởng ưu đãi'>
-									{recThuTruocHp?.soTinChiNhanUuDai} tín chỉ
+								<Descriptions.Item label={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.desc.sotinchi' })}>
+									{recThuTruocHp?.soTinChiNhanUuDai}{' '}
+									{intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.desc.tinchi' })}
 								</Descriptions.Item>
-								<Descriptions.Item label='Tổng tiền'>{inputFormat(soTienPhaiDong)} VNĐ</Descriptions.Item>
-								<Descriptions.Item label='Số tiền được miễn giảm'>{inputFormat(soTienUuDai)} VNĐ</Descriptions.Item>
-								<Descriptions.Item label='Số tiền đóng thực tế'>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.desc.tongtien' })}>
+									{inputFormat(soTienPhaiDong)} VNĐ
+								</Descriptions.Item>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.desc.miengiam' })}>
+									{inputFormat(soTienUuDai)} VNĐ
+								</Descriptions.Item>
+								<Descriptions.Item label={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.desc.thucte' })}>
 									{inputFormat(soTienPhaiDong - soTienUuDai)} VNĐ
 								</Descriptions.Item>
 							</Descriptions>
 						</Col>
 
 						<Col span={24}>
-							<div className='fw500'>Hình thức thanh toán</div>
+							<div className='fw500'>
+								{intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.payment.hinhthuc' })}
+							</div>
 						</Col>
 						<Col span={24}>
 							<HuongDanThanhToan amount={soTienPhaiDong - soTienUuDai} isRequired />
@@ -160,13 +183,17 @@ const ModalNopTruocHocPhi = (props: {
 					</Row>
 
 					<div className='form-footer'>
-						<Popconfirm title='Xác nhận thanh toán?' onConfirm={() => form.submit()} disabled={!maKhoaNganh}>
+						<Popconfirm
+							title={intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.confirm.pay' })}
+							onConfirm={() => form.submit()}
+							disabled={!maKhoaNganh}
+						>
 							<Button disabled={!maKhoaNganh} loading={formSubmiting} type='primary' htmlType='submit'>
-								Thanh toán
+								{intl.formatMessage({ id: 'lichsugiaodich.noptruochocphi.button.pay' })}
 							</Button>
 						</Popconfirm>
 
-						<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+						<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 					</div>
 				</Form>
 			)}

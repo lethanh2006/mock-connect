@@ -4,10 +4,11 @@ import dayjs from '@/utils/dayjs';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Col, Popover, Row } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ViewDetailHocKy from './ViewDetailHocKy';
 
 const FilterDotDangKy = () => {
+	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const {
 		getDotDangKyAvailableModel: getDotDangKy,
@@ -33,15 +34,20 @@ const FilterDotDangKy = () => {
 
 					<Popover content={<ViewDetailHocKy />} placement='right'>
 						<Button type='link' icon={<InfoCircleOutlined />}>
-							Xem chi tiết
+							{intl.formatMessage({ id: 'dangkytinchi.filter.btn.xemchitiet' })}
 						</Button>
 					</Popover>
 
 					{dotDangKyHienTai && sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
 						<span className={dangTrongThoiGian ? 'text-success' : 'text-error'}>
-							Thời gian đăng ký từ{' '}
-							<span className='fw500'>{dayjs(dotDangKyHienTai.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</span> đến{' '}
-							<span className='fw500'>{dayjs(dotDangKyHienTai.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</span>
+							{intl.formatMessage(
+								{ id: 'dangkytinchi.filter.thoigiandangky.title' },
+								{
+									thoigianbatdau: dayjs(dotDangKyHienTai.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
+									thoigianketthuc: dayjs(dotDangKyHienTai.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
+									span: (chunks) => <span className='fw500'>{chunks}</span>,
+								},
+							)}
 						</span>
 					) : null}
 				</div>

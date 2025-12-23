@@ -1,9 +1,10 @@
 import SelectHocKy from '@/pages/DaoTao/HocKy/SelectHocKy';
 import { Space } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import SelectKyThi from './Select';
 
 const FilterKyThi = () => {
+	const intl = useIntl();
 	const { record: recordKyThi, setRecord: setRecordKyThi, danhSach: danhSachKyThi } = useModel('khaothi.kythi');
 	const { record: recordHocKy, setRecord: setRecordHocKy, danhSach: danhSachHocKy } = useModel('daotao.hocky');
 
@@ -23,7 +24,7 @@ const FilterKyThi = () => {
 				<SelectKyThi
 					isSetRecord
 					value={recordKyThi?._id}
-					placeHolder='Lọc theo đợt thi'
+					placeHolder={intl.formatMessage({ id: 'baithi.select.filterKyThi.placeholder' })}
 					onChange={(val) => setRecordKyThi(danhSachKyThi.find((item) => item._id === val))}
 					maHocKy={recordHocKy?.ma}
 					style={{ width: 300 }}

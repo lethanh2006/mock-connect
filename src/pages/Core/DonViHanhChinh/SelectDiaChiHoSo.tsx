@@ -4,6 +4,7 @@ import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import rules from '@/utils/rules';
 import { Col, Form, Input, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
+import { useIntl } from 'umi';
 
 /** Seclect Đơn vị hành chính cho Thông tin gia đình của hồ sơ sinh viên */
 const SelectDiaChiHoSoFormItem = (props: {
@@ -13,6 +14,7 @@ const SelectDiaChiHoSoFormItem = (props: {
 	hasSoNha?: boolean;
 	required?: boolean;
 }) => {
+	const intl = useIntl();
 	const { value, onChange, listTinh, hasSoNha, required } = props;
 	const [listHuyen, setListHuyen] = useState<DonViHanhChinh.IRecord[]>([]);
 	const [listXa, setListXa] = useState<DonViHanhChinh.IRecord[]>([]);
@@ -50,9 +52,9 @@ const SelectDiaChiHoSoFormItem = (props: {
 	return (
 		<Row gutter={[12, 0]}>
 			<Col span={12} md={hasSoNha ? 8 : 12}>
-				<Form.Item label='Tỉnh/Thành phố' rules={required ? [...rules.required] : []}>
+				<Form.Item label={intl.formatMessage({ id: 'donvihanhchinh.tp' })} rules={required ? [...rules.required] : []}>
 					<Select
-						placeholder='Chọn tỉnh/thành phố'
+						placeholder={intl.formatMessage({ id: 'donvihanhchinh.tp.place' })}
 						options={listTinh?.map((item) => ({
 							key: item.ma,
 							value: item.ma,
@@ -85,9 +87,9 @@ const SelectDiaChiHoSoFormItem = (props: {
 				</Form.Item>
 			</Col> */}
 			<Col span={12} md={hasSoNha ? 8 : 12}>
-				<Form.Item label='Xã/Phường/Đặc khu' rules={required ? [...rules.required] : []}>
+				<Form.Item label={intl.formatMessage({ id: 'donvihanhchinh.xa' })} rules={required ? [...rules.required] : []}>
 					<Select
-						placeholder='Chọn phường/xã/đặc khu'
+						placeholder={intl.formatMessage({ id: 'donvihanhchinh.xa.place' })}
 						allowClear
 						showSearch
 						options={(listXa ?? []).map((item) => ({
@@ -104,9 +106,12 @@ const SelectDiaChiHoSoFormItem = (props: {
 			</Col>
 			{hasSoNha ? (
 				<Col span={12} md={hasSoNha ? 8 : 24}>
-					<Form.Item label='Số nhà/Tên đường' rules={[...rules.text, ...rules.length(250)]}>
+					<Form.Item
+						label={intl.formatMessage({ id: 'donvihanhchinh.sonha' })}
+						rules={[...rules.text, ...rules.length(250)]}
+					>
 						<Input
-							placeholder='Nhập số nhà/tên đường'
+							placeholder={intl.formatMessage({ id: 'donvihanhchinh.sonha.place' })}
 							value={value?.diaChi}
 							onChange={(e) => onChangeDiaChi(e.target.value)}
 						/>

@@ -4,12 +4,13 @@ import { ReloadOutlined } from '@ant-design/icons';
 import { Segmented, Skeleton, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import '../../LopHocPhan/DienDan/style.less';
 import CardStatusBaiTap from './components/CardStatusBaiTap';
 import FormBaiTap from './components/Form';
 
 const BaiTapPage = (props: { lopHocPhanId: string }) => {
+	const intl = useIntl();
 	const { lopHocPhanId } = props;
 	const { getModel, danhSach, loading, setLimit, limit, total, visibleForm, setVisibleForm } =
 		useModel('daotao.baitap');
@@ -41,12 +42,12 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 							value={segment}
 							onChange={(val) => setSegment(val.toString())}
 							options={[
-								{ value: '1', label: 'Đang diễn ra' },
-								{ value: '2', label: 'Đã quá hạn' },
+								{ value: '1', label: intl.formatMessage({ id: 'lophocphan.id.baitap.dangdienra' }) },
+								{ value: '2', label: intl.formatMessage({ id: 'lophocphan.id.baitap.quahan' }) },
 							]}
 						/>
 						<ButtonExtend icon={<ReloadOutlined />} onClick={() => getData()}>
-							Tải lại
+							{intl.formatMessage({ id: 'lophocphan.id.baitap.tailai' })}
 						</ButtonExtend>
 					</div>
 					{!danhSach?.length ? (
@@ -55,8 +56,8 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 								<img src='/images/bai-tap.svg' />
 							</div>
 							<div>
-								<b>Hiện tại lớp tín chỉ chưa có bài tập</b> <br />
-								<span>Theo dõi thông báo để không bỏ lỡ bài tập nào!</span>
+								<b>{intl.formatMessage({ id: 'lophocphan.id.baitap.noti1' })}</b> <br />
+								<span>{intl.formatMessage({ id: 'lophocphan.id.baitap.noti2' })}</span>
 							</div>
 						</div>
 					) : (
@@ -87,7 +88,7 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				width={800}
-				title='Nộp bài tập'
+				title={intl.formatMessage({ id: 'lophocphan.id.baitap.title' })}
 			>
 				<FormBaiTap getData={getData} />
 			</ModalExpandable>
