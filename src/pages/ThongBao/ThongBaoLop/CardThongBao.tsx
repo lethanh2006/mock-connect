@@ -6,21 +6,23 @@ import dayjs from '@/utils/dayjs';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Avatar, Card, List, Modal } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: string; onShowAll?: () => void }) => {
+	const intl = useIntl();
 	const { danhSach, getThongBaoLopModel, setRecord, record } = useModel('thongbao.thongbaolop');
 	const [visibleThongBao, setVisibleThongBao] = useState<boolean>(false);
 	const { loai, idLop, onShowAll } = props;
 
 	useEffect(() => {
+		``;
 		if (idLop) getThongBaoLopModel(idLop, loai, 1, 5);
 	}, [idLop]);
 
 	return (
 		<Card
 			size='small'
-			title='Thông báo'
+			title={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao' })}
 			variant='borderless'
 			styles={{ body: { padding: 0 } }}
 			extra={[
@@ -29,7 +31,7 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 					onClick={() => onShowAll && onShowAll()}
 					type='link'
 					icon={<ArrowRightOutlined />}
-					tooltip='Xem tất cả'
+					tooltip={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.xemtatca' })}
 				/>,
 			]}
 		>
@@ -72,12 +74,12 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 
 			<Modal
 				width={800}
-				bodyStyle={{ padding: 0 }}
+				styles={{ body: { padding: 0 } }}
 				destroyOnClose
 				onCancel={() => setVisibleThongBao(false)}
 				open={visibleThongBao}
 				okButtonProps={{ hidden: true }}
-				cancelText='Đóng'
+				cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 			>
 				<ViewThongBao record={record} />
 			</Modal>

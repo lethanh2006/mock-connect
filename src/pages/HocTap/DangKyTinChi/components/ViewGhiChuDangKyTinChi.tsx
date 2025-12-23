@@ -1,43 +1,62 @@
 import { EColorLopDangKy } from '@/services/DaoTao/DangKyTinChi/constant';
 import { Space } from 'antd';
+import { useIntl } from 'umi';
 
 const ViewGhiChuDangKyTinChi = () => {
+	const intl = useIntl();
+
 	return (
 		<div style={{ maxWidth: 500 }}>
-			Bước 1: Chọn Loại học phần
+			{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.step1' })}
 			<br />
-			Bước 2: Tương ứng với loại đã chọn, chọn Học phần cần đăng ký
+			{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.step2' })}
 			<br />
-			Bước 3: Tích chọn Lớp tín chỉ mong muốn (
-			<i>chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống</i>
-			)
+			{intl.formatMessage(
+				{ id: 'dangkytinchi.ghichudangkytinchi.step3' },
+				{
+					i: (chunk) => <i>{chunk}</i>,
+				},
+			)}
 			<br />
-			Bước 4: Xem lại danh sách và ấn nút <b>Đăng ký</b>
+			{intl.formatMessage(
+				{ id: 'dangkytinchi.ghichudangkytinchi.step4' },
+				{
+					b: (chunk) => <b>{chunk}</b>,
+				},
+			)}
 			<br />
-			Xem video hướng dẫn{' '}
-			<a href='https://www.youtube.com/watch?v=2xghlws7tAk' target='_blank' rel='noreferrer'>
-				tại đây
-			</a>
+			{intl.formatMessage(
+				{ id: 'dangkytinchi.ghichudangkytinchi.link.xemhuongdan' },
+				{
+					a: (chunks) => (
+						<a href='https://www.youtube.com/watch?v=2xghlws7tAk' target='_blank' rel='noreferrer'>
+							{chunks}
+						</a>
+					),
+				},
+			)}
 			<br />
 			<br />
-			<u>Ghi chú:</u>
+			<u>{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.ghichu' })}:</u>
 			<br />
 			<div style={{ display: 'flex', flexDirection: 'column' }}>
 				<Space style={{ marginTop: 5 }}>
 					<span className='dang-ky-ghi-chu selected' />
-					Lớp đã đăng ký / đã chọn
+					{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopdadangky' })}
 				</Space>
 				<Space style={{ marginTop: 5 }}>
 					<span className='dang-ky-ghi-chu' style={{ backgroundColor: EColorLopDangKy.TRUNG_LICH }} />
-					Lớp bị trùng lịch học
+					{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopbitrunglichhoc' })}
 				</Space>
 				<Space style={{ marginTop: 5 }}>
 					<span className='dang-ky-ghi-chu' style={{ backgroundColor: EColorLopDangKy.FULL_LOP }} />
-					Lớp không còn chỗ trống
+					{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopkhongconchotrong' })}
 				</Space>
 				<Space style={{ marginTop: 5 }}>
-					<span className='fw500'>Chữ đậm</span>
-					Lớp gợi ý theo kế hoạch giảng dạy
+					<span className='fw500'>
+						{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.chudam' })}
+					</span>
+					{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopgoiy' })}
 				</Space>
 			</div>
 		</div>

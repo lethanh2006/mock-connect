@@ -3,8 +3,10 @@ import { type IColumn } from '@/components/Table/typing';
 import { type BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { Checkbox, Form, type FormInstance } from 'antd';
+import { useIntl } from 'umi';
 
 const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance; disabled?: boolean }) => {
+	const intl = useIntl();
 	const { question, form } = props;
 
 	const handleCheckboxChange = (idHang: string, checkboxId: string, checked: boolean) => {
@@ -19,7 +21,7 @@ const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance; disab
 
 	const columns: IColumn<BieuMau.TGridItem>[] = [
 		{
-			title: 'Nội dung',
+			title: intl.formatMessage({ id: 'khaosat.gridChoice.column.noidung' }),
 			dataIndex: 'noiDung',
 			width: 250,
 		},
@@ -43,7 +45,7 @@ const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance; disab
 								const selectedCheckboxes = Object.values(rowValues).filter((vals) => vals === true);
 
 								if (question.batBuoc && !selectedCheckboxes.length) {
-									return Promise.reject('Bắt buộc');
+									return Promise.reject(intl.formatMessage({ id: 'khaosat.gridChoice.column.batbuoc' }));
 								} else {
 									return Promise.resolve();
 								}

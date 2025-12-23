@@ -8,11 +8,12 @@ import { inputFormat } from '@/utils/utils';
 import { UnorderedListOutlined } from '@ant-design/icons';
 import { Modal, Tag, notification } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import SelectDotThu from '../DotThu/Select';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
 
 const HoaDonPage = () => {
+	const intl = useIntl();
 	const { getModel, page, limit, setRecord, record } = useModel('taichinh.hoadon');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 
@@ -20,8 +21,15 @@ const HoaDonPage = () => {
 	useEffect(() => {
 		if (window.location.href.includes('orderType=momo_wallet'))
 			if (window.location.href.includes('resultCode=0'))
-				notification.success({ message: 'Thành công', description: 'Thanh toán công nợ thành công' });
-			else notification.warn({ message: 'Thất bại', description: 'Thanh toán thất bại' });
+				notification.success({
+					message: intl.formatMessage({ id: 'taichinh.hoadon.notify.success.title' }),
+					description: intl.formatMessage({ id: 'taichinh.hoadon.notify.success.desc' }),
+				});
+			else
+				notification.warning({
+					message: intl.formatMessage({ id: 'taichinh.hoadon.notify.fail.title' }),
+					description: intl.formatMessage({ id: 'taichinh.hoadon.notify.fail.desc' }),
+				});
 	}, []);
 
 	const getData = () =>
@@ -37,14 +45,14 @@ const HoaDonPage = () => {
 
 	const columns: IColumn<HoaDon.IRecord>[] = [
 		{
-			title: 'Mã HĐ',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.identityCode' }),
 			dataIndex: 'identityCode',
 			align: 'center',
 			filterType: 'string',
 			width: 120,
 		},
 		{
-			title: 'Đợt thu',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.dotthu' }),
 			dataIndex: 'idDotThu',
 			width: 180,
 			render: (val, rec) => rec.dotThu?.tenDot,
@@ -52,7 +60,7 @@ const HoaDonPage = () => {
 			filterCustomSelect: <SelectDotThu multiple />,
 		},
 		{
-			title: 'Khoản thu',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.khoanthu' }),
 			width: 250,
 			render: (val, rec) => (
 				<ExpandText>
@@ -63,7 +71,7 @@ const HoaDonPage = () => {
 			),
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.trangthai' }),
 			dataIndex: 'status',
 			align: 'center',
 			width: 150,
@@ -76,7 +84,7 @@ const HoaDonPage = () => {
 			})),
 		},
 		{
-			title: 'Số tiền phải nộp',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.sotienphainop' }),
 			width: 130,
 			align: 'right',
 			render: (val, rec) => {
@@ -87,7 +95,7 @@ const HoaDonPage = () => {
 			},
 		},
 		{
-			title: 'Số tiền đã nộp',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.sotiendanop' }),
 			width: 130,
 			align: 'right',
 			render: (val, rec) => {
@@ -98,13 +106,13 @@ const HoaDonPage = () => {
 			},
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'taichinh.hoadon.column.thaotac' }),
 			align: 'center',
 			width: 60,
 			fixed: 'right',
 			render: (val, rec) => (
 				<ButtonExtend
-					tooltip='Thanh toán'
+					tooltip={intl.formatMessage({ id: 'taichinh.hoadon.action.thanhtoan' })}
 					onClick={() => handleDetail(rec)}
 					type='link'
 					className='text-success'
@@ -122,7 +130,7 @@ const HoaDonPage = () => {
 				buttons={{ create: false }}
 				dependencies={[page, limit]}
 				modelName='taichinh.hoadon'
-				title='Công nợ'
+				title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}
 				widthDrawer={1000}
 			/>
 

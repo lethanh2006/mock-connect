@@ -5,12 +5,13 @@ import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { Card, Col, Empty, Row } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import CardLopHocPhanItem from '../LopHocPhan/components/CardLopHocPhanItem';
 import BaiTapStatistics from './components/Statistics';
 import CardTietHocSapToi from './components/TietHocSapToi';
 
 const LopHocPhanPage = () => {
+	const intl = useIntl();
 	const { danhSach, sinhVienGetAllModel, loading, sinhVienGetModel, lopHienTai, lopKeTiep } =
 		useModel('lophocphan.lophocphan');
 	const { record: recHocKy } = useModel('daotao.hocky');
@@ -38,7 +39,7 @@ const LopHocPhanPage = () => {
 		<Card
 			variant='borderless'
 			className='card-big-title card-borderless'
-			title='Lớp tín chỉ'
+			title={intl.formatMessage({ id: 'lophocphan.title' })}
 			extra={<FilterHocKy isSetHocKy />}
 		>
 			<Row gutter={[16, 16]}>
@@ -51,7 +52,7 @@ const LopHocPhanPage = () => {
 						loading={loading}
 						variant='borderless'
 						className='card-borderless card-big-title'
-						title='Danh sách lớp tín chỉ'
+						title={intl.formatMessage({ id: 'lophocphan.danhsach' })}
 					>
 						{danhSach.length > 0 ? (
 							<Row gutter={[0, 0]} style={{ margin: '-8px' }}>
@@ -91,7 +92,7 @@ const LopHocPhanPage = () => {
 						) : (
 							<Card variant='borderless' style={{ textAlign: 'center' }}>
 								<Empty
-									description='Không có lớp tín chỉ'
+									description={intl.formatMessage({ id: 'lophocphan.empty' })}
 									style={{ padding: '40px' }}
 									image={Empty.PRESENTED_IMAGE_SIMPLE}
 								/>

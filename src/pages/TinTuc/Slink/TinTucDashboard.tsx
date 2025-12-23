@@ -4,12 +4,13 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { Col, Empty, Row, Spin, Tooltip } from 'antd';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
-import { Link, history, useModel } from 'umi';
+import { Link, history, useIntl, useModel } from 'umi';
 import '../components/styles.less';
 import { CardTinTuc } from '../components/TinTuc.style';
 import { renderParagraph } from './BlockTinTuc';
 
 const TinTucDashboardSlink = () => {
+	const intl = useIntl();
 	const { danhSach, getModel, loading } = useModel('tintuc.tintuc');
 
 	useEffect(() => {
@@ -21,7 +22,7 @@ const TinTucDashboardSlink = () => {
 			<div style={{ maxHeight: 400, overflowY: 'auto', overflowX: 'hidden', padding: '0 5px 0 2px' }}>
 				<Spin spinning={loading}>
 					{isEmpty(danhSach) ? (
-						<Empty style={{ paddingTop: 32 }} description='Chưa có tin tức' />
+						<Empty style={{ paddingTop: 32 }} description={intl.formatMessage({ id: ' "tintuc.empty"' })} />
 					) : (
 						<Row gutter={[12, 12]} style={{ alignItems: 'stretch', marginBottom: 12 }}>
 							{danhSach.map((tintuc) => (
@@ -72,7 +73,7 @@ const TinTucDashboardSlink = () => {
 
 			<div style={{ textAlign: 'right', marginTop: 12 }}>
 				<Link to='/tin-tuc'>
-					Xem thêm <ArrowRightOutlined />
+					{intl.formatMessage({ id: 'tintuc.viewMore' })} <ArrowRightOutlined />
 				</Link>
 			</div>
 		</>

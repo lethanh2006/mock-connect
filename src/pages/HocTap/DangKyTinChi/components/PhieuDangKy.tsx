@@ -16,7 +16,7 @@ import { CalendarOutlined, DeleteOutlined, ReloadOutlined, SendOutlined } from '
 import { Col, Divider, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
@@ -27,6 +27,7 @@ import RenderLichHoc from './RenderLichHoc';
  * Học phí dự kiến, số tín chỉ được phép đăng ký, lịch học dự kiến
  */
 const PhieuDangKy = () => {
+	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const {
 		dotDangKyHienTai,
@@ -124,27 +125,27 @@ const PhieuDangKy = () => {
 
 	const columns: IColumn<DangKyTinChi.ILopDangKy>[] = [
 		{
-			title: 'Mã HP',
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.mahocphan' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
 			width: 80,
 			filterType: 'string',
 		},
 		{
-			title: 'Tên học phần',
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.tenhocphan' }),
 			dataIndex: ['hocPhan', 'ten'],
 			width: 170,
 			filterType: 'string',
 		},
 		{
-			title: 'TT lớp',
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sothutulop' }),
 			dataIndex: 'soThuTuLop',
 			width: 80,
 			align: 'center',
 			render: (val, rec) => `${val}${rec.soThuTuNhom ? ` (nhóm TH ${rec.soThuTuNhom})` : ''}`,
 		},
 		{
-			title: 'STC',
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
 			dataIndex: 'soTinChi',
 			width: 60,
 			align: 'center',
@@ -156,7 +157,7 @@ const PhieuDangKy = () => {
 			),
 		},
 		{
-			title: 'Giảng viên',
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.giangvien' }),
 			width: 160,
 			render: (val, rec) => (
 				<ExpandText>
@@ -169,7 +170,7 @@ const PhieuDangKy = () => {
 			),
 		},
 		{
-			title: 'Thông tin chi tiết',
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.thongtinchitiet' }),
 			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={{ ...rec, loai: ELoaiLopHocPhan.CHINH }} />, // Fake loại để ko lỗi
 		},
@@ -180,7 +181,7 @@ const PhieuDangKy = () => {
 		// 	width: 110,
 		// },
 		{
-			title: 'Học phí (dự kiến)',
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.hocphi' }),
 			align: 'right',
 			width: 120,
 			render: (val, rec) => {
@@ -202,14 +203,14 @@ const PhieuDangKy = () => {
 		// 	render: (val: ELoaiHocPhanDangKyTinChi) => LoaiHocPhanDangKyTinChi[val],
 		// },
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.trangthai' }),
 			dataIndex: 'trangThai',
 			width: 110,
 			align: 'center',
 			render: (val: ETrangThaiDangKyTinChi) => <Tag color={ColorTrangThaiDangKyTinChi[val]}>{val}</Tag>,
 		},
 		{
-			title: 'Hủy',
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy' }),
 			width: 60,
 			fixed: 'right',
 			align: 'center',
@@ -219,7 +220,7 @@ const PhieuDangKy = () => {
 						icon={<DeleteOutlined />}
 						danger
 						type='link'
-						tooltip='Hủy lớp'
+						tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}
 						onClick={() => {
 							setRecLopDangKy(rec);
 							setVisibleHuyLop(true);
@@ -229,12 +230,12 @@ const PhieuDangKy = () => {
 					<Popconfirm
 						title={
 							<>
-								Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ này?
+								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.confirm' })}
 								{tongTinChi - rec.soTinChi < soTinChiToiThieu ? (
 									<>
 										<br />
 										<i className='text-error'>
-											Lưu ý: Sau khi hủy lớp, tổng số tín chỉ còn lại không thỏa mãn điều kiện số tín chỉ tối thiểu
+											{intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.luuy' })}
 										</i>
 									</>
 								) : null}
@@ -257,7 +258,7 @@ const PhieuDangKy = () => {
 								rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
 								dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
 							}
-							tooltip='Hủy lớp'
+							tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}
 						/>
 					</Popconfirm>
 				),
@@ -267,16 +268,19 @@ const PhieuDangKy = () => {
 
 	return (
 		<>
-			<Divider style={{ marginTop: 24 }}>Danh sách lớp tín chỉ đã đăng ký / đã chọn</Divider>
+			<Divider style={{ marginTop: 24 }}>
+				{intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}
+			</Divider>
 			<Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
 				<Col span={24} md={10}>
-					Tổng số tín chỉ (đã trừ các học phần không tính số tín chỉ):{' '}
+					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
 					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
-						{tongTinChi} tín chỉ
+						{tongTinChi} {intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}
 					</b>
 				</Col>
 				<Col span={24} md={7}>
-					Học phí dự kiến: <b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
+					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.hocphidukien.title' })}:{' '}
+					<b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
 				</Col>
 				{phieuDangKy ? (
 					<Col span={24} md={7}>
@@ -286,7 +290,8 @@ const PhieuDangKy = () => {
 							}
 							style={{ textAlign: 'right' }}
 						>
-							Bạn được đăng ký trong khoảng tín chỉ: {[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
+							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.alert.khoangtinchi' })}:{' '}
+							{[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
 						</div>
 					</Col>
 				) : null}
@@ -302,18 +307,18 @@ const PhieuDangKy = () => {
 			>
 				<Space wrap>
 					<ButtonExtend cooldownMs={10000} icon={<ReloadOutlined />} onClick={getData}>
-						Tải lại
+						{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.tailai' })}
 					</ButtonExtend>
 					{danhSachLopDangKy.length ? (
 						<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
-							Xem trước lịch học
+							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
 						</ButtonExtend>
 					) : null}
 
 					{dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 						<>
 							<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
-								Các lớp đã hủy đăng ký
+								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.caclopdahuy' })}
 							</ButtonExtend>
 
 							<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
@@ -326,24 +331,28 @@ const PhieuDangKy = () => {
 						<ButtonExtend
 							tooltip={
 								tongTinChi > soTinChiToiDa
-									? 'Bạn đã đăng ký quá số tín chỉ tối đa'
+									? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
 									: tongTinChi < soTinChiToiThieu
-										? 'Bạn chưa đăng ký đủ số tín chỉ tối thiểu'
+										? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin' })
 										: !dangTrongThoiGian
-											? 'Ngoài thời gian đăng ký tín chỉ'
-											: 'Đăng ký tín chỉ'
+											? intl.formatMessage({
+													id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
+												})
+											: intl.formatMessage({
+													id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc',
+												})
 							}
 							type='primary'
 							icon={<SendOutlined />}
 							onClick={() => setVisibleRegister(true)}
 							disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
 						>
-							Đăng ký
+							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.dangky' })}
 						</ButtonExtend>
 					) : null}
 
 					{tongTinChi < soTinChiToiThieu ? (
-						<i className='text-error'>Lưu ý: Bạn chưa đăng ký đủ số tín chỉ tối thiểu</i>
+						<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>
 					) : null}
 				</Space>
 			</TableStaticData>

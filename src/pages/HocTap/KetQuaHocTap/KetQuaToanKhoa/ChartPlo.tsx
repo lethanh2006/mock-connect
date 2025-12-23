@@ -2,9 +2,10 @@ import { Empty } from 'antd';
 import { useEffect } from 'react';
 import Chart from 'react-apexcharts';
 import { useMediaQuery } from 'react-responsive';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
+	const intl = useIntl();
 	const { maKhoaNganh } = props;
 	const { thongKePLO, thongKeDiemPLOSinhVienModel } = useModel('daotao.diemhpsvhk');
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
@@ -18,7 +19,12 @@ const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 	const ploData = thongKePLO?.danhSachChuanDauRaMucTieu || [];
 
 	if (!ploData.length) {
-		return <Empty description='Không có dữ liệu' image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+		return (
+			<Empty
+				description={intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.empty' })}
+				image={Empty.PRESENTED_IMAGE_SIMPLE}
+			/>
+		);
 	}
 
 	const sortedPloData = [...ploData].sort((a: any, b: any) => {
@@ -39,7 +45,7 @@ const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 			toolbar: { show: false },
 		},
 		title: {
-			text: 'Kết quả chuẩn đầu ra chương trình',
+			text: intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.ketqua' }),
 			align: 'left',
 			style: {
 				fontSize: '14px',
@@ -62,9 +68,9 @@ const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 							<span style="font-size:11px; color:#666; margin-left:6px;">${plo.ten}</span>
 						</div>
 						<div style="margin-top:4px">
-							<span style="color:#3b82f6;">●</span> Trung bình PLO đã đạt: 
+							<span style="color:#3b82f6;">●</span> ${intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.plo' })}: 
 							<b>${series[0][dataPointIndex].toFixed(2)}</b><br/>
-							<span style="color:#10b981;">●</span> Điểm tối thiểu: 
+							<span style="color:#10b981;">●</span> ${intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.min' })}: 
 							<b>${series[1][dataPointIndex]}</b>
 						</div>
 					</div>
@@ -75,11 +81,11 @@ const ChartPloToanKhoa = (props: { maKhoaNganh: string }) => {
 
 	const chartSeries = [
 		{
-			name: 'Trung bình PLO đã đạt',
+			name: intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.plo' }),
 			data: sortedPloData.map((plo: any) => Number(plo.trungBinhPi.toFixed(2))),
 		},
 		{
-			name: 'Điểm tối thiểu',
+			name: intl.formatMessage({ id: 'ketquahoctap.chart.toankhoa.min' }),
 			data: sortedPloData.map((plo: any) => plo.diemPloToiThieu),
 		},
 	];

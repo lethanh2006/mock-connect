@@ -1,11 +1,12 @@
 import { Card, Carousel, Empty } from 'antd';
 import { useEffect } from 'react';
-import { Link, useModel } from 'umi';
+import { Link, useIntl, useModel } from 'umi';
 import ChartVaoRaThuVien from './Chart';
 import StatVaoRaThuVien from './Stat';
 import './style.less';
 
 const VaoRaThuVienDashboardCard = () => {
+	const intl = useIntl();
 	const { loading, thongKeVaoRaModel, thongKeVaoRa } = useModel('thuvien.vaorathuvien');
 
 	useEffect(() => {
@@ -16,10 +17,10 @@ const VaoRaThuVienDashboardCard = () => {
 		<Card
 			variant='borderless'
 			className='card-borderless card-big-title'
-			title='Lượt vào thư viện'
+			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.thuvien.title' })}
 			extra={
 				<Link to={'/thu-vien/vao-ra'} type='link' className='xem-tat-ca-link'>
-					Xem thêm
+					{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.thuvien.xemthem' })}
 				</Link>
 			}
 			loading={loading}
@@ -35,7 +36,11 @@ const VaoRaThuVienDashboardCard = () => {
 						</div>
 					</Carousel>
 				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ margin: '16px 0' }} description='Không có dữ liệu' />
+					<Empty
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+						style={{ margin: '16px 0' }}
+						description={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.thuvien.empty' })}
+					/>
 				)}
 			</Card>
 		</Card>

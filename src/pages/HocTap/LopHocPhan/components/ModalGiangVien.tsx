@@ -1,5 +1,6 @@
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import { Avatar, Col, Descriptions, Modal, Row, Typography } from 'antd';
+import { useIntl } from 'umi';
 
 const ModalThongTinGiangVien = ({
 	visible,
@@ -10,9 +11,11 @@ const ModalThongTinGiangVien = ({
 	onCancel: () => void;
 	giangVien?: ToChucNhanSu.INhanSu | null;
 }) => {
+	const intl = useIntl();
+
 	return (
 		<Modal
-			title='Thông tin giảng viên'
+			title={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.thongtingv' })}
 			open={visible}
 			onCancel={onCancel}
 			okButtonProps={{ hidden: true }}
@@ -29,16 +32,25 @@ const ModalThongTinGiangVien = ({
 					</Col>
 					<Col span={24} md={16}>
 						<Descriptions bordered column={1} size='small'>
-							<Descriptions.Item label='Họ tên'>{giangVien?.hoTen}</Descriptions.Item>
-							<Descriptions.Item label='Email'>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.hoTen' })}>
+								{giangVien?.hoTen}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.email' })}>
 								<Typography.Text copyable>{giangVien?.emailCanBo}</Typography.Text>
 							</Descriptions.Item>
-							<Descriptions.Item label='Giới tính'>{giangVien?.gioiTinh || 'Chưa cập nhật'}</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.gioitinh' })}>
+								{giangVien?.gioiTinh || intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.chuacapnhat' })}
+							</Descriptions.Item>
 							{/* <Descriptions.Item label='Ngày sinh'>
 								{giangVien?.ngaySinh ? dayjs(giangVien.ngaySinh).format('DD/MM/YYYY') : 'Chưa cập nhật'}
 							</Descriptions.Item> */}
-							<Descriptions.Item label='Học hàm'>{giangVien?.hocHam || 'Chưa cập nhật'}</Descriptions.Item>
-							<Descriptions.Item label='Trình độ'>{giangVien?.trinhDoDaoTao || 'Chưa cập nhật'}</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.hocham' })}>
+								{giangVien?.hocHam || intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.chuacapnhat' })}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.trinhdo' })}>
+								{giangVien?.trinhDoDaoTao ||
+									intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.chuacapnhat' })}
+							</Descriptions.Item>
 							{/* <Descriptions.Item label='Số điện thoại'>{giangVien?.sdtCaNhan || 'Chưa cập nhật'}</Descriptions.Item> */}
 
 							{/* <Descriptions.Item label='Chức vụ'>
@@ -49,7 +61,9 @@ const ModalThongTinGiangVien = ({
 					</Col>
 				</Row>
 			) : (
-				<div style={{ textAlign: 'center', color: '#999' }}>Không có thông tin giảng viên</div>
+				<div style={{ textAlign: 'center', color: '#999' }}>
+					{intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.empty' })}
+				</div>
 			)}
 		</Modal>
 	);

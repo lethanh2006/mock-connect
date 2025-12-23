@@ -6,9 +6,10 @@ import { resetFieldsForm } from '@/utils/utils';
 import { Button, Descriptions, Form, Input, Modal } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ModalXinNghi = (props: { visible: boolean; onClose: () => void }) => {
+	const intl = useIntl();
 	const { visible, onClose } = props;
 	const [form] = Form.useForm();
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
@@ -38,23 +39,37 @@ const ModalXinNghi = (props: { visible: boolean; onClose: () => void }) => {
 	};
 
 	return (
-		<Modal title='Đăng ký xin nghỉ' open={visible} onCancel={onClose} footer={null} maskClosable={false}>
+		<Modal
+			title={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.title' })}
+			open={visible}
+			onCancel={onClose}
+			footer={null}
+			maskClosable={false}
+		>
 			<Descriptions className='highlight' layout='vertical' colon={false} column={1} style={{ marginBottom: 16 }}>
-				<Descriptions.Item label='Lớp tín chỉ'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.loptinchi' })}>
 					{recTKB?.tenLopHocPhan ?? ''} ({recLopHocPhan?.hocPhan?.ten ?? ''})
 				</Descriptions.Item>
-				<Descriptions.Item label='Buổi học'>
+				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.buoihoc' })}>
 					{recTKB?.ngay ? dayjs(recTKB?.ngay).format('DD/MM/YYYY') : ''},{' '}
 					{recTKB?._id ? `tiết: ${recTKB?.tietBatDau ?? ''} - ${recTKB?.tietKetThuc ?? ''}` : ''}
 				</Descriptions.Item>
 			</Descriptions>
 
 			<Form form={form} layout='vertical' onFinish={onFinish}>
-				<Form.Item name='lyDo' label='Lý do' rules={[...rules.required]}>
-					<Input.TextArea placeholder='Nhập lý do xin nghỉ...' />
+				<Form.Item
+					name='lyDo'
+					label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lydo' })}
+					rules={[...rules.required]}
+				>
+					<Input.TextArea placeholder={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lydo.place' })} />
 				</Form.Item>
 
-				<Form.Item name='urlMinhChung' label='Minh chứng' rules={[...rules.required, ...rules.fileRequired]}>
+				<Form.Item
+					name='urlMinhChung'
+					label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.minhchung' })}
+					rules={[...rules.required, ...rules.fileRequired]}
+				>
 					<UploadFile
 						maxCount={1}
 						otherProps={{
@@ -64,13 +79,13 @@ const ModalXinNghi = (props: { visible: boolean; onClose: () => void }) => {
 					/>
 				</Form.Item>
 
-				<i className='text-error'>Sau khi gửi đơn, vui lòng chờ phê duyệt trước khi nghỉ học.</i>
+				<i className='text-error'>{intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.error' })}</i>
 
 				<div className='form-footer'>
 					<Button loading={formSubmiting} type='primary' htmlType='submit'>
-						Gửi đơn
+						{intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.guidon' })}
 					</Button>
-					<Button onClick={onClose}>Hủy</Button>
+					<Button onClick={onClose}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 				</div>
 			</Form>
 		</Modal>

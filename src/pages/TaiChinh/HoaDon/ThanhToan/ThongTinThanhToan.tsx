@@ -10,7 +10,7 @@ import dayjs from '@/utils/dayjs';
 import { AppstoreAddOutlined, DollarOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Checkbox, Col, Modal, Row, Space, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import CanhBaoGiaoDich from '../../GiaoDich/components/CanhBao';
 import DesThongTinHoaDon from '../ChiTiet/DesThongTin';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
@@ -19,6 +19,7 @@ import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
 import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
+	const intl = useIntl();
 	const { setVisible, getData } = props;
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
 	const { visibleThanhToan, setVisibleThanhToan, xemRutGonChiTiet, setXemRutGonChiTiet } =
@@ -89,7 +90,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	};
 
 	return (
-		<Card title='Thông tin thanh toán'>
+		<Card title={intl.formatMessage({ id: 'taichinh.thanhtoan.title' })}>
 			<Row gutter={[12, 12]} style={{ marginBottom: 12 }}>
 				<Col span={24}>
 					<DesThongTinHoaDon />
@@ -97,8 +98,8 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 				<Col span={24}>
 					<Tabs activeKey={activeTab} onChange={(tab) => onChangeTab(tab)}>
-						<Tabs.TabPane key={'1'} tab='Chi tiết' />
-						<Tabs.TabPane key={'2'} tab='Lịch sử giao dịch' />
+						<Tabs.TabPane key={'1'} tab={intl.formatMessage({ id: 'taichinh.thanhtoan.tab.chitiet' })} />
+						<Tabs.TabPane key={'2'} tab={intl.formatMessage({ id: 'taichinh.thanhtoan.tab.lichsu' })} />
 					</Tabs>
 
 					{activeTab === '1' ? (
@@ -107,8 +108,8 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
 							!ngoaiThoiGianThanhToan ? (
 								<Alert
-									message='Có giao dịch nộp tiền đang chờ xử lý! Bạn đã thực hiện thanh toán chưa?'
-									description='(Nếu đã thanh toán, vui lòng bỏ qua thông báo này)'
+									message={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.title' })}
+									description={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.desc' })}
 									showIcon
 									type='info'
 									action={
@@ -119,7 +120,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 												icon={<DollarOutlined />}
 												loading={loading}
 											>
-												Thanh toán ngay
+												{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
 											</Button>
 											{/* <Popconfirm title='Xác nhận hủy giao dịch này?' onConfirm={() => onCancel(recGiaoDich)}>
 												<Button danger type='link'>
@@ -139,15 +140,19 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 										className='btn-success'
 										loading={loading}
 										notHideText
-										tooltip={ngoaiThoiGianThanhToan ? 'Ngoài thời gian hoặc chưa mở đợt thanh toán' : undefined}
+										tooltip={
+											ngoaiThoiGianThanhToan
+												? intl.formatMessage({ id: 'taichinh.thanhtoan.tooltip.outOfTime' })
+												: undefined
+										}
 									>
-										Thông tin thanh toán
+										{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
 									</ButtonExtend>
 
 									<Checkbox checked={xemRutGonChiTiet} onChange={(e) => setXemRutGonChiTiet(e.target.checked)}>
-										Rút gọn
+										{intl.formatMessage({ id: 'taichinh.thanhtoan.checkbox.compact' })}
 									</Checkbox>
-									<i>(Xem chi tiết Số dư ví hiện tại, số tiền cần nộp và hướng dẫn thanh toán)</i>
+									<i>{intl.formatMessage({ id: 'taichinh.thanhtoan.note.compact' })}</i>
 								</Space>
 							)}
 
@@ -163,11 +168,11 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			</Row>
 
 			<div style={{ marginTop: 18 }} className='form-footer'>
-				<Button onClick={() => setVisible(false)}>Đóng</Button>
+				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>
 
 			<Modal
-				title='Thông tin thanh toán'
+				title={intl.formatMessage({ id: 'taichinh.thanhtoan.title' })}
 				open={visibleThanhToan}
 				onCancel={() => setVisibleThanhToan(false)}
 				footer={null}

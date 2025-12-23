@@ -6,10 +6,11 @@ import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { ArrowRightOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Card, Col, message, Modal, Popconfirm, Row, Space, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
-import { history, Link, useModel } from 'umi';
+import { history, Link, useIntl, useModel } from 'umi';
 import './style.less';
 
 const CardDichVuSinhVien = () => {
+	const intl = useIntl();
 	const {
 		getModel: getQuyTrinh,
 		loading,
@@ -141,10 +142,10 @@ const CardDichVuSinhVien = () => {
 			<Card
 				variant='borderless'
 				className='card-borderless card-big-title card-dichvu'
-				title='Dịch vụ sinh viên'
+				title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.title' })}
 				extra={
 					<Link to='/khai-bao-quy-trinh/dang-ky' className='xem-tat-ca-link'>
-						Xem thêm
+						{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.xemthem' })}
 					</Link>
 				}
 				loading={loading}
@@ -170,10 +171,10 @@ const CardDichVuSinhVien = () => {
 									) : (
 										// Nếu không có thông tin chung, sử dụng Popconfirm
 										<Popconfirm
-											title={`Bạn có muốn sử dụng dịch vụ ?`}
+											title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.sudung' })}
 											onConfirm={() => handleConfirmUse(quyTrinh)}
-											okText='Sử dụng'
-											cancelText='Đóng'
+											okText={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.xacnhan' })}
+											cancelText={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.dong' })}
 											overlayStyle={{ maxWidth: '500px' }}
 											placement='topRight'
 										>
@@ -197,7 +198,7 @@ const CardDichVuSinhVien = () => {
 							))
 						) : (
 							<Col span={24} className='empty-state'>
-								<span className='empty-text'>Không có dịch vụ nào</span>
+								<span className='empty-text'>{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.empty' })}</span>
 							</Col>
 						)}
 					</Row>
@@ -206,7 +207,7 @@ const CardDichVuSinhVien = () => {
 
 			{/* Modal chọn đợt khai báo */}
 			<Modal
-				title={'Chọn đợt khai báo'}
+				title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.dot' })}
 				width={500}
 				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
@@ -219,7 +220,7 @@ const CardDichVuSinhVien = () => {
 
 			{/* Modal thông tin chung */}
 			<Modal
-				title={'Thông tin chung'}
+				title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.empty' })}
 				width={1000}
 				open={visibleThongTinChung}
 				onCancel={() => setVisibleThongTinChung(false)}
@@ -238,7 +239,7 @@ const CardDichVuSinhVien = () => {
 								}
 							}}
 						>
-							Tiếp theo
+							{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.xemthem' })}
 						</Button>
 					</div>
 				}

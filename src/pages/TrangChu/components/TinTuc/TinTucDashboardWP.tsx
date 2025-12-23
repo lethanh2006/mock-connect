@@ -5,10 +5,11 @@ import dayjs from '@/utils/dayjs';
 import { Card, Col, Empty, Row, Spin } from 'antd';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
-import { history, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 import './style.less';
 
 const TinTucDashboardWP = (props: { category?: number }) => {
+	const intl = useIntl();
 	const { category } = props;
 	const { danhSach: danhSachChuDe } = useModel('tintuc.chude');
 	const { danhSach: danhSachTinTuc, getDashboardModel, loading } = useModel('tintuc.tintucwp');
@@ -31,7 +32,11 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 		<Card variant='borderless' className='card-borderless'>
 			<Spin spinning={loading}>
 				{isEmpty(danhSachTinTuc) ? (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ paddingTop: 32 }} description='Chưa có tin tức' />
+					<Empty
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+						style={{ paddingTop: 32 }}
+						description={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.tintuc.empty' })}
+					/>
 				) : (
 					<Row gutter={[1, 1]} className='tin-tuc-wrapper-dashboard'>
 						{danhSachTinTuc.map((tintuc, index) => (

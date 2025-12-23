@@ -2,12 +2,13 @@ import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { colorTrangThaiSinhVienQuyDoiDiem, type ETrangThaiPhieuQuyDoiDiem } from '@/services/HocTap/constant';
 import dayjs from '@/utils/dayjs';
-import { Button, Carousel, Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
+import { Button, Col, Descriptions, Modal, Row, Space, Tag } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormItemHocPhanQuyDoi from '../HocPhanQuyDoi/FormItemHocPhanQuyDoi';
 
 const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
+	const intl = useIntl();
 	const { visible, setVisible } = props;
 	const { record } = useModel('daotao.quydoidiem.phieuquydoidiem');
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
@@ -22,30 +23,38 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 			open={visible}
 			onCancel={() => setVisible(false)}
 			footer={null}
-			title='Lịch sử công nhận kết quả học tập'
+			title={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.ls' })}
 		>
 			<Row gutter={[12, 0]}>
 				<Col xs={24}>
 					<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}>
-						<Descriptions.Item label='Đợt quy đổi điểm'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.dot' })}>
 							{record?.dotDangKyQuyDoiDiem?.tenDot ?? '--'}
 						</Descriptions.Item>
-						<Descriptions.Item label='Ngành đào tạo'>{record?.khoaNganh?.ten ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='File minh chứng'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.nganh' })}>
+							{record?.khoaNganh?.ten ?? '--'}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.file' })}>
 							<Space>
-								{record?.urlsMinhChung?.length ? <a onClick={() => setVisibleFormFile(true)}>Xem tệp tin</a> : null}
+								{record?.urlsMinhChung?.length ? (
+									<a onClick={() => setVisibleFormFile(true)}>
+										{intl.formatMessage({ id: 'tientrinhhoctap.congnhan.xem' })}
+									</a>
+								) : null}
 							</Space>
 						</Descriptions.Item>
-						<Descriptions.Item label='Tỷ lệ công nhận'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.tyle' })}>
 							<span style={{ color: tiLeCongNhan > 50 ? 'red' : 'green' }}>
 								{tiLeCongNhan.toFixed(tiLeCongNhan !== 0 ? 2 : 0)} %
 							</span>
 						</Descriptions.Item>
-						<Descriptions.Item label='Số quyết định'>{record?.quyetDinh?.soQuyetDinh}</Descriptions.Item>
-						<Descriptions.Item label='Ngày ban hành'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.qd' })}>
+							{record?.quyetDinh?.soQuyetDinh}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.banhanh' })}>
 							{record?.quyetDinh?.ngayBanHanh ? dayjs(record?.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY') : ''}
 						</Descriptions.Item>
-						<Descriptions.Item label='Trạng thái'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.trangthai' })}>
 							<Tag color={colorTrangThaiSinhVienQuyDoiDiem[record?.trangThai as ETrangThaiPhieuQuyDoiDiem]}>
 								{record?.trangThai ?? ''}
 							</Tag>
@@ -58,26 +67,23 @@ const ViewPhieuQuyDoiDiem = (props: { visible: boolean; setVisible: (val: boolea
 			</Row>
 
 			<div className='form-footer'>
-				<Button onClick={() => setVisible(false)}>Đóng</Button>
+				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>
 
 			<ModalExpandable
-				title='Chi tiết minh chứng'
+				title={intl.formatMessage({ id: 'tientrinhhoctap.congnhan.chitiet' })}
 				width={1000}
-				visible={visibleFormFile}
+				open={visibleFormFile}
 				footer={
 					<div className='form-footer'>
-						<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+						<Button onClick={() => setVisibleFormFile(false)}>
+							{intl.formatMessage({ id: 'global.button.dong' })}
+						</Button>
 					</div>
 				}
 				onCancel={() => setVisibleFormFile(false)}
 			>
-				<Carousel autoplay pauseOnDotsHover>
-					{record?.urlsMinhChung?.map((item) => (
-						// eslint-disable-next-line react/jsx-key
-						<PreviewFile file={item ?? ''} />
-					))}
-				</Carousel>
+				<PreviewFile file={record?.urlsMinhChung ?? []} />
 			</ModalExpandable>
 		</Modal>
 	);

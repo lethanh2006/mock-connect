@@ -5,7 +5,7 @@ import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Descriptions, Form, Modal } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormQuyDoiDiem from './Form';
 
 const ModalQuyDoiDiem = (props: {
@@ -14,6 +14,7 @@ const ModalQuyDoiDiem = (props: {
 	hocPhan?: Pick<HocPhan.IRecord, 'ma' | 'ten' | 'soTinChi'>;
 	maKhoaNganh?: string;
 }) => {
+	const intl = useIntl();
 	const [form] = Form.useForm();
 	const { visible, setVisible, hocPhan, maKhoaNganh } = props;
 	const { getModel } = useModel('daotao.quydoidiem.phieuquydoidiem');
@@ -67,27 +68,34 @@ const ModalQuyDoiDiem = (props: {
 				setVisible(false);
 			}}
 			footer={null}
-			title='Công nhận kết quả học tập'
+			title={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.title' })}
 		>
 			<Form onFinish={onFinish} form={form} layout='vertical'>
 				<Descriptions column={{ xs: 1, md: 2, sm: 1, lg: 2, xl: 2, xxl: 2 }}>
-					<Descriptions.Item span={2} label='Đợt công nhận kết quả học tập'>
+					<Descriptions.Item
+						span={2}
+						label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.dot' })}
+					>
 						{recDot?.tenDot ?? ''}
 					</Descriptions.Item>
-					<Descriptions.Item span={2} label='Học phần xin công nhận'>
+					<Descriptions.Item span={2} label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.hp' })}>
 						{hocPhan?.ten ?? ''}
 					</Descriptions.Item>
-					<Descriptions.Item label='Mã học phần'>{hocPhan?.ma ?? ''}</Descriptions.Item>
-					<Descriptions.Item label='Số tín chỉ'>{hocPhan?.soTinChi ?? ''}</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.mahp' })}>
+						{hocPhan?.ma ?? ''}
+					</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.stc' })}>
+						{hocPhan?.soTinChi ?? ''}
+					</Descriptions.Item>
 				</Descriptions>
 
 				<FormQuyDoiDiem form={form} />
 
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
-						Đăng ký
+						{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan.dangky' })}
 					</Button>
-					<Button onClick={() => setVisible(false)}>Hủy</Button>
+					<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 				</div>
 			</Form>
 		</Modal>
