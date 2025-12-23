@@ -58,7 +58,7 @@ const DanhSachSinhVienThi = (props: { recLichThi: LichThi.IRecordMe; visible: bo
 			onCancel={handleCancel}
 			footer={
 				<Button type='primary' onClick={handleCancel}>
-					{intl.formatMessage({ id: 'common.ok' })}
+					{intl.formatMessage({ id: 'global.button.ok' })}
 				</Button>
 			}
 		>

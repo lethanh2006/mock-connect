@@ -4,7 +4,7 @@ import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, message, Progress, Row } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const mimeTypeMapping = {
 	[EDinhDangBaiThi.HTML]: ['text/html'],
@@ -39,6 +39,8 @@ const mimeTypeMapping = {
 
 const FormBaiThiCuoiKy = (props: any) => {
 	const { getData } = props;
+
+	const intl = useIntl();
 	const [form] = Form.useForm();
 	const { record, formSubmiting, visibleForm, setVisibleForm, nopBaiTapModel, uploadMultiPartModel, uploadProgress } =
 		useModel('khaothi.sinhvienthi');
@@ -65,13 +67,20 @@ const FormBaiThiCuoiKy = (props: any) => {
 
 		if (invalidFiles?.length > 0) {
 			const allowedFormats = allowedTypes.map((item) => mapNameDinhDangBaiThi[item]).join(', ');
-			message.error(`File không đúng định dạng. Định dạng cho phép (${allowedFormats})`);
+			message.error(
+				intl.formatMessage(
+					{ id: 'baithi.error.format' },
+					{
+						formats: allowedFormats,
+					},
+				),
+			);
 			return;
 		}
 
 		// Kiểm tra số lượng file
 		if (fileList?.length !== record?.soFilePhaiNop) {
-			message.error(`Số lượng file bắt buộc ${record?.soFilePhaiNop} file`);
+			message.error(intl.formatMessage({ id: 'baithi.error.count' }, { count: record?.soFilePhaiNop }));
 			return;
 		}
 
@@ -91,25 +100,33 @@ const FormBaiThiCuoiKy = (props: any) => {
 			setVisibleForm(false);
 		} catch (err) {
 			console.error(err);
-			message.error('Đã xảy ra lỗi khi nộp bài');
+			message.error(intl.formatMessage({ id: 'baithi.error.system' }));
 		}
 	};
 
 	return (
-		<Card title='Nộp bài tập'>
+		<Card title={intl.formatMessage({ id: 'baithi.form.title' })}>
 			<Form scrollToFirstError onFinish={onFinish} form={form} layout='vertical'>
 				<Row gutter={[12, 12]}>
 					<Col span={24}>
-						<Form.Item rules={[...rules.required]} name='urlBaiNop' label='File bài tập'>
+						<Form.Item
+							rules={[...rules.required]}
+							name='urlBaiNop'
+							label={intl.formatMessage({ id: 'baithi.form.fileLabel' })}
+						>
 							<UploadFile
 								maxCount={record?.soFilePhaiNop}
 								maxFileSize={record?.dungLuongToiDa}
 								extra={
 									<small style={{ color: '#999' }}>
 										<i>
-											Yêu cầu phải nộp {record?.soFilePhaiNop} file, dung lượng mỗi file không được quá{' '}
-											{record?.dungLuongToiDa}
-											MB
+											{intl.formatMessage(
+												{ id: 'baithi.form.extra' },
+												{
+													count: record?.soFilePhaiNop,
+													size: record?.dungLuongToiDa,
+												},
+											)}
 										</i>
 									</small>
 								}
@@ -119,7 +136,7 @@ const FormBaiThiCuoiKy = (props: any) => {
 
 					{formSubmiting && uploadProgress?.totalPart ? (
 						<Col span={24} style={{ textAlign: 'center' }}>
-							<div> Đang upload file, vui lòng chờ đợi và không tắt form ...</div>
+							<div>{intl.formatMessage({ id: 'baithi.form.uploading' })}</div>
 							<Progress
 								percent={Math.round((uploadProgress?.success / uploadProgress?.totalPart) * 100)}
 								status='active'
@@ -130,10 +147,10 @@ const FormBaiThiCuoiKy = (props: any) => {
 
 				<div className='form-footer'>
 					<Button loading={formSubmiting} htmlType='submit' type='primary'>
-						Nộp bài
+						{intl.formatMessage({ id: 'baithi.action.submit' })}
 					</Button>
 
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 				</div>
 			</Form>
 		</Card>

@@ -10,11 +10,12 @@ import { getNameFile } from '@/utils/utils';
 import { SaveOutlined } from '@ant-design/icons';
 import { Card, Segmented, Space, Tag } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FilterKyThi from '../../KhaoThi/KyThi/Filter';
 import Form from './components/Form';
 
 const BaiThiCuoiKy = () => {
+	const intl = useIntl();
 	const { record: recordHocKy } = useModel('daotao.hocky');
 	const { record: reckyThi } = useModel('khaothi.kythi');
 	const { getModel, page, limit, handleEdit } = useModel('khaothi.sinhvienthi');
@@ -36,20 +37,20 @@ const BaiThiCuoiKy = () => {
 
 	const columns: IColumn<SinhVienThi.IRecord>[] = [
 		{
-			title: 'Tên học phần',
+			title: intl.formatMessage({ id: 'baithi.table.tenHP' }),
 			dataIndex: 'tenHocPhan',
 			width: 150,
 			filterType: 'string',
 		},
 		{
-			title: 'Mã HP',
+			title: intl.formatMessage({ id: 'baithi.table.maHP' }),
 			align: 'center',
 			dataIndex: 'maHocPhan',
 			width: 90,
 			filterType: 'string',
 		},
 		{
-			title: 'Đề bài',
+			title: intl.formatMessage({ id: 'baithi.table.deBai' }),
 			dataIndex: 'fileDinhKem',
 			width: 300,
 			render: (val, rec) =>
@@ -65,7 +66,7 @@ const BaiThiCuoiKy = () => {
 					: null,
 		},
 		{
-			title: 'Thời gian bắt đầu',
+			title: intl.formatMessage({ id: 'baithi.table.tgBatDau' }),
 			align: 'center',
 			dataIndex: 'thoiGianBatDau',
 			width: 120,
@@ -74,7 +75,7 @@ const BaiThiCuoiKy = () => {
 			sortable: true,
 		},
 		{
-			title: 'Thời gian kết thúc',
+			title: intl.formatMessage({ id: 'baithi.table.tgKetThuc' }),
 			align: 'center',
 			dataIndex: 'thoiGianKetThuc',
 			width: 120,
@@ -83,20 +84,20 @@ const BaiThiCuoiKy = () => {
 			sortable: true,
 		},
 		{
-			title: 'SL tập tin phải nộp',
+			title: intl.formatMessage({ id: 'baithi.table.slFile' }),
 			align: 'center',
 			dataIndex: 'soFilePhaiNop',
 			width: 100,
 		},
 		{
-			title: 'Dung lượng tối đa',
+			title: intl.formatMessage({ id: 'baithi.table.dungLuong' }),
 			align: 'center',
 			dataIndex: 'dungLuongToiDa',
 			render: (val, rec) => val && `${val} MB`,
 			width: 100,
 		},
 		{
-			title: 'Định dạng cho phép',
+			title: intl.formatMessage({ id: 'baithi.table.dinhDang' }),
 			dataIndex: 'dinhDangFileChoPhep',
 			width: 200,
 			render: (val: EDinhDangBaiThi[], rec) =>
@@ -107,13 +108,13 @@ const BaiThiCuoiKy = () => {
 				),
 		},
 		{
-			title: 'Bài tập',
+			title: intl.formatMessage({ id: 'baithi.table.baiTap' }),
 			dataIndex: 'daNopBai',
 			width: 150,
 			render: (val, rec) =>
 				!val ? (
 					<div style={{ textAlign: 'center' }}>
-						<Tag color='red'>Chưa nộp bài</Tag>
+						<Tag color='red'>{intl.formatMessage({ id: 'baithi.table.chuaNop' })}</Tag>
 					</div>
 				) : (
 					rec?.urlBaiNop?.map((item: any) => (
@@ -128,13 +129,13 @@ const BaiThiCuoiKy = () => {
 			hide: type === 'raDe',
 		},
 		{
-			title: 'Ghi chú',
+			title: intl.formatMessage({ id: 'baithi.table.ghiChu' }),
 			dataIndex: 'ghiChuKhac',
 			width: 180,
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'baithi.table.thaoTac' }),
 			align: 'center',
 			width: 60,
 			fixed: 'right',
@@ -149,7 +150,13 @@ const BaiThiCuoiKy = () => {
 				return (
 					<ButtonExtend
 						disabled={ngoaiThoiGian || !!rec?.daNopBai}
-						tooltip={!!rec?.daNopBai ? 'Đã nộp bài' : ngoaiThoiGian ? 'Ngoài thời gian nộp bài' : 'Nộp bài tập'}
+						tooltip={
+							!!rec?.daNopBai
+								? intl.formatMessage({ id: 'baithi.table.daNop' })
+								: ngoaiThoiGian
+									? intl.formatMessage({ id: 'baithi.table.ngoaiTG' })
+									: intl.formatMessage({ id: 'baithi.table.nopBaiTap' })
+						}
 						onClick={() => handleEdit(rec)}
 						type='link'
 						icon={<SaveOutlined />}
@@ -164,7 +171,7 @@ const BaiThiCuoiKy = () => {
 		<Card
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-					<span>Bài cuối kỳ</span>
+					<span>{intl.formatMessage({ id: 'baithi.title' })}</span>
 					<FilterKyThi />
 				</Space>
 			}
@@ -192,13 +199,18 @@ const BaiThiCuoiKy = () => {
 									setType(val as string);
 								}}
 								options={[
-									{ value: 'nopBai', label: 'Giao đề/Nộp bài' },
-									{ value: 'raDe', label: 'Giao đề' },
+									{ value: 'nopBai', label: intl.formatMessage({ id: 'baithi.label.giaoDeNopBai' }) },
+									{ value: 'raDe', label: intl.formatMessage({ id: 'baithi.label.giaoDe' }) },
 								]}
 							/>
 							{type === 'raDe' && (
 								<div style={{ fontStyle: 'italic', color: primaryColor }}>
-									Với học phần ra đề, sinh viên <strong>không cần nộp bài</strong> trên hệ thống.
+									{intl.formatMessage(
+										{ id: 'baithi.msg.raDeNote' },
+										{
+											strong: (chunks) => <strong>{chunks}</strong>,
+										},
+									)}
 								</div>
 							)}
 						</Space>,

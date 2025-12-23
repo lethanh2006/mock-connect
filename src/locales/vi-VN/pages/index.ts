@@ -24,6 +24,7 @@ import tientrinhhoctap from './tientrinhhoctap';
 import trangchu from './trangchu';
 import dangkynhucau from './hoctap/dangkynhucau';
 import lichthi from './hoctap/lichthi';
+import baithicuoiky from './hoctap/baithicuoiky'
 
 export default {
 	...login,
@@ -52,4 +53,5 @@ export default {
 	...lichsu,
 	...dangkynhucau,
 	...lichthi,
+	...baithicuoiky
 };

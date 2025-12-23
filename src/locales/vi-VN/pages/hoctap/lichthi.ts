@@ -19,5 +19,4 @@ export default {
     'lichthi.modal.maSV': 'Mã sinh viên',
     'lichthi.modal.hoTen': 'Họ và tên',
     'lichthi.modal.lop': 'Lớp',
-    'common.ok': 'OK',
 };
