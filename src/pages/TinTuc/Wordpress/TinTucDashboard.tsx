@@ -4,13 +4,14 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { Col, Empty, Row, Spin, Tooltip } from 'antd';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
-import { Link, history, useModel } from 'umi';
+import { Link, history, useIntl, useModel } from 'umi';
 import '../components/styles.less';
 import { CardTinTuc } from '../components/TinTuc.style';
 import { Title } from './components/Title';
 import { getImageSrc } from './utils/getImageSrc';
 
 const TinTucDashboardWP = (props: { category?: number }) => {
+	const intl = useIntl();
 	const { category } = props;
 	const { danhSach: danhSachChuDe } = useModel('tintuc.chude');
 	const { danhSach: danhSachTinTuc, getDashboardModel, loading } = useModel('tintuc.tintucwp');
@@ -34,7 +35,11 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 			<div style={{ maxHeight: 400, overflowY: 'auto', overflowX: 'hidden', padding: '0 5px 0 2px' }}>
 				<Spin spinning={loading}>
 					{isEmpty(danhSachTinTuc) ? (
-						<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ paddingTop: 32 }} description='Chưa có tin tức' />
+						<Empty
+							image={Empty.PRESENTED_IMAGE_SIMPLE}
+							style={{ paddingTop: 32 }}
+							description={intl.formatMessage({ id: 'tintuc.empty' })}
+						/>
 					) : (
 						<Row gutter={[12, 12]} style={{ alignItems: 'stretch', marginBottom: 12 }}>
 							{danhSachTinTuc.map((tintuc) => {
@@ -92,7 +97,7 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 
 			<div style={{ textAlign: 'right', marginTop: 12 }}>
 				<Link to={category ? `/tin-tuc#${chuDe?._id ?? 'all'}` : '/tin-tuc'}>
-					Xem thêm <ArrowRightOutlined />
+					{intl.formatMessage({ id: 'tintuc.viewMore' })} <ArrowRightOutlined />
 				</Link>
 			</div>
 		</>
