@@ -4,8 +4,10 @@ import { getDanhSachSinhVienThi } from '@/services/KhaoThi/LichThi';
 import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import { Button, Modal } from 'antd';
 import { useEffect, useState } from 'react';
+import { useIntl } from 'umi';
 
 const DanhSachSinhVienThi = (props: { recLichThi: LichThi.IRecordMe; visible: boolean; handleCancel: any }) => {
+	const intl = useIntl();
 	const { recLichThi, visible, handleCancel } = props;
 	const [data, setData] = useState<LichThi.SinhVienLichThi[]>([]);
 	const getData = async () => {
@@ -19,28 +21,28 @@ const DanhSachSinhVienThi = (props: { recLichThi: LichThi.IRecordMe; visible: bo
 
 	const column: IColumn<LichThi.SinhVienLichThi>[] = [
 		{
-			title: 'Số báo danh',
+			title: intl.formatMessage({ id: 'lichthi.modal.sbd' }),
 			width: 150,
 			dataIndex: 'sbd',
 			align: 'center',
 			filterType: 'string',
 		},
 		{
-			title: 'Mã sinh viên',
+			title: intl.formatMessage({ id: 'lichthi.modal.maSV' }),
 			width: 150,
 			dataIndex: 'ma',
 			align: 'center',
 			filterType: 'string',
 		},
 		{
-			title: 'Họ và tên',
+			title: intl.formatMessage({ id: 'lichthi.modal.hoTen' }),
 			width: 150,
 			dataIndex: 'ten',
 			align: 'center',
 			filterType: 'string',
 		},
 		{
-			title: 'Lớp',
+			title: intl.formatMessage({ id: 'lichthi.modal.lop' }),
 			width: 150,
 			dataIndex: 'lop',
 			align: 'center',
@@ -52,11 +54,11 @@ const DanhSachSinhVienThi = (props: { recLichThi: LichThi.IRecordMe; visible: bo
 		<Modal
 			width={700}
 			open={visible}
-			title='Danh sách sinh viên thi'
+			title={intl.formatMessage({ id: 'lichthi.modal.title' })}
 			onCancel={handleCancel}
 			footer={
 				<Button type='primary' onClick={handleCancel}>
-					OK
+					{intl.formatMessage({ id: 'global.button.ok' })}
 				</Button>
 			}
 		>
