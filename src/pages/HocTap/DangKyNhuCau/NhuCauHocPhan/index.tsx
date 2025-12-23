@@ -12,12 +12,13 @@ import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Alert, Popconfirm, Tag } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormDangKyNhuCau from './Form';
 
 const NhuCauHocPhanPage = () =>
 	// props: { khoaNganhTrongDot: boolean }
 	{
+		const intl = useIntl();
 		const { record: recDot } = useModel('daotao.dangkynhucau.dotdangky');
 		const {
 			getModel,
@@ -54,36 +55,40 @@ const NhuCauHocPhanPage = () =>
 
 		const columns: IColumn<DangKyNhuCau.IHocPhanDangKyNhuCau & { soLuongDangKy: number }>[] = [
 			{
-				title: 'Mã HP',
+				title: intl.formatMessage({ id: 'dangkyhoctap.table.maHP' }),
 				width: 80,
 				dataIndex: 'maHocPhan',
 			},
 			{
-				title: 'Học phần',
+				title: intl.formatMessage({ id: 'dangkyhoctap.table.hocPhan' }),
 				width: 150,
 				dataIndex: 'maHocPhan',
 				render: (val, rec) => rec.hocPhan?.ten,
 			},
 			{
-				title: 'Số tín chỉ',
+				title: intl.formatMessage({ id: 'dangkyhoctap.table.soTinChi' }),
 				width: 60,
 				align: 'center',
 				render: (val, rec) => rec.hocPhan?.soTinChi,
 			},
 			{
-				title: 'Số SV đăng ký',
+				title: intl.formatMessage({ id: 'dangkyhoctap.table.soSVDangKy' }),
 				width: 60,
 				align: 'center',
 				dataIndex: 'soLuongDangKy',
-				render: (val) => <Tag color={val >= 30 ? 'green' : val >= 20 ? 'yellow' : 'red'}>{val} SV</Tag>,
+				render: (val) => (
+					<Tag color={val >= 30 ? 'green' : val >= 20 ? 'yellow' : 'red'}>
+						{val} {intl.formatMessage({ id: 'dangkyhoctap.label.sv' })}
+					</Tag>
+				),
 			},
 			{
-				title: 'Khóa ngành',
+				title: intl.formatMessage({ id: 'dangkyhoctap.table.khoaNganh' }),
 				width: 120,
 				render: (val, rec) => rec.phieuDangKyHocNhuCau?.khoaNganh?.ten,
 			},
 			{
-				title: 'Trạng thái',
+				title: intl.formatMessage({ id: 'dangkyhoctap.table.trangThai' }),
 				dataIndex: 'trangThai',
 				align: 'center',
 				width: 90,
@@ -94,16 +99,21 @@ const NhuCauHocPhanPage = () =>
 				),
 			},
 			{
-				title: 'Thao tác',
+				title: intl.formatMessage({ id: 'dangkyhoctap.table.thaoTac' }),
 				align: 'center',
 				width: 60,
 				render: (val, rec) => (
 					<Popconfirm
 						onConfirm={() => deleteModel(`${rec?._id}/me`, getData)}
-						title='Bạn có chắc chắn muốn xóa học phần này?'
+						title={intl.formatMessage({ id: 'dangkyhoctap.confirm.xoa' })}
 						placement='topLeft'
 					>
-						<ButtonExtend tooltip='Xóa' danger type='link' icon={<DeleteOutlined />} />
+						<ButtonExtend
+							tooltip={intl.formatMessage({ id: 'dangkyhoctap.table.xoa' })}
+							danger
+							type='link'
+							icon={<DeleteOutlined />}
+						/>
 					</Popconfirm>
 				),
 			},
@@ -115,14 +125,16 @@ const NhuCauHocPhanPage = () =>
 					<Alert
 						type={ngoaiThoiGian ? 'warning' : 'info'}
 						message={
-							ngoaiThoiGian ? (
-								'Ngoài thời gian đăng ký nhu cầu !'
-							) : (
-								<>
-									Thời gian đăng ký nhu cầu từ <b>{dayjs(recDot?.thoiGianBatDau).format('DD/MM/YYYY')}</b> đến{' '}
-									<b>{dayjs(recDot?.thoiGianKetThuc).format('DD/MM/YYYY')}</b>
-								</>
-							)
+							ngoaiThoiGian
+								? intl.formatMessage({ id: 'dangkyhoctap.alert.ngoaiThoiGian' })
+								: intl.formatMessage(
+										{ id: 'dangkyhoctap.alert.trongThoiGian' },
+										{
+											tuNgay: dayjs(recDot?.thoiGianBatDau).format('DD/MM/YYYY'),
+											denNgay: dayjs(recDot?.thoiGianKetThuc).format('DD/MM/YYYY'),
+											b: (chunks) => <b>{chunks}</b>,
+										},
+									)
 						}
 						showIcon
 					/>
@@ -148,7 +160,7 @@ const NhuCauHocPhanPage = () =>
 						}}
 						icon={<PlusCircleOutlined />}
 					>
-						Thêm mới
+						{intl.formatMessage({ id: 'dangkyhoctap.button.themMoi' })}
 					</ButtonExtend>
 				</TableStaticData>
 
@@ -159,7 +171,7 @@ const NhuCauHocPhanPage = () =>
 					open={visibleForm}
 					width={800}
 				>
-					<FormDangKyNhuCau getData={getData} title='Nhu cầu học phần' />
+					<FormDangKyNhuCau getData={getData} title={intl.formatMessage({ id: 'dangkyhoctap.modal.nhuCauHocPhan' })} />
 				</ModalExpandable>
 
 				{/* <TableBase

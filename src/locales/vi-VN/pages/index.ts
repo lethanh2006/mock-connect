@@ -22,6 +22,7 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tientrinhhoctap from './tientrinhhoctap';
 import trangchu from './trangchu';
+import dangkynhucau from './hoctap/dangkynhucau';
 
 export default {
 	...login,
@@ -48,4 +49,5 @@ export default {
 	...uudaithanhtoan,
 	...dangky,
 	...lichsu,
+	...dangkynhucau,
 };
