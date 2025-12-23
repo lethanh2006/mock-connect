@@ -13,10 +13,11 @@ import {
 import { TeamOutlined } from '@ant-design/icons';
 import { Button, Card, Space, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import DanhSachSinhVienThi from './DanhSachSinhVienThi';
 
 const LichThiPage = () => {
+	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { danhSachMe, getMeByHocKyModel, loading } = useModel('khaothi.lichthi');
 	const [recLichThi, setRecLichThi] = useState<LichThi.IRecordMe>();
@@ -35,28 +36,28 @@ const LichThiPage = () => {
 
 	const columns: IColumn<LichThi.IRecordMe>[] = [
 		{
-			title: 'Đợt thi',
+			title: intl.formatMessage({ id: 'lichthi.table.dotThi' }),
 			dataIndex: 'kyThi',
 			width: 180,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Ngày thi',
+			title: intl.formatMessage({ id: 'lichthi.table.ngayThi' }),
 			dataIndex: 'ngayThi',
 			align: 'center',
 			width: 80,
 			onCell,
 		},
 		{
-			title: 'Giờ thi',
+			title: intl.formatMessage({ id: 'lichthi.table.gioThi' }),
 			dataIndex: 'gioThi',
 			align: 'center',
 			width: 60,
 			onCell,
 		},
 		{
-			title: 'Mã HP',
+			title: intl.formatMessage({ id: 'lichthi.table.maHP' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
 			width: 100,
@@ -65,20 +66,20 @@ const LichThiPage = () => {
 			onCell,
 		},
 		{
-			title: 'Tên học phần',
+			title: intl.formatMessage({ id: 'lichthi.table.tenHocPhan' }),
 			dataIndex: 'tenHocPhan',
 			width: 180,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Phòng thi',
+			title: intl.formatMessage({ id: 'lichthi.table.phongThi' }),
 			dataIndex: 'phong',
 			width: 80,
 			onCell,
 		},
 		{
-			title: 'Số SV',
+			title: intl.formatMessage({ id: 'lichthi.table.soSV' }),
 			dataIndex: 'soLuong',
 			align: 'center',
 			width: 80,
@@ -86,12 +87,12 @@ const LichThiPage = () => {
 			onCell,
 		},
 		{
-			title: 'Điều kiện dự thi',
+			title: intl.formatMessage({ id: 'lichthi.table.dieuKienDuThi' }),
 			width: 160,
 
 			children: [
 				{
-					title: 'KQHT',
+					title: intl.formatMessage({ id: 'lichthi.table.kqht' }),
 					dataIndex: 'dieuKienKetQuaHocTap',
 					align: 'center',
 					width: 80,
@@ -101,7 +102,7 @@ const LichThiPage = () => {
 					onCell,
 				},
 				{
-					title: 'Công nợ',
+					title: intl.formatMessage({ id: 'lichthi.table.congNo' }),
 					dataIndex: 'dieuKienCongNo',
 					align: 'center',
 					width: 80,
@@ -111,7 +112,7 @@ const LichThiPage = () => {
 					onCell,
 				},
 				{
-					title: 'Trạng thái thi',
+					title: intl.formatMessage({ id: 'lichthi.table.trangThaiThi' }),
 					dataIndex: 'trangThai',
 					align: 'center',
 					width: 80,
@@ -123,11 +124,11 @@ const LichThiPage = () => {
 			],
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'lichthi.table.thaoTac' }),
 			align: 'center',
 			width: 80,
 			render: (rec) => (
-				<Tooltip title='Xem danh sách sinh viên thi'>
+				<Tooltip title={intl.formatMessage({ id: 'lichthi.tooltip.xemDSSV' })}>
 					<Button
 						type='link'
 						onClick={() => {
@@ -145,7 +146,7 @@ const LichThiPage = () => {
 		<Card
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-					<span>Lịch thi học kỳ </span>
+					<span>{intl.formatMessage({ id: 'lichthi.title' })}</span>
 					<FilterHocKy isSetHocKy />
 				</Space>
 			}
