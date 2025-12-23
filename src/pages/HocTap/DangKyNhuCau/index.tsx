@@ -1,10 +1,11 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { Card, Empty, Space } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import NhuCauHocPhanPage from './NhuCauHocPhan';
 
 const DangKyNhuCauPage = () => {
+	const intl = useIntl();
 	const { getDotDangKyNhuCauHocKyModel, record } = useModel('daotao.dangkynhucau.dotdangky');
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
@@ -25,7 +26,7 @@ const DangKyNhuCauPage = () => {
 			title={
 				<>
 					<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-						<span>Đăng ký học tập theo nhu cầu</span>
+						<span>{intl.formatMessage({ id: 'dangkyhoctap.title' })}</span>
 						<div style={{ marginBottom: 12 }}>
 							<FilterHocKy isSetHocKy>
 								{/* <SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} /> */}
@@ -42,7 +43,10 @@ const DangKyNhuCauPage = () => {
 				/>
 			) : (
 				<Card variant='borderless'>
-					<Empty description='Không có đợt đăng ký trong kỳ học' style={{ marginTop: 32 }} />
+					<Empty
+						description={intl.formatMessage({ id: 'dangkyhoctap.empty.khongcođotangky' })}
+						style={{ marginTop: 32 }}
+					/>
 				</Card>
 			)}
 		</Card>

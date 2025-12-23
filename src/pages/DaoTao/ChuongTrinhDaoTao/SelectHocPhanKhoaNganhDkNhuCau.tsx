@@ -1,7 +1,7 @@
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { Select, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 /**
  * Select học phần riêng, ko dùng model hocphan
@@ -17,6 +17,7 @@ const SelectHocPhanKhoaNganhDkNhuCau = (props: {
 	maKhoaNganh?: string;
 	idDotDkNhuCau?: string;
 }) => {
+	const intl = useIntl();
 	const { value, onChange, multiple, allowClear, selectMa, disabled, style, maKhoaNganh, idDotDkNhuCau } = props;
 	const { getAllModel } = useModel('daotao.chuongtrinhdaotao');
 	const [danhSach, setDanhSach] = useState<(HocPhan.IRecord & { soLuongDangKy: number })[]>([]);
@@ -44,13 +45,16 @@ const SelectHocPhanKhoaNganhDkNhuCau = (props: {
 				value: selectMa ? item.ma : item._id,
 				label: (
 					<span>
-						{item.ma} - {item.ten} - {item.soTinChi} TC - <Tag color={item.soLuongDangKy >= 30 ? 'green' : item.soLuongDangKy >= 20 ? 'yellow' : 'red'}>{item.soLuongDangKy} SV</Tag>
+						{item.ma} - {item.ten} - {item.soTinChi} TC -{' '}
+						<Tag color={item.soLuongDangKy >= 30 ? 'green' : item.soLuongDangKy >= 20 ? 'yellow' : 'red'}>
+							{item.soLuongDangKy} {intl.formatMessage({ id: 'dangkyhoctap.label.sv' })}
+						</Tag>
 					</span>
 				),
 			}))}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Chọn học phần'
+			placeholder={intl.formatMessage({ id: 'dangkyhoctap.select.placeholder' })}
 			style={{ width: '100%', ...style }}
 			allowClear={allowClear ?? false}
 		/>
