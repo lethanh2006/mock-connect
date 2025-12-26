@@ -8,12 +8,16 @@ export default () => {
 	const objInit = useInitModel<Activity.IRecord>('activities', undefined, undefined, ipCCT);
 	const { formSubmiting, setFormSubmiting } = objInit;
 
-	const registerActivityModel = async (idActivity: string, getData?: () => void): Promise<Activity.IRecord> => {
+	const registerActivityModel = async (
+		idActivity: string,
+		getData?: () => void,
+		messageText?: string,
+	): Promise<Activity.IRecord> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
 			const res = await registerActivity(idActivity);
-			message.success('Lưu thành công');
+			message.success(messageText ?? 'Lưu thành công');
 
 			if (getData) getData();
 			return res.data;

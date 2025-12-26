@@ -114,7 +114,11 @@ const ActivityPage = () => {
 											placement='topLeft'
 											onConfirm={(e) => {
 												e?.stopPropagation?.();
-												registerActivityModel(item._id, getData);
+												registerActivityModel(
+													item._id,
+													getData,
+													intl.formatMessage({ id: 'global.message.luuthanhcong' }),
+												);
 											}}
 											onCancel={(e) => {
 												e?.stopPropagation?.();
