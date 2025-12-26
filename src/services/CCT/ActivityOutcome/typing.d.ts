@@ -30,4 +30,10 @@ declare module ActivityOutCome {
 		createdAt: Date;
 		updatedAt: Date;
 	}
+
+	export interface IAnalyticsStudent {
+		pending: number;
+		processed: number;
+		total: number;
+	}
 }
