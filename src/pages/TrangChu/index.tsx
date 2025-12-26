@@ -1,11 +1,8 @@
 import { Col, Row } from 'antd';
-import ThongKeMuonSachCard from '../ThuVien/MuonTraSach/Dashboard/Card';
-import VaoRaThuVienDashboardCard from '../ThuVien/VaoRaThuVien/Dashboard/Card';
 import CardDichVuSinhVien from './components/DichVu';
 import LichDashboard from './components/Lich';
 import CardSuKienSapToi from './components/SuKienSapToi';
 import CardThongBaoDashboard from './components/ThongBao';
-import TinTucDashboardWrapper from './components/TinTuc/TinTucDashboardWrapper';
 import WelcomeCard from './components/XinChao';
 import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
 import CardBaiTapDashboard from './HocTapRenLuyen/BaiTap';
@@ -81,12 +78,10 @@ const TrangChu = () => {
 							{/* <Col span={24}>
 							<CardCuocThiDashboard />
 						</Col> */}
-							<Col span={24}>
-								<VaoRaThuVienDashboardCard />
-							</Col>
+							<Col span={24}>{/* <VaoRaThuVienDashboardCard /> */}</Col>
 							<Col span={24}>
 								{/* <ChatbotBanner /> */}
-								<ThongKeMuonSachCard />
+								{/* <ThongKeMuonSachCard /> */}
 							</Col>
 						</Row>
 					</Col>
@@ -94,7 +89,7 @@ const TrangChu = () => {
 			</Col>
 
 			<Col span={24} className='tintuc-dashboard'>
-				<TinTucDashboardWrapper />
+				{/* <TinTucDashboardWrapper /> */}
 			</Col>
 		</Row>
 	);
