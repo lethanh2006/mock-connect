@@ -42,6 +42,7 @@ export default {
 	'global.rightcontent.thongbao.dong': 'Đóng',
 
 	//Table
+	'global.table.column.stt': 'TT',
 	'global.table.export.title': 'Xuất dữ liệu',
 	'global.table.export.khadung': 'Các trường khả dụng',
 	'global.table.export.choose.chontatca': 'Chọn tất cả',
@@ -158,4 +159,6 @@ export default {
 	'global.uploadfile.text': 'Nhấn chuột hoặc kéo thả tài liệu để tải lên',
 	'global.uploadfile.text1': 'Thêm ảnh đại diện',
 	'global.uploadfile.button.chontep': 'Chọn tệp',
+
+	'global.column.action': 'Thao tác',
 };

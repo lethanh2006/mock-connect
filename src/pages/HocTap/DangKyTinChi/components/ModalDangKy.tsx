@@ -84,7 +84,6 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 
 	useEffect(() => {
 		if (visibleRegister) {
-			debugger;
 			setIsVerified(false);
 			captchaRef.current?.reset();
 		}

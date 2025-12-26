@@ -3,7 +3,7 @@ import { AppModules, EModuleKey } from '@/services/base/constant';
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
 
 const ip3 = ipRoot + 'slink'; // ip dev
-// const ip3 = 'http://192.168.1.149:3001'; // ip dev
+// const ip3 = 'http://192.168.1.38:3000'; // ip dev
 
 const ipNotif = ipRoot + 'notification'; // ip dev
 // const ipDaoTao = ipRoot + 'qldt'; // ip dev
@@ -13,10 +13,12 @@ const ipDaoTao = ipRoot + 'qldt'; // ip dev
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
 const ipNhanSu = ipRoot + 'tcns';
 const ipCore = ipRoot + 'core';
-const ipTaiChinh = ipRoot + 'tai-chinh-api-v2';
+const ipTaiChinh = ipRoot + 'tai-chinh';
 const ipKhaoThi = ipRoot + 'khao-thi';
 const ipThuVien = ipRoot + 'thu-vien'; // ip dev
 const ipChatbot = ipRoot + 'chatbot-api';
+const ipCCT = ipRoot + 'co-curriculum'; // ip dev
+// const ipCCT = 'http://192.168.1.38:3010'; // ip dev
 
 const ipNewsWP = APP_CONFIG_URL_LANDING;
 
@@ -38,6 +40,7 @@ const moodleEndpoint = APP_CONFIG_MOODLE_ENDPOINT;
 export {
 	currentRole,
 	ip3,
+	ipCCT,
 	ipChatbot,
 	ipCore,
 	ipDaoTao,

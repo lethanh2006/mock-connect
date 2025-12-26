@@ -158,7 +158,7 @@ const TableStaticData = (props: TableStaticProps) => {
 
 	if (addStt)
 		columns.unshift({
-			title: 'TT',
+			title: intl.formatMessage({ id: 'global.table.column.stt' }),
 			dataIndex: 'index',
 			align: 'center',
 			width: 40,
