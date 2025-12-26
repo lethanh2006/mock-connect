@@ -390,6 +390,29 @@
 		],
 	},
 
+	{
+		name: 'Activity',
+		icon: 'AppstoreOutlined',
+		path: 'activity',
+		routes: [
+			{
+				name: 'Register',
+				path: 'activity-register',
+				component: 'CCT/Activity',
+			},
+			{
+				name: 'MyActivity',
+				path: 'activity-myActivity',
+				component: 'CCT/History',
+			},
+			{
+				name: 'MyCCT',
+				path: 'activity-mycct',
+				component: 'CCT/MyCCT',
+			},
+		],
+	},
+
 	// GROUP TITLE
 	{
 		name: 'OtherGroup',
