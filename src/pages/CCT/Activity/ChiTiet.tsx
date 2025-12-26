@@ -91,7 +91,7 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 					<Col span={14}>
 						<Space direction='vertical' size={8}>
 							{record?.activitiesType?.attributes?.name && (
-								<Tag color='blue'>{record?.activitiesType?.attributes?.name}</Tag>
+								<Tag color={record?.activitiesType?.attributes?.color}>{record?.activitiesType?.attributes?.name}</Tag>
 							)}
 
 							<Text>
