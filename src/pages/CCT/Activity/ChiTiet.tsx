@@ -134,7 +134,13 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 
 				<Button
 					type='primary'
-					onClick={() => registerActivityModel(record?._id ?? '', getData).then(() => setVisibleForm(false))}
+					onClick={() =>
+						registerActivityModel(
+							record?._id ?? '',
+							getData,
+							intl.formatMessage({ id: 'global.message.luuthanhcong' }),
+						).then(() => setVisibleForm(false))
+					}
 					disabled={!!record?.workflow || !record?.activitiesTypeId}
 				>
 					{intl.formatMessage({ id: 'activity.btn.dangky' })}

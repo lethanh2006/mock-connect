@@ -68,7 +68,12 @@ const FormActivityOutCome = (props: any) => {
 		};
 
 		try {
-			await postActivityOutComeModel(record?.activitiesId ?? '', data, getData);
+			await postActivityOutComeModel(
+				record?.activitiesId ?? '',
+				data,
+				getData,
+				intl.formatMessage({ id: 'global.message.luuthanhcong' }),
+			);
 		} catch (err) {
 			console.log(err);
 		} finally {
