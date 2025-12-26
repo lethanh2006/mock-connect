@@ -19,10 +19,11 @@ import SelectActivitiesManagement from '../Activities/Select';
 import SelectRolesManagement from '../Roles/Select';
 import FormActivityOutCome from './components/Form';
 import FormPerstionActivityOutCome from './components/FormPerstion';
+import StatActivityOutCome from './components/Stat';
 
 const HistoryActivityPage = () => {
 	const intl = useIntl();
-	const { getModel, page, limit, handleEdit, handleView, deleteActivityModel, putModel } =
+	const { getModel, page, limit, handleEdit, handleView, deleteActivityModel, putModel, getAnalyticsStudentModel } =
 		useModel('cct.activityoutcome');
 	const { getAllModel, danhSach: dsAtribute } = useModel('cct.attributes');
 
@@ -43,6 +44,10 @@ const HistoryActivityPage = () => {
 			undefined,
 			'me/page',
 		);
+	};
+
+	const getThongKe = () => {
+		getAnalyticsStudentModel(tabActive);
 	};
 
 	const attributeColumns: IColumn<any>[] = useMemo(() => {
@@ -98,8 +103,12 @@ const HistoryActivityPage = () => {
 		{
 			title: intl.formatMessage({ id: 'activity.column.attribute' }),
 			align: 'center',
-			width: 120,
-			render: (val, rec) => rec?.activities?.activitiesType?.attributes?.name,
+			width: 200,
+			render: (val, rec) => (
+				<Tag color={rec?.activities?.activitiesType?.attributes?.color}>
+					{rec?.activities?.activitiesType?.attributes?.name}
+				</Tag>
+			),
 			onCell,
 			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
 		},
@@ -167,6 +176,7 @@ const HistoryActivityPage = () => {
 			dataIndex: 'activityRejectionNote',
 			width: 180,
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			filterType: 'string',
 			onCell,
 		},
 		{
@@ -174,6 +184,7 @@ const HistoryActivityPage = () => {
 			dataIndex: 'revisionNote',
 			width: 180,
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			filterType: 'string',
 			onCell,
 		},
 		{
@@ -210,12 +221,17 @@ const HistoryActivityPage = () => {
 						icon={tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? <EditOutlined /> : <PlusCircleOutlined />}
 					/>
 					<Popconfirm
-						onConfirm={() => deleteActivityModel(rec?._id, getData)}
+						onConfirm={() =>
+							deleteActivityModel(rec?._id, () => {
+								getData();
+								getThongKe();
+							})
+						}
 						title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
 						placement='topLeft'
 					>
 						<ButtonExtend
-							disabled={rec?.workflow !== EApprovalStatus.DRAFT && rec?.workflow !== EApprovalStatus.CHANGES_REQUIRED}
+							disabled={rec?.workflow === EApprovalStatus.APPROVED || rec?.workflow === EApprovalStatus.REJECTED}
 							tooltip={intl.formatMessage({ id: 'activity.button.xoa' })}
 							danger
 							type='link'
@@ -235,9 +251,16 @@ const HistoryActivityPage = () => {
 				))}
 			</Tabs>
 
+			<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
+
 			<TableBase
 				getData={getData}
-				formProps={{ getData }}
+				formProps={{
+					getData: () => {
+						getData();
+						getThongKe();
+					},
+				}}
 				columns={columns}
 				dependencies={[page, limit, tabActive]}
 				modelName='cct.activityoutcome'
@@ -246,6 +269,10 @@ const HistoryActivityPage = () => {
 				widthDrawer={800}
 				hideCard
 				buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
+				onReload={() => {
+					getData();
+					getThongKe();
+				}}
 			/>
 		</Card>
 	);

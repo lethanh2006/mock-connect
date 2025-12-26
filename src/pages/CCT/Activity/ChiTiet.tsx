@@ -91,7 +91,7 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 					<Col span={14}>
 						<Space direction='vertical' size={8}>
 							{record?.activitiesType?.attributes?.name && (
-								<Tag color='blue'>{record?.activitiesType?.attributes?.name}</Tag>
+								<Tag color={record?.activitiesType?.attributes?.color}>{record?.activitiesType?.attributes?.name}</Tag>
 							)}
 
 							<Text>
@@ -134,7 +134,13 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 
 				<Button
 					type='primary'
-					onClick={() => registerActivityModel(record?._id ?? '', getData).then(() => setVisibleForm(false))}
+					onClick={() =>
+						registerActivityModel(
+							record?._id ?? '',
+							getData,
+							intl.formatMessage({ id: 'global.message.luuthanhcong' }),
+						).then(() => setVisibleForm(false))
+					}
 					disabled={!!record?.workflow || !record?.activitiesTypeId}
 				>
 					{intl.formatMessage({ id: 'activity.btn.dangky' })}

@@ -47,11 +47,18 @@ const FormPerstionActivityOutCome = (props: any) => {
 		setFormSubmiting(false);
 
 		if (edit) {
-			putModel(record?._id ?? '', values, getData)
+			putModel(
+				record?._id ?? '',
+				values,
+				getData,
+				undefined,
+				undefined,
+				intl.formatMessage({ id: 'global.message.luuthanhcong' }),
+			)
 				.then()
 				.catch((er) => console.log(er));
 		} else
-			postModel(values, getData)
+			postModel(values, getData, undefined, intl.formatMessage({ id: 'global.message.themmoithanhcong' }))
 				.then()
 				.catch((er) => console.log(er));
 	};
