@@ -103,8 +103,12 @@ const HistoryActivityPage = () => {
 		{
 			title: intl.formatMessage({ id: 'activity.column.attribute' }),
 			align: 'center',
-			width: 120,
-			render: (val, rec) => rec?.activities?.activitiesType?.attributes?.name,
+			width: 200,
+			render: (val, rec) => (
+				<Tag color={rec?.activities?.activitiesType?.attributes?.color}>
+					{rec?.activities?.activitiesType?.attributes?.name}
+				</Tag>
+			),
 			onCell,
 			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
 		},
@@ -172,6 +176,7 @@ const HistoryActivityPage = () => {
 			dataIndex: 'activityRejectionNote',
 			width: 180,
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			filterType: 'string',
 			onCell,
 		},
 		{
@@ -179,6 +184,7 @@ const HistoryActivityPage = () => {
 			dataIndex: 'revisionNote',
 			width: 180,
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,
+			filterType: 'string',
 			onCell,
 		},
 		{
