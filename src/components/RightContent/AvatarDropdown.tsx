@@ -123,7 +123,7 @@ const AvatarDropdown = () => {
 				// 	});
 			});
 
-			// handleCheckKhaoSatBatBuoc();
+			handleCheckKhaoSatBatBuoc();
 
 			//Get All phân vùng để lấy mã màu
 			getAllPhanVung();
