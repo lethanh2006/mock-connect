@@ -109,4 +109,9 @@ export default {
 	'menu.ThuVien.VaoRa': 'Entry & Exit History',
 	'menu.ThuVien.MuonTraSach': 'Library Resource Search',
 	'menu.ThuVien.LichSuMuonTra': 'Borrowing History',
+
+	'menu.Activity': 'Activity',
+	'menu.Activity.Register': 'Register',
+	'menu.Activity.MyActivity': 'My Activity',
+	'menu.Activity.MyCCT': 'Co-curricular Transcript',
 };

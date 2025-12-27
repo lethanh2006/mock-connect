@@ -41,13 +41,13 @@ export default () => {
 			ssoId?: string;
 		},
 		getData?: () => void,
+		hideMessage?: boolean,
 	): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
 			const res = await traLoiBieuMau(payload);
-			message.success('Gửi câu trả lời thành công');
-			// getIdBieuMauDaTraLoiModel();
+			if (hideMessage !== true) message.success('Gửi câu trả lời thành công');
 
 			if (getData) getData();
 			setVisibleForm(false);

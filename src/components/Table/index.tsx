@@ -356,7 +356,7 @@ const TableBase = (props: TableBaseProps) => {
 		final = final?.filter((item) => item?.hide !== true);
 		if (props.addStt !== false)
 			final.unshift({
-				title: 'TT',
+				title: intl.formatMessage({ id: 'global.table.column.stt' }),
 				dataIndex: 'index',
 				align: 'center',
 				width: 50,
