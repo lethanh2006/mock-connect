@@ -42,6 +42,7 @@ export default {
 	'global.rightcontent.thongbao.dong': 'Close',
 
 	//Table
+	'global.table.column.stt': 'No.',
 	'global.table.export.title': 'Export data',
 	'global.table.export.khadung': 'Available fields',
 	'global.table.export.choose.chontatca': 'Select all',
@@ -155,4 +156,6 @@ export default {
 	'global.uploadfile.text': 'Click or drag a file to upload',
 	'global.uploadfile.text1': 'Add profile picture',
 	'global.uploadfile.button.chontep': 'Select file',
+
+	'global.column.action': 'Action',
 };

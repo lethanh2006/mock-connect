@@ -35,6 +35,8 @@ const FormTraLoiKhaoSat = (props: {
 
 	/** Thông tin câu trả lời khảo sát tổng */
 	khaoSat?: BieuMau.ICauTraLoiKhaoSat;
+
+	disabledForm?: boolean;
 }) => {
 	const intl = useIntl();
 	const {
@@ -56,13 +58,13 @@ const FormTraLoiKhaoSat = (props: {
 	} = useModel('tienich.bieumau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
-	const { onOk, cauTraLoi, onCancel, hideCard, isBatBuoc, loai, khaoSat } = props;
+	const { onOk, cauTraLoi, onCancel, hideCard, isBatBuoc, loai, khaoSat, disabledForm } = props;
 	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
 	const [check, setCheck] = useState<boolean>(false);
 	const record = props?.recBieuMauProps ?? recBieuMau;
 	const [currentStep, setCurrentStep] = useState<number>(0);
 
-	const disabled = ngoaiThoiGian || recordDot?.kichHoat === false;
+	const disabled = disabledForm ?? (ngoaiThoiGian || recordDot?.kichHoat === false);
 
 	useEffect(() => {
 		if (!isThanhCong) {

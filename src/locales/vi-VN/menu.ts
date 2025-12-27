@@ -116,4 +116,10 @@ export default {
 	'menu.ThuVien.VaoRa': 'Lịch sử vào ra',
 	'menu.ThuVien.MuonTraSach': 'Tìm kiếm tài nguyên thư viện',
 	'menu.ThuVien.LichSuMuonTra': 'Lịch sử mượn trả',
+
+	//CCT
+	'menu.Activity': 'Activity',
+	'menu.Activity.Register': 'Register',
+	'menu.Activity.MyActivity': 'My Activity',
+	'menu.Activity.MyCCT': 'Co-curricular Transcript',
 };
