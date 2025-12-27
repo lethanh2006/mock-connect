@@ -8,9 +8,9 @@ import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useIntl, useModel } from 'umi';
-import ButtonExtend from './ButtonExtend';
-import { updateSearchStorage } from './function';
 import ModalExpandable from './ModalExpandable';
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { updateSearchStorage } from './utils';
 import './style.less';
 import type { IColumn, TableStaticProps, TDataOption } from './typing';
 
@@ -160,7 +160,7 @@ const TableStaticData = (props: TableStaticProps) => {
 		columns.unshift({
 			title: 'TT',
 			dataIndex: 'index',
-			align: 'center',
+			// align: 'center',
 			width: 40,
 			children: undefined,
 			render: (val: string, rec: any) => {

@@ -2,7 +2,7 @@ import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import { TableProps } from 'antd';
 import type { ColumnType } from 'antd/lib/table';
 import React, { JSX } from 'react';
-import { type EOperatorType } from './constant';
+import { type EOperatorType } from './constant/constant';
 
 export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 'children'> {
 	/** Ẩn cột khi hiển thị trên table, nhưng vẫn có trong filter, import, export */
@@ -165,15 +165,12 @@ export type TFilter<T> = {
 };
 
 export type RowFilterProps = {
-	index: number;
-	columns: IColumn<any>[];
-	filter: TFilter<any>;
-	onChange: (filter: TFilter<any>) => void;
-	fieldsFilterable: string[];
-	onRemove?: () => void;
+	name: string | number;
+	formOwner: FormInstance;
+	parentPath?: (string | number)[];
 	allowGrouping?: boolean;
 	level?: number;
-	path?: (string | number)[];
+	onRemove?: () => void;
 };
 
 export type ConditionCriteria<T> = {
