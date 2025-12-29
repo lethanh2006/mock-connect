@@ -1,5 +1,5 @@
 export default {
-	'lophanhchinh.title': 'Lớp tín chỉ',
+	'lophanhchinh.title': 'Lớp hành chính',
 	'lophanhchinh.select': 'Thông tin chung',
 
 	'lophanhchinh.thongtinchung': 'Thông tin chung',
