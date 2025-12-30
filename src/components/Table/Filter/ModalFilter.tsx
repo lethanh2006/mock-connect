@@ -15,6 +15,7 @@ const ModalFilter = () => {
 	const { finalColumns: columns, setFilters, visibleFilter, setVisibleFilter, filters } = useTableContext();
 	const [form] = Form.useForm();
 	const { fieldsFilterable } = useFilterFields(columns, form);
+
 	const handleFinish = (values: any) => {
 		const normalizedFilters = normalizeFilters(values.filters);
 		setFilters(normalizedFilters);

@@ -41,10 +41,7 @@ const MatchColumns = (props: { onChange: () => void; onBack: any; importHeaders:
 								options={Object.entries(headLine ?? {}).map(([colName, title]) => ({
 									value: title,
 									key: colName,
-									label: intl.formatMessage(
-										{ id: 'global.table.import.match.cot' },
-										{ colName, title },
-									),
+									label: intl.formatMessage({ id: 'global.table.import.match.cot' }, { colName, title }),
 								}))}
 								style={{ width: '100%' }}
 								allowClear={!col.required}
