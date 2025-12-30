@@ -3,19 +3,18 @@ import { Button, Tooltip, type ButtonProps } from 'antd';
 import React from 'react';
 import './style.less';
 
+export interface ButtonExtendProps extends ButtonProps {
+	tooltip?: React.ReactNode;
+	/**
+	 * Cooldown (second)
+	 */
+	cooldownMs?: number;
+	notHideText?: boolean;
+}
+
 /** Button extend text with default Tooltip */
-const ButtonExtend = (
-	props: {
-		children?: React.ReactNode;
-		tooltip?: React.ReactNode;
-		/**
-		 * Cooldown (second)
-		 */
-		cooldownMs?: number;
-		notHideText?: boolean;
-	} & ButtonProps,
-) => {
-	const { children, tooltip, notHideText, cooldownMs, disabled, onClick, ...otherProps } = props;
+const ButtonExtend = (props: ButtonExtendProps) => {
+	const { children, tooltip, notHideText, cooldownMs, onClick, disabled, ...otherProps } = props;
 	const { countdown, disabled: disableCooldown, startCooldown } = useCooldown(Number(cooldownMs) / 1000);
 
 	const handleOnclick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -32,7 +31,11 @@ const ButtonExtend = (
 	return (
 		<Tooltip title={tooltip ?? childrenValue}>
 			<Button {...otherProps} disabled={disableCooldown || disabled} onClick={handleOnclick}>
-				{!notHideText && !!children && !!otherProps.icon ? <span className='span-extend'>{childrenValue}</span> : childrenValue}
+				{!notHideText && !!children && !!otherProps.icon ? (
+					<span className='span-extend'>{childrenValue}</span>
+				) : (
+					childrenValue
+				)}
 			</Button>
 		</Tooltip>
 	);

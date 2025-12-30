@@ -1,16 +1,19 @@
 import { tienVietNam } from '@/utils/utils';
+import { getLocale } from '@umijs/max';
+import en from 'apexcharts/dist/locales/en.json';
+import vi from 'apexcharts/dist/locales/vi.json';
 import Chart from 'react-apexcharts';
 import { type DataChartType } from '.';
 import './style.less';
-import vi from './vi.json';
 
 const DonutChart = (props: DataChartType) => {
 	const { xAxis, yAxis, height, colors, formatY, showTotal, width, otherOptions, type } = props;
-
+	const locale = getLocale();
+	const defaultLocale = locale === 'vi-VN' ? 'vi' : 'en';
 	const options = {
 		chart: {
-			defaultLocale: 'vi',
-			locales: [vi],
+			defaultLocale: defaultLocale,
+			locales: [vi, en],
 			toolbar: { show: true },
 		},
 		labels: xAxis,
