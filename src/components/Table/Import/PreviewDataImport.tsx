@@ -136,8 +136,10 @@ const PreviewDataImport = (props: {
 				<div className='fw500'>{intl.formatMessage({ id: 'global.table.import.preview.danhsacdulieu' })}</div>
 				{invalidRows?.size ? (
 					<i style={{ color: 'red' }}>
-						Có ô chứa dữ liệu không hợp lệ tại các dòng {Array.from(invalidRows).join(', ')} (đã được đánh dấu trong
-						bảng), vui lòng kiểm tra lại!
+						{intl.formatMessage(
+							{ id: 'global.table.import.preview.invalidRows' },
+							{ rows: Array.from(invalidRows).join(', ') },
+						)}
 					</i>
 				) : null}
 			</Col>
