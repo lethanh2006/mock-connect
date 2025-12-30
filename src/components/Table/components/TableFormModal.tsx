@@ -1,8 +1,8 @@
-import React from 'react';
 import ModalExpandable from '@/components/Table/ModalExpandable';
-import { TableFormDrawer } from './TableFormDrawer';
-import { useTableContext } from './TableContext';
+import React from 'react';
 import { useIntl } from 'umi';
+import { useTableContext } from './TableContext';
+import { TableFormDrawer } from './TableFormDrawer';
 
 export const TableFormModal: React.FC = () => {
 	const intl = useIntl();
@@ -55,4 +55,3 @@ export const TableFormModal: React.FC = () => {
 		</ModalExpandable>
 	);
 };
-

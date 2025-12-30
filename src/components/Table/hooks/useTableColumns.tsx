@@ -1,12 +1,12 @@
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons';
 import { AutoComplete, Button, Input, Space } from 'antd';
 import type { SortOrder } from 'antd/lib/table/interface';
-import React, { JSX, useEffect } from 'react';
-import { EOperatorType } from '../constant';
-import { updateSearchStorage } from '../utils';
-import { useTableContext } from '../components/TableContext';
-import type { IColumn, TDataOption, TFilter } from '../typing';
 import _ from 'lodash';
+import React, { JSX, useEffect } from 'react';
+import { useTableContext } from '../components/TableContext';
+import { EOperatorType } from '../constant';
+import type { IColumn, TDataOption, TFilter } from '../typing';
+import { updateSearchStorage } from '../utils';
 
 interface UseTableColumnsProps {
 	columns: IColumn<any>[];
@@ -15,13 +15,9 @@ interface UseTableColumnsProps {
 	dsPhanVung?: any[];
 }
 
-export const useTableColumns = ({
-	columns,
-	sort,
-	addStt,
-	dsPhanVung,
-}: UseTableColumnsProps) => {
-	const { searchInputRef, filters, setFilters, setFinalColumns, buttons, hasFilter, setVisibleFilter, size } = useTableContext();
+export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableColumnsProps) => {
+	const { searchInputRef, filters, setFilters, setFinalColumns, buttons, hasFilter, setVisibleFilter, size } =
+		useTableContext();
 
 	/**
 	 * Lấy quy tắc lọc hiện tại của cột
@@ -295,4 +291,3 @@ export const useTableColumns = ({
 
 	return { getColumns, handleFilter, handleSearch };
 };
-

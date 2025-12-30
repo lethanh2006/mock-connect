@@ -9,7 +9,20 @@ const TableBase = (props: TableBaseProps) => {
 	const filters: TFilter<any>[] = model?.filters;
 	const getData = props.getData ?? model?.getModel;
 	const hasFilter = props.columns?.filter((item) => item.filterType)?.length;
-	const { visibleForm, setVisibleForm, setEdit, setRecord, setIsView, selectedIds, setSelectedIds, total, loading, isView, edit, deleteManyModel } = model
+	const {
+		visibleForm,
+		setVisibleForm,
+		setEdit,
+		setRecord,
+		setIsView,
+		selectedIds,
+		setSelectedIds,
+		total,
+		loading,
+		isView,
+		edit,
+		deleteManyModel,
+	} = model;
 
 	const handleDeleteMany = () => {
 		if (deleteManyModel && selectedIds?.length)

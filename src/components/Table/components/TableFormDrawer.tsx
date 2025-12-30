@@ -4,16 +4,8 @@ import React from 'react';
 import { useTableContext } from './TableContext';
 
 export const TableFormDrawer: React.FC = () => {
-	const {
-		Form,
-		visibleForm,
-		setVisibleForm,
-		title,
-		widthDrawer,
-		maskCloseableForm,
-		destroyModal,
-		formProps,
-	} = useTableContext();
+	const { Form, visibleForm, setVisibleForm, title, widthDrawer, maskCloseableForm, destroyModal, formProps } =
+		useTableContext();
 
 	if (!Form) return null;
 
@@ -30,14 +22,8 @@ export const TableFormDrawer: React.FC = () => {
 			<Form title={title ?? ''} {...formProps} />
 
 			<div className='modal-buttons'>
-				<Button
-					type='text'
-					icon={<CloseOutlined />}
-					onClick={() => setVisibleForm(false)}
-					className='button'
-				/>
+				<Button type='text' icon={<CloseOutlined />} onClick={() => setVisibleForm(false)} className='button' />
 			</div>
 		</Drawer>
 	);
 };
-

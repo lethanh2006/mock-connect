@@ -1,12 +1,12 @@
 import { PlusOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import { Button, Form, Modal, Space, Typography } from 'antd';
+import { useEffect } from 'react';
 import { useIntl } from 'umi';
 import { useTableContext } from '../components/TableContext';
-import { ModalFooter } from './ModalFooter';
 import { useFilterFields } from '../hooks/useFilterFields';
-import RowFilter from './RowFilter';
 import { normalizeFilters } from '../utils';
-import { useEffect } from 'react';
+import { ModalFooter } from './ModalFooter';
+import RowFilter from './RowFilter';
 
 const { Text } = Typography;
 
@@ -39,11 +39,17 @@ const ModalFilter = () => {
 			title={intl.formatMessage({ id: 'global.table.customfilter.title' })}
 			width={800}
 		>
-			<Text type='secondary'>
-				{intl.formatMessage({ id: 'global.table.customfilter.dieukien' })}:
-			</Text>
+			<div style={{ marginBottom: 8 }}>
+				<Text type='secondary'>{intl.formatMessage({ id: 'global.table.customfilter.dieukien' })}:</Text>
+			</div>
 
-			<Form form={form} layout='vertical' onFinish={handleFinish} id='custom-filter-form' initialValues={{ filters: [] }}>
+			<Form
+				form={form}
+				layout='vertical'
+				onFinish={handleFinish}
+				id='custom-filter-form'
+				initialValues={{ filters: [] }}
+			>
 				<Form.List name='filters'>
 					{(fields, { add, remove }) => {
 						return (
@@ -106,8 +112,8 @@ const ModalFilter = () => {
 						);
 					}}
 				</Form.List>
-			</Form >
-		</Modal >
+			</Form>
+		</Modal>
 	);
 };
 

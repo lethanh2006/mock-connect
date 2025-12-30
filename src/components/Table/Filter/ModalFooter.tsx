@@ -11,13 +11,7 @@ export const ModalFooter = ({ onReset, onCancel }: ModalFooterProps) => {
 	const intl = useIntl();
 
 	return [
-		<Button
-			key='submit'
-			htmlType='submit'
-			type='primary'
-			icon={<FilterFilled />}
-			form='custom-filter-form'
-		>
+		<Button key='submit' htmlType='submit' type='primary' icon={<FilterFilled />} form='custom-filter-form'>
 			{intl.formatMessage({ id: 'global.table.customfilter.button.apdung' })}
 		</Button>,
 		<Button key='reset' danger icon={<CloseOutlined />} onClick={onReset}>
@@ -28,4 +22,3 @@ export const ModalFooter = ({ onReset, onCancel }: ModalFooterProps) => {
 		</Button>,
 	];
 };
-

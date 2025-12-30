@@ -153,6 +153,8 @@ export type TableBaseProps = {
 	 * @default getData
 	 */
 	onReload?: (params?: any) => void;
+
+	cardExtra?: React.ReactNode;
 };
 
 export type TFilter<T> = {

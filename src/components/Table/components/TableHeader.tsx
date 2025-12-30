@@ -1,3 +1,4 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { primaryColor } from '@/services/base/constant';
 import { inputFormat } from '@/utils/utils';
 import {
@@ -12,7 +13,6 @@ import { Popconfirm, Tooltip } from 'antd';
 import classNames from 'classnames';
 import React from 'react';
 import { useIntl } from 'umi';
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import { findFiltersInColumns } from '../utils';
 import { useTableContext } from './TableContext';
 
@@ -47,7 +47,8 @@ export const TableHeader: React.FC = () => {
 						size={size}
 						onClick={onCreate}
 						icon={<PlusCircleOutlined />}
-						className='btn-save'
+						className='btn-add'
+						type='primary'
 						notHideText
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 					>
@@ -56,12 +57,22 @@ export const TableHeader: React.FC = () => {
 				) : null}
 
 				{buttons?.import ? (
-					<ButtonExtend size={size} icon={<ImportOutlined />} onClick={() => setVisibleImport(true)} className='btn-import'>
+					<ButtonExtend
+						size={size}
+						icon={<ImportOutlined />}
+						onClick={() => setVisibleImport(true)}
+						className='btn-import'
+					>
 						{intl.formatMessage({ id: 'global.table.index.button.nhapdulieu' })}
 					</ButtonExtend>
 				) : null}
 				{buttons?.export ? (
-					<ButtonExtend size={size} icon={<ExportOutlined />} onClick={() => setVisibleExport(true)} className='btn-export'>
+					<ButtonExtend
+						size={size}
+						icon={<ExportOutlined />}
+						onClick={() => setVisibleExport(true)}
+						className='btn-export'
+					>
 						{intl.formatMessage({ id: 'global.table.index.button.xuatdulieu' })}{' '}
 						{selectedIds?.length && selectedIds?.length > 0 ? `(${selectedIds?.length})` : ''}
 					</ButtonExtend>
@@ -111,10 +122,10 @@ export const TableHeader: React.FC = () => {
 						style={
 							findFiltersInColumns(finalColumns, filters)?.length
 								? {
-									borderColor: primaryColor,
-									borderWidth: '1px',
-									borderStyle: 'solid',
-								}
+										borderColor: primaryColor,
+										borderWidth: '1px',
+										borderStyle: 'solid',
+									}
 								: undefined
 						}
 					>
@@ -133,4 +144,3 @@ export const TableHeader: React.FC = () => {
 		</div>
 	);
 };
-

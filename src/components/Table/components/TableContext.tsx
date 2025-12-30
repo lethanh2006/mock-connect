@@ -1,6 +1,6 @@
-import type { InputRef } from 'antd';
-import React, { createContext, useContext, useRef, useState, ReactNode } from 'react';
 import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
+import type { InputRef } from 'antd';
+import React, { createContext, ReactNode, useContext, useRef, useState } from 'react';
 import type { IColumn, TableBaseProps, TFilter } from '../typing';
 
 interface TableContextValue {
@@ -72,7 +72,20 @@ export const TableContext = createContext<TableContextValue | undefined>(undefin
 
 interface TableProviderProps {
 	children: ReactNode;
-	value: Omit<TableContextValue, 'visibleFilter' | 'setVisibleFilter' | 'visibleImport' | 'setVisibleImport' | 'visibleExport' | 'setVisibleExport' | 'finalColumns' | 'setFinalColumns' | 'searchInputRef' | 'filtersTemp' | 'setFiltersTemp'>;
+	value: Omit<
+		TableContextValue,
+		| 'visibleFilter'
+		| 'setVisibleFilter'
+		| 'visibleImport'
+		| 'setVisibleImport'
+		| 'visibleExport'
+		| 'setVisibleExport'
+		| 'finalColumns'
+		| 'setFinalColumns'
+		| 'searchInputRef'
+		| 'filtersTemp'
+		| 'setFiltersTemp'
+	>;
 }
 
 export const TableProvider: React.FC<TableProviderProps> = ({ children, value: externalValue }) => {
@@ -107,4 +120,3 @@ export const useTableContext = () => {
 	}
 	return context;
 };
-
