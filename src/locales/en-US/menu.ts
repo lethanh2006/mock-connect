@@ -5,9 +5,12 @@ export default {
 	'menu.Dashboard': 'Home',
 	'menu.About': `Introduction ${APP_CONFIG_TIEN_TO_TRUONG.toLowerCase()}`,
 	'menu.News': 'News',
+	'menu.News.News': 'News',
+	'menu.DanhMuc': 'Categories',
+	'menu.DanhMuc.ChucVu': 'Positions',
 
-	'menu.DanhMuc': 'Category',
-	'menu.DanhMuc.ChucVu': 'Position',
+	'menu.DashboardGroup': 'Dashboard & Learning',
+	'menu.OtherGroup': 'Others',
 
 	// DEFAULT
 	'menu.Lich': 'Calendar',
@@ -21,7 +24,9 @@ export default {
 	'menu.HocTap.DangKyNhuCau': 'Register for on-demand learning',
 	'menu.HocTap.DangKyTinChi': 'Course Registration',
 	'menu.HocTap.NhuCauHocPhan': 'Course Enrollment Request',
-	'menu.HocTap.LopHocPhan': 'Credit Class',
+	'menu.HocTap.LopHocPhan': 'Credit Classes',
+	'menu.HocTap.LopHocPhan.LopHocPhan': 'Credit Classes',
+	'menu.ChiTietLopHocPhan': 'Credit Class',
 	'menu.HocTap.LichThi': 'Exam Schedule',
 	'menu.HocTap.BaiThiCuoiKy': 'Final Exam Submission',
 	'menu.HocTap.KetQuaHocTap': 'Study Results',
@@ -39,8 +44,7 @@ export default {
 	'menu.TaiChinh.UuDaiThanhToan': 'Payment Discounts',
 	'menu.TaiChinh.GiaoDich': 'Transaction History',
 
-	// TRAINING DISCIPLINE SCORE
-
+	// DRL
 	'menu.DiemRenLuyen': 'Training Discipline',
 
 	'menu.DiemRenLuyen.KhaiBaoMinhChung': 'Evidence Declaration',
@@ -59,11 +63,13 @@ export default {
 	'menu.KhaoSatTrucTuyen': 'Online Surveys',
 	'menu.CuocThi': 'Competitions',
 	'menu.ThongBao': 'Announcements',
+	'menu.ChatBot': 'Ask Amin',
 
 	'menu.TienIch': 'Other Utilities',
 	'menu.TienIch.VanBanHuongDan': 'Guidelines & Documents',
 	'menu.TienIch.CauHoiThuongGap': 'Frequently Asked Questions',
 	'menu.TienIch.XemSau': 'Saved Items',
+	'menu.TienIch.LichSuMuonTraTinhVan': 'Borrowing History',
 
 	'menu.HoatDongKHCN': 'Scientific & Technological Activities',
 	'menu.HoatDongKHCN.DeTaiHocVien': 'Institute-Level Research Projects',
@@ -99,7 +105,7 @@ export default {
 	'menu.KhaiBaoQuyTrinh.LichSu': 'History',
 	'menu.KhaiBaoSucKhoe': 'Health Status',
 
-	// Dormitory & Off-campus Housing
+	// On-campus / Off-campus Housing
 	'menu.NoiNgoaiTru': 'Dormitory & Off-campus Residence',
 	'menu.NoiNgoaiTru.KhaiBao': 'Declaration',
 
@@ -110,6 +116,7 @@ export default {
 	'menu.ThuVien.MuonTraSach': 'Library Resource Search',
 	'menu.ThuVien.LichSuMuonTra': 'Borrowing History',
 
+	// CCT
 	'menu.Activity': 'Activity',
 	'menu.Activity.Register': 'Register',
 	'menu.Activity.MyActivity': 'My Activity',
