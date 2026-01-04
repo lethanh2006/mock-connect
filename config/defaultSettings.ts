@@ -5,14 +5,14 @@ const defaultSettings: LayoutSettings & {
 	siderWidth: number;
 } = {
 	navTheme: 'light',
-	layout: 'mix',
+	layout: 'side',
 	contentWidth: 'Fluid',
 	fixedHeader: true,
 	fixSiderbar: true,
 	colorWeak: true,
-	logo: '/logo-text.png',
+	logo: '/logo_vinuni.png',
 	iconfontUrl: '',
-	siderWidth: 220,
+	siderWidth: 260,
 };
 
 export default defaultSettings;
