@@ -1,6 +1,8 @@
 import Footer from '@/components/Footer';
 import RightContent from '@/components/RightContent';
+import GlobalHeaderRight from '@/components/RightContent';
 import '@ant-design/v5-patch-for-react-19';
+import { PageContainer } from '@ant-design/pro-components';
 import { App } from 'antd';
 import 'dayjs/locale/vi';
 import React from 'react'; // Bổ sung import React
@@ -40,7 +42,7 @@ export async function getInitialState(): Promise<IInitialState> {
 			const { authorizedPermissions } = JSON.parse(raw) as Partial<IInitialState>;
 			Object.assign(initialState, { authorizedPermissions });
 		}
-	} catch (e) {}
+	} catch (e) { }
 
 	return initialState;
 }
@@ -102,15 +104,33 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 			</a>
 		),
 
-		childrenRender: (dom) => (
-			<OIDCBounder>
-				<ErrorBoundary>
-					<TechnicalSupportBounder>
-						<OneSignalBounder>{dom}</OneSignalBounder>
-					</TechnicalSupportBounder>
-				</ErrorBoundary>
-			</OIDCBounder>
-		),
+		childrenRender: (dom) => {
+			const content = (
+				<OIDCBounder>
+					<ErrorBoundary>
+						<TechnicalSupportBounder>
+							<OneSignalBounder>{dom}</OneSignalBounder>
+						</TechnicalSupportBounder>
+					</ErrorBoundary>
+				</OIDCBounder>
+			);
+
+			if (initialState?.settings?.layout === 'side') {
+				return (
+					<PageContainer
+						ghost
+						breadcrumbRender={false}
+						title={false}
+						extra={<GlobalHeaderRight />}
+						header={{}}
+					>
+						{content}
+					</PageContainer>
+				);
+			}
+
+			return content;
+		},
 
 		title: AppModules[currentRole].title,
 		...initialState?.settings,

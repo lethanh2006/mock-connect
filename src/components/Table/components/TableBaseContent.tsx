@@ -1,4 +1,4 @@
-import { MenuOutlined } from '@ant-design/icons';
+import { MenuOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -7,6 +7,7 @@ import type { FilterValue } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
+import ButtonExtend from '../ButtonExtend';
 import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
 import { useTableColumns } from '../hooks/useTableColumns';
@@ -36,6 +37,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		buttons,
 		hasFilter,
 		setSelectedIds,
+		onCreate,
+		size,
 	} = useTableContext();
 
 	const { handleFilter, handleSearch } = useTableColumns({
@@ -136,13 +139,13 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				rowSelection={
 					props?.rowSelection
 						? {
-								type: 'checkbox',
-								selectedRowKeys: selectedIds ?? [],
-								preserveSelectedRowKeys: true,
-								onChange: (selectedRowKeys) => setSelectedIds(selectedRowKeys as (string | number)[]),
-								columnWidth: 40,
-								...props.detailRow,
-							}
+							type: 'checkbox',
+							selectedRowKeys: selectedIds ?? [],
+							preserveSelectedRowKeys: true,
+							onChange: (selectedRowKeys) => setSelectedIds(selectedRowKeys as (string | number)[]),
+							columnWidth: 40,
+							...props.detailRow,
+						}
 						: undefined
 				}
 				loading={loading}
@@ -215,12 +218,31 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		</div>
 	);
 
+	const cardExtra = (
+		<>
+			{buttons?.create !== false ? (
+				<ButtonExtend
+					size={size}
+					onClick={onCreate}
+					icon={<PlusCircleOutlined />}
+					className='btn-add'
+					type='primary'
+					notHideText
+					tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
+				>
+					{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
+				</ButtonExtend>
+			) : null}
+			{props.cardExtra}
+		</>
+	);
+
 	return (
 		<>
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<Card title={props.title || false} variant={props.border ? 'outlined' : 'borderless'} extra={props.cardExtra}>
+				<Card className='table-base-card' title={props.title || false} variant={props.border ? 'outlined' : 'borderless'} extra={cardExtra}>
 					{mainContent}
 				</Card>
 			)}
