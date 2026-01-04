@@ -10,7 +10,7 @@ const defaultSettings: LayoutSettings & {
 	fixedHeader: true,
 	fixSiderbar: true,
 	colorWeak: true,
-	logo: '/logo.png',
+	logo: '/logo_vinuni.png',
 	iconfontUrl: '',
 	siderWidth: 260,
 };
