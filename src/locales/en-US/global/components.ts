@@ -42,6 +42,8 @@ export default {
 	'global.rightcontent.thongbao.dong': 'Close',
 
 	//Table
+	'global.table.column.tt': 'No.',
+
 	'global.table.export.title': 'Export data',
 	'global.table.export.khadung': 'Available fields',
 	'global.table.export.choose.chontatca': 'Select all',
@@ -106,6 +108,17 @@ export default {
 	'global.table.import.validate.dongkhongthanhcong': 'unsuccessful rows',
 	'global.table.import.validate.button.luudulieu': 'Save data',
 	'global.table.import.validate.button.hoanthanh': 'Complete',
+	'global.table.import.validate.excel.thutuhang': 'Row No.',
+	'global.table.import.validate.excel.thongtinloi': 'Error details',
+	'global.table.import.validate.error': 'An error occurred!',
+	'global.table.import.result': 'All {count} rows of data have been {status}',
+	'global.table.import.status.validated': 'successfully validated',
+	'global.table.import.status.saved': 'successfully saved',
+	'global.table.import.validate.thanhcong': 'Successful ({count})',
+	'global.table.import.validate.thatbai': 'Failed ({count})',
+	'global.table.import.validate.popconfirm': 'There is invalid data',
+	'global.table.import.validate.popconfirm1': 'Do you still want to confirm saving the data?',
+	'global.table.import.validate.popconfirm2': 'Confirm saving data to the system?',
 
 	'global.table.index.button.themmoi': 'Add new',
 	'global.table.index.button.themmoi.tooltip': 'Add new data',
@@ -165,6 +178,9 @@ export default {
 	'global.table.operator.not_null': 'Not empty',
 	'global.table.operator.or': 'Or',
 	'global.table.operator.and': 'And',
+
+	'global.table.filterdropdown.xemthem': 'View more',
+	'global.table.filterdropdown.boloc': 'Custom filters',
 
 	'global.tablestatic.button.themmoi': 'Add New',
 	'global.tablestatic.button.themmoi.tooltip': 'Add new data',
