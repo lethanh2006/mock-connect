@@ -3,6 +3,7 @@ import { AutoComplete, Button, Input, Space } from 'antd';
 import type { SortOrder } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import React, { JSX, useEffect } from 'react';
+import { useIntl } from 'umi';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import type { IColumn, TDataOption, TFilter } from '../typing';
@@ -16,6 +17,7 @@ interface UseTableColumnsProps {
 }
 
 export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableColumnsProps) => {
+	const intl = useIntl();
 	const { searchInputRef, filters, setFilters, setFinalColumns, buttons, hasFilter, setVisibleFilter, size } =
 		useTableContext();
 
@@ -119,14 +121,14 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 						</AutoComplete>
 						{buttons?.filter !== false && hasFilter ? (
 							<div>
-								Xem thêm{' '}
+								{intl.formatMessage({ id: 'global.table.filterdropdown.xemthem' })}{' '}
 								<a
 									onClick={() => {
 										setVisibleFilter(true);
 										confirm();
 									}}
 								>
-									Bộ lọc tùy chỉnh
+									{intl.formatMessage({ id: 'global.table.filterdropdown.boloc' })}
 								</a>
 							</div>
 						) : null}
@@ -213,14 +215,14 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					</Space>
 					{buttons?.filter !== false && hasFilter ? (
 						<div>
-							Xem thêm{' '}
+							{intl.formatMessage({ id: 'global.table.filterdropdown.xemthem' })}{' '}
 							<a
 								onClick={() => {
 									setVisibleFilter(true);
 									confirm();
 								}}
 							>
-								Bộ lọc tùy chỉnh
+								{intl.formatMessage({ id: 'global.table.filterdropdown.boloc' })}
 							</a>
 						</div>
 					) : null}
@@ -258,7 +260,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		final = final?.filter((item) => item?.hide !== true);
 		if (addStt !== false)
 			final.unshift({
-				title: 'TT',
+				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
 				// align: 'center',
 				width: 50,
