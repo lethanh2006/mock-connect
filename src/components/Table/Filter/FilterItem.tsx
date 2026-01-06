@@ -69,18 +69,20 @@ const FilterItem = (props: RowFilterProps) => {
 	}, [filterType]);
 
 	const renderDataComponent = () => {
+		const isReadOnly = currentFilter.readOnly;
 		switch (filterType) {
 			case 'string':
-				return <Input placeholder={intl.formatMessage({ id: 'global.table.customfilter.label.giatri' })} />;
+				return <Input placeholder={intl.formatMessage({ id: 'global.table.customfilter.label.giatri' })} disabled={isReadOnly} />;
 			case 'date':
-				return <MyDatePicker />;
+				return <MyDatePicker disabled={isReadOnly} />;
 			case 'datetime':
-				return <MyDatePicker format='DD/MM/YYYY HH:mm' showTime />;
+				return <MyDatePicker format='DD/MM/YYYY HH:mm' showTime disabled={isReadOnly} />;
 			case 'number':
 				return (
 					<InputNumber
 						style={{ width: '100%' }}
 						placeholder={intl.formatMessage({ id: 'global.table.customfilter.label.giatri' })}
+						disabled={isReadOnly}
 					/>
 				);
 			case 'select':
@@ -95,6 +97,7 @@ const FilterItem = (props: RowFilterProps) => {
 						optionFilterProp='label'
 						placeholder={intl.formatMessage({ id: 'global.table.customfilter.placeholder.chongiatri' })}
 						showSearch
+						disabled={isReadOnly}
 					/>
 				);
 			case 'customselect':
@@ -108,7 +111,7 @@ const FilterItem = (props: RowFilterProps) => {
 	return (
 		<Card styles={{ body: { padding: 8 } }} style={{ marginTop: 8 }} variant='borderless'>
 			<Row gutter={[8, 8]}>
-				<Col span={22} md={23}>
+				<Col span={22} md={currentFilter.readOnly ? 24 : 23}>
 					<Row gutter={[8, 0]}>
 						<Col span={12}>
 							<Form.Item
@@ -118,12 +121,13 @@ const FilterItem = (props: RowFilterProps) => {
 								label={
 									<Space>
 										<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
-											<Checkbox>{intl.formatMessage({ id: 'global.table.customfilter.label.thuoctinh' })}</Checkbox>
+											<Checkbox disabled={currentFilter.readOnly}>{intl.formatMessage({ id: 'global.table.customfilter.label.thuoctinh' })}</Checkbox>
 										</Form.Item>
 									</Space>
 								}
 							>
 								<Select
+									disabled={currentFilter.readOnly}
 									onChange={() => {
 										formInstance.setFieldValue([...fullPath, 'operator'], undefined);
 										formInstance.setFieldValue([...fullPath, 'values'], undefined);
@@ -168,19 +172,20 @@ const FilterItem = (props: RowFilterProps) => {
 										label: intl.formatMessage({ id: `global.table.operator.${item}` }),
 									}))}
 									placeholder={intl.formatMessage({ id: 'global.table.customfilter.placeholder.chondieukien' })}
+									disabled={currentFilter.readOnly}
 								/>
 							</Form.Item>
 						</Col>
 
 						{!!currentFilter.operator &&
-						currentFilter.operator !== EOperatorType.NULL &&
-						currentFilter.operator !== EOperatorType.NOT_NULL ? (
+							currentFilter.operator !== EOperatorType.NULL &&
+							currentFilter.operator !== EOperatorType.NOT_NULL ? (
 							<>
 								<Col
 									span={24}
 									md={
 										currentFilter.operator === EOperatorType.BETWEEN ||
-										currentFilter.operator === EOperatorType.NOT_BETWEEN
+											currentFilter.operator === EOperatorType.NOT_BETWEEN
 											? 12
 											: 24
 									}
@@ -188,7 +193,7 @@ const FilterItem = (props: RowFilterProps) => {
 									<Form.Item
 										name={
 											currentFilter.operator === EOperatorType.INCLUDE ||
-											currentFilter.operator === EOperatorType.NOT_INCLUDE
+												currentFilter.operator === EOperatorType.NOT_INCLUDE
 												? [...namePath, 'values']
 												: [...namePath, 'values', 0]
 										}
@@ -201,7 +206,7 @@ const FilterItem = (props: RowFilterProps) => {
 								</Col>
 
 								{currentFilter.operator === EOperatorType.BETWEEN ||
-								currentFilter.operator === EOperatorType.NOT_BETWEEN ? (
+									currentFilter.operator === EOperatorType.NOT_BETWEEN ? (
 									<Col span={24} md={12}>
 										<Form.Item
 											name={[...namePath, 'values', 1]}
@@ -216,38 +221,39 @@ const FilterItem = (props: RowFilterProps) => {
 						) : null}
 					</Row>
 				</Col>
-
-				<Col span={2} md={1}>
-					<Space direction='vertical' align='center' style={{ width: '100%' }} size={4}>
-						{allowGrouping && level === 0 && (
-							<ButtonExtend
-								type='text'
-								size='small'
-								icon={<PlusSquareOutlined />}
-								onClick={() => {
-									const newGroupValue = {
-										active: currentFilter.active !== false,
-										operator: 'and',
-										filters: [currentFilter],
-										indexParent: currentFilter.indexParent,
-									};
-									formInstance.setFieldValue(fullPath, newGroupValue);
-								}}
-								tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.chuyenthanhnhom' })}
-							/>
-						)}
-						{onRemove && (
-							<ButtonExtend
-								type='text'
-								size='small'
-								icon={<CloseOutlined />}
-								onClick={onRemove}
-								danger
-								tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoadieukien' })}
-							/>
-						)}
-					</Space>
-				</Col>
+				{!currentFilter.readOnly && (
+					<Col span={2} md={1}>
+						<Space direction='vertical' align='center' style={{ width: '100%' }} size={4}>
+							{allowGrouping && level === 0 && (
+								<ButtonExtend
+									type='text'
+									size='small'
+									icon={<PlusSquareOutlined />}
+									onClick={() => {
+										const newGroupValue = {
+											active: currentFilter.active !== false,
+											operator: 'and',
+											filters: [currentFilter],
+											indexParent: currentFilter.indexParent,
+										};
+										formInstance.setFieldValue(fullPath, newGroupValue);
+									}}
+									tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.chuyenthanhnhom' })}
+								/>
+							)}
+							{onRemove && (
+								<ButtonExtend
+									type='text'
+									size='small'
+									icon={<CloseOutlined />}
+									onClick={onRemove}
+									danger
+									tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.xoadieukien' })}
+								/>
+							)}
+						</Space>
+					</Col>
+				)}
 			</Row>
 		</Card>
 	);

@@ -19,10 +19,6 @@ interface TableContextValue {
 	// Ref của ô nhập tìm kiếm
 	searchInputRef: React.RefObject<InputRef | null>;
 
-	// Trạng thái modal lọc
-	filtersTemp: TFilter<any>[];
-	setFiltersTemp: React.Dispatch<React.SetStateAction<TFilter<any>[]>>;
-
 	// Trạng thái bảng
 	selectedIds?: (string | number)[];
 	setSelectedIds: (ids?: (string | number)[]) => void;
@@ -83,8 +79,6 @@ interface TableProviderProps {
 		| 'finalColumns'
 		| 'setFinalColumns'
 		| 'searchInputRef'
-		| 'filtersTemp'
-		| 'setFiltersTemp'
 	>;
 }
 
@@ -93,7 +87,6 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
-	const [filtersTemp, setFiltersTemp] = useState<TFilter<any>[]>([]);
 	const searchInputRef = useRef<InputRef>(null);
 	const contextValue: TableContextValue = {
 		...externalValue,
@@ -106,8 +99,6 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 		finalColumns,
 		setFinalColumns,
 		searchInputRef,
-		filtersTemp,
-		setFiltersTemp,
 	};
 
 	return <TableContext.Provider value={contextValue}>{children}</TableContext.Provider>;
