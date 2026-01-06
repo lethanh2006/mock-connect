@@ -6,7 +6,6 @@ import {
 	FilterOutlined,
 	FilterTwoTone,
 	ImportOutlined,
-	PlusCircleOutlined,
 	ReloadOutlined,
 } from '@ant-design/icons';
 import { Popconfirm, Tooltip } from 'antd';
@@ -31,7 +30,6 @@ export const TableHeader: React.FC = () => {
 		setVisibleFilter,
 		setVisibleImport,
 		setVisibleExport,
-		onCreate,
 		onReload,
 		loading,
 		total,
@@ -42,20 +40,6 @@ export const TableHeader: React.FC = () => {
 	return (
 		<div className='header'>
 			<div className='action'>
-				{buttons?.create !== false ? (
-					<ButtonExtend
-						size={size}
-						onClick={onCreate}
-						icon={<PlusCircleOutlined />}
-						className='btn-add'
-						type='primary'
-						notHideText
-						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
-					>
-						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
-					</ButtonExtend>
-				) : null}
-
 				{buttons?.import ? (
 					<ButtonExtend
 						size={size}
@@ -122,10 +106,10 @@ export const TableHeader: React.FC = () => {
 						style={
 							findFiltersInColumns(finalColumns, filters)?.length
 								? {
-										borderColor: primaryColor,
-										borderWidth: '1px',
-										borderStyle: 'solid',
-									}
+									borderColor: primaryColor,
+									borderWidth: '1px',
+									borderStyle: 'solid',
+								}
 								: undefined
 						}
 					>
