@@ -53,7 +53,7 @@
 }
 
 // Style cho nhãn form - VinUni
-.ant-form-item-label > label {
+.ant-form-item-label>label {
 	height: auto;
 	margin: 4px 0 !important;
 	font-weight: 600 !important;
@@ -79,8 +79,8 @@
 
 // Màu tiêu đề card
 .ant-card.card-big-title {
-	> .ant-card-head {
-		> .ant-card-head-wrapper > .ant-card-head-title {
+	>.ant-card-head {
+		>.ant-card-head-wrapper>.ant-card-head-title {
 			color: var(--color-primary);
 		}
 	}
@@ -112,8 +112,8 @@
 .ant-table,
 .ant-table-container,
 .ant-table-content,
-.ant-table-thead > tr > th,
-.ant-table-tbody > tr > td {
+.ant-table-thead>tr>th,
+.ant-table-tbody>tr>td {
 	border: none !important;
 }
 
@@ -140,7 +140,7 @@
 		padding: 3px 18px !important;
 	}
 
-	> tr > th {
+	>tr>th {
 		background-color: #f5f5f5 !important;
 		color: #262626 !important;
 		font-weight: 700 !important;
@@ -195,11 +195,11 @@
 	&.card-borderless {
 		box-shadow: none;
 
-		> .ant-card-body {
+		>.ant-card-body {
 			padding: 8px 0 0 !important;
 		}
 
-		> .ant-card-head {
+		>.ant-card-head {
 			padding: 0;
 		}
 	}
@@ -207,15 +207,15 @@
 	&.card-big-title {
 		background: transparent;
 
-		> .ant-card-head {
+		>.ant-card-head {
 			border-bottom: none;
 
-			> .ant-card-head-wrapper > .ant-card-head-title {
+			>.ant-card-head-wrapper>.ant-card-head-title {
 				font-size: 18px;
 			}
 		}
 
-		> .ant-card-body {
+		>.ant-card-body {
 			padding: 0;
 		}
 	}
@@ -242,7 +242,7 @@
 	}
 
 	.ant-card-head {
-		padding: 16px 0;
+		padding: 0 0 16px 0;
 		border: none !important;
 
 		.ant-card-head-title {
@@ -253,7 +253,7 @@
 				content: '' !important;
 				position: absolute !important;
 				left: -18px !important;
-				top: 13px !important;
+				top: 0 !important;
 				transform: translateY(-50%) !important;
 				width: 0 !important;
 				height: 0 !important;
@@ -272,7 +272,7 @@
 				}
 
 				@media (max-width: 425px) {
-					top: 18px !important;
+					top: 4px !important;
 					left: -10px !important;
 					border-right: 10px solid var(--vin-color-primary) !important;
 					border-top: 8px solid transparent !important;
@@ -474,6 +474,7 @@
 			.ant-page-header-heading-extra {
 				.ant-space {
 					.ant-space-item {
+
 						[class*='menu_right'],
 						.menu_right {
 							margin-left: auto !important;
@@ -503,10 +504,8 @@
 
 							[class*='action'],
 							.action {
-								&:hover {
-									border-radius: 6px !important;
-									padding: 3px !important;
-								}
+								border-radius: 6px !important;
+								padding: 3px !important;
 							}
 						}
 					}
@@ -569,7 +568,7 @@
 	border-radius: 8px !important;
 
 	.header {
-		padding: 12px 18px !important;
+		padding: 12px 16px !important;
 		// flex-direction: row-reverse !important;
 		display: flex !important;
 		align-items: center !important;
@@ -709,7 +708,7 @@
 
 // Margin cho footer toàn cục
 .ant-pro-global-footer {
-	margin-block-start: 0 !important;
+	margin-block-start: 6px !important;
 	margin-block-end: 0 !important;
 	position: relative !important;
 	bottom: auto !important;
@@ -761,8 +760,7 @@
 	img {
 		height: 24px !important;
 		width: 24px !important;
-		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%)
-			contrast(97%); // Màu đỏ #C72127
+		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%); // Màu đỏ #C72127
 	}
 
 	img[src*='notification.svg'],
@@ -906,7 +904,7 @@
 		height: auto;
 		line-height: normal;
 
-		& + span {
+		&+span {
 			display: none; // hide icon if group title
 		}
 	}
@@ -934,15 +932,29 @@
 
 // Đẩy nội dung xuống dưới header fixed, giữ before background đủ không gian
 .ant-pro-layout-container {
-	margin-top: 64px !important;
+	margin-top: 80px !important;
 
 	@media (max-width: 767px) {
-		margin-top: 0 !important; // mobile đã ẩn header
+		margin-top: 16px !important; // mobile đã ẩn header
 	}
 }
 
 @media (max-width: 425px) {
 	.ant-pro-layout .ant-pro-sider-collapsed-button {
 		right: -10px !important;
+	}
+}
+
+.ant-modal {
+	.ant-modal-content {
+		.ant-modal-header {
+			border-bottom: 1.5px solid #f4f4f4 !important;
+		}
+
+		.ant-modal-footer {
+			border-top: 1.5px solid #f4f4f4 !important;
+			padding-top: 16px !important;
+			justify-content: end;
+		}
 	}
 }
