@@ -29,6 +29,7 @@ declare const APP_CONFIG_TEN_TRUONG: string;
 declare const APP_CONFIG_TIEN_TO_TRUONG: string;
 declare const APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH: string;
 declare const APP_CONFIG_PRIMARY_COLOR: string;
+declare const APP_CONFIG_HIGHLIGHT_COLOR: string;
 
 declare const APP_CONFIG_URL_LANDING: string;
 declare const APP_CONFIG_URL_CONNECT: string;
