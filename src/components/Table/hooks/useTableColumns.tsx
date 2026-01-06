@@ -57,13 +57,20 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			const tempFilters = filters?.filter((item) => JSON.stringify(item.field) !== JSON.stringify(dataIndex));
 			setFilters(tempFilters);
 		} else {
+			// Tìm column tương ứng để check có handleFilter không
+			const column = columns.find(
+				(col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex)
+			);
+			// Nếu column có handleFilter => đánh dấu readonly
+			const readOnly = !!column?.handleFilter;
+
 			const filter = getFilterColumn(dataIndex);
 			let tempFilters: TFilter<any>[] = [...(filters ?? [])];
 			if (filter)
 				// Cập nhật bộ lọc hiện tại
 				tempFilters = tempFilters.map((item) =>
 					JSON.stringify(item.field) === JSON.stringify(dataIndex)
-						? { ...item, active: true, operator: EOperatorType.CONTAIN, values: [value] }
+						? { ...item, active: true, operator: EOperatorType.CONTAIN, values: [value], readOnly }
 						: item,
 				);
 			// Thêm quy tắc lọc mới cho cột này
@@ -73,6 +80,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					field: dataIndex,
 					operator: EOperatorType.CONTAIN,
 					values: [value],
+					readOnly,
 				});
 			setFilters(tempFilters);
 		}
@@ -155,13 +163,20 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			const tempFilters = filters?.filter((item) => JSON.stringify(item.field) !== JSON.stringify(dataIndex));
 			setFilters(tempFilters);
 		} else {
+			// Tìm column tương ứng để check có handleFilter không
+			const column = columns.find(
+				(col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex)
+			);
+			// Nếu column có handleFilter => đánh dấu readonly
+			const readOnly = !!column?.handleFilter;
+
 			const filter = getFilterColumn(dataIndex);
 			let tempFilters: TFilter<any>[] = [...(filters ?? [])];
 			if (filter)
 				// Cập nhật bộ lọc hiện tại
 				tempFilters = tempFilters.map((item) =>
 					JSON.stringify(item.field) === JSON.stringify(dataIndex)
-						? { ...item, active: true, operator: EOperatorType.INCLUDE, values }
+						? { ...item, active: true, operator: EOperatorType.INCLUDE, values, readOnly }
 						: item,
 				);
 			// Thêm quy tắc lọc mới cho cột này
@@ -171,6 +186,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					field: dataIndex,
 					operator: EOperatorType.INCLUDE,
 					values,
+					readOnly,
 				});
 			setFilters(tempFilters);
 		}

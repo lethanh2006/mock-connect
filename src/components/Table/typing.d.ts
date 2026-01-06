@@ -24,6 +24,8 @@ export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 
 	/** JSX Element trả về 1 mảng value, thường là id */
 	filterCustomSelect?: JSX.Element;
 
+	handleFilter?: (value: any) => void;
+
 	/** Bắt buộc phải có để dùng custom Filter hoặc Import dữ liệu
 	 * Có thể filter 'string' với các trường populated
 	 */
@@ -164,6 +166,7 @@ export type TFilter<T> = {
 	active?: boolean;
 	filters?: TFilter<T>[];
 	logicOperator?: 'or' | 'and';
+	readOnly?: boolean;
 };
 
 export type RowFilterProps = {
