@@ -93,6 +93,8 @@ export default {
 	'menu.HoatDongKHCN.DeTaiKhoa.HoiDongXetDuyetThuyetMinh': 'Research Proposal Review Committee',
 	'menu.HoatDongKHCN.DeTaiKhoa.HoiDongNghiemThu': 'Research Acceptance Committee',
 	'menu.HoatDongKHCN.DeTaiKhoa.NopThuyetMinh': 'Submit Research Proposal Document',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoSauHoiDongThuyetMinh': 'Submit application after the Presentation Council',
+
 	'menu.HoatDongKHCN.DeTaiKhoa.NopHoSoNghiemThu': 'Submit Research Acceptance Document',
 	'menu.HoatDongKHCN.DeTaiKhoa.ThucHienDeTai': 'Implement Research Project',
 	'menu.HoatDongKHCN.DeTaiKhoa.QuyetDinhGiao': 'Research Project Assignment Decision',
