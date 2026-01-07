@@ -103,6 +103,19 @@
 	}
 }
 
+.ant-btn {
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
+
+	.ant-btn-icon,
+	.anticon {
+		font-size: 18px !important;
+		margin: 0 !important;
+		line-height: 1 !important;
+	}
+}
+
 .ant-table-small .ant-table-cell {
 	height: 36px;
 	padding: 3px 5px !important;
@@ -158,6 +171,18 @@
 	}
 }
 
+.ant-table-tbody {
+	.ant-table-selection-column {
+		text-align: start !important;
+	}
+}
+
+.ant-tabs {
+	.ant-tabs-nav {
+		padding: 0 12px !important;
+	}
+}
+
 .ant-card {
 	height: 100%;
 	border-radius: 6px !important;
@@ -173,6 +198,7 @@
 	.ant-card-head {
 		padding: 16px;
 		border-bottom: 1.5px solid #f4f4f4 !important;
+		background-color: var(--vin-color-primary-bg) !important;
 
 		@media (max-width: @screen-xs) {
 			padding: 0 12px;
@@ -200,7 +226,7 @@
 		}
 
 		>.ant-card-head {
-			padding: 0;
+			padding: 0 12px;
 		}
 	}
 
@@ -244,6 +270,7 @@
 	.ant-card-head {
 		padding: 0 0 16px 0;
 		border: none !important;
+		background-color: transparent !important;
 
 		.ant-card-head-title {
 			font-size: 22px !important;
@@ -563,17 +590,48 @@
 
 // Z-index cho tổng số ở header bảng
 .table-base {
-	padding: 0 !important;
+	padding: 16px 0 0 0 !important;
 	background-color: var(--color-accent-800) !important;
 	border-radius: 8px !important;
 
+	.ant-space {
+		padding: 0 16px !important;
+	}
+
+	.table-base-header {
+		margin-bottom: 0 !important;
+	}
+
+	.ant-spin-nested-loading {
+		.ant-spin-container {
+			.ant-table-pagination {
+				.ant-pagination-item {
+					a {
+						font-weight: 600 !important;
+					}
+				}
+
+				.ant-pagination-item-active {
+					background-color: var(--vin-color-primary) !important;
+					border: none !important;
+
+					a {
+						color: #ffffff !important;
+						font-weight: 600 !important;
+					}
+				}
+			}
+		}
+	}
+
 	.header {
-		padding: 12px 16px !important;
+		padding: 0 12px 16px 12px !important;
 		// flex-direction: row-reverse !important;
 		display: flex !important;
 		align-items: center !important;
 		justify-content: space-between !important;
 		gap: 12px !important;
+		margin-bottom: 0 !important;
 
 		.action {
 			display: flex !important;
@@ -582,10 +640,6 @@
 			flex-wrap: wrap !important;
 
 			.ant-btn {
-				// padding: 4px !important;
-				display: flex !important;
-				justify-content: center !important;
-				align-items: center !important;
 				padding: 8px !important;
 
 				.ant-btn-icon,
@@ -608,11 +662,6 @@
 			gap: 8px !important;
 
 			.ant-btn {
-				// padding: 4px !important;
-				display: flex !important;
-				justify-content: center !important;
-				align-items: center !important;
-				padding: 8px !important;
 
 				.ant-btn-icon,
 				.anticon {
@@ -849,7 +898,7 @@
 	}
 
 	.ant-menu-root {
-		padding-top: 8px;
+		padding: 0 !important;
 	}
 
 	.ant-menu-item-group-title {
@@ -865,14 +914,14 @@
 	.ant-menu-submenu-title {
 		color: #595959;
 		font-weight: 600;
-		margin: 4px 0 !important;
+		margin: 0 !important;
 		width: 100% !important;
 		border-radius: 0 !important;
-		padding-left: 24px !important;
+		padding: 12px 16px !important;
 
 		&:hover {
-			color: var(--color-primary);
-			background-color: #f0f7ff !important;
+			color: var(--color-highlight);
+			background-color: transparent;
 		}
 
 		.anticon {
@@ -899,8 +948,7 @@
 		font-weight: 700;
 		text-transform: uppercase;
 		font-size: 11px;
-		padding: 8px 24px 0px;
-		margin-top: 16px;
+		// padding: 8px 0px;
 		height: auto;
 		line-height: normal;
 
@@ -910,11 +958,10 @@
 	}
 }
 
-.ant-pro-sider-menu {
-	.ant-menu-item {
-		padding-inline: 24px !important;
-	}
-}
+// .ant-pro-sider-menu {
+// 	.ant-menu-item {
+// 	}
+// }
 
 // Style header của layout - VinUni
 .ant-layout-header {
@@ -949,6 +996,7 @@
 	.ant-modal-content {
 		.ant-modal-header {
 			border-bottom: 1.5px solid #f4f4f4 !important;
+			background-color: var(--vin-color-primary-bg) !important;
 		}
 
 		.ant-modal-footer {
@@ -957,4 +1005,8 @@
 			justify-content: end;
 		}
 	}
+}
+
+.ant-table-cell-fix-right-first {
+	display: flex !important;
 }
