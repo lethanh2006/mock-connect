@@ -1,4 +1,4 @@
-import { primaryColor } from '@/services/base/constant';
+import { primaryColor, highlightColor } from '@/services/base/constant';
 import { getLocale } from '@umijs/max';
 import { ConfigProvider, Spin } from 'antd';
 import { useEffect } from 'react';
@@ -37,8 +37,35 @@ const ConfigBounder = (props: { children?: any }) => {
 						dotSizeSM: 30,
 						dotSizeLG: 60,
 					},
+					Button: {
+						controlHeight: 36,
+						colorPrimary: highlightColor,
+						borderRadius: 4,
+						fontWeight: 600,
+					},
+					Pagination: {
+						colorPrimary: '#ffffff',
+						colorPrimaryActive: '#ffffff',
+						borderRadius: 4,
+						itemActiveBg: highlightColor,
+						colorPrimaryBorder: highlightColor,
+						colorPrimaryHover: '#ffffff',
+						fontWeightStrong: 600,
+					},
+					DatePicker: {
+						colorPrimary: highlightColor,
+						borderRadius: 4,
+						cellActiveWithRangeBg: highlightColor,
+						colorLink: highlightColor,
+						fontWeightStrong: 700,
+						colorIcon: primaryColor,
+					},
 					Divider: {
 						orientationMargin: 0,
+					},
+					Select: {
+						optionSelectedColor: primaryColor,
+						optionSelectedBg: '#f4f9ff',
 					},
 					Table: {
 						borderColor: '#e8e8e8',

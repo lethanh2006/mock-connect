@@ -50,6 +50,11 @@
 
 * {
 	font-family: 'Montserrat', sans-serif !important;
+	// font-size: 14px !important;
+	// color: var(--color-text-100) !important;
+	// font-weight: 500 !important;
+	// line-height: 1.5 !important;
+	// letter-spacing: 0,25px !important;
 }
 
 // Style cho nhãn form - VinUni
@@ -103,19 +108,6 @@
 	}
 }
 
-.ant-btn {
-	display: flex !important;
-	justify-content: center !important;
-	align-items: center !important;
-
-	.ant-btn-icon,
-	.anticon {
-		font-size: 18px !important;
-		margin: 0 !important;
-		line-height: 1 !important;
-	}
-}
-
 .ant-table-small .ant-table-cell {
 	height: 36px;
 	padding: 3px 5px !important;
@@ -155,7 +147,7 @@
 
 	>tr>th {
 		background-color: #f5f5f5 !important;
-		color: #262626 !important;
+		color: var(--color-text-100) !important;
 		font-weight: 700 !important;
 		text-align: left !important;
 		border-bottom: 1px solid #f0f0f0 !important;
@@ -166,7 +158,7 @@
 		}
 
 		.ant-table-column-title {
-			color: #262626 !important;
+			color: var(--color-text-100) !important;
 		}
 	}
 }
@@ -174,6 +166,25 @@
 .ant-table-tbody {
 	.ant-table-selection-column {
 		text-align: start !important;
+	}
+
+	.ant-table-cell-fix-right-first {
+		display: flex !important;
+		gap: 6px !important;
+
+		.ant-btn {
+			padding: 6px !important;
+			width: 28px !important;
+			height: 28px !important;
+			background-color: var(--color-info-bg) !important;
+		}
+
+		.ant-btn-icon,
+		.anticon {
+			font-size: 16px !important;
+			margin: 0 !important;
+			line-height: 1 !important;
+		}
 	}
 }
 
@@ -197,7 +208,7 @@
 
 	.ant-card-head {
 		padding: 16px;
-		border-bottom: 1.5px solid #f4f4f4 !important;
+		border-bottom: 1.5px solid var(--color-accent-700) !important;
 		background-color: var(--vin-color-primary-bg) !important;
 
 		@media (max-width: @screen-xs) {
@@ -324,8 +335,6 @@
 
 .ant-table-tbody {
 	.ant-table-cell {
-		color: #434343;
-
 		.ant-tag {
 			border-radius: 4px;
 			font-weight: 600;
@@ -371,14 +380,9 @@
 // Style chung cho tất cả button antd
 .ant-btn {
 	text-transform: uppercase !important;
-	font-weight: 600 !important;
-	padding: 8px 16px 6px 16px !important;
-	height: auto !important;
-	border-radius: 4px !important;
-
-	.anticon {
-		margin-right: 8px;
-	}
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
 }
 
 // Ghi đè màu primary cho button - VinUni
@@ -387,19 +391,19 @@
 	border-color: var(--vin-color-primary) !important;
 	color: var(--color-accent-800) !important;
 
-	&:hover:not(:disabled) {
+	&:hover {
 		background-color: var(--color-accent-800) !important;
 		border-color: var(--vin-color-primary) !important;
 		color: var(--vin-color-primary) !important;
 	}
 
-	&:focus:not(:disabled) {
+	&:focus {
 		background-color: var(--color-accent-800) !important;
 		border-color: var(--vin-color-primary) !important;
 		color: var(--vin-color-primary) !important;
 	}
 
-	&:active:not(:disabled) {
+	&:active {
 		background-color: #f5f5f5 !important;
 		border-color: var(--vin-color-primary) !important;
 		color: var(--vin-color-primary) !important;
@@ -411,17 +415,16 @@
 .btn-reload,
 .btn-filter {
 	background-color: var(--color-accent-800) !important;
-	border: 1.5px solid #d9d9d9 !important;
-	color: #595959 !important;
+	border: 1.5px solid var(--color-accent-700) !important;
+	color: var(--color-text-100) !important;
 	text-transform: uppercase;
 	font-weight: 700;
-	padding: 8px 16px 6px 16px !important;
+	font-size: 16px !important;
 	height: auto !important;
 	border-radius: 4px;
 
 	&:hover {
-		border-color: #1d3557 !important;
-		color: #1d3557 !important;
+		border-color: var(--color-text-200) !important;
 	}
 }
 
@@ -466,7 +469,7 @@
 	}
 
 	.ant-page-header {
-		border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+		border-bottom: 1px solid var(--color-official-200) !important;
 		padding: 16px !important;
 		min-height: 64px !important;
 		height: 64px !important;
@@ -602,31 +605,8 @@
 		margin-bottom: 0 !important;
 	}
 
-	.ant-spin-nested-loading {
-		.ant-spin-container {
-			.ant-table-pagination {
-				.ant-pagination-item {
-					a {
-						font-weight: 600 !important;
-					}
-				}
-
-				.ant-pagination-item-active {
-					background-color: var(--vin-color-primary) !important;
-					border: none !important;
-
-					a {
-						color: #ffffff !important;
-						font-weight: 600 !important;
-					}
-				}
-			}
-		}
-	}
-
 	.header {
 		padding: 0 12px 16px 12px !important;
-		// flex-direction: row-reverse !important;
 		display: flex !important;
 		align-items: center !important;
 		justify-content: space-between !important;
@@ -644,7 +624,7 @@
 
 				.ant-btn-icon,
 				.anticon {
-					font-size: 18px !important;
+					font-size: 17px !important;
 					margin: 0 !important;
 					line-height: 1 !important;
 				}
@@ -662,10 +642,11 @@
 			gap: 8px !important;
 
 			.ant-btn {
+				padding: 8px !important;
 
 				.ant-btn-icon,
 				.anticon {
-					font-size: 18px !important;
+					font-size: 17px !important;
 					margin: 0 !important;
 					line-height: 1 !important;
 				}
@@ -694,7 +675,7 @@
 
 // Border cho page header không có children
 .ant-page-header-no-children {
-	border: 1px solid rgba(255, 255, 255, 0.2) !important;
+	border: 1px solid var(--color-official-200) !important;
 	border-bottom: none !important;
 	display: flex !important;
 	justify-content: space-between !important;
@@ -732,7 +713,7 @@
 	display: flex !important;
 	align-items: center !important;
 	justify-content: center !important;
-	color: #000 !important;
+	color: var(--color-text-100) !important;
 
 	@media (max-width: 425px) {
 		right: 0 !important;
@@ -800,15 +781,15 @@
 // Kích thước và hình ảnh của menu item ở header - VinUni
 [class*='menu_right'] .header-menu-item,
 .menu_right .header-menu-item {
-	height: 40px !important;
-	width: 40px !important;
+	height: 36px !important;
+	width: 36px !important;
 	display: flex !important;
 	align-items: center !important;
 	justify-content: center !important;
 
 	img {
-		height: 24px !important;
-		width: 24px !important;
+		height: 20px !important;
+		width: 20px !important;
 		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%); // Màu đỏ #C72127
 	}
 
@@ -818,7 +799,7 @@
 	}
 
 	&:hover {
-		background-color: #f0f7ffeb !important;
+		background-color: var(--color-info-bg) !important;
 	}
 }
 
@@ -882,7 +863,7 @@
 	h1 {
 		font-size: 16px;
 		font-weight: 700;
-		color: #1d3557;
+		color: var(--color-official-200);
 		text-transform: uppercase;
 		display: block !important;
 	}
@@ -890,7 +871,7 @@
 
 .ant-layout-sider {
 	background-color: var(--color-accent-800) !important;
-	border-right: 1px solid #f0f0f0;
+	border-right: 1px solid var(--color-accent-700);
 	overflow: visible !important;
 
 	.ant-layout-sider-children {
@@ -904,7 +885,7 @@
 	.ant-menu-item-group-title {
 		font-size: 11px;
 		font-weight: 700;
-		color: #8c8c8c;
+		color: var(--color-text-300) !important;
 		text-transform: uppercase;
 		padding: 16px 24px 8px;
 		line-height: normal;
@@ -912,7 +893,7 @@
 
 	.ant-menu-item,
 	.ant-menu-submenu-title {
-		color: #595959;
+		color: var(--color-text-100) !important;
 		font-weight: 600;
 		margin: 0 !important;
 		width: 100% !important;
@@ -931,37 +912,34 @@
 	}
 
 	.ant-menu-item-selected {
-		background-color: #f0f7ff !important;
+		background-color: var(--color-info-bg) !important;
 		color: var(--color-primary) !important;
 		position: relative;
+
+		.ant-menu-title-content {
+			color: var(--color-primary) !important;
+		}
 
 		.anticon {
 			color: var(--color-primary);
 		}
 	}
 
-	// Grouping simulator for path-based headers (if used)
 	a[href^='/__group__/'] {
 		display: block;
 		pointer-events: none;
-		color: #8c8c8c !important;
+		color: var(--color-text-300) !important;
 		font-weight: 700;
 		text-transform: uppercase;
-		font-size: 11px;
-		// padding: 8px 0px;
+		font-size: 14px !important;
 		height: auto;
 		line-height: normal;
 
 		&+span {
-			display: none; // hide icon if group title
+			display: none;
 		}
 	}
 }
-
-// .ant-pro-sider-menu {
-// 	.ant-menu-item {
-// 	}
-// }
 
 // Style header của layout - VinUni
 .ant-layout-header {
@@ -995,18 +973,54 @@
 .ant-modal {
 	.ant-modal-content {
 		.ant-modal-header {
-			border-bottom: 1.5px solid #f4f4f4 !important;
+			border-bottom: 1.5px solid var(--color-accent-700) !important;
 			background-color: var(--vin-color-primary-bg) !important;
 		}
 
 		.ant-modal-footer {
-			border-top: 1.5px solid #f4f4f4 !important;
+			border-top: 1.5px solid var(--color-accent-700) !important;
 			padding-top: 16px !important;
 			justify-content: end;
 		}
 	}
 }
 
-.ant-table-cell-fix-right-first {
-	display: flex !important;
+.ant-popover {
+	.ant-popover-content {
+		.ant-popconfirm-inner-content {
+			.ant-popconfirm-buttons {
+				display: flex !important;
+				justify-content: end !important;
+				gap: 8px !important;
+			}
+		}
+	}
+}
+
+.ant-menu-title-content {
+	color: var(--color-text-100) !important;
+}
+
+.ant-picker-dropdown {
+	.ant-picker-range-wrapper {
+		.ant-picker-panel-container {
+			.ant-picker-panel-layout {
+				.ant-picker-panels {
+					.ant-picker-panel {
+						.ant-picker-body {
+							.ant-picker-content {
+								tbody {
+									tr {
+										.ant-picker-cell-in-view {
+											color: var(--color-text-100) !important;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
