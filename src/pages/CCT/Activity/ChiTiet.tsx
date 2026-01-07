@@ -18,7 +18,7 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 			{
 				roleName: string;
 				levelName?: string;
-				attributes: string[];
+				attributes: { name: string; color?: string }[];
 				autoApprove: boolean;
 			}
 		>();
@@ -37,14 +37,14 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 			}
 
 			if (item.attributes?.name) {
-				map.get(roleId)!.attributes.push(item.attributes.name);
+				map.get(roleId)!.attributes.push({
+					name: item.attributes.name,
+					color: item.attributes.color,
+				});
 			}
 		});
 
-		return Array.from(map.values()).map((item) => ({
-			...item,
-			attributesText: item.attributes.join(', '),
-		}));
+		return Array.from(map.values());
 	}, [record]);
 
 	const columns: IColumn<any>[] = [
@@ -60,9 +60,18 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.detail.attributes' }),
-			width: 120,
-			render: (_, rec) => rec.attributesText,
+			width: 200,
+			render: (_, rec) => (
+				<Space size={[4, 4]} wrap>
+					{rec.attributes?.map((attr: any, idx: number) => (
+						<Tag key={idx} color={attr.color}>
+							{attr.name}
+						</Tag>
+					))}
+				</Space>
+			),
 		},
+
 		{
 			title: intl.formatMessage({ id: 'activity.detail.autoApproval' }),
 			dataIndex: 'autoApprove',
