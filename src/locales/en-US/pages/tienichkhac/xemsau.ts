@@ -1,0 +1,16 @@
+export default {
+	'xemsau.title': 'Watchlist',
+	'xemsau.noidung': 'Content',
+	'xemsau.thaotac': 'Operation',
+	'xemsau.boluu': 'Remove save',
+	'xemsau.boluu.place': 'Are you sure you want to discard this information?',
+	'xemsau.xem': 'See',
+	'xemsau.chitiet.title': 'Activity details',
+	'xemsau.chitiet.tenhoatdong': 'Activity name',
+	'xemsau.chitiet.loai': 'Type',
+	'xemsau.chitiet.hocky': 'Semester',
+	'xemsau.chitiet.slthamgia': 'Number of participants',
+	'xemsau.chitiet.tgbt': 'Start time',
+	'xemsau.chitiet.tgkt': 'End time',
+	'xemsau.chitiet.diadiem': 'Location',
+};
