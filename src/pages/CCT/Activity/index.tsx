@@ -52,7 +52,8 @@ const ActivityPage = () => {
 					{danhSach?.map((item) => {
 						const isFutureOrNow = dayjs(item.startDate).isSameOrAfter(dayjs());
 
-						const disabledRegister = !!item.workflow || !item.activitiesTypeId || !isFutureOrNow;
+						const disabledRegister = !!item.workflow || !item.activitiesTypeId;
+						// || !isFutureOrNow;
 
 						return (
 							<Col key={item._id} xs={24} sm={12} md={8} lg={6}>

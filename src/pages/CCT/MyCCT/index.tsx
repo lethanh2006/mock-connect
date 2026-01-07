@@ -328,9 +328,11 @@ const StarRating: React.FC<{ count: number }> = ({ count }) => {
 
 const TranscriptReport: React.FC<any> = () => {
 	const { getAllModel, loading } = useModel('cct.activityoutcome');
+	const { getAllModel: getAllLevel, danhSach: dsLevels } = useModel('cct.levels');
 	const [danhSach, setDanhSach] = useState<any>();
 
 	useEffect(() => {
+		getAllLevel(undefined, { order: 1 });
 		getAllModel(undefined, undefined, undefined, undefined, 'my-cct', false).then((res) => setDanhSach(res));
 	}, []);
 
@@ -367,18 +369,12 @@ const TranscriptReport: React.FC<any> = () => {
 										<div className='info-block'>
 											<div className='description'>{attribute.description}</div>
 											<div className='rating-list'>
-												<div className='rating-row'>
-													<span className='rating-label'>Change-maker:</span>
-													<StarRating count={Utils.getStarCount(countLevel, 'Change')} />
-												</div>
-												<div className='rating-row'>
-													<span className='rating-label'>Connector:</span>
-													<StarRating count={Utils.getStarCount(countLevel, 'Connect')} />
-												</div>
-												<div className='rating-row'>
-													<span className='rating-label'>Explorer:</span>
-													<StarRating count={Utils.getStarCount(countLevel, 'Explorer')} />
-												</div>
+												{dsLevels?.map((item) => (
+													<div className='rating-row'>
+														<span className='rating-label'>{item?.name}:</span>
+														<StarRating count={Utils.getStarCount(countLevel, item?.name)} />
+													</div>
+												))}
 											</div>
 										</div>
 									</div>
