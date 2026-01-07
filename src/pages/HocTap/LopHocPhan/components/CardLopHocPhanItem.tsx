@@ -14,7 +14,7 @@ interface CardLopHocPhanItemProps {
 	backgrounds: string[];
 	isHienTai?: boolean;
 	isKeTiep?: boolean;
-	diemDanh?: { coMat?: number; chuaDiemDanh?: number };
+	diemDanh?: { soBuoi?: number; coMat?: number; chuaDiemDanh?: number };
 	soBaiTap?: number;
 	soBaiDang?: number;
 }
@@ -122,7 +122,9 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 							<ScheduleOutlined className='anticon' />
 							<Text strong>
 								{diemDanh?.coMat !== undefined ? diemDanh.coMat : '-'} /{' '}
-								{diemDanh?.chuaDiemDanh ? allThoiKhoaBieu.length - (diemDanh?.chuaDiemDanh ?? 0) : '-'}
+								{diemDanh?.chuaDiemDanh
+									? diemDanh?.soBuoi || allThoiKhoaBieu.length - (diemDanh?.chuaDiemDanh ?? 0)
+									: '-'}
 							</Text>
 						</div>
 					</Tooltip>

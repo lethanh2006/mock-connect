@@ -99,24 +99,18 @@ const TheChatPage = () => {
 
 							{record?._id && (
 								<div style={{ fontSize: '14px', lineHeight: '1.8', color: '#333' }}>
-									<Divider orientation='left'>
-										{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.title' })}
-									</Divider>
+									<Divider orientation='left'>Chỉ số hình thể</Divider>
 									<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '15px' }}>
 										<div className='height-card' style={{ background: '#DCFFFF' }}>
 											<div className='left'>
 												<img
 													src='/images/thechat/chieucao.png'
-													alt='height icon'
+													alt='Chiều cao'
 													className='icon-vertical'
 													style={{ color: '#18BBC2' }}
 												/>
-
-												<div className='label'>
-													{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.chieucao.title' })}
-												</div>
+												<div className='label'>Chiều cao</div>
 											</div>
-
 											<div className='right'>
 												<span className='value' style={{ color: '#26C2C8' }}>
 													{record?.chieuCao}
@@ -124,21 +118,16 @@ const TheChatPage = () => {
 												<span className='unit'>cm</span>
 											</div>
 										</div>
-
 										<div className='height-card' style={{ background: '#F8DDD3' }}>
 											<div className='left'>
 												<img
 													src='/images/thechat/cannang.png'
-													alt='height icon'
+													alt='Cân nặng'
 													className='icon-vertical'
 													style={{ color: '#E20404' }}
 												/>
-
-												<div className='label'>
-													{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.cannang.title' })}
-												</div>
+												<div className='label'>Cân nặng</div>
 											</div>
-
 											<div className='right'>
 												<span className='value' style={{ color: '#E20404' }}>
 													{record?.canNang}
@@ -147,22 +136,17 @@ const TheChatPage = () => {
 											</div>
 										</div>
 									</div>
-
 									<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '15px' }}>
 										<div className='height-card' style={{ background: '#FFE7BF' }}>
 											<div className='left'>
 												<img
 													src='/images/thechat/vongeo.png'
-													alt='height icon'
+													alt='Vòng eo'
 													className='icon-vertical'
 													style={{ color: '#FFAF0B' }}
 												/>
-
-												<div className='label'>
-													{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.vongeo.title' })}
-												</div>
+												<div className='label'>Vòng eo</div>
 											</div>
-
 											<div className='right'>
 												<span className='value' style={{ color: '#FFAF0B' }}>
 													{record?.vongEo}
@@ -174,16 +158,12 @@ const TheChatPage = () => {
 											<div className='left'>
 												<img
 													src='/images/thechat/vongmong.png'
-													alt='height icon'
+													alt='Vòng mông'
 													className='icon-vertical'
 													style={{ color: '#A61ADE' }}
 												/>
-
-												<div className='label'>
-													{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.chisothehinh.vongmong.title' })}
-												</div>
+												<div className='label'>Vòng mông</div>
 											</div>
-
 											<div className='right'>
 												<span className='value' style={{ color: '#A61ADE' }}>
 													{record?.vongMong}
@@ -192,47 +172,77 @@ const TheChatPage = () => {
 											</div>
 										</div>
 									</div>
+									<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '15px' }}>
+										<div className='height-card' style={{ background: '#FFEEFB' }}>
+											<div className='left'>
+												<img
+													src='/images/thechat/nhimtimnghi.png'
+													alt='Nhịp tim nghỉ ngơi'
+													className='icon-vertical'
+													style={{ color: '#F5D7EA' }}
+												/>
+												<div className='label'>Nhịp tim nghỉ ngơi</div>
+											</div>
+											<div className='right'>
+												<span className='value' style={{ color: '#F5D7EA' }}>
+													{record?.nhipTimBatDau}
+												</span>
+												<span className='unit'>bpm</span>
+											</div>
+										</div>
 
-									<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+										<div className='height-card' style={{ background: '#E6FBFF' }}>
+											<div className='left'>
+												<img
+													src='/images/thechat/nhimtimsautap.png'
+													alt='Nhịp tim sau tập'
+													className='icon-vertical'
+													style={{ color: '#D0EEFF' }}
+												/>
+												<div className='label'>Nhịp tim sau tập</div>
+											</div>
+											<div className='right'>
+												<span className='value' style={{ color: '#D0EEFF' }}>
+													{record?.nhipTimKetThuc}
+												</span>
+												<span className='unit'>bpm</span>
+											</div>
+										</div>
+									</div>
+									<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '15px' }}>
 										<div className='height-card' style={{ background: '#CDE1F4' }}>
 											<div className='left'>
 												<img
 													src='/images/thechat/BMI.png'
-													alt='height icon'
+													alt='BMI'
 													className='icon-vertical'
 													style={{ color: '#0047FF' }}
 												/>
-
 												<div className='label'>BMI</div>
 											</div>
-
 											<div className='right'>
 												<span className='value' style={{ color: '#0047FF' }}>
 													{record?.bmi}
 												</span>
 											</div>
 										</div>
-
 										<div className='height-card' style={{ background: '#DAEFDA' }}>
 											<div className='left'>
 												<img
 													src='/images/thechat/WHR.png'
-													alt='height icon'
+													alt='WHR'
 													className='icon-vertical'
 													style={{ color: '#399500' }}
 												/>
-
 												<div className='label'>WHR</div>
 											</div>
-
 											<div className='right'>
 												<span className='value' style={{ color: '#399500' }}>
-													{record?.vongMong}
+													{record?.whr || 'N/A'}
 												</span>
 											</div>
 										</div>
 									</div>
-
 									<div
 										style={{
 											marginTop: '15px',

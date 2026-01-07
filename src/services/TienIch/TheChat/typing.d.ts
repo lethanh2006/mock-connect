@@ -102,6 +102,8 @@ declare module TheChat {
 		chieuCao: number;
 		vongEo: number;
 		vongMong: number;
+		nhipTimBatDau: number;
+		nhipTimKetThuc: number;
 		tenNguoiTao: string;
 		ssoIdNguoiTao: string;
 
