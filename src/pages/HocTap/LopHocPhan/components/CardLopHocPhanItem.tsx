@@ -74,7 +74,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 						className='card-lhp-tag card-lhp-tag-completed'
 						style={{ display: 'inline-flex', alignItems: 'baseline' }}
 					>
-						<Text className='card-lhp-malop_copyable'>{lop.maLop || '--'}</Text>
+						<Text className='card-lhp-malop_copyable'>{lop?.soThuTuLop || lop?.maLop || '--'}</Text>
 					</Tag>
 
 					<Text className='color-secondary'>{lop.maHocPhan || '--'}</Text>
