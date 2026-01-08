@@ -20,6 +20,12 @@ export default () => {
 
 		const path = `hoc-ky/${maHocKy}/sinh-vien/me/page`;
 
+		if (page && limit) {
+			const res = await getModel(undefined, undefined, undefined, page, limit, path);
+			setDanhSach(res);
+			return res;
+		}
+
 		const res = await getModel(undefined, undefined, undefined, undefined, undefined, path);
 
 		setDanhSach(res);
