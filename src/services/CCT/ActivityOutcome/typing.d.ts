@@ -32,8 +32,11 @@ declare module ActivityOutCome {
 	}
 
 	export interface IAnalyticsStudent {
-		pending: number;
-		processed: number;
+		approved: number;
+		changesRequired: number;
+		draft: number;
+		rejected: number;
+		submitted: number;
 		total: number;
 	}
 }
