@@ -285,6 +285,11 @@
 						component: 'KhoaHoc/DeTaiKHCN/DeTaiHocVien/HoiDongXetDuyetThuyetMinh',
 					},
 					{
+						name: 'NopHoSoSauHoiDongThuyetMinh',
+						path: 'ho-so-sau-hoi-dong-thuyet-minh',
+						component: 'KhoaHoc/DeTaiKHCN/DeTaiHocVien/NopHoSoSauHoiDongXetDuyetThuyetMinh',
+					},
+					{
 						name: 'QuyetDinhGiao',
 						path: 'quyet-dinh-giao',
 						component: 'KhoaHoc/DeTaiKHCN/DeTaiHocVien/QuyetDinhGiao',

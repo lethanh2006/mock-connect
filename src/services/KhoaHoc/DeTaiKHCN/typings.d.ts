@@ -134,6 +134,8 @@ declare module DeTaiKHCN {
 	}
 
 	export interface ThuyetMinh {
+		deCuongUrlChinhSua: string[];
+		duToanUrl: string[];
 		deCuongUrl: string[];
 		soLuocTinhHinhNghienCuuTrongNuoc: string;
 		soLuocTinhHinhNghienCuuNgoaiNuoc: string;
@@ -274,6 +276,7 @@ declare module DeTaiKHCN {
 		lockXetDuyet: boolean;
 		lockNopDeCuong: boolean;
 		lockDeCuong: boolean;
+		lockSauXetDuyetDeCuong: boolean;
 		lockThucHien: boolean;
 		lockNopNghiemThu: boolean;
 		lockNghiemThu: boolean;
@@ -283,6 +286,7 @@ declare module DeTaiKHCN {
 		trangThaiNopDeCuong: ETrangThaiNopDeCuong;
 		commentNopDeCuong: string;
 		trangThaiXetDuyetDeCuong: ETrangThaiXetDuyetDeCuong;
+		trangThaiSauXetDuyetDeCuong: ETrangThaiXetDuyetDeCuong;
 		trangThaiThucHien: ETrangThaiThucHien;
 		commentThucHien: string;
 		trangThaiNghiemThu: ETrangThaiNghiemThu;
@@ -293,5 +297,6 @@ declare module DeTaiKHCN {
 		quyetDinhCongNhanId: string;
 		urlQuyetDinhGiao: string;
 		mauQuyetDinhGiao: string;
+		commentSauXetDuyetDeCuong: string;
 	}
 }

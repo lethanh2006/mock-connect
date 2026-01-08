@@ -1,6 +1,6 @@
 import { EPhaseDeTaiKHCN, ETypeTableDeTai } from '@/services/KhoaHoc/DeTaiKHCN/constants';
-import DeTaiKHCNPage from '..';
 import { ELoaiDeTai } from '@/services/KhoaHoc/KeHoachDeTai/constants';
+import DeTaiKHCNPage from '..';
 
 const NopHoSoSauNghiemThu = () => {
 	return (
@@ -15,6 +15,7 @@ const NopHoSoSauNghiemThu = () => {
 						EPhaseDeTaiKHCN.XET_DUYET_DANG_KY,
 						EPhaseDeTaiKHCN.NOP_DE_CUONG,
 						EPhaseDeTaiKHCN.XET_DUYET_DE_CUONG,
+						EPhaseDeTaiKHCN.SAU_XET_DUYET_DE_CUONG,
 						EPhaseDeTaiKHCN.THUC_HIEN,
 						EPhaseDeTaiKHCN.NOP_NGHIEM_THU,
 						EPhaseDeTaiKHCN.NGHIEM_THU,
