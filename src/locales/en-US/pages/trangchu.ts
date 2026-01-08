@@ -1,5 +1,5 @@
 export default {
-	'trangchu.title.xinchao': 'Hello {name}',
+	'trangchu.title.xinchao': 'Hello {ten}',
 	'trangchu.title.quaylai': 'Welcome back',
 	'trangchu.thongbao.title': 'Notifications',
 	'trangchu.thongbao.tag.dadoc': 'Read',
