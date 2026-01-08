@@ -403,17 +403,17 @@
 		routes: [
 			{
 				name: 'Register',
-				path: 'activity-register',
+				path: 'list-activity',
 				component: 'CCT/Activity',
 			},
 			{
 				name: 'MyActivity',
-				path: 'activity-myActivity',
+				path: 'my-activity',
 				component: 'CCT/History',
 			},
 			{
 				name: 'MyCCT',
-				path: 'activity-mycct',
+				path: 'co-curricular-transcript',
 				component: 'CCT/MyCCT',
 			},
 		],
