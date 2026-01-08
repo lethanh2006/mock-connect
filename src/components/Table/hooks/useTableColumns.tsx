@@ -3,6 +3,7 @@ import { AutoComplete, Button, Input, Space } from 'antd';
 import type { SortOrder } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import React, { JSX, useEffect } from 'react';
+import { useIntl } from 'umi';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import type { IColumn, TDataOption, TFilter } from '../typing';
@@ -16,6 +17,7 @@ interface UseTableColumnsProps {
 }
 
 export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableColumnsProps) => {
+	const intl = useIntl();
 	const { searchInputRef, filters, setFilters, setFinalColumns, buttons, hasFilter, setVisibleFilter, size } =
 		useTableContext();
 
@@ -55,13 +57,20 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			const tempFilters = filters?.filter((item) => JSON.stringify(item.field) !== JSON.stringify(dataIndex));
 			setFilters(tempFilters);
 		} else {
+			// Tìm column tương ứng để check có handleFilter không
+			const column = columns.find(
+				(col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex)
+			);
+			// Nếu column có handleFilter => đánh dấu readonly
+			const readOnly = !!column?.handleFilter;
+
 			const filter = getFilterColumn(dataIndex);
 			let tempFilters: TFilter<any>[] = [...(filters ?? [])];
 			if (filter)
 				// Cập nhật bộ lọc hiện tại
 				tempFilters = tempFilters.map((item) =>
 					JSON.stringify(item.field) === JSON.stringify(dataIndex)
-						? { ...item, active: true, operator: EOperatorType.CONTAIN, values: [value] }
+						? { ...item, active: true, operator: EOperatorType.CONTAIN, values: [value], readOnly }
 						: item,
 				);
 			// Thêm quy tắc lọc mới cho cột này
@@ -71,6 +80,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					field: dataIndex,
 					operator: EOperatorType.CONTAIN,
 					values: [value],
+					readOnly,
 				});
 			setFilters(tempFilters);
 		}
@@ -119,14 +129,14 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 						</AutoComplete>
 						{buttons?.filter !== false && hasFilter ? (
 							<div>
-								Xem thêm{' '}
+								{intl.formatMessage({ id: 'global.table.filterdropdown.xemthem' })}{' '}
 								<a
 									onClick={() => {
 										setVisibleFilter(true);
 										confirm();
 									}}
 								>
-									Bộ lọc tùy chỉnh
+									{intl.formatMessage({ id: 'global.table.filterdropdown.boloc' })}
 								</a>
 							</div>
 						) : null}
@@ -153,13 +163,20 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			const tempFilters = filters?.filter((item) => JSON.stringify(item.field) !== JSON.stringify(dataIndex));
 			setFilters(tempFilters);
 		} else {
+			// Tìm column tương ứng để check có handleFilter không
+			const column = columns.find(
+				(col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex)
+			);
+			// Nếu column có handleFilter => đánh dấu readonly
+			const readOnly = !!column?.handleFilter;
+
 			const filter = getFilterColumn(dataIndex);
 			let tempFilters: TFilter<any>[] = [...(filters ?? [])];
 			if (filter)
 				// Cập nhật bộ lọc hiện tại
 				tempFilters = tempFilters.map((item) =>
 					JSON.stringify(item.field) === JSON.stringify(dataIndex)
-						? { ...item, active: true, operator: EOperatorType.INCLUDE, values }
+						? { ...item, active: true, operator: EOperatorType.INCLUDE, values, readOnly }
 						: item,
 				);
 			// Thêm quy tắc lọc mới cho cột này
@@ -169,6 +186,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					field: dataIndex,
 					operator: EOperatorType.INCLUDE,
 					values,
+					readOnly,
 				});
 			setFilters(tempFilters);
 		}
@@ -213,14 +231,14 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					</Space>
 					{buttons?.filter !== false && hasFilter ? (
 						<div>
-							Xem thêm{' '}
+							{intl.formatMessage({ id: 'global.table.filterdropdown.xemthem' })}{' '}
 							<a
 								onClick={() => {
 									setVisibleFilter(true);
 									confirm();
 								}}
 							>
-								Bộ lọc tùy chỉnh
+								{intl.formatMessage({ id: 'global.table.filterdropdown.boloc' })}
 							</a>
 						</div>
 					) : null}
@@ -258,7 +276,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		final = final?.filter((item) => item?.hide !== true);
 		if (addStt !== false)
 			final.unshift({
-				title: 'TT',
+				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
 				// align: 'center',
 				width: 50,

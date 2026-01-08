@@ -1,7 +1,7 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import React from 'react';
-import { useIntl, useModel } from 'umi';
+import { useModel } from 'umi';
 import AvatarDropdown from './AvatarDropdown';
 import styles from './index.less';
 import LocaleSwitch from './LocaleSwitch';
@@ -9,7 +9,6 @@ import ModuleSwitch from './ModuleSwitch';
 import NoticeIconView from './NoticeIcon';
 
 const GlobalHeaderRight: React.FC = () => {
-	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 
 	if (!initialState || !initialState.currentUser) {
