@@ -29,7 +29,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		getBaiTapSinhVienModel(1, 20, recHocKy?.ma);
+		if (recHocKy?.ma) getBaiTapSinhVienModel(1, 20, recHocKy?.ma);
 
 		// lần đầu tiên sẽ để segment Tất cả khi không có bài tập  => cho đẹp, bài tập không bị trống
 		if (filteredData.length == 0) {
