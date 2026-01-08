@@ -35,6 +35,7 @@ import type {
 	ETrangThaiXetDuyetDangKy,
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import {
+	EDangSanPham,
 	EThaoTacDeTai,
 	type EPhaseDeTaiKHCN,
 	type ETrangThaiDeTaiQuanLyKhoaHoc,
@@ -54,7 +55,7 @@ export default () => {
 	const [visibleFormNghiemThu, setVisibleFormNghiemThu] = useState<boolean>(false);
 	const [visibleFormSauNghiemThu, setVisibleFormSauNghiemThu] = useState<boolean>(false);
 	const objInit = useInitModel<DeTaiKHCN.IRecord>('de-tai-khcn');
-
+	const { setRecord } = objInit;
 	const { setLoading, getModel, setVisibleForm } = objInit;
 	const [visibleTableDeTaiTrung, setVisibleTableDeTaiTrung] = useState<boolean>(false);
 
@@ -562,7 +563,43 @@ export default () => {
 		setLoading(false);
 	};
 
+	const handleBuildRecord = (recordDeTai: DeTaiKHCN.IRecord) => {
+		const recFinal = {
+			...recordDeTai,
+			deCuongKhcn: {
+				...(recordDeTai?.deCuongKhcn ?? {}),
+				sanPhamDeCuongDangI: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
+					(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I,
+				),
+				sanPhamDeCuongDangII: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
+					(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II,
+				),
+				sanPhamDeCuongDangIII: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
+					(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
+				),
+			},
+			nghiemThuKhcn: {
+				...(recordDeTai?.nghiemThuKhcn ?? {}),
+				sanPhamDeCuongDangI: recordDeTai?.nghiemThuKhcn?.baoCaoUrl?.length
+					? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter((item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I)
+					: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter((item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_I),
+				sanPhamDeCuongDangII: recordDeTai?.nghiemThuKhcn?.baoCaoUrl?.length
+					? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter((item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II)
+					: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter((item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_II),
+				sanPhamDeCuongDangIII: recordDeTai?.nghiemThuKhcn?.baoCaoUrl?.length
+					? recordDeTai.nghiemThuKhcn.sanPhamChinh.filter((item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III)
+					: recordDeTai.deCuongKhcn.sanPhamDeCuong.filter(
+							(item) => item.dangSanPham === EDangSanPham.DANG_SAN_PHAM_III,
+						),
+			},
+		};
+
+		setRecord(recFinal);
+		return recFinal;
+	};
+
 	return {
+		handleBuildRecord,
 		// lockDeCuong2022Model,
 		exportDeXuatUngDungModel,
 		giangVienUploadDeCuongModel,

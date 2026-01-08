@@ -4,6 +4,7 @@ import { useModel } from 'umi';
 import ViewDangKyDeXuat from './ViewDangKyDeXuat';
 import ViewHoSoNghiemThu from './ViewHoSoNghiemThu';
 import ViewHoSoSauNghiemThu from './ViewHoSoSauNghiemThu';
+import ViewHoSoSauXetDuyetThuyetMinh from './ViewHoSoSauXetDuyetThuyetMinh';
 import ViewThucHienDeTai from './ViewThucHienDeTai';
 import ViewThuyetMinh from './ViewThuyetMinh';
 
@@ -45,6 +46,7 @@ const ViewDeTai = (props: { phaseDeTai: EPhaseDeTaiKHCN }) => {
 					rec={record}
 				/>
 			);
+		if (phase === EPhaseDeTaiKHCN.SAU_XET_DUYET_DE_CUONG) return <ViewHoSoSauXetDuyetThuyetMinh rec={record} />;
 		if (phase === EPhaseDeTaiKHCN.THUC_HIEN) return <ViewThucHienDeTai rec={record} />;
 		if (phase === EPhaseDeTaiKHCN.NOP_NGHIEM_THU)
 			return (

@@ -34,6 +34,7 @@ import ViewQuyetDinhGiao from '../QuyetDinhGiao/ViewQuyetDinh';
 import FormDangKyDeXuat from './components/FormDangKyDeXuat';
 import FormNopHoSoNghiemThu from './components/FormNopHoSoNghiemThu';
 import FormNopHoSoSauNghiemThu from './components/FormNopHoSoSauNghiemThu';
+import FormNopHoSoSauThuyetMinh from './components/FormNopHoSoSauThuyetMinh';
 import FormNopThuyetMinh from './components/FormNopThuyetMinh';
 import FormThucHienDeTai from './components/FormThucHienDeTai';
 import ViewDeTai from './components/ViewDeTai';
@@ -50,6 +51,7 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		exportDeXuatUngDungModel,
 		page,
 		limit,
+		handleBuildRecord,
 	} = useModel('khoahoc.detaikhcn');
 
 	const {
@@ -123,6 +125,55 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 		},
 		style: { cursor: 'pointer' },
 	});
+
+	const renderThaoTacNopHoSoSauHoiDongThuyetMinh = (rec: DeTaiKHCN.IRecord) => {
+		const isLock = rec.lockSauXetDuyetDeCuong;
+		return (
+			<>
+				<Tooltip
+					title={
+						<div style={{ maxWidth: 150 }}>
+							{isLock ? 'Hủy nộp hồ sơ sau hội đồng thuyết minh' : 'Nộp hồ sơ sau hội đồng thuyết minh'}
+						</div>
+					}
+				>
+					<Button
+						// disabled={isLock}
+						onClick={() =>
+							giangVienKhoaOrMoKhoaDeTaiModel(
+								isLock ? 'unlock' : 'lock',
+								rec._id,
+								EPhaseDeTaiKHCN.SAU_XET_DUYET_DE_CUONG,
+								getData,
+							)
+						}
+						type='link'
+						icon={isLock ? <UnlockOutlined /> : <LockOutlined />}
+					/>
+				</Tooltip>
+				<Tooltip title='Chỉnh sửa hồ sơ sau hội đồng thuyết minh'>
+					<Button
+						// disabled={isLock}
+						onClick={() => {
+							handleEdit(handleBuildRecord(rec));
+						}}
+						type='link'
+						icon={<EditOutlined />}
+					/>
+				</Tooltip>
+
+				{/* <Tooltip title='Xóa'>
+							<Popconfirm
+								onConfirm={() => deleteModel(record._id, getData, `me/${record._id}`)}
+								title='Bạn có chắc chắn muốn xóa?'
+								placement='topLeft'
+							>
+								<Button disabled={isLock} danger type='link' icon={<DeleteOutlined />} />
+							</Popconfirm>
+						</Tooltip> */}
+			</>
+		);
+	};
 
 	const columnsDangKyDeXuat: IColumn<DeTaiKHCN.IRecord>[] = [
 		{
@@ -863,6 +914,114 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			},
 		},
 	];
+
+	const columnsNopHoSoSauHoiDongThuyetMinh: IColumn<DeTaiKHCN.IRecord>[] = [
+		{
+			title: 'Tên đề tài',
+			dataIndex: ['dangKyKhcn', 'ten'],
+			width: 200,
+			filterType: 'string',
+			onCell,
+		},
+		{
+			title: 'Sinh viên thực hiện đề tài',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 200,
+			align: 'center',
+			filterType: 'string',
+			// align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>
+						<b>{rec.dangKyKhcn.chuTriDeTai.ten}</b>
+					</div>
+					{rec.dangKyKhcn.danhSachCTV.map((item) => (
+						<div key={item.userId || item.ten}>{item.ten}</div>
+					))}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Lớp',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.ten' as any,
+			width: 150,
+			filterType: 'string',
+			align: 'center',
+			render: (val, rec) => (
+				<div>
+					<div>{rec.dangKyKhcn.chuTriDeTai.tenLopHanhChinh}</div>
+					{rec.dangKyKhcn?.danhSachCTV?.map((item) => <div key={item.maDinhDanh}>{item.tenLopHanhChinh}</div>)}
+				</div>
+			),
+			onCell,
+		},
+		{
+			title: 'Khoa',
+			dataIndex: 'dangKyKhcn.chuTriDeTai.tenDonVi' as any,
+			width: 150,
+			align: 'center',
+			render: (val, rec) => rec.dangKyKhcn.chuTriDeTai.tenDonVi,
+			onCell,
+		},
+		{
+			title: 'Loại đề tài',
+			dataIndex: ['dangKyKhcn', 'loaiCaNhan'],
+			width: 120,
+			align: 'center',
+			filterType: 'select',
+			filterData: Object.values(ELoaiDeTaiCaNhan).map((item) => ({ value: item, label: item })),
+			onCell,
+		},
+		// {
+		// 	title: 'Bước',
+		// 	dataIndex: 'phaseDeTaiKhcn',
+		// 	width: 150,
+		// 	align: 'center',
+		// 	filterType: 'select',
+		// 	filterData: Object.values(EPhaseDeTaiKHCN).map((item) => ({
+		// 		value: item,
+		// 		label: MapKeyNamePhaseDeTaiKHCN[item],
+		// 	})),
+		// 	render: (val: EPhaseDeTaiKHCN) => MapKeyNamePhaseDeTaiKHCN[val],
+		// 	onCell,
+		// },
+		{
+			title: 'Trạng thái nộp',
+			dataIndex: 'lockSauXetDuyetDeCuong',
+			width: 120,
+			align: 'center',
+			render: (val) => <Tag color={val ? '#28a745' : '#dc3545'}>{val ? 'Đã nộp' : 'Chưa nộp'}</Tag>,
+			filterType: 'select',
+			filterData: [
+				{ value: 1, label: 'Đã nộp' },
+				{ value: 0, label: 'Chưa nộp' },
+			],
+			onCell,
+		},
+		{
+			title: 'Trạng thái xử lý',
+			dataIndex: 'trangThaiSauXetDuyetDeCuong',
+			width: 130,
+			align: 'center',
+			render: (val) => (
+				<div>
+					<Tag color={MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc[val]}>{val}</Tag>
+				</div>
+			),
+			filterType: 'select',
+			filterData: Object.values(ETrangThaiDeTaiQuanLyKhoaHoc).map((item) => ({ value: item, label: item })),
+			onCell,
+		},
+		{
+			title: 'Thao tác',
+			width: 120,
+			align: 'center',
+			fixed: 'right',
+			render: (record: DeTaiKHCN.IRecord) => renderThaoTacNopHoSoSauHoiDongThuyetMinh(record),
+		},
+	];
+
 	const columnsQuyetDinhGiao: IColumn<DeTaiKHCN.IRecord>[] = [
 		{
 			title: 'Quyết định giao đề tài NCKH',
@@ -1953,6 +2112,8 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 			);
 		if (props.type === ETypeTableDeTai.NopThuyetMinh || props.type === ETypeTableDeTai.HoiDongXetDuyetThuyetMinh)
 			return <FormNopThuyetMinh getData={getData} />;
+		if (props.type === ETypeTableDeTai.NopHoSoSauHoiDongXetDuyetThuyetMinh)
+			return <FormNopHoSoSauThuyetMinh getData={getData} />;
 		if (props.type === ETypeTableDeTai.ThucHienDeTai) return <FormThucHienDeTai getData={getData} />;
 		if (props.type === ETypeTableDeTai.NopHoSoNghiemThu || props.type === ETypeTableDeTai.HoiDongNghiemThu)
 			return <FormNopHoSoNghiemThu getData={getData} />;
@@ -1996,17 +2157,19 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 							? columnsNopThuyetMinh
 							: props.type === ETypeTableDeTai.HoiDongXetDuyetThuyetMinh
 								? columnsHoiDongXetDuyetThuyetMinh
-								: props.type === ETypeTableDeTai.QuyetDinhGiao
-									? columnsQuyetDinhGiao
-									: props.type === ETypeTableDeTai.QuyetDinhCongNhan
-										? columnsQuyetDinhCongNhan
-										: props.type === ETypeTableDeTai.ThucHienDeTai
-											? columnsThucHienDeTai
-											: props.type === ETypeTableDeTai.NopHoSoNghiemThu
-												? columnsNopHoSoNghiemThu
-												: props.type === ETypeTableDeTai.HoiDongNghiemThu
-													? columnsHoiDongNghiemThu
-													: columnsNopHoSoSauNghiemThu
+								: props.type === ETypeTableDeTai.NopHoSoSauHoiDongXetDuyetThuyetMinh
+									? columnsNopHoSoSauHoiDongThuyetMinh
+									: props.type === ETypeTableDeTai.QuyetDinhGiao
+										? columnsQuyetDinhGiao
+										: props.type === ETypeTableDeTai.QuyetDinhCongNhan
+											? columnsQuyetDinhCongNhan
+											: props.type === ETypeTableDeTai.ThucHienDeTai
+												? columnsThucHienDeTai
+												: props.type === ETypeTableDeTai.NopHoSoNghiemThu
+													? columnsNopHoSoNghiemThu
+													: props.type === ETypeTableDeTai.HoiDongNghiemThu
+														? columnsHoiDongNghiemThu
+														: columnsNopHoSoSauNghiemThu
 			}
 			modelName={'khoahoc.detaikhcn'}
 			getData={getData}
@@ -2023,13 +2186,15 @@ const DeTaiKHCNPage = (props: { type: ETypeTableDeTai; paramCondition?: any; tit
 									? EPhaseDeTaiKHCN.NOP_DE_CUONG
 									: props.type === ETypeTableDeTai.HoiDongXetDuyetThuyetMinh
 										? EPhaseDeTaiKHCN.XET_DUYET_DE_CUONG
-										: props.type === ETypeTableDeTai.ThucHienDeTai
-											? EPhaseDeTaiKHCN.THUC_HIEN
-											: props.type === ETypeTableDeTai.NopHoSoNghiemThu
-												? EPhaseDeTaiKHCN.NOP_NGHIEM_THU
-												: props.title === ETypeTableDeTai.HoiDongNghiemThu
-													? EPhaseDeTaiKHCN.NGHIEM_THU
-													: EPhaseDeTaiKHCN.SAU_NGHIEM_THU
+										: props.type === ETypeTableDeTai.NopHoSoSauHoiDongXetDuyetThuyetMinh
+											? EPhaseDeTaiKHCN.SAU_XET_DUYET_DE_CUONG
+											: props.type === ETypeTableDeTai.ThucHienDeTai
+												? EPhaseDeTaiKHCN.THUC_HIEN
+												: props.type === ETypeTableDeTai.NopHoSoNghiemThu
+													? EPhaseDeTaiKHCN.NOP_NGHIEM_THU
+													: props.title === ETypeTableDeTai.HoiDongNghiemThu
+														? EPhaseDeTaiKHCN.NGHIEM_THU
+														: EPhaseDeTaiKHCN.SAU_NGHIEM_THU
 					}
 				/>
 			)}

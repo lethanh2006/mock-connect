@@ -14,7 +14,7 @@ interface CardLopHocPhanItemProps {
 	backgrounds: string[];
 	isHienTai?: boolean;
 	isKeTiep?: boolean;
-	diemDanh?: { coMat?: number; chuaDiemDanh?: number };
+	diemDanh?: { soBuoi?: number; coMat?: number; chuaDiemDanh?: number };
 	soBaiTap?: number;
 	soBaiDang?: number;
 }
@@ -74,7 +74,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 						className='card-lhp-tag card-lhp-tag-completed'
 						style={{ display: 'inline-flex', alignItems: 'baseline' }}
 					>
-						<Text className='card-lhp-malop_copyable'>{lop.maLop || '--'}</Text>
+						<Text className='card-lhp-malop_copyable'>{lop?.soThuTuLop || lop?.maLop || '--'}</Text>
 					</Tag>
 
 					<Text className='color-secondary'>{lop.maHocPhan || '--'}</Text>
@@ -122,7 +122,9 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 							<ScheduleOutlined className='anticon' />
 							<Text strong>
 								{diemDanh?.coMat !== undefined ? diemDanh.coMat : '-'} /{' '}
-								{diemDanh?.chuaDiemDanh ? allThoiKhoaBieu.length - (diemDanh?.chuaDiemDanh ?? 0) : '-'}
+								{diemDanh?.chuaDiemDanh
+									? diemDanh?.soBuoi || allThoiKhoaBieu.length - (diemDanh?.chuaDiemDanh ?? 0)
+									: '-'}
 							</Text>
 						</div>
 					</Tooltip>
