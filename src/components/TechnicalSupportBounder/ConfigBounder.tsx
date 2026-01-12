@@ -1,6 +1,6 @@
-import { primaryColor, highlightColor } from '@/services/base/constant';
+import { accentColors, highlightColor, officialColors, primaryColor, statusBgColors, statusColors, textColors } from '@/services/base/constant';
 import { getLocale } from '@umijs/max';
-import { ConfigProvider, Spin } from 'antd';
+import { ConfigProvider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
 
 /** Chú ý các route để layout: false thì phải bọc bởi ConfigBound để nhận styles */
@@ -23,14 +23,34 @@ const ConfigBounder = (props: { children?: any }) => {
 	return (
 		<ConfigProvider
 			locale={locale}
+			form={{
+				requiredMark: false,
+			}}
+			renderEmpty={() => (
+				<Empty
+					style={{ marginTop: 32, marginBottom: 32 }}
+					image='/empty.png'
+				/>
+			)}
 			theme={{
-				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
+				token: {
+					borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor, controlHeight: 36, controlHeightSM: 28,
+					colorError: '#E20404', colorTextDisabled: '#707070',
+				},
 				hashed: false,
 				cssVar: { prefix: '' },
 				components: {
+					Form: {
+						labelRequiredMarkColor: statusColors.status400,
+						fontSizeIcon: 20,
+					},
 					Carousel: {
-						dotHeight: 6,
-						dotOffset: 2, // khoảng cách từ bottom
+						dotHeight: 4,
+						dotOffset: 10,
+						dotWidth: 16,
+						dotGap: 4,
+						dotActiveWidth: 16,
+						arrowOffset: 8
 					},
 					Spin: {
 						dotSize: 45,
@@ -38,34 +58,108 @@ const ConfigBounder = (props: { children?: any }) => {
 						dotSizeLG: 60,
 					},
 					Button: {
-						controlHeight: 36,
-						colorPrimary: highlightColor,
+						textTextColor: primaryColor,
+						defaultColor: textColors.text100,
+						borderColorDisabled: 'transparent',
+						textHoverBg: primaryColor,
 						borderRadius: 4,
 						fontWeight: 600,
 					},
+					Progress: {
+						defaultColor: statusColors.status200,
+					},
 					Pagination: {
-						colorPrimary: '#ffffff',
-						colorPrimaryActive: '#ffffff',
+						colorPrimary: textColors.text400,
+						colorPrimaryActive: textColors.text400,
 						borderRadius: 4,
-						itemActiveBg: highlightColor,
-						colorPrimaryBorder: highlightColor,
-						colorPrimaryHover: '#ffffff',
+						itemActiveBg: primaryColor,
+						colorPrimaryBorder: 'transparent',
+						colorPrimaryHover: textColors.text400,
 						fontWeightStrong: 600,
 					},
 					DatePicker: {
-						colorPrimary: highlightColor,
+						colorPrimary: primaryColor,
 						borderRadius: 4,
-						cellActiveWithRangeBg: highlightColor,
-						colorLink: highlightColor,
 						fontWeightStrong: 700,
-						colorIcon: primaryColor,
+						colorTextDisabled: textColors.text100
+					},
+					Calendar: {
+						itemActiveBg: statusBgColors.statusBg400,
+						colorPrimary: primaryColor,
+					},
+					Modal: {
+						headerBg: officialColors.official500,
+					},
+					Steps: {
+						colorSplit: accentColors.accent700,
+						lineWidth: 2,
+						fontSize: 16,
+						finishIconBorderColor: 'transparent',
+						finishIconBgColor: '#008328',
+					} as any,
+					Slider: {
+						trackBg: statusColors.status200,
+						handleColor: statusColors.status200,
+					},
+					Checkbox: {
+						colorPrimary: statusColors.status200,
+					},
+					Switch: {
+						colorPrimary: statusColors.status200,
+					},
+					Input: {
+						colorTextDisabled: '#707070',
+						activeBorderColor: '#0047FF'
+					},
+					Segmented: {
+						itemSelectedColor: primaryColor,
+						controlHeight: 40,
+					},
+					Alert: {
+						lineType: 'none',
+					},
+					Collapse: {
+						headerPadding: '16px 12px',
+						contentPadding: 12,
+						headerBg: accentColors.accent700,
+					},
+					Notification: {
+						paddingMD: 12,
+						paddingLG: 12,
+						paddingContentHorizontalLG: 12,
+						fontSizeLG: 14,
+					},
+					Badge: {
+						colorInfo: '#0051FF'
+					},
+					Avatar: {
+						containerSizeLG: 48,
+						fontSize: 18,
+					},
+					Tag: {
+						lineType: 'none',
+					},
+					Radio: {
+						colorPrimary: highlightColor,
+						radioColor: highlightColor,
+						radioBgColor: textColors.text400,
+						dotSize: 10,
+					} as any,
+					Tabs: {
+						fontWeightStrong: 600,
+						cardBg: officialColors.official500,
+						inkBarColor: highlightColor,
+						cardGutter: 0,
 					},
 					Divider: {
+						colorSplit: accentColors.accent700,
+						lineWidth: 2,
 						orientationMargin: 0,
+						textPaddingInline: 8
 					},
 					Select: {
 						optionSelectedColor: primaryColor,
-						optionSelectedBg: '#f4f9ff',
+						optionSelectedBg: officialColors.official500,
 					},
 					Table: {
 						borderColor: '#e8e8e8',

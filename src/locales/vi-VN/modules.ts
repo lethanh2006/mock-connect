@@ -19,9 +19,9 @@ export default {
 	'modules.tap-chi-khoa-hoc': 'Tạp chí khoa học',
 
 	// University information
-	'config.co-quan-chu-quan': 'Hội Liên hiệp phụ nữ Việt Nam',
-	'config.ten-truong': 'Học viện Phụ nữ Việt Nam',
-	'config.tien-to-truong': 'Học viện',
-	'config.ten-truong-viet-tat-tieng-anh': 'VWA',
+	'config.co-quan-chu-quan': 'Bộ Giáo dục và Đào tạo',
+	'config.ten-truong': 'Trường Đại học VinUni',
+	'config.tien-to-truong': 'Trường',
+	'config.ten-truong-viet-tat-tieng-anh': 'VIN',
 };
 
