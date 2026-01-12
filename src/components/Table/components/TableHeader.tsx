@@ -6,6 +6,7 @@ import {
 	FilterOutlined,
 	FilterTwoTone,
 	ImportOutlined,
+	PlusCircleOutlined,
 	ReloadOutlined,
 } from '@ant-design/icons';
 import { Popconfirm, Tooltip } from 'antd';
@@ -30,16 +31,31 @@ export const TableHeader: React.FC = () => {
 		setVisibleFilter,
 		setVisibleImport,
 		setVisibleExport,
+		onCreate,
 		onReload,
 		loading,
 		total,
 		hideTotal,
-		size,
+		size = 'small',
 	} = useTableContext();
 
 	return (
 		<div className='header'>
 			<div className='action'>
+				{buttons?.create !== false ? (
+					<ButtonExtend
+						size={size}
+						onClick={onCreate}
+						icon={<PlusCircleOutlined />}
+						className='btn-add'
+						type='primary'
+						notHideText
+						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
+					>
+						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
+					</ButtonExtend>
+				) : null}
+
 				{buttons?.import ? (
 					<ButtonExtend
 						size={size}
@@ -89,7 +105,6 @@ export const TableHeader: React.FC = () => {
 						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
 					</ButtonExtend>
 				) : null}
-
 				{buttons?.filter !== false && hasFilter ? (
 					<ButtonExtend
 						className='btn-filter'
