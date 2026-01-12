@@ -86,7 +86,7 @@ const HistoryActivityPage = () => {
 		{
 			title: intl.formatMessage({ id: 'activity.column.cca' }),
 			dataIndex: 'activitiesTypeId',
-			width: 120,
+			width: 180,
 			render: (val, rec) => rec?.activitiesType?.name,
 			filterType: 'customselect',
 			filterCustomSelect: <SelectActivitiesManagement multiple />,
@@ -95,7 +95,7 @@ const HistoryActivityPage = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.column.activity' }),
-			width: 150,
+			width: 180,
 			render: (val, rec) => rec?.activities?.name,
 			onCell,
 			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
@@ -114,7 +114,7 @@ const HistoryActivityPage = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.column.cca' }),
-			width: 170,
+			width: 200,
 			render: (val, rec) => rec?.activities?.activitiesType?.name,
 			onCell,
 			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
@@ -140,7 +140,7 @@ const HistoryActivityPage = () => {
 		{
 			title: intl.formatMessage({ id: 'activity.column.role' }),
 			dataIndex: 'rolesId',
-			width: 120,
+			width: 180,
 			render: (val, rec) => rec?.roles?.name,
 			filterType: 'customselect',
 			filterCustomSelect: <SelectRolesManagement multiple />,
@@ -153,24 +153,6 @@ const HistoryActivityPage = () => {
 			onCell,
 		},
 		...attributeColumns,
-		{
-			title: intl.formatMessage({ id: 'activity.column.status' }),
-			dataIndex: 'workflow',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => (
-				<Tag color={mapColorApprovalStatus[val as EApprovalStatus]}>
-					{mapNameApprovalStatus[val as EApprovalStatus]}
-				</Tag>
-			),
-			fixed: 'right',
-			filterType: 'select',
-			filterData: Object.values(EApprovalStatus).map((item) => ({
-				value: item,
-				label: mapNameApprovalStatus[item as EApprovalStatus],
-			})),
-			onCell,
-		},
 		{
 			title: 'Rejection Note',
 			dataIndex: 'activityRejectionNote',
@@ -185,6 +167,32 @@ const HistoryActivityPage = () => {
 			width: 180,
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,
 			filterType: 'string',
+			onCell,
+		},
+		{
+			title: intl.formatMessage({ id: 'activity.column.status' }),
+			dataIndex: 'workflow',
+			align: 'center',
+			width: 120,
+			render: (val, rec) => (
+				<Tag
+					color={mapColorApprovalStatus[val as EApprovalStatus]}
+					style={{
+						maxWidth: 120,
+						whiteSpace: 'normal',
+						wordBreak: 'break-word',
+						textAlign: 'center',
+					}}
+				>
+					{mapNameApprovalStatus[val as EApprovalStatus]}
+				</Tag>
+			),
+			fixed: 'right',
+			filterType: 'select',
+			filterData: Object.values(EApprovalStatus).map((item) => ({
+				value: item,
+				label: mapNameApprovalStatus[item as EApprovalStatus],
+			})),
 			onCell,
 		},
 		{
@@ -244,6 +252,42 @@ const HistoryActivityPage = () => {
 	];
 
 	return (
+		<TableBase
+			getData={getData}
+			formProps={{
+				getData: () => {
+					getData();
+					getThongKe();
+				},
+			}}
+			columns={columns}
+			dependencies={[page, limit, tabActive]}
+			modelName='cct.activityoutcome'
+			title={intl.formatMessage({ id: 'activity.title' })}
+			Form={tabActive === EActivityCategory.REGISTERED ? FormActivityOutCome : FormPerstionActivityOutCome}
+			widthDrawer={800}
+			buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
+			onReload={() => {
+				getData();
+				getThongKe();
+			}}
+		>
+			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
+				{Object.values(EActivityCategory).map((item) => (
+					<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
+				))}
+			</Tabs>
+
+			<div
+				style={{
+					padding: '0px 12px 0px 12px',
+				}}
+			>
+				<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
+			</div>
+		</TableBase>
+	);
+	return (
 		<Card title={intl.formatMessage({ id: 'activity.title' })}>
 			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
 				{Object.values(EActivityCategory).map((item) => (
@@ -268,7 +312,7 @@ const HistoryActivityPage = () => {
 				Form={tabActive === EActivityCategory.REGISTERED ? FormActivityOutCome : FormPerstionActivityOutCome}
 				widthDrawer={800}
 				hideCard
-				buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
+				// buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
 				onReload={() => {
 					getData();
 					getThongKe();
