@@ -21,7 +21,6 @@ export default {
 	// University information
 	'config.co-quan-chu-quan': 'Vietnam Women\'s Union',
 	'config.ten-truong': 'Vietnam Women\'s Academy',
-	'config.tien-to-truong': 'Academy',
-	'config.ten-truong-viet-tat-tieng-anh': 'VWA',
+	'config.tien-to-truong': 'Academy'
 };
 
