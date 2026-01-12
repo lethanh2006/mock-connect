@@ -19,9 +19,9 @@ export default {
 	'modules.tap-chi-khoa-hoc': 'Scientific Journal',
 
 	// University information
-	'config.co-quan-chu-quan': 'Vietnam Women\'s Union',
-	'config.ten-truong': 'Vietnam Women\'s Academy',
-	'config.tien-to-truong': 'Academy',
-	'config.ten-truong-viet-tat-tieng-anh': 'VWA',
+	'config.co-quan-chu-quan': 'Ministry of Education and Training',
+	'config.ten-truong': 'Vin University',
+	'config.tien-to-truong': 'University',
+	'config.ten-truong-viet-tat-tieng-anh': 'VIN',
 };
 

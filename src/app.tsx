@@ -41,7 +41,7 @@ export async function getInitialState(): Promise<IInitialState> {
 			const { authorizedPermissions } = JSON.parse(raw) as Partial<IInitialState>;
 			Object.assign(initialState, { authorizedPermissions });
 		}
-	} catch (e) {}
+	} catch (e) { }
 
 	return initialState;
 }
@@ -117,7 +117,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 
 			if (initialState?.settings?.layout === 'side') {
 				return (
-					<PageContainer ghost breadcrumbRender={false} title={false} extra={<GlobalHeaderRight />} header={{}}>
+					<PageContainer
+						ghost
+						breadcrumbRender={false}
+						title={false}
+						extra={<GlobalHeaderRight />}
+						header={{}}
+					>
 						{content}
 					</PageContainer>
 				);

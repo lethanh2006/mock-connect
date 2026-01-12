@@ -125,11 +125,59 @@ export const moduleTapChiKhoaHoc: Partial<Login.TModule> = {
 /** Đường link landing page */
 export const landingUrl = APP_CONFIG_URL_LANDING;
 
-/** Màu sắc chủ đạo */
-export const primaryColor = APP_CONFIG_PRIMARY_COLOR;
+/** Official Colors */
+export const officialColors = {
+	official100: '#C72127', // đỏ
+	official200: '#35426E', // xanh dương đậm
+	official300: '#134D8B', // xanh dương
+	official500: '#F4F9FF', // xanh dương nhạt
+} as const;
+
+/** Accent Colors */
+export const accentColors = {
+	accent100: '#0087C3', // xanh dương
+	accent200: '#4890BD', // xanh dương nhạt
+	accent300: '#A7C4D2', // xanh xám nhạt
+	accent400: '#5CC6D0', // xanh ngọc
+	accent500: '#D2AE6D', // vàng nâu
+	accent600: '#D2D3D5', // xám nhạt
+	accent700: '#F4F4F4', // xám rất nhạt
+	accent800: '#F8F8F8', // trắng xám
+} as const;
+
+/** Text Colors */
+export const textColors = {
+	text100: '#2E2E2E', // đen xám
+	text200: '#818181', // xám
+	text300: '#CFCFCF', // xám nhạt
+	text400: '#FFFFFF', // trắng
+} as const;
+
+/** Status Colors */
+export const statusColors = {
+	status100: '#329323', // xanh lá
+	status200: '#0E50CF', // xanh dương
+	status300: '#CE7C1E', // cam/nâu
+	status400: '#C80F1F', // đỏ
+	status500: '#491F9D', // tím
+	status600: '#0F8D91', // xanh ngọc
+} as const;
+
+/** Status Background Colors */
+export const statusBgColors = {
+	statusBg100: '#F5FFEB', // xanh lá nhạt
+	statusBg200: '#E2F2FE', // xanh dương nhạt
+	statusBg300: '#FFFAE4', // cam nhạt
+	statusBg400: '#FFEFEE', // đỏ nhạt
+	statusBg500: '#F8EEFE', // tím nhạt
+	statusBg600: '#E2FFFB', // xanh ngọc nhạt
+} as const;
 
 /** Màu sắc nổi bật */
-export const highlightColor = APP_CONFIG_HIGHLIGHT_COLOR;
+export const highlightColor = officialColors.official100
+
+/** Màu sắc chủ đạo */
+export const primaryColor = officialColors.official300;
 
 /** Tên trường Học viện */
 export const unitName = 'config.ten-truong';
