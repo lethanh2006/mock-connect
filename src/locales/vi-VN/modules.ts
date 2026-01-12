@@ -21,7 +21,6 @@ export default {
 	// University information
 	'config.co-quan-chu-quan': 'Hội Liên hiệp phụ nữ Việt Nam',
 	'config.ten-truong': 'Học viện Phụ nữ Việt Nam',
-	'config.tien-to-truong': 'Học viện',
-	'config.ten-truong-viet-tat-tieng-anh': 'VWA',
+	'config.tien-to-truong': 'Học viện'
 };
 

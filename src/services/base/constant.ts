@@ -138,7 +138,7 @@ export const coQuanChuQuan = 'config.co-quan-chu-quan';
 export const unitPrefix = 'config.tien-to-truong';
 
 /** Tên tiếng anh của trường */
-export const tenTruongVietTatTiengAnh = 'config.ten-truong-viet-tat-tieng-anh';
+export const tenTruongVietTatTiengAnh = APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH;
 
 /** Cài đặt hệ thống */
 export enum ESettingKey {
