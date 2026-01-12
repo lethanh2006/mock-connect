@@ -209,4 +209,11 @@ export default {
 	'global.uploadfile.text': 'Nhấn chuột hoặc kéo thả tài liệu để tải lên',
 	'global.uploadfile.text1': 'Thêm ảnh đại diện',
 	'global.uploadfile.button.chontep': 'Chọn tệp',
+
+	// PDFViewer
+	'global.pdfviewer.dangtai': 'Đang tải...',
+	'global.pdfviewer.dangtaitailieu': 'Đang tải tài liệu. Vui lòng chờ trong giây lát...',
+	'global.pdfviewer.truoc': 'Trước',
+	'global.pdfviewer.sau': 'Sau',
+	'global.pdfviewer.trang': 'Trang {pageNumber} trên tổng số {numPages}',
 };
