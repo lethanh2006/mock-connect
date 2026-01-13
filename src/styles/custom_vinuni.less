@@ -194,6 +194,8 @@
 	}
 }
 
+
+
 .ant-card {
 	height: 100%;
 	border-radius: 6px !important;
@@ -209,7 +211,6 @@
 	.ant-card-head {
 		padding: 16px;
 		border-bottom: 1.5px solid var(--color-accent-700) !important;
-		background-color: var(--vin-color-primary-bg) !important;
 
 		@media (max-width: @screen-xs) {
 			padding: 0 12px;
@@ -233,7 +234,7 @@
 		box-shadow: none;
 
 		>.ant-card-body {
-			padding: 8px 0 0 !important;
+			padding: 0 !important;
 		}
 
 		>.ant-card-head {
@@ -302,16 +303,30 @@
 
 		>.ant-card-body {
 			border-radius: 4px;
-			margin: 0 -16px !important;
 			background-color: var(--color-text-400) !important;
-			// .ant-tabs {
-			// 	.ant-tabs-nav {
-			// 		margin-bottom: 0 !important;
-			// 		background-color: var(--color-text-400) !important;
-			// 		border-top-left-radius: 4px !important;
-			// 		border-top-right-radius: 4px !important;
-			// 	}
-			// }			
+			padding: 0 16px;
+
+			&.ant-spin-nested-loading {
+				margin: 0 -16px !important;
+			}
+
+			&.header {
+				margin: 0 -16px !important;
+			}
+
+			.ant-card {
+				.ant-spin-nested-loading {
+					margin: 0 !important;
+				}
+
+				.header {
+					margin: 0 !important;
+				}
+
+				.table-base {
+					margin: 0 !important;
+				}
+			}
 		}
 
 		>.ant-card-head-wrapper>.ant-card-head-title {
@@ -336,14 +351,11 @@
 	.ant-card-body {
 		background-color: var(--color-text-400) !important;
 		border-radius: 8px !important;
-		padding: 0 12px !important;
+		padding: 0 16px !important;
 
 		.table-base {
-			padding-top: 0 !important;
 			border-radius: 8px !important;
 		}
-
-		// padding: 0 !important;
 
 		@media (max-width: @screen-xs) {
 			padding: 0 !important;
@@ -487,14 +499,9 @@
 .btn-reload,
 .btn-filter {
 	background-color: var(--color-accent-700) !important;
-	border: none !important;
-	color: var(--color-text-100) !important;
-	height: auto !important;
 	border-radius: 4px;
+	border: none !important;
 
-	&:hover {
-		border-color: var(--color-text-200) !important;
-	}
 }
 
 // Style header của PageContainer - VinUni
@@ -651,7 +658,7 @@
 
 // Style container của Spin
 .ant-spin-container {
-	background-color: var(--color-accent-800) !important;
+	background-color: var(--color-text-400) !important;
 }
 
 // Margin cho phân trang bảngant-table-pagination
@@ -666,13 +673,8 @@
 
 // Z-index cho tổng số ở header bảng
 .table-base {
+	background-color: var(--color-text-400) !important;
 	margin: 0 -16px !important;
-
-	background-color: var(--color-accent-800) !important;
-
-	.ant-space {
-		padding: 0 8px !important;
-	}
 
 	.table-base-header {
 		margin-bottom: 0 !important;
@@ -695,7 +697,10 @@
 			flex-wrap: wrap !important;
 
 			.ant-btn {
-				padding: 5px !important;
+				padding: 8px 12px !important;
+				height: 28px !important;
+				font-size: 14px !important;
+				text-transform: none !important;
 
 				.ant-btn-icon,
 				.anticon {
@@ -725,7 +730,7 @@
 			gap: 8px !important;
 
 			.ant-btn {
-				padding: 5px !important;
+				padding: 8px 12px !important;
 
 				.ant-btn-icon,
 				.anticon {
@@ -757,6 +762,12 @@
 		justify-content: start !important;
 		width: 100% !important;
 		height: 100% !important;
+	}
+
+	.ant-table-wrapper {
+		.ant-spin-nested-loading {
+			margin: 0 !important;
+		}
 	}
 }
 
@@ -1050,8 +1061,18 @@
 			padding: 16px !important;
 		}
 
+		.table-export-modal-body {
+			padding: 0 16px 16px 16px !important;
+		}
+
 		.ant-modal-body {
 			padding: 16px;
+
+			.ant-card {
+				.ant-card-head {
+					background-color: var(--vin-color-primary-bg) !important;
+				}
+			}
 		}
 
 		.ant-modal-footer {
@@ -1192,10 +1213,6 @@
 			border-bottom-right-radius: 4px !important;
 		}
 	}
-}
-
-.ant-tabs-nav-list {
-	margin-left: 2px !important;
 }
 
 .ant-tag {

@@ -1,10 +1,11 @@
 import { accentColors, highlightColor, officialColors, primaryColor, statusBgColors, statusColors, textColors } from '@/services/base/constant';
-import { getLocale } from '@umijs/max';
+import { getIntl, getLocale } from '@umijs/max';
 import { ConfigProvider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
 
 /** Chú ý các route để layout: false thì phải bọc bởi ConfigBound để nhận styles */
 const ConfigBounder = (props: { children?: any }) => {
+	const intl = getIntl();
 	useEffect(() => {
 		// Đổi màu real time => Hỗ trợ đổi tenant
 		ConfigProvider.config({
@@ -29,7 +30,8 @@ const ConfigBounder = (props: { children?: any }) => {
 			renderEmpty={() => (
 				<Empty
 					style={{ marginTop: 32, marginBottom: 32 }}
-					image='/empty.png'
+					image='/images/empty.png'
+					description={intl.formatMessage({ id: 'global.table.index.empty' })}
 				/>
 			)}
 			theme={{
