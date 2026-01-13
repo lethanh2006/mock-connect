@@ -1,20 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 :root {
-	--button-only-icon-size: 18px;
-
 	// VinUni color palette
 	--color-official-100: #c72127;
 	--color-official-200: #35426e;
 	--color-official-300: #134d8b;
 	--color-official-500: #f4f9ff;
 
-	// Allow env-provided --color-primary/* to override; default to Vin colors
-	--vin-color-primary: var(--color-primary, var(--color-official-100));
-	--vin-color-primary-100: var(--color-primary-100, var(--color-official-100));
-	--vin-color-primary-200: var(--color-primary-200, var(--color-official-200));
-	--vin-color-primary-300: var(--color-primary-300, var(--color-official-300));
-	--vin-color-primary-bg: var(--color-primary-bg, var(--color-official-500));
+	--vin-color-primary: var(--color-official-100);
+	--vin-color-primary-100: var(--color-official-100);
+	--vin-color-primary-200: var(--color-official-200);
+	--vin-color-primary-300: var(--color-official-300);
+	--vin-color-primary-bg: var(--color-official-500);
 
 	--color-accent-100: #0087c3;
 	--color-accent-200: #4890bd;
@@ -23,11 +20,12 @@
 	--color-accent-500: #d2ae6d;
 	--color-accent-600: #d2d3d5;
 	--color-accent-700: #f4f4f4;
-	--color-accent-800: #ffffff;
+	--color-accent-800: #f8f8f8;
 
 	--color-text-100: #2e2e2e;
 	--color-text-200: #818181;
-	--color-text-300: #d1d1d1;
+	--color-text-300: #cfcfcf;
+	--color-text-400: #ffffff;
 
 	--color-success: #44b10f;
 	--color-info: #0051ff;
@@ -43,6 +41,22 @@
 	--color-highlight-bg: #f8eeff;
 	--color-teal-bg: #dcffff;
 
+	// Status Colors
+	--color-status-100: #329323;
+	--color-status-200: #0E50CF;
+	--color-status-300: #CE7C1E;
+	--color-status-400: #C80F1F;
+	--color-status-500: #491F9D;
+	--color-status-600: #0F8D91;
+
+	// Status Background Colors
+	--color-status-bg-100: #F5FFEB;
+	--color-status-bg-200: #E2F2FE;
+	--color-status-bg-300: #FFFAE4;
+	--color-status-bg-400: #FFEFEE;
+	--color-status-bg-500: #F8EEFE;
+	--color-status-bg-600: #E2FFFB;
+
 	--color-bg-layout: var(--color-accent-700);
 	--color-icon-hover: var(--vin-color-primary-300);
 	--color-bg-text-hover: var(--vin-color-primary-bg);
@@ -50,11 +64,6 @@
 
 * {
 	font-family: 'Montserrat', sans-serif !important;
-	// font-size: 14px !important;
-	// color: var(--color-text-100) !important;
-	// font-weight: 500 !important;
-	// line-height: 1.5 !important;
-	// letter-spacing: 0,25px !important;
 }
 
 // Style cho nhãn form - VinUni
@@ -65,6 +74,12 @@
 	font-size: 14px !important;
 	line-height: 170% !important;
 	letter-spacing: 1.5% !important;
+}
+
+.ant-form-item-required::after {
+	color: var(--form-label-required-mark-color) !important;
+	visibility: visible !important;
+	content: "*" !important;
 }
 
 .ant-form-vertical {
@@ -80,15 +95,6 @@
 // Bỏ padding của ant-layout-content
 .ant-layout-content.ant-pro-layout-content {
 	padding: 0 !important;
-}
-
-// Màu tiêu đề card
-.ant-card.card-big-title {
-	>.ant-card-head {
-		>.ant-card-head-wrapper>.ant-card-head-title {
-			color: var(--color-primary);
-		}
-	}
 }
 
 // Border cho ô bảng
@@ -117,8 +123,7 @@
 .ant-table,
 .ant-table-container,
 .ant-table-content,
-.ant-table-thead>tr>th,
-.ant-table-tbody>tr>td {
+.ant-table-thead>tr>th {
 	border: none !important;
 }
 
@@ -169,13 +174,14 @@
 	}
 
 	.ant-table-cell-fix-right-first {
-		display: flex !important;
 		gap: 6px !important;
+		text-align: start !important;
 
 		.ant-btn {
 			padding: 6px !important;
 			width: 28px !important;
 			height: 28px !important;
+			margin-right: 6px !important;
 			background-color: var(--color-info-bg) !important;
 		}
 
@@ -185,12 +191,6 @@
 			margin: 0 !important;
 			line-height: 1 !important;
 		}
-	}
-}
-
-.ant-tabs {
-	.ant-tabs-nav {
-		padding: 0 12px !important;
 	}
 }
 
@@ -243,19 +243,82 @@
 
 	&.card-big-title {
 		background: transparent;
+		border: none !important;
 
 		>.ant-card-head {
-			border-bottom: none;
+			padding: 0 0 16px 0;
+			border: none !important;
+			background-color: transparent !important;
 
-			>.ant-card-head-wrapper>.ant-card-head-title {
-				font-size: 18px;
+			.ant-card-head-title {
+				font-size: 22px !important;
+				margin-left: 2px !important;
+				color: var(--color-accent-800) !important;
+
+				&::after {
+					content: '' !important;
+					position: absolute !important;
+					left: -18px !important;
+					top: 0 !important;
+					transform: translateY(-50%) !important;
+					width: 0 !important;
+					height: 0 !important;
+					border-right: 14px solid var(--vin-color-primary) !important;
+					border-top: 10px solid transparent !important;
+					border-bottom: 10px solid transparent !important;
+					display: block !important;
+					rotate: 180deg !important;
+					visibility: visible !important;
+					opacity: 1 !important;
+					z-index: 999 !important;
+					pointer-events: none !important;
+
+					@media (max-width: 768px) {
+						left: -18px !important;
+					}
+
+					@media (max-width: 425px) {
+						top: 4px !important;
+						left: -10px !important;
+						border-right: 10px solid var(--vin-color-primary) !important;
+						border-top: 8px solid transparent !important;
+						border-bottom: 8px solid transparent !important;
+					}
+				}
+
+				@media (max-width: 425px) {
+					padding-left: 6px !important;
+				}
+			}
+
+			.ant-card-extra {
+				.ant-btn {
+					.ant-btn-icon {
+						display: none !important;
+					}
+				}
 			}
 		}
 
 		>.ant-card-body {
-			padding: 0;
+			border-radius: 4px;
+			margin: 0 -16px !important;
+			background-color: var(--color-text-400) !important;
+			// .ant-tabs {
+			// 	.ant-tabs-nav {
+			// 		margin-bottom: 0 !important;
+			// 		background-color: var(--color-text-400) !important;
+			// 		border-top-left-radius: 4px !important;
+			// 		border-top-right-radius: 4px !important;
+			// 	}
+			// }			
+		}
+
+		>.ant-card-head-wrapper>.ant-card-head-title {
+			font-size: 18px;
 		}
 	}
+
 }
 
 .ant-modal-title {
@@ -271,7 +334,16 @@
 	background-color: transparent;
 
 	.ant-card-body {
-		padding: 0 !important;
+		background-color: var(--color-text-400) !important;
+		border-radius: 8px !important;
+		padding: 0 12px !important;
+
+		.table-base {
+			padding-top: 0 !important;
+			border-radius: 8px !important;
+		}
+
+		// padding: 0 !important;
 
 		@media (max-width: @screen-xs) {
 			padding: 0 !important;
@@ -379,34 +451,34 @@
 /* Các class button tùy chỉnh - VinUni */
 // Style chung cho tất cả button antd
 .ant-btn {
-	text-transform: uppercase !important;
-	display: flex !important;
 	justify-content: center !important;
 	align-items: center !important;
+	box-shadow: none !important;
+	text-transform: uppercase !important;
+}
+
+.ant-btn-sm {
+	text-transform: none !important;
 }
 
 // Ghi đè màu primary cho button - VinUni
 .ant-btn-primary.ant-btn-color-primary.ant-btn-variant-solid {
-	background-color: var(--vin-color-primary) !important;
-	border-color: var(--vin-color-primary) !important;
-	color: var(--color-accent-800) !important;
-
 	&:hover {
 		background-color: var(--color-accent-800) !important;
-		border-color: var(--vin-color-primary) !important;
-		color: var(--vin-color-primary) !important;
+		border-color: var(--color-primary) !important;
+		color: var(--color-primary) !important;
 	}
 
 	&:focus {
 		background-color: var(--color-accent-800) !important;
-		border-color: var(--vin-color-primary) !important;
-		color: var(--vin-color-primary) !important;
+		border-color: var(--color-primary) !important;
+		color: var(--color-primary) !important;
 	}
 
 	&:active {
 		background-color: #f5f5f5 !important;
-		border-color: var(--vin-color-primary) !important;
-		color: var(--vin-color-primary) !important;
+		border-color: var(--color-primary) !important;
+		color: var(--color-primary) !important;
 	}
 }
 
@@ -414,12 +486,9 @@
 .btn-export,
 .btn-reload,
 .btn-filter {
-	background-color: var(--color-accent-800) !important;
-	border: 1.5px solid var(--color-accent-700) !important;
+	background-color: var(--color-accent-700) !important;
+	border: none !important;
 	color: var(--color-text-100) !important;
-	text-transform: uppercase;
-	font-weight: 700;
-	font-size: 16px !important;
 	height: auto !important;
 	border-radius: 4px;
 
@@ -585,20 +654,24 @@
 	background-color: var(--color-accent-800) !important;
 }
 
-// Margin cho phân trang bảng
+// Margin cho phân trang bảngant-table-pagination
 .ant-pagination.ant-table-pagination.ant-table-pagination-right {
 	margin-left: 40px !important;
 	margin-right: 40px !important;
 }
 
+.ant-table-pagination {
+	background-color: '#ffffff' !important;
+}
+
 // Z-index cho tổng số ở header bảng
 .table-base {
-	padding: 16px 0 0 0 !important;
+	margin: 0 -16px !important;
+
 	background-color: var(--color-accent-800) !important;
-	border-radius: 8px !important;
 
 	.ant-space {
-		padding: 0 16px !important;
+		padding: 0 8px !important;
 	}
 
 	.table-base-header {
@@ -606,47 +679,57 @@
 	}
 
 	.header {
-		padding: 0 12px 16px 12px !important;
+		padding: 12px 16px !important;
 		display: flex !important;
 		align-items: center !important;
+		flex-direction: row-reverse;
 		justify-content: space-between !important;
 		gap: 12px !important;
 		margin-bottom: 0 !important;
 
 		.action {
 			display: flex !important;
+			flex-direction: row-reverse;
 			align-items: center !important;
 			gap: 8px !important;
 			flex-wrap: wrap !important;
 
 			.ant-btn {
-				padding: 8px !important;
+				padding: 5px !important;
 
 				.ant-btn-icon,
 				.anticon {
-					font-size: 17px !important;
-					margin: 0 !important;
-					line-height: 1 !important;
-				}
-
-				.span-extend {
 					display: none !important;
+				}
+			}
+
+			.total {
+				z-index: 1 !important;
+				border: none !important;
+				font-size: 14px !important;
+				font-weight: 500 !important;
+
+				span {
+					color: var(--color-highlight) !important;
+					font-size: 15px !important;
+					font-weight: 600 !important;
+					margin-left: 4px !important;
 				}
 			}
 		}
 
 		.extra {
-			flex-direction: row-reverse !important;
+			// flex-direction: row-reverse !important;
 			display: flex !important;
 			align-items: center !important;
 			gap: 8px !important;
 
 			.ant-btn {
-				padding: 8px !important;
+				padding: 5px !important;
 
 				.ant-btn-icon,
 				.anticon {
-					font-size: 17px !important;
+					font-size: 16px !important;
 					margin: 0 !important;
 					line-height: 1 !important;
 				}
@@ -660,6 +743,10 @@
 		.total {
 			z-index: 1 !important;
 			border: none !important;
+
+			span {
+				color: var(--color-highlight) !important;
+			}
 		}
 	}
 
@@ -788,8 +875,8 @@
 	justify-content: center !important;
 
 	img {
-		height: 20px !important;
-		width: 20px !important;
+		height: 24px !important;
+		width: 24px !important;
 		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%); // Màu đỏ #C72127
 	}
 
@@ -815,8 +902,7 @@
 // Form footer style - VinUni
 .form-footer {
 	position: relative;
-	padding: 16px 0 6px 0 !important;
-	border-top: none !important;
+	padding: 16px 0 0 !important;
 	justify-content: flex-start !important;
 	flex-direction: row-reverse !important;
 	margin-top: 10px !important;
@@ -825,9 +911,9 @@
 		content: '';
 		position: absolute;
 		top: 0;
-		left: calc(-1 * var(--ant-modal-body-padding-horizontal, 17px)) !important;
-		right: calc(-1 * var(--ant-modal-body-padding-horizontal, 17px)) !important;
-		height: 1.5px;
+		left: calc(-1 * var(--ant-modal-body-padding-horizontal, 16px)) !important;
+		right: calc(-1 * var(--ant-modal-body-padding-horizontal, 16px)) !important;
+		height: 1px;
 		background-color: var(--color-accent-700);
 	}
 }
@@ -850,11 +936,13 @@
 
 // Style cho menu sider - VinUni
 .ant-pro-sider-logo {
-	padding: 16px 24px;
 	height: 64px;
 	display: flex;
 	align-items: center;
-	gap: 12px;
+
+	a {
+		gap: 10px;
+	}
 
 	img {
 		height: 32px !important;
@@ -924,21 +1012,6 @@
 			color: var(--color-primary);
 		}
 	}
-
-	a[href^='/__group__/'] {
-		display: block;
-		pointer-events: none;
-		color: var(--color-text-300) !important;
-		font-weight: 700;
-		text-transform: uppercase;
-		font-size: 14px !important;
-		height: auto;
-		line-height: normal;
-
-		&+span {
-			display: none;
-		}
-	}
 }
 
 // Style header của layout - VinUni
@@ -974,12 +1047,16 @@
 	.ant-modal-content {
 		.ant-modal-header {
 			border-bottom: 1.5px solid var(--color-accent-700) !important;
-			background-color: var(--vin-color-primary-bg) !important;
+			padding: 16px !important;
+		}
+
+		.ant-modal-body {
+			padding: 16px;
 		}
 
 		.ant-modal-footer {
 			border-top: 1.5px solid var(--color-accent-700) !important;
-			padding-top: 16px !important;
+			padding: 16px !important;
 			justify-content: end;
 		}
 	}
@@ -1014,12 +1091,230 @@
 										.ant-picker-cell-in-view {
 											color: var(--color-text-100) !important;
 										}
+
+										.ant-picker-cell-in-view.ant-picker-cell-today {
+											.ant-picker-cell-inner {
+												&::before {
+													background-color: var(--vin-color-primary) !important;
+													color: var(--color-text-400) !important;
+												}
+											}
+										}
 									}
 								}
 							}
 						}
 					}
 				}
+			}
+		}
+	}
+
+	.ant-picker-header {
+
+		.ant-picker-decade-btn,
+		.ant-picker-year-btn,
+		.ant-picker-month-btn,
+		.ant-picker-header-view button {
+			color: var(--color-official-300) !important;
+
+			&:hover {
+				opacity: 0.8;
+			}
+		}
+	}
+
+	.ant-picker-footer {
+		.ant-picker-ranges {
+			.ant-picker-now {
+				font-weight: 600;
+			}
+		}
+	}
+}
+
+// Style cho Calendar date value - VinUni
+.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date-value {
+	font-weight: 600 !important;
+}
+
+// Style cho Calendar selected cell - VinUni
+.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected .ant-picker-calendar-date .ant-picker-calendar-date-value,
+.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected:hover .ant-picker-calendar-date .ant-picker-calendar-date-value,
+.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected .ant-picker-calendar-date-today .ant-picker-calendar-date-value,
+.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected:hover .ant-picker-calendar-date-today .ant-picker-calendar-date-value {
+	background-color: var(--vin-color-primary) !important;
+	color: var(--color-text-400) !important;
+	width: 28px;
+	text-align: center;
+	justify-self: end;
+	border-radius: 4px;
+	font-weight: 600 !important;
+}
+
+
+
+.ant-radio-label,
+.ant-checkbox-label,
+.ant-space-item {
+	font-weight: 600;
+}
+
+.ant-tabs-card {
+	.ant-tabs-tab-active {
+		background-color: var(--color-primary) !important;
+		color: var(--color-text-400) !important;
+		border-radius: 4px !important;
+
+		.ant-tabs-tab-btn {
+			color: var(--color-text-400) !important;
+		}
+	}
+}
+
+.ant-tabs-card>.ant-tabs-nav {
+	&>.ant-tabs-nav-wrap>.ant-tabs-nav-list {
+		margin-right: '2px' !important;
+
+		&>.ant-tabs-tab {
+			border: none !important;
+			border-radius: 0;
+		}
+
+		// Đảm bảo last-child ăn radius bằng cách dùng :not(:only-child)
+		&>.ant-tabs-tab:first-child:not(:last-child) {
+			border-top-left-radius: 4px !important;
+			border-bottom-left-radius: 4px !important;
+		}
+
+		&>.ant-tabs-tab:last-of-type:not(:first-child) {
+			border-top-right-radius: 4px !important;
+			border-bottom-right-radius: 4px !important;
+		}
+	}
+}
+
+.ant-tabs-nav-list {
+	margin-left: 2px !important;
+}
+
+.ant-tag {
+	padding: 2px 4px;
+}
+
+// Style cho Steps finish icon - VinUni
+.ant-steps-item-finish {
+	.ant-steps-item-icon {
+
+		.ant-steps-icon,
+		.anticon {
+			color: var(--color-text-400) !important;
+		}
+	}
+}
+
+.ant-steps.ant-steps-horizontal .ant-steps-item-finish .ant-steps-item-icon,
+.ant-steps.ant-steps-vertical .ant-steps-item-finish .ant-steps-item-icon,
+.ant-steps.ant-steps-navigation .ant-steps-item-finish .ant-steps-item-icon {
+
+	.ant-steps-icon,
+	.anticon {
+		color: var(--color-text-400) !important;
+	}
+}
+
+// Style cho Carousel dots - VinUni
+.ant-carousel {
+
+	.slick-prev,
+	.slick-next {
+		color: var(--color-text-100) !important;
+		opacity: 1;
+
+		&:hover {
+			color: var(--color-highlight) !important;
+		}
+	}
+
+	.slick-dots {
+		li.slick-active {
+			&::after {
+				background-color: var(--color-highlight) !important;
+			}
+		}
+	}
+}
+
+.ant-picker-calendar {
+	.ant-picker-calendar-header {
+		.ant-radio-group {
+			.ant-radio-button-wrapper-checked {
+				background-color: var(--color-primary) !important;
+				color: var(--color-text-400) !important;
+			}
+
+			.ant-radio-button-wrapper {
+				background-color: var(--color-official-500);
+			}
+
+			;
+		}
+	}
+}
+
+.collapse-big-title {
+	.ant-collapse-item {
+		.ant-collapse-header {
+			.ant-collapse-header-text {
+				&::after {
+					content: '' !important;
+					position: absolute !important;
+					left: -16px !important;
+					top: 14px !important;
+					transform: translateY(-50%) !important;
+					width: 0 !important;
+					height: 0 !important;
+					border-right: 10px solid var(--color-primary) !important;
+					border-top: 6px solid transparent !important;
+					border-bottom: 6px solid transparent !important;
+					display: block !important;
+					rotate: 180deg !important;
+					visibility: visible !important;
+					opacity: 1 !important;
+					z-index: 999 !important;
+					pointer-events: none !important;
+				}
+			}
+		}
+	}
+}
+
+.divider-big-title {
+	.ant-divider-inner-text {
+		position: relative;
+		font-weight: 600;
+
+		&::before {
+			content: '' !important;
+			position: absolute !important;
+			left: -16px !important;
+			top: 0 !important;
+			transform: translateY(-50%) !important;
+
+			width: 0 !important;
+			height: 0 !important;
+			border-right: 10px solid var(--vin-color-primary) !important;
+			border-top: 6px solid transparent !important;
+			border-bottom: 6px solid transparent !important;
+			display: block !important;
+			visibility: visible !important;
+			opacity: 1 !important;
+			rotate: 180deg !important;
+			z-index: 999 !important;
+			pointer-events: none !important;
+
+			@media (max-width: 768px) {
+				top: 32% !important;
 			}
 		}
 	}

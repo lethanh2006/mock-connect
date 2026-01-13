@@ -211,4 +211,11 @@ export default {
 	'global.uploadfile.button.chontep': 'Chọn tệp',
 
 	'global.column.action': 'Thao tác',
+
+	// PDFViewer
+	'global.pdfviewer.dangtai': 'Đang tải...',
+	'global.pdfviewer.dangtaitailieu': 'Đang tải tài liệu. Vui lòng chờ trong giây lát...',
+	'global.pdfviewer.truoc': 'Trước',
+	'global.pdfviewer.sau': 'Sau',
+	'global.pdfviewer.trang': 'Trang {pageNumber} trên tổng số {numPages}',
 };

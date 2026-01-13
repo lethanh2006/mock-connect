@@ -1,13 +1,12 @@
 import Footer from '@/components/Footer';
-import RightContent from '@/components/RightContent';
-import GlobalHeaderRight from '@/components/RightContent';
-import '@ant-design/v5-patch-for-react-19';
+import { default as GlobalHeaderRight, default as RightContent } from '@/components/RightContent';
 import { PageContainer } from '@ant-design/pro-components';
+import '@ant-design/v5-patch-for-react-19';
 import { App } from 'antd';
 import 'dayjs/locale/vi';
 import React from 'react'; // Bổ sung import React
 import type { RunTimeLayoutConfig } from 'umi';
-import { history } from 'umi';
+import { getIntl, history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import ErrorBoundary from './components/ErrorBoundary';
 import { OIDCBounder } from './components/OIDCBounder';
@@ -49,7 +48,7 @@ export async function getInitialState(): Promise<IInitialState> {
 
 // ProLayout  https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
-	console.log(initialState, 'sadsadasdasdasd');
+	const intl = getIntl();
 	return {
 		unAccessible: (
 			<OIDCBounder>
@@ -133,7 +132,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 			return content;
 		},
 
-		title: AppModules[currentRole].title,
+		title: intl.formatMessage({ id: AppModules[currentRole].title }),
 		...initialState?.settings,
 	};
 };

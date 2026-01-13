@@ -1,13 +1,17 @@
 import { unitName } from '@/services/base/constant';
+import { useIntl } from '@umijs/max';
 import { Card } from 'antd';
 import '../../TrangChu/components/style.less';
 
 const AboutPage = () => {
+	const intl = useIntl();
 	return (
 		<Card styles={{ body: { height: '100%' } }}>
 			<div className='home-welcome'>
-				<h1 className='title'>GIỚI THIỆU {unitName.toUpperCase()}</h1>
-				<h2 className='sub-title'>HỆ THỐNG PHẦN MỀM ĐẠI HỌC SỐ - {unitName.toUpperCase()}</h2>
+				<h1 className='title'>GIỚI THIỆU {(intl.formatMessage({ id: unitName }) || unitName).toUpperCase()}</h1>
+				<h2 className='sub-title'>
+					HỆ THỐNG PHẦN MỀM ĐẠI HỌC SỐ - {(intl.formatMessage({ id: unitName }) || unitName).toUpperCase()}
+				</h2>
 			</div>
 		</Card>
 	);
