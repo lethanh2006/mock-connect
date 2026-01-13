@@ -1,6 +1,7 @@
 export default {
 	'activity.type.select': 'Select co-curricular activities (CCA)',
 	'activity.role.select': 'Select role',
+	'activity.level.select': 'Select level',
 
 	'activity.date.homnay': 'Today',
 	'activity.date.tuannay': 'This week',
@@ -23,7 +24,7 @@ export default {
 
 	'activity.title': 'My activity',
 	'activity.column.name': 'Co Curicular Name',
-	'activity.column.cca': 'Co-curricular Activities (CCA)',
+	'activity.column.cca': 'Co-curricular Activity (CCA)',
 	'activity.column.activity': 'Activity name',
 	'activity.column.attribute': 'Activity attributes',
 	'activity.column.startdate': 'Start Date',
@@ -43,7 +44,9 @@ export default {
 	'activity.registered.title': 'Add Evidence',
 	'activity.registered.role': 'Roles',
 	'activity.registered.role.select': 'Select role',
-	'activity.registered.role.vali': 'Please select role before submitting survey',
+	'activity.registered.role.vali': 'Please select roles before submitting survey',
+	'activity.registered.level.vali': 'Please select levels before submitting survey',
+	'activity.registered.level': 'Levels',
 
 	'lophocphan.id.khaosat.title': 'Survey details',
 	'lophocphan.id.khaosat.cau': 'Question',
@@ -83,11 +86,13 @@ export default {
 	'activity.perstion.title': 'Detail activity',
 	'activity.perstion.activitiesOutcomeName': 'Co Curicular Name',
 	'activity.perstion.activitiesOutcomeName.place': 'Enter co curicular name',
-	'activity.perstion.activitiesTypeId': 'Co-curricular Activities (CCA)',
+	'activity.perstion.activitiesTypeId': 'Co-curricular Activity (CCA)',
 	'activity.perstion.activitiesTypeId.mapping': 'Attributes competency mapping',
-	'activity.perstion.activitiesTypeId.select': 'Select Co-curricular Activities (CCA)',
+	'activity.perstion.activitiesTypeId.select': 'Select Co-curricular Activity (CCA)',
 	'activity.perstion.startDate': 'Start date',
 	'activity.perstion.startDate.place': 'Select start date',
+	'activity.perstion.endDate': 'End date',
+	'activity.perstion.endDate.place': 'Select end date',
 	'activity.perstion.organizer': 'Organizer',
 	'activity.perstion.organizer.place': 'Enter organizer',
 	'activity.perstion.location': 'Location',

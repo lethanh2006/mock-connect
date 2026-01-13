@@ -12,10 +12,11 @@ import {
 } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined, SendOutlined } from '@ant-design/icons';
-import { Card, Checkbox, Popconfirm, Tabs, Tag } from 'antd';
+import { Checkbox, Popconfirm, Tabs, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import SelectActivitiesManagement from '../Activities/Select';
+import SelectLevelsManagement from '../Levels/Select';
 import SelectRolesManagement from '../Roles/Select';
 import FormActivityOutCome from './components/Form';
 import FormPerstionActivityOutCome from './components/FormPerstion';
@@ -94,6 +95,18 @@ const HistoryActivityPage = () => {
 			hide: tabActive === EActivityCategory.REGISTERED,
 		},
 		{
+			title: 'Competency',
+			dataIndex: 'listAchievedCompetencies',
+			width: 140,
+			render: (val, rec) =>
+				rec?.listAchievedCompetencies
+					?.map((item) => item?.competencie?.name)
+					.filter(Boolean)
+					.join(', '),
+			onCell,
+			hide: tabActive === EActivityCategory.REGISTERED,
+		},
+		{
 			title: intl.formatMessage({ id: 'activity.column.activity' }),
 			width: 180,
 			render: (val, rec) => rec?.activities?.name,
@@ -102,7 +115,6 @@ const HistoryActivityPage = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.column.attribute' }),
-			align: 'center',
 			width: 200,
 			render: (val, rec) => (
 				<Tag color={rec?.activities?.activitiesType?.attributes?.color}>
@@ -148,8 +160,11 @@ const HistoryActivityPage = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.column.level' }),
+			dataIndex: 'rolesId',
 			width: 140,
-			render: (val, rec) => rec?.roles?.level?.name,
+			render: (val, rec) => rec?.levels?.name,
+			filterType: 'customselect',
+			filterCustomSelect: <SelectLevelsManagement multiple />,
 			onCell,
 		},
 		...attributeColumns,
@@ -235,7 +250,7 @@ const HistoryActivityPage = () => {
 								getThongKe();
 							})
 						}
-						title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
+						title={intl.formatMessage({ id: 'activity.confirm.xoa' })}
 						placement='topLeft'
 					>
 						<ButtonExtend
@@ -265,7 +280,7 @@ const HistoryActivityPage = () => {
 			modelName='cct.activityoutcome'
 			title={intl.formatMessage({ id: 'activity.title' })}
 			Form={tabActive === EActivityCategory.REGISTERED ? FormActivityOutCome : FormPerstionActivityOutCome}
-			widthDrawer={800}
+			widthDrawer={tabActive === EActivityCategory.REGISTERED ? 800 : 1000}
 			buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
 			onReload={() => {
 				getData();
@@ -286,39 +301,6 @@ const HistoryActivityPage = () => {
 				<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
 			</div>
 		</TableBase>
-	);
-	return (
-		<Card title={intl.formatMessage({ id: 'activity.title' })}>
-			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
-				{Object.values(EActivityCategory).map((item) => (
-					<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
-				))}
-			</Tabs>
-
-			<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
-
-			<TableBase
-				getData={getData}
-				formProps={{
-					getData: () => {
-						getData();
-						getThongKe();
-					},
-				}}
-				columns={columns}
-				dependencies={[page, limit, tabActive]}
-				modelName='cct.activityoutcome'
-				title={intl.formatMessage({ id: 'activity.title' })}
-				Form={tabActive === EActivityCategory.REGISTERED ? FormActivityOutCome : FormPerstionActivityOutCome}
-				widthDrawer={800}
-				hideCard
-				// buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
-				onReload={() => {
-					getData();
-					getThongKe();
-				}}
-			/>
-		</Card>
 	);
 };
 

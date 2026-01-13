@@ -11,6 +11,8 @@ declare module ActivityOutCome {
 		activitiesType: ActivitiesManagement.IRecord;
 		rolesId: string;
 		roles?: RolesManagement.IRecord;
+		levelId: string;
+		levels?: LevelsManagement.IRecord;
 		organizer: string;
 		description: string;
 		location: string;
@@ -26,6 +28,7 @@ declare module ActivityOutCome {
 		revisionNote: string;
 
 		activityRejectionNote?: string;
+		listAchievedCompetencies: Activity.ICompetencyMapping[];
 
 		createdAt: Date;
 		updatedAt: Date;
