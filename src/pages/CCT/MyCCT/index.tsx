@@ -350,7 +350,7 @@ const TranscriptReport: React.FC<any> = () => {
 				{/* Container chính chứa danh sách cards */}
 				<div className='transcript-container'>
 					{danhSach?.map((item: any) => {
-						const { attribute, countLevel, activitiesOutCome } = item;
+						const { attribute, countLevel, activitiesOutCome, listCompetencies } = item;
 						const themeColor = attribute.color || '#333';
 
 						const cardStyle = { '--theme-color': themeColor } as React.CSSProperties;
@@ -368,13 +368,30 @@ const TranscriptReport: React.FC<any> = () => {
 										</div>
 										<div className='info-block'>
 											<div className='description'>{attribute.description}</div>
-											<div className='rating-list'>
-												{dsLevels?.map((item) => (
-													<div className='rating-row'>
-														<span className='rating-label'>{item?.name}:</span>
-														<StarRating count={Utils.getStarCount(countLevel, item?.name)} />
-													</div>
-												))}
+											<div style={{ display: 'flex', justifyContent: 'space-between  ' }}>
+												<div className='rating-list'>
+													{dsLevels?.map((item) => (
+														<div className='rating-row'>
+															<span className='rating-label'>{item?.name}:</span>
+															<StarRating count={Utils.getStarCount(countLevel, item?.name)} />
+														</div>
+													))}
+												</div>
+
+												<div
+													className='rating-list'
+													style={{
+														color: attribute.color,
+														fontWeight: 800,
+													}}
+												>
+													<span className='rating-label'>Skill acquierd:</span>
+													{listCompetencies?.map((item: any, idx: number) => (
+														<div key={idx} className='rating-label'>
+															• {item}
+														</div>
+													))}
+												</div>
 											</div>
 										</div>
 									</div>

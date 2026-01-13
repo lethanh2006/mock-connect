@@ -54,11 +54,6 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 			dataIndex: 'roleName',
 		},
 		{
-			title: intl.formatMessage({ id: 'activity.detail.level' }),
-			width: 120,
-			dataIndex: 'levelName',
-		},
-		{
 			title: intl.formatMessage({ id: 'activity.detail.attributes' }),
 			width: 200,
 			render: (_, rec) => (

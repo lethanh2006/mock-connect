@@ -7,7 +7,7 @@ import { useIntl, useModel } from 'umi';
  */
 const SelectActivitiesManagement = (props: {
 	value?: string;
-	onChange?: (val?: string) => void;
+	onChange?: (val: string | string[], option: any) => void;
 	multiple?: boolean;
 	allowClear?: boolean;
 	style?: React.CSSProperties;
@@ -34,6 +34,7 @@ const SelectActivitiesManagement = (props: {
 				key: item._id,
 				value: item._id,
 				label: item.name,
+				rawData: item,
 			}))}
 			showSearch
 			optionFilterProp='label'

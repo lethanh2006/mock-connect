@@ -399,7 +399,7 @@
 		name: 'Activity',
 		icon: 'AppstoreOutlined',
 		path: 'activity',
-		access: 'cctFilter',
+		// access: 'cctFilter',
 		routes: [
 			{
 				name: 'Register',

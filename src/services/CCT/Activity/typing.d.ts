@@ -64,4 +64,13 @@ declare module Activity {
 		selfAssessmentQuestionsId: string;
 		selfAssessmentQuestionsName: string;
 	}
+
+	export interface ICompetencyMapping {
+		_id: string;
+		index?: number;
+		activityOutcomeId: string;
+		activityOutcome?: IRecord;
+		competencieId: string;
+		competencie?: Competency.IRecord;
+	}
 }

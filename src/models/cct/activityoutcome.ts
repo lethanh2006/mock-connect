@@ -16,6 +16,7 @@ export default () => {
 		idActivity: string,
 		payLoad: {
 			rolesId: string;
+			levelsId: string;
 			answerId: string | null;
 		},
 		getData?: () => void,

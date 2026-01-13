@@ -4,6 +4,7 @@ import { Card, Col, message, Row, Select, Spin } from 'antd';
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import SelectLevelsManagement from '../../Levels/Select';
 
 const FormActivityOutCome = (props: any) => {
 	const { getData } = props;
@@ -28,15 +29,17 @@ const FormActivityOutCome = (props: any) => {
 		setRecord: setRecCauTraLoi,
 	} = useModel('tienich.cautraloikhaosat');
 
-	const [rolesId, setRolesId] = useState<string>();
+	const { danhSach: dsLevels } = useModel('cct.levels');
 
-	const selfAssessmentQuestionsId = record?.activities?.coCurricularActivityEquivalency?.find(
-		(item) => item?.rolesId === rolesId,
-	)?.selfAssessmentQuestionsId;
+	const [rolesId, setRolesId] = useState<string>();
+	const [levelsId, setLevelsId] = useState<string>();
+
+	const selfAssessmentQuestionsId = dsLevels?.find((item) => item?._id === levelsId)?.selfAssessmentQuestionsId;
 
 	useEffect(() => {
 		if (!visibleForm) {
 			setRolesId(undefined);
+			setLevelsId(undefined);
 			setRecCauTraLoi({} as BieuMau.ICauTraLoiKhaoSat);
 		}
 
@@ -44,6 +47,10 @@ const FormActivityOutCome = (props: any) => {
 			setRolesId(record?.rolesId);
 		} else {
 			setRolesId(record?.activities?.coCurricularActivityEquivalency?.[0]?.rolesId);
+		}
+
+		if (record?.levelId) {
+			setLevelsId(record?.levelId);
 		}
 	}, [visibleForm]);
 
@@ -61,9 +68,10 @@ const FormActivityOutCome = (props: any) => {
 		}
 	}, [selfAssessmentQuestionsId]);
 
-	const submitActivityOutcome = async (roleId: string, answerId: string | null) => {
+	const submitActivityOutcome = async (roleId: string, levelsId: string, answerId: string | null) => {
 		const data = {
 			rolesId: roleId,
+			levelsId: levelsId,
 			answerId,
 		};
 
@@ -87,8 +95,13 @@ const FormActivityOutCome = (props: any) => {
 			return;
 		}
 
+		if (!levelsId) {
+			message.warning(intl.formatMessage({ id: 'activity.registered.level.vali' }));
+			return;
+		}
+
 		if (!recBieuMau?._id) {
-			await submitActivityOutcome(rolesId, null);
+			await submitActivityOutcome(rolesId, levelsId, null);
 			return;
 		}
 
@@ -105,7 +118,7 @@ const FormActivityOutCome = (props: any) => {
 			const answerId = res?.data?._id;
 			if (!answerId) return;
 
-			await submitActivityOutcome(rolesId, answerId);
+			await submitActivityOutcome(rolesId, levelsId, answerId);
 		} catch (err) {
 			console.log(err);
 		}
@@ -129,6 +142,18 @@ const FormActivityOutCome = (props: any) => {
 							label: item?.roles?.name,
 						}))}
 						allowClear
+					/>
+				</Col>
+				<Col span={24}>
+					<label style={{ display: 'block', marginBottom: 8 }}>
+						{intl.formatMessage({ id: 'activity.registered.level' })}
+					</label>
+					<SelectLevelsManagement
+						allowClear
+						disabled={isView}
+						value={levelsId}
+						onChange={(val) => setLevelsId(val as string)}
+						style={{ width: '100%' }}
 					/>
 				</Col>
 
