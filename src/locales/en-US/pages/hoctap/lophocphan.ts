@@ -182,6 +182,7 @@ export default {
 	'lophocphan.id.ketqua.daudiem': 'Score Weight',
 	'lophocphan.id.ketqua.diemcuoi': 'Final Score',
 	'lophocphan.id.ketqua.chitiet': 'View exam history details',
+	'lophocphan.id.ketqua.phuckhao': 'Request for exam score re-evaluation (remark)',
 	'lophocphan.id.ketqua.diemtongket': 'Final Grade',
 	'lophocphan.id.ketqua.diem10': 'Score (10-point scale)',
 	'lophocphan.id.ketqua.diem4': 'Score (4-point scale)',
