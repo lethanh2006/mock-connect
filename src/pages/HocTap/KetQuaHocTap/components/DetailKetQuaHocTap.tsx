@@ -7,7 +7,7 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Divider, Empty, Space, Spin, Tabs, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { history, useIntl, useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: {
 	lopHocPhanId?: string;
@@ -252,19 +252,30 @@ const DetailKetQuaHocTap = (props: {
 								</Descriptions.Item>
 							</Descriptions>
 
-							{recDiem && recDiem.diemKthp !== undefined && recDiem.diemKthp !== null && (
+							{recDiem && (
 								<div style={{ marginTop: 8 }}>
 									{!hienThiDiemThi ? (
-										<a
-											onClick={(e) => {
-												e.preventDefault();
-												setHienThiDiemThi(true);
-											}}
-										>
-											{intl.formatMessage({ id: 'lophocphan.id.ketqua.chitiet' })}
-										</a>
+										<Space wrap>
+											<a
+												onClick={(e) => {
+													e.preventDefault();
+													setHienThiDiemThi(true);
+												}}
+											>
+												{intl.formatMessage({ id: 'lophocphan.id.ketqua.chitiet' })}
+											</a>
+										</Space>
 									) : (
-										<DiemThiHocKy maHocKy={recDiem?.maHocKy} maHocPhan={recDiem?.maHocPhan} />
+										<>
+											<a
+												onClick={() => {
+													history.push('/khai-bao-quy-trinh/dang-ky');
+												}}
+											>
+												{intl.formatMessage({ id: 'lophocphan.id.ketqua.phuckhao' })}
+											</a>
+											<DiemThiHocKy maHocKy={recDiem?.maHocKy} maHocPhan={recDiem?.maHocPhan} />
+										</>
 									)}
 								</div>
 							)}

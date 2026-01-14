@@ -199,6 +199,7 @@ export default {
 	'lophocphan.id.ketqua.daudiem': 'Trọng số đầu điểm',
 	'lophocphan.id.ketqua.diemcuoi': 'Điểm cuối',
 	'lophocphan.id.ketqua.chitiet': 'Xem chi tiết lịch sử thi',
+	'lophocphan.id.ketqua.phuckhao': 'Yêu cầu xem xét lại điểm thi (phúc khảo)',
 	'lophocphan.id.ketqua.diemtongket': 'Điểm tổng kết',
 	'lophocphan.id.ketqua.diem10': 'Điểm hệ  10',
 	'lophocphan.id.ketqua.diem4': 'Điểm hệ 4',
