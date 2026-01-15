@@ -1,15 +1,16 @@
 import { ELoaiCheDoSinhVien } from '@/services/CongTacSinhVien/CheDoSinhVien/constant';
+import { useIntl, useModel } from 'umi';
 import QuyetDinh from '../QuyetDinh';
-import { useModel } from 'umi';
 
 const QuyetDinhGDCTTT = () => {
 	const { initialState } = useModel('@@initialState');
+	const intl = useIntl();
 
 	return (
 		<QuyetDinh
 			ssoId={initialState?.currentUser?.ssoId}
 			loaiCheDoSinhVien={ELoaiCheDoSinhVien.GDCT_TU_TUONG}
-			title='Kết quả giáo dục chính trị tư tưởng'
+			title={intl.formatMessage({ id: 'diemrenluyen.tuansinhhoatcongdan.page.title' })}
 		/>
 	);
 };

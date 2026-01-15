@@ -3,13 +3,14 @@ import dayjs from '@/utils/dayjs';
 import rules from '@/utils/rules';
 import { toISOString, uploadMultiFile } from '@/utils/utils';
 import { Button, Form, Input, Modal } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const FormGuiKhieuNai = (props: { getData: any }) => {
 	const [form] = Form.useForm();
 	const { record, guiKhieuNaiModel, loading, setVisibleFormGuiKhieuNai, visibleFormGuiKhieuNai, setLoading } = useModel(
 		'diemrenluyenv2.phieudiemrenluyen',
 	);
+	const intl = useIntl();
 
 	const onFinish = async (values: any) => {
 		try {
@@ -38,19 +39,19 @@ const FormGuiKhieuNai = (props: { getData: any }) => {
 			footer={false}
 			open={visibleFormGuiKhieuNai}
 			onCancel={() => setVisibleFormGuiKhieuNai(false)}
-			title={'Gửi khiếu nại điểm rèn luyện'}
+			title={intl.formatMessage({ id: 'diemrenluyen.khieunai.title' })}
 		>
 			<Form onFinish={onFinish} form={form} layout='vertical'>
 				<Form.Item
 					initialValue={record?.noiDungKhieuNai}
 					name='noiDungKhieuNai'
-					label='Nội dung khiếu nại'
+					label={intl.formatMessage({ id: 'diemrenluyen.khieunai.label.noidung' })}
 					rules={[...rules.required, ...rules.text]}
 				>
-					<Input.TextArea autoFocus placeholder='Nhập nội dung' />
+					<Input.TextArea autoFocus placeholder={intl.formatMessage({ id: 'diemrenluyen.khieunai.placeholder.noidung' })} />
 				</Form.Item>
 
-				<Form.Item name='urlFileDinhKem' label='Tập tin minh chứng (nếu có)'>
+				<Form.Item name='urlFileDinhKem' label={intl.formatMessage({ id: 'diemrenluyen.form.label.minhchung' })}>
 					<UploadFile
 						maxCount={5}
 						accept='image/*, .docx, .doc, .xls, .xlsx, .pdf'
@@ -60,9 +61,9 @@ const FormGuiKhieuNai = (props: { getData: any }) => {
 
 				<div className='form-footer'>
 					<Button loading={loading} htmlType='submit' type='primary'>
-						{'Gửi'}
+						{intl.formatMessage({ id: 'diemrenluyen.footer.button.gui' })}
 					</Button>
-					<Button onClick={() => setVisibleFormGuiKhieuNai(false)}>Hủy</Button>
+					<Button onClick={() => setVisibleFormGuiKhieuNai(false)}>{intl.formatMessage({ id: 'diemrenluyen.khieunai.button.huy' })}</Button>
 				</div>
 			</Form>
 		</Modal>

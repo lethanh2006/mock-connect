@@ -2,6 +2,7 @@ import activity from './cct/activity';
 import dangky from './dichvuhanhchinh/dangky';
 import lichsu from './dichvuhanhchinh/lichsu';
 import donvihanhchinh from './donvihanhchinh';
+import diemrenluyen from './diemrenluyen';
 import baithicuoiky from './hoctap/baithicuoiky';
 import chungchitotnghiep from './hoctap/chungchi';
 import dangkynhucau from './hoctap/dangkynhucau';
@@ -58,4 +59,5 @@ export default {
 	...lichthi,
 	...baithicuoiky,
 	...activity,
+	...diemrenluyen,
 };

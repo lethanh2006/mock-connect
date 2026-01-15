@@ -1,7 +1,7 @@
 import { Select } from 'antd';
 import { type BaseOptionType } from 'antd/lib/select';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 export const SelectDotChamDiem = (props: {
 	value?: string;
@@ -14,6 +14,7 @@ export const SelectDotChamDiem = (props: {
 }) => {
 	const { value, onChange, multiple, condition, allowClear, disabled, readOnly } = props;
 	const { danhSach, getAllModel, visibleForm } = useModel('diemrenluyen.dotchamdiem');
+  const intl = useIntl();
 
 	useEffect(() => {
 		if (!visibleForm) {
@@ -36,7 +37,7 @@ export const SelectDotChamDiem = (props: {
 			removeIcon={readOnly ? null : undefined}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Đợt chấm điểm'
+			placeholder={intl.formatMessage({ id: 'diemrenluyen.dotchamdiem.placeholder' })}
 			allowClear={allowClear ?? false}
 			style={{ width: '100%', pointerEvents: readOnly ? 'none' : undefined }}
 		/>

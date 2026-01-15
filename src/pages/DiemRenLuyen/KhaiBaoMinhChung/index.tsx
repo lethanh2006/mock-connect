@@ -16,7 +16,7 @@ import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Carousel, Popconfirm, Tag, Tooltip } from 'antd';
 import { useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import { FormKhaiBaoMinhChung } from './components/Form';
 
 export default () => {
@@ -32,6 +32,7 @@ export default () => {
 		record: recMinhChung,
 		setRecord,
 	} = useModel('diemrenluyen.minhchung');
+  const intl = useIntl();
 	const [visibleFormFile, setVisibleFormFile] = useState<boolean>(false);
 
 	const onCell = (rec: MinhChungDiemRenLuyen.IRecord) => ({
@@ -44,7 +45,7 @@ export default () => {
 		// Nội ngoại trú
 		{
 			width: 120,
-			title: 'Ngày khai báo',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.ngaykhaibao' }),
 			align: 'center',
 			filterType: 'date',
 			dataIndex: 'createdAt',
@@ -54,7 +55,7 @@ export default () => {
 		},
 		{
 			width: 100,
-			title: 'Phân loại',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.phanloai' }),
 			dataIndex: 'phanLoai',
 			align: 'center',
 			onCell,
@@ -67,7 +68,7 @@ export default () => {
 			render: (_, record) => EPhanLoaiNoiNgoaiTruMappingToLabel[record.phanLoai],
 		},
 		{
-			title: 'Nơi ở hiện nay',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.noio' }),
 			dataIndex: 'thongTinNgoaiTru',
 			width: 200,
 			hide: getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU,
@@ -75,7 +76,7 @@ export default () => {
 				if (record.phanLoai === 'noi_tru') {
 					return (
 						<p>
-							Ký túc xá {record?.kyTucXa?.ten}, số phòng {record?.soPhong?.ten}
+							{intl.formatMessage({ id: 'diemrenluyen.minhchung.ktx' })} {record?.kyTucXa?.ten}, {intl.formatMessage({ id: 'diemrenluyen.minhchung.sophong' })} {record?.soPhong?.ten}
 						</p>
 					);
 				} else if (record.phanLoai === 'ngoai_tru') {
@@ -91,22 +92,22 @@ export default () => {
 			onCell,
 		},
 		{
-			title: 'Liên hệ',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.lienhe' }),
 			dataIndex: 'thongTinNgoaiTru',
 			width: 200,
 			hide: getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.NOI_NGOAI_TRU,
 			onCell,
 			render: (val, rec) => {
 				if (rec.phanLoai === EPhanLoaiNoiNgoaiTru.NGOAI_TRU)
-					return val?.nhaRieng ? 'Nhà riêng' : `${val?.tenChuTro ?? ''} (chủ trọ/người thân), ${val?.sdtChuTro ?? ''}`;
-				return 'Ký túc xá';
+					return val?.nhaRieng ? intl.formatMessage({ id: 'diemrenluyen.minhchung.nharieng' }) : `${val?.tenChuTro ?? ''} ${intl.formatMessage({ id: 'diemrenluyen.minhchung.chutro' })}, ${val?.sdtChuTro ?? ''}`;
+				return intl.formatMessage({ id: 'diemrenluyen.minhchung.ktx' });
 			},
 		},
 
 		// Tham gia công tác xã hội
 
 		{
-			title: 'Tham gia công tác xã hội',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.thamgiacongtac' }),
 			dataIndex: 'idNoiDungCongTacXaHoi',
 			render: (_, rec) => rec.noiDungCongTacXaHoi?.ten,
 			width: 200,
@@ -114,7 +115,7 @@ export default () => {
 			hide: getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.THAM_GIA_CONG_TAC_XA_HOI,
 		},
 		{
-			title: 'Cấp đạt giải',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.capdatgiai' }),
 			dataIndex: 'idCapDatGiai',
 			width: 120,
 			render: (_, rec) => rec.capDatGiai?.ten,
@@ -122,10 +123,10 @@ export default () => {
 			hide: getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.THANH_TICH_DAC_BIET,
 		},
 		{
-			title: 'Nội dung hoạt động',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.noidunghoatdong' }),
 			dataIndex: 'noiDungHoatDong',
 			render: (val) => (
-				<ExpandText style={{ marginBottom: 0 }} ellipsis={{ rows: 2, expandable: true, symbol: <span>Xem tiếp</span> }}>
+				<ExpandText style={{ marginBottom: 0 }} ellipsis={{ rows: 2, expandable: true, symbol: <span>{intl.formatMessage({ id: 'diemrenluyen.minhchung.xemtiep' })}</span> }}>
 					{val}
 				</ExpandText>
 			),
@@ -137,7 +138,7 @@ export default () => {
 			].includes(getLoaiMinhChung()),
 		},
 		{
-			title: 'Sự kiện',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.sukien' }),
 			dataIndex: 'idSuKienCTSV',
 			width: 150,
 			render: (_, rec) => rec.suKienCTSV?.tenSuKien,
@@ -145,9 +146,7 @@ export default () => {
 			hide: getLoaiMinhChung() !== ELoaiMinhChungDiemRenLuyen.TUYEN_TRUYEN_TRUONG_TICH_CUC,
 		},
 		{
-			title: `Thời gian ${
-				getLoaiMinhChung() === ELoaiMinhChungDiemRenLuyen.TUYEN_TRUYEN_TRUONG_TICH_CUC ? 'chia sẻ' : 'tham gia'
-			}`,
+			title: getLoaiMinhChung() === ELoaiMinhChungDiemRenLuyen.TUYEN_TRUYEN_TRUONG_TICH_CUC ? intl.formatMessage({ id: 'diemrenluyen.minhchung.thoigianchiase' }) : intl.formatMessage({ id: 'diemrenluyen.minhchung.thoigianthamgia' }),
 			dataIndex: 'ngayThamGia',
 			align: 'center',
 			width: 120,
@@ -160,7 +159,7 @@ export default () => {
 			].includes(getLoaiMinhChung()),
 		},
 		{
-			title: 'Đường dẫn',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.duongdan' }),
 			dataIndex: 'duongDan',
 			align: 'center',
 			width: 120,
@@ -168,7 +167,7 @@ export default () => {
 				if (record.duongDan) {
 					return (
 						<Button type='link' href={record.duongDan} target='_blank' rel='noreferrer'>
-							Mở đường dẫn
+							{intl.formatMessage({ id: 'diemrenluyen.minhchung.moduongdan' })}
 						</Button>
 					);
 				}
@@ -181,7 +180,7 @@ export default () => {
 			].includes(getLoaiMinhChung()),
 		},
 		{
-			title: 'Tập tin',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.taptin' }),
 			dataIndex: 'urlFileList',
 			align: 'center',
 			render: (_, record) =>
@@ -193,7 +192,7 @@ export default () => {
 							setVisibleFormFile(true);
 						}}
 					>
-						Xem tập tin
+						{intl.formatMessage({ id: 'diemrenluyen.minhchung.xemtaptin' })}
 					</Button>
 				) : null,
 
@@ -205,7 +204,7 @@ export default () => {
 			].includes(getLoaiMinhChung()),
 		},
 		{
-			title: 'Điểm',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.diem' }),
 			dataIndex: 'diemQuyDoi',
 			align: 'center',
 			sortable: true,
@@ -213,7 +212,7 @@ export default () => {
 			onCell,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.trangthai' }),
 			dataIndex: 'trangThai',
 			align: 'center',
 			width: 120,
@@ -228,7 +227,7 @@ export default () => {
 			onCell,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'diemrenluyen.danhmuc.thaotac' }),
 			align: 'center',
 			width: 70,
 			fixed: 'right',
@@ -236,15 +235,15 @@ export default () => {
 			render: (val, rec) => {
 				return (
 					<>
-						<Tooltip title='Chỉnh sửa'>
+						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.chinhsua' })}>
 							<Button onClick={() => handleEdit(rec)} type='link' icon={<EditOutlined />} />
 						</Tooltip>
 
-						<Tooltip title='Xóa'>
+						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xoa' })}>
 							<Popconfirm
 								placement='topRight'
 								onConfirm={() => deleteModel(val._id, getModel)}
-								title='Bạn có chắc chắn muốn xóa đợt chấm điểm này?'
+								title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xacnhanxoa' })}
 							>
 								<Button danger type='link' icon={<DeleteOutlined />} />
 							</Popconfirm>
@@ -272,7 +271,7 @@ export default () => {
 			/>
 
 			<ModalExpandable
-				title='Chi tiết tập tin'
+				title={intl.formatMessage({ id: 'diemrenluyen.minhchung.chitiettaptin' })}
 				width={1000}
 				open={visibleFormFile}
 				footer={null}
@@ -286,7 +285,7 @@ export default () => {
 				</Carousel>
 
 				<div className='form-footer'>
-					<Button onClick={() => setVisibleFormFile(false)}>Đóng</Button>
+					<Button onClick={() => setVisibleFormFile(false)}>{intl.formatMessage({ id: 'diemrenluyen.minhchung.dong' })}</Button>
 				</div>
 			</ModalExpandable>
 		</>

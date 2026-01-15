@@ -1,6 +1,6 @@
 import DanhSachMinhChung from '@/pages/DiemRenLuyenV2/MinhChung/CauHinh/DanhSach';
 import dayjs from '@/utils/dayjs';
-import { useModel } from '@umijs/max';
+import { useIntl, useModel } from '@umijs/max';
 import { Alert, Card, Space } from 'antd';
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -14,6 +14,7 @@ const KhaiBaoMinhChungPage = () => {
 	const { record: recDot, setRecord: setDot, danhSach: danhSachDot } = useModel('diemrenluyenv2.dot');
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('25%');
+	const intl = useIntl();
 	const ngoaiThoiGian =
 		recDot?.thoiGianTiepNhanMinhChung &&
 		(dayjs().isAfter(dayjs(recDot.thoiGianTiepNhanMinhChung.thoiGianKetThuc)) ||
@@ -27,7 +28,7 @@ const KhaiBaoMinhChungPage = () => {
 			variant='borderless'
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-					<span>Khai báo minh chứng</span>
+					<span>{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.title' })}</span>
 					<SelectDotDiemRenLuyen
 						style={{ width: 300 }}
 						value={recDot?._id}
@@ -41,7 +42,7 @@ const KhaiBaoMinhChungPage = () => {
 				{!recDot || ngoaiThoiGian ? (
 					<Alert
 						showIcon
-						message='Ngoài thời gian khai báo minh chứng cho đợt này'
+						message={intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.ngoaithoigian' })}
 						style={{ marginBottom: 18 }}
 						type='warning'
 					/>
