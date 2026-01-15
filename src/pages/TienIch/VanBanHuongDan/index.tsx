@@ -120,7 +120,7 @@ const VanBanHuongDanComponent = () => {
 										{intl.formatMessage(
 											{ id: 'vanbanhuongdan.tongso.pagination' },
 											{
-												tongSo,
+												total: tongSo,
 											},
 										)}
 									</div>
