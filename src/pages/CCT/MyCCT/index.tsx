@@ -1,7 +1,6 @@
 import { Spin } from 'antd'; // Import thêm Button
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import './style.less';
 
 interface BaseEntity {
 	_id: string;
@@ -92,6 +91,15 @@ const Utils = {
 
 const cssStyles = `
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Great+Vibes&display=swap');
+
+  .transcript-scope,
+  .transcript-scope * {
+    font-family: 'Montserrat', sans-serif !important;
+  }
+
+  .transcript-scope .script-title {
+    font-family: 'Great Vibes', cursive !important;
+  }
 
   /* --- NEW: Page Wrapper & Background --- */
   .page-wrapper {
@@ -340,107 +348,112 @@ const TranscriptReport: React.FC<any> = () => {
 		<Spin spinning={loading}>
 			<style>{cssStyles}</style>
 
-			{/* Wrapper bao ngoài để tạo nền */}
-			<div className='page-wrapper'>
-				{/* Header mới */}
-				<div className='page-header'>
-					<div className='header-title'>Co-Curricular Transcript</div>
-				</div>
+			<div className='transcript-scope'>
+				{/* Wrapper bao ngoài để tạo nền */}
+				<div className='page-wrapper'>
+					{/* Header mới */}
+					<div className='page-header'>
+						<div className='header-title'>Co-Curricular Transcript</div>
+					</div>
 
-				{/* Container chính chứa danh sách cards */}
-				<div className='transcript-container'>
-					{danhSach?.map((item: any) => {
-						const { attribute, countLevel, activitiesOutCome, listCompetencies } = item;
-						const themeColor = attribute.color || '#333';
+					{/* Container chính chứa danh sách cards */}
+					<div className='transcript-container'>
+						{danhSach?.map((item: any) => {
+							const { attribute, countLevel, activitiesOutCome, listCompetencies } = item;
+							const themeColor = attribute.color || '#333';
 
-						const cardStyle = { '--theme-color': themeColor } as React.CSSProperties;
+							const cardStyle = { '--theme-color': themeColor } as React.CSSProperties;
 
-						return (
-							<div key={attribute._id} className='transcript-card' style={cardStyle}>
-								<div className='card-header'>
-									<div className='header-content'>
-										<div className='icon-wrapper'>
-											<img
-												src={attribute.icon}
-												alt={attribute.name}
-												onError={(e) => (e.currentTarget.style.display = 'none')}
-											/>
-										</div>
-										<div className='info-block'>
-											<div className='description'>{attribute.description}</div>
-											<div style={{ display: 'flex', justifyContent: 'space-between  ' }}>
-												<div className='rating-list'>
-													{dsLevels?.map((item) => (
-														<div className='rating-row'>
-															<span className='rating-label'>{item?.name}:</span>
-															<StarRating count={Utils.getStarCount(countLevel, item?.name)} />
-														</div>
-													))}
-												</div>
+							return (
+								<div key={attribute._id} className='transcript-card' style={cardStyle}>
+									<div className='card-header'>
+										<div className='header-content'>
+											<div className='icon-wrapper'>
+												<img
+													src={attribute.icon}
+													alt={attribute.name}
+													onError={(e) => (e.currentTarget.style.display = 'none')}
+												/>
+											</div>
+											<div className='info-block'>
+												<div className='description'>{attribute.description}</div>
+												<div style={{ display: 'flex', gap: 120 }}>
+													<div className='rating-list'>
+														{dsLevels?.map((item) => (
+															<div className='rating-row'>
+																<span className='rating-label'>{item?.name}:</span>
+																<StarRating count={Utils.getStarCount(countLevel, item?.name)} />
+															</div>
+														))}
+													</div>
 
-												<div
-													className='rating-list'
-													style={{
-														color: attribute.color,
-														fontWeight: 800,
-													}}
-												>
-													<span className='rating-label'>Skill acquierd:</span>
-													{listCompetencies?.map((item: any, idx: number) => (
-														<div key={idx} className='rating-label'>
-															• {item}
-														</div>
-													))}
+													<div
+														className='rating-list'
+														style={{
+															color: attribute.color,
+															fontWeight: 800,
+														}}
+													>
+														<span className='rating-label'>Skill acquierd:</span>
+														{listCompetencies?.map((item: any, idx: number) => (
+															<div key={idx} className='rating-label'>
+																• {item}
+															</div>
+														))}
+													</div>
 												</div>
 											</div>
 										</div>
+										<div className='script-title'>{Utils.toTitleCase(attribute.name)}</div>
 									</div>
-									<div className='script-title'>{Utils.toTitleCase(attribute.name)}</div>
+
+									<div className='table-container'>
+										{activitiesOutCome && activitiesOutCome.length > 0 ? (
+											<table>
+												<thead>
+													<tr>
+														<th style={{ width: '160px' }}></th>
+														<th>Activity</th>
+														<th>Start date</th>
+														<th>End date</th>
+														<th>Position</th>
+													</tr>
+												</thead>
+												<tbody>
+													{activitiesOutCome.map((act: any, index: number) => {
+														const levelName = Utils.shortLevelName(act.levels?.name || '');
+														const opacity = Utils.getOpacityByLevel(act.levels?.name);
+														const cellColor = Utils.hexToRgba(themeColor, opacity);
+
+														const activityName = act.activitiesName || act.activitiesType?.name || 'Unknown Activity';
+
+														return (
+															<tr key={index}>
+																<td className='level-col'>
+																	<div
+																		className='level-badge'
+																		style={{ '--level-bg': cellColor } as React.CSSProperties}
+																	>
+																		{levelName}
+																	</div>
+																</td>
+																<td style={{ fontWeight: 600, color: '#444' }}>{activityName}</td>
+																<td style={{ color: '#666' }}>{Utils.formatDate(act.startDate)}</td>
+																<td style={{ color: '#666' }}>{Utils.formatDate(act.endDate)}</td>
+																<td>{act.roles?.name}</td>
+															</tr>
+														);
+													})}
+												</tbody>
+											</table>
+										) : (
+											<div className='empty-state'>No activities recorded for this attribute</div>
+										)}
+									</div>
 								</div>
-
-								<div className='table-container'>
-									{activitiesOutCome && activitiesOutCome.length > 0 ? (
-										<table>
-											<thead>
-												<tr>
-													<th style={{ width: '160px' }}></th>
-													<th>Activity</th>
-													<th>Start date</th>
-													<th>End date</th>
-													<th>Position</th>
-												</tr>
-											</thead>
-											<tbody>
-												{activitiesOutCome.map((act: any, index: number) => {
-													const levelName = Utils.shortLevelName(act.levels?.name || '');
-													const opacity = Utils.getOpacityByLevel(act.levels?.name);
-													const cellColor = Utils.hexToRgba(themeColor, opacity);
-
-													const activityName = act.activitiesName || act.activitiesType?.name || 'Unknown Activity';
-
-													return (
-														<tr key={index}>
-															<td className='level-col'>
-																<div className='level-badge' style={{ '--level-bg': cellColor } as React.CSSProperties}>
-																	{levelName}
-																</div>
-															</td>
-															<td style={{ fontWeight: 600, color: '#444' }}>{activityName}</td>
-															<td style={{ color: '#666' }}>{Utils.formatDate(act.startDate)}</td>
-															<td style={{ color: '#666' }}>{Utils.formatDate(act.endDate)}</td>
-															<td>{act.roles?.name}</td>
-														</tr>
-													);
-												})}
-											</tbody>
-										</table>
-									) : (
-										<div className='empty-state'>No activities recorded for this attribute</div>
-									)}
-								</div>
-							</div>
-						);
-					})}
+							);
+						})}
+					</div>
 				</div>
 			</div>
 		</Spin>

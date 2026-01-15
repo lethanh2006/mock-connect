@@ -34,7 +34,7 @@ const ConfigBounder = (props: { children?: any }) => {
 			form={{
 				requiredMark: false,
 			}}
-			renderEmpty={() => <Empty style={{ marginTop: 32, marginBottom: 32 }} image='/empty.png' />}
+			renderEmpty={() => <Empty style={{ marginTop: 32, marginBottom: 32 }} image='/images/empty.png' />}
 			theme={{
 				token: {
 					borderRadius: 4,

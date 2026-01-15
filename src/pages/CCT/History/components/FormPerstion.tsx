@@ -27,7 +27,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const activitiesTypeId: string = Form.useWatch('activitiesTypeId', form);
 
 	useEffect(() => {
-		if (!visibleForm) resetFieldsForm(form);
+		if (!visibleForm) resetFieldsForm(form, { listAchievedCompetencies: null });
 		else if (record?._id) form.setFieldsValue(record);
 		// else if (record?._id)
 		// 	form.setFieldsValue({
@@ -57,7 +57,6 @@ const FormPerstionActivityOutCome = (props: any) => {
 		// })) as any;
 
 		values.listAchievedCompetencies = values.listAchievedCompetencies?.map((item) => ({
-			activityOutcomeId: record?._id ?? '',
 			competencieId: item.competencieId,
 		})) as any;
 
@@ -139,11 +138,17 @@ const FormPerstionActivityOutCome = (props: any) => {
 						{record?._id ? (
 							<>
 								<div className='fw500'>Competency Mapping</div>
-								<CompetencyMappingModelPage disabled={isView} />
+								<CompetencyMappingModelPage
+									disabled={isView}
+									attributesId={dsActivitiType?.find((item) => item?._id === activitiesTypeId)?.attributes?._id}
+								/>
 							</>
 						) : (
 							<Form.Item name='listAchievedCompetencies' label='Competency Mapping'>
-								<FormItemCompetencyMapping disabled={isView || !activitiesTypeId} />
+								<FormItemCompetencyMapping
+									disabled={isView || !activitiesTypeId}
+									attributesId={dsActivitiType?.find((item) => item?._id === activitiesTypeId)?.attributes?._id}
+								/>
 							</Form.Item>
 						)}
 					</Col>
