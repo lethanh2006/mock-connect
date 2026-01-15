@@ -2,11 +2,12 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import dayjs from '@/utils/dayjs';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const DanhSachDot = () => {
 	const { getAllModel, danhSach, record, setRecord } = useModel('diemrenluyenv2.dot');
 	const { getByIdModel } = useModel('diemrenluyenv2.bieumau');
+	const intl = useIntl();
 
 	const getData = async () => {
 		try {
@@ -47,7 +48,7 @@ const DanhSachDot = () => {
 
 	const columns: IColumn<DotChamDiemRenLuyen.IRecord>[] = [
 		{
-			title: 'Học kỳ',
+			title: intl.formatMessage({ id: 'diemrenluyen.danhsach.hocky' }),
 			dataIndex: 'tenDot',
 			width: 200,
 			onCell,
@@ -56,7 +57,7 @@ const DanhSachDot = () => {
 
 	return (
 		<div style={{ paddingTop: 3 }}>
-			<TableStaticData columns={columns} data={danhSach} otherProps={{ scrol: { x: 350 }, pagination: false }} />
+			<TableStaticData columns={columns} data={danhSach} otherProps={{ scroll: { x: 350 }, pagination: false }} />
 		</div>
 	);
 };

@@ -13,7 +13,7 @@ import { SaveOutlined, SendOutlined } from '@ant-design/icons';
 import { Alert, Button, Form, InputNumber, Modal, Select, Space } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import StepDotChamDiemRenLuyen from '../../DotChamDiem/components/Step';
 
 /** Dùng chung cho cả sinh viên, cán sự lớp, và cố vấn học tập */
@@ -44,6 +44,7 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 				: recDot?.thoiGianCVHTChamDiem &&
 					(dayjs().isAfter(recDot.thoiGianCVHTChamDiem.thoiGianKetThuc) ||
 						dayjs().isBefore(recDot?.thoiGianCVHTChamDiem?.thoiGianBatDau));
+	const intl = useIntl();
 	const editable = !daNop && !ngoaiThoiGian;
 
 	const getCauHinhPhieu = () => {
@@ -54,7 +55,7 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 				data.push({
 					_id: '-1',
 					STT: '-1',
-					tieuDe: `Tiêu chí ${index + 1}. ${tieuChi.tieuDe}`,
+					tieuDe: `${intl.formatMessage({ id: 'diemrenluyen.phieudiem.tieuchi' })} ${index + 1}. ${tieuChi.tieuDe}`,
 					diemQuyDinh: _.sum(
 						tieuChi.danhSachNoiDung?.map((item) => Math.max(item.tapGiaTri.at(-1) || 0, 0)),
 					).toString(),
@@ -149,10 +150,10 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 			);
 			if (type === 'nop')
 				Modal.confirm({
-					title: 'Bạn có muốn gửi phiếu điểm rèn luyện không?',
+					title: intl.formatMessage({ id: 'diemrenluyen.modal.confirm.title' }),
 					content:
 						role === EVaiTroPhieuDiem.SINH_VIEN
-							? 'Phiếu sẽ được gửi đến ban cán sự để đánh giá và xét duyệt'
+							? intl.formatMessage({ id: 'diemrenluyen.modal.confirm.content' })
 							: undefined,
 					onOk: () => doSubmit(type, { [vaiTroPhieuDiem[role].field]: finalDiemCham }),
 				});
@@ -162,12 +163,12 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 
 	const TitleRender = () => (
 		<div style={{ marginBottom: 12, marginTop: 18 }}>
-			<h2 style={{ textAlign: 'center', marginBottom: 0 }}>PHIẾU ĐÁNH GIÁ KẾT QUẢ RÈN LUYỆN</h2>
+			<h2 style={{ textAlign: 'center', marginBottom: 0 }}>{intl.formatMessage({ id: 'diemrenluyen.modal.phieugia.title' })}</h2>
 			<div style={{ textAlign: 'center', marginBottom: 12 }}>{recDot?.tenDot}</div>
 
 			{editable ? (
 				<div style={{ fontStyle: 'italic', color: 'red' }}>
-					Lưu ý: Những ô màu xám là điểm hệ thống tự động tính. Sinh viên chỉ thực hiện chấm điểm ở những ô sáng màu
+					{intl.formatMessage({ id: 'diemrenluyen.modal.luuy' })}
 				</div>
 			) : (
 				<Alert
@@ -175,10 +176,10 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 					showIcon
 					message={
 						daNop
-							? `Phiếu điểm đã được gửi đi, vui lòng chờ ${
-									role === EVaiTroPhieuDiem.SINH_VIEN ? 'cán sự lớp,' : ''
+							? `${intl.formatMessage({ id: 'diemrenluyen.modal.alert.danop' })} ${
+									role === EVaiTroPhieuDiem.SINH_VIEN ? `${intl.formatMessage({ id: 'diemrenluyen.phieudiem.cansu' })},` : ''
 								} CVHT đánh giá`
-							: `Ngoài thời gian ${vaiTroPhieuDiem[role].title.toLocaleLowerCase()} đánh giá điểm rèn luyện`
+							: intl.formatMessage({ id: 'diemrenluyen.modal.alert.ngoaithoigian' })
 					}
 				/>
 			)}
@@ -191,14 +192,14 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 				{editable ? (
 					<>
 						<Button type='primary' icon={<SendOutlined />} onClick={() => handleSubmit('nop')}>
-							Gửi
+							{intl.formatMessage({ id: 'diemrenluyen.modal.button.gui' })}
 						</Button>
 						<Button onClick={() => handleSubmit('luu')} icon={<SaveOutlined />}>
-							Lưu & Gửi sau
+							{intl.formatMessage({ id: 'diemrenluyen.modal.button.luuvagui' })}
 						</Button>
 					</>
 				) : null}
-				<Button onClick={() => setVisiblePhieuDiem(false)}>Đóng</Button>
+				<Button onClick={() => setVisiblePhieuDiem(false)}>{intl.formatMessage({ id: 'diemrenluyen.modal.button.dong' })}</Button>
 			</Space>
 		</div>
 	);
@@ -222,7 +223,7 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 			}),
 		},
 		{
-			title: 'Nội dung đánh giá',
+			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.noidungdanhgia' }),
 			dataIndex: 'tieuDe',
 			width: 350,
 			onCell: (rec) => ({
@@ -234,7 +235,7 @@ const ModalPhieuDiem = (props: { role: EVaiTroPhieuDiem; onOk?: () => void }) =>
 			}),
 		},
 		{
-			title: 'Điểm quy định',
+			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.diemquydinh' }),
 			dataIndex: 'diemQuyDinh',
 			align: 'center',
 			width: 80,

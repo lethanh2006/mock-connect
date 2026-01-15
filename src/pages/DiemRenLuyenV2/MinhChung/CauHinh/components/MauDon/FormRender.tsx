@@ -21,7 +21,7 @@ import type { FormInstance } from 'antd';
 import { Button, Col, Form, Input, InputNumber, Modal, Popconfirm, Radio, Select, Space, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormTable from './FormTable';
 import ViewRender from './ViewRender';
 
@@ -35,6 +35,7 @@ const FormRender = (props: {
 	const [visibleFormTable, setVisibleFormTable] = useState<boolean>(false);
 	const [editFormTable, setEditFormTable] = useState<boolean>(false);
 	const [recordTable, setRecordTable] = useState<any>({});
+	const intl = useIntl();
 
 	const { danhSach } = useModel('quytrinh.danhmuc');
 	const { record: recordLoaiHinh } = useModel('quytrinh.loaihinh');
@@ -129,14 +130,14 @@ const FormRender = (props: {
 	switch (cauHinh.kieuDuLieu) {
 		case EKieuDuLieu.TEXT:
 			if (cauHinh.textDisplay === ETextDisplay.TEXT_AREA) {
-				component = <Input.TextArea disabled={cauHinh?.readonly} placeholder={`Nhập ${cauHinh.ten}`} />;
+				component = <Input.TextArea disabled={cauHinh?.readonly} placeholder={`${intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.nhap' })} ${cauHinh.ten}`} />;
 			} else if (cauHinh.textDisplay === ETextDisplay.TEXT_EDITOR) {
 				component = <TinyEditor height={300} disabled={cauHinh?.readonly} />;
 			} else
 				component = cauHinh.laDangMang ? (
-					<Select disabled={cauHinh?.readonly} placeholder={`Chọn ${cauHinh.ten}`} mode='tags' />
+					<Select disabled={cauHinh?.readonly} placeholder={`${intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.chon' })} ${cauHinh.ten}`} mode='tags' />
 				) : (
-					<Input disabled={cauHinh?.readonly} placeholder={`Nhập ${cauHinh.ten}`} />
+					<Input disabled={cauHinh?.readonly} placeholder={`${intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.nhap' })} ${cauHinh.ten}`} />
 				);
 			rule = [...(cauHinh.laDangMang ? [] : rules.text), ...(cauHinh.batBuoc ? rules.required : [])];
 			break;
@@ -155,8 +156,8 @@ const FormRender = (props: {
 				<Radio.Group
 					disabled={cauHinh?.readonly}
 					options={[
-						{ value: true, label: 'Có' },
-						{ value: false, label: 'Không' },
+						{ value: true, label: intl.formatMessage({ id: 'diemrenluyen.maudon.co' }) },
+						{ value: false, label: intl.formatMessage({ id: 'diemrenluyen.maudon.khong' }) },
 					]}
 				/>
 			);
@@ -168,7 +169,7 @@ const FormRender = (props: {
 				<Select
 					mode={cauHinh.laDangMang ? 'multiple' : undefined}
 					allowClear
-					placeholder={`Chọn ${cauHinh.ten}`}
+					placeholder={`${intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.chon' })} ${cauHinh.ten}`}
 					options={danhSach
 						.find((item) => item.maDanhMuc === cauHinh.maDanhMuc)
 						?.danhSachGiaTri.map((item: { value: string }) => ({ value: item.value, label: item.value }))}
@@ -178,13 +179,13 @@ const FormRender = (props: {
 			break;
 		case EKieuDuLieu.NUMBER:
 			component = cauHinh.laDangMang ? (
-				<Select disabled={cauHinh?.readonly} mode='tags' placeholder={`Chọn ${cauHinh.ten}`} />
+				<Select disabled={cauHinh?.readonly} mode='tags' placeholder={`${intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.chon' })} ${cauHinh.ten}`} />
 			) : (
 				<InputNumber
 					disabled={cauHinh?.readonly}
 					formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 					style={{ width: '100%' }}
-					placeholder={`Nhập ${cauHinh.ten}`}
+					placeholder={`${intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.nhap' })} ${cauHinh.ten}`}
 				/>
 			);
 			rule = [
@@ -194,9 +195,9 @@ const FormRender = (props: {
 			break;
 		case EKieuDuLieu.DECIMAL:
 			component = cauHinh.laDangMang ? (
-				<Select disabled={cauHinh?.readonly} mode='tags' placeholder={`Chọn ${cauHinh.ten}`} />
+				<Select disabled={cauHinh?.readonly} mode='tags' placeholder={`${intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.chon' })} ${cauHinh.ten}`} />
 			) : (
-				<InputNumber disabled={cauHinh?.readonly} style={{ width: '100%' }} placeholder={`Nhập ${cauHinh.ten}`} />
+				<InputNumber disabled={cauHinh?.readonly} style={{ width: '100%' }} placeholder={`${intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.nhap' })} ${cauHinh.ten}`} />
 			);
 			rule = [
 				...(cauHinh.laDangMang ? rules.arrNumber(1000000000, 0) : []),
@@ -267,13 +268,13 @@ const FormRender = (props: {
 					});
 				});
 			columns.push({
-				title: 'Thao tác',
+				title: intl.formatMessage({ id: 'diemrenluyen.danhmuc.thaotac' }),
 				align: 'center',
 				width: 60,
 				fixed: 'right',
 				render: (rec: any) => (
 					<>
-						<Tooltip title='Chỉnh sửa'>
+						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.chinhsua' })}>
 							<Button
 								disabled={cauHinh?.readonly}
 								size='small'
@@ -287,7 +288,7 @@ const FormRender = (props: {
 							/>
 						</Tooltip>
 
-						<Tooltip title='Xóa'>
+						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xoa' })}>
 							<Popconfirm
 								disabled={cauHinh?.readonly}
 								onConfirm={() => {
@@ -303,7 +304,7 @@ const FormRender = (props: {
 										});
 									}
 								}}
-								title='Bạn có chắc chắn muốn xóa lớp này khỏi danh sách đăng ký sinh viên?'
+								title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xacnhanxoa' })}
 								placement='topRight'
 							>
 								<Button disabled={cauHinh?.readonly} size='small' danger type='link' icon={<DeleteOutlined />} />
@@ -320,7 +321,7 @@ const FormRender = (props: {
 								if (!recordQuyTrinhForm?.thongTinKhaiBao?.[cauHinh.ma]?.length) callback('');
 								callback();
 							},
-							message: 'Bắt buộc',
+							message: intl.formatMessage({ id: 'diemrenluyen.maudon.cot.batbuoc' }),
 							required: true,
 						},
 					]
@@ -340,7 +341,7 @@ const FormRender = (props: {
 								setEditFormTable(false);
 							}}
 						>
-							Thêm mới
+							{intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' })}
 						</Button>
 					</Space>
 
@@ -358,7 +359,7 @@ const FormRender = (props: {
 						destroyOnClose
 						width={700}
 						footer={false}
-						title={`${editFormTable ? 'Chỉnh sửa' : 'Thêm mới'} ${cauHinh.ten}`}
+						title={`${editFormTable ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.chinhsua' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' })} ${cauHinh.ten}`}
 						open={visibleFormTable}
 						onCancel={onCancelFormTable}
 					>
@@ -416,14 +417,14 @@ const FormRender = (props: {
 			</Col>
 			{truongThongTinTinh && truongThongTinTinh.loaiTruongThongTinTinh === ELoaiTruongThongTinTinh.VAI_TRO && (
 				<Col xs={24} sm={24} md={truongThongTinTinh?.colspan ? +truongThongTinTinh.colspan : undefined}>
-					<Form.Item name='vaiTro' label={truongThongTinTinh?.label ?? 'Vai trò'} rules={[...rules.required]}>
+					<Form.Item name='vaiTro' label={truongThongTinTinh?.label ?? intl.formatMessage({ id: 'diemrenluyen.maudon.cot.vaitro' })} rules={[...rules.required]}>
 						<Select
 							options={recordLoaiHinh?.danhSachVaiTroThanhVienKhaDung?.map((item: any) => ({
 								label: item,
 								value: item,
 							}))}
 							mode='multiple'
-							placeholder='Vai trò'
+							placeholder={intl.formatMessage({ id: 'diemrenluyen.maudon.cot.vaitro' })}
 						/>
 					</Form.Item>
 				</Col>
@@ -446,7 +447,7 @@ const FormRender = (props: {
 											? 'MM/YYYY'
 											: 'DD/MM/YYYY'
 								}
-								placeholder={['Từ', 'đến']}
+								placeholder={[intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.tu' }), intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.den' })]}
 								picker={
 									recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 										? 'year'
@@ -481,7 +482,7 @@ const FormRender = (props: {
 											? 'month'
 											: 'date'
 								}
-								placeholder={'Chọn thời gian'}
+								placeholder={intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.chonthoigian' })}
 							/>
 						</Form.Item>
 					</Col>
@@ -490,14 +491,14 @@ const FormRender = (props: {
 				truongThongTinTinh.loaiTruongThongTinTinh === ELoaiTruongThongTinTinh.DANH_SACH_THANH_VIEN && (
 					<>
 						<Col xs={24} sm={24} md={24}>
-							<Form.Item name='soLuongThanhVien' label='Số lượng thành viên' rules={[...rules.required]}>
-								<InputNumber style={{ width: '100%' }} min={1} max={100} placeholder='Số lượng thành viên' />
+							<Form.Item name='soLuongThanhVien' label={intl.formatMessage({ id: 'diemrenluyen.maudon.cot.soluongthanhvien' })} rules={[...rules.required]}>
+								<InputNumber style={{ width: '100%' }} min={1} max={100} placeholder={intl.formatMessage({ id: 'diemrenluyen.maudon.cot.soluongthanhvien' })} />
 							</Form.Item>
 						</Col>
 
 						<Col span={24}>
 							<div className='ant-descriptions-title' style={{ marginBottom: 12 }}>
-								{truongThongTinTinh?.label ?? 'Danh sách thành viên'}
+								{truongThongTinTinh?.label ?? intl.formatMessage({ id: 'diemrenluyen.maudon.cot.danhsachthanhvien' })}
 							</div>
 						</Col>
 					</>

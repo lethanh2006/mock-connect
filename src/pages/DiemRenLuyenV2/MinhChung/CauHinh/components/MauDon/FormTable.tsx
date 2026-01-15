@@ -1,7 +1,7 @@
 import { Button, Form, Row, message } from 'antd';
 import FormRender from './FormRender';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
 
@@ -15,6 +15,7 @@ const FormTable = (props: {
 	const [form] = Form.useForm();
 	const [formValues, setFormValues] = useState<any>({});
 	const { recordQuyTrinhForm, setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
+	const intl = useIntl();
 
 	useEffect(() => {
 		if (props.record) {
@@ -64,7 +65,7 @@ const FormTable = (props: {
 							},
 						});
 					}
-					message.success(props.edit ? 'Sửa thành công' : 'Thêm thành công');
+					message.success(props.edit ? intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.suathanhcong' }) : intl.formatMessage({ id: 'diemrenluyen.cauhinh.thongbao.themthanhcong' }));
 					props.onCancel();
 				}}
 			>
@@ -76,15 +77,15 @@ const FormTable = (props: {
 				<div className='form-footer'>
 					{!props?.isView && (
 						<Button htmlType='submit' type='primary'>
-							{!props.edit ? 'Thêm mới' : 'Lưu lại'}
+							{!props.edit ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.luulai' })}
 						</Button>
 					)}
-					{!props?.isView && <Button onClick={() => props.onCancel()}>Đóng</Button>}
+					{!props?.isView && <Button onClick={() => props.onCancel()}>{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.huy' })}</Button>}
 				</div>
 			</Form>
 			{props?.isView && (
 				<div style={{ display: 'flex', justifyContent: 'center' }}>
-					<Button onClick={() => props.onCancel()}>Đóng</Button>
+					<Button onClick={() => props.onCancel()}>{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.huy' })}</Button>
 				</div>
 			)}
 		</>

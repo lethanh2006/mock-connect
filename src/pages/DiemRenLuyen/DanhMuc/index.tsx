@@ -3,7 +3,7 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Tooltip } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import { FormDanhMuc } from './components/Form';
 import { type DanhMucDiemRenLuyen } from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/typing';
 import { ELoaiDanhMucChungMappingToTitle } from '@/services/CongTacSinhVien/DiemRenLuyen/DanhMuc/constant';
@@ -11,6 +11,7 @@ import { ELoaiDanhMucChungMappingToTitle } from '@/services/CongTacSinhVien/Diem
 export default () => {
 	const { handleEdit, handleView, deleteModel, getModel, page, limit, getLoaiDanhMucChung } =
 		useModel('diemrenluyen.danhmuc');
+  const intl = useIntl();
 
 	const onCell = (record: DanhMucDiemRenLuyen.IRecord) => ({
 		onClick: () => {
@@ -19,32 +20,30 @@ export default () => {
 		style: { cursor: 'pointer' },
 	});
 	const columns: IColumn<DanhMucDiemRenLuyen.IRecord>[] = [
-		{ width: 140, title: 'Mã', dataIndex: 'ma', filterType: 'string', onCell },
-		{ width: 200, title: 'Tên', dataIndex: 'ten', filterType: 'string', onCell },
+		{ width: 140, title: intl.formatMessage({ id: 'diemrenluyen.danhmuc.ma' }), dataIndex: 'ma', filterType: 'string', onCell },
+		{ width: 200, title: intl.formatMessage({ id: 'diemrenluyen.danhmuc.ten' }), dataIndex: 'ten', filterType: 'string', onCell },
 		{
 			width: 240,
-			title: 'Ghi chú',
+			title: intl.formatMessage({ id: 'diemrenluyen.danhmuc.ghichu' }),
 			dataIndex: 'ghiChu',
 			filterType: 'string',
 			render: (value) => <ExpandText>{value}</ExpandText>,
 			onCell,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'diemrenluyen.danhmuc.thaotac' }),
 			width: 90,
 			align: 'center',
 			render: (_, record) => {
 				return (
 					<>
-						<Tooltip title='Chỉnh sửa'>
+						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.chinhsua' })}>
 							<Button onClick={() => handleEdit(record)} type='link' icon={<EditOutlined />} />
 						</Tooltip>
-						<Tooltip title='Xóa'>
+						<Tooltip title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xoa' })}>
 							<Popconfirm
 								onConfirm={() => deleteModel(record._id, () => getModel())}
-								title={`Bạn có chắc chắn muốn xóa ${ELoaiDanhMucChungMappingToTitle[
-									getLoaiDanhMucChung()
-								].toLowerCase()} này?`}
+								title={intl.formatMessage({ id: 'diemrenluyen.danhmuc.xacnhanxoa' })}
 								placement='topLeft'
 							>
 								<Button danger type='link' icon={<DeleteOutlined />} />

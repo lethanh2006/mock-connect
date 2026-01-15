@@ -8,7 +8,7 @@ import dayjs from '@/utils/dayjs';
 import { EyeOutlined, FileExcelOutlined, ReloadOutlined, SaveOutlined } from '@ant-design/icons';
 import { Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ModalChiTiet from './ModalChiTiet';
 
 const SinhVienHoatDongCTSV = () => {
@@ -23,6 +23,7 @@ const SinhVienHoatDongCTSV = () => {
 	const { getAllModel: getAllHocKy, danhSach: danhSachHocKy } = useModel('daotao.hocky');
 	const [tabActive, setTabActive] = useState<EHoatDongChungType1>(EHoatDongChungType1.GIAO_DUC_CHINH_TRI_TU_TUONG);
 	const [loadingXemSau, setLoadingXemSau] = useState<boolean>(false);
+	const intl = useIntl();
 
 	const getDataXemSau = () => {
 		getAllXemSau(undefined, undefined, { loaiThongTin: ELoaiThongTinXemSau.SU_KIEN }, undefined, 'me/many');
@@ -52,7 +53,12 @@ const SinhVienHoatDongCTSV = () => {
 			loaiThongTin: ELoaiThongTinXemSau.SU_KIEN,
 			thongTin: rec,
 		};
-		postXemSau(data, getDataXemSau, undefined, 'Lưu thành công')
+		postXemSau(
+			data,
+			getDataXemSau,
+			undefined,
+			intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.message.luuthanhcong' }),
+		)
 			.then()
 			.catch((err) => console.log(err))
 			.finally(() => setLoadingXemSau(false));
@@ -68,31 +74,31 @@ const SinhVienHoatDongCTSV = () => {
 
 	const columns: IColumn<SuKien.ISinhVienHoatDongCTSV>[] = [
 		{
-			title: 'Tên hoạt động',
+			title: intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.table.ten' }),
 			width: 200,
 			render: (val, rec) => rec?.hoatDongCtsv?.ten,
 		},
 		{
-			title: 'Loại',
+			title: intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.table.loai' }),
 			width: 200,
 			align: 'center',
 			render: (val, rec) => rec?.hoatDongCtsv?.loai,
 		},
 		{
-			title: 'Học kỳ',
+			title: intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.table.hocky' }),
 			width: 150,
 			align: 'center',
 			render: (val, rec) => danhSachHocKy?.find((item) => item?.ma === rec?.hoatDongCtsv?.maHocKy)?.ten,
 		},
 		{
-			title: 'Thời gian bắt đầu',
+			title: intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.table.batdau' }),
 			align: 'center',
 			width: 100,
 			render: (val, rec) =>
 				rec?.hoatDongCtsv?.thoiGianBatDau && dayjs(rec?.hoatDongCtsv?.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
 		},
 		{
-			title: 'Thời gian kết thúc',
+			title: intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.table.ketthuc' }),
 			align: 'center',
 			width: 100,
 			render: (val, rec) =>
@@ -100,25 +106,30 @@ const SinhVienHoatDongCTSV = () => {
 		},
 
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.table.trangthai' }),
 			align: 'center',
 			width: 120,
 			render: (val, rec) => rec?.trangThaiThamGia,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.table.thaotac' }),
 			align: 'center',
 			width: 90,
 			render: (val, rec) => (
 				<>
-					<ButtonExtend tooltip='Chi tiết' type='link' icon={<EyeOutlined />} onClick={() => handleEdit(rec)} />
+					<ButtonExtend
+						tooltip={intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.button.chitiet' })}
+						type='link'
+						icon={<EyeOutlined />}
+						onClick={() => handleEdit(rec)}
+					/>
 					{danhSachXemSau?.find((items) => items?.sourceId === rec?._id)?._id ? (
 						<ButtonExtend
 							loading={loadingXemSau}
 							type='link'
 							danger
 							icon={<FileExcelOutlined />}
-							tooltip='Bỏ lưu'
+							tooltip={intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.button.boluu' })}
 							onClick={() => handleBoXemSau(danhSachXemSau?.find((items) => items?.sourceId === rec?._id))}
 						/>
 					) : (
@@ -127,7 +138,7 @@ const SinhVienHoatDongCTSV = () => {
 							loading={loadingXemSau}
 							type='link'
 							icon={<SaveOutlined />}
-							tooltip='Lưu'
+							tooltip={intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.button.luu' })}
 							onClick={() => handleXemSau(rec)}
 						/>
 					)}
@@ -137,7 +148,11 @@ const SinhVienHoatDongCTSV = () => {
 	];
 
 	return (
-		<Card title='Danh sách sự kiện' className='card-big-title card-borderless' variant='borderless'>
+		<Card
+			title={intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.page.title' })}
+			className='card-big-title card-borderless'
+			variant='borderless'
+		>
 			<Card>
 				<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EHoatDongChungType1)}>
 					{Object.values(EHoatDongChungType1).map((item) => (
@@ -154,8 +169,11 @@ const SinhVienHoatDongCTSV = () => {
 					hasTotal
 				>
 					<div style={{ position: 'absolute', right: 130 }}>
-						<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
-							Tải lại
+						<ButtonExtend
+							onClick={() => getData()}
+							icon={<ReloadOutlined />}
+						>
+							{intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.button.tailai' })}
 						</ButtonExtend>
 					</div>
 				</TableStaticData>

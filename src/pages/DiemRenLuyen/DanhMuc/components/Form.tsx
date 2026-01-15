@@ -7,10 +7,11 @@ import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Card, Col, Form, Input, Row } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import { SelectDanhMucDiemRenLuyen } from './Select';
 
 export const FormDanhMuc = () => {
+	const intl = useIntl();
 	const [form] = Form.useForm();
 	const {
 		isView,
@@ -43,7 +44,7 @@ export const FormDanhMuc = () => {
 	return (
 		<Card
 			title={
-				(isView ? 'Chi tiết ' : edit ? 'Chỉnh sửa ' : 'Thêm mới ') +
+				(isView ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.chitiet' }) : edit ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.chinhsua' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' })) + ' ' +
 				ELoaiDanhMucChungMappingToTitle[getLoaiDanhMucChung()].toLowerCase()
 			}
 		>
@@ -51,25 +52,25 @@ export const FormDanhMuc = () => {
 				<Form.Item name='loai' hidden />
 				<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
 					<Col span={24}>
-						<Form.Item label='Mã' name='ma' rules={[...rules.required]}>
-							<Input placeholder='Mã' />
+						<Form.Item label={intl.formatMessage({ id: 'diemrenluyen.danhmuc.ma' })} name='ma' rules={[...rules.required]}>
+							<Input placeholder={intl.formatMessage({ id: 'diemrenluyen.danhmuc.ma' })} />
 						</Form.Item>
 					</Col>
 					<Col span={24}>
-						<Form.Item label='Tên' name='ten' rules={[...rules.required]}>
-							<Input placeholder='Tên' />
+						<Form.Item label={intl.formatMessage({ id: 'diemrenluyen.danhmuc.ten' })} name='ten' rules={[...rules.required]}>
+							<Input placeholder={intl.formatMessage({ id: 'diemrenluyen.danhmuc.ten' })} />
 						</Form.Item>
 					</Col>
 					{getLoaiDanhMucChung() === ELoaiDanhMucChung.PHONG_KTX && (
 						<Col span={24}>
-							<Form.Item label='Ký túc xá' name='idCha' rules={[...rules.required]}>
+							<Form.Item label={intl.formatMessage({ id: 'diemrenluyen.minhchung.ktx' })} name='idCha' rules={[...rules.required]}>
 								<SelectDanhMucDiemRenLuyen loaiDanhMuc={ELoaiDanhMucChung.KY_TUC_XA} />
 							</Form.Item>
 						</Col>
 					)}
 					<Col span={24}>
-						<Form.Item label='Ghi chú' name='ghiChu'>
-							<Input.TextArea placeholder='Ghi chú' />
+						<Form.Item label={intl.formatMessage({ id: 'diemrenluyen.danhmuc.ghichu' })} name='ghiChu'>
+							<Input.TextArea placeholder={intl.formatMessage({ id: 'diemrenluyen.danhmuc.ghichu' })} />
 						</Form.Item>
 					</Col>
 				</Row>
@@ -83,7 +84,7 @@ export const FormDanhMuc = () => {
 						htmlType='submit'
 						type='primary'
 					>
-						{!edit ? 'Thêm mới ' : 'Lưu lại'}
+						{!edit ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.luulai' })}
 					</Button>
 				)}
 				<Button
@@ -91,7 +92,7 @@ export const FormDanhMuc = () => {
 						setVisibleForm(false);
 					}}
 				>
-					Đóng
+					{intl.formatMessage({ id: 'diemrenluyen.modal.button.dong' })}
 				</Button>
 			</Form.Item>
 		</Card>
