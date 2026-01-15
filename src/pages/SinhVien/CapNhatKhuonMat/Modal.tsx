@@ -51,7 +51,7 @@ const ModalCapNhatAnhNhanDien = (props: { visible: boolean; setVisible: (val: bo
 			<ol>
 				<li>
 					<b>{intl.formatMessage({ id: 'thongtincanhan.khuonmat.anhsang' })}</b>{' '}
-					{intl.formatMessage({ id: 'thongtincanhan.khuonmat.anhsang.decs' })}
+					{intl.formatMessage({ id: 'thongtincanhan.khuonmat.anhsang.desc' })}
 				</li>
 				<li>
 					<b>{intl.formatMessage({ id: 'thongtincanhan.khuonmat.tuthe' })}</b>{' '}
