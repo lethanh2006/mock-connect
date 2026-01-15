@@ -247,6 +247,7 @@ export default {
 	'lophocphan.id.khaosat.nd': 'Nội dung khảo sát',
 
 	'lophocphan.id.thongtinchungheader.quaylai': 'Quay lại',
+	'lophocphan.id.thongtinchung.quaylai': 'Quay lại',
 	'lophocphan.id.thongtinchungheader.chitiet': 'Xem đề cương chi tiết học phần',
 	'lophocphan.id.thongtinchungheader.chuacapnhat': 'Chưa cập nhật',
 	'lophocphan.id.thongtinchungheader.tinchi': 'Tín chỉ',
@@ -261,7 +262,7 @@ export default {
 	'lophocphan.id.thongtinchungheader.khongco': 'Không có',
 
 	'lophocphan.id.thongtinchungheader.thongtingv': 'Thông tin giảng viên',
-	'lophocphan.id.thongtinchungheader.hoten': 'Họ tên',
+	'lophocphan.id.thongtinchungheader.hoTen': 'Họ tên',
 	'lophocphan.id.thongtinchungheader.email': 'Email',
 	'lophocphan.id.thongtinchungheader.gioitinh': 'Giới tính',
 	'lophocphan.id.thongtinchungheader.hocham': 'Học hàm',

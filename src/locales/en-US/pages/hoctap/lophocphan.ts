@@ -239,7 +239,7 @@ export default {
 	'lophocphan.id.thongtinchungheader.gv': 'Instructor:',
 	'lophocphan.id.thongtinchungheader.khongco': 'None',
 	'lophocphan.id.thongtinchungheader.thongtingv': 'Instructor information',
-	'lophocphan.id.thongtinchungheader.hoten': 'Full name',
+	'lophocphan.id.thongtinchungheader.hoTen': 'Full name',
 	'lophocphan.id.thongtinchungheader.email': 'Email',
 	'lophocphan.id.thongtinchungheader.gioitinh': 'Gender',
 	'lophocphan.id.thongtinchungheader.hocham': 'Academic title',

@@ -23,7 +23,7 @@ export default {
 	'thongtincanhan.hoso.chuyennganh': 'Chuyên ngành',
 	'thongtincanhan.hoso.chuacapnhat': 'Chưa cập nhật',
 	'thongtincanhan.hoso.quoctich': 'Quốc tịch',
-	'thongtincanhan.hoso.danhtoc': 'Dân tộc',
+	'thongtincanhan.hoso.dantoc': 'Dân tộc',
 	'thongtincanhan.hoso.tongiao': 'Tôn giáo',
 
 	'thongtincanhan.hoso.diachi': 'Địa chỉ thường trú',
@@ -158,7 +158,7 @@ export default {
 	'thongtincanhan.khuonmat.anhsang.desc':
 		'Ánh sáng đồng đều, không quá sáng hoặc quá tối. Tránh chụp ngược sáng. Nên chụp trong điều kiện ánh sáng tự nhiên hoặc ánh sáng nhân tạo ổn định.',
 	'thongtincanhan.khuonmat.tuthe': 'Tư thế khuôn mặt:',
-	'thongtincanhan.khuonmat.thuthe.desc':
+	'thongtincanhan.khuonmat.tuthe.desc':
 		'Nhìn thẳng vào camera. Giữ đầu thẳng, không nghiêng hoặc quay sang bên. Mắt mở tự nhiên, biểu cảm trung tính.',
 	'thongtincanhan.khuonmat.khoangcach': 'Khoảng cách và góc chụp:',
 	'thongtincanhan.khuonmat.khoangcach.desc':
