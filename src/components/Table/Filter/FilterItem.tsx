@@ -13,7 +13,8 @@ import { type RowFilterProps, type TDataOption } from '../typing';
 const FilterItem = (props: RowFilterProps) => {
 	const intl = useIntl();
 	const { name, onRemove, allowGrouping = true, level = 0, formOwner, parentPath, ...restProps } = props;
-	const { finalColumns: columns } = useTableContext();
+	const { finalColumns, columns: originalColumns } = useTableContext();
+	const columns = originalColumns || finalColumns;
 	const formInstance = Form.useFormInstance();
 	const { fieldsFiltered } = useFilterFields(columns, formOwner);
 	const [operators, setOperators] = useState<EOperatorType[]>([]);
