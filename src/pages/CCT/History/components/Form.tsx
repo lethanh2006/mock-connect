@@ -43,16 +43,16 @@ const FormActivityOutCome = (props: any) => {
 			setRecCauTraLoi({} as BieuMau.ICauTraLoiKhaoSat);
 		}
 
+		if (record?.levelsId) {
+			setLevelsId(record?.levelsId);
+		}
+
 		if (record?.rolesId) {
 			setRolesId(record?.rolesId);
 		} else {
 			setRolesId(record?.activities?.coCurricularActivityEquivalency?.[0]?.rolesId);
 		}
-
-		if (record?.levelId) {
-			setLevelsId(record?.levelId);
-		}
-	}, [visibleForm]);
+	}, [visibleForm, record?._id]);
 
 	useEffect(() => {
 		if (record?.answerId) {

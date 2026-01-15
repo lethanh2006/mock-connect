@@ -12,7 +12,7 @@ import {
 } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined, SendOutlined } from '@ant-design/icons';
-import { Checkbox, Popconfirm, Tabs, Tag } from 'antd';
+import { Card, Checkbox, Popconfirm, Tabs, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import SelectActivitiesManagement from '../Activities/Select';
@@ -56,8 +56,7 @@ const HistoryActivityPage = () => {
 
 		return dsAtribute.map((attr: any) => ({
 			title: attr.code,
-			width: 90,
-			align: 'center',
+			width: 60,
 			render: (val, rec) => {
 				const check = rec?.activities?.coCurricularActivityEquivalency;
 				const checkPertion = rec?.activitiesType?.attributesId === attr?._id;
@@ -185,6 +184,15 @@ const HistoryActivityPage = () => {
 			onCell,
 		},
 		{
+			title: 'Declaration Approvers',
+			dataIndex: 'studentDeclarationApproverName',
+			align: 'center',
+			width: 180,
+			filterType: 'string',
+			onCell,
+			hide: tabActive === EActivityCategory.REGISTERED,
+		},
+		{
 			title: intl.formatMessage({ id: 'activity.column.status' }),
 			dataIndex: 'workflow',
 			align: 'center',
@@ -267,40 +275,43 @@ const HistoryActivityPage = () => {
 	];
 
 	return (
-		<TableBase
-			getData={getData}
-			formProps={{
-				getData: () => {
-					getData();
-					getThongKe();
-				},
-			}}
-			columns={columns}
-			dependencies={[page, limit, tabActive]}
-			modelName='cct.activityoutcome'
-			title={intl.formatMessage({ id: 'activity.title' })}
-			Form={tabActive === EActivityCategory.REGISTERED ? FormActivityOutCome : FormPerstionActivityOutCome}
-			widthDrawer={tabActive === EActivityCategory.REGISTERED ? 800 : 1000}
-			buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
-			onReload={() => {
-				getData();
-				getThongKe();
-			}}
-		>
+		<Card title={intl.formatMessage({ id: 'activity.title' })}>
 			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
 				{Object.values(EActivityCategory).map((item) => (
 					<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
 				))}
 			</Tabs>
 
+			<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
+
 			<div
 				style={{
 					padding: '0px 12px 0px 12px',
 				}}
 			>
-				<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
+				<TableBase
+					getData={getData}
+					formProps={{
+						getData: () => {
+							getData();
+							getThongKe();
+						},
+					}}
+					columns={columns}
+					dependencies={[page, limit, tabActive]}
+					modelName='cct.activityoutcome'
+					title={intl.formatMessage({ id: 'activity.title' })}
+					Form={tabActive === EActivityCategory.REGISTERED ? FormActivityOutCome : FormPerstionActivityOutCome}
+					widthDrawer={tabActive === EActivityCategory.REGISTERED ? 800 : 1000}
+					buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
+					onReload={() => {
+						getData();
+						getThongKe();
+					}}
+					hideCard
+				/>
 			</div>
-		</TableBase>
+		</Card>
 	);
 };
 
