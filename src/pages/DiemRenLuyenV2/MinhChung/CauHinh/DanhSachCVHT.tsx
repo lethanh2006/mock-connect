@@ -4,12 +4,13 @@ import { ETrangThaiTiepNhanMinhChung } from '@/services/DiemRenLuyenV2/MinhChung
 import { EDoiTuongNhap } from '@/services/DiemRenLuyenV2/MinhChung/MauDon/constants';
 import type { MinhChungDrl } from '@/services/DiemRenLuyenV2/MinhChung/typing';
 import React, { useEffect, useImperativeHandle } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const DanhSachMinhChungCVHT = React.forwardRef((props: { idLopHanhChinh?: string }, ref) => {
 	const { getAllModel, danhSach, record, setRecord } = useModel('diemrenluyenv2.minhchung.cauhinh');
 	const { record: recordDot } = useModel('diemrenluyenv2.dot');
 	const { record: recordLopHanhChinh } = useModel('daotao.lophanhchinh');
+	const intl = useIntl();
 
 	const getData = async (isSetRecord: boolean) => {
 		try {
@@ -46,7 +47,7 @@ const DanhSachMinhChungCVHT = React.forwardRef((props: { idLopHanhChinh?: string
 
 	const columns: IColumn<MinhChungDrl.IBieuMau>[] = [
 		{
-			title: 'Tên minh chứng',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.ten' }),
 			dataIndex: 'tenMinhChung',
 			width: 200,
 			filterType: 'string',
@@ -67,8 +68,7 @@ const DanhSachMinhChungCVHT = React.forwardRef((props: { idLopHanhChinh?: string
 							<div>
 								({/*<b>{rec?.trangThaiMinhChung?.['Xác nhận']}</b> Xác nhận,*/}
 								{/*<b>{rec?.trangThaiMinhChung?.['Duyệt']}</b> Duyệt,*/}
-								<b style={{ color: 'red' }}>{rec?.trangThaiMinhChung?.[ETrangThaiTiepNhanMinhChung.CHO_XU_LY]}</b> Chờ
-								xử lý
+								<b style={{ color: 'red' }}>{rec?.trangThaiMinhChung?.[ETrangThaiTiepNhanMinhChung.CHO_XU_LY]}</b> {intl.formatMessage({ id: 'diemrenluyen.minhchung.choxuly' })}
 								{/*<b>{rec?.trangThaiMinhChung?.['Không duyệt']}</b> Không duyệt*/})
 							</div>
 						)}

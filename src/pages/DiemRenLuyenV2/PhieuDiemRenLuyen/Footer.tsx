@@ -2,7 +2,7 @@ import { ETrangThaiDuyetBienBanHopDiemRenLuyen } from '@/services/DiemRenLuyenV2
 import type { ENguoiTraLoi, ETrangThaiDanhGia } from '@/services/DiemRenLuyenV2/PhieuDiemRenLuyen/constants';
 import { QuestionCircleOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 interface Props {
 	onLuuVaGuiSau?: () => void;
@@ -21,6 +21,7 @@ interface Props {
 export const Footer = ({ onGuiNgay, onLuuVaGuiSau, formSubmiting, dangGuiNgay, disabled }: Props) => {
 	const { record: recBienBanHop } = useModel('diemrenluyenv2.bienbanhop');
 	const { setVisibleFormGuiKhieuNai, record: recPhieuDiem } = useModel('diemrenluyenv2.phieudiemrenluyen');
+	const intl = useIntl();
 
 	const renderButtonGuiNgay = () => {
 		return (
@@ -30,7 +31,7 @@ export const Footer = ({ onGuiNgay, onLuuVaGuiSau, formSubmiting, dangGuiNgay, d
 				loading={formSubmiting && dangGuiNgay}
 				type='primary'
 			>
-				Gửi <SendOutlined style={{ transform: 'translate(1px, -1px) rotate(-45deg)' }} />
+				{intl.formatMessage({ id: 'diemrenluyen.footer.button.gui' })} <SendOutlined style={{ transform: 'translate(1px, -1px) rotate(-45deg)' }} />
 			</Button>
 		);
 	};
@@ -42,7 +43,7 @@ export const Footer = ({ onGuiNgay, onLuuVaGuiSau, formSubmiting, dangGuiNgay, d
 				loading={formSubmiting && !dangGuiNgay}
 				disabled={(formSubmiting && dangGuiNgay) || disabled}
 			>
-				Lưu & Gửi sau <SaveOutlined />
+				{intl.formatMessage({ id: 'diemrenluyen.footer.button.luuvaguisau' })} <SaveOutlined />
 			</Button>
 		);
 	};
@@ -61,7 +62,7 @@ export const Footer = ({ onGuiNgay, onLuuVaGuiSau, formSubmiting, dangGuiNgay, d
 						}}
 						type='primary'
 					>
-						Gửi khiếu nại
+						{intl.formatMessage({ id: 'diemrenluyen.form.button.guikhieunai' })}
 						<QuestionCircleOutlined />
 					</Button>
 				)
