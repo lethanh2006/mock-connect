@@ -22,6 +22,4 @@ export default {
 	'config.co-quan-chu-quan': 'Bộ Giáo dục và Đào tạo',
 	'config.ten-truong': 'Trường Đại học VinUni',
 	'config.tien-to-truong': 'Trường',
-	'config.ten-truong-viet-tat-tieng-anh': 'VIN',
 };
-
