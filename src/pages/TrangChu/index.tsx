@@ -1,7 +1,7 @@
 import { unitName } from '@/services/base/constant';
+import { useIntl } from '@umijs/max';
 import { Card } from 'antd';
 import './components/style.less';
-import { useIntl } from '@umijs/max';
 
 const TrangChu = () => {
 	const intl = useIntl();
@@ -10,7 +10,7 @@ const TrangChu = () => {
 			<div className='home-welcome'>
 				<h1 className='title'>{intl.formatMessage({ id: 'pages.trangchu.title' })}</h1>
 				<h2 className='sub-title'>
-					{intl.formatMessage({ id: 'pages.trangchu.subtitle' })} - {(intl.formatMessage({ id: unitName })).toUpperCase()}
+					{intl.formatMessage({ id: 'pages.trangchu.subtitle' })} - {intl.formatMessage({ id: unitName }).toUpperCase()}
 				</h2>
 			</div>
 		</Card>

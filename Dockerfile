@@ -10,7 +10,6 @@ ENV APP_CONFIG_KEYCLOAK_AUTHORITY=https://sso.hvpnvn.edu.vn/realms/vwa
 ENV APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID=vwa-
 ENV APP_CONFIG_APP_VERSION=241218.1100
 
-ENV APP_CONFIG_CO_QUAN_CHU_QUAN='Hội Liên hiệp phụ nữ Việt Nam'
 ENV APP_CONFIG_TEN_TRUONG='Học viện Phụ nữ Việt Nam'
 ENV APP_CONFIG_TIEN_TO_TRUONG='Học viện'
 ENV APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH='VWA'
@@ -33,24 +32,6 @@ ENV APP_CONFIG_URL_QLVB=https://sso.hvpnvn.edu.vn/realms/vwa/protocol/openid-con
 ENV APP_CONFIG_URL_VBCC=https://vbcc.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_QLND=https://iam.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_TAP_CHI_KH=https://tapchikhoahoc.hvpnvn.edu.vn/
-
-ENV APP_CONFIG_TITLE_LANDING='Cổng thông tin'
-ENV APP_CONFIG_TITLE_CONNECT='Cổng người học'
-ENV APP_CONFIG_TITLE_CAN_BO='Cổng cán bộ'
-ENV APP_CONFIG_TITLE_DAO_TAO='Quản lý đào tạo'
-ENV APP_CONFIG_TITLE_NHAN_SU='Tổ chức nhân sự'
-ENV APP_CONFIG_TITLE_TAI_CHINH='Tài chính'
-ENV APP_CONFIG_TITLE_CTSV='Công tác sinh viên'
-ENV APP_CONFIG_TITLE_QLKH='Quản lý khoa học'
-ENV APP_CONFIG_TITLE_VPS='Văn phòng điều hành'
-ENV APP_CONFIG_TITLE_KHAO_THI='Khảo thí'
-ENV APP_CONFIG_TITLE_CORE='Danh mục chung'
-ENV APP_CONFIG_TITLE_CSVC='Cơ sở vật chất'
-ENV APP_CONFIG_TITLE_THU_VIEN='Thư viện'
-ENV APP_CONFIG_TITLE_QLVB='Quản lý văn bản'
-ENV APP_CONFIG_TITLE_VBCC='Văn bằng chứng chỉ'
-ENV APP_CONFIG_TITLE_QLND='Người dùng & phân quyền'
-ENV APP_CONFIG_TITLE_TAP_CHI_KH='Tạp chí khoa học'
 
 
 # Set working directory
