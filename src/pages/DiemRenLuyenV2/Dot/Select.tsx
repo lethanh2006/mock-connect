@@ -1,6 +1,6 @@
 import { Empty, Select, Spin } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const SelectDotDiemRenLuyen = (props: {
 	value?: string | string[];
@@ -14,6 +14,7 @@ const SelectDotDiemRenLuyen = (props: {
 }): any => {
 	const { value, onChange, multiple, disabled, style, placeHolder, allowClear, isSetRecord } = props;
 	const { danhSach, getAllModel, loading } = useModel('diemrenluyenv2.dot');
+  const intl = useIntl();
 
 	const { danhSach: danhSachHocKy, getAllModel: getAllHocKy } = useModel('daotao.hocky');
 
@@ -34,9 +35,16 @@ const SelectDotDiemRenLuyen = (props: {
 			disabled={disabled}
 			notFoundContent={
 				loading ? (
-					<Spin spinning={true} tip='Đang tìm kiếm...' style={{ width: '100%', margin: 10 }} />
+					<Spin
+						spinning={true}
+						tip={intl.formatMessage({ id: 'diemrenluyen.dot.timkiem' })}
+						style={{ width: '100%', margin: 10 }}
+					/>
 				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu, hãy thử nhập từ khóa khác!' />
+					<Empty
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+						description={intl.formatMessage({ id: 'diemrenluyen.dot.khongcodulieu' })}
+					/>
 				)
 			}
 			options={danhSach.map((item) => ({
@@ -47,7 +55,7 @@ const SelectDotDiemRenLuyen = (props: {
 			}))}
 			showSearch
 			optionFilterProp='label'
-			placeholder={placeHolder || 'Lọc theo học kỳ'}
+			placeholder={placeHolder || intl.formatMessage({ id: 'diemrenluyen.dot.placeholder' })}
 			style={{ ...style }}
 			showArrow
 		/>

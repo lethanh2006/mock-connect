@@ -3,9 +3,9 @@ import { EKieuDuLieu, ETextDisplay } from '@/services/FormDong/LoaiHinh/constant
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
-import { useModel } from '@@/plugin-model/useModel';
 import { Button, Card, Col, Divider, Form, Row, Select } from 'antd';
 import { useEffect, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 import FormRender from '../../CauHinh/components/MauDon/FormRender';
 import ViewRender from '../../CauHinh/components/MauDon/ViewRender';
 const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu' }) => {
@@ -93,10 +93,16 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 		}
 	}, [record?._id, visibleForm]);
 
+	const intl = useIntl();
+
 	if (isView) {
 		return (
-			<Card title={`${recordCauHinh?.tenMinhChung ?? 'Khai báo minh chứng'}`}>
-				<Divider orientation={'center'}>Thông tin chung</Divider>
+			<Card
+				title={`${recordCauHinh?.tenMinhChung ?? intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.title' })}`}
+			>
+				<Divider orientation={'center'}>
+					{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.thongtinchung' })}
+				</Divider>
 				<Row gutter={[0, 10]}>
 					<Col xs={24} sm={24} md={12}>
 						<div
@@ -105,7 +111,7 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 							}}
 						>
 							<div style={{ marginRight: 4 }}>
-								<b>Sinh viên: </b>
+								<b>{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.sinhvien' })}: </b>
 							</div>
 							<div>{record?.hoTen}</div>
 						</div>
@@ -117,7 +123,7 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 							}}
 						>
 							<div style={{ marginRight: 4 }}>
-								<b>Mã sinh viên: </b>
+								<b>{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.masinhvien' })}: </b>
 							</div>
 							<div>{record?.maSinhVien}</div>
 						</div>
@@ -139,7 +145,9 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 						</Col>
 					)}
 
-					<Divider orientation={'center'}>Thông tin khai báo</Divider>
+					<Divider orientation={'center'}>
+						{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.thongtinkhaibao' })}
+					</Divider>
 					{recordCauHinh?.danhSachCauHinhMinhChung.map((item) => {
 						if (
 							!item?.truongThongTinLienQuan ||
@@ -182,7 +190,9 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 		);
 	} else {
 		return (
-			<Card title={`${recordCauHinh?.tenMinhChung ?? 'Khai báo minh chứng'}`}>
+			<Card
+				title={`${recordCauHinh?.tenMinhChung ?? intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.title' })}`}
+			>
 				<Form
 					style={{ position: 'relative' }}
 					scrollToFirstError
@@ -200,10 +210,14 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 								<Form.Item name={'ssoId'} hidden />
 								<Form.Item name={'hoTen'} hidden />
 								<Form.Item name={'lopHanhChinh'} hidden />
-								<Form.Item name={'maSinhVien'} label={'Sinh viên'} rules={[...rules.required]}>
+								<Form.Item
+									name={'maSinhVien'}
+									label={intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.sinhvien' })}
+									rules={[...rules.required]}
+								>
 									<Select
 										optionFilterProp='label'
-										placeholder='Chọn sinh viên (tìm theo họ tên hoặc mã sinh viên)'
+										placeholder={intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.chonsinhvien' })}
 										showSearch
 										options={recLopHanhChinh?.lopHcSvKyList?.map((item) => ({
 											value: item.sinhVien?.ma,
@@ -225,11 +239,17 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 							<Col span={24}>
 								<Form.Item
 									name={'diemQuyDoi'}
-									label={recordCauHinh?.tenDanhMucQuyDoi ?? 'Hạng mục'}
+									label={
+										recordCauHinh?.tenDanhMucQuyDoi ??
+										intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.hangmuc' })
+									}
 									rules={[...rules.required]}
 								>
 									<Select
-										placeholder={recordCauHinh?.tenDanhMucQuyDoi ?? 'Chọn hạng mục'}
+										placeholder={
+											recordCauHinh?.tenDanhMucQuyDoi ??
+											intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.chonhangmuc' })
+										}
 										options={recordCauHinh?.danhMucDiemQuyDoi?.map((val) => ({
 											value: val?.diemQuyDoi,
 											label: `${val?.tieuDe}`,
@@ -250,9 +270,13 @@ const FormKhaiBao = (props: { getData?: () => void; mode: 'sinhvien' | 'bancansu
 					</Row>
 					<div className='form-footer'>
 						<Button loading={formSubmiting} htmlType='submit' type='primary'>
-							{!edit ? 'Thêm mới' : 'Lưu lại'}
+							{!edit
+								? intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.themmoi' })
+								: intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.luulai' })}
 						</Button>
-						<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+						<Button onClick={() => setVisibleForm(false)}>
+							{intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.huy' })}
+						</Button>
 					</div>
 				</Form>
 			</Card>

@@ -14,11 +14,12 @@ import { primaryColor } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
 import { Card, Descriptions, Form, message, Space, Spin, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import { Footer } from '../../Footer';
 import { FieldsNhapDiem } from '../../components/FieldsNhapDiem';
 
 const FormNhapPhieuDiem = (props: { getData: any }) => {
+	const intl = useIntl();
 	const [form] = Form.useForm();
 	const {
 		formValuesTuDanhGiaVaDonViDanhGia,
@@ -86,11 +87,11 @@ const FormNhapPhieuDiem = (props: { getData: any }) => {
 					props.getData();
 				});
 			} else {
-				message.warning('Một số điểm chưa nhập vui lòng kiểm tra lại');
+				message.warning(intl.formatMessage({ id: 'diemrenluyen.form.thongbao.kiemtramotsodiemchuadung' }));
 			}
 		} catch (e) {
 			console.log(e);
-			message.warning('Một số điểm chưa nhập vui lòng kiểm tra lại');
+			message.warning(intl.formatMessage({ id: 'diemrenluyen.form.thongbao.kiemtramotsodiemchuadung' }));
 		}
 	};
 
@@ -221,7 +222,7 @@ const FormNhapPhieuDiem = (props: { getData: any }) => {
 						inline: 'center',
 					}}
 					onFinishFailed={() => {
-						message.warning('Một số điểm chưa nhập vui lòng kiểm tra lại');
+						message.warning(intl.formatMessage({ id: 'diemrenluyen.form.thongbao.kiemtramotsodiemchuadung' }));
 					}}
 				>
 					<FieldsNhapDiem
@@ -236,16 +237,24 @@ const FormNhapPhieuDiem = (props: { getData: any }) => {
 						title={
 							<>
 								<div style={{ marginBottom: 12 }}>
-									I.PHIẾU ĐIỂM RÈN LUYỆN{' '}
+									I.{intl.formatMessage({ id: 'diemrenluyen.phieudiem.form.title' })}{' '}
 									<Space>
 										{renderTrangThai()}
-										{ngoaiThoiGian ? <Tag color={primaryColor}>Ngoài thời gian chấm điểm</Tag> : ''}
+										{ngoaiThoiGian ? (
+											<Tag color={primaryColor}>
+												{intl.formatMessage({ id: 'diemrenluyen.form.tag.ngoaithoigian' })}
+											</Tag>
+										) : (
+											''
+										)}
 									</Space>
 								</div>
 								<div>
 									<Descriptions bordered>
-										<Descriptions.Item label='Họ và tên'>{recordPhieuDiem?.hoTen}</Descriptions.Item>
-										<Descriptions.Item label='Mã sinh viên'>
+										<Descriptions.Item label={intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.hoten' })}>
+											{recordPhieuDiem?.hoTen}
+										</Descriptions.Item>
+										<Descriptions.Item label={intl.formatMessage({ id: 'diemrenluyen.khaibaominhchung.masinhvien' })}>
 											{recordPhieuDiem?.maSinhVien?.toUpperCase()}
 										</Descriptions.Item>
 									</Descriptions>

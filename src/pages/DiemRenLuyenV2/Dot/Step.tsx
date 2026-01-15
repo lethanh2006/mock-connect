@@ -1,31 +1,32 @@
 import dayjs from '@/utils/dayjs';
 import { Steps } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const StepDotChamDiemRenLuyen = () => {
 	const { record } = useModel('diemrenluyenv2.dot');
 	const [step, setStep] = useState(0);
+	const intl = useIntl();
 	const steps = [
 		{
 			thoiGian: record?.thoiGianTiepNhanMinhChung?.thoiGianBatDau,
 			thoiGianKetThuc: record?.thoiGianTiepNhanMinhChung?.thoiGianKetThuc,
-			title: 'Cập nhật, duyệt minh chứng',
+			title: intl.formatMessage({ id: 'diemrenluyen.step.capnhat' }),
 		},
 		{
 			thoiGian: record?.thoiGianSVChamDiem?.thoiGianBatDau,
 			thoiGianKetThuc: record?.thoiGianSVChamDiem?.thoiGianKetThuc,
-			title: 'Sinh viên đánh giá',
+			title: intl.formatMessage({ id: 'diemrenluyen.step.sinhvien' }),
 		},
 		{
 			thoiGian: record?.thoiGianBCSChamDiem?.thoiGianBatDau,
 			thoiGianKetThuc: record?.thoiGianBCSChamDiem?.thoiGianKetThuc,
-			title: 'Ban cán sự đánh giá',
+			title: intl.formatMessage({ id: 'diemrenluyen.step.bancansu' }),
 		},
 		{
 			thoiGian: record?.thoiGianCoVanChamDiem?.thoiGianBatDau,
 			thoiGianKetThuc: record?.thoiGianCoVanChamDiem?.thoiGianKetThuc,
-			title: 'Chủ nhiệm lớp xác nhận',
+			title: intl.formatMessage({ id: 'diemrenluyen.step.chunhiemlop' }),
 		},
 		// {
 		// 	thoiGian: record?.thoiGianKhoaChamDiem?.thoiGianBatDau,

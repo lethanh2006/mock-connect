@@ -5,15 +5,21 @@ import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
+import { useIntl } from 'umi';
 import StepDotChamDiemRenLuyen from '../Dot/Step';
 
 const KhaiBaoMinhChungPage = () => {
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('25%');
 	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
+	const intl = useIntl();
 
 	return (
-		<Card title={'Phiếu điểm rèn luyện'} className='card-big-title card-borderless' variant='borderless'>
+		<Card
+			title={intl.formatMessage({ id: 'diemrenluyen.phieudiemrenluyen.title' })}
+			className='card-big-title card-borderless'
+			variant='borderless'
+		>
 			<Card style={{ paddingTop: 32 }}>
 				<StepDotChamDiemRenLuyen />
 				<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>

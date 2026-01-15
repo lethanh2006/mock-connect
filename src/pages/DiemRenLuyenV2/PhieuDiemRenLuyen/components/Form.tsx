@@ -19,7 +19,7 @@ import dayjs from '@/utils/dayjs';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Form, message, Modal, Spin, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import { Footer } from '../Footer';
 import FormGuiKhieuNai from '../FormGuiKhieuNai';
 import { FieldsNhapDiem } from './FieldsNhapDiem';
@@ -66,6 +66,7 @@ const FormNhapPhieuDiem = () => {
 		recordDot?.thoiGianSVChamDiem &&
 		(dayjs().isAfter(dayjs(recordDot.thoiGianSVChamDiem.thoiGianKetThuc)) ||
 			dayjs().isBefore(dayjs(recordDot?.thoiGianSVChamDiem?.thoiGianBatDau)));
+	const intl = useIntl();
 
 	const handleTinhDiemVaPhanLoai = (formValues_?: Partial<any>) => {
 		const formValues = formValues_ ?? form.getFieldsValue();
@@ -102,7 +103,7 @@ const FormNhapPhieuDiem = () => {
 			}
 		} catch (e) {
 			console.log(e);
-			message.warning('Một số điểm chưa nhập vui lòng kiểm tra lại');
+			message.warning(intl.formatMessage({ id: 'diemrenluyen.form.thongbao.kiemtramotsodiemchuadung' }));
 		}
 	};
 
@@ -228,7 +229,7 @@ const FormNhapPhieuDiem = () => {
 					inline: 'center',
 				}}
 				onFinishFailed={() => {
-					message.warning('Một số điểm chưa nhập vui lòng kiểm tra lại');
+					message.warning(intl.formatMessage({ id: 'diemrenluyen.form.thongbao.kiemtramotsodiemchuadung' }));
 				}}
 			>
 				{recordDot?.kyHoc && (
@@ -250,7 +251,10 @@ const FormNhapPhieuDiem = () => {
 					title={
 						<div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
 							<div>
-								PHIẾU ĐIỂM RÈN LUYỆN <Tag color={primaryColor}>{tongDiemCTSVDanhGia} điểm</Tag>
+								{intl.formatMessage({ id: 'diemrenluyen.form.title' })}{' '}
+								<Tag color={primaryColor}>
+									{tongDiemCTSVDanhGia} {intl.formatMessage({ id: 'diemrenluyen.form.diem' })}
+								</Tag>
 								{recBienBanHop?._id &&
 									recBienBanHop.trangThaiDuyet === ETrangThaiDuyetBienBanHopDiemRenLuyen.DA_DUYET &&
 									recPhieuDiem?._id && (
@@ -263,34 +267,37 @@ const FormNhapPhieuDiem = () => {
 													}}
 													type='primary'
 												>
-													Gửi khiếu nại
+													{intl.formatMessage({ id: 'diemrenluyen.form.button.guikhieunai' })}
 													<QuestionCircleOutlined />
 												</Button>
 											) : (
 												<div>
-													Sinh viên đã gửi khiếu nại (
+													{intl.formatMessage({ id: 'diemrenluyen.form.status.dagui' })} (
 													<a
 														onClick={() => {
 															Modal.info({
-																title: 'Chi tiết khiếu nại',
+																title: intl.formatMessage({ id: 'diemrenluyen.form.chitietkhieunai' }),
 																content: (
 																	<div>
 																		<div>
-																			<b>Nội dung khiếu nại:</b> {recPhieuDiem?.noiDungKhieuNai}
+																			<b>{intl.formatMessage({ id: 'diemrenluyen.form.noidungkhieunai' })}:</b>{' '}
+																			{recPhieuDiem?.noiDungKhieuNai}
 																		</div>
 																		<div>
-																			<b>Tập tin minh chứng (nếu có): </b>{' '}
+																			<b>{intl.formatMessage({ id: 'diemrenluyen.form.label.minhchung' })}: </b>{' '}
 																			{recPhieuDiem?.urlFileDinhKem?.map((item) => (
 																				<Tag color={primaryColor} key={item}>
 																					<a href={item} target='_blank' rel='noreferrer'>
-																						Xem tập tin
+																						{intl.formatMessage({ id: 'diemrenluyen.form.link.xemtaptin' })}
 																					</a>
 																				</Tag>
 																			))}
 																		</div>
 																		{recPhieuDiem?.traLoiNoiDungKhieuNai && (
 																			<div>
-																				<b style={{ color: primaryColor }}>Ghi chú của phòng CTSV: </b>
+																				<b style={{ color: primaryColor }}>
+																					{intl.formatMessage({ id: 'diemrenluyen.form.ghichu.ctsv' })}:{' '}
+																				</b>
 																				{recPhieuDiem.traLoiNoiDungKhieuNai}
 																			</div>
 																		)}
@@ -299,10 +306,13 @@ const FormNhapPhieuDiem = () => {
 															});
 														}}
 													>
-														xem chi tiết
+														{intl.formatMessage({ id: 'diemrenluyen.form.link.xemchitiet' })}
 													</a>{' '}
-													hoặc <a onClick={() => exportDonKhieuNaiModel(recPhieuDiem._id)}>xuất mẫu đơn</a>
-													), trạng thái:{' '}
+													hoặc{' '}
+													<a onClick={() => exportDonKhieuNaiModel(recPhieuDiem._id)}>
+														{intl.formatMessage({ id: 'diemrenluyen.form.link.xuatmaudon' })}
+													</a>
+													), {intl.formatMessage({ id: 'diemrenluyen.form.label.trangthai' })}:{' '}
 													<Tag color={MapKeyColorTrangThaiKhieuNai[recPhieuDiem.trangThaiXuLyKhieuNai]}>
 														{recPhieuDiem.trangThaiXuLyKhieuNai}
 													</Tag>
@@ -330,7 +340,11 @@ const FormNhapPhieuDiem = () => {
 								) : (
 									''
 								)}{' '}
-								{ngoaiThoiGian ? <Tag color={primaryColor}>Ngoài thời gian chấm điểm</Tag> : ''}
+								{ngoaiThoiGian ? (
+									<Tag color={primaryColor}>{intl.formatMessage({ id: 'diemrenluyen.form.tag.ngoaithoigian' })}</Tag>
+								) : (
+									''
+								)}
 							</div>
 						</div>
 					}
