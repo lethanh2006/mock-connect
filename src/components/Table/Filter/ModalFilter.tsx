@@ -12,7 +12,8 @@ const { Text } = Typography;
 
 const ModalFilter = () => {
 	const intl = useIntl();
-	const { finalColumns: columns, setFilters, visibleFilter, setVisibleFilter, filters } = useTableContext();
+	const { columns: originalColumns, finalColumns, setFilters, visibleFilter, setVisibleFilter, filters } = useTableContext();
+	const columns = originalColumns || finalColumns;
 	const [form] = Form.useForm();
 	const { fieldsFilterable } = useFilterFields(columns, form);
 
