@@ -42,7 +42,8 @@ export default {
 	'global.rightcontent.thongbao.dong': 'Đóng',
 
 	//Table
-	'global.table.column.stt': 'TT',
+	'global.table.column.tt': 'TT',
+
 	'global.table.export.title': 'Xuất dữ liệu',
 	'global.table.export.khadung': 'Các trường khả dụng',
 	'global.table.export.choose.chontatca': 'Chọn tất cả',
@@ -110,6 +111,17 @@ export default {
 	'global.table.import.validate.dongkhongthanhcong': 'dòng không thành công',
 	'global.table.import.validate.button.luudulieu': 'Lưu dữ liệu',
 	'global.table.import.validate.button.hoanthanh': 'Hoàn thành',
+	'global.table.import.validate.excel.thutuhang': 'TT hàng',
+	'global.table.import.validate.excel.thongtinloi': 'Thông tin lỗi',
+	'global.table.import.validate.error': 'Có lỗi xảy ra!',
+	'global.table.import.result': 'Tất cả dữ liệu {count} hàng đã được {status}',
+	'global.table.import.status.validated': 'kiểm tra hợp lệ',
+	'global.table.import.status.saved': 'lưu thành công',
+	'global.table.import.validate.thanhcong': 'Thành công ({count})',
+	'global.table.import.validate.thatbai': 'Thất bại ({count})',
+	'global.table.import.validate.popconfirm': 'Tồn tại dữ liệu không hợp lệ',
+	'global.table.import.validate.popconfirm1': 'Vẫn xác nhận Lưu dữ liệu?',
+	'global.table.import.validate.popconfirm2': 'Xác nhận lưu dữ liệu vào hệ thống?',
 
 	'global.table.index.button.themmoi': 'Thêm mới',
 	'global.table.index.button.themmoi.tooltip': 'Thêm mới dữ liệu',
@@ -170,6 +182,9 @@ export default {
 	'global.table.operator.or': 'Hoặc',
 	'global.table.operator.and': 'Và',
 
+	'global.table.filterdropdown.xemthem': 'Xem thêm',
+	'global.table.filterdropdown.boloc': 'Bộ lọc tùy chỉnh',
+
 	'global.tablestatic.button.themmoi': 'Thêm mới',
 	'global.tablestatic.button.themmoi.tooltip': 'Thêm mới dữ liệu',
 	'global.tablestatic.button.xoa': 'Tải lại',
@@ -196,4 +211,11 @@ export default {
 	'global.uploadfile.button.chontep': 'Chọn tệp',
 
 	'global.column.action': 'Thao tác',
+
+	// PDFViewer
+	'global.pdfviewer.dangtai': 'Đang tải...',
+	'global.pdfviewer.dangtaitailieu': 'Đang tải tài liệu. Vui lòng chờ trong giây lát...',
+	'global.pdfviewer.truoc': 'Trước',
+	'global.pdfviewer.sau': 'Sau',
+	'global.pdfviewer.trang': 'Trang {pageNumber} trên tổng số {numPages}',
 };

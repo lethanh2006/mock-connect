@@ -77,6 +77,7 @@ const TableBase = (props: TableBaseProps) => {
 				params: props.params,
 				getData,
 				setFilters: model?.setFilters,
+				columns: props.columns || [],
 			}}
 		>
 			<TableBaseContent {...props} />

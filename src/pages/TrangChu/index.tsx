@@ -1,8 +1,10 @@
+import { useIntl } from '@umijs/max';
 import { Col, Row } from 'antd';
 import ThongKeMuonSachCard from '../ThuVien/MuonTraSach/Dashboard/Card';
 import VaoRaThuVienDashboardCard from '../ThuVien/VaoRaThuVien/Dashboard/Card';
 import CardDichVuSinhVien from './components/DichVu';
 import LichDashboard from './components/Lich';
+import './components/style.less';
 import CardSuKienSapToi from './components/SuKienSapToi';
 import CardThongBaoDashboard from './components/ThongBao';
 import TinTucDashboardWrapper from './components/TinTuc/TinTucDashboardWrapper';
@@ -14,6 +16,7 @@ import CardDienDanDashboard from './HocTapRenLuyen/DienDan';
 import './styles.less';
 
 const TrangChu = () => {
+	const intl = useIntl();
 	return (
 		<Row gutter={[24, 24]}>
 			<Col span={24}>

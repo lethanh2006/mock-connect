@@ -58,4 +58,9 @@ export default {
 	...lichthi,
 	...baithicuoiky,
 	...activity,
+
+	'pages.trangchu.title': 'TRAINING MANAGEMENT SUBSYSTEM',
+	'pages.trangchu.subtitle': 'COMMAND AND CONTROL SOFTWARE SYSTEM',
+	'pages.gioithieu.title': 'ABOUT',
+	'pages.gioithieu.subtitle': 'COMMAND AND CONTROL SOFTWARE SYSTEM',
 };

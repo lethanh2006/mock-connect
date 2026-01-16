@@ -37,6 +37,7 @@ export const normalizeFilters = (filters: any[]): TFilter<any>[] => {
 				operator: f.operator,
 				values: Array.isArray(f.values) ? f.values : f.values !== undefined ? [f.values] : [],
 				active: true,
+				readOnly: f.readOnly,
 			});
 		}
 	});
