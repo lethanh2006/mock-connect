@@ -1,11 +1,15 @@
-import vi from '@/components/Chart/vi.json';
+import { getLocale } from '@umijs/max';
 import { type ApexOptions } from 'apexcharts';
+import en from 'apexcharts/dist/locales/en.json';
+import vi from 'apexcharts/dist/locales/vi.json';
 import Chart from 'react-apexcharts';
 import { useIntl, useModel } from 'umi';
 
 const ChartSoTinChi = () => {
 	const intl = useIntl();
 	const { danhSach } = useModel('daotao.ketquahocky');
+	const locale = getLocale();
+	const defaultLocale = locale === 'vi-VN' ? 'vi' : 'en';
 
 	const series = [
 		{
@@ -32,8 +36,8 @@ const ChartSoTinChi = () => {
 
 	const options: ApexOptions = {
 		chart: {
-			defaultLocale: 'vi',
-			locales: [vi],
+			defaultLocale,
+			locales: [vi, en],
 			stacked: true,
 		},
 		title: {
