@@ -7,9 +7,10 @@ import type { ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
 import { currentRole } from '@/utils/ip';
 import { Button } from 'antd';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: NotificationType }) => {
+	const intl = useIntl();
 	const { getData, type } = props;
 	const {
 		formSubmiting,
@@ -25,7 +26,7 @@ const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: Notificatio
 			type,
 			recordThongBaoDanhSach.title,
 			recordThongBaoDanhSach.content,
-			AppModules[currentRole].title,
+			intl.formatMessage({ id: AppModules[currentRole].title }),
 			recordThongBaoDanhSach.vaiTroNguoiNhan,
 			'1',
 			getData,
@@ -67,13 +68,7 @@ const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: Notificatio
 
 	return (
 		<>
-			<TableStaticData
-				columns={columns}
-				data={danhSachThongBaoDanhSach ?? []}
-				addStt
-				hasTotal
-				otherProps={{ pagination: true }}
-			/>
+			<TableStaticData columns={columns} data={danhSachThongBaoDanhSach ?? []} addStt hasTotal />
 
 			<div className='form-footer'>
 				<Button loading={formSubmiting} onClick={() => handleGui()} type='primary'>

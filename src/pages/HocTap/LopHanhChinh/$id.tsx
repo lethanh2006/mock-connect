@@ -5,17 +5,20 @@ import { currentRole } from '@/utils/ip';
 import { TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Card, Col, Row, Tabs } from 'antd';
 import { useEffect } from 'react';
-import { history, useModel, useParams } from 'umi';
+import { history, useIntl, useModel, useParams } from 'umi';
 import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
 import DienDanLopPage from '../LopHocPhan/DienDan';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
 
 const DetailLopHanhChinh = () => {
+	const intl = useIntl();
 	const { record, sinhVienGetByIdModel, loading } = useModel('daotao.lophanhchinh');
 	const { id } = useParams<{ id: string }>();
 
 	useEffect(() => {
-		document.title = [record?.ten, AppModules[currentRole].title].filter(Boolean).join(' - ');
+		document.title = [record?.ten, intl.formatMessage({ id: AppModules[currentRole].title })]
+			.filter(Boolean)
+			.join(' - ');
 	}, [record?.ten]);
 
 	useEffect(() => {
@@ -60,7 +63,7 @@ const DetailLopHanhChinh = () => {
 					</Row>
 				</Tabs.TabPane>
 				<Tabs.TabPane tab='Thông báo' key={1}>
-					<ThongBaoLopPage loai='lop-hanh-chinh' idLop={id} />
+					<ThongBaoLopPage loai='lop-hanh-chinh' idLop={id ?? ''} />
 				</Tabs.TabPane>
 				<Tabs.TabPane tab='Diễn đàn' key={2}>
 					<DienDanLopPage idLopHanhChinh={id} />
