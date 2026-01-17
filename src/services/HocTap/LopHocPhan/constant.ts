@@ -60,33 +60,57 @@ export enum ETrangThaiDangKyGiangDay {
 export enum ELoaiDiemChu {
 	A_PLUS = 'A+',
 	A = 'A',
+	// A_MINUS = 'A-',
 	B_PLUS = 'B+',
 	B = 'B',
+	// B_MINUS = 'B-',
 	C_PLUS = 'C+',
 	C = 'C',
+	// C_MINUS = 'C-',
 	D_PLUS = 'D+',
 	D = 'D',
-	F = 'F',
+	// D_MINUS = 'D-',
 	PASS = 'P',
-	HOAN_THI = 'I', // hoãn thi
+	// CR = 'CR',
+	F = 'F',
+	// NCR = 'NCR',
+	HOAN_THI = 'I', // hoãn thi (Incomplete)
 	CHUA_DU_DU_LIEU = 'X', // chưa đủ dữ liệu
 	MIEN_THI = 'M', // miễn thi
+	// IP = 'IP', // In Progress
+	// MT = 'MT', // Multi-term
+	// NGR = 'NGR',
+	// W = 'W', // rút khỏi khóa học (Withdrawn)
+	// DAT_NGOAI_CHUONG_TRINH = 'S', // Đạt ngoài chương trình Stastifcation
+	// KHONG_DAT_NGOAI_CHUONG_TRINH = 'U', // Không đạt ngoài chương trình Unsatisfactory
 }
 
-export const ColorDiemChu = {
+export const ColorDiemChu: Record<ELoaiDiemChu, string> = {
 	[ELoaiDiemChu.A_PLUS]: '#13b755',
 	[ELoaiDiemChu.A]: '#13b755',
+	// [ELoaiDiemChu.A_MINUS]: '#13b755',
 	[ELoaiDiemChu.B_PLUS]: '#33adff',
 	[ELoaiDiemChu.B]: '#33adff',
+	// [ELoaiDiemChu.B_MINUS]: '#33adff',
 	[ELoaiDiemChu.C_PLUS]: '#ffab50',
 	[ELoaiDiemChu.C]: '#ffab50',
+	// [ELoaiDiemChu.C_MINUS]: '#ffab50',
 	[ELoaiDiemChu.D_PLUS]: '#ff7171',
 	[ELoaiDiemChu.D]: '#ff7171',
+	// [ELoaiDiemChu.D_MINUS]: '#ff7171',
 	[ELoaiDiemChu.F]: '#a90b00',
+	// [ELoaiDiemChu.NCR]: '#ff7171',
 	[ELoaiDiemChu.PASS]: '#13b755',
+	// [ELoaiDiemChu.CR]: '#13b755',
 	[ELoaiDiemChu.HOAN_THI]: 'rgb(173 173 173)',
 	[ELoaiDiemChu.CHUA_DU_DU_LIEU]: 'rgb(173 173 173)',
 	[ELoaiDiemChu.MIEN_THI]: '#13b755',
+	// 	[ELoaiDiemChu.IP]: 'rgb(173 173 173)',
+	// [ELoaiDiemChu.MT]: '#13b755',
+	// [ELoaiDiemChu.NGR]: 'ff7171',
+	// [ELoaiDiemChu.W]: 'rgb(173 173 173)',
+	// [ELoaiDiemChu.DAT_NGOAI_CHUONG_TRINH]: '#13b755',
+	// [ELoaiDiemChu.KHONG_DAT_NGOAI_CHUONG_TRINH]: '#ff7171',
 };
 
 //LMS
