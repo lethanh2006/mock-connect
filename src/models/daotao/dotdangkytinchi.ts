@@ -135,6 +135,7 @@ export default () => {
 						ten: item.lopHocPhan.ten,
 						soTinChi: item.lopHocPhan?.hocPhan?.soTinChi ?? 0,
 						loai: item.loai,
+						loaiLop: item.lopHocPhan.loai,
 						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
 						maKhoaNganh: item.maKhoaNganh,
 					})) ?? [];
