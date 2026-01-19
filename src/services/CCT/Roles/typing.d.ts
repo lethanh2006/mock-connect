@@ -3,7 +3,7 @@ declare module RolesManagement {
 		_id: string;
 		code: string;
 		name: string;
-		levelId: string;
+		levelsId: string;
 		level: LevelsManagement.IRecord;
 		order: number;
 		description: string;

@@ -11,7 +11,7 @@ declare module ActivityOutCome {
 		activitiesType: ActivitiesManagement.IRecord;
 		rolesId: string;
 		roles?: RolesManagement.IRecord;
-		levelId: string;
+		levelsId: string;
 		levels?: LevelsManagement.IRecord;
 		organizer: string;
 		description: string;

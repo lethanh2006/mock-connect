@@ -1,6 +1,4 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useModel } from 'umi';
 import AvatarDropdown from './AvatarDropdown';
 import styles from './index.less';
@@ -10,6 +8,10 @@ import NoticeIconView from './NoticeIcon';
 
 const GlobalHeaderRight: React.FC = () => {
 	const { initialState } = useModel('@@initialState');
+
+	useEffect(() => {
+		console.log('Mounted GlobalHeaderRight');
+	}, []);
 
 	if (!initialState || !initialState.currentUser) {
 		return null;

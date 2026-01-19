@@ -2,7 +2,7 @@ import { MenuOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Card, ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
+import { Card, ConfigProvider, Space, Table, type PaginationProps } from 'antd';
 import type { FilterValue } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import { useEffect } from 'react';
@@ -204,15 +204,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			<TableHeader />
 
-			<ConfigProvider
-				renderEmpty={() => (
-					<Empty
-						style={{ marginTop: 32, marginBottom: 32 }}
-						description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
-						image={props.otherProps?.size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
-					/>
-				)}
-			>
+			<ConfigProvider>
 				{rowSortable ? (
 					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 						<SortableContext items={tableData.map((item) => item.key)} strategy={verticalListSortingStrategy}>
