@@ -14,6 +14,10 @@ import {
 	MenuOutlined,
 	UndoOutlined,
 } from '@ant-design/icons';
+<<<<<<< Updated upstream
+=======
+// import { useModel } from '@umijs/max';
+>>>>>>> Stashed changes
 import { Button, Divider, Popconfirm, Popover, Spin, Tag } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
