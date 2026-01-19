@@ -58,10 +58,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			setFilters(tempFilters);
 		} else {
 			// Tìm column tương ứng để check có handleFilter không
-			const column = columns.find(
-				(col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex)
-			);
-			// Nếu column có handleFilter => đánh dấu readonly
+			const column = columns.find((col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex)); // Nếu column có handleFilter => đánh dấu readonly
 			const readOnly = !!column?.handleFilter;
 
 			const filter = getFilterColumn(dataIndex);
@@ -164,9 +161,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			setFilters(tempFilters);
 		} else {
 			// Tìm column tương ứng để check có handleFilter không
-			const column = columns.find(
-				(col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex)
-			);
+			const column = columns.find((col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex));
 			// Nếu column có handleFilter => đánh dấu readonly
 			const readOnly = !!column?.handleFilter;
 
@@ -279,7 +274,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
 				// align: 'center',
-				width: 50,
+				width: 60,
 				render: (val, rec) => {
 					const phanVungHienTai = dsPhanVung?.find((item) => item?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';

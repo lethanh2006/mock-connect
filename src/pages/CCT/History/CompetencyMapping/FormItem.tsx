@@ -87,7 +87,7 @@ const FormItemCompetencyMapping = (props: {
 			</TableStaticData>
 
 			<Modal
-				title={`${edit ? intl.formatMessage({ id: 'global.button.chinhsua' }) : intl.formatMessage({ id: 'global.button.themmoi' })} Attributes Competency Mapping`}
+				title={`${edit ? intl.formatMessage({ id: 'global.button.chinhsua' }) : intl.formatMessage({ id: 'global.button.themmoi' })} Attributes Mapping`}
 				open={visibleForm}
 				width={600}
 				footer={null}

@@ -1,3 +1,4 @@
+import ActivityUpComming from '@/pages/CCT/Activity/ActivityUpComming';
 import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
 import { landingUrl } from '@/services/base/constant';
 import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
@@ -6,7 +7,7 @@ import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, Use
 import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
 import { rgba } from 'polished';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import { OIDCBounder } from '../OIDCBounder';
 import { EOperatorType } from '../Table/constant';
@@ -19,6 +20,8 @@ const AvatarDropdown = () => {
 	const { getThongTinCuaToiModel, record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { danhSach: dsPhanVung, getPartitionCodeMeModel } = useModel('core.phanvunguser');
 	const { getAllModel: getAllPhanVung } = useModel('core.phanvungdulieu');
+	const { getByIdModel: getSuKien } = useModel('cct.activityoutcome');
+	const [visibleOutCome, setVisibleOutCome] = useState<boolean>(false);
 
 	const avatarUrl = recSinhVien?.anhDaiDienUrl ?? initialState?.currentUser?.picture;
 	const currentPartition = localStorage.getItem('partitionCode');
@@ -100,6 +103,14 @@ const AvatarDropdown = () => {
 		}
 	};
 
+	const getSuKienModel = () => {
+		getSuKien('due', true).then((res) => {
+			if (res?._id) {
+				setVisibleOutCome(true);
+			}
+		});
+	};
+
 	useEffect(() => {
 		if (initialState?.currentUser?.ssoId) {
 			getThongTinCuaToiModel().then((res) => {
@@ -124,6 +135,7 @@ const AvatarDropdown = () => {
 			});
 
 			handleCheckKhaoSatBatBuoc();
+			getSuKienModel();
 
 			//Get All phân vùng để lấy mã màu
 			getAllPhanVung();
@@ -164,11 +176,11 @@ const AvatarDropdown = () => {
 				label: item?.dataPartition?.name ?? item?.dataPartition?.ma,
 				style: isActive
 					? {
-						backgroundColor: activeBgColor,
-						borderLeft: `3px solid ${activeColor}`,
-						color: activeColor,
-						fontWeight: 'bold',
-					}
+							backgroundColor: activeBgColor,
+							borderLeft: `3px solid ${activeColor}`,
+							color: activeColor,
+							fontWeight: 'bold',
+						}
 					: undefined,
 				onClick: () => {
 					localStorage.setItem('partitionCode', code);
@@ -208,8 +220,7 @@ const AvatarDropdown = () => {
 		{
 			key: 'portal',
 			icon: <GlobalOutlined />,
-			label:
-				`${intl.formatMessage({ id: `modules.cong-thong-tin` }) ?? intl.formatMessage({ id: 'app.header.portal', defaultMessage: 'Cổng thông tin' })}`,
+			label: `${intl.formatMessage({ id: `modules.cong-thong-tin` }) ?? intl.formatMessage({ id: 'app.header.portal', defaultMessage: 'Cổng thông tin' })}`,
 			onClick: () => window.open(landingUrl),
 		},
 		{ type: 'divider', key: 'divider' },
@@ -250,6 +261,8 @@ const AvatarDropdown = () => {
 			</Dropdown>
 
 			<ModalKhaoSatBatBuoc />
+
+			<ActivityUpComming visible={visibleOutCome} setVisible={setVisibleOutCome} />
 		</>
 	);
 };
