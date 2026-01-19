@@ -378,7 +378,15 @@ const TranscriptReport: React.FC<any> = () => {
 											<div className='info-block'>
 												<div className='description'>{attribute.description}</div>
 												<div style={{ display: 'flex', gap: 120 }}>
-													<div className='rating-list'>
+													<div
+														className='rating-list'
+														style={{
+															color: attribute.color,
+															fontWeight: 650,
+														}}
+													>
+														<span className='rating-label'>Over view:</span>
+
 														{dsLevels?.map((item) => (
 															<div className='rating-row'>
 																<span className='rating-label'>{item?.name}:</span>
@@ -391,10 +399,10 @@ const TranscriptReport: React.FC<any> = () => {
 														className='rating-list'
 														style={{
 															color: attribute.color,
-															fontWeight: 800,
+															fontWeight: 650,
 														}}
 													>
-														<span className='rating-label'>Skill acquierd:</span>
+														<span className='rating-label'>Skill acquired:</span>
 														{listCompetencies?.map((item: any, idx: number) => (
 															<div key={idx} className='rating-label'>
 																• {item}

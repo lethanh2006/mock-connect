@@ -43,15 +43,12 @@ const FormActivityOutCome = (props: any) => {
 			setRecCauTraLoi({} as BieuMau.ICauTraLoiKhaoSat);
 		}
 
-		if (record?.levelsId) {
-			setLevelsId(record?.levelsId);
-		}
-
 		if (record?.rolesId) {
 			setRolesId(record?.rolesId);
 		} else {
 			setRolesId(record?.activities?.coCurricularActivityEquivalency?.[0]?.rolesId);
 		}
+		setLevelsId(record?.levelsId ?? undefined);
 	}, [visibleForm, record?._id]);
 
 	useEffect(() => {
@@ -125,10 +122,16 @@ const FormActivityOutCome = (props: any) => {
 	};
 
 	return (
-		<Card title={intl.formatMessage({ id: 'activity.registered.title' })}>
+		<Card
+			title={
+				isView
+					? intl.formatMessage({ id: 'activity.registered.chitiet' })
+					: intl.formatMessage({ id: 'activity.registered.title' })
+			}
+		>
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
-					<label style={{ display: 'block', marginBottom: 8 }}>
+					<label style={{ display: 'block', margin: '4px 0px', fontWeight: 600, fontSize: 14 }}>
 						{intl.formatMessage({ id: 'activity.registered.role' })}
 					</label>
 					<Select
@@ -145,7 +148,7 @@ const FormActivityOutCome = (props: any) => {
 					/>
 				</Col>
 				<Col span={24}>
-					<label style={{ display: 'block', marginBottom: 8 }}>
+					<label style={{ display: 'block', margin: '4px 0px', fontWeight: 600, fontSize: 14 }}>
 						{intl.formatMessage({ id: 'activity.registered.level' })}
 					</label>
 					<SelectLevelsManagement
@@ -167,6 +170,7 @@ const FormActivityOutCome = (props: any) => {
 							formSubmiting={formSubmiBieuMau || formSubmiting}
 							onCancel={() => setVisibleForm(false)}
 							recBieuMauProps={recBieuMau}
+							hideTieuDe
 						/>
 					</Spin>
 				</Col>

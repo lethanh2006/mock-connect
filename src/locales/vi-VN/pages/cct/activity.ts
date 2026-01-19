@@ -10,10 +10,14 @@ export default {
 	'activity.confirm.dangky': 'Xác nhận đăng ký hoạt động?',
 
 	'activity.detail.role': 'Vai trò',
+	'activity.detail.des': 'Mô tả',
 	'activity.detail.level': 'Cấp độ',
 	'activity.detail.attributes': 'Thuộc tính',
 	'activity.detail.autoApproval': 'Tự động duyệt',
 
+	'activity.detail.warning': 'Bạn có hoạt động sắp hết hạn, hãy tranh thủ hoàn thành nhé!',
+
+	'activity.detail.type': 'Thuộc tính',
 	'activity.detail.coCurricularName': 'Tên hoạt động ngoại khóa',
 	'activity.detail.startDate': 'Ngày bắt đầu',
 	'activity.detail.endDate': 'Ngày kết thúc',
@@ -26,24 +30,33 @@ export default {
 	'activity.column.cca': 'Hoạt động ngoại khóa (CCA)',
 	'activity.column.activity': 'Tên hoạt động',
 	'activity.column.attribute': 'Thuộc tính hoạt động',
-	'activity.column.startdate': 'Ngày bắt đầu',
+	'activity.column.date': 'Thời gian diễn ra',
+	'activity.column.allow': 'Cho phép cập nhật sau sự kiện',
 	'activity.column.created': 'Ngày tạo',
 	'activity.column.role': 'Vai trò',
 	'activity.column.level': 'Cấp độ',
 	'activity.column.status': 'Trạng thái',
 
+	'activity.dahethan': 'Đã hết hạn',
+	'activity.saphethan': 'Sắp hết hạn',
+	'activity.conhan': 'Còn hạn',
+
 	'activity.button.duyet': 'Gửi duyệt',
 	'activity.button.add': 'Thêm minh chứng',
 	'activity.button.chinhsua': 'Chỉnh sửa',
 	'activity.button.xoa': 'Xóa',
+	'activity.button.hethan': 'Đã hết hạn chỉnh sửa',
 
 	'activity.confirm.duyet': 'Bạn có muốn gửi duyệt hoạt động này không?',
 	'activity.confirm.xoa': 'Bạn có muốn xóa hoạt động này không?',
 
 	'activity.registered.title': 'Thêm minh chứng',
+	'activity.registered.chitiet': 'Chi tiết minh chứng',
 	'activity.registered.role': 'Vai trò',
 	'activity.registered.role.select': 'Chọn vai trò',
 	'activity.registered.role.vali': 'Vui lòng chọn vai trò trước khi gửi khảo sát',
+	'activity.registered.level.vali': 'Vui lòng chọn cấp độ trước khi gửi khảo sát',
+	'activity.registered.level': 'Cấp độ',
 
 	'lophocphan.id.khaosat.title': 'Chi tiết khảo sát',
 	'lophocphan.id.khaosat.cau': 'Câu hỏi',
@@ -89,6 +102,8 @@ export default {
 	'activity.perstion.activitiesTypeId.select': 'Chọn hoạt động ngoại khóa (CCA)',
 	'activity.perstion.startDate': 'Ngày bắt đầu',
 	'activity.perstion.startDate.place': 'Chọn ngày bắt đầu',
+	'activity.perstion.endDate': 'Ngày kết thúc',
+	'activity.perstion.endDate.place': 'Chọn ngày kết thúc',
 	'activity.perstion.organizer': 'Đơn vị tổ chức',
 	'activity.perstion.organizer.place': 'Nhập đơn vị tổ chức',
 	'activity.perstion.location': 'Địa điểm',

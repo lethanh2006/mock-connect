@@ -1,9 +1,9 @@
-import dayjs from './dayjs';
-import _ from 'lodash';
 import { removeHtmlTags, urlRegex } from '@/utils/utils';
+import type { Rule } from 'antd/es/form';
+import _ from 'lodash';
 import React from 'react';
 import { FormattedMessage } from 'umi';
-import type { Rule } from 'antd/es/form';
+import dayjs from './dayjs';
 
 const allCharacters =
 	'a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹýếẾ';
@@ -18,7 +18,7 @@ const createRules = () => {
 	const rules = {
 		json: [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					try {
 						if (value) {
 							JSON.parse(value);
@@ -34,7 +34,7 @@ const createRules = () => {
 
 		arrNumber: (max: number, min: number): Rule[] => [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					let isArrNumber = true;
 					if (value && value.length) {
 						value.map((item: any) => {
@@ -48,7 +48,7 @@ const createRules = () => {
 				message: getMessage('global.validation.arrNumber.onlyNumbers'),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					let isValidArrNumber = true;
 					if (value && value.length) {
 						value.map((item: any) => {
@@ -61,7 +61,7 @@ const createRules = () => {
 				message: getMessage('global.validation.arrNumber.max', { max: String(max) }),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					let isValidArrNumber = true;
 					if (value && value.length) {
 						value.map((item: any) => {
@@ -119,14 +119,14 @@ const createRules = () => {
 					: getMessage('global.validation.number.onlyIntegers'),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (parseFloat(value) > max) callback('');
 					callback();
 				},
 				message: getMessage('global.validation.number.max', { max: String(max) }),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (parseFloat(value) < min) callback('');
 					callback();
 				},
@@ -136,7 +136,7 @@ const createRules = () => {
 
 		diem: [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (!Number.isInteger(value / 0.5)) callback('');
 					callback();
 				},
@@ -146,7 +146,7 @@ const createRules = () => {
 
 		diemToeic: [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (!Number.isInteger(value / 5)) callback('');
 					callback();
 				},
@@ -179,7 +179,7 @@ const createRules = () => {
 
 		ngaySinh: [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (dayjs(value).isAfter(dayjs())) callback('');
 					callback();
 				},
@@ -189,7 +189,7 @@ const createRules = () => {
 
 		sauHomNay: [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (value && dayjs(value).isBefore(dayjs().startOf('day'))) callback('');
 					callback();
 				},
@@ -199,7 +199,7 @@ const createRules = () => {
 
 		sauThoiDiem: (mo: any, label: string): Rule[] => [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (mo && value && dayjs(value).isBefore(dayjs(mo))) callback('');
 					callback();
 				},
@@ -209,7 +209,7 @@ const createRules = () => {
 
 		sauNgay: (mo: any, label: string): Rule[] => [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (mo && value && dayjs(value).isBefore(dayjs(mo).startOf('day'))) callback('');
 					callback();
 				},
@@ -219,7 +219,7 @@ const createRules = () => {
 
 		truocHomNay: [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (value && dayjs(value).isAfter(dayjs().startOf('day'))) callback('');
 					callback();
 				},
@@ -229,7 +229,7 @@ const createRules = () => {
 
 		truocThoiDiem: (mo: any, label: string): Rule[] => [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (mo && value && dayjs(value).isAfter(dayjs(mo))) callback('');
 					callback();
 				},
@@ -239,7 +239,7 @@ const createRules = () => {
 
 		truocNgay: (mo: any, label: string): Rule[] => [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (mo && value && dayjs(value).isAfter(dayjs(mo).startOf('day'))) callback('');
 					callback();
 				},
@@ -256,7 +256,7 @@ const createRules = () => {
 
 		requiredHtml: [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (
 						removeHtmlTags(value.text) === '' &&
 						!value.text.includes('<img') &&
@@ -313,7 +313,7 @@ const createRules = () => {
 
 		fileRequired: [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (_.get(value, 'fileList', []).length === 0) callback('');
 					callback();
 				},
@@ -324,7 +324,7 @@ const createRules = () => {
 
 		fileName: [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					const re = new RegExp(
 						'^[ 0-9a-z_\\-aàáạảãâầấậẩẫăằắặẳẵeèéẹẻẽêềếệểễiìíịỉĩoòóọỏõôồốộổỗơờớợởỡuùúụủũưừứựửữyỳýỵỷỹdđ]{1,100}$',
 					);
@@ -340,7 +340,7 @@ const createRules = () => {
 
 		fileType: (arrType: string[]): Rule[] => [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					value?.fileList?.map((item: any) => {
 						const type = item?.name?.split('.')?.pop();
 						if (!arrType?.includes(type)) callback('');
@@ -353,7 +353,7 @@ const createRules = () => {
 
 		fileLimit: (len: number): Rule[] => [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (_.get(value, 'fileList', []).length > len) callback('');
 					callback();
 				},
@@ -367,7 +367,7 @@ const createRules = () => {
 				message: getMessage('global.validation.floatnumber.onlyNumbers'),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					const string = `${value}`.split('.');
 					if (string.length === 2 && string[1].length > sauDauPhay) callback('');
 					callback();
@@ -375,14 +375,14 @@ const createRules = () => {
 				message: getMessage('global.validation.floatnumber.decimalPlaces', { sauDauPhay: String(sauDauPhay) }),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (value > max) callback('');
 					callback();
 				},
 				message: getMessage('global.validation.floatnumber.max', { max: String(max) }),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (value < min) callback('');
 					callback();
 				},
@@ -396,7 +396,7 @@ const createRules = () => {
 				message: getMessage('global.validation.float.onlyNumbersOrDot'),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (!max) {
 						callback();
 						return;
@@ -407,14 +407,14 @@ const createRules = () => {
 				message: getMessage('global.validation.float.max', { max: String(max) }),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (parseFloat(value) < min) callback('');
 					callback();
 				},
 				message: getMessage('global.validation.float.min', { min: String(min) }),
 			},
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					const string = `${value}`.split('.');
 					if (string.length === 2 && string[1].length > sauDauPhay) callback('');
 					callback();
@@ -425,7 +425,7 @@ const createRules = () => {
 
 		notEqual: (text: any, label?: string): Rule[] => [
 			{
-				validator: (_: any, value: any, callback: any) => {
+				validator: (__, value, callback) => {
 					if (value === text) callback('');
 					callback();
 				},

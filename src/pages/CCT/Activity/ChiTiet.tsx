@@ -1,11 +1,13 @@
+import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { IColumn } from '@/components/Table/typing';
-import { Button, Card, Checkbox, Col, Modal, Row, Space, Tag, Typography } from 'antd';
+import { Activity } from '@/services/CCT/Activity/typing';
+import { Button, Col, Descriptions, Image, Modal, Row, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
-const { Text, Paragraph } = Typography;
+const { Paragraph } = Typography;
 
 const ChiTietActivity = (props: { getData?: () => void }) => {
 	const { getData } = props;
@@ -17,6 +19,7 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 			string,
 			{
 				roleName: string;
+				desRole: string;
 				levelName?: string;
 				attributes: { name: string; color?: string }[];
 				autoApprove: boolean;
@@ -30,6 +33,7 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 			if (!map.has(roleId)) {
 				map.set(roleId, {
 					roleName: item.roles?.name ?? '',
+					desRole: item.roles?.description ?? '',
 					levelName: item.roles?.level?.name ?? '',
 					attributes: [],
 					autoApprove: item?.autoApprove ?? false,
@@ -47,11 +51,44 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 		return Array.from(map.values());
 	}, [record]);
 
+	const groupByAttributes = (data: Activity.ICompetencyMappingActivity[]) => {
+		const map = new Map<string, any>();
+
+		data.forEach((item) => {
+			const key = item.attributesId;
+
+			if (!map.has(key)) {
+				map.set(key, {
+					...item,
+					dsCompetencie: [
+						{
+							_id: item._id,
+							competencie: item.competencie,
+						},
+					],
+				});
+			} else {
+				map.get(key).dsCompetencie.push({
+					_id: item._id,
+					competencie: item.competencie,
+				});
+			}
+		});
+
+		return Array.from(map.values());
+	};
+
 	const columns: IColumn<any>[] = [
 		{
 			title: intl.formatMessage({ id: 'activity.detail.role' }),
-			width: 180,
+			width: 150,
 			dataIndex: 'roleName',
+		},
+		{
+			title: intl.formatMessage({ id: 'activity.detail.des' }),
+			width: 220,
+			dataIndex: 'desRole',
+			render: (val, rec) => <ExpandText>{val}</ExpandText>,
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.detail.attributes' }),
@@ -66,76 +103,102 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 				</Space>
 			),
 		},
+	];
 
+	const columnsCompetency: IColumn<any>[] = [
 		{
-			title: intl.formatMessage({ id: 'activity.detail.autoApproval' }),
-			dataIndex: 'autoApprove',
-			width: 90,
-			align: 'center',
-			render: (val) => <Checkbox checked={val} />,
+			title: 'Attributes',
+			dataIndex: 'attributesId',
+			width: 200,
+			render: (val, rec) => <Tag color={rec?.attributes?.color}>{rec?.attributes?.name}</Tag>,
+		},
+		{
+			title: 'Competency',
+			dataIndex: 'dsCompetencie',
+			width: 250,
+			render: (val, rec: any) =>
+				rec?.dsCompetencie
+					?.map((item: any) => item?.competencie?.name)
+					.filter(Boolean)
+					.join(', '),
 		},
 	];
 
 	return (
 		<Modal title={record?.name} open={visibleForm} onCancel={() => setVisibleForm(false)} width={800} footer={null}>
-			<Card style={{ marginTop: 16 }} variant='borderless'>
-				<Row gutter={24}>
-					<Col span={10}>
-						<img
-							src={record?.banner ?? '/logo.png'}
-							alt='banner'
-							style={{
-								width: '80%',
-								borderRadius: 8,
-								objectFit: 'cover',
-							}}
-						/>
-					</Col>
+			<Row gutter={24}>
+				<Col span={8} style={{ textAlign: 'center' }}>
+					<Image
+						src={record?.banner ?? '/logo.png'}
+						alt='banner'
+						style={{
+							width: '100%',
+							borderRadius: 8,
+							objectFit: 'cover',
+						}}
+					/>
+				</Col>
 
-					<Col span={14}>
-						<Space direction='vertical' size={8}>
-							{record?.activitiesType?.attributes?.name && (
+				<Col span={16}>
+					<Descriptions column={1} size='small'>
+						{record?.activitiesType?.attributes?.name && (
+							<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.type' })}>
 								<Tag color={record?.activitiesType?.attributes?.color}>{record?.activitiesType?.attributes?.name}</Tag>
-							)}
+							</Descriptions.Item>
+						)}
 
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.coCurricularName' })}:</strong> {record?.name}
-							</Text>
+						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.coCurricularName' })}>
+							{record?.name}
+						</Descriptions.Item>
 
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.startDate' })}:</strong>{' '}
-								{dayjs(record?.startDate).format('HH:mm DD/MM/YYYY')}
-							</Text>
+						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.startDate' })}>
+							{record?.startDate && dayjs(record?.startDate).format('HH:mm DD/MM/YYYY')}
+						</Descriptions.Item>
 
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.endDate' })}:</strong>{' '}
-								{dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')}
-							</Text>
+						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.endDate' })}>
+							{record?.endDate && dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')}
+						</Descriptions.Item>
 
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.organizer' })}:</strong> {record?.organizer}
-							</Text>
+						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.organizer' })}>
+							{record?.organizer}
+						</Descriptions.Item>
 
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.location' })}:</strong>{' '}
-								{record?.onCampus ? record?.facilityName : record?.otherAddress}
-							</Text>
+						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.location' })}>
+							{record?.onCampus ? record?.facilityName : record?.otherAddress}
+						</Descriptions.Item>
 
-							<Paragraph>
-								<strong>{intl.formatMessage({ id: 'activity.detail.description' })}:</strong>
-								<br />
-								{record?.description}
-							</Paragraph>
-						</Space>
-					</Col>
-				</Row>
-			</Card>
+						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.description' })}>
+							<Paragraph style={{ marginBottom: 0 }}>{record?.description}</Paragraph>
+						</Descriptions.Item>
 
-			<TableStaticData columns={columns} data={groupedEquivalency} size='small' addStt />
+						{record?.allowPostEventResultsUpdate && (
+							<>
+								<Descriptions.Item label='Allow post-event results update'>
+									{record?.allowPostEventResultsUpdate ? 'Allow' : 'Not allow'}
+								</Descriptions.Item>
+								<Descriptions.Item label='Due date'>
+									{record?.dueDate && dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')}
+								</Descriptions.Item>
+							</>
+						)}
+					</Descriptions>
+				</Col>
+			</Row>
+
+			<div style={{ padding: '0px 16px 0px 16px' }}>
+				<TableStaticData
+					columns={columnsCompetency}
+					data={groupByAttributes(record?.coCurricularAttributesEquivalency ?? [])}
+					size='small'
+					addStt
+				/>
+			</div>
+
+			<div style={{ padding: '0px 16px 0px 16px' }}>
+				<TableStaticData columns={columns} data={groupedEquivalency} size='small' addStt />
+			</div>
 
 			<div className='form-footer'>
-				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
-
 				<Button
 					type='primary'
 					onClick={() =>
@@ -149,6 +212,7 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 				>
 					{intl.formatMessage({ id: 'activity.btn.dangky' })}
 				</Button>
+				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>
 		</Modal>
 	);
