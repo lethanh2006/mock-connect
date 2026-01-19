@@ -63,7 +63,6 @@ const ConfigBounder = (props: { children?: any }) => {
 						textTextColor: primaryColor,
 						defaultColor: textColors.text100,
 						borderColorDisabled: 'transparent',
-						textHoverBg: primaryColor,
 						borderRadius: 4,
 						fontWeight: 600,
 					},
@@ -152,6 +151,7 @@ const ConfigBounder = (props: { children?: any }) => {
 						cardBg: officialColors.official500,
 						inkBarColor: highlightColor,
 						cardGutter: 0,
+						horizontalItemPadding: '12px',
 					},
 					Divider: {
 						colorSplit: accentColors.accent700,
