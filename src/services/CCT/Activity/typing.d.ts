@@ -27,6 +27,7 @@ declare module Activity {
 		unitCode: string;
 
 		allowPostEventResultsUpdate?: boolean;
+		dueDate?: Date;
 
 		activitiesTypeId: string | null;
 		activitiesType: ActivitiesManagement.IRecord;
@@ -34,6 +35,7 @@ declare module Activity {
 
 		studentDeclarationApproverList: ActivitiesManagement.IStudentDeclaration[];
 		coCurricularActivityEquivalency: IEquivalency[];
+		coCurricularAttributesEquivalency: ICompetencyMappingActivity[];
 
 		workflow: EApprovalStatus;
 
@@ -72,5 +74,19 @@ declare module Activity {
 		activityOutcome?: IRecord;
 		competencieId: string;
 		competencie?: Competency.IRecord;
+	}
+
+	export interface ICompetencyMappingActivity {
+		_id: string;
+		index?: number;
+		activitiesId: string;
+		activities?: IRecord;
+		competencieId: string;
+		competencie?: Competency.IRecord;
+		attributesId: string;
+		attributes?: AttributesManagement.IRecord;
+
+		//fake
+		dsCompetencie?: Competency.IRecord[];
 	}
 }

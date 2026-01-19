@@ -7,7 +7,7 @@ import SelectCompetency from '../../Competency/Select';
 const FormCompetencyMappingModel = (props: any) => {
 	const intl = useIntl();
 	const [form] = Form.useForm();
-	const { getData } = props;
+	const { getData, attributesId } = props;
 	const { record: recOutCome } = useModel('cct.activityoutcome');
 	const { setVisibleForm, visibleForm, edit, postModel, formSubmiting } = useModel('cct.competencymapping');
 
@@ -35,7 +35,7 @@ const FormCompetencyMappingModel = (props: any) => {
 				<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
 					<Col span={24}>
 						<Form.Item name='competencieId' label='Competency'>
-							<SelectCompetency multiple />
+							<SelectCompetency multiple condition={{ attributesId: attributesId }} />
 						</Form.Item>
 					</Col>
 				</Row>

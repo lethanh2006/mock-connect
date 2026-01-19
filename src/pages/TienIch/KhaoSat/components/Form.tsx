@@ -37,6 +37,9 @@ const FormTraLoiKhaoSat = (props: {
 	khaoSat?: BieuMau.ICauTraLoiKhaoSat;
 
 	disabledForm?: boolean;
+
+	/** Ẩn tiêu đề khảo sát */
+	hideTieuDe?: boolean;
 }) => {
 	const intl = useIntl();
 	const {
@@ -58,7 +61,7 @@ const FormTraLoiKhaoSat = (props: {
 	} = useModel('tienich.bieumau');
 	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [form] = Form.useForm();
-	const { onOk, cauTraLoi, onCancel, hideCard, isBatBuoc, loai, khaoSat, disabledForm } = props;
+	const { onOk, cauTraLoi, onCancel, hideCard, isBatBuoc, loai, khaoSat, disabledForm, hideTieuDe } = props;
 	const formSubmiting = props.formSubmiting !== undefined ? props.formSubmiting : formSubmiting1;
 	const [check, setCheck] = useState<boolean>(false);
 	const record = props?.recBieuMauProps ?? recBieuMau;
@@ -288,8 +291,12 @@ const FormTraLoiKhaoSat = (props: {
 					</div>
 				)}
 
-				<h3>{record?.tieuDe}</h3>
-				<p>{record?.moTa}</p>
+				{!hideTieuDe && (
+					<>
+						<h3>{record?.tieuDe}</h3>
+						<p>{record?.moTa}</p>
+					</>
+				)}
 
 				{record?.danhSachKhoi?.map((item) => (
 					// eslint-disable-next-line react/no-array-index-key

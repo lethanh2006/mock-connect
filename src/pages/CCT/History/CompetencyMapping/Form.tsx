@@ -5,10 +5,13 @@ import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import SelectCompetency from '../../Competency/Select';
 
-const FormCompetencyMapping = (props: { onOk: (val: Activity.ICompetencyMapping[]) => void }) => {
+const FormCompetencyMapping = (props: {
+	onOk: (val: Activity.ICompetencyMapping[]) => void;
+	attributesId?: string;
+}) => {
 	const intl = useIntl();
 	const [form] = Form.useForm();
-	const { onOk } = props;
+	const { onOk, attributesId } = props;
 	const { setVisibleForm, visibleForm, edit } = useModel('cct.competencymapping');
 	const { danhSach: dscompetency } = useModel('cct.competency');
 
@@ -34,7 +37,7 @@ const FormCompetencyMapping = (props: { onOk: (val: Activity.ICompetencyMapping[
 			<Row gutter={[12, 0]} style={{ marginBottom: 12 }}>
 				<Col span={24}>
 					<Form.Item name='competencieId' label='Competency'>
-						<SelectCompetency multiple />
+						<SelectCompetency multiple condition={{ attributesId: attributesId }} />
 					</Form.Item>
 				</Col>
 			</Row>

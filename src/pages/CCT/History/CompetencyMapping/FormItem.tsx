@@ -4,7 +4,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Modal, Popconfirm, Tag } from 'antd';
+import { Button, Modal, Popconfirm } from 'antd';
 import { useIntl, useModel } from 'umi';
 import FormCompetencyMapping from './Form';
 
@@ -12,10 +12,11 @@ const FormItemCompetencyMapping = (props: {
 	value?: Activity.ICompetencyMapping[];
 	onChange?: (data: Activity.ICompetencyMapping[]) => void;
 	disabled?: boolean;
+	attributesId?: string;
 }) => {
 	const intl = useIntl();
 	const { setVisibleForm, visibleForm, setEdit, edit, setRecord, setIsView } = useModel('cct.competencymapping');
-	const { value = [], onChange, disabled } = props;
+	const { value = [], onChange, disabled, attributesId } = props;
 
 	const onDelete = (index: number) => {
 		const data = [...value];
@@ -34,11 +35,6 @@ const FormItemCompetencyMapping = (props: {
 			title: 'Competency',
 			width: 150,
 			render: (val, rec) => rec?.competencie?.name,
-		},
-		{
-			title: 'Attributes',
-			width: 200,
-			render: (val, rec) => <Tag color={rec?.competencie?.attributes?.color}>{rec?.competencie?.attributes?.name}</Tag>,
 		},
 		{
 			title: 'Description',
@@ -91,13 +87,13 @@ const FormItemCompetencyMapping = (props: {
 			</TableStaticData>
 
 			<Modal
-				title={`${edit ? intl.formatMessage({ id: 'global.button.chinhsua' }) : intl.formatMessage({ id: 'global.button.themmoi' })} Attributes Competency Mapping`}
+				title={`${edit ? intl.formatMessage({ id: 'global.button.chinhsua' }) : intl.formatMessage({ id: 'global.button.themmoi' })} Attributes Mapping`}
 				open={visibleForm}
 				width={600}
 				footer={null}
 				onCancel={() => setVisibleForm(false)}
 			>
-				<FormCompetencyMapping onOk={onAdd} />
+				<FormCompetencyMapping onOk={onAdd} attributesId={attributesId} />
 			</Modal>
 		</div>
 	);

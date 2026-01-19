@@ -11,10 +11,14 @@ export default {
 	'activity.confirm.dangky': 'Confirm event registration?',
 
 	'activity.detail.role': 'Role',
+	'activity.detail.des': 'Description',
 	'activity.detail.level': 'Level',
 	'activity.detail.attributes': 'Attributes',
 	'activity.detail.autoApproval': 'Auto Approval',
 
+	'activity.detail.warning': 'You have activities that are nearing the deadline. Please complete them soon!',
+
+	'activity.detail.type': 'Attribute',
 	'activity.detail.coCurricularName': 'Co-curricular Name',
 	'activity.detail.startDate': 'Start Date',
 	'activity.detail.endDate': 'End Date',
@@ -27,21 +31,28 @@ export default {
 	'activity.column.cca': 'Co-curricular Activity (CCA)',
 	'activity.column.activity': 'Activity name',
 	'activity.column.attribute': 'Activity attributes',
-	'activity.column.startdate': 'Start Date',
+	'activity.column.date': 'Date',
+	'activity.column.allow': 'Allow post-event results update',
 	'activity.column.created': 'Date Created',
 	'activity.column.role': 'Roles',
 	'activity.column.level': 'Level',
 	'activity.column.status': 'Status',
 
+	'activity.dahethan': 'Deadline passed',
+	'activity.saphethan': 'Near deadline',
+	'activity.conhan': 'Still valid',
+
 	'activity.button.duyet': 'Send for approval',
 	'activity.button.add': 'Add Evidence',
 	'activity.button.chinhsua': 'Edit',
 	'activity.button.xoa': 'Delete',
+	'activity.button.hethan': 'Editing deadline has passed',
 
 	'activity.confirm.duyet': 'Do you want to send this activity',
 	'activity.confirm.xoa': 'Do you want to remove this activity',
 
 	'activity.registered.title': 'Add Evidence',
+	'activity.registered.chitiet': 'Detail Evidence',
 	'activity.registered.role': 'Roles',
 	'activity.registered.role.select': 'Select role',
 	'activity.registered.role.vali': 'Please select roles before submitting survey',
@@ -87,7 +98,7 @@ export default {
 	'activity.perstion.activitiesOutcomeName': 'Co Curicular Name',
 	'activity.perstion.activitiesOutcomeName.place': 'Enter co curicular name',
 	'activity.perstion.activitiesTypeId': 'Co-curricular Activity (CCA)',
-	'activity.perstion.activitiesTypeId.mapping': 'Attributes competency mapping',
+	'activity.perstion.activitiesTypeId.mapping': 'Attributes mapping',
 	'activity.perstion.activitiesTypeId.select': 'Select Co-curricular Activity (CCA)',
 	'activity.perstion.startDate': 'Start date',
 	'activity.perstion.startDate.place': 'Select start date',
