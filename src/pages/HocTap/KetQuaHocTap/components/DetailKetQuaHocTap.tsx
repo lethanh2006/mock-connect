@@ -189,7 +189,7 @@ const DetailKetQuaHocTap = (props: {
 							}
 							key='1'
 						>
-							<Divider>{intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.diemthanhphan_dkdt' })}</Divider>
+							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtp' })}</Divider>
 							{hasTrongSo ? (
 								<Descriptions bordered>
 									{dauDiemCoTrongSo?.map((item) => (
@@ -202,7 +202,7 @@ const DetailKetQuaHocTap = (props: {
 											{renderDiem(recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk])}
 										</Descriptions.Item>
 									))}
-									<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.dieukienduthi' })}>
+									<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.dkthi' })}>
 										<span style={{ color: recDiem?.trangThaiThi === ETrangThaiThi.CAM_THI ? 'red' : undefined }}>
 											{recDiem?.trangThaiThi ?? '--'}
 										</span>
@@ -211,18 +211,18 @@ const DetailKetQuaHocTap = (props: {
 							) : (
 								<Empty
 									image={Empty.PRESENTED_IMAGE_SIMPLE}
-									description={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.khongcodiemthanhphan' })}
+									description={intl.formatMessage({ id: 'lophocphan.id.ketqua.empty' })}
 								/>
 							)}
 
-							<Divider>{intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.diemthikthp' })}</Divider>
+							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemthi' })}</Divider>
 							<Descriptions bordered>
 								{!hasTrongSoThi ? (
 									<>
-										<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.thilan1' })}>
+										<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi1' })}>
 											{renderDiem(recDiem?.diemThi1)}
 										</Descriptions.Item>
-										<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.thilan2' })}>
+										<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi2' })}>
 											{renderDiem(recDiem?.diemThi2)}
 										</Descriptions.Item>
 									</>
@@ -237,14 +237,14 @@ const DetailKetQuaHocTap = (props: {
 											return (
 												<>
 													<Descriptions.Item
-														label={`${intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.trongsodaudiem' })} ${i}`}
+														label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.trongso' })} ${i}`}
 													>
 														<div>{trongSoThi}%</div>
 													</Descriptions.Item>
-													<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.thilan1' })}>
+													<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi1' })}>
 														{renderDiem(diemThi1)}
 													</Descriptions.Item>
-													<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.thilan2' })}>
+													<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi2' })}>
 														{renderDiem(diemThi2)}
 													</Descriptions.Item>
 												</>
@@ -255,7 +255,7 @@ const DetailKetQuaHocTap = (props: {
 								)}
 
 								{/* <Descriptions.Item
-							label={`${intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.diemcuoi' })} (${100 - trongSoThanhPhan}%)`}
+							label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.diemcuoi' })} (${100 - trongSoThanhPhan}%)`}
 						>
 							{recDiem?.trangThaiDuThi && recDiem.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
 								<span title={trangThaiDuThi[recDiem.trangThaiDuThi]}>{recDiem?.trangThaiDuThi}</span>
