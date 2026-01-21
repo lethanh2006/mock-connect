@@ -4,14 +4,29 @@ import type { IColumn } from '@/components/Table/typing';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { ApiOutlined } from '@ant-design/icons';
-import { Card, Col, Descriptions, Progress, Row, Spin, Tag } from 'antd';
-import { useEffect } from 'react';
+import { Card, Checkbox, Col, Descriptions, Progress, Row, Spin, Tabs, Tag } from 'antd';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 	const intl = useIntl();
 	const { idLopHocPhan } = props;
 	const { getByIdModel, record, loading } = useModel('lophocphan.lmsodoo');
+	const [activeKey, setActiveKey] = useState<string>('1');
+
+	const dataWithTT = useMemo(() => {
+		let tt = 0;
+
+		return (record?.hocLieuAll ?? [])?.map((item) => {
+			if (item?.isCategory === true) {
+				tt = 0;
+				return item;
+			}
+
+			tt++;
+			return { ...item, tt };
+		});
+	}, [record?.hocLieuAll]);
 
 	const getData = () => {
 		if (idLopHocPhan) getByIdModel(`lop-hoc-phan/${idLopHocPhan}/me/info`);
@@ -20,6 +35,14 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 	useEffect(() => {
 		getData();
 	}, [idLopHocPhan]);
+
+	const onCell = (rec: LopHocPhan.THocLieuAllLms) => ({
+		style: {
+			fontWeight: rec?.isCategory === true ? 600 : undefined,
+			backgroundColor: rec?.isCategory === true ? '#e8fafdbf' : undefined,
+		},
+		colSpan: rec?.isCategory === true ? 0 : 1,
+	});
 
 	const columns: IColumn<LopHocPhan.THocLieuLms>[] = [
 		{
@@ -54,6 +77,106 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 				) : (
 					<Tag color='red'>{intl.formatMessage({ id: 'lophocphan.id.lms.chuahoanthanh' })}</Tag>
 				),
+		},
+	];
+
+	const columnsAll: IColumn<LopHocPhan.THocLieuAllLms>[] = [
+		{
+			title: 'TT',
+			dataIndex: 'tt' as any,
+			width: 40,
+			align: 'center',
+			render: (val, rec) => {
+				if (rec.isCategory === true) {
+					return { children: null, props: { colSpan: 0 } };
+				}
+				return val;
+			},
+		},
+		{
+			title: intl.formatMessage({ id: 'lophocphan.id.lms.tenbai' }),
+			dataIndex: 'ten',
+			width: 220,
+			filterType: 'string',
+			onCell: (rec) => ({
+				...onCell(rec),
+				colSpan: rec?.isCategory === true ? 6 : 1,
+			}),
+		},
+		{
+			title: intl.formatMessage({ id: 'lophocphan.id.lms.tgbd' }),
+			dataIndex: 'thoiGianBatDau',
+			width: 120,
+			align: 'center',
+			sortable: true,
+			render: (val, rec) => {
+				if (rec?.isCategory === true) {
+					return { children: null, props: { colSpan: 0 } };
+				}
+				return val && dayjs(val).format('HH:mm DD/MM/YYYY');
+			},
+		},
+		{
+			title: intl.formatMessage({ id: 'lophocphan.id.lms.tgkt' }),
+			dataIndex: 'thoiGianKetThuc',
+			width: 120,
+			align: 'center',
+			sortable: true,
+			render: (val, rec) => {
+				if (rec?.isCategory === true) {
+					return { children: null, props: { colSpan: 0 } };
+				}
+				return val && dayjs(val).format('HH:mm DD/MM/YYYY');
+			},
+		},
+		{
+			title: intl.formatMessage({ id: 'lophocphan.id.lms.baikiemtra' }),
+			dataIndex: 'laBaiKiemTra',
+			width: 90,
+			align: 'center',
+			render: (val, rec) => {
+				if (rec?.isCategory === true) {
+					return { children: null, props: { colSpan: 0 } };
+				}
+				return <Checkbox checked={rec?.laBaiKiemTra} />;
+			},
+		},
+		{
+			title: intl.formatMessage({ id: 'lophocphan.id.lms.trangthai' }),
+			dataIndex: 'textCheckBaiKiemTra',
+			align: 'center',
+			width: 120,
+			render: (val, rec) => {
+				if (rec?.isCategory === true) {
+					return { children: null, props: { colSpan: 0 } };
+				}
+
+				let color = 'default';
+
+				if (rec.hoanThanh && !rec.quaHan) {
+					color = 'green';
+				} else if (rec.hoanThanh && rec.quaHan) {
+					color = 'orange';
+				} else if (!rec.hoanThanh && rec.quaHan) {
+					color = 'red';
+				} else {
+					color = 'blue';
+				}
+
+				return (
+					<Tag
+						color={color}
+						style={{
+							maxWidth: 120,
+							whiteSpace: 'normal',
+							wordBreak: 'break-word',
+							textAlign: 'center',
+						}}
+					>
+						{val}
+					</Tag>
+				);
+			},
 		},
 	];
 
@@ -105,11 +228,33 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 
 				<Col span={24}>
 					<Card variant='borderless'>
-						<div className='fw500' style={{ marginBottom: 12, fontSize: 16 }}>
-							{intl.formatMessage({ id: 'lophocphan.id.lms.ds' })}
-						</div>
+						<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
+							<Tabs.TabPane key='1' tab={intl.formatMessage({ id: 'lophocphan.id.lms.tientrinhht' })} />
+							<Tabs.TabPane key='0' tab={intl.formatMessage({ id: 'lophocphan.id.lms.baigiang' })} />
+						</Tabs>
 
-						<TableStaticData columns={columns} data={record?.hocLieu ?? []} addStt hasTotal onReload={getData} />
+						{activeKey === '0' ? (
+							<TableStaticData
+								size='small'
+								columns={columnsAll}
+								data={dataWithTT}
+								onReload={getData}
+								otherProps={{
+									pagination: false,
+									scroll: { y: 575 },
+								}}
+								hasTotal
+							/>
+						) : activeKey === '1' ? (
+							<TableStaticData
+								size='small'
+								columns={columns}
+								data={record?.hocLieu ?? []}
+								addStt
+								hasTotal
+								onReload={getData}
+							/>
+						) : null}
 					</Card>
 				</Col>
 			</Row>
