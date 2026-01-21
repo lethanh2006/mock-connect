@@ -281,8 +281,11 @@ export declare module LopHocPhan {
 		};
 		tiLeHoanThanh: number;
 		thoiGianTaoVao: string;
-		thoiGianCapNhatGanNhatVao: '03:23:40 22-12-2024';
+		thoiGianCapNhatGanNhatVao: string;
 		hocLieu: THocLieuLms[];
+		hocLieuAll: THocLieuAllLms[];
+
+		textCheckBaiKiemTra: string;
 	}
 
 	export type THocLieuLms = {
@@ -291,6 +294,22 @@ export declare module LopHocPhan {
 		soLanLamBaiKiemTra: number;
 		ten: string;
 		thoiGianHoanThanh: string;
+		isCategory: boolean;
+	};
+
+	export type THocLieuAllLms = {
+		id: number;
+		isCategory: boolean;
+		laBaiKiemTra: boolean;
+		soLanLamBaiKiemTra: number;
+		ten: string;
+		textCheckBaiKiemTra: string;
+		thoiGianBatDau: string;
+		thoiGianHoanThanh: string;
+		thoiGianKetThuc: string;
+		isCategory: boolean;
+		hoanThanh: boolean;
+		quaHan: boolean;
 	};
 
 	export type TSettingLMS = {
