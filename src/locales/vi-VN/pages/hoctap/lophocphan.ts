@@ -142,6 +142,12 @@ export default {
 	'lophocphan.id.lms.tgvaolop': 'Thời gian vào lớp',
 	'lophocphan.id.lms.tgcapnhat': 'Thời gian cập nhật gần nhất',
 	'lophocphan.id.lms.ds': 'Danh sách bài giảng/ Học liệu',
+	'lophocphan.id.lms.dsall': 'Danh sách bài giảng',
+	'lophocphan.id.lms.tgbd': 'Thời gian bắt đầu',
+	'lophocphan.id.lms.tgkt': 'Thời gian kết thúc',
+	'lophocphan.id.lms.baikiemtra': 'Bài kiểm tra',
+	'lophocphan.id.lms.tientrinhht': 'Tiến trình học tập',
+	'lophocphan.id.lms.baigiang': 'Bài giảng',
 
 	'lophocphan.id.baitap.title': 'Nộp bài tập',
 	'lophocphan.id.baitap.dangdienra': 'Đang diễn ra',
