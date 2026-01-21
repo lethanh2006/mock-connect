@@ -2,7 +2,6 @@ import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ETrangThaiThi } from '@/services/HocTap/constant';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Divider, Empty, Space, Spin, Tabs, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
@@ -21,19 +20,24 @@ const DetailKetQuaHocTap = (props: {
 	const [hienThiDiemThi, setHienThiDiemThi] = useState<boolean>(false);
 	const recDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
 
-	const hasTrongSo = !!recDiem?.trongSo1 || !!recDiem?.trongSo2 || !!recDiem?.trongSo3;
-	// Đầu điểm học phần theo đề cương
-	const dauDiemCoTrongSo = danhSachDauDiem.filter(
-		(item) =>
-			!hasTrongSo || // Đề cương học phần học kỳ này ko có trọng số
-			recDiem?.[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk],
-	);
+	const hasTrongSoThi =
+		!!recDiem?.trongSoThi1 ||
+		!!recDiem?.trongSoThi2 ||
+		!!recDiem?.trongSoThi3 ||
+		!!recDiem?.trongSoThi4 ||
+		!!recDiem?.trongSoThi5;
 
-	const hasTrongTrongSoThi = !!recDiem?.trongSoThi1 || !!recDiem?.trongSoThi2 || !!recDiem?.trongSoThi3;
 	const trongSoThanhPhan = _.range(1, 11).reduce((pre, cur) => {
 		const trongSo = +(recDiem?.[`trongSo${cur}` as keyof LopHocPhan.IDiemHpSvHk] ?? 0);
 		return pre + trongSo;
 	}, 0);
+	const hasTrongSo = !!trongSoThanhPhan;
+	// Đầu điểm học phần theo đề cương
+	const dauDiemCoTrongSo = danhSachDauDiem.filter(
+		(item) =>
+			!hasTrongSo || // Đề cương học phần học kỳ này ko có trọng số
+			!!recDiem?.[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk],
+	);
 
 	useEffect(() => {
 		setHienThiDiemThi(false);
@@ -185,8 +189,8 @@ const DetailKetQuaHocTap = (props: {
 							}
 							key='1'
 						>
-							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtp' })}</Divider>
-							{trongSoThanhPhan > 0 ? (
+							<Divider>{intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.diemthanhphan_dkdt' })}</Divider>
+							{hasTrongSo ? (
 								<Descriptions bordered>
 									{dauDiemCoTrongSo?.map((item) => (
 										<Descriptions.Item
@@ -198,7 +202,7 @@ const DetailKetQuaHocTap = (props: {
 											{renderDiem(recDiem?.[`diemThanhPhan${item.field}` as keyof LopHocPhan.IDiemHpSvHk])}
 										</Descriptions.Item>
 									))}
-									<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.dkthi' })}>
+									<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.dieukienduthi' })}>
 										<span style={{ color: recDiem?.trangThaiThi === ETrangThaiThi.CAM_THI ? 'red' : undefined }}>
 											{recDiem?.trangThaiThi ?? '--'}
 										</span>
@@ -207,55 +211,64 @@ const DetailKetQuaHocTap = (props: {
 							) : (
 								<Empty
 									image={Empty.PRESENTED_IMAGE_SIMPLE}
-									description={intl.formatMessage({ id: 'lophocphan.id.ketqua.empty' })}
+									description={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.khongcodiemthanhphan' })}
 								/>
 							)}
 
-							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemthi' })}</Divider>
+							<Divider>{intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.diemthikthp' })}</Divider>
 							<Descriptions bordered>
-								{hasTrongTrongSoThi && (
-									<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.trongso' })}>
-										<div>{hasTrongTrongSoThi ? recDiem.trongSoThi1 : 100 - trongSoThanhPhan}%</div>
-									</Descriptions.Item>
-								)}
-								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi1' })}>
-									{renderDiem(recDiem?.diemThi1)}
-								</Descriptions.Item>
-								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi2' })}>
-									{renderDiem(recDiem?.diemThi2)}
-								</Descriptions.Item>
+								{!hasTrongSoThi ? (
+									<>
+										<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.thilan1' })}>
+											{renderDiem(recDiem?.diemThi1)}
+										</Descriptions.Item>
+										<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.thilan2' })}>
+											{renderDiem(recDiem?.diemThi2)}
+										</Descriptions.Item>
+									</>
+								) : (
+									_.range(1, 6).map((i) => {
+										const trongSoThi = recDiem?.[`trongSoThi${i}` as keyof LopHocPhan.IDiemHpSvHk] as number;
+										const suffix = i > 1 ? i : '';
+										const diemThi1 = recDiem?.[`diemThi1${suffix}` as keyof LopHocPhan.IDiemHpSvHk];
+										const diemThi2 = recDiem?.[`diemThi2${suffix}` as keyof LopHocPhan.IDiemHpSvHk];
 
-								{_.range(2, 6).map((i) =>
-									recDiem?.[`trongSoThi${i}` as keyof LopHocPhan.IDiemHpSvHk] ? (
-										<>
-											<Descriptions.Item label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.trongso' })} ${i}`}>
-												<div>{recDiem?.[`trongSoThi${i}` as keyof LopHocPhan.IDiemHpSvHk] as any}%</div>
-											</Descriptions.Item>
-											<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi1' })}>
-												{renderDiem(recDiem?.[`diemThi1${i}` as keyof LopHocPhan.IDiemHpSvHk])}
-											</Descriptions.Item>
-											<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.thi2' })}>
-												{renderDiem(recDiem?.[`diemThi2${i}` as keyof LopHocPhan.IDiemHpSvHk])}
-											</Descriptions.Item>
-										</>
-									) : null,
+										if (!!trongSoThi) {
+											return (
+												<>
+													<Descriptions.Item
+														label={`${intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.trongsodaudiem' })} ${i}`}
+													>
+														<div>{trongSoThi}%</div>
+													</Descriptions.Item>
+													<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.thilan1' })}>
+														{renderDiem(diemThi1)}
+													</Descriptions.Item>
+													<Descriptions.Item label={intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.thilan2' })}>
+														{renderDiem(diemThi2)}
+													</Descriptions.Item>
+												</>
+											);
+										}
+										return null;
+									})
 								)}
 
-								<Descriptions.Item
-									label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.diemcuoi' })} (${100 - trongSoThanhPhan}%)`}
-								>
-									{recDiem?.trangThaiDuThi && recDiem.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
-										<span title={trangThaiDuThi[recDiem.trangThaiDuThi]}>{recDiem?.trangThaiDuThi}</span>
-									) : (
-										renderDiem(recDiem?.diemKthp)
-									)}
-								</Descriptions.Item>
+								{/* <Descriptions.Item
+							label={`${intl.formatMessage({ id: 'ketquahoctap.ketquahocphan.diemcuoi' })} (${100 - trongSoThanhPhan}%)`}
+						>
+							{recDiem?.trangThaiDuThi && recDiem.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
+								<span title={trangThaiDuThi[recDiem.trangThaiDuThi]}>{recDiem?.trangThaiDuThi}</span>
+							) : (
+								renderDiem(recDiem?.diemKthp)
+							)}
+						</Descriptions.Item> */}
 							</Descriptions>
 
 							{recDiem && (
 								<div style={{ marginTop: 8 }}>
-									{!hienThiDiemThi ? (
-										<Space wrap>
+									<Space wrap>
+										{!hienThiDiemThi && (
 											<a
 												onClick={(e) => {
 													e.preventDefault();
@@ -264,16 +277,18 @@ const DetailKetQuaHocTap = (props: {
 											>
 												{intl.formatMessage({ id: 'lophocphan.id.ketqua.chitiet' })}
 											</a>
-										</Space>
-									) : (
+										)}
+										<a
+											onClick={() => {
+												history.push('/khai-bao-quy-trinh/dang-ky');
+											}}
+										>
+											{intl.formatMessage({ id: 'lophocphan.id.ketqua.phuckhao' })}
+										</a>
+									</Space>
+
+									{hienThiDiemThi && (
 										<>
-											<a
-												onClick={() => {
-													history.push('/khai-bao-quy-trinh/dang-ky');
-												}}
-											>
-												{intl.formatMessage({ id: 'lophocphan.id.ketqua.phuckhao' })}
-											</a>
 											<DiemThiHocKy maHocKy={recDiem?.maHocKy} maHocPhan={recDiem?.maHocPhan} />
 										</>
 									)}
