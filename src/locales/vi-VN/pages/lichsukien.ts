@@ -39,6 +39,7 @@ export default {
 	'lichsukien.chitiet.tieude': 'Tiêu đề bài học',
 	'lichsukien.chitiet.lms': 'Lớp học LMS',
 	'lichsukien.chitiet.lms.duongdan': 'Đường dẫn',
+	'lichsukien.chitiet.duongdan': 'Đường dẫn',
 	'lichsukien.chitiet.hoctructuyen': 'Học trực tuyến',
 	'lichsukien.chitiet.hinhthuc': 'Hình thức giảng dạy',
 	'lichsukien.chitiet.thongbao': 'Thông báo',

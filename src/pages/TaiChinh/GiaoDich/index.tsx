@@ -194,7 +194,7 @@ const GiaoDichPage = () => {
 								rec.status !== ETransactionStatus.PENDING || rec.fromAccount !== ETransactionSourceType.EXTERNAL
 							}
 							icon={<CloseOutlined />}
-							tooltip={intl.formatMessage({ id: 'lichsugiaodich.column.huy' })}
+							tooltip={intl.formatMessage({ id: 'global.button.huy' })}
 							type='link'
 							danger
 						/>
