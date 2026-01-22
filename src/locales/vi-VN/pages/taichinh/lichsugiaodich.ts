@@ -10,6 +10,7 @@ export default {
 	'lichsugiaodich.column.thuchien': 'Thực hiện',
 	'lichsugiaodich.column.hoanthanh': 'Hoàn thành',
 	'lichsugiaodich.column.thaotac': 'Thao tác',
+	'lichsugiaodich.column.thanhtoan': 'Thanh toán',
 	'lichsugiaodich.button.thanhtoan': 'Thanh toán',
 	'lichsugiaodich.button.huy': 'Hủy',
 	'lichsugiaodich.button.noptruoc': 'Nộp trước học phí',
