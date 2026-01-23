@@ -73,7 +73,6 @@ export default {
 	'trangchu.hoctaprenluyen.diemdan.ngaydang': 'Ngày đăng',
 	'trangchu.hoctaprenluyen.diemdan.chuaxem': 'Chưa xem',
 	'trangchu.hoctaprenluyen.diemdan.moinhat': 'Mới nhất',
-	'trangchu.hoctaprenluyen.diemdan.xapsep': 'Sắp xếp',
 	'trangchu.hoctaprenluyen.diemdan.sapxep': 'Sắp xếp',
 	'trangchu.hoctaprenluyen.diemdan.moi': 'Mới',
 	'trangchu.hoctaprenluyen.diemdan.daxem': 'Đã xem',
