@@ -147,7 +147,7 @@ export default {
 	'lophocphan.id.lms.tgkt': 'Thời gian kết thúc',
 	'lophocphan.id.lms.baikiemtra': 'Bài kiểm tra',
 	'lophocphan.id.lms.tientrinhht': 'Tiến trình học tập',
-	'lophocphan.id.lms.baigiang': 'Bài giảng',
+	'lophocphan.id.lms.baigiang': 'Danh sách bài giảng',
 
 	'lophocphan.id.baitap.title': 'Nộp bài tập',
 	'lophocphan.id.baitap.dangdienra': 'Đang diễn ra',
