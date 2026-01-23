@@ -88,7 +88,6 @@ export default {
 	'diemrenluyen.phieudiem.cvhtdanhgia': 'CVHT Chấm điểm',
 	'diemrenluyen.phieudiem.tongdiem': 'TỔNG ĐIỂM',
 	'diemrenluyen.phieudiem.title': 'PHIẾU ĐIỂM RÈN LUYỆN',
-	'diemrenluyen.phieudiem.form.title': 'PHIẾU ĐIỂM RÈN LUYỆN',
 	'diemrenluyen.khaibaominhchung.thongtinchung': 'Thông tin chung',
 	'diemrenluyen.khaibaominhchung.thongtinkhaibao': 'Thông tin khai báo',
 	'diemrenluyen.khaibaominhchung.sinhvien': 'Sinh viên',

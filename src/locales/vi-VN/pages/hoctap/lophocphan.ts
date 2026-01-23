@@ -35,7 +35,6 @@ export default {
 	'lophocphan.id.khaosat': 'Khảo sát sinh viên',
 
 	'lophocphan.id.thongtinchung.hoctructuyen': 'Học trực tuyến',
-	'lophocphan.id.thongtinchung.lophoclms': 'Lớp học LMS',
 	'lophocphan.id.thongtinchung.lms': 'Lớp học LMS',
 	'lophocphan.id.thongtinchung.gioithieu': 'Giới thiệu lớp tín chỉ',
 	'lophocphan.id.thongtinchung.gioithieuchung': 'Giới thiệu chung',
@@ -187,7 +186,6 @@ export default {
 	'lophocphan.id.baitap.tooltip3': 'Đã nộp bài tập hoặc quá thời hạn nộp bài',
 	'lophocphan.id.baitap.nopbai': 'Nộp bài',
 	'lophocphan.id.baitap.luubai': 'Lưu bài',
-	'lophocphan.id.baitap.luulai': 'Lưu bài',
 
 	'lophocphan.id.ketqua.danhgia': 'Đánh giá quá trình',
 	'lophocphan.id.ketqua.baidanhgia': 'Bài đánh giá',

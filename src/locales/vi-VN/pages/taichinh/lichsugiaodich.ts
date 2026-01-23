@@ -11,8 +11,6 @@ export default {
 	'lichsugiaodich.column.hoanthanh': 'Hoàn thành',
 	'lichsugiaodich.column.thaotac': 'Thao tác',
 	'lichsugiaodich.column.thanhtoan': 'Thanh toán',
-	'lichsugiaodich.button.thanhtoan': 'Thanh toán',
-	'lichsugiaodich.button.huy': 'Hủy',
 	'lichsugiaodich.button.noptruoc': 'Nộp trước học phí',
 	'lichsugiaodich.button.tatca': 'Tất cả giao dịch',
 	'lichsugiaodich.confirm.huy': 'Xác nhận hủy giao dịch này?',
