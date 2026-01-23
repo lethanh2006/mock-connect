@@ -72,6 +72,7 @@ const LopHocPhanPage = () => {
 											index={index}
 											backgrounds={backgrounds}
 											diemDanh={{
+												soBuoi: lop?.thongKeDiemDanhLhp?.soBuoi,
 												coMat: lop?.thongKeDiemDanhLhp?.coMat,
 												chuaDiemDanh: lop?.thongKeDiemDanhLhp?.soBuoiChuaDiemDanh,
 											}}
