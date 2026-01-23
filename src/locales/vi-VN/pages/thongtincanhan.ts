@@ -70,6 +70,7 @@ export default {
 	'thongtincanhan.form.thongtin.noisinh': 'Nơi sinh',
 	'thongtincanhan.form.thongtin.loainoisinh': 'Loại nơi sinh',
 	'thongtincanhan.form.thongtin.loainoisinh.place': 'Chọn loại nơi sinh',
+	'thongtincanhan.form.loainoisinh.place': 'Chọn loại nơi sinh',
 	'thongtincanhan.form.thongtin.tp': 'Tỉnh/Thành phố',
 	'thongtincanhan.form.thongtin.tp.place': 'Chọn tỉnh/thành phố',
 	'thongtincanhan.form.thongtin.quocgia': 'Quốc gia',

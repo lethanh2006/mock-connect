@@ -30,7 +30,7 @@ export default {
 	'lophocphan.id.ketqua': 'Academic Results',
 	'lophocphan.id.khaosat': 'Student Surveys',
 	'lophocphan.id.thongtinchung.hoctructuyen': 'Online Learning',
-	'lophocphan.id.thongtinchung.lophoclms': 'LMS Class',
+	'lophocphan.id.thongtinchung.lms': 'LMS Class',
 	'lophocphan.id.thongtinchung.gioithieu': 'Credit Class Introduction',
 	'lophocphan.id.thongtinchung.gioithieuchung': 'General Introduction',
 	'lophocphan.id.thongtinchung.gioithieu.thugon': 'Collapse',
