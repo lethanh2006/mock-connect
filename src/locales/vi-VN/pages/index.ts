@@ -28,6 +28,7 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
+import sinhvien from './sinhvien';
 
 export default {
 	...login,
@@ -60,6 +61,7 @@ export default {
 	...baithicuoiky,
 	...activity,
 	...diemrenluyen,
+	...sinhvien,
 
 	'pages.trangchu.title': 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO',
 	'pages.trangchu.subtitle': 'HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH',

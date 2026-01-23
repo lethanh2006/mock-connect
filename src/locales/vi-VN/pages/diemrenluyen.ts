@@ -111,6 +111,7 @@ export default {
 	'diemrenluyen.minhchung.lienhe': 'Liên hệ',
 	'diemrenluyen.minhchung.nharieng': 'Nhà riêng',
 	'diemrenluyen.minhchung.ktx': 'Ký túc xá',
+	'diemrenluyen.minhchung.chatro': 'Ở nhà trọ/nhà người thân',
 	'diemrenluyen.minhchung.thamgiacongtac': 'Tham gia công tác xã hội',
 	'diemrenluyen.minhchung.capdatgiai': 'Cấp đạt giải',
 	'diemrenluyen.minhchung.noidunghoatdong': 'Nội dung hoạt động',

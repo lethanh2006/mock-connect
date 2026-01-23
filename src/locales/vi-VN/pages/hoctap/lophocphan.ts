@@ -35,7 +35,7 @@ export default {
 	'lophocphan.id.khaosat': 'Khảo sát sinh viên',
 
 	'lophocphan.id.thongtinchung.hoctructuyen': 'Học trực tuyến',
-	'lophocphan.id.thongtinchung.lophoclms': 'Lớp học LMS',
+	'lophocphan.id.thongtinchung.lms': 'Lớp học LMS',
 	'lophocphan.id.thongtinchung.gioithieu': 'Giới thiệu lớp tín chỉ',
 	'lophocphan.id.thongtinchung.gioithieuchung': 'Giới thiệu chung',
 	'lophocphan.id.thongtinchung.gioithieu.thugon': 'Thu gọn',
@@ -189,6 +189,7 @@ export default {
 
 	'lophocphan.id.ketqua.danhgia': 'Đánh giá quá trình',
 	'lophocphan.id.ketqua.baidanhgia': 'Bài đánh giá',
+	'lophocphan.id.ketqua.baodanhgia': 'Bài đánh giá',
 	'lophocphan.id.ketqua.hthp': 'Đánh giá KTHP',
 	'lophocphan.id.ketqua.hthp2': 'Đánh giá KTHP (thi lần 2)',
 	'lophocphan.id.ketqua.diemtb': 'Điểm trung bình',

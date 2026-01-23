@@ -237,7 +237,7 @@ const FormNhapPhieuDiem = (props: { getData: any }) => {
 						title={
 							<>
 								<div style={{ marginBottom: 12 }}>
-									I.{intl.formatMessage({ id: 'diemrenluyen.phieudiem.form.title' })}{' '}
+									I.{intl.formatMessage({ id: 'diemrenluyen.phieudiem.title' })}{' '}
 									<Space>
 										{renderTrangThai()}
 										{ngoaiThoiGian ? (
