@@ -104,19 +104,6 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 			}),
 		},
 		{
-			title: intl.formatMessage({ id: 'lophocphan.id.lms.tgbd' }),
-			dataIndex: 'thoiGianBatDau',
-			width: 120,
-			align: 'center',
-			sortable: true,
-			render: (val, rec) => {
-				if (rec?.isCategory === true) {
-					return { children: null, props: { colSpan: 0 } };
-				}
-				return val && dayjs(val).format('HH:mm DD/MM/YYYY');
-			},
-		},
-		{
 			title: intl.formatMessage({ id: 'lophocphan.id.lms.tgkt' }),
 			dataIndex: 'thoiGianKetThuc',
 			width: 120,
@@ -145,7 +132,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 			title: intl.formatMessage({ id: 'lophocphan.id.lms.trangthai' }),
 			dataIndex: 'textCheckBaiKiemTra',
 			align: 'center',
-			width: 120,
+			width: 160,
 			render: (val, rec) => {
 				if (rec?.isCategory === true) {
 					return { children: null, props: { colSpan: 0 } };
@@ -163,19 +150,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 					color = 'blue';
 				}
 
-				return (
-					<Tag
-						color={color}
-						style={{
-							maxWidth: 120,
-							whiteSpace: 'normal',
-							wordBreak: 'break-word',
-							textAlign: 'center',
-						}}
-					>
-						{val}
-					</Tag>
-				);
+				return <Tag color={color}>{val}</Tag>;
 			},
 		},
 	];
