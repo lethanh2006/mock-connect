@@ -20,6 +20,9 @@ export default {
 	'lophocphan.card.baidang': 'Bài đăng / thảo luận trên diễn đàn',
 	'lophocphan.card.diemthi': 'Điểm thi',
 	'lophocphan.card.tientrinh': 'Tiến trình',
+	'lophocphan.card.tieptheo': 'Tiếp theo',
+	'lophocphan.card.khongco': 'Không có',
+	'lophocphan.card.kyso': 'Trạng thái ký số bảng điểm',
 
 	'lophocphan.hocsaptoi.title': 'Tiết học sắp tới',
 	'lophocphan.hocsaptoi.empty': 'Không có lịch học',
