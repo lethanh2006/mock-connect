@@ -164,9 +164,16 @@ const ConfigBounder = (props: { children?: any }) => {
 						optionSelectedBg: officialColors.official500,
 					},
 					Table: {
-						borderColor: '#e8e8e8',
-						headerBg: '#f8f8f8',
+						borderColor: accentColors?.accent700,
+						headerBg: accentColors?.accent700,
 					},
+					Breadcrumb: {
+						lastItemColor: textColors?.text400,
+						itemColor: textColors?.text300
+					},
+					Typography: {
+						colorTextHeading: textColors?.text400,
+					}
 				},
 			}}
 		>

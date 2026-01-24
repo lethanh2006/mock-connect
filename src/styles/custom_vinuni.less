@@ -43,19 +43,19 @@
 
 	// Status Colors
 	--color-status-100: #329323;
-	--color-status-200: #0E50CF;
-	--color-status-300: #CE7C1E;
-	--color-status-400: #C80F1F;
-	--color-status-500: #491F9D;
-	--color-status-600: #0F8D91;
+	--color-status-200: #0e50cf;
+	--color-status-300: #ce7c1e;
+	--color-status-400: #c80f1f;
+	--color-status-500: #491f9d;
+	--color-status-600: #0f8d91;
 
 	// Status Background Colors
-	--color-status-bg-100: #F5FFEB;
-	--color-status-bg-200: #E2F2FE;
-	--color-status-bg-300: #FFFAE4;
-	--color-status-bg-400: #FFEFEE;
-	--color-status-bg-500: #F8EEFE;
-	--color-status-bg-600: #E2FFFB;
+	--color-status-bg-100: #f5ffeb;
+	--color-status-bg-200: #e2f2fe;
+	--color-status-bg-300: #fffae4;
+	--color-status-bg-400: #ffefee;
+	--color-status-bg-500: #f8eefe;
+	--color-status-bg-600: #e2fffb;
 
 	--color-bg-layout: var(--color-accent-700);
 	--color-icon-hover: var(--vin-color-primary-300);
@@ -79,7 +79,7 @@
 .ant-form-item-required::after {
 	color: var(--form-label-required-mark-color) !important;
 	visibility: visible !important;
-	content: "*" !important;
+	content: '*' !important;
 }
 
 .ant-form-vertical {
@@ -192,18 +192,14 @@
 	}
 }
 
-
-
 .ant-card {
-	height: 100%;
 	border-radius: 6px !important;
 
 	&.card-borderless {
 		box-shadow: none;
+		height: fit-content !important;
 
 		>.ant-card-body {
-			padding: 16px 0;
-
 			.table-base {
 				margin: 0 !important;
 			}
@@ -237,18 +233,6 @@
 
 	&>.ant-card-body {
 		padding: 10px 16px;
-
-		.table-base {
-			margin: 0 -16px !important;
-		}
-
-		&>.ant-card {
-			&>.ant-card-body {
-				.table-base {
-					margin: 0 -16px !important;
-				}
-			}
-		}
 	}
 
 	.ant-drawer .ant-card-body,
@@ -269,6 +253,8 @@
 				font-size: 22px !important;
 				margin-left: 2px !important;
 				color: var(--color-accent-800) !important;
+				display: flex;
+				align-items: center;
 
 				&::after {
 					content: '' !important;
@@ -307,6 +293,10 @@
 			}
 
 			.ant-card-extra {
+				.ant-space-align-center {
+					align-items: start !important;
+				}
+
 				.ant-btn {
 					.ant-btn-icon {
 						display: none !important;
@@ -317,7 +307,7 @@
 
 		>.ant-card-body {
 			border-radius: 4px;
-			background-color: var(--color-text-400) !important;
+			background-color: transparent !important;
 			padding: 0 16px;
 
 			&.ant-spin-nested-loading {
@@ -347,7 +337,6 @@
 			font-size: 18px;
 		}
 	}
-
 }
 
 .ant-modal-title {
@@ -361,7 +350,7 @@
 .card-big-title {
 	&>.ant-card-body {
 		padding: 0 !important;
-		background-color: var(--color-text-400) !important;
+		background-color: transparent !important;
 		border-radius: 8px !important;
 
 		.ant-spin-nested-loading {
@@ -376,10 +365,12 @@
 
 		.ant-card {
 			&>.ant-card-body {
-
-				// padding: 0 !important;
 				.table-base {
-					margin: 0 -16px !important;
+					>.ant-table-wrapper {
+						>.ant-spin-nested-loading {
+							margin: 0 -16px !important;
+						}
+					}
 				}
 
 				&>.ant-card {
@@ -510,7 +501,6 @@
 	background-color: var(--color-accent-700) !important;
 	border-radius: 4px;
 	border: none !important;
-
 }
 
 // Style header của PageContainer - VinUni
@@ -665,11 +655,6 @@
 	}
 }
 
-// Style container của Spin
-.ant-spin-container {
-	background-color: var(--color-text-400) !important;
-}
-
 // Margin cho phân trang bảngant-table-pagination
 .ant-pagination.ant-table-pagination.ant-table-pagination-right {
 	margin-left: 40px !important;
@@ -690,7 +675,7 @@
 	}
 
 	.header {
-		padding: 12px 16px !important;
+		padding: 0 0 12px 0 !important;
 		display: flex;
 		align-items: center !important;
 		flex-direction: row-reverse;
@@ -1178,8 +1163,6 @@
 	font-weight: 600 !important;
 }
 
-
-
 .ant-radio-label,
 .ant-checkbox-label,
 .ant-space-item {
@@ -1278,8 +1261,6 @@
 			.ant-radio-button-wrapper {
 				background-color: var(--color-official-500);
 			}
-
-			;
 		}
 	}
 }
@@ -1296,7 +1277,7 @@
 					transform: translateY(-50%) !important;
 					width: 0 !important;
 					height: 0 !important;
-					border-right: 10px solid var(--color-primary) !important;
+					border-right: 10px solid var(--color-highlight) !important;
 					border-top: 6px solid transparent !important;
 					border-bottom: 6px solid transparent !important;
 					display: block !important;
@@ -1338,6 +1319,29 @@
 			@media (max-width: 768px) {
 				top: 32% !important;
 			}
+		}
+	}
+}
+
+.highlight {
+	background-color: var(--color-official-500) !important;
+}
+
+.card-highlight {
+	.ant-card-head {
+		background-color: var(--color-info-bg) !important;
+		color: var(--color-primary) !important;
+	}
+}
+
+.lich-sap-toi-card {
+	margin: 0 !important;
+}
+
+[data-type='SplitPane'] .ant-card.card-borderless>.ant-card-body .table-base {
+	.ant-table-wrapper {
+		.ant-spin-nested-loading {
+			margin: 0 !important;
 		}
 	}
 }
