@@ -56,4 +56,6 @@ export type TabViewPageComponentProps = {
 	offsetTop?: number;
 
 	cardBigTitle?: boolean;
+
+	extraCard?: React.ReactNode;
 };

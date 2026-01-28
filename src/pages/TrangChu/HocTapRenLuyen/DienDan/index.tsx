@@ -152,7 +152,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 	return (
 		<Card
 			variant='borderless'
-			className='card-borderless card-big-title'
+			className='card-borderless'
 			title={
 				<Space>
 					{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.title' })}{' '}

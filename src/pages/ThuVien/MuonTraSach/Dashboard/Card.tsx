@@ -40,7 +40,7 @@ const ThongKeMuonSachCard = () => {
 	return (
 		<Card
 			variant='borderless'
-			className='card-borderless card-big-title'
+			className='card-borderless'
 			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.muontra.title' })}
 			extra={
 				<Link to={'/thu-vien/lich-su-muon-tra'} type='link' className='xem-tat-ca-link'>

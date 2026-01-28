@@ -141,7 +141,7 @@ const CardDichVuSinhVien = () => {
 		<>
 			<Card
 				variant='borderless'
-				className='card-borderless card-big-title card-dichvu'
+				className='card-borderless card-dichvu'
 				title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.title' })}
 				extra={
 					<Link to='/khai-bao-quy-trinh/dang-ky' className='xem-tat-ca-link'>

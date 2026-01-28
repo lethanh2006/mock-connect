@@ -16,7 +16,7 @@ const VaoRaThuVienDashboardCard = () => {
 	return (
 		<Card
 			variant='borderless'
-			className='card-borderless card-big-title'
+			className='card-borderless'
 			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.thuvien.title' })}
 			extra={
 				<Link to={'/thu-vien/vao-ra'} type='link' className='xem-tat-ca-link'>

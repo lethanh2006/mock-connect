@@ -21,7 +21,7 @@ const CardHocTapRenLuyenDashboard = () => {
 		<Card
 			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.title' })}
 			variant='borderless'
-			className='card-borderless card-big-title'
+			className='card-borderless'
 			style={{ height: '100%' }}
 		>
 			<Row gutter={[16, 16]} style={{ height: '100%' }}>

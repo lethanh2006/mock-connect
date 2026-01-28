@@ -30,7 +30,7 @@ const DangKyTinChiPage = () => {
 	}, [isVerified]);
 
 	return isVerified ? (
-		<Card title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
+		<Card className='card-big-title' title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
 			<FilterDotDangKy />
 
 			<Spin spinning={loading}>
