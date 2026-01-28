@@ -60,7 +60,7 @@ export default {
 	...activity,
 
 	'pages.trangchu.title': 'TRAINING MANAGEMENT SUBSYSTEM',
-	'pages.trangchu.subtitle': 'COMMAND AND CONTROL SOFTWARE SYSTEM',
+	'pages.trangchu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',
 	'pages.gioithieu.title': 'ABOUT',
-	'pages.gioithieu.subtitle': 'COMMAND AND CONTROL SOFTWARE SYSTEM',
+	'pages.gioithieu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',
 };
