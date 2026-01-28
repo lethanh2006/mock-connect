@@ -1,6 +1,6 @@
 import { Card, Form, Row } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import FormRender from './FormRender';
 // import TableThanhVien from './TableThanhVien';
 import { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
@@ -12,6 +12,7 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; mode: 'quyt
 	const [form] = Form.useForm();
 	const { record } = useModel('quytrinh.loaihinh');
 	const { recordQuyTrinhForm, visibleForm, edit } = useModel('quytrinh.quanlyquytrinh');
+	const intl = useIntl();
 
 	const [formValues, setFormValues] = useState<any>({
 		...recordQuyTrinhForm,
@@ -44,7 +45,7 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; mode: 'quyt
 	};
 
 	return (
-		<Card title={props.mode === 'loaihinh' ? `${!edit ? 'Thêm mới' : 'Chỉnh sửa'} ${record?.ten}` : record?.ten}>
+		<Card title={props.mode === 'loaihinh' ? `${!edit ? intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.themmoi' }) : intl.formatMessage({ id: 'diemrenluyen.danhmuc.form.chinhsua' })} ${record?.ten}` : record?.ten}>
 			<Form
 				labelCol={{ span: 24 }}
 				form={form}

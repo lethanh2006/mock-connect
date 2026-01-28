@@ -28,7 +28,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 		getTrongKhoangModel,
 		loading: loadingModel,
 	} = useModel('daotao.thoikhoabieu');
-	const [dateRange] = useState<Dayjs[]>([dayjs().startOf('week'), dayjs().endOf('week')]);
+	const [dateRange] = useState<Dayjs[]>([dayjs().startOf('week'), dayjs().add(1, 'month').endOf('day')]);
 	const [dataCalendar, setDataCalendar] = useState<ThoiKhoaBieu.IRecord[]>([]);
 	const [selectEvent, setSelectEvent] = useState<any>();
 	const [visibleDetail, setVisibleDetail] = useState<boolean>(false);

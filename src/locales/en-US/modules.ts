@@ -24,4 +24,3 @@ export default {
 	'config.tien-to-truong': 'University',
 	'config.ten-truong-viet-tat-tieng-anh': 'VIN',
 };
-

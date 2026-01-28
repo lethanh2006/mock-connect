@@ -7,6 +7,8 @@ import {
 	ELoaiHocPhanDangKyTinChi,
 	ETrangThaiDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
+import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
+import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Empty, Segmented } from 'antd';
 import { type TableRowSelection } from 'antd/lib/table/interface';
@@ -28,9 +30,12 @@ const DangKyLopHocPhan = () => {
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
 	const [typeLop, setTypeLop] = useState<string>('Lớp gợi ý');
 	// Học phần đang chọn đã được đăng ký 1 lớp nào đó rồi
-	const dangKyRoi = danhSachLopDangKy.find(
-		(item) => item.maHocPhan === recHocPhan?.ma && item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY,
-	);
+	const dangKyRoiMap: Partial<Record<ELoaiLopHocPhan, DangKyTinChi.ILopDangKy>> = {};
+	danhSachLopDangKy.find((item) => {
+		if (item.maHocPhan === recHocPhan?.ma && item.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY) {
+			dangKyRoiMap[item.loaiLop!] = item;
+		}
+	});
 	// const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
 
 	const getData = () =>
@@ -86,7 +91,12 @@ const DangKyLopHocPhan = () => {
 		onChange: (selectedRowKeys, selectedRows) => {
 			const lopVuaChon = selectedRows?.at(-1);
 			// Nếu chọn ít nhất 1 lớp và chưa đăng ký
-			if (lopVuaChon && !lopVuaChon.children?.length && !dangKyRoi && lopVuaChon.maHocPhan === recHocPhan?.ma) {
+			if (
+				lopVuaChon &&
+				!lopVuaChon.children?.length &&
+				!dangKyRoiMap[lopVuaChon.loai!] &&
+				lopVuaChon.maHocPhan === recHocPhan?.ma
+			) {
 				const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
 				let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
 				const khoaNganh =
@@ -118,13 +128,23 @@ const DangKyLopHocPhan = () => {
 
 		getCheckboxProps: (record) => {
 			const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
+			const needCheckLopCha = lopCha && dangKyRoiMap[lopCha.loai]?.soThuTuLop !== lopCha.soThuTuLop;
 			// Check trùng cả thời khóa biểu của lớp cha
-			const allThoiKhoaBieu = [...(record.thoiKhoaBieuList ?? []), ...(lopCha?.thoiKhoaBieuList ?? [])];
+			let allThoiKhoaBieu = [...(record.thoiKhoaBieuList ?? [])];
+			if (needCheckLopCha) {
+				allThoiKhoaBieu.push(...(lopCha?.thoiKhoaBieuList ?? []));
+			}
 			// Check sĩ số còn trống ở cả lớp cha nữa
-			const siSo =
-				record.siSoToiDa - (record.siSo ?? 0) <= 0 || (!!lopCha?._id && lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0);
+			let siSo = record.siSoToiDa - (record.siSo ?? 0) <= 0;
+			if (needCheckLopCha) {
+				siSo ||= !!lopCha?._id && lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0;
+			}
+			const failed1 = !!dangKyRoiMap[record.loai] || (!!dangKyRoiMap[lopCha?.loai!] && needCheckLopCha);
+			const failed2 = checkTrungLich(allThoiKhoaBieu);
+			const failed3 = !!record.children?.length;
+			const failed4 = siSo;
 			return {
-				disabled: !!dangKyRoi || checkTrungLich(allThoiKhoaBieu) || !!record.children?.length || siSo,
+				disabled: failed1 || failed2 || failed3 || failed4,
 			};
 		},
 	};

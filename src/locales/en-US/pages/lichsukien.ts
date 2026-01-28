@@ -34,7 +34,7 @@ export default {
 	'lichsukien.chitiet.giangvien': 'Instructor',
 	'lichsukien.chitiet.tieude': 'Lesson Title',
 	'lichsukien.chitiet.lms': 'LMS Class',
-	'lichsukien.chitiet.lms.duongdan': 'Link',
+	'lichsukien.chitiet.duongdan': 'Link',
 	'lichsukien.chitiet.hoctructuyen': 'Online Learning',
 	'lichsukien.chitiet.hinhthuc': 'Teaching Mode',
 	'lichsukien.chitiet.thongbao': 'Announcements',

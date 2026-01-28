@@ -11,7 +11,7 @@ import dayjs from '@/utils/dayjs';
 import { EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Tag, Tooltip } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const PhieuDiemBCS = (props: { idLopHanhChinh: string }) => {
 	const { idLopHanhChinh } = props;
@@ -19,6 +19,7 @@ const PhieuDiemBCS = (props: { idLopHanhChinh: string }) => {
 	const { record: recordDot, getAllModel: getAllDotDiemRenLuyen } = useModel('diemrenluyenv2.dot');
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { getByIdModel } = useModel('diemrenluyenv2.bieumau');
+	const intl = useIntl();
 	const getData = () => {
 		if (idLopHanhChinh && recordDot?._id && recordDot?.kyHoc === recHocKy?.ma)
 			getModel({
@@ -38,7 +39,7 @@ const PhieuDiemBCS = (props: { idLopHanhChinh: string }) => {
 
 	const columns: IColumn<PhieuDiemRenLuyenV2.IRecord>[] = [
 		{
-			title: 'Mã SV',
+			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.bcs.masv' }),
 			dataIndex: 'maSinhVien',
 			width: 120,
 			sortable: true,
@@ -48,14 +49,14 @@ const PhieuDiemBCS = (props: { idLopHanhChinh: string }) => {
 			render: (val) => (val ? val?.toUpperCase() : ''),
 		},
 		{
-			title: 'Họ tên',
+			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.bcs.hoten' }),
 			dataIndex: 'hoTen',
 			width: 150,
 			filterType: 'string',
 			onCell,
 		},
 		{
-			title: 'Sinh viên',
+			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.bcs.sinhvien' }),
 			dataIndex: 'trangThaiNopSV',
 			width: 160,
 			align: 'center',
@@ -69,7 +70,7 @@ const PhieuDiemBCS = (props: { idLopHanhChinh: string }) => {
 				val ? <Tag color={MapColorETrangThaiPhieuDiemRL?.[val]}>{MapTitleETrangThaiPhieuDiemRL?.[val]}</Tag> : '',
 		},
 		{
-			title: 'Ban cán sự',
+			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.bcs.bancansu' }),
 			dataIndex: 'trangThaiNopBCS',
 			width: 160,
 			align: 'center',
@@ -89,7 +90,7 @@ const PhieuDiemBCS = (props: { idLopHanhChinh: string }) => {
 				),
 		},
 		{
-			title: 'Cố vấn học tập',
+			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.bcs.covanhoctap' }),
 			dataIndex: 'trangThaiNopCoVan',
 			width: 160,
 			align: 'center',
@@ -109,13 +110,13 @@ const PhieuDiemBCS = (props: { idLopHanhChinh: string }) => {
 				),
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.bcs.thaotac' }),
 			align: 'center',
 			width: 80,
 			fixed: 'right',
 			render: (record: PhieuDiemRenLuyenV2.IRecord) => (
 				<>
-					<Tooltip title={isTrongThoiGianChamDiem ? 'Chấm điểm' : 'Xem chi tiết'}>
+					<Tooltip title={isTrongThoiGianChamDiem ? intl.formatMessage({ id: 'diemrenluyen.phieudiem.bcs.tooltip.chamdiem' }) : intl.formatMessage({ id: 'diemrenluyen.phieudiem.bcs.tooltip.xemchitiet' })}>
 						<Button
 							onClick={() => handleView(record)}
 							type='link'

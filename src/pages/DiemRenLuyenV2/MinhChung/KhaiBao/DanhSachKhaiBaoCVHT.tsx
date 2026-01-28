@@ -6,7 +6,6 @@ import {
 	ETrangThaiTiepNhanMinhChung,
 	MapColorETrangThaiTiepNhanMinhChung,
 } from '@/services/DiemRenLuyenV2/MinhChung/KhaiBao/constants';
-import { useModel } from '@@/plugin-model/useModel';
 import {
 	CheckOutlined,
 	CloseOutlined,
@@ -17,6 +16,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Divider, Popconfirm, Popover, Spin, Tag } from 'antd';
 import { useEffect } from 'react';
+import { useIntl, useModel } from 'umi';
 
 import type { KhaiBaoDRL } from '@/services/DiemRenLuyenV2/MinhChung/KhaiBao/typing';
 import { EDoiTuongNhap } from '@/services/DiemRenLuyenV2/MinhChung/MauDon/constants';
@@ -34,6 +34,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 
 	const { record: recordLopHanhChinh } = useModel('daotao.lophanhchinh');
 	const { record: recHocKy } = useModel('daotao.hocky');
+	const intl = useIntl();
 
 	const getAllMinhChungModel = () => {
 		getAllMinhChung(false, undefined, {
@@ -74,7 +75,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 
 	const columns: IColumn<KhaiBaoDRL.IRecord>[] = [
 		{
-			title: 'Họ và tên',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.hoten' }),
 			dataIndex: 'hoTen',
 			filterType: 'string',
 			onCell,
@@ -82,7 +83,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 			align: 'center',
 		},
 		{
-			title: 'Mã sinh viên',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.masv' }),
 			dataIndex: 'maSinhVien',
 			align: 'center',
 			filterType: 'string',
@@ -91,7 +92,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 		},
 
 		{
-			title: 'Người khai báo',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.nguoikhaibao' }),
 			dataIndex: 'nguoiKhaiBao',
 			align: 'center',
 			onCell,
@@ -99,7 +100,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 			render: (val) => val?.ten ?? '',
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.trangthai' }),
 			dataIndex: 'trangThai',
 			align: 'center',
 			onCell,
@@ -109,7 +110,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 			),
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.thaotac' }),
 			align: 'center',
 			width: 90,
 			fixed: 'right',
@@ -120,7 +121,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 					content={
 						<>
 							<Popconfirm
-								title={'Bạn có chắc chắn muốn duyệt minh chứng này'}
+								title={intl.formatMessage({ id: 'diemrenluyen.minhchung.xacnhanduyet' })}
 								placement={'topLeft'}
 								disabled={rec?.trangThai !== ETrangThaiTiepNhanMinhChung.CHO_XU_LY}
 								onConfirm={() => {
@@ -129,14 +130,14 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 							>
 								<ButtonExtend
 									disabled={rec?.trangThai !== ETrangThaiTiepNhanMinhChung.CHO_XU_LY}
-									tooltip='Duyệt'
+									tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.duyet' })}
 									type='link'
 									icon={<CheckOutlined />}
 								/>
 							</Popconfirm>
 							<Divider type={'vertical'} />
 							<Popconfirm
-								title={'Bạn có chắc chắn muốn từ chối minh chứng này'}
+								title={intl.formatMessage({ id: 'diemrenluyen.minhchung.xacnhantuchoi' })}
 								placement={'topLeft'}
 								disabled={rec?.trangThai !== ETrangThaiTiepNhanMinhChung.CHO_XU_LY}
 								onConfirm={() => {
@@ -145,7 +146,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 							>
 								<ButtonExtend
 									disabled={rec?.trangThai !== ETrangThaiTiepNhanMinhChung.CHO_XU_LY}
-									tooltip='Từ chối'
+									tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.tuchoi' })}
 									type='link'
 									danger
 									icon={<CloseOutlined />}
@@ -153,7 +154,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 							</Popconfirm>
 							<Divider type={'vertical'} />
 							<Popconfirm
-								title={'Bạn có chắc chắn chuyển về trạng thái chờ xử lý'}
+								title={intl.formatMessage({ id: 'diemrenluyen.minhchung.xacnhanchuyenvecho' })}
 								placement={'topLeft'}
 								disabled={rec?.trangThai === ETrangThaiTiepNhanMinhChung.CHO_XU_LY}
 								onConfirm={() => {
@@ -162,7 +163,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 							>
 								<ButtonExtend
 									disabled={rec?.trangThai === ETrangThaiTiepNhanMinhChung.CHO_XU_LY}
-									tooltip='Chuyển vể chờ xử lý'
+									tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.chuyenvecho' })}
 									type='link'
 									icon={<UndoOutlined />}
 								/>
@@ -173,7 +174,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 									rec?.trangThai === ETrangThaiTiepNhanMinhChung.DUYET ||
 									rec?.trangThai === ETrangThaiTiepNhanMinhChung.XAC_NHAN
 								}
-								tooltip='Chỉnh sửa'
+								tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.chinhsua' })}
 								type='link'
 								icon={<EditOutlined />}
 								onClick={() => {
@@ -186,7 +187,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 									rec?.trangThai === ETrangThaiTiepNhanMinhChung.DUYET ||
 									rec?.trangThai === ETrangThaiTiepNhanMinhChung.XAC_NHAN
 								}
-								title={'Bạn có chắc chắn muốn xoá minh chứng này'}
+								title={intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.xacnhanxoa' })}
 								placement={'topLeft'}
 								onConfirm={() => {
 									deleteModel(rec?._id, getData);
@@ -197,7 +198,7 @@ const KhaiBaoMinhChungCVHT = (props: { idLopHanhChinh?: string; getDataMinhChung
 										rec?.trangThai === ETrangThaiTiepNhanMinhChung.DUYET ||
 										rec?.trangThai === ETrangThaiTiepNhanMinhChung.XAC_NHAN
 									}
-									tooltip='Xoá'
+									tooltip={intl.formatMessage({ id: 'diemrenluyen.minhchung.danhsach.xoa' })}
 									type='link'
 									danger
 									icon={<DeleteOutlined />}

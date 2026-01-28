@@ -77,8 +77,8 @@ const TienTrinhHocTap = () => {
 							{ id: 'tientrinhhoctap.message' },
 							{
 								tenDot: recDotQuyDoi?.tenDot,
-								start: dayjs(recDotQuyDoi?.thoiGianBatDau).format('DD/MM/YYYY'),
-								end: dayjs(recDotQuyDoi?.thoiGianKetThuc).format('DD/MM/YYYY'),
+								tuNgay: dayjs(recDotQuyDoi?.thoiGianBatDau).format('DD/MM/YYYY'),
+								denNgay: dayjs(recDotQuyDoi?.thoiGianKetThuc).format('DD/MM/YYYY'),
 								b: (chunks) => <b>{chunks}</b>,
 							},
 						)}

@@ -10,9 +10,10 @@ import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, Row, Select, Space } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const FormThongBaoTuyChinh = (props: any) => {
+	const intl = useIntl();
 	const { afterAddNew, type } = props;
 	const [form] = Form.useForm();
 	const {
@@ -46,7 +47,7 @@ const FormThongBaoTuyChinh = (props: any) => {
 			type,
 			values.title,
 			values.content,
-			AppModules[currentRole].title,
+			intl.formatMessage({ id: AppModules[currentRole].title }),
 			values.vaiTroNguoiNhan,
 			'0',
 		)

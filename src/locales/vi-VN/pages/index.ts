@@ -1,6 +1,7 @@
 import activity from './cct/activity';
 import dangky from './dichvuhanhchinh/dangky';
 import lichsu from './dichvuhanhchinh/lichsu';
+import diemrenluyen from './diemrenluyen';
 import donvihanhchinh from './donvihanhchinh';
 import baithicuoiky from './hoctap/baithicuoiky';
 import chungchitotnghiep from './hoctap/chungchi';
@@ -27,6 +28,7 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
+import sinhvien from './sinhvien';
 
 export default {
 	...login,
@@ -58,4 +60,11 @@ export default {
 	...lichthi,
 	...baithicuoiky,
 	...activity,
+	...diemrenluyen,
+	...sinhvien,
+
+	'pages.trangchu.title': 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO',
+	'pages.trangchu.subtitle': 'HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH',
+	'pages.gioithieu.title': 'GIỚI THIỆU',
+	'pages.gioithieu.subtitle': 'HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH',
 };
