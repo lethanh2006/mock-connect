@@ -62,7 +62,9 @@ const DetailLopTinChi = () => {
 	const [visibleDeCuongHp, setVisibleDeCuongHp] = useState<[boolean, string]>([false, '3']);
 
 	useEffect(() => {
-		document.title = [record?.ten, AppModules[currentRole].title].filter(Boolean).join(' - ');
+		document.title = [record?.ten, intl.formatMessage({ id: AppModules[currentRole].title })]
+			.filter(Boolean)
+			.join(' - ');
 	}, [record?.ten]);
 
 	useEffect(() => {

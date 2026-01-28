@@ -1,3 +1,4 @@
+import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { type HocPhan } from '../HocPhan/typings';
 import type { SinhVien } from '../SinhVien/typings';
@@ -66,6 +67,7 @@ declare module DangKyTinChi {
 	export interface ILopDangKy extends LopHocPhan.IRecord {
 		soTinChi: number;
 		loai?: ELoaiHocPhanDangKyTinChi;
+		loaiLop?: ELoaiLopHocPhan;
 		trangThai: ETrangThaiDangKyTinChi;
 		maKhoaNganh?: string;
 

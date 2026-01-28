@@ -15,6 +15,8 @@ interface Props {
 	disabled?: boolean;
 }
 
+import { useIntl } from 'umi';
+
 export const Header = ({
 	formSubmiting,
 	linkTaiPhieu,
@@ -27,6 +29,7 @@ export const Header = ({
 	dangGuiNgay,
 	disabled,
 }: Props) => {
+	const intl = useIntl();
 	const canBoKhongTheSuaDanhGia =
 		nguoiTraLoi === ENguoiTraLoiDrl.SINH_VIEN &&
 		trangThaiDanhGia !== ETrangThaiDanhGia.CHUA_DANH_GIA &&
@@ -49,7 +52,7 @@ export const Header = ({
 				disabled={(formSubmiting && !dangGuiNgay) || disabled}
 				type='primary'
 			>
-				Gửi phòng TCHC <SendOutlined style={{ transform: 'translate(1px, -1px) rotate(-45deg)' }} />
+				{intl.formatMessage({ id: 'diemrenluyen.header.button.guiphongtchc' })} <SendOutlined style={{ transform: 'translate(1px, -1px) rotate(-45deg)' }} />
 			</Button>
 		);
 	};
@@ -68,7 +71,7 @@ export const Header = ({
 				loading={formSubmiting && !dangGuiNgay}
 				disabled={(formSubmiting && dangGuiNgay) || disabled}
 			>
-				Lưu & Gửi sau <SaveOutlined />
+				{intl.formatMessage({ id: 'diemrenluyen.modal.button.luuvagui' })} <SaveOutlined />
 			</Button>
 		);
 	};

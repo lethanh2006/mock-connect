@@ -11,7 +11,6 @@ export default {
 	'lichsugiaodich.column.hoanthanh': 'Completed',
 	'lichsugiaodich.column.thaotac': 'Actions',
 	'lichsugiaodich.button.thanhtoan': 'Payment',
-	'lichsugiaodich.button.huy': 'Cancel',
 	'lichsugiaodich.button.noptruoc': 'Advance Tuition Payment',
 	'lichsugiaodich.button.tatca': 'All Transactions',
 	'lichsugiaodich.confirm.huy': 'Confirm cancellation of this transaction?',

@@ -1,6 +1,7 @@
 import { Col, Row } from 'antd';
 import CardDichVuSinhVien from './components/DichVu';
 import LichDashboard from './components/Lich';
+import './components/style.less';
 import CardSuKienSapToi from './components/SuKienSapToi';
 import CardThongBaoDashboard from './components/ThongBao';
 import WelcomeCard from './components/XinChao';

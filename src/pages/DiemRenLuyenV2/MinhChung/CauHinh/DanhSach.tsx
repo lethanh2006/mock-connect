@@ -3,10 +3,11 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { MinhChungDrl } from '@/services/DiemRenLuyenV2/MinhChung/typing';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const DanhSachMinhChung = () => {
 	const { getAllModel, danhSach, record, setRecord } = useModel('diemrenluyenv2.minhchung.cauhinh');
+  const intl = useIntl();
 
 	useEffect(() => {
 		getAllModel(true, undefined, { dungChoSuKien: false }, [
@@ -30,7 +31,7 @@ const DanhSachMinhChung = () => {
 
 	const columns: IColumn<MinhChungDrl.IBieuMau>[] = [
 		{
-			title: 'Loại minh chứng',
+			title: intl.formatMessage({ id: 'diemrenluyen.minhchung.loaiminhchung' }),
 			dataIndex: 'tenMinhChung',
 			width: 200,
 			onCell,

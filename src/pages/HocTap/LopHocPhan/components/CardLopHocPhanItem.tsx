@@ -1,9 +1,9 @@
+import dayjs from '@/utils/dayjs';
 import { MessageOutlined, ReadOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Badge, Card, Progress, Space, Tag, Tooltip, Typography } from 'antd';
 import { createHash } from 'crypto';
-import dayjs from 'dayjs';
-import React from 'react';
-import { history, useIntl } from 'umi';
+import React, { useMemo } from 'react';
+import { history, useIntl, useModel } from 'umi';
 import './style.less';
 
 const { Title, Text } = Typography;
@@ -30,6 +30,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 	soBaiDang,
 }) => {
 	const intl = useIntl();
+	const { setRecord, setVisibleForm } = useModel('daotao.thoikhoabieu');
 	// Tạo mảng background cố định cho mỗi item để tránh bị giật hình
 	const getBackgroundForItem = (itemId: string, index: number) => {
 		const hash = createHash('md5').update(itemId).digest('hex');
@@ -47,6 +48,30 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 	const progress = Math.round((past / allThoiKhoaBieu.length) * 100) || 0;
 
 	const isCompleted = progress === 100 || lop?.diem?.diemHpSvHk?.diemKthp;
+
+	const nextClass = useMemo(() => {
+		const now = dayjs();
+		const upcoming = allThoiKhoaBieu
+			.map((tkb: any) => {
+				// Ưu tiên thoiGianBatDau(đầy đủ ngày giờ), nếu không có thì dùng ngay(chỉ có ngày, giờ là 00:00)
+				const startTime = tkb.thoiGianBatDau ? dayjs(tkb.thoiGianBatDau) : dayjs(tkb.ngay).endOf('day');
+				return { ...tkb, startTime, hasTime: !!tkb.thoiGianBatDau };
+			})
+			.filter((tkb: any) => tkb.startTime.isAfter(now))
+			.sort((a: any, b: any) => a.startTime.valueOf() - b.startTime.valueOf());
+		return upcoming[0];
+	}, [allThoiKhoaBieu]);
+
+	const handleNextClassClick = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		if (nextClass) {
+			setRecord(nextClass);
+			setVisibleForm(true);
+			const classId = lop?.parent?._id ?? lop?._id;
+			history.push(`/hoc-tap/lop-tin-chi/${classId}#buoi-hoc`);
+		}
+	};
 
 	return (
 		<div className='card-lhp'>
@@ -154,6 +179,20 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 							<Text strong>{soBaiDang ?? '--'}</Text>
 						</div>
 					</Tooltip>
+				</div>
+				<div
+					className={`card-lhp-row ${nextClass ? 'hover-highlight' : ''}`}
+					onClick={nextClass ? handleNextClassClick : undefined}
+					style={{ cursor: nextClass ? 'pointer' : 'default', marginTop: 4, marginBottom: 4 }}
+				>
+					<span>{intl.formatMessage({ id: 'lophocphan.card.tieptheo' })}:</span>
+					<Text strong className={!nextClass ? 'text-secondary' : ''}>
+						{nextClass
+							? nextClass.hasTime
+								? nextClass.startTime.format('HH:mm DD/MM')
+								: nextClass.startTime.format('DD/MM/YYYY')
+							: intl.formatMessage({ id: 'lophocphan.card.khongco' })}
+					</Text>
 				</div>
 
 				{lop?.diem?.diemHpSvHk?.diemKthp ? (

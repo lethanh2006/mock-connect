@@ -1,19 +1,20 @@
 import dayjs from '@/utils/dayjs';
 import { Steps } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const StepDotChamDiemRenLuyen = () => {
 	const { record } = useModel('diemrenluyen.dotchamdiem');
+  const intl = useIntl();
 	const [step, setStep] = useState(0);
 	const steps = [
 		{
 			thoiGian: record?.thoiGianSVChamDiem?.thoiGianBatDau,
-			title: 'Sinh viên đánh giá',
+			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.svtudanhgia' }),
 		},
-		{ thoiGian: record?.thoiGianCanSuLopChamDiem?.thoiGianBatDau, title: 'Tập thể lớp đánh giá' },
-		{ thoiGian: record?.thoiGianCVHTChamDiem?.thoiGianBatDau, title: 'CVHT đánh giá' },
-		{ thoiGian: record?.thoiGianCVHTChamDiem?.thoiGianKetThuc, title: 'Kết thúc đánh giá' },
+		{ thoiGian: record?.thoiGianCanSuLopChamDiem?.thoiGianBatDau, title: intl.formatMessage({ id: 'diemrenluyen.dotchamdiem.tapthelopdanhgia' }) },
+		{ thoiGian: record?.thoiGianCVHTChamDiem?.thoiGianBatDau, title: intl.formatMessage({ id: 'diemrenluyen.dotchamdiem.cvhtdanhgia' }) },
+		{ thoiGian: record?.thoiGianCVHTChamDiem?.thoiGianKetThuc, title: intl.formatMessage({ id: 'diemrenluyen.dotchamdiem.ketthucdanhgia' }) },
 	];
 
 	useEffect(() => {

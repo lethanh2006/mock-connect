@@ -8,9 +8,13 @@ const AboutPage = () => {
 	return (
 		<Card styles={{ body: { height: '100%' } }}>
 			<div className='home-welcome'>
-				<h1 className='title'>GIỚI THIỆU {(intl.formatMessage({ id: unitName }) || unitName).toUpperCase()}</h1>
+				<h1 className='title'>
+					{intl.formatMessage({ id: 'pages.gioithieu.title' })}{' '}
+					{(intl.formatMessage({ id: unitName }) || unitName).toUpperCase()}
+				</h1>
 				<h2 className='sub-title'>
-					HỆ THỐNG PHẦN MỀM ĐẠI HỌC SỐ - {(intl.formatMessage({ id: unitName }) || unitName).toUpperCase()}
+					{intl.formatMessage({ id: 'pages.gioithieu.subtitle' })} -{' '}
+					{(intl.formatMessage({ id: unitName }) || unitName).toUpperCase()}
 				</h2>
 			</div>
 		</Card>

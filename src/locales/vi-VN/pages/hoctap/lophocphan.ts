@@ -20,6 +20,9 @@ export default {
 	'lophocphan.card.baidang': 'Bài đăng / thảo luận trên diễn đàn',
 	'lophocphan.card.diemthi': 'Điểm thi',
 	'lophocphan.card.tientrinh': 'Tiến trình',
+	'lophocphan.card.tieptheo': 'Tiếp theo',
+	'lophocphan.card.khongco': 'Không có',
+	'lophocphan.card.kyso': 'Trạng thái ký số bảng điểm',
 
 	'lophocphan.hocsaptoi.title': 'Tiết học sắp tới',
 	'lophocphan.hocsaptoi.empty': 'Không có lịch học',
@@ -35,7 +38,7 @@ export default {
 	'lophocphan.id.khaosat': 'Khảo sát sinh viên',
 
 	'lophocphan.id.thongtinchung.hoctructuyen': 'Học trực tuyến',
-	'lophocphan.id.thongtinchung.lophoclms': 'Lớp học LMS',
+	'lophocphan.id.thongtinchung.lms': 'Lớp học LMS',
 	'lophocphan.id.thongtinchung.gioithieu': 'Giới thiệu lớp tín chỉ',
 	'lophocphan.id.thongtinchung.gioithieuchung': 'Giới thiệu chung',
 	'lophocphan.id.thongtinchung.gioithieu.thugon': 'Thu gọn',
@@ -142,6 +145,12 @@ export default {
 	'lophocphan.id.lms.tgvaolop': 'Thời gian vào lớp',
 	'lophocphan.id.lms.tgcapnhat': 'Thời gian cập nhật gần nhất',
 	'lophocphan.id.lms.ds': 'Danh sách bài giảng/ Học liệu',
+	'lophocphan.id.lms.dsall': 'Danh sách bài giảng',
+	'lophocphan.id.lms.tgbd': 'Thời gian bắt đầu',
+	'lophocphan.id.lms.tgkt': 'Thời gian kết thúc',
+	'lophocphan.id.lms.baikiemtra': 'Bài kiểm tra',
+	'lophocphan.id.lms.tientrinhht': 'Tiến trình học tập',
+	'lophocphan.id.lms.baigiang': 'Danh sách bài giảng',
 
 	'lophocphan.id.baitap.title': 'Nộp bài tập',
 	'lophocphan.id.baitap.dangdienra': 'Đang diễn ra',
@@ -183,6 +192,7 @@ export default {
 
 	'lophocphan.id.ketqua.danhgia': 'Đánh giá quá trình',
 	'lophocphan.id.ketqua.baidanhgia': 'Bài đánh giá',
+	'lophocphan.id.ketqua.baodanhgia': 'Bài đánh giá',
 	'lophocphan.id.ketqua.hthp': 'Đánh giá KTHP',
 	'lophocphan.id.ketqua.hthp2': 'Đánh giá KTHP (thi lần 2)',
 	'lophocphan.id.ketqua.diemtb': 'Điểm trung bình',
@@ -199,6 +209,7 @@ export default {
 	'lophocphan.id.ketqua.daudiem': 'Trọng số đầu điểm',
 	'lophocphan.id.ketqua.diemcuoi': 'Điểm cuối',
 	'lophocphan.id.ketqua.chitiet': 'Xem chi tiết lịch sử thi',
+	'lophocphan.id.ketqua.phuckhao': 'Yêu cầu xem xét lại điểm thi (phúc khảo)',
 	'lophocphan.id.ketqua.diemtongket': 'Điểm tổng kết',
 	'lophocphan.id.ketqua.diem10': 'Điểm hệ  10',
 	'lophocphan.id.ketqua.diem4': 'Điểm hệ 4',
@@ -246,6 +257,7 @@ export default {
 	'lophocphan.id.khaosat.nd': 'Nội dung khảo sát',
 
 	'lophocphan.id.thongtinchungheader.quaylai': 'Quay lại',
+	'lophocphan.id.thongtinchung.quaylai': 'Quay lại',
 	'lophocphan.id.thongtinchungheader.chitiet': 'Xem đề cương chi tiết học phần',
 	'lophocphan.id.thongtinchungheader.chuacapnhat': 'Chưa cập nhật',
 	'lophocphan.id.thongtinchungheader.tinchi': 'Tín chỉ',
@@ -260,7 +272,7 @@ export default {
 	'lophocphan.id.thongtinchungheader.khongco': 'Không có',
 
 	'lophocphan.id.thongtinchungheader.thongtingv': 'Thông tin giảng viên',
-	'lophocphan.id.thongtinchungheader.hoten': 'Họ tên',
+	'lophocphan.id.thongtinchungheader.hoTen': 'Họ tên',
 	'lophocphan.id.thongtinchungheader.email': 'Email',
 	'lophocphan.id.thongtinchungheader.gioitinh': 'Giới tính',
 	'lophocphan.id.thongtinchungheader.hocham': 'Học hàm',

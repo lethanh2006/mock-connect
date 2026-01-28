@@ -65,7 +65,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 
 	const getFilterLabel = () =>
 		filterOptions.find((f) => f.key === sortMode)?.label ||
-		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.xapsep' });
+		intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.sapxep' });
 
 	const handleFilterChange = (filterType: FilterType) => {
 		setSortMode(filterType);
