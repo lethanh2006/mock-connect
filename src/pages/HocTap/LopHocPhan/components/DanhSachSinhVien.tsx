@@ -51,7 +51,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 
 	const renderStudentList = () => (
 		<Card
-			className='card-big-title card-borderless'
+			className='card-borderless'
 			variant='borderless'
 			style={{
 				borderRadius: '8px',

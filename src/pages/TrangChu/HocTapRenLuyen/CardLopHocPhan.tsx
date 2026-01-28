@@ -86,9 +86,9 @@ const CardLopHocPhan = () => {
 		// Sử dụng hash từ ID hoặc index để đảm bảo background cố định cho mỗi item
 		const hash = itemId
 			? itemId.split('').reduce((a, b) => {
-					a = (a << 5) - a + b.charCodeAt(0);
-					return a & a;
-				}, 0)
+				a = (a << 5) - a + b.charCodeAt(0);
+				return a & a;
+			}, 0)
 			: index;
 
 		const backgroundIndex = Math.abs(hash) % backgrounds.length;
@@ -113,7 +113,7 @@ const CardLopHocPhan = () => {
 	return (
 		<Card
 			variant='borderless'
-			className='card-borderless card-big-title'
+			className='card-borderless'
 			title={intl.formatMessage({ id: 'trangchu.loptinchi.title' })}
 			loading={loading}
 			extra={

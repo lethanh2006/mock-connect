@@ -96,7 +96,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 		return (
 			<Card
 				title={intl.formatMessage({ id: 'lophocphan.hocsaptoi.title' })}
-				className='card-big-title card-borderless'
+				className='card-borderless'
 				variant='borderless'
 			>
 				<Card variant='borderless'>

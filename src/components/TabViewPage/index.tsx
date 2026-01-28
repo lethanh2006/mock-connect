@@ -28,6 +28,7 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 		style,
 		offsetTop = 56,
 		cardBigTitle,
+		extraCard,
 	} = props;
 	const activeMenu = menu?.filter((i) => !i.hide);
 	const paths = activeMenu?.map((item) => item.menuKey);
@@ -113,7 +114,7 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 	if (hideCard) return mainContent();
 	else if (cardBigTitle)
 		return (
-			<Card title={currentTitle} variant='borderless' className='card-borderless card-big-title'>
+			<Card title={currentTitle} variant='borderless' className='card-borderless card-big-title' extra={extraCard}>
 				<Card variant='borderless'>{mainContent()}</Card>
 			</Card>
 		);

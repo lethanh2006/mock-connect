@@ -85,7 +85,7 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 	);
 
 	return (
-		<Card size='small' className='lich-sap-toi-card card-big-title' title={cardTitle}>
+		<Card size='small' className='lich-sap-toi-card' title={cardTitle}>
 			{upcomingEvents.length === 0 ? (
 				<div className={`lich-sap-toi-empty ${expandLichSapToi ? 'expanded' : 'collapsed'}`}>
 					<ClockCircleOutlined />

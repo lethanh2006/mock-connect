@@ -29,7 +29,7 @@ const FilterDotDangKy = () => {
 	return (
 		<Row gutter={[18, 18]} style={{ marginBottom: 24 }}>
 			<Col span={24}>
-				<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12, alignItems: 'center' }}>
+				<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: 12, alignItems: 'center' }}>
 					<FilterHocKy isSetHocKy />
 
 					<Popover content={<ViewDetailHocKy />} placement='right'>
