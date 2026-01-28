@@ -2,6 +2,7 @@ import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
 import { ETrangThaiThi } from '@/services/HocTap/constant';
 import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Divider, Empty, Space, Spin, Tabs, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
@@ -254,15 +255,15 @@ const DetailKetQuaHocTap = (props: {
 									})
 								)}
 
-								{/* <Descriptions.Item
-							label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.diemcuoi' })} (${100 - trongSoThanhPhan}%)`}
-						>
-							{recDiem?.trangThaiDuThi && recDiem.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
-								<span title={trangThaiDuThi[recDiem.trangThaiDuThi]}>{recDiem?.trangThaiDuThi}</span>
-							) : (
-								renderDiem(recDiem?.diemKthp)
-							)}
-						</Descriptions.Item> */}
+								<Descriptions.Item
+									label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.diemcuoi' })} (${100 - trongSoThanhPhan}%)`}
+								>
+									{recDiem?.trangThaiDuThi && recDiem.trangThaiDuThi !== ETrangThaiDuThi.OK ? (
+										<span title={trangThaiDuThi[recDiem.trangThaiDuThi]}>{recDiem?.trangThaiDuThi}</span>
+									) : (
+										renderDiem(recDiem?.diemKthp)
+									)}
+								</Descriptions.Item>
 							</Descriptions>
 
 							{recDiem && (
