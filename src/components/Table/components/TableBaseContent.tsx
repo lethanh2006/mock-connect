@@ -225,7 +225,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<Card className='table-base-card card-big-title' title={props.title || false} variant={props.border ? 'outlined' : 'borderless'} extra={props.cardExtra}>
+				<Card className='table-base-card' title={props.title || false} variant={props.border ? 'outlined' : 'borderless'} extra={props.cardExtra}>
 					{mainContent}
 				</Card>
 			)}

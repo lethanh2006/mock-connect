@@ -3,11 +3,9 @@ import { getIntl, getLocale } from '@umijs/max';
 import { ConfigProvider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
 
-/** Chú ý các route để layout: false thì phải bọc bởi ConfigBound để nhận styles */
 const ConfigBounder = (props: { children?: any }) => {
 	const intl = getIntl();
 	useEffect(() => {
-		// Đổi màu real time => Hỗ trợ đổi tenant
 		ConfigProvider.config({
 			theme: {
 				token: { borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor },
@@ -37,7 +35,7 @@ const ConfigBounder = (props: { children?: any }) => {
 			theme={{
 				token: {
 					borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor, controlHeight: 36, controlHeightSM: 28,
-					colorError: '#E20404', colorTextDisabled: '#707070',
+					colorError: statusColors.status400, colorTextDisabled: textColors.text200,
 				},
 				hashed: false,
 				cssVar: { prefix: '' },
@@ -94,9 +92,11 @@ const ConfigBounder = (props: { children?: any }) => {
 					Steps: {
 						colorSplit: accentColors.accent700,
 						lineWidth: 2,
-						fontSize: 16,
+						fontSize: 14,
+						colorTextLightSolid: textColors.text100,
 						finishIconBorderColor: 'transparent',
-						finishIconBgColor: '#008328',
+						finishIconBgColor: statusColors.status100,
+						iconTop: -1,
 					} as any,
 					Slider: {
 						trackBg: statusColors.status200,
@@ -109,8 +109,8 @@ const ConfigBounder = (props: { children?: any }) => {
 						colorPrimary: statusColors.status200,
 					},
 					Input: {
-						colorTextDisabled: '#707070',
-						activeBorderColor: '#0047FF'
+						colorTextDisabled: textColors.text200,
+						activeBorderColor: accentColors.accent600
 					},
 					Segmented: {
 						itemSelectedColor: primaryColor,
@@ -141,8 +141,8 @@ const ConfigBounder = (props: { children?: any }) => {
 						lineType: 'none',
 					},
 					Radio: {
-						colorPrimary: highlightColor,
-						radioColor: highlightColor,
+						colorPrimary: primaryColor,
+						radioColor: primaryColor,
 						radioBgColor: textColors.text400,
 						dotSize: 10,
 					} as any,
@@ -169,7 +169,9 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Breadcrumb: {
 						lastItemColor: textColors?.text400,
-						itemColor: textColors?.text300
+						itemColor: textColors?.text300,
+						linkColor: textColors?.text300,
+						linkHoverColor: textColors?.text400,
 					},
 					Typography: {
 						colorTextHeading: textColors?.text400,
