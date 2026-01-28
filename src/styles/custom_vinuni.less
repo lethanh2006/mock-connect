@@ -43,19 +43,19 @@
 
 	// Status Colors
 	--color-status-100: #329323;
-	--color-status-200: #0E50CF;
-	--color-status-300: #CE7C1E;
-	--color-status-400: #C80F1F;
-	--color-status-500: #491F9D;
-	--color-status-600: #0F8D91;
+	--color-status-200: #0e50cf;
+	--color-status-300: #ce7c1e;
+	--color-status-400: #c80f1f;
+	--color-status-500: #491f9d;
+	--color-status-600: #0f8d91;
 
 	// Status Background Colors
-	--color-status-bg-100: #F5FFEB;
-	--color-status-bg-200: #E2F2FE;
-	--color-status-bg-300: #FFFAE4;
-	--color-status-bg-400: #FFEFEE;
-	--color-status-bg-500: #F8EEFE;
-	--color-status-bg-600: #E2FFFB;
+	--color-status-bg-100: #f5ffeb;
+	--color-status-bg-200: #e2f2fe;
+	--color-status-bg-300: #fffae4;
+	--color-status-bg-400: #ffefee;
+	--color-status-bg-500: #f8eefe;
+	--color-status-bg-600: #e2fffb;
 
 	--color-bg-layout: var(--color-accent-700);
 	--color-icon-hover: var(--vin-color-primary-300);
@@ -79,7 +79,7 @@
 .ant-form-item-required::after {
 	color: var(--form-label-required-mark-color) !important;
 	visibility: visible !important;
-	content: "*" !important;
+	content: '*' !important;
 }
 
 .ant-form-vertical {
@@ -99,7 +99,7 @@
 
 // Border cho ô bảng
 .ant-table-cell {
-	border-bottom: 1px solid #f0f0f0 !important;
+	border-bottom: 1px solid var(--color-accent-700) !important;
 	border-left: none !important;
 	border-right: none !important;
 	padding: 5px 18px !important;
@@ -151,11 +151,11 @@
 	}
 
 	>tr>th {
-		background-color: #f5f5f5 !important;
+		background-color: var(--color-accent-700) !important;
 		color: var(--color-text-100) !important;
 		font-weight: 700 !important;
 		text-align: left !important;
-		border-bottom: 1px solid #f0f0f0 !important;
+		border-bottom: 1px solid var(--color-accent-700) !important;
 		height: 44px;
 
 		&::before {
@@ -179,8 +179,6 @@
 
 		.ant-btn {
 			padding: 6px !important;
-			width: 28px !important;
-			height: 28px !important;
 			margin-right: 6px !important;
 			background-color: var(--color-info-bg) !important;
 		}
@@ -194,11 +192,23 @@
 	}
 }
 
-
-
 .ant-card {
-	height: 100%;
 	border-radius: 6px !important;
+
+	&.card-borderless {
+		box-shadow: none;
+		height: fit-content !important;
+
+		>.ant-card-body {
+			.table-base {
+				margin: 0 !important;
+			}
+		}
+
+		>.ant-card-head {
+			padding: 0 12px;
+		}
+	}
 
 	.ant-card-head-title {
 		white-space: pre-wrap;
@@ -209,7 +219,7 @@
 	}
 
 	.ant-card-head {
-		padding: 16px;
+		padding: 0 16px !important;
 		border-bottom: 1.5px solid var(--color-accent-700) !important;
 
 		@media (max-width: @screen-xs) {
@@ -221,7 +231,7 @@
 		}
 	}
 
-	.ant-card-body {
+	&>.ant-card-body {
 		padding: 10px 16px;
 	}
 
@@ -230,24 +240,12 @@
 		padding-top: 12px !important;
 	}
 
-	&.card-borderless {
-		box-shadow: none;
-
-		>.ant-card-body {
-			padding: 0 !important;
-		}
-
-		>.ant-card-head {
-			padding: 0 12px;
-		}
-	}
-
 	&.card-big-title {
 		background: transparent;
 		border: none !important;
 
 		>.ant-card-head {
-			padding: 0 0 16px 0;
+			padding: 0 0 16px 0 !important;
 			border: none !important;
 			background-color: transparent !important;
 
@@ -255,6 +253,8 @@
 				font-size: 22px !important;
 				margin-left: 2px !important;
 				color: var(--color-accent-800) !important;
+				display: flex;
+				align-items: center;
 
 				&::after {
 					content: '' !important;
@@ -293,6 +293,10 @@
 			}
 
 			.ant-card-extra {
+				.ant-space-align-center {
+					align-items: start !important;
+				}
+
 				.ant-btn {
 					.ant-btn-icon {
 						display: none !important;
@@ -303,7 +307,7 @@
 
 		>.ant-card-body {
 			border-radius: 4px;
-			background-color: var(--color-text-400) !important;
+			background-color: transparent !important;
 			padding: 0 16px;
 
 			&.ant-spin-nested-loading {
@@ -333,7 +337,6 @@
 			font-size: 18px;
 		}
 	}
-
 }
 
 .ant-modal-title {
@@ -344,6 +347,46 @@
 	color: var(--color-primary) !important;
 }
 
+.card-big-title {
+	&>.ant-card-body {
+		padding: 0 !important;
+		background-color: transparent !important;
+		border-radius: 8px !important;
+
+		.ant-spin-nested-loading {
+
+			// margin: 0 -16px !important;
+			.ant-card {
+				&>.ant-card-body {
+					padding: 12px 16px !important;
+				}
+			}
+		}
+
+		.ant-card {
+			&>.ant-card-body {
+				.table-base {
+					>.ant-table-wrapper {
+						>.ant-spin-nested-loading {
+							margin: 0 -16px !important;
+						}
+					}
+				}
+
+				&>.ant-card {
+					&>.ant-card-body {
+						padding: 0 !important;
+
+						.table-base {
+							margin: 0 !important;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 // Style cho card base của bảng - VinUni
 .table-base-card {
 	background-color: transparent;
@@ -351,7 +394,7 @@
 	.ant-card-body {
 		background-color: var(--color-text-400) !important;
 		border-radius: 8px !important;
-		padding: 0 16px !important;
+		// padding: 0 16px !important;
 
 		.table-base {
 			border-radius: 8px !important;
@@ -363,7 +406,7 @@
 	}
 
 	.ant-card-head {
-		padding: 0 0 16px 0;
+		padding: 0 0 16px 0 !important;
 		border: none !important;
 		background-color: transparent !important;
 
@@ -417,49 +460,6 @@
 	}
 }
 
-.ant-table-tbody {
-	.ant-table-cell {
-		.ant-tag {
-			border-radius: 4px;
-			font-weight: 600;
-			border: none;
-			padding: 2px 8px;
-
-			&.tag-empathy {
-				background-color: #e6f7ff;
-				color: #1890ff;
-			}
-
-			&.tag-creativity {
-				background-color: #fff7e6;
-				color: #fa8c16;
-			}
-
-			&.status-registed {
-				background-color: #f9f0ff;
-				color: #722ed1;
-			}
-
-			&.status-approved {
-				background-color: #f6ffed;
-				color: #52c41a;
-			}
-		}
-
-		.ant-btn-primary {
-			&.btn-red {
-				background-color: #c52828;
-				border-radius: 4px;
-				font-weight: 600;
-
-				&:hover {
-					background-color: #a31f1f;
-				}
-			}
-		}
-	}
-}
-
 /* Các class button tùy chỉnh - VinUni */
 // Style chung cho tất cả button antd
 .ant-btn {
@@ -501,7 +501,6 @@
 	background-color: var(--color-accent-700) !important;
 	border-radius: 4px;
 	border: none !important;
-
 }
 
 // Style header của PageContainer - VinUni
@@ -656,11 +655,6 @@
 	}
 }
 
-// Style container của Spin
-.ant-spin-container {
-	background-color: var(--color-text-400) !important;
-}
-
 // Margin cho phân trang bảngant-table-pagination
 .ant-pagination.ant-table-pagination.ant-table-pagination-right {
 	margin-left: 40px !important;
@@ -668,21 +662,21 @@
 }
 
 .ant-table-pagination {
-	background-color: '#ffffff' !important;
+	background-color: var(--color-text-400) !important;
 }
 
 // Z-index cho tổng số ở header bảng
 .table-base {
 	background-color: var(--color-text-400) !important;
-	margin: 0 -16px !important;
+	border-radius: 8px !important;
 
 	.table-base-header {
 		margin-bottom: 0 !important;
 	}
 
 	.header {
-		padding: 12px 16px !important;
-		display: flex !important;
+		padding: 0 0 12px 0 !important;
+		display: flex;
 		align-items: center !important;
 		flex-direction: row-reverse;
 		justify-content: space-between !important;
@@ -698,9 +692,6 @@
 
 			.ant-btn {
 				padding: 8px 12px !important;
-				height: 28px !important;
-				font-size: 14px !important;
-				text-transform: none !important;
 
 				.ant-btn-icon,
 				.anticon {
@@ -724,7 +715,6 @@
 		}
 
 		.extra {
-			// flex-direction: row-reverse !important;
 			display: flex !important;
 			align-items: center !important;
 			gap: 8px !important;
@@ -914,8 +904,8 @@
 .form-footer {
 	position: relative;
 	padding: 16px 0 0 !important;
-	justify-content: flex-start !important;
-	flex-direction: row-reverse !important;
+	justify-content: flex-end !important;
+	// flex-direction: row-reverse !important;
 	margin-top: 10px !important;
 
 	&::before {
@@ -1173,8 +1163,6 @@
 	font-weight: 600 !important;
 }
 
-
-
 .ant-radio-label,
 .ant-checkbox-label,
 .ant-space-item {
@@ -1273,8 +1261,6 @@
 			.ant-radio-button-wrapper {
 				background-color: var(--color-official-500);
 			}
-
-			;
 		}
 	}
 }
@@ -1291,7 +1277,7 @@
 					transform: translateY(-50%) !important;
 					width: 0 !important;
 					height: 0 !important;
-					border-right: 10px solid var(--color-primary) !important;
+					border-right: 10px solid var(--color-highlight) !important;
 					border-top: 6px solid transparent !important;
 					border-bottom: 6px solid transparent !important;
 					display: block !important;
@@ -1333,6 +1319,29 @@
 			@media (max-width: 768px) {
 				top: 32% !important;
 			}
+		}
+	}
+}
+
+.highlight {
+	background-color: var(--color-official-500) !important;
+}
+
+.card-highlight {
+	.ant-card-head {
+		background-color: var(--color-info-bg) !important;
+		color: var(--color-primary) !important;
+	}
+}
+
+.lich-sap-toi-card {
+	margin: 0 !important;
+}
+
+[data-type='SplitPane'] .ant-card.card-borderless>.ant-card-body .table-base {
+	.ant-table-wrapper {
+		.ant-spin-nested-loading {
+			margin: 0 !important;
 		}
 	}
 }

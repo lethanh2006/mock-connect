@@ -64,7 +64,7 @@ export default {
 	...sinhvien,
 
 	'pages.trangchu.title': 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO',
-	'pages.trangchu.subtitle': 'HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH',
+	'pages.trangchu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',
 	'pages.gioithieu.title': 'GIỚI THIỆU',
-	'pages.gioithieu.subtitle': 'HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH',
+	'pages.gioithieu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',
 };

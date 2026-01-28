@@ -22,5 +22,4 @@ export default {
 	'config.co-quan-chu-quan': 'Ministry of Education and Training',
 	'config.ten-truong': 'Vin University',
 	'config.tien-to-truong': 'University',
-	'config.ten-truong-viet-tat-tieng-anh': 'VIN',
 };

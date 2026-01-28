@@ -76,7 +76,6 @@ const ConfigBounder = (props: { children?: any }) => {
 						textTextColor: primaryColor,
 						defaultColor: textColors.text100,
 						borderColorDisabled: 'transparent',
-						textHoverBg: primaryColor,
 						borderRadius: 4,
 						fontWeight: 600,
 					},
@@ -165,6 +164,7 @@ const ConfigBounder = (props: { children?: any }) => {
 						cardBg: officialColors.official500,
 						inkBarColor: highlightColor,
 						cardGutter: 0,
+						horizontalItemPadding: '12px',
 					},
 					Divider: {
 						colorSplit: accentColors.accent700,
@@ -177,9 +177,16 @@ const ConfigBounder = (props: { children?: any }) => {
 						optionSelectedBg: officialColors.official500,
 					},
 					Table: {
-						borderColor: '#e8e8e8',
-						headerBg: '#f8f8f8',
+						borderColor: accentColors?.accent700,
+						headerBg: accentColors?.accent700,
 					},
+					Breadcrumb: {
+						lastItemColor: textColors?.text400,
+						itemColor: textColors?.text300
+					},
+					Typography: {
+						colorTextHeading: textColors?.text400,
+					}
 				},
 			}}
 		>

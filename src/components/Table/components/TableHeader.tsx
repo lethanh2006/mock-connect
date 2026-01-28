@@ -36,7 +36,7 @@ export const TableHeader: React.FC = () => {
 		loading,
 		total,
 		hideTotal,
-		size = 'small',
+		size,
 	} = useTableContext();
 
 	return (
