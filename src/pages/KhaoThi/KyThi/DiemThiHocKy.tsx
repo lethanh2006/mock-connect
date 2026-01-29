@@ -44,7 +44,7 @@ const DiemThiHocKy = (props: { maHocKy: string; maHocPhan: string }) => {
 		},
 		{
 			title: intl.formatMessage({ id: 'lophocphan.id.ketqua.diemhk.diemthi' }),
-			dataIndex: 'diemThi',
+			dataIndex: 'diemKthp',
 			align: 'center',
 			width: 100,
 			render: (val, rec) => (
