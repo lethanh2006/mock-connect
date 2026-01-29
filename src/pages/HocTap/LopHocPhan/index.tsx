@@ -51,7 +51,7 @@ const LopHocPhanPage = () => {
 					<Card
 						loading={loading}
 						variant='borderless'
-						className='card-borderless card-big-title'
+						className='card-borderless'
 						title={intl.formatMessage({ id: 'lophocphan.danhsach' })}
 					>
 						{danhSach.length > 0 ? (

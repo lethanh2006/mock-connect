@@ -311,9 +311,8 @@ const LichDashboard = () => {
 											}}
 										>
 											<div
-												className={`date-number ${responsiveClass} ${isSmallMonth ? 'small-month' : ''} ${
-													isSelectedToday ? 'selected-today' : isToday ? 'today' : isSelected ? 'selected' : ''
-												} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
+												className={`date-number ${responsiveClass} ${isSmallMonth ? 'small-month' : ''} ${isSelectedToday ? 'selected-today' : isToday ? 'today' : isSelected ? 'selected' : ''
+													} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
 											>
 												{date.format('DD')}
 											</div>
@@ -361,7 +360,7 @@ const LichDashboard = () => {
 		<>
 			<Card
 				variant='borderless'
-				className='card-borderless card-big-title'
+				className='card-borderless'
 				title={intl.formatMessage({ id: 'trangchu.lich.title' })}
 				extra={
 					<Link to='/calendar' className='xem-tat-ca-link'>

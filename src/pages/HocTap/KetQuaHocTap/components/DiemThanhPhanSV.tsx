@@ -39,9 +39,8 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				const kqhk = kqhkList.find((j) => j.maHocKy === mahk);
 				let tenHocPhan = diemHpHkList[0]?.hocKy?.ten ?? `Học kỳ ${mahk}`;
 				if (kqhk)
-					tenHocPhan += ` (TB học kỳ: ${kqhk.trungBinhHocKyThang4 ?? '--'}, đạt: ${
-						kqhk.tongSoTinChiHocKy ?? '--'
-					} tín chỉ, tích lũy: ${kqhk.tongSoTinChiTichLuyToanKhoa ?? '--'} tín chỉ)`;
+					tenHocPhan += ` (TB học kỳ: ${kqhk.trungBinhHocKyThang4 ?? '--'}, đạt: ${kqhk.tongSoTinChiHocKy ?? '--'
+						} tín chỉ, tích lũy: ${kqhk.tongSoTinChiTichLuyToanKhoa ?? '--'} tín chỉ)`;
 				// Thêm 1 hàng trống => Tên học kỳ
 				res.push({ _id: '-1', tenHocPhan, maHocKy: mahk });
 				// Thêm các hàng lớp trong kỳ, mỗi hàng có số thứ tự trong kỳ
@@ -126,7 +125,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 		{
 			title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tichLuy' }),
 			dataIndex: 'tichLuy',
-			width: 40,
+			width: 50,
 			align: 'center',
 			render: (val) => !!val && <CheckOutlined />,
 			onCell,
@@ -195,7 +194,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	}));
 	columns.splice(5, 0, {
 		title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.diemThanhPhan' }),
-		width: cols.length * 80,
+		width: 80,
 		children: cols,
 	});
 
@@ -223,6 +222,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 					pagination: false,
 					scroll: { y: 660 },
 				}}
+
 				data={loaiHocPhan === 'all' ? data : danhSachKhongDat}
 				columns={columns}
 			>

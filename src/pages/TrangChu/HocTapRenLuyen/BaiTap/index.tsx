@@ -179,7 +179,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	return (
 		<Card
 			variant='borderless'
-			className='card-borderless card-big-title card-baitap-dashboard'
+			className='card-borderless card-baitap-dashboard'
 			title={
 				<>
 					{intl.formatMessage({ id: 'trangchu.baitap.title' })}{' '}
