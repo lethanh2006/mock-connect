@@ -15,7 +15,7 @@ const TinTucDashboardWrapper = () => {
 	return (
 		<Card
 			variant='borderless'
-			className='card-borderless card-big-title'
+			className='card-borderless'
 			title={
 				<Tabs
 					onChange={setTab}

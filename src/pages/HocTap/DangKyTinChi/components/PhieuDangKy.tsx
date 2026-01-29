@@ -56,14 +56,14 @@ const PhieuDangKy = () => {
 		.map((item) =>
 			hocPhanCoLopThucHanh.includes(item.maHocPhan)
 				? {
-						...item,
-						// Gộp lịch học lớp Chính với lớp hiển thị
-						maHoaLichHoc:
-							danhSachLopDangKy
-								?.filter((j) => j.maHocPhan === item.maHocPhan)
-								?.map((j) => j.maHoaLichHoc ?? [])
-								?.flat() ?? [],
-					}
+					...item,
+					// Gộp lịch học lớp Chính với lớp hiển thị
+					maHoaLichHoc:
+						danhSachLopDangKy
+							?.filter((j) => j.maHocPhan === item.maHocPhan)
+							?.map((j) => j.maHoaLichHoc ?? [])
+							?.flat() ?? [],
+				}
 				: item,
 		);
 	const tongTinChi = _.sumBy(
@@ -128,7 +128,7 @@ const PhieuDangKy = () => {
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.mahocphan' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
-			width: 80,
+			width: 100,
 			filterType: 'string',
 		},
 		{
@@ -147,7 +147,7 @@ const PhieuDangKy = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
 			dataIndex: 'soTinChi',
-			width: 60,
+			width: 80,
 			align: 'center',
 			sortable: true,
 			render: (val, rec) => (
@@ -183,7 +183,7 @@ const PhieuDangKy = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.hocphi' }),
 			align: 'right',
-			width: 120,
+			width: 160,
 			render: (val, rec) => {
 				const due = tinhHocPhi(rec.soTinChi, rec.loai, rec.maKhoaNganh);
 				if (due) return `${inputFormat(due)} VND`;
@@ -271,7 +271,7 @@ const PhieuDangKy = () => {
 			<Divider style={{ marginTop: 24 }}>
 				{intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}
 			</Divider>
-			<Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
+			<Row gutter={[8, 12]} style={{ margin: 16 }}>
 				<Col span={24} md={10}>
 					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
 					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
@@ -305,7 +305,7 @@ const PhieuDangKy = () => {
 				hasTotal
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
 			>
-				<Space wrap>
+				<Space wrap style={{ margin: '0 16px' }}>
 					<ButtonExtend cooldownMs={10000} icon={<ReloadOutlined />} onClick={getData}>
 						{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.tailai' })}
 					</ButtonExtend>
@@ -326,8 +326,8 @@ const PhieuDangKy = () => {
 					) : null}
 
 					{tongTinChiChuaDk &&
-					dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
-					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
+						dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
+						sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
 						<ButtonExtend
 							tooltip={
 								tongTinChi > soTinChiToiDa
@@ -336,11 +336,11 @@ const PhieuDangKy = () => {
 										? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin' })
 										: !dangTrongThoiGian
 											? intl.formatMessage({
-													id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
-												})
+												id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
+											})
 											: intl.formatMessage({
-													id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc',
-												})
+												id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc',
+											})
 							}
 							type='primary'
 							icon={<SendOutlined />}

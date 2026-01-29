@@ -56,13 +56,13 @@ const BaiThiCuoiKy = () => {
 			render: (val, rec) =>
 				rec?.fileDinhKem?.length
 					? rec?.fileDinhKem?.map((item: any) => (
-							<div key={item} style={{ maxWidth: 300 }}>
-								-{' '}
-								<a href={item} target='_blank' rel='noreferrer'>
-									{getNameFile(item)}
-								</a>
-							</div>
-						))
+						<div key={item} style={{ maxWidth: 300 }}>
+							-{' '}
+							<a href={item} target='_blank' rel='noreferrer'>
+								{getNameFile(item)}
+							</a>
+						</div>
+					))
 					: null,
 		},
 		{
@@ -87,14 +87,14 @@ const BaiThiCuoiKy = () => {
 			title: intl.formatMessage({ id: 'baithi.table.slFile' }),
 			align: 'center',
 			dataIndex: 'soFilePhaiNop',
-			width: 100,
+			width: 130,
 		},
 		{
 			title: intl.formatMessage({ id: 'baithi.table.dungLuong' }),
 			align: 'center',
 			dataIndex: 'dungLuongToiDa',
 			render: (val, rec) => val && `${val} MB`,
-			width: 100,
+			width: 130,
 		},
 		{
 			title: intl.formatMessage({ id: 'baithi.table.dinhDang' }),
@@ -137,7 +137,7 @@ const BaiThiCuoiKy = () => {
 		{
 			title: intl.formatMessage({ id: 'baithi.table.thaoTac' }),
 			align: 'center',
-			width: 60,
+			width: 100,
 			fixed: 'right',
 			render: (val, rec) => {
 				const ngoaiThoiGian =
