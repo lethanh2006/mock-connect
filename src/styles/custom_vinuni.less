@@ -93,6 +93,7 @@
 // =============================================================================
 * {
 	font-family: 'Montserrat', sans-serif !important;
+	font-weight: 500;
 }
 
 .ant-form-item-label>label {
@@ -311,8 +312,8 @@
 // =============================================================================
 .ant-table,
 .ant-table-container,
-.ant-table-content,
-.ant-table-thead>tr>th {
+.ant-table-content>tr>th,
+.ant-table-content>tr>td {
 	border: none !important;
 }
 
@@ -332,11 +333,19 @@
 	}
 }
 
+.ant-table-tbody {
+	.ant-table-cell {
+		border-left: none !important;
+		border-right: none !important;
+	}
+}
+
 .ant-table-cell {
-	border-bottom: 1px solid var(--color-accent-700) !important;
-	border-left: none !important;
-	border-right: none !important;
-	padding: 5px 18px !important;
+	// border-bottom: 1px solid var(--color-accent-700) !important;
+	// border-left: none !important;
+	// border-right: none !important;
+	// padding: 5px 18px !important;
+	text-align: left !important;
 
 	p,
 	.ant-typography {
@@ -350,20 +359,17 @@
 
 .ant-table-small .ant-table-cell {
 	height: 36px;
-	padding: 3px 5px !important;
 }
 
 .ant-table-thead {
 	.ant-table-cell {
 		font-weight: 600 !important;
-		padding: 3px 18px !important;
+		text-align: left !important;
 	}
 
 	>tr>th {
-		background-color: var(--color-accent-700) !important;
 		color: var(--color-text-100) !important;
 		font-weight: 700 !important;
-		border-bottom: 1px solid var(--color-accent-700) !important;
 		height: 44px;
 
 		&::before {
@@ -373,6 +379,11 @@
 		.ant-table-column-title {
 			color: var(--color-text-100) !important;
 		}
+	}
+
+	>tr>th:last-child,
+	.ant-table-cell:last-child {
+		border-right: none !important;
 	}
 }
 
@@ -494,12 +505,23 @@
 		padding: 12px 0 0 0 !important;
 
 		.ant-spin-nested-loading {
-			margin: 0 !important;
+			margin: 0 -16px !important;
 		}
 	}
 }
 
-[data-type='SplitPane'] .ant-card.card-borderless>.ant-card-body .table-base .ant-table-wrapper .ant-spin-nested-loading {
+.css-glamorous-div--jgd0xx {
+	.table-base {
+		.ant-table-wrapper {
+			.ant-spin-nested-loading {
+				margin: 0 !important;
+			}
+		}
+	}
+}
+
+// .css-glamorous-div--jgd0xx trong card-big-title: dùng margin 0 -16px, không bị ghi đè bởi rule trên
+.card-big-title .css-glamorous-div--jgd0xx .table-base .ant-table-wrapper .ant-spin-nested-loading {
 	margin: 0 !important;
 }
 
@@ -553,13 +575,13 @@
 	}
 
 	&.card-big-title {
-		background: transparent;
+		// background: transparent;
 		border: none !important;
 
 		>.ant-card-head {
 			padding: 0 0 16px 0 !important;
 			border: none !important;
-			background-color: transparent !important;
+			// background-color: transparent !important;
 
 			.ant-card-head-title {
 				font-size: 22px !important;
@@ -631,8 +653,8 @@
 }
 
 .card-big-title>.ant-card-body {
-	padding: 0 !important;
-	background-color: transparent !important;
+	padding: 12px 16px !important;
+	// background-color: transparent !important;
 	border-radius: 8px !important;
 
 	.ant-spin-nested-loading .ant-card>.ant-card-body {
@@ -642,6 +664,10 @@
 	.ant-card>.ant-card-body {
 		.table-base>.ant-table-wrapper>.ant-spin-nested-loading {
 			margin: 0 -16px !important;
+		}
+
+		.css-glamorous-div--jgd0xx .table-base>.ant-table-wrapper>.ant-spin-nested-loading {
+			margin: 0 !important;
 		}
 
 		&>.ant-card>.ant-card-body {
@@ -744,15 +770,6 @@
 	}
 }
 
-.btn-import,
-.btn-export,
-.btn-reload,
-.btn-filter {
-	background-color: var(--color-accent-700) !important;
-	border-radius: 4px;
-	border: none !important;
-}
-
 // =============================================================================
 // 7. Page Container & Header
 // =============================================================================
@@ -766,9 +783,9 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		height: 172px;
+		height: 170px;
 		background-image: url('/header_page_vinuni.png') !important;
-		background-size: 100% 172px !important;
+		background-size: 101% 170px !important;
 		background-position: top center !important;
 		background-repeat: no-repeat !important;
 		z-index: 0;
@@ -986,7 +1003,6 @@
 	position: relative;
 	padding: 16px 0 0 !important;
 	justify-content: flex-end !important;
-	margin-top: 10px !important;
 
 	&::before {
 		content: '';
@@ -1134,12 +1150,16 @@
 	// Common styles
 	.ant-steps-item-icon .ant-steps-icon {
 		font-weight: 600 !important;
+		color: var(--color-text-100) !important;
 	}
 
 	.ant-steps-item-content .ant-steps-item-title {
-		line-height: 1.5 !important;
 		font-size: 14px !important;
 		font-weight: 600 !important;
+	}
+
+	&.ant-steps-label-vertical .ant-steps-item-content .ant-steps-item-title {
+		line-height: 1.5 !important;
 	}
 }
 
