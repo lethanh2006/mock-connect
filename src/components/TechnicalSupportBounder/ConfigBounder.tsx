@@ -1,4 +1,12 @@
-import { accentColors, highlightColor, officialColors, primaryColor, statusBgColors, statusColors, textColors } from '@/services/base/constant';
+import {
+	accentColors,
+	highlightColor,
+	officialColors,
+	primaryColor,
+	statusBgColors,
+	statusColors,
+	textColors,
+} from '@/services/base/constant';
 import { getIntl, getLocale } from '@umijs/max';
 import { ConfigProvider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
@@ -34,8 +42,14 @@ const ConfigBounder = (props: { children?: any }) => {
 			)}
 			theme={{
 				token: {
-					borderRadius: 4, colorPrimary: primaryColor, colorLink: primaryColor, controlHeight: 36, controlHeightSM: 28,
-					colorError: statusColors.status400, colorTextDisabled: textColors.text200,
+					borderRadius: 4,
+					colorPrimary: primaryColor,
+					colorLink: primaryColor,
+					controlHeight: 36,
+					controlHeightSM: 28,
+					colorError: statusColors.status400,
+					colorTextDisabled: textColors.text200,
+					colorPrimaryBg: officialColors.official500,
 				},
 				hashed: false,
 				cssVar: { prefix: '' },
@@ -50,7 +64,7 @@ const ConfigBounder = (props: { children?: any }) => {
 						dotWidth: 16,
 						dotGap: 4,
 						dotActiveWidth: 16,
-						arrowOffset: 8
+						arrowOffset: 8,
 					},
 					Spin: {
 						dotSize: 45,
@@ -80,7 +94,7 @@ const ConfigBounder = (props: { children?: any }) => {
 						colorPrimary: primaryColor,
 						borderRadius: 4,
 						fontWeightStrong: 700,
-						colorTextDisabled: textColors.text100
+						colorTextDisabled: textColors.text100,
 					},
 					Calendar: {
 						itemActiveBg: statusBgColors.statusBg400,
@@ -88,7 +102,8 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Modal: {
 						headerBg: officialColors.official500,
-					},
+						headerMarginBottom: 0,
+					} as any,
 					Steps: {
 						colorSplit: accentColors.accent700,
 						lineWidth: 2,
@@ -110,7 +125,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Input: {
 						colorTextDisabled: textColors.text200,
-						activeBorderColor: accentColors.accent600
+						activeBorderColor: accentColors.accent600,
 					},
 					Segmented: {
 						itemSelectedColor: primaryColor,
@@ -131,7 +146,7 @@ const ConfigBounder = (props: { children?: any }) => {
 						fontSizeLG: 14,
 					},
 					Badge: {
-						colorInfo: '#0051FF'
+						colorInfo: '#0051FF',
 					},
 					Avatar: {
 						containerSizeLG: 48,
@@ -157,14 +172,14 @@ const ConfigBounder = (props: { children?: any }) => {
 						colorSplit: accentColors.accent700,
 						lineWidth: 2,
 						orientationMargin: 0,
-						textPaddingInline: 8
+						textPaddingInline: 8,
 					},
 					Select: {
 						optionSelectedColor: primaryColor,
 						optionSelectedBg: officialColors.official500,
 					},
 					Table: {
-						borderColor: accentColors?.accent700,
+						borderColor: textColors?.text400,
 						headerBg: accentColors?.accent700,
 					},
 					Breadcrumb: {
@@ -175,7 +190,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					},
 					Typography: {
 						colorTextHeading: textColors?.text400,
-					}
+					},
 				},
 			}}
 		>
