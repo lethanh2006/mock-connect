@@ -26,7 +26,7 @@ export const TabViewPage = (props: TabViewPageComponentProps) => {
 		tabType = 'card',
 		tabStyle,
 		style,
-		offsetTop = 56,
+		offsetTop = 64,
 		cardBigTitle,
 	} = props;
 	const activeMenu = menu?.filter((i) => !i.hide);
