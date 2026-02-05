@@ -1,5 +1,5 @@
 import { landingUrl } from '@/services/base/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Col, Empty, Row, Spin, Tooltip } from 'antd';
 import { isEmpty } from 'lodash';
@@ -82,7 +82,7 @@ const TinTucDashboardWP = (props: { category?: number }) => {
 														/>
 													</Tooltip>
 													{tintuc?.date && (
-														<span className='thoi-gian'>{dayjs(tintuc?.date).format('DD/MM/YYYY')}</span>
+														<span className='thoi-gian'>{formatDate(tintuc?.date)}</span>
 													)}
 												</Col>
 											</Row>

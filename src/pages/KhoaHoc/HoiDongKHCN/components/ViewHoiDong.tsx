@@ -1,6 +1,7 @@
 import type { HoiDongKHCN } from '@/services/KhoaHoc/HoiDongKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { Button, Descriptions, Modal, Tag } from 'antd';
 import { useModel } from 'umi';
 import TableDeTaiHoiDong from './DeTaiHoiDong';
@@ -32,7 +33,7 @@ const ViewHoiDong = (props: { rec: HoiDongKHCN.IRecord; zIndex?: number }) => {
 					{rec.ten}
 				</Descriptions.Item>
 				<Descriptions.Item span={3} label='Ngày tổ chức'>
-					{dayjs(rec.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+					{formatDateTime(rec.thoiGianBatDau)}
 				</Descriptions.Item>
 				<Descriptions.Item span={3} label='Địa điểm'>
 					{rec.diaDiem}

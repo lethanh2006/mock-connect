@@ -12,6 +12,7 @@ import {
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { MenuOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Card, Checkbox, Empty, Space, Table } from 'antd';
 import _ from 'lodash';
@@ -120,8 +121,8 @@ const DangKyNhuCauHocPhan = () => {
 							) : (
 								<>
 									Thời gian đăng ký nhu cầu học phần từ{' '}
-									<b>{dayjs(recDot?.thoiGianBatDauDangKy).format('DD/MM/YYYY')}</b> đến{' '}
-									<b>{dayjs(recDot?.thoiGianKetThucDangKy).format('DD/MM/YYYY')}</b>
+									<b>{formatDate(recDot?.thoiGianBatDauDangKy)}</b> đến{' '}
+									<b>{formatDate(recDot?.thoiGianKetThucDangKy)}</b>
 								</>
 							)
 						}

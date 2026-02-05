@@ -5,6 +5,7 @@ import { type IColumn } from '@/components/Table/typing';
 import type { UuDaiThanhToan } from '@/services/TaiChinh/UuDaiThanhToan/typing';
 import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
+import { formatDate } from '@/utils/formatDate';
 import { useIntl, useModel } from 'umi';
 
 const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord) => void }) => {
@@ -36,9 +37,7 @@ const TableUuDaiHienHanh = (props: { onCellClick?: (rec: UuDaiThanhToan.IRecord)
 			align: 'center',
 			width: 140,
 			render: (val, rec) =>
-				`${rec.thoiGianBatDau ? dayjs(rec.thoiGianBatDau).format('DD/MM/YYYY') : ''} - ${
-					rec.thoiGianKetThuc ? dayjs(rec.thoiGianKetThuc).format('DD/MM/YYYY') : ''
-				}`,
+				`${formatDate(rec.thoiGianBatDau)} - ${formatDate(rec.thoiGianKetThuc)}`,
 			onCell,
 		},
 		{

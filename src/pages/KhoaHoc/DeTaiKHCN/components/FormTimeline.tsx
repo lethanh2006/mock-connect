@@ -89,7 +89,7 @@ const FormTimeline = (props: { onCancel: any; record?: DeTaiKHCN.TimelineThuyetM
 					rules={[...rules.required]}
 					style={{ marginBottom: 10 }}
 				>
-					<MyDateRangePicker placeholder={['Từ ngày', 'đến ngày']} format={'DD/MM/YYYY'} />
+					<MyDateRangePicker placeholder={['Từ ngày', 'đến ngày']} format={undefined} />
 				</Form.Item>
 				{isDeTaiTapThe && (
 					<Form.Item

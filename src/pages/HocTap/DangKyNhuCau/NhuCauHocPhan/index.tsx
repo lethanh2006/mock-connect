@@ -9,6 +9,7 @@ import {
 	type ETrangThaiHocPhanDangKyNhuCau,
 } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Alert, Popconfirm, Tag } from 'antd';
 import { useEffect } from 'react';
@@ -130,8 +131,8 @@ const NhuCauHocPhanPage = () =>
 								: intl.formatMessage(
 										{ id: 'dangkyhoctap.alert.trongThoiGian' },
 										{
-											tuNgay: dayjs(recDot?.thoiGianBatDau).format('DD/MM/YYYY'),
-											denNgay: dayjs(recDot?.thoiGianKetThuc).format('DD/MM/YYYY'),
+											tuNgay: formatDate(recDot?.thoiGianBatDau),
+											denNgay: formatDate(recDot?.thoiGianKetThuc),
 											b: (chunks) => <b>{chunks}</b>,
 										},
 									)
@@ -145,7 +146,7 @@ const NhuCauHocPhanPage = () =>
 					data={danhSach ?? []}
 					loading={loading}
 					addStt
-					otherProps={{ pagination: true }}
+					otherProps={{ pagination: {} }}
 					hasTotal
 					onReload={getData}
 				>

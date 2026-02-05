@@ -3,6 +3,7 @@ import { colorTrangThaiUserDiemDanh, trangThaiUserDiemDanh } from '@/services/Da
 import { colorHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Card, Descriptions, Space, Tag } from 'antd';
 import type { JSX } from 'react';
 import { useIntl } from 'umi';
@@ -24,12 +25,12 @@ const ThongTinBuoiHoc = (props: {
 	const content = (
 		<Descriptions column={column ?? { xs: 1, sm: 1, md: 3, lg: 3, xl: 3, xxl: 3 }}>
 			<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.hocgannhat.ngahoc' })}>
-				{THU_TRONG_TUAN[dayjs(buoiHoc?.ngay).day()]}, {dayjs(buoiHoc?.ngay).format('DD/MM/YYYY')}
+				{THU_TRONG_TUAN[dayjs(buoiHoc?.ngay).day()]}, {formatDate(buoiHoc?.ngay)}
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.hocgannhat.tiethoc' })}>
 				{buoiHoc?.tietBatDau} - {buoiHoc?.tietKetThuc}
 				{buoiHoc?.thoiGianBatDau && buoiHoc?.thoiGianKetThuc
-					? ` (${dayjs(buoiHoc.thoiGianBatDau).format('HH:mm')} - ${dayjs(buoiHoc.thoiGianKetThuc).format('HH:mm')})`
+					? ` (${formatDate(buoiHoc.thoiGianBatDau, 'HH:mm')} - ${formatDate(buoiHoc.thoiGianKetThuc, 'HH:mm')})`
 					: ''}
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.hocgannhat.hinhthuc' })}>

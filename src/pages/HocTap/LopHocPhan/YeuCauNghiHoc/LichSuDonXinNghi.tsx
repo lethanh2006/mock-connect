@@ -8,7 +8,7 @@ import { ETrangThaiDonNghiHoc, TrangThaiDonNghiHoc } from '@/services/DaoTao/con
 import type { YeuCauNghiHoc } from '@/services/DaoTao/YeuCauNghiHoc/typing';
 import { CloseOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
-import dayjs from 'dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import React, { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -43,7 +43,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			dataIndex: ['thoiKhoaBieu', 'ngay'],
 			align: 'center',
 			width: 100,
-			render: (value) => value && dayjs(value).format('DD/MM/YYYY'),
+			render: (value) => value && formatDate(value),
 			sortable: true,
 		},
 		{
@@ -100,7 +100,7 @@ const LichSuDonXinNghi: React.FC<LichSuDonXinNghiProps> = ({ visible, setVisible
 			width: 120,
 			align: 'center',
 			sortable: true,
-			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && formatDateTime(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.lichsu.thaotac' }),

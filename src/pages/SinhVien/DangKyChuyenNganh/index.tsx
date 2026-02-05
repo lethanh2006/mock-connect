@@ -7,7 +7,7 @@ import {
 	trangThaiDangKyChuyenNganh,
 } from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import type { DangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { EditOutlined } from '@ant-design/icons';
 import { Alert, Button, Tag, Tooltip } from 'antd';
 import { useEffect } from 'react';
@@ -65,14 +65,14 @@ const DangKyChuyenNganhPage = () => {
 			width: 120,
 			align: 'center',
 			dataIndex: 'createdAt',
-			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && formatDateTime(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.capnhat.tablecolumntitle' }),
 			width: 120,
 			align: 'center',
 			dataIndex: 'updatedAt',
-			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && formatDateTime(val),
 		},
 		// {
 		// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.khoanganhsinhvien.tablecolumntitle' }),
@@ -116,8 +116,8 @@ const DangKyChuyenNganhPage = () => {
 								<b>{dotHienHanh.ten}</b>&quot;{' '}
 								{intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.alert.success.endofsentence' })}{' '}
 								<b>
-									{dayjs(dotHienHanh.thoiGianBatDau).format('HH:mm:ss DD/MM')} -{' '}
-									{dayjs(dotHienHanh.thoiGianKetThuc).format('HH:mm:ss DD/MM')}
+									{formatDateTime(dotHienHanh.thoiGianBatDau)} -{' '}
+									{formatDateTime(dotHienHanh.thoiGianKetThuc)}
 								</b>
 								. {intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.alert.success.conclusionofsentence' })}
 							</>

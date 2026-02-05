@@ -1,7 +1,7 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { IColumn } from '@/components/Table/typing';
 import { Button, Card, Checkbox, Col, Modal, Row, Space, Tag, Typography } from 'antd';
-import dayjs from 'dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -109,12 +109,12 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 
 							<Text>
 								<strong>{intl.formatMessage({ id: 'activity.detail.startDate' })}:</strong>{' '}
-								{dayjs(record?.startDate).format('HH:mm DD/MM/YYYY')}
+								{formatDateTime(record?.startDate)}
 							</Text>
 
 							<Text>
 								<strong>{intl.formatMessage({ id: 'activity.detail.endDate' })}:</strong>{' '}
-								{dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')}
+								{formatDateTime(record?.endDate)}
 							</Text>
 
 							<Text>

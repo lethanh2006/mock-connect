@@ -4,7 +4,7 @@ import {
 	type ETrangThaiDuyetMuonSach,
 	type ETrangThaiMuonSach,
 } from '@/services/QuanLyThuVien/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Button, Card, Col, Descriptions, Row, Tag } from 'antd';
 import { useModel } from 'umi';
 
@@ -28,10 +28,10 @@ const ChiTietMuonTraSach = () => {
 							<> */}
 						<Descriptions.Item label='Đăng ký cá biệt'>{record?.soDangKyCaBiet ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Thời gian mượn'>
-							{record?.thoiGianMuon ? dayjs(record?.thoiGianMuon).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianMuon ? formatDate(record?.thoiGianMuon) : '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Hạn trả'>
-							{record?.expired ? dayjs(record?.expired).format('DD/MM/YYYY') : '--'}
+							{record?.expired ? formatDate(record?.expired) : '--'}
 						</Descriptions.Item>
 
 						{/* <Descriptions.Item label='Trạng thái'>
@@ -43,24 +43,24 @@ const ChiTietMuonTraSach = () => {
 						</Descriptions.Item> */}
 
 						<Descriptions.Item label='Thời gian gia hạn'>
-							{record?.thoiGianGiaHan ? dayjs(record?.thoiGianGiaHan).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianGiaHan ? formatDate(record?.thoiGianGiaHan) : '--'}
 						</Descriptions.Item>
 
 						<Descriptions.Item label='Thời gian trả'>
-							{record?.thoiGianTra ? dayjs(record?.thoiGianTra).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianTra ? formatDate(record?.thoiGianTra) : '--'}
 						</Descriptions.Item>
 						{/* </>
 						)} */}
 						<Descriptions.Item label='Thời gian đăng ký'>
 							{record?.phieuMuonTra?.thoiGianDangKy
-								? dayjs(record?.phieuMuonTra?.thoiGianDangKy).format('DD/MM/YYYY')
+								? formatDate(record?.phieuMuonTra?.thoiGianDangKy)
 								: '--'}
 						</Descriptions.Item>
 						{/* <Descriptions.Item label='Thời gian dự kiến mượn'>
-							{record?.thoiGianMuonDuKien ? dayjs(record?.thoiGianMuonDuKien).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianMuonDuKien ? formatDate(record?.thoiGianMuonDuKien) : '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Thời gian dự kiến trả'>
-							{record?.thoiGianTraDuKien ? dayjs(record?.thoiGianTraDuKien).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianTraDuKien ? formatDate(record?.thoiGianTraDuKien) : '--'}
 						</Descriptions.Item> */}
 
 						<Descriptions.Item label='Ghi chú đăng ký'>{record?.ghiChuDangKy ?? '--'}</Descriptions.Item>

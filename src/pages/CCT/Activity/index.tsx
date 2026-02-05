@@ -5,6 +5,7 @@ import { ReloadOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Popconfirm, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { formatDate } from '@/utils/formatDate';
 import { useIntl, useModel } from 'umi';
 import ChiTietActivity from './ChiTiet';
 
@@ -89,7 +90,7 @@ const ActivityPage = () => {
 													fontSize: 13,
 												}}
 											>
-												{dayjs(item.startDate).format('DD/MM/YYYY')}
+												{formatDate(item.startDate)}
 											</div>
 
 											<div style={{ position: 'absolute', top: 16, right: 16 }}>

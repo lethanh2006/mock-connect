@@ -4,7 +4,7 @@ import { buildUpLoadFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Descriptions, Form, Input, Modal } from 'antd';
-import dayjs from 'dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -51,7 +51,7 @@ const ModalXinNghi = (props: { visible: boolean; onClose: () => void }) => {
 					{recTKB?.tenLopHocPhan ?? ''} ({recLopHocPhan?.hocPhan?.ten ?? ''})
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lichhoc.xinnghi.buoihoc' })}>
-					{recTKB?.ngay ? dayjs(recTKB?.ngay).format('DD/MM/YYYY') : ''},{' '}
+					{recTKB?.ngay ? formatDate(recTKB?.ngay) : ''},{' '}
 					{recTKB?._id ? `tiết: ${recTKB?.tietBatDau ?? ''} - ${recTKB?.tietKetThuc ?? ''}` : ''}
 				</Descriptions.Item>
 			</Descriptions>

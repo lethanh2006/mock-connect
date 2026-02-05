@@ -1,5 +1,6 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Button, Card, Modal, Spin, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useIntl, useModel } from 'umi';
@@ -249,7 +250,7 @@ const LichDashboard = () => {
 				{/* Header với tên tháng và navigation */}
 				<div className={`calendar-header ${responsiveClass}`}>
 					<Typography.Title level={5} className={`calendar-title ${responsiveClass}`}>
-						{intl.formatMessage({ id: 'trangchu.lich.thang' })} {currentMonth.format('M/YYYY')}
+						{intl.formatMessage({ id: 'trangchu.lich.thang' })} {formatDate(currentMonth, 'MM/YYYY')}
 					</Typography.Title>
 					<div className={`${responsiveClass} navigation-buttons`}>
 						<Button
@@ -376,7 +377,7 @@ const LichDashboard = () => {
 
 			{/* Modal xem list sự kiện */}
 			<Modal
-				title={`${intl.formatMessage({ id: 'trangchu.lich.modal.title' })} ${selectedDate.format('DD/MM/YYYY')}`}
+				title={`${intl.formatMessage({ id: 'trangchu.lich.modal.title' })} ${formatDate(selectedDate)}`}
 				open={visibleDetail}
 				onCancel={() => setVisibleDetail(false)}
 				footer={null}
@@ -399,7 +400,7 @@ const LichDashboard = () => {
 								{event?.tenLopHocPhan ? `- ${event?.tenLopHocPhan}` : ''}
 							</div>
 							<div className='event-time'>
-								{dayjs(event.thoiGianBatDau).format('HH:mm')} - {dayjs(event.thoiGianKetThuc).format('HH:mm')}
+								{formatDate(event.thoiGianBatDau, 'HH:mm')} - {formatDate(event.thoiGianKetThuc, 'HH:mm')}
 							</div>
 							{(event.diaDiem || event.phongHoc) && (
 								<div className='event-location'>

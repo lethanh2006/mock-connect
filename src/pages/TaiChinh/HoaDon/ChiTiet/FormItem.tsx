@@ -2,7 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
 import { Col, Row, Table, Tag } from 'antd';
 import _ from 'lodash';
@@ -83,7 +83,7 @@ const FormItemHoaDonChiTiet = () => {
 			dataIndex: 'createdAt',
 			width: 120,
 			align: 'left',
-			render: (val) => dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => formatDateTime(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.trangthai' }),

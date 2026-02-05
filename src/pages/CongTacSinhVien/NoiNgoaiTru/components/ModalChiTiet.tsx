@@ -1,4 +1,4 @@
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Col, Descriptions, Divider, Image, Modal, Row } from 'antd';
 import { useModel } from 'umi';
 
@@ -28,9 +28,7 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 							{record?.thongTinSinhVien?.maSinhVien ?? 'Chưa khai báo'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Ngày sinh'>
-							{record?.thongTinSinhVien?.ngaySinh
-								? dayjs(record?.thongTinSinhVien?.ngaySinh).format('DD/MM/YYYY')
-								: 'Chưa khai báo'}
+							{record?.thongTinSinhVien?.ngaySinh ? formatDate(record?.thongTinSinhVien?.ngaySinh) : '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Giới tính'>
 							{record?.thongTinSinhVien?.gioiTinh ?? 'Chưa khai báo'}
@@ -93,9 +91,7 @@ const ModalChiTiet = (props: { visibleForm: boolean; setVisibleForm: (val: boole
 			<Descriptions labelStyle={{ fontWeight: 'bold' }} column={2}>
 				<Descriptions.Item label='Họ tên'>{record?.thongTinNguoiThan?.hoTen ?? 'Chưa khai báo'}</Descriptions.Item>
 				<Descriptions.Item label='Ngày sinh'>
-					{record?.thongTinNguoiThan?.namSinh
-						? dayjs(record?.thongTinNguoiThan?.namSinh).format('DD/MM/YYYY')
-						: 'Chưa khai báo'}
+					{formatDate(record?.thongTinNguoiThan?.namSinh)}
 				</Descriptions.Item>
 				<Descriptions.Item label='Số điện thoại'>
 					{record?.thongTinNguoiThan?.soDienThoai ?? 'Chưa khai báo'}

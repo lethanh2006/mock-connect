@@ -1,5 +1,5 @@
+import { formatDate } from '@/utils/formatDate';
 import { Descriptions, Divider, Spin } from 'antd';
-import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
@@ -73,12 +73,12 @@ const TheChatPage = () => {
 								<Descriptions.Item
 									label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.thoigianbatdau.description' })}
 								>
-									{recDot?.thoiGianBatDau ? dayjs(recDot?.thoiGianBatDau).format('DD/MM/YYYY') : '--'}
+									{formatDate(recDot?.thoiGianBatDau) || '--'}
 								</Descriptions.Item>
 								<Descriptions.Item
 									label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.thoigianketthuc.description' })}
 								>
-									{recDot?.thoiGianKetThuc ? dayjs(recDot?.thoiGianKetThuc).format('DD/MM/YYYY') : '--'}
+									{formatDate(recDot?.thoiGianKetThuc) || '--'}
 								</Descriptions.Item>
 								<Descriptions.Item
 									label={intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.tieuchidanhgia.description' })}

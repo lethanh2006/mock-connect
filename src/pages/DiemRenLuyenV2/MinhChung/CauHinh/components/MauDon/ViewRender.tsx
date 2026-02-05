@@ -5,7 +5,7 @@ import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import { primaryColor } from '@/services/base/constant';
 import { EKieuDuLieu, ETextDisplay } from '@/services/FormDong/LoaiHinh/constants';
 import type { LoaiHinh } from '@/services/FormDong/LoaiHinh/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { currencyFormat } from '@/utils/utils';
 import { Modal, Tag } from 'antd';
 import { useState } from 'react';
@@ -89,14 +89,14 @@ const ViewRender = (props: {
 			break;
 
 		case EKieuDuLieu.HOUR:
-			value = <div>{dayjs(valueFinal)?.format('HH:mm DD/MM/YYYY')}</div>;
+			value = <div>{formatDateTime(valueFinal)}</div>;
 			break;
 		case EKieuDuLieu.DATE:
-			value = <div>{dayjs(valueFinal)?.format('DD/MM/YYYY')}</div>;
+			value = <div>{formatDate(valueFinal)}</div>;
 			// value = <div>{valueFinal}</div>;
 			break;
 		case EKieuDuLieu.MONTH:
-			value = <div>{dayjs(valueFinal)?.format('MM/YYYY')}</div>;
+			value = <div>{formatDate(valueFinal, 'MM/YYYY')}</div>;
 			// value = <div>{valueFinal}</div>;
 			break;
 		case EKieuDuLieu.FILE:

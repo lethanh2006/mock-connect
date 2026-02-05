@@ -1,4 +1,4 @@
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Descriptions } from 'antd';
 import { useIntl, useModel } from 'umi';
 
@@ -18,7 +18,7 @@ const ViewDetailHocKy = () => {
 			<Descriptions.Item
 				label={intl.formatMessage({ id: 'dangkytinchi.chitiethocky.description.thoigianbatdauhocky' })}
 			>
-				{recHocKy?.thoiGianBatDau ? dayjs(recHocKy.thoiGianBatDau).format('DD/MM/YYYY') : null}
+				{recHocKy?.thoiGianBatDau ? formatDate(recHocKy.thoiGianBatDau) : null}
 			</Descriptions.Item>
 			{dotDangKyHienTai ? (
 				<>

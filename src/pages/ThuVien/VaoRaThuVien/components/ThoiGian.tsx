@@ -101,7 +101,7 @@ const ThoiGianVaoRaThuVien = (props: { visible: boolean; setVisible: (val: boole
 				size='small'
 				addStt
 				hasTotal
-				otherProps={{ pagination: true }}
+				otherProps={{ pagination: {} }}
 			/>
 		</Modal>
 	);
