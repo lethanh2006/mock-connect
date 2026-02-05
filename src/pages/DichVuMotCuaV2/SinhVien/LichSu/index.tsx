@@ -9,7 +9,7 @@ import Form from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
 import { TrangThaiDonDVMC } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import axios from '@/utils/axios';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { ip3 } from '@/utils/ip';
 import {
 	DeleteOutlined,
@@ -212,7 +212,7 @@ const LichSuGuiDon = () => {
 			title: 'Ngày tạo',
 			dataIndex: 'createdAt',
 			width: 100,
-			render: (val) => <div>{dayjs(val).format('HH:mm DD/MM/YYYY')}</div>,
+			render: (val) => <div>{formatDateTime(val)}</div>,
 			align: 'center',
 			onCell,
 		},

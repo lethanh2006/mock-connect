@@ -201,14 +201,14 @@ const FormRender = (props: {
 					disabled={props.disable}
 					style={{ width: '100%' }}
 					allowClear
-					format={'DD/MM/YYYY HH:mm'}
+					format={undefined}
 					showTime
 				/>
 			);
 			rule = [...(cauHinh.batBuoc ? rules.required : [])];
 			break;
 		case EKieuDuLieu.DATE:
-			component = <MyDatePicker disabled={props.disable} style={{ width: '100%' }} allowClear format={'DD/MM/YYYY'} />;
+			component = <MyDatePicker disabled={props.disable} style={{ width: '100%' }} allowClear format={undefined} />;
 			rule = [...(cauHinh.batBuoc ? rules.required : [])];
 			break;
 		case EKieuDuLieu.MONTH:
@@ -596,7 +596,7 @@ const FormRender = (props: {
 											? 'YYYY'
 											: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
 												? 'MM/YYYY'
-												: 'DD/MM/YYYY'
+												: undefined
 									}
 									placeholder={['Từ', 'đến']}
 									picker={
@@ -625,7 +625,7 @@ const FormRender = (props: {
 											? 'YYYY'
 											: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
 												? 'MM/YYYY'
-												: 'DD/MM/YYYY'
+												: undefined
 									}
 									pickerStyle={
 										recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY

@@ -1,7 +1,7 @@
 import { EVaiTroSvLhc, vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row, Typography } from 'antd';
 import { useIntl } from 'umi';
@@ -227,7 +227,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 							<Descriptions.Item
 								label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.ngaysinh' })}
 							>
-								{record?.ngaySinh && dayjs(record.ngaySinh).format('DD/MM/YYYY')}
+								{record?.ngaySinh && formatDate(record.ngaySinh)}
 							</Descriptions.Item>
 							<Descriptions.Item
 								label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.dienthoai' })}

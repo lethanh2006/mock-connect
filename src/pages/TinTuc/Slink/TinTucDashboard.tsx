@@ -1,5 +1,5 @@
 import anh from '@/assets/noimg.png';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Col, Empty, Row, Spin, Tooltip } from 'antd';
 import { isEmpty } from 'lodash';
@@ -59,7 +59,7 @@ const TinTucDashboardSlink = () => {
 													})}
 												</Tooltip>
 												{tintuc?.ngayDang && (
-													<span className='thoi-gian'>{dayjs(tintuc?.ngayDang).format('DD/MM/YYYY')}</span>
+													<span className='thoi-gian'>{formatDate(tintuc?.ngayDang)}</span>
 												)}
 											</Col>
 										</Row>

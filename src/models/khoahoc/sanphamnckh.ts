@@ -14,7 +14,7 @@ import {
 import { ETrangThaiSanPham } from '@/services/KhoaHoc/SanPhamNCKH/constants';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
 import { gioNCKHBySsoId } from '@/services/KhoaHoc/ThongKe';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { chuanHoaObject } from '@/utils/utils';
 import { message } from 'antd';
 import fileDownload from 'js-file-download';
@@ -247,7 +247,7 @@ export default () => {
 		try {
 			setLoading(true);
 			const res = await exportSanPham({ condition: { ...condition, ...paramCondition }, filters });
-			fileDownload(res?.data, `${loaiSanPham}_${dayjs().format('HH:mm DD/MM/YYYY')}.xlsx`);
+			fileDownload(res?.data, `${loaiSanPham}_${formatDateTime(new Date())}.xlsx`);
 			setLoading(false);
 		} catch (err) {
 			setLoading(false);

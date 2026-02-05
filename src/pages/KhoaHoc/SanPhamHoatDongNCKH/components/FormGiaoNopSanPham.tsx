@@ -416,7 +416,7 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 											? 'YYYY'
 											: record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
 												? 'MM/YYYY'
-												: 'DD/MM/YYYY'
+												: undefined
 									}
 									placeholder={['Từ', 'đến']}
 									picker={
@@ -452,7 +452,7 @@ const FormGiaoNopSanPham = (props: { isView?: boolean; getData: any; isDangThucH
 											? 'YYYY'
 											: record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
 												? 'MM/YYYY'
-												: 'DD/MM/YYYY'
+												: undefined
 									}
 									pickerStyle={
 										record.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY

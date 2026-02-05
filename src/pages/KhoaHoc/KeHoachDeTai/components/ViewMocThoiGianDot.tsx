@@ -5,6 +5,7 @@ import {
 } from '@/services/KhoaHoc/KeHoachDeTai/constants';
 import type { KeHoachDeTai } from '@/services/KhoaHoc/KeHoachDeTai/typings';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Timeline } from 'antd';
 
@@ -26,8 +27,8 @@ const ViewMocThoiGianDot = (props: { rec: KeHoachDeTai.IRecord }) => {
 						<div>
 							<div>{MapKeyNameMocThoiGianDot[item]}</div>
 							<div>
-								{dayjs(rec?.[MapKeyFieldMocThoiGianDot[item][0]]).format('DD/MM/YYYY')} -{' '}
-								{dayjs(rec?.[MapKeyFieldMocThoiGianDot[item][1]]).format('DD/MM/YYYY')}
+								{formatDate(rec?.[MapKeyFieldMocThoiGianDot[item][0]])} -{' '}
+								{formatDate(rec?.[MapKeyFieldMocThoiGianDot[item][1]])}
 							</div>
 						</div>
 					</Timeline.Item>

@@ -46,7 +46,7 @@ const GroupTagUsers = (props: {
 			columns={columns}
 			addStt
 			size='small'
-			otherProps={{ scroll: { y: 360 }, pagination: true }}
+			otherProps={{ scroll: { y: 360 }, pagination: {} }}
 			hasTotal
 		>
 			<div className='fw500'>Đã chọn</div>

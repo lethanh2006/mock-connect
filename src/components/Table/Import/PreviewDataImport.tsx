@@ -1,5 +1,6 @@
 import ExpandText from '@/components/ExpandText';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { ArrowLeftOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Row, Space } from 'antd';
 import { useEffect, useState } from 'react';
@@ -39,7 +40,7 @@ const PreviewDataImport = (props: {
 				) : item.type === 'Boolean' ? (
 					<Checkbox checked={!!val} />
 				) : item.type === 'Date' && val ? (
-					dayjs(val).format('DD/MM/YYYY')
+					formatDate(val)
 				) : item.type === 'String' ? (
 					<ExpandText>{val}</ExpandText>
 				) : (

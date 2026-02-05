@@ -166,7 +166,7 @@ const FormThanhVien = (props: { onCancel: any; record?: DeTaiKHCN.ThanhVienDeTai
 				<Row gutter={[10, 0]}>
 					<Col xs={24}>
 						<Form.Item name={['ngaySinh']} label='Ngày sinh' style={{ marginBottom: 10 }}>
-							<MyDatePicker placeholder='Ngày sinh' format={'DD/MM/YYYY'} />
+							<MyDatePicker placeholder='Ngày sinh' format={undefined} />
 						</Form.Item>
 					</Col>
 					<Col xs={24} sm={12}>

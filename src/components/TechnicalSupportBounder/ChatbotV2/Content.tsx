@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useModel } from 'umi';
 
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Collapse } from 'antd';
 import ReactMarkdown from 'react-markdown';
 
@@ -95,7 +96,7 @@ const ContentBoxChatV2 = () => {
 											.map((src) => {
 												const soQD = src.source?.['Số QĐ'] ?? '';
 												const ngayBanHanh = src.source?.['Ngày ban hành']
-													? dayjs(src.source['Ngày ban hành']).format('DD/MM/YYYY')
+													? formatDate(src.source['Ngày ban hành'])
 													: '';
 												const header1 = src.source?.['Header 1'] ?? '';
 												const header2 = src.source?.['Header 2'] ?? '';

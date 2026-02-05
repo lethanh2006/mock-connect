@@ -3,7 +3,7 @@ import { colorXepLoaiTheChat, EChiSoSoSanh } from '@/services/TienIch/TheChat/co
 import type { TheChat } from '@/services/TienIch/TheChat/typing';
 import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Collapse, Descriptions, Space, Tag } from 'antd';
-import moment from 'moment';
+import { formatDateTime } from '@/utils/formatDate';
 import React, { useState } from 'react';
 import { useIntl } from 'umi';
 import ViewMetaData from './ViewMetaData';
@@ -115,7 +115,7 @@ const ChiTietKetQuaDanhGia: React.FC<KetQuaDanhGiaCollapseProps> = ({ danhSachKe
 
 											<div style={{ fontSize: '12px', color: '#666', marginTop: 4 }}>
 												{intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.ketquadanhgia.thoigiandanhgia.title' })}:{' '}
-												{item?.thoiGianDanhGia && moment(item?.thoiGianDanhGia).format('HH:mm DD/MM/YYYY')}
+												{item?.thoiGianDanhGia && formatDateTime(item?.thoiGianDanhGia)}
 											</div>
 										</div>
 									</Descriptions.Item>

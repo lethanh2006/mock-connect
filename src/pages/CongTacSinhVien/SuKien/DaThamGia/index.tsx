@@ -2,6 +2,7 @@ import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail
 import { ColorSuKien, ELoaiQR, MapTitleELoaiQR, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import type { SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { useModel } from '@umijs/max';
 import { Badge, Card, Empty, Pagination, Segmented, Space, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
@@ -101,7 +102,7 @@ const SuKienDaThamGia = () => {
 					<Space style={{ marginBottom: 8 }}>
 						<Badge count={cacSuKien.length} size='small' offset={[15, 11]} color='#D66'>
 							<div className={styles.ngay__title}>
-								{thuTrongTuan}, ngày {dayjs(ngay).format('DD/MM/YYYY')}
+								{thuTrongTuan}, ngày {formatDate(ngay)}
 							</div>
 						</Badge>
 					</Space>
@@ -116,7 +117,7 @@ const SuKienDaThamGia = () => {
 							}}
 						>
 							<div className={styles.su_kien__left}>
-								<div className={styles.su_kien__thoi_gian}>{dayjs(sukien?.suKien?.thoiGianBatDau).format('HH:mm')}</div>
+								<div className={styles.su_kien__thoi_gian}>{formatDate(sukien?.suKien?.thoiGianBatDau, 'HH:mm')}</div>
 							</div>
 							<div
 								className={styles.su_kien__right}

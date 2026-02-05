@@ -6,7 +6,7 @@ import {
 } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Descriptions, Tag } from 'antd';
 import TableSanPham from './TableSanPham';
 import TableThanhVien from './TableThanhVien';
@@ -51,7 +51,7 @@ const ViewThucHienDeTai = (props: { rec: DeTaiKHCN.IRecord }) => {
 					{dangKyKhcn.chuTriDeTai.tenDonVi}
 				</Descriptions.Item>
 				<Descriptions.Item span={2} label='Ngày sinh'>
-					{dayjs(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
+					{formatDate(dangKyKhcn.chuTriDeTai.ngaySinh)}
 				</Descriptions.Item>
 				<Descriptions.Item span={2} label='Nơi sinh'>
 					{dangKyKhcn.chuTriDeTai.noiSinh}
@@ -139,7 +139,7 @@ const ViewThucHienDeTai = (props: { rec: DeTaiKHCN.IRecord }) => {
 					{deCuongKhcn?.ghiChuTienDo}
 				</Descriptions.Item>
 				{/* <Descriptions.Item span={6} label='Dự kiến lịch bảo vệ'>
-					{deCuongKhcn?.duKienLichBaoVe ? moment(deCuongKhcn.duKienLichBaoVe).format('DD/MM/YYYY') : 'Chưa có'}
+					{deCuongKhcn?.duKienLichBaoVe ? formatDate(deCuongKhcn.duKienLichBaoVe) : 'Chưa có'}
 				</Descriptions.Item> */}
 			</Descriptions>
 		</>

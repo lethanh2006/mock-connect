@@ -6,6 +6,7 @@ import { primaryColor } from '@/services/base/constant';
 import { type EDinhDangBaiThi, mapNameDinhDangBaiThi } from '@/services/KhaoThi/constant';
 import type { SinhVienThi } from '@/services/KhaoThi/SinhVienThi/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { getNameFile } from '@/utils/utils';
 import { SaveOutlined } from '@ant-design/icons';
 import { Card, Segmented, Space, Tag } from 'antd';
@@ -70,7 +71,7 @@ const BaiThiCuoiKy = () => {
 			align: 'center',
 			dataIndex: 'thoiGianBatDau',
 			width: 120,
-			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && formatDateTime(val),
 			filterType: 'date',
 			sortable: true,
 		},
@@ -79,7 +80,7 @@ const BaiThiCuoiKy = () => {
 			align: 'center',
 			dataIndex: 'thoiGianKetThuc',
 			width: 120,
-			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && formatDateTime(val),
 			filterType: 'date',
 			sortable: true,
 		},

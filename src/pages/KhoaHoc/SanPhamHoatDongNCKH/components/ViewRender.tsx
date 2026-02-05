@@ -4,7 +4,7 @@ import { primaryColor } from '@/services/base/constant';
 import { EKieuDuLieu } from '@/services/KhoaHoc/LoaiHinhNCKH/constants';
 import type { LoaiHinhNCKH } from '@/services/KhoaHoc/LoaiHinhNCKH/typings';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
-import dayjs from '@/utils/dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { Tag } from 'antd';
 import { useModel } from 'umi';
 import { buildFilter } from './BuildFilter';
@@ -88,13 +88,13 @@ const ViewRender = (props: {
 			break;
 
 		case EKieuDuLieu.HOUR:
-			value = <div>{dayjs(recordSanPhamFinal?.[cauHinh.ma]).format('HH:mm DD/MM/YYYY')}</div>;
+			value = <div>{formatDateTime(recordSanPhamFinal?.[cauHinh.ma])}</div>;
 			break;
 		case EKieuDuLieu.DATE:
-			value = <div>{dayjs(recordSanPhamFinal?.[cauHinh.ma]).format('DD/MM/YYYY')}</div>;
+			value = <div>{formatDate(recordSanPhamFinal?.[cauHinh.ma])}</div>;
 			break;
 		case EKieuDuLieu.MONTH:
-			value = <div>{dayjs(recordSanPhamFinal?.[cauHinh.ma]).format('MM/YYYY')}</div>;
+			value = <div>{formatDate(recordSanPhamFinal?.[cauHinh.ma], 'MM/YYYY')}</div>;
 			break;
 		case EKieuDuLieu.FILE:
 			value = (

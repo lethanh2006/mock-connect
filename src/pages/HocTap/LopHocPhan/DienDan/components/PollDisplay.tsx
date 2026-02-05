@@ -1,6 +1,7 @@
 import { exportPollData, votePoll } from '@/services/HocTap/DienDan/BaiDang/index';
 import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { ClockCircleOutlined, ExportOutlined } from '@ant-design/icons';
 import {
 	Avatar,
@@ -166,7 +167,7 @@ const PollDisplay = ({ baiDang, getDataPost }: Props) => {
 			extra={
 				<Space size='small' wrap>
 					<ClockCircleOutlined style={{ fontSize: 12 }} />
-					<Text type='secondary'>Kết thúc: {dayjs(baiDang.ngayKetThucBinhChon).format('HH:mm DD/MM/YYYY')}</Text>
+					<Text type='secondary'>Kết thúc: {formatDateTime(baiDang.ngayKetThucBinhChon)}</Text>
 					{pollExpired && <Tag color='error'>Đã kết thúc</Tag>}
 				</Space>
 			}

@@ -1,7 +1,7 @@
 import { ELoaiDeTaiCaNhan, MapKeyColorTrangThaiDeTaiQuanLyKhoaHoc } from '@/services/KhoaHoc/DeTaiKHCN/constants';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Button, Descriptions, Tag } from 'antd';
 import { useModel } from 'umi';
 import TableThanhVien from './TableThanhVien';
@@ -111,7 +111,7 @@ const ViewDangKyDeXuat = (props: {
 					{dangKyKhcn.chuTriDeTai.tenDonVi}
 				</Descriptions.Item>
 				<Descriptions.Item span={2} label='Ngày sinh'>
-					{dayjs(dangKyKhcn.chuTriDeTai.ngaySinh).format('DD/MM/YYYY')}
+					{formatDate(dangKyKhcn.chuTriDeTai.ngaySinh)}
 				</Descriptions.Item>
 				<Descriptions.Item span={2} label='Nơi sinh'>
 					{dangKyKhcn.chuTriDeTai.noiSinh}
@@ -155,8 +155,8 @@ const ViewDangKyDeXuat = (props: {
 			)}
 			<Descriptions column={{ xs: 2, sm: 2, md: 4, lg: 6, xl: 6, xxl: 6 }}>
 				<Descriptions.Item span={3} label='Thời gian dự kiến thực hiện đề tài'>
-					{dayjs(dangKyKhcn.thoiGianThucHienBatDau).format('DD/MM/YYYY')} -{' '}
-					{dayjs(dangKyKhcn.thoiGianThucHienKetThuc).format('DD/MM/YYYY')}
+					{formatDate(dangKyKhcn.thoiGianThucHienBatDau)} -{' '}
+					{formatDate(dangKyKhcn.thoiGianThucHienKetThuc)}
 				</Descriptions.Item>
 				<Descriptions.Item span={3} label='Đề xuất người hướng dẫn (nếu có)'>
 					{[

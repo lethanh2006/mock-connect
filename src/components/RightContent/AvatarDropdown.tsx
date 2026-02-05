@@ -1,7 +1,7 @@
 import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
 import { landingUrl } from '@/services/base/constant';
 import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { DatabaseOutlined, FileWordOutlined, GlobalOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Dropdown, Modal, Row, Spin } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
@@ -70,8 +70,8 @@ const AvatarDropdown = () => {
 								<Col span={24}>
 									<div>Tên đợt: {index?.[0]?.ten}</div>
 									<div>
-										Thời gian diễn ra từ {dayjs(index?.[0]?.thoiGianBatDau).format('DD/MM')} đến{' '}
-										{dayjs(index?.[0]?.thoiGianKetThuc).format('DD/MM/YYYY')}.
+										Thời gian diễn ra từ {formatDate(index?.[0]?.thoiGianBatDau, 'DD/MM')} đến{' '}
+										{formatDate(index?.[0]?.thoiGianKetThuc)}.
 									</div>
 								</Col>
 								<Col span={24}>

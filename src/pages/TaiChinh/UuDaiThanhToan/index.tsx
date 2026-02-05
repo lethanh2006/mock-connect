@@ -2,7 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import type { UuDaiThanhToan } from '@/services/TaiChinh/UuDaiThanhToan/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { useIntl, useModel } from 'umi';
 
 const UuDaiThanhToanPage = () => {
@@ -58,7 +58,7 @@ const UuDaiThanhToanPage = () => {
 			dataIndex: 'createdAt',
 			align: 'center',
 			width: 100,
-			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
+			render: (val) => formatDate(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'uudaithanhtoan.column.thoigiansudung' }),
@@ -66,7 +66,7 @@ const UuDaiThanhToanPage = () => {
 			align: 'center',
 			width: 100,
 			render: (val) =>
-				val ? dayjs(val).format('DD/MM/YYYY') : <i>{intl.formatMessage({ id: 'uudaithanhtoan.chuasudung' })}</i>,
+				val ? formatDate(val) : <i>{intl.formatMessage({ id: 'uudaithanhtoan.chuasudung' })}</i>,
 		},
 	];
 

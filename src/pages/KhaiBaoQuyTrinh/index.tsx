@@ -8,7 +8,7 @@ import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EPhanHe } from '@/services/QuyTrinh/constant';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import {
 	ArrowRightOutlined,
 	DeleteOutlined,
@@ -160,8 +160,8 @@ const KhaiBaoQuyTrinhPage = (props: {
 						</span>
 						{buocHienTai && cauHinhThoiGianDotBuocHienTai && (
 							<span style={{ marginLeft: 4, fontWeight: 'bold' }}>
-								{dayjs(cauHinhThoiGianDotBuocHienTai.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
-								{dayjs(cauHinhThoiGianDotBuocHienTai.thoiGianKetThuc).format('DD/MM/YYYY')}
+								{formatDate(cauHinhThoiGianDotBuocHienTai.thoiGianBatDau)} -{' '}
+								{formatDate(cauHinhThoiGianDotBuocHienTai.thoiGianKetThuc)}
 							</span>
 						)}
 					</div>
@@ -244,7 +244,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			align: 'center',
 			render: (val) => {
 				return val
-					? dayjs(val).format('DD/MM/YYYY')
+					? formatDate(val)
 					: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.khongdl' });
 			},
 			onCell,

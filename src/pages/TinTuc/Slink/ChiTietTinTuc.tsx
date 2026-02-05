@@ -1,4 +1,4 @@
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Col, Divider, Row, Spin } from 'antd';
 import { history, useModel } from 'umi';
@@ -19,7 +19,7 @@ const ChiTietTinTucSlink = () => {
 					<div id='content'>
 						<h4>{record?.tieuDe ?? ''}</h4>
 						<p className='ngay-dang'>
-							<CalendarOutlined /> {record?.ngayDang && dayjs(record?.ngayDang).format('DD MMMM YYYY, HH:mm ')}
+							<CalendarOutlined /> {record?.ngayDang && formatDateTime(record?.ngayDang)}
 							<Divider type='vertical' />
 							<UserOutlined /> {record?.nguoiDang?.hoTen}
 							<Divider type='vertical' />{' '}

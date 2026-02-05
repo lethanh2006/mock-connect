@@ -211,7 +211,7 @@ const FormRender = (props: {
 					disabled={cauHinh?.readonly}
 					style={{ width: '100%' }}
 					allowClear
-					format={'DD/MM/YYYY HH:mm'}
+					format={undefined}
 					showTime
 				/>
 			);
@@ -224,7 +224,7 @@ const FormRender = (props: {
 					disabled={cauHinh?.readonly}
 					style={{ width: '100%' }}
 					allowClear
-					format={'DD/MM/YYYY'}
+					format={undefined}
 				/>
 			);
 			rule = [...(cauHinh.batBuoc ? rules.required : [])];
@@ -445,7 +445,7 @@ const FormRender = (props: {
 										? 'YYYY'
 										: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
 											? 'MM/YYYY'
-											: 'DD/MM/YYYY'
+											: undefined
 								}
 								placeholder={[intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.tu' }), intl.formatMessage({ id: 'diemrenluyen.maudon.placeholder.den' })]}
 								picker={
@@ -473,7 +473,7 @@ const FormRender = (props: {
 										? 'YYYY'
 										: recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
 											? 'MM/YYYY'
-											: 'DD/MM/YYYY'
+											: undefined
 								}
 								pickerStyle={
 									recordLoaiHinh?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
