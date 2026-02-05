@@ -4,6 +4,7 @@ import { CloseOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Col, Form, Input, InputNumber, Row, Select, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
+import { getDateTimeFormat } from '@/utils/formatDate';
 import MyDatePicker from '../../MyDatePicker';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
@@ -77,7 +78,7 @@ const FilterItem = (props: RowFilterProps) => {
 			case 'date':
 				return <MyDatePicker disabled={isReadOnly} />;
 			case 'datetime':
-				return <MyDatePicker format='DD/MM/YYYY HH:mm' showTime disabled={isReadOnly} />;
+				return <MyDatePicker format={getDateTimeFormat()} showTime disabled={isReadOnly} />;
 			case 'number':
 				return (
 					<InputNumber
