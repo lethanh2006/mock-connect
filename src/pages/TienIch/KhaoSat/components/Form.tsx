@@ -298,13 +298,11 @@ const FormTraLoiKhaoSat = (props: {
 					</>
 				)}
 
-				{record?.danhSachKhoi?.map((item) => (
+				{record?.danhSachKhoi?.map((item, index) => (
 					// eslint-disable-next-line react/no-array-index-key
 					<div key={item._id} className='section-item'>
-						<Divider />
-						<div className='section-title'>{item.tieuDe}</div>
+						{index > 0 && <Divider />} <div className='section-title'>{item.tieuDe}</div>
 						<div className='section-description'>{item.moTa}</div>
-
 						{item.danhSachCauHoi?.map((cauHoi, index) => renderQuestion(cauHoi, index))}
 					</div>
 				))}

@@ -17,7 +17,12 @@ export default () => {
 		payLoad: {
 			rolesId: string;
 			levelsId: string;
-			answerId: string | null;
+			// answerId: string | null;
+			reflection: string;
+			evidenceFile: {
+				name: string;
+				file?: string[];
+			}[];
 		},
 		getData?: () => void,
 		messageText?: string,

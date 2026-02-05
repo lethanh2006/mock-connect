@@ -2,7 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { IColumn } from '@/components/Table/typing';
 import { Activity } from '@/services/CCT/Activity/typing';
-import { Button, Col, Descriptions, Image, Modal, Row, Space, Tag, Typography } from 'antd';
+import { Button, Col, Descriptions, Divider, Image, Modal, Row, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -126,77 +126,120 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 
 	return (
 		<Modal title={record?.name} open={visibleForm} onCancel={() => setVisibleForm(false)} width={800} footer={null}>
-			<Row gutter={24}>
-				<Col span={8} style={{ textAlign: 'center' }}>
-					<Image
-						src={record?.banner ?? '/logo.png'}
-						alt='banner'
-						style={{
-							width: '100%',
-							borderRadius: 8,
-							objectFit: 'cover',
-						}}
+			<Row gutter={[12, 0]}>
+				<Col span={24}>
+					<Row gutter={24}>
+						<Col span={8} style={{ textAlign: 'center' }}>
+							<Image
+								src={record?.banner ?? '/metadata.png'}
+								alt='banner'
+								style={{
+									width: '100%',
+									borderRadius: 8,
+									objectFit: 'cover',
+								}}
+							/>
+						</Col>
+
+						<Col span={16}>
+							<Descriptions column={1} size='small'>
+								{record?.activitiesType?.attributes && (
+									<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.type' })}>
+										<Space wrap>
+											{record?.activitiesType?.attributes?.map((item: any) => (
+												<Tag color={item?.color}>{item?.name}</Tag>
+											))}
+										</Space>
+									</Descriptions.Item>
+								)}
+
+								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.coCurricularName' })}>
+									{record?.name}
+								</Descriptions.Item>
+
+								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.startDate' })}>
+									{record?.startDate && dayjs(record?.startDate).format('HH:mm DD/MM/YYYY')}
+								</Descriptions.Item>
+
+								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.endDate' })}>
+									{record?.endDate && dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')}
+								</Descriptions.Item>
+
+								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.organizer' })}>
+									{record?.organizer}
+								</Descriptions.Item>
+
+								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.location' })}>
+									{record?.onCampus ? record?.facilityName : record?.otherAddress}
+								</Descriptions.Item>
+
+								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.description' })}>
+									<Paragraph style={{ marginBottom: 0 }}>{record?.description}</Paragraph>
+								</Descriptions.Item>
+
+								{record?.allowPostEventResultsUpdate && (
+									<>
+										<Descriptions.Item label='Allow post-event results update'>
+											{record?.allowPostEventResultsUpdate ? 'Allow' : 'Not allow'}
+										</Descriptions.Item>
+										<Descriptions.Item label='Due date'>
+											{record?.dueDate && dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')}
+										</Descriptions.Item>
+									</>
+								)}
+							</Descriptions>
+						</Col>
+					</Row>
+				</Col>
+
+				<Col span={24}>
+					<Divider className='divider-big-title' orientation='left'>
+						List Evidence
+					</Divider>
+				</Col>
+
+				<Col span={24}>
+					<TableStaticData
+						columns={[
+							{
+								title: 'Name',
+								width: 200,
+								render: (_, record) => _?.name,
+							},
+						]}
+						data={(record?.activitiesType?.requiredEvidenceList ?? []).map((item) => ({
+							name: item,
+						}))}
+						size='small'
+						addStt
 					/>
 				</Col>
 
-				<Col span={16}>
-					<Descriptions column={1} size='small'>
-						{record?.activitiesType?.attributes?.name && (
-							<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.type' })}>
-								<Tag color={record?.activitiesType?.attributes?.color}>{record?.activitiesType?.attributes?.name}</Tag>
-							</Descriptions.Item>
-						)}
+				{/* <Col span={24}>
+					<Divider className='divider-big-title' orientation='left'>
+						Attributes Competency Mapping
+					</Divider>
+				</Col>
 
-						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.coCurricularName' })}>
-							{record?.name}
-						</Descriptions.Item>
+				<Col span={24}>
+					<TableStaticData
+						columns={columnsCompetency}
+						data={groupByAttributes(record?.coCurricularAttributesEquivalency ?? [])}
+						size='small'
+						addStt
+					/>
+				</Col> */}
 
-						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.startDate' })}>
-							{record?.startDate && dayjs(record?.startDate).format('HH:mm DD/MM/YYYY')}
-						</Descriptions.Item>
+				<Col span={24}>
+					<Divider className='divider-big-title' orientation='left'>
+						CCA Equivalency Framework
+					</Divider>
+				</Col>
 
-						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.endDate' })}>
-							{record?.endDate && dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')}
-						</Descriptions.Item>
-
-						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.organizer' })}>
-							{record?.organizer}
-						</Descriptions.Item>
-
-						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.location' })}>
-							{record?.onCampus ? record?.facilityName : record?.otherAddress}
-						</Descriptions.Item>
-
-						<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.description' })}>
-							<Paragraph style={{ marginBottom: 0 }}>{record?.description}</Paragraph>
-						</Descriptions.Item>
-
-						{record?.allowPostEventResultsUpdate && (
-							<>
-								<Descriptions.Item label='Allow post-event results update'>
-									{record?.allowPostEventResultsUpdate ? 'Allow' : 'Not allow'}
-								</Descriptions.Item>
-								<Descriptions.Item label='Due date'>
-									{record?.dueDate && dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')}
-								</Descriptions.Item>
-							</>
-						)}
-					</Descriptions>
+				<Col span={24}>
+					<TableStaticData columns={columns} data={groupedEquivalency} size='small' addStt />
 				</Col>
 			</Row>
-
-			<div style={{ padding: '0px 16px 0px 16px' }}>
-				<TableStaticData
-					columns={columnsCompetency}
-					data={groupByAttributes(record?.coCurricularAttributesEquivalency ?? [])}
-					size='small'
-					addStt
-				/>
-			</div>
-
-			<div style={{ padding: '0px 16px 0px 16px' }}>
-				<TableStaticData columns={columns} data={groupedEquivalency} size='small' addStt />
-			</div>
 
 			<div className='form-footer'>
 				<Button

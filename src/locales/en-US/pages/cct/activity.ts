@@ -1,5 +1,5 @@
 export default {
-	'activity.type.select': 'Select co-curricular activities (CCA)',
+	'activity.type.select': 'Select Activity Bank',
 	'activity.role.select': 'Select role',
 	'activity.level.select': 'Select level',
 
@@ -19,7 +19,7 @@ export default {
 	'activity.detail.warning': 'You have activities that are nearing the deadline. Please complete them soon!',
 
 	'activity.detail.type': 'Attribute',
-	'activity.detail.coCurricularName': 'Co-curricular Name',
+	'activity.detail.coCurricularName': 'Activity name',
 	'activity.detail.startDate': 'Start Date',
 	'activity.detail.endDate': 'End Date',
 	'activity.detail.organizer': 'Organizer',
@@ -27,8 +27,8 @@ export default {
 	'activity.detail.description': 'Description',
 
 	'activity.title': 'My activity',
-	'activity.column.name': 'Co Curicular Name',
-	'activity.column.cca': 'Co-curricular Activity (CCA)',
+	'activity.column.name': 'Activity name',
+	'activity.column.cca': 'Activity type',
 	'activity.column.activity': 'Activity name',
 	'activity.column.attribute': 'Activity attributes',
 	'activity.column.date': 'Date',
@@ -97,9 +97,9 @@ export default {
 	'activity.perstion.title': 'Detail activity',
 	'activity.perstion.activitiesOutcomeName': 'Co Curicular Name',
 	'activity.perstion.activitiesOutcomeName.place': 'Enter co curicular name',
-	'activity.perstion.activitiesTypeId': 'Co-curricular Activity (CCA)',
+	'activity.perstion.activitiesTypeId': 'Activity type',
 	'activity.perstion.activitiesTypeId.mapping': 'Attributes mapping',
-	'activity.perstion.activitiesTypeId.select': 'Select Co-curricular Activity (CCA)',
+	'activity.perstion.activitiesTypeId.select': 'Select activity',
 	'activity.perstion.startDate': 'Start date',
 	'activity.perstion.startDate.place': 'Select start date',
 	'activity.perstion.endDate': 'End date',

@@ -414,7 +414,7 @@
 			{
 				name: 'MyCCT',
 				path: 'co-curricular-transcript',
-				component: 'CCT/MyCCT',
+				component: 'CCT/MyCCTV2',
 			},
 		],
 	},

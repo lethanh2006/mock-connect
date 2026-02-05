@@ -8,5 +8,6 @@ declare module RolesManagement {
 		order: number;
 		description: string;
 		isActive: boolean;
+		autoApproval: boolean;
 	}
 }

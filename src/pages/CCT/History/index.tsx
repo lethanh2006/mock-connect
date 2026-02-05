@@ -6,7 +6,9 @@ import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import {
 	EActivityCategory,
 	EApprovalStatus,
+	Evalidation,
 	mapColorApprovalStatus,
+	mapEvalidation,
 	mapNameActivityCategory,
 	mapNameApprovalStatus,
 } from '@/services/CCT/constant';
@@ -17,10 +19,11 @@ import {
 	CloseCircleOutlined,
 	DeleteOutlined,
 	EditOutlined,
+	MenuOutlined,
 	PlusCircleOutlined,
 	SendOutlined,
 } from '@ant-design/icons';
-import { Checkbox, Popconfirm, Tabs, Tag } from 'antd';
+import { Button, Checkbox, Popconfirm, Popover, Space, Tabs, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import SelectActivitiesManagement from '../Activities/Select';
@@ -164,6 +167,15 @@ const HistoryActivityPage = () => {
 
 	const columns: IColumn<ActivityOutCome.IRecord>[] = [
 		{
+			title: intl.formatMessage({ id: 'activity.column.level' }),
+			dataIndex: 'rolesId',
+			width: 140,
+			render: (val, rec) => rec?.levels?.name ?? <i className='text-warning'>No info</i>,
+			filterType: 'customselect',
+			filterCustomSelect: <SelectLevelsManagement multiple />,
+			onCell,
+		},
+		{
 			title: intl.formatMessage({ id: 'activity.column.name' }),
 			dataIndex: 'activitiesOutcomeName',
 			width: 150,
@@ -182,18 +194,6 @@ const HistoryActivityPage = () => {
 			hide: tabActive === EActivityCategory.REGISTERED,
 		},
 		{
-			title: 'Competency',
-			dataIndex: 'listAchievedCompetencies',
-			width: 140,
-			render: (val, rec) =>
-				rec?.listAchievedCompetencies
-					?.map((item) => item?.competencie?.name)
-					.filter(Boolean)
-					.join(', '),
-			onCell,
-			hide: tabActive === EActivityCategory.REGISTERED,
-		},
-		{
 			title: intl.formatMessage({ id: 'activity.column.activity' }),
 			width: 180,
 			render: (val, rec) => (
@@ -208,13 +208,27 @@ const HistoryActivityPage = () => {
 		{
 			title: intl.formatMessage({ id: 'activity.column.attribute' }),
 			width: 200,
-			render: (val, rec) => (
-				<Tag color={rec?.activities?.activitiesType?.attributes?.color}>
-					{rec?.activities?.activitiesType?.attributes?.name}
-				</Tag>
-			),
+			render: (val, rec) => {
+				const attriRe = rec?.activities?.coCurricularActivityEquivalency?.filter(
+					(item) => item?.rolesId === rec?.rolesId,
+				);
+
+				const attriDec = rec?.activitiesType?.attributes;
+
+				if (rec?.activityCategory === EActivityCategory.REGISTERED) {
+					return (
+						<Space wrap>
+							{attriRe?.map((item: any) => <Tag color={item?.attributes?.color}>{item?.attributes?.name}</Tag>)}
+						</Space>
+					);
+				} else
+					return (
+						<Space wrap>
+							{attriDec?.map((item: any) => <Tag color={item?.attributes?.color}>{item?.attributes?.name}</Tag>)}
+						</Space>
+					);
+			},
 			onCell,
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.column.cca' }),
@@ -222,6 +236,16 @@ const HistoryActivityPage = () => {
 			render: (val, rec) => rec?.activities?.activitiesType?.name,
 			onCell,
 			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
+		},
+		{
+			title: 'Competency',
+			width: 220,
+			render: (val, rec) =>
+				(rec?.activityCategory === EActivityCategory.REGISTERED ? rec?.activities?.competencyList : rec?.competencyList)
+					?.map((item) => item?.competency?.name)
+					.filter(Boolean)
+					.join(', '),
+			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.column.date' }),
@@ -240,7 +264,7 @@ const HistoryActivityPage = () => {
 		{
 			title: intl.formatMessage({ id: 'activity.column.allow' }),
 			align: 'center',
-			width: 150,
+			width: 180,
 			render: (val, rec) => (
 				<div>
 					<Checkbox checked={rec?.activities?.allowPostEventResultsUpdate} /> <br />
@@ -253,6 +277,16 @@ const HistoryActivityPage = () => {
 			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
 		},
 		{
+			title: intl.formatMessage({ id: 'activity.column.role' }),
+			dataIndex: 'rolesId',
+			width: 180,
+			render: (val, rec) => rec?.roles?.name ?? <i className='text-warning'>No info</i>,
+			filterType: 'customselect',
+			filterCustomSelect: <SelectRolesManagement multiple />,
+			onCell,
+		},
+		// ...attributeColumns,
+		{
 			title: intl.formatMessage({ id: 'activity.column.created' }),
 			dataIndex: 'createdAt',
 			align: 'center',
@@ -262,25 +296,6 @@ const HistoryActivityPage = () => {
 			sortable: true,
 			hide: tabActive === EActivityCategory.REGISTERED,
 		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.role' }),
-			dataIndex: 'rolesId',
-			width: 180,
-			render: (val, rec) => rec?.roles?.name,
-			filterType: 'customselect',
-			filterCustomSelect: <SelectRolesManagement multiple />,
-			onCell,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.level' }),
-			dataIndex: 'rolesId',
-			width: 140,
-			render: (val, rec) => rec?.levels?.name,
-			filterType: 'customselect',
-			filterCustomSelect: <SelectLevelsManagement multiple />,
-			onCell,
-		},
-		...attributeColumns,
 		{
 			title: 'Rejection Note',
 			dataIndex: 'activityRejectionNote',
@@ -305,6 +320,32 @@ const HistoryActivityPage = () => {
 			filterType: 'string',
 			onCell,
 			hide: tabActive === EActivityCategory.REGISTERED,
+		},
+		{
+			title: 'Impact',
+			dataIndex: 'validation',
+			align: 'center',
+			width: 120,
+			render: (val, rec) => (
+				<Tag
+					color={mapEvalidation[val as Evalidation]}
+					style={{
+						maxWidth: 120,
+						whiteSpace: 'normal',
+						wordBreak: 'break-word',
+						textAlign: 'center',
+					}}
+				>
+					{val}
+				</Tag>
+			),
+			fixed: 'right',
+			filterType: 'select',
+			filterData: Object.values(Evalidation).map((item) => ({
+				value: item,
+				label: item,
+			})),
+			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.column.status' }),
@@ -335,7 +376,7 @@ const HistoryActivityPage = () => {
 		{
 			title: intl.formatMessage({ id: 'global.column.action' }),
 			align: 'center',
-			width: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? 120 : 90,
+			width: 120,
 			fixed: 'right',
 			render: (val, rec) => {
 				const canDelete =
@@ -345,27 +386,12 @@ const HistoryActivityPage = () => {
 
 				return (
 					<>
-						{tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR && (
-							<Popconfirm
-								onConfirm={() => putModel(`me/${rec?._id}`, { workflow: EApprovalStatus.SUBMITTED }, getData)}
-								title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
-								placement='topLeft'
-							>
-								<ButtonExtend
-									disabled={!canEdit(rec)}
-									tooltip={intl.formatMessage({ id: 'activity.button.duyet' })}
-									type='link'
-									icon={<SendOutlined />}
-								/>
-							</Popconfirm>
-						)}
-
 						<ButtonExtend
-							// disabled={!canEdit(rec)}
+							disabled={!canEdit(rec)}
 							tooltip={getTooltip(rec)}
 							onClick={() => handleEdit(rec)}
 							type='link'
-							icon={tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? <EditOutlined /> : <PlusCircleOutlined />}
+							icon={<PlusCircleOutlined />}
 						/>
 
 						<Popconfirm
@@ -389,6 +415,74 @@ const HistoryActivityPage = () => {
 					</>
 				);
 			},
+			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
+		},
+		{
+			title: intl.formatMessage({ id: 'global.column.action' }),
+			align: 'center',
+			width: 120,
+			fixed: 'right',
+			render: (val, rec) => {
+				const canDelete =
+					(rec?.activityCategory !== EActivityCategory.REGISTERED || isInTimeRange(rec)) &&
+					rec?.workflow !== EApprovalStatus.APPROVED &&
+					rec?.workflow !== EApprovalStatus.REJECTED;
+
+				return (
+					<>
+						<Popconfirm
+							onConfirm={() => putModel(`me/${rec?._id}`, { workflow: EApprovalStatus.SUBMITTED }, getData)}
+							title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
+							placement='topLeft'
+						>
+							<ButtonExtend
+								className='btn-success'
+								disabled={!canEdit(rec)}
+								tooltip={intl.formatMessage({ id: 'activity.button.duyet' })}
+								type='link'
+								icon={<SendOutlined />}
+							/>
+						</Popconfirm>
+
+						<Popover
+							placement='left'
+							content={
+								<>
+									<ButtonExtend
+										disabled={!canEdit(rec)}
+										tooltip={getTooltip(rec)}
+										onClick={() => handleEdit(rec)}
+										type='link'
+										icon={<EditOutlined />}
+									/>
+
+									<Popconfirm
+										onConfirm={() =>
+											deleteActivityModel(rec?._id, () => {
+												getData();
+												getThongKe();
+											})
+										}
+										title={intl.formatMessage({ id: 'activity.confirm.xoa' })}
+										placement='topLeft'
+									>
+										<ButtonExtend
+											disabled={!canDelete}
+											tooltip={intl.formatMessage({ id: 'activity.button.xoa' })}
+											danger
+											type='link'
+											icon={<DeleteOutlined />}
+										/>
+									</Popconfirm>
+								</>
+							}
+						>
+							<Button icon={<MenuOutlined />} type='link' />
+						</Popover>
+					</>
+				);
+			},
+			hide: tabActive === EActivityCategory.REGISTERED,
 		},
 	];
 
@@ -413,19 +507,13 @@ const HistoryActivityPage = () => {
 				getThongKe();
 			}}
 		>
-			<div
-				style={{
-					padding: '0px 12px 0px 12px',
-				}}
-			>
-				<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
-					{Object.values(EActivityCategory).map((item) => (
-						<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
-					))}
-				</Tabs>
+			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
+				{Object.values(EActivityCategory).map((item) => (
+					<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
+				))}
+			</Tabs>
 
-				<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
-			</div>
+			<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
 		</TableBase>
 	);
 };

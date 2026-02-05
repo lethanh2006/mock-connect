@@ -39,7 +39,7 @@ export enum EApprovalStatus {
 }
 
 export const mapNameApprovalStatus: Record<EApprovalStatus, string> = {
-	[EApprovalStatus.DRAFT]: 'Draft',
+	[EApprovalStatus.DRAFT]: 'Registered',
 	[EApprovalStatus.SUBMITTED]: 'Submitted',
 	[EApprovalStatus.APPROVED]: 'Approved',
 	[EApprovalStatus.REJECTED]: 'Rejected',
@@ -62,4 +62,16 @@ export enum EActivityCategory {
 export const mapNameActivityCategory: Record<EActivityCategory, string> = {
 	[EActivityCategory.REGISTERED]: 'Registered Activities',
 	[EActivityCategory.PERSONAL_CO_CURRICULAR]: 'Personal Co-curricular Activity',
+};
+
+export enum Evalidation {
+	VERIFIED = 'Verified',
+	ENDORSED = 'Endorsed',
+	FEATURED = 'Featured',
+}
+
+export const mapEvalidation: Record<Evalidation, ETagColor> = {
+	[Evalidation.VERIFIED]: ETagColor.BLUE,
+	[Evalidation.ENDORSED]: ETagColor.GOLD,
+	[Evalidation.FEATURED]: ETagColor.GREEN,
 };
