@@ -1,7 +1,7 @@
 import { TrangThaiBuoc, TrangThaiThaoTac } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import type { DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import { primaryColor } from '@/services/base/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import {
 	CheckCircleOutlined,
 	ClockCircleOutlined,
@@ -108,9 +108,7 @@ const FormQuyTrinh = (props: {
 										<div style={{ width: 200, float: 'right' }}>
 											<b>
 												Tạo đơn thành công
-												{props?.thoiGianTaoDon
-													? ` vào lúc ${dayjs(props?.thoiGianTaoDon).format('HH:mm DD/MM/YYYY')}`
-													: ''}
+												{props?.thoiGianTaoDon ? ` vào lúc ${formatDateTime(props?.thoiGianTaoDon)}` : ''}
 											</b>
 										</div>
 									}
@@ -129,7 +127,7 @@ const FormQuyTrinh = (props: {
 				{props?.record?.danhSachBuoc?.length
 					? props?.record?.danhSachBuoc?.map((buoc, index) => {
 							const recordBuoc = recordTrangThaiDon?.find((item) => item.idBuoc === buoc._id);
-							const IconBuoc = IconTrangThai?.[recordBuoc?.trangThai ?? 'ANY'];
+							const IconBuoc = IconTrangThai?.[(recordBuoc?.trangThai ?? 'ANY') as keyof typeof IconTrangThai];
 							return (
 								<Timeline key={recordBuoc?._id} style={{ marginLeft: '-100px' }} mode='left'>
 									<Timeline.Item
@@ -166,11 +164,11 @@ const FormQuyTrinh = (props: {
 													{thaoTac?.tenThaoTac ?? ''}
 												</b>
 												<div>Đơn vị: {thaoTac?.tenDonVi || 'Đơn vị quản lý'}</div>
-												<div>Trạng thái: {TrangThaiThaoTac?.[recordThaoTac?.trangThai ?? ''] ?? 'Chưa xử lý'}</div>
+												<div>Trạng thái: {TrangThaiThaoTac?.[(recordThaoTac?.trangThai ?? '') as keyof typeof TrangThaiThaoTac] ?? 'Chưa xử lý'}</div>
 												{!['OK', 'NOT_OK'].includes(recordThaoTac?.trangThai ?? '') ? (
 													<div>
 														{recordThaoTac?.hanXuLy ? (
-															<div>Hạn xử lý: {dayjs(recordThaoTac?.hanXuLy)?.format('DD/MM/YYYY')}</div>
+															<div>Hạn xử lý: {formatDate(recordThaoTac?.hanXuLy)}</div>
 														) : (
 															<div>
 																Số ngày xử lý: {thaoTac?.soNgayXuLy ? `${thaoTac?.soNgayXuLy} ngày` : 'Chưa cập nhật'}
@@ -195,9 +193,7 @@ const FormQuyTrinh = (props: {
 												) : (
 													<>
 														<div>
-															{recordThaoTac?.updatedAt
-																? `Vào lúc: ${dayjs(recordThaoTac?.updatedAt).format('HH:mm DD/MM/YYYY')}`
-																: ''}
+															{recordThaoTac?.updatedAt ? `Vào lúc: ${formatDateTime(recordThaoTac?.updatedAt)}` : ''}
 														</div>
 														{recordDonThaoTac && (
 															<Button

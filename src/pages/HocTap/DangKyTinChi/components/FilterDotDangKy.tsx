@@ -1,6 +1,7 @@
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import { ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Col, Popover, Row } from 'antd';
 import { useEffect } from 'react';
@@ -43,8 +44,8 @@ const FilterDotDangKy = () => {
 							{intl.formatMessage(
 								{ id: 'dangkytinchi.filter.thoigiandangky.title' },
 								{
-									thoigianbatdau: dayjs(dotDangKyHienTai.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
-									thoigianketthuc: dayjs(dotDangKyHienTai.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
+									thoigianbatdau: formatDateTime(dotDangKyHienTai.thoiGianBatDau),
+									thoigianketthuc: formatDateTime(dotDangKyHienTai.thoiGianKetThuc),
 									span: (chunks) => <span className='fw500'>{chunks}</span>,
 								},
 							)}

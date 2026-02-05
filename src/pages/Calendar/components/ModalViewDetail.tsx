@@ -8,7 +8,7 @@ import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap
 import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
 import { colorTrangThaiThi } from '@/services/KhaoThi/constant';
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Dropdown, Modal, Popconfirm, Space, Tag, message } from 'antd';
 import { JSX } from 'react';
@@ -57,10 +57,10 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 					{evt?.tenSuKien}
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
-					{dayjs(evt?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+					{formatDateTime(evt?.thoiGianBatDau)}
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
-					{dayjs(evt?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+					{formatDateTime(evt?.thoiGianKetThuc)}
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.diadiem' })}>
 					{evt?.diaDiem ?? '--'}
@@ -88,10 +88,10 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 							{thoiKhoaBieu?.lopHocPhan?.hocPhan?.ten}
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
-							{dayjs(thoiKhoaBieu?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+							{formatDateTime(thoiKhoaBieu?.thoiGianBatDau)}
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
-							{dayjs(thoiKhoaBieu?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+							{formatDateTime(thoiKhoaBieu?.thoiGianKetThuc)}
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.phonghoc' })}>
 							{thoiKhoaBieu?.phongHoc ?? '--'}
@@ -166,7 +166,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 							{lichThi?.danhSachHocPhan?.map((item) => `${item.ma} - ${item.ten}`).join(', ')}
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
-							{dayjs(lichThi?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+							{formatDateTime(lichThi?.thoiGianBatDau)}
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.phongthi' })}>
 							{lichThi?.phong?.ma ?? '--'}
@@ -198,11 +198,11 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 						{evt?.assignment?.hoTenNguoiGiao ?? '--'}
 					</Descriptions.Item>
 					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tggiaobai' })}>
-						{evt?.assignment?.createdAt ? dayjs(evt?.assignment?.createdAt).format('HH:mm DD/MM/YYYY') : '--'}
+						{evt?.assignment?.createdAt ? formatDateTime(evt?.assignment?.createdAt) : '--'}
 					</Descriptions.Item>
 					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.thoihan' })}>
 						{evt?.assignment?.thoiGianKetThuc
-							? dayjs(evt?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
+							? formatDateTime(evt?.assignment?.thoiGianKetThuc)
 							: '--'}
 					</Descriptions.Item>
 					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.trangthai' })}>
@@ -257,10 +257,10 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 						{evt?.tenSuKien}
 					</Descriptions.Item>
 					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
-						{dayjs(evt?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}
+						{formatDateTime(evt?.thoiGianBatDau)}
 					</Descriptions.Item>
 					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
-						{dayjs(evt?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+						{formatDateTime(evt?.thoiGianKetThuc)}
 					</Descriptions.Item>
 					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.diadiem' })}>
 						{evt?.diaDiem ?? '--'}

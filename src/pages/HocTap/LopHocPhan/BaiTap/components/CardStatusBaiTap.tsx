@@ -5,7 +5,7 @@ import {
 	mapTrangThaiNopBaiTap,
 } from '@/services/DaoTao/BaiTap/constants';
 import type { BaiTap } from '@/services/DaoTao/BaiTap/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { Col, Divider, Row, Space, Tag } from 'antd';
 import { useIntl, useModel } from 'umi';
 import BoxFile from '../../DienDan/components/BoxFile';
@@ -45,7 +45,7 @@ const CardStatusBaiTap = (props: IProps) => {
 									{data?.assignment?.active ? (
 										<span>
 											({intl.formatMessage({ id: 'lophocphan.id.baitap.han' })}{' '}
-											{dayjs(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})
+											{formatDateTime(data?.assignment?.thoiGianKetThuc)})
 										</span>
 									) : (
 										<span style={{ color: 'red' }}>
@@ -54,7 +54,7 @@ const CardStatusBaiTap = (props: IProps) => {
 									)}
 								</span>
 							) : (
-								`${intl.formatMessage({ id: 'lophocphan.id.baitap.han' })} ${dayjs(data?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}`
+								`${intl.formatMessage({ id: 'lophocphan.id.baitap.han' })} ${formatDateTime(data?.assignment?.thoiGianKetThuc)}`
 							)}
 						</span>
 					</Col>

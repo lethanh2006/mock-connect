@@ -1,7 +1,7 @@
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import ViewThongBao from '@/pages/ThongBao/components/ViewThongBao';
 import { ThongBao } from '@/services/ThongBao/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Button, Card, Empty, Space, Spin, Tag, Typography } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -76,7 +76,7 @@ const CardThongBaoDashboard = () => {
 						<div className='details'>
 							<div className='title'>{currentNotice.title}</div>
 							<div className='footer'>
-								<div className='date'>{dayjs(currentNotice.createdAt).format('DD/MM/YYYY')}</div>
+								<div className='date'>{formatDate(currentNotice.createdAt)}</div>
 								<div className='tags'>
 									{/* cân bằng với Card Sự kiện - Lịch sắp tới */}
 									<Space size={4} wrap>

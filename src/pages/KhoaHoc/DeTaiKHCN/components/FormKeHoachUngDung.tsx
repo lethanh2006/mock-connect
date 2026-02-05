@@ -69,7 +69,7 @@ const FormKeHoachUngDung = (props: { onCancel: any; record?: DeTaiKHCN.KeHoachUn
 				</Form.Item>
 
 				<Form.Item name={['thoiGian']} label='Thời gian' rules={[...rules.required]} style={{ marginBottom: 10 }}>
-					<MyDatePicker placeholder={'Thời gian'} format={'DD/MM/YYYY'} />
+					<MyDatePicker placeholder={'Thời gian'} format={undefined} />
 				</Form.Item>
 
 				<Form.Item

@@ -4,6 +4,7 @@ import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/cons
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import {
 	ArrowRightOutlined,
 	CalendarOutlined,
@@ -226,7 +227,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 										className={styles.ngay__title}
 										style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
 									>
-										{thuTrongTuan}, ngày {dayjs(ngay).format('DD/MM')}
+										{thuTrongTuan}, ngày {formatDate(ngay, 'DD/MM')}
 									</div>
 								</Badge>
 							</Space>
@@ -244,7 +245,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 										{dayjs().isSameOrAfter(sukien.thoiGianBatDau) && dayjs().isSameOrBefore(sukien.thoiGianKetThuc) ? (
 											<div className={styles.pulse} />
 										) : null}
-										<div className={styles.su_kien__thoi_gian}>{dayjs(sukien.thoiGianBatDau).format('HH:mm')}</div>
+										<div className={styles.su_kien__thoi_gian}>{formatDate(sukien.thoiGianBatDau, 'HH:mm')}</div>
 									</div>
 									<Space
 										wrap
@@ -281,7 +282,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				formats={{
 					dayHeaderFormat: 'dddd DD/MM/YYYY',
 					dayRangeHeaderFormat: (range: DateRange) => {
-						return `${dayjs(range.start).format('DD/MM')} - ${dayjs(range.end).format('DD/MM')}`;
+						return `${formatDate(range.start, 'DD/MM')} - ${formatDate(range.end, 'DD/MM')}`;
 					},
 				}}
 				localizer={localizer}
@@ -432,7 +433,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 			<Modal
 				open={visibleXemThem}
 				title={
-					`${intl.formatMessage({ id: 'lichsukien.title' })} ` + dayjs(dateXemThem).format('dddd, ngà\y DD/MM/YYYY')
+					`${intl.formatMessage({ id: 'lichsukien.title' })} ` + formatDate(dateXemThem, 'dddd, [ngày] DD/MM/YYYY')
 				}
 				onCancel={() => setVisibleXemThem(false)}
 				footer={null}

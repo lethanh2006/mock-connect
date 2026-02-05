@@ -2,7 +2,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { ApiOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Col, Descriptions, Progress, Row, Spin, Tabs, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
@@ -63,7 +63,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 			dataIndex: 'thoiGianHoanThanh',
 			width: 130,
 			align: 'center',
-			render: (val, rec) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => val && formatDateTime(val),
 			sortable: true,
 		},
 		{
@@ -113,7 +113,7 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 				if (rec?.isCategory === true) {
 					return { children: null, props: { colSpan: 0 } };
 				}
-				return val && dayjs(val).format('HH:mm DD/MM/YYYY');
+				return val && formatDateTime(val);
 			},
 		},
 		{
@@ -190,11 +190,11 @@ const LmsOdooPage = (props: { idLopHocPhan: string }) => {
 								<Progress percent={record?.tiLeHoanThanh ?? 0} />
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lms.tgvaolop' })}>
-								{record?.thoiGianTaoVao ? dayjs(record?.thoiGianTaoVao).format('HH:mm DD/MM/YYYY') : '--'}
+								{record?.thoiGianTaoVao ? formatDateTime(record?.thoiGianTaoVao) : '--'}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.lms.tgcapnhat' })}>
 								{record?.thoiGianCapNhatGanNhatVao
-									? dayjs(record?.thoiGianCapNhatGanNhatVao).format('HH:mm DD/MM/YYYY')
+									? formatDateTime(record?.thoiGianCapNhatGanNhatVao)
 									: '--'}
 							</Descriptions.Item>
 						</Descriptions>

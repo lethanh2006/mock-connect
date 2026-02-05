@@ -230,7 +230,7 @@ const FormThucHienDeTai = (props: { getData: any }) => {
 					</Col>
 					{/* <Col xs={24} md={12} lg={8}>
 						<Form.Item name={['duKienLichBaoVe']} label='Dự kiến lịch bảo vệ'>
-							<MyDatePicker format={'DD/MM/YYYY'} placeholder='Chọn ngày' />
+							<MyDatePicker format={undefined} placeholder='Chọn ngày' />
 						</Form.Item>
 					</Col> */}
 				</Row>

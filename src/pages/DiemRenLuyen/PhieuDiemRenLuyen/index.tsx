@@ -2,7 +2,7 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import { type DotChamDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/DotChamDiem/typing';
 import { EVaiTroPhieuDiem } from '@/services/CongTacSinhVien/DiemRenLuyen/PhieuDiemRenLuyen/constants';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 import { useIntl, useModel } from 'umi';
@@ -33,17 +33,13 @@ const PhieuDiemRenLuyenSinhVienPage = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.thoigianbatdau' }),
-			render: (_, rec) =>
-				rec.thoiGianSVChamDiem?.thoiGianBatDau &&
-				dayjs(rec.thoiGianSVChamDiem.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
+			render: (_, rec) =>rec.thoiGianSVChamDiem?.thoiGianBatDau && formatDateTime(rec.thoiGianSVChamDiem?.thoiGianBatDau),
 			width: 120,
 			align: 'center',
 		},
 		{
 			title: intl.formatMessage({ id: 'diemrenluyen.phieudiem.thoigianketthuc' }),
-			render: (_, rec) =>
-				rec.thoiGianSVChamDiem?.thoiGianKetThuc &&
-				dayjs(rec.thoiGianSVChamDiem.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
+			render: (_, rec) =>rec.thoiGianSVChamDiem?.thoiGianKetThuc && formatDateTime(rec.thoiGianSVChamDiem?.thoiGianKetThuc),
 			width: 120,
 			align: 'center',
 		},

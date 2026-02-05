@@ -10,7 +10,7 @@ import {
 	mapNameActivityCategory,
 	mapNameApprovalStatus,
 } from '@/services/CCT/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined, SendOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Popconfirm, Tabs, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
@@ -123,7 +123,7 @@ const HistoryActivityPage = () => {
 			title: intl.formatMessage({ id: 'activity.column.startdate' }),
 			align: 'center',
 			width: 120,
-			render: (val, rec) => rec?.activities?.startDate && dayjs(rec?.activities?.startDate).format('DD/MM/YYYY'),
+			render: (val, rec) => rec?.activities?.startDate && formatDate(rec?.activities?.startDate),
 			onCell,
 			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
 		},
@@ -132,7 +132,7 @@ const HistoryActivityPage = () => {
 			dataIndex: 'createdAt',
 			align: 'center',
 			width: 120,
-			render: (val, rec) => val && dayjs(val).format('DD/MM/YYYY'),
+			render: (val, rec) => val && formatDate(val),
 			onCell,
 			sortable: true,
 			hide: tabActive === EActivityCategory.REGISTERED,

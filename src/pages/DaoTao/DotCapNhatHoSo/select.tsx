@@ -1,4 +1,4 @@
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { Select } from 'antd';
 import type { CSSProperties } from 'react';
 import { useEffect } from 'react';
@@ -29,9 +29,9 @@ export const SelectDotCapNhat = (props: {
 					options={danhSach.map((item) => ({
 						key: item._id,
 						value: item._id,
-						label: `${item.tenDot} (${dayjs(item.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} - ${dayjs(
+						label: `${item.tenDot} (${formatDateTime(item.thoiGianBatDau)} - ${formatDateTime(
 							item.thoiGianKetThuc,
-						).format('HH:mm DD/MM/YYYY')})`,
+						)})`,
 
 						rawData: item,
 					}))}

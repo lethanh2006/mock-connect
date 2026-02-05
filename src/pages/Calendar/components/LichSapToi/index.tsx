@@ -1,5 +1,6 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { ClockCircleOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Card, List, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
@@ -39,9 +40,9 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 		const endMoment = dayjs(end);
 
 		if (startMoment.isSame(endMoment, 'day')) {
-			return `${startMoment.format('HH:mm')} - ${endMoment.format('HH:mm')}`;
+			return `${formatDate(start, 'HH:mm')} - ${formatDate(end, 'HH:mm')}`;
 		}
-		return `${startMoment.format('HH:mm')} - ${endMoment.format('DD/MM HH:mm')}`;
+		return `${formatDate(start, 'HH:mm')} - ${formatDate(end, 'DD/MM HH:mm')}`;
 	};
 
 	const getEventColor = (loaiSuKien: string) => {
@@ -118,7 +119,7 @@ const LichSapToi: React.FC<LichSapToiProps> = ({ dataCalendar, limit = 5, onEven
 										<div className='lich-sap-toi-event-card-date-row'>
 											<div className='lich-sap-toi-event-card-date-row-dot' />
 											<Text className='lich-sap-toi-event-card-date-row-date-text'>
-												{dayjs(event.start).format('DD/MM/YYYY')}
+												{formatDate(event.start)}
 											</Text>
 											<div className='lich-sap-toi-event-card-date-row-time-badge'>
 												<Text className='time-text'>{formatTime(event.start, event.end)}</Text>

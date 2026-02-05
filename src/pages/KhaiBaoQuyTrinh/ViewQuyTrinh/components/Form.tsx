@@ -6,6 +6,7 @@ import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Form, message, Row, Select, Spin } from 'antd';
@@ -60,7 +61,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 						: undefined,
 				};
 				if (isDate || isMonth) {
-					valuesFinal[`${item}Date`] = { value: dayjs(valuesForm[item]).format(isDate ? 'DD/MM/YYYY' : 'MM/YYYY') };
+					valuesFinal[`${item}Date`] = { value: formatDate(valuesForm[item], isDate ? 'DD/MM/YYYY' : 'MM/YYYY') };
 				}
 			});
 
@@ -97,7 +98,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 				Object.keys(res?.data?.data)?.map((item: string) => {
 					const cauHinh = currentFormKhaiBao?.cauHinhLoaiHinh?.find((ele) => ele.ma === item);
 					finalData[item] = [EKieuDuLieu.DATE, EKieuDuLieu.MONTH].includes(cauHinh.kieuDuLieu)
-						? dayjs(res?.data?.data[item], 'DD/MM/YYYY')
+						? formatDate(res?.data?.data[item])
 						: res?.data?.data[item] === 'Invalid date'
 							? undefined
 							: res?.data?.data[item];
