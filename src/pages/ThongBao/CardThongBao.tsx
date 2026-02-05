@@ -7,6 +7,7 @@ import { type IColumn } from '@/components/Table/typing';
 import { type ESourceTypeNotification, mapModuleKeyToSourceType, NotificationType } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime, getDateFormat } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import { DeleteOutlined, EyeOutlined, LeftOutlined, PlusCircleOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Popconfirm, Segmented, Space } from 'antd';
@@ -143,7 +144,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 			filterType: 'datetime',
 			sortable: true,
 			onCell,
-			render: (val) => dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => formatDateTime(val),
 		},
 		{
 			title: 'Thao tác',
@@ -222,7 +223,7 @@ const CardThongBao = (props: { notiType: NotificationType; activeKey: string }) 
 				{type === 'DAY' && (
 					<DatePicker
 						allowClear={false}
-						format={'DD/MM/YYYY'}
+						format={getDateFormat()}
 						style={{ width: 150 }}
 						value={startDate}
 						onChange={(val) => {
