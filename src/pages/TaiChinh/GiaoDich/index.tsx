@@ -17,7 +17,7 @@ import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Popconfirm, Segmented, Tag, notification } from 'antd';
 
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalThanhToanNganHang from '../HoaDon/ThanhToan/ModalThanhToanNganHang';
@@ -158,7 +158,7 @@ const GiaoDichPage = () => {
 			align: 'center',
 			filterType: 'datetime',
 			sortable: true,
-			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && formatDateTime(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'lichsugiaodich.column.hoanthanh' }),
@@ -167,7 +167,7 @@ const GiaoDichPage = () => {
 			align: 'center',
 			filterType: 'datetime',
 			sortable: true,
-			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && formatDateTime(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'lichsugiaodich.column.thaotac' }),

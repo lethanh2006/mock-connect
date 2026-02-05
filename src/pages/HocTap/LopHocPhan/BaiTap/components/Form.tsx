@@ -9,6 +9,7 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { buildUpLoadMultiFile, handleSingleFile } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { resetFieldsForm } from '@/utils/utils';
 import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Spin, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
@@ -224,7 +225,7 @@ const FormBaiTap = (props: any) => {
 							<>
 								{intl.formatMessage({ id: 'lophocphan.id.baitap.tgconlai' })}:{' '}
 								<b style={{ color: 'red' }}>{remainingTime}</b>{' '}
-								<b>({dayjs(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')})</b>
+								<b>({formatDateTime(record?.assignment?.thoiGianKetThuc)})</b>
 							</>
 						}
 					/>
@@ -237,7 +238,7 @@ const FormBaiTap = (props: any) => {
 						message={
 							<>
 								{intl.formatMessage({ id: 'lophocphan.id.baitap.tgquahan' })}{' '}
-								{dayjs(record?.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+								{formatDateTime(record?.assignment?.thoiGianKetThuc)}
 							</>
 						}
 					/>
@@ -256,7 +257,7 @@ const FormBaiTap = (props: any) => {
 									{record?.assignment?.hoTenNguoiGiao}
 								</Descriptions.Item>
 								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.baitap.tggiaobai' })}>
-									{dayjs(record?.assignment?.thoiGianGiao ?? record?.assignment?.updatedAt).format('HH:mm DD/MM/YYYY')}
+									{formatDateTime(record?.assignment?.thoiGianGiao ?? record?.assignment?.updatedAt)}
 								</Descriptions.Item>
 							</Descriptions>
 							<Row gutter={[12, 12]} style={{ marginTop: 8 }}>
@@ -302,7 +303,7 @@ const FormBaiTap = (props: any) => {
 								</Tag>
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.baitap.tgcapnhat' })}>
-								{record?.thoiGianTraLoi ? dayjs(record?.thoiGianTraLoi).format('HH:mm DD/MM/YYYY') : '--'}
+								{record?.thoiGianTraLoi ? formatDateTime(record?.thoiGianTraLoi) : '--'}
 							</Descriptions.Item>
 						</Descriptions>
 					</Col>

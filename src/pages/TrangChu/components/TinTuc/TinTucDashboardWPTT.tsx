@@ -7,7 +7,7 @@ import { history, useModel } from 'umi';
 // import { CardTinTuc } from '../components/TinTuc.style';
 import { Title } from '@/pages/TinTuc/Wordpress/components/Title';
 import { getImageSrc } from '@/pages/TinTuc/Wordpress/utils/getImageSrc';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import './styles.less';
 
 const TinTucDashboardWPTT = (props: { category?: number }) => {
@@ -63,7 +63,7 @@ const TinTucDashboardWPTT = (props: { category?: number }) => {
 														<Title data={tintuc} rows={2} style={{ margin: 0 }} />
 													</div>
 												</div>
-												{tintuc?.date && <span className='thoi-gian'>{dayjs(tintuc?.date).format('DD/MM/YYYY')}</span>}
+												{tintuc?.date && <span className='thoi-gian'>{formatDate(tintuc?.date)}</span>}
 											</div>
 										</div>
 									</Col>

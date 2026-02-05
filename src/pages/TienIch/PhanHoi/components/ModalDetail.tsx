@@ -1,6 +1,6 @@
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { PaperClipOutlined } from '@ant-design/icons';
 import { Button, Card, Descriptions, Tag } from 'antd';
 import { useState } from 'react';
@@ -42,7 +42,7 @@ const ModalDetailPhanhoi = () => {
 					) : null}
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'phanhoi.chitiet.ngaygui' })}>
-					{dayjs(record?.createdAt).format('HH:mm DD/MM/YYYY')}
+					{formatDateTime(record?.createdAt)}
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'phanhoi.chitiet.tieude' })}>
 					{record?.tieuDe ?? '--'}
@@ -61,7 +61,7 @@ const ModalDetailPhanhoi = () => {
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'phanhoi.chitiet.tgtraloi' })}>
 					{record?.thoiGianTraLoi ? (
-						dayjs(record.thoiGianTraLoi).format('HH:mm DD/MM/YYYY')
+						formatDateTime(record.thoiGianTraLoi)
 					) : (
 						<Tag color='red'>{intl.formatMessage({ id: 'phanhoi.chitiet.chuatraloi' })}</Tag>
 					)}

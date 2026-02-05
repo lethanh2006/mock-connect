@@ -4,7 +4,7 @@ import {
 	ETrangThaiNopBaiTap,
 	mapTrangThaiNopBaiTap,
 } from '@/services/DaoTao/BaiTap/constants';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Card, Empty, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
@@ -96,7 +96,7 @@ const CardBaiTapLopHp = ({ lopHocPhanId }: IProps) => {
 									</Text>
 
 									<Text strong>
-										{dayjs(item.assignment?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}{' '}
+										{formatDateTime(item.assignment?.thoiGianKetThuc)}{' '}
 										<Tag
 											color={colorTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
 											style={{ marginLeft: item.trangThai == ETrangThaiNopBaiTap.DA_NOP ? 16 : 2 }}

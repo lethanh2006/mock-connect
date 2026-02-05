@@ -1,6 +1,7 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { EFileScope, uploadFile } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Checkbox, Col, Form, message, Modal, Row, Statistic } from 'antd';
@@ -73,8 +74,8 @@ const ModalNopTaiLieu = (props: { visible: boolean; setVisible: (val: boolean) =
 						<div style={{ textAlign: 'center', marginBottom: '8px' }}>
 							<h1 style={{ color: '#CC0D00' }}>Tên đợt: {record?.dot?.tenDot}</h1>
 							<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-								<span>Thời gian : {dayjs(record?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')}</span> -{' '}
-								<span>{dayjs(record?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}</span>
+								<span>Thời gian : {formatDateTime(record?.dot?.thoiGianBatDau)}</span> -{' '}
+								<span>{formatDateTime(record?.dot?.thoiGianKetThuc)}</span>
 								<span>
 									{dayjs(record?.dot?.thoiGianKetThuc).isAfter(dayjs()) &&
 										dayjs(record?.dot?.thoiGianBatDau).isBefore(dayjs()) && (

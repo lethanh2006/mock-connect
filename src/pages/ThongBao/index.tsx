@@ -3,6 +3,7 @@ import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import type { ThongBao } from '@/services/ThongBao/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { Modal } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -79,7 +80,7 @@ const ThongBaoPage = () => {
 			filterType: 'datetime',
 			sortable: true,
 			onCell,
-			render: (val) => dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => formatDateTime(val),
 		},
 	];
 

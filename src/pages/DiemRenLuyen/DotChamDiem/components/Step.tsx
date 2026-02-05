@@ -1,4 +1,5 @@
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -33,7 +34,7 @@ const StepDotChamDiemRenLuyen = () => {
 				{steps.map((item) => (
 					<Steps.Step
 						description={item.title}
-						title={<b>{dayjs(item.thoiGian).format('HH:mm DD/MM/YYYY')}</b>}
+						title={<b>{formatDateTime(item.thoiGian)}</b>}
 						key={item.title}
 					/>
 				))}

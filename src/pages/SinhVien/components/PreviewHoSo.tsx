@@ -1,5 +1,5 @@
 import { colorTrangThaiHocSv, type ETrangThaiHocSv } from '@/services/DaoTao/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { formatPhoneNumber } from '@/utils/utils';
 import { Col, Image, Row, Space, Spin, Tag } from 'antd';
 import { JSX, useEffect } from 'react';
@@ -44,7 +44,7 @@ const PreviewHoSo = () => {
 		{ label: intl.formatMessage({ id: 'thongtincanhan.hoso.gioitinh' }), content: record?.gioiTinh, md: 8 },
 		{
 			label: intl.formatMessage({ id: 'thongtincanhan.hoso.ngaysinh' }),
-			content: record?.ngaySinh ? dayjs(record.ngaySinh).format('DD/MM/YYYY') : '',
+			content: formatDate(record?.ngaySinh),
 			md: 8,
 		},
 		{
@@ -55,7 +55,7 @@ const PreviewHoSo = () => {
 		{
 			label: intl.formatMessage({ id: 'thongtincanhan.hoso.cccd' }),
 			content: `${record?.cccd ?? ''}, ${intl.formatMessage({ id: 'thongtincanhan.hoso.ngaycap' })}: ${
-				record?.ngayCapCccd ? dayjs(record.ngayCapCccd).format('DD/MM/YYYY') : '--'
+				formatDate(record?.ngayCapCccd) || '--'
 			}, ${intl.formatMessage({ id: 'thongtincanhan.hoso.noicap' })}: ${record?.noiCapCccd ?? ''}`,
 			md: 24,
 		},
@@ -119,12 +119,12 @@ const PreviewHoSo = () => {
 			children: [
 				{
 					label: intl.formatMessage({ id: 'thongtincanhan.hoso.dang.dubi' }),
-					content: record?.ngayVaoDang ? dayjs(record.ngayVaoDang).format('DD/MM/YYYY') : '',
+					content: formatDate(record?.ngayVaoDang),
 					md: 12,
 				},
 				{
 					label: intl.formatMessage({ id: 'thongtincanhan.hoso.dang.chinhthuc' }),
-					content: record?.ngayVaoDangChinhThuc ? dayjs(record.ngayVaoDangChinhThuc).format('DD/MM/YYYY') : '',
+					content: formatDate(record?.ngayVaoDangChinhThuc),
 					md: 12,
 				},
 			],

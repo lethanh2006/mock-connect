@@ -8,6 +8,7 @@ import { colorTrangThaiUserDiemDanh, ETrangThaiUserDiemDanh, trangThaiUserDiemDa
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { MailOutlined } from '@ant-design/icons';
 import { Button, Carousel, Tag } from 'antd';
 import { useState } from 'react';
@@ -51,7 +52,7 @@ const TableLichHocLopHP = (props: {
 			dataIndex: 'ngay',
 			align: 'center',
 			width: 150,
-			render: (val) => (val ? `${THU_TRONG_TUAN[dayjs(val).day()]}, ${dayjs(val).format('DD/MM/YYYY')}` : null),
+			render: (val) => (val ? `${THU_TRONG_TUAN[dayjs(val).day()]}, ${formatDate(val)}` : null),
 			filterType: 'string',
 			onCell,
 		},

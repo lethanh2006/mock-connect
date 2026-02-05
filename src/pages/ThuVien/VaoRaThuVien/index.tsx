@@ -5,6 +5,7 @@ import { EOperatorType } from '@/components/Table/constant';
 import type { IColumn } from '@/components/Table/typing';
 import type { QuanLyThuVien } from '@/services/QuanLyThuVien/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { StockOutlined, UserOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
 import { useState } from 'react';
@@ -49,7 +50,7 @@ const VaoRaThuVienPage = () => {
 			dataIndex: 'thoiGianCheckIn',
 			align: 'center',
 			width: 130,
-			render: (val, rec) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa vào</Tag>),
+			render: (val, rec) => (val ? formatDateTime(val) : <Tag color='red'>Chưa vào</Tag>),
 			filterType: 'date',
 			sortable: true,
 		},
@@ -58,7 +59,7 @@ const VaoRaThuVienPage = () => {
 			dataIndex: 'thoiGianCheckOut',
 			align: 'center',
 			width: 130,
-			render: (val, rec) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : <Tag color='red'>Chưa ra</Tag>),
+			render: (val, rec) => (val ? formatDateTime(val) : <Tag color='red'>Chưa ra</Tag>),
 			filterType: 'date',
 			sortable: true,
 		},

@@ -1,4 +1,5 @@
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
+import { formatDate } from '@/utils/formatDate';
 import { Avatar, Col, Descriptions, Modal, Row, Typography } from 'antd';
 import { useIntl } from 'umi';
 
@@ -42,7 +43,7 @@ const ModalThongTinGiangVien = ({
 								{giangVien?.gioiTinh || intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.chuacapnhat' })}
 							</Descriptions.Item>
 							{/* <Descriptions.Item label='Ngày sinh'>
-								{giangVien?.ngaySinh ? dayjs(giangVien.ngaySinh).format('DD/MM/YYYY') : 'Chưa cập nhật'}
+								{giangVien?.ngaySinh ? formatDate(giangVien.ngaySinh) : 'Chưa cập nhật'}
 							</Descriptions.Item> */}
 							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.hocham' })}>
 								{giangVien?.hocHam || intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.chuacapnhat' })}

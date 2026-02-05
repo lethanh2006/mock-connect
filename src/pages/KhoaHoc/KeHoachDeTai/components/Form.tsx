@@ -95,7 +95,7 @@ const FormKeHoachDeTai = () => {
 					{Object.values(EMocThoiGianDot).map((item) => (
 						<Col key={item} xs={24} lg={12}>
 							<Form.Item name={item} label={MapKeyNameMocThoiGianDot[item]} rules={[...rules.required]}>
-								<MyDateRangePicker format={'DD/MM/YYYY'} placeholder={['Từ ngày', 'đến ngày']} />
+								<MyDateRangePicker format={undefined} placeholder={['Từ ngày', 'đến ngày']} />
 							</Form.Item>
 						</Col>
 					))}

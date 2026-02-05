@@ -9,6 +9,7 @@ import {
 } from '@/services/QuanLyThuVien/constant';
 import type { MuonSach } from '@/services/QuanLyThuVien/MuonSach/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Card, Col, Descriptions, Row, Segmented, Tabs, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -81,7 +82,7 @@ const LichSuMuonTraPage = (props: any) => {
 			width: 150,
 			render: (val, rec) => {
 				if (!val) return null;
-				const formattedTime = dayjs(val).startOf('day').format('DD/MM/YYYY');
+				const formattedTime = formatDate(val);
 				const expirationTime = rec?.expired ? dayjs(rec.expired).startOf('day') : dayjs().startOf('day');
 				const now = dayjs().startOf('day');
 				const isOverdue = now.isAfter(expirationTime);
@@ -120,7 +121,7 @@ const LichSuMuonTraPage = (props: any) => {
 			align: 'center',
 			dataIndex: 'expired',
 			width: 130,
-			render: (val, rec) => val && dayjs(val).format('DD/MM/YYYY'),
+			render: (val, rec) => val && formatDate(val),
 			filterType: 'date',
 			sortable: true,
 			onCell,
@@ -152,7 +153,7 @@ const LichSuMuonTraPage = (props: any) => {
 			width: 150,
 			render: (val, rec) => {
 				if (!val) return null;
-				const formattedTime = dayjs(val).startOf('day').format('DD/MM/YYYY');
+				const formattedTime = formatDate(val);
 				const expirationTime = rec?.expired ? dayjs(rec.expired).startOf('day') : dayjs().startOf('day');
 				const isOverdue = dayjs().startOf('day').isAfter(expirationTime);
 				return (
@@ -247,7 +248,7 @@ const LichSuMuonTraPage = (props: any) => {
 						<Descriptions.Item label='Mã sinh viên'>{recPhieu?.maDinhDanhNguoiMuon ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Họ tên'>{recPhieu?.hoTenNguoiMuon ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Thời gian đăng ký'>
-							{recPhieu?.thoiGianDangKy ? dayjs(recPhieu?.thoiGianDangKy).format('DD/MM/YYYY') : '--'}
+							{recPhieu?.thoiGianDangKy ? formatDate(recPhieu?.thoiGianDangKy) : '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Khóa sinh viên'>{recPhieu?.tenKhoaSinhVienNguoiMuon ?? '--'}</Descriptions.Item>
 						<Descriptions.Item label='Khóa ngành'>{recPhieu?.tenNganhNguoiMuon ?? '--'}</Descriptions.Item>

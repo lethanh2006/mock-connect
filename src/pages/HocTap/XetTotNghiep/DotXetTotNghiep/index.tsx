@@ -6,6 +6,7 @@ import {
 	colorTrangThaiXetTotNghiep,
 } from '@/services/HocTap/XetTotNghiep/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { CloseOutlined, FormOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Col, Descriptions, Empty, Popconfirm, Row, Tag } from 'antd';
 import { useEffect, useState } from 'react';
@@ -65,7 +66,7 @@ const CardXetTotNghiep = () => {
 												{intl.formatMessage(
 													{ id: 'xettotnghiep.alert.ngaychotdanhsach' },
 													{
-														ngay: dayjs(record?.ngayChotDanhSach).format('DD/MM/YYYY'),
+														ngay: formatDate(record?.ngayChotDanhSach),
 														b: (chunks) => <b>{chunks}</b>,
 													},
 												)}{' '}

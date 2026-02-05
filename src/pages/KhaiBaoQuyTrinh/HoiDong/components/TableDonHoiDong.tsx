@@ -3,7 +3,7 @@ import type { IColumn } from '@/components/Table/typing';
 import type { TrangThaiTiepNhan } from '@/services/QuyTrinh/KhaiBao/constants';
 import { MapColorTrangThaiTiepNhan } from '@/services/QuyTrinh/KhaiBao/constants';
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Tag, Tooltip } from 'antd';
@@ -86,7 +86,7 @@ const TableDonHoiDong = () => {
 			width: 150,
 			align: 'center',
 			render: (val) => {
-				return val ? dayjs(val).format('DD/MM/YYYY') : 'Không có dữ liệu';
+				return val ? formatDate(val) : 'Không có dữ liệu';
 			},
 			onCell,
 		},

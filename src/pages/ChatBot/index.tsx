@@ -1,6 +1,7 @@
 import { quickReplies } from '@/services/TienIch/ChatbotV2/constant';
 import type { ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { resetFieldsForm, toCamelCase } from '@/utils/utils';
 import { SendOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Collapse, Form, Input, Spin } from 'antd';
@@ -169,7 +170,7 @@ const ChatBotPage = () => {
 											.map((src) => {
 												const soQD = src.source?.['Số QĐ'] ?? '';
 												const ngayBanHanh = src.source?.['Ngày ban hành']
-													? dayjs(src.source['Ngày ban hành']).format('DD/MM/YYYY')
+													? formatDate(src.source['Ngày ban hành'])
 													: '';
 												const header1 = src.source?.['Header 1'] ?? '';
 												const header2 = src.source?.['Header 2'] ?? '';
