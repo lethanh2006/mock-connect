@@ -86,9 +86,9 @@ const CardLopHocPhan = () => {
 		// Sử dụng hash từ ID hoặc index để đảm bảo background cố định cho mỗi item
 		const hash = itemId
 			? itemId.split('').reduce((a, b) => {
-				a = (a << 5) - a + b.charCodeAt(0);
-				return a & a;
-			}, 0)
+					a = (a << 5) - a + b.charCodeAt(0);
+					return a & a;
+				}, 0)
 			: index;
 
 		const backgroundIndex = Math.abs(hash) % backgrounds.length;
@@ -236,7 +236,7 @@ const CardLopHocPhan = () => {
 						})}
 					</Carousel>
 				) : (
-					<Card variant='borderless' style={{ borderRadius: 8 }}>
+					<Card variant='borderless' style={{ borderRadius: 8 }} styles={{ body: { minHeight: 320 } }}>
 						<Empty
 							image={Empty.PRESENTED_IMAGE_SIMPLE}
 							style={{ margin: '16px 0' }}

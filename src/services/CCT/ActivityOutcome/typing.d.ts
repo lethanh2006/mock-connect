@@ -1,5 +1,5 @@
 import { Activity } from '../Activity/typing';
-import { EActivityCategory, EApprovalStatus } from '../constant';
+import { EActivityCategory, EApprovalStatus, Evalidation } from '../constant';
 
 declare module ActivityOutCome {
 	export interface IRecord {
@@ -26,9 +26,20 @@ declare module ActivityOutCome {
 		studentDeclarationApproverSsoId: string;
 		activityRejectionNote: string;
 		revisionNote: string;
+		validation: Evalidation;
+		reflection: string;
 
 		activityRejectionNote?: string;
 		listAchievedCompetencies: Activity.ICompetencyMapping[];
+		evidenceFile: {
+			name: string;
+			file: string[];
+		}[];
+		competencyList: ICompetencyActivity[];
+
+		supervisorSsoId: string;
+		supervisorName: string;
+		supervisorCode: string;
 
 		createdAt: Date;
 		updatedAt: Date;
@@ -41,5 +52,13 @@ declare module ActivityOutCome {
 		rejected: number;
 		submitted: number;
 		total: number;
+	}
+
+	export interface ICompetencyActivity {
+		_id: string;
+		competencyId: string;
+		activitiesId: string;
+		competency: Competency.IRecord;
+		activities: IRecord;
 	}
 }

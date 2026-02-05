@@ -38,6 +38,7 @@ declare module Activity {
 		coCurricularAttributesEquivalency: ICompetencyMappingActivity[];
 
 		workflow: EApprovalStatus;
+		competencyList: ICompetencyActivity[];
 
 		//fake
 		cct?: boolean;
@@ -74,6 +75,11 @@ declare module Activity {
 		activityOutcome?: IRecord;
 		competencieId: string;
 		competencie?: Competency.IRecord;
+		attributesId: string;
+		attributes?: AttributesManagement.IRecord;
+
+		//fake
+		dsCompetencie?: Competency.IRecord[];
 	}
 
 	export interface ICompetencyMappingActivity {

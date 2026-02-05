@@ -139,7 +139,7 @@ const ActivityUpComming = (props: { visible: boolean; setVisible: (val: boolean)
 				<Row gutter={24}>
 					<Col span={8} style={{ textAlign: 'center' }}>
 						<Image
-							src={record?.banner ?? '/logo.png'}
+							src={record?.banner ?? '/metadata.png'}
 							alt='banner'
 							style={{
 								width: '100%',
@@ -151,11 +151,13 @@ const ActivityUpComming = (props: { visible: boolean; setVisible: (val: boolean)
 
 					<Col span={16}>
 						<Descriptions column={1} size='small'>
-							{record?.activitiesType?.attributes?.name && (
+							{record?.activitiesType?.attributes && (
 								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.type' })}>
-									<Tag color={record?.activitiesType?.attributes?.color}>
-										{record?.activitiesType?.attributes?.name}
-									</Tag>
+									<Space wrap>
+										{record?.activitiesType?.attributes?.map((item: any) => (
+											<Tag color={item?.color}>{item?.name}</Tag>
+										))}
+									</Space>
 								</Descriptions.Item>
 							)}
 

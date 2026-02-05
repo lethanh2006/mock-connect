@@ -1,12 +1,13 @@
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { EApprovalStatus, mapColorApprovalStatus, mapNameApprovalStatus } from '@/services/CCT/constant';
-import { ReloadOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Popconfirm, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import { CalendarOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Empty, Flex, Popconfirm, Row, Spin, Tag, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChiTietActivity from './ChiTiet';
+import './style.less';
 
 const { Title } = Typography;
 
@@ -31,80 +32,40 @@ const ActivityPage = () => {
 
 	return (
 		<Card title='List activity' className='table-base-card' variant='borderless'>
-			<div style={{ padding: '12px 0px 12px 0px' }}>
-				<Space style={{ marginBottom: 16 }}>
-					<MyDateRangePicker
-						value={dateRange?.length === 2 ? [dayjs(dateRange[0]), dayjs(dateRange[1])] : null}
-						onChange={(val: any) => setDateRange(val ?? [])}
-						ranges={{
-							[intl.formatMessage({ id: 'activity.date.homnay' })]: [dayjs().startOf('date'), dayjs().endOf('date')],
-							[intl.formatMessage({ id: 'activity.date.tuannay' })]: [dayjs().startOf('week'), dayjs().endOf('week')],
-							[intl.formatMessage({ id: 'activity.date.thangnay' })]: [
-								dayjs().startOf('month'),
-								dayjs().endOf('month'),
-							],
-						}}
-					/>
+			<Flex justify='space-between' align='center' style={{ marginBottom: 16 }}>
+				<MyDateRangePicker
+					style={{ width: 300 }}
+					value={dateRange?.length === 2 ? [dayjs(dateRange[0]), dayjs(dateRange[1])] : null}
+					onChange={(val: any) => setDateRange(val ?? [])}
+					ranges={{
+						[intl.formatMessage({ id: 'activity.date.homnay' })]: [dayjs().startOf('date'), dayjs().endOf('date')],
+						[intl.formatMessage({ id: 'activity.date.tuannay' })]: [dayjs().startOf('week'), dayjs().endOf('week')],
+						[intl.formatMessage({ id: 'activity.date.thangnay' })]: [dayjs().startOf('month'), dayjs().endOf('month')],
+					}}
+				/>
 
-					<ButtonExtend icon={<ReloadOutlined />} onClick={getData}>
-						{intl.formatMessage({ id: 'global.button.tailai' })}
-					</ButtonExtend>
-				</Space>
+				<ButtonExtend icon={<ReloadOutlined />} onClick={getData} />
+			</Flex>
 
-				<Spin spinning={loading}>
+			<Spin spinning={loading}>
+				{danhSach?.length ? (
 					<Row gutter={[24, 24]}>
 						{danhSach?.map((item) => {
-							const isFutureOrNow = dayjs(item.startDate).isSameOrAfter(dayjs());
-
+							// const isFutureOrNow = dayjs(item.startDate).isSameOrAfter(dayjs());
 							const disabledRegister = !!item.workflow || !item.activitiesTypeId;
-							// || !isFutureOrNow;
 
 							return (
-								<Col key={item._id} xs={24} sm={12} md={8} lg={6} style={{ display: 'flex' }}>
+								<Col key={item._id} xs={24} sm={12} md={8} lg={6} className='activity-col'>
 									<Card
 										hoverable
-										style={{
-											borderRadius: 12,
-											overflow: 'hidden',
-											boxShadow: '0 2px 8px rgba(0,0,0,0.09)',
-											width: '100%',
-											display: 'flex',
-											flexDirection: 'column',
-										}}
-										styles={{
-											body: {
-												padding: 0,
-												display: 'flex',
-												flexDirection: 'column',
-												height: '100%',
-											},
-										}}
+										className='activity-card'
 										cover={
-											<div style={{ position: 'relative' }}>
-												<img
-													alt={item.name}
-													src={item.banner ?? '/logo.png'}
-													style={{
-														height: 200,
-														width: '100%',
-														objectFit: 'cover',
-													}}
-												/>
+											<div className='activity-cover'>
+												<img src={item.banner ?? '/metadata.png'} alt={item.name} className='activity-image' />
 
-												<div
-													style={{
-														position: 'absolute',
-														top: 16,
-														left: 16,
-														background: 'rgba(0,0,0,0.7)',
-														color: '#fff',
-														padding: '6px 12px',
-														borderRadius: 6,
-														fontSize: 13,
-														fontWeight: 600,
-													}}
-												>
-													{dayjs(item.startDate).format('HH:mm DD/MM/YYYY')}
+												<div className='activity-date'>
+													<CalendarOutlined />
+													<span>{dayjs(item.startDate).format('MMM DD, YYYY')}</span>
 												</div>
 
 												<div style={{ position: 'absolute', top: 16, right: 16 }}>
@@ -119,58 +80,55 @@ const ActivityPage = () => {
 											setVisibleForm(true);
 										}}
 									>
-										<div
-											style={{
-												padding: 20,
-												display: 'flex',
-												flexDirection: 'column',
-												height: '100%',
-											}}
-										>
-											<Title level={4} style={{ marginBottom: 8 }}>
-												{item.name}
+										<div className='activity-content'>
+											<Title level={5} className='activity-title'>
+												{item?.name}
 											</Title>
+										</div>
 
-											<div style={{ marginTop: 'auto' }}>
-												<Popconfirm
-													title={intl.formatMessage({ id: 'activity.confirm.dangky' })}
-													placement='topLeft'
-													onConfirm={(e) => {
-														e?.stopPropagation?.();
-														registerActivityModel(
-															item._id,
-															getData,
-															intl.formatMessage({ id: 'global.message.luuthanhcong' }),
-														);
+										<div className='activity-footer'>
+											<Popconfirm
+												title={intl.formatMessage({ id: 'activity.confirm.dangky' })}
+												placement='topLeft'
+												onConfirm={(e) => {
+													e?.stopPropagation?.();
+													registerActivityModel(
+														item._id,
+														getData,
+														intl.formatMessage({ id: 'global.message.luuthanhcong' }),
+													);
+												}}
+												onCancel={(e) => e?.stopPropagation?.()}
+												disabled={disabledRegister}
+											>
+												<div
+													onClick={(e) => {
+														e.stopPropagation();
 													}}
-													onCancel={(e) => {
-														e?.stopPropagation?.();
-													}}
-													disabled={disabledRegister}
-													okText='Accept'
-													cancelText='Cancel'
 												>
-													<div
-														onClick={(e) => {
-															e.stopPropagation();
-														}}
+													<Tooltip
+													//  title={!isFutureOrNow ? 'The event has started or has ended' : undefined}
 													>
-														<Tooltip title={!isFutureOrNow ? 'The event has started or has ended' : undefined}>
-															<Button type='primary' block disabled={disabledRegister}>
-																{intl.formatMessage({ id: 'activity.btn.dangky' })}
-															</Button>
-														</Tooltip>
-													</div>
-												</Popconfirm>
-											</div>
+														<Button block type='default' className='activity-btn' disabled={disabledRegister}>
+															Register Now
+														</Button>
+													</Tooltip>
+												</div>
+											</Popconfirm>
 										</div>
 									</Card>
 								</Col>
 							);
 						})}
 					</Row>
-				</Spin>
-			</div>
+				) : (
+					<Empty
+						style={{ marginTop: 32, marginBottom: 32 }}
+						description={intl.formatMessage({ id: 'global.table.index.empty' })}
+						image='/images/empty.png'
+					/>
+				)}
+			</Spin>
 
 			<ChiTietActivity getData={getData} />
 		</Card>
