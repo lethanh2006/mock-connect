@@ -124,10 +124,10 @@ export declare module LopHocPhan {
 
 	export interface IDiemHpSvHk
 		extends IDiemThanhPhan,
-			IDiemThi,
-			IDiemTongKet,
-			HocPhan.ITrongSoDeCuong,
-			HocPhan.ITrongSoThi {
+		IDiemThi,
+		IDiemTongKet,
+		HocPhan.ITrongSoDeCuong,
+		HocPhan.ITrongSoThi {
 		_id: string;
 		sinhVienSsoId: string;
 		// maSinhVien: string;
