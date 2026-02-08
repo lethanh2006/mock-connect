@@ -249,7 +249,7 @@ const DetailLopTinChi = () => {
 				tabType='line'
 				tabStyle={{
 					backgroundColor: 'var(--color-primary-bg)',
-					marginTop: '-50px', // để phần Tabpane nằm bên trong ThongTinChungHeaderCard
+					marginTop: '-45px', // để phần Tabpane nằm bên trong ThongTinChungHeaderCard
 				}}
 			/>
 
