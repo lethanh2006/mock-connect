@@ -349,6 +349,12 @@ const FormActivityOutCome = (props: any) => {
 						</Col>
 
 						<Col span={24}>
+							<Divider className='divider-big-title' orientation='left'>
+								Evidence Required
+							</Divider>
+						</Col>
+
+						<Col span={24}>
 							<Form.List name='evidenceFile'>
 								{(fields) => (
 									<TableStaticData

@@ -13,5 +13,15 @@ declare module ActivitiesManagement {
 
 		coCurricularAttributesEquivalency?: any[];
 		requiredEvidenceList?: string[];
+		track: ITrack;
+	}
+
+	export interface ITrack {
+		_id: string;
+		code: string;
+		name: string;
+		order: number;
+		description: string;
+		isActive: boolean;
 	}
 }

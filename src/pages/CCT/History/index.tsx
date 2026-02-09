@@ -23,8 +23,8 @@ import {
 	PlusCircleOutlined,
 	SendOutlined,
 } from '@ant-design/icons';
-import { Button, Checkbox, Popconfirm, Popover, Space, Tabs, Tag } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { Button, Popconfirm, Popover, Space, Tabs, Tag } from 'antd';
+import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import SelectActivitiesManagement from '../Activities/Select';
 import SelectLevelsManagement from '../Levels/Select';
@@ -37,13 +37,8 @@ const HistoryActivityPage = () => {
 	const intl = useIntl();
 	const { getModel, page, limit, handleEdit, handleView, deleteActivityModel, putModel, getAnalyticsStudentModel } =
 		useModel('cct.activityoutcome');
-	const { getAllModel, danhSach: dsAtribute } = useModel('cct.attributes');
 
 	const [tabActive, setTabActive] = useState<EActivityCategory>(EActivityCategory.REGISTERED);
-
-	useEffect(() => {
-		getAllModel(undefined, { order: 1 });
-	}, []);
 
 	const getData = () => {
 		getModel(
@@ -61,24 +56,6 @@ const HistoryActivityPage = () => {
 	const getThongKe = () => {
 		getAnalyticsStudentModel(tabActive);
 	};
-
-	const attributeColumns: IColumn<any>[] = useMemo(() => {
-		if (!dsAtribute?.length) return [];
-
-		return dsAtribute.map((attr: any) => ({
-			title: attr.code,
-			width: 60,
-			render: (val, rec) => {
-				const check = rec?.activities?.coCurricularActivityEquivalency;
-				const checkPertion = rec?.activitiesType?.attributesId === attr?._id;
-
-				const isChecked = check?.some((item: any) => item.rolesId === rec.rolesId && item.attributesId === attr._id);
-
-				return <Checkbox checked={isChecked || checkPertion} />;
-			},
-			onCell,
-		}));
-	}, [dsAtribute]);
 
 	const onCell = (rec: ActivityOutCome.IRecord) => ({
 		onClick: () => handleView(rec),
@@ -167,7 +144,37 @@ const HistoryActivityPage = () => {
 
 	const columns: IColumn<ActivityOutCome.IRecord>[] = [
 		{
-			title: intl.formatMessage({ id: 'activity.column.level' }),
+			title: 'Activity Name',
+			dataIndex: tabActive === EActivityCategory.REGISTERED ? ['activities', 'name'] : 'activitiesOutcomeName',
+			width: 180,
+			render: (val, rec) => {
+				if (rec?.activityCategory === EActivityCategory.REGISTERED)
+					return (
+						<div>
+							{rec?.activities?.name} <br />
+							<div style={{ marginTop: 6 }}>
+								{rec?.workflow === EApprovalStatus.DRAFT && renderDeadlineBadge(rec)}
+							</div>{' '}
+						</div>
+					);
+				else {
+					return rec?.activitiesOutcomeName;
+				}
+			},
+			filterType: 'string',
+			onCell,
+		},
+		{
+			title: 'Role',
+			dataIndex: 'rolesId',
+			width: 180,
+			render: (val, rec) => rec?.roles?.name ?? <i className='text-warning'>No info</i>,
+			filterType: 'customselect',
+			filterCustomSelect: <SelectRolesManagement multiple />,
+			onCell,
+		},
+		{
+			title: 'Level',
 			dataIndex: 'rolesId',
 			width: 140,
 			render: (val, rec) => rec?.levels?.name ?? <i className='text-warning'>No info</i>,
@@ -176,37 +183,7 @@ const HistoryActivityPage = () => {
 			onCell,
 		},
 		{
-			title: intl.formatMessage({ id: 'activity.column.name' }),
-			dataIndex: 'activitiesOutcomeName',
-			width: 150,
-			filterType: 'string',
-			onCell,
-			hide: tabActive === EActivityCategory.REGISTERED,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.cca' }),
-			dataIndex: 'activitiesTypeId',
-			width: 180,
-			render: (val, rec) => rec?.activitiesType?.name,
-			filterType: 'customselect',
-			filterCustomSelect: <SelectActivitiesManagement multiple />,
-			onCell,
-			hide: tabActive === EActivityCategory.REGISTERED,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.activity' }),
-			width: 180,
-			render: (val, rec) => (
-				<div>
-					{rec?.activities?.name} <br />
-					<div style={{ marginTop: 6 }}>{rec?.workflow === EApprovalStatus.DRAFT && renderDeadlineBadge(rec)}</div>{' '}
-				</div>
-			),
-			onCell,
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.attribute' }),
+			title: 'Attribute',
 			width: 200,
 			render: (val, rec) => {
 				const attriRe = rec?.activities?.coCurricularActivityEquivalency?.filter(
@@ -231,13 +208,6 @@ const HistoryActivityPage = () => {
 			onCell,
 		},
 		{
-			title: intl.formatMessage({ id: 'activity.column.cca' }),
-			width: 200,
-			render: (val, rec) => rec?.activities?.activitiesType?.name,
-			onCell,
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
 			title: 'Competency',
 			width: 220,
 			render: (val, rec) =>
@@ -248,53 +218,23 @@ const HistoryActivityPage = () => {
 			onCell,
 		},
 		{
-			title: intl.formatMessage({ id: 'activity.column.date' }),
-			align: 'center',
+			title: 'Activity Type',
+			dataIndex: 'activitiesTypeId',
 			width: 180,
-			render: (val, rec) =>
-				[
-					dayjs(rec?.activities?.startDate).format('HH:mm DD/MM/YYYY'),
-					dayjs(rec?.activities?.endDate).format('HH:mm DD/MM/YYYY'),
-				]
-					.filter(Boolean)
-					.join(' - '),
-			onCell,
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.allow' }),
-			align: 'center',
-			width: 180,
-			render: (val, rec) => (
-				<div>
-					<Checkbox checked={rec?.activities?.allowPostEventResultsUpdate} /> <br />
-					{rec?.activities?.dueDate && (
-						<div style={{ marginTop: 6 }}>{dayjs(rec?.activities?.dueDate).format('HH:mm DD/MM/YYYY')}</div>
-					)}
-				</div>
-			),
-			onCell,
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.role' }),
-			dataIndex: 'rolesId',
-			width: 180,
-			render: (val, rec) => rec?.roles?.name ?? <i className='text-warning'>No info</i>,
+			render: (val, rec) => rec?.activitiesType?.name,
 			filterType: 'customselect',
-			filterCustomSelect: <SelectRolesManagement multiple />,
+			filterCustomSelect: <SelectActivitiesManagement multiple />,
 			onCell,
-		},
-		// ...attributeColumns,
-		{
-			title: intl.formatMessage({ id: 'activity.column.created' }),
-			dataIndex: 'createdAt',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => val && dayjs(val).format('DD/MM/YYYY'),
-			onCell,
-			sortable: true,
 			hide: tabActive === EActivityCategory.REGISTERED,
+		},
+		{
+			title: 'Track',
+			width: 120,
+			render: (val, rec) =>
+				rec?.activityCategory === EActivityCategory.REGISTERED
+					? rec?.activities?.activitiesType?.track?.name
+					: rec?.activitiesType?.track?.name,
+			onCell,
 		},
 		{
 			title: 'Rejection Note',
@@ -311,15 +251,6 @@ const HistoryActivityPage = () => {
 			render: (val, rec) => <ExpandText>{val}</ExpandText>,
 			filterType: 'string',
 			onCell,
-		},
-		{
-			title: 'Declaration Approvers',
-			dataIndex: 'studentDeclarationApproverName',
-			align: 'center',
-			width: 180,
-			filterType: 'string',
-			onCell,
-			hide: tabActive === EActivityCategory.REGISTERED,
 		},
 		{
 			title: 'Impact',
@@ -339,13 +270,21 @@ const HistoryActivityPage = () => {
 					{val}
 				</Tag>
 			),
-			fixed: 'right',
 			filterType: 'select',
 			filterData: Object.values(Evalidation).map((item) => ({
 				value: item,
 				label: item,
 			})),
 			onCell,
+		},
+		{
+			title: 'Due Date',
+			align: 'center',
+			width: 100,
+			render: (val, rec) => rec?.activities?.dueDate && dayjs(rec?.activities?.dueDate).format('HH:mm DD/MM/YYYY'),
+			onCell,
+			fixed: 'right',
+			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
 		},
 		{
 			title: intl.formatMessage({ id: 'activity.column.status' }),
