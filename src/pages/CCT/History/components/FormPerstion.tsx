@@ -11,7 +11,7 @@ import { handleSingleFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Card, Checkbox, Col, Divider, Form, Input, message, Modal, Row, Space, Tag } from 'antd';
+import { Button, Card, Checkbox, Col, Divider, Form, Input, message, Modal, Radio, Row, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -50,6 +50,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const activitiesTypeDomainId: string = Form.useWatch('activitiesTypeDomainId', form);
 	const checkbox: boolean = Form.useWatch('checkbox', form);
 	const competencyList: string[] = Form.useWatch('competencyList', form);
+	const onUni: boolean = Form.useWatch('onUni', form);
 
 	const [openAddEvidence, setOpenAddEvidence] = useState(false);
 
@@ -64,6 +65,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 				...record,
 				activitiesTypeDomainId: record?.activitiesType?.activitiesTypeDomainId,
 				competencyList: record?.competencyList?.map((item) => item?.competencyId),
+				onUni: record?.supervisorSsoId ? true : false,
 			});
 		}
 
@@ -77,6 +79,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 				evidenceFile: [],
 				checkbox: false,
 				listAchievedCompetencies: null,
+				onUni: true,
 			});
 		}
 
@@ -254,7 +257,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 					<Row gutter={[12, 0]}>
 						<Col span={24} md={12}>
 							<Form.Item name='activitiesTypeDomainId' label='Activity Group' rules={[...rules.required]}>
-								<SelectActivitiesTypeDomain disabled={isView} />
+								<SelectActivitiesTypeDomain disabled={isView} onChange={() => form.resetFields(['activitiesTypeId'])} />
 							</Form.Item>
 						</Col>
 						<Col span={24} md={12}>
@@ -291,14 +294,25 @@ const FormPerstionActivityOutCome = (props: any) => {
 								/>
 							</Form.Item>
 						</Col>
-						<Col span={24} md={12}>
+						<Col span={24}>
 							<Form.Item name='activitiesOutcomeName' label='Activity Name' rules={[...rules.required]}>
 								<Input placeholder='Enter Activity Name' disabled={isView} />
 							</Form.Item>
 						</Col>
 						<Col span={24} md={12}>
-							<Col span={24}>
-								<Form.Item name='supervisorSsoId' label='Mentor/Supervisor'>
+							<Form.Item name='onUni' label='Mentor/Supervisor' rules={[...rules.required]}>
+								<Radio.Group
+									disabled={isView}
+									options={[
+										{ value: true, label: 'In university' },
+										{ value: false, label: 'Outside of university' },
+									]}
+								/>
+							</Form.Item>
+						</Col>
+						{onUni ? (
+							<Col span={24} md={12}>
+								<Form.Item name='supervisorSsoId' label='Mentor/Supervisor' rules={[...rules.required]}>
 									<SelectNhanSuDebounce
 										onChange={(val, option) => {
 											const nhanSu = option?.rawData;
@@ -314,7 +328,13 @@ const FormPerstionActivityOutCome = (props: any) => {
 								<Form.Item name='supervisorName' hidden />
 								<Form.Item name='supervisorCode' hidden />
 							</Col>
-						</Col>
+						) : (
+							<Col span={24} md={12}>
+								<Form.Item name='supervisorName' label='Mentor/Supervisor' rules={[...rules.required]}>
+									<Input placeholder='Enter Mentor/Supervisor' />
+								</Form.Item>
+							</Col>
+						)}
 						<Col span={24} md={12}>
 							<Form.Item
 								name='organizer'
@@ -347,6 +367,10 @@ const FormPerstionActivityOutCome = (props: any) => {
 									format='HH:mm DD/MM/YYYY'
 									disabled={isView}
 									placeholder={intl.formatMessage({ id: 'activity.perstion.startDate.place' })}
+									disabledDate={(current) => {
+										return !!(current && current < dayjs().startOf('day'));
+									}}
+									onChange={() => form.resetFields(['endDate'])}
 								/>
 							</Form.Item>
 						</Col>
@@ -363,7 +387,12 @@ const FormPerstionActivityOutCome = (props: any) => {
 									showTime={{ showHour: true, showMinute: true }}
 									format='HH:mm DD/MM/YYYY'
 									disabled={isView}
-									disabledDate={(cur) => (startDate ? dayjs(cur).isBefore(startDate) : false)}
+									disabledDate={(current) =>
+										!!(
+											dayjs(current).isBefore(dayjs().startOf('day')) ||
+											(startDate && dayjs(current).isBefore(startDate))
+										)
+									}
 									placeholder={intl.formatMessage({ id: 'activity.perstion.endDate.place' })}
 								/>
 							</Form.Item>

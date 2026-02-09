@@ -58,10 +58,10 @@ const SelectNhanSuDebounce = (props: {
 								values: Array.isArray(value) ? value : [value],
 								operator: EOperatorType.INCLUDE,
 							},
-					  ]
+						]
 					: !!maDonVi
-					? [{ active: true, field: 'maDonVi', values: [maDonVi], operator: EOperatorType.INCLUDE }]
-					: undefined,
+						? [{ active: true, field: 'maDonVi', values: [maDonVi], operator: EOperatorType.INCLUDE }]
+						: undefined,
 				undefined,
 				1,
 				20,
@@ -103,6 +103,7 @@ const SelectNhanSuDebounce = (props: {
 				key: item?.ssoId,
 				value: selectMa ? item.maCanBo : item?.ssoId,
 				label: `${item?.hoTen ?? ''} - ${item.maCanBo ?? ''} - ${item.donViChinh?.ten ?? ''}`,
+				// label: [item?.hoTen, item?.email ?? item?.emailCanBo].filter(Boolean).join(' - '),
 				rawData: item,
 			}))}
 			showSearch
