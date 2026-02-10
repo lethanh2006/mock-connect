@@ -173,6 +173,7 @@ const ConfigBounder = (props: { children?: any }) => {
 						lineWidth: 2,
 						orientationMargin: 0,
 						textPaddingInline: 8,
+						margin: 8,
 					},
 					Select: {
 						optionSelectedColor: primaryColor,
@@ -187,9 +188,6 @@ const ConfigBounder = (props: { children?: any }) => {
 						itemColor: textColors?.text300,
 						linkColor: textColors?.text300,
 						linkHoverColor: textColors?.text400,
-					},
-					Typography: {
-						colorTextHeading: textColors?.text400,
 					},
 				},
 			}}

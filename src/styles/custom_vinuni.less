@@ -93,10 +93,13 @@
 // =============================================================================
 * {
 	font-family: 'Montserrat', sans-serif !important;
+}
+
+body {
 	font-weight: 500;
 }
 
-.ant-form-item-label>label {
+.ant-form-item-label > label {
 	height: auto;
 	margin: 4px 0 !important;
 	font-weight: 600 !important;
@@ -312,8 +315,8 @@
 // =============================================================================
 .ant-table,
 .ant-table-container,
-.ant-table-content>tr>th,
-.ant-table-content>tr>td {
+.ant-table-content > tr > th,
+.ant-table-content > tr > td {
 	border: none !important;
 }
 
@@ -367,7 +370,7 @@
 		text-align: left !important;
 	}
 
-	>tr>th {
+	> tr > th {
 		color: var(--color-text-100) !important;
 		font-weight: 700 !important;
 		height: 44px;
@@ -381,7 +384,7 @@
 		}
 	}
 
-	>tr>th:last-child,
+	> tr > th:last-child,
 	.ant-table-cell:last-child {
 		border-right: none !important;
 	}
@@ -552,8 +555,8 @@
 		}
 	}
 
-	&>.ant-card-body {
-		padding: 10px 16px;
+	& > .ant-card-body {
+		padding: 10px 16px !important;
 	}
 
 	.ant-drawer .ant-card-body,
@@ -565,11 +568,11 @@
 		box-shadow: none;
 		height: fit-content !important;
 
-		>.ant-card-body .table-base {
+		> .ant-card-body .table-base {
 			margin: 0 !important;
 		}
 
-		>.ant-card-head {
+		> .ant-card-head {
 			padding: 0 12px;
 		}
 	}
@@ -578,7 +581,7 @@
 		// background: transparent;
 		border: none !important;
 
-		>.ant-card-head {
+		> .ant-card-head {
 			padding: 0 0 16px 0 !important;
 			border: none !important;
 			// background-color: transparent !important;
@@ -621,7 +624,7 @@
 			}
 		}
 
-		>.ant-card-body {
+		> .ant-card-body {
 			border-radius: 4px;
 			// background-color: white !important;
 			padding: 0 16px;
@@ -646,31 +649,31 @@
 			}
 		}
 
-		>.ant-card-head-wrapper>.ant-card-head-title {
+		> .ant-card-head-wrapper > .ant-card-head-title {
 			font-size: 18px;
 		}
 	}
 }
 
-.card-big-title>.ant-card-body {
+.card-big-title > .ant-card-body {
 	padding: 0 !important;
 	// background-color: transparent !important;
 	border-radius: 8px !important;
 
-	.ant-spin-nested-loading .ant-card>.ant-card-body {
+	.ant-spin-nested-loading .ant-card > .ant-card-body {
 		padding: 12px 16px !important;
 	}
 
-	.ant-card>.ant-card-body {
-		.table-base>.ant-table-wrapper>.ant-spin-nested-loading {
+	.ant-card > .ant-card-body {
+		.table-base > .ant-table-wrapper > .ant-spin-nested-loading {
 			margin: 0 -16px !important;
 		}
 
-		.css-glamorous-div--jgd0xx .table-base>.ant-table-wrapper>.ant-spin-nested-loading {
+		.css-glamorous-div--jgd0xx .table-base > .ant-table-wrapper > .ant-spin-nested-loading {
 			margin: 0 !important;
 		}
 
-		&>.ant-card>.ant-card-body {
+		& > .ant-card > .ant-card-body {
 			padding: 0 !important;
 
 			.table-base {
@@ -755,7 +758,6 @@
 }
 
 .ant-btn-primary.ant-btn-color-primary.ant-btn-variant-solid {
-
 	&:hover,
 	&:focus {
 		background-color: var(--color-accent-800) !important;
@@ -842,7 +844,6 @@
 			overflow: visible !important;
 
 			.ant-page-header-heading-extra .ant-space .ant-space-item {
-
 				[class*='menu_right'],
 				.menu_right {
 					margin-left: auto !important;
@@ -936,7 +937,8 @@
 	img {
 		height: 24px !important;
 		width: 24px !important;
-		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%)
+			contrast(97%);
 	}
 
 	img[src*='notification.svg'],
@@ -966,6 +968,10 @@
 	font-size: 18px !important;
 	font-weight: bold !important;
 	color: var(--color-primary) !important;
+}
+
+.ant-modal {
+	top: 60px;
 }
 
 .ant-modal .ant-modal-content {
@@ -1029,7 +1035,15 @@
 // 9. Picker & Calendar
 // =============================================================================
 .ant-picker-dropdown {
-	.ant-picker-range-wrapper .ant-picker-panel-container .ant-picker-panel-layout .ant-picker-panels .ant-picker-panel .ant-picker-body .ant-picker-content tbody tr {
+	.ant-picker-range-wrapper
+		.ant-picker-panel-container
+		.ant-picker-panel-layout
+		.ant-picker-panels
+		.ant-picker-panel
+		.ant-picker-body
+		.ant-picker-content
+		tbody
+		tr {
 		.ant-picker-cell-in-view {
 			color: var(--color-text-100) !important;
 		}
@@ -1060,10 +1074,22 @@
 	font-weight: 600 !important;
 }
 
-.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected .ant-picker-calendar-date .ant-picker-calendar-date-value,
-.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected:hover .ant-picker-calendar-date .ant-picker-calendar-date-value,
-.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected .ant-picker-calendar-date-today .ant-picker-calendar-date-value,
-.ant-picker-calendar.ant-picker-calendar-full .ant-picker-cell-selected:hover .ant-picker-calendar-date-today .ant-picker-calendar-date-value {
+.ant-picker-calendar.ant-picker-calendar-full
+	.ant-picker-cell-selected
+	.ant-picker-calendar-date
+	.ant-picker-calendar-date-value,
+.ant-picker-calendar.ant-picker-calendar-full
+	.ant-picker-cell-selected:hover
+	.ant-picker-calendar-date
+	.ant-picker-calendar-date-value,
+.ant-picker-calendar.ant-picker-calendar-full
+	.ant-picker-cell-selected
+	.ant-picker-calendar-date-today
+	.ant-picker-calendar-date-value,
+.ant-picker-calendar.ant-picker-calendar-full
+	.ant-picker-cell-selected:hover
+	.ant-picker-calendar-date-today
+	.ant-picker-calendar-date-value {
 	background-color: var(--vin-color-primary) !important;
 	color: var(--color-text-400) !important;
 	width: 28px;
@@ -1097,20 +1123,20 @@
 	}
 }
 
-.ant-tabs-card>.ant-tabs-nav>.ant-tabs-nav-wrap>.ant-tabs-nav-list {
+.ant-tabs-card > .ant-tabs-nav > .ant-tabs-nav-wrap > .ant-tabs-nav-list {
 	margin-right: 2px !important;
 
-	>.ant-tabs-tab {
+	> .ant-tabs-tab {
 		border: none !important;
 		border-radius: 0;
 	}
 
-	>.ant-tabs-tab:first-child:not(:last-child) {
+	> .ant-tabs-tab:first-child:not(:last-child) {
 		border-top-left-radius: 4px !important;
 		border-bottom-left-radius: 4px !important;
 	}
 
-	>.ant-tabs-tab:last-of-type:not(:first-child) {
+	> .ant-tabs-tab:last-of-type:not(:first-child) {
 		border-top-right-radius: 4px !important;
 		border-bottom-right-radius: 4px !important;
 	}
@@ -1121,7 +1147,6 @@
 }
 
 .ant-steps {
-
 	// Current (process) step
 	.ant-steps-item-process .ant-steps-item-container .ant-steps-item-icon {
 		background-color: var(--color-text-400) !important;
@@ -1164,7 +1189,6 @@
 }
 
 .ant-carousel {
-
 	.slick-prev,
 	.slick-next {
 		color: var(--color-text-100) !important;
