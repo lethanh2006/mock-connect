@@ -42,6 +42,7 @@ declare module Activity {
 
 		//fake
 		cct?: boolean;
+		supervisorName?: string;
 	}
 
 	export interface IParticipantsList {

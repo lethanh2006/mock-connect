@@ -17,32 +17,32 @@ const StatActivityOutCome = (props: { getData: () => void; dependency?: any }) =
 		{
 			title: 'Total',
 			value: inputFormat(dataThongKe?.total ?? 0),
-			valueColor: '#1677ff',
+			valueColor: '#134D8B',
 		},
 		{
-			title: 'Submitted',
+			title: 'Action Required',
+			value: inputFormat(dataThongKe?.changesRequired ?? 0),
+			valueColor: '#CE7C1E',
+		},
+		{
+			title: 'Pending For Approval',
 			value: inputFormat(dataThongKe?.submitted ?? 0),
-			valueColor: '#13c2c2',
+			valueColor: '#0E50CF',
 		},
 		{
 			title: 'Approved',
 			value: inputFormat(dataThongKe?.approved ?? 0),
-			valueColor: '#52c41a',
-		},
-		{
-			title: 'Changes Required',
-			value: inputFormat(dataThongKe?.changesRequired ?? 0),
-			valueColor: '#faad14',
+			valueColor: '#329323',
 		},
 		{
 			title: 'Rejected',
 			value: inputFormat(dataThongKe?.rejected ?? 0),
-			valueColor: '#ff4d4f',
+			valueColor: '#C80F1F',
 		},
 		{
 			title: 'Draft',
 			value: inputFormat(dataThongKe?.draft ?? 0),
-			valueColor: '#8c8c8c',
+			valueColor: '#134D8B',
 		},
 	];
 

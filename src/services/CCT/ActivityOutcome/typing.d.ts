@@ -4,6 +4,7 @@ import { EActivityCategory, EApprovalStatus, Evalidation } from '../constant';
 declare module ActivityOutCome {
 	export interface IRecord {
 		_id: string;
+		banner: string;
 		activitiesOutcomeName: string;
 		activitiesId: string;
 		activities: Activity.IRecord;
@@ -28,6 +29,8 @@ declare module ActivityOutCome {
 		revisionNote: string;
 		validation: Evalidation;
 		reflection: string;
+		startDate: Date;
+		endDate: Date;
 
 		activityRejectionNote?: string;
 		listAchievedCompetencies: Activity.ICompetencyMapping[];

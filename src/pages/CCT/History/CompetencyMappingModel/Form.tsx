@@ -101,7 +101,6 @@ const FormCompetencyMappingModel = (props: any) => {
 							columns={columns}
 							data={uniqBy(dscompetency ?? [], 'competencyId')}
 							loading={loading}
-							size='small'
 							hasTotal
 							otherProps={{
 								pagination: false,
