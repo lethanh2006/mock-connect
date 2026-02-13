@@ -1,122 +1,119 @@
-import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { EApprovalStatus, mapColorApprovalStatus, mapNameApprovalStatus } from '@/services/CCT/constant';
-import { CalendarOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, Flex, Popconfirm, Row, Spin, Tag, Tooltip, Typography } from 'antd';
-import dayjs from 'dayjs';
+import { CheckCircleFilled } from '@ant-design/icons';
+import { Card, Col, Empty, Modal, Popconfirm, Row, Space, Spin, Tabs, Typography } from 'antd';
+import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChiTietActivity from './ChiTiet';
+import CardSuKienCCT from './components/CardSuKien';
+import FilterSuKien from './components/FilterSuKien';
 import './style.less';
 
 const { Title } = Typography;
 
+export interface FilterSuKienValue {
+	search?: string;
+	dateRange?: Dayjs[] | [];
+}
+
 const ActivityPage = () => {
 	const intl = useIntl();
 	const { getAllModel, danhSach, registerActivityModel, loading, setRecord, setVisibleForm } = useModel('cct.activity');
+	const { getAllModel: getAllAtributes } = useModel('cct.attributes');
+	const [activeKey, setActiveKey] = useState<string>('1');
+	const [visibleDangKy, setVisibleDangKy] = useState<boolean>(false);
 
-	const [dateRange, setDateRange] = useState<string[]>([
-		dayjs().startOf('month').toISOString(),
-		dayjs().endOf('month').toISOString(),
-	]);
+	const [filter, setFilter] = useState<FilterSuKienValue>({
+		search: '',
+		dateRange: [dayjs().startOf('month'), dayjs().endOf('month')],
+	});
 
 	const getData = () => {
-		if (dateRange?.length === 2) {
-			getAllModel(undefined, undefined, undefined, undefined, `me/from/${dateRange[0]}/to/${dateRange[1]}`);
+		if (filter?.dateRange?.length === 2) {
+			getAllModel(
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				`me/from/${filter?.dateRange[0]}/to/${filter?.dateRange[1]}`,
+			);
 		}
 	};
 
 	useEffect(() => {
+		getAllAtributes(undefined, { order: 1 }, { isActive: true });
+	}, []);
+
+	useEffect(() => {
 		getData();
-	}, [dateRange]);
+	}, [filter, activeKey]);
 
 	return (
 		<Card title='List activity' className='table-base-card' variant='borderless'>
-			<Flex justify='space-between' align='center' style={{ marginBottom: 16 }}>
-				<MyDateRangePicker
-					style={{ width: 300 }}
-					value={dateRange?.length === 2 ? [dayjs(dateRange[0]), dayjs(dateRange[1])] : null}
-					onChange={(val: any) => setDateRange(val ?? [])}
-					ranges={{
-						[intl.formatMessage({ id: 'activity.date.homnay' })]: [dayjs().startOf('date'), dayjs().endOf('date')],
-						[intl.formatMessage({ id: 'activity.date.tuannay' })]: [dayjs().startOf('week'), dayjs().endOf('week')],
-						[intl.formatMessage({ id: 'activity.date.thangnay' })]: [dayjs().startOf('month'), dayjs().endOf('month')],
-					}}
-				/>
+			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
+				<Tabs.TabPane key='1' tab='Upcoming' />
+				<Tabs.TabPane key='2' tab='Ongoing' />
+				<Tabs.TabPane key='3' tab='Completed' />
+			</Tabs>
 
-				<ButtonExtend icon={<ReloadOutlined />} onClick={getData} />
-			</Flex>
+			<FilterSuKien value={filter} onChange={setFilter} onReload={getData} />
+
+			<hr
+				style={{
+					marginTop: 16,
+					marginBottom: 16,
+					border: 'none',
+					borderTop: '1px solid #f0f0f0',
+				}}
+			/>
 
 			<Spin spinning={loading}>
 				{danhSach?.length ? (
-					<Row gutter={[24, 24]}>
+					<Row gutter={[12, 12]}>
 						{danhSach?.map((item) => {
-							// const isFutureOrNow = dayjs(item.startDate).isSameOrAfter(dayjs());
-							const disabledRegister = !!item.workflow || !item.activitiesTypeId;
+							const disabledRegister = !!item.workflow;
+							const equivalencyAttributeIds = item?.coCurricularActivityEquivalency?.map((x) => x.attributesId);
+							const fullSlot = false;
 
 							return (
-								<Col key={item._id} xs={24} sm={12} md={8} lg={6} className='activity-col'>
-									<Card
-										hoverable
-										className='activity-card'
-										cover={
-											<div className='activity-cover'>
-												<img src={item.banner ?? '/metadata.png'} alt={item.name} className='activity-image' />
-
-												<div className='activity-date'>
-													<CalendarOutlined />
-													<span>{dayjs(item.startDate).format('MMM DD, YYYY')}</span>
-												</div>
-
-												<div style={{ position: 'absolute', top: 16, right: 16 }}>
-													<Tag color={mapColorApprovalStatus[item.workflow as EApprovalStatus]}>
-														{mapNameApprovalStatus[item.workflow as EApprovalStatus]}
-													</Tag>
-												</div>
-											</div>
-										}
+								<Col key={item._id} xs={24} sm={12} md={8} lg={8}>
+									<CardSuKienCCT
+										record={item}
+										equivalencyAttributeIds={equivalencyAttributeIds}
+										workflow={item?.workflow}
 										onClick={() => {
 											setRecord(item);
 											setVisibleForm(true);
 										}}
-									>
-										<div className='activity-content'>
-											<Title level={5} className='activity-title'>
-												{item?.name}
-											</Title>
-										</div>
-
-										<div className='activity-footer'>
-											<Popconfirm
-												title={intl.formatMessage({ id: 'activity.confirm.dangky' })}
-												placement='topLeft'
-												onConfirm={(e) => {
-													e?.stopPropagation?.();
-													registerActivityModel(
-														item._id,
-														getData,
-														intl.formatMessage({ id: 'global.message.luuthanhcong' }),
-													);
-												}}
-												onCancel={(e) => e?.stopPropagation?.()}
-												disabled={disabledRegister}
-											>
-												<div
-													onClick={(e) => {
-														e.stopPropagation();
-													}}
-												>
-													<Tooltip
-													//  title={!isFutureOrNow ? 'The event has started or has ended' : undefined}
-													>
-														<Button block type='default' className='activity-btn' disabled={disabledRegister}>
-															Register Now
-														</Button>
-													</Tooltip>
-												</div>
-											</Popconfirm>
-										</div>
-									</Card>
+										button={
+											<Row style={{ padding: '12px 4px 4px 4px' }} gutter={[6, 0]}>
+												<Col span={24}>
+													{disabledRegister ? (
+														<ButtonExtend block disabled>
+															SEE MORE
+														</ButtonExtend>
+													) : fullSlot ? (
+														<ButtonExtend block disabled>
+															FULL SLOT
+														</ButtonExtend>
+													) : (
+														<Popconfirm
+															title={intl.formatMessage({ id: 'activity.confirm.dangky' })}
+															placement='topLeft'
+															onConfirm={() =>
+																registerActivityModel(item._id, getData).then(() => setVisibleDangKy(true))
+															}
+														>
+															<ButtonExtend type='primary' block>
+																REGISTER NOW
+															</ButtonExtend>
+														</Popconfirm>
+													)}
+												</Col>
+											</Row>
+										}
+										isCompleted={activeKey === '3'}
+									/>
 								</Col>
 							);
 						})}
@@ -130,7 +127,30 @@ const ActivityPage = () => {
 				)}
 			</Spin>
 
-			<ChiTietActivity getData={getData} />
+			<ChiTietActivity getData={getData} setVisibleDangKy={setVisibleDangKy} />
+
+			<Modal open={visibleDangKy} onCancel={() => setVisibleDangKy(false)} footer={null} centered width={400}>
+				<Space direction='vertical' size={24} align='center' style={{ width: '100%' }}>
+					<div
+						style={{
+							width: 90,
+							height: 90,
+							borderRadius: '50%',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<CheckCircleFilled style={{ fontSize: 48, color: '#329323' }} />
+					</div>
+				</Space>
+
+				<div style={{ textAlign: 'center', marginTop: 12 }}>
+					<Title level={4} style={{ color: '#329323' }}>
+						You have successfully registered
+					</Title>
+				</div>
+			</Modal>
 		</Card>
 	);
 };

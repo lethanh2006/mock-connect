@@ -1,44 +1,55 @@
-import ExpandText from '@/components/ExpandText';
-import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { type IColumn } from '@/components/Table/typing';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Activity } from '@/services/CCT/Activity/typing';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
-import {
-	EActivityCategory,
-	EApprovalStatus,
-	Evalidation,
-	mapColorApprovalStatus,
-	mapEvalidation,
-	mapNameActivityCategory,
-	mapNameApprovalStatus,
-} from '@/services/CCT/constant';
+import { EActivityCategory, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
-import {
-	CheckCircleOutlined,
-	ClockCircleOutlined,
-	CloseCircleOutlined,
-	DeleteOutlined,
-	EditOutlined,
-	MenuOutlined,
-	PlusCircleOutlined,
-	SendOutlined,
-} from '@ant-design/icons';
-import { Button, Popconfirm, Popover, Space, Tabs, Tag } from 'antd';
-import { useState } from 'react';
+import { DashOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-import SelectActivitiesManagement from '../Activities/Select';
-import SelectLevelsManagement from '../Levels/Select';
-import SelectRolesManagement from '../Roles/Select';
+import { FilterSuKienValue } from '../Activity';
+import CardChiTietSuKien from '../Activity/components/CardChiTietSuKien';
+import CardSuKienCCT from '../Activity/components/CardSuKien';
+import FilterSuKien from '../Activity/components/FilterSuKien';
+import '../Activity/style.less';
 import FormActivityOutCome from './components/Form';
 import FormPerstionActivityOutCome from './components/FormPerstion';
 import StatActivityOutCome from './components/Stat';
 
 const HistoryActivityPage = () => {
 	const intl = useIntl();
-	const { getModel, page, limit, handleEdit, handleView, deleteActivityModel, putModel, getAnalyticsStudentModel } =
-		useModel('cct.activityoutcome');
+	const {
+		danhSach,
+		getModel,
+		page,
+		limit,
+		setPage,
+		setLimit,
+		handleEdit,
+		handleView,
+		getAnalyticsStudentModel,
+		loading,
+		visibleForm,
+		setVisibleForm,
+		total,
+		setEdit,
+		setIsView,
+		setRecord,
+		deleteActivityModel,
+		putModel,
+		edit,
+		isView,
+		record,
+	} = useModel('cct.activityoutcome');
+	const { getAllModel: getAllAtributes } = useModel('cct.attributes');
 
 	const [tabActive, setTabActive] = useState<EActivityCategory>(EActivityCategory.REGISTERED);
+
+	const [filter, setFilter] = useState<FilterSuKienValue>({
+		search: '',
+		dateRange: [dayjs().startOf('month'), dayjs().endOf('month')],
+	});
 
 	const getData = () => {
 		getModel(
@@ -57,10 +68,14 @@ const HistoryActivityPage = () => {
 		getAnalyticsStudentModel(tabActive);
 	};
 
-	const onCell = (rec: ActivityOutCome.IRecord) => ({
-		onClick: () => handleView(rec),
-		style: { cursor: 'pointer' },
-	});
+	useEffect(() => {
+		getData();
+		getThongKe();
+	}, [tabActive]);
+
+	useEffect(() => {
+		getAllAtributes(undefined, { order: 1 }, { isActive: true });
+	}, []);
 
 	const isInTimeRange = (rec: ActivityOutCome.IRecord) => {
 		const now = dayjs();
@@ -83,377 +98,251 @@ const HistoryActivityPage = () => {
 		return rec?.workflow === EApprovalStatus.DRAFT || rec?.workflow === EApprovalStatus.CHANGES_REQUIRED;
 	};
 
-	const getTooltip = (rec: ActivityOutCome.IRecord) => {
-		if (rec?.activityCategory === EActivityCategory.REGISTERED && !isInTimeRange(rec)) {
-			return intl.formatMessage({ id: 'activity.button.hethan' });
+	const handlePaginationChange = (newPage: number, newPageSize: number) => {
+		if (newPageSize !== limit) {
+			setPage(1);
+			setLimit(newPageSize);
+		} else {
+			setPage(newPage);
 		}
-
-		return tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR
-			? intl.formatMessage({ id: 'activity.button.chinhsua' })
-			: intl.formatMessage({ id: 'activity.button.add' });
 	};
 
-	const getDeadline = (rec: ActivityOutCome.IRecord) => {
-		return rec?.activities?.allowPostEventResultsUpdate ? rec?.activities?.dueDate : rec?.activities?.endDate;
+	const handlePageSizeChange = (current: number, size: number) => {
+		setPage(1);
+		setLimit(size);
 	};
-
-	const getDeadlineStatus = (rec: ActivityOutCome.IRecord) => {
-		const deadline = getDeadline(rec);
-		if (!deadline) return 'EXPIRED';
-
-		const now = dayjs();
-		const end = dayjs(deadline);
-
-		if (!end.isValid()) return 'NONE';
-
-		if (now.isAfter(end)) return 'EXPIRED';
-
-		const diffMinutes = end.diff(now, 'minute');
-
-		if (diffMinutes <= 24 * 60) return 'NEAR';
-
-		return 'OK';
-	};
-
-	const renderDeadlineBadge = (rec: ActivityOutCome.IRecord) => {
-		const status = getDeadlineStatus(rec);
-
-		if (status === 'EXPIRED')
-			return (
-				<Tag color='red' icon={<CloseCircleOutlined />}>
-					{intl.formatMessage({ id: 'activity.dahethan' })}
-				</Tag>
-			);
-
-		if (status === 'NEAR')
-			return (
-				<Tag color='orange' icon={<ClockCircleOutlined />}>
-					{intl.formatMessage({ id: 'activity.saphethan' })}
-				</Tag>
-			);
-
-		if (status === 'OK')
-			return (
-				<Tag color='green' icon={<CheckCircleOutlined />}>
-					{intl.formatMessage({ id: 'activity.conhan' })}
-				</Tag>
-			);
-
-		return null;
-	};
-
-	const columns: IColumn<ActivityOutCome.IRecord>[] = [
-		{
-			title: 'Activity Name',
-			dataIndex: tabActive === EActivityCategory.REGISTERED ? ['activities', 'name'] : 'activitiesOutcomeName',
-			width: 180,
-			render: (val, rec) => {
-				if (rec?.activityCategory === EActivityCategory.REGISTERED)
-					return (
-						<div>
-							{rec?.activities?.name} <br />
-							<div style={{ marginTop: 6 }}>
-								{rec?.workflow === EApprovalStatus.DRAFT && renderDeadlineBadge(rec)}
-							</div>{' '}
-						</div>
-					);
-				else {
-					return rec?.activitiesOutcomeName;
-				}
-			},
-			filterType: 'string',
-			onCell,
-		},
-		{
-			title: 'Role',
-			dataIndex: 'rolesId',
-			width: 180,
-			render: (val, rec) => rec?.roles?.name ?? <i className='text-warning'>No info</i>,
-			filterType: 'customselect',
-			filterCustomSelect: <SelectRolesManagement multiple />,
-			onCell,
-		},
-		{
-			title: 'Level',
-			dataIndex: 'rolesId',
-			width: 140,
-			render: (val, rec) => rec?.levels?.name ?? <i className='text-warning'>No info</i>,
-			filterType: 'customselect',
-			filterCustomSelect: <SelectLevelsManagement multiple />,
-			onCell,
-		},
-		{
-			title: 'Attribute',
-			width: 200,
-			render: (val, rec) => {
-				const attriRe = rec?.activities?.coCurricularActivityEquivalency?.filter(
-					(item) => item?.rolesId === rec?.rolesId,
-				);
-
-				const attriDec = rec?.activitiesType?.attributes;
-
-				if (rec?.activityCategory === EActivityCategory.REGISTERED) {
-					return (
-						<Space wrap>
-							{attriRe?.map((item: any) => <Tag color={item?.attributes?.color}>{item?.attributes?.name}</Tag>)}
-						</Space>
-					);
-				} else
-					return (
-						<Space wrap>
-							{attriDec?.map((item: any) => <Tag color={item?.attributes?.color}>{item?.attributes?.name}</Tag>)}
-						</Space>
-					);
-			},
-			onCell,
-		},
-		{
-			title: 'Competency',
-			width: 220,
-			render: (val, rec) =>
-				(rec?.activityCategory === EActivityCategory.REGISTERED ? rec?.activities?.competencyList : rec?.competencyList)
-					?.map((item) => item?.competency?.name)
-					.filter(Boolean)
-					.join(', '),
-			onCell,
-		},
-		{
-			title: 'Activity Type',
-			dataIndex: 'activitiesTypeId',
-			width: 180,
-			render: (val, rec) => rec?.activitiesType?.name,
-			filterType: 'customselect',
-			filterCustomSelect: <SelectActivitiesManagement multiple />,
-			onCell,
-			hide: tabActive === EActivityCategory.REGISTERED,
-		},
-		{
-			title: 'Track',
-			width: 120,
-			render: (val, rec) =>
-				rec?.activityCategory === EActivityCategory.REGISTERED
-					? rec?.activities?.activitiesType?.track?.name
-					: rec?.activitiesType?.track?.name,
-			onCell,
-		},
-		{
-			title: 'Rejection Note',
-			dataIndex: 'activityRejectionNote',
-			width: 180,
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
-			filterType: 'string',
-			onCell,
-		},
-		{
-			title: 'Revision Note',
-			dataIndex: 'revisionNote',
-			width: 180,
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
-			filterType: 'string',
-			onCell,
-		},
-		{
-			title: 'Impact',
-			dataIndex: 'validation',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => (
-				<Tag
-					color={mapEvalidation[val as Evalidation]}
-					style={{
-						maxWidth: 120,
-						whiteSpace: 'normal',
-						wordBreak: 'break-word',
-						textAlign: 'center',
-					}}
-				>
-					{val}
-				</Tag>
-			),
-			filterType: 'select',
-			filterData: Object.values(Evalidation).map((item) => ({
-				value: item,
-				label: item,
-			})),
-			onCell,
-		},
-		{
-			title: 'Due Date',
-			align: 'center',
-			width: 100,
-			render: (val, rec) => rec?.activities?.dueDate && dayjs(rec?.activities?.dueDate).format('HH:mm DD/MM/YYYY'),
-			onCell,
-			fixed: 'right',
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.status' }),
-			dataIndex: 'workflow',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => (
-				<Tag
-					color={mapColorApprovalStatus[val as EApprovalStatus]}
-					style={{
-						maxWidth: 120,
-						whiteSpace: 'normal',
-						wordBreak: 'break-word',
-						textAlign: 'center',
-					}}
-				>
-					{mapNameApprovalStatus[val as EApprovalStatus]}
-				</Tag>
-			),
-			fixed: 'right',
-			filterType: 'select',
-			filterData: Object.values(EApprovalStatus).map((item) => ({
-				value: item,
-				label: mapNameApprovalStatus[item as EApprovalStatus],
-			})),
-			onCell,
-		},
-		{
-			title: intl.formatMessage({ id: 'global.column.action' }),
-			align: 'center',
-			width: 120,
-			fixed: 'right',
-			render: (val, rec) => {
-				const canDelete =
-					(rec?.activityCategory !== EActivityCategory.REGISTERED || isInTimeRange(rec)) &&
-					rec?.workflow !== EApprovalStatus.APPROVED &&
-					rec?.workflow !== EApprovalStatus.REJECTED;
-
-				return (
-					<>
-						<ButtonExtend
-							disabled={!canEdit(rec)}
-							tooltip={getTooltip(rec)}
-							onClick={() => handleEdit(rec)}
-							type='link'
-							icon={<PlusCircleOutlined />}
-						/>
-
-						<Popconfirm
-							onConfirm={() =>
-								deleteActivityModel(rec?._id, () => {
-									getData();
-									getThongKe();
-								})
-							}
-							title={intl.formatMessage({ id: 'activity.confirm.xoa' })}
-							placement='topLeft'
-						>
-							<ButtonExtend
-								disabled={!canDelete}
-								tooltip={intl.formatMessage({ id: 'activity.button.xoa' })}
-								danger
-								type='link'
-								icon={<DeleteOutlined />}
-							/>
-						</Popconfirm>
-					</>
-				);
-			},
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
-			title: intl.formatMessage({ id: 'global.column.action' }),
-			align: 'center',
-			width: 120,
-			fixed: 'right',
-			render: (val, rec) => {
-				const canDelete =
-					(rec?.activityCategory !== EActivityCategory.REGISTERED || isInTimeRange(rec)) &&
-					rec?.workflow !== EApprovalStatus.APPROVED &&
-					rec?.workflow !== EApprovalStatus.REJECTED;
-
-				return (
-					<>
-						<Popconfirm
-							onConfirm={() => putModel(`me/${rec?._id}`, { workflow: EApprovalStatus.SUBMITTED }, getData)}
-							title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
-							placement='topLeft'
-						>
-							<ButtonExtend
-								className='btn-success'
-								disabled={!canEdit(rec)}
-								tooltip={intl.formatMessage({ id: 'activity.button.duyet' })}
-								type='link'
-								icon={<SendOutlined />}
-							/>
-						</Popconfirm>
-
-						<Popover
-							placement='left'
-							content={
-								<>
-									<ButtonExtend
-										disabled={!canEdit(rec)}
-										tooltip={getTooltip(rec)}
-										onClick={() => handleEdit(rec)}
-										type='link'
-										icon={<EditOutlined />}
-									/>
-
-									<Popconfirm
-										onConfirm={() =>
-											deleteActivityModel(rec?._id, () => {
-												getData();
-												getThongKe();
-											})
-										}
-										title={intl.formatMessage({ id: 'activity.confirm.xoa' })}
-										placement='topLeft'
-									>
-										<ButtonExtend
-											disabled={!canDelete}
-											tooltip={intl.formatMessage({ id: 'activity.button.xoa' })}
-											danger
-											type='link'
-											icon={<DeleteOutlined />}
-										/>
-									</Popconfirm>
-								</>
-							}
-						>
-							<Button icon={<MenuOutlined />} type='link' />
-						</Popover>
-					</>
-				);
-			},
-			hide: tabActive === EActivityCategory.REGISTERED,
-		},
-	];
 
 	return (
-		<TableBase
-			getData={getData}
-			formProps={{
-				getData: () => {
-					getData();
-					getThongKe();
-				},
-			}}
-			columns={columns}
-			dependencies={[page, limit, tabActive]}
-			modelName='cct.activityoutcome'
-			title={intl.formatMessage({ id: 'activity.title' })}
-			Form={tabActive === EActivityCategory.REGISTERED ? FormActivityOutCome : FormPerstionActivityOutCome}
-			widthDrawer={tabActive === EActivityCategory.REGISTERED ? 800 : 1000}
-			buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
-			onReload={() => {
-				getData();
-				getThongKe();
-			}}
-		>
+		<Card title='My Activities' className='table-base-card' variant='borderless'>
 			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
 				{Object.values(EActivityCategory).map((item) => (
 					<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
 				))}
 			</Tabs>
 
+			<FilterSuKien
+				value={filter}
+				onChange={setFilter}
+				onReload={getData}
+				button={
+					tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? (
+						<ButtonExtend
+							type='primary'
+							onClick={() => {
+								setRecord({} as ActivityOutCome.IRecord);
+								setEdit(false);
+								setIsView(false);
+								setVisibleForm(true);
+							}}
+							size='small'
+						>
+							Add New
+						</ButtonExtend>
+					) : undefined
+				}
+				hideSelect
+			/>
+
+			<hr
+				style={{
+					marginTop: 16,
+					marginBottom: 16,
+					border: 'none',
+					borderTop: '1px solid #f0f0f0',
+				}}
+			/>
+
 			<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
-		</TableBase>
+
+			<hr
+				style={{
+					marginTop: 16,
+					marginBottom: 16,
+					border: 'none',
+					borderTop: '1px solid #f0f0f0',
+				}}
+			/>
+
+			<Spin spinning={loading}>
+				{danhSach?.length ? (
+					<>
+						<Row gutter={[12, 12]}>
+							{danhSach?.map((item) => {
+								const equivalencyAttributeIds = item?.activities?.coCurricularActivityEquivalency?.map(
+									(x) => x.attributesId,
+								);
+
+								const canDelete =
+									(item?.activityCategory !== EActivityCategory.REGISTERED || isInTimeRange(item)) &&
+									item?.workflow !== EApprovalStatus.APPROVED &&
+									item?.workflow !== EApprovalStatus.REJECTED;
+
+								return (
+									<Col key={item._id} xs={24} sm={12} md={8} lg={8}>
+										{tabActive === EActivityCategory.REGISTERED ? (
+											<CardSuKienCCT
+												record={{
+													...item?.activities,
+													workflow: item?.workflow,
+												}}
+												equivalencyAttributeIds={equivalencyAttributeIds}
+												onClick={() => handleView(item)}
+												button={
+													<Row style={{ marginTop: 12 }} gutter={[6, 0]}>
+														<Col span={24}>
+															<ButtonExtend
+																block
+																type={canEdit(item) ? 'primary' : undefined}
+																disabled={!canEdit(item)}
+																onClick={() => handleEdit(item)}
+															>
+																Add Evidence
+															</ButtonExtend>
+														</Col>
+													</Row>
+												}
+												isCompleted
+											/>
+										) : (
+											<CardSuKienCCT
+												record={
+													{
+														...item,
+														name: item?.activitiesOutcomeName,
+													} as any
+												}
+												equivalencyAttributeIds={item?.activitiesType?.attributes?.map((x) => x._id)}
+												onClick={() => handleView(item)}
+												button={
+													<Row style={{ marginTop: 12 }} gutter={[6, 0]}>
+														<Col span={3}>
+															<Popover
+																placement='bottom'
+																content={
+																	<Space direction='vertical' size={4} className='action-popover'>
+																		<Popconfirm
+																			onConfirm={(e) =>
+																				putModel(`me/${item?._id}`, { workflow: EApprovalStatus.SUBMITTED }, getData)
+																			}
+																			title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
+																			placement='topLeft'
+																		>
+																			<ButtonExtend
+																				className='btn-success'
+																				disabled={!canEdit(item)}
+																				type='link'
+																				icon={<SendOutlined />}
+																				size='small'
+																			>
+																				{intl.formatMessage({ id: 'activity.button.duyet' })}
+																			</ButtonExtend>
+																		</Popconfirm>
+
+																		<Popconfirm
+																			onConfirm={() =>
+																				deleteActivityModel(item?._id, () => {
+																					getData();
+																					getThongKe();
+																				})
+																			}
+																			title={intl.formatMessage({ id: 'activity.confirm.xoa' })}
+																			placement='topLeft'
+																		>
+																			<ButtonExtend
+																				disabled={!canDelete}
+																				danger
+																				type='link'
+																				icon={<DeleteOutlined />}
+																				size='small'
+																			>
+																				{intl.formatMessage({ id: 'activity.button.xoa' })}
+																			</ButtonExtend>
+																		</Popconfirm>
+																	</Space>
+																}
+															>
+																<ButtonExtend block icon={<DashOutlined />} />
+															</Popover>
+														</Col>
+														<Col span={21}>
+															<ButtonExtend
+																block
+																type={canEdit(item) ? 'primary' : undefined}
+																disabled={!canEdit(item)}
+																onClick={() => handleEdit(item)}
+															>
+																Update Evidence
+															</ButtonExtend>
+														</Col>
+													</Row>
+												}
+												isPersonal
+											/>
+										)}
+									</Col>
+								);
+							})}
+						</Row>
+
+						{total > 0 && (
+							<div className='pagination-container'>
+								<Pagination
+									current={page}
+									pageSize={limit || 10}
+									total={total}
+									onChange={handlePaginationChange}
+									onShowSizeChange={handlePageSizeChange}
+									pageSizeOptions={['5', '10', '20', '50']}
+									disabled={loading}
+									size='default'
+									className='pagination'
+								/>
+							</div>
+						)}
+					</>
+				) : (
+					<Empty
+						style={{ marginTop: 32, marginBottom: 32 }}
+						description={intl.formatMessage({ id: 'global.table.index.empty' })}
+						image='/images/empty.png'
+					/>
+				)}
+			</Spin>
+
+			<ModalExpandable
+				title={edit ? 'Update Evidence' : isView ? 'Detail Evidence' : 'Add Evidence'}
+				width={1000}
+				onCancel={() => setVisibleForm(false)}
+				footer={null}
+				open={visibleForm}
+			>
+				{tabActive === EActivityCategory.REGISTERED ? (
+					isView ? (
+						<>
+							<CardChiTietSuKien record={record?.activities ?? ({} as Activity.IRecord)} />
+
+							<div className='form-footer'>
+								<Button onClick={() => setVisibleForm(false)}>Close</Button>
+							</div>
+						</>
+					) : (
+						<FormActivityOutCome
+							getData={() => {
+								getData();
+								getThongKe();
+							}}
+						/>
+					)
+				) : (
+					<FormPerstionActivityOutCome
+						getData={() => {
+							getData();
+							getThongKe();
+						}}
+					/>
+				)}
+			</ModalExpandable>
+		</Card>
 	);
 };
 

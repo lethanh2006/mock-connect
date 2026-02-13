@@ -119,7 +119,6 @@ const CompetencyMappingModelPage = (props: { disabled?: boolean }) => {
 				columns={columns}
 				data={groupByAttributes(danhSach ?? [])}
 				loading={loading}
-				size='small'
 				hasTotal
 				onReload={getData}
 			>

@@ -100,7 +100,6 @@ const FormCompetencyMapping = (props: {
 							columns={columns}
 							data={dscompetency}
 							loading={loading}
-							size='small'
 							hasTotal
 							onReload={getAllAttriCompetency}
 							otherProps={{

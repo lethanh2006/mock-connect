@@ -97,7 +97,7 @@ const FormItemCompetencyMapping = (props: {
 
 	return (
 		<>
-			<TableStaticData data={value} columns={columns} size='small' hasTotal addStt>
+			<TableStaticData data={value} columns={columns} hasTotal addStt>
 				{/* <Button
 					disabled={disabled}
 					onClick={() => {
