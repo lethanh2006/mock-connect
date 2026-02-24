@@ -1,11 +1,8 @@
-import ExpandText from '@/components/ExpandText';
 import MyDatePicker from '@/components/MyDatePicker';
-import TableStaticData from '@/components/Table/TableStaticData';
-import { IColumn } from '@/components/Table/typing';
 import UploadFile from '@/components/Upload/UploadFile';
 import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
-import { EparticipantRole, EParticipantScope } from '@/services/CCT/constant';
+import { EApprovalStatus, EparticipantRole, EParticipantScope } from '@/services/CCT/constant';
 import { handleSingleFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
@@ -19,8 +16,8 @@ import SelectActivitiesManagement from '../../DanhMuc/Activities/Select';
 import SelectActivitiesTypeDomain from '../../DanhMuc/CCD/Select';
 import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
 import SelectRolesManagement from '../../DanhMuc/Roles/Select';
-
-const MAX_SELECT = 3;
+import CardNoteActivity from './CardNote';
+import FormCompetencyEvidence from './FormCompetencyEvidence';
 
 const uploadFilesOfCompetency = async (files: any[] = []) => {
 	if (!files.length) return [];
@@ -38,7 +35,6 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const { record, setVisibleForm, edit, isView, postModel, putModel, formSubmiting, visibleForm } =
 		useModel('cct.activityoutcome');
 
-	const { danhSach: dscompetency, loading, getAllModel: getAllAttriCompetency } = useModel('cct.competency');
 	const { danhSach: dsLevels } = useModel('cct.levels');
 	const { danhSach: dsRoles } = useModel('cct.roles');
 
@@ -77,8 +73,6 @@ const FormPerstionActivityOutCome = (props: any) => {
 				onUni: true,
 			});
 		}
-
-		getAllAttriCompetency();
 	}, [record?._id, visibleForm]);
 
 	const onFinish = async (values: ActivityOutCome.IRecord) => {
@@ -127,24 +121,12 @@ const FormPerstionActivityOutCome = (props: any) => {
 		}
 	};
 
-	const columnsCompetency: IColumn<Competency.IRecord>[] = [
-		{
-			title: intl.formatMessage({ id: 'competency.column.name' }),
-			dataIndex: 'name',
-			width: 170,
-			filterType: 'string',
-		},
-		{
-			title: 'Description',
-			dataIndex: 'description',
-			width: 250,
-			render: (val, rec) => val && <ExpandText>{val}</ExpandText>,
-		},
-	];
-
 	return (
 		<>
 			<Form onFinish={onFinish} form={form} layout='vertical'>
+				{(record?.workflow === EApprovalStatus.CHANGES_REQUIRED || record?.workflow === EApprovalStatus.REJECTED) && (
+					<CardNoteActivity />
+				)}
 				<Row gutter={[12, 0]}>
 					<Col span={24}>
 						<Row gutter={[12, 0]}>
@@ -415,36 +397,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 					<Col span={24}>
 						<Form.Item name='competencyList'>
-							<TableStaticData
-								columns={columnsCompetency}
-								data={dscompetency}
-								loading={loading}
-								hasTotal
-								onReload={getAllAttriCompetency}
-								otherProps={{
-									pagination: false,
-									scroll: { y: 350 },
-									rowKey: '_id',
-									rowSelection: {
-										type: 'checkbox',
-										columnWidth: 40,
-										selectedRowKeys: competencyList ?? [],
-										onChange: (selectedRowKeys: React.Key[]) => {
-											if (isView) return;
-											form.setFieldsValue({
-												competencyList: selectedRowKeys,
-											});
-										},
-										getCheckboxProps: (record: any) => ({
-											disabled:
-												isView ||
-												((competencyList?.length ?? 0) >= MAX_SELECT && !competencyList?.includes(record._id)),
-										}),
-										hideSelectAll: true,
-									},
-								}}
-								otherButtons={[<i className='text-info'>An activity allows a maximum of 3 competencies</i>]}
-							/>
+							<FormCompetencyEvidence competencyList={competencyList} form={form} />
 						</Form.Item>
 					</Col>
 
@@ -485,6 +438,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 				</Row>
 
 				<div className='form-footer'>
+					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 					{!isView && (
 						<Button
 							loading={formSubmiting}
@@ -492,12 +446,9 @@ const FormPerstionActivityOutCome = (props: any) => {
 							type='primary'
 							disabled={!checkbox || competencyList?.length > 3}
 						>
-							{!edit
-								? intl.formatMessage({ id: 'global.button.themmoi' })
-								: intl.formatMessage({ id: 'global.button.chinhsua' })}
+							{intl.formatMessage({ id: 'global.button.luulai' })}
 						</Button>
 					)}
-					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 				</div>
 			</Form>
 		</>

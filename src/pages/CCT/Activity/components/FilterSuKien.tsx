@@ -51,7 +51,6 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 						'Tháng này': [dayjs().startOf('month'), dayjs().endOf('month')],
 					}}
 					size='small'
-					allowClear
 				/>
 
 				{!hideSelect && (
@@ -73,7 +72,7 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 			</Space>
 
 			<Space wrap>
-				<ButtonExtend icon={<ReloadOutlined />} onClick={onReload} size='small' />
+				<ButtonExtend icon={<ReloadOutlined />} onClick={onReload} />
 				{button}
 			</Space>
 		</Flex>
