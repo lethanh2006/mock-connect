@@ -18,8 +18,17 @@ interface UseTableColumnsProps {
 
 export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableColumnsProps) => {
 	const intl = useIntl();
-	const { searchInputRef, filters, setFilters, setFinalColumns, buttons, hasFilter, setVisibleFilter, size } =
-		useTableContext();
+	const {
+		searchInputRef,
+		filters,
+		setFilters,
+		setFinalColumns,
+		buttons,
+		hasFilter,
+		setVisibleFilter,
+		size,
+		hideFilterColumn,
+	} = useTableContext();
 
 	/**
 	 * Lấy quy tắc lọc hiện tại của cột
@@ -253,23 +262,25 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		let final: IColumn<any>[] = columns.map((item) => ({
 			...item,
 			...(item.sortable && getSort(item.dataIndex)),
-			...(item.filterType === 'string'
-				? getColumnSearchProps(item.dataIndex, item.title)
-				: item.filterType === 'select'
-					? getFilterColumnProps(item.dataIndex, item.filterData)
-					: item.filterType === 'customselect'
-						? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
-						: undefined),
+			...(!hideFilterColumn &&
+				(item.filterType === 'string'
+					? getColumnSearchProps(item.dataIndex, item.title)
+					: item.filterType === 'select'
+						? getFilterColumnProps(item.dataIndex, item.filterData)
+						: item.filterType === 'customselect'
+							? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
+							: undefined)),
 			children: item.children?.map((child) => ({
 				...child,
 				...(child.sortable && getSort(child.dataIndex)),
-				...(child.filterType === 'string'
-					? getColumnSearchProps(child.dataIndex, child.title)
-					: child.filterType === 'select'
-						? getFilterColumnProps(child.dataIndex, child.filterData)
-						: child.filterType === 'customselect'
-							? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
-							: undefined),
+				...(!hideFilterColumn &&
+					(child.filterType === 'string'
+						? getColumnSearchProps(child.dataIndex, child.title)
+						: child.filterType === 'select'
+							? getFilterColumnProps(child.dataIndex, child.filterData)
+							: child.filterType === 'customselect'
+								? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
+								: undefined)),
 			})),
 		}));
 
@@ -305,7 +316,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 
 	useEffect(() => {
 		getColumns();
-	}, [JSON.stringify(filters), sort, ...columns]);
+	}, [JSON.stringify(filters), sort, hideFilterColumn, ...columns]);
 
 	return { getColumns, handleFilter, handleSearch };
 };

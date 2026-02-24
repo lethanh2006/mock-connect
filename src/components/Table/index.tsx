@@ -57,6 +57,7 @@ const TableBase = (props: TableBaseProps) => {
 				rowSelection: props.rowSelection,
 				deleteMany: props.deleteMany,
 				hideTotal: props.hideTotal,
+				hideFilterColumn: props.hideFilterColumn,
 				size: props.otherProps?.size,
 				visibleForm,
 				setVisibleForm,
