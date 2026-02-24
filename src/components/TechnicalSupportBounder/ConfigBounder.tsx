@@ -172,8 +172,8 @@ const ConfigBounder = (props: { children?: any }) => {
 						colorSplit: accentColors.accent700,
 						lineWidth: 2,
 						orientationMargin: 0,
-						textPaddingInline: 8,
-						margin: 8,
+						textPaddingInline: 2,
+						margin: 16,
 					},
 					Select: {
 						optionSelectedColor: primaryColor,
@@ -182,6 +182,8 @@ const ConfigBounder = (props: { children?: any }) => {
 					Table: {
 						borderColor: textColors?.text400,
 						headerBg: accentColors?.accent700,
+						cellPaddingBlock: 8,
+						cellPaddingInline: 16,
 					},
 					Breadcrumb: {
 						lastItemColor: textColors?.text400,
