@@ -43,6 +43,8 @@ const ConfigBounder = (props: { children?: any }) => {
 					Table: {
 						borderColor: '#e8e8e8',
 						headerBg: '#f8f8f8',
+						cellPaddingBlock: 8,
+						cellPaddingInline: 8,
 					},
 				},
 			}}
