@@ -13,6 +13,7 @@ import CardChiTietSuKien from '../Activity/components/CardChiTietSuKien';
 import CardSuKienCCT from '../Activity/components/CardSuKien';
 import FilterSuKien from '../Activity/components/FilterSuKien';
 import '../Activity/style.less';
+import ChiTietActivityOutCome from './components/ChiTiet';
 import FormActivityOutCome from './components/Form';
 import FormPerstionActivityOutCome from './components/FormPerstion';
 import StatActivityOutCome from './components/Stat';
@@ -41,6 +42,7 @@ const HistoryActivityPage = () => {
 		edit,
 		isView,
 		record,
+		filters,
 	} = useModel('cct.activityoutcome');
 	const { getAllModel: getAllAtributes } = useModel('cct.attributes');
 
@@ -69,9 +71,12 @@ const HistoryActivityPage = () => {
 	};
 
 	useEffect(() => {
-		getData();
 		getThongKe();
 	}, [tabActive]);
+
+	useEffect(() => {
+		getData();
+	}, [tabActive, filters]);
 
 	useEffect(() => {
 		getAllAtributes(undefined, { order: 1 }, { isActive: true });
@@ -134,7 +139,6 @@ const HistoryActivityPage = () => {
 								setIsView(false);
 								setVisibleForm(true);
 							}}
-							size='small'
 						>
 							Add New
 						</ButtonExtend>
@@ -315,14 +319,55 @@ const HistoryActivityPage = () => {
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
 				open={visibleForm}
+				styles={
+					isView
+						? {
+								body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
+								header: { backgroundColor: '#F8F8F8' },
+							}
+						: undefined
+				}
 			>
 				{tabActive === EActivityCategory.REGISTERED ? (
 					isView ? (
 						<>
-							<CardChiTietSuKien record={record?.activities ?? ({} as Activity.IRecord)} />
+							<CardChiTietSuKien
+								record={
+									{
+										...record?.activities,
+										workflow: record?.workflow,
+										validation: record?.validation,
+										rolesId: record?.rolesId,
+										tracks: record?.tracks,
+										levels: record?.levels,
+										evidenceFile: record?.evidenceFile,
+										competencyList: record?.competencyList,
+										reflection: record?.reflection,
+										revisionNote: record?.revisionNote,
+									} as Activity.IRecord
+								}
+								isCompleted
+								isRegistered={record?.activityCategory === EActivityCategory.REGISTERED}
+							/>
 
-							<div className='form-footer'>
+							<div
+								style={{
+									backgroundColor: '#fff',
+									display: 'flex',
+									gap: 8,
+									justifyContent: 'flex-end',
+									margin: '15px -15px -15px -15px',
+									padding: 16,
+								}}
+							>
 								<Button onClick={() => setVisibleForm(false)}>Close</Button>
+								<Button
+									type={canEdit(record ?? ({} as ActivityOutCome.IRecord)) ? 'primary' : undefined}
+									disabled={!canEdit(record ?? ({} as ActivityOutCome.IRecord))}
+									onClick={() => handleEdit(record)}
+								>
+									Update Evidence
+								</Button>
 							</div>
 						</>
 					) : (
@@ -333,6 +378,30 @@ const HistoryActivityPage = () => {
 							}}
 						/>
 					)
+				) : isView ? (
+					<>
+						<ChiTietActivityOutCome recOutcome={record ?? ({} as ActivityOutCome.IRecord)} />
+
+						<div
+							style={{
+								backgroundColor: '#fff',
+								display: 'flex',
+								gap: 8,
+								justifyContent: 'flex-end',
+								margin: '15px -15px -15px -15px',
+								padding: 16,
+							}}
+						>
+							<Button onClick={() => setVisibleForm(false)}>Close</Button>
+							<Button
+								type={canEdit(record ?? ({} as ActivityOutCome.IRecord)) ? 'primary' : undefined}
+								disabled={!canEdit(record ?? ({} as ActivityOutCome.IRecord))}
+								onClick={() => handleEdit(record)}
+							>
+								Update Evidence
+							</Button>
+						</div>
+					</>
 				) : (
 					<FormPerstionActivityOutCome
 						getData={() => {

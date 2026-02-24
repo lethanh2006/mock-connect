@@ -39,19 +39,19 @@ export enum EApprovalStatus {
 }
 
 export const mapNameApprovalStatus: Record<EApprovalStatus, string> = {
-	[EApprovalStatus.DRAFT]: 'Registered',
-	[EApprovalStatus.SUBMITTED]: 'Submitted',
+	[EApprovalStatus.DRAFT]: 'Draft',
+	[EApprovalStatus.SUBMITTED]: 'Pending For Approval',
 	[EApprovalStatus.APPROVED]: 'Approved',
 	[EApprovalStatus.REJECTED]: 'Rejected',
 	[EApprovalStatus.CHANGES_REQUIRED]: 'Changes Required',
 };
 
-export const mapColorApprovalStatus: Record<EApprovalStatus, ETagColor> = {
-	[EApprovalStatus.DRAFT]: ETagColor.DEFAULT,
-	[EApprovalStatus.SUBMITTED]: ETagColor.GOLD,
-	[EApprovalStatus.APPROVED]: ETagColor.GREEN,
-	[EApprovalStatus.REJECTED]: ETagColor.RED,
-	[EApprovalStatus.CHANGES_REQUIRED]: ETagColor.ORANGE,
+export const mapColorApprovalStatus: Record<EApprovalStatus, string> = {
+	[EApprovalStatus.DRAFT]: '#CE7C1E',
+	[EApprovalStatus.SUBMITTED]: '#0E50CF',
+	[EApprovalStatus.APPROVED]: '#329323',
+	[EApprovalStatus.REJECTED]: '#C80F1F',
+	[EApprovalStatus.CHANGES_REQUIRED]: '#CE7C1E',
 };
 
 export enum EActivityCategory {

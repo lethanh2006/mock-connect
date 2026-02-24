@@ -1,91 +1,28 @@
-import ExpandText from '@/components/ExpandText';
-import TableStaticData from '@/components/Table/TableStaticData';
-import { IColumn } from '@/components/Table/typing';
 import { Activity } from '@/services/CCT/Activity/typing';
-import { Card, Col, Divider, Row, Space, Tag } from 'antd';
+import { EApprovalStatus, Evalidation, mapEvalidation } from '@/services/CCT/constant';
+import { FileOutlined } from '@ant-design/icons';
+import { Card, Col, Divider, Empty, Input, List, Row, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
-import { useIntl } from 'umi';
+import FormCompetencyEvidence from '../../History/components/FormCompetencyEvidence';
+import FormRoleEvidence from '../../History/components/FormRoleEvidence';
 import CardSuKienCCT from './CardSuKien';
 
-const CardChiTietSuKien = (props: { record: Activity.IRecord }) => {
-	const { record } = props;
-	const intl = useIntl();
-
-	const groupedEquivalency = useMemo(() => {
-		const map = new Map<
-			string,
-			{
-				roleName: string;
-				desRole: string;
-				levelName?: string;
-				attributes: { name: string; color?: string }[];
-				autoApprove: boolean;
-			}
-		>();
-
-		record?.coCurricularActivityEquivalency?.forEach((item) => {
-			const roleId = item.roles?._id;
-			if (!roleId) return;
-
-			if (!map.has(roleId)) {
-				map.set(roleId, {
-					roleName: item.roles?.name ?? '',
-					desRole: item.roles?.description ?? '',
-					levelName: item.roles?.level?.name ?? '',
-					attributes: [],
-					autoApprove: item?.autoApprove ?? false,
-				});
-			}
-
-			if (item.attributes?.name) {
-				map.get(roleId)!.attributes.push({
-					name: item.attributes.name,
-					color: item.attributes.color,
-				});
-			}
-		});
-
-		return Array.from(map.values());
-	}, [record]);
-
-	const columns: IColumn<any>[] = [
-		{
-			title: intl.formatMessage({ id: 'activity.detail.role' }),
-			width: 180,
-			dataIndex: 'roleName',
-			filterType: 'string',
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.detail.des' }),
-			width: 280,
-			dataIndex: 'desRole',
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
-			filterType: 'string',
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.detail.attributes' }),
-			width: 200,
-			render: (_, rec) => (
-				<Space size={[4, 4]} wrap>
-					{rec.attributes?.map((attr: any, idx: number) => (
-						<Tag key={idx} color={attr.color}>
-							{attr.name}
-						</Tag>
-					))}
-				</Space>
-			),
-		},
-	];
+const CardChiTietSuKien = (props: {
+	record: Activity.IRecord;
+	activeKey?: string;
+	isCompleted?: boolean;
+	isRegistered?: boolean;
+}) => {
+	const { record, activeKey, isCompleted, isRegistered } = props;
 
 	return (
 		<Row gutter={[12, 12]}>
 			<Col span={24} md={9}>
 				<CardSuKienCCT
-					record={record ?? ({} as Activity.IRecord)}
+					record={{ ...record, workflow: record?.workflow }}
 					equivalencyAttributeIds={record?.coCurricularActivityEquivalency?.map((x) => x.attributesId) ?? []}
-					workflow={record?.workflow}
 					isDetail
+					isCompleted={activeKey === '3' || isCompleted}
 				/>
 			</Col>
 			<Col span={24} md={15}>
@@ -94,7 +31,7 @@ const CardChiTietSuKien = (props: { record: Activity.IRecord }) => {
 						Administrative Information
 					</Divider>
 
-					<div className='custom-info-grid'>
+					<div className='custom-info-grid grid-2'>
 						<div className='info-row'>
 							<div className='info-item'>
 								<div className='info-label'>Organizer</div>
@@ -108,9 +45,6 @@ const CardChiTietSuKien = (props: { record: Activity.IRecord }) => {
 										: '--'}
 								</div>
 							</div>
-						</div>
-
-						<div className='info-row'>
 							<div className='info-item'>
 								<div className='info-label'>Activity Group</div>
 								<div className='info-value'>{record?.activitiesType?.activitiesTypeDomain?.name ?? '--'}</div>
@@ -119,9 +53,6 @@ const CardChiTietSuKien = (props: { record: Activity.IRecord }) => {
 								<div className='info-label'>Activity Type</div>
 								<div className='info-value'>{record?.activitiesType?.name ?? '--'}</div>
 							</div>
-						</div>
-
-						<div className='info-row'>
 							<div className='info-item'>
 								<div className='info-label'>Track</div>
 								<div className='info-value'>{record?.activitiesType?.track?.name ?? '--'}</div>
@@ -130,9 +61,6 @@ const CardChiTietSuKien = (props: { record: Activity.IRecord }) => {
 								<div className='info-label'>Capacity</div>
 								<div className='info-value'>15 slots</div>
 							</div>
-						</div>
-
-						<div className='info-row'>
 							<div className='info-item'>
 								<div className='info-label'>Allow post-event results update</div>
 								<div className='info-value'>{record?.allowPostEventResultsUpdate ? 'Yes' : 'No'}</div>
@@ -147,10 +75,7 @@ const CardChiTietSuKien = (props: { record: Activity.IRecord }) => {
 										: '--'}
 								</div>
 							</div>
-						</div>
-
-						<div className='info-row'>
-							<div className='info-item full-width'>
+							<div className={`info-item  ${!record?.validation ? 'full-width' : ''}`}>
 								<div className='info-label'>Required Evidence</div>
 								<div className='info-value'>
 									{record?.activitiesType?.requiredEvidenceList
@@ -161,27 +86,93 @@ const CardChiTietSuKien = (props: { record: Activity.IRecord }) => {
 										: '--'}
 								</div>
 							</div>
+							{record?.validation && (
+								<div className='info-item'>
+									<div className='info-label'>Impact</div>
+									<div className='info-value'>
+										<Tag color={mapEvalidation[record?.validation as Evalidation]}>{record?.validation}</Tag>
+									</div>
+								</div>
+							)}
 						</div>
 					</div>
 				</Card>
 			</Col>
 
+			{record?.workflow === EApprovalStatus.CHANGES_REQUIRED && !!record?.revisionNote && (
+				<Col span={24}>
+					<Card variant='borderless' size='small'>
+						<Divider className='divider-big-title' orientation='left'>
+							Revision Note
+						</Divider>
+						<span>{record?.revisionNote}</span>
+					</Card>
+				</Col>
+			)}
+
+			{record?.workflow === EApprovalStatus.REJECTED && !!record?.reflection && (
+				<Col span={24}>
+					<Card variant='borderless' size='small'>
+						<Divider className='divider-big-title' orientation='left'>
+							Rejection Note
+						</Divider>
+						<span>{record?.reflection}</span>
+					</Card>
+				</Col>
+			)}
+
 			<Col span={24}>
 				<Card variant='borderless' size='small'>
 					<Divider className='divider-big-title' orientation='left'>
-						Role
+						{isRegistered ? 'Evidence Information' : 'Role'}
 					</Divider>
-					<TableStaticData
-						columns={columns}
-						data={groupedEquivalency}
-						addStt
-						otherProps={{
-							pagination: false,
-							scroll: {
-								y: 400,
-							},
-						}}
-					/>
+					<FormRoleEvidence select={isRegistered} rolesId={record?.rolesId} />
+
+					{isRegistered && (
+						<div className='custom-info-grid grid-2' style={{ marginTop: 16 }}>
+							<div className='info-row'>
+								<div className='info-item'>
+									<div style={{ marginBottom: 8, fontWeight: 600 }}>Track</div>
+									<Input disabled value={record?.tracks?.name ?? 'No information'} />
+								</div>
+								<div className='info-item'>
+									<div style={{ marginBottom: 8, fontWeight: 600 }}>Level</div>
+									<Input disabled value={record?.levels?.name ?? 'No information'} />
+								</div>
+								<div className='info-item full-width'>
+									<div style={{ marginBottom: 8, fontWeight: 600 }}>List Evidence</div>
+									<List
+										size='small'
+										dataSource={record?.evidenceFile ?? []}
+										locale={{ emptyText: <Empty description='No competency file' /> }}
+										renderItem={(item: any) => (
+											<List.Item>
+												<Typography.Link
+													href={item.file}
+													target='_blank'
+													rel='noopener noreferrer'
+													style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+												>
+													<FileOutlined />
+													<span>{item.name}</span>
+												</Typography.Link>
+											</List.Item>
+										)}
+									/>
+								</div>
+								<div className='info-item full-width'>
+									<div style={{ marginBottom: 8, fontWeight: 600 }}>List Evidence</div>
+									<FormCompetencyEvidence
+										competencyList={record?.competencyList?.map((item) => item?.competencyId)}
+									/>{' '}
+								</div>
+								<div className='info-item full-width'>
+									<div style={{ marginBottom: 8, fontWeight: 600 }}>Reflection</div>
+									<Input.TextArea rows={3} disabled value={record?.reflection ?? 'No information'} />
+								</div>
+							</div>
+						</div>
+					)}
 				</Card>
 			</Col>
 

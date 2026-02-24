@@ -14,6 +14,8 @@ declare module ActivityOutCome {
 		roles?: RolesManagement.IRecord;
 		levelsId: string;
 		levels?: LevelsManagement.IRecord;
+		trackId?: string;
+		tracks?: TrackManagement.IRecord;
 		organizer: string;
 		description: string;
 		location: string;

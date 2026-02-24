@@ -4,8 +4,12 @@ import { Modal, Popconfirm, Space } from 'antd';
 import { useIntl, useModel } from 'umi';
 import CardChiTietSuKien from './components/CardChiTietSuKien';
 
-const ChiTietActivity = (props: { getData?: () => void; setVisibleDangKy?: (val: boolean) => void }) => {
-	const { getData, setVisibleDangKy } = props;
+const ChiTietActivity = (props: {
+	getData?: () => void;
+	setVisibleDangKy?: (val: boolean) => void;
+	activeKey?: string;
+}) => {
+	const { getData, setVisibleDangKy, activeKey } = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, registerActivityModel } = useModel('cct.activity');
 	const { deleteActivityModel } = useModel('cct.activityoutcome');
@@ -23,7 +27,7 @@ const ChiTietActivity = (props: { getData?: () => void; setVisibleDangKy?: (val:
 			}}
 		>
 			<div style={{ marginTop: -12 }}>
-				<CardChiTietSuKien record={record ?? ({} as Activity.IRecord)} />
+				<CardChiTietSuKien record={record ?? ({} as Activity.IRecord)} activeKey={activeKey} />
 			</div>
 
 			<div

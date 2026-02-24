@@ -46,7 +46,7 @@ const ActivityPage = () => {
 
 	useEffect(() => {
 		getData();
-	}, [filter, activeKey]);
+	}, [filter]);
 
 	return (
 		<Card title='List activity' className='table-base-card' variant='borderless'>
@@ -75,12 +75,20 @@ const ActivityPage = () => {
 							const equivalencyAttributeIds = item?.coCurricularActivityEquivalency?.map((x) => x.attributesId);
 							const fullSlot = false;
 
+							const now = Date.now();
+							const endDateSource = item?.allowPostEventResultsUpdate ? item?.dueDate : item?.endDate;
+							const isOutOfTime =
+								(item?.startDate && now < new Date(item.startDate).getTime()) ||
+								(endDateSource && now > new Date(endDateSource).getTime());
+
 							return (
 								<Col key={item._id} xs={24} sm={12} md={8} lg={8}>
 									<CardSuKienCCT
-										record={item}
+										record={{
+											...item,
+											workflow: item?.workflow,
+										}}
 										equivalencyAttributeIds={equivalencyAttributeIds}
-										workflow={item?.workflow}
 										onClick={() => {
 											setRecord(item);
 											setVisibleForm(true);
@@ -88,7 +96,7 @@ const ActivityPage = () => {
 										button={
 											<Row style={{ padding: '12px 4px 4px 4px' }} gutter={[6, 0]}>
 												<Col span={24}>
-													{disabledRegister ? (
+													{disabledRegister || isOutOfTime ? (
 														<ButtonExtend block disabled>
 															SEE MORE
 														</ButtonExtend>
@@ -113,6 +121,7 @@ const ActivityPage = () => {
 											</Row>
 										}
 										isCompleted={activeKey === '3'}
+										isOutOfTime={isOutOfTime}
 									/>
 								</Col>
 							);
@@ -127,7 +136,7 @@ const ActivityPage = () => {
 				)}
 			</Spin>
 
-			<ChiTietActivity getData={getData} setVisibleDangKy={setVisibleDangKy} />
+			<ChiTietActivity getData={getData} setVisibleDangKy={setVisibleDangKy} activeKey={activeKey} />
 
 			<Modal open={visibleDangKy} onCancel={() => setVisibleDangKy(false)} footer={null} centered width={400}>
 				<Space direction='vertical' size={24} align='center' style={{ width: '100%' }}>

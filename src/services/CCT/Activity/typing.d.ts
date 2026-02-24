@@ -1,4 +1,4 @@
-import { EApprovalStatus, EparticipantRole, EParticipantScope } from '../constant';
+import { EApprovalStatus, EparticipantRole, EParticipantScope, Evalidation } from '../constant';
 
 declare module Activity {
 	export interface IRecord {
@@ -40,9 +40,22 @@ declare module Activity {
 		workflow: EApprovalStatus;
 		competencyList: ICompetencyActivity[];
 
-		//fake
+		//fake && ActivytOutcome
 		cct?: boolean;
 		supervisorName?: string;
+		revisionNote?: string;
+		reflection?: string;
+		validation?: Evalidation;
+		rolesId: string;
+		roles?: RolesManagement.IRecord;
+		levelsId: string;
+		levels?: LevelsManagement.IRecord;
+		trackId?: string;
+		tracks?: TrackManagement.IRecord;
+		evidenceFile: {
+			name: string;
+			file: string[];
+		}[];
 	}
 
 	export interface IParticipantsList {
