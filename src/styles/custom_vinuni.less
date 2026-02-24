@@ -517,15 +517,19 @@ body {
 	}
 }
 
-// .css-glamorous-div--jgd0xx {
-// 	.table-base {
-// 		.ant-table-wrapper {
-// 			.ant-spin-nested-loading {
-// 				margin: 0 !important;
-// 			}
-// 		}
-// 	}
-// }
+.css-glamorous-div--jgd0xx {
+	.ant-card {
+		.ant-card-body {
+			.table-base {
+				.ant-table-wrapper {
+					.ant-spin-nested-loading {
+						margin: 0 !important;
+					}
+				}
+			}
+		}
+	}
+}
 
 // .css-glamorous-div--jgd0xx trong card-big-title: dùng margin 0 -16px, không bị ghi đè bởi rule trên
 .card-big-title .css-glamorous-div--jgd0xx .table-base .ant-table-wrapper .ant-spin-nested-loading {
@@ -974,6 +978,10 @@ body {
 	color: var(--color-primary) !important;
 }
 
+.ant-modal {
+	top: 60px;
+}
+
 .ant-modal .ant-modal-content {
 	.ant-modal-header {
 		border-bottom: 1.5px solid var(--color-accent-700) !important;
@@ -1008,7 +1016,8 @@ body {
 .form-footer {
 	position: relative;
 	padding: 16px 0 0 !important;
-	justify-content: flex-end !important;
+	justify-content: flex-start !important;
+	flex-direction: row-reverse;
 
 	&::before {
 		content: '';
@@ -1048,7 +1057,7 @@ body {
 			color: var(--color-text-100) !important;
 		}
 
-		.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+		.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner {
 			background-color: var(--vin-color-primary) !important;
 			color: var(--color-text-400) !important;
 		}
@@ -1232,4 +1241,8 @@ body {
 
 .highlight {
 	background-color: var(--color-official-500) !important;
+}
+
+.loading-content {
+	height: 70vh;
 }
