@@ -4,6 +4,7 @@ import { CloseOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Col, Form, Input, InputNumber, Row, Select, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
+import { getDateTimeFormat } from '@/utils/formatDate';
 import MyDatePicker from '../../MyDatePicker';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
@@ -13,7 +14,8 @@ import { type RowFilterProps, type TDataOption } from '../typing';
 const FilterItem = (props: RowFilterProps) => {
 	const intl = useIntl();
 	const { name, onRemove, allowGrouping = true, level = 0, formOwner, parentPath, ...restProps } = props;
-	const { finalColumns: columns } = useTableContext();
+	const { finalColumns, columns: originalColumns } = useTableContext();
+	const columns = originalColumns || finalColumns;
 	const formInstance = Form.useFormInstance();
 	const { fieldsFiltered } = useFilterFields(columns, formOwner);
 	const [operators, setOperators] = useState<EOperatorType[]>([]);
@@ -76,7 +78,7 @@ const FilterItem = (props: RowFilterProps) => {
 			case 'date':
 				return <MyDatePicker disabled={isReadOnly} />;
 			case 'datetime':
-				return <MyDatePicker format='DD/MM/YYYY HH:mm' showTime disabled={isReadOnly} />;
+				return <MyDatePicker format={getDateTimeFormat()} showTime disabled={isReadOnly} />;
 			case 'number':
 				return (
 					<InputNumber

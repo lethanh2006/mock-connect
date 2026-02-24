@@ -15,6 +15,7 @@ interface TableContextValue {
 	// Trạng thái các cột
 	finalColumns: IColumn<any>[];
 	setFinalColumns: React.Dispatch<React.SetStateAction<IColumn<any>[]>>;
+	columns: IColumn<any>[]; // Columns gốc (chưa lọc hide)
 
 	// Ref của ô nhập tìm kiếm
 	searchInputRef: React.RefObject<InputRef | null>;
