@@ -11,6 +11,7 @@ import {
 } from '@/services/QuanLyThuVien/constant';
 import type { QuanLyThuVien } from '@/services/QuanLyThuVien/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { CloudUploadOutlined, DeleteOutlined, EditOutlined, EyeOutlined, MenuOutlined } from '@ant-design/icons';
 import { Button, Card, Popconfirm, Popover, Space, Tabs, Tag } from 'antd';
 import { useEffect, useState } from 'react';
@@ -66,8 +67,8 @@ const QuanLyThuVienPage = () => {
 				rec?.dot?.thoiGianBatDau &&
 				rec?.dot?.thoiGianKetThuc && (
 					<>
-						{dayjs(rec?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
-						{dayjs(rec?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+						{formatDateTime(rec?.dot?.thoiGianBatDau)} -{' '}
+						{formatDateTime(rec?.dot?.thoiGianKetThuc)}
 					</>
 				),
 			onCell,
@@ -129,7 +130,7 @@ const QuanLyThuVienPage = () => {
 			dataIndex: 'thoiGianNop',
 			align: 'center',
 			width: 150,
-			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
+			render: (val) => val && formatDate(val),
 			filterType: 'date',
 			sortable: true,
 			onCell,

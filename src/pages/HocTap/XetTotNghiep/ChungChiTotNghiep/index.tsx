@@ -11,6 +11,7 @@ import {
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
 import { useIntl, useModel } from 'umi';
@@ -84,7 +85,7 @@ const ChungChiTotNghiepPage = () => {
 			filterType: 'date',
 			align: 'center',
 			sortable: true,
-			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
+			render: (val) => val && formatDate(val),
 			onCell,
 		},
 		{
@@ -98,7 +99,7 @@ const ChungChiTotNghiepPage = () => {
 						const endDate = dayjs(rec.ngayCap).add(rec.chungChi.thoiHanChungChi ?? 0, 'year');
 						return (
 							<span className={dayjs().isAfter(endDate) ? 'text-error' : undefined}>
-								{endDate.format('DD/MM/YYYY')}
+								{formatDate(endDate)}
 							</span>
 						);
 					} else

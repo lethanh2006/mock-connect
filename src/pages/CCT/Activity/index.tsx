@@ -1,6 +1,7 @@
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { EApprovalStatus, mapColorApprovalStatus, mapNameApprovalStatus } from '@/services/CCT/constant';
+import { formatDate } from '@/utils/formatDate';
 import { CalendarOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Flex, Popconfirm, Row, Spin, Tag, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
@@ -66,6 +67,21 @@ const ActivityPage = () => {
 												<div className='activity-date'>
 													<CalendarOutlined />
 													<span>{dayjs(item.startDate).format('MMM DD, YYYY')}</span>
+												</div>
+
+												<div
+													style={{
+														position: 'absolute',
+														top: 16,
+														left: 16,
+														background: 'rgba(0,0,0,0.7)',
+														color: '#fff',
+														padding: '6px 12px',
+														borderRadius: 6,
+														fontSize: 13,
+													}}
+												>
+													{formatDate(item.startDate)}
 												</div>
 
 												<div style={{ position: 'absolute', top: 16, right: 16 }}>

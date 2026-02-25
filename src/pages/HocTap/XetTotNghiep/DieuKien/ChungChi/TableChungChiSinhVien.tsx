@@ -3,6 +3,7 @@ import type { IColumn } from '@/components/Table/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EPhuongThucTinhDiem } from '@/services/DaoTao/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { Empty, Tag } from 'antd';
 import { useIntl, useModel } from 'umi';
@@ -43,7 +44,7 @@ const TableChungChiSinhVien = () => {
 			dataIndex: 'ngayCap',
 			width: 100,
 			align: 'center',
-			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
+			render: (val) => val && formatDate(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'dieukienxettotnghiep.chungchi.modal.table.thoihan.columntable' }),
@@ -55,7 +56,7 @@ const TableChungChiSinhVien = () => {
 						const endDate = dayjs(rec.ngayCap).add(rec.chungChi.thoiHanChungChi ?? 0, 'year');
 						return (
 							<span style={dayjs().isAfter(endDate) ? { color: 'red' } : undefined}>
-								{endDate.format('DD/MM/YYYY')}
+								{formatDate(endDate)}
 							</span>
 						);
 					} else

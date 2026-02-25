@@ -1,4 +1,4 @@
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { CalendarOutlined } from '@ant-design/icons';
 import { Col, Divider, Row, Spin } from 'antd';
 import { history, useModel } from 'umi';
@@ -20,7 +20,7 @@ const ChiTietTinTucWpPage = () => {
 					<div id='content'>
 						<h4 dangerouslySetInnerHTML={{ __html: record?.title?.rendered ?? '' }} />
 						<p className='ngay-dang'>
-							<CalendarOutlined /> {record?.date && dayjs(record?.date).format('DD MMMM YYYY, HH:mm ')}
+							<CalendarOutlined /> {record?.date && formatDateTime(record?.date)}
 							<Divider type='vertical' />{' '}
 							<a type='link' onClick={() => changeMenu()}>
 								{recChuDe?.name}

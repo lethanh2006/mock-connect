@@ -1,4 +1,5 @@
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { MessageOutlined, ReadOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Badge, Card, Progress, Space, Tag, Tooltip, Typography } from 'antd';
 import { createHash } from 'crypto';
@@ -190,7 +191,7 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 						{nextClass
 							? nextClass.hasTime
 								? nextClass.startTime.format('HH:mm DD/MM')
-								: nextClass.startTime.format('DD/MM/YYYY')
+								: formatDate(nextClass.startTime)
 							: intl.formatMessage({ id: 'lophocphan.card.khongco' })}
 					</Text>
 				</div>

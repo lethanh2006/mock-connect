@@ -1,3 +1,4 @@
+import type { CardProps } from 'antd';
 import type { CSSProperties, JSX } from 'react';
 
 /**
@@ -58,4 +59,6 @@ export type TabViewPageComponentProps = {
 	cardBigTitle?: boolean;
 
 	extraCard?: React.ReactNode;
+
+	cardProps?: Omit<CardProps, 'children'>;
 };

@@ -18,6 +18,7 @@ import SelectKeHoachDeTai from '../KeHoachDeTai/components/SelectKeHoachDeTai';
 import TableDeTaiHoiDong from './components/DeTaiHoiDong';
 
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import ViewHoiDong from './components/ViewHoiDong';
 
 const HoiDongKHCNPage = (props: {
@@ -105,7 +106,7 @@ const HoiDongKHCNPage = (props: {
 			dataIndex: 'thoiGianBatDau',
 			width: 150,
 			align: 'center',
-			render: (val) => <div>{val ? dayjs(val).format('HH:mm DD/MM/YYYY') : ''}</div>,
+			render: (val) => <div>{formatDateTime(val)}</div>,
 			onCell,
 		},
 		{
@@ -174,7 +175,7 @@ const HoiDongKHCNPage = (props: {
 		//   width: 120,
 		//   dataIndex: 'createdAt',
 		//   align: 'center',
-		//   render: (val) => <div>{moment(val).format('DD/MM/YYYY')}</div>,
+		//   render: (val) => <div>{formatDate(val)}</div>,
 		// },
 		// {
 		// 	title: 'Trạng thái diễn ra',

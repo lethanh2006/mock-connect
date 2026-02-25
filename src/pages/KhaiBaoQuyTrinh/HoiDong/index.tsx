@@ -7,7 +7,7 @@ import { useModel } from 'umi';
 import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { HoiDong } from '@/services/QuyTrinh/HoiDong/typings';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import TableDonHoiDong from './components/TableDonHoiDong';
 import TableThanhVien from './components/TableThanhVien';
 
@@ -53,7 +53,7 @@ const HoiDongThamGia = (props: { viewTheoBuoc?: boolean }) => {
 			width: 150,
 			render: (rec: HoiDong.IRecord) => (
 				<div>
-					{dayjs(rec.startDate).format('HH:mm DD/MM/YYYY')} - {dayjs(rec.endDate).format('HH:mm DD/MM/YYYY')}
+					{formatDateTime(rec.startDate)} - {formatDateTime(rec.endDate)}
 				</div>
 			),
 		},

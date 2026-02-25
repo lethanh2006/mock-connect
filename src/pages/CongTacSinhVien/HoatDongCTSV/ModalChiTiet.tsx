@@ -1,4 +1,4 @@
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { Descriptions, Modal } from 'antd';
 import { useIntl, useModel } from 'umi';
 
@@ -28,14 +28,10 @@ const ModalChiTiet = () => {
 					{record?.hoatDongCtsv?.soLuongThamGia}
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'xemsau.chitiet.tgbt' })}>
-					{record?.hoatDongCtsv?.thoiGianBatDau
-						? dayjs(record?.hoatDongCtsv?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')
-						: '--'}
+					{record?.hoatDongCtsv?.thoiGianBatDau ? formatDateTime(record?.hoatDongCtsv?.thoiGianBatDau) : '--'}
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'xemsau.chitiet.tgkt' })}>
-					{record?.hoatDongCtsv?.thoiGianKetThuc
-						? dayjs(record?.hoatDongCtsv?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')
-						: '--'}
+					{record?.hoatDongCtsv?.thoiGianKetThuc ? formatDateTime(record?.hoatDongCtsv?.thoiGianKetThuc) : '--'}
 				</Descriptions.Item>
 				<Descriptions.Item label={intl.formatMessage({ id: 'xemsau.chitiet.diadiem' })}>
 					{record?.hoatDongCtsv?.diaDiem ?? '--'}

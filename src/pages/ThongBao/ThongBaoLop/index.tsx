@@ -3,7 +3,7 @@ import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { IColumn } from '@/components/Table/typing';
 import type { ThongBao } from '@/services/ThongBao/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { EyeOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import { useState } from 'react';
@@ -41,7 +41,7 @@ const ThongBaoLopPage = (props: { idLop: string; loai: 'lop-hanh-chinh' | 'lop-h
 			align: 'center',
 			filterType: 'datetime',
 			sortable: true,
-			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && formatDateTime(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.thaotac' }),

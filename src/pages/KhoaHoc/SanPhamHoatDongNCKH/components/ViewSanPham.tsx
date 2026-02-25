@@ -14,7 +14,6 @@ import {
 	MapKeyTextTrangThaiSanPham,
 } from '@/services/KhoaHoc/SanPhamNCKH/constants';
 import type { SanPhamNCKH } from '@/services/KhoaHoc/SanPhamNCKH/typings';
-import dayjs from '@/utils/dayjs';
 import { CheckOutlined, CloseOutlined, EditOutlined, StopOutlined } from '@ant-design/icons';
 import { Button, Descriptions, Modal, Select, Tag } from 'antd';
 import { useCallback, useState } from 'react';
@@ -22,6 +21,7 @@ import { useModel } from 'umi';
 import FormXetDuyet from './FormXetDuyet';
 import TableThanhVien from './TableThanhVien';
 import ViewRender from './ViewRender';
+import { formatDate } from '@/utils/formatDate';
 
 const ViewSanPham = (props: {
 	getData: any;
@@ -90,19 +90,21 @@ const ViewSanPham = (props: {
 							recordLoaiHinh?.loaiThoiGianThucHien,
 						) && (
 							<Descriptions.Item span={6} label={`${recordLoaiHinh.startLabel} - ${recordLoaiHinh.endLabel}`}>
-								{dayjs(recordSanPham?.thongTinThoiGian?.start).format(
+								{formatDate(
+									recordSanPham?.thongTinThoiGian?.start,
 									recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 										? 'YYYY'
 										: recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
 											? 'MM/YYYY'
-											: 'DD/MM/YYYY',
+											: undefined,
 								)}{' '}
-								{dayjs(recordSanPham?.thongTinThoiGian?.end).format(
+								{formatDate(
+									recordSanPham?.thongTinThoiGian?.end,
 									recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 										? 'YYYY'
 										: recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
 											? 'MM/YYYY'
-											: 'DD/MM/YYYY',
+											: undefined,
 								)}
 							</Descriptions.Item>
 						)}
@@ -117,12 +119,13 @@ const ViewSanPham = (props: {
 							ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY,
 						].includes(recordLoaiHinh?.loaiThoiGianThucHien) && (
 							<Descriptions.Item span={6} label={recordLoaiHinh.timelineLabel}>
-								{dayjs(recordSanPham?.thongTinThoiGian?.timeline).format(
+								{formatDate(
+									recordSanPham?.thongTinThoiGian?.timeline,
 									recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 										? 'YYYY'
 										: recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
 											? 'MM/YYYY'
-											: 'DD/MM/YYYY',
+											: undefined,
 								)}
 							</Descriptions.Item>
 						)}
@@ -174,19 +177,21 @@ const ViewSanPham = (props: {
 															span={ele?.colspan ? ele.colspan / 4 : 6}
 															label={ele?.label ?? `${recordLoaiHinh?.startLabel} - ${recordLoaiHinh?.endLabel}`}
 														>
-															{dayjs(recordSanPham?.thongTinThoiGian?.start).format(
+															{formatDate(
+																recordSanPham?.thongTinThoiGian?.start,
 																recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 																	? 'YYYY'
 																	: recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
 																		? 'MM/YYYY'
-																		: 'DD/MM/YYYY',
+																		: undefined,
 															)}{' '}
-															{dayjs(recordSanPham?.thongTinThoiGian?.end).format(
+															{formatDate(
+																recordSanPham?.thongTinThoiGian?.end,
 																recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 																	? 'YYYY'
 																	: recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
 																		? 'MM/YYYY'
-																		: 'DD/MM/YYYY',
+																		: undefined,
 															)}
 														</Descriptions.Item>
 													);
@@ -196,12 +201,13 @@ const ViewSanPham = (props: {
 															span={ele?.colspan ? ele.colspan / 4 : 6}
 															label={ele?.label || recordLoaiHinh.timelineLabel}
 														>
-															{dayjs(recordSanPham?.thongTinThoiGian?.timeline).format(
+															{formatDate(
+																recordSanPham?.thongTinThoiGian?.timeline,
 																recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 																	? 'YYYY'
 																	: recordLoaiHinh.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
 																		? 'MM/YYYY'
-																		: 'DD/MM/YYYY',
+																		: undefined,
 															)}
 														</Descriptions.Item>
 													);

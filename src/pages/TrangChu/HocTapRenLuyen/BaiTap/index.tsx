@@ -7,6 +7,7 @@ import {
 } from '@/services/DaoTao/BaiTap/constants';
 import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Card, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
@@ -140,7 +141,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 							{intl.formatMessage({ id: 'trangchu.baitap.hannopbai' })}:
 						</Text>
 						<Text className={`deadline-time ${isMobile ? 'mobile' : ''}`}>
-							{dayjs(item.assignment.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+							{formatDateTime(item.assignment.thoiGianKetThuc)}
 							<Tag color={colorTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]} style={{ marginLeft: 4 }}>
 								{mapTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
 							</Tag>

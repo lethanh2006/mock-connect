@@ -1,7 +1,7 @@
 import ExpandText from '@/components/ExpandText';
 import type { BinhLuan } from '@/services/HocTap/DienDan/BinhLuan/typing';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { createTextLinks } from '@/utils/utils';
 import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Form, Input, Popconfirm, Popover } from 'antd';
@@ -177,7 +177,7 @@ const Comment = React.forwardRef((props: IProps, ref) => {
 												)}
 											</div>
 											<span style={{ fontSize: 11, color: 'rgba(68,68,68,0.84)', marginLeft: 6 }}>
-												{dayjs(val?.ngayDang).calendar()}
+												{formatDateTime(val?.ngayDang)}
 											</span>
 										</div>
 										<ExpandText>

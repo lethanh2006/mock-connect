@@ -2,7 +2,7 @@ import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import { colorTrangThaiDuyeMuonSach, ETrangThaiDuyetMuonSach } from '@/services/QuanLyThuVien/constant';
 import type { PhieuMuonTra } from '@/services/QuanLyThuVien/PhieuMuonTra/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Card, Tabs, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -51,7 +51,7 @@ const PhieuMuonPage = () => {
 			dataIndex: 'thoiGianDangKy',
 			align: 'center',
 			width: 120,
-			render: (val, rec) => val && dayjs(val).format('DD/MM/YYYY'),
+			render: (val, rec) => val && formatDate(val),
 			filterType: 'date',
 			sortable: true,
 			onCell,

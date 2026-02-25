@@ -13,7 +13,7 @@ import {
 	type ETransactionPaymentType,
 	type ETransactionType,
 } from '@/services/TaiChinh/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
@@ -86,7 +86,7 @@ const LichSuThanhToan = (props: {
 			dataIndex: 'createdAt',
 			width: 120,
 			sortable: true,
-			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && formatDateTime(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.hoanthanh' }),
@@ -94,7 +94,7 @@ const LichSuThanhToan = (props: {
 			dataIndex: 'transactionDate',
 			width: 120,
 			sortable: true,
-			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => val && formatDateTime(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.lichsu.thaotac' }),

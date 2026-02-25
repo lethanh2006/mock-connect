@@ -4,7 +4,7 @@ import { type IColumn } from '@/components/Table/typing';
 import { EHoatDongChungType1 } from '@/services/SuKien/constant';
 import type { SuKien } from '@/services/SuKien/typings';
 import { ELoaiThongTinXemSau } from '@/services/TienIch/XemSau/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { EyeOutlined, FileExcelOutlined, ReloadOutlined, SaveOutlined } from '@ant-design/icons';
 import { Card, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
@@ -94,15 +94,13 @@ const SinhVienHoatDongCTSV = () => {
 			title: intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.table.batdau' }),
 			align: 'center',
 			width: 100,
-			render: (val, rec) =>
-				rec?.hoatDongCtsv?.thoiGianBatDau && dayjs(rec?.hoatDongCtsv?.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => formatDateTime(rec?.hoatDongCtsv?.thoiGianBatDau),
 		},
 		{
 			title: intl.formatMessage({ id: 'diemrenluyen.hoatdongctsv.table.ketthuc' }),
 			align: 'center',
 			width: 100,
-			render: (val, rec) =>
-				rec?.hoatDongCtsv?.thoiGianKetThuc && dayjs(rec?.hoatDongCtsv?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
+			render: (val, rec) => formatDateTime(rec?.hoatDongCtsv?.thoiGianKetThuc),
 		},
 
 		{
@@ -165,7 +163,7 @@ const SinhVienHoatDongCTSV = () => {
 					data={danhSach ?? []}
 					loading={loading}
 					addStt
-					otherProps={{ pagination: true }}
+					otherProps={{ pagination: {} }}
 					hasTotal
 				>
 					<div style={{ position: 'absolute', right: 130 }}>
