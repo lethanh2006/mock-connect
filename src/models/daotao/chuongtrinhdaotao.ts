@@ -1,5 +1,5 @@
 import useInitModel from '@/hooks/useInitModel';
-import { getTienTrinhKhung, getTienTrinhThucTe } from '@/services/DaoTao/ChuongTrinhDaoTao';
+import { getHocPhanTienQuyet, getTienTrinhKhung, getTienTrinhThucTe } from '@/services/DaoTao/ChuongTrinhDaoTao';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { ipDaoTao } from '@/utils/ip';
@@ -10,6 +10,8 @@ export default () => {
 	const [loading, setLoading] = useState<boolean>();
 	const [record, setRecord] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>();
 	const [tienTrinhHocTap, setTienTrinhHocTap] = useState<LopHocPhan.IRecordSinhVienLopHP[]>();
+	const [dsKhoiHocPhanTienQuyet, setDsKhoiHocPhanTienQuyet] = useState<ChuongTrinhDaoTao.IKhoiHpCt[]>([]);
+	const [loadingKhoiHocPhanTienQuyet, setLoadingKhoiHocPhanTienQuyet] = useState(false);
 
 	const sinhVienGetTienTrinhKhungModel = async (
 		isSongNhanh?: boolean,
@@ -40,6 +42,20 @@ export default () => {
 		}
 	};
 
+	const fetchKhoiHocPhanTienQuyet = async (maHocPhan: string) => {
+		setLoadingKhoiHocPhanTienQuyet(true);
+		try {
+			const res = await getHocPhanTienQuyet(maHocPhan);
+			const data = res?.data?.data ?? [];
+			setDsKhoiHocPhanTienQuyet(data);
+			return data;
+		} catch (er) {
+			return Promise.reject(er);
+		} finally {
+			setLoadingKhoiHocPhanTienQuyet(false);
+		}
+	};
+
 	return {
 		...objInit,
 		loading,
@@ -50,5 +66,9 @@ export default () => {
 		setTienTrinhHocTap,
 		sinhVienGetTienTrinhKhungModel,
 		sinhVienGetTienTrinhThucTeModel,
+		dsKhoiHocPhanTienQuyet,
+		setDsKhoiHocPhanTienQuyet,
+		loadingKhoiHocPhanTienQuyet,
+		fetchKhoiHocPhanTienQuyet,
 	};
 };

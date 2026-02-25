@@ -8,3 +8,8 @@ export async function getDotHienHanh() {
 export async function sinhVienDangKyChuyenNganh(data: any) {
 	return axios.post(`${ipDaoTao}/dang-ky-chuyen-nganh/sinh-vien/dang-ky`, data);
 }
+
+export async function getKyHienTai(loai: 'minor' | 'concentration') {
+	const url = `${ipDaoTao}/dot-dk-ctdt/loai/${loai}/hoc-ky/hien-tai`;
+	return axios.get(url);
+}
