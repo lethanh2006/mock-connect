@@ -183,7 +183,8 @@ const ConfigBounder = (props: { children?: any }) => {
 						borderColor: textColors?.text400,
 						headerBg: accentColors?.accent700,
 						cellPaddingBlock: 8,
-						cellPaddingInline: 8,
+						cellPaddingInline: 16,
+						headerBorderRadius: 0,
 					},
 					Breadcrumb: {
 						lastItemColor: textColors?.text400,
