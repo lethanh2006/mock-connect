@@ -1,4 +1,4 @@
-﻿export default [
+export default [
 	{
 		path: '/user',
 		layout: false,
@@ -155,6 +155,33 @@
 				name: 'HocTapKhac',
 				path: 'khac',
 				component: 'HocTap/Khac',
+			},
+			{
+				name: 'DangKyChuyenNganh',
+				path: 'dang-ky-chuyen-nganh',
+				routes: [
+					{
+						name: 'DangKyChuyenNganhBuild',
+						path: 'register/build',
+						component: 'SinhVien/DangKyChuyenNganhMoi/Build',
+						hideInMenu: true,
+						exact: true,
+					},
+					{
+						name: 'DangKyChuyenNganhRegister',
+						path: 'register',
+						component: 'SinhVien/DangKyChuyenNganhMoi/Register',
+						hideInMenu: true,
+						exact: true,
+					},
+					{
+						path: ':id',
+						component: 'SinhVien/DangKyChuyenNganhMoi/Detail',
+						hideInMenu: true,
+						exact: true,
+					},
+				],
+				hideInMenu: true,
 			},
 		],
 	},
