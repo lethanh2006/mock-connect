@@ -229,7 +229,7 @@ const TableStaticData = (props: TableStaticProps) => {
 				}}
 				loading={props?.loading}
 				size={props.size}
-				scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
+				scroll={{ x: props.otherProps?.scroll?.x ?? 'max-content', ...props.otherProps?.scroll }}
 				bordered
 				components={rowSortable ? { body: { row: SortableRow } } : undefined}
 				{...props?.otherProps}

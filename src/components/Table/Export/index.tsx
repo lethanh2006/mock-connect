@@ -86,7 +86,7 @@ const ModalExport = (props: ModalExportProps) => {
 		>
 			{!!exportFields.length ? (
 				<>
-					<Row gutter={[12, 12]} style={{ marginBottom: 18 }}>
+					<Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
 						{selectedIds?.length > 0 ? (
 							<Col span={24}>
 								{intl.formatMessage({ id: 'global.table.export.index.trichxuat' }, { count: selectedIds?.length })}
