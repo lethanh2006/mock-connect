@@ -204,6 +204,10 @@ body {
 		}
 	}
 
+	.ant-pro-base-menu-inline .ant-pro-base-menu-inline-submenu-has-icon>.ant-menu-sub {
+		padding-inline-start: 0
+	}
+
 	.ant-menu-item-selected {
 		background-color: var(--color-info-bg) !important;
 		color: var(--color-primary) !important;
@@ -250,12 +254,6 @@ body {
 }
 
 .ant-pro-sider-collapsed-button {
-	position: absolute !important;
-	top: 16px !important;
-	right: -50px !important;
-	bottom: unset !important;
-	inset-block-start: 16px !important;
-	inset-block-end: unset !important;
 	z-index: 999 !important;
 	cursor: pointer !important;
 	pointer-events: auto !important;
@@ -267,28 +265,6 @@ body {
 	align-items: center !important;
 	justify-content: center !important;
 	color: var(--color-text-100) !important;
-
-	@media (max-width: 425px) {
-		right: -10px !important;
-	}
-}
-
-.ant-pro-layout .ant-pro-sider-collapsed-button {
-	right: -50px !important;
-	top: 16px !important;
-
-	@media (max-width: 425px) {
-		right: -10px !important;
-	}
-}
-
-.ant-pro-sider-collapsed .ant-pro-sider-collapsed-button .anticon::before {
-	content: '\e6d7' !important; // MenuUnfoldOutlined
-}
-
-.ant-pro-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon::before,
-.ant-layout-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon::before {
-	content: '\e6d8' !important; // MenuFoldOutlined
 }
 
 .ant-layout-header {
@@ -296,18 +272,6 @@ body {
 	background-size: 100% 100% !important;
 	background-position: top center !important;
 	background-repeat: no-repeat !important;
-}
-
-// Icon chung (collapse, modal close, table expand, v.v.)
-.ant-menu-submenu-arrow,
-.ant-collapse-expand-icon,
-.ant-collapse-arrow,
-.ant-modal-close,
-.ant-drawer-close,
-.ant-table-expand-icon,
-.ant-table-row-expand-icon,
-.ant-card-extra .anticon {
-	color: var(--color-text-100) !important;
 }
 
 // =============================================================================
@@ -322,17 +286,8 @@ body {
 
 .ant-table-wrapper {
 	.ant-table {
-		border-radius: 0 !important;
-	}
-
-	.ant-table-container {
-		padding: 0 !important;
-		border-radius: 18px !important;
-
-		&::before,
-		&::after {
-			display: none !important;
-		}
+		border-radius: var(--table-header-border-radius) !important;
+		border: 1px solid var(--color-accent-700) !important;
 	}
 }
 
@@ -340,14 +295,17 @@ body {
 	.ant-table-cell {
 		border-left: none !important;
 		border-right: none !important;
+		border-bottom: 1px solid var(--color-accent-700) !important;
+	}
+
+	.ant-table-row:last-child {
+		.ant-table-cell {
+			border-bottom: none !important;
+		}
 	}
 }
 
 .ant-table-cell {
-	// border-bottom: 1px solid var(--color-accent-700) !important;
-	// border-left: none !important;
-	// border-right: none !important;
-	// padding: 5px 18px !important;
 	text-align: left !important;
 
 	p,
@@ -368,6 +326,7 @@ body {
 	.ant-table-cell {
 		font-weight: 600 !important;
 		text-align: left !important;
+		border-bottom: 1px solid var(--color-accent-700) !important;
 	}
 
 	>tr>th {
@@ -454,13 +413,6 @@ body {
 				border: none !important;
 				font-size: 14px !important;
 				font-weight: 500 !important;
-
-				span {
-					color: var(--color-highlight) !important;
-					font-size: 15px !important;
-					font-weight: 600 !important;
-					margin-left: 4px !important;
-				}
 			}
 		}
 
@@ -470,7 +422,7 @@ body {
 			gap: 8px !important;
 
 			.ant-btn {
-				padding: 8px 12px !important;
+				padding: 12px !important;
 
 				.ant-btn-icon,
 				.anticon {
@@ -506,10 +458,6 @@ body {
 
 	.ant-table-wrapper {
 		padding: 12px 0 0 0 !important;
-
-		.ant-spin-nested-loading {
-			margin: 0 -16px !important;
-		}
 	}
 }
 
@@ -525,11 +473,6 @@ body {
 			}
 		}
 	}
-}
-
-// .css-glamorous-div--jgd0xx trong card-big-title: dùng margin 0 -16px, không bị ghi đè bởi rule trên
-.card-big-title .css-glamorous-div--jgd0xx .table-base .ant-table-wrapper .ant-spin-nested-loading {
-	margin: 0 !important;
 }
 
 // =============================================================================
@@ -633,14 +576,6 @@ body {
 			// background-color: white !important;
 			padding: 0 16px;
 
-			&.ant-spin-nested-loading {
-				margin: 0 -16px !important;
-			}
-
-			&.header {
-				margin: 0 -16px !important;
-			}
-
 			.ant-card {
 				.ant-spin-nested-loading {
 					margin: 0 !important;
@@ -669,13 +604,6 @@ body {
 	}
 
 	.ant-card>.ant-card-body {
-		.table-base>.ant-table-wrapper>.ant-spin-nested-loading {
-			margin: 0 -16px !important;
-		}
-
-		.css-glamorous-div--jgd0xx .table-base>.ant-table-wrapper>.ant-spin-nested-loading {
-			margin: 0 !important;
-		}
 
 		&>.ant-card>.ant-card-body {
 			padding: 0 !important;
@@ -763,15 +691,8 @@ body {
 
 .ant-btn-primary.ant-btn-color-primary.ant-btn-variant-solid {
 
-	&:hover,
-	&:focus {
+	&:hover {
 		background-color: var(--color-accent-800) !important;
-		border-color: var(--color-primary) !important;
-		color: var(--color-primary) !important;
-	}
-
-	&:active {
-		background-color: #f5f5f5 !important;
 		border-color: var(--color-primary) !important;
 		color: var(--color-primary) !important;
 	}
