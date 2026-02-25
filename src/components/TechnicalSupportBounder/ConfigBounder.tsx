@@ -45,6 +45,8 @@ const ConfigBounder = (props: { children?: any }) => {
 						headerBg: '#f8f8f8',
 						cellPaddingBlock: 8,
 						cellPaddingInline: 8,
+						cellPaddingBlockSM: 3,
+						cellPaddingInlineSM: 5,
 					},
 				},
 			}}
