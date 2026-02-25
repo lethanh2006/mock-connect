@@ -53,7 +53,7 @@ const TienTrinhHocTap = () => {
 									<div className='progress-dot' />
 									<div className='progress-label'>
 										{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '--'}{' '}
-										{intl.formatMessage({ id: 'tientrinhhoctap.tin' })} /
+										{intl.formatMessage({ id: 'tientrinhhoctap.tin' })}
 									</div>
 								</div>
 								<div className='progress-img'>
