@@ -1,6 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { CalendarOutlined, DownOutlined, EditFilled, FilterOutlined } from '@ant-design/icons';
 import { Calendar as AntdCalendar, Button, Card, Checkbox, Col, Popover, Row, Select } from 'antd';
 import { Dayjs } from 'dayjs';
@@ -129,7 +130,7 @@ const FilterColumn = (props: { date: Date; setDate: (val: Date) => void }) => {
 			<Button block className={`date-button`} onClick={() => setExpandMiniCalendar(!expandMiniCalendar)}>
 				<CalendarOutlined className='calendar-icon' />
 
-				<div>{dayjs(date).format('DD/MM/YYYY')}</div>
+				<div>{formatDate(date)}</div>
 				<DownOutlined className={`down-arrow ${expandMiniCalendar ? 'expanded' : 'collapsed'}`} />
 			</Button>
 

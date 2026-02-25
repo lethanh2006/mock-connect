@@ -216,7 +216,7 @@ const FormNopThuyetMinh = (props: { getData: any }) => {
 
 					<Col xs={24} lg={12}>
 						<Form.Item name={['chuTriDeTai', 'ngaySinh']} label='Ngày sinh' rules={[...rules.required]}>
-							<MyDatePicker format={'DD/MM/YYYY'} placeholder='Ngày sinh' />
+							<MyDatePicker format={undefined} placeholder='Ngày sinh' />
 						</Form.Item>
 					</Col>
 					<Col xs={24} lg={12}>

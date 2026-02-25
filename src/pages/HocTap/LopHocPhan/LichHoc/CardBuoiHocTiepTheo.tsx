@@ -3,6 +3,7 @@ import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { colorHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { ArrowRightOutlined, CheckSquareOutlined, EyeOutlined } from '@ant-design/icons';
 import { Card, Col, Descriptions, Empty, Progress, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
@@ -64,11 +65,11 @@ const CardBuoiHocTiepTheo = () => {
 
 				<Descriptions column={1} size='small'>
 					<Descriptions.Item label='Ngày học' span={2}>
-						{THU_TRONG_TUAN[dayjs(buoiHoc.ngay).day()]}, {dayjs(buoiHoc.ngay).format('DD/MM/YYYY')}
+						{THU_TRONG_TUAN[dayjs(buoiHoc.ngay).day()]}, {formatDate(buoiHoc.ngay)}
 					</Descriptions.Item>
 					<Descriptions.Item label='Thời gian'>
 						{buoiHoc.thoiGianBatDau && buoiHoc.thoiGianKetThuc
-							? `${dayjs(buoiHoc.thoiGianBatDau).format('HH:mm')} - ${dayjs(buoiHoc.thoiGianKetThuc).format('HH:mm')}`
+							? `${formatDate(buoiHoc.thoiGianBatDau, 'HH:mm')} - ${formatDate(buoiHoc.thoiGianKetThuc, 'HH:mm')}`
 							: `Tiết ${buoiHoc.tietBatDau} - ${buoiHoc.tietKetThuc}`}
 					</Descriptions.Item>
 					<Descriptions.Item label='Phòng'>

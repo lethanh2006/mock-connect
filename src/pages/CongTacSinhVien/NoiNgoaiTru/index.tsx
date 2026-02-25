@@ -7,6 +7,7 @@ import {
 } from '@/services/CongTacSinhVien/NoiNgoaiTru/constant';
 import type { NoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { Card, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -46,8 +47,7 @@ const NoiNgoaiTruPage = () => {
 			width: 250,
 			render: (val, rec) => (
 				<>
-					{dayjs(rec.dotKhaiBao?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
-					{dayjs(rec.dotKhaiBao?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+					{formatDateTime(rec.dotKhaiBao?.thoiGianBatDau)} - {formatDateTime(rec.dotKhaiBao?.thoiGianKetThuc)}
 				</>
 			),
 			onCell,

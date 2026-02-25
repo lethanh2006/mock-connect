@@ -3,7 +3,7 @@ import { type IColumn } from '@/components/Table/typing';
 
 import PreviewFile from '@/components/PreviewFile';
 import { EDoiTuongKeHoachNCKH, MapKeyDoiTuongKeHoachNCKH } from '@/services/KhoaHoc/KeHoach/constants';
-import dayjs from '@/utils/dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { Button, Modal } from 'antd';
 import { useCallback, useState } from 'react';
 import { useModel } from 'umi';
@@ -63,7 +63,7 @@ const QuyCheComponent = () => {
 			sortable: true,
 			onCell,
 			align: 'center',
-			render: (val) => (val ? dayjs(val).format('DD/MM/YYYY') : ''),
+			render: (val) => formatDate(val),
 		},
 		{
 			title: 'File đính kèm',
@@ -88,7 +88,7 @@ const QuyCheComponent = () => {
 		// 	width: 120,
 		// 	filterType: 'datetime',
 		// 	sortable: true,
-		// 	render: (val) => moment(val).format('HH:mm DD/MM/YYYY'),
+		// 	render: (val) => formatDateTime(val),
 		// 	onCell,
 		// },
 	];

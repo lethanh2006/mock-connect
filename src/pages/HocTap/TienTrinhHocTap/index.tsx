@@ -1,6 +1,6 @@
 import { TabViewPage } from '@/components/TabViewPage';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { BookOutlined, CheckCircleOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Alert, Card, Col, Row, Spin } from 'antd';
 import { useEffect } from 'react';
@@ -53,7 +53,7 @@ const TienTrinhHocTap = () => {
 									<div className='progress-dot' />
 									<div className='progress-label'>
 										{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '--'}{' '}
-										{intl.formatMessage({ id: 'tientrinhhoctap.tin' })} /
+										{intl.formatMessage({ id: 'tientrinhhoctap.tin' })}
 									</div>
 								</div>
 								<div className='progress-img'>
@@ -77,8 +77,8 @@ const TienTrinhHocTap = () => {
 							{ id: 'tientrinhhoctap.message' },
 							{
 								tenDot: recDotQuyDoi?.tenDot,
-								tuNgay: dayjs(recDotQuyDoi?.thoiGianBatDau).format('DD/MM/YYYY'),
-								denNgay: dayjs(recDotQuyDoi?.thoiGianKetThuc).format('DD/MM/YYYY'),
+								tuNgay: formatDate(recDotQuyDoi?.thoiGianBatDau),
+								denNgay: formatDate(recDotQuyDoi?.thoiGianKetThuc),
 								b: (chunks) => <b>{chunks}</b>,
 							},
 						)}

@@ -30,7 +30,7 @@ import { useModel } from 'umi';
 import TableBase from '@/components/Table';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { primaryColor } from '@/services/base/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import SelectNamHoc from '../../components/SelectNamHoc';
 import { buildFilter } from './BuildFilter';
 import FormChonDot from './FormChonDot';
@@ -236,30 +236,33 @@ const TableSanPhamNCKH = (props: {
 					recordLoaiHinhNCKH?.loaiThoiGianThucHien,
 				) ? (
 					<Descriptions.Item span={6} label={`${recordLoaiHinhNCKH.startLabel} - ${recordLoaiHinhNCKH.endLabel}`}>
-						{dayjs(rec?.thongTinThoiGian?.start).format(
+						{formatDate(
+							rec?.thongTinThoiGian?.start,
 							recordLoaiHinhNCKH.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 								? 'YYYY'
 								: recordLoaiHinhNCKH.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
 									? 'MM/YYYY'
-									: 'DD/MM/YYYY',
+									: undefined,
 						)}{' '}
 						-{' '}
-						{dayjs(rec?.thongTinThoiGian?.end).format(
+						{formatDate(
+							rec?.thongTinThoiGian?.end,
 							recordLoaiHinhNCKH.loaiThoiGianThucHien === ELoaiThoiGianThucHien.NAM
 								? 'YYYY'
 								: recordLoaiHinhNCKH.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THANGNAM
 									? 'MM/YYYY'
-									: 'DD/MM/YYYY',
+									: undefined,
 						)}
 					</Descriptions.Item>
 				) : (
 					<Descriptions.Item span={6} label={recordLoaiHinhNCKH?.timelineLabel}>
-						{dayjs(rec?.thongTinThoiGian?.timeline).format(
+						{formatDate(
+							rec?.thongTinThoiGian?.timeline,
 							recordLoaiHinhNCKH?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_YYYY
 								? 'YYYY'
 								: recordLoaiHinhNCKH?.loaiThoiGianThucHien === ELoaiThoiGianThucHien.THOIGIANCUTHE_MMYYYY
 									? 'MM/YYYY'
-									: 'DD/MM/YYYY',
+									: undefined,
 						)}
 					</Descriptions.Item>
 				),

@@ -1,6 +1,6 @@
 import anh from '@/assets/noimg.png';
 import { renderParagraph } from '@/pages/TinTuc/Slink/BlockTinTuc';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Col, Empty, Row, Spin } from 'antd';
 import { isEmpty } from 'lodash';
@@ -47,7 +47,7 @@ const TinTucDashboardSlink = () => {
 												<div className='tin-tuc-tieu-de'>{renderParagraph(tintuc?.tieuDe, 2, { margin: 0 })}</div>
 											</div>
 											{tintuc?.ngayDang && (
-												<span className='thoi-gian'>{dayjs(tintuc?.ngayDang).format('DD/MM/YYYY')}</span>
+												<span className='thoi-gian'>{formatDate(tintuc?.ngayDang)}</span>
 											)}
 										</div>
 									</div>

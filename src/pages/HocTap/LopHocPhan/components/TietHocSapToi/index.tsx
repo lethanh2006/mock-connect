@@ -11,6 +11,7 @@ import { type Dayjs } from 'dayjs';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { history, Link, useIntl, useModel } from 'umi';
+import { formatDate } from '@/utils/formatDate';
 import styles from './style.less';
 
 interface RenderLichHocProps {
@@ -148,7 +149,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 												className={styles.ngay__title}
 												style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
 											>
-												{thuTrongTuan}, ngày {dayjs(ngay).format('DD/MM')}
+												{thuTrongTuan}, ngày {formatDate(ngay, 'DD/MM')}
 											</div>
 										</Badge>
 									</Space>
@@ -170,7 +171,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 												<div className={styles.tiet_hoc__left}>
 													{onProgress ? <div className={styles.pulse} /> : null}
 													<div className={styles.tiet_hoc__thoi_gian}>
-														{dayjs(buoiHoc.thoiGianBatDau).format('HH:mm')}
+														{formatDate(buoiHoc.thoiGianBatDau, 'HH:mm')}
 													</div>
 												</div>
 

@@ -2,12 +2,13 @@ import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { IColumn } from '@/components/Table/typing';
 import { Activity } from '@/services/CCT/Activity/typing';
+import { formatDateTime } from '@/utils/formatDate';
 import { Button, Col, Descriptions, Divider, Image, Modal, Row, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
-const { Paragraph } = Typography;
+const { Paragraph, Text } = Typography;
 
 const ChiTietActivity = (props: { getData?: () => void }) => {
 	const { getData } = props;
@@ -157,13 +158,15 @@ const ChiTietActivity = (props: { getData?: () => void }) => {
 									{record?.name}
 								</Descriptions.Item>
 
-								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.startDate' })}>
-									{record?.startDate && dayjs(record?.startDate).format('HH:mm DD/MM/YYYY')}
-								</Descriptions.Item>
+								<Text>
+									<strong>{intl.formatMessage({ id: 'activity.detail.startDate' })}:</strong>{' '}
+									{formatDateTime(record?.startDate)}
+								</Text>
 
-								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.endDate' })}>
-									{record?.endDate && dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')}
-								</Descriptions.Item>
+								<Text>
+									<strong>{intl.formatMessage({ id: 'activity.detail.endDate' })}:</strong>{' '}
+									{formatDateTime(record?.endDate)}
+								</Text>
 
 								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.organizer' })}>
 									{record?.organizer}

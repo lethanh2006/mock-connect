@@ -7,7 +7,7 @@ import {
 	mapNameETinhChatHocPhanNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 
 import { Button, Checkbox, Col, Descriptions, Modal, Row, Tag } from 'antd';
 import _ from 'lodash';
@@ -85,7 +85,7 @@ const ChiTietSinhVienDangKy = () => {
 							{_.sumBy(record?.danhSachHocPhanDangKy ?? [], 'soTinChi')}
 						</Descriptions.Item>
 						<Descriptions.Item label='Thời gian đăng ký'>
-							{record?.thoiGianDangKy ? dayjs(record?.thoiGianDangKy).format('DD/MM/YYYY') : '--'}
+							{record?.thoiGianDangKy ? formatDate(record?.thoiGianDangKy) : '--'}
 						</Descriptions.Item>
 						<Descriptions.Item label='Ghi chú CVHT' span={2}>
 							{record?.ghiChuCVHT ?? '--'}

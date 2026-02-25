@@ -1,7 +1,7 @@
 import { ColorDiemChu, type ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { QuyDoiDiem } from '@/services/HocTap/QuyDoiDiem/typing';
 import { EMinhChungQuyDoiDiem, colorTrangThaiHocPhanQuyDoi } from '@/services/HocTap/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { resetFieldsForm } from '@/utils/utils';
 import { Button, Descriptions, Form, Modal, Row, Space, Tag } from 'antd';
 import { useEffect } from 'react';
@@ -101,7 +101,7 @@ const FormHocPhanQuyDoiDiem = (props: { getData: () => void }) => {
 										<br />- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.chungchi.donvi' })}:{' '}
 										<b>{record?.donViCap ?? ''}</b>
 										<br />- {intl.formatMessage({ id: 'tientrinhhoctap.congnhan.chungchi.hieuluc' })}:{' '}
-										<b>{record?.thoiGianHieuLuc ? dayjs(record?.thoiGianHieuLuc).format('DD/MM/YYYY') : '--'}</b>
+										<b>{record?.thoiGianHieuLuc ? formatDate(record?.thoiGianHieuLuc) : '--'}</b>
 									</div>
 								</Descriptions.Item>
 							) : record?.loai === EMinhChungQuyDoiDiem.NCKH ? (

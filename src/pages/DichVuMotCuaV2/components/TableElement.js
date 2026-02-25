@@ -2,6 +2,7 @@ import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant
 import { Button, Input, Table, Drawer, Modal, Tooltip, Divider, Popconfirm } from 'antd';
 import React from 'react';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 
 class App extends React.Component {
   state = {
@@ -82,7 +83,7 @@ class App extends React.Component {
         break;
       }
       case 'DATE_PICKER': {
-        valueFinal = values?.value ? dayjs(values?.value).format('HH:mm DD/MM/YYYY') : undefined;
+        valueFinal = values?.value ? formatDateTime(values?.value) : undefined;
         break;
       }
       case 'DON_VI_HANH_CHINH': {

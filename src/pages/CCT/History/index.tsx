@@ -13,6 +13,7 @@ import {
 	mapNameApprovalStatus,
 } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import {
 	CheckCircleOutlined,
 	ClockCircleOutlined,
@@ -250,14 +251,8 @@ const HistoryActivityPage = () => {
 		{
 			title: intl.formatMessage({ id: 'activity.column.date' }),
 			align: 'center',
-			width: 180,
-			render: (val, rec) =>
-				[
-					dayjs(rec?.activities?.startDate).format('HH:mm DD/MM/YYYY'),
-					dayjs(rec?.activities?.endDate).format('HH:mm DD/MM/YYYY'),
-				]
-					.filter(Boolean)
-					.join(' - '),
+			width: 120,
+			render: (val, rec) => rec?.activities?.startDate && formatDate(rec?.activities?.startDate),
 			onCell,
 			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
 		},
@@ -291,7 +286,7 @@ const HistoryActivityPage = () => {
 			dataIndex: 'createdAt',
 			align: 'center',
 			width: 120,
-			render: (val, rec) => val && dayjs(val).format('DD/MM/YYYY'),
+			render: (val, rec) => val && formatDate(val),
 			onCell,
 			sortable: true,
 			hide: tabActive === EActivityCategory.REGISTERED,

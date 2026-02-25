@@ -149,6 +149,7 @@ export type TableBaseProps = {
 	onSortEnd?: (record: any, newIndex: number) => void;
 
 	hideChildrenRows?: boolean;
+	hideFilterColumn?: boolean;
 
 	/** Có hiển thị modal title không? Mặc định: `Không` */
 	showModalTitle?: boolean;

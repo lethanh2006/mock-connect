@@ -1,6 +1,7 @@
 import { messagesCalendar } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Card, Modal } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
@@ -77,8 +78,8 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 						{
 							countLop: props.soLopHienThi,
 							countBuoi: dataCalendar.length,
-							start: dayjs(startDate).format('DD/MM/YYYY'),
-							end: dayjs(endDate).format('DD/MM/YYYY'),
+							start: formatDate(startDate),
+							end: formatDate(endDate),
 
 							b: (chunks: any) => <b>{chunks}</b>,
 						},

@@ -1,6 +1,6 @@
 import Table from '@/components/OldTable/Table';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import type { IColumn } from '@/utils/interfaces';
 
 const TableLichSuTraKetQua = (props: { data: DichVuMotCuaV2.LichSuChinhSua[] }) => {
@@ -46,7 +46,7 @@ const TableLichSuTraKetQua = (props: { data: DichVuMotCuaV2.LichSuChinhSua[] }) 
 			dataIndex: 'editDate',
 			width: 200,
 			align: 'center',
-			render: (val) => <div>{dayjs(val).format('HH:mm DD/MM/YYYY')}</div>,
+			render: (val) => <div>{formatDateTime(val)}</div>,
 		},
 	];
 
