@@ -4,7 +4,6 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 import { Card, ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
 import type { FilterValue } from 'antd/lib/table/interface';
-import _ from 'lodash';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalExport from '../Export';
@@ -143,17 +142,17 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	const renderTable = () => {
 		return (
 			<Table
-				scroll={{ x: _.sum(finalColumns.map((item) => item.width ?? 80)), ...props.scroll }}
+				scroll={{ x: props.scroll?.x ?? 'max-content', ...props.scroll }}
 				rowSelection={
 					props?.rowSelection
 						? {
-							type: 'checkbox',
-							selectedRowKeys: selectedIds ?? [],
-							preserveSelectedRowKeys: true,
-							onChange: (selectedRowKeys) => setSelectedIds(selectedRowKeys as (string | number)[]),
-							columnWidth: 40,
-							...props.detailRow,
-						}
+								type: 'checkbox',
+								selectedRowKeys: selectedIds ?? [],
+								preserveSelectedRowKeys: true,
+								onChange: (selectedRowKeys) => setSelectedIds(selectedRowKeys as (string | number)[]),
+								columnWidth: 40,
+								...props.detailRow,
+							}
 						: undefined
 				}
 				loading={loading}
