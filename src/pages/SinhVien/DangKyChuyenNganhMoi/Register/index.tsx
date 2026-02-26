@@ -11,8 +11,12 @@ const RegisterPage = () => {
 	const searchParams = new URLSearchParams(location.search);
 	const loai = searchParams.get('loai') || 'minor';
 	const isMinor = loai.toLowerCase() === 'minor';
-	const pageTitle = isMinor ? intl.formatMessage({ id: 'minor.register.title.minor' }) : intl.formatMessage({ id: 'minor.register.title.concentration' });
-	const { fetchPhieuDangKyHienTai, phieuDangKyTheoDot, fetchPhieuDangKyTheoDot } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
+	const pageTitle = isMinor
+		? intl.formatMessage({ id: 'minor.register.title.minor' })
+		: intl.formatMessage({ id: 'minor.register.title.concentration' });
+	const { fetchPhieuDangKyHienTai, phieuDangKyTheoDot, fetchPhieuDangKyTheoDot } = useModel(
+		'sinhvien.dangkychuyennganh.dangkychuyennganh',
+	);
 	const { record: dotDangKy, fetchDotDangKy } = useModel('daotao.dotdkctdt');
 	const { getModel } = useModel('daotao.nganhchuyennganh');
 	const shouldHideButton = !!phieuDangKyTheoDot && phieuDangKyTheoDot?.trangThai !== ETrangThaiDangKyChuyenNganh.NHAP;
@@ -35,11 +39,19 @@ const RegisterPage = () => {
 			<Card
 				variant='borderless'
 				className='card-big-title card-borderless'
-				extra={<Breadcrumb items={[
-					{ title: intl.formatMessage({ id: 'minor.breadcrumb.student' }) },
-					{ title: isMinor ? intl.formatMessage({ id: 'minor.breadcrumb.minor' }) : intl.formatMessage({ id: 'minor.breadcrumb.concentration' }), href: isMinor ? '/hoc-tap/khac#dang-ky-chuyen-nganh-hep' : '/hoc-tap/khac' },
-					{ title: pageTitle },
-				]} />
+				extra={
+					<Breadcrumb
+						items={[
+							{ title: intl.formatMessage({ id: 'minor.breadcrumb.student' }) },
+							{
+								title: isMinor
+									? intl.formatMessage({ id: 'minor.breadcrumb.minor' })
+									: intl.formatMessage({ id: 'minor.breadcrumb.concentration' }),
+								href: isMinor ? '/hoc-tap/khac#dang-ky-chuyen-nganh-hep' : '/hoc-tap/khac',
+							},
+							{ title: pageTitle },
+						]}
+					/>
 				}
 				title={pageTitle}
 			>
@@ -50,13 +62,10 @@ const RegisterPage = () => {
 						</Card>
 					</Col>
 					<Col span={24}>
-						<DanhSachChuyenNganhList
-							isMinor={isMinor}
-							hiddenButton={shouldHideButton}
-						/>
+						<DanhSachChuyenNganhList isMinor={isMinor} hiddenButton={shouldHideButton} />
 					</Col>
 				</Row>
-			</Card >
+			</Card>
 		</>
 	);
 };
