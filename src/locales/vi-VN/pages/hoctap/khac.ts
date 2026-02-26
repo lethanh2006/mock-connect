@@ -30,6 +30,9 @@ export default {
 	'hoctapkhac.xethocvu.lydo.tablecolumntitle': 'Lý do',
 	'hoctapkhac.xethocvu.trangThai.tablecolumntitle': 'Trạng thái',
 	'hoctapkhac.xethocvu.quyetdinh.tablecolumntitle': 'Quyết định',
+	'hoctapkhac.xethocvu.loaixuly.canhBaoHocTap': 'Cảnh báo học tập',
+	'hoctapkhac.xethocvu.loaixuly.buocThoiHoc': 'Buộc thôi học',
+	'hoctapkhac.xethocvu.loaixuly.thuThachHocTap': 'Thử thách học tập',
 
 	'hoctapkhac.baoluu.lichsubaoluu.title': 'Lịch sử bảo lưu',
 	'hoctapkhac.thoihoc.lichsuthoihoc.title': 'Lịch sử thôi học',
