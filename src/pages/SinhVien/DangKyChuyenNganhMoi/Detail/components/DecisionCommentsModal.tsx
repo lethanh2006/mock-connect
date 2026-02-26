@@ -25,7 +25,7 @@ const DecisionCommentsModal = (props: DecisionCommentsModalProps) => {
 			open={open}
 			onCancel={onCancel}
 			footer={[
-				<Button key="close" onClick={onCancel}>
+				<Button key='close' onClick={onCancel}>
 					{closeLabel}
 				</Button>,
 			]}
@@ -37,4 +37,3 @@ const DecisionCommentsModal = (props: DecisionCommentsModalProps) => {
 };
 
 export default DecisionCommentsModal;
-

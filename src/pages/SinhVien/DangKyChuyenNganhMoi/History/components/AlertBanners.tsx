@@ -3,7 +3,13 @@ import { CheckCircleOutlined, WarningOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Row } from 'antd';
 import { history, useIntl, useModel } from 'umi';
 
-const AlertBanners = ({ buttonRegister = false, type }: { buttonRegister?: boolean, type?: 'minor' | 'concentration' }) => {
+const AlertBanners = ({
+	buttonRegister = false,
+	type,
+}: {
+	buttonRegister?: boolean;
+	type?: 'minor' | 'concentration';
+}) => {
 	const intl = useIntl();
 	const { record: kyHienTai } = useModel('daotao.dotdkctdt');
 
@@ -17,14 +23,23 @@ const AlertBanners = ({ buttonRegister = false, type }: { buttonRegister?: boole
 								<span>
 									{kyHienTai?.thoiGianBatDau
 										? (() => {
-											const startDate = dayjs(kyHienTai.thoiGianBatDau).format('DD/MM/YYYY HH:mm');
-											const endDate = kyHienTai?.thoiGianKetThuc ? dayjs(kyHienTai.thoiGianKetThuc).format('DD/MM/YYYY HH:mm') : '-';
-											return type === 'minor'
-												? intl.formatMessage({ id: 'minor.alert.registrationRange.minor' }, { startDate, endDate })
-												: intl.formatMessage({ id: 'minor.alert.registrationRange.concentration' }, { startDate, endDate });
-										})()
-										: intl.formatMessage({ id: type === 'minor' ? 'minor.alert.registrationNotOpen.minor' : 'minor.alert.registrationNotOpen.concentration' })
-									}
+												const startDate = dayjs(kyHienTai.thoiGianBatDau).format('DD/MM/YYYY HH:mm');
+												const endDate = kyHienTai?.thoiGianKetThuc
+													? dayjs(kyHienTai.thoiGianKetThuc).format('DD/MM/YYYY HH:mm')
+													: '-';
+												return type === 'minor'
+													? intl.formatMessage({ id: 'minor.alert.registrationRange.minor' }, { startDate, endDate })
+													: intl.formatMessage(
+															{ id: 'minor.alert.registrationRange.concentration' },
+															{ startDate, endDate },
+														);
+											})()
+										: intl.formatMessage({
+												id:
+													type === 'minor'
+														? 'minor.alert.registrationNotOpen.minor'
+														: 'minor.alert.registrationNotOpen.concentration',
+											})}
 								</span>
 							</Col>
 							{buttonRegister && (
@@ -35,7 +50,9 @@ const AlertBanners = ({ buttonRegister = false, type }: { buttonRegister?: boole
 												type='primary'
 												onClick={() => history.push(`/hoc-tap/dang-ky-chuyen-nganh/register?loai=${type}`)}
 											>
-												{type === 'minor' ? intl.formatMessage({ id: 'minor.button.registerMinor' }) : intl.formatMessage({ id: 'minor.button.registerConcentration' })}
+												{type === 'minor'
+													? intl.formatMessage({ id: 'minor.button.registerMinor' })
+													: intl.formatMessage({ id: 'minor.button.registerConcentration' })}
 											</Button>
 										</Col>
 									</Row>

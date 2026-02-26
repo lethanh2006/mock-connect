@@ -163,7 +163,7 @@ export default [
 					{
 						name: 'DangKyChuyenNganhBuild',
 						path: 'register/build',
-						component: 'SinhVien/DangKyChuyenNganhMoi/Build',
+						component: 'SinhVien/DangKyChuyenNganhMoi/CustomBuild',
 						hideInMenu: true,
 						exact: true,
 					},

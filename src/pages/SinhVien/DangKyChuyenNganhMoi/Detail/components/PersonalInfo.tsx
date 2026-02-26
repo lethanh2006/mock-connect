@@ -5,7 +5,7 @@ import { useIntl } from 'umi';
 
 const PersonalInfo = () => {
 	const intl = useIntl();
-	const { record: phieuDkCtdtMe } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh')
+	const { record: phieuDkCtdtMe } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
 	return (
 		<div>
 			<Divider orientation='left' className='divider-big-title' style={{ marginTop: 0 }} dashed>
@@ -17,9 +17,7 @@ const PersonalInfo = () => {
 						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.studentSsoId' })}>
 							{phieuDkCtdtMe?.sinhVienSsoId || '-'}
 						</Descriptions.Item>
-						<Descriptions.Item label="GPA">
-							{phieuDkCtdtMe?.gpa?.toFixed(2) || '-'}
-						</Descriptions.Item>
+						<Descriptions.Item label='GPA'>{phieuDkCtdtMe?.gpa?.toFixed(2) || '-'}</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.major' })}>
 							{phieuDkCtdtMe?.nganh || '-'}
 						</Descriptions.Item>
@@ -39,18 +37,14 @@ const PersonalInfo = () => {
 						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.major' })}>
 							{phieuDkCtdtMe?.nganh || '-'}
 						</Descriptions.Item>
-						<Descriptions.Item label="Lớp">
-							{phieuDkCtdtMe?.lop || '-'}
-						</Descriptions.Item>
+						<Descriptions.Item label='Lớp'>{phieuDkCtdtMe?.lop || '-'}</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.dateOfBirth' })}>
 							{dayjs(phieuDkCtdtMe?.ngaySinh).format('DD/MM/YYYY') || '-'}
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.gender' })}>
 							{phieuDkCtdtMe?.gioiTinh || '-'}
 						</Descriptions.Item>
-						<Descriptions.Item label="Email">
-							{phieuDkCtdtMe?.email || '-'}
-						</Descriptions.Item>
+						<Descriptions.Item label='Email'>{phieuDkCtdtMe?.email || '-'}</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.phoneNumber' })}>
 							{phieuDkCtdtMe?.soDienThoai || '-'}
 						</Descriptions.Item>
