@@ -5,7 +5,7 @@ import { CloseOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Card, Col, Descriptions, Divider, Row, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useLocation, useModel, useNavigate, useParams } from 'umi';
-import ProgramDesignTable from '../Build/components/ProgramDesignTable';
+import ProgramDesignTable from '../CustomBuild/components/ProgramDesignTable';
 import DecisionCommentsModal from './components/DecisionCommentsModal';
 import PersonalInfo from './components/PersonalInfo';
 import ProcessSidebar from './components/ProcessSidebar';
@@ -18,7 +18,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 	const loai = searchParams.get('loai') || 'minor';
 	const isMinor = loai.toLowerCase() === 'minor';
 
-	const { fetchChiTietPhieuDangKy, record: phieuDkCtdtMe } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh')
+	const { fetchChiTietPhieuDangKy, record: phieuDkCtdtMe } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
 	const navigate = useNavigate();
 	const [currentStep, setCurrentStep] = useState(0);
 	const [visibleViewCommentModal, setVisibleViewCommentModal] = useState(false);
@@ -58,20 +58,23 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 		<>
 			<Card
 				className='card-borderless card-big-title'
-				title={isMinor ? intl.formatMessage({ id: 'minor.detail.title.minor' }) : intl.formatMessage({ id: 'minor.detail.title.concentration' })}
+				title={
+					isMinor
+						? intl.formatMessage({ id: 'minor.detail.title.minor' })
+						: intl.formatMessage({ id: 'minor.detail.title.concentration' })
+				}
 				extra={
 					<Breadcrumb>
-						<Breadcrumb.Item>
-							{intl.formatMessage({ id: 'minor.breadcrumb.student' })}
-						</Breadcrumb.Item>
+						<Breadcrumb.Item>{intl.formatMessage({ id: 'minor.breadcrumb.student' })}</Breadcrumb.Item>
 						<Breadcrumb.Item href={isMinor ? '/hoc-tap/khac#dang-ky-chuyen-nganh-hep' : '/hoc-tap/khac'}>
-							{isMinor ? intl.formatMessage({ id: 'minor.breadcrumb.minor' }) : intl.formatMessage({ id: 'minor.breadcrumb.concentration' })}
+							{isMinor
+								? intl.formatMessage({ id: 'minor.breadcrumb.minor' })
+								: intl.formatMessage({ id: 'minor.breadcrumb.concentration' })}
 						</Breadcrumb.Item>
 						<Breadcrumb.Item>{intl.formatMessage({ id: 'minor.breadcrumb.detail' })}</Breadcrumb.Item>
 					</Breadcrumb>
 				}
-			>
-			</Card>
+			></Card>
 			<Row gutter={16}>
 				<Col span={6}>
 					<ProcessSidebar
@@ -133,18 +136,12 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 										{intl.formatMessage({ id: 'minor.idm.programDesign.title' })}
 									</Divider>
 
-									<ProgramDesignTable
-										data={phieuDkCtdtMe?.khoiHpCtList || []}
-										hideActions
-									/>
+									<ProgramDesignTable data={phieuDkCtdtMe?.khoiHpCtList || []} hideActions />
 								</div>
 							)}
 							{phieuDkCtdtMe?.trangThai === ETrangThaiDangKyChuyenNganh.NHAP && (
 								<div className='form-footer'>
-									<Button
-										icon={<CloseOutlined />}
-										onClick={handleEdit}
-									>
+									<Button icon={<CloseOutlined />} onClick={handleEdit}>
 										{intl.formatMessage({ id: 'minor.detail.edit' })}
 									</Button>
 								</div>
@@ -152,7 +149,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 						</Space>
 					</Card>
 				</Col>
-			</Row >
+			</Row>
 
 			<DecisionCommentsModal
 				open={visibleViewCommentModal}
