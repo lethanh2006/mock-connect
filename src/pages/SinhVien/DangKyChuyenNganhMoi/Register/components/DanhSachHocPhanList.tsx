@@ -22,7 +22,11 @@ interface DanhSachHocPhanListProps {
 
 const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }: DanhSachHocPhanListProps) => {
 	const intl = useIntl();
-	const { submitPhieuDangKy, formSubmiting: loadingSubmit, record: phieuDangKyHienTai } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
+	const {
+		submitPhieuDangKy,
+		formSubmiting: loadingSubmit,
+		record: phieuDangKyHienTai,
+	} = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
 	const { danhSach, loading } = useModel('daotao.khoihpctnganh');
 	const [visibleDeCuong, setVisibleDeCuong] = useState(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
@@ -30,7 +34,10 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 	const minor = danhSach.find((item) => item.ma === choosenMinor);
 	const effectiveKhoiHpCtList = useMemo(() => minor?.hocPhanCtdtList ?? [], [minor?.hocPhanCtdtList]);
 
-	const { compulsory, electiveGroups } = useMemo((): { compulsory: ChuongTrinhDaoTao.IKhoiHpCt[]; electiveGroups: ChuongTrinhDaoTao.IKhoiHpCt[] } => {
+	const { compulsory, electiveGroups } = useMemo((): {
+		compulsory: ChuongTrinhDaoTao.IKhoiHpCt[];
+		electiveGroups: ChuongTrinhDaoTao.IKhoiHpCt[];
+	} => {
 		const raw = [...effectiveKhoiHpCtList].sort((a, b) => (a.soThuTuKy ?? 0) - (b.soThuTuKy ?? 0));
 		const compRaw: Row[] = [];
 		const electiveGroupsList: ChuongTrinhDaoTao.IKhoiHpCt[] = [];
@@ -109,19 +116,20 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 		return list;
 	}, [compulsory, electiveGroups, intl]);
 
-	const rowSelection: TableRowSelection<Row> | undefined = hiddenButton || !isMinor
-		? undefined
-		: {
-			type: 'checkbox',
-			selectedRowKeys: selectedElectiveRows.map((row) => row._id ?? row.maHocPhan ?? ''),
-			preserveSelectedRowKeys: true,
-			onChange: (_: React.Key[], rows: Row[]) =>
-				setSelectedElectiveRows(rows.filter((r) => !isGroupRow(r) && !isCompulsory(r))),
-			columnWidth: 48,
-			hideSelectAll: true,
-			renderCell: (checked, record, _index, originNode) =>
-				isGroupRow(record) || isCompulsory(record) ? null : originNode,
-		};
+	const rowSelection: TableRowSelection<Row> | undefined =
+		hiddenButton || !isMinor
+			? undefined
+			: {
+					type: 'checkbox',
+					selectedRowKeys: selectedElectiveRows.map((row) => row._id ?? row.maHocPhan ?? ''),
+					preserveSelectedRowKeys: true,
+					onChange: (_: React.Key[], rows: Row[]) =>
+						setSelectedElectiveRows(rows.filter((r) => !isGroupRow(r) && !isCompulsory(r))),
+					columnWidth: 48,
+					hideSelectAll: true,
+					renderCell: (checked, record, _index, originNode) =>
+						isGroupRow(record) || isCompulsory(record) ? null : originNode,
+				};
 
 	const handleXemDeCuong = (record: Row) => {
 		setDeCuongModal({
@@ -143,7 +151,16 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 			dataIndex: 'maHocPhan',
 			render: (_, rec) => {
 				const code = rec.hocPhan?.ma ?? rec.maHocPhan ?? '-';
-				return <a onClick={(e) => { e.stopPropagation(); handleXemDeCuong(rec); }}>{code}</a>;
+				return (
+					<a
+						onClick={(e) => {
+							e.stopPropagation();
+							handleXemDeCuong(rec);
+						}}
+					>
+						{code}
+					</a>
+				);
 			},
 			onCell,
 		},
@@ -182,7 +199,13 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 			title: intl.formatMessage({ id: 'minor.course.prerequisiteList' }),
 			dataIndex: 'dsHocPhanTienQuyet',
 			width: 200,
-			render: (val: any) => (Array.isArray(val) ? val.map((item: any) => item?.ma).filter(Boolean).join(', ') : ''),
+			render: (val: any) =>
+				Array.isArray(val)
+					? val
+							.map((item: any) => item?.ma)
+							.filter(Boolean)
+							.join(', ')
+					: '',
 			onCell,
 		},
 	];
@@ -196,7 +219,7 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 		},
 		...columns.map((col) => ({
 			...col,
-			onCell: (rec: Row) => (isGroupRow(rec) ? { colSpan: 0 } : col.onCell?.(rec) ?? {}),
+			onCell: (rec: Row) => (isGroupRow(rec) ? { colSpan: 0 } : (col.onCell?.(rec) ?? {})),
 		})),
 	];
 
@@ -221,7 +244,7 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 						onRow: (r: Row) => (isGroupRow(r) ? { style: { background: 'var(--color-info-bg)' } } : {}),
 					}}
 				/>
-				{(minor?.ma && !hiddenButton) && (
+				{minor?.ma && !hiddenButton && (
 					<div className='form-footer'>
 						<Popconfirm
 							title={intl.formatMessage({ id: 'minor.popconfirm.title' })}
@@ -245,12 +268,13 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 										},
 										onSuccess,
 									);
-								} catch {
-								}
+								} catch {}
 							}}
 						>
 							<Button type='primary' loading={loadingSubmit} disabled={loading || !minor?.ma}>
-								{isMinor ? intl.formatMessage({ id: 'minor.button.registerMinor' }) : intl.formatMessage({ id: 'minor.button.registerConcentration' })}
+								{isMinor
+									? intl.formatMessage({ id: 'minor.button.registerMinor' })
+									: intl.formatMessage({ id: 'minor.button.registerConcentration' })}
 							</Button>
 						</Popconfirm>
 					</div>

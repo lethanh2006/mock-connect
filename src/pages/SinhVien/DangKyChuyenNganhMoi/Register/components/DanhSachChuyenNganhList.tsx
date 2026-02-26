@@ -16,7 +16,14 @@ const DanhSachChuyenNganhList = ({ isMinor, hiddenButton }: { isMinor: boolean; 
 	const { getModel, danhSach, loading } = useModel('daotao.nganhchuyennganh');
 	const { getAllModel } = useModel('daotao.khoihpctnganh');
 
-	const getDataKhoiHocPhan = () => getAllModel(undefined, undefined, undefined, undefined, isMinor ? `${choosenMinor}/many` : `${choosenMinor}/ctdt/many`);
+	const getDataKhoiHocPhan = () =>
+		getAllModel(
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			isMinor ? `${choosenMinor}/many` : `${choosenMinor}/ctdt/many`,
+		);
 
 	const [choosenMinor, setChoosenMinor] = useState<string>('');
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
@@ -40,11 +47,24 @@ const DanhSachChuyenNganhList = ({ isMinor, hiddenButton }: { isMinor: boolean; 
 		}
 	}, [choosenMinor]);
 
-	const getData = () => getModel(undefined, undefined, undefined, undefined, undefined, isMinor ? 'phu/page' : 'me/page');
+	const getData = () =>
+		getModel(undefined, undefined, undefined, undefined, undefined, isMinor ? 'phu/page' : 'me/page');
 
 	const columns: IColumn<ChuongTrinhDaoTao.IChuyenNganhMe>[] = [
-		{ title: intl.formatMessage({ id: 'minor.table.ma' }), dataIndex: 'ma', key: 'ma', filterType: 'string', width: 100 },
-		{ title: intl.formatMessage({ id: 'minor.table.ten' }), dataIndex: 'ten', key: 'ten', filterType: 'string', width: 220 },
+		{
+			title: intl.formatMessage({ id: 'minor.table.ma' }),
+			dataIndex: 'ma',
+			key: 'ma',
+			filterType: 'string',
+			width: 100,
+		},
+		{
+			title: intl.formatMessage({ id: 'minor.table.ten' }),
+			dataIndex: 'ten',
+			key: 'ten',
+			filterType: 'string',
+			width: 220,
+		},
 		{
 			title: intl.formatMessage({ id: 'minor.table.donVi' }),
 			dataIndex: 'maDonVi',
@@ -77,10 +97,14 @@ const DanhSachChuyenNganhList = ({ isMinor, hiddenButton }: { isMinor: boolean; 
 					<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
 						<Pane initialSize={paneSize} minSize='35%' style={{ width: '100%', height: 'fit-content !important' }}>
 							<Card
-								title={isMinor ? intl.formatMessage({ id: 'minor.major.recommended.minor' }) : intl.formatMessage({ id: 'minor.major.recommended.concentration' })}
+								title={
+									isMinor
+										? intl.formatMessage({ id: 'minor.major.recommended.minor' })
+										: intl.formatMessage({ id: 'minor.major.recommended.concentration' })
+								}
 							>
 								<TableBase
-									modelName="daotao.nganhchuyennganh"
+									modelName='daotao.nganhchuyennganh'
 									getData={getData}
 									formProps={{ getData }}
 									dependencies={[isMinor]}
@@ -97,14 +121,20 @@ const DanhSachChuyenNganhList = ({ isMinor, hiddenButton }: { isMinor: boolean; 
 										hiddenButton || !cctFilter?.()
 											? []
 											: [
-												<Button
-													key="build"
-													type="primary"
-													onClick={() => history.push(`/hoc-tap/dang-ky-chuyen-nganh/register/build?loai=${isMinor ? 'minor' : 'concentration'}`)}
-												>
-													{isMinor ? intl.formatMessage({ id: 'minor.build.button.minor' }) : intl.formatMessage({ id: 'minor.build.button.concentration' })}
-												</Button>,
-											]
+													<Button
+														key='build'
+														type='primary'
+														onClick={() =>
+															history.push(
+																`/hoc-tap/dang-ky-chuyen-nganh/register/build?loai=${isMinor ? 'minor' : 'concentration'}`,
+															)
+														}
+													>
+														{isMinor
+															? intl.formatMessage({ id: 'minor.build.button.minor' })
+															: intl.formatMessage({ id: 'minor.build.button.concentration' })}
+													</Button>,
+												]
 									}
 									otherProps={{
 										loading,

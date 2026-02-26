@@ -19,17 +19,19 @@ import StudentInfoCard from './components/StudentInfoCard';
 
 const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) => {
 	const intl = useIntl();
-	const { phieuDangKyTheoDot, getModel, page, limit, fetchPhieuDangKyTheoDot } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
+	const { phieuDangKyTheoDot, getModel, page, limit, fetchPhieuDangKyTheoDot } = useModel(
+		'sinhvien.dangkychuyennganh.dangkychuyennganh',
+	);
 	const { record: dotDangKy, fetchDotDangKy } = useModel('daotao.dotdkctdt');
 	const [minorListModalOpen, setMinorListModalOpen] = useState(false);
 
 	const getData = () => {
 		const filterParams: TFilter<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto>[] = [
 			{
-				field: ["dot", "loaiCtdt"],
+				field: ['dot', 'loaiCtdt'],
 				operator: EOperatorType.EQUAL,
-				values: [type]
-			}
+				values: [type],
+			},
 		];
 		return getModel(undefined, filterParams, undefined, undefined, undefined, 'me/page');
 	};
@@ -114,7 +116,9 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 		<>
 			<div style={{ marginBottom: 8 }}>
 				<AlertBanners
-					buttonRegister={!!dotDangKy && (!phieuDangKyTheoDot || phieuDangKyTheoDot?.trangThai === ETrangThaiDangKyChuyenNganh.NHAP)}
+					buttonRegister={
+						!!dotDangKy && (!phieuDangKyTheoDot || phieuDangKyTheoDot?.trangThai === ETrangThaiDangKyChuyenNganh.NHAP)
+					}
 					type={type}
 				/>
 			</div>
@@ -129,12 +133,23 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 				modelName='sinhvien.dangkychuyennganh.dangkychuyennganh'
 				formProps={{ getData }}
 				hideCard
-				otherButtons={[<Button onClick={() => setMinorListModalOpen(true)} key='dangky'> {type === 'minor' ? intl.formatMessage({ id: 'minor.history.viewListMinor' }) : intl.formatMessage({ id: 'minor.history.viewListConcentration' })}</Button>]}
+				otherButtons={[
+					<Button onClick={() => setMinorListModalOpen(true)} key='dangky'>
+						{' '}
+						{type === 'minor'
+							? intl.formatMessage({ id: 'minor.history.viewListMinor' })
+							: intl.formatMessage({ id: 'minor.history.viewListConcentration' })}
+					</Button>,
+				]}
 				buttons={{ create: false }}
 			/>
 
 			<Modal
-				title={type === 'minor' ? intl.formatMessage({ id: 'minor.title.minor' }) : intl.formatMessage({ id: 'minor.title.concentration' })}
+				title={
+					type === 'minor'
+						? intl.formatMessage({ id: 'minor.title.minor' })
+						: intl.formatMessage({ id: 'minor.title.concentration' })
+				}
 				open={minorListModalOpen}
 				onCancel={() => setMinorListModalOpen(false)}
 				footer={null}

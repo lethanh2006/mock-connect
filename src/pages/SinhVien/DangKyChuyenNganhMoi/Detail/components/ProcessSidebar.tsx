@@ -1,4 +1,8 @@
-import { colorTrangThaiDangKyChuyenNganh, ETrangThaiDangKyChuyenNganh, trangThaiDangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/constant';
+import {
+	colorTrangThaiDangKyChuyenNganh,
+	ETrangThaiDangKyChuyenNganh,
+	trangThaiDangKyChuyenNganh,
+} from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import { useModel } from '@umijs/max';
@@ -25,7 +29,9 @@ const ProcessStepsSidebar = ({
 
 	const processSteps = useMemo(() => {
 		const isPersonal = phieuDkCtdtMe?.loai === ELoaiPhieuDkCtdt.PERSONAL;
-		const isFinal = [ETrangThaiDangKyChuyenNganh.DA_DUYET, ETrangThaiDangKyChuyenNganh.KHONG_DUYET].includes(phieuDkCtdtMe?.trangThai as any);
+		const isFinal = [ETrangThaiDangKyChuyenNganh.DA_DUYET, ETrangThaiDangKyChuyenNganh.KHONG_DUYET].includes(
+			phieuDkCtdtMe?.trangThai as any,
+		);
 		const getStepStatus = (s?: ETrangThaiDangKyChuyenNganh) => (isFinal ? phieuDkCtdtMe?.trangThai : s);
 
 		const steps: {
@@ -78,13 +84,17 @@ const ProcessStepsSidebar = ({
 					)
 				}
 			>
-				<Steps direction="vertical" current={currentStep} onChange={onStepChange} size="small">
+				<Steps direction='vertical' current={currentStep} onChange={onStepChange} size='small'>
 					{processSteps.map((step, index) => {
 						let antStatus: 'wait' | 'process' | 'finish' | 'error' = 'wait';
 						if (lastApproveIdx !== -1 && index <= lastApproveIdx) antStatus = 'finish';
 						else if (step.status === ETrangThaiDangKyChuyenNganh.DA_DUYET) antStatus = 'finish';
 						else if (step.status === ETrangThaiDangKyChuyenNganh.CHO_DUYET) antStatus = 'process';
-						else if (step.status === ETrangThaiDangKyChuyenNganh.KHONG_DUYET || step.status === ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA) antStatus = 'error';
+						else if (
+							step.status === ETrangThaiDangKyChuyenNganh.KHONG_DUYET ||
+							step.status === ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA
+						)
+							antStatus = 'error';
 
 						return (
 							<Steps.Step
@@ -92,12 +102,12 @@ const ProcessStepsSidebar = ({
 								title={step.title}
 								status={antStatus}
 								description={
-									<Space direction="vertical">
+									<Space direction='vertical'>
 										<Tag color={colorTrangThaiDangKyChuyenNganh[step.status as ETrangThaiDangKyChuyenNganh]}>
 											{trangThaiDangKyChuyenNganh[step.status as ETrangThaiDangKyChuyenNganh]}
 										</Tag>
 										{step.comment && onViewComments && (
-											<Button type="primary" size="small" onClick={() => onViewComments(step.commentType)}>
+											<Button type='primary' size='small' onClick={() => onViewComments(step.commentType)}>
 												{intl.formatMessage({ id: 'minor.idm.detail.process.viewComments' })}
 											</Button>
 										)}
