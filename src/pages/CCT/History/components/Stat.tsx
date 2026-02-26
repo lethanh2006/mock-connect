@@ -16,17 +16,26 @@ const StatActivityOutCome = (props: { getData: () => void; dependency?: any }) =
 		getData();
 	}, [dependency]);
 
-	const filterTrangThai = (workflow: EApprovalStatus | 'all') => {
+	const filterTrangThai = (workflow: EApprovalStatus | EApprovalStatus[] | 'all') => {
 		const temp = [...(filters ?? [])].filter((item) => item.field !== 'workflow');
-		if (workflow !== 'all')
-			temp?.push({
+
+		if (workflow !== 'all') {
+			temp.push({
 				active: true,
 				field: 'workflow',
-				values: [workflow],
+				values: Array.isArray(workflow) ? workflow : [workflow],
 				operator: EOperatorType.INCLUDE,
 			});
+		}
+
 		setFilters(temp);
 	};
+
+	const ACTION_REQUIRED_STATUSES = [
+		EApprovalStatus.EVIDENCE_REQUIRED,
+		EApprovalStatus.CHANGES_REQUIRED,
+		EApprovalStatus.DRAFT,
+	];
 
 	const statisticsData: StatisticsItem[] = [
 		{
@@ -37,10 +46,14 @@ const StatActivityOutCome = (props: { getData: () => void; dependency?: any }) =
 		},
 		{
 			title: 'Action Required',
-			value: inputFormat(dataThongKe?.changesRequired ?? 0),
+			value: inputFormat(
+				(dataThongKe?.evidenceRequired ?? 0) + (dataThongKe?.changesRequired ?? 0) + (dataThongKe?.draft ?? 0),
+			),
 			valueColor: '#CE7C1E',
-			onClick: () => filterTrangThai(EApprovalStatus.CHANGES_REQUIRED),
-			selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.CHANGES_REQUIRED,
+			onClick: () => filterTrangThai(ACTION_REQUIRED_STATUSES),
+			selected:
+				valueFiltered?.length === ACTION_REQUIRED_STATUSES.length &&
+				ACTION_REQUIRED_STATUSES.every((s) => valueFiltered.includes(s)),
 		},
 		{
 			title: 'Pending For Approval',
@@ -64,11 +77,11 @@ const StatActivityOutCome = (props: { getData: () => void; dependency?: any }) =
 			selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.REJECTED,
 		},
 		{
-			title: 'Draft',
-			value: inputFormat(dataThongKe?.draft ?? 0),
-			valueColor: '#134D8B',
-			onClick: () => filterTrangThai(EApprovalStatus.DRAFT),
-			selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.DRAFT,
+			title: 'Expired',
+			value: inputFormat(dataThongKe?.expired ?? 0),
+			valueColor: '#0E50CF',
+			onClick: () => filterTrangThai(EApprovalStatus.EXPIRED),
+			selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.EXPIRED,
 		},
 	];
 

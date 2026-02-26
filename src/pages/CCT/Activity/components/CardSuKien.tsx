@@ -1,5 +1,10 @@
 import { Activity } from '@/services/CCT/Activity/typing';
-import { EApprovalStatus, mapColorApprovalStatus, mapNameApprovalStatus } from '@/services/CCT/constant';
+import {
+	EApprovalStatus,
+	mapColorApprovalStatus,
+	mapColorTextApprovalStatus,
+	mapNameApprovalStatus,
+} from '@/services/CCT/constant';
 import { ClockCircleOutlined, EnvironmentOutlined, HourglassOutlined, UserOutlined } from '@ant-design/icons';
 import { Card, Flex, Image, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
@@ -13,19 +18,41 @@ const CardSuKienCCT = (props: {
 	equivalencyAttributeIds: string[];
 	onClick?: () => void;
 	button?: JSX.Element;
+
 	isOutOfTime?: boolean;
-	isCompleted?: boolean;
+	isExpiringSoon?: boolean;
+
 	isDetail?: boolean;
 	isPersonal?: boolean;
+
+	activeKey?: string;
 }) => {
 	const { danhSach: dsAttribute } = useModel('cct.attributes');
-	const { record, equivalencyAttributeIds, onClick, button, isOutOfTime, isCompleted, isDetail, isPersonal } = props;
+	const {
+		record,
+		equivalencyAttributeIds,
+		onClick,
+		button,
+		isOutOfTime,
+		isExpiringSoon,
+		isDetail,
+		isPersonal,
+		activeKey,
+	} = props;
 
 	const now = dayjs();
-	const isNew = record?.startDate && now.isBefore(dayjs(record.startDate).add(3, 'day'));
-	const endDate = record?.endDate ? dayjs(record.endDate) : null;
+	const isNew = record?.createdAt && now.isBefore(dayjs(record.createdAt).add(3, 'day'));
+	const endDate = record?.dueDateRegistration
+		? dayjs(record.dueDateRegistration)
+		: record?.endDate
+			? dayjs(record.endDate)
+			: null;
 
-	const isExpiringSoon = endDate && endDate.isAfter(now) && endDate.diff(now, 'day', true) <= 3;
+	const endDateUpdateEvidence = record?.allowPostEventResultsUpdate
+		? dayjs(record.dueDate)
+		: record?.endDate
+			? dayjs(record.endDate)
+			: null;
 
 	const remainingText = (() => {
 		if (!endDate || !endDate.isAfter(now)) return null;
@@ -41,12 +68,17 @@ const CardSuKienCCT = (props: {
 		return `${remainingHours} hour${remainingHours > 1 ? 's' : ''}`;
 	})();
 
+	const editableWorkflow =
+		record?.workflow === EApprovalStatus.DRAFT ||
+		record?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+		record?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+
+	const outTime = isOutOfTime && activeKey !== '3';
+
 	return (
 		<Card
 			hoverable={!!onClick}
-			className={`activity-card ${isOutOfTime ? 'activity-disabled' : ''} ${
-				isExpiringSoon && remainingText && !isCompleted && !isDetail ? 'activity-expiring' : ''
-			}`}
+			className={`activity-card ${outTime ? 'activity-disabled' : ''} ${isExpiringSoon && !record?.workflow ? 'activity-expiring' : ''}`}
 			cover={
 				<div className='activity-cover'>
 					{isDetail ? (
@@ -55,7 +87,7 @@ const CardSuKienCCT = (props: {
 						<img src={record?.banner ?? '/images/cct/background.png'} alt={record?.name} className='activity-image' />
 					)}
 
-					{isNew && <div className='new'>New</div>}
+					{activeKey === '1' && isNew && <div className='new'>New</div>}
 				</div>
 			}
 			onClick={onClick}
@@ -72,14 +104,17 @@ const CardSuKienCCT = (props: {
 							{dsAttribute?.map((lv, idx) => {
 								const isActive = equivalencyAttributeIds?.includes(lv?._id);
 								return (
-									<span key={idx} className={`level-item ${isActive ? 'active' : ''} ${isOutOfTime ? 'disabled' : ''}`}>
+									<span key={idx} className={`level-item ${isActive ? 'active' : ''} ${outTime ? 'disabled' : ''}`}>
 										{lv?.code}
 									</span>
 								);
 							})}
 						</div>
 
-						<Tag color={mapColorApprovalStatus[record?.workflow as EApprovalStatus]}>
+						<Tag
+							color={mapColorApprovalStatus[record?.workflow as EApprovalStatus]}
+							style={{ color: mapColorTextApprovalStatus[record?.workflow as EApprovalStatus], fontWeight: 600 }}
+						>
 							{mapNameApprovalStatus[record?.workflow as EApprovalStatus]}
 						</Tag>
 					</Flex>
@@ -100,51 +135,58 @@ const CardSuKienCCT = (props: {
 					</Space>
 
 					{isPersonal ? (
-						<Space size='small'>
-							<UserOutlined className='icon-light' />
-							<span className={`${!isDetail ? 'one-line' : ''}`}>Approver: {record?.supervisorName}</span>
-						</Space>
-					) : isCompleted ? (
-						<>
-							<Space size='small'>
-								<UserOutlined className='icon-light' />
-								<span className={`${!isDetail ? 'one-line' : ''}`}>
-									Approver:{' '}
-									{record?.studentDeclarationApproverList
-										?.map((item) => item?.name)
-										.filter(Boolean)
-										.join(', ')}
-								</span>
-							</Space>
-
-							<Space size='small'>
-								<HourglassOutlined className='icon-light' />
-								<span className={`text-danger ${!isDetail ? 'one-line' : ''}`}>
-									Evidence update before{' '}
-									{record?.allowPostEventResultsUpdate
-										? record?.dueDate && dayjs(record.dueDate).format('HH:mm DD/MM/YYYY')
-										: record?.endDate && dayjs(record.endDate).format('HH:mm DD/MM/YYYY')}
-								</span>
-							</Space>
-						</>
-					) : (
-						<>
+						isDetail ? (
 							<Space size='small'>
 								<EnvironmentOutlined className='icon-light' />
 								<span className={`${!isDetail ? 'one-line' : ''}`}>
-									{record?.onCampus ? record?.facilityName : record?.otherAddress}
+									{[record?.organizer, record?.location].filter(Boolean).join(', ') || '--'}
 								</span>
 							</Space>
+						) : (
+							<Space size='small'>
+								<UserOutlined className='icon-light' />
+								<span className={`${!isDetail ? 'one-line' : ''}`}>
+									Approver: {record?.studentDeclarationApproverName}
+								</span>
+							</Space>
+						)
+					) : (
+						<>
+							{!record?.workflow || !!isDetail ? (
+								<Space size='small'>
+									<EnvironmentOutlined className='icon-light' />
+									<span className={`${!isDetail ? 'one-line' : ''}`}>
+										{record?.onCampus ? record?.facilityName : record?.otherAddress}
+									</span>
+								</Space>
+							) : (
+								<Space size='small'>
+									<UserOutlined className='icon-light' />
+									<span className={`${!isDetail ? 'one-line' : ''}`}>
+										Approver:{' '}
+										{record?.studentDeclarationApproverList
+											?.map((item) => item?.name)
+											.filter(Boolean)
+											.join(', ')}
+									</span>
+								</Space>
+							)}
 
 							<Space size='small'>
 								<HourglassOutlined className='icon-light' />
 
-								{isOutOfTime ? (
-									<div className='text-danger one-line'>Registration is no longer valid</div>
-								) : isExpiringSoon && remainingText ? (
-									<span className='text-warning one-line'>Remaining time: {remainingText}</span>
+								{isOutOfTime && !record?.workflow ? (
+									<div className={`text-danger ${!isDetail ? 'one-line' : ''}`}>Registration is no longer valid</div>
+								) : isExpiringSoon && !record?.workflow ? (
+									<span className={`text-warning ${!isDetail ? 'one-line' : ''}`}>Remaining time: {remainingText}</span>
+								) : !!record?.workflow && !isDetail ? (
+									<span className={`${editableWorkflow ? 'text-danger' : ''} ${!isDetail ? 'one-line' : ''}`}>
+										Evidence update before {endDateUpdateEvidence && endDateUpdateEvidence.format('HH:mm DD/MM/YYYY')}
+									</span>
 								) : (
-									<span className='one-line'>Register before {endDate && endDate.format('HH:mm DD/MM/YYYY')}</span>
+									<span className={`${!isDetail ? 'one-line' : ''}`}>
+										Register before {endDate && endDate.format('HH:mm DD/MM/YYYY')}
+									</span>
 								)}
 							</Space>
 						</>

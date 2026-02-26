@@ -1,18 +1,30 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { Activity } from '@/services/CCT/Activity/typing';
+import { EApprovalStatus } from '@/services/CCT/constant';
 import { Modal, Popconfirm, Space } from 'antd';
+import dayjs from 'dayjs';
 import { useIntl, useModel } from 'umi';
 import CardChiTietSuKien from './components/CardChiTietSuKien';
 
-const ChiTietActivity = (props: {
-	getData?: () => void;
-	setVisibleDangKy?: (val: boolean) => void;
-	activeKey?: string;
-}) => {
-	const { getData, setVisibleDangKy, activeKey } = props;
+const ChiTietActivity = (props: { getData?: () => void; setVisibleDangKy?: (val: boolean) => void }) => {
+	const { getData, setVisibleDangKy } = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, registerActivityModel } = useModel('cct.activity');
-	const { deleteActivityModel } = useModel('cct.activityoutcome');
+	const { deleteActivityModel, handleEdit } = useModel('cct.activityoutcome');
+
+	const isInTimeRange = () => {
+		const now = dayjs();
+		const start = dayjs(record?.startDate);
+		const end = dayjs(record?.endDate);
+
+		if (!start.isValid() || !end.isValid()) return false;
+
+		return now.isBetween(start, end, null, '[]');
+	};
+
+	const editableWorkflow =
+		record?.workflow === EApprovalStatus.DRAFT ||
+		record?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+		record?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
 
 	return (
 		<Modal
@@ -27,7 +39,25 @@ const ChiTietActivity = (props: {
 			}}
 		>
 			<div style={{ marginTop: -12 }}>
-				<CardChiTietSuKien record={record ?? ({} as Activity.IRecord)} activeKey={activeKey} />
+				<CardChiTietSuKien
+					record={
+						{
+							...record,
+							workflow: record?.activityOutcome?.workflow,
+							validation: record?.activityOutcome?.validation,
+
+							rolesId: record?.activityOutcome?.rolesId,
+							tracks: record?.activityOutcome?.tracks,
+							levels: record?.activityOutcome?.levels,
+
+							evidenceFile: record?.activityOutcome?.evidenceFile,
+
+							reflection: record?.activityOutcome?.reflection,
+							revisionNote: record?.activityOutcome?.revisionNote,
+						} as any
+					}
+					infoEvidence={!!record?.workflow && record?.workflow !== EApprovalStatus.EVIDENCE_REQUIRED}
+				/>
 			</div>
 
 			<div
@@ -40,7 +70,7 @@ const ChiTietActivity = (props: {
 					padding: 16,
 				}}
 			>
-				{!!record?.workflow && (
+				{editableWorkflow && (
 					<Popconfirm
 						title='Confirm cancellation of activity registration'
 						placement='topLeft'
@@ -54,18 +84,34 @@ const ChiTietActivity = (props: {
 
 				<Space wrap>
 					<ButtonExtend onClick={() => setVisibleForm(false)}>CLOSE</ButtonExtend>
-					<ButtonExtend
-						type='primary'
-						onClick={() =>
-							registerActivityModel(record?._id ?? '', getData).then(() => {
+
+					{!record?.workflow ? (
+						<ButtonExtend
+							type='primary'
+							onClick={() =>
+								registerActivityModel(record?._id ?? '', getData).then(() => {
+									setVisibleForm(false);
+									setVisibleDangKy && setVisibleDangKy(true);
+								})
+							}
+							disabled={!!record?.workflow}
+						>
+							REGISTER NOW
+						</ButtonExtend>
+					) : editableWorkflow && isInTimeRange() ? (
+						<ButtonExtend
+							type='primary'
+							onClick={() => {
 								setVisibleForm(false);
-								setVisibleDangKy && setVisibleDangKy(true);
-							})
-						}
-						disabled={!!record?.workflow}
-					>
-						REGISTER NOW
-					</ButtonExtend>
+								handleEdit({
+									...record?.activityOutcome,
+									activities: record,
+								});
+							}}
+						>
+							Update Evidence
+						</ButtonExtend>
+					) : null}
 				</Space>
 			</div>
 		</Modal>

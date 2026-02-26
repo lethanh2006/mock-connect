@@ -7,13 +7,12 @@ import FormCompetencyEvidence from '../../History/components/FormCompetencyEvide
 import FormRoleEvidence from '../../History/components/FormRoleEvidence';
 import CardSuKienCCT from './CardSuKien';
 
-const CardChiTietSuKien = (props: {
-	record: Activity.IRecord;
-	activeKey?: string;
-	isCompleted?: boolean;
-	isRegistered?: boolean;
-}) => {
-	const { record, activeKey, isCompleted, isRegistered } = props;
+const CardChiTietSuKien = (props: { record: Activity.IRecord; infoEvidence?: boolean }) => {
+	const { record, infoEvidence } = props;
+
+	const registered = record?.numberOfRegisteredActivityOutcomes ?? 0;
+	const capacity = record?.capacity;
+	const isFull = capacity && registered >= capacity;
 
 	return (
 		<Row gutter={[12, 12]}>
@@ -22,12 +21,11 @@ const CardChiTietSuKien = (props: {
 					record={{ ...record, workflow: record?.workflow }}
 					equivalencyAttributeIds={record?.coCurricularActivityEquivalency?.map((x) => x.attributesId) ?? []}
 					isDetail
-					isCompleted={activeKey === '3' || isCompleted}
 				/>
 			</Col>
 			<Col span={24} md={15}>
 				<Card variant='borderless' size='small'>
-					<Divider className='divider-big-title' orientation='left'>
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
 						Administrative Information
 					</Divider>
 
@@ -47,7 +45,11 @@ const CardChiTietSuKien = (props: {
 							</div>
 							<div className='info-item'>
 								<div className='info-label'>Activity Group</div>
-								<div className='info-value'>{record?.activitiesType?.activitiesTypeDomain?.name ?? '--'}</div>
+								<div className='info-value'>
+									{record?.activitiesType?.activitiesTypeDomainText ??
+										record?.activitiesType?.activitiesTypeDomain?.name ??
+										'--'}
+								</div>
 							</div>
 							<div className='info-item'>
 								<div className='info-label'>Activity Type</div>
@@ -55,11 +57,27 @@ const CardChiTietSuKien = (props: {
 							</div>
 							<div className='info-item'>
 								<div className='info-label'>Track</div>
-								<div className='info-value'>{record?.activitiesType?.track?.name ?? '--'}</div>
+								<div className='info-value'>
+									{record?.activitiesType?.trackText ?? record?.activitiesType?.track?.name ?? '--'}
+								</div>
 							</div>
 							<div className='info-item'>
 								<div className='info-label'>Capacity</div>
-								<div className='info-value'>15 slots</div>
+								<div
+									className='info-value'
+									style={{
+										color: isFull ? '#C72127' : undefined,
+									}}
+								>
+									{capacity ? (
+										<>
+											{`${registered} / ${capacity}`}
+											{isFull && ' (Full Slot)'}
+										</>
+									) : (
+										'--'
+									)}
+								</div>
 							</div>
 							<div className='info-item'>
 								<div className='info-label'>Allow post-event results update</div>
@@ -99,10 +117,10 @@ const CardChiTietSuKien = (props: {
 				</Card>
 			</Col>
 
-			{record?.workflow === EApprovalStatus.CHANGES_REQUIRED && !!record?.revisionNote && (
+			{(record?.workflow === EApprovalStatus.CHANGES_REQUIRED || !!record?.revisionNote) && (
 				<Col span={24}>
 					<Card variant='borderless' size='small'>
-						<Divider className='divider-big-title' orientation='left'>
+						<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
 							Revision Note
 						</Divider>
 						<span>{record?.revisionNote}</span>
@@ -110,25 +128,29 @@ const CardChiTietSuKien = (props: {
 				</Col>
 			)}
 
-			{record?.workflow === EApprovalStatus.REJECTED && !!record?.reflection && (
+			{(record?.workflow === EApprovalStatus.REJECTED || !!record?.activityRejectionNote) && (
 				<Col span={24}>
 					<Card variant='borderless' size='small'>
-						<Divider className='divider-big-title' orientation='left'>
+						<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
 							Rejection Note
 						</Divider>
-						<span>{record?.reflection}</span>
+						<span>{record?.activityRejectionNote}</span>
 					</Card>
 				</Col>
 			)}
 
 			<Col span={24}>
 				<Card variant='borderless' size='small'>
-					<Divider className='divider-big-title' orientation='left'>
-						{isRegistered ? 'Evidence Information' : 'Role'}
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
+						{infoEvidence ? 'Evidence Information' : 'Role'}
 					</Divider>
-					<FormRoleEvidence select={isRegistered} rolesId={record?.rolesId} />
+					<FormRoleEvidence
+						equivalency={record?.coCurricularActivityEquivalency ?? []}
+						select={infoEvidence}
+						rolesId={record?.rolesId}
+					/>
 
-					{isRegistered && (
+					{infoEvidence && (
 						<div className='custom-info-grid grid-2' style={{ marginTop: 16 }}>
 							<div className='info-row'>
 								<div className='info-item'>
@@ -162,9 +184,7 @@ const CardChiTietSuKien = (props: {
 								</div>
 								<div className='info-item full-width'>
 									<div style={{ marginBottom: 8, fontWeight: 600 }}>List Evidence</div>
-									<FormCompetencyEvidence
-										competencyList={record?.competencyList?.map((item) => item?.competencyId)}
-									/>{' '}
+									<FormCompetencyEvidence competencyList={record?.competencyList?.map((item) => item?.competencyId)} />
 								</div>
 								<div className='info-item full-width'>
 									<div style={{ marginBottom: 8, fontWeight: 600 }}>Reflection</div>
@@ -178,7 +198,7 @@ const CardChiTietSuKien = (props: {
 
 			<Col span={24}>
 				<Card variant='borderless' size='small'>
-					<Divider className='divider-big-title' orientation='left'>
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
 						Competency
 					</Divider>
 					<div className='competency-list'>
@@ -194,7 +214,7 @@ const CardChiTietSuKien = (props: {
 
 			<Col span={24}>
 				<Card variant='borderless' size='small'>
-					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 6 }}>
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
 						Activity Description
 					</Divider>
 					<span>{record?.description}</span>

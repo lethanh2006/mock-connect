@@ -100,7 +100,11 @@ const HistoryActivityPage = () => {
 			if (!isInTimeRange(rec)) return false;
 		}
 
-		return rec?.workflow === EApprovalStatus.DRAFT || rec?.workflow === EApprovalStatus.CHANGES_REQUIRED;
+		return (
+			rec?.workflow === EApprovalStatus.DRAFT ||
+			rec?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+			rec?.workflow === EApprovalStatus.EVIDENCE_REQUIRED
+		);
 	};
 
 	const handlePaginationChange = (newPage: number, newPageSize: number) => {
@@ -200,12 +204,11 @@ const HistoryActivityPage = () => {
 																disabled={!canEdit(item)}
 																onClick={() => handleEdit(item)}
 															>
-																Add Evidence
+																Update Evidence
 															</ButtonExtend>
 														</Col>
 													</Row>
 												}
-												isCompleted
 											/>
 										) : (
 											<CardSuKienCCT
@@ -337,17 +340,18 @@ const HistoryActivityPage = () => {
 										...record?.activities,
 										workflow: record?.workflow,
 										validation: record?.validation,
+
 										rolesId: record?.rolesId,
 										tracks: record?.tracks,
 										levels: record?.levels,
+
 										evidenceFile: record?.evidenceFile,
-										competencyList: record?.competencyList,
+
 										reflection: record?.reflection,
 										revisionNote: record?.revisionNote,
 									} as Activity.IRecord
 								}
-								isCompleted
-								isRegistered={record?.activityCategory === EActivityCategory.REGISTERED}
+								infoEvidence={record?.activityCategory === EActivityCategory.REGISTERED}
 							/>
 
 							<div
