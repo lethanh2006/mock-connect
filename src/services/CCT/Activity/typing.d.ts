@@ -1,3 +1,4 @@
+import { ActivityOutCome } from '../ActivityOutcome/typing';
 import { EApprovalStatus, EparticipantRole, EParticipantScope, Evalidation } from '../constant';
 
 declare module Activity {
@@ -28,6 +29,9 @@ declare module Activity {
 
 		allowPostEventResultsUpdate?: boolean;
 		dueDate?: Date;
+		dueDateRegistration?: Date;
+		capacity?: number;
+		numberOfRegisteredActivityOutcomes?: number;
 
 		activitiesTypeId: string | null;
 		activitiesType: ActivitiesManagement.IRecord;
@@ -40,9 +44,14 @@ declare module Activity {
 		workflow: EApprovalStatus;
 		competencyList: ICompetencyActivity[];
 
+		activityOutcome: ActivityOutCome.IRecord;
+
+		createdAt?: Date;
+
 		//fake && ActivytOutcome
 		cct?: boolean;
 		supervisorName?: string;
+		activityRejectionNote?: string;
 		revisionNote?: string;
 		reflection?: string;
 		validation?: Evalidation;
@@ -56,6 +65,8 @@ declare module Activity {
 			name: string;
 			file: string[];
 		}[];
+		location?: string;
+		studentDeclarationApproverName?: string;
 	}
 
 	export interface IParticipantsList {

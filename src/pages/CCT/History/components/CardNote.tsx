@@ -1,5 +1,11 @@
-import { EApprovalStatus, mapColorApprovalStatus, mapNameApprovalStatus } from '@/services/CCT/constant';
+import {
+	EApprovalStatus,
+	mapColorApprovalStatus,
+	mapColorTextApprovalStatus,
+	mapNameApprovalStatus,
+} from '@/services/CCT/constant';
 import { Tag } from 'antd';
+import dayjs from 'dayjs';
 import { useModel } from 'umi';
 
 const CardNoteActivity = () => {
@@ -8,7 +14,10 @@ const CardNoteActivity = () => {
 	return (
 		<div className='info-summary-box'>
 			<div className='info-summary-status'>
-				<Tag color={mapColorApprovalStatus[record?.workflow as EApprovalStatus]}>
+				<Tag
+					color={mapColorApprovalStatus[record?.workflow as EApprovalStatus]}
+					style={{ color: mapColorTextApprovalStatus[record?.workflow as EApprovalStatus], fontWeight: 600 }}
+				>
 					{mapNameApprovalStatus[record?.workflow as EApprovalStatus]}
 				</Tag>
 			</div>
@@ -17,7 +26,9 @@ const CardNoteActivity = () => {
 				<div className='info-row'>
 					<div className='info-item'>
 						<div className='info-label'>Evidence Update Deadline</div>
-						<div className='info-value'>--</div>
+						<div className='info-value'>
+							{record?.dueDate ? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY') : '--'}
+						</div>
 					</div>
 					<div className='info-item'>
 						<div className='info-label'>Evidence Review Time</div>
@@ -25,11 +36,15 @@ const CardNoteActivity = () => {
 					</div>
 					<div className='info-item'>
 						<div className='info-label'>Approver</div>
-						<div className='info-value'>--</div>
+						<div className='info-value'>{record?.studentDeclarationApproverName ?? '--'}</div>
 					</div>
 					<div className='info-item'>
 						<div className='info-label'>Revision Note</div>
-						<div className='info-value'>--</div>
+						<div className='info-value'>{record?.revisionNote ?? '-'}</div>
+					</div>
+					<div className='info-item'>
+						<div className='info-label'>Rejection Note</div>
+						<div className='info-value'>{record?.activityRejectionNote ?? '-'}</div>
 					</div>
 				</div>
 			</div>

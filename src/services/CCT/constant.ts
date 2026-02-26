@@ -31,27 +31,43 @@ export const mapNameParticipantRole: Record<EparticipantRole, string> = {
 };
 
 export enum EApprovalStatus {
-	DRAFT = 'DRAFT', // Trạng thái ban đầu (chưa gửi / chưa upload)
-	SUBMITTED = 'SUBMITTED', // Đã upload evidence, chờ duyệt
-	APPROVED = 'APPROVED', // Đã duyệt
-	REJECTED = 'REJECTED', // Bị từ chối
-	CHANGES_REQUIRED = 'CHANGES_REQUIRED', // Yêu cầu chỉnh sửa
+	EVIDENCE_REQUIRED = 'EVIDENCE_REQUIRED',
+	DRAFT = 'DRAFT',
+	SUBMITTED = 'SUBMITTED',
+	APPROVED = 'APPROVED',
+	REJECTED = 'REJECTED',
+	CHANGES_REQUIRED = 'CHANGES_REQUIRED',
+	EXPIRED = 'EXPIRED',
 }
 
 export const mapNameApprovalStatus: Record<EApprovalStatus, string> = {
+	[EApprovalStatus.EVIDENCE_REQUIRED]: 'Evidence Required',
 	[EApprovalStatus.DRAFT]: 'Draft',
 	[EApprovalStatus.SUBMITTED]: 'Pending For Approval',
 	[EApprovalStatus.APPROVED]: 'Approved',
 	[EApprovalStatus.REJECTED]: 'Rejected',
 	[EApprovalStatus.CHANGES_REQUIRED]: 'Changes Required',
+	[EApprovalStatus.EXPIRED]: 'Expired',
 };
 
 export const mapColorApprovalStatus: Record<EApprovalStatus, string> = {
+	[EApprovalStatus.EVIDENCE_REQUIRED]: '#FFFAE4',
+	[EApprovalStatus.DRAFT]: '#FFFAE4',
+	[EApprovalStatus.SUBMITTED]: '#E2F2FE',
+	[EApprovalStatus.APPROVED]: '#F5FFEB',
+	[EApprovalStatus.REJECTED]: '#FFEFEE',
+	[EApprovalStatus.CHANGES_REQUIRED]: '#FFFAE4',
+	[EApprovalStatus.EXPIRED]: '#F4F9FF',
+};
+
+export const mapColorTextApprovalStatus: Record<EApprovalStatus, string> = {
+	[EApprovalStatus.EVIDENCE_REQUIRED]: '#CE7C1E',
 	[EApprovalStatus.DRAFT]: '#CE7C1E',
 	[EApprovalStatus.SUBMITTED]: '#0E50CF',
 	[EApprovalStatus.APPROVED]: '#329323',
 	[EApprovalStatus.REJECTED]: '#C80F1F',
 	[EApprovalStatus.CHANGES_REQUIRED]: '#CE7C1E',
+	[EApprovalStatus.EXPIRED]: '#134D8B',
 };
 
 export enum EActivityCategory {

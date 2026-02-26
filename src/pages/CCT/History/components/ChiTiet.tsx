@@ -24,7 +24,7 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 			</Col>
 			<Col span={24} md={15}>
 				<Card variant='borderless' size='small'>
-					<Divider className='divider-big-title' orientation='left'>
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
 						Administrative Information
 					</Divider>
 
@@ -35,8 +35,8 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 								<div className='info-value'>{recOutcome?.organizer ?? '--'}</div>
 							</div>
 							<div className='info-item'>
-								<div className='info-label'>Location</div>
-								<div className='info-value'>{recOutcome?.location ?? '--'}</div>
+								<div className='info-label'>Approver</div>
+								<div className='info-value'>{recOutcome?.studentDeclarationApproverName ?? '--'}</div>
 							</div>
 							<div className='info-item'>
 								<div className='info-label'>Activity Group</div>
@@ -69,7 +69,7 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 
 			<Col span={24}>
 				<Card variant='borderless' size='small'>
-					<Divider className='divider-big-title' orientation='left'>
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0 }}>
 						Evidence Information
 					</Divider>
 
@@ -105,7 +105,7 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 								/>
 							</div>
 							<div className='info-item full-width'>
-								<div style={{ marginBottom: 8, fontWeight: 600 }}>List Evidence</div>
+								<div style={{ marginBottom: 8, fontWeight: 600 }}>List Competency</div>
 								<FormCompetencyEvidence
 									competencyList={recOutcome?.competencyList?.map((item) => item?.competencyId)}
 								/>

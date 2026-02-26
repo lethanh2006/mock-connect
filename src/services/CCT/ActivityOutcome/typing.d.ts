@@ -33,6 +33,7 @@ declare module ActivityOutCome {
 		reflection: string;
 		startDate: Date;
 		endDate: Date;
+		dueDate: Date;
 
 		activityRejectionNote?: string;
 		listAchievedCompetencies: Activity.ICompetencyMapping[];
@@ -57,6 +58,8 @@ declare module ActivityOutCome {
 		rejected: number;
 		submitted: number;
 		total: number;
+		expired: number;
+		evidenceRequired: number;
 	}
 
 	export interface ICompetencyActivity {

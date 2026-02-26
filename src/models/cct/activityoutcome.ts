@@ -23,6 +23,7 @@ export default () => {
 				name: string;
 				file?: string[];
 			}[];
+			submitted: boolean;
 		},
 		getData?: () => void,
 		messageText?: string,

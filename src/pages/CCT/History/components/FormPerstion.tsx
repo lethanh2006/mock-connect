@@ -7,10 +7,9 @@ import { handleSingleFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Divider, Form, Image, Input, message, Radio, Row } from 'antd';
+import { Button, Checkbox, Col, Form, Image, Input, message, Radio, Row, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
-import { uniqBy } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import SelectActivitiesManagement from '../../DanhMuc/Activities/Select';
 import SelectActivitiesTypeDomain from '../../DanhMuc/CCD/Select';
@@ -37,6 +36,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 	const { danhSach: dsLevels } = useModel('cct.levels');
 	const { danhSach: dsRoles } = useModel('cct.roles');
+	const { danhSach: dsActivityType } = useModel('cct.activities');
 
 	const startDate: Date = Form.useWatch('startDate', form);
 	const rolesId: string = Form.useWatch('rolesId', form);
@@ -45,9 +45,12 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const checkbox: boolean = Form.useWatch('checkbox', form);
 	const competencyList: string[] = Form.useWatch('competencyList', form);
 	const onUni: boolean = Form.useWatch('onUni', form);
+	const activitiesTypeId: string = Form.useWatch('activitiesTypeId', form);
 
 	const autoLevel = dsLevels?.find((i) => i?._id === levelsId)?.autoApproval;
 	const autoRole = dsRoles?.find((i) => i?._id === rolesId)?.autoApproval;
+
+	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!visibleForm) resetFieldsForm(form);
@@ -75,7 +78,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 		}
 	}, [record?._id, visibleForm]);
 
-	const onFinish = async (values: ActivityOutCome.IRecord) => {
+	const onFinish = async (values: ActivityOutCome.IRecord, submitted: boolean) => {
 		const evidenceFile = await Promise.all(
 			(values.evidenceFile || []).map(async (item: any) => ({
 				name: item.name,
@@ -107,6 +110,8 @@ const FormPerstionActivityOutCome = (props: any) => {
 			competencyId: id,
 		})) as any;
 
+		values.workflow = submitted ? EApprovalStatus.SUBMITTED : EApprovalStatus.DRAFT;
+
 		if (edit) {
 			putModel(
 				record?._id ?? '',
@@ -123,10 +128,8 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 	return (
 		<>
-			<Form onFinish={onFinish} form={form} layout='vertical'>
-				{(record?.workflow === EApprovalStatus.CHANGES_REQUIRED || record?.workflow === EApprovalStatus.REJECTED) && (
-					<CardNoteActivity />
-				)}
+			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
+				{(!!record?.revisionNote || !!record?.activityRejectionNote) && <CardNoteActivity />}
 				<Row gutter={[12, 0]}>
 					<Col span={24}>
 						<Row gutter={[12, 0]}>
@@ -179,22 +182,26 @@ const FormPerstionActivityOutCome = (props: any) => {
 															attributesId: attr._id,
 															attributes: attr,
 														})),
-														evidenceFile: uniqBy(
-															rawData?.requiredEvidenceList?.map((i: any) => ({ name: i })) || [],
-															'name',
-														)?.map((competency) => {
-															const matched = record?.evidenceFile?.find((e: any) => e.name === competency);
-															return {
-																...competency,
-																file: matched?.file || [],
-																isSystem: true,
-															};
-														}),
 													});
 												}}
 											/>
 										</Form.Item>
 									</Col>
+									{activitiesTypeId && (
+										<Col span={24}>
+											Attributes:{' '}
+											<Space wrap>
+												{dsActivityType
+													?.find((i) => i._id === activitiesTypeId)
+													?.attributes?.map((item) => (
+														<Tag key={item?._id} color={item?.color}>
+															{item?.name}
+														</Tag>
+													))}
+											</Space>
+										</Col>
+									)}
+
 									<Col span={24}>
 										<Form.Item name='activitiesOutcomeName' label='Activity Name' rules={[...rules.required]}>
 											<Input placeholder='Enter Activity Name' disabled={isView} />
@@ -245,7 +252,6 @@ const FormPerstionActivityOutCome = (props: any) => {
 							</Col>
 						</Row>
 					</Col>
-
 					<Col span={24} md={9}>
 						<Form.Item name='onUni' label='Mentor/Supervisor' rules={[...rules.required]}>
 							<Radio.Group
@@ -301,7 +307,6 @@ const FormPerstionActivityOutCome = (props: any) => {
 							<Input placeholder='Enter location' disabled={isView} />
 						</Form.Item>
 					</Col>
-
 					<Col span={24} md={12}>
 						<Form.Item
 							name='rolesId'
@@ -316,118 +321,70 @@ const FormPerstionActivityOutCome = (props: any) => {
 							<SelectLevelsManagement disabled={isView} />
 						</Form.Item>
 					</Col>
-
-					{/* <Col span={24}>
-							<Divider className='divider-big-title' orientation='left'>
-								Competency Mapping
-							</Divider>
-						</Col>
-						<Col span={24}>
-							{record?._id ? (
-								<CompetencyMappingModelPage disabled={isView} />
-							) : (
-								<Form.Item name='listAchievedCompetencies'>
-									<FormItemCompetencyMapping disabled={isView} />
-								</Form.Item>
-							)}
-						</Col> */}
-
 					<Col span={24}>
-						<Divider className='divider-big-title' orientation='left'>
+						<div className='fw500' style={{ marginBottom: 6 }}>
 							List Evidence
-						</Divider>
-					</Col>
-
-					<Col span={24}>
+						</div>
 						<div style={{ marginBottom: 10 }}>
 							<i className='text-info'>(Suggestion Evidence: Supervisor confirmation, Research log)</i>
 						</div>
+						<div style={{ marginBottom: 10 }}>
+							<Form.List name='evidenceFile'>
+								{(fields, { add, remove }, { errors }) => (
+									<>
+										{fields.map((field, index) => (
+											<Row gutter={[12, 0]} key={field.key}>
+												<Col span={24} md={12}>
+													<Form.Item label='Evidence File Name' name={[index, 'name']} rules={[...rules.required]}>
+														<Input placeholder='Enter Name' disabled={isView} />
+													</Form.Item>
+												</Col>
+												<Col span={22} md={10}>
+													<Form.Item label='File' name={[index, 'file']} rules={[...rules.required]}>
+														<UploadFile maxCount={5} disabled={isView} />
+													</Form.Item>
+												</Col>
+												<Col span={2}>
+													<div
+														style={{
+															height: '100%',
+															display: 'flex',
+															alignItems: 'center',
+															justifyContent: 'center',
+														}}
+													>
+														<Button
+															danger
+															type='link'
+															title='Xóa'
+															icon={<DeleteOutlined />}
+															onClick={() => remove(field.name)}
+															disabled={isView}
+														/>
+													</div>
+												</Col>
+												<Form.ErrorList errors={errors} />
+											</Row>
+										))}
 
-						<Form.List name='evidenceFile'>
-							{(fields, { add, remove }, { errors }) => (
-								<>
-									{fields.map((field, index) => (
-										<Row gutter={[12, 0]} key={field.key}>
-											<Col span={24} md={12}>
-												<Form.Item label='Evidence File Name' name={[index, 'name']} rules={[...rules.required]}>
-													<Input placeholder='Enter Name' disabled={isView} />
-												</Form.Item>
-											</Col>
-											<Col span={22} md={10}>
-												<Form.Item label='File' name={[index, 'file']} rules={[...rules.required]}>
-													<UploadFile maxCount={5} disabled={isView} />
-												</Form.Item>
-											</Col>
-											<Col span={2}>
-												<div
-													style={{
-														height: '100%',
-														display: 'flex',
-														alignItems: 'center',
-														justifyContent: 'center',
-													}}
-												>
-													<Button
-														danger
-														type='link'
-														title='Xóa'
-														icon={<DeleteOutlined />}
-														onClick={() => remove(field.name)}
-														disabled={isView}
-													/>
-												</div>
-											</Col>
-											<Form.ErrorList errors={errors} />
-										</Row>
-									))}
-
-									<Button onClick={() => add()} icon={<PlusOutlined />} type='dashed' size='small' disabled={isView}>
-										Add Evidence
-									</Button>
-								</>
-							)}
-						</Form.List>
+										<Button onClick={() => add()} icon={<PlusOutlined />} type='dashed' size='small' disabled={isView}>
+											Update Evidence
+										</Button>
+									</>
+								)}
+							</Form.List>
+						</div>
 					</Col>
-
 					<Col span={24}>
-						<Divider className='divider-big-title' orientation='left'>
-							List competency
-						</Divider>
-					</Col>
-
-					<Col span={24}>
-						<Form.Item name='competencyList'>
+						<Form.Item name='competencyList' label='List Competency'>
 							<FormCompetencyEvidence competencyList={competencyList} form={form} />
 						</Form.Item>
 					</Col>
-
 					<Col span={24}>
 						<Form.Item name='reflection' label='Reflection'>
 							<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' />
 						</Form.Item>
 					</Col>
-					{/* <Col span={24}>
-							<Form.Item name='description' label={intl.formatMessage({ id: 'activity.perstion.description' })}>
-								<Input.TextArea
-									rows={3}
-									placeholder={intl.formatMessage({ id: 'activity.perstion.description.place' })}
-									disabled={isView}
-								/>
-							</Form.Item>
-						</Col>
-						<Col span={24}>
-							<Form.Item
-								name='learningOutcomes'
-								label={intl.formatMessage({ id: 'activity.perstion.learningOutcomes' })}
-							>
-								<Input.TextArea
-									rows={3}
-									placeholder={intl.formatMessage({ id: 'activity.perstion.learningOutcomes.place' })}
-									disabled={isView}
-								/>
-							</Form.Item>
-						</Col> */}
-
 					{!isView && (
 						<Col span={24}>
 							<Form.Item name='checkbox' valuePropName='checked'>
@@ -438,17 +395,29 @@ const FormPerstionActivityOutCome = (props: any) => {
 				</Row>
 
 				<div className='form-footer'>
-					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 					{!isView && (
-						<Button
-							loading={formSubmiting}
-							htmlType='submit'
-							type='primary'
-							disabled={!checkbox || competencyList?.length > 3}
-						>
-							{intl.formatMessage({ id: 'global.button.luulai' })}
-						</Button>
+						<>
+							<Button
+								type='primary'
+								htmlType='submit'
+								loading={formSubmiting}
+								disabled={!checkbox || competencyList?.length > 3}
+								onClick={() => setIsSubmit(true)}
+							>
+								Submit
+							</Button>
+
+							<Button
+								htmlType='submit'
+								loading={formSubmiting}
+								disabled={!checkbox || competencyList?.length > 3}
+								onClick={() => setIsSubmit(false)}
+							>
+								Save Draft
+							</Button>
+						</>
 					)}
+					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 				</div>
 			</Form>
 		</>

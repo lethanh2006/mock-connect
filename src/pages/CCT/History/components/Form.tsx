@@ -1,12 +1,11 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { Activity } from '@/services/CCT/Activity/typing';
-import { EApprovalStatus } from '@/services/CCT/constant';
 import { handleSingleFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Collapse, Divider, Form, Input, message, Row } from 'antd';
+import { Button, Checkbox, Col, Collapse, Form, Input, message, Row } from 'antd';
 import { uniqBy } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import CardChiTietSuKien from '../../Activity/components/CardChiTietSuKien';
 import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
@@ -42,6 +41,8 @@ const FormActivityOutCome = (props: any) => {
 	const autoLevel = dsLevels?.find((i) => i?._id === levelsId)?.autoApproval;
 	const autoRole = dsRoles?.find((i) => i?.rolesId === rolesId)?.roles?.autoApproval;
 
+	const [isSubmit, setIsSubmit] = useState<boolean>(false);
+
 	useEffect(() => {
 		if (!visibleForm) {
 			form.resetFields();
@@ -50,6 +51,7 @@ const FormActivityOutCome = (props: any) => {
 
 		form.setFieldsValue({
 			rolesId: record?.rolesId ?? dsRoles?.[0]?.rolesId,
+			trackId: record?.trackId ?? record?.activities?.activitiesType?.trackId,
 			levelsId: record?.levelsId,
 			reflection: record?.reflection,
 			competencyList: record?.competencyList
@@ -60,7 +62,7 @@ const FormActivityOutCome = (props: any) => {
 		});
 	}, [visibleForm, record?._id]);
 
-	const onFinish = async (values: any) => {
+	const onFinish = async (values: any, submitted: boolean) => {
 		const evidenceFile = await Promise.all(
 			(values.evidenceFile || []).map(async (item: any) => ({
 				name: item.name,
@@ -76,8 +78,11 @@ const FormActivityOutCome = (props: any) => {
 		const payload = {
 			rolesId: values.rolesId,
 			levelsId: values.levelsId,
+			trackId: values.trackId,
 			evidenceFile,
 			reflection: values.reflection,
+			competencyList: values.competencyList,
+			submitted,
 		};
 
 		await postActivityOutComeModel(
@@ -91,20 +96,17 @@ const FormActivityOutCome = (props: any) => {
 	};
 
 	return (
-		<Form form={form} layout='vertical' onFinish={onFinish}>
-			{(record?.workflow === EApprovalStatus.CHANGES_REQUIRED || record?.workflow === EApprovalStatus.REJECTED) && (
-				<CardNoteActivity />
-			)}
+		<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
+			{(!!record?.revisionNote || !!record?.activityRejectionNote) && <CardNoteActivity />}
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
-					<Divider className='divider-big-title' orientation='left'>
-						Role
-					</Divider>
-				</Col>
-
-				<Col span={24}>
-					<Form.Item name='rolesId'>
-						<FormRoleEvidence select rolesId={record?.rolesId} form={form} />
+					<Form.Item name='rolesId' label='Role'>
+						<FormRoleEvidence
+							equivalency={record?.activities?.coCurricularActivityEquivalency ?? []}
+							select
+							rolesId={rolesId}
+							form={form}
+						/>
 					</Form.Item>
 				</Col>
 
@@ -121,12 +123,10 @@ const FormActivityOutCome = (props: any) => {
 				</Col>
 
 				<Col span={24}>
-					<Divider className='divider-big-title' orientation='left'>
+					<div className='fw500' style={{ marginBottom: 6 }}>
 						List Evidence
-					</Divider>
-				</Col>
+					</div>
 
-				<Col span={24}>
 					<div style={{ marginBottom: 10 }}>
 						<i className='text-info'>(Suggestion Evidence: Supervisor confirmation, Research log)</i>
 					</div>
@@ -169,7 +169,7 @@ const FormActivityOutCome = (props: any) => {
 								))}
 
 								<Button onClick={() => add()} icon={<PlusOutlined />} type='dashed' size='small' disabled={isView}>
-									Add Evidence
+									Update Evidence
 								</Button>
 							</>
 						)}
@@ -177,13 +177,7 @@ const FormActivityOutCome = (props: any) => {
 				</Col>
 
 				<Col span={24}>
-					<Divider className='divider-big-title' orientation='left'>
-						Competency
-					</Divider>
-				</Col>
-
-				<Col span={24}>
-					<Form.Item name='competencyList'>
+					<Form.Item name='competencyList' label='Competency'>
 						<FormCompetencyEvidence competencyList={competencyList} form={form} />
 					</Form.Item>
 				</Col>
@@ -212,12 +206,29 @@ const FormActivityOutCome = (props: any) => {
 			</Row>
 
 			<div className='form-footer'>
-				<Button onClick={() => setVisibleForm(false)}>Close</Button>
 				{!isView && (
-					<Button type='primary' htmlType='submit' loading={formSubmiting} disabled={!checkbox}>
-						Save
-					</Button>
+					<>
+						<Button
+							type='primary'
+							htmlType='submit'
+							loading={formSubmiting}
+							disabled={!checkbox || competencyList?.length > 3}
+							onClick={() => setIsSubmit(true)}
+						>
+							Submit
+						</Button>
+
+						<Button
+							htmlType='submit'
+							loading={formSubmiting}
+							disabled={!checkbox || competencyList?.length > 3}
+							onClick={() => setIsSubmit(false)}
+						>
+							Save Draft
+						</Button>
+					</>
 				)}
+				<Button onClick={() => setVisibleForm(false)}>Close</Button>
 			</div>
 		</Form>
 	);

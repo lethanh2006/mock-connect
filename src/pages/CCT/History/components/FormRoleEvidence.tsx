@@ -1,14 +1,20 @@
 import ExpandText from '@/components/ExpandText';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { IColumn } from '@/components/Table/typing';
+import { Activity } from '@/services/CCT/Activity/typing';
 import { FormInstance, Space, Tag } from 'antd';
 import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
-const FormRoleEvidence = (props: { select?: boolean; rolesId?: string; form?: FormInstance }) => {
+const FormRoleEvidence = (props: {
+	equivalency?: Activity.IEquivalency[];
+	select?: boolean;
+	rolesId?: string;
+	form?: FormInstance;
+}) => {
 	const intl = useIntl();
-	const { select, rolesId, form } = props;
-	const { record, isView } = useModel('cct.activityoutcome');
+	const { equivalency, select, rolesId, form } = props;
+	const { isView } = useModel('cct.activityoutcome');
 
 	const groupedEquivalency = useMemo(() => {
 		const map = new Map<
@@ -23,7 +29,7 @@ const FormRoleEvidence = (props: { select?: boolean; rolesId?: string; form?: Fo
 			}
 		>();
 
-		record?.activities?.coCurricularActivityEquivalency?.forEach((item) => {
+		equivalency?.forEach((item) => {
 			const roleId = item.roles?._id;
 			if (!roleId) return;
 
@@ -47,7 +53,7 @@ const FormRoleEvidence = (props: { select?: boolean; rolesId?: string; form?: Fo
 		});
 
 		return Array.from(map.values());
-	}, [record]);
+	}, [equivalency]);
 
 	const columnsRoles: IColumn<any>[] = [
 		{

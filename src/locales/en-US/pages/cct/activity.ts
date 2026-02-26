@@ -43,7 +43,7 @@ export default {
 	'activity.conhan': 'Still valid',
 
 	'activity.button.duyet': 'Send for approval',
-	'activity.button.add': 'Add Evidence',
+	'activity.button.add': 'Update Evidence',
 	'activity.button.chinhsua': 'Edit',
 	'activity.button.xoa': 'Delete',
 	'activity.button.hethan': 'Editing deadline has passed',
@@ -51,7 +51,7 @@ export default {
 	'activity.confirm.duyet': 'Do you want to send this activity',
 	'activity.confirm.xoa': 'Do you want to remove this activity',
 
-	'activity.registered.title': 'Add Evidence',
+	'activity.registered.title': 'Update Evidence',
 	'activity.registered.chitiet': 'Detail Evidence',
 	'activity.registered.role': 'Roles',
 	'activity.registered.role.select': 'Select role',
