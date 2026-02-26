@@ -178,8 +178,7 @@ export default () => {
 		try {
 			const response = await getService(
 				payload,
-				`dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${
-					loaiDangKyTheoLop === ELoaiDangKyTheoLop.LOP_HANH_CHINH && tatCa ? 'doi-tuong' : loaiDangKyTheoLop
+				`dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${loaiDangKyTheoLop === ELoaiDangKyTheoLop.LOP_HANH_CHINH && tatCa ? 'doi-tuong' : loaiDangKyTheoLop
 				}/page`,
 				true,
 			);
