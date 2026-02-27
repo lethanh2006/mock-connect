@@ -6,7 +6,7 @@ import { Resizable } from 'react-resizable';
 import { Card, ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
 import type { FilterValue } from 'antd/lib/table/interface';
 import _ from 'lodash';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
@@ -47,6 +47,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 	const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 5 } });
 	const sensors = useSensors(sensor);
+	const lastResizeEndTimeRef = useRef<number>(0);
+	const isResizingRef = useRef(false);
 
 	const tableData: any[] = useMemo(
 		() =>
@@ -65,6 +67,18 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	useEffect(() => {
 		setPage(1);
 	}, [JSON.stringify(filters ?? [])]);
+
+	useEffect(() => {
+		// Block text selection during resize
+		const handleSelectStart = (e: Event) => {
+			if (isResizingRef.current) {
+				e.preventDefault();
+			}
+		};
+
+		document.addEventListener('selectstart', handleSelectStart, true);
+		return () => document.removeEventListener('selectstart', handleSelectStart, true);
+	}, []);
 
 	useEffect(() => {
 		getData(params);
@@ -137,6 +151,24 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					draggableOpts={{ enableUserSelectHack: true }}
 					onResizeStart={(e) => {
 						e.stopPropagation();
+						isResizingRef.current = true;
+						// Disable user select during resize
+						document.body.style.userSelect = 'none';
+						// Block pointer events on title during resize
+						const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
+						if (titleEl) {
+							(titleEl as HTMLElement).style.pointerEvents = 'none';
+						}
+					}}
+					onResizeStop={(e) => {
+						// Restore user select and pointer events after resize
+						isResizingRef.current = false;
+						document.body.style.userSelect = '';
+						const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
+						if (titleEl) {
+							(titleEl as HTMLElement).style.pointerEvents = '';
+						}
+						lastResizeEndTimeRef.current = Date.now();
 					}}
 					handle={
 						<span
@@ -154,6 +186,12 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	}, []);
 
 	const onChange = (pagination: PaginationProps, fil: Record<string, FilterValue | null>, sorter: any) => {
+		// Skip sort if triggered within 300ms after resize (avoid resize->sort on mouseup)
+		const skipSort = sorter?.field && Date.now() - lastResizeEndTimeRef.current < 300;
+		if (skipSort) {
+			fil = {}; // Also skip filters
+		}
+
 		const allColumns = finalColumns
 			.map((col) => {
 				if (col.children?.length) return [col, ...col.children];
@@ -180,9 +218,12 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			}
 		});
 
-		const { order, field } = sorter;
-		const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
-		if (sorter && setSort) setSort({ [Array.isArray(field) ? field.join('.') : field]: orderValue });
+		// Only apply sort if not within resize window
+		if (!skipSort) {
+			const { order, field } = sorter;
+			const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
+			if (sorter && setSort) setSort({ [Array.isArray(field) ? field.join('.') : field]: orderValue });
+		}
 
 		const { current, pageSize } = pagination;
 		setPage(current);
