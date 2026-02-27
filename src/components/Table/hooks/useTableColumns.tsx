@@ -30,6 +30,8 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		columnsWidth,
 		setColumnsWidth,
 		hideFilterColumn,
+		columnSettings,
+		setColumnSettings,
 	} = useTableContext();
 
 	/**
@@ -286,7 +288,9 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				};
 
 		let final: IColumn<any>[] = columns.map((item) => {
-			const key = Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : (item.dataIndex as string);
+			const key = String(
+				item.key ?? (Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : (item.dataIndex as string) ?? item.title)
+			);
 			const width = columnsWidth[key] || item.width;
 
 			return {
@@ -321,9 +325,9 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 								? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
 								: undefined)),
 				children: item.children?.map((child) => {
-					const childKey = Array.isArray(child.dataIndex)
-						? child.dataIndex.join('.')
-						: (child.dataIndex as string);
+					const childKey = String(
+						child.key ?? (Array.isArray(child.dataIndex) ? child.dataIndex.join('.') : (child.dataIndex as string) ?? child.title)
+					);
 					const childWidth = columnsWidth[childKey] || child.width;
 					const baseChildWidth = child.width;
 					return {
@@ -361,6 +365,48 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			};
 		});
 
+		// Đồng bộ settings
+		const currentKeys = final.map((col) =>
+			String(col.key ?? (Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : (col.dataIndex as string) ?? col.title))
+		);
+		let updatedSettings = [...columnSettings];
+		let hasChange = false;
+
+		// Thêm cột mới
+		currentKeys.forEach((key) => {
+			if (!updatedSettings.find((s) => s.key === key)) {
+				const colDef = final.find(
+					(col) =>
+						String(
+							col.key ?? (Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : (col.dataIndex as string) ?? col.title)
+						) === key
+				);
+				updatedSettings.push({ key, visible: colDef?.hide !== true });
+				hasChange = true;
+			}
+		});
+
+		// Xóa cột không còn tồn tại
+		updatedSettings = updatedSettings.filter((s) => currentKeys.includes(s.key));
+		if (updatedSettings.length !== columnSettings.length) hasChange = true;
+
+		if (hasChange) {
+			setTimeout(() => setColumnSettings(updatedSettings), 0);
+		}
+
+		// Sắp xếp và ẩn hiện theo settings
+		final = updatedSettings
+			.filter((s) => s.visible !== false)
+			.map((s) =>
+				final.find(
+					(col) =>
+						String(
+							col.key ?? (Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : (col.dataIndex as string) ?? col.title)
+						) === s.key
+				)
+			)
+			.filter(Boolean) as IColumn<any>[];
+
 		final = final?.filter((item) => item?.hide !== true);
 		if (addStt !== false)
 			final.unshift({
@@ -390,7 +436,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			});
 
 		return final;
-	}, [columns, columnsWidth, sort, filters, addStt, dsPhanVung, intl, onResize, size, hideFilterColumn]);
+	}, [columns, columnsWidth, columnSettings, sort, filters, addStt, dsPhanVung, intl, onResize, size, hideFilterColumn]);
 
 	useEffect(() => {
 		setFinalColumns(finalColumns);

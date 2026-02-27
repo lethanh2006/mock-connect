@@ -14,6 +14,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { useIntl } from 'umi';
 import { findFiltersInColumns } from '../utils';
+import { ColumnSettings } from './ColumnSettings';
 import { useTableContext } from './TableContext';
 
 export const TableHeader: React.FC = () => {
@@ -122,10 +123,10 @@ export const TableHeader: React.FC = () => {
 						style={
 							findFiltersInColumns(finalColumns, filters)?.length
 								? {
-										borderColor: primaryColor,
-										borderWidth: '1px',
-										borderStyle: 'solid',
-									}
+									borderColor: primaryColor,
+									borderWidth: '1px',
+									borderStyle: 'solid',
+								}
 								: undefined
 						}
 					>
@@ -140,6 +141,8 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				) : null}
+
+				<ColumnSettings />
 			</div>
 		</div>
 	);

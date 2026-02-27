@@ -140,6 +140,13 @@ export default {
 	'global.table.index.bochon': 'Bỏ chọn tất cả',
 	'global.table.index.tongso': 'Tổng số',
 
+	'global.table.columnSetting.title': 'Cấu hình cột',
+	'global.table.columnSetting.reset': 'Khôi phục',
+	'global.table.columnSetting.reset.confirm': 'Bạn có chắc chắn muốn khôi phục lại cấu hình mặc định (vị trí, ẩn hiện và độ rộng) của các cột?',
+	'global.table.columnSetting.apply': 'Áp dụng',
+	'global.table.columnSetting.cancel': 'Hủy',
+	'global.table.columnSetting.tooltip': 'Cấu hình ẩn/hiện và thứ tự cột',
+
 	'global.table.customfilter.title': 'Bộ lọc tùy chỉnh',
 	'global.table.customfilter.dieukien': 'Các điều kiện lọc đang được áp dụng',
 	'global.table.customfilter.button.them': 'Thêm điều kiện lọc',
