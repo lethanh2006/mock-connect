@@ -1,6 +1,6 @@
 import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import type { InputRef } from 'antd';
-import React, { createContext, ReactNode, useContext, useRef, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import type { IColumn, TableBaseProps, TFilter } from '../typing';
 
 interface TableContextValue {
@@ -19,6 +19,14 @@ interface TableContextValue {
 
 	// Ref của ô nhập tìm kiếm
 	searchInputRef: React.RefObject<InputRef | null>;
+
+	// Trạng thái resize cột
+	columnsWidth: Record<string, number>;
+	setColumnsWidth: React.Dispatch<React.SetStateAction<Record<string, number>>>;
+
+	// Cấu hình hiển thị và thứ tự cột
+	columnSettings: Array<{ key: string; visible: boolean }>;
+	setColumnSettings: React.Dispatch<React.SetStateAction<Array<{ key: string; visible: boolean }>>>;
 
 	// Trạng thái bảng
 	selectedIds?: (string | number)[];
@@ -80,6 +88,10 @@ interface TableProviderProps {
 		| 'setVisibleExport'
 		| 'finalColumns'
 		| 'setFinalColumns'
+		| 'columnsWidth'
+		| 'setColumnsWidth'
+		| 'columnSettings'
+		| 'setColumnSettings'
 		| 'searchInputRef'
 	>;
 }
@@ -89,6 +101,42 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
+	const configStorageKey = `tableConfig_${externalValue.modelName}`;
+
+	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
+		try {
+			const saved = localStorage.getItem(configStorageKey);
+			if (saved) return JSON.parse(saved).widths || {};
+
+			// Migration từ key cũ nếu có
+			const oldWidths = localStorage.getItem(`columnsWidth_${externalValue.modelName}`);
+			return oldWidths ? JSON.parse(oldWidths) : {};
+		} catch (e) {
+			return {};
+		}
+	});
+
+	const [columnSettings, setColumnSettings] = useState<Array<{ key: string; visible: boolean }>>(() => {
+		try {
+			const saved = localStorage.getItem(configStorageKey);
+			if (saved) return JSON.parse(saved).columns || [];
+
+			// Migration từ key cũ nếu có
+			const oldSettings = localStorage.getItem(`columnSettings_${externalValue.modelName}`);
+			return oldSettings ? JSON.parse(oldSettings) : [];
+		} catch (e) {
+			return [];
+		}
+	});
+
+	useEffect(() => {
+		const config = {
+			widths: columnsWidth,
+			columns: columnSettings,
+		};
+		localStorage.setItem(configStorageKey, JSON.stringify(config));
+	}, [columnsWidth, columnSettings, configStorageKey]);
+
 	const searchInputRef = useRef<InputRef>(null);
 	const contextValue: TableContextValue = {
 		...externalValue,
@@ -100,6 +148,10 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 		setVisibleExport,
 		finalColumns,
 		setFinalColumns,
+		columnsWidth,
+		setColumnsWidth,
+		columnSettings,
+		setColumnSettings,
 		searchInputRef,
 	};
 
