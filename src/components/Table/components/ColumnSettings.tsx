@@ -18,6 +18,7 @@ import { Button, Checkbox, Popover, Divider, Space, Popconfirm } from 'antd';
 import React from 'react';
 import { useIntl } from 'umi';
 import { useTableContext } from './TableContext';
+import '../style.less';
 
 interface SortableItemProps {
   id: string;
@@ -32,24 +33,21 @@ const SortableItem = ({ id, label, visible, onToggle }: SortableItemProps) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    display: 'flex',
-    alignItems: 'center',
-    padding: '4px 8px',
-    background: isDragging ? '#f5f5f5' : 'white',
-    borderRadius: '4px',
-    zIndex: isDragging ? 1 : 0,
-    marginBottom: '2px',
   };
 
   return (
-    <div ref={setNodeRef} style={style}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={isDragging ? 'column-settings-item is-dragging' : 'column-settings-item'}
+    >
       <HolderOutlined
         {...attributes}
         {...listeners}
-        style={{ cursor: 'grab', marginRight: 8, color: '#bfbfbf' }}
+        className='column-settings-handle'
       />
       <Checkbox checked={visible} onChange={() => onToggle(id)}>
-        <span style={{ fontSize: '13px' }}>{label}</span>
+        <span className='column-settings-label'>{label}</span>
       </Checkbox>
     </div>
   );
@@ -114,9 +112,9 @@ export const ColumnSettings: React.FC = () => {
   };
 
   const content = (
-    <div style={{ width: 250 }}>
-      <div style={{ padding: '8px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <b style={{ fontSize: '14px' }}>
+    <div className='column-settings-content'>
+      <div className='column-settings-header'>
+        <b className='column-settings-title'>
           {intl.formatMessage({ id: 'global.table.columnSetting.title' })}
         </b>
         <Popconfirm
@@ -124,13 +122,13 @@ export const ColumnSettings: React.FC = () => {
           onConfirm={resetSettings}
           placement='bottomRight'
         >
-          <Button type='link' size='small' style={{ padding: 0 }}>
+          <Button type='link' size='small' className='column-settings-reset'>
             {intl.formatMessage({ id: 'global.table.columnSetting.reset' })}
           </Button>
         </Popconfirm>
       </div>
-      <Divider style={{ margin: '0' }} />
-      <div style={{ maxHeight: 300, overflowY: 'auto', padding: '8px' }}>
+      <Divider className='column-settings-divider' />
+      <div className='column-settings-list'>
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={tempSettings.map((i) => i.key)} strategy={verticalListSortingStrategy}>
             {tempSettings.map((setting) => {
@@ -154,8 +152,8 @@ export const ColumnSettings: React.FC = () => {
           </SortableContext>
         </DndContext>
       </div>
-      <Divider style={{ margin: '0' }} />
-      <div style={{ padding: '8px 12px', textAlign: 'right' }}>
+      <Divider className='column-settings-divider' />
+      <div className='column-settings-footer'>
         <Space>
           <Button size='small' onClick={() => setVisible(false)}>
             {intl.formatMessage({ id: 'global.table.columnSetting.cancel' })}
@@ -176,7 +174,7 @@ export const ColumnSettings: React.FC = () => {
       arrow={{ pointAtCenter: true }}
       open={visible}
       onOpenChange={setVisible}
-      overlayStyle={{ padding: 0 }}
+      overlayClassName='column-settings-popover'
     >
       <Button
         icon={<SettingOutlined />}
