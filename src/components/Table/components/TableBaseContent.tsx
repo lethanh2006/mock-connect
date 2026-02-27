@@ -2,8 +2,8 @@ import { MenuOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Resizable } from 'react-resizable';
 import { Card, ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
+import { ResizableTitle } from './ResizableTitle';
 import type { FilterValue } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import { useEffect, useMemo, useRef } from 'react';
@@ -87,8 +87,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	useEffect(() => {
 		return () => {
 			if (props.noCleanUp !== true) {
-				setFilters(initFilter);
-				setSelectedIds(undefined);
+				setFilters?.(initFilter);
+				setSelectedIds?.(undefined);
 			}
 		};
 	}, []);
@@ -132,57 +132,29 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		};
 	}, []);
 
-	const ResizableTitle = useMemo(() => {
-		return (componentProps: any) => {
-			const { onColumnResize, width, minWidth, maxWidth, resizable, children, ...restProps } = componentProps;
-
-			if (!width || !resizable) {
-				return <th {...restProps}>{children}</th>;
-			}
-
-			return (
-				<Resizable
-					width={width}
-					height={0}
-					axis='x'
-					minConstraints={minWidth ? [minWidth, 0] : undefined}
-					maxConstraints={maxWidth ? [maxWidth, 0] : undefined}
-					onResize={onColumnResize}
-					draggableOpts={{ enableUserSelectHack: true }}
-					onResizeStart={(e) => {
-						e.stopPropagation();
-						isResizingRef.current = true;
-						// Disable user select during resize
-						document.body.style.userSelect = 'none';
-						// Block pointer events on title during resize
-						const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
-						if (titleEl) {
-							(titleEl as HTMLElement).style.pointerEvents = 'none';
-						}
-					}}
-					onResizeStop={(e) => {
-						// Restore user select and pointer events after resize
-						isResizingRef.current = false;
-						document.body.style.userSelect = '';
-						const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
-						if (titleEl) {
-							(titleEl as HTMLElement).style.pointerEvents = '';
-						}
-						lastResizeEndTimeRef.current = Date.now();
-					}}
-					handle={
-						<span
-							className='react-resizable-handle'
-							onClick={(e) => {
-								e.stopPropagation();
-							}}
-						/>
+	const ResizableHeaderCell = useMemo(() => {
+		return (componentProps: any) => (
+			<ResizableTitle
+				{...componentProps}
+				onResizeStart={(e: any) => {
+					isResizingRef.current = true;
+					document.body.style.userSelect = 'none';
+					const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
+					if (titleEl) {
+						(titleEl as HTMLElement).style.pointerEvents = 'none';
 					}
-				>
-					<th {...restProps}>{children}</th>
-				</Resizable>
-			);
-		};
+				}}
+				onResizeStop={(e: any) => {
+					isResizingRef.current = false;
+					document.body.style.userSelect = '';
+					const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
+					if (titleEl) {
+						(titleEl as HTMLElement).style.pointerEvents = '';
+					}
+					lastResizeEndTimeRef.current = Date.now();
+				}}
+			/>
+		);
 	}, []);
 
 	const onChange = (pagination: PaginationProps, fil: Record<string, FilterValue | null>, sorter: any) => {
@@ -242,7 +214,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 							type: 'checkbox',
 							selectedRowKeys: selectedIds ?? [],
 							preserveSelectedRowKeys: true,
-							onChange: (selectedRowKeys) => setSelectedIds(selectedRowKeys as (string | number)[]),
+							onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
 							columnWidth: 40,
 							fixed: 'left',
 							...props.detailRow,
@@ -268,7 +240,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 									{selectedIds && selectedIds.length > 0 ? (
 										<span>
 											(
-											<a href='#!' onClick={() => setSelectedIds(undefined)}>
+											<a href='#!' onClick={() => setSelectedIds?.(undefined)}>
 												{intl.formatMessage({ id: 'global.table.index.bochon' })}
 											</a>
 											)
@@ -287,7 +259,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				columns={actualColumns as any[]}
 				components={{
 					...(rowSortable ? { body: { row: SortableRow } } : {}),
-					header: { cell: ResizableTitle },
+					header: { cell: ResizableHeaderCell },
 				}}
 				tableLayout='fixed'
 				{...props?.otherProps}
@@ -339,9 +311,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			{buttons?.import ? (
 				<ModalImport
-					visible={visibleImport}
+					visible={visibleImport ?? false}
 					modelName={props.modelImportName ?? modelName}
-					onCancel={() => setVisibleImport(false)}
+					onCancel={() => setVisibleImport?.(false)}
 					onOk={() => getData(params)}
 					titleTemplate={title ? `Biểu mẫu ${title}.xlsx` : undefined}
 					extendData={params}
@@ -350,9 +322,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			{buttons?.export ? (
 				<ModalExport
-					visible={visibleExport}
+					visible={visibleExport ?? false}
 					modelName={props.modelExportName ?? modelName}
-					onCancel={() => setVisibleExport(false)}
+					onCancel={() => setVisibleExport?.(false)}
 					fileName={`Danh sách ${title ?? 'dữ liệu'}.xlsx`}
 					condition={params}
 				/>
