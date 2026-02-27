@@ -399,12 +399,21 @@ body {
 			gap: 8px !important;
 			flex-wrap: wrap !important;
 
-			.ant-btn {
-				padding: 8px 12px !important;
+			button.ant-btn:has(> .span-extend) {
+				>span.ant-btn-icon {
+					@media (min-width: 576px) {
+						display: none !important;
+					}
+				}
 
-				.ant-btn-icon,
-				.anticon {
-					display: none !important;
+				&.btn-reload {
+					>span.ant-btn-icon {
+						display: inline-flex !important;
+					}
+
+					>.span-extend {
+						display: none !important;
+					}
 				}
 			}
 
@@ -422,11 +431,9 @@ body {
 			gap: 8px !important;
 
 			.ant-btn {
-				padding: 12px !important;
 
 				.ant-btn-icon,
 				.anticon {
-					font-size: 16px !important;
 					margin: 0 !important;
 					line-height: 1 !important;
 				}
@@ -440,6 +447,7 @@ body {
 		.total {
 			z-index: 1 !important;
 			border: none !important;
+			padding: 0 !important;
 
 			span {
 				color: var(--color-highlight) !important;
@@ -1145,4 +1153,8 @@ body {
 
 .loading-content {
 	height: 70vh;
+}
+
+.ant-table-selection-column {
+	text-align-last: center !important;
 }
