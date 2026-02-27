@@ -230,10 +230,13 @@ export type TableStaticProps = Pick<
 	| 'hideChildrenRows'
 	| 'onReload'
 	| 'otherButtons'
+	| 'scroll'
 > & {
 	data: any[];
 	loading?: boolean;
-
+	modelName?: string;
+	resizable?: boolean;
+	dataPartitionCode?: string;
 	showEdit?: boolean;
 	setShowEdit?: (vi: boolean) => void;
 

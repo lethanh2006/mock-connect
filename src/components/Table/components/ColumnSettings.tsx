@@ -17,7 +17,8 @@ import { CSS } from '@dnd-kit/utilities';
 import { Button, Checkbox, Popover, Divider, Space, Popconfirm } from 'antd';
 import React from 'react';
 import { useIntl } from 'umi';
-import { useTableContext } from './TableContext';
+import { IColumnSetting, useTableContext } from './TableContext';
+import { IColumn } from '../typing';
 
 interface SortableItemProps {
   id: string;
@@ -59,7 +60,7 @@ export const ColumnSettings: React.FC = () => {
   const intl = useIntl();
   const { columnSettings, setColumnSettings, setColumnsWidth, columns, size } = useTableContext();
   const [visible, setVisible] = React.useState(false);
-  const [tempSettings, setTempSettings] = React.useState(columnSettings);
+  const [tempSettings, setTempSettings] = React.useState<IColumnSetting[]>(columnSettings);
   const [shouldResetWidths, setShouldResetWidths] = React.useState(false);
 
   // Sync tempSettings khi mở Popover
@@ -82,22 +83,22 @@ export const ColumnSettings: React.FC = () => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      setTempSettings((items) => {
-        const oldIndex = items.findIndex((i) => i.key === active.id);
-        const newIndex = items.findIndex((i) => i.key === over.id);
+      setTempSettings((items: IColumnSetting[]) => {
+        const oldIndex = items.findIndex((i: IColumnSetting) => i.key === active.id);
+        const newIndex = items.findIndex((i: IColumnSetting) => i.key === over.id);
         return arrayMove(items, oldIndex, newIndex);
       });
     }
   };
 
   const toggleVisibility = (key: string) => {
-    setTempSettings((items) =>
-      items.map((item) => (item.key === key ? { ...item, visible: !item.visible } : item))
+    setTempSettings((items: IColumnSetting[]) =>
+      items.map((item: IColumnSetting) => (item.key === key ? { ...item, visible: !item.visible } : item))
     );
   };
 
   const resetSettings = () => {
-    const defaultSettings = columns.map((col) => ({
+    const defaultSettings: IColumnSetting[] = columns.map((col: IColumn<any>) => ({
       key: String(col.key ?? (Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : (col.dataIndex as string))),
       visible: col.hide !== true,
     }));
@@ -132,10 +133,10 @@ export const ColumnSettings: React.FC = () => {
       <Divider style={{ margin: '0' }} />
       <div style={{ maxHeight: 300, overflowY: 'auto', padding: '8px' }}>
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={tempSettings.map((i) => i.key)} strategy={verticalListSortingStrategy}>
-            {tempSettings.map((setting) => {
+          <SortableContext items={tempSettings.map((i: IColumnSetting) => i.key)} strategy={verticalListSortingStrategy}>
+            {tempSettings.map((setting: IColumnSetting) => {
               const colDef = columns.find(
-                (col) =>
+                (col: IColumn<any>) =>
                   String(
                     col.key ??
                     (Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : (col.dataIndex as string) ?? col.title)

@@ -61,7 +61,7 @@ export const TableHeader: React.FC = () => {
 					<ButtonExtend
 						size={size}
 						icon={<ImportOutlined />}
-						onClick={() => setVisibleImport(true)}
+						onClick={() => setVisibleImport?.(true)}
 						className='btn-import'
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.nhapdulieu' })}
@@ -71,7 +71,7 @@ export const TableHeader: React.FC = () => {
 					<ButtonExtend
 						size={size}
 						icon={<ExportOutlined />}
-						onClick={() => setVisibleExport(true)}
+						onClick={() => setVisibleExport?.(true)}
 						className='btn-export'
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.xuatdulieu' })}{' '}
@@ -118,7 +118,7 @@ export const TableHeader: React.FC = () => {
 								<FilterOutlined />
 							)
 						}
-						onClick={() => setVisibleFilter(true)}
+						onClick={() => setVisibleFilter?.(true)}
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.boloc.tooltip' })}
 						style={
 							findFiltersInColumns(finalColumns, filters)?.length

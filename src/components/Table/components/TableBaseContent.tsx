@@ -2,8 +2,8 @@ import { MenuOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Resizable } from 'react-resizable';
 import { Card, ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
+import { ResizableTitle } from './ResizableTitle';
 import type { FilterValue } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import { useEffect, useMemo } from 'react';
@@ -73,8 +73,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	useEffect(() => {
 		return () => {
 			if (props.noCleanUp !== true) {
-				setFilters(initFilter);
-				setSelectedIds(undefined);
+				setFilters?.(initFilter);
+				setSelectedIds?.(undefined);
 			}
 		};
 	}, []);
@@ -118,40 +118,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		};
 	}, []);
 
-	const ResizableTitle = useMemo(() => {
-		return (componentProps: any) => {
-			const { onColumnResize, width, minWidth, maxWidth, resizable, children, ...restProps } = componentProps;
 
-			if (!width || !resizable) {
-				return <th {...restProps}>{children}</th>;
-			}
-
-			return (
-				<Resizable
-					width={width}
-					height={0}
-					axis='x'
-					minConstraints={minWidth ? [minWidth, 0] : undefined}
-					maxConstraints={maxWidth ? [maxWidth, 0] : undefined}
-					onResize={onColumnResize}
-					draggableOpts={{ enableUserSelectHack: true }}
-					onResizeStart={(e) => {
-						e.stopPropagation();
-					}}
-					handle={
-						<span
-							className='react-resizable-handle'
-							onClick={(e) => {
-								e.stopPropagation();
-							}}
-						/>
-					}
-				>
-					<th {...restProps}>{children}</th>
-				</Resizable>
-			);
-		};
-	}, []);
 
 	const onChange = (pagination: PaginationProps, fil: Record<string, FilterValue | null>, sorter: any) => {
 		const allColumns = finalColumns
@@ -201,7 +168,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 							type: 'checkbox',
 							selectedRowKeys: selectedIds ?? [],
 							preserveSelectedRowKeys: true,
-							onChange: (selectedRowKeys) => setSelectedIds(selectedRowKeys as (string | number)[]),
+							onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
 							columnWidth: 40,
 							fixed: 'left',
 							...props.detailRow,
@@ -227,7 +194,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 									{selectedIds && selectedIds.length > 0 ? (
 										<span>
 											(
-											<a href='#!' onClick={() => setSelectedIds(undefined)}>
+											<a href='#!' onClick={() => setSelectedIds?.(undefined)}>
 												{intl.formatMessage({ id: 'global.table.index.bochon' })}
 											</a>
 											)
@@ -298,9 +265,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			{buttons?.import ? (
 				<ModalImport
-					visible={visibleImport}
+					visible={visibleImport ?? false}
 					modelName={props.modelImportName ?? modelName}
-					onCancel={() => setVisibleImport(false)}
+					onCancel={() => setVisibleImport?.(false)}
 					onOk={() => getData(params)}
 					titleTemplate={title ? `Biểu mẫu ${title}.xlsx` : undefined}
 					extendData={params}
@@ -309,9 +276,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			{buttons?.export ? (
 				<ModalExport
-					visible={visibleExport}
+					visible={visibleExport ?? false}
 					modelName={props.modelExportName ?? modelName}
-					onCancel={() => setVisibleExport(false)}
+					onCancel={() => setVisibleExport?.(false)}
 					fileName={`Danh sách ${title ?? 'dữ liệu'}.xlsx`}
 					condition={params}
 				/>

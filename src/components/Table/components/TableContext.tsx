@@ -3,43 +3,49 @@ import type { InputRef } from 'antd';
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import type { IColumn, TableBaseProps, TFilter } from '../typing';
 
+export interface IColumnSetting {
+	key: string;
+	visible: boolean;
+	order?: number;
+}
+
 interface TableContextValue {
 	// Trạng thái hiển thị Modal
-	visibleFilter: boolean;
-	setVisibleFilter: (visible: boolean) => void;
-	visibleImport: boolean;
-	setVisibleImport: (visible: boolean) => void;
-	visibleExport: boolean;
-	setVisibleExport: (visible: boolean) => void;
+	visibleFilter?: boolean;
+	setVisibleFilter?: (visible: boolean) => void;
+	visibleImport?: boolean;
+	setVisibleImport?: (visible: boolean) => void;
+	visibleExport?: boolean;
+	setVisibleExport?: (visible: boolean) => void;
 
 	// Trạng thái các cột
 	finalColumns: IColumn<any>[];
-	setFinalColumns: React.Dispatch<React.SetStateAction<IColumn<any>[]>>;
+	setFinalColumns?: React.Dispatch<React.SetStateAction<IColumn<any>[]>>;
 	columns: IColumn<any>[]; // Columns gốc (chưa lọc hide)
 
 	// Ref của ô nhập tìm kiếm
-	searchInputRef: React.RefObject<InputRef | null>;
+	searchInputRef?: React.RefObject<InputRef | null>;
 
 	// Trạng thái resize cột
 	columnsWidth: Record<string, number>;
 	setColumnsWidth: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 
 	// Cấu hình hiển thị và thứ tự cột
-	columnSettings: Array<{ key: string; visible: boolean }>;
-	setColumnSettings: React.Dispatch<React.SetStateAction<Array<{ key: string; visible: boolean }>>>;
+	columnSettings: IColumnSetting[];
+	setColumnSettings: React.Dispatch<React.SetStateAction<IColumnSetting[]>>;
 
 	// Trạng thái bảng
 	selectedIds?: (string | number)[];
-	setSelectedIds: (ids?: (string | number)[]) => void;
-	loading: boolean;
-	total: number;
-	filters: TFilter<any>[];
-	hasFilter: boolean;
+	setSelectedIds?: (ids?: (string | number)[]) => void;
+	loading?: boolean;
+	total?: number;
+	filters?: TFilter<any>[];
+	hasFilter?: boolean;
 
 	// Các hành động trên bảng
-	handleDeleteMany: () => void;
-	onCreate: () => void;
-	onReload: () => void;
+	handleDeleteMany?: () => void;
+	onCreate?: () => void;
+	onReload?: () => void;
 
 	// Cấu hình bảng
 	buttons?: TableBaseProps['buttons'];
@@ -50,10 +56,10 @@ interface TableContextValue {
 	size?: 'small' | 'middle' | 'large';
 
 	// Trạng thái modal form
-	visibleForm: boolean;
-	setVisibleForm: (visible: boolean) => void;
-	isView: boolean;
-	edit: boolean;
+	visibleForm?: boolean;
+	setVisibleForm?: (visible: boolean) => void;
+	isView?: boolean;
+	edit?: boolean;
 	Form?: React.FC;
 	title?: React.ReactNode;
 	widthDrawer?: number | 'full';
@@ -65,12 +71,12 @@ interface TableContextValue {
 	formProps?: any;
 
 	// Cấu hình các modal
-	modelName: Namespaces;
+	modelName?: Namespaces;
 	modelImportName?: Namespaces;
 	modelExportName?: Namespaces;
 	params?: any;
 	getData?: (params: any) => void;
-	setFilters: (filters: TFilter<any>[]) => void;
+	setFilters?: (filters: TFilter<any>[]) => void;
 }
 
 export const TableContext = createContext<TableContextValue | undefined>(undefined);
@@ -115,7 +121,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 		}
 	});
 
-	const [columnSettings, setColumnSettings] = useState<Array<{ key: string; visible: boolean }>>(() => {
+	const [columnSettings, setColumnSettings] = useState<IColumnSetting[]>(() => {
 		try {
 			const saved = localStorage.getItem(configStorageKey);
 			if (saved) return JSON.parse(saved).columns || [];
@@ -137,6 +143,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	}, [columnsWidth, columnSettings, configStorageKey]);
 
 	const searchInputRef = useRef<InputRef>(null);
+
 	const contextValue: TableContextValue = {
 		...externalValue,
 		visibleFilter,
