@@ -1,7 +1,17 @@
 import { Resizable } from 'react-resizable';
 
 export const ResizableTitle = (componentProps: any) => {
-  const { onColumnResize, width, minWidth, maxWidth, resizable, children, ...restProps } = componentProps;
+  const {
+    onColumnResize,
+    width,
+    minWidth,
+    maxWidth,
+    resizable,
+    onResizeStart,
+    onResizeStop,
+    children,
+    ...restProps
+  } = componentProps;
 
   if (!width || !resizable) {
     return <th {...restProps}>{children}</th>;
@@ -18,6 +28,10 @@ export const ResizableTitle = (componentProps: any) => {
       draggableOpts={{ enableUserSelectHack: true }}
       onResizeStart={(e) => {
         e.stopPropagation();
+        onResizeStart?.(e);
+      }}
+      onResizeStop={(e) => {
+        onResizeStop?.(e);
       }}
       handle={
         <span
