@@ -3,7 +3,7 @@ import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { IColumn } from '@/components/Table/typing';
 import type { AuditLog } from '@/services/TienIch/AuditLog/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import type { models as rawModels } from '@@/plugin-model/model';
 import { Button, Card, Col, Descriptions, Row, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -126,7 +126,7 @@ const ModalAuditLog = (props: {
 			width: 150,
 			filterType: 'datetime',
 			sortable: true,
-			render: (val) => val && dayjs(val).format('HH:mm:ss, DD/MM/YYYY'),
+			render: (val) => val && formatDateTime(val),
 			onCell,
 		},
 		// {

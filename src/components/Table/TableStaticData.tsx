@@ -6,7 +6,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { AutoComplete, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
-import React, { useEffect, useMemo, useRef, useState, useCallback, JSX } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useIntl, useModel } from 'umi';
 import ModalExpandable from './ModalExpandable';
@@ -266,8 +266,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					setTotal(extra.currentDataSource.length ?? pagination.total);
 				}}
 				loading={props?.loading}
-				size={size}
-				scroll={{ x: totalWidth, ...props.scroll }}
+				size={size ?? props.size}
+				scroll={{ x: totalWidth ?? props.otherProps?.scroll?.x ?? 'max-content', ...props.scroll, ...props.otherProps?.scroll }}
 				bordered
 				components={{
 					...(rowSortable ? { body: { row: SortableRow } } : {}),

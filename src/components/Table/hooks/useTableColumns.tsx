@@ -30,6 +30,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		size,
 		columnsWidth,
 		setColumnsWidth,
+		hideFilterColumn,
 		columnSettings,
 		setColumnSettings,
 	} = useTableContext();
@@ -285,26 +286,28 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			return columns.map((item: IColumn<any>) => ({
 				...item,
 				...(item.sortable && getSort(item.dataIndex)),
-				...(item.filterType === 'string'
-					? getColumnSearchProps(item.dataIndex, item.title)
-					: item.filterType === 'select'
-						? getFilterColumnProps(item.dataIndex, item.filterData)
-						: item.filterType === 'customselect'
-							? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
-							: undefined),
+				...(!hideFilterColumn &&
+					(item.filterType === 'string'
+						? getColumnSearchProps(item.dataIndex, item.title)
+						: item.filterType === 'select'
+							? getFilterColumnProps(item.dataIndex, item.filterData)
+							: item.filterType === 'customselect'
+								? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
+								: undefined)),
 				children: item.children?.map((child: IColumn<any>) => ({
 					...child,
 					...(child.sortable && getSort(child.dataIndex)),
-					...(child.filterType === 'string'
-						? getColumnSearchProps(child.dataIndex, child.title)
-						: child.filterType === 'select'
-							? getFilterColumnProps(child.dataIndex, child.filterData)
-							: child.filterType === 'customselect'
-								? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
-								: undefined),
+					...(!hideFilterColumn &&
+						(child.filterType === 'string'
+							? getColumnSearchProps(child.dataIndex, child.title)
+							: child.filterType === 'select'
+								? getFilterColumnProps(child.dataIndex, child.filterData)
+								: child.filterType === 'customselect'
+									? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
+									: undefined)),
 				})),
 			}));
-		}, [columns, getSort, getColumnSearchProps, getFilterColumnProps, getColumnSelectProps]),
+		}, [columns, getSort, getColumnSearchProps, getFilterColumnProps, getColumnSelectProps, hideFilterColumn]),
 		columnSettings,
 		columnsWidth,
 		setColumnsWidth,
