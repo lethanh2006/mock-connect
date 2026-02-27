@@ -41,6 +41,10 @@ export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 
 	 * Hàm sort tùy chỉnh (có thể dùng để sắp xếp họ tên theo AB)
 	 */
 	customSort?: (value1: any, value2: any) => number;
+
+	minWidth?: number;
+	maxWidth?: number;
+	resizable?: boolean;
 }
 
 export type TDataOption = {

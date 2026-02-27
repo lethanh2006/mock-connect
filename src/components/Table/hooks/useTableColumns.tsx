@@ -2,7 +2,7 @@ import { FilterOutlined, SearchOutlined } from '@ant-design/icons';
 import { AutoComplete, Button, Input, Space } from 'antd';
 import type { SortOrder } from 'antd/lib/table/interface';
 import _ from 'lodash';
-import React, { JSX, useEffect } from 'react';
+import React, { JSX, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useIntl } from 'umi';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
@@ -18,8 +18,18 @@ interface UseTableColumnsProps {
 
 export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableColumnsProps) => {
 	const intl = useIntl();
-	const { searchInputRef, filters, setFilters, setFinalColumns, buttons, hasFilter, setVisibleFilter, size } =
-		useTableContext();
+	const {
+		searchInputRef,
+		filters,
+		setFilters,
+		setFinalColumns,
+		buttons,
+		hasFilter,
+		setVisibleFilter,
+		size,
+		columnsWidth,
+		setColumnsWidth,
+	} = useTableContext();
 
 	/**
 	 * Lấy quy tắc lọc hiện tại của cột
@@ -247,41 +257,117 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			filteredValue: filterColumn?.values ?? [],
 		};
 	};
+	//#endregion
 
-	//#region Lấy các cột của bảng
-	const getColumns = () => {
-		let final: IColumn<any>[] = columns.map((item) => ({
-			...item,
-			...(item.sortable && getSort(item.dataIndex)),
-			...(item.filterType === 'string'
-				? getColumnSearchProps(item.dataIndex, item.title)
-				: item.filterType === 'select'
-					? getFilterColumnProps(item.dataIndex, item.filterData)
-					: item.filterType === 'customselect'
-						? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
-						: undefined),
-			children: item.children?.map((child) => ({
-				...child,
-				...(child.sortable && getSort(child.dataIndex)),
-				...(child.filterType === 'string'
-					? getColumnSearchProps(child.dataIndex, child.title)
-					: child.filterType === 'select'
-						? getFilterColumnProps(child.dataIndex, child.filterData)
-						: child.filterType === 'customselect'
-							? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
+	const rafRef = useRef<number | null>(null);
+	const onResize = useCallback(
+		(key: string, newWidth: number) => {
+			if (rafRef.current) window.cancelAnimationFrame(rafRef.current);
+			rafRef.current = window.requestAnimationFrame(() => {
+				setColumnsWidth((prev) => {
+					if (prev[key] === newWidth) return prev;
+					return {
+						...prev,
+						[key]: newWidth,
+					};
+				});
+			});
+		},
+		[setColumnsWidth]
+	);
+
+	const finalColumns = useMemo(() => {
+		const handleResize =
+			(dataIndex: any) =>
+				(e: React.SyntheticEvent, { size: s }: any) => {
+					const key = Array.isArray(dataIndex) ? dataIndex.join('.') : dataIndex;
+					onResize(key, s.width);
+				};
+
+		let final: IColumn<any>[] = columns.map((item) => {
+			const key = Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : (item.dataIndex as string);
+			const width = columnsWidth[key] || item.width;
+
+			return {
+				...item,
+				width,
+				onHeaderCell: (column: any) => {
+					const baseWidth = item.width;
+					return {
+						width: column.width,
+						minWidth: item.minWidth ?? (item.resizable ? baseWidth * 0.8 : undefined),
+						maxWidth: item.maxWidth ?? (item.resizable ? baseWidth * 1.2 : undefined),
+						onColumnResize: handleResize(item.dataIndex),
+						resizable: item.resizable,
+						onDoubleClick: () => {
+							if (item.resizable) {
+								setColumnsWidth((prev) => {
+									const newWidths = { ...prev };
+									delete newWidths[key];
+									return newWidths;
+								});
+							}
+						},
+					};
+				},
+				...(item.sortable && getSort(item.dataIndex)),
+				...(item.filterType === 'string'
+					? getColumnSearchProps(item.dataIndex, item.title)
+					: item.filterType === 'select'
+						? getFilterColumnProps(item.dataIndex, item.filterData)
+						: item.filterType === 'customselect'
+							? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
 							: undefined),
-			})),
-		}));
+				children: item.children?.map((child) => {
+					const childKey = Array.isArray(child.dataIndex)
+						? child.dataIndex.join('.')
+						: (child.dataIndex as string);
+					const childWidth = columnsWidth[childKey] || child.width;
+					const baseChildWidth = child.width;
+					return {
+						...child,
+						width: childWidth,
+						onHeaderCell: (column: any) => {
+							return {
+								width: column.width,
+								minWidth: child.minWidth ?? (child.resizable ? baseChildWidth * 0.8 : undefined),
+								maxWidth: child.maxWidth ?? (child.resizable ? baseChildWidth * 1.2 : undefined),
+								onColumnResize: handleResize(child.dataIndex),
+								resizable: child.resizable,
+								onDoubleClick: () => {
+									if (child.resizable) {
+										setColumnsWidth((prev) => {
+											const newWidths = { ...prev };
+											delete newWidths[childKey];
+											return newWidths;
+										});
+									}
+								},
+							};
+						},
+						...(child.sortable && getSort(child.dataIndex)),
+						...(child.filterType === 'string'
+							? getColumnSearchProps(child.dataIndex, child.title)
+							: child.filterType === 'select'
+								? getFilterColumnProps(child.dataIndex, child.filterData)
+								: child.filterType === 'customselect'
+									? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
+									: undefined),
+					};
+				}),
+			};
+		});
 
 		final = final?.filter((item) => item?.hide !== true);
 		if (addStt !== false)
 			final.unshift({
 				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
-				// align: 'center',
+				key: 'index',
 				width: 60,
+				fixed: 'left',
 				render: (val, rec) => {
-					const phanVungHienTai = dsPhanVung?.find((item) => item?.ma === rec?.dataPartitionCode);
+					const phanVungHienTai = dsPhanVung?.find((it) => it?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
 
 					return (
@@ -300,12 +386,12 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				},
 			});
 
-		setFinalColumns(final);
-	};
+		return final;
+	}, [columns, columnsWidth, sort, filters, addStt, dsPhanVung, intl, onResize, size]);
 
 	useEffect(() => {
-		getColumns();
-	}, [JSON.stringify(filters), sort, ...columns]);
+		setFinalColumns(finalColumns);
+	}, [finalColumns, setFinalColumns]);
 
-	return { getColumns, handleFilter, handleSearch };
+	return { finalColumns, handleFilter, handleSearch };
 };

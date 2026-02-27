@@ -1,6 +1,6 @@
 import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import type { InputRef } from 'antd';
-import React, { createContext, ReactNode, useContext, useRef, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import type { IColumn, TableBaseProps, TFilter } from '../typing';
 
 interface TableContextValue {
@@ -19,6 +19,10 @@ interface TableContextValue {
 
 	// Ref của ô nhập tìm kiếm
 	searchInputRef: React.RefObject<InputRef | null>;
+
+	// Trạng thái resize cột
+	columnsWidth: Record<string, number>;
+	setColumnsWidth: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 
 	// Trạng thái bảng
 	selectedIds?: (string | number)[];
@@ -79,6 +83,8 @@ interface TableProviderProps {
 		| 'setVisibleExport'
 		| 'finalColumns'
 		| 'setFinalColumns'
+		| 'columnsWidth'
+		| 'setColumnsWidth'
 		| 'searchInputRef'
 	>;
 }
@@ -88,6 +94,22 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
+	const storageKey = `columnsWidth_${externalValue.modelName}`;
+	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
+		try {
+			const saved = localStorage.getItem(storageKey);
+			return saved ? JSON.parse(saved) : {};
+		} catch (e) {
+			return {};
+		}
+	});
+
+	useEffect(() => {
+		if (Object.keys(columnsWidth).length > 0) {
+			localStorage.setItem(storageKey, JSON.stringify(columnsWidth));
+		}
+	}, [columnsWidth, storageKey]);
+
 	const searchInputRef = useRef<InputRef>(null);
 	const contextValue: TableContextValue = {
 		...externalValue,
@@ -99,6 +121,8 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 		setVisibleExport,
 		finalColumns,
 		setFinalColumns,
+		columnsWidth,
+		setColumnsWidth,
 		searchInputRef,
 	};
 
