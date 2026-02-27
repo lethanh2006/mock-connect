@@ -24,6 +24,10 @@ interface TableContextValue {
 	columnsWidth: Record<string, number>;
 	setColumnsWidth: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 
+	// Cấu hình hiển thị và thứ tự cột
+	columnSettings: Array<{ key: string; visible: boolean }>;
+	setColumnSettings: React.Dispatch<React.SetStateAction<Array<{ key: string; visible: boolean }>>>;
+
 	// Trạng thái bảng
 	selectedIds?: (string | number)[];
 	setSelectedIds: (ids?: (string | number)[]) => void;
@@ -85,6 +89,8 @@ interface TableProviderProps {
 		| 'setFinalColumns'
 		| 'columnsWidth'
 		| 'setColumnsWidth'
+		| 'columnSettings'
+		| 'setColumnSettings'
 		| 'searchInputRef'
 	>;
 }
@@ -94,21 +100,41 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
-	const storageKey = `columnsWidth_${externalValue.modelName}`;
+	const configStorageKey = `tableConfig_${externalValue.modelName}`;
+
 	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
 		try {
-			const saved = localStorage.getItem(storageKey);
-			return saved ? JSON.parse(saved) : {};
+			const saved = localStorage.getItem(configStorageKey);
+			if (saved) return JSON.parse(saved).widths || {};
+
+			// Migration từ key cũ nếu có
+			const oldWidths = localStorage.getItem(`columnsWidth_${externalValue.modelName}`);
+			return oldWidths ? JSON.parse(oldWidths) : {};
 		} catch (e) {
 			return {};
 		}
 	});
 
-	useEffect(() => {
-		if (Object.keys(columnsWidth).length > 0) {
-			localStorage.setItem(storageKey, JSON.stringify(columnsWidth));
+	const [columnSettings, setColumnSettings] = useState<Array<{ key: string; visible: boolean }>>(() => {
+		try {
+			const saved = localStorage.getItem(configStorageKey);
+			if (saved) return JSON.parse(saved).columns || [];
+
+			// Migration từ key cũ nếu có
+			const oldSettings = localStorage.getItem(`columnSettings_${externalValue.modelName}`);
+			return oldSettings ? JSON.parse(oldSettings) : [];
+		} catch (e) {
+			return [];
 		}
-	}, [columnsWidth, storageKey]);
+	});
+
+	useEffect(() => {
+		const config = {
+			widths: columnsWidth,
+			columns: columnSettings,
+		};
+		localStorage.setItem(configStorageKey, JSON.stringify(config));
+	}, [columnsWidth, columnSettings, configStorageKey]);
 
 	const searchInputRef = useRef<InputRef>(null);
 	const contextValue: TableContextValue = {
@@ -123,6 +149,8 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 		setFinalColumns,
 		columnsWidth,
 		setColumnsWidth,
+		columnSettings,
+		setColumnSettings,
 		searchInputRef,
 	};
 
