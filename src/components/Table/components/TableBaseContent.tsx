@@ -194,7 +194,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 		return (
 			<Table
-				scroll={{ x: totalWidth, ...props.scroll }}
+				scroll={{ x: totalWidth ?? props.scroll?.x ?? 'max-content', ...props.scroll }}
 				rowSelection={
 					props?.rowSelection
 						? {

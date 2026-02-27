@@ -29,6 +29,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		size,
 		columnsWidth,
 		setColumnsWidth,
+		hideFilterColumn,
 	} = useTableContext();
 
 	/**
@@ -311,13 +312,14 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					};
 				},
 				...(item.sortable && getSort(item.dataIndex)),
-				...(item.filterType === 'string'
-					? getColumnSearchProps(item.dataIndex, item.title)
-					: item.filterType === 'select'
-						? getFilterColumnProps(item.dataIndex, item.filterData)
-						: item.filterType === 'customselect'
-							? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
-							: undefined),
+				...(!hideFilterColumn &&
+					(item.filterType === 'string'
+						? getColumnSearchProps(item.dataIndex, item.title)
+						: item.filterType === 'select'
+							? getFilterColumnProps(item.dataIndex, item.filterData)
+							: item.filterType === 'customselect'
+								? getColumnSelectProps(item.dataIndex, item.filterCustomSelect)
+								: undefined)),
 				children: item.children?.map((child) => {
 					const childKey = Array.isArray(child.dataIndex)
 						? child.dataIndex.join('.')
@@ -346,13 +348,14 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 							};
 						},
 						...(child.sortable && getSort(child.dataIndex)),
-						...(child.filterType === 'string'
-							? getColumnSearchProps(child.dataIndex, child.title)
-							: child.filterType === 'select'
-								? getFilterColumnProps(child.dataIndex, child.filterData)
-								: child.filterType === 'customselect'
-									? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
-									: undefined),
+						...(!hideFilterColumn &&
+							(child.filterType === 'string'
+								? getColumnSearchProps(child.dataIndex, child.title)
+								: child.filterType === 'select'
+									? getFilterColumnProps(child.dataIndex, child.filterData)
+									: child.filterType === 'customselect'
+										? getColumnSelectProps(child.dataIndex, child.filterCustomSelect)
+										: undefined)),
 					};
 				}),
 			};
@@ -387,7 +390,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			});
 
 		return final;
-	}, [columns, columnsWidth, sort, filters, addStt, dsPhanVung, intl, onResize, size]);
+	}, [columns, columnsWidth, sort, filters, addStt, dsPhanVung, intl, onResize, size, hideFilterColumn]);
 
 	useEffect(() => {
 		setFinalColumns(finalColumns);
