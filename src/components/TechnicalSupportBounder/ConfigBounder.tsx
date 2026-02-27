@@ -75,6 +75,7 @@ const ConfigBounder = (props: { children?: any }) => {
 						textTextColor: primaryColor,
 						defaultColor: textColors.text100,
 						borderColorDisabled: 'transparent',
+						paddingInline: 10,
 						borderRadius: 4,
 						fontWeight: 600,
 					},
