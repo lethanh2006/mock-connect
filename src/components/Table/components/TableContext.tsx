@@ -113,7 +113,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
 		try {
 			const saved = localStorage.getItem(configStorageKey);
-			if (saved) return JSON.parse(saved).widths || {};
+			return saved ? JSON.parse(saved).widths || {} : {};
 		} catch (e) {
 			return {};
 		}
@@ -122,7 +122,7 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	const [columnSettings, setColumnSettings] = useState<IColumnSetting[]>(() => {
 		try {
 			const saved = localStorage.getItem(configStorageKey);
-			if (saved) return JSON.parse(saved).columns || [];
+			return saved ? JSON.parse(saved).columns || [] : [];
 		} catch (e) {
 			return [];
 		}
