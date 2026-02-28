@@ -2,7 +2,7 @@ import { FilterOutlined, SearchOutlined } from '@ant-design/icons';
 import { AutoComplete, Button, Input, Space } from 'antd';
 import type { SortOrder } from 'antd/lib/table/interface';
 import _ from 'lodash';
-import React, { JSX, useEffect, useMemo, useCallback } from 'react';
+import React, { JSX, useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'umi';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
@@ -80,7 +80,9 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 	const handleSearch = useCallback(
 		(dataIndex: any, value: string, confirm?: () => void) => {
 			if (!value) {
-				const tempFilters = (filters ?? []).filter((item: TFilter<any>) => JSON.stringify(item.field) !== JSON.stringify(dataIndex));
+				const tempFilters = (filters ?? []).filter(
+					(item: TFilter<any>) => JSON.stringify(item.field) !== JSON.stringify(dataIndex),
+				);
 				setFilters?.(tempFilters);
 			} else {
 				const column = columns.find((col: IColumn<any>) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex));
@@ -186,7 +188,9 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		(dataIndex: any, values: string[]) => {
 			if (!values || !values.length) {
 				// Xóa bộ lọc của cột này
-				const tempFilters = (filters ?? []).filter((item: TFilter<any>) => JSON.stringify(item.field) !== JSON.stringify(dataIndex));
+				const tempFilters = (filters ?? []).filter(
+					(item: TFilter<any>) => JSON.stringify(item.field) !== JSON.stringify(dataIndex),
+				);
 				setFilters?.(tempFilters);
 			} else {
 				// Tìm column tương ứng để check có handleFilter không
@@ -323,7 +327,6 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				dataIndex: 'index',
 				key: 'index',
 				width: 60,
-				fixed: 'left',
 				render: (val, rec) => {
 					const phanVungHienTai = dsPhanVung?.find((it: any) => it?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
