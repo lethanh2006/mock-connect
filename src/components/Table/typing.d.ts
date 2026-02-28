@@ -235,7 +235,6 @@ export type TableStaticProps = Pick<
 > & {
 	data: any[];
 	loading?: boolean;
-	modelName?: string;
 	resizable?: boolean;
 	dataPartitionCode?: string;
 	showEdit?: boolean;

@@ -6,39 +6,21 @@ import { CSS } from '@dnd-kit/utilities';
 import { AutoComplete, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
-import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useIntl, useModel } from 'umi';
+import { ResizableTitle } from './components/ResizableTitle';
+import { TableProvider, useTableContext } from './components/TableContext';
+import { useApplyColumnSettings } from './hooks/useApplyColumnSettings';
 import ModalExpandable from './ModalExpandable';
 import './style.less';
 import type { IColumn, TableStaticProps, TDataOption } from './typing';
 import { updateSearchStorage } from './utils';
-import { TableProvider, useTableContext } from './components/TableContext';
-import { useApplyColumnSettings } from './hooks/useApplyColumnSettings';
-import { ResizableTitle } from './components/ResizableTitle';
-import { ColumnSettings } from './components/ColumnSettings';
 
 const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const intl = useIntl();
-	const {
-		Form,
-		showEdit,
-		setShowEdit,
-		addStt,
-		data,
-		children,
-		hasCreate,
-		hasTotal,
-		rowSortable,
-		resizable,
-	} = props;
-	const {
-		columnSettings,
-		setColumnSettings,
-		columnsWidth,
-		setColumnsWidth,
-		size,
-	} = useTableContext();
+	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable, resizable } = props;
+	const { columnSettings, setColumnSettings, columnsWidth, setColumnsWidth, size } = useTableContext();
 
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
 	const [searchText, setSearchText] = useState<string>('');
@@ -50,16 +32,19 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
 	// State cho tableData để sortable
-	const tableData = useMemo(() =>
-		(props?.data ?? []).map((item: any, index: number) => ({
-			...item,
-			key: item?._id ?? String(index),
-			index: index + 1,
-			children:
-				!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
-					? item.children
-					: undefined,
-		})), [props.data, props.hideChildrenRows]);
+	const tableData = useMemo(
+		() =>
+			(props?.data ?? []).map((item: any, index: number) => ({
+				...item,
+				key: item?._id ?? String(index),
+				index: index + 1,
+				children:
+					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
+						? item.children
+						: undefined,
+			})),
+		[props.data, props.hideChildrenRows],
+	);
 
 	useEffect(() => {
 		setTotal(data?.length);
@@ -72,66 +57,69 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		setSearchedColumn(dataIndex);
 	}, []);
 
-	const getColumnSearchProps = useCallback((dataIndex: any, columnTitle: any, render: any): Partial<IColumn<unknown>> => ({
-		filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
-			const searchOptions = (JSON.parse(localStorage.getItem('dataTimKiem') || '{}')[dataIndex] || []).map(
-				(value: string) => ({ value, label: value }),
-			);
+	const getColumnSearchProps = useCallback(
+		(dataIndex: any, columnTitle: any, render: any): Partial<IColumn<unknown>> => ({
+			filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
+				const searchOptions = (JSON.parse(localStorage.getItem('dataTimKiem') || '{}')[dataIndex] || []).map(
+					(value: string) => ({ value, label: value }),
+				);
 
-			return (
-				<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
-					<AutoComplete
-						options={searchOptions}
-						onSelect={(value: string) => {
-							setSelectedKeys([value]);
-							handleSearch(confirm, dataIndex);
-						}}
-					>
-						<Input.Search
-							placeholder={`Tìm ${columnTitle}`}
-							allowClear
-							enterButton
-							value={selectedKeys[0]}
-							onChange={(e) => {
-								if (e.type === 'click') {
-									setSelectedKeys([]);
-									confirm();
-								} else {
-									setSelectedKeys(e.target.value ? [e.target.value] : []);
-								}
-							}}
-							onSearch={(value: string) => {
-								if (value) updateSearchStorage(dataIndex, value);
+				return (
+					<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
+						<AutoComplete
+							options={searchOptions}
+							onSelect={(value: string) => {
+								setSelectedKeys([value]);
 								handleSearch(confirm, dataIndex);
 							}}
-							ref={searchInputRef}
-						/>
-					</AutoComplete>
-				</div>
-			);
-		},
-		filterIcon: (filtered: boolean) => <SearchOutlined className={filtered ? 'text-primary' : undefined} />,
-		onFilter: (value: any, record: any) =>
-			typeof dataIndex === 'string'
-				? record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
-				: typeof dataIndex === 'object'
-					? record[dataIndex[0]][dataIndex?.[1]]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
-					: '',
-		onFilterDropdownVisibleChange: (vis: boolean) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
-		render: (text: any, record: any) =>
-			render ? (
-				render(text, record)
-			) : searchedColumn === dataIndex ? (
-				<Highlighter
-					highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-					searchWords={[searchText]}
-					autoEscape
-					textToHighlight={text ? text.toString() : ''}
-				/>
-			) : (
-				text
-			),
-	}), [handleSearch, searchText, searchedColumn]);
+						>
+							<Input.Search
+								placeholder={`Tìm ${columnTitle}`}
+								allowClear
+								enterButton
+								value={selectedKeys[0]}
+								onChange={(e) => {
+									if (e.type === 'click') {
+										setSelectedKeys([]);
+										confirm();
+									} else {
+										setSelectedKeys(e.target.value ? [e.target.value] : []);
+									}
+								}}
+								onSearch={(value: string) => {
+									if (value) updateSearchStorage(dataIndex, value);
+									handleSearch(confirm, dataIndex);
+								}}
+								ref={searchInputRef}
+							/>
+						</AutoComplete>
+					</div>
+				);
+			},
+			filterIcon: (filtered: boolean) => <SearchOutlined className={filtered ? 'text-primary' : undefined} />,
+			onFilter: (value: any, record: any) =>
+				typeof dataIndex === 'string'
+					? record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
+					: typeof dataIndex === 'object'
+						? record[dataIndex[0]][dataIndex?.[1]]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
+						: '',
+			onFilterDropdownVisibleChange: (vis: boolean) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
+			render: (text: any, record: any) =>
+				render ? (
+					render(text, record)
+				) : searchedColumn === dataIndex ? (
+					<Highlighter
+						highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+						searchWords={[searchText]}
+						autoEscape
+						textToHighlight={text ? text.toString() : ''}
+					/>
+				) : (
+					text
+				),
+		}),
+		[handleSearch, searchText, searchedColumn],
+	);
 
 	const getFilterColumnProps = useCallback((dataIndex: any, filterData?: any[]): Partial<IColumn<unknown>> => {
 		return {
@@ -183,7 +171,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 	const { processedColumns } = useApplyColumnSettings({
 		columns: baseColumns,
-		columnSettings,
+		// Tạm thời static nên ko aplly columnSettings, sau này nếu có thêm tính năng chỉnh cột thì sẽ dùng
+		columnSettings: [],
 		columnsWidth,
 		setColumnsWidth,
 		setColumnSettings,
@@ -208,10 +197,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 							{phanVungHienTai?._id && (
 								<Tooltip title={phanVungHienTai?.name}>
-									<div
-										className='cornerTriangle'
-										style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }}
-									/>
+									<div className='cornerTriangle' style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }} />
 								</Tooltip>
 							)}
 						</div>
@@ -267,7 +253,11 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				}}
 				loading={props?.loading}
 				size={size ?? props.size}
-				scroll={{ x: totalWidth ?? props.otherProps?.scroll?.x ?? 'max-content', ...props.scroll, ...props.otherProps?.scroll }}
+				scroll={{
+					x: totalWidth ?? props.otherProps?.scroll?.x ?? 'max-content',
+					...props.scroll,
+					...props.otherProps?.scroll,
+				}}
 				bordered
 				components={{
 					...(rowSortable ? { body: { row: SortableRow } } : {}),
@@ -322,8 +312,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							</div>
 						</Tooltip>
 					) : null}
-
-					{props.modelName && <ColumnSettings />}
 				</div>
 			</div>
 
@@ -392,15 +380,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 };
 
 const TableStaticData: React.FC<TableStaticProps> = (props) => {
-	if (props.modelName) {
-		return (
-			<TableProvider value={{ modelName: props.modelName as any, size: props.size, columns: props.columns }}>
-				<TableStaticContent {...props} />
-			</TableProvider>
-		);
-	}
-
-	// Fallback when no modelName is provided - limited management
 	return (
 		<TableProvider value={{ modelName: 'default_static' as any, size: props.size, columns: props.columns }}>
 			<TableStaticContent {...props} />

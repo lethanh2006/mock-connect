@@ -107,16 +107,13 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
+	// TODO: Check lại config key có thể xảy ra trùng lặp khi dùng nhiều table trên cùng 1 model/tableStatic
 	const configStorageKey = `tableConfig_${externalValue.modelName}`;
 
 	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
 		try {
 			const saved = localStorage.getItem(configStorageKey);
 			if (saved) return JSON.parse(saved).widths || {};
-
-			// Migration từ key cũ nếu có
-			const oldWidths = localStorage.getItem(`columnsWidth_${externalValue.modelName}`);
-			return oldWidths ? JSON.parse(oldWidths) : {};
 		} catch (e) {
 			return {};
 		}
@@ -126,10 +123,6 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 		try {
 			const saved = localStorage.getItem(configStorageKey);
 			if (saved) return JSON.parse(saved).columns || [];
-
-			// Migration từ key cũ nếu có
-			const oldSettings = localStorage.getItem(`columnSettings_${externalValue.modelName}`);
-			return oldSettings ? JSON.parse(oldSettings) : [];
 		} catch (e) {
 			return [];
 		}
