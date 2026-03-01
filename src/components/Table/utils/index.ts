@@ -87,3 +87,15 @@ export const updateSearchStorage = (dataIndex: string, value: string) => {
 	savedSearchValues[dataIndex] = uniqueValues;
 	localStorage.setItem('dataTimKiem', JSON.stringify(savedSearchValues));
 };
+
+/**
+ * Tạo key duy nhất cho column dựa trên key, dataIndex hoặc title + index
+ */
+export const getColumnKey = (item: IColumn<any>, index: number) => {
+	if (item.key) return String(item.key);
+	if (item.dataIndex) {
+		return Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : String(item.dataIndex);
+	}
+	// Nếu không có key/dataIndex (thường là cột Thao tác), dùng title + index để đảm bảo duy nhất
+	return `${String(item.title ?? 'column')}_${index}`;
+};

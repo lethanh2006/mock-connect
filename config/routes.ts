@@ -46,6 +46,11 @@
 				path: 'chuc-vu',
 				component: './DanhMuc/ChucVu',
 			},
+			{
+				name: 'DemoStatic',
+				path: 'demo-static',
+				component: './DanhMuc/DemoStatic',
+			},
 		],
 	},
 

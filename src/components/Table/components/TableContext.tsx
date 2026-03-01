@@ -73,6 +73,7 @@ interface TableContextValue {
 
 	// Cấu hình các modal
 	modelName?: Namespaces;
+	configKey?: string;
 	modelImportName?: Namespaces;
 	modelExportName?: Namespaces;
 	params?: any;
@@ -107,8 +108,9 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
-	// TODO: Check lại config key có thể xảy ra trùng lặp khi dùng nhiều table trên cùng 1 model/tableStatic
-	const configStorageKey = `tableConfig_${externalValue.modelName}`;
+
+	const pathname = window.location.pathname.replace(/\//g, '_');
+	const configStorageKey = `tableConfig_${pathname}_${externalValue.configKey || externalValue.modelName || 'default'}`;
 
 	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
 		try {

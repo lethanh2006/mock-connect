@@ -19,6 +19,7 @@ import React from 'react';
 import { useIntl } from 'umi';
 import { IColumnSetting, useTableContext } from './TableContext';
 import { IColumn } from '../typing';
+import { getColumnKey } from '../utils';
 import '../style.less';
 
 interface SortableItemProps {
@@ -96,8 +97,8 @@ export const ColumnSettings: React.FC = () => {
   };
 
   const resetSettings = () => {
-    const defaultSettings: IColumnSetting[] = columns.map((col: IColumn<any>) => ({
-      key: String(col.key ?? (Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : (col.dataIndex as string))),
+    const defaultSettings: IColumnSetting[] = columns.map((col: IColumn<any>, idx: number) => ({
+      key: getColumnKey(col, idx),
       visible: col.hide !== true,
     }));
     setTempSettings(defaultSettings);
@@ -134,11 +135,7 @@ export const ColumnSettings: React.FC = () => {
           <SortableContext items={tempSettings.map((i: IColumnSetting) => i.key)} strategy={verticalListSortingStrategy}>
             {tempSettings.map((setting: IColumnSetting) => {
               const colDef = columns.find(
-                (col: IColumn<any>) =>
-                  String(
-                    col.key ??
-                    (Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : (col.dataIndex as string) ?? col.title)
-                  ) === setting.key
+                (col: IColumn<any>, idx: number) => getColumnKey(col, idx) === setting.key
               );
               return (
                 <SortableItem
