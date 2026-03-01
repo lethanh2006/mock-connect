@@ -1,4 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
@@ -21,12 +22,12 @@ import StatActivityOutCome from './components/Stat';
 const HistoryActivityPage = () => {
 	const intl = useIntl();
 	const {
-		danhSach,
-		getModel,
 		page,
 		limit,
 		setPage,
 		setLimit,
+		danhSach,
+		getModel,
 		handleEdit,
 		handleView,
 		getAnalyticsStudentModel,
@@ -47,21 +48,41 @@ const HistoryActivityPage = () => {
 	const { getAllModel: getAllAtributes } = useModel('cct.attributes');
 
 	const [tabActive, setTabActive] = useState<EActivityCategory>(EActivityCategory.REGISTERED);
-
 	const [filter, setFilter] = useState<FilterSuKienValue>({
-		search: '',
-		dateRange: [dayjs().startOf('month'), dayjs().endOf('month')],
+		search: undefined,
+		dateRange: [],
 	});
+	const now = dayjs();
 
 	const getData = () => {
+		const filters: any[] = [];
+
+		if (!!filter?.search) {
+			filters.push({
+				active: true,
+				field: tabActive === EActivityCategory.REGISTERED ? ['activities', 'name'] : 'activitiesOutcomeName',
+				values: [filter?.search],
+				operator: EOperatorType.CONTAIN,
+			});
+		}
+
+		if (!!filter?.dateRange?.length) {
+			filters.push({
+				active: true,
+				field: tabActive === EActivityCategory.REGISTERED ? ['activities', 'startDate'] : 'startDate',
+				values: [filter?.dateRange[0], filter?.dateRange[1]],
+				operator: EOperatorType.BETWEEN,
+			});
+		}
+
 		getModel(
 			{
 				activityCategory: tabActive,
 			},
+			filters,
 			undefined,
 			undefined,
-			undefined,
-			undefined,
+			9,
 			'me/page',
 		);
 	};
@@ -76,7 +97,7 @@ const HistoryActivityPage = () => {
 
 	useEffect(() => {
 		getData();
-	}, [tabActive, filters]);
+	}, [tabActive, filter, page, limit, filters]);
 
 	useEffect(() => {
 		getAllAtributes(undefined, { order: 1 }, { isActive: true });
@@ -86,25 +107,38 @@ const HistoryActivityPage = () => {
 		const now = dayjs();
 
 		const start = dayjs(rec?.activities?.startDate);
-		const end = rec?.activities?.allowPostEventResultsUpdate
-			? dayjs(rec?.activities?.dueDate)
-			: dayjs(rec?.activities?.endDate);
+		const end =
+			rec?.workflow === EApprovalStatus.CHANGES_REQUIRED
+				? rec?.dueDate
+					? dayjs(rec?.dueDate)
+					: null
+				: rec?.activities?.allowPostEventResultsUpdate
+					? rec?.activities?.dueDate
+						? dayjs(rec?.activities?.dueDate)
+						: null
+					: rec?.activities?.endDate
+						? dayjs(rec?.activities?.endDate)
+						: null;
 
-		if (!start.isValid() || !end.isValid()) return false;
+		if (!start.isValid() || !end?.isValid()) return false;
 
 		return now.isAfter(start) && now.isBefore(end);
 	};
 
 	const canEdit = (rec: ActivityOutCome.IRecord) => {
+		const isWorkflowValid = [
+			EApprovalStatus.DRAFT,
+			EApprovalStatus.CHANGES_REQUIRED,
+			EApprovalStatus.EVIDENCE_REQUIRED,
+		].includes(rec?.workflow);
+
+		if (!isWorkflowValid) return false;
+
 		if (rec?.activityCategory === EActivityCategory.REGISTERED) {
-			if (!isInTimeRange(rec)) return false;
+			return isInTimeRange(rec);
 		}
 
-		return (
-			rec?.workflow === EApprovalStatus.DRAFT ||
-			rec?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
-			rec?.workflow === EApprovalStatus.EVIDENCE_REQUIRED
-		);
+		return rec?.workflow === EApprovalStatus.CHANGES_REQUIRED ? rec?.dueDate && now.isBefore(dayjs(rec.dueDate)) : true;
 	};
 
 	const handlePaginationChange = (newPage: number, newPageSize: number) => {
@@ -121,8 +155,48 @@ const HistoryActivityPage = () => {
 		setLimit(size);
 	};
 
+	const mappedData = danhSach?.map((item) => {
+		const start = dayjs(item?.activities?.startDate);
+		const end = dayjs(item?.activities?.endDate);
+
+		let activeKey = '';
+
+		if (start.isAfter(now)) {
+			activeKey = '1';
+		} else if (start.isSameOrBefore(now) && end.isSameOrAfter(now)) {
+			activeKey = '2';
+		} else if (end.isBefore(now)) {
+			activeKey = '3';
+		}
+
+		return {
+			...item,
+			activeKey,
+		};
+	});
+
+	const endDateUpdateEvidence =
+		record?.workflow === EApprovalStatus.CHANGES_REQUIRED
+			? record?.dueDate
+				? dayjs(record?.dueDate)
+				: null
+			: record?.activities?.allowPostEventResultsUpdate
+				? record?.activities?.dueDate
+					? dayjs(record?.activities?.dueDate)
+					: null
+				: record?.activities?.endDate
+					? dayjs(record?.activities?.endDate)
+					: null;
+
+	const editableWorkflow =
+		record?.workflow === EApprovalStatus.DRAFT ||
+		record?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+		record?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+
+	const isExpired = record?.activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
+
 	return (
-		<Card title='My Activities' className='table-base-card' variant='borderless'>
+		<Card title='My Activity' className='table-base-card' variant='borderless'>
 			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
 				{Object.values(EActivityCategory).map((item) => (
 					<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
@@ -172,18 +246,58 @@ const HistoryActivityPage = () => {
 			/>
 
 			<Spin spinning={loading}>
-				{danhSach?.length ? (
+				{mappedData?.length ? (
 					<>
 						<Row gutter={[12, 12]}>
-							{danhSach?.map((item) => {
+							{mappedData?.map((item) => {
 								const equivalencyAttributeIds = item?.activities?.coCurricularActivityEquivalency?.map(
 									(x) => x.attributesId,
 								);
 
 								const canDelete =
-									(item?.activityCategory !== EActivityCategory.REGISTERED || isInTimeRange(item)) &&
-									item?.workflow !== EApprovalStatus.APPROVED &&
-									item?.workflow !== EApprovalStatus.REJECTED;
+									item?.workflow === EApprovalStatus.DRAFT || item?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+								const now = dayjs();
+
+								const startDate = item?.activities?.startDate ? dayjs(item?.activities.startDate) : null;
+								const endDateUpdateEvidence =
+									item?.workflow === EApprovalStatus.CHANGES_REQUIRED
+										? item?.dueDate
+											? dayjs(item?.dueDate)
+											: null
+										: item?.activities?.allowPostEventResultsUpdate
+											? item?.activities?.dueDate
+												? dayjs(item?.activities?.dueDate)
+												: null
+											: item?.activities?.endDate
+												? dayjs(item?.activities?.endDate)
+												: null;
+								const isOngoing = now.isAfter(startDate) && now.isBefore(endDateUpdateEvidence);
+								const isOngoingPerstion =
+									item?.workflow === EApprovalStatus.CHANGES_REQUIRED
+										? now.isBefore(dayjs(item?.dueDate ? dayjs(item?.dueDate) : null))
+										: true;
+
+								const endDateSource = item?.activities?.dueDateRegistration ?? item?.activities?.endDate;
+								const endDate = endDateSource ? dayjs(endDateSource) : null;
+								const outTimeRegis = now.isAfter(endDate) && !item?.workflow;
+
+								const editableWorkflow =
+									item?.workflow === EApprovalStatus.DRAFT ||
+									item?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+									item?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+
+								const isExpired = item?.activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
+
+								const renderButton =
+									editableWorkflow && (tabActive === EActivityCategory.REGISTERED ? isOngoing : isOngoingPerstion) ? (
+										<ButtonExtend block type={'primary'} onClick={() => handleEdit(item)}>
+											Update Evidence
+										</ButtonExtend>
+									) : (
+										<ButtonExtend block disabled>
+											SEE MORE
+										</ButtonExtend>
+									);
 
 								return (
 									<Col key={item._id} xs={24} sm={12} md={8} lg={8}>
@@ -191,33 +305,40 @@ const HistoryActivityPage = () => {
 											<CardSuKienCCT
 												record={{
 													...item?.activities,
-													workflow: item?.workflow,
+													activityOutcome: item,
 												}}
+												banner={item?.banner}
+												name={item?.activities?.name}
+												startDate={
+													item?.activities?.startDate
+														? dayjs(item?.activities?.startDate).format('HH:mm DD/MM/YYYY')
+														: '--'
+												}
+												endDate={
+													item?.activities?.endDate ? dayjs(item?.activities?.endDate).format('HH:mm DD/MM/YYYY') : '--'
+												}
 												equivalencyAttributeIds={equivalencyAttributeIds}
 												onClick={() => handleView(item)}
 												button={
 													<Row style={{ marginTop: 12 }} gutter={[6, 0]}>
-														<Col span={24}>
-															<ButtonExtend
-																block
-																type={canEdit(item) ? 'primary' : undefined}
-																disabled={!canEdit(item)}
-																onClick={() => handleEdit(item)}
-															>
-																Update Evidence
-															</ButtonExtend>
-														</Col>
+														<Col span={24}>{renderButton}</Col>
 													</Row>
 												}
+												outTimeRegis={outTimeRegis}
+												isExpired={isExpired}
+												activeKey={item?.activeKey}
+												isRegister
 											/>
 										) : (
 											<CardSuKienCCT
-												record={
-													{
-														...item,
-														name: item?.activitiesOutcomeName,
-													} as any
-												}
+												record={{
+													...item?.activities,
+													activityOutcome: item,
+												}}
+												banner={item?.banner}
+												name={item?.activitiesOutcomeName}
+												startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
+												endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
 												equivalencyAttributeIds={item?.activitiesType?.attributes?.map((x) => x._id)}
 												onClick={() => handleView(item)}
 												button={
@@ -271,19 +392,13 @@ const HistoryActivityPage = () => {
 																<ButtonExtend block icon={<DashOutlined />} />
 															</Popover>
 														</Col>
-														<Col span={21}>
-															<ButtonExtend
-																block
-																type={canEdit(item) ? 'primary' : undefined}
-																disabled={!canEdit(item)}
-																onClick={() => handleEdit(item)}
-															>
-																Update Evidence
-															</ButtonExtend>
-														</Col>
+														<Col span={21}>{renderButton}</Col>
 													</Row>
 												}
 												isPersonal
+												isExpired={
+													item?.workflow === EApprovalStatus.CHANGES_REQUIRED && now.isAfter(dayjs(item?.dueDate))
+												}
 											/>
 										)}
 									</Col>
@@ -295,7 +410,7 @@ const HistoryActivityPage = () => {
 							<div className='pagination-container'>
 								<Pagination
 									current={page}
-									pageSize={limit || 10}
+									pageSize={limit}
 									total={total}
 									onChange={handlePaginationChange}
 									onShowSizeChange={handlePageSizeChange}
@@ -338,20 +453,26 @@ const HistoryActivityPage = () => {
 								record={
 									{
 										...record?.activities,
-										workflow: record?.workflow,
-										validation: record?.validation,
-
-										rolesId: record?.rolesId,
-										tracks: record?.tracks,
-										levels: record?.levels,
-
-										evidenceFile: record?.evidenceFile,
-
-										reflection: record?.reflection,
-										revisionNote: record?.revisionNote,
+										activityOutcome: record,
 									} as Activity.IRecord
 								}
-								infoEvidence={record?.activityCategory === EActivityCategory.REGISTERED}
+								evidenceDeadline={
+									record?.workflow === EApprovalStatus.CHANGES_REQUIRED
+										? record?.dueDate
+											? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')
+											: '--'
+										: record?.activities?.allowPostEventResultsUpdate
+											? record?.activities?.dueDate
+												? dayjs(record?.activities?.dueDate).format('HH:mm DD/MM/YYYY')
+												: '--'
+											: record?.endDate
+												? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')
+												: '--'
+								}
+								infoEvidence={!!record?.workflow}
+								activeKey={record?.activeKey}
+								isExpired={isExpired}
+								isRegister
 							/>
 
 							<div
@@ -365,13 +486,11 @@ const HistoryActivityPage = () => {
 								}}
 							>
 								<Button onClick={() => setVisibleForm(false)}>Close</Button>
-								<Button
-									type={canEdit(record ?? ({} as ActivityOutCome.IRecord)) ? 'primary' : undefined}
-									disabled={!canEdit(record ?? ({} as ActivityOutCome.IRecord))}
-									onClick={() => handleEdit(record)}
-								>
-									Update Evidence
-								</Button>
+								{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
+									<Button type='primary' onClick={() => handleEdit(record)}>
+										Update Evidence
+									</Button>
+								)}
 							</div>
 						</>
 					) : (
@@ -397,13 +516,11 @@ const HistoryActivityPage = () => {
 							}}
 						>
 							<Button onClick={() => setVisibleForm(false)}>Close</Button>
-							<Button
-								type={canEdit(record ?? ({} as ActivityOutCome.IRecord)) ? 'primary' : undefined}
-								disabled={!canEdit(record ?? ({} as ActivityOutCome.IRecord))}
-								onClick={() => handleEdit(record)}
-							>
-								Update Evidence
-							</Button>
+							{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
+								<Button type='primary' onClick={() => handleEdit(record)}>
+									Update Evidence
+								</Button>
+							)}
 						</div>
 					</>
 				) : (

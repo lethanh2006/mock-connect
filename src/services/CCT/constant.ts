@@ -1,4 +1,4 @@
-import { ETagColor } from '../base/constant';
+import { ETagColor, officialColors, statusBgColors, statusColors } from '../base/constant';
 
 export enum EParticipantScope {
 	UNIVERSITY = 'University',
@@ -46,28 +46,28 @@ export const mapNameApprovalStatus: Record<EApprovalStatus, string> = {
 	[EApprovalStatus.SUBMITTED]: 'Pending For Approval',
 	[EApprovalStatus.APPROVED]: 'Approved',
 	[EApprovalStatus.REJECTED]: 'Rejected',
-	[EApprovalStatus.CHANGES_REQUIRED]: 'Changes Required',
+	[EApprovalStatus.CHANGES_REQUIRED]: 'Change Required',
 	[EApprovalStatus.EXPIRED]: 'Expired',
 };
 
 export const mapColorApprovalStatus: Record<EApprovalStatus, string> = {
-	[EApprovalStatus.EVIDENCE_REQUIRED]: '#FFFAE4',
-	[EApprovalStatus.DRAFT]: '#FFFAE4',
-	[EApprovalStatus.SUBMITTED]: '#E2F2FE',
-	[EApprovalStatus.APPROVED]: '#F5FFEB',
-	[EApprovalStatus.REJECTED]: '#FFEFEE',
-	[EApprovalStatus.CHANGES_REQUIRED]: '#FFFAE4',
-	[EApprovalStatus.EXPIRED]: '#F4F9FF',
+	[EApprovalStatus.EVIDENCE_REQUIRED]: statusBgColors.statusBg300,
+	[EApprovalStatus.DRAFT]: statusBgColors.statusBg300,
+	[EApprovalStatus.SUBMITTED]: statusBgColors.statusBg200,
+	[EApprovalStatus.APPROVED]: statusBgColors.statusBg100,
+	[EApprovalStatus.REJECTED]: statusBgColors.statusBg400,
+	[EApprovalStatus.CHANGES_REQUIRED]: statusBgColors.statusBg300,
+	[EApprovalStatus.EXPIRED]: officialColors.official500,
 };
 
 export const mapColorTextApprovalStatus: Record<EApprovalStatus, string> = {
-	[EApprovalStatus.EVIDENCE_REQUIRED]: '#CE7C1E',
-	[EApprovalStatus.DRAFT]: '#CE7C1E',
-	[EApprovalStatus.SUBMITTED]: '#0E50CF',
-	[EApprovalStatus.APPROVED]: '#329323',
-	[EApprovalStatus.REJECTED]: '#C80F1F',
-	[EApprovalStatus.CHANGES_REQUIRED]: '#CE7C1E',
-	[EApprovalStatus.EXPIRED]: '#134D8B',
+	[EApprovalStatus.EVIDENCE_REQUIRED]: statusColors.status300,
+	[EApprovalStatus.DRAFT]: statusColors.status300,
+	[EApprovalStatus.SUBMITTED]: statusColors.status200,
+	[EApprovalStatus.APPROVED]: statusColors.status100,
+	[EApprovalStatus.REJECTED]: statusColors.status400,
+	[EApprovalStatus.CHANGES_REQUIRED]: statusColors.status300,
+	[EApprovalStatus.EXPIRED]: officialColors.official300,
 };
 
 export enum EActivityCategory {
@@ -76,7 +76,7 @@ export enum EActivityCategory {
 }
 
 export const mapNameActivityCategory: Record<EActivityCategory, string> = {
-	[EActivityCategory.REGISTERED]: 'Registered Activities',
+	[EActivityCategory.REGISTERED]: 'Registered Activity',
 	[EActivityCategory.PERSONAL_CO_CURRICULAR]: 'Personal Co-curricular Activity',
 };
 

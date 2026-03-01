@@ -1,5 +1,5 @@
 import { ActivityOutCome } from '../ActivityOutcome/typing';
-import { EApprovalStatus, EparticipantRole, EParticipantScope, Evalidation } from '../constant';
+import { EApprovalStatus, EparticipantRole, EParticipantScope } from '../constant';
 
 declare module Activity {
 	export interface IRecord {
@@ -47,26 +47,6 @@ declare module Activity {
 		activityOutcome: ActivityOutCome.IRecord;
 
 		createdAt?: Date;
-
-		//fake && ActivytOutcome
-		cct?: boolean;
-		supervisorName?: string;
-		activityRejectionNote?: string;
-		revisionNote?: string;
-		reflection?: string;
-		validation?: Evalidation;
-		rolesId: string;
-		roles?: RolesManagement.IRecord;
-		levelsId: string;
-		levels?: LevelsManagement.IRecord;
-		trackId?: string;
-		tracks?: TrackManagement.IRecord;
-		evidenceFile: {
-			name: string;
-			file: string[];
-		}[];
-		location?: string;
-		studentDeclarationApproverName?: string;
 	}
 
 	export interface IParticipantsList {
@@ -94,17 +74,10 @@ declare module Activity {
 	}
 
 	export interface ICompetencyMapping {
-		_id: string;
-		index?: number;
-		activityOutcomeId: string;
+		activityOutcomeId?: string;
 		activityOutcome?: IRecord;
-		competencieId: string;
+		competencyId: string;
 		competencie?: Competency.IRecord;
-		attributesId: string;
-		attributes?: AttributesManagement.IRecord;
-
-		//fake
-		dsCompetencie?: Competency.IRecord[];
 	}
 
 	export interface ICompetencyMappingActivity {
@@ -112,7 +85,7 @@ declare module Activity {
 		index?: number;
 		activitiesId: string;
 		activities?: IRecord;
-		competencieId: string;
+		competencyId: string;
 		competencie?: Competency.IRecord;
 		attributesId: string;
 		attributes?: AttributesManagement.IRecord;

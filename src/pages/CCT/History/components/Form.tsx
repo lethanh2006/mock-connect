@@ -1,9 +1,11 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { Activity } from '@/services/CCT/Activity/typing';
+import { EApprovalStatus } from '@/services/CCT/constant';
 import { handleSingleFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Collapse, Form, Input, message, Row } from 'antd';
+import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -27,7 +29,7 @@ const FormActivityOutCome = (props: any) => {
 	const intl = useIntl();
 	const [form] = Form.useForm();
 
-	const { record, setVisibleForm, isView, edit, formSubmiting, visibleForm, postActivityOutComeModel } =
+	const { record, setVisibleForm, isView, formSubmiting, visibleForm, postActivityOutComeModel } =
 		useModel('cct.activityoutcome');
 	const { danhSach: dsLevels } = useModel('cct.levels');
 
@@ -36,7 +38,7 @@ const FormActivityOutCome = (props: any) => {
 	const rolesId: string = Form.useWatch('rolesId', form);
 	const levelsId: string = Form.useWatch('levelsId', form);
 	const checkbox: boolean = Form.useWatch('checkbox', form);
-	const competencyList: string[] = Form.useWatch('competencyList', form);
+	const listAchievedCompetencies: string[] = Form.useWatch('listAchievedCompetencies', form);
 
 	const autoLevel = dsLevels?.find((i) => i?._id === levelsId)?.autoApproval;
 	const autoRole = dsRoles?.find((i) => i?.rolesId === rolesId)?.roles?.autoApproval;
@@ -54,11 +56,9 @@ const FormActivityOutCome = (props: any) => {
 			trackId: record?.trackId ?? record?.activities?.activitiesType?.trackId,
 			levelsId: record?.levelsId,
 			reflection: record?.reflection,
-			competencyList: record?.competencyList
-				? record?.competencyList?.map((item) => item?.competencyId)
-				: edit
-					? record?.activities?.competencyList?.map((item) => item?.competencyId)
-					: [],
+			listAchievedCompetencies: record?.listAchievedCompetencies?.length
+				? record?.listAchievedCompetencies?.map((item) => item?.competencyId)
+				: record?.activities?.competencyList?.map((item) => item?.competencyId),
 		});
 	}, [visibleForm, record?._id]);
 
@@ -81,7 +81,9 @@ const FormActivityOutCome = (props: any) => {
 			trackId: values.trackId,
 			evidenceFile,
 			reflection: values.reflection,
-			competencyList: values.competencyList,
+			listAchievedCompetencies: values.listAchievedCompetencies?.map((id: any) => ({
+				competencyId: id,
+			})),
 			submitted,
 		};
 
@@ -97,7 +99,7 @@ const FormActivityOutCome = (props: any) => {
 
 	return (
 		<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
-			{(!!record?.revisionNote || !!record?.activityRejectionNote) && <CardNoteActivity />}
+			{!!record?.revisionNote && <CardNoteActivity />}
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
 					<Form.Item name='rolesId' label='Role'>
@@ -128,7 +130,14 @@ const FormActivityOutCome = (props: any) => {
 					</div>
 
 					<div style={{ marginBottom: 10 }}>
-						<i className='text-info'>(Suggestion Evidence: Supervisor confirmation, Research log)</i>
+						<i className='text-info'>
+							(Suggestion Evidence:{' '}
+							{record?.activities?.activitiesType?.requiredEvidenceList
+								?.map((item) => item)
+								.filter(Boolean)
+								.join(', ')}
+							)
+						</i>
 					</div>
 
 					<Form.List name='evidenceFile'>
@@ -177,8 +186,8 @@ const FormActivityOutCome = (props: any) => {
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='competencyList' label='Competency'>
-						<FormCompetencyEvidence competencyList={competencyList} form={form} />
+					<Form.Item name='listAchievedCompetencies' label='Competency'>
+						<FormCompetencyEvidence listAchievedCompetencies={listAchievedCompetencies} form={form} />
 					</Form.Item>
 				</Col>
 
@@ -188,6 +197,34 @@ const FormActivityOutCome = (props: any) => {
 					</Form.Item>
 				</Col>
 
+				<Col span={24}>
+					<Collapse>
+						<Collapse.Panel key={0} header={'Activity Detail'}>
+							<CardChiTietSuKien
+								record={
+									{
+										...record?.activities,
+										activityOutcome: record,
+									} as Activity.IRecord
+								}
+								evidenceDeadline={
+									record?.workflow === EApprovalStatus.CHANGES_REQUIRED
+										? record?.dueDate
+											? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')
+											: '--'
+										: record?.activities?.allowPostEventResultsUpdate
+											? record?.activities?.dueDate
+												? dayjs(record?.activities?.dueDate).format('HH:mm DD/MM/YYYY')
+												: '--'
+											: record?.endDate
+												? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')
+												: '--'
+								}
+							/>
+						</Collapse.Panel>
+					</Collapse>
+				</Col>
+
 				{!isView && (
 					<Col span={24}>
 						<Form.Item name='checkbox' valuePropName='checked'>
@@ -195,14 +232,6 @@ const FormActivityOutCome = (props: any) => {
 						</Form.Item>
 					</Col>
 				)}
-
-				<Col span={24}>
-					<Collapse>
-						<Collapse.Panel key={0} header={'Detail Activity'}>
-							<CardChiTietSuKien record={record?.activities ?? ({} as Activity.IRecord)} />
-						</Collapse.Panel>
-					</Collapse>
-				</Col>
 			</Row>
 
 			<div className='form-footer'>
@@ -212,7 +241,7 @@ const FormActivityOutCome = (props: any) => {
 							type='primary'
 							htmlType='submit'
 							loading={formSubmiting}
-							disabled={!checkbox || competencyList?.length > 3}
+							disabled={!checkbox || listAchievedCompetencies?.length > 3}
 							onClick={() => setIsSubmit(true)}
 						>
 							Submit
@@ -221,7 +250,7 @@ const FormActivityOutCome = (props: any) => {
 						<Button
 							htmlType='submit'
 							loading={formSubmiting}
-							disabled={!checkbox || competencyList?.length > 3}
+							disabled={listAchievedCompetencies?.length > 3}
 							onClick={() => setIsSubmit(false)}
 						>
 							Save Draft

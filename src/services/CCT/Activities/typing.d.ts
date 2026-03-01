@@ -11,6 +11,7 @@ declare module ActivitiesManagement {
 		order: number;
 		description: string;
 		isActive: boolean;
+		requiredEvidenceText: string;
 
 		coCurricularAttributesEquivalency?: any[];
 		requiredEvidenceList?: string[];
