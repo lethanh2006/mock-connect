@@ -33,6 +33,12 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 							search: val,
 						})
 					}
+					onClear={() => {
+						onChange?.({
+							...value,
+							search: undefined,
+						});
+					}}
 					size='small'
 				/>
 
@@ -46,27 +52,35 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 						})
 					}
 					ranges={{
-						'Hôm nay': [dayjs().startOf('date'), dayjs().endOf('date')],
-						'Tuần này': [dayjs().startOf('week'), dayjs().endOf('week')],
-						'Tháng này': [dayjs().startOf('month'), dayjs().endOf('month')],
+						Today: [dayjs().startOf('day'), dayjs().endOf('day')],
+						'This Week': [dayjs().startOf('week'), dayjs().endOf('week')],
+						'This Month': [dayjs().startOf('month'), dayjs().endOf('month')],
+						'Next Month': [dayjs().add(1, 'month').startOf('month'), dayjs().add(1, 'month').endOf('month')],
 					}}
 					size='small'
+					allowClear
 				/>
 
 				{!hideSelect && (
 					<Select
-						// value={'all'}
+						value={value?.regiStatus}
 						style={{
 							width: 200,
 						}}
 						placeholder='All Registration Status'
 						options={[
-							{ value: 'all', label: 'All' },
-							{ value: 'registered', label: 'Registered' },
-							{ value: 'not_registered', label: 'Not registered' },
+							{ value: 'All', label: 'All' },
+							{ value: 'Registered', label: 'Registered' },
+							{ value: 'NotRegistered', label: 'Not registered' },
 						]}
 						allowClear
 						size='small'
+						onChange={(val) =>
+							onChange?.({
+								...value,
+								regiStatus: val,
+							})
+						}
 					/>
 				)}
 			</Space>

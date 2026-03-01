@@ -15,7 +15,8 @@ declare module ActivityOutCome {
 		levelsId: string;
 		levels?: LevelsManagement.IRecord;
 		trackId?: string;
-		tracks?: TrackManagement.IRecord;
+		track?: TrackManagement.IRecord;
+		trackText: string;
 		organizer: string;
 		description: string;
 		location: string;
@@ -34,6 +35,8 @@ declare module ActivityOutCome {
 		startDate: Date;
 		endDate: Date;
 		dueDate: Date;
+		submittedAt?: Date;
+		approvalTime?: Date;
 
 		activityRejectionNote?: string;
 		listAchievedCompetencies: Activity.ICompetencyMapping[];
@@ -41,7 +44,6 @@ declare module ActivityOutCome {
 			name: string;
 			file: string[];
 		}[];
-		competencyList: ICompetencyActivity[];
 
 		supervisorSsoId: string;
 		supervisorName: string;
@@ -49,6 +51,9 @@ declare module ActivityOutCome {
 
 		createdAt: Date;
 		updatedAt: Date;
+
+		// fake
+		activeKey?: string;
 	}
 
 	export interface IAnalyticsStudent {

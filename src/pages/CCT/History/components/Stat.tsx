@@ -1,6 +1,7 @@
 import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { EOperatorType } from '@/components/Table/constant';
+import { accentColors, officialColors, statusBgColors, statusColors } from '@/services/base/constant';
 import { EApprovalStatus } from '@/services/CCT/constant';
 import { inputFormat } from '@/utils/utils';
 import { useEffect } from 'react';
@@ -41,7 +42,8 @@ const StatActivityOutCome = (props: { getData: () => void; dependency?: any }) =
 		{
 			title: 'Total',
 			value: inputFormat(dataThongKe?.total ?? 0),
-			valueColor: '#134D8B',
+			backgroundColor: accentColors.accent800,
+			valueColor: officialColors.official300,
 			onClick: () => filterTrangThai('all'),
 		},
 		{
@@ -49,7 +51,8 @@ const StatActivityOutCome = (props: { getData: () => void; dependency?: any }) =
 			value: inputFormat(
 				(dataThongKe?.evidenceRequired ?? 0) + (dataThongKe?.changesRequired ?? 0) + (dataThongKe?.draft ?? 0),
 			),
-			valueColor: '#CE7C1E',
+			backgroundColor: statusBgColors.statusBg300,
+			valueColor: statusColors.status300,
 			onClick: () => filterTrangThai(ACTION_REQUIRED_STATUSES),
 			selected:
 				valueFiltered?.length === ACTION_REQUIRED_STATUSES.length &&
@@ -58,30 +61,34 @@ const StatActivityOutCome = (props: { getData: () => void; dependency?: any }) =
 		{
 			title: 'Pending For Approval',
 			value: inputFormat(dataThongKe?.submitted ?? 0),
-			valueColor: '#0E50CF',
+			backgroundColor: statusBgColors.statusBg200,
+			valueColor: statusColors.status200,
 			onClick: () => filterTrangThai(EApprovalStatus.SUBMITTED),
 			selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.SUBMITTED,
 		},
 		{
 			title: 'Approved',
 			value: inputFormat(dataThongKe?.approved ?? 0),
-			valueColor: '#329323',
+			backgroundColor: statusBgColors.statusBg100,
+			valueColor: statusColors.status100,
 			onClick: () => filterTrangThai(EApprovalStatus.APPROVED),
 			selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.APPROVED,
 		},
 		{
 			title: 'Rejected',
 			value: inputFormat(dataThongKe?.rejected ?? 0),
-			valueColor: '#C80F1F',
+			backgroundColor: statusBgColors.statusBg400,
+			valueColor: statusColors.status400,
 			onClick: () => filterTrangThai(EApprovalStatus.REJECTED),
 			selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.REJECTED,
 		},
 		{
 			title: 'Expired',
 			value: inputFormat(dataThongKe?.expired ?? 0),
-			valueColor: '#0E50CF',
-			onClick: () => filterTrangThai(EApprovalStatus.EXPIRED),
-			selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.EXPIRED,
+			backgroundColor: officialColors.official500,
+			valueColor: officialColors.official300,
+			// onClick: () => filterTrangThai(EApprovalStatus.EXPIRED),
+			// selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.EXPIRED,
 		},
 	];
 

@@ -15,6 +15,7 @@ import SelectActivitiesManagement from '../../DanhMuc/Activities/Select';
 import SelectActivitiesTypeDomain from '../../DanhMuc/CCD/Select';
 import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
 import SelectRolesManagement from '../../DanhMuc/Roles/Select';
+import SelectTrack from '../../DanhMuc/Track/Select';
 import CardNoteActivity from './CardNote';
 import FormCompetencyEvidence from './FormCompetencyEvidence';
 
@@ -43,7 +44,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const levelsId: string = Form.useWatch('levelsId', form);
 	const activitiesTypeDomainId: string = Form.useWatch('activitiesTypeDomainId', form);
 	const checkbox: boolean = Form.useWatch('checkbox', form);
-	const competencyList: string[] = Form.useWatch('competencyList', form);
+	const listAchievedCompetencies: string[] = Form.useWatch('listAchievedCompetencies', form);
 	const onUni: boolean = Form.useWatch('onUni', form);
 	const activitiesTypeId: string = Form.useWatch('activitiesTypeId', form);
 
@@ -59,8 +60,9 @@ const FormPerstionActivityOutCome = (props: any) => {
 			form.setFieldsValue({
 				...record,
 				activitiesTypeDomainId: record?.activitiesType?.activitiesTypeDomainId,
-				competencyList: record?.competencyList?.map((item) => item?.competencyId),
+				listAchievedCompetencies: record?.listAchievedCompetencies?.map((item) => item?.competencyId),
 				onUni: record?.supervisorSsoId ? true : false,
+				banner: record?.banner ?? '/images/cct/background.png',
 			});
 		}
 
@@ -74,6 +76,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 				checkbox: false,
 				listAchievedCompetencies: null,
 				onUni: true,
+				banner: '/images/cct/background.png',
 			});
 		}
 	}, [record?._id, visibleForm]);
@@ -93,20 +96,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 		values.evidenceFile = evidenceFile;
 
-		const listAchievedCompetencies: any = [];
-
-		values.listAchievedCompetencies?.map((item: any) =>
-			item?.competencieId?.forEach((element: any) => {
-				listAchievedCompetencies.push({
-					competencieId: element,
-					attributesId: item?.attributesId,
-				});
-			}),
-		);
-
-		values.listAchievedCompetencies = listAchievedCompetencies;
-
-		values.competencyList = values.competencyList?.map((id) => ({
+		values.listAchievedCompetencies = values.listAchievedCompetencies?.map((id) => ({
 			competencyId: id,
 		})) as any;
 
@@ -114,7 +104,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 		if (edit) {
 			putModel(
-				record?._id ?? '',
+				`me/${record?._id}`,
 				values,
 				getData,
 				undefined,
@@ -129,7 +119,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 	return (
 		<>
 			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
-				{(!!record?.revisionNote || !!record?.activityRejectionNote) && <CardNoteActivity />}
+				{!!record?.revisionNote && <CardNoteActivity />}
 				<Row gutter={[12, 0]}>
 					<Col span={24}>
 						<Row gutter={[12, 0]}>
@@ -145,7 +135,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 								<Col span={24} md={9}>
 									<Form.Item name='banner' label='Banner'>
 										<UploadFile
-											isLandscapeAvatar
+											isWidescreen
 											accept='.png,.jpg,.jpeg'
 											buttonDescription='Add Banner'
 											extra='Only .png, .jpeg, and .jpg files are allowed'
@@ -178,10 +168,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 													if (!rawData) return;
 
 													form.setFieldsValue({
-														listAchievedCompetencies: (rawData.attributes || []).map((attr: any) => ({
-															attributesId: attr._id,
-															attributes: attr,
-														})),
+														trackId: rawData?.trackId,
 													});
 												}}
 											/>
@@ -201,58 +188,54 @@ const FormPerstionActivityOutCome = (props: any) => {
 											</Space>
 										</Col>
 									)}
-
-									<Col span={24}>
+									<Col span={24} md={24}>
+										<Form.Item name='trackId' label='Track' rules={[...rules.required]}>
+											<SelectTrack disabled={isView} />
+										</Form.Item>
+									</Col>
+									<Col span={24} md={24}>
 										<Form.Item name='activitiesOutcomeName' label='Activity Name' rules={[...rules.required]}>
 											<Input placeholder='Enter Activity Name' disabled={isView} />
-										</Form.Item>
-									</Col>
-									<Col span={24} md={12}>
-										<Form.Item
-											name='startDate'
-											label={intl.formatMessage({ id: 'activity.perstion.startDate' })}
-											rules={[...rules.required]}
-										>
-											<MyDatePicker
-												showTime={{ showHour: true, showMinute: true }}
-												format='HH:mm DD/MM/YYYY'
-												disabled={isView}
-												placeholder={intl.formatMessage({ id: 'activity.perstion.startDate.place' })}
-												disabledDate={(current) => {
-													return !!(current && current < dayjs().startOf('day'));
-												}}
-												onChange={() => form.resetFields(['endDate'])}
-											/>
-										</Form.Item>
-									</Col>
-									<Col span={24} md={12}>
-										<Form.Item
-											name='endDate'
-											label={intl.formatMessage({ id: 'activity.perstion.endDate' })}
-											rules={[
-												...rules.required,
-												...rules.sauNgay(dayjs(startDate), intl.formatMessage({ id: 'activity.perstion.startDate' })),
-											]}
-										>
-											<MyDatePicker
-												showTime={{ showHour: true, showMinute: true }}
-												format='HH:mm DD/MM/YYYY'
-												disabled={isView}
-												disabledDate={(current) =>
-													!!(
-														dayjs(current).isBefore(dayjs().startOf('day')) ||
-														(startDate && dayjs(current).isBefore(startDate))
-													)
-												}
-												placeholder={intl.formatMessage({ id: 'activity.perstion.endDate.place' })}
-											/>
 										</Form.Item>
 									</Col>
 								</Row>
 							</Col>
 						</Row>
 					</Col>
-					<Col span={24} md={9}>
+					<Col span={24} md={12}>
+						<Form.Item
+							name='startDate'
+							label={intl.formatMessage({ id: 'activity.perstion.startDate' })}
+							rules={[...rules.required]}
+						>
+							<MyDatePicker
+								showTime={{ showHour: true, showMinute: true }}
+								format='HH:mm DD/MM/YYYY'
+								disabled={isView}
+								placeholder={intl.formatMessage({ id: 'activity.perstion.startDate.place' })}
+								onChange={() => form.resetFields(['endDate'])}
+							/>
+						</Form.Item>
+					</Col>
+					<Col span={24} md={12}>
+						<Form.Item
+							name='endDate'
+							label={intl.formatMessage({ id: 'activity.perstion.endDate' })}
+							rules={[
+								...rules.required,
+								...rules.sauNgay(dayjs(startDate), intl.formatMessage({ id: 'activity.perstion.startDate' })),
+							]}
+						>
+							<MyDatePicker
+								showTime={{ showHour: true, showMinute: true }}
+								format='HH:mm DD/MM/YYYY'
+								disabled={isView}
+								disabledDate={(current) => startDate && dayjs(current).isBefore(startDate)}
+								placeholder={intl.formatMessage({ id: 'activity.perstion.endDate.place' })}
+							/>
+						</Form.Item>
+					</Col>
+					<Col span={24} md={12}>
 						<Form.Item name='onUni' label='Mentor/Supervisor' rules={[...rules.required]}>
 							<Radio.Group
 								disabled={isView}
@@ -264,7 +247,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 						</Form.Item>
 					</Col>
 					{onUni ? (
-						<Col span={24} md={15}>
+						<Col span={24} md={12}>
 							<Form.Item name='supervisorSsoId' label='Mentor/Supervisor' rules={[...rules.required]}>
 								<SelectNhanSuDebounce
 									onChange={(val, option) => {
@@ -283,7 +266,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 							<Form.Item name='supervisorCode' hidden />
 						</Col>
 					) : (
-						<Col span={24} md={15}>
+						<Col span={24} md={12}>
 							<Form.Item name='supervisorName' label='Mentor/Supervisor' rules={[...rules.required]}>
 								<Input placeholder='Enter Mentor/Supervisor' disabled={isView} />
 							</Form.Item>
@@ -326,7 +309,15 @@ const FormPerstionActivityOutCome = (props: any) => {
 							List Evidence
 						</div>
 						<div style={{ marginBottom: 10 }}>
-							<i className='text-info'>(Suggestion Evidence: Supervisor confirmation, Research log)</i>
+							<i className='text-info'>
+								(Suggestion Evidence:{' '}
+								{dsActivityType
+									?.find((i) => i._id === activitiesTypeId)
+									?.requiredEvidenceList?.map((item) => item)
+									.filter(Boolean)
+									.join(', ')}
+								)
+							</i>
 						</div>
 						<div style={{ marginBottom: 10 }}>
 							<Form.List name='evidenceFile'>
@@ -376,8 +367,8 @@ const FormPerstionActivityOutCome = (props: any) => {
 						</div>
 					</Col>
 					<Col span={24}>
-						<Form.Item name='competencyList' label='List Competency'>
-							<FormCompetencyEvidence competencyList={competencyList} form={form} />
+						<Form.Item name='listAchievedCompetencies' label='List Competency'>
+							<FormCompetencyEvidence listAchievedCompetencies={listAchievedCompetencies} form={form} />
 						</Form.Item>
 					</Col>
 					<Col span={24}>
@@ -401,7 +392,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 								type='primary'
 								htmlType='submit'
 								loading={formSubmiting}
-								disabled={!checkbox || competencyList?.length > 3}
+								disabled={!checkbox || listAchievedCompetencies?.length > 3}
 								onClick={() => setIsSubmit(true)}
 							>
 								Submit
@@ -410,7 +401,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 							<Button
 								htmlType='submit'
 								loading={formSubmiting}
-								disabled={!checkbox || competencyList?.length > 3}
+								disabled={listAchievedCompetencies?.length > 3}
 								onClick={() => setIsSubmit(false)}
 							>
 								Save Draft

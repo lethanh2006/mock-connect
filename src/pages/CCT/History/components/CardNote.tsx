@@ -32,7 +32,9 @@ const CardNoteActivity = () => {
 					</div>
 					<div className='info-item'>
 						<div className='info-label'>Evidence Review Time</div>
-						<div className='info-value'>--</div>
+						<div className='info-value'>
+							{record?.approvalTime && dayjs(record?.approvalTime).format('HH:mm DD/MM/YYYY')}
+						</div>
 					</div>
 					<div className='info-item'>
 						<div className='info-label'>Approver</div>
@@ -41,10 +43,6 @@ const CardNoteActivity = () => {
 					<div className='info-item'>
 						<div className='info-label'>Revision Note</div>
 						<div className='info-value'>{record?.revisionNote ?? '-'}</div>
-					</div>
-					<div className='info-item'>
-						<div className='info-label'>Rejection Note</div>
-						<div className='info-value'>{record?.activityRejectionNote ?? '-'}</div>
 					</div>
 				</div>
 			</div>

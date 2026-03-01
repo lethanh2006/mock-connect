@@ -48,7 +48,7 @@ export default () => {
 		setFormSubmiting(true);
 		try {
 			const res = await deleteActivity(idActivity);
-			message.success('Lưu thành công');
+			message.success('Xóa thành công');
 
 			if (getData) getData();
 			return res.data;
