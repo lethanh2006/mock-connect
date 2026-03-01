@@ -56,15 +56,6 @@ export type TableBaseProps = {
 	/** Tên model */
 	modelName: Namespaces;
 
-	/** Key duy nhất để lưu cấu hình (widths, ẩn hiện cột) vào Local Storage */
-	/**
-	 * Lưu ý:
-	 * - Nếu dùng cùng model, configKey không cần thiết
-	 * - Nếu dùng cùng model, configKey cần thiết
-	 * - Nếu trên cùng một trang mà anh render 2 cái bảng Static (cả 2 đều không có modelName), thì lúc này cả 2 bảng sẽ dùng chung key là tableConfig_{path}_default và sẽ bị conflict cấu hình với nhau.
-	 */
-	configKey?: string;
-
 	/** Import dùng model khác? */
 	modelImportName?: Namespaces;
 	/** Export dùng model khác? */
@@ -227,7 +218,6 @@ export type TableStaticProps = Pick<
 	TableBaseProps,
 	| 'emptyText'
 	| 'columns'
-	| 'configKey'
 	| 'title'
 	| 'Form'
 	| 'formProps'

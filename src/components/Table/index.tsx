@@ -73,7 +73,6 @@ const TableBase = (props: TableBaseProps) => {
 				showModalTitle: props.showModalTitle,
 				formProps: props.formProps,
 				modelName: props.modelName,
-				configKey: props.configKey,
 				modelImportName: props.modelImportName,
 				modelExportName: props.modelExportName,
 				params: props.params,

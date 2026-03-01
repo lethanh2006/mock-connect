@@ -1,7 +1,8 @@
 import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import type { InputRef } from 'antd';
-import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { IColumn, TableBaseProps, TFilter } from '../typing';
+import { getTableFingerprint, stringHash } from '../utils';
 
 export interface IColumnSetting {
 	key: string;
@@ -73,7 +74,6 @@ interface TableContextValue {
 
 	// Cấu hình các modal
 	modelName?: Namespaces;
-	configKey?: string;
 	modelImportName?: Namespaces;
 	modelExportName?: Namespaces;
 	params?: any;
@@ -109,8 +109,14 @@ export const TableProvider: React.FC<TableProviderProps> = ({ children, value: e
 	const [visibleExport, setVisibleExport] = useState(false);
 	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
 
-	const pathname = window.location.pathname.replace(/\//g, '_');
-	const configStorageKey = `tableConfig_${pathname}_${externalValue.configKey || externalValue.modelName || 'default'}`;
+	const configStorageKey = useMemo(() => {
+		const pathname = window.location.pathname.replace(/\//g, '_');
+		const fingerprint = getTableFingerprint(externalValue.columns);
+		const identifier = `${externalValue.modelName || ''}_${fingerprint}`;
+
+		// Không hash pathname để dễ đọc, dễ phân biệt nếu cần kiểm tra
+		return `tableConfig_${pathname}_${stringHash(identifier)}`;
+	}, [externalValue.modelName, externalValue.columns]);
 
 	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
 		try {

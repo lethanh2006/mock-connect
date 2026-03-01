@@ -99,3 +99,29 @@ export const getColumnKey = (item: IColumn<any>, index: number) => {
 	// Nếu không có key/dataIndex (thường là cột Thao tác), dùng title + index để đảm bảo duy nhất
 	return `${String(item.title ?? 'column')}_${index}`;
 };
+
+/**
+ * Hàm hash chuỗi đơn giản để tạo mã ngắn gọn (8 ký tự)
+ */
+export const stringHash = (str: string): string => {
+	let hash = 0;
+	for (let i = 0; i < str.length; i++) {
+		const char = str.charCodeAt(i);
+		hash = (hash << 5) - hash + char;
+		hash |= 0; // Convert to 32bit integer
+	}
+	return Math.abs(hash).toString(16).padStart(8, '0');
+};
+
+/**
+ * Tạo "vân tay" của bảng dựa trên cấu trúc các cột (key/dataIndex)
+ */
+export const getTableFingerprint = (columns: IColumn<any>[]): string => {
+	if (!columns || !Array.isArray(columns)) return 'empty';
+	const columnIds = columns.map((col, index) => {
+		if (col.key) return String(col.key);
+		if (col.dataIndex) return Array.isArray(col.dataIndex) ? col.dataIndex.join('.') : String(col.dataIndex);
+		return `col_${index}`;
+	});
+	return columnIds.join('|');
+};

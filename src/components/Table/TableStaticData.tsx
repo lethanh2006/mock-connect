@@ -386,7 +386,6 @@ const TableStaticData: React.FC<TableStaticProps> = (props) => {
 		<TableProvider
 			value={{
 				modelName: props.modelName,
-				configKey: props.configKey,
 				size: props.size,
 				columns: props.columns,
 			}}
