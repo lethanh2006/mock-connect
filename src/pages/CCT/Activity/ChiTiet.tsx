@@ -1,264 +1,161 @@
-import ExpandText from '@/components/ExpandText';
-import TableStaticData from '@/components/Table/TableStaticData';
-import { IColumn } from '@/components/Table/typing';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { Activity } from '@/services/CCT/Activity/typing';
-import { formatDateTime } from '@/utils/formatDate';
-import { Button, Col, Descriptions, Divider, Image, Modal, Row, Space, Tag, Typography } from 'antd';
+import { EApprovalStatus } from '@/services/CCT/constant';
+import { Modal, Popconfirm, Space } from 'antd';
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
+import CardChiTietSuKien from './components/CardChiTietSuKien';
 
-const { Paragraph, Text } = Typography;
-
-const ChiTietActivity = (props: { getData?: () => void }) => {
-	const { getData } = props;
+const ChiTietActivity = (props: {
+	getData?: () => void;
+	setVisibleDangKy?: (val: boolean) => void;
+	activeKey?: string;
+}) => {
+	const { getData, setVisibleDangKy, activeKey } = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, registerActivityModel } = useModel('cct.activity');
+	const { deleteActivityModel, handleEdit } = useModel('cct.activityoutcome');
 
-	const groupedEquivalency = useMemo(() => {
-		const map = new Map<
-			string,
-			{
-				roleName: string;
-				desRole: string;
-				levelName?: string;
-				attributes: { name: string; color?: string }[];
-				autoApprove: boolean;
-			}
-		>();
+	const now = dayjs();
+	const startDate = record?.startDate ? dayjs(record.startDate) : null;
+	const endDateSource = record?.dueDateRegistration ?? record?.endDate;
+	const endDate = endDateSource ? dayjs(endDateSource) : null;
 
-		record?.coCurricularActivityEquivalency?.forEach((item) => {
-			const roleId = item.roles?._id;
-			if (!roleId) return;
+	const endDateUpdateEvidence =
+		record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
+			? record?.activityOutcome?.dueDate
+				? dayjs(record?.activityOutcome?.dueDate)
+				: null
+			: record?.allowPostEventResultsUpdate
+				? record.dueDate
+					? dayjs(record.dueDate)
+					: null
+				: record?.endDate
+					? dayjs(record.endDate)
+					: null;
 
-			if (!map.has(roleId)) {
-				map.set(roleId, {
-					roleName: item.roles?.name ?? '',
-					desRole: item.roles?.description ?? '',
-					levelName: item.roles?.level?.name ?? '',
-					attributes: [],
-					autoApprove: item?.autoApprove ?? false,
-				});
-			}
+	const isOngoing = now.isAfter(startDate) && now.isBefore(endDateUpdateEvidence);
 
-			if (item.attributes?.name) {
-				map.get(roleId)!.attributes.push({
-					name: item.attributes.name,
-					color: item.attributes.color,
-				});
-			}
-		});
+	const editableWorkflow =
+		record?.activityOutcome?.workflow === EApprovalStatus.DRAFT ||
+		record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+		record?.activityOutcome?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
 
-		return Array.from(map.values());
-	}, [record]);
+	const isFullSlot = !!record?.capacity && (record?.numberOfRegisteredActivityOutcomes ?? 0) >= record.capacity;
 
-	const groupByAttributes = (data: Activity.ICompetencyMappingActivity[]) => {
-		const map = new Map<string, any>();
+	const outTime = now.isAfter(endDate) && !record?.activityOutcome?.workflow;
 
-		data.forEach((item) => {
-			const key = item.attributesId;
-
-			if (!map.has(key)) {
-				map.set(key, {
-					...item,
-					dsCompetencie: [
-						{
-							_id: item._id,
-							competencie: item.competencie,
-						},
-					],
-				});
-			} else {
-				map.get(key).dsCompetencie.push({
-					_id: item._id,
-					competencie: item.competencie,
-				});
-			}
-		});
-
-		return Array.from(map.values());
-	};
-
-	const columns: IColumn<any>[] = [
-		{
-			title: intl.formatMessage({ id: 'activity.detail.role' }),
-			width: 150,
-			dataIndex: 'roleName',
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.detail.des' }),
-			width: 220,
-			dataIndex: 'desRole',
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.detail.attributes' }),
-			width: 200,
-			render: (_, rec) => (
-				<Space size={[4, 4]} wrap>
-					{rec.attributes?.map((attr: any, idx: number) => (
-						<Tag key={idx} color={attr.color}>
-							{attr.name}
-						</Tag>
-					))}
-				</Space>
-			),
-		},
-	];
-
-	const columnsCompetency: IColumn<any>[] = [
-		{
-			title: 'Attributes',
-			dataIndex: 'attributesId',
-			width: 200,
-			render: (val, rec) => <Tag color={rec?.attributes?.color}>{rec?.attributes?.name}</Tag>,
-		},
-		{
-			title: 'Competency',
-			dataIndex: 'dsCompetencie',
-			width: 250,
-			render: (val, rec: any) =>
-				rec?.dsCompetencie
-					?.map((item: any) => item?.competencie?.name)
-					.filter(Boolean)
-					.join(', '),
-		},
-	];
+	const isExpired = activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
-		<Modal title={record?.name} open={visibleForm} onCancel={() => setVisibleForm(false)} width={800} footer={null}>
-			<Row gutter={[12, 0]}>
-				<Col span={24}>
-					<Row gutter={24}>
-						<Col span={8} style={{ textAlign: 'center' }}>
-							<Image
-								src={record?.banner ?? '/metadata.png'}
-								alt='banner'
-								style={{
-									width: '100%',
-									borderRadius: 8,
-									objectFit: 'cover',
-								}}
-							/>
-						</Col>
-
-						<Col span={16}>
-							<Descriptions column={1} size='small'>
-								{record?.activitiesType?.attributes && (
-									<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.type' })}>
-										<Space wrap>
-											{record?.activitiesType?.attributes?.map((item: any) => (
-												<Tag color={item?.color}>{item?.name}</Tag>
-											))}
-										</Space>
-									</Descriptions.Item>
-								)}
-
-								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.coCurricularName' })}>
-									{record?.name}
-								</Descriptions.Item>
-
-								<Text>
-									<strong>{intl.formatMessage({ id: 'activity.detail.startDate' })}:</strong>{' '}
-									{formatDateTime(record?.startDate)}
-								</Text>
-
-								<Text>
-									<strong>{intl.formatMessage({ id: 'activity.detail.endDate' })}:</strong>{' '}
-									{formatDateTime(record?.endDate)}
-								</Text>
-
-								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.organizer' })}>
-									{record?.organizer}
-								</Descriptions.Item>
-
-								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.location' })}>
-									{record?.onCampus ? record?.facilityName : record?.otherAddress}
-								</Descriptions.Item>
-
-								<Descriptions.Item label={intl.formatMessage({ id: 'activity.detail.description' })}>
-									<Paragraph style={{ marginBottom: 0 }}>{record?.description}</Paragraph>
-								</Descriptions.Item>
-
-								{record?.allowPostEventResultsUpdate && (
-									<>
-										<Descriptions.Item label='Allow post-event results update'>
-											{record?.allowPostEventResultsUpdate ? 'Allow' : 'Not allow'}
-										</Descriptions.Item>
-										<Descriptions.Item label='Due date'>
-											{record?.dueDate && dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')}
-										</Descriptions.Item>
-									</>
-								)}
-							</Descriptions>
-						</Col>
-					</Row>
-				</Col>
-
-				<Col span={24}>
-					<Divider className='divider-big-title' orientation='left'>
-						List Evidence
-					</Divider>
-				</Col>
-
-				<Col span={24}>
-					<TableStaticData
-						columns={[
-							{
-								title: 'Name',
-								width: 200,
-								render: (_, record) => _?.name,
-							},
-						]}
-						data={(record?.activitiesType?.requiredEvidenceList ?? []).map((item) => ({
-							name: item,
-						}))}
-						size='small'
-						addStt
-					/>
-				</Col>
-
-				{/* <Col span={24}>
-					<Divider className='divider-big-title' orientation='left'>
-						Attributes Competency Mapping
-					</Divider>
-				</Col>
-
-				<Col span={24}>
-					<TableStaticData
-						columns={columnsCompetency}
-						data={groupByAttributes(record?.coCurricularAttributesEquivalency ?? [])}
-						size='small'
-						addStt
-					/>
-				</Col> */}
-
-				<Col span={24}>
-					<Divider className='divider-big-title' orientation='left'>
-						CCA Equivalency Framework
-					</Divider>
-				</Col>
-
-				<Col span={24}>
-					<TableStaticData columns={columns} data={groupedEquivalency} size='small' addStt />
-				</Col>
-			</Row>
-
-			<div className='form-footer'>
-				<Button
-					type='primary'
-					onClick={() =>
-						registerActivityModel(
-							record?._id ?? '',
-							getData,
-							intl.formatMessage({ id: 'global.message.luuthanhcong' }),
-						).then(() => setVisibleForm(false))
+		<Modal
+			title='Activity Detail'
+			open={visibleForm}
+			onCancel={() => setVisibleForm(false)}
+			width={1000}
+			footer={null}
+			styles={{
+				body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
+				header: { backgroundColor: '#F8F8F8' },
+			}}
+		>
+			<div style={{ marginTop: -12 }}>
+				<CardChiTietSuKien
+					record={
+						{
+							...record,
+							activityOutcome: record?.activityOutcome,
+						} as Activity.IRecord
 					}
-					disabled={!!record?.workflow || !record?.activitiesTypeId}
-				>
-					{intl.formatMessage({ id: 'activity.btn.dangky' })}
-				</Button>
-				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
+					evidenceDeadline={
+						record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
+							? record?.activityOutcome?.dueDate
+								? dayjs(record?.activityOutcome?.dueDate).format('HH:mm DD/MM/YYYY')
+								: '--'
+							: record?.allowPostEventResultsUpdate
+								? record?.dueDate
+									? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')
+									: '--'
+								: record?.endDate
+									? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')
+									: '--'
+					}
+					infoEvidence={
+						(!!record?.activityOutcome?.workflow && record?.activityOutcome?.workflow !== EApprovalStatus.EXPIRED) ||
+						(record?.activityOutcome?.workflow === EApprovalStatus.EXPIRED && !!record?.activityOutcome?._id)
+					}
+					activeKey={activeKey}
+					isExpired={isExpired}
+				/>
+			</div>
+
+			<div
+				style={{
+					backgroundColor: '#fff',
+					display: 'flex',
+					gap: 8,
+					justifyContent:
+						record?.activityOutcome?.workflow !== EApprovalStatus.EVIDENCE_REQUIRED || activeKey === '3'
+							? 'flex-end'
+							: 'space-between',
+					margin: '15px -15px -15px -15px',
+					padding: 16,
+				}}
+			>
+				{record?.activityOutcome?.workflow === EApprovalStatus.EVIDENCE_REQUIRED && activeKey !== '3' && (
+					<Popconfirm
+						title='Confirm cancellation of activity registration ?'
+						placement='topLeft'
+						onConfirm={() =>
+							deleteActivityModel(
+								record?.activityOutcome?._id ?? '',
+								getData,
+								intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+							).then(() => setVisibleForm(false))
+						}
+					>
+						<ButtonExtend type='link' className='btn-unregister'>
+							UNREGISTER
+						</ButtonExtend>
+					</Popconfirm>
+				)}
+
+				<Space wrap>
+					<ButtonExtend onClick={() => setVisibleForm(false)}>CLOSE</ButtonExtend>
+
+					{!record?.activityOutcome?.workflow && !isFullSlot ? (
+						<Popconfirm
+							title='Confirm activity registration ?'
+							placement='topLeft'
+							onConfirm={() =>
+								registerActivityModel(record?.activityOutcome?._id ?? '', getData).then(() => {
+									setVisibleForm(false);
+									setVisibleDangKy && setVisibleDangKy(true);
+								})
+							}
+							disabled={outTime}
+						>
+							<ButtonExtend type='primary' disabled={outTime}>
+								REGISTER NOW
+							</ButtonExtend>
+						</Popconfirm>
+					) : editableWorkflow && isOngoing ? (
+						<ButtonExtend
+							type='primary'
+							onClick={() => {
+								setVisibleForm(false);
+								handleEdit({
+									...record?.activityOutcome,
+									activities: record,
+								});
+							}}
+						>
+							Update Evidence
+						</ButtonExtend>
+					) : isFullSlot && !record?.activityOutcome?.workflow ? (
+						<ButtonExtend disabled>FULL SLOT</ButtonExtend>
+					) : null}
+				</Space>
 			</div>
 		</Modal>
 	);

@@ -4,6 +4,7 @@ import { EActivityCategory, EApprovalStatus, Evalidation } from '../constant';
 declare module ActivityOutCome {
 	export interface IRecord {
 		_id: string;
+		banner: string;
 		activitiesOutcomeName: string;
 		activitiesId: string;
 		activities: Activity.IRecord;
@@ -13,6 +14,9 @@ declare module ActivityOutCome {
 		roles?: RolesManagement.IRecord;
 		levelsId: string;
 		levels?: LevelsManagement.IRecord;
+		trackId?: string;
+		track?: TrackManagement.IRecord;
+		trackText: string;
 		organizer: string;
 		description: string;
 		location: string;
@@ -28,6 +32,11 @@ declare module ActivityOutCome {
 		revisionNote: string;
 		validation: Evalidation;
 		reflection: string;
+		startDate: Date;
+		endDate: Date;
+		dueDate: Date;
+		submittedAt?: Date;
+		approvalTime?: Date;
 
 		activityRejectionNote?: string;
 		listAchievedCompetencies: Activity.ICompetencyMapping[];
@@ -35,7 +44,6 @@ declare module ActivityOutCome {
 			name: string;
 			file: string[];
 		}[];
-		competencyList: ICompetencyActivity[];
 
 		supervisorSsoId: string;
 		supervisorName: string;
@@ -43,6 +51,9 @@ declare module ActivityOutCome {
 
 		createdAt: Date;
 		updatedAt: Date;
+
+		// fake
+		activeKey?: string;
 	}
 
 	export interface IAnalyticsStudent {
@@ -52,6 +63,8 @@ declare module ActivityOutCome {
 		rejected: number;
 		submitted: number;
 		total: number;
+		expired: number;
+		evidenceRequired: number;
 	}
 
 	export interface ICompetencyActivity {

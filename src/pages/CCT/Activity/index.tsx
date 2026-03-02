@@ -1,142 +1,326 @@
-import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { EApprovalStatus, mapColorApprovalStatus, mapNameApprovalStatus } from '@/services/CCT/constant';
-import { formatDate } from '@/utils/formatDate';
-import { CalendarOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, Flex, Popconfirm, Row, Spin, Tag, Tooltip, Typography } from 'antd';
-import dayjs from 'dayjs';
+import { EOperatorType } from '@/components/Table/constant';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { EApprovalStatus } from '@/services/CCT/constant';
+import { Card, Col, Empty, Pagination, Popconfirm, Row, Spin, Tabs } from 'antd';
+import dayjs, { Dayjs } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import FormActivityOutCome from '../History/components/Form';
 import ChiTietActivity from './ChiTiet';
+import CardSuKienCCT from './components/CardSuKien';
+import ModalDangKyThanhCong from './components/DangKyThanhCong';
+import FilterSuKien from './components/FilterSuKien';
 import './style.less';
 
-const { Title } = Typography;
+dayjs.extend(utc);
+
+export interface FilterSuKienValue {
+	search?: string;
+	dateRange?: Dayjs[] | [];
+	regiStatus?: 'All' | 'Registered' | 'NotRegistered';
+}
 
 const ActivityPage = () => {
 	const intl = useIntl();
-	const { getAllModel, danhSach, registerActivityModel, loading, setRecord, setVisibleForm } = useModel('cct.activity');
+	const {
+		getModel,
+		danhSach,
+		page,
+		limit,
+		setPage,
+		setLimit,
+		registerActivityModel,
+		loading,
+		setRecord,
+		setVisibleForm,
+		total,
+	} = useModel('cct.activity');
+	const {
+		setVisibleForm: setVisibleFormActivityOutcome,
+		visibleForm: visibleFormActivityOutcome,
+		handleEdit,
+	} = useModel('cct.activityoutcome');
+	const { getAllModel: getAllAtributes } = useModel('cct.attributes');
+	const [activeKey, setActiveKey] = useState<string>('1');
+	const [visibleDangKy, setVisibleDangKy] = useState<boolean>(false);
 
-	const [dateRange, setDateRange] = useState<string[]>([
-		dayjs().startOf('month').toISOString(),
-		dayjs().endOf('month').toISOString(),
-	]);
+	const [filter, setFilter] = useState<FilterSuKienValue>({
+		search: undefined,
+		dateRange: [],
+		regiStatus: undefined,
+	});
 
 	const getData = () => {
-		if (dateRange?.length === 2) {
-			getAllModel(undefined, undefined, undefined, undefined, `me/from/${dateRange[0]}/to/${dateRange[1]}`);
+		const now = dayjs().toISOString();
+		const filters: any[] = [];
+
+		if (activeKey === '1') {
+			filters.push({
+				active: true,
+				field: 'startDate',
+				values: [now],
+				operator: EOperatorType.GREAT_THAN,
+			});
 		}
+
+		if (activeKey === '2') {
+			filters.push(
+				{
+					active: true,
+					field: 'startDate',
+					values: [now],
+					operator: EOperatorType.LESS_EQUAL,
+				},
+				{
+					active: true,
+					field: 'endDate',
+					values: [now],
+					operator: EOperatorType.GREAT_EQUAL,
+				},
+			);
+		}
+
+		if (activeKey === '3') {
+			filters.push({
+				active: true,
+				field: 'endDate',
+				values: [now],
+				operator: EOperatorType.LESS_THAN,
+			});
+		}
+
+		if (!!filter?.search) {
+			filters.push({
+				active: true,
+				field: 'name',
+				values: [filter?.search],
+				operator: EOperatorType.CONTAIN,
+			});
+		}
+
+		if (!!filter?.dateRange?.length) {
+			filters.push({
+				active: true,
+				field: ['startDate'],
+				values: [filter?.dateRange[0], filter?.dateRange[1]],
+				operator: EOperatorType.BETWEEN,
+			});
+		}
+
+		getModel(
+			undefined,
+			filters,
+			activeKey === '2'
+				? {
+						startDate: -1,
+					}
+				: activeKey === '1'
+					? {
+							startDate: 1,
+						}
+					: activeKey === '3'
+						? {
+								endDate: -1,
+							}
+						: undefined,
+			undefined,
+			9,
+			'me/page',
+			{
+				registerStatus: filter?.regiStatus,
+			},
+		);
 	};
 
 	useEffect(() => {
+		getAllAtributes(undefined, { order: 1 }, { isActive: true });
+	}, []);
+
+	useEffect(() => {
 		getData();
-	}, [dateRange]);
+	}, [activeKey, filter, page, limit]);
+
+	const handlePaginationChange = (newPage: number, newPageSize: number) => {
+		if (newPageSize !== limit) {
+			setPage(1);
+			setLimit(newPageSize);
+		} else {
+			setPage(newPage);
+		}
+	};
+
+	const handlePageSizeChange = (current: number, size: number) => {
+		setPage(1);
+		setLimit(size);
+	};
 
 	return (
-		<Card title='List activity' className='table-base-card' variant='borderless'>
-			<Flex justify='space-between' align='center' style={{ marginBottom: 16 }}>
-				<MyDateRangePicker
-					style={{ width: 300 }}
-					value={dateRange?.length === 2 ? [dayjs(dateRange[0]), dayjs(dateRange[1])] : null}
-					onChange={(val: any) => setDateRange(val ?? [])}
-					ranges={{
-						[intl.formatMessage({ id: 'activity.date.homnay' })]: [dayjs().startOf('date'), dayjs().endOf('date')],
-						[intl.formatMessage({ id: 'activity.date.tuannay' })]: [dayjs().startOf('week'), dayjs().endOf('week')],
-						[intl.formatMessage({ id: 'activity.date.thangnay' })]: [dayjs().startOf('month'), dayjs().endOf('month')],
-					}}
-				/>
+		<Card title='List Activity' className='table-base-card' variant='borderless'>
+			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
+				<Tabs.TabPane key='1' tab='Upcoming' />
+				<Tabs.TabPane key='2' tab='Ongoing' />
+				<Tabs.TabPane key='3' tab='Completed' />
+			</Tabs>
 
-				<ButtonExtend icon={<ReloadOutlined />} onClick={getData} />
-			</Flex>
+			<FilterSuKien value={filter} onChange={setFilter} onReload={getData} />
+
+			<hr
+				style={{
+					marginTop: 16,
+					marginBottom: 16,
+					border: 'none',
+					borderTop: '1px solid #f0f0f0',
+				}}
+			/>
 
 			<Spin spinning={loading}>
 				{danhSach?.length ? (
-					<Row gutter={[24, 24]}>
-						{danhSach?.map((item) => {
-							// const isFutureOrNow = dayjs(item.startDate).isSameOrAfter(dayjs());
-							const disabledRegister = !!item.workflow || !item.activitiesTypeId;
+					<>
+						<Row gutter={[12, 12]}>
+							{danhSach?.map((item) => {
+								const equivalencyAttributeIds = item?.coCurricularActivityEquivalency?.map((x) => x.attributesId);
+								const now = dayjs();
 
-							return (
-								<Col key={item._id} xs={24} sm={12} md={8} lg={6} className='activity-col'>
-									<Card
-										hoverable
-										className='activity-card'
-										cover={
-											<div className='activity-cover'>
-												<img src={item.banner ?? '/metadata.png'} alt={item.name} className='activity-image' />
+								const startDate = item?.startDate ? dayjs(item.startDate) : null;
+								const endDateUpdateEvidence =
+									item?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
+										? item?.activityOutcome?.dueDate
+											? dayjs(item?.activityOutcome?.dueDate)
+											: null
+										: item?.allowPostEventResultsUpdate
+											? item.dueDate
+												? dayjs(item.dueDate)
+												: null
+											: item?.endDate
+												? dayjs(item.endDate)
+												: null;
 
-												<div className='activity-date'>
-													<CalendarOutlined />
-													<span>{dayjs(item.startDate).format('MMM DD, YYYY')}</span>
-												</div>
+								const isOngoing = now.isAfter(startDate) && now.isBefore(endDateUpdateEvidence);
 
-												<div
-													style={{
-														position: 'absolute',
-														top: 16,
-														left: 16,
-														background: 'rgba(0,0,0,0.7)',
-														color: '#fff',
-														padding: '6px 12px',
-														borderRadius: 6,
-														fontSize: 13,
-													}}
-												>
-													{formatDate(item.startDate)}
-												</div>
+								const endDateSource = item?.dueDateRegistration ?? item?.endDate;
+								const endDate = endDateSource ? dayjs(endDateSource) : null;
+								const outTimeRegis = now.isAfter(endDate) && !item?.activityOutcome?.workflow;
 
-												<div style={{ position: 'absolute', top: 16, right: 16 }}>
-													<Tag color={mapColorApprovalStatus[item.workflow as EApprovalStatus]}>
-														{mapNameApprovalStatus[item.workflow as EApprovalStatus]}
-													</Tag>
-												</div>
-											</div>
-										}
-										onClick={() => {
-											setRecord(item);
-											setVisibleForm(true);
-										}}
-									>
-										<div className='activity-content'>
-											<Title level={5} className='activity-title'>
-												{item?.name}
-											</Title>
-										</div>
+								const isRegistered = !!item?.activityOutcome?.workflow;
+								const isNotStarted = startDate && now.isBefore(startDate);
 
-										<div className='activity-footer'>
-											<Popconfirm
-												title={intl.formatMessage({ id: 'activity.confirm.dangky' })}
-												placement='topLeft'
-												onConfirm={(e) => {
-													e?.stopPropagation?.();
-													registerActivityModel(
-														item._id,
-														getData,
-														intl.formatMessage({ id: 'global.message.luuthanhcong' }),
-													);
+								const isFullSlot = !!item?.capacity && (item?.numberOfRegisteredActivityOutcomes ?? 0) >= item.capacity;
+
+								const editableWorkflow =
+									item?.activityOutcome?.workflow === EApprovalStatus.DRAFT ||
+									item?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+									item?.activityOutcome?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+
+								const isExpired = activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
+
+								const renderButton = () => {
+									//Chưa đăng ký
+									if (isRegistered && isNotStarted) {
+										return (
+											<ButtonExtend block disabled>
+												REGISTERED
+											</ButtonExtend>
+										);
+									}
+
+									//Đã đăng ký và trong thời gian cập nhật minh chứng
+									if (editableWorkflow && isOngoing) {
+										return (
+											<ButtonExtend
+												block
+												type='primary'
+												onClick={() => {
+													setVisibleForm(false);
+													handleEdit({
+														...item?.activityOutcome,
+														activities: item,
+													});
 												}}
-												onCancel={(e) => e?.stopPropagation?.()}
-												disabled={disabledRegister}
 											>
-												<div
-													onClick={(e) => {
-														e.stopPropagation();
-													}}
-												>
-													<Tooltip
-													//  title={!isFutureOrNow ? 'The event has started or has ended' : undefined}
-													>
-														<Button block type='default' className='activity-btn' disabled={disabledRegister}>
-															Register Now
-														</Button>
-													</Tooltip>
-												</div>
-											</Popconfirm>
-										</div>
-									</Card>
-								</Col>
-							);
-						})}
-					</Row>
+												Update Evidence
+											</ButtonExtend>
+										);
+									}
+
+									//Hết số lượng đăng ký
+									if (!isRegistered && isFullSlot) {
+										return (
+											<ButtonExtend block disabled>
+												FULL SLOT
+											</ButtonExtend>
+										);
+									}
+
+									//Đã đăng ký và ngoài thời gian cập nhật minh chứng
+									if (isRegistered || (activeKey === '3' && !isRegistered) || outTimeRegis) {
+										return (
+											<ButtonExtend block disabled>
+												SEE MORE
+											</ButtonExtend>
+										);
+									}
+
+									return (
+										<Popconfirm
+											title={intl.formatMessage({ id: 'activity.confirm.dangky' })}
+											placement='topLeft'
+											onConfirm={() => registerActivityModel(item._id, getData).then(() => setVisibleDangKy(true))}
+										>
+											<ButtonExtend type='primary' block>
+												REGISTER NOW
+											</ButtonExtend>
+										</Popconfirm>
+									);
+								};
+
+								return (
+									<Col key={item._id} xs={24} sm={12} md={8} lg={8}>
+										<CardSuKienCCT
+											record={{
+												...item,
+												activityOutcome: item?.activityOutcome,
+											}}
+											banner={item?.banner}
+											name={item?.name}
+											startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
+											endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
+											equivalencyAttributeIds={equivalencyAttributeIds}
+											onClick={() => {
+												setRecord(item);
+												setVisibleForm(true);
+											}}
+											button={
+												<Row style={{ padding: '12px 4px 4px 4px' }} gutter={[6, 0]}>
+													<Col span={24}>{renderButton()}</Col>
+												</Row>
+											}
+											outTimeRegis={outTimeRegis && activeKey !== '3'}
+											activeKey={activeKey}
+											isExpired={isExpired}
+										/>
+									</Col>
+								);
+							})}
+						</Row>
+
+						{total > 0 && (
+							<div className='pagination-container'>
+								<Pagination
+									current={page}
+									pageSize={limit}
+									total={total}
+									onChange={handlePaginationChange}
+									onShowSizeChange={handlePageSizeChange}
+									pageSizeOptions={['5', '10', '20', '50']}
+									disabled={loading}
+									size='default'
+									className='pagination'
+								/>
+							</div>
+						)}
+					</>
 				) : (
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
@@ -146,7 +330,19 @@ const ActivityPage = () => {
 				)}
 			</Spin>
 
-			<ChiTietActivity getData={getData} />
+			<ChiTietActivity getData={getData} setVisibleDangKy={setVisibleDangKy} activeKey={activeKey} />
+
+			<ModalDangKyThanhCong visibleDangKy={visibleDangKy} setVisibleDangKy={setVisibleDangKy} />
+
+			<ModalExpandable
+				title={'Update Evidence'}
+				width={1000}
+				onCancel={() => setVisibleFormActivityOutcome(false)}
+				footer={null}
+				open={visibleFormActivityOutcome}
+			>
+				<FormActivityOutCome getData={getData} />
+			</ModalExpandable>
 		</Card>
 	);
 };

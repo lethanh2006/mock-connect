@@ -23,6 +23,7 @@ export default () => {
 				name: string;
 				file?: string[];
 			}[];
+			submitted: boolean;
 		},
 		getData?: () => void,
 		messageText?: string,
@@ -42,12 +43,16 @@ export default () => {
 		}
 	};
 
-	const deleteActivityModel = async (idActivity: string, getData?: () => void): Promise<ActivityOutCome.IRecord> => {
+	const deleteActivityModel = async (
+		idActivityOutCome: string,
+		getData?: () => void,
+		messageText?: string,
+	): Promise<ActivityOutCome.IRecord> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
 		try {
-			const res = await deleteActivity(idActivity);
-			message.success('Lưu thành công');
+			const res = await deleteActivity(idActivityOutCome);
+			message.success(messageText ?? 'Xóa thành công');
 
 			if (getData) getData();
 			return res.data;
