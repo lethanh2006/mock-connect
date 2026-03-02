@@ -109,9 +109,29 @@ const ActivityPage = () => {
 			});
 		}
 
-		getModel(undefined, filters, undefined, undefined, 9, 'me/page', {
-			registerStatus: filter?.regiStatus,
-		});
+		getModel(
+			undefined,
+			filters,
+			activeKey === '2'
+				? {
+						startDate: -1,
+					}
+				: activeKey === '1'
+					? {
+							startDate: 1,
+						}
+					: activeKey === '3'
+						? {
+								endDate: -1,
+							}
+						: undefined,
+			undefined,
+			9,
+			'me/page',
+			{
+				registerStatus: filter?.regiStatus,
+			},
+		);
 	};
 
 	useEffect(() => {

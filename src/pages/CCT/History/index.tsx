@@ -368,10 +368,14 @@ const HistoryActivityPage = () => {
 
 																		<Popconfirm
 																			onConfirm={() =>
-																				deleteActivityModel(item?._id, () => {
-																					getData();
-																					getThongKe();
-																				})
+																				deleteActivityModel(
+																					item?._id,
+																					() => {
+																						getData();
+																						getThongKe();
+																					},
+																					intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+																				)
 																			}
 																			title={intl.formatMessage({ id: 'activity.confirm.xoa' })}
 																			placement='topLeft'

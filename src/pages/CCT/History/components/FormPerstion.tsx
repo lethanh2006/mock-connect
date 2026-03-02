@@ -7,7 +7,7 @@ import { handleSingleFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { resetFieldsForm } from '@/utils/utils';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Image, Input, message, Radio, Row, Space, Tag } from 'antd';
+import { Button, Checkbox, Col, Form, Image, Input, Radio, Row, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -25,8 +25,6 @@ const uploadFilesOfCompetency = async (files: any[] = []) => {
 	return urls.filter(Boolean) as string[];
 };
 
-const hasAtLeastOneEvidenceFile = (evidenceFile: any[] = []) => evidenceFile.some((i) => i?.file?.length);
-
 const FormPerstionActivityOutCome = (props: any) => {
 	const { getData } = props;
 	const intl = useIntl();
@@ -35,21 +33,14 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const { record, setVisibleForm, edit, isView, postModel, putModel, formSubmiting, visibleForm } =
 		useModel('cct.activityoutcome');
 
-	const { danhSach: dsLevels } = useModel('cct.levels');
-	const { danhSach: dsRoles } = useModel('cct.roles');
 	const { danhSach: dsActivityType } = useModel('cct.activities');
 
 	const startDate: Date = Form.useWatch('startDate', form);
-	const rolesId: string = Form.useWatch('rolesId', form);
-	const levelsId: string = Form.useWatch('levelsId', form);
 	const activitiesTypeDomainId: string = Form.useWatch('activitiesTypeDomainId', form);
 	const checkbox: boolean = Form.useWatch('checkbox', form);
 	const listAchievedCompetencies: string[] = Form.useWatch('listAchievedCompetencies', form);
 	const onUni: boolean = Form.useWatch('onUni', form);
 	const activitiesTypeId: string = Form.useWatch('activitiesTypeId', form);
-
-	const autoLevel = dsLevels?.find((i) => i?._id === levelsId)?.autoApproval;
-	const autoRole = dsRoles?.find((i) => i?._id === rolesId)?.autoApproval;
 
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
@@ -88,11 +79,6 @@ const FormPerstionActivityOutCome = (props: any) => {
 				file: await uploadFilesOfCompetency(item?.file?.fileList),
 			})),
 		);
-
-		if (autoLevel && autoRole && !hasAtLeastOneEvidenceFile(evidenceFile)) {
-			message.warning('You must upload at least one evidence file for auto approval.');
-			return;
-		}
 
 		values.evidenceFile = evidenceFile;
 
