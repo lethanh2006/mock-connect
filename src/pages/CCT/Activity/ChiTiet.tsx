@@ -106,7 +106,13 @@ const ChiTietActivity = (props: {
 					<Popconfirm
 						title='Confirm cancellation of activity registration ?'
 						placement='topLeft'
-						onConfirm={() => deleteActivityModel(record?._id ?? '', getData).then(() => setVisibleForm(false))}
+						onConfirm={() =>
+							deleteActivityModel(
+								record?.activityOutcome?._id ?? '',
+								getData,
+								intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+							).then(() => setVisibleForm(false))
+						}
 					>
 						<ButtonExtend type='link' className='btn-unregister'>
 							UNREGISTER
