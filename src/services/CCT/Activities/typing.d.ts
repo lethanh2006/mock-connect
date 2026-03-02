@@ -7,11 +7,25 @@ declare module ActivitiesManagement {
 		attributes: AttributesManagement.IRecord[];
 		activitiesTypeDomainId: string;
 		activitiesTypeDomain: ActivitiesTypeDomain.IRecord;
+		activitiesTypeDomainText?: string;
 		order: number;
 		description: string;
 		isActive: boolean;
+		requiredEvidenceText: string;
 
 		coCurricularAttributesEquivalency?: any[];
 		requiredEvidenceList?: string[];
+		track: ITrack;
+		trackId: string;
+		trackText: string;
+	}
+
+	export interface ITrack {
+		_id: string;
+		code: string;
+		name: string;
+		order: number;
+		description: string;
+		isActive: boolean;
 	}
 }

@@ -135,7 +135,7 @@ const AvatarDropdown = () => {
 			});
 
 			handleCheckKhaoSatBatBuoc();
-			getSuKienModel();
+			// getSuKienModel();
 
 			//Get All phân vùng để lấy mã màu
 			getAllPhanVung();

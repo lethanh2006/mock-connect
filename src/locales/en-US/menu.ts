@@ -120,7 +120,7 @@ export default {
 
 	// CCT
 	'menu.Activity': 'Co-curricular',
-	'menu.Activity.Register': 'Register',
+	'menu.Activity.Register': 'List Activity',
 	'menu.Activity.MyActivity': 'My Activity',
 	'menu.Activity.MyCCT': 'Co-curricular Transcript',
 };

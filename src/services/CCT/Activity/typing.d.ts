@@ -1,3 +1,4 @@
+import { ActivityOutCome } from '../ActivityOutcome/typing';
 import { EApprovalStatus, EparticipantRole, EParticipantScope } from '../constant';
 
 declare module Activity {
@@ -28,6 +29,9 @@ declare module Activity {
 
 		allowPostEventResultsUpdate?: boolean;
 		dueDate?: Date;
+		dueDateRegistration?: Date;
+		capacity?: number;
+		numberOfRegisteredActivityOutcomes?: number;
 
 		activitiesTypeId: string | null;
 		activitiesType: ActivitiesManagement.IRecord;
@@ -40,8 +44,9 @@ declare module Activity {
 		workflow: EApprovalStatus;
 		competencyList: ICompetencyActivity[];
 
-		//fake
-		cct?: boolean;
+		activityOutcome: ActivityOutCome.IRecord;
+
+		createdAt?: Date;
 	}
 
 	export interface IParticipantsList {
@@ -69,17 +74,10 @@ declare module Activity {
 	}
 
 	export interface ICompetencyMapping {
-		_id: string;
-		index?: number;
-		activityOutcomeId: string;
+		activityOutcomeId?: string;
 		activityOutcome?: IRecord;
-		competencieId: string;
+		competencyId: string;
 		competencie?: Competency.IRecord;
-		attributesId: string;
-		attributes?: AttributesManagement.IRecord;
-
-		//fake
-		dsCompetencie?: Competency.IRecord[];
 	}
 
 	export interface ICompetencyMappingActivity {
@@ -87,7 +85,7 @@ declare module Activity {
 		index?: number;
 		activitiesId: string;
 		activities?: IRecord;
-		competencieId: string;
+		competencyId: string;
 		competencie?: Competency.IRecord;
 		attributesId: string;
 		attributes?: AttributesManagement.IRecord;
