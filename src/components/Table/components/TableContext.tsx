@@ -103,20 +103,34 @@ interface TableProviderProps {
 	>;
 }
 
-export const TableProvider: React.FC<TableProviderProps> = ({ children, value: externalValue }) => {
+let tableSequence = 0;
+let lastPath = '';
+
+const getTableSequence = (path: string) => {
+	if (path !== lastPath) {
+		lastPath = path;
+		tableSequence = 0;
+	}
+	return ++tableSequence;
+};
+
+export const TableProvider = ({ children, value: externalValue }: TableProviderProps) => {
 	const [visibleFilter, setVisibleFilter] = useState(false);
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
+	const [instanceSeq] = useState(() => getTableSequence(window.location.pathname));
 
 	const configStorageKey = useMemo(() => {
 		const pathname = window.location.pathname.replace(/\//g, '_');
 		const fingerprint = getTableFingerprint(externalValue.columns);
-		const identifier = `${externalValue.modelName || ''}_${fingerprint}`;
 
-		// Không hash pathname để dễ đọc, dễ phân biệt nếu cần kiểm tra
-		return `tableConfig_${pathname}_${stringHash(identifier)}`;
-	}, [externalValue.modelName, externalValue.columns]);
+		// Ghép các yếu tố định danh chính để hash
+		const identifier = [externalValue.modelName, fingerprint].filter(Boolean).join('_');
+
+		// Không hash pathname và seq để dễ đọc, dễ phân biệt nếu cần kiểm tra
+		return `tableConfig_${pathname}_${stringHash(identifier)}_seq${instanceSeq}`;
+	}, [externalValue.modelName, externalValue.columns, instanceSeq]);
 
 	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
 		try {
