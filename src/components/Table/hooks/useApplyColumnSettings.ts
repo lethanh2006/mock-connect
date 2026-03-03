@@ -110,20 +110,24 @@ export const useApplyColumnSettings = ({
 
 	// Đồng bộ settings (ẩn/hiện, thứ tự) khi danh sách columns thay đổi
 	useEffect(() => {
-		const currentKeys = baseProcessedColumns.map((col) => col.key as string);
+		// Chỉ lấy những cột không bị ẩn hoàn toàn (hide !== true)
+		const visibleInSettingsColumns = baseProcessedColumns.filter((col) => col.hide !== true);
+		const currentKeys = visibleInSettingsColumns.map((col) => col.key as string);
 		let updatedSettings = [...columnSettings];
 		let hasChange = false;
 
 		// Thêm các cột mới chưa có trong settings
 		currentKeys.forEach((key) => {
 			if (!updatedSettings.find((s) => s.key === key)) {
-				const colDef = baseProcessedColumns.find((col) => col.key === key);
-				updatedSettings.push({ key, visible: colDef?.hide !== true });
+				const colDef = visibleInSettingsColumns.find((col) => col.key === key);
+				// Mặc định ẩn nếu hide === true HOẶC initialHide === true
+				const isDefaultVisible = colDef?.hide !== true && colDef?.initialHide !== true;
+				updatedSettings.push({ key, visible: isDefaultVisible });
 				hasChange = true;
 			}
 		});
 
-		// Loại bỏ các cột không còn tồn tại trong columns
+		// Loại bỏ các cột không còn tồn tại trong columns hoặc đã bị đổi thành hide: true
 		const filteredSettings = updatedSettings.filter((s) => currentKeys.includes(s.key));
 		if (filteredSettings.length !== updatedSettings.length) {
 			updatedSettings = filteredSettings;
@@ -133,15 +137,18 @@ export const useApplyColumnSettings = ({
 		if (hasChange) {
 			setColumnSettings(updatedSettings);
 		}
-	}, [baseProcessedColumns, columnSettings, setColumnSettings]); // baseProcessedColumns chỉ thay đổi khi columns hoặc width thay đổi
+	}, [baseProcessedColumns, columnSettings, setColumnSettings]);
 
 	// Lọc và sắp xếp columns dựa trên settings hiện tại
 	const processedColumns = useMemo(() => {
-		if (!columnSettings?.length) return baseProcessedColumns;
+		// Loại bỏ vĩnh viễn các cột có hide === true
+		const availableColumns = baseProcessedColumns.filter((col) => col.hide !== true);
+
+		if (!columnSettings?.length) return availableColumns;
 
 		return columnSettings
 			.filter((s) => s.visible !== false)
-			.map((s) => baseProcessedColumns.find((col) => col.key === s.key))
+			.map((s) => availableColumns.find((col) => col.key === s.key))
 			.filter(Boolean) as IColumn<any>[];
 	}, [baseProcessedColumns, columnSettings]);
 

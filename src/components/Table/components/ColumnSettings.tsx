@@ -97,10 +97,15 @@ export const ColumnSettings: React.FC = () => {
   };
 
   const resetSettings = () => {
-    const defaultSettings: IColumnSetting[] = columns.map((col: IColumn<any>, idx: number) => ({
-      key: getColumnKey(col, idx),
-      visible: col.hide !== true,
-    }));
+    const defaultSettings: IColumnSetting[] = columns
+      .map((col: IColumn<any>, idx: number) => ({
+        key: getColumnKey(col, idx),
+        visible: col.initialHide !== true,
+        hide: col.hide,
+      }))
+      .filter((item: any) => item.hide !== true)
+      .map(({ hide, ...rest }: any) => rest);
+
     setTempSettings(defaultSettings);
     setShouldResetWidths(true);
   };
