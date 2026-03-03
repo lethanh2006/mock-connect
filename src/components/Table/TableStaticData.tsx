@@ -10,6 +10,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Highlighter from 'react-highlight-words';
 import { useIntl, useModel } from 'umi';
 import { ResizableTitle } from './components/ResizableTitle';
+import { ColumnSettings } from './components/ColumnSettings';
 import { TableProvider, useTableContext } from './components/TableContext';
 import { useApplyColumnSettings } from './hooks/useApplyColumnSettings';
 import ModalExpandable from './ModalExpandable';
@@ -171,8 +172,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 	const { processedColumns } = useApplyColumnSettings({
 		columns: baseColumns,
-		// Tạm thời static nên ko aplly columnSettings, sau này nếu có thêm tính năng chỉnh cột thì sẽ dùng
-		columnSettings: [],
+		columnSettings,
 		columnsWidth,
 		setColumnsWidth,
 		setColumnSettings,
@@ -312,6 +312,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							</div>
 						</Tooltip>
 					) : null}
+
+					<ColumnSettings />
 				</div>
 			</div>
 
@@ -381,7 +383,12 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 const TableStaticData: React.FC<TableStaticProps> = (props) => {
 	return (
-		<TableProvider value={{ modelName: 'default_static' as any, size: props.size, columns: props.columns }}>
+		<TableProvider
+			value={{
+				size: props.size,
+				columns: props.columns,
+			}}
+		>
 			<TableStaticContent {...props} />
 		</TableProvider>
 	);

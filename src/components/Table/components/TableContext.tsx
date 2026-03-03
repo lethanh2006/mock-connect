@@ -1,7 +1,8 @@
 import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import type { InputRef } from 'antd';
-import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { IColumn, TableBaseProps, TFilter } from '../typing';
+import { getTableFingerprint, stringHash } from '../utils';
 
 export interface IColumnSetting {
 	key: string;
@@ -102,13 +103,34 @@ interface TableProviderProps {
 	>;
 }
 
-export const TableProvider: React.FC<TableProviderProps> = ({ children, value: externalValue }) => {
+let tableSequence = 0;
+let lastPath = '';
+
+const getTableSequence = (path: string) => {
+	if (path !== lastPath) {
+		lastPath = path;
+		tableSequence = 0;
+	}
+	return ++tableSequence;
+};
+
+export const TableProvider = ({ children, value: externalValue }: TableProviderProps) => {
 	const [visibleFilter, setVisibleFilter] = useState(false);
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
 	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
-	// TODO: Check lại config key có thể xảy ra trùng lặp khi dùng nhiều table trên cùng 1 model/tableStatic
-	const configStorageKey = `tableConfig_${externalValue.modelName}`;
+	const [instanceSeq] = useState(() => getTableSequence(window.location.pathname));
+
+	const configStorageKey = useMemo(() => {
+		const pathname = window.location.pathname.replace(/\//g, '_');
+		const fingerprint = getTableFingerprint(externalValue.columns);
+
+		// Ghép các yếu tố định danh chính để hash
+		const identifier = [externalValue.modelName, fingerprint].filter(Boolean).join('_');
+
+		// Không hash pathname và seq để dễ đọc, dễ phân biệt nếu cần kiểm tra
+		return `tableConfig_${pathname}_${stringHash(identifier)}_seq${instanceSeq}`;
+	}, [externalValue.modelName, externalValue.columns, instanceSeq]);
 
 	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
 		try {

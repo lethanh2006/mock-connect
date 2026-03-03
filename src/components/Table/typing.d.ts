@@ -5,8 +5,11 @@ import React, { JSX } from 'react';
 import { type EOperatorType } from './constant/constant';
 
 export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 'children'> {
-	/** Ẩn cột khi hiển thị trên table, nhưng vẫn có trong filter, import, export */
+	/** Ẩn hoàn toàn cột (không hiện trong table, không hiện trong menu cấu hình) */
 	hide?: boolean;
+
+	/** Ẩn mặc định (không hiện trong table lần đầu, nhưng có trong menu cấu hình để bật lại) */
+	initialHide?: boolean;
 
 	children?: IColumn<T>[];
 
