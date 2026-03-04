@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import type { IColumn } from '../typing';
-import { getColumnKey } from '../utils';
+import { getColumnKey, mergeColumnSettings } from '../utils';
 
 interface UseApplyColumnSettingsProps {
 	columns: IColumn<any>[];
@@ -111,29 +111,9 @@ export const useApplyColumnSettings = ({
 
 	// Lọc và sắp xếp columns dựa trên settings hiện tại
 	const processedColumns = useMemo(() => {
-		// Loại bỏ vĩnh viễn các cột có hide === true
 		const availableColumns = baseProcessedColumns.filter((col) => col.hide !== true);
+		const mergedSettings = mergeColumnSettings(columnSettings, columns);
 
-		// Nếu người dùng chưa hề chỉnh sửa gì (settings trống), dùng mặc định từ code
-		if (!columnSettings || columnSettings.length === 0) {
-			return availableColumns.filter((col) => col.initialHide !== true);
-		}
-
-		// 1. Tạo bản sao settings để chèn các cột mới vào đúng vị trí tương đối
-		const settingsKeys = new Set(columnSettings.map((s) => s.key));
-		const mergedSettings = [...columnSettings];
-
-		// Duyệt qua danh sách cột trong code, nếu thấy cột nào chưa có trong settings thì chèn vào đúng index đó
-		availableColumns.forEach((col, index) => {
-			if (!settingsKeys.has(col.key as string)) {
-				// Chỉ hiển thị mặc định nếu không bị initialHide
-				if (col.initialHide !== true) {
-					mergedSettings.splice(index, 0, { key: col.key as string, visible: true });
-				}
-			}
-		});
-
-		// 2. Map ra kết quả cuối cùng theo thứ tự đã được trộn
 		return mergedSettings
 			.map((s) => {
 				const col = availableColumns.find((c) => c.key === s.key);
@@ -141,7 +121,7 @@ export const useApplyColumnSettings = ({
 				return null;
 			})
 			.filter(Boolean) as IColumn<any>[];
-	}, [baseProcessedColumns, columnSettings]);
+	}, [baseProcessedColumns, columnSettings, columns]);
 
 	return { processedColumns, onResize };
 };
