@@ -350,8 +350,12 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		return final;
 	}, [processedColumns, addStt, dsPhanVung, intl, size]);
 
+	const lastFinalColumnsRef = React.useRef<IColumn<any>[]>([]);
 	useEffect(() => {
-		setFinalColumns?.(finalColumns);
+		if (!_.isEqual(lastFinalColumnsRef.current, finalColumns)) {
+			lastFinalColumnsRef.current = finalColumns;
+			setFinalColumns?.(finalColumns);
+		}
 	}, [finalColumns, setFinalColumns]);
 
 	return { finalColumns, handleFilter, handleSearch, onResize };

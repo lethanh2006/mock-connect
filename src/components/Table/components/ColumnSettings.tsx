@@ -62,13 +62,35 @@ export const ColumnSettings: React.FC = () => {
   const [tempSettings, setTempSettings] = React.useState<IColumnSetting[]>(columnSettings);
   const [shouldResetWidths, setShouldResetWidths] = React.useState(false);
 
-  // Sync tempSettings khi mở Popover
+  // Sync tempSettings khi mở Popover - Trộn giữa settings đã lưu và cột thực tế từ code
   React.useEffect(() => {
     if (visible) {
-      setTempSettings(columnSettings);
+      const availableColumns = columns.filter((col) => col.hide !== true);
+
+      // 1. Tạo bản sao settings để chèn các cột mới vào đúng vị trí tương đối
+      const existingKeys = new Set(columnSettings.map((s) => s.key));
+      const mergedTempSettings = [...columnSettings];
+
+      // Duyệt qua danh sách cột thực tế, nếu cột nào chưa có trong settings thì chèn vào đúng index
+      availableColumns.forEach((col, index) => {
+        const key = getColumnKey(col, index);
+        if (!existingKeys.has(key)) {
+          mergedTempSettings.splice(index, 0, {
+            key,
+            visible: col.initialHide !== true,
+          });
+        }
+      });
+
+      // Lọc bỏ các cột không còn tồn tại trong code (cleanup settings cũ)
+      const finalTempSettings = mergedTempSettings.filter((s) =>
+        availableColumns.some((col, idx) => getColumnKey(col, idx) === s.key)
+      );
+
+      setTempSettings(finalTempSettings);
       setShouldResetWidths(false);
     }
-  }, [visible, columnSettings]);
+  }, [visible, columnSettings, columns]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

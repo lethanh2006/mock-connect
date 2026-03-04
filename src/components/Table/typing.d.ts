@@ -59,6 +59,9 @@ export type TableBaseProps = {
 	/** Tên model */
 	modelName: Namespaces;
 
+	/** Key cố định để lưu cấu hình (dùng khi bảng có cấu trúc cột thay đổi động) */
+	configKey?: string;
+
 	/** Import dùng model khác? */
 	modelImportName?: Namespaces;
 	/** Export dùng model khác? */
@@ -221,6 +224,8 @@ export type TableStaticProps = Pick<
 	TableBaseProps,
 	| 'emptyText'
 	| 'columns'
+	| 'modelName'
+	| 'configKey'
 	| 'title'
 	| 'Form'
 	| 'formProps'

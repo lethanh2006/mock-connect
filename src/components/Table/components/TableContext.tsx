@@ -3,6 +3,7 @@ import type { InputRef } from 'antd';
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { IColumn, TableBaseProps, TFilter } from '../typing';
 import { getTableFingerprint, stringHash } from '../utils';
+import _ from 'lodash';
 
 export interface IColumnSetting {
 	key: string;
@@ -74,6 +75,7 @@ interface TableContextValue {
 
 	// Cấu hình các modal
 	modelName?: Namespaces;
+	configKey?: string;
 	modelImportName?: Namespaces;
 	modelExportName?: Namespaces;
 	params?: any;
@@ -123,14 +125,20 @@ export const TableProvider = ({ children, value: externalValue }: TableProviderP
 
 	const configStorageKey = useMemo(() => {
 		const pathname = window.location.pathname.replace(/\//g, '_');
-		const fingerprint = getTableFingerprint(externalValue.columns);
 
-		// Ghép các yếu tố định danh chính để hash
+		// 1. ƯU TIÊN: Nếu có configKey (định danh thủ công), dùng để đảm bảo ổn định tuyệt đối (Dùng cho CỘT ĐỘNG)
+		if (externalValue.configKey) {
+			return `tableConfig_${pathname}_${stringHash(externalValue.configKey)}_manual`;
+		}
+
+		// 2. MẶC ĐỊNH: Dùng Model + Fingerprint (Vân tay cột)
+		// Giúp phân biệt các bảng tĩnh khác nhau dựa trên nội dung cột mà không phụ thuộc thứ tự render
+		const fingerprint = getTableFingerprint(externalValue.columns);
 		const identifier = [externalValue.modelName, fingerprint].filter(Boolean).join('_');
 
-		// Không hash pathname và seq để dễ đọc, dễ phân biệt nếu cần kiểm tra
+		// 3. AN TOÀN: Vẫn cộng thêm instanceSeq để tách biệt 2 bảng giống hệt nhau (cùng model, cùng cột) trên 1 trang
 		return `tableConfig_${pathname}_${stringHash(identifier)}_seq${instanceSeq}`;
-	}, [externalValue.modelName, externalValue.columns, instanceSeq]);
+	}, [externalValue.configKey, externalValue.modelName, externalValue.columns, instanceSeq]);
 
 	const [columnsWidth, setColumnsWidth] = useState<Record<string, number>>(() => {
 		try {
@@ -151,6 +159,15 @@ export const TableProvider = ({ children, value: externalValue }: TableProviderP
 	});
 
 	useEffect(() => {
+		const hasWidths = Object.keys(columnsWidth).length > 0;
+		const hasSettings = columnSettings.length > 0;
+
+		// Nếu không có gì để lưu và cũng chưa có gì trong storage thì không tạo mới
+		if (!hasWidths && !hasSettings) {
+			const existing = localStorage.getItem(configStorageKey);
+			if (!existing) return;
+		}
+
 		const config = {
 			widths: columnsWidth,
 			columns: columnSettings,
@@ -158,24 +175,41 @@ export const TableProvider = ({ children, value: externalValue }: TableProviderP
 		localStorage.setItem(configStorageKey, JSON.stringify(config));
 	}, [columnsWidth, columnSettings, configStorageKey]);
 
+	// Dùng ref để giữ externalValue ổn định nếu content không đổi (tránh re-render khi parent truyền inline object)
+	const externalValueRef = useRef(externalValue);
+	if (!_.isEqual(externalValueRef.current, externalValue)) {
+		externalValueRef.current = externalValue;
+	}
+
 	const searchInputRef = useRef<InputRef>(null);
 
-	const contextValue: TableContextValue = {
-		...externalValue,
-		visibleFilter,
-		setVisibleFilter,
-		visibleImport,
-		setVisibleImport,
-		visibleExport,
-		setVisibleExport,
-		finalColumns,
-		setFinalColumns,
-		columnsWidth,
-		setColumnsWidth,
-		columnSettings,
-		setColumnSettings,
-		searchInputRef,
-	};
+	const contextValue: TableContextValue = useMemo(
+		() => ({
+			...externalValueRef.current,
+			visibleFilter,
+			setVisibleFilter,
+			visibleImport,
+			setVisibleImport,
+			visibleExport,
+			setVisibleExport,
+			finalColumns,
+			setFinalColumns,
+			columnsWidth,
+			setColumnsWidth,
+			columnSettings,
+			setColumnSettings,
+			searchInputRef,
+		}),
+		[
+			externalValueRef.current,
+			visibleFilter,
+			visibleImport,
+			visibleExport,
+			finalColumns,
+			columnsWidth,
+			columnSettings,
+		],
+	);
 
 	return <TableContext.Provider value={contextValue}>{children}</TableContext.Provider>;
 };
