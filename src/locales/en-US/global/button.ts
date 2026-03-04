@@ -1,5 +1,5 @@
 export default {
-	'global.button.themmoi': 'Add new',
+	'global.button.themmoi': 'Save',
 	'global.button.luulai': 'Save',
 	'global.button.huy': 'Cancel',
 	'global.button.dong': 'Close',
