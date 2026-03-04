@@ -224,7 +224,6 @@ export type TableStaticProps = Pick<
 	TableBaseProps,
 	| 'emptyText'
 	| 'columns'
-	| 'modelName'
 	| 'configKey'
 	| 'title'
 	| 'Form'
