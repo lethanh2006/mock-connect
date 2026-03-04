@@ -12,15 +12,22 @@ const { Text } = Typography;
 
 const ModalFilter = () => {
 	const intl = useIntl();
-	const { columns: originalColumns, finalColumns, setFilters, visibleFilter, setVisibleFilter, filters } = useTableContext();
+	const {
+		columns: originalColumns,
+		finalColumns,
+		setFilters,
+		visibleFilter,
+		setVisibleFilter,
+		filters,
+	} = useTableContext();
 	const columns = originalColumns || finalColumns;
 	const [form] = Form.useForm();
 	const { fieldsFilterable } = useFilterFields(columns, form);
 
 	const handleFinish = (values: any) => {
 		const normalizedFilters = normalizeFilters(values.filters);
-		setFilters(normalizedFilters);
-		setVisibleFilter(false);
+		setFilters?.(normalizedFilters);
+		setVisibleFilter?.(false);
 	};
 
 	useEffect(() => {
@@ -36,8 +43,8 @@ const ModalFilter = () => {
 	return (
 		<Modal
 			open={visibleFilter}
-			onCancel={() => setVisibleFilter(false)}
-			footer={<ModalFooter onReset={handleReset} onCancel={() => setVisibleFilter(false)} />}
+			onCancel={() => setVisibleFilter?.(false)}
+			footer={<ModalFooter onReset={handleReset} onCancel={() => setVisibleFilter?.(false)} />}
 			title={intl.formatMessage({ id: 'global.table.customfilter.title' })}
 			width={800}
 		>
