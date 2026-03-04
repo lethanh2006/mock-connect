@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import type { IColumn } from '../typing';
 import { getColumnKey } from '../utils';
 
@@ -108,48 +108,36 @@ export const useApplyColumnSettings = ({
 		});
 	}, [columns, columnsWidth, onResize, setColumnsWidth]);
 
-	// Đồng bộ settings (ẩn/hiện, thứ tự) khi danh sách columns thay đổi
-	useEffect(() => {
-		// Chỉ lấy những cột không bị ẩn hoàn toàn (hide !== true)
-		const visibleInSettingsColumns = baseProcessedColumns.filter((col) => col.hide !== true);
-		const currentKeys = visibleInSettingsColumns.map((col) => col.key as string);
-		let updatedSettings = [...columnSettings];
-		let hasChange = false;
-
-		// Thêm các cột mới chưa có trong settings
-		currentKeys.forEach((key) => {
-			if (!updatedSettings.find((s) => s.key === key)) {
-				const colDef = visibleInSettingsColumns.find((col) => col.key === key);
-				// Mặc định ẩn nếu hide === true HOẶC initialHide === true
-				const isDefaultVisible = colDef?.hide !== true && colDef?.initialHide !== true;
-				updatedSettings.push({ key, visible: isDefaultVisible });
-				hasChange = true;
-			}
-		});
-
-		// Loại bỏ các cột không còn tồn tại trong columns hoặc đã bị đổi thành hide: true
-		const filteredSettings = updatedSettings.filter((s) => currentKeys.includes(s.key));
-		if (filteredSettings.length !== updatedSettings.length) {
-			updatedSettings = filteredSettings;
-			hasChange = true;
-		}
-
-		if (hasChange) {
-			setColumnSettings(updatedSettings);
-		}
-	}, [baseProcessedColumns, columnSettings, setColumnSettings]);
 
 	// Lọc và sắp xếp columns dựa trên settings hiện tại
 	const processedColumns = useMemo(() => {
 		// Loại bỏ vĩnh viễn các cột có hide === true
 		const availableColumns = baseProcessedColumns.filter((col) => col.hide !== true);
 
-		if (!columnSettings?.length) return availableColumns;
+		// Nếu người dùng chưa hề chỉnh sửa gì (settings trống), dùng mặc định từ code
+		if (!columnSettings || columnSettings.length === 0) {
+			return availableColumns.filter((col) => col.initialHide !== true);
+		}
 
-		return columnSettings
-			.filter((s) => s.visible !== false)
-			.map((s) => availableColumns.find((col) => col.key === s.key))
+		// 1. Lấy danh sách các cột đã có trong settings (áp dụng thứ tự và ẩn/hiện của người dùng)
+		const settingsMap = new Map(columnSettings.map((s) => [s.key, s]));
+		const orderedColumnsFromSettings = columnSettings
+			.map((s) => {
+				const col = availableColumns.find((c) => c.key === s.key);
+				if (col && s.visible !== false) return col;
+				return null;
+			})
 			.filter(Boolean) as IColumn<any>[];
+
+		// 2. Tìm các cột có trong code nhưng CHƯA có trong settings (cột mới hoặc cột động)
+		const newColumns = availableColumns.filter((col) => {
+			const hasSetting = settingsMap.has(col.key as string);
+			// Nếu chưa có setting, hiển thị nếu không bị initialHide
+			return !hasSetting && col.initialHide !== true;
+		});
+
+		// 3. Ghép lại: Thứ tự người dùng đã chỉnh + Các cột mới/động ở phía sau
+		return [...orderedColumnsFromSettings, ...newColumns];
 	}, [baseProcessedColumns, columnSettings]);
 
 	return { processedColumns, onResize };
