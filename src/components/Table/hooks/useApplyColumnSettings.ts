@@ -119,25 +119,28 @@ export const useApplyColumnSettings = ({
 			return availableColumns.filter((col) => col.initialHide !== true);
 		}
 
-		// 1. Lấy danh sách các cột đã có trong settings (áp dụng thứ tự và ẩn/hiện của người dùng)
-		const settingsMap = new Map(columnSettings.map((s) => [s.key, s]));
-		const orderedColumnsFromSettings = columnSettings
+		// 1. Tạo bản sao settings để chèn các cột mới vào đúng vị trí tương đối
+		const settingsKeys = new Set(columnSettings.map((s) => s.key));
+		const mergedSettings = [...columnSettings];
+
+		// Duyệt qua danh sách cột trong code, nếu thấy cột nào chưa có trong settings thì chèn vào đúng index đó
+		availableColumns.forEach((col, index) => {
+			if (!settingsKeys.has(col.key as string)) {
+				// Chỉ hiển thị mặc định nếu không bị initialHide
+				if (col.initialHide !== true) {
+					mergedSettings.splice(index, 0, { key: col.key as string, visible: true });
+				}
+			}
+		});
+
+		// 2. Map ra kết quả cuối cùng theo thứ tự đã được trộn
+		return mergedSettings
 			.map((s) => {
 				const col = availableColumns.find((c) => c.key === s.key);
 				if (col && s.visible !== false) return col;
 				return null;
 			})
 			.filter(Boolean) as IColumn<any>[];
-
-		// 2. Tìm các cột có trong code nhưng CHƯA có trong settings (cột mới hoặc cột động)
-		const newColumns = availableColumns.filter((col) => {
-			const hasSetting = settingsMap.has(col.key as string);
-			// Nếu chưa có setting, hiển thị nếu không bị initialHide
-			return !hasSetting && col.initialHide !== true;
-		});
-
-		// 3. Ghép lại: Thứ tự người dùng đã chỉnh + Các cột mới/động ở phía sau
-		return [...orderedColumnsFromSettings, ...newColumns];
 	}, [baseProcessedColumns, columnSettings]);
 
 	return { processedColumns, onResize };

@@ -67,25 +67,27 @@ export const ColumnSettings: React.FC = () => {
     if (visible) {
       const availableColumns = columns.filter((col) => col.hide !== true);
 
-      // 1. Lấy các cột đã có trong settings (giữ nguyên thứ tự người dùng đã sắp xếp)
-      const existingSettings = columnSettings
-        .map((s) => {
-          const col = availableColumns.find((c, idx) => getColumnKey(c, idx) === s.key);
-          if (col) return s;
-          return null;
-        })
-        .filter(Boolean) as IColumnSetting[];
+      // 1. Tạo bản sao settings để chèn các cột mới vào đúng vị trí tương đối
+      const existingKeys = new Set(columnSettings.map((s) => s.key));
+      const mergedTempSettings = [...columnSettings];
 
-      // 2. Bổ sung các cột mới trong code mà chưa có trong settings
-      const existingKeys = new Set(existingSettings.map((s) => s.key));
-      const newSettings = availableColumns
-        .filter((col, idx) => !existingKeys.has(getColumnKey(col, idx)))
-        .map((col, idx) => ({
-          key: getColumnKey(col, idx),
-          visible: col.initialHide !== true,
-        }));
+      // Duyệt qua danh sách cột thực tế, nếu cột nào chưa có trong settings thì chèn vào đúng index
+      availableColumns.forEach((col, index) => {
+        const key = getColumnKey(col, index);
+        if (!existingKeys.has(key)) {
+          mergedTempSettings.splice(index, 0, {
+            key,
+            visible: col.initialHide !== true,
+          });
+        }
+      });
 
-      setTempSettings([...existingSettings, ...newSettings]);
+      // Lọc bỏ các cột không còn tồn tại trong code (cleanup settings cũ)
+      const finalTempSettings = mergedTempSettings.filter((s) =>
+        availableColumns.some((col, idx) => getColumnKey(col, idx) === s.key)
+      );
+
+      setTempSettings(finalTempSettings);
       setShouldResetWidths(false);
     }
   }, [visible, columnSettings, columns]);
