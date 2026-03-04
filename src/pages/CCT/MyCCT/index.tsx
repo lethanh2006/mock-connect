@@ -81,7 +81,7 @@ const TranscriptReport: React.FC<any> = () => {
 	const [danhSach, setDanhSach] = useState<any>();
 
 	useEffect(() => {
-		getAllLevel(undefined, { order: 1 });
+		getAllLevel(undefined, { order: 1 }, { isActive: true });
 		getAllModel(undefined, undefined, undefined, undefined, 'my-cct', false).then((res) => setDanhSach(res));
 	}, []);
 

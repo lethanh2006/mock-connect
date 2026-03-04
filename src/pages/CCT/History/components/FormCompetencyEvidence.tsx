@@ -13,7 +13,7 @@ const FormCompetencyEvidence = (props: { listAchievedCompetencies?: string[]; fo
 	const { danhSach: dscompetency, loading, getAllModel: getAllAttriCompetency } = useModel('cct.competency');
 
 	useEffect(() => {
-		getAllAttriCompetency();
+		getAllAttriCompetency(undefined, { order: 1 }, { isActive: true });
 	}, []);
 
 	const sortedData = useMemo(() => {
