@@ -128,7 +128,7 @@ const ChiTietActivity = (props: {
 							title='Confirm activity registration ?'
 							placement='topLeft'
 							onConfirm={() =>
-								registerActivityModel(record?.activityOutcome?._id ?? '', getData).then(() => {
+								registerActivityModel(record?._id ?? '', getData).then(() => {
 									setVisibleForm(false);
 									setVisibleDangKy && setVisibleDangKy(true);
 								})
