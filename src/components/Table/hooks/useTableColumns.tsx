@@ -27,7 +27,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		hasFilter,
 		setVisibleFilter,
 		size,
-		hideFilterColumn,
+		hideFilterColumn = true,
 	} = useTableContext();
 
 	/**
@@ -67,7 +67,8 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			setFilters(tempFilters);
 		} else {
 			// Tìm column tương ứng để check có handleFilter không
-			const column = columns.find((col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex)); // Nếu column có handleFilter => đánh dấu readonly
+			const column = columns.find((col) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex));
+			// Nếu column có handleFilter => đánh dấu readonly
 			const readOnly = !!column?.handleFilter;
 
 			const filter = getFilterColumn(dataIndex);
