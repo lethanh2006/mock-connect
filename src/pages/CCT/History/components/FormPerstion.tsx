@@ -5,7 +5,7 @@ import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EApprovalStatus, EparticipantRole, EParticipantScope } from '@/services/CCT/constant';
 import { handleSingleFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
-import { resetFieldsForm } from '@/utils/utils';
+import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Form, Image, Input, Radio, Row, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
@@ -209,14 +209,16 @@ const FormPerstionActivityOutCome = (props: any) => {
 							label={intl.formatMessage({ id: 'activity.perstion.endDate' })}
 							rules={[
 								...rules.required,
-								...rules.sauNgay(dayjs(startDate), intl.formatMessage({ id: 'activity.perstion.startDate' })),
+								...rules.sauThoiDiem(dayjs(startDate), intl.formatMessage({ id: 'activity.perstion.startDate' })),
 							]}
 						>
 							<MyDatePicker
 								showTime={{ showHour: true, showMinute: true }}
 								format='HH:mm DD/MM/YYYY'
 								disabled={isView}
-								disabledDate={(current) => startDate && dayjs(current).isBefore(startDate)}
+								{...buildDisabledDateTime({
+									min: startDate ? dayjs(startDate) : undefined,
+								})}
 								placeholder={intl.formatMessage({ id: 'activity.perstion.endDate.place' })}
 							/>
 						</Form.Item>
