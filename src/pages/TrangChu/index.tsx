@@ -1,15 +1,7 @@
 import { Card, Col, Row } from 'antd';
 import Chart from 'react-apexcharts';
-import CardDichVuSinhVien from './components/DichVu';
-import LichDashboard from './components/Lich';
 import './components/style.less';
-import CardSuKienSapToi from './components/SuKienSapToi';
-import CardThongBaoDashboard from './components/ThongBao';
 import WelcomeCard from './components/XinChao';
-import CardHocTapRenLuyenDashboard from './HocTapRenLuyen';
-import CardBaiTapDashboard from './HocTapRenLuyen/BaiTap';
-import CardLopHocPhan from './HocTapRenLuyen/CardLopHocPhan';
-import CardDienDanDashboard from './HocTapRenLuyen/DienDan';
 import './styles.less';
 
 const PRIMARY_COLOR = '#C72127';
@@ -144,15 +136,15 @@ const TrangChu = () => {
 		<Row gutter={[24, 24]}>
 			<Col span={24}>
 				<Row gutter={[16, 16]}>
-					<Col span={24} md={12}>
+					<Col span={24} md={24}>
 						<WelcomeCard />
 					</Col>
-					<Col span={24} md={6}>
+					{/* <Col span={24} md={6}>
 						<CardThongBaoDashboard />
 					</Col>
 					<Col span={24} md={6}>
 						<CardSuKienSapToi />
-					</Col>
+					</Col> */}
 				</Row>
 			</Col>
 
@@ -171,7 +163,7 @@ const TrangChu = () => {
 					</Col>
 				</Row>
 			</Col>
-			<Col span={24}>
+			{/* <Col span={24}>
 				<CardLopHocPhan />
 			</Col>
 
@@ -196,7 +188,7 @@ const TrangChu = () => {
 						<CardDichVuSinhVien />
 					</Col>
 				</Row>
-			</Col>
+			</Col> */}
 
 			<Col span={24}>
 				<Row className='diendan-thuvien-banner' gutter={[16, 16]}>
@@ -211,9 +203,9 @@ const TrangChu = () => {
 							/>
 						</Col> */}
 
-							<Col className='card-diendan' span={24}>
+							{/* <Col className='card-diendan' span={24}>
 								<CardDienDanDashboard typeLop='all' />
-							</Col>
+							</Col> */}
 						</Row>
 					</Col>
 
