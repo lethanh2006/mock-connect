@@ -2,34 +2,57 @@ import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { EOperatorType } from '@/components/Table/constant';
 import { accentColors, officialColors, statusBgColors, statusColors } from '@/services/base/constant';
-import { EApprovalStatus } from '@/services/CCT/constant';
+import { EActivityCategory, EApprovalStatus } from '@/services/CCT/constant';
 import { inputFormat } from '@/utils/utils';
-import { useEffect } from 'react';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
-const StatActivityOutCome = (props: { getData: () => void; dependency?: any }) => {
-	const { getData, dependency } = props;
+const StatActivityOutCome = (props: { getData: () => void; tabActive?: EActivityCategory }) => {
+	const { getData, tabActive } = props;
 	const intl = useIntl();
 	const { loadingThongKe, dataThongKe, filters, setFilters } = useModel('cct.activityoutcome');
 	const valueFiltered = filters?.find((item) => item.field?.includes('workflow'))?.values ?? [];
+	const [statusExpired, setStatusExpired] = useState<boolean>(false);
 
 	useEffect(() => {
 		getData();
-	}, [dependency]);
+	}, [tabActive]);
 
 	const filterTrangThai = (workflow: EApprovalStatus | EApprovalStatus[] | 'all') => {
-		const temp = [...(filters ?? [])].filter((item) => item.field !== 'workflow');
-
+		setStatusExpired(false);
 		if (workflow !== 'all') {
-			temp.push({
+			setFilters([
+				{
+					active: true,
+					field: 'workflow',
+					values: Array.isArray(workflow) ? workflow : [workflow],
+					operator: EOperatorType.INCLUDE,
+				},
+			]);
+		} else {
+			setFilters([]);
+		}
+	};
+
+	const filterExpiredPersonal = () => {
+		setStatusExpired(true);
+		const now = dayjs().toISOString();
+
+		setFilters([
+			{
 				active: true,
 				field: 'workflow',
-				values: Array.isArray(workflow) ? workflow : [workflow],
+				values: [EApprovalStatus.CHANGES_REQUIRED],
 				operator: EOperatorType.INCLUDE,
-			});
-		}
-
-		setFilters(temp);
+			},
+			{
+				active: true,
+				field: 'dueDate',
+				values: [now],
+				operator: EOperatorType.LESS_THAN,
+			},
+		]);
 	};
 
 	const ACTION_REQUIRED_STATUSES = [
@@ -87,8 +110,8 @@ const StatActivityOutCome = (props: { getData: () => void; dependency?: any }) =
 			value: inputFormat(dataThongKe?.expired ?? 0),
 			backgroundColor: officialColors.official500,
 			valueColor: officialColors.official300,
-			// onClick: () => filterTrangThai(EApprovalStatus.EXPIRED),
-			// selected: valueFiltered?.length === 1 && valueFiltered[0] === EApprovalStatus.EXPIRED,
+			onClick: () => filterExpiredPersonal(),
+			selected: statusExpired,
 		},
 	];
 
