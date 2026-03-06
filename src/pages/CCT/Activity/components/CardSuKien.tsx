@@ -162,7 +162,7 @@ const CardSuKienCCT = (props: {
 								const isActive = equivalencyAttributeIds?.includes(lv?._id);
 								return (
 									<span key={idx} className={`level-item ${isActive ? 'active' : ''} ${outTime ? 'disabled' : ''}`}>
-										{lv?.code}
+										{lv?.code?.charAt(0)}
 									</span>
 								);
 							})}

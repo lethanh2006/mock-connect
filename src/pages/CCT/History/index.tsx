@@ -234,7 +234,7 @@ const HistoryActivityPage = () => {
 				}}
 			/>
 
-			<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
+			<StatActivityOutCome getData={getThongKe} tabActive={tabActive} />
 
 			<hr
 				style={{
