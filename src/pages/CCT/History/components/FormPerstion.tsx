@@ -3,7 +3,7 @@ import UploadFile from '@/components/Upload/UploadFile';
 import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EApprovalStatus, EparticipantRole, EParticipantScope } from '@/services/CCT/constant';
-import { handleSingleFile } from '@/services/uploadFile';
+import { buildUpLoadFile, handleSingleFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -30,7 +30,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const intl = useIntl();
 	const [form] = Form.useForm();
 
-	const { record, setVisibleForm, edit, isView, postModel, putModel, formSubmiting, visibleForm } =
+	const { record, setVisibleForm, edit, isView, postModel, putModel, formSubmiting, visibleForm, setFormSubmiting } =
 		useModel('cct.activityoutcome');
 
 	const { danhSach: dsActivityType } = useModel('cct.activities');
@@ -73,6 +73,11 @@ const FormPerstionActivityOutCome = (props: any) => {
 	}, [record?._id, visibleForm]);
 
 	const onFinish = async (values: ActivityOutCome.IRecord, submitted: boolean) => {
+		setFormSubmiting(true);
+		const banner = await buildUpLoadFile(values, 'banner');
+		values.banner = banner;
+		setFormSubmiting(false);
+
 		const evidenceFile = await Promise.all(
 			(values.evidenceFile || []).map(async (item: any) => ({
 				name: item.name,

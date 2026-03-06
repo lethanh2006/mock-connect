@@ -4,7 +4,7 @@ import { EActivityCategory, EApprovalStatus, Evalidation } from '../constant';
 declare module ActivityOutCome {
 	export interface IRecord {
 		_id: string;
-		banner: string;
+		banner: string | null;
 		activitiesOutcomeName: string;
 		activitiesId: string;
 		activities: Activity.IRecord;
