@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
 /**
- * Secect Căn cứ pháp lý để cho vào FormItem
+ * Select Căn cứ pháp lý để cho vào FormItem
  */
 const SelectCompetency = (props: {
 	value?: string;
@@ -20,23 +20,27 @@ const SelectCompetency = (props: {
 	const { danhSach, getAllModel } = useModel('cct.competency');
 
 	useEffect(() => {
-		getAllModel(
-			!!isSetRecord,
-			{ order: 1 },
-			{ ...condition, isActive: true },
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			{
-				population: [
-					{
-						path: 'attributes',
-					},
-				],
-			},
-		);
+		getAllModel(!!isSetRecord, { order: 1 }, { ...condition }, undefined, undefined, undefined, undefined, {
+			population: [{ path: 'attributes' }],
+		});
 	}, [JSON.stringify(condition)]);
+
+	const options = (danhSach || [])
+		.filter((item) => {
+			if (item.isActive) return true;
+
+			if (multiple && Array.isArray(value)) {
+				return value.includes(item._id);
+			}
+
+			return item._id === value;
+		})
+		.map((item) => ({
+			key: item._id,
+			value: item._id,
+			label: item.name,
+			rawData: item,
+		}));
 
 	return (
 		<Select
@@ -45,11 +49,7 @@ const SelectCompetency = (props: {
 			allowClear={allowClear}
 			value={value}
 			onChange={onChange}
-			options={danhSach.map((item) => ({
-				key: item._id,
-				value: item._id,
-				label: item.name,
-			}))}
+			options={options}
 			showSearch
 			optionFilterProp='label'
 			placeholder='Select competency'
