@@ -41,7 +41,7 @@ export const TableHeader: React.FC = () => {
 	} = useTableContext();
 
 	return (
-		<div className='header'>
+		<div className='header no-print'>
 			<div className='action'>
 				{buttons?.create !== false ? (
 					<ButtonExtend
