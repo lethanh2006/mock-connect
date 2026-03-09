@@ -49,17 +49,21 @@ const FormActivityOutCome = (props: any) => {
 		if (!visibleForm) {
 			form.resetFields();
 			return;
+		} else {
+			form.setFieldsValue({
+				rolesId: record?.rolesId ?? dsRoles?.[0]?.rolesId,
+				trackId: record?.trackId ?? record?.activities?.activitiesType?.trackId,
+				levelsId: record?.levelsId,
+				reflection: record?.reflection,
+				listAchievedCompetencies: record?.listAchievedCompetencies?.length
+					? record?.listAchievedCompetencies?.map((item) => item?.competencyId)
+					: record?.activities?.competencyList?.map((item) => item?.competencyId),
+				evidenceFile: record?.evidenceFile?.map((item: any) => ({
+					name: item.name,
+					file: item.file,
+				})),
+			});
 		}
-
-		form.setFieldsValue({
-			rolesId: record?.rolesId ?? dsRoles?.[0]?.rolesId,
-			trackId: record?.trackId ?? record?.activities?.activitiesType?.trackId,
-			levelsId: record?.levelsId,
-			reflection: record?.reflection,
-			listAchievedCompetencies: record?.listAchievedCompetencies?.length
-				? record?.listAchievedCompetencies?.map((item) => item?.competencyId)
-				: record?.activities?.competencyList?.map((item) => item?.competencyId),
-		});
 	}, [visibleForm, record?._id]);
 
 	const onFinish = async (values: any, submitted: boolean) => {
