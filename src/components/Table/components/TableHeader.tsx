@@ -79,6 +79,19 @@ export const TableHeader: React.FC = () => {
 					</ButtonExtend>
 				) : null}
 
+				{buttons?.reload !== false ? (
+					<ButtonExtend
+						size={size}
+						icon={<ReloadOutlined />}
+						onClick={onReload}
+						loading={loading}
+						className='btn-reload'
+						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
+					>
+						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
+					</ButtonExtend>
+				) : null}
+
 				{otherButtons}
 
 				{rowSelection && deleteMany && selectedIds?.length ? (
@@ -94,18 +107,6 @@ export const TableHeader: React.FC = () => {
 			</div>
 
 			<div className='extra'>
-				{buttons?.reload !== false ? (
-					<ButtonExtend
-						size={size}
-						icon={<ReloadOutlined />}
-						onClick={onReload}
-						loading={loading}
-						className='btn-reload'
-						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
-					>
-						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
-					</ButtonExtend>
-				) : null}
 				{buttons?.filter !== false && hasFilter ? (
 					<ButtonExtend
 						className='btn-filter'

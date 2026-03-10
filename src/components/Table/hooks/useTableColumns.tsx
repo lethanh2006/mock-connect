@@ -187,27 +187,22 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 	const handleFilter = useCallback(
 		(dataIndex: any, values: string[]) => {
 			if (!values || !values.length) {
-				// Xóa bộ lọc của cột này
 				const tempFilters = (filters ?? []).filter(
 					(item: TFilter<any>) => JSON.stringify(item.field) !== JSON.stringify(dataIndex),
 				);
 				setFilters?.(tempFilters);
 			} else {
-				// Tìm column tương ứng để check có handleFilter không
 				const column = columns.find((col: IColumn<any>) => JSON.stringify(col.dataIndex) === JSON.stringify(dataIndex));
-				// Nếu column có handleFilter => đánh dấu readonly
 				const readOnly = !!column?.handleFilter;
 
 				const filter = getFilterColumn(dataIndex);
 				let tempFilters: TFilter<any>[] = [...(filters ?? [])];
 				if (filter)
-					// Cập nhật bộ lọc hiện tại
 					tempFilters = tempFilters.map((item: TFilter<any>) =>
 						JSON.stringify(item.field) === JSON.stringify(dataIndex)
 							? { ...item, active: true, operator: EOperatorType.INCLUDE, values, readOnly }
 							: item,
 					);
-				// Thêm quy tắc lọc mới cho cột này
 				else
 					tempFilters.push({
 						active: true,
