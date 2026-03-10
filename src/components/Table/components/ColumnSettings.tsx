@@ -62,6 +62,15 @@ export const ColumnSettings: React.FC = () => {
   const [tempSettings, setTempSettings] = React.useState<IColumnSetting[]>(columnSettings);
   const [shouldResetWidths, setShouldResetWidths] = React.useState(false);
 
+  React.useEffect(() => {
+    const handleBeforePrint = () => setVisible(false);
+    window.addEventListener('beforeprint', handleBeforePrint);
+
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+    };
+  }, []);
+
   // Sync tempSettings khi mở Popover - Trộn giữa settings đã lưu và cột thực tế từ code
   React.useEffect(() => {
     if (visible) {
@@ -183,6 +192,7 @@ export const ColumnSettings: React.FC = () => {
       <Button
         icon={<SettingOutlined />}
         size={size}
+        className='column-settings-trigger no-print'
         title={intl.formatMessage({ id: 'global.table.columnSetting.tooltip' })}
       />
     </Popover>
