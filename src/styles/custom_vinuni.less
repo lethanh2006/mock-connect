@@ -122,9 +122,9 @@ body {
 	}
 }
 
-// =============================================================================
-// 3. Layout
-// =============================================================================
+// #endregion
+
+// #region 3. Layout
 .ant-layout-content.ant-pro-layout-content {
 	padding: 0 !important;
 }
@@ -144,21 +144,6 @@ body {
 	@media (max-width: 767px) {
 		margin-top: 16px !important;
 	}
-}
-
-.ant-pro-global-footer {
-	margin-block-start: 6px !important;
-	margin-block-end: 0 !important;
-	position: relative !important;
-	bottom: auto !important;
-}
-
-.ant-pro-global-footer-copyright {
-	margin-bottom: 8px !important;
-}
-
-.ant-pro-global-footer-list {
-	margin-block-end: 0 !important;
 }
 
 // Sider
@@ -804,18 +789,7 @@ body {
 	}
 }
 
-// Margin cho phân trang bảngant-table-pagination
-.ant-pagination.ant-table-pagination.ant-table-pagination-right {
-	margin-left: 40px !important;
-	margin-right: 40px !important;
-}
-
-.ant-table-pagination {
-	background-color: var(--color-text-400) !important;
-}
-
 .table-base {
-	background-color: var(--color-text-400) !important;
 	border-radius: 8px !important;
 
 	.table-base-header {
@@ -1336,14 +1310,6 @@ body {
 	}
 }
 
-// Margin cho footer toàn cục
-.ant-pro-global-footer {
-	margin-block-start: 6px !important;
-	margin-block-end: 0 !important;
-	position: relative !important;
-	bottom: auto !important;
-}
-
 // Đảm bảo layout không tạo scrollbar thứ hai
 .ant-pro-layout {
 	overflow-x: hidden !important;
@@ -1351,14 +1317,6 @@ body {
 
 .ant-layout {
 	overflow-x: hidden !important;
-}
-
-.ant-pro-global-footer-copyright {
-	margin-bottom: 8px !important;
-}
-
-.ant-pro-global-footer-list {
-	margin-block-end: 0 !important;
 }
 
 // Ẩn sider actions khi layout là side - VinUni
@@ -1526,6 +1484,8 @@ body {
 	}
 }
 
+// #endregion
+
 // Style header của layout - VinUni
 .ant-layout-header {
 	background-image: url('/header_page_vinuni.png') !important;
@@ -1553,4 +1513,39 @@ body {
 	.ant-pro-layout .ant-pro-sider-collapsed-button {
 		right: -10px !important;
 	}
+}
+
+.collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text::after {
+	.vin-triangle-indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
+	left: -16px !important;
+	top: 14px !important;
+	transform: translateY(-50%) !important;
+}
+
+.divider-big-title .ant-divider-inner-text {
+	position: relative;
+	font-weight: 600;
+
+	&::before {
+		.vin-triangle-indicator(@w: 10px; @h: 6px; @side: right);
+		left: -16px !important;
+		top: 0 !important;
+		transform: translateY(-50%) !important;
+
+		@media (max-width: 768px) {
+			top: 32% !important;
+		}
+	}
+}
+
+.highlight {
+	background-color: var(--color-official-500) !important;
+}
+
+.loading-content {
+	height: 70vh;
+}
+
+.ant-table-selection-column {
+	text-align-last: center !important;
 }

@@ -10,9 +10,9 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
-import { useTableColumns } from '../hooks/useTableColumns';
+import { useTableColumns } from '@/components/Table/hooks/useTableColumns';
 import ModalImport from '../Import';
-import type { TableBaseProps, TFilter } from '../typing';
+import type { IColumn, TableBaseProps, TFilter } from '../typing';
 import { useTableContext } from './TableContext';
 import { TableFormModal } from './TableFormModal';
 import { TableHeader } from './TableHeader';
@@ -165,7 +165,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		}
 
 		const allColumns = finalColumns
-			.map((col) => {
+			.map((col: IColumn<any>) => {
 				if (col.children?.length) return [col, ...col.children];
 				else return [col];
 			})
@@ -173,7 +173,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		Object.entries(fil).map(([field, values]) => {
 			// Field từ table => nếu dataIndex là Array => field1.subfield
 			const dataIndex = field.includes('.') ? field.split('.') : field;
-			const col = allColumns.find((item) => JSON.stringify(item.dataIndex) === JSON.stringify(dataIndex));
+			const col = allColumns.find((item: IColumn<any>) => JSON.stringify(item.dataIndex) === JSON.stringify(dataIndex));
 			if (col?.handleFilter) {
 				col.handleFilter(values?.[0] as any);
 				if (col?.filterType === 'string') {
