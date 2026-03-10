@@ -41,8 +41,8 @@ export const TableHeader: React.FC = () => {
 	} = useTableContext();
 
 	return (
-		<div className='header no-print'>
-			<div className='action'>
+		<div className='header'>
+			<div className='action no-print'>
 				{buttons?.create !== false ? (
 					<ButtonExtend
 						size={size}
@@ -93,7 +93,7 @@ export const TableHeader: React.FC = () => {
 				) : null}
 			</div>
 
-			<div className='extra'>
+			<div className='extra  no-print'>
 				{buttons?.reload !== false ? (
 					<ButtonExtend
 						size={size}
