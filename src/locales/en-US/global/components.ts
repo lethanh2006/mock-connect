@@ -137,6 +137,14 @@ export default {
   'global.table.index.bochon': 'Deselect all',
   'global.table.index.tongso': 'Total',
 
+  'global.table.columnSetting.title': 'Column settings',
+  'global.table.columnSetting.reset': 'Reset',
+  'global.table.columnSetting.reset.confirm':
+    'Are you sure you want to reset the default column configuration (position, visibility, and width)?',
+  'global.table.columnSetting.apply': 'Apply',
+  'global.table.columnSetting.cancel': 'Cancel',
+  'global.table.columnSetting.tooltip': 'Configure column visibility and order',
+
   'global.table.customfilter.title': 'Custom filter',
   'global.table.customfilter.dieukien': 'Applied filter conditions',
   'global.table.customfilter.button.them': 'Add filter condition',
