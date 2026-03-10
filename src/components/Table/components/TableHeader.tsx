@@ -107,6 +107,8 @@ export const TableHeader: React.FC = () => {
 			</div>
 
 			<div className='extra'>
+				<ColumnSettings />	
+
 				{buttons?.filter !== false && hasFilter ? (
 					<ButtonExtend
 						className='btn-filter'
@@ -141,8 +143,6 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				) : null}
-
-				<ColumnSettings />
 			</div>
 		</div>
 	);

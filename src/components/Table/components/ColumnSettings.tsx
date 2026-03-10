@@ -184,6 +184,7 @@ export const ColumnSettings: React.FC = () => {
         icon={<SettingOutlined />}
         size={size}
         title={intl.formatMessage({ id: 'global.table.columnSetting.tooltip' })}
+        className='btn-column-settings'
       />
     </Popover>
   );
