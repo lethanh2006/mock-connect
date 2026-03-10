@@ -6,20 +6,26 @@ import { CSS } from '@dnd-kit/utilities';
 import { AutoComplete, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
-import { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useIntl, useModel } from 'umi';
+import { ResizableTitle } from './components/ResizableTitle';
+import { ColumnSettings } from './components/ColumnSettings';
+import { TableProvider, useTableContext } from './components/TableContext';
+import { useApplyColumnSettings } from './hooks/useApplyColumnSettings';
 import ModalExpandable from './ModalExpandable';
 import './style.less';
 import type { IColumn, TableStaticProps, TDataOption } from './typing';
 import { updateSearchStorage } from './utils';
 
-const TableStaticData = (props: TableStaticProps) => {
+const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const intl = useIntl();
-	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable } = props;
+	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable, resizable } = props;
+	const { columnSettings, setColumnSettings, columnsWidth, setColumnsWidth, size } = useTableContext();
+
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
 	const [searchText, setSearchText] = useState<string>('');
-	const [searchedColumn, setSearchedColumn] = useState();
+	const [searchedColumn, setSearchedColumn] = useState<any>();
 	const [total, setTotal] = useState<number>();
 	const searchInputRef = useRef<InputRef>(null);
 
@@ -27,15 +33,19 @@ const TableStaticData = (props: TableStaticProps) => {
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
 	// State cho tableData để sortable
-	const tableData = (props?.data ?? []).map((item, index) => ({
-		...item,
-		key: String(index),
-		index: index + 1,
-		children:
-			!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
-				? item.children
-				: undefined,
-	}));
+	const tableData = useMemo(
+		() =>
+			(props?.data ?? []).map((item: any, index: number) => ({
+				...item,
+				key: item?._id ?? String(index),
+				index: index + 1,
+				children:
+					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
+						? item.children
+						: undefined,
+			})),
+		[props.data, props.hideChildrenRows],
+	);
 
 	useEffect(() => {
 		setTotal(data?.length);
@@ -43,73 +53,76 @@ const TableStaticData = (props: TableStaticProps) => {
 		setSearchedColumn(undefined);
 	}, [data?.length]);
 
-	const handleSearch = (confirm: any, dataIndex: any) => {
+	const handleSearch = useCallback((confirm: any, dataIndex: any) => {
 		confirm();
 		setSearchedColumn(dataIndex);
-	};
+	}, []);
 
-	const getColumnSearchProps = (dataIndex: any, columnTitle: any, render: any): Partial<IColumn<unknown>> => ({
-		filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
-			const searchOptions = (JSON.parse(localStorage.getItem('dataTimKiem') || '{}')[dataIndex] || []).map(
-				(value: string) => ({ value, label: value }),
-			);
+	const getColumnSearchProps = useCallback(
+		(dataIndex: any, columnTitle: any, render: any): Partial<IColumn<unknown>> => ({
+			filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
+				const searchOptions = (JSON.parse(localStorage.getItem('dataTimKiem') || '{}')[dataIndex] || []).map(
+					(value: string) => ({ value, label: value }),
+				);
 
-			return (
-				<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
-					<AutoComplete
-						options={searchOptions}
-						onSelect={(value: string) => {
-							setSelectedKeys([value]);
-							handleSearch(confirm, dataIndex);
-						}}
-					>
-						<Input.Search
-							placeholder={`Tìm ${columnTitle}`}
-							allowClear
-							enterButton
-							value={selectedKeys[0]}
-							onChange={(e) => {
-								if (e.type === 'click') {
-									setSelectedKeys([]);
-									confirm();
-								} else {
-									setSelectedKeys(e.target.value ? [e.target.value] : []);
-								}
-							}}
-							onSearch={(value) => {
-								if (value) updateSearchStorage(dataIndex, value);
+				return (
+					<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
+						<AutoComplete
+							options={searchOptions}
+							onSelect={(value: string) => {
+								setSelectedKeys([value]);
 								handleSearch(confirm, dataIndex);
 							}}
-							ref={searchInputRef}
-						/>
-					</AutoComplete>
-				</div>
-			);
-		},
-		filterIcon: (filtered: boolean) => <SearchOutlined className={filtered ? 'text-primary' : undefined} />,
-		onFilter: (value: any, record: any) =>
-			typeof dataIndex === 'string'
-				? record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
-				: typeof dataIndex === 'object'
-					? record[dataIndex[0]][dataIndex?.[1]]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
-					: '',
-		onFilterDropdownVisibleChange: (vis) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
-		render: (text: any, record: any) =>
-			render ? (
-				render(text, record)
-			) : searchedColumn === dataIndex ? (
-				<Highlighter
-					highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-					searchWords={[searchText]}
-					autoEscape
-					textToHighlight={text ? text.toString() : ''}
-				/>
-			) : (
-				text
-			),
-	});
+						>
+							<Input.Search
+								placeholder={`Tìm ${columnTitle}`}
+								allowClear
+								enterButton
+								value={selectedKeys[0]}
+								onChange={(e) => {
+									if (e.type === 'click') {
+										setSelectedKeys([]);
+										confirm();
+									} else {
+										setSelectedKeys(e.target.value ? [e.target.value] : []);
+									}
+								}}
+								onSearch={(value: string) => {
+									if (value) updateSearchStorage(dataIndex, value);
+									handleSearch(confirm, dataIndex);
+								}}
+								ref={searchInputRef}
+							/>
+						</AutoComplete>
+					</div>
+				);
+			},
+			filterIcon: (filtered: boolean) => <SearchOutlined className={filtered ? 'text-primary' : undefined} />,
+			onFilter: (value: any, record: any) =>
+				typeof dataIndex === 'string'
+					? record[dataIndex]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
+					: typeof dataIndex === 'object'
+						? record[dataIndex[0]][dataIndex?.[1]]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
+						: '',
+			onFilterDropdownVisibleChange: (vis: boolean) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
+			render: (text: any, record: any) =>
+				render ? (
+					render(text, record)
+				) : searchedColumn === dataIndex ? (
+					<Highlighter
+						highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+						searchWords={[searchText]}
+						autoEscape
+						textToHighlight={text ? text.toString() : ''}
+					/>
+				) : (
+					text
+				),
+		}),
+		[handleSearch, searchText, searchedColumn],
+	);
 
-	const getFilterColumnProps = (dataIndex: any, filterData?: any[]): Partial<IColumn<unknown>> => {
+	const getFilterColumnProps = useCallback((dataIndex: any, filterData?: any[]): Partial<IColumn<unknown>> => {
 		return {
 			filters: filterData?.map((item: string | TDataOption) =>
 				typeof item === 'string'
@@ -119,12 +132,12 @@ const TableStaticData = (props: TableStaticProps) => {
 			onFilter: (value: any, record: any) => record[dataIndex]?.indexOf(value) === 0,
 			filterSearch: true,
 		};
-	};
+	}, []);
 
-	const columns = props.columns
-		?.filter((item) => !item.hide)
-		?.map((item) => ({
+	const baseColumns = useMemo(() => {
+		return props.columns?.map((item: IColumn<any>) => ({
 			...item,
+			resizable: item.resizable ?? resizable, // Apply default resizable if provided
 			...(item?.filterType === 'string'
 				? getColumnSearchProps(item.dataIndex, item.title, item.render)
 				: item?.filterType === 'select'
@@ -137,9 +150,9 @@ const TableStaticData = (props: TableStaticProps) => {
 					return item.customSort ? item.customSort(aValue, bValue) : aValue > bValue ? 1 : -1;
 				},
 			}),
-			// Xử lý các cột children tương tự cột chính
-			children: item.children?.map((child) => ({
+			children: item.children?.map((child: IColumn<any>) => ({
 				...child,
+				resizable: child.resizable ?? resizable,
 				...(child?.filterType === 'string'
 					? getColumnSearchProps(child.dataIndex, item.title, item.render)
 					: child?.filterType === 'select'
@@ -155,83 +168,102 @@ const TableStaticData = (props: TableStaticProps) => {
 				}),
 			})),
 		}));
+	}, [props.columns, resizable, getColumnSearchProps, getFilterColumnProps]);
 
-	if (addStt)
-		columns.unshift({
-			title: intl.formatMessage({ id: 'global.table.column.tt' }),
-			dataIndex: 'index',
-			align: 'center',
-			width: 60,
-			children: undefined,
-			render: (val: string, rec: any) => {
-				const phanVungHienTai = dsPhanVung?.find((item) => item?.ma === rec?.dataPartitionCode);
-				const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
+	const { processedColumns } = useApplyColumnSettings({
+		columns: baseColumns,
+		columnSettings,
+		columnsWidth,
+		setColumnsWidth,
+		setColumnSettings,
+	});
 
-				return (
-					<div className='ttCellWrapper'>
-						<span>{val}</span>
+	const displayedColumns = useMemo(() => {
+		const cols = [...processedColumns];
+		if (addStt)
+			cols.unshift({
+				title: intl.formatMessage({ id: 'global.table.column.tt' }),
+				dataIndex: 'index',
+				align: 'center',
+				width: 40,
+				fixed: 'left',
+				render: (val: string, rec: any) => {
+					const phanVungHienTai = dsPhanVung?.find((item: any) => item?.ma === rec?.dataPartitionCode);
+					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
 
-						{phanVungHienTai?._id && (
-							<Tooltip title={phanVungHienTai?.name}>
-								<div
-									className='cornerTriangle'
-									style={{ backgroundColor: maMau, top: props?.size === 'small' ? -4 : -8 }}
-								/>
-							</Tooltip>
-						)}
-					</div>
-				);
-			},
-		});
+					return (
+						<div className='ttCellWrapper'>
+							<span>{val}</span>
 
-	//#region Get Drag Sortable column
-	if (rowSortable)
-		columns.unshift({
-			width: 30,
-			align: 'center',
-			children: undefined,
-			render: () => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />,
-		});
+							{phanVungHienTai?._id && (
+								<Tooltip title={phanVungHienTai?.name}>
+									<div className='cornerTriangle' style={{ backgroundColor: maMau, top: size === 'small' ? -4 : -8 }} />
+								</Tooltip>
+							)}
+						</div>
+					);
+				},
+			} as any);
+
+		//#region Get Drag Sortable column
+		if (rowSortable)
+			cols.unshift({
+				width: 30,
+				align: 'center',
+				fixed: 'left',
+				render: () => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />,
+			} as any);
+
+		return cols;
+	}, [processedColumns, addStt, rowSortable, dsPhanVung, size, intl]);
 
 	const handleDragEnd = (event: any) => {
 		const { active, over } = event;
 		if (active && over && active.id !== over.id) {
-			const oldIndex = tableData.findIndex((i) => i.key === active.id);
-			const newIndex = tableData.findIndex((i) => i.key === over.id);
+			const oldIndex = tableData.findIndex((i: any) => i.key === active.id);
+			const newIndex = tableData.findIndex((i: any) => i.key === over.id);
 			if (props.onSortEnd) props.onSortEnd(tableData[oldIndex], newIndex);
 		}
 	};
 
 	// dnd-kit: SortableRow component
-	const SortableRow = (props: any) => {
+	const SortableRow = (rowProps: any) => {
 		const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-			id: props['data-row-key'],
+			id: rowProps['data-row-key'],
 		});
 		const style = {
-			...props.style,
+			...rowProps.style,
 			transform: CSS.Transform.toString(transform),
 			transition,
 			cursor: 'grab',
 			...(isDragging ? { background: '#fafafa' } : {}),
 		};
-		return <tr {...props} ref={setNodeRef} style={style} {...attributes} {...listeners} />;
+		return <tr {...rowProps} ref={setNodeRef} style={style} {...attributes} {...listeners} />;
 	};
-	//#endregion
 
 	const renderTable = () => {
+		const totalWidth = _.sum(displayedColumns.map((item: any) => item.width ?? 80));
 		return (
 			<Table
-				columns={columns as any[]}
+				columns={displayedColumns as any[]}
 				dataSource={tableData}
 				rowKey='key'
 				onChange={(pagination, filters, sorter, extra) => {
 					setTotal(extra.currentDataSource.length ?? pagination.total);
 				}}
 				loading={props?.loading}
-				size={props.size}
-				scroll={{ x: _.sum(columns.map((item) => item.width ?? 80)) }}
+				size={size ?? props.size}
+				scroll={{
+					x: totalWidth ?? props.otherProps?.scroll?.x ?? 'max-content',
+					...props.scroll,
+					...props.otherProps?.scroll,
+				}}
 				bordered
-				components={rowSortable ? { body: { row: SortableRow } } : undefined}
+				components={{
+					...(rowSortable ? { body: { row: SortableRow } } : {}),
+					header: { cell: ResizableTitle },
+				}}
+				tableLayout='fixed'
 				{...props?.otherProps}
 			/>
 		);
@@ -249,7 +281,7 @@ const TableStaticData = (props: TableStaticProps) => {
 							}}
 							icon={<PlusCircleOutlined />}
 							type='primary'
-							size={props?.size ?? 'middle'}
+							size={size}
 							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.themmoi.tooltip' })}
 						>
 							{intl.formatMessage({ id: 'global.tablestatic.button.themmoi' })}
@@ -262,7 +294,7 @@ const TableStaticData = (props: TableStaticProps) => {
 				<div className='extra'>
 					{!!props.onReload ? (
 						<ButtonExtend
-							size={props?.size}
+							size={size}
 							icon={<ReloadOutlined />}
 							onClick={() => (props.onReload ? props.onReload() : null)}
 							loading={props.loading}
@@ -274,12 +306,14 @@ const TableStaticData = (props: TableStaticProps) => {
 
 					{hasTotal ? (
 						<Tooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
-							<div className={classNames({ total: true, small: props?.size === 'small' })}>
+							<div className={classNames({ total: true, small: size === 'small' })}>
 								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
 								<span>{total || props.data?.length || 0}</span>
 							</div>
 						</Tooltip>
 					) : null}
+
+					<ColumnSettings />
 				</div>
 			</div>
 
@@ -288,15 +322,13 @@ const TableStaticData = (props: TableStaticProps) => {
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
-						image={
-							props.otherProps?.size === 'small' || props.size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined
-						}
+						image={size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
 					/>
 				)}
 			>
 				{rowSortable ? (
 					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-						<SortableContext items={tableData.map((item) => item.key)} strategy={verticalListSortingStrategy}>
+						<SortableContext items={tableData.map((item: any) => item.key)} strategy={verticalListSortingStrategy}>
 							{renderTable()}
 						</SortableContext>
 					</DndContext>
@@ -346,6 +378,21 @@ const TableStaticData = (props: TableStaticProps) => {
 				</>
 			)}
 		</div>
+	);
+};
+
+const TableStaticData: React.FC<TableStaticProps> = (props) => {
+	return (
+		<TableProvider
+			value={{
+				configKey: props.configKey,
+				title: props.title,
+				size: props.size,
+				columns: props.columns,
+			}}
+		>
+			<TableStaticContent {...props} />
+		</TableProvider>
 	);
 };
 

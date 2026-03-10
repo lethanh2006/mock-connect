@@ -17,13 +17,17 @@ const ChucVuPage = () => {
       filterType: 'select',
       filterData: ['M01', 'M02', 'M03'],
       sortable: true,
+      resizable: true,
     },
     {
       title: 'Tên chức vụ',
       dataIndex: 'ten',
       width: 250,
+      minWidth: 150,
+      maxWidth: 600,
       filterType: 'string',
       sortable: true,
+      resizable: true,
     },
     {
       title: 'Ngày tạo',
@@ -33,6 +37,7 @@ const ChucVuPage = () => {
       filterType: 'datetime',
       sortable: true,
       render: (val) => formatDateTime(val),
+      resizable: true,
     },
     {
       title: 'Thao tác',

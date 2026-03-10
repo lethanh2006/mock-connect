@@ -185,6 +185,8 @@ const ConfigBounder = (props: { children?: any }) => {
 						headerBg: accentColors?.accent700,
 						cellPaddingBlock: 8,
 						cellPaddingInline: 8,
+						cellPaddingBlockSM: 3,
+						cellPaddingInlineSM: 5,
 						headerBorderRadius: 0,
 					},
 					Breadcrumb: {
@@ -192,6 +194,9 @@ const ConfigBounder = (props: { children?: any }) => {
 						itemColor: textColors?.text300,
 						linkColor: textColors?.text300,
 						linkHoverColor: textColors?.text400,
+					},
+					Typography: {
+						colorTextHeading: textColors?.text400,
 					},
 				},
 			}}

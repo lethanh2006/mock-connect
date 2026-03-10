@@ -34,6 +34,7 @@
 	--color-official-200: #35426e;
 	--color-official-300: #134d8b;
 	--color-official-500: #f4f9ff;
+	
 	--vin-color-primary: var(--color-official-100);
 	--vin-color-primary-100: var(--color-official-100);
 	--vin-color-primary-200: var(--color-official-200);
@@ -48,10 +49,12 @@
 	--color-accent-600: #d2d3d5;
 	--color-accent-700: #f4f4f4;
 	--color-accent-800: #f8f8f8;
+
 	--color-text-100: #2e2e2e;
 	--color-text-200: #818181;
 	--color-text-300: #cfcfcf;
 	--color-text-400: #ffffff;
+
 	--color-success: #44b10f;
 	--color-info: #0051ff;
 	--color-warning: #faae13;
@@ -96,7 +99,7 @@ body {
 	font-weight: 500;
 }
 
-.ant-form-item-label > label {
+.ant-form-item-label>label {
 	height: auto;
 	margin: 4px 0 !important;
 	font-weight: 600 !important;
@@ -141,21 +144,6 @@ body {
 	@media (max-width: 767px) {
 		margin-top: 16px !important;
 	}
-}
-
-.ant-pro-global-footer {
-	margin-block-start: 6px !important;
-	margin-block-end: 0 !important;
-	position: relative !important;
-	bottom: auto !important;
-}
-
-.ant-pro-global-footer-copyright {
-	margin-bottom: 8px !important;
-}
-
-.ant-pro-global-footer-list {
-	margin-block-end: 0 !important;
 }
 
 // Sider
@@ -644,7 +632,8 @@ body {
 .btn-import,
 .btn-export,
 .btn-reload,
-.btn-filter {
+.btn-filter,
+.btn-column-settings{
 	background-color: var(--color-accent-700) !important;
 	border-radius: 4px;
 	border: none !important;
@@ -801,18 +790,7 @@ body {
 	}
 }
 
-// Margin cho phân trang bảngant-table-pagination
-.ant-pagination.ant-table-pagination.ant-table-pagination-right {
-	margin-left: 40px !important;
-	margin-right: 40px !important;
-}
-
-.ant-table-pagination {
-	background-color: var(--color-text-400) !important;
-}
-
 .table-base {
-	background-color: var(--color-text-400) !important;
 	border-radius: 8px !important;
 
 	.table-base-header {
@@ -1333,14 +1311,6 @@ body {
 	}
 }
 
-// Margin cho footer toàn cục
-.ant-pro-global-footer {
-	margin-block-start: 6px !important;
-	margin-block-end: 0 !important;
-	position: relative !important;
-	bottom: auto !important;
-}
-
 // Đảm bảo layout không tạo scrollbar thứ hai
 .ant-pro-layout {
 	overflow-x: hidden !important;
@@ -1348,14 +1318,6 @@ body {
 
 .ant-layout {
 	overflow-x: hidden !important;
-}
-
-.ant-pro-global-footer-copyright {
-	margin-bottom: 8px !important;
-}
-
-.ant-pro-global-footer-list {
-	margin-block-end: 0 !important;
 }
 
 // Ẩn sider actions khi layout là side - VinUni
@@ -1550,4 +1512,39 @@ body {
 	.ant-pro-layout .ant-pro-sider-collapsed-button {
 		right: -10px !important;
 	}
+}
+
+.collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text::after {
+	.vin-triangle-indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
+	left: -16px !important;
+	top: 14px !important;
+	transform: translateY(-50%) !important;
+}
+
+.divider-big-title .ant-divider-inner-text {
+	position: relative;
+	font-weight: 600;
+
+	&::before {
+		.vin-triangle-indicator(@w: 10px; @h: 6px; @side: right);
+		left: -16px !important;
+		top: 0 !important;
+		transform: translateY(-50%) !important;
+
+		@media (max-width: 768px) {
+			top: 32% !important;
+		}
+	}
+}
+
+.highlight {
+	background-color: var(--color-official-500) !important;
+}
+
+.loading-content {
+	height: 70vh;
+}
+
+.ant-table-selection-column {
+	text-align-last: center !important;
 }
