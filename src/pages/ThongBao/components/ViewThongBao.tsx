@@ -1,9 +1,9 @@
 import { EModuleKey } from '@/services/base/constant';
 import { type ESourceTypeNotification, mapModuleKey } from '@/services/ThongBao/constant';
 import { type ThongBao } from '@/services/ThongBao/typing';
-import dayjs from '@/utils/dayjs';
 import { currentRole } from '@/utils/ip';
 import { getNameFile } from '@/utils/utils';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Divider, Row } from 'antd';
 import { history } from 'umi';
@@ -54,7 +54,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 					<>
 						<div style={{ marginBottom: 8 }}>{record?.description}</div>
 						<UserOutlined /> {record?.senderName ?? ''} <Divider type='vertical' />
-						<CalendarOutlined /> {dayjs(record?.createdAt).format('HH:mm DD/MM/YYYY')}
+						<CalendarOutlined /> {formatDateTime(record?.createdAt)}
 					</>
 				}
 			/>
@@ -77,7 +77,7 @@ const ViewThongBao = (props: { record?: ThongBao.IRecord; afterViewDetail?: () =
 				{record?.thoiGianHieuLuc ? (
 					<Col span={24}>
 						Hiệu lực thông báo:{' '}
-						<b style={{ color: 'red' }}>{dayjs(record?.thoiGianHieuLuc).format('DD/MM/YYYY')}</b>{' '}
+						<b style={{ color: 'red' }}>{formatDate(record?.thoiGianHieuLuc)}</b>{' '}
 					</Col>
 				) : null}
 

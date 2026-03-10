@@ -5,8 +5,11 @@ import React, { JSX } from 'react';
 import { type EOperatorType } from './constant/constant';
 
 export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 'children'> {
-	/** Ẩn cột khi hiển thị trên table, nhưng vẫn có trong filter, import, export */
+	/** Ẩn hoàn toàn cột (không hiện trong table, không hiện trong menu cấu hình) */
 	hide?: boolean;
+
+	/** Ẩn mặc định (không hiện trong table lần đầu, nhưng có trong menu cấu hình để bật lại) */
+	initialHide?: boolean;
 
 	children?: IColumn<T>[];
 
@@ -41,6 +44,10 @@ export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 
 	 * Hàm sort tùy chỉnh (có thể dùng để sắp xếp họ tên theo AB)
 	 */
 	customSort?: (value1: any, value2: any) => number;
+
+	minWidth?: number;
+	maxWidth?: number;
+	resizable?: boolean;
 }
 
 export type TDataOption = {
@@ -51,6 +58,9 @@ export type TDataOption = {
 export type TableBaseProps = {
 	/** Tên model */
 	modelName: Namespaces;
+
+	/** Key cố định để lưu cấu hình (dùng khi bảng có cấu trúc cột thay đổi động) */
+	configKey?: string;
 
 	/** Import dùng model khác? */
 	modelImportName?: Namespaces;
@@ -144,6 +154,7 @@ export type TableBaseProps = {
 	onSortEnd?: (record: any, newIndex: number) => void;
 
 	hideChildrenRows?: boolean;
+	hideFilterColumn?: boolean;
 
 	/** Có hiển thị modal title không? Mặc định: `Không` */
 	showModalTitle?: boolean;
@@ -213,6 +224,7 @@ export type TableStaticProps = Pick<
 	TableBaseProps,
 	| 'emptyText'
 	| 'columns'
+	| 'configKey'
 	| 'title'
 	| 'Form'
 	| 'formProps'
@@ -226,10 +238,12 @@ export type TableStaticProps = Pick<
 	| 'hideChildrenRows'
 	| 'onReload'
 	| 'otherButtons'
+	| 'scroll'
 > & {
 	data: any[];
 	loading?: boolean;
-
+	resizable?: boolean;
+	dataPartitionCode?: string;
 	showEdit?: boolean;
 	setShowEdit?: (vi: boolean) => void;
 

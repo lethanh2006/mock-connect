@@ -14,6 +14,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { useIntl } from 'umi';
 import { findFiltersInColumns } from '../utils';
+import { ColumnSettings } from './ColumnSettings';
 import { useTableContext } from './TableContext';
 
 export const TableHeader: React.FC = () => {
@@ -40,7 +41,7 @@ export const TableHeader: React.FC = () => {
 	} = useTableContext();
 
 	return (
-		<div className='header'>
+		<div className='header no-print'>
 			<div className='action'>
 				{buttons?.create !== false ? (
 					<ButtonExtend
@@ -60,7 +61,7 @@ export const TableHeader: React.FC = () => {
 					<ButtonExtend
 						size={size}
 						icon={<ImportOutlined />}
-						onClick={() => setVisibleImport(true)}
+						onClick={() => setVisibleImport?.(true)}
 						className='btn-import'
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.nhapdulieu' })}
@@ -70,7 +71,7 @@ export const TableHeader: React.FC = () => {
 					<ButtonExtend
 						size={size}
 						icon={<ExportOutlined />}
-						onClick={() => setVisibleExport(true)}
+						onClick={() => setVisibleExport?.(true)}
 						className='btn-export'
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.xuatdulieu' })}{' '}
@@ -116,7 +117,7 @@ export const TableHeader: React.FC = () => {
 								<FilterOutlined />
 							)
 						}
-						onClick={() => setVisibleFilter(true)}
+						onClick={() => setVisibleFilter?.(true)}
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.boloc.tooltip' })}
 						style={
 							findFiltersInColumns(finalColumns, filters)?.length
@@ -139,6 +140,8 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				) : null}
+
+				<ColumnSettings />
 			</div>
 		</div>
 	);

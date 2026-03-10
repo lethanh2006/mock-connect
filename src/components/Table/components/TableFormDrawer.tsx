@@ -22,7 +22,7 @@ export const TableFormDrawer: React.FC = () => {
 			<Form title={title ?? ''} {...formProps} />
 
 			<div className='modal-buttons'>
-				<Button type='text' icon={<CloseOutlined />} onClick={() => setVisibleForm(false)} className='button' />
+				<Button type='text' icon={<CloseOutlined />} onClick={() => setVisibleForm?.(false)} className='button' />
 			</div>
 		</Drawer>
 	);
