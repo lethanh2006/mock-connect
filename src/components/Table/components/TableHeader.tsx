@@ -123,10 +123,10 @@ export const TableHeader: React.FC = () => {
 						style={
 							findFiltersInColumns(finalColumns, filters)?.length
 								? {
-									borderColor: primaryColor,
-									borderWidth: '1px',
-									borderStyle: 'solid',
-								}
+										borderColor: primaryColor,
+										borderWidth: '1px',
+										borderStyle: 'solid',
+									}
 								: undefined
 						}
 					>
