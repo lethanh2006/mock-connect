@@ -42,7 +42,7 @@ export const TableHeader: React.FC = () => {
 
 	return (
 		<div className='header'>
-			<div className='action'>
+			<div className='action no-print'>
 				{buttons?.create !== false ? (
 					<ButtonExtend
 						size={size}
@@ -93,7 +93,7 @@ export const TableHeader: React.FC = () => {
 				) : null}
 			</div>
 
-			<div className='extra'>
+			<div className='extra  no-print'>
 				{buttons?.reload !== false ? (
 					<ButtonExtend
 						size={size}
@@ -123,10 +123,10 @@ export const TableHeader: React.FC = () => {
 						style={
 							findFiltersInColumns(finalColumns, filters)?.length
 								? {
-									borderColor: primaryColor,
-									borderWidth: '1px',
-									borderStyle: 'solid',
-								}
+										borderColor: primaryColor,
+										borderWidth: '1px',
+										borderStyle: 'solid',
+									}
 								: undefined
 						}
 					>

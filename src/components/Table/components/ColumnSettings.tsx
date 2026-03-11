@@ -178,7 +178,7 @@ export const ColumnSettings: React.FC = () => {
       arrow={{ pointAtCenter: true }}
       open={visible}
       onOpenChange={setVisible}
-      overlayClassName='column-settings-popover'
+      overlayClassName='column-settings-popover no-print'
     >
       <Button
         icon={<SettingOutlined />}
