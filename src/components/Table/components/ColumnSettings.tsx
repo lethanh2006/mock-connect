@@ -181,6 +181,7 @@ export const ColumnSettings: React.FC = () => {
       overlayClassName='column-settings-popover no-print'
     >
       <Button
+        className='no-print'
         icon={<SettingOutlined />}
         size={size}
         title={intl.formatMessage({ id: 'global.table.columnSetting.tooltip' })}
