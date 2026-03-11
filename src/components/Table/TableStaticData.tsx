@@ -3,7 +3,7 @@ import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AutoComplete, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
+import { AutoComplete, Card, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -269,7 +269,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		);
 	};
 
-	return (
+	const mainContent = (
 		<div className='table-base'>
 			<div className='header'>
 				{children}
@@ -336,6 +336,18 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					renderTable()
 				)}
 			</ConfigProvider>
+		</div>
+	);
+
+	return (
+		<>
+			{props.title === undefined ? (
+				mainContent
+			) : (
+				<Card title={props.title || false} variant='borderless' className='card-borderless card-big-title'>
+					<Card>{mainContent}</Card>
+				</Card>
+			)}
 
 			{Form && (
 				<>
@@ -377,7 +389,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					)}
 				</>
 			)}
-		</div>
+		</>
 	);
 };
 
