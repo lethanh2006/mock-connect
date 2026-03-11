@@ -35,7 +35,7 @@ export const ResizableTitle = (componentProps: any) => {
       }}
       handle={
         <span
-          className='react-resizable-handle'
+          className='react-resizable-handle no-print'
           onClick={(e) => {
             e.stopPropagation();
           }}
