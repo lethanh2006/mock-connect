@@ -1,4 +1,3 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
@@ -197,7 +196,14 @@ const HistoryActivityPage = () => {
 
 	return (
 		<Card title='My Activity' className='table-base-card' variant='borderless'>
-			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
+			<Tabs
+				activeKey={tabActive}
+				onChange={(tab) => {
+					setTabActive(tab as EActivityCategory);
+					setPage(1);
+					setLimit(9);
+				}}
+			>
 				{Object.values(EActivityCategory).map((item) => (
 					<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
 				))}
@@ -209,7 +215,7 @@ const HistoryActivityPage = () => {
 				onReload={getData}
 				button={
 					tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? (
-						<ButtonExtend
+						<Button
 							type='primary'
 							onClick={() => {
 								setRecord({} as ActivityOutCome.IRecord);
@@ -219,7 +225,7 @@ const HistoryActivityPage = () => {
 							}}
 						>
 							Add New
-						</ButtonExtend>
+						</Button>
 					) : undefined
 				}
 				hideSelect
@@ -290,13 +296,13 @@ const HistoryActivityPage = () => {
 
 								const renderButton =
 									editableWorkflow && (tabActive === EActivityCategory.REGISTERED ? isOngoing : isOngoingPerstion) ? (
-										<ButtonExtend block type={'primary'} onClick={() => handleEdit(item)}>
+										<Button block type={'primary'} onClick={() => handleEdit(item)}>
 											Update Evidence
-										</ButtonExtend>
+										</Button>
 									) : (
-										<ButtonExtend block disabled>
+										<Button block onClick={() => handleView(item)}>
 											SEE MORE
-										</ButtonExtend>
+										</Button>
 									);
 
 								return (
@@ -307,7 +313,7 @@ const HistoryActivityPage = () => {
 													...item?.activities,
 													activityOutcome: item,
 												}}
-												banner={item?.banner}
+												banner={item?.banner ?? undefined}
 												name={item?.activities?.name}
 												startDate={
 													item?.activities?.startDate
@@ -335,7 +341,7 @@ const HistoryActivityPage = () => {
 													...item?.activities,
 													activityOutcome: item,
 												}}
-												banner={item?.banner}
+												banner={item?.banner ?? undefined}
 												name={item?.activitiesOutcomeName}
 												startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
 												endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
@@ -355,7 +361,7 @@ const HistoryActivityPage = () => {
 																			title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
 																			placement='topLeft'
 																		>
-																			<ButtonExtend
+																			<Button
 																				className='btn-success'
 																				disabled={!canEdit(item)}
 																				type='link'
@@ -363,7 +369,7 @@ const HistoryActivityPage = () => {
 																				size='small'
 																			>
 																				{intl.formatMessage({ id: 'activity.button.duyet' })}
-																			</ButtonExtend>
+																			</Button>
 																		</Popconfirm>
 
 																		<Popconfirm
@@ -380,7 +386,7 @@ const HistoryActivityPage = () => {
 																			title={intl.formatMessage({ id: 'activity.confirm.xoa' })}
 																			placement='topLeft'
 																		>
-																			<ButtonExtend
+																			<Button
 																				disabled={!canDelete}
 																				danger
 																				type='link'
@@ -388,12 +394,12 @@ const HistoryActivityPage = () => {
 																				size='small'
 																			>
 																				{intl.formatMessage({ id: 'activity.button.xoa' })}
-																			</ButtonExtend>
+																			</Button>
 																		</Popconfirm>
 																	</Space>
 																}
 															>
-																<ButtonExtend block icon={<DashOutlined />} />
+																<Button block icon={<DashOutlined />} />
 															</Popover>
 														</Col>
 														<Col span={21}>{renderButton}</Col>

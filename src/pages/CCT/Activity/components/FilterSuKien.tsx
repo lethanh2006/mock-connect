@@ -1,7 +1,6 @@
 import MyDateRangePicker from '@/components/MyDatePicker/RangePicker';
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import { FilterOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Flex, Input, Select, Space } from 'antd';
+import { Button, Flex, Input, Select, Space } from 'antd';
 import dayjs from 'dayjs';
 import { JSX } from 'react';
 import { FilterSuKienValue } from '..';
@@ -20,7 +19,7 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 	return (
 		<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
 			<Space wrap>
-				<ButtonExtend className='btn-filter' icon={<FilterOutlined />} size='small' />
+				<Button className='btn-filter' icon={<FilterOutlined />} size='small' />
 
 				<Search
 					placeholder='Search activities (Name)'
@@ -86,7 +85,7 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 			</Space>
 
 			<Space wrap>
-				<ButtonExtend icon={<ReloadOutlined />} onClick={onReload} />
+				<Button icon={<ReloadOutlined />} onClick={onReload} />
 				{button}
 			</Space>
 		</Flex>

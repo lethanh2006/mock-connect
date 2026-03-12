@@ -1,7 +1,6 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { Modal, Popconfirm, Space } from 'antd';
+import { Button, Modal, Popconfirm, Space } from 'antd';
 import dayjs from 'dayjs';
 import { useIntl, useModel } from 'umi';
 import CardChiTietSuKien from './components/CardChiTietSuKien';
@@ -114,14 +113,14 @@ const ChiTietActivity = (props: {
 							).then(() => setVisibleForm(false))
 						}
 					>
-						<ButtonExtend type='link' className='btn-unregister'>
+						<Button type='link' className='btn-unregister'>
 							UNREGISTER
-						</ButtonExtend>
+						</Button>
 					</Popconfirm>
 				)}
 
 				<Space wrap>
-					<ButtonExtend onClick={() => setVisibleForm(false)}>CLOSE</ButtonExtend>
+					<Button onClick={() => setVisibleForm(false)}>CLOSE</Button>
 
 					{!record?.activityOutcome?.workflow && !isFullSlot ? (
 						<Popconfirm
@@ -135,12 +134,12 @@ const ChiTietActivity = (props: {
 							}
 							disabled={outTime}
 						>
-							<ButtonExtend type='primary' disabled={outTime}>
+							<Button type='primary' disabled={outTime}>
 								REGISTER NOW
-							</ButtonExtend>
+							</Button>
 						</Popconfirm>
 					) : editableWorkflow && isOngoing ? (
-						<ButtonExtend
+						<Button
 							type='primary'
 							onClick={() => {
 								setVisibleForm(false);
@@ -151,9 +150,9 @@ const ChiTietActivity = (props: {
 							}}
 						>
 							Update Evidence
-						</ButtonExtend>
+						</Button>
 					) : isFullSlot && !record?.activityOutcome?.workflow ? (
-						<ButtonExtend disabled>FULL SLOT</ButtonExtend>
+						<Button disabled>FULL SLOT</Button>
 					) : null}
 				</Space>
 			</div>
