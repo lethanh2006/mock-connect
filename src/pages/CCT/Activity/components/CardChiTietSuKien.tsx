@@ -30,7 +30,7 @@ const CardChiTietSuKien = (props: {
 			<Col span={24} md={9}>
 				<CardSuKienCCT
 					record={{ ...record, activityOutcome: record?.activityOutcome }}
-					banner={record?.banner}
+					banner={record?.banner ?? undefined}
 					name={record?.name}
 					startDate={record?.startDate ? dayjs(record?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
 					endDate={record?.endDate ? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
@@ -207,16 +207,24 @@ const CardChiTietSuKien = (props: {
 								</div>
 								<div className='info-item full-width'>
 									<div style={{ marginBottom: 8, fontWeight: 600 }}>List Evidence</div>
+
 									<List
 										size='small'
-										dataSource={record?.activityOutcome?.evidenceFile ?? []}
+										dataSource={
+											record?.activityOutcome?.evidenceFile?.flatMap((item: any) =>
+												item.file.map((url: string) => ({
+													name: item.name,
+													url,
+												})),
+											) ?? []
+										}
 										locale={{
 											emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='No List Evidence' />,
 										}}
 										renderItem={(item: any) => (
 											<List.Item>
 												<Typography.Link
-													href={item.file}
+													href={item.url}
 													target='_blank'
 													rel='noopener noreferrer'
 													style={{ display: 'flex', alignItems: 'center', gap: 8 }}

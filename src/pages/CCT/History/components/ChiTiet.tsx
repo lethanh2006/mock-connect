@@ -16,7 +16,7 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 						...recOutcome?.activities,
 						activityOutcome: recOutcome,
 					}}
-					banner={recOutcome?.banner}
+					banner={recOutcome?.banner ?? undefined}
 					name={recOutcome?.activitiesOutcomeName}
 					startDate={recOutcome?.startDate ? dayjs(recOutcome?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
 					endDate={recOutcome?.endDate ? dayjs(recOutcome?.endDate).format('HH:mm DD/MM/YYYY') : '--'}

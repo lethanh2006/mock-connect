@@ -36,7 +36,7 @@ const SelectLevelsManagement = (props: {
 		.map((item) => ({
 			key: item._id,
 			value: item._id,
-			label: item.name,
+			label: `${item?.name} (${item?.description})`,
 			rawData: item,
 		}));
 

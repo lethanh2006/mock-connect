@@ -18,7 +18,7 @@ const { Title } = Typography;
 
 const CardSuKienCCT = (props: {
 	record: Activity.IRecord;
-	banner: string;
+	banner: string | undefined;
 	name: string;
 	equivalencyAttributeIds: string[];
 	startDate: string;

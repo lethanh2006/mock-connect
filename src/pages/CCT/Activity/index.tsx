@@ -1,8 +1,7 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { Card, Col, Empty, Pagination, Popconfirm, Row, Spin, Tabs } from 'antd';
+import { Button, Card, Col, Empty, Pagination, Popconfirm, Row, Spin, Tabs } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
@@ -158,7 +157,14 @@ const ActivityPage = () => {
 
 	return (
 		<Card title='List Activity' className='table-base-card' variant='borderless'>
-			<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
+			<Tabs
+				activeKey={activeKey}
+				onChange={(tab) => {
+					setActiveKey(tab);
+					setPage(1);
+					setLimit(9);
+				}}
+			>
 				<Tabs.TabPane key='1' tab='Upcoming' />
 				<Tabs.TabPane key='2' tab='Ongoing' />
 				<Tabs.TabPane key='3' tab='Completed' />
@@ -219,16 +225,16 @@ const ActivityPage = () => {
 									//Chưa đăng ký
 									if (isRegistered && isNotStarted) {
 										return (
-											<ButtonExtend block disabled>
+											<Button block disabled>
 												REGISTERED
-											</ButtonExtend>
+											</Button>
 										);
 									}
 
 									//Đã đăng ký và trong thời gian cập nhật minh chứng
 									if (editableWorkflow && isOngoing) {
 										return (
-											<ButtonExtend
+											<Button
 												block
 												type='primary'
 												onClick={() => {
@@ -240,25 +246,31 @@ const ActivityPage = () => {
 												}}
 											>
 												Update Evidence
-											</ButtonExtend>
+											</Button>
 										);
 									}
 
 									//Hết số lượng đăng ký
 									if (!isRegistered && isFullSlot) {
 										return (
-											<ButtonExtend block disabled>
+											<Button block disabled>
 												FULL SLOT
-											</ButtonExtend>
+											</Button>
 										);
 									}
 
 									//Đã đăng ký và ngoài thời gian cập nhật minh chứng
 									if (isRegistered || (activeKey === '3' && !isRegistered) || outTimeRegis) {
 										return (
-											<ButtonExtend block disabled>
+											<Button
+												block
+												onClick={() => {
+													setRecord(item);
+													setVisibleForm(true);
+												}}
+											>
 												SEE MORE
-											</ButtonExtend>
+											</Button>
 										);
 									}
 
@@ -268,9 +280,9 @@ const ActivityPage = () => {
 											placement='topLeft'
 											onConfirm={() => registerActivityModel(item._id, getData).then(() => setVisibleDangKy(true))}
 										>
-											<ButtonExtend type='primary' block>
+											<Button type='primary' block>
 												REGISTER NOW
-											</ButtonExtend>
+											</Button>
 										</Popconfirm>
 									);
 								};
@@ -282,7 +294,7 @@ const ActivityPage = () => {
 												...item,
 												activityOutcome: item?.activityOutcome,
 											}}
-											banner={item?.banner}
+											banner={item?.banner ?? undefined}
 											name={item?.name}
 											startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
 											endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
