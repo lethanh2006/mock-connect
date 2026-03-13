@@ -1,0 +1,79 @@
+.step-dang-ky {
+	max-width: 800px;
+	margin: auto;
+
+	.ant-steps-item-tail {
+		margin-left: 110px;
+	}
+
+	.ant-steps-item-icon {
+		margin-left: 107px;
+	}
+
+	.ant-steps-item-content {
+		width: 220px;
+	}
+}
+
+ul.lich-hoc {
+	margin: 0;
+	padding-left: 14px;
+	font-size: 13px;
+
+	list-style: circle;
+}
+
+.table-dang-ky {
+	.ant-checkbox-inner {
+		border-color: var(--ant-primary-6);
+	}
+}
+
+.dang-ky-ghi-chu {
+	display: inline-block;
+	width: 40px;
+	height: 20px;
+
+	&.selected {
+		background-color: var(--color-primary-bg);
+	}
+}
+
+.huong-dan {
+	position: fixed;
+	right: 27px;
+	bottom: 160px;
+	z-index: 99;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&:hover .title-huong-dan {
+		display: block;
+	}
+}
+
+.title-huong-dan {
+	display: none;
+	margin-right: 5px;
+	padding: 10px;
+	color: white;
+	background: #63b7d8;
+	border-radius: 10px;
+}
+
+.pulse {
+	color: red;
+	font-size: 43px;
+	animation: pulse 1s infinite ease-in-out alternate;
+}
+
+@keyframes pulse {
+	from {
+		transform: scale(0.8);
+	}
+
+	to {
+		transform: scale(1.2);
+	}
+}

@@ -1,0 +1,15 @@
+export const messagesCalendar = {
+  allDay: 'Cả ngày',
+  previous: 'Trước',
+  next: 'Sau',
+  today: 'Hôm nay',
+  month: 'Tháng',
+  week: 'Tuần',
+  day: 'Ngày',
+  agenda: 'Chung',
+  date: 'Ngày',
+  time: 'Thời gian',
+  event: 'Sự kiện',
+  showMore: (total: number) => `+ Xem thêm (${total})`,
+  noEventsInRange: 'Không có sự kiện nào trong khoảng thời gian này',
+};

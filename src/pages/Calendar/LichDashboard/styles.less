@@ -1,0 +1,117 @@
+.dashboard_calendar {
+	height: auto;
+
+	.title {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		color: red;
+	}
+
+	.ngay {
+		margin-bottom: 18px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.ngay__title {
+		color: rgba(0, 0, 0, 0.5);
+		font-weight: 600;
+		font-size: 15px;
+	}
+
+	.su_kien {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		margin: 0 6px 8px 6px;
+		padding: 4px;
+		color: #333;
+		background-color: #fafafa;
+		border-radius: 6px;
+
+		cursor: pointer;
+		transition: 0.3s all;
+
+		&:hover {
+			box-shadow: 1px 3px 5px rgba(163, 177, 191, 0.35);
+			transition: 0.3s;
+
+			.hover_link {
+				display: initial;
+			}
+		}
+
+		.hover_link {
+			display: none;
+		}
+
+		&.on_progress {
+			outline: 2px solid var(--color-primary);
+			// box-shadow: var(--box-shadow-secondary); // comment lại cho sạch
+			outline-offset: 2px;
+			transition:
+				outline 0.1s linear,
+				box-shadow 0.3s ease,
+				outline-offset 0.3s ease;
+			margin-bottom: 12px;
+		}
+	}
+
+	.su_kien__left {
+		position: relative;
+		display: flex;
+		align-items: center;
+		padding-left: 12px;
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+
+		.pulse {
+			position: absolute;
+			top: -8px;
+			left: -2px;
+			display: block;
+			width: 10px;
+			height: 10px;
+			background-color: var(--color-primary);
+			border-radius: 15px;
+			box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+			animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+		}
+	}
+
+	.su_kien__thoi_gian {
+		font-weight: 600;
+		font-size: 15px;
+	}
+
+	.su_kien__right {
+		padding: 6px;
+		border-left: 6px solid;
+		border-radius: 4px;
+	}
+
+	.sketch-picker {
+		padding: 0 !important;
+		border-radius: 0 !important;
+		box-shadow: none !important;
+	}
+}
+
+@keyframes pulse-dot {
+	0% {
+		transform: scale(0.8);
+		opacity: 0.5;
+	}
+
+	50% {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	100% {
+		transform: scale(0.8);
+		opacity: 0.5;
+	}
+}

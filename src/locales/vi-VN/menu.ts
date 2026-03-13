@@ -1,0 +1,126 @@
+export default {
+	'menu.login': 'Đăng nhập',
+	'menu.account': 'Tài khoản',
+	'menu.account.center': 'Cá nhân',
+	'menu.Dashboard': 'Trang chủ',
+	'menu.About': `Giới thiệu ${APP_CONFIG_TIEN_TO_TRUONG.toLowerCase()}`,
+	'menu.News': 'Tin tức',
+	'menu.News.News': 'Tin tức',
+	'menu.DanhMuc': 'Danh mục',
+	'menu.DanhMuc.ChucVu': 'Chức vụ',
+
+	'menu.DashboardGroup': 'Dashboard & Học tập',
+	'menu.OtherGroup': 'Khác',
+
+	// DEFAULT
+	'menu.Lich': 'Lịch & Sự kiện',
+	'menu.ThongTinCaNhan': 'Thông tin cá nhân',
+
+	'menu.LopHanhChinh': 'Lớp hành chính',
+
+	// SINH VIEN
+	'menu.HocTap': 'Học tập',
+	'menu.HocTap.TienTrinhHocTap': 'Tiến trình học tập',
+	'menu.HocTap.DangKyNhuCau': 'Đăng ký học tập theo nhu cầu',
+	'menu.HocTap.DangKyTinChi': 'Đăng ký tín chỉ',
+	'menu.HocTap.NhuCauHocPhan': 'Phiếu đăng ký học phần',
+	'menu.HocTap.LopHocPhan': 'Lớp tín chỉ',
+	'menu.HocTap.LopHocPhan.LopHocPhan': 'Lớp tín chỉ',
+	'menu.ChiTietLopHocPhan': 'Lớp tín chỉ',
+	'menu.HocTap.LichThi': 'Lịch thi',
+	'menu.HocTap.BaiThiCuoiKy': 'Nộp bài cuối kỳ',
+	'menu.HocTap.KetQuaHocTap': 'Kết quả học tập',
+	'menu.HocTap.HocTapKhac': 'Khác',
+	'menu.HocTap.HocTapKhac.DangKyChuyenNganh': 'Đăng ký chuyên ngành',
+	'menu.HocTap.HocTapKhac.XetHocVu': 'Xét học vụ',
+	'menu.HocTap.HocTapKhac.QuyetDinh': 'Bảo lưu, thôi học',
+	'menu.HocTap.XetTotNghiep': 'Chứng chỉ, tốt nghiệp',
+	'menu.HocTap.XetTotNghiep.ChungChiTotNghiep': 'Chứng chỉ',
+	'menu.HocTap.XetTotNghiep.XetTotNghiep': 'Xét tốt nghiệp',
+	'menu.KeHoachNamHoc': 'Kế hoạch năm học',
+
+	'menu.TaiChinh': 'Tài chính',
+	'menu.TaiChinh.CongNo': 'Công nợ',
+	'menu.TaiChinh.UuDaiThanhToan': 'Ưu đãi thanh toán',
+	'menu.TaiChinh.GiaoDich': 'Lịch sử giao dịch',
+
+	// DRL
+
+	'menu.DiemRenLuyen': 'Rèn luyện',
+
+	'menu.DiemRenLuyen.KhaiBaoMinhChung': 'Khai báo minh chứng',
+	'menu.DiemRenLuyen.KhaiBaoMinhChung.NoiNgoaiTru': 'Nội ngoại trú',
+	'menu.DiemRenLuyen.KhaiBaoMinhChung.ThamGiaCongTacXaHoi': 'Tham gia công tác xã hội',
+	'menu.DiemRenLuyen.KhaiBaoMinhChung.TuyenTruyen': 'Tuyên truyền tích cực về Trường/Khoa',
+	'menu.DiemRenLuyen.KhaiBaoMinhChung.DacBiet': 'Thành tích đặc biệt',
+
+	'menu.DiemRenLuyen.PhieuDiemRenLuyen': 'Phiếu điểm rèn luyện',
+	'menu.DiemRenLuyen.HoatDongCTSV': 'Sự kiện tham gia',
+	'menu.DiemRenLuyen.TuanSinhHoatCongDan': 'Tuần sinh hoạt công dân',
+
+	'menu.DichVuHanhChinh': 'Dịch vụ hành chính',
+	'menu.DichVuHanhChinh.TaoDon': 'Tạo đơn - Dịch vụ hành chính',
+	'menu.PhanHoi': 'Phản hồi',
+	'menu.KhaoSatTrucTuyen': 'Khảo sát',
+	'menu.CuocThi': 'Cuộc thi',
+	'menu.ThongBao': 'Thông báo',
+	'menu.ChatBot': 'Thắc mắc Amin',
+
+	'menu.TienIch': 'Tiện ích khác',
+	'menu.TienIch.VanBanHuongDan': 'Văn bản hướng dẫn',
+	'menu.TienIch.CauHoiThuongGap': 'Câu hỏi thường gặp',
+	'menu.TienIch.XemSau': 'Đã lưu',
+	'menu.TienIch.LichSuMuonTraTinhVan': 'Lịch sử mượn trả',
+
+	'menu.HoatDongKHCN': 'Hoạt động KH&CN',
+	'menu.HoatDongKHCN.DeTaiHocVien': 'Đề tài NCKH cấp Học viện',
+	'menu.HoatDongKHCN.DeTaiKhoa': 'Đề tài NCKH cấp khoa/viện',
+	'menu.HoatDongKHCN.KeHoachNCKH': 'Định hướng NCKH',
+	'menu.HoatDongKHCN.QuyCheQuyDinh': 'Quy chế, quy định',
+
+	'menu.HoatDongKHCN.DeTaiHocVien.DangKyDeXuat': 'Đăng ký đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongXetChonDeXuat': 'Hội đồng xét chọn đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongXetDuyetThuyetMinh': 'Hội đồng xét duyệt thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.HoiDongNghiemThu': 'Hội đồng nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopThuyetMinh': 'Xây dựng và nộp hồ sơ thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoSauHoiDongThuyetMinh': 'Nộp hồ sơ sau Hội đồng thuyết minh',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoNghiemThu': 'Nộp hồ sơ nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.ThucHienDeTai': 'Thực hiện đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhGiao': 'Quyết định giao đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.QuyetDinhCongNhan': 'Quyết định công nhận đề tài',
+	'menu.HoatDongKHCN.DeTaiHocVien.NopHoSoSauNghiemThu': 'Nộp hồ sơ sau nghiệm thu đề tài',
+
+	'menu.HoatDongKHCN.DeTaiKhoa.DangKyDeXuat': 'Đăng ký đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.HoiDongXetChonDeXuat': 'Hội đồng xét chọn đề xuất đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.HoiDongXetDuyetThuyetMinh': 'Hội đồng xét duyệt thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.HoiDongNghiemThu': 'Hội đồng nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.NopThuyetMinh': 'Xây dựng và nộp hồ sơ thuyết minh đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.NopHoSoNghiemThu': 'Nộp hồ sơ nghiệm thu đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.ThucHienDeTai': 'Thực hiện đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.QuyetDinhGiao': 'Quyết định giao đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.QuyetDinhCongNhan': 'Quyết định công nhận đề tài',
+	'menu.HoatDongKHCN.DeTaiKhoa.NopHoSoSauNghiemThu': 'Nộp hồ sơ sau nghiệm thu đề tài',
+
+	'menu.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
+	'menu.KhaiBaoQuyTrinh.KhaiBaoQuyTrinh': 'Dịch vụ hành chính',
+	'menu.KhaiBaoQuyTrinh.DangKy': 'Đăng ký',
+	'menu.KhaiBaoQuyTrinh.LichSu': 'Lịch sử',
+	'menu.KhaiBaoSucKhoe': 'Tình trạng sức khoẻ',
+
+	//Nội trú, ngoại trú
+	'menu.NoiNgoaiTru': 'Nội - Ngoại trú',
+	'menu.NoiNgoaiTru.KhaiBao': 'Khai báo',
+
+	'menu.KeHoachNCKH': 'Kế hoạch NCKH',
+
+	'menu.ThuVien': 'Thư viện',
+	'menu.ThuVien.VaoRa': 'Lịch sử vào ra',
+	'menu.ThuVien.MuonTraSach': 'Tìm kiếm tài nguyên thư viện',
+	'menu.ThuVien.LichSuMuonTra': 'Lịch sử mượn trả',
+
+	// CCT
+	'menu.Activity': 'Hoạt động',
+	'menu.Activity.Register': 'Đăng ký',
+	'menu.Activity.MyActivity': 'Hoạt động của tôi',
+	'menu.Activity.MyCCT': 'Bảng điểm hoạt động ngoại khóa',
+};

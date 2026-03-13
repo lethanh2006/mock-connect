@@ -1,0 +1,18 @@
+export default {
+	'global.button.themmoi': 'Save',
+	'global.button.luulai': 'Save',
+	'global.button.huy': 'Cancel',
+	'global.button.dong': 'Close',
+	'global.button.xacnhan': 'Confirm',
+	'global.button.tieptheo': 'Next',
+	'global.button.taixuongdulieu': 'Download data',
+	'global.button.hoanthanh': 'Complete',
+	'global.button.nhapdulieu': 'Import',
+	'global.button.xuatdulieu': 'Export',
+	'global.button.tailai': 'Reload',
+	'global.button.boloctuychinh': 'Custom filters',
+	'global.button.tongso': 'Total',
+	'global.button.chinhsua': 'Edit',
+	'global.button.quaylai': 'Back',
+	'global.button.ok': 'OK'
+};

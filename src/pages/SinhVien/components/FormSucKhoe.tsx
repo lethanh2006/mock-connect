@@ -1,0 +1,66 @@
+import rules from '@/utils/rules';
+import { Col, Form, Input, InputNumber, Row } from 'antd';
+import { useIntl } from 'umi';
+
+const FormSucKhoe = () => {
+	const intl = useIntl();
+
+	return (
+		<Row gutter={[12, 0]}>
+			<Col span={12} md={8}>
+				<Form.Item
+					name='chieuCao'
+					label={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.chieucao' })}
+					rules={[...rules.number(300, 0), ...rules.required]}
+				>
+					<InputNumber
+						placeholder={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.chieucao.place' })}
+						style={{ width: '100%' }}
+					/>
+				</Form.Item>
+			</Col>
+			<Col span={12} md={8}>
+				<Form.Item
+					name='canNang'
+					label={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.cannang' })}
+					rules={[...rules.number(300, 0), ...rules.required]}
+				>
+					<InputNumber
+						placeholder={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.cannang.place' })}
+						style={{ width: '100%' }}
+					/>
+				</Form.Item>
+			</Col>
+			<Col span={12} md={8}>
+				<Form.Item
+					name='loaiKhuyetTat'
+					label={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.loai' })}
+					rules={[...rules.text, ...rules.length(250)]}
+				>
+					<Input placeholder={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.loai.place' })} />
+				</Form.Item>
+			</Col>
+
+			<Col span={12} md={12}>
+				<Form.Item
+					name='soBaoHiemSinhVien'
+					label={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.bh' })}
+					rules={[...rules.text, ...rules.length(20)]}
+				>
+					<Input placeholder={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.bh.place' })} />
+				</Form.Item>
+			</Col>
+			<Col span={24} md={12}>
+				<Form.Item
+					name='maBenhVienKhamChuaBenh'
+					label={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.benhvien' })}
+					rules={[...rules.text, ...rules.length(20)]}
+				>
+					<Input placeholder={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.benhvien.place' })} />
+				</Form.Item>
+			</Col>
+		</Row>
+	);
+};
+
+export default FormSucKhoe;

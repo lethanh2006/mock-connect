@@ -1,0 +1,123 @@
+/* eslint-disable no-underscore-dangle */
+import ThanhToan from '@/pages/DichVuMotCuaV2/ThanhToan';
+import DanhMuc from '@/pages/DichVuMotCuaV2/components/DanhMuc';
+import FormBieuMau from '@/pages/DichVuMotCuaV2/components/FormBieuMau';
+import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
+import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
+import { history } from '@umijs/max';
+import { Button, Card, Modal } from 'antd';
+import { useEffect } from 'react';
+import { useModel, useParams } from 'umi';
+
+const SinhVienTaoDon = () => {
+	const { visibleFormBieuMau, setVisibleFormBieuMau, record, getBieuMauByIdModel, recordDon } =
+		useModel('dvmc.dichvumotcuav2');
+	const { id } = useParams<{ id: string }>();
+	// const { getAllKyHocSinhVienModel, setDanhSach: setDanhSachKyHoc } = useModel('daotao.hocky');
+	// const { getAllNamHocSinhVienModel, setDanhSach: setDanhSachNamHoc } = useModel('daotao.namhoc');
+
+	// const {
+	//   getAllMonHocSinhVienModel,
+	//   setDanhSachMonHoc,
+	//   getAllLopTinChiSinhVienModel,
+	//   setDanhSach: setDanhSachLopTinChi,
+	// } = useModel('hoctap.loptinchi');
+
+	const { visibleForm, setVisibleForm } = useModel('dvmc.thanhtoan');
+
+	const { record: infoSinhVien } = useModel('sinhvien.sinhvien');
+
+	useEffect(() => {
+		window.scroll({ top: 0 });
+		id && getBieuMauByIdModel(id);
+		// if (access.sinhVien) {
+		//   getAllKyHocSinhVienModel();
+		//   getAllNamHocSinhVienModel();
+		//   getAllMonHocSinhVienModel();
+		//   getAllLopTinChiSinhVienModel();
+		// }
+		return () => {
+			setVisibleForm(false);
+		};
+	}, []);
+	return (
+		<Card>
+			<ArrowLeftOutlined
+				style={{ color: '#007EB9', fontSize: '24px' }}
+				onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}
+			/>
+			{/*<Button*/}
+			{/*  type={'primary'}*/}
+			{/*  icon={<ArrowLeftOutlined />}*/}
+			{/*  onClick={() => history.push('/dich-vu-hanh-chinh/tao-don')}*/}
+			{/*  key={1}*/}
+			{/*>*/}
+
+			{/*</Button>*/}
+			<Modal
+				destroyOnClose
+				onCancel={() => {
+					setVisibleFormBieuMau(false);
+				}}
+				footer={false}
+				width='800px'
+				styles={{ body: { padding: 0 } }}
+				open={visibleFormBieuMau}
+			>
+				<FormBieuMau
+					type='create'
+					infoNguoiTaoDon={infoSinhVien}
+					record={
+						{
+							thongTinDichVu: { ...record },
+						} as unknown as DichVuMotCuaV2.Don
+					}
+				/>
+			</Modal>
+
+			{record?.thongTinThuTuc?.yeuCauTraPhi && (
+				<Modal
+					maskClosable={false}
+					title="Thanh toán (Sinh viên có thể xem lại các thông tin này ở mục 'Đơn đã gửi')"
+					destroyOnClose
+					onCancel={() => {
+						history.push('/dich-vu-hanh-chinh');
+						setVisibleForm(false);
+					}}
+					footer={
+						<Button
+							onClick={() => {
+								setVisibleForm(false);
+								history.push('/dich-vu-hanh-chinh');
+							}}
+						>
+							Đóng
+						</Button>
+					}
+					width='800px'
+					open={visibleForm}
+				>
+					<ThanhToan identityCode={recordDon?.identityCode ?? ''} trangThaiThanhToan={recordDon?.trangThaiThanhToan} />
+				</Modal>
+			)}
+
+			<DanhMuc
+				button={
+					<Button
+						disabled={!record?._id}
+						onClick={() => {
+							setVisibleFormBieuMau(true);
+						}}
+						icon={<PlusOutlined />}
+						type='primary'
+						style={{ marginRight: '18%' }}
+					>
+						Sử dụng dịch vụ
+					</Button>
+				}
+			/>
+		</Card>
+	);
+};
+
+export default SinhVienTaoDon;

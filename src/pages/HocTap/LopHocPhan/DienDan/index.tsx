@@ -1,0 +1,136 @@
+import type { BaiDang } from '@/services/HocTap/DienDan/BaiDang/typing';
+import { Empty, Skeleton, Spin } from 'antd';
+import { useEffect } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { history, Link, useIntl, useModel, useSearchParams } from 'umi';
+import CardAddStatus from './components/CardAddStatus';
+import CardStatus from './components/CardStatus';
+import './style.less';
+
+interface IProps {
+	idLopHocPhan?: string;
+	idLopHanhChinh?: string;
+}
+const DienDanLopPage = (props: IProps) => {
+	const intl = useIntl();
+	const { idLopHocPhan, idLopHanhChinh } = props;
+	const idLop = idLopHocPhan ?? idLopHanhChinh;
+	const {
+		getModel,
+		danhSach,
+		deleteModel,
+		handleEdit,
+		getByIdModel,
+		record,
+		setRecord,
+		loading,
+		putModel,
+		total,
+		setLimit,
+		limit,
+	} = useModel('diendan.baidang');
+	const [searchParams] = useSearchParams();
+	const idBaiViet = searchParams.get('idBaiViet');
+	// const { idBaiViet } = history?.location?.query ?? {}; thì ra là nó
+
+	const getData = () => {
+		if (idBaiViet) getByIdModel(idBaiViet?.toString(), true);
+		else {
+			if (idLopHocPhan) getModel({ lopHocPhanId: idLopHocPhan }, undefined, { ghimBaiViet: -1 });
+			else if (idLopHanhChinh) getModel({ lopHanhChinhId: idLopHanhChinh }, undefined, { ghimBaiViet: -1 });
+		}
+	};
+
+	useEffect(() => {
+		if (idLop) getData();
+	}, [idLop, idBaiViet, limit]);
+
+	return (
+		<div className='dien-dan'>
+			{!!idBaiViet ? (
+				<div style={{ marginBottom: 12 }}>
+					<Link
+						to='#!'
+						onClick={(e) => {
+							e.preventDefault();
+							setRecord({} as BaiDang.IRecord);
+							history.push(`${history?.location?.pathname}${history?.location?.hash ?? ''}`);
+						}}
+					>
+						← {intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.quaylai' })}
+					</Link>
+				</div>
+			) : null}
+
+			<Spin spinning={loading}>
+				<div className='main-content'>
+					<CardAddStatus
+						hiddenAdd={!!idBaiViet}
+						idLopHocPhan={idLopHocPhan}
+						idLopHanhChinh={idLopHanhChinh}
+						getData={getData}
+					/>
+
+					{!idBaiViet ? (
+						<InfiniteScroll
+							style={{ overflow: 'unset' }}
+							dataLength={danhSach?.length}
+							next={() => {
+								if (loading) return;
+								setLimit(limit + 5);
+							}}
+							hasMore={danhSach?.length < total}
+							loader={
+								<div style={{ padding: '12px 24px' }}>
+									<Skeleton paragraph={{ rows: 3 }} active />
+								</div>
+							}
+							scrollableTarget='body'
+						>
+							{danhSach.length ? (
+								danhSach?.map((val) => (
+									<CardStatus
+										key={val._id}
+										data={val}
+										deleteModel={(id) => deleteModel(id, getData)}
+										handleEdit={(data) => handleEdit(data)}
+										handlePin={(data) => putModel(val?._id, { ghimBaiViet: data }, getData)}
+										getDataPost={getData}
+									/>
+								))
+							) : (
+								<Empty
+									description={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.empty2' })}
+									style={{ marginTop: 32 }}
+								/>
+							)}
+
+							{!!danhSach.length && danhSach?.length === total ? (
+								<div className='flex justify-center' style={{ marginTop: 24, color: '#a7abaf' }}>
+									{intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.xemhet' })}
+								</div>
+							) : null}
+						</InfiniteScroll>
+					) : record?._id ? (
+						<CardStatus
+							data={record}
+							deleteModel={(id) => {
+								deleteModel(id, () => {
+									getData();
+									history.push(`${history?.location?.pathname}${history?.location?.hash ?? ''}`);
+								});
+							}}
+							handleEdit={(data) => handleEdit(data)}
+							handlePin={(data) => putModel(record?._id ?? '', { ghimBaiViet: data }, getData)}
+							detail
+							getDataPost={getData}
+						/>
+					) : (
+						<Empty description={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan.empty' })} />
+					)}
+				</div>
+			</Spin>
+		</div>
+	);
+};
+export default DienDanLopPage;
