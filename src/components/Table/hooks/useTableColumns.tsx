@@ -205,7 +205,6 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					);
 				else
 					tempFilters.push({
-						active: true,
 						field: dataIndex,
 						operator: EOperatorType.INCLUDE,
 						values,

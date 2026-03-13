@@ -1,18 +1,19 @@
+import PageCard from '@/components/PageCard';
+import { useTableColumns } from '@/components/Table/hooks/useTableColumns';
 import { MenuOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Card, ConfigProvider, Space, Table, type PaginationProps } from 'antd';
-import { ResizableTitle } from './ResizableTitle';
+import { ConfigProvider, Space, Table, type PaginationProps } from 'antd';
 import type { FilterValue } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import { useEffect, useMemo, useRef } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
-import { useTableColumns } from '@/components/Table/hooks/useTableColumns';
 import ModalImport from '../Import';
 import type { IColumn, TableBaseProps, TFilter } from '../typing';
+import { ResizableTitle } from './ResizableTitle';
 import { useTableContext } from './TableContext';
 import { TableFormModal } from './TableFormModal';
 import { TableHeader } from './TableHeader';
@@ -61,7 +62,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 						? item.children
 						: undefined,
 			})) || [],
-		[model?.[props.dataState || 'danhSach'], page, limit, props.pageable, props.hideChildrenRows]
+		[model?.[props.dataState || 'danhSach'], page, limit, props.pageable, props.hideChildrenRows],
 	);
 
 	useEffect(() => {
@@ -211,14 +212,14 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				rowSelection={
 					props?.rowSelection
 						? {
-							type: 'checkbox',
-							selectedRowKeys: selectedIds ?? [],
-							preserveSelectedRowKeys: true,
-							onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
-							columnWidth: 40,
-							fixed: 'left',
-							...props.detailRow,
-						}
+								type: 'checkbox',
+								selectedRowKeys: selectedIds ?? [],
+								preserveSelectedRowKeys: true,
+								onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
+								columnWidth: 40,
+								fixed: 'left',
+								...props.detailRow,
+							}
 						: undefined
 				}
 				loading={loading}
@@ -287,16 +288,14 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		</div>
 	);
 
-
-
 	return (
 		<>
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<Card className='table-base-card' title={props.title || false} variant={props.border ? 'outlined' : 'borderless'} extra={props.cardExtra}>
+				<PageCard title={props.title || false} extra={props.cardExtra} bordered={props.border}>
 					{mainContent}
-				</Card>
+				</PageCard>
 			)}
 
 			<TableFormModal />

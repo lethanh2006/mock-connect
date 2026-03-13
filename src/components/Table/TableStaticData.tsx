@@ -3,14 +3,14 @@ import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AutoComplete, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
+import { AutoComplete, Card, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useIntl, useModel } from 'umi';
-import { ResizableTitle } from './components/ResizableTitle';
 import { ColumnSettings } from './components/ColumnSettings';
+import { ResizableTitle } from './components/ResizableTitle';
 import { TableProvider, useTableContext } from './components/TableContext';
 import { useApplyColumnSettings } from './hooks/useApplyColumnSettings';
 import ModalExpandable from './ModalExpandable';
@@ -186,7 +186,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				dataIndex: 'index',
 				align: 'center',
 				width: 40,
-				fixed: 'left',
 				render: (val: string, rec: any) => {
 					const phanVungHienTai = dsPhanVung?.find((item: any) => item?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
@@ -269,7 +268,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		);
 	};
 
-	return (
+	const mainContent = (
 		<div className='table-base'>
 			<div className='header'>
 				{children}
@@ -336,6 +335,18 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					renderTable()
 				)}
 			</ConfigProvider>
+		</div>
+	);
+
+	return (
+		<>
+			{props.title === undefined ? (
+				mainContent
+			) : (
+				<Card title={props.title || false} variant='borderless' className='card-borderless card-big-title'>
+					<Card>{mainContent}</Card>
+				</Card>
+			)}
 
 			{Form && (
 				<>
@@ -377,7 +388,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					)}
 				</>
 			)}
-		</div>
+		</>
 	);
 };
 

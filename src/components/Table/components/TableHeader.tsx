@@ -41,8 +41,8 @@ export const TableHeader: React.FC = () => {
 	} = useTableContext();
 
 	return (
-		<div className='header no-print'>
-			<div className='action'>
+		<div className='header'>
+			<div className='action no-print'>
 				{buttons?.create !== false ? (
 					<ButtonExtend
 						size={size}
@@ -106,8 +106,8 @@ export const TableHeader: React.FC = () => {
 				) : null}
 			</div>
 
-			<div className='extra'>
-				<ColumnSettings />	
+			<div className='extra no-print'>
+				<ColumnSettings />
 
 				{buttons?.filter !== false && hasFilter ? (
 					<ButtonExtend
@@ -125,10 +125,10 @@ export const TableHeader: React.FC = () => {
 						style={
 							findFiltersInColumns(finalColumns, filters)?.length
 								? {
-									borderColor: primaryColor,
-									borderWidth: '1px',
-									borderStyle: 'solid',
-								}
+										borderColor: primaryColor,
+										borderWidth: '1px',
+										borderStyle: 'solid',
+									}
 								: undefined
 						}
 					>

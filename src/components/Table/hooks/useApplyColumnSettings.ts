@@ -54,7 +54,7 @@ export const useApplyColumnSettings = ({
 				onHeaderCell: (column: any) => ({
 					width: column.width,
 					minWidth: minWidth ?? (resizable ? baseWidth * 0.8 : undefined),
-					maxWidth: maxWidth ?? (resizable ? baseWidth * 1.2 : undefined),
+					maxWidth: maxWidth ?? (resizable ? baseWidth * 1.5 : undefined),
 					onColumnResize: handleResize,
 					resizable: resizable,
 					onDoubleClick: () => {
@@ -87,7 +87,7 @@ export const useApplyColumnSettings = ({
 						onHeaderCell: (column: any) => ({
 							width: column.width,
 							minWidth: minWidth ?? (resizable ? baseChildWidth * 0.8 : undefined),
-							maxWidth: maxWidth ?? (resizable ? baseChildWidth * 1.2 : undefined),
+							maxWidth: maxWidth ?? (resizable ? baseChildWidth * 1.5 : undefined),
 							onColumnResize: handleChildResize,
 							resizable: resizable,
 							onDoubleClick: () => {
@@ -107,7 +107,6 @@ export const useApplyColumnSettings = ({
 			return processedItem;
 		});
 	}, [columns, columnsWidth, onResize, setColumnsWidth]);
-
 
 	// Lọc và sắp xếp columns dựa trên settings hiện tại
 	const processedColumns = useMemo(() => {

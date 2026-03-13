@@ -109,41 +109,6 @@
 			bottom: 0;
 		}
 	}
-
-	// Targeted overflow: hidden on the last column to clip the resize handle (persistent scrollbar)
-	.ant-table-thead>tr>th:last-child {
-		overflow: hidden;
-	}
-
-	@media print {
-
-		.ant-table-pagination,
-		.react-resizable-handle {
-			display: none !important;
-		}
-
-		.ant-table-wrapper,
-		.ant-table-content,
-		.ant-table-body,
-		.ant-table-container {
-			overflow: visible !important;
-			height: auto !important;
-		}
-
-		.ant-table {
-			width: 100% !important;
-
-			table {
-				width: 100% !important;
-				table-layout: auto !important;
-			}
-		}
-
-		.ant-table-cell {
-			background: #fff !important;
-			color: #000 !important;
-		}
-	}
 }
 
 .column-settings-popover {
@@ -298,4 +263,25 @@
 	border-bottom-right-radius: 5px;
 	clip-path: polygon(0 0, 100% 0, 0 100%);
 	cursor: pointer;
+}
+
+.ant-table-thead>tr>th:last-child {
+	overflow: hidden;
+}
+
+@media print {
+	.no-print {
+		display: none !important;
+	}
+
+	.ant-table-sticky-scroll,
+	.ant-table-cell-scrollbar {
+		display: none !important;
+	}
+
+	.ant-table-wrapper .ant-table-body,
+	.ant-table-wrapper .ant-table-content {
+		overflow: visible !important;
+		max-height: none !important;
+	}
 }
