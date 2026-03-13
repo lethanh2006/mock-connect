@@ -9,8 +9,8 @@ import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useIntl, useModel } from 'umi';
-import { ResizableTitle } from './components/ResizableTitle';
 import { ColumnSettings } from './components/ColumnSettings';
+import { ResizableTitle } from './components/ResizableTitle';
 import { TableProvider, useTableContext } from './components/TableContext';
 import { useApplyColumnSettings } from './hooks/useApplyColumnSettings';
 import ModalExpandable from './ModalExpandable';
@@ -186,7 +186,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				dataIndex: 'index',
 				align: 'center',
 				width: 40,
-				fixed: 'left',
 				render: (val: string, rec: any) => {
 					const phanVungHienTai = dsPhanVung?.find((item: any) => item?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';

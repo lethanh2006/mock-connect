@@ -210,7 +210,6 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				// Thêm quy tắc lọc mới cho cột này
 				else
 					tempFilters.push({
-						active: true,
 						field: dataIndex,
 						operator: EOperatorType.INCLUDE,
 						values,

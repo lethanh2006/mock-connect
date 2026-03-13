@@ -1,9 +1,9 @@
+import PageCard from '@/components/PageCard';
 import { MenuOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Card, ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
-import { ResizableTitle } from './ResizableTitle';
+import { ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
 import type { FilterValue } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import { useEffect, useMemo, useRef } from 'react';
@@ -13,6 +13,7 @@ import ModalFilter from '../Filter/ModalFilter';
 import { useTableColumns } from '../hooks/useTableColumns';
 import ModalImport from '../Import';
 import type { TableBaseProps, TFilter } from '../typing';
+import { ResizableTitle } from './ResizableTitle';
 import { useTableContext } from './TableContext';
 import { TableFormModal } from './TableFormModal';
 import { TableHeader } from './TableHeader';
@@ -61,7 +62,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 						? item.children
 						: undefined,
 			})) || [],
-		[model?.[props.dataState || 'danhSach'], page, limit, props.pageable, props.hideChildrenRows]
+		[model?.[props.dataState || 'danhSach'], page, limit, props.pageable, props.hideChildrenRows],
 	);
 
 	useEffect(() => {
@@ -211,14 +212,14 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				rowSelection={
 					props?.rowSelection
 						? {
-							type: 'checkbox',
-							selectedRowKeys: selectedIds ?? [],
-							preserveSelectedRowKeys: true,
-							onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
-							columnWidth: 40,
-							fixed: 'left',
-							...props.detailRow,
-						}
+								type: 'checkbox',
+								selectedRowKeys: selectedIds ?? [],
+								preserveSelectedRowKeys: true,
+								onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
+								columnWidth: 40,
+								fixed: 'left',
+								...props.detailRow,
+							}
 						: undefined
 				}
 				loading={loading}
@@ -300,16 +301,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<Card 
-					title={props.title || false} 
-					variant={props.border ? 'outlined' : 'borderless'} 
-					extra={props.cardExtra} 
-					className='card-borderless card-big-title'
-				>
-					<Card>
-						{mainContent}
-					</Card>
-				</Card>
+				<PageCard title={props.title || false} extra={props.cardExtra} bordered={props.border}>
+					{mainContent}
+				</PageCard>
 			)}
 
 			<TableFormModal />
