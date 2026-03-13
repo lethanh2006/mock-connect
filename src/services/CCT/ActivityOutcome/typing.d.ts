@@ -51,9 +51,6 @@ declare module ActivityOutCome {
 
 		createdAt: Date;
 		updatedAt: Date;
-
-		// fake
-		activeKey?: string;
 	}
 
 	export interface IAnalyticsStudent {

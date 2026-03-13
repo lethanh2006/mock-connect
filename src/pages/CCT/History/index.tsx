@@ -106,18 +106,7 @@ const HistoryActivityPage = () => {
 		const now = dayjs();
 
 		const start = dayjs(rec?.activities?.startDate);
-		const end =
-			rec?.workflow === EApprovalStatus.CHANGES_REQUIRED
-				? rec?.dueDate
-					? dayjs(rec?.dueDate)
-					: null
-				: rec?.activities?.allowPostEventResultsUpdate
-					? rec?.activities?.dueDate
-						? dayjs(rec?.activities?.dueDate)
-						: null
-					: rec?.activities?.endDate
-						? dayjs(rec?.activities?.endDate)
-						: null;
+		const end = rec?.dueDate ? dayjs(rec?.dueDate) : null;
 
 		if (!start.isValid() || !end?.isValid()) return false;
 
@@ -154,45 +143,14 @@ const HistoryActivityPage = () => {
 		setLimit(size);
 	};
 
-	const mappedData = danhSach?.map((item) => {
-		const start = dayjs(item?.activities?.startDate);
-		const end = dayjs(item?.activities?.endDate);
-
-		let activeKey = '';
-
-		if (start.isAfter(now)) {
-			activeKey = '1';
-		} else if (start.isSameOrBefore(now) && end.isSameOrAfter(now)) {
-			activeKey = '2';
-		} else if (end.isBefore(now)) {
-			activeKey = '3';
-		}
-
-		return {
-			...item,
-			activeKey,
-		};
-	});
-
-	const endDateUpdateEvidence =
-		record?.workflow === EApprovalStatus.CHANGES_REQUIRED
-			? record?.dueDate
-				? dayjs(record?.dueDate)
-				: null
-			: record?.activities?.allowPostEventResultsUpdate
-				? record?.activities?.dueDate
-					? dayjs(record?.activities?.dueDate)
-					: null
-				: record?.activities?.endDate
-					? dayjs(record?.activities?.endDate)
-					: null;
+	const endDateUpdateEvidence = record?.dueDate ? dayjs(record?.dueDate) : null;
 
 	const editableWorkflow =
 		record?.workflow === EApprovalStatus.DRAFT ||
 		record?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
 		record?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
 
-	const isExpired = record?.activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
+	const isExpired = editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
 		<Card title='My Activity' className='table-base-card' variant='borderless'>
@@ -252,10 +210,10 @@ const HistoryActivityPage = () => {
 			/>
 
 			<Spin spinning={loading}>
-				{mappedData?.length ? (
+				{danhSach?.length ? (
 					<>
 						<Row gutter={[12, 12]}>
-							{mappedData?.map((item) => {
+							{danhSach?.map((item) => {
 								const equivalencyAttributeIds = item?.activities?.coCurricularActivityEquivalency?.map(
 									(x) => x.attributesId,
 								);
@@ -265,18 +223,7 @@ const HistoryActivityPage = () => {
 								const now = dayjs();
 
 								const startDate = item?.activities?.startDate ? dayjs(item?.activities.startDate) : null;
-								const endDateUpdateEvidence =
-									item?.workflow === EApprovalStatus.CHANGES_REQUIRED
-										? item?.dueDate
-											? dayjs(item?.dueDate)
-											: null
-										: item?.activities?.allowPostEventResultsUpdate
-											? item?.activities?.dueDate
-												? dayjs(item?.activities?.dueDate)
-												: null
-											: item?.activities?.endDate
-												? dayjs(item?.activities?.endDate)
-												: null;
+								const endDateUpdateEvidence = item?.dueDate ? dayjs(item?.dueDate) : null;
 								const isOngoing = now.isAfter(startDate) && now.isBefore(endDateUpdateEvidence);
 								const isOngoingPerstion =
 									item?.workflow === EApprovalStatus.CHANGES_REQUIRED
@@ -291,8 +238,6 @@ const HistoryActivityPage = () => {
 									item?.workflow === EApprovalStatus.DRAFT ||
 									item?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
 									item?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
-
-								const isExpired = item?.activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 								const renderButton =
 									editableWorkflow && (tabActive === EActivityCategory.REGISTERED ? isOngoing : isOngoingPerstion) ? (
@@ -313,7 +258,7 @@ const HistoryActivityPage = () => {
 													...item?.activities,
 													activityOutcome: item,
 												}}
-												banner={item?.banner ?? undefined}
+												banner={item?.activities?.banner ?? undefined}
 												name={item?.activities?.name}
 												startDate={
 													item?.activities?.startDate
@@ -331,8 +276,7 @@ const HistoryActivityPage = () => {
 													</Row>
 												}
 												outTimeRegis={outTimeRegis}
-												isExpired={isExpired}
-												activeKey={item?.activeKey}
+												isExpired={editableWorkflow && now.isAfter(endDateUpdateEvidence)}
 												isRegister
 											/>
 										) : (
@@ -466,21 +410,8 @@ const HistoryActivityPage = () => {
 										activityOutcome: record,
 									} as Activity.IRecord
 								}
-								evidenceDeadline={
-									record?.workflow === EApprovalStatus.CHANGES_REQUIRED
-										? record?.dueDate
-											? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')
-											: '--'
-										: record?.activities?.allowPostEventResultsUpdate
-											? record?.activities?.dueDate
-												? dayjs(record?.activities?.dueDate).format('HH:mm DD/MM/YYYY')
-												: '--'
-											: record?.endDate
-												? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')
-												: '--'
-								}
+								evidenceDeadline={record?.dueDate ? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY') : '--'}
 								infoEvidence={!!record?.workflow}
-								activeKey={record?.activeKey}
 								isExpired={isExpired}
 								isRegister
 							/>
