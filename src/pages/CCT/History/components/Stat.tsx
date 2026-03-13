@@ -21,18 +21,38 @@ const StatActivityOutCome = (props: { getData: () => void; tabActive?: EActivity
 
 	const filterTrangThai = (workflow: EApprovalStatus | EApprovalStatus[] | 'all') => {
 		setStatusExpired(false);
-		if (workflow !== 'all') {
-			setFilters([
-				{
-					active: true,
-					field: 'workflow',
-					values: Array.isArray(workflow) ? workflow : [workflow],
-					operator: EOperatorType.INCLUDE,
-				},
-			]);
-		} else {
+
+		if (workflow === 'all') {
 			setFilters([]);
+			return;
 		}
+
+		const now = dayjs().toISOString();
+		const workflows = Array.isArray(workflow) ? workflow : [workflow];
+
+		const filtersToSet: any[] = [
+			{
+				active: true,
+				field: 'workflow',
+				values: workflows,
+				operator: EOperatorType.INCLUDE,
+			},
+		];
+
+		const isActionRequired =
+			workflows.length === ACTION_REQUIRED_STATUSES.length &&
+			ACTION_REQUIRED_STATUSES.every((s) => workflows.includes(s));
+
+		if (isActionRequired) {
+			filtersToSet.push({
+				active: true,
+				field: 'dueDate',
+				values: [now],
+				operator: EOperatorType.GREAT_THAN,
+			});
+		}
+
+		setFilters(filtersToSet);
 	};
 
 	const filterExpiredPersonal = () => {
@@ -43,7 +63,7 @@ const StatActivityOutCome = (props: { getData: () => void; tabActive?: EActivity
 			{
 				active: true,
 				field: 'workflow',
-				values: [EApprovalStatus.CHANGES_REQUIRED],
+				values: [EApprovalStatus.CHANGES_REQUIRED, EApprovalStatus.DRAFT, EApprovalStatus.EVIDENCE_REQUIRED],
 				operator: EOperatorType.INCLUDE,
 			},
 			{
@@ -79,7 +99,8 @@ const StatActivityOutCome = (props: { getData: () => void; tabActive?: EActivity
 			onClick: () => filterTrangThai(ACTION_REQUIRED_STATUSES),
 			selected:
 				valueFiltered?.length === ACTION_REQUIRED_STATUSES.length &&
-				ACTION_REQUIRED_STATUSES.every((s) => valueFiltered.includes(s)),
+				ACTION_REQUIRED_STATUSES.every((s) => valueFiltered.includes(s)) &&
+				!statusExpired,
 		},
 		{
 			title: 'Pending For Approval',

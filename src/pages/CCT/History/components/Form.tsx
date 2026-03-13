@@ -1,6 +1,5 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { Activity } from '@/services/CCT/Activity/typing';
-import { EApprovalStatus } from '@/services/CCT/constant';
 import { handleSingleFile } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -211,19 +210,7 @@ const FormActivityOutCome = (props: any) => {
 										activityOutcome: record,
 									} as Activity.IRecord
 								}
-								evidenceDeadline={
-									record?.workflow === EApprovalStatus.CHANGES_REQUIRED
-										? record?.dueDate
-											? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')
-											: '--'
-										: record?.activities?.allowPostEventResultsUpdate
-											? record?.activities?.dueDate
-												? dayjs(record?.activities?.dueDate).format('HH:mm DD/MM/YYYY')
-												: '--'
-											: record?.endDate
-												? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')
-												: '--'
-								}
+								evidenceDeadline={record?.dueDate ? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY') : '--'}
 							/>
 						</Collapse.Panel>
 					</Collapse>
