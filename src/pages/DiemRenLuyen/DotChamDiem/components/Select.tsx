@@ -1,0 +1,45 @@
+import { Select } from 'antd';
+import { type BaseOptionType } from 'antd/lib/select';
+import { useEffect } from 'react';
+import { useIntl, useModel } from 'umi';
+
+export const SelectDotChamDiem = (props: {
+	value?: string;
+	onChange?: (val?: string, option?: BaseOptionType) => void;
+	multiple?: boolean;
+	condition?: any;
+	allowClear?: boolean;
+	disabled?: boolean;
+	readOnly?: boolean;
+}) => {
+	const { value, onChange, multiple, condition, allowClear, disabled, readOnly } = props;
+	const { danhSach, getAllModel, visibleForm } = useModel('diemrenluyen.dotchamdiem');
+  const intl = useIntl();
+
+	useEffect(() => {
+		if (!visibleForm) {
+			getAllModel(false, undefined, { ...condition });
+		}
+	}, [visibleForm, condition]);
+
+	return (
+		<Select
+			mode={multiple ? 'multiple' : undefined}
+			value={value}
+			onChange={onChange}
+			disabled={disabled}
+			options={danhSach.map((item) => ({
+				key: item._id,
+				value: item._id,
+				label: item.tenDot,
+				rawData: item,
+			}))}
+			removeIcon={readOnly ? null : undefined}
+			showSearch
+			optionFilterProp='label'
+			placeholder={intl.formatMessage({ id: 'diemrenluyen.dotchamdiem.placeholder' })}
+			allowClear={allowClear ?? false}
+			style={{ width: '100%', pointerEvents: readOnly ? 'none' : undefined }}
+		/>
+	);
+};

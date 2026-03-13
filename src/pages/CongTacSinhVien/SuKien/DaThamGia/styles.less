@@ -1,0 +1,60 @@
+.container {
+	height: auto;
+}
+
+.title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.ngay {
+	margin-bottom: 18px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.ngay__title {
+	color: rgba(0, 0, 0, 0.5);
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.su_kien {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	margin: 0 6px 8px 6px;
+	padding: 4px;
+	color: #333;
+	background-color: #fafafa;
+	border-radius: 6px;
+
+	cursor: pointer;
+	transition: 0.3s all;
+
+	&:hover {
+		box-shadow: 1px 3px 5px rgba(163, 177, 191, 0.35);
+		transition: 0.3s;
+	}
+}
+
+.su_kien__left {
+	display: flex;
+	align-items: center;
+	padding-left: 12px;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.su_kien__thoi_gian {
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.su_kien__right {
+	padding: 6px;
+	border-left: 6px solid;
+	border-radius: 4px;
+}

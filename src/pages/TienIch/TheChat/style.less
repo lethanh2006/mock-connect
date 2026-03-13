@@ -1,0 +1,41 @@
+.height-card {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 70px;
+	padding: 16px 20px;
+	border-radius: 12px;
+
+	.left {
+		display: flex;
+		flex-direction: column;
+
+		.icon-vertical {
+			width: 35px;
+			height: 50px;
+			margin-bottom: 4px;
+			object-fit: contain;
+		}
+
+		.label {
+			color: #000;
+			font-weight: 500;
+			font-size: 14px;
+		}
+	}
+
+	.right {
+		display: flex;
+		gap: 4px;
+		align-items: baseline;
+
+		.value {
+			font-weight: bold;
+			font-size: 28px;
+		}
+
+		.unit {
+			font-size: 14px;
+		}
+	}
+}

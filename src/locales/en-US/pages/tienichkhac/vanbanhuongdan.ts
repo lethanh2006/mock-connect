@@ -1,0 +1,16 @@
+export default {
+	'vanbanhuongdan.title': 'Instructional text',
+	'vanbanhuongdan.timkiem.place': 'Search by name...',
+	'vanbanhuongdan.timkiem.button': 'Search',
+	'vanbanhuongdan.tongso.label': 'Total number',
+	'vanbanhuongdan.tongso.pagination': 'Total: {total}',
+	'vanbanhuongdan.item.chuadatten': 'UNTITLED',
+	'vanbanhuongdan.item.mota': 'Description',
+	'vanbanhuongdan.item.soluong': 'Number of documents',
+	'vanbanhuongdan.form.tenvanban': 'Document name',
+	'vanbanhuongdan.form.mota': 'Description',
+	'vanbanhuongdan.form.tep': 'Attachment',
+	'vanbanhuongdan.form.chitiet': 'File details',
+	'vanbanhuongdan.form.save': 'Save',
+	'vanbanhuongdan.form.unsave': 'Remove save',
+};

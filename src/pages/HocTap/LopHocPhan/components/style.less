@@ -1,0 +1,450 @@
+.card-lhp {
+	padding: 0;
+	margin: 0;
+
+	.ribbon {
+		z-index: 1;
+		position: absolute;
+		top: 10;
+		right: 0;
+	}
+
+	&-inner {
+		border-radius: 8px;
+		height: 100%;
+		cursor: pointer;
+		margin: 8px;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: right center;
+		// không hiểu tại sao không áp dụng được màu gradient vào
+		// background-color: linear-gradient(64.35deg, #ffdfe1 30.01%, #fff1f1 97.67%); !important ??
+		// background-image:
+		// 	linear-gradient(64.35deg, #ffdfe1 30.01%, #fff1f1 97.67%), var(--bg-url); // sẽ được thay bằng inline style
+		// background-color: var(--color-primary-bg);
+
+		// trả về màu bình thường
+		background-color: #fceeee;
+		transition: all 0.3s ease;
+
+		&:hover {
+			transform: scale(1.005) translateY(-3px);
+		}
+	}
+
+	&-tag {
+		background-color: transparent !important;
+		margin-bottom: 8px;
+	}
+
+	&-malop_copyable {
+		color: var(--color-primary);
+		font-weight: 500;
+
+		// .ant-typography-copy {
+		// 	color: @text-color-secondary !important;
+		// }
+	}
+
+	&-tag-completed {
+		color: #ff7677;
+		border: 1px solid rgb(253, 197, 191);
+	}
+
+	&-tag-progressing {
+		color: #52c41a;
+		border: 1px solid #b7eb8f;
+	}
+
+	&-title {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 100%;
+		margin-bottom: 8px;
+	}
+
+	&-row {
+		display: flex;
+		justify-content: space-between;
+		color: #6f6f6f !important;
+		font-weight: 600;
+		gap: 8px;
+
+		.stat {
+			flex: 1;
+			text-align: center;
+			border: 1px solid transparent;
+			border-radius: 4px;
+			padding: 4px 8px;
+			border: 1px solid #fff;
+			background-color: fade(@background-color-light, 36%);
+			font-size: 16px;
+
+			backdrop-filter: blur(4px);
+			-webkit-backdrop-filter: blur(4px);
+
+			box-shadow: 0 2px 6px rgba(164, 164, 164, 0.2005);
+
+			.anticon {
+				margin-right: 8px;
+			}
+		}
+
+		strong {
+			font-weight: 600;
+		}
+	}
+
+	.ant-typography.score {
+		color: #007aff;
+		font-weight: bold;
+	}
+
+	&-score {
+		color: #6f6f6f;
+		font-weight: 400;
+		display: flex;
+		justify-content: space-between;
+
+		span:last-child {
+			font-weight: bold;
+			color: #007aff;
+		}
+	}
+}
+
+// ThongTinChung
+// Style cho component ThongTinChung
+
+// Container chính
+.thong-tin-chung-container {
+	// Đường phân cách dạng gạch ngang
+	.dashed-border {
+		border-bottom: 1px dashed transparent;
+		border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
+		border-image-slice: 1;
+		margin-bottom: 16px;
+		padding-bottom: 8px;
+	}
+
+	// Giới thiệu chung
+	.gioi-thieu-section {
+		.dashed-border();
+	}
+
+	.thong-tin-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 4px;
+
+		width: 100%;
+		font-weight: 600;
+		margin-bottom: 12px;
+		font-size: 16px;
+
+		a {
+			font-weight: 400;
+			font-size: 14px;
+		}
+	}
+
+	.gioi-thieu-chung-content {
+		overflow: hidden;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 5;
+	}
+}
+
+// Card styles
+.tai-lieu-card {
+	margin-bottom: 16px;
+	border: none;
+	padding: 0;
+	// border-bottom: 1px dashed transparent;
+	// border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
+	border-image-slice: 1;
+	margin: -16px;
+
+	.ant-card-head {
+		border: none;
+	}
+}
+
+.ky-nang-card {
+	border: none;
+	border-bottom: 1px dashed transparent;
+	border-image: repeating-linear-gradient(to right, #ccc 0 8px, transparent 8px 16px);
+	border-image-slice: 1;
+	margin: -16px;
+	margin-bottom: 32px;
+	margin-top: 32px;
+
+	.ant-card-head {
+		border: none;
+	}
+}
+
+// Học liệu item
+.hoc-lieu-item {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	padding: 8px 0;
+
+	&:not(:last-child) {
+		border-bottom: 1px solid #f0f0f0;
+	}
+}
+
+.tai-lieu-item {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	padding: 6px 0;
+
+	> div {
+		display: grid;
+		grid-template-columns: none !important;
+		width: 100%;
+		.box-file {
+			box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.04);
+		}
+	}
+}
+
+.hoc-lieu-content {
+	flex: 1;
+}
+
+.hoc-lieu-title {
+	font-weight: 500;
+	font-size: 14px;
+	margin-bottom: 4px;
+}
+
+.hoc-lieu-author {
+	color: #666;
+	font-size: 12px;
+	margin-bottom: 2px;
+}
+
+.hoc-lieu-publisher {
+	color: #666;
+	font-size: 12px;
+	margin-bottom: 2px;
+}
+
+.hoc-lieu-description {
+	color: #999;
+	font-size: 12px;
+	font-style: italic;
+}
+
+// <=============== KỸ NĂNG ===============>
+
+// // Kỹ năng item
+// .ky-nang-items {
+// 	display: flex;
+// 	flex-direction: column;
+// 	gap: 0;
+// }
+
+// .ky-nang-item {
+// 	display: flex;
+// 	align-items: flex-start;
+
+// 	&.preview {
+// 		padding: 12px 0;
+// 		border-radius: 8px;
+// 		background-color: #fafafa;
+// 		margin-bottom: 0;
+// 	}
+
+// 	&.detail {
+// 		padding: 16px 0;
+// 		border-radius: 0px;
+// 		background-color: transparent;
+// 		margin-bottom: 8px;
+// 	}
+
+// 	&:not(:last-child) {
+// 		border-bottom: 1px solid #f0f0f0;
+// 	}
+// }
+
+// .ky-nang-number {
+// 	min-width: 32px;
+// 	height: 32px;
+// 	background-color: #1677ff;
+// 	border-radius: 50%;
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: center;
+// 	margin-right: 16px;
+// 	margin-top: 2px;
+// 	box-shadow: 0 2px 4px rgba(22, 119, 255, 0.2);
+
+// 	.ant-typography {
+// 		color: white;
+// 		font-size: 14px;
+// 		font-weight: bold;
+// 	}
+// }
+
+// .ky-nang-content {
+// 	flex: 1;
+// }
+
+// .ky-nang-title {
+// 	font-weight: 600;
+// 	font-size: 15px;
+// 	margin-bottom: 6px;
+// 	color: #262626;
+// 	line-height: 1.4;
+// }
+
+// .ky-nang-description {
+// 	color: #595959;
+// 	font-size: 14px;
+// 	line-height: 1.6;
+// 	margin-bottom: 8px;
+// }
+
+// .ky-nang-tags {
+// 	display: flex;
+// 	gap: 8px;
+// 	flex-wrap: wrap;
+// 	align-items: center;
+// }
+
+// .ky-nang-tag {
+// 	border-radius: 4px;
+// 	font-weight: 500;
+// 	font-size: 12px;
+
+// 	&.muc-do-cao {
+// 		color: red;
+// 	}
+
+// 	&.muc-do-trung-binh {
+// 		color: orange;
+// 	}
+
+// 	&.muc-do-thap {
+// 		color: green;
+// 	}
+// }
+
+// // More skills section
+// .more-skills {
+// 	text-align: center;
+// 	margin-top: 16px;
+// 	padding: 12px;
+// 	background-color: #f8f9fa;
+// 	border-radius: 6px;
+// }
+
+// .more-skills-text {
+// 	font-size: 14px;
+// }
+
+// // Empty states
+// .empty-ky-nang {
+// 	text-align: center;
+// 	color: #999;
+// 	padding: 40px 0;
+// 	background-color: #fafafa;
+// 	border-radius: 6px;
+
+// 	.anticon {
+// 		font-size: 32px;
+// 		margin-bottom: 12px;
+// 		color: #d9d9d9;
+// 	}
+
+// 	div {
+// 		font-size: 14px;
+// 	}
+// }
+
+// .empty-ky-nang-modal {
+// 	text-align: center;
+// 	color: #999;
+// 	padding: 60px 0;
+// 	font-size: 16px;
+
+// 	.anticon {
+// 		font-size: 48px;
+// 		margin-bottom: 16px;
+// 		color: #d9d9d9;
+// 	}
+// }
+
+// Modal styles
+// .modal-ky-nang {
+// 	.ant-modal {
+// 		top: 20px;
+// 	}
+
+// 	.ant-tabs {
+// 		min-height: 500px;
+// 	}
+
+// 	.ant-tabs-content {
+// 		padding: 16px 0;
+// 	}
+// }
+
+// .modal-title {
+// 	display: flex;
+// 	align-items: center;
+// 	gap: 8px;
+
+// 	.anticon {
+// 		color: #1677ff;
+// 	}
+// }
+
+// <=============== END KỸ NĂNG ===============>
+
+// Button styles
+.btn-extra {
+	padding: 0;
+	font-weight: 500;
+
+	&.detail-btn {
+		.anticon {
+			margin-right: 4px;
+		}
+	}
+}
+
+// Space for buttons
+.button-space {
+	margin: 8px 0 24px 0;
+}
+
+.header-action-buttons {
+	margin-top: -8px;
+
+	.button-extend {
+		background-color: transparent;
+		border-color: currentColor;
+	}
+}
+
+.ant-list-item {
+	.card-hover {
+		transition: all 0.2s ease; // mượt cả background lẫn transform
+
+		&:hover {
+			background-color: #fafafa;
+			cursor: pointer;
+			transform: translateY(-1px); // di chuyển nhẹ lên trên
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); // optional: thêm bóng nhẹ
+		}
+	}
+}

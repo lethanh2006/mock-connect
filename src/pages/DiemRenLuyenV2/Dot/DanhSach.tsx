@@ -1,0 +1,65 @@
+import TableStaticData from '@/components/Table/TableStaticData';
+import type { IColumn } from '@/components/Table/typing';
+import dayjs from '@/utils/dayjs';
+import { useEffect } from 'react';
+import { useIntl, useModel } from 'umi';
+
+const DanhSachDot = () => {
+	const { getAllModel, danhSach, record, setRecord } = useModel('diemrenluyenv2.dot');
+	const { getByIdModel } = useModel('diemrenluyenv2.bieumau');
+	const intl = useIntl();
+
+	const getData = async () => {
+		try {
+			getAllModel().then((res) => {
+				const dataDot = res;
+				const currentDot = dataDot?.find(
+					(item) =>
+						dayjs().isAfter(dayjs(item?.thoiGianSVChamDiem.thoiGianBatDau)) &&
+						dayjs().isBefore(dayjs(item?.thoiGianSVChamDiem?.thoiGianKetThuc)),
+				);
+				if (currentDot) setRecord(currentDot);
+				else setRecord(dataDot?.[0]);
+			});
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	useEffect(() => {
+		getData();
+	}, []);
+
+	useEffect(() => {
+		if (record?.idBieuMau) getByIdModel(record?.idBieuMau ?? '', true);
+	}, [record]);
+
+	const onCell = (recordVal: DotChamDiemRenLuyen.IRecord) => ({
+		onClick: () => {
+			setRecord(recordVal);
+		},
+		style: {
+			cursor: 'pointer',
+			fontWeight: recordVal._id === record?._id ? 600 : undefined,
+			color: recordVal._id === record?._id ? 'var(--color-primary)' : undefined,
+			backgroundColor: recordVal._id === record?._id ? 'var(--color-primary-bg)' : undefined,
+		},
+	});
+
+	const columns: IColumn<DotChamDiemRenLuyen.IRecord>[] = [
+		{
+			title: intl.formatMessage({ id: 'diemrenluyen.danhsach.hocky' }),
+			dataIndex: 'tenDot',
+			width: 200,
+			onCell,
+		},
+	];
+
+	return (
+		<div style={{ paddingTop: 3 }}>
+			<TableStaticData columns={columns} data={danhSach} otherProps={{ scroll: { x: 350 }, pagination: false }} />
+		</div>
+	);
+};
+
+export default DanhSachDot;

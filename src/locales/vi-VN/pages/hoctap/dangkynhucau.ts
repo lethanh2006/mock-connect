@@ -1,0 +1,28 @@
+export default {
+	'dangkyhoctap.title': 'Đăng ký học tập theo nhu cầu',
+	'dangkyhoctap.empty.khongcođotangky': 'Không có đợt đăng ký trong kỳ học',
+
+	'dangkyhoctap.table.maHP': 'Mã HP',
+	'dangkyhoctap.table.hocPhan': 'Học phần',
+	'dangkyhoctap.table.soTinChi': 'Số tín chỉ',
+	'dangkyhoctap.table.soSVDangKy': 'Số SV đăng ký',
+	'dangkyhoctap.table.khoaNganh': 'Khóa ngành',
+	'dangkyhoctap.table.trangThai': 'Trạng thái',
+	'dangkyhoctap.table.thaoTac': 'Thao tác',
+	'dangkyhoctap.table.xoa': 'Xóa',
+	'dangkyhoctap.confirm.xoa': 'Bạn có chắc chắn muốn xóa học phần này?',
+	'dangkyhoctap.alert.ngoaiThoiGian': 'Ngoài thời gian đăng ký nhu cầu !',
+	'dangkyhoctap.alert.trongThoiGian': 'Thời gian đăng ký nhu cầu từ <b>{tuNgay}</b> đến <b>{denNgay}</b>',
+	'dangkyhoctap.button.themMoi': 'Thêm mới',
+	'dangkyhoctap.modal.nhuCauHocPhan': 'Nhu cầu học phần',
+	'dangkyhoctap.label.sv': 'SV',
+
+	'dangkyhoctap.form.chinhSua': 'Chỉnh sửa',
+	'dangkyhoctap.form.themMoi': 'Thêm mới',
+	'dangkyhoctap.form.khoaNganh': 'Khóa ngành',
+	'dangkyhoctap.form.hocPhan': 'Học phần',
+	'dangkyhoctap.form.huy': 'Hủy',
+	'dangkyhoctap.message.error.tonTai': 'Đã tồn tại học phần trong bảng đăng ký!',
+
+	'dangkyhoctap.select.placeholder': 'Chọn học phần',
+};
