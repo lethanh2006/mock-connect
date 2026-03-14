@@ -214,6 +214,7 @@ export default {
 	'global.uploadfile.text': 'Click or drag a file to upload',
 	'global.uploadfile.text1': 'Add profile picture',
 	'global.uploadfile.button.chontep': 'Select file',
+	'global.uploadfile.tepdinhkem': 'Attachment',
 
 	// PDFViewer
 	'global.pdfviewer.dangtai': 'Loading...',
