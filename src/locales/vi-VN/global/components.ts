@@ -142,7 +142,8 @@ export default {
 
 	'global.table.columnSetting.title': 'Cấu hình cột',
 	'global.table.columnSetting.reset': 'Khôi phục',
-	'global.table.columnSetting.reset.confirm': 'Bạn có chắc chắn muốn khôi phục lại cấu hình mặc định (vị trí, ẩn hiện và độ rộng) của các cột?',
+	'global.table.columnSetting.reset.confirm':
+		'Bạn có chắc chắn muốn khôi phục lại cấu hình mặc định (vị trí, ẩn hiện và độ rộng) của các cột?',
 	'global.table.columnSetting.apply': 'Áp dụng',
 	'global.table.columnSetting.cancel': 'Hủy',
 	'global.table.columnSetting.tooltip': 'Cấu hình ẩn/hiện và thứ tự cột',
@@ -216,6 +217,7 @@ export default {
 	'global.uploadfile.text': 'Nhấn chuột hoặc kéo thả tài liệu để tải lên',
 	'global.uploadfile.text1': 'Thêm ảnh đại diện',
 	'global.uploadfile.button.chontep': 'Chọn tệp',
+	'global.uploadfile.tepdinhkem': 'Tệp đính kèm',
 
 	// PDFViewer
 	'global.pdfviewer.dangtai': 'Đang tải...',
