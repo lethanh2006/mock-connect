@@ -53,7 +53,9 @@ const ValidateDataImport = (props: {
 
 	const validateData = async () => {
 		if (postValidateModel)
-			postValidateModel(dataImport)
+			postValidateModel(dataImport, {
+				messageText: intl.formatMessage({ id: 'global.message.validated' }),
+			})
 				.then((res: TImportResponse) => {
 					setErrorCount(res.validate?.filter((item) => !!item.rowErrors?.length).length);
 					setIsError(res.error);
@@ -68,7 +70,9 @@ const ValidateDataImport = (props: {
 	}, []);
 
 	const onExecute = () => {
-		postExecuteImpotModel(dataImport)
+		postExecuteImpotModel(dataImport, {
+			messageText: intl.formatMessage({ id: 'global.message.imported' }),
+		})
 			.then((res: TImportResponse) => {
 				setStep(1);
 				setErrorCount(res.validate?.filter((item) => !!item.rowErrors?.length).length);
