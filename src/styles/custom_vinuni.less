@@ -500,13 +500,6 @@ body {
 
 		.ant-card {
 			& > .ant-card-body {
-				.table-base {
-					> .ant-table-wrapper {
-						> .ant-spin-nested-loading {
-							margin: 0 -16px !important;
-						}
-					}
-				}
 
 				& > .ant-card {
 					& > .ant-card-body {
@@ -1269,32 +1262,6 @@ body {
 	align-items: center !important;
 }
 
-// Bóng cho nút thu gọn - VinUni
-
-.ant-pro-sider-collapsed-button {
-	position: absolute !important;
-	top: 16px !important;
-	right: -50px !important;
-	bottom: unset !important;
-	inset-block-start: 16px !important;
-	inset-block-end: unset !important;
-	z-index: 999 !important;
-	cursor: pointer !important;
-	pointer-events: auto !important;
-	width: 32px !important;
-	height: 32px !important;
-	min-width: 32px !important;
-	min-height: 32px !important;
-	display: flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	color: var(--color-text-100) !important;
-
-	@media (max-width: 425px) {
-		right: 0 !important;
-	}
-}
-
 // Thay đổi icon của collapsed button dựa trên collapsed state
 // Khi sidebar collapsed (đóng) - hiển thị MenuUnfoldOutlined
 .ant-pro-sider-collapsed .ant-pro-sider-collapsed-button .anticon {
@@ -1491,12 +1458,6 @@ body {
 	background-size: 100% 100% !important;
 	background-position: top center !important;
 	background-repeat: no-repeat !important;
-}
-
-// Giữ nguyên vị trí nút collapsed khi scroll
-.ant-pro-layout .ant-pro-sider-collapsed-button {
-	right: -50px !important;
-	top: 16px !important;
 }
 
 // Đẩy nội dung xuống dưới header fixed, giữ before background đủ không gian
