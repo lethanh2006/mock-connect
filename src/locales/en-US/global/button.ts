@@ -10,7 +10,7 @@ export default {
 	'global.button.nhapdulieu': 'Import',
 	'global.button.xuatdulieu': 'Export',
 	'global.button.tailai': 'Reload',
-	'global.button.boloctuychinh': 'Custom filters',
+	'global.button.boloctuychinh': 'Filters',
 	'global.button.tongso': 'Total',
 	'global.button.chinhsua': 'Edit',
 };

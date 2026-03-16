@@ -98,6 +98,8 @@ export type TableBaseProps = {
 		import?: boolean;
 		/** Được xuất dữ liệu ko? Mặc định: Không */
 		export?: boolean;
+		/** Có ô tìm kiếm global ko? Mặc định: Có */
+		globalSearch?: boolean;
 		/** Được lọc tùy chỉnh ko? Mặc định: Có */
 		filter?: boolean;
 		/** Có nút tải lại ko? Mặc định: Có */

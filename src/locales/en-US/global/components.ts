@@ -128,10 +128,14 @@ export default {
 	'global.table.index.button.xoa.title': 'Confirm deletion of {count} selected items?',
 	'global.table.index.button.tailai': 'Reload',
 	'global.table.index.button.tailai.tooltip': 'Reload data',
-	'global.table.index.button.boloc': 'Custom filter',
+	'global.table.index.button.boloc': 'Fsilter',
 	'global.table.index.button.boloc.tooltip': 'Apply custom filter',
 	'global.table.index.button.tongso': 'Total',
 	'global.table.index.button.tongso.tooltip': 'Total data count',
+	'global.table.index.search.placeholder': 'Search by: {fields}',
+	'global.table.index.search.placeholder.default': 'Search',
+	'global.table.index.search.tooltip': 'Searching by: {fields}',
+	'global.table.index.search.tooltip.default': 'Search across text fields',
 	'global.table.index.empty': 'No data available',
 	'global.table.index.dachon': 'Selected',
 	'global.table.index.bochon': 'Deselect all',
@@ -145,7 +149,7 @@ export default {
 	'global.table.columnSetting.cancel': 'Cancel',
 	'global.table.columnSetting.tooltip': 'Configure column visibility and order',
 
-	'global.table.customfilter.title': 'Custom filter',
+	'global.table.customfilter.title': 'Filter',
 	'global.table.customfilter.dieukien': 'Applied filter conditions',
 	'global.table.customfilter.button.them': 'Add filter condition',
 	'global.table.customfilter.button.apdung': 'Apply filter',
@@ -188,7 +192,7 @@ export default {
 	'global.table.operator.and': 'And',
 
 	'global.table.filterdropdown.xemthem': 'View more',
-	'global.table.filterdropdown.boloc': 'Custom filters',
+	'global.table.filterdropdown.boloc': 'Filters',
 
 	'global.tablestatic.button.themmoi': 'Add New',
 	'global.tablestatic.button.themmoi.tooltip': 'Add new data',
