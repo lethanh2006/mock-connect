@@ -128,7 +128,7 @@ export default {
 	'global.table.index.button.xoa.title': 'Confirm deletion of {count} selected items?',
 	'global.table.index.button.tailai': 'Reload',
 	'global.table.index.button.tailai.tooltip': 'Reload data',
-	'global.table.index.button.boloc': 'Fsilter',
+	'global.table.index.button.boloc': 'Filter',
 	'global.table.index.button.boloc.tooltip': 'Apply custom filter',
 	'global.table.index.button.tongso': 'Total',
 	'global.table.index.button.tongso.tooltip': 'Total data count',
