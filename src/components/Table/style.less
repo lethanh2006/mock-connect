@@ -18,6 +18,11 @@
 			gap: 8px;
 			justify-content: flex-end;
 
+			.global-search {
+				width: 280px;
+				max-width: 100%;
+			}
+
 			.total {
 				height: 32px;
 				padding: 0 15px;
@@ -241,9 +246,17 @@
 }
 
 @media (max-width: @screen-xs) {
-	// .extra {
-	// 	width: 100%;
-	// }
+	.table-base {
+		.header {
+			.extra {
+				width: 100%;
+
+				.global-search {
+					width: 100%;
+				}
+			}
+		}
+	}
 }
 
 .ttCellWrapper {
