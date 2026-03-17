@@ -338,6 +338,7 @@ export const TableHeader: React.FC = () => {
 							<ButtonExtend
 								className='btn-minimize-search'
 								size={size}
+								loading={loading}
 								tooltip={globalSearchTooltip}
 								icon={<SearchOutlined />}
 								style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
@@ -357,6 +358,7 @@ export const TableHeader: React.FC = () => {
 							}
 							enterButton={
 								<Button
+									loading={loading}
 									icon={
 										<Tooltip title={globalSearchTooltip}>
 											<SearchOutlined />
