@@ -70,7 +70,7 @@ const ChucVuPage = () => {
       modelName="danhmuc.chucvu"
       title="Chức vụ"
       Form={Form}
-      buttons={{ import: true, minimizeGlobalSearch: true }}
+      buttons={{ import: true }}
     />
   );
 };
