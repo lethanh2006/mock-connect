@@ -50,9 +50,9 @@ export const TableHeader: React.FC = () => {
 		minimizeGlobalSearch,
 		create: btnCreate = true,
 		export: btnExport,
-		filter: btnFilter,
+		filter: btnFilter = true,
 		import: btnImport,
-		reload: btnReload,
+		reload: btnReload = true,
 	} = buttons || {};
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
 
@@ -64,7 +64,7 @@ export const TableHeader: React.FC = () => {
 		const seen = new Set<string>();
 		return flatColumns
 			.filter((item) => {
-				const isDefaultSearchable = item?.filterType === 'string' || item?.filterType === 'select';
+				const isDefaultSearchable = item?.filterType === 'string';
 				const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
 				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index';
 			})
@@ -285,11 +285,7 @@ export const TableHeader: React.FC = () => {
 									allowClear
 									value={globalSearchText}
 									placeholder={globalSearchPlaceholder}
-									style={{
-										width: 300,
-										borderColor: globalSearchText ? primaryColor : undefined,
-										outline: globalSearchText ? `1px solid ${primaryColor}` : undefined,
-									}}
+									style={{ width: 280 }}
 									autoFocus
 									onChange={(e) => {
 										const nextValue = e.target.value;
@@ -303,25 +299,14 @@ export const TableHeader: React.FC = () => {
 								/>
 							}
 							trigger='click'
+							placement='bottom'
 						>
-							<Button
+							<ButtonExtend
 								className='btn-minimize-search'
 								size={size}
-								icon={
-									<Tooltip title={globalSearchTooltip}>
-										<SearchOutlined className='global-search-tooltip-icon' />
-									</Tooltip>
-								}
-								style={
-									globalSearchText
-										? {
-												borderColor: primaryColor,
-												borderWidth: '1px',
-												borderStyle: 'solid',
-												color: primaryColor,
-											}
-										: undefined
-								}
+								tooltip={globalSearchTooltip}
+								icon={<SearchOutlined />}
+								style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
 							/>
 						</Popover>
 					) : (
@@ -333,18 +318,14 @@ export const TableHeader: React.FC = () => {
 							placeholder={globalSearchPlaceholder}
 							style={
 								globalSearchText
-									? {
-											borderColor: primaryColor,
-											outline: `1px solid ${primaryColor}`,
-											borderRadius: '2px',
-										}
+									? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
 									: undefined
 							}
 							enterButton={
 								<Button
 									icon={
 										<Tooltip title={globalSearchTooltip}>
-											<SearchOutlined className='global-search-tooltip-icon' />
+											<SearchOutlined />
 										</Tooltip>
 									}
 								/>
@@ -362,19 +343,6 @@ export const TableHeader: React.FC = () => {
 					)
 				) : null}
 
-				{btnReload && (
-					<ButtonExtend
-						size={size}
-						icon={<ReloadOutlined />}
-						onClick={onReload}
-						loading={loading}
-						className='btn-reload'
-						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
-					>
-						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
-					</ButtonExtend>
-				)}
-
 				{btnFilter && hasFilter && (
 					<ButtonExtend
 						className='btn-filter'
@@ -388,17 +356,22 @@ export const TableHeader: React.FC = () => {
 						}
 						onClick={() => setVisibleFilter?.(true)}
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.boloc.tooltip' })}
-						style={
-							findFiltersInColumns(finalColumns, filters)?.length
-								? {
-										borderColor: primaryColor,
-										borderWidth: '1px',
-										borderStyle: 'solid',
-									}
-								: undefined
-						}
+						style={findFiltersInColumns(finalColumns, filters)?.length ? { borderColor: primaryColor } : undefined}
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.boloc' })}
+					</ButtonExtend>
+				)}
+
+				{btnReload && (
+					<ButtonExtend
+						size={size}
+						icon={<ReloadOutlined />}
+						onClick={onReload}
+						loading={loading}
+						className='btn-reload'
+						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
+					>
+						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
 					</ButtonExtend>
 				)}
 
