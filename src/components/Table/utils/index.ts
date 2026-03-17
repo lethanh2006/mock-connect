@@ -28,6 +28,7 @@ export const normalizeFilters = (filters: any[]): TFilter<any>[] => {
 				filters: normalizedSubFilters,
 				active: true,
 				values: [],
+				readOnly: f.readOnly,
 			});
 			return;
 		}

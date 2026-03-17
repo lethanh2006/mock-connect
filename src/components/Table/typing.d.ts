@@ -48,6 +48,8 @@ export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 
 	minWidth?: number;
 	maxWidth?: number;
 	resizable?: boolean;
+	/** Cho phép tìm kiếm global hay ko (Mặc định: true với filterType = string | select) */
+	enableGlobalSearch?: boolean;
 }
 
 export type TDataOption = {
@@ -98,6 +100,10 @@ export type TableBaseProps = {
 		import?: boolean;
 		/** Được xuất dữ liệu ko? Mặc định: Không */
 		export?: boolean;
+		/** Có ô tìm kiếm global ko? Mặc định: Có */
+		globalSearch?: boolean;
+		/** Thu nhỏ ô tìm kiếm global ko? (Hiện icon, click hiện popover) */
+		minimizeGlobalSearch?: boolean;
 		/** Được lọc tùy chỉnh ko? Mặc định: Có */
 		filter?: boolean;
 		/** Có nút tải lại ko? Mặc định: Có */

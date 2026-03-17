@@ -34,7 +34,7 @@
 	--color-official-200: #35426e;
 	--color-official-300: #134d8b;
 	--color-official-500: #f4f9ff;
-	
+
 	--vin-color-primary: var(--color-official-100);
 	--vin-color-primary-100: var(--color-official-100);
 	--vin-color-primary-200: var(--color-official-200);
@@ -99,7 +99,7 @@ body {
 	font-weight: 500;
 }
 
-.ant-form-item-label>label {
+.ant-form-item-label > label {
 	height: auto;
 	margin: 4px 0 !important;
 	font-weight: 600 !important;
@@ -162,7 +162,7 @@ body {
 
 	.ant-menu-item-group-title {
 		font-size: 11px;
-		font-weight: 700;
+		font-weight: 600;
 		color: var(--color-text-300) !important;
 		text-transform: uppercase;
 		padding: 16px 24px 8px;
@@ -275,7 +275,8 @@ body {
 	}
 
 	.ant-btn {
-		height: 30px;
+		height: 28px;
+		width: 28px;
 	}
 }
 
@@ -292,7 +293,7 @@ body {
 
 	> tr > th {
 		color: var(--color-text-100) !important;
-		font-weight: 700 !important;
+		font-weight: 600 !important;
 		height: 44px;
 
 		&::before {
@@ -314,7 +315,7 @@ body {
 	gap: 6px !important;
 
 	.ant-btn {
-		padding: 6px !important;
+		padding: 4px !important;
 		margin-right: 6px !important;
 		margin-bottom: 6px !important;
 		background-color: var(--color-info-bg) !important;
@@ -500,7 +501,6 @@ body {
 
 		.ant-card {
 			& > .ant-card-body {
-
 				& > .ant-card {
 					& > .ant-card-body {
 						padding: 0 !important;
@@ -622,15 +622,15 @@ body {
 	}
 }
 
-.btn-import,
-.btn-export,
-.btn-reload,
-.btn-filter,
-.btn-column-settings{
-	background-color: var(--color-accent-700) !important;
-	border-radius: 4px;
-	border: none !important;
-}
+// .btn-import,
+// .btn-export,
+// .btn-reload,
+// .btn-filter,
+// .btn-column-settings{
+// 	background-color: var(--color-accent-700) !important;
+// 	border-radius: 4px;
+// 	border: none !important;
+// }
 
 // Style header của PageContainer - VinUni
 .ant-pro-page-container {
@@ -1377,6 +1377,7 @@ body {
 		border-top: 1.5px solid var(--color-accent-700) !important;
 		padding: 16px !important;
 		justify-content: end;
+		flex-direction: row-reverse;
 	}
 }
 

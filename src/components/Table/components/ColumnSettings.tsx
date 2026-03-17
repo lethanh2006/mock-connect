@@ -5,6 +5,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Button, Checkbox, Divider, Popconfirm, Popover, Space } from 'antd';
 import React from 'react';
 import { useIntl } from 'umi';
+import ButtonExtend from '../ButtonExtend';
 import '../style.less';
 import { IColumn } from '../typing';
 import { getColumnKey, mergeColumnSettings } from '../utils';
@@ -117,7 +118,9 @@ export const ColumnSettings: React.FC = () => {
 					</Button>
 				</Popconfirm>
 			</div>
+
 			<Divider className='column-settings-divider' />
+
 			<div className='column-settings-list'>
 				<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 					<SortableContext
@@ -139,7 +142,9 @@ export const ColumnSettings: React.FC = () => {
 					</SortableContext>
 				</DndContext>
 			</div>
+
 			<Divider className='column-settings-divider' />
+
 			<div className='column-settings-footer'>
 				<Space>
 					<Button size='small' onClick={() => setVisible(false)}>
@@ -161,13 +166,13 @@ export const ColumnSettings: React.FC = () => {
 			arrow={{ pointAtCenter: true }}
 			open={visible}
 			onOpenChange={setVisible}
-			overlayClassName='column-settings-popover no-print'
+			classNames={{ root: 'column-settings-popover no-print' }}
 		>
-			<Button
+			<ButtonExtend
+				className='no-print'
 				icon={<SettingOutlined />}
 				size={size}
-				title={intl.formatMessage({ id: 'global.table.columnSetting.tooltip' })}
-				className='btn-column-settings no-print'
+				tooltip={intl.formatMessage({ id: 'global.table.columnSetting.tooltip' })}
 			/>
 		</Popover>
 	);

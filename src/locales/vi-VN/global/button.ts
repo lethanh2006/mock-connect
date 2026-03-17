@@ -10,7 +10,7 @@ export default {
 	'global.button.nhapdulieu': 'Nhập dữ liệu',
 	'global.button.xuatdulieu': 'Xuất dữ liệu',
 	'global.button.tailai': 'Tải lại',
-	'global.button.boloctuychinh': 'Bộ lọc tùy chỉnh',
+	'global.button.boloctuychinh': 'Bộ lọc',
 	'global.button.tongso': 'Tổng số',
 	'global.button.chinhsua': 'Chỉnh sửa',
 };

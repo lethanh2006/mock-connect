@@ -11,7 +11,7 @@ export const useFilterFields = (columns: IColumn<any>[], form: ReturnType<typeof
 		const extractFields = (filterList: any[]) => {
 			if (!filterList || !Array.isArray(filterList)) return;
 			filterList.forEach((filter) => {
-				if (filter?.field) {
+				if (filter?.field && filter?.readOnly !== true) {
 					fields.push(JSON.stringify(filter.field));
 				}
 				if (filter?.filters) {
