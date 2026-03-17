@@ -18,8 +18,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useIntl } from 'umi';
 import { EOperatorType } from '../constant';
 import type { TFilter } from '../typing';
-import { findFiltersInColumns } from '../utils';
-import { updateSearchStorage } from '../utils';
+import { findFiltersInColumns, updateSearchStorage } from '../utils';
 import { ColumnSettings } from './ColumnSettings';
 import { useTableContext } from './TableContext';
 
@@ -46,12 +45,21 @@ export const TableHeader: React.FC = () => {
 		hideTotal,
 		size,
 	} = useTableContext();
+	const {
+		globalSearch = true,
+		minimizeGlobalSearch,
+		create: btnCreate = true,
+		export: btnExport,
+		filter: btnFilter,
+		import: btnImport,
+		reload: btnReload,
+	} = buttons || {};
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
 
+	//#region Global Search Logic
+
 	const searchableColumns = useMemo(() => {
-		const flatColumns = finalColumns
-			.map((item) => (item.children?.length ? [item, ...item.children] : [item]))
-			.flat();
+		const flatColumns = finalColumns.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat();
 
 		const seen = new Set<string>();
 		return flatColumns
@@ -60,13 +68,16 @@ export const TableHeader: React.FC = () => {
 				const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
 				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index';
 			})
-			.reduce((result, item) => {
-				const fieldKey = JSON.stringify(item.dataIndex);
-				if (seen.has(fieldKey)) return result;
-				seen.add(fieldKey);
-				result.push({ field: item.dataIndex, title: item.title });
-				return result;
-			}, [] as Array<{ field: any; title?: any }>);
+			.reduce(
+				(result, item) => {
+					const fieldKey = JSON.stringify(item.dataIndex);
+					if (seen.has(fieldKey)) return result;
+					seen.add(fieldKey);
+					result.push({ field: item.dataIndex, title: item.title });
+					return result;
+				},
+				[] as Array<{ field: any; title?: any }>,
+			);
 	}, [finalColumns]);
 
 	const searchableFieldKeys = useMemo(
@@ -79,8 +90,7 @@ export const TableHeader: React.FC = () => {
 			if (!filter?.filters?.length) return false;
 			if (filter.operator !== EOperatorType.OR) return false;
 
-			const hasGlobalMarker =
-				filter.readOnly === true || filter.filters.every((item) => item?.readOnly === true);
+			const hasGlobalMarker = filter.readOnly === true || filter.filters.every((item) => item?.readOnly === true);
 			if (!hasGlobalMarker) return false;
 
 			let keyword: string | undefined;
@@ -206,14 +216,15 @@ export const TableHeader: React.FC = () => {
 	}, [intl, searchableColumns]);
 
 	const isMobile = useMediaQuery({ maxWidth: 767 });
-	const isMinimize = buttons?.minimizeGlobalSearch || isMobile;
+	const isMinimize = minimizeGlobalSearch || isMobile;
+	const canShowGlobalSearch = globalSearch && searchableColumns.length > 0;
 
-	const canShowGlobalSearch = buttons?.globalSearch !== false && searchableColumns.length > 0;
+	//#endregion
 
 	return (
 		<div className='header'>
 			<div className='action no-print'>
-				{buttons?.create !== false ? (
+				{btnCreate && (
 					<ButtonExtend
 						size={size}
 						onClick={onCreate}
@@ -225,9 +236,9 @@ export const TableHeader: React.FC = () => {
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
 					</ButtonExtend>
-				) : null}
+				)}
 
-				{buttons?.import ? (
+				{btnImport && (
 					<ButtonExtend
 						size={size}
 						icon={<ImportOutlined />}
@@ -236,18 +247,18 @@ export const TableHeader: React.FC = () => {
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.nhapdulieu' })}
 					</ButtonExtend>
-				) : null}
-				{buttons?.export ? (
+				)}
+				{btnExport && (
 					<ButtonExtend
 						size={size}
 						icon={<ExportOutlined />}
 						onClick={() => setVisibleExport?.(true)}
 						className='btn-export'
 					>
-						{intl.formatMessage({ id: 'global.table.index.button.xuatdulieu' })}{' '}
-						{selectedIds?.length && selectedIds?.length > 0 ? `(${selectedIds?.length})` : ''}
+						{intl.formatMessage({ id: 'global.table.index.button.xuatdulieu' })}
+						{selectedIds?.length && selectedIds?.length > 0 ? ` (${selectedIds?.length})` : ''}
 					</ButtonExtend>
-				) : null}
+				)}
 
 				{otherButtons}
 
@@ -263,7 +274,7 @@ export const TableHeader: React.FC = () => {
 				) : null}
 			</div>
 
-			<div className='extra  no-print'>
+			<div className='extra no-print'>
 				{canShowGlobalSearch ? (
 					isMinimize ? (
 						<Popover
@@ -292,7 +303,6 @@ export const TableHeader: React.FC = () => {
 								/>
 							}
 							trigger='click'
-							placement='bottomRight'
 						>
 							<Button
 								className='btn-minimize-search'
@@ -352,7 +362,7 @@ export const TableHeader: React.FC = () => {
 					)
 				) : null}
 
-				{buttons?.reload !== false ? (
+				{btnReload && (
 					<ButtonExtend
 						size={size}
 						icon={<ReloadOutlined />}
@@ -363,9 +373,9 @@ export const TableHeader: React.FC = () => {
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
 					</ButtonExtend>
-				) : null}
+				)}
 
-				{buttons?.filter !== false && hasFilter ? (
+				{btnFilter && hasFilter && (
 					<ButtonExtend
 						className='btn-filter'
 						size={size}
@@ -390,15 +400,15 @@ export const TableHeader: React.FC = () => {
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.boloc' })}
 					</ButtonExtend>
-				) : null}
+				)}
 
-				{!hideTotal ? (
+				{!hideTotal && (
 					<Tooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
 						<div className={classNames({ total: true, small: size === 'small' })}>
 							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:<span>{inputFormat(total || 0)}</span>
 						</div>
 					</Tooltip>
-				) : null}
+				)}
 
 				<ColumnSettings />
 			</div>
