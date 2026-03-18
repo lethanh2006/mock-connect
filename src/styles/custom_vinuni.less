@@ -34,6 +34,7 @@
 	--color-official-200: #35426e;
 	--color-official-300: #134d8b;
 	--color-official-500: #f4f9ff;
+
 	--vin-color-primary: var(--color-official-100);
 	--vin-color-primary-100: var(--color-official-100);
 	--vin-color-primary-200: var(--color-official-200);
@@ -48,10 +49,12 @@
 	--color-accent-600: #d2d3d5;
 	--color-accent-700: #f4f4f4;
 	--color-accent-800: #f8f8f8;
+
 	--color-text-100: #2e2e2e;
 	--color-text-200: #818181;
 	--color-text-300: #cfcfcf;
 	--color-text-400: #ffffff;
+
 	--color-success: #44b10f;
 	--color-info: #0051ff;
 	--color-warning: #faae13;
@@ -143,21 +146,6 @@ body {
 	}
 }
 
-.ant-pro-global-footer {
-	margin-block-start: 6px !important;
-	margin-block-end: 0 !important;
-	position: relative !important;
-	bottom: auto !important;
-}
-
-.ant-pro-global-footer-copyright {
-	margin-bottom: 8px !important;
-}
-
-.ant-pro-global-footer-list {
-	margin-block-end: 0 !important;
-}
-
 // Sider
 .ant-layout-sider {
 	background-color: var(--color-accent-800) !important;
@@ -174,7 +162,7 @@ body {
 
 	.ant-menu-item-group-title {
 		font-size: 11px;
-		font-weight: 700;
+		font-weight: 600;
 		color: var(--color-text-300) !important;
 		text-transform: uppercase;
 		padding: 16px 24px 8px;
@@ -291,7 +279,8 @@ body {
 	}
 
 	.ant-btn {
-		height: 30px;
+		height: 28px;
+		width: 28px;
 	}
 }
 
@@ -308,7 +297,7 @@ body {
 
 	> tr > th {
 		color: var(--color-text-100) !important;
-		font-weight: 700 !important;
+		font-weight: 600 !important;
 		height: 44px;
 
 		&::before {
@@ -330,7 +319,7 @@ body {
 	gap: 6px !important;
 
 	.ant-btn {
-		padding: 6px !important;
+		padding: 4px !important;
 		margin-right: 6px !important;
 		margin-bottom: 6px !important;
 		background-color: var(--color-info-bg) !important;
@@ -516,14 +505,6 @@ body {
 
 		.ant-card {
 			& > .ant-card-body {
-				.table-base {
-					> .ant-table-wrapper {
-						> .ant-spin-nested-loading {
-							margin: 0 -16px !important;
-						}
-					}
-				}
-
 				& > .ant-card {
 					& > .ant-card-body {
 						padding: 0 !important;
@@ -645,14 +626,15 @@ body {
 	}
 }
 
-.btn-import,
-.btn-export,
-.btn-reload,
-.btn-filter {
-	background-color: var(--color-accent-700) !important;
-	border-radius: 4px;
-	border: none !important;
-}
+// .btn-import,
+// .btn-export,
+// .btn-reload,
+// .btn-filter,
+// .btn-column-settings{
+// 	background-color: var(--color-accent-700) !important;
+// 	border-radius: 4px;
+// 	border: none !important;
+// }
 
 // Style header của PageContainer - VinUni
 .ant-pro-page-container {
@@ -805,18 +787,7 @@ body {
 	}
 }
 
-// Margin cho phân trang bảngant-table-pagination
-.ant-pagination.ant-table-pagination.ant-table-pagination-right {
-	margin-left: 40px !important;
-	margin-right: 40px !important;
-}
-
-.ant-table-pagination {
-	background-color: var(--color-text-400) !important;
-}
-
 .table-base {
-	background-color: var(--color-text-400) !important;
 	border-radius: 8px !important;
 
 	.table-base-header {
@@ -1295,32 +1266,6 @@ body {
 	align-items: center !important;
 }
 
-// Bóng cho nút thu gọn - VinUni
-
-.ant-pro-sider-collapsed-button {
-	position: absolute !important;
-	top: 16px !important;
-	right: -50px !important;
-	bottom: unset !important;
-	inset-block-start: 16px !important;
-	inset-block-end: unset !important;
-	z-index: 999 !important;
-	cursor: pointer !important;
-	pointer-events: auto !important;
-	width: 32px !important;
-	height: 32px !important;
-	min-width: 32px !important;
-	min-height: 32px !important;
-	display: flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	color: var(--color-text-100) !important;
-
-	@media (max-width: 425px) {
-		right: 0 !important;
-	}
-}
-
 // Thay đổi icon của collapsed button dựa trên collapsed state
 // Khi sidebar collapsed (đóng) - hiển thị MenuUnfoldOutlined
 .ant-pro-sider-collapsed .ant-pro-sider-collapsed-button .anticon {
@@ -1337,14 +1282,6 @@ body {
 	}
 }
 
-// Margin cho footer toàn cục
-.ant-pro-global-footer {
-	margin-block-start: 6px !important;
-	margin-block-end: 0 !important;
-	position: relative !important;
-	bottom: auto !important;
-}
-
 // Đảm bảo layout không tạo scrollbar thứ hai
 .ant-pro-layout {
 	overflow-x: hidden !important;
@@ -1352,14 +1289,6 @@ body {
 
 .ant-layout {
 	overflow-x: hidden !important;
-}
-
-.ant-pro-global-footer-copyright {
-	margin-bottom: 8px !important;
-}
-
-.ant-pro-global-footer-list {
-	margin-block-end: 0 !important;
 }
 
 // Ẩn sider actions khi layout là side - VinUni
@@ -1452,6 +1381,7 @@ body {
 		border-top: 1.5px solid var(--color-accent-700) !important;
 		padding: 16px !important;
 		justify-content: end;
+		flex-direction: row-reverse;
 	}
 }
 
@@ -1533,12 +1463,6 @@ body {
 	background-size: 100% 100% !important;
 	background-position: top center !important;
 	background-repeat: no-repeat !important;
-}
-
-// Giữ nguyên vị trí nút collapsed khi scroll
-.ant-pro-layout .ant-pro-sider-collapsed-button {
-	right: -50px !important;
-	top: 16px !important;
 }
 
 // Đẩy nội dung xuống dưới header fixed, giữ before background đủ không gian

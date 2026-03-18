@@ -141,7 +141,7 @@ export default {
 	'global.table.index.bochon': 'Deselect All',
 	'global.table.index.tongso': 'Total',
 
-	'global.table.columnSetting.title': 'Column Settings',
+	'global.table.columnSetting.title': 'Column settings',
 	'global.table.columnSetting.reset': 'Reset',
 	'global.table.columnSetting.reset.confirm':
 		'Are you sure you want to restore the default column settings (position, visibility, and width)?',
