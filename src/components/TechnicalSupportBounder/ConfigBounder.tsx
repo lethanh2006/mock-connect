@@ -195,6 +195,9 @@ const ConfigBounder = (props: { children?: any }) => {
 						linkColor: textColors?.text300,
 						linkHoverColor: textColors?.text400,
 					},
+					Typography: {
+						colorTextHeading: textColors?.text400,
+					},
 				},
 			}}
 		>

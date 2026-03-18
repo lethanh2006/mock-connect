@@ -260,7 +260,9 @@ export const TableHeader: React.FC = () => {
 					</ButtonExtend>
 				)}
 
-				{buttons?.reload !== false ? (
+				{otherButtons}
+
+				{btnReload && (
 					<ButtonExtend
 						size={size}
 						icon={<ReloadOutlined />}
@@ -271,9 +273,7 @@ export const TableHeader: React.FC = () => {
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
 					</ButtonExtend>
-				) : null}
-
-				{otherButtons}
+				)}
 
 				{rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
@@ -288,6 +288,27 @@ export const TableHeader: React.FC = () => {
 			</div>
 
 			<div className='extra no-print'>
+				<ColumnSettings />
+
+				{btnFilter && hasFilter && (
+					<ButtonExtend
+						className='btn-filter'
+						size={size}
+						icon={
+							findFiltersInColumns(finalColumns, filters)?.length ? (
+								<FilterTwoTone twoToneColor={primaryColor} />
+							) : (
+								<FilterOutlined />
+							)
+						}
+						onClick={() => setVisibleFilter?.(true)}
+						tooltip={intl.formatMessage({ id: 'global.table.index.button.boloc.tooltip' })}
+						style={findFiltersInColumns(finalColumns, filters)?.length ? { borderColor: primaryColor } : undefined}
+					>
+						{intl.formatMessage({ id: 'global.table.index.button.boloc' })}
+					</ButtonExtend>
+				)}
+
 				{canShowGlobalSearch ? (
 					isMinimize ? (
 						<Popover
@@ -358,38 +379,6 @@ export const TableHeader: React.FC = () => {
 					)
 				) : null}
 
-				{btnFilter && hasFilter && (
-					<ButtonExtend
-						className='btn-filter'
-						size={size}
-						icon={
-							findFiltersInColumns(finalColumns, filters)?.length ? (
-								<FilterTwoTone twoToneColor={primaryColor} />
-							) : (
-								<FilterOutlined />
-							)
-						}
-						onClick={() => setVisibleFilter?.(true)}
-						tooltip={intl.formatMessage({ id: 'global.table.index.button.boloc.tooltip' })}
-						style={findFiltersInColumns(finalColumns, filters)?.length ? { borderColor: primaryColor } : undefined}
-					>
-						{intl.formatMessage({ id: 'global.table.index.button.boloc' })}
-					</ButtonExtend>
-				)}
-
-				{btnReload && (
-					<ButtonExtend
-						size={size}
-						icon={<ReloadOutlined />}
-						onClick={onReload}
-						loading={loading}
-						className='btn-reload'
-						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
-					>
-						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
-					</ButtonExtend>
-				)}
-
 				{!hideTotal && (
 					<Tooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
 						<div className={classNames({ total: true, small: size === 'small' })}>
@@ -397,8 +386,6 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				)}
-
-				<ColumnSettings />
 			</div>
 		</div>
 	);
