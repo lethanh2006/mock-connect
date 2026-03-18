@@ -81,6 +81,21 @@ export type TableBaseProps = {
 	/** Hàm getData tùy chỉnh, nếu ko có thì 'getModel' của model sẽ là mặc định */
 	getData?: (params: any) => void;
 
+	/**
+	 * Bộ lọc được truyền từ giao diện bên ngoài TableBase.
+	 * Các filter này sẽ hiển thị trong TableBase và Modal Filter.
+	 */
+	externalFilters?: TFilter<any>[];
+
+	/**
+	 * Callback đồng bộ khi người dùng thay đổi filter external trong Modal Filter.
+	 * Nếu không truyền callback, filter external sẽ được khóa chỉnh sửa (readOnly).
+	 */
+	onExternalFiltersChange?: (filters: TFilter<any>[]) => void;
+
+	/** Ẩn/khóa toàn bộ Modal Filter (vẫn có thể dùng filter theo cột nếu được bật) */
+	disableFilterModal?: boolean;
+
 	/** Tham số phụ thuộc để getData được gọi */
 	dependencies?: any[];
 
@@ -184,6 +199,7 @@ export type TFilter<T> = {
 	filters?: TFilter<T>[];
 	logicOperator?: 'or' | 'and';
 	readOnly?: boolean;
+	source?: 'table' | 'external' | 'system';
 };
 
 export type RowFilterProps = {

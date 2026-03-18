@@ -29,6 +29,7 @@ export const normalizeFilters = (filters: any[]): TFilter<any>[] => {
 				active: true,
 				values: [],
 				readOnly: f.readOnly,
+				source: f.source,
 			});
 			return;
 		}
@@ -41,11 +42,113 @@ export const normalizeFilters = (filters: any[]): TFilter<any>[] => {
 				values: Array.isArray(f.values) ? f.values : f.values !== undefined ? [f.values] : [],
 				active: true,
 				readOnly: f.readOnly,
+				source: f.source,
 			});
 		}
 	});
 
 	return result;
+};
+
+export const markExternalFilters = (
+	filters: TFilter<any>[] = [],
+	options?: { forceReadOnly?: boolean },
+): TFilter<any>[] => {
+	if (!Array.isArray(filters)) return [];
+
+	return filters.map((filter) => {
+		const nextFilter: TFilter<any> = {
+			...filter,
+			source: 'external',
+			...(options?.forceReadOnly ? { readOnly: true } : {}),
+		};
+
+		if (Array.isArray(filter?.filters)) {
+			nextFilter.filters = markExternalFilters(filter.filters, options);
+		}
+
+		return nextFilter;
+	});
+};
+
+const splitFilterNodeBySource = (
+	filter: TFilter<any>,
+): {
+	tableFilter?: TFilter<any>;
+	externalFilter?: TFilter<any>;
+} => {
+	if (!filter) return {};
+
+	if (Array.isArray(filter.filters) && filter.filters.length > 0) {
+		const tableChildren: TFilter<any>[] = [];
+		const externalChildren: TFilter<any>[] = [];
+
+		filter.filters.forEach((childFilter) => {
+			const { tableFilter, externalFilter } = splitFilterNodeBySource(childFilter);
+			if (tableFilter) tableChildren.push(tableFilter);
+			if (externalFilter) externalChildren.push(externalFilter);
+		});
+
+		const groupBaseFilter: TFilter<any> = { ...filter };
+		delete groupBaseFilter.filters;
+		delete groupBaseFilter.source;
+
+		return {
+			tableFilter: tableChildren.length ? { ...groupBaseFilter, filters: tableChildren } : undefined,
+			externalFilter: externalChildren.length
+				? { ...groupBaseFilter, filters: externalChildren, source: 'external' }
+				: undefined,
+		};
+	}
+
+	if (filter.source === 'external') {
+		return { externalFilter: { ...filter, source: 'external' } };
+	}
+
+	return { tableFilter: { ...filter } };
+};
+
+export const splitFiltersBySource = (
+	filters: TFilter<any>[] = [],
+): {
+	tableFilters: TFilter<any>[];
+	externalFilters: TFilter<any>[];
+} => {
+	if (!Array.isArray(filters) || !filters.length) {
+		return {
+			tableFilters: [],
+			externalFilters: [],
+		};
+	}
+
+	const tableFilters: TFilter<any>[] = [];
+	const externalFilters: TFilter<any>[] = [];
+
+	filters.forEach((filter) => {
+		const { tableFilter, externalFilter } = splitFilterNodeBySource(filter);
+		if (tableFilter) tableFilters.push(tableFilter);
+		if (externalFilter) externalFilters.push(externalFilter);
+	});
+
+	return {
+		tableFilters,
+		externalFilters,
+	};
+};
+
+export const stripFilterSource = (filters: TFilter<any>[] = []): TFilter<any>[] => {
+	if (!Array.isArray(filters)) return [];
+
+	return filters.map((filter) => {
+		const nextFilter: TFilter<any> = { ...filter };
+		delete nextFilter.source;
+
+		if (Array.isArray(nextFilter.filters)) {
+			nextFilter.filters = stripFilterSource(nextFilter.filters);
+		}
+
+		return nextFilter;
+	});
 };
 
 export const findFiltersInColumns = (columns: IColumn<unknown>[], filters?: any[]): any[] => {

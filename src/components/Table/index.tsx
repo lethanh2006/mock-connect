@@ -1,14 +1,48 @@
 import { useModel } from 'umi';
+import { useCallback, useMemo } from 'react';
 import { TableBaseContent } from './components/TableBaseContent';
 import { TableProvider } from './components/TableContext';
 import './style.less';
 import type { TableBaseProps, TFilter } from './typing';
+import { markExternalFilters, normalizeFilters, splitFiltersBySource, stripFilterSource } from './utils';
 
 const TableBase = (props: TableBaseProps) => {
 	const model = useModel(props.modelName) as any;
-	const filters: TFilter<any>[] = model?.filters;
+	const modelFilters: TFilter<any>[] = model?.filters ?? [];
+	const canSyncExternalFilters = typeof props.onExternalFiltersChange === 'function';
+	const externalFilters = useMemo(
+		() => markExternalFilters(props.externalFilters ?? [], { forceReadOnly: !canSyncExternalFilters }),
+		[props.externalFilters, canSyncExternalFilters],
+	);
+
+	const { tableFilters } = useMemo(() => splitFiltersBySource(modelFilters), [modelFilters]);
+
+	const filters = useMemo<TFilter<any>[]>(
+		() => normalizeFilters([...(externalFilters ?? []), ...(tableFilters ?? [])]),
+		[externalFilters, tableFilters],
+	);
+
+	const handleSetFilters = useCallback(
+		(nextFilters: TFilter<any>[] = []) => {
+			const normalizedNextFilters = normalizeFilters(nextFilters);
+			const {
+				tableFilters: nextTableFilters,
+				externalFilters: nextExternalFilters,
+			} = splitFiltersBySource(normalizedNextFilters);
+
+			model?.setFilters?.(nextTableFilters);
+
+			if (props.onExternalFiltersChange) {
+				props.onExternalFiltersChange(stripFilterSource(nextExternalFilters));
+			}
+		},
+		[model, props.onExternalFiltersChange],
+	);
+
 	const getData = props.getData ?? model?.getModel;
-	const hasFilter = props.columns?.filter((item) => item.filterType)?.length;
+	const hasFilter =
+		props.columns?.filter((item) => item.filterType)?.length ||
+		(props.externalFilters && props.externalFilters.length > 0);
 	const {
 		visibleForm,
 		setVisibleForm,
@@ -78,8 +112,9 @@ const TableBase = (props: TableBaseProps) => {
 				modelExportName: props.modelExportName,
 				params: props.params,
 				getData,
-				setFilters: model?.setFilters,
+				setFilters: handleSetFilters,
 				columns: props.columns || [],
+				disableFilterModal: props.disableFilterModal,
 			}}
 		>
 			<TableBaseContent {...props} />

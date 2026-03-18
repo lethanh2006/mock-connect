@@ -12,7 +12,7 @@ import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
 import { useTableColumns } from '../hooks/useTableColumns';
 import ModalImport from '../Import';
-import type { TableBaseProps, TFilter } from '../typing';
+import type { TableBaseProps } from '../typing';
 import { ResizableTitle } from './ResizableTitle';
 import { useTableContext } from './TableContext';
 import { TableFormModal } from './TableFormModal';
@@ -24,7 +24,6 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	const model = useModel(modelName) as any;
 	const { page, limit, setPage, setLimit, condition, sort, setSort, setFilters, initFilter } = model;
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
-	const filters: TFilter<any>[] = model?.filters;
 	const getData = props.getData ?? model?.getModel;
 	const {
 		visibleImport,
@@ -37,7 +36,11 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		buttons,
 		hasFilter,
 		setSelectedIds,
+		filters,
+		disableFilterModal,
 	} = useTableContext();
+
+	const filtersDependency = JSON.stringify(filters ?? []);
 
 	const { handleFilter, handleSearch, finalColumns } = useTableColumns({
 		columns: props.columns,
@@ -67,7 +70,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 	useEffect(() => {
 		setPage(1);
-	}, [JSON.stringify(filters ?? [])]);
+	}, [filtersDependency]);
 
 	useEffect(() => {
 		// Block text selection during resize
@@ -83,7 +86,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 	useEffect(() => {
 		getData(params);
-	}, [...dependencies, filters, condition, sort]);
+	}, [...dependencies, filtersDependency, condition, sort]);
 
 	useEffect(() => {
 		return () => {
@@ -308,7 +311,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			<TableFormModal />
 
-			{buttons?.filter !== false && hasFilter ? <ModalFilter /> : null}
+			{buttons?.filter !== false && hasFilter && disableFilterModal !== true ? <ModalFilter /> : null}
 
 			{buttons?.import ? (
 				<ModalImport

@@ -56,6 +56,7 @@ interface TableContextValue {
 	deleteMany?: boolean;
 	hideTotal?: boolean;
 	hideFilterColumn?: boolean;
+	disableFilterModal?: boolean;
 	size?: 'small' | 'middle' | 'large';
 
 	// Trạng thái modal form
