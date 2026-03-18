@@ -99,7 +99,7 @@ body {
 	font-weight: 500;
 }
 
-.ant-form-item-label > label {
+.ant-form-item-label>label {
 	height: auto;
 	margin: 4px 0 !important;
 	font-weight: 600 !important;
@@ -146,21 +146,6 @@ body {
 	}
 }
 
-.ant-pro-global-footer {
-	margin-block-start: 6px !important;
-	margin-block-end: 0 !important;
-	position: relative !important;
-	bottom: auto !important;
-}
-
-.ant-pro-global-footer-copyright {
-	margin-bottom: 8px !important;
-}
-
-.ant-pro-global-footer-list {
-	margin-block-end: 0 !important;
-}
-
 // Sider
 .ant-layout-sider {
 	background-color: var(--color-accent-800) !important;
@@ -177,31 +162,15 @@ body {
 
 	.ant-menu-item-group-title {
 		font-size: 11px;
-		font-weight: 700;
+		font-weight: 600;
 		color: var(--color-text-300) !important;
 		text-transform: uppercase;
 		padding: 16px 24px 8px;
 		line-height: normal;
 	}
 
-	.ant-menu-item,
-	.ant-menu-submenu-title {
-		color: var(--color-text-100) !important;
-		font-weight: 600;
-		margin: 0 !important;
-		width: 100% !important;
-		border-radius: 0 !important;
-		padding: 12px 16px !important;
-
-		&:hover {
-			color: var(--color-highlight);
-			background-color: transparent;
-		}
-
-		.anticon {
-			font-size: 16px;
-			margin-right: 12px;
-		}
+	.ant-menu-title-content {
+		font-weight: 600 !important;
 	}
 
 	.ant-menu-item-selected {
@@ -250,12 +219,6 @@ body {
 }
 
 .ant-pro-sider-collapsed-button {
-	position: absolute !important;
-	top: 16px !important;
-	right: -50px !important;
-	bottom: unset !important;
-	inset-block-start: 16px !important;
-	inset-block-end: unset !important;
 	z-index: 999 !important;
 	cursor: pointer !important;
 	pointer-events: auto !important;
@@ -267,28 +230,6 @@ body {
 	align-items: center !important;
 	justify-content: center !important;
 	color: var(--color-text-100) !important;
-
-	@media (max-width: 425px) {
-		right: -10px !important;
-	}
-}
-
-.ant-pro-layout .ant-pro-sider-collapsed-button {
-	right: -50px !important;
-	top: 16px !important;
-
-	@media (max-width: 425px) {
-		right: -10px !important;
-	}
-}
-
-.ant-pro-sider-collapsed .ant-pro-sider-collapsed-button .anticon::before {
-	content: '\e6d7' !important; // MenuUnfoldOutlined
-}
-
-.ant-pro-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon::before,
-.ant-layout-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon::before {
-	content: '\e6d8' !important; // MenuFoldOutlined
 }
 
 .ant-layout-header {
@@ -298,41 +239,20 @@ body {
 	background-repeat: no-repeat !important;
 }
 
-// Icon chung (collapse, modal close, table expand, v.v.)
-.ant-menu-submenu-arrow,
-.ant-collapse-expand-icon,
-.ant-collapse-arrow,
-.ant-modal-close,
-.ant-drawer-close,
-.ant-table-expand-icon,
-.ant-table-row-expand-icon,
-.ant-card-extra .anticon {
-	color: var(--color-text-100) !important;
-}
-
 // =============================================================================
 // 4. Table
 // =============================================================================
 .ant-table,
 .ant-table-container,
-.ant-table-content > tr > th,
-.ant-table-content > tr > td {
+.ant-table-content>tr>th,
+.ant-table-content>tr>td {
 	border: none !important;
 }
 
 .ant-table-wrapper {
 	.ant-table {
-		border-radius: 0 !important;
-	}
-
-	.ant-table-container {
-		padding: 0 !important;
-		border-radius: 18px !important;
-
-		&::before,
-		&::after {
-			display: none !important;
-		}
+		border-radius: var(--table-header-border-radius) !important;
+		border: 1px solid var(--color-accent-700) !important;
 	}
 }
 
@@ -340,14 +260,17 @@ body {
 	.ant-table-cell {
 		border-left: none !important;
 		border-right: none !important;
+		border-bottom: 1px solid var(--color-accent-700) !important;
+	}
+
+	.ant-table-row:last-child {
+		.ant-table-cell {
+			border-bottom: none !important;
+		}
 	}
 }
 
 .ant-table-cell {
-	// border-bottom: 1px solid var(--color-accent-700) !important;
-	// border-left: none !important;
-	// border-right: none !important;
-	// padding: 5px 18px !important;
 	text-align: left !important;
 
 	p,
@@ -356,7 +279,8 @@ body {
 	}
 
 	.ant-btn {
-		height: 30px;
+		height: 28px !important;
+		width: 28px !important;
 	}
 }
 
@@ -368,11 +292,12 @@ body {
 	.ant-table-cell {
 		font-weight: 600 !important;
 		text-align: left !important;
+		border-bottom: 1px solid var(--color-accent-700) !important;
 	}
 
-	> tr > th {
+	>tr>th {
 		color: var(--color-text-100) !important;
-		font-weight: 700 !important;
+		font-weight: 600 !important;
 		height: 44px;
 
 		&::before {
@@ -384,7 +309,7 @@ body {
 		}
 	}
 
-	> tr > th:last-child,
+	>tr>th:last-child,
 	.ant-table-cell:last-child {
 		border-right: none !important;
 	}
@@ -394,7 +319,7 @@ body {
 	gap: 6px !important;
 
 	.ant-btn {
-		padding: 6px !important;
+		padding: 4px !important;
 		margin-right: 6px !important;
 		margin-bottom: 6px !important;
 		background-color: var(--color-info-bg) !important;
@@ -408,17 +333,463 @@ body {
 	}
 }
 
-.ant-pagination.ant-table-pagination.ant-table-pagination-right {
-	margin-left: 40px !important;
-	margin-right: 40px !important;
+.ant-card {
+	border-radius: 6px !important;
+
+	&.card-borderless {
+		box-shadow: none;
+		height: fit-content !important;
+
+		>.ant-card-body {
+			.table-base {
+				margin: 0 !important;
+			}
+		}
+
+		>.ant-card-head {
+			padding: 0 12px;
+		}
+	}
+
+	.ant-card-head-title {
+		white-space: pre-wrap;
+		flex: auto;
+		font-size: 18px !important;
+		font-weight: bold !important;
+		color: var(--color-primary) !important;
+	}
+
+	.ant-card-head {
+		padding: 0 16px !important;
+		border-bottom: 1.5px solid var(--color-accent-700) !important;
+
+		@media (max-width: @screen-xs) {
+			padding: 0 12px;
+		}
+
+		.ant-card-head-wrapper {
+			flex-wrap: wrap;
+		}
+	}
+
+	&>.ant-card-body {
+		padding: 10px 16px;
+	}
+
+	.ant-drawer .ant-card-body,
+	.ant-modal .ant-card-body {
+		padding-top: 12px !important;
+	}
+
+	&.card-big-title {
+		background: transparent;
+		border: none !important;
+
+		>.ant-card-head {
+			padding: 0 0 16px 0 !important;
+			border: none !important;
+			background-color: transparent !important;
+
+			.ant-card-head-title {
+				font-size: 22px !important;
+				margin-left: 2px !important;
+				color: var(--color-accent-800) !important;
+				display: flex;
+				align-items: center;
+
+				&::after {
+					content: '' !important;
+					position: absolute !important;
+					left: -18px !important;
+					top: 0 !important;
+					transform: translateY(-50%) !important;
+					width: 0 !important;
+					height: 0 !important;
+					border-right: 14px solid var(--vin-color-primary) !important;
+					border-top: 10px solid transparent !important;
+					border-bottom: 10px solid transparent !important;
+					display: block !important;
+					rotate: 180deg !important;
+					visibility: visible !important;
+					opacity: 1 !important;
+					z-index: 999 !important;
+					pointer-events: none !important;
+
+					@media (max-width: 768px) {
+						left: -18px !important;
+					}
+
+					@media (max-width: 425px) {
+						top: 4px !important;
+						left: -10px !important;
+						border-right: 10px solid var(--vin-color-primary) !important;
+						border-top: 8px solid transparent !important;
+						border-bottom: 8px solid transparent !important;
+					}
+				}
+
+				@media (max-width: 425px) {
+					padding-left: 6px !important;
+				}
+			}
+
+			.ant-card-extra {
+				.ant-space-align-center {
+					align-items: start !important;
+				}
+
+				.ant-btn {
+					.ant-btn-icon {
+						display: none !important;
+					}
+				}
+			}
+		}
+
+		>.ant-card-body {
+			border-radius: 4px;
+			background-color: transparent !important;
+			padding: 0 16px;
+
+			&.ant-spin-nested-loading {
+				margin: 0 -16px !important;
+			}
+
+			&.header {
+				margin: 0 -16px !important;
+			}
+
+			.ant-card {
+				.ant-spin-nested-loading {
+					margin: 0 !important;
+				}
+
+				.header {
+					margin: 0 !important;
+				}
+
+				.table-base {
+					margin: 0 !important;
+				}
+			}
+		}
+
+		>.ant-card-head-wrapper>.ant-card-head-title {
+			font-size: 18px;
+		}
+	}
 }
 
-.ant-table-pagination {
-	background-color: var(--color-text-400) !important;
+.ant-modal-title {
+	white-space: pre-wrap;
+	flex: auto;
+	font-size: 18px !important;
+	font-weight: bold !important;
+	color: var(--color-primary) !important;
+}
+
+.card-big-title {
+	&>.ant-card-body {
+		padding: 0 !important;
+		background-color: transparent !important;
+		border-radius: 8px !important;
+
+		.ant-spin-nested-loading {
+
+			// margin: 0 -16px !important;
+			.ant-card {
+				&>.ant-card-body {
+					padding: 12px 16px !important;
+				}
+			}
+		}
+
+		.ant-card {
+			&>.ant-card-body {
+				&>.ant-card {
+					&>.ant-card-body {
+						padding: 0 !important;
+
+						.table-base {
+							margin: 0 !important;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+// Style cho card base của bảng - VinUni
+.table-base-card {
+	background-color: transparent;
+
+	.ant-card-body {
+		background-color: var(--color-text-400) !important;
+		border-radius: 8px !important;
+		// padding: 0 16px !important;
+
+		.table-base {
+			border-radius: 8px !important;
+		}
+
+		@media (max-width: @screen-xs) {
+			padding: 0 !important;
+		}
+	}
+
+	.ant-card-head {
+		padding: 0 0 16px 0 !important;
+		border: none !important;
+		background-color: transparent !important;
+
+		.ant-card-head-title {
+			font-size: 22px !important;
+			color: var(--color-accent-800) !important;
+
+			&::after {
+				content: '' !important;
+				position: absolute !important;
+				left: -18px !important;
+				top: 0 !important;
+				transform: translateY(-50%) !important;
+				width: 0 !important;
+				height: 0 !important;
+				border-right: 14px solid var(--vin-color-primary) !important;
+				border-top: 10px solid transparent !important;
+				border-bottom: 10px solid transparent !important;
+				display: block !important;
+				rotate: 180deg !important;
+				visibility: visible !important;
+				opacity: 1 !important;
+				z-index: 999 !important;
+				pointer-events: none !important;
+
+				@media (max-width: 768px) {
+					left: -18px !important;
+				}
+
+				@media (max-width: 425px) {
+					top: 4px !important;
+					left: -10px !important;
+					border-right: 10px solid var(--vin-color-primary) !important;
+					border-top: 8px solid transparent !important;
+					border-bottom: 8px solid transparent !important;
+				}
+			}
+
+			@media (max-width: 425px) {
+				padding-left: 6px !important;
+			}
+		}
+
+		.ant-card-extra {
+			.ant-btn {
+				.ant-btn-icon {
+					display: none !important;
+				}
+			}
+		}
+	}
+}
+
+/* Các class button tùy chỉnh - VinUni */
+// Style chung cho tất cả button antd
+.ant-btn {
+	justify-content: center !important;
+	align-items: center !important;
+	box-shadow: none !important;
+	text-transform: uppercase !important;
+}
+
+.ant-btn-sm {
+	text-transform: none !important;
+}
+
+// Ghi đè màu primary cho button - VinUni
+.ant-btn-primary.ant-btn-color-primary.ant-btn-variant-solid {
+	&:hover {
+		background-color: var(--color-accent-800) !important;
+		border-color: var(--color-primary) !important;
+		color: var(--color-primary) !important;
+	}
+
+	&:focus {
+		background-color: var(--color-accent-800) !important;
+		border-color: var(--color-primary) !important;
+		color: var(--color-primary) !important;
+	}
+
+	&:active {
+		background-color: #f5f5f5 !important;
+		border-color: var(--color-primary) !important;
+		color: var(--color-primary) !important;
+	}
+}
+
+// .btn-import,
+// .btn-export,
+// .btn-reload,
+// .btn-filter,
+// .btn-column-settings{
+// 	background-color: var(--color-accent-700) !important;
+// 	border-radius: 4px;
+// 	border: none !important;
+// }
+
+// Style header của PageContainer - VinUni
+.ant-pro-page-container {
+	position: relative;
+	overflow: visible !important; // cho sticky header hoạt động
+
+	&::before {
+		content: '';
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 172px;
+		background-image: url('/header_page_vinuni.png') !important;
+		background-size: 100% 172px !important;
+		background-position: top center !important;
+		background-repeat: no-repeat !important;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.ant-pro-page-container-children {
+		position: relative;
+		z-index: 1;
+	}
+
+	.ant-pro-page-container-children-container {
+		padding: 0 18px !important;
+		overflow-x: auto !important;
+		position: relative !important;
+		z-index: 2 !important;
+
+		@media (max-width: 768px) {
+			padding: 0 18px !important;
+		}
+
+		@media (max-width: 425px) {
+			padding: 0 10px !important;
+		}
+	}
+
+	.ant-page-header {
+		border-bottom: 1px solid var(--color-official-200) !important;
+		padding: 16px !important;
+		min-height: 64px !important;
+		height: 64px !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: end;
+		position: fixed !important;
+		top: 0 !important;
+		left: 0 !important;
+		right: 0 !important;
+		width: 100vw !important;
+		z-index: 10 !important;
+		background-color: transparent !important;
+		background-image: url('/header_page_vinuni.png') !important;
+		background-size: 100% 172px !important;
+		background-position: top center !important;
+		background-repeat: no-repeat !important;
+
+		@media (max-width: 767px) {
+			display: none !important;
+		}
+
+		.ant-page-header-heading {
+			min-height: auto !important;
+			padding: 0 !important;
+			display: flex !important;
+			align-items: center !important;
+			width: 100% !important;
+			position: relative !important;
+			overflow: visible !important;
+
+			.ant-page-header-heading-extra {
+				.ant-space {
+					.ant-space-item {
+
+						[class*='menu_right'],
+						.menu_right {
+							margin-left: auto !important;
+							margin-right: 0 !important;
+							color: var(--color-accent-800) !important;
+							font-weight: 600 !important;
+
+							@media (max-width: 768px) {
+								width: 100% !important;
+								display: flex;
+								justify-content: end;
+							}
+
+							[class*='account'],
+							.account {
+								color: var(--color-accent-800) !important;
+								font-weight: 500 !important;
+								display: flex;
+								gap: 8px;
+
+								[class*='avatar'],
+								.avatar {
+									width: 36px !important;
+									height: 36px !important;
+								}
+							}
+
+							[class*='action'],
+							.action {
+								border-radius: 6px !important;
+								padding: 3px !important;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.ant-page-header-heading-title {
+			color: var(--color-accent-800) !important;
+			font-size: 22px !important;
+			font-weight: 700 !important;
+			line-height: 1.5 !important;
+			position: absolute !important;
+			left: 16px !important;
+			top: 70px !important;
+			display: inline-block !important;
+			overflow: visible !important;
+			overflow: visible !important;
+
+			&::before {
+				content: '' !important;
+				position: s !important;
+				left: -32px !important;
+				top: 50% !important;
+				transform: translateY(-50%) !important;
+				width: 0 !important;
+				height: 0 !important;
+				border-left: 16px solid var(--vin-color-primary) !important;
+				border-top: 12px solid transparent !important;
+				border-bottom: 12px solid transparent !important;
+				display: block !important;
+				visibility: visible !important;
+				opacity: 1 !important;
+				z-index: 999 !important;
+				pointer-events: none !important;
+
+				@media (max-width: 768px) {
+					left: -10px !important;
+				}
+			}
+		}
+	}
 }
 
 .table-base {
-	background-color: var(--color-text-400) !important;
 	border-radius: 8px !important;
 
 	.table-base-header {
@@ -440,12 +811,21 @@ body {
 			gap: 8px !important;
 			flex-wrap: wrap !important;
 
-			.ant-btn {
-				padding: 8px 12px !important;
+			button.ant-btn:has(> .span-extend) {
+				>span.ant-btn-icon {
+					@media (min-width: 576px) {
+						display: none !important;
+					}
+				}
 
-				.ant-btn-icon,
-				.anticon {
-					display: none !important;
+				&.btn-reload {
+					>span.ant-btn-icon {
+						display: inline-flex !important;
+					}
+
+					>.span-extend {
+						display: none !important;
+					}
 				}
 			}
 
@@ -454,13 +834,6 @@ body {
 				border: none !important;
 				font-size: 14px !important;
 				font-weight: 500 !important;
-
-				span {
-					color: var(--color-highlight) !important;
-					font-size: 15px !important;
-					font-weight: 600 !important;
-					margin-left: 4px !important;
-				}
 			}
 		}
 
@@ -470,11 +843,9 @@ body {
 			gap: 8px !important;
 
 			.ant-btn {
-				padding: 8px 12px !important;
 
 				.ant-btn-icon,
 				.anticon {
-					font-size: 16px !important;
 					margin: 0 !important;
 					line-height: 1 !important;
 				}
@@ -488,6 +859,7 @@ body {
 		.total {
 			z-index: 1 !important;
 			border: none !important;
+			padding: 0 !important;
 
 			span {
 				color: var(--color-highlight) !important;
@@ -506,26 +878,21 @@ body {
 
 	.ant-table-wrapper {
 		padding: 12px 0 0 0 !important;
-
-		.ant-spin-nested-loading {
-			margin: 0 -16px !important;
-		}
 	}
 }
 
-// .css-glamorous-div--jgd0xx {
-// 	.table-base {
-// 		.ant-table-wrapper {
-// 			.ant-spin-nested-loading {
-// 				margin: 0 !important;
-// 			}
-// 		}
-// 	}
-// }
-
-// .css-glamorous-div--jgd0xx trong card-big-title: dùng margin 0 -16px, không bị ghi đè bởi rule trên
-.card-big-title .css-glamorous-div--jgd0xx .table-base .ant-table-wrapper .ant-spin-nested-loading {
-	margin: 0 !important;
+.css-glamorous-div--jgd0xx {
+	.ant-card {
+		.ant-card-body {
+			.table-base {
+				.ant-table-wrapper {
+					.ant-spin-nested-loading {
+						margin: 0 !important;
+					}
+				}
+			}
+		}
+	}
 }
 
 // =============================================================================
@@ -555,7 +922,7 @@ body {
 		}
 	}
 
-	& > .ant-card-body {
+	&>.ant-card-body {
 		padding: 10px 16px !important;
 	}
 
@@ -568,11 +935,11 @@ body {
 		box-shadow: none;
 		height: fit-content !important;
 
-		> .ant-card-body .table-base {
+		>.ant-card-body .table-base {
 			margin: 0 !important;
 		}
 
-		> .ant-card-head {
+		>.ant-card-head {
 			padding: 0 12px;
 		}
 	}
@@ -581,7 +948,7 @@ body {
 		// background: transparent;
 		border: none !important;
 
-		> .ant-card-head {
+		>.ant-card-head {
 			padding: 0 0 16px 0 !important;
 			border: none !important;
 			// background-color: transparent !important;
@@ -624,18 +991,10 @@ body {
 			}
 		}
 
-		> .ant-card-body {
+		>.ant-card-body {
 			border-radius: 4px;
 			// background-color: white !important;
 			padding: 0 16px;
-
-			&.ant-spin-nested-loading {
-				margin: 0 -16px !important;
-			}
-
-			&.header {
-				margin: 0 -16px !important;
-			}
 
 			.ant-card {
 				.ant-spin-nested-loading {
@@ -649,31 +1008,23 @@ body {
 			}
 		}
 
-		> .ant-card-head-wrapper > .ant-card-head-title {
+		>.ant-card-head-wrapper>.ant-card-head-title {
 			font-size: 18px;
 		}
 	}
 }
 
-.card-big-title > .ant-card-body {
+.card-big-title>.ant-card-body {
 	padding: 0 !important;
 	// background-color: transparent !important;
 	border-radius: 8px !important;
 
-	.ant-spin-nested-loading .ant-card > .ant-card-body {
+	.ant-spin-nested-loading .ant-card>.ant-card-body {
 		padding: 12px 16px !important;
 	}
 
-	.ant-card > .ant-card-body {
-		.table-base > .ant-table-wrapper > .ant-spin-nested-loading {
-			margin: 0 -16px !important;
-		}
-
-		.css-glamorous-div--jgd0xx .table-base > .ant-table-wrapper > .ant-spin-nested-loading {
-			margin: 0 !important;
-		}
-
-		& > .ant-card > .ant-card-body {
+	.ant-card>.ant-card-body {
+		&>.ant-card>.ant-card-body {
 			padding: 0 !important;
 
 			.table-base {
@@ -758,15 +1109,8 @@ body {
 }
 
 .ant-btn-primary.ant-btn-color-primary.ant-btn-variant-solid {
-	&:hover,
-	&:focus {
+	&:hover {
 		background-color: var(--color-accent-800) !important;
-		border-color: var(--color-primary) !important;
-		color: var(--color-primary) !important;
-	}
-
-	&:active {
-		background-color: #f5f5f5 !important;
 		border-color: var(--color-primary) !important;
 		color: var(--color-primary) !important;
 	}
@@ -844,6 +1188,7 @@ body {
 			overflow: visible !important;
 
 			.ant-page-header-heading-extra .ant-space .ant-space-item {
+
 				[class*='menu_right'],
 				.menu_right {
 					margin-left: auto !important;
@@ -925,7 +1270,51 @@ body {
 	align-items: center !important;
 }
 
+// Thay đổi icon của collapsed button dựa trên collapsed state
+// Khi sidebar collapsed (đóng) - hiển thị MenuUnfoldOutlined
+.ant-pro-sider-collapsed .ant-pro-sider-collapsed-button .anticon {
+	&::before {
+		content: '\e6d7' !important; // MenuUnfoldOutlined unicode
+	}
+}
+
+// Khi sidebar expanded (mở) - hiển thị MenuFoldOutlined
+.ant-pro-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon,
+.ant-layout-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon {
+	&::before {
+		content: '\e6d8' !important; // MenuFoldOutlined unicode
+	}
+}
+
+// Đảm bảo layout không tạo scrollbar thứ hai
+.ant-pro-layout {
+	overflow-x: hidden !important;
+}
+
+.ant-layout {
+	overflow-x: hidden !important;
+}
+
+// Ẩn sider actions khi layout là side - VinUni
+.ant-pro-sider-actions {
+	display: none !important;
+}
+
+// Màu icon đóng/mở rộng - VinUni
+.ant-menu-submenu-arrow,
+.ant-collapse-expand-icon,
+.ant-collapse-arrow,
+.ant-modal-close,
+.ant-drawer-close,
+.ant-table-expand-icon,
+.ant-table-row-expand-icon,
+.ant-card-extra .anticon {
+	color: var(--color-text-100) !important;
+}
+
+// Kích thước và hình ảnh của menu item ở header - VinUni
 // Menu right (header)
+
 [class*='menu_right'] .header-menu-item,
 .menu_right .header-menu-item {
 	height: 36px !important;
@@ -937,8 +1326,7 @@ body {
 	img {
 		height: 24px !important;
 		width: 24px !important;
-		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%)
-			contrast(97%);
+		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
 	}
 
 	img[src*='notification.svg'],
@@ -996,6 +1384,7 @@ body {
 		border-top: 1.5px solid var(--color-accent-700) !important;
 		padding: 16px !important;
 		justify-content: end;
+		flex-direction: row-reverse;
 	}
 }
 
@@ -1008,7 +1397,8 @@ body {
 .form-footer {
 	position: relative;
 	padding: 16px 0 0 !important;
-	justify-content: flex-end !important;
+	justify-content: flex-start !important;
+	flex-direction: row-reverse;
 
 	&::before {
 		content: '';
@@ -1035,20 +1425,12 @@ body {
 // 9. Picker & Calendar
 // =============================================================================
 .ant-picker-dropdown {
-	.ant-picker-range-wrapper
-		.ant-picker-panel-container
-		.ant-picker-panel-layout
-		.ant-picker-panels
-		.ant-picker-panel
-		.ant-picker-body
-		.ant-picker-content
-		tbody
-		tr {
+	.ant-picker-range-wrapper .ant-picker-panel-container .ant-picker-panel-layout .ant-picker-panels .ant-picker-panel .ant-picker-body .ant-picker-content tbody tr {
 		.ant-picker-cell-in-view {
 			color: var(--color-text-100) !important;
 		}
 
-		.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+		.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner {
 			background-color: var(--vin-color-primary) !important;
 			color: var(--color-text-400) !important;
 		}
@@ -1070,143 +1452,29 @@ body {
 	}
 }
 
-.ant-picker-calendar.ant-picker-calendar-full .ant-picker-calendar-date-value {
-	font-weight: 600 !important;
+// Style header của layout - VinUni
+.ant-layout-header {
+	background-image: url('/header_page_vinuni.png') !important;
+	background-size: 100% 100% !important;
+	background-position: top center !important;
+	background-repeat: no-repeat !important;
 }
 
-.ant-picker-calendar.ant-picker-calendar-full
-	.ant-picker-cell-selected
-	.ant-picker-calendar-date
-	.ant-picker-calendar-date-value,
-.ant-picker-calendar.ant-picker-calendar-full
-	.ant-picker-cell-selected:hover
-	.ant-picker-calendar-date
-	.ant-picker-calendar-date-value,
-.ant-picker-calendar.ant-picker-calendar-full
-	.ant-picker-cell-selected
-	.ant-picker-calendar-date-today
-	.ant-picker-calendar-date-value,
-.ant-picker-calendar.ant-picker-calendar-full
-	.ant-picker-cell-selected:hover
-	.ant-picker-calendar-date-today
-	.ant-picker-calendar-date-value {
-	background-color: var(--vin-color-primary) !important;
-	color: var(--color-text-400) !important;
-	width: 28px;
-	text-align: center;
-	justify-self: end;
-	border-radius: 4px;
-	font-weight: 600 !important;
-}
+// Đẩy nội dung xuống dưới header fixed, giữ before background đủ không gian
+.ant-pro-layout-container {
+	margin-top: 80px !important;
 
-.ant-picker-calendar .ant-picker-calendar-header .ant-radio-group {
-	.ant-radio-button-wrapper-checked {
-		background-color: var(--color-primary) !important;
-		color: var(--color-text-400) !important;
-	}
-
-	.ant-radio-button-wrapper {
-		background-color: var(--color-official-500);
+	@media (max-width: 767px) {
+		margin-top: 16px !important; // mobile đã ẩn header
 	}
 }
 
-// =============================================================================
-// 10. Tabs, Tags, Radio, Checkbox, Steps, Carousel
-// =============================================================================
-.ant-tabs-card .ant-tabs-tab-active {
-	background-color: var(--color-primary) !important;
-	color: var(--color-text-400) !important;
-	border-radius: 4px !important;
-
-	.ant-tabs-tab-btn {
-		color: var(--color-text-400) !important;
+@media (max-width: 425px) {
+	.ant-pro-layout .ant-pro-sider-collapsed-button {
+		right: -10px !important;
 	}
 }
 
-.ant-tabs-card > .ant-tabs-nav > .ant-tabs-nav-wrap > .ant-tabs-nav-list {
-	margin-right: 2px !important;
-
-	> .ant-tabs-tab {
-		border: none !important;
-		border-radius: 0;
-	}
-
-	> .ant-tabs-tab:first-child:not(:last-child) {
-		border-top-left-radius: 4px !important;
-		border-bottom-left-radius: 4px !important;
-	}
-
-	> .ant-tabs-tab:last-of-type:not(:first-child) {
-		border-top-right-radius: 4px !important;
-		border-bottom-right-radius: 4px !important;
-	}
-}
-
-.ant-tag {
-	padding: 2px 4px;
-}
-
-.ant-steps {
-	// Current (process) step
-	.ant-steps-item-process .ant-steps-item-container .ant-steps-item-icon {
-		background-color: var(--color-text-400) !important;
-		border-color: var(--color-accent-700) !important;
-
-		.ant-steps-icon span {
-			color: var(--color-accent-700) !important;
-		}
-	}
-
-	// Finished step
-	.ant-steps-item-finish .ant-steps-item-container {
-		.ant-steps-item-icon .ant-steps-icon span {
-			color: var(--color-text-400) !important;
-		}
-
-		.ant-steps-item-tail::after {
-			background-color: var(--color-status-100) !important;
-		}
-
-		.ant-steps-item-content .ant-steps-item-title {
-			color: var(--color-status-100) !important;
-		}
-	}
-
-	// Common styles
-	.ant-steps-item-icon .ant-steps-icon {
-		font-weight: 600 !important;
-		color: var(--color-text-100) !important;
-	}
-
-	.ant-steps-item-content .ant-steps-item-title {
-		font-size: 14px !important;
-		font-weight: 600 !important;
-	}
-
-	&.ant-steps-label-vertical .ant-steps-item-content .ant-steps-item-title {
-		line-height: 1.5 !important;
-	}
-}
-
-.ant-carousel {
-	.slick-prev,
-	.slick-next {
-		color: var(--color-text-100) !important;
-		opacity: 1;
-
-		&:hover {
-			color: var(--color-highlight) !important;
-		}
-	}
-
-	.slick-dots li.slick-active::after {
-		background-color: var(--color-highlight) !important;
-	}
-}
-
-// =============================================================================
-// 11. Utility: collapse/divider big title, highlight
-// =============================================================================
 .collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text::after {
 	.vin-triangle-indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
 	left: -16px !important;
@@ -1232,4 +1500,16 @@ body {
 
 .highlight {
 	background-color: var(--color-official-500) !important;
+}
+
+.loading-content {
+	height: 70vh;
+}
+
+.ant-table-selection-column {
+	text-align-last: center !important;
+}
+
+.tb-sk-wrapper .header-tb-sk {
+	padding: 6px 20px 0 !important;
 }
