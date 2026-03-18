@@ -8,6 +8,7 @@ import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import type { IColumn, TDataOption, TFilter } from '../typing';
 import { updateSearchStorage } from '../utils';
+import { findFilterInTree, isExternalFilterNode, isSameFilterField, updateFiltersByField } from '../utils/filterTree';
 import { useApplyColumnSettings } from './useApplyColumnSettings';
 
 interface UseTableColumnsProps {
@@ -36,110 +37,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		disableFilterModal,
 	} = useTableContext();
 	const canOpenModalFilter = buttons?.filter !== false && hasFilter && disableFilterModal !== true;
-	const isExternalFilter = useCallback((filter?: TFilter<any>) => filter?.source === 'external', []);
-	const normalizeFieldValue = useCallback(
-		(field: any) => (Array.isArray(field) ? field.join('.') : field),
-		[],
-	);
-
-	const findFilterInTree = useCallback(
-		(
-			filterList: TFilter<any>[] | undefined,
-			fieldName: any,
-			operator?: EOperatorType,
-			active?: boolean,
-			options?: { excludeExternal?: boolean },
-		): TFilter<any> | undefined => {
-			if (!Array.isArray(filterList) || !filterList.length) return undefined;
-
-			const normalizedFieldName = normalizeFieldValue(fieldName);
-
-			for (const item of filterList) {
-				if (options?.excludeExternal === true && isExternalFilter(item)) continue;
-
-				const normalizedItemField = normalizeFieldValue(item?.field);
-				const isMatchedField =
-					normalizedItemField !== undefined &&
-					JSON.stringify(normalizedItemField) === JSON.stringify(normalizedFieldName);
-
-				if (
-					isMatchedField &&
-					(operator === undefined || item.operator === operator) &&
-					(active === undefined || item.active === undefined || item.active === active)
-				) {
-					return item;
-				}
-
-				if (Array.isArray(item.filters) && item.filters.length) {
-					const nestedFilter = findFilterInTree(item.filters, fieldName, operator, active, options);
-					if (nestedFilter) return nestedFilter;
-				}
-			}
-
-			return undefined;
-		},
-		[isExternalFilter, normalizeFieldValue],
-	);
-
-	const isMatchedField = useCallback(
-		(filterField: any, fieldName: any) => {
-			const normalizedFilterField = normalizeFieldValue(filterField);
-			const normalizedFieldName = normalizeFieldValue(fieldName);
-
-			if (normalizedFilterField === undefined || normalizedFieldName === undefined) return false;
-			return JSON.stringify(normalizedFilterField) === JSON.stringify(normalizedFieldName);
-		},
-		[normalizeFieldValue],
-	);
-
-	const updateFiltersByField = useCallback(
-		(
-			filterList: TFilter<any>[] | undefined,
-			fieldName: any,
-			updater: (filter: TFilter<any>) => TFilter<any> | null,
-			options?: { skipReadOnlyExternal?: boolean },
-		): { filters: TFilter<any>[]; matched: boolean } => {
-			if (!Array.isArray(filterList) || !filterList.length) {
-				return { filters: [], matched: false };
-			}
-
-			let matched = false;
-			const nextFilters: TFilter<any>[] = [];
-
-			for (const filter of filterList) {
-				let nextFilter: TFilter<any> | null = filter;
-
-				if (Array.isArray(filter.filters) && filter.filters.length) {
-					const nestedResult = updateFiltersByField(filter.filters, fieldName, updater, options);
-					if (nestedResult.matched) matched = true;
-
-					if (nestedResult.filters.length) {
-						nextFilter = { ...filter, filters: nestedResult.filters };
-					} else {
-						// Nếu nhóm không còn điều kiện con thì loại bỏ nhóm rỗng
-						nextFilter = filter.field ? { ...filter, filters: [] } : null;
-					}
-				}
-
-				if (nextFilter && isMatchedField(nextFilter.field, fieldName)) {
-					const isBlockedByReadOnlyExternal =
-						options?.skipReadOnlyExternal === true &&
-						nextFilter.readOnly === true &&
-						isExternalFilter(nextFilter);
-
-					if (!isBlockedByReadOnlyExternal) {
-						nextFilter = updater(nextFilter);
-						matched = true;
-					}
-				}
-
-				if (nextFilter) nextFilters.push(nextFilter);
-			}
-
-			return { filters: nextFilters, matched };
-		},
-		[isMatchedField, isExternalFilter],
-	);
+	const isExternalFilter = isExternalFilterNode;
 
 	/**
 	 * Lấy quy tắc lọc hiện tại của cột
@@ -151,7 +49,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			active?: boolean,
 			options?: { excludeExternal?: boolean },
 		) => findFilterInTree(filters, fieldName, operator, active, options),
-		[filters, findFilterInTree],
+		[filters],
 	);
 
 	//#region Lấy các thuộc tính sắp xếp của cột
@@ -196,8 +94,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					setFilters?.(tempFilters);
 				} else {
 					const fallbackFilters = (filters ?? []).filter(
-						(item: TFilter<any>) =>
-							JSON.stringify(item.field) !== JSON.stringify(dataIndex) || isExternalFilter(item),
+						(item: TFilter<any>) => !isSameFilterField(item.field, dataIndex) || isExternalFilter(item),
 					);
 					setFilters?.(fallbackFilters);
 				}
@@ -236,7 +133,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			}
 			if (confirm) confirm();
 		},
-		[columns, filters, setFilters, isExternalFilter, updateFiltersByField],
+		[columns, filters, setFilters],
 	);
 
 	const getColumnSearchProps = useCallback(
@@ -332,8 +229,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					setFilters?.(tempFilters);
 				} else {
 					const fallbackFilters = (filters ?? []).filter(
-						(item: TFilter<any>) =>
-							JSON.stringify(item.field) !== JSON.stringify(dataIndex) || isExternalFilter(item),
+						(item: TFilter<any>) => !isSameFilterField(item.field, dataIndex) || isExternalFilter(item),
 					);
 					setFilters?.(fallbackFilters);
 				}
@@ -373,7 +269,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				}
 			}
 		},
-		[columns, filters, setFilters, isExternalFilter, updateFiltersByField],
+		[columns, filters, setFilters],
 	);
 
 	const getFilterColumnProps = useCallback(
