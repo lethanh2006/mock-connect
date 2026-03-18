@@ -57,6 +57,7 @@ interface TableContextValue {
 	hideTotal?: boolean;
 	hideFilterColumn?: boolean;
 	disableFilterModal?: boolean;
+	syncExternalToColumnFilter?: boolean;
 	size?: 'small' | 'middle' | 'large';
 
 	// Trạng thái modal form

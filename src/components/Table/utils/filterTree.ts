@@ -7,6 +7,7 @@ type FindFilterOptions = {
 
 type UpdateFilterOptions = {
 	skipReadOnlyExternal?: boolean;
+	skipExternal?: boolean;
 };
 
 const normalizeFieldValue = (field: any) => (Array.isArray(field) ? field.join('.') : field);
@@ -64,6 +65,11 @@ export const updateFiltersByField = (
 	const nextFilters: TFilter<any>[] = [];
 
 	for (const filter of filterList) {
+		if (options?.skipExternal === true && isExternalFilterNode(filter)) {
+			nextFilters.push(filter);
+			continue;
+		}
+
 		let nextFilter: TFilter<any> | null = filter;
 
 		if (Array.isArray(filter.filters) && filter.filters.length) {
@@ -79,12 +85,13 @@ export const updateFiltersByField = (
 		}
 
 		if (nextFilter && isSameFilterField(nextFilter.field, fieldName)) {
+			const isBlockedByExternal = options?.skipExternal === true && isExternalFilterNode(nextFilter);
 			const isBlockedByReadOnlyExternal =
 				options?.skipReadOnlyExternal === true &&
 				nextFilter.readOnly === true &&
 				isExternalFilterNode(nextFilter);
 
-			if (!isBlockedByReadOnlyExternal) {
+			if (!isBlockedByExternal && !isBlockedByReadOnlyExternal) {
 				nextFilter = updater(nextFilter);
 				matched = true;
 			}

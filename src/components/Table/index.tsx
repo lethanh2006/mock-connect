@@ -115,6 +115,7 @@ const TableBase = (props: TableBaseProps) => {
 				setFilters: handleSetFilters,
 				columns: props.columns || [],
 				disableFilterModal: props.disableFilterModal,
+				syncExternalToColumnFilter: props.syncExternalToColumnFilter,
 			}}
 		>
 			<TableBaseContent {...props} />

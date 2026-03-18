@@ -96,6 +96,13 @@ export type TableBaseProps = {
 	/** Ẩn/khóa toàn bộ Modal Filter (vẫn có thể dùng filter theo cột nếu được bật) */
 	disableFilterModal?: boolean;
 
+	/**
+	 * Có đồng bộ external filter ra filter theo cột hay không.
+	 * - true: Giá trị external có thể hiển thị ở filter cột (mặc định)
+	 * - false: Filter cột chỉ dùng state nội bộ của table
+	 */
+	syncExternalToColumnFilter?: boolean;
+
 	/** Tham số phụ thuộc để getData được gọi */
 	dependencies?: any[];
 

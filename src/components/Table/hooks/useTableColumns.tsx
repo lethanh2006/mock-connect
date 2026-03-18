@@ -35,8 +35,10 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		columnSettings,
 		setColumnSettings,
 		disableFilterModal,
+		syncExternalToColumnFilter,
 	} = useTableContext();
 	const canOpenModalFilter = buttons?.filter !== false && hasFilter && disableFilterModal !== true;
+	const shouldSyncExternalToColumnFilter = syncExternalToColumnFilter !== false;
 	const isExternalFilter = isExternalFilterNode;
 
 	/**
@@ -48,8 +50,11 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			operator?: EOperatorType,
 			active?: boolean,
 			options?: { excludeExternal?: boolean },
-		) => findFilterInTree(filters, fieldName, operator, active, options),
-		[filters],
+		) =>
+			findFilterInTree(filters, fieldName, operator, active, {
+				excludeExternal: options?.excludeExternal === true || !shouldSyncExternalToColumnFilter,
+			}),
+		[filters, shouldSyncExternalToColumnFilter],
 	);
 
 	//#region Lấy các thuộc tính sắp xếp của cột
@@ -82,12 +87,17 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 	//#region Lấy các thuộc tính tìm kiếm của cột
 	const handleSearch = useCallback(
 		(dataIndex: any, value: string, confirm?: () => void) => {
+			const updateFilterOptions = {
+				skipReadOnlyExternal: true,
+				skipExternal: !shouldSyncExternalToColumnFilter,
+			};
+
 			if (!value) {
 				const { filters: tempFilters, matched } = updateFiltersByField(
 					filters,
 					dataIndex,
 					() => null,
-					{ skipReadOnlyExternal: true },
+					updateFilterOptions,
 				);
 
 				if (matched) {
@@ -112,7 +122,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 						values: [value],
 						readOnly,
 					}),
-					{ skipReadOnlyExternal: true },
+					updateFilterOptions,
 				);
 
 				if (matched) {
@@ -133,7 +143,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			}
 			if (confirm) confirm();
 		},
-		[columns, filters, setFilters],
+		[columns, filters, setFilters, shouldSyncExternalToColumnFilter],
 	);
 
 	const getColumnSearchProps = useCallback(
@@ -217,12 +227,17 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 	//#region Lấy các thuộc tính lọc của cột
 	const handleFilter = useCallback(
 		(dataIndex: any, values: string[]) => {
+			const updateFilterOptions = {
+				skipReadOnlyExternal: true,
+				skipExternal: !shouldSyncExternalToColumnFilter,
+			};
+
 			if (!values || !values.length) {
 				const { filters: tempFilters, matched } = updateFiltersByField(
 					filters,
 					dataIndex,
 					() => null,
-					{ skipReadOnlyExternal: true },
+					updateFilterOptions,
 				);
 
 				if (matched) {
@@ -249,7 +264,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 						values,
 						readOnly,
 					}),
-					{ skipReadOnlyExternal: true },
+					updateFilterOptions,
 				);
 
 				if (matched) {
@@ -269,7 +284,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				}
 			}
 		},
-		[columns, filters, setFilters],
+		[columns, filters, setFilters, shouldSyncExternalToColumnFilter],
 	);
 
 	const getFilterColumnProps = useCallback(
