@@ -236,7 +236,7 @@ const CardLopHocPhan = () => {
 						})}
 					</Carousel>
 				) : (
-					<Card variant='borderless' style={{ borderRadius: 8 }} styles={{ body: { minHeight: 320 } }}>
+					<Card variant='borderless' styles={{ body: { minHeight: 320 } }}>
 						<Empty
 							image={Empty.PRESENTED_IMAGE_SIMPLE}
 							style={{ margin: '16px 0' }}

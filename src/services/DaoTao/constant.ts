@@ -1,5 +1,23 @@
 import { ETagColor } from '../base/constant';
 
+export enum ETrangThaiKqht {
+	NOT_STARTED = 'not-started',
+	IN_PROGRESS = 'in-progress',
+	COMPLETED = 'completed',
+}
+
+export const trangThaiKqht: Record<ETrangThaiKqht, string> = {
+	[ETrangThaiKqht.NOT_STARTED]: 'Chưa bắt đầu',
+	[ETrangThaiKqht.IN_PROGRESS]: 'Đang thực hiện',
+	[ETrangThaiKqht.COMPLETED]: 'Hoàn thành',
+};
+
+export const colorTrangThaiKqht: Record<ETrangThaiKqht, ETagColor> = {
+	[ETrangThaiKqht.NOT_STARTED]: ETagColor.DEFAULT,
+	[ETrangThaiKqht.IN_PROGRESS]: ETagColor.BLUE,
+	[ETrangThaiKqht.COMPLETED]: ETagColor.GREEN,
+};
+
 export enum ELoaiNhuCauHocPhan {
 	KHHT_CHUAN = 'Theo kế hoạch học tập chuẩn',
 	NGOAI_CT = 'Ngoài chương trình đào tạo',
@@ -122,11 +140,13 @@ export const colorTrangThaiUserDiemDanh: Record<ETrangThaiUserDiemDanh, string> 
 export enum ELoaiChuongTrinhDaoTao {
 	CHUAN = 'Chuan',
 	KE_HOACH = 'KeHoach',
+	CA_NHAN = 'CaNhan',
 }
 
 export const LoaiChuongTrinhDaoTao: Record<ELoaiChuongTrinhDaoTao, string> = {
 	[ELoaiChuongTrinhDaoTao.CHUAN]: 'Chuẩn',
 	[ELoaiChuongTrinhDaoTao.KE_HOACH]: 'Kế hoạch',
+	[ELoaiChuongTrinhDaoTao.CA_NHAN]: 'Cá nhân',
 };
 
 //Đăng ký nhu cầu
