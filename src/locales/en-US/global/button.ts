@@ -14,5 +14,7 @@ export default {
 	'global.button.tongso': 'Total',
 	'global.button.chinhsua': 'Edit',
 	'global.button.quaylai': 'Back',
-	'global.button.ok': 'OK'
+	'global.button.ok': 'OK',
+	'global.button.xemthem': 'See more',
+	'global.button.thugon': 'See less'
 };

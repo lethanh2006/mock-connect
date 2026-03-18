@@ -5,4 +5,6 @@ export default {
 	'global.message.validated': 'Data validated',
 	'global.message.imported': 'Data imported',
 	'global.message.formsubmiting': 'Submitting data',
+	'global.message.capnhatthanhcong': 'Updated successfully',
+	'global.message.capnhatthatbai': 'Update failed',
 };

@@ -15,6 +15,7 @@ import { useIntl, useModel } from 'umi';
 import SelectDonViHanhChinh from '../../Core/DonViHanhChinh/SelectDonViHanhChinh';
 import FormSucKhoe from './FormSucKhoe';
 import ThongTinGiaDinhFormItem from './GiaDinh';
+import ThongTinVisaFormItem from './ThongTinVisa';
 
 const FormSinhVien = (props: { onCancel?: () => void }) => {
 	const intl = useIntl();
@@ -365,6 +366,20 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 						<Col span={24}>
 							<Form.Item name='thanhVienGiaDinh' label=''>
 								<ThongTinGiaDinhFormItem />
+							</Form.Item>
+						</Col>
+					</Row>
+				</Collapse.Panel>
+
+				<Collapse.Panel
+					forceRender
+					header={intl.formatMessage({ id: 'thongtincanhan.form.thongtinvisa' })}
+					key='5'
+				>
+					<Row gutter={[12, 0]}>
+						<Col span={24}>
+							<Form.Item name='visaList' label=''>
+								<ThongTinVisaFormItem />
 							</Form.Item>
 						</Col>
 					</Row>

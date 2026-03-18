@@ -1,3 +1,4 @@
+import SelectCategory from '@/pages/Core/Category/SelectCategory';
 import rules from '@/utils/rules';
 import { Col, Form, Input, InputNumber, Row } from 'antd';
 import { useIntl } from 'umi';
@@ -37,7 +38,7 @@ const FormSucKhoe = () => {
 					label={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.loai' })}
 					rules={[...rules.text, ...rules.length(250)]}
 				>
-					<Input placeholder={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.loai.place' })} />
+					<SelectCategory allowClear category="disability" />
 				</Form.Item>
 			</Col>
 
@@ -57,6 +58,18 @@ const FormSucKhoe = () => {
 					rules={[...rules.text, ...rules.length(20)]}
 				>
 					<Input placeholder={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.benhvien.place' })} />
+				</Form.Item>
+			</Col>
+			<Col span={24}>
+				<Form.Item
+					name='ghiChuYTe'
+					label={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.ghichuyte' })}
+					rules={[...rules.text, ...rules.length(500)]}
+				>
+					<Input.TextArea
+						rows={3}
+						placeholder={intl.formatMessage({ id: 'thongtincanhan.form.suckhoe.ghichuyte.place' })}
+					/>
 				</Form.Item>
 			</Col>
 		</Row>
