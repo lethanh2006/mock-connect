@@ -18,7 +18,7 @@ const NoiDungHocPhanPage = () => {
 
 	const columns: IColumn<HocPhan.ILichTrinhChung>[] = [
 		{
-			title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.tieuDe' }),
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.tomtat.tieude' }),
 			dataIndex: 'tieuDe',
 			width: 180,
 			filterType: 'string',

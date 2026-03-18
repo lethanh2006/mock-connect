@@ -9,7 +9,7 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiCauHoi } from '@/services/TienIch/KhaoSat/constants';
 import { buildUpLoadMultiFile, handleSingleFile } from '@/services/uploadFile';
 import dayjs from '@/utils/dayjs';
-import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { formatDateTime } from '@/utils/formatDate';
 import { resetFieldsForm } from '@/utils/utils';
 import { Alert, Button, Col, Descriptions, Divider, Form, Input, Row, Spin, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
@@ -292,7 +292,7 @@ const FormBaiTap = (props: any) => {
 					</div>
 
 					<Col span={24}>
-						<Divider>{intl.formatMessage({ id: 'lophocphan.id.baitap.cautl ' })}</Divider>
+						<Divider>{intl.formatMessage({ id: 'lophocphan.id.baitap.cautl' })}</Divider>
 					</Col>
 
 					<Col span={24}>
