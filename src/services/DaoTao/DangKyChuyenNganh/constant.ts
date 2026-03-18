@@ -1,23 +1,25 @@
+import { ETagColor } from '@/services/base/constant';
+
 export enum ETrangThaiDangKyChuyenNganh {
-	CHO_DUYET = 'CHO_DUYET',
-	// XAC_NHAN = 'XAC_NHAN',
-	DA_DUYET = 'DA_DUYET',
-	YEU_CAU_CHINH_SUA = 'YEU_CAU_CHINH_SUA',
-	KHONG_DUYET = 'KHONG_DUYET',
+	NHAP = 'draft',
+	CHO_DUYET = 'pending',
+	DA_DUYET = 'approve',
+	YEU_CAU_CHINH_SUA = 'request_change',
+	KHONG_DUYET = 'rejected',
 }
 
 export const trangThaiDangKyChuyenNganh: Record<ETrangThaiDangKyChuyenNganh, string> = {
+	[ETrangThaiDangKyChuyenNganh.NHAP]: 'Nháp',
 	[ETrangThaiDangKyChuyenNganh.CHO_DUYET]: 'Chờ duyệt',
-	// [ETrangThaiDangKyChuyenNganh.XAC_NHAN]: 'Xác nhận',
 	[ETrangThaiDangKyChuyenNganh.DA_DUYET]: 'Đã duyệt',
 	[ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA]: 'Yêu cầu chỉnh sửa',
 	[ETrangThaiDangKyChuyenNganh.KHONG_DUYET]: 'Không duyệt',
 };
 
-export const colorTrangThaiDangKyChuyenNganh: Record<ETrangThaiDangKyChuyenNganh, string> = {
-	[ETrangThaiDangKyChuyenNganh.CHO_DUYET]: 'blue',
-	// [ETrangThaiDangKyChuyenNganh.XAC_NHAN]: 'purple',
-	[ETrangThaiDangKyChuyenNganh.DA_DUYET]: 'green',
-	[ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA]: 'orange',
-	[ETrangThaiDangKyChuyenNganh.KHONG_DUYET]: 'red',
+export const colorTrangThaiDangKyChuyenNganh: Record<ETrangThaiDangKyChuyenNganh, ETagColor> = {
+	[ETrangThaiDangKyChuyenNganh.NHAP]: ETagColor.DEFAULT,
+	[ETrangThaiDangKyChuyenNganh.CHO_DUYET]: ETagColor.BLUE,
+	[ETrangThaiDangKyChuyenNganh.DA_DUYET]: ETagColor.GREEN,
+	[ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA]: ETagColor.ORANGE,
+	[ETrangThaiDangKyChuyenNganh.KHONG_DUYET]: ETagColor.RED,
 };

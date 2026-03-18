@@ -32,28 +32,20 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 		<div>
 			<Spin spinning={loading}>
 				<div
-					style={{
-						padding: '20px 20px',
-						backgroundColor: 'var(--color-primary-bg)',
-						margin: '-24px -12px 5px', // để phần Header này theo đúng thiết kế (sát vào lề)
-						backgroundImage: `url(${randomBackground})`,
-						backgroundSize: 'contain',
-						backgroundRepeat: 'no-repeat',
-						backgroundPosition: 'right center',
-					}}
+					className='thong-tin-chung-header-card'
+					style={{ backgroundImage: `url(${randomBackground})` }}
 				>
 					<Card
-						className='card-big-title card-borderless'
+						className='card-borderless'
 						variant='borderless'
 						title={
 							<>
 								{/* Header Title */}
 								<div
 									style={{
-										marginBottom: '16px',
 										display: 'flex',
 										flexDirection: 'row',
-										alignItems: 'baseline',
+										alignItems: 'center',
 										gap: '16px',
 									}}
 								>

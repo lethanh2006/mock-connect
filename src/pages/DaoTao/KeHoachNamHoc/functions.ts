@@ -28,7 +28,7 @@ export const calHeader = (
 	hocKyList: Partial<HocKy.IRecord>[],
 	numWeek: number,
 ): KeHoachNamHoc.TGridHeader => {
-	const day = dayjs(thoiGianBatDau); // or: thoiGianBatDau.clone() if plugin
+	let day = dayjs(thoiGianBatDau); // or: thoiGianBatDau.clone() if plugin
 	let month: number = -1;
 	const weeks: number[] = [];
 	const isoWeeks: number[] = [];
