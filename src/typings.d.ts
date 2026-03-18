@@ -47,3 +47,4 @@ declare const APP_CONFIG_URL_QLVB: string;
 declare const APP_CONFIG_URL_VBCC: string;
 declare const APP_CONFIG_URL_QLND: string;
 declare const APP_CONFIG_URL_TAP_CHI_KH: string;
+declare const APP_CONFIG_URL_KY_SO: string;

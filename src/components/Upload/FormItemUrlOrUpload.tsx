@@ -1,8 +1,8 @@
 import rules from '@/utils/rules';
 import { Form, Input, Radio, type FormInstance } from 'antd';
 import { useEffect, useState } from 'react';
-import UploadFile from './UploadFile';
 import { useIntl } from 'umi';
+import UploadFile from './UploadFile';
 
 /**
  * Form Item cho vào Form cho nhập URL hoặc UPLOAD file
@@ -23,7 +23,7 @@ const FormItemUrlOrUpload = (props: {
 	const [typeUpload, setTypeUpload] = useState<'UPLOAD' | 'URL'>('UPLOAD');
 	const field = props.field || 'url';
 	const accept = props.accept || '.docx, .pdf, .doc';
-	const label = props.label || 'Tệp đính kèm';
+	const label = props.label || intl.formatMessage({ id: 'global.uploadfile.tepdinhkem' });
 
 	useEffect(() => {
 		setTypeUpload(!!initValue ? 'URL' : 'UPLOAD');

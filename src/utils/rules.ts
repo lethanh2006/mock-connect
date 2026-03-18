@@ -111,7 +111,7 @@ const createRules = () => {
 			},
 		] as Rule[],
 
-		number: (max: number, min: number = 0, hasDecimal: boolean = true): Rule[] => [
+		number: (max?: number, min: number = 0, hasDecimal: boolean = true): Rule[] => [
 			{
 				pattern: hasDecimal ? new RegExp('^[0-9-.]+$') : new RegExp('^[0-9-]+$'),
 				message: hasDecimal
@@ -120,7 +120,7 @@ const createRules = () => {
 			},
 			{
 				validator: (__, value, callback) => {
-					if (parseFloat(value) > max) callback('');
+					if (max !== undefined && max !== null && parseFloat(value) > max) callback('');
 					callback();
 				},
 				message: getMessage('global.validation.number.max', { max: String(max) }),
@@ -361,7 +361,7 @@ const createRules = () => {
 			},
 		],
 
-		floatnumber: (max: number, min: number = 0, sauDauPhay: number = 2): Rule[] => [
+		floatnumber: (max?: number, min: number = 0, sauDauPhay: number = 2): Rule[] => [
 			{
 				pattern: new RegExp(/^-?\d*(\.\d+)?$/),
 				message: getMessage('global.validation.floatnumber.onlyNumbers'),
@@ -376,7 +376,7 @@ const createRules = () => {
 			},
 			{
 				validator: (__, value, callback) => {
-					if (value > max) callback('');
+					if (max !== undefined && max !== null && value > max) callback('');
 					callback();
 				},
 				message: getMessage('global.validation.floatnumber.max', { max: String(max) }),
@@ -390,18 +390,18 @@ const createRules = () => {
 			},
 		],
 
-		float: (max: number, min: number = 0, sauDauPhay: number = 2): Rule[] => [
+		float: (max?: number, min: number = 0, sauDauPhay: number = 2): Rule[] => [
 			{
 				pattern: new RegExp('^[0-9.]+$'),
 				message: getMessage('global.validation.float.onlyNumbersOrDot'),
 			},
 			{
 				validator: (__, value, callback) => {
-					if (!max) {
+					if (max === undefined || max === null) {
 						callback();
 						return;
 					}
-					if (max && parseFloat(value) > max) callback('');
+					if (parseFloat(value) > max) callback('');
 					callback();
 				},
 				message: getMessage('global.validation.float.max', { max: String(max) }),
@@ -430,6 +430,16 @@ const createRules = () => {
 					callback();
 				},
 				message: getMessage('global.validation.notEqual', { label: label ?? String(text) }),
+			},
+		],
+
+		maxArray: (max: any): Rule[] => [
+			{
+				validator: (_, value, callback) => {
+					if (Array.isArray(value) && value.length > max) callback('');
+					callback();
+				},
+				message: `Chỉ được chọn tối đa ${max} phần tử`,
 			},
 		],
 	};

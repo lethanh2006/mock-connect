@@ -4,7 +4,7 @@ import type { IColumn } from '@/components/Table/typing';
 import { AppModules } from '@/services/base/constant';
 import type { NotificationType } from '@/services/ThongBao/constant';
 import type { ThongBao } from '@/services/ThongBao/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { currentRole } from '@/utils/ip';
 import { Button } from 'antd';
 import { useModel } from 'umi';
@@ -61,7 +61,7 @@ const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: Notificatio
 			dataIndex: 'createdAt',
 			width: 120,
 			align: 'center',
-			render: (val) => dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => formatDateTime(val),
 		},
 	];
 
@@ -72,7 +72,7 @@ const ConfirmThongBaoTuyChinh = (props: { getData: () => void; type: Notificatio
 				data={danhSachThongBaoDanhSach ?? []}
 				addStt
 				hasTotal
-				otherProps={{ pagination: true }}
+				otherProps={{ pagination: {} }}
 			/>
 
 			<div className='form-footer'>

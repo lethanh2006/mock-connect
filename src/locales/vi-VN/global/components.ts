@@ -131,16 +131,28 @@ export default {
 	'global.table.index.button.xoa.title': 'Xác nhận xóa {count} mục đã chọn?',
 	'global.table.index.button.tailai': 'Tải lại',
 	'global.table.index.button.tailai.tooltip': 'Tải lại dữ liệu',
-	'global.table.index.button.boloc': 'Bộ lọc tùy chỉnh',
+	'global.table.index.button.boloc': 'Bộ lọc',
 	'global.table.index.button.boloc.tooltip': 'Áp dụng bộ lọc tùy chỉnh',
 	'global.table.index.button.tongso': 'Tổng số',
 	'global.table.index.button.tongso.tooltip': 'Tổng số dữ liệu',
+	'global.table.index.search.placeholder': 'Tìm theo: {fields}',
+	'global.table.index.search.placeholder.default': 'Tìm kiếm',
+	'global.table.index.search.tooltip': 'Đang tìm kiếm theo: {fields}',
+	'global.table.index.search.tooltip.default': 'Tìm kiếm theo các trường dạng chuỗi',
 	'global.table.index.empty': 'Không có dữ liệu',
 	'global.table.index.dachon': 'Đã chọn',
 	'global.table.index.bochon': 'Bỏ chọn tất cả',
 	'global.table.index.tongso': 'Tổng số',
 
-	'global.table.customfilter.title': 'Bộ lọc tùy chỉnh',
+	'global.table.columnSetting.title': 'Cấu hình cột',
+	'global.table.columnSetting.reset': 'Khôi phục',
+	'global.table.columnSetting.reset.confirm':
+		'Bạn có chắc chắn muốn khôi phục lại cấu hình mặc định (vị trí, ẩn hiện và độ rộng) của các cột?',
+	'global.table.columnSetting.apply': 'Áp dụng',
+	'global.table.columnSetting.cancel': 'Hủy',
+	'global.table.columnSetting.tooltip': 'Cấu hình ẩn/hiện và thứ tự cột',
+
+	'global.table.customfilter.title': 'Bộ lọc',
 	'global.table.customfilter.dieukien': 'Các điều kiện lọc đang được áp dụng',
 	'global.table.customfilter.button.them': 'Thêm điều kiện lọc',
 	'global.table.customfilter.button.apdung': 'Áp dụng bộ lọc',
@@ -183,7 +195,7 @@ export default {
 	'global.table.operator.and': 'Và',
 
 	'global.table.filterdropdown.xemthem': 'Xem thêm',
-	'global.table.filterdropdown.boloc': 'Bộ lọc tùy chỉnh',
+	'global.table.filterdropdown.boloc': 'Bộ lọc',
 
 	'global.tablestatic.button.themmoi': 'Thêm mới',
 	'global.tablestatic.button.themmoi.tooltip': 'Thêm mới dữ liệu',
@@ -209,6 +221,7 @@ export default {
 	'global.uploadfile.text': 'Nhấn chuột hoặc kéo thả tài liệu để tải lên',
 	'global.uploadfile.text1': 'Thêm ảnh đại diện',
 	'global.uploadfile.button.chontep': 'Chọn tệp',
+	'global.uploadfile.tepdinhkem': 'Tệp đính kèm',
 
 	// PDFViewer
 	'global.pdfviewer.dangtai': 'Đang tải...',

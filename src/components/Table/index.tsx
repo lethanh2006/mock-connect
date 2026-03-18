@@ -57,6 +57,7 @@ const TableBase = (props: TableBaseProps) => {
 				rowSelection: props.rowSelection,
 				deleteMany: props.deleteMany,
 				hideTotal: props.hideTotal,
+				hideFilterColumn: props.hideFilterColumn,
 				size: props.otherProps?.size,
 				visibleForm,
 				setVisibleForm,
@@ -72,11 +73,13 @@ const TableBase = (props: TableBaseProps) => {
 				showModalTitle: props.showModalTitle,
 				formProps: props.formProps,
 				modelName: props.modelName,
+				configKey: props.configKey,
 				modelImportName: props.modelImportName,
 				modelExportName: props.modelExportName,
 				params: props.params,
 				getData,
 				setFilters: model?.setFilters,
+				columns: props.columns || [],
 			}}
 		>
 			<TableBaseContent {...props} />
