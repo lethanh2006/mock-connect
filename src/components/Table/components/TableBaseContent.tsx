@@ -1,16 +1,19 @@
+import PageCard from '@/components/PageCard';
 import { MenuOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Card, ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
+import { ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
 import type { FilterValue } from 'antd/lib/table/interface';
-import { useEffect } from 'react';
+import _ from 'lodash';
+import { useEffect, useMemo, useRef } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
 import { useTableColumns } from '../hooks/useTableColumns';
 import ModalImport from '../Import';
 import type { TableBaseProps, TFilter } from '../typing';
+import { ResizableTitle } from './ResizableTitle';
 import { useTableContext } from './TableContext';
 import { TableFormModal } from './TableFormModal';
 import { TableHeader } from './TableHeader';
@@ -28,7 +31,6 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		setVisibleImport,
 		visibleExport,
 		setVisibleExport,
-		finalColumns,
 		selectedIds,
 		loading,
 		total,
@@ -37,28 +39,47 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		setSelectedIds,
 	} = useTableContext();
 
-	const { handleFilter, handleSearch } = useTableColumns({
+	const { handleFilter, handleSearch, finalColumns } = useTableColumns({
 		columns: props.columns,
 		sort,
 		addStt: props.addStt,
 		dsPhanVung,
 	});
 
-	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+	const sensor = useSensor(PointerSensor, { activationConstraint: { distance: 5 } });
+	const sensors = useSensors(sensor);
+	const lastResizeEndTimeRef = useRef<number>(0);
+	const isResizingRef = useRef(false);
 
-	const tableData: any[] = model?.[props.dataState || 'danhSach']?.map((item: any, index: number) => ({
-		...item,
-		index: index + 1 + (page - 1) * limit * (props.pageable === false ? 0 : 1),
-		key: item?._id ?? index,
-		children:
-			!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
-				? item.children
-				: undefined,
-	}));
+	const tableData: any[] = useMemo(
+		() =>
+			model?.[props.dataState || 'danhSach']?.map((item: any, index: number) => ({
+				...item,
+				index: index + 1 + (page - 1) * limit * (props.pageable === false ? 0 : 1),
+				key: item?._id ?? index,
+				children:
+					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
+						? item.children
+						: undefined,
+			})) || [],
+		[model?.[props.dataState || 'danhSach'], page, limit, props.pageable, props.hideChildrenRows],
+	);
 
 	useEffect(() => {
 		setPage(1);
 	}, [JSON.stringify(filters ?? [])]);
+
+	useEffect(() => {
+		// Block text selection during resize
+		const handleSelectStart = (e: Event) => {
+			if (isResizingRef.current) {
+				e.preventDefault();
+			}
+		};
+
+		document.addEventListener('selectstart', handleSelectStart, true);
+		return () => document.removeEventListener('selectstart', handleSelectStart, true);
+	}, []);
 
 	useEffect(() => {
 		getData(params);
@@ -67,18 +88,25 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	useEffect(() => {
 		return () => {
 			if (props.noCleanUp !== true) {
-				setFilters(initFilter);
-				setSelectedIds(undefined);
+				setFilters?.(initFilter);
+				setSelectedIds?.(undefined);
 			}
 		};
 	}, []);
 
-	if (rowSortable)
-		finalColumns.unshift({
-			width: 30,
-			align: 'center',
-			render: () => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />,
-		});
+	const actualColumns = useMemo(() => {
+		const cols = [...finalColumns];
+		if (rowSortable && !cols.find((c: any) => c._isSortHandle))
+			cols.unshift({
+				width: 30,
+				key: 'sort-handle',
+				align: 'center',
+				fixed: 'left',
+				_isSortHandle: true,
+				render: () => <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />,
+			} as any);
+		return cols;
+	}, [finalColumns, rowSortable]);
 
 	const handleDragEnd = (event: any) => {
 		const { active, over } = event;
@@ -89,21 +117,54 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		}
 	};
 
-	const SortableRow = (props: any) => {
-		const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-			id: props['data-row-key'],
-		});
-		const style = {
-			...props.style,
-			transform: CSS.Transform.toString(transform),
-			transition,
-			cursor: 'grab',
-			...(isDragging ? { background: '#fafafa' } : {}),
+	const SortableRow = useMemo(() => {
+		return (componentProps: any) => {
+			const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+				id: componentProps['data-row-key'],
+			});
+			const style = {
+				...componentProps.style,
+				transform: CSS.Transform.toString(transform),
+				transition,
+				cursor: 'grab',
+				...(isDragging ? { background: '#fafafa' } : {}),
+			};
+			return <tr {...componentProps} ref={setNodeRef} style={style} {...attributes} {...listeners} />;
 		};
-		return <tr {...props} ref={setNodeRef} style={style} {...attributes} {...listeners} />;
-	};
+	}, []);
+
+	const ResizableHeaderCell = useMemo(() => {
+		return (componentProps: any) => (
+			<ResizableTitle
+				{...componentProps}
+				onResizeStart={(e: any) => {
+					isResizingRef.current = true;
+					document.body.style.userSelect = 'none';
+					const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
+					if (titleEl) {
+						(titleEl as HTMLElement).style.pointerEvents = 'none';
+					}
+				}}
+				onResizeStop={(e: any) => {
+					isResizingRef.current = false;
+					document.body.style.userSelect = '';
+					const titleEl = (e.target as HTMLElement)?.closest('th')?.querySelector('.ant-table-column-title');
+					if (titleEl) {
+						(titleEl as HTMLElement).style.pointerEvents = '';
+					}
+					lastResizeEndTimeRef.current = Date.now();
+				}}
+			/>
+		);
+	}, []);
 
 	const onChange = (pagination: PaginationProps, fil: Record<string, FilterValue | null>, sorter: any) => {
+		// Skip sort if triggered within 300ms after resize (avoid resize->sort on mouseup)
+		const skipSort = sorter?.field && Date.now() - lastResizeEndTimeRef.current < 300;
+		if (skipSort) {
+			fil = {}; // Also skip filters
+		}
+
 		const allColumns = finalColumns
 			.map((col) => {
 				if (col.children?.length) return [col, ...col.children];
@@ -130,9 +191,12 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			}
 		});
 
-		const { order, field } = sorter;
-		const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
-		if (sorter && setSort) setSort({ [Array.isArray(field) ? field.join('.') : field]: orderValue });
+		// Only apply sort if not within resize window
+		if (!skipSort) {
+			const { order, field } = sorter;
+			const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
+			if (sorter && setSort) setSort({ [Array.isArray(field) ? field.join('.') : field]: orderValue });
+		}
 
 		const { current, pageSize } = pagination;
 		setPage(current);
@@ -140,23 +204,26 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	};
 
 	const renderTable = () => {
+		const totalWidth = _.sum(actualColumns.map((item: any) => item.width ?? 80)) + (props?.rowSelection ? 40 : 0);
+
 		return (
 			<Table
-				scroll={{ x: props.scroll?.x ?? 'max-content', ...props.scroll }}
+				scroll={{ x: totalWidth ?? props.scroll?.x ?? 'max-content', ...props.scroll }}
 				rowSelection={
 					props?.rowSelection
 						? {
 								type: 'checkbox',
 								selectedRowKeys: selectedIds ?? [],
 								preserveSelectedRowKeys: true,
-								onChange: (selectedRowKeys) => setSelectedIds(selectedRowKeys as (string | number)[]),
+								onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
 								columnWidth: 40,
+								fixed: 'left',
 								...props.detailRow,
 							}
 						: undefined
 				}
 				loading={loading}
-				bordered={props.border || true}
+				bordered={props.border ?? true}
 				pagination={{
 					current: page,
 					pageSize: limit,
@@ -174,7 +241,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 									{selectedIds && selectedIds.length > 0 ? (
 										<span>
 											(
-											<a href='#!' onClick={() => setSelectedIds(undefined)}>
+											<a href='#!' onClick={() => setSelectedIds?.(undefined)}>
 												{intl.formatMessage({ id: 'global.table.index.bochon' })}
 											</a>
 											)
@@ -190,8 +257,12 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				}}
 				onChange={onChange}
 				dataSource={tableData}
-				columns={finalColumns as any[]}
-				components={rowSortable ? { body: { row: SortableRow } } : undefined}
+				columns={actualColumns as any[]}
+				components={{
+					...(rowSortable ? { body: { row: SortableRow } } : {}),
+					header: { cell: ResizableHeaderCell },
+				}}
+				tableLayout='fixed'
 				{...props?.otherProps}
 			/>
 		);
@@ -230,9 +301,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<Card title={props.title || false} variant={props.border ? 'outlined' : 'borderless'} extra={props.cardExtra}>
+				<PageCard title={props.title || false} extra={props.cardExtra} bordered={props.border}>
 					{mainContent}
-				</Card>
+				</PageCard>
 			)}
 
 			<TableFormModal />
@@ -241,9 +312,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			{buttons?.import ? (
 				<ModalImport
-					visible={visibleImport}
+					visible={visibleImport ?? false}
 					modelName={props.modelImportName ?? modelName}
-					onCancel={() => setVisibleImport(false)}
+					onCancel={() => setVisibleImport?.(false)}
 					onOk={() => getData(params)}
 					titleTemplate={title ? `Biểu mẫu ${title}.xlsx` : undefined}
 					extendData={params}
@@ -252,9 +323,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			{buttons?.export ? (
 				<ModalExport
-					visible={visibleExport}
+					visible={visibleExport ?? false}
 					modelName={props.modelExportName ?? modelName}
-					onCancel={() => setVisibleExport(false)}
+					onCancel={() => setVisibleExport?.(false)}
 					fileName={`Danh sách ${title ?? 'dữ liệu'}.xlsx`}
 					condition={params}
 				/>
