@@ -157,6 +157,12 @@ export default [
 				component: 'HocTap/Khac',
 			},
 			{
+				name: 'PathWay',
+				path: 'pathway',
+				component: 'SinhVien/PathWay',
+				access: 'cctFilter', // Tạm thời chỉ show cho VinUni
+			},
+			{
 				name: 'DangKyChuyenNganh',
 				path: 'dang-ky-chuyen-nganh',
 				routes: [

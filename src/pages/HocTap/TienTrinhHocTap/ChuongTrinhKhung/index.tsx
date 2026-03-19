@@ -4,7 +4,7 @@ import { ELoaiHocPhanCTDT, LoaiChuongTrinhDaoTao } from '@/services/DaoTao/const
 import { Collapse, Descriptions, Divider, Spin, Typography } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Link, useIntl, useModel } from 'umi';
+import { Link, useAccess, useIntl, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhanV2 from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
@@ -33,6 +33,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 	const [visibleDiem, setVisibleDiem] = useState(false);
+	const { cctFilter } = useAccess();
 	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
 	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
 	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh : recSinhVien?.chuyenNganh;
@@ -111,33 +112,51 @@ const TienTrinhChuongTrinhKhung = () => {
 		</div>
 	);
 
+	console.log(recTienTrinh, 'recTienTrinh');
+
 	return (
 		<div>
 			{recTienTrinh?.ctdtKeHoach?._id && (
-				<>
-					<Descriptions style={{ marginBottom: 16 }} layout='vertical' className='highlight' colon={false}>
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })} span={2}>
-							<Link
-								to='#'
-								onClick={(e) => {
-									e.preventDefault();
-									setVisibleChuongTrinh(true);
-								}}
-							>
-								{recTienTrinh?.ctdtKeHoach?.ten}
-							</Link>
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loai' })}>
-							{recTienTrinh?.ctdtKeHoach?.loai && LoaiChuongTrinhDaoTao[recTienTrinh?.ctdtKeHoach?.loai]}
-						</Descriptions.Item>
+				<Descriptions
+					style={{ marginBottom: 12 }}
+					layout='vertical'
+					column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
+					className='highlight'
+					colon={false}
+				>
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })} span={2}>
+						<Link
+							to='#'
+							onClick={(e) => {
+								e.preventDefault();
+								setVisibleChuongTrinh(true);
+							}}
+						>
+							{recTienTrinh?.ctdtKeHoach?.ten}
+						</Link>
+					</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loai' })}>
+						{recTienTrinh?.ctdtKeHoach?.loai && LoaiChuongTrinhDaoTao[recTienTrinh?.ctdtKeHoach?.loai]}
+					</Descriptions.Item>
 
-						{chuyenNganhHienTai && (
-							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
-								{chuyenNganhHienTai.ten ?? <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuadk' })}</i>}
-							</Descriptions.Item>
-						)}
-					</Descriptions>
-				</>
+					{!chuyenNganhHienTai && (
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
+							{chuyenNganhHienTai?.ten ?? <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuadk' })}</i>}
+						</Descriptions.Item>
+					)}
+					<Descriptions.Item
+						style={{ display: !cctFilter() ? 'none' : '' }}
+						label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
+					>
+						<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
+					</Descriptions.Item>
+					<Descriptions.Item
+						style={{ display: !cctFilter() ? 'none' : '' }}
+						label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.pathway' })}
+					>
+						<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
+					</Descriptions.Item>
+				</Descriptions>
 			)}
 
 			<Spin spinning={loading}>
