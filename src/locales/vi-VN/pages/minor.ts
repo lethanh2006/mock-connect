@@ -230,7 +230,7 @@ export default {
 	'minor.info.selectedConcentration': 'Chuyên ngành chính được chọn',
 	'minor.info.requirement.gpa': 'Điểm trung bình ≥ {gpa}',
 	'minor.info.requirement.minCredits': 'Tối thiểu: {credits} tín chỉ',
-	'minor.info.requirement.completedCredits': 'Đã hoàn thành hoặc đang học: ≤ {credits} tín chỉ',
+	'minor.info.requirement.completedCredits': 'Đã hoàn thành hoặc đang học: ≤ {credits}',
 
 	// History - table, modal
 	'minor.history.type': 'Loại',
