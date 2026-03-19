@@ -15,9 +15,7 @@ const StudentInfoCard = ({ type }: { type: 'minor' | 'concentration' }) => {
 	const gpa = recSinhVien?.kqhtTichLuyNganh1?.trungBinhThang4 || '-';
 	const chuongTrinhDaoTao =
 		phieuDkCtdtMeByDot?.trangThai !== ETrangThaiDangKyChuyenNganh.NHAP
-			? type === 'minor'
-				? phieuDkCtdtMeByDot?.tenChuongTrinh || phieuDkCtdtMeByDot?.ctdt?.ten
-				: phieuDkCtdtMeByDot?.chuyenNganh?.ten
+			? phieuDkCtdtMeByDot?.tenChuongTrinh || phieuDkCtdtMeByDot?.ctdt?.ten || phieuDkCtdtMeByDot?.chuyenNganh?.ten
 			: '-';
 	return (
 		<Row gutter={[16, 16]}>
