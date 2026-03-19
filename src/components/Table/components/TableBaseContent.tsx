@@ -24,7 +24,6 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	const model = useModel(modelName) as any;
 	const { page, limit, setPage, setLimit, condition, sort, setSort, setFilters, initFilter } = model;
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
-	const getData = props.getData ?? model?.getModel;
 	const {
 		visibleImport,
 		setVisibleImport,
@@ -38,9 +37,12 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		setSelectedIds,
 		filters,
 		disableFilterModal,
+		externalConditions,
+		getData,
 	} = useTableContext();
 
 	const filtersDependency = JSON.stringify(filters ?? []);
+	const externalConditionsDependency = JSON.stringify(externalConditions ?? {});
 
 	const { handleFilter, handleSearch, finalColumns } = useTableColumns({
 		columns: props.columns,
@@ -85,8 +87,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	}, []);
 
 	useEffect(() => {
-		getData(params);
-	}, [...dependencies, filtersDependency, condition, sort]);
+		getData?.(params);
+	}, [...dependencies, filtersDependency, externalConditionsDependency, condition, sort]);
 
 	useEffect(() => {
 		return () => {
@@ -318,7 +320,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					visible={visibleImport ?? false}
 					modelName={props.modelImportName ?? modelName}
 					onCancel={() => setVisibleImport?.(false)}
-					onOk={() => getData(params)}
+					onOk={() => getData?.(params)}
 					titleTemplate={title ? `Biểu mẫu ${title}.xlsx` : undefined}
 					extendData={params}
 				/>

@@ -226,4 +226,7 @@ export default {
 	'global.pdfviewer.truoc': 'Previous',
 	'global.pdfviewer.sau': 'Next',
 	'global.pdfviewer.trang': 'Page {pageNumber} of {numPages}',
+	'global.table.customfilter.tooltip.applied': 'Filter conditions currently applied to the table',
+	'global.table.customfilter.moreconditions': '+{count} more conditions',
+	'global.table.customfilter.button.xemthem': 'View more',
 };

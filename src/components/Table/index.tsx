@@ -9,6 +9,7 @@ import { markExternalFilters, normalizeFilters, splitFiltersBySource, stripFilte
 const TableBase = (props: TableBaseProps) => {
 	const model = useModel(props.modelName) as any;
 	const modelFilters: TFilter<any>[] = model?.filters ?? [];
+	const externalConditions = props.externalConditions;
 	const canSyncExternalFilters = typeof props.onExternalFiltersChange === 'function';
 	const externalFilters = useMemo(
 		() => markExternalFilters(props.externalFilters ?? [], { forceReadOnly: !canSyncExternalFilters }),
@@ -39,10 +40,33 @@ const TableBase = (props: TableBaseProps) => {
 		[model, props.onExternalFiltersChange],
 	);
 
-	const getData = props.getData ?? model?.getModel;
+	const mergeExternalConditions = useCallback(
+		(params: any) => {
+			if (!externalConditions || Object.keys(externalConditions).length === 0) return params;
+
+			const normalizedParams =
+				params && typeof params === 'object' && !Array.isArray(params) ? params : {};
+
+			return {
+				...externalConditions,
+				...normalizedParams,
+			};
+		},
+		[externalConditions],
+	);
+
+	const getData = useCallback(
+		(params: any) => {
+			if (props.getData) return props.getData(params);
+			return model?.getModel?.(mergeExternalConditions(params));
+		},
+		[props.getData, model, mergeExternalConditions],
+	);
+	const hasExternalConditions = !!(externalConditions && Object.keys(externalConditions).length > 0);
 	const hasFilter =
 		props.columns?.filter((item) => item.filterType)?.length ||
-		(props.externalFilters && props.externalFilters.length > 0);
+		(props.externalFilters && props.externalFilters.length > 0) ||
+		hasExternalConditions;
 	const {
 		visibleForm,
 		setVisibleForm,
@@ -116,6 +140,9 @@ const TableBase = (props: TableBaseProps) => {
 				columns: props.columns || [],
 				disableFilterModal: props.disableFilterModal,
 				syncExternalToColumnFilter: props.syncExternalToColumnFilter,
+				externalConditions,
+				externalConditionLabels: props.externalConditionLabels,
+				externalConditionValueLabels: props.externalConditionValueLabels,
 			}}
 		>
 			<TableBaseContent {...props} />

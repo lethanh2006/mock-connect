@@ -153,7 +153,7 @@ export default {
 	'global.table.columnSetting.tooltip': 'Cấu hình ẩn/hiện và thứ tự cột',
 
 	'global.table.customfilter.title': 'Bộ lọc',
-	'global.table.customfilter.dieukien': 'Các điều kiện lọc đang được áp dụng',
+	'global.table.customfilter.dieukien': 'Điều kiện',
 	'global.table.customfilter.button.them': 'Thêm điều kiện lọc',
 	'global.table.customfilter.button.apdung': 'Áp dụng bộ lọc',
 	'global.table.customfilter.button.xoa': 'Bỏ lọc',
@@ -229,4 +229,7 @@ export default {
 	'global.pdfviewer.truoc': 'Trước',
 	'global.pdfviewer.sau': 'Sau',
 	'global.pdfviewer.trang': 'Trang {pageNumber} trên tổng số {numPages}',
+	'global.table.customfilter.tooltip.applied': 'Các điều kiện lọc hiện đang được áp dụng cho bảng dữ liệu',
+	'global.table.customfilter.moreconditions': '+{count} điều kiện khác',
+	'global.table.customfilter.button.xemthem': 'Xem thêm',
 };

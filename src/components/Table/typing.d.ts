@@ -88,6 +88,24 @@ export type TableBaseProps = {
 	externalFilters?: TFilter<any>[];
 
 	/**
+	 * Condition từ giao diện bên ngoài TableBase.
+	 * Dùng để hiển thị trạng thái condition trong Modal Filter và theo dõi thay đổi để reload dữ liệu.
+	 */
+	externalConditions?: QueryCondition<any>;
+
+	/**
+	 * Map nhãn hiển thị cho key của `externalConditions`.
+	 * Ví dụ: { ma: 'Mã', dataPartitionCode: 'Phân vùng dữ liệu' }
+	 */
+	externalConditionLabels?: Record<string, string>;
+
+	/**
+	 * Map nhãn hiển thị cho value của từng key trong `externalConditions`.
+	 * Ví dụ: { active: { true: 'Đang hoạt động', false: 'Ngừng hoạt động' } }
+	 */
+	externalConditionValueLabels?: Record<string, Record<string, string>>;
+
+	/**
 	 * Callback đồng bộ khi người dùng thay đổi filter external trong Modal Filter.
 	 * Nếu không truyền callback, filter external sẽ được khóa chỉnh sửa (readOnly).
 	 */
