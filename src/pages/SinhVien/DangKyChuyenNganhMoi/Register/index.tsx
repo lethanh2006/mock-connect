@@ -19,7 +19,10 @@ const RegisterPage = () => {
 	);
 	const { record: dotDangKy, fetchDotDangKy } = useModel('daotao.dotdkctdt');
 	const { getModel } = useModel('daotao.nganhchuyennganh');
-	const shouldHideButton = !!phieuDangKyTheoDot && phieuDangKyTheoDot?.trangThai !== ETrangThaiDangKyChuyenNganh.NHAP;
+
+	const hasRegisteredChoice = !!(phieuDangKyTheoDot?.maCtdt || phieuDangKyTheoDot?.maChuyenNganh);
+	const shouldHideButton =
+		hasRegisteredChoice || (!!phieuDangKyTheoDot && phieuDangKyTheoDot?.trangThai !== ETrangThaiDangKyChuyenNganh.NHAP);
 
 	useEffect(() => {
 		fetchDotDangKy(loai as 'minor' | 'concentration');
