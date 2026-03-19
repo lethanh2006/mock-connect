@@ -31,14 +31,14 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 	const [visibleDeCuong, setVisibleDeCuong] = useState(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 	const [selectedElectiveRows, setSelectedElectiveRows] = useState<ChuongTrinhDaoTao.IKhoiHpCt[]>([]);
-	const minor = danhSach.find((item) => item.ma === choosenMinor);
+	const minor = danhSach.find((item) => item.maChuyenNganh === choosenMinor);
 	const effectiveKhoiHpCtList = useMemo(() => minor?.hocPhanCtdtList ?? [], [minor?.hocPhanCtdtList]);
-
 	const { compulsory, electiveGroups } = useMemo((): {
 		compulsory: ChuongTrinhDaoTao.IKhoiHpCt[];
 		electiveGroups: ChuongTrinhDaoTao.IKhoiHpCt[];
 	} => {
 		const raw = [...effectiveKhoiHpCtList].sort((a, b) => (a.soThuTuKy ?? 0) - (b.soThuTuKy ?? 0));
+		console.log(raw, 'rawrawraw');
 		const compRaw: Row[] = [];
 		const electiveGroupsList: ChuongTrinhDaoTao.IKhoiHpCt[] = [];
 
@@ -78,6 +78,9 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 		const compulsory = [...compulsoryMap.values()].sort((a, b) => (a.soThuTuKy ?? 0) - (b.soThuTuKy ?? 0));
 		return { compulsory, electiveGroups: electiveGroupsList };
 	}, [effectiveKhoiHpCtList]);
+
+	console.log(compulsory, 'compulsorycompulsory');
+	console.log(electiveGroups, 'electiveGroupselectiveGroups');
 
 	const isGroupRow = (r: Row) => (r._id ?? '').toString().startsWith('-0-');
 	const isCompulsory = (r: Row) => (r._id ?? '').toString().startsWith('-1-');
@@ -253,8 +256,8 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 							onConfirm={async () => {
 								try {
 									const base: Partial<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto> = isMinor
-										? { maCtdt: minor?.ma, loai: ELoaiPhieuDkCtdt.DEFAULT }
-										: { maChuyenNganh: minor?.ma, loai: ELoaiPhieuDkCtdt.DEFAULT };
+										? { maCtdt: choosenMinor, loai: ELoaiPhieuDkCtdt.DEFAULT }
+										: { maChuyenNganh: choosenMinor, loai: ELoaiPhieuDkCtdt.DEFAULT };
 									await submitPhieuDangKy(
 										phieuDangKyHienTai?._id ?? '',
 										{
@@ -271,7 +274,7 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 								} catch {}
 							}}
 						>
-							<Button type='primary' loading={loadingSubmit} disabled={loading || !minor?.ma}>
+							<Button type='primary' loading={loadingSubmit} disabled={loading || !choosenMinor}>
 								{isMinor
 									? intl.formatMessage({ id: 'minor.button.registerMinor' })
 									: intl.formatMessage({ id: 'minor.button.registerConcentration' })}

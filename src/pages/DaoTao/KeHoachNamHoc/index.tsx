@@ -1,5 +1,6 @@
+import PageCard from '@/components/PageCard';
 import dayjs from '@/utils/dayjs'; // ✅ Sử dụng dayjs
-import { Card, Divider, Empty, Spin } from 'antd';
+import { Divider, Empty, Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
@@ -18,8 +19,8 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 	const { getAllModel: getNganh } = useModel('daotao.nganhdaotao');
 	const [data, setData] = useState<KeHoachNamHoc.TKeHoachData[]>([]);
 	const [header, setHeader] = useState<KeHoachNamHoc.TGridHeader>();
-	const mapNganh = useRef<Record<string, NganhDaoTao.IRecordCoSo>>();
-	const mapKhoa = useRef<Record<string, KhoaSinhVien.IRecord>>();
+	const mapNganh = useRef<Record<string, NganhDaoTao.IRecordCoSo>>({});
+	const mapKhoa = useRef<Record<string, KhoaSinhVien.IRecord>>({});
 
 	const getData = async () => {
 		getHocKy({ sort: { soThuTu: 1 }, condition: { namHocId: recNam?._id } }).then((hocKyList) => {
@@ -146,7 +147,7 @@ const KeHoachNamHocPage = (props: { hideSelect?: boolean }) => {
 		</div>
 	);
 
-	return <>{!hideSelect ? <Card title='Kế hoạch năm học'>{mainContent()}</Card> : mainContent()}</>;
+	return <>{!hideSelect ? <PageCard title='Kế hoạch năm học'>{mainContent()}</PageCard> : mainContent()}</>;
 };
 
 export default KeHoachNamHocPage;

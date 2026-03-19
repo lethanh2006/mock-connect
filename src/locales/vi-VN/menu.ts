@@ -34,6 +34,7 @@ export default {
 	'menu.HocTap.HocTapKhac.DangKyChuyenNganh': 'Đăng ký chuyên ngành',
 	'menu.HocTap.HocTapKhac.XetHocVu': 'Xét học vụ',
 	'menu.HocTap.HocTapKhac.QuyetDinh': 'Bảo lưu, thôi học',
+	'menu.HocTap.PathWay': 'Lộ trình học tập',
 	'menu.HocTap.XetTotNghiep': 'Chứng chỉ, tốt nghiệp',
 	'menu.HocTap.XetTotNghiep.ChungChiTotNghiep': 'Chứng chỉ',
 	'menu.HocTap.XetTotNghiep.XetTotNghiep': 'Xét tốt nghiệp',
