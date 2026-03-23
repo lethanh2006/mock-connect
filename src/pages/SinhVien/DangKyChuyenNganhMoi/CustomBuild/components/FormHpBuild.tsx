@@ -1,3 +1,4 @@
+import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import { ETrangThaiKqht, trangThaiKqht } from '@/services/DaoTao/constant';
 import rules from '@/utils/rules';
@@ -7,7 +8,6 @@ import { useEffect } from 'react';
 import FormHPTuyenQuyet from './FormHPTuyenQuyet';
 import FormHocPhanPhu from './FormHocPhanThayThe';
 import FormItemHocPhanTable from './FormItemHocPhanTable';
-import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
 
 const TRANG_THAI_KQHT_OPTIONS = Object.values(ETrangThaiKqht).map((v) => ({
 	value: v,
@@ -108,11 +108,11 @@ const FormHpBuild = ({
 					<Form.Item
 						name='soThuTuKy'
 						label={intl.formatMessage({ id: 'minor.idm.form.expectedSemester' })}
-						rules={isView ? [] : [...rules.number(20, 0, false), ...rules.required]}
+						rules={isView ? [] : [...rules.number(20, 5, false), ...rules.required]}
 					>
 						<InputNumber
 							style={{ width: '100%' }}
-							min={0}
+							min={5}
 							max={20}
 							disabled={isView}
 							placeholder={intl.formatMessage({ id: 'minor.idm.form.expectedSemester' })}
