@@ -4,14 +4,22 @@ import {
 	trangThaiDangKyChuyenNganh,
 } from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import { Card, Col, Row, Tag } from 'antd';
+import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const StudentInfoCard = ({ type }: { type: 'minor' | 'concentration' }) => {
 	const intl = useIntl();
 
-	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { record: recSinhVien, getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const { phieuDangKyTheoDot: phieuDkCtdtMeByDot } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
 	const { record: kyHienTai } = useModel('daotao.dotdkctdt');
+
+	useEffect(() => {
+		if (!recSinhVien) {
+			getThongTinCuaToiModel();
+		}
+	}, []);
+
 	const gpa = recSinhVien?.kqhtTichLuyNganh1?.trungBinhThang4 || '-';
 	const chuongTrinhDaoTao =
 		phieuDkCtdtMeByDot?.trangThai !== ETrangThaiDangKyChuyenNganh.NHAP

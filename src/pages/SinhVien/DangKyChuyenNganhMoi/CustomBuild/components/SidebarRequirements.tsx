@@ -18,7 +18,7 @@ const SidebarRequirements = () => {
 			<Affix offsetTop={80}>
 				<Card title={intl.formatMessage({ id: 'minor.idm.sidebar.requirements' })} style={{ height: 'fit-content' }}>
 					<div>
-						<Divider orientation='left' className='divider-big-title' dashed>
+						<Divider orientation='left' className='divider-big-title' style={{ marginTop: 0 }} dashed>
 							{intl.formatMessage({ id: 'minor.idm.sidebar.mandatoryRequirements' })}
 						</Divider>
 						<ul>
@@ -64,11 +64,6 @@ const SidebarRequirements = () => {
 							</li>
 						</ul>
 					</div>
-
-					<Card style={{ marginTop: 16 }}>
-						<p style={{ fontWeight: 'bold' }}>{intl.formatMessage({ id: 'minor.idm.sidebar.note' })}</p>
-						<p>{intl.formatMessage({ id: 'minor.idm.sidebar.noteContent' })}</p>
-					</Card>
 				</Card>
 			</Affix>
 		</Col>

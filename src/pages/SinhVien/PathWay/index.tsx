@@ -1,7 +1,7 @@
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
-import { Button, Card, Col, Descriptions, Row, Spin, Steps, Tag } from 'antd';
+import { Card, Col, Descriptions, Row, Spin, Steps, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
@@ -164,11 +164,6 @@ const PathWayPage = () => {
 																				</h3>
 																			</Col>
 																		</Row>
-																	</Col>
-																	<Col>
-																		<Button size='small' onClick={() => setPreviewingPathway(p)}>
-																			{intl.formatMessage({ id: 'pathway.button.view' })}
-																		</Button>
 																	</Col>
 																</Row>
 															</Card>
