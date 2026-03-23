@@ -37,7 +37,7 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 		compulsory: ChuongTrinhDaoTao.IKhoiHpCt[];
 		electiveGroups: ChuongTrinhDaoTao.IKhoiHpCt[];
 	} => {
-		const raw = [...effectiveKhoiHpCtList].sort((a, b) => (a.soThuTuKy ?? 0) - (b.soThuTuKy ?? 0));
+		const raw = [...danhSach].sort((a, b) => (a.soThuTuKy ?? 0) - (b.soThuTuKy ?? 0));
 		console.log(raw, 'rawrawraw');
 		const compRaw: Row[] = [];
 		const electiveGroupsList: ChuongTrinhDaoTao.IKhoiHpCt[] = [];
@@ -78,9 +78,6 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 		const compulsory = [...compulsoryMap.values()].sort((a, b) => (a.soThuTuKy ?? 0) - (b.soThuTuKy ?? 0));
 		return { compulsory, electiveGroups: electiveGroupsList };
 	}, [effectiveKhoiHpCtList]);
-
-	console.log(compulsory, 'compulsorycompulsory');
-	console.log(electiveGroups, 'electiveGroupselectiveGroups');
 
 	const isGroupRow = (r: Row) => (r._id ?? '').toString().startsWith('-0-');
 	const isCompulsory = (r: Row) => (r._id ?? '').toString().startsWith('-1-');
