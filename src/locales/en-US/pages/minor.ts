@@ -61,7 +61,7 @@ export default {
 	'minor.idm.sidebar.note': 'Note',
 	'minor.idm.sidebar.noteContent': 'Recommended to apply before the end of Year 2 to avoid graduation delays',
 	'minor.idm.sidebar.needHelp': 'Need Help?',
-	'minor.idm.requirement.gpa': 'Gpa ≥',
+	'minor.idm.requirement.gpa': 'GPA ≥',
 	'minor.idm.requirement.facultyAdvisor': 'Faculty Advisor from your home College',
 	'minor.idm.requirement.fullTimeStatus': 'Full-time VinUni student status',
 	'minor.idm.requirement.minCredits': 'Minimum',

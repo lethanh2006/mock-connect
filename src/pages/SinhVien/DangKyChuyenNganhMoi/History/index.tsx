@@ -32,6 +32,11 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 				operator: EOperatorType.EQUAL,
 				values: [type],
 			},
+			{
+				field: 'trangThai',
+				operator: EOperatorType.NOT_EQUAL,
+				values: [ETrangThaiDangKyChuyenNganh.NHAP],
+			},
 		];
 		return getModel(undefined, filterParams, undefined, undefined, undefined, 'me/page');
 	};

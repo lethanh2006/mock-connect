@@ -1,6 +1,6 @@
 export default {
 	'hoctapkhac.title': 'Other Academic Activities',
-	'hoctapkhac.dangkychuyennganh.title': 'Major Registration',
+	'hoctapkhac.dangkychuyennganh.title': 'Concentration Registration',
 	'hoctapkhac.dangkychuyennganhhep.title': 'Minor Registration',
 	'hoctapkhac.xethocvu.title': 'Academic Review',
 	'hoctapkhac.baoluuthoihoc.title': 'Study Suspension / Withdrawal',

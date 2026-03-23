@@ -18,9 +18,6 @@ const FormFooter = ({ showPrevious = false, onPrevious, onNext, onSubmit, nextTe
 
 	return (
 		<div className='form-footer'>
-			{showPrevious && onPrevious && (
-				<Button onClick={onPrevious}>{intl.formatMessage({ id: 'minor.idm.button.previous' })}</Button>
-			)}
 			{onNext && (
 				<Button type='primary' onClick={onNext}>
 					{nextText || defaultNextText}
@@ -35,6 +32,9 @@ const FormFooter = ({ showPrevious = false, onPrevious, onNext, onSubmit, nextTe
 				>
 					<Button type='primary'>{submitText || defaultSubmitText}</Button>
 				</Popconfirm>
+			)}
+			{showPrevious && onPrevious && (
+				<Button onClick={onPrevious}>{intl.formatMessage({ id: 'minor.idm.button.previous' })}</Button>
 			)}
 		</div>
 	);
