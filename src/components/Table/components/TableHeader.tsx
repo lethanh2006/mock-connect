@@ -43,6 +43,7 @@ export const TableHeader: React.FC = () => {
 		loading,
 		total,
 		hideTotal,
+		disableFilterModal,
 		size,
 	} = useTableContext();
 	const {
@@ -55,6 +56,7 @@ export const TableHeader: React.FC = () => {
 		reload: btnReload = true,
 	} = buttons || {};
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
+	const canOpenModalFilter = btnFilter && hasFilter && disableFilterModal !== true;
 
 	//#region Global Search Logic
 
@@ -290,7 +292,7 @@ export const TableHeader: React.FC = () => {
 			<div className='extra no-print'>
 				<ColumnSettings />
 
-				{btnFilter && hasFilter && (
+				{canOpenModalFilter && (
 					<ButtonExtend
 						className='btn-filter'
 						size={size}

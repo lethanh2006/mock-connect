@@ -12,7 +12,7 @@ import { useIntl, useModel } from 'umi';
 import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
 import ModalImport from '../Import';
-import type { IColumn, TableBaseProps, TFilter } from '../typing';
+import type { IColumn, TableBaseProps } from '../typing';
 import { ResizableTitle } from './ResizableTitle';
 import { useTableContext } from './TableContext';
 import { TableFormModal } from './TableFormModal';
@@ -24,8 +24,6 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	const model = useModel(modelName) as any;
 	const { page, limit, setPage, setLimit, condition, sort, setSort, setFilters, initFilter } = model;
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
-	const filters: TFilter<any>[] = model?.filters;
-	const getData = props.getData ?? model?.getModel;
 	const {
 		visibleImport,
 		setVisibleImport,
@@ -37,7 +35,14 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		buttons,
 		hasFilter,
 		setSelectedIds,
+		filters,
+		disableFilterModal,
+		externalConditions,
+		getData,
 	} = useTableContext();
+
+	const filtersDependency = JSON.stringify(filters ?? []);
+	const externalConditionsDependency = JSON.stringify(externalConditions ?? {});
 
 	const { handleFilter, handleSearch, finalColumns } = useTableColumns({
 		columns: props.columns,
@@ -56,7 +61,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			model?.[props.dataState || 'danhSach']?.map((item: any, index: number) => ({
 				...item,
 				index: index + 1 + (page - 1) * limit * (props.pageable === false ? 0 : 1),
-				key: item?._id ?? index,
+				key: item?._id ? `${item._id}-${index}` : index,
 				children:
 					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
 						? item.children
@@ -67,7 +72,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 	useEffect(() => {
 		setPage(1);
-	}, [JSON.stringify(filters ?? [])]);
+	}, [filtersDependency]);
 
 	useEffect(() => {
 		// Block text selection during resize
@@ -82,8 +87,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	}, []);
 
 	useEffect(() => {
-		getData(params);
-	}, [...dependencies, filters, condition, sort]);
+		getData?.(params);
+	}, [...dependencies, filtersDependency, externalConditionsDependency, condition, sort]);
 
 	useEffect(() => {
 		return () => {
@@ -300,15 +305,19 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			<TableFormModal />
 
-			{buttons?.filter !== false && hasFilter ? <ModalFilter /> : null}
+			{buttons?.filter !== false && hasFilter && disableFilterModal !== true ? <ModalFilter /> : null}
 
 			{buttons?.import ? (
 				<ModalImport
 					visible={visibleImport ?? false}
 					modelName={props.modelImportName ?? modelName}
 					onCancel={() => setVisibleImport?.(false)}
-					onOk={() => getData(params)}
-					titleTemplate={title ? `Biểu mẫu ${title}.xlsx` : undefined}
+					onOk={() => getData?.(params)}
+					titleTemplate={
+						title
+							? intl.formatMessage({ id: 'global.table.index.import.titleTemplate' }, { title: title as any })
+							: undefined
+					}
 					extendData={params}
 				/>
 			) : null}
@@ -318,7 +327,10 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					visible={visibleExport ?? false}
 					modelName={props.modelExportName ?? modelName}
 					onCancel={() => setVisibleExport?.(false)}
-					fileName={`Danh sách ${title ?? 'dữ liệu'}.xlsx`}
+					fileName={intl.formatMessage(
+						{ id: 'global.table.index.export.fileName' },
+						{ title: (title ?? intl.formatMessage({ id: 'global.table.index.export.defaultTitle' })) as any },
+					)}
 					condition={params}
 				/>
 			) : null}
