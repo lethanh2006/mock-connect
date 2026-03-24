@@ -1,7 +1,7 @@
 import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import type { InputRef } from 'antd';
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import type { IColumn, QueryCondition, TableBaseProps, TFilter } from '../typing';
+import type { IColumn, TableBaseProps, TExternalConditionItem, TFilter } from '../typing';
 import { getTableFingerprint, stringHash } from '../utils';
 import _ from 'lodash';
 
@@ -83,9 +83,7 @@ interface TableContextValue<T extends object = any> {
 	params?: any;
 	getData?: (params: any) => void;
 	setFilters?: (filters: TFilter<T>[]) => void;
-	externalConditions?: QueryCondition<T>;
-	externalConditionLabels?: Record<string, string>;
-	externalConditionValueLabels?: Record<string, Record<string, string>>;
+	externalConditions?: TExternalConditionItem<T>[];
 }
 
 export const TableContext = createContext<TableContextValue<any> | undefined>(undefined);

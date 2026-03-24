@@ -16,12 +16,11 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	const model = useModel(props.modelName) as any;
 	const modelFilters: TFilter<T>[] = model?.filters ?? [];
 
-	// Normalize conditions (supports both new array format and legacy object format)
-	const {
-		conditions: externalConditions,
-		labels: externalConditionLabels,
-		valueLabels: externalConditionValueLabels,
-	} = useMemo(() => normalizeExternalConditions(props.externalConditions), [props.externalConditions]);
+	// Normalize and extract raw conditions for API/dependencies
+	const { conditions: externalRawConditions } = useMemo(
+		() => normalizeExternalConditions(props.externalConditions),
+		[props.externalConditions],
+	);
 
 	const canSyncExternalFilters = typeof props.onExternalFiltersChange === 'function';
 	const externalFilters = useMemo(
@@ -55,17 +54,17 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 
 	const mergeExternalConditions = useCallback(
 		(params: any) => {
-			if (!externalConditions || Object.keys(externalConditions).length === 0) return params;
+			if (!externalRawConditions || Object.keys(externalRawConditions).length === 0) return params;
 
 			const normalizedParams =
 				params && typeof params === 'object' && !Array.isArray(params) ? params : {};
 
 			return {
-				...externalConditions,
+				...externalRawConditions,
 				...normalizedParams,
 			};
 		},
-		[externalConditions],
+		[externalRawConditions],
 	);
 
 	const getData = useCallback(
@@ -75,7 +74,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 		},
 		[props.getData, model, mergeExternalConditions],
 	);
-	const hasExternalConditions = !!(externalConditions && Object.keys(externalConditions).length > 0);
+	const hasExternalConditions = !!(props.externalConditions && props.externalConditions.length > 0);
 	const hasFilter =
 		props.columns?.filter((item) => item.filterType)?.length ||
 		(props.externalFilters && props.externalFilters.length > 0) ||
@@ -153,9 +152,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 				columns: props.columns || [],
 				disableFilterModal: props.disableFilterModal,
 				syncExternalToColumnFilter: props.syncExternalToColumnFilter,
-				externalConditions,
-				externalConditionLabels,
-				externalConditionValueLabels,
+				externalConditions: props.externalConditions,
 			}}
 		>
 			<TableBaseContent {...props} />

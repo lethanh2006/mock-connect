@@ -2,7 +2,6 @@ import { PlusOutlined, PlusSquareOutlined, QuestionCircleOutlined } from '@ant-d
 import { Button, Descriptions, Form, Modal, Space, Tooltip, Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
-import type { ConditionCriteria } from '../typing';
 import { useTableContext } from '../components/TableContext';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { normalizeFilters } from '../utils';
@@ -21,12 +20,11 @@ const ModalFilter = () => {
 		setVisibleFilter,
 		filters,
 		externalConditions,
-		externalConditionLabels,
-		externalConditionValueLabels,
 	} = useTableContext();
 	const columns = originalColumns || finalColumns;
 	const [form] = Form.useForm();
 	const { fieldsFilterable } = useFilterFields(columns, form);
+
 	const fieldMetaMap = useMemo(() => {
 		const map: Record<string, { label: string; valueLabelMap: Record<string, string> }> = {};
 
@@ -68,88 +66,72 @@ const ModalFilter = () => {
 	}, [columns]);
 
 	const externalConditionRows = useMemo(() => {
-		if (!externalConditions || Object.keys(externalConditions).length === 0) {
+		if (!externalConditions || !Array.isArray(externalConditions) || externalConditions.length === 0) {
 			return [];
 		}
 
-		const isCriteriaObject = (value: any) => {
-			if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
-			return Object.keys(value).some((key) => key.startsWith('$'));
-		};
+		const formatScalarValue = (item: any): string => {
+			if (item.value === null || item.value === undefined) return intl.formatMessage({ id: 'global.table.operator.null' });
 
-		const formatScalarValue = (field: string, value: any): string => {
-			if (value === null || value === undefined) return intl.formatMessage({ id: 'global.table.operator.null' });
+			if (typeof item.valueLabel === 'string') return item.valueLabel;
+			if (typeof item.valueLabel === 'object' && item.valueLabel[String(item.value)]) return item.valueLabel[String(item.value)];
 
-			const externalValueLabel = externalConditionValueLabels?.[field]?.[String(value)];
-			if (externalValueLabel !== undefined) return externalValueLabel;
+			const fieldMetaValueLabel = fieldMetaMap[item.field]?.valueLabelMap?.[String(item.value)];
+			if (fieldMetaValueLabel !== undefined) return fieldMetaValueLabel;
 
-			const valueLabel = fieldMetaMap[field]?.valueLabelMap?.[String(value)];
-			if (valueLabel !== undefined) return valueLabel;
-
-			if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-				return String(value);
+			if (typeof item.value === 'string' || typeof item.value === 'number' || typeof item.value === 'boolean') {
+				return String(item.value);
 			}
 
-			return JSON.stringify(value);
+			return JSON.stringify(item.value);
 		};
 
-		const formatListValue = (field: string, value: any): string => {
-			const values = Array.isArray(value) ? value : [value];
-			return `[${values.map((item) => formatScalarValue(field, item)).join(', ')}]`;
+		const formatListValue = (item: any): string => {
+			const values = Array.isArray(item.value) ? item.value : [item.value];
+			return `[${values.map((v: any) => formatScalarValue({ ...item, value: v })).join(', ')}]`;
 		};
 
-		const formatConditionExpression = (field: string, conditionValue: any): string => {
-			if (!isCriteriaObject(conditionValue)) {
-				if (Array.isArray(conditionValue)) return `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(field, conditionValue)}`;
-				return formatScalarValue(field, conditionValue);
-			}
+		const formatConditionExpression = (item: any): string => {
+			const { operator } = item;
+			const op = operator || '$eq';
 
-			const formatItemExpression = (f: string, v: any, op: keyof ConditionCriteria<any> = '$eq'): string => {
-				const OPERATOR_RENDERER: Record<
-					keyof ConditionCriteria<any>,
-					(field: string, value: any) => string
-				> = {
-					$eq: (field, value) => (Array.isArray(value) ? `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(field, value)}` : formatScalarValue(field, value)),
-					$ne: (field, value) => {
-						if (typeof value === 'boolean') {
-							const oppositeValueLabel = externalConditionValueLabels?.[field]?.[String(!value)];
-							if (oppositeValueLabel !== undefined) return oppositeValueLabel;
+			const OPERATOR_RENDERER: Record<string, (item: any) => string> = {
+				$eq: (i) => (Array.isArray(i.value) ? `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(i)}` : formatScalarValue(i)),
+				$ne: (i) => {
+					if (typeof i.value === 'boolean') {
+						const oppositeValue = !i.value;
+						if (typeof i.valueLabel === 'object' && i.valueLabel[String(oppositeValue)]) {
+							return i.valueLabel[String(oppositeValue)];
 						}
-						return `${intl.formatMessage({ id: 'global.table.operator.ne' })} ${formatScalarValue(field, value)}`;
-					},
-					$in: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(field, value)}`,
-					$nin: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.not_in' })} ${formatListValue(field, value)}`,
-					$gt: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.gt' })} ${formatScalarValue(field, value)}`,
-					$gte: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.gte' })} ${formatScalarValue(field, value)}`,
-					$lt: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.lt' })} ${formatScalarValue(field, value)}`,
-					$lte: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.lte' })} ${formatScalarValue(field, value)}`,
-					$exist: (field, value) =>
-						intl.formatMessage({
-							id: value ? 'global.table.operator.exist' : 'global.table.operator.not_exist',
-						}),
-					$like: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.contain' })} ${formatScalarValue(field, value)}`,
-					$regex: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.regex' })} ${formatScalarValue(field, value)}`,
-					$not: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.not' })} (${formatConditionExpression(field, value)})`,
-				};
-
-				const renderer = OPERATOR_RENDERER[op];
-				if (renderer) return renderer(f, v);
-				return `${op} ${formatScalarValue(f, v)}`;
+					}
+					return `${intl.formatMessage({ id: 'global.table.operator.ne' })} ${formatScalarValue(i)}`;
+				},
+				$in: (i) => `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(i)}`,
+				$nin: (i) => `${intl.formatMessage({ id: 'global.table.operator.not_in' })} ${formatListValue(i)}`,
+				$gt: (i) => `${intl.formatMessage({ id: 'global.table.operator.gt' })} ${formatScalarValue(i)}`,
+				$gte: (i) => `${intl.formatMessage({ id: 'global.table.operator.gte' })} ${formatScalarValue(i)}`,
+				$lt: (i) => `${intl.formatMessage({ id: 'global.table.operator.lt' })} ${formatScalarValue(i)}`,
+				$lte: (i) => `${intl.formatMessage({ id: 'global.table.operator.lte' })} ${formatScalarValue(i)}`,
+				$exist: (i) =>
+					intl.formatMessage({
+						id: i.value ? 'global.table.operator.exist' : 'global.table.operator.not_exist',
+					}),
+				$like: (i) => `${intl.formatMessage({ id: 'global.table.operator.contain' })} ${formatScalarValue(i)}`,
+				$regex: (i) => `${intl.formatMessage({ id: 'global.table.operator.regex' })} ${formatScalarValue(i)}`,
+				// $not: (i) => `${intl.formatMessage({ id: 'global.table.operator.not' })} (${formatConditionExpression(i)})`,
 			};
 
-			const parts = Object.entries(conditionValue).map(([operator, value]) => {
-				return formatItemExpression(field, value, operator as keyof ConditionCriteria<any>);
-			});
-
-			return parts.join(` ${intl.formatMessage({ id: 'global.table.operator.and' })} `);
+			const renderer = OPERATOR_RENDERER[op];
+			if (renderer) return renderer(item);
+			return `${op} ${formatScalarValue(item)}`;
 		};
 
-		return Object.entries(externalConditions).map(([field, conditionValue]) => ({
-			key: field,
-			label: externalConditionLabels?.[field] ?? fieldMetaMap[field]?.label ?? field,
-			expression: formatConditionExpression(field, conditionValue),
+		return externalConditions.map((item) => ({
+			key: String(item.field),
+			label: item.label || fieldMetaMap[String(item.field)]?.label || String(item.field),
+			expression: formatConditionExpression(item),
 		}));
-	}, [externalConditions, externalConditionLabels, externalConditionValueLabels, fieldMetaMap, intl]);
+	}, [externalConditions, fieldMetaMap, intl]);
 
 
 	const INITIAL_CONDITION_ROWS = 4;

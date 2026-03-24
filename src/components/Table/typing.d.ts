@@ -221,18 +221,34 @@ export type RowFilterProps = {
 };
 
 /**
- * Cấu trúc một item trong bộ lọc ngoài (Dùng cho gom 3 thành 1)
+ * Đại diện cho một điều kiện lọc từ bên ngoài truyền vào TableBase.
+ * @template T Kiểu dữ liệu của bản ghi trong bảng.
+ * 
+ * @example
+ * // Trường hợp dùng mapping object
+ * {
+ *   field: 'active',
+ *   label: 'Trạng thái',
+ *   value: true,
+ *   valueLabel: { true: 'Đang hoạt động', false: 'Ngừng hoạt động' }
+ * }
+ * 
+ * @example
+ * // Trường hợp dùng nhãn trực tiếp (khi đã biết nhãn từ Select)
+ * {
+ *   field: 'phongBanId',
+ *   label: 'Phòng ban',
+ *   value: 'kt',
+ *   valueLabel: 'Kế toán'
+ * }
  */
-export type TExternalConditionItem<T extends object = any> = {
-	/** Tên trường dữ liệu (ví dụ: 'ma', 'active', 'createdAt') */
+export type TExternalConditionItem<T extends object> = {
+	/** Tên trường cần lọc (Dựa trên kiểu dữ liệu T) */
 	field: keyof T | string;
-
-	/** Nhãn hiển thị cho trường này (ví dụ: 'Mã', 'Trạng thái') */
-	label: string;
-
+	/** Nhãn hiển thị của trường (Dùng trong Modal Filter) */
+	label?: string;
 	/** Giá trị lọc */
 	value: any;
-
 	/**
 	 * Toán tử lọc (MongoDB style)
 	 * @default '$eq'
@@ -240,11 +256,13 @@ export type TExternalConditionItem<T extends object = any> = {
 	 */
 	operator?: keyof ConditionCriteria<T>;
 
-	/**
-	 * Nhãn hiển thị cho giá trị lọc (Plaintext mapping)
-	 * - Nếu là string: Dùng làm nhãn trực tiếp.
-	 * - Nếu là object: Map value sang label (ví dụ: { true: 'Có', false: 'Không' }).
-	 * - Nếu không truyền: Modal Filter sẽ tự tìm label từ `columns.filterData` hoặc hiển thị giá trị thô.
+	/** 
+	 * Nhãn hiển thị cho giá trị lọc (Dùng để hiển thị trong Modal Filter thay cho giá trị thô). 
+	 * - Dạng `string`: Dùng khi đã có sẵn nhãn (VD: lấy từ `Select.label`). 
+	 *   Ví dụ: `valueLabel: 'Kế toán'`.
+	 * - Dạng `object`: Dùng khi muốn định nghĩa bộ quy tắc tra cứu (VD: cho Boolean, Enum). 
+	 *   Ví dụ: `valueLabel: { true: 'Có', false: 'Không' }`.
+	 * - Nếu không truyền: Hệ thống tự tìm nhãn từ `columns.filterData` hoặc hiển thị giá trị thô.
 	 */
 	valueLabel?: string | Record<string, string>;
 };
