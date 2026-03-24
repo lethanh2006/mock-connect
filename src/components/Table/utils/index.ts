@@ -104,24 +104,26 @@ const extractText = (node: any): string => {
 	return '';
 };
 
-// Tạo key duy nhất cho column dựa trên key, dataIndex hoặc title
+// Tạo key duy nhất cho column dựa trên key, dataIndex hoặc kết hợp title
 export const getColumnKey = (item: IColumn<any>, index: number) => {
 	if (item.key) return String(item.key);
-	if (item.dataIndex) {
-		return Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : String(item.dataIndex);
-	}
 
-	// Trích xuất text từ title để làm part của key
+	// Trích xuất text từ title để làm part của key giúp tăng độ duy nhất
 	let titleText = '';
-	if (typeof item.title === 'function') {
-		titleText = 'f_title'; // Placeholder cho title dạng function
-	} else {
+	if (typeof item.title !== 'function') {
 		titleText = extractText(item.title);
 	}
+	const titleHash = titleText ? stringHash(titleText) : '';
 
-	if (titleText && titleText !== 'f_title') {
+	if (item.dataIndex) {
+		const baseKey = Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : String(item.dataIndex);
+		// Kết hợp dataIndex với titleHash để phân biệt các cột dùng chung dataIndex nhưng khác tiêu đề
+		return titleHash ? `${baseKey}_${titleHash}` : baseKey;
+	}
+
+	if (titleText) {
 		// Nếu có title rõ ràng, dùng hash của title để đảm bảo tính ổn định (không phụ thuộc index)
-		return `col_${stringHash(titleText)}`;
+		return `col_${titleHash}`;
 	}
 
 	// Cuối cùng nếu không có gì để định danh, mới dùng index
@@ -145,8 +147,15 @@ export const mergeColumnSettings = (
 	const availableColumns = newColumns.filter((col) => col.hide !== true);
 	const availableKeys = availableColumns.map((col, index) => getColumnKey(col, index));
 
-	// 1. Lọc bỏ các cột không còn tồn tại trong code
-	const result = currentSettings.filter((s) => availableKeys.includes(s.key));
+	// 1. Lọc bỏ các cột không còn tồn tại trong code và loại bỏ các Key trùng lặp (nếu lướt bị cache lỗi)
+	const seenResultKeys = new Set<string>();
+	const result = currentSettings.filter((s) => {
+		if (!availableKeys.includes(s.key)) return false;
+		if (seenResultKeys.has(s.key)) return false;
+		seenResultKeys.add(s.key);
+		return true;
+	});
+
 	const resultKeys = new Set(result.map((s) => s.key));
 
 	// 2. Chèn các cột mới vào đúng vị trí tương đối

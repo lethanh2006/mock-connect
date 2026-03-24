@@ -37,7 +37,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		() =>
 			(props?.data ?? []).map((item: any, index: number) => ({
 				...item,
-				key: item?._id ?? String(index),
+				key: item?._id ? `${item._id}-${index}` : String(index),
 				index: index + 1,
 				children:
 					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
