@@ -11,7 +11,7 @@ export interface IColumnSetting {
 	order?: number;
 }
 
-interface TableContextValue {
+interface TableContextValue<T extends object = any> {
 	// Trạng thái hiển thị Modal
 	visibleFilter?: boolean;
 	setVisibleFilter?: (visible: boolean) => void;
@@ -21,9 +21,9 @@ interface TableContextValue {
 	setVisibleExport?: (visible: boolean) => void;
 
 	// Trạng thái các cột
-	finalColumns: IColumn<any>[];
-	setFinalColumns?: React.Dispatch<React.SetStateAction<IColumn<any>[]>>;
-	columns: IColumn<any>[]; // Columns gốc (chưa lọc hide)
+	finalColumns: IColumn<T>[];
+	setFinalColumns?: React.Dispatch<React.SetStateAction<IColumn<T>[]>>;
+	columns: IColumn<T>[]; // Columns gốc (chưa lọc hide)
 
 	// Ref của ô nhập tìm kiếm
 	searchInputRef?: React.RefObject<InputRef | null>;
@@ -41,7 +41,7 @@ interface TableContextValue {
 	setSelectedIds?: (ids?: (string | number)[]) => void;
 	loading?: boolean;
 	total?: number;
-	filters?: TFilter<any>[];
+	filters?: TFilter<T>[];
 	hasFilter?: boolean;
 
 	// Các hành động trên bảng
@@ -82,18 +82,18 @@ interface TableContextValue {
 	modelExportName?: Namespaces;
 	params?: any;
 	getData?: (params: any) => void;
-	setFilters?: (filters: TFilter<any>[]) => void;
-	externalConditions?: QueryCondition<any>;
+	setFilters?: (filters: TFilter<T>[]) => void;
+	externalConditions?: QueryCondition<T>;
 	externalConditionLabels?: Record<string, string>;
 	externalConditionValueLabels?: Record<string, Record<string, string>>;
 }
 
-export const TableContext = createContext<TableContextValue | undefined>(undefined);
+export const TableContext = createContext<TableContextValue<any> | undefined>(undefined);
 
-interface TableProviderProps {
+interface TableProviderProps<T extends object = any> {
 	children: ReactNode;
 	value: Omit<
-		TableContextValue,
+		TableContextValue<T>,
 		| 'visibleFilter'
 		| 'setVisibleFilter'
 		| 'visibleImport'
@@ -121,11 +121,14 @@ const getTableSequence = (path: string) => {
 	return ++tableSequence;
 };
 
-export const TableProvider = ({ children, value: externalValue }: TableProviderProps) => {
+export const TableProvider = <T extends object = any>({
+	children,
+	value: externalValue,
+}: TableProviderProps<T>) => {
 	const [visibleFilter, setVisibleFilter] = useState(false);
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
-	const [finalColumns, setFinalColumns] = useState<IColumn<any>[]>([]);
+	const [finalColumns, setFinalColumns] = useState<IColumn<T>[]>([]);
 	const [instanceSeq] = useState(() => getTableSequence(window.location.pathname));
 
 	const configStorageKey = useMemo(() => {

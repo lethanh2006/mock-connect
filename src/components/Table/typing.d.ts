@@ -57,7 +57,7 @@ export type TDataOption = {
 	value: string | number;
 };
 
-export type TableBaseProps = {
+export type TableBaseProps<T extends object = any> = {
 	/** Tên model */
 	modelName: Namespaces;
 
@@ -71,7 +71,7 @@ export type TableBaseProps = {
 
 	Form?: React.FC;
 	formType?: 'Modal' | 'Drawer';
-	columns: IColumn<any>[];
+	columns: IColumn<T>[];
 	title?: React.ReactNode;
 	widthDrawer?: number | 'full';
 
@@ -85,13 +85,13 @@ export type TableBaseProps = {
 	 * Bộ lọc được truyền từ giao diện bên ngoài TableBase.
 	 * Các filter này sẽ hiển thị trong TableBase và Modal Filter.
 	 */
-	externalFilters?: TFilter<any>[];
+	externalFilters?: TFilter<T>[];
 
 	/**
 	 * Condition từ giao diện bên ngoài TableBase.
 	 * Dùng để hiển thị trạng thái condition trong Modal Filter và theo dõi thay đổi để reload dữ liệu.
 	 */
-	externalConditions?: QueryCondition<any>;
+	externalConditions?: QueryCondition<T>;
 
 	/**
 	 * Map nhãn hiển thị cho key của `externalConditions`.

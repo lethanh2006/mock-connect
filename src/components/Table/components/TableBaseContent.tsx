@@ -321,7 +321,11 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					modelName={props.modelImportName ?? modelName}
 					onCancel={() => setVisibleImport?.(false)}
 					onOk={() => getData?.(params)}
-					titleTemplate={title ? `Biểu mẫu ${title}.xlsx` : undefined}
+					titleTemplate={
+						title
+							? intl.formatMessage({ id: 'global.table.index.import.titleTemplate' }, { title: title as any })
+							: undefined
+					}
 					extendData={params}
 				/>
 			) : null}
@@ -331,7 +335,10 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					visible={visibleExport ?? false}
 					modelName={props.modelExportName ?? modelName}
 					onCancel={() => setVisibleExport?.(false)}
-					fileName={`Danh sách ${title ?? 'dữ liệu'}.xlsx`}
+					fileName={intl.formatMessage(
+						{ id: 'global.table.index.export.fileName' },
+						{ title: (title ?? intl.formatMessage({ id: 'global.table.index.export.defaultTitle' })) as any }
+					)}
 					condition={params}
 				/>
 			) : null}

@@ -6,9 +6,9 @@ import './style.less';
 import type { TableBaseProps, TFilter } from './typing';
 import { markExternalFilters, normalizeFilters, splitFiltersBySource, stripFilterSource } from './utils';
 
-const TableBase = (props: TableBaseProps) => {
+const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	const model = useModel(props.modelName) as any;
-	const modelFilters: TFilter<any>[] = model?.filters ?? [];
+	const modelFilters: TFilter<T>[] = model?.filters ?? [];
 	const externalConditions = props.externalConditions;
 	const canSyncExternalFilters = typeof props.onExternalFiltersChange === 'function';
 	const externalFilters = useMemo(
@@ -18,13 +18,13 @@ const TableBase = (props: TableBaseProps) => {
 
 	const { tableFilters } = useMemo(() => splitFiltersBySource(modelFilters), [modelFilters]);
 
-	const filters = useMemo<TFilter<any>[]>(
+	const filters = useMemo<TFilter<T>[]>(
 		() => normalizeFilters([...(externalFilters ?? []), ...(tableFilters ?? [])]),
 		[externalFilters, tableFilters],
 	);
 
 	const handleSetFilters = useCallback(
-		(nextFilters: TFilter<any>[] = []) => {
+		(nextFilters: TFilter<T>[] = []) => {
 			const normalizedNextFilters = normalizeFilters(nextFilters);
 			const {
 				tableFilters: nextTableFilters,
@@ -99,7 +99,7 @@ const TableBase = (props: TableBaseProps) => {
 	const onReload = () => (props.onReload ? props.onReload(props.params) : getData(props.params));
 
 	return (
-		<TableProvider
+		<TableProvider<T>
 			value={{
 				selectedIds,
 				setSelectedIds,

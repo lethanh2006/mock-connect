@@ -1,7 +1,8 @@
 import { PlusOutlined, PlusSquareOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Form, Modal, Space, Tooltip, Typography } from 'antd';
+import { Button, Descriptions, Form, Modal, Space, Tooltip, Typography } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'umi';
+import type { ConditionCriteria } from '../typing';
 import { useTableContext } from '../components/TableContext';
 import { useFilterFields } from '../hooks/useFilterFields';
 import { normalizeFilters } from '../utils';
@@ -77,8 +78,7 @@ const ModalFilter = () => {
 		};
 
 		const formatScalarValue = (field: string, value: any): string => {
-			if (value === null) return 'null';
-			if (value === undefined) return 'undefined';
+			if (value === null || value === undefined) return intl.formatMessage({ id: 'global.table.operator.null' });
 
 			const externalValueLabel = externalConditionValueLabels?.[field]?.[String(value)];
 			if (externalValueLabel !== undefined) return externalValueLabel;
@@ -100,46 +100,48 @@ const ModalFilter = () => {
 
 		const formatConditionExpression = (field: string, conditionValue: any): string => {
 			if (!isCriteriaObject(conditionValue)) {
-				if (Array.isArray(conditionValue)) return `thuộc ${formatListValue(field, conditionValue)}`;
+				if (Array.isArray(conditionValue)) return `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(field, conditionValue)}`;
 				return formatScalarValue(field, conditionValue);
 			}
 
-			const parts = Object.entries(conditionValue).map(([operator, value]) => {
-				switch (operator) {
-					case '$eq':
-						return formatScalarValue(field, value);
-					case '$ne':
+			const formatItemExpression = (f: string, v: any, op: keyof ConditionCriteria<any> = '$eq'): string => {
+				const OPERATOR_RENDERER: Record<
+					keyof ConditionCriteria<any>,
+					(field: string, value: any) => string
+				> = {
+					$eq: (field, value) => (Array.isArray(value) ? `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(field, value)}` : formatScalarValue(field, value)),
+					$ne: (field, value) => {
 						if (typeof value === 'boolean') {
 							const oppositeValueLabel = externalConditionValueLabels?.[field]?.[String(!value)];
 							if (oppositeValueLabel !== undefined) return oppositeValueLabel;
 						}
-						return `khác ${formatScalarValue(field, value)}`;
-					case '$in':
-						return `thuộc ${formatListValue(field, value)}`;
-					case '$nin':
-						return `không thuộc ${formatListValue(field, value)}`;
-					case '$gt':
-						return `> ${formatScalarValue(field, value)}`;
-					case '$gte':
-						return `>= ${formatScalarValue(field, value)}`;
-					case '$lt':
-						return `< ${formatScalarValue(field, value)}`;
-					case '$lte':
-						return `<= ${formatScalarValue(field, value)}`;
-					case '$exist':
-						return value ? 'tồn tại' : 'không tồn tại';
-					case '$like':
-						return `chứa ${formatScalarValue(field, value)}`;
-					case '$regex':
-						return `regex ${formatScalarValue(field, value)}`;
-					case '$not':
-						return `không (${formatConditionExpression(field, value)})`;
-					default:
-						return `${operator} ${formatScalarValue(field, value)}`;
-				}
+						return `${intl.formatMessage({ id: 'global.table.operator.ne' })} ${formatScalarValue(field, value)}`;
+					},
+					$in: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(field, value)}`,
+					$nin: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.not_in' })} ${formatListValue(field, value)}`,
+					$gt: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.gt' })} ${formatScalarValue(field, value)}`,
+					$gte: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.gte' })} ${formatScalarValue(field, value)}`,
+					$lt: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.lt' })} ${formatScalarValue(field, value)}`,
+					$lte: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.lte' })} ${formatScalarValue(field, value)}`,
+					$exist: (field, value) =>
+						intl.formatMessage({
+							id: value ? 'global.table.operator.exist' : 'global.table.operator.not_exist',
+						}),
+					$like: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.contain' })} ${formatScalarValue(field, value)}`,
+					$regex: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.regex' })} ${formatScalarValue(field, value)}`,
+					$not: (field, value) => `${intl.formatMessage({ id: 'global.table.operator.not' })} (${formatConditionExpression(field, value)})`,
+				};
+
+				const renderer = OPERATOR_RENDERER[op];
+				if (renderer) return renderer(f, v);
+				return `${op} ${formatScalarValue(f, v)}`;
+			};
+
+			const parts = Object.entries(conditionValue).map(([operator, value]) => {
+				return formatItemExpression(field, value, operator as keyof ConditionCriteria<any>);
 			});
 
-			return parts.join(' và ');
+			return parts.join(` ${intl.formatMessage({ id: 'global.table.operator.and' })} `);
 		};
 
 		return Object.entries(externalConditions).map(([field, conditionValue]) => ({
@@ -147,7 +149,7 @@ const ModalFilter = () => {
 			label: externalConditionLabels?.[field] ?? fieldMetaMap[field]?.label ?? field,
 			expression: formatConditionExpression(field, conditionValue),
 		}));
-	}, [externalConditions, externalConditionLabels, externalConditionValueLabels, fieldMetaMap]);
+	}, [externalConditions, externalConditionLabels, externalConditionValueLabels, fieldMetaMap, intl]);
 
 
 	const INITIAL_CONDITION_ROWS = 4;
@@ -185,7 +187,7 @@ const ModalFilter = () => {
 				<div
 					style={{
 						marginBottom: 12,
-					padding: '8px 8px',
+						padding: '8px 8px',
 						borderRadius: 6,
 						background: '#fafafa',
 						border: '1px solid #f0f0f0',
@@ -198,37 +200,37 @@ const ModalFilter = () => {
 						</Tooltip>
 						<Text strong>:</Text>
 					</div>
-					<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 16px', marginTop: 6 }}>
-						{visibleConditionRows.map((row) => (
-							<div
-								key={row.key}
-								style={{
-									display: 'flex',
-									flexDirection: 'column',
-									gap: 2,
-								}}
-							>
-								<Text strong style={{ marginBottom: 0 }}>
-									{row.label}:
-								</Text>
-								<Text style={{ marginBottom: 0 }}>{row.expression}</Text>
-							</div>
-						))}
+					<div style={{ marginTop: 8 }}>
+						<Descriptions
+							column={
+								visibleConditionRows.length === 1 || visibleConditionRows.some((row) => row.expression.length > 50)
+									? 1
+									: { xxl: 2, xl: 2, lg: 2, md: 2, sm: 1, xs: 1 }
+							}
+							size='small'
+							layout='horizontal'
+						>
+							{visibleConditionRows.map((row) => (
+								<Descriptions.Item key={row.key} label={row.label}>
+									{row.expression}
+								</Descriptions.Item>
+							))}
+						</Descriptions>
 					</div>
 
-					   {hiddenConditionRows > 0 ? (
-						   <div style={{ marginTop: 4 }}>
+					{hiddenConditionRows > 0 ? (
+						<div style={{ marginTop: 4 }}>
 							<Text type='secondary' style={{ marginRight: 8 }}>
 								{intl.formatMessage(
 									{ id: 'global.table.customfilter.moreconditions', defaultMessage: '+{count} more conditions' },
 									{ count: hiddenConditionRows }
 								)}
 							</Text>
-							   <Button size='small' type='link' style={{ padding: 0 }} onClick={() => setMaxConditionRows((prev) => prev + LOAD_MORE_STEP)}>
-								   {intl.formatMessage({ id: 'global.table.customfilter.button.xemthem', defaultMessage: 'View more' })}
-							   </Button>
-						   </div>
-					   ) : null}
+							<Button size='small' type='link' style={{ padding: 0 }} onClick={() => setMaxConditionRows((prev) => prev + LOAD_MORE_STEP)}>
+								{intl.formatMessage({ id: 'global.table.customfilter.button.xemthem', defaultMessage: 'View more' })}
+							</Button>
+						</div>
+					) : null}
 				</div>
 			) : null}
 
