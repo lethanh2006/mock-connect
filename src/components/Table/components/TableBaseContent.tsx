@@ -56,7 +56,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			model?.[props.dataState || 'danhSach']?.map((item: any, index: number) => ({
 				...item,
 				index: index + 1 + (page - 1) * limit * (props.pageable === false ? 0 : 1),
-				key: item?._id ?? index,
+				key: item?._id ? `${item._id}-${index}` : index,
 				children:
 					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
 						? item.children
@@ -212,14 +212,14 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				rowSelection={
 					props?.rowSelection
 						? {
-								type: 'checkbox',
-								selectedRowKeys: selectedIds ?? [],
-								preserveSelectedRowKeys: true,
-								onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
-								columnWidth: 40,
-								fixed: 'left',
-								...props.detailRow,
-							}
+							type: 'checkbox',
+							selectedRowKeys: selectedIds ?? [],
+							preserveSelectedRowKeys: true,
+							onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
+							columnWidth: 40,
+							fixed: 'left',
+							...props.detailRow,
+						}
 						: undefined
 				}
 				loading={loading}
