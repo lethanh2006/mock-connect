@@ -8,6 +8,7 @@ export {
 	splitFiltersBySource,
 	stripFilterSource,
 } from './filters';
+export { normalizeExternalConditions } from './conditions';
 
 export const updateSearchStorage = (dataIndex: string, value: string) => {
 	const savedSearchValues = JSON.parse(localStorage.getItem('dataTimKiem') || '{}');

@@ -86,29 +86,13 @@ export type TableBaseProps<T extends object = any> = {
 	 * Các filter này sẽ hiển thị trong TableBase và Modal Filter.
 	 */
 	externalFilters?: TFilter<T>[];
-
+ 
 	/**
-	 * Condition từ giao diện bên ngoài TableBase.
-	 * Dùng để hiển thị trạng thái condition trong Modal Filter và theo dõi thay đổi để reload dữ liệu.
+	 * Điều kiện lọc bổ sung từ bên ngoài (Gom 3 thành 1).
+	 * Dùng để hiển thị trạng thái lọc trong Modal Filter và đồng bộ dữ liệu.
 	 */
-	externalConditions?: QueryCondition<T>;
+	externalConditions?: TExternalConditionItem<T>[];
 
-	/**
-	 * Map nhãn hiển thị cho key của `externalConditions`.
-	 * Ví dụ: { ma: 'Mã', dataPartitionCode: 'Phân vùng dữ liệu' }
-	 */
-	externalConditionLabels?: Record<string, string>;
-
-	/**
-	 * Map nhãn hiển thị cho value của từng key trong `externalConditions`.
-	 * Ví dụ: { active: { true: 'Đang hoạt động', false: 'Ngừng hoạt động' } }
-	 */
-	externalConditionValueLabels?: Record<string, Record<string, string>>;
-
-	/**
-	 * Callback đồng bộ khi người dùng thay đổi filter external trong Modal Filter.
-	 * Nếu không truyền callback, filter external sẽ được khóa chỉnh sửa (readOnly).
-	 */
 	onExternalFiltersChange?: (filters: TFilter<any>[]) => void;
 
 	/** Ẩn/khóa toàn bộ Modal Filter (vẫn có thể dùng filter theo cột nếu được bật) */
@@ -234,6 +218,35 @@ export type RowFilterProps = {
 	allowGrouping?: boolean;
 	level?: number;
 	onRemove?: () => void;
+};
+
+/**
+ * Cấu trúc một item trong bộ lọc ngoài (Dùng cho gom 3 thành 1)
+ */
+export type TExternalConditionItem<T extends object = any> = {
+	/** Tên trường dữ liệu (ví dụ: 'ma', 'active', 'createdAt') */
+	field: keyof T | string;
+
+	/** Nhãn hiển thị cho trường này (ví dụ: 'Mã', 'Trạng thái') */
+	label: string;
+
+	/** Giá trị lọc */
+	value: any;
+
+	/**
+	 * Toán tử lọc (MongoDB style)
+	 * @default '$eq'
+	 * Các toán tử hỗ trợ: '$eq', '$ne', '$in', '$nin', '$gt', '$gte', '$lt', '$lte', '$like', '$regex', '$exist', '$not'
+	 */
+	operator?: keyof ConditionCriteria<T>;
+
+	/**
+	 * Nhãn hiển thị cho giá trị lọc (Plaintext mapping)
+	 * - Nếu là string: Dùng làm nhãn trực tiếp.
+	 * - Nếu là object: Map value sang label (ví dụ: { true: 'Có', false: 'Không' }).
+	 * - Nếu không truyền: Modal Filter sẽ tự tìm label từ `columns.filterData` hoặc hiển thị giá trị thô.
+	 */
+	valueLabel?: string | Record<string, string>;
 };
 
 export type ConditionCriteria<T> = {

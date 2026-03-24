@@ -4,12 +4,25 @@ import { TableBaseContent } from './components/TableBaseContent';
 import { TableProvider } from './components/TableContext';
 import './style.less';
 import type { TableBaseProps, TFilter } from './typing';
-import { markExternalFilters, normalizeFilters, splitFiltersBySource, stripFilterSource } from './utils';
+import {
+	markExternalFilters,
+	normalizeExternalConditions,
+	normalizeFilters,
+	splitFiltersBySource,
+	stripFilterSource,
+} from './utils';
 
 const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	const model = useModel(props.modelName) as any;
 	const modelFilters: TFilter<T>[] = model?.filters ?? [];
-	const externalConditions = props.externalConditions;
+
+	// Normalize conditions (supports both new array format and legacy object format)
+	const {
+		conditions: externalConditions,
+		labels: externalConditionLabels,
+		valueLabels: externalConditionValueLabels,
+	} = useMemo(() => normalizeExternalConditions(props.externalConditions), [props.externalConditions]);
+
 	const canSyncExternalFilters = typeof props.onExternalFiltersChange === 'function';
 	const externalFilters = useMemo(
 		() => markExternalFilters(props.externalFilters ?? [], { forceReadOnly: !canSyncExternalFilters }),
@@ -141,8 +154,8 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 				disableFilterModal: props.disableFilterModal,
 				syncExternalToColumnFilter: props.syncExternalToColumnFilter,
 				externalConditions,
-				externalConditionLabels: props.externalConditionLabels,
-				externalConditionValueLabels: props.externalConditionValueLabels,
+				externalConditionLabels,
+				externalConditionValueLabels,
 			}}
 		>
 			<TableBaseContent {...props} />
