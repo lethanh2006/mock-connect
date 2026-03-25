@@ -18,7 +18,7 @@ const RegisterPage = () => {
 	const { fetchPhieuDangKyHienTai, phieuDangKyTheoDot, fetchPhieuDangKyTheoDot } = useModel(
 		'sinhvien.dangkychuyennganh.dangkychuyennganh',
 	);
-	const { record: dotDangKy, fetchDotDangKy } = useModel('daotao.dotdkctdt');
+	const { record: dotDangKy, fetchDotDangKy, isRegistrationOpen } = useModel('daotao.dotdkctdt');
 	const { getModel } = useModel('daotao.nganhchuyennganh');
 
 	const hasRegisteredChoice = !!(phieuDangKyTheoDot?.maCtdt || phieuDangKyTheoDot?.maChuyenNganh);
