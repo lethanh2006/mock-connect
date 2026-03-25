@@ -32,7 +32,9 @@ const FilterGroup = (props: RowFilterProps) => {
 			title={
 				<Space>
 					<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
-						<Checkbox disabled={isReadOnly}>{intl.formatMessage({ id: 'global.table.customfilter.label.nhomdieukien' })}</Checkbox>
+						<Checkbox disabled={isReadOnly}>
+							{intl.formatMessage({ id: 'global.table.customfilter.label.nhomdieukien' })}
+						</Checkbox>
 					</Form.Item>
 					<Form.Item name={[...namePath, 'operator']} initialValue='and' style={{ margin: 0 }} noStyle>
 						<Select
@@ -48,7 +50,8 @@ const FilterGroup = (props: RowFilterProps) => {
 				</Space>
 			}
 			extra={
-				onRemove && !isReadOnly && (
+				onRemove &&
+				!isReadOnly && (
 					<ButtonExtend
 						type='text'
 						size='small'

@@ -40,9 +40,7 @@ const ModalFilter = () => {
 
 			const fieldKey = Array.isArray(column.dataIndex) ? column.dataIndex.join('.') : String(column.dataIndex);
 			const label =
-				typeof column.title === 'string' || typeof column.title === 'number'
-					? String(column.title)
-					: fieldKey;
+				typeof column.title === 'string' || typeof column.title === 'number' ? String(column.title) : fieldKey;
 
 			if (!map[fieldKey]) {
 				map[fieldKey] = { label, valueLabelMap: {} };
@@ -71,10 +69,12 @@ const ModalFilter = () => {
 		}
 
 		const formatScalarValue = (item: any): string => {
-			if (item.value === null || item.value === undefined) return intl.formatMessage({ id: 'global.table.operator.null' });
+			if (item.value === null || item.value === undefined)
+				return intl.formatMessage({ id: 'global.table.operator.null' });
 
 			if (typeof item.valueLabel === 'string') return item.valueLabel;
-			if (typeof item.valueLabel === 'object' && item.valueLabel[String(item.value)]) return item.valueLabel[String(item.value)];
+			if (typeof item.valueLabel === 'object' && item.valueLabel[String(item.value)])
+				return item.valueLabel[String(item.value)];
 
 			const fieldMetaValueLabel = fieldMetaMap[item.field]?.valueLabelMap?.[String(item.value)];
 			if (fieldMetaValueLabel !== undefined) return fieldMetaValueLabel;
@@ -96,7 +96,10 @@ const ModalFilter = () => {
 			const op = operator || '$eq';
 
 			const OPERATOR_RENDERER: Record<string, (item: any) => string> = {
-				$eq: (i) => (Array.isArray(i.value) ? `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(i)}` : formatScalarValue(i)),
+				$eq: (i) =>
+					Array.isArray(i.value)
+						? `${intl.formatMessage({ id: 'global.table.operator.in' })} ${formatListValue(i)}`
+						: formatScalarValue(i),
 				$ne: (i) => {
 					if (typeof i.value === 'boolean') {
 						const oppositeValue = !i.value;
@@ -132,7 +135,6 @@ const ModalFilter = () => {
 			expression: formatConditionExpression(item),
 		}));
 	}, [externalConditions, fieldMetaMap, intl]);
-
 
 	const INITIAL_CONDITION_ROWS = 4;
 	const LOAD_MORE_STEP = 4;
@@ -176,8 +178,15 @@ const ModalFilter = () => {
 					}}
 				>
 					<div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-						<Tooltip title={intl.formatMessage({ id: 'global.table.customfilter.tooltip.applied', defaultMessage: 'Filter conditions currently applied to the table' })}>
-							<Text strong>{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })} </Text>
+						<Tooltip
+							title={intl.formatMessage({
+								id: 'global.table.customfilter.tooltip.applied',
+								defaultMessage: 'Filter conditions currently applied to the table',
+							})}
+						>
+							<Text strong>
+								{intl.formatMessage({ id: 'global.table.customfilter.dieukien', defaultMessage: 'Conditions' })}{' '}
+							</Text>
 							<QuestionCircleOutlined style={{ fontSize: 12, color: '#999' }} />
 						</Tooltip>
 						<Text strong>:</Text>
@@ -205,10 +214,15 @@ const ModalFilter = () => {
 							<Text type='secondary' style={{ marginRight: 8 }}>
 								{intl.formatMessage(
 									{ id: 'global.table.customfilter.moreconditions', defaultMessage: '+{count} more conditions' },
-									{ count: hiddenConditionRows }
+									{ count: hiddenConditionRows },
 								)}
 							</Text>
-							<Button size='small' type='link' style={{ padding: 0 }} onClick={() => setMaxConditionRows((prev) => prev + LOAD_MORE_STEP)}>
+							<Button
+								size='small'
+								type='link'
+								style={{ padding: 0 }}
+								onClick={() => setMaxConditionRows((prev) => prev + LOAD_MORE_STEP)}
+							>
 								{intl.formatMessage({ id: 'global.table.customfilter.button.xemthem', defaultMessage: 'View more' })}
 							</Button>
 						</div>
