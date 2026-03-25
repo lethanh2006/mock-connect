@@ -99,27 +99,14 @@ body {
 	font-weight: 500;
 }
 
-.ant-form-item-label>label {
-	height: auto;
-	margin: 4px 0 !important;
+.ant-form-item-label > label {
 	font-weight: 600 !important;
-	font-size: 14px !important;
-	line-height: 170% !important;
-	letter-spacing: 1.5% !important;
 }
 
 .ant-form-item-required::after {
 	color: var(--form-label-required-mark-color) !important;
 	visibility: visible !important;
 	content: '*' !important;
-}
-
-.ant-form-vertical .ant-form-item {
-	margin-bottom: 10px !important;
-
-	.ant-form-item-label {
-		padding: 0 !important;
-	}
 }
 
 // =============================================================================
@@ -184,17 +171,13 @@ body {
 	}
 }
 
-.ant-menu-title-content {
-	color: var(--color-text-100) !important;
-}
-
 .ant-pro-sider-logo {
 	height: 64px;
 	display: flex;
 	align-items: center;
 
 	a {
-		gap: 10px;
+		gap: 6px;
 	}
 
 	img {
@@ -202,37 +185,9 @@ body {
 	}
 
 	h1 {
-		font-size: 16px;
-		font-weight: 700;
-		color: var(--color-official-200);
 		text-transform: uppercase;
-		display: block !important;
+		height: auto !important;
 	}
-}
-
-.ant-pro-sider-actions {
-	display: none !important;
-}
-
-.ant-pro-sider-collapsed-button {
-	z-index: 999 !important;
-	cursor: pointer !important;
-	pointer-events: auto !important;
-	width: 32px !important;
-	height: 32px !important;
-	min-width: 32px !important;
-	min-height: 32px !important;
-	display: flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	color: var(--color-text-100) !important;
-}
-
-.ant-layout-header {
-	background-image: url('/header_page_vinuni.png') !important;
-	background-size: 100% 100% !important;
-	background-position: top center !important;
-	background-repeat: no-repeat !important;
 }
 
 // =============================================================================
@@ -240,8 +195,8 @@ body {
 // =============================================================================
 .ant-table,
 .ant-table-container,
-.ant-table-content>tr>th,
-.ant-table-content>tr>td {
+.ant-table-content > tr > th,
+.ant-table-content > tr > td {
 	border: none !important;
 }
 
@@ -280,32 +235,8 @@ body {
 	}
 }
 
-.ant-table-small .ant-table-cell {
-	height: 36px;
-}
-
 .ant-table-thead {
-	.ant-table-cell {
-		font-weight: 600 !important;
-		text-align: left !important;
-		border-bottom: 1px solid var(--color-accent-700) !important;
-	}
-
-	>tr>th {
-		color: var(--color-text-100) !important;
-		font-weight: 600 !important;
-		height: 44px;
-
-		&::before {
-			display: none !important;
-		}
-
-		.ant-table-column-title {
-			color: var(--color-text-100) !important;
-		}
-	}
-
-	>tr>th:last-child,
+	> tr > th:last-child,
 	.ant-table-cell:last-child {
 		border-right: none !important;
 	}
@@ -330,61 +261,16 @@ body {
 }
 
 .ant-card {
-	border-radius: 6px !important;
-
-	&.card-borderless {
-		box-shadow: none;
-		height: fit-content !important;
-
-		>.ant-card-body {
-			.table-base {
-				margin: 0 !important;
-			}
-		}
-
-		>.ant-card-head {
-			padding: 0 12px;
-		}
-	}
-
 	.ant-card-head-title {
 		white-space: pre-wrap;
-		flex: auto;
 		font-size: 18px !important;
 		font-weight: bold !important;
 		color: var(--color-primary) !important;
 	}
 
-	.ant-card-head {
-		padding: 0 16px !important;
-		border-bottom: 1.5px solid var(--color-accent-700) !important;
-
-		@media (max-width: @screen-xs) {
-			padding: 0 12px;
-		}
-
-		.ant-card-head-wrapper {
-			flex-wrap: wrap;
-		}
-	}
-
-	&>.ant-card-body {
-		padding: 10px 16px;
-	}
-
-	.ant-drawer .ant-card-body,
-	.ant-modal .ant-card-body {
-		padding-top: 12px !important;
-	}
-
 	&.card-big-title {
-		background: transparent;
-		border: none !important;
-
-		>.ant-card-head {
-			padding: 0 0 16px 0 !important;
-			border: none !important;
-			background-color: transparent !important;
+		> .ant-card-head {
+			padding-bottom: 16px !important;
 
 			.ant-card-head-title {
 				font-size: 22px !important;
@@ -441,38 +327,6 @@ body {
 				}
 			}
 		}
-
-		>.ant-card-body {
-			border-radius: 4px;
-			background-color: transparent !important;
-			padding: 0 16px;
-
-			&.ant-spin-nested-loading {
-				margin: 0 -16px !important;
-			}
-
-			&.header {
-				margin: 0 -16px !important;
-			}
-
-			.ant-card {
-				.ant-spin-nested-loading {
-					margin: 0 !important;
-				}
-
-				.header {
-					margin: 0 !important;
-				}
-
-				.table-base {
-					margin: 0 !important;
-				}
-			}
-		}
-
-		>.ant-card-head-wrapper>.ant-card-head-title {
-			font-size: 18px;
-		}
 	}
 }
 
@@ -482,111 +336,6 @@ body {
 	font-size: 18px !important;
 	font-weight: bold !important;
 	color: var(--color-primary) !important;
-}
-
-.card-big-title {
-	&>.ant-card-body {
-		padding: 0 !important;
-		background-color: transparent !important;
-		border-radius: 8px !important;
-
-		.ant-spin-nested-loading {
-
-			// margin: 0 -16px !important;
-			.ant-card {
-				&>.ant-card-body {
-					padding: 12px 16px !important;
-				}
-			}
-		}
-
-		.ant-card {
-			&>.ant-card-body {
-				&>.ant-card {
-					&>.ant-card-body {
-						padding: 0 !important;
-
-						.table-base {
-							margin: 0 !important;
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-// Style cho card base của bảng - VinUni
-.table-base-card {
-	background-color: transparent;
-
-	.ant-card-body {
-		background-color: var(--color-text-400) !important;
-		border-radius: 8px !important;
-		// padding: 0 16px !important;
-
-		.table-base {
-			border-radius: 8px !important;
-		}
-
-		@media (max-width: @screen-xs) {
-			padding: 0 !important;
-		}
-	}
-
-	.ant-card-head {
-		padding: 0 0 16px 0 !important;
-		border: none !important;
-		background-color: transparent !important;
-
-		.ant-card-head-title {
-			font-size: 22px !important;
-			color: var(--color-accent-800) !important;
-
-			&::after {
-				content: '' !important;
-				position: absolute !important;
-				left: -18px !important;
-				top: 0 !important;
-				transform: translateY(-50%) !important;
-				width: 0 !important;
-				height: 0 !important;
-				border-right: 14px solid var(--vin-color-primary) !important;
-				border-top: 10px solid transparent !important;
-				border-bottom: 10px solid transparent !important;
-				display: block !important;
-				rotate: 180deg !important;
-				visibility: visible !important;
-				opacity: 1 !important;
-				z-index: 999 !important;
-				pointer-events: none !important;
-
-				@media (max-width: 768px) {
-					left: -18px !important;
-				}
-
-				@media (max-width: 425px) {
-					top: 4px !important;
-					left: -10px !important;
-					border-right: 10px solid var(--vin-color-primary) !important;
-					border-top: 8px solid transparent !important;
-					border-bottom: 8px solid transparent !important;
-				}
-			}
-
-			@media (max-width: 425px) {
-				padding-left: 6px !important;
-			}
-		}
-
-		.ant-card-extra {
-			.ant-btn {
-				.ant-btn-icon {
-					display: none !important;
-				}
-			}
-		}
-	}
 }
 
 /* Các class button tùy chỉnh - VinUni */
@@ -622,16 +371,6 @@ body {
 		color: var(--color-primary) !important;
 	}
 }
-
-// .btn-import,
-// .btn-export,
-// .btn-reload,
-// .btn-filter,
-// .btn-column-settings{
-// 	background-color: var(--color-accent-700) !important;
-// 	border-radius: 4px;
-// 	border: none !important;
-// }
 
 // Style header của PageContainer - VinUni
 .ant-pro-page-container {
@@ -709,7 +448,6 @@ body {
 			.ant-page-header-heading-extra {
 				.ant-space {
 					.ant-space-item {
-
 						[class*='menu_right'],
 						.menu_right {
 							margin-left: auto !important;
@@ -786,60 +524,39 @@ body {
 }
 
 .table-base {
-	border-radius: 8px !important;
-
-	.table-base-header {
-		margin-bottom: 0 !important;
-	}
-
 	.header {
 		display: flex;
-		align-items: center !important;
 		flex-direction: row-reverse;
 		justify-content: space-between !important;
-		gap: 12px !important;
-		margin-bottom: 0 !important;
 
 		.action {
 			display: flex !important;
 			flex-direction: row-reverse;
-			align-items: center !important;
-			gap: 8px !important;
-			flex-wrap: wrap !important;
 
 			button.ant-btn:has(> .span-extend) {
-				>span.ant-btn-icon {
+				> span.ant-btn-icon {
 					@media (min-width: 576px) {
 						display: none !important;
 					}
 				}
 
 				&.btn-reload {
-					>span.ant-btn-icon {
+					> span.ant-btn-icon {
 						display: inline-flex !important;
 					}
 
-					>.span-extend {
+					> .span-extend {
 						display: none !important;
 					}
 				}
-			}
-
-			.total {
-				z-index: 1 !important;
-				border: none !important;
-				font-size: 14px !important;
-				font-weight: 500 !important;
 			}
 		}
 
 		.extra {
 			display: flex !important;
 			align-items: center !important;
-			gap: 8px !important;
 
 			.ant-btn {
-
 				.ant-btn-icon,
 				.anticon {
 					margin: 0 !important;
@@ -862,223 +579,6 @@ body {
 			}
 		}
 	}
-
-	.ttCellWrapper {
-		position: relative !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: start !important;
-		width: 100% !important;
-		height: 100% !important;
-	}
-
-	.ant-table-wrapper {
-		padding: 12px 0 0 0 !important;
-	}
-}
-
-.css-glamorous-div--jgd0xx {
-	.ant-card {
-		.ant-card-body {
-			.table-base {
-				.ant-table-wrapper {
-					.ant-spin-nested-loading {
-						margin: 0 !important;
-					}
-				}
-			}
-		}
-	}
-}
-
-// =============================================================================
-// 5. Card
-// =============================================================================
-.ant-card {
-	border-radius: 6px !important;
-
-	.ant-card-head-title {
-		white-space: pre-wrap;
-		flex: auto;
-		font-size: 18px !important;
-		font-weight: bold !important;
-		color: var(--color-primary) !important;
-	}
-
-	.ant-card-head {
-		padding: 0 16px !important;
-		border-bottom: 1.5px solid var(--color-accent-700) !important;
-
-		@media (max-width: @screen-xs) {
-			padding: 0 12px;
-		}
-
-		.ant-card-head-wrapper {
-			flex-wrap: wrap;
-		}
-	}
-
-	&>.ant-card-body {
-		padding: 10px 16px !important;
-	}
-
-	.ant-drawer .ant-card-body,
-	.ant-modal .ant-card-body {
-		padding-top: 12px !important;
-	}
-
-	&.card-borderless {
-		box-shadow: none;
-		height: fit-content !important;
-
-		>.ant-card-body .table-base {
-			margin: 0 !important;
-		}
-
-		>.ant-card-head {
-			padding: 0 12px;
-		}
-	}
-
-	&.card-big-title {
-		// background: transparent;
-		border: none !important;
-
-		>.ant-card-head {
-			padding: 0 0 16px 0 !important;
-			border: none !important;
-			// background-color: transparent !important;
-
-			.ant-card-head-title {
-				font-size: 22px !important;
-				margin-left: 2px !important;
-				color: var(--color-accent-800) !important;
-				display: flex;
-				align-items: center;
-
-				&::after {
-					.vin-triangle-indicator(@side: right; @w: 14px; @h: 10px);
-					left: -18px !important;
-					top: 0 !important;
-					transform: translateY(-50%) !important;
-
-					@media (max-width: 425px) {
-						top: 4px !important;
-						left: -10px !important;
-						border-right: 10px solid var(--vin-color-primary) !important;
-						border-top: 8px solid transparent !important;
-						border-bottom: 8px solid transparent !important;
-					}
-				}
-
-				@media (max-width: 425px) {
-					padding-left: 6px !important;
-				}
-			}
-
-			.ant-card-extra {
-				.ant-space-align-center {
-					align-items: start !important;
-				}
-
-				.ant-btn .ant-btn-icon {
-					display: none !important;
-				}
-			}
-		}
-
-		>.ant-card-body {
-			border-radius: 4px;
-			// background-color: white !important;
-			padding: 0 16px;
-
-			.ant-card {
-				.ant-spin-nested-loading {
-					margin: 0 !important;
-				}
-
-				.header,
-				.table-base {
-					margin: 0 !important;
-				}
-			}
-		}
-
-		>.ant-card-head-wrapper>.ant-card-head-title {
-			font-size: 18px;
-		}
-	}
-}
-
-.card-big-title>.ant-card-body {
-	padding: 0 !important;
-	// background-color: transparent !important;
-	border-radius: 8px !important;
-
-	.ant-spin-nested-loading .ant-card>.ant-card-body {
-		padding: 12px 16px !important;
-	}
-
-	.ant-card>.ant-card-body {
-		&>.ant-card>.ant-card-body {
-			padding: 0 !important;
-
-			.table-base {
-				margin: 0 !important;
-			}
-		}
-	}
-}
-
-.table-base-card {
-	background-color: transparent;
-
-	.ant-card-body {
-		background-color: var(--color-text-400) !important;
-		border-radius: 8px !important;
-
-		.table-base {
-			border-radius: 8px !important;
-		}
-
-		@media (max-width: @screen-xs) {
-			padding: 0 !important;
-		}
-	}
-
-	.ant-card-head {
-		padding: 0 0 16px 0 !important;
-		border: none !important;
-		background-color: transparent !important;
-
-		.ant-card-head-title {
-			font-size: 22px !important;
-			color: var(--color-accent-800) !important;
-
-			&::after {
-				.vin-triangle-indicator(@side: right; @w: 14px; @h: 10px);
-				left: -18px !important;
-				top: 0 !important;
-				transform: translateY(-50%) !important;
-
-				@media (max-width: 425px) {
-					top: 4px !important;
-					left: -10px !important;
-					border-right: 10px solid var(--vin-color-primary) !important;
-					border-top: 8px solid transparent !important;
-					border-bottom: 8px solid transparent !important;
-				}
-			}
-
-			@media (max-width: 425px) {
-				padding-left: 6px !important;
-			}
-		}
-
-		.ant-card-extra .ant-btn .ant-btn-icon {
-			display: none !important;
-		}
-	}
 }
 
 .card-highlight .ant-card-head {
@@ -1088,162 +588,6 @@ body {
 
 .lich-sap-toi-card {
 	margin: 0 !important;
-}
-
-// =============================================================================
-// 6. Button
-// =============================================================================
-.ant-btn {
-	justify-content: center !important;
-	align-items: center !important;
-	box-shadow: none !important;
-	text-transform: uppercase !important;
-}
-
-.ant-btn-sm {
-	text-transform: none !important;
-}
-
-.ant-btn-primary.ant-btn-color-primary.ant-btn-variant-solid {
-	&:hover {
-		background-color: var(--color-accent-800) !important;
-		border-color: var(--color-primary) !important;
-		color: var(--color-primary) !important;
-	}
-}
-
-// =============================================================================
-// 7. Page Container & Header
-// =============================================================================
-.ant-pro-page-container {
-	position: relative;
-	overflow: visible !important;
-
-	&::before {
-		content: '';
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		height: 170px;
-		background-image: url('/header_page_vinuni.png') !important;
-		background-size: 101% 170px !important;
-		background-position: top center !important;
-		background-repeat: no-repeat !important;
-		z-index: 0;
-		pointer-events: none;
-	}
-
-	.ant-pro-page-container-children {
-		position: relative;
-		z-index: 1;
-	}
-
-	.ant-pro-page-container-children-container {
-		padding: 0 18px !important;
-		overflow-x: auto !important;
-		position: relative !important;
-		z-index: 2 !important;
-
-		@media (max-width: 425px) {
-			padding: 0 10px !important;
-		}
-	}
-
-	.ant-page-header {
-		border-bottom: 1px solid var(--color-official-200) !important;
-		padding: 16px !important;
-		min-height: 64px !important;
-		height: 64px !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: end;
-		position: fixed !important;
-		top: 0 !important;
-		left: 0 !important;
-		right: 0 !important;
-		width: 100vw !important;
-		z-index: 10 !important;
-		background-color: transparent !important;
-		background-image: url('/header_page_vinuni.png') !important;
-		background-size: 100% 172px !important;
-		background-position: top center !important;
-		background-repeat: no-repeat !important;
-
-		@media (max-width: 767px) {
-			display: none !important;
-		}
-
-		.ant-page-header-heading {
-			min-height: auto !important;
-			padding: 0 !important;
-			display: flex !important;
-			align-items: center !important;
-			width: 100% !important;
-			position: relative !important;
-			overflow: visible !important;
-
-			.ant-page-header-heading-extra .ant-space .ant-space-item {
-
-				[class*='menu_right'],
-				.menu_right {
-					margin-left: auto !important;
-					margin-right: 0 !important;
-					color: var(--color-accent-800) !important;
-					font-weight: 600 !important;
-
-					@media (max-width: 768px) {
-						width: 100% !important;
-						display: flex;
-						justify-content: end;
-					}
-
-					[class*='account'],
-					.account {
-						color: var(--color-accent-800) !important;
-						font-weight: 500 !important;
-						display: flex;
-						gap: 8px;
-
-						[class*='avatar'],
-						.avatar {
-							width: 36px !important;
-							height: 36px !important;
-						}
-					}
-
-					[class*='action'],
-					.action {
-						border-radius: 6px !important;
-						padding: 3px !important;
-					}
-				}
-			}
-		}
-
-		.ant-page-header-heading-title {
-			color: var(--color-accent-800) !important;
-			font-size: 22px !important;
-			font-weight: 700 !important;
-			line-height: 1.5 !important;
-			position: absolute !important;
-			left: 16px !important;
-			top: 70px !important;
-			display: inline-block !important;
-			overflow: visible !important;
-
-			&::before {
-				.vin-triangle-indicator(@side: left; @w: 16px; @h: 12px; @rotate: 0deg);
-				left: -32px !important;
-				top: 50% !important;
-				transform: translateY(-50%) !important;
-
-				@media (max-width: 768px) {
-					left: -10px !important;
-				}
-			}
-		}
-	}
 }
 
 .ant-page-header-no-children {
@@ -1264,22 +608,6 @@ body {
 	margin-left: auto !important;
 	display: flex !important;
 	align-items: center !important;
-}
-
-// Thay đổi icon của collapsed button dựa trên collapsed state
-// Khi sidebar collapsed (đóng) - hiển thị MenuUnfoldOutlined
-.ant-pro-sider-collapsed .ant-pro-sider-collapsed-button .anticon {
-	&::before {
-		content: '\e6d7' !important; // MenuUnfoldOutlined unicode
-	}
-}
-
-// Khi sidebar expanded (mở) - hiển thị MenuFoldOutlined
-.ant-pro-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon,
-.ant-layout-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon {
-	&::before {
-		content: '\e6d8' !important; // MenuFoldOutlined unicode
-	}
 }
 
 // Đảm bảo layout không tạo scrollbar thứ hai
@@ -1322,7 +650,8 @@ body {
 	img {
 		height: 24px !important;
 		width: 24px !important;
-		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%)
+			contrast(97%);
 	}
 
 	img[src*='notification.svg'],
@@ -1407,21 +736,19 @@ body {
 	}
 }
 
-.ant-modal-body .form-footer::before {
-	left: -24px;
-	right: -24px;
-}
-
-.ant-card-body .form-footer::before {
-	left: -18px;
-	right: -18px;
-}
-
 // =============================================================================
 // 9. Picker & Calendar
 // =============================================================================
 .ant-picker-dropdown {
-	.ant-picker-range-wrapper .ant-picker-panel-container .ant-picker-panel-layout .ant-picker-panels .ant-picker-panel .ant-picker-body .ant-picker-content tbody tr {
+	.ant-picker-range-wrapper
+		.ant-picker-panel-container
+		.ant-picker-panel-layout
+		.ant-picker-panels
+		.ant-picker-panel
+		.ant-picker-body
+		.ant-picker-content
+		tbody
+		tr {
 		.ant-picker-cell-in-view {
 			color: var(--color-text-100) !important;
 		}
@@ -1445,23 +772,6 @@ body {
 
 	.ant-picker-footer .ant-picker-ranges .ant-picker-now {
 		font-weight: 600;
-	}
-}
-
-// Style header của layout - VinUni
-.ant-layout-header {
-	background-image: url('/header_page_vinuni.png') !important;
-	background-size: 100% 100% !important;
-	background-position: top center !important;
-	background-repeat: no-repeat !important;
-}
-
-// Đẩy nội dung xuống dưới header fixed, giữ before background đủ không gian
-.ant-pro-layout-container {
-	margin-top: 80px !important;
-
-	@media (max-width: 767px) {
-		margin-top: 16px !important; // mobile đã ẩn header
 	}
 }
 
@@ -1508,4 +818,12 @@ body {
 
 .tb-sk-wrapper .header-tb-sk {
 	padding: 6px 20px 0 !important;
+}
+
+.ant-steps {
+	.ant-steps-item-finish {
+		.ant-steps-icon {
+			color: white;
+		}
+	}
 }
