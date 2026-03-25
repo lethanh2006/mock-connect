@@ -1,9 +1,9 @@
 import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import type { InputRef } from 'antd';
+import _ from 'lodash';
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { IColumn, TableBaseProps, TExternalConditionItem, TFilter } from '../typing';
 import { getTableFingerprint, stringHash } from '../utils';
-import _ from 'lodash';
 
 export interface IColumnSetting {
 	key: string;
@@ -119,10 +119,7 @@ const getTableSequence = (path: string) => {
 	return ++tableSequence;
 };
 
-export const TableProvider = <T extends object = any>({
-	children,
-	value: externalValue,
-}: TableProviderProps<T>) => {
+export const TableProvider = <T extends object = any>({ children, value: externalValue }: TableProviderProps<T>) => {
 	const [visibleFilter, setVisibleFilter] = useState(false);
 	const [visibleImport, setVisibleImport] = useState(false);
 	const [visibleExport, setVisibleExport] = useState(false);
@@ -206,15 +203,7 @@ export const TableProvider = <T extends object = any>({
 			setColumnSettings,
 			searchInputRef,
 		}),
-		[
-			externalValueRef.current,
-			visibleFilter,
-			visibleImport,
-			visibleExport,
-			finalColumns,
-			columnsWidth,
-			columnSettings,
-		],
+		[externalValueRef.current, visibleFilter, visibleImport, visibleExport, finalColumns, columnsWidth, columnSettings],
 	);
 
 	return <TableContext.Provider value={contextValue}>{children}</TableContext.Provider>;

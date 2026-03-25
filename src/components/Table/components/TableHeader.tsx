@@ -48,7 +48,7 @@ export const TableHeader: React.FC = () => {
 	} = useTableContext();
 	const {
 		globalSearch = true,
-		minimizeGlobalSearch,
+		minimizeGlobalSearch = size === 'small',
 		create: btnCreate = true,
 		export: btnExport,
 		filter: btnFilter = true,
@@ -321,7 +321,7 @@ export const TableHeader: React.FC = () => {
 									allowClear
 									value={globalSearchText}
 									placeholder={globalSearchPlaceholder}
-									style={{ width: 280 }}
+									style={{ width: 250 }}
 									autoFocus
 									onChange={(e) => {
 										const nextValue = e.target.value;
