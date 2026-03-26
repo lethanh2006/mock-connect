@@ -61,7 +61,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			model?.[props.dataState || 'danhSach']?.map((item: any, index: number) => ({
 				...item,
 				index: index + 1 + (page - 1) * limit * (props.pageable === false ? 0 : 1),
-				key: item?._id ? `${item._id}-${index}` : index,
+				key: item?._id ?? index,
 				children:
 					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
 						? item.children
