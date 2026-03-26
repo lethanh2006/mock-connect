@@ -61,7 +61,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			model?.[props.dataState || 'danhSach']?.map((item: any, index: number) => ({
 				...item,
 				index: index + 1 + (page - 1) * limit * (props.pageable === false ? 0 : 1),
-				key: item?._id ?? index,
+				key: item?._id ? `${item._id}-${index}` : index,
 				children:
 					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
 						? item.children
@@ -337,7 +337,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					onCancel={() => setVisibleExport?.(false)}
 					fileName={intl.formatMessage(
 						{ id: 'global.table.index.export.fileName' },
-						{ title: (title ?? intl.formatMessage({ id: 'global.table.index.export.defaultTitle' })) as any }
+						{ title: (title ?? intl.formatMessage({ id: 'global.table.index.export.defaultTitle' })) as any },
 					)}
 					condition={params}
 				/>

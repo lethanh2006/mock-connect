@@ -45,12 +45,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 	 * Lấy quy tắc lọc hiện tại của cột
 	 */
 	const getFilterColumn = useCallback(
-		(
-			fieldName: any,
-			operator?: EOperatorType,
-			active?: boolean,
-			options?: { excludeExternal?: boolean },
-		) =>
+		(fieldName: any, operator?: EOperatorType, active?: boolean, options?: { excludeExternal?: boolean }) =>
 			findFilterInTree(filters, fieldName, operator, active, {
 				excludeExternal: options?.excludeExternal === true || !shouldSyncExternalToColumnFilter,
 			}),
