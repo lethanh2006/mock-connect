@@ -22,7 +22,7 @@ const getRegistrationStatus = (dotDangKy?: DangKyChuyenNganh.IDotDangKy): TDotDa
 
 export default () => {
 	const objInit = useInitModel<DangKyChuyenNganh.IDotDangKy>('dot-dk-ctdt', undefined, undefined, ipDaoTao);
-	const { setRecord, setLoading, getAllModel } = objInit;
+	const { setRecord, setLoading } = objInit;
 	const [registrationStatus, setRegistrationStatus] = useState<TDotDangKyCtdtStatus>('not-open');
 
 	const applyDotDangKyState = (dotDangKy?: DangKyChuyenNganh.IDotDangKy) => {
@@ -31,36 +31,21 @@ export default () => {
 		return dotDangKy;
 	};
 
-	const fetchFallbackDotDangKy = async (loai: 'minor' | 'concentration') => {
-		const data = await getAllModel(false, { thoiGianBatDau: -1 }, { loaiCtdt: loai }, undefined, undefined, false);
-		return data?.[0];
-	};
-
 	const fetchDotDangKy = async (loai: 'minor' | 'concentration') => {
 		applyDotDangKyState(undefined);
 		setLoading(true);
 		try {
 			const response = await getKyHienTai(loai);
 			const data = response?.data?.data;
-
-			if (data) {
-				return applyDotDangKyState(data);
-			}
-
-			const fallbackDotDangKy = await fetchFallbackDotDangKy(loai);
-			return applyDotDangKyState(fallbackDotDangKy);
+			return applyDotDangKyState(data);
 		} catch (error) {
-			try {
-				const fallbackDotDangKy = await fetchFallbackDotDangKy(loai);
-				return applyDotDangKyState(fallbackDotDangKy);
-			} catch {
-				applyDotDangKyState(undefined);
-				return Promise.reject(error);
-			}
+			applyDotDangKyState(undefined);
+			return Promise.reject(error);
 		} finally {
 			setLoading(false);
 		}
 	};
+
 
 	return {
 		...objInit,
