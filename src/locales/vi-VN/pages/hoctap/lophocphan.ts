@@ -322,6 +322,7 @@ export default {
 	'lophocphan.id.decuong.hoclieu.nxb': 'Nhà xuất bản',
 	'lophocphan.id.decuong.hoclieu.namxb': 'Năm xuất bản',
 	'lophocphan.id.decuong.hoclieu.mota': 'Mô tả',
+	'lophocphan.id.decuong.hoclieu.batbuoc': 'Bắt buộc',
 	'lophocphan.id.decuong.hoclieu.thaotac': 'Thao tác',
 	'lophocphan.id.decuong.hoclieu.xemchitiet': 'Xem chi tiết',
 
