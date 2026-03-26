@@ -55,7 +55,7 @@ const GiaoDichPage = () => {
 			else
 				notification.warning({
 					message: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.title' }),
-					description: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.des' }),
+					description: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.desc' }),
 				});
 	}, []);
 

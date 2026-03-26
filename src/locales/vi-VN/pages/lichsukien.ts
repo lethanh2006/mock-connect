@@ -50,7 +50,7 @@ export default {
 	'lichsukien.chitiet.dieukien': 'Điều kiện dự thi',
 	'lichsukien.chitiet.xemlichthi': 'Xem lịch thi',
 	'lichsukien.chitiet.tenbaitap': 'Tên bài tập',
-	'lichsukien.chitiet.tggiaobao': 'Thời gian giao bài tập',
+	'lichsukien.chitiet.tggiaobai': 'Thời gian giao bài tập',
 	'lichsukien.chitiet.thoihan': 'Thời hạn bài tập',
 	'lichsukien.chitiet.trangthai': 'Trạng thái nộp bài',
 	'lichsukien.chitiet.chinhsua': 'Chỉnh sửa',
