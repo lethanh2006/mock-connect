@@ -6,7 +6,7 @@ import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import type { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
-import { Button, Card, Popconfirm, Space, Tag, Typography } from 'antd';
+import { Button, Card, Popconfirm, Space, Spin, Tag, Typography } from 'antd';
 import { TableRowSelection } from 'antd/es/table/interface';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -15,12 +15,19 @@ type Row = ChuongTrinhDaoTao.IKhoiHpCt;
 
 interface DanhSachHocPhanListProps {
 	choosenMinor: string;
+	choosenMinorName?: string;
 	onSuccess?: () => void;
 	isMinor: boolean;
 	hiddenButton?: boolean;
 }
 
-const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }: DanhSachHocPhanListProps) => {
+const DanhSachHocPhanList = ({
+	choosenMinor,
+	choosenMinorName,
+	onSuccess,
+	isMinor,
+	hiddenButton,
+}: DanhSachHocPhanListProps) => {
 	const intl = useIntl();
 	const {
 		submitPhieuDangKy,
@@ -163,6 +170,7 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 				);
 			},
 			onCell,
+			key: 'maHocPhan',
 		},
 		{
 			title: intl.formatMessage({ id: 'minor.course.name' }),
@@ -170,6 +178,7 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 			dataIndex: 'hocPhan',
 			render: (_, rec) => rec.hocPhan?.ten ?? '-',
 			onCell,
+			key: 'tenHocPhan',
 		},
 		{
 			title: intl.formatMessage({ id: 'minor.table.sem' }),
@@ -178,6 +187,7 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 			dataIndex: 'soThuTuKy',
 			render: (_, rec) => intl.formatMessage({ id: 'minor.table.semFormat' }, { sem: rec.soThuTuKy }),
 			onCell,
+			key: 'soThuTuKy',
 		},
 		{
 			title: intl.formatMessage({ id: 'minor.course.creditsCount' }),
@@ -194,6 +204,7 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 				);
 			},
 			onCell,
+			key: 'soTinChi',
 		},
 		{
 			title: intl.formatMessage({ id: 'minor.course.prerequisiteList' }),
@@ -207,8 +218,10 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 							.join(', ')
 					: '',
 			onCell,
+			key: 'dsHocPhanTienQuyet',
 		},
 	];
+
 
 	const columnsAll: IColumn<Row>[] = [
 		{
@@ -225,25 +238,38 @@ const DanhSachHocPhanList = ({ choosenMinor, onSuccess, isMinor, hiddenButton }:
 
 	return (
 		<>
-			<Card title={minor?.ten} loading={loading}>
-				{minor?.ghiChu && (
-					<Space direction='vertical'>
-						<Typography.Text strong>{intl.formatMessage({ id: 'minor.objective.label' })}:</Typography.Text>
-						<ExpandText ellipsis={{ rows: 2 }}>{String(minor?.ghiChu ?? '').trim()}</ExpandText>
-					</Space>
+			<Card
+				title={`${intl.formatMessage({ id: 'minor.breadcrumb.detail' })} ${choosenMinorName || ''}`}
+				loading={false}
+			>
+				{loading ? (
+					<div style={{ textAlign: 'center', padding: '24px' }}>
+						<Spin />
+					</div>
+				) : (
+					<>
+						{minor?.ghiChu && (
+							<Space direction='vertical' style={{ marginBottom: '16px', display: 'flex' }}>
+								<Typography.Text strong>{intl.formatMessage({ id: 'minor.objective.label' })}:</Typography.Text>
+								<ExpandText ellipsis={{ rows: 2 }}>{String(minor?.ghiChu ?? '').trim()}</ExpandText>
+							</Space>
+						)}
+
+						<TableStaticData
+							data={dataAll}
+							addStt={false}
+							columns={columnsAll}
+							otherProps={{
+								pagination: false,
+								scroll: { y: 450 },
+								rowKey: (r: Row) => r._id ?? r.maHocPhan ?? '',
+								rowSelection,
+								onRow: (r: Row) => (isGroupRow(r) ? { style: { background: 'var(--color-info-bg)' } } : {}),
+							}}
+						/>
+					</>
 				)}
-				<TableStaticData
-					data={dataAll}
-					addStt={false}
-					columns={columnsAll}
-					otherProps={{
-						pagination: false,
-						scroll: { y: 450 },
-						rowKey: (r: Row) => r._id ?? r.maHocPhan ?? '',
-						rowSelection,
-						onRow: (r: Row) => (isGroupRow(r) ? { style: { background: 'var(--color-info-bg)' } } : {}),
-					}}
-				/>
+
 				{minor?.ma && !hiddenButton && (
 					<div className='form-footer'>
 						<Popconfirm
