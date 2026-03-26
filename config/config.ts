@@ -3,7 +3,7 @@ import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 
-const appBasePath = '/student';
+const appBasePath = '/student/';
 
 export default defineConfig({
 	hash: true,
