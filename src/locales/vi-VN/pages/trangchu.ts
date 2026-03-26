@@ -1,6 +1,7 @@
 export default {
 	'trangchu.title.xinchao': 'Xin chào {ten}',
 	'trangchu.title.quaylai': 'mừng bạn quay lại',
+	'trangchu.xemtatca': 'Xem tất cả',
 
 	'trangchu.thongbao.title': 'Thông báo',
 	'trangchu.thongbao.tag.dadoc': 'Đã đọc',
