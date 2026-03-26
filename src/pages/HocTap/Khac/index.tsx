@@ -18,29 +18,27 @@ const HocTapKhacPage = () => {
 	const shouldShowSelectSongNganh = activeTab === 'dang-ky-chuyen-nganh' || activeTab === 'dang-ky-chuyen-nganh-hep';
 
 	const menu = [
-		...(access.cctFilter()
-			? [
-				{
-					icon: <ProfileOutlined />,
-					title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
-					menuKey: 'dang-ky-chuyen-nganh',
-					content: <DangKyChuyenNganhPage type='concentration' />,
-				},
-				{
-					icon: <ProfileOutlined />,
-					title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganhhep.title' }),
-					menuKey: 'dang-ky-chuyen-nganh-hep',
-					content: <DangKyChuyenNganhPage type='minor' />,
-				},
-			]
-			: [
-				{
-					icon: <ProfileOutlined />,
-					title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
-					menuKey: 'dang-ky-chuyen-nganh',
-					content: <DangKyChuyenNganh />,
-				},
-			]),
+		{
+			icon: <ProfileOutlined />,
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
+			menuKey: 'dang-ky-chuyen-nganh',
+			// hide: !access.cctFilter(),
+			content: <DangKyChuyenNganhPage type='concentration' />,
+		},
+		{
+			icon: <ProfileOutlined />,
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganhhep.title' }),
+			menuKey: 'dang-ky-chuyen-nganh-hep',
+			// hide: !access.cctFilter(),
+			content: <DangKyChuyenNganhPage type='minor' />,
+		},
+		// {
+		// 	icon: <ProfileOutlined />,
+		// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
+		// 	menuKey: 'dang-ky-chuyen-nganh',
+		// 	hide: access.cctFilter(),
+		// 	content: <DangKyChuyenNganh />,
+		// },
 		{
 			icon: <CheckCircleOutlined />,
 			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.title' }),
@@ -64,7 +62,15 @@ const HocTapKhacPage = () => {
 	return (
 		<TabViewPage
 			cardBigTitle
-			cardProps={shouldShowSelectSongNganh ? { extra: <SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} /> } : undefined}
+			cardProps={
+				shouldShowSelectSongNganh
+					? {
+						extra: (
+							<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+						),
+					}
+					: undefined
+			}
 			onChange={(tab) => setActiveTab(tab)}
 			cardTitle={intl.formatMessage({ id: 'hoctapkhac.title' })}
 			menu={menu}
