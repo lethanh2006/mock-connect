@@ -35,6 +35,7 @@ ENV APP_CONFIG_URL_QLND=https://iam.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_TAP_CHI_KH=https://tapchikhoahoc.hvpnvn.edu.vn/
 
 ENV APP_CONFIG_MOODLE_ENDPOINT=''
+ENV APP_CONFIG_BASE_PATH=/student
 
 
 # Set working directory
