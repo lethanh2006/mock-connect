@@ -17,17 +17,17 @@ ENV APP_CONFIG_PRIMARY_COLOR='#134D8B'
 ENV APP_CONFIG_HIGHLIGHT_COLOR='#C72127'
 
 ENV APP_CONFIG_URL_LANDING=https://hvpnvn.edu.vn/
-ENV APP_CONFIG_URL_CONNECT=https://sinhvien.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_CONNECT=https://uat-my.vinuni.edu.vn/student/
 ENV APP_CONFIG_URL_CAN_BO=https://canbo.hvpnvn.edu.vn/
-ENV APP_CONFIG_URL_DAO_TAO=https://qldt.hvpnvn.edu.vn/
-ENV APP_CONFIG_URL_NHAN_SU=https://tcns.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_DAO_TAO=https://uat-my.vinuni.edu.vn/qldt/
+ENV APP_CONFIG_URL_NHAN_SU=https://uat-my.vinuni.edu.vn/to-chuc-nhan-su/
 ENV APP_CONFIG_URL_TAI_CHINH=https://taichinh.hvpnvn.edu.vn/
-ENV APP_CONFIG_URL_CTSV=https://ctsv.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_CTSV=https://uat-my.vinuni.edu.vn/cong-tac-sinh-vien/
 ENV APP_CONFIG_URL_QLKH=https://qlkh.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_VPS=https://vanphong.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_KHAO_THI=https://khaothi.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_CORE=https://core.hvpnvn.edu.vn/
-ENV APP_CONFIG_URL_CSVC=https://csvc.hvpnvn.edu.vn/
+ENV APP_CONFIG_URL_CSVC=https://uat-my.vinuni.edu.vn/co-so-vat-chat/
 ENV APP_CONFIG_URL_THU_VIEN=https://thuvien.hvpnvn.edu.vn/
 ENV APP_CONFIG_URL_QLVB=https://sso.hvpnvn.edu.vn/realms/vwa/protocol/openid-connect/auth?response_type=token&client_id=vwa-odoo-qlvb&redirect_uri=http%3A%2F%2Fqlvb.hvpnvn.edu.vn%2Fauth_oauth%2Fsignin&scope=profile+openid+email&state=%7B%22d%22%3A+%22qlvb1%22%2C+%22p%22%3A+4%2C+%22r%22%3A+%22http%253A%252F%252Fqlvb.hvpnvn.edu.vn%252Fweb%22%7D
 ENV APP_CONFIG_URL_VBCC=https://vbcc.hvpnvn.edu.vn/
