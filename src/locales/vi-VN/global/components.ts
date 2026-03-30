@@ -195,7 +195,6 @@ export default {
 	'global.table.operator.not_between': 'Ngoài khoảng',
 	'global.table.operator.in': 'Thuộc',
 	'global.table.operator.not_in': 'Không thuộc',
-	'global.table.operator.null': 'Trống',
 	'global.table.operator.not_null': 'Không trống',
 	'global.table.operator.or': 'Hoặc',
 	'global.table.operator.and': 'Và',

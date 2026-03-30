@@ -70,7 +70,7 @@ const ModalFilter = () => {
 
 		const formatScalarValue = (item: any): string => {
 			if (item.value === null || item.value === undefined)
-				return intl.formatMessage({ id: 'global.table.operator.null' });
+					return '-';
 
 			if (typeof item.valueLabel === 'string') return item.valueLabel;
 			if (typeof item.valueLabel === 'object' && item.valueLabel[String(item.value)])
