@@ -91,3 +91,43 @@ export const mapEvalidation: Record<Evalidation, ETagColor> = {
 	[Evalidation.ENDORSED]: ETagColor.GOLD,
 	[Evalidation.FEATURED]: ETagColor.GREEN,
 };
+
+export enum EStatusMyCCT {
+	DRAFT = 'DRAFT',
+	PENDING_APPROVAL = 'PENDING_APPROVAL',
+	APPROVED = 'APPROVED',
+	CHANGES_REQUIRED = 'CHANGES_REQUIRED',
+}
+
+export const mapNameStatusMyCCT: Record<EStatusMyCCT, string> = {
+	[EStatusMyCCT.DRAFT]: 'Draft',
+	[EStatusMyCCT.PENDING_APPROVAL]: 'Pending For Approval',
+	[EStatusMyCCT.APPROVED]: 'Approved',
+	[EStatusMyCCT.CHANGES_REQUIRED]: 'Changes Required',
+};
+
+export const mapColorStatusMyCCT: Record<EStatusMyCCT, string> = {
+	[EStatusMyCCT.DRAFT]: statusBgColors.statusBg300,
+	[EStatusMyCCT.PENDING_APPROVAL]: statusBgColors.statusBg200,
+	[EStatusMyCCT.APPROVED]: statusBgColors.statusBg100,
+	[EStatusMyCCT.CHANGES_REQUIRED]: statusBgColors.statusBg300,
+};
+
+export const mapColorTextStatusMyCCT: Record<EStatusMyCCT, string> = {
+	[EStatusMyCCT.DRAFT]: statusColors.status300,
+	[EStatusMyCCT.PENDING_APPROVAL]: statusColors.status200,
+	[EStatusMyCCT.APPROVED]: statusColors.status100,
+	[EStatusMyCCT.CHANGES_REQUIRED]: statusColors.status300,
+};
+
+export enum EScopeAward {
+	INTERNATIONAL = 'INTERNATIONAL',
+	NATIONAL = 'NATIONAL',
+	REGIONAL = 'REGIONAL',
+}
+
+export const mapNameScopeAward: Record<EScopeAward, string> = {
+	[EScopeAward.INTERNATIONAL]: 'International',
+	[EScopeAward.NATIONAL]: 'National',
+	[EScopeAward.REGIONAL]: 'University',
+};

@@ -432,7 +432,7 @@ export default [
 		name: 'Activity',
 		icon: 'AppstoreOutlined',
 		path: 'activity',
-		// access: 'cctFilter',
+		access: 'cctFilter',
 		routes: [
 			{
 				name: 'Register',
@@ -447,7 +447,7 @@ export default [
 			{
 				name: 'MyCCT',
 				path: 'co-curricular-transcript',
-				component: 'CCT/MyCCTV2',
+				component: 'CCT/MyCCT',
 			},
 		],
 	},

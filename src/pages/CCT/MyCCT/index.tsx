@@ -1,217 +1,357 @@
-import { Card, Col, Row, Spin } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
+import { EStatusMyCCT } from '@/services/CCT/constant';
+import { handleSingleFile } from '@/services/uploadFile';
+import {
+	CloseCircleOutlined,
+	EditOutlined,
+	FilePdfOutlined,
+	ReloadOutlined,
+	SaveOutlined,
+	SendOutlined,
+} from '@ant-design/icons';
+import { Button, Form, Space } from 'antd';
+import dayjs from 'dayjs';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { useEffect, useRef, useState } from 'react';
 import { useModel } from 'umi';
+import CardNoteMyCCT from './components/CardNote';
+import CCTContent from './components/CCTContent';
+import PreviewCCTModal from './components/PreviewCCTModal';
 import './style.less';
 
-interface BaseEntity {
-	_id: string;
-	name: string;
-	code?: string;
-	order?: number;
-	description?: string;
-	isActive?: boolean;
-}
-
-interface AttributeInfo extends BaseEntity {
-	description: string;
-	color: string;
-	icon: string;
-	background: string | null;
-}
-
-interface ActivityOutcome {
-	startDate: string;
-	endDate: string;
-	roles: BaseEntity;
-	levels: BaseEntity;
-	activitiesType?: BaseEntity;
-	activitiesName?: string;
-}
-
-export interface TranscriptItem {
-	attribute: AttributeInfo;
-	countLevel: Record<string, number>;
-	activitiesOutCome: ActivityOutcome[];
-	listCompetencies?: string[];
-}
-
-const Utils = {
-	hexToRgba: (hex: string, alpha: number): string => {
-		let c: any;
-		if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-			c = hex.substring(1).split('');
-			if (c.length === 3) {
-				c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-			}
-			c = '0x' + c.join('');
-			return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',')},${alpha})`;
-		}
-		return hex;
-	},
-
-	getOpacityByLevel: (levelName?: string): number => {
-		if (!levelName) return 0.3;
-		const lower = levelName.toLowerCase();
-		if (lower.includes('change') || lower.includes('level 3')) return 1;
-		if (lower.includes('connect') || lower.includes('level 2')) return 0.6;
-		return 0.3;
-	},
-
-	formatDate: (isoString: string): string => {
-		if (!isoString) return '';
-		return new Date(isoString).toLocaleDateString('en-GB');
-	},
-
-	toTitleCase: (str: string) =>
-		str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()),
-
-	shortLevelName: (name: string) => (name.includes('-') ? name.split('-')[1].trim().toUpperCase() : name.toUpperCase()),
-
-	getStarCount: (countObj: Record<string, number>, keyword: string): number => {
-		const key = Object.keys(countObj).find((k) => k.toLowerCase().includes(keyword.toLowerCase()));
-		return key ? countObj[key] : 0;
-	},
+const uploadFilesOfCompetency = async (files: any[] = []) => {
+	if (!files.length) return [];
+	const urls = await Promise.all(files.map((f) => handleSingleFile(f).catch(() => null)));
+	return urls.filter(Boolean) as string[];
 };
 
-const StarRating: React.FC<{ count: number }> = ({ count }) => <span className='stars'>{'★'.repeat(count)}</span>;
+const MyCCTv3 = () => {
+	const [form] = Form.useForm();
+	const { getByIdModel, updateMyCCTModel, formSubmiting, edit, setEdit } = useModel('cct.mycct');
+	const { getByIdModel: getDot, record: recDot } = useModel('cct.submissionround');
+	const [selectedActivities, setSelectedActivities] = useState<{ attributeId: string; activityIds: string[] }[]>([]);
+	const [record, setRecord] = useState<{
+		allCompetencies: string[];
+		attributes: MyCCT.IAttributeMyCCT[];
+		levelOfEngagement: MyCCT.ILevelOfEngagement[];
+		myCCT: MyCCT.IRecord;
+		awardsAndRecognition: ActivityOutCome.IRecord;
+	}>();
+	const [isSubmit, setIsSubmit] = useState<boolean>(false);
+	const printRef = useRef<HTMLDivElement>(null);
+	const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+	const [listAwardRecognition, setListAwardRecognition] = useState<string[]>([]);
+	const [exporting, setExporting] = useState(false); // State để quản lý loading khi xuất file
 
-const TranscriptReport: React.FC<any> = () => {
-	const { getAllModel, loading } = useModel('cct.activityoutcome');
-	const { getAllModel: getAllLevel, danhSach: dsLevels } = useModel('cct.levels');
-	const [danhSach, setDanhSach] = useState<any>();
+	const getData = () => {
+		getByIdModel('me', false).then((res: any) => {
+			if (res?.myCCT?.selectedActivities?.length) {
+				res.attributes = res?.attributes?.map((attr: any) => {
+					const found = res?.myCCT?.selectedActivities?.find((i: any) => i?.attributeId === attr?.attribute?._id);
+
+					if (!found) return attr;
+
+					const mapOrder = new Map(found?.activityIds?.map((id: string, index: number) => [id, index]));
+
+					attr.activitiesOutCome = [...(attr?.activitiesOutCome || [])].sort(
+						(a, b) => (mapOrder.get(a.id) ?? (999 as any)) - (mapOrder.get(b.id) ?? (999 as any)),
+					);
+
+					return attr;
+				});
+			}
+
+			if (res?.myCCT?.listAwardRecognition?.length) {
+				const mapOrder = new Map(res.myCCT.listAwardRecognition.map((id: string, index: number) => [id, index]));
+
+				res.awardsAndRecognition = [...(res.awardsAndRecognition || [])].sort(
+					(a, b) => (mapOrder.get(a.id) ?? (999 as any)) - (mapOrder.get(b.id) ?? (999 as any)),
+				);
+			}
+
+			setRecord(res);
+		});
+	};
+
+	const getDotHienHanh = () => {
+		getDot('active', true);
+	};
 
 	useEffect(() => {
-		getAllLevel(undefined, { order: 1 }, { isActive: true });
-		getAllModel(undefined, undefined, undefined, undefined, 'my-cct', false).then((res) => setDanhSach(res));
+		getData();
+		getDotHienHanh();
 	}, []);
 
+	useEffect(() => {
+		if (!edit) {
+			form.resetFields();
+		} else {
+			form.setFieldsValue(record?.myCCT);
+
+			if (record?.myCCT?.listAwardRecognition?.length) {
+				setListAwardRecognition(record.myCCT.listAwardRecognition);
+			}
+		}
+	}, [edit, record?.myCCT?._id]);
+
+	const onFinish = async (values: MyCCT.IRecord, submitted: boolean) => {
+		const awardsAndRecognition = await Promise.all(
+			(values?.awardsAndRecognition || []).map(async (award: any) => ({
+				...award,
+				evidenceFile: await Promise.all(
+					(award.evidenceFile || [])?.map(async (file: any) => ({
+						name: file.name,
+						file: await uploadFilesOfCompetency(file?.file?.fileList),
+					})),
+				),
+			})),
+		);
+
+		const fallbackSelected = record?.attributes?.map((attr) => ({
+			attributeId: attr?.attribute?._id,
+			activityIds: (attr?.activitiesOutCome || []).map((i) => i.id),
+		}));
+
+		const data = {
+			...values,
+			awardsAndRecognition,
+			selectedActivities: selectedActivities.length ? selectedActivities : fallbackSelected,
+			listAwardRecognition,
+			submitted,
+		};
+
+		updateMyCCTModel(data as any, getData)
+			.then(() => setEdit(false))
+			.catch((err) => console.log(err));
+	};
+
+	const handleRealSubmit = () => {
+		form
+			.validateFields()
+			.then((values) => {
+				onFinish(values, true);
+				setPreviewVisible(false);
+			})
+			.catch(() => {});
+	};
+
+	// const handlePrint = useReactToPrint({
+	// 	contentRef: printRef,
+	// 	documentTitle: 'CCT Transcript',
+	// 	copyStyles: true,
+	// } as any);
+
+	const handleExportPDF = async () => {
+		const element = printRef.current;
+		if (!element) return;
+
+		try {
+			setExporting(true);
+
+			const clone = element.cloneNode(true) as HTMLElement;
+
+			// ✅ add class riêng
+			clone.classList.add('export-mode');
+
+			// ✅ inject style override pseudo-element
+			const style = document.createElement('style');
+			style.innerHTML = `
+			.export-mode .skills-section h3::before {
+				left: 0px !important;
+				top: 10px !important;
+				transform: translateY(-50%) !important;
+			}
+		`;
+			document.head.appendChild(style);
+
+			clone.style.width = '1700px';
+			clone.style.position = 'fixed';
+			clone.style.top = '-9999px';
+			clone.style.left = '0';
+			clone.style.zIndex = '-1';
+			clone.style.background = '#fff';
+
+			document.body.appendChild(clone);
+
+			const canvas = await html2canvas(clone, {
+				scale: 2,
+				useCORS: true,
+			});
+
+			document.body.removeChild(clone);
+			document.head.removeChild(style); // ✅ cleanup
+
+			const imgData = canvas.toDataURL('image/png');
+
+			const pdf = new jsPDF({
+				orientation: 'landscape',
+				unit: 'px',
+				format: 'a3',
+			});
+
+			const imgProps = pdf.getImageProperties(imgData);
+
+			const pdfWidth = pdf.internal.pageSize.getWidth();
+			const pdfHeight = pdf.internal.pageSize.getHeight();
+
+			const ratio = Math.min(pdfWidth / imgProps.width, pdfHeight / imgProps.height);
+
+			const finalWidth = imgProps.width * ratio;
+			const finalHeight = imgProps.height * ratio;
+
+			const offsetX = (pdfWidth - finalWidth) / 2;
+			const offsetY = (pdfHeight - finalHeight) / 2;
+
+			pdf.addImage(imgData, 'PNG', offsetX, offsetY, finalWidth, finalHeight);
+
+			pdf.save(`CCT_Transcript_${dayjs().format('YYYYMMDD')}.pdf`);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setExporting(false);
+		}
+	};
+
 	return (
-		<Card
-			title='Co-Curricular Transcript'
-			className='table-base-card'
-			variant='borderless'
-			styles={{
-				body: {
-					padding: 0,
-				},
-			}}
-		>
-			<Spin spinning={loading}>
-				<div className='transcript-scope'>
-					<div className='page-wrapper'>
-						<Row gutter={[12, 12]}>
-							{danhSach?.map((item: any) => {
-								const { attribute, countLevel, activitiesOutCome, listCompetencies } = item;
-								const themeColor = attribute.color || '#333';
-
-								const cardStyle = { '--theme-color': themeColor } as React.CSSProperties;
-
-								return (
-									<Col xs={24} sm={24} md={24} lg={24} xxl={12} key={attribute._id}>
-										<div className='transcript-card' style={cardStyle}>
-											<div className='card-header'>
-												<div className='header-content'>
-													<div className='icon-wrapper'>
-														<img
-															src={attribute.icon}
-															alt={attribute.name}
-															onError={(e) => (e.currentTarget.style.display = 'none')}
-														/>
-													</div>
-													<div className='header-details'>
-														<div className='description'>{attribute.description}</div>
-														<Row gutter={[12, 12]}>
-															<Col xs={24} md={8}>
-																<div className='rating-list'>
-																	<span className='rating-title'>Overview:</span>
-																	{dsLevels?.map((lv) => (
-																		<div key={lv._id} className='rating-row'>
-																			<span className='level-name'>{lv.name}</span>
-																			<StarRating count={Utils.getStarCount(countLevel, lv.name)} />
-																		</div>
-																	))}
-																</div>
-															</Col>
-
-															<Col xs={24} md={5}>
-																<div className='rating-list'>
-																	<span className='rating-title'>Skill acquired:</span>
-																	<div className='skills-list'>
-																		{listCompetencies?.map((c: string, i: number) => (
-																			<div key={i} className='skill-item'>
-																				• {c}
-																			</div>
-																		))}
-																	</div>
-																</div>
-															</Col>
-
-															<Col xs={24} md={10}>
-																<div className='script-title-wrapper'>
-																	<div className='script-title'>{Utils.toTitleCase(attribute.name)}</div>
-																</div>
-															</Col>
-														</Row>
-													</div>
-												</div>
-											</div>
-
-											<div className='table-container'>
-												{activitiesOutCome && activitiesOutCome.length > 0 ? (
-													<div className='table-responsive'>
-														<table>
-															<thead>
-																<tr>
-																	<th className='level-header'>Level</th>
-																	<th>Activity</th>
-																	<th>Start date</th>
-																	<th>End date</th>
-																	<th>Position</th>
-																</tr>
-															</thead>
-															<tbody>
-																{activitiesOutCome.map((act: any, index: number) => {
-																	const levelName = Utils.shortLevelName(act.levels?.name || '');
-																	const opacity = Utils.getOpacityByLevel(act.levels?.name);
-																	const cellColor = Utils.hexToRgba(themeColor, opacity);
-
-																	const activityName =
-																		act.activitiesName || act.activitiesType?.name || 'Unknown Activity';
-
-																	return (
-																		<tr key={index}>
-																			<td className='level-col'>
-																				<div
-																					className='level-badge'
-																					style={{ '--level-bg': cellColor } as React.CSSProperties}
-																				>
-																					{levelName}
-																				</div>
-																			</td>
-																			<td className='activity-name'>{activityName}</td>
-																			<td className='date-cell'>{Utils.formatDate(act.startDate)}</td>
-																			<td className='date-cell'>{Utils.formatDate(act.endDate)}</td>
-																			<td className='position-cell'>{act.roles?.name}</td>
-																		</tr>
-																	);
-																})}
-															</tbody>
-														</table>
-													</div>
-												) : (
-													<div className='empty-state'>No activities recorded for this attribute</div>
-												)}
-											</div>
-										</div>
-									</Col>
-								);
-							})}
-						</Row>
+		<>
+			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
+				<div
+					style={{
+						maxWidth: '100%',
+						margin: 'auto',
+					}}
+				>
+					<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+						<div style={{ color: '#fff', textAlign: 'left' }}>
+							{recDot?._id ? (
+								<>
+									<strong>{recDot?.roundName}</strong>
+									<p>{`(${[
+										dayjs(recDot?.startDate).format('HH:mm DD/MM/YYYY'),
+										dayjs(recDot?.endDate).format('HH:mm DD/MM/YYYY'),
+									]
+										.filter(Boolean)
+										.join(' - ')})`}</p>
+								</>
+							) : (
+								<></>
+							)}
+						</div>
+						<Space wrap>
+							{edit ? (
+								<>
+									<Button onClick={() => setEdit(false)} icon={<CloseCircleOutlined />}>
+										Cancel
+									</Button>
+									<Button
+										htmlType='submit'
+										loading={formSubmiting}
+										icon={<SaveOutlined />}
+										onClick={() => setIsSubmit(false)}
+									>
+										Save
+									</Button>
+									<Button icon={<SendOutlined />} onClick={() => setPreviewVisible(true)}>
+										Submit
+									</Button>
+								</>
+							) : (
+								<>
+									<Button onClick={getData} icon={<ReloadOutlined />}>
+										Reload
+									</Button>
+									{/* <Button icon={<PrinterOutlined />} onClick={handlePrint as any}>
+										Print
+									</Button> */}
+									<Button icon={<FilePdfOutlined />} onClick={handleExportPDF} loading={exporting}>
+										Export PDF
+									</Button>
+									<Button
+										disabled={
+											record?.myCCT?.status === EStatusMyCCT.APPROVED ||
+											record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL
+										}
+										onClick={() => {
+											setEdit(true);
+										}}
+										icon={<EditOutlined />}
+									>
+										Update
+									</Button>
+									<Button
+										disabled={
+											record?.myCCT?.status === EStatusMyCCT.APPROVED ||
+											record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL
+										}
+										icon={<SendOutlined />}
+										onClick={() => setPreviewVisible(true)}
+									>
+										Submit
+									</Button>
+								</>
+							)}
+						</Space>
 					</div>
+					{!!record?.myCCT?.status && <CardNoteMyCCT myCCT={record?.myCCT ?? ({} as MyCCT.IRecord)} />}
 				</div>
-			</Spin>
-		</Card>
+
+				<div className='cct-container' ref={printRef}>
+					<CCTContent
+						record={record as any}
+						form={form}
+						setSelectedActivities={setSelectedActivities}
+						setListAwardRecognition={setListAwardRecognition}
+						edit={edit}
+					/>
+				</div>
+
+				{edit && (
+					<div
+						style={{
+							position: 'fixed',
+							bottom: 0,
+							left: 0,
+							width: '100%',
+							background: '#fff',
+							padding: '12px 16px',
+							boxShadow: '0 -2px 8px rgba(0,0,0,0.1)',
+							zIndex: 1000,
+							display: 'flex',
+							justifyContent: 'flex-end',
+						}}
+					>
+						<Space wrap>
+							<Button onClick={() => setEdit(false)} icon={<CloseCircleOutlined />}>
+								Cancel
+							</Button>
+							<Button
+								htmlType='submit'
+								loading={formSubmiting}
+								icon={<SaveOutlined />}
+								onClick={() => setIsSubmit(false)}
+							>
+								Save
+							</Button>
+							<Button type='primary' icon={<SendOutlined />} onClick={() => setPreviewVisible(true)}>
+								Submit
+							</Button>
+						</Space>
+					</div>
+				)}
+			</Form>
+
+			<PreviewCCTModal open={previewVisible} onCancel={() => setPreviewVisible(false)} onConfirm={handleRealSubmit}>
+				<CCTContent
+					record={record as any}
+					form={form}
+					setSelectedActivities={setSelectedActivities}
+					setListAwardRecognition={setListAwardRecognition}
+					edit={false}
+				/>
+			</PreviewCCTModal>
+		</>
 	);
 };
 
-export default TranscriptReport;
+export default MyCCTv3;
