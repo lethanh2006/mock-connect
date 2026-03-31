@@ -50,7 +50,7 @@ const SelectLevelsManagement = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Select Level'
+			placeholder={intl.formatMessage({ id: 'level.select' })}
 			style={{ width: '100%', ...style }}
 		/>
 	);

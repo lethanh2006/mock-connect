@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import CardChiTietSuKien from '../../Activity/components/CardChiTietSuKien';
 import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
-import SelectTrack from '../../DanhMuc/Track/Select';
 import CardNoteActivity from './CardNote';
 import FormCompetencyEvidence from './FormCompetencyEvidence';
 import FormRoleEvidence from './FormRoleEvidence';
@@ -115,13 +114,13 @@ const FormActivityOutCome = (props: any) => {
 					</Form.Item>
 				</Col>
 
-				<Col span={12}>
+				{/* <Col span={12}>
 					<Form.Item name='trackId' label='Track' rules={[...rules.required]}>
 						<SelectTrack disabled={isView} />
 					</Form.Item>
-				</Col>
+				</Col> */}
 
-				<Col span={12}>
+				<Col span={24} md={24}>
 					<Form.Item name='levelsId' label='Level' rules={[...rules.required]}>
 						<SelectLevelsManagement disabled={isView} />
 					</Form.Item>

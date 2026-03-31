@@ -286,7 +286,7 @@ const HistoryActivityPage = () => {
 													activityOutcome: item,
 												}}
 												banner={item?.banner ?? undefined}
-												name={item?.activitiesOutcomeName}
+												name={item?.isAwardRecognition ? item?.competition : item?.activitiesOutcomeName}
 												startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
 												endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
 												equivalencyAttributeIds={item?.activitiesType?.attributes?.map((x) => x._id)}
@@ -353,6 +353,7 @@ const HistoryActivityPage = () => {
 												isExpired={
 													item?.workflow === EApprovalStatus.CHANGES_REQUIRED && now.isAfter(dayjs(item?.dueDate))
 												}
+												isAward={item?.isAwardRecognition}
 											/>
 										)}
 									</Col>
@@ -442,7 +443,7 @@ const HistoryActivityPage = () => {
 							}}
 						/>
 					)
-				) : isView ? (
+				) : isView && !record?.isAwardRecognition ? (
 					<>
 						<ChiTietActivityOutCome recOutcome={record ?? ({} as ActivityOutCome.IRecord)} />
 

@@ -1,5 +1,5 @@
 import { Activity } from '../Activity/typing';
-import { EActivityCategory, EApprovalStatus, Evalidation } from '../constant';
+import { EActivityCategory, EApprovalStatus, EScopeAward, Evalidation } from '../constant';
 
 declare module ActivityOutCome {
 	export interface IRecord {
@@ -51,6 +51,14 @@ declare module ActivityOutCome {
 
 		createdAt: Date;
 		updatedAt: Date;
+
+		//Award
+		isAwardRecognition: boolean;
+		competition: string;
+		dateOfAchievement: Date;
+		scope: EScopeAward;
+		rank: string;
+		link: string;
 	}
 
 	export interface IAnalyticsStudent {
