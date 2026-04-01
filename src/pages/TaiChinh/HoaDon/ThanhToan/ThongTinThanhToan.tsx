@@ -160,7 +160,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						</Space>
 					) : (
 						<>
-							<CanhBaoGiaoDich />
+							<div style={{ marginBottom: 6 }}>
+								<CanhBaoGiaoDich />
+							</div>
 							<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
 						</>
 					)}

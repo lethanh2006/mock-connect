@@ -218,9 +218,13 @@ export default {
 	// AlertBanners
 	'minor.alert.registrationStart.minor': 'Đợt đăng ký chuyên ngành phụ bắt đầu từ ngày {date}',
 	'minor.alert.registrationStart.concentration': 'Đợt đăng ký chuyên ngành chính bắt đầu từ ngày {date}',
-	'minor.alert.registrationRange.minor': 'Đang trong đợt đăng ký chuyên ngành phụ: {startDate} – {endDate}',
+	'minor.alert.registrationUpcoming.minor': 'Đợt đăng ký chuyên ngành hẹp sẽ diễn ra: {startDate} – {endDate}',
+	'minor.alert.registrationUpcoming.concentration': 'Đợt đăng ký chuyên ngành chính sẽ diễn ra: {startDate} – {endDate}',
+	'minor.alert.registrationRange.minor': 'Đang trong đợt đăng ký chuyên ngành hẹp: {startDate} – {endDate}',
 	'minor.alert.registrationRange.concentration': 'Đang trong đợt đăng ký chuyên ngành chính: {startDate} – {endDate}',
-	'minor.alert.registrationNotOpen.minor': 'Đợt đăng ký chuyên ngành phụ chưa được mở',
+	'minor.alert.registrationClosed.minor': 'Đợt đăng ký chuyên ngành hẹp đã kết thúc: {startDate} – {endDate}',
+	'minor.alert.registrationClosed.concentration': 'Đợt đăng ký chuyên ngành chính đã kết thúc: {startDate} – {endDate}',
+	'minor.alert.registrationNotOpen.minor': 'Đợt đăng ký chuyên ngành hẹp chưa được mở',
 	'minor.alert.registrationNotOpen.concentration': 'Đợt đăng ký chuyên ngành chính chưa được mở',
 	'minor.button.registerMinor': 'Đăng ký chuyên ngành phụ',
 	'minor.button.registerConcentration': 'Đăng ký chuyên ngành chính',
@@ -248,8 +252,8 @@ export default {
 	'minor.build.title.concentration': 'Thiết kế Chuyên ngành chính cá nhân hóa (IDC)',
 	'minor.build.desc.minor': 'Thiết kế chương trình phụ cá nhân hóa theo định hướng học thuật của bạn',
 	'minor.build.desc.concentration': 'Thiết kế chương trình chính cá nhân hóa theo định hướng học thuật của bạn',
-	'minor.build.button.minor': 'Xây dựng chuyên ngành riêng bạn',
-	'minor.build.button.concentration': 'Xây dựng chuyên ngành riêng bạn',
+	'minor.build.button.minor': 'Xây dựng chuyên ngành riêng',
+	'minor.build.button.concentration': 'Xây dựng chuyên ngành riêng',
 	'minor.build.pageTitle.minor': 'Thiết kế Chuyên ngành phụ cá nhân hóa (IDM)',
 	'minor.build.pageTitle.concentration': 'Thiết kế Chuyên ngành chính cá nhân hóa (IDC)',
 	'minor.build.breadcrumb.study': 'Học tập',
@@ -279,8 +283,8 @@ export default {
 	'minor.course.prerequisiteList': 'DS học phần tiên quyết',
 
 	// MajorList
-	'minor.major.recommended.minor': 'Danh sách chuyên ngành phụ',
-	'minor.major.recommended.concentration': 'Danh sách chuyên ngành chính',
+	'minor.major.recommended.minor': 'Danh sách chuyên ngành',
+	'minor.major.recommended.concentration': 'Danh sách chuyên ngành',
 	'minor.empty.noRecommended.minor': 'Không có chuyên ngành phụ đề xuất',
 	'minor.empty.noRecommended.concentration': 'Không có chuyên ngành chính đề xuất',
 

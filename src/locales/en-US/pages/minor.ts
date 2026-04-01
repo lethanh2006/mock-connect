@@ -214,8 +214,12 @@ export default {
 	// AlertBanners
 	'minor.alert.registrationStart.minor': 'Minor registration period starts from {date}',
 	'minor.alert.registrationStart.concentration': 'Concentration registration period starts from {date}',
+	'minor.alert.registrationUpcoming.minor': 'Minor registration period is scheduled: {startDate} – {endDate}',
+	'minor.alert.registrationUpcoming.concentration': 'Concentration registration period is scheduled: {startDate} – {endDate}',
 	'minor.alert.registrationRange.minor': 'Minor registration in progress: {startDate} – {endDate}',
 	'minor.alert.registrationRange.concentration': 'Concentration registration in progress: {startDate} – {endDate}',
+	'minor.alert.registrationClosed.minor': 'Minor registration period has ended: {startDate} – {endDate}',
+	'minor.alert.registrationClosed.concentration': 'Concentration registration period has ended: {startDate} – {endDate}',
 	'minor.alert.registrationNotOpen.minor': 'Minor registration period has not been opened',
 	'minor.alert.registrationNotOpen.concentration': 'Concentration registration period has not been opened',
 	'minor.button.registerMinor': 'Register Minor',

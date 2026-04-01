@@ -136,6 +136,7 @@ export default {
 	'thongtincanhan.form.thongtingiadinh.xoa.xacnhan': 'Bạn có chắc chắn muốn xóa thành viên này?',
 	'thongtincanhan.form.thongtingiadinh.form.chinhsua': 'Chỉnh sửa thành viên gia đình',
 	'thongtincanhan.form.thongtingiadinh.form.themmoi': 'Thêm mới thành viên gia đình',
+	'thongtincanhan.form.thongtingiadinh.form.luulai': 'Lưu lại thông tin thành viên gia đình',
 	'thongtincanhan.form.thongtingiadinh.form.loaithanhvien': 'Loại thành viên',
 	'thongtincanhan.form.thongtingiadinh.form.loaithanhvien.place': 'Chọn loại thành viên gia đình',
 	'thongtincanhan.form.thongtingiadinh.form.trangthai': 'Trạng thái',

@@ -1,6 +1,5 @@
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
-import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { Button, Card, Col, Row, Tag } from 'antd';
 import { useEffect, useState } from 'react';
@@ -65,14 +64,7 @@ const DanhSachChuyenNganhList = ({ isMinor, hiddenButton }: { isMinor: boolean; 
 			filterType: 'string',
 			width: 220,
 		},
-		{
-			title: intl.formatMessage({ id: 'minor.table.donVi' }),
-			dataIndex: 'maDonVi',
-			key: 'maVien',
-			filterType: 'customselect',
-			filterCustomSelect: <SelectDonVi multiple />,
-			width: 120,
-		},
+
 		{
 			title: intl.formatMessage({ id: 'minor.table.tongTinChi' }),
 			width: 140,
@@ -102,6 +94,25 @@ const DanhSachChuyenNganhList = ({ isMinor, hiddenButton }: { isMinor: boolean; 
 										? intl.formatMessage({ id: 'minor.major.recommended.minor' })
 										: intl.formatMessage({ id: 'minor.major.recommended.concentration' })
 								}
+								extra={
+									hiddenButton || !cctFilter?.()
+										? []
+										: [
+											<Button
+												key='build'
+												type='primary'
+												onClick={() =>
+													history.push(
+														`/hoc-tap/dang-ky-chuyen-nganh/register/build?loai=${isMinor ? 'minor' : 'concentration'}`,
+													)
+												}
+											>
+												{isMinor
+													? intl.formatMessage({ id: 'minor.build.button.minor' })
+													: intl.formatMessage({ id: 'minor.build.button.concentration' })}
+											</Button>,
+										]
+								}
 							>
 								<TableBase
 									modelName='daotao.nganhchuyennganh'
@@ -116,26 +127,7 @@ const DanhSachChuyenNganhList = ({ isMinor, hiddenButton }: { isMinor: boolean; 
 											? intl.formatMessage({ id: 'minor.empty.noRecommended.minor' })
 											: intl.formatMessage({ id: 'minor.empty.noRecommended.concentration' })
 									}
-									buttons={{ create: false, import: false, export: false, filter: true, reload: true }}
-									otherButtons={
-										hiddenButton || !cctFilter?.()
-											? []
-											: [
-													<Button
-														key='build'
-														type='primary'
-														onClick={() =>
-															history.push(
-																`/hoc-tap/dang-ky-chuyen-nganh/register/build?loai=${isMinor ? 'minor' : 'concentration'}`,
-															)
-														}
-													>
-														{isMinor
-															? intl.formatMessage({ id: 'minor.build.button.minor' })
-															: intl.formatMessage({ id: 'minor.build.button.concentration' })}
-													</Button>,
-												]
-									}
+									buttons={{ create: false, import: false, export: false, filter: true, reload: true, minimizeGlobalSearch: true }}
 									otherProps={{
 										loading,
 										rowKey: 'ma',
@@ -153,6 +145,7 @@ const DanhSachChuyenNganhList = ({ isMinor, hiddenButton }: { isMinor: boolean; 
 								isMinor={isMinor}
 								hiddenButton={hiddenButton}
 								choosenMinor={choosenMinor}
+								choosenMinorName={danhSach.find((item) => item.ma === choosenMinor)?.ten}
 								onSuccess={() => {
 									if (isMinor) {
 										history.push('/hoc-tap/khac#dang-ky-chuyen-nganh-hep');

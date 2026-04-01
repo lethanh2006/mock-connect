@@ -1,84 +1,14 @@
 import React from 'react';
-import { type IColumn, type TFilter } from '../typing';
+import type { IColumn } from '../typing';
 
-/**
- * Chuẩn hóa dữ liệu bộ lọc từ form trước khi gửi lên table context hoặc backend.
- * Hàm này xử lý đệ quy các nhóm bộ lọc, làm phẳng các nhóm AND và giữ lại các bộ lọc đang hoạt động.
- *
- * @param filters Mảng các bộ lọc hoặc nhóm bộ lọc
- * @returns Mảng các bộ lọc đã được chuẩn hóa
- */
-export const normalizeFilters = (filters: any[]): TFilter<any>[] => {
-	if (!filters || !Array.isArray(filters)) return [];
-
-	const result: TFilter<any>[] = [];
-
-	filters.forEach((f) => {
-		if (!f || f.active === false) return;
-
-		// Nếu là một nhóm (có operator hoặc mảng filters con)
-		const logicOp = f.operator;
-		if (logicOp === 'and' || logicOp === 'or' || (f.filters && Array.isArray(f.filters))) {
-			const normalizedSubFilters = normalizeFilters(f.filters || []);
-			if (normalizedSubFilters.length === 0) return;
-
-			// Giữ nguyên cấu trúc nhóm (AND hoặc OR) để bảo toàn giao diện người dùng
-			result.push({
-				operator: logicOp || 'and',
-				filters: normalizedSubFilters,
-				active: true,
-				values: [],
-				readOnly: f.readOnly,
-			});
-			return;
-		}
-
-		// Nếu là một bộ lọc lá (có trường field)
-		if (f.field) {
-			result.push({
-				field: f.field,
-				operator: f.operator,
-				values: Array.isArray(f.values) ? f.values : f.values !== undefined ? [f.values] : [],
-				active: true,
-				readOnly: f.readOnly,
-			});
-		}
-	});
-
-	return result;
-};
-
-export const findFiltersInColumns = (columns: IColumn<unknown>[], filters?: any[]): any[] => {
-	if (!filters?.length) return [];
-
-	return filters
-		.map((filter): any => {
-			// Check for group filter - support both 'filters' and 'filtes' (typo) for backward compatibility
-			const filterArray = filter.filters || filter.filtes;
-			if (filterArray && Array.isArray(filterArray)) {
-				return {
-					filters: findFiltersInColumns(columns, filterArray),
-					logicOperator: filter.operator || filter.logicOperator || 'and',
-					active: true,
-				};
-			}
-
-			const field = JSON.stringify(filter.field);
-			const column = columns.find((col) => JSON.stringify(col.dataIndex) === field);
-
-			if (column) {
-				return {
-					field: filter.field,
-					operator: filter.operator,
-					values: filter.values || [],
-					active: true,
-				};
-			}
-
-			return null;
-		})
-		.filter(Boolean);
-};
+export {
+	findFiltersInColumns,
+	markExternalFilters,
+	normalizeFilters,
+	splitFiltersBySource,
+	stripFilterSource,
+} from './filters';
+export { normalizeExternalConditions } from './conditions';
 
 export const updateSearchStorage = (dataIndex: string, value: string) => {
 	const savedSearchValues = JSON.parse(localStorage.getItem('dataTimKiem') || '{}');
@@ -104,24 +34,26 @@ const extractText = (node: any): string => {
 	return '';
 };
 
-// Tạo key duy nhất cho column dựa trên key, dataIndex hoặc title
+// Tạo key duy nhất cho column dựa trên key, dataIndex hoặc kết hợp title
 export const getColumnKey = (item: IColumn<any>, index: number) => {
 	if (item.key) return String(item.key);
-	if (item.dataIndex) {
-		return Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : String(item.dataIndex);
-	}
 
-	// Trích xuất text từ title để làm part của key
+	// Trích xuất text từ title để làm part của key giúp tăng độ duy nhất
 	let titleText = '';
-	if (typeof item.title === 'function') {
-		titleText = 'f_title'; // Placeholder cho title dạng function
-	} else {
+	if (typeof item.title !== 'function') {
 		titleText = extractText(item.title);
 	}
+	const titleHash = titleText ? stringHash(titleText) : '';
 
-	if (titleText && titleText !== 'f_title') {
+	if (item.dataIndex) {
+		const baseKey = Array.isArray(item.dataIndex) ? item.dataIndex.join('.') : String(item.dataIndex);
+		// Kết hợp dataIndex với titleHash để phân biệt các cột dùng chung dataIndex nhưng khác tiêu đề
+		return titleHash ? `${baseKey}_${titleHash}` : baseKey;
+	}
+
+	if (titleText) {
 		// Nếu có title rõ ràng, dùng hash của title để đảm bảo tính ổn định (không phụ thuộc index)
-		return `col_${stringHash(titleText)}`;
+		return `col_${titleHash}`;
 	}
 
 	// Cuối cùng nếu không có gì để định danh, mới dùng index
@@ -145,8 +77,15 @@ export const mergeColumnSettings = (
 	const availableColumns = newColumns.filter((col) => col.hide !== true);
 	const availableKeys = availableColumns.map((col, index) => getColumnKey(col, index));
 
-	// 1. Lọc bỏ các cột không còn tồn tại trong code
-	const result = currentSettings.filter((s) => availableKeys.includes(s.key));
+	// 1. Lọc bỏ các cột không còn tồn tại trong code và loại bỏ các Key trùng lặp (nếu lướt bị cache lỗi)
+	const seenResultKeys = new Set<string>();
+	const result = currentSettings.filter((s) => {
+		if (!availableKeys.includes(s.key)) return false;
+		if (seenResultKeys.has(s.key)) return false;
+		seenResultKeys.add(s.key);
+		return true;
+	});
+
 	const resultKeys = new Set(result.map((s) => s.key));
 
 	// 2. Chèn các cột mới vào đúng vị trí tương đối
