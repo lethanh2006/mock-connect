@@ -15,7 +15,8 @@ export default () => {
 	const { setLoading, setFormSubmiting, formSubmiting, setDanhSach } = objInit;
 
 	const [selectedKhoiLuaChon, setSelectedKhoiLuaChon] = useState<ChuongTrinhDaoTao.IKhoiKienThuc | null>(null);
-	const [currentKhoiLuaChonMa, setCurrentKhoiLuaChonMa] = useState<string>('');
+	const [currentKhoiLuaChonMa, setCurrentKhoiLuaChonMa] = useState<string | null>(null);
+	const [currentKhoiLuaChonTen, setCurrentKhoiLuaChonTen] = useState<string | null>(null);
 	const [khoiLuaChonList, setKhoiLuaChonList] = useState<ChuongTrinhDaoTao.IKhoiKienThuc[]>([]);
 	const [isLoadingKhoiLuaChon, setIsLoadingKhoiLuaChon] = useState<boolean>(false);
 
@@ -89,6 +90,7 @@ export default () => {
 
 			if (!currentKhoiLuaChonMa && danhSachKhoiLuaChon.length > 0) {
 				setCurrentKhoiLuaChonMa(danhSachKhoiLuaChon[0].ma);
+				setCurrentKhoiLuaChonTen(danhSachKhoiLuaChon[0].ten);
 			}
 
 			return danhSachKhoiLuaChon;
@@ -106,6 +108,7 @@ export default () => {
 			maKhoaNganh: string;
 			maKhoiCha: string;
 			maKhoiCon: string;
+			dotDangKyPathwayId: string;
 		},
 		messages: {
 			errorIncomplete: string;
@@ -134,6 +137,7 @@ export default () => {
 		setRegisteredPathway(null);
 		setKhoiLuaChonList([]);
 		setCurrentKhoiLuaChonMa('');
+		setCurrentKhoiLuaChonTen('');
 		setSelectedKhoiLuaChon(null);
 	};
 
@@ -161,6 +165,7 @@ export default () => {
 		setSelectedKhoiLuaChon,
 		currentKhoiLuaChonMa,
 		setCurrentKhoiLuaChonMa,
+		currentKhoiLuaChonTen,
 		khoiLuaChonList,
 		setKhoiLuaChonList,
 		isLoadingKhoiLuaChon,
