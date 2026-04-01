@@ -1,6 +1,7 @@
 import { TabViewPage } from '@/components/TabViewPage';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import PathWayPage from '@/pages/SinhVien/PathWay';
+import { tenTruongVietTatTiengAnh } from '@/services/base/constant';
 import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
 import { formatDate } from '@/utils/formatDate';
 import { BookOutlined, CheckCircleOutlined, NodeIndexOutlined, ScheduleOutlined } from '@ant-design/icons';
@@ -159,6 +160,7 @@ const TienTrinhHocTap = () => {
 							menuKey: 'lo-trinh-hoc-tap',
 							content: <PathWayPage getData={() => getByIdModel(`me?maKhoaNganh=${maKhoaNganh}`, true)} />,
 							icon: <NodeIndexOutlined />,
+							hide: tenTruongVietTatTiengAnh !== 'VINUNI',
 						},
 						{
 							title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan' }),
