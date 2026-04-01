@@ -24,12 +24,14 @@ const HocTapKhacPage = () => {
 					icon: <ProfileOutlined />,
 					title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
 					menuKey: 'dang-ky-chuyen-nganh',
+					hide: !access.cctFilter(),
 					content: <DangKyChuyenNganhPage type='concentration' />,
 				},
 				{
 					icon: <ProfileOutlined />,
 					title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganhhep.title' }),
 					menuKey: 'dang-ky-chuyen-nganh-hep',
+					hide: !access.cctFilter(),
 					content: <DangKyChuyenNganhPage type='minor' />,
 				},
 			]
@@ -38,6 +40,7 @@ const HocTapKhacPage = () => {
 					icon: <ProfileOutlined />,
 					title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
 					menuKey: 'dang-ky-chuyen-nganh',
+					hide: access.cctFilter(),
 					content: <DangKyChuyenNganh />,
 				},
 			]),
@@ -64,7 +67,15 @@ const HocTapKhacPage = () => {
 	return (
 		<TabViewPage
 			cardBigTitle
-			cardProps={shouldShowSelectSongNganh ? { extra: <SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} /> } : undefined}
+			cardProps={
+				shouldShowSelectSongNganh
+					? {
+						extra: (
+							<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
+						),
+					}
+					: undefined
+			}
 			onChange={(tab) => setActiveTab(tab)}
 			cardTitle={intl.formatMessage({ id: 'hoctapkhac.title' })}
 			menu={menu}

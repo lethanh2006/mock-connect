@@ -24,7 +24,7 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 				open={visible}
 				onCancel={() => setVisible(false)}
 				okButtonProps={{ hidden: true }}
-				cancelText={intl.formatMessage({ id: 'global.button.close' })}
+				cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 				width={1000}
 				title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.title' })}
 			>

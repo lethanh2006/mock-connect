@@ -86,7 +86,7 @@ const ThongTinChungPage = () => {
 				<PreviewFile file={record?.url ?? ''} />
 
 				<div className='form-footer'>
-					<Button onClick={() => setVisibleFormFile(false)}>{intl.formatMessage({ id: 'golbal.button.dong' })}</Button>
+					<Button onClick={() => setVisibleFormFile(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 				</div>
 			</ModalExpandable>
 		</>

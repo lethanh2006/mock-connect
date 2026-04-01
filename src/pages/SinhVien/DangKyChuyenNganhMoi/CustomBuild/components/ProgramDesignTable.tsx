@@ -121,7 +121,7 @@ const ProgramDesignTable = ({
 				columns={columns}
 				hasTotal={hasTotal}
 				addStt
-				title={title}
+				size='small'
 				otherButtons={otherButtons}
 				showEdit={showEdit}
 				setShowEdit={setShowEdit}

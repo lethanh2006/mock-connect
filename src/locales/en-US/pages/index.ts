@@ -1,4 +1,3 @@
-import pathway from '@/locales/vi-VN/pages/pathway';
 import activity from './cct/activity';
 import dangky from './dichvuhanhchinh/dangky';
 import lichsu from './dichvuhanhchinh/lichsu';
@@ -12,6 +11,7 @@ import ketquahoctap from './hoctap/ketquahoctap';
 import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
+import pathway from './hoctap/pathway';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
 import lichsukien from './lichsukien';
@@ -60,10 +60,11 @@ export default {
 	...lichthi,
 	...baithicuoiky,
 	...activity,
+	...pathway,
+	...minor,
+
 	'pages.trangchu.title': 'TRAINING MANAGEMENT SUBSYSTEM',
 	'pages.trangchu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',
 	'pages.gioithieu.title': 'ABOUT',
 	'pages.gioithieu.subtitle': 'COMMAND AND CONTROL SOFTWARE SYSTEM',
-	...pathway,
-	...minor,
 };

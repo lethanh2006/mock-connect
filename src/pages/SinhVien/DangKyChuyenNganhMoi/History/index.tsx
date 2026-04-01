@@ -22,7 +22,7 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 	const { phieuDangKyTheoDot, getModel, page, limit, fetchPhieuDangKyTheoDot } = useModel(
 		'sinhvien.dangkychuyennganh.dangkychuyennganh',
 	);
-	const { record: dotDangKy, fetchDotDangKy } = useModel('daotao.dotdkctdt');
+	const { record: dotDangKy, fetchDotDangKy, isRegistrationOpen } = useModel('daotao.dotdkctdt');
 	const [minorListModalOpen, setMinorListModalOpen] = useState(false);
 
 	const getData = () => {
@@ -31,6 +31,11 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 				field: ['dot', 'loaiCtdt'],
 				operator: EOperatorType.EQUAL,
 				values: [type],
+			},
+			{
+				field: 'trangThai',
+				operator: EOperatorType.NOT_EQUAL,
+				values: [ETrangThaiDangKyChuyenNganh.NHAP],
 			},
 		];
 		return getModel(undefined, filterParams, undefined, undefined, undefined, 'me/page');
@@ -117,14 +122,18 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 			<div style={{ marginBottom: 8 }}>
 				<AlertBanners
 					buttonRegister={
-						!!dotDangKy && (!phieuDangKyTheoDot || phieuDangKyTheoDot?.trangThai === ETrangThaiDangKyChuyenNganh.NHAP)
+						isRegistrationOpen &&
+						!!dotDangKy &&
+						(!phieuDangKyTheoDot || phieuDangKyTheoDot?.trangThai === ETrangThaiDangKyChuyenNganh.NHAP)
 					}
 					type={type}
 				/>
 			</div>
-			<div style={{ marginBottom: 8 }}>
-				<StudentInfoCard type={type} />
-			</div>
+			{isRegistrationOpen && (
+				<div style={{ marginBottom: 8 }}>
+					<StudentInfoCard type={type} />
+				</div>
+			)}
 
 			<TableBase
 				columns={columns}

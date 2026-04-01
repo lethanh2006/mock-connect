@@ -67,7 +67,7 @@ const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps)
 							<div style={{ marginBottom: 8 }}>
 								{intl.formatMessage({ id: 'minor.idm.goalsAndRationale.description' })}{' '}
 							</div>
-							<Form.Item name='mucTieuLyDo' rules={[...rules.required, ...rules.length(500)]}>
+							<Form.Item name='mucTieuLyDo'>
 								<Input.TextArea
 									rows={6}
 									placeholder={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.placeholder' })}
@@ -92,7 +92,7 @@ const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps)
 									value: `${totalCredits} / ${minCredits}`,
 								},
 								{
-									ok: meetsMaxCompletedCredits,
+									ok: !meetsMaxCompletedCredits,
 									label: intl.formatMessage({ id: 'minor.idm.programDesign.creditsCompletedMax' }),
 									value: `${completedCredits} / ${maxCompletedCredits}`,
 								},
@@ -142,6 +142,7 @@ const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps)
 												icon={<PlusCircleOutlined />}
 												onClick={() => setShowEdit(true)}
 												type='primary'
+												size='small'
 											>
 												{intl.formatMessage({ id: 'minor.idm.programDesign.addCourse' })}
 											</ButtonExtend>,

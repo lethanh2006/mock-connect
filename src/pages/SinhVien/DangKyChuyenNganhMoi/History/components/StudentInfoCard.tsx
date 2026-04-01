@@ -4,14 +4,22 @@ import {
 	trangThaiDangKyChuyenNganh,
 } from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import { Card, Col, Row, Tag } from 'antd';
+import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const StudentInfoCard = ({ type }: { type: 'minor' | 'concentration' }) => {
 	const intl = useIntl();
 
-	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
+	const { record: recSinhVien, getThongTinCuaToiModel } = useModel('sinhvien.sinhvien');
 	const { phieuDangKyTheoDot: phieuDkCtdtMeByDot } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
 	const { record: kyHienTai } = useModel('daotao.dotdkctdt');
+
+	useEffect(() => {
+		if (!recSinhVien) {
+			getThongTinCuaToiModel();
+		}
+	}, []);
+
 	const gpa = recSinhVien?.kqhtTichLuyNganh1?.trungBinhThang4 || '-';
 	const chuongTrinhDaoTao =
 		phieuDkCtdtMeByDot?.trangThai !== ETrangThaiDangKyChuyenNganh.NHAP
@@ -19,7 +27,7 @@ const StudentInfoCard = ({ type }: { type: 'minor' | 'concentration' }) => {
 			: '-';
 	return (
 		<Row gutter={[16, 16]}>
-			<Col span={8}>
+			<Col span={12}>
 				<Card variant='borderless' style={{ backgroundColor: 'var(--color-status-bg-100)', alignContent: 'center' }}>
 					<Row justify='space-between' align='middle'>
 						<Col>
@@ -32,10 +40,10 @@ const StudentInfoCard = ({ type }: { type: 'minor' | 'concentration' }) => {
 					</Row>
 				</Card>
 			</Col>
-			<Col span={8}>
+			<Col span={12}>
 				<Card
 					variant='borderless'
-					style={{ backgroundColor: 'var(--color-status-200)', color: 'var(--color-text-400)', alignContent: 'center' }}
+					style={{ backgroundColor: 'var(--color-status-bg-200)', alignContent: 'center' }}
 				>
 					<div>
 						{type === 'minor'
@@ -57,7 +65,7 @@ const StudentInfoCard = ({ type }: { type: 'minor' | 'concentration' }) => {
 					</div>
 				</Card>
 			</Col>
-			<Col xs={24} md={8}>
+			{/* <Col xs={24} md={8}>
 				<Card variant='borderless' style={{ backgroundColor: 'var(--color-status-bg-100)', height: '100%' }}>
 					<div style={{ marginBottom: 8 }}>
 						{intl.formatMessage({ id: 'minor.info.requirement.gpa' }, { gpa: kyHienTai?.gpaMin ?? '-' })}
@@ -83,7 +91,7 @@ const StudentInfoCard = ({ type }: { type: 'minor' | 'concentration' }) => {
 						)}
 					</div>
 				</Card>
-			</Col>
+			</Col> */}
 		</Row>
 	);
 };
