@@ -31,7 +31,7 @@ export default {
 	'menu.HocTap.BaiThiCuoiKy': 'Final Exam Submission',
 	'menu.HocTap.KetQuaHocTap': 'Study Results',
 	'menu.HocTap.HocTapKhac': 'Other Study Activities',
-	'menu.HocTap.HocTapKhac.DangKyChuyenNganh': 'Major Registration',
+	'menu.HocTap.HocTapKhac.DangKyChuyenNganh': 'Concentration Registration',
 	'menu.HocTap.HocTapKhac.XetHocVu': 'Academic Review',
 	'menu.HocTap.HocTapKhac.QuyetDinh': 'Leave of Absence, Withdrawal',
 	'menu.HocTap.XetTotNghiep': 'Certificates & Graduation',

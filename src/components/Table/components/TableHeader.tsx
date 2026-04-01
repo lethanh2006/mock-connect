@@ -43,11 +43,12 @@ export const TableHeader: React.FC = () => {
 		loading,
 		total,
 		hideTotal,
+		disableFilterModal,
 		size,
 	} = useTableContext();
 	const {
 		globalSearch = true,
-		minimizeGlobalSearch,
+		minimizeGlobalSearch = size === 'small',
 		create: btnCreate = true,
 		export: btnExport,
 		filter: btnFilter = true,
@@ -55,6 +56,7 @@ export const TableHeader: React.FC = () => {
 		reload: btnReload = true,
 	} = buttons || {};
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
+	const canOpenModalFilter = btnFilter && hasFilter && disableFilterModal !== true;
 
 	//#region Global Search Logic
 
@@ -290,7 +292,7 @@ export const TableHeader: React.FC = () => {
 			<div className='extra no-print'>
 				<ColumnSettings />
 
-				{btnFilter && hasFilter && (
+				{canOpenModalFilter && (
 					<ButtonExtend
 						className='btn-filter'
 						size={size}
@@ -319,7 +321,7 @@ export const TableHeader: React.FC = () => {
 									allowClear
 									value={globalSearchText}
 									placeholder={globalSearchPlaceholder}
-									style={{ width: 280 }}
+									style={{ width: 250 }}
 									autoFocus
 									onChange={(e) => {
 										const nextValue = e.target.value;

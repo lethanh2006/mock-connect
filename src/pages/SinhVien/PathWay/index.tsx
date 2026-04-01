@@ -1,23 +1,24 @@
-import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
+import { ETrangThaiDuyetLoTrinh } from '@/services/DaoTao/ChuongTrinhDaoTao/constant';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
-import { Button, Card, Col, Descriptions, Row, Spin, Steps, Tag } from 'antd';
+import { Card, Col, Descriptions, Row, Spin, Steps, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
 import { useIntl, useModel } from 'umi';
+import CardNotePathWay from './components/CardNote';
 import PathwayCard from './components/PathwayCard';
 
-const PathWayPage = () => {
+const PathWayPage = (props: { getData?: () => void }) => {
 	const intl = useIntl();
-	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
+	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const {
 		loading,
 		fetchPathwayList,
 		getSelectedKhoiLuaChonFromCache,
 		initializePathwayData,
 		refreshChosenPathway,
+		currentKhoiLuaChonTen,
 		currentKhoiLuaChonMa,
 		setCurrentKhoiLuaChonMa,
 		danhSach,
@@ -25,14 +26,11 @@ const PathWayPage = () => {
 		khoiLuaChonList,
 		isLoadingKhoiLuaChon,
 	} = useModel('sinhvien.pathway');
+	const { record: recLoTrinh, loading: lotrinhLoading } = useModel('sinhvien.lotrinhhoctap');
 	const [previewingPathway, setPreviewingPathway] = useState<ChuongTrinhDaoTao.IKhoiKienThuc | null>(null);
-	const {
-		chuongTrinhHienTai,
-		loading: loadingChuongTrinh,
-		getChuongTrinhHienTaiModel,
-	} = useModel('daotao.chuongtrinhdaotao');
 	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const [paneSize, setPaneSize] = useState('35%');
+	const { getData } = props;
 
 	const handlePaneSizeChange = (size: any) => {
 		setPaneSize(size[0]);
@@ -41,7 +39,6 @@ const PathWayPage = () => {
 	useEffect(() => {
 		if (maKhoaNganh) {
 			initializePathwayData(maKhoaNganh);
-			getChuongTrinhHienTaiModel(maKhoaNganh);
 		} else {
 			setPreviewingPathway(null);
 		}
@@ -62,60 +59,39 @@ const PathWayPage = () => {
 	}, [currentKhoiLuaChonMa]);
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-big-title card-borderless'
-			title={intl.formatMessage({ id: 'pathway.title' })}
-			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
-		>
-			<Row gutter={[0, 16]}>
-				<Col span={24}>
-					<Row gutter={[16, 0]}>
-						<Col span={24}>
-							<Card variant='borderless'>
-								<Spin spinning={loadingChuongTrinh}>
-									<Descriptions
-										column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 1 }}
-										layout='vertical'
-										className='highlight'
-										colon={false}
-									>
-										<Descriptions.Item label={intl.formatMessage({ id: 'pathway.info.programType' })}>
-											{chuongTrinhHienTai?.loai
-												? LoaiChuongTrinhDaoTao[chuongTrinhHienTai.loai]
-												: chuongTrinhHienTai?.loai}
-										</Descriptions.Item>
-										<Descriptions.Item label={intl.formatMessage({ id: 'pathway.info.currentProgram' })}>
-											{chuongTrinhHienTai?.nganh?.ten || chuongTrinhHienTai?.ten || '-'}
-										</Descriptions.Item>
-									</Descriptions>
-								</Spin>
-								<Spin spinning={isLoadingKhoiLuaChon}>
-									<Steps
-										style={{ marginTop: 16 }}
-										current={khoiLuaChonList.findIndex((khoi) => {
-											console.log('khoi', khoi);
-											return khoi.ma === currentKhoiLuaChonMa;
-										})}
-										onChange={(current) => {
-											const allKhoi = khoiLuaChonList;
-											const khoi = allKhoi[current];
-											if (khoi) {
-												setCurrentKhoiLuaChonMa(khoi.ma);
-											}
-										}}
-										items={khoiLuaChonList.map((khoi) => {
-											return {
-												key: khoi.ma,
-												title: khoi?.ten,
-											};
-										})}
-									/>
-								</Spin>
-							</Card>
-						</Col>
-					</Row>
-				</Col>
+		<Spin spinning={isLoadingKhoiLuaChon || lotrinhLoading}>
+			<Row gutter={[0, 12]}>
+				{recLoTrinh?._id && recLoTrinh?.trangThaiDuyet !== ETrangThaiDuyetLoTrinh.CHUA_DANG_KY && (
+					<Col span={24}>
+						<CardNotePathWay />
+					</Col>
+				)}
+
+				{khoiLuaChonList?.length > 1 && (
+					<Col span={24}>
+						<Steps
+							style={{ marginTop: 16 }}
+							current={khoiLuaChonList.findIndex((khoi) => {
+								return khoi.ma === currentKhoiLuaChonMa;
+							})}
+							onChange={(current) => {
+								const allKhoi = khoiLuaChonList;
+								const khoi = allKhoi[current];
+								if (khoi) {
+									setCurrentKhoiLuaChonMa(khoi.ma);
+								} else {
+									setCurrentKhoiLuaChonMa(null);
+								}
+							}}
+							items={khoiLuaChonList.map((khoi) => {
+								return {
+									key: khoi.ma,
+									title: khoi?.ten,
+								};
+							})}
+						/>
+					</Col>
+				)}
 
 				<Col span={24}>
 					<Row gutter={[12, 0]}>
@@ -123,8 +99,9 @@ const PathWayPage = () => {
 							<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange}>
 								<Pane initialSize={paneSize} minSize='15%'>
 									<Card
-										title={intl.formatMessage({ id: 'pathway.card.title' })}
-										styles={{ body: { padding: 16, overflowY: 'auto' } }}
+										title={currentKhoiLuaChonTen ?? intl.formatMessage({ id: 'pathway.card.title' })}
+										variant='borderless'
+										className='card-borderless'
 									>
 										<Spin spinning={loading}>
 											<Row gutter={[0, 12]}>
@@ -140,6 +117,7 @@ const PathWayPage = () => {
 																	width: '100%',
 																	borderColor: isSelected ? 'var(--color-primary)' : undefined,
 																	backgroundColor: isSelected ? 'var(--color-info-bg)' : undefined,
+																	cursor: 'pointer',
 																}}
 																styles={{ body: { padding: 16 } }}
 																onClick={() => setPreviewingPathway(p)}
@@ -164,11 +142,6 @@ const PathWayPage = () => {
 																				</h3>
 																			</Col>
 																		</Row>
-																	</Col>
-																	<Col>
-																		<Button size='small' onClick={() => setPreviewingPathway(p)}>
-																			{intl.formatMessage({ id: 'pathway.button.view' })}
-																		</Button>
 																	</Col>
 																</Row>
 															</Card>
@@ -199,6 +172,8 @@ const PathWayPage = () => {
 										onSuccess={() => {
 											if (maKhoaNganh) {
 												refreshChosenPathway(maKhoaNganh);
+
+												if (getData) getData();
 											}
 										}}
 									/>
@@ -208,7 +183,7 @@ const PathWayPage = () => {
 					</Row>
 				</Col>
 			</Row>
-		</Card>
+		</Spin>
 	);
 };
 

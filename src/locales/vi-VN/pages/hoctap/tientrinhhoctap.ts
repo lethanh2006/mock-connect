@@ -114,7 +114,7 @@ export default {
 	'tientrinhhoctap.ctdt.khoasv': 'Khóa sinh viên',
 	'tientrinhhoctap.ctdt.nganh': 'Ngành',
 	'tientrinhhoctap.ctdt.thoigian': 'Thời gian đào tạo',
-	'tientrinhhoctap.ctdt.thoigianToida': 'Thời gian đào tạo tối đa',
+	'tientrinhhoctap.ctdt.thoigiantoida': 'Thời gian đào tạo tối đa',
 	'tientrinhhoctap.ctdt.tongsotinchi': 'Tổng số tín chỉ phải học',
 	'tientrinhhoctap.ctdt.file': 'Tập tin',
 	'tientrinhhoctap.ctdt.muctieu': 'Mục tiêu đào tạo',
@@ -180,9 +180,15 @@ export default {
 	'tientrinhhoctap.congnhan.hp.truong': 'Học tại trường',
 	'tientrinhhoctap.congnhan.hp.trinhdo': 'Trình độ',
 	'tientrinhhoctap.congnhan.hp.nganh': 'Ngành học',
+	'tientrinhhoctap.congnhan.hp.nganhhoc': 'Ngành học',
 	'tientrinhhoctap.congnhan.hp.namtotnghiep': 'Năm tốt nghiệp',
 	'tientrinhhoctap.congnhan.hp.ketqua': 'Kết quả học tập',
 	'tientrinhhoctap.congnhan.hocphan.tinchi': 'tín chỉ',
 
 	'tientrinhhoctap.songnganh': 'Chọn ngành đào tạo',
+
+	'lotrinhhoctap.message':
+		'Đợt đăng ký lộ trình học tập <b>{tenDot}</b> đang diễn ra từ <b>{tuNgay}</b> đến <b>{denNgay}</b>, vui lòng theo dõi và đăng ký kịp thời',
+	'lotrinhhoctap.title': 'Lộ trình học tập',
+	'lotrinhhoctap.trangthai': 'Trạng thái đăng ký',
 };
