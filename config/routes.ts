@@ -152,12 +152,6 @@ export default [
 				],
 			},
 			{
-				name: 'PathWay',
-				path: 'pathway',
-				component: 'SinhVien/PathWay',
-				access: 'cctFilter', // Tạm thời chỉ show cho VinUni
-			},
-			{
 				name: 'HocTapKhac',
 				path: 'khac',
 				component: 'HocTap/Khac',

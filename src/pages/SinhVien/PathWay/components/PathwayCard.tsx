@@ -1,8 +1,11 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
+import { ETrangThaiDuyetLoTrinh } from '@/services/DaoTao/ChuongTrinhDaoTao/constant';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { Button, Card, Tag } from 'antd';
+import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
+import { Button, Card, Checkbox, Tag } from 'antd';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -15,8 +18,16 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 	const intl = useIntl();
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const { currentKhoiLuaChonMa, handleSelectPathway, formSubmiting, registeredPathway } = useModel('sinhvien.pathway');
+	const { record: recLoTrinh } = useModel('sinhvien.lotrinhhoctap');
 	const [visibleDeCuong, setVisibleDeCuong] = useState(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
+
+	const ngoaiThoiGian =
+		recLoTrinh?.dotDangKyPathway?.kichHoat === false ||
+		!recLoTrinh?.dotDangKyPathway?.thoiGianBatDau ||
+		!recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc ||
+		dayjs().isBefore(recLoTrinh?.dotDangKyPathway?.thoiGianBatDau) ||
+		dayjs().isAfter(recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc);
 
 	const isChosen = pathway ? registeredPathway?.maKhoiKienThuc === pathway.ma : false;
 	const hasRegisteredPathway = !!registeredPathway?.maKhoiKienThuc;
@@ -31,7 +42,6 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 		);
 	}
 
-	// Transform data để hỗ trợ sort và search
 	const transformedData = (pathway.khoiHpCtList || []).map((item) => ({
 		...item,
 		maHocPhan: item.hocPhan?.ma || '-',
@@ -40,12 +50,7 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 		soThuTuKy: item.soThuTuKy ?? 0,
 	}));
 
-	// Sort mặc định theo học kỳ
-	const sortedData = [...transformedData].sort((a, b) => {
-		return a.soThuTuKy - b.soThuTuKy;
-	});
-
-	const totalCredits = sortedData.reduce((sum, item) => {
+	const totalCredits = transformedData.reduce((sum, item) => {
 		return sum + item.soTinChi;
 	}, 0);
 
@@ -59,6 +64,7 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 				maKhoaNganh,
 				maKhoiCha: currentKhoiLuaChonMa,
 				maKhoiCon: pathway.ma,
+				dotDangKyPathwayId: recLoTrinh?.dotDangKyPathwayId ?? '',
 			},
 			{
 				errorIncomplete: intl.formatMessage({ id: 'pathway.error.incomplete' }),
@@ -69,7 +75,7 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 		);
 	};
 
-	const handleXemDeCuong = (record: (typeof sortedData)[0]) => {
+	const handleXemDeCuong = (record: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
 		const deCuongId = record.hocPhan?.ma ?? '';
 		if (!deCuongId) return;
 		setDeCuongModal({
@@ -81,58 +87,92 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 		setVisibleDeCuong(true);
 	};
 
-	const columns: IColumn<(typeof sortedData)[0]>[] = [
+	const dataTuChon = pathway.khoiHpCtList?.filter((item) => item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON);
+	const dataBatBuoc = pathway.khoiHpCtList?.filter((item) => item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC);
+	const dataTotNghiep = pathway.khoiHpCtList?.filter((item) => item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TOT_NGHIEP);
+
+	const columns: IColumn<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>[] = [
 		{
 			title: intl.formatMessage({ id: 'pathway.table.code' }),
-			width: 120,
-			dataIndex: 'maHocPhan',
-			sortable: true,
+			dataIndex: ['hocPhan', 'ma'],
+			width: 80,
 			filterType: 'string',
-			render: (_: any, record: (typeof sortedData)[0]) => {
-				const code = record.maHocPhan || '-';
-				return (
-					<a
-						onClick={(e) => {
-							e.stopPropagation();
-							handleXemDeCuong(record);
-						}}
-					>
-						{code}
-					</a>
-				);
-			},
+			align: 'center',
+			render: (val, rec) => <a onClick={() => handleXemDeCuong(rec)}>{val}</a>,
 		},
 		{
 			title: intl.formatMessage({ id: 'pathway.table.courseTitle' }),
 			width: 180,
-			dataIndex: 'tenHocPhan',
-			sortable: true,
+			dataIndex: ['hocPhan', 'ten'],
 			filterType: 'string',
 		},
 		{
-			title: intl.formatMessage({ id: 'pathway.table.sem' }),
-			width: 100,
+			title: intl.formatMessage({ id: 'pathway.table.credits' }),
+			width: 80,
+			render: (val, rec) => rec.hocPhan?.soTinChi,
 			align: 'center',
-			dataIndex: 'soThuTuKy',
-			sortable: true,
-			render: (_: any, record: (typeof sortedData)[0]) =>
-				intl.formatMessage({ id: 'pathway.table.semFormat' }, { sem: record.soThuTuKy }),
 		},
 		{
-			title: intl.formatMessage({ id: 'pathway.table.credits' }),
-			width: 100,
+			title: intl.formatMessage({ id: 'pathway.table.hkkehoach' }),
+			width: 80,
+			dataIndex: 'soThuTuKyKeHoach',
 			align: 'center',
-			dataIndex: 'soTinChi',
 			sortable: true,
-			render: (_: any, record: (typeof sortedData)[0]) => {
-				const credits = record.soTinChi;
-				const tagColor = credits === 0 ? 'default' : credits === 1 || credits === 2 ? 'gold' : 'red';
-				return (
-					<Tag color={tagColor}>
-						{credits} {intl.formatMessage({ id: 'pathway.table.credits' })}
-					</Tag>
-				);
-			},
+		},
+		{
+			title: intl.formatMessage({ id: 'pathway.table.hkthucte' }),
+			width: 80,
+			dataIndex: 'soThuTuKy',
+			align: 'center',
+			sortable: true,
+		},
+		{
+			title: intl.formatMessage({ id: 'pathway.table.tichluy' }),
+			width: 80,
+			align: 'center',
+			render: (val, rec) => <Checkbox checked={rec.hocPhan?.loaiHocPhan?.isTinhSoTinChiTichLuy} />,
+		},
+	];
+
+	const columnsTuChon: IColumn<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>[] = [
+		{
+			title: intl.formatMessage({ id: 'pathway.table.khoihp' }),
+			width: 180,
+			dataIndex: 'ten',
+			filterType: 'string',
+		},
+		{
+			title: intl.formatMessage({ id: 'pathway.table.hp' }),
+			width: 60,
+			dataIndex: 'soHocPhanTuChonPhaiHoc',
+			align: 'center',
+		},
+		{
+			title: intl.formatMessage({ id: 'pathway.table.tc' }),
+			width: 60,
+			dataIndex: 'soTinChiTuChonPhaiHoc',
+			align: 'center',
+		},
+		{
+			title: intl.formatMessage({ id: 'pathway.table.hkkehoach' }),
+			width: 80,
+			dataIndex: 'soThuTuKyKeHoach',
+			align: 'center',
+			sortable: true,
+		},
+		{
+			title: intl.formatMessage({ id: 'pathway.table.hkthucte' }),
+			width: 80,
+			dataIndex: 'soThuTuKy',
+			align: 'center',
+			sortable: true,
+		},
+		{
+			title: intl.formatMessage({ id: 'pathway.table.tichluy' }),
+			width: 80,
+			dataIndex: 'isTinhSoTinChiTichLuy',
+			align: 'center',
+			render: (val) => <Checkbox checked={val} />,
 		},
 	];
 
@@ -144,16 +184,58 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 					{totalCredits} {intl.formatMessage({ id: 'pathway.card.credits' })}
 				</Tag>
 			}
+			variant='borderless'
+			className='card-borderless'
 		>
-			<TableStaticData columns={columns} data={sortedData} addStt hasTotal otherProps={{ pagination: false }} />
+			{dataBatBuoc?.length ? (
+				<div style={{ marginTop: 12 }}>
+					<TableStaticData
+						data={dataBatBuoc}
+						addStt
+						columns={columns}
+						size='small'
+						otherProps={{ pagination: false, scroll: { y: 350 } }}
+						otherButtons={[<div className='fw500'>{intl.formatMessage({ id: 'pathway.ds.hpbatbuoc' })}</div>]}
+					/>
+				</div>
+			) : null}
+			{dataTuChon?.length ? (
+				<div style={{ marginTop: 12 }}>
+					<TableStaticData
+						data={dataTuChon}
+						addStt
+						columns={columnsTuChon}
+						size='small'
+						otherProps={{ pagination: false, scroll: { y: 350 } }}
+						otherButtons={[<div className='fw500'>{intl.formatMessage({ id: 'pathway.ds.hptuchon' })}</div>]}
+					/>
+				</div>
+			) : null}
+			{dataTotNghiep?.length ? (
+				<div style={{ marginTop: 12 }}>
+					<TableStaticData
+						data={dataTotNghiep}
+						addStt
+						columns={columnsTuChon}
+						size='small'
+						otherProps={{ pagination: false, scroll: { y: 350 } }}
+						otherButtons={[<div className='fw500'>{intl.formatMessage({ id: 'pathway.ds.hptotnghiep' })}</div>]}
+					/>
+				</div>
+			) : null}
 
-			{!hasRegisteredPathway && !isChosen && (
-				<div className='form-footer'>
+			<div className='form-footer'>
+				{!(
+					(hasRegisteredPathway && recLoTrinh?.trangThaiDuyet !== ETrangThaiDuyetLoTrinh.YEU_CAU_CHINH_SUA) ||
+					isChosen ||
+					ngoaiThoiGian
+				) && (
 					<Button type='primary' loading={formSubmiting} onClick={handleChoosePathway}>
 						{intl.formatMessage({ id: 'pathway.button.choose' })}
 					</Button>
-				</div>
-			)}
+				)}
+			</div>
+
 			{deCuongModal && (
 				<ModalHocPhan
 					visible={visibleDeCuong}
