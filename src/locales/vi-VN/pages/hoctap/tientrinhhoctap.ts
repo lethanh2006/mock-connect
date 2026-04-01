@@ -186,4 +186,9 @@ export default {
 	'tientrinhhoctap.congnhan.hocphan.tinchi': 'tín chỉ',
 
 	'tientrinhhoctap.songnganh': 'Chọn ngành đào tạo',
+
+	'lotrinhhoctap.message':
+		'Đợt đăng ký lộ trình học tập <b>{tenDot}</b> đang diễn ra từ <b>{tuNgay}</b> đến <b>{denNgay}</b>, vui lòng theo dõi và đăng ký kịp thời',
+	'lotrinhhoctap.title': 'Lộ trình học tập',
+	'lotrinhhoctap.trangthai': 'Trạng thái đăng ký',
 };

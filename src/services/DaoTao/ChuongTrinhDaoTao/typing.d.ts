@@ -46,16 +46,25 @@ declare module ChuongTrinhDaoTao {
 	export interface IKhoiHocPhanCTDT extends IHocPhanBase {
 		maChuongTrinhDaoTao: string;
 		chuongTrinhDaoTao?: IRecord;
-		maKhoiKienThuc: string;
-		khoiKienThuc?: { ma: string; ten: string };
+		maKhoiKienThuc?: string;
+		khoiKienThuc?: KhoiKienThuc.IRecord;
 		maChuyenNganh?: string;
 		chuyenNganh?: NganhDaoTao.IRecordCoSo;
 		loaiHocPhanCtdt: ELoaiHocPhanCTDT;
 
+		/** Số thứ tự kỳ, kỳ thực tế */
 		soThuTuKy?: number;
-		soTinChiTuChonPhaiHoc?: number;
+		/** Số thứ tự kế hoạch (với chương trình kế hoạch) */
+		soThuTuKyKeHoach?: number;
+		// tinhChuanDauRa?: boolean;
+
+		phamViTuChon?: PhamViTuChonHpCtdt;
 		ten?: string; // Tên khối chương trình tự chọn
+		soTinChiTuChonPhaiHoc?: number;
+		soHocPhanTuChonPhaiHoc?: number;
 		isTinhSoTinChiTichLuy?: boolean;
+		// maLoaiHocPhan?: string;
+		// loaiHocPhan?: HocPhan.ILoaiHocPhan;
 		hocPhanCtdtList?: IHocPhanTuChonCTDT[];
 	}
 
@@ -121,7 +130,7 @@ declare module ChuongTrinhDaoTao {
 		cheDoTienQuyet?: string;
 		dsHocPhanTruoc?: THocPhanTuongQuan[];
 		dsHocPhanSongHanh?: THocPhanTuongQuan[];
-		chuongTrinhDaoTao?: { ma: string, ten: string };
+		chuongTrinhDaoTao?: { ma: string; ten: string };
 		hocPhan?: { ma: string; ten: string; soTinChi: number };
 		hocPhanCtdtList?: IKhoiHpCt[];
 		createdAt?: string;

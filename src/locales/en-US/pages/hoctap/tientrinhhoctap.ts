@@ -176,4 +176,9 @@ export default {
 	'tientrinhhoctap.congnhan.hp.ketqua': 'Academic Result',
 	'tientrinhhoctap.congnhan.hocphan.tinchi': 'Credit',
 	'tientrinhhoctap.songnganh': 'Select Program / Select Major',
+
+	'lotrinhhoctap.message':
+		'The study pathway registration period <b>{tenDot}</b> is taking place from <b>{tuNgay}</b> to <b>{denNgay}</b>. Please follow and register on time.',
+	'lotrinhhoctap.title': 'Study Pathway',
+	'lotrinhhoctap.trangthai': 'Registration Status',
 };
