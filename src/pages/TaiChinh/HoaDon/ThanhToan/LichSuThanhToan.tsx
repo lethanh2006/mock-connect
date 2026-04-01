@@ -1,5 +1,5 @@
+import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
@@ -17,7 +17,6 @@ import { formatDateTime } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
 import { CloseOutlined, DollarOutlined } from '@ant-design/icons';
 import { Popconfirm, Tag } from 'antd';
-import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const LichSuThanhToan = (props: {
@@ -27,15 +26,22 @@ const LichSuThanhToan = (props: {
 }) => {
 	const intl = useIntl();
 	const { record } = useModel('taichinh.hoadon');
-	const { getAllModel, danhSach, loading } = useModel('taichinh.giaodich');
+	const { getModel, page, limit } = useModel('taichinh.giaodich');
 	const { onPay, onCancel, ngoaiThoiGianThanhToan } = props;
 
-	const getData = () =>
-		record?.identityCode && getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode });
-
-	useEffect(() => {
-		getData();
-	}, [record?.identityCode]);
+	const getData = () => {
+		record?.identityCode &&
+			getModel(
+				{
+					billIdentityCode: record?.identityCode,
+				},
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				'me/page',
+			);
+	};
 
 	const columns: IColumn<GiaoDich.IRecord>[] = [
 		{
@@ -140,7 +146,17 @@ const LichSuThanhToan = (props: {
 		},
 	];
 
-	return <TableStaticData columns={columns} data={danhSach} addStt size='small' loading={loading} />;
+	return (
+		<TableBase
+			columns={columns}
+			getData={getData}
+			modelName='taichinh.giaodich'
+			dependencies={[page, limit, record?.identityCode]}
+			hideCard
+			buttons={{ create: false }}
+			otherProps={{ size: 'small' }}
+		/>
+	);
 };
 
 export default LichSuThanhToan;
