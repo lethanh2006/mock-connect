@@ -12,13 +12,13 @@ import ketquahoctap from './hoctap/ketquahoctap';
 import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
+import pathway from './hoctap/pathway';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
 import minor from './minor';
-import pathway from './pathway';
 import phanhoi from './phanhoi';
 import sinhvien from './sinhvien';
 import congno from './taichinh/congno';
@@ -64,10 +64,11 @@ export default {
 	...activity,
 	...diemrenluyen,
 	...sinhvien,
+	...pathway,
+	...minor,
+
 	'pages.trangchu.title': 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO',
 	'pages.trangchu.subtitle': 'HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH',
 	'pages.gioithieu.title': 'GIỚI THIỆU',
 	'pages.gioithieu.subtitle': 'HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH',
-	...pathway,
-	...minor,
 };
