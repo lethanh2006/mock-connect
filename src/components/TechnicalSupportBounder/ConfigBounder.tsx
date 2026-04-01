@@ -108,11 +108,7 @@ const ConfigBounder = (props: { children?: any }) => {
 					Steps: {
 						colorSplit: accentColors.accent700,
 						lineWidth: 2,
-						fontSize: 14,
-						colorTextLightSolid: textColors.text100,
-						finishIconBorderColor: 'transparent',
 						finishIconBgColor: statusColors.status100,
-						iconTop: -1,
 					} as any,
 					Slider: {
 						trackBg: statusColors.status200,
@@ -168,6 +164,7 @@ const ConfigBounder = (props: { children?: any }) => {
 						inkBarColor: highlightColor,
 						cardGutter: 0,
 						horizontalItemPadding: '12px',
+						horizontalItemGutter: 8,
 					},
 					Divider: {
 						colorSplit: accentColors.accent700,
