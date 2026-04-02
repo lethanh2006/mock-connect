@@ -64,10 +64,11 @@ export default {
 	...activity,
 	...diemrenluyen,
 	...sinhvien,
-	'pages.trangchu.title': 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO',
+	...pathway,
+	...minor,
+
+	'pages.trangchu.title': 'PHÂN HỆ CỔNG SINH VIÊN',
 	'pages.trangchu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',
 	'pages.gioithieu.title': 'GIỚI THIỆU',
 	'pages.gioithieu.subtitle': 'HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH',
-	...pathway,
-	...minor,
 };

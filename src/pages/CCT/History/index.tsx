@@ -2,7 +2,7 @@ import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
-import { EActivityCategory, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
+import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
 import { DashOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
@@ -51,6 +51,8 @@ const HistoryActivityPage = () => {
 		search: undefined,
 		dateRange: [],
 	});
+	const [workflowQuery, setWorkflowQuery] = useState<EActivityStatus>(EActivityStatus.TOTAL);
+
 	const now = dayjs();
 
 	const getData = () => {
@@ -83,6 +85,9 @@ const HistoryActivityPage = () => {
 			undefined,
 			9,
 			'me/page',
+			{
+				status: workflowQuery,
+			},
 		);
 	};
 
@@ -96,7 +101,7 @@ const HistoryActivityPage = () => {
 
 	useEffect(() => {
 		getData();
-	}, [tabActive, filter, page, limit, filters]);
+	}, [tabActive, filter, page, limit, filters, workflowQuery]);
 
 	useEffect(() => {
 		getAllAtributes(undefined, { order: 1 }, { isActive: true });
@@ -170,7 +175,10 @@ const HistoryActivityPage = () => {
 			<FilterSuKien
 				value={filter}
 				onChange={setFilter}
-				onReload={getData}
+				onReload={() => {
+					getData();
+					getThongKe();
+				}}
 				button={
 					tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? (
 						<Button
@@ -198,8 +206,12 @@ const HistoryActivityPage = () => {
 				}}
 			/>
 
-			<StatActivityOutCome getData={getThongKe} tabActive={tabActive} />
-
+			<StatActivityOutCome
+				getData={getThongKe}
+				tabActive={tabActive}
+				onChangeWorkflow={setWorkflowQuery}
+				currentWorkflow={workflowQuery}
+			/>
 			<hr
 				style={{
 					marginTop: 16,

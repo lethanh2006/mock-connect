@@ -1,6 +1,7 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { handleSingleFile } from '@/services/uploadFile';
+import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Collapse, Form, Input, message, Row } from 'antd';
@@ -16,7 +17,7 @@ import FormRoleEvidence from './FormRoleEvidence';
 
 const uploadFilesOfCompetency = async (files: any[] = []) => {
 	if (!files.length) return [];
-	const urls = await Promise.all(files.map((f) => handleSingleFile(f).catch(() => null)));
+	const urls = await Promise.all(files.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
 	return urls.filter(Boolean) as string[];
 };
 
