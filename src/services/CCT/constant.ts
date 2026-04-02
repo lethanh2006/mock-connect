@@ -131,3 +131,12 @@ export const mapNameScopeAward: Record<EScopeAward, string> = {
 	[EScopeAward.NATIONAL]: 'National',
 	[EScopeAward.REGIONAL]: 'University',
 };
+
+export enum EActivityStatus {
+	TOTAL = 'TOTAL',
+	ACTION_REQUIRED = 'ACTION_REQUIRED',
+	PENDING_FOR_APPROVAL = 'PENDING_FOR_APPROVAL',
+	APPROVED = 'APPROVED',
+	REJECTED = 'REJECTED',
+	EXPIRED = 'EXPIRED',
+}

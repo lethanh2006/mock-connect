@@ -10,6 +10,7 @@ import {
 	mapNameScopeAward,
 } from '@/services/CCT/constant';
 import { buildUpLoadFile, handleSingleFile } from '@/services/uploadFile';
+import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -26,7 +27,7 @@ import FormCompetencyEvidence from './FormCompetencyEvidence';
 
 const uploadFilesOfCompetency = async (files: any[] = []) => {
 	if (!files.length) return [];
-	const urls = await Promise.all(files?.map((f) => handleSingleFile(f).catch(() => null)));
+	const urls = await Promise.all(files?.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
 	return urls.filter(Boolean) as string[];
 };
 
@@ -83,7 +84,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 	const onFinish = async (values: ActivityOutCome.IRecord, submitted: boolean) => {
 		setFormSubmiting(true);
-		const banner = await buildUpLoadFile(values, 'banner');
+		const banner = await buildUpLoadFile(values, 'banner', undefined, ipCCT);
 		values.banner = banner;
 		setFormSubmiting(false);
 
