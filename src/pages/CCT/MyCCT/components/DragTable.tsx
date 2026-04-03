@@ -17,8 +17,10 @@ const DragTable: React.FC<Props> = ({ item, edit, onChangeOrder }) => {
 	const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
 	useEffect(() => {
-		setData(item?.activitiesOutCome || []);
-	}, [JSON.stringify(item?.activitiesOutCome)]);
+		if (!edit) {
+			setData(item?.activitiesOutCome || []);
+		}
+	}, [edit, item?.activitiesOutCome]);
 
 	const moveRow = (from: number, to: number) => {
 		if (from === to) return;
