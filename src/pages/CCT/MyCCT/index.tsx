@@ -518,7 +518,16 @@ const MyCCTv3 = () => {
 							>
 								Save
 							</Button>
-							<Button type='primary' icon={<SendOutlined />} onClick={() => setPreviewVisible(true)}>
+							<Button
+								type='primary'
+								icon={<SendOutlined />}
+								onClick={() => setPreviewVisible(true)}
+								disabled={
+									!recDot?._id ||
+									record?.myCCT?.status === EStatusMyCCT.APPROVED ||
+									record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL
+								}
+							>
 								Submit
 							</Button>
 						</Space>
