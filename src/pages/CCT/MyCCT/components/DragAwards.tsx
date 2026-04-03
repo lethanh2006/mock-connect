@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const DragAwards = ({
 	data = [],
@@ -10,24 +10,17 @@ const DragAwards = ({
 	edit: boolean;
 	onChangeOrder: (ids: string[]) => void;
 }) => {
-	const [list, setList] = useState<any[]>([]);
-	const isFirstRender = useRef(true);
+	const [list, setList] = useState<any[]>(data);
 
-	// ✅ FIX: chỉ sync khi data thay đổi thực sự (không phá drag)
 	useEffect(() => {
-		if (isFirstRender.current) {
-			setList(data);
-			isFirstRender.current = false;
-			return;
-		}
-
-		// chỉ update nếu length khác hoặc id khác
-		const isDifferent = data.length !== list.length || data.some((item, index) => item._id !== list[index]?._id);
-
-		if (isDifferent) {
-			setList(data);
-		}
+		setList(data);
 	}, [data]);
+
+	useEffect(() => {
+		if (!edit) {
+			setList(data);
+		}
+	}, [edit, data]);
 
 	const handleDrag = (from: number, to: number) => {
 		if (from === to) return;
