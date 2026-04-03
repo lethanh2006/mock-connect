@@ -262,8 +262,8 @@ const MyCCTv3 = () => {
 
 			const mainImgData = canvas.toDataURL('image/jpeg', 0.85);
 
-			const headerImg = await loadImage('/images/cct/headerCCT.jpg');
-			const footerImg = await loadImage('/images/cct/footerCCT.jpg');
+			const headerImg = await loadImage('/student/images/cct/headerCCT.jpg');
+			const footerImg = await loadImage('/student/images/cct/footerCCT.jpg');
 
 			const pdf = new jsPDF({
 				orientation: 'landscape',

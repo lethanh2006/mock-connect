@@ -67,7 +67,7 @@ const CCTContent = (props: {
 					<div className='cct-column left'>
 						<header>
 							<div style={{ marginBottom: 20 }}>
-								<img src='/logo-text.png' alt='logo' width={90} />
+								<img src='/student/logo-text.png' alt='logo' width={90} />
 							</div>
 							<h1>CO-CURRICULAR & COMPETENCY TRANSCRIPT</h1>
 							<div style={{ marginTop: -5 }}>
@@ -325,7 +325,7 @@ const CCTContent = (props: {
 									display: 'inline-block',
 								}}
 							>
-								<img src='/images/cct/footer.png' alt='logo' width={120} />
+								<img src='/student/images/cct/footer.png' alt='logo' width={120} />
 
 								<div
 									style={{

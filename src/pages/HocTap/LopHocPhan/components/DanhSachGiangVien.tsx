@@ -48,7 +48,9 @@ const DanhSachGiangVien = (props: { danhSachNhanSu?: Partial<TNhanSu>[]; title?:
 										size={48}
 										src={
 											item.nhanSu?.urlAnhDaiDien ||
-											(item.nhanSu?.gioiTinh === 'Nữ' ? '/images/teacher-female.svg' : '/images/teacher-male.svg')
+											(item.nhanSu?.gioiTinh === 'Nữ'
+												? '/student/images/teacher-female.svg'
+												: '/student/images/teacher-male.svg')
 										}
 									/>
 								</div>

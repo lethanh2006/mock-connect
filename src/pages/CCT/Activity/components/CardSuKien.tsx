@@ -151,9 +151,9 @@ const CardSuKienCCT = (props: {
 			cover={
 				<div className='activity-cover'>
 					{isDetail ? (
-						<Image src={banner ?? '/images/cct/background.png'} alt={name} className='activity-image' />
+						<Image src={banner ?? '/student/images/cct/background.png'} alt={name} className='activity-image' />
 					) : (
-						<img src={banner ?? '/images/cct/background.png'} alt={name} className='activity-image' />
+						<img src={banner ?? '/student/images/cct/background.png'} alt={name} className='activity-image' />
 					)}
 
 					{activeKey === '1' && isNew && !isRegister && (

@@ -17,7 +17,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const [selectedGiangVien, setSelectedGiangVien] = useState<ToChucNhanSu.INhanSu>();
 	const [visibleGvDetailModal, setVisibleGvDetailModal] = useState(false);
 	const backgroundRef = useRef(Math.floor(Math.random() * 6));
-	const randomBackground = `/images/isolation-mode-${backgroundRef.current}.svg`;
+	const randomBackground = `/student/images/isolation-mode-${backgroundRef.current}.svg`;
 	const navigate = useNavigate();
 	const visibleFilter = useMediaQuery({ query: '(max-width: 1200px)' });
 
@@ -31,10 +31,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	return (
 		<div>
 			<Spin spinning={loading}>
-				<div
-					className='thong-tin-chung-header-card'
-					style={{ backgroundImage: `url(${randomBackground})` }}
-				>
+				<div className='thong-tin-chung-header-card' style={{ backgroundImage: `url(${randomBackground})` }}>
 					<Card
 						className='card-borderless'
 						variant='borderless'
