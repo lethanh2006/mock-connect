@@ -62,6 +62,6 @@ export default defineConfig({
 		return result;
 	}, {}),
 
-	base: process.env.APP_CONFIG_SUBPATH,
-	publicPath: process.env.APP_CONFIG_SUBPATH,
+	base: process.env.APP_CONFIG_BASE_PATH,
+	publicPath: process.env.APP_CONFIG_BASE_PATH,
 });
