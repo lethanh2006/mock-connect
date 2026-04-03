@@ -25,7 +25,7 @@ const ChatbotOverlayV2 = () => {
 
 	const fullName = initialState?.currentUser?.family_name
 		? `${initialState?.currentUser.family_name} ${initialState?.currentUser?.given_name ?? ''}`
-		: initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || '');
+		: (initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || ''));
 
 	useEffect(() => {
 		if (boxChatVisible && !danhSach.length) {
@@ -83,7 +83,7 @@ const ChatbotOverlayV2 = () => {
 					</div>
 
 					<div className='pulse' onClick={() => setBoxChatVisible(true)}>
-						<img src='/images/chatbot.png' alt='chatbot' />
+						<img src='/student/images/chatbot.png' alt='chatbot' />
 					</div>
 				</div>
 			)}
