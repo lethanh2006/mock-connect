@@ -499,7 +499,15 @@ const MyCCTv3 = () => {
 						}}
 					>
 						<Space wrap>
-							<Button onClick={() => setEdit(false)} icon={<CloseCircleOutlined />}>
+							<Button
+								onClick={() => {
+									setEdit(false);
+
+									setListAwardRecognition(record?.myCCT?.listAwardRecognition || []);
+									setSelectedActivities([]);
+								}}
+								icon={<CloseCircleOutlined />}
+							>
 								Cancel
 							</Button>
 							<Button
@@ -517,6 +525,7 @@ const MyCCTv3 = () => {
 					</div>
 				)}
 			</Form>
+
 			<PreviewCCTModal open={previewVisible} onCancel={() => setPreviewVisible(false)} onConfirm={handleRealSubmit}>
 				<CCTContent
 					record={record as any}

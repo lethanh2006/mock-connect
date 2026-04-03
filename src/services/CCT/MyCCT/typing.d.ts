@@ -18,6 +18,8 @@ declare module MyCCT {
 		status: string;
 		submissionRoundId: string;
 		yearOfEnrollment: string;
+		program: string;
+		concentration: string;
 		listCompetency: string[];
 		listAwardRecognition: string[];
 		college: string;
