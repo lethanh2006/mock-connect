@@ -82,23 +82,23 @@ const CCTContent = (props: {
 
 						<section className='student-meta'>
 							<div className='meta-item'>
-								<span>•</span> Student name: {record?.myCCT?.name || 'Nguyễn Minh Anh'}
+								<span>•</span> Student name: {record?.myCCT?.name || '--'}
 							</div>
 							<div className='meta-item'>
-								<span>•</span> Student ID: {record?.myCCT?.code || 'SV202201234'}
+								<span>•</span> Student ID: {record?.myCCT?.code || '--'}
 							</div>
 							<div className='meta-item'>
-								<span>•</span> Date of Birth:{' '}
-								{record?.myCCT?.dob ? dayjs(record.myCCT.dob).format('DD/MM/YYYY') : '18/05/2004'}
+								<span>•</span> Date of Birth: {record?.myCCT?.dob ? dayjs(record.myCCT.dob).format('DD/MM/YYYY') : '--'}
 							</div>
 							<div className='meta-item'>
-								<span>•</span> {record?.myCCT?.college || 'Faculty of Information Technology'}
+								<span>•</span> {record?.myCCT?.college || '--'}
 							</div>
 							<div className='meta-item'>
-								<span>•</span> Year of Enrollment: {'2023'}
+								<span>•</span> Year of Enrollment: {record?.myCCT?.yearOfEnrollment ?? '--'}
 							</div>
 							<div className='meta-item'>
-								<span>•</span> {'Bachelor of Business Administration - Concentration Finance'}
+								<span>•</span>{' '}
+								{[record?.myCCT?.program, `Concentration ${record?.myCCT?.concentration}`].filter(Boolean).join(' - ')}
 							</div>
 						</section>
 
@@ -306,13 +306,11 @@ const CCTContent = (props: {
 							<span>
 								<i>
 									Date of Issue:{' '}
-									{record?.myCCT?.dateOfIssue
-										? dayjs(record.myCCT.dateOfIssue).format('DD/MM/YYYY')
-										: dayjs().subtract(2, 'day').format('DD/MM/YYYY')}
+									{record?.myCCT?.dateOfIssue ? dayjs(record.myCCT.dateOfIssue).format('DD/MM/YYYY') : '--'}
 								</i>
 							</span>
 							<span>
-								<i>Serial Number: {record?.myCCT?.serialNumber || 'CCT-2026-000123'}</i>
+								<i>Serial Number: {record?.myCCT?.serialNumber || ' --'}</i>
 							</span>
 						</div>
 
