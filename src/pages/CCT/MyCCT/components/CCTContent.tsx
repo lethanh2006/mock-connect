@@ -304,10 +304,7 @@ const CCTContent = (props: {
 								<i>This Transcript is officially issued and verified by VinUniversity</i>
 							</span>
 							<span>
-								<i>
-									Date of Issue:{' '}
-									{record?.myCCT?.dateOfIssue ? dayjs(record.myCCT.dateOfIssue).format('DD/MM/YYYY') : '--'}
-								</i>
+								<i>Date of Issue: {record?.myCCT?.dateOfIssue ?? '--'}</i>
 							</span>
 							<span>
 								<i>Serial Number: {record?.myCCT?.serialNumber || ' --'}</i>
