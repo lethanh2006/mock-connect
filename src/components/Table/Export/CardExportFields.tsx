@@ -18,6 +18,7 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 			title: '',
 			width: 30,
 			align: 'center',
+			hide: true,
 			render: (val, rec) => (
 				<Button
 					icon={<DeleteOutlined />}

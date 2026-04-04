@@ -385,6 +385,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
 				key: 'index',
+				align: 'center',
 				width: 60,
 				render: (val, rec) => {
 					const phanVungHienTai = dsPhanVung?.find((it: any) => it?.ma === rec?.dataPartitionCode);
