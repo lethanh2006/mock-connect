@@ -41,6 +41,7 @@ const ChucVuPage = () => {
     },
     {
       title: 'Thao tác',
+      align: 'center',
       width: 90,
       fixed: 'right',
       render: (record: ChucVu.IRecord) => (

@@ -236,27 +236,14 @@ body {
 }
 
 .ant-table-thead {
-	>tr>th {
+	.ant-table-cell {
+		text-align: left !important;
+
 		.ant-table-column-title {
 			display: flex !important;
 			justify-content: flex-start !important;
 			text-align: left !important;
 			width: auto !important;
-		}
-	}
-
-	>tr>th:nth-child(1),
-	>tr>th:last-child,
-	>tr>th.ant-table-cell-fix-right {
-		text-align: left !important;
-		
-		.ant-table-header-column {
-			justify-content: flex-start !important;
-		}
-		
-		.ant-table-column-title {
-			justify-content: flex-start !important;
-			text-align: left !important;
 		}
 	}
 
@@ -834,7 +821,7 @@ body {
 }
 
 .ant-table-selection-column {
-	text-align-last: center !important;
+	text-align-last: left !important;
 }
 
 .tb-sk-wrapper .header-tb-sk {

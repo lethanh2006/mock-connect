@@ -184,7 +184,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 			cols.unshift({
 				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
-				align: 'left',
+				align: 'center',
 				width: 40,
 				render: (val: string, rec: any) => {
 					const phanVungHienTai = dsPhanVung?.find((item: any) => item?.ma === rec?.dataPartitionCode);
