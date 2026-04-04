@@ -382,9 +382,10 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		final = final?.filter((item: IColumn<any>) => item?.hide !== true);
 		if (addStt !== false)
 			final.unshift({
-				title: intl.formatMessage({ id: 'global.table.column.tt' }),
+				title: <div style={{ textAlign: 'left', width: '100%' }}>{intl.formatMessage({ id: 'global.table.column.tt' })}</div>,
 				dataIndex: 'index',
 				key: 'index',
+				align: 'left',
 				width: 60,
 				render: (val, rec) => {
 					const phanVungHienTai = dsPhanVung?.find((it: any) => it?.ma === rec?.dataPartitionCode);

@@ -182,9 +182,9 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		const cols = [...processedColumns];
 		if (addStt)
 			cols.unshift({
-				title: intl.formatMessage({ id: 'global.table.column.tt' }),
+				title: <div style={{ textAlign: 'left', width: '100%' }}>{intl.formatMessage({ id: 'global.table.column.tt' })}</div>,
 				dataIndex: 'index',
-				align: 'center',
+				align: 'left',
 				width: 40,
 				render: (val: string, rec: any) => {
 					const phanVungHienTai = dsPhanVung?.find((item: any) => item?.ma === rec?.dataPartitionCode);

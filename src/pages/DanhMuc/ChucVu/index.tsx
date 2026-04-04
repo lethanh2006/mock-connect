@@ -40,7 +40,7 @@ const ChucVuPage = () => {
       resizable: true,
     },
     {
-      title: 'Thao tác',
+      title: <div style={{ textAlign: 'left', width: '100%' }}>Thao tác</div>,
       align: 'center',
       width: 90,
       fixed: 'right',
