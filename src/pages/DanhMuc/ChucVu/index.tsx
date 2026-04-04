@@ -40,8 +40,7 @@ const ChucVuPage = () => {
       resizable: true,
     },
     {
-      title: <div style={{ textAlign: 'left', width: '100%' }}>Thao tác</div>,
-      align: 'center',
+      title: 'Thao tác',
       width: 90,
       fixed: 'right',
       render: (record: ChucVu.IRecord) => (

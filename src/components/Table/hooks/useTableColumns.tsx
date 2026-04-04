@@ -382,7 +382,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		final = final?.filter((item: IColumn<any>) => item?.hide !== true);
 		if (addStt !== false)
 			final.unshift({
-				title: <div style={{ textAlign: 'left', width: '100%' }}>{intl.formatMessage({ id: 'global.table.column.tt' })}</div>,
+				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
 				key: 'index',
 				align: 'left',

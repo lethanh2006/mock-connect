@@ -182,7 +182,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		const cols = [...processedColumns];
 		if (addStt)
 			cols.unshift({
-				title: <div style={{ textAlign: 'left', width: '100%' }}>{intl.formatMessage({ id: 'global.table.column.tt' })}</div>,
+				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
 				align: 'left',
 				width: 40,

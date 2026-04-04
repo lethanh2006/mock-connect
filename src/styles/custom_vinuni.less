@@ -245,10 +245,29 @@ body {
 		}
 	}
 
+	>tr>th:nth-child(1),
+	>tr>th:last-child,
+	>tr>th.ant-table-cell-fix-right {
+		text-align: left !important;
+		
+		.ant-table-header-column {
+			justify-content: flex-start !important;
+		}
+		
+		.ant-table-column-title {
+			justify-content: flex-start !important;
+			text-align: left !important;
+		}
+	}
+
 	>tr>th:last-child,
 	.ant-table-cell:last-child {
 		border-right: none !important;
 	}
+}
+
+.ttCellWrapper {
+	justify-content: flex-start !important;
 }
 
 .ant-table-tbody .ant-table-row .ant-table-cell-fix-right:last-child {
