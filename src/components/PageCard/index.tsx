@@ -3,12 +3,13 @@ import React from 'react';
 
 export interface PageCardProps extends CardProps {
 	bordered?: boolean;
+	hideInnerCard?: boolean;
 }
 
-const PageCard: React.FC<PageCardProps> = ({ className, children, ...rest }) => {
+const PageCard: React.FC<PageCardProps> = ({ className, children, hideInnerCard, ...rest }) => {
 	return (
 		<Card {...rest} className={`card-big-title card-borderless ${className}`} variant='borderless'>
-			<Card variant={rest.bordered ? 'outlined' : 'borderless'}>{children}</Card>
+			{hideInnerCard ? children : <Card variant={rest.bordered ? 'outlined' : 'borderless'}>{children}</Card>}
 		</Card>
 	);
 };
