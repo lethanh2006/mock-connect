@@ -7,7 +7,7 @@ variables:
   AWS_REGION: "ap-southeast-1"
   ECR_REGISTRY: "520492793952.dkr.ecr.ap-southeast-1.amazonaws.com"
   ECR_REPO_NAME: "vwa-connect"
-  APP_NAME: "dhs-qldt-web"
+  APP_NAME: "dhs-slink-web"
   GIT_DEPTH: 1
 
 include:
