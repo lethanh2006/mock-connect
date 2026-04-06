@@ -1,6 +1,7 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { handleSingleFile } from '@/services/uploadFile';
+import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Collapse, Form, Input, message, Row } from 'antd';
@@ -10,14 +11,13 @@ import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import CardChiTietSuKien from '../../Activity/components/CardChiTietSuKien';
 import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
-import SelectTrack from '../../DanhMuc/Track/Select';
 import CardNoteActivity from './CardNote';
 import FormCompetencyEvidence from './FormCompetencyEvidence';
 import FormRoleEvidence from './FormRoleEvidence';
 
 const uploadFilesOfCompetency = async (files: any[] = []) => {
 	if (!files.length) return [];
-	const urls = await Promise.all(files.map((f) => handleSingleFile(f).catch(() => null)));
+	const urls = await Promise.all(files.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
 	return urls.filter(Boolean) as string[];
 };
 
@@ -115,13 +115,13 @@ const FormActivityOutCome = (props: any) => {
 					</Form.Item>
 				</Col>
 
-				<Col span={12}>
+				{/* <Col span={12}>
 					<Form.Item name='trackId' label='Track' rules={[...rules.required]}>
 						<SelectTrack disabled={isView} />
 					</Form.Item>
-				</Col>
+				</Col> */}
 
-				<Col span={12}>
+				<Col span={24} md={24}>
 					<Form.Item name='levelsId' label='Level' rules={[...rules.required]}>
 						<SelectLevelsManagement disabled={isView} />
 					</Form.Item>
@@ -195,8 +195,12 @@ const FormActivityOutCome = (props: any) => {
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='reflection' label='Reflection'>
-						<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' />
+					<Form.Item
+						name='reflection'
+						label='Reflection'
+						rules={[...rules.required, ...rules.text, ...rules.length(70)]}
+					>
+						<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' showCount />
 					</Form.Item>
 				</Col>
 

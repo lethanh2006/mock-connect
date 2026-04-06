@@ -30,6 +30,7 @@ declare const APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH: string;
 declare const APP_CONFIG_PRIMARY_COLOR: string;
 declare const APP_CONFIG_HIGHLIGHT_COLOR: string;
 declare const APP_CONFIG_HO_TRO_KY_THUAT: string;
+declare const APP_CONFIG_BASE_PATH: string;
 
 declare const APP_CONFIG_URL_LANDING: string;
 declare const APP_CONFIG_URL_CONNECT: string;
@@ -48,6 +49,7 @@ declare const APP_CONFIG_URL_QLVB: string;
 declare const APP_CONFIG_URL_VBCC: string;
 declare const APP_CONFIG_URL_QLND: string;
 declare const APP_CONFIG_URL_TAP_CHI_KH: string;
+declare const APP_CONFIG_URL_KY_SO: string;
 
 declare const APP_CONFIG_MOODLE_ENDPOINT: string;
 declare const APP_CONFIG_TIN_TUC_WP_CATEGORY: number;

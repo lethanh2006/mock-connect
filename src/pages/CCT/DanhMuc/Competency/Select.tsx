@@ -52,7 +52,7 @@ const SelectCompetency = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Select competency'
+			placeholder={intl.formatMessage({ id: 'competency.select' })}
 			style={{ width: '100%', ...style }}
 		/>
 	);
