@@ -16,7 +16,7 @@ const HocLieuDeCuongPage = () => {
 
 	const columns: IColumn<HocPhan.IHocLieuDeCuong>[] = [
 		{
-			title: intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.tieuDe' }),
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.tieude' }),
 			dataIndex: 'tieuDe',
 			width: 200,
 			filterType: 'string',
@@ -64,9 +64,8 @@ const HocLieuDeCuongPage = () => {
 			render: (val) =>
 				val ? (
 					<a
-						href={`${
-							settings?.THU_VIEN_HOC_LIEU?.enable ? settings?.THU_VIEN_HOC_LIEU?.thuVienUrl : APP_CONFIG_URL_THU_VIEN
-						}${val}`}
+						href={`${settings?.THU_VIEN_HOC_LIEU?.enable ? settings?.THU_VIEN_HOC_LIEU?.thuVienUrl : APP_CONFIG_URL_THU_VIEN
+							}${val}`}
 						target='_blank'
 						rel='noreferrer'
 						title={intl.formatMessage({ id: 'lophocphan.id.decuong.hoclieu.xemchitiet' })}

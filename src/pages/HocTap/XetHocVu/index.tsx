@@ -60,7 +60,13 @@ const XetHocVuPage = () => {
 			dataIndex: 'loaiXuLy',
 			align: 'center',
 			width: 120,
-			render: (val: ELoaiXuLyKQHT) => val && <Tag color={colorLoaiXuLyKQHT[val]}>{loaiXuLyKQHT[val]}</Tag>,
+			render: (val: ELoaiXuLyKQHT) =>
+				val &&
+				loaiXuLyKQHT[val] && (
+					<Tag color={colorLoaiXuLyKQHT[val]}>
+						{intl.formatMessage({ id: loaiXuLyKQHT[val] })}
+					</Tag>
+				),
 		},
 		{
 			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.lydo.tablecolumntitle' }),

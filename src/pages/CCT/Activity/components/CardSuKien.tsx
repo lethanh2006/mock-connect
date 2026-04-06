@@ -12,7 +12,7 @@ import { ClockCircleOutlined, EnvironmentOutlined, HourglassOutlined, UserOutlin
 import { Card, Flex, Image, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { JSX } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const { Title } = Typography;
 
@@ -36,7 +36,9 @@ const CardSuKienCCT = (props: {
 	activeKey?: string;
 
 	isExpired?: boolean;
+	isAward?: boolean;
 }) => {
+	const intl = useIntl();
 	const { danhSach: dsAttribute } = useModel('cct.attributes');
 	const {
 		record,
@@ -53,6 +55,7 @@ const CardSuKienCCT = (props: {
 		activeKey,
 		isExpired,
 		isRegister,
+		isAward,
 	} = props;
 
 	const now = dayjs();
@@ -110,24 +113,33 @@ const CardSuKienCCT = (props: {
 
 	const timeContent = (() => {
 		if (outTime && !isDetail && activeKey !== '3') {
-			return <div className={`text-danger ${!isDetail ? 'one-line' : ''}`}>Registration is no longer valid</div>;
+			return (
+				<div className={`text-danger ${!isDetail ? 'one-line' : ''}`}>
+					{intl.formatMessage({ id: 'activity.card.quahan' })}
+				</div>
+			);
 		}
 
 		if (isExpiringSoon && !record?.activityOutcome?.workflow) {
-			return <span className={`text-warning ${!isDetail ? 'one-line' : ''}`}>Remaining time: {remainingText}</span>;
+			return (
+				<span className={`text-warning ${!isDetail ? 'one-line' : ''}`}>
+					{intl.formatMessage({ id: 'activity.card.remain' })}: {remainingText}
+				</span>
+			);
 		}
 
 		if (activeKey !== '1' && !!record?.activityOutcome?.workflow && !isDetail) {
 			return (
 				<span className={`${editableWorkflow ? 'text-danger' : ''} ${!isDetail ? 'one-line' : ''}`}>
-					Evidence update before {endDateUpdateEvidence ? endDateUpdateEvidence.format('HH:mm DD/MM/YYYY') : '--'}
+					{intl.formatMessage({ id: 'activity.card.update' })}{' '}
+					{endDateUpdateEvidence ? endDateUpdateEvidence.format('HH:mm DD/MM/YYYY') : '--'}
 				</span>
 			);
 		}
 
 		return (
 			<span className={`${!isDetail ? 'one-line' : ''}`}>
-				Register before {endDateRegi && endDateRegi.format('HH:mm DD/MM/YYYY')}
+				{intl.formatMessage({ id: 'activity.card.dangky' })} {endDateRegi && endDateRegi.format('HH:mm DD/MM/YYYY')}
 			</span>
 		);
 	})();
@@ -139,12 +151,14 @@ const CardSuKienCCT = (props: {
 			cover={
 				<div className='activity-cover'>
 					{isDetail ? (
-						<Image src={banner ?? '/images/cct/background.png'} alt={name} className='activity-image' />
+						<Image src={banner ?? '/student/images/cct/background.png'} alt={name} className='activity-image' />
 					) : (
-						<img src={banner ?? '/images/cct/background.png'} alt={name} className='activity-image' />
+						<img src={banner ?? '/student/images/cct/background.png'} alt={name} className='activity-image' />
 					)}
 
-					{activeKey === '1' && isNew && !isRegister && <div className='new'>New</div>}
+					{activeKey === '1' && isNew && !isRegister && (
+						<div className='new'>{intl.formatMessage({ id: 'activity.card.new' })}</div>
+					)}
 				</div>
 			}
 			onClick={onClick}
@@ -157,16 +171,28 @@ const CardSuKienCCT = (props: {
 					</Title>
 
 					<Flex justify='space-between' align='center' gap='small' wrap>
-						<div className='card-level'>
-							{dsAttribute?.map((lv, idx) => {
-								const isActive = equivalencyAttributeIds?.includes(lv?._id);
-								return (
-									<span key={idx} className={`level-item ${isActive ? 'active' : ''} ${outTime ? 'disabled' : ''}`}>
-										{lv?.code?.charAt(0)}
-									</span>
-								);
-							})}
-						</div>
+						{isAward ? (
+							<Tag
+								color={officialColors.official300}
+								style={{
+									color: officialColors.official500,
+									fontWeight: 600,
+								}}
+							>
+								Award
+							</Tag>
+						) : (
+							<div className='card-level'>
+								{dsAttribute?.map((lv, idx) => {
+									const isActive = equivalencyAttributeIds?.includes(lv?._id);
+									return (
+										<span key={idx} className={`level-item ${isActive ? 'active' : ''} ${outTime ? 'disabled' : ''}`}>
+											{lv?.code?.charAt(0)}
+										</span>
+									);
+								})}
+							</div>
+						)}
 
 						<Space wrap size={'small'}>
 							{isExpired ? (
@@ -177,7 +203,7 @@ const CardSuKienCCT = (props: {
 										fontWeight: 600,
 									}}
 								>
-									Expired
+									{intl.formatMessage({ id: 'activity.card.hethan' })}
 								</Tag>
 							) : activeKey !== '1' ? (
 								<>
@@ -205,7 +231,8 @@ const CardSuKienCCT = (props: {
 					<Space size='small'>
 						<ClockCircleOutlined className='icon-light' />
 						<span className={`${!isDetail ? 'one-line' : ''}`}>
-							<span className='text-semibold'>{startDate} </span> to <span className='text-semibold'>{endDate} </span>
+							<span className='text-semibold'>{startDate} </span> {intl.formatMessage({ id: 'activity.card.to' })}{' '}
+							<span className='text-semibold'>{endDate} </span>
 						</span>
 					</Space>
 
@@ -222,7 +249,8 @@ const CardSuKienCCT = (props: {
 							<Space size='small'>
 								<UserOutlined className='icon-light' />
 								<span className={`${!isDetail ? 'one-line' : ''}`}>
-									Approver: {record?.activityOutcome?.studentDeclarationApproverName}
+									{intl.formatMessage({ id: 'activity.card.approver' })}:{' '}
+									{record?.activityOutcome?.studentDeclarationApproverName}
 								</span>
 							</Space>
 						)
@@ -240,7 +268,7 @@ const CardSuKienCCT = (props: {
 									<>
 										<UserOutlined className='icon-light' />
 										<span className={`${!isDetail ? 'one-line' : ''}`}>
-											Approver:{' '}
+											{intl.formatMessage({ id: 'activity.card.approver' })}:{' '}
 											{record?.activityOutcome?.workflow === EApprovalStatus.APPROVED &&
 											!record?.activityOutcome?.studentDeclarationApproverName
 												? 'System'

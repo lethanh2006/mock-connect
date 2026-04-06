@@ -3,6 +3,7 @@ import { FilterOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Flex, Input, Select, Space } from 'antd';
 import dayjs from 'dayjs';
 import { JSX } from 'react';
+import { useIntl } from 'umi';
 import { FilterSuKienValue } from '..';
 
 const { Search } = Input;
@@ -16,13 +17,15 @@ interface FilterSuKienProps {
 }
 
 const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, button, hideSelect }) => {
+	const intl = useIntl();
+
 	return (
 		<Flex justify='space-between' align='center' style={{ marginBottom: 8 }}>
 			<Space wrap>
 				<Button className='btn-filter' icon={<FilterOutlined />} size='small' />
 
 				<Search
-					placeholder='Search activities (Name)'
+					placeholder={intl.formatMessage({ id: 'activity.filter.name' })}
 					style={{ width: 280 }}
 					allowClear
 					value={value?.search}
@@ -51,10 +54,13 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 						})
 					}
 					ranges={{
-						Today: [dayjs().startOf('day'), dayjs().endOf('day')],
-						'This Week': [dayjs().startOf('week'), dayjs().endOf('week')],
-						'This Month': [dayjs().startOf('month'), dayjs().endOf('month')],
-						'Next Month': [dayjs().add(1, 'month').startOf('month'), dayjs().add(1, 'month').endOf('month')],
+						[intl.formatMessage({ id: 'activity.filter.today' })]: [dayjs().startOf('day'), dayjs().endOf('day')],
+						[intl.formatMessage({ id: 'activity.filter.week' })]: [dayjs().startOf('week'), dayjs().endOf('week')],
+						[intl.formatMessage({ id: 'activity.filter.month' })]: [dayjs().startOf('month'), dayjs().endOf('month')],
+						[intl.formatMessage({ id: 'activity.filter.next' })]: [
+							dayjs().add(1, 'month').startOf('month'),
+							dayjs().add(1, 'month').endOf('month'),
+						],
 					}}
 					size='small'
 					allowClear
@@ -63,14 +69,21 @@ const FilterSuKien: React.FC<FilterSuKienProps> = ({ value, onChange, onReload, 
 				{!hideSelect && (
 					<Select
 						value={value?.regiStatus}
-						style={{
-							width: 200,
-						}}
-						placeholder='All Registration Status'
+						style={{ width: 200 }}
+						placeholder={intl.formatMessage({ id: 'activity.filter.trangthai' })}
 						options={[
-							{ value: 'All', label: 'All' },
-							{ value: 'Registered', label: 'Registered' },
-							{ value: 'NotRegistered', label: 'Not registered' },
+							{
+								value: 'All',
+								label: intl.formatMessage({ id: 'activity.filter.tatca' }),
+							},
+							{
+								value: 'Registered',
+								label: intl.formatMessage({ id: 'activity.filter.dangky' }),
+							},
+							{
+								value: 'NotRegistered',
+								label: intl.formatMessage({ id: 'activity.filter.chuadangky' }),
+							},
 						]}
 						allowClear
 						size='small'

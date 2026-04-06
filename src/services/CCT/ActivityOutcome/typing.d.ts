@@ -1,5 +1,5 @@
 import { Activity } from '../Activity/typing';
-import { EActivityCategory, EApprovalStatus, Evalidation } from '../constant';
+import { EActivityCategory, EApprovalStatus, EScopeAward, Evalidation } from '../constant';
 
 declare module ActivityOutCome {
 	export interface IRecord {
@@ -51,17 +51,23 @@ declare module ActivityOutCome {
 
 		createdAt: Date;
 		updatedAt: Date;
+
+		//Award
+		isAwardRecognition: boolean;
+		competition: string;
+		dateOfAchievement: Date;
+		scope: EScopeAward;
+		rank: string;
+		link: string;
 	}
 
 	export interface IAnalyticsStudent {
+		actionRequired: number;
 		approved: number;
-		changesRequired: number;
-		draft: number;
-		rejected: number;
-		submitted: number;
-		total: number;
 		expired: number;
-		evidenceRequired: number;
+		pendingForApproval: number;
+		rejected: number;
+		total: number;
 	}
 
 	export interface ICompetencyActivity {
@@ -70,5 +76,32 @@ declare module ActivityOutCome {
 		activitiesId: string;
 		competency: Competency.IRecord;
 		activities: IRecord;
+	}
+
+	export interface IThongKeLevels {
+		_id: string;
+		code: string;
+		name: string;
+		order: number;
+		count: number;
+		percentage: number;
+	}
+
+	export interface IThongKeAttributes {
+		_id: string;
+		code: string;
+		name: string;
+		icon: string;
+		color: string;
+		count: number;
+		percentage: number;
+	}
+
+	export interface IThongKeActivityType {
+		_id: string;
+		code: string;
+		name: string;
+		count: number;
+		percentage: number;
 	}
 }

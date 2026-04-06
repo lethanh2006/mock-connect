@@ -17,7 +17,10 @@ import khaosat from './khaosat';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
+import minor from './minor';
+import pathway from './pathway';
 import phanhoi from './phanhoi';
+import sinhvien from './sinhvien';
 import congno from './taichinh/congno';
 import lichsugiaodich from './taichinh/lichsugiaodich';
 import uudaithanhtoan from './taichinh/uudaithanhtoan';
@@ -28,7 +31,6 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
-import sinhvien from './sinhvien';
 
 export default {
 	...login,
@@ -62,9 +64,11 @@ export default {
 	...activity,
 	...diemrenluyen,
 	...sinhvien,
+	...pathway,
+	...minor,
 
-	'pages.trangchu.title': 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO',
+	'pages.trangchu.title': 'PHÂN HỆ CỔNG SINH VIÊN',
 	'pages.trangchu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',
 	'pages.gioithieu.title': 'GIỚI THIỆU',
-	'pages.gioithieu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',
+	'pages.gioithieu.subtitle': 'HỆ THỐNG PHẦN MỀM CHỈ ĐẠO, ĐIỀU HÀNH',
 };
