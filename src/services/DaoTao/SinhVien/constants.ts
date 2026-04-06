@@ -73,3 +73,16 @@ export const vaiTroSvLhc: Record<EVaiTroSvLhc, string> = {
 	// [EVaiTroSvLhc.LOP_PHO_DOI_SONG]: 'Lớp phó đời sống',
 	// [EVaiTroSvLhc.LOP_PHO_HOC_TAP]: 'Lớp phó học tập',
 };
+
+// Số lần nhập cảnh visa
+export enum SoLanNhapCanhVisa {
+	SINGLE = 'single',
+	DOUBLE = 'double',
+	MULTIPLE = 'multiple',
+}
+
+export const TenSoLanNhapCanhVisa: Record<SoLanNhapCanhVisa, string> = {
+	[SoLanNhapCanhVisa.SINGLE]: 'thongtincanhan.form.thongtinvisa.solannhapcanh.single',
+	[SoLanNhapCanhVisa.DOUBLE]: 'thongtincanhan.form.thongtinvisa.solannhapcanh.double',
+	[SoLanNhapCanhVisa.MULTIPLE]: 'thongtincanhan.form.thongtinvisa.solannhapcanh.multiple',
+};

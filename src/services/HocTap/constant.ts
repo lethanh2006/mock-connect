@@ -36,17 +36,20 @@ export enum ETrangThaiThi {
 
 export enum ELoaiXuLyKQHT {
 	CANH_BAO_HOC_TAP = 'CANH_BAO_HOC_TAP',
+	THU_THACH_HOC_TAP = 'THU_THACH',
 	BUOC_THOI_HOC = 'BUOC_THOI_HOC',
 }
 
 export const loaiXuLyKQHT: Record<ELoaiXuLyKQHT, string> = {
-	[ELoaiXuLyKQHT.CANH_BAO_HOC_TAP]: 'Cảnh báo học tập',
-	[ELoaiXuLyKQHT.BUOC_THOI_HOC]: 'Buộc thôi học',
+	[ELoaiXuLyKQHT.CANH_BAO_HOC_TAP]: 'hoctapkhac.xethocvu.loaixuly.canhBaoHocTap',
+	[ELoaiXuLyKQHT.BUOC_THOI_HOC]: 'hoctapkhac.xethocvu.loaixuly.buocThoiHoc',
+	[ELoaiXuLyKQHT.THU_THACH_HOC_TAP]: 'hoctapkhac.xethocvu.loaixuly.thuThachHocTap',
 };
 
 export const colorLoaiXuLyKQHT: Record<ELoaiXuLyKQHT, string> = {
 	[ELoaiXuLyKQHT.CANH_BAO_HOC_TAP]: 'orange',
 	[ELoaiXuLyKQHT.BUOC_THOI_HOC]: 'red',
+	[ELoaiXuLyKQHT.THU_THACH_HOC_TAP]: 'blue',
 };
 
 export enum ETrangThaiDuyetXuLyKqht {

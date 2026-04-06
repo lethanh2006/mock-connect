@@ -20,6 +20,6 @@ export default {
 
 	// University information
 	'config.co-quan-chu-quan': 'Ministry of Education and Training',
-	'config.ten-truong': 'Vin University',
+	'config.ten-truong': 'VinUniversity',
 	'config.tien-to-truong': 'University',
 };

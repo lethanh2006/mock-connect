@@ -24,6 +24,14 @@ const CardNoteActivity = () => {
 
 			<div className='custom-info-grid grid-3'>
 				<div className='info-row'>
+					{record?.isAwardRecognition && (
+						<div className='info-item'>
+							<div className='info-label'>Submission Time</div>
+							<div className='info-value'>
+								{record?.submittedAt ? dayjs(record?.submittedAt).format('HH:mm DD/MM/YYYY') : '--'}
+							</div>
+						</div>
+					)}
 					<div className='info-item'>
 						<div className='info-label'>Evidence Update Deadline</div>
 						<div className='info-value'>

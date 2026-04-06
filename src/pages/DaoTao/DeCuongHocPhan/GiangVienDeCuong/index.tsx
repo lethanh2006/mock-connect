@@ -11,7 +11,7 @@ const GiangVienDeCuongPage = () => {
 
 	const columns: IColumn<HocPhan.IGiangVienDeCuong>[] = [
 		{
-			title: intl.formatMessage({ id: 'lophocphan.id.decuong.gv.hoTen' }),
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.gv.hoten' }),
 			width: 150,
 			render: (val, rec) => rec.hoTen,
 		},
@@ -21,7 +21,7 @@ const GiangVienDeCuongPage = () => {
 			render: (val, rec) => [rec.chucDanh, rec.hocHam, rec.hocVi].filter((item) => !!item).join(', '),
 		},
 		{
-			title: intl.formatMessage({ id: 'lophocphan.id.decuong.gv.sodienthoai' }),
+			title: intl.formatMessage({ id: 'lophocphan.id.decuong.gv.sdt' }),
 			width: 120,
 			render: (val, rec) => rec.soDienThoai && formatPhoneNumber(rec.soDienThoai),
 		},

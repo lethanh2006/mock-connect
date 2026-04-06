@@ -3,8 +3,6 @@ import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 
-const appBasePath = '/student/';
-
 export default defineConfig({
 	hash: true,
 	antd: {
@@ -38,10 +36,9 @@ export default defineConfig({
 
 	ignoreMomentLocale: true,
 	// proxy: proxy[REACT_APP_ENV || 'dev'],
-	base: appBasePath,
-	publicPath: appBasePath,
+	// base: '/qldt', 		// Sub-path
 	manifest: {
-		basePath: appBasePath,
+		basePath: '/',
 	},
 	// Fast Refresh 热更新
 	fastRefresh: true,
@@ -64,4 +61,7 @@ export default defineConfig({
 		}
 		return result;
 	}, {}),
+
+	base: process.env.APP_CONFIG_BASE_PATH,
+	publicPath: process.env.APP_CONFIG_BASE_PATH,
 });
