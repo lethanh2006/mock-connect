@@ -200,6 +200,8 @@ export type TableBaseProps<T extends object = any> = {
 	onReload?: (params?: any) => void;
 
 	cardExtra?: React.ReactNode;
+	/** Cấp độ của PageCard bao quanh Table (1, 2, 3) */
+	level?: 1 | 2 | 3;
 };
 
 export type TFilter<T> = {
