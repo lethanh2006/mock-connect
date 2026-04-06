@@ -6,7 +6,7 @@ const ChatbotBanner = () => {
 
 	return (
 		<div className='chatbot-banner' onClick={() => setBoxChatVisible(true)}>
-			<img src='/images/chatbot_banner.png' alt='banner' />
+			<img src='/student/images/chatbot_banner.png' alt='banner' />
 		</div>
 	);
 };

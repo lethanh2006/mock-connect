@@ -1,6 +1,6 @@
 export default {
-	'global.button.themmoi': 'Lưu',
-	'global.button.luulai': 'Lưu',
+	'global.button.themmoi': 'Lưu lại',
+	'global.button.luulai': 'Lưu lại',
 	'global.button.huy': 'Hủy',
 	'global.button.dong': 'Đóng',
 	'global.button.xacnhan': 'Xác nhận',
@@ -10,9 +10,11 @@ export default {
 	'global.button.nhapdulieu': 'Nhập dữ liệu',
 	'global.button.xuatdulieu': 'Xuất dữ liệu',
 	'global.button.tailai': 'Tải lại',
-	'global.button.boloctuychinh': 'Bộ lọc tùy chỉnh',
+	'global.button.boloctuychinh': 'Bộ lọc',
 	'global.button.tongso': 'Tổng số',
 	'global.button.chinhsua': 'Chỉnh sửa',
 	'global.button.quaylai': 'Quay lại',
-	'global.button.ok': 'OK'
+	'global.button.ok': 'OK',
+	'global.button.xemthem': 'Xem thêm',
+	'global.button.thugon': 'Thu gọn'
 };

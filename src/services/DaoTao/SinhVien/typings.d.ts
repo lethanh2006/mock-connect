@@ -81,12 +81,14 @@ declare module SinhVien {
 		tenNganHang: string;
 		chiNhanhNganHang: string;
 
-		loaiKhuyetTat: string;
+		loaiKhuyetTat?: string;
+		ghiChuYTe?: string;
 		canNang: number;
 		chieuCao: number;
 		soBaoHiemSinhVien: string;
 		maBenhVienKhamChuaBenh: string;
 		thanhVienGiaDinh?: TThongTinGiaDinh[];
+		visaList?: TThongTinVisa[];
 
 		maKhoaNganh?: string;
 		khoaNganh?: KhoaNganh.IRecord;
@@ -134,6 +136,23 @@ declare module SinhVien {
 		/** Có cần cập nhật lại ảnh nhận diện khuôn mặt không */
 		needUpdateFaceReg?: boolean;
 	}
+
+	export type TThongTinVisa = {
+		key?: number;
+		_id?: string;
+		sinhVienSsoId?: string;
+		maQuocGia?: string;
+		tenQuocGia?: string;
+		soHieuVisa?: string;
+		loaiVisa?: string;
+		ngayCapPhep?: string;
+		ngayHetHan?: string;
+		soLanNhapCanh?: string; // single | double | multiple
+		coQuanCap?: string;
+		noiCap?: string;
+		urlMinhChung?: string | null;
+		visaChinh?: boolean;
+	};
 
 	export type TThongTinGiaDinh = {
 		key?: number;

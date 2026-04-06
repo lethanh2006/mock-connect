@@ -124,9 +124,7 @@ const CardStatus = (props: IProps) => {
 								{/*)}*/}
 							</div>
 							<div className='time'>
-								{data?.ngayDang
-									? formatDateTime(data?.ngayDang)
-									: formatDateTime(data?.createdAt)}
+								{data?.ngayDang ? formatDateTime(data?.ngayDang) : formatDateTime(data?.createdAt)}
 							</div>
 						</div>
 					</div>
@@ -183,7 +181,7 @@ const CardStatus = (props: IProps) => {
 								placement={'right'}
 							>
 								<div className='action-menu pointer'>
-									<img src='/images/menu.svg' alt='icon' />
+									<img src='/student/images/menu.svg' alt='icon' />
 								</div>
 							</Popover>
 						)}

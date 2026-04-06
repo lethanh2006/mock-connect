@@ -5,4 +5,6 @@ export default {
 	'global.message.validated': 'Đã kiểm tra dữ liệu',
 	'global.message.imported': 'Đã nhập dữ liệu',
 	'global.message.formsubmiting': 'Đang gửi dữ liệu',
+	'global.message.capnhatthanhcong': 'Cập nhật thành công',
+	'global.message.capnhatthatbai': 'Cập nhật thất bại',
 };

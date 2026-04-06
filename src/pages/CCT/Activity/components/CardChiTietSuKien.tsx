@@ -79,12 +79,12 @@ const CardChiTietSuKien = (props: {
 								<div className='info-label'>Activity Type</div>
 								<div className='info-value'>{record?.activitiesType?.name ?? '--'}</div>
 							</div>
-							<div className='info-item'>
+							{/* <div className='info-item'>
 								<div className='info-label'>Track</div>
 								<div className='info-value'>
 									{record?.activitiesType?.trackText ?? record?.activitiesType?.track?.name ?? '--'}
 								</div>
-							</div>
+							</div> */}
 							<div className='info-item'>
 								<div className='info-label'>Capacity</div>
 								<div
@@ -192,7 +192,7 @@ const CardChiTietSuKien = (props: {
 					{infoEvidence && activeKey !== '1' && (
 						<div className='custom-info-grid grid-2' style={{ marginTop: 16 }}>
 							<div className='info-row'>
-								<div className='info-item'>
+								{/* <div className='info-item'>
 									<div style={{ marginBottom: 8, fontWeight: 600 }}>Track</div>
 									<Input
 										disabled
@@ -200,7 +200,7 @@ const CardChiTietSuKien = (props: {
 											record?.activityOutcome?.trackText ?? record?.activityOutcome?.track?.name ?? 'No information'
 										}
 									/>
-								</div>
+								</div> */}
 								<div className='info-item'>
 									<div style={{ marginBottom: 8, fontWeight: 600 }}>Level</div>
 									<Input disabled value={record?.activityOutcome?.levels?.name ?? 'No information'} />

@@ -1,4 +1,4 @@
-﻿export default [
+export default [
 	{
 		path: '/user',
 		layout: false,
@@ -92,7 +92,7 @@
 	// 	component: 'KhoaHoc/KeHoach',
 	// },
 
-	// MENU SINH VIEN
+	// // MENU SINH VIEN
 	// {
 	// 	name: 'HocTap',
 	// 	path: '/hoc-tap',
@@ -155,6 +155,39 @@
 	// 			name: 'HocTapKhac',
 	// 			path: 'khac',
 	// 			component: 'HocTap/Khac',
+	// 		},
+	// 		{
+	// 			name: 'PathWay',
+	// 			path: 'pathway',
+	// 			component: 'SinhVien/PathWay',
+	// 			access: 'cctFilter', // Tạm thời chỉ show cho VinUni
+	// 		},
+	// 		{
+	// 			name: 'DangKyChuyenNganh',
+	// 			path: 'dang-ky-chuyen-nganh',
+	// 			routes: [
+	// 				{
+	// 					name: 'DangKyChuyenNganhBuild',
+	// 					path: 'register/build',
+	// 					component: 'SinhVien/DangKyChuyenNganhMoi/CustomBuild',
+	// 					hideInMenu: true,
+	// 					exact: true,
+	// 				},
+	// 				{
+	// 					name: 'DangKyChuyenNganhRegister',
+	// 					path: 'register',
+	// 					component: 'SinhVien/DangKyChuyenNganhMoi/Register',
+	// 					hideInMenu: true,
+	// 					exact: true,
+	// 				},
+	// 				{
+	// 					path: ':id',
+	// 					component: 'SinhVien/DangKyChuyenNganhMoi/Detail',
+	// 					hideInMenu: true,
+	// 					exact: true,
+	// 				},
+	// 			],
+	// 			hideInMenu: true,
 	// 		},
 	// 	],
 	// },
@@ -399,7 +432,7 @@
 		name: 'Activity',
 		icon: 'AppstoreOutlined',
 		path: 'activity',
-		// access: 'cctFilter',
+		access: 'cctFilter',
 		routes: [
 			{
 				name: 'Register',
@@ -414,7 +447,7 @@
 			{
 				name: 'MyCCT',
 				path: 'co-curricular-transcript',
-				component: 'CCT/MyCCTV2',
+				component: 'CCT/MyCCT',
 			},
 		],
 	},
