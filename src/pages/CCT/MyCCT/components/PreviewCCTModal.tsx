@@ -1,5 +1,5 @@
 import { Checkbox, Modal } from 'antd';
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 
 interface Props {
 	open: boolean;
@@ -10,12 +10,6 @@ interface Props {
 
 const PreviewCCTModal = forwardRef<HTMLDivElement, Props>(({ open, onCancel, onConfirm, children }, ref) => {
 	const [confirmed, setConfirmed] = useState(false);
-
-	useEffect(() => {
-		if (!open) {
-			setConfirmed(false);
-		}
-	}, [open]);
 
 	return (
 		<Modal
@@ -29,6 +23,7 @@ const PreviewCCTModal = forwardRef<HTMLDivElement, Props>(({ open, onCancel, onC
 			cancelText='Close'
 			okButtonProps={{ disabled: !confirmed }}
 			width={1300}
+			destroyOnClose
 		>
 			<div style={{ maxHeight: '70vh', overflow: 'auto' }}>
 				<div className='cct-container' ref={ref}>

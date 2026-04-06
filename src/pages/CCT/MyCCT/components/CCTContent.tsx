@@ -81,25 +81,40 @@ const CCTContent = (props: {
 						</header>
 
 						<section className='student-meta'>
-							<div className='meta-item'>
-								<span>•</span> Student name: {record?.myCCT?.name || '--'}
-							</div>
-							<div className='meta-item'>
-								<span>•</span> Student ID: {record?.myCCT?.code || '--'}
-							</div>
-							<div className='meta-item'>
-								<span>•</span> Date of Birth: {record?.myCCT?.dob ? dayjs(record.myCCT.dob).format('DD/MM/YYYY') : '--'}
-							</div>
-							<div className='meta-item'>
-								<span>•</span> {record?.myCCT?.college || '--'}
-							</div>
-							<div className='meta-item'>
-								<span>•</span> Year of Enrollment: {record?.myCCT?.yearOfEnrollment ?? '--'}
-							</div>
-							<div className='meta-item'>
-								<span>•</span>{' '}
-								{[record?.myCCT?.program, `Concentration ${record?.myCCT?.concentration}`].filter(Boolean).join(' - ')}
-							</div>
+							{record?.myCCT?.name && (
+								<div className='meta-item'>
+									<span>•</span> Student name: {record?.myCCT?.name || '--'}
+								</div>
+							)}
+							{record?.myCCT?.code && (
+								<div className='meta-item'>
+									<span>•</span> Student ID: {record?.myCCT?.code || '--'}
+								</div>
+							)}
+							{record?.myCCT?.dob && (
+								<div className='meta-item'>
+									<span>•</span> Date of Birth:{' '}
+									{record?.myCCT?.dob ? dayjs(record.myCCT.dob).format('DD/MM/YYYY') : '--'}
+								</div>
+							)}
+							{record?.myCCT?.college && (
+								<div className='meta-item'>
+									<span>•</span> {record?.myCCT?.college || '--'}
+								</div>
+							)}
+							{record?.myCCT?.yearOfEnrollment && (
+								<div className='meta-item'>
+									<span>•</span> Year of Enrollment: {record?.myCCT?.yearOfEnrollment ?? '--'}
+								</div>
+							)}
+							{(record?.myCCT?.program || record?.myCCT?.concentration) && (
+								<div className='meta-item'>
+									<span>•</span>{' '}
+									{[record?.myCCT?.program, `Concentration ${record?.myCCT?.concentration}`]
+										.filter(Boolean)
+										.join(' - ')}
+								</div>
+							)}
 						</section>
 
 						<section className='skills-section'>
@@ -303,12 +318,16 @@ const CCTContent = (props: {
 							<span>
 								<i>This Transcript is officially issued and verified by VinUniversity</i>
 							</span>
-							<span>
-								<i>Date of Issue: {record?.myCCT?.dateOfIssue ?? '--'}</i>
-							</span>
-							<span>
-								<i>Serial Number: {record?.myCCT?.serialNumber || ' --'}</i>
-							</span>
+							{record?.myCCT?.dateOfIssue && (
+								<span>
+									<i>Date of Issue: {record?.myCCT?.dateOfIssue ?? '--'}</i>
+								</span>
+							)}
+							{record?.myCCT?.serialNumber && (
+								<span>
+									<i>Serial Number: {record?.myCCT?.serialNumber || ' --'}</i>
+								</span>
+							)}
 						</div>
 
 						{record?.myCCT?.status === EStatusMyCCT.APPROVED && (
