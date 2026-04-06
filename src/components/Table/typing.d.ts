@@ -132,6 +132,8 @@ export type TableBaseProps<T extends object = any> = {
 		filter?: boolean;
 		/** Có nút tải lại ko? Mặc định: Có */
 		reload?: boolean;
+		/** Có nút cấu hình cột ko? Mặc định: Có */
+		columnSetting?: boolean;
 	};
 
 	/** Danh sách các nút khác bên cạnh Thêm mới */
@@ -198,6 +200,8 @@ export type TableBaseProps<T extends object = any> = {
 	onReload?: (params?: any) => void;
 
 	cardExtra?: React.ReactNode;
+	/** Cấp độ của PageCard bao quanh Table (1, 2, 3) */
+	level?: 1 | 2 | 3;
 };
 
 export type TFilter<T> = {
@@ -327,6 +331,8 @@ export type TableStaticProps = Pick<
 
 	hasCreate?: boolean;
 	hasTotal?: boolean;
+	/** Có nút cấu hình cột ko? Mặc định: Có */
+	columnSetting?: boolean;
 	size?: 'small' | 'middle';
 };
 

@@ -54,6 +54,7 @@ export const TableHeader: React.FC = () => {
 		filter: btnFilter = true,
 		import: btnImport,
 		reload: btnReload = true,
+		columnSetting: btnColumnSetting = true,
 	} = buttons || {};
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
 	const canOpenModalFilter = btnFilter && hasFilter && disableFilterModal !== true;
@@ -386,8 +387,7 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				)}
-
-				<ColumnSettings />
+				{btnColumnSetting && <ColumnSettings />}
 			</div>
 		</div>
 	);

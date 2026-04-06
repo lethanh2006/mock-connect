@@ -309,7 +309,12 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<PageCard title={props.title || false} extra={props.cardExtra} bordered={props.border}>
+				<PageCard
+					level={props.level}
+					title={props.title || false}
+					extra={props.cardExtra}
+					bordered={props.border}
+				>
 					{mainContent}
 				</PageCard>
 			)}
