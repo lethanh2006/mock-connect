@@ -1,22 +1,13 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EStatusMyCCT } from '@/services/CCT/constant';
 import { handleSingleFile } from '@/services/uploadFile';
 import { ipCCT } from '@/utils/ip';
-import {
-	CloseCircleOutlined,
-	EditOutlined,
-	FilePdfOutlined,
-	ReloadOutlined,
-	SaveOutlined,
-	SendOutlined,
-} from '@ant-design/icons';
-import { Badge, Button, Form, Space } from 'antd';
+import { CloseCircleOutlined, FilePdfOutlined, ReloadOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
+import { Badge, Button, Form, Space, Spin, Tag, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useEffect, useRef, useState } from 'react';
-import { useReactToPrint } from 'react-to-print';
 import { useIntl, useModel } from 'umi';
 import CardNoteMyCCT from './components/CardNote';
 import CCTContent from './components/CCTContent';
@@ -144,12 +135,6 @@ const MyCCTv3 = () => {
 			.catch(() => {});
 	};
 
-	const handlePrint = useReactToPrint({
-		contentRef: printRef,
-		documentTitle: 'CCT Transcript',
-		copyStyles: true,
-	} as any);
-
 	const handleExportPDF = async () => {
 		const element = printRef.current;
 		if (!element) return;
@@ -266,36 +251,42 @@ const MyCCTv3 = () => {
 			const footerImg = await loadImage('/images/cct/footerCCT.jpg');
 
 			const pdf = new jsPDF({
-				orientation: 'landscape',
+				orientation: headerImg ? 'portrait' : 'landscape',
 				unit: 'px',
-				format: 'a3',
+				format: headerImg ? 'a4' : 'a3',
 				compress: true,
 			});
 
-			const pdfWidth = pdf.internal.pageSize.getWidth();
-			const pdfHeight = pdf.internal.pageSize.getHeight();
+			const addImageCentered = (
+				data: string,
+				isNewPage = false,
+				format?: string,
+				orientation?: 'portrait' | 'landscape',
+			) => {
+				if (isNewPage) pdf.addPage(format as any, orientation);
 
-			const addImageCentered = (data: string, isNewPage = false) => {
-				if (isNewPage) pdf.addPage();
+				const pageWidth = pdf.internal.pageSize.getWidth();
+				const pageHeight = pdf.internal.pageSize.getHeight();
 
 				const props = pdf.getImageProperties(data);
-				const ratio = Math.min(pdfWidth / props.width, pdfHeight / props.height);
+				const ratio = Math.min(pageWidth / props.width, pageHeight / props.height);
 				const w = props.width * ratio;
 				const h = props.height * ratio;
-				const x = (pdfWidth - w) / 2;
-				const y = (pdfHeight - h) / 2;
+				const x = (pageWidth - w) / 2;
+				const y = (pageHeight - h) / 2;
 
 				pdf.addImage(data, 'JPEG', x, y, w, h, undefined, 'FAST');
 			};
 
 			if (headerImg) {
 				addImageCentered(headerImg, false);
+				addImageCentered(mainImgData, true, 'a3', 'landscape');
+			} else {
+				addImageCentered(mainImgData, false);
 			}
 
-			addImageCentered(mainImgData, !!headerImg);
-
 			if (footerImg) {
-				addImageCentered(footerImg, true);
+				addImageCentered(footerImg, true, 'a4', 'portrait');
 			}
 
 			pdf.save(`CCT_Transcript_${dayjs().format('YYYYMMDD')}.pdf`);
@@ -305,74 +296,6 @@ const MyCCTv3 = () => {
 			setExporting(false);
 		}
 	};
-
-	// const handleExportPDF = async () => {
-	// 	const element = printRef.current;
-	// 	if (!element) return;
-
-	// 	try {
-	// 		setExporting(true);
-
-	// 		const clone = element.cloneNode(true) as HTMLElement;
-
-	// 		clone.classList.add('export-mode');
-
-	// 		const style = document.createElement('style');
-	// 		style.innerHTML = `
-	// 		.export-mode .skills-section h3::before {
-	// 			left: 0px !important;
-	// 			top: 10px !important;
-	// 			transform: translateY(-50%) !important;
-	// 		}
-	// 	`;
-	// 		document.head.appendChild(style);
-	// 		clone.style.width = '2200px';
-	// 		clone.style.position = 'fixed';
-	// 		clone.style.top = '-9999px';
-	// 		clone.style.left = '0';
-	// 		clone.style.zIndex = '-1';
-	// 		clone.style.background = '#fff';
-
-	// 		document.body.appendChild(clone);
-
-	// 		const canvas = await html2canvas(clone, {
-	// 			scale: 2,
-	// 			useCORS: true,
-	// 		});
-
-	// 		document.body.removeChild(clone);
-	// 		document.head.removeChild(style);
-
-	// 		const imgData = canvas.toDataURL('image/png');
-
-	// 		const pdf = new jsPDF({
-	// 			orientation: 'landscape',
-	// 			unit: 'px',
-	// 			format: 'a3',
-	// 		});
-
-	// 		const imgProps = pdf.getImageProperties(imgData);
-
-	// 		const pdfWidth = pdf.internal.pageSize.getWidth();
-	// 		const pdfHeight = pdf.internal.pageSize.getHeight();
-
-	// 		const ratio = Math.min(pdfWidth / imgProps.width, pdfHeight / imgProps.height);
-
-	// 		const finalWidth = imgProps.width * ratio;
-	// 		const finalHeight = imgProps.height * ratio;
-
-	// 		const offsetX = (pdfWidth - finalWidth) / 2;
-	// 		const offsetY = (pdfHeight - finalHeight) / 2;
-
-	// 		pdf.addImage(imgData, 'PNG', offsetX, offsetY, finalWidth, finalHeight);
-
-	// 		pdf.save(`CCT_Transcript_${dayjs().format('YYYYMMDD')}.pdf`);
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 	} finally {
-	// 		setExporting(false);
-	// 	}
-	// };
 
 	return (
 		<>
@@ -403,69 +326,134 @@ const MyCCTv3 = () => {
 										.join(' - ')})`}</p>
 								</>
 							) : (
-								<></>
+								<i>
+									No submission period available. <br />
+									Students can only submit during an active period.
+								</i>
 							)}
 						</div>
 						<Space wrap>
 							{edit ? null : (
 								<>
-									{danhSach?.length ? (
-										<Badge count={danhSach?.length} offset={[-3, 0]}>
-											<ButtonExtend
-												tooltip='Some activities are still pending approval. Please contact the approver.'
-												style={{
-													animation: 'pulseSmooth 1.8s ease-in-out infinite',
-													backgroundColor: '#faad14',
-												}}
-												onClick={() => setVisiblePending(true)}
-												size='small'
-											>
-												Pending For Approval
-											</ButtonExtend>
-										</Badge>
-									) : null}
+									{(() => {
+										const tagStyle = {
+											padding: '6px 10px',
+											marginTop: 12,
+											fontSize: 14,
+											fontWeight: 500,
+											borderRadius: 4,
+											display: 'inline-flex',
+											alignItems: 'center' as const,
+											gap: 4,
+										};
 
-									<Button onClick={getData} icon={<ReloadOutlined />} size='small'>
-										Reload
-									</Button>
-									{/* <Button icon={<PrinterOutlined />} onClick={handlePrint as any}>
-											Print
-										</Button> */}
-									<Button icon={<FilePdfOutlined />} onClick={handleExportPDF} loading={exporting} size='small'>
-										Export PDF
-									</Button>
-									<Button
-										disabled={
+										const disabledStyle = {
+											cursor: 'not-allowed',
+											opacity: 0.5,
+										};
+
+										const isDisabled =
 											record?.myCCT?.status === EStatusMyCCT.APPROVED ||
-											record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL
-										}
-										onClick={() => {
-											setEdit(true);
-										}}
-										icon={<EditOutlined />}
-										size='small'
-									>
-										Update
-									</Button>
-									<Button
-										disabled={
-											!recDot?._id ||
-											record?.myCCT?.status === EStatusMyCCT.APPROVED ||
-											record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL
-										}
-										icon={<SendOutlined />}
-										onClick={() => setPreviewVisible(true)}
-										size='small'
-										style={{
-											backgroundColor:
-												record?.myCCT?.status === EStatusMyCCT.APPROVED ||
-												record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL
-													? undefined
-													: '#52c41a',
-										}}
-									>
-										Submit
-									</Button>
+											record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL;
+
+										const isSubmitDisabled = !recDot?._id || isDisabled;
+
+										return (
+											<>
+												<Tooltip title='RELOAD'>
+													<Tag
+														icon={<ReloadOutlined style={{ fontSize: 14 }} />}
+														style={{
+															...tagStyle,
+															cursor: 'pointer',
+															display: 'inline-flex',
+															alignItems: 'center',
+															justifyContent: 'center',
+															width: 32,
+															height: 32,
+															padding: 0,
+														}}
+														onClick={getData}
+													/>
+												</Tooltip>
+
+												<Tooltip title='EXPORT PDF'>
+													<Spin spinning={exporting} size='small'>
+														<Tag
+															icon={<FilePdfOutlined style={{ fontSize: 14 }} />}
+															style={{
+																...tagStyle,
+																cursor: 'pointer',
+																display: 'inline-flex',
+																alignItems: 'center',
+																justifyContent: 'center',
+																width: 32,
+																height: 32,
+																padding: 0,
+															}}
+															onClick={handleExportPDF}
+														/>
+													</Spin>
+												</Tooltip>
+
+												{danhSach?.length ? (
+													<Badge count={danhSach?.length} offset={[-3, 7]}>
+														<Tag
+															style={{
+																...tagStyle,
+																cursor: 'pointer',
+																animation: 'pulseSmooth 1.8s ease-in-out infinite',
+																backgroundColor: '#FFE58F',
+																color: '#CE7C1E',
+																fontWeight: 600,
+															}}
+															onClick={() => setVisiblePending(true)}
+														>
+															PENDING FOR APPROVAL
+														</Tag>
+													</Badge>
+												) : null}
+
+												<Tag
+													style={{
+														...tagStyle,
+														...(isDisabled ? disabledStyle : { cursor: 'pointer', color: '#134D8B', fontWeight: 600 }),
+													}}
+													onClick={() => {
+														if (!isDisabled) {
+															setEdit(true);
+														}
+													}}
+												>
+													UPDATE
+												</Tag>
+
+												<Tooltip
+													title={
+														!recDot?._id
+															? 'No submission period available. Students can only submit during an active period.'
+															: ''
+													}
+												>
+													<Tag
+														style={{
+															...tagStyle,
+															...(isSubmitDisabled
+																? disabledStyle
+																: { cursor: 'pointer', backgroundColor: '#F5FFEB', color: '#329323', fontWeight: 600 }),
+														}}
+														onClick={() => {
+															if (!isSubmitDisabled) {
+																setPreviewVisible(true);
+															}
+														}}
+													>
+														SUBMIT
+													</Tag>
+												</Tooltip>
+											</>
+										);
+									})()}
 								</>
 							)}
 						</Space>
