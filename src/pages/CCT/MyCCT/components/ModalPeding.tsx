@@ -232,6 +232,10 @@ const ModalPeding = (props: { visible: boolean; setVisible: (val: boolean) => vo
 			width={1000}
 			footer={null}
 		>
+			<i className='text-error' style={{ marginBottom: 12 }}>
+				Some activities are still pending approval. Please contact the approver
+			</i>
+
 			<TableStaticData
 				columns={columns}
 				data={danhSach?.filter((item) => item.activityCategory === segmentSelected) ?? []}

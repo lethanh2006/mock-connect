@@ -195,8 +195,12 @@ const FormActivityOutCome = (props: any) => {
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='reflection' label='Reflection'>
-						<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' />
+					<Form.Item
+						name='reflection'
+						label='Reflection'
+						rules={[...rules.required, ...rules.text, ...rules.length(70)]}
+					>
+						<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' showCount />
 					</Form.Item>
 				</Col>
 
