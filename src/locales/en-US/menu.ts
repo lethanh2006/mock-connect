@@ -119,8 +119,8 @@ export default {
 	'menu.ThuVien.LichSuMuonTra': 'Borrowing History',
 
 	// CCT
-	'menu.Activity': 'Activity',
-	'menu.Activity.Register': 'Register',
+	'menu.Activity': 'Co-curricular',
+	'menu.Activity.Register': 'List Activity',
 	'menu.Activity.MyActivity': 'My Activity',
 	'menu.Activity.MyCCT': 'Co-curricular Transcript',
 };

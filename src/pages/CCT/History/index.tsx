@@ -1,48 +1,93 @@
-import ExpandText from '@/components/ExpandText';
-import TableBase from '@/components/Table';
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import { type IColumn } from '@/components/Table/typing';
+import { EOperatorType } from '@/components/Table/constant';
+import ModalExpandable from '@/components/Table/ModalExpandable';
+import { Activity } from '@/services/CCT/Activity/typing';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
-import {
-	EActivityCategory,
-	EApprovalStatus,
-	mapColorApprovalStatus,
-	mapNameActivityCategory,
-	mapNameApprovalStatus,
-} from '@/services/CCT/constant';
-import { formatDate } from '@/utils/formatDate';
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined, SendOutlined } from '@ant-design/icons';
-import { Card, Checkbox, Popconfirm, Tabs, Tag } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
+import dayjs from '@/utils/dayjs';
+import { DashOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-import SelectActivitiesManagement from '../Activities/Select';
-import SelectRolesManagement from '../Roles/Select';
+import { FilterSuKienValue } from '../Activity';
+import CardChiTietSuKien from '../Activity/components/CardChiTietSuKien';
+import CardSuKienCCT from '../Activity/components/CardSuKien';
+import FilterSuKien from '../Activity/components/FilterSuKien';
+import '../Activity/style.less';
+import ChiTietActivityOutCome from './components/ChiTiet';
 import FormActivityOutCome from './components/Form';
 import FormPerstionActivityOutCome from './components/FormPerstion';
 import StatActivityOutCome from './components/Stat';
 
 const HistoryActivityPage = () => {
 	const intl = useIntl();
-	const { getModel, page, limit, handleEdit, handleView, deleteActivityModel, putModel, getAnalyticsStudentModel } =
-		useModel('cct.activityoutcome');
-	const { getAllModel, danhSach: dsAtribute } = useModel('cct.attributes');
+	const {
+		page,
+		limit,
+		setPage,
+		setLimit,
+		danhSach,
+		getModel,
+		handleEdit,
+		handleView,
+		getAnalyticsStudentModel,
+		loading,
+		visibleForm,
+		setVisibleForm,
+		total,
+		setEdit,
+		setIsView,
+		setRecord,
+		deleteActivityModel,
+		putModel,
+		edit,
+		isView,
+		record,
+		filters,
+	} = useModel('cct.activityoutcome');
+	const { getAllModel: getAllAtributes } = useModel('cct.attributes');
 
 	const [tabActive, setTabActive] = useState<EActivityCategory>(EActivityCategory.REGISTERED);
+	const [filter, setFilter] = useState<FilterSuKienValue>({
+		search: undefined,
+		dateRange: [],
+	});
+	const [workflowQuery, setWorkflowQuery] = useState<EActivityStatus>(EActivityStatus.TOTAL);
 
-	useEffect(() => {
-		getAllModel(undefined, { order: 1 });
-	}, []);
+	const now = dayjs();
 
 	const getData = () => {
+		const filters: any[] = [];
+
+		if (!!filter?.search) {
+			filters.push({
+				active: true,
+				field: tabActive === EActivityCategory.REGISTERED ? ['activities', 'name'] : 'activitiesOutcomeName',
+				values: [filter?.search],
+				operator: EOperatorType.CONTAIN,
+			});
+		}
+
+		if (!!filter?.dateRange?.length) {
+			filters.push({
+				active: true,
+				field: tabActive === EActivityCategory.REGISTERED ? ['activities', 'startDate'] : 'startDate',
+				values: [filter?.dateRange[0], filter?.dateRange[1]],
+				operator: EOperatorType.BETWEEN,
+			});
+		}
+
 		getModel(
 			{
 				activityCategory: tabActive,
 			},
+			filters,
 			undefined,
 			undefined,
-			undefined,
-			undefined,
+			9,
 			'me/page',
+			{
+				status: workflowQuery,
+			},
 		);
 	};
 
@@ -50,230 +95,397 @@ const HistoryActivityPage = () => {
 		getAnalyticsStudentModel(tabActive);
 	};
 
-	const attributeColumns: IColumn<any>[] = useMemo(() => {
-		if (!dsAtribute?.length) return [];
+	useEffect(() => {
+		getThongKe();
+	}, [tabActive]);
 
-		return dsAtribute.map((attr: any) => ({
-			title: attr.code,
-			width: 90,
-			align: 'center',
-			render: (val, rec) => {
-				const check = rec?.activities?.coCurricularActivityEquivalency;
-				const checkPertion = rec?.activitiesType?.attributesId === attr?._id;
+	useEffect(() => {
+		getData();
+	}, [tabActive, filter, page, limit, filters, workflowQuery]);
 
-				const isChecked = check?.some((item: any) => item.rolesId === rec.rolesId && item.attributesId === attr._id);
+	useEffect(() => {
+		getAllAtributes(undefined, { order: 1 }, { isActive: true });
+	}, []);
 
-				return <Checkbox checked={isChecked || checkPertion} />;
-			},
-			onCell,
-		}));
-	}, [dsAtribute]);
+	const isInTimeRange = (rec: ActivityOutCome.IRecord) => {
+		const now = dayjs();
 
-	const onCell = (rec: ActivityOutCome.IRecord) => ({
-		onClick: () => handleView(rec),
-		style: { cursor: 'pointer' },
-	});
+		const start = dayjs(rec?.activities?.startDate);
+		const end = rec?.dueDate ? dayjs(rec?.dueDate) : null;
 
-	const columns: IColumn<ActivityOutCome.IRecord>[] = [
-		{
-			title: intl.formatMessage({ id: 'activity.column.name' }),
-			dataIndex: 'activitiesOutcomeName',
-			width: 150,
-			filterType: 'string',
-			onCell,
-			hide: tabActive === EActivityCategory.REGISTERED,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.cca' }),
-			dataIndex: 'activitiesTypeId',
-			width: 120,
-			render: (val, rec) => rec?.activitiesType?.name,
-			filterType: 'customselect',
-			filterCustomSelect: <SelectActivitiesManagement multiple />,
-			onCell,
-			hide: tabActive === EActivityCategory.REGISTERED,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.activity' }),
-			width: 150,
-			render: (val, rec) => rec?.activities?.name,
-			onCell,
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.attribute' }),
-			align: 'center',
-			width: 200,
-			render: (val, rec) => (
-				<Tag color={rec?.activities?.activitiesType?.attributes?.color}>
-					{rec?.activities?.activitiesType?.attributes?.name}
-				</Tag>
-			),
-			onCell,
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.cca' }),
-			width: 170,
-			render: (val, rec) => rec?.activities?.activitiesType?.name,
-			onCell,
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.startdate' }),
-			align: 'center',
-			width: 120,
-			render: (val, rec) => rec?.activities?.startDate && formatDate(rec?.activities?.startDate),
-			onCell,
-			hide: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.created' }),
-			dataIndex: 'createdAt',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => val && formatDate(val),
-			onCell,
-			sortable: true,
-			hide: tabActive === EActivityCategory.REGISTERED,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.role' }),
-			dataIndex: 'rolesId',
-			width: 120,
-			render: (val, rec) => rec?.roles?.name,
-			filterType: 'customselect',
-			filterCustomSelect: <SelectRolesManagement multiple />,
-			onCell,
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.column.level' }),
-			width: 140,
-			render: (val, rec) => rec?.roles?.level?.name,
-			onCell,
-		},
-		...attributeColumns,
-		{
-			title: intl.formatMessage({ id: 'activity.column.status' }),
-			dataIndex: 'workflow',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => (
-				<Tag color={mapColorApprovalStatus[val as EApprovalStatus]}>
-					{mapNameApprovalStatus[val as EApprovalStatus]}
-				</Tag>
-			),
-			fixed: 'right',
-			filterType: 'select',
-			filterData: Object.values(EApprovalStatus).map((item) => ({
-				value: item,
-				label: mapNameApprovalStatus[item as EApprovalStatus],
-			})),
-			onCell,
-		},
-		{
-			title: 'Rejection Note',
-			dataIndex: 'activityRejectionNote',
-			width: 180,
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
-			filterType: 'string',
-			onCell,
-		},
-		{
-			title: 'Revision Note',
-			dataIndex: 'revisionNote',
-			width: 180,
-			render: (val, rec) => <ExpandText>{val}</ExpandText>,
-			filterType: 'string',
-			onCell,
-		},
-		{
-			title: intl.formatMessage({ id: 'global.column.action' }),
-			align: 'center',
-			width: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? 120 : 90,
-			fixed: 'right',
-			render: (val, rec) => (
-				<>
-					{tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR && (
-						<Popconfirm
-							onConfirm={() => putModel(`me/${rec?._id}`, { workflow: EApprovalStatus.SUBMITTED }, getData)}
-							title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
-							placement='topLeft'
-						>
-							<ButtonExtend
-								disabled={rec?.workflow !== EApprovalStatus.DRAFT && rec?.workflow !== EApprovalStatus.CHANGES_REQUIRED}
-								tooltip={intl.formatMessage({ id: 'activity.button.duyet' })}
-								type='link'
-								icon={<SendOutlined />}
-							/>
-						</Popconfirm>
-					)}
+		if (!start.isValid() || !end?.isValid()) return false;
 
-					<ButtonExtend
-						disabled={rec?.workflow !== EApprovalStatus.DRAFT && rec?.workflow !== EApprovalStatus.CHANGES_REQUIRED}
-						tooltip={
-							tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR
-								? intl.formatMessage({ id: 'activity.button.chinhsua' })
-								: intl.formatMessage({ id: 'activity.button.add' })
-						}
-						onClick={() => handleEdit(rec)}
-						type='link'
-						icon={tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? <EditOutlined /> : <PlusCircleOutlined />}
-					/>
-					<Popconfirm
-						onConfirm={() =>
-							deleteActivityModel(rec?._id, () => {
-								getData();
-								getThongKe();
-							})
-						}
-						title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
-						placement='topLeft'
-					>
-						<ButtonExtend
-							disabled={rec?.workflow === EApprovalStatus.APPROVED || rec?.workflow === EApprovalStatus.REJECTED}
-							tooltip={intl.formatMessage({ id: 'activity.button.xoa' })}
-							danger
-							type='link'
-							icon={<DeleteOutlined />}
-						/>
-					</Popconfirm>
-				</>
-			),
-		},
-	];
+		return now.isAfter(start) && now.isBefore(end);
+	};
+
+	const canEdit = (rec: ActivityOutCome.IRecord) => {
+		const isWorkflowValid = [
+			EApprovalStatus.DRAFT,
+			EApprovalStatus.CHANGES_REQUIRED,
+			EApprovalStatus.EVIDENCE_REQUIRED,
+		].includes(rec?.workflow);
+
+		if (!isWorkflowValid) return false;
+
+		if (rec?.activityCategory === EActivityCategory.REGISTERED) {
+			return isInTimeRange(rec);
+		}
+
+		return rec?.workflow === EApprovalStatus.CHANGES_REQUIRED ? rec?.dueDate && now.isBefore(dayjs(rec.dueDate)) : true;
+	};
+
+	const handlePaginationChange = (newPage: number, newPageSize: number) => {
+		if (newPageSize !== limit) {
+			setPage(1);
+			setLimit(newPageSize);
+		} else {
+			setPage(newPage);
+		}
+	};
+
+	const handlePageSizeChange = (current: number, size: number) => {
+		setPage(1);
+		setLimit(size);
+	};
+
+	const endDateUpdateEvidence = record?.dueDate ? dayjs(record?.dueDate) : null;
+
+	const editableWorkflow =
+		record?.workflow === EApprovalStatus.DRAFT ||
+		record?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+		record?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+
+	const isExpired = editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
-		<Card title={intl.formatMessage({ id: 'activity.title' })}>
-			<Tabs activeKey={tabActive} onChange={(tab) => setTabActive(tab as EActivityCategory)}>
+		<Card title='My Activity' className='table-base-card' variant='borderless'>
+			<Tabs
+				activeKey={tabActive}
+				onChange={(tab) => {
+					setTabActive(tab as EActivityCategory);
+					setPage(1);
+					setLimit(9);
+				}}
+			>
 				{Object.values(EActivityCategory).map((item) => (
 					<Tabs.TabPane tab={mapNameActivityCategory[item]} key={item} />
 				))}
 			</Tabs>
 
-			<StatActivityOutCome getData={getThongKe} dependency={tabActive} />
-
-			<TableBase
-				getData={getData}
-				formProps={{
-					getData: () => {
-						getData();
-						getThongKe();
-					},
-				}}
-				columns={columns}
-				dependencies={[page, limit, tabActive]}
-				modelName='cct.activityoutcome'
-				title={intl.formatMessage({ id: 'activity.title' })}
-				Form={tabActive === EActivityCategory.REGISTERED ? FormActivityOutCome : FormPerstionActivityOutCome}
-				widthDrawer={800}
-				hideCard
-				buttons={{ create: tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR }}
+			<FilterSuKien
+				value={filter}
+				onChange={setFilter}
 				onReload={() => {
 					getData();
 					getThongKe();
 				}}
+				button={
+					tabActive === EActivityCategory.PERSONAL_CO_CURRICULAR ? (
+						<Button
+							type='primary'
+							onClick={() => {
+								setRecord({} as ActivityOutCome.IRecord);
+								setEdit(false);
+								setIsView(false);
+								setVisibleForm(true);
+							}}
+						>
+							Add New
+						</Button>
+					) : undefined
+				}
+				hideSelect
 			/>
+
+			<hr
+				style={{
+					marginTop: 16,
+					marginBottom: 16,
+					border: 'none',
+					borderTop: '1px solid #f0f0f0',
+				}}
+			/>
+
+			<StatActivityOutCome
+				getData={getThongKe}
+				tabActive={tabActive}
+				onChangeWorkflow={setWorkflowQuery}
+				currentWorkflow={workflowQuery}
+			/>
+			<hr
+				style={{
+					marginTop: 16,
+					marginBottom: 16,
+					border: 'none',
+					borderTop: '1px solid #f0f0f0',
+				}}
+			/>
+
+			<Spin spinning={loading}>
+				{danhSach?.length ? (
+					<>
+						<Row gutter={[12, 12]}>
+							{danhSach?.map((item) => {
+								const equivalencyAttributeIds = item?.activities?.coCurricularActivityEquivalency?.map(
+									(x) => x.attributesId,
+								);
+
+								const canDelete =
+									item?.workflow === EApprovalStatus.DRAFT || item?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+								const now = dayjs();
+
+								const startDate = item?.activities?.startDate ? dayjs(item?.activities.startDate) : null;
+								const endDateUpdateEvidence = item?.dueDate ? dayjs(item?.dueDate) : null;
+								const isOngoing = now.isAfter(startDate) && now.isBefore(endDateUpdateEvidence);
+								const isOngoingPerstion =
+									item?.workflow === EApprovalStatus.CHANGES_REQUIRED
+										? now.isBefore(dayjs(item?.dueDate ? dayjs(item?.dueDate) : null))
+										: true;
+
+								const endDateSource = item?.activities?.dueDateRegistration ?? item?.activities?.endDate;
+								const endDate = endDateSource ? dayjs(endDateSource) : null;
+								const outTimeRegis = now.isAfter(endDate) && !item?.workflow;
+
+								const editableWorkflow =
+									item?.workflow === EApprovalStatus.DRAFT ||
+									item?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+									item?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
+
+								const renderButton =
+									editableWorkflow && (tabActive === EActivityCategory.REGISTERED ? isOngoing : isOngoingPerstion) ? (
+										<Button block type={'primary'} onClick={() => handleEdit(item)}>
+											Update Evidence
+										</Button>
+									) : (
+										<Button block onClick={() => handleView(item)}>
+											SEE MORE
+										</Button>
+									);
+
+								return (
+									<Col key={item._id} xs={24} sm={12} md={8} lg={8}>
+										{tabActive === EActivityCategory.REGISTERED ? (
+											<CardSuKienCCT
+												record={{
+													...item?.activities,
+													activityOutcome: item,
+												}}
+												banner={item?.activities?.banner ?? undefined}
+												name={item?.activities?.name}
+												startDate={
+													item?.activities?.startDate
+														? dayjs(item?.activities?.startDate).format('HH:mm DD/MM/YYYY')
+														: '--'
+												}
+												endDate={
+													item?.activities?.endDate ? dayjs(item?.activities?.endDate).format('HH:mm DD/MM/YYYY') : '--'
+												}
+												equivalencyAttributeIds={equivalencyAttributeIds}
+												onClick={() => handleView(item)}
+												button={
+													<Row style={{ marginTop: 12 }} gutter={[6, 0]}>
+														<Col span={24}>{renderButton}</Col>
+													</Row>
+												}
+												outTimeRegis={outTimeRegis}
+												isExpired={editableWorkflow && now.isAfter(endDateUpdateEvidence)}
+												isRegister
+											/>
+										) : (
+											<CardSuKienCCT
+												record={{
+													...item?.activities,
+													activityOutcome: item,
+												}}
+												banner={item?.banner ?? undefined}
+												name={item?.isAwardRecognition ? item?.competition : item?.activitiesOutcomeName}
+												startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
+												endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
+												equivalencyAttributeIds={item?.activitiesType?.attributes?.map((x) => x._id)}
+												onClick={() => handleView(item)}
+												button={
+													<Row style={{ marginTop: 12 }} gutter={[6, 0]}>
+														<Col span={3}>
+															<Popover
+																placement='bottom'
+																content={
+																	<Space direction='vertical' size={4} className='action-popover'>
+																		<Popconfirm
+																			onConfirm={(e) =>
+																				putModel(`me/${item?._id}`, { workflow: EApprovalStatus.SUBMITTED }, getData)
+																			}
+																			title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
+																			placement='topLeft'
+																		>
+																			<Button
+																				className='btn-success'
+																				disabled={!canEdit(item)}
+																				type='link'
+																				icon={<SendOutlined />}
+																				size='small'
+																			>
+																				{intl.formatMessage({ id: 'activity.button.duyet' })}
+																			</Button>
+																		</Popconfirm>
+
+																		<Popconfirm
+																			onConfirm={() =>
+																				deleteActivityModel(
+																					item?._id,
+																					() => {
+																						getData();
+																						getThongKe();
+																					},
+																					intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+																				)
+																			}
+																			title={intl.formatMessage({ id: 'activity.confirm.xoa' })}
+																			placement='topLeft'
+																		>
+																			<Button
+																				disabled={!canDelete}
+																				danger
+																				type='link'
+																				icon={<DeleteOutlined />}
+																				size='small'
+																			>
+																				{intl.formatMessage({ id: 'activity.button.xoa' })}
+																			</Button>
+																		</Popconfirm>
+																	</Space>
+																}
+															>
+																<Button block icon={<DashOutlined />} />
+															</Popover>
+														</Col>
+														<Col span={21}>{renderButton}</Col>
+													</Row>
+												}
+												isPersonal
+												isExpired={
+													item?.workflow === EApprovalStatus.CHANGES_REQUIRED && now.isAfter(dayjs(item?.dueDate))
+												}
+												isAward={item?.isAwardRecognition}
+											/>
+										)}
+									</Col>
+								);
+							})}
+						</Row>
+
+						{total > 0 && (
+							<div className='pagination-container'>
+								<Pagination
+									current={page}
+									pageSize={limit}
+									total={total}
+									onChange={handlePaginationChange}
+									onShowSizeChange={handlePageSizeChange}
+									pageSizeOptions={['5', '10', '20', '50']}
+									disabled={loading}
+									size='default'
+									className='pagination'
+								/>
+							</div>
+						)}
+					</>
+				) : (
+					<Empty
+						style={{ marginTop: 32, marginBottom: 32 }}
+						description={intl.formatMessage({ id: 'global.table.index.empty' })}
+						image='/images/empty.png'
+					/>
+				)}
+			</Spin>
+
+			<ModalExpandable
+				title={edit ? 'Update Evidence' : isView ? 'Detail Evidence' : 'Add Evidence'}
+				width={1000}
+				onCancel={() => setVisibleForm(false)}
+				footer={null}
+				open={visibleForm}
+				styles={
+					isView
+						? {
+								body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
+								header: { backgroundColor: '#F8F8F8' },
+							}
+						: undefined
+				}
+			>
+				{tabActive === EActivityCategory.REGISTERED ? (
+					isView ? (
+						<>
+							<CardChiTietSuKien
+								record={
+									{
+										...record?.activities,
+										activityOutcome: record,
+									} as Activity.IRecord
+								}
+								evidenceDeadline={record?.dueDate ? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY') : '--'}
+								infoEvidence={!!record?.workflow}
+								isExpired={isExpired}
+								isRegister
+							/>
+
+							<div
+								style={{
+									backgroundColor: '#fff',
+									display: 'flex',
+									gap: 8,
+									justifyContent: 'flex-end',
+									margin: '15px -15px -15px -15px',
+									padding: 16,
+								}}
+							>
+								<Button onClick={() => setVisibleForm(false)}>Close</Button>
+								{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
+									<Button type='primary' onClick={() => handleEdit(record)}>
+										Update Evidence
+									</Button>
+								)}
+							</div>
+						</>
+					) : (
+						<FormActivityOutCome
+							getData={() => {
+								getData();
+								getThongKe();
+							}}
+						/>
+					)
+				) : isView && !record?.isAwardRecognition ? (
+					<>
+						<ChiTietActivityOutCome recOutcome={record ?? ({} as ActivityOutCome.IRecord)} />
+
+						<div
+							style={{
+								backgroundColor: '#fff',
+								display: 'flex',
+								gap: 8,
+								justifyContent: 'flex-end',
+								margin: '15px -15px -15px -15px',
+								padding: 16,
+							}}
+						>
+							<Button onClick={() => setVisibleForm(false)}>Close</Button>
+							{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
+								<Button type='primary' onClick={() => handleEdit(record)}>
+									Update Evidence
+								</Button>
+							)}
+						</div>
+					</>
+				) : (
+					<FormPerstionActivityOutCome
+						getData={() => {
+							getData();
+							getThongKe();
+						}}
+					/>
+				)}
+			</ModalExpandable>
 		</Card>
 	);
 };

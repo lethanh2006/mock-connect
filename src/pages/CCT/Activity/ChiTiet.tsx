@@ -1,159 +1,160 @@
-import TableStaticData from '@/components/Table/TableStaticData';
-import { IColumn } from '@/components/Table/typing';
-import { Button, Card, Checkbox, Col, Modal, Row, Space, Tag, Typography } from 'antd';
-import { formatDateTime } from '@/utils/formatDate';
-import { useMemo } from 'react';
+import { Activity } from '@/services/CCT/Activity/typing';
+import { EApprovalStatus } from '@/services/CCT/constant';
+import { Button, Modal, Popconfirm, Space } from 'antd';
+import dayjs from 'dayjs';
 import { useIntl, useModel } from 'umi';
+import CardChiTietSuKien from './components/CardChiTietSuKien';
 
-const { Text, Paragraph } = Typography;
-
-const ChiTietActivity = (props: { getData?: () => void }) => {
-	const { getData } = props;
+const ChiTietActivity = (props: {
+	getData?: () => void;
+	setVisibleDangKy?: (val: boolean) => void;
+	activeKey?: string;
+}) => {
+	const { getData, setVisibleDangKy, activeKey } = props;
 	const intl = useIntl();
 	const { visibleForm, setVisibleForm, record, registerActivityModel } = useModel('cct.activity');
+	const { deleteActivityModel, handleEdit } = useModel('cct.activityoutcome');
 
-	const groupedEquivalency = useMemo(() => {
-		const map = new Map<
-			string,
-			{
-				roleName: string;
-				levelName?: string;
-				attributes: { name: string; color?: string }[];
-				autoApprove: boolean;
-			}
-		>();
+	const now = dayjs();
+	const startDate = record?.startDate ? dayjs(record.startDate) : null;
+	const endDateSource = record?.dueDateRegistration ?? record?.endDate;
+	const endDate = endDateSource ? dayjs(endDateSource) : null;
 
-		record?.coCurricularActivityEquivalency?.forEach((item) => {
-			const roleId = item.roles?._id;
-			if (!roleId) return;
+	const endDateUpdateEvidence =
+		record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
+			? record?.activityOutcome?.dueDate
+				? dayjs(record?.activityOutcome?.dueDate)
+				: null
+			: record?.allowPostEventResultsUpdate
+				? record.dueDate
+					? dayjs(record.dueDate)
+					: null
+				: record?.endDate
+					? dayjs(record.endDate)
+					: null;
 
-			if (!map.has(roleId)) {
-				map.set(roleId, {
-					roleName: item.roles?.name ?? '',
-					levelName: item.roles?.level?.name ?? '',
-					attributes: [],
-					autoApprove: item?.autoApprove ?? false,
-				});
-			}
+	const isOngoing = now.isAfter(startDate) && now.isBefore(endDateUpdateEvidence);
 
-			if (item.attributes?.name) {
-				map.get(roleId)!.attributes.push({
-					name: item.attributes.name,
-					color: item.attributes.color,
-				});
-			}
-		});
+	const editableWorkflow =
+		record?.activityOutcome?.workflow === EApprovalStatus.DRAFT ||
+		record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED ||
+		record?.activityOutcome?.workflow === EApprovalStatus.EVIDENCE_REQUIRED;
 
-		return Array.from(map.values());
-	}, [record]);
+	const isFullSlot = !!record?.capacity && (record?.numberOfRegisteredActivityOutcomes ?? 0) >= record.capacity;
 
-	const columns: IColumn<any>[] = [
-		{
-			title: intl.formatMessage({ id: 'activity.detail.role' }),
-			width: 180,
-			dataIndex: 'roleName',
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.detail.level' }),
-			width: 120,
-			dataIndex: 'levelName',
-		},
-		{
-			title: intl.formatMessage({ id: 'activity.detail.attributes' }),
-			width: 200,
-			render: (_, rec) => (
-				<Space size={[4, 4]} wrap>
-					{rec.attributes?.map((attr: any, idx: number) => (
-						<Tag key={idx} color={attr.color}>
-							{attr.name}
-						</Tag>
-					))}
-				</Space>
-			),
-		},
+	const outTime = now.isAfter(endDate) && !record?.activityOutcome?.workflow;
 
-		{
-			title: intl.formatMessage({ id: 'activity.detail.autoApproval' }),
-			dataIndex: 'autoApprove',
-			width: 90,
-			align: 'center',
-			render: (val) => <Checkbox checked={val} />,
-		},
-	];
+	const isExpired = activeKey === '3' && editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
-		<Modal title={record?.name} open={visibleForm} onCancel={() => setVisibleForm(false)} width={800} footer={null}>
-			<Card style={{ marginTop: 16 }} variant='borderless'>
-				<Row gutter={24}>
-					<Col span={10}>
-						<img
-							src={record?.banner ?? '/logo.png'}
-							alt='banner'
-							style={{
-								width: '80%',
-								borderRadius: 8,
-								objectFit: 'cover',
-							}}
-						/>
-					</Col>
-
-					<Col span={14}>
-						<Space direction='vertical' size={8}>
-							{record?.activitiesType?.attributes?.name && (
-								<Tag color={record?.activitiesType?.attributes?.color}>{record?.activitiesType?.attributes?.name}</Tag>
-							)}
-
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.coCurricularName' })}:</strong> {record?.name}
-							</Text>
-
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.startDate' })}:</strong>{' '}
-								{formatDateTime(record?.startDate)}
-							</Text>
-
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.endDate' })}:</strong>{' '}
-								{formatDateTime(record?.endDate)}
-							</Text>
-
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.organizer' })}:</strong> {record?.organizer}
-							</Text>
-
-							<Text>
-								<strong>{intl.formatMessage({ id: 'activity.detail.location' })}:</strong>{' '}
-								{record?.onCampus ? record?.facilityName : record?.otherAddress}
-							</Text>
-
-							<Paragraph>
-								<strong>{intl.formatMessage({ id: 'activity.detail.description' })}:</strong>
-								<br />
-								{record?.description}
-							</Paragraph>
-						</Space>
-					</Col>
-				</Row>
-			</Card>
-
-			<TableStaticData columns={columns} data={groupedEquivalency} size='small' addStt />
-
-			<div className='form-footer'>
-				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
-
-				<Button
-					type='primary'
-					onClick={() =>
-						registerActivityModel(
-							record?._id ?? '',
-							getData,
-							intl.formatMessage({ id: 'global.message.luuthanhcong' }),
-						).then(() => setVisibleForm(false))
+		<Modal
+			title='Activity Detail'
+			open={visibleForm}
+			onCancel={() => setVisibleForm(false)}
+			width={1000}
+			footer={null}
+			styles={{
+				body: { backgroundColor: '#F8F8F8', borderRadius: 2 },
+				header: { backgroundColor: '#F8F8F8' },
+			}}
+		>
+			<div style={{ marginTop: -12 }}>
+				<CardChiTietSuKien
+					record={
+						{
+							...record,
+							activityOutcome: record?.activityOutcome,
+						} as Activity.IRecord
 					}
-					disabled={!!record?.workflow || !record?.activitiesTypeId}
-				>
-					{intl.formatMessage({ id: 'activity.btn.dangky' })}
-				</Button>
+					evidenceDeadline={
+						record?.activityOutcome?.workflow === EApprovalStatus.CHANGES_REQUIRED
+							? record?.activityOutcome?.dueDate
+								? dayjs(record?.activityOutcome?.dueDate).format('HH:mm DD/MM/YYYY')
+								: '--'
+							: record?.allowPostEventResultsUpdate
+								? record?.dueDate
+									? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY')
+									: '--'
+								: record?.endDate
+									? dayjs(record?.endDate).format('HH:mm DD/MM/YYYY')
+									: '--'
+					}
+					infoEvidence={
+						(!!record?.activityOutcome?.workflow && record?.activityOutcome?.workflow !== EApprovalStatus.EXPIRED) ||
+						(record?.activityOutcome?.workflow === EApprovalStatus.EXPIRED && !!record?.activityOutcome?._id)
+					}
+					activeKey={activeKey}
+					isExpired={isExpired}
+				/>
+			</div>
+
+			<div
+				style={{
+					backgroundColor: '#fff',
+					display: 'flex',
+					gap: 8,
+					justifyContent:
+						record?.activityOutcome?.workflow !== EApprovalStatus.EVIDENCE_REQUIRED || activeKey === '3'
+							? 'flex-end'
+							: 'space-between',
+					margin: '15px -15px -15px -15px',
+					padding: 16,
+				}}
+			>
+				{record?.activityOutcome?.workflow === EApprovalStatus.EVIDENCE_REQUIRED && activeKey !== '3' && (
+					<Popconfirm
+						title='Confirm cancellation of activity registration ?'
+						placement='topLeft'
+						onConfirm={() =>
+							deleteActivityModel(
+								record?.activityOutcome?._id ?? '',
+								getData,
+								intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+							).then(() => setVisibleForm(false))
+						}
+					>
+						<Button type='link' className='btn-unregister'>
+							UNREGISTER
+						</Button>
+					</Popconfirm>
+				)}
+
+				<Space wrap>
+					<Button onClick={() => setVisibleForm(false)}>CLOSE</Button>
+
+					{!record?.activityOutcome?.workflow && !isFullSlot ? (
+						<Popconfirm
+							title='Confirm activity registration ?'
+							placement='topLeft'
+							onConfirm={() =>
+								registerActivityModel(record?._id ?? '', getData).then(() => {
+									setVisibleForm(false);
+									setVisibleDangKy && setVisibleDangKy(true);
+								})
+							}
+							disabled={outTime}
+						>
+							<Button type='primary' disabled={outTime}>
+								REGISTER NOW
+							</Button>
+						</Popconfirm>
+					) : editableWorkflow && isOngoing ? (
+						<Button
+							type='primary'
+							onClick={() => {
+								setVisibleForm(false);
+								handleEdit({
+									...record?.activityOutcome,
+									activities: record,
+								});
+							}}
+						>
+							Update Evidence
+						</Button>
+					) : isFullSlot && !record?.activityOutcome?.workflow ? (
+						<Button disabled>FULL SLOT</Button>
+					) : null}
+				</Space>
 			</div>
 		</Modal>
 	);
