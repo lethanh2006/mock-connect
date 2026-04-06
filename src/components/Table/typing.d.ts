@@ -132,6 +132,8 @@ export type TableBaseProps<T extends object = any> = {
 		filter?: boolean;
 		/** Có nút tải lại ko? Mặc định: Có */
 		reload?: boolean;
+		/** Có nút cấu hình cột ko? Mặc định: Có */
+		columnSetting?: boolean;
 	};
 
 	/** Danh sách các nút khác bên cạnh Thêm mới */
@@ -327,6 +329,8 @@ export type TableStaticProps = Pick<
 
 	hasCreate?: boolean;
 	hasTotal?: boolean;
+	/** Có nút cấu hình cột ko? Mặc định: Có */
+	columnSetting?: boolean;
 	size?: 'small' | 'middle';
 };
 
