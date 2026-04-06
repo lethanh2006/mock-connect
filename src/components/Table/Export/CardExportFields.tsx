@@ -1,5 +1,8 @@
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Card } from 'antd';
+// import { DeleteOutlined } from '@ant-design/icons';
+import {
+	// Button,
+	Card
+} from 'antd';
 import { useIntl } from 'umi';
 import TableStaticData from '../TableStaticData';
 import { type IColumn, type TExportField } from '../typing';
@@ -14,20 +17,20 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 			width: 180,
 			render: (val, rec) => rec.labels.join(' / '),
 		},
-		{
-			title: '',
-			width: 30,
-			align: 'center',
-			hide: true,
-			render: (val, rec) => (
-				<Button
-					icon={<DeleteOutlined />}
-					type='link'
-					danger
-					onClick={() => setFields(fields.map((item) => (item._id === rec._id ? { ...item, selected: false } : item)))}
-				/>
-			),
-		},
+		// {
+		// 	title: '',
+		// 	width: 30,
+		// 	align: 'center',
+		// 	hide: true,
+		// 	render: (val, rec) => (
+		// 		<Button
+		// 			icon={<DeleteOutlined />}
+		// 			type='link'
+		// 			danger
+		// 			onClick={() => setFields(fields.map((item) => (item._id === rec._id ? { ...item, selected: false } : item)))}
+		// 		/>
+		// 	),
+		// },
 	];
 
 	const onSortEnd = (record: TExportField, newIndex: number): void => {
@@ -49,6 +52,7 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 				data={fields.filter((item) => item.selected)}
 				size='small'
 				addStt
+				columnSetting={false}
 				rowSortable
 				onSortEnd={onSortEnd}
 				otherProps={{ scroll: { y: 380 }, pagination: false }}
