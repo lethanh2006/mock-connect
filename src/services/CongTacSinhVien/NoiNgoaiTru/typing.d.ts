@@ -58,5 +58,10 @@ declare module NoiNgoaiTru {
 		cmtCccd?: string;
 		queQuan?: IDonViHanhChinh;
 		hoKhauThuongTru?: IDonViHanhChinh;
+
+		tenNganh: string;
+		khoaVien: string;
+		tenKhoaSinhVien: string;
+		tenLopHanhChinh: string;
 	}
 }
