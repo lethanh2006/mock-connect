@@ -1,0 +1,391 @@
+@primary-blue: #003366;
+@primary-red: #a31f34;
+@text-black: #000;
+@text-gray: #444;
+@light-gray: #f2f2f2;
+@border-color: #ddd;
+
+.vin-triangle-indicator(@color: ~'var(--vin-color-primary)' ; @w: 14px; @h: 10px; @side: right; @rotate: 180deg) {
+	content: '' !important;
+	position: absolute !important;
+	width: 0 !important;
+	height: 0 !important;
+	border-top: @h solid transparent !important;
+	border-bottom: @h solid transparent !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	z-index: 999 !important;
+	pointer-events: none !important;
+	rotate: @rotate !important;
+
+	& when (@side =right) {
+		border-right: @w solid @color !important;
+	}
+
+	& when (@side =left) {
+		border-left: @w solid @color !important;
+	}
+}
+
+@container-padding: 20px;
+@block-gap: 20px;
+
+.cct-container {
+	display: flex;
+	padding: @container-padding;
+	gap: 30px;
+	background: white;
+	color: @text-gray;
+	max-width: '100%';
+	margin: auto;
+	line-height: 1.4;
+	margin-bottom: 30px;
+
+	.cct-column {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: @block-gap;
+	}
+}
+
+header {
+	.logo {
+		font-weight: bold;
+		color: @primary-red;
+		font-size: 16px;
+		margin-bottom: 5px;
+	}
+	h1 {
+		font-size: 22px;
+		font-weight: bold;
+		color: @primary-blue;
+		margin: 5px 0 10px;
+		padding-bottom: 5px;
+		display: inline-block;
+	}
+}
+
+.description {
+	font-size: 11px;
+	color: @primary-blue;
+	max-width: 90%;
+	font-weight: 600;
+}
+
+.student-meta {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	font-size: 11.5px;
+	color: @primary-red;
+	row-gap: 5px;
+	column-gap: 15px;
+	margin-left: 15px;
+
+	.meta-item {
+		span {
+			font-weight: bold;
+			margin-right: 5px;
+		}
+	}
+}
+
+.info-footer {
+	margin-top: -12px;
+	display: flex;
+	font-size: 11.5px;
+	color: @primary-red;
+	gap: 30px;
+}
+
+.skills-section {
+	h3 {
+		position: relative;
+		color: @primary-blue;
+		font-size: 13px;
+		margin: 0 0 10px 0;
+		font-weight: bold;
+		padding-left: 16px;
+
+		&::before {
+			position: absolute;
+
+			.vin-triangle-indicator(@w: 10px; @h: 6px; @side: right);
+
+			left: 0px !important;
+			top: -3px !important;
+
+			transform: translateY(-50%) !important;
+
+			@media (max-width: 768px) {
+				top: 32% !important;
+			}
+		}
+	}
+}
+
+.skills-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	font-size: 11px;
+	gap: 10px 15px;
+
+	.skill-item {
+		color: @primary-blue;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		.checkbox-icon {
+			width: 14px;
+			height: 14px;
+			border-radius: 50%;
+			background-color: @primary-blue;
+			color: white;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 10px;
+			font-weight: bold;
+		}
+	}
+}
+
+.featured-projects h3 {
+	color: @primary-blue;
+	font-size: 13px;
+	margin: 0px 0 10px;
+	font-weight: bold;
+}
+
+.competency-block {
+	border: 1px solid @border-color;
+	border-radius: 3px;
+	overflow: hidden;
+
+	.block-header {
+		display: flex;
+		padding: 5px 15px;
+		color: white;
+		align-items: center;
+		position: relative;
+
+		.title {
+			font-weight: bold;
+			font-size: 13px;
+			text-transform: uppercase;
+		}
+		.desc {
+			font-size: 10px;
+			flex: 1;
+			opacity: 0.9;
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+	}
+
+	&.blue .block-header {
+		background-color: @primary-blue;
+	}
+	&.red .block-header {
+		background-color: @primary-red;
+	}
+	&.blue-dark .block-header {
+		background-color: #002244;
+	}
+	&.red-dark .block-header {
+		background-color: #881122;
+	}
+
+	.content-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 10px;
+
+		table-layout: fixed;
+		th,
+		td {
+			color: @primary-blue;
+			padding: 10px 12px;
+			text-align: left;
+			border-bottom: 1px solid #eee;
+
+			white-space: normal;
+			word-break: break-word;
+		}
+
+		th {
+			background: @light-gray;
+			color: @primary-red;
+			font-weight: bold;
+		}
+	}
+}
+
+.competency-block.leadership-mindset .block-header {
+	background-color: @primary-blue;
+}
+
+.awards {
+	margin-top: -24px;
+	h3 {
+		color: @primary-blue;
+		font-size: 13px;
+		margin: 25px 0 10px;
+		font-weight: bold;
+	}
+	ul {
+		font-size: 11px;
+		list-style: none;
+		padding-left: 16px;
+		li {
+			color: @primary-blue;
+		}
+	}
+}
+
+.transcript-footer {
+	font-size: 11px;
+	color: @primary-blue;
+
+	.section-title {
+		color: @primary-blue;
+		font-size: 16px;
+		font-weight: 600;
+		margin: 10px 0 20px;
+	}
+
+	.divider {
+		position: relative;
+		text-align: center;
+		font-weight: bold;
+		margin-bottom: 20px;
+
+		&::before,
+		&::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			right: 0;
+			height: 2px;
+			background: @primary-blue;
+		}
+
+		&::before {
+			top: -8px;
+		}
+
+		&::after {
+			bottom: -8px;
+		}
+
+		span {
+			padding: 0 12px;
+			background: white;
+			font-style: italic;
+			letter-spacing: 1px;
+		}
+	}
+
+	.gauge-row {
+		display: flex;
+		justify-content: space-around;
+		align-items: flex-end;
+
+		.gauge-item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.gauge-container {
+			position: relative;
+			width: 90px;
+			height: 45px;
+			display: flex;
+			justify-content: center;
+			align-items: flex-end;
+		}
+
+		.gauge-svg {
+			width: 100%;
+			height: auto;
+		}
+
+		.gauge-value {
+			position: absolute;
+			bottom: 5px;
+			font-size: 12px;
+			font-weight: 600;
+			color: @primary-blue;
+		}
+
+		.label {
+			margin-top: 10px;
+			font-size: 11px;
+			font-weight: 800;
+			color: @primary-blue;
+			letter-spacing: 0.5px;
+			text-align: center;
+		}
+	}
+
+	.role-desc {
+		margin-top: 10px;
+		line-height: 1.5;
+
+		p {
+			margin: 4px 0;
+		}
+
+		b {
+			color: @primary-blue;
+		}
+	}
+}
+
+.icon-white {
+	filter: brightness(0) invert(1);
+}
+
+.award-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.award-item {
+	padding: 8px 12px;
+	border-radius: 6px;
+	margin-bottom: 8px;
+	background: #fff;
+	border: 1px solid #eee;
+	position: relative;
+	cursor: grab;
+
+	&:active {
+		cursor: grabbing;
+	}
+}
+
+.highlight-top {
+	background: #fffbe6;
+}
+
+@keyframes pulseSmooth {
+	0% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgba(114, 46, 209, 0.5);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.04);
+		box-shadow: 0 0 0 8px rgba(114, 46, 209, 0.15);
+		opacity: 0.95;
+	}
+	100% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgba(114, 46, 209, 0);
+		opacity: 1;
+	}
+}

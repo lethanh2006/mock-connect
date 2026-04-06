@@ -1,433 +1,541 @@
-import { Spin } from 'antd'; // Import thêm Button
-import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
+import { EStatusMyCCT } from '@/services/CCT/constant';
+import { handleSingleFile } from '@/services/uploadFile';
+import { ipCCT } from '@/utils/ip';
+import { CloseCircleOutlined, FilePdfOutlined, ReloadOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
+import { Badge, Button, Form, Space, Spin, Tag, Tooltip } from 'antd';
+import dayjs from 'dayjs';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { useEffect, useRef, useState } from 'react';
+import { useIntl, useModel } from 'umi';
+import CardNoteMyCCT from './components/CardNote';
+import CCTContent from './components/CCTContent';
+import ModalPeding from './components/ModalPeding';
+import PreviewCCTModal from './components/PreviewCCTModal';
 import './style.less';
 
-interface BaseEntity {
-	_id: string;
-	name: string;
-	code?: string;
-	order?: number;
-	description?: string;
-	isActive?: boolean;
-}
+const uploadFilesOfCompetency = async (files: any[] = []) => {
+	if (!files.length) return [];
+	const urls = await Promise.all(files.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
+	return urls.filter(Boolean) as string[];
+};
 
-interface AttributeInfo extends BaseEntity {
-	description: string;
-	color: string;
-	icon: string;
-	background: string | null;
-}
+const MyCCTv3 = () => {
+	const intl = useIntl();
+	const [form] = Form.useForm();
+	const { getByIdModel, updateMyCCTModel, formSubmiting, edit, setEdit } = useModel('cct.mycct');
+	const { getByIdModel: getDot, record: recDot } = useModel('cct.submissionround');
+	const { getAllModel, danhSach } = useModel('cct.activityoutcome');
+	const [selectedActivities, setSelectedActivities] = useState<{ attributeId: string; activityIds: string[] }[]>([]);
+	const [record, setRecord] = useState<{
+		allCompetencies: string[];
+		attributes: MyCCT.IAttributeMyCCT[];
+		levelOfEngagement: MyCCT.ILevelOfEngagement[];
+		myCCT: MyCCT.IRecord;
+		awardsAndRecognition: ActivityOutCome.IRecord;
+	}>();
+	const [isSubmit, setIsSubmit] = useState<boolean>(false);
+	const printRef = useRef<HTMLDivElement>(null);
+	const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+	const [listAwardRecognition, setListAwardRecognition] = useState<string[]>([]);
+	const [exporting, setExporting] = useState(false);
+	const [visiblePending, setVisiblePending] = useState<boolean>(false);
 
-interface ActivityOutcome {
-	attributesId?: string;
-	rolesId?: string;
-	activitiesTypeId?: string;
-	startDate: string;
-	endDate: string;
-	roles: BaseEntity;
-	levels: BaseEntity;
-	activitiesType?: BaseEntity;
+	const getData = () => {
+		getByIdModel('me', false).then((res: any) => {
+			if (res?.myCCT?.selectedActivities?.length) {
+				res.attributes = res?.attributes?.map((attr: any) => {
+					const found = res?.myCCT?.selectedActivities?.find((i: any) => i?.attributeId === attr?.attribute?._id);
 
-	activitiesName?: string;
-}
+					if (!found) return attr;
 
-export interface TranscriptItem {
-	attribute: AttributeInfo;
-	countLevel: Record<string, number>;
-	activitiesOutCome: ActivityOutcome[];
-}
+					const mapOrder = new Map(found?.activityIds?.map((id: string, index: number) => [id, index]));
 
-const Utils = {
-	hexToRgba: (hex: string, alpha: number): string => {
-		let c: any;
-		if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-			c = hex.substring(1).split('');
-			if (c.length === 3) {
-				c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+					attr.activitiesOutCome = [...(attr?.activitiesOutCome || [])].sort(
+						(a, b) => (mapOrder.get(a.id) ?? (999 as any)) - (mapOrder.get(b.id) ?? (999 as any)),
+					);
+
+					return attr;
+				});
 			}
-			c = '0x' + c.join('');
-			return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',')},${alpha})`;
-		}
-		return hex;
-	},
 
-	getOpacityByLevel: (levelName?: string): number => {
-		if (!levelName) return 0.3;
-		const lower = levelName.toLowerCase();
+			if (res?.myCCT?.listAwardRecognition?.length) {
+				const mapOrder = new Map(res.myCCT.listAwardRecognition.map((id: string, index: number) => [id, index]));
 
-		if (lower.includes('change') || lower.includes('level 3')) return 1;
-		if (lower.includes('connect') || lower.includes('level 2')) return 0.6;
-		if (lower.includes('explorer') || lower.includes('level 1')) return 0.3;
+				res.awardsAndRecognition = [...(res.awardsAndRecognition || [])].sort(
+					(a, b) => (mapOrder.get(a.id) ?? (999 as any)) - (mapOrder.get(b.id) ?? (999 as any)),
+				);
+			}
 
-		return 0.3;
-	},
+			setRecord(res);
+		});
+	};
 
-	formatDate: (isoString: string): string => {
-		if (!isoString) return '';
-		try {
-			const d = new Date(isoString);
-			return d.toLocaleDateString('en-GB');
-		} catch {
-			return isoString;
-		}
-	},
-
-	toTitleCase: (str: string) => {
-		return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
-	},
-
-	shortLevelName: (name: string) => {
-		if (name.includes('-')) {
-			return name.split('-')[1].trim().toUpperCase();
-		}
-		return name.toUpperCase();
-	},
-
-	getStarCount: (countObj: Record<string, number>, keyword: string): number => {
-		const key = Object.keys(countObj).find((k) => k.toLowerCase().includes(keyword.toLowerCase()));
-		return key ? countObj[key] : 0;
-	},
-};
-
-const cssStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Great+Vibes&display=swap');
-
-  /* --- NEW: Page Wrapper & Background --- */
-  .page-wrapper {
-    min-height: 100vh;
-    width: 100%;
-    /* Sử dụng gradient để mô phỏng nền xanh đậm trong thiết kế */
-    background: linear-gradient(135deg, #1a3b5d 0%, #24507b 100%);
-    padding-bottom: 40px;
-    font-family: 'Montserrat', sans-serif;
-  }
-
-  /* --- NEW: Header Section --- */
-  .page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    color: #fff;
-  }
-
-  .header-title {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-  }
-
-  .header-actions {
-    display: flex;
-    gap: 16px;
-  }
-
-  /* Custom styles cho nút Antd để khớp thiết kế */
-  .custom-btn-edit {
-    background-color: #fff !important;
-    color: #1a3b5d !important;
-    border: none !important;
-    font-weight: 700 !important;
-    height: 44px !important;
-    padding: 0 32px !important;
-    border-radius: 6px !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  }
-
-  .custom-btn-goal {
-    background-color: #d32f2f !important; /* Màu đỏ đậm */
-    color: #fff !important;
-    border: none !important;
-    font-weight: 700 !important;
-    height: 44px !important;
-    padding: 0 32px !important;
-    border-radius: 6px !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  }
-  .custom-btn-goal:hover {
-      background-color: #b71c1c !important;
-  }
-
-  /* --- EXISTING: Transcript Container (Updated) --- */
-  .transcript-container {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    max-width: 1100px; /* Tăng chiều rộng một chút */
-    margin: 10px auto 0; /* Căn giữa và tạo khoảng cách với header */
-    padding: 40px;
-    background-color: #fdfdfd; /* Nền trắng sáng bên trong */
-    border-radius: 16px; /* Bo góc cho container chính */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  }
-
-  /* --- EXISTING: Card Styles (Giữ nguyên) --- */
-  .transcript-card {
-    background: #fff;
-    border: 2px solid var(--theme-color);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
-  }
-
-  .transcript-card:hover {
-    transform: translateY(-3px);
-  }
-
-  .card-header {
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .header-content {
-    display: flex;
-    gap: 24px;
-    flex: 1;
-  }
-
-  .icon-wrapper {
-    width: 80px;
-    height: 80px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .icon-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .info-block {
-    flex: 1;
-    max-width: 70%;
-  }
-
-  .description {
-    font-size: 14px;
-    color: var(--theme-color);
-    font-weight: 600;
-    line-height: 1.5;
-    margin-bottom: 12px;
-  }
-
-  .rating-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    font-size: 13px;
-    color: #666;
-    font-weight: 500;
-  }
-
-  .rating-row {
-    display: flex;
-    align-items: center;
-  }
-
-  .rating-label {
-    width: 110px;
-  }
-
-  .stars {
-    color: #f59e0b;
-    letter-spacing: 2px;
-    font-size: 14px;
-    margin-left: 4px;
-  }
-
-  .script-title {
-    font-family: 'Great Vibes', cursive;
-    font-size: 42px;
-    color: var(--theme-color);
-    white-space: nowrap;
-    margin-top: 5px;
-    margin-right: 10px;
-    text-align: right;
-    line-height: 1;
-  }
-
-  /* --- TABLE --- */
-  .table-container {
-    width: 100%;
-    border-top: 1px solid #eee;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    color: #333;
-  }
-
-  thead {
-    background-color: var(--theme-color);
-    color: #fff;
-  }
-
-  th {
-    padding: 12px 16px;
-    text-align: left;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 12px;
-  }
-
-  tbody tr {
-    border-bottom: 1px solid #f0f0f0;
-  }
-
-  tbody tr:last-child {
-    border-bottom: none;
-  }
-
-  td {
-    padding: 12px 16px;
-    vertical-align: middle;
-  }
-
-  td.level-col {
-    padding: 0;
-    width: 160px;
-    border-bottom: 1px solid #fff;
-  }
-
-  .level-badge {
-    width: 100%;
-    height: 100%;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-weight: 700;
-    font-size: 11px;
-    text-transform: uppercase;
-    background-color: var(--level-bg);
-  }
-
-  .empty-state {
-    padding: 32px;
-    text-align: center;
-    color: #94a3b8;
-    font-style: italic;
-  }
-`;
-
-const StarRating: React.FC<{ count: number }> = ({ count }) => {
-	return <span className='stars'>{'★'.repeat(count)}</span>;
-};
-
-const TranscriptReport: React.FC<any> = () => {
-	const { getAllModel, loading } = useModel('cct.activityoutcome');
-	const { getAllModel: getAllLevel, danhSach: dsLevels } = useModel('cct.levels');
-	const [danhSach, setDanhSach] = useState<any>();
+	const getDotHienHanh = () => {
+		getDot('active', true);
+	};
 
 	useEffect(() => {
-		getAllLevel(undefined, { order: 1 });
-		getAllModel(undefined, undefined, undefined, undefined, 'my-cct', false).then((res) => setDanhSach(res));
+		getData();
+		getDotHienHanh();
+		getAllModel(undefined, undefined, undefined, undefined, 'pending-for-approval/many');
 	}, []);
 
+	useEffect(() => {
+		if (!edit) {
+			form.resetFields();
+		} else {
+			form.setFieldsValue(record?.myCCT);
+
+			if (record?.myCCT?.listAwardRecognition?.length) {
+				setListAwardRecognition(record.myCCT.listAwardRecognition);
+			}
+		}
+	}, [edit, record?.myCCT?._id]);
+
+	const onFinish = async (values: MyCCT.IRecord, submitted: boolean) => {
+		const awardsAndRecognition = await Promise.all(
+			(values?.awardsAndRecognition || []).map(async (award: any) => ({
+				...award,
+				evidenceFile: await Promise.all(
+					(award.evidenceFile || [])?.map(async (file: any) => ({
+						name: file.name,
+						file: await uploadFilesOfCompetency(file?.file?.fileList),
+					})),
+				),
+			})),
+		);
+
+		const fallbackSelected = record?.attributes?.map((attr) => ({
+			attributeId: attr?.attribute?._id,
+			activityIds: (attr?.activitiesOutCome || []).map((i) => i.id),
+		}));
+
+		const data = {
+			...values,
+			awardsAndRecognition,
+			selectedActivities: selectedActivities.length ? selectedActivities : fallbackSelected,
+			listAwardRecognition,
+			submitted,
+		};
+
+		updateMyCCTModel(data as any, getData, intl.formatMessage({ id: 'global.message.luuthanhcong' }))
+			.then(() => setEdit(false))
+			.catch((err) => console.log(err));
+	};
+
+	const handleRealSubmit = () => {
+		form
+			.validateFields()
+			.then((values) => {
+				onFinish(values, true);
+				setPreviewVisible(false);
+			})
+			.catch(() => {});
+	};
+
+	const handleExportPDF = async () => {
+		const element = printRef.current;
+		if (!element) return;
+
+		const loadImage = (src: string): Promise<string> => {
+			return new Promise((resolve) => {
+				const img = new Image();
+				img.crossOrigin = 'anonymous';
+				img.src = src;
+
+				img.onload = () => {
+					const canvas = document.createElement('canvas');
+					canvas.width = img.width;
+					canvas.height = img.height;
+					const ctx = canvas.getContext('2d');
+					if (!ctx) return resolve('');
+
+					ctx.drawImage(img, 0, 0);
+					resolve(canvas.toDataURL('image/jpeg', 0.8));
+				};
+
+				img.onerror = () => resolve('');
+			});
+		};
+
+		try {
+			setExporting(true);
+
+			const clone = element.cloneNode(true) as HTMLElement;
+			clone.classList.add('export-mode');
+
+			const style = document.createElement('style');
+			style.innerHTML = `
+            .export-mode .skills-section h3::before {
+                left: 0px !important;
+                top: 10px !important;
+                transform: translateY(-50%) !important;
+            }
+        `;
+			document.head.appendChild(style);
+
+			clone.style.width = '2200px';
+			clone.style.position = 'fixed';
+			clone.style.top = '-9999px';
+			clone.style.left = '0';
+			clone.style.zIndex = '-1';
+			clone.style.background = '#fff';
+
+			document.body.appendChild(clone);
+
+			const convertImageToWhite = (img: HTMLImageElement) => {
+				return new Promise<void>((resolve) => {
+					const image = new Image();
+					image.crossOrigin = 'anonymous';
+					image.src = img.src;
+
+					image.onload = () => {
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+						if (!ctx) return resolve();
+
+						canvas.width = image.width;
+						canvas.height = image.height;
+						ctx.drawImage(image, 0, 0);
+
+						const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+						const data = imageData.data;
+
+						for (let i = 0; i < data.length; i += 4) {
+							data[i] = 255;
+							data[i + 1] = 255;
+							data[i + 2] = 255;
+						}
+
+						ctx.putImageData(imageData, 0, 0);
+						img.src = canvas.toDataURL('image/png');
+						resolve();
+					};
+					image.onerror = () => resolve();
+				});
+			};
+
+			const imgs = clone.querySelectorAll('.icon-white');
+			await Promise.all(Array.from(imgs).map((img: any) => convertImageToWhite(img)));
+
+			const waitForImages = (container: HTMLElement) => {
+				const images = container.querySelectorAll('img');
+				return Promise.all(
+					Array.from(images).map((img: any) => {
+						if (img.complete) return Promise.resolve();
+						return new Promise((res) => {
+							img.onload = res;
+							img.onerror = res;
+						});
+					}),
+				);
+			};
+
+			await waitForImages(clone);
+
+			const canvas = await html2canvas(clone, {
+				scale: 2,
+				useCORS: true,
+				backgroundColor: '#ffffff',
+				logging: false,
+			});
+
+			document.body.removeChild(clone);
+			document.head.removeChild(style);
+
+			const mainImgData = canvas.toDataURL('image/jpeg', 0.85);
+
+			const headerImg = await loadImage('/images/cct/headerCCT.jpg');
+			const footerImg = await loadImage('/images/cct/footerCCT.jpg');
+
+			const pdf = new jsPDF({
+				orientation: headerImg ? 'portrait' : 'landscape',
+				unit: 'px',
+				format: headerImg ? 'a4' : 'a3',
+				compress: true,
+			});
+
+			const addImageCentered = (
+				data: string,
+				isNewPage = false,
+				format?: string,
+				orientation?: 'portrait' | 'landscape',
+			) => {
+				if (isNewPage) pdf.addPage(format as any, orientation);
+
+				const pageWidth = pdf.internal.pageSize.getWidth();
+				const pageHeight = pdf.internal.pageSize.getHeight();
+
+				const props = pdf.getImageProperties(data);
+				const ratio = Math.min(pageWidth / props.width, pageHeight / props.height);
+				const w = props.width * ratio;
+				const h = props.height * ratio;
+				const x = (pageWidth - w) / 2;
+				const y = (pageHeight - h) / 2;
+
+				pdf.addImage(data, 'JPEG', x, y, w, h, undefined, 'FAST');
+			};
+
+			if (headerImg) {
+				addImageCentered(headerImg, false);
+				addImageCentered(mainImgData, true, 'a3', 'landscape');
+			} else {
+				addImageCentered(mainImgData, false);
+			}
+
+			if (footerImg) {
+				addImageCentered(footerImg, true, 'a4', 'portrait');
+			}
+
+			pdf.save(`CCT_Transcript_${dayjs().format('YYYYMMDD')}.pdf`);
+		} catch (error) {
+			console.error('Export PDF error:', error);
+		} finally {
+			setExporting(false);
+		}
+	};
+
 	return (
-		<Spin spinning={loading}>
-			<style>{cssStyles}</style>
+		<>
+			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
+				<div
+					style={{
+						maxWidth: '100%',
+						margin: 'auto',
+					}}
+				>
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'space-between',
+							margin: !recDot?._id ? '12px 0px 12px 0px' : undefined,
+						}}
+					>
+						<div style={{ color: '#fff', textAlign: 'left' }}>
+							{recDot?._id ? (
+								<>
+									<strong>{recDot?.roundName}</strong>
+									<p>{`(${[
+										dayjs(recDot?.startDate).format('HH:mm DD/MM/YYYY'),
+										dayjs(recDot?.endDate).format('HH:mm DD/MM/YYYY'),
+									]
+										.filter(Boolean)
+										.join(' - ')})`}</p>
+								</>
+							) : (
+								<i>
+									No submission period available. <br />
+									Students can only submit during an active period.
+								</i>
+							)}
+						</div>
+						<Space wrap>
+							{edit ? null : (
+								<>
+									{(() => {
+										const tagStyle = {
+											padding: '6px 10px',
+											marginTop: 12,
+											fontSize: 14,
+											fontWeight: 500,
+											borderRadius: 4,
+											display: 'inline-flex',
+											alignItems: 'center' as const,
+											gap: 4,
+										};
 
-			{/* Wrapper bao ngoài để tạo nền */}
-			<div className='page-wrapper'>
-				{/* Header mới */}
-				<div className='page-header'>
-					<div className='header-title'>Co-Curricular Transcript</div>
+										const disabledStyle = {
+											cursor: 'not-allowed',
+											opacity: 0.5,
+										};
+
+										const isDisabled =
+											record?.myCCT?.status === EStatusMyCCT.APPROVED ||
+											record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL;
+
+										const isSubmitDisabled = !recDot?._id || isDisabled;
+
+										return (
+											<>
+												<Tooltip title='RELOAD'>
+													<Tag
+														icon={<ReloadOutlined style={{ fontSize: 14 }} />}
+														style={{
+															...tagStyle,
+															cursor: 'pointer',
+															display: 'inline-flex',
+															alignItems: 'center',
+															justifyContent: 'center',
+															width: 32,
+															height: 32,
+															padding: 0,
+														}}
+														onClick={getData}
+													/>
+												</Tooltip>
+
+												<Tooltip title='EXPORT PDF'>
+													<Spin spinning={exporting} size='small'>
+														<Tag
+															icon={<FilePdfOutlined style={{ fontSize: 14 }} />}
+															style={{
+																...tagStyle,
+																cursor: 'pointer',
+																display: 'inline-flex',
+																alignItems: 'center',
+																justifyContent: 'center',
+																width: 32,
+																height: 32,
+																padding: 0,
+															}}
+															onClick={handleExportPDF}
+														/>
+													</Spin>
+												</Tooltip>
+
+												{danhSach?.length ? (
+													<Badge count={danhSach?.length} offset={[-3, 7]}>
+														<Tag
+															style={{
+																...tagStyle,
+																cursor: 'pointer',
+																animation: 'pulseSmooth 1.8s ease-in-out infinite',
+																backgroundColor: '#FFE58F',
+																color: '#CE7C1E',
+																fontWeight: 600,
+															}}
+															onClick={() => setVisiblePending(true)}
+														>
+															PENDING FOR APPROVAL
+														</Tag>
+													</Badge>
+												) : null}
+
+												<Tag
+													style={{
+														...tagStyle,
+														...(isDisabled ? disabledStyle : { cursor: 'pointer', color: '#134D8B', fontWeight: 600 }),
+													}}
+													onClick={() => {
+														if (!isDisabled) {
+															setEdit(true);
+														}
+													}}
+												>
+													UPDATE
+												</Tag>
+
+												<Tooltip
+													title={
+														!recDot?._id
+															? 'No submission period available. Students can only submit during an active period.'
+															: ''
+													}
+												>
+													<Tag
+														style={{
+															...tagStyle,
+															...(isSubmitDisabled
+																? disabledStyle
+																: { cursor: 'pointer', backgroundColor: '#F5FFEB', color: '#329323', fontWeight: 600 }),
+														}}
+														onClick={() => {
+															if (!isSubmitDisabled) {
+																setPreviewVisible(true);
+															}
+														}}
+													>
+														SUBMIT
+													</Tag>
+												</Tooltip>
+											</>
+										);
+									})()}
+								</>
+							)}
+						</Space>
+					</div>
+					{!!record?.myCCT?.status && <CardNoteMyCCT myCCT={record?.myCCT ?? ({} as MyCCT.IRecord)} />}
 				</div>
 
-				{/* Container chính chứa danh sách cards */}
-				<div className='transcript-container'>
-					{danhSach?.map((item: any) => {
-						const { attribute, countLevel, activitiesOutCome } = item;
-						const themeColor = attribute.color || '#333';
-
-						const cardStyle = { '--theme-color': themeColor } as React.CSSProperties;
-
-						return (
-							<div key={attribute._id} className='transcript-card' style={cardStyle}>
-								<div className='card-header'>
-									<div className='header-content'>
-										<div className='icon-wrapper'>
-											<img
-												src={attribute.icon}
-												alt={attribute.name}
-												onError={(e) => (e.currentTarget.style.display = 'none')}
-											/>
-										</div>
-										<div className='info-block'>
-											<div className='description'>{attribute.description}</div>
-											<div className='rating-list'>
-												{dsLevels?.map((item) => (
-													<div className='rating-row'>
-														<span className='rating-label'>{item?.name}:</span>
-														<StarRating count={Utils.getStarCount(countLevel, item?.name)} />
-													</div>
-												))}
-											</div>
-										</div>
-									</div>
-									<div className='script-title'>{Utils.toTitleCase(attribute.name)}</div>
-								</div>
-
-								<div className='table-container'>
-									{activitiesOutCome && activitiesOutCome.length > 0 ? (
-										<table>
-											<thead>
-												<tr>
-													<th style={{ width: '160px' }}></th>
-													<th>Activity</th>
-													<th>Start date</th>
-													<th>End date</th>
-													<th>Position</th>
-												</tr>
-											</thead>
-											<tbody>
-												{activitiesOutCome.map((act: any, index: number) => {
-													const levelName = Utils.shortLevelName(act.levels?.name || '');
-													const opacity = Utils.getOpacityByLevel(act.levels?.name);
-													const cellColor = Utils.hexToRgba(themeColor, opacity);
-
-													const activityName = act.activitiesName || act.activitiesType?.name || 'Unknown Activity';
-
-													return (
-														<tr key={index}>
-															<td className='level-col'>
-																<div className='level-badge' style={{ '--level-bg': cellColor } as React.CSSProperties}>
-																	{levelName}
-																</div>
-															</td>
-															<td style={{ fontWeight: 600, color: '#444' }}>{activityName}</td>
-															<td style={{ color: '#666' }}>{Utils.formatDate(act.startDate)}</td>
-															<td style={{ color: '#666' }}>{Utils.formatDate(act.endDate)}</td>
-															<td>{act.roles?.name}</td>
-														</tr>
-													);
-												})}
-											</tbody>
-										</table>
-									) : (
-										<div className='empty-state'>No activities recorded for this attribute</div>
-									)}
-								</div>
-							</div>
-						);
-					})}
+				<div className='cct-container' ref={printRef}>
+					<CCTContent
+						record={record as any}
+						form={form}
+						setSelectedActivities={setSelectedActivities}
+						setListAwardRecognition={setListAwardRecognition}
+						edit={edit}
+					/>
 				</div>
-			</div>
-		</Spin>
+
+				{edit && (
+					<div
+						style={{
+							position: 'fixed',
+							bottom: 0,
+							left: 0,
+							width: '100%',
+							background: '#fff',
+							padding: '12px 16px',
+							boxShadow: '0 -2px 8px rgba(0,0,0,0.1)',
+							zIndex: 1000,
+							display: 'flex',
+							justifyContent: 'flex-end',
+						}}
+					>
+						<Space wrap>
+							<Button
+								onClick={() => {
+									setEdit(false);
+
+									setListAwardRecognition(record?.myCCT?.listAwardRecognition || []);
+									setSelectedActivities([]);
+								}}
+								icon={<CloseCircleOutlined />}
+							>
+								Cancel
+							</Button>
+							<Button
+								htmlType='submit'
+								loading={formSubmiting}
+								icon={<SaveOutlined />}
+								onClick={() => setIsSubmit(false)}
+							>
+								Save
+							</Button>
+							<Button
+								type='primary'
+								icon={<SendOutlined />}
+								onClick={() => setPreviewVisible(true)}
+								disabled={
+									!recDot?._id ||
+									record?.myCCT?.status === EStatusMyCCT.APPROVED ||
+									record?.myCCT?.status === EStatusMyCCT.PENDING_APPROVAL
+								}
+							>
+								Submit
+							</Button>
+						</Space>
+					</div>
+				)}
+			</Form>
+
+			<PreviewCCTModal open={previewVisible} onCancel={() => setPreviewVisible(false)} onConfirm={handleRealSubmit}>
+				<CCTContent
+					record={record as any}
+					form={form}
+					setSelectedActivities={setSelectedActivities}
+					setListAwardRecognition={setListAwardRecognition}
+					edit={false}
+				/>
+			</PreviewCCTModal>
+
+			<ModalPeding visible={visiblePending} setVisible={setVisiblePending} />
+		</>
 	);
 };
 
-export default TranscriptReport;
+export default MyCCTv3;
