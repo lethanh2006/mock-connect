@@ -1,4 +1,5 @@
-import { Card } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Card } from 'antd';
 import { useIntl } from 'umi';
 import TableStaticData from '../TableStaticData';
 import { type IColumn, type TExportField } from '../typing';
@@ -12,6 +13,20 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 			title: intl.formatMessage({ id: 'global.table.export.field.tentruong' }),
 			width: 180,
 			render: (val, rec) => rec.labels.join(' / '),
+		},
+		{
+			title: '',
+			width: 30,
+			align: 'center',
+			hide: true,
+			render: (val, rec) => (
+				<Button
+					icon={<DeleteOutlined />}
+					type='link'
+					danger
+					onClick={() => setFields(fields.map((item) => (item._id === rec._id ? { ...item, selected: false } : item)))}
+				/>
+			),
 		},
 	];
 
