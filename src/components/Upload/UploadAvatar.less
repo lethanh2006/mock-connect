@@ -47,6 +47,46 @@
 			}
 		}
 	}
+
+	&.avatar-widescreen {
+		.ant-upload {
+			width: 240px !important;
+			height: 135px !important;
+			aspect-ratio: 16/9 !important;
+		}
+
+		.ant-upload-select-picture-card {
+			width: 100% !important;
+			height: auto !important;
+			aspect-ratio: 16/9 !important;
+		}
+
+		.ant-upload-select-picture-card,
+		.ant-upload-list-item-container {
+			width: 240px !important;
+			aspect-ratio: 16/9 !important;
+			height: auto !important;
+		}
+
+		.ant-upload-list-picture-card-container {
+			width: 240px !important;
+			aspect-ratio: 16/9 !important;
+
+			.ant-upload-list-item-list-type-picture-card {
+				width: 100% !important;
+				height: 100% !important;
+				aspect-ratio: 16/9 !important;
+				padding: 0 !important;
+				border: none;
+
+				.ant-upload-list-item-image {
+					width: 100% !important;
+					height: 100% !important;
+					object-fit: cover !important;
+				}
+			}
+		}
+	}
 }
 
 .avatar-small {
