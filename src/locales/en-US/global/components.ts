@@ -229,6 +229,8 @@ export default {
 	'global.uploadfile.button.chontep': 'Select File',
 	'global.uploadfile.tepdinhkem': 'Attachment',
 
+	'global.column.action': 'Action',
+
 	// PDFViewer
 	'global.pdfviewer.dangtai': 'Loading...',
 	'global.pdfviewer.dangtaitailieu': 'Loading document. Please wait...',

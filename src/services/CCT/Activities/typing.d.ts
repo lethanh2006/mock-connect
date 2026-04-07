@@ -4,22 +4,28 @@ declare module ActivitiesManagement {
 		code: string;
 		name: string;
 		attributesId: string;
-		attributes: AttributesManagement.IRecord;
+		attributes: AttributesManagement.IRecord[];
+		activitiesTypeDomainId: string;
+		activitiesTypeDomain: ActivitiesTypeDomain.IRecord;
+		activitiesTypeDomainText?: string;
 		order: number;
 		description: string;
 		isActive: boolean;
-		studentDeclarationApproverList: IStudentDeclaration[];
+		requiredEvidenceText: string;
+
+		coCurricularAttributesEquivalency?: any[];
+		requiredEvidenceList?: string[];
+		track: ITrack;
+		trackId: string;
+		trackText: string;
 	}
 
-	export interface IStudentDeclaration {
+	export interface ITrack {
 		_id: string;
-		index: number;
-		ssoId: string;
+		code: string;
 		name: string;
-		email: string;
-		activitiesTypeId: string;
-		activitiesType: string;
-		activitiesId: string;
-		activities: string;
+		order: number;
+		description: string;
+		isActive: boolean;
 	}
 }

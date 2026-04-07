@@ -1,3 +1,4 @@
+import { ActivityOutCome } from '../ActivityOutcome/typing';
 import { EApprovalStatus, EparticipantRole, EParticipantScope } from '../constant';
 
 declare module Activity {
@@ -27,6 +28,10 @@ declare module Activity {
 		unitCode: string;
 
 		allowPostEventResultsUpdate?: boolean;
+		dueDate?: Date;
+		dueDateRegistration?: Date;
+		capacity?: number;
+		numberOfRegisteredActivityOutcomes?: number;
 
 		activitiesTypeId: string | null;
 		activitiesType: ActivitiesManagement.IRecord;
@@ -34,11 +39,14 @@ declare module Activity {
 
 		studentDeclarationApproverList: ActivitiesManagement.IStudentDeclaration[];
 		coCurricularActivityEquivalency: IEquivalency[];
+		coCurricularAttributesEquivalency: ICompetencyMappingActivity[];
 
 		workflow: EApprovalStatus;
+		competencyList: ICompetencyActivity[];
 
-		//fake
-		cct?: boolean;
+		activityOutcome: ActivityOutCome.IRecord;
+
+		createdAt?: Date;
 	}
 
 	export interface IParticipantsList {
@@ -63,5 +71,26 @@ declare module Activity {
 		autoApprove: boolean;
 		selfAssessmentQuestionsId: string;
 		selfAssessmentQuestionsName: string;
+	}
+
+	export interface ICompetencyMapping {
+		activityOutcomeId?: string;
+		activityOutcome?: IRecord;
+		competencyId: string;
+		competencie?: Competency.IRecord;
+	}
+
+	export interface ICompetencyMappingActivity {
+		_id: string;
+		index?: number;
+		activitiesId: string;
+		activities?: IRecord;
+		competencyId: string;
+		competencie?: Competency.IRecord;
+		attributesId: string;
+		attributes?: AttributesManagement.IRecord;
+
+		//fake
+		dsCompetencie?: Competency.IRecord[];
 	}
 }
