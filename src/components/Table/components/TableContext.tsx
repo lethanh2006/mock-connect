@@ -58,6 +58,7 @@ interface TableContextValue<T extends object = any> {
 	hideFilterColumn?: boolean;
 	disableFilterModal?: boolean;
 	syncExternalToColumnFilter?: boolean;
+	columnSetting?: boolean;
 	size?: 'small' | 'middle' | 'large';
 
 	// Trạng thái modal form
