@@ -49,6 +49,7 @@ const CardExportFields = (props: { fields: TExportField[]; setFields: (val: TExp
 				data={fields.filter((item) => item.selected)}
 				size='small'
 				addStt
+				columnSetting={false}
 				rowSortable
 				onSortEnd={onSortEnd}
 				otherProps={{ scroll: { y: 380 }, pagination: false }}
