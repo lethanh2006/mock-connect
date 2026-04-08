@@ -293,11 +293,15 @@ body {
 		}
 	}
 
-	&.normal,
-	&.standard {
+	&.normal {
 		.ant-card-head {
 			.ant-card-head-title {
+				font-size: 16px !important;
 				color: var(--color-official-300) !important;
+
+				&::after {
+					display: none !important;
+				}
 			}
 		}
 	}
