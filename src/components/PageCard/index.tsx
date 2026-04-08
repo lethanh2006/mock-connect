@@ -1,12 +1,6 @@
-import { Card, CardProps } from 'antd';
+import { Card } from 'antd';
 import React from 'react';
-
-export interface PageCardProps extends CardProps {
-	bordered?: boolean;
-	hideInnerCard?: boolean;
-	level?: 1 | 2 | 3 | 4;
-	showIndicator?: boolean;
-}
+import { PageCardProps } from './typing';
 
 const PageCard: React.FC<PageCardProps> = ({
 	className,
