@@ -310,7 +310,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				mainContent
 			) : (
 				<PageCard
-					level={props.level}
+					level={props.cardProps?.level}
+					showIndicator={props.cardProps?.showIndicator}
 					title={props.title || false}
 					extra={props.cardExtra}
 					bordered={props.border}
