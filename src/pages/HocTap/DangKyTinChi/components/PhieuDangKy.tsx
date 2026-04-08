@@ -13,7 +13,7 @@ import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
 import { CalendarOutlined, DeleteOutlined, ReloadOutlined, SendOutlined } from '@ant-design/icons';
-import { Col, Divider, Popconfirm, Row, Space, Tag } from 'antd';
+import { Col, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -268,10 +268,7 @@ const PhieuDangKy = () => {
 
 	return (
 		<>
-			<Divider style={{ marginTop: 24 }}>
-				{intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}
-			</Divider>
-			<Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
+			<Row gutter={[8, 12]} style={{ marginBottom: 12 }}>
 				<Col span={24} md={10}>
 					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
 					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>

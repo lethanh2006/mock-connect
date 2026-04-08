@@ -127,5 +127,35 @@ export default {
     'dangkytinchi.ghichudangkytinchi.description.lopbitrunglichhoc': 'Lớp bị trùng lịch học',
     'dangkytinchi.ghichudangkytinchi.description.lopkhongconchotrong': 'Lớp không còn chỗ trống',
     'dangkytinchi.ghichudangkytinchi.description.lopgoiy': 'Lớp gợi ý theo kế hoạch giảng dạy',
-    'dangkytinchi.ghichudangkytinchi.description.chudam': 'Chữ đậm'
+    'dangkytinchi.ghichudangkytinchi.description.chudam': 'Chữ đậm',
+
+    // đăng ký vượt tín
+    'dangkytinchi.vuottin.button.dangkyvuottin': 'Đăng ký vượt tín',
+    'dangkytinchi.vuottin.button.xemlichsu': 'Xem lịch sử',
+    'dangkytinchi.vuottin.form.descriptions.msv': 'Mã sinh viên',
+    'dangkytinchi.vuottin.form.descriptions.hoten': 'Họ tên',
+    'dangkytinchi.vuottin.form.descriptions.hocky': 'Học kỳ',
+    'dangkytinchi.vuottin.form.note':
+        'Theo quy định, sinh viên được phép đăng ký tín chỉ học kỳ trong giới hạn nhất định. Tùy theo điều kiện cá nhân, sinh viên có thể đăng ký xin học vượt số tín chỉ theo quy định. Sau khi đăng ký, cần có sự phê duyệt của Cố vấn học tập/Giám đốc chương trình',
+    'dangkytinchi.vuottin.form.label.stctoithieuhientai': 'STC tối thiểu hiện tại',
+    'dangkytinchi.vuottin.form.label.stctoidahientai': 'STC tối đa hiện tại',
+    'dangkytinchi.vuottin.form.label.stctoidadangky': 'STC tối đa đăng ký',
+    'dangkytinchi.vuottin.form.placeholder.sotinchi': 'Nhập số tín chỉ',
+    'dangkytinchi.vuottin.form.btn.luu': 'Lưu',
+    'dangkytinchi.vuottin.form.btn.dong': 'Đóng',
+    'dangkytinchi.vuottin.modal.title': 'Chi tiết đăng ký vượt tín',
+    'dangkytinchi.vuottin.modal.col.hocky': 'Học Kỳ',
+    'dangkytinchi.vuottin.modal.col.tacdong': 'Tác động',
+    'dangkytinchi.vuottin.modal.col.nguoixuly': 'Người xử lý',
+    'dangkytinchi.vuottin.modal.col.ghichu': 'Ghi chú',
+
+    'dangkytinchi.vuottin.status.text.CHO_DUYET': 'Chờ duyệt',
+    'dangkytinchi.vuottin.status.text.DA_DUYET': 'Đã duyệt',
+    'dangkytinchi.vuottin.status.text.TU_CHOI': 'Từ chối',
+    'dangkytinchi.vuottin.status.text.YEU_CAU_CHINH_SUA': 'Yêu cầu chỉnh sửa',
+
+    'dangkytinchi.vuottin.status.message.CHO_DUYET': 'Yêu cầu đăng ký vượt tín của bạn đang được xử lý',
+    'dangkytinchi.vuottin.status.message.DA_DUYET': 'Yêu cầu đăng ký vượt tín của bạn đã được duyệt',
+    'dangkytinchi.vuottin.status.message.TU_CHOI': 'Yêu cầu đăng ký vượt tín của bạn đã bị từ chối',
+    'dangkytinchi.vuottin.status.message.YEU_CAU_CHINH_SUA': 'Yêu cầu đăng ký vượt tín của bạn cần chỉnh sửa',
 };
