@@ -176,7 +176,7 @@ const MyCCTv3 = () => {
             .export-mode { padding: 0 !important; margin: 0 !important; }
             .export-mode .skills-section h3::before {
                 left: 0px !important;
-                top: 10px !important;
+                top: 15px !important;
                 transform: translateY(-50%) !important;
             }
 			.export-mode * {
@@ -281,6 +281,7 @@ const MyCCTv3 = () => {
 			setExporting(false);
 		}
 	};
+
 	return (
 		<>
 			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
