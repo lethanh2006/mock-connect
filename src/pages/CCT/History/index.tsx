@@ -412,6 +412,7 @@ const HistoryActivityPage = () => {
 							}
 						: undefined
 				}
+				destroyOnClose
 			>
 				{tabActive === EActivityCategory.REGISTERED ? (
 					isView ? (
