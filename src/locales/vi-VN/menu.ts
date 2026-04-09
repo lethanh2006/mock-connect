@@ -124,4 +124,7 @@ export default {
 	'menu.Activity.Register': 'Đăng ký',
 	'menu.Activity.MyActivity': 'Hoạt động của tôi',
 	'menu.Activity.MyCCT': 'Bảng điểm hoạt động ngoại khóa',
+
+	'menu.GeneralService': 'General Service',
+	'menu.GeneralService.Dormitory': 'Dormitory',
 };
