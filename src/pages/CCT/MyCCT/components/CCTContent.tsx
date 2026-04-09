@@ -381,12 +381,16 @@ const CCTContent = (props: {
 							</span>
 							{record?.myCCT?.dateOfIssue && (
 								<span>
-									<i>Date of Issue: {record?.myCCT?.dateOfIssue ?? '--'}</i>
+									<i>
+										Date of Issue: <br /> {record?.myCCT?.dateOfIssue ?? '--'}
+									</i>
 								</span>
 							)}
 							{record?.myCCT?.serialNumber && (
 								<span>
-									<i>Serial Number: {record?.myCCT?.serialNumber || ' --'}</i>
+									<i>
+										Serial Number: <br /> {record?.myCCT?.serialNumber || ' --'}
+									</i>
 								</span>
 							)}
 						</div>
