@@ -176,18 +176,76 @@ const MyCCTv3 = () => {
             .export-mode { padding: 0 !important; margin: 0 !important; }
             .export-mode .skills-section h3::before {
                 left: 0px !important;
-                top: 10px !important;
-                transform: translateY(-50%) !important;
+                top: 17px !important;
+                transform: translateY(-50%) scale(1.5) !important;
             }
 			.export-mode * {
         		font-weight: bold !important;
-				font-size: 20px !important;
+				font-size: 19px !important;
     		}
-        `;
+			.export-mode .left {
+        		margin-right: 70px !important;
+    		}
+			.export-mode .right {
+        		margin-left: 70px !important;
+    		}
+			.export-mode .logo {
+			    width: 250px !important;
+			 	height: 180px !important;
+			 }
+			 .export-mode .icon-white {
+			     width: 100px !important;
+			 	height: 100px !important;
+			 }
+			.export-mode .title-cct {
+			    font-size: 30px !important;
+			 	font-weight: 700 !important;
+				margin-bottom: 16px !important;
+			 }
+			.export-mode h3 {
+			    font-size: 23px !important;
+			 	font-weight: 700 !important;
+			 }
+			.export-mode .skills-section {
+				margin-bottom: 16px !important;
+			 }
+			.export-mode table.content-table thead th {
+    			padding: 16px 20px !important;
+    			height: 68px !important;            
+    			vertical-align: middle !important;   
+			}
+			.export-mode .title {
+			    font-size: 23px !important;
+			 }
+			.export-mode .desc {
+			    font-size: 20px !important;
+			 }
+			.export-mode .approved {
+			    width: 200px !important;
+			 	height: 180px !important;
+			 }
+			.export-mode .gauge-container {
+    			transform: scale(1.5);
+    			transform-origin: top left;
+			}
+			.export-mode .gauge-row {
+    			display: flex;
+    			align-items: flex-start !important;
+			}
+			.export-mode .gauge-container {
+    			flex: 0 0 320px !important;
+			}
+			.export-mode .role-desc {
+    			flex: 1;
+    			padding-left: 20px;
+    			padding-top: 40px;
+			}
+			.export-mode .info-footer {
+				margin-top: 60px !important;
+			 }
+        	`;
 			document.head.appendChild(style);
 
-			// ✅ Dùng đúng kích thước A3 landscape (px ở 96dpi): 1587 x 1123
-			// Nhưng để capture sắc nét, set width = 3174 (x2) rồi scale html2canvas x2
 			const A3_WIDTH_PX = 4000;
 			clone.style.width = `${A3_WIDTH_PX}px`;
 			clone.style.position = 'fixed';
@@ -197,7 +255,6 @@ const MyCCTv3 = () => {
 
 			document.body.appendChild(clone);
 
-			// Xử lý icon-white
 			const imgs = clone.querySelectorAll('.icon-white');
 			await Promise.all(
 				Array.from(imgs).map((img: any) => {
@@ -256,7 +313,6 @@ const MyCCTv3 = () => {
 			const pageWidth = pdf.internal.pageSize.getWidth();
 			const pageHeight = pdf.internal.pageSize.getHeight();
 
-			// Trang 1: Header (A4 portrait)
 			if (headerImg) {
 				pdf.deletePage(1);
 				pdf.addPage('a4', 'portrait');
@@ -264,11 +320,9 @@ const MyCCTv3 = () => {
 				pdf.addPage('a3', 'landscape');
 			}
 
-			// ✅ Trang 2: Fill toàn bộ trang A3, padding 16
 			const margin = 16;
 			pdf.addImage(mainImg, 'JPEG', margin, margin, pageWidth - margin * 2, pageHeight - margin * 2, undefined, 'FAST');
 
-			// Trang 3: Footer (A4 portrait)
 			if (footerImg) {
 				pdf.addPage('a4', 'portrait');
 				pdf.addImage(footerImg, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
@@ -281,6 +335,7 @@ const MyCCTv3 = () => {
 			setExporting(false);
 		}
 	};
+
 	return (
 		<>
 			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
