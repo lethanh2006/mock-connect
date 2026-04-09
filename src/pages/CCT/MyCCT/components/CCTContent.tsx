@@ -113,10 +113,10 @@ const CCTContent = (props: {
 						</section>
 
 						<section className='skills-section'>
-							<h3>SELF-REFLECTION</h3>
+							<h3>STUDENT PROFILE</h3>
 							{edit ? (
 								<Form.Item name='selfAspiration' rules={[...rules.required, ...rules.text]}>
-									<Input.TextArea rows={3} placeholder='Enter Self-Reflection' />
+									<Input.TextArea rows={3} placeholder='Enter Student Profile' />
 								</Form.Item>
 							) : (
 								<span className='description'>{record?.myCCT?.selfAspiration}</span>
@@ -252,7 +252,7 @@ const CCTContent = (props: {
 								<span>END OF TRANSCRIPT</span>
 							</div>
 							<section className='skills-section'>
-								<h3>Level of Engagement</h3>
+								<h3>LEVEL OF ENGAGEMENT</h3>
 							</section>
 
 							<span
@@ -277,7 +277,7 @@ const CCTContent = (props: {
 
 											stroke: {
 												show: true,
-												width: 8,
+												width: 6,
 												colors: ['#ffffff'],
 												lineCap: 'round',
 											},
