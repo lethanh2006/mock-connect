@@ -123,4 +123,7 @@ export default {
 	'menu.Activity.Register': 'List Activity',
 	'menu.Activity.MyActivity': 'My Activity',
 	'menu.Activity.MyCCT': 'Co-curricular Transcript',
+
+	'menu.GeneralService': 'General Service',
+	'menu.GeneralService.Dormitory': 'Dormitory',
 };

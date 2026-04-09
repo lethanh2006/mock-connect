@@ -1,4 +1,4 @@
-import { Empty } from 'antd';
+import { Empty, Rate } from 'antd';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 
@@ -10,6 +10,19 @@ interface Props {
 	edit?: boolean;
 	onChangeOrder?: (attributeId: string, ids: string[]) => void;
 }
+
+export const mapLevelToStar = (level: string) => {
+	switch (level) {
+		case 'Participant':
+			return 1;
+		case 'Contributor':
+			return 2;
+		case 'Leader':
+			return 3;
+		default:
+			return 4;
+	}
+};
 
 const DragTable: React.FC<Props> = ({ item, edit, onChangeOrder }) => {
 	const [data, setData] = useState<MyCCT.IActivityOutComeMyCCT[]>([]);
@@ -50,12 +63,12 @@ const DragTable: React.FC<Props> = ({ item, edit, onChangeOrder }) => {
 	return (
 		<table className='content-table'>
 			<colgroup>
-				<col style={{ width: '18%' }} />
+				<col style={{ width: '17%' }} />
+				<col style={{ width: '15%' }} />
+				<col style={{ width: '15%' }} />
 				<col style={{ width: '14%' }} />
-				<col style={{ width: '14%' }} />
-				<col style={{ width: '14%' }} />
-				<col style={{ width: '18%' }} />
-				<col style={{ width: '24%' }} />
+				<col style={{ width: '15%' }} />
+				<col style={{ width: '26%' }} />
 			</colgroup>
 
 			<thead>
@@ -99,23 +112,33 @@ const DragTable: React.FC<Props> = ({ item, edit, onChangeOrder }) => {
 							}}
 						>
 							<td>{i?.activity}</td>
-
 							<td>
 								{(() => {
 									const start = dayjs(i?.startDate).utc();
 									const end = dayjs(i?.endDate).utc();
 
 									const isSameMonth = start.isSame(end, 'month') && start.isSame(end, 'year');
+									const isSameYear = start.isSame(end, 'year');
 
 									if (isSameMonth) {
 										return start.format('MMM YYYY');
 									}
 
-									return `${start.format('MMM')} - ${end.format('MMM YYYY')}`;
+									if (isSameYear) {
+										return `${start.format('MMM')} - ${end.format('MMM YYYY')}`;
+									}
+
+									return `${start.format('MMM YYYY')} - ${end.format('MMM YYYY')}`;
 								})()}
 							</td>
-
-							<td>{i?.level}</td>
+							<td style={{ whiteSpace: 'nowrap' }}>
+								<Rate
+									disabled
+									value={mapLevelToStar(i?.level)}
+									count={mapLevelToStar(i?.level)}
+									style={{ fontSize: 12 }}
+								/>
+							</td>
 							<td>{i?.role}</td>
 							<td>{i?.organizationUnit}</td>
 							<td>{i?.impact}</td>
