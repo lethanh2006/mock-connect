@@ -250,7 +250,7 @@ body {
 }
 
 .ant-card {
-	.ant-card-head-title {
+	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 		white-space: pre-wrap;
 		font-size: 18px !important;
 		font-weight: bold !important;
@@ -258,7 +258,7 @@ body {
 	}
 
 	&.hide-indicator {
-		.ant-card-head-title {
+		> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 			padding-left: 0 !important;
 			margin-left: 0 !important;
 
@@ -269,8 +269,8 @@ body {
 	}
 
 	&.card-big-title {
-		.ant-card-head {
-			.ant-card-head-title {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 22px !important;
 				color: var(--color-accent-800) !important;
 
@@ -282,8 +282,8 @@ body {
 	}
 
 	&.highlight {
-		.ant-card-head {
-			.ant-card-head-title {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				color: var(--color-official-300) !important;
 
 				&::after {
@@ -294,8 +294,8 @@ body {
 	}
 
 	&.normal {
-		.ant-card-head {
-			.ant-card-head-title {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 16px !important;
 				color: var(--color-official-300) !important;
 
