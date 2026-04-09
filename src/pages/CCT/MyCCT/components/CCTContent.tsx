@@ -68,7 +68,7 @@ const CCTContent = (props: {
 					<div className='cct-column left'>
 						<header>
 							<div style={{ marginBottom: 12 }}>
-								<img src='/logo-text.png' alt='logo' width={90} />
+								<img src='/student/logo-text.png' alt='logo' width={90} className='logo' />
 							</div>
 							<span
 								style={{
@@ -76,6 +76,7 @@ const CCTContent = (props: {
 									fontWeight: 700,
 									fontSize: 18,
 								}}
+								className='title-cct'
 							>
 								CO-CURRICULAR & COMPETENCY TRANSCRIPT
 							</span>
@@ -286,7 +287,7 @@ const CCTContent = (props: {
 												enabled: true,
 												formatter: (val: number) => `${Math.round(val)}%`,
 												style: {
-													fontSize: '13px', // ✅ Tăng font size
+													fontSize: '13px',
 													fontWeight: 'bold',
 													colors: ['#fff'],
 												},
@@ -327,6 +328,7 @@ const CCTContent = (props: {
 										}}
 										series={(record?.levelOfEngagement ?? []).map((item) => item?.percentage ?? 0)}
 										type='donut'
+										className='donut-chart'
 										width={220}
 										height={220}
 									/>
@@ -379,20 +381,19 @@ const CCTContent = (props: {
 							<span>
 								<i>This Transcript is officially issued and verified by VinUniversity</i>
 							</span>
-							{record?.myCCT?.dateOfIssue && (
-								<span>
-									<i>
-										Date of Issue: <br /> {record?.myCCT?.dateOfIssue ?? '--'}
-									</i>
-								</span>
-							)}
-							{record?.myCCT?.serialNumber && (
-								<span>
-									<i>
-										Serial Number: <br /> {record?.myCCT?.serialNumber || ' --'}
-									</i>
-								</span>
-							)}
+
+							<div style={{ display: 'flex', alignItems: 'center', gap: 40, marginTop: 6 }}>
+								{record?.myCCT?.dateOfIssue && (
+									<span>
+										<i>Date of Issue: {record?.myCCT?.dateOfIssue ?? '--'}</i>
+									</span>
+								)}
+								{record?.myCCT?.serialNumber && (
+									<span>
+										<i>Serial Number: {record?.myCCT?.serialNumber || ' --'}</i>
+									</span>
+								)}
+							</div>
 						</div>
 
 						{record?.myCCT?.status === EStatusMyCCT.APPROVED && (
@@ -404,7 +405,7 @@ const CCTContent = (props: {
 									display: 'inline-block',
 								}}
 							>
-								<img src='/student/images/cct/footer.png' alt='logo' width={120} />
+								<img src='/student/images/cct/footer.png' alt='logo' width={120} className='approved' />
 
 								<div
 									style={{
