@@ -68,7 +68,7 @@ const CCTContent = (props: {
 					<div className='cct-column left'>
 						<header>
 							<div style={{ marginBottom: 12 }}>
-								<img src='/logo-text.png' alt='logo' width={90} />
+								<img src='/student/logo-text.png' alt='logo' width={90} />
 							</div>
 							<span
 								style={{
@@ -286,7 +286,7 @@ const CCTContent = (props: {
 												enabled: true,
 												formatter: (val: number) => `${Math.round(val)}%`,
 												style: {
-													fontSize: '13px', // ✅ Tăng font size
+													fontSize: '13px',
 													fontWeight: 'bold',
 													colors: ['#fff'],
 												},
