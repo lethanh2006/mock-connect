@@ -2,8 +2,15 @@ import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EStatusMyCCT } from '@/services/CCT/constant';
 import { handleSingleFile } from '@/services/uploadFile';
 import { ipCCT } from '@/utils/ip';
-import { CloseCircleOutlined, FilePdfOutlined, ReloadOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
-import { Badge, Button, Form, Space, Spin, Tag, Tooltip } from 'antd';
+import {
+	CloseCircleOutlined,
+	FilePdfOutlined,
+	LoadingOutlined,
+	ReloadOutlined,
+	SaveOutlined,
+	SendOutlined,
+} from '@ant-design/icons';
+import { Badge, Button, Form, Space, Tag, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -35,6 +42,7 @@ const MyCCTv3 = () => {
 		myCCT: MyCCT.IRecord;
 		awardsAndRecognition: ActivityOutCome.IRecord;
 	}>();
+	const [previewData, setPreviewData] = useState<any>();
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 	const printRef = useRef<HTMLDivElement>(null);
 	const [previewVisible, setPreviewVisible] = useState<boolean>(false);
@@ -151,9 +159,8 @@ const MyCCTv3 = () => {
 					canvas.height = img.height;
 					const ctx = canvas.getContext('2d');
 					if (!ctx) return resolve('');
-
 					ctx.drawImage(img, 0, 0);
-					resolve(canvas.toDataURL('image/jpeg', 0.8));
+					resolve(canvas.toDataURL('image/jpeg', 0.9));
 				};
 
 				img.onerror = () => resolve('');
@@ -168,6 +175,7 @@ const MyCCTv3 = () => {
 
 			const style = document.createElement('style');
 			style.innerHTML = `
+            .export-mode { padding: 0 !important; margin: 0 !important; }
             .export-mode .skills-section h3::before {
                 left: 0px !important;
                 top: 10px !important;
@@ -176,67 +184,53 @@ const MyCCTv3 = () => {
         `;
 			document.head.appendChild(style);
 
-			clone.style.width = '2200px';
+			clone.style.width = '3400px';
 			clone.style.position = 'fixed';
 			clone.style.top = '-9999px';
 			clone.style.left = '0';
-			clone.style.zIndex = '-1';
 			clone.style.background = '#fff';
 
 			document.body.appendChild(clone);
 
-			const convertImageToWhite = (img: HTMLImageElement) => {
-				return new Promise<void>((resolve) => {
-					const image = new Image();
-					image.crossOrigin = 'anonymous';
-					image.src = img.src;
-
-					image.onload = () => {
-						const canvas = document.createElement('canvas');
-						const ctx = canvas.getContext('2d');
-						if (!ctx) return resolve();
-
-						canvas.width = image.width;
-						canvas.height = image.height;
-						ctx.drawImage(image, 0, 0);
-
-						const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-						const data = imageData.data;
-
-						for (let i = 0; i < data.length; i += 4) {
-							data[i] = 255;
-							data[i + 1] = 255;
-							data[i + 2] = 255;
-						}
-
-						ctx.putImageData(imageData, 0, 0);
-						img.src = canvas.toDataURL('image/png');
-						resolve();
-					};
-					image.onerror = () => resolve();
-				});
-			};
-
 			const imgs = clone.querySelectorAll('.icon-white');
-			await Promise.all(Array.from(imgs).map((img: any) => convertImageToWhite(img)));
+			await Promise.all(
+				Array.from(imgs).map((img: any) => {
+					return new Promise<void>((resolve) => {
+						const image = new Image();
+						image.crossOrigin = 'anonymous';
+						image.src = img.src;
 
-			const waitForImages = (container: HTMLElement) => {
-				const images = container.querySelectorAll('img');
-				return Promise.all(
-					Array.from(images).map((img: any) => {
-						if (img.complete) return Promise.resolve();
-						return new Promise((res) => {
-							img.onload = res;
-							img.onerror = res;
-						});
-					}),
-				);
-			};
+						image.onload = () => {
+							const canvas = document.createElement('canvas');
+							const ctx = canvas.getContext('2d');
+							if (!ctx) return resolve();
 
-			await waitForImages(clone);
+							canvas.width = image.width;
+							canvas.height = image.height;
+							ctx.drawImage(image, 0, 0);
+
+							const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+							const data = imageData.data;
+
+							for (let i = 0; i < data.length; i += 4) {
+								data[i] = 255;
+								data[i + 1] = 255;
+								data[i + 2] = 255;
+							}
+
+							ctx.putImageData(imageData, 0, 0);
+							img.src = canvas.toDataURL('image/png');
+
+							resolve();
+						};
+
+						image.onerror = () => resolve();
+					});
+				}),
+			);
 
 			const canvas = await html2canvas(clone, {
-				scale: 2,
+				scale: 3,
 				useCORS: true,
 				backgroundColor: '#ffffff',
 				logging: false,
@@ -245,48 +239,54 @@ const MyCCTv3 = () => {
 			document.body.removeChild(clone);
 			document.head.removeChild(style);
 
-			const mainImgData = canvas.toDataURL('image/jpeg', 0.85);
+			const mainImg = canvas.toDataURL('image/jpeg', 0.95);
 
 			const headerImg = await loadImage('/images/cct/headerCCT.jpg');
 			const footerImg = await loadImage('/images/cct/footerCCT.jpg');
 
 			const pdf = new jsPDF({
-				orientation: headerImg ? 'portrait' : 'landscape',
+				orientation: 'landscape',
 				unit: 'px',
-				format: headerImg ? 'a4' : 'a3',
+				format: 'a3',
 				compress: true,
 			});
 
-			const addImageCentered = (
-				data: string,
-				isNewPage = false,
-				format?: string,
-				orientation?: 'portrait' | 'landscape',
-			) => {
-				if (isNewPage) pdf.addPage(format as any, orientation);
-
-				const pageWidth = pdf.internal.pageSize.getWidth();
-				const pageHeight = pdf.internal.pageSize.getHeight();
-
-				const props = pdf.getImageProperties(data);
-				const ratio = Math.min(pageWidth / props.width, pageHeight / props.height);
-				const w = props.width * ratio;
-				const h = props.height * ratio;
-				const x = (pageWidth - w) / 2;
-				const y = (pageHeight - h) / 2;
-
-				pdf.addImage(data, 'JPEG', x, y, w, h, undefined, 'FAST');
-			};
+			const pageWidth = pdf.internal.pageSize.getWidth();
+			const pageHeight = pdf.internal.pageSize.getHeight();
 
 			if (headerImg) {
-				addImageCentered(headerImg, false);
-				addImageCentered(mainImgData, true, 'a3', 'landscape');
-			} else {
-				addImageCentered(mainImgData, false);
+				pdf.deletePage(1);
+				pdf.addPage('a4', 'portrait');
+				pdf.addImage(headerImg, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+				pdf.addPage('a3', 'landscape');
 			}
 
+			// --- BẮT ĐẦU PHẦN ĐIỀU CHỈNH MAIN IMG ---
+			const padding = 12;
+			const props = pdf.getImageProperties(mainImg);
+
+			// Kích thước khu vực khả dụng để vẽ ảnh (trừ đi padding 12px cho các cạnh)
+			const availableWidth = pageWidth - padding * 2;
+			const availableHeight = pageHeight - padding * 2;
+
+			// Tính tỷ lệ để nhét vừa ảnh vào khoảng trống mà không làm méo tỷ lệ (Aspect Ratio)
+			const scaleX = availableWidth / props.width;
+			const scaleY = availableHeight / props.height;
+			const ratio = Math.min(scaleX, scaleY);
+
+			const finalWidth = props.width * ratio;
+			const finalHeight = props.height * ratio;
+
+			// Căn giữa ảnh vào chính giữa tờ A3
+			const x = padding + (availableWidth - finalWidth) / 2;
+			const y = padding + (availableHeight - finalHeight) / 2;
+
+			pdf.addImage(mainImg, 'JPEG', x, y, finalWidth, finalHeight, undefined, 'FAST');
+			// --- KẾT THÚC PHẦN ĐIỀU CHỈNH MAIN IMG ---
+
 			if (footerImg) {
-				addImageCentered(footerImg, true, 'a4', 'portrait');
+				pdf.addPage('a4', 'portrait');
+				pdf.addImage(footerImg, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
 			}
 
 			pdf.save(`CCT_Transcript_${dayjs().format('YYYYMMDD')}.pdf`);
@@ -377,24 +377,27 @@ const MyCCTv3 = () => {
 													/>
 												</Tooltip>
 
-												<Tooltip title='EXPORT PDF'>
-													<Spin spinning={exporting} size='small'>
-														<Tag
-															icon={<FilePdfOutlined style={{ fontSize: 14 }} />}
-															style={{
-																...tagStyle,
-																cursor: 'pointer',
-																display: 'inline-flex',
-																alignItems: 'center',
-																justifyContent: 'center',
-																width: 32,
-																height: 32,
-																padding: 0,
-															}}
-															onClick={handleExportPDF}
-														/>
-													</Spin>
-												</Tooltip>
+												<Tag
+													icon={
+														exporting ? (
+															<LoadingOutlined spin style={{ fontSize: 14 }} />
+														) : (
+															<FilePdfOutlined style={{ fontSize: 14 }} />
+														)
+													}
+													style={{
+														...tagStyle,
+														cursor: 'pointer',
+														display: 'inline-flex',
+														alignItems: 'center',
+														justifyContent: 'center',
+														width: 32,
+														height: 32,
+														padding: 0,
+														opacity: exporting ? 0.7 : 1,
+													}}
+													onClick={!exporting ? handleExportPDF : undefined}
+												/>
 
 												{danhSach?.length ? (
 													<Badge count={danhSach?.length} offset={[-3, 7]}>
@@ -444,7 +447,13 @@ const MyCCTv3 = () => {
 														}}
 														onClick={() => {
 															if (!isSubmitDisabled) {
-																setPreviewVisible(true);
+																form
+																	.validateFields()
+																	.then((values) => {
+																		setPreviewData(values);
+																		setPreviewVisible(true);
+																	})
+																	.catch(() => {});
 															}
 														}}
 													>
@@ -509,7 +518,15 @@ const MyCCTv3 = () => {
 							<Button
 								type='primary'
 								icon={<SendOutlined />}
-								onClick={() => setPreviewVisible(true)}
+								onClick={() => {
+									form
+										.validateFields()
+										.then((values) => {
+											setPreviewData(values);
+											setPreviewVisible(true);
+										})
+										.catch(() => {});
+								}}
 								disabled={
 									!recDot?._id ||
 									record?.myCCT?.status === EStatusMyCCT.APPROVED ||
@@ -525,7 +542,17 @@ const MyCCTv3 = () => {
 
 			<PreviewCCTModal open={previewVisible} onCancel={() => setPreviewVisible(false)} onConfirm={handleRealSubmit}>
 				<CCTContent
-					record={record as any}
+					record={
+						previewData
+							? {
+									...record,
+									myCCT: {
+										...record?.myCCT,
+										...previewData,
+									},
+								}
+							: (record as any)
+					}
 					form={form}
 					setSelectedActivities={setSelectedActivities}
 					setListAwardRecognition={setListAwardRecognition}
