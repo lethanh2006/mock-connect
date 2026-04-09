@@ -275,7 +275,7 @@ body {
 				color: var(--color-accent-800) !important;
 
 				&::after {
-					.triangle-indicator(@color: ~'var(--vin-color-primary)'; @w: 10px; @h: 10px; @side: right);
+					.indicator(@color: ~'var(--vin-color-primary)'; @w: 10px; @h: 10px; @side: right);
 				}
 			}
 		}
@@ -287,7 +287,7 @@ body {
 				color: var(--color-official-300) !important;
 
 				&::after {
-					.triangle-indicator(@color: ~'var(--vin-color-primary)'; @w: 10px; @h: 7px; @side: right);
+					.indicator(@color: ~'var(--vin-color-primary)'; @w: 10px; @h: 7px; @side: right);
 				}
 			}
 		}
@@ -752,7 +752,7 @@ body {
 }
 
 .collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text::after {
-	.triangle-indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
+	.indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
 	left: -16px !important;
 	top: 14px !important;
 	transform: translateY(-50%) !important;
@@ -763,7 +763,7 @@ body {
 	font-weight: 600;
 
 	&::before {
-		.triangle-indicator(@w: 10px; @h: 6px; @side: right);
+		.indicator(@w: 10px; @h: 6px; @side: right);
 		left: -16px !important;
 		top: 0 !important;
 		transform: translateY(-50%) !important;
