@@ -363,7 +363,7 @@ const CCTContent = (props: {
 													style={{ fontSize: 12 }}
 												/>
 
-												<span style={{ marginLeft: 'auto' }}>{item?.percentage ?? 0}%</span>
+												{/* <span style={{ marginLeft: 'auto' }}>{item?.percentage ?? 0}%</span> */}
 											</div>
 
 											<p style={{ margin: '2px 0 0 28px', fontStyle: 'italic', fontSize: '12px', color: '#555' }}>
