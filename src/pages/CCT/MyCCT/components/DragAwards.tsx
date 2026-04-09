@@ -55,7 +55,7 @@ const DragAwards = ({
 						{item?.competition} - {item?.rank} ({dayjs(item?.dateOfAchievement).format('DD/MM/YYYY')})
 					</strong>
 
-					<p>
+					<p style={{ color: '#2e2e2e' }}>
 						<i>{item?.description}</i>
 					</p>
 				</li>
