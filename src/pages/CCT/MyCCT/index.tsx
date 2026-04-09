@@ -192,57 +192,73 @@ const MyCCTv3 = () => {
 			.export-mode .logo {
 			    width: 250px !important;
 			 	height: 180px !important;
-			 }
-			 .export-mode .icon-white {
-			     width: 100px !important;
+			}
+			.export-mode .icon-white {
+			    width: 100px !important;
 			 	height: 100px !important;
-			 }
+			}
 			.export-mode .title-cct {
 			    font-size: 30px !important;
 			 	font-weight: 700 !important;
 				margin-bottom: 16px !important;
-			 }
+			}
 			.export-mode h3 {
 			    font-size: 23px !important;
 			 	font-weight: 700 !important;
-			 }
+			}
 			.export-mode .skills-section {
 				margin-bottom: 16px !important;
-			 }
+			}
 			.export-mode table.content-table thead th {
     			padding: 16px 20px !important;
-    			height: 68px !important;            
-    			vertical-align: middle !important;   
+    			height: 68px !important;
+    			vertical-align: middle !important;
 			}
 			.export-mode .title {
 			    font-size: 23px !important;
-			 }
+			}
 			.export-mode .desc {
 			    font-size: 20px !important;
-			 }
+			}
 			.export-mode .approved {
 			    width: 200px !important;
 			 	height: 180px !important;
-			 }
-			.export-mode .gauge-container {
-    			transform: scale(1.5);
-    			transform-origin: top left;
 			}
+			.export-mode .gauge-row-wrapper {
+    			display: flex !important;
+    			flex-direction: row !important;
+    			align-items: center !important;
+}
 			.export-mode .gauge-row {
-    			display: flex;
-    			align-items: flex-start !important;
+			    display: flex !important;
+			    align-items: flex-start !important;
+			    flex: 1 !important;
+			    min-width: 0 !important;
 			}
 			.export-mode .gauge-container {
-    			flex: 0 0 320px !important;
+				transform: scale(1.5);
+				transform-origin: top left;
+				flex-shrink: 0 !important;
+				width: 330px !important;
 			}
 			.export-mode .role-desc {
-    			flex: 1;
-    			padding-left: 20px;
-    			padding-top: 40px;
+				flex: 1 !important;
+				min-width: 0 !important;
+				padding-left: 20px !important;
+				padding-top: 40px !important;
+				overflow: visible !important;
+				word-break: break-word !important;
 			}
-			.export-mode .info-footer {
-				margin-top: 60px !important;
-			 }
+			.export-mode .approved-stamp-wrapper {
+				position: relative !important;
+				flex-shrink: 0 !important;
+				width: auto !important;
+				text-align: right !important;
+				display: inline-flex !important;
+				align-items: center !important;
+				justify-content: flex-end !important;
+				padding-right: 20px !important;
+			}
         	`;
 			document.head.appendChild(style);
 
@@ -339,12 +355,7 @@ const MyCCTv3 = () => {
 	return (
 		<>
 			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
-				<div
-					style={{
-						maxWidth: '100%',
-						margin: 'auto',
-					}}
-				>
+				<div style={{ maxWidth: '100%', margin: 'auto' }}>
 					<div
 						style={{
 							display: 'flex',
@@ -538,7 +549,6 @@ const MyCCTv3 = () => {
 							<Button
 								onClick={() => {
 									setEdit(false);
-
 									setListAwardRecognition(record?.myCCT?.listAwardRecognition || []);
 									setSelectedActivities([]);
 								}}
