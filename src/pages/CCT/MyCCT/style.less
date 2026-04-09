@@ -107,12 +107,27 @@ header {
 		}
 	}
 }
+
 .info-footer {
 	margin-top: -12px;
 	display: flex;
 	font-size: 12px;
 	color: @primary-red;
-	gap: 40px;
+	justify-content: space-between;
+
+	span {
+		&:nth-child(2):last-child {
+			text-align: right;
+		}
+
+		&:only-child {
+			text-align: left;
+		}
+
+		&:nth-child(2):not(:last-child) {
+			text-align: center;
+		}
+	}
 }
 
 .skills-section {
@@ -307,15 +322,15 @@ header {
 		margin-top: 12px;
 		display: flex;
 		align-items: center;
-		justify-content: flex-start;
 		gap: 40px;
 
 		.gauge-container {
-			position: relative;
+			flex: 0 0 auto;
 		}
 
 		.role-desc {
 			flex: 1;
+			min-width: 0;
 			line-height: 1.4;
 
 			strong {
