@@ -64,11 +64,11 @@ const DragTable: React.FC<Props> = ({ item, edit, onChangeOrder }) => {
 		<table className='content-table'>
 			<colgroup>
 				<col style={{ width: '17%' }} />
-				<col style={{ width: '13%' }} />
-				<col style={{ width: '17%' }} />
+				<col style={{ width: '15%' }} />
+				<col style={{ width: '15%' }} />
 				<col style={{ width: '14%' }} />
-				<col style={{ width: '17%' }} />
-				<col style={{ width: '24%' }} />
+				<col style={{ width: '15%' }} />
+				<col style={{ width: '26%' }} />
 			</colgroup>
 
 			<thead>
