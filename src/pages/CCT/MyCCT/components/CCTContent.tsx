@@ -1,12 +1,13 @@
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EStatusMyCCT } from '@/services/CCT/constant';
 import rules from '@/utils/rules';
-import { Checkbox, Col, Form, FormInstance, Input, Row, Spin } from 'antd';
+import { Checkbox, Col, Form, FormInstance, Input, Rate, Row, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
+import Chart from 'react-apexcharts';
 import { useModel } from 'umi';
 import DragAwards from './DragAwards';
-import DragTable from './DragTable';
+import DragTable, { mapLevelToStar } from './DragTable';
 
 const CheckboxIcon = () => (
 	<div className='checkbox-icon'>
@@ -66,11 +67,19 @@ const CCTContent = (props: {
 				<Col span={24} md={12}>
 					<div className='cct-column left'>
 						<header>
-							<div style={{ marginBottom: 20 }}>
-								<img src='/student/logo-text.png' alt='logo' width={90} />
+							<div style={{ marginBottom: 12 }}>
+								<img src='/logo-text.png' alt='logo' width={90} />
 							</div>
-							<h1>CO-CURRICULAR & COMPETENCY TRANSCRIPT</h1>
-							<div style={{ marginTop: -5 }}>
+							<span
+								style={{
+									color: '#134D8B',
+									fontWeight: 700,
+									fontSize: 18,
+								}}
+							>
+								CO-CURRICULAR & COMPETENCY TRANSCRIPT
+							</span>
+							<div style={{ marginTop: 6 }}>
 								<span className='description'>
 									Co-curricular & Competency Transcript (CCT) is part of VinUniversity’s commitment to developing
 									holistic graduates. This transcript documents the co-curricular experiences and developmental
@@ -80,48 +89,34 @@ const CCTContent = (props: {
 							</div>
 						</header>
 
-						<section className='student-meta'>
-							{record?.myCCT?.name && (
-								<div className='meta-item'>
-									<span>•</span> Student name: {record?.myCCT?.name || '--'}
-								</div>
-							)}
-							{record?.myCCT?.code && (
-								<div className='meta-item'>
-									<span>•</span> Student ID: {record?.myCCT?.code || '--'}
-								</div>
-							)}
-							{record?.myCCT?.dob && (
-								<div className='meta-item'>
-									<span>•</span> Date of Birth:{' '}
-									{record?.myCCT?.dob ? dayjs(record.myCCT.dob).format('DD/MM/YYYY') : '--'}
-								</div>
-							)}
-							{record?.myCCT?.college && (
-								<div className='meta-item'>
-									<span>•</span> {record?.myCCT?.college || '--'}
-								</div>
-							)}
-							{record?.myCCT?.yearOfEnrollment && (
-								<div className='meta-item'>
-									<span>•</span> Year of Enrollment: {record?.myCCT?.yearOfEnrollment ?? '--'}
-								</div>
-							)}
-							{(record?.myCCT?.program || record?.myCCT?.concentration) && (
-								<div className='meta-item'>
-									<span>•</span>{' '}
-									{[record?.myCCT?.program, `Concentration ${record?.myCCT?.concentration}`]
-										.filter(Boolean)
-										.join(' - ')}
-								</div>
-							)}
+						<section className='skills-section'>
+							<h3>STUDENT INFORMATION</h3>
+						</section>
+
+						<section className='student-meta-table'>
+							<div className='cell label'>Student name</div>
+							<div className='cell value'>{record?.myCCT?.name || '--'}</div>
+							<div className='cell label'>Student ID</div>
+							<div className='cell value'>{record?.myCCT?.code || '--'}</div>
+
+							<div className='cell label'>Date of Birth</div>
+							<div className='cell value'>
+								{record?.myCCT?.dob ? dayjs(record.myCCT.dob).format('DD/MM/YYYY') : '--'}
+							</div>
+							<div className='cell label'>College</div>
+							<div className='cell value'>{record?.myCCT?.college || '--'}</div>
+
+							<div className='cell label'>Year of Enrollment</div>
+							<div className='cell value'>{record?.myCCT?.yearOfEnrollment ?? '--'}</div>
+							<div className='cell label'>Program</div>
+							<div className='cell value'>{record?.myCCT?.program || '--'}</div>
 						</section>
 
 						<section className='skills-section'>
-							<h3>SELF-REFLECTION</h3>
+							<h3>STUDENT PROFILE</h3>
 							{edit ? (
 								<Form.Item name='selfAspiration' rules={[...rules.required, ...rules.text]}>
-									<Input.TextArea rows={3} placeholder='Enter Self-Reflection' />
+									<Input.TextArea rows={3} placeholder='Enter Student Profile' />
 								</Form.Item>
 							) : (
 								<span className='description'>{record?.myCCT?.selfAspiration}</span>
@@ -256,61 +251,127 @@ const CCTContent = (props: {
 							<div className='divider'>
 								<span>END OF TRANSCRIPT</span>
 							</div>
-							<h3 className='section-title'>Level of Engagement</h3>
+							<section className='skills-section'>
+								<h3>LEVEL OF ENGAGEMENT</h3>
+							</section>
+
+							<span
+								style={{
+									fontSize: 13,
+									fontWeight: 600,
+								}}
+							>
+								The following role classifications describe the level of responsibility and impact demonstrated by the
+								student in each activity:
+							</span>
 
 							<div className='gauge-row'>
-								{record?.levelOfEngagement?.map((item, index) => (
-									<div className='gauge-item' key={index}>
-										<div className='gauge-container'>
-											<svg viewBox='0 0 100 55' className='gauge-svg'>
-												<path
-													className='gauge-bg'
-													d='M 10 45 A 40 40 0 0 1 90 45'
-													fill='none'
-													stroke='#92b3d9'
-													strokeWidth='12'
-													strokeLinecap='round'
-												/>
-												<path
-													className='gauge-progress'
-													d='M 10 45 A 40 40 0 0 1 90 45'
-													fill='none'
-													stroke={'#005a8c'}
-													strokeWidth='12'
-													strokeLinecap='round'
+								<div className='gauge-container'>
+									<Chart
+										options={{
+											chart: {
+												type: 'donut',
+											},
+											colors: ['#7EA4D5', '#F7981D', '#058069', '#A91F24'],
+											labels: (record?.levelOfEngagement ?? []).map((item) => item?.level?.name?.toUpperCase?.() || ''),
+
+											stroke: {
+												show: true,
+												width: 4,
+												colors: ['#ffffff'],
+												lineCap: 'round',
+											},
+
+											dataLabels: {
+												enabled: true,
+												formatter: (val: number) => `${Math.round(val)}%`,
+												style: {
+													fontSize: '13px', // ✅ Tăng font size
+													fontWeight: 'bold',
+													colors: ['#fff'],
+												},
+												dropShadow: {
+													enabled: false,
+												},
+											},
+
+											legend: { show: false },
+
+											plotOptions: {
+												pie: {
+													expandOnClick: false,
+													donut: {
+														size: '50%',
+														labels: {
+															show: true,
+															total: {
+																show: true,
+																showAlways: true,
+																label: '',
+																formatter: (w: any) => {
+																	const max = Math.max(...w.globals.series);
+																	return `${max}%`;
+																},
+																fontSize: '22px',
+																fontWeight: 'bold',
+																color: '#1a1a2e',
+															},
+															value: { show: false },
+															name: { show: false },
+														},
+													},
+												},
+											},
+
+											tooltip: { enabled: true },
+										}}
+										series={(record?.levelOfEngagement ?? []).map((item) => item?.percentage ?? 0)}
+										type='donut'
+										width={220}
+										height={220}
+									/>
+								</div>
+
+								<div className='role-desc'>
+									{record?.levelOfEngagement?.map((item, index) => (
+										<div key={index} style={{ marginBottom: '12px' }}>
+											<div
+												style={{
+													display: 'flex',
+													alignItems: 'center',
+													gap: '8px',
+													fontWeight: '600',
+													color: '#134D8B',
+													width: '100%',
+												}}
+											>
+												<div
 													style={{
-														strokeDasharray: 126,
-														strokeDashoffset: 126 - (126 * (item?.percentage ?? 0)) / 100,
+														width: '20px',
+														height: '12px',
+														backgroundColor: ['#7EA4D5', '#F7981D', '#058069', '#A91F24'][index],
+														borderRadius: '4px',
 													}}
 												/>
-											</svg>
-											<span className='gauge-value'>{item?.percentage ?? 0} %</span>
+
+												<span style={{ minWidth: '100px' }}>{item.level?.name?.toUpperCase?.()}</span>
+
+												<Rate
+													disabled
+													value={mapLevelToStar(item?.level?.name)}
+													count={mapLevelToStar(item?.level?.name)}
+													style={{ fontSize: 12 }}
+												/>
+
+												{/* <span style={{ marginLeft: 'auto' }}>{item?.percentage ?? 0}%</span> */}
+											</div>
+
+											<p style={{ margin: '2px 0 0 28px', fontStyle: 'italic', fontSize: '12px', color: '#555' }}>
+												{item.level?.description}
+											</p>
 										</div>
-										<div className='label'>{item.level?.name.toUpperCase()}</div>
-									</div>
-								))}
-							</div>
-
-							<div className='role-desc'>
-								<p>
-									<strong>
-										The following role classifications describe the level of responsibility and impact demonstrated by
-										the student in each activity:
-									</strong>
-								</p>
-
-								<p>
-									<b>PARTICIPANT:</b> Engages in activities and contributes to implementation.
-								</p>
-								<p>
-									<b>CONTRIBUTOR:</b> Demonstrates initiative by contributing ideas and owning specific outputs.
-								</p>
-								<p>
-									<b>LEADER:</b> Provides direction, mobilizes people, and delivers results.
-								</p>
-								<p>
-									<b>IMPACT DRIVER:</b> Creates scalable impact that extends beyond the original project or context.
-								</p>
+									))}
+								</div>
 							</div>
 						</footer>
 

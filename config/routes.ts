@@ -452,6 +452,20 @@ export default [
 		],
 	},
 
+	// {
+	// 	name: 'GeneralService',
+	// 	icon: 'ToolOutlined',
+	// 	path: 'general-service',
+	// 	access: 'cctFilter',
+	// 	routes: [
+	// 		{
+	// 			name: 'Dormitory',
+	// 			path: 'dormitory',
+	// 			component: 'GeneralService/Dormitory',
+	// 		},
+	// 	],
+	// },
+
 	// GROUP TITLE
 	// {
 	// 	name: 'OtherGroup',
