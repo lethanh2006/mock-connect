@@ -1,6 +1,6 @@
-@primary-blue: #003366;
+@primary-blue: #134d8b;
 @primary-red: #a31f34;
-@text-black: #000;
+@text-black: #2e2e2e;
 @text-gray: #444;
 @light-gray: #f2f2f2;
 @border-color: #ddd;
@@ -68,35 +68,51 @@ header {
 }
 
 .description {
-	font-size: 11px;
-	color: @primary-blue;
-	max-width: 90%;
-	font-weight: 600;
+	font-size: 12px;
+	color: '#2E2E2E';
 }
 
-.student-meta {
+.student-meta-table {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	font-size: 11.5px;
-	color: @primary-red;
-	row-gap: 5px;
-	column-gap: 15px;
-	margin-left: 15px;
+	grid-template-columns: 1.2fr 0.8fr 0.8fr 1.7fr;
+	border: 1px solid #f0f0f0;
+	border-radius: 4px;
+	overflow: hidden;
+	font-size: 12px;
+	line-height: 1.5;
+	margin-top: -16px;
 
-	.meta-item {
-		span {
-			font-weight: bold;
-			margin-right: 5px;
+	.cell {
+		padding: 12px 15px;
+		border-bottom: 1px solid #f0f0f0;
+		display: flex;
+		align-items: center;
+
+		&:nth-last-child(-n + 4) {
+			border-bottom: none;
+		}
+	}
+
+	.label {
+		background-color: #f4f9ff;
+		color: #2e2e2e;
+		border-right: 1px solid #f0f0f0;
+	}
+
+	.value {
+		color: #2e2e2e;
+
+		&:nth-child(4n-2) {
+			border-right: 1px solid #f0f0f0;
 		}
 	}
 }
-
 .info-footer {
 	margin-top: -12px;
 	display: flex;
-	font-size: 11.5px;
+	font-size: 12px;
 	color: @primary-red;
-	gap: 30px;
+	gap: 40px;
 }
 
 .skills-section {
@@ -111,7 +127,7 @@ header {
 		&::before {
 			position: absolute;
 
-			.vin-triangle-indicator(@w: 10px; @h: 6px; @side: right);
+			.vin-triangle-indicator(@w: 8px; @h: 6px; @side: right);
 
 			left: 0px !important;
 			top: -3px !important;
@@ -128,11 +144,11 @@ header {
 .skills-grid {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	font-size: 11px;
+	font-size: 12px;
 	gap: 10px 15px;
 
 	.skill-item {
-		color: @primary-blue;
+		color: #2e2e2e;
 		display: flex;
 		align-items: center;
 		gap: 8px;
@@ -165,7 +181,7 @@ header {
 
 	.block-header {
 		display: flex;
-		padding: 5px 15px;
+		padding: 10px 20px;
 		color: white;
 		align-items: center;
 		position: relative;
@@ -176,7 +192,7 @@ header {
 			text-transform: uppercase;
 		}
 		.desc {
-			font-size: 10px;
+			font-size: 12px;
 			flex: 1;
 			opacity: 0.9;
 			padding-left: 15px;
@@ -200,12 +216,12 @@ header {
 	.content-table {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 10px;
+		font-size: 12px;
 
 		table-layout: fixed;
 		th,
 		td {
-			color: @primary-blue;
+			color: @text-black;
 			padding: 10px 12px;
 			text-align: left;
 			border-bottom: 1px solid #eee;
@@ -216,7 +232,7 @@ header {
 
 		th {
 			background: @light-gray;
-			color: @primary-red;
+			color: @text-black;
 			font-weight: bold;
 		}
 	}
@@ -235,7 +251,7 @@ header {
 		font-weight: bold;
 	}
 	ul {
-		font-size: 11px;
+		font-size: 12px;
 		list-style: none;
 		padding-left: 16px;
 		li {
@@ -245,7 +261,7 @@ header {
 }
 
 .transcript-footer {
-	font-size: 11px;
+	font-size: 12px;
 	color: @primary-blue;
 
 	.section-title {
@@ -288,58 +304,31 @@ header {
 	}
 
 	.gauge-row {
+		margin-top: 12px;
 		display: flex;
-		justify-content: space-around;
-		align-items: flex-end;
-
-		.gauge-item {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-		}
+		align-items: center;
+		justify-content: flex-start;
+		gap: 40px;
 
 		.gauge-container {
 			position: relative;
-			width: 90px;
-			height: 45px;
-			display: flex;
-			justify-content: center;
-			align-items: flex-end;
 		}
 
-		.gauge-svg {
-			width: 100%;
-			height: auto;
-		}
+		.role-desc {
+			flex: 1;
+			line-height: 1.4;
 
-		.gauge-value {
-			position: absolute;
-			bottom: 5px;
-			font-size: 12px;
-			font-weight: 600;
-			color: @primary-blue;
-		}
+			strong {
+				display: block;
+				margin-bottom: 15px;
+				color: @primary-blue;
+				font-size: 13px;
+			}
 
-		.label {
-			margin-top: 10px;
-			font-size: 11px;
-			font-weight: 800;
-			color: @primary-blue;
-			letter-spacing: 0.5px;
-			text-align: center;
-		}
-	}
-
-	.role-desc {
-		margin-top: 10px;
-		line-height: 1.5;
-
-		p {
-			margin: 4px 0;
-		}
-
-		b {
-			color: @primary-blue;
+			p {
+				margin: 0;
+				color: #333;
+			}
 		}
 	}
 }
@@ -352,6 +341,7 @@ header {
 	list-style: none;
 	padding: 0;
 	margin: 0;
+	margin-left: -16px;
 }
 
 .award-item {
