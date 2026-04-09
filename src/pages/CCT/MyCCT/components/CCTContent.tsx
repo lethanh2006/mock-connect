@@ -277,19 +277,48 @@ const CCTContent = (props: {
 
 											stroke: {
 												show: true,
-												width: 6,
+												width: 4,
 												colors: ['#ffffff'],
 												lineCap: 'round',
 											},
 
-											dataLabels: { enabled: false },
+											dataLabels: {
+												enabled: true,
+												formatter: (val: number) => `${Math.round(val)}%`,
+												style: {
+													fontSize: '13px', // ✅ Tăng font size
+													fontWeight: 'bold',
+													colors: ['#fff'],
+												},
+												dropShadow: {
+													enabled: false,
+												},
+											},
+
 											legend: { show: false },
 
 											plotOptions: {
 												pie: {
 													expandOnClick: false,
 													donut: {
-														size: '60%',
+														size: '50%',
+														labels: {
+															show: true,
+															total: {
+																show: true,
+																showAlways: true,
+																label: '',
+																formatter: (w: any) => {
+																	const max = Math.max(...w.globals.series);
+																	return `${max}%`;
+																},
+																fontSize: '22px',
+																fontWeight: 'bold',
+																color: '#1a1a2e',
+															},
+															value: { show: false },
+															name: { show: false },
+														},
 													},
 												},
 											},
@@ -298,8 +327,8 @@ const CCTContent = (props: {
 										}}
 										series={(record?.levelOfEngagement ?? []).map((item) => item?.percentage ?? 0)}
 										type='donut'
-										width={200}
-										height={200}
+										width={220}
+										height={220}
 									/>
 								</div>
 

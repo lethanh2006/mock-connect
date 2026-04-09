@@ -152,7 +152,6 @@ const MyCCTv3 = () => {
 				const img = new Image();
 				img.crossOrigin = 'anonymous';
 				img.src = src;
-
 				img.onload = () => {
 					const canvas = document.createElement('canvas');
 					canvas.width = img.width;
@@ -162,7 +161,6 @@ const MyCCTv3 = () => {
 					ctx.drawImage(img, 0, 0);
 					resolve(canvas.toDataURL('image/jpeg', 0.9));
 				};
-
 				img.onerror = () => resolve('');
 			});
 		};
@@ -181,10 +179,17 @@ const MyCCTv3 = () => {
                 top: 10px !important;
                 transform: translateY(-50%) !important;
             }
+			.export-mode * {
+        		font-weight: bold !important;
+				font-size: 20px !important;
+    		}
         `;
 			document.head.appendChild(style);
 
-			clone.style.width = '3400px';
+			// ✅ Dùng đúng kích thước A3 landscape (px ở 96dpi): 1587 x 1123
+			// Nhưng để capture sắc nét, set width = 3174 (x2) rồi scale html2canvas x2
+			const A3_WIDTH_PX = 4000;
+			clone.style.width = `${A3_WIDTH_PX}px`;
 			clone.style.position = 'fixed';
 			clone.style.top = '-9999px';
 			clone.style.left = '0';
@@ -192,6 +197,7 @@ const MyCCTv3 = () => {
 
 			document.body.appendChild(clone);
 
+			// Xử lý icon-white
 			const imgs = clone.querySelectorAll('.icon-white');
 			await Promise.all(
 				Array.from(imgs).map((img: any) => {
@@ -199,41 +205,37 @@ const MyCCTv3 = () => {
 						const image = new Image();
 						image.crossOrigin = 'anonymous';
 						image.src = img.src;
-
 						image.onload = () => {
 							const canvas = document.createElement('canvas');
 							const ctx = canvas.getContext('2d');
 							if (!ctx) return resolve();
-
 							canvas.width = image.width;
 							canvas.height = image.height;
 							ctx.drawImage(image, 0, 0);
-
 							const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 							const data = imageData.data;
-
 							for (let i = 0; i < data.length; i += 4) {
 								data[i] = 255;
 								data[i + 1] = 255;
 								data[i + 2] = 255;
 							}
-
 							ctx.putImageData(imageData, 0, 0);
 							img.src = canvas.toDataURL('image/png');
-
 							resolve();
 						};
-
 						image.onerror = () => resolve();
 					});
 				}),
 			);
 
 			const canvas = await html2canvas(clone, {
-				scale: 3,
+				scale: 4,
 				useCORS: true,
 				backgroundColor: '#ffffff',
 				logging: false,
+				width: A3_WIDTH_PX,
+				imageTimeout: 0,
+				allowTaint: false,
 			});
 
 			document.body.removeChild(clone);
@@ -254,6 +256,7 @@ const MyCCTv3 = () => {
 			const pageWidth = pdf.internal.pageSize.getWidth();
 			const pageHeight = pdf.internal.pageSize.getHeight();
 
+			// Trang 1: Header (A4 portrait)
 			if (headerImg) {
 				pdf.deletePage(1);
 				pdf.addPage('a4', 'portrait');
@@ -261,29 +264,11 @@ const MyCCTv3 = () => {
 				pdf.addPage('a3', 'landscape');
 			}
 
-			// --- BẮT ĐẦU PHẦN ĐIỀU CHỈNH MAIN IMG ---
-			const padding = 12;
-			const props = pdf.getImageProperties(mainImg);
+			// ✅ Trang 2: Fill toàn bộ trang A3, padding 16
+			const margin = 16;
+			pdf.addImage(mainImg, 'JPEG', margin, margin, pageWidth - margin * 2, pageHeight - margin * 2, undefined, 'FAST');
 
-			// Kích thước khu vực khả dụng để vẽ ảnh (trừ đi padding 12px cho các cạnh)
-			const availableWidth = pageWidth - padding * 2;
-			const availableHeight = pageHeight - padding * 2;
-
-			// Tính tỷ lệ để nhét vừa ảnh vào khoảng trống mà không làm méo tỷ lệ (Aspect Ratio)
-			const scaleX = availableWidth / props.width;
-			const scaleY = availableHeight / props.height;
-			const ratio = Math.min(scaleX, scaleY);
-
-			const finalWidth = props.width * ratio;
-			const finalHeight = props.height * ratio;
-
-			// Căn giữa ảnh vào chính giữa tờ A3
-			const x = padding + (availableWidth - finalWidth) / 2;
-			const y = padding + (availableHeight - finalHeight) / 2;
-
-			pdf.addImage(mainImg, 'JPEG', x, y, finalWidth, finalHeight, undefined, 'FAST');
-			// --- KẾT THÚC PHẦN ĐIỀU CHỈNH MAIN IMG ---
-
+			// Trang 3: Footer (A4 portrait)
 			if (footerImg) {
 				pdf.addPage('a4', 'portrait');
 				pdf.addImage(footerImg, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
@@ -296,7 +281,6 @@ const MyCCTv3 = () => {
 			setExporting(false);
 		}
 	};
-
 	return (
 		<>
 			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
