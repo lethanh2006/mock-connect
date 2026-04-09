@@ -250,7 +250,7 @@ body {
 }
 
 .ant-card {
-	.ant-card-head-title {
+	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 		white-space: pre-wrap;
 		font-size: 18px !important;
 		font-weight: bold !important;
@@ -258,7 +258,7 @@ body {
 	}
 
 	&.hide-indicator {
-		.ant-card-head-title {
+		> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 			padding-left: 0 !important;
 			margin-left: 0 !important;
 
@@ -269,33 +269,33 @@ body {
 	}
 
 	&.card-big-title {
-		.ant-card-head {
-			.ant-card-head-title {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 22px !important;
 				color: var(--color-accent-800) !important;
 
 				&::after {
-					.triangle-indicator(@color: ~'var(--vin-color-primary)'; @w: 10px; @h: 10px; @side: right);
+					.indicator(@color: ~'var(--vin-color-primary)'; @w: 10px; @h: 10px; @side: right);
 				}
 			}
 		}
 	}
 
 	&.highlight {
-		.ant-card-head {
-			.ant-card-head-title {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				color: var(--color-official-300) !important;
 
 				&::after {
-					.triangle-indicator(@color: ~'var(--vin-color-primary)'; @w: 10px; @h: 7px; @side: right);
+					.indicator(@color: ~'var(--vin-color-primary)'; @w: 10px; @h: 7px; @side: right);
 				}
 			}
 		}
 	}
 
 	&.normal {
-		.ant-card-head {
-			.ant-card-head-title {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 16px !important;
 				color: var(--color-official-300) !important;
 
@@ -752,7 +752,7 @@ body {
 }
 
 .collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text::after {
-	.triangle-indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
+	.indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
 	left: -16px !important;
 	top: 14px !important;
 	transform: translateY(-50%) !important;
@@ -763,7 +763,7 @@ body {
 	font-weight: 600;
 
 	&::before {
-		.triangle-indicator(@w: 10px; @h: 6px; @side: right);
+		.indicator(@w: 10px; @h: 6px; @side: right);
 		left: -16px !important;
 		top: 0 !important;
 		transform: translateY(-50%) !important;
