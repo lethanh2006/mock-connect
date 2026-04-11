@@ -196,6 +196,7 @@ export enum ESettingKey {
 	THONG_TIN_THANH_TOAN = 'THONG_TIN_THANH_TOAN',
 	GENERAL_INFO = 'GENERAL_INFO',
 	THU_VIEN_HOC_LIEU = 'THU_VIEN_HOC_LIEU',
+	SINH_VIEN = 'SINH_VIEN',
 }
 
 /** Định dạng file */
