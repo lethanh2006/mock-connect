@@ -13,12 +13,13 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Empty, Modal, Segmented } from 'antd';
 import { type TableRowSelection } from 'antd/lib/table/interface';
 import { useEffect, useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useAccess, useIntl, useModel } from 'umi';
 import FilterHocPhanDKTC from './FilterHocPhan';
 import RenderLichHoc from './RenderLichHoc';
 
 const DangKyLopHocPhan = () => {
 	const intl = useIntl();
+	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel } = useModel('lophocphan.lophocphan');
 	const { danhSachLopDangKy, setDanhSachLopDangKy, tinhDataLichHoc, checkTrungLich } =
@@ -132,7 +133,7 @@ const DangKyLopHocPhan = () => {
 				}
 			};
 
-			if (isHetCho) {
+			if (isHetCho && cctFilter?.()) {
 				Modal.confirm({
 					title: 'Lớp đã đầy',
 					content:
@@ -163,7 +164,9 @@ const DangKyLopHocPhan = () => {
 			const failed1 = !!dangKyRoiMap[record.loai] || (!!dangKyRoiMap[lopCha?.loai!] && needCheckLopCha);
 			const failed2 = checkTrungLich(allThoiKhoaBieu);
 			const failed3 = !!record.children?.length;
-			const failed4 = siSo && (record.waitlistCount ?? 0) >= (settings?.SINH_VIEN?.extraSlots ?? 0);
+			const failed4 = cctFilter?.()
+				? siSo && (record.waitlistCount ?? 0) >= (settings?.SINH_VIEN?.extraSlots ?? 0)
+				: siSo;
 			return {
 				disabled: failed1 || failed2 || failed3 || failed4,
 			};

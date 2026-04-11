@@ -41,8 +41,8 @@ const DangKyTinChiPage = () => {
 			getLopHc();
 			if (cctFilter?.()) {
 				getData();
+				getByKeyModel(ESettingKey.SINH_VIEN, ipDaoTao);
 			}
-			getByKeyModel(ESettingKey.SINH_VIEN, ipDaoTao);
 		}
 	}, [isVerified]);
 
@@ -130,9 +130,11 @@ const DangKyTinChiPage = () => {
 											)}
 										</div>
 
-										<div style={{ marginBottom: 12 }}>
-											<i className='text-info'>{intl.formatMessage({ id: 'dangkytinchi.waitlist.alert' })}</i>
-										</div>
+										{cctFilter?.() && (
+											<div style={{ marginBottom: 12 }}>
+												<i className='text-info'>{intl.formatMessage({ id: 'dangkytinchi.waitlist.alert' })}</i>
+											</div>
+										)}
 
 										<DangKyLopHocPhan />
 									</>
