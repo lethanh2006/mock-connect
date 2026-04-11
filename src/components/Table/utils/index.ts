@@ -1,6 +1,7 @@
 import React from 'react';
 import type { IColumn } from '../typing';
 
+export { normalizeExternalConditions } from './conditions';
 export {
 	findFiltersInColumns,
 	markExternalFilters,
@@ -8,16 +9,18 @@ export {
 	splitFiltersBySource,
 	stripFilterSource,
 } from './filters';
-export { normalizeExternalConditions } from './conditions';
 
-export const updateSearchStorage = (dataIndex: string, value: string) => {
+export const updateSearchStorage = (identifier: string, value: string, isGlobal: boolean = false) => {
+	if (!value || !value.trim()) return;
+	const storageKey = isGlobal ? `GLOBAL_SEARCH_${identifier || 'default'}` : identifier;
 	const savedSearchValues = JSON.parse(localStorage.getItem('dataTimKiem') || '{}');
-	const currentSearchValues = savedSearchValues[dataIndex] || [];
 
-	const newValues = [value, ...currentSearchValues];
+	const currentSearchValues = savedSearchValues[storageKey] || [];
+	const filteredOldValues = currentSearchValues.filter((item: string) => item.toLowerCase() !== value.toLowerCase());
+	const newValues = [value, ...filteredOldValues];
 	const uniqueValues = [...new Set(newValues)].slice(0, 10);
 
-	savedSearchValues[dataIndex] = uniqueValues;
+	savedSearchValues[storageKey] = uniqueValues;
 	localStorage.setItem('dataTimKiem', JSON.stringify(savedSearchValues));
 };
 
