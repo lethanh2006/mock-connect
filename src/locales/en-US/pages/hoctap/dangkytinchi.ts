@@ -13,6 +13,8 @@ export default {
 	'dangkytinchi.empty.ghichu': 'Note',
 	'dangkytinchi.empty.alert':
 		'The registration period only allows you to <b>DELETE</b> previously registered credit classes!',
+	'dangkytinchi.waitlist.alert':
+		'If the class is full, you can still register for the waitlist. When a spot becomes available or the instructor approves your request, you will be moved into the official class.',
 	'dangkytinchi.thongtindangky.title': 'Registration information',
 	'dangkytinchi.thongtindangky.alert':
 		'Students proactively monitor <link_tien_trinh>Study progress</link_tien_trinh> and <link_ket_qua>Academic results</link_ket_qua> to choose classes according to the correct progress; courses that need to be retaken or improved; the graduation thesis or replacement courses...',
@@ -20,10 +22,13 @@ export default {
 	'dangkytinchi.thongtindangky.empty.khongcodotdangky': 'There is no credit registration period this semester!',
 	'dangkytinchi.thongtindangky.huongdandangky.title': 'Watch the video guide to registering for credits',
 	'dangkytinchi.dankylophocphan.columntable.thutulop': 'Class order',
+	'dangkytinchi.dankylophocphan.columntable.malop': 'Class Code',
 	'dangkytinchi.dankylophocphan.columntable.giangvien': 'Lecturer',
 	'dangkytinchi.dankylophocphan.columntable.thongtinchitiet': 'Detailed information',
 	'dangkytinchi.dankylophocphan.columntable.sisotoida': 'Maximum number of students',
 	'dangkytinchi.dankylophocphan.columntable.controng': 'Still empty',
+	'dangkytinchi.dankylophocphan.columntable.dlphong': 'Room Capacity',
+	'dangkytinchi.dankylophocphan.columntable.hangcho': 'Waitlist',
 	'dangkytinchi.dankylophocphan.columntable.hinhthucdt': 'Form of phone number',
 	'dangkytinchi.dankylophocphan.columntable.csdt': 'Training Institution',
 	'dangkytinchi.dankylophocphan.columntable.tinhchat': 'Properties',
@@ -91,6 +96,7 @@ export default {
 	'dangkytinchi.modaldangky.columntable.tenhocphan': 'Course name',
 	'dangkytinchi.modaldangky.columntable.loptinchi': 'Credit class',
 	'dangkytinchi.modaldangky.columntable.trangthai': 'Status',
+	'dangkytinchi.modaldangky.columntable.hangcho': 'Waitlist',
 	'dangkytinchi.modaldangky.success.hoanthanhdangky': 'Registration completed',
 	'dangkytinchi.modaldangky.dangky.title': 'Registration confirmation',
 	'dangkytinchi.modaldangky.dangky.alert': 'Confirm registration of the selected credit classes?',
