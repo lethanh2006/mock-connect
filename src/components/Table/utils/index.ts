@@ -10,18 +10,21 @@ export {
 	stripFilterSource,
 } from './filters';
 
-export const updateSearchStorage = (identifier: string, value: string, isGlobal: boolean = false) => {
+export const updateSearchStorage = (dataIndex: string, value: string) => {
 	if (!value || !value.trim()) return;
-	const storageKey = isGlobal ? `GLOBAL_SEARCH_${identifier || 'default'}` : identifier;
 	const savedSearchValues = JSON.parse(localStorage.getItem('dataTimKiem') || '{}');
+	const currentSearchValues = savedSearchValues[dataIndex] || [];
 
-	const currentSearchValues = savedSearchValues[storageKey] || [];
-	const filteredOldValues = currentSearchValues.filter((item: string) => item.toLowerCase() !== value.toLowerCase());
-	const newValues = [value, ...filteredOldValues];
-	const uniqueValues = [...new Set(newValues)].slice(0, 10);
+	const uniqueValues = currentSearchValues.filter((item: string) => item.toLowerCase() !== value.toLowerCase());
+	const newValues = [value, ...uniqueValues].slice(0, 10);
 
-	savedSearchValues[storageKey] = uniqueValues;
+	savedSearchValues[dataIndex] = newValues;
 	localStorage.setItem('dataTimKiem', JSON.stringify(savedSearchValues));
+};
+
+export const getSearchStorage = (dataIndex: string) => {
+	const saved = JSON.parse(localStorage.getItem('dataTimKiem') || '{}');
+	return saved[dataIndex] || [];
 };
 
 // Hàm hỗ trợ trích lọc nội dung text từ ReactNode (như Tooltip, Tag, v.v.)

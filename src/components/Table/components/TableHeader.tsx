@@ -13,12 +13,12 @@ import {
 import { AutoComplete, Button, Input, Popconfirm, Popover, Tooltip } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useIntl } from 'umi';
 import { EOperatorType } from '../constant';
 import type { TFilter } from '../typing';
-import { findFiltersInColumns, updateSearchStorage } from '../utils';
+import { findFiltersInColumns, getSearchStorage, updateSearchStorage } from '../utils';
 import { ColumnSettings } from './ColumnSettings';
 import { useTableContext } from './TableContext';
 
@@ -58,8 +58,9 @@ export const TableHeader: React.FC = () => {
 	} = buttons || {};
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
 	const [globalOptions, setGlobalOptions] = useState<{ value: string }[]>([]);
-	const [openDropdown, setOpenDropdown] = useState(false);
+	const searchInputRef = useRef<any>(null);
 	const currentPath = window.location.pathname;
+	const globalDataIndex = useMemo(() => `GLOBAL_SEARCH_${currentPath}`, [currentPath]);
 	const canOpenModalFilter = btnFilter && hasFilter && disableFilterModal !== true;
 
 	//#region Global Search Logic
@@ -129,16 +130,6 @@ export const TableHeader: React.FC = () => {
 	useEffect(() => {
 		setGlobalSearchText(currentGlobalSearchText);
 	}, [currentGlobalSearchText]);
-
-	const getGlobalSearchHistory = (pathname: string) => {
-		const saved = JSON.parse(localStorage.getItem('dataTimKiem') || '{}');
-		return saved[`GLOBAL_SEARCH_${pathname || 'default'}`] || [];
-	};
-
-	useEffect(() => {
-		const history = getGlobalSearchHistory(currentPath);
-		setGlobalOptions(history.map((val: string) => ({ value: val })));
-	}, [currentPath]);
 
 	const createGlobalSearchFilter = useCallback(
 		(keyword: string): TFilter<any> => ({
@@ -231,20 +222,76 @@ export const TableHeader: React.FC = () => {
 		);
 	}, [intl, searchableColumns]);
 
+	useEffect(() => {
+		const history = getSearchStorage(globalDataIndex);
+		setGlobalOptions(history.map((val: string) => ({ value: val })));
+	}, [globalDataIndex]);
+
 	const handleGlobalSearchTrigger = useCallback(
 		(value: string) => {
 			const keyword = value?.trim() || '';
+
 			setGlobalSearchText(keyword);
 			applyGlobalSearch(keyword);
 
+			const history = getSearchStorage(globalDataIndex);
+			setGlobalOptions(history.map((val: string) => ({ value: val, label: val })));
+
 			if (keyword) {
-				updateSearchStorage(currentPath, keyword, true);
-				const history = getGlobalSearchHistory(currentPath);
-				setGlobalOptions(history.map((val: string) => ({ value: val })));
+				updateSearchStorage(globalDataIndex, keyword);
 			}
-			setOpenDropdown(false);
+			setTimeout(() => {
+				searchInputRef.current?.blur();
+			}, 0);
 		},
-		[currentPath, applyGlobalSearch],
+		[globalDataIndex, applyGlobalSearch],
+	);
+
+	const renderGlobalSearch = (minimized: boolean) => (
+		<AutoComplete
+			options={globalOptions}
+			value={globalSearchText}
+			onSelect={handleGlobalSearchTrigger}
+			onChange={(val) => setGlobalSearchText(val)}
+		>
+			<Input.Search
+				ref={searchInputRef}
+				className='global-search'
+				size={size}
+				allowClear
+				value={globalSearchText}
+				placeholder={globalSearchPlaceholder}
+				autoFocus={minimized}
+				style={
+					minimized
+						? { width: 250 }
+						: globalSearchText
+							? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
+							: undefined
+				}
+				enterButton={
+					!minimized ? (
+						<Button
+							loading={loading}
+							icon={
+								<Tooltip title={globalSearchTooltip}>
+									<SearchOutlined />
+								</Tooltip>
+							}
+						/>
+					) : null
+				}
+				onSearch={handleGlobalSearchTrigger}
+				onChange={(e) => {
+					if (e.type === 'click') {
+						setGlobalSearchText('');
+						handleGlobalSearchTrigger('');
+					} else {
+						setGlobalSearchText(e.target.value);
+					}
+				}}
+			/>
+		</AutoComplete>
 	);
 
 	const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -309,41 +356,7 @@ export const TableHeader: React.FC = () => {
 			<div className='extra no-print'>
 				{canShowGlobalSearch ? (
 					isMinimize ? (
-						<Popover
-							content={
-								<AutoComplete
-									options={globalOptions}
-									value={globalSearchText}
-									open={openDropdown}
-									onDropdownVisibleChange={(visible) => setOpenDropdown(visible)}
-									onSelect={(val) => handleGlobalSearchTrigger(val)}
-									onChange={(val) => setGlobalSearchText(val)}
-								>
-									<Input.Search
-										className='global-search'
-										size={size}
-										allowClear
-										value={globalSearchText}
-										placeholder={globalSearchPlaceholder}
-										style={{ width: 250 }}
-										autoFocus
-										onChange={(e) => {
-											const val = e.target.value;
-											if (e.type === 'click' && !val) {
-												handleGlobalSearchTrigger('');
-											} else {
-												setGlobalSearchText(val);
-											}
-										}}
-										onSearch={(value) => {
-											handleGlobalSearchTrigger(value);
-										}}
-									/>
-								</AutoComplete>
-							}
-							trigger='click'
-							placement='bottom'
-						>
+						<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
 							<ButtonExtend
 								className='btn-minimize-search'
 								size={size}
@@ -354,46 +367,7 @@ export const TableHeader: React.FC = () => {
 							/>
 						</Popover>
 					) : (
-						<AutoComplete
-							options={globalOptions}
-							value={globalSearchText}
-							open={openDropdown}
-							onDropdownVisibleChange={(visible) => setOpenDropdown(visible)}
-							onSelect={(val) => handleGlobalSearchTrigger(val)}
-							onChange={(val) => setGlobalSearchText(val)}
-						>
-							<Input.Search
-								className='global-search'
-								size={size}
-								allowClear
-								value={globalSearchText}
-								placeholder={globalSearchPlaceholder}
-								style={
-									globalSearchText
-										? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
-										: undefined
-								}
-								enterButton={
-									<Button
-										loading={loading}
-										icon={
-											<Tooltip title={globalSearchTooltip}>
-												<SearchOutlined />
-											</Tooltip>
-										}
-									/>
-								}
-								onSearch={(value) => handleGlobalSearchTrigger(value)}
-								onChange={(e) => {
-									const val = e.target.value;
-									if (e.type === 'click' && !val) {
-										handleGlobalSearchTrigger('');
-									} else {
-										setGlobalSearchText(val);
-									}
-								}}
-							/>
-						</AutoComplete>
+						renderGlobalSearch(isMinimize)
 					)
 				) : null}
 
