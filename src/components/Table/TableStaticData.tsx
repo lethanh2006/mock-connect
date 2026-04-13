@@ -21,7 +21,14 @@ import { updateSearchStorage } from './utils';
 const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const intl = useIntl();
 	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable, resizable } = props;
-	const { columnSettings, setColumnSettings, columnsWidth, setColumnsWidth, size, columnSetting = true } = useTableContext();
+	const {
+		columnSettings,
+		setColumnSettings,
+		columnsWidth,
+		setColumnsWidth,
+		size,
+		columnSetting = true,
+	} = useTableContext();
 
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
 	const [searchText, setSearchText] = useState<string>('');
@@ -288,9 +295,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					)}
 
 					{props.otherButtons}
-				</div>
 
-				<div className='extra'>
 					{!!props.onReload ? (
 						<ButtonExtend
 							size={size}
@@ -302,6 +307,10 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							{intl.formatMessage({ id: 'global.tablestatic.button.xoa' })}
 						</ButtonExtend>
 					) : null}
+				</div>
+
+				<div className='extra'>
+					{columnSetting && <ColumnSettings />}
 
 					{hasTotal ? (
 						<Tooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
@@ -311,8 +320,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							</div>
 						</Tooltip>
 					) : null}
-
-					{columnSetting && <ColumnSettings />}
 				</div>
 			</div>
 
