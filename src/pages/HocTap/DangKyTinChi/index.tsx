@@ -1,4 +1,6 @@
+import { ESettingKey } from '@/services/base/constant';
 import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import { ipDaoTao } from '@/utils/ip';
 import { QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Divider, Empty, Row, Spin } from 'antd';
 import { useEffect, useState } from 'react';
@@ -17,6 +19,8 @@ const DangKyTinChiPage = () => {
 	const { dotDangKyHienTai, loading, sinhVienDot, phieuDangKy } = useModel('daotao.dotdangkytinchi');
 	const { getModel } = useModel('daotao.dkvuottinchi');
 	const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
+	const { getByKeyModel } = useModel('tienich.caidat');
+
 	const [isVerified, setIsVerified] = useState<boolean>(false);
 	const [visibleLichSu, setVisibleLichSu] = useState<boolean>(false);
 
@@ -33,13 +37,14 @@ const DangKyTinChiPage = () => {
 	};
 
 	useEffect(() => {
-		if (!isVerified) {
+		if (isVerified) {
 			getLopHc();
 			if (cctFilter?.()) {
 				getData();
+				getByKeyModel(ESettingKey.SINH_VIEN, ipDaoTao);
 			}
 		}
-	}, [isVerified, cctFilter]);
+	}, [isVerified]);
 
 	return !isVerified ? (
 		<Card className='card-big-title' variant='borderless' title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
@@ -124,6 +129,13 @@ const DangKyTinChiPage = () => {
 												},
 											)}
 										</div>
+
+										{cctFilter?.() && (
+											<div style={{ marginBottom: 12 }}>
+												<i className='text-info'>{intl.formatMessage({ id: 'dangkytinchi.waitlist.alert' })}</i>
+											</div>
+										)}
+
 										<DangKyLopHocPhan />
 									</>
 								) : (
