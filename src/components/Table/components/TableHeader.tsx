@@ -229,6 +229,7 @@ export const TableHeader: React.FC = () => {
 
 	const handleGlobalSearchTrigger = useCallback(
 		(value: string) => {
+			debounceSearch.cancel();
 			const keyword = value?.trim() || '';
 
 			setGlobalSearchText(keyword);
@@ -244,7 +245,7 @@ export const TableHeader: React.FC = () => {
 				searchInputRef.current?.blur();
 			}, 0);
 		},
-		[globalDataIndex, applyGlobalSearch],
+		[globalDataIndex, applyGlobalSearch, debounceSearch],
 	);
 
 	const renderGlobalSearch = (minimized: boolean) => (
@@ -284,10 +285,13 @@ export const TableHeader: React.FC = () => {
 				onSearch={handleGlobalSearchTrigger}
 				onChange={(e) => {
 					if (e.type === 'click') {
+						debounceSearch.cancel();
 						setGlobalSearchText('');
 						handleGlobalSearchTrigger('');
 					} else {
-						setGlobalSearchText(e.target.value);
+						const val = e.target.value;
+						setGlobalSearchText(val);
+						debounceSearch(val);
 					}
 				}}
 			/>
