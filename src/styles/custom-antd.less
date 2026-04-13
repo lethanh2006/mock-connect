@@ -3,6 +3,34 @@
 	font-weight: 600 !important;
 }
 
+// Mixins dùng chung – giảm lặp cho triangle indicator
+.triangle-indicator(@color: var(--color-primary); @w: 14px; @h: 10px; @side: right; @rotate: 180deg) {
+	content: '' !important;
+	position: absolute !important;
+	width: 0 !important;
+	height: 0 !important;
+	border-top: @h solid transparent !important;
+	border-bottom: @h solid transparent !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	z-index: 999 !important;
+	pointer-events: none !important;
+	rotate: @rotate !important;
+
+	& when (@side = right) {
+		border-right: @w solid @color !important;
+	}
+
+	& when (@side = left) {
+		border-left: @w solid @color !important;
+	}
+}
+
+.ant-layout-content {
+	overflow-x: hidden;
+}
+
 .ant-checkbox {
 	.ant-checkbox-inner {
 		border-radius: var(--border-radius);
@@ -206,14 +234,72 @@
 
 		> .ant-card-head {
 			border-bottom: none;
+			// padding-bottom: 16px !important;
+			overflow: visible !important;
 
-			> .ant-card-head-wrapper > .ant-card-head-title {
+			.ant-card-head-title {
 				font-size: 18px;
+				margin-left: 2px !important;
+				padding-left: 0 !important;
+				display: flex;
+				align-items: center;
+
+				&::after {
+					.triangle-indicator();
+					left: -18px !important;
+					top: 8px !important;
+					transform: translateY(-50%) !important;
+				}
 			}
 		}
 
 		> .ant-card-body {
 			padding: 0;
+		}
+	}
+
+	&.highlight {
+		.ant-card-head {
+			overflow: visible !important;
+			padding-bottom: 0 !important;
+
+			.ant-card-head-title {
+				font-size: 18px !important;
+				padding-left: 18px !important;
+				display: flex;
+				align-items: center;
+
+				&::after {
+					left: 0 !important;
+					top: 14px !important;
+					transform: translateY(-50%) !important;
+					.triangle-indicator(@w: 10px; @h: 7px);
+				}
+			}
+		}
+	}
+
+	&.normal {
+		> .ant-card-head {
+			.ant-card-head-title {
+				padding-left: 0 !important;
+				font-size: 16px !important;
+
+				&::after {
+					display: none !important;
+				}
+			}
+		}
+	}
+
+	&.hide-indicator {
+		.ant-card-head .ant-card-head-title {
+			padding-left: 0 !important;
+			margin-left: 0 !important;
+
+			&::after {
+				display: none !important;
+			}
 		}
 	}
 }

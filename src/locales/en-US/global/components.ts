@@ -192,7 +192,6 @@ export default {
 	'global.table.operator.not_between': 'Out Of Range',
 	'global.table.operator.in': 'Includes',
 	'global.table.operator.not_in': 'Does Not Include',
-	'global.table.operator.null': 'Empty',
 	'global.table.operator.not_null': 'Not Empty',
 	'global.table.operator.or': 'Or',
 	'global.table.operator.and': 'And',

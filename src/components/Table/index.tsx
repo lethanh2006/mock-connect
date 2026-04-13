@@ -35,6 +35,11 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 		[externalFilters, tableFilters],
 	);
 
+	const { externalFilters: activeExternalFilters } = useMemo(
+		() => splitFiltersBySource(filters),
+		[filters],
+	);
+
 	const handleSetFilters = useCallback(
 		(nextFilters: TFilter<T>[] = []) => {
 			const normalizedNextFilters = normalizeFilters(nextFilters);
@@ -70,9 +75,9 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	const getData = useCallback(
 		(params: any) => {
 			if (props.getData) return props.getData(params);
-			return model?.getModel?.(mergeExternalConditions(params));
+			return model?.getModel?.(mergeExternalConditions(params), activeExternalFilters);
 		},
-		[props.getData, model, mergeExternalConditions],
+		[props.getData, model, mergeExternalConditions, activeExternalFilters],
 	);
 	const hasExternalConditions = !!(props.externalConditions && props.externalConditions.length > 0);
 	const hasFilter =

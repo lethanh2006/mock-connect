@@ -21,7 +21,7 @@ import { updateSearchStorage } from './utils';
 const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const intl = useIntl();
 	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable, resizable } = props;
-	const { columnSettings, setColumnSettings, columnsWidth, setColumnsWidth, size } = useTableContext();
+	const { columnSettings, setColumnSettings, columnsWidth, setColumnsWidth, size, columnSetting = true } = useTableContext();
 
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
 	const [searchText, setSearchText] = useState<string>('');
@@ -37,7 +37,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		() =>
 			(props?.data ?? []).map((item: any, index: number) => ({
 				...item,
-				key: item?._id ? `${item._id}-${index}` : String(index),
+				key: item?._id ?? String(index),
 				index: index + 1,
 				children:
 					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
@@ -312,7 +312,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 						</Tooltip>
 					) : null}
 
-					<ColumnSettings />
+					{columnSetting && <ColumnSettings />}
 				</div>
 			</div>
 
@@ -400,6 +400,7 @@ const TableStaticData: React.FC<TableStaticProps> = (props) => {
 				title: props.title,
 				size: props.size,
 				columns: props.columns,
+				columnSetting: props.columnSetting,
 			}}
 		>
 			<TableStaticContent {...props} />
