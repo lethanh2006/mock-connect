@@ -253,6 +253,7 @@ const DangKyLopHocPhan = () => {
 			align: 'center',
 			width: 60,
 			onCell,
+			hide: !cctFilter?.(),
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.hangcho' }),
@@ -261,6 +262,7 @@ const DangKyLopHocPhan = () => {
 			width: 60,
 			render: (val, rec) => `${val ?? 0}/${settings?.SINH_VIEN?.extraSlots ?? 0}`,
 			onCell,
+			hide: !cctFilter?.(),
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.hinhthucdt' }),
