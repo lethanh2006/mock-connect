@@ -4,7 +4,7 @@
 }
 
 // Mixins dùng chung – giảm lặp cho triangle indicator
-.triangle-indicator(@color: var(--color-primary); @w: 14px; @h: 10px; @side: right; @rotate: 180deg) {
+.indicator(@color: var(--color-primary); @w: 14px; @h: 10px; @side: right; @rotate: 180deg) {
 	content: '' !important;
 	position: absolute !important;
 	width: 0 !important;
@@ -187,12 +187,12 @@
 .ant-card {
 	height: 100%;
 
-	.ant-card-head-title {
+	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 		white-space: pre-wrap;
 		flex: auto;
 	}
 
-	.ant-card-head {
+	> .ant-card-head {
 		padding: 0 18px;
 
 		@media (max-width: @screen-xs) {
@@ -237,7 +237,7 @@
 			// padding-bottom: 16px !important;
 			overflow: visible !important;
 
-			.ant-card-head-title {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 18px;
 				margin-left: 2px !important;
 				padding-left: 0 !important;
@@ -245,7 +245,7 @@
 				align-items: center;
 
 				&::after {
-					.triangle-indicator();
+					.indicator();
 					left: -18px !important;
 					top: 8px !important;
 					transform: translateY(-50%) !important;
@@ -259,11 +259,11 @@
 	}
 
 	&.highlight {
-		.ant-card-head {
+		> .ant-card-head {
 			overflow: visible !important;
 			padding-bottom: 0 !important;
 
-			.ant-card-head-title {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 18px !important;
 				padding-left: 18px !important;
 				display: flex;
@@ -273,7 +273,7 @@
 					left: 0 !important;
 					top: 14px !important;
 					transform: translateY(-50%) !important;
-					.triangle-indicator(@w: 10px; @h: 7px);
+					.indicator(@w: 10px; @h: 7px);
 				}
 			}
 		}
@@ -281,7 +281,7 @@
 
 	&.normal {
 		> .ant-card-head {
-			.ant-card-head-title {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				padding-left: 0 !important;
 				font-size: 16px !important;
 
@@ -293,7 +293,7 @@
 	}
 
 	&.hide-indicator {
-		.ant-card-head .ant-card-head-title {
+		> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 			padding-left: 0 !important;
 			margin-left: 0 !important;
 
