@@ -1,18 +1,31 @@
 import useInitModel from '@/hooks/useInitModel';
 import { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
 import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { getMoodleLopHocPhan } from '@/services/HocTap/LopHocPhan';
+import { getMoodleLopHocPhan, postWithdraw } from '@/services/HocTap/LopHocPhan';
 import { ELoaiLopHocPhan, ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { ipDaoTao } from '@/utils/ip';
+import { message } from 'antd';
 import _ from 'lodash';
 import { useState } from 'react';
 
 export default () => {
 	const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
-	const { getByIdModel, getModel, getAllModel, setLoading, page, limit, getService, setPage, setTotal, setDanhSach } =
-		objInit;
+	const {
+		getByIdModel,
+		getModel,
+		getAllModel,
+		setLoading,
+		page,
+		limit,
+		getService,
+		setPage,
+		setTotal,
+		setDanhSach,
+		setFormSubmiting,
+		formSubmiting,
+	} = objInit;
 	const [danhSachLopDktc, setDanhSachLopDktc] = useState<LopHocPhan.IRecord[]>([]);
 	const [lopHienTai, setLopHienTai] = useState<LopHocPhan.IRecord>();
 	const [lopKeTiep, setLopKeTiep] = useState<LopHocPhan.IRecord>();
@@ -178,7 +191,8 @@ export default () => {
 		try {
 			const response = await getService(
 				payload,
-				`dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${loaiDangKyTheoLop === ELoaiDangKyTheoLop.LOP_HANH_CHINH && tatCa ? 'doi-tuong' : loaiDangKyTheoLop
+				`dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${
+					loaiDangKyTheoLop === ELoaiDangKyTheoLop.LOP_HANH_CHINH && tatCa ? 'doi-tuong' : loaiDangKyTheoLop
 				}/page`,
 				true,
 			);
@@ -215,6 +229,21 @@ export default () => {
 		}
 	};
 
+	const postWithdrawModel = async (payload: { lopHpSvId: string }): Promise<any> => {
+		if (formSubmiting) return Promise.reject('Form submiting');
+		setFormSubmiting(true);
+		try {
+			const res = await postWithdraw(payload);
+			message.success('Lưu thành công');
+
+			return res.data;
+		} catch (er) {
+			return Promise.reject(er);
+		} finally {
+			setFormSubmiting(false);
+		}
+	};
+
 	return {
 		...objInit,
 		danhSachLopDktc,
@@ -226,5 +255,6 @@ export default () => {
 		getMoodleLopHocPhanModel,
 		sinhVienGetLopDangKyModel,
 		calculateNearestBuoiLop,
+		postWithdrawModel,
 	};
 };
