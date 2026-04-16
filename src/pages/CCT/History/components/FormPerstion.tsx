@@ -512,7 +512,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 								<Form.Item
 									name='reflection'
 									label='Reflection'
-									rules={[...rules.required, ...rules.text, ...rules.length(70)]}
+									rules={[...rules.required, ...rules.text, ...rules.length(300)]}
 								>
 									<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' showCount />
 								</Form.Item>

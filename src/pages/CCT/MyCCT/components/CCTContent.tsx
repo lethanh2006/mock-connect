@@ -1,22 +1,24 @@
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
-import { EStatusMyCCT } from '@/services/CCT/constant';
 import rules from '@/utils/rules';
-import { Checkbox, Col, Form, FormInstance, Input, Rate, Row, Spin } from 'antd';
+import { Checkbox, Col, Form, FormInstance, Input, Row, Spin } from 'antd';
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
-import Chart from 'react-apexcharts';
+import _ from 'lodash';
 import { useModel } from 'umi';
-import DragAwards from './DragAwards';
-import DragTable, { mapLevelToStar } from './DragTable';
 
-const CheckboxIcon = () => (
-	<div className='checkbox-icon'>
-		<span>✓</span>
-	</div>
-);
+export const getLevelSymbol = (levelName: string) => {
+	const map: Record<string, number> = {
+		Participant: 1,
+		Contributor: 2,
+		Leader: 3,
+		'Impact Driver': 4,
+	};
+
+	return '▶'.repeat(map[levelName] || 0);
+};
 
 const CCTContent = (props: {
 	record: {
+		activities: MyCCT.IActivityMyCCT[];
 		allCompetencies: string[];
 		attributes: MyCCT.IAttributeMyCCT[];
 		levelOfEngagement: MyCCT.ILevelOfEngagement[];
@@ -24,126 +26,174 @@ const CCTContent = (props: {
 		awardsAndRecognition: ActivityOutCome.IRecord[];
 	};
 	form: FormInstance;
-	setSelectedActivities: (val: any) => void;
-	setListAwardRecognition: (val: any) => void;
 	edit: boolean;
 }) => {
-	const { record, form, setSelectedActivities, setListAwardRecognition, edit } = props;
+	const { record, form, edit } = props;
 	const { loading } = useModel('cct.mycct');
 	const { loading: loadingDot } = useModel('cct.submissionround');
+
 	const selectedCompetencies = Form.useWatch('listCompetency', form) || [];
-	const isMaxSelected = selectedCompetencies.length >= 10;
+	const isMaxSelected = selectedCompetencies.length >= 9;
 
-	const handleOrderChange = (attributeId: string, activityIds: string[]) => {
-		setSelectedActivities((prev: any) => {
-			const index = prev.findIndex((i: any) => i.attributeId === attributeId);
+	const selectedActivity = Form.useWatch('selectedActivities', form) || [];
+	const isMaxSelectedActivity = selectedActivity.length >= 7;
 
-			if (index > -1) {
-				const newArr = [...prev];
-				newArr[index] = { attributeId, activityIds };
-				return newArr;
-			}
+	const selectedAward = Form.useWatch('listAwardRecognition', form) || [];
+	const isMaxSelectedAward = selectedAward.length >= 7;
 
-			return [...prev, { attributeId, activityIds }];
-		});
+	const sortedActivities = _(record?.activities).orderBy(['year', '_levelOrderForSorting'], ['asc', 'desc']).value();
+	const selectedActivities = sortedActivities.filter((item) => record?.myCCT?.selectedActivities?.includes(item.id));
+
+	const renderItem = (item: any, withCheckbox = false) => {
+		const content = (
+			<div className='project-item'>
+				<div className='project-year'>
+					<span>{item?.year}</span>
+					<span className='role-indicator level-2'>{getLevelSymbol(item.level)}</span>
+				</div>
+
+				<div className='project-detail'>
+					<h3>{item?.activity}</h3>
+					<p>
+						<i>{item?.impact}</i>
+					</p>
+				</div>
+			</div>
+		);
+
+		if (withCheckbox) {
+			return (
+				<div key={item.id} className='project-row'>
+					<Checkbox
+						value={item.id}
+						disabled={!selectedActivity.includes(item.id) && isMaxSelectedActivity}
+						style={{ fontSize: 9 }}
+					/>
+					<div className='project-content'>{content}</div>
+				</div>
+			);
+		}
+
+		return (
+			<div key={item.id} className='project-row no-checkbox'>
+				{content}
+			</div>
+		);
 	};
 
-	const awards = record?.awardsAndRecognition || [];
-	const order = record?.myCCT?.listAwardRecognition || [];
+	const sortedAwards = _.orderBy(record?.awardsAndRecognition ?? [], ['dateOfAchievement'], ['asc']);
+	const selectedAwards = sortedAwards.filter((item) => record?.myCCT?.listAwardRecognition?.includes(item?._id));
 
-	const sortedAwards = useMemo(() => {
-		if (!order.length) return awards;
+	const renderAwards = (item: any, withCheckbox = false) => {
+		const content = (
+			<div className='award-item'>
+				<h3>
+					<span className='star'>★</span> {item?.competition} - {item?.rank},{' '}
+					{dayjs(item?.dateOfAchievement).format('DD/MM/YYYY')}
+				</h3>
 
-		const orderMap = new Map(order.map((id, index) => [id, index]));
+				<p>
+					<i>{item?.description}</i>
+				</p>
+			</div>
+		);
 
-		return [...awards].sort((a, b) => {
-			return (orderMap.get(a._id) ?? 9999) - (orderMap.get(b._id) ?? 9999);
-		});
-	}, [awards, order]);
+		if (withCheckbox) {
+			return (
+				<div key={item._id} className='project-row'>
+					<Checkbox
+						value={item._id}
+						disabled={!selectedAward.includes(item._id) && isMaxSelectedAward}
+						style={{ fontSize: 9 }}
+					/>
+					{content}
+				</div>
+			);
+		}
+
+		return content;
+	};
 
 	return (
 		<Spin spinning={loading || loadingDot}>
-			<Row gutter={[36, 20]}>
-				<Col span={24} md={12}>
-					<div className='cct-column left'>
-						<header>
-							<div style={{ marginBottom: 12 }}>
-								<img src='/student/logo-text.png' alt='logo' width={90} className='logo' />
-							</div>
-							<span
-								style={{
-									color: '#134D8B',
-									fontWeight: 700,
-									fontSize: 18,
-								}}
-								className='title-cct'
-							>
-								CO-CURRICULAR & COMPETENCY TRANSCRIPT
-							</span>
-							<div style={{ marginTop: 6 }}>
-								<span className='description'>
-									Co-curricular & Competency Transcript (CCT) is part of VinUniversity's commitment to developing
-									holistic graduates. This transcript documents the co-curricular experiences and developmental
-									activities that students engage in during their time at VinUni, capturing evidence of their
-									competencies, growth, and contributions beyond academic performance.
-								</span>
-							</div>
-						</header>
+			<div className='cct-container'>
+				<header className='cct-header'>
+					<div className='header-content'>
+						<div className='header-title'>
+							CO-CURRICULAR & <br /> COMPETENCY TRANSCRIPT
+						</div>
+						<div className='university-logo'>
+							<img src={'/images/cct/bg-cct.png'} style={{ height: 60 }} />
+						</div>
+					</div>
+				</header>
 
-						<section className='skills-section'>
-							<h3>STUDENT INFORMATION</h3>
+				<main className='cct-body'>
+					<div className='column left-column'>
+						<section className='intro-section'>
+							<p className='intro-text'>
+								<b>Co-curricular & Competency Transcript (CCT)</b> is part of VinUniversity's commitment to developing
+								holistic graduates. This transcript documents the co-curricular experiences and developmental activities
+								that students engage in during their time at VinUni, capturing evidence of their competencies, growth,
+								and contributions beyond academic performance.
+							</p>
+							<div className='student-info'>
+								<div className='info-group'>
+									<p>Student name: {record?.myCCT?.name || '--'}</p>
+									<p>Date of Birth: {record?.myCCT?.dob ? dayjs(record.myCCT.dob).format('DD/MM/YYYY') : '--'}</p>
+									<p>Year of Enrollment: {record?.myCCT?.yearOfEnrollment ?? '--'}</p>
+								</div>
+								<div className='info-group'>
+									<p>Student ID: {record?.myCCT?.code || '--'}</p>
+									<p>
+										{`Program: ${record?.myCCT?.program || ''}${
+											record?.myCCT?.college ? ` - ${record?.myCCT?.college}` : ''
+										}`}
+									</p>
+								</div>
+							</div>
 						</section>
 
-						<section className='student-meta-table'>
-							<div className='cell label'>Student name</div>
-							<div className='cell value'>{record?.myCCT?.name || '--'}</div>
-							<div className='cell label'>Student ID</div>
-							<div className='cell value'>{record?.myCCT?.code || '--'}</div>
-
-							<div className='cell label'>Date of Birth</div>
-							<div className='cell value'>
-								{record?.myCCT?.dob ? dayjs(record.myCCT.dob).format('DD/MM/YYYY') : '--'}
+						<section className='profile-section'>
+							<div className='section-title gold-text'>
+								<img src={'/images/cct/Profile.png'} style={{ width: 25, marginLeft: -4, marginTop: -4 }} /> Student
+								Aspiration Statement
 							</div>
-							<div className='cell label'>College</div>
-							<div className='cell value'>{record?.myCCT?.college || '--'}</div>
-
-							<div className='cell label'>Year of Enrollment</div>
-							<div className='cell value'>{record?.myCCT?.yearOfEnrollment ?? '--'}</div>
-							<div className='cell label'>Program</div>
-							<div className='cell value'>{record?.myCCT?.program || '--'}</div>
-						</section>
-
-						<section className='skills-section'>
-							<h3>STUDENT PROFILE</h3>
 							{edit ? (
 								<Form.Item name='selfAspiration' rules={[...rules.required, ...rules.text]}>
-									<Input.TextArea rows={3} placeholder='Enter Student Profile' />
+									<Input.TextArea
+										rows={3}
+										placeholder='Enter Student Aspiration Statement'
+										style={{ fontSize: '9px' }}
+									/>
 								</Form.Item>
 							) : (
-								<span className='description'>{record?.myCCT?.selfAspiration}</span>
+								<p className='italic-text'>{record?.myCCT?.selfAspiration ?? '--'}</p>
 							)}
 						</section>
 
 						<section className='skills-section'>
-							<h3>SKILLS & COMPETENCY DEVELOPMENT</h3>
-							<div style={{ marginBottom: 12 }}>
-								<span className='description'>
-									<i>
-										The following competencies were developed and demonstrated through verified co-curricular activities
-										and experiences.
-									</i>
-								</span>
+							<div className='section-title gold-text'>
+								<img src={'/images/cct/Skills.png'} style={{ width: 25, marginLeft: -4, marginTop: -7 }} /> Skills and
+								Competency Development
 							</div>
+							<p className='italic-text'>
+								<i>
+									The following competencies were developed and demonstrated through verified co-curricular activities
+									and experiences.
+								</i>
+							</p>
+
 							{edit ? (
-								<Form.Item name='listCompetency'>
-									<Checkbox.Group style={{ width: '100%' }}>
+								<Form.Item name='listCompetency' rules={[...rules.required]}>
+									<Checkbox.Group style={{ fontSize: 9 }}>
 										<Row gutter={[12, 8]}>
 											{record?.allCompetencies?.map((item) => (
 												<Col span={12} key={item}>
 													<Checkbox
 														value={item}
 														disabled={!selectedCompetencies.includes(item) && isMaxSelected}
-														style={{ fontSize: 11 }}
+														style={{ fontSize: 9 }}
 													>
 														{item}
 													</Checkbox>
@@ -154,270 +204,107 @@ const CCTContent = (props: {
 								</Form.Item>
 							) : (
 								<div className='skills-grid'>
-									{record?.myCCT?.listCompetency?.map((skill, index) => (
-										<div key={index} className='skill-item'>
-											<CheckboxIcon /> {skill}
-										</div>
-									))}
+									{record?.myCCT?.listCompetency?.length ? (
+										record?.myCCT?.listCompetency?.map((skill, index) => (
+											<div key={index} className='skill-item'>
+												{skill}
+											</div>
+										))
+									) : (
+										<div className='skill-item'>--</div>
+									)}
 								</div>
 							)}
 						</section>
 
-						<section className='featured-projects'>
-							<section className='skills-section'>
-								<h3>FEATURED PROJECTS/INITIATIVES</h3>
-							</section>
+						<section className='projects-section'>
+							<h2 className='section-title gold-text'>
+								<img src={'/images/cct/Featured.png'} style={{ width: 25, marginLeft: -4, marginTop: -4 }} /> Featured
+								Projects/Experience
+							</h2>
 
-							<div style={{ marginBottom: 12 }}>
-								<span className='description'>
-									<i>
-										Featured Projects showcase high-impact projects where students applied knowledge to real-world
-										challenges. Each project is mapped to VinUni's EXCEL competency framework, representing the core
-										attributes developed through the VinUni education model.
-									</i>
-								</span>
-							</div>
-
-							<Row gutter={[0, 20]}>
-								{record?.attributes?.slice(0, 2)?.map((item, index) => (
-									<Col span={24} key={item?.attribute?._id}>
-										<div className={`competency-block ${index === 0 ? 'blue' : 'red'}`}>
-											<div className='block-header'>
-												<div className='title'>{item?.attribute?.name.toUpperCase()}</div>
-												<div className='desc'>{item?.attribute?.description}</div>
-												<div>
-													<img src={item?.attribute?.icon} alt='logo' width={40} className='icon-white' />
-												</div>
-											</div>
-
-											<DragTable
-												item={{
-													attributeId: item?.attribute?._id,
-													activitiesOutCome: item?.activitiesOutCome ?? [],
-												}}
-												edit={edit}
-												onChangeOrder={handleOrderChange}
-											/>
-										</div>
-									</Col>
-								))}
-							</Row>
+							{edit ? (
+								<Form.Item name='selectedActivities' rules={[...rules.required]}>
+									<Checkbox.Group style={{ fontSize: 9 }}>
+										{sortedActivities.map((item) => renderItem(item, true))}
+									</Checkbox.Group>
+								</Form.Item>
+							) : selectedActivities.length ? (
+								selectedActivities.map((item) => renderItem(item))
+							) : (
+								<div className='project-item'>--</div>
+							)}
 						</section>
 					</div>
-				</Col>
 
-				<Col span={24} md={12}>
-					<div className='cct-column right'>
-						<Row gutter={[0, 20]}>
-							{record?.attributes?.slice(2)?.map((item, index) => (
-								<Col span={24} key={item?.attribute?._id}>
-									<div className={`competency-block ${index === 1 ? 'red' : 'blue'}`}>
-										<div className='block-header'>
-											<div className='title'>{item?.attribute?.name.toUpperCase()}</div>
-											<div className='desc'>{item?.attribute?.description}</div>
-											<div>
-												<img src={item?.attribute?.icon} alt='logo' width={40} className='icon-white' />
-											</div>
-										</div>
+					<div className='column right-column'>
+						<section className='awards-section'>
+							<h2 className='section-title gold-text'>
+								<img src={'/images/cct/Awards.png'} style={{ width: 25, marginLeft: -7 }} /> Awards, Recognization and
+								Scholarship
+							</h2>
 
-										<DragTable
-											item={{
-												attributeId: item?.attribute?._id,
-												activitiesOutCome: item?.activitiesOutCome ?? [],
-											}}
-											edit={edit}
-											onChangeOrder={handleOrderChange}
-										/>
-									</div>
-								</Col>
-							))}
-						</Row>
-
-						<section className='awards'>
-							<section className='skills-section'>
-								<h3>AWARDS & RECOGNITION</h3>
-							</section>
-
-							<DragAwards
-								data={sortedAwards}
-								edit={edit}
-								onChangeOrder={(ids) => {
-									setListAwardRecognition?.(ids);
-								}}
-							/>
+							{edit ? (
+								<Form.Item name='listAwardRecognition' rules={[...rules.required]}>
+									<Checkbox.Group style={{ fontSize: 9 }}>
+										{sortedAwards?.map((item) => renderAwards(item, true))}
+									</Checkbox.Group>
+								</Form.Item>
+							) : selectedAwards.length ? (
+								selectedAwards.map((item) => renderAwards(item))
+							) : (
+								<div className='project-item'>--</div>
+							)}
 						</section>
 
-						<footer className='transcript-footer'>
-							<div className='divider'>
+						<section className='footer-legend'>
+							<div className='end-transcript-divider'>
 								<span>END OF TRANSCRIPT</span>
 							</div>
-							<section className='skills-section'>
-								<h3>LEVEL OF ENGAGEMENT</h3>
-							</section>
+							<p className='italic-text' style={{ fontSize: 7 }}>
+								<i>
+									The following role classifications describe the level of responsibility and impact demonstrated by the
+									student in each activity:
+								</i>
+							</p>
 
-							<span style={{ fontSize: 13, fontWeight: 600 }}>
-								The following role classifications describe the level of responsibility and impact demonstrated by the
-								student in each activity:
-							</span>
+							<div className='legend-table'>
+								{record?.levelOfEngagement
+									?.sort((a, b) => a.level.order - b.level.order)
+									?.map((item) => (
+										<div className='legend-row' key={item.level._id}>
+											<span className='symbol'>{getLevelSymbol(item.level.name)}</span>
 
-							{/* gauge-row-wrapper: flex khi export để approved nằm ngang hàng piechart */}
-							<div className='gauge-row-wrapper'>
-								<div className='gauge-row'>
-									<div className='gauge-container'>
-										<Chart
-											options={{
-												chart: { type: 'donut' },
-												colors: ['#7EA4D5', '#F7981D', '#058069', '#A91F24'],
-												labels: (record?.levelOfEngagement ?? []).map(
-													(item) => item?.level?.name?.toUpperCase?.() || '',
-												),
-												stroke: {
-													show: true,
-													width: 4,
-													colors: ['#ffffff'],
-													lineCap: 'round',
-												},
-												dataLabels: {
-													enabled: true,
-													formatter: (val: number) => `${Math.round(val)}%`,
-													style: {
-														fontSize: '13px',
-														fontWeight: 'bold',
-														colors: ['#fff'],
-													},
-													dropShadow: { enabled: false },
-												},
-												legend: { show: false },
-												plotOptions: {
-													pie: {
-														expandOnClick: false,
-														donut: {
-															size: '50%',
-															labels: {
-																show: true,
-																total: {
-																	show: true,
-																	showAlways: true,
-																	label: '',
-																	formatter: (w: any) => {
-																		const max = Math.max(...w.globals.series);
-																		return `${max}%`;
-																	},
-																	fontSize: '22px',
-																	fontWeight: 'bold',
-																	color: '#1a1a2e',
-																},
-																value: { show: false },
-																name: { show: false },
-															},
-														},
-													},
-												},
-												tooltip: { enabled: true },
-											}}
-											series={(record?.levelOfEngagement ?? []).map((item) => item?.percentage ?? 0)}
-											type='donut'
-											className='donut-chart'
-											width={220}
-											height={220}
-										/>
-									</div>
-
-									<div className='role-desc'>
-										{record?.levelOfEngagement?.map((item, index) => (
-											<div key={index} style={{ marginBottom: '12px' }}>
-												<div
-													style={{
-														display: 'flex',
-														alignItems: 'center',
-														gap: '8px',
-														fontWeight: '600',
-														color: '#134D8B',
-														width: '100%',
-													}}
-												>
-													<div
-														style={{
-															width: '20px',
-															height: '12px',
-															backgroundColor: ['#7EA4D5', '#F7981D', '#058069', '#A91F24'][index],
-															borderRadius: '4px',
-														}}
-													/>
-													<span style={{ minWidth: '100px' }}>{item.level?.name?.toUpperCase?.()}</span>
-													<Rate
-														disabled
-														value={mapLevelToStar(item?.level?.name)}
-														count={mapLevelToStar(item?.level?.name)}
-														style={{ fontSize: 12 }}
-													/>
-												</div>
-												<p style={{ margin: '2px 0 0 28px', fontStyle: 'italic', fontSize: '12px', color: '#555' }}>
-													{item.level?.description}
-												</p>
-											</div>
-										))}
-									</div>
-								</div>
-
-								{/* Con dấu: nằm cùng hàng với gauge-row khi export, góc phải bình thường trên UI */}
-								{record?.myCCT?.status === EStatusMyCCT.APPROVED && (
-									<div
-										className='approved-stamp-wrapper'
-										style={{
-											width: '100%',
-											textAlign: 'right',
-											position: 'relative',
-											display: 'inline-block',
-										}}
-									>
-										<img src='/student/images/cct/footer.png' alt='logo' width={120} className='approved' />
-										<div
-											style={{
-												position: 'absolute',
-												top: 10,
-												right: 10,
-												transform: 'rotate(-15deg)',
-												border: '2px solid #d32f2f',
-												color: '#d32f2f',
-												padding: '4px 10px',
-												fontWeight: 'bold',
-												fontSize: 12,
-												background: 'rgba(255,255,255,0.7)',
-												borderRadius: 4,
-												letterSpacing: 1,
-												textTransform: 'uppercase',
-												boxShadow: '0 0 6px rgba(0,0,0,0.2)',
-											}}
-										>
-											Approved ✓
+											<span className='label'>{item.level.name}</span>
+											<span className='desc'>
+												<i>{item.level.description}</i>
+											</span>
 										</div>
-									</div>
-								)}
+									))}
 							</div>
-						</footer>
 
-						<div className='info-footer'>
-							<span>
-								<i>This Transcript is officially issued and verified by VinUniversity</i>
-							</span>
-
-							<div style={{ display: 'flex', alignItems: 'center', gap: 40, marginTop: 6 }}>
-								{record?.myCCT?.dateOfIssue && (
-									<span>
-										<i>Date of Issue: {record?.myCCT?.dateOfIssue ?? '--'}</i>
-									</span>
-								)}
-								{record?.myCCT?.serialNumber && (
-									<span>
-										<i>Serial Number: {record?.myCCT?.serialNumber || ' --'}</i>
-									</span>
-								)}
+							<div className='signatures'>
+								<div className='issue-info'>
+									<p>
+										<i>Serial Number</i>: {record?.myCCT?.serialNumber || ' --'}
+									</p>
+									<p>
+										<i>Date of Issue</i>: {record?.myCCT?.dateOfIssue ?? '--'}
+									</p>
+								</div>
+								<div className='provost-sig'>
+									<div>PROVOST OF VINUNIVERSITY</div>
+									<div className='sig-name'>Prof. Tan Yap Peng</div>
+								</div>
 							</div>
-						</div>
+						</section>
 					</div>
-				</Col>
-			</Row>
+				</main>
+
+				<div className='title-bottom'>
+					<i>This Transcript is officially issued and verified by VinUniversity</i>
+				</div>
+			</div>
 		</Spin>
 	);
 };

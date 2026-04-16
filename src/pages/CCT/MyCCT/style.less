@@ -1,364 +1,279 @@
-@primary-blue: #134d8b;
-@primary-red: #a31f34;
-@text-black: #2e2e2e;
-@text-gray: #444;
-@light-gray: #f2f2f2;
-@border-color: #ddd;
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-.vin-triangle-indicator(@color: ~'var(--vin-color-primary)' ; @w: 14px; @h: 10px; @side: right; @rotate: 180deg) {
-	content: '' !important;
-	position: absolute !important;
-	width: 0 !important;
-	height: 0 !important;
-	border-top: @h solid transparent !important;
-	border-bottom: @h solid transparent !important;
-	display: block !important;
-	visibility: visible !important;
-	opacity: 1 !important;
-	z-index: 999 !important;
-	pointer-events: none !important;
-	rotate: @rotate !important;
-
-	& when (@side =right) {
-		border-right: @w solid @color !important;
-	}
-
-	& when (@side =left) {
-		border-left: @w solid @color !important;
-	}
-}
-
-@container-padding: 20px;
-@block-gap: 20px;
+@navy-blue: #1f4174;
+@gold: #d4b27e;
+@text-gray: #333;
+@border-gray: #e0e0e0;
 
 .cct-container {
-	display: flex;
-	padding: @container-padding;
-	gap: 30px;
-	background: white;
+	font-family: 'Montserrat', sans-serif;
 	color: @text-gray;
-	max-width: '100%';
-	margin: auto;
+	max-width: 100%;
+	margin: 0 auto;
+	background-color: #fff;
 	line-height: 1.4;
-	margin-bottom: 30px;
 
-	.cct-column {
-		flex: 1;
+	.cct-header {
+		background-color: @navy-blue;
+		color: white;
+		padding: 15px 40px;
+
+		.header-content {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.header-title {
+				font-family: 'Lora', serif !important;
+				font-weight: bold;
+				font-size: 29px;
+				line-height: 1.1;
+				background: linear-gradient(180deg, #f4dab2 0%, #ffffff 50%, #ddbd8b 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+				color: transparent;
+				-webkit-font-smoothing: antialiased;
+				display: inline-block;
+			}
+		}
+	}
+
+	.cct-body {
+		display: flex;
+		padding: 20px 40px;
+		gap: 80px;
+	}
+
+	.column {
 		display: flex;
 		flex-direction: column;
-		gap: @block-gap;
 	}
-}
 
-header {
-	.logo {
-		font-weight: bold;
-		color: @primary-red;
-		font-size: 16px;
+	.left-column {
+		flex: 1;
+	}
+
+	.right-column {
+		flex: 1;
+	}
+
+	.gold-text {
+		font-family: 'Lora', serif !important;
+		color: @gold;
+		font-size: 20px;
 		margin-bottom: 5px;
+		border-bottom: none;
+		font-weight: normal;
 	}
-	h1 {
-		font-size: 22px;
-		font-weight: bold;
-		color: @primary-blue;
-		margin: 5px 0 10px;
-		padding-bottom: 5px;
-		display: inline-block;
+
+	.italic-text {
+		font-size: 9px;
+		color: @navy-blue;
+		text-align: justify;
 	}
-}
 
-.description {
-	font-size: 12px;
-	color: '#2E2E2E';
-}
+	section {
+		margin-bottom: 15px;
+	}
 
-.student-meta-table {
-	display: grid;
-	grid-template-columns: 1.2fr 0.8fr 0.8fr 1.7fr;
-	border: 1px solid #f0f0f0;
-	border-radius: 4px;
-	overflow: hidden;
-	font-size: 12px;
-	line-height: 1.5;
-	margin-top: -16px;
+	.intro-text {
+		font-size: 9px;
+		color: @navy-blue;
+		text-align: justify;
+	}
 
-	.cell {
-		padding: 12px 15px;
-		border-bottom: 1px solid #f0f0f0;
+	.student-info {
 		display: flex;
-		align-items: center;
-
-		&:nth-last-child(-n + 4) {
-			border-bottom: none;
-		}
-	}
-
-	.label {
-		background-color: #f4f9ff;
-		color: #2e2e2e;
-		border-right: 1px solid #f0f0f0;
-	}
-
-	.value {
-		color: #2e2e2e;
-
-		&:nth-child(4n-2) {
-			border-right: 1px solid #f0f0f0;
-		}
-	}
-}
-
-.info-footer {
-	margin-top: -12px;
-	font-size: 12px;
-	color: @primary-red;
-}
-
-.skills-section {
-	h3 {
-		position: relative;
-		color: @primary-blue;
-		font-size: 13px;
-		margin: 0 0 10px 0;
+		font-size: 9px;
 		font-weight: bold;
-		padding-left: 16px;
+		gap: 12px;
 
-		&::before {
-			position: absolute;
-
-			.vin-triangle-indicator(@w: 8px; @h: 6px; @side: right);
-
-			left: 0px !important;
-			top: -3px !important;
-
-			transform: translateY(-50%) !important;
-
-			@media (max-width: 768px) {
-				top: 32% !important;
-			}
-		}
-	}
-}
-
-.skills-grid {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	font-size: 12px;
-	gap: 10px 15px;
-
-	.skill-item {
-		color: #2e2e2e;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		.checkbox-icon {
-			width: 14px;
-			height: 14px;
-			border-radius: 50%;
-			background-color: @primary-blue;
-			color: white;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 10px;
-			font-weight: bold;
-		}
-	}
-}
-
-.featured-projects h3 {
-	color: @primary-blue;
-	font-size: 13px;
-	margin: 0px 0 10px;
-	font-weight: bold;
-}
-
-.competency-block {
-	border: 1px solid @border-color;
-	border-radius: 3px;
-	overflow: hidden;
-
-	.block-header {
-		display: flex;
-		padding: 10px 20px;
-		color: white;
-		align-items: center;
-		position: relative;
-
-		.title {
-			font-weight: bold;
-			font-size: 13px;
-			text-transform: uppercase;
-		}
-		.desc {
-			font-size: 12px;
-			flex: 1;
-			opacity: 0.9;
-			padding-left: 15px;
-			padding-right: 15px;
-		}
-	}
-
-	&.blue .block-header {
-		background-color: @primary-blue;
-	}
-	&.red .block-header {
-		background-color: @primary-red;
-	}
-	&.blue-dark .block-header {
-		background-color: #002244;
-	}
-	&.red-dark .block-header {
-		background-color: #881122;
-	}
-
-	.content-table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: 12px;
-
-		table-layout: fixed;
-		th,
-		td {
-			color: @text-black;
-			padding: 10px 12px;
-			text-align: left;
-			border-bottom: 1px solid #eee;
-
-			white-space: normal;
-			word-break: break-word;
-		}
-
-		th {
-			background: @light-gray;
-			color: @text-black;
-			font-weight: bold;
-		}
-	}
-}
-
-.competency-block.leadership-mindset .block-header {
-	background-color: @primary-blue;
-}
-
-.awards {
-	margin-top: -24px;
-	h3 {
-		color: @primary-blue;
-		font-size: 13px;
-		margin: 25px 0 10px;
-		font-weight: bold;
-	}
-	ul {
-		font-size: 12px;
-		list-style: none;
-		padding-left: 16px;
-		li {
-			color: @primary-blue;
-		}
-	}
-}
-
-.transcript-footer {
-	font-size: 12px;
-	color: @primary-blue;
-
-	.section-title {
-		color: @primary-blue;
-		font-size: 16px;
-		font-weight: 600;
-		margin: 10px 0 20px;
-	}
-
-	.divider {
-		position: relative;
-		text-align: center;
-		font-weight: bold;
-		margin-bottom: 20px;
-
-		&::before,
-		&::after {
-			content: '';
-			position: absolute;
-			left: 0;
-			right: 0;
-			height: 2px;
-			background: @primary-blue;
-		}
-
-		&::before {
-			top: -8px;
-		}
-
-		&::after {
-			bottom: -8px;
-		}
-
-		span {
-			padding: 0 12px;
-			background: white;
-			font-style: italic;
-			letter-spacing: 1px;
-		}
-	}
-
-	.gauge-row {
-		margin-top: 12px;
-		display: flex;
-		align-items: center;
-		gap: 40px;
-
-		.gauge-container {
-			flex: 0 0 auto;
-		}
-
-		.role-desc {
-			flex: 1;
-			min-width: 0;
-			line-height: 1.4;
-
-			strong {
-				display: block;
-				margin-bottom: 15px;
-				color: @primary-blue;
-				font-size: 13px;
-			}
+		.info-group {
+			width: 50%;
+			flex: 0 0 50%;
 
 			p {
-				margin: 0;
-				color: #333;
+				margin: 4px 0;
+				color: @navy-blue;
+				word-break: break-word;
+				overflow-wrap: break-word;
+				white-space: normal;
 			}
 		}
 	}
-}
 
-.icon-white {
-	filter: brightness(0) invert(1);
-}
+	.skills-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 8px 16px;
 
-.award-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	margin-left: -16px;
-}
-
-.award-item {
-	padding: 8px 12px;
-	border-radius: 6px;
-	margin-bottom: 8px;
-	background: #fff;
-	border: 1px solid #eee;
-	position: relative;
-	cursor: grab;
-
-	&:active {
-		cursor: grabbing;
+		.skill-item {
+			color: @navy-blue;
+			font-size: 9px;
+			font-weight: bold;
+		}
 	}
-}
 
-.highlight-top {
-	background: #fffbe6;
+	.project-row {
+		display: flex;
+		align-items: flex-start;
+		gap: 8px;
+		width: 100%;
+
+		.ant-checkbox {
+			margin-top: 4px;
+		}
+	}
+
+	.project-content {
+		flex: 1;
+	}
+
+	.project-item {
+		display: flex;
+		width: 100%;
+	}
+
+	.project-year {
+		min-width: 60px;
+		display: flex;
+		flex-direction: column;
+
+		span:first-child {
+			font-weight: bold;
+			font-size: 18px;
+			color: @navy-blue;
+		}
+
+		.role-indicator {
+			color: @gold;
+			font-size: 16px;
+			margin-top: -10px;
+			margin-right: 15px;
+			text-align: right;
+			padding-bottom: 12px;
+		}
+	}
+
+	.project-detail {
+		padding-left: 12px;
+		border-left: 1px solid @gold;
+
+		h3 {
+			font-size: 9px;
+			color: @navy-blue;
+			font-weight: bold;
+			margin: 0;
+		}
+
+		p {
+			font-size: 9px;
+			color: @navy-blue;
+			margin: 0;
+			text-align: justify;
+		}
+	}
+
+	.award-item {
+		margin-bottom: 8px;
+
+		h3 {
+			font-size: 9px;
+			color: @navy-blue;
+			display: flex;
+			align-items: flex-start;
+			font-weight: bold;
+
+			.star {
+				margin-top: -3px;
+				font-size: 15px;
+				color: @navy-blue;
+				margin-right: 6px;
+				font-weight: bold;
+			}
+		}
+
+		p {
+			margin: -8px 0 0 19px;
+			font-size: 9px;
+			color: @navy-blue;
+		}
+	}
+
+	.footer-legend {
+		margin-top: auto;
+		bottom: 0px;
+
+		.end-transcript-divider {
+			border-top: 1px solid @gold;
+			text-align: left;
+			margin-bottom: 6px;
+			padding-top: 8px;
+
+			span {
+				font-family: 'Lora', serif !important;
+				color: @gold;
+				font-size: 16px;
+				font-weight: bold;
+			}
+		}
+
+		.legend-table {
+			.legend-row {
+				display: grid;
+				grid-template-columns: 60px 100px 1fr;
+				border-bottom: 1px solid @gold;
+				font-size: 7px;
+
+				.symbol {
+					font-size: 18px;
+					font-weight: bold;
+					color: @gold;
+					margin-bottom: -5px;
+				}
+				.label {
+					margin-top: 6px;
+					font-weight: bold;
+					color: @navy-blue;
+				}
+				.desc {
+					margin-top: 6px;
+					color: @navy-blue;
+				}
+			}
+		}
+
+		.signatures {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 50px;
+			font-size: 9px;
+			color: @navy-blue;
+
+			.issue-info {
+				p {
+					margin: 4px 0;
+				}
+			}
+
+			.provost-sig {
+				font-weight: bold;
+
+				.sig-name {
+					margin-top: 60px;
+					text-align: center;
+				}
+			}
+		}
+	}
+
+	.title-bottom {
+		font-size: 9px;
+		color: @navy-blue;
+		padding-left: 12px;
+		padding-bottom: 6px;
+	}
 }
 
 @keyframes pulseSmooth {
