@@ -107,6 +107,11 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	};
 
 	const onCreate = () => {
+		if (props.onCreateClick) {
+			props.onCreateClick();
+			return;
+		}
+
 		setRecord({});
 		setEdit(false);
 		setIsView(false);
