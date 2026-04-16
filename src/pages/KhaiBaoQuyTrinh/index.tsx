@@ -16,7 +16,7 @@ import {
 	DownloadOutlined,
 	EyeOutlined,
 } from '@ant-design/icons';
-import { Button, Dropdown, Menu, Modal, Popconfirm, Tag, Tooltip, message } from 'antd';
+import { Button, Card, Dropdown, Menu, Modal, Popconfirm, Tag, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import ThongTinThanhToan from '../TaiChinh/HoaDon/ThanhToan/ThongTinThanhToan';
@@ -243,9 +243,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			width: 150,
 			align: 'center',
 			render: (val) => {
-				return val
-					? formatDate(val)
-					: intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.khongdl' });
+				return val ? formatDate(val) : intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.column.khongdl' });
 			},
 			onCell,
 		},
@@ -348,14 +346,17 @@ const KhaiBaoQuyTrinhPage = (props: {
 		},
 	];
 	return (
-		<div>
+		<Card
+			className='card-big-title card-borderless'
+			variant='borderless'
+			title={props.title || intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.don' })}
+		>
 			<ThongKeDichVu />
 			<TableBase
 				modelName={'quytrinh.khaibaoquytrinh'}
 				columns={columns}
 				getData={getData}
 				dependencies={[page, limit, condition, props.tenQuyTrinh, danhSachQuyTrinh.length]}
-				title={props.title || intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.don' })}
 				destroyModal
 				buttons={{ create: false }}
 				otherButtons={[
@@ -385,7 +386,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 								placeholder={intl.formatMessage({ id: 'dichvuhanhchinh.lichsu.loc' })}
 								loadData={false}
 								allowClear
-								style={{ width: 320, marginBottom: 8 }}
+								style={{ width: 320 }}
 								onChange={(val: any) => {
 									setCondition({
 										...condition,
@@ -440,7 +441,7 @@ const KhaiBaoQuyTrinhPage = (props: {
 			>
 				<ThongTinThanhToan setVisible={setVisibleModal} />
 			</Modal>
-		</div>
+		</Card>
 	);
 };
 export default KhaiBaoQuyTrinhPage;
