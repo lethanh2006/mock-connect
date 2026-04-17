@@ -200,6 +200,11 @@ export type TableBaseProps<T extends object = any> = {
 	 */
 	onReload?: (params?: any) => void;
 
+	/** Action custom khi click nút thêm mới.
+	 * Nếu truyền prop này, TableBase sẽ gọi hàm thay vì tự mở form modal mặc định.
+	 */
+	onCreateClick?: () => void;
+
 	cardExtra?: React.ReactNode;
 	/** Cấp độ của PageCard bao quanh Table (1, 2, 3) */
 	cardProps?: PageCardProps;
