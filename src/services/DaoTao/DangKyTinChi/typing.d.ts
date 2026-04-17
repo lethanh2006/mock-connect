@@ -77,6 +77,10 @@ declare module DangKyTinChi {
 		maNganh?: string;
 
 		lopHocPhan?: LopHocPhan.IRecord;
+
+		//fake
+		isWaitlist?: boolean;
+		trangThai?: ETrangThaiDangKyTinChi;
 	}
 
 	export interface IHocPhanDangKy {
@@ -107,5 +111,10 @@ declare module DangKyTinChi {
 		userAgent?: string;
 		response?: { data?: unknown | DangKyTinChi.ILopDangKy };
 		createdAt?: Date;
+	}
+
+	export interface ICauHinhWaitlist {
+		_id: string;
+		extraSlots: number;
 	}
 }
