@@ -1,8 +1,9 @@
+import axios from './axios';
 import button from './button';
+import components from './components';
 import header from './header';
 import message from './message';
 import title from './title';
-import components from './components';
 import validation from './validation';
 
 export default {
@@ -12,4 +13,5 @@ export default {
 	...header,
 	...components,
 	...validation,
+	...axios,
 };

@@ -2,12 +2,19 @@ import MyDatePicker from '@/components/MyDatePicker';
 import UploadFile from '@/components/Upload/UploadFile';
 import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
-import { EApprovalStatus, EparticipantRole, EParticipantScope } from '@/services/CCT/constant';
+import {
+	EApprovalStatus,
+	EparticipantRole,
+	EParticipantScope,
+	EScopeAward,
+	mapNameScopeAward,
+} from '@/services/CCT/constant';
 import { buildUpLoadFile, handleSingleFile } from '@/services/uploadFile';
+import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Image, Input, Radio, Row, Space, Tag } from 'antd';
+import { Button, Checkbox, Col, Form, Image, Input, Radio, Row, Select, Space, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -15,13 +22,12 @@ import SelectActivitiesManagement from '../../DanhMuc/Activities/Select';
 import SelectActivitiesTypeDomain from '../../DanhMuc/CCD/Select';
 import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
 import SelectRolesManagement from '../../DanhMuc/Roles/Select';
-import SelectTrack from '../../DanhMuc/Track/Select';
 import CardNoteActivity from './CardNote';
 import FormCompetencyEvidence from './FormCompetencyEvidence';
 
 const uploadFilesOfCompetency = async (files: any[] = []) => {
 	if (!files.length) return [];
-	const urls = await Promise.all(files?.map((f) => handleSingleFile(f).catch(() => null)));
+	const urls = await Promise.all(files?.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
 	return urls.filter(Boolean) as string[];
 };
 
@@ -36,6 +42,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const { danhSach: dsActivityType } = useModel('cct.activities');
 
 	const startDate: Date = Form.useWatch('startDate', form);
+	const endDate: Date = Form.useWatch('endDate', form);
 	const activitiesTypeDomainId: string = Form.useWatch('activitiesTypeDomainId', form);
 	const checkbox: boolean = Form.useWatch('checkbox', form);
 	const listAchievedCompetencies: string[] = Form.useWatch('listAchievedCompetencies', form);
@@ -43,6 +50,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const activitiesTypeId: string = Form.useWatch('activitiesTypeId', form);
 
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
+	const isAward = activitiesTypeDomainId === 'award-recognition';
 
 	useEffect(() => {
 		if (!visibleForm) resetFieldsForm(form);
@@ -50,7 +58,9 @@ const FormPerstionActivityOutCome = (props: any) => {
 		if (record?._id) {
 			form.setFieldsValue({
 				...record,
-				activitiesTypeDomainId: record?.activitiesType?.activitiesTypeDomainId,
+				activitiesTypeDomainId: record?.isAwardRecognition
+					? 'award-recognition'
+					: record?.activitiesType?.activitiesTypeDomainId,
 				listAchievedCompetencies: record?.listAchievedCompetencies?.map((item) => item?.competencyId),
 				onUni: record?.supervisorSsoId ? true : false,
 				banner: record?.banner ?? '/images/cct/background.png',
@@ -74,7 +84,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 	const onFinish = async (values: ActivityOutCome.IRecord, submitted: boolean) => {
 		setFormSubmiting(true);
-		const banner = await buildUpLoadFile(values, 'banner');
+		const banner = await buildUpLoadFile(values, 'banner', undefined, ipCCT);
 		values.banner = banner;
 		setFormSubmiting(false);
 
@@ -92,6 +102,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 		})) as any;
 
 		values.workflow = submitted ? EApprovalStatus.SUBMITTED : EApprovalStatus.DRAFT;
+		values.isAwardRecognition = isAward ? true : false;
 
 		if (edit) {
 			putModel(
@@ -110,7 +121,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 	return (
 		<>
 			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
-				{!!record?.revisionNote && <CardNoteActivity />}
+				{(!!record?.revisionNote || !!record?.isAwardRecognition) && <CardNoteActivity />}
 				<Row gutter={[12, 0]}>
 					<Col span={24}>
 						<Row gutter={[12, 0]}>
@@ -145,230 +156,369 @@ const FormPerstionActivityOutCome = (props: any) => {
 											/>
 										</Form.Item>
 									</Col>
-									<Col span={24} md={12}>
-										<Form.Item
-											name='activitiesTypeId'
-											label={intl.formatMessage({ id: 'activity.perstion.activitiesTypeId' })}
-											rules={[...rules.required]}
-										>
-											<SelectActivitiesManagement
-												condition={{ activitiesTypeDomainId: activitiesTypeDomainId }}
-												disabled={isView}
-												onChange={(val, option) => {
-													const rawData = option?.rawData;
-													if (!rawData) return;
+									{isAward ? (
+										<>
+											<Col span={24} md={12}>
+												<Form.Item name='scope' label='Scope' rules={[...rules.required]}>
+													<Select
+														placeholder='Select Scope'
+														options={Object.values(EScopeAward).map((value) => ({
+															value,
+															label: mapNameScopeAward[value],
+														}))}
+														allowClear
+														disabled={isView}
+													/>
+												</Form.Item>
+											</Col>
+											<Col span={24} md={24}>
+												<Form.Item name='competition' label='Competition' rules={[...rules.required]}>
+													<Input placeholder='Enter Competition' disabled={isView} />
+												</Form.Item>
+											</Col>
+											<Col span={24} md={12}>
+												<Form.Item
+													name='startDate'
+													label={intl.formatMessage({ id: 'activity.perstion.startDate' })}
+													rules={[...rules.required]}
+												>
+													<MyDatePicker
+														showTime={{ showHour: true, showMinute: true }}
+														format='HH:mm DD/MM/YYYY'
+														disabled={isView}
+														placeholder={intl.formatMessage({ id: 'activity.perstion.startDate.place' })}
+														onChange={() => form.resetFields(['endDate'])}
+													/>
+												</Form.Item>
+											</Col>
+											<Col span={24} md={12}>
+												<Form.Item
+													name='endDate'
+													label={intl.formatMessage({ id: 'activity.perstion.endDate' })}
+													rules={[
+														...rules.required,
+														...rules.sauThoiDiem(
+															dayjs(startDate),
+															intl.formatMessage({ id: 'activity.perstion.startDate' }),
+														),
+													]}
+												>
+													<MyDatePicker
+														showTime={{ showHour: true, showMinute: true }}
+														format='HH:mm DD/MM/YYYY'
+														disabled={isView}
+														{...buildDisabledDateTime({
+															min: startDate ? dayjs(startDate) : undefined,
+														})}
+														placeholder={intl.formatMessage({ id: 'activity.perstion.endDate.place' })}
+													/>
+												</Form.Item>
+											</Col>
+										</>
+									) : (
+										<>
+											<Col span={24} md={12}>
+												<Form.Item
+													name='activitiesTypeId'
+													label={intl.formatMessage({ id: 'activity.perstion.activitiesTypeId' })}
+													rules={[...rules.required]}
+												>
+													<SelectActivitiesManagement
+														condition={{ activitiesTypeDomainId: activitiesTypeDomainId }}
+														disabled={isView}
+														onChange={(val, option) => {
+															const rawData = option?.rawData;
+															if (!rawData) return;
 
-													form.setFieldsValue({
-														trackId: rawData?.trackId,
-													});
-												}}
-											/>
-										</Form.Item>
-									</Col>
-									{activitiesTypeId && (
-										<Col span={24}>
-											Attributes:{' '}
-											<Space wrap>
-												{dsActivityType
-													?.find((i) => i._id === activitiesTypeId)
-													?.attributes?.map((item) => (
-														<Tag key={item?._id} color={item?.color}>
-															{item?.name}
-														</Tag>
-													))}
-											</Space>
-										</Col>
+															form.setFieldsValue({
+																trackId: rawData?.trackId,
+															});
+														}}
+													/>
+												</Form.Item>
+											</Col>
+											{activitiesTypeId && (
+												<Col span={24}>
+													Attributes:{' '}
+													<Space wrap>
+														{dsActivityType
+															?.find((i) => i._id === activitiesTypeId)
+															?.attributes?.map((item) => (
+																<Tag key={item?._id} color={item?.color}>
+																	{item?.name}
+																</Tag>
+															))}
+													</Space>
+												</Col>
+											)}
+											{/* <Col span={24} md={24}>
+												<Form.Item name='trackId' label='Track' rules={[...rules.required]}>
+													<SelectTrack disabled={isView} />
+												</Form.Item>
+											</Col> */}
+											<Col span={24} md={24}>
+												<Form.Item name='activitiesOutcomeName' label='Activity Name' rules={[...rules.required]}>
+													<Input placeholder='Enter Activity Name' disabled={isView} />
+												</Form.Item>
+											</Col>
+											<Col span={24} md={12}>
+												<Form.Item
+													name='startDate'
+													label={intl.formatMessage({ id: 'activity.perstion.startDate' })}
+													rules={[...rules.required]}
+												>
+													<MyDatePicker
+														showTime={{ showHour: true, showMinute: true }}
+														format='HH:mm DD/MM/YYYY'
+														disabled={isView}
+														placeholder={intl.formatMessage({ id: 'activity.perstion.startDate.place' })}
+														onChange={() => form.resetFields(['endDate'])}
+													/>
+												</Form.Item>
+											</Col>
+											<Col span={24} md={12}>
+												<Form.Item
+													name='endDate'
+													label={intl.formatMessage({ id: 'activity.perstion.endDate' })}
+													rules={[
+														...rules.required,
+														...rules.sauThoiDiem(
+															dayjs(startDate),
+															intl.formatMessage({ id: 'activity.perstion.startDate' }),
+														),
+													]}
+												>
+													<MyDatePicker
+														showTime={{ showHour: true, showMinute: true }}
+														format='HH:mm DD/MM/YYYY'
+														disabled={isView}
+														{...buildDisabledDateTime({
+															min: startDate ? dayjs(startDate) : undefined,
+														})}
+														placeholder={intl.formatMessage({ id: 'activity.perstion.endDate.place' })}
+													/>
+												</Form.Item>
+											</Col>
+										</>
 									)}
-									<Col span={24} md={24}>
-										<Form.Item name='trackId' label='Track' rules={[...rules.required]}>
-											<SelectTrack disabled={isView} />
-										</Form.Item>
-									</Col>
-									<Col span={24} md={24}>
-										<Form.Item name='activitiesOutcomeName' label='Activity Name' rules={[...rules.required]}>
-											<Input placeholder='Enter Activity Name' disabled={isView} />
-										</Form.Item>
-									</Col>
 								</Row>
 							</Col>
 						</Row>
 					</Col>
-					<Col span={24} md={12}>
-						<Form.Item
-							name='startDate'
-							label={intl.formatMessage({ id: 'activity.perstion.startDate' })}
-							rules={[...rules.required]}
-						>
-							<MyDatePicker
-								showTime={{ showHour: true, showMinute: true }}
-								format='HH:mm DD/MM/YYYY'
-								disabled={isView}
-								placeholder={intl.formatMessage({ id: 'activity.perstion.startDate.place' })}
-								onChange={() => form.resetFields(['endDate'])}
-							/>
-						</Form.Item>
-					</Col>
-					<Col span={24} md={12}>
-						<Form.Item
-							name='endDate'
-							label={intl.formatMessage({ id: 'activity.perstion.endDate' })}
-							rules={[
-								...rules.required,
-								...rules.sauThoiDiem(dayjs(startDate), intl.formatMessage({ id: 'activity.perstion.startDate' })),
-							]}
-						>
-							<MyDatePicker
-								showTime={{ showHour: true, showMinute: true }}
-								format='HH:mm DD/MM/YYYY'
-								disabled={isView}
-								{...buildDisabledDateTime({
-									min: startDate ? dayjs(startDate) : undefined,
-								})}
-								placeholder={intl.formatMessage({ id: 'activity.perstion.endDate.place' })}
-							/>
-						</Form.Item>
-					</Col>
-					<Col span={24} md={12}>
-						<Form.Item name='onUni' label='Mentor/Supervisor' rules={[...rules.required]}>
-							<Radio.Group
-								disabled={isView}
-								options={[
-									{ value: true, label: 'In university' },
-									{ value: false, label: 'Outside of university' },
-								]}
-							/>
-						</Form.Item>
-					</Col>
-					{onUni ? (
-						<Col span={24} md={12}>
-							<Form.Item name='supervisorSsoId' label='Mentor/Supervisor' rules={[...rules.required]}>
-								<SelectNhanSuDebounce
-									onChange={(val, option) => {
-										const nhanSu = option?.rawData;
-										form.setFieldsValue({
-											supervisorName: nhanSu?.hoTen
-												? nhanSu?.hoTen
-												: [nhanSu?.hoDem, nhanSu?.ten].filter(Boolean).join(' '),
-											supervisorCode: nhanSu?.maCanBo,
-										});
-									}}
-									disabled={isView}
-								/>
-							</Form.Item>
-							<Form.Item name='supervisorName' hidden />
-							<Form.Item name='supervisorCode' hidden />
-						</Col>
-					) : (
-						<Col span={24} md={12}>
-							<Form.Item name='supervisorName' label='Mentor/Supervisor' rules={[...rules.required]}>
-								<Input placeholder='Enter Mentor/Supervisor' disabled={isView} />
-							</Form.Item>
-						</Col>
-					)}
-					<Col span={24} md={12}>
-						<Form.Item
-							name='organizer'
-							label={intl.formatMessage({ id: 'activity.perstion.organizer' })}
-							rules={[...rules.required]}
-						>
-							<Input placeholder={intl.formatMessage({ id: 'activity.perstion.organizer.place' })} disabled={isView} />
-						</Form.Item>
-					</Col>
-					<Col span={24} md={12}>
-						<Form.Item
-							name='location'
-							label={intl.formatMessage({ id: 'activity.perstion.location' })}
-							rules={[...rules.required]}
-						>
-							<Input placeholder='Enter location' disabled={isView} />
-						</Form.Item>
-					</Col>
-					<Col span={24} md={12}>
-						<Form.Item
-							name='rolesId'
-							label={intl.formatMessage({ id: 'activity.perstion.rolesId' })}
-							rules={[...rules.required]}
-						>
-							<SelectRolesManagement disabled={isView} />
-						</Form.Item>
-					</Col>
-					<Col span={24} md={12}>
-						<Form.Item name='levelsId' label='Level' rules={[...rules.required]}>
-							<SelectLevelsManagement disabled={isView} />
-						</Form.Item>
-					</Col>
-					<Col span={24}>
-						<div className='fw500' style={{ marginBottom: 6 }}>
-							List Evidence
-						</div>
-						<div style={{ marginBottom: 10 }}>
-							<i className='text-info'>
-								(Suggestion Evidence:{' '}
-								{dsActivityType
-									?.find((i) => i._id === activitiesTypeId)
-									?.requiredEvidenceList?.map((item) => item)
-									.filter(Boolean)
-									.join(', ')}
-								)
-							</i>
-						</div>
-						<div style={{ marginBottom: 10 }}>
-							<Form.List name='evidenceFile'>
-								{(fields, { add, remove }, { errors }) => (
-									<>
-										{fields.map((field, index) => (
-											<Row gutter={[12, 0]} key={field.key}>
-												<Col span={24} md={12}>
-													<Form.Item label='Evidence File Name' name={[index, 'name']} rules={[...rules.required]}>
-														<Input placeholder='Enter Name' disabled={isView} />
-													</Form.Item>
-												</Col>
-												<Col span={22} md={10}>
-													<Form.Item label='File' name={[index, 'file']} rules={[...rules.required]}>
-														<UploadFile maxCount={5} disabled={isView} />
-													</Form.Item>
-												</Col>
-												<Col span={2}>
-													<div
-														style={{
-															height: '100%',
-															display: 'flex',
-															alignItems: 'center',
-															justifyContent: 'center',
-														}}
-													>
-														<Button
-															danger
-															type='link'
-															title='Xóa'
-															icon={<DeleteOutlined />}
-															onClick={() => remove(field.name)}
-															disabled={isView}
-														/>
-													</div>
-												</Col>
-												<Form.ErrorList errors={errors} />
-											</Row>
-										))}
+					{isAward ? (
+						<>
+							<Col span={24} md={8}>
+								<Form.Item
+									name='dateOfAchievement'
+									label='Date Of Achievement'
+									rules={[
+										...rules.required,
+										...rules.sauThoiDiem(dayjs(startDate), intl.formatMessage({ id: 'activity.perstion.startDate' })),
+										...rules.truocThoiDiem(dayjs(endDate), intl.formatMessage({ id: 'activity.perstion.endDate' })),
+									]}
+								>
+									<MyDatePicker
+										showTime={{ showHour: true, showMinute: true }}
+										format='HH:mm DD/MM/YYYY'
+										disabled={isView}
+										placeholder='Choose Date Of Achievement'
+										{...buildDisabledDateTime({
+											min: startDate ? dayjs(startDate) : undefined,
+											max: endDate ? dayjs(endDate) : undefined,
+										})}
+										allowClear
+									/>
+								</Form.Item>
+							</Col>
+							<Col span={24} md={8}>
+								<Form.Item name='rank' label='Rank' rules={[...rules.required]}>
+									<Input disabled={isView} placeholder='Enter rank' />
+								</Form.Item>
+							</Col>
+							<Col span={24} md={8}>
+								<Form.Item name='link' label='Link' rules={[...rules.httpLink]}>
+									<Input disabled={isView} placeholder='Enter link' />
+								</Form.Item>
+							</Col>
+							<Col span={24}>
+								<Row gutter={[12, 0]}>
+									<Col span={24} md={12}>
+										<Form.Item label='File Name' name={['evidenceFile', 0, 'name']} rules={[...rules.required]}>
+											<Input placeholder='Enter Name' disabled={isView} />
+										</Form.Item>
+									</Col>
 
-										<Button onClick={() => add()} icon={<PlusOutlined />} type='dashed' size='small' disabled={isView}>
-											Update Evidence
-										</Button>
-									</>
-								)}
-							</Form.List>
-						</div>
-					</Col>
-					<Col span={24}>
-						<Form.Item name='listAchievedCompetencies' label='List Competency'>
-							<FormCompetencyEvidence listAchievedCompetencies={listAchievedCompetencies} form={form} />
-						</Form.Item>
-					</Col>
-					<Col span={24}>
-						<Form.Item name='reflection' label='Reflection'>
-							<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' />
-						</Form.Item>
-					</Col>
+									<Col span={22} md={12}>
+										<Form.Item label='File' name={['evidenceFile', 0, 'file']} rules={[...rules.required]}>
+											<UploadFile maxCount={1} disabled={isView} />
+										</Form.Item>
+									</Col>
+								</Row>
+							</Col>
+							<Col span={24}>
+								<Form.Item name='description' label='Description'>
+									<Input.TextArea rows={3} disabled={isView} placeholder='Enter Description' />
+								</Form.Item>
+							</Col>
+						</>
+					) : (
+						<>
+							<Col span={24} md={12}>
+								<Form.Item name='onUni' label='Mentor/Supervisor' rules={[...rules.required]}>
+									<Radio.Group
+										disabled={isView}
+										options={[
+											{ value: true, label: 'In university' },
+											{ value: false, label: 'Outside of university' },
+										]}
+									/>
+								</Form.Item>
+							</Col>
+							{onUni ? (
+								<Col span={24} md={12}>
+									<Form.Item name='supervisorSsoId' label='Mentor/Supervisor' rules={[...rules.required]}>
+										<SelectNhanSuDebounce
+											onChange={(val, option) => {
+												const nhanSu = option?.rawData;
+												form.setFieldsValue({
+													supervisorName: nhanSu?.hoTen
+														? nhanSu?.hoTen
+														: [nhanSu?.hoDem, nhanSu?.ten].filter(Boolean).join(' '),
+													supervisorCode: nhanSu?.maCanBo,
+												});
+											}}
+											disabled={isView}
+										/>
+									</Form.Item>
+									<Form.Item name='supervisorName' hidden />
+									<Form.Item name='supervisorCode' hidden />
+								</Col>
+							) : (
+								<Col span={24} md={12}>
+									<Form.Item name='supervisorName' label='Mentor/Supervisor' rules={[...rules.required]}>
+										<Input placeholder='Enter Mentor/Supervisor' disabled={isView} />
+									</Form.Item>
+								</Col>
+							)}
+							<Col span={24} md={12}>
+								<Form.Item
+									name='organizer'
+									label={intl.formatMessage({ id: 'activity.perstion.organizer' })}
+									rules={[...rules.required]}
+								>
+									<Input
+										placeholder={intl.formatMessage({ id: 'activity.perstion.organizer.place' })}
+										disabled={isView}
+									/>
+								</Form.Item>
+							</Col>
+							<Col span={24} md={12}>
+								<Form.Item
+									name='location'
+									label={intl.formatMessage({ id: 'activity.perstion.location' })}
+									rules={[...rules.required]}
+								>
+									<Input placeholder='Enter location' disabled={isView} />
+								</Form.Item>
+							</Col>
+							<Col span={24} md={12}>
+								<Form.Item
+									name='rolesId'
+									label={intl.formatMessage({ id: 'activity.perstion.rolesId' })}
+									rules={[...rules.required]}
+								>
+									<SelectRolesManagement disabled={isView} />
+								</Form.Item>
+							</Col>
+							<Col span={24} md={12}>
+								<Form.Item name='levelsId' label='Level' rules={[...rules.required]}>
+									<SelectLevelsManagement disabled={isView} />
+								</Form.Item>
+							</Col>
+							<Col span={24}>
+								<div className='fw500' style={{ marginBottom: 6 }}>
+									List Evidence
+								</div>
+								<div style={{ marginBottom: 10 }}>
+									<i className='text-info'>
+										(Suggestion Evidence:{' '}
+										{dsActivityType
+											?.find((i) => i._id === activitiesTypeId)
+											?.requiredEvidenceList?.map((item) => item)
+											.filter(Boolean)
+											.join(', ')}
+										)
+									</i>
+								</div>
+								<div style={{ marginBottom: 10 }}>
+									<Form.List name='evidenceFile'>
+										{(fields, { add, remove }, { errors }) => (
+											<>
+												{fields.map((field, index) => (
+													<Row gutter={[12, 0]} key={field.key}>
+														<Col span={24} md={12}>
+															<Form.Item label='Evidence File Name' name={[index, 'name']} rules={[...rules.required]}>
+																<Input placeholder='Enter Name' disabled={isView} />
+															</Form.Item>
+														</Col>
+														<Col span={22} md={10}>
+															<Form.Item label='File' name={[index, 'file']} rules={[...rules.required]}>
+																<UploadFile maxCount={5} disabled={isView} />
+															</Form.Item>
+														</Col>
+														<Col span={2}>
+															<div
+																style={{
+																	height: '100%',
+																	display: 'flex',
+																	alignItems: 'center',
+																	justifyContent: 'center',
+																}}
+															>
+																<Button
+																	danger
+																	type='link'
+																	title='Xóa'
+																	icon={<DeleteOutlined />}
+																	onClick={() => remove(field.name)}
+																	disabled={isView}
+																/>
+															</div>
+														</Col>
+														<Form.ErrorList errors={errors} />
+													</Row>
+												))}
+
+												<Button
+													onClick={() => add()}
+													icon={<PlusOutlined />}
+													type='dashed'
+													size='small'
+													disabled={isView}
+												>
+													Add Evidence
+												</Button>
+											</>
+										)}
+									</Form.List>
+								</div>
+							</Col>
+							<Col span={24}>
+								<Form.Item name='listAchievedCompetencies' label='List Competency'>
+									<FormCompetencyEvidence listAchievedCompetencies={listAchievedCompetencies} form={form} />
+								</Form.Item>
+							</Col>
+							<Col span={24}>
+								<Form.Item
+									name='reflection'
+									label='Reflection'
+									rules={[...rules.required, ...rules.text, ...rules.length(70)]}
+								>
+									<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' showCount />
+								</Form.Item>
+							</Col>
+						</>
+					)}
 					{!isView && (
 						<Col span={24}>
 							<Form.Item name='checkbox' valuePropName='checked'>
