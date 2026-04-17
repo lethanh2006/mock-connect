@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import './style.less';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const QuyTrinhPage = () => {
 	const intl = useIntl();
