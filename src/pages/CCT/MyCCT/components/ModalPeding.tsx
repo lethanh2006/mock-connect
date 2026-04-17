@@ -19,9 +19,9 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
-const ModalPeding = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
+const ModalPeding = (props: { visible: boolean; setVisible: (val: boolean) => void; getData: () => void }) => {
 	const intl = useIntl();
-	const { visible, setVisible } = props;
+	const { visible, setVisible, getData } = props;
 	const { danhSach } = useModel('cct.activityoutcome');
 	const [segmentSelected, setSegmentSelected] = useState<EActivityCategory | string>(EActivityCategory.REGISTERED);
 
@@ -247,17 +247,18 @@ const ModalPeding = (props: { visible: boolean; setVisible: (val: boolean) => vo
 						options={[
 							{
 								value: EActivityCategory.REGISTERED,
-								label: mapNameActivityCategory[EActivityCategory.REGISTERED],
+								label: `${mapNameActivityCategory[EActivityCategory.REGISTERED]} (${danhSach?.filter((item) => item.activityCategory === EActivityCategory.REGISTERED).length})`,
 							},
 							{
 								value: EActivityCategory.PERSONAL_CO_CURRICULAR,
-								label: mapNameActivityCategory[EActivityCategory.PERSONAL_CO_CURRICULAR],
+								label: `${mapNameActivityCategory[EActivityCategory.PERSONAL_CO_CURRICULAR]} (${danhSach?.filter((item) => item.activityCategory === EActivityCategory.PERSONAL_CO_CURRICULAR).length})`,
 							},
 						]}
 						value={segmentSelected}
 						onChange={(val) => setSegmentSelected(val)}
 					/>,
 				]}
+				onReload={getData}
 			/>
 
 			<div className='form-footer'>
