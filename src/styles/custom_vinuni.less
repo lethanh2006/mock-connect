@@ -257,13 +257,13 @@ body {
 		color: var(--color-primary) !important;
 	}
 
-	&.hide-indicator {
+	&.has-indicator {
 		> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
-			padding-left: 0 !important;
-			margin-left: 0 !important;
-
 			&::after {
-				display: none !important;
+				.indicator();
+				left: -18px !important;
+				top: 8px !important;
+				transform: translateY(-50%) !important;
 			}
 		}
 	}
@@ -273,9 +273,20 @@ body {
 			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 22px !important;
 				color: var(--color-accent-800) !important;
+				margin-left: 0 !important;
+				padding-left: 0 !important;
+			}
+		}
+
+		&.has-indicator {
+			> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+				margin-left: 2px !important;
 
 				&::after {
 					.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 10px; @side: right);
+					left: -18px !important;
+					top: 8px !important;
+					transform: translateY(-50%) !important;
 				}
 			}
 		}
@@ -285,9 +296,19 @@ body {
 		> .ant-card-head {
 			> .ant-card-head-wrapper > .ant-card-head-title {
 				color: var(--color-official-300) !important;
+				padding-left: 0 !important;
+			}
+		}
+
+		&.has-indicator {
+			.ant-card-head .ant-card-head-title {
+				padding-left: 18px !important;
 
 				&::after {
 					.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 7px; @side: right);
+					left: 0 !important;
+					top: 14px !important;
+					transform: translateY(-50%) !important;
 				}
 			}
 		}
@@ -380,7 +401,7 @@ body {
 	}
 
 	.ant-pro-page-container-children-container {
-		padding: 0 16px !important; //main là 12px nhưng còn chừa chỗ con indicator nên để 16px
+		padding: 0 18px !important;
 		overflow-x: auto !important;
 		position: relative !important;
 		z-index: 2 !important;
