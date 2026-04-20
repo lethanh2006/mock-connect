@@ -8,6 +8,7 @@ import { useIntl } from 'umi';
 import './style.less';
 
 import { useEffect, useState } from 'react';
+import PageCard from '@/components/PageCard';
 const { Text } = Typography;
 
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
@@ -50,9 +51,9 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 	const isMobile = screenSize.width <= 768;
 
 	const renderStudentList = () => (
-		<Card
-			className='card-big-title card-borderless'
-			variant='borderless'
+		<PageCard
+			loading={loading}
+			level={3}
 			style={{
 				borderRadius: '8px',
 			}}
@@ -76,7 +77,6 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 				</div>
 			}
 			bodyStyle={{ padding: 0 }}
-			loading={loading}
 		>
 			{/* Di chuyển scroll xuống đây - chỉ áp dụng cho phần danh sách */}
 			<div
@@ -186,7 +186,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 					/>
 				)}
 			</div>
-		</Card>
+		</PageCard>
 	);
 
 	return (
