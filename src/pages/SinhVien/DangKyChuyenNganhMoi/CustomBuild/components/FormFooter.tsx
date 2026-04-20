@@ -6,15 +6,27 @@ interface FormFooterProps {
 	onPrevious?: () => void;
 	onNext?: () => void;
 	onSubmit?: () => void;
+	onSaveDraft?: () => void;
 	nextText?: string;
 	submitText?: string;
+	saveDraftText?: string;
 }
 
-const FormFooter = ({ showPrevious = false, onPrevious, onNext, onSubmit, nextText, submitText }: FormFooterProps) => {
+const FormFooter = ({
+	showPrevious = false,
+	onPrevious,
+	onNext,
+	onSubmit,
+	onSaveDraft,
+	nextText,
+	submitText,
+	saveDraftText,
+}: FormFooterProps) => {
 	const intl = useIntl();
 
 	const defaultNextText = intl.formatMessage({ id: 'minor.idm.button.next' });
 	const defaultSubmitText = intl.formatMessage({ id: 'minor.idm.button.submit' });
+	const defaultSaveDraftText = intl.formatMessage({ id: 'minor.idm.button.saveDraft' });
 
 	return (
 		<div className='form-footer'>
@@ -32,6 +44,9 @@ const FormFooter = ({ showPrevious = false, onPrevious, onNext, onSubmit, nextTe
 				>
 					<Button type='primary'>{submitText || defaultSubmitText}</Button>
 				</Popconfirm>
+			)}
+			{onSaveDraft && (
+				<Button onClick={onSaveDraft}>{saveDraftText || defaultSaveDraftText}</Button>
 			)}
 			{showPrevious && onPrevious && (
 				<Button onClick={onPrevious}>{intl.formatMessage({ id: 'minor.idm.button.previous' })}</Button>

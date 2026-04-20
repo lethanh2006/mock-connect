@@ -9,8 +9,8 @@ import {
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import dayjs from '@/utils/dayjs';
-import { EyeOutlined } from '@ant-design/icons';
-import { Button, Modal, Tag, Tooltip } from 'antd';
+import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { Button, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import DanhSachChuyenNganhList from '../Register/components/DanhSachChuyenNganhList';
@@ -19,7 +19,7 @@ import StudentInfoCard from './components/StudentInfoCard';
 
 const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) => {
 	const intl = useIntl();
-	const { phieuDangKyTheoDot, getModel, page, limit, fetchPhieuDangKyTheoDot } = useModel(
+	const { phieuDangKyTheoDot, getModel, page, limit, fetchPhieuDangKyTheoDot, deleteModel } = useModel(
 		'sinhvien.dangkychuyennganh.dangkychuyennganh',
 	);
 	const { record: dotDangKy, fetchDotDangKy, isRegistrationOpen } = useModel('daotao.dotdkctdt');
@@ -31,11 +31,6 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 				field: ['dot', 'loaiCtdt'],
 				operator: EOperatorType.EQUAL,
 				values: [type],
-			},
-			{
-				field: 'trangThai',
-				operator: EOperatorType.NOT_EQUAL,
-				values: [ETrangThaiDangKyChuyenNganh.NHAP],
 			},
 		];
 		return getModel(undefined, filterParams, undefined, undefined, undefined, 'me/page');
@@ -54,6 +49,18 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 	const loaiDisplay: Partial<Record<ELoaiPhieuDkCtdt, { label: string; color: string }>> = {
 		[ELoaiPhieuDkCtdt.PERSONAL]: { label: type === 'concentration' ? 'IDC' : 'IDM', color: 'var(--color-primary)' },
 		[ELoaiPhieuDkCtdt.DEFAULT]: { label: 'Standard', color: '#CE7C1E' },
+	};
+
+	const canDeleteRegistration = (status?: ETrangThaiDangKyChuyenNganh) =>
+		status === ETrangThaiDangKyChuyenNganh.NHAP || status === ETrangThaiDangKyChuyenNganh.CHO_DUYET;
+
+	const handleDeleteRegistration = async (rec: PhieuDkCtdt.UpdatePhieuDkCtdtMeDto) => {
+		await deleteModel(rec._id as string, getData, undefined, {
+			messageText: intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+		});
+		if (phieuDangKyTheoDot?._id === rec._id && dotDangKy?._id) {
+			await fetchPhieuDangKyTheoDot(dotDangKy._id);
+		}
 	};
 
 	const columns: IColumn<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto>[] = [
@@ -99,7 +106,7 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 		{
 			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.thaotac.tablecolumntitle' }),
 			align: 'center',
-			width: 80,
+			width: 120,
 			fixed: 'right',
 			render: (val, rec) => (
 				<>
@@ -112,6 +119,18 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 							}}
 						/>
 					</Tooltip>
+					{canDeleteRegistration(rec.trangThai as ETrangThaiDangKyChuyenNganh) && (
+						<Tooltip title={intl.formatMessage({ id: 'minor.idm.action.delete' })}>
+							<Popconfirm
+								title={intl.formatMessage({ id: 'minor.idm.popconfirm.deleteConfirm' })}
+								okText={intl.formatMessage({ id: 'global.button.xacnhan' })}
+								cancelText={intl.formatMessage({ id: 'global.button.huy' })}
+								onConfirm={() => handleDeleteRegistration(rec)}
+							>
+								<Button type='link' danger icon={<DeleteOutlined />} />
+							</Popconfirm>
+						</Tooltip>
+					)}
 				</>
 			),
 		},

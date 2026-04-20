@@ -74,6 +74,8 @@ export default {
 	'minor.idm.button.previous': 'Previous',
 	'minor.idm.advisor.facultyAdvisor': 'Faculty Advisor',
 	'minor.idm.advisor.facultyAdvisorLabel': 'Faculty Advisor',
+	'minor.idm.advisor.responsibleUnit': 'Responsible Unit',
+	'minor.idm.advisor.responsibleUnitPlaceholder': 'Select responsible unit',
 	'minor.idm.advisor.selectPlaceholder': 'Select faculty advisor',
 	'minor.idm.advisor.name': 'Name',
 	'minor.idm.advisor.email': 'Email',
@@ -81,6 +83,7 @@ export default {
 	'minor.idm.advisor.expertise': 'Expertise',
 	'minor.idm.advisor.secondaryAdvisor': 'Secondary Advisor',
 	'minor.idm.advisor.discussedConsent': 'I have discussed this with my advisor and received their consent to support',
+	'minor.idm.advisor.error.duplicateSecondaryAdvisor': 'Secondary advisor must be different from primary advisor',
 	'minor.idm.form.titleOfMinor': 'Title of Minor',
 	'minor.idm.form.titlePlaceholder': 'Enter title',
 	'minor.idm.goalsAndRationale.title': 'Goals & Rationale',
@@ -95,7 +98,10 @@ export default {
 	'minor.idm.programDesign.maximum': 'credits (maximum)',
 	'minor.idm.programDesign.creditsRegisteredMin': 'Registered credits (minimum)',
 	'minor.idm.programDesign.creditsCompletedMax': 'IP/Completed credits (maximum)',
+	'minor.idm.programDesign.registrationCompleted': 'Registration completed',
 	'minor.idm.programDesign.addCourse': 'Add course',
+	'minor.idm.programDesign.error.minCredits': 'Registered credits must be at least {min} credits',
+	'minor.idm.programDesign.error.maxCompletedCredits': 'Completed credits must not exceed {max} credits',
 	'minor.idm.select.placeholderCourse': 'Select course',
 	'minor.idm.select.placeholderPrerequisite': 'Select prerequisite course',
 	'minor.idm.select.placeholderSelectMainFirst': 'Select main course first',
@@ -109,6 +115,7 @@ export default {
 	'minor.idm.form.alternateCourse': 'Alternate course',
 	'minor.idm.form.prerequisiteCourse': 'Prerequisite course',
 	'minor.idm.button.submit': 'Submit',
+	'minor.idm.button.saveDraft': 'Save draft',
 	'minor.idm.button.addAlternate': 'Add alternate course',
 	'minor.idm.button.addPrerequisite': 'Add prerequisite course',
 	'minor.idm.button.confirm': 'Confirm',
@@ -159,13 +166,16 @@ export default {
 	'minor.idm.review.cardCompletedCredits': 'Total Credits IP/Completed',
 	'minor.idm.review.cardCompletedCreditsSub': '(Must be ≤ {max})',
 	'minor.idm.review.confirmLabel': 'I confirm that:',
-	'minor.idm.review.confirmRequired': 'Please confirm the statements',
+	'minor.idm.review.confirmRequired': 'Please confirm the information',
 	'minor.idm.review.confirmItem1': 'All information provided is accurate and truthful',
 	'minor.idm.review.confirmItem2': 'I have discussed this program with my advisor',
 	'minor.idm.review.confirmItem3':
 		'I understand any changes after approval require written approval from the Program Director',
 	'minor.idm.review.confirmItem4': 'I will complete all regular academic requirements of my primary program',
 	'minor.idm.button.submitConcentration': 'Submit Concentration',
+	'minor.idm.fallback.title.minor': 'Personal Minor - untitled',
+	'minor.idm.fallback.title.concentration': 'Personal Concentration - untitled',
+	'minor.idm.fallback.rationale': 'No rationale provided',
 
 	// Detail - ProcessSidebar
 	'minor.idm.detail.process.advisorDecision': 'Academic Advisor Decision',
@@ -173,10 +183,12 @@ export default {
 	'minor.idm.detail.process.trainingDecision': 'Registrar Office Decision',
 	'minor.idm.detail.process.title': 'Registration Process',
 	'minor.idm.detail.process.viewComments': 'View Comments',
+	'minor.idm.detail.process.viewReason': 'View reason',
+	'minor.idm.detail.process.viewNotes': 'View notes',
 
 	// Detail - PersonalInfo
 	'minor.idm.detail.personalInfo.title': 'Personal Information',
-	'minor.idm.detail.personalInfo.studentSsoId': 'Student ID',
+	'minor.idm.detail.personalInfo.masv': 'Student Code',
 	'minor.idm.detail.personalInfo.major': 'Major',
 	'minor.idm.detail.personalInfo.semester': 'Semester',
 	'minor.idm.detail.personalInfo.fullName': 'Full Name',
@@ -227,7 +239,7 @@ export default {
 
 	// StudentInfoCard
 	'minor.info.selectedMinor': 'Selected Minor',
-	'minor.info.selectedConcentration': 'Selected Concentration',
+	'minor.info.selectedConcentration': 'Registed Concentration',
 	'minor.info.requirement.gpa': 'GPA ≥ {gpa}',
 	'minor.info.requirement.minCredits': 'Minimum: {credits} credits',
 	'minor.info.requirement.completedCredits': 'Completed or in progress: ≤ {credits} credits',
@@ -257,6 +269,11 @@ export default {
 	'minor.build.step.selectAdvisor': 'Select Advisor',
 	'minor.build.step.programDesign': 'Program Design',
 	'minor.build.step.reviewSubmit': 'Review and Submit',
+	'minor.build.leaveModal.title': 'Unsaved draft',
+	'minor.build.leaveModal.description': 'Your form has not been submitted. Do you want to save as draft before leaving?',
+	'minor.build.leaveModal.stay': 'Stay on this page',
+	'minor.build.leaveModal.leaveWithoutSave': 'Leave without saving',
+	'minor.build.leaveModal.saveAndLeave': 'Save draft and leave',
 
 	// CourseList
 	'minor.course.code': 'Course code',
