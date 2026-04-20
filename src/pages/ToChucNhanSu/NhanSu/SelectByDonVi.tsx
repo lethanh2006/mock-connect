@@ -7,8 +7,10 @@ const SelectNhanSuTheoDonVi = (props: {
   onChange?: (value: string, option: any) => void;
   multiple?: boolean;
   donViId: string;
+  allowClear?: boolean;
+  placeholder?: string;
 }) => {
-  const { value, onChange, multiple, donViId } = props;
+  const { value, onChange, multiple, donViId, allowClear, placeholder } = props;
   const { danhSach, getAllModel } = useModel('tochucnhansu.nhansudonvi');
 
   useEffect(() => {
@@ -25,10 +27,12 @@ const SelectNhanSuTheoDonVi = (props: {
         value: item.thongTinNhanSu?.ssoId ?? item.thongTinNhanSuId,
         label: `${item.thongTinNhanSu?.hoDem} ${item.thongTinNhanSu?.ten} - ${item.thongTinNhanSu.maCanBo} - ${item.chucVu?.ten}`,
         hoten: `${item.thongTinNhanSu?.hoDem} ${item.thongTinNhanSu?.ten}`,
+        rawData: item,
       }))}
       showSearch
+      allowClear={allowClear}
       optionFilterProp="label"
-      placeholder="Chọn cán bộ, giảng viên"
+      placeholder={placeholder || 'Chọn cán bộ, giảng viên'}
     />
   );
 };

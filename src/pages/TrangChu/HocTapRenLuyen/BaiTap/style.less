@@ -8,6 +8,7 @@
 		background-image: url(/images/assignment-background.svg);
 		height: 350px;
 		min-height: 350px;
+		background-color: var(--color-bg-base);
 
 		.empty {
 			display: flex;
@@ -50,6 +51,13 @@
 
 		display: flex;
 		flex-direction: column;
+		background-color: var(--color-bg-base);
+	}
+
+	.content-wrapper {
+		.assignment-card {
+			background-color: transparent;
+		}
 	}
 
 	@media (max-width: @screen-xs) {
