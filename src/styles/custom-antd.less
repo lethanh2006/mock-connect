@@ -243,6 +243,11 @@
 				padding-left: 0 !important;
 				display: flex;
 				align-items: center;
+			}
+		}
+
+		&.has-indicator {
+			> .ant-card-head .ant-card-head-title {
 
 				&::after {
 					.indicator();
@@ -265,9 +270,15 @@
 
 			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 18px !important;
-				padding-left: 18px !important;
+				padding-left: 0 !important;
 				display: flex;
 				align-items: center;
+			}
+		}
+
+		&.has-indicator {
+			.ant-card-head .ant-card-head-title {
+				padding-left: 18px !important;
 
 				&::after {
 					left: 0 !important;
@@ -292,16 +303,6 @@
 		}
 	}
 
-	&.hide-indicator {
-		> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
-			padding-left: 0 !important;
-			margin-left: 0 !important;
-
-			&::after {
-				display: none !important;
-			}
-		}
-	}
 }
 
 .ant-modal-content {
