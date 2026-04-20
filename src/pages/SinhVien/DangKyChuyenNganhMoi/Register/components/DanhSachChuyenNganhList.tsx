@@ -65,21 +65,21 @@ const DanhSachChuyenNganhList = ({ isMinor, hiddenButton }: { isMinor: boolean; 
 			width: 220,
 		},
 
-		{
-			title: intl.formatMessage({ id: 'minor.table.tongTinChi' }),
-			width: 140,
-			align: 'center',
-			dataIndex: 'soTinChi',
-			sortable: true,
-			render: (_, record) => {
-				const credits = record.soTinChi || 0;
-				return (
-					<Tag color='blue'>
-						{credits} {intl.formatMessage({ id: 'minor.table.credits' })}
-					</Tag>
-				);
-			},
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'minor.table.tongTinChi' }),
+		// 	width: 140,
+		// 	align: 'center',
+		// 	dataIndex: 'soTinChi',
+		// 	sortable: true,
+		// 	render: (_, record) => {
+		// 		const credits = record.soTinChi || 0;
+		// 		return (
+		// 			<Tag color='blue'>
+		// 				{credits} {intl.formatMessage({ id: 'minor.table.credits' })}
+		// 			</Tag>
+		// 		);
+		// 	},
+		// },
 	];
 
 	return (

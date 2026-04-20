@@ -223,6 +223,12 @@ const DanhSachHocPhanList = ({
 	];
 
 
+	const totalTinChi = useMemo(() => {
+		const compulsoryTinChi = compulsory.reduce((acc, it) => acc + (it.hocPhan?.soTinChi ?? 0), 0);
+		const electiveTinChi = electiveGroups.reduce((acc, it) => acc + (it.soTinChiTuChonPhaiHoc ?? 0), 0);
+		return compulsoryTinChi + electiveTinChi;
+	}, [compulsory, electiveGroups]);
+
 	const columnsAll: IColumn<Row>[] = [
 		{
 			title: intl.formatMessage({ id: 'global.table.column.tt' }),
@@ -241,6 +247,12 @@ const DanhSachHocPhanList = ({
 			<Card
 				title={`${intl.formatMessage({ id: 'minor.breadcrumb.detail' })} ${choosenMinorName || ''}`}
 				loading={false}
+				extra={
+					<Typography.Text strong>
+						{intl.formatMessage({ id: 'minor.table.tongTinChi' })}: {totalTinChi}{' '}
+						{intl.formatMessage({ id: 'minor.table.credits' })}
+					</Typography.Text>
+				}
 			>
 				{loading ? (
 					<div style={{ textAlign: 'center', padding: '24px' }}>
