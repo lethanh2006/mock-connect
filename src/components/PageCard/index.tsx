@@ -18,7 +18,7 @@ const PageCard: React.FC<PageCardProps> = ({
 
 	// Indicator visibility logic for Level 1 and 2
 	const canToggleIndicator = level === 1 || level === 2;
-	const indicatorClass = canToggleIndicator && showIndicator === false ? 'hide-indicator' : '';
+	const indicatorClass = canToggleIndicator && showIndicator === true ? 'has-indicator' : '';
 
 	return (
 		<Card
