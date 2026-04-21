@@ -92,7 +92,7 @@ build_prod:
       DOCKEREOF
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
-      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --dockerfile "${CI_PROJECT_DIR}/DockerfileProd"
       --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:${CI_COMMIT_TAG}"
       --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:latest"
       --cache=true
