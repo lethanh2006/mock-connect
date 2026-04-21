@@ -176,23 +176,26 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				else return [col];
 			})
 			.flat();
+
 		Object.entries(fil).map(([field, values]) => {
-			// Field từ table => nếu dataIndex là Array => field1.subfield
-			const dataIndex = field.includes('.') ? field.split('.') : field;
-			const col = allColumns.find((item) => JSON.stringify(item.dataIndex) === JSON.stringify(dataIndex));
+			// tìm col có key trùng với dataIndex đã hash của fil
+			const col = allColumns.find((item) => field === item.key);
+			// lấy dataIndex gốc
+			const cleanDataIndex = col ? col.dataIndex : field.includes('.') ? field.split('.') : field;
+
 			if (col?.handleFilter) {
 				col.handleFilter(values?.[0] as any);
 				if (col?.filterType === 'string') {
-					handleSearch(dataIndex, values?.[0] as any);
+					handleSearch(cleanDataIndex, values?.[0] as any);
 				} else if (col?.filterType === 'select') {
-					handleFilter(dataIndex, values as any);
+					handleFilter(cleanDataIndex, values as any);
 				}
 			} else if (col?.filterType === 'select') {
-				handleFilter(dataIndex, values as any);
+				handleFilter(cleanDataIndex, values as any);
 			} else if (col?.filterType === 'string') {
-				handleSearch(dataIndex, values?.[0] as any);
+				handleSearch(cleanDataIndex, values?.[0] as any);
 			} else if (col?.filterType === 'customselect') {
-				handleFilter(dataIndex, values as any);
+				handleFilter(cleanDataIndex, values as any);
 			}
 		});
 
@@ -306,7 +309,13 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<PageCard title={props.title || false} extra={props.cardExtra} bordered={props.border}>
+				<PageCard
+					level={props.cardProps?.level}
+					showIndicator={props.cardProps?.showIndicator}
+					title={props.title || false}
+					extra={props.cardExtra}
+					bordered={props.border}
+				>
 					{mainContent}
 				</PageCard>
 			)}
