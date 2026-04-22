@@ -180,7 +180,6 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 	return (
 		<PageCard
-			level={props.isDashBoard && APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH === 'VINUNI' ? 2 : 3}
 			hideInnerCard
 			className='card-baitap-dashboard'
 			title={
