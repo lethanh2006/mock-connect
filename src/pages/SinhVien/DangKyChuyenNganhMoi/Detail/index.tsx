@@ -65,7 +65,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 	return (
 		<>
 			<PageCard
-			hideInnerCard
+				hideInnerCard
 				title={
 					isMinor
 						? intl.formatMessage({ id: 'minor.detail.title.minor' })
@@ -82,7 +82,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 						<Breadcrumb.Item>{intl.formatMessage({ id: 'minor.breadcrumb.detail' })}</Breadcrumb.Item>
 					</Breadcrumb>
 				}
-			></PageCard>
+			>
 			<Row gutter={16}>
 				<Col span={6}>
 					<ProcessSidebar
@@ -171,6 +171,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 				title={intl.formatMessage({ id: 'minor.modal.comment' })}
 				content={getCommentContent()}
 			/>
+			</PageCard>
 		</>
 	);
 };
