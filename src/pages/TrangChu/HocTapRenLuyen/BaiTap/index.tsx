@@ -9,7 +9,7 @@ import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Card, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
+import { Button, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { history, Link, useIntl, useModel } from 'umi';
