@@ -39,7 +39,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh : recSinhVien?.chuyenNganh;
 
 	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
-		const listKhoi = _.uniq(listKhoiHpCt.map((item) => item.maKhoiKienThuc));
+		const listKhoi = _.uniq(listKhoiHpCt.map((item) => item.maKhoiKienThuc)) as string[];
 		const temp: Record<string, string> = {};
 		listKhoi.forEach(
 			(khoi) =>
@@ -79,7 +79,7 @@ const TienTrinhChuongTrinhKhung = () => {
 		fetch();
 	}, [maKhoaNganh]);
 
-	const renderHocPhan = (data: TChuongTrinhHocKy) => (
+	const renderListHocPhan = (data: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => (
 		<div
 			style={{
 				display: 'grid',
@@ -87,12 +87,12 @@ const TienTrinhChuongTrinhKhung = () => {
 				gap: '12px',
 			}}
 		>
-			{data.khoiHocPhan.map((ctk) =>
+			{data.map((ctk) =>
 				ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC ? (
 					<CardHocPhanV2
 						key={ctk._id}
 						hocPhan={ctk.hocPhan}
-						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc ?? '']}
 						onClick={() => {
 							setChuongTrinh(ctk);
 							setVisibleDiem(true);
@@ -104,7 +104,7 @@ const TienTrinhChuongTrinhKhung = () => {
 					<CardKhoiHocPhan
 						khoi={ctk}
 						key={ctk._id}
-						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc ?? '']}
 						onClickHocPhan={() => setVisibleDiem(true)}
 					/>
 				),
@@ -112,7 +112,102 @@ const TienTrinhChuongTrinhKhung = () => {
 		</div>
 	);
 
-	console.log(recTienTrinh, 'recTienTrinh');
+	const renderChuyenNganh = (dataChuyenNganh: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
+		const dataTuChon = dataChuyenNganh.filter((item) => item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TU_CHON);
+		const dataBatBuoc = dataChuyenNganh.filter((item) => item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC);
+		const dataTotNghiep = dataChuyenNganh.filter((item) => item.loaiHocPhanCtdt === ELoaiHocPhanCTDT.TOT_NGHIEP);
+		return (
+			<>
+				{dataBatBuoc?.length ? (
+					<>
+						<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
+							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hpbatbuoc' })}
+						</div>
+						{renderListHocPhan(dataBatBuoc)}
+					</>
+				) : null}
+				{dataTuChon?.length ? (
+					<>
+						<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
+							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hptuchon' })}
+						</div>
+						{renderListHocPhan(dataTuChon)}
+					</>
+				) : null}
+				{dataTotNghiep?.length ? (
+					<>
+						<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
+							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hptotnghiep' })}
+						</div>
+						{renderListHocPhan(dataTotNghiep)}
+					</>
+				) : null}
+			</>
+		);
+	};
+
+	const renderKhoi = (dataKhoi: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
+		const groupKhoi = _.groupBy(dataKhoi, (item) => item.maKhoiKienThuc || 'undefined');
+		return (
+			<Collapse
+				ghost
+				defaultActiveKey={Object.keys(groupKhoi)}
+				style={{ marginLeft: -16 }}
+			>
+				{Object.entries(groupKhoi).map(([maKhoi, dataHp]) => {
+					const tenKhoi =
+						dataHp[0]?.khoiKienThuc?.ten ||
+						(maKhoi !== 'undefined' ? maKhoi : intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khongten' }));
+
+					// Nhóm theo chuyên ngành bên trong khối (nếu có chuyên ngành)
+					const groupChuyenNganh = _.groupBy(dataHp, (item) => item.maChuyenNganh || 'common');
+					const hasMultipleMajors = Object.keys(groupChuyenNganh).filter((k) => k !== 'common').length > 0;
+
+					return (
+						<Collapse.Panel
+							key={maKhoi}
+							header={
+								<>
+									{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoi' })}: {tenKhoi.toLocaleUpperCase()}
+								</>
+							}
+						>
+							<div style={{ margin: '-16px 0px' }}>
+								{/* Hiện môn chung/bắt buộc của khối trước */}
+								{renderChuyenNganh(groupChuyenNganh.common || [])}
+							</div>
+
+							{/* Hiện chuyên ngành hẹp nồng bên trong khối */}
+							{hasMultipleMajors && (
+								<Collapse
+									bordered={false}
+									defaultActiveKey={[chuyenNganhHienTai?.ma ?? '']}
+								>
+									{Object.entries(groupChuyenNganh)
+										.filter(([nganh]) => nganh !== 'common')
+										.map(([nganh, dsHocPhan]) => (
+											<Collapse.Panel
+												key={nganh}
+												header={
+													<>
+														{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}: {dsHocPhan?.[0].chuyenNganh?.ten || nganh} (
+														{_.sumBy(dsHocPhan, (i) => i.hocPhan?.soTinChi || i.soTinChiTuChonPhaiHoc || 0)} tín)
+													</>
+												}
+											>
+												<div style={{ margin: '-16px 0px' }}>
+													{renderChuyenNganh(dsHocPhan)}
+												</div>
+											</Collapse.Panel>
+										))}
+								</Collapse>
+							)}
+						</Collapse.Panel>
+					);
+				})}
+			</Collapse>
+		);
+	};
 
 	return (
 		<div>
@@ -141,7 +236,7 @@ const TienTrinhChuongTrinhKhung = () => {
 
 					{!chuyenNganhHienTai && (
 						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
-							{chuyenNganhHienTai?.ten ?? <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuadk' })}</i>}
+							{(chuyenNganhHienTai as any)?.ten ?? <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuadk' })}</i>}
 						</Descriptions.Item>
 					)}
 					<Descriptions.Item
@@ -195,24 +290,11 @@ const TienTrinhChuongTrinhKhung = () => {
 								</div>
 							</div>
 
-							{/* Grid các môn học */}
-							{renderHocPhan(data)}
+							{/* Consolidated rendering of combined common and specialized subjects */}
+							{renderKhoi([...(data.khoiHocPhan || []), ...(data.chuyenNganhList?.flatMap((cn) => cn.khoiHocPhan) || [])])}
 						</div>
 
-						{data.chuyenNganhList?.length ? (
-							<Collapse bordered={false} defaultActiveKey={[chuyenNganhHienTai?.ma ?? '']}>
-								{data.chuyenNganhList.map((chuyenNganh) => (
-									<Collapse.Panel
-										key={chuyenNganh.khoiHocPhan[0].maChuyenNganh || chuyenNganh.khoiHocPhan[0]._id}
-										header={`${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}: ${
-											chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
-										}`}
-									>
-										{renderHocPhan(chuyenNganh)}
-									</Collapse.Panel>
-								))}
-							</Collapse>
-						) : null}
+						{/* Redundant specialized major loop removed as it's now nested within renderKhoi */}
 
 						{/* Divider giữa các học kỳ */}
 						{index < danhSachHocKy.length - 1 && <Divider />}
