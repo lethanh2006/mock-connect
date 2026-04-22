@@ -20,7 +20,13 @@ type TChuongTrinhHocKy = {
 	chuyenNganhList?: TChuongTrinhHocKy[];
 };
 
-const TienTrinhChuongTrinhKhung = () => {
+const TienTrinhChuongTrinhKhung = ({
+	hienKhoi = true,
+	hienTenLoai = true,
+}: {
+	hienKhoi?: boolean;
+	hienTenLoai?: boolean;
+}) => {
 	const intl = useIntl();
 	const {
 		loading,
@@ -92,7 +98,7 @@ const TienTrinhChuongTrinhKhung = () => {
 					<CardHocPhanV2
 						key={ctk._id}
 						hocPhan={ctk.hocPhan}
-						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc ?? '']}
+						loaiHocPhan={ctk.loaiHocPhanCtdt}
 						onClick={() => {
 							setChuongTrinh(ctk);
 							setVisibleDiem(true);
@@ -120,25 +126,31 @@ const TienTrinhChuongTrinhKhung = () => {
 			<>
 				{dataBatBuoc?.length ? (
 					<>
-						<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
-							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hpbatbuoc' })}
-						</div>
+						{hienTenLoai && (
+							<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
+								{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hpbatbuoc' })}
+							</div>
+						)}
 						{renderListHocPhan(dataBatBuoc)}
 					</>
 				) : null}
 				{dataTuChon?.length ? (
 					<>
-						<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
-							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hptuchon' })}
-						</div>
+						{hienTenLoai && (
+							<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
+								{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hptuchon' })}
+							</div>
+						)}
 						{renderListHocPhan(dataTuChon)}
 					</>
 				) : null}
 				{dataTotNghiep?.length ? (
 					<>
-						<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
-							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hptotnghiep' })}
-						</div>
+						{hienTenLoai && (
+							<div className='fw500' style={{ marginTop: 8, marginBottom: 8 }}>
+								{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hptotnghiep' })}
+							</div>
+						)}
 						{renderListHocPhan(dataTotNghiep)}
 					</>
 				) : null}
@@ -195,7 +207,7 @@ const TienTrinhChuongTrinhKhung = () => {
 													</>
 												}
 											>
-												<div style={{ margin: '-16px 0px' }}>
+												<div style={{ margin: '-16px 0px 8px 0px' }}>
 													{renderChuyenNganh(dsHocPhan)}
 												</div>
 											</Collapse.Panel>
@@ -290,8 +302,14 @@ const TienTrinhChuongTrinhKhung = () => {
 								</div>
 							</div>
 
-							{/* Consolidated rendering of combined common and specialized subjects */}
-							{renderKhoi([...(data.khoiHocPhan || []), ...(data.chuyenNganhList?.flatMap((cn) => cn.khoiHocPhan) || [])])}
+							{/* Consolidated rendering based on hienKhoi and hienTenLoai props */}
+							{(() => {
+								const allSubjects = [
+									...(data.khoiHocPhan || []),
+									...(data.chuyenNganhList?.flatMap((cn) => cn.khoiHocPhan) || []),
+								];
+								return hienKhoi ? renderKhoi(allSubjects) : renderChuyenNganh(allSubjects);
+							})()}
 						</div>
 
 						{/* Redundant specialized major loop removed as it's now nested within renderKhoi */}
