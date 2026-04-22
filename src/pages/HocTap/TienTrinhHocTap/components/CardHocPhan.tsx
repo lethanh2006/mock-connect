@@ -1,8 +1,9 @@
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { ETrangThaiHocTap } from '@/services/DaoTao/constant';
+import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
 import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Card, Tag } from 'antd';
+import { PushpinFilled, BookOutlined } from '@ant-design/icons';
+import { Card, Tag, Tooltip } from 'antd';
 import { useIntl } from 'umi';
 import './CardStyles.less';
 
@@ -36,11 +37,11 @@ const CardHocPhan = (props: {
 	hocPhan?: Partial<HocPhan.IRecord>;
 	listDiem?: LopHocPhan.IDiemHpSvHk[];
 	onClick: () => void;
-	colorKhoiKienThuc?: string;
 	trangThaiHoc?: ETrangThaiHocTap;
+	loaiHocPhan?: ELoaiHocPhanCTDT;
 }) => {
 	const intl = useIntl();
-	const { hocPhan, listDiem, colorKhoiKienThuc, trangThaiHoc, onClick } = props;
+	const { hocPhan, listDiem, trangThaiHoc, onClick, loaiHocPhan } = props;
 	const soTinChi = hocPhan?.soTinChi ?? 0;
 	const listDiemChu = listDiem?.map((item) => item.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU);
 
@@ -75,7 +76,18 @@ const CardHocPhan = (props: {
 					{/* Credits */}
 					<Tag className='credits-tag'>
 						{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
+						{loaiHocPhan === ELoaiHocPhanCTDT.BAT_BUOC && (
+							<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hpbatbuoc' })}>
+								<PushpinFilled style={{ color: 'var(--color-error)', marginLeft: 4, fontSize: '10px' }} />
+							</Tooltip>
+						)}
+						{loaiHocPhan === ELoaiHocPhanCTDT.TU_CHON && (
+							<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hptuchon' })}>
+								<BookOutlined style={{ color: 'var(--color-info)', marginLeft: 4, fontSize: '10px' }} />
+							</Tooltip>
+						)}
 					</Tag>
+					
 				</div>
 
 				{/* Currently studying indicator */}
