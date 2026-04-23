@@ -33,6 +33,7 @@ export default {
 	'minor.button.submitInfo': 'Feature is under development',
 	'minor.button.submitSuccess': 'Registered successfully!',
 	'minor.button.submitError': 'An error occurred while registering',
+	'minor.button.updateRecord': 'Update application',
 	'minor.button.duyetSuccess': 'Approved successfully!',
 	'minor.button.duyetError': 'An error occurred while approving',
 	'minor.empty.noMinor': 'No minor available',
@@ -76,7 +77,7 @@ export default {
 	'minor.idm.advisor.facultyAdvisorLabel': 'Faculty Advisor',
 	'minor.idm.advisor.responsibleUnit': 'Responsible Unit',
 	'minor.idm.advisor.responsibleUnitPlaceholder': 'Select responsible unit',
-	'minor.idm.advisor.selectPlaceholder': 'Select faculty advisor',
+	'minor.idm.advisor.selectPlaceholder': 'Select secondary advisor',
 	'minor.idm.advisor.name': 'Name',
 	'minor.idm.advisor.email': 'Email',
 	'minor.idm.advisor.college': 'College/Department',
@@ -86,7 +87,7 @@ export default {
 	'minor.idm.advisor.error.duplicateSecondaryAdvisor': 'Secondary advisor must be different from primary advisor',
 	'minor.idm.form.titleOfMinor': 'Title of Minor',
 	'minor.idm.form.titlePlaceholder': 'Enter title',
-	'minor.idm.goalsAndRationale.title': 'Goals & Rationale',
+	'minor.idm.goalsAndRationale.title': 'Registration Information',
 	'minor.idm.goalsAndRationale.description':
 		'State the goals and rationale describing the minor: (maximum is 500 words)',
 	'minor.idm.goalsAndRationale.placeholder': 'Enter the goals and rationale',
@@ -222,6 +223,8 @@ export default {
 	'minor.detail.email': 'Email',
 	'minor.detail.edit': 'Edit',
 	'minor.detail.commentDefault': 'Suitable major',
+	'minor.detail.registration_info.title': 'Registration Information',
+	'minor.detail.proposed_program_name': 'Proposed Program Name',
 
 	// AlertBanners
 	'minor.alert.registrationStart.minor': 'Minor registration period starts from {date}',

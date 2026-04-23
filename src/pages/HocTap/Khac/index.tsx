@@ -25,14 +25,14 @@ const HocTapKhacPage = () => {
 					title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
 					menuKey: 'dang-ky-chuyen-nganh',
 					hide: !access.cctFilter(),
-					content: <DangKyChuyenNganhPage type='concentration' />,
+					content: <DangKyChuyenNganhPage type='concentration' key='concentration' />,
 				},
 				{
 					icon: <ProfileOutlined />,
 					title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganhhep.title' }),
 					menuKey: 'dang-ky-chuyen-nganh-hep',
 					hide: !access.cctFilter(),
-					content: <DangKyChuyenNganhPage type='minor' />,
+					content: <DangKyChuyenNganhPage type='minor' key='minor' />,
 				},
 			]
 			: [

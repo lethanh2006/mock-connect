@@ -189,7 +189,7 @@ const TienTrinhChuongTrinhKhung = ({
 								{renderChuyenNganh(groupChuyenNganh.common || [])}
 							</div>
 
-							{/* Hiện chuyên ngành hẹp nồng bên trong khối */}
+							{/* Hiện chuyên ngành phụ nồng bên trong khối */}
 							{hasMultipleMajors && (
 								<Collapse
 									bordered={false}
