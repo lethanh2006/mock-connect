@@ -1,13 +1,14 @@
 import { TabViewPage } from '@/components/TabViewPage';
+import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import PathWayPage from '@/pages/SinhVien/PathWay';
 import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
 import { formatDate } from '@/utils/formatDate';
 import { BookOutlined, CheckCircleOutlined, NodeIndexOutlined, ScheduleOutlined } from '@ant-design/icons';
-import { Alert, Card, Col, Descriptions, Row, Spin } from 'antd';
+import { Alert, Card, Col, Descriptions, Divider, Row, Spin } from 'antd';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
-import { useAccess, useIntl, useModel } from 'umi';
+import { useEffect, useState } from 'react';
+import { Link, useAccess, useIntl, useModel } from 'umi';
 import LichSuQuyDoiDiemPage from '../QuyDoiDiem';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import flag from './components/flag.svg';
@@ -17,15 +18,20 @@ import TienTrinhThucTe from './TienTrinhThucTe';
 const TienTrinhHocTap = () => {
 	const intl = useIntl();
 	const { getAllModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
-	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
+	const { maKhoaNganh, setMaKhoaNganh, record: recSinhVien, khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const { record: recTienTrinh, getTienTrinhTotNghiepModel, loading } = useModel('sinhvien.tientrinhtotnghiep');
 	const { getByIdModel, record: recLoTrinh } = useModel('sinhvien.lotrinhhoctap');
 	const {
 		chuongTrinhHienTai,
 		loading: loadingChuongTrinh,
 		getChuongTrinhHienTaiModel,
+		setRecord: setChuongTrinh,
 	} = useModel('daotao.chuongtrinhdaotao');
+	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
 	const access = useAccess();
+
+	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
+	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh2 : recSinhVien?.chuyenNganh;
 
 	const ngoaiThoiGian =
 		recLoTrinh?.dotDangKyPathway?.kichHoat === false ||
@@ -57,8 +63,53 @@ const TienTrinhHocTap = () => {
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<Card variant='borderless'>
+				<Spin spinning={loadingChuongTrinh || loading}>
+					<Descriptions
+						column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 1 }}
+						layout='vertical'
+						className='highlight'
+						colon={false}
+						style={{ marginBottom: 16 }}
+					>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })}>
+							<Link
+								to='#'
+								onClick={(e) => {
+									e.preventDefault();
+									setVisibleChuongTrinh(true);
+								}}
+							>
+								{recTienTrinh?.ctdtKeHoach?.ten || '-'}
+							</Link>
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loai' })}>
+							{chuongTrinhHienTai?.loai ? LoaiChuongTrinhDaoTao[chuongTrinhHienTai.loai] : chuongTrinhHienTai?.loai || '-'}
+						</Descriptions.Item>
+						<Descriptions.Item label={intl.formatMessage({ id: 'pathway.info.currentProgram' })}>
+							{chuongTrinhHienTai?.nganh?.ten || chuongTrinhHienTai?.ten || '-'}
+						</Descriptions.Item>
+						{chuyenNganhHienTai && (
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
+								{(chuyenNganhHienTai as any)?.ten}
+							</Descriptions.Item>
+						)}
+						{access.cctFilter() && khoaNganhMe?.khoaNganhPhu && (
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}>
+								{khoaNganhMe.khoaNganhPhu.ten || <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>}
+							</Descriptions.Item>
+						)}
+						{access.cctFilter() && (
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.pathway' })}>
+								{recLoTrinh?.dotDangKyPathway?.ten ?? <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>}
+							</Descriptions.Item>
+						)}
+					</Descriptions>
+				</Spin>
+
 				<Spin spinning={loading}>
-					<div>{intl.formatMessage({ id: 'tientrinhhoctap.scttichluy' })}</div>
+					<Divider dashed orientation='left'>
+						{intl.formatMessage({ id: 'tientrinhhoctap.scttichluy' })}
+					</Divider>
 
 					<Row align='middle' gutter={[12, 12]}>
 						<Col span={20} md={22}>
@@ -123,22 +174,7 @@ const TienTrinhHocTap = () => {
 					/>
 				)}
 
-				<Spin spinning={loadingChuongTrinh}>
-					<Descriptions
-						column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 1 }}
-						layout='vertical'
-						className='highlight'
-						colon={false}
-						style={{ marginBottom: 12 }}
-					>
-						<Descriptions.Item label={intl.formatMessage({ id: 'pathway.info.programType' })}>
-							{chuongTrinhHienTai?.loai ? LoaiChuongTrinhDaoTao[chuongTrinhHienTai.loai] : chuongTrinhHienTai?.loai}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'pathway.info.currentProgram' })}>
-							{chuongTrinhHienTai?.nganh?.ten || chuongTrinhHienTai?.ten || '-'}
-						</Descriptions.Item>
-					</Descriptions>
-				</Spin>
+
 
 				<TabViewPage
 					hideCard
@@ -171,6 +207,7 @@ const TienTrinhHocTap = () => {
 					]}
 				/>
 			</Card>
+			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
 		</Card>
 	);
 };
