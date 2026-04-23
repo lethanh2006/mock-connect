@@ -40,7 +40,6 @@ include:
   - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-prod'
     ref: master
     file: '.gitlab/cd-update-image.yml'
-
 build_develop:
   stage: build
   image:
