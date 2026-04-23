@@ -10,6 +10,8 @@ interface FormFooterProps {
 	nextText?: string;
 	submitText?: string;
 	saveDraftText?: string;
+	loading?: boolean;
+	submitLoading?: boolean;
 }
 
 const FormFooter = ({
@@ -21,6 +23,8 @@ const FormFooter = ({
 	nextText,
 	submitText,
 	saveDraftText,
+	loading = false,
+	submitLoading = false,
 }: FormFooterProps) => {
 	const intl = useIntl();
 
@@ -31,7 +35,7 @@ const FormFooter = ({
 	return (
 		<div className='form-footer'>
 			{onNext && (
-				<Button type='primary' onClick={onNext}>
+				<Button type='primary' onClick={onNext} loading={loading}>
 					{nextText || defaultNextText}
 				</Button>
 			)}
@@ -41,15 +45,22 @@ const FormFooter = ({
 					okText={intl.formatMessage({ id: 'minor.popconfirm.ok' })}
 					cancelText={intl.formatMessage({ id: 'minor.popconfirm.cancel' })}
 					onConfirm={onSubmit}
+					disabled={submitLoading}
 				>
-					<Button type='primary'>{submitText || defaultSubmitText}</Button>
+					<Button type='primary' loading={submitLoading}>
+						{submitText || defaultSubmitText}
+					</Button>
 				</Popconfirm>
 			)}
 			{onSaveDraft && (
-				<Button onClick={onSaveDraft}>{saveDraftText || defaultSaveDraftText}</Button>
+				<Button onClick={onSaveDraft} loading={loading}>
+					{saveDraftText || defaultSaveDraftText}
+				</Button>
 			)}
 			{showPrevious && onPrevious && (
-				<Button onClick={onPrevious}>{intl.formatMessage({ id: 'minor.idm.button.previous' })}</Button>
+				<Button onClick={onPrevious} disabled={loading || submitLoading}>
+					{intl.formatMessage({ id: 'minor.idm.button.previous' })}
+				</Button>
 			)}
 		</div>
 	);
