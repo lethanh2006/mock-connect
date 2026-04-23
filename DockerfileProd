@@ -1,5 +1,6 @@
 # 1. For build React app
-FROM node:22-alpine AS development
+ARG BUILD_BASE_IMAGE=537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:build-base-prod
+FROM ${BUILD_BASE_IMAGE} AS development
 
 
 # Set environment variables
@@ -42,7 +43,7 @@ ENV APP_CONFIG_BASE_PATH=/student/
 WORKDIR /app
 
 COPY package.json yarn.lock /app/
-RUN yarn install
+RUN if [ ! -d node_modules ] || [ ! -f /opt/build-base.yarn.lock ] || ! cmp -s yarn.lock /opt/build-base.yarn.lock; then yarn install; fi
 
 COPY . /app
 
