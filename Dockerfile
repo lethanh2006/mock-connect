@@ -3,7 +3,7 @@ FROM node:22-alpine AS development
 
 
 # Set environment variables
-ENV APP_CONFIG_IP_ROOT=https://uat-apigw.vinuni.edu.vn/
+ENV APP_CONFIG_IP_ROOT=https://one-apigw.vinuni.edu.vn/
 ENV APP_CONFIG_ONE_SIGNAL_ID=
 ENV APP_CONFIG_SENTRY_DSN=
 ENV APP_CONFIG_KEYCLOAK_AUTHORITY=https://one-sso.vinuni.edu.vn/realms/vinuni
@@ -41,7 +41,7 @@ ENV APP_CONFIG_MOODLE_ENDPOINT=''
 ENV APP_CONFIG_INIT_MA_NHOM_TIET_HOC=G
 ENV APP_CONFIG_SO_TIN_CHI_HOC_KY_MIN=14
 ENV APP_CONFIG_SO_TIN_CHI_HOC_KY_MAX=24
-ENV APP_CONFIG_BASE_PATH=/cong-tac-sinh-vien/
+ENV APP_CONFIG_BASE_PATH=/student/
 
 # Set working directory
 WORKDIR /app
