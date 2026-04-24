@@ -1,6 +1,6 @@
 import { EDinhDangFile } from '@/services/base/constant';
 import type { IFileInfo } from '@/services/base/typing';
-import { getFileInfo } from '@/services/uploadFile';
+import { getFileContent, getFileInfo } from '@/services/uploadFile';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
 import {
@@ -25,11 +25,12 @@ type TFrameProps = {
 	type: EDinhDangFile;
 	name?: string;
 	src?: string;
+	data?: ArrayBuffer;
 };
 
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
-	const { file, style = {}, children, ip = ip3, isFileId, tenFile } = props;
+	const { file, style = {}, children, ip = ip3, isFileId, tenFile, isPrivate } = props;
 
 	const isValidStringArray = (value: any): value is string[] => {
 		return Array.isArray(value) && value.every((item) => typeof item === 'string');
@@ -89,7 +90,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	};
 
 	const getFileDataFromUrl = async (srcUrl: string) => {
-		const idFile = isFileId ? srcUrl : srcUrl.split('/')[srcUrl.length - 2];
+		const idFile = isFileId ? srcUrl : srcUrl.split('/').at(-2);
 		const frame: TFrameProps = {
 			url: srcUrl,
 			type: EDinhDangFile.UNKNOWN,
@@ -108,6 +109,11 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				frame.type =
 					getFileType(fileInfo?.mimetype ? fileInfo.mimetype : (getFileExtension(frame.url) ?? '')) ||
 					EDinhDangFile.UNKNOWN;
+
+				if (isPrivate) {
+					// Nếu là file riêng tư thì phải lấy src có token mới xem được
+					frame.data = (await getFileContent(frame.url)) as any;
+				}
 			} else {
 				frame.type = getFileType(getFileExtension(srcUrl) ?? '') || EDinhDangFile.UNKNOWN;
 			}
@@ -270,9 +276,13 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			<div className='preview-content'>
 				{frameData?.type === EDinhDangFile.PDF && frameData?.src ? (
 					<div className='preview-pdf'>
-						<PDFViewerV2 url={frameData?.src} {...props.viewerProps} />
+						<PDFViewerV2
+							data={frameData.data}
+							url={!!frameData.data ? undefined : frameData?.src}
+							{...props.viewerProps}
+						/>
 					</div>
-				) : frameData?.type === EDinhDangFile.IMAGE && frameData?.src ? (
+				) : frameData?.type === EDinhDangFile.IMAGE && !!frameData?.src ? (
 					<div className='preview-image-container'>
 						<Image
 							src={frameData.src}
