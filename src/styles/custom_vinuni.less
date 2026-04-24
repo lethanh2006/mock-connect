@@ -73,7 +73,7 @@ body {
 	font-weight: 500;
 }
 
-.ant-form-item-label>label {
+.ant-form-item-label > label {
 	font-weight: 600 !important;
 }
 
@@ -169,8 +169,8 @@ body {
 // =============================================================================
 .ant-table,
 .ant-table-container,
-.ant-table-content>tr>th,
-.ant-table-content>tr>td {
+.ant-table-content > tr > th,
+.ant-table-content > tr > td {
 	border: none !important;
 }
 
@@ -221,7 +221,7 @@ body {
 		}
 	}
 
-	>tr>th:last-child,
+	> tr > th:last-child,
 	.ant-table-cell:last-child {
 		border-right: none !important;
 	}
@@ -451,7 +451,6 @@ body {
 			.ant-page-header-heading-extra {
 				.ant-space {
 					.ant-space-item {
-
 						[class*='menu_right'],
 						.menu_right {
 							margin-left: auto !important;
@@ -538,18 +537,18 @@ body {
 			flex-direction: row-reverse;
 
 			button.ant-btn:has(> .span-extend) {
-				>span.ant-btn-icon {
+				> span.ant-btn-icon {
 					@media (min-width: 576px) {
 						display: none !important;
 					}
 				}
 
 				&.btn-reload {
-					>span.ant-btn-icon {
+					> span.ant-btn-icon {
 						display: inline-flex !important;
 					}
 
-					>.span-extend {
+					> .span-extend {
 						display: none !important;
 					}
 				}
@@ -561,7 +560,6 @@ body {
 			align-items: center !important;
 
 			.ant-btn {
-
 				.ant-btn-icon,
 				.anticon {
 					margin: 0 !important;
@@ -655,7 +653,8 @@ body {
 	img {
 		height: 24px !important;
 		width: 24px !important;
-		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+		filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%)
+			contrast(97%);
 	}
 
 	img[src*='notification.svg'],
@@ -744,7 +743,15 @@ body {
 // 9. Picker & Calendar
 // =============================================================================
 .ant-picker-dropdown {
-	.ant-picker-range-wrapper .ant-picker-panel-container .ant-picker-panel-layout .ant-picker-panels .ant-picker-panel .ant-picker-body .ant-picker-content tbody tr {
+	.ant-picker-range-wrapper
+		.ant-picker-panel-container
+		.ant-picker-panel-layout
+		.ant-picker-panels
+		.ant-picker-panel
+		.ant-picker-body
+		.ant-picker-content
+		tbody
+		tr {
 		.ant-picker-cell-in-view {
 			color: var(--color-text-100) !important;
 		}
@@ -791,7 +798,7 @@ body {
 	&::before {
 		.indicator(@w: 10px; @h: 6px; @side: right);
 		left: -16px !important;
-		top: 0 !important;
+		top: 4px !important;
 		transform: translateY(-50%) !important;
 
 		@media (max-width: 768px) {
@@ -817,11 +824,9 @@ body {
 }
 
 .ant-steps {
-
 	.ant-steps-item-finish,
 	.ant-steps-item-process {
 		.ant-steps-item-icon {
-
 			.ant-steps-icon,
 			span {
 				color: white !important;
