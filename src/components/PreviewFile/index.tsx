@@ -90,7 +90,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	};
 
 	const getFileDataFromUrl = async (srcUrl: string) => {
-		const idFile = isFileId ? srcUrl : srcUrl.split('/').at(-2);
+		const idFile = isFileId ? srcUrl : undefined; // srcUrl.split('/').at(-2);
 		const frame: TFrameProps = {
 			url: srcUrl,
 			type: EDinhDangFile.UNKNOWN,
@@ -109,13 +109,13 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				frame.type =
 					getFileType(fileInfo?.mimetype ? fileInfo.mimetype : (getFileExtension(frame.url) ?? '')) ||
 					EDinhDangFile.UNKNOWN;
-
-				if (isPrivate) {
-					// Nếu là file riêng tư thì phải lấy src có token mới xem được
-					frame.data = (await getFileContent(frame.url)) as any;
-				}
 			} else {
 				frame.type = getFileType(getFileExtension(srcUrl) ?? '') || EDinhDangFile.UNKNOWN;
+			}
+
+			if (isPrivate) {
+				// Nếu là file riêng tư thì phải lấy src có token mới xem được
+				frame.data = (await getFileContent(frame.url))?.data;
 			}
 
 			// Fill other props
