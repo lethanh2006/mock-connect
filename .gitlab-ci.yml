@@ -84,8 +84,11 @@ jfrog_build_connect:
   extends:
     - .jfrog_kaniko_build_job
     - .security_tools_image_defaults
+  resource_group: "vwa-connect-dev-runner-heavy"
   tags:
-    - runner-vu-digital-dev
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
   variables:
     BUILD_CONTEXT: "${CI_PROJECT_DIR}"
     BUILD_DOCKERFILE: "${CI_PROJECT_DIR}/Dockerfile"
@@ -93,18 +96,39 @@ jfrog_build_connect:
 
 sbom_scan_connect:
   extends: .jfrog_sbom_scan_job
+  resource_group: "vwa-connect-dev-runner-heavy"
   tags:
-    - runner-vu-digital-dev
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
   variables:
+    IsBuildImage: 'true'
     IMAGE_NAME: "${JFROG_REGISTRY}/${IMAGE_REPO}/${APP_NAME}"
     DOCKER_IMAGE_NAME: "${JFROG_REGISTRY}/${IMAGE_REPO}/${APP_NAME}:${CI_COMMIT_SHORT_SHA}"
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+  cache: []
   needs:
     - jfrog_build_connect
 
 vuln_scan_connect:
   extends: .standard_vuln_scan_job
+  resource_group: "vwa-connect-dev-runner-heavy"
   tags:
-    - runner-vu-digital-dev
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
 
 update_gitops:
   extends: .update_image_tag
