@@ -1,7 +1,10 @@
 stages:
+  - sast_scan
+  - sast_upload
+  - sca_source
   - prepare
   - build
-  - security-scan
+  - sca_image
   - update-gitops
 
 workflow:
@@ -21,23 +24,22 @@ variables:
   PROD_BUILD_BASE_TAG: "build-base-prod"
   APP_NAME: "dhs-slink-web"
   GIT_DEPTH: 1
+  CICD_ENGAGEMENT_NAME: "CICD Runs - ${CI_COMMIT_REF_NAME}"
 
 include:
+  - project: 'vinsoc-ai/anbm-pentest/security-templates'
+    ref: main
+    file:
+      - '/dojo-context.gitlab-ci.yml'
+      - '/namespace-mirror.gitlab-ci.yml'
+      - '/vuln-scan.gitlab-ci.yml'
+      - '/sbom-scan.gitlab-ci.yml'
+      - '/image-scan.gitlab-ci.yml'
   - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-dev'
     ref: master
-    file: '.gitlab/cd-update-image.yml'
-  - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-dev'
-    ref: master
-    file: '.gitlab/templates/jfrog-build.gitlab-ci.yml'
-  - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-dev'
-    ref: master
-    file: '.gitlab/templates/security-scan-defaults.gitlab-ci.yml'
-  - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-dev'
-    ref: master
-    file: '.gitlab/templates/sbom-scan.gitlab-ci.yml'
-  - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-dev'
-    ref: master
-    file: '.gitlab/templates/vuln-scan.gitlab-ci.yml'
+    file:
+      - '.gitlab/templates/jfrog-build.gitlab-ci.yml'
+      - '.gitlab/cd-update-image.yml'
   - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-prod'
     ref: master
     file: '.gitlab/cd-update-image.yml'
@@ -82,9 +84,7 @@ build_develop:
   interruptible: true
 
 jfrog_build_connect:
-  extends:
-    - .jfrog_kaniko_build_job
-    - .security_tools_image_defaults
+  extends: .jfrog_kaniko_build_job
   resource_group: "vwa-connect-dev-runner-heavy"
   tags:
     - vu-aund
@@ -93,32 +93,106 @@ jfrog_build_connect:
   variables:
     BUILD_CONTEXT: "${CI_PROJECT_DIR}"
     BUILD_DOCKERFILE: "${CI_PROJECT_DIR}/Dockerfile"
-    BUILD_DESTINATION: "${JFROG_REGISTRY}/${IMAGE_REPO}/${APP_NAME}:${CI_COMMIT_SHORT_SHA}"
+    BUILD_DESTINATION: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}:${CI_COMMIT_SHORT_SHA}"
 
-sbom_scan_connect:
-  extends: .jfrog_sbom_scan_job
-  resource_group: "vwa-connect-dev-runner-heavy"
+sbom_scan:
   tags:
     - vu-aund
   rules:
     - if: $CI_COMMIT_TAG =~ /^scan_.+/
   variables:
-    IsBuildImage: 'true'
-    IMAGE_NAME: "${JFROG_REGISTRY}/${IMAGE_REPO}/${APP_NAME}"
-    DOCKER_IMAGE_NAME: "${JFROG_REGISTRY}/${IMAGE_REPO}/${APP_NAME}:${CI_COMMIT_SHORT_SHA}"
     KUBERNETES_MEMORY_REQUEST: "512Mi"
     KUBERNETES_MEMORY_LIMIT: "1Gi"
     KUBERNETES_HELPER_MEMORY_REQUEST: "512Mi"
     KUBERNETES_HELPER_MEMORY_LIMIT: "1Gi"
     KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
     KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
-  cache: []
+
+trivy_source_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+image_scan_connect:
+  extends: .image_scan_template
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    DOCKER_IMAGE_NAME: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}:${CI_COMMIT_SHORT_SHA}"
+    TRIVY_USERNAME: "${JFROG_USER}"
+    TRIVY_PASSWORD: "${JFROG_TOKEN}"
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
   needs:
     - jfrog_build_connect
 
-vuln_scan_connect:
-  extends: .standard_vuln_scan_job
-  resource_group: "vwa-connect-dev-runner-heavy"
+semgrep_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+mobsf_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+gosec_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+gitleaks_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+sast_upload:
   tags:
     - vu-aund
   rules:
