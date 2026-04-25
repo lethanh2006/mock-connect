@@ -388,6 +388,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 												});
 											}}
 											disabled={isView}
+											isHideSinhVien
 										/>
 									</Form.Item>
 									<Form.Item name='supervisorName' hidden />
