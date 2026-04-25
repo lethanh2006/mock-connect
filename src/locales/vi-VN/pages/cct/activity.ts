@@ -161,4 +161,8 @@ export default {
 	'activity.chitiet.dangky': 'REGISTER NOW',
 	'activity.chitiet.dangky.confirm': 'Confirm activity registration?',
 	'activity.chitiet.update': 'Update Evidence',
+
+	'selectNhanSu.placeholder': 'Chọn cán bộ, giảng viên (tìm theo họ tên hoặc mã)',
+	'selectNhanSu.loading': 'Đang tìm kiếm...',
+	'selectNhanSu.empty': 'Không có dữ liệu, hãy thử từ khóa khác',
 };
