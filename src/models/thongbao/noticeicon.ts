@@ -4,7 +4,7 @@ import { message } from 'antd';
 import { useState } from 'react';
 
 export default () => {
-	const [loading, setLoading] = useState<boolean>(true);
+	const [loading, setLoading] = useState<boolean>(false);
 	const [record, setRecord] = useState<ThongBao.IRecord>();
 	const [danhSach, setDanhSach] = useState<ThongBao.IRecord[]>([]);
 	const [page, setPage] = useState<number>(1);
