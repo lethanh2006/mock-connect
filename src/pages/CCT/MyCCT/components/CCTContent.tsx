@@ -123,7 +123,7 @@ const CCTContent = (props: {
 							CO-CURRICULAR & <br /> COMPETENCY TRANSCRIPT
 						</div>
 						<div className='university-logo'>
-							<img src={'/images/cct/bg-cct.png'} style={{ height: 60 }} />
+							<img src={'/student/images/cct/bg-cct.png'} style={{ height: 60 }} />
 						</div>
 					</div>
 				</header>
@@ -156,8 +156,8 @@ const CCTContent = (props: {
 
 						<section className='profile-section'>
 							<div className='section-title gold-text'>
-								<img src={'/images/cct/Profile.png'} style={{ width: 25, marginLeft: -4, marginTop: -4 }} /> Student
-								Aspiration Statement
+								<img src={'/student/images/cct/Profile.png'} style={{ width: 25, marginLeft: -4, marginTop: -4 }} />{' '}
+								Student Aspiration Statement
 							</div>
 							{edit ? (
 								<Form.Item name='selfAspiration' rules={[...rules.required, ...rules.text]}>
@@ -174,8 +174,8 @@ const CCTContent = (props: {
 
 						<section className='skills-section'>
 							<div className='section-title gold-text'>
-								<img src={'/images/cct/Skills.png'} style={{ width: 25, marginLeft: -4, marginTop: -7 }} /> Skills and
-								Competency Development
+								<img src={'/student/images/cct/Skills.png'} style={{ width: 25, marginLeft: -4, marginTop: -7 }} />{' '}
+								Skills and Competency Development
 							</div>
 							<p className='italic-text'>
 								<i>
@@ -219,8 +219,8 @@ const CCTContent = (props: {
 
 						<section className='projects-section'>
 							<h2 className='section-title gold-text'>
-								<img src={'/images/cct/Featured.png'} style={{ width: 25, marginLeft: -4, marginTop: -4 }} /> Featured
-								Projects/Experience
+								<img src={'/student/images/cct/Featured.png'} style={{ width: 25, marginLeft: -4, marginTop: -4 }} />{' '}
+								Featured Projects/Experience
 							</h2>
 
 							{edit ? (
@@ -240,8 +240,8 @@ const CCTContent = (props: {
 					<div className='column right-column'>
 						<section className='awards-section'>
 							<h2 className='section-title gold-text'>
-								<img src={'/images/cct/Awards.png'} style={{ width: 25, marginLeft: -7 }} /> Awards, Recognization and
-								Scholarship
+								<img src={'/student/images/cct/Awards.png'} style={{ width: 25, marginLeft: -7 }} /> Awards,
+								Recognization and Scholarship
 							</h2>
 
 							{edit ? (
