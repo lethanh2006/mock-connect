@@ -161,4 +161,8 @@ export default {
 	'activity.chitiet.dangky': 'REGISTER NOW',
 	'activity.chitiet.dangky.confirm': 'Confirm activity registration?',
 	'activity.chitiet.update': 'Update Evidence',
+
+	'selectNhanSu.placeholder': 'Select staff / faculty (search by name or ID)',
+	'selectNhanSu.loading': 'Searching...',
+	'selectNhanSu.empty': 'No data found, try another keyword',
 };
