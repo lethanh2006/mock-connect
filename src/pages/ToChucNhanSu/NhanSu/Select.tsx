@@ -19,7 +19,6 @@ const SelectNhanSuDebounce = (props: {
 	maDonVi?: string;
 	placeholder?: string;
 	hidePersonalInfo?: boolean; //Ẩn thông tin cá nhân
-	isHideSinhVien?: boolean;
 }) => {
 	const intl = useIntl();
 
@@ -35,7 +34,6 @@ const SelectNhanSuDebounce = (props: {
 		maDonVi,
 		placeholder,
 		hidePersonalInfo,
-		isHideSinhVien,
 	} = props;
 
 	const { danhSach, getModel, loading, searchCanBoModel } = useModel('tochucnhansu.nhansu');
@@ -70,7 +68,7 @@ const SelectNhanSuDebounce = (props: {
 				undefined,
 				1,
 				20,
-				isHideSinhVien ? undefined : 'sinh-vien/page',
+				'sinh-vien/page',
 			);
 		}
 	}, [keyword, JSON.stringify(value)]);
