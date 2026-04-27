@@ -45,6 +45,7 @@ include:
     file: '.gitlab/cd-update-image.yml'
 build_develop:
   stage: build
+  resource_group: "vwa-connect-dev-runner-heavy"
   image:
     name: gcr.io/kaniko-project/executor:v1.23.0-debug
     entrypoint: [""]
@@ -207,6 +208,7 @@ sast_upload:
 
 update_gitops:
   extends: .update_image_tag
+  resource_group: "vwa-connect-dev-runner-heavy"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"
     - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == "develop" || $CI_COMMIT_REF_NAME =~ /^uat(-.+)?$/)
@@ -216,6 +218,7 @@ update_gitops:
 # ============ PROD ============
 build_custom_image_prod:
   stage: prepare
+  resource_group: "vwa-connect-prod-runner-heavy"
   image:
     name: gcr.io/kaniko-project/executor:v1.23.0-debug
     entrypoint: [""]
@@ -257,6 +260,7 @@ build_custom_image_prod:
 
 build_prod:
   stage: build
+  resource_group: "vwa-connect-prod-runner-heavy"
   image:
     name: gcr.io/kaniko-project/executor:v1.23.0-debug
     entrypoint: [""]
@@ -299,6 +303,7 @@ build_prod:
 
 update_gitops_prod:
   extends: .update_image_tag_prod
+  resource_group: "vwa-connect-prod-runner-heavy"
   variables:
     AWS_ACCOUNT_ID: "537557168856"
     ECR_REGISTRY: "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com"
