@@ -1,9 +1,11 @@
 import { CheckCircleFilled } from '@ant-design/icons';
 import { Modal, Space, Typography } from 'antd';
+import { useIntl } from 'umi';
 
 const { Title } = Typography;
 
 const ModalDangKyThanhCong = (props: { visibleDangKy: boolean; setVisibleDangKy: (val: boolean) => void }) => {
+	const intl = useIntl();
 	const { visibleDangKy, setVisibleDangKy } = props;
 
 	return (
@@ -25,7 +27,7 @@ const ModalDangKyThanhCong = (props: { visibleDangKy: boolean; setVisibleDangKy:
 
 			<div style={{ textAlign: 'center', marginTop: 12 }}>
 				<Title level={4} style={{ color: '#329323' }}>
-					You have successfully registered
+					{intl.formatMessage({ id: 'activity.chitiet.dangkythanhcong' })}
 				</Title>
 			</div>
 		</Modal>
