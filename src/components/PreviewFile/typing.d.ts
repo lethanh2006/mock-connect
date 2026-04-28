@@ -15,4 +15,7 @@ export type TPreviewFileProps = {
 	// Thêm viewerProps để truyền xuống PDFViewerV2
 	/** Truyền plugins [] nếu không chỉ muốn view pdf vào không hiển thị chức nào nào */
 	viewerProps?: Partial<Omit<ViewerProps, 'fileUrl'>>;
+
+	/** File có phải là file riêng tư không */
+	isPrivate?: boolean;
 };

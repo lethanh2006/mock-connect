@@ -1,3 +1,4 @@
+import background from '@/assets/cct/background.png';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
@@ -270,7 +271,7 @@ const HistoryActivityPage = () => {
 													...item?.activities,
 													activityOutcome: item,
 												}}
-												banner={item?.activities?.banner ?? undefined}
+												banner={item?.activities?.banner ?? background}
 												name={item?.activities?.name}
 												startDate={
 													item?.activities?.startDate
@@ -297,11 +298,11 @@ const HistoryActivityPage = () => {
 													...item?.activities,
 													activityOutcome: item,
 												}}
-												banner={item?.banner ?? undefined}
+												banner={item?.banner ?? background}
 												name={item?.isAwardRecognition ? item?.competition : item?.activitiesOutcomeName}
 												startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
 												endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
-												equivalencyAttributeIds={item?.activitiesType?.attributes?.map((x) => x._id)}
+												equivalencyAttributeIds={item?.activitiesType?.attributes?.map((x) => x?._id)}
 												onClick={() => handleView(item)}
 												button={
 													<Row style={{ marginTop: 12 }} gutter={[6, 0]}>

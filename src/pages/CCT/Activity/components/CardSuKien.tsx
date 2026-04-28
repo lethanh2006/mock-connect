@@ -1,3 +1,5 @@
+import background from '@/assets/cct/background.png';
+import AuthImage from '@/components/Image/AuthImage';
 import { officialColors } from '@/services/base/constant';
 import { Activity } from '@/services/CCT/Activity/typing';
 import {
@@ -9,7 +11,7 @@ import {
 	mapNameApprovalStatus,
 } from '@/services/CCT/constant';
 import { ClockCircleOutlined, EnvironmentOutlined, HourglassOutlined, UserOutlined } from '@ant-design/icons';
-import { Card, Flex, Image, Space, Tag, Typography } from 'antd';
+import { Card, Flex, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { JSX } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -150,11 +152,13 @@ const CardSuKienCCT = (props: {
 			className={`activity-card ${outTime ? 'activity-disabled' : ''} ${isExpiringSoon && !record?.activityOutcome?.workflow && !isDetail ? 'activity-expiring' : ''}`}
 			cover={
 				<div className='activity-cover'>
-					{isDetail ? (
-						<Image src={banner ?? '/images/cct/background.png'} alt={name} className='activity-image' />
-					) : (
-						<img src={banner ?? '/images/cct/background.png'} alt={name} className='activity-image' />
-					)}
+					<AuthImage
+						src={banner ?? background}
+						fallback={background}
+						alt={name}
+						className='activity-image'
+						isDetail={isDetail}
+					/>
 
 					{activeKey === '1' && isNew && !isRegister && (
 						<div className='new'>{intl.formatMessage({ id: 'activity.card.new' })}</div>
