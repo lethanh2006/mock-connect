@@ -29,6 +29,11 @@ const StepDotChamDiemRenLuyen = () => {
 			thoiGianKetThuc: record?.thoiGianCoVanChamDiem?.thoiGianKetThuc,
 			title: intl.formatMessage({ id: 'diemrenluyen.step.chunhiemlop' }),
 		},
+		{
+			thoiGian: record?.thoiGianKhieuNai?.thoiGianBatDau,
+			thoiGianKetThuc: record?.thoiGianCoVanChamDiem?.thoiGianKetThuc,
+			title: intl.formatMessage({ id: 'diemrenluyen.step.khieunai' }),
+		},
 		// {
 		// 	thoiGian: record?.thoiGianKhoaChamDiem?.thoiGianBatDau,
 		// 	thoiGianKetThuc: record?.thoiGianKhoaChamDiem?.thoiGianKetThuc,
