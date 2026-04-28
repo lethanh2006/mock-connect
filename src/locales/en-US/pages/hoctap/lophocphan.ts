@@ -29,6 +29,8 @@ export default {
 	'lophocphan.id.baitap': 'Assignments & Quizzes',
 	'lophocphan.id.ketqua': 'Academic Results',
 	'lophocphan.id.khaosat': 'Student Surveys',
+	'lophocphan.id.syllabus': 'Syllabus',
+
 	'lophocphan.id.thongtinchung.hoctructuyen': 'Online Learning',
 	'lophocphan.id.thongtinchung.lms': 'LMS Class',
 	'lophocphan.id.thongtinchung.gioithieu': 'Credit Class Introduction',
