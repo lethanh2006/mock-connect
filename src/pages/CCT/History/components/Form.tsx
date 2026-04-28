@@ -4,7 +4,7 @@ import { handleSingleFile } from '@/services/uploadFile';
 import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Collapse, Form, Input, message, Row } from 'antd';
+import { Button, Checkbox, Col, Collapse, Form, Input, message, Row, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -14,6 +14,8 @@ import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
 import CardNoteActivity from './CardNote';
 import FormCompetencyEvidence from './FormCompetencyEvidence';
 import FormRoleEvidence from './FormRoleEvidence';
+
+const { Paragraph } = Typography;
 
 const uploadFilesOfCompetency = async (files: any[] = []) => {
 	if (!files.length) return [];
@@ -214,6 +216,19 @@ const FormActivityOutCome = (props: any) => {
 						name='reflection'
 						label={intl.formatMessage({ id: 'activity.outcome.reflection' })}
 						rules={[...rules.required, ...rules.text, ...rules.length(300)]}
+						extra={
+							<div style={{ marginTop: 6 }}>
+								<Paragraph className='text-info' style={{ fontSize: 12, marginBottom: 6, color: '#595959' }}>
+									Format: Led / Contributed to <b>[activity/project]</b>, resulting in <b>[measurable impact]</b>,
+									demonstrating <b>[key competency]</b>.
+								</Paragraph>
+
+								<Paragraph className='text-info' style={{ fontSize: 12, marginBottom: 0, color: '#8c8c8c' }}>
+									Example: Organized a charity initiative for Ha Nau Secondary School, reaching 150+ students and
+									mobilizing X VND in resources, demonstrating strong community engagement and execution capability.
+								</Paragraph>
+							</div>
+						}
 					>
 						<Input.TextArea
 							rows={3}
