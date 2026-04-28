@@ -48,7 +48,7 @@ COPY . /app
 FROM development AS build
 RUN cp .env.uat .env.production && yarn build
 
-FROM nginx:alpine
+FROM nginx:alpine-slim
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
 WORKDIR /var/www/website
 
