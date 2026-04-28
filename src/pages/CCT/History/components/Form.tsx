@@ -4,7 +4,7 @@ import { handleSingleFile } from '@/services/uploadFile';
 import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Collapse, Form, Input, message, Row } from 'antd';
+import { Button, Checkbox, Col, Collapse, Form, Input, message, Row, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -14,6 +14,8 @@ import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
 import CardNoteActivity from './CardNote';
 import FormCompetencyEvidence from './FormCompetencyEvidence';
 import FormRoleEvidence from './FormRoleEvidence';
+
+const { Paragraph } = Typography;
 
 const uploadFilesOfCompetency = async (files: any[] = []) => {
 	if (!files.length) return [];
@@ -74,7 +76,7 @@ const FormActivityOutCome = (props: any) => {
 		);
 
 		if (autoLevel && autoRole && !hasAtLeastOneEvidenceFile(evidenceFile)) {
-			message.warning('You must upload at least one evidence file for auto approval.');
+			message.warning(intl.formatMessage({ id: 'activity.outcome.warning' }));
 			return;
 		}
 
@@ -105,7 +107,7 @@ const FormActivityOutCome = (props: any) => {
 			{!!record?.revisionNote && <CardNoteActivity />}
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
-					<Form.Item name='rolesId' label='Role'>
+					<Form.Item name='rolesId' label={intl.formatMessage({ id: 'activity.outcome.role' })}>
 						<FormRoleEvidence
 							equivalency={record?.activities?.coCurricularActivityEquivalency ?? []}
 							select
@@ -122,19 +124,23 @@ const FormActivityOutCome = (props: any) => {
 				</Col> */}
 
 				<Col span={24} md={24}>
-					<Form.Item name='levelsId' label='Level' rules={[...rules.required]}>
+					<Form.Item
+						name='levelsId'
+						label={intl.formatMessage({ id: 'activity.outcome.level' })}
+						rules={[...rules.required]}
+					>
 						<SelectLevelsManagement disabled={isView} />
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
 					<div className='fw500' style={{ marginBottom: 6 }}>
-						List Evidence
+						{intl.formatMessage({ id: 'activity.outcome.evidence' })}
 					</div>
 
 					<div style={{ marginBottom: 10 }}>
 						<i className='text-info'>
-							(Suggestion Evidence:{' '}
+							({intl.formatMessage({ id: 'activity.outcome.suggest' })}:{' '}
 							{record?.activities?.activitiesType?.requiredEvidenceList
 								?.map((item) => item)
 								.filter(Boolean)
@@ -149,12 +155,23 @@ const FormActivityOutCome = (props: any) => {
 								{fields.map((field, index) => (
 									<Row gutter={[12, 0]} key={field.key}>
 										<Col span={24} md={12}>
-											<Form.Item label='Evidence File Name' name={[index, 'name']} rules={[...rules.required]}>
-												<Input placeholder='Enter Name' disabled={isView} />
+											<Form.Item
+												label={intl.formatMessage({ id: 'activity.outcome.evidence.name' })}
+												name={[index, 'name']}
+												rules={[...rules.required]}
+											>
+												<Input
+													placeholder={intl.formatMessage({ id: 'activity.outcome.evidence.name.placeholder' })}
+													disabled={isView}
+												/>
 											</Form.Item>
 										</Col>
 										<Col span={22} md={10}>
-											<Form.Item label='File' name={[index, 'file']} rules={[...rules.required]}>
+											<Form.Item
+												label={intl.formatMessage({ id: 'activity.outcome.evidence.file' })}
+												name={[index, 'file']}
+												rules={[...rules.required]}
+											>
 												<UploadFile maxCount={5} disabled={isView} isPrivate />
 											</Form.Item>
 										</Col>
@@ -170,7 +187,7 @@ const FormActivityOutCome = (props: any) => {
 												<Button
 													danger
 													type='link'
-													title='Xóa'
+													title={intl.formatMessage({ id: 'activity.outcome.delete' })}
 													icon={<DeleteOutlined />}
 													onClick={() => remove(field.name)}
 												/>
@@ -181,7 +198,7 @@ const FormActivityOutCome = (props: any) => {
 								))}
 
 								<Button onClick={() => add()} icon={<PlusOutlined />} type='dashed' size='small' disabled={isView}>
-									Update Evidence
+									{intl.formatMessage({ id: 'activity.outcome.evidence.update' })}
 								</Button>
 							</>
 						)}
@@ -189,7 +206,7 @@ const FormActivityOutCome = (props: any) => {
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='listAchievedCompetencies' label='Competency'>
+					<Form.Item name='listAchievedCompetencies' label={intl.formatMessage({ id: 'activity.outcome.competency' })}>
 						<FormCompetencyEvidence listAchievedCompetencies={listAchievedCompetencies} form={form} />
 					</Form.Item>
 				</Col>
@@ -197,16 +214,34 @@ const FormActivityOutCome = (props: any) => {
 				<Col span={24}>
 					<Form.Item
 						name='reflection'
-						label='Reflection'
+						label={intl.formatMessage({ id: 'activity.outcome.reflection' })}
 						rules={[...rules.required, ...rules.text, ...rules.length(300)]}
+						extra={
+							<div style={{ marginTop: 6 }}>
+								<Paragraph className='text-info' style={{ fontSize: 12, marginBottom: 6, color: '#595959' }}>
+									Format: Led / Contributed to <b>[activity/project]</b>, resulting in <b>[measurable impact]</b>,
+									demonstrating <b>[key competency]</b>.
+								</Paragraph>
+
+								<Paragraph className='text-info' style={{ fontSize: 12, marginBottom: 0, color: '#8c8c8c' }}>
+									Example: Organized a charity initiative for Ha Nau Secondary School, reaching 150+ students and
+									mobilizing X VND in resources, demonstrating strong community engagement and execution capability.
+								</Paragraph>
+							</div>
+						}
 					>
-						<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' showCount />
+						<Input.TextArea
+							rows={3}
+							disabled={isView}
+							placeholder={intl.formatMessage({ id: 'activity.outcome.reflection.placeholder' })}
+							showCount
+						/>
 					</Form.Item>
 				</Col>
 
 				<Col span={24}>
 					<Collapse>
-						<Collapse.Panel key={0} header={'Activity Detail'}>
+						<Collapse.Panel key={0} header={intl.formatMessage({ id: 'activity.outcome.activity.detail' })}>
 							<CardChiTietSuKien
 								record={
 									{
@@ -223,7 +258,7 @@ const FormActivityOutCome = (props: any) => {
 				{!isView && (
 					<Col span={24}>
 						<Form.Item name='checkbox' valuePropName='checked'>
-							<Checkbox>I hereby declare that the information provided is accurate.</Checkbox>
+							<Checkbox>{intl.formatMessage({ id: 'activity.outcome.confirm' })}</Checkbox>
 						</Form.Item>
 					</Col>
 				)}
@@ -239,7 +274,7 @@ const FormActivityOutCome = (props: any) => {
 							disabled={!checkbox || listAchievedCompetencies?.length > 3}
 							onClick={() => setIsSubmit(true)}
 						>
-							Submit
+							{intl.formatMessage({ id: 'activity.outcome.submit' })}
 						</Button>
 
 						<Button
@@ -248,11 +283,11 @@ const FormActivityOutCome = (props: any) => {
 							disabled={listAchievedCompetencies?.length > 3}
 							onClick={() => setIsSubmit(false)}
 						>
-							Save Draft
+							{intl.formatMessage({ id: 'activity.outcome.save' })}
 						</Button>
 					</>
 				)}
-				<Button onClick={() => setVisibleForm(false)}>Close</Button>
+				<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'activity.outcome.close' })}</Button>
 			</div>
 		</Form>
 	);
