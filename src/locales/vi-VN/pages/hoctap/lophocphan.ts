@@ -36,6 +36,8 @@ export default {
 	'lophocphan.id.baitap': 'Bài tập, bài kiểm tra',
 	'lophocphan.id.ketqua': 'Kết quả học tập',
 	'lophocphan.id.khaosat': 'Khảo sát sinh viên',
+	'lophocphan.id.syllabus': 'Đề cương chi tiết',
+
 
 	'lophocphan.id.thongtinchung.hoctructuyen': 'Học trực tuyến',
 	'lophocphan.id.thongtinchung.lms': 'Lớp học LMS',

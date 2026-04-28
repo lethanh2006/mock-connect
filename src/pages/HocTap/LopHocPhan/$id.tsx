@@ -9,6 +9,7 @@ import { currentRole, ipDaoTao } from '@/utils/ip';
 import {
 	BarChartOutlined,
 	BellOutlined,
+	BookOutlined,
 	CalendarOutlined,
 	FileTextOutlined,
 	InfoCircleOutlined,
@@ -19,7 +20,7 @@ import {
 import { Card, Col, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
-import { history, useIntl, useModel, useParams } from 'umi';
+import { history, useAccess, useIntl, useModel, useParams } from 'umi';
 import DetailKetQuaHocTap from '../KetQuaHocTap/components/DetailKetQuaHocTap';
 import CardBaiTapLopHp from './components/CardBaiTapLopHp';
 import DanhSachGiangVien from './components/DanhSachGiangVien';
@@ -29,6 +30,7 @@ import ThongTinChungHeaderCard from './components/ThongTinChungHeaderCard';
 import DanhGiaGiangVienPage from './DanhGiaGiangVien';
 import DanhSachBuoiHoc from './LichHoc';
 import LmsOdooPage from './LMS';
+import SyllabusPage from './Syllabus';
 
 const DetailLopTinChi = () => {
 	const intl = useIntl();
@@ -47,8 +49,19 @@ const DetailLopTinChi = () => {
 	} = useModel('daotao.lopthuchanh');
 	const [activeKey, setActiveKey] = useState<string>('-1');
 	const auth = useAuth();
+	const { cctFilter } = useAccess();
 
-	const paths = ['thong-tin', 'buoi-hoc', 'thong-bao', 'dien-dan', 'lms', 'bai-tap', 'ket-qua', 'danh-gia-giang-vien'];
+	const paths = [
+		'thong-tin',
+		'buoi-hoc',
+		'thong-bao',
+		'dien-dan',
+		'lms',
+		'bai-tap',
+		'ket-qua',
+		'danh-gia-giang-vien',
+		'syllabus',
+	];
 	const titles = [
 		intl.formatMessage({ id: 'lophocphan.id.thongtinchung' }),
 		intl.formatMessage({ id: 'lophocphan.id.lichhoc' }),
@@ -58,6 +71,7 @@ const DetailLopTinChi = () => {
 		intl.formatMessage({ id: 'lophocphan.id.baitap' }),
 		intl.formatMessage({ id: 'lophocphan.id.ketqua' }),
 		intl.formatMessage({ id: 'lophocphan.id.khaosat' }),
+		intl.formatMessage({ id: 'lophocphan.id.syllabus' }),
 	];
 	const [visibleDeCuongHp, setVisibleDeCuongHp] = useState<[boolean, string]>([false, '3']);
 
@@ -177,6 +191,15 @@ const DetailLopTinChi = () => {
 			),
 			icon: <InfoCircleOutlined />,
 		},
+
+		{
+			title: titles[8],
+			menuKey: paths[8],
+			content: <SyllabusPage lopHocPhanId={id as string} />,
+			icon: <BookOutlined />,
+			hide: !cctFilter?.(),
+		},
+
 		{
 			title: titles[1],
 			menuKey: paths[1],
@@ -193,6 +216,7 @@ const DetailLopTinChi = () => {
 			),
 			icon: <BellOutlined />,
 		},
+
 		{
 			title: titles[3],
 			menuKey: paths[3],
