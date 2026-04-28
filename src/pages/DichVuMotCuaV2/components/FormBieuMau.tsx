@@ -12,6 +12,7 @@ import { accessFileUpload } from '@/services/DVMC/DichVuMotCuaV2/constant';
 import { type DichVuMotCuaV2 } from '@/services/DVMC/DichVuMotCuaV2/typing';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { checkFileSize, renderFileList, uploadMultiFile } from '@/utils/utils';
 import { Button, Card, Checkbox, Divider, Form, Input, InputNumber, Radio, Select } from 'antd';
@@ -186,7 +187,7 @@ const FormBieuMau = (props: {
 
 			case 'DATE_PICKER': {
 				initialValue = item?.value ? dayjs(item?.value) : undefined;
-				element = <MyDatePicker format='DD/MM/YYYY HH:mm' showTime={{ defaultValue: dayjs('00:00:00', 'HH:mm:ss') }} />;
+				element = <MyDatePicker format={undefined} showTime={{ defaultValue: dayjs('00:00:00', 'HH:mm:ss') }} />;
 				break;
 			}
 
@@ -325,7 +326,7 @@ const FormBieuMau = (props: {
 					recordRow?.forEach((cell: DichVuMotCuaV2.CauHinhBieuMau) => {
 						let value = typeof cell?.value === 'object' ? cell?.value?.join(', ') : cell?.value;
 						if (cell.type === 'DATE_PICKER') {
-							value = dayjs(cell?.value)?.format('HH:mm DD/MM/YYYY');
+							value = formatDateTime(cell?.value);
 						}
 
 						row[cell?.label] = value;
@@ -367,9 +368,7 @@ const FormBieuMau = (props: {
 								render: (val: any) =>
 									column?.type === 'DATE_PICKER' ? (
 										<div>
-											{val && props.type !== 'create' && props.type !== 'edit'
-												? dayjs(val)?.format('HH:mm DD/MM/YYYY')
-												: val}
+											{val && props.type !== 'create' && props.type !== 'edit' ? formatDateTime(val) : val}
 										</div>
 									) : (
 										<div>{val}</div>

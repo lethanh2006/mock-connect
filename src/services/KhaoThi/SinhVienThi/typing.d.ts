@@ -62,7 +62,7 @@ declare module SinhVienThi {
 
 	export interface IDiemThiHocKySinhVien {
 		kyThi: KyThi.IRecord;
-		diemThi: number;
+		diemKthp: number;
 		diemPhucKhao: number;
 		hocPhanThi: HocPhanThi.IRecord;
 		sinhVienThi: IRecord;

@@ -21,6 +21,10 @@ const CardChooseFields = (props: {
 	};
 	const treeData = genTreeData(allFields);
 
+	const selectedFields = fields.filter((item) => item.selected);
+	const isAllSelected = selectedFields.length === allFields.length;
+	const isAllUnSelected = selectedFields.length === 0;
+
 	const onCheckAll = () => setFields(fields.map((item) => ({ ...item, selected: true })));
 
 	const onUnCheckAll = () => setFields(fields.map((item) => ({ ...item, selected: false })));
@@ -32,10 +36,10 @@ const CardChooseFields = (props: {
 			className='card-borderless'
 		>
 			<Space style={{ marginBottom: 8 }} wrap>
-				<Button size='small' onClick={onCheckAll}>
+				<Button size='small' type={isAllSelected ? 'primary' : 'default'} onClick={onCheckAll}>
 					{intl.formatMessage({ id: 'global.table.export.choose.chontatca' })}
 				</Button>
-				<Button size='small' onClick={onUnCheckAll}>
+				<Button size='small' type={isAllUnSelected ? 'primary' : 'default'} onClick={onUnCheckAll}>
 					{intl.formatMessage({ id: 'global.table.export.choose.bochontatca' })}
 				</Button>
 			</Space>

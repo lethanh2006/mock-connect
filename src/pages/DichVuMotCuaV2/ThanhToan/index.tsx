@@ -2,7 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { type ThanhToan } from '@/services/DVMC/ThanhToan/typings';
 import { TrangThaiThanhToan } from '@/services/DVMC/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { currencyFormat } from '@/utils/utils';
 import { Divider, Empty, Table, Tabs } from 'antd';
 import { useEffect } from 'react';
@@ -44,7 +44,7 @@ const ThanhToanPage = (props: { identityCode: string; trangThaiThanhToan?: strin
 			width: 120,
 			dataIndex: 'transactionDate',
 			align: 'center',
-			render: (val) => val && dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => formatDateTime(val),
 		},
 		{
 			title: 'Người thực hiện',

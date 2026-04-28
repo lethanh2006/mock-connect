@@ -3,7 +3,7 @@ import type { IColumn } from '@/components/Table/typing';
 import UploadFile from '@/components/Upload/UploadFile';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
 import { primaryColor } from '@/services/base/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Divider, Form, Modal, Popconfirm, Space, Tag, Tooltip } from 'antd';
 import { useCallback, useState } from 'react';
@@ -44,7 +44,7 @@ const TableTimeline = (props: {
 			align: 'center',
 			render: (val: string, rec) => (
 				<div>
-					{dayjs(val).format('DD/MM/YYYY')} - {dayjs(rec.endDate).format('DD/MM/YYYY')}
+					{formatDate(val)} - {formatDate(rec.endDate)}
 				</div>
 			),
 		},

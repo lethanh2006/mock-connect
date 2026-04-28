@@ -1,6 +1,7 @@
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Button, Card, Empty, Space, Spin, Tag, Typography } from 'antd';
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
@@ -79,7 +80,7 @@ const CardSuKienSapToi = () => {
 							<div className='title'>{currentEvent.title || currentEvent.tenSuKien}</div>
 
 							<div className='footer'>
-								<div className='date'>{dayjs(currentEvent.thoiGianBatDau).format('DD/MM/YYYY')}</div>
+								<div className='date'>{formatDate(currentEvent.thoiGianBatDau)}</div>
 								<div className='tags'>
 									<Space size={4} wrap>
 										<Tag

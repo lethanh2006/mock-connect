@@ -137,7 +137,7 @@ const FormThemMoiBaiViet = (props: IProps) => {
 													>
 														<MyDatePicker
 															showTime={{ format: 'HH:mm' }}
-															format='DD/MM/YYYY HH:mm'
+															format={undefined}
 															disabledDate={(mo) => dayjs().isAfter(mo)}
 														/>
 													</Form.Item>

@@ -2,6 +2,7 @@ import type { DotQuyTrinh } from '@/services/QuyTrinh/DotQuyTrinh/typing';
 import type { QuyTrinh } from '@/services/QuyTrinh/typings';
 import { primaryColor } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { SyncOutlined } from '@ant-design/icons';
 import { Card, Timeline } from 'antd';
 
@@ -16,9 +17,7 @@ const ViewDot = (props: { recDot: DotQuyTrinh.IRecord; recQuyTrinh: QuyTrinh.IRe
 	return (
 		<Card
 			bodyStyle={{ paddingBottom: 0 }}
-			title={`${recDot.ten} (${dayjs(recDot.thoiGianBatDau).format('DD/MM/YYYY')} - ${dayjs(
-				recDot.thoiGianKetThuc,
-			).format('DD/MM/YYYY')})`}
+			title={`${recDot.ten} (${formatDate(recDot.thoiGianBatDau)} - ${formatDate(recDot.thoiGianKetThuc)})`}
 		>
 			<Timeline>
 				{recDot.danhSachCauHinhThoiGianDot.map((item, index) => (
@@ -30,7 +29,7 @@ const ViewDot = (props: { recDot: DotQuyTrinh.IRecord; recQuyTrinh: QuyTrinh.IRe
 						<div style={{ color: index === indexCurrent ? primaryColor : undefined }}>
 							{recQuyTrinh.danhSachBuocXuLy.find((ele) => ele.ma === item.maBuoc)?.ten}{' '}
 							<b>
-								({dayjs(item.thoiGianBatDau).format('DD/MM/YYYY')} - {dayjs(item.thoiGianKetThuc).format('DD/MM/YYYY')})
+								({formatDate(item.thoiGianBatDau)} - {formatDate(item.thoiGianKetThuc)})
 							</b>
 						</div>
 					</Timeline.Item>

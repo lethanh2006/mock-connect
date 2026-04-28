@@ -11,11 +11,13 @@ import ketquahoctap from './hoctap/ketquahoctap';
 import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
+import pathway from './hoctap/pathway';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
+import minor from './minor';
 import phanhoi from './phanhoi';
 import congno from './taichinh/congno';
 import lichsugiaodich from './taichinh/lichsugiaodich';
@@ -58,6 +60,8 @@ export default {
 	...lichthi,
 	...baithicuoiky,
 	...activity,
+	...pathway,
+	...minor,
 
 	'pages.trangchu.title': 'TRAINING MANAGEMENT SUBSYSTEM',
 	'pages.trangchu.subtitle': 'COMMAND AND CONTROL SOFTWARE SYSTEM',

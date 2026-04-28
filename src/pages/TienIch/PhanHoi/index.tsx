@@ -3,7 +3,7 @@ import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import { type PhanHoi } from '@/services/TienIch/PhanHoi/typing';
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { EyeOutlined } from '@ant-design/icons';
 import { Button, Segmented, Tag, Tooltip } from 'antd';
 import { useState } from 'react';
@@ -46,7 +46,7 @@ const PhanHoiPage = () => {
 			title: intl.formatMessage({ id: 'phanhoi.column.ngaygui' }),
 			dataIndex: 'createdAt',
 			align: 'center',
-			render: (val) => dayjs(val).format('HH:mm DD/MM/YYYY'),
+			render: (val) => formatDateTime(val),
 			width: 120,
 			sortable: true,
 			filterType: 'datetime',
@@ -90,7 +90,7 @@ const PhanHoiPage = () => {
 			align: 'center',
 			render: (val, rec) =>
 				rec.daTraLoiPhanHoi && val ? (
-					dayjs(val).format('HH:mm DD/MM/YYYY')
+					formatDateTime(val)
 				) : (
 					<Tag color='red'>{intl.formatMessage({ id: 'phanhoi.trangthai.chuatraloi' })}</Tag>
 				),

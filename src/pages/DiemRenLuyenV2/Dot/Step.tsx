@@ -1,4 +1,5 @@
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { Steps } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -59,8 +60,8 @@ const StepDotChamDiemRenLuyen = () => {
 						description={item.title}
 						title={
 							<b style={{ fontSize: 13 }}>
-								{dayjs(item.thoiGian).format('HH:mm DD/MM/YYYY')}
-								{item?.thoiGianKetThuc ? ` - ${dayjs(item.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}` : ''}
+								{formatDateTime(item.thoiGian)}
+								{item?.thoiGianKetThuc ? ` - ${formatDateTime(item.thoiGianKetThuc)}` : ''}
 							</b>
 						}
 						key={item.title}

@@ -1,152 +1,260 @@
-import FormTraLoiKhaoSat from '@/pages/TienIch/KhaoSat/components/Form';
-import { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
-import { Card, Col, message, Row, Select, Spin } from 'antd';
+import UploadFile from '@/components/Upload/UploadFile';
+import { Activity } from '@/services/CCT/Activity/typing';
+import { handleSingleFile } from '@/services/uploadFile';
+import { ipCCT } from '@/utils/ip';
+import rules from '@/utils/rules';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Col, Collapse, Form, Input, message, Row } from 'antd';
+import dayjs from 'dayjs';
 import { uniqBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import CardChiTietSuKien from '../../Activity/components/CardChiTietSuKien';
+import SelectLevelsManagement from '../../DanhMuc/Levels/Select';
+import CardNoteActivity from './CardNote';
+import FormCompetencyEvidence from './FormCompetencyEvidence';
+import FormRoleEvidence from './FormRoleEvidence';
+
+const uploadFilesOfCompetency = async (files: any[] = []) => {
+	if (!files.length) return [];
+	const urls = await Promise.all(files.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
+	return urls.filter(Boolean) as string[];
+};
+
+const hasAtLeastOneEvidenceFile = (evidenceFile: any[] = []) => evidenceFile.some((i) => i?.file?.length);
 
 const FormActivityOutCome = (props: any) => {
 	const { getData } = props;
 	const intl = useIntl();
+	const [form] = Form.useForm();
 
 	const { record, setVisibleForm, isView, formSubmiting, visibleForm, postActivityOutComeModel } =
 		useModel('cct.activityoutcome');
+	const { danhSach: dsLevels } = useModel('cct.levels');
 
-	const {
-		traLoiBieuMauModel,
-		formSubmiting: formSubmiBieuMau,
-		getByIdModel,
-		loading,
-		record: recBieuMau,
-		setRecord: setRecBieuMau,
-	} = useModel('tienich.bieumau');
+	const dsRoles = uniqBy(record?.activities?.coCurricularActivityEquivalency ?? [], 'rolesId');
 
-	const {
-		getByIdModel: getCauTraLoiMe,
-		loading: loadingCauTraLoi,
-		record: cauTraLoi,
-		setRecord: setRecCauTraLoi,
-	} = useModel('tienich.cautraloikhaosat');
+	const rolesId: string = Form.useWatch('rolesId', form);
+	const levelsId: string = Form.useWatch('levelsId', form);
+	const checkbox: boolean = Form.useWatch('checkbox', form);
+	const listAchievedCompetencies: string[] = Form.useWatch('listAchievedCompetencies', form);
 
-	const [rolesId, setRolesId] = useState<string>();
+	const autoLevel = dsLevels?.find((i) => i?._id === levelsId)?.autoApproval;
+	const autoRole = dsRoles?.find((i) => i?.rolesId === rolesId)?.roles?.autoApproval;
 
-	const selfAssessmentQuestionsId = record?.activities?.coCurricularActivityEquivalency?.find(
-		(item) => item?.rolesId === rolesId,
-	)?.selfAssessmentQuestionsId;
+	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!visibleForm) {
-			setRolesId(undefined);
-			setRecCauTraLoi({} as BieuMau.ICauTraLoiKhaoSat);
-		}
-
-		if (record?.rolesId) {
-			setRolesId(record?.rolesId);
+			form.resetFields();
+			return;
 		} else {
-			setRolesId(record?.activities?.coCurricularActivityEquivalency?.[0]?.rolesId);
+			form.setFieldsValue({
+				rolesId: record?.rolesId ?? dsRoles?.[0]?.rolesId,
+				trackId: record?.trackId ?? record?.activities?.activitiesType?.trackId,
+				levelsId: record?.levelsId,
+				reflection: record?.reflection,
+				listAchievedCompetencies: record?.listAchievedCompetencies?.length
+					? record?.listAchievedCompetencies?.map((item) => item?.competencyId)
+					: record?.activities?.competencyList?.map((item) => item?.competencyId),
+				evidenceFile: record?.evidenceFile?.map((item: any) => ({
+					name: item.name,
+					file: item.file,
+				})),
+			});
 		}
-	}, [visibleForm]);
+	}, [visibleForm, record?._id]);
 
-	useEffect(() => {
-		if (record?.answerId) {
-			getCauTraLoiMe(record.answerId, true).catch(console.log);
+	const onFinish = async (values: any, submitted: boolean) => {
+		const evidenceFile = await Promise.all(
+			(values.evidenceFile || []).map(async (item: any) => ({
+				name: item.name,
+				file: await uploadFilesOfCompetency(item?.file?.fileList),
+			})),
+		);
+
+		if (autoLevel && autoRole && !hasAtLeastOneEvidenceFile(evidenceFile)) {
+			message.warning('You must upload at least one evidence file for auto approval.');
+			return;
 		}
-	}, [record?.answerId]);
 
-	useEffect(() => {
-		if (selfAssessmentQuestionsId) {
-			getByIdModel(selfAssessmentQuestionsId).catch(console.log);
-		} else {
-			setRecBieuMau({} as BieuMau.Record);
-		}
-	}, [selfAssessmentQuestionsId]);
-
-	const submitActivityOutcome = async (roleId: string, answerId: string | null) => {
-		const data = {
-			rolesId: roleId,
-			answerId,
+		const payload = {
+			rolesId: values.rolesId,
+			levelsId: values.levelsId,
+			trackId: values.trackId,
+			evidenceFile,
+			reflection: values.reflection,
+			listAchievedCompetencies: values.listAchievedCompetencies?.map((id: any) => ({
+				competencyId: id,
+			})),
+			submitted,
 		};
 
-		try {
-			await postActivityOutComeModel(
-				record?.activitiesId ?? '',
-				data,
-				getData,
-				intl.formatMessage({ id: 'global.message.luuthanhcong' }),
-			);
-		} catch (err) {
-			console.log(err);
-		} finally {
-			setVisibleForm(false);
-		}
-	};
+		await postActivityOutComeModel(
+			record?.activitiesId ?? '',
+			payload,
+			getData,
+			intl.formatMessage({ id: 'global.message.luuthanhcong' }),
+		);
 
-	const handleKhaoSat = async (val: BieuMau.TraLoiRecord[]) => {
-		if (!rolesId) {
-			message.warning(intl.formatMessage({ id: 'activity.registered.role.vali' }));
-			return;
-		}
-
-		if (!recBieuMau?._id) {
-			await submitActivityOutcome(rolesId, null);
-			return;
-		}
-
-		try {
-			const res = await traLoiBieuMauModel(
-				{
-					idKhaoSat: recBieuMau?._id,
-					danhSachTraLoi: val,
-				} as any,
-				undefined,
-				true,
-			);
-
-			const answerId = res?.data?._id;
-			if (!answerId) return;
-
-			await submitActivityOutcome(rolesId, answerId);
-		} catch (err) {
-			console.log(err);
-		}
+		setVisibleForm(false);
 	};
 
 	return (
-		<Card title={intl.formatMessage({ id: 'activity.registered.title' })}>
+		<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
+			{!!record?.revisionNote && <CardNoteActivity />}
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
-					<label style={{ display: 'block', marginBottom: 8 }}>
-						{intl.formatMessage({ id: 'activity.registered.role' })}
-					</label>
-					<Select
-						placeholder={intl.formatMessage({ id: 'activity.registered.role.select' })}
-						disabled={isView}
-						value={rolesId}
-						onChange={setRolesId}
-						style={{ width: '100%' }}
-						options={uniqBy(record?.activities?.coCurricularActivityEquivalency ?? [], 'rolesId').map((item) => ({
-							value: item?.rolesId,
-							label: item?.roles?.name,
-						}))}
-						allowClear
-					/>
+					<Form.Item name='rolesId' label='Role'>
+						<FormRoleEvidence
+							equivalency={record?.activities?.coCurricularActivityEquivalency ?? []}
+							select
+							rolesId={rolesId}
+							form={form}
+						/>
+					</Form.Item>
+				</Col>
+
+				{/* <Col span={12}>
+					<Form.Item name='trackId' label='Track' rules={[...rules.required]}>
+						<SelectTrack disabled={isView} />
+					</Form.Item>
+				</Col> */}
+
+				<Col span={24} md={24}>
+					<Form.Item name='levelsId' label='Level' rules={[...rules.required]}>
+						<SelectLevelsManagement disabled={isView} />
+					</Form.Item>
 				</Col>
 
 				<Col span={24}>
-					<Spin spinning={loading || loadingCauTraLoi}>
-						<FormTraLoiKhaoSat
-							onOk={handleKhaoSat}
-							cauTraLoi={cauTraLoi?.danhSachTraLoi ?? []}
-							hideCard
-							disabledForm={isView ? true : false}
-							formSubmiting={formSubmiBieuMau || formSubmiting}
-							onCancel={() => setVisibleForm(false)}
-							recBieuMauProps={recBieuMau}
-						/>
-					</Spin>
+					<div className='fw500' style={{ marginBottom: 6 }}>
+						List Evidence
+					</div>
+
+					<div style={{ marginBottom: 10 }}>
+						<i className='text-info'>
+							(Suggestion Evidence:{' '}
+							{record?.activities?.activitiesType?.requiredEvidenceList
+								?.map((item) => item)
+								.filter(Boolean)
+								.join(', ')}
+							)
+						</i>
+					</div>
+
+					<Form.List name='evidenceFile'>
+						{(fields, { add, remove }, { errors }) => (
+							<>
+								{fields.map((field, index) => (
+									<Row gutter={[12, 0]} key={field.key}>
+										<Col span={24} md={12}>
+											<Form.Item label='Evidence File Name' name={[index, 'name']} rules={[...rules.required]}>
+												<Input placeholder='Enter Name' disabled={isView} />
+											</Form.Item>
+										</Col>
+										<Col span={22} md={10}>
+											<Form.Item label='File' name={[index, 'file']} rules={[...rules.required]}>
+												<UploadFile maxCount={5} disabled={isView} />
+											</Form.Item>
+										</Col>
+										<Col span={2}>
+											<div
+												style={{
+													height: '100%',
+													display: 'flex',
+													alignItems: 'center',
+													justifyContent: 'center',
+												}}
+											>
+												<Button
+													danger
+													type='link'
+													title='Xóa'
+													icon={<DeleteOutlined />}
+													onClick={() => remove(field.name)}
+												/>
+											</div>
+										</Col>
+										<Form.ErrorList errors={errors} />
+									</Row>
+								))}
+
+								<Button onClick={() => add()} icon={<PlusOutlined />} type='dashed' size='small' disabled={isView}>
+									Update Evidence
+								</Button>
+							</>
+						)}
+					</Form.List>
 				</Col>
+
+				<Col span={24}>
+					<Form.Item name='listAchievedCompetencies' label='Competency'>
+						<FormCompetencyEvidence listAchievedCompetencies={listAchievedCompetencies} form={form} />
+					</Form.Item>
+				</Col>
+
+				<Col span={24}>
+					<Form.Item
+						name='reflection'
+						label='Reflection'
+						rules={[...rules.required, ...rules.text, ...rules.length(70)]}
+					>
+						<Input.TextArea rows={3} disabled={isView} placeholder='Enter reflection' showCount />
+					</Form.Item>
+				</Col>
+
+				<Col span={24}>
+					<Collapse>
+						<Collapse.Panel key={0} header={'Activity Detail'}>
+							<CardChiTietSuKien
+								record={
+									{
+										...record?.activities,
+										activityOutcome: record,
+									} as Activity.IRecord
+								}
+								evidenceDeadline={record?.dueDate ? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY') : '--'}
+							/>
+						</Collapse.Panel>
+					</Collapse>
+				</Col>
+
+				{!isView && (
+					<Col span={24}>
+						<Form.Item name='checkbox' valuePropName='checked'>
+							<Checkbox>I hereby declare that the information provided is accurate.</Checkbox>
+						</Form.Item>
+					</Col>
+				)}
 			</Row>
-		</Card>
+
+			<div className='form-footer'>
+				{!isView && (
+					<>
+						<Button
+							type='primary'
+							htmlType='submit'
+							loading={formSubmiting}
+							disabled={!checkbox || listAchievedCompetencies?.length > 3}
+							onClick={() => setIsSubmit(true)}
+						>
+							Submit
+						</Button>
+
+						<Button
+							htmlType='submit'
+							loading={formSubmiting}
+							disabled={listAchievedCompetencies?.length > 3}
+							onClick={() => setIsSubmit(false)}
+						>
+							Save Draft
+						</Button>
+					</>
+				)}
+				<Button onClick={() => setVisibleForm(false)}>Close</Button>
+			</div>
+		</Form>
 	);
 };
 

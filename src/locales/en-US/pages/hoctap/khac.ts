@@ -1,6 +1,7 @@
 export default {
 	'hoctapkhac.title': 'Other Academic Activities',
-	'hoctapkhac.dangkychuyennganh.title': 'Major Registration',
+	'hoctapkhac.dangkychuyennganh.title': 'Concentration Registration',
+	'hoctapkhac.dangkychuyennganhhep.title': 'Minor Registration',
 	'hoctapkhac.xethocvu.title': 'Academic Review',
 	'hoctapkhac.baoluuthoihoc.title': 'Study Suspension / Withdrawal',
 	'hoctapkhac.thechatsinhvien.title': 'Student Physical Fitness',
@@ -27,6 +28,9 @@ export default {
 	'hoctapkhac.xethocvu.lydo.tablecolumntitle': 'Reason',
 	'hoctapkhac.xethocvu.trangThai.tablecolumntitle': 'Status',
 	'hoctapkhac.xethocvu.quyetdinh.tablecolumntitle': 'Decision',
+	'hoctapkhac.xethocvu.loaixuly.canhBaoHocTap': 'Academic Warning',
+	'hoctapkhac.xethocvu.loaixuly.buocThoiHoc': 'Dismissal',
+	'hoctapkhac.xethocvu.loaixuly.thuThachHocTap': 'Academic Probation',
 	'hoctapkhac.baoluu.lichsubaoluu.title': 'Study Suspension History',
 	'hoctapkhac.thoihoc.lichsuthoihoc.title': 'Withdrawal History',
 	'hoctapkhac.baoluuthoihoc.soquyetdinh.tablecolumntitle': 'Decision Number',

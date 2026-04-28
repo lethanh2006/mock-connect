@@ -12,74 +12,65 @@ const CardThongBao = (props: { loai: 'lop-hanh-chinh' | 'lop-hoc-phan'; idLop?: 
 	const intl = useIntl();
 	const { danhSach, getThongBaoLopModel, setRecord, record } = useModel('thongbao.thongbaolop');
 	const [visibleThongBao, setVisibleThongBao] = useState<boolean>(false);
-	const { loai, idLop, onShowAll } = props;
 
 	useEffect(() => {
-		``;
-		if (idLop) getThongBaoLopModel(idLop, loai, 1, 5);
-	}, [idLop]);
+		if (props.idLop) {
+			getThongBaoLopModel(props.idLop, props.loai);
+		}
+	}, [props.idLop, props.loai]);
 
 	return (
 		<Card
-			size='small'
-			title={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao' })}
-			variant='borderless'
-			styles={{ body: { padding: 0 } }}
-			extra={[
+		size='small'
+			title={
+				props.loai === 'lop-hanh-chinh'
+					? intl.formatMessage({ id: 'thongbaolop.title.hanhchinh' })
+					: intl.formatMessage({ id: 'thongbaolop.title.hocphan' })
+			}
+			className={styles.list}
+			extra={
 				<ButtonExtend
-					key='all'
-					onClick={() => onShowAll && onShowAll()}
+					onClick={() => {
+						props.onShowAll?.();
+					}}
 					type='link'
 					icon={<ArrowRightOutlined />}
-					tooltip={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao.xemtatca' })}
-				/>,
-			]}
+				>
+					{intl.formatMessage({ id: 'trangchu.xemtatca' })}
+				</ButtonExtend>
+			}
 		>
-			<List<ThongBao.IRecord>
-				className={styles.list}
-				style={{ maxHeight: 400, overflow: 'scroll' }}
-				dataSource={danhSach}
-				renderItem={(item) => {
-					const leftIcon = item.imageUrl ? <Avatar className={styles.avatar} src={item.imageUrl} /> : null;
-
-					return (
-						<List.Item
-							className={styles.item}
-							key={item._id}
-							onClick={() => {
-								setRecord(item);
-								setVisibleThongBao(true);
-							}}
-						>
-							<List.Item.Meta
-								className={styles.meta}
-								avatar={leftIcon}
-								title={
-									<div className={styles.title}>
-										{item.title}
-										{/* <div className={styles.extra}>{item.extra}</div> */}
-									</div>
-								}
-								description={
-									<>
-										<div className={styles.description}>{item.description}</div>
-										<div className={styles.datetime}>{dayjs(item.createdAt).fromNow()}</div>
-									</>
-								}
-							/>
-						</List.Item>
-					);
-				}}
+			<List
+				dataSource={danhSach.slice(0, 5)}
+				renderItem={(item: ThongBao.IRecord) => (
+					<List.Item
+						onClick={() => {
+							setRecord(item);
+							setVisibleThongBao(true);
+						}}
+						key={item._id}
+						className={styles.item}
+					>
+						<List.Item.Meta
+							avatar={<Avatar src={item.imageUrl} />}
+							title={<div className={styles.title}>{item.title}</div>}
+							description={
+								<>
+									<div className={styles.description}>{item.description}</div>
+									<div className={styles.datetime}>{dayjs(item.createdAt).fromNow()}</div>
+								</>
+							}
+						/>
+					</List.Item>
+				)}
 			/>
-
 			<Modal
-				width={800}
-				styles={{ body: { padding: 0 } }}
-				destroyOnClose
-				onCancel={() => setVisibleThongBao(false)}
+				title={intl.formatMessage({ id: 'thongbao.detail.title' })}
 				open={visibleThongBao}
-				okButtonProps={{ hidden: true }}
-				cancelText={intl.formatMessage({ id: 'global.button.dong' })}
+				onCancel={() => setVisibleThongBao(false)}
+				footer={null}
+				width={800}
+				destroyOnClose
 			>
 				<ViewThongBao record={record} />
 			</Modal>

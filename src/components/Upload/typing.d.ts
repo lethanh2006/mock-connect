@@ -39,6 +39,9 @@ export type TUploadProps = {
 	hasPreviewFile?: boolean;
 
 	previewFileProps?: Pick<TPreviewFileProps, 'isFileId' | 'ip'>;
+
+	/** Ảnh tỉ lệ 16:9 (màn hình rộng) */
+	isWidescreen?: boolean;
 };
 
 export type TResizeProps = {

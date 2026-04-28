@@ -1,7 +1,7 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { SinhVien } from '@/services/DaoTao/SinhVien/typings';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { formatPhoneNumber } from '@/utils/utils';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Tooltip } from 'antd';
@@ -65,7 +65,7 @@ const ThongTinGiaDinhFormItem = (props: {
 			dataIndex: 'ngaySinh',
 			align: 'center',
 			width: 120,
-			render: (val) => val && dayjs(val).format('DD/MM/YYYY'),
+			render: (val) => val && formatDate(val),
 		},
 		{
 			title: intl.formatMessage({ id: 'thongtincanhan.form.thongtingiadinh.nghenghiep' }),

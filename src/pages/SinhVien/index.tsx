@@ -11,6 +11,7 @@ import FormSinhVien from './components/Form';
 import PreviewHoSo from './components/PreviewHoSo';
 import './components/style.less';
 import ModalHocBaSinhVien from './HocBa/components/Modal';
+import { formatDate } from '@/utils/formatDate';
 
 const ThongTinSinhVienPage = () => {
 	const intl = useIntl();
@@ -53,8 +54,8 @@ const ThongTinSinhVienPage = () => {
 							{ id: 'thongtincanhan.dotcapnhat' },
 							{
 								tenDot: recordDot.tenDot,
-								start: dayjs(recordDot.thoiGianBatDau).format('DD/MM/YYYY'),
-								end: dayjs(recordDot.thoiGianKetThuc).format('DD/MM/YYYY'),
+								start: formatDate(recordDot.thoiGianBatDau),
+								end: formatDate(recordDot.thoiGianKetThuc),
 								b: (chunks) => <b>{chunks}</b>,
 							},
 						)}

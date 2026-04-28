@@ -6,12 +6,16 @@ declare module DangKyChuyenNganh {
 		_id: string;
 		maHocKy: string;
 		hocKy?: HocKy.IRecord;
+		loaiCtdt?: 'minor' | 'concentration';
 
 		ten: string;
 		kichHoat: boolean;
 		choPhepDangKyLai?: boolean;
 		thoiGianBatDau: Date;
 		thoiGianKetThuc: Date;
+		gpaMin: number;
+		minCredit: number;
+		maxCompletedCredit: number;
 	}
 
 	export interface ISinhVienDangKy {

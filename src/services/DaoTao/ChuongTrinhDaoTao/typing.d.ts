@@ -46,16 +46,25 @@ declare module ChuongTrinhDaoTao {
 	export interface IKhoiHocPhanCTDT extends IHocPhanBase {
 		maChuongTrinhDaoTao: string;
 		chuongTrinhDaoTao?: IRecord;
-		maKhoiKienThuc: string;
-		khoiKienThuc?: { ma: string; ten: string };
+		maKhoiKienThuc?: string;
+		khoiKienThuc?: KhoiKienThuc.IRecord;
 		maChuyenNganh?: string;
 		chuyenNganh?: NganhDaoTao.IRecordCoSo;
 		loaiHocPhanCtdt: ELoaiHocPhanCTDT;
 
+		/** Số thứ tự kỳ, kỳ thực tế */
 		soThuTuKy?: number;
-		soTinChiTuChonPhaiHoc?: number;
+		/** Số thứ tự kế hoạch (với chương trình kế hoạch) */
+		soThuTuKyKeHoach?: number;
+		// tinhChuanDauRa?: boolean;
+
+		phamViTuChon?: PhamViTuChonHpCtdt;
 		ten?: string; // Tên khối chương trình tự chọn
+		soTinChiTuChonPhaiHoc?: number;
+		soHocPhanTuChonPhaiHoc?: number;
 		isTinhSoTinChiTichLuy?: boolean;
+		// maLoaiHocPhan?: string;
+		// loaiHocPhan?: HocPhan.ILoaiHocPhan;
 		hocPhanCtdtList?: IHocPhanTuChonCTDT[];
 	}
 
@@ -86,7 +95,47 @@ declare module ChuongTrinhDaoTao {
 		lichSuDiem?: LopHocPhan.IDiemHpSvHk[];
 	}
 
-	export type THocPhanTuongQuan = Pick<HocPhan.IRecord, 'ma' | 'ten' | 'soTinChi'>;
+	export type THocPhanTuongQuan = Pick<HocPhan.IRecord, 'ma' | 'ten' | 'soTinChi'> & { soHocPhan?: number };
+
+	export interface IChuyenNganhMe extends NganhDaoTao.IRecordCoSo {
+		active?: boolean;
+		externalId?: string | null;
+		dmNganhId?: string | null;
+		canCuId?: string | null;
+		dataPartitionCode?: string | null;
+		khoiHpCtList?: IKhoiHpCt[];
+		soTinChi?: number;
+		mucTieu?: string;
+	}
+
+	export interface IKhoiHpCt {
+		_id: string;
+		ma: string;
+		maHocPhan: string;
+		maChuongTrinhDaoTao: string;
+		maKhoiKienThuc?: string;
+		maChuyenNganh?: string;
+		loaiHocPhanCtdt?: string;
+		isTinhSoTinChiTichLuy?: boolean;
+		ten?: string | null;
+		soThuTuKy?: number;
+		soThuTuKyKeHoach?: number | null;
+		soTinChiTuChonPhaiHoc?: number | null;
+		soTinChiTuChonDaDat?: number;
+		soHocPhanTuChonPhaiHoc?: number | null;
+		phamViTuChon?: string;
+		trangThaiLuaChon?: string;
+		ghiChu?: string;
+		dsHocPhanTienQuyet?: THocPhanTuongQuan[] | null;
+		cheDoTienQuyet?: string;
+		dsHocPhanTruoc?: THocPhanTuongQuan[];
+		dsHocPhanSongHanh?: THocPhanTuongQuan[];
+		chuongTrinhDaoTao?: { ma: string; ten: string };
+		hocPhan?: { ma: string; ten: string; soTinChi: number };
+		hocPhanCtdtList?: IKhoiHpCt[];
+		createdAt?: string;
+		updatedAt?: string;
+	}
 
 	export interface IChungChiCTDT {
 		_id: string;
@@ -125,4 +174,31 @@ declare module ChuongTrinhDaoTao {
 
 		danhSachChuanDauRaMucTieu: TDiemPi[];
 	};
+
+	export interface IKhoiKienThuc {
+		_id: string;
+		ten: string;
+		ma: string;
+		maKhoiKienThuc: string;
+		maCha: string | null;
+		soThuTu: number | null;
+		cheDoYeuCauLuaChon: string;
+		huongDanDangKy: string | null;
+		dataPartitionCode: string | null;
+		createdAt: string;
+		updatedAt: string;
+		khoiHpCtList?: IKhoiHocPhanCTDT[];
+		khoiCha?: IKhoiKienThuc;
+	}
+
+	export interface IKhoiLuaChon {
+		_id: string;
+		sinhVienSsoId: string;
+		maKhoaNganh: string;
+		maKhoiKienThuc: string;
+		dataPartitionCode: string | null;
+		createdAt: string;
+		updatedAt: string;
+		khoiKienThuc?: IKhoiKienThuc;
+	}
 }

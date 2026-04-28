@@ -68,6 +68,9 @@ export declare module LopHocPhan {
 		thongKeDiemDanhLhp?: TThongKeDiemDanh;
 		soBaiTap?: number;
 		soBaiDang?: number;
+
+		phongCapacity?: number;
+		waitlistCount?: number;
 	}
 
 	export type TThongKeDiemDanh = {
@@ -120,6 +123,9 @@ export declare module LopHocPhan {
 
 		loai?: ELoaiHocPhanDangKyTinChi;
 		diemHpSvHk?: IDiemHpSvHk;
+
+		//fake
+		trangThai?: ETrangThaiDangKyTinChi;
 	}
 
 	export interface IDiemHpSvHk

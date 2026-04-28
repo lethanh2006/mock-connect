@@ -11,7 +11,7 @@ export const useFilterFields = (columns: IColumn<any>[], form: ReturnType<typeof
 		const extractFields = (filterList: any[]) => {
 			if (!filterList || !Array.isArray(filterList)) return;
 			filterList.forEach((filter) => {
-				if (filter?.field) {
+				if (filter?.field && filter?.readOnly !== true) {
 					fields.push(JSON.stringify(filter.field));
 				}
 				if (filter?.filters) {
@@ -27,7 +27,13 @@ export const useFilterFields = (columns: IColumn<any>[], form: ReturnType<typeof
 	const fieldsFilterable = useMemo(
 		() =>
 			columns
-				.filter((item) => item.filterType && item.dataIndex && !fieldsFiltered.includes(JSON.stringify(item.dataIndex)))
+				.filter(
+					(item) =>
+						item.filterType &&
+						item.dataIndex &&
+						item.hide !== true &&
+						!fieldsFiltered.includes(JSON.stringify(item.dataIndex)),
+				)
 				.map((item) => JSON.stringify(item.dataIndex)),
 		[columns, fieldsFiltered],
 	);

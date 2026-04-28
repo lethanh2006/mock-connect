@@ -1,4 +1,4 @@
-import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { ArrowRightOutlined, CheckCircleOutlined, FilterOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Dropdown, Empty, Space, Spin, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
@@ -126,7 +126,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 									title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.giangvien' })}
 								/>
 							)}
-							{dayjs(item?.ngayDang ?? item.createdAt).format('HH:mm DD/MM/YYYY')}
+							{formatDateTime(item?.ngayDang ?? item.createdAt)}
 							{item.danhSachBinhLuan?.length > 0 && (
 								<Text
 									style={{

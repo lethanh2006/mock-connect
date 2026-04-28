@@ -1,5 +1,5 @@
-import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	ETrangThaiKhaiBaoNoiNgoaiTru,
@@ -7,20 +7,25 @@ import {
 } from '@/services/CongTacSinhVien/NoiNgoaiTru/constant';
 import type { NoiNgoaiTru } from '@/services/CongTacSinhVien/NoiNgoaiTru/typing';
 import dayjs from '@/utils/dayjs';
-import { Card, Tag } from 'antd';
-import { useState } from 'react';
+import { formatDateTime } from '@/utils/formatDate';
+import { Card, Modal, Tag } from 'antd';
+import { useEffect } from 'react';
 import { useModel } from 'umi';
-import Form from './components/Form';
+import FormKhaiBao from './components/Form';
 import ModalChiTiet from './components/ModalChiTiet';
 
 const NoiNgoaiTruPage = () => {
-	const { getAllModel, handleEdit, setRecord } = useModel('noingoaitru.khaibao');
-	const [viewChiTiet, setViewChiTiet] = useState<boolean>(false);
+	const { getAllModel, handleEdit, handleView, isView, danhSach, loading, visibleForm, setVisibleForm, record } =
+		useModel('noingoaitru.khaibao');
 
 	const getData = () => getAllModel(undefined, undefined, undefined, undefined, 'me');
 
+	useEffect(() => {
+		getData();
+	}, []);
+
 	const onCell = (rec: NoiNgoaiTru.IKhaiBao) => ({
-		onClick: () => (setViewChiTiet(true), setRecord(rec)),
+		onClick: () => handleView(rec),
 		style: { cursor: 'pointer' },
 	});
 
@@ -29,13 +34,14 @@ const NoiNgoaiTruPage = () => {
 			title: 'Kỳ học',
 			dataIndex: 'dotKhaiBaoId',
 			width: 150,
+			align: 'center',
 			render: (val, rec) => rec.dotKhaiBao?.hocKy?.ten ?? rec.dotKhaiBao?.maHocKy,
 			onCell,
 		},
 		{
 			title: 'Tên đợt',
 			dataIndex: 'dotKhaiBaoId',
-			width: 150,
+			width: 180,
 			render: (val, rec) => rec.dotKhaiBao?.tenDot,
 			onCell,
 		},
@@ -46,8 +52,7 @@ const NoiNgoaiTruPage = () => {
 			width: 250,
 			render: (val, rec) => (
 				<>
-					{dayjs(rec.dotKhaiBao?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
-					{dayjs(rec.dotKhaiBao?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+					{formatDateTime(rec.dotKhaiBao?.thoiGianBatDau)} - {formatDateTime(rec.dotKhaiBao?.thoiGianKetThuc)}
 				</>
 			),
 			onCell,
@@ -122,19 +127,23 @@ const NoiNgoaiTruPage = () => {
 
 	return (
 		<Card title='Lịch sử khai báo nội - ngoại trú'>
-			<TableBase
-				title='Nội trú, ngoại trú'
-				columns={columns}
-				getData={getData}
-				modelName='noingoaitru.khaibao'
-				hideCard
-				Form={Form}
-				formType='Drawer'
-				buttons={{ create: false, export: true }}
-				widthDrawer={1000}
-			/>
+			<TableStaticData columns={columns} data={danhSach ?? []} loading={loading} addStt hasTotal onReload={getData} />
 
-			<ModalChiTiet visibleForm={viewChiTiet} setVisibleForm={setViewChiTiet} />
+			<Modal
+				open={visibleForm}
+				onCancel={() => setVisibleForm(false)}
+				footer={null}
+				width={1000}
+				title={
+					isView
+						? 'Thông tin khai báo nội trú, ngoại trú'
+						: `${
+								record?.trangThai === ETrangThaiKhaiBaoNoiNgoaiTru.DA_KHAI_BAO ? 'Chỉnh sửa' : 'Khai báo'
+							} thông tin nội - ngoại trú`
+				}
+			>
+				{isView ? <ModalChiTiet /> : <FormKhaiBao getData={getData} />}
+			</Modal>
 		</Card>
 	);
 };

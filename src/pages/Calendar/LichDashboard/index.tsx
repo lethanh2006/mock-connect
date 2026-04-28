@@ -2,6 +2,7 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { ArrowRightOutlined, CalendarOutlined, InfoCircleOutlined, MenuOutlined } from '@ant-design/icons';
 import { Badge, Card, Col, Empty, Modal, Popover, Row, Segmented, Space, Tag, Typography } from 'antd';
 import { isEmpty, sortBy } from 'lodash';
@@ -154,7 +155,7 @@ const LichDashboard = () => {
 								className={styles.ngay__title}
 								style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
 							>
-								{thuTrongTuan}, ngày {dayjs(ngay).format('DD/MM')}
+								{thuTrongTuan}, ngày {formatDate(ngay, 'DD/MM')}
 							</div>
 						</Badge>
 					</Space>
@@ -171,7 +172,7 @@ const LichDashboard = () => {
 								{dayjs().isSameOrAfter(sukien.thoiGianBatDau) && dayjs().isSameOrBefore(sukien.thoiGianKetThuc) && (
 									<div className={styles.pulse} />
 								)}
-								<div className={styles.su_kien__thoi_gian}>{dayjs(sukien.thoiGianBatDau).format('HH:mm')}</div>
+								<div className={styles.su_kien__thoi_gian}>{formatDate(sukien.thoiGianBatDau, 'HH:mm')}</div>
 							</div>
 							<Space
 								wrap
