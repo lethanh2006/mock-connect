@@ -3,11 +3,12 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { IColumn } from '@/components/Table/typing';
 import { FormInstance } from 'antd';
 import { useEffect, useMemo } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const MAX_SELECT = 3;
 
 const FormCompetencyEvidence = (props: { listAchievedCompetencies?: string[]; form?: FormInstance }) => {
+	const intl = useIntl();
 	const { listAchievedCompetencies, form } = props;
 	const { isView } = useModel('cct.activityoutcome');
 	const { danhSach: dscompetency, loading, getAllModel: getAllAttriCompetency } = useModel('cct.competency');
@@ -35,13 +36,13 @@ const FormCompetencyEvidence = (props: { listAchievedCompetencies?: string[]; fo
 
 	const columns: IColumn<Competency.IRecord>[] = [
 		{
-			title: 'Name',
+			title: intl.formatMessage({ id: 'activity.formCompetent.name' }),
 			dataIndex: 'name',
 			width: 170,
 			filterType: 'string',
 		},
 		{
-			title: 'Description',
+			title: intl.formatMessage({ id: 'activity.formCompetent.description' }),
 			dataIndex: 'description',
 			width: 250,
 			render: (val, rec) => val && <ExpandText>{val}</ExpandText>,
@@ -79,7 +80,7 @@ const FormCompetencyEvidence = (props: { listAchievedCompetencies?: string[]; fo
 					hideSelectAll: true,
 				},
 			}}
-			otherButtons={[<i className='text-info'>An activity allows a maximum of 3 competencies</i>]}
+			otherButtons={[<i className='text-info'>{intl.formatMessage({ id: 'activity.formCompetent.limit' })}</i>]}
 		/>
 	);
 };
