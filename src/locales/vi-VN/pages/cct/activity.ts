@@ -165,4 +165,8 @@ export default {
 	'selectNhanSu.placeholder': 'Chọn cán bộ, giảng viên (tìm theo họ tên hoặc mã)',
 	'selectNhanSu.loading': 'Đang tìm kiếm...',
 	'selectNhanSu.empty': 'Không có dữ liệu, hãy thử từ khóa khác',
+
+	'cct.thongke.level': 'Level Distribution (Quality & Depth)',
+	'cct.thongke.core': 'Core Competencies (Radar)',
+	'cct.thongke.type': 'Activity Types',
 };
