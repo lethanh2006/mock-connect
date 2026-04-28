@@ -1,20 +1,15 @@
 import { EDinhDangFile } from '@/services/base/constant';
 import type { IFileInfo } from '@/services/base/typing';
-import { getFileInfo } from '@/services/uploadFile';
+import { getFileContent, getFileInfo } from '@/services/uploadFile';
+import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
-import {
-	CopyOutlined,
-	DownloadOutlined,
-	ExpandOutlined,
-	FileSearchOutlined,
-	LeftOutlined,
-	RightOutlined,
-} from '@ant-design/icons';
-import { Empty, Image, message, Spin } from 'antd';
+import { DownloadOutlined, FileSearchOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Button, Empty, message, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
+import AuthImage from '../Image/AuthImage';
 import PDFViewerV2 from '../PDFViewerV2';
 import type { TPreviewFileProps } from '../PreviewFile/typing';
 import ButtonExtend from '../Table/ButtonExtend';
@@ -25,11 +20,12 @@ type TFrameProps = {
 	type: EDinhDangFile;
 	name?: string;
 	src?: string;
+	data?: ArrayBuffer;
 };
 
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
-	const { file, style = {}, children, ip = ip3, isFileId, tenFile } = props;
+	const { file, style = {}, children, ip = ip3, isFileId, tenFile, isPrivate } = props;
 
 	const isValidStringArray = (value: any): value is string[] => {
 		return Array.isArray(value) && value.every((item) => typeof item === 'string');
@@ -40,7 +36,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	if (file && !isValidSingleString && !isValidStringArray(file)) {
 		return (
 			<div className='preview-error'>
-				<p style={{ color: 'red', fontWeight: 600 }}>File không hợp lệ</p>
+				<p style={{ color: 'red', fontWeight: 600 }}>Invalid file</p>
 			</div>
 		);
 	}
@@ -89,7 +85,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	};
 
 	const getFileDataFromUrl = async (srcUrl: string) => {
-		const idFile = isFileId ? srcUrl : srcUrl.split('/')[srcUrl.length - 2];
+		const idFile = isFileId ? srcUrl : undefined; // srcUrl.split('/').at(-2);
 		const frame: TFrameProps = {
 			url: srcUrl,
 			type: EDinhDangFile.UNKNOWN,
@@ -110,6 +106,11 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 					EDinhDangFile.UNKNOWN;
 			} else {
 				frame.type = getFileType(getFileExtension(srcUrl) ?? '') || EDinhDangFile.UNKNOWN;
+			}
+
+			if (isPrivate) {
+				// Nếu là file riêng tư thì phải lấy src có token mới xem được
+				frame.data = (await getFileContent(frame.url))?.data;
 			}
 
 			// Fill other props
@@ -146,18 +147,21 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const handleDownloadOrView = async () => {
 		if (!frameData?.url) return;
 
-		if (isDownloadableUrl(frameData.url)) {
-			try {
-				const response = await fetch(frameData.url);
-				const blob = await response.blob();
-				fileDownload(blob, getNameFile(frameData.url));
-			} catch (error) {
-				console.error('Error downloading file:', error);
-				window.open(frameData.url, '_blank');
-			}
-		} else {
+		// if (isDownloadableUrl(frameData.url)) {
+		try {
+			const response = await axios.get(frameData.url, {
+				responseType: 'blob',
+			});
+
+			const blob = response.data;
+			fileDownload(blob, getNameFile(frameData.url));
+		} catch (error) {
+			console.error('Error downloading file:', error);
 			window.open(frameData.url, '_blank');
 		}
+		// } else {
+		// 	window.open(frameData.url, '_blank');
+		// }
 	};
 
 	const handleCopy = () => {
@@ -204,7 +208,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	}
 
 	if (!file) {
-		return <Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không tồn tại dữ liệu tệp tin' />;
+		return <Empty style={{ marginTop: 32, marginBottom: 32 }} description='No file data available' />;
 	}
 
 	return (
@@ -244,23 +248,23 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 									icon={<DownloadOutlined />}
 									onClick={handleDownloadOrView}
 								/>
-								<ButtonExtend
+								{/* <ButtonExtend
 									type='link'
 									tooltip={intl.formatMessage({ id: 'global.previewfile.button.saochep' })}
 									icon={<CopyOutlined />}
 									onClick={handleCopy}
-								/>
+								/> */}
 							</>
 						)}
 
-						{!!frameData?.src && (
+						{/* {!!frameData?.src && (
 							<ButtonExtend
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
 								icon={<ExpandOutlined />}
 								onClick={() => window.open(frameData?.src, '_blank')}
 							/>
-						)}
+						)} */}
 
 						{children}
 					</div>
@@ -270,11 +274,15 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			<div className='preview-content'>
 				{frameData?.type === EDinhDangFile.PDF && frameData?.src ? (
 					<div className='preview-pdf'>
-						<PDFViewerV2 url={frameData?.src} {...props.viewerProps} />
+						<PDFViewerV2
+							data={frameData.data}
+							url={!!frameData.data ? undefined : frameData?.src}
+							{...props.viewerProps}
+						/>
 					</div>
-				) : frameData?.type === EDinhDangFile.IMAGE && frameData?.src ? (
+				) : frameData?.type === EDinhDangFile.IMAGE && !!frameData?.src ? (
 					<div className='preview-image-container'>
-						<Image
+						<AuthImage
 							src={frameData.src}
 							alt={frameData.name}
 							style={{
@@ -285,7 +293,16 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 						/>
 					</div>
 				) : frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
-					<iframe src={frameData.src} className='preview-iframe' title='File preview' />
+					isPrivate ? (
+						<div className='preview-error'>
+							<p>This document is protected and cannot be previewed directly via Office Online.</p>
+							<Button type='primary' icon={<DownloadOutlined />} onClick={handleDownloadOrView}>
+								Download to view
+							</Button>
+						</div>
+					) : (
+						<iframe src={frameData?.src} className='preview-iframe' />
+					)
 				) : (
 					<div className='preview-error'>
 						<p className='preview-error-message'>
