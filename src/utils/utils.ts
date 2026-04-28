@@ -3,6 +3,7 @@ import { EFileScope, uploadFile } from '@/services/uploadFile';
 import { message, type FormInstance } from 'antd';
 import { type AxiosResponse } from 'axios';
 import type dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
 import * as XLSX from 'xlsx';
 import dayjsLib from './dayjs';
 
@@ -361,7 +362,7 @@ export const disabledRangeTime = (current: dayjs.Dayjs, type: 'start' | 'end', h
 				disabledHours: () => range(0, Number(hour)),
 				disabledMinutes: () => range(0, hour === current.format('HH') ? Number(minute) : 0),
 				disabledSeconds: () => [55, 56],
-		  }
+			}
 		: {};
 };
 
@@ -472,7 +473,7 @@ export const genExcelFile = (data: (string | number | null | undefined)[][], fil
 export const uploadMultiFile = async (arrFile: any[], returnFileType?: boolean, returnAllResponse?: boolean) => {
 	const url: any[] = arrFile
 		?.filter((item) => item?.remote === true)
-		?.map((item) => (returnFileType === true ? { url: item?.url ?? '', type: item?.type } : item?.url ?? ''));
+		?.map((item) => (returnFileType === true ? { url: item?.url ?? '', type: item?.type } : (item?.url ?? '')));
 	if (!arrFile) return [];
 	let arrUrl: any[] = [];
 	const arrUpload = arrFile
@@ -695,4 +696,64 @@ export const toCamelCase = (str: string) => {
 			index === 0 ? word.toLowerCase() : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
 		)
 		.join('');
+};
+
+export const buildDisabledDateTime = ({ min, max }: { min?: Dayjs; max?: Dayjs }) => {
+	return {
+		disabledDate: (current: Dayjs) => {
+			if (!current) return false;
+
+			if (min && current.isBefore(min.startOf('day'))) return true;
+			if (max && current.isAfter(max.endOf('day'))) return true;
+
+			return false;
+		},
+
+		disabledTime: (current: Dayjs | null) => {
+			if (!current) return {};
+
+			const result: any = {};
+
+			// ===== MIN LOGIC =====
+			if (min && current.isSame(min, 'day')) {
+				result.disabledHours = () => Array.from({ length: min.hour() }, (_, i) => i);
+
+				result.disabledMinutes = (selectedHour: number) => {
+					if (selectedHour !== min.hour()) return [];
+					return Array.from({ length: min.minute() }, (_, i) => i);
+				};
+			}
+
+			// ===== MAX LOGIC =====
+			if (max && current.isSame(max, 'day')) {
+				const disabledHoursAfter = Array.from({ length: 23 - max.hour() }, (_, i) => max.hour() + 1 + i);
+
+				const oldDisabledHours = result.disabledHours;
+
+				result.disabledHours = () => {
+					const minHours = oldDisabledHours ? oldDisabledHours() : [];
+					return [...minHours, ...disabledHoursAfter];
+				};
+
+				result.disabledMinutes = (selectedHour: number) => {
+					let disabled: number[] = [];
+
+					// minutes from min
+					if (min && current.isSame(min, 'day') && selectedHour === min.hour()) {
+						disabled = Array.from({ length: min.minute() }, (_, i) => i);
+					}
+
+					// minutes from max
+					if (selectedHour === max.hour()) {
+						const afterMinutes = Array.from({ length: 59 - max.minute() }, (_, i) => max.minute() + 1 + i);
+						disabled = [...disabled, ...afterMinutes];
+					}
+
+					return disabled;
+				};
+			}
+
+			return result;
+		},
+	} as any;
 };

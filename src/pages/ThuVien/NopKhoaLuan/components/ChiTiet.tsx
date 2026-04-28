@@ -3,7 +3,7 @@ import {
 	ELoaiDotQuanLyThuvien,
 	type ETrangThaiNopThuVien,
 } from '@/services/QuanLyThuVien/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { Button, Card, Descriptions, Tag } from 'antd';
 import { useModel } from 'umi';
 
@@ -22,8 +22,8 @@ const ChiTietThuVien = (props: any) => {
 						<Descriptions.Item label='Thời gian' span={24}>
 							{record?.dot?.thoiGianBatDau && record?.dot?.thoiGianKetThuc ? (
 								<>
-									{dayjs(record?.dot?.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} -{' '}
-									{dayjs(record?.dot?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+									{formatDateTime(record?.dot?.thoiGianBatDau)} -{' '}
+									{formatDateTime(record?.dot?.thoiGianKetThuc)}
 								</>
 							) : (
 								'--'
@@ -42,7 +42,7 @@ const ChiTietThuVien = (props: any) => {
 				<Descriptions.Item label='Mã học viên'>{record?.maSinhVien ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Họ tên tác giả'>{record?.hoTenTacGia ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Ngày sinh'>
-					{record?.sinhVien?.ngaySinh ? dayjs(record?.sinhVien?.ngaySinh).format('DD/MM/YYYY') : '--'}
+					{record?.sinhVien?.ngaySinh ? formatDate(record?.sinhVien?.ngaySinh) : '--'}
 				</Descriptions.Item>
 				<Descriptions.Item label='Số điện thoại'>{record?.sinhVien?.soDienThoai ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Chức danh'>{record?.chucDanh ?? '--'}</Descriptions.Item>
@@ -55,7 +55,7 @@ const ChiTietThuVien = (props: any) => {
 					)}
 				</Descriptions.Item>
 				<Descriptions.Item label='Thời gian nộp'>
-					{record?.thoiGianNop ? dayjs(record?.thoiGianNop).format('DD/MM/YYYY') : '--'}
+					{record?.thoiGianNop ? formatDate(record?.thoiGianNop) : '--'}
 				</Descriptions.Item>
 				<Descriptions.Item label='Chuyên ngành'>{record?.nganh?.ten ?? '--'}</Descriptions.Item>
 				<Descriptions.Item label='Mã chuyên ngành'>{record?.maNganh ?? '--'}</Descriptions.Item>

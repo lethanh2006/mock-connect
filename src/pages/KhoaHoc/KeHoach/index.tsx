@@ -10,7 +10,7 @@ import {
 	MapKeyDoiTuongKeHoachNCKH,
 } from '@/services/KhoaHoc/KeHoach/constants';
 import type { KeHoachNCKH } from '@/services/KhoaHoc/KeHoach/typings';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Button, Carousel, Modal, Tag } from 'antd';
 import { useState } from 'react';
 import { useModel } from 'umi';
@@ -76,7 +76,7 @@ const KeHoachNCKHComponent = () => {
 			sortable: true,
 			onCell,
 			align: 'center',
-			render: (val) => (val ? dayjs(val).format('DD/MM/YYYY') : ''),
+			render: (val) => formatDate(val),
 		},
 		{
 			title: 'File kèm theo',

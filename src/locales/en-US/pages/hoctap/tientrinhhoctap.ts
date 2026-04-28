@@ -91,7 +91,10 @@ export default {
 	'tientrinhhoctap.ctdt.chuongtrinh': 'Program / Study plan',
 	'tientrinhhoctap.ctdt.loai': 'Program type',
 	'tientrinhhoctap.ctdt.chuyennganh': 'Major',
+	'tientrinhhoctap.ctdt.chuyennganhphu': 'Minor',
+	'tientrinhhoctap.ctdt.pathway': 'Pathway',
 	'tientrinhhoctap.ctdt.chuadk': 'Major not registered',
+	'tientrinhhoctap.ctdt.dangcapnhat': 'Updating',
 	'tientrinhhoctap.ctdt.hocky': 'Semester',
 	'tientrinhhoctap.ctdt.tinchi': 'Credit',
 	'tientrinhhoctap.ctdt.chuyenhanh': 'Major',
@@ -173,4 +176,9 @@ export default {
 	'tientrinhhoctap.congnhan.hp.ketqua': 'Academic Result',
 	'tientrinhhoctap.congnhan.hocphan.tinchi': 'Credit',
 	'tientrinhhoctap.songnganh': 'Select Program / Select Major',
+
+	'lotrinhhoctap.message':
+		'The study pathway registration period <b>{tenDot}</b> is taking place from <b>{tuNgay}</b> to <b>{denNgay}</b>. Please follow and register on time.',
+	'lotrinhhoctap.title': 'Study Pathway',
+	'lotrinhhoctap.trangthai': 'Registration Status',
 };

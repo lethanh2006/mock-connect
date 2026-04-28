@@ -9,6 +9,7 @@ import { history, useIntl, useModel } from 'umi';
 import CardLopHocPhanItem from '../LopHocPhan/components/CardLopHocPhanItem';
 import BaiTapStatistics from './components/Statistics';
 import CardTietHocSapToi from './components/TietHocSapToi';
+import PageCard from '@/components/PageCard';
 
 const LopHocPhanPage = () => {
 	const intl = useIntl();
@@ -36,11 +37,10 @@ const LopHocPhanPage = () => {
 	}, [recHocKy?.ma]);
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-big-title card-borderless'
+		<PageCard
 			title={intl.formatMessage({ id: 'lophocphan.title' })}
 			extra={<FilterHocKy isSetHocKy />}
+			hideInnerCard
 		>
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
@@ -48,10 +48,10 @@ const LopHocPhanPage = () => {
 				</Col>
 
 				<Col span={24}>
-					<Card
+					<PageCard
+						hideInnerCard
+						level={3}
 						loading={loading}
-						variant='borderless'
-						className='card-borderless card-big-title'
 						title={intl.formatMessage({ id: 'lophocphan.danhsach' })}
 					>
 						{danhSach.length > 0 ? (
@@ -99,7 +99,7 @@ const LopHocPhanPage = () => {
 								/>
 							</Card>
 						)}
-					</Card>
+					</PageCard>
 				</Col>
 
 				<Col span={24} md={8}>
@@ -112,7 +112,7 @@ const LopHocPhanPage = () => {
 					<CardTietHocSapToi />
 				</Col>
 			</Row>
-		</Card>
+		</PageCard>
 	);
 };
 

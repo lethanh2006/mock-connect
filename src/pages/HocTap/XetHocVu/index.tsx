@@ -9,7 +9,7 @@ import {
 	type ELoaiXuLyKQHT,
 	type ETrangThaiDuyetXuLyKqht,
 } from '@/services/HocTap/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -60,7 +60,13 @@ const XetHocVuPage = () => {
 			dataIndex: 'loaiXuLy',
 			align: 'center',
 			width: 120,
-			render: (val: ELoaiXuLyKQHT) => val && <Tag color={colorLoaiXuLyKQHT[val]}>{loaiXuLyKQHT[val]}</Tag>,
+			render: (val: ELoaiXuLyKQHT) =>
+				val &&
+				loaiXuLyKQHT[val] && (
+					<Tag color={colorLoaiXuLyKQHT[val]}>
+						{intl.formatMessage({ id: loaiXuLyKQHT[val] })}
+					</Tag>
+				),
 		},
 		{
 			title: intl.formatMessage({ id: 'hoctapkhac.xethocvu.lydo.tablecolumntitle' }),
@@ -83,7 +89,7 @@ const XetHocVuPage = () => {
 			render: (val, rec) =>
 				val && (
 					<>
-						{rec.quyetDinh?.soQuyetDinh}, {dayjs(rec?.quyetDinh?.ngayBanHanh).format('DD/MM/YYYY')}
+						{rec.quyetDinh?.soQuyetDinh}, {formatDate(rec?.quyetDinh?.ngayBanHanh)}
 					</>
 				),
 		},

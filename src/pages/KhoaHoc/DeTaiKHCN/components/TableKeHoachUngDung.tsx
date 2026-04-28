@@ -1,7 +1,7 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { DeTaiKHCN } from '@/services/KhoaHoc/DeTaiKHCN/typings';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Divider, Modal, Popconfirm, Space, Tooltip } from 'antd';
 import { useCallback, useState } from 'react';
@@ -32,7 +32,7 @@ const TableKeHoachUngDung = (props: { mode: 'view' | 'edit'; data: DeTaiKHCN.KeH
 			dataIndex: 'thoiGian',
 			width: 120,
 			align: 'center',
-			render: (val: string, rec) => <div>{dayjs(val).format('DD/MM/YYYY')}</div>,
+			render: (val: string, rec) => <div>{formatDate(val)}</div>,
 		},
 		{
 			title: 'Địa điểm tiếp nhận ứng dụng',

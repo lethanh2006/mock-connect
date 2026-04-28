@@ -5,7 +5,7 @@ import { IColumn } from '@/components/Table/typing';
 import { ELoaiDot } from '@/services/TienIch/KhaoSat/constants';
 import { DotKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat/typing';
 import { Descriptions, Empty, Space, Tag } from 'antd';
-import dayjs from 'dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
@@ -147,10 +147,10 @@ const DanhGiaGiangVienPage = () => {
 									)}
 								</Descriptions.Item>
 								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.khaosat.tgbt' })}>
-									{record?.thoiGianBatDau ? dayjs(record?.thoiGianBatDau).format('HH:mm DD/MM/YYYY') : '--'}
+									{record?.thoiGianBatDau ? formatDateTime(record?.thoiGianBatDau) : '--'}
 								</Descriptions.Item>
 								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.khaosat.tgkt' })}>
-									{record?.thoiGianKetThuc ? dayjs(record?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY') : '--'}
+									{record?.thoiGianKetThuc ? formatDateTime(record?.thoiGianKetThuc) : '--'}
 								</Descriptions.Item>
 							</Descriptions>
 

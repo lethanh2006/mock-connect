@@ -12,8 +12,8 @@ import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
-import { CalendarOutlined, DeleteOutlined, ReloadOutlined, SendOutlined } from '@ant-design/icons';
-import { Col, Divider, Popconfirm, Row, Space, Tag } from 'antd';
+import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
+import { Col, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -128,7 +128,7 @@ const PhieuDangKy = () => {
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.mahocphan' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
-			width: 80,
+			width: 100,
 			filterType: 'string',
 		},
 		{
@@ -147,7 +147,7 @@ const PhieuDangKy = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
 			dataIndex: 'soTinChi',
-			width: 60,
+			width: 80,
 			align: 'center',
 			sortable: true,
 			render: (val, rec) => (
@@ -183,7 +183,7 @@ const PhieuDangKy = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.hocphi' }),
 			align: 'right',
-			width: 120,
+			width: 160,
 			render: (val, rec) => {
 				const due = tinhHocPhi(rec.soTinChi, rec.loai, rec.maKhoaNganh);
 				if (due) return `${inputFormat(due)} VND`;
@@ -205,9 +205,18 @@ const PhieuDangKy = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.trangthai' }),
 			dataIndex: 'trangThai',
-			width: 110,
+			width: 120,
 			align: 'center',
-			render: (val: ETrangThaiDangKyTinChi) => <Tag color={ColorTrangThaiDangKyTinChi[val]}>{val}</Tag>,
+			render: (val, rec) => (
+				<Space wrap size={'small'}>
+					<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>{val}</Tag>
+					{rec?.isWaitlist && (
+						<Tag color={'orange'}>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
+					)}
+				</Space>
+			),
+
+			fixed: 'right',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy' }),
@@ -268,10 +277,7 @@ const PhieuDangKy = () => {
 
 	return (
 		<>
-			<Divider style={{ marginTop: 24 }}>
-				{intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}
-			</Divider>
-			<Row gutter={[8, 12]} style={{ marginBottom: 18 }}>
+			<Row gutter={[8, 12]} style={{ marginBottom: 12 }}>
 				<Col span={24} md={10}>
 					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
 					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
@@ -304,11 +310,9 @@ const PhieuDangKy = () => {
 				loading={loading}
 				hasTotal
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
+				onReload={getData}
 			>
-				<Space wrap>
-					<ButtonExtend cooldownMs={10000} icon={<ReloadOutlined />} onClick={getData}>
-						{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.tailai' })}
-					</ButtonExtend>
+				<Space wrap style={{ margin: '0 16px' }}>
 					{danhSachLopDangKy.length ? (
 						<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
 							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}

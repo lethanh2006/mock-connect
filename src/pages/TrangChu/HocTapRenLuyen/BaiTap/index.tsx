@@ -7,6 +7,7 @@ import {
 } from '@/services/DaoTao/BaiTap/constants';
 import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, Card, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
@@ -14,6 +15,7 @@ import { useMediaQuery } from 'react-responsive';
 import { history, Link, useIntl, useModel } from 'umi';
 import SlideButtonIcon from '../../components/SlideButtonIcon';
 import './style.less';
+import PageCard from '@/components/PageCard';
 
 const { Text } = Typography;
 
@@ -140,7 +142,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 							{intl.formatMessage({ id: 'trangchu.baitap.hannopbai' })}:
 						</Text>
 						<Text className={`deadline-time ${isMobile ? 'mobile' : ''}`}>
-							{dayjs(item.assignment.thoiGianKetThuc).format('HH:mm DD/MM/YYYY')}
+							{formatDateTime(item.assignment.thoiGianKetThuc)}
 							<Tag color={colorTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]} style={{ marginLeft: 4 }}>
 								{mapTrangThaiNopBaiTap[item.trangThai as ETrangThaiNopBaiTap]}
 							</Tag>
@@ -177,9 +179,10 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	};
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless card-big-title card-baitap-dashboard'
+		<PageCard
+			level={props.isDashBoard && APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH === 'VINUNI' ? 2 : 3}
+			hideInnerCard
+			className='card-baitap-dashboard'
 			title={
 				<>
 					{intl.formatMessage({ id: 'trangchu.baitap.title' })}{' '}
@@ -256,7 +259,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 				</Space>
 			}
 		>
-			<Card variant='borderless' className={`${isDashBoard && 'content-wrapper'} `} styles={{ body: { padding: 0 } }}>
+			<PageCard level={3} hideInnerCard className={`${isDashBoard && 'content-wrapper'} `} styles={{ body: { padding: 0 } }}>
 				<div ref={containerRef}>
 					{!!dataToUse.length ? (
 						<Carousel
@@ -279,8 +282,8 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 						/>
 					)}
 				</div>
-			</Card>
-		</Card>
+			</PageCard>
+		</PageCard>
 	);
 };
 

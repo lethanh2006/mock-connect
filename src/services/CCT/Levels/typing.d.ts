@@ -7,5 +7,7 @@ declare module LevelsManagement {
 		description: string;
 		isActive: boolean;
 		autoApproval: boolean;
+		selfAssessmentQuestionsId: string;
+		selfAssessmentQuestionsName: string;
 	}
 }

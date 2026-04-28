@@ -9,6 +9,7 @@ import {
 import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import type { QuyTrinh } from '@/services/QuyTrinh/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { EditOutlined, LeftOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Collapse, Modal, Popconfirm, Row, Spin, Steps, Tag } from 'antd';
 import { useEffect, useState } from 'react';
@@ -33,7 +34,14 @@ interface Iprops {
 }
 const View = (props: Iprops) => {
 	const { dataQuyTrinh, current, loadingForm, modalName, FormModal, formProps, type } = props;
-	const model = useModel(modalName);
+	const model = useModel(modalName) as {
+		setCurrent: (val: any) => void;
+		setCurrentFormKhaiBao: (val: any) => void;
+		currentFormKhaiBao: any;
+		setEditFormKhaiBao: (val: boolean) => void;
+		setRecordFormKhaiBao: (val: any) => void;
+		editFormKhaiBao: boolean;
+	};
 	const { visibleForm, setVisibleForm } = useModel('taichinh.hoadon');
 	const { setRecordQuyTrinhForm } = useModel('quytrinh.quanlyquytrinh');
 	const {
@@ -241,8 +249,8 @@ const View = (props: Iprops) => {
 													{value.ten}{' '}
 													{cauHinhThoiGianDot && (
 														<b>
-															{dayjs(cauHinhThoiGianDot?.thoiGianBatDau).format('DD/MM/YYYY')} -{' '}
-															{dayjs(cauHinhThoiGianDot?.thoiGianKetThuc).format('DD/MM/YYYY')}
+															{formatDate(cauHinhThoiGianDot?.thoiGianBatDau)} -{' '}
+															{formatDate(cauHinhThoiGianDot?.thoiGianKetThuc)}
 														</b>
 													)}
 												</div>

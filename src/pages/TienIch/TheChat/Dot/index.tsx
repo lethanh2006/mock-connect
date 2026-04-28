@@ -1,7 +1,7 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { IColumn } from '@/components/Table/typing';
 import { TheChat } from '@/services/TienIch/TheChat/typing';
-import dayjs from 'dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -53,14 +53,14 @@ const DotTheChatPage = () => {
 			title: intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.thoigianbatdau.tablecolumntitle' }),
 			align: 'center',
 			width: 120,
-			render: (_, rec) => (rec?.thoiGianBatDau ? dayjs(rec.thoiGianBatDau).format('DD/MM/YYYY') : '--'),
+			render: (_, rec) => (formatDate(rec.thoiGianBatDau) || '--'),
 			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'hoctapkhac.thechatsinhvien.thoigianketthuc.tablecolumntitle' }),
 			align: 'center',
 			width: 120,
-			render: (_, rec) => (rec?.thoiGianKetThuc ? dayjs(rec.thoiGianKetThuc).format('DD/MM/YYYY') : '--'),
+			render: (_, rec) => (formatDate(rec.thoiGianKetThuc) || '--'),
 			onCell,
 		},
 	];

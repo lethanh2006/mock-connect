@@ -45,7 +45,7 @@ export const TableFormModal: React.FC = () => {
 			fullScreen={widthDrawer === 'full'}
 			maskClosable={maskCloseableForm || false}
 			width={widthDrawer !== 'full' ? (widthDrawer ?? 600) : undefined}
-			onCancel={() => setVisibleForm(false)}
+			onCancel={() => setVisibleForm?.(false)}
 			footer={null}
 			styles={!modalTitle && (!showModalTitle || !title) ? { body: { padding: 0 } } : undefined}
 			open={visibleForm}

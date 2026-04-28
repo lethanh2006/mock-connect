@@ -2,7 +2,7 @@ import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import { ELoaiBoLoc, type ELoaiCheDoSinhVien } from '@/services/CongTacSinhVien/CheDoSinhVien/constant';
 import type { CheDoSinhVien } from '@/services/CongTacSinhVien/CheDoSinhVien/typings';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { Input, Modal, Select } from 'antd';
 import { useEffect } from 'react';
 import { useModel } from 'umi';
@@ -107,7 +107,7 @@ const QuyetDinh = (props: {
 			dataIndex: 'ngaySinh',
 			width: 100,
 			align: 'center',
-			render: (val) => (val ? dayjs(val).format('DD/MM/YYYY') : ''),
+			render: (val) => (val ? formatDate(val) : ''),
 			onCell,
 			hide: props.ssoId ? true : false,
 		},

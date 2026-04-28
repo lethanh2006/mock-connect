@@ -1,5 +1,6 @@
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
 import { Descriptions, Tag } from 'antd';
 import { useIntl, useModel } from 'umi';
@@ -25,9 +26,9 @@ const DesThongTinHoaDon = () => {
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.thoigianthu' })}>
 				<span className={ngoaiThoiGianThanhToan ? 'text-error' : undefined}>
 					{recHoaDon?.dotThu?.thoiGianBatDau ? (
-						`${dayjs(recHoaDon.dotThu.thoiGianBatDau).format('HH:mm DD/MM/YYYY')} - ${dayjs(
+						`${formatDateTime(recHoaDon.dotThu.thoiGianBatDau)} - ${formatDateTime(
 							recHoaDon.dotThu.thoiGianKetThuc,
-						).format('HH:mm DD/MM/YYYY')}`
+						)}`
 					) : (
 						<i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>
 					)}

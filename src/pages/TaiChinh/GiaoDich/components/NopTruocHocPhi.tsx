@@ -2,6 +2,7 @@ import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import { ETransactionPaymentType } from '@/services/TaiChinh/constant';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import dayjs from '@/utils/dayjs';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { inputFormat } from '@/utils/utils';
 import { Alert, Button, Col, Descriptions, Form, Modal, Popconfirm, Row } from 'antd';
@@ -116,8 +117,8 @@ const ModalNopTruocHocPhi = (props: {
 											{intl.formatMessage(
 												{ id: 'lichsugiaodich.noptruochocphi.alert.thoigian' },
 												{
-													form: dayjs(recThuTruocHp?.thoiGianBatDau).format('HH:mm DD/MM/YYYY'),
-													to: dayjs(recThuTruocHp?.thoiGianKetThuc).format('HH:mm DD/MM/YYYY'),
+													form: formatDateTime(recThuTruocHp?.thoiGianBatDau),
+													to: formatDateTime(recThuTruocHp?.thoiGianKetThuc),
 													b: (chunks) => <b>{chunks}</b>,
 												},
 											)}

@@ -42,6 +42,7 @@ const SelectDonVi = (props: {
 				key: item._id,
 				value: props.fieldValue ? item?.[props.fieldValue] ?? '' : item.maDonVi,
 				label: `${item.ten} (${item.maDonVi ?? ''})`,
+				rawData: item,
 			}))}
 			showSearch
 			showArrow

@@ -1,4 +1,4 @@
-import { ETagColor } from '../base/constant';
+import { ETagColor, officialColors, statusBgColors, statusColors } from '../base/constant';
 
 export enum EParticipantScope {
 	UNIVERSITY = 'University',
@@ -31,27 +31,43 @@ export const mapNameParticipantRole: Record<EparticipantRole, string> = {
 };
 
 export enum EApprovalStatus {
-	DRAFT = 'DRAFT', // Trạng thái ban đầu (chưa gửi / chưa upload)
-	SUBMITTED = 'SUBMITTED', // Đã upload evidence, chờ duyệt
-	APPROVED = 'APPROVED', // Đã duyệt
-	REJECTED = 'REJECTED', // Bị từ chối
-	CHANGES_REQUIRED = 'CHANGES_REQUIRED', // Yêu cầu chỉnh sửa
+	EVIDENCE_REQUIRED = 'EVIDENCE_REQUIRED',
+	DRAFT = 'DRAFT',
+	SUBMITTED = 'SUBMITTED',
+	APPROVED = 'APPROVED',
+	REJECTED = 'REJECTED',
+	CHANGES_REQUIRED = 'CHANGES_REQUIRED',
+	EXPIRED = 'EXPIRED',
 }
 
 export const mapNameApprovalStatus: Record<EApprovalStatus, string> = {
+	[EApprovalStatus.EVIDENCE_REQUIRED]: 'Evidence Required',
 	[EApprovalStatus.DRAFT]: 'Draft',
-	[EApprovalStatus.SUBMITTED]: 'Submitted',
+	[EApprovalStatus.SUBMITTED]: 'Pending For Approval',
 	[EApprovalStatus.APPROVED]: 'Approved',
 	[EApprovalStatus.REJECTED]: 'Rejected',
-	[EApprovalStatus.CHANGES_REQUIRED]: 'Changes Required',
+	[EApprovalStatus.CHANGES_REQUIRED]: 'Change Required',
+	[EApprovalStatus.EXPIRED]: 'Expired',
 };
 
-export const mapColorApprovalStatus: Record<EApprovalStatus, ETagColor> = {
-	[EApprovalStatus.DRAFT]: ETagColor.DEFAULT,
-	[EApprovalStatus.SUBMITTED]: ETagColor.GOLD,
-	[EApprovalStatus.APPROVED]: ETagColor.GREEN,
-	[EApprovalStatus.REJECTED]: ETagColor.RED,
-	[EApprovalStatus.CHANGES_REQUIRED]: ETagColor.ORANGE,
+export const mapColorApprovalStatus: Record<EApprovalStatus, string> = {
+	[EApprovalStatus.EVIDENCE_REQUIRED]: statusBgColors.statusBg300,
+	[EApprovalStatus.DRAFT]: statusBgColors.statusBg300,
+	[EApprovalStatus.SUBMITTED]: statusBgColors.statusBg200,
+	[EApprovalStatus.APPROVED]: statusBgColors.statusBg100,
+	[EApprovalStatus.REJECTED]: statusBgColors.statusBg400,
+	[EApprovalStatus.CHANGES_REQUIRED]: statusBgColors.statusBg300,
+	[EApprovalStatus.EXPIRED]: officialColors.official500,
+};
+
+export const mapColorTextApprovalStatus: Record<EApprovalStatus, string> = {
+	[EApprovalStatus.EVIDENCE_REQUIRED]: statusColors.status300,
+	[EApprovalStatus.DRAFT]: statusColors.status300,
+	[EApprovalStatus.SUBMITTED]: statusColors.status200,
+	[EApprovalStatus.APPROVED]: statusColors.status100,
+	[EApprovalStatus.REJECTED]: statusColors.status400,
+	[EApprovalStatus.CHANGES_REQUIRED]: statusColors.status300,
+	[EApprovalStatus.EXPIRED]: officialColors.official300,
 };
 
 export enum EActivityCategory {
@@ -60,6 +76,67 @@ export enum EActivityCategory {
 }
 
 export const mapNameActivityCategory: Record<EActivityCategory, string> = {
-	[EActivityCategory.REGISTERED]: 'Registered Activities',
+	[EActivityCategory.REGISTERED]: 'Registered Activity',
 	[EActivityCategory.PERSONAL_CO_CURRICULAR]: 'Personal Co-curricular Activity',
 };
+
+export enum Evalidation {
+	VERIFIED = 'Verified',
+	ENDORSED = 'Endorsed',
+	FEATURED = 'Featured',
+}
+
+export const mapEvalidation: Record<Evalidation, ETagColor> = {
+	[Evalidation.VERIFIED]: ETagColor.BLUE,
+	[Evalidation.ENDORSED]: ETagColor.GOLD,
+	[Evalidation.FEATURED]: ETagColor.GREEN,
+};
+
+export enum EStatusMyCCT {
+	DRAFT = 'DRAFT',
+	PENDING_APPROVAL = 'PENDING_APPROVAL',
+	APPROVED = 'APPROVED',
+	CHANGES_REQUIRED = 'CHANGES_REQUIRED',
+}
+
+export const mapNameStatusMyCCT: Record<EStatusMyCCT, string> = {
+	[EStatusMyCCT.DRAFT]: 'Draft',
+	[EStatusMyCCT.PENDING_APPROVAL]: 'Pending For Approval',
+	[EStatusMyCCT.APPROVED]: 'Approved',
+	[EStatusMyCCT.CHANGES_REQUIRED]: 'Changes Required',
+};
+
+export const mapColorStatusMyCCT: Record<EStatusMyCCT, string> = {
+	[EStatusMyCCT.DRAFT]: statusBgColors.statusBg300,
+	[EStatusMyCCT.PENDING_APPROVAL]: statusBgColors.statusBg200,
+	[EStatusMyCCT.APPROVED]: statusBgColors.statusBg100,
+	[EStatusMyCCT.CHANGES_REQUIRED]: statusBgColors.statusBg300,
+};
+
+export const mapColorTextStatusMyCCT: Record<EStatusMyCCT, string> = {
+	[EStatusMyCCT.DRAFT]: statusColors.status300,
+	[EStatusMyCCT.PENDING_APPROVAL]: statusColors.status200,
+	[EStatusMyCCT.APPROVED]: statusColors.status100,
+	[EStatusMyCCT.CHANGES_REQUIRED]: statusColors.status300,
+};
+
+export enum EScopeAward {
+	INTERNATIONAL = 'INTERNATIONAL',
+	NATIONAL = 'NATIONAL',
+	REGIONAL = 'REGIONAL',
+}
+
+export const mapNameScopeAward: Record<EScopeAward, string> = {
+	[EScopeAward.INTERNATIONAL]: 'International',
+	[EScopeAward.NATIONAL]: 'National',
+	[EScopeAward.REGIONAL]: 'University',
+};
+
+export enum EActivityStatus {
+	TOTAL = 'TOTAL',
+	ACTION_REQUIRED = 'ACTION_REQUIRED',
+	PENDING_FOR_APPROVAL = 'PENDING_FOR_APPROVAL',
+	APPROVED = 'APPROVED',
+	REJECTED = 'REJECTED',
+	EXPIRED = 'EXPIRED',
+}

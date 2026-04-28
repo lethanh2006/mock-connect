@@ -1,13 +1,14 @@
 import { EVaiTroSvLhc, vaiTroSvLhc } from '@/services/DaoTao/SinhVien/constants';
 import { type SinhVien } from '@/services/DaoTao/SinhVien/typings';
 import { EGioiTinh } from '@/services/DaoTao/constant';
-import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { EyeOutlined, MoreOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Descriptions, Dropdown, List, Menu, Modal, Row, Typography } from 'antd';
 import { useIntl } from 'umi';
 import './style.less';
 
 import { useEffect, useState } from 'react';
+import PageCard from '@/components/PageCard';
 const { Text } = Typography;
 
 type TSinhVien = Partial<SinhVien.IRecord> & Partial<SinhVien.ISinhVienHocKy>;
@@ -50,9 +51,9 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 	const isMobile = screenSize.width <= 768;
 
 	const renderStudentList = () => (
-		<Card
-			className='card-big-title card-borderless'
-			variant='borderless'
+		<PageCard
+			loading={loading}
+			level={3}
 			style={{
 				borderRadius: '8px',
 			}}
@@ -76,7 +77,6 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 				</div>
 			}
 			bodyStyle={{ padding: 0 }}
-			loading={loading}
 		>
 			{/* Di chuyển scroll xuống đây - chỉ áp dụng cho phần danh sách */}
 			<div
@@ -186,7 +186,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 					/>
 				)}
 			</div>
-		</Card>
+		</PageCard>
 	);
 
 	return (
@@ -227,7 +227,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 							<Descriptions.Item
 								label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.ngaysinh' })}
 							>
-								{record?.ngaySinh && dayjs(record.ngaySinh).format('DD/MM/YYYY')}
+								{record?.ngaySinh && formatDate(record.ngaySinh)}
 							</Descriptions.Item>
 							<Descriptions.Item
 								label={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongtinlop.sv.dienthoai' })}

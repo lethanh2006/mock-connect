@@ -1,4 +1,5 @@
 import { type ELoaiToChucDayHoc } from '../constant';
+import { ETrangThaiPhieuDkyCtdt } from '../PhieuDkyCTDT/constant';
 
 declare module HocPhan {
 	export interface IRecord {
@@ -10,6 +11,7 @@ declare module HocPhan {
 		loaiHocPhan?: ILoaiHocPhan;
 		soTinChi: number;
 		maDonVi: string;
+		trangThaiKqht?: ETrangThaiPhieuDkyCtdt;
 		donVi?: ToChucNhanSu.IDonVi;
 
 		active: boolean;

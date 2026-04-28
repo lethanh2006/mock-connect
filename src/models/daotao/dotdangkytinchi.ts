@@ -121,13 +121,17 @@ export default () => {
 
 	const getLopDangKyModel = async (maHocKy: string): Promise<DangKyTinChi.ILopDangKy[]> => {
 		if (!maHocKy) return Promise.reject('Invalid maHocKy');
+
 		setLoading(true);
+
 		try {
 			const res = await getLopDangKy(maHocKy);
-			const lop: LopHocPhan.IRecordSinhVienLopHP[] = res.data?.data ?? [];
 
-			const lopDangKy =
-				lop
+			const mapLop = (
+				list: LopHocPhan.IRecordSinhVienLopHP[],
+				isWaitlist: boolean = false,
+			): DangKyTinChi.ILopDangKy[] =>
+				list
 					?.filter((item) => item.lopHocPhan?.trangThaiLop === ETrangThaiLopHocPhan.MO)
 					?.map((item) => ({
 						...item.lopHocPhan,
@@ -136,10 +140,20 @@ export default () => {
 						soTinChi: item.lopHocPhan?.hocPhan?.soTinChi ?? 0,
 						loai: item.loai,
 						loaiLop: item.lopHocPhan.loai,
-						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
 						maKhoaNganh: item.maKhoaNganh,
+						isWaitlist,
+						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
 					})) ?? [];
-			setDanhSachLopDangKy(lopDangKy);
+
+			const lop = res.data?.data?.registeredList ?? [];
+			const waitList = res.data?.data?.waitlistList ?? [];
+
+			const lopDangKy = mapLop(lop, false);
+			const lopWaitList = mapLop(waitList, true);
+
+			const result = [...lopDangKy, ...lopWaitList];
+
+			setDanhSachLopDangKy(result);
 			tinhDataLichHoc(lopDangKy);
 
 			return lopDangKy;
