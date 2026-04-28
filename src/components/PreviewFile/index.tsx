@@ -283,6 +283,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				) : frameData?.type === EDinhDangFile.IMAGE && !!frameData?.src ? (
 					<div className='preview-image-container'>
 						<AuthImage
+							isDetail
 							src={frameData.src}
 							alt={frameData.name}
 							style={{
