@@ -6,9 +6,10 @@ import {
 } from '@/services/CCT/constant';
 import { Tag } from 'antd';
 import dayjs from 'dayjs';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const CardNoteActivity = () => {
+	const intl = useIntl();
 	const { record } = useModel('cct.activityoutcome');
 
 	return (
@@ -26,30 +27,30 @@ const CardNoteActivity = () => {
 				<div className='info-row'>
 					{record?.isAwardRecognition && (
 						<div className='info-item'>
-							<div className='info-label'>Submission Time</div>
+							<div className='info-label'>{intl.formatMessage({ id: 'activity.cardnote.submissionTime' })}</div>
 							<div className='info-value'>
 								{record?.submittedAt ? dayjs(record?.submittedAt).format('HH:mm DD/MM/YYYY') : '--'}
 							</div>
 						</div>
 					)}
 					<div className='info-item'>
-						<div className='info-label'>Evidence Update Deadline</div>
+						<div className='info-label'>{intl.formatMessage({ id: 'activity.cardnote.deadline' })}</div>
 						<div className='info-value'>
 							{record?.dueDate ? dayjs(record?.dueDate).format('HH:mm DD/MM/YYYY') : '--'}
 						</div>
 					</div>
 					<div className='info-item'>
-						<div className='info-label'>Evidence Review Time</div>
+						<div className='info-label'>{intl.formatMessage({ id: 'activity.cardnote.reviewTime' })}</div>
 						<div className='info-value'>
 							{record?.approvalTime && dayjs(record?.approvalTime).format('HH:mm DD/MM/YYYY')}
 						</div>
 					</div>
 					<div className='info-item'>
-						<div className='info-label'>Approver</div>
+						<div className='info-label'>{intl.formatMessage({ id: 'activity.cardnote.approver' })}</div>
 						<div className='info-value'>{record?.studentDeclarationApproverName ?? '--'}</div>
 					</div>
 					<div className='info-item'>
-						<div className='info-label'>Revision Note</div>
+						<div className='info-label'>{intl.formatMessage({ id: 'activity.cardnote.revisionNote' })}</div>
 						<div className='info-value'>{record?.revisionNote ?? '-'}</div>
 					</div>
 				</div>
