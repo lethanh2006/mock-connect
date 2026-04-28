@@ -1,3 +1,4 @@
+import background from '@/assets/cct/background.png';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { EApprovalStatus } from '@/services/CCT/constant';
@@ -294,7 +295,7 @@ const ActivityPage = () => {
 												...item,
 												activityOutcome: item?.activityOutcome,
 											}}
-											banner={item?.banner ?? undefined}
+											banner={item?.banner ?? background}
 											name={item?.name}
 											startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
 											endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}

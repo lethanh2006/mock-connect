@@ -155,7 +155,7 @@ const FormActivityOutCome = (props: any) => {
 										</Col>
 										<Col span={22} md={10}>
 											<Form.Item label='File' name={[index, 'file']} rules={[...rules.required]}>
-												<UploadFile maxCount={5} disabled={isView} />
+												<UploadFile maxCount={5} disabled={isView} isPrivate />
 											</Form.Item>
 										</Col>
 										<Col span={2}>

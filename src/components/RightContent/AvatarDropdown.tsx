@@ -1,4 +1,3 @@
-import ActivityUpComming from '@/pages/CCT/Activity/ActivityUpComming';
 import ModalKhaoSatBatBuoc from '@/pages/TienIch/KhaoSat/components/ModalKhaoSatBatBuoc';
 import { landingUrl } from '@/services/base/constant';
 import { ELoaiDot, EThoiGianDot } from '@/services/TienIch/KhaoSat/constants';
@@ -260,7 +259,7 @@ const AvatarDropdown = () => {
 
 			<ModalKhaoSatBatBuoc />
 
-			<ActivityUpComming visible={visibleOutCome} setVisible={setVisibleOutCome} />
+			{/* <ActivityUpComming visible={visibleOutCome} setVisible={setVisibleOutCome} /> */}
 		</>
 	);
 };
