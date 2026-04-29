@@ -12,7 +12,7 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"
     - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH =~ /^uat(-.+)?$/)
     - if: $CI_COMMIT_TAG =~ /^scan_.+/
-    - if: $CI_COMMIT_TAG =~ /^build_.+/
+    - if: $CI_COMMIT_TAG =~ /^build_base_(develop|prod).*/
     - if: $CI_COMMIT_TAG =~ /^release_.+/
     - when: never
 
@@ -21,8 +21,11 @@ variables:
   AWS_REGION: "ap-southeast-1"
   ECR_REGISTRY: "520492793952.dkr.ecr.ap-southeast-1.amazonaws.com"
   ECR_REPO_NAME: "vwa-connect"
-  PROD_BUILD_BASE_TAG: "build-base-prod"
   APP_NAME: "dhs-slink-web"
+  DEV_BUILD_BASE_TAG: "build-base"
+  DEV_BUILD_BASE_IMAGE: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}:${DEV_BUILD_BASE_TAG}"
+  PROD_BUILD_BASE_TAG: "build-base-prod"
+  PROD_BUILD_BASE_IMAGE: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}:${PROD_BUILD_BASE_TAG}"
   GIT_DEPTH: 1
   CICD_ENGAGEMENT_NAME: "CICD Runs - ${CI_COMMIT_REF_NAME}"
 
@@ -66,6 +69,12 @@ build_develop:
     - |
       cat > /kaniko/.docker/config.json << DOCKEREOF
       {
+        "auths": {
+          "${JFROG_REGISTRY}": {
+            "username": "${JFROG_USER}",
+            "password": "${JFROG_TOKEN}"
+          }
+        },
         "credHelpers": {
           "${ECR_REGISTRY}": "ecr-login"
         }
@@ -74,8 +83,55 @@ build_develop:
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --build-arg "BUILD_BASE_IMAGE=${DEV_BUILD_BASE_IMAGE}"
       --destination "${ECR_REGISTRY}/vwa-connect:${CI_COMMIT_SHORT_SHA}"
       --destination "${ECR_REGISTRY}/vwa-connect:develop"
+      --cache=true
+      --cache-repo="${ECR_REGISTRY}/digital-dev-build-cache"
+      --snapshot-mode=redo
+      --use-new-run
+      --compressed-caching=false
+      --cleanup
+  interruptible: true
+
+build_custom_image_develop:
+  stage: prepare
+  resource_group: "vwa-connect-dev-runner-heavy"
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.0-debug
+    entrypoint: [""]
+  tags:
+    - runner-vu-digital-dev
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "1Gi"
+    KUBERNETES_MEMORY_LIMIT: "3Gi"
+    KUBERNETES_CPU_REQUEST: "1"
+    KUBERNETES_CPU_LIMIT: "2"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "10Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "20Gi"
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^build_base_develop.*/
+  script:
+    - mkdir -p /kaniko/.docker
+    - |
+      cat > /kaniko/.docker/config.json << DOCKEREOF
+      {
+        "auths": {
+          "${JFROG_REGISTRY}": {
+            "username": "${JFROG_USER}",
+            "password": "${JFROG_TOKEN}"
+          }
+        },
+        "credHelpers": {
+          "${ECR_REGISTRY}": "ecr-login"
+        }
+      }
+      DOCKEREOF
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/DockerfileBuildBase"
+      --destination "${DEV_BUILD_BASE_IMAGE}-${CI_COMMIT_TAG}"
+      --destination "${DEV_BUILD_BASE_IMAGE}"
       --cache=true
       --cache-repo="${ECR_REGISTRY}/digital-dev-build-cache"
       --snapshot-mode=redo
@@ -234,12 +290,18 @@ build_custom_image_prod:
     KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "10Gi"
     KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "20Gi"
   rules:
-    - if: $CI_COMMIT_TAG =~ /^build_.+/
+    - if: $CI_COMMIT_TAG =~ /^build_base_prod.*/
   script:
     - mkdir -p /kaniko/.docker
     - |
       cat > /kaniko/.docker/config.json << DOCKEREOF
       {
+        "auths": {
+          "${JFROG_REGISTRY}": {
+            "username": "${JFROG_USER}",
+            "password": "${JFROG_TOKEN}"
+          }
+        },
         "credHelpers": {
           "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com": "ecr-login"
         }
@@ -248,8 +310,8 @@ build_custom_image_prod:
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/DockerfileBuildBase"
-      --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:${PROD_BUILD_BASE_TAG}-${CI_COMMIT_TAG}"
-      --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:${PROD_BUILD_BASE_TAG}"
+      --destination "${PROD_BUILD_BASE_IMAGE}-${CI_COMMIT_TAG}"
+      --destination "${PROD_BUILD_BASE_IMAGE}"
       --cache=true
       --cache-repo="537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/prod-build-cache"
       --snapshot-mode=redo
@@ -282,6 +344,12 @@ build_prod:
     - |
       cat > /kaniko/.docker/config.json << DOCKEREOF
       {
+        "auths": {
+          "${JFROG_REGISTRY}": {
+            "username": "${JFROG_USER}",
+            "password": "${JFROG_TOKEN}"
+          }
+        },
         "credHelpers": {
           "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com": "ecr-login"
         }
@@ -290,7 +358,7 @@ build_prod:
     - /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/DockerfileProd"
-      --build-arg "BUILD_BASE_IMAGE=537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:${PROD_BUILD_BASE_TAG}"
+      --build-arg "BUILD_BASE_IMAGE=${PROD_BUILD_BASE_IMAGE}"
       --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:${CI_COMMIT_TAG}"
       --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:latest"
       --cache=true
