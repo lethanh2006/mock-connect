@@ -22,7 +22,7 @@ variables:
   ECR_REGISTRY: "520492793952.dkr.ecr.ap-southeast-1.amazonaws.com"
   ECR_REPO_NAME: "vwa-connect"
   APP_NAME: "dhs-slink-web"
-  DEV_BUILD_BASE_TAG: "build-base"
+  DEV_BUILD_BASE_TAG: "build-base-develop"
   DEV_BUILD_BASE_IMAGE: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}:${DEV_BUILD_BASE_TAG}"
   PROD_BUILD_BASE_TAG: "build-base-prod"
   PROD_BUILD_BASE_IMAGE: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}:${PROD_BUILD_BASE_TAG}"
