@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
@@ -9,7 +10,6 @@ import { history, useIntl, useModel } from 'umi';
 import CardLopHocPhanItem from '../LopHocPhan/components/CardLopHocPhanItem';
 import BaiTapStatistics from './components/Statistics';
 import CardTietHocSapToi from './components/TietHocSapToi';
-import PageCard from '@/components/PageCard';
 
 const LopHocPhanPage = () => {
 	const intl = useIntl();
@@ -37,23 +37,14 @@ const LopHocPhanPage = () => {
 	}, [recHocKy?.ma]);
 
 	return (
-		<PageCard
-			title={intl.formatMessage({ id: 'lophocphan.title' })}
-			extra={<FilterHocKy isSetHocKy />}
-			hideInnerCard
-		>
+		<PageCard title={intl.formatMessage({ id: 'lophocphan.title' })} extra={<FilterHocKy isSetHocKy />} hideInnerCard>
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<BaiTapStatistics />
 				</Col>
 
 				<Col span={24}>
-					<PageCard
-						hideInnerCard
-						level={3}
-						loading={loading}
-						title={intl.formatMessage({ id: 'lophocphan.danhsach' })}
-					>
+					<PageCard hideInnerCard level={4} loading={loading} title={intl.formatMessage({ id: 'lophocphan.danhsach' })}>
 						{danhSach.length > 0 ? (
 							<Row gutter={[0, 0]} style={{ margin: '-8px' }}>
 								{danhSach.map((lop, index) => (

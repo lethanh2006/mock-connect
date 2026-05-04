@@ -131,7 +131,6 @@ const BaiTapStatistics = () => {
 			data={statisticsData}
 			loading={loading}
 			colSpan={{ xs: 12, md: 4 }}
-			hideCard
 		/>
 	);
 };
