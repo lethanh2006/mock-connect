@@ -1,7 +1,7 @@
 import useInitModel from '@/hooks/useInitModel';
 import { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
 import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { getMoodleLopHocPhan, postWithdraw } from '@/services/HocTap/LopHocPhan';
+import { getGiaoAnSinhVien, getMoodleLopHocPhan, postWithdraw } from '@/services/HocTap/LopHocPhan';
 import { ELoaiLopHocPhan, ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
@@ -229,6 +229,20 @@ export default () => {
 		}
 	};
 
+	const getGiaoAnSinhVienModel = async (lopHocPhanId: string): Promise<any> => {
+		setLoading(true);
+
+		try {
+			const res = await getGiaoAnSinhVien(lopHocPhanId);
+
+			return res.data?.data;
+		} catch (error) {
+			return Promise.reject(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const postWithdrawModel = async (payload: { lopHpSvId: string }): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submiting');
 		setFormSubmiting(true);
@@ -256,5 +270,6 @@ export default () => {
 		sinhVienGetLopDangKyModel,
 		calculateNearestBuoiLop,
 		postWithdrawModel,
+		getGiaoAnSinhVienModel,
 	};
 };

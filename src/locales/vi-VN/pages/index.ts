@@ -31,6 +31,7 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
+import syllabus from './syllabus';
 
 export default {
 	...login,
@@ -66,6 +67,7 @@ export default {
 	...sinhvien,
 	...pathway,
 	...minor,
+	...syllabus,
 
 	'pages.trangchu.title': 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO',
 	'pages.trangchu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',

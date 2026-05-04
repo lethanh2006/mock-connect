@@ -42,9 +42,12 @@ export declare module PhieuDkCtdt {
 		maChuyenNganh?: string;
 		maCtdt?: string;
 		email: string;
+		tenDonViPhuTrach?: string;
+		maDonViPhuTrach?: string;
 		ssoIdCoVanHocTapChinh?: string;
 		hoTenCoVanHocTapChinh?: string;
 		emailCoVanHocTapChinh?: string;
+		idDonViPhuTrach?: string;
 		sinhVienSsoId?: string;
 		maCoVanHocTapChinh?: string;
 		ssoIdCoVanHocTapPhu?: string;

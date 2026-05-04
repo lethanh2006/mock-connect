@@ -1,4 +1,5 @@
 // import PDFViewerV2 from '@/components/PDFViewerV2';
+import PageCard from '@/components/PageCard';
 import BoxFile from '@/pages/HocTap/LopHocPhan/DienDan/components/BoxFile';
 import {
 	colorTrangThaiNopBaiTap,
@@ -9,7 +10,7 @@ import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Card, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
+import { Button, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { history, Link, useIntl, useModel } from 'umi';
@@ -178,9 +179,10 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	};
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless card-baitap-dashboard'
+		<PageCard
+			level={props.isDashBoard && APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH === 'VINUNI' ? 2 : 3}
+			hideInnerCard
+			className='card-baitap-dashboard'
 			title={
 				<>
 					{intl.formatMessage({ id: 'trangchu.baitap.title' })}{' '}
@@ -257,7 +259,12 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 				</Space>
 			}
 		>
-			<Card variant='borderless' className={`${isDashBoard && 'content-wrapper'} `} styles={{ body: { padding: 0 } }}>
+			<PageCard
+				level={3}
+				hideInnerCard
+				className={`${isDashBoard && 'content-wrapper'} `}
+				styles={{ body: { padding: 0 } }}
+			>
 				<div ref={containerRef}>
 					{!!dataToUse.length ? (
 						<Carousel
@@ -280,8 +287,8 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 						/>
 					)}
 				</div>
-			</Card>
-		</Card>
+			</PageCard>
+		</PageCard>
 	);
 };
 

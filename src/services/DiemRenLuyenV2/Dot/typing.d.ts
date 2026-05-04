@@ -34,6 +34,11 @@ declare module DotChamDiemRenLuyen {
 			thoiGianKetThuc: string;
 			_id: string;
 		};
+		thoiGianKhieuNai: {
+			thoiGianBatDau: string;
+			thoiGianKetThuc: string;
+			_id: string;
+		};
 		createdAt: string;
 		updatedAt: string;
 		__v: number;
