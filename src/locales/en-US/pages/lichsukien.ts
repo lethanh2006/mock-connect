@@ -39,7 +39,7 @@ export default {
 	'lichsukien.chitiet.hinhthuc': 'Teaching Mode',
 	'lichsukien.chitiet.thongbao': 'Announcements',
 	'lichsukien.chitiet.diendan': 'Discussion Forum',
-	'lichsukien.chitiet.baitap': 'Assignments & Quizzes',
+	'lichsukien.chitiet.baitap': 'Assignments & Tests',
 	'lichsukien.chitiet.xemchitiet': 'View Details',
 	'lichsukien.chitiet.monthi': 'Exam Subject',
 	'lichsukien.chitiet.phongthi': 'Exam Room',
