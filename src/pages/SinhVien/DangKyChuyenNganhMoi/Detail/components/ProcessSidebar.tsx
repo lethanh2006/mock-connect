@@ -28,11 +28,12 @@ const ProcessStepsSidebar = ({
 	const { record: phieuDkCtdtMe } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
 
 	const processSteps = useMemo(() => {
-		const isPersonal = phieuDkCtdtMe?.loai === ELoaiPhieuDkCtdt.PERSONAL;
-		const isFinal = [ETrangThaiDangKyChuyenNganh.DA_DUYET, ETrangThaiDangKyChuyenNganh.KHONG_DUYET].includes(
-			phieuDkCtdtMe?.trangThai as any,
-		);
-		const getStepStatus = (s?: ETrangThaiDangKyChuyenNganh) => (isFinal ? phieuDkCtdtMe?.trangThai : s);
+		const isPersonal =
+			phieuDkCtdtMe?.loai === ELoaiPhieuDkCtdt.PERSONAL ||
+			!!phieuDkCtdtMe?.mucTieuLyDo ||
+			(phieuDkCtdtMe?.khoiHpCtList?.length ?? 0) > 0 ||
+			!!phieuDkCtdtMe?.hoTenCoVanHocTapChinh ||
+			!!phieuDkCtdtMe?.maCoVanHocTapChinh;
 
 		const steps: {
 			title: string;
@@ -44,22 +45,22 @@ const ProcessStepsSidebar = ({
 		if (isPersonal) {
 			steps.push({
 				title: intl.formatMessage({ id: 'minor.idm.detail.process.advisorDecision' }),
-				status: getStepStatus(phieuDkCtdtMe?.trangThaiDuyetCVHT),
+				status: phieuDkCtdtMe?.trangThaiDuyetCVHT,
 				commentType: 'ghiChuCVHT',
 				comment: phieuDkCtdtMe?.ghiChuCVHT,
+			});
+
+			steps.push({
+				title: intl.formatMessage({ id: 'minor.idm.detail.process.facultyDecision' }),
+				status: phieuDkCtdtMe?.trangThaiDuyetKhoaBoMon,
+				commentType: 'ghiChuBoMon',
+				comment: phieuDkCtdtMe?.ghiChuBoMon,
 			});
 		}
 
 		steps.push({
-			title: intl.formatMessage({ id: 'minor.idm.detail.process.facultyDecision' }),
-			status: getStepStatus(phieuDkCtdtMe?.trangThaiDuyetKhoaBoMon),
-			commentType: 'ghiChuBoMon',
-			comment: phieuDkCtdtMe?.ghiChuBoMon,
-		});
-
-		steps.push({
 			title: intl.formatMessage({ id: 'minor.idm.detail.process.trainingDecision' }),
-			status: getStepStatus(phieuDkCtdtMe?.trangThaiDuyetQldt),
+			status: phieuDkCtdtMe?.trangThaiDuyetQldt,
 			commentType: 'ghiChuQldt',
 			comment: phieuDkCtdtMe?.ghiChuQldt,
 		});
@@ -67,10 +68,16 @@ const ProcessStepsSidebar = ({
 		return steps;
 	}, [intl, phieuDkCtdtMe]);
 
-	const lastApproveIdx = useMemo(
-		() => processSteps.findLastIndex((s) => s.status === ETrangThaiDangKyChuyenNganh.DA_DUYET),
-		[processSteps],
-	);
+	const currentActiveStep = useMemo(() => {
+		const idx = processSteps.findIndex(
+			(s) =>
+				!s.status ||
+				s.status === ETrangThaiDangKyChuyenNganh.CHO_DUYET ||
+				s.status === ETrangThaiDangKyChuyenNganh.KHONG_DUYET ||
+				s.status === ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA,
+		);
+		return idx !== -1 ? idx : processSteps.length - 1;
+	}, [processSteps]);
 
 	return (
 		<Affix offsetTop={affixOffsetTop}>
@@ -84,17 +91,22 @@ const ProcessStepsSidebar = ({
 					)
 				}
 			>
-				<Steps direction='vertical' current={currentStep} onChange={onStepChange} size='small'>
+				<Steps
+					direction='vertical'
+					current={currentStep || currentActiveStep}
+					onChange={onStepChange}
+					size='small'
+				>
 					{processSteps.map((step, index) => {
 						let antStatus: 'wait' | 'process' | 'finish' | 'error' = 'wait';
-						if (lastApproveIdx !== -1 && index <= lastApproveIdx) antStatus = 'finish';
-						else if (step.status === ETrangThaiDangKyChuyenNganh.DA_DUYET) antStatus = 'finish';
+						if (step.status === ETrangThaiDangKyChuyenNganh.DA_DUYET) antStatus = 'finish';
 						else if (step.status === ETrangThaiDangKyChuyenNganh.CHO_DUYET) antStatus = 'process';
 						else if (
 							step.status === ETrangThaiDangKyChuyenNganh.KHONG_DUYET ||
 							step.status === ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA
 						)
 							antStatus = 'error';
+						else if (index === currentActiveStep && !step.status) antStatus = 'process';
 
 						return (
 							<Steps.Step
@@ -102,13 +114,24 @@ const ProcessStepsSidebar = ({
 								title={step.title}
 								status={antStatus}
 								description={
-									<Space direction='vertical'>
-										<Tag color={colorTrangThaiDangKyChuyenNganh[step.status as ETrangThaiDangKyChuyenNganh]}>
-											{trangThaiDangKyChuyenNganh[step.status as ETrangThaiDangKyChuyenNganh]}
-										</Tag>
+									<Space direction='vertical' size={4} style={{ marginTop: 4 }}>
+										{step.status ? (
+											<Tag color={colorTrangThaiDangKyChuyenNganh[step.status as ETrangThaiDangKyChuyenNganh]}>
+												{trangThaiDangKyChuyenNganh[step.status as ETrangThaiDangKyChuyenNganh]}
+											</Tag>
+										) : (
+											<span style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>
+												{index === currentActiveStep ? 'Đang xử lý' : 'Chưa đến bước này'}
+											</span>
+										)}
 										{step.comment && onViewComments && (
 											<Button type='primary' size='small' onClick={() => onViewComments(step.commentType)}>
-												{intl.formatMessage({ id: 'minor.idm.detail.process.viewComments' })}
+												{intl.formatMessage({
+													id:
+														step.status === ETrangThaiDangKyChuyenNganh.KHONG_DUYET
+															? 'minor.idm.detail.process.viewReason'
+															: 'minor.idm.detail.process.viewNotes',
+												})}
 											</Button>
 										)}
 									</Space>

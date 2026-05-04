@@ -1,7 +1,7 @@
 import { ETrangThaiDangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import type { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
-import { CloseOutlined } from '@ant-design/icons';
+import { EditOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Card, Col, Descriptions, Divider, Row, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useLocation, useModel, useNavigate, useParams } from 'umi';
@@ -9,6 +9,7 @@ import ProgramDesignTable from '../CustomBuild/components/ProgramDesignTable';
 import DecisionCommentsModal from './components/DecisionCommentsModal';
 import PersonalInfo from './components/PersonalInfo';
 import ProcessSidebar from './components/ProcessSidebar';
+import PageCard from '@/components/PageCard';
 
 const DetailSinhVienDangKyChuyenNganh = () => {
 	const intl = useIntl();
@@ -54,10 +55,17 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 		}
 	};
 
+	const isPersonalRegistration =
+		phieuDkCtdtMe?.loai === ELoaiPhieuDkCtdt.PERSONAL ||
+		!!phieuDkCtdtMe?.mucTieuLyDo ||
+		(phieuDkCtdtMe?.khoiHpCtList?.length ?? 0) > 0 ||
+		!!phieuDkCtdtMe?.hoTenCoVanHocTapChinh ||
+		!!phieuDkCtdtMe?.maCoVanHocTapChinh;
+
 	return (
 		<>
-			<Card
-				className='card-borderless card-big-title'
+			<PageCard
+			hideInnerCard
 				title={
 					isMinor
 						? intl.formatMessage({ id: 'minor.detail.title.minor' })
@@ -74,14 +82,13 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 						<Breadcrumb.Item>{intl.formatMessage({ id: 'minor.breadcrumb.detail' })}</Breadcrumb.Item>
 					</Breadcrumb>
 				}
-			></Card>
+			></PageCard>
 			<Row gutter={16}>
 				<Col span={6}>
 					<ProcessSidebar
 						currentStep={currentStep}
 						onStepChange={setCurrentStep}
 						onViewComments={handleViewComments}
-						showViewCommentsStepIndex={1}
 					/>
 				</Col>
 
@@ -97,7 +104,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 								<div style={{ display: 'flex', gap: 16, flexDirection: 'column' }}>
 									<Descriptions
 										column={2}
-										layout='vertical'
+										layout='horizontal'
 										title={intl.formatMessage({ id: 'minor.detail.advisorPrimary' })}
 									>
 										<Descriptions.Item label={intl.formatMessage({ id: 'minor.detail.fullName' })}>
@@ -109,7 +116,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 									</Descriptions>
 									<Descriptions
 										column={2}
-										layout='vertical'
+										layout='horizontal'
 										title={intl.formatMessage({ id: 'minor.detail.advisorSecondary' })}
 									>
 										<Descriptions.Item label={intl.formatMessage({ id: 'minor.detail.fullName' })}>
@@ -121,7 +128,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 									</Descriptions>
 								</div>
 							</div>
-							{phieuDkCtdtMe?.loai === ELoaiPhieuDkCtdt.PERSONAL && (
+							{isPersonalRegistration && (
 								<div>
 									<Divider orientation='left' className='divider-big-title' style={{ marginTop: 0 }} dashed>
 										{intl.formatMessage({ id: 'minor.idm.goalsAndRationale.title' })}
@@ -130,7 +137,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 								</div>
 							)}
 
-							{phieuDkCtdtMe?.loai === ELoaiPhieuDkCtdt.PERSONAL && (
+							{isPersonalRegistration && (
 								<div>
 									<Divider orientation='left' className='divider-big-title' style={{ marginTop: 0 }} dashed>
 										{intl.formatMessage({ id: 'minor.idm.programDesign.title' })}
@@ -139,10 +146,17 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 									<ProgramDesignTable data={phieuDkCtdtMe?.khoiHpCtList || []} hideActions />
 								</div>
 							)}
-							{phieuDkCtdtMe?.trangThai === ETrangThaiDangKyChuyenNganh.NHAP && (
+							{([
+								ETrangThaiDangKyChuyenNganh.NHAP,
+								ETrangThaiDangKyChuyenNganh.CHO_DUYET,
+								ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA,
+							].includes(phieuDkCtdtMe?.trangThai as ETrangThaiDangKyChuyenNganh) &&
+								phieuDkCtdtMe?.trangThaiDuyetCVHT !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
+								phieuDkCtdtMe?.trangThaiDuyetKhoaBoMon !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
+								phieuDkCtdtMe?.trangThaiDuyetQldt !== ETrangThaiDangKyChuyenNganh.DA_DUYET) && (
 								<div className='form-footer'>
-									<Button icon={<CloseOutlined />} onClick={handleEdit}>
-										{intl.formatMessage({ id: 'minor.detail.edit' })}
+									<Button icon={<EditOutlined />} type='primary' onClick={handleEdit}>
+										{intl.formatMessage({ id: 'global.button.chinhsua' })}
 									</Button>
 								</div>
 							)}

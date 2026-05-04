@@ -1,9 +1,10 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
+import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import { ELoaiDangKyTheoLop, loaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Popover, Select, Space } from 'antd';
+import { Button, Divider, Flex, Popover, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
@@ -31,6 +32,8 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 	const allLoaiDangKy = Object.values(ELoaiDangKyTheoLop);
 	if (!khoaNganhMe?.khoaNganhPhu?.ma) allLoaiDangKy.splice(-2, 1);
 	const danhSachMaHpDangKy = danhSachLopDangKy.map((item) => item.maHocPhan);
+	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
+	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 
 	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
 
@@ -43,6 +46,14 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 			setHocPhan(undefined);
 		};
 	}, []);
+
+	const handleXemDeCuong = (maHocPhan: string, tenHocPhan?: string) => {
+		setDeCuongModal({
+			deCuongId: maHocPhan,
+			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${tenHocPhan || maHocPhan || ''}`,
+		});
+		setVisibleDeCuong(true);
+	};
 
 	const onCell = (rec: HocPhan.IRecord) => ({
 		onClick: () => setHocPhan(rec),
@@ -69,6 +80,18 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 			width: 80,
 			align: 'center',
 			filterType: 'string',
+			render: (val, rec) => {
+				return (
+					<a
+						onClick={(e) => {
+							e.stopPropagation();
+							handleXemDeCuong(val, rec?.ten);
+						}}
+					>
+						{val}
+					</a>
+				);
+			},
 			onCell,
 		},
 		{
@@ -94,7 +117,7 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 
 	return (
 		<>
-			<Space wrap>
+			<Flex justify='space-between' align='center' style={{ marginBottom: 12 }}>
 				<Select
 					options={allLoaiDangKy.map((item) => ({
 						key: item,
@@ -110,7 +133,9 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 						{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.btn.huongdandangky' })}
 					</Button>
 				</Popover>
-			</Space>
+			</Flex>
+
+			<Divider style={{ margin: '8px 0' }} />
 
 			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange} style={{ marginTop: 12 }}>
 				<Pane initialSize={paneSize} minSize='250px' maxSize='50%'>
@@ -128,6 +153,15 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 
 				<Pane>{props.children}</Pane>
 			</SplitPane>
+
+			{deCuongModal && (
+				<ModalHocPhan
+					visible={visibleDeCuong}
+					setVisible={setVisibleDeCuong}
+					deCuongId={deCuongModal.deCuongId}
+					title={deCuongModal.title}
+				/>
+			)}
 		</>
 	);
 };

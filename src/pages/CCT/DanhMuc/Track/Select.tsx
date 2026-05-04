@@ -50,7 +50,7 @@ const SelectTrack = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Select Track'
+			placeholder={intl.formatMessage({ id: 'track.select' })}
 			style={{ width: '100%', ...style }}
 		/>
 	);
