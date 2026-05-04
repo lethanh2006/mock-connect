@@ -10,10 +10,14 @@ interface StepReviewSubmitProps {
 	formData: PhieuDkCtdt.UpdatePhieuDkCtdtMeDto;
 	onPrevious: () => void;
 	onSubmit: () => void;
+	onSaveDraft?: () => void;
+	isMinor?: boolean;
 }
 
-const StepReviewSubmit = ({ formData, onPrevious, onSubmit }: StepReviewSubmitProps) => {
+const StepReviewSubmit = ({ formData, onPrevious, onSubmit, onSaveDraft, isMinor = false }: StepReviewSubmitProps) => {
 	const intl = useIntl();
+	const tenDonViPhuTrach = Form.useWatch('tenDonViPhuTrach', Form.useFormInstance());
+	const maDonViPhuTrach = Form.useWatch('maDonViPhuTrach', Form.useFormInstance());
 	const { record: phieuMeDotHienTai } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
 	const { record: kyHienTai } = useModel('daotao.dotdkctdt');
 	const khoiHpCtList = formData?.khoiHpCtList || [];
@@ -51,6 +55,21 @@ const StepReviewSubmit = ({ formData, onPrevious, onSubmit }: StepReviewSubmitPr
 						<Divider orientation='left' dashed className='divider-big-title'>
 							{intl.formatMessage({ id: 'minor.idm.review.applicationSummary' })}
 						</Divider>
+						{isMinor && tenDonViPhuTrach && (
+							<Col span={24}>
+								<Descriptions
+									column={1}
+									className='highlight'
+									layout='horizontal'
+									items={[
+										{
+											label: intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit' }),
+											children: `${tenDonViPhuTrach}${maDonViPhuTrach ? ` (${maDonViPhuTrach})` : ''}`,
+										},
+									]}
+								/>
+							</Col>
+						)}
 						<Col xs={24} md={24}>
 							<Descriptions
 								column={2}
@@ -199,27 +218,37 @@ const StepReviewSubmit = ({ formData, onPrevious, onSubmit }: StepReviewSubmitPr
 					<Form.Item
 						name='confirmCheckbox'
 						valuePropName='checked'
-						rules={[{ required: true, message: intl.formatMessage({ id: 'minor.idm.review.confirmRequired' }) }]}
+						validateTrigger='onChange'
+						rules={[
+							{
+								validator: (_, value) => {
+									if (value) {
+										return Promise.resolve();
+									}
+									return Promise.reject(new Error(intl.formatMessage({ id: 'minor.idm.review.confirmRequired' })));
+								},
+							},
+						]}
 					>
 						<Checkbox>{intl.formatMessage({ id: 'minor.idm.review.confirmLabel' })}</Checkbox>
-						<ul>
-							<li style={{ color: 'var(--color-primary)' }}>
-								{intl.formatMessage({ id: 'minor.idm.review.confirmItem1' })}
-							</li>
-							<li style={{ color: 'var(--color-primary)' }}>
-								{intl.formatMessage({ id: 'minor.idm.review.confirmItem2' })}
-							</li>
-							<li style={{ color: 'var(--color-primary)' }}>
-								{intl.formatMessage({ id: 'minor.idm.review.confirmItem3' })}
-							</li>
-							<li style={{ color: 'var(--color-primary)' }}>
-								{intl.formatMessage({ id: 'minor.idm.review.confirmItem4' })}
-							</li>
-						</ul>
 					</Form.Item>
+					<ul style={{ paddingLeft: 24 }}>
+						<li style={{ color: 'var(--color-primary)' }}>
+							{intl.formatMessage({ id: 'minor.idm.review.confirmItem1' })}
+						</li>
+						<li style={{ color: 'var(--color-primary)' }}>
+							{intl.formatMessage({ id: 'minor.idm.review.confirmItem2' })}
+						</li>
+						<li style={{ color: 'var(--color-primary)' }}>
+							{intl.formatMessage({ id: 'minor.idm.review.confirmItem3' })}
+						</li>
+						<li style={{ color: 'var(--color-primary)' }}>
+							{intl.formatMessage({ id: 'minor.idm.review.confirmItem4' })}
+						</li>
+					</ul>
 				</Col>
 			</Row>
-			<FormFooter showPrevious onPrevious={onPrevious} onSubmit={onSubmit} />
+			<FormFooter showPrevious onPrevious={onPrevious} onSubmit={onSubmit} onSaveDraft={onSaveDraft} />
 		</>
 	);
 };

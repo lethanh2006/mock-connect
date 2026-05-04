@@ -4,24 +4,26 @@ import { ETrangThaiKqht } from '@/services/DaoTao/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import rules from '@/utils/rules';
 import { CheckCircleOutlined, CloseCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Card, Col, Collapse, Divider, Form, FormInstance, Input, Modal, Row } from 'antd';
+import { Card, Col, Descriptions, Divider, Form, FormInstance, Input, Modal, Row } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import FormFooter from '../FormFooter';
 import FormHpBuild from '../FormHpBuild';
 
-const { Panel } = Collapse;
-
 interface StepProgramDesignProps {
 	onPrevious: () => void;
 	onNext: () => void;
+	onSaveDraft?: () => void;
+	isMinor?: boolean;
 	form: FormInstance<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto>;
 }
 
-const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps) => {
+const StepProgramDesign = ({ onPrevious, onNext, onSaveDraft, isMinor = false, form }: StepProgramDesignProps) => {
 	const intl = useIntl();
 	const [showEdit, setShowEdit] = useState(false);
 	const khoiHpCtList = Form.useWatch('khoiHpCtList', form) || [];
+	const tenDonViPhuTrach = Form.useWatch('tenDonViPhuTrach', form);
+	const maDonViPhuTrach = Form.useWatch('maDonViPhuTrach', form);
 	const { record: dotDangKy } = useModel('daotao.dotdkctdt');
 
 	// Tính tổng số tín chỉ
@@ -41,7 +43,7 @@ const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps)
 	const minCredits = dotDangKy?.minCredit ?? 0;
 	const maxCompletedCredits = dotDangKy?.maxCompletedCredit ?? 0;
 	const meetsMinCredits = totalCredits >= minCredits;
-	const meetsMaxCompletedCredits = completedCredits > 0 && completedCredits <= maxCompletedCredits;
+	const isWithinMaxCompletedCredits = completedCredits <= maxCompletedCredits;
 
 	const handleDelete = (index: number) => {
 		const updated = khoiHpCtList.filter((_: any, idx: number) => idx !== index);
@@ -50,6 +52,19 @@ const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps)
 
 	return (
 		<>
+			{isMinor && tenDonViPhuTrach && (
+				<Descriptions
+					column={1}
+					className='highlight'
+					layout='horizontal'
+					items={[
+						{
+							label: intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit' }),
+							children: `${tenDonViPhuTrach}${maDonViPhuTrach ? ` (${maDonViPhuTrach})` : ''}`,
+						},
+					]}
+				/>
+			)}
 			<Row gutter={[0, 8]}>
 				<Col span={24}>
 					<Form.Item
@@ -62,21 +77,14 @@ const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps)
 				</Col>
 
 				<Col span={24}>
-					<Collapse defaultActiveKey={['1']}>
-						<Panel header={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.title' })} key='1'>
-							<div style={{ marginBottom: 8 }}>
-								{intl.formatMessage({ id: 'minor.idm.goalsAndRationale.description' })}{' '}
-							</div>
-							<Form.Item name='mucTieuLyDo'>
-								<Input.TextArea
-									rows={6}
-									placeholder={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.placeholder' })}
-									showCount
-									maxLength={500}
-								/>
-							</Form.Item>
-						</Panel>
-					</Collapse>
+					<Form.Item name='mucTieuLyDo' rules={rules.required} label={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.title' })}>
+						<Input.TextArea
+							rows={6}
+							placeholder={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.placeholder' })}
+							showCount
+							maxLength={5000}
+						/>
+					</Form.Item>
 
 					<div>
 						<Row gutter={[0, 8]} style={{ marginBottom: 8 }}>
@@ -92,7 +100,7 @@ const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps)
 									value: `${totalCredits} / ${minCredits}`,
 								},
 								{
-									ok: !meetsMaxCompletedCredits,
+									ok: isWithinMaxCompletedCredits,
 									label: intl.formatMessage({ id: 'minor.idm.programDesign.creditsCompletedMax' }),
 									value: `${completedCredits} / ${maxCompletedCredits}`,
 								},
@@ -128,7 +136,47 @@ const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps)
 								</Col>
 							))}
 							<Col span={24}>
-								<Form.Item name='khoiHpCtList'>
+								<Form.Item
+									name='khoiHpCtList'
+									rules={[
+										{
+											validator: async (_, value) => {
+												const currentTotalCredits = (value || []).reduce(
+													(sum: number, item: any) => sum + (item.hocPhanChinh?.soTinChi || 0),
+													0,
+												);
+												if (currentTotalCredits < minCredits) {
+													return Promise.reject(
+														new Error(
+															intl.formatMessage({ id: 'minor.idm.programDesign.error.minCredits' }, { min: minCredits }),
+														),
+													);
+												}
+
+												const currentCompletedCredits = (value || []).reduce((sum: number, item: any) => {
+													const status = item.hocPhanChinh?.trangThaiKqht;
+													if (status === ETrangThaiKqht.COMPLETED || status === ETrangThaiKqht.IN_PROGRESS) {
+														return sum + (item.hocPhanChinh?.soTinChi || 0);
+													}
+													return sum;
+												}, 0);
+
+												if (currentCompletedCredits > maxCompletedCredits) {
+													return Promise.reject(
+														new Error(
+															intl.formatMessage(
+																{ id: 'minor.idm.programDesign.error.maxCompletedCredits' },
+																{ max: maxCompletedCredits },
+															),
+														),
+													);
+												}
+
+												return Promise.resolve();
+											},
+										},
+									]}
+								>
 									<ProgramDesignTable
 										data={khoiHpCtList}
 										onDelete={handleDelete}
@@ -164,7 +212,7 @@ const StepProgramDesign = ({ onPrevious, onNext, form }: StepProgramDesignProps)
 				</Col>
 			</Row>
 
-			<FormFooter showPrevious onPrevious={onPrevious} onNext={onNext} />
+			<FormFooter showPrevious onPrevious={onPrevious} onNext={onNext} onSaveDraft={onSaveDraft} />
 		</>
 	);
 };
