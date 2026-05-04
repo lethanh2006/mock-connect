@@ -8,7 +8,11 @@ import {
 import { chuanHoaObject } from '@/utils/utils';
 import { message } from 'antd';
 import { useState } from 'react';
+import { getIntl } from 'umi';
 import useInitService from './useInitService';
+
+const formatIntlMsg = (id: string, values?: Record<string, string | number>) =>
+	getIntl()?.formatMessage({ id }, values) || id;
 
 /**
  *
@@ -236,7 +240,7 @@ const useInitModel = <T extends object>(
 				path,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(messageText ?? 'Thêm mới thành công');
+			message.success(messageText ?? formatIntlMsg('global.message.themmoithanhcong'));
 			setLoading(false);
 			if (getData) getData();
 			else getModel();
@@ -269,7 +273,7 @@ const useInitModel = <T extends object>(
 				path,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(messageText ?? 'Lưu thành công');
+			message.success(messageText ?? formatIntlMsg('global.message.luuthanhcong'));
 			setLoading(false);
 			if (getData) getData();
 			else if (!notGet) getModel();
@@ -300,7 +304,7 @@ const useInitModel = <T extends object>(
 				chuanHoaObject(payload),
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(messageText ?? 'Lưu thành công');
+			message.success(messageText ?? formatIntlMsg('global.message.luuthanhcong'));
 			setLoading(false);
 			if (getData) getData();
 			else if (!notGet) getModel();
@@ -328,7 +332,7 @@ const useInitModel = <T extends object>(
 				path,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(config?.messageText ?? 'Xóa thành công');
+			message.success(config?.messageText ?? formatIntlMsg('global.message.xoathanhcong'));
 
 			const maxPage = Math.ceil((total - 1) / limit) || 1;
 			let newPage = page;
@@ -359,7 +363,7 @@ const useInitModel = <T extends object>(
 				undefined,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(`Xóa thành công ${ids.length} mục`);
+			message.success(formatIntlMsg('global.message.deletedcount', { count: ids.length }));
 
 			const maxPage = Math.ceil((total - ids.length) / limit) || 1;
 			let newPage = page;
@@ -457,7 +461,7 @@ const useInitModel = <T extends object>(
 				{ rows: payload },
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(config?.messageText ?? 'Đã kiểm tra dữ liệu');
+			message.success(config?.messageText ?? formatIntlMsg('global.message.validated'));
 			return res.data?.data ?? [];
 		} catch (err) {
 			return Promise.reject(err);
@@ -481,7 +485,7 @@ const useInitModel = <T extends object>(
 				{ rows: payload },
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
-			message.success(config?.messageText ?? 'Đã nhập dữ liệu');
+			message.success(config?.messageText ?? formatIntlMsg('global.message.imported'));
 			return res.data?.data ?? [];
 		} catch (err) {
 			return Promise.reject(err);
