@@ -156,7 +156,7 @@ const ActivityPage = () => {
 	};
 
 	return (
-		<Card title='List Activity' className='table-base-card' variant='borderless'>
+		<Card title={intl.formatMessage({ id: 'activity.list' })} className='table-base-card' variant='borderless'>
 			<Tabs
 				activeKey={activeKey}
 				onChange={(tab) => {
@@ -165,9 +165,9 @@ const ActivityPage = () => {
 					setLimit(9);
 				}}
 			>
-				<Tabs.TabPane key='1' tab='Upcoming' />
-				<Tabs.TabPane key='2' tab='Ongoing' />
-				<Tabs.TabPane key='3' tab='Completed' />
+				<Tabs.TabPane key='1' tab={intl.formatMessage({ id: 'activity.upcoming' })} />
+				<Tabs.TabPane key='2' tab={intl.formatMessage({ id: 'activity.ongoing' })} />
+				<Tabs.TabPane key='3' tab={intl.formatMessage({ id: 'activity.completed' })} />
 			</Tabs>
 
 			<FilterSuKien value={filter} onChange={setFilter} onReload={getData} />
@@ -226,7 +226,7 @@ const ActivityPage = () => {
 									if (isRegistered && isNotStarted) {
 										return (
 											<Button block disabled>
-												REGISTERED
+												{intl.formatMessage({ id: 'activity.dangky' })}
 											</Button>
 										);
 									}
@@ -245,7 +245,7 @@ const ActivityPage = () => {
 													});
 												}}
 											>
-												Update Evidence
+												{intl.formatMessage({ id: 'activity.update' })}
 											</Button>
 										);
 									}
@@ -254,7 +254,7 @@ const ActivityPage = () => {
 									if (!isRegistered && isFullSlot) {
 										return (
 											<Button block disabled>
-												FULL SLOT
+												{intl.formatMessage({ id: 'activity.full' })}
 											</Button>
 										);
 									}
@@ -269,7 +269,7 @@ const ActivityPage = () => {
 													setVisibleForm(true);
 												}}
 											>
-												SEE MORE
+												{intl.formatMessage({ id: 'activity.see' })}
 											</Button>
 										);
 									}
@@ -281,7 +281,7 @@ const ActivityPage = () => {
 											onConfirm={() => registerActivityModel(item._id, getData).then(() => setVisibleDangKy(true))}
 										>
 											<Button type='primary' block>
-												REGISTER NOW
+												{intl.formatMessage({ id: 'activity.now' })}
 											</Button>
 										</Popconfirm>
 									);
@@ -347,7 +347,7 @@ const ActivityPage = () => {
 			<ModalDangKyThanhCong visibleDangKy={visibleDangKy} setVisibleDangKy={setVisibleDangKy} />
 
 			<ModalExpandable
-				title={'Update Evidence'}
+				title={intl.formatMessage({ id: 'activity.update' })}
 				width={1000}
 				onCancel={() => setVisibleFormActivityOutcome(false)}
 				footer={null}

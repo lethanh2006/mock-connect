@@ -7,7 +7,7 @@ import { BookOutlined, CheckCircleOutlined, NodeIndexOutlined, ScheduleOutlined 
 import { Alert, Card, Col, Descriptions, Row, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useAccess, useIntl, useModel } from 'umi';
 import LichSuQuyDoiDiemPage from '../QuyDoiDiem';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import flag from './components/flag.svg';
@@ -25,6 +25,7 @@ const TienTrinhHocTap = () => {
 		loading: loadingChuongTrinh,
 		getChuongTrinhHienTaiModel,
 	} = useModel('daotao.chuongtrinhdaotao');
+	const access = useAccess();
 
 	const ngoaiThoiGian =
 		recLoTrinh?.dotDangKyPathway?.kichHoat === false ||
@@ -159,6 +160,7 @@ const TienTrinhHocTap = () => {
 							menuKey: 'lo-trinh-hoc-tap',
 							content: <PathWayPage getData={() => getByIdModel(`me?maKhoaNganh=${maKhoaNganh}`, true)} />,
 							icon: <NodeIndexOutlined />,
+							hide: !access.cctFilter(),
 						},
 						{
 							title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan' }),

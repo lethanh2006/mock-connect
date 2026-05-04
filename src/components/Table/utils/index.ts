@@ -1,6 +1,7 @@
 import React from 'react';
 import type { IColumn } from '../typing';
 
+export { normalizeExternalConditions } from './conditions';
 export {
 	findFiltersInColumns,
 	markExternalFilters,
@@ -8,17 +9,22 @@ export {
 	splitFiltersBySource,
 	stripFilterSource,
 } from './filters';
-export { normalizeExternalConditions } from './conditions';
 
 export const updateSearchStorage = (dataIndex: string, value: string) => {
+	if (!value || !value.trim()) return;
 	const savedSearchValues = JSON.parse(localStorage.getItem('dataTimKiem') || '{}');
 	const currentSearchValues = savedSearchValues[dataIndex] || [];
 
-	const newValues = [value, ...currentSearchValues];
-	const uniqueValues = [...new Set(newValues)].slice(0, 10);
+	const uniqueValues = currentSearchValues.filter((item: string) => item.toLowerCase() !== value.toLowerCase());
+	const newValues = [value, ...uniqueValues].slice(0, 10);
 
-	savedSearchValues[dataIndex] = uniqueValues;
+	savedSearchValues[dataIndex] = newValues;
 	localStorage.setItem('dataTimKiem', JSON.stringify(savedSearchValues));
+};
+
+export const getSearchStorage = (dataIndex: string) => {
+	const saved = JSON.parse(localStorage.getItem('dataTimKiem') || '{}');
+	return saved[dataIndex] || [];
 };
 
 // Hàm hỗ trợ trích lọc nội dung text từ ReactNode (như Tooltip, Tag, v.v.)

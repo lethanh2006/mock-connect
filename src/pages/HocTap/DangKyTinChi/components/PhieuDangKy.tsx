@@ -12,8 +12,8 @@ import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
 import { inputFormat } from '@/utils/utils';
-import { CalendarOutlined, DeleteOutlined, ReloadOutlined, SendOutlined } from '@ant-design/icons';
-import { Col, Divider, Popconfirm, Row, Space, Tag } from 'antd';
+import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
+import { Col, Popconfirm, Row, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -56,14 +56,14 @@ const PhieuDangKy = () => {
 		.map((item) =>
 			hocPhanCoLopThucHanh.includes(item.maHocPhan)
 				? {
-					...item,
-					// Gộp lịch học lớp Chính với lớp hiển thị
-					maHoaLichHoc:
-						danhSachLopDangKy
-							?.filter((j) => j.maHocPhan === item.maHocPhan)
-							?.map((j) => j.maHoaLichHoc ?? [])
-							?.flat() ?? [],
-				}
+						...item,
+						// Gộp lịch học lớp Chính với lớp hiển thị
+						maHoaLichHoc:
+							danhSachLopDangKy
+								?.filter((j) => j.maHocPhan === item.maHocPhan)
+								?.map((j) => j.maHoaLichHoc ?? [])
+								?.flat() ?? [],
+					}
 				: item,
 		);
 	const tongTinChi = _.sumBy(
@@ -205,9 +205,18 @@ const PhieuDangKy = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.trangthai' }),
 			dataIndex: 'trangThai',
-			width: 110,
+			width: 120,
 			align: 'center',
-			render: (val: ETrangThaiDangKyTinChi) => <Tag color={ColorTrangThaiDangKyTinChi[val]}>{val}</Tag>,
+			render: (val, rec) => (
+				<Space wrap size={'small'}>
+					<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>{val}</Tag>
+					{rec?.isWaitlist && (
+						<Tag color={'orange'}>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
+					)}
+				</Space>
+			),
+
+			fixed: 'right',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy' }),
@@ -268,10 +277,7 @@ const PhieuDangKy = () => {
 
 	return (
 		<>
-			<Divider style={{ marginTop: 24 }}>
-				{intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}
-			</Divider>
-			<Row gutter={[8, 12]} style={{ margin: 16 }}>
+			<Row gutter={[8, 12]} style={{ marginBottom: 12 }}>
 				<Col span={24} md={10}>
 					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
 					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
@@ -304,11 +310,9 @@ const PhieuDangKy = () => {
 				loading={loading}
 				hasTotal
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
+				onReload={getData}
 			>
 				<Space wrap style={{ margin: '0 16px' }}>
-					<ButtonExtend cooldownMs={10000} icon={<ReloadOutlined />} onClick={getData}>
-						{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.tailai' })}
-					</ButtonExtend>
 					{danhSachLopDangKy.length ? (
 						<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
 							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
@@ -326,8 +330,8 @@ const PhieuDangKy = () => {
 					) : null}
 
 					{tongTinChiChuaDk &&
-						dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
-						sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
+					dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
+					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
 						<ButtonExtend
 							tooltip={
 								tongTinChi > soTinChiToiDa
@@ -336,11 +340,11 @@ const PhieuDangKy = () => {
 										? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin' })
 										: !dangTrongThoiGian
 											? intl.formatMessage({
-												id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
-											})
+													id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
+												})
 											: intl.formatMessage({
-												id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc',
-											})
+													id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc',
+												})
 							}
 							type='primary'
 							icon={<SendOutlined />}

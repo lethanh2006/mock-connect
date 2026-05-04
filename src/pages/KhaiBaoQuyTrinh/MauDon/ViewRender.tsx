@@ -11,6 +11,7 @@ import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { currencyFormat } from '@/utils/utils';
 import { Modal, Tag } from 'antd';
 import { useState } from 'react';
+import { useIntl } from 'umi';
 
 const ViewRender = (props: {
 	cauHinh: LoaiHinh.TruongThongTin | LoaiHinh.Cot;
@@ -20,6 +21,7 @@ const ViewRender = (props: {
 	// const { danhSach } = useModel('quanlykhoahoc.danhmuc.chung');
 	// const { danhSach: danhSachLoaiHinh } = useModel('quanlykhoahoc.loaihinhnckh');
 	const { cauHinh, recordSanPham, isCot } = props;
+	const intl = useIntl();
 
 	const [visibleFormTable, setVisibleFormTable] = useState<boolean>(false);
 	const [editFormTable, setEditFormTable] = useState<boolean>(false);
@@ -142,7 +144,7 @@ const ViewRender = (props: {
 						destroyOnClose
 						width={700}
 						footer={false}
-						title={`${editFormTable ? 'Chỉnh sửa' : 'Thêm mới'} ${cauHinh.ten}`}
+						title={`${intl.formatMessage({ id: editFormTable ? 'global.button.chinhsua' : 'global.table.index.button.themmoi' })} ${cauHinh.ten}`}
 						open={visibleFormTable}
 						onCancel={() => setVisibleFormTable(false)}
 					>

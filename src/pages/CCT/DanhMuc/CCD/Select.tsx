@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
 /**
- * Secect Căn cứ pháp lý để cho vào FormItem
+ * Select Căn cứ pháp lý để cho vào FormItem
  */
 const SelectActivitiesTypeDomain = (props: {
 	value?: string;
@@ -23,7 +23,14 @@ const SelectActivitiesTypeDomain = (props: {
 		getAllModel(!!isSetRecord, { order: 1 }, { ...condition });
 	}, [JSON.stringify(condition)]);
 
-	const options = (danhSach || [])
+	const fixedOption = {
+		key: 'award-recognition',
+		value: 'award-recognition',
+		label: 'Award & Recognition',
+		rawData: null,
+	};
+
+	const dynamicOptions = (danhSach || [])
 		.filter((item) => {
 			if (item.isActive) return true;
 
@@ -40,6 +47,8 @@ const SelectActivitiesTypeDomain = (props: {
 			rawData: item,
 		}));
 
+	const options = [...dynamicOptions, fixedOption];
+
 	return (
 		<Select
 			disabled={disabled}
@@ -50,7 +59,7 @@ const SelectActivitiesTypeDomain = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Select Co-curricular Domain'
+			placeholder={intl.formatMessage({ id: 'ccd.select' })}
 			style={{ width: '100%', ...style }}
 		/>
 	);

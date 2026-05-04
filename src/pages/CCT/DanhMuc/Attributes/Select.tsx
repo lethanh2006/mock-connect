@@ -50,7 +50,7 @@ const SelectAttributesManagement = (props: {
 			options={options}
 			showSearch
 			optionFilterProp='label'
-			placeholder='Select attribute'
+			placeholder={intl.formatMessage({ id: 'attribute.select' })}
 			style={{ width: '100%', ...style }}
 		/>
 	);
