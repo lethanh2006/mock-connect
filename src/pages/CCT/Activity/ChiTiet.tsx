@@ -114,13 +114,13 @@ const ChiTietActivity = (props: {
 						}
 					>
 						<Button type='link' className='btn-unregister'>
-							UNREGISTER
+							{intl.formatMessage({ id: 'activity.chitiet.huydangky' })}
 						</Button>
 					</Popconfirm>
 				)}
 
 				<Space wrap>
-					<Button onClick={() => setVisibleForm(false)}>CLOSE</Button>
+					<Button onClick={() => setVisibleForm(false)}>{intl.formatMessage({ id: 'activity.chitiet.dong' })}</Button>
 
 					{!record?.activityOutcome?.workflow && !isFullSlot ? (
 						<Popconfirm
@@ -135,7 +135,7 @@ const ChiTietActivity = (props: {
 							disabled={outTime}
 						>
 							<Button type='primary' disabled={outTime}>
-								REGISTER NOW
+								{intl.formatMessage({ id: 'activity.chitiet.dangky' })}
 							</Button>
 						</Popconfirm>
 					) : editableWorkflow && isOngoing ? (
@@ -149,10 +149,10 @@ const ChiTietActivity = (props: {
 								});
 							}}
 						>
-							Update Evidence
+							{intl.formatMessage({ id: 'activity.chitiet.update' })}
 						</Button>
 					) : isFullSlot && !record?.activityOutcome?.workflow ? (
-						<Button disabled>FULL SLOT</Button>
+						<Button disabled>{intl.formatMessage({ id: 'activity.full' })}</Button>
 					) : null}
 				</Space>
 			</div>
