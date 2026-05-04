@@ -180,7 +180,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 	return (
 		<PageCard
-			level={props.isDashBoard && APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH === 'VINUNI' ? 2 : 3}
+			level={props.isDashBoard && APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH === 'VINUNI' ? 2 : 4}
 			hideInnerCard
 			className='card-baitap-dashboard'
 			title={
@@ -259,12 +259,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 				</Space>
 			}
 		>
-			<PageCard
-				level={3}
-				hideInnerCard
-				className={`${isDashBoard && 'content-wrapper'} `}
-				styles={{ body: { padding: 0 } }}
-			>
+			<PageCard hideInnerCard className={`${isDashBoard && 'content-wrapper'} `}>
 				<div ref={containerRef}>
 					{!!dataToUse.length ? (
 						<Carousel
