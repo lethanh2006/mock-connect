@@ -151,8 +151,9 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 	};
 
 	return (
-		<Card
-			variant='borderless'
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={
 				<Space>
 					{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.title' })}{' '}
@@ -189,13 +190,14 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 				</Space>
 			}
 		>
-			<PageCard hideInnerCard style={{ borderRadius: 8, maxHeight: '348px', overflowX: 'scroll' }}>
+			<Card variant='borderless' style={{ borderRadius: 8, maxHeight: '348px', overflowX: 'scroll' }}>
 				<Spin spinning={loading}>
 					{danhSach.length ? (
 						danhSach.map((item, index) => renderDiscussionItem(item, index))
 					) : (
 						<Empty
 							image={Empty.PRESENTED_IMAGE_SIMPLE}
+							style={{ margin: '16px 0' }}
 							description={
 								sortMode === 'chua-xem'
 									? intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.empty' })
@@ -204,8 +206,8 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 						/>
 					)}
 				</Spin>
-			</PageCard>
-		</Card>
+			</Card>
+		</PageCard>
 	);
 };
 
