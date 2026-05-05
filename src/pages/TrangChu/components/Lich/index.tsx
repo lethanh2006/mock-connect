@@ -9,6 +9,7 @@ import FormLichCaNhan from '@/pages/Calendar/components/FormLichCaNhan';
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import SlideButtonIcon from '../SlideButtonIcon';
 import './style.less';
+import PageCard from '@/components/PageCard';
 
 interface SuKienItem {
 	_id: string;
@@ -360,9 +361,9 @@ const LichDashboard = () => {
 
 	return (
 		<>
-			<Card
-				variant='borderless'
-				className='card-borderless card-big-title'
+			<PageCard
+				level={2}
+				hideInnerCard
 				title={intl.formatMessage({ id: 'trangchu.lich.title' })}
 				extra={
 					<Link to='/calendar' className='xem-tat-ca-link'>
@@ -373,7 +374,7 @@ const LichDashboard = () => {
 				<Card variant='borderless' className='calendar-card'>
 					{renderCalendar()}
 				</Card>
-			</Card>
+			</PageCard>
 
 			{/* Modal xem list sự kiện */}
 			<Modal
