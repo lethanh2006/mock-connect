@@ -12,6 +12,7 @@ import FilterDotDangKy from './components/FilterDotDangKy';
 import ModalLichSuVuotTin from './components/ModalLichSuVuotTin';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
+import PageCard from '@/components/PageCard';
 
 const DangKyTinChiPage = () => {
 	const intl = useIntl();
@@ -47,7 +48,7 @@ const DangKyTinChiPage = () => {
 	}, [isVerified]);
 
 	return !isVerified ? (
-		<Card className='card-big-title' variant='borderless' title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
+		<Card className='card-big-title card-borderless' variant='borderless' title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<Card
@@ -160,9 +161,9 @@ const DangKyTinChiPage = () => {
 					</Card>
 				</Col>
 				<Col span={24}>
-					<Card title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}>
+					<PageCard title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}>
 						<PhieuDangKy />
-					</Card>
+					</PageCard>
 				</Col>
 			</Row>
 

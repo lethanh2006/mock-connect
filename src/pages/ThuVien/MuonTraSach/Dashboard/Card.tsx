@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import StatisticsCard from '@/components/StatisticsCard';
 import { StatisticsItem } from '@/components/StatisticsCard/typing';
 import { Card } from 'antd';
@@ -38,9 +39,9 @@ const ThongKeMuonSachCard = () => {
 	];
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless card-big-title'
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.muontra.title' })}
 			extra={
 				<Link to={'/thu-vien/lich-su-muon-tra'} type='link' className='xem-tat-ca-link'>
@@ -55,7 +56,7 @@ const ThongKeMuonSachCard = () => {
 				cardStyle={{ padding: 14 }}
 				rowGutter={12}
 			/>
-		</Card>
+		</PageCard>
 	);
 };
 

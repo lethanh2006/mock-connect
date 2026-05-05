@@ -8,6 +8,7 @@ import { Button, Card, Col, message, Modal, Popconfirm, Row, Space, Tooltip } fr
 import { useEffect, useState } from 'react';
 import { history, Link, useIntl, useModel } from 'umi';
 import './style.less';
+import PageCard from '@/components/PageCard';
 
 const CardDichVuSinhVien = () => {
 	const intl = useIntl();
@@ -139,9 +140,10 @@ const CardDichVuSinhVien = () => {
 
 	return (
 		<>
-			<Card
-				variant='borderless'
-				className='card-borderless card-big-title card-dichvu'
+			<PageCard
+				level={2}
+				hideInnerCard
+				className='card-dichvu'
 				title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.title' })}
 				extra={
 					<Link to='/khai-bao-quy-trinh/dang-ky' className='xem-tat-ca-link'>
@@ -203,7 +205,7 @@ const CardDichVuSinhVien = () => {
 						)}
 					</Row>
 				</Card>
-			</Card>
+			</PageCard>
 
 			{/* Modal chọn đợt khai báo */}
 			<Modal
