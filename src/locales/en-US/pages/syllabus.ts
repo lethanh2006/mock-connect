@@ -1,0 +1,15 @@
+export default {
+	'syllabus.preview.exportToPdf': 'Export PDF',
+	'syllabus.preview.mucLuc': 'Table Of Contents',
+	'syllabus.list.colNguoiSoan': 'Author',
+	'syllabus.list.colNgayTao': 'Created At',
+	'syllabus.list.colTrangThaiDuyet': 'Approval Status',
+	'syllabus.list.colNgayCapNhat': 'Updated At',
+	'syllabus.stat.status.dang_soan_thao': 'Drafting',
+	'syllabus.stat.status.cho_aqa_tham_dinh': 'Pending Review',
+	'syllabus.stat.status.yeu_cau_chinh_sua': 'Revision Requested',
+	'syllabus.stat.status.tu_choi_duyet': 'Rejected',
+	'syllabus.stat.status.da_duyet': 'Approved',
+	'syllabus.stat.status.ban_hanh': 'Issued',
+	'syllabus.stat.status.cho_duyet': 'Pending Approval',
+};

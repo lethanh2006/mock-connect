@@ -1,4 +1,5 @@
 // import PDFViewerV2 from '@/components/PDFViewerV2';
+import PageCard from '@/components/PageCard';
 import BoxFile from '@/pages/HocTap/LopHocPhan/DienDan/components/BoxFile';
 import {
 	colorTrangThaiNopBaiTap,
@@ -15,7 +16,6 @@ import { useMediaQuery } from 'react-responsive';
 import { history, Link, useIntl, useModel } from 'umi';
 import SlideButtonIcon from '../../components/SlideButtonIcon';
 import './style.less';
-import PageCard from '@/components/PageCard';
 
 const { Text } = Typography;
 
@@ -180,6 +180,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 	return (
 		<PageCard
+			level={props.isDashBoard && APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH === 'VINUNI' ? 2 : 4}
 			hideInnerCard
 			className='card-baitap-dashboard'
 			title={
@@ -258,7 +259,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 				</Space>
 			}
 		>
-			<PageCard level={3} hideInnerCard className={`${isDashBoard && 'content-wrapper'} `} styles={{ body: { padding: 0 } }}>
+			<PageCard hideInnerCard className={`${isDashBoard && 'content-wrapper'} `}>
 				<div ref={containerRef}>
 					{!!dataToUse.length ? (
 						<Carousel

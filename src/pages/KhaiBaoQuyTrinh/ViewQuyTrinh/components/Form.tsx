@@ -5,13 +5,12 @@ import type { KhaiBaoQuyTrinh } from '@/services/QuyTrinh/KhaiBao/typings';
 import { EKieuDuLieu } from '@/services/QuyTrinh/LoaiHinh/constants';
 import { getDataDefaultV2 } from '@/services/QuyTrinh/MauDon/maudon';
 import { buildUpLoadMultiFile } from '@/services/uploadFile';
-import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Form, message, Row, Select, Spin } from 'antd';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 	const { currentFormKhaiBao, current, dataQuyTrinh, editFormKhaiBao, recordFormKhaiBao, setEditFormKhaiBao } =
@@ -24,6 +23,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 	const [loadingKhaiBao, setLoadingKhaiBao] = useState<boolean>(false);
 	const [danhSachDonViXuLy, setDanhSachDonViXuLy] = useState<KhaiBaoQuyTrinh.IDonViXuLy[]>([]);
 	const [form] = Form.useForm();
+	const intl = useIntl();
 	const doiTuongDieuPhoi = dataQuyTrinh?.quyTrinh?.danhSachBuocXuLy?.find(
 		(item) => item?.ma === current?.ma,
 	)?.doiTuongDieuPhoi;
@@ -74,7 +74,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 			setEditFormKhaiBao(false);
 			window.scroll({ top: 0, behavior: 'smooth' });
 			if (res) {
-				message.success('Khai báo thành công');
+				message.success(intl.formatMessage({ id: 'global.message.themmoithanhcong' }));
 				props?.getData();
 				if (res?.data?.data?.identityCode) {
 					await getHoaDon({ identityCode: res.data.data.identityCode });
@@ -172,10 +172,14 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 					))}
 				</Row>
 				{!current?.maBoPhanXuLy && doiTuongDieuPhoi === DoiTuongDieuPhoi.NGUOI_CU_THE && (
-					<Form.Item name={'maBoPhanXuLy'} label={'Bộ phận xử lý'} rules={[...rules.required]}>
+					<Form.Item
+						name={'maBoPhanXuLy'}
+						label={intl.formatMessage({ id: 'phanhoi.column.donvi' })}
+						rules={[...rules.required]}
+					>
 						<Select
 							style={{ width: '100%' }}
-							placeholder={'Chọn bộ phận xử lý'}
+							placeholder={intl.formatMessage({ id: 'phanhoi.column.donvi' })}
 							onChange={() => {}}
 							options={danhSachDonViXuLy?.map((val) => {
 								return {
@@ -194,7 +198,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 					}}
 				>
 					<Button icon={<SaveOutlined />} style={{ marginRight: 8 }} type={'primary'} htmlType={'submit'}>
-						Lưu
+						{intl.formatMessage({ id: 'global.button.luulai' })}
 					</Button>
 					{editFormKhaiBao && (
 						<Button
@@ -205,7 +209,7 @@ const FormQuyTrinh = (props: { idQuyTrinh?: string; getData: () => void }) => {
 								window.scroll({ top: 0, behavior: 'smooth' });
 							}}
 						>
-							Hủy
+							{intl.formatMessage({ id: 'global.button.huy' })}
 						</Button>
 					)}
 				</div>

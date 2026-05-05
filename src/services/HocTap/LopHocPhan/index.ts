@@ -9,6 +9,10 @@ export async function getMoodleLopHocPhan(lopHocPhanId: string) {
 	return axios.get(`${ipDaoTao}/lop-hoc-phan/${lopHocPhanId}/moodle/course`);
 }
 
+export async function getGiaoAnSinhVien(lopHocPhanId: string) {
+	return axios.get(`${ipDaoTao}/lop-hoc-phan/${lopHocPhanId}/giao-an/sinh-vien`);
+}
+
 export async function thongKeDiemPLOSinhVien(maKhoaNganh: string) {
 	return axios.get(`${ipDaoTao}/diem-hp-sv-hk/thong-ke-diem-pi/me/khoa-nganh/${maKhoaNganh}`);
 }
@@ -20,3 +24,5 @@ export async function thongTinWithdraw(lopHocPhanId: string) {
 export async function postWithdraw(payLoad: any) {
 	return axios.post(`${ipDaoTao}/lop-hp-sv/rut-lop-hp`, payLoad);
 }
+
+
