@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import { Card, Carousel, Empty } from 'antd';
 import { useEffect } from 'react';
 import { Link, useIntl, useModel } from 'umi';
@@ -14,9 +15,9 @@ const VaoRaThuVienDashboardCard = () => {
 	}, []);
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless'
+		<PageCard
+			hideInnerCard
+			level={2}
 			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.thuvien.title' })}
 			extra={
 				<Link to={'/thu-vien/vao-ra'} type='link' className='xem-tat-ca-link'>
@@ -43,7 +44,7 @@ const VaoRaThuVienDashboardCard = () => {
 					/>
 				)}
 			</Card>
-		</Card>
+		</PageCard>
 	);
 };
 

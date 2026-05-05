@@ -96,17 +96,22 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 
 	if (!loading && isEmpty(data)) {
 		return (
-			<Card title={intl.formatMessage({ id: 'lophocphan.hocsaptoi.title' })}>
+			<PageCard
+				level={2}
+				title={intl.formatMessage({ id: 'lophocphan.hocsaptoi.title' })}
+			>
 				<Empty
 					image={Empty.PRESENTED_IMAGE_SIMPLE}
 					description={intl.formatMessage({ id: 'lophocphan.hocsaptoi.empty' })}
 				/>
-			</Card>
+			</PageCard>
 		);
 	}
 
 	return (
-		<Card
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={intl.formatMessage({ id: 'lophocphan.hocsaptoi.title' })}
 			styles={{ body: { height: 'fit-content', maxHeight: 348 } }}
 			extra={
@@ -127,7 +132,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 				)
 			}
 		>
-			<PageCard hideInnerCard>
+			<Card variant='borderless'>
 				<Spin spinning={loading}>
 					<div className={styles.tiet_hoc_sap_toi}>
 						{keysSorted.map((ngay) => {
@@ -236,7 +241,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 						})}
 					</div>
 				</Spin>
-			</PageCard>
+			</Card>
 
 			{/* Modal xem chi tiết */}
 			{selectEvent ? (
@@ -247,7 +252,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 					getData={getThoiKhoaBieu}
 				/>
 			) : null}
-		</Card>
+		</PageCard>
 	);
 };
 

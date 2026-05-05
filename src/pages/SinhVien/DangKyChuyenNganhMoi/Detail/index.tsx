@@ -65,7 +65,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 	return (
 		<>
 			<PageCard
-			hideInnerCard
+				hideInnerCard
 				title={
 					isMinor
 						? intl.formatMessage({ id: 'minor.detail.title.minor' })
@@ -82,7 +82,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 						<Breadcrumb.Item>{intl.formatMessage({ id: 'minor.breadcrumb.detail' })}</Breadcrumb.Item>
 					</Breadcrumb>
 				}
-			></PageCard>
+			>
 			<Row gutter={16}>
 				<Col span={6}>
 					<ProcessSidebar
@@ -133,7 +133,14 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 									<Divider orientation='left' className='divider-big-title' style={{ marginTop: 0 }} dashed>
 										{intl.formatMessage({ id: 'minor.idm.goalsAndRationale.title' })}
 									</Divider>
-									{phieuDkCtdtMe?.mucTieuLyDo || '-'}
+									<Descriptions column={1} layout='horizontal'>
+										<Descriptions.Item label={intl.formatMessage({ id: 'minor.detail.proposed_program_name' })}>
+											<span style={{ fontWeight: 600 }}>{phieuDkCtdtMe?.tenChuongTrinh || '-'}</span>
+										</Descriptions.Item>
+										<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.description' })}>
+											<div style={{ whiteSpace: 'pre-wrap' }}>{phieuDkCtdtMe?.mucTieuLyDo || '-'}</div>
+										</Descriptions.Item>
+									</Descriptions>
 								</div>
 							)}
 
@@ -171,6 +178,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 				title={intl.formatMessage({ id: 'minor.modal.comment' })}
 				content={getCommentContent()}
 			/>
+			</PageCard>
 		</>
 	);
 };

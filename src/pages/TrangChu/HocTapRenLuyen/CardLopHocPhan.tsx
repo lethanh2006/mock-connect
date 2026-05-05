@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { DownOutlined } from '@ant-design/icons';
 import { Button, Card, Carousel, Dropdown, Empty, Menu, Space } from 'antd';
@@ -111,9 +112,9 @@ const CardLopHocPhan = () => {
 	};
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless'
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={intl.formatMessage({ id: 'trangchu.loptinchi.title' })}
 			loading={loading}
 			extra={
@@ -245,7 +246,7 @@ const CardLopHocPhan = () => {
 					</Card>
 				)}
 			</div>
-		</Card>
+		</PageCard>
 	);
 };
 

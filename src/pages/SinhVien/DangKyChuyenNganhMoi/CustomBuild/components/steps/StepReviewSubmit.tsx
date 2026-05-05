@@ -12,9 +12,23 @@ interface StepReviewSubmitProps {
 	onSubmit: () => void;
 	onSaveDraft?: () => void;
 	isMinor?: boolean;
+	loading?: boolean;
+	submitLoading?: boolean;
+	canEdit?: boolean;
+	trangThai?: string;
 }
 
-const StepReviewSubmit = ({ formData, onPrevious, onSubmit, onSaveDraft, isMinor = false }: StepReviewSubmitProps) => {
+const StepReviewSubmit = ({
+	formData,
+	onPrevious,
+	onSubmit,
+	onSaveDraft,
+	isMinor = false,
+	loading,
+	submitLoading,
+	canEdit,
+	trangThai,
+}: StepReviewSubmitProps) => {
 	const intl = useIntl();
 	const tenDonViPhuTrach = Form.useWatch('tenDonViPhuTrach', Form.useFormInstance());
 	const maDonViPhuTrach = Form.useWatch('maDonViPhuTrach', Form.useFormInstance());
@@ -39,6 +53,11 @@ const StepReviewSubmit = ({ formData, onPrevious, onSubmit, onSaveDraft, isMinor
 	const meetsGpa = minGpa == null || gpa >= minGpa;
 	const meetsMinCredits = minCredits == null || totalCredits >= minCredits;
 	const meetsMaxCompletedCredits = maxCompletedCredits == null || completedCredits <= maxCompletedCredits;
+
+	const isPending = trangThai === 'pending';
+	const submitText = isPending
+		? intl.formatMessage({ id: 'minor.button.updateRecord' }, { defaultMessage: 'Cập nhật phiếu' })
+		: intl.formatMessage({ id: 'minor.idm.button.submit' });
 
 	return (
 		<>
@@ -248,7 +267,15 @@ const StepReviewSubmit = ({ formData, onPrevious, onSubmit, onSaveDraft, isMinor
 					</ul>
 				</Col>
 			</Row>
-			<FormFooter showPrevious onPrevious={onPrevious} onSubmit={onSubmit} onSaveDraft={onSaveDraft} />
+			<FormFooter
+				showPrevious
+				onPrevious={onPrevious}
+				onSubmit={onSubmit}
+				onSaveDraft={onSaveDraft}
+				loading={loading}
+				submitLoading={submitLoading}
+				submitText={submitText}
+			/>
 		</>
 	);
 };

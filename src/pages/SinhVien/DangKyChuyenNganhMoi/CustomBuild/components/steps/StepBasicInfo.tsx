@@ -8,9 +8,11 @@ interface StepBasicInfoProps {
 	onSaveDraft?: () => void;
 	isMinor?: boolean;
 	form: FormInstance<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto>;
+	loading?: boolean;
+	canEdit?: boolean;
 }
 
-const StepBasicInfo = ({ onNext, onSaveDraft, isMinor = false, form }: StepBasicInfoProps) => {
+const StepBasicInfo = ({ onNext, onSaveDraft, isMinor = false, form, loading, canEdit }: StepBasicInfoProps) => {
 	const intl = useIntl();
 	const tenDonViPhuTrach = Form.useWatch('tenDonViPhuTrach', form);
 	const maDonViPhuTrach = Form.useWatch('maDonViPhuTrach', form);
@@ -90,7 +92,7 @@ const StepBasicInfo = ({ onNext, onSaveDraft, isMinor = false, form }: StepBasic
 					</Form.Item>
 				</Col>
 			</Row>
-			<FormFooter onNext={onNext} onSaveDraft={onSaveDraft} />
+			<FormFooter onNext={onNext} onSaveDraft={onSaveDraft} loading={loading} />
 		</>
 	);
 };
