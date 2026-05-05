@@ -29,6 +29,7 @@ import vanbanhuongdan from './tienichkhac/vanbanhuongdan';
 import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
+import syllabus from './syllabus';
 
 export default {
 	...login,
@@ -62,6 +63,7 @@ export default {
 	...activity,
 	...pathway,
 	...minor,
+	...syllabus,
 
 	'pages.trangchu.title': 'TRAINING MANAGEMENT SUBSYSTEM',
 	'pages.trangchu.subtitle': 'COMMAND AND CONTROL SOFTWARE SYSTEM',
