@@ -371,7 +371,7 @@ export const TableHeader: React.FC = () => {
 			</div>
 
 			<div className='extra no-print'>
-				<ColumnSettings />
+				{btnColumnSetting && <ColumnSettings />}
 
 				{canOpenModalFilter && (
 					<ButtonExtend
@@ -416,7 +416,6 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				)}
-				{btnColumnSetting && <ColumnSettings />}
 			</div>
 		</div>
 	);
