@@ -1,29 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-
-// =============================================================================
-// Mixins dùng chung – giảm lặp cho triangle indicator
-// =============================================================================
-.vin-triangle-indicator(@color: ~'var(--vin-color-primary)'; @w: 14px; @h: 10px; @side: right; @rotate: 180deg) {
-	content: '' !important;
-	position: absolute !important;
-	width: 0 !important;
-	height: 0 !important;
-	border-top: @h solid transparent !important;
-	border-bottom: @h solid transparent !important;
-	display: block !important;
-	visibility: visible !important;
-	opacity: 1 !important;
-	z-index: 999 !important;
-	pointer-events: none !important;
-	rotate: @rotate !important;
-
-	& when (@side =right) {
-		border-right: @w solid @color !important;
-	}
-
-	& when (@side =left) {
-		border-left: @w solid @color !important;
-	}
+@font-face {
+	font-family: 'Montserrat';
+	src: url('../assets/font/Montserrat.ttf') format('truetype');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
 }
 
 // =============================================================================
@@ -240,7 +220,9 @@ body {
 }
 
 .ant-table-thead {
-	> tr > th {
+	.ant-table-cell {
+		text-align: left !important;
+
 		.ant-table-column-title {
 			display: flex !important;
 			justify-content: flex-start !important;
@@ -253,6 +235,10 @@ body {
 	.ant-table-cell:last-child {
 		border-right: none !important;
 	}
+}
+
+.ttCellWrapper {
+	justify-content: flex-start !important;
 }
 
 .ant-table-tbody .ant-table-row .ant-table-cell-fix-right:last-child {
@@ -274,69 +260,78 @@ body {
 }
 
 .ant-card {
-	.ant-card-head-title {
+	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 		white-space: pre-wrap;
 		font-size: 18px !important;
 		font-weight: bold !important;
 		color: var(--color-primary) !important;
 	}
 
+	&.has-indicator {
+		> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+			&::after {
+				.indicator();
+				left: -18px !important;
+				top: 8px !important;
+				transform: translateY(-50%) !important;
+			}
+		}
+	}
+
 	&.card-big-title {
 		> .ant-card-head {
-			padding-bottom: 16px !important;
-
-			.ant-card-head-title {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 22px !important;
-				margin-left: 2px !important;
 				color: var(--color-accent-800) !important;
-				display: flex;
-				align-items: center;
+				margin-left: 0 !important;
+				padding-left: 0 !important;
+			}
+		}
+
+		&.has-indicator {
+			> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+				margin-left: 2px !important;
 
 				&::after {
-					content: '' !important;
-					position: absolute !important;
+					.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 10px; @side: right);
 					left: -18px !important;
-					top: 0 !important;
+					top: 8px !important;
 					transform: translateY(-50%) !important;
-					width: 0 !important;
-					height: 0 !important;
-					border-right: 14px solid var(--vin-color-primary) !important;
-					border-top: 10px solid transparent !important;
-					border-bottom: 10px solid transparent !important;
-					display: block !important;
-					rotate: 180deg !important;
-					visibility: visible !important;
-					opacity: 1 !important;
-					z-index: 999 !important;
-					pointer-events: none !important;
-
-					@media (max-width: 768px) {
-						left: -18px !important;
-					}
-
-					@media (max-width: 425px) {
-						top: 4px !important;
-						left: -10px !important;
-						border-right: 10px solid var(--vin-color-primary) !important;
-						border-top: 8px solid transparent !important;
-						border-bottom: 8px solid transparent !important;
-					}
-				}
-
-				@media (max-width: 425px) {
-					padding-left: 6px !important;
 				}
 			}
+		}
+	}
 
-			.ant-card-extra {
-				.ant-space-align-center {
-					align-items: start !important;
+	&.highlight {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
+				color: var(--color-official-300) !important;
+				padding-left: 0 !important;
+			}
+		}
+
+		&.has-indicator {
+			.ant-card-head .ant-card-head-title {
+				padding-left: 18px !important;
+
+				&::after {
+					.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 7px; @side: right);
+					left: 0 !important;
+					top: 14px !important;
+					transform: translateY(-50%) !important;
 				}
+			}
+		}
+	}
 
-				.ant-btn {
-					.ant-btn-icon {
-						display: none !important;
-					}
+	&.normal {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
+				font-size: 16px !important;
+				color: var(--color-official-300) !important;
+
+				&::after {
+					display: none !important;
 				}
 			}
 		}
@@ -358,6 +353,11 @@ body {
 	align-items: center !important;
 	box-shadow: none !important;
 	text-transform: uppercase !important;
+
+	&:disabled,
+	&.ant-btn-disabled {
+		font-weight: 400 !important;
+	}
 }
 
 .ant-btn-sm {
@@ -411,7 +411,7 @@ body {
 	}
 
 	.ant-pro-page-container-children-container {
-		padding: 0 18px !important;
+		padding: 0 16px !important; //main là 12px nhưng còn chừa chỗ con indicator nên để 16px
 		overflow-x: auto !important;
 		position: relative !important;
 		z-index: 2 !important;
@@ -795,7 +795,7 @@ body {
 }
 
 .collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text::after {
-	.vin-triangle-indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
+	.indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
 	left: -16px !important;
 	top: 14px !important;
 	transform: translateY(-50%) !important;
@@ -806,9 +806,9 @@ body {
 	font-weight: 600;
 
 	&::before {
-		.vin-triangle-indicator(@w: 10px; @h: 6px; @side: right);
+		.indicator(@w: 10px; @h: 6px; @side: right);
 		left: -16px !important;
-		top: 0 !important;
+		top: 4px !important;
 		transform: translateY(-50%) !important;
 
 		@media (max-width: 768px) {
@@ -818,7 +818,7 @@ body {
 }
 
 .highlight {
-	background-color: var(--color-official-500) !important;
+	// background-color: var(--color-official-500) !important;
 }
 
 .loading-content {
@@ -826,7 +826,7 @@ body {
 }
 
 .ant-table-selection-column {
-	text-align-last: center !important;
+	text-align-last: left !important;
 }
 
 .tb-sk-wrapper .header-tb-sk {

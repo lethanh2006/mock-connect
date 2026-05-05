@@ -193,12 +193,12 @@
 .ant-card {
 	height: 100%;
 
-	.ant-card-head-title {
+	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 		white-space: pre-wrap;
 		flex: auto;
 	}
 
-	.ant-card-head {
+	> .ant-card-head {
 		padding: 0 18px;
 
 		@media (max-width: @screen-xs) {
@@ -243,7 +243,7 @@
 			// padding-bottom: 16px !important;
 			overflow: visible !important;
 
-			.ant-card-head-title {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 18px;
 				margin-left: 2px !important;
 				padding-left: 0 !important;
@@ -270,11 +270,11 @@
 	}
 
 	&.highlight {
-		.ant-card-head {
+		> .ant-card-head {
 			overflow: visible !important;
 			padding-bottom: 0 !important;
 
-			.ant-card-head-title {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 18px !important;
 				padding-left: 0 !important;
 				display: flex;
@@ -298,7 +298,7 @@
 
 	&.normal {
 		> .ant-card-head {
-			.ant-card-head-title {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				padding-left: 0 !important;
 				font-size: 16px !important;
 
