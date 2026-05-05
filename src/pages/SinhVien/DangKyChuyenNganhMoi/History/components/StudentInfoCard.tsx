@@ -43,7 +43,7 @@ const StudentInfoCard = ({ type }: { type: 'minor' | 'concentration' }) => {
 			<Col span={12}>
 				<Card
 					variant='borderless'
-					style={{ backgroundColor: 'var(--color-status-bg-200)', alignContent: 'center' }}
+					style={{ backgroundColor: 'var(--color-info-bg)', alignContent: 'center' }}
 				>
 					<div>
 						{type === 'minor'

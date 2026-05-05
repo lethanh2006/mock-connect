@@ -16,15 +16,26 @@ interface StepProgramDesignProps {
 	onSaveDraft?: () => void;
 	isMinor?: boolean;
 	form: FormInstance<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto>;
+	loading?: boolean;
+	canEdit?: boolean;
 }
 
-const StepProgramDesign = ({ onPrevious, onNext, onSaveDraft, isMinor = false, form }: StepProgramDesignProps) => {
+const StepProgramDesign = ({
+	onPrevious,
+	onNext,
+	onSaveDraft,
+	isMinor = false,
+	form,
+	loading,
+	canEdit,
+}: StepProgramDesignProps) => {
 	const intl = useIntl();
 	const [showEdit, setShowEdit] = useState(false);
 	const khoiHpCtList = Form.useWatch('khoiHpCtList', form) || [];
 	const tenDonViPhuTrach = Form.useWatch('tenDonViPhuTrach', form);
 	const maDonViPhuTrach = Form.useWatch('maDonViPhuTrach', form);
-	const { record: dotDangKy } = useModel('daotao.dotdkctdt');
+	const { record: dotDangKy, fetchDotDangKy } = useModel('daotao.dotdkctdt');
+	const { record: phieuMeDotHienTai } = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
 
 	// Tính tổng số tín chỉ
 	const totalCredits = khoiHpCtList.reduce((sum: number, item: any) => {
@@ -97,11 +108,19 @@ const StepProgramDesign = ({ onPrevious, onNext, onSaveDraft, isMinor = false, f
 								{
 									ok: meetsMinCredits,
 									label: intl.formatMessage({ id: 'minor.idm.programDesign.creditsRegisteredMin' }),
+									subLabel: intl.formatMessage(
+										{ id: 'minor.idm.review.cardTotalCreditsSub' },
+										{ min: minCredits ?? '-' },
+									),
 									value: `${totalCredits} / ${minCredits}`,
 								},
 								{
 									ok: isWithinMaxCompletedCredits,
 									label: intl.formatMessage({ id: 'minor.idm.programDesign.creditsCompletedMax' }),
+									subLabel: intl.formatMessage(
+										{ id: 'minor.idm.review.cardCompletedCreditsSub' },
+										{ max: maxCompletedCredits ?? '-' },
+									),
 									value: `${completedCredits} / ${maxCompletedCredits}`,
 								},
 							].map((item, idx) => (
@@ -119,6 +138,7 @@ const StepProgramDesign = ({ onPrevious, onNext, onSaveDraft, isMinor = false, f
 													<CloseCircleOutlined style={{ color: 'var(--color-error)' }} />
 												)}
 												<div style={{ fontWeight: 600 }}>{item.label}</div>
+												<sub>{item.subLabel}</sub>
 											</Col>
 											<Col>
 												<h2
@@ -212,7 +232,13 @@ const StepProgramDesign = ({ onPrevious, onNext, onSaveDraft, isMinor = false, f
 				</Col>
 			</Row>
 
-			<FormFooter showPrevious onPrevious={onPrevious} onNext={onNext} onSaveDraft={onSaveDraft} />
+			<FormFooter
+				showPrevious
+				onPrevious={onPrevious}
+				onNext={onNext}
+				onSaveDraft={onSaveDraft}
+				loading={loading}
+			/>
 		</>
 	);
 };

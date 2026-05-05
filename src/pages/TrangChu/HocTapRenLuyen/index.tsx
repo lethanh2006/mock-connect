@@ -5,6 +5,7 @@ import CardCongNoDashboard from '../components/CongNo';
 import CardKetQuaHocTapDashboard from './CardHocTap';
 import CardRenLuyenDashboard from './CardRenLuyen';
 import './style.less';
+import PageCard from '@/components/PageCard';
 
 const CardHocTapRenLuyenDashboard = () => {
 	const intl = useIntl();
@@ -18,10 +19,10 @@ const CardHocTapRenLuyenDashboard = () => {
 	}, []);
 
 	return (
-		<Card
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.title' })}
-			variant='borderless'
-			className='card-borderless card-big-title'
 			style={{ height: '100%' }}
 		>
 			<Row gutter={[16, 16]} style={{ height: '100%' }}>
@@ -41,7 +42,7 @@ const CardHocTapRenLuyenDashboard = () => {
 					<CardCongNoDashboard />
 				</Col>
 			</Row>
-		</Card>
+		</PageCard>
 	);
 };
 

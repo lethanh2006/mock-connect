@@ -10,7 +10,7 @@ import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
+import { Button, Card, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { history, Link, useIntl, useModel } from 'umi';
@@ -180,7 +180,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 
 	return (
 		<PageCard
-			level={props.isDashBoard && APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH === 'VINUNI' ? 2 : 4}
+			level={2}
 			hideInnerCard
 			className='card-baitap-dashboard'
 			title={
@@ -259,7 +259,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 				</Space>
 			}
 		>
-			<PageCard hideInnerCard className={`${isDashBoard && 'content-wrapper'} `}>
+			<Card className={`${isDashBoard && 'content-wrapper'} `} variant='borderless'>
 				<div ref={containerRef}>
 					{!!dataToUse.length ? (
 						<Carousel
@@ -282,7 +282,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 						/>
 					)}
 				</div>
-			</PageCard>
+			</Card>
 		</PageCard>
 	);
 };

@@ -17,6 +17,7 @@ export default () => {
 	const { setRecord, setLoading, setFormSubmiting } = objInit;
 	const [phieuDangKyTheoDot, setPhieuDangKyTheoDot] = useState<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto | null>(null);
 	const fetchPhieuDangKyHienTai = async (dotId: string) => {
+		setRecord(null as any);
 		setLoading(true);
 		try {
 			const response = await getPhieuMeDotHienTaiInit(dotId);
@@ -31,6 +32,7 @@ export default () => {
 	};
 
 	const fetchPhieuDangKyTheoDot = async (dotId: string) => {
+		setPhieuDangKyTheoDot(null);
 		setLoading(true);
 		try {
 			const response = await getPhieuDkCtdtMeByDot(dotId);
@@ -45,6 +47,7 @@ export default () => {
 	};
 
 	const fetchChiTietPhieuDangKy = async (phieuId: string) => {
+		setRecord(null as any);
 		setLoading(true);
 		try {
 			const response = await getPhieuDkCtdtMe(phieuId);
