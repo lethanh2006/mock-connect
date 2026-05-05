@@ -191,4 +191,9 @@ export default {
 		'Đợt đăng ký lộ trình học tập <b>{tenDot}</b> đang diễn ra từ <b>{tuNgay}</b> đến <b>{denNgay}</b>, vui lòng theo dõi và đăng ký kịp thời',
 	'lotrinhhoctap.title': 'Lộ trình học tập',
 	'lotrinhhoctap.trangthai': 'Trạng thái đăng ký',
+	'tientrinhhoctap.ctdt.hpbatbuoc': 'Học phần bắt buộc',
+	'tientrinhhoctap.ctdt.hptuchon': 'Học phần tự chọn',
+	'tientrinhhoctap.ctdt.hptotnghiep': 'Học phần tốt nghiệp',
+	'tientrinhhoctap.ctdt.khoi': 'Khối',
+	'tientrinhhoctap.ctdt.khongten': 'Khối không tên',
 };

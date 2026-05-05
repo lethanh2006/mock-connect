@@ -44,7 +44,7 @@ const LopHocPhanPage = () => {
 				</Col>
 
 				<Col span={24}>
-					<PageCard hideInnerCard level={4} loading={loading} title={intl.formatMessage({ id: 'lophocphan.danhsach' })}>
+					<PageCard hideInnerCard level={2} loading={loading} title={intl.formatMessage({ id: 'lophocphan.danhsach' })}>
 						{danhSach.length > 0 ? (
 							<Row gutter={[0, 0]} style={{ margin: '-8px' }}>
 								{danhSach.map((lop, index) => (

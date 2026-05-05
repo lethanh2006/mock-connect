@@ -4,6 +4,7 @@ import { Link, useIntl, useModel } from 'umi';
 import ChartVaoRaThuVien from './Chart';
 import StatVaoRaThuVien from './Stat';
 import './style.less';
+import PageCard from '@/components/PageCard';
 
 const VaoRaThuVienDashboardCard = () => {
 	const intl = useIntl();
@@ -14,9 +15,9 @@ const VaoRaThuVienDashboardCard = () => {
 	}, []);
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless card-big-title'
+		<PageCard
+			hideInnerCard
+			level={2}
 			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.thuvien.title' })}
 			extra={
 				<Link to={'/thu-vien/vao-ra'} type='link' className='xem-tat-ca-link'>
@@ -43,7 +44,7 @@ const VaoRaThuVienDashboardCard = () => {
 					/>
 				)}
 			</Card>
-		</Card>
+		</PageCard>
 	);
 };
 

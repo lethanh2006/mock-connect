@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Link, useIntl } from 'umi';
 import TinTucDashboard from './TinTucDashboard';
 import TinTucDashboardWP from './TinTucDashboardWP';
+import PageCard from '@/components/PageCard';
 
 const TinTucDashboardWrapper = () => {
 	const intl = useIntl();
@@ -13,9 +14,9 @@ const TinTucDashboardWrapper = () => {
 	const renderTinTuc = () => <TinTucDashboard />;
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless card-big-title'
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={
 				<Tabs
 					onChange={setTab}
@@ -52,7 +53,7 @@ const TinTucDashboardWrapper = () => {
 		>
 			{/* Chỉ PTIT */}
 			{tab === 'giao-vu' ? <TinTucDashboardWP category={344} /> : tab === 'tin-tuc' && renderTinTuc()}
-		</Card>
+		</PageCard>
 	);
 };
 

@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useIntl, useModel } from 'umi';
 import CardLopHocPhanItem from '../../HocTap/LopHocPhan/components/CardLopHocPhanItem';
 import SlideButtonIcon from '../components/SlideButtonIcon';
+import PageCard from '@/components/PageCard';
 
 const CardLopHocPhan = () => {
 	const intl = useIntl();
@@ -111,9 +112,9 @@ const CardLopHocPhan = () => {
 	};
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless card-big-title'
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={intl.formatMessage({ id: 'trangchu.loptinchi.title' })}
 			loading={loading}
 			extra={
@@ -245,7 +246,7 @@ const CardLopHocPhan = () => {
 					</Card>
 				)}
 			</div>
-		</Card>
+		</PageCard>
 	);
 };
 

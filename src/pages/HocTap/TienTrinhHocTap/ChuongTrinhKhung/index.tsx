@@ -33,7 +33,7 @@ const TienTrinhChuongTrinhKhung = () => {
 	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 	const [visibleDiem, setVisibleDiem] = useState(false);
-	const { cctFilter } = useAccess();
+	// const { cctFilter } = useAccess();
 	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
 	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
 	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh : recSinhVien?.chuyenNganh;
@@ -43,7 +43,7 @@ const TienTrinhChuongTrinhKhung = () => {
 		const temp: Record<string, string> = {};
 		listKhoi.forEach(
 			(khoi) =>
-				(temp[khoi] = `rgb(${Math.random() * 190 + 15}, ${Math.random() * 190 + 15}, ${Math.random() * 190 + 15})`),
+				(temp[khoi as string] = `rgb(${Math.random() * 190 + 15}, ${Math.random() * 190 + 15}, ${Math.random() * 190 + 15})`),
 		);
 		setMapColorKhoiKienThuc(temp);
 	};
@@ -92,7 +92,7 @@ const TienTrinhChuongTrinhKhung = () => {
 					<CardHocPhanV2
 						key={ctk._id}
 						hocPhan={ctk.hocPhan}
-						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc!]}
 						onClick={() => {
 							setChuongTrinh(ctk);
 							setVisibleDiem(true);
@@ -104,7 +104,7 @@ const TienTrinhChuongTrinhKhung = () => {
 					<CardKhoiHocPhan
 						khoi={ctk}
 						key={ctk._id}
-						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc!]}
 						onClickHocPhan={() => setVisibleDiem(true)}
 					/>
 				),
@@ -116,48 +116,7 @@ const TienTrinhChuongTrinhKhung = () => {
 
 	return (
 		<div>
-			{recTienTrinh?.ctdtKeHoach?._id && (
-				<Descriptions
-					style={{ marginBottom: 12 }}
-					layout='vertical'
-					column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
-					className='highlight'
-					colon={false}
-				>
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })} span={2}>
-						<Link
-							to='#'
-							onClick={(e) => {
-								e.preventDefault();
-								setVisibleChuongTrinh(true);
-							}}
-						>
-							{recTienTrinh?.ctdtKeHoach?.ten}
-						</Link>
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loai' })}>
-						{recTienTrinh?.ctdtKeHoach?.loai && LoaiChuongTrinhDaoTao[recTienTrinh?.ctdtKeHoach?.loai]}
-					</Descriptions.Item>
 
-					{!chuyenNganhHienTai && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
-							{chuyenNganhHienTai?.ten ?? <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuadk' })}</i>}
-						</Descriptions.Item>
-					)}
-					<Descriptions.Item
-						style={{ display: !cctFilter() ? 'none' : '' }}
-						label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
-					>
-						<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
-					</Descriptions.Item>
-					<Descriptions.Item
-						style={{ display: !cctFilter() ? 'none' : '' }}
-						label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.pathway' })}
-					>
-						<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
-					</Descriptions.Item>
-				</Descriptions>
-			)}
 
 			<Spin spinning={loading}>
 				{danhSachHocKy?.map((data, index) => (

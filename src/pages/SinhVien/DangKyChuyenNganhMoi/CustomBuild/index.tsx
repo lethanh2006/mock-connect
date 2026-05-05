@@ -32,6 +32,8 @@ const IDMPage = () => {
 		submitPhieuDangKy,
 		fetchPhieuDangKyHienTai,
 		updatePhieuDangKy,
+		loading,
+		formSubmiting,
 	} = useModel('sinhvien.dangkychuyennganh.dangkychuyennganh');
 	const { record: dotDangKy, fetchDotDangKy } = useModel('daotao.dotdkctdt');
 	const formValues = Form.useWatch([], form);
@@ -54,22 +56,31 @@ const IDMPage = () => {
 
 	useEffect(() => {
 		if (phieuDangKyHienTai && !hasInitializedStep) {
+			const initialValues = {
+				...phieuDangKyHienTai,
+				hasDiscussedWithAdvisor:
+					phieuDangKyHienTai?.hasDiscussedWithAdvisor ?? !!phieuDangKyHienTai?.hoTenCoVanHocTapPhu,
+			};
+
 			setFormData((prev: any) => ({
 				...prev,
-				...phieuDangKyHienTai,
-				hasDiscussedWithAdvisor:
-					phieuDangKyHienTai?.hasDiscussedWithAdvisor ?? !!phieuDangKyHienTai?.hoTenCoVanHocTapPhu,
+				...initialValues,
 			}));
 
-			form.setFieldsValue({
-				...phieuDangKyHienTai,
-				hasDiscussedWithAdvisor:
-					phieuDangKyHienTai?.hasDiscussedWithAdvisor ?? !!phieuDangKyHienTai?.hoTenCoVanHocTapPhu,
-			});
+			form.setFieldsValue(initialValues);
+
+			// Xác định bước hiện tại dựa trên dữ liệu đã có
+			if (phieuDangKyHienTai?.khoiHpCtList?.length && phieuDangKyHienTai?.khoiHpCtList?.length > 0) {
+				setCurrentStep(3);
+			} else if (phieuDangKyHienTai?.maCoVanHocTapPhu && phieuDangKyHienTai?.maCoVanHocTapPhu !== '') {
+				setCurrentStep(2);
+			} else if (phieuDangKyHienTai?.soDienThoai && phieuDangKyHienTai?.soDienThoai !== '') {
+				setCurrentStep(1);
+			}
+
+			setHasInitializedStep(true);
 		}
 	}, [phieuDangKyHienTai, hasInitializedStep, form]);
-
-	console.log(phieuDangKyHienTai, 'phieuDangKyHienTai');
 
 	const steps = [
 		intl.formatMessage({ id: 'minor.build.step.basicInfo' }),
@@ -87,18 +98,28 @@ const IDMPage = () => {
 		}
 	}, [formValues]);
 
-	useEffect(() => {
-		if (phieuDangKyHienTai && !hasInitializedStep) {
-			if (phieuDangKyHienTai?.khoiHpCtList?.length && phieuDangKyHienTai?.khoiHpCtList?.length > 0) {
-				setCurrentStep(3);
-			} else if (phieuDangKyHienTai?.maCoVanHocTapPhu && phieuDangKyHienTai?.maCoVanHocTapPhu !== '') {
-				setCurrentStep(2);
-			} else if (phieuDangKyHienTai?.soDienThoai && phieuDangKyHienTai?.soDienThoai !== '') {
-				setCurrentStep(1);
-			}
-			setHasInitializedStep(true);
+	const canEdit = useMemo(() => {
+		if (!phieuDangKyHienTai) return true;
+		const { trangThai, trangThaiDuyetCVHT, trangThaiDuyetKhoaBoMon, trangThaiDuyetQldt } = phieuDangKyHienTai;
+
+		// 1. Các trạng thái mặc định được sửa
+		if (
+			[ETrangThaiDangKyChuyenNganh.NHAP, ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA].includes(trangThai as any)
+		) {
+			return true;
 		}
-	}, [phieuDangKyHienTai, hasInitializedStep]);
+
+		// 2. Trạng thái CHO_DUYET nhưng CHƯA AI duyệt
+		if (trangThai === ETrangThaiDangKyChuyenNganh.CHO_DUYET) {
+			return (
+				trangThaiDuyetCVHT === ETrangThaiDangKyChuyenNganh.CHO_DUYET &&
+				trangThaiDuyetKhoaBoMon === ETrangThaiDangKyChuyenNganh.CHO_DUYET &&
+				trangThaiDuyetQldt === ETrangThaiDangKyChuyenNganh.CHO_DUYET
+			);
+		}
+
+		return false;
+	}, [phieuDangKyHienTai]);
 
 	const shouldGuardLeaving =
 		phieuDangKyHienTai?.trangThai === ETrangThaiDangKyChuyenNganh.NHAP && !!phieuDangKyHienTai?._id;
@@ -133,6 +154,7 @@ const IDMPage = () => {
 		const mucTieuLyDo = currentFormValues.mucTieuLyDo || intl.formatMessage({ id: 'minor.idm.fallback.rationale' });
 
 		await updatePhieuDangKy(phieuDangKyHienTai._id, {
+			...phieuDangKyHienTai,
 			...currentFormValues,
 			tenChuongTrinh,
 			mucTieuLyDo,
@@ -182,15 +204,23 @@ const IDMPage = () => {
 	const onNext = async () => {
 		await form.validateFields();
 
-		const currentFormValues = form.getFieldsValue();
-		let updatedFormData = {};
-
-		updatedFormData = {
-			...currentFormValues,
+		const allValues = form.getFieldsValue(true);
+		const updatedFormData = {
+			...formData,
+			...allValues,
 			loai: ELoaiPhieuDkCtdt.PERSONAL,
 		};
 
-		if (phieuDangKyHienTai?._id) await updatePhieuDangKy(phieuDangKyHienTai?._id, updatedFormData);
+		// Nếu đang ở trạng thái có thể sửa (Draft/Request), ta lưu trung gian.
+		// Nếu đang Pending, ta chỉ set state local, việc update sẽ dồn vào nút "Cập nhật phiếu" ở bước cuối.
+		const isDraftOrRequest = [
+			ETrangThaiDangKyChuyenNganh.NHAP,
+			ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA,
+		].includes(phieuDangKyHienTai?.trangThai as any);
+
+		if (phieuDangKyHienTai?._id && isDraftOrRequest) {
+			await updatePhieuDangKy(phieuDangKyHienTai?._id, updatedFormData);
+		}
 
 		setFormData(updatedFormData);
 		setCurrentStep(currentStep + 1);
@@ -203,16 +233,23 @@ const IDMPage = () => {
 	const handleSubmit = async () => {
 		try {
 			await form.validateFields(['confirmCheckbox']);
-			if (phieuDangKyHienTai?._id)
+			if (phieuDangKyHienTai?._id) {
+				const allValues = form.getFieldsValue(true);
+				// Loại bỏ các trường metadata không cần thiết để tránh lỗi payload hoặc null
+				const { updatedAt, dot, ctdt, chuyenNganh, ...cleanRecord } = phieuDangKyHienTai || {};
+				const payload = {
+					...cleanRecord,
+					...allValues,
+					loai: ELoaiPhieuDkCtdt.PERSONAL,
+				};
 				await submitPhieuDangKy(
-					phieuDangKyHienTai?._id,
-					{
-						loai: ELoaiPhieuDkCtdt.PERSONAL,
-					},
+					phieuDangKyHienTai._id,
+					payload,
 					() => {
 						navigateWithBypass(backToHistoryPath);
 					},
 				);
+			}
 		} catch (error) {
 			// Để Ant Design tự hiển thị lỗi đỏ tại các trường, không cần message.error chung chung gây nhiễu
 		}
@@ -241,27 +278,36 @@ const IDMPage = () => {
 	};
 
 	const renderStepContent = () => {
+		const isPending = phieuDangKyHienTai?.trangThai === ETrangThaiDangKyChuyenNganh.CHO_DUYET;
+		const commonProps = {
+			form,
+			loading,
+			submitLoading: formSubmiting,
+			canEdit,
+			onSaveDraft: isPending ? undefined : handleSaveDraft,
+		};
+
 		switch (currentStep) {
 			case 0:
-				return <StepBasicInfo onNext={onNext} onSaveDraft={handleSaveDraft} form={form} />;
+				return <StepBasicInfo {...commonProps} onNext={onNext} />;
 			case 1:
 				return (
 					<StepSelectAdvisor
+						{...commonProps}
 						isMinor={isMinor}
 						onPrevious={onPrevious}
 						onNext={onNext}
-						onSaveDraft={handleSaveDraft}
-						form={form}
 					/>
 				);
 			case 2:
-				return <StepProgramDesign onPrevious={onPrevious} onNext={onNext} onSaveDraft={handleSaveDraft} form={form} />;
+				return <StepProgramDesign {...commonProps} onPrevious={onPrevious} onNext={onNext} />;
 			case 3:
 				return (
 					<StepReviewSubmit
+						{...commonProps}
+						trangThai={phieuDangKyHienTai?.trangThai}
 						onPrevious={onPrevious}
 						onSubmit={handleSubmit}
-						onSaveDraft={handleSaveDraft}
 						formData={formData}
 					/>
 				);
@@ -345,7 +391,7 @@ const IDMPage = () => {
 						</Row>
 					</Card>
 					<Card title={steps[currentStep] ?? ''} style={{ height: 'fit-content' }}>
-						<Form form={form} layout='vertical'>
+						<Form form={form} layout='vertical' disabled={!canEdit}>
 							{renderStepContent()}
 						</Form>
 					</Card>

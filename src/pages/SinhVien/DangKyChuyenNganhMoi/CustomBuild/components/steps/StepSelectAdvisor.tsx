@@ -3,7 +3,7 @@ import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import SelectNhanSuTheoDonVi from '@/pages/ToChucNhanSu/NhanSu/SelectByDonVi';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import { Checkbox, Collapse, Descriptions, Divider, Form, FormInstance } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useIntl, useModel } from 'umi';
 import FormFooter from '../FormFooter';
 
@@ -13,11 +13,23 @@ interface StepSelectAdvisorProps {
 	onSaveDraft?: () => void;
 	isMinor?: boolean;
 	form: FormInstance<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto>;
+	loading?: boolean;
+	canEdit?: boolean;
 }
 
-const StepSelectAdvisor = ({ onPrevious, onNext, onSaveDraft, isMinor = false, form }: StepSelectAdvisorProps) => {
+const StepSelectAdvisor = ({
+	onPrevious,
+	onNext,
+	onSaveDraft,
+	isMinor = false,
+	form,
+	loading,
+	canEdit,
+}: StepSelectAdvisorProps) => {
 	const intl = useIntl();
 	const { danhSach, getModel } = useModel('tochucnhansu.nhansu');
+	const fetchedPrimarySso = useRef<string | null>(null);
+	const fetchedSecondarySso = useRef<string | null>(null);
 	const selectedDonViId = Form.useWatch('idDonViPhuTrach', form);
 	const hasDiscussedWithAdvisor = Form.useWatch('hasDiscussedWithAdvisor', form);
 	const ssoIdCoVanHocTapPhu = Form.useWatch('ssoIdCoVanHocTapPhu', form);
@@ -58,8 +70,19 @@ const StepSelectAdvisor = ({ onPrevious, onNext, onSaveDraft, isMinor = false, f
 
 	useEffect(() => {
 		const fetchPrimaryAdvisorBySso = async () => {
-			if (!ssoIdCoVanHocTapChinh || !!maCoVanHocTapChinh || coVanHocTapChinh) return;
-			const ds = await getModel({ ssoId: ssoIdCoVanHocTapChinh }, undefined, undefined, 1, 1, 'sinh-vien/page', undefined, false);
+			if (!ssoIdCoVanHocTapChinh || !!maCoVanHocTapChinh || coVanHocTapChinh || fetchedPrimarySso.current === ssoIdCoVanHocTapChinh)
+				return;
+			fetchedPrimarySso.current = ssoIdCoVanHocTapChinh;
+			const ds = await getModel(
+				{ ssoId: ssoIdCoVanHocTapChinh },
+				undefined,
+				undefined,
+				1,
+				1,
+				'sinh-vien/page',
+				undefined,
+				false,
+			);
 			const advisor = ds?.[0];
 			if (!advisor) return;
 			form.setFieldsValue({
@@ -71,7 +94,7 @@ const StepSelectAdvisor = ({ onPrevious, onNext, onSaveDraft, isMinor = false, f
 		};
 
 		fetchPrimaryAdvisorBySso();
-	}, [ssoIdCoVanHocTapChinh, maCoVanHocTapChinh, coVanHocTapChinh, getModel, form]);
+	}, [ssoIdCoVanHocTapChinh, maCoVanHocTapChinh, coVanHocTapChinh]);
 
 	useEffect(() => {
 		if (coVanHocTapPhu) {
@@ -97,8 +120,19 @@ const StepSelectAdvisor = ({ onPrevious, onNext, onSaveDraft, isMinor = false, f
 
 	useEffect(() => {
 		const fetchSecondaryAdvisorBySso = async () => {
-			if (!ssoIdCoVanHocTapPhu || !!maCoVanHocTapPhu || coVanHocTapPhu) return;
-			const ds = await getModel({ ssoId: ssoIdCoVanHocTapPhu }, undefined, undefined, 1, 1, 'sinh-vien/page', undefined, false);
+			if (!ssoIdCoVanHocTapPhu || !!maCoVanHocTapPhu || coVanHocTapPhu || fetchedSecondarySso.current === ssoIdCoVanHocTapPhu)
+				return;
+			fetchedSecondarySso.current = ssoIdCoVanHocTapPhu;
+			const ds = await getModel(
+				{ ssoId: ssoIdCoVanHocTapPhu },
+				undefined,
+				undefined,
+				1,
+				1,
+				'sinh-vien/page',
+				undefined,
+				false,
+			);
 			const advisor = ds?.[0];
 			if (!advisor) return;
 			form.setFieldsValue({
@@ -110,7 +144,7 @@ const StepSelectAdvisor = ({ onPrevious, onNext, onSaveDraft, isMinor = false, f
 		};
 
 		fetchSecondaryAdvisorBySso();
-	}, [ssoIdCoVanHocTapPhu, maCoVanHocTapPhu, coVanHocTapPhu, getModel, form]);
+	}, [ssoIdCoVanHocTapPhu, maCoVanHocTapPhu, coVanHocTapPhu]);
 
 	return (
 		<>
@@ -183,6 +217,7 @@ const StepSelectAdvisor = ({ onPrevious, onNext, onSaveDraft, isMinor = false, f
 					</Form.Item>
 					{hasDiscussedWithAdvisor && (
 						<Form.Item
+							label={intl.formatMessage({ id: 'minor.idm.advisor.secondaryAdvisor' })}
 							name='maCoVanHocTapPhu'
 							rules={[
 								{
@@ -240,7 +275,13 @@ const StepSelectAdvisor = ({ onPrevious, onNext, onSaveDraft, isMinor = false, f
 				</Collapse.Panel>
 			</Collapse>
 
-			<FormFooter showPrevious onPrevious={onPrevious} onNext={onNext} onSaveDraft={onSaveDraft} />
+			<FormFooter
+				showPrevious
+				onPrevious={onPrevious}
+				onNext={onNext}
+				onSaveDraft={onSaveDraft}
+				loading={loading}
+			/>
 		</>
 	);
 };
