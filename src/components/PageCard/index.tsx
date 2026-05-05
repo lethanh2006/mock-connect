@@ -7,7 +7,7 @@ const PageCard: React.FC<PageCardProps> = ({
 	children,
 	hideInnerCard,
 	level = 1,
-	showIndicator = !true,
+	showIndicator = true,
 	...rest
 }) => {
 	// Hierarchy modifiers: card-big-title (level 1 only), highlight (level 2), normal (level 3), or standard (level 4)
