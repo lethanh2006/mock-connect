@@ -38,6 +38,7 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 
 	useEffect(() => {
 		fetchDotDangKy(type);
+		getData();
 	}, [type]);
 
 	useEffect(() => {

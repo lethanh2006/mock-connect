@@ -160,7 +160,8 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 							].includes(phieuDkCtdtMe?.trangThai as ETrangThaiDangKyChuyenNganh) &&
 								phieuDkCtdtMe?.trangThaiDuyetCVHT !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
 								phieuDkCtdtMe?.trangThaiDuyetKhoaBoMon !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
-								phieuDkCtdtMe?.trangThaiDuyetQldt !== ETrangThaiDangKyChuyenNganh.DA_DUYET) && (
+								phieuDkCtdtMe?.trangThaiDuyetQldt !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
+								phieuDkCtdtMe?.loai !== ELoaiPhieuDkCtdt.DEFAULT) && (
 								<div className='form-footer'>
 									<Button icon={<EditOutlined />} type='primary' onClick={handleEdit}>
 										{intl.formatMessage({ id: 'global.button.chinhsua' })}
