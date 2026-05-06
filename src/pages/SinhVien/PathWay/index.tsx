@@ -58,6 +58,8 @@ const PathWayPage = (props: { getData?: () => void }) => {
 		}
 	}, [currentKhoiLuaChonMa]);
 
+	const currentIndex = khoiLuaChonList.findIndex((khoi) => khoi.ma === currentKhoiLuaChonMa);
+
 	return (
 		<Spin spinning={isLoadingKhoiLuaChon || lotrinhLoading}>
 			<Row gutter={[0, 12]}>
@@ -71,22 +73,18 @@ const PathWayPage = (props: { getData?: () => void }) => {
 					<Col span={24}>
 						<Steps
 							style={{ marginTop: 16 }}
-							current={khoiLuaChonList.findIndex((khoi) => {
-								return khoi.ma === currentKhoiLuaChonMa;
-							})}
+							current={currentIndex}
 							onChange={(current) => {
-								const allKhoi = khoiLuaChonList;
-								const khoi = allKhoi[current];
+								const khoi = khoiLuaChonList[current];
 								if (khoi) {
 									setCurrentKhoiLuaChonMa(khoi.ma);
-								} else {
-									setCurrentKhoiLuaChonMa(null);
 								}
 							}}
-							items={khoiLuaChonList.map((khoi) => {
+							items={khoiLuaChonList.map((khoi, index) => {
 								return {
 									key: khoi.ma,
 									title: khoi?.ten,
+									status: index < currentIndex ? 'finish' : index === currentIndex ? 'process' : 'wait',
 								};
 							})}
 						/>
@@ -172,7 +170,6 @@ const PathWayPage = (props: { getData?: () => void }) => {
 										onSuccess={() => {
 											if (maKhoaNganh) {
 												refreshChosenPathway(maKhoaNganh);
-
 												if (getData) getData();
 											}
 										}}
