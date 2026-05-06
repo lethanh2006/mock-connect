@@ -189,7 +189,10 @@ const CCTContent = (props: {
 							</p>
 
 							{edit ? (
-								<Form.Item name='listCompetency' rules={[...rules.required]}>
+								<Form.Item
+									name='listCompetency'
+									rules={record?.allCompetencies?.length ? [...rules.required] : undefined}
+								>
 									<Checkbox.Group style={{ fontSize: 9 }}>
 										<Row gutter={[12, 8]}>
 											{record?.allCompetencies?.map((item) => (
@@ -227,7 +230,7 @@ const CCTContent = (props: {
 							</h2>
 
 							{edit ? (
-								<Form.Item name='selectedActivities' rules={[...rules.required]}>
+								<Form.Item name='selectedActivities' rules={sortedActivities?.length ? [...rules.required] : undefined}>
 									<Checkbox.Group style={{ fontSize: 9 }}>
 										{sortedActivities.map((item) => renderItem(item, true))}
 									</Checkbox.Group>
@@ -247,7 +250,10 @@ const CCTContent = (props: {
 							</h2>
 
 							{edit ? (
-								<Form.Item name='listAwardRecognition' rules={[...rules.required]}>
+								<Form.Item
+									name='listAwardRecognition'
+									//  rules={[...rules.required]}
+								>
 									<Checkbox.Group style={{ fontSize: 9 }}>
 										{sortedAwards?.map((item) => renderAwards(item, true))}
 									</Checkbox.Group>
