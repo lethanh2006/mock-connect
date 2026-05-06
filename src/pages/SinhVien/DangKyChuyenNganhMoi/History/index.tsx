@@ -72,6 +72,12 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 			render: (val, rec) => rec.chuyenNganh?.ten || rec.tenChuongTrinh || rec.ctdt?.ten || val,
 		},
 		{
+			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.chuyennganh.tendotdangky' }),
+			dataIndex: ['dot', 'ten'],
+			width: 200,
+			render: (val, rec) => rec.chuyenNganh?.ten || rec.tenChuongTrinh || rec.ctdt?.ten || val,
+		},
+		{
 			title: intl.formatMessage({ id: 'minor.history.type' }),
 			dataIndex: 'loai',
 			align: 'center',
