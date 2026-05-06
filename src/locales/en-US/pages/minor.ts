@@ -256,7 +256,7 @@ export default {
 	'minor.history.viewListConcentration': 'View concentration list',
 	'minor.title.minor': 'Minor',
 	'minor.title.concentration': 'Concentration',
-	'minor.history.endDate': 'End date',
+	'minor.history.endDate': 'Submited',
 
 	// BuildCard
 	'minor.build.title.minor': 'Individually Designed Minor (IDM)',

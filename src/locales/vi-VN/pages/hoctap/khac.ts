@@ -12,6 +12,7 @@ export default {
 	'hoctapkhac.dangkychuyennganh.ghichu.tablecolumntitle': 'Ghi chú',
 	'hoctapkhac.dangkychuyennganh.dangky.tablecolumntitle': 'Đăng ký',
 	'hoctapkhac.dangkychuyennganh.capnhat.tablecolumntitle': 'Cập nhật',
+	'hoctapkhac.dangkychuyennganh.chuyennganh.tendotdangky': 'Đợt đăng ký',
 	'hoctapkhac.dangkychuyennganh.khoanganhsinhvien.tablecolumntitle': 'Khóa ngành sinh viên',
 	'hoctapkhac.dangkychuyennganh.thaotac.tablecolumntitle': 'Thao tác',
 	'hoctapkhac.dangkychuyennganh.thaotac.chinhsua.tooltiptitle': 'Chỉnh sửa',
