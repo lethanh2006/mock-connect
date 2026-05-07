@@ -15,6 +15,7 @@ import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import flag from './components/flag.svg';
 import './components/style.less';
 import TienTrinhThucTe from './TienTrinhThucTe';
+import PageCard from '@/components/PageCard';
 
 const TienTrinhHocTap = () => {
 	const intl = useIntl();
@@ -99,10 +100,8 @@ const TienTrinhHocTap = () => {
 	}, [recLoTrinh?._id]);
 
 	return (
-		<Card
-			variant='borderless'
+		<PageCard
 			title={intl.formatMessage({ id: 'tientrinhhoctap.title' })}
-			className='card-tien-trinh card-big-title card-borderless'
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<Card variant='borderless'>
@@ -277,7 +276,7 @@ const TienTrinhHocTap = () => {
 				/>
 			</Card>
 			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
-		</Card>
+		</PageCard>
 	);
 };
 

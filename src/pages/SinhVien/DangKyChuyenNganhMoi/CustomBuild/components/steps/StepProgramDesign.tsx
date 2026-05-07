@@ -31,6 +31,8 @@ const StepProgramDesign = ({
 }: StepProgramDesignProps) => {
 	const intl = useIntl();
 	const [showEdit, setShowEdit] = useState(false);
+	const [editingIndex, setEditingIndex] = useState<number | undefined>(undefined);
+	const [editingRecord, setEditingRecord] = useState<PhieuDkCtdt.KhoiHocPhanDkCtdt | undefined>(undefined);
 	const khoiHpCtList = Form.useWatch('khoiHpCtList', form) || [];
 	const tenDonViPhuTrach = Form.useWatch('tenDonViPhuTrach', form);
 	const maDonViPhuTrach = Form.useWatch('maDonViPhuTrach', form);
@@ -61,6 +63,18 @@ const StepProgramDesign = ({
 		form.setFieldsValue({ khoiHpCtList: updated });
 	};
 
+	const handleEdit = (record: PhieuDkCtdt.KhoiHocPhanDkCtdt, index: number) => {
+		setEditingIndex(index);
+		setEditingRecord(record);
+		setShowEdit(true);
+	};
+
+	const handleAdd = () => {
+		setEditingIndex(undefined);
+		setEditingRecord(undefined);
+		setShowEdit(true);
+	};
+
 	return (
 		<>
 			{isMinor && tenDonViPhuTrach && (
@@ -79,7 +93,7 @@ const StepProgramDesign = ({
 			<Row gutter={[0, 8]}>
 				<Col span={24}>
 					<Form.Item
-						label={intl.formatMessage({ id: 'minor.idm.form.titleOfMinor' })}
+						label={isMinor ? intl.formatMessage({ id: 'minor.idm.form.titleOfMinor' }) : intl.formatMessage({ id: 'minor.idm.form.titleOfConcentration' })}
 						name='tenChuongTrinh'
 						rules={rules.required}
 					>
@@ -88,7 +102,20 @@ const StepProgramDesign = ({
 				</Col>
 
 				<Col span={24}>
-					<Form.Item name='mucTieuLyDo' rules={rules.required} label={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.title' })}>
+					<Form.Item
+						name='mucTieuLyDo'
+						rules={[...rules.required, ...rules.length(5000)]}
+						label={
+							<div>
+								<div>{intl.formatMessage({ id: 'minor.idm.goalsAndRationale.title' })}</div>
+								<div style={{ fontWeight: 400, marginTop: 4, color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+									{isMinor
+										? intl.formatMessage({ id: 'minor.idm.goalsAndRationale.description.minor' })
+										: intl.formatMessage({ id: 'minor.idm.goalsAndRationale.description.concentration' })}
+								</div>
+							</div>
+						}
+					>
 						<Input.TextArea
 							rows={6}
 							placeholder={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.placeholder' })}
@@ -200,6 +227,7 @@ const StepProgramDesign = ({
 									<ProgramDesignTable
 										data={khoiHpCtList}
 										onDelete={handleDelete}
+										onEdit={handleEdit}
 										hasTotal
 										title={intl.formatMessage({ id: 'minor.idm.button.addNew' })}
 										showEdit={showEdit}
@@ -208,7 +236,7 @@ const StepProgramDesign = ({
 											<ButtonExtend
 												key='add'
 												icon={<PlusCircleOutlined />}
-												onClick={() => setShowEdit(true)}
+												onClick={handleAdd}
 												type='primary'
 												size='small'
 											>
@@ -222,11 +250,24 @@ const StepProgramDesign = ({
 						<Modal
 							width={800}
 							open={showEdit}
-							onCancel={() => setShowEdit(false)}
+							onCancel={() => {
+								setShowEdit(false);
+								setEditingIndex(undefined);
+								setEditingRecord(undefined);
+							}}
 							footer={null}
-							title={intl.formatMessage({ id: 'minor.idm.programDesign.addCourse' })}
+							title={editingIndex !== undefined ? intl.formatMessage({ id: 'global.button.chinhsua' }) : intl.formatMessage({ id: 'minor.idm.programDesign.addCourse' })}
 						>
-							<FormHpBuild form={form} onCancel={() => setShowEdit(false)} />
+							<FormHpBuild
+								form={form}
+								onCancel={() => {
+									setShowEdit(false);
+									setEditingIndex(undefined);
+									setEditingRecord(undefined);
+								}}
+								editIndex={editingIndex}
+								initialValues={editingRecord}
+							/>
 						</Modal>
 					</div>
 				</Col>

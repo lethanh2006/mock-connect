@@ -137,7 +137,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 										<Descriptions.Item label={intl.formatMessage({ id: 'minor.detail.proposed_program_name' })}>
 											<span style={{ fontWeight: 600 }}>{phieuDkCtdtMe?.tenChuongTrinh || '-'}</span>
 										</Descriptions.Item>
-										<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.description' })}>
+										<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.goalsAndRationale.title' })}>
 											<div style={{ whiteSpace: 'pre-wrap' }}>{phieuDkCtdtMe?.mucTieuLyDo || '-'}</div>
 										</Descriptions.Item>
 									</Descriptions>
