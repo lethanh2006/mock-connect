@@ -70,7 +70,12 @@ const StepSelectAdvisor = ({
 
 	useEffect(() => {
 		const fetchPrimaryAdvisorBySso = async () => {
-			if (!ssoIdCoVanHocTapChinh || !!maCoVanHocTapChinh || coVanHocTapChinh || fetchedPrimarySso.current === ssoIdCoVanHocTapChinh)
+			if (
+				!ssoIdCoVanHocTapChinh ||
+				!!maCoVanHocTapChinh ||
+				coVanHocTapChinh ||
+				fetchedPrimarySso.current === ssoIdCoVanHocTapChinh
+			)
 				return;
 			fetchedPrimarySso.current = ssoIdCoVanHocTapChinh;
 			const ds = await getModel(
@@ -107,11 +112,14 @@ const StepSelectAdvisor = ({
 		}
 	}, [coVanHocTapPhu, form]);
 
-
-
 	useEffect(() => {
 		const fetchSecondaryAdvisorBySso = async () => {
-			if (!ssoIdCoVanHocTapPhu || !!maCoVanHocTapPhu || coVanHocTapPhu || fetchedSecondarySso.current === ssoIdCoVanHocTapPhu)
+			if (
+				!ssoIdCoVanHocTapPhu ||
+				!!maCoVanHocTapPhu ||
+				coVanHocTapPhu ||
+				fetchedSecondarySso.current === ssoIdCoVanHocTapPhu
+			)
 				return;
 			fetchedSecondarySso.current = ssoIdCoVanHocTapPhu;
 			const ds = await getModel(
@@ -195,7 +203,15 @@ const StepSelectAdvisor = ({
 						</div>
 					}
 					name='maDonViPhuTrach'
-					rules={[{ required: true, message: intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit.error.required' }, { defaultMessage: 'Vui lòng chọn Đơn vị phụ trách' }) }]}
+					rules={[
+						{
+							required: true,
+							message: intl.formatMessage(
+								{ id: 'minor.idm.advisor.responsibleUnit.error.required' },
+								{ defaultMessage: 'Vui lòng chọn Đơn vị phụ trách' },
+							),
+						},
+					]}
 				>
 					<SelectDonVi
 						fieldValue='maDonVi'
@@ -232,7 +248,9 @@ const StepSelectAdvisor = ({
 							const duplicateByMa = !!maCoVanHocTapChinh && value === maCoVanHocTapChinh;
 							const duplicateBySso = !!ssoIdCoVanHocTapChinh && selectedAdvisor?.ssoId === ssoIdCoVanHocTapChinh;
 							if (!duplicateByMa && !duplicateBySso) return Promise.resolve();
-							return Promise.reject(new Error(intl.formatMessage({ id: 'minor.idm.advisor.error.duplicateSecondaryAdvisor' })));
+							return Promise.reject(
+								new Error(intl.formatMessage({ id: 'minor.idm.advisor.error.duplicateSecondaryAdvisor' })),
+							);
 						},
 					},
 				]}
@@ -248,7 +266,8 @@ const StepSelectAdvisor = ({
 								form.setFieldsValue({
 									maCoVanHocTapPhu: rawData?.thongTinNhanSu?.maCanBo ?? value,
 									ssoIdCoVanHocTapPhu: rawData?.thongTinNhanSu?.ssoId ?? value,
-									hoTenCoVanHocTapPhu: `${rawData?.thongTinNhanSu?.hoDem ?? ''} ${rawData?.thongTinNhanSu?.ten ?? ''}`.trim(),
+									hoTenCoVanHocTapPhu:
+										`${rawData?.thongTinNhanSu?.hoDem ?? ''} ${rawData?.thongTinNhanSu?.ten ?? ''}`.trim(),
 									emailCoVanHocTapPhu: rawData?.thongTinNhanSu?.email ?? rawData?.thongTinNhanSu?.emailCanBo,
 								});
 							}}
@@ -271,34 +290,32 @@ const StepSelectAdvisor = ({
 					/>
 				)}
 			</Form.Item>
-			<Divider orientation='left' dashed/>
+			<Divider orientation='left' dashed />
 			<Form.Item
 				name={'hasDiscussedWithAdvisor'}
 				valuePropName='checked'
-				style={{marginTop: -8}}
+				style={{ marginTop: -8 }}
 				rules={[
 					{
 						validator: (_, value) =>
 							value
 								? Promise.resolve()
-								: Promise.reject(new Error(intl.formatMessage({ id: 'minor.idm.advisor.error.discussedConsentRequired' }))),
+								: Promise.reject(
+										new Error(intl.formatMessage({ id: 'minor.idm.advisor.error.discussedConsentRequired' })),
+									),
 					},
 				]}
 			>
-				<Checkbox><i>{intl.formatMessage({ id: 'minor.idm.advisor.discussedConsent' })}</i></Checkbox>
+				<Checkbox>
+					<i>{intl.formatMessage({ id: 'minor.idm.advisor.discussedConsent' })}</i>
+				</Checkbox>
 			</Form.Item>
 			<Form.Item name='ssoIdCoVanHocTapPhu' hidden />
 			<Form.Item name='hoTenCoVanHocTapPhu' hidden />
 			<Form.Item name='emailCoVanHocTapPhu' hidden />
 			<Form.Item name='tenDonViPhuTrach' hidden />
 
-			<FormFooter
-				showPrevious
-				onPrevious={onPrevious}
-				onNext={onNext}
-				onSaveDraft={onSaveDraft}
-				loading={loading}
-			/>
+			<FormFooter showPrevious onPrevious={onPrevious} onNext={onNext} onSaveDraft={onSaveDraft} loading={loading} />
 		</>
 	);
 };

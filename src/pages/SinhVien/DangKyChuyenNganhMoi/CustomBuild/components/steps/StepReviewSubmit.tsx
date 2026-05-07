@@ -2,7 +2,7 @@ import ProgramDesignTable from '@/pages/SinhVien/DangKyChuyenNganhMoi/CustomBuil
 import { ETrangThaiKqht } from '@/services/DaoTao/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import { CheckCircleOutlined, CloseCircleOutlined, WarningOutlined } from '@ant-design/icons';
-import { Alert, Card, Checkbox, Col, Descriptions, Divider, Form, Row, Tag, Typography } from 'antd';
+import { Alert, Card, Checkbox, Col, Divider, Form, Row, Tag, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
 import FormFooter from '../FormFooter';
 
@@ -64,7 +64,8 @@ const StepReviewSubmit = ({
 	const emailPhuWatch = Form.useWatch('emailCoVanHocTapPhu', Form.useFormInstance());
 
 	const { danhSach } = useModel('tochucnhansu.nhansu');
-	const ssoIdChinh = Form.useWatch('ssoIdCoVanHocTapChinh', Form.useFormInstance()) || phieuMeDotHienTai?.ssoIdCoVanHocTapChinh;
+	const ssoIdChinh =
+		Form.useWatch('ssoIdCoVanHocTapChinh', Form.useFormInstance()) || phieuMeDotHienTai?.ssoIdCoVanHocTapChinh;
 	const maChinh = Form.useWatch('maCoVanHocTapChinh', Form.useFormInstance()) || phieuMeDotHienTai?.maCoVanHocTapChinh;
 	const advisorChinh = danhSach?.find((item) => (maChinh ? item.maCanBo === maChinh : item.ssoId === ssoIdChinh));
 
@@ -254,7 +255,7 @@ const StepReviewSubmit = ({
 									</Col>
 								)}
 
-								{(isMinor && (tenDonViPhuTrach || formData?.tenDonViPhuTrach)) && (
+								{isMinor && (tenDonViPhuTrach || formData?.tenDonViPhuTrach) && (
 									<Col span={24}>
 										<div
 											style={{
@@ -269,7 +270,9 @@ const StepReviewSubmit = ({
 											</span>{' '}
 											<span style={{ fontWeight: 600 }}>
 												{tenDonViPhuTrach || formData?.tenDonViPhuTrach}
-												{(maDonViPhuTrach || formData?.maDonViPhuTrach) ? ` (${maDonViPhuTrach || formData?.maDonViPhuTrach})` : ''}
+												{maDonViPhuTrach || formData?.maDonViPhuTrach
+													? ` (${maDonViPhuTrach || formData?.maDonViPhuTrach})`
+													: ''}
 											</span>
 										</div>
 									</Col>
