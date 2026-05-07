@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
@@ -15,7 +16,6 @@ import { Button, Card, Space, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import DanhSachSinhVienThi from './DanhSachSinhVienThi';
-import PageCard from '@/components/PageCard';
 
 const LichThiPage = () => {
 	const intl = useIntl();
@@ -96,7 +96,7 @@ const LichThiPage = () => {
 					title: intl.formatMessage({ id: 'lichthi.table.kqht' }),
 					dataIndex: 'dieuKienKetQuaHocTap',
 					align: 'center',
-					width: 80,
+					width: 120,
 					filterType: 'select',
 					filterData: Object.values(EDKDTKetQuaHocTap),
 					render: (val: EDKDTKetQuaHocTap) => val && <Tag color={colorDKDTKetQuaHocTap[val]}>{val}</Tag>,
@@ -106,7 +106,7 @@ const LichThiPage = () => {
 					title: intl.formatMessage({ id: 'lichthi.table.congNo' }),
 					dataIndex: 'dieuKienCongNo',
 					align: 'center',
-					width: 80,
+					width: 120,
 					filterType: 'select',
 					filterData: Object.values(EDKDTCongNo),
 					render: (val: EDKDTCongNo) => val && <Tag color={colorDKDTCongNo[val]}>{val}</Tag>,
@@ -116,7 +116,7 @@ const LichThiPage = () => {
 					title: intl.formatMessage({ id: 'lichthi.table.trangThaiThi' }),
 					dataIndex: 'trangThai',
 					align: 'center',
-					width: 80,
+					width: 120,
 					filterType: 'select',
 					filterData: Object.values(ETrangThaiThi),
 					render: (val: ETrangThaiThi) => val && <Tag color={colorTrangThaiThi[val]}>{val}</Tag>,
@@ -127,7 +127,7 @@ const LichThiPage = () => {
 		{
 			title: intl.formatMessage({ id: 'lichthi.table.thaoTac' }),
 			align: 'center',
-			width: 80,
+			width: 120,
 			render: (rec) => (
 				<Tooltip title={intl.formatMessage({ id: 'lichthi.tooltip.xemDSSV' })}>
 					<Button

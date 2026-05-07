@@ -31,7 +31,6 @@ const TienTrinhHocTap = () => {
 	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
 	const [currentHash, setCurrentHash] = useState(window.location.hash.replace('#', ''));
 	const access = useAccess();
-
 	useEffect(() => {
 		const handleHashChange = () => {
 			setCurrentHash(window.location.hash.replace('#', ''));
@@ -39,17 +38,14 @@ const TienTrinhHocTap = () => {
 		window.addEventListener('hashchange', handleHashChange);
 		return () => window.removeEventListener('hashchange', handleHashChange);
 	}, []);
-
 	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
 	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh2 : recSinhVien?.chuyenNganh;
-
 	const ngoaiThoiGian =
 		recLoTrinh?.dotDangKyPathway?.kichHoat === false ||
 		!recLoTrinh?.dotDangKyPathway?.thoiGianBatDau ||
 		!recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc ||
 		dayjs().isBefore(recLoTrinh?.dotDangKyPathway?.thoiGianBatDau) ||
 		dayjs().isAfter(recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc);
-
 	useEffect(() => {
 		//Get đợt me
 		getAllModel(undefined, undefined, undefined, undefined, 'current', false).then((res) => setRecord(res as any));

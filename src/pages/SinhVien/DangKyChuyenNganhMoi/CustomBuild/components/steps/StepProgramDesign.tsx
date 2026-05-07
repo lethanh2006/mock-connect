@@ -93,7 +93,11 @@ const StepProgramDesign = ({
 			<Row gutter={[0, 8]}>
 				<Col span={24}>
 					<Form.Item
-						label={isMinor ? intl.formatMessage({ id: 'minor.idm.form.titleOfMinor' }) : intl.formatMessage({ id: 'minor.idm.form.titleOfConcentration' })}
+						label={
+							isMinor
+								? intl.formatMessage({ id: 'minor.idm.form.titleOfMinor' })
+								: intl.formatMessage({ id: 'minor.idm.form.titleOfConcentration' })
+						}
 						name='tenChuongTrinh'
 						rules={rules.required}
 					>
@@ -195,7 +199,10 @@ const StepProgramDesign = ({
 												if (currentTotalCredits < minCredits) {
 													return Promise.reject(
 														new Error(
-															intl.formatMessage({ id: 'minor.idm.programDesign.error.minCredits' }, { min: minCredits }),
+															intl.formatMessage(
+																{ id: 'minor.idm.programDesign.error.minCredits' },
+																{ min: minCredits },
+															),
 														),
 													);
 												}
@@ -256,7 +263,11 @@ const StepProgramDesign = ({
 								setEditingRecord(undefined);
 							}}
 							footer={null}
-							title={editingIndex !== undefined ? intl.formatMessage({ id: 'global.button.chinhsua' }) : intl.formatMessage({ id: 'minor.idm.programDesign.addCourse' })}
+							title={
+								editingIndex !== undefined
+									? intl.formatMessage({ id: 'global.button.chinhsua' })
+									: intl.formatMessage({ id: 'minor.idm.programDesign.addCourse' })
+							}
 						>
 							<FormHpBuild
 								form={form}
@@ -273,13 +284,7 @@ const StepProgramDesign = ({
 				</Col>
 			</Row>
 
-			<FormFooter
-				showPrevious
-				onPrevious={onPrevious}
-				onNext={onNext}
-				onSaveDraft={onSaveDraft}
-				loading={loading}
-			/>
+			<FormFooter showPrevious onPrevious={onPrevious} onNext={onNext} onSaveDraft={onSaveDraft} loading={loading} />
 		</>
 	);
 };
