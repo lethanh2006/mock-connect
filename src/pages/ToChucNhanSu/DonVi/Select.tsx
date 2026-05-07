@@ -7,7 +7,7 @@ import { useModel } from 'umi';
  */
 const SelectDonVi = (props: {
 	value?: string;
-	onChange?: (val: string) => void;
+	onChange?: (val: string, option?: any) => void;
 	multiple?: boolean;
 	disabled?: boolean;
 	style?: React.CSSProperties;
