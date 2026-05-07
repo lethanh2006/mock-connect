@@ -335,4 +335,10 @@ export default {
 	'minor.form.chuyenNganh': 'Registered Major',
 	'minor.form.confirm': 'Confirm',
 	'minor.form.cancel': 'Cancel',
+
+	// Feedback alerts
+	'minor.idm.action.edit': 'Edit',
+	'minor.feedback.advisor': 'Feedback from Academic Advisor',
+	'minor.feedback.department': 'Feedback from Department/Faculty',
+	'minor.feedback.admin': 'Feedback from Registrar Office',
 };

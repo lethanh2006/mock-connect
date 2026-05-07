@@ -337,4 +337,10 @@ export default {
 	'minor.form.chuyenNganh': 'Chuyên ngành đăng ký',
 	'minor.form.confirm': 'Xác nhận',
 	'minor.form.cancel': 'Hủy',
+
+	// Feedback alerts
+	'minor.idm.action.edit': 'Chỉnh sửa',
+	'minor.feedback.advisor': 'Phản hồi từ Cố vấn học tập',
+	'minor.feedback.department': 'Phản hồi từ Khoa/Bộ môn',
+	'minor.feedback.admin': 'Phản hồi từ Phòng QLĐT',
 };
