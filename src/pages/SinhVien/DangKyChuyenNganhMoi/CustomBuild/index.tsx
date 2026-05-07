@@ -55,7 +55,7 @@ const IDMPage = () => {
 	}, [dotDangKy?._id]);
 
 	useEffect(() => {
-		if (phieuDangKyHienTai && !hasInitializedStep) {
+		if (phieuDangKyHienTai?._id && !hasInitializedStep) {
 			const initialValues = {
 				...phieuDangKyHienTai,
 				hasDiscussedWithAdvisor:
@@ -80,7 +80,7 @@ const IDMPage = () => {
 
 			setHasInitializedStep(true);
 		}
-	}, [phieuDangKyHienTai, hasInitializedStep, form]);
+	}, [phieuDangKyHienTai?._id, hasInitializedStep, form]);
 
 	const steps = [
 		intl.formatMessage({ id: 'minor.build.step.basicInfo' }),
@@ -153,9 +153,22 @@ const IDMPage = () => {
 			});
 		const mucTieuLyDo = currentFormValues.mucTieuLyDo || intl.formatMessage({ id: 'minor.idm.fallback.rationale' });
 
+
+		// bỏ đi các trường thông tin không cần thiêt, chỉ cấn id/ma sẽ populate được các thông tin khác
+		const {
+			idDonViPhuTrach: _,
+			tenDonViPhuTrach: __,
+			hoTenCoVanHocTapChinh: ___,
+			emailCoVanHocTapChinh: ____,
+			hoTenCoVanHocTapPhu: _____,
+			emailCoVanHocTapPhu: ______,
+			// ---
+			...restValues
+		} = currentFormValues;
+
 		await updatePhieuDangKy(phieuDangKyHienTai._id, {
 			...phieuDangKyHienTai,
-			...currentFormValues,
+			...restValues,
 			tenChuongTrinh,
 			mucTieuLyDo,
 			loai: ELoaiPhieuDkCtdt.PERSONAL,
@@ -205,9 +218,14 @@ const IDMPage = () => {
 		await form.validateFields();
 
 		const allValues = form.getFieldsValue(true);
+		// Lọc bỏ các giá trị undefined để tránh ghi đè dữ liệu cũ khi field bị unmount
+		const cleanValues = Object.fromEntries(
+			Object.entries(allValues).filter(([_, v]) => v !== undefined)
+		);
+		
 		const updatedFormData = {
 			...formData,
-			...allValues,
+			...cleanValues,
 			loai: ELoaiPhieuDkCtdt.PERSONAL,
 		};
 
@@ -219,7 +237,18 @@ const IDMPage = () => {
 		].includes(phieuDangKyHienTai?.trangThai as any);
 
 		if (phieuDangKyHienTai?._id && isDraftOrRequest) {
-			await updatePhieuDangKy(phieuDangKyHienTai?._id, updatedFormData);
+		// bỏ đi các trường thông tin không cần thiêt, chỉ cấn id/ma sẽ populate được các thông tin khác
+			const {
+				idDonViPhuTrach: _,
+				tenDonViPhuTrach: __,
+				hoTenCoVanHocTapChinh: ___,
+				emailCoVanHocTapChinh: ____,
+				hoTenCoVanHocTapPhu: _____,
+				emailCoVanHocTapPhu: ______,
+				// ---
+				...restUpdatedData
+			} = updatedFormData;
+			await updatePhieuDangKy(phieuDangKyHienTai?._id, restUpdatedData);
 		}
 
 		setFormData(updatedFormData);
@@ -227,6 +256,14 @@ const IDMPage = () => {
 	};
 
 	const onPrevious = () => {
+		const allValues = form.getFieldsValue(true);
+		const cleanValues = Object.fromEntries(
+			Object.entries(allValues).filter(([_, v]) => v !== undefined)
+		);
+		
+		const newFormData = { ...formData, ...cleanValues };
+		setFormData(newFormData);
+		form.setFieldsValue(newFormData);
 		setCurrentStep(currentStep - 1);
 	};
 
@@ -235,11 +272,21 @@ const IDMPage = () => {
 			await form.validateFields(['confirmCheckbox']);
 			if (phieuDangKyHienTai?._id) {
 				const allValues = form.getFieldsValue(true);
-				// Loại bỏ các trường metadata không cần thiết để tránh lỗi payload hoặc null
+				// Loại bỏ các trường metadata không cần thiết hoặc trường chỉ dùng để hiển thị (Tên/Email) để payload gọn và đúng yêu cầu chỉ gửi 'Mã'
 				const { updatedAt, dot, ctdt, chuyenNganh, ...cleanRecord } = phieuDangKyHienTai || {};
+				const {
+					idDonViPhuTrach: _,
+					tenDonViPhuTrach: __,
+					hoTenCoVanHocTapChinh: ___,
+					emailCoVanHocTapChinh: ____,
+					hoTenCoVanHocTapPhu: _____,
+					emailCoVanHocTapPhu: ______,
+					...restAllValues
+				} = allValues;
+
 				const payload = {
 					...cleanRecord,
-					...allValues,
+					...restAllValues,
 					loai: ELoaiPhieuDkCtdt.PERSONAL,
 				};
 				await submitPhieuDangKy(
@@ -289,7 +336,7 @@ const IDMPage = () => {
 
 		switch (currentStep) {
 			case 0:
-				return <StepBasicInfo {...commonProps} onNext={onNext} />;
+				return <StepBasicInfo {...commonProps} isMinor={isMinor} onNext={onNext} />;
 			case 1:
 				return (
 					<StepSelectAdvisor
@@ -300,7 +347,7 @@ const IDMPage = () => {
 					/>
 				);
 			case 2:
-				return <StepProgramDesign {...commonProps} onPrevious={onPrevious} onNext={onNext} />;
+				return <StepProgramDesign {...commonProps} isMinor={isMinor} onPrevious={onPrevious} onNext={onNext} />;
 			case 3:
 				return (
 					<StepReviewSubmit
@@ -309,6 +356,7 @@ const IDMPage = () => {
 						onPrevious={onPrevious}
 						onSubmit={handleSubmit}
 						formData={formData}
+						isMinor={isMinor}
 					/>
 				);
 			default:
@@ -391,7 +439,7 @@ const IDMPage = () => {
 						</Row>
 					</Card>
 					<Card title={steps[currentStep] ?? ''} style={{ height: 'fit-content' }}>
-						<Form form={form} layout='vertical' disabled={!canEdit}>
+						<Form form={form} layout='vertical' disabled={!canEdit} preserve>
 							{renderStepContent()}
 						</Form>
 					</Card>

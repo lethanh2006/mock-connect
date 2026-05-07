@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import FilterKyThi from '../../KhaoThi/KyThi/Filter';
 import Form from './components/Form';
+import PageCard from '@/components/PageCard';
 
 const BaiThiCuoiKy = () => {
 	const intl = useIntl();
@@ -169,15 +170,13 @@ const BaiThiCuoiKy = () => {
 	];
 
 	return (
-		<Card
+		<PageCard
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
 					<span>{intl.formatMessage({ id: 'baithi.title' })}</span>
 					<FilterKyThi />
 				</Space>
 			}
-			className='card-big-title card-borderless'
-			variant='borderless'
 		>
 			<Card variant='borderless'>
 				<TableBase
@@ -218,7 +217,7 @@ const BaiThiCuoiKy = () => {
 					]}
 				/>
 			</Card>
-		</Card>
+		</PageCard>
 	);
 };
 

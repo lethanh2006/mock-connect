@@ -15,6 +15,7 @@ import { Button, Card, Space, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import DanhSachSinhVienThi from './DanhSachSinhVienThi';
+import PageCard from '@/components/PageCard';
 
 const LichThiPage = () => {
 	const intl = useIntl();
@@ -143,15 +144,13 @@ const LichThiPage = () => {
 	];
 
 	return (
-		<Card
+		<PageCard
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
 					<span>{intl.formatMessage({ id: 'lichthi.title' })}</span>
 					<FilterHocKy isSetHocKy />
 				</Space>
 			}
-			className='card-big-title card-borderless'
-			variant='borderless'
 		>
 			<Card variant='borderless'>
 				<TableStaticData columns={columns} data={danhSachMe} addStt loading={loading}></TableStaticData>
@@ -163,7 +162,7 @@ const LichThiPage = () => {
 					/>
 				)}
 			</Card>
-		</Card>
+		</PageCard>
 	);
 };
 
