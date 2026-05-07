@@ -60,7 +60,9 @@ const TienTrinhHocTap = () => {
 		if (!recTienTrinh && maKhoaNganh) getTienTrinhTotNghiepModel(maKhoaNganh);
 		//Get đợt lộ trình học tập
 		if (maKhoaNganh) {
-			getByIdModel(`me?maKhoaNganh=${maKhoaNganh}`, true);
+			if (access.cctFilter()) {
+				getByIdModel(`me?maKhoaNganh=${maKhoaNganh}`, true);
+			}
 			getChuongTrinhHienTaiModel(maKhoaNganh);
 			getChosenPathwayDataModel(maKhoaNganh);
 		}
