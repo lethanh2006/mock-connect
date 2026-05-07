@@ -20,7 +20,7 @@ export default {
 	'pathway.ds.hptuchon': 'Danh sách học phần tự chọn',
 	'pathway.ds.hptotnghiep': 'Danh sách học phần tốt nghiệp',
 
-	'pathway.button.choose': 'Chọn lộ trình',
+	'pathway.button.choose': 'Đăng ký lộ trình',
 	'pathway.button.view': 'Xem',
 	'pathway.button.viewMore': 'Xem thêm',
 	'pathway.card.title': 'Loại lộ trình',

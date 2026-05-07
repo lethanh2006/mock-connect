@@ -189,6 +189,7 @@ declare module ChuongTrinhDaoTao {
 		updatedAt: string;
 		khoiHpCtList?: IKhoiHocPhanCTDT[];
 		khoiCha?: IKhoiKienThuc;
+		khoiCon?: ChuongTrinhDaoTao.IKhoiKienThuc[];
 	}
 
 	export interface IKhoiLuaChon {
@@ -200,5 +201,6 @@ declare module ChuongTrinhDaoTao {
 		createdAt: string;
 		updatedAt: string;
 		khoiKienThuc?: IKhoiKienThuc;
+		maKhoiCha?: string;
 	}
 }

@@ -1,36 +1,20 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
-import { ETrangThaiDuyetLoTrinh } from '@/services/DaoTao/ChuongTrinhDaoTao/constant';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
-import { Button, Card, Checkbox, Tag } from 'antd';
-import dayjs from 'dayjs';
+import { Card, Checkbox, Tag } from 'antd';
 import { useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useIntl } from 'umi';
 
 interface PathwayCardProps {
-	pathway: ChuongTrinhDaoTao.IKhoiKienThuc | null;
-	onSuccess?: () => void;
+	pathway?: ChuongTrinhDaoTao.IKhoiKienThuc;
 }
 
-const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
+const PathwayCard = ({ pathway }: PathwayCardProps) => {
 	const intl = useIntl();
-	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
-	const { currentKhoiLuaChonMa, handleSelectPathway, formSubmiting, registeredPathway } = useModel('sinhvien.pathway');
-	const { record: recLoTrinh } = useModel('sinhvien.lotrinhhoctap');
 	const [visibleDeCuong, setVisibleDeCuong] = useState(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
-
-	const ngoaiThoiGian =
-		recLoTrinh?.dotDangKyPathway?.kichHoat === false ||
-		!recLoTrinh?.dotDangKyPathway?.thoiGianBatDau ||
-		!recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc ||
-		dayjs().isBefore(recLoTrinh?.dotDangKyPathway?.thoiGianBatDau) ||
-		dayjs().isAfter(recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc);
-
-	const isChosen = pathway ? registeredPathway?.maKhoiKienThuc === pathway.ma : false;
-	const hasRegisteredPathway = !!registeredPathway?.maKhoiKienThuc;
 
 	if (!pathway) {
 		return (
@@ -53,27 +37,6 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 	const totalCredits = transformedData.reduce((sum, item) => {
 		return sum + item.soTinChi;
 	}, 0);
-
-	const handleChoosePathway = async () => {
-		if (!handleSelectPathway || !maKhoaNganh || !currentKhoiLuaChonMa || !pathway.ma) {
-			return;
-		}
-
-		await handleSelectPathway(
-			{
-				maKhoaNganh,
-				maKhoiCha: currentKhoiLuaChonMa,
-				maKhoiCon: pathway.ma,
-				dotDangKyPathwayId: recLoTrinh?.dotDangKyPathwayId ?? '',
-			},
-			{
-				errorIncomplete: intl.formatMessage({ id: 'pathway.error.incomplete' }),
-				successChoose: intl.formatMessage({ id: 'pathway.success.choose' }),
-				errorChoose: intl.formatMessage({ id: 'pathway.error.choose' }),
-			},
-			onSuccess,
-		);
-	};
 
 	const handleXemDeCuong = (record: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => {
 		const deCuongId = record.hocPhan?.ma ?? '';
@@ -192,6 +155,7 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 					<TableStaticData
 						data={dataBatBuoc}
 						addStt
+						hasTotal
 						columns={columns}
 						size='small'
 						otherProps={{ pagination: false, scroll: { y: 350 } }}
@@ -204,6 +168,7 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 					<TableStaticData
 						data={dataTuChon}
 						addStt
+						hasTotal
 						columns={columnsTuChon}
 						size='small'
 						otherProps={{ pagination: false, scroll: { y: 350 } }}
@@ -216,6 +181,7 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 					<TableStaticData
 						data={dataTotNghiep}
 						addStt
+						hasTotal
 						columns={columnsTuChon}
 						size='small'
 						otherProps={{ pagination: false, scroll: { y: 350 } }}
@@ -223,18 +189,6 @@ const PathwayCard = ({ pathway, onSuccess }: PathwayCardProps) => {
 					/>
 				</div>
 			) : null}
-
-			<div className='form-footer'>
-				{!(
-					(hasRegisteredPathway && recLoTrinh?.trangThaiDuyet !== ETrangThaiDuyetLoTrinh.YEU_CAU_CHINH_SUA) ||
-					isChosen ||
-					ngoaiThoiGian
-				) && (
-					<Button type='primary' loading={formSubmiting} onClick={handleChoosePathway}>
-						{intl.formatMessage({ id: 'pathway.button.choose' })}
-					</Button>
-				)}
-			</div>
 
 			{deCuongModal && (
 				<ModalHocPhan

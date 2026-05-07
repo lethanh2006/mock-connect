@@ -26,12 +26,14 @@ export async function getChuongTrinhHienTai(maKhoaNganh: string) {
 	return axios.get(`${ipDaoTao}/chuong-trinh-dao-tao/me/khoa-nganh/${maKhoaNganh}/hien-tai`);
 }
 
-export async function choosePathway(payload: { maKhoaNganh: string; maKhoiCha: string; maKhoiCon: string }) {
+export async function choosePathway(
+	payload: { maKhoaNganh: string; maKhoiCha: string; maKhoiCon: string; dotDangKyPathwayId: string }[],
+) {
 	return axios.post(`${ipDaoTao}/sv-khoi-kien-thuc/lua-chon`, payload);
 }
 
-export async function getPathwayChoice(maKhoaNganh: string, maKhoi: string) {
-	return axios.get(`${ipDaoTao}/sv-khoi-kien-thuc/khoa-nganh/${maKhoaNganh}/khoi/${maKhoi}/lua-chon`);
+export async function getPathwayChoice(maKhoaNganh: string) {
+	return axios.get(`${ipDaoTao}/sv-khoi-kien-thuc/khoa-nganh/${maKhoaNganh}/lua-chon`);
 }
 
 export async function getChuongTrinhDaoTaoTheoLoai(loai: string, donviId?: string) {

@@ -1,11 +1,10 @@
-import {
-	ETrangThaiDuyetLoTrinh,
-	mapColorTrangThaiDuyetLoTrinh,
-	mapNamTrangThaiDuyetLoTrinh,
-} from '@/services/DaoTao/ChuongTrinhDaoTao/constant';
+import { ETrangThaiDuyetLoTrinh, mapNamTrangThaiDuyetLoTrinh } from '@/services/DaoTao/ChuongTrinhDaoTao/constant';
 import { formatDateTime } from '@/utils/formatDate';
-import { Alert, Space, Tag } from 'antd';
+import { CheckCircleFilled, ClockCircleFilled, ExclamationCircleFilled, InfoCircleFilled } from '@ant-design/icons';
+import { Alert, Divider, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
+
+const { Text } = Typography;
 
 const CardNotePathWay = () => {
 	const intl = useIntl();
@@ -13,33 +12,54 @@ const CardNotePathWay = () => {
 
 	const trangThai = recLoTrinh?.trangThaiDuyet as ETrangThaiDuyetLoTrinh;
 
-	const renderMessage = () => {
-		const tenTrangThai = mapNamTrangThaiDuyetLoTrinh[trangThai];
+	const getStatusConfig = () => {
+		switch (trangThai) {
+			case ETrangThaiDuyetLoTrinh.DA_DUYET:
+				return { type: 'success' as const, icon: <CheckCircleFilled /> };
+			case ETrangThaiDuyetLoTrinh.CHO_DUYET:
+				return { type: 'warning' as const, icon: <ClockCircleFilled /> };
+			case ETrangThaiDuyetLoTrinh.TU_CHOI:
+				return { type: 'error' as const, icon: <ExclamationCircleFilled /> };
+			default:
+				return { type: 'info' as const, icon: <InfoCircleFilled /> };
+		}
+	};
 
-		if (trangThai !== ETrangThaiDuyetLoTrinh.CHUA_DANG_KY && trangThai !== ETrangThaiDuyetLoTrinh.CHO_DUYET) {
-			return `${tenTrangThai} bởi ${recLoTrinh?.tenNguoiDuyet ?? '--'} vào ${
-				recLoTrinh?.thoiGianDuyet ? formatDateTime(recLoTrinh.thoiGianDuyet) : '--'
-			}${recLoTrinh?.ghiChuDuyet ? ` (Ghi chú: ${recLoTrinh.ghiChuDuyet})` : ''}`;
+	const config = getStatusConfig();
+
+	const renderDescription = () => {
+		if (trangThai === ETrangThaiDuyetLoTrinh.CHUA_DANG_KY || trangThai === ETrangThaiDuyetLoTrinh.CHO_DUYET) {
+			return <Text type='secondary'>Vui lòng kiểm tra lại lộ trình học tập của bạn.</Text>;
 		}
 
-		return `${intl.formatMessage({ id: 'lotrinhhoctap.trangthai' })}: ${tenTrangThai}`;
+		return (
+			<>
+				<Text strong>{recLoTrinh?.tenNguoiDuyet ?? '--'}</Text>
+				<Divider type='vertical' />
+				<Text type='secondary'>{recLoTrinh?.thoiGianDuyet ? formatDateTime(recLoTrinh.thoiGianDuyet) : '--'}</Text>
+				{recLoTrinh?.ghiChuDuyet && (
+					<div style={{ marginTop: 4, fontStyle: 'italic' }}>
+						<Text type='danger'>Ghi chú: {recLoTrinh.ghiChuDuyet}</Text>
+					</div>
+				)}
+			</>
+		);
 	};
 
 	return (
 		<Alert
-			type={
-				trangThai === ETrangThaiDuyetLoTrinh.DA_DUYET
-					? 'success'
-					: trangThai === ETrangThaiDuyetLoTrinh.CHO_DUYET
-						? 'warning'
-						: 'info'
-			}
+			showIcon
+			icon={config.icon}
+			type={config.type}
+			style={{
+				marginBottom: 16,
+			}}
 			message={
-				<Space wrap>
-					<Tag color={mapColorTrangThaiDuyetLoTrinh[trangThai]}>{mapNamTrangThaiDuyetLoTrinh[trangThai]}</Tag>
-					{renderMessage()}
-				</Space>
+				<Text strong style={{ fontSize: 15 }}>
+					{mapNamTrangThaiDuyetLoTrinh[trangThai]}
+				</Text>
 			}
+			description={renderDescription()}
 		/>
 	);
 };
