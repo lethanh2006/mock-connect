@@ -21,8 +21,9 @@ export default {
 	'pathway.ds.hptuchon': 'Elective Courses',
 	'pathway.ds.hptotnghiep': 'Graduation Courses',
 
-	'pathway.button.choose': 'Select Pathway',
+	'pathway.button.choose': 'Register Pathway',
 	'pathway.button.view': 'View',
+	'pathway.button.viewMore': 'See more',
 
 	'pathway.card.title': 'Pathway Type',
 	'pathway.card.pathwayType': 'Pathway Type',
@@ -31,7 +32,7 @@ export default {
 
 	'pathway.info.program': 'Program / Study Plan',
 	'pathway.info.programType': 'Program Type',
-	'pathway.info.currentProgram': 'Current Program',
+	'pathway.info.currentProgram': 'Major/Program',
 	'pathway.info.general': 'General',
 	'pathway.info.major': 'Major',
 	'pathway.info.studyPlan': 'Study Plan',

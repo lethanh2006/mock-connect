@@ -1,4 +1,5 @@
 import { ETrangThaiDangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/constant';
+import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import { Breadcrumb, Card, Col, Row } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useLocation, useModel, useNavigate } from 'umi';
@@ -21,7 +22,11 @@ const RegisterPage = () => {
 	const { record: dotDangKy, fetchDotDangKy, isRegistrationOpen } = useModel('daotao.dotdkctdt');
 	const { getModel } = useModel('daotao.nganhchuyennganh');
 
-	const hasRegisteredChoice = !!(phieuDangKyTheoDot?.maCtdt || phieuDangKyTheoDot?.maChuyenNganh);
+	const hasRegisteredChoice = !!(
+		phieuDangKyTheoDot?.maCtdt ||
+		phieuDangKyTheoDot?.maChuyenNganh ||
+		phieuDangKyTheoDot?.loai === ELoaiPhieuDkCtdt.PERSONAL
+	);
 	const shouldHideButton =
 		hasRegisteredChoice || (!!phieuDangKyTheoDot && phieuDangKyTheoDot?.trangThai !== ETrangThaiDangKyChuyenNganh.NHAP);
 
@@ -33,7 +38,7 @@ const RegisterPage = () => {
 	useEffect(() => {
 		if (dotDangKy?._id) {
 			fetchPhieuDangKyHienTai(dotDangKy?._id);
-			if (!phieuDangKyTheoDot) {
+			if (!phieuDangKyTheoDot || phieuDangKyTheoDot?.dot?._id !== dotDangKy?._id) {
 				fetchPhieuDangKyTheoDot(dotDangKy?._id);
 			}
 		}

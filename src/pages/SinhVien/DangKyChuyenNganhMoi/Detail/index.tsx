@@ -173,6 +173,7 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 					</Col>
 				</Row>
 
+
 				<DecisionCommentsModal
 					open={visibleViewCommentModal}
 					onCancel={handleCloseViewCommentModal}
