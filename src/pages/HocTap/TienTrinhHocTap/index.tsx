@@ -60,9 +60,7 @@ const TienTrinhHocTap = () => {
 		if (!recTienTrinh && maKhoaNganh) getTienTrinhTotNghiepModel(maKhoaNganh);
 		//Get đợt lộ trình học tập
 		if (maKhoaNganh) {
-			if (access.cctFilter()) {
-				getByIdModel(`me?maKhoaNganh=${maKhoaNganh}`, true);
-			}
+			getByIdModel(`me?maKhoaNganh=${maKhoaNganh}`, true);
 			getChuongTrinhHienTaiModel(maKhoaNganh);
 			getChosenPathwayDataModel(maKhoaNganh);
 		}
@@ -173,7 +171,7 @@ const TienTrinhHocTap = () => {
 					/>
 				) : null}
 
-				{!ngoaiThoiGian && (
+				{!ngoaiThoiGian && access.cctFilter() && (
 					<Alert
 						style={{ marginBottom: 12 }}
 						type='warning'
