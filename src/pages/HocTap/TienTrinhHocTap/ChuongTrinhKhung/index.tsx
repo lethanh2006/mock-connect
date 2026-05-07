@@ -1,10 +1,10 @@
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { ELoaiHocPhanCTDT, LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
-import { Collapse, Descriptions, Divider, Spin, Typography } from 'antd';
+import { ELoaiHocPhanCTDT } from '@/services/DaoTao/constant';
+import { Collapse, Divider, Spin, Typography } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Link, useAccess, useIntl, useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhanV2 from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
@@ -43,7 +43,8 @@ const TienTrinhChuongTrinhKhung = () => {
 		const temp: Record<string, string> = {};
 		listKhoi.forEach(
 			(khoi) =>
-				(temp[khoi as string] = `rgb(${Math.random() * 190 + 15}, ${Math.random() * 190 + 15}, ${Math.random() * 190 + 15})`),
+				(temp[khoi as string] =
+					`rgb(${Math.random() * 190 + 15}, ${Math.random() * 190 + 15}, ${Math.random() * 190 + 15})`),
 		);
 		setMapColorKhoiKienThuc(temp);
 	};
@@ -112,12 +113,8 @@ const TienTrinhChuongTrinhKhung = () => {
 		</div>
 	);
 
-	console.log(recTienTrinh, 'recTienTrinh');
-
 	return (
 		<div>
-
-
 			<Spin spinning={loading}>
 				{danhSachHocKy?.map((data, index) => (
 					<React.Fragment key={data.soThuTuKy}>
