@@ -21,7 +21,7 @@ export default {
 	'pathway.ds.hptuchon': 'Elective Courses',
 	'pathway.ds.hptotnghiep': 'Graduation Courses',
 
-	'pathway.button.choose': 'Select Pathway',
+	'pathway.button.choose': 'Register Pathway',
 	'pathway.button.view': 'View',
 	'pathway.button.viewMore': 'See more',
 
