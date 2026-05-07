@@ -1,4 +1,5 @@
 import ExpandText from '@/components/ExpandText';
+import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
@@ -14,7 +15,6 @@ import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import FilterKyThi from '../../KhaoThi/KyThi/Filter';
 import Form from './components/Form';
-import PageCard from '@/components/PageCard';
 
 const BaiThiCuoiKy = () => {
 	const intl = useIntl();
@@ -89,14 +89,14 @@ const BaiThiCuoiKy = () => {
 			title: intl.formatMessage({ id: 'baithi.table.slFile' }),
 			align: 'center',
 			dataIndex: 'soFilePhaiNop',
-			width: 100,
+			width: 130,
 		},
 		{
 			title: intl.formatMessage({ id: 'baithi.table.dungLuong' }),
 			align: 'center',
 			dataIndex: 'dungLuongToiDa',
 			render: (val, rec) => val && `${val} MB`,
-			width: 100,
+			width: 130,
 		},
 		{
 			title: intl.formatMessage({ id: 'baithi.table.dinhDang' }),
@@ -139,7 +139,7 @@ const BaiThiCuoiKy = () => {
 		{
 			title: intl.formatMessage({ id: 'baithi.table.thaoTac' }),
 			align: 'center',
-			width: 60,
+			width: 100,
 			fixed: 'right',
 			render: (val, rec) => {
 				const ngoaiThoiGian =
