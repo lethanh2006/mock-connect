@@ -6,7 +6,7 @@ export default {
 	'hoctapkhac.baoluuthoihoc.title': 'Study Suspension / Withdrawal',
 	'hoctapkhac.thechatsinhvien.title': 'Student Physical Fitness',
 	'hoctapkhac.dangkychuyennganh.dotangky.tablecolumntitle': 'Registration Period',
-	'hoctapkhac.dangkychuyennganh.chuyennganh.tablecolumntitle': 'Major',
+	'hoctapkhac.dangkychuyennganh.chuyennganh.tablecolumntitle': 'Concentration',
 	'hoctapkhac.dangkychuyennganh.trangthai.tablecolumntitle': 'Status',
 	'hoctapkhac.dangkychuyennganh.ghichu.tablecolumntitle': 'Notes',
 	'hoctapkhac.dangkychuyennganh.dangky.tablecolumntitle': 'Register',

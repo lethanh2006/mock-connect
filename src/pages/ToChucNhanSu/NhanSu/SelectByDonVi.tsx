@@ -9,8 +9,9 @@ const SelectNhanSuTheoDonVi = (props: {
   donViId: string;
   allowClear?: boolean;
   placeholder?: string;
+  disabled?: boolean;
 }) => {
-  const { value, onChange, multiple, donViId, allowClear, placeholder } = props;
+  const { value, onChange, multiple, donViId, allowClear, placeholder, disabled } = props;
   const { danhSach, getAllModel } = useModel('tochucnhansu.nhansudonvi');
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const SelectNhanSuTheoDonVi = (props: {
       mode={multiple ? 'multiple' : undefined}
       value={value}
       onChange={onChange}
+      disabled={disabled}
       options={danhSach.map((item) => ({
         key: item._id,
         value: item.thongTinNhanSu?.ssoId ?? item.thongTinNhanSuId,
