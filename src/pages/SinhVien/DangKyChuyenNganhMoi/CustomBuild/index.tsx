@@ -1,21 +1,22 @@
-import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import { ETrangThaiDangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/constant';
-import { Breadcrumb, Button, Card, Col, Form, Modal, Row, Steps } from 'antd';
+import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
+import { Alert, Breadcrumb, Button, Card, Col, Form, Modal, Row, Space, Steps } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { history, useIntl, useLocation, useModel } from 'umi';
 import AlertBanners from '../History/components/AlertBanners';
 // import SidebarRequirements from './components/SidebarRequirements';
+import PageCard from '@/components/PageCard';
 import StepBasicInfo from './components/steps/StepBasicInfo';
 import StepProgramDesign from './components/steps/StepProgramDesign';
 import StepReviewSubmit from './components/steps/StepReviewSubmit';
 import StepSelectAdvisor from './components/steps/StepSelectAdvisor';
-import PageCard from '@/components/PageCard';
 
 const IDMPage = () => {
 	const intl = useIntl();
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
 	const loai = searchParams.get('loai') || 'minor';
+	const id = searchParams.get('id');
 
 	const isMinor = loai.toLowerCase() === 'minor';
 	const pageTitle = intl.formatMessage({
@@ -31,6 +32,7 @@ const IDMPage = () => {
 		record: phieuDangKyHienTai,
 		submitPhieuDangKy,
 		fetchPhieuDangKyHienTai,
+		fetchChiTietPhieuDangKy,
 		updatePhieuDangKy,
 		loading,
 		formSubmiting,
@@ -51,11 +53,15 @@ const IDMPage = () => {
 	}, [loai]);
 
 	useEffect(() => {
-		if (dotDangKy?._id) fetchPhieuDangKyHienTai(dotDangKy?._id);
-	}, [dotDangKy?._id]);
+		if (id) {
+			fetchChiTietPhieuDangKy(id);
+		} else if (dotDangKy?._id) {
+			fetchPhieuDangKyHienTai(dotDangKy?._id);
+		}
+	}, [id, dotDangKy?._id]);
 
 	useEffect(() => {
-		if (phieuDangKyHienTai && !hasInitializedStep) {
+		if (phieuDangKyHienTai?._id && !hasInitializedStep) {
 			const initialValues = {
 				...phieuDangKyHienTai,
 				hasDiscussedWithAdvisor:
@@ -80,7 +86,7 @@ const IDMPage = () => {
 
 			setHasInitializedStep(true);
 		}
-	}, [phieuDangKyHienTai, hasInitializedStep, form]);
+	}, [phieuDangKyHienTai?._id, hasInitializedStep, form]);
 
 	const steps = [
 		intl.formatMessage({ id: 'minor.build.step.basicInfo' }),
@@ -103,9 +109,7 @@ const IDMPage = () => {
 		const { trangThai, trangThaiDuyetCVHT, trangThaiDuyetKhoaBoMon, trangThaiDuyetQldt } = phieuDangKyHienTai;
 
 		// 1. Các trạng thái mặc định được sửa
-		if (
-			[ETrangThaiDangKyChuyenNganh.NHAP, ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA].includes(trangThai as any)
-		) {
+		if ([ETrangThaiDangKyChuyenNganh.NHAP, ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA].includes(trangThai as any)) {
 			return true;
 		}
 
@@ -153,9 +157,21 @@ const IDMPage = () => {
 			});
 		const mucTieuLyDo = currentFormValues.mucTieuLyDo || intl.formatMessage({ id: 'minor.idm.fallback.rationale' });
 
+		// bỏ đi các trường thông tin không cần thiêt, chỉ cấn id/ma sẽ populate được các thông tin khác
+		const {
+			idDonViPhuTrach: _,
+			tenDonViPhuTrach: __,
+			hoTenCoVanHocTapChinh: ___,
+			emailCoVanHocTapChinh: ____,
+			hoTenCoVanHocTapPhu: _____,
+			emailCoVanHocTapPhu: ______,
+			// ---
+			...restValues
+		} = currentFormValues;
+
 		await updatePhieuDangKy(phieuDangKyHienTai._id, {
 			...phieuDangKyHienTai,
-			...currentFormValues,
+			...restValues,
 			tenChuongTrinh,
 			mucTieuLyDo,
 			loai: ELoaiPhieuDkCtdt.PERSONAL,
@@ -205,21 +221,34 @@ const IDMPage = () => {
 		await form.validateFields();
 
 		const allValues = form.getFieldsValue(true);
+		// Lọc bỏ các giá trị undefined để tránh ghi đè dữ liệu cũ khi field bị unmount
+		const cleanValues = Object.fromEntries(Object.entries(allValues).filter(([_, v]) => v !== undefined));
+
 		const updatedFormData = {
 			...formData,
-			...allValues,
+			...cleanValues,
 			loai: ELoaiPhieuDkCtdt.PERSONAL,
 		};
 
 		// Nếu đang ở trạng thái có thể sửa (Draft/Request), ta lưu trung gian.
 		// Nếu đang Pending, ta chỉ set state local, việc update sẽ dồn vào nút "Cập nhật phiếu" ở bước cuối.
-		const isDraftOrRequest = [
-			ETrangThaiDangKyChuyenNganh.NHAP,
-			ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA,
-		].includes(phieuDangKyHienTai?.trangThai as any);
+		const isDraftOrRequest = [ETrangThaiDangKyChuyenNganh.NHAP, ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA].includes(
+			phieuDangKyHienTai?.trangThai as any,
+		);
 
 		if (phieuDangKyHienTai?._id && isDraftOrRequest) {
-			await updatePhieuDangKy(phieuDangKyHienTai?._id, updatedFormData);
+			// bỏ đi các trường thông tin không cần thiêt, chỉ cấn id/ma sẽ populate được các thông tin khác
+			const {
+				idDonViPhuTrach: _,
+				tenDonViPhuTrach: __,
+				hoTenCoVanHocTapChinh: ___,
+				emailCoVanHocTapChinh: ____,
+				hoTenCoVanHocTapPhu: _____,
+				emailCoVanHocTapPhu: ______,
+				// ---
+				...restUpdatedData
+			} = updatedFormData;
+			await updatePhieuDangKy(phieuDangKyHienTai?._id, restUpdatedData);
 		}
 
 		setFormData(updatedFormData);
@@ -227,6 +256,12 @@ const IDMPage = () => {
 	};
 
 	const onPrevious = () => {
+		const allValues = form.getFieldsValue(true);
+		const cleanValues = Object.fromEntries(Object.entries(allValues).filter(([_, v]) => v !== undefined));
+
+		const newFormData = { ...formData, ...cleanValues };
+		setFormData(newFormData);
+		form.setFieldsValue(newFormData);
 		setCurrentStep(currentStep - 1);
 	};
 
@@ -235,20 +270,26 @@ const IDMPage = () => {
 			await form.validateFields(['confirmCheckbox']);
 			if (phieuDangKyHienTai?._id) {
 				const allValues = form.getFieldsValue(true);
-				// Loại bỏ các trường metadata không cần thiết để tránh lỗi payload hoặc null
+				// Loại bỏ các trường metadata không cần thiết hoặc trường chỉ dùng để hiển thị (Tên/Email) để payload gọn và đúng yêu cầu chỉ gửi 'Mã'
 				const { updatedAt, dot, ctdt, chuyenNganh, ...cleanRecord } = phieuDangKyHienTai || {};
+				const {
+					idDonViPhuTrach: _,
+					tenDonViPhuTrach: __,
+					hoTenCoVanHocTapChinh: ___,
+					emailCoVanHocTapChinh: ____,
+					hoTenCoVanHocTapPhu: _____,
+					emailCoVanHocTapPhu: ______,
+					...restAllValues
+				} = allValues;
+
 				const payload = {
 					...cleanRecord,
-					...allValues,
+					...restAllValues,
 					loai: ELoaiPhieuDkCtdt.PERSONAL,
 				};
-				await submitPhieuDangKy(
-					phieuDangKyHienTai._id,
-					payload,
-					() => {
-						navigateWithBypass(backToHistoryPath);
-					},
-				);
+				await submitPhieuDangKy(phieuDangKyHienTai._id, payload, () => {
+					navigateWithBypass(backToHistoryPath);
+				});
 			}
 		} catch (error) {
 			// Để Ant Design tự hiển thị lỗi đỏ tại các trường, không cần message.error chung chung gây nhiễu
@@ -289,18 +330,11 @@ const IDMPage = () => {
 
 		switch (currentStep) {
 			case 0:
-				return <StepBasicInfo {...commonProps} onNext={onNext} />;
+				return <StepBasicInfo {...commonProps} isMinor={isMinor} onNext={onNext} />;
 			case 1:
-				return (
-					<StepSelectAdvisor
-						{...commonProps}
-						isMinor={isMinor}
-						onPrevious={onPrevious}
-						onNext={onNext}
-					/>
-				);
+				return <StepSelectAdvisor {...commonProps} isMinor={isMinor} onPrevious={onPrevious} onNext={onNext} />;
 			case 2:
-				return <StepProgramDesign {...commonProps} onPrevious={onPrevious} onNext={onNext} />;
+				return <StepProgramDesign {...commonProps} isMinor={isMinor} onPrevious={onPrevious} onNext={onNext} />;
 			case 3:
 				return (
 					<StepReviewSubmit
@@ -309,6 +343,7 @@ const IDMPage = () => {
 						onPrevious={onPrevious}
 						onSubmit={handleSubmit}
 						formData={formData}
+						isMinor={isMinor}
 					/>
 				);
 			default:
@@ -371,6 +406,40 @@ const IDMPage = () => {
 							<Col span={24}>
 								<AlertBanners type={loai as 'minor' | 'concentration'} buttonRegister={false} />
 							</Col>
+
+							{[
+								ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA,
+								ETrangThaiDangKyChuyenNganh.CHO_DUYET,
+							].includes(phieuDangKyHienTai?.trangThai as any) && (
+								<Col span={24}>
+									<Space direction='vertical' style={{ width: '100%' }} size='small'>
+										{phieuDangKyHienTai?.ghiChuCVHT && (
+											<Alert
+												message={intl.formatMessage({ id: 'minor.feedback.advisor' })}
+												description={phieuDangKyHienTai.ghiChuCVHT}
+												type='warning'
+												showIcon
+											/>
+										)}
+										{phieuDangKyHienTai?.ghiChuBoMon && (
+											<Alert
+												message={intl.formatMessage({ id: 'minor.feedback.department' })}
+												description={phieuDangKyHienTai.ghiChuBoMon}
+												type='warning'
+												showIcon
+											/>
+										)}
+										{phieuDangKyHienTai?.ghiChuQldt && (
+											<Alert
+												message={intl.formatMessage({ id: 'minor.feedback.admin' })}
+												description={phieuDangKyHienTai.ghiChuQldt}
+												type='warning'
+												showIcon
+											/>
+										)}
+									</Space>
+								</Col>
+							)}
 							<Steps
 								labelPlacement='vertical'
 								current={currentStep}
@@ -391,7 +460,7 @@ const IDMPage = () => {
 						</Row>
 					</Card>
 					<Card title={steps[currentStep] ?? ''} style={{ height: 'fit-content' }}>
-						<Form form={form} layout='vertical' disabled={!canEdit}>
+						<Form form={form} layout='vertical' disabled={!canEdit} preserve>
 							{renderStepContent()}
 						</Form>
 					</Card>

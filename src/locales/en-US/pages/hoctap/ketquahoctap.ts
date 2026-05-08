@@ -28,7 +28,7 @@ export default {
 	'ketquahoctap.diemtp.col.maHp': 'Course Code',
 	'ketquahoctap.diemtp.col.tenHp': 'Course Name',
 	'ketquahoctap.diemtp.col.soTc': 'Credits',
-	'ketquahoctap.diemtp.col.tichLuy': '',
+	'ketquahoctap.diemtp.col.tichLuy': 'Accumulated points',
 	'ketquahoctap.diemtp.col.diemThi1': 'Exam Score',
 	'ketquahoctap.diemtp.col.diemThi2': 'Second Exam',
 	'ketquahoctap.diemtp.col.tongKet10': 'Final Grade (10-point scale)',

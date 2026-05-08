@@ -2,7 +2,7 @@ import SelectDonVi from '@/pages/ToChucNhanSu/DonVi/Select';
 import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
 import SelectNhanSuTheoDonVi from '@/pages/ToChucNhanSu/NhanSu/SelectByDonVi';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
-import { Checkbox, Collapse, Descriptions, Divider, Form, FormInstance } from 'antd';
+import { Checkbox, Descriptions, Divider, Form, FormInstance } from 'antd';
 import { useEffect, useRef } from 'react';
 import { useIntl, useModel } from 'umi';
 import FormFooter from '../FormFooter';
@@ -31,7 +31,7 @@ const StepSelectAdvisor = ({
 	const fetchedPrimarySso = useRef<string | null>(null);
 	const fetchedSecondarySso = useRef<string | null>(null);
 	const selectedDonViId = Form.useWatch('idDonViPhuTrach', form);
-	const hasDiscussedWithAdvisor = Form.useWatch('hasDiscussedWithAdvisor', form);
+
 	const ssoIdCoVanHocTapPhu = Form.useWatch('ssoIdCoVanHocTapPhu', form);
 	const maCoVanHocTapPhu = Form.useWatch('maCoVanHocTapPhu', form);
 	const coVanHocTapPhu = danhSach?.find((item) =>
@@ -70,7 +70,12 @@ const StepSelectAdvisor = ({
 
 	useEffect(() => {
 		const fetchPrimaryAdvisorBySso = async () => {
-			if (!ssoIdCoVanHocTapChinh || !!maCoVanHocTapChinh || coVanHocTapChinh || fetchedPrimarySso.current === ssoIdCoVanHocTapChinh)
+			if (
+				!ssoIdCoVanHocTapChinh ||
+				!!maCoVanHocTapChinh ||
+				coVanHocTapChinh ||
+				fetchedPrimarySso.current === ssoIdCoVanHocTapChinh
+			)
 				return;
 			fetchedPrimarySso.current = ssoIdCoVanHocTapChinh;
 			const ds = await getModel(
@@ -108,19 +113,13 @@ const StepSelectAdvisor = ({
 	}, [coVanHocTapPhu, form]);
 
 	useEffect(() => {
-		if (hasDiscussedWithAdvisor === false) {
-			form.setFieldsValue({
-				maCoVanHocTapPhu: undefined,
-				ssoIdCoVanHocTapPhu: undefined,
-				hoTenCoVanHocTapPhu: undefined,
-				emailCoVanHocTapPhu: undefined,
-			});
-		}
-	}, [hasDiscussedWithAdvisor, form]);
-
-	useEffect(() => {
 		const fetchSecondaryAdvisorBySso = async () => {
-			if (!ssoIdCoVanHocTapPhu || !!maCoVanHocTapPhu || coVanHocTapPhu || fetchedSecondarySso.current === ssoIdCoVanHocTapPhu)
+			if (
+				!ssoIdCoVanHocTapPhu ||
+				!!maCoVanHocTapPhu ||
+				coVanHocTapPhu ||
+				fetchedSecondarySso.current === ssoIdCoVanHocTapPhu
+			)
 				return;
 			fetchedSecondarySso.current = ssoIdCoVanHocTapPhu;
 			const ds = await getModel(
@@ -187,101 +186,136 @@ const StepSelectAdvisor = ({
 				]}
 			/>
 
-			<Collapse className='collapse-big-title' ghost defaultActiveKey={['1']} expandIconPosition='end'>
-				<Collapse.Panel header={intl.formatMessage({ id: 'minor.idm.advisor.secondaryAdvisor' })} key='1'>
-					{isMinor && (
-						<Form.Item
-							label={intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit' })}
-							name='idDonViPhuTrach'
-							rules={[{ required: true }]}
-						>
-							<SelectDonVi
-								fieldValue='_id'
-								allowClear
-								placeholder={intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnitPlaceholder' })}
-								onChange={() => {
-									form.setFieldsValue({
-										tenDonViPhuTrach: undefined,
-										maDonViPhuTrach: undefined,
-										maCoVanHocTapPhu: undefined,
-										ssoIdCoVanHocTapPhu: undefined,
-										hoTenCoVanHocTapPhu: undefined,
-										emailCoVanHocTapPhu: undefined,
-									});
-								}}
-							/>
-						</Form.Item>
-					)}
-					<Form.Item name={'hasDiscussedWithAdvisor'} valuePropName='checked'>
-						<Checkbox>{intl.formatMessage({ id: 'minor.idm.advisor.discussedConsent' })}</Checkbox>
-					</Form.Item>
-					{hasDiscussedWithAdvisor && (
-						<Form.Item
-							label={intl.formatMessage({ id: 'minor.idm.advisor.secondaryAdvisor' })}
-							name='maCoVanHocTapPhu'
-							rules={[
-								{
-									validator: (_, value) => {
-										if (!value) return Promise.resolve();
-										const selectedAdvisor = danhSach?.find((item) => item.maCanBo === value);
-										const duplicateByMa = !!maCoVanHocTapChinh && value === maCoVanHocTapChinh;
-										const duplicateBySso = !!ssoIdCoVanHocTapChinh && selectedAdvisor?.ssoId === ssoIdCoVanHocTapChinh;
-										if (!duplicateByMa && !duplicateBySso) return Promise.resolve();
-										return Promise.reject(new Error(intl.formatMessage({ id: 'minor.idm.advisor.error.duplicateSecondaryAdvisor' })));
-									},
-								},
-							]}
-						>
-							{isMinor ? (
-								selectedDonViId ? (
-									<SelectNhanSuTheoDonVi
-										donViId={selectedDonViId}
-										allowClear
-										placeholder={intl.formatMessage({ id: 'minor.idm.advisor.selectPlaceholder' })}
-										onChange={(value, option) => {
-											const rawData = option?.rawData;
-											form.setFieldsValue({
-												maCoVanHocTapPhu: rawData?.thongTinNhanSu?.maCanBo ?? value,
-												ssoIdCoVanHocTapPhu: rawData?.thongTinNhanSu?.ssoId ?? value,
-												hoTenCoVanHocTapPhu: `${rawData?.thongTinNhanSu?.hoDem ?? ''} ${rawData?.thongTinNhanSu?.ten ?? ''}`.trim(),
-												emailCoVanHocTapPhu: rawData?.thongTinNhanSu?.email ?? rawData?.thongTinNhanSu?.emailCanBo,
-											});
-										}}
-									/>
-								) : (
-									<SelectDonVi disabled placeholder={intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnitPlaceholder' })} />
-								)
-							) : (
-								<SelectNhanSuDebounce
-									placeholder={intl.formatMessage({ id: 'minor.idm.advisor.selectPlaceholder' })}
-									selectMa
-									onChange={(value, option) => {
-										form.setFieldsValue({
-											maCoVanHocTapPhu: value as string,
-											ssoIdCoVanHocTapPhu: option?.rawData?.ssoId ?? undefined,
-											hoTenCoVanHocTapPhu: option?.rawData?.hoTen ?? undefined,
-											emailCoVanHocTapPhu: option?.rawData?.email ?? option?.rawData?.emailCanBo,
-										});
-									}}
-								/>
-							)}
-						</Form.Item>
-					)}
-					<Form.Item name='ssoIdCoVanHocTapPhu' hidden />
-					<Form.Item name='hoTenCoVanHocTapPhu' hidden />
-					<Form.Item name='emailCoVanHocTapPhu' hidden />
-					<Form.Item name='tenDonViPhuTrach' hidden />
-					<Form.Item name='maDonViPhuTrach' hidden />
-				</Collapse.Panel>
-			</Collapse>
+			<Divider orientation='left' dashed className='divider-big-title'>
+				{intl.formatMessage({ id: 'minor.idm.advisor.secondaryAdvisor' })}
+			</Divider>
 
-			<FormFooter
-				showPrevious
-				onPrevious={onPrevious}
-				onNext={onNext}
-				onSaveDraft={onSaveDraft}
-				loading={loading}
-			/>
+			{isMinor && (
+				<Form.Item
+					label={
+						<div>
+							<div>{intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit' })}</div>
+							<div style={{ fontWeight: 400, marginTop: 4, color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+								{isMinor
+									? intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit.description.minor' })
+									: intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit.description.concentration' })}
+							</div>
+						</div>
+					}
+					name='maDonViPhuTrach'
+					rules={[
+						{
+							required: true,
+							message: intl.formatMessage(
+								{ id: 'minor.idm.advisor.responsibleUnit.error.required' },
+								{ defaultMessage: 'Vui lòng chọn Đơn vị phụ trách' },
+							),
+						},
+					]}
+				>
+					<SelectDonVi
+						fieldValue='maDonVi'
+						allowClear
+						placeholder={intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnitPlaceholder' })}
+						onChange={(val: string, option: any) => {
+							form.setFieldsValue({
+								tenDonViPhuTrach: option?.rawData?.ten,
+								idDonViPhuTrach: option?.rawData?._id,
+								maCoVanHocTapPhu: undefined,
+								ssoIdCoVanHocTapPhu: undefined,
+								hoTenCoVanHocTapPhu: undefined,
+								emailCoVanHocTapPhu: undefined,
+							});
+						}}
+					/>
+				</Form.Item>
+			)}
+			<Form.Item
+				label={
+					<div>
+						<div>{intl.formatMessage({ id: 'minor.idm.advisor.secondaryAdvisor' })}</div>
+						<div style={{ fontWeight: 400, marginTop: 4, color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+							{intl.formatMessage({ id: 'minor.idm.advisor.secondaryAdvisor.description' })}
+						</div>
+					</div>
+				}
+				name='maCoVanHocTapPhu'
+				rules={[
+					{
+						validator: (_, value) => {
+							if (!value) return Promise.resolve();
+							const selectedAdvisor = danhSach?.find((item) => item.maCanBo === value);
+							const duplicateByMa = !!maCoVanHocTapChinh && value === maCoVanHocTapChinh;
+							const duplicateBySso = !!ssoIdCoVanHocTapChinh && selectedAdvisor?.ssoId === ssoIdCoVanHocTapChinh;
+							if (!duplicateByMa && !duplicateBySso) return Promise.resolve();
+							return Promise.reject(
+								new Error(intl.formatMessage({ id: 'minor.idm.advisor.error.duplicateSecondaryAdvisor' })),
+							);
+						},
+					},
+				]}
+			>
+				{isMinor ? (
+					selectedDonViId ? (
+						<SelectNhanSuTheoDonVi
+							donViId={selectedDonViId}
+							allowClear
+							placeholder={intl.formatMessage({ id: 'minor.idm.advisor.selectPlaceholder' })}
+							onChange={(value, option) => {
+								const rawData = option?.rawData;
+								form.setFieldsValue({
+									maCoVanHocTapPhu: rawData?.thongTinNhanSu?.maCanBo ?? value,
+									ssoIdCoVanHocTapPhu: rawData?.thongTinNhanSu?.ssoId ?? value,
+									hoTenCoVanHocTapPhu:
+										`${rawData?.thongTinNhanSu?.hoDem ?? ''} ${rawData?.thongTinNhanSu?.ten ?? ''}`.trim(),
+									emailCoVanHocTapPhu: rawData?.thongTinNhanSu?.email ?? rawData?.thongTinNhanSu?.emailCanBo,
+								});
+							}}
+						/>
+					) : (
+						<SelectDonVi disabled placeholder={intl.formatMessage({ id: 'minor.idm.advisor.selectPlaceholder' })} />
+					)
+				) : (
+					<SelectNhanSuDebounce
+						placeholder={intl.formatMessage({ id: 'minor.idm.advisor.selectPlaceholder' })}
+						selectMa
+						onChange={(value, option) => {
+							form.setFieldsValue({
+								maCoVanHocTapPhu: value as string,
+								ssoIdCoVanHocTapPhu: option?.rawData?.ssoId ?? undefined,
+								hoTenCoVanHocTapPhu: option?.rawData?.hoTen ?? undefined,
+								emailCoVanHocTapPhu: option?.rawData?.email ?? option?.rawData?.emailCanBo,
+							});
+						}}
+					/>
+				)}
+			</Form.Item>
+			<Divider orientation='left' dashed />
+			<Form.Item
+				name={'hasDiscussedWithAdvisor'}
+				valuePropName='checked'
+				style={{ marginTop: -8 }}
+				rules={[
+					{
+						validator: (_, value) =>
+							value
+								? Promise.resolve()
+								: Promise.reject(
+										new Error(intl.formatMessage({ id: 'minor.idm.advisor.error.discussedConsentRequired' })),
+									),
+					},
+				]}
+			>
+				<Checkbox>
+					<i>{intl.formatMessage({ id: 'minor.idm.advisor.discussedConsent' })}</i>
+				</Checkbox>
+			</Form.Item>
+			<Form.Item name='ssoIdCoVanHocTapPhu' hidden />
+			<Form.Item name='hoTenCoVanHocTapPhu' hidden />
+			<Form.Item name='emailCoVanHocTapPhu' hidden />
+			<Form.Item name='tenDonViPhuTrach' hidden />
+
+			<FormFooter showPrevious onPrevious={onPrevious} onNext={onNext} onSaveDraft={onSaveDraft} loading={loading} />
 		</>
 	);
 };

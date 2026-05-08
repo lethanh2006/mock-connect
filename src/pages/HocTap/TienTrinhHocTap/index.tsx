@@ -1,8 +1,8 @@
+import PageCard from '@/components/PageCard';
 import { TabViewPage } from '@/components/TabViewPage';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import PathWayPage from '@/pages/SinhVien/PathWay';
-import { getManyKhoiLuaChonKhoaNganh, getPathwayChoice } from '@/services/DaoTao/ChuongTrinhDaoTao';
 import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
 import { formatDate } from '@/utils/formatDate';
 import { BookOutlined, CheckCircleOutlined, NodeIndexOutlined, ScheduleOutlined } from '@ant-design/icons';
@@ -26,14 +26,11 @@ const TienTrinhHocTap = () => {
 		chuongTrinhHienTai,
 		loading: loadingChuongTrinh,
 		getChuongTrinhHienTaiModel,
-		setRecord: setChuongTrinh,
 	} = useModel('daotao.chuongtrinhdaotao');
+	const { registeredPathway, getChosenPathwayDataModel } = useModel('sinhvien.pathway');
 	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
-	const [chosenPathways, setChosenPathways] = useState<string[]>([]);
-	const [loadingPathway, setLoadingPathway] = useState(false);
 	const [currentHash, setCurrentHash] = useState(window.location.hash.replace('#', ''));
 	const access = useAccess();
-
 	useEffect(() => {
 		const handleHashChange = () => {
 			setCurrentHash(window.location.hash.replace('#', ''));
@@ -41,41 +38,14 @@ const TienTrinhHocTap = () => {
 		window.addEventListener('hashchange', handleHashChange);
 		return () => window.removeEventListener('hashchange', handleHashChange);
 	}, []);
-
 	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
 	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh2 : recSinhVien?.chuyenNganh;
-
 	const ngoaiThoiGian =
 		recLoTrinh?.dotDangKyPathway?.kichHoat === false ||
 		!recLoTrinh?.dotDangKyPathway?.thoiGianBatDau ||
 		!recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc ||
 		dayjs().isBefore(recLoTrinh?.dotDangKyPathway?.thoiGianBatDau) ||
 		dayjs().isAfter(recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc);
-
-	const fetchChosenPathways = async () => {
-		if (!maKhoaNganh) return;
-		setLoadingPathway(true);
-		try {
-			const resKhoi = await getManyKhoiLuaChonKhoaNganh(maKhoaNganh);
-			const khoiList = resKhoi?.data?.data || [];
-			if (khoiList.length > 0) {
-				const choiceResponses = await Promise.all(
-					khoiList.map((khoi: any) => getPathwayChoice(maKhoaNganh, khoi.ma))
-				);
-				const names = choiceResponses
-					.map((res: any) => res?.data?.data?.khoiKienThuc?.ten)
-					.filter(Boolean);
-				setChosenPathways(names);
-			} else {
-				setChosenPathways([]);
-			}
-		} catch (error) {
-			setChosenPathways([]);
-		} finally {
-			setLoadingPathway(false);
-		}
-	};
-
 	useEffect(() => {
 		//Get đợt me
 		getAllModel(undefined, undefined, undefined, undefined, 'current', false).then((res) => setRecord(res as any));
@@ -88,21 +58,25 @@ const TienTrinhHocTap = () => {
 		if (maKhoaNganh) {
 			getByIdModel(`me?maKhoaNganh=${maKhoaNganh}`, true);
 			getChuongTrinhHienTaiModel(maKhoaNganh);
-			fetchChosenPathways();
+			getChosenPathwayDataModel(maKhoaNganh);
 		}
 	}, [maKhoaNganh]);
 
 	useEffect(() => {
-		if (maKhoaNganh && recLoTrinh?._id) {
-			fetchChosenPathways();
+		if (maKhoaNganh) {
+			getChosenPathwayDataModel(maKhoaNganh);
 		}
 	}, [recLoTrinh?._id]);
 
+	const registeredPathwayNames =
+		registeredPathway
+			?.map((item) => item?.khoiKienThuc?.ten)
+			?.filter(Boolean)
+			?.join(', ') || '';
+
 	return (
-		<Card
-			variant='borderless'
+		<PageCard
 			title={intl.formatMessage({ id: 'tientrinhhoctap.title' })}
-			className='card-tien-trinh card-big-title card-borderless'
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<Card variant='borderless'>
@@ -126,7 +100,9 @@ const TienTrinhHocTap = () => {
 							</Link>
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loai' })}>
-							{chuongTrinhHienTai?.loai ? LoaiChuongTrinhDaoTao[chuongTrinhHienTai.loai] : chuongTrinhHienTai?.loai || '-'}
+							{chuongTrinhHienTai?.loai
+								? LoaiChuongTrinhDaoTao[chuongTrinhHienTai.loai]
+								: chuongTrinhHienTai?.loai || '-'}
 						</Descriptions.Item>
 						<Descriptions.Item label={intl.formatMessage({ id: 'pathway.info.currentProgram' })}>
 							{chuongTrinhHienTai?.nganh?.ten || chuongTrinhHienTai?.ten || '-'}
@@ -145,37 +121,67 @@ const TienTrinhHocTap = () => {
 						)}
 						{access.cctFilter() && (
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.pathway' })}>
-								<Spin spinning={loadingPathway} size='small'>
-									{chosenPathways.length > 0 ? (
-										<Tooltip title={chosenPathways.join(', ')}>
-											<div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
-												<Typography.Paragraph
-													style={{ maxWidth: '100%', marginBottom: 0, flex: 1 }}
-													ellipsis={{ rows: 2, tooltip: false }}
+								{registeredPathway.length > 0 ? (
+									<Tooltip title={registeredPathwayNames}>
+										<div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+											<Typography.Paragraph
+												style={{ maxWidth: '100%', marginBottom: 0, flex: 1 }}
+												ellipsis={{ rows: 2, tooltip: false }}
+											>
+												{registeredPathwayNames}
+											</Typography.Paragraph>
+											{currentHash !== 'lo-trinh-hoc-tap' && (
+												<a
+													href='#lo-trinh-hoc-tap'
+													style={{ fontSize: 12, whiteSpace: 'nowrap' }}
+													onClick={() => {
+														window.location.hash = 'lo-trinh-hoc-tap';
+													}}
 												>
-													{chosenPathways.join(', ')}
-												</Typography.Paragraph>
-												{currentHash !== 'lo-trinh-hoc-tap' && (
-													<a
-														href='#lo-trinh-hoc-tap'
-														style={{ fontSize: 12, whiteSpace: 'nowrap' }}
-														onClick={() => {
-															window.location.hash = 'lo-trinh-hoc-tap';
-														}}
-													>
-														{intl.formatMessage({ id: 'pathway.button.viewMore' })}
-													</a>
-												)}
-											</div>
-										</Tooltip>
-									) : (
-										<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
-									)}
-								</Spin>
+													{intl.formatMessage({ id: 'pathway.button.viewMore' })}
+												</a>
+											)}
+										</div>
+									</Tooltip>
+								) : (
+									<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
+								)}
 							</Descriptions.Item>
 						)}
 					</Descriptions>
 				</Spin>
+
+				{recDotQuyDoi?._id ? (
+					<Alert
+						style={{ marginBottom: 12 }}
+						type='info'
+						message={intl.formatMessage(
+							{ id: 'tientrinhhoctap.message' },
+							{
+								tenDot: recDotQuyDoi?.tenDot,
+								tuNgay: formatDate(recDotQuyDoi?.thoiGianBatDau),
+								denNgay: formatDate(recDotQuyDoi?.thoiGianKetThuc),
+								b: (chunks) => <b>{chunks}</b>,
+							},
+						)}
+					/>
+				) : null}
+
+				{!ngoaiThoiGian && access.cctFilter() && (
+					<Alert
+						style={{ marginBottom: 12 }}
+						type='warning'
+						message={intl.formatMessage(
+							{ id: 'lotrinhhoctap.message' },
+							{
+								tenDot: recLoTrinh?.dotDangKyPathway?.ten,
+								tuNgay: formatDate(recLoTrinh?.dotDangKyPathway?.thoiGianBatDau),
+								denNgay: formatDate(recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc),
+								b: (chunks) => <b>{chunks}</b>,
+							},
+						)}
+					/>
+				)}
 
 				<Spin spinning={loading}>
 					<Divider dashed orientation='left'>
@@ -213,38 +219,6 @@ const TienTrinhHocTap = () => {
 					</Row>
 				</Spin>
 
-				{recDotQuyDoi?._id ? (
-					<Alert
-						style={{ marginBottom: 12 }}
-						type='info'
-						message={intl.formatMessage(
-							{ id: 'tientrinhhoctap.message' },
-							{
-								tenDot: recDotQuyDoi?.tenDot,
-								tuNgay: formatDate(recDotQuyDoi?.thoiGianBatDau),
-								denNgay: formatDate(recDotQuyDoi?.thoiGianKetThuc),
-								b: (chunks) => <b>{chunks}</b>,
-							},
-						)}
-					/>
-				) : null}
-
-				{!ngoaiThoiGian && (
-					<Alert
-						style={{ marginBottom: 12 }}
-						type='warning'
-						message={intl.formatMessage(
-							{ id: 'lotrinhhoctap.message' },
-							{
-								tenDot: recLoTrinh?.dotDangKyPathway?.ten,
-								tuNgay: formatDate(recLoTrinh?.dotDangKyPathway?.thoiGianBatDau),
-								denNgay: formatDate(recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc),
-								b: (chunks) => <b>{chunks}</b>,
-							},
-						)}
-					/>
-				)}
-
 				<TabViewPage
 					hideCard
 					menu={[
@@ -277,7 +251,7 @@ const TienTrinhHocTap = () => {
 				/>
 			</Card>
 			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
-		</Card>
+		</PageCard>
 	);
 };
 

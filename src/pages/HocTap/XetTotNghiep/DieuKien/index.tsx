@@ -1,9 +1,10 @@
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { Alert, Card, Space, Spin } from 'antd';
+import { Alert, Card, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import DieuKienChungChiSection from './ChungChi';
 import DieuKienKqhtSection from './KetQuaHocTap';
+import PageCard from '@/components/PageCard';
 
 const CardDieuKienTotNghiep = () => {
 	const intl = useIntl();
@@ -26,15 +27,9 @@ const CardDieuKienTotNghiep = () => {
 	}, [maKhoaNganh]);
 
 	return (
-		<Card
-			className='card-big-title card-borderless'
-			variant='borderless'
-			title={
-				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-					<span>{intl.formatMessage({ id: 'dieukienxettotnghiep.title' })}</span>
-					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
-				</Space>
-			}
+		<PageCard
+			title={intl.formatMessage({ id: 'dieukienxettotnghiep.title' })}
+			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<Card variant='borderless'>
 				<Spin spinning={loading}>
@@ -59,7 +54,7 @@ const CardDieuKienTotNghiep = () => {
 					/>
 				)}
 			</Card>
-		</Card>
+		</PageCard>
 	);
 };
 

@@ -9,7 +9,7 @@ import {
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import dayjs from '@/utils/dayjs';
-import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -52,8 +52,14 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 		[ELoaiPhieuDkCtdt.DEFAULT]: { label: 'Standard', color: '#CE7C1E' },
 	};
 
-	const canDeleteRegistration = (status?: ETrangThaiDangKyChuyenNganh) =>
-		status === ETrangThaiDangKyChuyenNganh.NHAP || status === ETrangThaiDangKyChuyenNganh.CHO_DUYET;
+	const canDeleteRegistration = (status?: ETrangThaiDangKyChuyenNganh) => status === ETrangThaiDangKyChuyenNganh.NHAP;
+
+	const canEditRegistration = (status?: ETrangThaiDangKyChuyenNganh) =>
+		[
+			ETrangThaiDangKyChuyenNganh.NHAP,
+			ETrangThaiDangKyChuyenNganh.CHO_DUYET,
+			ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA,
+		].includes(status as ETrangThaiDangKyChuyenNganh);
 
 	const handleDeleteRegistration = async (rec: PhieuDkCtdt.UpdatePhieuDkCtdtMeDto) => {
 		await deleteModel(rec._id as string, getData, undefined, {
@@ -75,7 +81,6 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 			title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.chuyennganh.tendotdangky' }),
 			dataIndex: ['dot', 'ten'],
 			width: 200,
-			render: (val, rec) => rec.chuyenNganh?.ten || rec.tenChuongTrinh || rec.ctdt?.ten || val,
 		},
 		{
 			title: intl.formatMessage({ id: 'minor.history.type' }),
@@ -126,6 +131,17 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 							}}
 						/>
 					</Tooltip>
+					{canEditRegistration(rec.trangThai as ETrangThaiDangKyChuyenNganh) && (
+						<Tooltip title={intl.formatMessage({ id: 'minor.idm.action.edit' })}>
+							<Button
+								type='link'
+								icon={<EditOutlined />}
+								onClick={() => {
+									history.push(`/hoc-tap/dang-ky-chuyen-nganh/register?id=${rec._id}&loai=${type}`);
+								}}
+							/>
+						</Tooltip>
+					)}
 					{canDeleteRegistration(rec.trangThai as ETrangThaiDangKyChuyenNganh) && (
 						<Tooltip title={intl.formatMessage({ id: 'minor.idm.action.delete' })}>
 							<Popconfirm

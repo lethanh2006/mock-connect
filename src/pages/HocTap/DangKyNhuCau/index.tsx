@@ -3,6 +3,7 @@ import { Card, Empty, Space } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import NhuCauHocPhanPage from './NhuCauHocPhan';
+import PageCard from '@/components/PageCard';
 
 const DangKyNhuCauPage = () => {
 	const intl = useIntl();
@@ -21,8 +22,7 @@ const DangKyNhuCauPage = () => {
 	}, [recHocKy?._id]);
 
 	return (
-		<Card
-			className='card-big-title card-borderless'
+		<PageCard
 			title={
 				<>
 					<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
@@ -35,7 +35,6 @@ const DangKyNhuCauPage = () => {
 					</Space>
 				</>
 			}
-			variant='borderless'
 		>
 			{record?._id ? (
 				<NhuCauHocPhanPage
@@ -49,7 +48,7 @@ const DangKyNhuCauPage = () => {
 					/>
 				</Card>
 			)}
-		</Card>
+		</PageCard>
 	);
 };
 
