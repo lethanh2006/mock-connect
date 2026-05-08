@@ -117,7 +117,7 @@ const PathWayPage = (props: { getData?: () => void }) => {
 
 	return (
 		<>
-			<CardNotePathWay />
+			{recLoTrinh?._id && <CardNotePathWay />}
 
 			<Spin spinning={isLoadingKhoiLuaChon}>
 				{khoiLuaChonList?.length > 1 && (
