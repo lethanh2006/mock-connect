@@ -236,6 +236,7 @@ export default {
 	'minor.detail.commentDefault': 'Suitable major',
 	'minor.detail.registration_info.title': 'Registration Information',
 	'minor.detail.proposed_program_name': 'Proposed Program Name',
+	'minor.detail.tenDonVi': 'Faculty/School',
 
 	// AlertBanners
 	'minor.alert.registrationStart.minor': 'Minor registration period starts from {date}',
