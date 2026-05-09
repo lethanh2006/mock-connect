@@ -161,10 +161,29 @@ const StepReviewSubmit = ({
 								{intl.formatMessage({ id: 'minor.idm.review.advisorSummary' })}
 							</Divider>
 							<Row gutter={[16, 16]}>
+								{isMinor && (
+									<Col xs={24}>
+										<div style={{ marginBottom: 12 }}>
+											<Tag color='purple' style={{ marginBottom: 8 }}>
+												{intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit' })}
+											</Tag>
+											<div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+												<div>
+													<span style={{ color: 'var(--color-text-secondary)' }}>
+														{intl.formatMessage({ id: 'minor.detail.tenDonVi' }, { defaultMessage: 'Tên đơn vị' })}:
+													</span>{' '}
+													<span style={{ fontWeight: 600 }}>
+														{tenDonViPhuTrach ?? formData?.tenDonViPhuTrach ?? '-'}
+													</span>
+												</div>
+											</div>
+										</div>
+									</Col>
+								)}
 								<Col xs={24} md={12}>
 									<div style={{ marginBottom: 12 }}>
 										<Tag color='blue' style={{ marginBottom: 8 }}>
-											{intl.formatMessage({ id: 'minor.idm.review.primaryAdvisor' })}
+											{intl.formatMessage({ id: 'minor.idm.advisor.facultyAdvisorLabel' })}
 										</Tag>
 										<div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
 											<div>

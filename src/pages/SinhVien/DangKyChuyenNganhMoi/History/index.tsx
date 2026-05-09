@@ -53,7 +53,7 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 	};
 
 	const canDeleteRegistration = (status?: ETrangThaiDangKyChuyenNganh) =>
-		status === ETrangThaiDangKyChuyenNganh.NHAP;
+		status === ETrangThaiDangKyChuyenNganh.NHAP || status === ETrangThaiDangKyChuyenNganh.CHO_DUYET;
 
 	const canEditRegistration = (status?: ETrangThaiDangKyChuyenNganh) =>
 		[
@@ -132,17 +132,17 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 							}}
 						/>
 					</Tooltip>
-					{canEditRegistration(rec.trangThai as ETrangThaiDangKyChuyenNganh) && (
+					{/* {canEditRegistration(rec.trangThai as ETrangThaiDangKyChuyenNganh) && (
 						<Tooltip title={intl.formatMessage({ id: 'minor.idm.action.edit' })}>
 							<Button
 								type='link'
 								icon={<EditOutlined />}
 								onClick={() => {
-									history.push(`/hoc-tap/dang-ky-chuyen-nganh/register?id=${rec._id}&loai=${type}`);
+									history.push(`/hoc-tap/dang-ky-chuyen-nganh/${rec._id}&loai=${type}`);
 								}}
 							/>
 						</Tooltip>
-					)}
+					)} */}
 					{canDeleteRegistration(rec.trangThai as ETrangThaiDangKyChuyenNganh) && (
 						<Tooltip title={intl.formatMessage({ id: 'minor.idm.action.delete' })}>
 							<Popconfirm

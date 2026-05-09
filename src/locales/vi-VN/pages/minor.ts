@@ -238,6 +238,7 @@ export default {
 	'minor.detail.edit': 'Sửa',
 	'minor.detail.commentDefault': 'Chuyên ngành phù hợp',
 	'minor.detail.proposed_program_name': 'Chương trình/Chuyên ngành đề xuất',
+	'minor.detail.tenDonVi': 'Đơn vị phụ trách',
 
 	// AlertBanners
 	'minor.alert.registrationStart.minor': 'Đợt đăng ký chuyên ngành phụ bắt đầu từ ngày {date}',

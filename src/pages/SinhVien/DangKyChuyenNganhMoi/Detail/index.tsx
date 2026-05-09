@@ -114,6 +114,16 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 												{phieuDkCtdtMe?.emailCoVanHocTapChinh || '-'}
 											</Descriptions.Item>
 										</Descriptions>
+										{isMinor && (
+											<Descriptions
+												column={1}
+												layout='horizontal'
+											>
+												<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit' })}>
+													<span style={{ fontWeight: 500 }}>{phieuDkCtdtMe?.tenDonViPhuTrach || '-'}</span>
+												</Descriptions.Item>
+											</Descriptions>
+										)}
 										<Descriptions
 											column={2}
 											layout='horizontal'
@@ -153,14 +163,12 @@ const DetailSinhVienDangKyChuyenNganh = () => {
 										<ProgramDesignTable data={phieuDkCtdtMe?.khoiHpCtList || []} hideActions />
 									</div>
 								)}
-								{[
-									ETrangThaiDangKyChuyenNganh.NHAP,
-									ETrangThaiDangKyChuyenNganh.CHO_DUYET,
-									ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA,
-								].includes(phieuDkCtdtMe?.trangThai as ETrangThaiDangKyChuyenNganh) &&
-									phieuDkCtdtMe?.trangThaiDuyetCVHT !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
-									phieuDkCtdtMe?.trangThaiDuyetKhoaBoMon !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
-									phieuDkCtdtMe?.trangThaiDuyetQldt !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
+								{((phieuDkCtdtMe?.trangThai === ETrangThaiDangKyChuyenNganh.NHAP) ||
+									(phieuDkCtdtMe?.trangThai === ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA) ||
+									(phieuDkCtdtMe?.trangThai === ETrangThaiDangKyChuyenNganh.CHO_DUYET &&
+										phieuDkCtdtMe?.trangThaiDuyetCVHT !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
+										phieuDkCtdtMe?.trangThaiDuyetKhoaBoMon !== ETrangThaiDangKyChuyenNganh.DA_DUYET &&
+										phieuDkCtdtMe?.trangThaiDuyetQldt !== ETrangThaiDangKyChuyenNganh.DA_DUYET)) &&
 									phieuDkCtdtMe?.loai !== ELoaiPhieuDkCtdt.DEFAULT && (
 										<div className='form-footer'>
 											<Button icon={<EditOutlined />} type='primary' onClick={handleEdit}>
