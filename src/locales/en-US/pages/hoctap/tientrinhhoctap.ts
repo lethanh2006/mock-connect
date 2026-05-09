@@ -97,7 +97,6 @@ export default {
 	'tientrinhhoctap.ctdt.dangcapnhat': 'Updating',
 	'tientrinhhoctap.ctdt.hocky': 'Semester',
 	'tientrinhhoctap.ctdt.tinchi': 'Credit',
-	'tientrinhhoctap.ctdt.chuyenhanh': 'Major',
 	'tientrinhhoctap.ctdt.khoihp': 'Course block / Module group',
 	'tientrinhhoctap.ctdt.noti': 'You must complete {soTinChi} credits in the following courses',
 	'tientrinhhoctap.ctdt.title': 'Program/Study plan details',

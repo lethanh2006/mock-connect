@@ -101,7 +101,6 @@ export default {
 	'tientrinhhoctap.ctdt.dangcapnhat': 'Đang cập nhật',
 	'tientrinhhoctap.ctdt.hocky': 'Học kỳ',
 	'tientrinhhoctap.ctdt.tinchi': 'tín chỉ',
-	'tientrinhhoctap.ctdt.chuyenhanh': 'Chuyên ngành',
 	'tientrinhhoctap.ctdt.khoihp': 'Khối học phần',
 	'tientrinhhoctap.ctdt.noti': 'Bạn phải đảm bảo học {soTinChi} tín chỉ trong số những học phần sau đây',
 
