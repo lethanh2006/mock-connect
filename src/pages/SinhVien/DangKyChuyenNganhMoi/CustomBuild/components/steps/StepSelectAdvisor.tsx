@@ -28,13 +28,10 @@ const StepSelectAdvisor = ({
 }: StepSelectAdvisorProps) => {
 	const intl = useIntl();
 	const { danhSach, getModel } = useModel('tochucnhansu.nhansu');
-	const { danhSach: danhSachDonVi } = useModel('tochucnhansu.donvi');
 	const fetchedPrimarySso = useRef<string | null>(null);
 	const fetchedSecondarySso = useRef<string | null>(null);
-	const selectedDonViId = Form.useWatch('idDonViPhuTrach', form);
 	const maDonViPhuTrach = Form.useWatch('maDonViPhuTrach', form);
-	// idDonViPhuTrach chỉ có khi user vừa chọn trong session này;
-	// maDonViPhuTrach có khi load từ API → dùng làm fallback để biết đơn vị đã được chọn
+	const selectedDonViId = Form.useWatch('idDonViPhuTrach', form);
 	const hasSelectedDonVi = !!(selectedDonViId || maDonViPhuTrach);
 
 	const ssoIdCoVanHocTapPhu = Form.useWatch('ssoIdCoVanHocTapPhu', form);
@@ -63,15 +60,6 @@ const StepSelectAdvisor = ({
 		}
 	}, [isMinor, selectedDonViId, maDonViPhuTrach, form]);
 
-	// Khi load từ API: maDonViPhuTrach có nhưng idDonViPhuTrach chưa có
-	// → lookup _id từ danh sách đơn vị đã load để SelectNhanSuTheoDonVi filter đúng
-	useEffect(() => {
-		if (!isMinor || selectedDonViId || !maDonViPhuTrach) return;
-		const donVi = danhSachDonVi?.find((dv) => dv.maDonVi === maDonViPhuTrach);
-		if (donVi?._id) {
-			form.setFieldValue('idDonViPhuTrach', donVi._id);
-		}
-	}, [isMinor, selectedDonViId, maDonViPhuTrach, danhSachDonVi, form]);
 
 	useEffect(() => {
 		if (coVanHocTapChinh) {
@@ -235,6 +223,7 @@ const StepSelectAdvisor = ({
 						placeholder={intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnitPlaceholder' })}
 						onChange={(val: string, option: any) => {
 							form.setFieldsValue({
+								maDonViPhuTrach: val,
 								tenDonViPhuTrach: option?.rawData?.ten,
 								idDonViPhuTrach: option?.rawData?._id,
 								maCoVanHocTapPhu: undefined,
@@ -274,7 +263,8 @@ const StepSelectAdvisor = ({
 				{isMinor ? (
 					hasSelectedDonVi ? (
 						<SelectNhanSuTheoDonVi
-							donViId={selectedDonViId ?? ''}
+							donViId={selectedDonViId}
+							maDonVi={maDonViPhuTrach}
 							allowClear
 							placeholder={intl.formatMessage({ id: 'minor.idm.advisor.selectPlaceholder' })}
 							onChange={(value, option) => {
