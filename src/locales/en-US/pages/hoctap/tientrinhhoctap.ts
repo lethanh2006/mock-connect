@@ -90,7 +90,7 @@ export default {
 	'tientrinhhoctap.tientrinhthucte.congnhan.form.ghichu.place': 'Enter notes',
 	'tientrinhhoctap.ctdt.chuongtrinh': 'Program / Study plan',
 	'tientrinhhoctap.ctdt.loai': 'Program type',
-	'tientrinhhoctap.ctdt.chuyennganh': 'Major',
+	'tientrinhhoctap.ctdt.chuyennganh': 'Concentration',
 	'tientrinhhoctap.ctdt.chuyennganhphu': 'Minor',
 	'tientrinhhoctap.ctdt.pathway': 'Pathway',
 	'tientrinhhoctap.ctdt.chuadk': 'Major not registered',

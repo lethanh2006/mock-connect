@@ -8,6 +8,7 @@ export default {
 
 	'hoctapkhac.dangkychuyennganh.dotangky.tablecolumntitle': 'Đợt đăng ký',
 	'hoctapkhac.dangkychuyennganh.chuyennganh.tablecolumntitle': 'Chuyên ngành',
+	'hoctapkhac.dangkychuyennganh.chuyennganh.tendotdangky': 'Tên đợt đăng ký',
 	'hoctapkhac.dangkychuyennganh.trangthai.tablecolumntitle': 'Trạng thái',
 	'hoctapkhac.dangkychuyennganh.ghichu.tablecolumntitle': 'Ghi chú',
 	'hoctapkhac.dangkychuyennganh.dangky.tablecolumntitle': 'Đăng ký',
