@@ -3,7 +3,7 @@ FROM node:22-alpine AS development
 
 
 # Set environment variables
-ENV APP_CONFIG_IP_ROOT=https://ais.aisenote.com/sit-vinuni
+ENV APP_CONFIG_IP_ROOT=https://ais.aisenote.com/sit-vinuni/
 ENV APP_CONFIG_ONE_SIGNAL_ID=
 ENV APP_CONFIG_SENTRY_DSN=
 ENV APP_CONFIG_KEYCLOAK_AUTHORITY=https://ais.aisenote.com/sit/keycloak/realms/sit-vinuni
