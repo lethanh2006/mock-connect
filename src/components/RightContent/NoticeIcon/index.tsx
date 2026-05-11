@@ -44,6 +44,8 @@ const NoticeIconView = () => {
 							setVisibleDetail(true);
 							setVisiblePopup(false);
 						}}
+						emptyText={intl.formatMessage({ id: 'global.rightcontent.thongbao.emptytext' })}
+						viewMoreText={intl.formatMessage({ id: 'global.rightcontent.thongbao.taithem' })}
 					/>
 				</Spin>
 			</NoticeIcon>
