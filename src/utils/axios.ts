@@ -4,7 +4,7 @@ import { notification } from 'antd';
 import axios1 from 'axios';
 // import { history } from 'umi';
 import qs from 'qs';
-import { getIntl } from 'umi';
+import { getIntl, getLocale } from 'umi';
 import { excludedPaths } from './constants';
 import data from './data';
 
@@ -32,6 +32,9 @@ import data from './data';
 //   });
 //   failedQueue = [];
 // };
+
+/** Chuẩn hóa locale (vi-VN, en-US, …) thành giá trị Accept-Language ở BE. */
+const getAcceptLanguage = (): 'en' | 'vi' => (getLocale().startsWith('vi') ? 'vi' : 'en');
 
 // Hàm trợ giúp để xử lý message từ i18n
 const getMessage = (id: string, values?: Record<string, string | number>): string => {
@@ -82,6 +85,11 @@ axios.interceptors.request.use(
 		// }
 
 		const isExcluded = excludedPaths.some((path) => config.url?.startsWith(path));
+
+		if (config.headers && !config.headers.get('Accept-Language')) {
+			config.headers.set('Accept-Language', getAcceptLanguage());
+		}
+
 		if (!isExcluded && !config.url?.includes('wp-json')) {
 			const hasHeader = Object.prototype.hasOwnProperty.call(config.headers, 'x-data-partition-code');
 

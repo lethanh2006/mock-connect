@@ -10,14 +10,13 @@ const PageCard: React.FC<PageCardProps> = ({
 	showIndicator = !true,
 	...rest
 }) => {
-	// Hierarchy modifiers: card-big-title (level 1 only), highlight (level 2), normal (level 3), or standard (level 4)
-	const isLevel1 = level === 1;
+	// Hierarchy modifiers: card-big-title (level 1 & 2), highlight (level 3), normal (level 2), or standard (level 4)
 	const isLevel4 = level === 4;
-	const baseClasses = `${isLevel1 ? 'card-big-title' : ''} ${isLevel4 ? '' : 'card-borderless'}`;
-	const levelClass = level === 2 ? 'highlight' : level === 3 ? 'normal' : isLevel4 ? 'standard' : '';
+	const baseClasses = `${level === 1 || level === 2 ? 'card-big-title' : ''} ${isLevel4 ? '' : 'card-borderless'}`;
+	const levelClass = level === 3 ? 'highlight' : level === 2 ? 'normal' : isLevel4 ? 'standard' : '';
 
-	// Indicator visibility logic for Level 1 and 2
-	const canToggleIndicator = level === 1 || level === 2;
+	// Indicator visibility logic for Level 1 and 3
+	const canToggleIndicator = level === 1 || level === 3;
 	const indicatorClass = canToggleIndicator && showIndicator === true ? 'has-indicator' : '';
 
 	return (
