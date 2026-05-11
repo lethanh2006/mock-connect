@@ -1,10 +1,11 @@
 import { blobToBase64, getNameFile } from '@/utils/utils';
-import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Image, Upload, message } from 'antd';
 import type { RcFile } from 'antd/es/upload';
 import { useEffect, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
 import { useIntl } from 'umi';
+import AuthImage from '../Image/AuthImage';
 import PreviewFile from '../PreviewFile';
 import ModalExpandable from '../Table/ModalExpandable';
 import './UploadAvatar.less';
@@ -28,6 +29,8 @@ const UploadFile: React.FC<TUploadProps> = ({
 	extra,
 	isLandscapeAvatar,
 	hasPreviewFile = true,
+	isWidescreen,
+	isPrivate,
 	...props
 }) => {
 	const intl = useIntl();
@@ -36,7 +39,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
 	const resizeProps: TResizeProps | undefined = typeof resize === 'boolean' ? {} : resize;
-	const showImage = isAvatar || isAvatarSmall || isLandscapeAvatar;
+	const showImage = isAvatar || isAvatarSmall || isLandscapeAvatar || isWidescreen;
 
 	useEffect(() => {
 		let files: any[] = [];
@@ -185,7 +188,13 @@ const UploadFile: React.FC<TUploadProps> = ({
 					customRequest={({ onSuccess }) => setTimeout(() => onSuccess && onSuccess('ok'), 0)}
 					listType='picture-card'
 					className={`avatar-uploader ${
-						isAvatarSmall ? 'avatar-small' : isLandscapeAvatar ? 'avatar-landscape' : undefined
+						isAvatarSmall
+							? 'avatar-small'
+							: isLandscapeAvatar
+								? 'avatar-landscape'
+								: isWidescreen
+									? 'avatar-widescreen'
+									: undefined
 					}`}
 					fileList={fileList}
 					onChange={handleChange}
@@ -193,6 +202,37 @@ const UploadFile: React.FC<TUploadProps> = ({
 					multiple={false}
 					accept='image/*'
 					onPreview={handlePreviewImage}
+					itemRender={
+						isPrivate
+							? (originNode, file, currFileList, actions) => {
+									if (file.url || file.preview) {
+										return (
+											<div
+												className='ant-upload-item-custom'
+												style={{ position: 'relative', width: '100%', height: '100%' }}
+											>
+												<AuthImage
+													src={file.url || file.preview}
+													style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+												/>
+
+												{!isDisabled && (
+													<div className='ant-upload-list-item-actions-custom'>
+														<span onClick={() => handlePreviewImage(file)}>
+															<EyeOutlined style={{ color: '#fff', marginRight: 12 }} />
+														</span>
+														<span onClick={() => actions.remove()}>
+															<DeleteOutlined style={{ color: '#fff' }} />
+														</span>
+													</div>
+												)}
+											</div>
+										);
+									}
+									return originNode;
+								}
+							: undefined
+					}
 					{...otherProps}
 				>
 					{!isDisabled && !fileList?.length ? (
@@ -213,14 +253,26 @@ const UploadFile: React.FC<TUploadProps> = ({
 				</Upload>
 				<Extra />
 
-				<Image
-					style={{ display: 'none' }}
-					preview={{
-						visible: previewOpen,
-						src: previewImage,
-						onVisibleChange: (val) => setPreviewOpen(val),
-					}}
-				/>
+				{isPrivate ? (
+					<AuthImage
+						isDetail
+						src={previewImage}
+						style={{ display: 'none' }}
+						preview={{
+							visible: previewOpen,
+							onVisibleChange: (val: boolean) => setPreviewOpen(val),
+						}}
+					/>
+				) : (
+					<Image
+						style={{ display: 'none' }}
+						preview={{
+							visible: previewOpen,
+							src: previewImage,
+							onVisibleChange: (val) => setPreviewOpen(val),
+						}}
+					/>
+				)}
 			</>
 		);
 
@@ -256,7 +308,7 @@ const UploadFile: React.FC<TUploadProps> = ({
 					footer={null}
 					onCancel={() => setPreviewOpen(false)}
 				>
-					<PreviewFile file={previewImage} {...props.previewFileProps} />
+					<PreviewFile file={previewImage} {...props.previewFileProps} isPrivate={isPrivate} />
 
 					<div className='form-footer'>
 						<Button onClick={() => setPreviewOpen(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
