@@ -194,7 +194,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 														showTime={{ showHour: true, showMinute: true }}
 														format='HH:mm DD/MM/YYYY'
 														disabled={isView}
-														placeholder={msg('startDatePlace')}
+														placeholder={msg('startDate.place')}
 														onChange={() => form.resetFields(['endDate'])}
 													/>
 												</Form.Item>
@@ -212,7 +212,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 														{...buildDisabledDateTime({
 															min: startDate ? dayjs(startDate) : undefined,
 														})}
-														placeholder={msg('endDatePlace')}
+														placeholder={msg('endDate.place')}
 													/>
 												</Form.Item>
 											</Col>
@@ -265,7 +265,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 														showTime={{ showHour: true, showMinute: true }}
 														format='HH:mm DD/MM/YYYY'
 														disabled={isView}
-														placeholder={msg('startDatePlace')}
+														placeholder={msg('startDate.place')}
 														onChange={() => form.resetFields(['endDate'])}
 													/>
 												</Form.Item>
@@ -283,7 +283,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 														{...buildDisabledDateTime({
 															min: startDate ? dayjs(startDate) : undefined,
 														})}
-														placeholder={msg('endDatePlace')}
+														placeholder={msg('endDate.place')}
 													/>
 												</Form.Item>
 											</Col>
@@ -390,7 +390,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 							)}
 							<Col span={24} md={12}>
 								<Form.Item name='organizer' label={msg('organizer')} rules={[...rules.required]}>
-									<Input placeholder={msg('organizerPlace')} disabled={isView} />
+									<Input placeholder={msg('organizer.place')} disabled={isView} />
 								</Form.Item>
 							</Col>
 							<Col span={24} md={12}>
