@@ -17,9 +17,10 @@ const FormItemUrlOrUpload = (props: {
 	isRequired?: boolean;
 	label?: string;
 	disabled?: boolean;
+	isPrivate?: boolean;
 }) => {
 	const intl = useIntl();
-	const { form, initValue, isRequired, disabled } = props;
+	const { form, initValue, isRequired, disabled, isPrivate } = props;
 	const [typeUpload, setTypeUpload] = useState<'UPLOAD' | 'URL'>('UPLOAD');
 	const field = props.field || 'url';
 	const accept = props.accept || '.docx, .pdf, .doc';
@@ -55,7 +56,7 @@ const FormItemUrlOrUpload = (props: {
 			]}
 		>
 			{typeUpload === 'UPLOAD' ? (
-				<UploadFile disabled={disabled} maxCount={1} otherProps={{ accept }} />
+				<UploadFile disabled={disabled} maxCount={1} otherProps={{ accept }} isPrivate={isPrivate} />
 			) : (
 				<Input
 					disabled={disabled}
