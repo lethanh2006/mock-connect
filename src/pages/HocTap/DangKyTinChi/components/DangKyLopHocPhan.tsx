@@ -207,7 +207,7 @@ const DangKyLopHocPhan = () => {
 					// 	handleXemDeCuong(val, rec?.ten);
 					// }}
 					>
-						{val}
+						{val ?? rec?.ten}
 					</a>
 				);
 			},
