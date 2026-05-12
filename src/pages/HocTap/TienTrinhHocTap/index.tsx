@@ -5,11 +5,19 @@ import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
 import PathWayPage from '@/pages/SinhVien/PathWay';
 import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
 import { formatDate } from '@/utils/formatDate';
-import { BookOutlined, CheckCircleOutlined, NodeIndexOutlined, ScheduleOutlined } from '@ant-design/icons';
+import {
+	BookOutlined,
+	CheckCircleOutlined,
+	NodeIndexOutlined,
+	ProfileOutlined,
+	ScheduleOutlined,
+} from '@ant-design/icons';
 import { Alert, Card, Col, Descriptions, Divider, Row, Spin, Tooltip, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Link, useAccess, useIntl, useModel } from 'umi';
+import DangKyChuyenNganh from '@/pages/SinhVien/DangKyChuyenNganh';
+import DangKyChuyenNganhHistory from '@/pages/SinhVien/DangKyChuyenNganhMoi/History';
 import LichSuQuyDoiDiemPage from '../QuyDoiDiem';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
 import flag from './components/flag.svg';
@@ -78,8 +86,8 @@ const TienTrinhHocTap = () => {
 		<PageCard
 			title={intl.formatMessage({ id: 'tientrinhhoctap.title' })}
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
+
 		>
-			<Card variant='borderless'>
 				<Spin spinning={loadingChuongTrinh || loading}>
 					<Descriptions
 						column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 1 }}
@@ -242,6 +250,23 @@ const TienTrinhHocTap = () => {
 							hide: !access.cctFilter(),
 						},
 						{
+							title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
+							menuKey: 'dang-ky-chuyen-nganh',
+							content: access.cctFilter() ? (
+								<DangKyChuyenNganhHistory type='concentration' />
+							) : (
+								<DangKyChuyenNganh />
+							),
+							icon: <ProfileOutlined />,
+						},
+						{
+							title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganhhep.title' }),
+							menuKey: 'dang-ky-chuyen-nganh-hep',
+							content: <DangKyChuyenNganhHistory type='minor' />,
+							icon: <ProfileOutlined />,
+							hide: !access.cctFilter(),
+						},
+						{
 							title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan' }),
 							menuKey: 'cong-nhan-kqht',
 							content: <LichSuQuyDoiDiemPage />,
@@ -249,7 +274,6 @@ const TienTrinhHocTap = () => {
 						},
 					]}
 				/>
-			</Card>
 			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
 		</PageCard>
 	);

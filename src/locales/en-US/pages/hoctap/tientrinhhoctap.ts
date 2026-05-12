@@ -7,7 +7,7 @@ export default {
 		'Credit Recognition Period {tenDot} is ongoing from {tuNgay} to {denNgay}. You may register for grade conversion of courses within the academic program',
 	'tientrinhhoctap.tientrinhthucte': 'Actual Progress',
 	'tientrinhhoctap.ctdt': 'Academic Program',
-	'tientrinhhoctap.congnhan': 'Academic Results Recognition',
+	'tientrinhhoctap.congnhan': 'Recognizing training results',
 	'tientrinhhoctap.empty': 'No data',
 	'tientrinhhoctap.danghoc': 'In progress / No academic results',
 	'tientrinhhoctap.tientrinhthucte.khongcothongtin': 'No information',
