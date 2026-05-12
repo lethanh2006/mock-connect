@@ -1,7 +1,7 @@
 export default {
 	'hoctapkhac.title': 'Học tập khác',
-	'hoctapkhac.dangkychuyennganh.title': 'Đăng ký chuyên ngành',
-	'hoctapkhac.dangkychuyennganhhep.title': 'Đăng ký chuyên ngành phụ',
+	'hoctapkhac.dangkychuyennganh.title': 'Chuyên ngành',
+	'hoctapkhac.dangkychuyennganhhep.title': 'Chuyên ngành phụ',
 	'hoctapkhac.xethocvu.title': 'Xét học vụ',
 	'hoctapkhac.baoluuthoihoc.title': 'Bảo lưu, thôi học',
 	'hoctapkhac.thechatsinhvien.title': 'Thể chất sinh viên',
