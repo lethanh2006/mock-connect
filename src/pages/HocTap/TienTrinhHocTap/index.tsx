@@ -86,8 +86,8 @@ const TienTrinhHocTap = () => {
 		<PageCard
 			title={intl.formatMessage({ id: 'tientrinhhoctap.title' })}
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
+
 		>
-			<Card variant='borderless'>
 				<Spin spinning={loadingChuongTrinh || loading}>
 					<Descriptions
 						column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 1 }}
@@ -274,7 +274,6 @@ const TienTrinhHocTap = () => {
 						},
 					]}
 				/>
-			</Card>
 			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
 		</PageCard>
 	);
