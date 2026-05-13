@@ -50,7 +50,7 @@ export default {
 
 	'dangkytinchi.phieudangky.columntable.mahocphan': 'Mã HP',
 	'dangkytinchi.phieudangky.columntable.tenhocphan': 'Tên học phần',
-	'dangkytinchi.phieudangky.columntable.sothutulop': 'TT lớp',
+	'dangkytinchi.phieudangky.columntable.malop': 'Mã lớp',
 	'dangkytinchi.phieudangky.columntable.sotinchi': 'STC',
 	'dangkytinchi.phieudangky.columntable.giangvien': 'Giảng viên',
 	'dangkytinchi.phieudangky.columntable.thongtinchitiet': 'Thông tin chi tiết',

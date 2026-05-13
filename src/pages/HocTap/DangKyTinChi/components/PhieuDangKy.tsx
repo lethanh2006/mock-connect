@@ -138,11 +138,11 @@ const PhieuDangKy = () => {
 			filterType: 'string',
 		},
 		{
-			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sothutulop' }),
-			dataIndex: 'soThuTuLop',
-			width: 80,
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.malop' }),
+			dataIndex: 'maLop',
+			width: 150,
 			align: 'center',
-			render: (val, rec) => `${val}${rec.soThuTuNhom ? ` (nhóm TH ${rec.soThuTuNhom})` : ''}`,
+			render: (val, rec) => `${val ?? rec?.ten}${rec.soThuTuNhom ? ` (nhóm TH ${rec.soThuTuNhom})` : ''}`,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
@@ -229,6 +229,7 @@ const PhieuDangKy = () => {
 						icon={<DeleteOutlined />}
 						danger
 						type='link'
+						disabled={rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY && !rec.dangKyTinChi}
 						tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}
 						onClick={() => {
 							setRecLopDangKy(rec);
@@ -255,8 +256,9 @@ const PhieuDangKy = () => {
 						onConfirm={() => onDeleteLop(rec)}
 						// Đợt chỉ cho đk mới thì ko cho xóa những lớp đã đăng ký
 						disabled={
-							rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-							dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
+							(rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+								dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+							!rec.dangKyTinChi
 						}
 					>
 						<ButtonExtend
@@ -264,8 +266,9 @@ const PhieuDangKy = () => {
 							danger
 							type='link'
 							disabled={
-								rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-								dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY
+								(rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+									dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+								!rec.dangKyTinChi
 							}
 							tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}
 						/>
