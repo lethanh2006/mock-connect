@@ -44,7 +44,7 @@ export default {
 	'dangkytinchi.dankylophocphan.filterhocphan.btn.huongdandangky': 'Registration Guide',
 	'dangkytinchi.phieudangky.columntable.mahocphan': 'Course ID',
 	'dangkytinchi.phieudangky.columntable.tenhocphan': 'Course name',
-	'dangkytinchi.phieudangky.columntable.sothutulop': 'Class schedule',
+	'dangkytinchi.phieudangky.columntable.malop': 'Section Code',
 	'dangkytinchi.phieudangky.columntable.sotinchi': 'Credit(s)',
 	'dangkytinchi.phieudangky.columntable.giangvien': 'Lecturer',
 	'dangkytinchi.phieudangky.columntable.thongtinchitiet': 'Detailed information',

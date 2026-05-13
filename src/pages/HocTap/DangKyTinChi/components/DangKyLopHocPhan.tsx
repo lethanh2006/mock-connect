@@ -192,11 +192,12 @@ const DangKyLopHocPhan = () => {
 			align: 'center',
 			render: (val, rec) => (rec.soThuTuNhom ? `Nhóm TH ${rec.soThuTuNhom}` : val),
 			onCell,
+			hide: true,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.malop' }),
 			dataIndex: 'maLop',
-			width: 90,
+			width: 140,
 			align: 'center',
 			filterType: 'string',
 			render: (val, rec) => {
