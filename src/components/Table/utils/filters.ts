@@ -128,6 +128,63 @@ export const splitFiltersBySource = (
 	};
 };
 
+export const reAddMetadata = (
+	filters: TFilter<any>[],
+	columns: IColumn<any>[],
+	searchableFieldKeys: Set<string>,
+	totalSearchableColumns: number,
+	inheritedReadOnly?: boolean,
+): TFilter<any>[] => {
+	if (!filters || !Array.isArray(filters)) return [];
+
+	return filters.map((filter) => {
+		const nextFilter = { ...filter, active: filter.active ?? true };
+		const isGlobal = isGlobalSearchFilter(nextFilter, searchableFieldKeys, totalSearchableColumns);
+
+		// Tự động nhận diện ReadOnly theo cột (Ưu tiên cấu hình thủ công)
+		if (nextFilter.field) {
+			const col = columns.find(
+				(c) => (Array.isArray(c.dataIndex) ? c.dataIndex.join('.') : c.dataIndex) === nextFilter.field,
+			);
+			
+			if (col?.readOnly !== undefined) {
+				// Nếu có cấu hình readOnly (true/false) cụ thể ở cột, ưu tiên tuyệt đối
+				nextFilter.readOnly = col.readOnly;
+			} else if (col?.handleFilter) {
+				// Nếu không cấu hình readOnly nhưng có handleFilter, mặc định khóa
+				nextFilter.readOnly = true;
+			} else if (isGlobal || inheritedReadOnly || nextFilter.source === 'external') {
+				// Nếu thuộc nhóm Global Search hoặc nguồn bên ngoài, mặc định khóa
+				nextFilter.readOnly = true;
+			} else {
+				// Các trường hợp còn lại đảm bảo không bị dính cờ readOnly cũ
+				delete nextFilter.readOnly;
+			}
+		} else {
+			// Xử lý cho Nhóm (Group)
+			if (isGlobal || inheritedReadOnly || nextFilter.source === 'external') {
+				nextFilter.readOnly = true;
+				if (Array.isArray(nextFilter.filters)) {
+					nextFilter.filters = nextFilter.filters.map((sub) => ({ ...sub, readOnly: true, active: true }));
+				}
+			}
+		}
+
+		// Đệ quy cho nhóm
+		if (Array.isArray(nextFilter.filters)) {
+			nextFilter.filters = reAddMetadata(
+				nextFilter.filters,
+				columns,
+				searchableFieldKeys,
+				totalSearchableColumns,
+				nextFilter.readOnly, // Truyền trạng thái khóa xuống con
+			);
+		}
+
+		return nextFilter;
+	});
+};
+
 export const stripFilterSource = (filters: TFilter<any>[] = []): TFilter<any>[] => {
 	if (!Array.isArray(filters)) return [];
 
@@ -137,6 +194,21 @@ export const stripFilterSource = (filters: TFilter<any>[] = []): TFilter<any>[] 
 
 		if (Array.isArray(nextFilter.filters)) {
 			nextFilter.filters = stripFilterSource(nextFilter.filters);
+		}
+
+		return nextFilter;
+	});
+};
+
+export const stripMetadata = (filters: TFilter<any>[] = []): TFilter<any>[] => {
+	if (!Array.isArray(filters)) return [];
+
+	return filters.map((filter) => {
+		const { active, readOnly, source, ...rest } = filter;
+		const nextFilter: TFilter<any> = { ...rest };
+
+		if (Array.isArray(filter.filters)) {
+			nextFilter.filters = stripMetadata(filter.filters);
 		}
 
 		return nextFilter;
@@ -169,8 +241,30 @@ export const findFiltersInColumns = (columns: IColumn<unknown>[], filters?: any[
 					active: true,
 				};
 			}
-
 			return null;
 		})
 		.filter(Boolean);
+};
+
+export const isGlobalSearchFilter = (filter: TFilter<any>, searchableFieldKeys: Set<string>, totalSearchableColumns: number) => {
+	if (!filter?.filters?.length) return false;
+	if (filter.operator !== 'or') return false;
+
+	const { filters: subFilters } = filter;
+	if (subFilters.length !== totalSearchableColumns) return false;
+
+	let keyword: string | undefined;
+	return subFilters.every((child) => {
+		const fieldKey = JSON.stringify(child?.field);
+		if (!searchableFieldKeys.has(fieldKey)) return false;
+		if (child?.operator !== 'contain') return false;
+		const firstValue = child?.values?.[0];
+		if (firstValue === undefined || firstValue === null) return false;
+
+		const normalizedValue = `${firstValue}`.trim();
+		if (!normalizedValue) return false;
+
+		if (keyword === undefined) keyword = normalizedValue;
+		return keyword === normalizedValue;
+	});
 };

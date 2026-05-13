@@ -10,6 +10,8 @@ import {
 	normalizeFilters,
 	splitFiltersBySource,
 	stripFilterSource,
+	stripMetadata,
+	reAddMetadata,
 } from './utils';
 
 const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
@@ -30,10 +32,33 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 
 	const { tableFilters } = useMemo(() => splitFiltersBySource(modelFilters), [modelFilters]);
 
-	const filters = useMemo<TFilter<T>[]>(
-		() => normalizeFilters([...(externalFilters ?? []), ...(tableFilters ?? [])]),
-		[externalFilters, tableFilters],
+	const searchableColumns = useMemo(() => {
+		const flatColumns = props.columns?.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat() ?? [];
+		const seen = new Set<string>();
+		return flatColumns
+			.filter((item) => {
+				const isDefaultSearchable = item?.filterType === 'string';
+				const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
+				return enableGlobalSearch && item?.dataIndex && item.dataIndex !== 'index';
+			})
+			.reduce((result, item) => {
+				const fieldKey = JSON.stringify(item.dataIndex);
+				if (seen.has(fieldKey)) return result;
+				seen.add(fieldKey);
+				result.push(item.dataIndex);
+				return result;
+			}, [] as any[]);
+	}, [props.columns]);
+
+	const searchableFieldKeys = useMemo(
+		() => new Set(searchableColumns.map((k) => JSON.stringify(k))),
+		[searchableColumns],
 	);
+
+	const filters = useMemo<TFilter<T>[]>(() => {
+		const normalized = normalizeFilters([...(externalFilters ?? []), ...(tableFilters ?? [])]);
+		return reAddMetadata(normalized, props.columns ?? [], searchableFieldKeys, searchableColumns.length);
+	}, [externalFilters, tableFilters, props.columns, searchableFieldKeys, searchableColumns]);
 
 	const { externalFilters: activeExternalFilters } = useMemo(
 		() => splitFiltersBySource(filters),
@@ -48,10 +73,11 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 				externalFilters: nextExternalFilters,
 			} = splitFiltersBySource(normalizedNextFilters);
 
-			model?.setFilters?.(nextTableFilters);
+			// Strip metadata before syncing to model (URL)
+			model?.setFilters?.(stripMetadata(nextTableFilters));
 
 			if (props.onExternalFiltersChange) {
-				props.onExternalFiltersChange(stripFilterSource(nextExternalFilters));
+				props.onExternalFiltersChange(stripFilterSource(stripMetadata(nextExternalFilters)));
 			}
 		},
 		[model, props.onExternalFiltersChange],
@@ -75,7 +101,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	const getData = useCallback(
 		(params: any) => {
 			if (props.getData) return props.getData(params);
-			return model?.getModel?.(mergeExternalConditions(params), activeExternalFilters);
+			return model?.getModel?.(mergeExternalConditions(params), stripMetadata(activeExternalFilters));
 		},
 		[props.getData, model, mergeExternalConditions, activeExternalFilters],
 	);

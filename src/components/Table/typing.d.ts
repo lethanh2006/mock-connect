@@ -51,6 +51,8 @@ export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 
 	resizable?: boolean;
 	/** Cho phép tìm kiếm global hay ko (Mặc định: true với filterType = string | select) */
 	enableGlobalSearch?: boolean;
+	/** Khóa bộ lọc của cột này ở giao diện (luôn là read-only) */
+	readOnly?: boolean;
 }
 
 export type TDataOption = {
@@ -228,6 +230,7 @@ export type RowFilterProps = {
 	allowGrouping?: boolean;
 	level?: number;
 	onRemove?: () => void;
+	forceReadOnly?: boolean;
 };
 
 /**
