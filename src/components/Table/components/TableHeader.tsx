@@ -97,11 +97,13 @@ export const TableHeader: React.FC = () => {
 			if (!filter?.filters?.length) return false;
 			if (filter.operator !== EOperatorType.OR) return false;
 
-			const hasGlobalMarker = filter.readOnly === true || filter.filters.every((item) => item?.readOnly === true);
-			if (!hasGlobalMarker) return false;
+			// Global search identifies itself by matching all searchable columns with CONTAIN operator
+			// and having the same value across all of them.
+			const { filters: subFilters } = filter;
+			if (subFilters.length !== searchableColumns.length) return false;
 
 			let keyword: string | undefined;
-			return filter.filters.every((child) => {
+			return subFilters.every((child) => {
 				const fieldKey = JSON.stringify(child?.field);
 				if (!searchableFieldKeys.has(fieldKey)) return false;
 				if (child?.operator !== EOperatorType.CONTAIN) return false;
@@ -115,7 +117,7 @@ export const TableHeader: React.FC = () => {
 				return keyword === normalizedValue;
 			});
 		},
-		[searchableFieldKeys],
+		[searchableFieldKeys, searchableColumns],
 	);
 
 	const currentGlobalSearchText = useMemo(() => {
@@ -135,11 +137,13 @@ export const TableHeader: React.FC = () => {
 		(keyword: string): TFilter<any> => ({
 			operator: EOperatorType.OR,
 			readOnly: true,
+			active: true,
 			filters: searchableColumns.map((item) => ({
 				field: item.field,
 				operator: EOperatorType.CONTAIN,
 				values: [keyword],
 				readOnly: true,
+				active: true,
 			})),
 		}),
 		[searchableColumns],

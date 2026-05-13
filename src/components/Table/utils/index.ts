@@ -8,6 +8,8 @@ export {
 	normalizeFilters,
 	splitFiltersBySource,
 	stripFilterSource,
+	stripMetadata,
+	reAddMetadata,
 } from './filters';
 
 export const updateSearchStorage = (dataIndex: string, value: string) => {
