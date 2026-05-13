@@ -108,6 +108,8 @@ export default {
 	'dangkytinchi.modaldangky.dangky.alert': 'Xác nhận đăng ký các lớp tín chỉ đã chọn?',
 	'dangkytinchi.modaldangky.dangky.warning':
 		'Lưu ý: Tổng số tín chỉ đăng ký hiện tại đang thấp hơn quy định số tín chỉ tối thiểu đăng ký trong học kỳ!',
+	'dangkytinchi.modaldangky.info': 'Kiểm tra cẩn thận kết quả đăng ký trước khi kết thúc',
+
 	// confirm kq hủy lớp
 	'dangkytinchi.modalconfimhuylop.title': 'Xác nhận hủy đăng ký lớp tín chỉ',
 	'dangkytinchi.modalconfimhuylop.confirm.cochacmuonhuy': 'Bạn có chắc chắn muốn huỷ đăng ký lớp tín chỉ',

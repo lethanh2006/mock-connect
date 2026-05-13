@@ -102,6 +102,7 @@ export default {
 	'dangkytinchi.modaldangky.dangky.alert': 'Confirm registration of the selected credit classes?',
 	'dangkytinchi.modaldangky.dangky.warning':
 		'Note: The total number of currently registered credits is lower than the minimum number of credits required to register for the semester!',
+	'dangkytinchi.modaldangky.info': 'Please carefully review your registration results before finishing',
 	'dangkytinchi.modalconfimhuylop.title': 'Confirm cancellation of course registration',
 	'dangkytinchi.modalconfimhuylop.confirm.cochacmuonhuy': 'Are you sure you want to cancel the course registration',
 	'dangkytinchi.modalconfimhuylop.luuy.thaotackhonthehuy': 'Note: This action cannot be undone',
