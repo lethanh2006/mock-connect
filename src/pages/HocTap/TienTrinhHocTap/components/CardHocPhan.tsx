@@ -38,9 +38,10 @@ const CardHocPhan = (props: {
 	onClick: () => void;
 	colorKhoiKienThuc?: string;
 	trangThaiHoc?: ETrangThaiHocTap;
+	label?: string;
 }) => {
 	const intl = useIntl();
-	const { hocPhan, listDiem, colorKhoiKienThuc, trangThaiHoc, onClick } = props;
+	const { hocPhan, listDiem, colorKhoiKienThuc, trangThaiHoc, onClick, label } = props;
 	const soTinChi = hocPhan?.soTinChi ?? 0;
 	const listDiemChu = listDiem?.map((item) => item.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU);
 
@@ -68,14 +69,27 @@ const CardHocPhan = (props: {
 				{/* Content */}
 				<div className='card-content'>
 					{/* Course name */}
-					<h4 className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`} title={hocPhan?.ten}>
+					<h4
+						className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`}
+						title={hocPhan?.ten}
+					>
 						{hocPhan?.ten}
 					</h4>
 
 					{/* Credits */}
-					<Tag className='credits-tag'>
-						{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
-					</Tag>
+					<div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+						<Tag className='credits-tag'>
+							{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
+						</Tag>
+					</div>
+					{label && (
+						<span
+							className='card-label'
+							style={{ paddingRight: gradeImage ? 100 : 0 }}
+						>
+							{label}
+						</span>
+					)}
 				</div>
 
 				{/* Currently studying indicator */}

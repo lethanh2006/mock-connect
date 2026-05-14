@@ -4,12 +4,14 @@
 .base-card {
 	position: relative;
 	margin-bottom: 4px;
+	height: 100%;
 
 	.ant-card {
 		border-radius: 8px;
 		position: relative;
 		overflow: hidden;
 		background: #fff;
+		height: 100%;
 		min-height: 120px;
 		box-shadow: 0px 0px 12px 0px #0000000a;
 		cursor: pointer;
@@ -20,9 +22,11 @@
 		}
 
 		.ant-card-body {
-			padding: 20px;
+			padding: 16px;
 			position: relative;
 			height: 100%;
+			display: flex;
+			flex-direction: column;
 		}
 	}
 }
@@ -32,8 +36,8 @@
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	width: 60%;
-	height: 60%;
+	width: 50%;
+	height: 50%;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: bottom right;
@@ -44,16 +48,19 @@
 .card-content {
 	position: relative;
 	z-index: 2;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 }
 
 // Title styles
 .card-title {
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 600;
 	margin-bottom: 12px;
 	margin-top: 0;
-	padding-right: 60px;
 	line-height: 1.4;
+	flex: 1;
 
 	&.not-studied {
 		color: #8c8c8c;
@@ -62,6 +69,16 @@
 	&.default {
 		color: #262626;
 	}
+}
+
+// Label styles (Specialization/Pathway)
+.card-label {
+	display: block;
+	font-size: 11px;
+	color: #8c8c8c;
+	font-weight: 500;
+	margin-top: 4px;
+	line-height: 1.4;
 }
 
 // Credits tag styles
