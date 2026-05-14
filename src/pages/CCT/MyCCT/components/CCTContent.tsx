@@ -123,7 +123,7 @@ const CCTContent = (props: {
 		<Spin spinning={loading || loadingDot}>
 			<div className='cct-container'>
 				<header className='cct-header'>
-					<div className='header-content'>
+					<div className='header-content-cct'>
 						<div className='header-title'>
 							CO-CURRICULAR & <br /> COMPETENCY TRANSCRIPT
 						</div>
