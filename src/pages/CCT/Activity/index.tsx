@@ -327,6 +327,7 @@ const ActivityPage = () => {
 									onChange={handlePaginationChange}
 									onShowSizeChange={handlePageSizeChange}
 									pageSizeOptions={['5', '10', '20', '50']}
+									showSizeChanger={false}
 									disabled={loading}
 									size='default'
 									className='pagination'
