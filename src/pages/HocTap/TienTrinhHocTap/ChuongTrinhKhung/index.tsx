@@ -291,19 +291,20 @@ const TienTrinhChuongTrinhKhung = () => {
 
 						{/* Grid các môn học */}
 						{renderHocPhan(data, (item) => {
-							// 1. Ưu tiên nhãn Chuyên ngành/Chuyên ngành phụ nếu có
-							if (item.chuyenNganh?.ten) {
-								const isMinor = item.maChuyenNganh === recSinhVien?.maChuyenNganh2;
-								const labelId = isMinor ? 'tientrinhhoctap.ctdt.chuyennganhphu.label' : 'tientrinhhoctap.ctdt.chuyennganh.label';
-								return `${intl.formatMessage({ id: labelId })}: ${item.chuyenNganh.ten}`;
+							if (viewType === 'semester') {
+								// Chế độ học kỳ: Hiện tên lộ trình (Chuyên ngành hoặc Khối con)
+								const name = item.chuyenNganh?.ten || item.khoiKienThuc?.ten;
+								return name ? `${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.pathway.label' })}: ${name}` : undefined;
 							}
+							// Chế độ khối: Chỉ hiện nhãn Chuyên ngành ở Grid chính
+							const majorName = item.chuyenNganh?.ten;
+							if (!majorName) return undefined;
 
-							// 2. Nếu không có chuyên ngành, hiện nhãn Khối (thường dùng trong chế độ Học kỳ cho các môn tự chọn)
-							if (viewType === 'semester' && item.khoiKienThuc?.ten) {
-								return `${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.pathway.label' })}: ${item.khoiKienThuc.ten}`;
-							}
+							// Kiểm tra xem có phải chuyên ngành phụ không
+							const isMinor = item.maChuyenNganh === recSinhVien?.maChuyenNganh2;
+							const labelId = isMinor ? 'tientrinhhoctap.ctdt.chuyennganhphu.label' : 'tientrinhhoctap.ctdt.chuyennganh.label';
 
-							return undefined;
+							return `${intl.formatMessage({ id: labelId })}: ${majorName}`;
 						})}
 
 						{data.chuyenNganhList?.length ? (
@@ -330,15 +331,15 @@ const TienTrinhChuongTrinhKhung = () => {
 									>
 										{renderHocPhan(chuyenNganh, (item) => {
 											if (viewType === 'semester') return undefined; // Trong Collapse học kỳ thì không cần label nữa vì đã có Header
+											// Chế độ khối: Hiện nhãn chuyên ngành nếu có
+											const majorName = item.chuyenNganh?.ten;
+											if (!majorName) return undefined;
 
-											// Logic tương tự Grid chính để hiển thị nhãn Chuyên ngành/Phụ
-											if (item.chuyenNganh?.ten) {
-												const isMinor = item.maChuyenNganh === recSinhVien?.maChuyenNganh2;
-												const labelId = isMinor ? 'tientrinhhoctap.ctdt.chuyennganhphu.label' : 'tientrinhhoctap.ctdt.chuyennganh.label';
-												return `${intl.formatMessage({ id: labelId })}: ${item.chuyenNganh.ten}`;
-											}
+											// Kiểm tra xem có phải chuyên ngành phụ không
+											const isMinor = item.maChuyenNganh === recSinhVien?.maChuyenNganh2;
+											const labelId = isMinor ? 'tientrinhhoctap.ctdt.chuyennganhphu.label' : 'tientrinhhoctap.ctdt.chuyennganh.label';
 
-											return undefined;
+											return `${intl.formatMessage({ id: labelId })}: ${majorName}`;
 										})}
 									</Collapse.Panel>
 								))}
