@@ -36,8 +36,8 @@
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	width: 50%;
-	height: 50%;
+	width: 40%;
+	height: 40%;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: bottom right;
@@ -90,7 +90,7 @@
 	font-weight: 500;
 }
 
-// Currently studying indicator
+// Currently studying indicator (Standard)
 .studying-indicator {
 	position: absolute;
 	top: 12px;
@@ -103,6 +103,20 @@
 	box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.4);
 	z-index: 10;
 	animation: pulse-green 2s infinite;
+}
+
+// Currently studying text (VinUni)
+.studying-text {
+	display: inline-block;
+	font-size: 11px;
+	font-weight: 600;
+	color: #52c41a;
+	background: #f6ffed;
+	padding: 1px 8px;
+	border-radius: 4px;
+	border: 1px solid #b7eb8f;
+	line-height: 20px;
+	text-transform: uppercase;
 }
 
 @keyframes pulse-green {
