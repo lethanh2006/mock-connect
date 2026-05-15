@@ -231,16 +231,16 @@ const TienTrinhHocTap = () => {
 				hideCard
 				menu={[
 					{
-						title: intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte' }),
-						menuKey: 'tien-trinh-thuc-te',
-						content: <TienTrinhThucTe />,
-						icon: <ScheduleOutlined />,
-					},
-					{
 						title: intl.formatMessage({ id: 'tientrinhhoctap.ctdt' }),
 						menuKey: 'chuong-trinh-dao-tao',
 						content: <TienTrinhChuongTrinhKhung />,
 						icon: <BookOutlined />,
+					},
+					{
+						title: intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte' }),
+						menuKey: 'tien-trinh-thuc-te',
+						content: <TienTrinhThucTe />,
+						icon: <ScheduleOutlined />,
 					},
 					{
 						title: intl.formatMessage({ id: 'lotrinhhoctap.title' }),
@@ -270,6 +270,7 @@ const TienTrinhHocTap = () => {
 					},
 				]}
 			/>
+
 			<ChuongTrinhDaoTaoModalView visible={visibleChuongTrinh} setVisible={setVisibleChuongTrinh} />
 		</PageCard>
 	);
