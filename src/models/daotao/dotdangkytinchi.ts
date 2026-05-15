@@ -145,7 +145,7 @@ export default () => {
 						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
 					})) ?? [];
 
-			const lop = res.data?.data?.registeredList ?? [];
+			const lop = res.data?.data?.registeredList ?? res.data?.data ?? []; // Back trả về có thể là {registeredList: [], waitlistList: []} hoặc chỉ là mảng lớp đã đăng ký
 			const waitList = res.data?.data?.waitlistList ?? [];
 
 			const lopDangKy = mapLop(lop, false);
@@ -154,9 +154,9 @@ export default () => {
 			const result = [...lopDangKy, ...lopWaitList];
 
 			setDanhSachLopDangKy(result);
-			tinhDataLichHoc(lopDangKy);
+			tinhDataLichHoc(result);
 
-			return lopDangKy;
+			return result;
 		} catch (er) {
 			setDanhSachLopDangKy([]);
 			setDataLichHoc({});

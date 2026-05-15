@@ -51,6 +51,12 @@ export declare module LopHocPhan {
 		thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[];
 		trangThaiLop: ETrangThaiLopHocPhan;
 
+		/** Đã chốt kế hoạch rà soát học phần chưa? */
+		chotKeHoach?: boolean;
+		chotTkb: boolean;
+		dangKyTinChi?: boolean;
+		khoaTkb?: boolean;
+
 		// lopHpHcList?: Partial<ILopHpLopHc>[];
 		// doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
 

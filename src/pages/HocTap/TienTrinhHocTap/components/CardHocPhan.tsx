@@ -1,5 +1,6 @@
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ETrangThaiHocTap } from '@/services/DaoTao/constant';
+import { tenTruongVietTatTiengAnh } from '@/services/base/constant';
 import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Card, Tag } from 'antd';
@@ -38,11 +39,16 @@ const CardHocPhan = (props: {
 	onClick: () => void;
 	colorKhoiKienThuc?: string;
 	trangThaiHoc?: ETrangThaiHocTap;
+	label?: string;
 }) => {
 	const intl = useIntl();
-	const { hocPhan, listDiem, colorKhoiKienThuc, trangThaiHoc, onClick } = props;
+	const { hocPhan, listDiem, colorKhoiKienThuc, trangThaiHoc, onClick, label } = props;
 	const soTinChi = hocPhan?.soTinChi ?? 0;
 	const listDiemChu = listDiem?.map((item) => item.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU);
+
+	const isNotStudied = trangThaiHoc === ETrangThaiHocTap.CHUA_HOC;
+	const isCurrentlyStudying = trangThaiHoc === ETrangThaiHocTap.DANG_HOC;
+	const isVinUni = tenTruongVietTatTiengAnh === 'VINUNI';
 
 	// Chỉ hiển thị điểm đầu tiên
 	const diemHienThi = listDiemChu?.[0];
@@ -52,10 +58,6 @@ const CardHocPhan = (props: {
 		if (isNotStudied) return null;
 		return GRADE_IMAGES[grade as keyof typeof GRADE_IMAGES] || GRADE_IMAGES.DEFAULT;
 	};
-
-	// Check status
-	const isNotStudied = trangThaiHoc === ETrangThaiHocTap.CHUA_HOC;
-	const isCurrentlyStudying = trangThaiHoc === ETrangThaiHocTap.DANG_HOC;
 
 	const gradeImage = diemHienThi ? getGradeImage(diemHienThi) : null;
 
@@ -68,18 +70,36 @@ const CardHocPhan = (props: {
 				{/* Content */}
 				<div className='card-content'>
 					{/* Course name */}
-					<h4 className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`} title={hocPhan?.ten}>
+					<h4
+						className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`}
+						title={hocPhan?.ten}
+					>
 						{hocPhan?.ten}
 					</h4>
 
-					{/* Credits */}
-					<Tag className='credits-tag'>
-						{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
-					</Tag>
+					{/* Credits & Status */}
+					<div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+						<Tag className='credits-tag'>
+							{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
+						</Tag>
+						{isCurrentlyStudying && isVinUni && (
+							<div className='studying-text'>
+								{intl.formatMessage({ id: 'tientrinhhoctap.danghoc', defaultMessage: 'Đang học' })}
+							</div>
+						)}
+					</div>
+					{label && (
+						<span
+							className='card-label'
+							style={{ paddingRight: gradeImage ? 100 : 0 }}
+						>
+							{label}
+						</span>
+					)}
 				</div>
 
-				{/* Currently studying indicator */}
-				{isCurrentlyStudying && (
+				{/* Currently studying indicator (Non-VinUni) */}
+				{isCurrentlyStudying && !isVinUni && (
 					<div
 						className='studying-indicator'
 						title={intl.formatMessage({ id: 'tientrinhhoctap.danghoc' })}
