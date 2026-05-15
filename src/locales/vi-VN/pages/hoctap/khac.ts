@@ -1,13 +1,14 @@
 export default {
 	'hoctapkhac.title': 'Học tập khác',
-	'hoctapkhac.dangkychuyennganh.title': 'Đăng ký chuyên ngành',
-	'hoctapkhac.dangkychuyennganhhep.title': 'Đăng ký chuyên ngành phụ',
+	'hoctapkhac.dangkychuyennganh.title': 'Chuyên ngành',
+	'hoctapkhac.dangkychuyennganhhep.title': 'Chuyên ngành phụ',
 	'hoctapkhac.xethocvu.title': 'Xét học vụ',
 	'hoctapkhac.baoluuthoihoc.title': 'Bảo lưu, thôi học',
 	'hoctapkhac.thechatsinhvien.title': 'Thể chất sinh viên',
 
 	'hoctapkhac.dangkychuyennganh.dotangky.tablecolumntitle': 'Đợt đăng ký',
 	'hoctapkhac.dangkychuyennganh.chuyennganh.tablecolumntitle': 'Chuyên ngành',
+	'hoctapkhac.dangkychuyennganh.chuyennganh.tendotdangky': 'Tên đợt đăng ký',
 	'hoctapkhac.dangkychuyennganh.trangthai.tablecolumntitle': 'Trạng thái',
 	'hoctapkhac.dangkychuyennganh.ghichu.tablecolumntitle': 'Ghi chú',
 	'hoctapkhac.dangkychuyennganh.dangky.tablecolumntitle': 'Đăng ký',

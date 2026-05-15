@@ -30,7 +30,9 @@ const StepSelectAdvisor = ({
 	const { danhSach, getModel } = useModel('tochucnhansu.nhansu');
 	const fetchedPrimarySso = useRef<string | null>(null);
 	const fetchedSecondarySso = useRef<string | null>(null);
+	const maDonViPhuTrach = Form.useWatch('maDonViPhuTrach', form);
 	const selectedDonViId = Form.useWatch('idDonViPhuTrach', form);
+	const hasSelectedDonVi = !!(selectedDonViId || maDonViPhuTrach);
 
 	const ssoIdCoVanHocTapPhu = Form.useWatch('ssoIdCoVanHocTapPhu', form);
 	const maCoVanHocTapPhu = Form.useWatch('maCoVanHocTapPhu', form);
@@ -47,7 +49,8 @@ const StepSelectAdvisor = ({
 
 	useEffect(() => {
 		if (!isMinor) return;
-		if (!selectedDonViId) {
+		// Clear cố vấn phụ nếu user xóa đơn vị
+		if (!selectedDonViId && !maDonViPhuTrach) {
 			form.setFieldsValue({
 				maCoVanHocTapPhu: undefined,
 				ssoIdCoVanHocTapPhu: undefined,
@@ -55,7 +58,8 @@ const StepSelectAdvisor = ({
 				emailCoVanHocTapPhu: undefined,
 			});
 		}
-	}, [isMinor, selectedDonViId, form]);
+	}, [isMinor, selectedDonViId, maDonViPhuTrach, form]);
+
 
 	useEffect(() => {
 		if (coVanHocTapChinh) {
@@ -219,6 +223,7 @@ const StepSelectAdvisor = ({
 						placeholder={intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnitPlaceholder' })}
 						onChange={(val: string, option: any) => {
 							form.setFieldsValue({
+								maDonViPhuTrach: val,
 								tenDonViPhuTrach: option?.rawData?.ten,
 								idDonViPhuTrach: option?.rawData?._id,
 								maCoVanHocTapPhu: undefined,
@@ -256,9 +261,10 @@ const StepSelectAdvisor = ({
 				]}
 			>
 				{isMinor ? (
-					selectedDonViId ? (
+					hasSelectedDonVi ? (
 						<SelectNhanSuTheoDonVi
 							donViId={selectedDonViId}
+							maDonVi={maDonViPhuTrach}
 							allowClear
 							placeholder={intl.formatMessage({ id: 'minor.idm.advisor.selectPlaceholder' })}
 							onChange={(value, option) => {

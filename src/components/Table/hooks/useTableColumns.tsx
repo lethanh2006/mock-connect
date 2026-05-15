@@ -155,7 +155,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 					);
 					const selectedValue = selectedKeys?.[0];
 					const inputValue =
-						selectedValue !== undefined && selectedValue !== null && `${selectedValue}` !== ''
+						selectedValue !== undefined && selectedValue !== null
 							? (selectedValue as string)
 							: (currentFilterValue ?? '');
 
@@ -301,14 +301,14 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		(dataIndex: any, filterCustomSelect?: JSX.Element): Partial<IColumn<unknown>> => {
 			if (!filterCustomSelect) return {};
 			const filterColumn = getFilterColumn(dataIndex, EOperatorType.INCLUDE, true);
-			const currentFilterValues = (filterColumn?.values ?? []) as (string | number)[];
+			
 			return {
 				filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => (
 					<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
 						<Space size={0}>
 							<div style={{ width: 300 }}>
 								{React.cloneElement(filterCustomSelect, {
-									value: selectedKeys?.length ? selectedKeys : currentFilterValues,
+									value: selectedKeys,
 									onChange: (value: any) => setSelectedKeys(Array.isArray(value) ? value : [value]),
 									style: { width: '100%' },
 								})}

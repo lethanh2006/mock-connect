@@ -1,6 +1,6 @@
 import { ETrangThaiDangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/constant';
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
-import { Alert, Breadcrumb, Button, Card, Col, Form, Modal, Row, Space, Steps } from 'antd';
+import { Alert, Breadcrumb, Button, Card, Col, Form, message, Modal, Row, Space, Steps } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { history, useIntl, useLocation, useModel } from 'umi';
 import AlertBanners from '../History/components/AlertBanners';
@@ -64,8 +64,11 @@ const IDMPage = () => {
 		if (phieuDangKyHienTai?._id && !hasInitializedStep) {
 			const initialValues = {
 				...phieuDangKyHienTai,
+				loai: ELoaiPhieuDkCtdt.PERSONAL, // CustomBuild luôn là PERSONAL
 				hasDiscussedWithAdvisor:
 					phieuDangKyHienTai?.hasDiscussedWithAdvisor ?? !!phieuDangKyHienTai?.hoTenCoVanHocTapPhu,
+				// Luôn yêu cầu user tự tick xác nhận mỗi lần chỉnh sửa
+				confirmCheckbox: undefined,
 			};
 
 			setFormData((prev: any) => ({
@@ -74,6 +77,15 @@ const IDMPage = () => {
 			}));
 
 			form.setFieldsValue(initialValues);
+
+			// Nếu phiếu chưa đúng loại PERSONAL (vd: vừa init từ API với DEFAULT),
+			// cập nhật ngay để đảm bảo loại đúng ngay cả khi user không thao tác gì
+			if (phieuDangKyHienTai?.loai !== ELoaiPhieuDkCtdt.PERSONAL) {
+				updatePhieuDangKy(phieuDangKyHienTai._id, {
+					...phieuDangKyHienTai,
+					loai: ELoaiPhieuDkCtdt.PERSONAL,
+				});
+			}
 
 			// Xác định bước hiện tại dựa trên dữ liệu đã có
 			if (phieuDangKyHienTai?.khoiHpCtList?.length && phieuDangKyHienTai?.khoiHpCtList?.length > 0) {
@@ -145,7 +157,8 @@ const IDMPage = () => {
 	};
 
 	const saveDraft = async (force = false) => {
-		if (!phieuDangKyHienTai?._id) return;
+		const phieuId = phieuDangKyHienTai?._id || id;
+		if (!phieuId) return;
 		if (!force && !hasUnsavedChanges) return;
 		const currentFormValues = form.getFieldsValue(true);
 
@@ -158,6 +171,8 @@ const IDMPage = () => {
 		const mucTieuLyDo = currentFormValues.mucTieuLyDo || intl.formatMessage({ id: 'minor.idm.fallback.rationale' });
 
 		// bỏ đi các trường thông tin không cần thiêt, chỉ cấn id/ma sẽ populate được các thông tin khác
+		const cleanFormValues = Object.fromEntries(Object.entries(currentFormValues).filter(([_, v]) => v !== undefined));
+
 		const {
 			idDonViPhuTrach: _,
 			tenDonViPhuTrach: __,
@@ -167,15 +182,17 @@ const IDMPage = () => {
 			emailCoVanHocTapPhu: ______,
 			// ---
 			...restValues
-		} = currentFormValues;
+		} = cleanFormValues;
 
-		await updatePhieuDangKy(phieuDangKyHienTai._id, {
+		const payload = {
 			...phieuDangKyHienTai,
+			...formData, 
 			...restValues,
 			tenChuongTrinh,
 			mucTieuLyDo,
-			loai: ELoaiPhieuDkCtdt.PERSONAL,
-		});
+			loai: ELoaiPhieuDkCtdt.PERSONAL,  // CustomBuild luôn là PERSONAL
+		};
+		await updatePhieuDangKy(phieuId, payload);
 	};
 
 	const handleSaveDraft = async () => {
@@ -230,13 +247,12 @@ const IDMPage = () => {
 			loai: ELoaiPhieuDkCtdt.PERSONAL,
 		};
 
-		// Nếu đang ở trạng thái có thể sửa (Draft/Request), ta lưu trung gian.
-		// Nếu đang Pending, ta chỉ set state local, việc update sẽ dồn vào nút "Cập nhật phiếu" ở bước cuối.
-		const isDraftOrRequest = [ETrangThaiDangKyChuyenNganh.NHAP, ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA].includes(
-			phieuDangKyHienTai?.trangThai as any,
-		);
+		// Nếu đang ở trạng thái Nháp, ta lưu trung gian.
+		// Nếu đang Request Revision hoặc Pending, ta chỉ set state local, việc update sẽ dồn vào nút "Cập nhật/Gửi" ở bước cuối
+		// để tránh tình trạng API trả về dữ liệu cũ và ghi đè state.
+		const isDraft = phieuDangKyHienTai?.trangThai === ETrangThaiDangKyChuyenNganh.NHAP;
 
-		if (phieuDangKyHienTai?._id && isDraftOrRequest) {
+		if (phieuDangKyHienTai?._id && isDraft) {
 			// bỏ đi các trường thông tin không cần thiêt, chỉ cấn id/ma sẽ populate được các thông tin khác
 			const {
 				idDonViPhuTrach: _,
@@ -267,8 +283,15 @@ const IDMPage = () => {
 
 	const handleSubmit = async () => {
 		try {
-			await form.validateFields(['confirmCheckbox']);
-			if (phieuDangKyHienTai?._id) {
+			try {
+				await form.validateFields(['confirmCheckbox']);
+			} catch (validationError) {
+				message.error(intl.formatMessage({ id: 'minor.idm.review.confirmRequired' }));
+				return;
+			}
+
+			const phieuId = phieuDangKyHienTai?._id || id;
+			if (phieuId) {
 				const allValues = form.getFieldsValue(true);
 				// Loại bỏ các trường metadata không cần thiết hoặc trường chỉ dùng để hiển thị (Tên/Email) để payload gọn và đúng yêu cầu chỉ gửi 'Mã'
 				const { updatedAt, dot, ctdt, chuyenNganh, ...cleanRecord } = phieuDangKyHienTai || {};
@@ -284,15 +307,18 @@ const IDMPage = () => {
 
 				const payload = {
 					...cleanRecord,
+					...formData, // <-- Kết hợp formData để không mất dữ liệu các bước trước
 					...restAllValues,
 					loai: ELoaiPhieuDkCtdt.PERSONAL,
 				};
-				await submitPhieuDangKy(phieuDangKyHienTai._id, payload, () => {
+				await submitPhieuDangKy(phieuId, payload, () => {
 					navigateWithBypass(backToHistoryPath);
 				});
+			} else {
+				message.error('Lỗi: Không tìm thấy ID phiếu đăng ký!');
 			}
 		} catch (error) {
-			// Để Ant Design tự hiển thị lỗi đỏ tại các trường, không cần message.error chung chung gây nhiễu
+			console.error('LỖI KHI XÁC NHẬN SUBMIT:', error);
 		}
 	};
 
@@ -319,13 +345,16 @@ const IDMPage = () => {
 	};
 
 	const renderStepContent = () => {
-		const isPending = phieuDangKyHienTai?.trangThai === ETrangThaiDangKyChuyenNganh.CHO_DUYET;
+		// Dùng formData?.trangThai để lấy trạng thái gốc khi vừa load trang
+		// Tránh việc gọi API lưu trung gian ở các bước làm BE trả về trạng thái "Nháp" và hiện lại nút.
+		const isPending = formData?.trangThai === ETrangThaiDangKyChuyenNganh.CHO_DUYET;
+		const isRequestRevision = formData?.trangThai === ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA;
 		const commonProps = {
 			form,
 			loading,
 			submitLoading: formSubmiting,
 			canEdit,
-			onSaveDraft: isPending ? undefined : handleSaveDraft,
+			onSaveDraft: (isPending || isRequestRevision) ? undefined : handleSaveDraft,
 		};
 
 		switch (currentStep) {

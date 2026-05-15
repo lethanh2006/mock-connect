@@ -9,7 +9,7 @@ import {
 import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import dayjs from '@/utils/dayjs';
-import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Modal, Popconfirm, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
@@ -52,7 +52,8 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 		[ELoaiPhieuDkCtdt.DEFAULT]: { label: 'Standard', color: '#CE7C1E' },
 	};
 
-	const canDeleteRegistration = (status?: ETrangThaiDangKyChuyenNganh) => status === ETrangThaiDangKyChuyenNganh.NHAP;
+	const canDeleteRegistration = (status?: ETrangThaiDangKyChuyenNganh) =>
+		status === ETrangThaiDangKyChuyenNganh.NHAP || status === ETrangThaiDangKyChuyenNganh.CHO_DUYET;
 
 	const canEditRegistration = (status?: ETrangThaiDangKyChuyenNganh) =>
 		[
@@ -131,17 +132,17 @@ const DangKyChuyenNganhPage = ({ type }: { type: 'minor' | 'concentration' }) =>
 							}}
 						/>
 					</Tooltip>
-					{canEditRegistration(rec.trangThai as ETrangThaiDangKyChuyenNganh) && (
+					{/* {canEditRegistration(rec.trangThai as ETrangThaiDangKyChuyenNganh) && (
 						<Tooltip title={intl.formatMessage({ id: 'minor.idm.action.edit' })}>
 							<Button
 								type='link'
 								icon={<EditOutlined />}
 								onClick={() => {
-									history.push(`/hoc-tap/dang-ky-chuyen-nganh/register?id=${rec._id}&loai=${type}`);
+									history.push(`/hoc-tap/dang-ky-chuyen-nganh/${rec._id}&loai=${type}`);
 								}}
 							/>
 						</Tooltip>
-					)}
+					)} */}
 					{canDeleteRegistration(rec.trangThai as ETrangThaiDangKyChuyenNganh) && (
 						<Tooltip title={intl.formatMessage({ id: 'minor.idm.action.delete' })}>
 							<Popconfirm
