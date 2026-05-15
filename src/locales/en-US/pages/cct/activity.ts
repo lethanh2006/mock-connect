@@ -125,7 +125,7 @@ export default {
 	'level.select': 'Select Level',
 	'track.select': 'Select Track',
 
-	'activity.list': 'List Activity',
+	'activity.list': 'Events & Engagement Calendar',
 	'activity.upcoming': 'Upcoming',
 	'activity.ongoing': 'Ongoing',
 	'activity.completed': 'Completed',

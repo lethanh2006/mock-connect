@@ -148,7 +148,8 @@ const CardSuKienCCT = (props: {
 
 	return (
 		<Card
-			hoverable={!!onClick}
+			// hoverable={!!onClick}
+			style={onClick ? { cursor: 'pointer' } : undefined}
 			className={`activity-card ${outTime ? 'activity-disabled' : ''} ${isExpiringSoon && !record?.activityOutcome?.workflow && !isDetail ? 'activity-expiring' : ''}`}
 			cover={
 				<div className='activity-cover'>
