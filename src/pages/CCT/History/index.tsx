@@ -383,6 +383,7 @@ const HistoryActivityPage = () => {
 									onChange={handlePaginationChange}
 									onShowSizeChange={handlePageSizeChange}
 									pageSizeOptions={['5', '10', '20', '50']}
+									showSizeChanger={false}
 									disabled={loading}
 									size='default'
 									className='pagination'
@@ -393,8 +394,8 @@ const HistoryActivityPage = () => {
 				) : (
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
-						description={intl.formatMessage({ id: 'activity.history.empty' })}
-						image='/images/empty.png'
+						description={intl.formatMessage({ id: 'global.table.index.empty' })}
+						image='/student/images/empty.png'
 					/>
 				)}
 			</Spin>
