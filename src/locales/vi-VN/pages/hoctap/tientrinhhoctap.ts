@@ -101,7 +101,6 @@ export default {
 	'tientrinhhoctap.ctdt.dangcapnhat': 'Đang cập nhật',
 	'tientrinhhoctap.ctdt.hocky': 'Học kỳ',
 	'tientrinhhoctap.ctdt.tinchi': 'tín chỉ',
-	'tientrinhhoctap.ctdt.chuyenhanh': 'Chuyên ngành',
 	'tientrinhhoctap.ctdt.khoihp': 'Khối học phần',
 	'tientrinhhoctap.ctdt.noti': 'Bạn phải đảm bảo học {soTinChi} tín chỉ trong số những học phần sau đây',
 
@@ -196,4 +195,10 @@ export default {
 	'tientrinhhoctap.ctdt.hptotnghiep': 'Học phần tốt nghiệp',
 	'tientrinhhoctap.ctdt.khoi': 'Khối',
 	'tientrinhhoctap.ctdt.khongten': 'Khối không tên',
+	'tientrinhhoctap.view.semester': 'Học kỳ',
+	'tientrinhhoctap.view.block': 'Khối kiến thức',
+	'tientrinhhoctap.ctdt.courses': 'học phần',
+	'tientrinhhoctap.ctdt.pathway.label': 'Khối',
+	'tientrinhhoctap.ctdt.chuyennganh.label': 'Chuyên ngành',
+	'tientrinhhoctap.ctdt.chuyennganhphu.label': 'Chuyên ngành phụ',
 };

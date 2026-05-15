@@ -38,6 +38,15 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 
 	const postDangKy = async () => {
 		setFormSubmiting(true);
+
+		const isInvalidData = danhSachDangKy.some((item) => !item.maKhoaNganh);
+
+		if (isInvalidData) {
+			message.error('Dữ liệu không chính xác, vui lòng tải lại trang');
+			setFormSubmiting(false);
+			return;
+		}
+
 		const limit = pLimit(1); // Giới hạn 1 truy vấn cùng lúc
 
 		// Với từng lớp mới chọn thì gọi 1 API đăng ký
@@ -71,7 +80,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 				.then()
 				.finally(() => {
 					setTimeout(() => {
-						message.info(intl.formatMessage({ id: 'dangkytinchi.modaldangky.success.hoanthanhdangky' }));
+						// message.info(intl.formatMessage({ id: 'dangkytinchi.modaldangky.success.hoanthanhdangky' }));
 						if (dotDangKyHienTai?._id) {
 							getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
 							getLopDangKyModel(dotDangKyHienTai.maHocKy);
@@ -194,6 +203,11 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 					addStt
 					loading={loading}
 					otherProps={{ pagination: false, scroll: { y: 600 } }}
+					otherButtons={[
+						<i className='text-info'>
+							{intl.formatMessage({ id: 'dangkytinchi.modaldangky.info' })}
+						</i>
+					]}
 				/>
 
 				<ReCAPTCHA
