@@ -39,7 +39,7 @@ const LocaleSwitch = () => {
 	];
 
 	// Nếu ko cho đổi ngôn ngữ thì return null, đồng thời ở config sửa baseNavigator thành false
-	// return null;
+	return null;
 	return (
 		<HeaderDropdown content={<Menu items={items} />} trigger='hover'>
 			<span className={styles.action}>
