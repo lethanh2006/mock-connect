@@ -5,6 +5,7 @@ import {
 	ETinhChatHocPhanNhuCau,
 	ETrangThaiSvDkHpNhuCau,
 	mapNameETinhChatHocPhanNhuCau,
+	mapNameTrangThaiSvDkHpNhuCau,
 } from '@/services/HocTap/HocPhanNhuCau/constant';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { formatDate } from '@/utils/formatDate';
@@ -19,18 +20,18 @@ const ChiTietSinhVienDangKy = () => {
 
 	const columns: IColumn<HocPhanNhuCau.IRecord>[] = [
 		{
-			title: 'Mã HP',
+			title: intl.formatMessage({ id: 'hocphannhucau.table.maHP' }),
 			dataIndex: 'maHocPhan',
 			width: 100,
 			align: 'center',
 		},
 		{
-			title: 'Tên học phần',
+			title: intl.formatMessage({ id: 'hocphannhucau.table.tenHocPhan' }),
 			width: 200,
 			render: (val, rec) => rec?.hocPhan?.ten,
 		},
 		{
-			title: 'STC',
+			title: intl.formatMessage({ id: 'hocphannhucau.table.soTinChi' }),
 			align: 'center',
 			dataIndex: 'soTinChi',
 			width: 60,
@@ -38,17 +39,20 @@ const ChiTietSinhVienDangKy = () => {
 			sortable: true,
 		},
 		{
-			title: 'Theo tiến trình',
+			title: intl.formatMessage({ id: 'hocphannhucau.table.theoTienTrinh' }),
 			align: 'center',
 			width: 80,
 			render: (val, rec) => <Checkbox checked={rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH} />,
 		},
 		{
-			title: 'Tính chất học phần',
+			title: intl.formatMessage({ id: 'hocphannhucau.table.tinhChatHocPhan' }),
 			dataIndex: 'tinhChatHocPhan',
 			width: 150,
 			align: 'center',
-			render: (val, rec) => mapNameETinhChatHocPhanNhuCau[val as ETinhChatHocPhanNhuCau],
+			render: (val, rec) =>
+				mapNameETinhChatHocPhanNhuCau[val as ETinhChatHocPhanNhuCau]
+					? intl.formatMessage({ id: mapNameETinhChatHocPhanNhuCau[val as ETinhChatHocPhanNhuCau] })
+					: '',
 		},
 	];
 
@@ -71,7 +75,11 @@ const ChiTietSinhVienDangKy = () => {
 						<Descriptions.Item label='Trạng thái'>
 							{record?.trangThai ? (
 								<Tag color={colorTrangThaiSvDkHpNhuCau[record?.trangThai as ETrangThaiSvDkHpNhuCau]}>
-									{record?.trangThai}
+									{mapNameTrangThaiSvDkHpNhuCau[record?.trangThai as ETrangThaiSvDkHpNhuCau]
+										? intl.formatMessage({
+												id: mapNameTrangThaiSvDkHpNhuCau[record?.trangThai as ETrangThaiSvDkHpNhuCau],
+											})
+										: record?.trangThai}
 								</Tag>
 							) : (
 								'--'

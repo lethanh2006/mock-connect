@@ -104,7 +104,12 @@ export default [
 				path: 'tien-trinh-hoc-tap',
 				component: 'HocTap/TienTrinhHocTap',
 			},
-			// { name: 'NhuCauHocPhan', path: 'dang-ky-hoc-phan-nhu-cau', component: './HocTap/HocPhanNhuCau' },
+			{
+				name: 'NhuCauHocPhan',
+				path: 'dang-ky-hoc-phan-nhu-cau',
+				component: './HocTap/HocPhanNhuCau',
+				access: 'hocPhanNhuCauFilter',
+			},
 			{ name: 'DangKyTinChi', path: 'dang-ky-tin-chi', component: './HocTap/DangKyTinChi' },
 			{ name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
 
