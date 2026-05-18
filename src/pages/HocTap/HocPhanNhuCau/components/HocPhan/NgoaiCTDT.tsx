@@ -2,7 +2,8 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { useModel } from 'umi';
+import { useMemo } from 'react';
+import { useIntl, useModel } from 'umi';
 
 const HocPhanNgoaiCTDT = (props: {
 	data: HocPhan.IRecord[];
@@ -12,33 +13,37 @@ const HocPhanNgoaiCTDT = (props: {
 	};
 	otherButtons?: any[];
 }) => {
+	const intl = useIntl();
 	const { data, danhSachTrong, otherButtons } = props;
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
 	const { record: recDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
 
-	const columns: IColumn<HocPhan.IRecord>[] = [
-		{
-			title: 'Mã HP',
-			dataIndex: 'ma',
-			width: 100,
-			align: 'center',
-			filterType: 'string',
-		},
-		{
-			title: 'Tên HP',
-			dataIndex: 'ten',
-			width: 200,
-			filterType: 'string',
-		},
-		{
-			title: 'Số tín chỉ',
-			dataIndex: 'soTinChi',
-			align: 'center',
-			width: 90,
-			filterType: 'number',
-			sortable: true,
-		},
-	];
+	const columns: IColumn<HocPhan.IRecord>[] = useMemo(
+		() => [
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.maHP' }),
+				dataIndex: 'ma',
+				width: 100,
+				align: 'center',
+				filterType: 'string',
+			},
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.tenHocPhan' }),
+				dataIndex: 'ten',
+				width: 200,
+				filterType: 'string',
+			},
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.soTinChi' }),
+				dataIndex: 'soTinChi',
+				align: 'center',
+				width: 90,
+				filterType: 'number',
+				sortable: true,
+			},
+		],
+		[intl],
+	);
 
 	return (
 		<TableStaticData

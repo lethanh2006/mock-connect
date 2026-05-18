@@ -5,6 +5,7 @@ import donvihanhchinh from './donvihanhchinh';
 import baithicuoiky from './hoctap/baithicuoiky';
 import chungchitotnghiep from './hoctap/chungchi';
 import dangkynhucau from './hoctap/dangkynhucau';
+import hocphannhucau from './hoctap/hocphannhucau';
 import dangkytinchi from './hoctap/dangkytinchi';
 import dieukientotnghiep from './hoctap/dieukientotnghiep';
 import ketquahoctap from './hoctap/ketquahoctap';
@@ -57,6 +58,7 @@ export default {
 	...dangky,
 	...lichsu,
 	...dangkynhucau,
+	...hocphannhucau,
 	...tintuc,
 	...lichthi,
 	...baithicuoiky,
