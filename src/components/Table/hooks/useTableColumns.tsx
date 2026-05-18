@@ -37,7 +37,8 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		disableFilterModal,
 		syncExternalToColumnFilter,
 	} = useTableContext();
-	const canOpenModalFilter = buttons?.filter !== false && hasFilter && disableFilterModal !== true;
+	const canOpenModalFilter = false;
+	// buttons?.filter !== false && hasFilter && disableFilterModal !== true;
 	const shouldSyncExternalToColumnFilter = syncExternalToColumnFilter !== false;
 	const isExternalFilter = isExternalFilterNode;
 
@@ -301,7 +302,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		(dataIndex: any, filterCustomSelect?: JSX.Element): Partial<IColumn<unknown>> => {
 			if (!filterCustomSelect) return {};
 			const filterColumn = getFilterColumn(dataIndex, EOperatorType.INCLUDE, true);
-			
+
 			return {
 				filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => (
 					<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
