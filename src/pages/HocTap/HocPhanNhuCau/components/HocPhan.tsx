@@ -3,11 +3,12 @@ import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { Segmented, Space, Spin, Tag } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import HocPhanNgoaiCTDT from './HocPhan/NgoaiCTDT';
 import HocPhanTrongCTDT from './HocPhan/TrongCTDT';
 
 const HocPhanCTDT = () => {
+	const intl = useIntl();
 	const { getAllModel, danhSach } = useModel('sinhvien.nhucauhocphan.sinhvienhocphannhucau');
 	const { maKhoaNganh } = useModel('sinhvien.sinhvien');
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
@@ -36,10 +37,16 @@ const HocPhanCTDT = () => {
 
 			if (rec) {
 				const danhSachHocPhanDungTienTrinh =
-					rec?.danhSachHocPhanDungTienTrinh?.map((item: any) => ({ ...item, loai: 'Đúng tiến trình' })) || [];
+					rec?.danhSachHocPhanDungTienTrinh?.map((item: any) => ({
+						...item,
+						loai: intl.formatMessage({ id: 'hocphannhucau.hocphan.loai.dungTienTrinh' }),
+					})) || [];
 
 				const danhSachHocPhanCtdt =
-					rec?.danhSachHocPhanCtdt?.map((item: any) => ({ ...item, loai: 'Trong chương trình' })) || [];
+					rec?.danhSachHocPhanCtdt?.map((item: any) => ({
+						...item,
+						loai: intl.formatMessage({ id: 'hocphannhucau.hocphan.loai.trongChuongTrinh' }),
+					})) || [];
 
 				setDanhSachTrong({
 					danhSachHocPhanDungTienTrinh: _.uniqBy(danhSachHocPhanDungTienTrinh, 'maHocPhan') as any,
@@ -124,8 +131,8 @@ const HocPhanCTDT = () => {
 			value={segment}
 			onChange={(val) => setSegment(val.toString())}
 			options={[
-				{ value: '1', label: 'Theo tiến trình học' },
-				{ value: '2', label: 'Các học phần khác' },
+				{ value: '1', label: intl.formatMessage({ id: 'hocphannhucau.segment.theoTienTrinhHoc' }) },
+				{ value: '2', label: intl.formatMessage({ id: 'hocphannhucau.segment.hocPhanKhac' }) },
 			]}
 		/>,
 	];
@@ -135,8 +142,15 @@ const HocPhanCTDT = () => {
 			{selectedIds?.length ? (
 				<div style={{ marginBottom: 12 }}>
 					<i>
-						Bạn đã đăng ký <b>{selectedIds?.length}</b> học phần, trong đó có <b>{soHocPhanDungTienTrinh}</b> HP đúng
-						tiến trình và <b>{soHocPhanNgoaiTienTrinh + soHocPhanKhac}</b> HP khác.
+						{intl.formatMessage(
+							{ id: 'hocphannhucau.hocphan.daChon' },
+							{
+								count: selectedIds?.length ?? 0,
+								dungTT: soHocPhanDungTienTrinh,
+								khac: soHocPhanNgoaiTienTrinh + soHocPhanKhac,
+								b: (chunks) => <b>{chunks}</b>,
+							},
+						)}
 					</i>
 				</div>
 			) : null}
