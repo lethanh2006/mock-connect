@@ -48,12 +48,12 @@ const CardLopHocPhan = () => {
 	}, []);
 
 	// Assets
-	const Isolation_Mode_1 = '/student/images/isolation-mode-1.svg';
-	const Isolation_Mode_2 = '/student/images/isolation-mode-2.svg';
-	const Isolation_Mode_3 = '/student/images/isolation-mode-3.svg';
-	const Isolation_Mode_4 = '/student/images/isolation-mode-4.svg';
-	const Isolation_Mode_5 = '/student/images/isolation-mode-5.svg';
-	const Isolation_Mode_6 = '/student/images/isolation-mode-6.svg';
+	const Isolation_Mode_1 = '/images/isolation-mode-1.svg';
+	const Isolation_Mode_2 = '/images/isolation-mode-2.svg';
+	const Isolation_Mode_3 = '/images/isolation-mode-3.svg';
+	const Isolation_Mode_4 = '/images/isolation-mode-4.svg';
+	const Isolation_Mode_5 = '/images/isolation-mode-5.svg';
+	const Isolation_Mode_6 = '/images/isolation-mode-6.svg';
 
 	const getData = () => recHocKy?.ma && sinhVienGetModel({ maHocKy: recHocKy?.ma });
 

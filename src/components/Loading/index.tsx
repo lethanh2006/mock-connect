@@ -15,7 +15,7 @@ const LoadingPage = () => {
 
 	return (
 		<div className='loading-content'>
-			{/* <img src='/student/images/app/book-loading.gif' alt='Loading...' /> */}
+			{/* <img src='/images/app/book-loading.gif' alt='Loading...' /> */}
 			{/* <Spin spinning size='large' /> */}
 			{/* <div className='progress-loader' /> */}
 			<div className='circle-loader' />

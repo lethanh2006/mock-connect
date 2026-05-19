@@ -26,10 +26,7 @@ const ModalThongTinGiangVien = ({
 				<Row gutter={[0, 12]} align='middle'>
 					<Col span={24} md={8} style={{ textAlign: 'center' }}>
 						<Avatar
-							src={
-								giangVien?.urlAnhDaiDien ||
-								`/student/images/${giangVien?.gioiTinh === 'Nữ' ? 'female.svg' : 'male.svg'}`
-							}
+							src={giangVien?.urlAnhDaiDien || `/images/${giangVien?.gioiTinh === 'Nữ' ? 'female.svg' : 'male.svg'}`}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>
 					</Col>

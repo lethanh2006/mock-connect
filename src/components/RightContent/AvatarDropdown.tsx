@@ -60,7 +60,7 @@ const AvatarDropdown = () => {
 							<div>
 								<img
 									style={{ width: '100%', marginTop: -8, marginBottom: 12 }}
-									src='/student/logi-thong-bao.png'
+									src='/logi-thong-bao.png'
 									alt={'image'}
 								/>
 							</div>

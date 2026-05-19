@@ -139,7 +139,7 @@ const QuyTrinhPage = () => {
 										<div className='card-content'>
 											<div className='card-main'>
 												<div className='card-icon'>
-													<img src='/student/images/folder-icon.png' alt='' width={24} />
+													<img src='/images/folder-icon.png' alt='' width={24} />
 												</div>
 
 												<div className='card-info'>

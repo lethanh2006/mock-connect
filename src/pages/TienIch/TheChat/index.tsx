@@ -104,7 +104,7 @@ const TheChatPage = () => {
 										<div className='height-card' style={{ background: '#DCFFFF' }}>
 											<div className='left'>
 												<img
-													src='/student/images/thechat/chieucao.png'
+													src='/images/thechat/chieucao.png'
 													alt='Chiều cao'
 													className='icon-vertical'
 													style={{ color: '#18BBC2' }}
@@ -121,7 +121,7 @@ const TheChatPage = () => {
 										<div className='height-card' style={{ background: '#F8DDD3' }}>
 											<div className='left'>
 												<img
-													src='/student/images/thechat/cannang.png'
+													src='/images/thechat/cannang.png'
 													alt='Cân nặng'
 													className='icon-vertical'
 													style={{ color: '#E20404' }}
@@ -140,7 +140,7 @@ const TheChatPage = () => {
 										<div className='height-card' style={{ background: '#FFE7BF' }}>
 											<div className='left'>
 												<img
-													src='/student/images/thechat/vongeo.png'
+													src='/images/thechat/vongeo.png'
 													alt='Vòng eo'
 													className='icon-vertical'
 													style={{ color: '#FFAF0B' }}
@@ -157,7 +157,7 @@ const TheChatPage = () => {
 										<div className='height-card' style={{ background: '#ECD7F5' }}>
 											<div className='left'>
 												<img
-													src='/student/images/thechat/vongmong.png'
+													src='/images/thechat/vongmong.png'
 													alt='Vòng mông'
 													className='icon-vertical'
 													style={{ color: '#A61ADE' }}
@@ -176,7 +176,7 @@ const TheChatPage = () => {
 										<div className='height-card' style={{ background: '#FFEEFB' }}>
 											<div className='left'>
 												<img
-													src='/student/images/thechat/nhimtimnghi.png'
+													src='/images/thechat/nhimtimnghi.png'
 													alt='Nhịp tim nghỉ ngơi'
 													className='icon-vertical'
 													style={{ color: '#F5D7EA' }}
@@ -194,7 +194,7 @@ const TheChatPage = () => {
 										<div className='height-card' style={{ background: '#E6FBFF' }}>
 											<div className='left'>
 												<img
-													src='/student/images/thechat/nhimtimsautap.png'
+													src='/images/thechat/nhimtimsautap.png'
 													alt='Nhịp tim sau tập'
 													className='icon-vertical'
 													style={{ color: '#D0EEFF' }}
@@ -213,7 +213,7 @@ const TheChatPage = () => {
 										<div className='height-card' style={{ background: '#CDE1F4' }}>
 											<div className='left'>
 												<img
-													src='/student/images/thechat/BMI.png'
+													src='/images/thechat/BMI.png'
 													alt='BMI'
 													className='icon-vertical'
 													style={{ color: '#0047FF' }}
@@ -229,7 +229,7 @@ const TheChatPage = () => {
 										<div className='height-card' style={{ background: '#DAEFDA' }}>
 											<div className='left'>
 												<img
-													src='/student/images/thechat/WHR.png'
+													src='/images/thechat/WHR.png'
 													alt='WHR'
 													className='icon-vertical'
 													style={{ color: '#399500' }}

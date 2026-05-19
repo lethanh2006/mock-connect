@@ -15,7 +15,7 @@ const ModuleSwitch = () => {
 				placement='bottom'
 			>
 				<div className='header-menu-item'>
-					<img src='/student/icons/modules.svg' alt='apps' />
+					<img src='/icons/modules.svg' alt='apps' />
 				</div>
 			</Tooltip>
 		</HeaderDropdown>

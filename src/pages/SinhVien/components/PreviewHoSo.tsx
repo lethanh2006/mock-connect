@@ -158,7 +158,7 @@ const PreviewHoSo = () => {
 			<Row gutter={[18, 18]} style={{ maxWidth: 1200, margin: 'auto' }}>
 				<Col span={24} sm={6} style={{ display: 'flex', justifyContent: 'center' }}>
 					<div className='avatar-container'>
-						<Image src={record?.anhDaiDienUrl ?? '/student/metadata.png'} />
+						<Image src={record?.anhDaiDienUrl ?? '/metadata.png'} />
 					</div>
 				</Col>
 				<Col span={24} sm={18}>

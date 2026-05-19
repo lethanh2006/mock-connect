@@ -36,9 +36,7 @@ const CardGiangVienLop = (props: {
 										size='large'
 										src={
 											item.nhanSu?.urlAnhDaiDien ||
-											(item.nhanSu?.gioiTinh === 'Nữ'
-												? '/student/images/teacher-female.svg'
-												: '/student/images/teacher-male.svg')
+											(item.nhanSu?.gioiTinh === 'Nữ' ? '/images/teacher-female.svg' : '/images/teacher-male.svg')
 										}
 									/>
 								}

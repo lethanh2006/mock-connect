@@ -17,7 +17,7 @@ export const useAuthActions = () => {
 
 		auth
 			.signoutRedirect({
-				post_logout_redirect_uri: window.location.origin + '/student/user/login',
+				post_logout_redirect_uri: window.location.origin + '/user/login',
 				id_token_hint: auth.user?.id_token,
 			})
 			.then(() => {
