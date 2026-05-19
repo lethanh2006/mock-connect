@@ -58,7 +58,7 @@ const CCTContent = (props: {
 				</div>
 
 				<div className='project-detail'>
-					<h3>{item?.activity}</h3>
+					<h3>{[item?.role, item?.activity].filter(Boolean).join(', ')}</h3>
 					<p>
 						<i>{item?.impact}</i>
 					</p>
@@ -124,9 +124,7 @@ const CCTContent = (props: {
 			<div className='cct-container'>
 				<header className='cct-header'>
 					<div className='header-content-cct'>
-						<div className='header-title'>
-							CO-CURRICULAR & <br /> COMPETENCY TRANSCRIPT
-						</div>
+						<div className='header-title'>CO-CURRICULAR PORTFOLIO</div>
 						<div className='university-logo'>
 							<img src={bgcct} style={{ height: 60 }} />
 						</div>
@@ -137,10 +135,10 @@ const CCTContent = (props: {
 					<div className='column left-column'>
 						<section className='intro-section'>
 							<p className='intro-text'>
-								<b>Co-curricular & Competency Transcript (CCT)</b> is part of VinUniversity's commitment to developing
-								holistic graduates. This transcript documents the co-curricular experiences and developmental activities
-								that students engage in during their time at VinUni, capturing evidence of their competencies, growth,
-								and contributions beyond academic performance.
+								<b>Co-curricular Portfolio (CCP)</b> is part of VinUniversity’s commitment to developing holistic
+								graduates. This Portfolio documents the co-curricular experiences and developmental activities that
+								students engage in during their time at VinUni, capturing evidence of their competencies, growth, and
+								contributions beyond academic performance.
 							</p>
 							<div className='student-info'>
 								<div className='info-group'>
@@ -267,7 +265,7 @@ const CCTContent = (props: {
 
 						<section className='footer-legend'>
 							<div className='end-transcript-divider'>
-								<span>END OF TRANSCRIPT</span>
+								<span>END OF PORTFOLIO</span>
 							</div>
 							<p className='italic-text' style={{ fontSize: 7 }}>
 								<i>
