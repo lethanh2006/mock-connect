@@ -139,7 +139,7 @@ const ActivityUpComming = (props: { visible: boolean; setVisible: (val: boolean)
 				<Row gutter={24}>
 					<Col span={8} style={{ textAlign: 'center' }}>
 						<Image
-							src={record?.banner ?? '/student/metadata.png'}
+							src={record?.banner ?? '/metadata.png'}
 							alt='banner'
 							style={{
 								width: '100%',

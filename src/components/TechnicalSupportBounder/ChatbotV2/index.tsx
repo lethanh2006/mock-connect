@@ -83,7 +83,7 @@ const ChatbotOverlayV2 = () => {
 					</div>
 
 					<div className='pulse' onClick={() => setBoxChatVisible(true)}>
-						<img src='/student/images/chatbot.png' alt='chatbot' />
+						<img src='/images/chatbot.png' alt='chatbot' />
 					</div>
 				</div>
 			)}

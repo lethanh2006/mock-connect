@@ -125,7 +125,7 @@ const ChatBotPage = () => {
 		return (
 			<>
 				<div className='avatar'>
-					<Avatar src='/student/images/chatbot_ava.png' />
+					<Avatar src='/images/chatbot_ava.png' />
 				</div>
 
 				<div className='content-text'>
@@ -229,7 +229,7 @@ const ChatBotPage = () => {
 									{formSubmiting ? (
 										<div className='message bot' id='tidot_loading'>
 											<div className='avatar'>
-												<Avatar src='/student/images/chatbot_ava.png' />
+												<Avatar src='/images/chatbot_ava.png' />
 											</div>
 											<div className='text'>
 												<div className='ticontainer'>

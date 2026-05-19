@@ -50,11 +50,11 @@ const HuongDanThanhToan = (props: {
 						) : (
 							<>
 								<Radio value={ETransactionPaymentType.BANK}>
-									<img src='/student/images/vietqr.png' alt='vietqr' />
+									<img src='/images/vietqr.png' alt='vietqr' />
 									{intl.formatMessage({ id: 'taichinh.thanhtoan.huongdan.thenoidia' })}
 								</Radio>
 								{/* <Radio value={ETransactionPaymentType.MOMO_WALLET}>
-									<img src='/student/images/momo.svg' alt='momo' />
+									<img src='/images/momo.svg' alt='momo' />
 									Ví MOMO
 								</Radio> */}
 							</>

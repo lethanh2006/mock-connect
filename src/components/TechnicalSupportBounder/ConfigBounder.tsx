@@ -36,7 +36,7 @@ const ConfigBounder = (props: { children?: any }) => {
 			renderEmpty={() => (
 				<Empty
 					style={{ marginTop: 32, marginBottom: 32 }}
-					image='/student/images/empty.png'
+					image='/images/empty.png'
 					description={intl.formatMessage({ id: 'global.table.index.empty' })}
 				/>
 			)}

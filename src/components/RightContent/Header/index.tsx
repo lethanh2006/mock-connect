@@ -8,12 +8,12 @@ const HeaderContentPage = () => {
 
 	return (
 		<div className='header-content'>
-			<img src='/student/logo.png' alt='logo' onClick={() => history.push('/')} />
+			<img src='/logo.png' alt='logo' onClick={() => history.push('/')} />
 			<div>
 				{/* <div className='text-error'>{intl.formatMessage({ id: 'global.rightcontent.header.title' })}</div> */}
 				<Link to='/'>{intl.formatMessage({ id: AppModules[currentRole].title }).toLocaleUpperCase()}</Link>
 			</div>
-			{/* <img src='/student/images/hoa-dao.png' alt='hoa-dao' /> */}
+			{/* <img src='/images/hoa-dao.png' alt='hoa-dao' /> */}
 		</div>
 	);
 };

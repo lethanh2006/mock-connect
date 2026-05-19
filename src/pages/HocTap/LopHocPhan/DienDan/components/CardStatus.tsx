@@ -181,7 +181,7 @@ const CardStatus = (props: IProps) => {
 								placement={'right'}
 							>
 								<div className='action-menu pointer'>
-									<img src='/student/images/menu.svg' alt='icon' />
+									<img src='/images/menu.svg' alt='icon' />
 								</div>
 							</Popover>
 						)}

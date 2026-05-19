@@ -17,12 +17,12 @@ const LopHocPhanPage = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
 
 	// Background images array
-	const bg1 = '/student/images/isolation-mode-1.svg';
-	const bg2 = '/student/images/isolation-mode-2.svg';
-	const bg3 = '/student/images/isolation-mode-3.svg';
-	const bg4 = '/student/images/isolation-mode-4.svg';
-	const bg5 = '/student/images/isolation-mode-5.svg';
-	const bg6 = '/student/images/isolation-mode-6.svg';
+	const bg1 = '/images/isolation-mode-1.svg';
+	const bg2 = '/images/isolation-mode-2.svg';
+	const bg3 = '/images/isolation-mode-3.svg';
+	const bg4 = '/images/isolation-mode-4.svg';
+	const bg5 = '/images/isolation-mode-5.svg';
+	const bg6 = '/images/isolation-mode-6.svg';
 	const backgrounds = [bg1, bg2, bg3, bg4, bg5, bg6];
 
 	const getData = () => {
