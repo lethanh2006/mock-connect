@@ -3,6 +3,7 @@ import AuthImage from '@/components/Image/AuthImage';
 import MyDatePicker from '@/components/MyDatePicker';
 import UploadFile from '@/components/Upload/UploadFile';
 import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
+import { ESettingKey } from '@/services/base/constant';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import {
 	EApprovalStatus,
@@ -45,8 +46,8 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 	const { record, setVisibleForm, edit, isView, postModel, putModel, formSubmiting, visibleForm, setFormSubmiting } =
 		useModel('cct.activityoutcome');
-
 	const { danhSach: dsActivityType } = useModel('cct.activities');
+	const { getByKeyModel, settings } = useModel('tienich.caidat');
 
 	const startDate: Date = Form.useWatch('startDate', form);
 	const endDate: Date = Form.useWatch('endDate', form);
@@ -57,7 +58,8 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const activitiesTypeId: string = Form.useWatch('activitiesTypeId', form);
 
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
-	const isAward = activitiesTypeDomainId === 'award-recognition';
+
+	const isAward = settings?.CCT_TRANSCRIPT?.listTypeAwardAndRecognition?.includes(activitiesTypeDomainId);
 
 	useEffect(() => {
 		if (!visibleForm) resetFieldsForm(form);
@@ -87,6 +89,8 @@ const FormPerstionActivityOutCome = (props: any) => {
 				banner: background,
 			});
 		}
+
+		getByKeyModel(ESettingKey.CCT_TRANSCRIPT, ipCCT);
 	}, [record?._id, visibleForm]);
 
 	const onFinish = async (values: ActivityOutCome.IRecord, submitted: boolean) => {
