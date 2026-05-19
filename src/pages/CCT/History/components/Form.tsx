@@ -172,7 +172,12 @@ const FormActivityOutCome = (props: any) => {
 												name={[index, 'file']}
 												rules={[...rules.required]}
 											>
-												<UploadFile maxCount={5} disabled={isView} isPrivate />
+												<UploadFile
+													maxCount={5}
+													disabled={isView}
+													isPrivate
+													accept='.pdf, .doc, .docx, .xls, .xlsx, .png, .jpg, .jpeg'
+												/>
 											</Form.Item>
 										</Col>
 										<Col span={2}>
