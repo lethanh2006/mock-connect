@@ -26,6 +26,7 @@ type RowConfig = {
 
 interface Props {
 	index?: number;
+	readonly?: boolean;
 }
 
 const FacultyTaContent: React.FC<Props> = ({ index }) => {
