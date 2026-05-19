@@ -4,7 +4,7 @@ import type { DotXetTotNghiep } from '@/services/HocTap/XetTotNghiep/typing';
 import type { EDoiTuongLopHanhChinh } from '@/services/HocTap/constant';
 import type { ChungChi } from '../ChungChi/typing';
 import type { ChuongTrinhDaoTao } from '../ChuongTrinhDaoTao/typing';
-import { type ELoaiDiemChu } from '../KetQuaHocTap/constant';
+import { type ELoaiDiemChu } from '@/services/KetQuaHocTap/constant';
 import { type ETrangThaiHocSv } from '../constant';
 import type {
 	EGioiTinh,

@@ -23,7 +23,7 @@ const ModalKhaoSatBatBuoc = () => {
 			title={intl.formatMessage({ id: 'khaosat.batbuoc.title' })}
 			open={visibleKhaoSatBatBuoc}
 			footer={null}
-			width={800}
+			width={1000}
 			closable={false}
 			keyboard={false}
 		>
