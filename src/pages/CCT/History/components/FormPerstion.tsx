@@ -59,7 +59,9 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
-	const isAward = settings?.CCT_TRANSCRIPT?.listTypeAwardAndRecognition?.includes(activitiesTypeDomainId);
+	const isAward = isView
+		? record?.isAwardRecognition
+		: settings?.CCT_TRANSCRIPT?.listTypeAwardAndRecognition?.includes(activitiesTypeDomainId);
 
 	useEffect(() => {
 		if (!visibleForm) resetFieldsForm(form);
@@ -67,9 +69,7 @@ const FormPerstionActivityOutCome = (props: any) => {
 		if (record?._id) {
 			form.setFieldsValue({
 				...record,
-				activitiesTypeDomainId: record?.isAwardRecognition
-					? 'award-recognition'
-					: record?.activitiesType?.activitiesTypeDomainId,
+				activitiesTypeDomainId: record?.activitiesType?.activitiesTypeDomainId,
 				listAchievedCompetencies: record?.listAchievedCompetencies?.map((item) => item?.competencyId),
 				onUni: record?.supervisorSsoId ? true : false,
 				banner: record?.banner ?? background,
