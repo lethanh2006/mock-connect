@@ -275,7 +275,35 @@ const CCTContent = (props: {
 							</p>
 
 							<div className='legend-table'>
-								{record?.levelOfEngagement
+								<div className='legend-row'>
+									<span className='symbol'>▶</span>
+									<span className='label'>Participant</span>
+									<span className='desc'>
+										<i>Engages in activities and contributes to implementation</i>
+									</span>
+								</div>
+								<div className='legend-row'>
+									<span className='symbol'>▶▶</span>
+									<span className='label'>Contributor</span>
+									<span className='desc'>
+										<i>Demonstrates initiative by contributing ideas and owning specific outputs.</i>
+									</span>
+								</div>
+								<div className='legend-row'>
+									<span className='symbol'>▶▶▶</span>
+									<span className='label'>Leader</span>
+									<span className='desc'>
+										<i>Provides direction, mobilizes people, and delivers results.</i>
+									</span>
+								</div>
+								<div className='legend-row'>
+									<span className='symbol'>▶▶▶▶</span>
+									<span className='label'>Impact Driver</span>
+									<span className='desc'>
+										<i>Creates scalable impact that extends beyond the original project or context.</i>
+									</span>
+								</div>
+								{/* {record?.levelOfEngagement
 									?.sort((a, b) => a.level.order - b.level.order)
 									?.map((item) => (
 										<div className='legend-row' key={item.level._id}>
@@ -286,7 +314,7 @@ const CCTContent = (props: {
 												<i>{item.level.description}</i>
 											</span>
 										</div>
-									))}
+									))} */}
 							</div>
 
 							<div className='signatures'>
@@ -308,7 +336,7 @@ const CCTContent = (props: {
 				</main>
 
 				<div className='title-bottom'>
-					<i>This Transcript is officially issued and verified by VinUniversity</i>
+					<i>This Portfolio is officially issued and verified by VinUniversity</i>
 				</div>
 			</div>
 		</Spin>
