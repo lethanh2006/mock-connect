@@ -4,7 +4,7 @@ import {
 	trangThaiDuyetGiaoAn,
 } from '@/services/DanhMucHeThong/Syllabus/constant';
 import { formatDateTime } from '@/utils/formatDate';
-import { Button, Card, Descriptions, Form, Splitter, Steps, Tag, Typography } from 'antd';
+import { Anchor, Button, Card, Descriptions, Form, Splitter, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useIntl, useModel } from 'umi';
@@ -27,7 +27,6 @@ const SyllabusPreview = ({ previewContentRef, isLopTinChi, footer, mucLucCollaps
 	const contentRef = previewContentRef || internalRef;
 	const [container, setContainer] = useState<HTMLElement | null>(null);
 	const form = Form.useFormInstance();
-	const [currentStep, setCurrentStep] = useState(0);
 
 	const sections = Form.useWatch('noiDung', form) ?? [];
 	const recordSyllabus = Form.useWatch('deCuong', form);
@@ -35,33 +34,6 @@ const SyllabusPreview = ({ previewContentRef, isLopTinChi, footer, mucLucCollaps
 	const ngayCapNhat = Form.useWatch('updatedAt', form);
 	const trangThaiDuyet = Form.useWatch('trangThaiDuyet', form);
 	const nguoiTaoHoTen = Form.useWatch('nguoiTaoHoTen', form);
-	useEffect(() => {
-		if (!container) return;
-
-		const handleScroll = () => {
-			const sectionElements = sections.map((_: any, index: number) => {
-				return container.querySelector(`#section-${index}`);
-			});
-
-			let current = 0;
-			sectionElements.forEach((el: Element | null, i: number) => {
-				if (el && (el as HTMLElement).offsetTop - container.offsetTop <= container.scrollTop + 70) {
-					current = i;
-				}
-			});
-			setCurrentStep(current);
-		};
-
-		container.addEventListener('scroll', handleScroll);
-		return () => container.removeEventListener('scroll', handleScroll);
-	}, [container, sections]);
-
-	const handleStepChange = (current: number) => {
-		setCurrentStep(current);
-		container
-			?.querySelector<HTMLElement>(`#section-${current}`)
-			?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-	};
 
 	return (
 		<Form form={form} component={false}>
@@ -93,12 +65,15 @@ const SyllabusPreview = ({ previewContentRef, isLopTinChi, footer, mucLucCollaps
 						{sections.length > 0 && (
 							<div>
 								<Title level={5}>{intl.formatMessage({ id: 'syllabus.preview.mucLuc' })}</Title>
-								<Steps
-									direction='vertical'
-									size='small'
-									current={currentStep}
-									onChange={handleStepChange}
-									items={sections.map((section: any) => ({ title: section.tieuDe }))}
+								<Anchor
+									affix={false}
+									targetOffset={70}
+									getContainer={() => container ?? window}
+									items={sections.map((section: any, index: number) => ({
+										key: `section-${index}`,
+										href: `#section-${index}`,
+										title: section.tieuDe,
+									}))}
 								/>
 							</div>
 						)}
