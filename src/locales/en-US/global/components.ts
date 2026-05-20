@@ -133,6 +133,7 @@ export default {
 	'global.table.index.button.tongso': 'Total',
 	'global.table.index.button.tongso.tooltip': 'Total Data Count',
 	'global.table.index.search.placeholder': 'Search by: {fields}',
+	'global.table.index.search.placeholder.short': 'Search {field}',
 	'global.table.index.search.placeholder.default': 'Search',
 	'global.table.index.search.tooltip': 'Searching by: {fields}',
 	'global.table.index.search.tooltip.default': 'Search Across Text Fields',

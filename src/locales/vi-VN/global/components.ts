@@ -136,6 +136,7 @@ export default {
 	'global.table.index.button.tongso': 'Tổng số',
 	'global.table.index.button.tongso.tooltip': 'Tổng số dữ liệu',
 	'global.table.index.search.placeholder': 'Tìm theo: {fields}',
+	'global.table.index.search.placeholder.short': 'Tìm {field}',
 	'global.table.index.search.placeholder.default': 'Tìm kiếm',
 	'global.table.index.search.tooltip': 'Đang tìm kiếm theo: {fields}',
 	'global.table.index.import.titleTemplate': 'Biểu mẫu {title}.xlsx',

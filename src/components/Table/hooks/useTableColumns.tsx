@@ -145,6 +145,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		(dataIndex: any, columnTitle: any): Partial<IColumn<unknown>> => {
 			const filterColumn = getFilterColumn(dataIndex, EOperatorType.CONTAIN, true);
 			const currentFilterValue = filterColumn?.values?.[0] as string | undefined;
+
 			return {
 				filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
 					const options = (JSON.parse(localStorage.getItem('dataTimKiem') || '{}')[dataIndex] || []).map(
@@ -169,7 +170,10 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 								}}
 							>
 								<Input.Search
-									placeholder={`Tìm ${columnTitle}`}
+									placeholder={intl.formatMessage(
+										{ id: 'global.table.index.search.placeholder.short' },
+										{ field: columnTitle },
+									)}
 									allowClear
 									enterButton
 									value={inputValue}
@@ -188,6 +192,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 									ref={searchInputRef}
 								/>
 							</AutoComplete>
+
 							{canOpenModalFilter ? (
 								<div>
 									{intl.formatMessage({ id: 'global.table.filterdropdown.xemthem' })}{' '}
@@ -204,6 +209,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 						</div>
 					);
 				},
+
 				filteredValue: filterColumn?.values ?? [],
 				filterIcon: () => {
 					const values = getFilterColumn(dataIndex, undefined, true)?.values;
@@ -303,7 +309,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		(dataIndex: any, filterCustomSelect?: JSX.Element): Partial<IColumn<unknown>> => {
 			if (!filterCustomSelect) return {};
 			const filterColumn = getFilterColumn(dataIndex, EOperatorType.INCLUDE, true);
-			
+
 			return {
 				filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => (
 					<div className='column-search-box' onKeyDown={(e) => e.stopPropagation()}>
