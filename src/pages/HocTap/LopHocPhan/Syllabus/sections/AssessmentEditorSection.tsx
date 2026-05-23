@@ -18,6 +18,9 @@ const AssessmentEditorSection: React.FC<AssessmentEditorSectionProps> = ({ field
 	const cloData = ((Array.isArray(record) ? record[0]?.danhSachMucTieuHocPhan : record?.danhSachMucTieuHocPhan) ??
 		[]) as any[];
 
+	const cdrHinhThucData =
+		(deCuong as any)?.cdrHinhThuc ?? (deCuong as any)?.danhSachCdrHinhThuc ?? ([] as any[]);
+
 	const assessmentDataSignature = JSON.stringify({
 		_id: deCuong?._id,
 		thongTinTrongSo: deCuong?.thongTinTrongSo,
@@ -27,11 +30,13 @@ const AssessmentEditorSection: React.FC<AssessmentEditorSectionProps> = ({ field
 		thangDiemTuyChinh: (deCuong as any)?.thangDiemTuyChinh,
 		cloMas: (cloData ?? []).map((c: any) => c?.ma),
 		grading: JSON.stringify(gradingSchemeData),
+		cdr: JSON.stringify(cdrHinhThucData ?? []),
 	});
 
 	const fullHtmlForReadonly = useMemo(
-		() => buildAssessmentHtml(deCuong, cloData, gradingSchemeData, footerNoiDung ?? section.noiDung),
-		[deCuong, cloData, gradingSchemeData, footerNoiDung, section.noiDung, assessmentDataSignature],
+		() =>
+			buildAssessmentHtml(deCuong, cloData, gradingSchemeData, footerNoiDung ?? section.noiDung, cdrHinhThucData),
+		[deCuong, cloData, gradingSchemeData, footerNoiDung, section.noiDung, cdrHinhThucData, assessmentDataSignature],
 	);
 
 	return <div dangerouslySetInnerHTML={{ __html: fullHtmlForReadonly }} />;
