@@ -54,6 +54,9 @@ const ConfigBounder = (props: { children?: any }) => {
 				hashed: false,
 				cssVar: { prefix: '' },
 				components: {
+					Anchor: {
+						linkPaddingBlock: 12,
+					},
 					Form: {
 						labelRequiredMarkColor: statusColors.status400,
 						fontSizeIcon: 20,

@@ -804,10 +804,18 @@ body {
 			top: 32% !important;
 		}
 	}
+
+	&:has(> h1)::before {
+		top: 14px !important;
+	}
+
+	&:has(> h2)::before {
+		top: 6px !important;
+	}
 }
 
 .highlight {
-	// background-color: var(--color-official-500) !important;
+	background-color: var(--color-official-500) !important;
 }
 
 .loading-content {
@@ -834,4 +842,13 @@ body {
 			}
 		}
 	}
+}
+
+.ant-anchor-ink,
+.ant-anchor-ink.ant-anchor-ink-visible {
+	height: 35px !important;
+}
+
+.ant-pro-global-footer {
+	margin-block-start: 24;
 }
