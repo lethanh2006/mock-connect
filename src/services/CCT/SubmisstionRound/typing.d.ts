@@ -8,4 +8,10 @@ declare module SubmisstionRound {
 		semesterName: string;
 		note: string;
 	}
+
+	export interface ISetting {
+		fileId: string;
+		fileName: string;
+		listTypeAwardAndRecognition: string[];
+	}
 }

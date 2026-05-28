@@ -74,7 +74,7 @@ const TinyEditor = (props: {
 				disabled={disabled}
 				licenseKey='gpl'
 				init={{
-					language_url: '/lang/vi_VN.js',
+					language_url: '/student/lang/vi_VN.js',
 					language: 'vi_VN',
 					max_height: height,
 					autoresize_bottom_margin: minHeight,
