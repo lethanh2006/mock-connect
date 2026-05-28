@@ -1,10 +1,96 @@
 import axios from '@/utils/axios';
-import { ip3 } from '@/utils/ip';
+import { ip3, ipFile } from '@/utils/ip';
 
 export enum EFileScope {
 	PUBLIC = 'Public',
 	INTERNAL = 'Internal',
 	PRIVATE = 'Private',
+}
+
+type TPresignedPart = {
+	partNumber: number;
+	presignedUrl: string;
+};
+
+type TMultipartInitData = {
+	fileId: string;
+	uploadId: string;
+	multipartPartSize: number;
+	totalPart: number;
+	presignedUrls: TPresignedPart[];
+};
+
+type TMultipartCompletePart = {
+	PartNumber: number;
+	ETag: string;
+};
+
+const getFilename = (file: Blob): string => {
+	return (file as File)?.name || 'upload';
+};
+
+const getFileExtension = (filename: string): string => {
+	const ext = filename.split('.').pop();
+	return ext && ext !== filename ? ext : '';
+};
+
+const uploadMultipartParts = async (file: Blob, initData: TMultipartInitData): Promise<TMultipartCompletePart[]> => {
+	const partSize = initData.multipartPartSize;
+	const parts = await Promise.all(
+		initData.presignedUrls.map(async ({ partNumber, presignedUrl }) => {
+			const start = (partNumber - 1) * partSize;
+			const end = Math.min(start + partSize, file.size);
+			const response = await fetch(presignedUrl, {
+				method: 'PUT',
+				body: file.slice(start, end),
+			});
+
+			if (!response.ok) {
+				throw new Error(`Upload part ${partNumber} failed with status ${response.status}`);
+			}
+
+			const etag = response.headers.get('ETag')?.replaceAll('"', '');
+			if (!etag) {
+				throw new Error(`Upload part ${partNumber} missing ETag`);
+			}
+
+			return {
+				PartNumber: partNumber,
+				ETag: etag,
+			};
+		}),
+	);
+
+	return parts.sort((a, b) => a.PartNumber - b.PartNumber);
+};
+
+export async function uploadFileManagerMultipart(
+	payload: { file: Blob; scope?: EFileScope; module?: string },
+	ip: string = ipFile,
+) {
+	const file = payload.file;
+	const filename = getFilename(file);
+	const initResponse = await axios.post(`${ip}/file/multipart/init`, {
+		filename,
+		size: file.size,
+		mimetype: file.type || 'application/octet-stream',
+		ext: getFileExtension(filename),
+		scope: payload.scope ?? EFileScope.PRIVATE,
+		module: payload.module ?? 'co-curriculum',
+	});
+	const initData: TMultipartInitData = initResponse?.data?.data;
+	const parts = await uploadMultipartParts(file, initData);
+
+	const completeResponse = await axios.post(`${ip}/file/multipart/complete`, {
+		fileId: initData.fileId,
+		parts,
+	});
+
+	if (completeResponse?.data?.data?.file && !completeResponse.data.data._id) {
+		completeResponse.data.data._id = completeResponse.data.data.file._id;
+	}
+
+	return completeResponse;
 }
 
 export const handleSingleFile = async (
@@ -82,6 +168,10 @@ export const buildUpLoadMultiFile = async (
 
 export const getFileInfo = (id: string, ip?: string) => {
 	return axios.get(`${ip ?? ip3}/file/${id}/info`, { data: { silent: true } });
+};
+
+export const getFileUrl = (id: string, ip?: string) => {
+	return axios.get(`${ip ?? ip3}/file/${id}/url`, { data: { silent: true } });
 };
 
 export const getFileContent = (url: string) => {
