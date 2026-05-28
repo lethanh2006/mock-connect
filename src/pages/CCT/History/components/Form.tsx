@@ -16,11 +16,36 @@ import FormRoleEvidence from './FormRoleEvidence';
 
 const { Paragraph } = Typography;
 
+const getUploadedFileId = (file: any) => {
+	return file?.response?.file?._id ?? file?.response?._id ?? file?.url ?? null;
+};
+
+const uploadEvidenceRequest = async ({ file, onSuccess, onError }: any) => {
+	try {
+		const response = await uploadFileManagerMultipart({
+			file,
+			scope: EFileScope.PRIVATE,
+			module: 'co-curriculum',
+		});
+		const fileId = response?.data?.data?.file?._id ?? response?.data?.data?._id;
+
+		if (!fileId) {
+			throw new Error('Missing uploaded file id');
+		}
+
+		onSuccess?.({ ...response?.data?.data, _id: fileId, fileId }, file);
+	} catch (error) {
+		onError?.(error);
+	}
+};
+
 const uploadFilesOfCompetency = async (files: any[] = []) => {
 	if (!files.length) return [];
 	const fileIds = await Promise.all(
 		files.map(async (f) => {
-			if (!f?.originFileObj) return f?.url || null;
+			const uploadedFileId = getUploadedFileId(f);
+			if (uploadedFileId) return uploadedFileId;
+			if (!f?.originFileObj) return null;
 			const response = await uploadFileManagerMultipart({
 				file: f.originFileObj,
 				scope: EFileScope.PRIVATE,
@@ -186,6 +211,9 @@ const FormActivityOutCome = (props: any) => {
 													disabled={isView}
 													isPrivate
 													accept='.pdf, .doc, .docx, .xls, .xlsx, .png, .jpg, .jpeg'
+													otherProps={{
+														customRequest: uploadEvidenceRequest,
+													}}
 												/>
 											</Form.Item>
 										</Col>
