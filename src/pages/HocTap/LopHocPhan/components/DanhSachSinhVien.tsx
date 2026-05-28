@@ -103,7 +103,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 										<Avatar
 											src={
 												student.anhDaiDienUrl ||
-												`/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+												`/student/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
 											}
 											size={48}
 										/>
@@ -153,7 +153,7 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 											<Avatar
 												src={
 													student.anhDaiDienUrl ||
-													`/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+													`/student/images/${student.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
 												}
 												size={48}
 											/>
@@ -204,7 +204,10 @@ const DanhSachSinhVien = (props: { sinhVienList: TSinhVien[]; loading: boolean; 
 				<Row align='middle' gutter={[0, 12]}>
 					<Col span={24} md={8} style={{ textAlign: 'center' }}>
 						<Avatar
-							src={record?.anhDaiDienUrl || `/images/${record?.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`}
+							src={
+								record?.anhDaiDienUrl ||
+								`/student/images/${record?.gioiTinh === EGioiTinh.Nu ? 'female.svg' : 'male.svg'}`
+							}
 							size={{ xs: 80, sm: 128, md: 128, lg: 160, xl: 160, xxl: 160 }}
 						/>
 					</Col>

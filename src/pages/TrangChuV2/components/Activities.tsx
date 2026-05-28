@@ -244,7 +244,7 @@ const Activities = () => {
 						<Empty
 							style={{ marginTop: 32, marginBottom: 32 }}
 							description={intl.formatMessage({ id: 'global.table.index.empty' })}
-							image='/images/empty.png'
+							image='/student/images/empty.png'
 						/>
 					)}
 				</Spin>

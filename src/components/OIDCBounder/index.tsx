@@ -149,7 +149,11 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 	return (
 		<AuthProvider
 			{...oidcConfig}
-			redirect_uri={window.location.pathname.includes('/user') ? window.location.origin : window.location.href}
+			redirect_uri={
+				window.location.pathname.includes('/user')
+					? `${window.location.origin}${APP_CONFIG_BASE_PATH}`
+					: window.location.href
+			}
 		>
 			<OIDCBounder_ {...props} />
 		</AuthProvider>

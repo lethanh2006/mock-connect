@@ -80,7 +80,7 @@ const DetailThongTinSach = () => {
 								width: '220px',
 								height: '300px',
 								color: 'white',
-								backgroundImage: `url(/thuvien/sach2-${record?.randomImageIndex ?? randomImage}.png)`,
+								backgroundImage: `url(/student/thuvien/sach2-${record?.randomImageIndex ?? randomImage}.png)`,
 								display: 'flex',
 								flexDirection: 'column',
 								justifyContent: 'space-between',
