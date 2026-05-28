@@ -28,13 +28,13 @@ const LocaleSwitch = () => {
 			key: 'vi-VN',
 			label: 'Tiếng Việt (vi-VN)',
 			onClick: handleChange('vi-VN'),
-			icon: <img src='/images/locales/vi-VN.svg' width={25} alt='vi' />,
+			icon: <img src='/student/images/locales/vi-VN.svg' width={25} alt='vi' />,
 		},
 		{
 			key: 'en-US',
 			label: 'English (en-US)',
 			onClick: handleChange('en-US'),
-			icon: <img src='/images/locales/en-US.svg' width={25} alt='en' />,
+			icon: <img src='/student/images/locales/en-US.svg' width={25} alt='en' />,
 		},
 	];
 
@@ -44,7 +44,7 @@ const LocaleSwitch = () => {
 		<HeaderDropdown content={<Menu items={items} />} trigger='hover'>
 			<span className={styles.action}>
 				<img
-					src={`/images/locales/${intl.formatMessage({ id: 'app.locale.image', defaultMessage: 'vi-VN.svg' })}`}
+					src={`/student/images/locales/${intl.formatMessage({ id: 'app.locale.image', defaultMessage: 'vi-VN.svg' })}`}
 					alt='lang'
 					width={25}
 				/>

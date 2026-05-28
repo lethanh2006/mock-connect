@@ -6,8 +6,8 @@ const WelcomeCard = () => {
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const { record: recSinhVien, loading } = useModel('sinhvien.sinhvien');
-	const frame = '/images/welcome-frame.png';
-	const gif = '/images/welcome.gif';
+	const frame = '/student/images/welcome-frame.png';
+	const gif = '/student/images/welcome.gif';
 
 	return (
 		<Card variant='borderless' className='welcome-card' loading={loading}>

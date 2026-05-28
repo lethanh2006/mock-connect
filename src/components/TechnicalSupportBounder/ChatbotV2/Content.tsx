@@ -51,7 +51,7 @@ const ContentBoxChatV2 = () => {
 		return (
 			<>
 				<div className='avatar'>
-					<Avatar src='/images/chatbot_ava.png' />
+					<Avatar src='/student/images/chatbot_ava.png' />
 				</div>
 
 				<div className='content-text'>
@@ -133,7 +133,7 @@ const ContentBoxChatV2 = () => {
 			{formSubmiting ? (
 				<div className='message bot' id='tidot_loading'>
 					<div className='avatar'>
-						<Avatar src='/images/chatbot_ava.png' />
+						<Avatar src='/student/images/chatbot_ava.png' />
 					</div>
 					<div className='text'>
 						<div className='ticontainer'>
