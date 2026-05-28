@@ -304,7 +304,7 @@ export default {
 	'activity.formpersion.enterReflection': 'Enter Reflection',
 	'activity.formpersion.declaration': 'I hereby declare that the information provided is accurate.',
 
-	'activity.history.title': 'My Activity',
+	'activity.history.title': 'Activity Logging',
 	'activity.history.addNew': 'Add New',
 	'activity.history.updateEvidence': 'Update Evidence',
 	'activity.history.seeMore': 'See More',
