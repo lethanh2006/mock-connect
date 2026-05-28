@@ -231,4 +231,6 @@ export default {
 	'global.pdfviewer.truoc': 'Trước',
 	'global.pdfviewer.sau': 'Sau',
 	'global.pdfviewer.trang': 'Trang {pageNumber} trên tổng số {numPages}',
+
+	'global.noticeion.all': 'Đã đọc tất cả thông báo',
 };

@@ -59,39 +59,47 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
-	const isAward = isView
-		? record?.isAwardRecognition
-		: settings?.CCT_TRANSCRIPT?.listTypeAwardAndRecognition?.includes(activitiesTypeDomainId);
+	useEffect(() => {
+		if (visibleForm) {
+			getByKeyModel(ESettingKey.CCT_TRANSCRIPT, ipCCT);
+		} else {
+			resetFieldsForm(form);
+		}
+	}, [visibleForm]);
+
+	const awardTypeDomainIds = settings?.CCT_TRANSCRIPT?.listTypeAwardAndRecognition ?? [];
+	const firstAwardTypeDomainId = awardTypeDomainIds?.[0];
+	const isAward = isView || edit ? record?.isAwardRecognition : awardTypeDomainIds?.includes(activitiesTypeDomainId);
 
 	useEffect(() => {
-		if (!visibleForm) resetFieldsForm(form);
+		if (!visibleForm) return;
 
 		if (record?._id) {
 			form.setFieldsValue({
 				...record,
-				activitiesTypeDomainId: record?.activitiesType?.activitiesTypeDomainId,
+				activitiesTypeDomainId: record?.isAwardRecognition
+					? firstAwardTypeDomainId
+					: record?.activitiesType?.activitiesTypeDomainId,
 				listAchievedCompetencies: record?.listAchievedCompetencies?.map((item) => item?.competencyId),
 				onUni: record?.supervisorSsoId ? true : false,
 				banner: record?.banner ?? background,
 			});
+
+			return;
 		}
 
-		if (!record?._id) {
-			form.setFieldsValue({
-				participantScope: EParticipantScope.UNIVERSITY,
-				participantRole: EparticipantRole.ALL,
-				cct: true,
-				allowPostEventResultsUpdate: false,
-				onCampus: true,
-				checkbox: false,
-				listAchievedCompetencies: null,
-				onUni: true,
-				banner: background,
-			});
-		}
-
-		getByKeyModel(ESettingKey.CCT_TRANSCRIPT, ipCCT);
-	}, [record?._id, visibleForm]);
+		form.setFieldsValue({
+			participantScope: EParticipantScope.UNIVERSITY,
+			participantRole: EparticipantRole.ALL,
+			cct: true,
+			allowPostEventResultsUpdate: false,
+			onCampus: true,
+			checkbox: false,
+			listAchievedCompetencies: null,
+			onUni: true,
+			banner: background,
+		});
+	}, [visibleForm, record?._id, firstAwardTypeDomainId]);
 
 	const onFinish = async (values: ActivityOutCome.IRecord, submitted: boolean) => {
 		setFormSubmiting(true);
@@ -353,7 +361,11 @@ const FormPerstionActivityOutCome = (props: any) => {
 								</Row>
 							</Col>
 							<Col span={24}>
-								<Form.Item name='description' label={msg('description')}>
+								<Form.Item
+									name='description'
+									label={msg('description')}
+									rules={[...rules.required, ...rules.length(250)]}
+								>
 									<Input.TextArea rows={3} disabled={isView} placeholder={msg('enterDescription')} />
 								</Form.Item>
 							</Col>
