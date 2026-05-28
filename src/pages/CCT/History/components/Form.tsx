@@ -1,7 +1,6 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { Activity } from '@/services/CCT/Activity/typing';
-import { handleSingleFile } from '@/services/uploadFile';
-import { ipCCT } from '@/utils/ip';
+import { EFileScope, uploadFileManagerMultipart } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Collapse, Form, Input, message, Row, Typography } from 'antd';
@@ -19,8 +18,18 @@ const { Paragraph } = Typography;
 
 const uploadFilesOfCompetency = async (files: any[] = []) => {
 	if (!files.length) return [];
-	const urls = await Promise.all(files.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
-	return urls.filter(Boolean) as string[];
+	const fileIds = await Promise.all(
+		files.map(async (f) => {
+			if (!f?.originFileObj) return f?.url || null;
+			const response = await uploadFileManagerMultipart({
+				file: f.originFileObj,
+				scope: EFileScope.PRIVATE,
+				module: 'co-curriculum',
+			});
+			return response?.data?.data?.file?._id ?? response?.data?.data?._id ?? null;
+		}),
+	);
+	return fileIds.filter(Boolean) as string[];
 };
 
 const hasAtLeastOneEvidenceFile = (evidenceFile: any[] = []) => evidenceFile.some((i) => i?.file?.length);

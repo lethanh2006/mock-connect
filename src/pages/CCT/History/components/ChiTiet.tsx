@@ -3,6 +3,8 @@ import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
+import { getFileUrl } from '@/services/uploadFile';
+import { ipFile } from '@/utils/ip';
 import { getNameFile } from '@/utils/utils';
 import { FileOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Divider, Empty, Input, List, Row, Typography } from 'antd';
@@ -10,6 +12,14 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useIntl } from 'umi';
 import CardSuKienCCT from '../../Activity/components/CardSuKien';
+
+const isFileUrl = (value: string) => /^https?:\/\//.test(value) || value?.startsWith('/');
+
+const getPreviewUrl = async (value: string) => {
+	if (isFileUrl(value)) return value;
+	const result = await getFileUrl(value, ipFile);
+	return result?.data?.data?.url ?? value;
+};
 
 const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) => {
 	const intl = useIntl();
@@ -180,13 +190,13 @@ const ChiTietActivityOutCome = (props: { recOutcome: ActivityOutCome.IRecord }) 
 															<Typography.Link
 																key={index}
 																style={{ display: 'flex', alignItems: 'center', gap: 8 }}
-																onClick={() => {
-																	setPreviewImage(url);
+																onClick={async () => {
+																	setPreviewImage(await getPreviewUrl(url));
 																	setPreviewOpen(true);
 																}}
 															>
 																<FileOutlined />
-																<span>{getNameFile(url)}</span>
+																<span>{isFileUrl(url) ? getNameFile(url) : `File ${index + 1}`}</span>
 															</Typography.Link>
 														))}
 													</div>
