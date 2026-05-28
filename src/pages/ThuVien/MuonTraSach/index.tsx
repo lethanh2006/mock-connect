@@ -298,7 +298,7 @@ const MuonTraSachPage = () => {
 																			width: '220px',
 																			height: '250px',
 																			color: 'white',
-																			backgroundImage: `url(/thuvien/sach2-${item?.randomImageIndex}.png)`,
+																			backgroundImage: `url(/student/thuvien/sach2-${item?.randomImageIndex}.png)`,
 																			display: 'flex',
 																			flexDirection: 'column',
 																			justifyContent: 'space-between',

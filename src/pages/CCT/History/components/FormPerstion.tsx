@@ -3,6 +3,7 @@ import AuthImage from '@/components/Image/AuthImage';
 import MyDatePicker from '@/components/MyDatePicker';
 import UploadFile from '@/components/Upload/UploadFile';
 import SelectNhanSuDebounce from '@/pages/ToChucNhanSu/NhanSu/Select';
+import { ESettingKey } from '@/services/base/constant';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import {
 	EApprovalStatus,
@@ -45,8 +46,8 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 	const { record, setVisibleForm, edit, isView, postModel, putModel, formSubmiting, visibleForm, setFormSubmiting } =
 		useModel('cct.activityoutcome');
-
 	const { danhSach: dsActivityType } = useModel('cct.activities');
+	const { getByKeyModel, settings } = useModel('tienich.caidat');
 
 	const startDate: Date = Form.useWatch('startDate', form);
 	const endDate: Date = Form.useWatch('endDate', form);
@@ -57,37 +58,48 @@ const FormPerstionActivityOutCome = (props: any) => {
 	const activitiesTypeId: string = Form.useWatch('activitiesTypeId', form);
 
 	const [isSubmit, setIsSubmit] = useState<boolean>(false);
-	const isAward = activitiesTypeDomainId === 'award-recognition';
 
 	useEffect(() => {
-		if (!visibleForm) resetFieldsForm(form);
+		if (visibleForm) {
+			getByKeyModel(ESettingKey.CCT_TRANSCRIPT, ipCCT);
+		} else {
+			resetFieldsForm(form);
+		}
+	}, [visibleForm]);
+
+	const awardTypeDomainIds = settings?.CCT_TRANSCRIPT?.listTypeAwardAndRecognition ?? [];
+	const firstAwardTypeDomainId = awardTypeDomainIds?.[0];
+	const isAward = isView || edit ? record?.isAwardRecognition : awardTypeDomainIds?.includes(activitiesTypeDomainId);
+
+	useEffect(() => {
+		if (!visibleForm) return;
 
 		if (record?._id) {
 			form.setFieldsValue({
 				...record,
 				activitiesTypeDomainId: record?.isAwardRecognition
-					? 'award-recognition'
+					? firstAwardTypeDomainId
 					: record?.activitiesType?.activitiesTypeDomainId,
 				listAchievedCompetencies: record?.listAchievedCompetencies?.map((item) => item?.competencyId),
 				onUni: record?.supervisorSsoId ? true : false,
 				banner: record?.banner ?? background,
 			});
+
+			return;
 		}
 
-		if (!record?._id) {
-			form.setFieldsValue({
-				participantScope: EParticipantScope.UNIVERSITY,
-				participantRole: EparticipantRole.ALL,
-				cct: true,
-				allowPostEventResultsUpdate: false,
-				onCampus: true,
-				checkbox: false,
-				listAchievedCompetencies: null,
-				onUni: true,
-				banner: background,
-			});
-		}
-	}, [record?._id, visibleForm]);
+		form.setFieldsValue({
+			participantScope: EParticipantScope.UNIVERSITY,
+			participantRole: EparticipantRole.ALL,
+			cct: true,
+			allowPostEventResultsUpdate: false,
+			onCampus: true,
+			checkbox: false,
+			listAchievedCompetencies: null,
+			onUni: true,
+			banner: background,
+		});
+	}, [visibleForm, record?._id, firstAwardTypeDomainId]);
 
 	const onFinish = async (values: ActivityOutCome.IRecord, submitted: boolean) => {
 		setFormSubmiting(true);
@@ -338,13 +350,22 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 									<Col span={22} md={12}>
 										<Form.Item label={msg('file')} name={['evidenceFile', 0, 'file']} rules={[...rules.required]}>
-											<UploadFile maxCount={1} disabled={isView} />
+											<UploadFile
+												maxCount={1}
+												disabled={isView}
+												isPrivate
+												accept='.pdf, .doc, .docx, .xls, .xlsx, .png, .jpg, .jpeg'
+											/>
 										</Form.Item>
 									</Col>
 								</Row>
 							</Col>
 							<Col span={24}>
-								<Form.Item name='description' label={msg('description')}>
+								<Form.Item
+									name='description'
+									label={msg('description')}
+									rules={[...rules.required, ...rules.length(250)]}
+								>
 									<Input.TextArea rows={3} disabled={isView} placeholder={msg('enterDescription')} />
 								</Form.Item>
 							</Col>
