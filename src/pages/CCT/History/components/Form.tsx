@@ -39,22 +39,23 @@ const uploadEvidenceRequest = async ({ file, onSuccess, onError }: any) => {
 	}
 };
 
-const uploadFilesOfCompetency = async (files: any[] = []) => {
+const getUploadedFileIds = (files: any[] = []) => {
 	if (!files.length) return [];
-	const fileIds = await Promise.all(
-		files.map(async (f) => {
-			const uploadedFileId = getUploadedFileId(f);
-			if (uploadedFileId) return uploadedFileId;
-			if (!f?.originFileObj) return null;
-			const response = await uploadFileManagerMultipart({
-				file: f.originFileObj,
-				scope: EFileScope.PRIVATE,
-				module: 'co-curriculum',
-			});
-			return response?.data?.data?.file?._id ?? response?.data?.data?._id ?? null;
-		}),
-	);
-	return fileIds.filter(Boolean) as string[];
+
+	if (files.some((file) => file?.status === 'uploading')) {
+		throw new Error('File is still uploading. Please wait for the upload to complete.');
+	}
+
+	if (files.some((file) => file?.status === 'error')) {
+		throw new Error('File upload failed. Please remove the failed file and upload again.');
+	}
+
+	const fileIds = files.map(getUploadedFileId).filter(Boolean);
+	if (fileIds.length !== files.length) {
+		throw new Error('File has not been uploaded successfully. Please upload again.');
+	}
+
+	return fileIds as string[];
 };
 
 const hasAtLeastOneEvidenceFile = (evidenceFile: any[] = []) => evidenceFile.some((i) => i?.file?.length);
@@ -102,12 +103,16 @@ const FormActivityOutCome = (props: any) => {
 	}, [visibleForm, record?._id]);
 
 	const onFinish = async (values: any, submitted: boolean) => {
-		const evidenceFile = await Promise.all(
-			(values.evidenceFile || []).map(async (item: any) => ({
+		let evidenceFile: any[] = [];
+		try {
+			evidenceFile = (values.evidenceFile || []).map((item: any) => ({
 				name: item.name,
-				file: await uploadFilesOfCompetency(item?.file?.fileList),
-			})),
-		);
+				file: getUploadedFileIds(item?.file?.fileList),
+			}));
+		} catch (error: any) {
+			message.error(error?.message);
+			return;
+		}
 
 		if (autoLevel && autoRole && !hasAtLeastOneEvidenceFile(evidenceFile)) {
 			message.warning(intl.formatMessage({ id: 'activity.outcome.warning' }));
