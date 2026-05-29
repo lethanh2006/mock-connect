@@ -70,8 +70,20 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	}, [file, tenFile]);
 
 	const getFileExtension = (url: string) => {
-		const arr = url.split('.');
+		const cleanUrl = url.split('?')[0].split('#')[0];
+		const arr = cleanUrl.split('.');
 		return arr.length > 1 ? arr.at(-1)!.toLowerCase() : '';
+	};
+
+	const getProxiedFileUrl = (url: string) => {
+		if (!url || url.startsWith('blob:') || url.startsWith('data:')) return url;
+		try {
+			const parsedUrl = new URL(url, window.location.origin);
+			parsedUrl.searchParams.set('proxy', '1');
+			return parsedUrl.toString();
+		} catch {
+			return url.includes('?') ? `${url}&proxy=1` : `${url}?proxy=1`;
+		}
 	};
 
 	const getIframeSrc = (type: EDinhDangFile, fileUrl?: string) => {
@@ -97,7 +109,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				setLoading(true);
 				const result = await getFileInfo(idFile, ip);
 				const fileInfo: IFileInfo = result?.data?.data;
-				frame.url = fileInfo?.url ?? (!isFileId ? srcUrl : `${ip}/file/${idFile}/${fileInfo?.name}`);
+				frame.url = getProxiedFileUrl(fileInfo?.url ?? (!isFileId ? srcUrl : `${ip}/file/${idFile}/${fileInfo?.name}`));
 				frame.name = fileInfo?.name;
 
 				// Mapping { mimetype : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"} sang EDinhDangFile
@@ -105,6 +117,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 					getFileType(fileInfo?.mimetype ? fileInfo.mimetype : (getFileExtension(frame.url) ?? '')) ||
 					EDinhDangFile.UNKNOWN;
 			} else {
+				frame.url = getProxiedFileUrl(srcUrl);
 				frame.type = getFileType(getFileExtension(srcUrl) ?? '') || EDinhDangFile.UNKNOWN;
 			}
 

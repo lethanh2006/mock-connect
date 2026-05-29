@@ -20,6 +20,12 @@ const getUploadedFileId = (file: any) => {
 	return file?.response?.file?._id ?? file?.response?._id ?? file?.url ?? null;
 };
 
+const getUploadErrorMessage = (error: any) =>
+	error?.response?.data?.message ??
+	error?.response?.data?.detail?.exception?.message ??
+	error?.message ??
+	'File upload failed. Please try again.';
+
 const uploadEvidenceRequest = async ({ file, onSuccess, onError }: any) => {
 	try {
 		const response = await uploadFileManagerMultipart({
@@ -35,6 +41,7 @@ const uploadEvidenceRequest = async ({ file, onSuccess, onError }: any) => {
 
 		onSuccess?.({ ...response?.data?.data, _id: fileId, fileId }, file);
 	} catch (error) {
+		message.error(getUploadErrorMessage(error));
 		onError?.(error);
 	}
 };
