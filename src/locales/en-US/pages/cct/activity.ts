@@ -276,6 +276,7 @@ export default {
 	'activity.formpersion.listCompetency': 'List Competency',
 	'activity.formpersion.reflection': 'Reflection',
 	'activity.formpersion.mentor': 'Mentor/Supervisor',
+	'activity.formpersion.enterMentor': 'Enter Mentor/Supervisor',
 	'activity.formpersion.inUniversity': 'In university',
 	'activity.formpersion.outUniversity': 'Outside of university',
 	'activity.formpersion.checkbox': 'I hereby declare that the information provided is accurate.',
