@@ -1,7 +1,6 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { Activity } from '@/services/CCT/Activity/typing';
-import { handleSingleFile } from '@/services/uploadFile';
-import { ipCCT } from '@/utils/ip';
+import { EFileScope, uploadFileManagerMultipart } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Col, Collapse, Form, Input, message, Row, Typography } from 'antd';
@@ -17,10 +16,53 @@ import FormRoleEvidence from './FormRoleEvidence';
 
 const { Paragraph } = Typography;
 
-const uploadFilesOfCompetency = async (files: any[] = []) => {
+const getUploadedFileId = (file: any) => {
+	return file?.response?.file?._id ?? file?.response?._id ?? file?.url ?? null;
+};
+
+const getUploadErrorMessage = (error: any) =>
+	error?.response?.data?.message ??
+	error?.response?.data?.detail?.exception?.message ??
+	error?.message ??
+	'File upload failed. Please try again.';
+
+const uploadEvidenceRequest = async ({ file, onSuccess, onError }: any) => {
+	try {
+		const response = await uploadFileManagerMultipart({
+			file,
+			scope: EFileScope.PRIVATE,
+			module: 'co-curriculum',
+		});
+		const fileId = response?.data?.data?.file?._id ?? response?.data?.data?._id;
+
+		if (!fileId) {
+			throw new Error('Missing uploaded file id');
+		}
+
+		onSuccess?.({ ...response?.data?.data, _id: fileId, fileId }, file);
+	} catch (error) {
+		message.error(getUploadErrorMessage(error));
+		onError?.(error);
+	}
+};
+
+const getUploadedFileIds = (files: any[] = []) => {
 	if (!files.length) return [];
-	const urls = await Promise.all(files.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
-	return urls.filter(Boolean) as string[];
+
+	if (files.some((file) => file?.status === 'uploading')) {
+		throw new Error('File is still uploading. Please wait for the upload to complete.');
+	}
+
+	if (files.some((file) => file?.status === 'error')) {
+		throw new Error('File upload failed. Please remove the failed file and upload again.');
+	}
+
+	const fileIds = files.map(getUploadedFileId).filter(Boolean);
+	if (fileIds.length !== files.length) {
+		throw new Error('File has not been uploaded successfully. Please upload again.');
+	}
+
+	return fileIds as string[];
 };
 
 const hasAtLeastOneEvidenceFile = (evidenceFile: any[] = []) => evidenceFile.some((i) => i?.file?.length);
@@ -68,12 +110,16 @@ const FormActivityOutCome = (props: any) => {
 	}, [visibleForm, record?._id]);
 
 	const onFinish = async (values: any, submitted: boolean) => {
-		const evidenceFile = await Promise.all(
-			(values.evidenceFile || []).map(async (item: any) => ({
+		let evidenceFile: any[] = [];
+		try {
+			evidenceFile = (values.evidenceFile || []).map((item: any) => ({
 				name: item.name,
-				file: await uploadFilesOfCompetency(item?.file?.fileList),
-			})),
-		);
+				file: getUploadedFileIds(item?.file?.fileList),
+			}));
+		} catch (error: any) {
+			message.error(error?.message);
+			return;
+		}
 
 		if (autoLevel && autoRole && !hasAtLeastOneEvidenceFile(evidenceFile)) {
 			message.warning(intl.formatMessage({ id: 'activity.outcome.warning' }));
@@ -177,6 +223,9 @@ const FormActivityOutCome = (props: any) => {
 													disabled={isView}
 													isPrivate
 													accept='.pdf, .doc, .docx, .xls, .xlsx, .png, .jpg, .jpeg'
+													otherProps={{
+														customRequest: uploadEvidenceRequest,
+													}}
 												/>
 											</Form.Item>
 										</Col>
