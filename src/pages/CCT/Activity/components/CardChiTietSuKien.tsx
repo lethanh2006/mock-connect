@@ -14,13 +14,28 @@ import { useIntl } from 'umi';
 import FormRoleEvidence from '../../History/components/FormRoleEvidence';
 import CardSuKienCCT from './CardSuKien';
 
-const isFileUrl = (value: string) => /^https?:\/\//.test(value) || value?.startsWith('/');
+const getFileIdFromValue = (value: string) => {
+	const cleanPath = value.split('?')[0].split('#')[0].replace(/^\/+/, '');
+	if (/^[0-9a-f]{24}$/i.test(cleanPath)) return cleanPath;
+	try {
+		const url = new URL(value);
+		const parts = url.pathname.split('/').filter(Boolean);
+		if (parts.includes('file')) return undefined;
+		return parts.length === 1 && /^[0-9a-f]{24}$/i.test(parts[0]) ? parts[0] : undefined;
+	} catch {
+		return undefined;
+	}
+};
+
+const isFileUrl = (value: string) => /^https?:\/\//.test(value) || value?.includes('/file/');
 
 const getPreviewUrl = async (value: string) => {
-	if (isFileUrl(value)) return value;
-	const result = await getFileInfo(value, ipFile);
+	const fileId = getFileIdFromValue(value);
+	if (!fileId && isFileUrl(value)) return value;
+	const id = fileId ?? value;
+	const result = await getFileInfo(id, ipFile);
 	const fileInfo = result?.data?.data;
-	return fileInfo?.url ?? `${ipFile}/file/${value}/${encodeURIComponent(fileInfo?.name ?? 'file')}`;
+	return `${ipFile}/file/${id}/${encodeURIComponent(fileInfo?.name ?? 'file')}`;
 };
 
 const CardChiTietSuKien = (props: {
