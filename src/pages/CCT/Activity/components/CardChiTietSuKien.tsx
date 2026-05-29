@@ -3,7 +3,7 @@ import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { getFileUrl } from '@/services/uploadFile';
+import { getFileInfo } from '@/services/uploadFile';
 import { ipFile } from '@/utils/ip';
 import { getNameFile } from '@/utils/utils';
 import { FileOutlined } from '@ant-design/icons';
@@ -18,8 +18,9 @@ const isFileUrl = (value: string) => /^https?:\/\//.test(value) || value?.starts
 
 const getPreviewUrl = async (value: string) => {
 	if (isFileUrl(value)) return value;
-	const result = await getFileUrl(value, ipFile);
-	return result?.data?.data?.url ?? value;
+	const result = await getFileInfo(value, ipFile);
+	const fileInfo = result?.data?.data;
+	return fileInfo?.url ?? `${ipFile}/file/${value}/${encodeURIComponent(fileInfo?.name ?? 'file')}`;
 };
 
 const CardChiTietSuKien = (props: {
