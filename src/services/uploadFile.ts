@@ -102,6 +102,7 @@ export async function uploadFileManagerMultipart(
 export const handleSingleFile = async (
 	file: any,
 	scope: EFileScope = EFileScope.PUBLIC,
+	returnResponse?: boolean,
 	ip?: string,
 ): Promise<string | null> => {
 	if (file?.originFileObj) {
@@ -113,7 +114,7 @@ export const handleSingleFile = async (
 				},
 				ip,
 			);
-			return response?.data?.data?.url;
+			return returnResponse ? (response as any) : response?.data?.data?.url;
 		} catch (er) {
 			return Promise.reject(er);
 		}
@@ -124,7 +125,7 @@ export async function uploadFile(payload: { file: string | Blob; scope: EFileSco
 	const form = new FormData();
 	form.append('file', payload?.file);
 	form.append('scope', payload?.scope);
-	return axios.post(`${ip ?? ip3}/file`, form);
+	return axios.post(ip ? `${ip}/file` : `${ipFile}/file`, form);
 }
 
 /**
@@ -138,12 +139,13 @@ export const buildUpLoadFile = async (
 	values: any,
 	fieldName: string,
 	scope: EFileScope = EFileScope.PUBLIC,
+	returnResponse?: boolean,
 	ip?: string,
-): Promise<string | null> => {
+): Promise<string | null | any> => {
 	// File updload chưa onChange => value vẫn là string
 	if (typeof values?.[fieldName] === 'string') return values[fieldName];
 	else if (values?.[fieldName]?.fileList?.[0]) {
-		return handleSingleFile(values?.[fieldName]?.fileList?.[0], scope, ip);
+		return handleSingleFile(values?.[fieldName]?.fileList?.[0], scope, returnResponse, ip);
 	}
 	return null;
 };
