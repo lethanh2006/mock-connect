@@ -12,12 +12,12 @@ import {
 	EScopeAward,
 	mapNameScopeAward,
 } from '@/services/CCT/constant';
-import { buildUpLoadFile, handleSingleFile } from '@/services/uploadFile';
+import { EFileScope, uploadFileManagerMultipart } from '@/services/uploadFile';
 import { ipCCT } from '@/utils/ip';
 import rules from '@/utils/rules';
 import { buildDisabledDateTime, resetFieldsForm } from '@/utils/utils';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Input, Radio, Row, Select, Space, Tag, Typography } from 'antd';
+import { Button, Checkbox, Col, Form, Input, message, Radio, Row, Select, Space, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -30,10 +30,84 @@ import FormCompetencyEvidence from './FormCompetencyEvidence';
 
 const { Paragraph } = Typography;
 
-const uploadFilesOfCompetency = async (files: any[] = []) => {
+const getUploadedFileId = (file: any) => {
+	return file?.response?.file?._id ?? file?.response?._id ?? file?.url ?? null;
+};
+
+const getUploadErrorMessage = (error: any) =>
+	error?.response?.data?.message ??
+	error?.response?.data?.detail?.exception?.message ??
+	error?.message ??
+	'File upload failed. Please try again.';
+
+const uploadEvidenceRequest = async ({ file, onSuccess, onError }: any) => {
+	try {
+		const response = await uploadFileManagerMultipart({
+			file,
+			scope: EFileScope.PRIVATE,
+			module: 'co-curriculum',
+		});
+
+		const fileId = response?.data?.data?.file?._id ?? response?.data?.data?._id;
+
+		if (!fileId) {
+			throw new Error('Missing uploaded file id');
+		}
+
+		onSuccess?.({ ...response?.data?.data, _id: fileId, fileId }, file);
+	} catch (error) {
+		message.error(getUploadErrorMessage(error));
+		onError?.(error);
+	}
+};
+
+const getUploadedFileIds = (files: any[] = []) => {
 	if (!files.length) return [];
-	const urls = await Promise.all(files?.map((f) => handleSingleFile(f, undefined, ipCCT).catch(() => null)));
-	return urls.filter(Boolean) as string[];
+
+	if (files.some((file) => file?.status === 'uploading')) {
+		throw new Error('File is still uploading. Please wait for the upload to complete.');
+	}
+
+	if (files.some((file) => file?.status === 'error')) {
+		throw new Error('File upload failed. Please remove the failed file and upload again.');
+	}
+
+	const fileIds = files.map(getUploadedFileId).filter(Boolean);
+
+	if (fileIds.length !== files.length) {
+		throw new Error('File has not been uploaded successfully. Please upload again.');
+	}
+
+	return fileIds as string[];
+};
+
+const getUploadedSingleFileId = (fileValue: any) => {
+	if (!fileValue) return null;
+
+	if (typeof fileValue === 'string') {
+		return fileValue === background ? null : fileValue;
+	}
+
+	const fileList = fileValue?.fileList ?? [];
+	const file = fileList?.[0];
+
+	if (!file) return null;
+
+	if (file?.status === 'uploading') {
+		throw new Error('File is still uploading. Please wait for the upload to complete.');
+	}
+
+	if (file?.status === 'error') {
+		throw new Error('File upload failed. Please remove the failed file and upload again.');
+	}
+
+	const fileId = getUploadedFileId(file);
+
+	if (!fileId) {
+		throw new Error('File has not been uploaded successfully. Please upload again.');
+	}
+
+	return fileId;
 };
 
 const FormPerstionActivityOutCome = (props: any) => {
@@ -103,21 +177,23 @@ const FormPerstionActivityOutCome = (props: any) => {
 
 	const onFinish = async (values: ActivityOutCome.IRecord, submitted: boolean) => {
 		setFormSubmiting(true);
-		let banner = await buildUpLoadFile(values, 'banner', undefined, ipCCT);
-		if (!banner || !banner.includes('http')) {
-			banner = null;
-		}
-		values.banner = banner;
-		setFormSubmiting(false);
 
-		const evidenceFile = await Promise.all(
-			(values.evidenceFile || []).map(async (item: any) => ({
+		try {
+			values.banner = getUploadedSingleFileId(values.banner);
+
+			const evidenceFile = (values.evidenceFile || []).map((item: any) => ({
 				name: item.name,
-				file: await uploadFilesOfCompetency(item?.file?.fileList),
-			})),
-		);
+				file: getUploadedFileIds(item?.file?.fileList),
+			}));
 
-		values.evidenceFile = evidenceFile;
+			values.evidenceFile = evidenceFile;
+		} catch (error: any) {
+			message.error(error?.message);
+			setFormSubmiting(false);
+			return;
+		}
+
+		setFormSubmiting(false);
 
 		values.listAchievedCompetencies = values.listAchievedCompetencies?.map((id) => ({
 			competencyId: id,
@@ -165,6 +241,9 @@ const FormPerstionActivityOutCome = (props: any) => {
 											accept='.png,.jpg,.jpeg'
 											buttonDescription={msg('addBanner')}
 											extra={msg('bannerExtra')}
+											otherProps={{
+												customRequest: uploadEvidenceRequest,
+											}}
 										/>
 									</Form.Item>
 								</Col>
@@ -355,6 +434,9 @@ const FormPerstionActivityOutCome = (props: any) => {
 												disabled={isView}
 												isPrivate
 												accept='.pdf, .doc, .docx, .xls, .xlsx, .png, .jpg, .jpeg'
+												otherProps={{
+													customRequest: uploadEvidenceRequest,
+												}}
 											/>
 										</Form.Item>
 									</Col>
@@ -461,7 +543,15 @@ const FormPerstionActivityOutCome = (props: any) => {
 														</Col>
 														<Col span={22} md={10}>
 															<Form.Item label={msg('file')} name={[index, 'file']} rules={[...rules.required]}>
-																<UploadFile maxCount={5} disabled={isView} isPrivate />
+																<UploadFile
+																	maxCount={5}
+																	disabled={isView}
+																	isPrivate
+																	accept='.pdf, .doc, .docx, .xls, .xlsx, .png, .jpg, .jpeg'
+																	otherProps={{
+																		customRequest: uploadEvidenceRequest,
+																	}}
+																/>
 															</Form.Item>
 														</Col>
 														<Col span={2}>
