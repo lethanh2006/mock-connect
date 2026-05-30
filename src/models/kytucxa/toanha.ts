@@ -1,0 +1,83 @@
+import useInitModel from '@/hooks/useInitModel';
+import { ipCsvc } from '@/utils/ip';
+import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+
+export default () => {
+	const objInit = useInitModel<DangKyKyTucXa.IToaKTX>('toa-nha/ktx', undefined, undefined, ipCsvc);
+
+	const getModel: typeof objInit.getModel = async (
+		paramCondition,
+		filterParams,
+		sortParam,
+		paramPage,
+		paramLimit,
+		path,
+		otherQuery,
+		isSetDanhSach,
+		isAbsolutePath,
+		selectParams,
+		config,
+	) => {
+		return objInit.getModel(
+			paramCondition,
+			filterParams,
+			sortParam,
+			paramPage,
+			paramLimit,
+			path || 'toa-nha/ktx',
+			otherQuery,
+			isSetDanhSach,
+			isAbsolutePath !== undefined ? isAbsolutePath : !path,
+			selectParams,
+			config,
+		);
+	};
+
+	const getAllModel: typeof objInit.getAllModel = async (
+		isSetRecord,
+		sortParam,
+		conditionParam,
+		filterParam,
+		pathParam,
+		isSetDanhSach,
+		selectParams,
+		otherQuery,
+		config,
+	) => {
+		objInit.setLoading(true);
+		try {
+			const payload = {
+				condition: conditionParam,
+				sort: sortParam,
+				filters: filterParam,
+				select: selectParams?.join(' '),
+				...(otherQuery ?? {}),
+			};
+			const response = await objInit.getService(
+				payload as any,
+				pathParam || 'toa-nha/ktx',
+				!pathParam,
+				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
+			);
+			const data = response?.data?.data ?? [];
+			if (isSetDanhSach !== false) objInit.setDanhSach(data);
+			if (isSetRecord) objInit.setRecord(data?.[0]);
+
+			return data;
+		} catch (er) {
+			if (isSetDanhSach !== false) {
+				objInit.setDanhSach([]);
+				objInit.setTotal(0);
+			}
+			return Promise.reject(er);
+		} finally {
+			objInit.setLoading(false);
+		}
+	};
+
+	return {
+		...objInit,
+		getModel,
+		getAllModel,
+	};
+};

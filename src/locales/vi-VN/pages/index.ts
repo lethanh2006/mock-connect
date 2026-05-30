@@ -33,6 +33,8 @@ import xemsau from './tienichkhac/xemsau';
 import tintuc from './tintuc';
 import trangchu from './trangchu';
 import syllabus from './syllabus';
+import dangkyktx from './kytucxa/dangky';
+import lichsudangkyktx from './kytucxa/lichsu';
 
 export default {
 	...login,
@@ -70,6 +72,8 @@ export default {
 	...pathway,
 	...minor,
 	...syllabus,
+	...dangkyktx,
+	...lichsudangkyktx,
 
 	'pages.trangchu.title': 'PHÂN HỆ QUẢN LÝ ĐÀO TẠO',
 	'pages.trangchu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',
