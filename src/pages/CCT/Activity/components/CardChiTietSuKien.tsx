@@ -3,7 +3,7 @@ import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { getNameFile } from '@/utils/utils';
+import { getNameFile, getPreviewUrl, isFileUrl } from '@/utils/utils';
 import { FileOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Divider, Empty, Input, List, Row, Typography } from 'antd';
 import dayjs from 'dayjs';
@@ -254,13 +254,13 @@ const CardChiTietSuKien = (props: {
 																<Typography.Link
 																	key={index}
 																	style={{ display: 'flex', alignItems: 'center', gap: 8 }}
-																	onClick={() => {
-																		setPreviewImage(url);
+																	onClick={async () => {
+																		setPreviewImage(await getPreviewUrl(url));
 																		setPreviewOpen(true);
 																	}}
 																>
 																	<FileOutlined />
-																	<span>{getNameFile(url)}</span>
+																	<span>{isFileUrl(url) ? getNameFile(url) : `File ${index + 1}`}</span>
 																</Typography.Link>
 															))}
 														</div>
