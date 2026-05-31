@@ -82,11 +82,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 			destroyOnClose
 			closeIcon={<CloseOutlined className='ktx-modal__close-icon' />}
 			className='ktx-room-modal'
-			title={
-				<Typography.Text strong className='ktx-modal__header-title'>
-					{intl.formatMessage({ id: 'kytucxa.dangky.modal.title' })}
-				</Typography.Text>
-			}
+			title={intl.formatMessage({ id: 'kytucxa.dangky.modal.title' })}
 		>
 			<div className='ktx-modal__content'>
 				<Row justify='space-between' align='middle' gutter={[16, 8]}>

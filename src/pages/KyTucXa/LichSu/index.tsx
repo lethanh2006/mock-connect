@@ -64,6 +64,7 @@ const LichSuDangKyKTX = () => {
             width: 80,
             align: 'center',
             sortable: true,
+            onCell,
             render: (val: number) => {
                 if (val === undefined || val === null) return '-';
                 const isEnglish = intl.locale.startsWith('en');
@@ -90,6 +91,7 @@ const LichSuDangKyKTX = () => {
             width: 200,
             align: 'center',
             filterType: 'string',
+            onCell,
             render: (val) => {
                 if (!val) return '-';
                 if (!danhSachToa || danhSachToa.length === 0) return '...';
@@ -130,8 +132,8 @@ const LichSuDangKyKTX = () => {
             width: 160,
             align: 'center',
 			sortable: true,
-            render: (val) =>  (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '--'),
             onCell,
+            render: (val) =>  (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '--'),
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.paymentDeadline' }),
@@ -139,8 +141,8 @@ const LichSuDangKyKTX = () => {
             width: 160,
             align: 'center',
 			sortable: true,
-            render: (val) =>  (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '--'),
             onCell,
+            render: (val) =>  (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '--'),
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.status' }),

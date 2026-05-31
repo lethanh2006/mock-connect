@@ -15,6 +15,7 @@ import { FilterIconCustom } from './components/IconsRoom';
 import { ETrangThaiDuyetKTX } from '@/services/KyTucXa/constant';
 import SelectCapacityKTX from './components/SelectCapacity';
 import SelectRoomTypeKTX from './components/SelectRoomType';
+import PageCard from '@/components/PageCard';
 
 const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
@@ -163,10 +164,9 @@ const DangKyKyTucXaPage = () => {
 	}, [cacDotDangKyHienTai]);
 
 	return (
-		<div className='ktx-page'>
-			<Typography.Title level={4} className='ktx-page__title'>
-				{intl.formatMessage({ id: 'kytucxa.dangky.title' })}
-			</Typography.Title>
+		<PageCard
+			title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}
+		>
 
 			{loadingDotDangKy ? (
 				<Card className='ktx-page__dot-card' style={{ borderRadius: 12 }}>
@@ -286,7 +286,7 @@ const DangKyKyTucXaPage = () => {
 					<FormDangKy />
 				</>
 			)}
-		</div>
+		</PageCard>
 	);
 };
 

@@ -1,4 +1,4 @@
-import { Card, Form, Input, Row, Col, Typography, Avatar, Space, Divider, Tag } from 'antd';
+import { Card, Form, Input, Row, Col, Typography, Avatar, Space, Divider, Tag, Button } from 'antd';
 import { useIntl, useModel } from 'umi';
 import { formatDate } from '@/utils/formatDate';
 import { UserOutlined, IdcardOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
@@ -10,7 +10,7 @@ const { Text, Title } = Typography;
 
 const FormLichSuDk = () => {
     const intl = useIntl();
-    const { record } = useModel('kytucxa.dangky');
+    const { record, setVisibleForm } = useModel('kytucxa.dangky');
     const { danhSach: danhSachToa, getAllModel: getAllToa } = useModel('kytucxa.toanha');
     
     useEffect(() => {
@@ -158,7 +158,7 @@ const FormLichSuDk = () => {
                             <Input readOnly variant="filled" value={record?.formDon?.college} />
                         </Form.Item>
                     </Col>
-                    <Col xs={24} md={8}>
+                    <Col xs={24} md={16}>
                         <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.program' })}>
                             <Input readOnly variant="filled" value={record?.formDon?.program} />
                         </Form.Item>
@@ -225,6 +225,18 @@ const FormLichSuDk = () => {
                     )} */}
                 {/* </Row> */}
             </Form>
+            
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+                <Button 
+                    type="primary" 
+                    ghost
+                    onClick={() => setVisibleForm(false)} 
+                    size="large"
+                    style={{ minWidth: 120, borderRadius: 8, fontWeight: 500 }}
+                >
+                    {intl.formatMessage({ id: 'global.button.dong' })}
+                </Button>
+            </div>
         </Card>
     );
 };
