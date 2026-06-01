@@ -1,4 +1,4 @@
-import { blobToBase64, getNameFile } from '@/utils/utils';
+import { blobToBase64, getNameFile, getPreviewUrl } from '@/utils/utils';
 import { DeleteOutlined, EyeOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { Button, Image, Upload, message } from 'antd';
 import type { RcFile } from 'antd/es/upload';
@@ -130,14 +130,14 @@ const UploadFile: React.FC<TUploadProps> = ({
 		// Nếu file mới up lên (chưa có url và preview) thì thêm preview vào file
 		if (!file.url && !file.preview) file.preview = await blobToBase64(file.originFileObj as RcFile);
 
-		setPreviewImage(file.url || (file.preview as string));
+		setPreviewImage(await getPreviewUrl(file.url || (file.preview as string)));
 		setPreviewOpen(true);
 	};
 
 	/** Xem trước file */
 	const handlePreviewFile = async (file: TFileProps) => {
 		if (file.url) {
-			setPreviewImage(file.url ?? '');
+			setPreviewImage(await getPreviewUrl(file.url ?? ''));
 			setPreviewOpen(true);
 		}
 	};
