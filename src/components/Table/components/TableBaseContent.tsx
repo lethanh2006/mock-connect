@@ -327,8 +327,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 							? intl.formatMessage({ id: 'global.table.index.import.titleTemplate' }, { title: title as any })
 							: undefined
 					}
-					importParam={props.importParam}
-					extendData={props.importParam}
+					extendData={props.importParam ?? params}
 				/>
 			) : null}
 
