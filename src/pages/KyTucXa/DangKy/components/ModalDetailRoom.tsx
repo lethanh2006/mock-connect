@@ -16,11 +16,6 @@ const formatGia = (gia?: number, currency?: string) => {
 	return gia.toLocaleString('vi-VN') + ' ' + (currency || 'VND');
 };
 
-const splitTwoCol = <T,>(arr: T[]): [T[], T[]] => {
-	const mid = Math.ceil(arr.length / 2);
-	return [arr.slice(0, mid), arr.slice(mid)];
-};
-
 const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongDaDangKy }) => {
 	const intl = useIntl();
 	const { record: phong, isView, setIsView } = useModel('kytucxa.phong');
@@ -28,8 +23,8 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 	const { tienIchMap } = useModel('kytucxa.tienich');
 	const [activeImg, setActiveImg] = useState<number>(0);
 
-	const { slotLeft, numBedLabel, images, thumbs, col1, col2 } = useMemo(() => {
-		if (!phong) return { slotLeft: 0, numBedLabel: '', images: [], thumbs: [], col1: [], col2: [] };
+	const { slotLeft, numBedLabel, images, thumbs, tienIchAll } = useMemo(() => {
+		if (!phong) return { slotLeft: 0, numBedLabel: '', images: [], thumbs: [], tienIchAll: [] };
 		const left = Math.max(0, phong.soLuongToiDa - phong.soLuongHienTai);
 		const imgs = phong.danhSachAnh ?? [];
 		const tbs = imgs.slice(0, 4);
@@ -41,14 +36,12 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 				return { ten: it?.maDanhMucTienIch ?? '' };
 			})
 			.filter(Boolean);
-		const [c1, c2] = splitTwoCol(tienIchAll);
 		return {
 			slotLeft: left,
 			numBedLabel: `${intl.formatMessage({ id: 'kytucxa.dangky.card.bedRoom' }, { soLuongToiDa: phong.soLuongToiDa })}`,
 			images: imgs,
 			thumbs: tbs,
-			col1: c1,
-			col2: c2,
+			tienIchAll,
 		};
 	}, [phong, tienIchMap]);
 
@@ -78,15 +71,74 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 			open={isView}
 			onCancel={() => setIsView(false)}
 			footer={null}
-			width={1000}
+			width={975}
 			destroyOnClose
 			closeIcon={<CloseOutlined className='ktx-modal__close-icon' />}
 			className='ktx-room-modal'
 			title={intl.formatMessage({ id: 'kytucxa.dangky.modal.title' })}
 		>
 			<div className='ktx-modal__content'>
-				<Row justify='space-between' align='middle' gutter={[16, 8]}>
-					<Col style={{ paddingLeft: 20 }}>
+				<div className='ktx-modal__gallery-new'>
+					<div className='ktx-modal__gallery-main'>
+						{images.length > 0 ? (
+							<Image.PreviewGroup
+								items={images}
+								preview={{
+									current: activeImg,
+									onChange: (index) => setActiveImg(index),
+								}}
+							>
+								<Image
+									src={images[activeImg] ?? images[0]}
+									className='ktx-modal__main-img'
+									wrapperClassName='ktx-modal__main-img-ant-wrap'
+								/>
+							</Image.PreviewGroup>
+						) : (
+							<div className='ktx-modal__main-img ktx-modal__main-img--placeholder' />
+						)}
+
+						{images.length > 1 && (
+							<>
+								<button className='ktx-modal__nav ktx-modal__nav--prev' onClick={prevImg}>
+									<LeftOutlined />
+								</button>
+								<button className='ktx-modal__nav ktx-modal__nav--next' onClick={nextImg}>
+									<RightOutlined />
+								</button>
+							</>
+						)}
+
+						{images.length > 1 && (
+							<div className='ktx-modal__dots'>
+								{images.map((_, i) => (
+									<span
+										key={i}
+										className={`ktx-modal__dot-item${i === activeImg ? ' ktx-modal__dot-item--active' : ''}`}
+										onClick={() => setActiveImg(i)}
+									/>
+								))}
+							</div>
+						)}
+					</div>
+					
+					{thumbs.length > 1 && (
+						<div className='ktx-modal__gallery-grid'>
+							{thumbs.map((url, i) => (
+								<div
+									key={i}
+									className={`ktx-modal__thumb${i === activeImg ? ' ktx-modal__thumb--active' : ''}`}
+									onClick={() => setActiveImg(i)}
+								>
+									<img src={url} alt={`thumb-${i}`} />
+								</div>
+							))}
+						</div>
+					)}
+				</div>
+
+				<Row gutter={[24, 24]} className='ktx-modal__details-wrap'>
+					<Col xs={24} md={15}>
 						<div className='ktx-modal__title-row'>
 							<Typography.Text strong className='ktx-modal__room-name'>
 								{numBedLabel}
@@ -99,112 +151,45 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 								{phong.dienTich}{intl.formatMessage({ id: 'kytucxa.dangky.card.m2' })}	
 							</span>
 						</div>
-					</Col>
-					<Col className='ktx-modal__price-col'>
-						<Typography.Text strong className='ktx-modal__price'>
-							{formatGia(giaPhong, currency)}
-						</Typography.Text>
-					</Col>
-				</Row>
 
-				<Row gutter={[16, 16]} style={{ marginTop: 24 }}>
-					<Col xs={24} md={14}>
-						<div className='ktx-modal__gallery' style={{ display: 'flex', gap: 12, height: 300 }}>
-							<div className='ktx-modal__main-img-wrap' style={{ flex: 1, height: '100%', paddingTop: 0 }}>
-								{images.length > 0 ? (
-									<Image.PreviewGroup
-										items={images}
-										preview={{
-											current: activeImg,
-											onChange: (index) => setActiveImg(index),
-										}}
-									>
-										<Image
-											src={images[activeImg] ?? images[0]}
-											className='ktx-modal__main-img'
-											wrapperClassName='ktx-modal__main-img-ant-wrap'
-										/>
-									</Image.PreviewGroup>
-								) : (
-									<div className='ktx-modal__main-img ktx-modal__main-img--placeholder' />
-								)}
-
-								{images.length > 1 && (
-									<>
-										<button className='ktx-modal__nav ktx-modal__nav--prev' onClick={prevImg}>
-											<LeftOutlined />
-										</button>
-										<button className='ktx-modal__nav ktx-modal__nav--next' onClick={nextImg}>
-											<RightOutlined />
-										</button>
-									</>
-								)}
-
-								{images.length > 1 && (
-									<div className='ktx-modal__dots'>
-										{images.map((_, i) => (
-											<span
-												key={i}
-												className={`ktx-modal__dot-item${i === activeImg ? ' ktx-modal__dot-item--active' : ''}`}
-												onClick={() => setActiveImg(i)}
-											/>
-										))}
-									</div>
-								)}
-							</div>
-
-							{thumbs.length > 1 && (
-								<div className='ktx-modal__thumbs' style={{ width: 70, marginBottom: 0 }}>
-									{thumbs.map((url, i) => (
-										<div
-											key={i}
-											className={`ktx-modal__thumb${i === activeImg ? ' ktx-modal__thumb--active' : ''}`}
-											onClick={() => setActiveImg(i)}
-										>
-											<img src={url} alt={`thumb-${i}`} />
-										</div>
-									))}
+						<div className='ktx-modal__amenities-new'>
+							{tienIchAll.map((t, i) => (
+								<div key={i} className='ktx-modal__amenity-item'>
+									<CheckCircleOutlined className='ktx-modal__amenity-icon' />
+									<span>{t.ten}</span>
 								</div>
-							)}
+							))}
 						</div>
 					</Col>
 
-					<Col xs={24} md={10}>
-						<div className='ktx-modal__info-grid'>
-							<div className='ktx-modal__info-cell'>
-								<span className='ktx-modal__info-label'>{intl.formatMessage({ id: 'kytucxa.dangky.modal.available' })}</span>
-								<span className='ktx-modal__info-value' style={{ color: '#cc2424' }}>
-									{slotLeft > 0 ? `${intl.formatMessage({ id: 'kytucxa.dangky.modal.slots' }, { slotLeft })}` : intl.formatMessage({ id: 'kytucxa.dangky.modal.outOfSlot' })}
-								</span>
+					<Col xs={24} md={9}>
+						<div className='ktx-modal__summary-card'>
+							<div className='ktx-modal__summary-price'>
+								{formatGia(giaPhong, currency)}
 							</div>
-							<div className='ktx-modal__info-cell'>
-								<span className='ktx-modal__info-label'>{intl.formatMessage({ id: 'kytucxa.dangky.modal.layout' })}</span>
-								<span className='ktx-modal__info-value' style={{ color: '#2E2E2E' }}>
-									{phong.cachBoTri ?? `${intl.formatMessage({ id: 'kytucxa.dangky.modal.people' }, { soLuongToiDa: phong.soLuongToiDa })}`}
-								</span>
+							<div className='ktx-modal__info-grid-new'>
+								<div className='ktx-modal__info-cell-new'>
+									<span className='ktx-modal__info-label'>{intl.formatMessage({ id: 'kytucxa.dangky.modal.available' })}</span>
+									<span className='ktx-modal__info-value' style={{ color: '#cc2424' }}>
+										{slotLeft > 0 ? `${intl.formatMessage({ id: 'kytucxa.dangky.modal.slots' }, { slotLeft })}` : intl.formatMessage({ id: 'kytucxa.dangky.modal.outOfSlot' })}
+									</span>
+								</div>
+								{/* <div className='ktx-modal__info-cell-new'>
+									<span className='ktx-modal__info-label'>{intl.formatMessage({ id: 'kytucxa.dangky.modal.layout' })}</span>
+									<span className='ktx-modal__info-value' style={{ color: '#2E2E2E' }}>
+										{phong.cachBoTri ?? `${intl.formatMessage({ id: 'kytucxa.dangky.modal.people' }, { soLuongToiDa: phong.soLuongToiDa })}`}
+									</span>
+								</div> */}
 							</div>
 						</div>
-
-						<Row gutter={[8, 4]} className='ktx-modal__amenities'>
-							<Col span={12}>
-								{col1.map((t, i) => (
-									<div key={i} className='ktx-modal__amenity-item'>
-										<CheckCircleOutlined className='ktx-modal__amenity-icon' />
-										<span>{t.ten}</span>
-									</div>
-								))}
-							</Col>
-							<Col span={12}>
-								{col2.map((t, i) => (
-									<div key={i} className='ktx-modal__amenity-item'>
-										<CheckCircleOutlined className='ktx-modal__amenity-icon' />
-										<span>{t.ten}</span>
-									</div>
-								))}
-							</Col>
-						</Row>
 					</Col>
 				</Row>
+
+				{phong.moTa && (
+					<div className='ktx-modal__desc-new'>
+						{phong.moTa}
+					</div>
+				)}
 
 				{phong.coTheDangKy === false && phong.lyDoKhongTheDangKy?.length ? (
 					<div className='ktx-modal__reason'>

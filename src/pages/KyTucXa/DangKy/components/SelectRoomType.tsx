@@ -6,7 +6,7 @@ import { useIntl, useModel } from 'umi';
  * Select Loại phòng KTX để cho vào FormItem
  */
 const SelectRoomTypeKTX = (props: {
-    value?: number | number[];
+    value?: string | string[];
     onChange?: (value: any) => void;
     multiple?: boolean;
     condition?: any;
@@ -16,28 +16,23 @@ const SelectRoomTypeKTX = (props: {
     selectMa?: boolean;
 }) => {
     const { value, onChange, multiple, allowClear, style, isSetRecord, condition } = props;
-    const { danhSach, getModel, setRecord, loading } = useModel('kytucxa.phong');
+    const { danhSach, getAllModel, setRecord, loading } = useModel('kytucxa.loaiphong');
     const intl = useIntl();
 
     useEffect(() => {
-        getModel(undefined, undefined, condition, undefined, undefined, '').then(() => {
+        getAllModel(undefined, undefined, condition, undefined).then(() => {
             if (!isSetRecord) setRecord?.(undefined);
         });
     }, [JSON.stringify(condition)]);
-    
-        const uniqueCapacities = Array.from(
-            new Set((danhSach || []).map((item) => item.soLuongToiDa).filter((val) => typeof val === 'number'))
-        ).sort((a, b) => a - b);
-
     return (
         <Select
             mode={multiple ? 'multiple' : undefined}
             value={value}
             onChange={onChange}
-            options={uniqueCapacities.map((capacity) => ({
-				key: capacity,
-				value: capacity,
-				label: `${intl.formatMessage({ id: 'kytucxa.dangky.select.capacityLabel' }, { capacity })}`,
+            options={danhSach?.map((item) => ({
+				key: item._id,
+				value: item.ma,
+				label: item.ten,
 			}))}
             showSearch
             optionFilterProp='label'

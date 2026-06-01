@@ -28,6 +28,7 @@ declare module DangKyKyTucXa {
         soLuongToiDa: number;
         soLuongHienTai: number;
 
+        maLoaiPhongKtx?: string;
         tangThu?: number;
         cachBoTri?: string;
         dienTich?: number;

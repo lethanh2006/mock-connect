@@ -28,6 +28,7 @@ const DangKyKyTucXaPage = () => {
 
 	const [selectedToa, setSelectedToa] = useState<string | undefined>(undefined);
 	const [selectedCapacity, setSelectedCapacity] = useState<number | undefined>(undefined);
+	const [selectedRoomType, setSelectedRoomType] = useState<string | undefined>(undefined);
 	const [selectedFloor, setSelectedFloor] = useState<number | undefined>(undefined);
 
 	const maPhongDaDangKy = useMemo(() => {
@@ -119,8 +120,12 @@ const DangKyKyTucXaPage = () => {
 			list = list.filter((p) => p.tangThu === selectedFloor);
 		}
 
+		if (selectedRoomType !== undefined) {
+			list = list.filter((p) => p.maLoaiPhongKtx === selectedRoomType);
+		}
+
 		return list;
-	}, [listPhong, selectedMaToa, selectedCapacity, selectedFloor, danhSachMaPhongHienTai]);
+	}, [listPhong, selectedMaToa, selectedCapacity, selectedFloor, selectedRoomType, danhSachMaPhongHienTai]);
 
 	useEffect(() => {
 		if (cacDotDangKyHienTai.length === 0) {
@@ -135,6 +140,7 @@ const DangKyKyTucXaPage = () => {
 		setSelectedToa(undefined);
 		setSelectedCapacity(undefined);
 		setSelectedFloor(undefined);
+		setSelectedRoomType(undefined);
 		getDotDangKy();
 		getLichSu();
 	};
@@ -233,7 +239,7 @@ const DangKyKyTucXaPage = () => {
 								</Col>
 								
 								<Col flex='220px'>
-									<SelectRoomTypeKTX value={selectedCapacity} onChange={handleChangeCapacity} allowClear={true} />
+									<SelectRoomTypeKTX value={selectedRoomType} onChange={setSelectedRoomType} allowClear={true} />
 								</Col>
 
 								<Col flex='220px'>
