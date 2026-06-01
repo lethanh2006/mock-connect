@@ -4,7 +4,7 @@ import FilterGroup from './FilterGroup';
 import FilterItem from './FilterItem';
 
 const RowFilter = (props: RowFilterProps) => {
-	const { name, formOwner, parentPath } = props;
+	const { name, formOwner, parentPath, forceReadOnly } = props;
 
 	const namePath = Array.isArray(name) ? name : [name];
 	const fullPath = parentPath ? [...parentPath, ...namePath] : ['filters', ...namePath];
@@ -17,10 +17,10 @@ const RowFilter = (props: RowFilterProps) => {
 		(Array.isArray(currentFilter.filters) && currentFilter.filters.length > 0);
 
 	if (isGroup) {
-		return <FilterGroup {...props} />;
+		return <FilterGroup {...props} forceReadOnly={forceReadOnly} />;
 	}
 
-	return <FilterItem {...props} />;
+	return <FilterItem {...props} forceReadOnly={forceReadOnly} />;
 };
 
 export default RowFilter;
