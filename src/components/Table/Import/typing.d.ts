@@ -16,9 +16,6 @@ export type ModalImportProps = {
 	/** Ấn ra ngoài để đóng, mặc định KHÔNG */
 	maskCloseableForm?: boolean;
 
-	/** Query import từ TableBase (definition, template, validate, insert) */
-	importParam?: Record<string, any>;
-
 	/** Data thêm vào mỗi record khi preview/validate/execute import */
 	extendData?: Record<string, string | number | boolean | null | undefined>;
 

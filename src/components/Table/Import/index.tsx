@@ -83,7 +83,7 @@ const ModalImport = (props: ModalImportProps) => {
 						<ChooseFileImport
 							onChange={() => setCurrentStep(1)}
 							onCancel={onCancelModal}
-							getTemplate={getTemplate || getImportTemplateModel}
+							getTemplate={getTemplate ? () => getTemplate(extendData) : () => getImportTemplateModel(extendData)}
 							fileName={titleTemplate}
 						/>
 					) : currentStep === 1 ? (
