@@ -131,7 +131,7 @@ const FormDangKyKTX = () => {
 			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
 			footer={null}
-			width={860}
+			width={975}
 			destroyOnClose
 			className='ktx-register-modal'
 			title={intl.formatMessage({ id: 'kytucxa.dangky.form.title' })}
