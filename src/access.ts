@@ -1,3 +1,4 @@
+import { tenTruongVietTatTiengAnh } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 // import { currentRole } from './utils/ip';
 
@@ -29,6 +30,8 @@ export default function access(initialState: IInitialState) {
 		// guest: (token && ((vaiTro && vaiTro === 'Guest') || !vaiTro)) || false,
 		accessFilter: (route: any) => scopes?.includes(route?.maChucNang) || false,
 		manyAccessFilter: (route: any) => route?.listChucNang?.some((role: string) => scopes?.includes(role)) || false,
+		vinuniAccessFilter: () => tenTruongVietTatTiengAnh === 'VINUNI',
+
 		// adminAccessFilter: (route: any) =>
 		//   (token && vaiTro && vaiTro === 'Admin') ||
 		//   initialState?.phanNhom?.nhom_vai_tro?.includes(route?.maChucNang) ||

@@ -16,11 +16,14 @@ export type ModalImportProps = {
 	/** Ấn ra ngoài để đóng, mặc định KHÔNG */
 	maskCloseableForm?: boolean;
 
-	/** Data thêm vào mỗi record khi validate và execute import */
+	/** Query import từ TableBase (definition, template, validate, insert) */
+	importParam?: Record<string, any>;
+
+	/** Data thêm vào mỗi record khi preview/validate/execute import */
 	extendData?: Record<string, string | number | boolean | null | undefined>;
 
 	/** Hàm gọi API để get file import mẫu */
-	getTemplate?: () => Promise<Blob>;
+	getTemplate?: (importParam?: Record<string, any>) => Promise<Blob>;
 
 	/** Tên file Excel mẫu, mặc định `File biểu mẫu.xlsx` */
 	titleTemplate?: string;

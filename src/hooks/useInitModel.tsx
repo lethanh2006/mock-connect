@@ -495,9 +495,10 @@ const useInitModel = <T extends object>(
 	 * Lấy fields cho chức năng export
 	 * @returns {any}
 	 */
-	const getExportFieldsModel = async (config?: {
-		dataPartitionCode?: string | null | undefined;
-	}): Promise<TExportField[]> => {
+	const getExportFieldsModel = async (
+		query?: any,
+		config?: { dataPartitionCode?: string | null | undefined },
+	): Promise<TExportField[]> => {
 		const genIdField = (data?: TExportField[], prefix?: string): TExportField[] | undefined => {
 			if (!data?.length) return undefined;
 			return data?.map((f, index) => ({
@@ -509,6 +510,7 @@ const useInitModel = <T extends object>(
 
 		try {
 			const res = await getExportFields(
+				query,
 				config?.dataPartitionCode ? { 'x-data-partition-code': config.dataPartitionCode } : undefined,
 			);
 			const fields = genIdField(res.data?.data) ?? [];
