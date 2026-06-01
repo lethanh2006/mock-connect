@@ -176,6 +176,7 @@ export default {
 	'global.table.customfilter.label.nhomdieukien': 'Nhóm điều kiện:',
 	'global.table.customfilter.placeholder.chondieukien': 'Chọn điều kiện',
 	'global.table.customfilter.placeholder.chongiatri': 'Chọn giá trị',
+	'global.table.customfilter.tim': 'Tìm',
 	'global.table.import.match.cot': 'Cột {colName}: {title}',
 	'global.table.import.preview.invalidRows':
 		'Có ô chứa dữ liệu không hợp lệ tại các dòng {rows} (đã được đánh dấu trong bảng), vui lòng kiểm tra lại!',
@@ -233,6 +234,9 @@ export default {
 	'global.uploadfile.text1': 'Thêm ảnh đại diện',
 	'global.uploadfile.button.chontep': 'Chọn tệp',
 	'global.uploadfile.tepdinhkem': 'Tệp đính kèm',
+
+	'app.copyright.produced': 'CopyRight',
+	'app.locale.image': 'vi-VN.svg',
 
 	// PDFViewer
 	'global.pdfviewer.dangtai': 'Đang tải...',
