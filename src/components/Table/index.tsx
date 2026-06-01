@@ -1,5 +1,5 @@
-import { useModel } from 'umi';
 import { useCallback, useMemo } from 'react';
+import { useModel } from 'umi';
 import { TableBaseContent } from './components/TableBaseContent';
 import { TableProvider } from './components/TableContext';
 import './style.less';
@@ -8,10 +8,10 @@ import {
 	markExternalFilters,
 	normalizeExternalConditions,
 	normalizeFilters,
+	reAddMetadata,
 	splitFiltersBySource,
 	stripFilterSource,
 	stripMetadata,
-	reAddMetadata,
 } from './utils';
 
 const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
@@ -33,7 +33,8 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	const { tableFilters } = useMemo(() => splitFiltersBySource(modelFilters), [modelFilters]);
 
 	const searchableColumns = useMemo(() => {
-		const flatColumns = props.columns?.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat() ?? [];
+		const flatColumns =
+			props.columns?.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat() ?? [];
 		const seen = new Set<string>();
 		return flatColumns
 			.filter((item) => {
@@ -60,18 +61,13 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 		return reAddMetadata(normalized, props.columns ?? [], searchableFieldKeys, searchableColumns.length);
 	}, [externalFilters, tableFilters, props.columns, searchableFieldKeys, searchableColumns]);
 
-	const { externalFilters: activeExternalFilters } = useMemo(
-		() => splitFiltersBySource(filters),
-		[filters],
-	);
+	const { externalFilters: activeExternalFilters } = useMemo(() => splitFiltersBySource(filters), [filters]);
 
 	const handleSetFilters = useCallback(
 		(nextFilters: TFilter<T>[] = []) => {
 			const normalizedNextFilters = normalizeFilters(nextFilters);
-			const {
-				tableFilters: nextTableFilters,
-				externalFilters: nextExternalFilters,
-			} = splitFiltersBySource(normalizedNextFilters);
+			const { tableFilters: nextTableFilters, externalFilters: nextExternalFilters } =
+				splitFiltersBySource(normalizedNextFilters);
 
 			// Strip metadata before syncing to model (URL)
 			model?.setFilters?.(stripMetadata(nextTableFilters));
@@ -87,8 +83,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 		(params: any) => {
 			if (!externalRawConditions || Object.keys(externalRawConditions).length === 0) return params;
 
-			const normalizedParams =
-				params && typeof params === 'object' && !Array.isArray(params) ? params : {};
+			const normalizedParams = params && typeof params === 'object' && !Array.isArray(params) ? params : {};
 
 			return {
 				...externalRawConditions,

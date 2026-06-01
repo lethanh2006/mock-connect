@@ -62,8 +62,8 @@ const useInitService = (url: string, ip?: string) => {
 		return axios.post(`${finalIp}/${url}/import/insert`, payload, { headers });
 	};
 
-	const getExportFields = (headers?: any) => {
-		return axios.get(`${finalIp}/${url}/export/definition`, { data: { silent: true }, headers });
+	const getExportFields = (params?: any, headers?: any) => {
+		return axios.get(`${finalIp}/${url}/export/definition`, { params, data: { silent: true }, headers });
 	};
 
 	const postExport = (

@@ -2,8 +2,8 @@ import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import { TableProps } from 'antd';
 import type { ColumnType } from 'antd/lib/table';
 import React, { JSX } from 'react';
-import { type EOperatorType } from './constant/constant';
 import { PageCardProps } from '../PageCard/typing';
+import { type EOperatorType } from './constant/constant';
 
 export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 'children'> {
 	/** Ẩn hoàn toàn cột (không hiện trong table, không hiện trong menu cấu hình) */
@@ -89,7 +89,7 @@ export type TableBaseProps<T extends object = any> = {
 	 * Các filter này sẽ hiển thị trong TableBase và Modal Filter.
 	 */
 	externalFilters?: TFilter<T>[];
- 
+
 	/**
 	 * Điều kiện lọc bổ sung từ bên ngoài (Gom 3 thành 1).
 	 * Dùng để hiển thị trạng thái lọc trong Modal Filter và đồng bộ dữ liệu.
@@ -111,8 +111,14 @@ export type TableBaseProps<T extends object = any> = {
 	/** Tham số phụ thuộc để getData được gọi */
 	dependencies?: any[];
 
-	/** Tham số để truyền vào hàm getData, ModalImport, ModalExport */
+	/** Tham số truyền vào getData */
 	params?: any;
+
+	/** Query riêng cho export (definition, xlsx) */
+	exportParam?: Record<string, any>;
+
+	/** Query riêng cho import (definition, template, validate, insert) */
+	importParam?: Record<string, any>;
 
 	/** Các nội dung hiển thị trên header, bên cạnh button thêm mới */
 	children?: React.ReactNode;
@@ -215,7 +221,7 @@ export type TableBaseProps<T extends object = any> = {
 export type TFilter<T> = {
 	field?: keyof T | [keyof T, string];
 	operator?: EOperatorType;
-	values?: (string | number)[];
+	values?: (string | number | boolean)[];
 	active?: boolean;
 	filters?: TFilter<T>[];
 	logicOperator?: 'or' | 'and';
@@ -236,7 +242,7 @@ export type RowFilterProps = {
 /**
  * Đại diện cho một điều kiện lọc từ bên ngoài truyền vào TableBase.
  * @template T Kiểu dữ liệu của bản ghi trong bảng.
- * 
+ *
  * @example
  * // Trường hợp dùng mapping object
  * {
@@ -245,7 +251,7 @@ export type RowFilterProps = {
  *   value: true,
  *   valueLabel: { true: 'Đang hoạt động', false: 'Ngừng hoạt động' }
  * }
- * 
+ *
  * @example
  * // Trường hợp dùng nhãn trực tiếp (khi đã biết nhãn từ Select)
  * {
@@ -269,11 +275,11 @@ export type TExternalConditionItem<T extends object> = {
 	 */
 	operator?: keyof ConditionCriteria<T>;
 
-	/** 
-	 * Nhãn hiển thị cho giá trị lọc (Dùng để hiển thị trong Modal Filter thay cho giá trị thô). 
-	 * - Dạng `string`: Dùng khi đã có sẵn nhãn (VD: lấy từ `Select.label`). 
+	/**
+	 * Nhãn hiển thị cho giá trị lọc (Dùng để hiển thị trong Modal Filter thay cho giá trị thô).
+	 * - Dạng `string`: Dùng khi đã có sẵn nhãn (VD: lấy từ `Select.label`).
 	 *   Ví dụ: `valueLabel: 'Kế toán'`.
-	 * - Dạng `object`: Dùng khi muốn định nghĩa bộ quy tắc tra cứu (VD: cho Boolean, Enum). 
+	 * - Dạng `object`: Dùng khi muốn định nghĩa bộ quy tắc tra cứu (VD: cho Boolean, Enum).
 	 *   Ví dụ: `valueLabel: { true: 'Có', false: 'Không' }`.
 	 * - Nếu không truyền: Hệ thống tự tìm nhãn từ `columns.filterData` hoặc hiển thị giá trị thô.
 	 */
@@ -340,6 +346,7 @@ export type TableStaticProps = Pick<
 
 	hasCreate?: boolean;
 	hasTotal?: boolean;
+	totalComponent?: React.ReactNode;
 	/** Có nút cấu hình cột ko? Mặc định: Có */
 	columnSetting?: boolean;
 	size?: 'small' | 'middle';
