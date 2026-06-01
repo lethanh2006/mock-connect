@@ -1,4 +1,6 @@
+import { EOperatorType } from '../constant';
 import { type IColumn, type TFilter } from '../typing';
+import { isSameFilterField } from './filterTree';
 
 /**
  * Chuẩn hóa dữ liệu bộ lọc từ form trước khi gửi lên table context hoặc backend.
@@ -146,7 +148,7 @@ export const reAddMetadata = (
 			const col = columns.find(
 				(c) => (Array.isArray(c.dataIndex) ? c.dataIndex.join('.') : c.dataIndex) === nextFilter.field,
 			);
-			
+
 			if (col?.readOnly !== undefined) {
 				// Nếu có cấu hình readOnly (true/false) cụ thể ở cột, ưu tiên tuyệt đối
 				nextFilter.readOnly = col.readOnly;
@@ -246,18 +248,17 @@ export const findFiltersInColumns = (columns: IColumn<unknown>[], filters?: any[
 		.filter(Boolean);
 };
 
-export const isGlobalSearchFilter = (filter: TFilter<any>, searchableFieldKeys: Set<string>, totalSearchableColumns: number) => {
-	if (!filter?.filters?.length) return false;
-	if (filter.operator !== 'or') return false;
-
-	const { filters: subFilters } = filter;
-	if (subFilters.length !== totalSearchableColumns) return false;
+export const getGlobalSearchKeyword = (
+	filter: TFilter<any> | undefined,
+	searchableFieldKeys: Set<string>,
+): string | undefined => {
+	if (!filter?.filters?.length) return undefined;
 
 	let keyword: string | undefined;
-	return subFilters.every((child) => {
+	const isValid = filter.filters.every((child) => {
 		const fieldKey = JSON.stringify(child?.field);
 		if (!searchableFieldKeys.has(fieldKey)) return false;
-		if (child?.operator !== 'contain') return false;
+		if (child?.operator !== EOperatorType.CONTAIN) return false;
 		const firstValue = child?.values?.[0];
 		if (firstValue === undefined || firstValue === null) return false;
 
@@ -267,4 +268,129 @@ export const isGlobalSearchFilter = (filter: TFilter<any>, searchableFieldKeys: 
 		if (keyword === undefined) keyword = normalizedValue;
 		return keyword === normalizedValue;
 	});
+
+	return isValid ? keyword : undefined;
+};
+
+export const isGlobalSearchFilter = (
+	filter: TFilter<any>,
+	searchableFieldKeys: Set<string>,
+	_totalSearchableColumns?: number,
+) => {
+	if (!filter?.filters?.length) return false;
+	if (filter.operator !== EOperatorType.OR) return false;
+	return getGlobalSearchKeyword(filter, searchableFieldKeys) !== undefined;
+};
+
+export const findGlobalSearchFilter = (
+	filters: TFilter<any>[] = [],
+	searchableFieldKeys: Set<string>,
+): { filter: TFilter<any>; index: number; keyword: string } | undefined => {
+	if (!Array.isArray(filters)) return undefined;
+
+	for (let index = 0; index < filters.length; index++) {
+		const filter = filters[index];
+		const keyword = getGlobalSearchKeyword(filter, searchableFieldKeys);
+		if (keyword) return { filter, index, keyword };
+	}
+
+	return undefined;
+};
+
+export const getStandaloneSearchableFields = (
+	filters: TFilter<any>[] = [],
+	searchableFieldKeys: Set<string>,
+): any[] => {
+	if (!Array.isArray(filters)) return [];
+
+	return filters
+		.filter((filter) => {
+			if (!filter?.field) return false;
+			const fieldKey = JSON.stringify(filter.field);
+			return searchableFieldKeys.has(fieldKey) && filter.operator === EOperatorType.CONTAIN;
+		})
+		.map((filter) => filter.field);
+};
+
+export const buildGlobalSearchFilter = (
+	keyword: string,
+	searchableFields: any[],
+	excludedFields: any[] = [],
+): TFilter<any> | undefined => {
+	const normalizedKeyword = keyword?.trim() ?? '';
+	if (!normalizedKeyword || !searchableFields.length) return undefined;
+
+	const excludedKeys = new Set(excludedFields.map((field) => JSON.stringify(field)));
+	const subFilters = searchableFields
+		.filter((field) => !excludedKeys.has(JSON.stringify(field)))
+		.map((field) => ({
+			field,
+			operator: EOperatorType.CONTAIN,
+			values: [normalizedKeyword],
+			readOnly: true,
+			active: true,
+		}));
+
+	if (!subFilters.length) return undefined;
+
+	return {
+		operator: EOperatorType.OR,
+		readOnly: true,
+		active: true,
+		filters: subFilters,
+		values: [],
+	};
+};
+
+export const applyColumnStringSearch = (
+	filters: TFilter<any>[] = [],
+	fieldName: any,
+	value: string,
+	searchableFieldKeys: Set<string>,
+): TFilter<any>[] => {
+	const currentFilters = filters ?? [];
+	const globalSearch = findGlobalSearchFilter(currentFilters, searchableFieldKeys);
+	const normalizedValue = value?.trim() ?? '';
+
+	if (!normalizedValue) {
+		if (!globalSearch) {
+			return currentFilters.filter((item) => !item?.field || !isSameFilterField(item.field, fieldName));
+		}
+
+		const withoutStandalone = currentFilters.filter(
+			(item) => !item?.field || !isSameFilterField(item.field, fieldName),
+		);
+		const nextGlobalSearch = findGlobalSearchFilter(withoutStandalone, searchableFieldKeys);
+		const nextFilters = withoutStandalone.filter((_, index) => index !== nextGlobalSearch?.index);
+
+		const existingGlobalFields = nextGlobalSearch?.filter.filters?.map((item) => item.field) ?? [];
+		const hasFieldInGlobal = existingGlobalFields.some((field) => isSameFilterField(field, fieldName));
+		if (hasFieldInGlobal) return withoutStandalone;
+
+		const rebuiltGlobal = buildGlobalSearchFilter(nextGlobalSearch!.keyword, [...existingGlobalFields, fieldName]);
+		return rebuiltGlobal ? [rebuiltGlobal, ...nextFilters] : nextFilters;
+	}
+
+	const withoutStandalone = currentFilters.filter((item) => !item?.field || !isSameFilterField(item.field, fieldName));
+	const nextGlobalSearch = findGlobalSearchFilter(withoutStandalone, searchableFieldKeys);
+	const nextFilters = withoutStandalone.filter((_, index) => index !== nextGlobalSearch?.index);
+
+	let rebuiltGlobal: TFilter<any> | undefined;
+	if (nextGlobalSearch) {
+		const remainingFields =
+			nextGlobalSearch.filter.filters
+				?.filter((item) => !isSameFilterField(item.field, fieldName))
+				.map((item) => item.field) ?? [];
+		rebuiltGlobal = buildGlobalSearchFilter(nextGlobalSearch.keyword, remainingFields);
+	}
+
+	const columnFilter: TFilter<any> = {
+		field: fieldName,
+		operator: EOperatorType.CONTAIN,
+		values: [normalizedValue],
+		active: true,
+		source: 'table',
+	};
+
+	return [...(rebuiltGlobal ? [rebuiltGlobal] : []), ...nextFilters, columnFilter];
 };
