@@ -1,11 +1,12 @@
 import { EDinhDangFile } from '@/services/base/constant';
-import { EFileScope, uploadFile } from '@/services/uploadFile';
+import { EFileScope, getFileInfo, uploadFile } from '@/services/uploadFile';
 import { message, type FormInstance } from 'antd';
 import { type AxiosResponse } from 'axios';
 import type dayjs from 'dayjs';
 import { Dayjs } from 'dayjs';
 import * as XLSX from 'xlsx';
 import dayjsLib from './dayjs';
+import { ipFile } from './ip';
 
 export const urlRegex =
 	/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.,~#?&//=]*)$/;
@@ -756,4 +757,28 @@ export const buildDisabledDateTime = ({ min, max }: { min?: Dayjs; max?: Dayjs }
 			return result;
 		},
 	} as any;
+};
+
+export const getFileIdFromValue = (value: string) => {
+	const cleanPath = value.split('?')[0].split('#')[0].replace(/^\/+/, '');
+	if (/^[0-9a-f]{24}$/i.test(cleanPath)) return cleanPath;
+	try {
+		const url = new URL(value);
+		const parts = url.pathname.split('/').filter(Boolean);
+		if (parts.includes('file')) return undefined;
+		return parts.length === 1 && /^[0-9a-f]{24}$/i.test(parts[0]) ? parts[0] : undefined;
+	} catch {
+		return undefined;
+	}
+};
+
+export const isFileUrl = (value: string) => /^https?:\/\//.test(value) || value?.includes('/file/');
+
+export const getPreviewUrl = async (value: string) => {
+	const fileId = getFileIdFromValue(value);
+	if (!fileId && isFileUrl(value)) return value;
+	const id = fileId ?? value;
+	const result = await getFileInfo(id, ipFile);
+	const fileInfo = result?.data?.data;
+	return `${ipFile}/file/${id}/${encodeURIComponent(fileInfo?.name ?? 'file')}`;
 };
