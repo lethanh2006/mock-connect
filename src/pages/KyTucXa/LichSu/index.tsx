@@ -50,14 +50,6 @@ const LichSuDangKyKTX = () => {
 	};
 
     const columns: IColumn<DangKyKyTucXa.IThongTinDangKyKTX>[] = [
-        // {
-        //     title: intl.formatMessage({ id: 'kytucxa.lichsu.table.ma' }),
-        //     dataIndex: 'identityCode',
-        //     width: 150,
-        //     align: 'center',
-        //     filterType: 'string',
-        //     // onCell,
-        // },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.floor' }),
             dataIndex: ['phong', 'tangThu'],
@@ -99,16 +91,6 @@ const LichSuDangKyKTX = () => {
                 return toa ? toa.ten : val;
             },
         },
-		{
-			title: intl.formatMessage({ id: 'kytucxa.lichsu.table.capacityType' }),
-			dataIndex: ['phong', 'soLuongToiDa'],
-			width: 140,
-			align: 'center',
-			filterType: 'string',
-			sortable: true,
-			onCell,
-			render: (val) => val ? `${intl.formatMessage({ id: 'kytucxa.lichsu.table.capacityValue' }, { val })}` : '-',
-		},
 		{
 			title: intl.formatMessage({ id: 'kytucxa.lichsu.table.roomPrice' }),
 			dataIndex: ['phong', 'maKhoanThuPhong'],

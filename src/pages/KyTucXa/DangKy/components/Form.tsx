@@ -5,7 +5,6 @@ import './style.less';
 import dayjs from 'dayjs';
 import { resetFieldsForm } from '@/utils/utils';
 import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
-// import SelectQuocTichSinhVien from './SelectQuocTichSinhVien';
 import rules from '@/utils/rules';
 
 const { TextArea } = Input;
@@ -17,14 +16,8 @@ const FormDangKyKTX = () => {
 	const { record: phong, visibleForm, setVisibleForm } = useModel('kytucxa.phong');
 	const { record: dotDangKyRecord } = useModel('kytucxa.dotdangky');
 	const { postModel, getModel: getLichSu, formSubmiting } = useModel('kytucxa.dangky');
-	const { danhSach: danhSachQuocTich } = useModel('kytucxa.quoctichsinhvien');
 
 	const [currentStep, setCurrentStep] = useState(0);
-	// const haveHealthInsurance = Form.useWatch('haveHealthInsurance', form);
-	const nationality = Form.useWatch('nationality', form);
-
-	const selectedQuocTich = danhSachQuocTich?.find(item => item.tenQuocTich === nationality);
-	const isOtherNationality = selectedQuocTich?.ma?.toUpperCase() === 'OTHER' || selectedQuocTich?.ma?.toUpperCase() === 'OTR' || selectedQuocTich?.ma?.toUpperCase() === 'KHAC' || selectedQuocTich?.tenQuocTich?.toLowerCase() === 'Khác';
 
 	useEffect(() => {
 		if (visibleForm) {
@@ -86,15 +79,9 @@ const FormDangKyKTX = () => {
 				? dayjs(rest.dateOfBirth, 'DD/MM/YYYY').toISOString()
 				: '';
 
-			// const insuranceUrl: string | undefined =
-			// 	(rest.healthInsuranceFile as any)?.fileList?.[0]?.response?.data?.url ??
-			// 	(rest.healthInsuranceFile as any)?.fileList?.[0]?.url ??
-			// 	'';
-
 			const payload = {
 				maDotId: dotDangKyRecord?._id,
 				maPhong: phong?.ma,
-				// ghiChu: rest.specialRequirements,
 				form: {
 					fullName: rest.fullName,
 					studentId: rest.studentId,
@@ -107,10 +94,9 @@ const FormDangKyKTX = () => {
 					identityNumber: rest.identityNumber,
 					dateOfIssue: rest.dateOfIssue,
 					placeOfIssue: rest.placeOfIssue,
-					nationality: isOtherNationality ? (rest as any).otherNationality : rest.nationality,
+					nationality: rest.nationality,
 					permanentHomeAddress: rest.permanentHomeAddress,
 					haveHealthInsurance: !!rest.haveHealthInsurance,
-					// healthInsuranceFile: insuranceUrl,
 					emergencyContactName: rest.emergencyContactName,
 					emergencyRelationship: rest.emergencyRelationship,
 					emergencyContactNumber: rest.emergencyContactNumber,
@@ -230,19 +216,11 @@ const FormDangKyKTX = () => {
 												<Input disabled />
 											</Form.Item>
 										</Col>
-										<Col xs={24} md={12}>
+										<Col xs={24}>
 											<Form.Item name="nationality" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality' })} rules={[...rules.required]}>
-												{/* <SelectQuocTichSinhVien /> */}
 												<Input disabled />
 											</Form.Item>
 										</Col>
-										
-										<Col xs={24} md={12}>
-											<Form.Item name="otherNationality" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.otherNationality' })}>
-												<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.placeholder.otherNationality' })} autoFocus />
-											</Form.Item>
-										</Col>
-									
 										<Col xs={24} md={24}>
 											<Form.Item name="permanentHomeAddress" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.permanentHomeAddress' })} rules={[...rules.required]}>
 												<TextArea rows={2} disabled />
@@ -251,43 +229,6 @@ const FormDangKyKTX = () => {
 									</Row>
 								</div>
 							</div>
-
-							{/* <div className="ktx-register-section mt-4">
-								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.specialReq' })}</Typography.Title>
-								<div className="ktx-register-section__content">
-									<Form.Item
-										name="specialRequirements"
-										label={<span style={{ fontWeight: '400' }}>{intl.formatMessage({ id: 'kytucxa.dangky.form.field.specialReqDesc' })}</span>}
-									>
-										<TextArea rows={3} placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.placeholder.specialReq' })} />
-									</Form.Item>
-								</div>
-							</div> */}
-
-							{/* <div className="ktx-register-section mt-4">
-								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.healthInsurance' })}</Typography.Title>
-								<div className="ktx-register-section__content">
-									<Form.Item name="haveHealthInsurance" valuePropName="checked" style={{ marginBottom: 12 }}>
-										<Checkbox className="ktx-insurance-checkbox">
-											<span style={{ fontWeight: '500' }}>{intl.formatMessage({ id: 'kytucxa.dangky.form.field.yes' })}</span>
-										</Checkbox>
-									</Form.Item>
-									
-									{haveHealthInsurance === true && (
-										<div className="ktx-upload-wrapper mt-3">
-											<Form.Item 
-												name="healthInsuranceFile"
-												rules={[...rules.required]}
-											>
-												<UploadFile 
-													drag={true} 
-													maxCount={1} 
-												/>
-											</Form.Item>
-										</div>
-									)}
-								</div>
-							</div> */}
 
 							<div className="ktx-register-section mt-4">
 								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.emergencyContact' })}</Typography.Title>
