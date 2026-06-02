@@ -4,12 +4,8 @@ import type { BieuMau } from '@/services/TienIch/KhaoSat/BieuMau/typing';
 import { ELoaiDot, EVaiTroKhaoSat } from '@/services/TienIch/KhaoSat/constants';
 import { getBieuMauPLOKhaoSat } from '@/services/TienIch/KhaoSat/DotKhaoSat';
 import { Alert, Select, Spin, message } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-
-const getMaHocKy = (record?: any) => {
-	return record?.maHocKy ?? record?.hocKy?.ma ?? record?.hocKy?.maHocKy ?? record?.hocKyId ?? record?.idHocKy;
-};
 
 const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 	const intl = useIntl();
@@ -28,15 +24,7 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 	const [loadingBieuMau, setLoadingBieuMau] = useState<boolean>(false);
 	const [recBieuMau, setRecBieuMau] = useState<BieuMau.Record>();
 
-	const maHocKyLopHocPhan = useMemo(() => getMaHocKy(recLopHocPhan), [recLopHocPhan]);
-	const maHocKyDot = useMemo(() => getMaHocKy(recDot), [recDot]);
-
-	const isCungHocKy = useMemo(() => {
-		if (!recDot?._id || !recLopHocPhan?._id) return false;
-		if (!maHocKyLopHocPhan || !maHocKyDot) return false;
-
-		return maHocKyLopHocPhan === maHocKyDot;
-	}, [recDot?._id, recLopHocPhan?._id, maHocKyLopHocPhan, maHocKyDot]);
+	const isCungHocKy = recDot?.maHocKy === recLopHocPhan?.maHocKy;
 
 	useEffect(() => {
 		setGiangVienSsoId(recLopHocPhan?.nhanSuList?.[0]?.nhanSuSsoId ?? null);
@@ -119,6 +107,17 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 		).catch((err) => console.log(err));
 	};
 
+	if (!isCungHocKy)
+		return (
+			<Alert
+				type='warning'
+				showIcon
+				message={intl.formatMessage({ id: 'lophocphan.id.khaosat.cungky.mess' })}
+				description={intl.formatMessage({ id: 'lophocphan.id.khaosat.cungky.des' })}
+				style={{ marginBottom: 12 }}
+			/>
+		);
+
 	return (
 		<>
 			{recDot?.loai === ELoaiDot.DANH_GIA_GIANG_VIEN && (
@@ -136,25 +135,15 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 				/>
 			)}
 
-			{!isCungHocKy ? (
-				<Alert
-					type='warning'
-					showIcon
-					message='Không thể thực hiện khảo sát'
-					description='Học kỳ của lớp học phần không trùng với học kỳ của đợt khảo sát.'
-					style={{ marginBottom: 12 }}
+			<Spin spinning={loadingCauTraLoi || loadingBieuMau}>
+				<FormTraLoiKhaoSat
+					onOk={hanldeKhaoSat}
+					cauTraLoi={cauTraLoi?.danhSachTraLoi}
+					formSubmiting={formSubmiting}
+					hideCard
+					recBieuMauProps={recBieuMau}
 				/>
-			) : (
-				<Spin spinning={loadingCauTraLoi || loadingBieuMau}>
-					<FormTraLoiKhaoSat
-						onOk={hanldeKhaoSat}
-						cauTraLoi={cauTraLoi?.danhSachTraLoi}
-						formSubmiting={formSubmiting}
-						hideCard
-						recBieuMauProps={recBieuMau}
-					/>
-				</Spin>
-			)}
+			</Spin>
 		</>
 	);
 };
