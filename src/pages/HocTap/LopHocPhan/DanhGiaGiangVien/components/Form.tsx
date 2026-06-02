@@ -125,7 +125,6 @@ const FormDanhGiaGiangVien = (props: { getData?: () => void }) => {
 					value={giangVienSsoId}
 					style={{ width: 250, marginBottom: 12 }}
 					placeholder={intl.formatMessage({ id: 'lophocphan.id.khaosat.chongv' })}
-					disabled={!isCungHocKy}
 					options={recLopHocPhan?.nhanSuList?.map((item) => ({
 						key: item.nhanSuSsoId,
 						value: item.nhanSuSsoId,
