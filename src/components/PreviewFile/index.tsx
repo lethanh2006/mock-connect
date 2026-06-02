@@ -1,6 +1,6 @@
 import { EDinhDangFile } from '@/services/base/constant';
 import type { IFileInfo } from '@/services/base/typing';
-import { getFileContent, getFileInfo } from '@/services/uploadFile';
+import { getFileContent, getFileInfo, getFileRouteBase } from '@/services/uploadFile';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
@@ -109,7 +109,10 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 				setLoading(true);
 				const result = await getFileInfo(idFile, ip);
 				const fileInfo: IFileInfo = result?.data?.data;
-				frame.url = getProxiedFileUrl(fileInfo?.url ?? (!isFileId ? srcUrl : `${ip}/file/${idFile}/${fileInfo?.name}`));
+				const fileRouteBase = getFileRouteBase(ip);
+				frame.url = getProxiedFileUrl(
+					fileInfo?.url ?? (!isFileId ? srcUrl : `${fileRouteBase}/${idFile}/${encodeURIComponent(fileInfo?.name ?? 'file')}`),
+				);
 				frame.name = fileInfo?.name;
 
 				// Mapping { mimetype : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"} sang EDinhDangFile

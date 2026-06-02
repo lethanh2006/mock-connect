@@ -34,9 +34,9 @@ const getFileExtension = (filename: string): string => {
 	return ext && ext !== filename ? ext : '';
 };
 
-const getFileRouteBase = (ip?: string) => {
-	const base = ip ?? ip3;
-	return base === ipFile ? base : `${base}/file`;
+export const getFileRouteBase = (ip?: string) => {
+	const base = (ip ?? ip3).replace(/\/+$/, '');
+	return base.endsWith('/file') ? base : `${base}/file`;
 };
 
 const uploadMultipartParts = async (file: Blob, initData: TMultipartInitData): Promise<TMultipartCompletePart[]> => {
@@ -125,7 +125,7 @@ export async function uploadFile(payload: { file: string | Blob; scope: EFileSco
 	const form = new FormData();
 	form.append('file', payload?.file);
 	form.append('scope', payload?.scope);
-	return axios.post(ip ? `${ip}/file` : `${ipFile}/file`, form);
+	return axios.post(getFileRouteBase(ip ?? ipFile), form);
 }
 
 /**
