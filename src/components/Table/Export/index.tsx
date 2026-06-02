@@ -36,7 +36,7 @@ const ModalExport = (props: ModalExportProps) => {
 		setLoading(true);
 		try {
 			if (getExportFieldsModel)
-				await getExportFieldsModel().then((fields: TExportField[]) => {
+				await getExportFieldsModel(otherQuery).then((fields: TExportField[]) => {
 					setAllFields(fields);
 
 					const flatData = genFlatData(fields);
