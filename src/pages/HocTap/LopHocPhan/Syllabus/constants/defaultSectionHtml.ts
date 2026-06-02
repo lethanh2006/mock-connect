@@ -1,4 +1,4 @@
-import { ColorDiemChu, ELoaiDiemChu } from '@/services/KetQuaHocTap/constant';
+import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 
 export interface SyllabusTableColumnConfig {
 	title: string;
