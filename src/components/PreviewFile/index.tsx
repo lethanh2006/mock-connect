@@ -1,6 +1,7 @@
 import { EDinhDangFile } from '@/services/base/constant';
 import type { IFileInfo } from '@/services/base/typing';
-import { getFileInfo } from '@/services/uploadFile';
+import { getFileContent, getFileInfo } from '@/services/uploadFile';
+import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
 import {
@@ -11,10 +12,11 @@ import {
 	LeftOutlined,
 	RightOutlined,
 } from '@ant-design/icons';
-import { Empty, Image, message, Spin } from 'antd';
+import { Button, Empty, message, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
+import AuthImage from '../Image/AuthImage';
 import PDFViewerV2 from '../PDFViewerV2';
 import type { TPreviewFileProps } from '../PreviewFile/typing';
 import ButtonExtend from '../Table/ButtonExtend';
@@ -25,11 +27,12 @@ type TFrameProps = {
 	type: EDinhDangFile;
 	name?: string;
 	src?: string;
+	data?: ArrayBuffer;
 };
 
 const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const intl = useIntl();
-	const { file, style = {}, children, ip = ip3, isFileId, tenFile } = props;
+	const { file, style = {}, children, ip = ip3, isFileId, tenFile, isPrivate } = props;
 
 	const isValidStringArray = (value: any): value is string[] => {
 		return Array.isArray(value) && value.every((item) => typeof item === 'string');
@@ -89,7 +92,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	};
 
 	const getFileDataFromUrl = async (srcUrl: string) => {
-		const idFile = isFileId ? srcUrl : srcUrl.split('/')[srcUrl.length - 2];
+		const idFile = isFileId ? srcUrl : undefined; // srcUrl.split('/').at(-2);
 		const frame: TFrameProps = {
 			url: srcUrl,
 			type: EDinhDangFile.UNKNOWN,
@@ -110,6 +113,11 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 					EDinhDangFile.UNKNOWN;
 			} else {
 				frame.type = getFileType(getFileExtension(srcUrl) ?? '') || EDinhDangFile.UNKNOWN;
+			}
+
+			if (isPrivate) {
+				// Nếu là file riêng tư thì phải lấy src có token mới xem được
+				frame.data = (await getFileContent(frame.url))?.data;
 			}
 
 			// Fill other props
@@ -148,8 +156,11 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 
 		if (isDownloadableUrl(frameData.url)) {
 			try {
-				const response = await fetch(frameData.url);
-				const blob = await response.blob();
+				const response = await axios.get(frameData.url, {
+					responseType: 'blob',
+				});
+
+				const blob = response.data;
 				fileDownload(blob, getNameFile(frameData.url));
 			} catch (error) {
 				console.error('Error downloading file:', error);
@@ -270,11 +281,16 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 			<div className='preview-content'>
 				{frameData?.type === EDinhDangFile.PDF && frameData?.src ? (
 					<div className='preview-pdf'>
-						<PDFViewerV2 url={frameData?.src} {...props.viewerProps} />
+						<PDFViewerV2
+							data={frameData.data}
+							url={!!frameData.data ? undefined : frameData?.src}
+							{...props.viewerProps}
+						/>
 					</div>
-				) : frameData?.type === EDinhDangFile.IMAGE && frameData?.src ? (
+				) : frameData?.type === EDinhDangFile.IMAGE && !!frameData?.src ? (
 					<div className='preview-image-container'>
-						<Image
+						<AuthImage
+							isDetail
 							src={frameData.src}
 							alt={frameData.name}
 							style={{
@@ -285,7 +301,16 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 						/>
 					</div>
 				) : frameData?.type !== EDinhDangFile.UNKNOWN && !!frameData?.src ? (
-					<iframe src={frameData.src} className='preview-iframe' title='File preview' />
+					isPrivate ? (
+						<div className='preview-error'>
+							<p>This document is protected and cannot be previewed directly via Office Online.</p>
+							<Button type='primary' icon={<DownloadOutlined />} onClick={handleDownloadOrView}>
+								Download to view
+							</Button>
+						</div>
+					) : (
+						<iframe src={frameData?.src} className='preview-iframe' />
+					)
 				) : (
 					<div className='preview-error'>
 						<p className='preview-error-message'>

@@ -11,15 +11,15 @@ import RowFilter from './RowFilter';
 const FilterGroup = (props: RowFilterProps) => {
 	const intl = useIntl();
 	const { name, onRemove, allowGrouping = true, level = 0, formOwner, parentPath, ...restProps } = props;
-	const { finalColumns, columns: originalColumns } = useTableContext();
-	const columns = originalColumns || finalColumns;
+	const { finalColumns } = useTableContext();
+	const columns = finalColumns;
 	const formInstance = Form.useFormInstance();
 	const { fieldsFilterable } = useFilterFields(columns, formInstance);
 
 	const namePath = Array.isArray(name) ? name : [name];
 	const fullPath = parentPath ? [...parentPath, ...namePath] : ['filters', ...namePath];
 	const currentFilter = Form.useWatch(fullPath, formOwner) ?? {};
-	const isReadOnly = currentFilter.readOnly;
+	const isReadOnly = props.forceReadOnly || currentFilter.readOnly;
 
 	return (
 		<Card
@@ -76,6 +76,7 @@ const FilterGroup = (props: RowFilterProps) => {
 									allowGrouping={allowGrouping}
 									level={level + 1}
 									formOwner={formOwner}
+									forceReadOnly={isReadOnly}
 									{...restProps}
 								/>
 							);
