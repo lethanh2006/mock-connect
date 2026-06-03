@@ -83,7 +83,8 @@ export default {
 	// 'kytucxa.dangky.form.field.yes': 'Yes',
 	// 'kytucxa.dangky.form.msg.uploadHealthInsurance': 'Please upload health insurance document!',
 	// 'kytucxa.dangky.form.desc.uploadHealthInsurance': 'Supports PDF, JPG, PNG formats (max 5MB)',
-
+	
+	'kytucxa.dangky.form.emergencyContact.title': 'Add New Emergency Contact Information',
 	'kytucxa.dangky.form.section.emergencyContact': 'Emergency Contact Information',
 	'kytucxa.dangky.form.field.emergencyContactName': 'Parent/Guardian Name',
 	'kytucxa.dangky.form.placeholder.emergencyContactName': 'Enter parent or guardian\'s full name',
@@ -115,7 +116,14 @@ export default {
 	'kytucxa.dangky.form.msg.mustAgree': 'You must agree to the terms',
 	'kytucxa.dangky.form.confirmText': 'I understand and confirm that this Dormitory application is subject to room availability and that VinUni reserves the right to assign any other type of Dormitory available. I declare that I have read and agreed with the terms and conditions above and the information provided by me in this application is true and complete.',
 	
+	'kytucxa.dangky.table.emergencyContact.add': 'Add more',
+	'kytucxa.dangky.table.emergencyContact.stt': 'No.',
+	'kytucxa.dangky.table.emergencyContact.action': 'Action',
+	'kytucxa.dangky.table.emergencyContact.deleteConfirm': 'Are you sure you want to delete this contact?',
+	'kytucxa.dangky.table.emergencyContact.msg.min2Contacts': 'Please add at least two emergency contacts',
+	
 	'kytucxa.dangky.form.close': 'CLOSE',
+	'kytucxa.dangky.form.save': 'SAVE',
 	'kytucxa.dangky.form.next': 'NEXT',
 	'kytucxa.dangky.form.previous': 'PREVIOUS',
 	'kytucxa.dangky.form.submit': 'SUBMIT',

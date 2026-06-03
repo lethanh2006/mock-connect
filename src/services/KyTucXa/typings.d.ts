@@ -59,7 +59,9 @@ declare module DangKyKyTucXa {
         createdAt?: string;
         updatedAt?: string;
         formDon?: IFormDangKyKTX;
-        phong?: IPhongKTXSinhVien
+        phong?: IPhongKTXSinhVien;
+        ngayChuyenVao?: string;
+        ngayChuyenRa?: string;
     }
 
     export interface IKhoanThuKTX {

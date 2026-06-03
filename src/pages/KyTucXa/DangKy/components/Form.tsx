@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { resetFieldsForm } from '@/utils/utils';
 import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
 import rules from '@/utils/rules';
+import TableEmergencyContact from './TableEmergencyContact';
 
 const { TextArea } = Input;
 
@@ -47,18 +48,43 @@ const FormDangKyKTX = () => {
 				phoneNumber: thongTinSinhVien.soDienThoai || '-',
 				nationality: thongTinSinhVien.quocTich || '-',
 				permanentHomeAddress: thongTinSinhVien.hoKhauThuongTru || '-',
-				emergencyContactName: thongTinSinhVien.nguoiLienLac || '-',
-				emergencyContactNumber: thongTinSinhVien.soDienThoaiNguoiLienLac || '-',
-				emergencyRelationship: thongTinSinhVien.thanhVienGiaDinh || '-', 
+				emergencyContacts: [{
+					id: Date.now().toString(),
+					emergencyContactName: thongTinSinhVien.nguoiLienLac || '-',
+					emergencyContactNumber: thongTinSinhVien.soDienThoaiNguoiLienLac || '-',
+					emergencyRelationship: thongTinSinhVien.thanhVienGiaDinh || '-', 
+					secondaryContactNumber: '-',
+					emergencyEmail: '-',
+					address: thongTinSinhVien.hoKhauThuongTru || '-',
+				}],
 			});
 		}
 	}, [thongTinSinhVien, visibleForm, form]);
 
 	const handleNext = async () => {
 		try {
-			await form.validateFields(['fullName', 'studentId', 'dateOfBirth', 'email', 'phoneNumber', 'apid', 'college', 'identityNumber', 'dateOfIssue', 'placeOfIssue', 'nationality', 'emergencyContactName', 'emergencyRelationship', 'emergencyContactNumber', 'emergencyEmail']);
+			await form.validateFields(['fullName', 'studentId', 'dateOfBirth', 'email', 'phoneNumber', 'apid', 'college', 'identityNumber', 'dateOfIssue', 'placeOfIssue', 'nationality', 'emergencyContacts']);
 			setCurrentStep(1);
 		} catch (error) { }
+	};
+
+	const handleReloadEmergencyContacts = async () => {
+		try {
+			await getThongTinSinhVienModel();
+			form.setFieldsValue({
+				emergencyContacts: [{
+					id: Date.now().toString(),
+					emergencyContactName: thongTinSinhVien?.nguoiLienLac || '-',
+					emergencyContactNumber: thongTinSinhVien?.soDienThoaiNguoiLienLac || '-',
+					emergencyRelationship: thongTinSinhVien?.thanhVienGiaDinh || '-', 
+					secondaryContactNumber: '-',
+					emergencyEmail: '-',
+					address: thongTinSinhVien?.hoKhauThuongTru || '-',
+				}]
+			});
+		} catch (error) {
+			console.error('Lỗi khi tải lại thông tin sinh viên:', error);
+		}
 	};
 
 	const handlePrevious = () => {
@@ -97,11 +123,7 @@ const FormDangKyKTX = () => {
 					nationality: rest.nationality,
 					permanentHomeAddress: rest.permanentHomeAddress,
 					haveHealthInsurance: !!rest.haveHealthInsurance,
-					emergencyContactName: rest.emergencyContactName,
-					emergencyRelationship: rest.emergencyRelationship,
-					emergencyContactNumber: rest.emergencyContactNumber,
-					secondaryContactNumber: rest.secondaryContactNumber,
-					emergencyEmail: rest.emergencyEmail,
+					emergencyContacts: rest.emergencyContacts,
 				},
 			};
 
@@ -233,44 +255,22 @@ const FormDangKyKTX = () => {
 							<div className="ktx-register-section mt-4">
 								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.emergencyContact' })}</Typography.Title>
 								<div className="ktx-register-section__content">
-									<Row gutter={16}>
-										<Col xs={24} md={12}>
-											<Form.Item name="emergencyContactName" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.emergencyContactName' })} rules={[...rules.required]}>
-												<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.placeholder.emergencyContactName' })} />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="emergencyRelationship" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.emergencyRelationship' })} rules={[...rules.required]}>
-												{/* <Select placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.placeholder.emergencyRelationship' })}>
-													<Select.Option value={intl.formatMessage({ id: 'kytucxa.dangky.form.option.father' })}>{intl.formatMessage({ id: 'kytucxa.dangky.form.option.father' })}</Select.Option>
-													<Select.Option value={intl.formatMessage({ id: 'kytucxa.dangky.form.option.mother' })}>{intl.formatMessage({ id: 'kytucxa.dangky.form.option.mother' })}</Select.Option>
-													<Select.Option value={intl.formatMessage({ id: 'kytucxa.dangky.form.option.guardian' })}>{intl.formatMessage({ id: 'kytucxa.dangky.form.option.guardian' })}</Select.Option>
-													<Select.Option value={intl.formatMessage({ id: 'kytucxa.dangky.form.option.other' })}>{intl.formatMessage({ id: 'kytucxa.dangky.form.option.other' })}</Select.Option>
-												</Select> */}
-												<Input />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="emergencyContactNumber" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.emergencyContactNumber' })} rules={[...rules.required]}>
-												<InputNumber placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.placeholder.emergencyContactNumber' })} maxLength={11} stringMode style={{ width: '100%' }} />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="secondaryContactNumber" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.secondaryContactNumber' })}>
-												<InputNumber placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.placeholder.secondaryContactNumber' })} maxLength={11} stringMode style={{ width: '100%' }} />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={24}>
-											<Form.Item name="emergencyEmail" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.email' })} rules={[...rules.required]}>
-												<Input placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.placeholder.email' })} type="email" />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={24}>
-											<Form.Item name="address" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.address' })} rules={[...rules.required]}>
-												<TextArea rows={2} placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.placeholder.address' })} />
-											</Form.Item>
-										</Col>
-									</Row>
+									<Form.Item 
+										name="emergencyContacts" 
+										rules={[
+											{ required: true },
+											{
+												validator: (_, value) => {
+													if (!value || value.length < 2) {
+														return Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.msg.min2Contacts' })));
+													}
+													return Promise.resolve();
+												}
+											}
+										]}
+									>
+										<TableEmergencyContact onReload={handleReloadEmergencyContacts} />
+									</Form.Item>
 								</div>
 							</div>
 					</div>

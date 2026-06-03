@@ -84,6 +84,7 @@ export default {
     // 'kytucxa.dangky.form.msg.uploadHealthInsurance': 'Vui lòng tải lên tài liệu bảo hiểm y tế!',
     // 'kytucxa.dangky.form.desc.uploadHealthInsurance': 'Hỗ trợ các định dạng PDF, JPG, PNG (tối đa 5MB)',
 
+    'kytucxa.dangky.form.emergencyContact.title': 'Thêm mới Thông tin Liên Hệ Khẩn cấp',
     'kytucxa.dangky.form.section.emergencyContact': 'Thông tin liên hệ khẩn cấp',
     'kytucxa.dangky.form.field.emergencyContactName': 'Tên Người thân/Người giám hộ',
     'kytucxa.dangky.form.placeholder.emergencyContactName': 'Nhập họ tên người thân hoặc người giám hộ',
@@ -115,7 +116,14 @@ export default {
     'kytucxa.dangky.form.msg.mustAgree': 'Bạn phải đồng ý với các điều khoản',
     'kytucxa.dangky.form.confirmText': 'Tôi hiểu và xác nhận rằng đơn đăng ký Ký túc xá này phụ thuộc vào tình trạng phòng trống và VinUni có quyền sắp xếp bất kỳ loại phòng Ký túc xá nào khác hiện có. Tôi tuyên bố rằng tôi đã đọc, đồng ý với các điều khoản, điều kiện nêu trên và những thông tin tôi cung cấp trong đơn này là hoàn toàn đúng sự thật và đầy đủ.',
     
+    'kytucxa.dangky.table.emergencyContact.add': 'Thêm mới',
+    'kytucxa.dangky.table.emergencyContact.stt': 'Số thứ tự',
+    'kytucxa.dangky.table.emergencyContact.action': 'Thao tác',
+	'kytucxa.dangky.table.emergencyContact.deleteConfirm': 'Bạn có chắc chắn muốn xóa liên hệ này không?',
+    'kytucxa.dangky.table.emergencyContact.msg.min2Contacts': 'Vui lòng thêm ít nhất 2 liên hệ khẩn cấp',
+
     'kytucxa.dangky.form.close': 'ĐÓNG',
+    'kytucxa.dangky.form.save': 'LƯU',
     'kytucxa.dangky.form.next': 'TIẾP THEO',
     'kytucxa.dangky.form.previous': 'QUAY LẠI',
     'kytucxa.dangky.form.submit': 'XÁC NHẬN',

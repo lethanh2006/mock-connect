@@ -8,8 +8,11 @@ export default {
 	'kytucxa.lichsu.table.capacityType': 'Capacity Type',
 	'kytucxa.lichsu.table.capacityValue': '{val}-person room',
 	'kytucxa.lichsu.table.roomPrice': 'Price',
-	'kytucxa.lichsu.table.registerTime': 'Registration Time',
-	'kytucxa.lichsu.table.paymentDeadline': 'Payment Deadline',
+	// 'kytucxa.lichsu.table.registerTime': 'Registration Time',
+	// 'kytucxa.lichsu.table.paymentDeadline': 'Payment Deadline',
+	'kytucxa.lichsu.table.moveInDate': 'Move in Date',
+	'kytucxa.lichsu.table.moveOutDate': 'Move out Date',
+
 	'kytucxa.lichsu.table.status': 'Status',
 	'kytucxa.lichsu.table.status.success': 'Renting',
 	'kytucxa.lichsu.table.status.processing': 'Pending',
