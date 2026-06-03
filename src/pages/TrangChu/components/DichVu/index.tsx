@@ -27,7 +27,7 @@ const CardDichVuSinhVien = () => {
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 
-	const playIc = 'images/play-icon.png';
+	const playIc = 'student/images/play-icon.png';
 
 	useEffect(() => {
 		// Reset states khi component mount

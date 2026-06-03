@@ -11,6 +11,7 @@ type TSettingType = Partial<{
 	[ESettingKey.THONG_TIN_THANH_TOAN]: GiaoDich.TSetting; // Some type has `_id`
 	[ESettingKey.GENERAL_INFO]: LopHocPhan.TSettingLMS;
 	[ESettingKey.THU_VIEN_HOC_LIEU]: HocPhan.ISettingThuVien;
+	[ESettingKey.CCT_TRANSCRIPT]: SubmisstionRound.ISetting;
 }>;
 
 export default () => {

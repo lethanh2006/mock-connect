@@ -125,7 +125,7 @@ export default {
 	'level.select': 'Select Level',
 	'track.select': 'Select Track',
 
-	'activity.list': 'List Activity',
+	'activity.list': 'Events & Engagement Calendar',
 	'activity.upcoming': 'Upcoming',
 	'activity.ongoing': 'Ongoing',
 	'activity.completed': 'Completed',
@@ -276,6 +276,7 @@ export default {
 	'activity.formpersion.listCompetency': 'List Competency',
 	'activity.formpersion.reflection': 'Reflection',
 	'activity.formpersion.mentor': 'Mentor/Supervisor',
+	'activity.formpersion.enterMentor': 'Enter Mentor/Supervisor',
 	'activity.formpersion.inUniversity': 'In university',
 	'activity.formpersion.outUniversity': 'Outside of university',
 	'activity.formpersion.checkbox': 'I hereby declare that the information provided is accurate.',
@@ -304,7 +305,7 @@ export default {
 	'activity.formpersion.enterReflection': 'Enter Reflection',
 	'activity.formpersion.declaration': 'I hereby declare that the information provided is accurate.',
 
-	'activity.history.title': 'My Activity',
+	'activity.history.title': 'Activity Logging',
 	'activity.history.addNew': 'Add New',
 	'activity.history.updateEvidence': 'Update Evidence',
 	'activity.history.seeMore': 'See More',
