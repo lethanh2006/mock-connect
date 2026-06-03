@@ -17,6 +17,7 @@ declare module DangKyKyTucXa {
 		maLoai: string;
 		ma: string;
 		ten: string;
+        anh?: string;
 	}
 
     export interface IPhongKTXSinhVien {

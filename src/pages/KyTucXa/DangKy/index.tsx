@@ -174,13 +174,13 @@ const DangKyKyTucXaPage = () => {
 			title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}
 		>
 
-			{loadingDotDangKy ? (
+			{/* {loadingDotDangKy ? (
 				<Card className='ktx-page__dot-card' style={{ borderRadius: 12 }}>
 					<Skeleton active paragraph={{ rows: 2 }} />
 				</Card>
 			) : cacDotDangKyHienTai.length === 0 ? (
 				<Empty
-					description={intl.formatMessage({ id: 'kytucxa.dangky.noBatch' })}
+					description={intl.formatMessage({ id: 'kytucxa.dangky.noPeriod' })}
 					image={Empty.PRESENTED_IMAGE_SIMPLE}
 					className='ktx-page__empty'
 				/>
@@ -216,7 +216,7 @@ const DangKyKyTucXaPage = () => {
 								</div>
 							)}
 						</div>
-					))}
+					))} */}
 
 					<div className='ktx-page__main-card'>
 						<div className='ktx-page__filter-bar'>
@@ -290,8 +290,8 @@ const DangKyKyTucXaPage = () => {
 					/>
 
 					<FormDangKy />
-				</>
-			)}
+				{/* </>
+			)} */}
 		</PageCard>
 	);
 };

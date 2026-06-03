@@ -16,6 +16,24 @@ const formatGia = (gia?: number, currency?: string) => {
 	return gia.toLocaleString('vi-VN') + ' ' + (currency || 'VND');
 };
 
+const AmenityIcon = ({ src, alt, className }: { src?: string; alt?: string; className?: string }) => {
+	const [error, setError] = useState(false);
+
+	if (!src || error) {
+		return <CheckCircleOutlined className={className} />;
+	}
+
+	return (
+		<img
+			src={src}
+			alt={alt}
+			className={className}
+			style={{ width: '1em', height: '1em', objectFit: 'contain' }}
+			onError={() => setError(true)}
+		/>
+	);
+};
+
 const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongDaDangKy }) => {
 	const intl = useIntl();
 	const { record: phong, isView, setIsView } = useModel('kytucxa.phong');
@@ -33,7 +51,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 				const key = it?.maDanhMucTienIch;
 				const found = key ? tienIchMap.get(key) : undefined;
 				if (found) return found;
-				return { ten: it?.maDanhMucTienIch ?? '' };
+				return { ten: it?.maDanhMucTienIch ?? '', anh: undefined };
 			})
 			.filter(Boolean);
 		return {
@@ -155,7 +173,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 						<div className='ktx-modal__amenities-new'>
 							{tienIchAll.map((t, i) => (
 								<div key={i} className='ktx-modal__amenity-item'>
-									<CheckCircleOutlined className='ktx-modal__amenity-icon' />
+									<AmenityIcon src={('anh' in t) ? (t.anh as string) : undefined} alt={t.ten} className='ktx-modal__amenity-icon' />
 									<span>{t.ten}</span>
 								</div>
 							))}

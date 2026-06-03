@@ -1,7 +1,7 @@
 export default {
 	// Dormitory Registration - PAGE
 	'kytucxa.dangky.title': 'Student Housing',
-	'kytucxa.dangky.noBatch': 'There is currently no dormitory registration batch available for you',
+	'kytucxa.dangky.noPeriod': 'There is currently no dormitory registration period available for you',
 	'kytucxa.dangky.registerTime': 'Registration Time:',
 	'kytucxa.dangky.to': 'to',
 	'kytucxa.dangky.note': 'Note',

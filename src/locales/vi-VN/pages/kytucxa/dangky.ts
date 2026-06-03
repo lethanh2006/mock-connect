@@ -1,7 +1,7 @@
 export default {
     // Trang Đăng ký Ký túc xá - PAGE
     'kytucxa.dangky.title': 'Ký túc xá Sinh viên',
-    'kytucxa.dangky.noBatch': 'Hiện tại không có đợt đăng ký ký túc xá nào dành cho bạn',
+    'kytucxa.dangky.noPeriod': 'Hiện tại không có đợt đăng ký ký túc xá nào dành cho bạn',
     'kytucxa.dangky.registerTime': 'Thời gian đăng ký:',
     'kytucxa.dangky.to': 'đến',
     'kytucxa.dangky.note': 'Ghi chú',
