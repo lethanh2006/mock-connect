@@ -5,9 +5,9 @@ import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
 import { currentRole, replaceRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
-import { Button, notification, Result } from 'antd';
+import { notification } from 'antd';
 import queryString from 'query-string';
-import { useEffect, useRef, useState, type FC } from 'react';
+import { useEffect, type FC } from 'react';
 import { AuthProvider, hasAuthParams, useAuth } from 'react-oidc-context';
 import { history, useIntl, useModel } from 'umi';
 import LoadingPage from '../Loading';
@@ -15,70 +15,33 @@ import { unAuthPaths, unCheckPermissionPaths } from './constant';
 
 let OIDCBounderHandlers: ReturnType<typeof useAuthActions> | null = null;
 
-const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');
-
-const getBasePath = () => trimTrailingSlash(APP_CONFIG_BASE_PATH || '');
-
-const removeAuthParams = (search: string) => {
-	const params = queryString.parse(search);
-	delete params.code;
-	delete params.iss;
-	delete params.session_state;
-	delete params.state;
-
-	let newSearch = queryString.stringify(params);
-	if (newSearch) newSearch = '?' + newSearch;
-
-	return newSearch;
-};
-
-const getRedirectPathname = () => {
-	const basePath = getBasePath();
-	const loginPath = `${basePath}/user/login`;
-	const dashboardPath = `${basePath}/dashboard`;
-	const pathname = trimTrailingSlash(window.location.pathname);
-
-	return pathname === '' || pathname === basePath || pathname === '/user/login' || pathname === loginPath
-		? dashboardPath
-		: window.location.pathname;
-};
-
-const getOidcRedirectUri = () => {
-	const basePath = getBasePath();
-	const pathname = window.location.pathname.includes('/user') ? `${basePath}/` : window.location.pathname;
-	const search = removeAuthParams(window.location.search);
-
-	return `${window.location.origin}${pathname}${search}${window.location.hash}`;
-};
-
-const redirectLocation = () => {
-	// Loại bỏ các Auth params
-	const newSearch = removeAuthParams(window.location.search);
-	// Cập nhật URL hiện tại sau khi nhận access token, tránh reload callback lặp lại
-	const pathname = getRedirectPathname();
-	window.history.replaceState({}, document.title, `${pathname}${newSearch}${window.location.hash}`);
-};
-
 export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
 	const intl = useIntl();
 	const { setInitialState, initialState } = useModel('@@initialState');
 	const auth = useAuth();
 	const actions = useAuthActions();
-	const [authError, setAuthError] = useState<string>();
-	const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 	const isUnauth = unAuthPaths.some((path) => window.location.pathname.includes(path));
+	let timeout: any = null;
 
 	const handleAxios = (access_token: string) => {
 		axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
 	};
 
-	const handleAuthError = (description: string) => {
-		setAuthError(description);
-		setInitialState((prev) => ({ ...prev, currentUser: undefined, permissionLoading: false }));
-		notification.error({
-			message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
-			description,
-		});
+	const redirectLocation = () => {
+		// Loại bỏ các Auth params
+		const { code, iss, session_state, state, ...other } = queryString.parse(window.location.search);
+		let newSearch = Object.keys(other)
+			.map((key) => `${key}=${other[key]}`)
+			.join('&');
+		if (newSearch) newSearch = '?' + newSearch;
+		// Reload trang để cập nhật access token mới
+		const pathname =
+			window.location.pathname === '/' || window.location.pathname === '/student/user/login'
+				? '/dashboard'
+				: window.location.pathname;
+		window.location.replace(`${pathname}${newSearch}${window.location.hash}`);
+		// window.history.replaceState({}, document.title, `${pathname}${newSearch}${window.location.hash}`);
+		// window.location.reload();
 	};
 
 	const handleLogin = async () => {
@@ -111,7 +74,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 					setInitialState((prev) => ({ ...prev, permissionLoading: false }));
 				}, 0);
 
-				if (!isUncheckPath && currentRole && !hasRole) {
+				if (!isUncheckPath && currentRole && permissions.length && !hasRole) {
 					const hasReplaceRole = permissions.some((item) => item.rsname === replaceRole);
 					const linkReplace = !!replaceRole && AppModules[replaceRole]?.url;
 
@@ -119,16 +82,22 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 						window.location.replace(linkReplace);
 						return;
 					}
-					handleAuthError('Bạn không có quyền truy cập phân hệ này. Vui lòng liên hệ quản trị viên để được cấp quyền.');
+					history.replace('/403');
 				} else {
-					if (getRedirectPathname() !== window.location.pathname) redirectLocation();
+					if (window.location.pathname === '/' || window.location.pathname === '/student/user/login')
+						redirectLocation();
 				}
-			} catch (error) {
-				console.error('OIDC login failed:', error);
-				handleAuthError('Không thể lấy thông tin người dùng hoặc phân quyền. Vui lòng thử đăng nhập lại.');
+			} catch {
 				if (auth.isAuthenticated) auth.removeUser();
+				else {
+					notification.warning({
+						message: intl.formatMessage({ id: 'global.OIDCBounder.message' }),
+						description: intl.formatMessage({ id: 'global.OIDCBounder.description' }),
+					});
+					history.replace('/student/user/login');
+				}
 			}
-		} else history.replace('/user/login');
+		} else history.replace('/student/user/login');
 	};
 
 	useEffect(() => {
@@ -140,13 +109,7 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 		// <Button onClick={() => signinPopup()}>Đăng nhập</Button>
 		// Sau khi đăng nhập popup sẽ nhảy về đây và xử lý như bình thường
 
-		if (auth.isLoading || authError) return;
-
-		if (auth.error) {
-			handleAuthError(auth.error.message || 'Xác thực không thành công. Vui lòng thử đăng nhập lại.');
-			redirectLocation();
-			return;
-		}
+		if (auth.isLoading) return;
 
 		// Chưa login + chưa có auth params ==> Cần redirect keycloak để lấy auth params + cookie
 		if (!hasAuthParams() && !auth.isAuthenticated && initialState?.permissionLoading) {
@@ -155,23 +118,20 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 		}
 
 		// Quá 5s nếu ko auth được thì xóa params
-		if (!timeoutRef.current)
-			timeoutRef.current = setTimeout(() => {
-				if (hasAuthParams() && !auth.isAuthenticated) {
-					handleAuthError('Không thể hoàn tất xác thực từ SSO. Vui lòng thử đăng nhập lại.');
-					redirectLocation();
-				}
+		if (!timeout)
+			timeout = setTimeout(() => {
+				if (hasAuthParams() && !auth.isAuthenticated) redirectLocation();
 			}, 1000 * 5);
 
 		// Đã login => Xoá toàn bộ auth params được sử dụng để login trước đó
 		if (auth.isAuthenticated) {
 			if (hasAuthParams()) redirectLocation();
 			else {
-				if (timeoutRef.current) clearTimeout(timeoutRef.current);
+				if (timeout) clearTimeout(timeout);
 				handleLogin();
 			}
 		}
-	}, [auth.isAuthenticated, auth.isLoading, auth.error, authError]);
+	}, [auth.isAuthenticated, auth.isLoading]);
 
 	useEffect(() => {
 		if (auth.user?.access_token) handleAxios(auth.user.access_token);
@@ -180,21 +140,6 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 	useEffect(() => {
 		OIDCBounderHandlers = actions;
 	}, [actions]);
-
-	if (authError && !isUnauth) {
-		return (
-			<Result
-				status='error'
-				title='Xác thực không thành công'
-				subTitle={authError}
-				extra={
-					<Button type='primary' onClick={() => auth.signinRedirect()}>
-						Đăng nhập lại
-					</Button>
-				}
-			/>
-		);
-	}
 
 	return <>{(auth.isLoading || initialState?.permissionLoading) && !isUnauth ? <LoadingPage /> : children}</>;
 };
@@ -205,8 +150,11 @@ export const OIDCBounder: FC<{ children: React.ReactElement }> & { getActions: (
 	return (
 		<AuthProvider
 			{...oidcConfig}
-			redirect_uri={getOidcRedirectUri()}
-			onSigninCallback={redirectLocation}
+			redirect_uri={
+				window.location.pathname.includes('/user')
+					? `${window.location.origin}${APP_CONFIG_BASE_PATH}`
+					: window.location.href
+			}
 		>
 			<OIDCBounder_ {...props} />
 		</AuthProvider>
