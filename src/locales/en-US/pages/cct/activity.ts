@@ -224,6 +224,7 @@ export default {
 	'activity.cardnote.reviewTime': 'Evidence Review Time',
 	'activity.cardnote.approver': 'Approver',
 	'activity.cardnote.revisionNote': 'Revision Note',
+	'activity.cardnote.rejectNote': 'Reject Note',
 
 	'activity.outcome.detail.admin': 'Administrative Information',
 	'activity.outcome.detail.organizer': 'Organizer',
