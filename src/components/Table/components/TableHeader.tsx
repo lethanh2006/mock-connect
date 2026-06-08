@@ -10,7 +10,7 @@ import {
 	ReloadOutlined,
 	SearchOutlined,
 } from '@ant-design/icons';
-import { AutoComplete, Button, Input, Popconfirm, Popover, Tooltip } from 'antd';
+import { AutoComplete, Button, Input, Popover, Tooltip } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -68,7 +68,8 @@ export const TableHeader: React.FC = () => {
 	const searchInputRef = useRef<any>(null);
 	const currentPath = window.location.pathname;
 	const globalDataIndex = useMemo(() => `GLOBAL_SEARCH_${currentPath}`, [currentPath]);
-	const canOpenModalFilter = btnFilter && hasFilter && disableFilterModal !== true;
+	const canOpenModalFilter = false;
+	// btnFilter && hasFilter && disableFilterModal !== true;
 
 	//#region Global Search Logic
 
@@ -314,7 +315,7 @@ export const TableHeader: React.FC = () => {
 						className='btn-export'
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.xuatdulieu' })}
-						{selectedIds?.length && selectedIds?.length > 0 ? ` (${selectedIds?.length})` : ''}
+						{/* {selectedIds?.length && selectedIds?.length > 0 ? ` (${selectedIds?.length})` : ''} */}
 					</ButtonExtend>
 				)}
 
@@ -333,7 +334,7 @@ export const TableHeader: React.FC = () => {
 					</ButtonExtend>
 				)}
 
-				{rowSelection && deleteMany && selectedIds?.length ? (
+				{/* {rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
 						title={intl.formatMessage({ id: 'global.table.index.button.xoa.title' }, { count: selectedIds?.length })}
 						onConfirm={handleDeleteMany}
@@ -342,7 +343,7 @@ export const TableHeader: React.FC = () => {
 							{intl.formatMessage({ id: 'global.table.index.button.xoa' }, { count: selectedIds?.length })}
 						</ButtonExtend>
 					</Popconfirm>
-				) : null}
+				) : null} */}
 			</div>
 
 			<div className='extra no-print'>
