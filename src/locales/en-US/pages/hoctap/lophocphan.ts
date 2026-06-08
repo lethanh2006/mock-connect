@@ -224,6 +224,9 @@ export default {
 	'lophocphan.id.khaosat.tgkt': 'End time',
 	'lophocphan.id.khaosat.empty': 'No data',
 	'lophocphan.id.khaosat.chongv': 'No data',
+	'lophocphan.id.khaosat.cungky.mess': 'Unable to conduct the survey',
+	'lophocphan.id.khaosat.cungky.des':
+		'The semester of the course section does not match the semester of the survey period.',
 	'lophocphan.id.khaosat.title': 'Survey details',
 	'lophocphan.id.khaosat.cau': 'Question',
 	'lophocphan.id.khaosat.sl': 'Question',
