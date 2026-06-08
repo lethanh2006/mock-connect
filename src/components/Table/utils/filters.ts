@@ -2,6 +2,12 @@ import { EOperatorType } from '../constant';
 import { type IColumn, type TFilter } from '../typing';
 import { isSameFilterField } from './filterTree';
 
+/** Loại bỏ null/undefined/'' khỏi mảng giá trị filter (vd. allowClear hoặc option "Tất cả" trả về null). */
+export const sanitizeFilterValues = (values?: any[] | any): any[] => {
+	const arr = Array.isArray(values) ? values : values != null && values !== '' ? [values] : [];
+	return arr.filter((v) => v != null && v !== '');
+};
+
 /**
  * Chuẩn hóa dữ liệu bộ lọc từ form trước khi gửi lên table context hoặc backend.
  */
