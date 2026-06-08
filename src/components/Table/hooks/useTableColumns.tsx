@@ -38,7 +38,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		syncExternalToColumnFilter,
 	} = useTableContext();
 	const canOpenModalFilter = false;
-	buttons?.filter !== false && hasFilter && disableFilterModal !== true;
+	// buttons?.filter !== false && hasFilter && disableFilterModal !== true;
 	const shouldSyncExternalToColumnFilter = syncExternalToColumnFilter !== false;
 	const isExternalFilter = isExternalFilterNode;
 
