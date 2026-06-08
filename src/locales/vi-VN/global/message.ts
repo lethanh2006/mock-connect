@@ -8,4 +8,9 @@ export default {
 	'global.message.formsubmiting': 'Đang gửi dữ liệu',
 	'global.message.capnhatthanhcong': 'Cập nhật thành công',
 	'global.message.capnhatthatbai': 'Cập nhật thất bại',
+
+	'message.confirm.activate': 'Bạn có chắc muốn kích hoạt?',
+	'message.confirm.deactivate': 'Bạn có chắc muốn ngừng kích hoạt?',
+	'message.activateSuccess': 'Kích hoạt thành công',
+	'message.deactivateSuccess': 'Hủy kích hoạt thành công',
 };
