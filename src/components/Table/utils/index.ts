@@ -13,6 +13,7 @@ export {
 	markExternalFilters,
 	normalizeFilters,
 	reAddMetadata,
+	sanitizeFilterValues,
 	splitFiltersBySource,
 	stripFilterSource,
 	stripMetadata,
