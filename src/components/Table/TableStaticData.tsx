@@ -319,7 +319,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 						<Tooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
 							<div className={classNames({ total: true, small: size === 'small' })}>
 								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
-								<span>{total || props.data?.length || 0}</span>
+								<span>{total ?? props.data?.length ?? 0}</span>
 							</div>
 						</Tooltip>
 					) : null}
