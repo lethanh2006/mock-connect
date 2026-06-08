@@ -38,7 +38,6 @@ export default {
 	'lophocphan.id.khaosat': 'Khảo sát sinh viên',
 	'lophocphan.id.syllabus': 'Đề cương chi tiết',
 
-
 	'lophocphan.id.thongtinchung.hoctructuyen': 'Học trực tuyến',
 	'lophocphan.id.thongtinchung.lms': 'Lớp học LMS',
 	'lophocphan.id.thongtinchung.gioithieu': 'Giới thiệu lớp tín chỉ',
@@ -245,6 +244,9 @@ export default {
 	'lophocphan.id.khaosat.tgkt': 'Thời gian kết thúc',
 	'lophocphan.id.khaosat.empty': 'Không có dữ liệu',
 	'lophocphan.id.khaosat.chongv': 'Không có dữ liệu',
+
+	'lophocphan.id.khaosat.cungky.mess': 'Không thể thực hiện khảo sát',
+	'lophocphan.id.khaosat.cungky.des': 'Học kỳ của lớp học phần không trùng với học kỳ của đợt khảo sát.',
 
 	'lophocphan.id.khaosat.title': 'Chi tiết khảo sát',
 	'lophocphan.id.khaosat.cau': 'Câu',

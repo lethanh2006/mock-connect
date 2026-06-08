@@ -7,7 +7,7 @@ import { useIntl } from 'umi';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import type { IColumn, TDataOption, TFilter } from '../typing';
-import { updateSearchStorage } from '../utils';
+import { applyColumnStringSearch, updateSearchStorage } from '../utils';
 import { findFilterInTree, isExternalFilterNode, isSameFilterField, updateFiltersByField } from '../utils/filterTree';
 import { useApplyColumnSettings } from './useApplyColumnSettings';
 
@@ -41,6 +41,25 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 	// buttons?.filter !== false && hasFilter && disableFilterModal !== true;
 	const shouldSyncExternalToColumnFilter = syncExternalToColumnFilter !== false;
 	const isExternalFilter = isExternalFilterNode;
+
+	const searchableFieldKeys = useMemo(() => {
+		const flatColumns = columns.map((item) => (item.children?.length ? [item, ...item.children] : [item])).flat();
+		const seen = new Set<string>();
+		const keys = new Set<string>();
+
+		flatColumns.forEach((item) => {
+			const isDefaultSearchable = item?.filterType === 'string';
+			const enableGlobalSearch = item?.enableGlobalSearch ?? isDefaultSearchable;
+			if (!enableGlobalSearch || !item?.dataIndex || item.dataIndex === 'index') return;
+
+			const fieldKey = JSON.stringify(item.dataIndex);
+			if (seen.has(fieldKey)) return;
+			seen.add(fieldKey);
+			keys.add(fieldKey);
+		});
+
+		return keys;
+	}, [columns]);
 
 	/**
 	 * Lấy quy tắc lọc hiện tại của cột
@@ -83,6 +102,12 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 	//#region Lấy các thuộc tính tìm kiếm của cột
 	const handleSearch = useCallback(
 		(dataIndex: any, value: string, confirm?: () => void) => {
+			if (searchableFieldKeys.has(JSON.stringify(dataIndex))) {
+				setFilters?.(applyColumnStringSearch(filters ?? [], dataIndex, value, searchableFieldKeys));
+				if (confirm) confirm();
+				return;
+			}
+
 			const updateFilterOptions = {
 				skipReadOnlyExternal: true,
 				skipExternal: !shouldSyncExternalToColumnFilter,
@@ -139,13 +164,14 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 			}
 			if (confirm) confirm();
 		},
-		[columns, filters, setFilters, shouldSyncExternalToColumnFilter],
+		[columns, filters, setFilters, shouldSyncExternalToColumnFilter, searchableFieldKeys],
 	);
 
 	const getColumnSearchProps = useCallback(
 		(dataIndex: any, columnTitle: any): Partial<IColumn<unknown>> => {
 			const filterColumn = getFilterColumn(dataIndex, EOperatorType.CONTAIN, true);
 			const currentFilterValue = filterColumn?.values?.[0] as string | undefined;
+
 			return {
 				filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
 					const options = (JSON.parse(localStorage.getItem('dataTimKiem') || '{}')[dataIndex] || []).map(
@@ -170,7 +196,10 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 								}}
 							>
 								<Input.Search
-									placeholder={`Tìm ${columnTitle}`}
+									placeholder={intl.formatMessage(
+										{ id: 'global.table.index.search.placeholder.short' },
+										{ field: columnTitle },
+									)}
 									allowClear
 									enterButton
 									value={inputValue}
@@ -189,6 +218,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 									ref={searchInputRef}
 								/>
 							</AutoComplete>
+
 							{canOpenModalFilter ? (
 								<div>
 									{intl.formatMessage({ id: 'global.table.filterdropdown.xemthem' })}{' '}
@@ -205,6 +235,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 						</div>
 					);
 				},
+
 				filteredValue: filterColumn?.values ?? [],
 				filterIcon: () => {
 					const values = getFilterColumn(dataIndex, undefined, true)?.values;

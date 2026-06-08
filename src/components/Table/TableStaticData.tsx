@@ -82,7 +82,10 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							}}
 						>
 							<Input.Search
-								placeholder={`Tìm ${columnTitle}`}
+								placeholder={intl.formatMessage(
+									{ id: 'global.table.index.search.placeholder.short' },
+									{ field: columnTitle },
+								)}
 								allowClear
 								enterButton
 								value={selectedKeys[0]}
@@ -104,6 +107,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					</div>
 				);
 			},
+
 			filterIcon: (filtered: boolean) => <SearchOutlined className={filtered ? 'text-primary' : undefined} />,
 			onFilter: (value: any, record: any) =>
 				typeof dataIndex === 'string'
@@ -112,6 +116,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 						? record[dataIndex[0]][dataIndex?.[1]]?.toString()?.toLowerCase()?.includes(value.toLowerCase())
 						: '',
 			onFilterDropdownVisibleChange: (vis: boolean) => vis && setTimeout(() => searchInputRef?.current?.select(), 100),
+
 			render: (text: any, record: any) =>
 				render ? (
 					render(text, record)
