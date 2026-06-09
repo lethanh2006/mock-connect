@@ -2,7 +2,10 @@ include:
   - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-dev'
     ref: master
     file: '.gitlab/templates/frontend-vwa.gitlab-ci.yml'
-
+  - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-prod'
+    ref: master
+    file: '.gitlab/templates/frontend-vwa-prod.gitlab-ci.yml'
+  
 variables:
   ECR_REPO_NAME: "vwa-connect"
   APP_NAME: "dhs-slink-web"
