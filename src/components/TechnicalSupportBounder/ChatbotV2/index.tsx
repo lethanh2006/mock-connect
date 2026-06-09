@@ -25,7 +25,7 @@ const ChatbotOverlayV2 = () => {
 
 	const fullName = initialState?.currentUser?.family_name
 		? `${initialState?.currentUser.family_name} ${initialState?.currentUser?.given_name ?? ''}`
-		: initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || '');
+		: (initialState?.currentUser?.name ?? (initialState?.currentUser?.preferred_username || ''));
 
 	useEffect(() => {
 		if (boxChatVisible && !danhSach.length) {

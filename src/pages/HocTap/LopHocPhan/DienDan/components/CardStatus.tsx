@@ -124,9 +124,7 @@ const CardStatus = (props: IProps) => {
 								{/*)}*/}
 							</div>
 							<div className='time'>
-								{data?.ngayDang
-									? formatDateTime(data?.ngayDang)
-									: formatDateTime(data?.createdAt)}
+								{data?.ngayDang ? formatDateTime(data?.ngayDang) : formatDateTime(data?.createdAt)}
 							</div>
 						</div>
 					</div>

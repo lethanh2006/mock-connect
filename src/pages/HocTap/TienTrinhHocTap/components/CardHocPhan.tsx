@@ -1,8 +1,8 @@
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ETrangThaiHocTap } from '@/services/DaoTao/constant';
-import { tenTruongVietTatTiengAnh } from '@/services/base/constant';
 import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import { tenTruongVietTatTiengAnh } from '@/services/base/constant';
 import { Card, Tag } from 'antd';
 import { useIntl } from 'umi';
 import './CardStyles.less';
@@ -70,10 +70,7 @@ const CardHocPhan = (props: {
 				{/* Content */}
 				<div className='card-content'>
 					{/* Course name */}
-					<h4
-						className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`}
-						title={hocPhan?.ten}
-					>
+					<h4 className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`} title={hocPhan?.ten}>
 						{hocPhan?.ten}
 					</h4>
 
@@ -89,10 +86,7 @@ const CardHocPhan = (props: {
 						)}
 					</div>
 					{label && (
-						<span
-							className='card-label'
-							style={{ paddingRight: gradeImage ? 100 : 0 }}
-						>
+						<span className='card-label' style={{ paddingRight: gradeImage ? 100 : 0 }}>
 							{label}
 						</span>
 					)}
@@ -103,7 +97,7 @@ const CardHocPhan = (props: {
 					<div
 						className='studying-indicator'
 						title={intl.formatMessage({ id: 'tientrinhhoctap.danghoc' })}
-					// style={{ backgroundColor: colorKhoiKienThuc }}
+						// style={{ backgroundColor: colorKhoiKienThuc }}
 					/>
 				)}
 			</Card>

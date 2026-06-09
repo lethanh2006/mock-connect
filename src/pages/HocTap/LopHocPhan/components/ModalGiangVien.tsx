@@ -1,5 +1,4 @@
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
-import { formatDate } from '@/utils/formatDate';
 import { Avatar, Col, Descriptions, Modal, Row, Typography } from 'antd';
 import { useIntl } from 'umi';
 

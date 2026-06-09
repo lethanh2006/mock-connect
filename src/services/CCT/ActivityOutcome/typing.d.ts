@@ -68,16 +68,6 @@ declare module ActivityOutCome {
 		pendingForApproval: number;
 		rejected: number;
 		total: number;
-		expired: number;
-		evidenceRequired: number;
-	}
-
-	export interface ICompetencyActivity {
-		_id: string;
-		competencyId: string;
-		activitiesId: string;
-		competency: Competency.IRecord;
-		activities: IRecord;
 	}
 
 	export interface ICompetencyActivity {

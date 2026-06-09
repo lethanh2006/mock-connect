@@ -3,11 +3,12 @@ import { RiseOutlined, ThunderboltOutlined, TrophyOutlined } from '@ant-design/i
 import { Card, Col, Divider, Flex, Row, Space, Spin, Tag, Typography } from 'antd';
 import { useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const { Text } = Typography;
 
 const ThongKeCCT = () => {
+	const intl = useIntl();
 	const {
 		loadingLevels,
 		dataThongKeLevels,
@@ -184,7 +185,9 @@ const ThongKeCCT = () => {
 							title={
 								<Space>
 									<RiseOutlined style={{ color: primaryColor, fontSize: 20 }} />
-									<span style={{ color: primaryColor, fontWeight: 600 }}>Level Distribution (Quality & Depth)</span>
+									<span style={{ color: primaryColor, fontWeight: 600 }}>
+										{intl.formatMessage({ id: 'cct.thongke.level' })}
+									</span>
 								</Space>
 							}
 							variant='borderless'
@@ -211,7 +214,9 @@ const ThongKeCCT = () => {
 							title={
 								<Space>
 									<ThunderboltOutlined style={{ color: highlightColor, fontSize: 20 }} />
-									<span style={{ color: primaryColor, fontWeight: 600 }}>Core Competencies (Radar)</span>
+									<span style={{ color: primaryColor, fontWeight: 600 }}>
+										{intl.formatMessage({ id: 'cct.thongke.core' })}
+									</span>
 								</Space>
 							}
 							variant='borderless'
@@ -244,7 +249,9 @@ const ThongKeCCT = () => {
 							title={
 								<Space>
 									<TrophyOutlined style={{ color: primaryColor, fontSize: 20 }} />
-									<span style={{ color: primaryColor, fontWeight: 600 }}>Activity Types</span>
+									<span style={{ color: primaryColor, fontWeight: 600 }}>
+										{intl.formatMessage({ id: 'cct.thongke.type' })}
+									</span>
 								</Space>
 							}
 							variant='borderless'

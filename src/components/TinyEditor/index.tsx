@@ -173,11 +173,11 @@ const TinyEditor = (props: {
 					font_size_formats: '8px 10px 12px 14px 18px 24px',
 					...(isVinUni
 						? {
-							forced_root_block: 'p',
-							forced_root_block_attrs: {
-								style: `font-family: ${resolvedDefaultFont};`,
-							},
-						}
+								forced_root_block: 'p',
+								forced_root_block_attrs: {
+									style: `font-family: ${resolvedDefaultFont};`,
+								},
+							}
 						: {}),
 				}}
 				onEditorChange={triggerChange}

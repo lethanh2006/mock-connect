@@ -30,13 +30,17 @@ export default () => {
 		}
 	};
 
-	const readNotificationModel = async (type: 'ALL' | 'ONE', notificationId?: string): Promise<any> => {
+	const readNotificationModel = async (
+		type: 'ALL' | 'ONE',
+		notificationId?: string,
+		messageText?: string,
+	): Promise<any> => {
 		setLoading(true);
 		try {
 			const response = await readNotification({ type, notificationId });
 			if (page !== 1) setPage(1);
 			else getThongBaoModel();
-			if (type === 'ALL') message.success('Đã đọc tất cả thông báo');
+			if (type === 'ALL') messageText ?? message.success('Đã đọc tất cả thông báo');
 
 			return response?.data?.data;
 		} catch (er) {

@@ -241,4 +241,6 @@ export default {
 	'global.pdfviewer.truoc': 'Previous',
 	'global.pdfviewer.sau': 'Next',
 	'global.pdfviewer.trang': 'Page {pageNumber} of {numPages}',
+
+	'global.noticeion.all': 'Mark all notifications as read',
 };
