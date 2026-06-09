@@ -20,6 +20,7 @@ export default {
     
     'kytucxa.lichsu.tooltip.payment': 'Thanh toán',
     'kytucxa.lichsu.tooltip.delete': 'Xóa',
+    'kytucxa.lichsu.tooltip.view': 'Xem chi tiết',
     'kytucxa.lichsu.tooltip.confirmDelete': 'Xác nhận xóa',
     'kytucxa.lichsu.tooltip.cannotPayment': 'Không thể thanh toán ở trạng thái này',
     'kytucxa.lichsu.filter.period': 'Đợt đăng ký',

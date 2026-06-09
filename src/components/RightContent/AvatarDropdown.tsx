@@ -113,31 +113,31 @@ const AvatarDropdown = () => {
 
 	useEffect(() => {
 		if (initialState?.currentUser?.ssoId) {
-			// getThongTinCuaToiModel().then((res) => {
-			// 	// if (res.needUpdateFaceReg)
-			// 	// 	notification.warn({
-			// 	// 		message: 'Nhận diện khuôn mặt',
-			// 	// 		description: 'Cần cập nhật ảnh nhận diện khuôn mặt',
-			// 	// 		key: 'updateFaceRegNoti',
-			// 	// 		btn: (
-			// 	// 			<Button
-			// 	// 				type='primary'
-			// 	// 				size='small'
-			// 	// 				onClick={() => {
-			// 	// 					history.push('/thong-tin-ca-nhan');
-			// 	// 					notification.close('updateFaceRegNoti');
-			// 	// 				}}
-			// 	// 			>
-			// 	// 				Cập nhật ngay
-			// 	// 			</Button>
-			// 	// 		),
-			// 	// 	});
-			// });
-			// handleCheckKhaoSatBatBuoc();
-			// getSuKienModel();
-			//Get All phân vùng để lấy mã màu
-			// getAllPhanVung();
-			// getPartitionCodeMeModel(currentPartition?.toString());
+			getThongTinCuaToiModel().then((res) => {
+				if (res.needUpdateFaceReg) {}
+					// notification.warn({
+					// 	message: 'Nhận diện khuôn mặt',
+					// 	description: 'Cần cập nhật ảnh nhận diện khuôn mặt',
+					// 	key: 'updateFaceRegNoti',
+					// 	btn: (
+					// 		<Button
+					// 			type='primary'
+					// 			size='small'
+					// 			onClick={() => {
+					// 				history.push('/thong-tin-ca-nhan');
+					// 				notification.close('updateFaceRegNoti');
+					// 			}}
+					// 		>
+					// 			Cập nhật ngay
+					// 		</Button>
+					// 	),
+					// });
+			});
+			handleCheckKhaoSatBatBuoc();
+			getSuKienModel();
+			// Get All phân vùng để lấy mã màu
+			getAllPhanVung();
+			getPartitionCodeMeModel(currentPartition?.toString());
 		}
 	}, [initialState?.currentUser?.ssoId]);
 

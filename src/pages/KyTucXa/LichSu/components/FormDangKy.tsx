@@ -1,4 +1,4 @@
-import { Card, Form, Input, Row, Col, Typography, Avatar, Space, Divider, Tag, Button } from 'antd';
+import { Card, Form, Input, Row, Col, Typography, Avatar, Space, Divider, Tag, Button, Badge } from 'antd';
 import { useIntl, useModel } from 'umi';
 import { formatDate } from '@/utils/formatDate';
 import { UserOutlined, IdcardOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
@@ -16,10 +16,6 @@ const FormLichSuDk = () => {
     useEffect(() => {
         if (!danhSachToa || danhSachToa.length === 0) getAllToa();
     }, []);
-
-    // const renderBooleanText = (val?: boolean) => {
-    //     return val ? intl.formatMessage({ id: 'kytucxa.lichsu.detail.yes' }) : intl.formatMessage({ id: 'kytucxa.lichsu.detail.no' });
-    // };
 
     const getStatusDisplay = (val?: string) => {
         let color = 'default';
@@ -127,19 +123,14 @@ const FormLichSuDk = () => {
 
                 <Title level={5} style={{ color: '#1d3a6b' }}>{intl.formatMessage({ id: 'kytucxa.lichsu.detail.section.contactInfo' })}</Title>
                 <Row gutter={16}>
-                    <Col xs={24} md={8}>
+                    <Col xs={24} md={12}>
                         <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.phoneNumber' })}>
                             <Input readOnly variant="filled" value={record?.formDon?.phoneNumber} prefix={<PhoneOutlined />} />
                         </Form.Item>
                     </Col>
-                    <Col xs={24} md={8}>
+                    <Col xs={24} md={12}>
                         <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.email' })}>
                             <Input readOnly variant="filled" value={record?.formDon?.email} prefix={<MailOutlined />} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={8}>
-                        <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.secondaryContactNumber' })}>
-                            <Input readOnly variant="filled" value={record?.formDon?.secondaryContactNumber || '-'} />
                         </Form.Item>
                     </Col>
                     <Col xs={24}>
@@ -168,62 +159,58 @@ const FormLichSuDk = () => {
                 <Divider style={{ margin: '6px 0 9px' }} />
 
                 <Title level={5} style={{ color: '#1d3a6b' }}>{intl.formatMessage({ id: 'kytucxa.lichsu.detail.section.emergencyContact' })}</Title>
-                <Row gutter={16}>
-                    <Col xs={24} md={8}>
-                        <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.emergencyContactName' })}>
-                            <Input readOnly variant="filled" value={record?.formDon?.emergencyContactName} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={8}>
-                        <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.emergencyRelationship' })}>
-                            <Input readOnly variant="filled" value={record?.formDon?.emergencyRelationship} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={8}>
-                        <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.emergencyContactNumber' })}>
-                            <Input readOnly variant="filled" value={record?.formDon?.emergencyContactNumber} prefix={<PhoneOutlined />} />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={8}>
-                        <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.email' })}>
-                            <Input readOnly variant="filled" value={record?.formDon?.emergencyEmail} prefix={<MailOutlined />} />
-                        </Form.Item>
-                    </Col>
-                       <Col xs={24} md={16}>
-                        <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.address' })}>
-                            <Input readOnly variant="filled" value={record?.formDon?.address}/>
-                        </Form.Item>
-                    </Col>
-                </Row>
-
-                {/* <Divider style={{ margin: '6px 0 9px' }} /> */}
-
-                {/* <Title level={5} style={{ color: '#1d3a6b' }}>{intl.formatMessage({ id: 'kytucxa.lichsu.detail.section.healthInfo' })}</Title>
-                <Row gutter={16}>
-                    <Col xs={24} md={8}>
-                        <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.haveHealthInsurance' })}>
-                            <Input readOnly variant="filled" value={renderBooleanText(record?.formDon?.haveHealthInsurance)} />
-                        </Form.Item>
-                    </Col>
-                    
-                    <Col xs={24}>
-                        <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.specialRequirements' })}>
-                            <TextArea readOnly variant="filled" value={record?.formDon?.specialRequirements || '-'} autoSize />
-                        </Form.Item>
-                    </Col> */}
-
-                    {/* {record?.formDon?.healthInsuranceFile && (
-                        <Col xs={24}>
-                            <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.healthInsuranceFile' })}>
-                                <Tag color="processing" style={{ padding: '4px 8px', fontSize: 14 }}>
-                                    <a href={record.form.healthInsuranceFile} target="_blank" rel="noreferrer">
-                                        {intl.formatMessage({ id: 'kytucxa.lichsu.detail.action.viewAttachment' })}
-                                    </a>
-                                </Tag>
-                            </Form.Item>
-                        </Col>
-                    )} */}
-                {/* </Row> */}
+                <Space direction="vertical" size={12} style={{ width: '100%' }}>
+                    {(record?.formDon?.emergencyContacts ?? []).length === 0 ? (
+                        <Typography.Text type="secondary" italic>Không có thông tin liên hệ khẩn cấp.</Typography.Text>
+                    ) : (
+                        (record?.formDon?.emergencyContacts ?? []).map((contact, index) => (
+                            <Badge.Ribbon
+                                key={contact.emergencyContactName + index}
+                                text={`#${index + 1}`}
+                                color="#1d3a6b"
+                            >
+                                <Card
+                                    size="small"
+                                    bordered
+                                    style={{ borderRadius: 8, background: '#fafbff', borderColor: '#d6e4ff' }}
+                                >
+                                    <Row gutter={[12, 0]}>
+                                        <Col xs={24} md={8}>
+                                            <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.emergencyContactName' })} style={{ marginBottom: 8 }}>
+                                                <Input readOnly variant="filled" value={contact.emergencyContactName} />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col xs={24} md={8}>
+                                            <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.emergencyRelationship' })} style={{ marginBottom: 8 }}>
+                                                <Input readOnly variant="filled" value={contact.emergencyRelationship} />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col xs={24} md={8}>
+                                            <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.emergencyContactNumber' })} style={{ marginBottom: 8 }}>
+                                                <Input readOnly variant="filled" value={contact.emergencyContactNumber} prefix={<PhoneOutlined />} />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col xs={24} md={8}>
+                                            <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.secondaryContactNumber' })} style={{ marginBottom: 8 }}>
+                                                <Input readOnly variant="filled" value={contact.secondaryContactNumber || '-'} prefix={<PhoneOutlined />} />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col xs={24} md={8}>
+                                            <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.email' })} style={{ marginBottom: 8 }}>
+                                                <Input readOnly variant="filled" value={contact.emergencyEmail || '-'} prefix={<MailOutlined />} />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col xs={24} md={16}>
+                                            <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.address' })} style={{ marginBottom: 8 }}>
+                                                <Input readOnly variant="filled" value={contact.address} />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Card>
+                            </Badge.Ribbon>
+                        ))
+                    )}
+                </Space>
             </Form>
             
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>

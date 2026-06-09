@@ -9,7 +9,7 @@ import FormLichSuDk from '@/pages/KyTucXa/LichSu/components/FormDangKy';
 import "@/pages/KyTucXa/DangKy/style.less"
 import SelectDotDangKyKTX from './components/SelectDotDangKy';
 import { FilterIconCustom } from '@/pages/KyTucXa/DangKy/components/IconsRoom';
-import { UnorderedListOutlined, DeleteOutlined, CreditCardOutlined, ReloadOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, DeleteOutlined, CreditCardOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Popover } from 'antd';
 import PaymentModal from './components/PaymentModal';
 import dayjs from '@/utils/dayjs';
@@ -17,7 +17,7 @@ import dayjs from '@/utils/dayjs';
 const LichSuDangKyKTX = () => {
 	const intl = useIntl();
     const { danhSach: danhSachToa, getAllModel: getAllToa } = useModel('kytucxa.toanha');
-	const { setRecord, deleteModel, getByIdModel, setVisibleForm, setIsView } = useModel('kytucxa.dangky');
+	const { setRecord, deleteModel, setVisibleForm, setIsView } = useModel('kytucxa.dangky');
 	const { danhSach: danhSachKhoanThu, getAllModel: getAllKhoanThu } = useModel('kytucxa.khoanthu');
 
 	const [drawerVisible, setDrawerVisible] = useState(false);
@@ -29,24 +29,8 @@ const LichSuDangKyKTX = () => {
 		if (!danhSachToa || danhSachToa.length === 0) getAllToa();
 	}, []);
 
-    
 	const handleReset = () => {
 		setSelectedDotId(undefined);
-	};
-
-	const handleRowClick = (rec: DangKyKyTucXa.IThongTinDangKyKTX) => {
-		setIsView(true);
-		getByIdModel(rec._id);
-		setVisibleForm(true);
-	};
-
-	const onCell = (record: DangKyKyTucXa.IThongTinDangKyKTX) => {
-		return {
-			onClick: () => {
-				handleRowClick(record);
-			},
-			style: { cursor: 'pointer' },
-		};
 	};
 
     const columns: IColumn<DangKyKyTucXa.IThongTinDangKyKTX>[] = [
@@ -56,7 +40,6 @@ const LichSuDangKyKTX = () => {
             width: 80,
             align: 'center',
             sortable: true,
-            onCell,
             render: (val: number) => {
                 if (val === undefined || val === null) return '-';
                 const isEnglish = intl.locale.startsWith('en');
@@ -75,7 +58,6 @@ const LichSuDangKyKTX = () => {
             width: 120,
             align: 'center',
             filterType: 'string',
-            onCell,
         },
 		{
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.apartmentType' }),
@@ -83,7 +65,6 @@ const LichSuDangKyKTX = () => {
             width: 200,
             align: 'center',
             filterType: 'string',
-            onCell,
             render: (val) => {
                 if (!val) return '-';
                 if (!danhSachToa || danhSachToa.length === 0) return '...';
@@ -98,7 +79,6 @@ const LichSuDangKyKTX = () => {
 			align: 'center',
 			filterType: 'number',
 			sortable: true,
-			onCell,
 			render: (val, record: DangKyKyTucXa.IThongTinDangKyKTX) => {
 				if (!danhSachKhoanThu || danhSachKhoanThu.length === 0) return '...';
 				const maKhoanThuPhong = record.phong?.maKhoanThuPhong;
@@ -114,7 +94,6 @@ const LichSuDangKyKTX = () => {
             width: 160,
             align: 'center',
 			sortable: true,
-            onCell,
             render: (val) =>  (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '-'),
         },
         {
@@ -123,7 +102,6 @@ const LichSuDangKyKTX = () => {
             width: 160,
             align: 'center',
 			sortable: true,
-            onCell,
             render: (val) =>  (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '-'),
         },
         {
@@ -131,7 +109,6 @@ const LichSuDangKyKTX = () => {
             dataIndex: 'trangThaiDuyet',
             width: 120,
             align: 'center',
-            onCell,
             render: (val) => {
                 let color = 'default';
                 let label = val;
@@ -159,6 +136,17 @@ const LichSuDangKyKTX = () => {
 
                 const content = (
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <Button 
+                            onClick={() => {
+                                setRecord(record);
+                                setIsView(true);
+                                setVisibleForm(true);
+                            }}
+                            type="text"
+                            icon={<EyeOutlined />}
+                        >
+                            {intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.view' })}
+                        </Button>
                         <Button 
                             type="text"
                             disabled={!isChoThanhToan}

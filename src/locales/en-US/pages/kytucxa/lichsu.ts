@@ -21,6 +21,7 @@ export default {
 	
 	'kytucxa.lichsu.tooltip.payment': 'Payment',
 	'kytucxa.lichsu.tooltip.delete': 'Delete',
+	'kytucxa.lichsu.tooltip.view': 'View Details',
 	'kytucxa.lichsu.tooltip.confirmDelete': 'Confirm Delete',
 	'kytucxa.lichsu.tooltip.cannotPayment': 'Cannot pay in this status',
 	'kytucxa.lichsu.filter.period': 'Registration Period',

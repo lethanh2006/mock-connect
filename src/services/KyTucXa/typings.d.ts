@@ -88,6 +88,15 @@ declare module DangKyKyTucXa {
         danhSachPhong?: string[];
     }
 
+    export interface IEmergencyContacts {
+        emergencyContactName: string,
+        emergencyRelationship: string,
+        emergencyContactNumber: string,
+        secondaryContactNumber: string,
+        emergencyEmail: string,
+        address: string
+    }
+
     export interface IFormDangKyKTX {
         fullName: string
         studentId: string;
@@ -98,10 +107,6 @@ declare module DangKyKyTucXa {
         dateOfBirth: string;
         specialRequirements?: string;
         conditionDetails?: string;
-        emergencyContactName: string;
-        emergencyRelationship: string;
-        emergencyContactNumber: string;
-        emergencyEmail: string;
         program: string;
         identityNumber: string;
         dateOfIssue: string;
@@ -110,8 +115,7 @@ declare module DangKyKyTucXa {
         permanentHomeAddress: string;
         haveHealthInsurance: boolean;
         healthInsuranceFile?: string;
-        secondaryContactNumber?: string;
-        address: string;
+        emergencyContacts: IEmergencyContacts[];
     }
 
     export interface INganhHoc {
