@@ -7,7 +7,7 @@ import { useIntl } from 'umi';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
 import type { IColumn, TDataOption, TFilter } from '../typing';
-import { applyColumnStringSearch, updateSearchStorage } from '../utils';
+import { applyColumnStringSearch, sanitizeFilterValues, updateSearchStorage } from '../utils';
 import { findFilterInTree, isExternalFilterNode, isSameFilterField, updateFiltersByField } from '../utils/filterTree';
 import { useApplyColumnSettings } from './useApplyColumnSettings';
 
@@ -258,8 +258,9 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 				skipReadOnlyExternal: true,
 				skipExternal: !shouldSyncExternalToColumnFilter,
 			};
+			const sanitizedValues = sanitizeFilterValues(values);
 
-			if (!values || !values.length) {
+			if (!sanitizedValues.length) {
 				const { filters: tempFilters, matched } = updateFiltersByField(
 					filters,
 					dataIndex,
@@ -286,7 +287,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 						...item,
 						active: true,
 						operator: EOperatorType.INCLUDE,
-						values,
+						values: sanitizedValues,
 						readOnly,
 					}),
 					updateFilterOptions,
@@ -301,7 +302,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 							field: dataIndex,
 							active: true,
 							operator: EOperatorType.INCLUDE,
-							values,
+							values: sanitizedValues,
 							readOnly,
 							source: 'table',
 						},
