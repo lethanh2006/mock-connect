@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import useInitModel from '@/hooks/useInitModel';
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 import { ipCsvc } from '@/utils/ip';
 
 export default () => {
-  const objInit = useInitModel<DangKyKyTucXa.IDanhMucChung>(
+  const objInit = useInitModel<KyTucXa.IDanhMucChung>(
     'danh-muc-chung',
     undefined,
     { maLoai: 'LOAI_PHONG_KTX' },
@@ -20,7 +20,7 @@ export default () => {
   };
 
   const tienIchMap = useMemo(() => {
-    const m = new Map<string, DangKyKyTucXa.IDanhMucChung>();
+    const m = new Map<string, KyTucXa.IDanhMucChung>();
     (objInit.danhSach ?? []).forEach((d) => {
       if (d.ma) m.set(d.ma, d);
     });

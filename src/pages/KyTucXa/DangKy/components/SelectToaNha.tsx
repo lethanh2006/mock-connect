@@ -1,4 +1,4 @@
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 import { Select } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -29,7 +29,7 @@ const SelectToaNhaKTX = (props: {
 
 	const filteredDanhSach = useMemo(() => {
 		if (!danhSachMaToa || danhSachMaToa.length === 0) return danhSach;
-		return danhSach.filter((item: DangKyKyTucXa.IToaKTX)=> danhSachMaToa.includes(item.ma));
+		return danhSach.filter((item: KyTucXa.IToa)=> danhSachMaToa.includes(item.ma));
 	}, [danhSach, danhSachMaToa]);
 
 	return (
@@ -37,7 +37,7 @@ const SelectToaNhaKTX = (props: {
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			onChange={onChange}
-			options={filteredDanhSach.map((item: DangKyKyTucXa.IToaKTX) => ({
+			options={filteredDanhSach.map((item: KyTucXa.IToa) => ({
 				key: item._id,
 				value: item._id,
 				label: `${item.ten}`,

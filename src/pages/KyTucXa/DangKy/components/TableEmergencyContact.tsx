@@ -10,7 +10,7 @@ interface TableEmergencyContactProps {
 	onReload?: () => Promise<void> | void;
 }
 
-const TableEmergencyContact: React.FC<TableEmergencyContactProps> = (props) => {
+const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) => {
 	const { value = [], onChange } = props;
 	const intl = useIntl();
 	const [visibleForm, setVisibleForm] = useState(false);
@@ -149,4 +149,4 @@ const TableEmergencyContact: React.FC<TableEmergencyContactProps> = (props) => {
 	);
 };
 
-export default TableEmergencyContact;
+export default TableEmergencyContactKTX;

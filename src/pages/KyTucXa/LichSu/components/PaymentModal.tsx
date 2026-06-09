@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Row, Col, Tag, Result } from 'antd';
 import { useModel } from 'umi';
-import { ETrangThaiDuyetKTX } from '@/services/KyTucXa/constant';
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { ETrangThaiDuyet } from '@/services/KyTucXa/constant';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 import { QrcodeOutlined } from '@ant-design/icons';
 
 interface IPaymentModalProps {
@@ -27,7 +27,7 @@ const PaymentModal: React.FC<IPaymentModalProps> = ({ visible, onClose }) => {
 
     const getPriceNumber = (maKhoanThu?: string) => {
         if (!maKhoanThu) return 0;
-        const khoanThu = (danhSachKhoanThu as DangKyKyTucXa.IKhoanThuKTX[])?.find(
+        const khoanThu = (danhSachKhoanThu as KyTucXa.IKhoanThu[])?.find(
             (item) => item.maMucThu === maKhoanThu
         );
         return khoanThu?.unitAmount || 0;
@@ -35,7 +35,7 @@ const PaymentModal: React.FC<IPaymentModalProps> = ({ visible, onClose }) => {
     
     const getCurrency = (maKhoanThu?: string) => {
         if (!maKhoanThu) return 'VNĐ';
-        const khoanThu = (danhSachKhoanThu as DangKyKyTucXa.IKhoanThuKTX[])?.find(
+        const khoanThu = (danhSachKhoanThu as KyTucXa.IKhoanThu[])?.find(
             (item) => item.maMucThu === maKhoanThu
         );
         return khoanThu?.currency || 'VNĐ';
@@ -67,13 +67,13 @@ const PaymentModal: React.FC<IPaymentModalProps> = ({ visible, onClose }) => {
     
     let tagColor = 'default';
     let trangThaiDisplay = record.trangThaiDuyet;
-    if (record.trangThaiDuyet === ETrangThaiDuyetKTX.DA_THANH_TOAN) {
+    if (record.trangThaiDuyet === ETrangThaiDuyet.DA_THANH_TOAN) {
         tagColor = 'success';
         trangThaiDisplay = 'Renting';
-    } else if (record.trangThaiDuyet === ETrangThaiDuyetKTX.CHO_THANH_TOAN) {
+    } else if (record.trangThaiDuyet === ETrangThaiDuyet.CHO_THANH_TOAN) {
         tagColor = 'processing';
         trangThaiDisplay = 'Pending';
-    } else if (record.trangThaiDuyet === ETrangThaiDuyetKTX.HUY) {
+    } else if (record.trangThaiDuyet === ETrangThaiDuyet.HUY) {
         tagColor = 'error';
         trangThaiDisplay = 'Expired';
     }
@@ -153,7 +153,7 @@ const PaymentModal: React.FC<IPaymentModalProps> = ({ visible, onClose }) => {
                     Remaining Amount to Pay
                 </Col>
                 <Col span={7} style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', color: '#ff4d4f', fontWeight: 600 }}>
-                    {record.trangThaiDuyet === ETrangThaiDuyetKTX.CHO_THANH_TOAN ? tongThanhTienStr : '0 VNĐ'}
+                    {record.trangThaiDuyet === ETrangThaiDuyet.CHO_THANH_TOAN ? tongThanhTienStr : '0 VNĐ'}
                 </Col>
             </Row>
         </div>

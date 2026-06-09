@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import { useIntl, useModel } from 'umi';
 import { Tag, Modal, Col } from 'antd';
-import { ETrangThaiDuyetKTX } from '@/services/KyTucXa/constant';
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { ETrangThaiDuyet } from '@/services/KyTucXa/constant';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 import FormLichSuDk from '@/pages/KyTucXa/LichSu/components/FormDangKy'; 
 import "@/pages/KyTucXa/DangKy/style.less"
 import SelectDotDangKyKTX from './components/SelectDotDangKy';
@@ -19,6 +19,11 @@ const LichSuDangKyKTX = () => {
     const { danhSach: danhSachToa, getAllModel: getAllToa } = useModel('kytucxa.toanha');
 	const { setRecord, deleteModel, setVisibleForm, setIsView } = useModel('kytucxa.dangky');
 	const { danhSach: danhSachKhoanThu, getAllModel: getAllKhoanThu } = useModel('kytucxa.khoanthu');
+	const { danhSach: danhSachDot } = useModel('kytucxa.dotdangky');
+
+	const dotMap = useMemo(() => {
+		return new Map((danhSachDot as KyTucXa.IDotDangKy[]).map((d) => [d._id, d]));
+	}, [danhSachDot]);
 
 	const [drawerVisible, setDrawerVisible] = useState(false);
 	const [selectedDotId, setSelectedDotId] = useState<string>();
@@ -33,7 +38,7 @@ const LichSuDangKyKTX = () => {
 		setSelectedDotId(undefined);
 	};
 
-    const columns: IColumn<DangKyKyTucXa.IThongTinDangKyKTX>[] = [
+    const columns: IColumn<KyTucXa.IThongTinDangKy>[] = [
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.floor' }),
             dataIndex: ['phong', 'tangThu'],
@@ -68,7 +73,7 @@ const LichSuDangKyKTX = () => {
             render: (val) => {
                 if (!val) return '-';
                 if (!danhSachToa || danhSachToa.length === 0) return '...';
-                const toa = (danhSachToa as DangKyKyTucXa.IToaKTX[])?.find((item) => item.ma === val);
+                const toa = (danhSachToa as KyTucXa.IToa[])?.find((item) => item.ma === val);
                 return toa ? toa.ten : val;
             },
         },
@@ -79,10 +84,10 @@ const LichSuDangKyKTX = () => {
 			align: 'center',
 			filterType: 'number',
 			sortable: true,
-			render: (val, record: DangKyKyTucXa.IThongTinDangKyKTX) => {
+			render: (val, record: KyTucXa.IThongTinDangKy) => {
 				if (!danhSachKhoanThu || danhSachKhoanThu.length === 0) return '...';
 				const maKhoanThuPhong = record.phong?.maKhoanThuPhong;
-				const khoanThu = (danhSachKhoanThu as DangKyKyTucXa.IKhoanThuKTX[])?.find((item: DangKyKyTucXa.IKhoanThuKTX) => item.maMucThu === maKhoanThuPhong);
+				const khoanThu = (danhSachKhoanThu as KyTucXa.IKhoanThu[])?.find((item: KyTucXa.IKhoanThu) => item.maMucThu === maKhoanThuPhong);
 				const giaHienThi = khoanThu?.unitAmount ?? val;
 				const currency = khoanThu?.currency || 'VND';
 				return giaHienThi ? `${giaHienThi.toLocaleString('vi-VN')} ${currency}` : '-';
@@ -90,19 +95,23 @@ const LichSuDangKyKTX = () => {
 		},		
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.moveInDate' }),
-            dataIndex: 'ngayChuyenVao',
+            dataIndex: 'maDotId',
             width: 160,
             align: 'center',
-			sortable: true,
-            render: (val) =>  (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '-'),
+            render: (_val, record: KyTucXa.IThongTinDangKy) => {
+                const dot = dotMap.get(record.maDotId!);
+                return dot?.ngayChuyenVao ? dayjs(dot.ngayChuyenVao).format('DD/MM/YYYY') : '-';
+            },
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.moveOutDate' }),
-            dataIndex: 'ngayChuyenRa',
+            dataIndex: 'maDotId',
             width: 160,
             align: 'center',
-			sortable: true,
-            render: (val) =>  (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '-'),
+            render: (_val, record: KyTucXa.IThongTinDangKy) => {
+                const dot = dotMap.get(record.maDotId!);
+                return dot?.ngayChuyenRa ? dayjs(dot.ngayChuyenRa).format('DD/MM/YYYY') : '-';
+            },
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.status' }),
@@ -112,13 +121,13 @@ const LichSuDangKyKTX = () => {
             render: (val) => {
                 let color = 'default';
                 let label = val;
-                if ([ETrangThaiDuyetKTX.DA_THANH_TOAN].includes(val as ETrangThaiDuyetKTX)) {
+                if ([ETrangThaiDuyet.DA_THANH_TOAN].includes(val as ETrangThaiDuyet)) {
                     color = 'success';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.success' });
-                } else if ([ETrangThaiDuyetKTX.CHO_THANH_TOAN].includes(val as ETrangThaiDuyetKTX)) {
+                } else if ([ETrangThaiDuyet.CHO_THANH_TOAN].includes(val as ETrangThaiDuyet)) {
                     color = 'processing';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.processing' });
-                } else if ([ETrangThaiDuyetKTX.HUY].includes(val as ETrangThaiDuyetKTX)) {
+                } else if ([ETrangThaiDuyet.HUY].includes(val as ETrangThaiDuyet)) {
                     color = 'error';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.expired' });
                 }
@@ -130,9 +139,9 @@ const LichSuDangKyKTX = () => {
             width: 80,
             align: 'center',
             fixed: 'right',
-            render: (_, record: DangKyKyTucXa.IThongTinDangKyKTX) => {
-                const isChoThanhToan = record.trangThaiDuyet === ETrangThaiDuyetKTX.CHO_THANH_TOAN;
-                const isChoPhepXoa = record.trangThaiDuyet === ETrangThaiDuyetKTX.HUY || record.trangThaiDuyet === ETrangThaiDuyetKTX.CHO_THANH_TOAN;
+            render: (_, record: KyTucXa.IThongTinDangKy) => {
+                const isChoThanhToan = record.trangThaiDuyet === ETrangThaiDuyet.CHO_THANH_TOAN;
+                const isChoPhepXoa = record.trangThaiDuyet === ETrangThaiDuyet.HUY || record.trangThaiDuyet === ETrangThaiDuyet.CHO_THANH_TOAN;
 
                 const content = (
                     <div style={{ display: 'flex', flexDirection: 'column' }}>

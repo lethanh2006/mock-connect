@@ -3,11 +3,11 @@ import { Button, Col, Image, Modal, Row, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { DienTichIconCustom } from './IconsRoom';
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 import './style.less';
 
 interface RoomDetailModalProps {
-	onDangKy: (phong: DangKyKyTucXa.IPhongKTXSinhVien) => void;
+	onDangKy: (phong: KyTucXa.IPhong) => void;
 	maPhongDaDangKy?: string;
 }
 
@@ -47,7 +47,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 		const imgs = phong.danhSachAnh ?? [];
 		const tbs = imgs.slice(0, 4);
 		const tienIchAll = (phong.danhSachTienIch ?? [])
-			.map((it: DangKyKyTucXa.ITienIchKTX) => {
+			.map((it: KyTucXa.ITienIch) => {
 				const key = it?.maDanhMucTienIch;
 				const found = key ? tienIchMap.get(key) : undefined;
 				if (found) return found;
@@ -65,7 +65,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 
 	const giaPhong = useMemo(() => {
 		if (!phong) return undefined;
-		const khoanThu = (danhSachKhoanThu as DangKyKyTucXa.IKhoanThuKTX[])?.find(
+		const khoanThu = (danhSachKhoanThu as KyTucXa.IKhoanThu[])?.find(
 			(kt) => kt.maMucThu === phong.maKhoanThuPhong
 		);
 		return khoanThu?.unitAmount;
@@ -73,7 +73,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 
 	const currency = useMemo(() => {
 		if (!phong) return undefined;
-		const khoanThu = (danhSachKhoanThu as DangKyKyTucXa.IKhoanThuKTX[])?.find(
+		const khoanThu = (danhSachKhoanThu as KyTucXa.IKhoanThu[])?.find(
 			(kt) => kt.maMucThu === phong.maKhoanThuPhong
 		);
 		return khoanThu?.currency;

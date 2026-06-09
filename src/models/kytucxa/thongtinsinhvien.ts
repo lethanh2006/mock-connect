@@ -1,9 +1,9 @@
 import useInitModel from '@/hooks/useInitModel';
 import { ipDaoTao } from '@/utils/ip';
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 
 export default () => {
-	const objInit = useInitModel<DangKyKyTucXa.IThongTinSinhVien>('sinh-vien', undefined, undefined, ipDaoTao);
+	const objInit = useInitModel<KyTucXa.IThongTinSinhVien>('sinh-vien', undefined, undefined, ipDaoTao);
 	const { getService, setRecord, setLoading } = objInit;
 
 	const getThongTinSinhVienModel = async () => {

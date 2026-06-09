@@ -20,7 +20,7 @@ interface FormEmergencyContactProps {
 	initialData?: EmergencyContact | null;
 }
 
-const FormEmergencyContact: React.FC<FormEmergencyContactProps> = ({
+const FormEmergencyContactKTX: React.FC<FormEmergencyContactProps> = ({
 	visible,
 	onClose,
 	onSave,
@@ -104,4 +104,4 @@ const FormEmergencyContact: React.FC<FormEmergencyContactProps> = ({
 	);
 };
 
-export default FormEmergencyContact;
+export default FormEmergencyContactKTX;

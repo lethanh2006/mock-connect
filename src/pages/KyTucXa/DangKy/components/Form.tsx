@@ -4,9 +4,9 @@ import { useIntl, useModel } from 'umi';
 import './style.less';
 import dayjs from 'dayjs';
 import { resetFieldsForm } from '@/utils/utils';
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 import rules from '@/utils/rules';
-import TableEmergencyContact from './TableEmergencyContact';
+import TableEmergencyContactKTX from './TableEmergencyContact';
 
 const { TextArea } = Input;
 
@@ -99,7 +99,7 @@ const FormDangKyKTX = () => {
 				return;
 			}
 
-			const { confirmTerms, ...rest } = values as { confirmTerms: boolean } & DangKyKyTucXa.IFormDangKyKTX & { specialRequirements?: string };
+			const { confirmTerms, ...rest } = values as { confirmTerms: boolean } & KyTucXa.IFormDangKy;
 
 			const dateOfBirthISO = rest.dateOfBirth
 				? dayjs(rest.dateOfBirth, 'DD/MM/YYYY').toISOString()
@@ -122,7 +122,6 @@ const FormDangKyKTX = () => {
 					placeOfIssue: rest.placeOfIssue,
 					nationality: rest.nationality,
 					permanentHomeAddress: rest.permanentHomeAddress,
-					haveHealthInsurance: !!rest.haveHealthInsurance,
 					emergencyContacts: rest.emergencyContacts,
 				},
 			};
@@ -269,7 +268,7 @@ const FormDangKyKTX = () => {
 											}
 										]}
 									>
-										<TableEmergencyContact onReload={handleReloadEmergencyContacts} />
+										<TableEmergencyContactKTX onReload={handleReloadEmergencyContacts} />
 									</Form.Item>
 								</div>
 							</div>

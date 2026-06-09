@@ -3,18 +3,18 @@ export enum EGioiTinh {
 	NU = 'Nữ',
 }
 
-export enum ETrangThaiMinhChungKTX {
+export enum ETrangThaiMinhChung {
 	CHO_DUYET = 'Chờ duyệt',
 	DA_DUYET = 'Đã duyệt',
 	TU_CHOI = 'Từ chối',
 }
 
-export enum ETrangThaiDuyetKTX {
+export enum ETrangThaiDuyet {
 	CHO_THANH_TOAN = 'Chờ thanh toán',
 	DA_THANH_TOAN = 'Đã thanh toán',
 	HUY = 'Hủy',
 }
 
-export enum ELoaiKhoanThuKTX {
+export enum ELoaiKhoanThu {
 	KTX = 'KTX',
 }

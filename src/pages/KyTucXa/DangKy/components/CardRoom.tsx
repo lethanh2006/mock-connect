@@ -1,14 +1,14 @@
 import { Button, Tooltip, Typography } from 'antd';
 import { CheckIconCustom, DienTichIconCustom, ExpandIconCustom } from './IconsRoom';
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 import './style.less';
 import { useIntl, useModel } from 'umi';
 import React, { useMemo } from 'react';
 
 interface RoomCardProps {
-	phong: DangKyKyTucXa.IPhongKTXSinhVien;
-	onXemChiTiet: (phong: DangKyKyTucXa.IPhongKTXSinhVien) => void;
-	onDangKy: (phong: DangKyKyTucXa.IPhongKTXSinhVien) => void;
+	phong: KyTucXa.IPhong;
+	onXemChiTiet: (phong: KyTucXa.IPhong) => void;
+	onDangKy: (phong: KyTucXa.IPhong) => void;
 	maPhongDaDangKy?: string;
 }
 
@@ -28,7 +28,7 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 	const mappedTienIchList = useMemo(() => {
 		const rawList = Array.isArray(phong.danhSachTienIch) ? phong.danhSachTienIch : [];
 		return rawList
-			.map((it: DangKyKyTucXa.ITienIchKTX) => {
+			.map((it: KyTucXa.ITienIch) => {
 				const key = it?.maDanhMucTienIch;
 				const found = key ? tienIchMap.get(key) : undefined; 
 				if (found) return found;
@@ -50,14 +50,14 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 	}, [phong, mappedTienIchList]);
 
 	const giaPhong = useMemo(() => {
-		const khoanThu = (danhSachKhoanThu as DangKyKyTucXa.IKhoanThuKTX[])?.find(
+		const khoanThu = (danhSachKhoanThu as KyTucXa.IKhoanThu[])?.find(
 			(kt) => kt.maMucThu === phong.maKhoanThuPhong
 		);
 		return khoanThu?.unitAmount;
 	}, [danhSachKhoanThu, phong.maKhoanThuPhong]);
 	 
 	const currency = useMemo(() => {
-		const khoanThu = (danhSachKhoanThu as DangKyKyTucXa.IKhoanThuKTX[])?.find(
+		const khoanThu = (danhSachKhoanThu as KyTucXa.IKhoanThu[])?.find(
 			(kt) => kt.maMucThu === phong.maKhoanThuPhong
 		);
 		return khoanThu?.currency;

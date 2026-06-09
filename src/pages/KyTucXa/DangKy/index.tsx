@@ -1,4 +1,4 @@
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { ReloadOutlined, InfoCircleOutlined } from '@ant-design/icons';
@@ -12,7 +12,7 @@ import SelectToaNhaKTX from './components/SelectToaNha';
 import SelectFloorKTX from './components/SelectFloor';
 import './style.less';
 import { FilterIconCustom } from './components/IconsRoom';
-import { ETrangThaiDuyetKTX } from '@/services/KyTucXa/constant';
+import { ETrangThaiDuyet } from '@/services/KyTucXa/constant';
 import SelectCapacityKTX from './components/SelectCapacity';
 import SelectRoomTypeKTX from './components/SelectRoomType';
 import PageCard from '@/components/PageCard';
@@ -33,7 +33,7 @@ const DangKyKyTucXaPage = () => {
 
 	const maPhongDaDangKy = useMemo(() => {
 		const lichSuHoatDong = danhSachLichSu.find(
-			(item) => item.trangThaiDuyet !== ETrangThaiDuyetKTX.HUY,
+			(item) => item.trangThaiDuyet !== ETrangThaiDuyet.HUY,
 		);
 		return lichSuHoatDong?.maPhong;
 	}, [danhSachLichSu]);
@@ -58,12 +58,12 @@ const DangKyKyTucXaPage = () => {
 	};
 
 	const listToa = useMemo(
-		() => (Array.isArray(danhSachToa) ? (danhSachToa as DangKyKyTucXa.IToaKTX[]) : []),
+		() => (Array.isArray(danhSachToa) ? (danhSachToa as KyTucXa.IToa[]) : []),
 		[danhSachToa],
 	);
 
 	const listPhong = useMemo(
-		() => (Array.isArray(danhSachPhong) ? (danhSachPhong as DangKyKyTucXa.IPhongKTXSinhVien[]) : []),
+		() => (Array.isArray(danhSachPhong) ? (danhSachPhong as KyTucXa.IPhong[]) : []),
 		[danhSachPhong],
 	);
 
@@ -145,12 +145,12 @@ const DangKyKyTucXaPage = () => {
 		getLichSu();
 	};
 
-	const handleXemChiTiet = useCallback((phong: DangKyKyTucXa.IPhongKTXSinhVien) => {
+	const handleXemChiTiet = useCallback((phong: KyTucXa.IPhong) => {
 		setPhongRecord(phong);
 		setIsView(true);
 	}, []);
 
-	const handleDangKy = useCallback((phong: DangKyKyTucXa.IPhongKTXSinhVien) => {
+	const handleDangKy = useCallback((phong: KyTucXa.IPhong) => {
 		if (cacDotDangKyHienTai.length === 0) return;
 
 		const dotChuaPhong = cacDotDangKyHienTai.find(dot => {
@@ -174,7 +174,7 @@ const DangKyKyTucXaPage = () => {
 			title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}
 		>
 
-			{/* {loadingDotDangKy ? (
+			{loadingDotDangKy ? (
 				<Card className='ktx-page__dot-card' style={{ borderRadius: 12 }}>
 					<Skeleton active paragraph={{ rows: 2 }} />
 				</Card>
@@ -216,7 +216,7 @@ const DangKyKyTucXaPage = () => {
 								</div>
 							)}
 						</div>
-					))} */}
+					))}
 
 					<div className='ktx-page__main-card'>
 						<div className='ktx-page__filter-bar'>
@@ -290,8 +290,8 @@ const DangKyKyTucXaPage = () => {
 					/>
 
 					<FormDangKy />
-				{/* </>
-			)} */}
+				</>
+			)}
 		</PageCard>
 	);
 };

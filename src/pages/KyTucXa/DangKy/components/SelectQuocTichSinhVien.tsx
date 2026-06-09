@@ -5,7 +5,7 @@ import { useIntl, useModel } from 'umi';
 /**
  * Select Quốc tịch sinh viên để cho vào FormItem
  */
-const SelectQuocTichSinhVien = (props: {
+const SelectQuocTichSinhVienKTX = (props: {
     value?: string;
     onChange?: (id: string) => void;
     multiple?: boolean;
@@ -46,4 +46,4 @@ const SelectQuocTichSinhVien = (props: {
     );
 };
 
-export default SelectQuocTichSinhVien;
+export default SelectQuocTichSinhVienKTX;

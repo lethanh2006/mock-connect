@@ -1,9 +1,9 @@
 import useInitModel from '@/hooks/useInitModel';
 import { ipCsvc } from '@/utils/ip';
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 
 export default () => {
-	const objInit = useInitModel<DangKyKyTucXa.IToaKTX>('toa-nha/ktx', undefined, undefined, ipCsvc);
+	const objInit = useInitModel<KyTucXa.IToa>('toa-nha/ktx', undefined, undefined, ipCsvc);
 
 	const getModel: typeof objInit.getModel = async (
 		paramCondition,

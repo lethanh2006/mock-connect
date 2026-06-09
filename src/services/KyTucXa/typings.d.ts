@@ -1,14 +1,14 @@
 import { ETrangThaiDuyet, ETrangThaiMinhChung, EGioiTinh, ELoaiKhoanThu } from './constant';
 
-declare module DangKyKyTucXa {
-    export interface IToaKTX {
+declare module KyTucXa {
+    export interface IToa {
         _id: string;
         ma: string;
         ten: string;
         soPhongKtx?: number;
     }
 
-    export interface ITienIchKTX {
+    export interface ITienIch {
         maDanhMucTienIch: string;
     }
 
@@ -20,7 +20,7 @@ declare module DangKyKyTucXa {
         anh?: string;
 	}
 
-    export interface IPhongKTXSinhVien {
+    export interface IPhong {
         _id: string;
         ma: string;
         ten: string;
@@ -28,24 +28,21 @@ declare module DangKyKyTucXa {
         maGioiTinh?: EGioiTinh;
         soLuongToiDa: number;
         soLuongHienTai: number;
-
         maLoaiPhongKtx?: string;
         tangThu?: number;
         cachBoTri?: string;
         dienTich?: number;
         moTa?: string;
-        danhSachTienIch?: ITienIchKTX[];
+        danhSachTienIch?: ITienIch[];
         danhSachAnh?: string[];
         maKhoanThuPhong?: string;
         maKhoanThuCoc?: string;
-
         giaPhong?: number;
-
         coTheDangKy?: boolean;
         lyDoKhongTheDangKy?: string[];
     }
 
-    export interface IThongTinDangKyKTX {
+    export interface IThongTinDangKy {
         _id: string;
         maDotId?: string;
         maPhong?: string;
@@ -59,13 +56,11 @@ declare module DangKyKyTucXa {
         trangThaiDuyet?: ETrangThaiDuyet;
         createdAt?: string;
         updatedAt?: string;
-        formDon?: IFormDangKyKTX;
-        phong?: IPhongKTXSinhVien;
-        ngayChuyenVao?: string;
-        ngayChuyenRa?: string;
+        formDon?: IFormDangKy;
+        phong?: IPhong;
     }
 
-    export interface IKhoanThuKTX {
+    export interface IKhoanThu {
         _id: string;
         ten: string;
         loai: ELoaiKhoanThu;
@@ -75,7 +70,7 @@ declare module DangKyKyTucXa {
         currency: string;
     }
 
-    export interface IDotDangKyKTX {
+    export interface IDotDangKy {
         _id: string;
         tenDot: string;
         maHocKy: string;
@@ -86,6 +81,8 @@ declare module DangKyKyTucXa {
         soLuongDon: number;
         danhSachToaNha: string[];
         danhSachPhong?: string[];
+        ngayChuyenVao: string;
+        ngayChuyenRa: string;
     }
 
     export interface IEmergencyContacts {
@@ -97,7 +94,7 @@ declare module DangKyKyTucXa {
         address: string
     }
 
-    export interface IFormDangKyKTX {
+    export interface IFormDangKy {
         fullName: string
         studentId: string;
         gender: EGioiTinh;
@@ -105,16 +102,12 @@ declare module DangKyKyTucXa {
         phoneNumber: string;
         college: string;
         dateOfBirth: string;
-        specialRequirements?: string;
-        conditionDetails?: string;
         program: string;
         identityNumber: string;
         dateOfIssue: string;
         placeOfIssue: string;
         nationality: string;
         permanentHomeAddress: string;
-        haveHealthInsurance: boolean;
-        healthInsuranceFile?: string;
         emergencyContacts: IEmergencyContacts[];
     }
 

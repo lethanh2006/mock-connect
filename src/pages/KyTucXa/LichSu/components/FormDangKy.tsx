@@ -2,9 +2,9 @@ import { Card, Form, Input, Row, Col, Typography, Avatar, Space, Divider, Tag, B
 import { useIntl, useModel } from 'umi';
 import { formatDate } from '@/utils/formatDate';
 import { UserOutlined, IdcardOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
-import { ETrangThaiDuyetKTX } from '@/services/KyTucXa/constant';
+import { ETrangThaiDuyet } from '@/services/KyTucXa/constant';
 import { useEffect, useMemo } from 'react';
-import { DangKyKyTucXa } from '@/services/KyTucXa/typings';
+import { KyTucXa } from '@/services/KyTucXa/typings';
 
 const { Text, Title } = Typography;
 
@@ -21,13 +21,13 @@ const FormLichSuDk = () => {
         let color = 'default';
         let label = val || intl.formatMessage({ id: 'kytucxa.lichsu.detail.unknownStatus' });
 
-        if ([ETrangThaiDuyetKTX.DA_THANH_TOAN].includes(val as ETrangThaiDuyetKTX)) {
+        if ([ETrangThaiDuyet.DA_THANH_TOAN].includes(val as ETrangThaiDuyet)) {
             color = 'success';
             label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.success' });
-        } else if ([ETrangThaiDuyetKTX.CHO_THANH_TOAN].includes(val as ETrangThaiDuyetKTX)) {
+        } else if ([ETrangThaiDuyet.CHO_THANH_TOAN].includes(val as ETrangThaiDuyet)) {
             color = 'processing';
             label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.processing' });
-        } else if ([ETrangThaiDuyetKTX.HUY].includes(val as ETrangThaiDuyetKTX)) {
+        } else if ([ETrangThaiDuyet.HUY].includes(val as ETrangThaiDuyet)) {
             color = 'error';
             label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.expired' });
         }
@@ -37,7 +37,7 @@ const FormLichSuDk = () => {
 
     const tenToaNha = useMemo(() => {
         if (!danhSachToa || !record?.phong?.maToaNha) return record?.phong?.maToaNha;
-        const toa = danhSachToa.find((t: DangKyKyTucXa.IToaKTX) => t.ma === record?.phong?.maToaNha);
+        const toa = danhSachToa.find((t: KyTucXa.IToa) => t.ma === record?.phong?.maToaNha);
         return toa?.ten || record?.phong?.maToaNha;
     }, [danhSachToa, record?.phong?.maToaNha]);
 
