@@ -84,7 +84,7 @@ const TienTrinhHocTap = () => {
 
 	return (
 		<PageCard
-			title={intl.formatMessage({ id: 'tientrinhhoctap.title' })}
+			title='Degree Audit'
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<Spin spinning={loadingChuongTrinh || loading}>

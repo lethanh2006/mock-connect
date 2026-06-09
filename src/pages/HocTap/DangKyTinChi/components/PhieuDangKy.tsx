@@ -2,6 +2,7 @@ import ExpandText from '@/components/ExpandText';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import {
 	ColorTrangThaiDangKyTinChi,
 	ETinhChatDangKyTC,
@@ -47,6 +48,10 @@ const PhieuDangKy = () => {
 	const [visibleHuyLop, setVisibleHuyLop] = useState<boolean>(false);
 	const [visibleLopDaHuy, setVisibleLopDaHuy] = useState(false);
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
+	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
+	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
+	const dangKyNgay: boolean = true;
+
 	const [recLopDangKy, setRecLopDangKy] = useState<DangKyTinChi.ILopDangKy>();
 	// Danh sách học phần có cả lớp Chính và lớp thực hành
 	const hocPhanCoLopThucHanh = danhSachLopDangKy.filter((item) => !!item.tenCha).map((item) => item.maHocPhan);
@@ -100,10 +105,10 @@ const PhieuDangKy = () => {
 		getData();
 	}, [recHocKy?.ma]);
 
-	useEffect(() => {
-		// Get mức thu học phí của tôi theo năm học
-		if (recHocKy?.namBatDau) getMucThuHocPhiTheoNamModel(recHocKy.namBatDau.toString());
-	}, [recHocKy?.namBatDau]);
+	// useEffect(() => {
+	// 	// Get mức thu học phí của tôi theo năm học
+	// 	if (recHocKy?.namBatDau) getMucThuHocPhiTheoNamModel(recHocKy.namBatDau.toString());
+	// }, [recHocKy?.namBatDau]);
 
 	const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
 		try {
@@ -123,12 +128,32 @@ const PhieuDangKy = () => {
 		}
 	};
 
+	const handleXemDeCuong = (maHocPhan: string, tenHocPhan?: string) => {
+		setDeCuongModal({
+			deCuongId: maHocPhan,
+			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${tenHocPhan || maHocPhan || ''}`,
+		});
+		setVisibleDeCuong(true);
+	};
+
 	const columns: IColumn<DangKyTinChi.ILopDangKy>[] = [
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.mahocphan' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
 			width: 100,
+			render: (val, rec) => {
+				return (
+					<a
+						onClick={(e) => {
+							e.stopPropagation();
+							handleXemDeCuong(val, rec?.ten);
+						}}
+					>
+						{val}
+					</a>
+				);
+			},
 			filterType: 'string',
 		},
 		{
@@ -180,17 +205,17 @@ const PhieuDangKy = () => {
 		// 	align: 'center',
 		// 	width: 110,
 		// },
-		{
-			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.hocphi' }),
-			align: 'right',
-			width: 160,
-			render: (val, rec) => {
-				const due = tinhHocPhi(rec.soTinChi, rec.loai, rec.maKhoaNganh);
-				if (due) return `${inputFormat(due)} VND`;
-				return null;
-			},
-			// hide: !dangTrongThoiGian,
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.hocphi' }),
+		// 	align: 'right',
+		// 	width: 160,
+		// 	render: (val, rec) => {
+		// 		const due = tinhHocPhi(rec.soTinChi, rec.loai, rec.maKhoaNganh);
+		// 		if (due) return `${inputFormat(due)} VND`;
+		// 		return null;
+		// 	},
+		// 	// hide: !dangTrongThoiGian,
+		// },
 		// {
 		// 	title: 'Loại ĐK',
 		// 	dataIndex: 'loai',
@@ -280,31 +305,35 @@ const PhieuDangKy = () => {
 
 	return (
 		<>
-			<Row gutter={[8, 12]} style={{ marginBottom: 12 }}>
-				<Col span={24} md={10}>
-					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
-					<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
-						{tongTinChi} {intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}
-					</b>
-				</Col>
-				<Col span={24} md={7}>
-					{intl.formatMessage({ id: 'dangkytinchi.phieudangky.hocphidukien.title' })}:{' '}
-					<b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
-				</Col>
-				{phieuDangKy ? (
-					<Col span={24} md={7}>
-						<div
-							className={
-								tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'fw500 text-error' : 'fw500 text-success'
-							}
-							style={{ textAlign: 'right' }}
-						>
-							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.alert.khoangtinchi' })}:{' '}
-							{[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
-						</div>
+			{!dangKyNgay && (
+				<Row gutter={[8, 12]} style={{ marginBottom: 12 }}>
+					<Col span={24} md={10}>
+						{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
+						<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
+							{tongTinChi} {intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}
+						</b>
 					</Col>
-				) : null}
-			</Row>
+					<Col span={24} md={7}>
+						{intl.formatMessage({ id: 'dangkytinchi.phieudangky.hocphidukien.title' })}:{' '}
+						<b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
+					</Col>
+					{phieuDangKy ? (
+						<Col span={24} md={7}>
+							<div
+								className={
+									tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu
+										? 'fw500 text-error'
+										: 'fw500 text-success'
+								}
+								style={{ textAlign: 'right' }}
+							>
+								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.alert.khoangtinchi' })}:{' '}
+								{[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
+							</div>
+						</Col>
+					) : null}
+				</Row>
+			)}
 
 			<TableStaticData
 				columns={columns}
@@ -314,61 +343,71 @@ const PhieuDangKy = () => {
 				hasTotal
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
 				onReload={getData}
-			>
-				<Space wrap style={{ margin: '0 16px' }}>
-					{danhSachLopDangKy.length ? (
-						<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
-							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
-						</ButtonExtend>
-					) : null}
-
-					{dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
-						<>
-							<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
-								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.caclopdahuy' })}
+				otherButtons={[
+					<Space wrap>
+						{danhSachLopDangKy.length ? (
+							<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
+								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
 							</ButtonExtend>
+						) : null}
 
-							<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
-						</>
-					) : null}
+						{dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+							<>
+								<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
+									{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.caclopdahuy' })}
+								</ButtonExtend>
 
-					{tongTinChiChuaDk &&
-					dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
-					sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
-						<ButtonExtend
-							tooltip={
-								tongTinChi > soTinChiToiDa
-									? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
-									: tongTinChi < soTinChiToiThieu
-										? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin' })
-										: !dangTrongThoiGian
-											? intl.formatMessage({
-													id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
-												})
-											: intl.formatMessage({
-													id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc',
-												})
-							}
-							type='primary'
-							icon={<SendOutlined />}
-							onClick={() => setVisibleRegister(true)}
-							disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
-						>
-							{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.dangky' })}
-						</ButtonExtend>
-					) : null}
+								<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
+							</>
+						) : null}
 
-					{tongTinChi < soTinChiToiThieu ? (
-						<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>
-					) : null}
-				</Space>
-			</TableStaticData>
+						{tongTinChiChuaDk &&
+						dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
+						sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
+							<ButtonExtend
+								tooltip={
+									tongTinChi > soTinChiToiDa
+										? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
+										: tongTinChi < soTinChiToiThieu
+											? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin' })
+											: !dangTrongThoiGian
+												? intl.formatMessage({
+														id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
+													})
+												: intl.formatMessage({
+														id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc',
+													})
+								}
+								type='primary'
+								icon={<SendOutlined />}
+								onClick={() => setVisibleRegister(true)}
+								disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
+							>
+								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.dangky' })}
+							</ButtonExtend>
+						) : null}
+
+						{tongTinChi < soTinChiToiThieu ? (
+							<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>
+						) : null}
+					</Space>,
+				]}
+			/>
 
 			<ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
 
 			<ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
 
 			<ConfirmKetHuyLopDKTC visible={visibleHuyLop} setVisible={setVisibleHuyLop} recLopDangKy={recLopDangKy} />
+
+			{deCuongModal && (
+				<ModalHocPhan
+					visible={visibleDeCuong}
+					setVisible={setVisibleDeCuong}
+					deCuongId={deCuongModal.deCuongId}
+					title={deCuongModal.title}
+				/>
+			)}
 		</>
 	);
 };

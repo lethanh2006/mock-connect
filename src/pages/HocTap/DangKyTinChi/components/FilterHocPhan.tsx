@@ -1,16 +1,14 @@
 import TableBase from '@/components/Table';
 import { type IColumn } from '@/components/Table/typing';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
-import { ELoaiDangKyTheoLop, loaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
+import { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Divider, Flex, Popover, Select } from 'antd';
+import { Divider } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
 import { useIntl, useModel } from 'umi';
-import ViewGhiChuDangKyTinChi from './ViewGhiChuDangKyTinChi';
 
 const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 	const intl = useIntl();
@@ -77,7 +75,7 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.mahp' }),
 			dataIndex: 'ma',
-			width: 80,
+			width: 110,
 			align: 'center',
 			filterType: 'string',
 			render: (val, rec) => {
@@ -97,7 +95,7 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.tenhocphan' }),
 			dataIndex: 'ten',
-			width: 170,
+			width: 200,
 			filterType: 'string',
 			onCell,
 		},
@@ -117,24 +115,6 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 
 	return (
 		<>
-			<Flex justify='space-between' align='center' style={{ marginBottom: 12 }}>
-				<Select
-					options={allLoaiDangKy.map((item) => ({
-						key: item,
-						value: item,
-						label: loaiDangKyTheoLop?.[item],
-					}))}
-					value={loaiDangKy}
-					onChange={(val) => setLoaiDangKy(val)}
-					style={{ width: 250 }}
-				/>
-				<Popover content={<ViewGhiChuDangKyTinChi />}>
-					<Button type='link' icon={<QuestionCircleOutlined />}>
-						{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.btn.huongdandangky' })}
-					</Button>
-				</Popover>
-			</Flex>
-
 			<Divider style={{ margin: '8px 0' }} />
 
 			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange} style={{ marginTop: 12 }}>

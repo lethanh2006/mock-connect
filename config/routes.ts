@@ -34,99 +34,99 @@ export default [
 	// 	component: 'TienIch/GioiThieu',
 	// 	hideInMenu: true,
 	// },
-	// {
-	// 	path: '/my-profile',
-	// 	name: 'MyProfile',
-	// 	icon: 'UserOutlined',
-	// 	component: 'New/MyProfile',
-	// },
-	// {
-	// 	path: '/my-calendar',
-	// 	name: 'MyCalendar',
-	// 	icon: 'CalendarOutlined',
-	// 	component: 'New/MyCalendar',
-	// },
-	// {
-	// 	path: '/academic',
-	// 	name: 'Academic',
-	// 	icon: 'BookOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'course-registration',
-	// 			name: 'CourseRegistration',
-	// 			component: 'New/CourseRegistration',
-	// 		},
-	// 		{
-	// 			path: 'timetable',
-	// 			name: 'Timetable',
-	// 			component: 'New/Timetable',
-	// 		},
-	// 		{
-	// 			path: 'grades-transcript',
-	// 			name: 'GradesTranscript',
-	// 			component: 'New/GradesTranscript',
-	// 		},
-	// 		{
-	// 			path: 'degree-audit',
-	// 			name: 'DegreeAudit',
-	// 			component: 'New/DegreeAudit',
-	// 		},
-	// 		{
-	// 			path: 'graduation-review',
-	// 			name: 'GraduationReview',
-	// 			component: 'New/GraduationReview',
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	path: '/learning-experience',
-	// 	name: 'LearningExperience',
-	// 	icon: 'ReadOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'lms',
-	// 			name: 'Lms',
-	// 			component: 'New/Lms',
-	// 		},
-	// 		{
-	// 			path: 'lecture-materials',
-	// 			name: 'LectureMaterials',
-	// 			component: 'New/LectureMaterials',
-	// 		},
-	// 		{
-	// 			path: 'assignments-submissions',
-	// 			name: 'AssignmentsSubmissions',
-	// 			component: 'New/AssignmentsSubmissions',
-	// 		},
-	// 		{
-	// 			path: 'library',
-	// 			name: 'Library',
-	// 			component: 'New/Library',
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	path: '/advising-development',
-	// 	name: 'AdvisingDevelopment',
-	// 	icon: 'TeamOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'advising-framework',
-	// 			name: 'AdvisingFramework',
-	// 			component: 'New/AdvisingFramework',
-	// 		},
-	// 		{
-	// 			path: 'IDP',
-	// 			name: 'IDP',
-	// 			component: 'New/IDP',
-	// 		},
-	// 		{
-	// 			path: 'advisor-appointment',
-	// 			name: 'AdvisorAppointment',
-	// 			component: 'New/AdvisorAppointment',
-	// 		},
-	// 	],
-	// },
+	{
+		path: '/my-profile',
+		name: 'MyProfile',
+		icon: 'UserOutlined',
+		component: 'New/MyProfile',
+	},
+	{
+		path: '/my-calendar',
+		name: 'MyCalendar',
+		icon: 'CalendarOutlined',
+		component: 'New/MyCalendar',
+	},
+	{
+		path: '/academic',
+		name: 'Academic',
+		icon: 'BookOutlined',
+		routes: [
+			{
+				path: 'course-registration',
+				name: 'CourseRegistration',
+				component: './HocTap/DangKyTinChi',
+			},
+			{
+				path: 'timetable',
+				name: 'Timetable',
+				component: 'Calendar',
+			},
+			{
+				path: 'grades-transcript',
+				name: 'GradesTranscript',
+				component: 'HocTap/KetQuaHocTap',
+			},
+			{
+				path: 'degree-audit',
+				name: 'DegreeAudit',
+				component: 'HocTap/TienTrinhHocTap',
+			},
+			{
+				path: 'graduation-review',
+				name: 'GraduationReview',
+				component: 'HocTap/XetTotNghiep',
+			},
+		],
+	},
+	{
+		path: '/learning-experience',
+		name: 'LearningExperience',
+		icon: 'ReadOutlined',
+		routes: [
+			{
+				path: 'lms',
+				name: 'Lms',
+				component: 'New/Lms',
+			},
+			{
+				path: 'lecture-materials',
+				name: 'LectureMaterials',
+				component: 'New/LectureMaterials',
+			},
+			{
+				path: 'assignments-submissions',
+				name: 'AssignmentsSubmissions',
+				component: 'New/AssignmentsSubmissions',
+			},
+			{
+				path: 'library',
+				name: 'Library',
+				component: 'New/Library',
+			},
+		],
+	},
+	{
+		path: '/advising-development',
+		name: 'AdvisingDevelopment',
+		icon: 'TeamOutlined',
+		routes: [
+			{
+				path: 'advising-framework',
+				name: 'AdvisingFramework',
+				component: 'New/AdvisingFramework',
+			},
+			{
+				path: 'IDP',
+				name: 'IDP',
+				component: 'New/IDP',
+			},
+			{
+				path: 'advisor-appointment',
+				name: 'AdvisorAppointment',
+				component: 'New/AdvisorAppointment',
+			},
+		],
+	},
 	{
 		path: '/experience-porfolio',
 		name: 'ExperiencePorfolio',
@@ -137,11 +137,11 @@ export default [
 				name: 'StudentDevelopment',
 				component: 'New/StudentDevelopment',
 			},
-			// {
-			// 	path: 'student-awarding',
-			// 	name: 'StudentAwarding',
-			// 	component: 'New/StudentAwarding',
-			// },
+			{
+				path: 'student-awarding',
+				name: 'StudentAwarding',
+				component: 'New/StudentAwarding',
+			},
 			{
 				path: 'events',
 				name: 'Events',
@@ -159,209 +159,209 @@ export default [
 			},
 		],
 	},
-	// {
-	// 	path: '/student-support',
-	// 	name: 'StudentSupport',
-	// 	icon: 'CustomerServiceOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'registrar-services',
-	// 			name: 'RegistrarServices',
-	// 			routes: [
-	// 				{
-	// 					path: 'registration',
-	// 					name: 'Registration',
-	// 					component: 'New/Registration',
-	// 				},
-	// 				{
-	// 					path: 'history',
-	// 					name: 'History',
-	// 					component: 'New/History',
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			path: 'health-clinic',
-	// 			name: 'HealthClinic',
-	// 			component: 'New/HealthClinic',
-	// 		},
-	// 		{
-	// 			path: 'mental-health',
-	// 			name: 'MentalHealth',
-	// 			component: 'New/MentalHealth',
-	// 		},
-	// 		{
-	// 			path: 'work-study',
-	// 			name: 'WorkStudy',
-	// 			component: 'New/WorkStudy',
-	// 		},
-	// 		{
-	// 			path: 'international',
-	// 			name: 'International',
-	// 			component: 'New/International',
-	// 		},
-	// 		{
-	// 			path: 'IT-support',
-	// 			name: 'ITSupport',
-	// 			component: 'New/ITSupport',
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	path: '/campus-life',
-	// 	name: 'CampusLife',
-	// 	icon: 'BankOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'student-housing',
-	// 			name: 'StudentHousing',
-	// 			component: 'New/StudentHousing',
-	// 		},
-	// 		{
-	// 			path: 'Club',
-	// 			name: 'Club',
-	// 			component: 'New/Club',
-	// 		},
-	// 		{
-	// 			path: 'code-conduct',
-	// 			name: 'CodeConduct',
-	// 			component: 'New/CodeConduct',
-	// 		},
-	// 		{
-	// 			path: 'facility-booking',
-	// 			name: 'FacilityBooking',
-	// 			component: 'New/FacilityBooking',
-	// 		},
-	// 		{
-	// 			path: 'campus-news',
-	// 			name: 'CampusNews',
-	// 			component: 'New/CampusNews',
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	path: '/career-industry',
-	// 	name: 'CareerIndustry',
-	// 	icon: 'RocketOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'internship',
-	// 			name: 'Internship',
-	// 			component: 'New/Internship',
-	// 		},
-	// 		{
-	// 			path: 'industry',
-	// 			name: 'Industry',
-	// 			component: 'New/Industry',
-	// 		},
-	// 		{
-	// 			path: 'career-pathways',
-	// 			name: 'CareerPathways',
-	// 			component: 'New/CareerPathways',
-	// 		},
-	// 		{
-	// 			path: 'CV-builder',
-	// 			name: 'CVBuilder',
-	// 			component: 'New/CVBuilder',
-	// 		},
-	// 		{
-	// 			path: 'mock-interview',
-	// 			name: 'MockInterview',
-	// 			component: 'New/MockInterview',
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	path: '/global-mobility',
-	// 	name: 'GlobalMobility',
-	// 	icon: 'GlobalOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'exchange-programs',
-	// 			name: 'ExchangePrograms',
-	// 			component: 'New/ExchangePrograms',
-	// 		},
-	// 		{
-	// 			path: 'study-abroad',
-	// 			name: 'StudyAbroad',
-	// 			component: 'New/StudyAbroad',
-	// 		},
-	// 		{
-	// 			path: 'visa',
-	// 			name: 'Visa',
-	// 			component: 'New/Visa',
-	// 		},
-	// 		{
-	// 			path: 'global-opportunities',
-	// 			name: 'GlobalOpportunities',
-	// 			component: 'New/GlobalOpportunities',
-	// 		},
-	// 		{
-	// 			path: 'global-network',
-	// 			name: 'GlobalNetwork',
-	// 			component: 'New/GlobalNetwork',
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	path: '/research-innovation',
-	// 	name: 'ResearchInnovation',
-	// 	icon: 'ExperimentOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'reserch-projects',
-	// 			name: 'ReserchProjects',
-	// 			component: 'New/ReserchProjects',
-	// 		},
-	// 		{
-	// 			path: 'publication-tracking',
-	// 			name: 'PublicationTracking',
-	// 			component: 'New/PublicationTracking',
-	// 		},
-	// 		{
-	// 			path: 'faculty-matching',
-	// 			name: 'FacultyMatching',
-	// 			component: 'New/FacultyMatching',
-	// 		},
-	// 		{
-	// 			path: 'grant-opportunities',
-	// 			name: 'GrantOpportunities',
-	// 			component: 'New/GrantOpportunities',
-	// 		},
-	// 		{
-	// 			path: 'research-pathway',
-	// 			name: 'ResearchPathway',
-	// 			component: 'New/ResearchPathway',
-	// 		},
-	// 	],
-	// },
-	// {
-	// 	path: '/finance',
-	// 	name: 'Finance',
-	// 	icon: 'DollarOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'tuition-billing',
-	// 			name: 'TuitionBilling',
-	// 			component: 'New/TuitionBilling',
-	// 		},
-	// 		{
-	// 			path: 'payment-tracking',
-	// 			name: 'PaymentTracking',
-	// 			component: 'New/PaymentTracking',
-	// 		},
-	// 		{
-	// 			path: 'scholarship',
-	// 			name: 'Scholarship',
-	// 			component: 'New/Scholarship',
-	// 		},
-	// 		{
-	// 			path: 'financial-planning',
-	// 			name: 'FinancialPlanning',
-	// 			component: 'New/FinancialPlanning',
-	// 		},
-	// 	],
-	// },
+	{
+		path: '/student-support',
+		name: 'StudentSupport',
+		icon: 'CustomerServiceOutlined',
+		routes: [
+			{
+				path: 'registrar-services',
+				name: 'RegistrarServices',
+				routes: [
+					{
+						path: 'registration',
+						name: 'Registration',
+						component: 'New/Registration',
+					},
+					{
+						path: 'history',
+						name: 'History',
+						component: 'New/History',
+					},
+				],
+			},
+			{
+				path: 'health-clinic',
+				name: 'HealthClinic',
+				component: 'New/HealthClinic',
+			},
+			{
+				path: 'mental-health',
+				name: 'MentalHealth',
+				component: 'New/MentalHealth',
+			},
+			{
+				path: 'work-study',
+				name: 'WorkStudy',
+				component: 'New/WorkStudy',
+			},
+			{
+				path: 'international',
+				name: 'International',
+				component: 'New/International',
+			},
+			{
+				path: 'IT-support',
+				name: 'ITSupport',
+				component: 'New/ITSupport',
+			},
+		],
+	},
+	{
+		path: '/campus-life',
+		name: 'CampusLife',
+		icon: 'BankOutlined',
+		routes: [
+			{
+				path: 'student-housing',
+				name: 'StudentHousing',
+				component: 'New/StudentHousing',
+			},
+			{
+				path: 'Club',
+				name: 'Club',
+				component: 'New/Club',
+			},
+			{
+				path: 'code-conduct',
+				name: 'CodeConduct',
+				component: 'New/CodeConduct',
+			},
+			{
+				path: 'facility-booking',
+				name: 'FacilityBooking',
+				component: 'New/FacilityBooking',
+			},
+			{
+				path: 'campus-news',
+				name: 'CampusNews',
+				component: 'New/CampusNews',
+			},
+		],
+	},
+	{
+		path: '/career-industry',
+		name: 'CareerIndustry',
+		icon: 'RocketOutlined',
+		routes: [
+			{
+				path: 'internship',
+				name: 'Internship',
+				component: 'New/Internship',
+			},
+			{
+				path: 'industry',
+				name: 'Industry',
+				component: 'New/Industry',
+			},
+			{
+				path: 'career-pathways',
+				name: 'CareerPathways',
+				component: 'New/CareerPathways',
+			},
+			{
+				path: 'CV-builder',
+				name: 'CVBuilder',
+				component: 'New/CVBuilder',
+			},
+			{
+				path: 'mock-interview',
+				name: 'MockInterview',
+				component: 'New/MockInterview',
+			},
+		],
+	},
+	{
+		path: '/global-mobility',
+		name: 'GlobalMobility',
+		icon: 'GlobalOutlined',
+		routes: [
+			{
+				path: 'exchange-programs',
+				name: 'ExchangePrograms',
+				component: 'New/ExchangePrograms',
+			},
+			{
+				path: 'study-abroad',
+				name: 'StudyAbroad',
+				component: 'New/StudyAbroad',
+			},
+			{
+				path: 'visa',
+				name: 'Visa',
+				component: 'New/Visa',
+			},
+			{
+				path: 'global-opportunities',
+				name: 'GlobalOpportunities',
+				component: 'New/GlobalOpportunities',
+			},
+			{
+				path: 'global-network',
+				name: 'GlobalNetwork',
+				component: 'New/GlobalNetwork',
+			},
+		],
+	},
+	{
+		path: '/research-innovation',
+		name: 'ResearchInnovation',
+		icon: 'ExperimentOutlined',
+		routes: [
+			{
+				path: 'reserch-projects',
+				name: 'ReserchProjects',
+				component: 'New/ReserchProjects',
+			},
+			{
+				path: 'publication-tracking',
+				name: 'PublicationTracking',
+				component: 'New/PublicationTracking',
+			},
+			{
+				path: 'faculty-matching',
+				name: 'FacultyMatching',
+				component: 'New/FacultyMatching',
+			},
+			{
+				path: 'grant-opportunities',
+				name: 'GrantOpportunities',
+				component: 'New/GrantOpportunities',
+			},
+			{
+				path: 'research-pathway',
+				name: 'ResearchPathway',
+				component: 'New/ResearchPathway',
+			},
+		],
+	},
+	{
+		path: '/finance',
+		name: 'Finance',
+		icon: 'DollarOutlined',
+		routes: [
+			{
+				path: 'tuition-billing',
+				name: 'TuitionBilling',
+				component: 'New/TuitionBilling',
+			},
+			{
+				path: 'payment-tracking',
+				name: 'PaymentTracking',
+				component: 'New/PaymentTracking',
+			},
+			{
+				path: 'scholarship',
+				name: 'Scholarship',
+				component: 'New/Scholarship',
+			},
+			{
+				path: 'financial-planning',
+				name: 'FinancialPlanning',
+				component: 'New/FinancialPlanning',
+			},
+		],
+	},
 
 	// DANH MUC HE THONG
 	// {

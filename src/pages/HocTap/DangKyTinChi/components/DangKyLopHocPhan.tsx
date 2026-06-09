@@ -10,18 +10,18 @@ import {
 import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Empty, Modal, Segmented } from 'antd';
-import { type TableRowSelection } from 'antd/lib/table/interface';
+import { Empty, Modal, Segmented, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
 import FilterHocPhanDKTC from './FilterHocPhan';
+import ModalDangKyNgay from './ModalDangKyNgay';
 import RenderLichHoc from './RenderLichHoc';
 
 const DangKyLopHocPhan = () => {
 	const intl = useIntl();
 	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel } = useModel('lophocphan.lophocphan');
+	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel, setRecord } = useModel('lophocphan.lophocphan');
 	const { danhSachLopDangKy, setDanhSachLopDangKy, tinhDataLichHoc, checkTrungLich } =
 		useModel('daotao.dotdangkytinchi');
 	const { record: recHocPhan, loaiDangKy } = useModel('hocphan.hocphan');
@@ -39,6 +39,8 @@ const DangKyLopHocPhan = () => {
 		}
 	});
 	// const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
+	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
+	const dangKyNgay: boolean = true;
 
 	const getData = () =>
 		recHocKy?.ma &&
@@ -82,95 +84,112 @@ const DangKyLopHocPhan = () => {
 		},
 	});
 
-	const rowSelection: TableRowSelection<LopHocPhan.IRecord> = {
-		columnWidth: 40,
-		hideSelectAll: true,
-		preserveSelectedRowKeys: true,
-		fixed: true,
-		// type: 'radio',     // Dùng radio không được
-		selectedRowKeys: danhSachLopDangKy?.map((item) => item.ten),
+	const isDaChonLop = (rec: LopHocPhan.IRecord) =>
+		!!danhSachLopDangKy.find((item) => item._id === rec._id || item.ten === rec.ten);
 
-		onChange: (selectedRowKeys, selectedRows) => {
-			const lopVuaChon = selectedRows?.at(-1);
-			// Nếu chọn ít nhất 1 lớp và chưa đăng ký
-			if (!lopVuaChon) return;
+	const getDisabledDangKy = (record: LopHocPhan.IRecord) => {
+		const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
+		const needCheckLopCha = lopCha && dangKyRoiMap[lopCha.loai]?.soThuTuLop !== lopCha.soThuTuLop;
+		// Check trùng cả thời khóa biểu của lớp cha
+		let allThoiKhoaBieu = [...(record.thoiKhoaBieuList ?? [])];
+		if (needCheckLopCha) {
+			allThoiKhoaBieu.push(...(lopCha?.thoiKhoaBieuList ?? []));
+		}
+		// Check sĩ số còn trống ở cả lớp cha nữa
+		let siSo = record.siSoToiDa - (record.siSo ?? 0) <= 0;
+		if (needCheckLopCha) {
+			siSo ||= !!lopCha?._id && lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0;
+		}
+		const failed1 = !!dangKyRoiMap[record.loai] || (!!dangKyRoiMap[lopCha?.loai!] && needCheckLopCha);
+		const failed2 = checkTrungLich(allThoiKhoaBieu);
+		const failed3 = !!record.children?.length;
+		const failed4 = cctFilter?.()
+			? siSo && (record.waitlistCount ?? 0) >= (settings?.SINH_VIEN?.extraSlots ?? 0)
+			: siSo;
 
-			const isHetCho = lopVuaChon.siSoToiDa - (lopVuaChon.siSo ?? 0) <= 0;
+		return failed1 || failed2 || failed3 || failed4;
+	};
 
-			const handleDangKy = (isWaitList = false) => {
-				if (
-					!lopVuaChon.children?.length &&
-					!dangKyRoiMap[lopVuaChon.loai!] &&
-					lopVuaChon.maHocPhan === recHocPhan?.ma
-				) {
-					const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
-					let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
-					const khoaNganh =
-						loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu : khoaNganhMe?.khoaNganhChinh;
-					const lopDangKy = {
-						hocPhan: recHocPhan,
-						maNganh: khoaNganh?.maNganh,
-						maKhoaNganh: khoaNganh?.ma,
-						// TODO: Update loại đăng ký
-						loai: ELoaiHocPhanDangKyTinChi.TIEN_TRINH,
-						trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
-						isWaitlist: isWaitList,
-					};
-					// Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
-					if (lopVuaChon.tenCha) {
-						const lopCha = danhSachLopDktc.find((item) => item.ten === lopVuaChon.tenCha);
-						if (!soTinChi) soTinChi = lopCha?.hocPhan?.soTinChi ?? 0;
-						// Thêm cả lớp cha vào để hiển thị lịch học ở lớp đăng ký
-						if (lopCha) temp.splice(0, 0, { ...lopCha, soTinChi, ...lopDangKy });
-					}
-					// Thêm lớp vừa chọn vào danh sách Lớp đăng ký
-					// Loại đăng ký theo loại học phần đã chọn
-					temp.splice(0, 0, { ...lopVuaChon, soTinChi, ...lopDangKy });
+	const buildLopDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitlist = false) => {
+		const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
+		let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
+		const khoaNganh =
+			loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu : khoaNganhMe?.khoaNganhChinh;
+		const lopDangKy = {
+			hocPhan: recHocPhan,
+			maNganh: khoaNganh?.maNganh,
+			maKhoaNganh: khoaNganh?.ma,
+			// TODO: Update loại đăng ký
+			loai: ELoaiHocPhanDangKyTinChi.TIEN_TRINH,
+			trangThai: dangKyNgay ? ETrangThaiDangKyTinChi.DA_DANG_KY : ETrangThaiDangKyTinChi.CHUA_DANG_KY,
+			isWaitlist,
+		};
 
-					setDanhSachLopDangKy(temp);
-					setCoDangKyMoi(true);
-					// Không tính lại lịch học ở đây vì sẽ trùng với các lớp trong môn hiện tại
-				}
-			};
+		const listDangKy: DangKyTinChi.ILopDangKy[] = [];
 
-			if (isHetCho && cctFilter?.()) {
-				Modal.confirm({
-					title: 'Lớp đã đầy',
-					content:
-						'Lớp này hiện đã đủ sĩ số. Bạn có muốn đăng ký vào danh sách chờ không? Bạn sẽ được tự động chuyển vào lớp khi có chỗ trống hoặc khi giảng viên phê duyệt.',
-					okText: 'Vào danh sách chờ',
-					cancelText: 'Hủy',
-					onOk: () => handleDangKy(true),
-				});
+		// Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
+		if (lopVuaChon.tenCha) {
+			const lopCha = danhSachLopDktc.find((item) => item.ten === lopVuaChon.tenCha);
+			if (!soTinChi) soTinChi = lopCha?.hocPhan?.soTinChi ?? 0;
+			// Thêm cả lớp cha vào để hiển thị lịch học ở lớp đăng ký
+			if (lopCha) listDangKy.push({ ...lopCha, soTinChi, ...lopDangKy } as DangKyTinChi.ILopDangKy);
+		}
+
+		// Thêm lớp vừa chọn vào danh sách Lớp đăng ký
+		// Loại đăng ký theo loại học phần đã chọn
+		listDangKy.push({ ...lopVuaChon, soTinChi, ...lopDangKy } as DangKyTinChi.ILopDangKy);
+
+		return {
+			temp: [...listDangKy, ...temp],
+			listDangKy,
+		};
+	};
+
+	const handleDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitList = false) => {
+		if (!lopVuaChon.children?.length && !dangKyRoiMap[lopVuaChon.loai!] && lopVuaChon.maHocPhan === recHocPhan?.ma) {
+			const { temp } = buildLopDangKy(lopVuaChon, isWaitList);
+
+			if (dangKyNgay) {
+				setRecord(lopVuaChon);
+				setVisibleDangKyNgay(true);
 				return;
 			}
 
-			handleDangKy(false);
-		},
+			setDanhSachLopDangKy(temp);
+			setCoDangKyMoi(true);
+			// Không tính lại lịch học ở đây vì sẽ trùng với các lớp trong môn hiện tại
+		}
+	};
 
-		getCheckboxProps: (record) => {
-			const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
-			const needCheckLopCha = lopCha && dangKyRoiMap[lopCha.loai]?.soThuTuLop !== lopCha.soThuTuLop;
-			// Check trùng cả thời khóa biểu của lớp cha
-			let allThoiKhoaBieu = [...(record.thoiKhoaBieuList ?? [])];
-			if (needCheckLopCha) {
-				allThoiKhoaBieu.push(...(lopCha?.thoiKhoaBieuList ?? []));
-			}
-			// Check sĩ số còn trống ở cả lớp cha nữa
-			let siSo = record.siSoToiDa - (record.siSo ?? 0) <= 0;
-			if (needCheckLopCha) {
-				siSo ||= !!lopCha?._id && lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0;
-			}
-			const failed1 = !!dangKyRoiMap[record.loai] || (!!dangKyRoiMap[lopCha?.loai!] && needCheckLopCha);
-			const failed2 = checkTrungLich(allThoiKhoaBieu);
-			const failed3 = !!record.children?.length;
-			const failed4 = cctFilter?.()
-				? siSo && (record.waitlistCount ?? 0) >= (settings?.SINH_VIEN?.extraSlots ?? 0)
-				: siSo;
-			return {
-				disabled: failed1 || failed2 || failed3 || failed4,
-			};
-		},
+	const onClickDangKy = (lopVuaChon: LopHocPhan.IRecord) => {
+		const isHetCho = lopVuaChon.siSoToiDa - (lopVuaChon.siSo ?? 0) <= 0;
+
+		if (isHetCho && cctFilter?.()) {
+			Modal.confirm({
+				title: 'Lớp đã đầy',
+				content:
+					'Lớp này hiện đã đủ sĩ số. Bạn có muốn đăng ký vào danh sách chờ không? Bạn sẽ được tự động chuyển vào lớp khi có chỗ trống hoặc khi giảng viên phê duyệt.',
+				okText: 'Vào danh sách chờ',
+				cancelText: 'Hủy',
+				onOk: () => handleDangKy(lopVuaChon, true),
+			});
+			return;
+		}
+
+		handleDangKy(lopVuaChon, false);
+	};
+
+	const onClickBoChon = (rec: LopHocPhan.IRecord) => {
+		if (dangKyNgay) return;
+
+		const temp = danhSachLopDangKy.filter(
+			(item) =>
+				item.maHocPhan !== rec.maHocPhan ||
+				(item._id !== rec._id && item.ten !== rec.ten && item.tenCha !== rec.ten && item.ten !== rec.tenCha),
+		);
+
+		setDanhSachLopDangKy(temp);
+		setCoDangKyMoi(true);
 	};
 
 	/**
@@ -238,31 +257,35 @@ const DangKyLopHocPhan = () => {
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.sisotoida' }),
 			dataIndex: 'siSoToiDa',
 			align: 'center',
-			width: 60,
+			width: 80,
 			onCell,
+			sortable: true,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.controng' }),
 			align: 'center',
-			width: 60,
+			width: 80,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
 			onCell,
+			sortable: true,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.dlphong' }),
 			dataIndex: 'phongCapacity',
 			align: 'center',
-			width: 60,
+			width: 120,
 			onCell,
+			sortable: true,
 			hide: !cctFilter?.(),
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.hangcho' }),
 			dataIndex: 'waitlistCount',
 			align: 'center',
-			width: 60,
+			width: 80,
 			render: (val, rec) => `${val ?? 0}/${settings?.SINH_VIEN?.extraSlots ?? 0}`,
 			onCell,
+			sortable: true,
 			hide: !cctFilter?.(),
 		},
 		{
@@ -284,6 +307,51 @@ const DangKyLopHocPhan = () => {
 			dataIndex: 'maTinhChat',
 			align: 'center',
 			width: 60,
+			onCell,
+		},
+		{
+			title: 'Thao tác',
+			align: 'center',
+			width: 120,
+			fixed: 'right',
+			render: (val, rec) => {
+				const daChon = isDaChonLop(rec);
+				const disabled = getDisabledDangKy(rec);
+
+				if (daChon) {
+					return (
+						<Tooltip title={dangKyNgay ? 'Đã đăng ký' : 'Đã chọn'}>
+							<div
+								className={`action-register ${!dangKyNgay ? 'action-register-selected' : 'action-register-disabled'}`}
+								onClick={(e) => {
+									e.stopPropagation();
+
+									if (!dangKyNgay) {
+										onClickBoChon(rec);
+									}
+								}}
+							>
+								{dangKyNgay ? 'Đã đăng ký' : 'Đã chọn'}
+							</div>
+						</Tooltip>
+					);
+				}
+
+				return (
+					<div
+						className={`action-register ${disabled ? 'action-register-disabled' : 'action-register-primary'}`}
+						onClick={(e) => {
+							e.stopPropagation();
+
+							if (!disabled) {
+								onClickDangKy(rec);
+							}
+						}}
+					>
+						{dangKyNgay ? 'Đăng ký' : 'Chọn'}
+					</div>
+				);
+			},
 			onCell,
 		},
 	];
@@ -311,7 +379,6 @@ const DangKyLopHocPhan = () => {
 								expandedRowKeys: expandedLopHocPhan,
 								onExpand,
 							},
-							rowSelection,
 						}}
 						otherButtons={
 							loaiDangKy === ELoaiDangKyTheoLop.LOP_HANH_CHINH
@@ -365,6 +432,8 @@ const DangKyLopHocPhan = () => {
 					style={{ marginTop: 30, marginBottom: 30 }}
 				/>
 			)}
+
+			<ModalDangKyNgay visible={visibleDangKyNgay} setVisible={setVisibleDangKyNgay} />
 		</FilterHocPhanDKTC>
 	);
 };
