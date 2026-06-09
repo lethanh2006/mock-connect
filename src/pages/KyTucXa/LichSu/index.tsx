@@ -11,7 +11,7 @@ import SelectDotDangKyKTX from './components/SelectDotDangKy';
 import { FilterIconCustom } from '@/pages/KyTucXa/DangKy/components/IconsRoom';
 import { UnorderedListOutlined, DeleteOutlined, CreditCardOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Popover } from 'antd';
-import PaymentModal from './components/PaymentModal';
+import PaymentModal from './components/ModalPayment';
 import dayjs from '@/utils/dayjs';
 
 const LichSuDangKyKTX = () => {
@@ -124,6 +124,9 @@ const LichSuDangKyKTX = () => {
                 if ([ETrangThaiDuyet.DA_THANH_TOAN].includes(val as ETrangThaiDuyet)) {
                     color = 'success';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.success' });
+                } else if ([ETrangThaiDuyet.DA_NHAN_PHONG].includes(val as ETrangThaiDuyet)) {
+                    color = 'success';
+                    label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.checkedin' });
                 } else if ([ETrangThaiDuyet.CHO_THANH_TOAN].includes(val as ETrangThaiDuyet)) {
                     color = 'processing';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.processing' });

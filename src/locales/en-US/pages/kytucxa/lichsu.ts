@@ -15,6 +15,7 @@ export default {
 
 	'kytucxa.lichsu.table.status': 'Status',
 	'kytucxa.lichsu.table.status.success': 'Renting',
+	'kytucxa.lichsu.table.status.checkedin': 'Checked-in',
 	'kytucxa.lichsu.table.status.processing': 'Pending',
 	'kytucxa.lichsu.table.status.expired': 'Expired',
 	'kytucxa.lichsu.table.action': 'Action',

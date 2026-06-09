@@ -12,6 +12,7 @@ export enum ETrangThaiMinhChung {
 export enum ETrangThaiDuyet {
 	CHO_THANH_TOAN = 'Chờ thanh toán',
 	DA_THANH_TOAN = 'Đã thanh toán',
+	DA_NHAN_PHONG = 'Đã nhận phòng',
 	HUY = 'Hủy',
 }
 
