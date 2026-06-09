@@ -12,9 +12,10 @@ ENV APP_CONFIG_APP_VERSION=250513.1045
 
 ENV APP_CONFIG_TEN_TRUONG='Trường Đại học VinUni'
 ENV APP_CONFIG_TIEN_TO_TRUONG='Trường'
-ENV APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH='VIN'
+ENV APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH='VINUNI'
 ENV APP_CONFIG_PRIMARY_COLOR='#134D8B'
 ENV APP_CONFIG_HIGHLIGHT_COLOR='#C72127'
+ENV APP_CONFIG_HO_TRO_KY_THUAT=
 
 ENV APP_CONFIG_URL_LANDING=
 ENV APP_CONFIG_URL_CONNECT=https://connect-sit.vercel.app/
@@ -37,7 +38,6 @@ ENV APP_CONFIG_URL_KY_SO=
 
 ENV APP_CONFIG_MOODLE_ENDPOINT=''
 
-
 # Set working directory
 WORKDIR /app
 
@@ -47,7 +47,7 @@ RUN yarn install
 COPY . /app
 
 FROM development AS build
-RUN yarn build
+RUN cp .env.uat .env.production && yarn build
 
 FROM nginx:alpine
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf

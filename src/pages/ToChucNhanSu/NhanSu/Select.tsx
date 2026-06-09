@@ -4,7 +4,7 @@ import type { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import { Empty, Select, Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const SelectNhanSuDebounce = (props: {
 	value?: string | string[];
@@ -20,6 +20,8 @@ const SelectNhanSuDebounce = (props: {
 	placeholder?: string;
 	hidePersonalInfo?: boolean; //Ẩn thông tin cá nhân
 }) => {
+	const intl = useIntl();
+
 	const {
 		value,
 		onChange,
@@ -33,6 +35,7 @@ const SelectNhanSuDebounce = (props: {
 		placeholder,
 		hidePersonalInfo,
 	} = props;
+
 	const { danhSach, getModel, loading, searchCanBoModel } = useModel('tochucnhansu.nhansu');
 	const { initialState } = useModel('@@initialState');
 	const [keyword, setKeyword] = useState<string>();
@@ -78,7 +81,7 @@ const SelectNhanSuDebounce = (props: {
 
 	return props.isView ? (
 		<>
-			{dataView?.hoDem ?? ''} ${dataView?.ten ?? ''} - ${dataView?.maCanBo ?? ''}
+			{dataView?.hoDem ?? ''} {dataView?.ten ?? ''} - {dataView?.maCanBo ?? ''}
 		</>
 	) : (
 		<Select
@@ -91,9 +94,13 @@ const SelectNhanSuDebounce = (props: {
 			onSearch={(val) => searchDebounceSinhVien(val)}
 			notFoundContent={
 				loading ? (
-					<Spin spinning={true} tip='Đang tìm kiếm...' style={{ width: '100%', margin: 10 }} />
+					<Spin
+						spinning
+						tip={intl.formatMessage({ id: 'selectNhanSu.loading' })}
+						style={{ width: '100%', margin: 10 }}
+					/>
 				) : (
-					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='Không có dữ liệu, hãy thử nhập từ khóa khác!' />
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={intl.formatMessage({ id: 'selectNhanSu.empty' })} />
 				)
 			}
 			options={(hidePersonalInfo
@@ -108,7 +115,7 @@ const SelectNhanSuDebounce = (props: {
 			}))}
 			showSearch
 			optionFilterProp='label'
-			placeholder={placeholder || 'Chọn cán bộ, giảng viên (tìm kiếm theo họ tên hoặc mã nhân sự)'}
+			placeholder={placeholder || intl.formatMessage({ id: 'selectNhanSu.placeholder' })}
 			style={{ width: '100%', ...style }}
 			showArrow
 		/>

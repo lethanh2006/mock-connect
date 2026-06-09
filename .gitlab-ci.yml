@@ -1,0 +1,311 @@
+stages:
+  - sast_scan
+  - sast_upload
+  - sca_source
+  - prepare
+  - build
+  - sca_image
+  - update-gitops
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_BRANCH == "develop" || $CI_COMMIT_BRANCH =~ /^uat(-.+)?$/)
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+    - if: $CI_COMMIT_TAG =~ /^build_.+/
+    - if: $CI_COMMIT_TAG =~ /^release_.+/
+    - when: never
+
+variables:
+  AWS_ACCOUNT_ID: "520492793952"
+  AWS_REGION: "ap-southeast-1"
+  ECR_REGISTRY: "520492793952.dkr.ecr.ap-southeast-1.amazonaws.com"
+  ECR_REPO_NAME: "vwa-connect"
+  PROD_BUILD_BASE_TAG: "build-base-prod"
+  APP_NAME: "dhs-slink-web"
+  GIT_DEPTH: 1
+  CICD_ENGAGEMENT_NAME: "CICD Runs - ${CI_COMMIT_REF_NAME}"
+
+include:
+  - project: 'vinsoc-ai/anbm-pentest/security-templates'
+    ref: main
+    file:
+      - '/dojo-context.gitlab-ci.yml'
+      - '/namespace-mirror.gitlab-ci.yml'
+      - '/vuln-scan.gitlab-ci.yml'
+      - '/sbom-scan.gitlab-ci.yml'
+      - '/image-scan.gitlab-ci.yml'
+  - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-dev'
+    ref: master
+    file:
+      - '.gitlab/templates/jfrog-build.gitlab-ci.yml'
+      - '.gitlab/cd-update-image.yml'
+  - project: 'vsf-qtvhgd/vinuni/digital-university/devsecops/gitops-prod'
+    ref: master
+    file: '.gitlab/cd-update-image.yml'
+build_develop:
+  stage: build
+  resource_group: "vwa-connect-dev-runner-heavy"
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.0-debug
+    entrypoint: [""]
+  tags:
+    - runner-vu-digital-dev
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "2Gi"
+    KUBERNETES_MEMORY_LIMIT: "5Gi"
+    KUBERNETES_CPU_REQUEST: "2"
+    KUBERNETES_CPU_LIMIT: "4"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "10Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "20Gi"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == "develop" || $CI_COMMIT_REF_NAME =~ /^uat(-.+)?$/)
+  script:
+    - mkdir -p /kaniko/.docker
+    - |
+      cat > /kaniko/.docker/config.json << DOCKEREOF
+      {
+        "credHelpers": {
+          "${ECR_REGISTRY}": "ecr-login"
+        }
+      }
+      DOCKEREOF
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "${ECR_REGISTRY}/vwa-connect:${CI_COMMIT_SHORT_SHA}"
+      --destination "${ECR_REGISTRY}/vwa-connect:develop"
+      --cache=true
+      --cache-repo="${ECR_REGISTRY}/digital-dev-build-cache"
+      --snapshot-mode=redo
+      --use-new-run
+      --compressed-caching=false
+      --cleanup
+  interruptible: true
+
+jfrog_build_connect:
+  extends: .jfrog_kaniko_build_job
+  resource_group: "vwa-connect-dev-runner-heavy"
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    BUILD_CONTEXT: "${CI_PROJECT_DIR}"
+    BUILD_DOCKERFILE: "${CI_PROJECT_DIR}/Dockerfile"
+    BUILD_DESTINATION: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}:${CI_COMMIT_SHORT_SHA}"
+
+sbom_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+trivy_source_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+image_scan_connect:
+  extends: .image_scan_template
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    DOCKER_IMAGE_NAME: "${JFROG_REGISTRY}/${JFROG_IMAGE_REPO}/${APP_NAME}:${CI_COMMIT_SHORT_SHA}"
+    TRIVY_USERNAME: "${JFROG_USER}"
+    TRIVY_PASSWORD: "${JFROG_TOKEN}"
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+  needs:
+    - jfrog_build_connect
+
+semgrep_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+mobsf_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+gosec_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+gitleaks_scan:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+sast_upload:
+  tags:
+    - vu-aund
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^scan_.+/
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "512Mi"
+    KUBERNETES_MEMORY_LIMIT: "1Gi"
+    KUBERNETES_HELPER_MEMORY_REQUEST: "256Mi"
+    KUBERNETES_HELPER_MEMORY_LIMIT: "512Mi"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "2Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "4Gi"
+
+update_gitops:
+  extends: .update_image_tag
+  resource_group: "vwa-connect-dev-runner-heavy"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == "develop" || $CI_COMMIT_REF_NAME =~ /^uat(-.+)?$/)
+  needs:
+    - build_develop
+
+# ============ PROD ============
+build_custom_image_prod:
+  stage: prepare
+  resource_group: "vwa-connect-prod-runner-heavy"
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.0-debug
+    entrypoint: [""]
+  tags:
+    - runner-vu-digital-prod
+  variables:
+    AWS_ACCOUNT_ID: "537557168856"
+    ECR_REGISTRY: "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com"
+    KUBERNETES_MEMORY_REQUEST: "1Gi"
+    KUBERNETES_MEMORY_LIMIT: "3Gi"
+    KUBERNETES_CPU_REQUEST: "1"
+    KUBERNETES_CPU_LIMIT: "2"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "5Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "10Gi"
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^build_.+/
+  script:
+    - mkdir -p /kaniko/.docker
+    - |
+      cat > /kaniko/.docker/config.json << DOCKEREOF
+      {
+        "credHelpers": {
+          "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com": "ecr-login"
+        }
+      }
+      DOCKEREOF
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/DockerfileBuildBase"
+      --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:${PROD_BUILD_BASE_TAG}-${CI_COMMIT_TAG}"
+      --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:${PROD_BUILD_BASE_TAG}"
+      --cache=true
+      --cache-repo="537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/prod-build-cache"
+      --snapshot-mode=redo
+      --use-new-run
+      --compressed-caching=false
+      --cleanup
+  interruptible: true
+
+build_prod:
+  stage: build
+  resource_group: "vwa-connect-prod-runner-heavy"
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.0-debug
+    entrypoint: [""]
+  tags:
+    - runner-vu-digital-prod
+  variables:
+    AWS_ACCOUNT_ID: "537557168856"
+    ECR_REGISTRY: "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com"
+    KUBERNETES_MEMORY_REQUEST: "1Gi"
+    KUBERNETES_MEMORY_LIMIT: "3Gi"
+    KUBERNETES_CPU_REQUEST: "1"
+    KUBERNETES_CPU_LIMIT: "2"
+    KUBERNETES_EPHEMERAL_STORAGE_REQUEST: "5Gi"
+    KUBERNETES_EPHEMERAL_STORAGE_LIMIT: "10Gi"
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^release_.+/
+  script:
+    - mkdir -p /kaniko/.docker
+    - |
+      cat > /kaniko/.docker/config.json << DOCKEREOF
+      {
+        "credHelpers": {
+          "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com": "ecr-login"
+        }
+      }
+      DOCKEREOF
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/DockerfileProd"
+      --build-arg "BUILD_BASE_IMAGE=537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:${PROD_BUILD_BASE_TAG}"
+      --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:${CI_COMMIT_TAG}"
+      --destination "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/vwa-connect:latest"
+      --cache=true
+      --cache-repo="537557168856.dkr.ecr.ap-southeast-1.amazonaws.com/prod-build-cache"
+      --snapshot-mode=redo
+      --use-new-run
+      --compressed-caching=false
+      --cleanup
+  interruptible: true
+
+update_gitops_prod:
+  extends: .update_image_tag_prod
+  resource_group: "vwa-connect-prod-runner-heavy"
+  variables:
+    AWS_ACCOUNT_ID: "537557168856"
+    ECR_REGISTRY: "537557168856.dkr.ecr.ap-southeast-1.amazonaws.com"
+  needs:
+    - build_prod

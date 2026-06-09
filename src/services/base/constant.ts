@@ -197,6 +197,7 @@ export enum ESettingKey {
 	GENERAL_INFO = 'GENERAL_INFO',
 	THU_VIEN_HOC_LIEU = 'THU_VIEN_HOC_LIEU',
 	SINH_VIEN = 'SINH_VIEN',
+	CCT_TRANSCRIPT = 'CCT_TRANSCRIPT',
 }
 
 /** Định dạng file */

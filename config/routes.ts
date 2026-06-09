@@ -13,11 +13,11 @@ export default [
 	},
 
 	// GROUP TITLE
-	{
-		name: 'DashboardGroup',
-		path: '/__group__/dashboard',
-		disabled: true,
-	},
+	// {
+	// 	name: 'DashboardGroup',
+	// 	path: '/__group__/dashboard',
+	// 	disabled: true,
+	// },
 
 	///////////////////////////////////
 
@@ -25,15 +25,343 @@ export default [
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
-		component: 'TrangChu',
+		component: 'TrangChuV2',
 		icon: 'HomeOutlined',
 	},
+	// {
+	// 	path: '/gioi-thieu',
+	// 	name: 'About',
+	// 	component: 'TienIch/GioiThieu',
+	// 	hideInMenu: true,
+	// },
+	// {
+	// 	path: '/my-profile',
+	// 	name: 'MyProfile',
+	// 	icon: 'UserOutlined',
+	// 	component: 'New/MyProfile',
+	// },
+	// {
+	// 	path: '/my-calendar',
+	// 	name: 'MyCalendar',
+	// 	icon: 'CalendarOutlined',
+	// 	component: 'New/MyCalendar',
+	// },
+	// {
+	// 	path: '/academic',
+	// 	name: 'Academic',
+	// 	icon: 'BookOutlined',
+	// 	routes: [
+	// 		{
+	// 			path: 'course-registration',
+	// 			name: 'CourseRegistration',
+	// 			component: 'New/CourseRegistration',
+	// 		},
+	// 		{
+	// 			path: 'timetable',
+	// 			name: 'Timetable',
+	// 			component: 'New/Timetable',
+	// 		},
+	// 		{
+	// 			path: 'grades-transcript',
+	// 			name: 'GradesTranscript',
+	// 			component: 'New/GradesTranscript',
+	// 		},
+	// 		{
+	// 			path: 'degree-audit',
+	// 			name: 'DegreeAudit',
+	// 			component: 'New/DegreeAudit',
+	// 		},
+	// 		{
+	// 			path: 'graduation-review',
+	// 			name: 'GraduationReview',
+	// 			component: 'New/GraduationReview',
+	// 		},
+	// 	],
+	// },
+	// {
+	// 	path: '/learning-experience',
+	// 	name: 'LearningExperience',
+	// 	icon: 'ReadOutlined',
+	// 	routes: [
+	// 		{
+	// 			path: 'lms',
+	// 			name: 'Lms',
+	// 			component: 'New/Lms',
+	// 		},
+	// 		{
+	// 			path: 'lecture-materials',
+	// 			name: 'LectureMaterials',
+	// 			component: 'New/LectureMaterials',
+	// 		},
+	// 		{
+	// 			path: 'assignments-submissions',
+	// 			name: 'AssignmentsSubmissions',
+	// 			component: 'New/AssignmentsSubmissions',
+	// 		},
+	// 		{
+	// 			path: 'library',
+	// 			name: 'Library',
+	// 			component: 'New/Library',
+	// 		},
+	// 	],
+	// },
+	// {
+	// 	path: '/advising-development',
+	// 	name: 'AdvisingDevelopment',
+	// 	icon: 'TeamOutlined',
+	// 	routes: [
+	// 		{
+	// 			path: 'advising-framework',
+	// 			name: 'AdvisingFramework',
+	// 			component: 'New/AdvisingFramework',
+	// 		},
+	// 		{
+	// 			path: 'IDP',
+	// 			name: 'IDP',
+	// 			component: 'New/IDP',
+	// 		},
+	// 		{
+	// 			path: 'advisor-appointment',
+	// 			name: 'AdvisorAppointment',
+	// 			component: 'New/AdvisorAppointment',
+	// 		},
+	// 	],
+	// },
 	{
-		path: '/gioi-thieu',
-		name: 'About',
-		component: 'TienIch/GioiThieu',
-		hideInMenu: true,
+		path: '/experience-porfolio',
+		name: 'ExperiencePorfolio',
+		icon: 'FolderOpenOutlined',
+		routes: [
+			{
+				path: 'student-development',
+				name: 'StudentDevelopment',
+				component: 'New/StudentDevelopment',
+			},
+			// {
+			// 	path: 'student-awarding',
+			// 	name: 'StudentAwarding',
+			// 	component: 'New/StudentAwarding',
+			// },
+			{
+				path: 'events',
+				name: 'Events',
+				component: 'CCT/Activity',
+			},
+			{
+				path: 'activity-logging',
+				name: 'ActivityLogging',
+				component: 'CCT/History',
+			},
+			{
+				path: 'CCT-porfolio',
+				name: 'CCTPorfolio',
+				component: 'CCT/MyCCT',
+			},
+		],
 	},
+	// {
+	// 	path: '/student-support',
+	// 	name: 'StudentSupport',
+	// 	icon: 'CustomerServiceOutlined',
+	// 	routes: [
+	// 		{
+	// 			path: 'registrar-services',
+	// 			name: 'RegistrarServices',
+	// 			routes: [
+	// 				{
+	// 					path: 'registration',
+	// 					name: 'Registration',
+	// 					component: 'New/Registration',
+	// 				},
+	// 				{
+	// 					path: 'history',
+	// 					name: 'History',
+	// 					component: 'New/History',
+	// 				},
+	// 			],
+	// 		},
+	// 		{
+	// 			path: 'health-clinic',
+	// 			name: 'HealthClinic',
+	// 			component: 'New/HealthClinic',
+	// 		},
+	// 		{
+	// 			path: 'mental-health',
+	// 			name: 'MentalHealth',
+	// 			component: 'New/MentalHealth',
+	// 		},
+	// 		{
+	// 			path: 'work-study',
+	// 			name: 'WorkStudy',
+	// 			component: 'New/WorkStudy',
+	// 		},
+	// 		{
+	// 			path: 'international',
+	// 			name: 'International',
+	// 			component: 'New/International',
+	// 		},
+	// 		{
+	// 			path: 'IT-support',
+	// 			name: 'ITSupport',
+	// 			component: 'New/ITSupport',
+	// 		},
+	// 	],
+	// },
+	// {
+	// 	path: '/campus-life',
+	// 	name: 'CampusLife',
+	// 	icon: 'BankOutlined',
+	// 	routes: [
+	// 		{
+	// 			path: 'student-housing',
+	// 			name: 'StudentHousing',
+	// 			component: 'New/StudentHousing',
+	// 		},
+	// 		{
+	// 			path: 'Club',
+	// 			name: 'Club',
+	// 			component: 'New/Club',
+	// 		},
+	// 		{
+	// 			path: 'code-conduct',
+	// 			name: 'CodeConduct',
+	// 			component: 'New/CodeConduct',
+	// 		},
+	// 		{
+	// 			path: 'facility-booking',
+	// 			name: 'FacilityBooking',
+	// 			component: 'New/FacilityBooking',
+	// 		},
+	// 		{
+	// 			path: 'campus-news',
+	// 			name: 'CampusNews',
+	// 			component: 'New/CampusNews',
+	// 		},
+	// 	],
+	// },
+	// {
+	// 	path: '/career-industry',
+	// 	name: 'CareerIndustry',
+	// 	icon: 'RocketOutlined',
+	// 	routes: [
+	// 		{
+	// 			path: 'internship',
+	// 			name: 'Internship',
+	// 			component: 'New/Internship',
+	// 		},
+	// 		{
+	// 			path: 'industry',
+	// 			name: 'Industry',
+	// 			component: 'New/Industry',
+	// 		},
+	// 		{
+	// 			path: 'career-pathways',
+	// 			name: 'CareerPathways',
+	// 			component: 'New/CareerPathways',
+	// 		},
+	// 		{
+	// 			path: 'CV-builder',
+	// 			name: 'CVBuilder',
+	// 			component: 'New/CVBuilder',
+	// 		},
+	// 		{
+	// 			path: 'mock-interview',
+	// 			name: 'MockInterview',
+	// 			component: 'New/MockInterview',
+	// 		},
+	// 	],
+	// },
+	// {
+	// 	path: '/global-mobility',
+	// 	name: 'GlobalMobility',
+	// 	icon: 'GlobalOutlined',
+	// 	routes: [
+	// 		{
+	// 			path: 'exchange-programs',
+	// 			name: 'ExchangePrograms',
+	// 			component: 'New/ExchangePrograms',
+	// 		},
+	// 		{
+	// 			path: 'study-abroad',
+	// 			name: 'StudyAbroad',
+	// 			component: 'New/StudyAbroad',
+	// 		},
+	// 		{
+	// 			path: 'visa',
+	// 			name: 'Visa',
+	// 			component: 'New/Visa',
+	// 		},
+	// 		{
+	// 			path: 'global-opportunities',
+	// 			name: 'GlobalOpportunities',
+	// 			component: 'New/GlobalOpportunities',
+	// 		},
+	// 		{
+	// 			path: 'global-network',
+	// 			name: 'GlobalNetwork',
+	// 			component: 'New/GlobalNetwork',
+	// 		},
+	// 	],
+	// },
+	// {
+	// 	path: '/research-innovation',
+	// 	name: 'ResearchInnovation',
+	// 	icon: 'ExperimentOutlined',
+	// 	routes: [
+	// 		{
+	// 			path: 'reserch-projects',
+	// 			name: 'ReserchProjects',
+	// 			component: 'New/ReserchProjects',
+	// 		},
+	// 		{
+	// 			path: 'publication-tracking',
+	// 			name: 'PublicationTracking',
+	// 			component: 'New/PublicationTracking',
+	// 		},
+	// 		{
+	// 			path: 'faculty-matching',
+	// 			name: 'FacultyMatching',
+	// 			component: 'New/FacultyMatching',
+	// 		},
+	// 		{
+	// 			path: 'grant-opportunities',
+	// 			name: 'GrantOpportunities',
+	// 			component: 'New/GrantOpportunities',
+	// 		},
+	// 		{
+	// 			path: 'research-pathway',
+	// 			name: 'ResearchPathway',
+	// 			component: 'New/ResearchPathway',
+	// 		},
+	// 	],
+	// },
+	// {
+	// 	path: '/finance',
+	// 	name: 'Finance',
+	// 	icon: 'DollarOutlined',
+	// 	routes: [
+	// 		{
+	// 			path: 'tuition-billing',
+	// 			name: 'TuitionBilling',
+	// 			component: 'New/TuitionBilling',
+	// 		},
+	// 		{
+	// 			path: 'payment-tracking',
+	// 			name: 'PaymentTracking',
+	// 			component: 'New/PaymentTracking',
+	// 		},
+	// 		{
+	// 			path: 'scholarship',
+	// 			name: 'Scholarship',
+	// 			component: 'New/Scholarship',
+	// 		},
+	// 		{
+	// 			path: 'financial-planning',
+	// 			name: 'FinancialPlanning',
+	// 			component: 'New/FinancialPlanning',
+	// 		},
+	// 	],
+	// },
 
 	// DANH MUC HE THONG
 	// {
@@ -57,139 +385,134 @@ export default [
 	// },
 
 	// MENU CHUNG
-	{
-		name: 'ThongTinCaNhan',
-		icon: 'idcard',
-		path: '/thong-tin-ca-nhan',
-		component: 'SinhVien',
-	},
+	// {
+	// 	name: 'ThongTinCaNhan',
+	// 	icon: 'idcard',
+	// 	path: '/thong-tin-ca-nhan',
+	// 	component: 'SinhVien',
+	// },
 
-	{
-		name: 'KeHoachNamHoc',
-		path: '/ke-hoach-nam-hoc',
-		icon: 'TableOutlined',
-		component: 'DaoTao/KeHoachNamHoc',
-	},
+	// {
+	// 	name: 'KeHoachNamHoc',
+	// 	path: '/ke-hoach-nam-hoc',
+	// 	icon: 'TableOutlined',
+	// 	component: 'DaoTao/KeHoachNamHoc',
+	// },
 
-	{
-		name: 'Lich',
-		icon: 'CalendarOutlined',
-		path: '/calendar',
-		component: 'Calendar',
-	},
+	// {
+	// 	name: 'Lich',
+	// 	icon: 'CalendarOutlined',
+	// 	path: '/calendar',
+	// 	component: 'Calendar',
+	// },
 
-	{
-		name: 'LopHanhChinh',
-		icon: 'hdd',
-		path: 'lop-hanh-chinh',
-		component: 'HocTap/LopHanhChinh',
-	},
+	// {
+	// 	name: 'LopHanhChinh',
+	// 	icon: 'hdd',
+	// 	path: 'lop-hanh-chinh',
+	// 	component: 'HocTap/LopHanhChinh',
+	// },
 
-	{
-		name: 'KeHoachNCKH',
-		icon: 'FileOutlined',
-		path: '/ke-hoach-nckh',
-		component: 'KhoaHoc/KeHoach',
-	},
+	// {
+	// 	name: 'KeHoachNCKH',
+	// 	icon: 'FileOutlined',
+	// 	path: '/ke-hoach-nckh',
+	// 	component: 'KhoaHoc/KeHoach',
+	// },
 
 	// MENU SINH VIEN
-	{
-		name: 'HocTap',
-		path: '/hoc-tap',
-		icon: 'EditOutlined',
-		// access: 'sinhVien',
-		routes: [
-			{
-				name: 'TienTrinhHocTap',
-				path: 'tien-trinh-hoc-tap',
-				component: 'HocTap/TienTrinhHocTap',
-			},
-			{
-				name: 'NhuCauHocPhan',
-				path: 'dang-ky-hoc-phan-nhu-cau',
-				component: './HocTap/HocPhanNhuCau',
-				access: 'hocPhanNhuCauFilter',
-			},
-			{ name: 'DangKyTinChi', path: 'dang-ky-tin-chi', component: './HocTap/DangKyTinChi' },
-			{ name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
+	// {
+	// 	name: 'HocTap',
+	// 	path: '/hoc-tap',
+	// 	icon: 'EditOutlined',
+	// 	// access: 'sinhVien',
+	// 	routes: [
+	// 		{
+	// 			name: 'TienTrinhHocTap',
+	// 			path: 'tien-trinh-hoc-tap',
+	// 			component: 'HocTap/TienTrinhHocTap',
+	// 		},
+	// 		// { name: 'NhuCauHocPhan', path: 'dang-ky-hoc-phan-nhu-cau', component: './HocTap/HocPhanNhuCau' },
+	// 		{ name: 'DangKyTinChi', path: 'dang-ky-tin-chi', component: './HocTap/DangKyTinChi' },
+	// 		{ name: 'DangKyNhuCau', path: 'dang-ky-nhu-cau', component: './HocTap/DangKyNhuCau' },
 
-			{
-				name: 'LopHocPhan',
-				path: 'lop-tin-chi',
-				routes: [
-					{
-						path: '',
-						hideInMenu: true,
-						component: 'HocTap/LopHocPhan',
-						exact: true,
-					},
-					{
-						name: 'LopHocPhan',
-						path: ':id',
-						component: 'HocTap/LopHocPhan/$id',
-						hideInMenu: true,
-						exact: true,
-					},
-				],
-			},
-			{ name: 'LichThi', path: 'lich-thi', component: 'KhaoThi/LichThi' },
-			{ name: 'BaiThiCuoiKy', path: 'bai-thi-cuoi-ky', component: 'HocTap/BaiThiCuoiKy' },
-			{
-				name: 'KetQuaHocTap',
-				path: 'ket-qua-hoc-tap',
-				// access: 'sinhVien',
-				component: 'HocTap/KetQuaHocTap',
-			},
-			{
-				name: 'XetTotNghiep',
-				path: 'xet-tot-nghiep',
-				routes: [
-					{
-						name: 'ChungChiTotNghiep',
-						path: 'chung-chi-tot-nghiep',
-						component: 'HocTap/XetTotNghiep/ChungChiTotNghiep',
-					},
-					{
-						name: 'XetTotNghiep',
-						path: 'xet-tot-nghiep',
-						component: 'HocTap/XetTotNghiep',
-					},
-				],
-			},
-			{
-				name: 'HocTapKhac',
-				path: 'khac',
-				component: 'HocTap/Khac',
-			},
-			{
-				name: 'DangKyChuyenNganh',
-				path: 'dang-ky-chuyen-nganh',
-				routes: [
-					{
-						name: 'DangKyChuyenNganhBuild',
-						path: 'register/build',
-						component: 'SinhVien/DangKyChuyenNganhMoi/CustomBuild',
-						hideInMenu: true,
-						exact: true,
-					},
-					{
-						name: 'DangKyChuyenNganhRegister',
-						path: 'register',
-						component: 'SinhVien/DangKyChuyenNganhMoi/Register',
-						hideInMenu: true,
-						exact: true,
-					},
-					{
-						path: ':id',
-						component: 'SinhVien/DangKyChuyenNganhMoi/Detail',
-						hideInMenu: true,
-						exact: true,
-					},
-				],
-				hideInMenu: true,
-			},
-		],
-	},
+	// 		{
+	// 			name: 'LopHocPhan',
+	// 			path: 'lop-tin-chi',
+	// 			routes: [
+	// 				{
+	// 					path: '',
+	// 					hideInMenu: true,
+	// 					component: 'HocTap/LopHocPhan',
+	// 					exact: true,
+	// 				},
+	// 				{
+	// 					name: 'LopHocPhan',
+	// 					path: ':id',
+	// 					component: 'HocTap/LopHocPhan/$id',
+	// 					hideInMenu: true,
+	// 					exact: true,
+	// 				},
+	// 			],
+	// 		},
+	// 		{ name: 'LichThi', path: 'lich-thi', component: 'KhaoThi/LichThi' },
+	// 		{ name: 'BaiThiCuoiKy', path: 'bai-thi-cuoi-ky', component: 'HocTap/BaiThiCuoiKy' },
+	// 		{
+	// 			name: 'KetQuaHocTap',
+	// 			path: 'ket-qua-hoc-tap',
+	// 			// access: 'sinhVien',
+	// 			component: 'HocTap/KetQuaHocTap',
+	// 		},
+	// 		{
+	// 			name: 'XetTotNghiep',
+	// 			path: 'xet-tot-nghiep',
+	// 			routes: [
+	// 				{
+	// 					name: 'ChungChiTotNghiep',
+	// 					path: 'chung-chi-tot-nghiep',
+	// 					component: 'HocTap/XetTotNghiep/ChungChiTotNghiep',
+	// 				},
+	// 				{
+	// 					name: 'XetTotNghiep',
+	// 					path: 'xet-tot-nghiep',
+	// 					component: 'HocTap/XetTotNghiep',
+	// 				},
+	// 			],
+	// 		},
+	// 		{
+	// 			name: 'HocTapKhac',
+	// 			path: 'khac',
+	// 			component: 'HocTap/Khac',
+	// 		},
+	// 		{
+	// 			name: 'DangKyChuyenNganh',
+	// 			path: 'dang-ky-chuyen-nganh',
+	// 			routes: [
+	// 				{
+	// 					name: 'DangKyChuyenNganhBuild',
+	// 					path: 'register/build',
+	// 					component: 'SinhVien/DangKyChuyenNganhMoi/CustomBuild',
+	// 					hideInMenu: true,
+	// 					exact: true,
+	// 				},
+	// 				{
+	// 					name: 'DangKyChuyenNganhRegister',
+	// 					path: 'register',
+	// 					component: 'SinhVien/DangKyChuyenNganhMoi/Register',
+	// 					hideInMenu: true,
+	// 					exact: true,
+	// 				},
+	// 				{
+	// 					path: ':id',
+	// 					component: 'SinhVien/DangKyChuyenNganhMoi/Detail',
+	// 					hideInMenu: true,
+	// 					exact: true,
+	// 				},
+	// 			],
+	// 			hideInMenu: true,
+	// 		},
+	// 	],
+	// },
 	// Trường hợp copy link từ giảng viên => Tự động redirect tới học tập
 	// {
 	// 	path: 'giang-day/lop-tin-chi/:id',
@@ -427,36 +750,36 @@ export default [
 	// 	],
 	// },
 
-	{
-		name: 'Activity',
-		icon: 'AppstoreOutlined',
-		path: 'activity',
-		// access: 'cctFilter',
-		routes: [
-			{
-				name: 'Register',
-				path: 'list-activity',
-				component: 'CCT/Activity',
-			},
-			{
-				name: 'MyActivity',
-				path: 'my-activity',
-				component: 'CCT/History',
-			},
-			{
-				name: 'MyCCT',
-				path: 'co-curricular-transcript',
-				component: 'CCT/MyCCTV2',
-			},
-		],
-	},
+	// {
+	// 	name: 'Activity',
+	// 	icon: 'AppstoreOutlined',
+	// 	path: 'activity',
+	// 	access: 'cctFilter',
+	// 	routes: [
+	// 		{
+	// 			name: 'Register',
+	// 			path: 'list-activity',
+	// 			component: 'CCT/Activity',
+	// 		},
+	// 		{
+	// 			name: 'MyActivity',
+	// 			path: 'my-activity',
+	// 			component: 'CCT/History',
+	// 		},
+	// 		{
+	// 			name: 'MyCCT',
+	// 			path: 'co-curricular-transcript',
+	// 			component: 'CCT/MyCCT',
+	// 		},
+	// 	],
+	// },
 
 	// GROUP TITLE
-	{
-		name: 'OtherGroup',
-		path: '/__group__/khac',
-		disabled: true,
-	},
+	// {
+	// 	name: 'OtherGroup',
+	// 	path: '/__group__/khac',
+	// 	disabled: true,
+	// },
 
 	// {
 	// 	name: 'NoiNgoaiTru',
@@ -472,40 +795,40 @@ export default [
 	// },
 
 	//quy trinh
-	{
-		name: 'KhaiBaoQuyTrinh',
-		icon: 'AuditOutlined',
-		path: 'khai-bao-quy-trinh',
-		// component: 'KhaiBaoQuyTrinh',
-		routes: [
-			{
-				name: 'DangKy',
-				icon: 'AuditOutlined',
-				path: 'dang-ky',
-				component: 'KhaiBaoQuyTrinh/QuyTrinh',
-			},
-			{
-				name: 'LichSu',
-				icon: 'AuditOutlined',
-				path: 'lich-su',
-				component: 'KhaiBaoQuyTrinh/DichVuHanhChinh',
-			},
-			// {
-			// 	name: 'DanhSachQuyTrinh',
-			// 	icon: 'AuditOutlined',
-			// 	hideInMenu: true,
-			// 	path: '',
-			// 	component: 'KhaiBaoQuyTrinh',
-			// },
-			{
-				name: 'KhaiBaoQuyTrinh',
-				icon: 'AuditOutlined',
-				hideInMenu: true,
-				path: ':id',
-				component: 'KhaiBaoQuyTrinh/ViewQuyTrinh/$id',
-			},
-		],
-	},
+	// {
+	// 	name: 'KhaiBaoQuyTrinh',
+	// 	icon: 'AuditOutlined',
+	// 	path: 'khai-bao-quy-trinh',
+	// 	// component: 'KhaiBaoQuyTrinh',
+	// 	routes: [
+	// 		{
+	// 			name: 'DangKy',
+	// 			icon: 'AuditOutlined',
+	// 			path: 'dang-ky',
+	// 			component: 'KhaiBaoQuyTrinh/QuyTrinh',
+	// 		},
+	// 		{
+	// 			name: 'LichSu',
+	// 			icon: 'AuditOutlined',
+	// 			path: 'lich-su',
+	// 			component: 'KhaiBaoQuyTrinh/DichVuHanhChinh',
+	// 		},
+	// 		// {
+	// 		// 	name: 'DanhSachQuyTrinh',
+	// 		// 	icon: 'AuditOutlined',
+	// 		// 	hideInMenu: true,
+	// 		// 	path: '',
+	// 		// 	component: 'KhaiBaoQuyTrinh',
+	// 		// },
+	// 		{
+	// 			name: 'KhaiBaoQuyTrinh',
+	// 			icon: 'AuditOutlined',
+	// 			hideInMenu: true,
+	// 			path: ':id',
+	// 			component: 'KhaiBaoQuyTrinh/ViewQuyTrinh/$id',
+	// 		},
+	// 	],
+	// },
 
 	// {
 	// 	name: 'ThuVien',
@@ -561,71 +884,71 @@ export default [
 	// },
 
 	// TIỆN ÍCH
-	{
-		name: 'PhanHoi',
-		path: 'phan-hoi',
-		component: 'TienIch/PhanHoi',
-		icon: 'HighlightOutlined',
-		// access: 'sinhVienVaNhanVien',
-	},
-	{
-		name: 'KhaoSatTrucTuyen',
-		path: 'khao-sat',
-		component: 'TienIch/KhaoSat',
-		icon: 'table',
-	},
-	{
-		name: 'CuocThi',
-		path: 'cuoc-thi',
-		component: './TienIch/CuocThi',
-		icon: 'TrophyOutlined',
-	},
-	{
-		name: 'ThongBao',
-		path: 'thong-bao',
-		component: 'ThongBao',
-		icon: 'BellOutlined',
-	},
+	// {
+	// 	name: 'PhanHoi',
+	// 	path: 'phan-hoi',
+	// 	component: 'TienIch/PhanHoi',
+	// 	icon: 'HighlightOutlined',
+	// 	// access: 'sinhVienVaNhanVien',
+	// },
+	// {
+	// 	name: 'KhaoSatTrucTuyen',
+	// 	path: 'khao-sat',
+	// 	component: 'TienIch/KhaoSat',
+	// 	icon: 'table',
+	// },
+	// {
+	// 	name: 'CuocThi',
+	// 	path: 'cuoc-thi',
+	// 	component: './TienIch/CuocThi',
+	// 	icon: 'TrophyOutlined',
+	// },
+	// {
+	// 	name: 'ThongBao',
+	// 	path: 'thong-bao',
+	// 	component: 'ThongBao',
+	// 	icon: 'BellOutlined',
+	// },
 	// {
 	// 	name: 'ChatBot',
 	// 	path: 'chat-bot',
 	// 	component: './ChatBot',
 	// 	icon: 'RobotOutlined',
 	// },
-	{
-		name: 'KhaiBaoSucKhoe',
-		icon: 'HeartOutlined',
-		path: '/khai-bao-suc-khoe',
-		component: 'TienIch/KhaiBaoSucKhoe',
-	},
+	// {
+	// 	name: 'KhaiBaoSucKhoe',
+	// 	icon: 'HeartOutlined',
+	// 	path: '/khai-bao-suc-khoe',
+	// 	component: 'TienIch/KhaiBaoSucKhoe',
+	// },
 
-	{
-		name: 'TienIch',
-		path: 'tien-ich',
-		icon: 'AppstoreAddOutlined',
-		routes: [
-			{
-				name: 'CauHoiThuongGap',
-				path: 'cau-hoi-thuong-gap',
-				component: 'TienIch/CauHoiThuongGap',
-			},
-			{
-				name: 'VanBanHuongDan',
-				path: 'van-ban-huong-dan',
-				component: 'TienIch/VanBanHuongDan',
-			},
-			{
-				name: 'XemSau',
-				path: 'xem-sau',
-				component: 'TienIch/XemSau',
-			},
-			// {
-			// 	name: 'LichSuMuonTraTinhVan',
-			// 	path: './lich-su-muon-tra',
-			// 	component: './TienIch/LichSuMuonTraTinhVan',
-			// },
-		],
-	},
+	// {
+	// 	name: 'TienIch',
+	// 	path: 'tien-ich',
+	// 	icon: 'AppstoreAddOutlined',
+	// 	routes: [
+	// 		{
+	// 			name: 'CauHoiThuongGap',
+	// 			path: 'cau-hoi-thuong-gap',
+	// 			component: 'TienIch/CauHoiThuongGap',
+	// 		},
+	// 		{
+	// 			name: 'VanBanHuongDan',
+	// 			path: 'van-ban-huong-dan',
+	// 			component: 'TienIch/VanBanHuongDan',
+	// 		},
+	// 		{
+	// 			name: 'XemSau',
+	// 			path: 'xem-sau',
+	// 			component: 'TienIch/XemSau',
+	// 		},
+	// 		// {
+	// 		// 	name: 'LichSuMuonTraTinhVan',
+	// 		// 	path: './lich-su-muon-tra',
+	// 		// 	component: './TienIch/LichSuMuonTraTinhVan',
+	// 		// },
+	// 	],
+	// },
 
 	{
 		path: '/notification',

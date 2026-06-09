@@ -25,11 +25,7 @@ const PreviewCCTModal = forwardRef<HTMLDivElement, Props>(({ open, onCancel, onC
 			width={1300}
 			destroyOnClose
 		>
-			<div style={{ maxHeight: '70vh', overflow: 'auto' }}>
-				<div className='cct-container' ref={ref}>
-					{children}
-				</div>
-			</div>
+			<div style={{ maxHeight: '70vh', overflow: 'auto' }}>{children}</div>
 
 			<div style={{ marginTop: 16 }}>
 				<Checkbox onChange={(e) => setConfirmed(e.target.checked)}>

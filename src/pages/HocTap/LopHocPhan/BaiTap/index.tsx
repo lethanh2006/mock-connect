@@ -77,7 +77,9 @@ const BaiTapPage = (props: { lopHocPhanId: string }) => {
 								}
 								scrollableTarget='body'
 							>
-								{danhSach?.map((val) => <CardStatusBaiTap key={val._id} data={val} />)}
+								{danhSach?.map((val) => (
+									<CardStatusBaiTap key={val._id} data={val} />
+								))}
 							</InfiniteScroll>
 						</>
 					)}

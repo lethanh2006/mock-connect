@@ -4,7 +4,7 @@ import { accentColors, officialColors, statusBgColors, statusColors } from '@/se
 import { EActivityCategory, EActivityStatus } from '@/services/CCT/constant';
 import { inputFormat } from '@/utils/utils';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const StatActivityOutCome = (props: {
 	getData: () => void;
@@ -13,6 +13,7 @@ const StatActivityOutCome = (props: {
 	currentWorkflow?: string;
 }) => {
 	const { getData, tabActive, onChangeWorkflow, currentWorkflow } = props;
+	const intl = useIntl();
 	const { loadingThongKe, dataThongKe } = useModel('cct.activityoutcome');
 
 	useEffect(() => {

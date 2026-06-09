@@ -4,14 +4,7 @@ import { getFileContent, getFileInfo } from '@/services/uploadFile';
 import axios from '@/utils/axios';
 import { ip3 } from '@/utils/ip';
 import { getFileType, getNameFile } from '@/utils/utils';
-import {
-	CopyOutlined,
-	DownloadOutlined,
-	ExpandOutlined,
-	FileSearchOutlined,
-	LeftOutlined,
-	RightOutlined,
-} from '@ant-design/icons';
+import { DownloadOutlined, FileSearchOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Empty, message, Spin } from 'antd';
 import fileDownload from 'js-file-download';
 import { useEffect, useState } from 'react';
@@ -43,7 +36,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	if (file && !isValidSingleString && !isValidStringArray(file)) {
 		return (
 			<div className='preview-error'>
-				<p style={{ color: 'red', fontWeight: 600 }}>File không hợp lệ</p>
+				<p style={{ color: 'red', fontWeight: 600 }}>Invalid file</p>
 			</div>
 		);
 	}
@@ -154,21 +147,21 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	const handleDownloadOrView = async () => {
 		if (!frameData?.url) return;
 
-		if (isDownloadableUrl(frameData.url)) {
-			try {
-				const response = await axios.get(frameData.url, {
-					responseType: 'blob',
-				});
+		// if (isDownloadableUrl(frameData.url)) {
+		try {
+			const response = await axios.get(frameData.url, {
+				responseType: 'blob',
+			});
 
-				const blob = response.data;
-				fileDownload(blob, getNameFile(frameData.url));
-			} catch (error) {
-				console.error('Error downloading file:', error);
-				window.open(frameData.url, '_blank');
-			}
-		} else {
+			const blob = response.data;
+			fileDownload(blob, getNameFile(frameData.url));
+		} catch (error) {
+			console.error('Error downloading file:', error);
 			window.open(frameData.url, '_blank');
 		}
+		// } else {
+		// 	window.open(frameData.url, '_blank');
+		// }
 	};
 
 	const handleCopy = () => {
@@ -215,7 +208,7 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 	}
 
 	if (!file) {
-		return <Empty style={{ marginTop: 32, marginBottom: 32 }} description='Không tồn tại dữ liệu tệp tin' />;
+		return <Empty style={{ marginTop: 32, marginBottom: 32 }} description='No file data available' />;
 	}
 
 	return (
@@ -255,23 +248,23 @@ const PreviewFile: React.FC<TPreviewFileProps> = (props) => {
 									icon={<DownloadOutlined />}
 									onClick={handleDownloadOrView}
 								/>
-								<ButtonExtend
+								{/* <ButtonExtend
 									type='link'
 									tooltip={intl.formatMessage({ id: 'global.previewfile.button.saochep' })}
 									icon={<CopyOutlined />}
 									onClick={handleCopy}
-								/>
+								/> */}
 							</>
 						)}
 
-						{!!frameData?.src && (
+						{/* {!!frameData?.src && (
 							<ButtonExtend
 								type='link'
 								tooltip={intl.formatMessage({ id: 'global.previewfile.button.morong' })}
 								icon={<ExpandOutlined />}
 								onClick={() => window.open(frameData?.src, '_blank')}
 							/>
-						)}
+						)} */}
 
 						{children}
 					</div>

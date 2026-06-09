@@ -1,3 +1,5 @@
+import background from '@/assets/cct/background.png';
+import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
@@ -5,7 +7,7 @@ import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
 import { DashOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
+import { Button, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { FilterSuKienValue } from '../Activity';
@@ -158,7 +160,7 @@ const HistoryActivityPage = () => {
 	const isExpired = editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
-		<Card title='My Activity' className='table-base-card' variant='borderless'>
+		<PageCard title={intl.formatMessage({ id: 'activity.history.title' })}>
 			<Tabs
 				activeKey={tabActive}
 				onChange={(tab) => {
@@ -190,7 +192,7 @@ const HistoryActivityPage = () => {
 								setVisibleForm(true);
 							}}
 						>
-							Add New
+							{intl.formatMessage({ id: 'activity.history.addNew' })}
 						</Button>
 					) : undefined
 				}
@@ -254,11 +256,11 @@ const HistoryActivityPage = () => {
 								const renderButton =
 									editableWorkflow && (tabActive === EActivityCategory.REGISTERED ? isOngoing : isOngoingPerstion) ? (
 										<Button block type={'primary'} onClick={() => handleEdit(item)}>
-											Update Evidence
+											{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
 										</Button>
 									) : (
 										<Button block onClick={() => handleView(item)}>
-											SEE MORE
+											{intl.formatMessage({ id: 'activity.history.seeMore' })}
 										</Button>
 									);
 
@@ -270,7 +272,7 @@ const HistoryActivityPage = () => {
 													...item?.activities,
 													activityOutcome: item,
 												}}
-												banner={item?.activities?.banner ?? undefined}
+												banner={item?.activities?.banner ?? background}
 												name={item?.activities?.name}
 												startDate={
 													item?.activities?.startDate
@@ -297,11 +299,11 @@ const HistoryActivityPage = () => {
 													...item?.activities,
 													activityOutcome: item,
 												}}
-												banner={item?.banner ?? undefined}
+												banner={item?.banner ?? background}
 												name={item?.isAwardRecognition ? item?.competition : item?.activitiesOutcomeName}
 												startDate={item?.startDate ? dayjs(item?.startDate).format('HH:mm DD/MM/YYYY') : '--'}
 												endDate={item?.endDate ? dayjs(item?.endDate).format('HH:mm DD/MM/YYYY') : '--'}
-												equivalencyAttributeIds={item?.activitiesType?.attributes?.map((x) => x._id)}
+												equivalencyAttributeIds={item?.activitiesType?.attributes?.map((x) => x?._id)}
 												onClick={() => handleView(item)}
 												button={
 													<Row style={{ marginTop: 12 }} gutter={[6, 0]}>
@@ -314,7 +316,7 @@ const HistoryActivityPage = () => {
 																			onConfirm={(e) =>
 																				putModel(`me/${item?._id}`, { workflow: EApprovalStatus.SUBMITTED }, getData)
 																			}
-																			title={intl.formatMessage({ id: 'activity.confirm.duyet' })}
+																			title={intl.formatMessage({ id: 'activity.history.confirm.duyet' })}
 																			placement='topLeft'
 																		>
 																			<Button
@@ -324,7 +326,7 @@ const HistoryActivityPage = () => {
 																				icon={<SendOutlined />}
 																				size='small'
 																			>
-																				{intl.formatMessage({ id: 'activity.button.duyet' })}
+																				{intl.formatMessage({ id: 'activity.history.button.duyet' })}
 																			</Button>
 																		</Popconfirm>
 
@@ -339,7 +341,7 @@ const HistoryActivityPage = () => {
 																					intl.formatMessage({ id: 'global.message.xoathanhcong' }),
 																				)
 																			}
-																			title={intl.formatMessage({ id: 'activity.confirm.xoa' })}
+																			title={intl.formatMessage({ id: 'activity.history.confirm.xoa' })}
 																			placement='topLeft'
 																		>
 																			<Button
@@ -349,7 +351,7 @@ const HistoryActivityPage = () => {
 																				icon={<DeleteOutlined />}
 																				size='small'
 																			>
-																				{intl.formatMessage({ id: 'activity.button.xoa' })}
+																				{intl.formatMessage({ id: 'activity.history.button.xoa' })}
 																			</Button>
 																		</Popconfirm>
 																	</Space>
@@ -382,6 +384,7 @@ const HistoryActivityPage = () => {
 									onChange={handlePaginationChange}
 									onShowSizeChange={handlePageSizeChange}
 									pageSizeOptions={['5', '10', '20', '50']}
+									showSizeChanger={false}
 									disabled={loading}
 									size='default'
 									className='pagination'
@@ -399,7 +402,13 @@ const HistoryActivityPage = () => {
 			</Spin>
 
 			<ModalExpandable
-				title={edit ? 'Update Evidence' : isView ? 'Detail Evidence' : 'Add Evidence'}
+				title={
+					edit
+						? intl.formatMessage({ id: 'activity.history.updateEvidence' })
+						: isView
+							? intl.formatMessage({ id: 'activity.history.detailEvidence' })
+							: intl.formatMessage({ id: 'activity.history.addEvidence' })
+				}
 				width={1000}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
@@ -412,6 +421,7 @@ const HistoryActivityPage = () => {
 							}
 						: undefined
 				}
+				destroyOnClose
 			>
 				{tabActive === EActivityCategory.REGISTERED ? (
 					isView ? (
@@ -439,10 +449,12 @@ const HistoryActivityPage = () => {
 									padding: 16,
 								}}
 							>
-								<Button onClick={() => setVisibleForm(false)}>Close</Button>
+								<Button onClick={() => setVisibleForm(false)}>
+									{intl.formatMessage({ id: 'activity.history.close' })}
+								</Button>
 								{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
 									<Button type='primary' onClick={() => handleEdit(record)}>
-										Update Evidence
+										{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
 									</Button>
 								)}
 							</div>
@@ -469,10 +481,12 @@ const HistoryActivityPage = () => {
 								padding: 16,
 							}}
 						>
-							<Button onClick={() => setVisibleForm(false)}>Close</Button>
+							<Button onClick={() => setVisibleForm(false)}>
+								{intl.formatMessage({ id: 'activity.history.close' })}
+							</Button>
 							{canEdit(record ?? ({} as ActivityOutCome.IRecord)) && (
 								<Button type='primary' onClick={() => handleEdit(record)}>
-									Update Evidence
+									{intl.formatMessage({ id: 'activity.history.updateEvidence' })}
 								</Button>
 							)}
 						</div>
@@ -486,7 +500,7 @@ const HistoryActivityPage = () => {
 					/>
 				)}
 			</ModalExpandable>
-		</Card>
+		</PageCard>
 	);
 };
 

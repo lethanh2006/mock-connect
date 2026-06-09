@@ -13,6 +13,7 @@ type TSettingType = Partial<{
 	[ESettingKey.GENERAL_INFO]: LopHocPhan.TSettingLMS;
 	[ESettingKey.THU_VIEN_HOC_LIEU]: HocPhan.ISettingThuVien;
 	[ESettingKey.SINH_VIEN]: DangKyTinChi.ICauHinhWaitlist;
+	[ESettingKey.CCT_TRANSCRIPT]: SubmisstionRound.ISetting;
 }>;
 
 export default () => {
