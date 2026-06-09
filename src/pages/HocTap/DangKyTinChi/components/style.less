@@ -77,3 +77,46 @@ ul.lich-hoc {
 		transform: scale(1.2);
 	}
 }
+
+.action-register {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 110px;
+	padding: 4px 12px;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 600;
+	user-select: none;
+	transition: all 0.2s ease;
+}
+
+.action-register-primary {
+	color: #fff;
+	background: #134d8b;
+	cursor: pointer;
+
+	&:hover {
+		background: #0f3d70;
+		transform: translateY(-1px);
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+	}
+}
+
+.action-register-selected {
+	color: #134d8b;
+	background: #e6f4ff;
+	cursor: pointer;
+
+	&:hover {
+		background: #bae0ff;
+		transform: translateY(-1px);
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+	}
+}
+
+.action-register-disabled {
+	color: #999;
+	background: #f5f5f5;
+	cursor: default;
+}

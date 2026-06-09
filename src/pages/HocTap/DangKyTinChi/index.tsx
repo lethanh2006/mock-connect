@@ -1,18 +1,26 @@
+import PageCard from '@/components/PageCard';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { ESettingKey } from '@/services/base/constant';
-import { ETinhChatDangKyTC, ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
+import {
+	ELoaiDangKyTheoLop,
+	ETinhChatDangKyTC,
+	ETrangThaiSinhVienDKTinChi,
+} from '@/services/DaoTao/DangKyTinChi/constant';
+import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { ipDaoTao } from '@/utils/ip';
-import { QuestionCircleOutlined, YoutubeOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Divider, Empty, Row, Spin } from 'antd';
+import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Alert, Card, Col, Empty, Row, Select, Space, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { history, useAccess, useIntl, useModel } from 'umi';
+import { useAccess, useIntl, useModel } from 'umi';
 import AlertVuotTin from './components/AlertVuotTin';
 import DangKyLopHocPhan from './components/DangKyLopHocPhan';
 import FilterDotDangKy from './components/FilterDotDangKy';
 import ModalLichSuVuotTin from './components/ModalLichSuVuotTin';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
-import PageCard from '@/components/PageCard';
+import ViewGhiChuDangKyTinChi from './components/ViewGhiChuDangKyTinChi';
 
 const DangKyTinChiPage = () => {
 	const intl = useIntl();
@@ -21,9 +29,17 @@ const DangKyTinChiPage = () => {
 	const { getModel } = useModel('daotao.dkvuottinchi');
 	const { getMeModel: getLopHc } = useModel('daotao.lophanhchinh');
 	const { getByKeyModel } = useModel('tienich.caidat');
-
+	const { loaiDangKy, setLoaiDangKy } = useModel('hocphan.hocphan');
+	const allLoaiDangKy = Object.values(ELoaiDangKyTheoLop);
 	const [isVerified, setIsVerified] = useState<boolean>(false);
 	const [visibleLichSu, setVisibleLichSu] = useState<boolean>(false);
+	const [visibleThongTin, setVisibleThongTin] = useState<boolean>(false);
+
+	const dangTrongThoiGian =
+		dotDangKyHienTai?.thoiGianBatDau &&
+		dotDangKyHienTai?.thoiGianKetThuc &&
+		dayjs().isSameOrAfter(dayjs(dotDangKyHienTai?.thoiGianBatDau)) &&
+		dayjs().isSameOrBefore(dayjs(dotDangKyHienTai?.thoiGianKetThuc));
 
 	const handleCaptchaChange = (token: string | null) => {
 		if (token) {
@@ -48,18 +64,37 @@ const DangKyTinChiPage = () => {
 	}, [isVerified]);
 
 	return !isVerified ? (
-		<Card className='card-big-title card-borderless' variant='borderless' title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
-			<Row gutter={[16, 16]}>
-				<Col span={24}>
+		<Row gutter={[12, 12]}>
+			<Col span={24}>
+				<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
 					<Card
-						title={<FilterDotDangKy />}
-						extra={
-							cctFilter?.() && (
-								<Button type='primary' onClick={() => setVisibleLichSu(true)}>
-									{intl.formatMessage({ id: 'dangkytinchi.vuottin.button.dangkyvuottin' })}
-								</Button>
-							)
+						title={
+							<Space>
+								<FilterDotDangKy />
+								<Select
+									options={allLoaiDangKy.map((item) => ({
+										key: item,
+										value: item,
+										label: intl.formatMessage({
+											id: `dangkytinchi.loaidangky.${item}`,
+										}),
+									}))}
+									value={loaiDangKy}
+									onChange={(val) => setLoaiDangKy(val)}
+									style={{ width: 250 }}
+								/>
+								<ButtonExtend icon={<QuestionCircleOutlined />} onClick={() => setVisibleThongTin(true)} />
+							</Space>
 						}
+						// extra={
+						// 	cctFilter?.() && (
+						// 		<Button type='primary' onClick={() => setVisibleLichSu(true)}>
+						// 			{intl.formatMessage({ id: 'dangkytinchi.vuottin.button.dangkyvuottin' })}
+						// 		</Button>
+						// 	)
+						// }
+						className='card-borderless'
+						variant='borderless'
 					>
 						{cctFilter?.() && <AlertVuotTin onViewLichSu={() => setVisibleLichSu(true)} />}
 						<Spin spinning={loading}>
@@ -91,51 +126,25 @@ const DangKyTinChiPage = () => {
 									/>
 								) : !!phieuDangKy?.soTinChiToiDa ? (
 									<>
-										<Divider style={{ marginTop: 24 }}>
-											{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.title' })}
-										</Divider>
-										{sinhVienDot?.ghiChu && (
-											<div>
-												{<QuestionCircleOutlined />} {intl.formatMessage({ id: 'dangkytinchi.empty.ghichu' })}:{' '}
-												<i style={{ color: 'gray' }}>{sinhVienDot.ghiChu}.</i>
-											</div>
-										)}
-										<div style={{ marginBottom: 12 }}>
-											{intl.formatMessage(
-												{ id: 'dangkytinchi.thongtindangky.alert' },
-												{
-													link_tien_trinh: (chunks: any) => (
-														<a
-															href='./tien-trinh-hoc-tap'
-															onClick={(e) => {
-																e.preventDefault();
-																history.push('./tien-trinh-hoc-tap');
-															}}
-														>
-															{chunks}
-														</a>
-													),
-
-													link_ket_qua: (chunks: any) => (
-														<a
-															href='./ket-qua-hoc-tap'
-															onClick={(e) => {
-																e.preventDefault();
-																history.push('./ket-qua-hoc-tap');
-															}}
-														>
-															{chunks}
-														</a>
-													),
-												},
-											)}
-										</div>
-
-										{cctFilter?.() && (
-											<div style={{ marginBottom: 12 }}>
-												<i className='text-info'>{intl.formatMessage({ id: 'dangkytinchi.waitlist.alert' })}</i>
-											</div>
-										)}
+										{dotDangKyHienTai && sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
+											<Alert
+												type={dangTrongThoiGian ? 'info' : 'error'}
+												showIcon
+												icon={<InfoCircleOutlined />}
+												message={
+													<span className={dangTrongThoiGian ? 'text-info' : 'text-error'}>
+														{intl.formatMessage(
+															{ id: 'dangkytinchi.filter.thoigiandangky.title' },
+															{
+																thoigianbatdau: formatDateTime(dotDangKyHienTai?.thoiGianBatDau),
+																thoigianketthuc: formatDateTime(dotDangKyHienTai?.thoiGianKetThuc),
+																span: (chunks) => <span className='fw500'>{chunks}</span>,
+															},
+														)}
+													</span>
+												}
+											/>
+										) : null}
 
 										<DangKyLopHocPhan />
 									</>
@@ -159,15 +168,15 @@ const DangKyTinChiPage = () => {
 							)}
 						</Spin>
 					</Card>
-				</Col>
-				<Col span={24}>
-					<PageCard title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}>
-						<PhieuDangKy />
-					</PageCard>
-				</Col>
-			</Row>
+				</PageCard>
+			</Col>
+			<Col span={24}>
+				<Card title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.danhsachdadangky.title' })}>
+					<PhieuDangKy />
+				</Card>
+			</Col>
 
-			<div className='huong-dan'>
+			{/* <div className='huong-dan'>
 				<div className='title-huong-dan'>
 					<i>{intl.formatMessage({ id: 'dangkytinchi.thongtindangky.huongdandangky.title' })}</i>
 				</div>
@@ -176,12 +185,14 @@ const DangKyTinChiPage = () => {
 					className='pulse'
 					onClick={() => window.open('https://www.youtube.com/watch?v=2xghlws7tAk&t=2s')}
 				/>
-			</div>
+			</div> */}
 
 			<ModalLichSuVuotTin visible={visibleLichSu} onClose={() => setVisibleLichSu(false)} />
-		</Card>
+
+			<ViewGhiChuDangKyTinChi visible={visibleThongTin} setVisible={setVisibleThongTin} />
+		</Row>
 	) : (
-		<Card>
+		<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
 			<ReCAPTCHA
 				style={{
 					margin: '12px auto',
@@ -191,7 +202,7 @@ const DangKyTinChiPage = () => {
 				sitekey='6LelHsEeAAAAAJmsVdeC2EPNCAVEtfRBUGSKireh'
 				onChange={handleCaptchaChange}
 			/>
-		</Card>
+		</PageCard>
 	);
 };
 

@@ -7,6 +7,11 @@ export default {
 	'dangkytinchi.filter.step.thoigianbatdaudk.title': 'Thời gian bắt đầu đăng ký',
 	'dangkytinchi.filter.step.thoigianketthucdk.title': 'Thời gian kết thúc đăng ký',
 
+	'dangkytinchi.loaidangky.lop-hanh-chinh': 'Lớp theo kế hoạch giảng dạy',
+	'dangkytinchi.loaidangky.khoa-nganh': 'Theo chương trình đào tạo',
+	'dangkytinchi.loaidangky.khoa-nganh-2': 'Theo chương trình ngành 2',
+	'dangkytinchi.loaidangky.tat-ca': 'Tất cả học phần',
+
 	// chi tiết học kỳ
 	'dangkytinchi.chitiethocky.description.tenhocky': 'Tên học kỳ',
 	'dangkytinchi.chitiethocky.description.sotuanhoc': 'Số tuần học',

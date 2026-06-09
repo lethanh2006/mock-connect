@@ -5,6 +5,12 @@ export default {
 		'Registration period from <span>{thoigianbatdau}</span> to <span>{thoigianketthuc}</span>',
 	'dangkytinchi.filter.step.thoigianbatdaudk.title': 'Registration start time',
 	'dangkytinchi.filter.step.thoigianketthucdk.title': 'Registration closing time',
+
+	'dangkytinchi.loaidangky.lop-hanh-chinh': 'Classes according to the teaching plan',
+	'dangkytinchi.loaidangky.khoa-nganh': 'According to the curriculum',
+	'dangkytinchi.loaidangky.khoa-nganh-2': 'According to the second major curriculum',
+	'dangkytinchi.loaidangky.tat-ca': 'All courses',
+
 	'dangkytinchi.chitiethocky.description.tenhocky': 'Semester name',
 	'dangkytinchi.chitiethocky.description.sotuanhoc': 'Number of weeks of study',
 	'dangkytinchi.chitiethocky.description.thoigianbatdauhocky': 'Semester start time',
