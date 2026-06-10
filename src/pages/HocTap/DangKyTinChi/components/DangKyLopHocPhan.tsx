@@ -12,7 +12,7 @@ import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Empty, Modal, Popconfirm, Segmented, Select, Tooltip } from 'antd';
+import { Empty, Modal, Popconfirm, Segmented, Select, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
 import ModalDangKyNgay from './ModalDangKyNgay';
@@ -282,14 +282,14 @@ const DangKyLopHocPhan = () => {
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.sisotoida' }),
 			dataIndex: 'siSoToiDa',
 			align: 'center',
-			width: 80,
+			width: 100,
 			onCell,
 			sortable: true,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.controng' }),
 			align: 'center',
-			width: 80,
+			width: 100,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
 			onCell,
 			sortable: true,
@@ -335,9 +335,9 @@ const DangKyLopHocPhan = () => {
 		// 	onCell,
 		// },
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.thaotac' }),
 			align: 'center',
-			width: 150,
+			width: 120,
 			fixed: 'right',
 			render: (val, rec) => {
 				const daChon = isDaChonLop(rec);
@@ -347,17 +347,17 @@ const DangKyLopHocPhan = () => {
 
 				if (daChon && dangKyNgay) {
 					return (
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								gap: 8,
-							}}
-						>
-							<div className='action-register action-register-registered'>Đã đăng ký</div>
+						<Space>
+							<Tag color='green'>
+								{intl.formatMessage({
+									id: 'dangkytinchi.dankylophocphan.action.dadangky',
+								})}
+							</Tag>
 
 							<Popconfirm
-								title={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.confirm' })}
+								title={intl.formatMessage({
+									id: 'dangkytinchi.phieudangky.columntable.huy.confirm',
+								})}
 								placement='topRight'
 								onConfirm={() => lopDangKy?._id && onDeleteLop(lopDangKy)}
 							>
@@ -365,41 +365,52 @@ const DangKyLopHocPhan = () => {
 									icon={<DeleteOutlined />}
 									danger
 									type='link'
-									tooltip={intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy.tooltip' })}
+									tooltip={intl.formatMessage({
+										id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
+									})}
 								/>
 							</Popconfirm>
-						</div>
+						</Space>
 					);
 				}
 
 				if (daChon) {
 					return (
-						<Tooltip title='Đã chọn'>
-							<div
-								className='action-register action-register-selected'
+						<div>
+							<ButtonExtend
+								type='primary'
 								onClick={(e) => {
 									e.stopPropagation();
 									onClickBoChon(rec);
 								}}
 							>
-								Đã chọn
-							</div>
-						</Tooltip>
+								{intl.formatMessage({
+									id: 'dangkytinchi.dankylophocphan.action.dachon',
+								})}
+							</ButtonExtend>
+						</div>
 					);
 				}
 
 				return (
-					<div
-						className={`action-register ${disabled ? 'action-register-disabled' : 'action-register-primary'}`}
-						onClick={(e) => {
-							e.stopPropagation();
+					<div>
+						<ButtonExtend
+							type='primary'
+							disabled={disabled}
+							onClick={(e) => {
+								e.stopPropagation();
 
-							if (!disabled) {
-								onClickDangKy(rec);
-							}
-						}}
-					>
-						{dangKyNgay ? 'Đăng ký' : 'Chọn'}
+								if (!disabled) {
+									onClickDangKy(rec);
+								}
+							}}
+						>
+							{intl.formatMessage({
+								id: dangKyNgay
+									? 'dangkytinchi.dankylophocphan.action.dangky'
+									: 'dangkytinchi.dankylophocphan.action.chon',
+							})}
+						</ButtonExtend>
 					</div>
 				);
 			},
@@ -420,7 +431,7 @@ const DangKyLopHocPhan = () => {
 						modelName='lophocphan.lophocphan'
 						hideCard
 						buttons={{ create: false }}
-						scroll={{ y: 600 }}
+						hideFilterColumn={false}
 						otherProps={{
 							rowKey: 'ten',
 							expandable: {
@@ -434,25 +445,29 @@ const DangKyLopHocPhan = () => {
 							[
 								<Segmented
 									key='2'
-									options={['Lớp còn trống', 'Tất cả']}
-									// value={trangThaiLopFilter}
+									options={[
+										intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.lopcontrong' }),
+										intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.tatca' }),
+									]} // value={trangThaiLopFilter}
 									// onChange={(val) => setTrangThaiLopFilter(val.toString())}
 								/>,
 								<Select
 									key='1'
-									placeholder='Lọc theo thứ'
+									placeholder={intl.formatMessage({
+										id: 'dangkytinchi.dankylophocphan.filter.loctheothu',
+									})}
 									allowClear
 									style={{ width: 140 }}
 									// value={thuFilter}
 									// onChange={(val) => setThuFilter(val)}
 									options={[
-										{ value: 1, label: 'Thứ 2' },
-										{ value: 2, label: 'Thứ 3' },
-										{ value: 3, label: 'Thứ 4' },
-										{ value: 4, label: 'Thứ 5' },
-										{ value: 5, label: 'Thứ 6' },
-										{ value: 6, label: 'Thứ 7' },
-										{ value: 7, label: 'Chủ nhật' },
+										{ value: 1, label: intl.formatMessage({ id: 'dangkytinchi.thu.2' }) },
+										{ value: 2, label: intl.formatMessage({ id: 'dangkytinchi.thu.3' }) },
+										{ value: 3, label: intl.formatMessage({ id: 'dangkytinchi.thu.4' }) },
+										{ value: 4, label: intl.formatMessage({ id: 'dangkytinchi.thu.5' }) },
+										{ value: 5, label: intl.formatMessage({ id: 'dangkytinchi.thu.6' }) },
+										{ value: 6, label: intl.formatMessage({ id: 'dangkytinchi.thu.7' }) },
+										{ value: 7, label: intl.formatMessage({ id: 'dangkytinchi.thu.cn' }) },
 									]}
 								/>,
 							]

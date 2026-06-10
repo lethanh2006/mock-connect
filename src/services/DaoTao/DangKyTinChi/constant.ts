@@ -57,6 +57,12 @@ export enum ETrangThaiDangKyTinChi {
 	LOI = 'Lỗi',
 }
 
+export const mapTrangThaiDangKyTinChiI18n: Record<ETrangThaiDangKyTinChi, string> = {
+	[ETrangThaiDangKyTinChi.CHUA_DANG_KY]: 'dangkytinchi.trangthaidangky.chuadangky',
+	[ETrangThaiDangKyTinChi.DA_DANG_KY]: 'dangkytinchi.trangthaidangky.dadangky',
+	[ETrangThaiDangKyTinChi.LOI]: 'dangkytinchi.trangthaidangky.loi',
+};
+
 export const ColorTrangThaiDangKyTinChi = {
 	[ETrangThaiDangKyTinChi.CHUA_DANG_KY]: 'blue',
 	[ETrangThaiDangKyTinChi.DA_DANG_KY]: 'green',

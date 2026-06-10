@@ -34,11 +34,18 @@ const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) =
 	};
 
 	return (
-		<Modal title={'Thông báo xác nhận'} open={visible} footer={null} onCancel={() => setVisible(false)} width={700}>
+		<Modal
+			title={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.title' })}
+			open={visible}
+			footer={null}
+			onCancel={() => setVisible(false)}
+			width={700}
+		>
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
-					Bạn có chắc chắn muốn <b>"Đăng ký"</b> học lớp học phần này không?
+					{intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.message' }, { b: (chunks) => <b>{chunks}</b> })}
 				</Col>
+
 				<Col span={24}>
 					<Descriptions
 						column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
@@ -46,18 +53,25 @@ const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) =
 						layout='vertical'
 						colon={false}
 					>
-						<Descriptions.Item label='Mã lớp'>{record?.maLop ?? record?.ten ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Tên học phần'>{record?.hocPhan?.ten ?? '--'}</Descriptions.Item>
-						<Descriptions.Item label='Giảng viên'>
+						<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.malop' })}>
+							{record?.maLop ?? record?.ten ?? '--'}
+						</Descriptions.Item>
+
+						<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.tenhocphan' })}>
+							{record?.hocPhan?.ten ?? '--'}
+						</Descriptions.Item>
+
+						<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.giangvien' })}>
 							{record?.nhanSuList?.length
-								? record?.nhanSuList
-										?.map((item) =>
+								? record.nhanSuList
+										.map((item) =>
 											item.nhanSu?.ten ? `${item.nhanSu?.hoDem ?? ''} ${item.nhanSu?.ten ?? ''}` : item.tenNhanSu,
 										)
 										.join(', ')
 								: '--'}
 						</Descriptions.Item>
-						<Descriptions.Item label='Thông tin lớp học'>
+
+						<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.thongtinlophoc' })}>
 							{record?._id ? <RenderLichHoc lopHocPhan={record} /> : '--'}
 						</Descriptions.Item>
 					</Descriptions>

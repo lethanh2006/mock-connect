@@ -6,7 +6,6 @@ import {
 	ETinhChatDangKyTC,
 	ETrangThaiSinhVienDKTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
-import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { ipDaoTao } from '@/utils/ip';
 import { InfoCircleOutlined } from '@ant-design/icons';
@@ -41,18 +40,11 @@ const DangKyTinChiPage = () => {
 	const { getByKeyModel } = useModel('tienich.caidat');
 	const { loaiDangKy, setLoaiDangKy } = useModel('hocphan.hocphan');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
-	const { tinhHocPhi } = useModel('taichinh.mucthuhocphi');
 	const allLoaiDangKy = Object.values(ELoaiDangKyTheoLop);
 	const [isVerified, setIsVerified] = useState<boolean>(false);
 	const [visibleLichSu, setVisibleLichSu] = useState<boolean>(false);
 	const [visibleThongTin, setVisibleThongTin] = useState<boolean>(false);
 	const [activeKey, setActiveKey] = useState<string>('1');
-
-	const dangTrongThoiGian =
-		dotDangKyHienTai?.thoiGianBatDau &&
-		dotDangKyHienTai?.thoiGianKetThuc &&
-		dayjs().isSameOrAfter(dayjs(dotDangKyHienTai?.thoiGianBatDau)) &&
-		dayjs().isSameOrBefore(dayjs(dotDangKyHienTai?.thoiGianKetThuc));
 
 	const handleCaptchaChange = (token: string | null) => {
 		if (token) {
@@ -128,14 +120,13 @@ const DangKyTinChiPage = () => {
 			? phieuDangKy.soTinChiToiDaSongNganh
 			: (phieuDangKy?.soTinChiToiDa ?? 0);
 	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
-	const tongHocPhi = _.sumBy(danhSachLopHienThi, (lop) => tinhHocPhi(lop.soTinChi, lop.loai, lop.maNganh));
 
 	return (
 		<>
 			<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
 				<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
-					<Tabs.TabPane key='1' tab='Đăng ký' />
-					<Tabs.TabPane key='2' tab='Lịch sử đăng ký' />
+					<Tabs.TabPane key='1' tab={intl.formatMessage({ id: 'dangkytinchi.tabs.dangky' })} />
+					<Tabs.TabPane key='2' tab={intl.formatMessage({ id: 'dangkytinchi.tabs.lichsudangky' })} />
 				</Tabs>
 
 				<Flex justify='space-between' align='center' style={{ marginBottom: 12 }}>
@@ -157,7 +148,7 @@ const DangKyTinChiPage = () => {
 								/>
 								<ButtonExtend
 									type='primary'
-									className='custom-info-btn' // Thêm class custom vào đây
+									className='custom-info-btn'
 									icon={<InfoCircleOutlined />}
 									onClick={() => setVisibleThongTin(true)}
 								/>
@@ -187,7 +178,7 @@ const DangKyTinChiPage = () => {
 									{
 										thoigianbatdau: formatDateTime(dotDangKyHienTai?.thoiGianBatDau),
 										thoigianketthuc: formatDateTime(dotDangKyHienTai?.thoiGianKetThuc),
-										span: (chunks) => <b>{chunks}</b>,
+										b: (chunks) => <b>{chunks}</b>,
 									},
 								)}
 
@@ -195,8 +186,11 @@ const DangKyTinChiPage = () => {
 									<>
 										.{' '}
 										<span>
-											{intl.formatMessage({ id: 'dangkytinchi.phieudangky.alert.khoangtinchi' })}:{' '}
-											<b>{[soTinChiToiThieu, soTinChiToiDa].join(' - ')} tín chỉ.</b>
+											{intl.formatMessage({ id: 'dangkytinchi.phieudangky.alert.khoangtinchi' })}{' '}
+											<b>
+												{[soTinChiToiThieu, soTinChiToiDa].join('-')}{' '}
+												{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}.
+											</b>
 										</span>
 									</>
 								) : null}
@@ -206,34 +200,6 @@ const DangKyTinChiPage = () => {
 						<Divider style={{ margin: '8px 0' }} />
 					</>
 				) : null}
-
-				{/* <Row gutter={[8, 12]} style={{ marginBottom: 12 }}>
-					<Col span={24} md={12}>
-						{intl.formatMessage({ id: 'dangkytinchi.phieudangky.tongtinchi.title' })}:{' '}
-						<b className={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu ? 'text-error' : 'text-success'}>
-							{tongTinChi} {intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}
-						</b>
-					</Col>
-					<Col span={24} md={7}>
-						{intl.formatMessage({ id: 'dangkytinchi.phieudangky.hocphidukien.title' })}:{' '}
-						<b>{tongHocPhi ? inputFormat(tongHocPhi) : '--'} VND</b>
-					</Col>
-					{phieuDangKy ? (
-						<Col span={24} md={12}>
-							<div
-								className={
-									tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu
-										? 'fw500 text-error'
-										: 'fw500 text-success'
-								}
-								style={{ textAlign: 'right' }}
-							>
-								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.alert.khoangtinchi' })}:{' '}
-								{[soTinChiToiThieu, soTinChiToiDa].join(' - ')}
-							</div>
-						</Col>
-					) : null}
-				</Row> */}
 
 				{activeKey === '1' ? (
 					<>
