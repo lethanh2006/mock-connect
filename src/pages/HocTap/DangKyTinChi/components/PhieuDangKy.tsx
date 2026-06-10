@@ -8,10 +8,12 @@ import {
 	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
 	ETrangThaiSinhVienDKTinChi,
+	mapTrangThaiDangKyTinChiI18n,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDateTime } from '@/utils/formatDate';
 import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
 import { Popconfirm, Space, Tag } from 'antd';
 import _ from 'lodash';
@@ -125,6 +127,7 @@ const PhieuDangKy = (props: {
 			width: 150,
 			align: 'center',
 			render: (val, rec) => `${val ?? rec?.ten}${rec.soThuTuNhom ? ` (nhóm TH ${rec.soThuTuNhom})` : ''}`,
+			filterType: 'string',
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.sotinchi' }),
@@ -155,6 +158,13 @@ const PhieuDangKy = (props: {
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.thongtinchitiet' }),
 			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={{ ...rec, loai: ELoaiLopHocPhan.CHINH }} />, // Fake loại để ko lỗi
+		},
+		{
+			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.tgdangky' }),
+			dataIndex: 'createdAt',
+			width: 150,
+			render: (val, rec) => val && formatDateTime(val),
+			sortable: true,
 		},
 		// {
 		// 	title: 'Mã khóa ngành',
@@ -191,7 +201,11 @@ const PhieuDangKy = (props: {
 			align: 'center',
 			render: (val, rec) => (
 				<Space wrap size={'small'}>
-					<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>{val}</Tag>
+					<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>
+						{intl.formatMessage({
+							id: mapTrangThaiDangKyTinChiI18n[val as ETrangThaiDangKyTinChi],
+						})}
+					</Tag>{' '}
 					{rec?.isWaitlist && (
 						<Tag color={'orange'}>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
 					)}
@@ -318,7 +332,8 @@ const PhieuDangKy = (props: {
 				]}
 				otherText={[
 					<span>
-						Tổng STC đã đăng ký: <b style={{ color: '#c80f1f', fontSize: '1.1rem' }}>{tongTinChi ?? 0}</b>
+						{intl.formatMessage({ id: 'dangkytinchi.tcdangky' })}:{' '}
+						<b style={{ color: '#c80f1f', fontSize: 15 }}>{tongTinChi ?? 0}</b>
 					</span>,
 				]}
 			/>

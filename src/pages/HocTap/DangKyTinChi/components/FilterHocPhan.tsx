@@ -1,4 +1,5 @@
 import TableBase from '@/components/Table';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { type IColumn } from '@/components/Table/typing';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
@@ -97,30 +98,39 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 			onCell,
 		},
 		{
-			title: 'Trạng thái',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.trangthai' }),
 			dataIndex: 'ma',
 			width: 120,
 			align: 'center',
 			render: (ma: string) =>
-				danhSachMaHpDangKy.includes(ma) ? <Tag color='green'>Đã đăng ký</Tag> : <Tag color='red'>Chưa đăng ký</Tag>,
+				danhSachMaHpDangKy.includes(ma) ? (
+					<Tag color='green'>
+						{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.trangthai.dadangky' })}
+					</Tag>
+				) : (
+					<Tag color='red'>
+						{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.trangthai.chuadangky' })}
+					</Tag>
+				),
 			onCell,
 		},
 		{
-			title: 'Thao tác',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.thaotac' }),
 			align: 'center',
-			width: 90,
+			width: 60,
 			fixed: 'right',
 			render: (_, rec) => (
-				<button
-					type='button'
-					className='custom-action-btn'
-					onClick={() => {
-						setHocPhan(rec);
-						setVisibleHocPhan(true);
-					}}
-				>
-					<PlusOutlined />
-				</button>
+				<div>
+					<ButtonExtend
+						size='small'
+						type='primary'
+						icon={<PlusOutlined />}
+						onClick={() => {
+							setHocPhan(rec);
+							setVisibleHocPhan(true);
+						}}
+					/>
+				</div>
 			),
 		},
 	];
@@ -134,9 +144,11 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 				modelName='hocphan.hocphan'
 				hideCard
 				buttons={{ create: false }}
+				hideFilterColumn={false}
 				otherText={[
 					<span>
-						Tổng STC đã đăng ký: <b style={{ color: '#c80f1f', fontSize: '1.1rem' }}>{tongTinChi ?? 0}</b>
+						{intl.formatMessage({ id: 'dangkytinchi.tcdangky' })}:{' '}
+						<b style={{ color: '#c80f1f', fontSize: 15 }}>{tongTinChi ?? 0}</b>
 					</span>,
 				]}
 			/>
@@ -151,7 +163,13 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 			)}
 
 			<ModalExpandable
-				title={[recHocPhan?.ten, recHocPhan?.ma, `${recHocPhan?.soTinChi} tín chỉ`].filter(Boolean).join(' - ')}
+				title={[
+					recHocPhan?.ten,
+					recHocPhan?.ma,
+					`${recHocPhan?.soTinChi} ${intl.formatMessage({ id: 'dangkytinchi.phieudangky.tinchi.title' })}`,
+				]
+					.filter(Boolean)
+					.join(' - ')}
 				open={visibleHocPhan}
 				onCancel={() => setVisibleHocPhan(false)}
 				footer={null}

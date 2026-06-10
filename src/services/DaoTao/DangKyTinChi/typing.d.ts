@@ -81,6 +81,9 @@ declare module DangKyTinChi {
 		//fake
 		isWaitlist?: boolean;
 		trangThai?: ETrangThaiDangKyTinChi;
+
+		createdAt?: Date;
+		updatedAt?: Date;
 	}
 
 	export interface IHocPhanDangKy {

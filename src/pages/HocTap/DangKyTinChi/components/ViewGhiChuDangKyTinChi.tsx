@@ -1,6 +1,6 @@
 import { EColorLopDangKy } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDate } from '@/utils/formatDate';
-import { Button, Col, Divider, Modal, Row, Space, Tag } from 'antd';
+import { Col, Divider, Modal, Row, Space, Tag } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
@@ -100,10 +100,6 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					</div>
 				</Col>
 			</Row>
-
-			<div className='form-footer'>
-				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
-			</div>
 		</Modal>
 	);
 };
