@@ -298,6 +298,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							{intl.formatMessage({ id: 'global.tablestatic.button.themmoi' })}
 						</ButtonExtend>
 					)}
+
 					{props.otherButtons}
 
 					{!!props.onReload ? (
@@ -306,11 +307,13 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							icon={<ReloadOutlined />}
 							onClick={() => (props.onReload ? props.onReload() : null)}
 							loading={props.loading}
-							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.xoa.tooltip' })}
-						>
-							{intl.formatMessage({ id: 'global.tablestatic.button.xoa' })}
-						</ButtonExtend>
-					) : null}
+							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.tailai.tooltip' })}
+						/>
+					) : // 	{intl.formatMessage({ id: 'global.tablestatic.button.tailai' })}
+					// </ButtonExtend>
+					null}
+
+					{props.otherText}
 				</div>
 
 				<div className='extra'>

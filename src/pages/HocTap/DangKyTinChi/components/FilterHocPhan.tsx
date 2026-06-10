@@ -1,16 +1,17 @@
 import TableBase from '@/components/Table';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { type IColumn } from '@/components/Table/typing';
 import ModalHocPhan from '@/pages/DaoTao/DeCuongHocPhan/ModalHocPhan';
 import { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
-import { Divider } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import SplitPane from 'react-split-pane';
-import Pane from 'react-split-pane/lib/Pane';
+import { PlusOutlined } from '@ant-design/icons';
+import { Tag } from 'antd';
+import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import DangKyLopHocPhan from './DangKyLopHocPhan';
 
-const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
+const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
+	const { tongTinChi } = props;
 	const intl = useIntl();
 
 	const { khoaNganhMe, getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
@@ -21,19 +22,20 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 		limit,
 		getHocPhanDKHPModel,
 		loaiDangKy,
-		setLoaiDangKy,
 	} = useModel('hocphan.hocphan');
+
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
-	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
-	const [paneSize, setPaneSize] = useState('350px');
+
+	const [visibleHocPhan, setVisibleHocPhan] = useState<boolean>(false);
+
 	const allLoaiDangKy = Object.values(ELoaiDangKyTheoLop);
 	if (!khoaNganhMe?.khoaNganhPhu?.ma) allLoaiDangKy.splice(-2, 1);
+
 	const danhSachMaHpDangKy = danhSachLopDangKy.map((item) => item.maHocPhan);
+
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
-
-	const handlePaneSizeChange = (size: any) => setPaneSize(size[0]);
 
 	const getData = () => recHocKy?.ma && getHocPhanDKHPModel(recHocKy.ma).then((res) => setHocPhan(res?.[0]));
 
@@ -54,85 +56,90 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 	};
 
 	const onCell = (rec: HocPhan.IRecord) => ({
-		onClick: () => setHocPhan(rec),
-		style: {
-			cursor: 'pointer',
-			fontWeight: rec.ma === recHocPhan?.ma ? 600 : undefined,
-			backgroundColor: rec.ma === recHocPhan?.ma ? '#f0f0f0' : undefined,
-			// color: rec.trangThai !== ETrangThaiHocPhanDangKyTinChi.DUOC_DK ? '#cc0101' : undefined,
-			color: danhSachMaHpDangKy.includes(rec.ma) ? 'var(--ant-info-color)' : undefined,
+		onClick: () => {
+			setHocPhan(rec);
+			setVisibleHocPhan(true);
 		},
+		style: { cursor: 'pointer' },
 	});
 
 	const columns: IColumn<HocPhan.IRecord & { index: number }>[] = [
-		{
-			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.thutu' }),
-			dataIndex: 'index',
-			width: 60,
-			align: 'center',
-			onCell,
-		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.mahp' }),
 			dataIndex: 'ma',
 			width: 110,
 			align: 'center',
 			filterType: 'string',
-			render: (val, rec) => {
-				return (
-					<a
-						onClick={(e) => {
-							e.stopPropagation();
-							handleXemDeCuong(val, rec?.ten);
-						}}
-					>
-						{val}
-					</a>
-				);
-			},
-			onCell,
+			render: (val, rec) => (
+				<a
+					onClick={(e) => {
+						e.stopPropagation();
+						handleXemDeCuong(val, rec?.ten);
+					}}
+				>
+					{val}
+				</a>
+			),
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.tenhocphan' }),
 			dataIndex: 'ten',
-			width: 200,
+			width: 280,
 			filterType: 'string',
 			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.sotinchi' }),
 			dataIndex: 'soTinChi',
-			width: 60,
+			width: 70,
 			align: 'center',
+			sortable: true,
 			onCell,
-			// render: (val, rec) => (
-			// 	<>
-			// 		{val} {rec?.isTinhSoTinChi === false ? <i>(không tính)</i> : null}
-			// 	</>
-			// ),
+		},
+		{
+			title: 'Trạng thái',
+			dataIndex: 'ma',
+			width: 120,
+			align: 'center',
+			render: (ma: string) =>
+				danhSachMaHpDangKy.includes(ma) ? <Tag color='green'>Đã đăng ký</Tag> : <Tag color='red'>Chưa đăng ký</Tag>,
+			onCell,
+		},
+		{
+			title: 'Thao tác',
+			align: 'center',
+			width: 90,
+			fixed: 'right',
+			render: (_, rec) => (
+				<button
+					type='button'
+					className='custom-action-btn'
+					onClick={() => {
+						setHocPhan(rec);
+						setVisibleHocPhan(true);
+					}}
+				>
+					<PlusOutlined />
+				</button>
+			),
 		},
 	];
 
 	return (
 		<>
-			<Divider style={{ margin: '8px 0' }} />
-
-			<SplitPane split={isMobile ? 'horizontal' : 'vertical'} onChange={handlePaneSizeChange} style={{ marginTop: 12 }}>
-				<Pane initialSize={paneSize} minSize='250px' maxSize='50%'>
-					<TableBase
-						columns={columns}
-						dependencies={[page, limit, loaiDangKy, recHocKy?.ma]}
-						getData={getData}
-						modelName='hocphan.hocphan'
-						hideCard
-						buttons={{ create: false, reload: false, filter: false }}
-						hideTotal
-						addStt={false}
-					/>
-				</Pane>
-
-				<Pane>{props.children}</Pane>
-			</SplitPane>
+			<TableBase
+				columns={columns}
+				dependencies={[page, limit, loaiDangKy, recHocKy?.ma]}
+				getData={getData}
+				modelName='hocphan.hocphan'
+				hideCard
+				buttons={{ create: false }}
+				otherText={[
+					<span>
+						Tổng STC đã đăng ký: <b style={{ color: '#c80f1f', fontSize: '1.1rem' }}>{tongTinChi ?? 0}</b>
+					</span>,
+				]}
+			/>
 
 			{deCuongModal && (
 				<ModalHocPhan
@@ -142,6 +149,16 @@ const FilterHocPhanDKTC = (props: { children: React.ReactNode }) => {
 					title={deCuongModal.title}
 				/>
 			)}
+
+			<ModalExpandable
+				title={[recHocPhan?.ten, recHocPhan?.ma, `${recHocPhan?.soTinChi} tín chỉ`].filter(Boolean).join(' - ')}
+				open={visibleHocPhan}
+				onCancel={() => setVisibleHocPhan(false)}
+				footer={null}
+				width={1100}
+			>
+				<DangKyLopHocPhan />
+			</ModalExpandable>
 		</>
 	);
 };

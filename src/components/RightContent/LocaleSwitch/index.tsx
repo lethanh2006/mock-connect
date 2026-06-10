@@ -1,6 +1,5 @@
 import { Menu } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
-import { useEffect } from 'react';
 import { getLocale, setLocale, useIntl } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from '../index.less';
@@ -9,9 +8,9 @@ const LocaleSwitch = () => {
 	const intl = useIntl();
 	// const allLocales = getAllLocales();
 
-	useEffect(() => {
-		setLocale('en-US', true);
-	}, []);
+	// useEffect(() => {
+	// 	setLocale('en-US', true);
+	// }, []);
 
 	const handleChange = (locale: string) => () => {
 		if (getLocale() !== locale) setLocale(locale, true);
@@ -39,7 +38,7 @@ const LocaleSwitch = () => {
 	];
 
 	// Nếu ko cho đổi ngôn ngữ thì return null, đồng thời ở config sửa baseNavigator thành false
-	return null;
+	// return null;
 	return (
 		<HeaderDropdown content={<Menu items={items} />} trigger='hover'>
 			<span className={styles.action}>
