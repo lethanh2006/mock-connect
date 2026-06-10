@@ -34,6 +34,7 @@ export const TableHeader: React.FC = () => {
 	const {
 		buttons,
 		otherButtons,
+		otherText,
 		rowSelection,
 		deleteMany,
 		selectedIds,
@@ -333,6 +334,8 @@ export const TableHeader: React.FC = () => {
 						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
 					</ButtonExtend>
 				)}
+
+				{otherText}
 
 				{/* {rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm

@@ -1,5 +1,5 @@
 export default {
-	'dangkytinchi.title': 'Credit registration',
+	'dangkytinchi.title': 'Course Registration',
 	'dangkytinchi.filter.btn.xemchitiet': 'View details',
 	'dangkytinchi.filter.thoigiandangky.title':
 		'Registration period from <span>{thoigianbatdau}</span> to <span>{thoigianketthuc}</span>',

@@ -54,7 +54,7 @@ export default [
 			{
 				path: 'course-registration',
 				name: 'CourseRegistration',
-				component: './HocTap/DangKyTinChi',
+				component: 'HocTap/DangKyTinChi',
 			},
 			{
 				path: 'timetable',
