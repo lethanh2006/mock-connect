@@ -398,27 +398,29 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					)}
 
 					{props.otherButtons}
-				</div>
 
-				<div className='extra'>
 					{!!props.onReload ? (
 						<ButtonExtend
 							size={size}
 							icon={<ReloadOutlined />}
 							onClick={() => (props.onReload ? props.onReload() : null)}
 							loading={props.loading}
+							className='btn-reload'
 							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.tailai.tooltip' })}
 						>
 							{intl.formatMessage({ id: 'global.tablestatic.button.tailai' })}
 						</ButtonExtend>
 					) : null}
+				</div>
 
+				<div className='extra'>
 					{columnSetting && <ColumnSettings />}
 
 					{globalSearch && globalSearchColumns.length ? (
 						<AutoComplete
 							options={globalOptions}
 							value={globalSearchText}
+							size={size}
 							onSelect={handleGlobalSearchTrigger}
 							onChange={(val) => setGlobalSearchText(val)}
 						>
@@ -467,12 +469,10 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 						<Tooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
 							<div className={classNames({ total: true, small: size === 'small' })}>
 								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
-								<span style={{ fontSize: 15 }}>{total ?? tableData?.length ?? props.data?.length ?? 0}</span>
+								<span>{total ?? tableData?.length ?? props.data?.length ?? 0}</span>
 							</div>
 						</Tooltip>
 					) : null}
-
-					{columnSetting && <ColumnSettings />}
 				</div>
 			</div>
 
