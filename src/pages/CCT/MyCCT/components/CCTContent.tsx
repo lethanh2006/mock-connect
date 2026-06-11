@@ -124,7 +124,7 @@ const CCTContent = (props: {
 			<div className='cct-container'>
 				<header className='cct-header'>
 					<div className='header-content-cct'>
-						<div className='header-title'>CO-CURRICULAR PORTFOLIO</div>
+						<div className='header-title'>CO-CURRICULUM RECORD - STUDENT DEVELOPMENT PORFOLIO</div>
 						<div className='university-logo'>
 							<img src={bgcct} style={{ height: 60 }} />
 						</div>
@@ -135,10 +135,10 @@ const CCTContent = (props: {
 					<div className='column left-column'>
 						<section className='intro-section'>
 							<p className='intro-text'>
-								<b>Co-curricular Portfolio (CCP)</b> is part of VinUniversity’s commitment to developing holistic
-								graduates. This Portfolio documents the co-curricular experiences and developmental activities that
-								students engage in during their time at VinUni, capturing evidence of their competencies, growth, and
-								contributions beyond academic performance.
+								<b>Co-curriculum Record - Student Development Porfolio (CCP)</b> is part of VinUniversity’s commitment
+								to developing holistic graduates. This Portfolio documents the co-curricular experiences and
+								developmental activities that students engage in during their time at VinUni, capturing evidence of
+								their competencies, growth, and contributions beyond academic performance.
 							</p>
 							<div className='student-info'>
 								<div className='info-group'>
