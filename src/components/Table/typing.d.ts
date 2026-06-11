@@ -350,6 +350,7 @@ export type TableStaticProps = Pick<
 	/** Có nút cấu hình cột ko? Mặc định: Có */
 	columnSetting?: boolean;
 	size?: 'small' | 'middle';
+	globalSearch?: boolean;
 };
 
 // IMPORT HEADER

@@ -209,8 +209,8 @@ export default {
 
 	'global.tablestatic.button.themmoi': 'Add New',
 	'global.tablestatic.button.themmoi.tooltip': 'Add New Data',
-	'global.tablestatic.button.xoa': 'Reload',
-	'global.tablestatic.button.xoa.tooltip': 'Reload Data',
+	'global.tablestatic.button.tailai': 'Reload',
+	'global.tablestatic.button.tailai.tooltip': 'Reload Data',
 	'global.tablestatic.button.tongso': 'Total',
 	'global.tablestatic.button.tongso.tooltip': 'Total Data Count',
 
@@ -239,4 +239,6 @@ export default {
 	'global.pdfviewer.truoc': 'Previous',
 	'global.pdfviewer.sau': 'Next',
 	'global.pdfviewer.trang': 'Page {pageNumber} of {numPages}',
+
+	'global.noticeion.all': 'Mark all notifications as read',
 };
