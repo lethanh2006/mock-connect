@@ -179,6 +179,7 @@ export default () => {
 		loaiDangKyTheoLop: ELoaiDangKyTheoLop,
 		maHocPhan: string,
 		tatCa: boolean = false,
+		otherQuery?: any,
 	): Promise<LopHocPhan.IRecord[]> => {
 		setLoading(true);
 		const payload = {
@@ -186,6 +187,7 @@ export default () => {
 			limit,
 			sort: { soThuTuLop: 1 },
 			condition: { maHocPhan, loai: ELoaiLopHocPhan.CHINH, trangThaiLop: ETrangThaiLopHocPhan.MO },
+			otherQuery,
 		};
 
 		try {

@@ -1,36 +1,60 @@
-import { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
-import { Button, Col, Descriptions, Modal, Row } from 'antd';
+import { Alert, Button, Col, Descriptions, Modal, Row } from 'antd';
+import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import RenderLichHoc from './RenderLichHoc';
 
 const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
 	const intl = useIntl();
 	const { visible, setVisible } = props;
+
+	const [errorMessage, setErrorMessage] = useState<string>();
+
 	const { record, formSubmiting, setFormSubmiting } = useModel('lophocphan.lophocphan');
 	const { dotDangKyHienTai, postDangKyTinChiModel, phieuDangKy, getPhieuDangKyModel, getLopDangKyModel } =
 		useModel('daotao.dotdangkytinchi');
-	const { loaiDangKy } = useModel('hocphan.hocphan');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien');
 
-	const khoaNganh =
-		loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu : khoaNganhMe?.khoaNganhChinh;
+	const khoaNganh = khoaNganhMe?.khoaNganhChinh;
+
+	const handleClose = () => {
+		setErrorMessage(undefined);
+		setVisible(false);
+	};
+
+	const getErrorMessage = (er: any) =>
+		er?.data?.message ||
+		er?.response?.data?.message ||
+		er?.detail?.message ||
+		er?.message ||
+		'Đăng ký lớp học phần không thành công';
 
 	const postDangKy = async () => {
-		setFormSubmiting(true);
-		postDangKyTinChiModel({
-			phieuDktcId: phieuDangKy?._id ?? '',
-			dangKy: { lopHocPhanId: record?._id ?? '', maKhoaNganh: khoaNganh?.ma ?? '' },
-		})
-			.then()
-			.finally(() => {
-				if (dotDangKyHienTai?._id) {
-					getPhieuDangKyModel(dotDangKyHienTai._id);
-					getLopDangKyModel(dotDangKyHienTai.maHocKy);
-				}
+		try {
+			setErrorMessage(undefined);
+			setFormSubmiting(true);
 
-				setFormSubmiting(false);
-				setVisible(false);
-			});
+			await postDangKyTinChiModel(
+				{
+					phieuDktcId: phieuDangKy?._id ?? '',
+					dangKy: {
+						lopHocPhanId: record?._id ?? '',
+						maKhoaNganh: khoaNganh?.ma ?? '',
+					},
+				},
+				intl.formatMessage({ id: 'dangkytinchi.thongbao.dangky' }),
+			);
+
+			if (dotDangKyHienTai?._id) {
+				getPhieuDangKyModel(dotDangKyHienTai._id);
+				getLopDangKyModel(dotDangKyHienTai.maHocKy);
+			}
+
+			handleClose();
+		} catch (er: any) {
+			setErrorMessage(getErrorMessage(er));
+		} finally {
+			setFormSubmiting(false);
+		}
 	};
 
 	return (
@@ -38,13 +62,20 @@ const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) =
 			title={intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.title' })}
 			open={visible}
 			footer={null}
-			onCancel={() => setVisible(false)}
+			onCancel={handleClose}
 			width={700}
+			destroyOnClose
 		>
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
 					{intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.message' }, { b: (chunks) => <b>{chunks}</b> })}
 				</Col>
+
+				{errorMessage ? (
+					<Col span={24}>
+						<Alert type='error' showIcon message={errorMessage} />
+					</Col>
+				) : null}
 
 				<Col span={24}>
 					<Descriptions
@@ -82,7 +113,8 @@ const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) =
 				<Button type='primary' loading={formSubmiting} onClick={postDangKy}>
 					{intl.formatMessage({ id: 'global.button.xacnhan' })}
 				</Button>
-				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
+
+				<Button onClick={handleClose}>{intl.formatMessage({ id: 'global.button.huy' })}</Button>
 			</div>
 		</Modal>
 	);

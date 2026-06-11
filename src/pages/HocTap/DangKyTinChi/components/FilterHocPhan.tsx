@@ -38,7 +38,17 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 	const [visibleDeCuong, setVisibleDeCuong] = useState<boolean>(false);
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 
-	const getData = () => recHocKy?.ma && getHocPhanDKHPModel(recHocKy.ma).then((res) => setHocPhan(res?.[0]));
+	const getData = () =>
+		recHocKy?.ma &&
+		getHocPhanDKHPModel(
+			recHocKy.ma,
+			undefined,
+			loaiDangKy === ELoaiDangKyTheoLop.TAT_CA
+				? {
+						isOpenLop: true,
+					}
+				: undefined,
+		).then((res) => setHocPhan(res?.[0]));
 
 	useEffect(() => {
 		getKhoaNganhMeModel();
@@ -71,16 +81,17 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 			width: 110,
 			align: 'center',
 			filterType: 'string',
-			render: (val, rec) => (
-				<a
-					onClick={(e) => {
-						e.stopPropagation();
-						handleXemDeCuong(val, rec?.ten);
-					}}
-				>
-					{val}
-				</a>
-			),
+			// render: (val, rec) => (
+			// 	<a
+			// 		onClick={(e) => {
+			// 			e.stopPropagation();
+			// 			handleXemDeCuong(val, rec?.ten);
+			// 		}}
+			// 	>
+			// 		{val}
+			// 	</a>
+			// ),
+			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.tenhocphan' }),

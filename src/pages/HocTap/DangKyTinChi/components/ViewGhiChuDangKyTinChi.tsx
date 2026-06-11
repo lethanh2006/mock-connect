@@ -1,6 +1,6 @@
-import { EColorLopDangKy } from '@/services/DaoTao/DangKyTinChi/constant';
+import { tinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDate } from '@/utils/formatDate';
-import { Col, Divider, Modal, Row, Space, Tag } from 'antd';
+import { Col, Divider, Modal, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
@@ -10,93 +10,116 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
 
 	return (
-		<Modal title={'Thông tin Đăng ký'} open={visible} footer={null} onCancel={() => setVisible(false)} width={800}>
+		<Modal
+			title={intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtindangky' })}
+			open={visible}
+			footer={null}
+			onCancel={() => setVisible(false)}
+			width={800}
+		>
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
 					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 8 }}>
-						Chi tiết kỳ
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtinkyhoc' })}
 					</Divider>
 				</Col>
-				<Col span={24}>
-					<div>
-						<strong>Tên học kỳ</strong>: {recHocKy?.ten}
-					</div>
-					<div style={{ marginTop: 8 }}>
-						<strong>Số tuần học</strong>: {recHocKy?.soTuan}
-					</div>
-					<div style={{ marginTop: 8 }}>
-						<strong>Thời gian bắt đầu học kỳ</strong>:{' '}
-						{recHocKy?.thoiGianBatDau ? formatDate(recHocKy.thoiGianBatDau) : null}
-					</div>
-					{dotDangKyHienTai && (
-						<div style={{ marginTop: 8 }}>
-							<strong>Tên đợt đăng ký tín chỉ</strong>: {dotDangKyHienTai.ten}
-						</div>
-					)}
-				</Col>
 
 				<Col span={24}>
-					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 8, marginBottom: 8 }}>
-						Thông tin bổ sung
+					<div>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tenhocky' })}</strong>: {recHocKy?.ten ?? '--'}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.sotuanhoc' })}</strong>: {recHocKy?.soTuan ?? '--'}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.thoigianbatdauhocky' })}</strong>:{' '}
+						{recHocKy?.thoiGianBatDau ? formatDate(recHocKy.thoiGianBatDau) : '--'}
+					</div>
+				</Col>
+
+				{dotDangKyHienTai ? (
+					<>
+						<Col span={24}>
+							<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 8 }}>
+								{intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtindotdangky' })}
+							</Divider>
+						</Col>
+
+						<Col span={24}>
+							<div>
+								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tendotdangky' })}</strong>:{' '}
+								{dotDangKyHienTai?.ten ?? '--'}
+							</div>
+							<div style={{ marginTop: 8 }}>
+								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.batdau' })}</strong>:{' '}
+								{dotDangKyHienTai?.thoiGianBatDau ? formatDate(dotDangKyHienTai.thoiGianBatDau) : '--'}
+							</div>
+							<div style={{ marginTop: 8 }}>
+								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.ketthuc' })}</strong>:{' '}
+								{dotDangKyHienTai?.thoiGianKetThuc ? formatDate(dotDangKyHienTai.thoiGianKetThuc) : '--'}
+							</div>
+							<div style={{ marginTop: 8 }}>
+								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tinhchat' })}</strong>:{' '}
+								{dotDangKyHienTai?.tinhChatDangKy ? tinhChatDangKyTC[dotDangKyHienTai.tinhChatDangKy] : '--'}
+							</div>
+						</Col>
+					</>
+				) : null}
+
+				<Col span={24}>
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 8 }}>
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtinbosung' })}
 					</Divider>
 				</Col>
+
 				<Col span={24}>
 					<div>
-						<strong>Lớp theo kế hoạch giảng dạy</strong>: chỉ hiển thị các học phần theo chương trình khung của sinh
-						viên, do thiết kế chương trình hoặc chương trình sv tự thiết kế. Xem chi tiết{' '}
-						<a href='#' style={{ color: '#d32f2f', textDecoration: 'underline' }}>
-							tại đây
-						</a>
-						.
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday.mota' })}
 					</div>
 					<div style={{ marginTop: 8 }}>
-						<strong>Toàn bộ học phần</strong>: toàn bộ học phần mà trường có tổ chức mở lớp trong học kỳ.
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhdaotao' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhdaotao.mota' })}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2.mota' })}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan.mota' })}
 					</div>
 				</Col>
 
 				<Col span={24}>
-					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 8, marginBottom: 8 }}>
-						Hướng dẫn đăng ký
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 8 }}>
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.huongdandangky' })}
 					</Divider>
 				</Col>
+
 				<Col span={24}>
 					<div>
-						<strong>Bước 1:</strong> Chọn Loại học phần
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1.mota' })}
 					</div>
-					<div>
-						<strong>Bước 2:</strong> Tương ứng với loại đã chọn, chọn Học phần cần đăng ký
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2.mota' })}
 					</div>
-					<div>
-						<strong>Bước 3:</strong> Kiểm tra và chọn Lớp tín chỉ mong muốn (chỉ có thể chọn những lớp thuộc học phần
-						chưa được đăng ký, không trùng lịch học và còn trống)
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc3' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc3.mota' })}
 					</div>
-					<div>
-						<strong>Bước 4:</strong> Bấm nút <span style={{ color: '#1890ff', fontWeight: 'bold' }}>ĐĂNG KÝ</span> để
-						đối với từng học phần.
-					</div>
-
-					<div style={{ marginTop: 16, color: '#666' }}>Lưu ý:</div>
-					<div style={{ display: 'flex', flexDirection: 'column' }}>
-						<Space style={{ marginTop: 5 }}>
-							<span className='dang-ky-ghi-chu selected' />
-							{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopdadangky' })}
-						</Space>
-						<Space style={{ marginTop: 5 }}>
-							<span className='dang-ky-ghi-chu' style={{ backgroundColor: EColorLopDangKy.TRUNG_LICH }} />
-							{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopbitrunglichhoc' })}
-						</Space>
-						<Space style={{ marginTop: 5 }}>
-							<span className='dang-ky-ghi-chu' style={{ backgroundColor: EColorLopDangKy.FULL_LOP }} />
-							{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopkhongconchotrong' })}
-						</Space>
-					</div>
-
-					<div style={{ display: 'flex', alignItems: 'flex-start', marginTop: 12 }}>
-						<Tag color={'orange'}>Trong danh sách chờ</Tag>
-						<div style={{ flex: 1, paddingLeft: 12, lineHeight: '1.5' }}>
-							Lớp học phần vẫn tính vào số tín chỉ, lịch học dự kiến của bạn tuy nhiên bạn chưa chính thức ở trong lớp,
-							bạn chỉ là chính thức khi có sinh viên khác rút khỏi lớp hoặc giảng viên chủ động thêm bạn vào lớp.
-						</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc4' })}</strong>:{' '}
+						{intl.formatMessage(
+							{ id: 'dangkytinchi.duongdan.buoc4.mota' },
+							{
+								dangky: (
+									<b style={{ color: '#134D8B' }}>{intl.formatMessage({ id: 'dangkytinchi.duongdan.dangky' })}</b>
+								),
+							},
+						)}
 					</div>
 				</Col>
 			</Row>

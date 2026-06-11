@@ -53,10 +53,13 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 		const promises = danhSachDangKy.map((item, index) =>
 			limit(() => {
 				if (item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY)
-					postDangKyTinChiModel({
-						phieuDktcId: phieuDangKy?._id ?? '',
-						dangKy: { lopHocPhanId: item._id, maKhoaNganh: item.maKhoaNganh ?? '' },
-					})
+					postDangKyTinChiModel(
+						{
+							phieuDktcId: phieuDangKy?._id ?? '',
+							dangKy: { lopHocPhanId: item._id, maKhoaNganh: item.maKhoaNganh ?? '' },
+						},
+						intl.formatMessage({ id: 'dangkytinchi.thongbao.dangky' }),
+					)
 						.then((res) =>
 							// Nếu thành công
 							setDanhSachDangKy((p) => {
@@ -203,11 +206,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 					addStt
 					loading={loading}
 					otherProps={{ pagination: false, scroll: { y: 600 } }}
-					otherButtons={[
-						<i className='text-info'>
-							{intl.formatMessage({ id: 'dangkytinchi.modaldangky.info' })}
-						</i>
-					]}
+					otherButtons={[<i className='text-info'>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.info' })}</i>]}
 				/>
 
 				<ReCAPTCHA

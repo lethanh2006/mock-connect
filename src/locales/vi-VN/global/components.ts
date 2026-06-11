@@ -211,8 +211,8 @@ export default {
 
 	'global.tablestatic.button.themmoi': 'Thêm mới',
 	'global.tablestatic.button.themmoi.tooltip': 'Thêm mới dữ liệu',
-	'global.tablestatic.button.xoa': 'Tải lại',
-	'global.tablestatic.button.xoa.tooltip': 'Tải lại dữ liệu',
+	'global.tablestatic.button.tailai': 'Tải lại',
+	'global.tablestatic.button.tailai.tooltip': 'Tải lại dữ liệu',
 	'global.tablestatic.button.tongso': 'Tổng số',
 	'global.tablestatic.button.tongso.tooltip': 'Tổng số dữ liệu',
 

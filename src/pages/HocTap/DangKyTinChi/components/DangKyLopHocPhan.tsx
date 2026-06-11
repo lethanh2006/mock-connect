@@ -4,7 +4,6 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	EColorLopDangKy,
-	ELoaiDangKyTheoLop,
 	ELoaiHocPhanDangKyTinChi,
 	ETrangThaiDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
@@ -48,12 +47,19 @@ const DangKyLopHocPhan = () => {
 	// const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
 	const dangKyNgay: boolean = true;
+	const [thuFilter, setThuFilter] = useState<number>();
+	const [trangThaiLopFilter, setTrangThaiLopFilter] = useState<'lopcontrong' | 'tatca'>('lopcontrong');
+
+	const otherQuery = {
+		lichHoc: thuFilter ? String(thuFilter) : undefined,
+		siSo: trangThaiLopFilter === 'lopcontrong',
+	};
 
 	const getData = () =>
 		recHocKy?.ma &&
 		recHocPhan?.ma &&
-		sinhVienGetLopDangKyModel(recHocKy.ma, loaiDangKy, recHocPhan.ma, typeLop !== 'Lớp gợi ý').then((data) =>
-			setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
+		sinhVienGetLopDangKyModel(recHocKy.ma, loaiDangKy, recHocPhan.ma, typeLop !== 'Lớp gợi ý', otherQuery).then(
+			(data) => setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
 		);
 
 	/**
@@ -120,8 +126,8 @@ const DangKyLopHocPhan = () => {
 	const buildLopDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitlist = false) => {
 		const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
 		let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
-		const khoaNganh =
-			loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu : khoaNganhMe?.khoaNganhChinh;
+		const khoaNganh = khoaNganhMe?.khoaNganhChinh;
+		// loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu :
 		const lopDangKy = {
 			hocPhan: recHocPhan,
 			maNganh: khoaNganh?.maNganh,
@@ -214,10 +220,13 @@ const DangKyLopHocPhan = () => {
 		try {
 			// Nếu đã đăng ký rồi thì gọi API để xóa lớp
 			if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
-				await deleteDangKyTinChiModel({
-					phieuDktcId: phieuDangKy?._id ?? '',
-					lopHocPhanId: rec._id ?? '',
-				});
+				await deleteDangKyTinChiModel(
+					{
+						phieuDktcId: phieuDangKy?._id ?? '',
+						lopHocPhanId: rec._id ?? '',
+					},
+					intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+				);
 
 			// Xóa lớp ở danh sách tại local
 			const data = danhSachLopDangKy.filter((item) => item.maHocPhan !== rec.maHocPhan);
@@ -425,7 +434,7 @@ const DangKyLopHocPhan = () => {
 				<div className='table-dang-ky'>
 					<TableBase
 						columns={columns}
-						dependencies={[page, limit, recHocKy?.ma, recHocPhan?.ma, typeLop]}
+						dependencies={[page, limit, recHocKy?.ma, recHocPhan?.ma, typeLop, thuFilter, trangThaiLopFilter]}
 						getData={getData}
 						dataState='danhSachLopDktc'
 						modelName='lophocphan.lophocphan'
@@ -444,30 +453,37 @@ const DangKyLopHocPhan = () => {
 						otherButtons={
 							[
 								<Segmented
-									key='2'
+									key='lop-filter'
+									value={trangThaiLopFilter}
 									options={[
-										intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.lopcontrong' }),
-										intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.tatca' }),
-									]} // value={trangThaiLopFilter}
-									// onChange={(val) => setTrangThaiLopFilter(val.toString())}
+										{
+											label: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.lopcontrong' }),
+											value: 'lopcontrong',
+										},
+										{
+											label: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.tatca' }),
+											value: 'tatca',
+										},
+									]}
+									onChange={(val) => setTrangThaiLopFilter(val as 'lopcontrong' | 'tatca')}
 								/>,
 								<Select
-									key='1'
+									key='thu-filter'
 									placeholder={intl.formatMessage({
 										id: 'dangkytinchi.dankylophocphan.filter.loctheothu',
 									})}
 									allowClear
 									style={{ width: 140 }}
-									// value={thuFilter}
-									// onChange={(val) => setThuFilter(val)}
+									value={thuFilter}
+									onChange={(val) => setThuFilter(val)}
 									options={[
-										{ value: 1, label: intl.formatMessage({ id: 'dangkytinchi.thu.2' }) },
-										{ value: 2, label: intl.formatMessage({ id: 'dangkytinchi.thu.3' }) },
-										{ value: 3, label: intl.formatMessage({ id: 'dangkytinchi.thu.4' }) },
-										{ value: 4, label: intl.formatMessage({ id: 'dangkytinchi.thu.5' }) },
-										{ value: 5, label: intl.formatMessage({ id: 'dangkytinchi.thu.6' }) },
-										{ value: 6, label: intl.formatMessage({ id: 'dangkytinchi.thu.7' }) },
-										{ value: 7, label: intl.formatMessage({ id: 'dangkytinchi.thu.cn' }) },
+										{ value: 2, label: intl.formatMessage({ id: 'dangkytinchi.thu.2' }) },
+										{ value: 3, label: intl.formatMessage({ id: 'dangkytinchi.thu.3' }) },
+										{ value: 4, label: intl.formatMessage({ id: 'dangkytinchi.thu.4' }) },
+										{ value: 5, label: intl.formatMessage({ id: 'dangkytinchi.thu.5' }) },
+										{ value: 6, label: intl.formatMessage({ id: 'dangkytinchi.thu.6' }) },
+										{ value: 7, label: intl.formatMessage({ id: 'dangkytinchi.thu.7' }) },
+										{ value: 8, label: intl.formatMessage({ id: 'dangkytinchi.thu.cn' }) },
 									]}
 								/>,
 							]
