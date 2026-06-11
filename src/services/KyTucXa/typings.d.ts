@@ -25,6 +25,7 @@ declare module KyTucXa {
         ma: string;
         ten: string;
         maToaNha: string;
+        toaNha?: IToa;
         maGioiTinh?: EGioiTinh;
         soLuongToiDa: number;
         soLuongHienTai: number;
@@ -32,6 +33,7 @@ declare module KyTucXa {
         tangThu?: number;
         cachBoTri?: string;
         dienTich?: number;
+        soPhongTam?: number;
         moTa?: string;
         danhSachTienIch?: ITienIch[];
         danhSachAnh?: string[];

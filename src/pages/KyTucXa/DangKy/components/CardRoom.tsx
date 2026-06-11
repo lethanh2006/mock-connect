@@ -1,5 +1,5 @@
 import { Button, Tooltip, Typography } from 'antd';
-import { CheckIconCustom, DienTichIconCustom, ExpandIconCustom } from './IconsRoom';
+import { CheckIconCustom, DienTichIconCustom, PhongTamIconCustom } from './IconsRoom';
 import { KyTucXa } from '@/services/KyTucXa/typings';
 import './style.less';
 import { useIntl, useModel } from 'umi';
@@ -23,6 +23,7 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 	const intl = useIntl();
 	const { danhSach: danhSachKhoanThu } = useModel('kytucxa.khoanthu');
 	const { tienIchMap } = useModel('kytucxa.tienich');
+	const { loaiPhongMap } = useModel('kytucxa.loaiphong');
 	
 
 	const mappedTienIchList = useMemo(() => {
@@ -43,11 +44,11 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 		return {
 			slotLeft: left,
 			mainImg: phong.danhSachAnh?.[0],
-			numBedLabel: `${intl.formatMessage({ id: 'kytucxa.dangky.card.bedRoom' }, { soLuongToiDa: phong.soLuongToiDa })}`,
+			numBedLabel: [phong.ma, phong.toaNha?.ten, phong.maLoaiPhongKtx ? loaiPhongMap.get(phong.maLoaiPhongKtx)?.ten : undefined].filter(Boolean).join(' · '),
 			tienIchShow: mappedTienIchList.slice(0, MAX_TIEN_ICH_SHOW),
 			tienIchMore: Math.max(0, mappedTienIchList.length - MAX_TIEN_ICH_SHOW),
 		};
-	}, [phong, mappedTienIchList]);
+	}, [phong, mappedTienIchList, loaiPhongMap]);
 
 	const giaPhong = useMemo(() => {
 		const khoanThu = (danhSachKhoanThu as KyTucXa.IKhoanThu[])?.find(
@@ -90,17 +91,21 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 				</div>
 
 				<div className='ktx-room-card__stats'>
-					<span className='ktx-room-card__stat'>
-						<DienTichIconCustom />
-						&nbsp;
-						{phong.dienTich}{intl.formatMessage({ id: 'kytucxa.dangky.card.m2' })}
-					</span>
-					<span className='ktx-room-card__dot' />
-					<span className='ktx-room-card__stat'>
-						<ExpandIconCustom />
-						&nbsp;
-						{phong.cachBoTri}
-					</span>
+					{!!phong.soPhongTam && (
+						<span className='ktx-room-card__stat'>
+							<PhongTamIconCustom />
+							&nbsp;
+							{phong.soPhongTam}
+						</span>
+					)}
+					{!!phong.soPhongTam && !!phong.dienTich && <span className='ktx-room-card__dot' />}
+					{!!phong.dienTich && (
+						<span className='ktx-room-card__stat'>
+							<DienTichIconCustom />
+							&nbsp;
+							{phong.dienTich}{intl.formatMessage({ id: 'kytucxa.dangky.card.m2' })}
+						</span>
+					)}
 				</div>
 
 				<div className='ktx-room-card__amenities'>

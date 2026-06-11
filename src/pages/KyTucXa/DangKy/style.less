@@ -30,6 +30,13 @@
 		padding: 10px;
 		background: #fff;
 		border-bottom: 1px solid #e8edf5;
+		overflow-x: auto;
+		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none; /* IE/Edge */
+		
+		&::-webkit-scrollbar {
+			display: none; /* Chrome/Safari */
+		}
 	}
 
 	&__reset-btn {

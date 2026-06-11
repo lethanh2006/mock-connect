@@ -19,7 +19,7 @@ export default () => {
     return objInit.getAllModel(isSetRecord, sortParam, finalCondition, ...rest);
   };
 
-  const tienIchMap = useMemo(() => {
+  const loaiPhongMap = useMemo(() => {
     const m = new Map<string, KyTucXa.IDanhMucChung>();
     (objInit.danhSach ?? []).forEach((d) => {
       if (d.ma) m.set(d.ma, d);
@@ -30,6 +30,6 @@ export default () => {
   return {
     ...objInit,
     getAllModel,
-    tienIchMap,
+    loaiPhongMap,
   };
 };

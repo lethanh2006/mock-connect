@@ -2,7 +2,7 @@ import { CheckCircleOutlined, CloseOutlined, LeftOutlined, RightOutlined } from 
 import { Button, Col, Image, Modal, Row, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-import { DienTichIconCustom } from './IconsRoom';
+import { DienTichIconCustom, PhongTamIconCustom } from './IconsRoom';
 import { KyTucXa } from '@/services/KyTucXa/typings';
 import './style.less';
 
@@ -39,6 +39,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 	const { record: phong, isView, setIsView } = useModel('kytucxa.phong');
 	const { danhSach: danhSachKhoanThu } = useModel('kytucxa.khoanthu');
 	const { tienIchMap } = useModel('kytucxa.tienich');
+	const { loaiPhongMap } = useModel('kytucxa.loaiphong');
 	const [activeImg, setActiveImg] = useState<number>(0);
 
 	const { slotLeft, numBedLabel, images, thumbs, tienIchAll } = useMemo(() => {
@@ -56,12 +57,12 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 			.filter(Boolean);
 		return {
 			slotLeft: left,
-			numBedLabel: `${intl.formatMessage({ id: 'kytucxa.dangky.card.bedRoom' }, { soLuongToiDa: phong.soLuongToiDa })}`,
+			numBedLabel: [phong.ma, phong.toaNha?.ten, phong.maLoaiPhongKtx ? loaiPhongMap.get(phong.maLoaiPhongKtx)?.ten : undefined].filter(Boolean).join(' · '),
 			images: imgs,
 			thumbs: tbs,
 			tienIchAll,
 		};
-	}, [phong, tienIchMap]);
+	}, [phong, tienIchMap, loaiPhongMap]);
 
 	const giaPhong = useMemo(() => {
 		if (!phong) return undefined;
@@ -163,11 +164,21 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 							</Typography.Text>
 						</div>
 						<div className='ktx-modal__sub-stats'>
-							<span className='ktx-room-card__stat'>
-								<DienTichIconCustom />
-								&nbsp;
-								{phong.dienTich}{intl.formatMessage({ id: 'kytucxa.dangky.card.m2' })}	
-							</span>
+							{!!phong.soPhongTam && (
+								<span className='ktx-room-card__stat'>
+									<PhongTamIconCustom />
+									&nbsp;
+									{phong.soPhongTam}
+								</span>
+							)}
+							{!!phong.soPhongTam && !!phong.dienTich && <span className='ktx-room-card__dot' />}
+							{!!phong.dienTich && (
+								<span className='ktx-room-card__stat'>
+									<DienTichIconCustom />
+									&nbsp;
+									{phong.dienTich}{intl.formatMessage({ id: 'kytucxa.dangky.card.m2' })}	
+								</span>
+							)}
 						</div>
 
 						<div className='ktx-modal__amenities-new'>

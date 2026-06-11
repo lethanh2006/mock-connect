@@ -1,6 +1,7 @@
 import React from 'react';
 import cachBoTriImg from '@/assets/KyTucXa/cachBoTri.png';
 import dienTichImg from '@/assets/KyTucXa/dienTich.png';
+import phongTamImg from '@/assets/KyTucXa/phongTam.png'
 
 export const CheckIconCustom: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 	<svg
@@ -59,6 +60,14 @@ export const ExpandIconCustom: React.FC<React.ImgHTMLAttributes<HTMLImageElement
 export const DienTichIconCustom: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = (props) => (
 	<img
 		src={dienTichImg}
+		alt='Dien tich'
+		style={{ width: 18, height: 18, objectFit: 'contain' }}
+		{...props}
+	/>
+);
+export const PhongTamIconCustom: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = (props) => (
+	<img
+		src={phongTamImg}
 		alt='Dien tich'
 		style={{ width: 18, height: 18, objectFit: 'contain' }}
 		{...props}

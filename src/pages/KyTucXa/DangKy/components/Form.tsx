@@ -63,7 +63,7 @@ const FormDangKyKTX = () => {
 
 	const handleNext = async () => {
 		try {
-			await form.validateFields(['fullName', 'studentId', 'dateOfBirth', 'email', 'phoneNumber', 'apid', 'college', 'identityNumber', 'dateOfIssue', 'placeOfIssue', 'nationality', 'emergencyContacts']);
+			// await form.validateFields(['fullName', 'studentId', 'dateOfBirth', 'email', 'phoneNumber', 'apid', 'college', 'identityNumber', 'dateOfIssue', 'placeOfIssue', 'nationality', 'emergencyContacts', 'confirmInfo']);
 			setCurrentStep(1);
 		} catch (error) { }
 	};
@@ -257,7 +257,6 @@ const FormDangKyKTX = () => {
 									<Form.Item 
 										name="emergencyContacts" 
 										rules={[
-											{ required: true },
 											{
 												validator: (_, value) => {
 													if (!value || value.length < 2) {
@@ -272,11 +271,69 @@ const FormDangKyKTX = () => {
 									</Form.Item>
 								</div>
 							</div>
+							<div className="ktx-register-section mt-4">
+								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.privacyPolicy' })}</Typography.Title>
+								<div className="ktx-register-section__content">
+									<div className="ktx-terms-content">
+										<p className="fw-500" style={{ marginBottom: 12 }}>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.desc' })}</p>
+										<ol className="ktx-terms-list">
+											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.1' })}</li>
+											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.2' })}</li>
+											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.3' })}</li>
+											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.4' })}</li>
+										</ol>
+									</div>
+								</div>
+							</div>
+
+							<div className="ktx-register-section mt-4">
+								<div className="ktx-register-section__content">
+									<Form.Item name="confirmInfo" valuePropName="checked" rules={[{ validator: (_, value) => value ? Promise.resolve() : Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.form.msg.mustAgree' }))) }]}>
+										<Checkbox className="ktx-confirm-checkbox ktx-confirm-checkbox-step1">
+											<span className="ktx-confirm-text">
+												{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.confirmText' })}
+											</span>
+										</Checkbox>
+									</Form.Item>
+								</div>
+							</div>
 					</div>
 
 
 					<div className="ktx-step2-wrapper" style={{ display: currentStep === 1 ? 'block' : 'none' }}>
 							<div className="ktx-register-section">
+								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.commitments' })}</Typography.Title>
+								<div className="ktx-register-section__content">
+									<div className="ktx-terms-content">
+										<p className="fw-500" style={{ marginBottom: 12 }}>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.desc' })}</p>
+										<ol className="ktx-terms-list">
+											<li>
+												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.1.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.1.content' })}
+											</li>
+											<li>
+												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.2.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.2.content' })}
+											</li>
+											<li>
+												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.3.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.3.content' })}
+											</li>
+											<li>
+												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.4.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.4.content' })}
+											</li>
+											<li>
+												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.5.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.5.content' })}
+											</li>
+											<li>
+												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.6.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.6.content' })}
+											</li>
+											<li>
+												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.7.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.7.content' })}
+											</li>
+										</ol>
+									</div>
+								</div>
+							</div>
+
+							<div className="ktx-register-section mt-4">
 								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.step.waiver' })}</Typography.Title>
 								<div className="ktx-register-section__content">
 									<div className="ktx-terms-content">
