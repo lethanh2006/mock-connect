@@ -7,14 +7,13 @@ import {
 	ColorTrangThaiDangKyTinChi,
 	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
-	ETrangThaiSinhVienDKTinChi,
 	mapTrangThaiDangKyTinChiI18n,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
-import { CalendarOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
+import { CalendarOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Popconfirm, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useState } from 'react';
@@ -22,7 +21,6 @@ import { useIntl, useModel } from 'umi';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
-import ModalLopDaHuy from './ModalLopDaHuy';
 import RenderLichHoc from './RenderLichHoc';
 
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
@@ -73,10 +71,13 @@ const PhieuDangKy = (props: {
 		try {
 			// Nếu đã đăng ký rồi thì gọi API để xóa lớp
 			if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
-				await deleteDangKyTinChiModel({
-					phieuDktcId: phieuDangKy?._id ?? '',
-					lopHocPhanId: rec._id ?? '',
-				});
+				await deleteDangKyTinChiModel(
+					{
+						phieuDktcId: phieuDangKy?._id ?? '',
+						lopHocPhanId: rec._id ?? '',
+					},
+					intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+				);
 
 			// Xóa lớp ở danh sách tại local
 			const data = danhSachLopDangKy.filter((item) => item.maHocPhan !== rec.maHocPhan);
@@ -101,18 +102,18 @@ const PhieuDangKy = (props: {
 			dataIndex: 'maHocPhan',
 			align: 'center',
 			width: 100,
-			render: (val, rec) => {
-				return (
-					<a
-						onClick={(e) => {
-							e.stopPropagation();
-							handleXemDeCuong(val, rec?.ten);
-						}}
-					>
-						{val}
-					</a>
-				);
-			},
+			// render: (val, rec) => {
+			// 	return (
+			// 		<a
+			// 			onClick={(e) => {
+			// 				e.stopPropagation();
+			// 				handleXemDeCuong(val, rec?.ten);
+			// 			}}
+			// 		>
+			// 			{val}
+			// 		</a>
+			// 	);
+			// },
 			filterType: 'string',
 		},
 		{
@@ -291,7 +292,7 @@ const PhieuDangKy = (props: {
 								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
 							</ButtonExtend>
 						) : null}
-						{dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
+						{/* {dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 							<>
 								<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
 									{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.caclopdahuy' })}
@@ -327,7 +328,7 @@ const PhieuDangKy = (props: {
 						) : null}
 						{tongTinChi < soTinChiToiThieu ? (
 							<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>
-						) : null}
+						) : null} */}
 					</Space>,
 				]}
 				otherText={[

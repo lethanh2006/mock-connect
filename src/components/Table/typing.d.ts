@@ -360,6 +360,7 @@ export type TableStaticProps = Pick<
 	size?: 'small' | 'middle';
 
 	totalComponent?: any;
+	globalSearch?: boolean;
 };
 
 // IMPORT HEADER

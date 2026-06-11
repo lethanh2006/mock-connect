@@ -204,5 +204,40 @@ export default {
 	'dangkytinchi.trangthaidangky.loi': 'Lỗi',
 
 	'dangkytinchi.tabs.dangky': 'Đăng ký',
-	'dangkytinchi.tabs.lichsudangky': 'Lịch sử đăng ký',
+	'dangkytinchi.tabs.lichsudangky': 'Lớp đã đăng ký',
+
+	'dangkytinchi.duongdan.thongtindangky': 'Thông tin Đăng ký',
+	'dangkytinchi.duongdan.thongtinkyhoc': 'Thông tin kỳ học',
+	'dangkytinchi.duongdan.tenhocky': 'Tên học kỳ',
+	'dangkytinchi.duongdan.sotuanhoc': 'Số tuần học',
+	'dangkytinchi.duongdan.thoigianbatdauhocky': 'Thời gian bắt đầu học kỳ',
+	'dangkytinchi.duongdan.thongtindotdangky': 'Thông tin đợt đăng ký',
+	'dangkytinchi.duongdan.tendotdangky': 'Tên đợt đăng ký',
+	'dangkytinchi.duongdan.batdau': 'Bắt đầu',
+	'dangkytinchi.duongdan.ketthuc': 'Kết thúc',
+	'dangkytinchi.duongdan.tinhchat': 'Tính chất',
+	'dangkytinchi.duongdan.thongtinbosung': 'Thông tin bổ sung',
+	'dangkytinchi.duongdan.theokehoachgiangday': 'Theo kế hoạch giảng dạy',
+	'dangkytinchi.duongdan.theokehoachgiangday.mota':
+		'Hiển thị các học phần cần học của học kỳ theo đúng khung chương trình đào tạo có mở lớp',
+	'dangkytinchi.duongdan.theochuongtrinhdaotao': 'Theo chương trình đào tạo',
+	'dangkytinchi.duongdan.theochuongtrinhdaotao.mota': 'Hiển thị các học phần thuộc chương trình đào tạo có mở lớp',
+	'dangkytinchi.duongdan.theochuongtrinhnganh2': 'Theo chương trình ngành 2',
+	'dangkytinchi.duongdan.theochuongtrinhnganh2.mota':
+		'Hiển thị các học phần thuộc chương trình đào tạo song ngành có mở lớp',
+	'dangkytinchi.duongdan.tatcahocphan': 'Tất cả học phần',
+	'dangkytinchi.duongdan.tatcahocphan.mota': 'Hiển thị tất cả các học phần có mở lớp trong kỳ',
+	'dangkytinchi.duongdan.huongdandangky': 'Hướng dẫn đăng ký',
+	'dangkytinchi.duongdan.buoc1': 'Bước 1',
+	'dangkytinchi.duongdan.buoc1.mota': 'Chọn Loại học phần',
+	'dangkytinchi.duongdan.buoc2': 'Bước 2',
+	'dangkytinchi.duongdan.buoc2.mota': 'Click chọn học phần cần đăng ký',
+	'dangkytinchi.duongdan.buoc3': 'Bước 3',
+	'dangkytinchi.duongdan.buoc3.mota':
+		'Kiểm tra và chọn Lớp tín chỉ mong muốn (chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống)',
+	'dangkytinchi.duongdan.buoc4': 'Bước 4',
+	'dangkytinchi.duongdan.buoc4.mota': 'Bấm nút {dangKy} để thực hiện đăng ký',
+	'dangkytinchi.duongdan.dangky': 'ĐĂNG KÝ',
+
+	'dangkytinchi.thongbao.dangky': 'Đăng ký thành công',
 };
