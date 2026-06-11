@@ -9,7 +9,7 @@ import FormLichSuDk from '@/pages/KyTucXa/LichSu/components/FormDangKy';
 import "@/pages/KyTucXa/DangKy/style.less"
 import SelectDotDangKyKTX from './components/SelectDotDangKy';
 import { FilterIconCustom } from '@/pages/KyTucXa/DangKy/components/IconsRoom';
-import { UnorderedListOutlined, DeleteOutlined, CreditCardOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, DeleteOutlined, DollarOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Popover } from 'antd';
 import PaymentModal from './components/ModalPayment';
 import dayjs from '@/utils/dayjs';
@@ -125,7 +125,7 @@ const LichSuDangKyKTX = () => {
                     color = 'success';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.success' });
                 } else if ([ETrangThaiDuyet.DA_NHAN_PHONG].includes(val as ETrangThaiDuyet)) {
-                    color = 'success';
+                    color = 'purple';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.checkedin' });
                 } else if ([ETrangThaiDuyet.CHO_THANH_TOAN].includes(val as ETrangThaiDuyet)) {
                     color = 'processing';
@@ -162,7 +162,7 @@ const LichSuDangKyKTX = () => {
                         <Button 
                             type="text"
                             disabled={!isChoThanhToan}
-                            icon={<CreditCardOutlined />}
+                            icon={<DollarOutlined />}
                          
                             onClick={() => {
                                 setRecord(record);

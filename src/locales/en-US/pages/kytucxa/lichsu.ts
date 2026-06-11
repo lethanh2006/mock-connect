@@ -13,10 +13,10 @@ export default {
 	'kytucxa.lichsu.table.moveInDate': 'Move in Date',
 	'kytucxa.lichsu.table.moveOutDate': 'Move out Date',
 
-	'kytucxa.lichsu.table.status': 'Status',
-	'kytucxa.lichsu.table.status.success': 'Renting',
+	'kytucxa.lichsu.table.status': 'Payment Status',
+	'kytucxa.lichsu.table.status.success': 'Paid',
 	'kytucxa.lichsu.table.status.checkedin': 'Checked-in',
-	'kytucxa.lichsu.table.status.processing': 'Pending',
+	'kytucxa.lichsu.table.status.processing': 'Unpaid',
 	'kytucxa.lichsu.table.status.expired': 'Expired',
 	'kytucxa.lichsu.table.action': 'Action',
 	

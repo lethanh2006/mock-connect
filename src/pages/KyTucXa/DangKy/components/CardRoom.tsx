@@ -1,8 +1,8 @@
-import { Button, Tooltip, Typography } from 'antd';
+import { Button, Tooltip, Typography, Tag } from 'antd';
 import { CheckIconCustom, DienTichIconCustom, PhongTamIconCustom } from './IconsRoom';
 import { KyTucXa } from '@/services/KyTucXa/typings';
 import './style.less';
-import { useIntl, useModel } from 'umi';
+import { useIntl, useModel, history } from 'umi';
 import React, { useMemo } from 'react';
 
 interface RoomCardProps {
@@ -10,6 +10,7 @@ interface RoomCardProps {
 	onXemChiTiet: (phong: KyTucXa.IPhong) => void;
 	onDangKy: (phong: KyTucXa.IPhong) => void;
 	maPhongDaDangKy?: string;
+	activeRegistrationStatus?: string;
 }
 
 const formatGia = (gia?: number, currency?: string) => {
@@ -19,7 +20,16 @@ const formatGia = (gia?: number, currency?: string) => {
 
 const MAX_TIEN_ICH_SHOW = 3;
 
-const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, maPhongDaDangKy }) => {
+const getStatusColor = (status?: string) => {
+	switch (status) {
+		case 'Chờ thanh toán': return 'processing';
+		case 'Đã thanh toán': return 'success';
+		case 'Đã nhận phòng': return 'purple';
+		default: return 'default';
+	}
+};
+
+const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, maPhongDaDangKy, activeRegistrationStatus }) => {
 	const intl = useIntl();
 	const { danhSach: danhSachKhoanThu } = useModel('kytucxa.khoanthu');
 	const { tienIchMap } = useModel('kytucxa.tienich');
@@ -133,20 +143,30 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 
 				<div className='ktx-room-card__footer'>
 					<div className='ktx-room-card__price-wrap'>
-						<Typography.Text strong className='ktx-room-card__price'>
-							{formatGia(giaPhong, currency)}
-						</Typography.Text>
+						{phong.ma === maPhongDaDangKy && activeRegistrationStatus ? (
+							<Tag color={getStatusColor(activeRegistrationStatus)} style={{ margin: 0, fontWeight: 500, padding: '2px 8px', fontSize: 13 }}>
+								{intl.formatMessage({ id: `kytucxa.dangky.status.${activeRegistrationStatus}` })}
+							</Tag>
+						) : (
+							<Typography.Text strong className='ktx-room-card__price'>
+								{formatGia(giaPhong, currency)}
+							</Typography.Text>
+						)}
 					</div>
 					<Button
 						type='primary'
-						disabled={slotLeft === 0 || phong.coTheDangKy === false || !!maPhongDaDangKy}
-						className={`ktx-room-card__btn ${phong.ma === maPhongDaDangKy ? 'ktx-room-card__btn--registered' : ''}`}
+						disabled={phong.ma !== maPhongDaDangKy && (slotLeft === 0 || phong.coTheDangKy === false || !!maPhongDaDangKy)}
+						className={`ktx-room-card__btn`}
 						onClick={(e) => {
 							e.stopPropagation();
-							onDangKy(phong);
+							if (phong.ma === maPhongDaDangKy) {
+								history.push('/ky-tuc-xa/lich-su');
+							} else {
+								onDangKy(phong);
+							}
 						}}
 					>
-						{phong.ma === maPhongDaDangKy ? intl.formatMessage({ id: 'kytucxa.dangky.card.registered' }) : intl.formatMessage({ id: 'kytucxa.dangky.card.register' })}
+						{phong.ma === maPhongDaDangKy ? intl.formatMessage({ id: 'kytucxa.dangky.success.paymentNow' }) : intl.formatMessage({ id: 'kytucxa.dangky.card.register' })}
 					</Button>
 				</div>
 			</div>

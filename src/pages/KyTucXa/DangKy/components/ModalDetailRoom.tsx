@@ -1,7 +1,7 @@
 import { CheckCircleOutlined, CloseOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Modal, Row, Typography } from 'antd';
 import { useMemo, useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useIntl, useModel, history } from 'umi';
 import { DienTichIconCustom, PhongTamIconCustom } from './IconsRoom';
 import { KyTucXa } from '@/services/KyTucXa/typings';
 import './style.less';
@@ -237,11 +237,17 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 					<Button
 						type='primary'
 						size='large'
-						disabled={slotLeft === 0 || phong.coTheDangKy === false || !!maPhongDaDangKy}
-						onClick={() => onDangKy(phong)}
-						className={`ktx-modal__btn-register ${phong.ma === maPhongDaDangKy ? 'ktx-modal__btn-register--registered' : ''}`}
+						disabled={phong.ma !== maPhongDaDangKy && (slotLeft === 0 || phong.coTheDangKy === false || !!maPhongDaDangKy)}
+						onClick={() => {
+							if (phong.ma === maPhongDaDangKy) {
+								history.push('/ky-tuc-xa/lich-su');
+							} else {
+								onDangKy(phong);
+							}
+						}}
+						className={`ktx-modal__btn-register`}
 					>
-						{phong.ma === maPhongDaDangKy ? intl.formatMessage({ id: 'kytucxa.dangky.modal.registered' }) : intl.formatMessage({ id: 'kytucxa.dangky.modal.register' })}
+						{phong.ma === maPhongDaDangKy ? intl.formatMessage({ id: 'kytucxa.dangky.success.paymentNow' }) : intl.formatMessage({ id: 'kytucxa.dangky.modal.register' })}
 					</Button>
 				</div>
 			</div>

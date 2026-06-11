@@ -12,7 +12,7 @@ export default {
     // 'kytucxa.lichsu.table.paymentDeadline': 'Hạn thanh toán',
     'kytucxa.lichsu.table.moveInDate': 'Ngày chuyển vào',
 	'kytucxa.lichsu.table.moveOutDate': 'Ngày chuyển ra',
-    'kytucxa.lichsu.table.status': 'Trạng thái',
+    'kytucxa.lichsu.table.status': 'Trạng thái thanh toán',
     'kytucxa.lichsu.table.status.success': 'Đã thanh toán',
     'kytucxa.lichsu.table.status.checkedin': 'Đã nhận phòng',
     'kytucxa.lichsu.table.status.processing': 'Chờ thanh toán',

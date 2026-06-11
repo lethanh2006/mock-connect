@@ -16,6 +16,7 @@ import { ETrangThaiDuyet } from '@/services/KyTucXa/constant';
 import SelectCapacityKTX from './components/SelectCapacity';
 import SelectRoomTypeKTX from './components/SelectRoomType';
 import PageCard from '@/components/PageCard';
+import ModalSuccessRegistration from './components/ModalSuccessRegistration';
 
 const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
@@ -31,12 +32,21 @@ const DangKyKyTucXaPage = () => {
 	const [selectedRoomType, setSelectedRoomType] = useState<string | undefined>(undefined);
 	const [selectedFloor, setSelectedFloor] = useState<number | undefined>(undefined);
 
-	const maPhongDaDangKy = useMemo(() => {
-		const lichSuHoatDong = danhSachLichSu.find(
+	const activeRegistration = useMemo(() => {
+		return danhSachLichSu.find(
 			(item) => item.trangThaiDuyet !== ETrangThaiDuyet.HUY,
 		);
-		return lichSuHoatDong?.maPhong;
 	}, [danhSachLichSu]);
+
+	const maPhongDaDangKy = activeRegistration?.phong?.ma || activeRegistration?.maPhong;
+
+	const [visibleAutoSuccess, setVisibleAutoSuccess] = useState(false);
+
+	useEffect(() => {
+		if (maPhongDaDangKy) {
+			setVisibleAutoSuccess(true);
+		}
+	}, [maPhongDaDangKy]);
 
 	useEffect(() => {
 		getDotDangKy();
@@ -186,38 +196,6 @@ const DangKyKyTucXaPage = () => {
 				/>
 			) : (
 				<>
-					{cacDotDangKyHienTai.map(dot => (
-						<div key={dot._id} className='ktx-page__dot-card' style={{ padding: '10px 14px', marginBottom: 16 }}>
-							<Typography.Title level={5} style={{ marginBottom: 4, color: '#1d3a6b' }}>
-								{dot.tenDot}
-							</Typography.Title>
-							<Typography.Text type='secondary' style={{ fontSize: '13px' }}>
-								{intl.formatMessage({ id: 'kytucxa.dangky.registerTime' })} <strong>{formatDateTime(dot.thoiGianBatDau)}</strong> {intl.formatMessage({ id: 'kytucxa.dangky.to' })}{' '}
-								<strong>{formatDateTime(dot.thoiGianKetThuc)}</strong>
-							</Typography.Text>
-
-							{dot.ghiChu && (
-								<div
-									style={{
-										marginTop: 14,
-										padding: '10px 14px',
-										background: '#f0f5ff',
-										borderLeft: '4px solid #1d3a6b',
-										borderRadius: '0 8px 8px 0',
-										display: 'flex',
-										alignItems: 'flex-start',
-										gap: 10,
-									}}
-								>
-									<InfoCircleOutlined style={{ color: '#1d3a6b', marginTop: 3, fontSize: '15px' }} />
-									<Typography.Text style={{ color: '#1d3a6b', fontWeight: 600, display: 'block', fontSize: '13px', marginBottom: 2 }}>
-										{intl.formatMessage({ id: 'kytucxa.dangky.note' })}: {dot.ghiChu}
-									</Typography.Text>
-								</div>
-							)}
-						</div>
-					))}
-
 					<div className='ktx-page__main-card'>
 						<div className='ktx-page__filter-bar'>
 							<Row gutter={[12, 8]} align='middle' wrap={false}>
@@ -251,6 +229,32 @@ const DangKyKyTucXaPage = () => {
 								</Col>
 							</Row>
 						</div>
+
+						{cacDotDangKyHienTai.map(dot => (
+							<div key={dot._id} style={{ padding: '16px 20px', borderBottom: '1px solid #e8edf5', background: '#fafcff' }}>
+								<Typography.Title level={5} style={{ marginBottom: 4, color: '#1d3a6b' }}>
+									{dot.tenDot}
+								</Typography.Title>
+								<div
+									style={{
+										marginTop: 10,
+										padding: '10px 14px',
+										background: '#f0f5ff',
+										borderLeft: '4px solid #1d3a6b',
+										borderRadius: '0 8px 8px 0',
+										display: 'flex',
+										alignItems: 'flex-start',
+										gap: 10,
+									}}
+								>
+									<InfoCircleOutlined style={{ color: '#1d3a6b', marginTop: 3, fontSize: '15px' }} />
+									<Typography.Text style={{ fontSize: '14px', color: '#2E2E2E' }}>
+										{intl.formatMessage({ id: 'kytucxa.dangky.registerTime' })} <strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianBatDau)}</strong> {intl.formatMessage({ id: 'kytucxa.dangky.to' })}{' '}
+										<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>. {intl.formatMessage({ id: 'kytucxa.dangky.paymentBefore' })} <strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
+									</Typography.Text>
+								</div>
+							</div>
+						))}
 
 						<div className='ktx-page__list'>
 							{loadingPhong ? (
@@ -290,6 +294,11 @@ const DangKyKyTucXaPage = () => {
 					/>
 
 					<FormDangKy />
+					<ModalSuccessRegistration 
+						open={visibleAutoSuccess} 
+						onClose={() => setVisibleAutoSuccess(false)} 
+						phong={(danhSachPhong as KyTucXa.IPhong[])?.find(p => p.ma === maPhongDaDangKy) || activeRegistration?.phong}
+					/>
 				</>
 			)}
 		</PageCard>
