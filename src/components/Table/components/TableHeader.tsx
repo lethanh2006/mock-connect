@@ -247,16 +247,14 @@ export const TableHeader: React.FC = () => {
 							: undefined
 				}
 				enterButton={
-					!minimized ? (
-						<Button
-							loading={loading}
-							icon={
-								<Tooltip title={globalSearchTooltip}>
-									<SearchOutlined />
-								</Tooltip>
-							}
-						/>
-					) : null
+					<Button
+						loading={loading}
+						icon={
+							<Tooltip title={globalSearchTooltip}>
+								<SearchOutlined />
+							</Tooltip>
+						}
+					/>
 				}
 				onSearch={handleGlobalSearchTrigger}
 				onChange={(e) => {
@@ -290,7 +288,6 @@ export const TableHeader: React.FC = () => {
 						icon={<PlusCircleOutlined />}
 						className='btn-add'
 						type='primary'
-						notHideText
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
