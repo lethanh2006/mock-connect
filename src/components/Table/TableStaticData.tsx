@@ -398,7 +398,9 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					)}
 
 					{props.otherButtons}
+				</div>
 
+				<div className='extra'>
 					{!!props.onReload ? (
 						<ButtonExtend
 							size={size}
@@ -411,10 +413,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							{intl.formatMessage({ id: 'global.tablestatic.button.tailai' })}
 						</ButtonExtend>
 					) : null}
-				</div>
-
-				<div className='extra'>
-					{columnSetting && <ColumnSettings />}
 
 					{globalSearch && globalSearchColumns.length ? (
 						<AutoComplete
@@ -473,6 +471,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							</div>
 						</Tooltip>
 					) : null}
+
+					{columnSetting && <ColumnSettings />}
 				</div>
 			</div>
 
