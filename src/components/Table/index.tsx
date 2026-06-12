@@ -155,6 +155,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 				onReload,
 				buttons: props.buttons,
 				otherButtons: props.otherButtons,
+				otherExtra: props.otherExtra,
 				rowSelection: props.rowSelection,
 				deleteMany: props.deleteMany,
 				hideTotal: props.hideTotal,

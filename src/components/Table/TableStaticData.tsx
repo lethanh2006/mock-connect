@@ -401,6 +401,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				</div>
 
 				<div className='extra'>
+					{props.otherExtra}
+
 					{!!props.onReload ? (
 						<ButtonExtend
 							size={size}
