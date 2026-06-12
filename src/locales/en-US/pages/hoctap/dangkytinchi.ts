@@ -195,6 +195,10 @@ export default {
 	'dangkytinchi.trangthaidangky.dadangky': 'Registered',
 	'dangkytinchi.trangthaidangky.loi': 'Error',
 
+	'dangkytinchi.tinhchatdangky.dangkyxoa': 'Allow Add and Drop',
+	'dangkytinchi.tinhchatdangky.dangky': 'Add Only',
+	'dangkytinchi.tinhchatdangky.xoa': 'Drop Only',
+
 	'dangkytinchi.tabs.dangky': 'Register',
 	'dangkytinchi.tabs.lichsudangky': 'Registered Courses',
 

@@ -57,4 +57,18 @@ export default {
 	'lichsukien.chitiet.xoa': 'Xóa',
 	'lichsukien.chitiet.xoa.xacnhan': 'Bạn có chắc chắn muốn xóa sự kiện này không?',
 	'lichsukien.chitiet.loai': 'Loại sự kiện',
+
+	'lichsukien.calendar.allday': 'Cả ngày',
+	'lichsukien.calendar.previous': 'Trước',
+	'lichsukien.calendar.next': 'Sau',
+	'lichsukien.calendar.today': 'Hôm nay',
+	'lichsukien.calendar.month': 'Tháng',
+	'lichsukien.calendar.week': 'Tuần',
+	'lichsukien.calendar.day': 'Ngày',
+	'lichsukien.calendar.agenda': 'Chung',
+	'lichsukien.calendar.date': 'Ngày',
+	'lichsukien.calendar.time': 'Thời gian',
+	'lichsukien.calendar.event': 'Sự kiện',
+	'lichsukien.calendar.showmore': '+ Xem thêm ({total})',
+	'lichsukien.calendar.noeventsinrange': 'Không có sự kiện nào trong khoảng thời gian này',
 };

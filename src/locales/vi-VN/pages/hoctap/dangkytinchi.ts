@@ -203,6 +203,10 @@ export default {
 	'dangkytinchi.trangthaidangky.dadangky': 'Đã đăng ký',
 	'dangkytinchi.trangthaidangky.loi': 'Lỗi',
 
+	'dangkytinchi.tinhchatdangky.dangkyxoa': 'Cho đăng ký mới và xoá cũ',
+	'dangkytinchi.tinhchatdangky.dangky': 'Chỉ đăng ký mới',
+	'dangkytinchi.tinhchatdangky.xoa': 'Chỉ cho phép xóa',
+
 	'dangkytinchi.tabs.dangky': 'Đăng ký',
 	'dangkytinchi.tabs.lichsudangky': 'Lớp đã đăng ký',
 

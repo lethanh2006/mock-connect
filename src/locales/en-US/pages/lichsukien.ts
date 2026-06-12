@@ -53,4 +53,18 @@ export default {
 	'lichsukien.chitiet.xoa': 'Delete',
 	'lichsukien.chitiet.xoa.xacnhan': 'Are you sure you want to delete this event?',
 	'lichsukien.chitiet.loai': 'Event Type',
+
+	'lichsukien.calendar.allday': 'All day',
+	'lichsukien.calendar.previous': 'Back',
+	'lichsukien.calendar.next': 'Next',
+	'lichsukien.calendar.today': 'Today',
+	'lichsukien.calendar.month': 'Month',
+	'lichsukien.calendar.week': 'Week',
+	'lichsukien.calendar.day': 'Day',
+	'lichsukien.calendar.agenda': 'Agenda',
+	'lichsukien.calendar.date': 'Date',
+	'lichsukien.calendar.time': 'Time',
+	'lichsukien.calendar.event': 'Event',
+	'lichsukien.calendar.showmore': '+ View more ({total})',
+	'lichsukien.calendar.noeventsinrange': 'There are no events in this range',
 };
