@@ -465,6 +465,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					)}
 
 					{props.otherButtons}
+
+					{props.otherTextButtons}
 				</div>
 
 				<div className='extra'>
