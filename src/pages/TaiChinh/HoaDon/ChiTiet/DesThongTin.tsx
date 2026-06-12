@@ -1,4 +1,4 @@
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import { EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
@@ -26,9 +26,7 @@ const DesThongTinHoaDon = () => {
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.thoigianthu' })}>
 				<span className={ngoaiThoiGianThanhToan ? 'text-error' : undefined}>
 					{recHoaDon?.dotThu?.thoiGianBatDau ? (
-						`${formatDateTime(recHoaDon.dotThu.thoiGianBatDau)} - ${formatDateTime(
-							recHoaDon.dotThu.thoiGianKetThuc,
-						)}`
+						`${formatDateTime(recHoaDon.dotThu.thoiGianBatDau)} - ${formatDateTime(recHoaDon.dotThu.thoiGianKetThuc)}`
 					) : (
 						<i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>
 					)}
@@ -51,36 +49,36 @@ const DesThongTinHoaDon = () => {
 				)}
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.tongtien' })}>
-				{inputFormat(
+				{/* {inputFormat(
 					recHoaDon?.billItems
 						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
 						?.reduce((acc, item) => acc + (item.amountDue || 0), 0),
-				)}{' '}
-				VNĐ
+				)}{' '} */}
+				{inputFormat(recHoaDon?.soTienPhaiThu ?? 0)} VNĐ
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.uudai' })}>
-				{inputFormat(
+				{/* {inputFormat(
 					recHoaDon?.billItems
 						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
 						?.reduce((acc, item) => acc + (item.amountDiscount || 0), 0),
-				)}{' '}
-				VNĐ
+				)}{' '} */}
+				{inputFormat(recHoaDon?.soTienKhuyenMai ?? 0)} VNĐ
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.danop' })}>
-				{inputFormat(
+				{/* {inputFormat(
 					recHoaDon?.billItems
 						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
 						?.reduce((acc, item) => acc + (item.amountPaid || 0), 0),
-				)}{' '}
-				VNĐ
+				)}{' '} */}
+				{inputFormat(recHoaDon?.soTienPhaiThu ?? 0)} VNĐ
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.conlai' })}>
-				{inputFormat(
+				{/* {inputFormat(
 					recHoaDon?.billItems
 						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
 						?.reduce((acc, item) => acc + (item.amountRemaining || 0), 0),
-				)}{' '}
-				VNĐ
+				)}{' '} */}
+				{inputFormat(recHoaDon?.soTienConLai ?? 0)} VNĐ
 			</Descriptions.Item>
 		</Descriptions>
 	);
