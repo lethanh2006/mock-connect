@@ -338,6 +338,7 @@ export type TableStaticProps = Pick<
 	| 'hideChildrenRows'
 	| 'onReload'
 	| 'otherButtons'
+	| 'otherExtra'
 	| 'scroll'
 > & {
 	data: any[];

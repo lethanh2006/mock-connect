@@ -411,6 +411,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							{intl.formatMessage({ id: 'global.tablestatic.button.tailai' })}
 						</ButtonExtend>
 					) : null}
+
+					{props.otherExtra}
 				</div>
 
 				<div className='extra'>
