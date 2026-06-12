@@ -34,7 +34,7 @@ export const TableHeader: React.FC = () => {
 	const {
 		buttons,
 		otherButtons,
-		otherText,
+		otherExtra,
 		rowSelection,
 		deleteMany,
 		selectedIds,
@@ -335,7 +335,7 @@ export const TableHeader: React.FC = () => {
 					</ButtonExtend>
 				)}
 
-				{otherText}
+				{otherExtra}
 
 				{/* {rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm

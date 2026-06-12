@@ -240,7 +240,7 @@ export default {
 	'dangkytinchi.duongdan.buoc3.mota':
 		'Kiểm tra và chọn Lớp tín chỉ mong muốn (chỉ có thể chọn những lớp thuộc học phần chưa được đăng ký, không trùng lịch học và còn trống)',
 	'dangkytinchi.duongdan.buoc4': 'Bước 4',
-	'dangkytinchi.duongdan.buoc4.mota': 'Bấm nút {dangKy} để thực hiện đăng ký',
+	'dangkytinchi.duongdan.buoc4.mota': 'Bấm nút {dangky} để thực hiện đăng ký',
 	'dangkytinchi.duongdan.dangky': 'ĐĂNG KÝ',
 
 	'dangkytinchi.thongbao.dangky': 'Đăng ký thành công',

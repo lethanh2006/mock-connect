@@ -40,15 +40,9 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 
 	const getData = () =>
 		recHocKy?.ma &&
-		getHocPhanDKHPModel(
-			recHocKy.ma,
-			undefined,
-			loaiDangKy === ELoaiDangKyTheoLop.TAT_CA
-				? {
-						isOpenLop: true,
-					}
-				: undefined,
-		).then((res) => setHocPhan(res?.[0]));
+		getHocPhanDKHPModel(recHocKy.ma, undefined, {
+			isOpenLop: true,
+		}).then((res) => setHocPhan(res?.[0]));
 
 	useEffect(() => {
 		getKhoaNganhMeModel();
@@ -156,7 +150,7 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 				hideCard
 				buttons={{ create: false }}
 				hideFilterColumn={false}
-				otherText={[
+				otherExtra={[
 					<span>
 						{intl.formatMessage({ id: 'dangkytinchi.tcdangky' })}:{' '}
 						<b style={{ color: '#c80f1f', fontSize: 15 }}>{tongTinChi ?? 0}</b>

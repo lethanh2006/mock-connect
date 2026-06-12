@@ -46,8 +46,6 @@ export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 
 	 */
 	customSort?: (value1: any, value2: any) => number;
 
-	specialFilter?: boolean;
-
 	minWidth?: number;
 	maxWidth?: number;
 	resizable?: boolean;
@@ -151,7 +149,7 @@ export type TableBaseProps<T extends object = any> = {
 	otherButtons?: JSX.Element[];
 
 	/** Danh sách các text trước nút Tải lại */
-	otherText?: JSX.Element[];
+	otherExtra?: JSX.Element[];
 
 	/** Biến lưu dữ liệu trong model, Mặc định: danhSach */
 	dataState?: string;
@@ -166,9 +164,6 @@ export type TableBaseProps<T extends object = any> = {
 	rowSelection?: boolean;
 	/** View antd Row Selection */
 	detailRow?: any;
-
-	/** Trạng thái loading của table */
-	loading?: boolean;
 
 	/** Cho phép xóa nhiều, đi kèm với props `rowSelection` */
 	deleteMany?: boolean;
@@ -210,6 +205,7 @@ export type TableBaseProps<T extends object = any> = {
 
 	/** Modal title thay thế, mặc định `Thêm mới`, `Chỉnh sửa`, `Chi tiết` + title */
 	modalTitle?: React.ReactNode;
+
 	/** Hàm reload dữ liệu
 	 * @default getData
 	 */
@@ -342,7 +338,7 @@ export type TableStaticProps = Pick<
 	| 'hideChildrenRows'
 	| 'onReload'
 	| 'otherButtons'
-	| 'otherText'
+	| 'otherExtra'
 	| 'scroll'
 > & {
 	data: any[];
