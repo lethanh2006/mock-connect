@@ -1,98 +1,115 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import { formatDateTime } from '@/utils/formatDate';
+import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { Col, Row, Table, Tag } from 'antd';
-import _ from 'lodash';
+import { Col, Row, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const FormItemHoaDonChiTiet = () => {
 	const intl = useIntl();
 	const { record } = useModel('taichinh.hoadon');
+
 	const { getAllModel, loading, danhSach, xemRutGonChiTiet } = useModel('taichinh.hoadonchitiet');
-	const [result, setResult] = useState<HoaDon.IBillItem[]>([]);
+	// const [result, setResult] = useState<HoaDon.IBillItem[]>([]);
+	const [result, setResult] = useState<HoaDon.ITransaction[]>([]);
 
-	const setBillItemResult = (list: HoaDon.IBillItem[]) => {
-		setResult(list.filter((item) => !xemRutGonChiTiet || item.status !== EMaTrangThaiThanhToan.DONG));
-	};
+	// const setBillItemResult = (list: HoaDon.IBillItem[]) => {
+	// 	setResult(list.filter((item) => !xemRutGonChiTiet || item.status !== EMaTrangThaiThanhToan.DONG));
+	// };
 
-	const getData = () =>
-		record?._id &&
-		getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode }).then((list) =>
-			setBillItemResult(list),
-		);
+	// const getData = () =>
+	// 	record?._id &&
+	// 	getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode }).then((list) =>
+	// 		setBillItemResult(list),
+	// 	);
+
+	// useEffect(() => {
+	// 	getData();
+	// }, [record?._id]);
+
+	// useEffect(() => setBillItemResult(danhSach), [xemRutGonChiTiet]);
 
 	useEffect(() => {
-		getData();
-	}, [record?._id]);
+		setResult(record?.transactions ?? []);
+	}, [record]);
 
-	useEffect(() => setBillItemResult(danhSach), [xemRutGonChiTiet]);
-
-	const columns: IColumn<HoaDon.IBillItem & { index: number }>[] = [
+	const columns: IColumn<HoaDon.ITransaction & { index: number }>[] = [
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.noidung' }),
-			dataIndex: 'ten',
+			dataIndex: 'name',
 			width: 180,
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.dongia' }),
-			dataIndex: 'unitAmount',
+			dataIndex: 'amount',
 			width: 110,
 			align: 'right',
-			render: (val, rec) => `${inputFormat(val)} VND${rec.unitLabel ? `/${rec.unitLabel}` : ''}`,
+			render: (val, rec) => `${inputFormat(val)} ${rec.loaiTienTe ?? 'VND'}`,
+			// render: (val, rec) => `${inputFormat(val)} VND${rec.transactions?. ? `/${rec.transactions?.unitLabel}` : ''}`,
 		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.heso' }),
-			dataIndex: 'heSo',
-			width: 45,
-			align: 'center',
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.heso' }),
+		// 	dataIndex: 'heSo',
+		// 	width: 45,
+		// 	align: 'center',
+		// },
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.SL' }),
 			dataIndex: 'quantity',
 			width: 45,
 			align: 'center',
+			render: (val, rec) => (
+				<div
+					style={{
+						textAlign: 'center',
+					}}
+				>
+					{val ?? 1}
+				</div>
+			),
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.thanhtien' }),
-			dataIndex: 'amountDue',
+			// dataIndex: 'amountDue',
 			width: 100,
 			align: 'right',
-			render: (val, rec) => (
-				<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
-					{inputFormat(val)} VND
-				</span>
-			),
+			render: (val, rec) => {
+				const thanhTien = (rec.amount ?? 0) * (rec.quantity ?? 1);
+				return (
+					<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
+						{inputFormat(thanhTien)} VND
+					</span>
+				);
+			},
 		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.uudai' }),
-			dataIndex: 'amountDiscount',
-			width: 100,
-			align: 'right',
-			render: (val, rec) => (
-				<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
-					{inputFormat(val)} VND
-				</span>
-			),
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.thoigiantao' }),
-			dataIndex: 'createdAt',
-			width: 120,
-			align: 'left',
-			render: (val) => formatDateTime(val),
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.trangthai' }),
-			dataIndex: 'status',
-			align: 'center',
-			width: 120,
-			render: (val: EMaTrangThaiThanhToan) =>
-				val && <Tag color={EMauTrangThaiThanhToanTable?.[val]}>{ETrangThaiThanhToan?.[val] ?? ''}</Tag>,
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.uudai' }),
+		// 	dataIndex: 'amountDiscount',
+		// 	width: 100,
+		// 	align: 'right',
+		// 	render: (val, rec) => (
+		// 		<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
+		// 			{inputFormat(val)} VND
+		// 		</span>
+		// 	),
+		// },
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.thoigiantao' }),
+		// 	dataIndex: 'createdAt',
+		// 	width: 120,
+		// 	align: 'left',
+		// 	render: (val) => formatDateTime(val),
+		// },
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.trangthai' }),
+		// 	dataIndex: 'status',
+		// 	align: 'center',
+		// 	width: 120,
+		// 	render: (val: EMaTrangThaiThanhToan) =>
+		// 		val && <Tag color={EMauTrangThaiThanhToanTable?.[val]}>{ETrangThaiThanhToan?.[val] ?? ''}</Tag>,
+		// },
 	];
 
 	return (
@@ -105,23 +122,31 @@ const FormItemHoaDonChiTiet = () => {
 					addStt
 					size='small'
 					otherProps={{
-						summary: (data: HoaDon.IBillItem[]) => {
+						summary: (data: HoaDon.ITransaction[]) => {
 							const dataFiltered = data.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG);
-							const sumDue = _.sumBy(dataFiltered, (item) => item.amountDue);
-							const sumDiscount = _.sumBy(dataFiltered, (item) => item.amountDiscount);
+
+							const sumCharge = dataFiltered
+								.filter((item) => item.type === 'CHARGE')
+								.reduce((sum, item) => sum + (item.amount ?? 0) * (item.quantity ?? 1), 0);
+
+							const sumDiscount = dataFiltered
+								.filter((item) => item.type === 'DISCOUNT')
+								.reduce((sum, item) => sum + (item.amount ?? 0) * (item.quantity ?? 1), 0);
+
+							const total = sumCharge - sumDiscount;
 							return (
 								<Table.Summary fixed>
 									<Table.Summary.Row>
-										<Table.Summary.Cell index={0} colSpan={5} align='center'>
+										<Table.Summary.Cell index={0} colSpan={4} align='center'>
 											<b>{intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.tongcong' })}</b>
 										</Table.Summary.Cell>
 										<Table.Summary.Cell index={1} align='right'>
-											<b>{inputFormat(sumDue)} VND</b>
+											<b>{inputFormat(total)} VND</b>
 										</Table.Summary.Cell>
-										<Table.Summary.Cell index={2} align='right'>
+										{/* <Table.Summary.Cell index={2} align='right'>
 											<b>{inputFormat(sumDiscount)} VND</b>
 										</Table.Summary.Cell>
-										<Table.Summary.Cell index={3} />
+										<Table.Summary.Cell index={3} /> */}
 									</Table.Summary.Row>
 								</Table.Summary>
 							);

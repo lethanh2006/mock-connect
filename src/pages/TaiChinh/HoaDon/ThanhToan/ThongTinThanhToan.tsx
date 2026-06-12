@@ -1,14 +1,10 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import ModalThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ModalThanhToan';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
-import {
-	EMaTrangThaiThanhToan,
-	ETransactionPaymentType,
-	ETransactionSourceType,
-	ETransactionStatus,
-} from '@/services/TaiChinh/constant';
+import { ETransactionPaymentType, ETransactionSourceType, ETransactionStatus } from '@/services/TaiChinh/constant';
 import dayjs from '@/utils/dayjs';
-import { AppstoreAddOutlined, DollarOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Checkbox, Col, Modal, Row, Space, Tabs } from 'antd';
+import { AppstoreAddOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Modal, Row, Space, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import CanhBaoGiaoDich from '../../GiaoDich/components/CanhBao';
@@ -21,7 +17,7 @@ import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const intl = useIntl();
 	const { setVisible, getData } = props;
-	const { record: recHoaDon } = useModel('taichinh.hoadon');
+	const { record: recHoaDon, visibleModalThanhToan, setVisibleModalThanhToan } = useModel('taichinh.hoadon');
 	const { visibleThanhToan, setVisibleThanhToan, xemRutGonChiTiet, setXemRutGonChiTiet } =
 		useModel('taichinh.hoadonchitiet');
 	const {
@@ -70,6 +66,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		setRecord(tran);
 		setVisibleHuongDan(true);
 	};
+	console.log('recGiaoDich', recHoaDon);
 
 	const onPay = (rec: GiaoDich.IRecord) => {
 		if (rec?.paymentType === ETransactionPaymentType.BANK) {
@@ -104,7 +101,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 					{activeTab === '1' ? (
 						<Space direction='vertical' style={{ width: '100%' }}>
-							{recGiaoDich?._id &&
+							{/* {recGiaoDich?._id &&
 							recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
 							!ngoaiThoiGianThanhToan ? (
 								<Alert
@@ -127,7 +124,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 													Hủy giao dịch
 												</Button>
 											</Popconfirm> */}
-										</Space>
+							{/* </Space>
 									}
 								/>
 							) : (
@@ -154,8 +151,30 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 									</Checkbox>
 									<i>{intl.formatMessage({ id: 'taichinh.thanhtoan.note.compact' })}</i>
 								</Space>
-							)}
+							)} */}
+							<Space wrap>
+								<ButtonExtend
+									// disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
+									onClick={() => setVisibleModalThanhToan(true)}
+									icon={<AppstoreAddOutlined />}
+									type='primary'
+									className='btn-success'
+									loading={loading}
+									notHideText
+									tooltip={
+										ngoaiThoiGianThanhToan
+											? intl.formatMessage({ id: 'taichinh.thanhtoan.tooltip.outOfTime' })
+											: undefined
+									}
+								>
+									{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
+								</ButtonExtend>
 
+								{/* <Checkbox checked={xemRutGonChiTiet} onChange={(e) => setXemRutGonChiTiet(e.target.checked)}>
+									{intl.formatMessage({ id: 'taichinh.thanhtoan.checkbox.compact' })}
+								</Checkbox>
+								<i>{intl.formatMessage({ id: 'taichinh.thanhtoan.note.compact' })}</i> */}
+							</Space>
 							<FormItemHoaDonChiTiet />
 						</Space>
 					) : (
@@ -188,6 +207,16 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 					}}
 				/>
 			</Modal>
+
+			<ModalThanhToan
+				visible={visibleModalThanhToan}
+				onClose={() => setVisibleModalThanhToan(false)}
+				onSuccess={() => {
+					if (activeTab === '1') getGiaoDich();
+					if (getData) getData();
+					setVisibleModalThanhToan(false);
+				}}
+			/>
 
 			<ModalThanhToanNganHang
 				visible={visibleHuongDan}

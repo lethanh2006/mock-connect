@@ -119,4 +119,23 @@ export default {
 	'taichinh.thanhtoan.nganhang.baotri':
 		'Hệ thống đang sao lưu dữ liệu, vui lòng thực hiện thanh toán từ 01:00 đến 23:00',
 	'taichinh.thanhtoan.nganhang.here': 'tại đây',
+
+	'taichinh.thanhtoan.modal.phuongthuc': 'Phương thức thanh toán',
+	'taichinh.thanhtoan.modal.title': 'Chi tiết thanh toán',
+	'taichinh.thanhtoan.modal.subtitle': 'Vui lòng kiểm tra lại thông tin trước khi thanh toán',
+	'taichinh.thanhtoan.modal.magd': 'Mã giao dịch',
+	'taichinh.thanhtoan.modal.noidung': 'Nội dung',
+
+	'taichinh.thanhtoan.modal.col.stt': 'STT',
+	'taichinh.thanhtoan.modal.col.noidung': 'Nội dung',
+	'taichinh.thanhtoan.modal.col.loai': 'Loại',
+	'taichinh.thanhtoan.modal.col.dongia': 'Đơn giá',
+	'taichinh.thanhtoan.modal.col.thanhtien': 'Thành tiền',
+
+	'taichinh.thanhtoan.modal.tongtienphainop': 'Tổng tiền phải nộp',
+	'taichinh.thanhtoan.modal.tienuudai': 'Số tiền ưu đãi',
+	'taichinh.thanhtoan.modal.phigiaodich': 'Phí giao dịch',
+	'taichinh.thanhtoan.modal.tongcong': 'Tổng cộng',
+	'taichinh.thanhtoan.modal.thanhtoanngay': 'Thanh toán ngay',
+	'taichinh.thanhtoan.modal.baomat': 'Bảo mật',
 };
