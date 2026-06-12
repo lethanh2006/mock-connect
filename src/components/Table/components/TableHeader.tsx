@@ -10,7 +10,7 @@ import {
 	ReloadOutlined,
 	SearchOutlined,
 } from '@ant-design/icons';
-import { AutoComplete, Button, Input, Popover, Tooltip } from 'antd';
+import { AutoComplete, Button, Input, Popconfirm, Popover, Tooltip } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -68,8 +68,7 @@ export const TableHeader: React.FC = () => {
 	const searchInputRef = useRef<any>(null);
 	const currentPath = window.location.pathname;
 	const globalDataIndex = useMemo(() => `GLOBAL_SEARCH_${currentPath}`, [currentPath]);
-	const canOpenModalFilter = false;
-	// btnFilter && hasFilter && disableFilterModal !== true;
+	const canOpenModalFilter = btnFilter && hasFilter && disableFilterModal !== true;
 
 	//#region Global Search Logic
 
@@ -315,26 +314,13 @@ export const TableHeader: React.FC = () => {
 						className='btn-export'
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.xuatdulieu' })}
-						{/* {selectedIds?.length && selectedIds?.length > 0 ? ` (${selectedIds?.length})` : ''} */}
+						{selectedIds?.length && selectedIds?.length > 0 ? ` (${selectedIds?.length})` : ''}
 					</ButtonExtend>
 				)}
 
 				{otherButtons}
 
-				{btnReload && (
-					<ButtonExtend
-						size={size}
-						icon={<ReloadOutlined />}
-						onClick={onReload}
-						loading={loading}
-						className='btn-reload'
-						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
-					>
-						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
-					</ButtonExtend>
-				)}
-
-				{/* {rowSelection && deleteMany && selectedIds?.length ? (
+				{rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
 						title={intl.formatMessage({ id: 'global.table.index.button.xoa.title' }, { count: selectedIds?.length })}
 						onConfirm={handleDeleteMany}
@@ -343,11 +329,26 @@ export const TableHeader: React.FC = () => {
 							{intl.formatMessage({ id: 'global.table.index.button.xoa' }, { count: selectedIds?.length })}
 						</ButtonExtend>
 					</Popconfirm>
-				) : null} */}
+				) : null}
 			</div>
 
 			<div className='extra no-print'>
-				{btnColumnSetting && <ColumnSettings />}
+				{canShowGlobalSearch ? (
+					isMinimize ? (
+						<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
+							<ButtonExtend
+								className='btn-minimize-search'
+								size={size}
+								loading={loading}
+								tooltip={globalSearchTooltip}
+								icon={<SearchOutlined />}
+								style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
+							/>
+						</Popover>
+					) : (
+						renderGlobalSearch(isMinimize)
+					)
+				) : null}
 
 				{canOpenModalFilter && (
 					<ButtonExtend
@@ -368,30 +369,28 @@ export const TableHeader: React.FC = () => {
 					</ButtonExtend>
 				)}
 
-				{canShowGlobalSearch ? (
-					isMinimize ? (
-						<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
-							<ButtonExtend
-								className='btn-minimize-search'
-								size={size}
-								loading={loading}
-								tooltip={globalSearchTooltip}
-								icon={<SearchOutlined />}
-								style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
-							/>
-						</Popover>
-					) : (
-						renderGlobalSearch(isMinimize)
-					)
-				) : null}
+				{btnReload && (
+					<ButtonExtend
+						size={size}
+						icon={<ReloadOutlined />}
+						onClick={onReload}
+						loading={loading}
+						className='btn-reload'
+						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
+					>
+						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
+					</ButtonExtend>
+				)}
 
 				{!hideTotal && (
 					<Tooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
 						<div className={classNames({ total: true, small: size === 'small' })}>
-							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:<span>{inputFormat(total || 0)}</span>
+							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:
+							<span style={{ fontSize: 15 }}>{inputFormat(total || 0)}</span>
 						</div>
 					</Tooltip>
 				)}
+				{btnColumnSetting && <ColumnSettings />}
 			</div>
 		</div>
 	);
