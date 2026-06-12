@@ -1,9 +1,10 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { primaryColor } from '@/services/base/constant';
 import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AutoComplete, Card, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
+import { AutoComplete, Button, Card, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -18,9 +19,26 @@ import './style.less';
 import type { IColumn, TableStaticProps, TDataOption } from './typing';
 import { updateSearchStorage } from './utils';
 
+const getValueByDataIndex = (record: any, dataIndex: any) => {
+	if (Array.isArray(dataIndex)) return _.get(record, dataIndex);
+	return _.get(record, dataIndex);
+};
+
 const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const intl = useIntl();
-	const { Form, showEdit, setShowEdit, addStt, data, children, hasCreate, hasTotal, rowSortable, resizable } = props;
+	const {
+		Form,
+		showEdit,
+		setShowEdit,
+		addStt,
+		data,
+		children,
+		hasCreate,
+		hasTotal,
+		rowSortable,
+		resizable,
+		globalSearch = true,
+	} = props;
 	const {
 		columnSettings,
 		setColumnSettings,
@@ -33,32 +51,112 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
 	const [searchText, setSearchText] = useState<string>('');
 	const [searchedColumn, setSearchedColumn] = useState<any>();
+	const [globalSearchText, setGlobalSearchText] = useState<string>('');
+	const [globalOptions, setGlobalOptions] = useState<{ value: string; label?: string }[]>([]);
 	const [total, setTotal] = useState<number>();
 	const searchInputRef = useRef<InputRef>(null);
 
 	// dnd-kit: sensors
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
+	const globalDataIndex = useMemo(() => `TABLE_STATIC_GLOBAL_SEARCH_${window.location.pathname}`, []);
+
+	const globalSearchColumns = useMemo(() => {
+		const flattenColumns = props.columns
+			?.map((item: IColumn<any>) => (item.children?.length ? [item, ...item.children] : [item]))
+			.flat();
+
+		return (
+			flattenColumns?.filter(
+				(item: IColumn<any>) => item?.filterType === 'string' && item?.dataIndex && item.dataIndex !== 'index',
+			) ?? []
+		);
+	}, [props.columns]);
+
 	// State cho tableData để sortable
-	const tableData = useMemo(
-		() =>
-			(props?.data ?? []).map((item: any, index: number) => ({
-				...item,
-				key: item?._id ?? String(index),
-				index: index + 1,
-				children:
-					!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
-						? item.children
-						: undefined,
-			})),
-		[props.data, props.hideChildrenRows],
-	);
+	const tableData = useMemo(() => {
+		const rawData = (props?.data ?? []).map((item: any, index: number) => ({
+			...item,
+			key: item?._id ?? String(index),
+			index: index + 1,
+			children:
+				!props.hideChildrenRows && item?.children && Array.isArray(item.children) && item.children.length
+					? item.children
+					: undefined,
+		}));
+
+		const keyword = globalSearchText.trim().toLowerCase();
+
+		if (!globalSearch || !keyword) return rawData;
+
+		return rawData.filter((record: any) =>
+			globalSearchColumns.some((col: IColumn<any>) => {
+				const value = getValueByDataIndex(record, col.dataIndex);
+				return value?.toString?.().toLowerCase?.().includes(keyword);
+			}),
+		);
+	}, [props.data, props.hideChildrenRows, globalSearch, globalSearchText, globalSearchColumns]);
 
 	useEffect(() => {
 		setTotal(data?.length);
 		setSearchText('');
 		setSearchedColumn(undefined);
+		setGlobalSearchText('');
 	}, [data?.length]);
+
+	useEffect(() => {
+		const history = JSON.parse(localStorage.getItem('dataTimKiem') || '{}')?.[globalDataIndex] || [];
+		setGlobalOptions(history.map((val: string) => ({ value: val, label: val })));
+	}, [globalDataIndex]);
+
+	const globalSearchPlaceholder = useMemo(() => {
+		const labels = globalSearchColumns
+			.map((item: IColumn<any>) => {
+				if (typeof item.title === 'string' || typeof item.title === 'number') return `${item.title}`;
+				if (Array.isArray(item.dataIndex)) return item.dataIndex.join('.');
+				return item.dataIndex ? String(item.dataIndex) : '';
+			})
+			.filter(Boolean)
+			.slice(0, 3)
+			.join(', ');
+
+		if (!labels) return intl.formatMessage({ id: 'global.table.index.search.placeholder.default' });
+
+		return intl.formatMessage({ id: 'global.table.index.search.placeholder' }, { fields: labels });
+	}, [intl, globalSearchColumns]);
+
+	const globalSearchTooltip = useMemo(() => {
+		const labels = globalSearchColumns
+			.map((item: IColumn<any>) => {
+				if (typeof item.title === 'string' || typeof item.title === 'number') return `${item.title}`;
+				if (Array.isArray(item.dataIndex)) return item.dataIndex.join('.');
+				return item.dataIndex ? String(item.dataIndex) : '';
+			})
+			.filter(Boolean)
+			.slice(0, 5)
+			.join(', ');
+
+		if (!labels) return intl.formatMessage({ id: 'global.table.index.search.tooltip.default' });
+
+		return intl.formatMessage({ id: 'global.table.index.search.tooltip' }, { fields: labels });
+	}, [intl, globalSearchColumns]);
+
+	const handleGlobalSearchTrigger = useCallback(
+		(value: string) => {
+			const keyword = value?.trim() || '';
+			setGlobalSearchText(keyword);
+
+			if (keyword) updateSearchStorage(globalDataIndex, keyword);
+
+			const history = JSON.parse(localStorage.getItem('dataTimKiem') || '{}')?.[globalDataIndex] || [];
+			setGlobalOptions(history.map((val: string) => ({ value: val, label: val })));
+
+			setTimeout(() => {
+				searchInputRef.current?.blur();
+			}, 0);
+		},
+		[globalDataIndex],
+	);
 
 	const handleSearch = useCallback((confirm: any, dataIndex: any) => {
 		confirm();
@@ -197,7 +295,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'index',
 				align: 'center',
-				width: 40,
+				width: 60,
 				render: (val: string, rec: any) => {
 					const phanVungHienTai = dsPhanVung?.find((item: any) => item?.ma === rec?.dataPartitionCode);
 					const maMau = phanVungHienTai?.maMau ?? 'var(--color-primary)';
@@ -307,9 +405,10 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							icon={<ReloadOutlined />}
 							onClick={() => (props.onReload ? props.onReload() : null)}
 							loading={props.loading}
-							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.xoa.tooltip' })}
+							className='btn-reload'
+							tooltip={intl.formatMessage({ id: 'global.tablestatic.button.tailai.tooltip' })}
 						>
-							{intl.formatMessage({ id: 'global.tablestatic.button.xoa' })}
+							{intl.formatMessage({ id: 'global.tablestatic.button.tailai' })}
 						</ButtonExtend>
 					) : null}
 				</div>
@@ -317,11 +416,60 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				<div className='extra'>
 					{columnSetting && <ColumnSettings />}
 
+					{globalSearch && globalSearchColumns.length ? (
+						<AutoComplete
+							options={globalOptions}
+							value={globalSearchText}
+							size={size}
+							onSelect={handleGlobalSearchTrigger}
+							onChange={(val) => setGlobalSearchText(val)}
+						>
+							<Input.Search
+								ref={searchInputRef}
+								className='global-search'
+								size={size}
+								allowClear
+								value={globalSearchText}
+								placeholder={globalSearchPlaceholder}
+								style={
+									globalSearchText
+										? {
+												width: 260,
+												borderColor: primaryColor,
+												outline: '1px solid ' + primaryColor,
+												borderRadius: 4,
+											}
+										: { width: 260 }
+								}
+								enterButton={
+									<Button
+										size={size}
+										icon={
+											<Tooltip title={globalSearchTooltip}>
+												<SearchOutlined />
+											</Tooltip>
+										}
+									/>
+								}
+								onSearch={handleGlobalSearchTrigger}
+								onChange={(e) => {
+									if (e.type === 'click') {
+										setGlobalSearchText('');
+										handleGlobalSearchTrigger('');
+									} else {
+										const val = e.target.value;
+										setGlobalSearchText(val);
+									}
+								}}
+							/>
+						</AutoComplete>
+					) : null}
+
 					{hasTotal ? (
 						<Tooltip title={intl.formatMessage({ id: 'global.tablestatic.button.tongso.tooltip' })}>
 							<div className={classNames({ total: true, small: size === 'small' })}>
 								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
-								<span>{total || props.data?.length || 0}</span>
+								<span style={{ fontSize: 15 }}>{total ?? tableData?.length ?? props.data?.length ?? 0}</span>
 							</div>
 						</Tooltip>
 					) : null}
