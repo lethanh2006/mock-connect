@@ -5,6 +5,7 @@ import { type IColumn } from '@/components/Table/typing';
 import {
 	EColorLopDangKy,
 	ELoaiHocPhanDangKyTinChi,
+	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
@@ -23,6 +24,7 @@ const DangKyLopHocPhan = () => {
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel, setRecord } = useModel('lophocphan.lophocphan');
 	const {
+		dotDangKyHienTai,
 		danhSachLopDangKy,
 		setDanhSachLopDangKy,
 		tinhDataLichHoc,
@@ -253,18 +255,19 @@ const DangKyLopHocPhan = () => {
 			width: 140,
 			align: 'center',
 			filterType: 'string',
-			render: (val, rec) => {
-				return (
-					<a
-					// onClick={(e) => {
-					// 	e.stopPropagation();
-					// 	handleXemDeCuong(val, rec?.ten);
-					// }}
-					>
-						{val ?? rec?.ten}
-					</a>
-				);
-			},
+			render: (val, rec) => val ?? rec?.ten,
+			// 	{
+			// 	return (
+			// 		<a
+			// 		// onClick={(e) => {
+			// 		// 	e.stopPropagation();
+			// 		// 	handleXemDeCuong(val, rec?.ten);
+			// 		// }}
+			// 		>
+			// 			{val ?? rec?.ten}
+			// 		</a>
+			// 	);
+			// },
 			onCell,
 		},
 		{
@@ -369,6 +372,11 @@ const DangKyLopHocPhan = () => {
 								})}
 								placement='topRight'
 								onConfirm={() => lopDangKy?._id && onDeleteLop(lopDangKy)}
+								disabled={
+									(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+										dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+									!rec.dangKyTinChi
+								}
 							>
 								<ButtonExtend
 									icon={<DeleteOutlined />}
@@ -377,6 +385,11 @@ const DangKyLopHocPhan = () => {
 									tooltip={intl.formatMessage({
 										id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
 									})}
+									disabled={
+										(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+											dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+										!rec.dangKyTinChi
+									}
 								/>
 							</Popconfirm>
 						</Space>

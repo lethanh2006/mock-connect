@@ -31,7 +31,7 @@ export const useTableColumns = ({ columns, sort, addStt, dsPhanVung }: UseTableC
 		size,
 		columnsWidth,
 		setColumnsWidth,
-		hideFilterColumn = true,
+		hideFilterColumn,
 		columnSettings,
 		setColumnSettings,
 		disableFilterModal,

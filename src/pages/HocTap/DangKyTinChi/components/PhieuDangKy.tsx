@@ -283,7 +283,6 @@ const PhieuDangKy = (props: {
 				addStt
 				loading={loading}
 				hasTotal
-				otherProps={{ pagination: false, scroll: { y: 600 } }}
 				onReload={getData}
 				otherButtons={[
 					<Space wrap>
@@ -331,7 +330,7 @@ const PhieuDangKy = (props: {
 						) : null} */}
 					</Space>,
 				]}
-				otherText={[
+				otherExtra={[
 					<span>
 						{intl.formatMessage({ id: 'dangkytinchi.tcdangky' })}:{' '}
 						<b style={{ color: '#c80f1f', fontSize: 15 }}>{tongTinChi ?? 0}</b>

@@ -1,5 +1,5 @@
 import { tinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
-import { formatDate } from '@/utils/formatDate';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { Col, Divider, Modal, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
 
@@ -52,11 +52,11 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 							</div>
 							<div style={{ marginTop: 8 }}>
 								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.batdau' })}</strong>:{' '}
-								{dotDangKyHienTai?.thoiGianBatDau ? formatDate(dotDangKyHienTai.thoiGianBatDau) : '--'}
+								{dotDangKyHienTai?.thoiGianBatDau ? formatDateTime(dotDangKyHienTai.thoiGianBatDau) : '--'}
 							</div>
 							<div style={{ marginTop: 8 }}>
 								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.ketthuc' })}</strong>:{' '}
-								{dotDangKyHienTai?.thoiGianKetThuc ? formatDate(dotDangKyHienTai.thoiGianKetThuc) : '--'}
+								{dotDangKyHienTai?.thoiGianKetThuc ? formatDateTime(dotDangKyHienTai.thoiGianKetThuc) : '--'}
 							</div>
 							<div style={{ marginTop: 8 }}>
 								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tinhchat' })}</strong>:{' '}
@@ -83,10 +83,10 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhdaotao' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhdaotao.mota' })}
 					</div>
-					<div style={{ marginTop: 8 }}>
+					{/* <div style={{ marginTop: 8 }}>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2.mota' })}
-					</div>
+					</div> */}
 					<div style={{ marginTop: 8 }}>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan.mota' })}
