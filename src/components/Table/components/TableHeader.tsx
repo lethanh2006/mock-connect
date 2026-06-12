@@ -34,6 +34,7 @@ export const TableHeader: React.FC = () => {
 	const {
 		buttons,
 		otherButtons,
+		otherExtra,
 		rowSelection,
 		deleteMany,
 		selectedIds,
@@ -334,6 +335,8 @@ export const TableHeader: React.FC = () => {
 					</ButtonExtend>
 				)}
 
+				{otherExtra}
+
 				{/* {rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
 						title={intl.formatMessage({ id: 'global.table.index.button.xoa.title' }, { count: selectedIds?.length })}
@@ -388,7 +391,8 @@ export const TableHeader: React.FC = () => {
 				{!hideTotal && (
 					<Tooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
 						<div className={classNames({ total: true, small: size === 'small' })}>
-							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:<span>{inputFormat(total || 0)}</span>
+							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:
+							<span style={{ fontSize: 15 }}>{inputFormat(total || 0)}</span>
 						</div>
 					</Tooltip>
 				)}
