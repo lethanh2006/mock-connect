@@ -76,9 +76,9 @@ export enum ETinhChatDangKyTC {
 }
 
 export const tinhChatDangKyTC: Record<ETinhChatDangKyTC, string> = {
-	[ETinhChatDangKyTC.DANG_KY_XOA]: 'Cho đăng ký mới và xoá cũ',
-	[ETinhChatDangKyTC.DANG_KY]: 'Chỉ đăng ký mới',
-	[ETinhChatDangKyTC.XOA]: 'Chỉ cho phép xóa',
+	[ETinhChatDangKyTC.DANG_KY_XOA]: 'dangkytinchi.tinhchatdangky.dangkyxoa',
+	[ETinhChatDangKyTC.DANG_KY]: 'dangkytinchi.tinhchatdangky.dangky',
+	[ETinhChatDangKyTC.XOA]: 'dangkytinchi.tinhchatdangky.xoa',
 };
 
 export enum ELoaiDangKyTheoLop {

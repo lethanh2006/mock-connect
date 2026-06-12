@@ -60,7 +60,9 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 							</div>
 							<div style={{ marginTop: 8 }}>
 								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tinhchat' })}</strong>:{' '}
-								{dotDangKyHienTai?.tinhChatDangKy ? tinhChatDangKyTC[dotDangKyHienTai.tinhChatDangKy] : '--'}
+								{dotDangKyHienTai?.tinhChatDangKy
+									? intl.formatMessage({ id: tinhChatDangKyTC[dotDangKyHienTai.tinhChatDangKy] })
+									: '--'}
 							</div>
 						</Col>
 					</>
