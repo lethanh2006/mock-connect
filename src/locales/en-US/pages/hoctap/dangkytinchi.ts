@@ -21,6 +21,10 @@ export default {
 		'The registration period only allows you to <b>DELETE</b> previously registered credit classes!',
 	'dangkytinchi.waitlist.alert':
 		'If the class is full, you can still register for the waitlist. When a spot becomes available or the instructor approves your request, you will be moved into the official class.',
+	'dangkytinchi.waitlist.confirm.title': 'Class is Full',
+	'dangkytinchi.waitlist.confirm.content':
+		'This class has reached its capacity. Would you like to join the waitlist? You will be automatically moved into the class when a spot opens or when the instructor approves your request.',
+	'dangkytinchi.waitlist.confirm.ok': 'Join waitlist',
 	'dangkytinchi.thongtindangky.title': 'Registration information',
 	'dangkytinchi.thongtindangky.alert':
 		'Students proactively monitor <link_tien_trinh>Study progress</link_tien_trinh> and <link_ket_qua>Academic results</link_ket_qua> to choose classes according to the correct progress; courses that need to be retaken or improved; the graduation thesis or replacement courses...',
@@ -34,6 +38,8 @@ export default {
 	'dangkytinchi.dankylophocphan.columntable.thongtinchitiet': 'Schedule',
 	'dangkytinchi.dankylophocphan.columntable.sisotoida': 'Maximum Capacity',
 	'dangkytinchi.dankylophocphan.columntable.controng': 'Remaining Slots',
+	'dangkytinchi.dankylophocphan.columntable.trangthai.lopday': 'Full',
+	'dangkytinchi.dankylophocphan.columntable.trangthai.trunglich': 'Conflict',
 	'dangkytinchi.dankylophocphan.columntable.dlphong': 'Room Capacity',
 	'dangkytinchi.dankylophocphan.columntable.hangcho': 'Waitlist',
 	'dangkytinchi.dankylophocphan.columntable.hinhthucdt': 'Form of phone number',
@@ -140,6 +146,10 @@ export default {
 	'dangkytinchi.action.xacnhan': 'Confirm',
 	'dangkytinchi.action.huy': 'Cancel',
 	'dangkytinchi.renderlichhoc.khongcothongtin': 'No class schedule information',
+	'dangkytinchi.renderlichhoc.tiet': 'Period {batdau}-{ketthuc}',
+	'dangkytinchi.renderlichhoc.phong': 'Room {phong}',
+	'dangkytinchi.renderlichhoc.tuan': '{count} weeks',
+	'dangkytinchi.renderlichhoc.tuanchitiet': '{count} weeks ({danhsach})',
 	'dangkytinchi.ghichudangkytinchi.step1': 'Step 1: Select Course Type',
 	'dangkytinchi.ghichudangkytinchi.step2': 'Step 2: Corresponding to the selected type, select the course to register',
 	'dangkytinchi.ghichudangkytinchi.step3':
@@ -189,6 +199,7 @@ export default {
 	'dangkytinchi.dangkyngay.modal.tenhocphan': 'Course Name',
 	'dangkytinchi.dangkyngay.modal.giangvien': 'Instructor',
 	'dangkytinchi.dangkyngay.modal.thongtinlophoc': 'Schedule',
+	'dangkytinchi.dangkyngay.modal.error': 'Failed to register for the course section',
 
 	'dangkytinchi.tcdangky': 'Registered Credits',
 	'dangkytinchi.trangthaidangky.chuadangky': 'Not Registered',

@@ -40,10 +40,11 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 
 	const getData = () =>
 		recHocKy?.ma &&
+		dotDangKyHienTai?._id &&
 		getHocPhanDKHPModel(recHocKy.ma, undefined, {
 			isOpenLop: true,
 			idDot: dotDangKyHienTai?._id,
-		}).then((res) => setHocPhan(res?.[0]));
+		});
 
 	useEffect(() => {
 		getKhoaNganhMeModel();
@@ -145,7 +146,7 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 		<>
 			<TableBase
 				columns={columns}
-				dependencies={[page, limit, loaiDangKy, recHocKy?.ma]}
+				dependencies={[page, limit, loaiDangKy, recHocKy?.ma, dotDangKyHienTai?._id]}
 				getData={getData}
 				modelName='hocphan.hocphan'
 				hideCard

@@ -23,6 +23,10 @@ export default {
 	'dangkytinchi.empty.alert': 'Đợt đăng ký chỉ cho phép <b>XÓA</b> lớp tín chỉ đã đăng ký trước đó!',
 	'dangkytinchi.waitlist.alert':
 		'Nếu lớp đã đủ sĩ số, bạn vẫn có thể đăng ký vào danh sách chờ (waitlist). Khi có chỗ trống hoặc được giảng viên phê duyệt, bạn sẽ được chuyển vào lớp chính thức.',
+	'dangkytinchi.waitlist.confirm.title': 'Lớp đã đầy',
+	'dangkytinchi.waitlist.confirm.content':
+		'Lớp này hiện đã đủ sĩ số. Bạn có muốn đăng ký vào danh sách chờ không? Bạn sẽ được tự động chuyển vào lớp khi có chỗ trống hoặc khi giảng viên phê duyệt.',
+	'dangkytinchi.waitlist.confirm.ok': 'Vào danh sách chờ',
 
 	'dangkytinchi.thongtindangky.title': 'Thông tin đăng ký',
 	'dangkytinchi.thongtindangky.alert':
@@ -37,6 +41,8 @@ export default {
 	'dangkytinchi.dankylophocphan.columntable.thongtinchitiet': 'Thông tin chi tiết',
 	'dangkytinchi.dankylophocphan.columntable.sisotoida': 'Sĩ số tối đa',
 	'dangkytinchi.dankylophocphan.columntable.controng': 'Còn trống',
+	'dangkytinchi.dankylophocphan.columntable.trangthai.lopday': 'Lớp đầy',
+	'dangkytinchi.dankylophocphan.columntable.trangthai.trunglich': 'Trùng lịch',
 	'dangkytinchi.dankylophocphan.columntable.dlphong': 'Dung lượng phòng',
 	'dangkytinchi.dankylophocphan.columntable.hangcho': 'Hàng chờ',
 	'dangkytinchi.dankylophocphan.columntable.hinhthucdt': 'Hình thức ĐT',
@@ -147,6 +153,10 @@ export default {
 
 	// render lịch học
 	'dangkytinchi.renderlichhoc.khongcothongtin': 'Không có thông tin lịch học',
+	'dangkytinchi.renderlichhoc.tiet': 'tiết {batdau}-{ketthuc}',
+	'dangkytinchi.renderlichhoc.phong': 'phòng {phong}',
+	'dangkytinchi.renderlichhoc.tuan': '{count} tuần',
+	'dangkytinchi.renderlichhoc.tuanchitiet': '{count} tuần ({danhsach})',
 	// ghi chú đăng ký tín chỉ
 	'dangkytinchi.ghichudangkytinchi.step1': 'Bước 1: Chọn Loại học phần',
 	'dangkytinchi.ghichudangkytinchi.step2': 'Bước 2: Tương ứng với loại đã chọn, chọn Học phần cần đăng ký',
@@ -197,6 +207,7 @@ export default {
 	'dangkytinchi.dangkyngay.modal.tenhocphan': 'Tên học phần',
 	'dangkytinchi.dangkyngay.modal.giangvien': 'Giảng viên',
 	'dangkytinchi.dangkyngay.modal.thongtinlophoc': 'Thông tin lớp học',
+	'dangkytinchi.dangkyngay.modal.error': 'Đăng ký lớp học phần không thành công',
 
 	'dangkytinchi.tcdangky': 'Tổng STC đã đăng ký',
 	'dangkytinchi.trangthaidangky.chuadangky': 'Chưa đăng ký',

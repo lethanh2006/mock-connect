@@ -26,7 +26,7 @@ const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) =
 		er?.response?.data?.message ||
 		er?.detail?.message ||
 		er?.message ||
-		'Đăng ký lớp học phần không thành công';
+		intl.formatMessage({ id: 'dangkytinchi.dangkyngay.modal.error' });
 
 	const postDangKy = async () => {
 		try {
@@ -63,7 +63,7 @@ const ModalDangKyNgay = (props: { visible: boolean; setVisible: (val: boolean) =
 			open={visible}
 			footer={null}
 			onCancel={handleClose}
-			width={700}
+			width={1000}
 			destroyOnClose
 		>
 			<Row gutter={[12, 12]}>

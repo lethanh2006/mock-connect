@@ -86,43 +86,61 @@ const DangKyLopHocPhan = () => {
 		}
 	}, [recHocPhan?.ma]);
 
-	const onCell = (rec: LopHocPhan.IRecord) => ({
-		style: {
-			background: !!danhSachLopDangKy.find((item) => item._id === rec._id)
-				? undefined
-				: rec.siSoToiDa - (rec.siSo ?? 0) <= 0
-					? EColorLopDangKy.FULL_LOP
-					: checkTrungLich(rec.thoiKhoaBieuList ?? [])
-						? EColorLopDangKy.TRUNG_LICH
-						: undefined,
-			// fontWeight: rec.lopHpHcList?.some((item) => danhSachMaLopHc?.includes(item.maLopHc ?? '')) ? 600 : undefined,
-		},
-	});
-
 	const isDaChonLop = (rec: LopHocPhan.IRecord) =>
 		!!danhSachLopDangKy.find((item) => item._id === rec._id || item.ten === rec.ten);
 
-	const getDisabledDangKy = (record: LopHocPhan.IRecord) => {
-		const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
-		const needCheckLopCha = lopCha && dangKyRoiMap[lopCha.loai]?.soThuTuLop !== lopCha.soThuTuLop;
-		// Check trùng cả thời khóa biểu của lớp cha
-		let allThoiKhoaBieu = [...(record.thoiKhoaBieuList ?? [])];
-		if (needCheckLopCha) {
-			allThoiKhoaBieu.push(...(lopCha?.thoiKhoaBieuList ?? []));
-		}
-		// Check sĩ số còn trống ở cả lớp cha nữa
-		let siSo = record.siSoToiDa - (record.siSo ?? 0) <= 0;
-		if (needCheckLopCha) {
-			siSo ||= !!lopCha?._id && lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0;
-		}
-		const failed1 = !!dangKyRoiMap[record.loai] || (!!dangKyRoiMap[lopCha?.loai!] && needCheckLopCha);
-		const failed2 = checkTrungLich(allThoiKhoaBieu);
-		const failed3 = !!record.children?.length;
-		const failed4 = cctFilter?.()
-			? siSo && (record.waitlistCount ?? 0) >= (settings?.SINH_VIEN?.extraSlots ?? 0)
-			: siSo;
+	const renderTrangThaiCanhBao = (rec: LopHocPhan.IRecord) => {
+		if (isDaChonLop(rec)) return null;
 
-		return failed1 || failed2 || failed3 || failed4;
+		if (rec.siSoToiDa - (rec.siSo ?? 0) <= 0) {
+			return (
+				<Tag color={EColorLopDangKy.FULL_LOP}>
+					{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.trangthai.lopday' })}
+				</Tag>
+			);
+		}
+
+		if (checkTrungLich(rec.thoiKhoaBieuList ?? [])) {
+			return (
+				<Tag color={EColorLopDangKy.TRUNG_LICH}>
+					{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.trangthai.trunglich' })}
+				</Tag>
+			);
+		}
+
+		return null;
+	};
+
+	const getLopChaContext = (record: LopHocPhan.IRecord) => {
+		const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
+		const needCheckLopCha = !!(lopCha && dangKyRoiMap[lopCha.loai]?.soThuTuLop !== lopCha.soThuTuLop);
+		return { lopCha, needCheckLopCha };
+	};
+
+	const isHetSiSo = (record: LopHocPhan.IRecord, lopCha?: LopHocPhan.IRecord, needCheckLopCha?: boolean) => {
+		const hetCho = record.siSoToiDa - (record.siSo ?? 0) <= 0;
+		if (!needCheckLopCha || !lopCha?._id) return hetCho;
+		return hetCho || lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0;
+	};
+
+	const getDisabledDangKy = (record: LopHocPhan.IRecord) => {
+		if (record.children?.length) return true;
+
+		const { lopCha, needCheckLopCha } = getLopChaContext(record);
+
+		if (dangKyRoiMap[record.loai]) return true;
+		if (needCheckLopCha && lopCha?.loai && dangKyRoiMap[lopCha.loai]) return true;
+
+		if (isHetSiSo(record, lopCha, needCheckLopCha)) {
+			if (!cctFilter?.()) return true;
+			if ((record.waitlistCount ?? 0) >= (settings?.SINH_VIEN?.extraSlots ?? 0)) return true;
+		}
+
+		const allThoiKhoaBieu = needCheckLopCha
+			? [...(record.thoiKhoaBieuList ?? []), ...(lopCha?.thoiKhoaBieuList ?? [])]
+			: (record.thoiKhoaBieuList ?? []);
+
+		return checkTrungLich(allThoiKhoaBieu);
 	};
 
 	const buildLopDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitlist = false) => {
@@ -181,11 +199,10 @@ const DangKyLopHocPhan = () => {
 
 		if (isHetCho && cctFilter?.()) {
 			Modal.confirm({
-				title: 'Lớp đã đầy',
-				content:
-					'Lớp này hiện đã đủ sĩ số. Bạn có muốn đăng ký vào danh sách chờ không? Bạn sẽ được tự động chuyển vào lớp khi có chỗ trống hoặc khi giảng viên phê duyệt.',
-				okText: 'Vào danh sách chờ',
-				cancelText: 'Hủy',
+				title: intl.formatMessage({ id: 'dangkytinchi.waitlist.confirm.title' }),
+				content: intl.formatMessage({ id: 'dangkytinchi.waitlist.confirm.content' }),
+				okText: intl.formatMessage({ id: 'dangkytinchi.waitlist.confirm.ok' }),
+				cancelText: intl.formatMessage({ id: 'global.button.huy' }),
 				onOk: () => handleDangKy(lopVuaChon, true),
 			});
 			return;
@@ -246,7 +263,6 @@ const DangKyLopHocPhan = () => {
 			width: 100,
 			align: 'center',
 			render: (val, rec) => (rec.soThuTuNhom ? `Nhóm TH ${rec.soThuTuNhom}` : val),
-			onCell,
 			hide: true,
 		},
 		{
@@ -268,7 +284,6 @@ const DangKyLopHocPhan = () => {
 			// 		</a>
 			// 	);
 			// },
-			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.giangvien' }),
@@ -282,20 +297,17 @@ const DangKyLopHocPhan = () => {
 						.join(', ')}
 				</ExpandText>
 			),
-			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.thongtinchitiet' }),
 			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
-			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.sisotoida' }),
 			dataIndex: 'siSoToiDa',
 			align: 'center',
 			width: 100,
-			onCell,
 			sortable: true,
 		},
 		{
@@ -303,7 +315,6 @@ const DangKyLopHocPhan = () => {
 			align: 'center',
 			width: 100,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
-			onCell,
 			sortable: true,
 		},
 		// {
@@ -414,6 +425,9 @@ const DangKyLopHocPhan = () => {
 					);
 				}
 
+				const canhBao = renderTrangThaiCanhBao(rec);
+				if (canhBao && disabled) return canhBao;
+
 				return (
 					<div>
 						<ButtonExtend
@@ -436,7 +450,6 @@ const DangKyLopHocPhan = () => {
 					</div>
 				);
 			},
-			onCell,
 		},
 	];
 
