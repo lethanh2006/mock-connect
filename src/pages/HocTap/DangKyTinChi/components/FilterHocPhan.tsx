@@ -26,7 +26,7 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 	} = useModel('hocphan.hocphan');
 
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
+	const { danhSachLopDangKy, dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
 
 	const [visibleHocPhan, setVisibleHocPhan] = useState<boolean>(false);
 
@@ -42,6 +42,7 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 		recHocKy?.ma &&
 		getHocPhanDKHPModel(recHocKy.ma, undefined, {
 			isOpenLop: true,
+			idDot: dotDangKyHienTai?._id,
 		}).then((res) => setHocPhan(res?.[0]));
 
 	useEffect(() => {
