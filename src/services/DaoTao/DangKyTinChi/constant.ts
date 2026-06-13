@@ -46,9 +46,9 @@ export enum ETrangThaiHocPhanDangKyTinChi {
 }
 
 export enum EColorLopDangKy {
-	TRUNG_LICH = 'rgba(255, 223, 140, 0.3)',
-	FULL_LOP = 'rgba(255, 122, 0, 0.3)',
-	KHONG_DU_DK = 'rgba(255, 104, 104, 0.3)',
+	TRUNG_LICH = 'gold',
+	FULL_LOP = 'orange',
+	KHONG_DU_DK = 'red',
 }
 
 export enum ETrangThaiDangKyTinChi {
