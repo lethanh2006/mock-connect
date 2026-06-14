@@ -85,23 +85,19 @@ const HoaDonPage = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.sotienphainop' }),
-			width: 130,
+			width: 150,
 			align: 'right',
 			render: (val, rec) => {
-				const totalAmountDue = rec?.billItems
-					?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-					?.reduce((acc, item) => acc + ((item.amountDue ?? 0) - (item.amountDiscount ?? 0)), 0);
+				const totalAmountDue = rec?.soTienPhaiThu;
 				return `${inputFormat(totalAmountDue ?? 0)} VND`;
 			},
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.sotiendanop' }),
-			width: 130,
+			width: 150,
 			align: 'right',
 			render: (val, rec) => {
-				const totalAmountDue = rec?.billItems
-					?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-					?.reduce((acc, item) => acc + (item.amountPaid || 0), 0);
+				const totalAmountDue = rec?.soTienDaThu;
 				return `${inputFormat(totalAmountDue ?? 0)} VND`;
 			},
 		},
