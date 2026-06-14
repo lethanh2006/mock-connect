@@ -33,6 +33,5 @@ export interface PaymentDetailProps {
     invoiceCode: string;
     totalAmount: number;
     transactionFee?: number;
-    onPayment: (payload: IPaymentPayload) => void;
     loading?: boolean;
 }
