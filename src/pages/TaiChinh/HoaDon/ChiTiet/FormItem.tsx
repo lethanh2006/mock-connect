@@ -47,14 +47,7 @@ const FormItemHoaDonChiTiet = () => {
 			width: 110,
 			align: 'right',
 			render: (val, rec) => `${inputFormat(val)} ${rec.loaiTienTe ?? 'VND'}`,
-			// render: (val, rec) => `${inputFormat(val)} VND${rec.transactions?. ? `/${rec.transactions?.unitLabel}` : ''}`,
 		},
-		// {
-		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.heso' }),
-		// 	dataIndex: 'heSo',
-		// 	width: 45,
-		// 	align: 'center',
-		// },
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.SL' }),
 			dataIndex: 'quantity',
@@ -72,7 +65,6 @@ const FormItemHoaDonChiTiet = () => {
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.thanhtien' }),
-			// dataIndex: 'amountDue',
 			width: 100,
 			align: 'right',
 			render: (val, rec) => {
@@ -84,32 +76,6 @@ const FormItemHoaDonChiTiet = () => {
 				);
 			},
 		},
-		// {
-		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.uudai' }),
-		// 	dataIndex: 'amountDiscount',
-		// 	width: 100,
-		// 	align: 'right',
-		// 	render: (val, rec) => (
-		// 		<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
-		// 			{inputFormat(val)} VND
-		// 		</span>
-		// 	),
-		// },
-		// {
-		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.thoigiantao' }),
-		// 	dataIndex: 'createdAt',
-		// 	width: 120,
-		// 	align: 'left',
-		// 	render: (val) => formatDateTime(val),
-		// },
-		// {
-		// 	title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.trangthai' }),
-		// 	dataIndex: 'status',
-		// 	align: 'center',
-		// 	width: 120,
-		// 	render: (val: EMaTrangThaiThanhToan) =>
-		// 		val && <Tag color={EMauTrangThaiThanhToanTable?.[val]}>{ETrangThaiThanhToan?.[val] ?? ''}</Tag>,
-		// },
 	];
 
 	return (

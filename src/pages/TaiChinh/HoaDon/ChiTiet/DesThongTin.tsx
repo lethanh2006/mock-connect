@@ -49,35 +49,15 @@ const DesThongTinHoaDon = () => {
 				)}
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.tongtien' })}>
-				{/* {inputFormat(
-					recHoaDon?.billItems
-						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.reduce((acc, item) => acc + (item.amountDue || 0), 0),
-				)}{' '} */}
 				{inputFormat(recHoaDon?.soTienPhaiThu ?? 0)} VNĐ
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.uudai' })}>
-				{/* {inputFormat(
-					recHoaDon?.billItems
-						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.reduce((acc, item) => acc + (item.amountDiscount || 0), 0),
-				)}{' '} */}
 				{inputFormat(recHoaDon?.soTienKhuyenMai ?? 0)} VNĐ
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.danop' })}>
-				{/* {inputFormat(
-					recHoaDon?.billItems
-						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.reduce((acc, item) => acc + (item.amountPaid || 0), 0),
-				)}{' '} */}
 				{inputFormat(recHoaDon?.soTienPhaiThu ?? 0)} VNĐ
 			</Descriptions.Item>
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.conlai' })}>
-				{/* {inputFormat(
-					recHoaDon?.billItems
-						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.reduce((acc, item) => acc + (item.amountRemaining || 0), 0),
-				)}{' '} */}
 				{inputFormat(recHoaDon?.soTienConLai ?? 0)} VNĐ
 			</Descriptions.Item>
 		</Descriptions>

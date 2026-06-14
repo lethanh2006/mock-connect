@@ -1,7 +1,12 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ModalThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ModalThanhToan';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
-import { ETransactionPaymentType, ETransactionSourceType, ETransactionStatus } from '@/services/TaiChinh/constant';
+import {
+	EMaTrangThaiThanhToan,
+	ETransactionPaymentType,
+	ETransactionSourceType,
+	ETransactionStatus,
+} from '@/services/TaiChinh/constant';
 import dayjs from '@/utils/dayjs';
 import { AppstoreAddOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Modal, Row, Space, Tabs } from 'antd';
@@ -154,7 +159,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							)} */}
 							<Space wrap>
 								<ButtonExtend
-									// disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
+									disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
 									onClick={() => setVisibleModalThanhToan(true)}
 									icon={<AppstoreAddOutlined />}
 									type='primary'
