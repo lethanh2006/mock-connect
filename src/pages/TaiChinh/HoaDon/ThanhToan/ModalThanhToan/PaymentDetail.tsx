@@ -13,7 +13,6 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	invoiceCode,
 	totalAmount,
 	transactionFee,
-	onPayment,
 	loading,
 }) => {
 	const intl = useIntl();
@@ -67,9 +66,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			console.log('paymentUrl', paymentUrl);
 
 			if (paymentUrl) {
-				// window.location.href = paymentUrl;
 				window.location.href = paymentUrl;
-				// history.push(paymentUrl);
 			} else {
 				message.error('Không nhận được URL thanh toán từ ONEPAY');
 			}
@@ -81,15 +78,6 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 		}
 		// } else {
 		// 	//todo: update cho các phương thức khác
-		// 	const firstTransaction = transactions[0];
-		// 	onPayment({
-		// 		invoiceId: invoiceCode,
-		// 		orderId: firstTransaction?.billId ?? '',
-		// 		transactionId: firstTransaction?._id ?? '',
-		// 		amount: totalAmountFinal,
-		// 		paymentMethodCode: method.code,
-		// 		paymentMethodName: method.tenNganHang,
-		// 	});
 		// }
 	};
 
@@ -109,16 +97,12 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 					<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.magd' })}>
 						#{invoiceCode}
 					</Descriptions.Item>
-					{/* {transactions[0]?.ghiChu && ( */}
+
 					<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.noidung' })}>
-						{/* {transactions[0].ghiChu} */}
 						{addInfo}
 					</Descriptions.Item>
-					{/* )} */}
 				</Descriptions>
 			</div>
-
-			{/* <Table columns={columns} dataSource={transactions} rowKey='_id' pagination={false} size='small' bordered /> */}
 
 			<div className='payment-detail__summary'>
 				<div className='payment-detail__summary-row'>
@@ -148,7 +132,6 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 				<Button type='primary' block size='large' onClick={handlePayment} loading={loading || loadingOnePay}>
 					{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.thanhtoanngay' })}
 				</Button>
-				{/* <div className='payment-detail__secure'>🔒 {intl.formatMessage({ id: 'taichinh.thanhtoan.modal.baomat' })}</div> */}
 			</div>
 		</div>
 	);
