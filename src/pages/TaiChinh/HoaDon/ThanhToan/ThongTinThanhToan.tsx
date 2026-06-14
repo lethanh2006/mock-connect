@@ -39,7 +39,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const [activeTab, setActiveTab] = useState('1');
 	const ngoaiThoiGianThanhToan =
 		!recHoaDon?.dotThu?._id ||
-		!recHoaDon?.dotThu?.thoiGianBatDau ||
+		// !recHoaDon?.dotThu?.thoiGianBatDau ||
 		!recHoaDon?.dotThu?.thoiGianKetThuc ||
 		dayjs().isBefore(dayjs(recHoaDon.dotThu.thoiGianBatDau)) ||
 		dayjs().isAfter(dayjs(recHoaDon.dotThu.thoiGianKetThuc)) ||
@@ -71,7 +71,6 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 		setRecord(tran);
 		setVisibleHuongDan(true);
 	};
-	console.log('recGiaoDich', recHoaDon);
 
 	const onPay = (rec: GiaoDich.IRecord) => {
 		if (rec?.paymentType === ETransactionPaymentType.BANK) {
