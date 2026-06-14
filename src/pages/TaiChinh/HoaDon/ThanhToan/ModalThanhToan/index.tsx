@@ -5,7 +5,7 @@ import { useModel } from 'umi';
 import PaymentDetail from './PaymentDetail';
 import PaymentMethodList from './PaymentMethodList';
 import './style.less';
-import type { IPaymentPayload, ModalThanhToanProps } from './typing';
+import type { ModalThanhToanProps } from './typing';
 
 const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuccess }) => {
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
@@ -36,19 +36,6 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 		return recHoaDon?.transactions?.reduce((sum, t) => sum + (t.amount ?? 0), 0) ?? 0;
 	}, [recHoaDon?.transactions]);
 
-	// Redirect logic
-	const handlePayment = (payload: IPaymentPayload) => {
-		switch (payload.paymentMethodCode) {
-			case 'MOMO':
-				thanhToanMomoModel(payload.invoiceId);
-				break;
-			default:
-				const redirectUrl = selectedMethod?.apiUrl || `/payment/${payload.paymentMethodCode.toLowerCase()}`;
-				window.location.href = redirectUrl;
-				break;
-		}
-	};
-
 	return (
 		<Modal
 			open={visible}
@@ -71,7 +58,6 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 							transactions={recHoaDon?.transactions ?? []}
 							invoiceCode={recHoaDon?.identityCode ?? ''}
 							totalAmount={totalAmount}
-							onPayment={handlePayment}
 							loading={loadingKenh || loadingPayment}
 						/>
 					)}
