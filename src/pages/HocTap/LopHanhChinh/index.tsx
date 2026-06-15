@@ -10,6 +10,7 @@ import CardGiangVienLop from '../LopHocPhan/components/CardGiangVien';
 import DienDanLopPage from '../LopHocPhan/DienDan';
 import SelectLopHanhChinhSinhVien from './components/Select';
 import ThongTinChungLopHanhChinh from './components/ThongTinChung';
+import PageCard from '@/components/PageCard';
 
 const LopHanhChinhPage = () => {
 	const intl = useIntl();
@@ -27,10 +28,9 @@ const LopHanhChinhPage = () => {
 	// }, [recHocKy?.ma, record?._id]);
 
 	return (
-		<Card
+		<PageCard
 			title={intl.formatMessage({ id: 'lophanhchinh.title' })}
-			variant={'borderless'}
-			className='card-big-title card-borderless'
+			bodyStyle={{ padding: 0 }}
 			extra={
 				<SelectLopHanhChinhSinhVien
 					value={record?._id}
@@ -40,6 +40,7 @@ const LopHanhChinhPage = () => {
 				/>
 			}
 		>
+			<div style={{ background: '#fff', borderRadius: 8, padding: '0 16px 16px', overflow: 'hidden' }}>
 			{/* Xem lớp hành chính theo từng học kỳ khác nhau */}
 			{/* <FilterHocKy style={{ marginBottom: 8 }} isSetHocKy fromLhc>
 				<SelectLopHanhChinhSinhVien
@@ -51,67 +52,74 @@ const LopHanhChinhPage = () => {
 				/>
 			</FilterHocKy>  */}
 
-			<Card variant='borderless'>
 				<Spin spinning={loading}>
 					{record?._id ? (
-						<>
-							<TabViewPage
-								hideCard
-								menu={[
-									{
-										title: intl.formatMessage({ id: 'lophanhchinh.title' }),
-										menuKey: 'thong-tin',
-										content: (
-											<Row gutter={[16, 16]}>
-												<Col span={24} md={{ span: 8, push: 16 }} xxl={{ span: 6, push: 18 }}>
-													<Row gutter={[16, 16]}>
-														<Col span={24}>
-															<CardGiangVienLop
-																loading={loading}
-																title={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.covanhoctap' })}
-																danhSachNhanSu={
-																	recordDetail?.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
-																	(recordDetail?.giangVien?.ssoId
-																		? [{ nhanSu: recordDetail.giangVien, nhanSuSsoId: recordDetail.giangVien.ssoId }]
-																		: [])
-																}
-																isHighlight
-															/>
-														</Col>
-														<Col span={24}>
-															<CardThongBao
-																loai='lop-hanh-chinh'
-																idLop={record?._id}
-																onShowAll={() => (window.location.hash = 'thong-bao')}
-															/>
-														</Col>
-														<Col span={24}>
-															<CardDienDanDashboard typeLop={'lop-hanh-chinh'} />
-														</Col>
-													</Row>
-												</Col>
-												<Col span={24} md={{ span: 16, pull: 8 }} xxl={{ span: 18, pull: 6 }}>
-													<ThongTinChungLopHanhChinh />
-												</Col>
-											</Row>
-										),
-										icon: <InfoCircleOutlined />,
-									},
-									{
-										title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao' }),
-										menuKey: 'thong-bao',
-										content: <ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />,
-										icon: <NotificationOutlined />,
-									},
-									{
-										title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan' }),
-										menuKey: 'dien-dan',
-										content: <DienDanLopPage idLopHanhChinh={record?._id} />,
-										icon: <MessageOutlined />,
-									},
-								]}
-							/>
-						</>
+						<TabViewPage
+							hideCard
+							menu={[
+								{
+									title: intl.formatMessage({ id: 'lophanhchinh.title' }),
+									menuKey: 'thong-tin',
+									content: (
+										<Row gutter={[16, 16]}>
+											<Col
+												span={24}
+												order={1}
+												md={{ span: 8, order: 2 }}
+												xxl={{ span: 6, order: 2 }}
+											>
+												<Row gutter={[16, 16]}>
+													<Col span={24}>
+														<CardGiangVienLop
+															loading={loading}
+															title={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.covanhoctap' })}
+															danhSachNhanSu={
+																recordDetail?.lopHcNsKyList?.map((i) => ({ tenNhanSu: i.hoTenNhanSu, ...i })) ??
+																(recordDetail?.giangVien?.ssoId
+																	? [{ nhanSu: recordDetail.giangVien, nhanSuSsoId: recordDetail.giangVien.ssoId }]
+																	: [])
+															}
+															isHighlight
+														/>
+													</Col>
+													<Col span={24}>
+														<CardThongBao
+															loai='lop-hanh-chinh'
+															idLop={record?._id}
+															onShowAll={() => (window.location.hash = 'thong-bao')}
+														/>
+													</Col>
+													<Col span={24}>
+														<CardDienDanDashboard typeLop={'lop-hanh-chinh'} />
+													</Col>
+												</Row>
+											</Col>
+											<Col
+												span={24}
+												order={2}
+												md={{ span: 16, order: 1 }}
+												xxl={{ span: 18, order: 1 }}
+											>
+												<ThongTinChungLopHanhChinh />
+											</Col>
+										</Row>
+									),
+									icon: <InfoCircleOutlined />,
+								},
+								{
+									title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.thongbao' }),
+									menuKey: 'thong-bao',
+									content: <ThongBaoLopPage loai='lop-hanh-chinh' idLop={record._id} />,
+									icon: <NotificationOutlined />,
+								},
+								{
+									title: intl.formatMessage({ id: 'lophanhchinh.thongtinchung.diendan' }),
+									menuKey: 'dien-dan',
+									content: <DienDanLopPage idLopHanhChinh={record?._id} />,
+									icon: <MessageOutlined />,
+								},
+							]}
+						/>
 					) : (
 						<Empty
 							description={intl.formatMessage({ id: 'lophanhchinh.thongtinchung.empty' })}
@@ -119,8 +127,8 @@ const LopHanhChinhPage = () => {
 						/>
 					)}
 				</Spin>
-			</Card>
-		</Card>
+			</div>
+		</PageCard>
 	);
 };
 

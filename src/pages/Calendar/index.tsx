@@ -1,5 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { messagesCalendar } from '@/services/Calendar/constant';
+import { useMessagesCalendar } from '@/services/Calendar/constant';
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import { type SuKien } from '@/services/SuKien/typings';
@@ -35,6 +35,7 @@ const localizer = dayjsLocalizer(dayjs);
 
 const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const intl = useIntl();
+	const messagesCalendar = useMessagesCalendar();
 	const {
 		visibleForm,
 		setVisibleForm,

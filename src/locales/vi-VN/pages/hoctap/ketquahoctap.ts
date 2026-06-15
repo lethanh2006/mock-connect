@@ -75,4 +75,7 @@ export default {
 	'ketquahoctap.maytinh.form.label': 'Điểm dự kiến sau khi học lại / cải thiện (hệ 10)',
 	'ketquahoctap.maytinh.form.placeholder': 'Nhập điểm dự kiến',
 	'ketquahoctap.maytinh.common.ok': 'Đồng ý',
+	'ketquahoctap.ketquahocky.trungbinhhocky10': 'Trung bình học kỳ (hệ 10)',
+	'ketquahoctap.ketquahocky.tinchino': 'Số tín chỉ nợ học kỳ',
+	'ketquahoctap.ketquahocky.trungbinhtichluy10': 'TBC tích lũy (hệ 10)',
 };

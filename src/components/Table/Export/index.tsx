@@ -36,7 +36,7 @@ const ModalExport = (props: ModalExportProps) => {
 		setLoading(true);
 		try {
 			if (getExportFieldsModel)
-				await getExportFieldsModel().then((fields: TExportField[]) => {
+				await getExportFieldsModel(otherQuery).then((fields: TExportField[]) => {
 					setAllFields(fields);
 
 					const flatData = genFlatData(fields);
@@ -63,7 +63,8 @@ const ModalExport = (props: ModalExportProps) => {
 	const onFinish = () => {
 		if (finalFields.length)
 			postExportModel(
-				selectedIds?.length > 0 ? { ids: selectedIds, definitions: finalFields } : { definitions: finalFields },
+				// selectedIds?.length > 0 ? { ids: selectedIds, definitions: finalFields } :
+				{ definitions: finalFields },
 				condition,
 				filters,
 				otherQuery,
@@ -87,11 +88,11 @@ const ModalExport = (props: ModalExportProps) => {
 			{!!exportFields.length ? (
 				<>
 					<Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
-						{selectedIds?.length > 0 ? (
+						{/* {selectedIds?.length > 0 ? (
 							<Col span={24}>
 								{intl.formatMessage({ id: 'global.table.export.index.trichxuat' }, { count: selectedIds?.length })}
 							</Col>
-						) : null}
+						) : null} */}
 
 						<Col
 							span={24}

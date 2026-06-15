@@ -6,23 +6,36 @@ interface FormFooterProps {
 	onPrevious?: () => void;
 	onNext?: () => void;
 	onSubmit?: () => void;
+	onSaveDraft?: () => void;
 	nextText?: string;
 	submitText?: string;
+	saveDraftText?: string;
+	loading?: boolean;
+	submitLoading?: boolean;
 }
 
-const FormFooter = ({ showPrevious = false, onPrevious, onNext, onSubmit, nextText, submitText }: FormFooterProps) => {
+const FormFooter = ({
+	showPrevious = false,
+	onPrevious,
+	onNext,
+	onSubmit,
+	onSaveDraft,
+	nextText,
+	submitText,
+	saveDraftText,
+	loading = false,
+	submitLoading = false,
+}: FormFooterProps) => {
 	const intl = useIntl();
 
 	const defaultNextText = intl.formatMessage({ id: 'minor.idm.button.next' });
 	const defaultSubmitText = intl.formatMessage({ id: 'minor.idm.button.submit' });
+	const defaultSaveDraftText = intl.formatMessage({ id: 'minor.idm.button.saveDraft' });
 
 	return (
 		<div className='form-footer'>
-			{showPrevious && onPrevious && (
-				<Button onClick={onPrevious}>{intl.formatMessage({ id: 'minor.idm.button.previous' })}</Button>
-			)}
 			{onNext && (
-				<Button type='primary' onClick={onNext}>
+				<Button type='primary' onClick={onNext} loading={loading}>
 					{nextText || defaultNextText}
 				</Button>
 			)}
@@ -32,9 +45,22 @@ const FormFooter = ({ showPrevious = false, onPrevious, onNext, onSubmit, nextTe
 					okText={intl.formatMessage({ id: 'minor.popconfirm.ok' })}
 					cancelText={intl.formatMessage({ id: 'minor.popconfirm.cancel' })}
 					onConfirm={onSubmit}
+					disabled={submitLoading}
 				>
-					<Button type='primary'>{submitText || defaultSubmitText}</Button>
+					<Button type='primary' loading={submitLoading}>
+						{submitText || defaultSubmitText}
+					</Button>
 				</Popconfirm>
+			)}
+			{onSaveDraft && (
+				<Button onClick={onSaveDraft} loading={loading}>
+					{saveDraftText || defaultSaveDraftText}
+				</Button>
+			)}
+			{showPrevious && onPrevious && (
+				<Button onClick={onPrevious} disabled={loading || submitLoading}>
+					{intl.formatMessage({ id: 'minor.idm.button.previous' })}
+				</Button>
 			)}
 		</div>
 	);

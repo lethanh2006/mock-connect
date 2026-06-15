@@ -13,21 +13,7 @@ const PersonalInfo = () => {
 			</Divider>
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
-					<Descriptions column={2} layout='vertical' className='highlight'>
-						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.studentSsoId' })}>
-							{phieuDkCtdtMe?.sinhVienSsoId || '-'}
-						</Descriptions.Item>
-						<Descriptions.Item label='GPA'>{phieuDkCtdtMe?.gpa?.toFixed(2) || '-'}</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.major' })}>
-							{phieuDkCtdtMe?.nganh || '-'}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.semester' })}>
-							{phieuDkCtdtMe?.dot?.hocKy?.ten || '-'}
-						</Descriptions.Item>
-					</Descriptions>
-				</Col>
-				<Col span={24}>
-					<Descriptions column={2} layout='vertical'>
+					<Descriptions column={2} layout='horizontal'>
 						<Descriptions.Item label={intl.formatMessage({ id: 'minor.idm.detail.personalInfo.fullName' })}>
 							{phieuDkCtdtMe?.ten || '-'}
 						</Descriptions.Item>

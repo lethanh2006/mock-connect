@@ -101,7 +101,6 @@ export default {
 	'tientrinhhoctap.ctdt.dangcapnhat': 'Đang cập nhật',
 	'tientrinhhoctap.ctdt.hocky': 'Học kỳ',
 	'tientrinhhoctap.ctdt.tinchi': 'tín chỉ',
-	'tientrinhhoctap.ctdt.chuyenhanh': 'Chuyên ngành',
 	'tientrinhhoctap.ctdt.khoihp': 'Khối học phần',
 	'tientrinhhoctap.ctdt.noti': 'Bạn phải đảm bảo học {soTinChi} tín chỉ trong số những học phần sau đây',
 
@@ -114,7 +113,7 @@ export default {
 	'tientrinhhoctap.ctdt.khoasv': 'Khóa sinh viên',
 	'tientrinhhoctap.ctdt.nganh': 'Ngành',
 	'tientrinhhoctap.ctdt.thoigian': 'Thời gian đào tạo',
-	'tientrinhhoctap.ctdt.thoigianToida': 'Thời gian đào tạo tối đa',
+	'tientrinhhoctap.ctdt.thoigiantoida': 'Thời gian đào tạo tối đa',
 	'tientrinhhoctap.ctdt.tongsotinchi': 'Tổng số tín chỉ phải học',
 	'tientrinhhoctap.ctdt.file': 'Tập tin',
 	'tientrinhhoctap.ctdt.muctieu': 'Mục tiêu đào tạo',
@@ -180,9 +179,26 @@ export default {
 	'tientrinhhoctap.congnhan.hp.truong': 'Học tại trường',
 	'tientrinhhoctap.congnhan.hp.trinhdo': 'Trình độ',
 	'tientrinhhoctap.congnhan.hp.nganh': 'Ngành học',
+	'tientrinhhoctap.congnhan.hp.nganhhoc': 'Ngành học',
 	'tientrinhhoctap.congnhan.hp.namtotnghiep': 'Năm tốt nghiệp',
 	'tientrinhhoctap.congnhan.hp.ketqua': 'Kết quả học tập',
 	'tientrinhhoctap.congnhan.hocphan.tinchi': 'tín chỉ',
 
 	'tientrinhhoctap.songnganh': 'Chọn ngành đào tạo',
+
+	'lotrinhhoctap.message':
+		'Đợt đăng ký lộ trình học tập <b>{tenDot}</b> đang diễn ra từ <b>{tuNgay}</b> đến <b>{denNgay}</b>, vui lòng theo dõi và đăng ký kịp thời',
+	'lotrinhhoctap.title': 'Lộ trình học tập',
+	'lotrinhhoctap.trangthai': 'Trạng thái đăng ký',
+	'tientrinhhoctap.ctdt.hpbatbuoc': 'Học phần bắt buộc',
+	'tientrinhhoctap.ctdt.hptuchon': 'Học phần tự chọn',
+	'tientrinhhoctap.ctdt.hptotnghiep': 'Học phần tốt nghiệp',
+	'tientrinhhoctap.ctdt.khoi': 'Khối',
+	'tientrinhhoctap.ctdt.khongten': 'Khối không tên',
+	'tientrinhhoctap.view.semester': 'Học kỳ',
+	'tientrinhhoctap.view.block': 'Khối kiến thức',
+	'tientrinhhoctap.ctdt.courses': 'học phần',
+	'tientrinhhoctap.ctdt.pathway.label': 'Khối',
+	'tientrinhhoctap.ctdt.chuyennganh.label': 'Chuyên ngành',
+	'tientrinhhoctap.ctdt.chuyennganhphu.label': 'Chuyên ngành phụ',
 };

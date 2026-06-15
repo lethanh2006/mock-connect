@@ -36,6 +36,7 @@ export default {
 	'lophocphan.id.baitap': 'Bài tập, bài kiểm tra',
 	'lophocphan.id.ketqua': 'Kết quả học tập',
 	'lophocphan.id.khaosat': 'Khảo sát sinh viên',
+	'lophocphan.id.syllabus': 'Đề cương chi tiết',
 
 	'lophocphan.id.thongtinchung.hoctructuyen': 'Học trực tuyến',
 	'lophocphan.id.thongtinchung.lms': 'Lớp học LMS',
@@ -244,6 +245,9 @@ export default {
 	'lophocphan.id.khaosat.empty': 'Không có dữ liệu',
 	'lophocphan.id.khaosat.chongv': 'Không có dữ liệu',
 
+	'lophocphan.id.khaosat.cungky.mess': 'Không thể thực hiện khảo sát',
+	'lophocphan.id.khaosat.cungky.des': 'Học kỳ của lớp học phần không trùng với học kỳ của đợt khảo sát.',
+
 	'lophocphan.id.khaosat.title': 'Chi tiết khảo sát',
 	'lophocphan.id.khaosat.cau': 'Câu',
 	'lophocphan.id.khaosat.sl': 'Câu',
@@ -270,6 +274,24 @@ export default {
 	'lophocphan.id.thongtinchungheader.kyhoc': 'Kỳ học:',
 	'lophocphan.id.thongtinchungheader.gv': 'Giảng viên:',
 	'lophocphan.id.thongtinchungheader.khongco': 'Không có',
+	'lophocphan.id.thongtinchungheader.withdraw': 'Rời khỏi lớp',
+
+	'lophocphan.withdraw.title': 'Xác nhận rời khỏi lớp',
+	'lophocphan.withdraw.confirm': 'Xác nhận rút',
+	'lophocphan.withdraw.currentInfo': 'Thông tin hiện tại',
+	'lophocphan.withdraw.progress': 'Thời lượng đã học: {value}%',
+	'lophocphan.withdraw.totalWCredits': 'Tổng tín chỉ W: {current}/{max}',
+	'lophocphan.withdraw.rule': 'Quy định',
+	'lophocphan.withdraw.rule.before': 'Rút trước {percent}% → nhận điểm W',
+	'lophocphan.withdraw.rule.maxW': 'Tối đa {max} tín chỉ W',
+	'lophocphan.withdraw.rule.after': 'Rút sau {percent}% hoặc vượt giới hạn → nhận F',
+	'lophocphan.withdraw.resultTitle': 'Kết quả nếu bạn rút lúc này',
+	'lophocphan.withdraw.result.W': 'Điểm W',
+	'lophocphan.withdraw.result.F': 'Điểm F',
+	'lophocphan.withdraw.alert.W.title': 'Bạn sẽ nhận điểm W',
+	'lophocphan.withdraw.alert.W.desc': 'Không tính GPA, không tính trượt.',
+	'lophocphan.withdraw.alert.F.title': 'Bạn sẽ nhận điểm F',
+	'lophocphan.withdraw.alert.F.desc': 'Bị tính trượt và ảnh hưởng GPA.',
 
 	'lophocphan.id.thongtinchungheader.thongtingv': 'Thông tin giảng viên',
 	'lophocphan.id.thongtinchungheader.hoTen': 'Họ tên',
@@ -322,6 +344,7 @@ export default {
 	'lophocphan.id.decuong.hoclieu.nxb': 'Nhà xuất bản',
 	'lophocphan.id.decuong.hoclieu.namxb': 'Năm xuất bản',
 	'lophocphan.id.decuong.hoclieu.mota': 'Mô tả',
+	'lophocphan.id.decuong.hoclieu.batbuoc': 'Bắt buộc',
 	'lophocphan.id.decuong.hoclieu.thaotac': 'Thao tác',
 	'lophocphan.id.decuong.hoclieu.xemchitiet': 'Xem chi tiết',
 

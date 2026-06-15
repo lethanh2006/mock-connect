@@ -3,7 +3,7 @@ import { type IColumn } from '@/components/Table/typing';
 import { ColorTrangThaiDangKyTinChi, ETrangThaiDangKyTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { SyncOutlined } from '@ant-design/icons';
-import { Button, Card, Modal, Tag, message } from 'antd';
+import { Button, Card, message, Modal, Space, Tag } from 'antd';
 import pLimit from 'p-limit';
 import { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -38,21 +38,33 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 
 	const postDangKy = async () => {
 		setFormSubmiting(true);
+
+		const isInvalidData = danhSachDangKy.some((item) => !item.maKhoaNganh);
+
+		if (isInvalidData) {
+			message.error('Dữ liệu không chính xác, vui lòng tải lại trang');
+			setFormSubmiting(false);
+			return;
+		}
+
 		const limit = pLimit(1); // Giới hạn 1 truy vấn cùng lúc
 
 		// Với từng lớp mới chọn thì gọi 1 API đăng ký
 		const promises = danhSachDangKy.map((item, index) =>
 			limit(() => {
 				if (item.trangThai !== ETrangThaiDangKyTinChi.DA_DANG_KY)
-					postDangKyTinChiModel({
-						phieuDktcId: phieuDangKy?._id ?? '',
-						dangKy: { lopHocPhanId: item._id, maKhoaNganh: item.maKhoaNganh ?? '' },
-					})
-						.then(() =>
+					postDangKyTinChiModel(
+						{
+							phieuDktcId: phieuDangKy?._id ?? '',
+							dangKy: { lopHocPhanId: item._id, maKhoaNganh: item.maKhoaNganh ?? '' },
+						},
+						intl.formatMessage({ id: 'dangkytinchi.thongbao.dangky' }),
+					)
+						.then((res) =>
 							// Nếu thành công
 							setDanhSachDangKy((p) => {
 								const p1 = [...p];
-								p1[index].trangThai = ETrangThaiDangKyTinChi.DA_DANG_KY;
+								p1[index].trangThai = !res?.trangThai ? ETrangThaiDangKyTinChi.DA_DANG_KY : res?.trangThai;
 								return p1;
 							}),
 						)
@@ -71,7 +83,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 				.then()
 				.finally(() => {
 					setTimeout(() => {
-						message.info(intl.formatMessage({ id: 'dangkytinchi.modaldangky.success.hoanthanhdangky' }));
+						// message.info(intl.formatMessage({ id: 'dangkytinchi.modaldangky.success.hoanthanhdangky' }));
 						if (dotDangKyHienTai?._id) {
 							getPhieuDangKyModel(dotDangKyHienTai._id); // Get lại thông tin phiếu đăng ký của kỳ hiện tại
 							getLopDangKyModel(dotDangKyHienTai.maHocKy);
@@ -157,12 +169,17 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 			dataIndex: 'trangThai',
 			width: 170,
 			align: 'center',
-			render: (val: ETrangThaiDangKyTinChi, rec) =>
+			render: (val, rec) =>
 				formSubmiting && val === ETrangThaiDangKyTinChi.CHUA_DANG_KY ? (
 					<SyncOutlined spin className='text-info' />
 				) : (
 					<>
-						<Tag color={ColorTrangThaiDangKyTinChi[val]}>{val}</Tag>
+						<Space wrap>
+							<Tag color={ColorTrangThaiDangKyTinChi[val as ETrangThaiDangKyTinChi]}>{val}</Tag>
+							{rec?.isWaitlist && (
+								<Tag color={'orange'}>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.columntable.hangcho' })}</Tag>
+							)}
+						</Space>
 						{rec.error ? (
 							<div>
 								<i>{rec.error}</i>
@@ -189,6 +206,7 @@ const ModalDangKy = (props: { tongTinChi: number; danhSachDangKy: DangKyTinChi.I
 					addStt
 					loading={loading}
 					otherProps={{ pagination: false, scroll: { y: 600 } }}
+					otherButtons={[<i className='text-info'>{intl.formatMessage({ id: 'dangkytinchi.modaldangky.info' })}</i>]}
 				/>
 
 				<ReCAPTCHA
