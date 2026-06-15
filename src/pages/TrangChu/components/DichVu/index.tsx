@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import FormKhaiBao from '@/pages/KhaiBaoQuyTrinh/components/FormKhaiBao';
 import ViewThongTinChung from '@/pages/KhaiBaoQuyTrinh/components/ViewThongTinChung';
 import { createDonKhaiBaoUser } from '@/services/QuyTrinh/KhaiBao/khaibaoquytrinh';
@@ -27,7 +28,7 @@ const CardDichVuSinhVien = () => {
 	const [visibleThongTinChung, setVisibleThongTinChung] = useState<boolean>(false);
 	const [recordThongTinChung, setRecordThongTinChung] = useState<QuyTrinh.IDanhSachCauHinhThongTinChung[]>([]);
 
-	const playIc = 'student/images/play-icon.png';
+	const playIc = 'student/student/images/play-icon.png';
 
 	useEffect(() => {
 		// Reset states khi component mount
@@ -139,9 +140,10 @@ const CardDichVuSinhVien = () => {
 
 	return (
 		<>
-			<Card
-				variant='borderless'
-				className='card-borderless card-dichvu'
+			<PageCard
+				level={2}
+				hideInnerCard
+				className='card-dichvu'
 				title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.dichvu.title' })}
 				extra={
 					<Link to='/khai-bao-quy-trinh/dang-ky' className='xem-tat-ca-link'>
@@ -203,7 +205,7 @@ const CardDichVuSinhVien = () => {
 						)}
 					</Row>
 				</Card>
-			</Card>
+			</PageCard>
 
 			{/* Modal chọn đợt khai báo */}
 			<Modal

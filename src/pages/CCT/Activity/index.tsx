@@ -1,8 +1,9 @@
 import background from '@/assets/cct/background.png';
+import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { EApprovalStatus } from '@/services/CCT/constant';
-import { Button, Card, Col, Empty, Pagination, Popconfirm, Row, Spin, Tabs } from 'antd';
+import { Button, Col, Empty, Pagination, Popconfirm, Row, Spin, Tabs } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
@@ -157,7 +158,7 @@ const ActivityPage = () => {
 	};
 
 	return (
-		<Card title={intl.formatMessage({ id: 'activity.list' })} className='table-base-card' variant='borderless'>
+		<PageCard title={intl.formatMessage({ id: 'activity.list' })}>
 			<Tabs
 				activeKey={activeKey}
 				onChange={(tab) => {
@@ -357,7 +358,7 @@ const ActivityPage = () => {
 			>
 				<FormActivityOutCome getData={getData} />
 			</ModalExpandable>
-		</Card>
+		</PageCard>
 	);
 };
 

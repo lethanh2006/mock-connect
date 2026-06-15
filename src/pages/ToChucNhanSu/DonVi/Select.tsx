@@ -7,7 +7,7 @@ import { useModel } from 'umi';
  */
 const SelectDonVi = (props: {
 	value?: string;
-	onChange?: (val: string) => void;
+	onChange?: (val: string, option?: any) => void;
 	multiple?: boolean;
 	disabled?: boolean;
 	style?: React.CSSProperties;
@@ -42,6 +42,7 @@ const SelectDonVi = (props: {
 				key: item._id,
 				value: props.fieldValue ? item?.[props.fieldValue] ?? '' : item.maDonVi,
 				label: `${item.ten} (${item.maDonVi ?? ''})`,
+				rawData: item,
 			}))}
 			showSearch
 			showArrow

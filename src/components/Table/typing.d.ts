@@ -2,6 +2,7 @@ import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import { TableProps } from 'antd';
 import type { ColumnType } from 'antd/lib/table';
 import React, { JSX } from 'react';
+import { PageCardProps } from '../PageCard/typing';
 import { type EOperatorType } from './constant/constant';
 
 export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 'children'> {
@@ -45,13 +46,13 @@ export interface IColumn<T> extends Omit<ColumnType<T>, 'dataIndex' | 'width' | 
 	 */
 	customSort?: (value1: any, value2: any) => number;
 
-	specialFilter?: boolean;
-
 	minWidth?: number;
 	maxWidth?: number;
 	resizable?: boolean;
 	/** Cho phép tìm kiếm global hay ko (Mặc định: true với filterType = string | select) */
 	enableGlobalSearch?: boolean;
+	/** Khóa bộ lọc của cột này ở giao diện (luôn là read-only) */
+	readOnly?: boolean;
 }
 
 export type TDataOption = {
@@ -59,7 +60,7 @@ export type TDataOption = {
 	value: string | number;
 };
 
-export type TableBaseProps = {
+export type TableBaseProps<T extends object = any> = {
 	/** Tên model */
 	modelName: Namespaces;
 
@@ -73,7 +74,7 @@ export type TableBaseProps = {
 
 	Form?: React.FC;
 	formType?: 'Modal' | 'Drawer';
-	columns: IColumn<any>[];
+	columns: IColumn<T>[];
 	title?: React.ReactNode;
 	widthDrawer?: number | 'full';
 
@@ -83,11 +84,41 @@ export type TableBaseProps = {
 	/** Hàm getData tùy chỉnh, nếu ko có thì 'getModel' của model sẽ là mặc định */
 	getData?: (params: any) => void;
 
+	/**
+	 * Bộ lọc được truyền từ giao diện bên ngoài TableBase.
+	 * Các filter này sẽ hiển thị trong TableBase và Modal Filter.
+	 */
+	externalFilters?: TFilter<T>[];
+
+	/**
+	 * Điều kiện lọc bổ sung từ bên ngoài (Gom 3 thành 1).
+	 * Dùng để hiển thị trạng thái lọc trong Modal Filter và đồng bộ dữ liệu.
+	 */
+	externalConditions?: TExternalConditionItem<T>[];
+
+	onExternalFiltersChange?: (filters: TFilter<any>[]) => void;
+
+	/** Ẩn/khóa toàn bộ Modal Filter (vẫn có thể dùng filter theo cột nếu được bật) */
+	disableFilterModal?: boolean;
+
+	/**
+	 * Có đồng bộ external filter ra filter theo cột hay không.
+	 * - true: Giá trị external có thể hiển thị ở filter cột (mặc định)
+	 * - false: Filter cột chỉ dùng state nội bộ của table
+	 */
+	syncExternalToColumnFilter?: boolean;
+
 	/** Tham số phụ thuộc để getData được gọi */
 	dependencies?: any[];
 
-	/** Tham số để truyền vào hàm getData, ModalImport, ModalExport */
+	/** Tham số truyền vào getData */
 	params?: any;
+
+	/** Query riêng cho export (definition, xlsx) */
+	exportParam?: Record<string, any>;
+
+	/** Query riêng cho import (definition, template, validate, insert) */
+	importParam?: Record<string, any>;
 
 	/** Các nội dung hiển thị trên header, bên cạnh button thêm mới */
 	children?: React.ReactNode;
@@ -110,10 +141,15 @@ export type TableBaseProps = {
 		filter?: boolean;
 		/** Có nút tải lại ko? Mặc định: Có */
 		reload?: boolean;
+		/** Có nút cấu hình cột ko? Mặc định: Có */
+		columnSetting?: boolean;
 	};
 
 	/** Danh sách các nút khác bên cạnh Thêm mới */
 	otherButtons?: JSX.Element[];
+
+	/** Danh sách các text trước nút Tải lại */
+	otherExtra?: JSX.Element[];
 
 	/** Biến lưu dữ liệu trong model, Mặc định: danhSach */
 	dataState?: string;
@@ -128,9 +164,6 @@ export type TableBaseProps = {
 	rowSelection?: boolean;
 	/** View antd Row Selection */
 	detailRow?: any;
-
-	/** Trạng thái loading của table */
-	loading?: boolean;
 
 	/** Cho phép xóa nhiều, đi kèm với props `rowSelection` */
 	deleteMany?: boolean;
@@ -172,22 +205,31 @@ export type TableBaseProps = {
 
 	/** Modal title thay thế, mặc định `Thêm mới`, `Chỉnh sửa`, `Chi tiết` + title */
 	modalTitle?: React.ReactNode;
+
 	/** Hàm reload dữ liệu
 	 * @default getData
 	 */
 	onReload?: (params?: any) => void;
 
+	/** Action custom khi click nút thêm mới.
+	 * Nếu truyền prop này, TableBase sẽ gọi hàm thay vì tự mở form modal mặc định.
+	 */
+	onCreateClick?: () => void;
+
 	cardExtra?: React.ReactNode;
+	/** Cấp độ của PageCard bao quanh Table (1, 2, 3) */
+	cardProps?: PageCardProps;
 };
 
 export type TFilter<T> = {
 	field?: keyof T | [keyof T, string];
 	operator?: EOperatorType;
-	values?: (string | number)[];
+	values?: (string | number | boolean)[];
 	active?: boolean;
 	filters?: TFilter<T>[];
 	logicOperator?: 'or' | 'and';
 	readOnly?: boolean;
+	source?: 'table' | 'external' | 'system';
 };
 
 export type RowFilterProps = {
@@ -197,6 +239,54 @@ export type RowFilterProps = {
 	allowGrouping?: boolean;
 	level?: number;
 	onRemove?: () => void;
+	forceReadOnly?: boolean;
+};
+
+/**
+ * Đại diện cho một điều kiện lọc từ bên ngoài truyền vào TableBase.
+ * @template T Kiểu dữ liệu của bản ghi trong bảng.
+ *
+ * @example
+ * // Trường hợp dùng mapping object
+ * {
+ *   field: 'active',
+ *   label: 'Trạng thái',
+ *   value: true,
+ *   valueLabel: { true: 'Đang hoạt động', false: 'Ngừng hoạt động' }
+ * }
+ *
+ * @example
+ * // Trường hợp dùng nhãn trực tiếp (khi đã biết nhãn từ Select)
+ * {
+ *   field: 'phongBanId',
+ *   label: 'Phòng ban',
+ *   value: 'kt',
+ *   valueLabel: 'Kế toán'
+ * }
+ */
+export type TExternalConditionItem<T extends object> = {
+	/** Tên trường cần lọc (Dựa trên kiểu dữ liệu T) */
+	field: keyof T | string;
+	/** Nhãn hiển thị của trường (Dùng trong Modal Filter) */
+	label?: string;
+	/** Giá trị lọc */
+	value: any;
+	/**
+	 * Toán tử lọc (MongoDB style)
+	 * @default '$eq'
+	 * Các toán tử hỗ trợ: '$eq', '$ne', '$in', '$nin', '$gt', '$gte', '$lt', '$lte', '$like', '$regex', '$exist', '$not'
+	 */
+	operator?: keyof ConditionCriteria<T>;
+
+	/**
+	 * Nhãn hiển thị cho giá trị lọc (Dùng để hiển thị trong Modal Filter thay cho giá trị thô).
+	 * - Dạng `string`: Dùng khi đã có sẵn nhãn (VD: lấy từ `Select.label`).
+	 *   Ví dụ: `valueLabel: 'Kế toán'`.
+	 * - Dạng `object`: Dùng khi muốn định nghĩa bộ quy tắc tra cứu (VD: cho Boolean, Enum).
+	 *   Ví dụ: `valueLabel: { true: 'Có', false: 'Không' }`.
+	 * - Nếu không truyền: Hệ thống tự tìm nhãn từ `columns.filterData` hoặc hiển thị giá trị thô.
+	 */
+	valueLabel?: string | Record<string, string>;
 };
 
 export type ConditionCriteria<T> = {
@@ -248,6 +338,7 @@ export type TableStaticProps = Pick<
 	| 'hideChildrenRows'
 	| 'onReload'
 	| 'otherButtons'
+	| 'otherExtra'
 	| 'scroll'
 > & {
 	data: any[];
@@ -259,9 +350,13 @@ export type TableStaticProps = Pick<
 
 	hasCreate?: boolean;
 	hasTotal?: boolean;
+	totalComponent?: React.ReactNode;
+	/** Có nút cấu hình cột ko? Mặc định: Có */
+	columnSetting?: boolean;
 	size?: 'small' | 'middle';
 
 	totalComponent?: any;
+	globalSearch?: boolean;
 };
 
 // IMPORT HEADER

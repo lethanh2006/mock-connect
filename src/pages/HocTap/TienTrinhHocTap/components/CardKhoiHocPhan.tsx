@@ -31,9 +31,11 @@ const CardKhoiHocPhan = (props: {
 						</h4>
 
 						{/* Credits */}
-						<Tag className='credits-tag'>
-							{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tinchi' })}
-						</Tag>
+						<div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+							<Tag className='credits-tag'>
+								{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
+							</Tag>
+						</div>
 					</div>
 
 					{/* Color indicator */}

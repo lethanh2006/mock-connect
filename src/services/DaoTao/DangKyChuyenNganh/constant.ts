@@ -5,12 +5,12 @@ export enum ETrangThaiDangKyChuyenNganh {
 	CHO_DUYET = 'pending',
 	DA_DUYET = 'approve',
 	YEU_CAU_CHINH_SUA = 'request_change',
-	KHONG_DUYET = 'rejected',
+	KHONG_DUYET = 'reject',
 }
 
 export const trangThaiDangKyChuyenNganh: Record<ETrangThaiDangKyChuyenNganh, string> = {
 	[ETrangThaiDangKyChuyenNganh.NHAP]: 'Nháp',
-	[ETrangThaiDangKyChuyenNganh.CHO_DUYET]: 'Chờ duyệt',
+	[ETrangThaiDangKyChuyenNganh.CHO_DUYET]: 'Chờ xử lý',
 	[ETrangThaiDangKyChuyenNganh.DA_DUYET]: 'Đã duyệt',
 	[ETrangThaiDangKyChuyenNganh.YEU_CAU_CHINH_SUA]: 'Yêu cầu chỉnh sửa',
 	[ETrangThaiDangKyChuyenNganh.KHONG_DUYET]: 'Không duyệt',

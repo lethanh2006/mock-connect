@@ -42,27 +42,36 @@ export declare module PhieuDkCtdt {
 		maChuyenNganh?: string;
 		maCtdt?: string;
 		email: string;
+		sinhVienSsoId?: string;
+
+		tenDonViPhuTrach?: string;
+		maDonViPhuTrach?: string;
+		idDonViPhuTrach?: string;
+		
 		ssoIdCoVanHocTapChinh?: string;
 		hoTenCoVanHocTapChinh?: string;
 		emailCoVanHocTapChinh?: string;
-		sinhVienSsoId?: string;
 		maCoVanHocTapChinh?: string;
+
 		ssoIdCoVanHocTapPhu?: string;
 		hoTenCoVanHocTapPhu?: string;
 		emailCoVanHocTapPhu?: string;
 		maCoVanHocTapPhu?: string;
 		soDienThoai: string;
+
 		trangThai: ETrangThaiDangKyChuyenNganh;
 		trangThaiDuyetCVHT: ETrangThaiDangKyChuyenNganh;
 		trangThaiDuyetKhoaBoMon: ETrangThaiDangKyChuyenNganh;
 		trangThaiDuyetQldt: ETrangThaiDangKyChuyenNganh;
-		ngayNop?: string;
+
 		ghiChu?: string;
 		ghiChuCVHT?: string;
 		ghiChuBoMon?: string;
 		ghiChuQldt?: string;
+		
 		hasDiscussedWithAdvisor?: boolean;
 		dot?: DangKyChuyenNganh.IDotDangKy;
+		ngayNop?: string;
 		ctdt?: ChuongTrinhDaoTao.IRecord;
 		chuyenNganh?: ChuongTrinhDaoTao.IChuyenNganhMe;
 		updatedAt: Date;

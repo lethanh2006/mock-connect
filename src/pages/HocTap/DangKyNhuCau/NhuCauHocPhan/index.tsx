@@ -95,7 +95,9 @@ const NhuCauHocPhanPage = () =>
 				width: 90,
 				render: (val) => (
 					<Tag color={colorTrangThaiHocPhanDangKyNhuCau[val as ETrangThaiHocPhanDangKyNhuCau]}>
-						{mapTrangThaiHocPhanDangKyNhuCau[val as ETrangThaiHocPhanDangKyNhuCau]}
+						{intl.formatMessage({
+							id: mapTrangThaiHocPhanDangKyNhuCau[val as ETrangThaiHocPhanDangKyNhuCau],
+						})}
 					</Tag>
 				),
 			},
