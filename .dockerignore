@@ -42,3 +42,5 @@ screenshot
 build
 
 .vercel
+.env
+.env.*
