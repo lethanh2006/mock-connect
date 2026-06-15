@@ -2,7 +2,6 @@ import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { MessageOutlined, ReadOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { Badge, Card, Progress, Space, Tag, Tooltip, Typography } from 'antd';
-import { createHash } from 'crypto';
 import React, { useMemo } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import './style.less';
@@ -34,9 +33,9 @@ const CardLopHocPhanItem: React.FC<CardLopHocPhanItemProps> = ({
 	const { setRecord, setVisibleForm } = useModel('daotao.thoikhoabieu');
 	// Tạo mảng background cố định cho mỗi item để tránh bị giật hình
 	const getBackgroundForItem = (itemId: string, index: number) => {
-		const hash = createHash('md5').update(itemId).digest('hex');
-		// Lấy 2 ký tự đầu tiên chuyển thành số, sau đó % với số hình nền
-		const hashNum = parseInt(hash.slice(0, 4), 16);
+		const hashNum = Array.from(itemId || `${index}`).reduce((hash, char) => {
+			return (hash * 31 + char.charCodeAt(0)) >>> 0;
+		}, 0);
 		const backgroundIndex = hashNum % backgrounds.length;
 		return backgrounds[backgroundIndex];
 	};

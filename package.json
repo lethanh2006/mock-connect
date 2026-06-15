@@ -58,6 +58,7 @@
     "@umijs/max": "^4.4.6",
     "@umijs/plugin-model": "^2.6.2",
     "@umijs/route-utils": "^4.0.1",
+    "elliptic": "npm:@soatok/elliptic-to-noble@9999.0.0",
     "antd": "^5.24.2",
     "apexcharts": "^4.5.0",
     "axios": "^1.15.2",
@@ -156,12 +157,10 @@
     "**/esbuild": "0.28.1",
     "@babel/runtime": ">=7.26.10",
     "send": ">=0.19.0",
-    "elliptic": "6.6.1",
-    "**/elliptic": "6.6.1"
+    "**/elliptic": "npm:@soatok/elliptic-to-noble@9999.0.0"
   },
   "overrides": {
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
-    "esbuild": "0.28.1",
-    "elliptic": "6.6.1"
+    "elliptic": "npm:@soatok/elliptic-to-noble@9999.0.0"
   }
 }

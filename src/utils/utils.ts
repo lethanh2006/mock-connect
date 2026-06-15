@@ -1,5 +1,5 @@
 import { EDinhDangFile } from '@/services/base/constant';
-import { EFileScope, getFileInfo, uploadFile } from '@/services/uploadFile';
+import { EFileScope, getFileInfo, getFileRouteBase, uploadFile } from '@/services/uploadFile';
 import { message, type FormInstance } from 'antd';
 import { type AxiosResponse } from 'axios';
 import type dayjs from 'dayjs';
@@ -780,5 +780,5 @@ export const getPreviewUrl = async (value: string) => {
 	const id = fileId ?? value;
 	const result = await getFileInfo(id, ipFile);
 	const fileInfo = result?.data?.data;
-	return `${ipFile}/file/${id}/${encodeURIComponent(fileInfo?.name ?? 'file')}`;
+	return `${getFileRouteBase(ipFile)}/${id}/${encodeURIComponent(fileInfo?.name ?? 'file')}`;
 };
