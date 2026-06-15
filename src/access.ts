@@ -2,6 +2,8 @@ import { tenTruongVietTatTiengAnh } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 // import { currentRole } from './utils/ip';
 
+const vinUniSchoolCodes = ['VIN', 'VINUNI'];
+
 /**
  * @see https://umijs.org/zh-CN/plugins/plugin-access
  * */
@@ -32,7 +34,7 @@ export default function access(initialState: IInitialState) {
 		manyAccessFilter: (route: any) => route?.listChucNang?.some((role: string) => scopes?.includes(role)) || false,
 
 		/** Co-curricular Activities (CCA) */
-		cctFilter: () => tenTruongVietTatTiengAnh === 'VINUNI',
+		cctFilter: () => vinUniSchoolCodes.includes(tenTruongVietTatTiengAnh),
 		hocPhanNhuCauFilter: () => tenTruongVietTatTiengAnh !== 'VWA',
 
 		vinuniAccessFilter: () => tenTruongVietTatTiengAnh === 'VINUNI',
