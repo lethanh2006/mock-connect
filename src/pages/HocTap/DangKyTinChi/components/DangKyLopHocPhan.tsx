@@ -12,7 +12,7 @@ import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Empty, Modal, Popconfirm, Segmented, Select, Space, Tag } from 'antd';
+import { Empty, Modal, Popconfirm, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
 import ModalDangKyNgay from './ModalDangKyNgay';
@@ -49,12 +49,10 @@ const DangKyLopHocPhan = () => {
 	// const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
 	const dangKyNgay: boolean = true;
-	const [thuFilter, setThuFilter] = useState<number>();
 	const [trangThaiLopFilter, setTrangThaiLopFilter] = useState<'lopcontrong' | 'tatca'>('lopcontrong');
 
 	const otherQuery = {
-		lichHoc: thuFilter ? String(thuFilter) : undefined,
-		siSo: trangThaiLopFilter === 'lopcontrong',
+		// siSo: trangThaiLopFilter === 'lopcontrong',
 	};
 
 	const getData = () =>
@@ -460,7 +458,7 @@ const DangKyLopHocPhan = () => {
 				<div className='table-dang-ky'>
 					<TableBase
 						columns={columns}
-						dependencies={[page, limit, recHocKy?.ma, recHocPhan?.ma, typeLop, thuFilter, trangThaiLopFilter]}
+						dependencies={[page, limit, recHocKy?.ma, recHocPhan?.ma, typeLop]}
 						getData={getData}
 						dataState='danhSachLopDktc'
 						modelName='lophocphan.lophocphan'
@@ -478,40 +476,21 @@ const DangKyLopHocPhan = () => {
 						}}
 						otherButtons={
 							[
-								<Segmented
-									key='lop-filter'
-									value={trangThaiLopFilter}
-									options={[
-										{
-											label: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.lopcontrong' }),
-											value: 'lopcontrong',
-										},
-										{
-											label: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.tatca' }),
-											value: 'tatca',
-										},
-									]}
-									onChange={(val) => setTrangThaiLopFilter(val as 'lopcontrong' | 'tatca')}
-								/>,
-								<Select
-									key='thu-filter'
-									placeholder={intl.formatMessage({
-										id: 'dangkytinchi.dankylophocphan.filter.loctheothu',
-									})}
-									allowClear
-									style={{ width: 140 }}
-									value={thuFilter}
-									onChange={(val) => setThuFilter(val)}
-									options={[
-										{ value: 2, label: intl.formatMessage({ id: 'dangkytinchi.thu.2' }) },
-										{ value: 3, label: intl.formatMessage({ id: 'dangkytinchi.thu.3' }) },
-										{ value: 4, label: intl.formatMessage({ id: 'dangkytinchi.thu.4' }) },
-										{ value: 5, label: intl.formatMessage({ id: 'dangkytinchi.thu.5' }) },
-										{ value: 6, label: intl.formatMessage({ id: 'dangkytinchi.thu.6' }) },
-										{ value: 7, label: intl.formatMessage({ id: 'dangkytinchi.thu.7' }) },
-										{ value: 8, label: intl.formatMessage({ id: 'dangkytinchi.thu.cn' }) },
-									]}
-								/>,
+								// <Segmented
+								// 	key='lop-filter'
+								// 	value={trangThaiLopFilter}
+								// 	options={[
+								// 		{
+								// 			label: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.lopcontrong' }),
+								// 			value: 'lopcontrong',
+								// 		},
+								// 		{
+								// 			label: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.tatca' }),
+								// 			value: 'tatca',
+								// 		},
+								// 	]}
+								// 	onChange={(val) => setTrangThaiLopFilter(val as 'lopcontrong' | 'tatca')}
+								// />,
 							]
 
 							// loaiDangKy === ELoaiDangKyTheoLop.LOP_HANH_CHINH
