@@ -1,21 +1,25 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import FilterLopHocPhan from '@/pages/DaoTao/LopHocPhan/FilterLopHocPhan';
 import { primaryColor } from '@/services/base/constant';
 import { ToChucNhanSu } from '@/services/ToChucNhanSu/typing';
 import dayjs from '@/utils/dayjs';
-import { ArrowLeftOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Col, Row, Spin, Tag, Tooltip, Typography } from 'antd';
+import { ArrowLeftOutlined, InfoCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Card, Col, Row, Space, Spin, Tag, Tooltip, Typography } from 'antd';
 import { useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { Link, useIntl, useModel, useNavigate } from 'umi';
+import { Link, useAccess, useIntl, useModel, useNavigate } from 'umi';
 import ModalThongTinGiangVien from './ModalGiangVien';
+import ModalWithdraw from './ModalWithdraw';
 import './style.less';
 const { Title, Text } = Typography;
 
 const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 	const intl = useIntl();
+	const { cctFilter } = useAccess();
 	const { loading, record } = useModel('lophocphan.lophocphan');
 	const [selectedGiangVien, setSelectedGiangVien] = useState<ToChucNhanSu.INhanSu>();
 	const [visibleGvDetailModal, setVisibleGvDetailModal] = useState(false);
+	const [visibleWithdraw, setVisibleWithdraw] = useState(false);
 	const backgroundRef = useRef(Math.floor(Math.random() * 6));
 	const randomBackground = `/student/images/isolation-mode-${backgroundRef.current}.svg`;
 	const navigate = useNavigate();
@@ -85,7 +89,7 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 							</>
 						}
 						extra={
-							<>
+							<Space wrap>
 								{!visibleFilter ? (
 									<FilterLopHocPhan
 										miniHocKy // bật chế độ mini => FilterHocKy ẩn mặc định
@@ -96,7 +100,14 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 										}}
 									/>
 								) : null}
-							</>
+								{cctFilter?.() && (
+									<ButtonExtend
+										tooltip={intl.formatMessage({ id: 'lophocphan.id.thongtinchungheader.withdraw' })}
+										icon={<LogoutOutlined />}
+										onClick={() => setVisibleWithdraw(true)}
+									/>
+								)}
+							</Space>
 						}
 					>
 						{/* Info Row */}
@@ -162,6 +173,8 @@ const ThongTinChungHeaderCard = (props: { onShowDeCuong: () => void }) => {
 							onCancel={() => setVisibleGvDetailModal(false)}
 							giangVien={selectedGiangVien}
 						/>
+
+						<ModalWithdraw visible={visibleWithdraw} setVisible={setVisibleWithdraw} />
 					</Card>
 				</div>
 			</Spin>

@@ -124,9 +124,6 @@ export default {
 	'menu.Activity.MyActivity': 'My Activity',
 	'menu.Activity.MyCCT': 'Co-curricular Transcript',
 
-	'menu.GeneralService': 'General Service',
-	'menu.GeneralService.Dormitory': 'Dormitory',
-
 	'menu.MyProfile': 'My Profile',
 	'menu.MyCalendar': 'My Calendar',
 	'menu.Academic': 'Academic',

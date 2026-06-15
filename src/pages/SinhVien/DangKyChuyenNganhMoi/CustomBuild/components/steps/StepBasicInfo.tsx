@@ -1,18 +1,37 @@
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
-import { Col, Form, FormInstance, Input, Row } from 'antd';
+import { Col, Descriptions, Form, FormInstance, Input, Row } from 'antd';
 import { useIntl } from 'umi';
 import FormFooter from '../FormFooter';
 
 interface StepBasicInfoProps {
 	onNext: () => void;
+	onSaveDraft?: () => void;
+	isMinor?: boolean;
 	form: FormInstance<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto>;
+	loading?: boolean;
+	canEdit?: boolean;
 }
 
-const StepBasicInfo = ({ onNext, form }: StepBasicInfoProps) => {
+const StepBasicInfo = ({ onNext, onSaveDraft, isMinor = false, form, loading, canEdit }: StepBasicInfoProps) => {
 	const intl = useIntl();
+	const tenDonViPhuTrach = Form.useWatch('tenDonViPhuTrach', form);
+	const maDonViPhuTrach = Form.useWatch('maDonViPhuTrach', form);
 
 	return (
 		<>
+			{isMinor && tenDonViPhuTrach && (
+				<Descriptions
+					column={1}
+					className='highlight'
+					layout='horizontal'
+					items={[
+						{
+							label: intl.formatMessage({ id: 'minor.idm.advisor.responsibleUnit' }),
+							children: `${tenDonViPhuTrach}${maDonViPhuTrach ? ` (${maDonViPhuTrach})` : ''}`,
+						},
+					]}
+				/>
+			)}
 			<Row gutter={[16, 0]}>
 				<Col xs={24} md={12}>
 					<Form.Item label={intl.formatMessage({ id: 'minor.idm.form.fullName' })} name='ten'>
@@ -73,7 +92,7 @@ const StepBasicInfo = ({ onNext, form }: StepBasicInfoProps) => {
 					</Form.Item>
 				</Col>
 			</Row>
-			<FormFooter onNext={onNext} />
+			<FormFooter onNext={onNext} onSaveDraft={onSaveDraft} loading={loading} />
 		</>
 	);
 };

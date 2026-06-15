@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
 import CardBaiTapDashboard from '@/pages/TrangChu/HocTapRenLuyen/BaiTap';
 import CardDienDanDashboard from '@/pages/TrangChu/HocTapRenLuyen/DienDan';
@@ -36,24 +37,14 @@ const LopHocPhanPage = () => {
 	}, [recHocKy?.ma]);
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-big-title card-borderless'
-			title={intl.formatMessage({ id: 'lophocphan.title' })}
-			extra={<FilterHocKy isSetHocKy />}
-		>
+		<PageCard title={intl.formatMessage({ id: 'lophocphan.title' })} extra={<FilterHocKy isSetHocKy />} hideInnerCard>
 			<Row gutter={[16, 16]}>
 				<Col span={24}>
 					<BaiTapStatistics />
 				</Col>
 
 				<Col span={24}>
-					<Card
-						loading={loading}
-						variant='borderless'
-						className='card-borderless'
-						title={intl.formatMessage({ id: 'lophocphan.danhsach' })}
-					>
+					<PageCard hideInnerCard level={2} loading={loading} title={intl.formatMessage({ id: 'lophocphan.danhsach' })}>
 						{danhSach.length > 0 ? (
 							<Row gutter={[0, 0]} style={{ margin: '-8px' }}>
 								{danhSach.map((lop, index) => (
@@ -99,7 +90,7 @@ const LopHocPhanPage = () => {
 								/>
 							</Card>
 						)}
-					</Card>
+					</PageCard>
 				</Col>
 
 				<Col span={24} md={8}>
@@ -112,7 +103,7 @@ const LopHocPhanPage = () => {
 					<CardTietHocSapToi />
 				</Col>
 			</Row>
-		</Card>
+		</PageCard>
 	);
 };
 

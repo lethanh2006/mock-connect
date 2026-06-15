@@ -1,5 +1,5 @@
 import dayjs from '@/utils/dayjs';
-import { CheckCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, InfoCircleOutlined, WarningOutlined } from '@ant-design/icons';
 import { Alert, Button, Col, Row } from 'antd';
 import { history, useIntl, useModel } from 'umi';
 
@@ -11,7 +11,41 @@ const AlertBanners = ({
 	type?: 'minor' | 'concentration';
 }) => {
 	const intl = useIntl();
-	const { record: kyHienTai } = useModel('daotao.dotdkctdt');
+	const { record: kyDangKy, isRegistrationOpen, registrationStatus } = useModel('daotao.dotdkctdt');
+
+	const hasRegistrationTime = !!kyDangKy?.thoiGianBatDau;
+	const startDate = kyDangKy?.thoiGianBatDau ? dayjs(kyDangKy.thoiGianBatDau).format('DD/MM/YYYY HH:mm') : '-';
+	const endDate = kyDangKy?.thoiGianKetThuc ? dayjs(kyDangKy.thoiGianKetThuc).format('DD/MM/YYYY HH:mm') : '-';
+
+	const getMessageId = () => {
+		if (!hasRegistrationTime) {
+			return type === 'minor'
+				? 'minor.alert.registrationNotOpen.minor'
+				: 'minor.alert.registrationNotOpen.concentration';
+		}
+
+		switch (registrationStatus) {
+			case 'open':
+				return type === 'minor'
+					? 'minor.alert.registrationRange.minor'
+					: 'minor.alert.registrationRange.concentration';
+			case 'upcoming':
+				return type === 'minor'
+					? 'minor.alert.registrationUpcoming.minor'
+					: 'minor.alert.registrationUpcoming.concentration';
+			case 'closed':
+				return type === 'minor'
+					? 'minor.alert.registrationClosed.minor'
+					: 'minor.alert.registrationClosed.concentration';
+			default:
+				return type === 'minor'
+					? 'minor.alert.registrationNotOpen.minor'
+					: 'minor.alert.registrationNotOpen.concentration';
+		}
+	};
+
+	const alertType = isRegistrationOpen ? 'success' : registrationStatus === 'upcoming' ? 'info' : 'warning';
+	const alertIcon = isRegistrationOpen ? <CheckCircleOutlined /> : registrationStatus === 'upcoming' ? <InfoCircleOutlined /> : <WarningOutlined />;
 
 	return (
 		<Row gutter={[0, 8]}>
@@ -21,28 +55,10 @@ const AlertBanners = ({
 						<Row justify='space-between' align='middle'>
 							<Col style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
 								<span>
-									{kyHienTai?.thoiGianBatDau
-										? (() => {
-												const startDate = dayjs(kyHienTai.thoiGianBatDau).format('DD/MM/YYYY HH:mm');
-												const endDate = kyHienTai?.thoiGianKetThuc
-													? dayjs(kyHienTai.thoiGianKetThuc).format('DD/MM/YYYY HH:mm')
-													: '-';
-												return type === 'minor'
-													? intl.formatMessage({ id: 'minor.alert.registrationRange.minor' }, { startDate, endDate })
-													: intl.formatMessage(
-															{ id: 'minor.alert.registrationRange.concentration' },
-															{ startDate, endDate },
-														);
-											})()
-										: intl.formatMessage({
-												id:
-													type === 'minor'
-														? 'minor.alert.registrationNotOpen.minor'
-														: 'minor.alert.registrationNotOpen.concentration',
-											})}
+									{intl.formatMessage({ id: getMessageId() }, { startDate, endDate, date: startDate })}
 								</span>
 							</Col>
-							{buttonRegister && (
+							{buttonRegister && isRegistrationOpen && (
 								<Col>
 									<Row gutter={8} align='middle' wrap={false}>
 										<Col>
@@ -60,8 +76,8 @@ const AlertBanners = ({
 							)}
 						</Row>
 					}
-					type={kyHienTai?.thoiGianBatDau ? 'success' : 'warning'}
-					icon={kyHienTai?.thoiGianBatDau ? <CheckCircleOutlined /> : <WarningOutlined />}
+					type={alertType}
+					icon={alertIcon}
 					showIcon
 				/>
 			</Col>

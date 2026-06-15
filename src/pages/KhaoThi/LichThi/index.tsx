@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import FilterHocKy from '@/pages/DaoTao/HocKy/FilterHocKy';
@@ -143,15 +144,13 @@ const LichThiPage = () => {
 	];
 
 	return (
-		<Card
+		<PageCard
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
 					<span>{intl.formatMessage({ id: 'lichthi.title' })}</span>
 					<FilterHocKy isSetHocKy />
 				</Space>
 			}
-			className='card-big-title card-borderless'
-			variant='borderless'
 		>
 			<Card variant='borderless'>
 				<TableStaticData columns={columns} data={danhSachMe} addStt loading={loading}></TableStaticData>
@@ -163,7 +162,7 @@ const LichThiPage = () => {
 					/>
 				)}
 			</Card>
-		</Card>
+		</PageCard>
 	);
 };
 

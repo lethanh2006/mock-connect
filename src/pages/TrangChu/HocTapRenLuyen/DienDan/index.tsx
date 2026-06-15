@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import { formatDateTime } from '@/utils/formatDate';
 import { ArrowRightOutlined, CheckCircleOutlined, FilterOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Dropdown, Empty, Space, Spin, Tag, Typography } from 'antd';
@@ -150,9 +151,9 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 	};
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless'
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={
 				<Space>
 					{intl.formatMessage({ id: 'trangchu.hoctaprenluyen.diemdan.title' })}{' '}
@@ -206,7 +207,7 @@ const CardDienDanDashboard = (props: { typeLop: 'all' | 'lop-hoc-phan' | 'lop-ha
 					)}
 				</Spin>
 			</Card>
-		</Card>
+		</PageCard>
 	);
 };
 

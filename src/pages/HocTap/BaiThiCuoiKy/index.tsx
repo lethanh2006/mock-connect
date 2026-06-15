@@ -1,4 +1,5 @@
 import ExpandText from '@/components/ExpandText';
+import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
@@ -169,15 +170,13 @@ const BaiThiCuoiKy = () => {
 	];
 
 	return (
-		<Card
+		<PageCard
 			title={
 				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
 					<span>{intl.formatMessage({ id: 'baithi.title' })}</span>
 					<FilterKyThi />
 				</Space>
 			}
-			className='card-big-title card-borderless'
-			variant='borderless'
 		>
 			<Card variant='borderless'>
 				<TableBase
@@ -218,7 +217,7 @@ const BaiThiCuoiKy = () => {
 					]}
 				/>
 			</Card>
-		</Card>
+		</PageCard>
 	);
 };
 

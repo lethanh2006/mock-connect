@@ -4,8 +4,8 @@ import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { ELoaiHocPhanCTDT, ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
 import { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useEffect, useMemo, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 import '../style.less';
 
 const HocPhanTrongCTDT = (props: {
@@ -16,6 +16,7 @@ const HocPhanTrongCTDT = (props: {
 	danhSachNgoai: HocPhan.IRecord[];
 	otherButtons?: any[];
 }) => {
+	const intl = useIntl();
 	const { data, danhSachNgoai, otherButtons } = props;
 	const { selectedIds, setSelectedIds } = useModel('hocphan.hocphan');
 	const { record: recDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
@@ -70,53 +71,60 @@ const HocPhanTrongCTDT = (props: {
 		setExpandedRowKeys(defaultExpandedKeys);
 	}, [data]);
 
-	const columns: IColumn<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>[] = [
-		{
-			title: 'Mã HP',
-			dataIndex: 'maHocPhan',
-			width: 100,
-			align: 'center',
-			filterType: 'string',
-		},
-		{
-			title: 'Tên HP',
-			width: 200,
-			render: (val, rec) => rec?.hocPhan?.ten ?? rec?.ten,
-			filterType: 'string',
-		},
-		{
-			title: 'STC',
-			align: 'center',
-			width: 40,
-			render: (val, rec) => rec?.hocPhan?.soTinChi ?? rec?.soTinChiTuChonPhaiHoc,
-		},
-		{
-			title: 'Kỳ',
-			dataIndex: 'soThuTuKy',
-			align: 'center',
-			width: 40,
-		},
-		{
-			title: 'Chuyên ngành',
-			dataIndex: 'maChuyenNganh',
-			width: 160,
-			render: (val, rec) => rec?.chuyenNganh?.ten ?? val,
-		},
-		{
-			title: 'Loại',
-			dataIndex: 'loai' as any,
-			align: 'center',
-			width: 140,
-			filterType: 'string',
-		},
-		{
-			title: 'Trạng thái học tập',
-			dataIndex: 'hoc',
-			align: 'center',
-			width: 120,
-			render: (val, rec) => trangThaiHocTap[rec?.hoc],
-		},
-	];
+	const columns: IColumn<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>[] = useMemo(
+		() => [
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.maHP' }),
+				dataIndex: 'maHocPhan',
+				width: 100,
+				align: 'center',
+				filterType: 'string',
+			},
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.tenHocPhan' }),
+				width: 200,
+				render: (val, rec) => rec?.hocPhan?.ten ?? rec?.ten,
+				filterType: 'string',
+			},
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.soTinChi' }),
+				align: 'center',
+				width: 40,
+				render: (val, rec) => rec?.hocPhan?.soTinChi ?? rec?.soTinChiTuChonPhaiHoc,
+			},
+			{
+				title: intl.formatMessage({ id: 'minor.history.semester' }),
+				dataIndex: 'soThuTuKy',
+				align: 'center',
+				width: 40,
+			},
+			{
+				title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.chuyennganh.tablecolumntitle' }),
+				dataIndex: 'maChuyenNganh',
+				width: 160,
+				render: (val, rec) => rec?.chuyenNganh?.ten ?? val,
+			},
+			{
+				title: intl.formatMessage({ id: 'minor.history.type' }),
+				dataIndex: 'loai' as any,
+				align: 'center',
+				width: 140,
+				filterType: 'string',
+				render: (_, rec) => {
+					const id = (rec as ChuongTrinhDaoTao.IKhoiHocPhanCTDT & { loai?: string })?.loai;
+					return id?.startsWith('hocphannhucau.') ? intl.formatMessage({ id }) : id;
+				},
+			},
+			{
+				title: intl.formatMessage({ id: 'thongtincanhan.hoso.trangthaihoc' }),
+				dataIndex: 'hoc',
+				align: 'center',
+				width: 120,
+				render: (val, rec) => trangThaiHocTap[rec?.hoc],
+			},
+		],
+		[intl],
+	);
 
 	return (
 		<TableStaticData

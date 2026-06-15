@@ -1,4 +1,5 @@
-import { Card, Col, Row } from 'antd';
+import PageCard from '@/components/PageCard';
+import { Col, Row } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import CardCongNoDashboard from '../components/CongNo';
@@ -18,10 +19,10 @@ const CardHocTapRenLuyenDashboard = () => {
 	}, []);
 
 	return (
-		<Card
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={intl.formatMessage({ id: 'trangchu.hoctaprenluyen.title' })}
-			variant='borderless'
-			className='card-borderless'
 			style={{ height: '100%' }}
 		>
 			<Row gutter={[16, 16]} style={{ height: '100%' }}>
@@ -41,7 +42,7 @@ const CardHocTapRenLuyenDashboard = () => {
 					<CardCongNoDashboard />
 				</Col>
 			</Row>
-		</Card>
+		</PageCard>
 	);
 };
 

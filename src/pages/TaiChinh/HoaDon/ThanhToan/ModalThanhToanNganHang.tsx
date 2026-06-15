@@ -119,10 +119,7 @@ const ModalThanhToanNganHang = (props: { visible: boolean; onOk: () => void }) =
 							{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.maThanhToanSV' })}: <b>{record?.identityCode}</b>
 							<br />
 							{intl.formatMessage({ id: 'taichinh.thanhtoan.nganhang.soTK24_7' })}:{' '}
-							<b>
-								{hinhThucFinal.tienToSTK}
-								{record?.identityCode}
-							</b>
+							<b>{record?.externalIdentityCode ?? `${hinhThucFinal.tienToSTK}${record?.identityCode}`}</b>
 						</>
 					)}
 				</p>

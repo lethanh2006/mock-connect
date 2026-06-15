@@ -2,7 +2,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import { colorTrangThaiKqht, trangThaiKqht, type ETrangThaiKqht } from '@/services/DaoTao/constant';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Modal, Tag, Tooltip } from 'antd';
 import type { ReactElement, ReactNode } from 'react';
 import { useState } from 'react';
@@ -12,6 +12,7 @@ import FormHpBuild from './FormHpBuild';
 export interface ProgramDesignTableProps {
 	data: PhieuDkCtdt.KhoiHocPhanDkCtdt[];
 	onDelete?: (index: number) => void;
+	onEdit?: (record: PhieuDkCtdt.KhoiHocPhanDkCtdt, index: number) => void;
 	hasTotal?: boolean;
 	title?: ReactNode;
 	otherButtons?: ReactElement[];
@@ -24,6 +25,7 @@ export interface ProgramDesignTableProps {
 const ProgramDesignTable = ({
 	data,
 	onDelete,
+	onEdit,
 	hasTotal = true,
 	title,
 	otherButtons,
@@ -41,7 +43,7 @@ const ProgramDesignTable = ({
 			title: intl.formatMessage({ id: 'minor.idm.form.courseCode' }),
 			dataIndex: 'hocPhanChinh',
 			width: 120,
-			render: (val) => val?.ma,
+			render: (val) => val?.ma || '-',
 		},
 		{
 			title: intl.formatMessage({ id: 'minor.idm.form.courseName' }),
@@ -90,20 +92,32 @@ const ProgramDesignTable = ({
 			: [
 					{
 						title: intl.formatMessage({ id: 'minor.idm.table.actions' }),
-						width: 80,
+						width: 100,
 						fixed: 'right' as const,
-						render: (_: any, __: any, index: number) => (
-							<Tooltip title={intl.formatMessage({ id: 'minor.idm.action.delete' })}>
-								<Button
-									type='link'
-									danger
-									icon={<DeleteOutlined />}
-									onClick={(e) => {
-										e.stopPropagation();
-										onDelete?.(index);
-									}}
-								/>
-							</Tooltip>
+						render: (_: any, record: any, index: number) => (
+							<div style={{ display: 'flex' }}>
+								<Tooltip title={intl.formatMessage({ id: 'global.button.chinhsua' })}>
+									<Button
+										type='link'
+										icon={<EditOutlined />}
+										onClick={(e) => {
+											e.stopPropagation();
+											onEdit?.(record, index);
+										}}
+									/>
+								</Tooltip>
+								<Tooltip title={intl.formatMessage({ id: 'minor.idm.action.delete' })}>
+									<Button
+										type='link'
+										danger
+										icon={<DeleteOutlined />}
+										onClick={(e) => {
+											e.stopPropagation();
+											onDelete?.(index);
+										}}
+									/>
+								</Tooltip>
+							</div>
 						),
 					},
 				]),
@@ -121,7 +135,7 @@ const ProgramDesignTable = ({
 				columns={columns}
 				hasTotal={hasTotal}
 				addStt
-				title={title}
+				size='small'
 				otherButtons={otherButtons}
 				showEdit={showEdit}
 				setShowEdit={setShowEdit}
