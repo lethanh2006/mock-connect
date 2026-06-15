@@ -29,10 +29,13 @@ const ConfirmKetHuyLopDKTC = (props: {
 
 	const handleXoaDangKyTinChi = async () => {
 		try {
-			await deleteDangKyTinChiModel({
-				phieuDktcId: phieuDangKy?._id ?? '',
-				lopHocPhanId: recLopDangKy?._id ?? '',
-			});
+			await deleteDangKyTinChiModel(
+				{
+					phieuDktcId: phieuDangKy?._id ?? '',
+					lopHocPhanId: recLopDangKy?._id ?? '',
+				},
+				intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+			);
 
 			const data = danhSachLopDangKy.filter((item) => item.maHocPhan !== recLopDangKy?.maHocPhan);
 			tinhDataLichHoc(data);

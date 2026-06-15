@@ -1,6 +1,7 @@
 import { createSetting, getByKey, getSettingByKey, putSetting, updateSetting } from '@/services/base/api';
 import type { ESettingKey } from '@/services/base/constant';
 import type { ISetting } from '@/services/base/typing';
+import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
@@ -11,6 +12,7 @@ type TSettingType = Partial<{
 	[ESettingKey.THONG_TIN_THANH_TOAN]: GiaoDich.TSetting; // Some type has `_id`
 	[ESettingKey.GENERAL_INFO]: LopHocPhan.TSettingLMS;
 	[ESettingKey.THU_VIEN_HOC_LIEU]: HocPhan.ISettingThuVien;
+	[ESettingKey.SINH_VIEN]: DangKyTinChi.ICauHinhWaitlist;
 	[ESettingKey.CCT_TRANSCRIPT]: SubmisstionRound.ISetting;
 }>;
 

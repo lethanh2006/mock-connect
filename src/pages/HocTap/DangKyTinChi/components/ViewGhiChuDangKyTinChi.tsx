@@ -1,65 +1,131 @@
-import { EColorLopDangKy } from '@/services/DaoTao/DangKyTinChi/constant';
-import { Space } from 'antd';
-import { useIntl } from 'umi';
+import { tinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
+import { formatDate, formatDateTime } from '@/utils/formatDate';
+import { Col, Divider, Modal, Row } from 'antd';
+import { useIntl, useModel } from 'umi';
 
-const ViewGhiChuDangKyTinChi = () => {
+const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
+	const { visible, setVisible } = props;
 	const intl = useIntl();
+	const { record: recHocKy } = useModel('daotao.hocky');
+	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
 
 	return (
-		<div style={{ maxWidth: 500 }}>
-			{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.step1' })}
-			<br />
-			{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.step2' })}
-			<br />
-			{intl.formatMessage(
-				{ id: 'dangkytinchi.ghichudangkytinchi.step3' },
-				{
-					i: (chunk) => <i>{chunk}</i>,
-				},
-			)}
-			<br />
-			{intl.formatMessage(
-				{ id: 'dangkytinchi.ghichudangkytinchi.step4' },
-				{
-					b: (chunk) => <b>{chunk}</b>,
-				},
-			)}
-			<br />
-			{intl.formatMessage(
-				{ id: 'dangkytinchi.ghichudangkytinchi.link.xemhuongdan' },
-				{
-					a: (chunks) => (
-						<a href='https://www.youtube.com/watch?v=2xghlws7tAk' target='_blank' rel='noreferrer'>
-							{chunks}
-						</a>
-					),
-				},
-			)}
-			<br />
-			<br />
-			<u>{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.ghichu' })}:</u>
-			<br />
-			<div style={{ display: 'flex', flexDirection: 'column' }}>
-				<Space style={{ marginTop: 5 }}>
-					<span className='dang-ky-ghi-chu selected' />
-					{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopdadangky' })}
-				</Space>
-				<Space style={{ marginTop: 5 }}>
-					<span className='dang-ky-ghi-chu' style={{ backgroundColor: EColorLopDangKy.TRUNG_LICH }} />
-					{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopbitrunglichhoc' })}
-				</Space>
-				<Space style={{ marginTop: 5 }}>
-					<span className='dang-ky-ghi-chu' style={{ backgroundColor: EColorLopDangKy.FULL_LOP }} />
-					{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopkhongconchotrong' })}
-				</Space>
-				<Space style={{ marginTop: 5 }}>
-					<span className='fw500'>
-						{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.chudam' })}
-					</span>
-					{intl.formatMessage({ id: 'dangkytinchi.ghichudangkytinchi.description.lopgoiy' })}
-				</Space>
-			</div>
-		</div>
+		<Modal
+			title={intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtindangky' })}
+			open={visible}
+			footer={null}
+			onCancel={() => setVisible(false)}
+			width={800}
+		>
+			<Row gutter={[12, 12]}>
+				<Col span={24}>
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 8 }}>
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtinkyhoc' })}
+					</Divider>
+				</Col>
+
+				<Col span={24}>
+					<div>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tenhocky' })}</strong>: {recHocKy?.ten ?? '--'}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.sotuanhoc' })}</strong>: {recHocKy?.soTuan ?? '--'}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.thoigianbatdauhocky' })}</strong>:{' '}
+						{recHocKy?.thoiGianBatDau ? formatDate(recHocKy.thoiGianBatDau) : '--'}
+					</div>
+				</Col>
+
+				{dotDangKyHienTai ? (
+					<>
+						<Col span={24}>
+							<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 8 }}>
+								{intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtindotdangky' })}
+							</Divider>
+						</Col>
+
+						<Col span={24}>
+							<div>
+								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tendotdangky' })}</strong>:{' '}
+								{dotDangKyHienTai?.ten ?? '--'}
+							</div>
+							<div style={{ marginTop: 8 }}>
+								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.batdau' })}</strong>:{' '}
+								{dotDangKyHienTai?.thoiGianBatDau ? formatDateTime(dotDangKyHienTai.thoiGianBatDau) : '--'}
+							</div>
+							<div style={{ marginTop: 8 }}>
+								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.ketthuc' })}</strong>:{' '}
+								{dotDangKyHienTai?.thoiGianKetThuc ? formatDateTime(dotDangKyHienTai.thoiGianKetThuc) : '--'}
+							</div>
+							<div style={{ marginTop: 8 }}>
+								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tinhchat' })}</strong>:{' '}
+								{dotDangKyHienTai?.tinhChatDangKy
+									? intl.formatMessage({ id: tinhChatDangKyTC[dotDangKyHienTai.tinhChatDangKy] })
+									: '--'}
+							</div>
+						</Col>
+					</>
+				) : null}
+
+				<Col span={24}>
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 8 }}>
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtinbosung' })}
+					</Divider>
+				</Col>
+
+				<Col span={24}>
+					<div>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday.mota' })}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhdaotao' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhdaotao.mota' })}
+					</div>
+					{/* <div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2.mota' })}
+					</div> */}
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan.mota' })}
+					</div>
+				</Col>
+
+				<Col span={24}>
+					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 8 }}>
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.huongdandangky' })}
+					</Divider>
+				</Col>
+
+				<Col span={24}>
+					<div>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1.mota' })}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2.mota' })}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc3' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc3.mota' })}
+					</div>
+					<div style={{ marginTop: 8 }}>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc4' })}</strong>:{' '}
+						{intl.formatMessage(
+							{ id: 'dangkytinchi.duongdan.buoc4.mota' },
+							{
+								dangky: (
+									<b style={{ color: '#134D8B' }}>{intl.formatMessage({ id: 'dangkytinchi.duongdan.dangky' })}</b>
+								),
+							},
+						)}
+					</div>
+				</Col>
+			</Row>
+		</Modal>
 	);
 };
 

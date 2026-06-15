@@ -3,9 +3,9 @@ export default {
 	'activity.role.select': 'Chọn vai trò',
 	'activity.level.select': 'Chọn mức độ',
 
-	'activity.date.homnay': 'Hôm nay',
-	'activity.date.tuannay': 'Tuần này',
-	'activity.date.thangnay': 'Tháng này',
+	'activity.date.homnay': 'Today',
+	'activity.date.tuannay': 'This week',
+	'activity.date.thangnay': 'This month',
 
 	'activity.btn.dangky': 'Đăng ký ngay',
 	'activity.confirm.dangky': 'Xác nhận đăng ký sự kiện?',
@@ -71,8 +71,8 @@ export default {
 	'lophocphan.id.khaosat.gt': 'Giới thiệu',
 	'lophocphan.id.khaosat.nd': 'Nội dung khảo sát',
 
-	'khaosat.batbuoc.title': 'Chi tiết khảo sát',
-	'khaosat.batbuoc.thanhcong': 'THÀNH CÔNG',
+	'khaosat.batbuoc.title': 'Survey Details',
+	'khaosat.batbuoc.thanhcong': 'SUCCESS',
 	'khaosat.batbuoc.noti':
 		'Bạn vẫn còn <b>{count}</b> đợt khảo sát chưa hoàn thành. Vui lòng hoàn thành để tiếp tục sử dụng hệ thống!',
 	'khaosat.batbuoc.noti1': 'Khảo sát đã được hoàn thành. Bạn có thể tiếp tục sử dụng hệ thống!',
@@ -83,11 +83,11 @@ export default {
 	'khaosat.filechoice.form.diemso': 'Điểm',
 	'khaosat.filechoice.form.diemso.place': 'Chưa có điểm',
 
-	'khaosat.gridChoice.column.noidung': 'Nội dung',
-	'khaosat.gridChoice.column.batbuoc': 'Bắt buộc',
+	'khaosat.gridChoice.column.noidung': 'Content',
+	'khaosat.gridChoice.column.batbuoc': 'Required',
 
-	'khaosat.multipleChoice.form.cautlkhac': 'Câu trả lời khác',
-	'khaosat.multipleChoice.form.cautlkhac.place': 'Nhập câu trả lời khác',
+	'khaosat.multipleChoice.form.cautlkhac': 'Other answer',
+	'khaosat.multipleChoice.form.cautlkhac.place': 'Enter other answer',
 
 	'khaosat.text.form.extra': 'Nhập số từ {gioiHanDuoiTuyenTinh} đến {gioiHanTrenTuyenTinh}',
 	'khaosat.text.form.cautl.place': 'Nhập câu trả lời',

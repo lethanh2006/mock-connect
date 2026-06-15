@@ -23,6 +23,7 @@ export declare module LopHocPhan {
 		maLop: string;
 		maLopCha?: string;
 		maHocKy: string;
+		csdt?: CSDT.IRecord;
 		hocKy?: HocKy.IRecord;
 		maHocPhan: string;
 		hocPhan?: HocPhan.IRecord;
@@ -37,7 +38,7 @@ export declare module LopHocPhan {
 		soThuTuLop?: number;
 		soThuTuNhom?: number;
 		moodleShortname?: string | null;
-
+		phongHoc?: string;
 		parent?: IRecord;
 		children?: IRecord[];
 		/** Lớp ghép thời khóa biểu cùng */
@@ -49,6 +50,12 @@ export declare module LopHocPhan {
 		maHoaLichHoc?: TMaHoaLichHoc[];
 		thoiKhoaBieuList?: ThoiKhoaBieu.IRecord[];
 		trangThaiLop: ETrangThaiLopHocPhan;
+
+		/** Đã chốt kế hoạch rà soát học phần chưa? */
+		chotKeHoach?: boolean;
+		chotTkb: boolean;
+		dangKyTinChi?: boolean;
+		khoaTkb?: boolean;
 
 		// lopHpHcList?: Partial<ILopHpLopHc>[];
 		// doiTuongLopHanhChinh?: EDoiTuongLopHanhChinh;
@@ -68,6 +75,9 @@ export declare module LopHocPhan {
 		thongKeDiemDanhLhp?: TThongKeDiemDanh;
 		soBaiTap?: number;
 		soBaiDang?: number;
+
+		phongCapacity?: number;
+		waitlistCount?: number;
 	}
 
 	export type TThongKeDiemDanh = {
@@ -120,14 +130,17 @@ export declare module LopHocPhan {
 
 		loai?: ELoaiHocPhanDangKyTinChi;
 		diemHpSvHk?: IDiemHpSvHk;
+
+		//fake
+		trangThai?: ETrangThaiDangKyTinChi;
 	}
 
 	export interface IDiemHpSvHk
 		extends IDiemThanhPhan,
-		IDiemThi,
-		IDiemTongKet,
-		HocPhan.ITrongSoDeCuong,
-		HocPhan.ITrongSoThi {
+			IDiemThi,
+			IDiemTongKet,
+			HocPhan.ITrongSoDeCuong,
+			HocPhan.ITrongSoThi {
 		_id: string;
 		sinhVienSsoId: string;
 		// maSinhVien: string;
@@ -320,5 +333,6 @@ export declare module LopHocPhan {
 		tenGiamDoc: string;
 		tenTruongPhongQLDT: string;
 		university: string;
+		syllabusPolicies: string;
 	};
 }

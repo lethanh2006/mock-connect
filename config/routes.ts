@@ -46,38 +46,38 @@ export default [
 	// 	icon: 'CalendarOutlined',
 	// 	component: 'New/MyCalendar',
 	// },
-	// {
-	// 	path: '/academic',
-	// 	name: 'Academic',
-	// 	icon: 'BookOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'course-registration',
-	// 			name: 'CourseRegistration',
-	// 			component: 'New/CourseRegistration',
-	// 		},
-	// 		{
-	// 			path: 'timetable',
-	// 			name: 'Timetable',
-	// 			component: 'New/Timetable',
-	// 		},
-	// 		{
-	// 			path: 'grades-transcript',
-	// 			name: 'GradesTranscript',
-	// 			component: 'New/GradesTranscript',
-	// 		},
-	// 		{
-	// 			path: 'degree-audit',
-	// 			name: 'DegreeAudit',
-	// 			component: 'New/DegreeAudit',
-	// 		},
-	// 		{
-	// 			path: 'graduation-review',
-	// 			name: 'GraduationReview',
-	// 			component: 'New/GraduationReview',
-	// 		},
-	// 	],
-	// },
+	{
+		path: '/academic',
+		name: 'Academic',
+		icon: 'BookOutlined',
+		routes: [
+			{
+				path: 'course-registration',
+				name: 'CourseRegistration',
+				component: 'HocTap/DangKyTinChi',
+			},
+			// {
+			// 	path: 'timetable',
+			// 	name: 'Timetable',
+			// 	component: 'Calendar',
+			// },
+			// {
+			// 	path: 'grades-transcript',
+			// 	name: 'GradesTranscript',
+			// 	component: 'HocTap/KetQuaHocTap',
+			// },
+			// {
+			// 	path: 'degree-audit',
+			// 	name: 'DegreeAudit',
+			// 	component: 'HocTap/TienTrinhHocTap',
+			// },
+			// {
+			// 	path: 'graduation-review',
+			// 	name: 'GraduationReview',
+			// 	component: 'HocTap/XetTotNghiep',
+			// },
+		],
+	},
 	// {
 	// 	path: '/learning-experience',
 	// 	name: 'LearningExperience',
@@ -137,11 +137,11 @@ export default [
 				name: 'StudentDevelopment',
 				component: 'New/StudentDevelopment',
 			},
-			// {
-			// 	path: 'student-awarding',
-			// 	name: 'StudentAwarding',
-			// 	component: 'New/StudentAwarding',
-			// },
+			{
+				path: 'student-awarding',
+				name: 'StudentAwarding',
+				component: 'New/StudentAwarding',
+			},
 			{
 				path: 'events',
 				name: 'Events',

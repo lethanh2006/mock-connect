@@ -1,4 +1,5 @@
 import background from '@/assets/cct/background.png';
+import PageCard from '@/components/PageCard';
 import { EOperatorType } from '@/components/Table/constant';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { Activity } from '@/services/CCT/Activity/typing';
@@ -6,7 +7,7 @@ import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EActivityCategory, EActivityStatus, EApprovalStatus, mapNameActivityCategory } from '@/services/CCT/constant';
 import dayjs from '@/utils/dayjs';
 import { DashOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
+import { Button, Col, Empty, Pagination, Popconfirm, Popover, Row, Space, Spin, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { FilterSuKienValue } from '../Activity';
@@ -159,7 +160,7 @@ const HistoryActivityPage = () => {
 	const isExpired = editableWorkflow && now.isAfter(endDateUpdateEvidence);
 
 	return (
-		<Card title={intl.formatMessage({ id: 'activity.history.title' })} className='table-base-card' variant='borderless'>
+		<PageCard title={intl.formatMessage({ id: 'activity.history.title' })}>
 			<Tabs
 				activeKey={tabActive}
 				onChange={(tab) => {
@@ -499,7 +500,7 @@ const HistoryActivityPage = () => {
 					/>
 				)}
 			</ModalExpandable>
-		</Card>
+		</PageCard>
 	);
 };
 

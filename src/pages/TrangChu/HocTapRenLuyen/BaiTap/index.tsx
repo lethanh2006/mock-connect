@@ -1,4 +1,5 @@
 // import PDFViewerV2 from '@/components/PDFViewerV2';
+import PageCard from '@/components/PageCard';
 import BoxFile from '@/pages/HocTap/LopHocPhan/DienDan/components/BoxFile';
 import {
 	colorTrangThaiNopBaiTap,
@@ -178,9 +179,10 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 	};
 
 	return (
-		<Card
-			variant='borderless'
-			className='card-borderless card-baitap-dashboard'
+		<PageCard
+			level={2}
+			hideInnerCard
+			className='card-baitap-dashboard'
 			title={
 				<>
 					{intl.formatMessage({ id: 'trangchu.baitap.title' })}{' '}
@@ -257,7 +259,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 				</Space>
 			}
 		>
-			<Card variant='borderless' className={`${isDashBoard && 'content-wrapper'} `} styles={{ body: { padding: 0 } }}>
+			<Card className={`${isDashBoard && 'content-wrapper'} `} variant='borderless'>
 				<div ref={containerRef}>
 					{!!dataToUse.length ? (
 						<Carousel
@@ -281,7 +283,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 					)}
 				</div>
 			</Card>
-		</Card>
+		</PageCard>
 	);
 };
 

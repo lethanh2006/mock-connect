@@ -1,0 +1,15 @@
+export default {
+	'syllabus.preview.exportToPdf': 'Xuất PDF',
+	'syllabus.preview.mucLuc': 'Mục lục',
+	'syllabus.list.colNguoiSoan': 'Người soạn',
+	'syllabus.list.colNgayTao': 'Ngày tạo',
+	'syllabus.list.colTrangThaiDuyet': 'Trạng thái duyệt',
+	'syllabus.list.colNgayCapNhat': 'Ngày cập nhật',
+	'syllabus.stat.status.dang_soan_thao': 'Đang soạn thảo',
+	'syllabus.stat.status.cho_aqa_tham_dinh': 'Chờ thẩm định',
+	'syllabus.stat.status.yeu_cau_chinh_sua': 'Yêu cầu chỉnh sửa',
+	'syllabus.stat.status.tu_choi_duyet': 'Từ chối duyệt',
+	'syllabus.stat.status.da_duyet': 'Đã duyệt',
+	'syllabus.stat.status.ban_hanh': 'Ban hành',
+	'syllabus.stat.status.cho_duyet': 'Chờ duyệt',
+};

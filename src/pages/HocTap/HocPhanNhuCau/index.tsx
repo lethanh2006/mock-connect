@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
@@ -14,15 +15,16 @@ import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { MenuOutlined, PlusCircleOutlined, ReloadOutlined } from '@ant-design/icons';
-import { Alert, Card, Checkbox, Empty, Space, Table } from 'antd';
+import { Alert, Checkbox, Empty, Space, Table } from 'antd';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useEffect, useMemo, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 import SelectDotDangKyHocPhanNhuCau from './DotDangKy/Select';
 import DanhSachDangKyLop from './components/DanhSachDangKy';
 import FormHocPhanDangKyNhuCau from './components/Form';
 
 const DangKyNhuCauHocPhan = () => {
+	const intl = useIntl();
 	const { record: recDot, setRecord: setRecDot, danhSach: danhSachDot } = useModel('sinhvien.nhucauhocphan.dotdangky');
 	const { getAllModel, danhSach, loading, setVisibleForm } = useModel('sinhvien.nhucauhocphan.sinhvienhocphannhucau');
 	const { maKhoaNganh, setMaKhoaNganh } = useModel('sinhvien.sinhvien');
@@ -60,45 +62,51 @@ const DangKyNhuCauHocPhan = () => {
 			});
 	}, [maKhoaNganh, recHocKy?.ma]);
 
-	const columns: IColumn<HocPhanNhuCau.IRecord>[] = [
-		{
-			title: 'Mã HP',
-			dataIndex: 'maHocPhan',
-			width: 100,
-			align: 'center',
-			filterType: 'string',
-		},
-		{
-			title: 'Tên học phần',
-			width: 200,
-			render: (val, rec) => rec?.hocPhan?.ten,
-		},
-		{
-			title: 'Số tín chỉ',
-			align: 'center',
-			dataIndex: 'soTinChi',
-			width: 80,
-			filterType: 'number',
-			sortable: true,
-		},
-		{
-			title: 'Theo tiến trình',
-			align: 'center',
-			width: 80,
-			render: (val, rec) => (
-				<Checkbox
-					checked={
-						rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH ||
-						rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.NGOAI_TIEN_TRINH
-					}
-				/>
-			),
-		},
-	];
+	const columns: IColumn<HocPhanNhuCau.IRecord>[] = useMemo(
+		() => [
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.maHP' }),
+				dataIndex: 'maHocPhan',
+				width: 100,
+				align: 'center',
+				filterType: 'string',
+			},
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.tenHocPhan' }),
+				width: 200,
+				render: (val, rec) => rec?.hocPhan?.ten,
+			},
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.soTinChi' }),
+				align: 'center',
+				dataIndex: 'soTinChi',
+				width: 80,
+				filterType: 'number',
+				sortable: true,
+			},
+			{
+				title: intl.formatMessage({ id: 'hocphannhucau.table.theoTienTrinh' }),
+				align: 'center',
+				width: 80,
+				render: (val, rec) => (
+					<Checkbox
+						checked={
+							rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH ||
+							rec?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.NGOAI_TIEN_TRINH
+						}
+					/>
+				),
+			},
+		],
+		[intl],
+	);
+
+	const ttSv = danhSach?.[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai as ETrangThaiSvDkHpNhuCau | undefined;
 
 	return (
-		<Card title='Phiếu đăng ký học phần'>
-			<Space wrap style={{ marginBottom: 12 }}>
+		<PageCard
+			title={intl.formatMessage({ id: 'menu.HocTap.NhuCauHocPhan' })}
+			extra={
 				<FilterHocKy isSetHocKy selectLatest>
 					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
 					<SelectDotDangKyHocPhanNhuCau
@@ -108,41 +116,42 @@ const DangKyNhuCauHocPhan = () => {
 						style={{ width: 250 }}
 					/>
 				</FilterHocKy>
-			</Space>
-
+			}
+		>
 			{recDot?._id ? (
 				<>
 					<Alert
 						style={{ marginBottom: 12 }}
 						type={ngoaiThoiGian ? 'warning' : 'info'}
 						message={
-							ngoaiThoiGian ? (
-								'Ngoài thời gian đăng ký nhu cầu!'
-							) : (
-								<>
-									Thời gian đăng ký nhu cầu học phần từ{' '}
-									<b>{formatDate(recDot?.thoiGianBatDauDangKy)}</b> đến{' '}
-									<b>{formatDate(recDot?.thoiGianKetThucDangKy)}</b>
-								</>
-							)
+							ngoaiThoiGian
+								? intl.formatMessage({ id: 'hocphannhucau.alert.ngoaiThoiGian' })
+								: intl.formatMessage(
+										{ id: 'hocphannhucau.alert.trongThoiGian' },
+										{
+											tuNgay: formatDate(recDot?.thoiGianBatDauDangKy),
+											denNgay: formatDate(recDot?.thoiGianKetThucDangKy),
+											b: (chunks) => <b>{chunks}</b>,
+										},
+									)
 						}
 						showIcon
 					/>
 					{danhSach?.length ? (
 						<div style={{ marginBottom: 12 }}>
 							<span>
-								Trạng thái đăng ký nhu cầu học phần:{' '}
-								<b
-									style={{
-										color: colorTrangThaiSvDkHpNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai],
-									}}
-								>
-									{mapNameTrangThaiSvDkHpNhuCau[danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.trangThai]}
+								{intl.formatMessage({ id: 'hocphannhucau.block.trangThaiLabel' })}{' '}
+								<b style={{ color: ttSv ? colorTrangThaiSvDkHpNhuCau[ttSv] : undefined }}>
+									{ttSv && mapNameTrangThaiSvDkHpNhuCau[ttSv]
+										? intl.formatMessage({ id: mapNameTrangThaiSvDkHpNhuCau[ttSv] })
+										: ''}
 								</b>
 							</span>
 							<br />
 							<span>
-								Ý kiến cố vấn học tập: {danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.ghiChuCVHT ?? 'Chưa có ý kiến'}
+								{intl.formatMessage({ id: 'hocphannhucau.block.yKienCvht' })}{' '}
+								{danhSach[0]?.sinhVienDangKyHocPhanNhuCau?.ghiChuCVHT ??
+									intl.formatMessage({ id: 'hocphannhucau.cvht.chuaCoYKien' })}
 							</span>
 						</div>
 					) : null}
@@ -156,7 +165,7 @@ const DangKyNhuCauHocPhan = () => {
 						otherProps={{
 							scroll: { y: 500 },
 							pagination: false,
-							summary: (pageData: HocPhanNhuCau.IRecord[]) => {
+							summary: (pageData: readonly HocPhanNhuCau.IRecord[]) => {
 								const tongSTC = _.sumBy(pageData, (item) => item?.soTinChi);
 								const hpDungTienTrinh = _.sumBy(
 									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH),
@@ -170,14 +179,21 @@ const DangKyNhuCauHocPhan = () => {
 									pageData?.filter((item) => item?.tinhChatHocPhan === ETinhChatHocPhanNhuCau.HOC_PHAN_KHAC),
 									(item) => item?.soTinChi,
 								);
+								const hpTheoTienTrinh = hpDungTienTrinh + hpNgoaiTienTrinh;
 								return (
 									<Table.Summary fixed>
 										<Table.Summary.Row>
 											<Table.Summary.Cell index={0} colSpan={8}>
 												<span>
-													Tổng số tín chỉ: <b>{tongSTC}</b> tín chỉ, trong đó{' '}
-													<b>{hpDungTienTrinh + hpNgoaiTienTrinh}</b> tín chỉ HP theo tiến trình và <b>{hpKhac}</b> tín
-													chỉ HP khác
+													{intl.formatMessage(
+														{ id: 'hocphannhucau.table.summary' },
+														{
+															tongSTC,
+															hpTheoTienTrinh,
+															hpKhac,
+															b: (chunks) => <b>{chunks}</b>,
+														},
+													)}
 												</span>
 											</Table.Summary.Cell>
 										</Table.Summary.Row>
@@ -196,19 +212,19 @@ const DangKyNhuCauHocPhan = () => {
 								icon={<PlusCircleOutlined />}
 								type='primary'
 								notHideText
-								tooltip='Đăng ký nhu cầu học phần'
+								tooltip={intl.formatMessage({ id: 'hocphannhucau.tooltip.dangKyNhuCau' })}
 							>
-								Đăng ký
+								{intl.formatMessage({ id: 'hocphannhucau.button.dangKy' })}
 							</ButtonExtend>
 
 							{isBanCanSu ? (
 								<ButtonExtend onClick={() => setVisibleLop(true)} icon={<MenuOutlined />}>
-									DS đăng ký của Lớp
+									{intl.formatMessage({ id: 'hocphannhucau.button.dsLop' })}
 								</ButtonExtend>
 							) : null}
 
 							<ButtonExtend onClick={() => getData()} icon={<ReloadOutlined />}>
-								Tải lại
+								{intl.formatMessage({ id: 'hocphannhucau.button.taiLai' })}
 							</ButtonExtend>
 						</Space>
 					</TableStaticData>
@@ -218,9 +234,12 @@ const DangKyNhuCauHocPhan = () => {
 					<DanhSachDangKyLop visible={visibleLop} setVisible={setVisibleLop} />
 				</>
 			) : (
-				<Empty description='Không có đợt đăng ký nhu cầu học phần' style={{ margin: '18px 0px' }} />
+				<Empty
+					description={intl.formatMessage({ id: 'hocphannhucau.empty.khongCoDot' })}
+					style={{ margin: '18px 0px' }}
+				/>
 			)}
-		</Card>
+		</PageCard>
 	);
 };
 

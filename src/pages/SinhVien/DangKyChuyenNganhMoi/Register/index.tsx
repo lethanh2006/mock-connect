@@ -1,13 +1,15 @@
 import { ETrangThaiDangKyChuyenNganh } from '@/services/DaoTao/DangKyChuyenNganh/constant';
+import { ELoaiPhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/constant';
 import { Breadcrumb, Card, Col, Row } from 'antd';
 import { useEffect } from 'react';
-import { useIntl, useLocation, useModel } from 'umi';
+import { useIntl, useLocation, useModel, useNavigate } from 'umi';
 import AlertBanners from '../History/components/AlertBanners';
 import DanhSachChuyenNganhList from './components/DanhSachChuyenNganhList';
 
 const RegisterPage = () => {
 	const intl = useIntl();
 	const location = useLocation() as any;
+	const navigate = useNavigate();
 	const searchParams = new URLSearchParams(location.search);
 	const loai = searchParams.get('loai') || 'minor';
 	const isMinor = loai.toLowerCase() === 'minor';
@@ -17,10 +19,14 @@ const RegisterPage = () => {
 	const { fetchPhieuDangKyHienTai, phieuDangKyTheoDot, fetchPhieuDangKyTheoDot } = useModel(
 		'sinhvien.dangkychuyennganh.dangkychuyennganh',
 	);
-	const { record: dotDangKy, fetchDotDangKy } = useModel('daotao.dotdkctdt');
+	const { record: dotDangKy, fetchDotDangKy, isRegistrationOpen } = useModel('daotao.dotdkctdt');
 	const { getModel } = useModel('daotao.nganhchuyennganh');
 
-	const hasRegisteredChoice = !!(phieuDangKyTheoDot?.maCtdt || phieuDangKyTheoDot?.maChuyenNganh);
+	const hasRegisteredChoice = !!(
+		phieuDangKyTheoDot?.maCtdt ||
+		phieuDangKyTheoDot?.maChuyenNganh ||
+		phieuDangKyTheoDot?.loai === ELoaiPhieuDkCtdt.PERSONAL
+	);
 	const shouldHideButton =
 		hasRegisteredChoice || (!!phieuDangKyTheoDot && phieuDangKyTheoDot?.trangThai !== ETrangThaiDangKyChuyenNganh.NHAP);
 
@@ -32,7 +38,7 @@ const RegisterPage = () => {
 	useEffect(() => {
 		if (dotDangKy?._id) {
 			fetchPhieuDangKyHienTai(dotDangKy?._id);
-			if (!phieuDangKyTheoDot) {
+			if (!phieuDangKyTheoDot || phieuDangKyTheoDot?.dot?._id !== dotDangKy?._id) {
 				fetchPhieuDangKyTheoDot(dotDangKy?._id);
 			}
 		}
@@ -50,7 +56,7 @@ const RegisterPage = () => {
 								title: isMinor
 									? intl.formatMessage({ id: 'minor.breadcrumb.minor' })
 									: intl.formatMessage({ id: 'minor.breadcrumb.concentration' }),
-								href: isMinor ? '/hoc-tap/khac#dang-ky-chuyen-nganh-hep' : '/hoc-tap/khac',
+								onClick: () => navigate(isMinor ? '/hoc-tap/khac#dang-ky-chuyen-nganh-hep' : '/hoc-tap/khac'),
 							},
 							{ title: pageTitle },
 						]}

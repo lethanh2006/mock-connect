@@ -1,5 +1,6 @@
+import PageCard from '@/components/PageCard';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { Alert, Card, Space, Spin } from 'antd';
+import { Alert, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import DieuKienChungChiSection from './ChungChi';
@@ -26,40 +27,32 @@ const CardDieuKienTotNghiep = () => {
 	}, [maKhoaNganh]);
 
 	return (
-		<Card
-			className='card-big-title card-borderless'
-			variant='borderless'
-			title={
-				<Space wrap style={{ width: '100%', justifyContent: 'space-between' }}>
-					<span>{intl.formatMessage({ id: 'dieukienxettotnghiep.title' })}</span>
-					<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />
-				</Space>
-			}
+		<PageCard
+			title='Graduation Review'
+			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
-			<Card variant='borderless'>
-				<Spin spinning={loading}>
-					<DieuKienKqhtSection />
+			<Spin spinning={loading}>
+				<DieuKienKqhtSection />
 
-					<DieuKienChungChiSection />
+				<DieuKienChungChiSection />
 
-					{/* <DieuKienKhacSection /> */}
-				</Spin>
+				{/* <DieuKienKhacSection /> */}
+			</Spin>
 
-				{dieuKienTotNghiep?.isDuKieuKien ? (
-					<Alert
-						type='success'
-						description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.success.dudieukien' })}
-						showIcon
-					/>
-				) : (
-					<Alert
-						type='warning'
-						description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.warning.chuadudieukien' })}
-						showIcon
-					/>
-				)}
-			</Card>
-		</Card>
+			{dieuKienTotNghiep?.isDuKieuKien ? (
+				<Alert
+					type='success'
+					description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.success.dudieukien' })}
+					showIcon
+				/>
+			) : (
+				<Alert
+					type='warning'
+					description={intl.formatMessage({ id: 'dieukienxettotnghiep.alert.warning.chuadudieukien' })}
+					showIcon
+				/>
+			)}
+		</PageCard>
 	);
 };
 

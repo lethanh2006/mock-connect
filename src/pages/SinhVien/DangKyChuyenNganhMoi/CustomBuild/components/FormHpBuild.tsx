@@ -1,3 +1,4 @@
+import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
 import { PhieuDkCtdt } from '@/services/DaoTao/PhieuDkyCTDT/typing';
 import { ETrangThaiKqht, trangThaiKqht } from '@/services/DaoTao/constant';
 import rules from '@/utils/rules';
@@ -7,30 +8,25 @@ import { useEffect } from 'react';
 import FormHPTuyenQuyet from './FormHPTuyenQuyet';
 import FormHocPhanPhu from './FormHocPhanThayThe';
 import FormItemHocPhanTable from './FormItemHocPhanTable';
-import SelectHocPhan from '@/pages/DaoTao/HocPhan/SelectHocPhan';
 
 const TRANG_THAI_KQHT_OPTIONS = Object.values(ETrangThaiKqht).map((v) => ({
 	value: v,
 	label: trangThaiKqht[v],
 }));
 
-const FormHpBuild = ({
-	form,
-	onCancel,
-	initialValues,
-	isView = false,
-}: {
+const FormHpBuild = (props: {
 	form?: FormInstance<PhieuDkCtdt.UpdatePhieuDkCtdtMeDto>;
 	onCancel: () => void;
 	initialValues?: PhieuDkCtdt.KhoiHocPhanDkCtdt;
 	isView?: boolean;
+	editIndex?: number;
 }) => {
+	const { form, onCancel, initialValues, isView = false, editIndex } = props;
 	const intl = useIntl();
 	const { danhSach } = useModel('hocphan.hocphan');
 	const [formModal] = Form.useForm();
 	const maHocPhanChinh = Form.useWatch(['hocPhanChinh', 'ma'], formModal);
 	const hocPhanChinh = danhSach.find((item) => item.ma === maHocPhanChinh);
-	console.log(hocPhanChinh, 'hocPhanChinh');
 
 	useEffect(() => {
 		if (initialValues) {
@@ -40,7 +36,13 @@ const FormHpBuild = ({
 				hocPhanThayTheList: initialValues?.hocPhanThayTheList,
 				dsHocPhanTienQuyet: initialValues?.dsHocPhanTienQuyet,
 			});
-		} else if (hocPhanChinh) {
+		} else {
+			formModal.resetFields();
+		}
+	}, [initialValues]);
+
+	useEffect(() => {
+		if (hocPhanChinh) {
 			formModal.setFieldsValue({
 				hocPhanChinh: {
 					ma: hocPhanChinh?.ma,
@@ -49,18 +51,24 @@ const FormHpBuild = ({
 					trangThaiKqht: hocPhanChinh?.trangThaiKqht,
 				},
 			});
-		} else {
-			formModal.resetFields();
 		}
-	}, [hocPhanChinh, initialValues]);
+	}, [hocPhanChinh]);
 
 	const onFinish = async (values: PhieuDkCtdt.KhoiHocPhanDkCtdt) => {
 		if (!form) return;
 		const khoiHpCtList = form.getFieldValue('khoiHpCtList') || [];
 
-		form.setFieldsValue({
-			khoiHpCtList: [...khoiHpCtList, values],
-		});
+		if (editIndex !== undefined) {
+			const updatedList = [...khoiHpCtList];
+			updatedList[editIndex] = values;
+			form.setFieldsValue({
+				khoiHpCtList: updatedList,
+			});
+		} else {
+			form.setFieldsValue({
+				khoiHpCtList: [...khoiHpCtList, values],
+			});
+		}
 
 		formModal.resetFields();
 		onCancel();
@@ -108,11 +116,11 @@ const FormHpBuild = ({
 					<Form.Item
 						name='soThuTuKy'
 						label={intl.formatMessage({ id: 'minor.idm.form.expectedSemester' })}
-						rules={isView ? [] : [...rules.number(20, 0, false), ...rules.required]}
+						rules={isView ? [] : [...rules.number(10, 5, false), ...rules.required]}
 					>
 						<InputNumber
 							style={{ width: '100%' }}
-							min={0}
+							min={5}
 							max={20}
 							disabled={isView}
 							placeholder={intl.formatMessage({ id: 'minor.idm.form.expectedSemester' })}

@@ -1,30 +1,40 @@
 import ExpandText from '@/components/ExpandText';
 import TableBase from '@/components/Table';
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import {
 	EColorLopDangKy,
-	ELoaiDangKyTheoLop,
 	ELoaiHocPhanDangKyTinChi,
+	ETinhChatDangKyTC,
 	ETrangThaiDangKyTinChi,
 } from '@/services/DaoTao/DangKyTinChi/constant';
 import { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Empty, Segmented } from 'antd';
-import { type TableRowSelection } from 'antd/lib/table/interface';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Empty, Modal, Popconfirm, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { useIntl, useModel } from 'umi';
-import FilterHocPhanDKTC from './FilterHocPhan';
+import { useAccess, useIntl, useModel } from 'umi';
+import ModalDangKyNgay from './ModalDangKyNgay';
 import RenderLichHoc from './RenderLichHoc';
 
 const DangKyLopHocPhan = () => {
 	const intl = useIntl();
+	const { cctFilter } = useAccess();
 	const { record: recHocKy } = useModel('daotao.hocky');
-	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel } = useModel('lophocphan.lophocphan');
-	const { danhSachLopDangKy, setDanhSachLopDangKy, tinhDataLichHoc, checkTrungLich } =
-		useModel('daotao.dotdangkytinchi');
+	const { page, limit, danhSachLopDktc, sinhVienGetLopDangKyModel, setRecord } = useModel('lophocphan.lophocphan');
+	const {
+		dotDangKyHienTai,
+		danhSachLopDangKy,
+		setDanhSachLopDangKy,
+		tinhDataLichHoc,
+		checkTrungLich,
+		phieuDangKy,
+		deleteDangKyTinChiModel,
+	} = useModel('daotao.dotdangkytinchi');
 	const { record: recHocPhan, loaiDangKy } = useModel('hocphan.hocphan');
 	const { khoaNganhMe } = useModel('sinhvien.sinhvien'); // Đã get khóa ngành của tôi ở file Filter Học phần
+	const { settings } = useModel('tienich.caidat');
 	// const { danhSach: danhSachLopHanhChinh } = useModel('daotao.lophanhchinh');
 	const [coDangKyMoi, setCoDangKyMoi] = useState<boolean>();
 	const [expandedLopHocPhan, setExpandedLopHocPhan] = useState<string[]>([]);
@@ -37,12 +47,19 @@ const DangKyLopHocPhan = () => {
 		}
 	});
 	// const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
+	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
+	const dangKyNgay: boolean = true;
+	const [trangThaiLopFilter, setTrangThaiLopFilter] = useState<'lopcontrong' | 'tatca'>('lopcontrong');
+
+	const otherQuery = {
+		// siSo: trangThaiLopFilter === 'lopcontrong',
+	};
 
 	const getData = () =>
 		recHocKy?.ma &&
 		recHocPhan?.ma &&
-		sinhVienGetLopDangKyModel(recHocKy.ma, loaiDangKy, recHocPhan.ma, typeLop !== 'Lớp gợi ý').then((data) =>
-			setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
+		sinhVienGetLopDangKyModel(recHocKy.ma, loaiDangKy, recHocPhan.ma, typeLop !== 'Lớp gợi ý', otherQuery).then(
+			(data) => setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
 		);
 
 	/**
@@ -67,86 +84,142 @@ const DangKyLopHocPhan = () => {
 		}
 	}, [recHocPhan?.ma]);
 
-	const onCell = (rec: LopHocPhan.IRecord) => ({
-		style: {
-			background: !!danhSachLopDangKy.find((item) => item._id === rec._id)
-				? undefined
-				: rec.siSoToiDa - (rec.siSo ?? 0) <= 0
-					? EColorLopDangKy.FULL_LOP
-					: checkTrungLich(rec.thoiKhoaBieuList ?? [])
-						? EColorLopDangKy.TRUNG_LICH
-						: undefined,
-			// fontWeight: rec.lopHpHcList?.some((item) => danhSachMaLopHc?.includes(item.maLopHc ?? '')) ? 600 : undefined,
-		},
-	});
+	const isDaChonLop = (rec: LopHocPhan.IRecord) =>
+		!!danhSachLopDangKy.find((item) => item._id === rec._id || item.ten === rec.ten);
 
-	const rowSelection: TableRowSelection<LopHocPhan.IRecord> = {
-		columnWidth: 40,
-		hideSelectAll: true,
-		preserveSelectedRowKeys: true,
-		fixed: true,
-		// type: 'radio',     // Dùng radio không được
-		selectedRowKeys: danhSachLopDangKy?.map((item) => item.ten),
+	const renderTrangThaiCanhBao = (rec: LopHocPhan.IRecord) => {
+		if (isDaChonLop(rec)) return null;
 
-		onChange: (selectedRowKeys, selectedRows) => {
-			const lopVuaChon = selectedRows?.at(-1);
-			// Nếu chọn ít nhất 1 lớp và chưa đăng ký
-			if (
-				lopVuaChon &&
-				!lopVuaChon.children?.length &&
-				!dangKyRoiMap[lopVuaChon.loai!] &&
-				lopVuaChon.maHocPhan === recHocPhan?.ma
-			) {
-				const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
-				let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
-				const khoaNganh =
-					loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu : khoaNganhMe?.khoaNganhChinh;
-				const lopDangKy = {
-					hocPhan: recHocPhan,
-					maNganh: khoaNganh?.maNganh,
-					maKhoaNganh: khoaNganh?.ma,
-					// TODO: Update loại đăng ký
-					loai: ELoaiHocPhanDangKyTinChi.TIEN_TRINH,
-					trangThai: ETrangThaiDangKyTinChi.CHUA_DANG_KY,
-				};
-				// Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
-				if (lopVuaChon.tenCha) {
-					const lopCha = danhSachLopDktc.find((item) => item.ten === lopVuaChon.tenCha);
-					if (!soTinChi) soTinChi = lopCha?.hocPhan?.soTinChi ?? 0;
-					// Thêm cả lớp cha vào để hiển thị lịch học ở lớp đăng ký
-					if (lopCha) temp.splice(0, 0, { ...lopCha, soTinChi, ...lopDangKy });
-				}
-				// Thêm lớp vừa chọn vào danh sách Lớp đăng ký
-				// Loại đăng ký theo loại học phần đã chọn
-				temp.splice(0, 0, { ...lopVuaChon, soTinChi, ...lopDangKy });
+		if (rec.siSoToiDa - (rec.siSo ?? 0) <= 0) {
+			return (
+				<Tag color={EColorLopDangKy.FULL_LOP}>
+					{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.trangthai.lopday' })}
+				</Tag>
+			);
+		}
 
-				setDanhSachLopDangKy(temp);
-				setCoDangKyMoi(true);
-				// Không tính lại lịch học ở đây vì sẽ trùng với các lớp trong môn hiện tại
+		if (checkTrungLich(rec.thoiKhoaBieuList ?? [])) {
+			return (
+				<Tag color={EColorLopDangKy.TRUNG_LICH}>
+					{intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.trangthai.trunglich' })}
+				</Tag>
+			);
+		}
+
+		return null;
+	};
+
+	const getLopChaContext = (record: LopHocPhan.IRecord) => {
+		const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
+		const needCheckLopCha = !!(lopCha && dangKyRoiMap[lopCha.loai]?.soThuTuLop !== lopCha.soThuTuLop);
+		return { lopCha, needCheckLopCha };
+	};
+
+	const isHetSiSo = (record: LopHocPhan.IRecord, lopCha?: LopHocPhan.IRecord, needCheckLopCha?: boolean) => {
+		const hetCho = record.siSoToiDa - (record.siSo ?? 0) <= 0;
+		if (!needCheckLopCha || !lopCha?._id) return hetCho;
+		return hetCho || lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0;
+	};
+
+	const getDisabledDangKy = (record: LopHocPhan.IRecord) => {
+		if (record.children?.length) return true;
+
+		const { lopCha, needCheckLopCha } = getLopChaContext(record);
+
+		if (dangKyRoiMap[record.loai]) return true;
+		if (needCheckLopCha && lopCha?.loai && dangKyRoiMap[lopCha.loai]) return true;
+
+		if (isHetSiSo(record, lopCha, needCheckLopCha)) {
+			if (!cctFilter?.()) return true;
+			if ((record.waitlistCount ?? 0) >= (settings?.SINH_VIEN?.extraSlots ?? 0)) return true;
+		}
+
+		const allThoiKhoaBieu = needCheckLopCha
+			? [...(record.thoiKhoaBieuList ?? []), ...(lopCha?.thoiKhoaBieuList ?? [])]
+			: (record.thoiKhoaBieuList ?? []);
+
+		return checkTrungLich(allThoiKhoaBieu);
+	};
+
+	const buildLopDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitlist = false) => {
+		const temp = danhSachLopDangKy.filter((item) => item.maHocPhan !== lopVuaChon.maHocPhan); // Bỏ những lớp khác cùng học phần
+		let soTinChi = lopVuaChon.hocPhan?.soTinChi ?? recHocPhan?.soTinChi ?? 0;
+		const khoaNganh = khoaNganhMe?.khoaNganhChinh;
+		// loaiDangKy === ELoaiDangKyTheoLop.KHOA_NGANH_2 ? khoaNganhMe?.khoaNganhPhu :
+		const lopDangKy = {
+			hocPhan: recHocPhan,
+			maNganh: khoaNganh?.maNganh,
+			maKhoaNganh: khoaNganh?.ma,
+			// TODO: Update loại đăng ký
+			loai: ELoaiHocPhanDangKyTinChi.TIEN_TRINH,
+			trangThai: dangKyNgay ? ETrangThaiDangKyTinChi.DA_DANG_KY : ETrangThaiDangKyTinChi.CHUA_DANG_KY,
+			isWaitlist,
+		};
+
+		const listDangKy: DangKyTinChi.ILopDangKy[] = [];
+
+		// Nếu lớp vừa chọn là lớp thực hành thì lấy số tín chỉ của lớp cha nó
+		if (lopVuaChon.tenCha) {
+			const lopCha = danhSachLopDktc.find((item) => item.ten === lopVuaChon.tenCha);
+			if (!soTinChi) soTinChi = lopCha?.hocPhan?.soTinChi ?? 0;
+			// Thêm cả lớp cha vào để hiển thị lịch học ở lớp đăng ký
+			if (lopCha) listDangKy.push({ ...lopCha, soTinChi, ...lopDangKy } as DangKyTinChi.ILopDangKy);
+		}
+
+		// Thêm lớp vừa chọn vào danh sách Lớp đăng ký
+		// Loại đăng ký theo loại học phần đã chọn
+		listDangKy.push({ ...lopVuaChon, soTinChi, ...lopDangKy } as DangKyTinChi.ILopDangKy);
+
+		return {
+			temp: [...listDangKy, ...temp],
+			listDangKy,
+		};
+	};
+
+	const handleDangKy = (lopVuaChon: LopHocPhan.IRecord, isWaitList = false) => {
+		if (!lopVuaChon.children?.length && !dangKyRoiMap[lopVuaChon.loai!] && lopVuaChon.maHocPhan === recHocPhan?.ma) {
+			const { temp } = buildLopDangKy(lopVuaChon, isWaitList);
+
+			if (dangKyNgay) {
+				setRecord(lopVuaChon);
+				setVisibleDangKyNgay(true);
+				return;
 			}
-		},
 
-		getCheckboxProps: (record) => {
-			const lopCha = danhSachLopDktc.find((item) => item.ten === record.tenCha);
-			const needCheckLopCha = lopCha && dangKyRoiMap[lopCha.loai]?.soThuTuLop !== lopCha.soThuTuLop;
-			// Check trùng cả thời khóa biểu của lớp cha
-			let allThoiKhoaBieu = [...(record.thoiKhoaBieuList ?? [])];
-			if (needCheckLopCha) {
-				allThoiKhoaBieu.push(...(lopCha?.thoiKhoaBieuList ?? []));
-			}
-			// Check sĩ số còn trống ở cả lớp cha nữa
-			let siSo = record.siSoToiDa - (record.siSo ?? 0) <= 0;
-			if (needCheckLopCha) {
-				siSo ||= !!lopCha?._id && lopCha.siSoToiDa - (lopCha.siSo ?? 0) <= 0;
-			}
-			const failed1 = !!dangKyRoiMap[record.loai] || (!!dangKyRoiMap[lopCha?.loai!] && needCheckLopCha);
-			const failed2 = checkTrungLich(allThoiKhoaBieu);
-			const failed3 = !!record.children?.length;
-			const failed4 = siSo;
-			return {
-				disabled: failed1 || failed2 || failed3 || failed4,
-			};
-		},
+			setDanhSachLopDangKy(temp);
+			setCoDangKyMoi(true);
+			// Không tính lại lịch học ở đây vì sẽ trùng với các lớp trong môn hiện tại
+		}
+	};
+
+	const onClickDangKy = (lopVuaChon: LopHocPhan.IRecord) => {
+		const isHetCho = lopVuaChon.siSoToiDa - (lopVuaChon.siSo ?? 0) <= 0;
+
+		if (isHetCho && cctFilter?.()) {
+			Modal.confirm({
+				title: intl.formatMessage({ id: 'dangkytinchi.waitlist.confirm.title' }),
+				content: intl.formatMessage({ id: 'dangkytinchi.waitlist.confirm.content' }),
+				okText: intl.formatMessage({ id: 'dangkytinchi.waitlist.confirm.ok' }),
+				cancelText: intl.formatMessage({ id: 'global.button.huy' }),
+				onOk: () => handleDangKy(lopVuaChon, true),
+			});
+			return;
+		}
+
+		handleDangKy(lopVuaChon, false);
+	};
+
+	const onClickBoChon = (rec: LopHocPhan.IRecord) => {
+		if (dangKyNgay) return;
+
+		const temp = danhSachLopDangKy.filter(
+			(item) =>
+				item.maHocPhan !== rec.maHocPhan ||
+				(item._id !== rec._id && item.ten !== rec.ten && item.tenCha !== rec.ten && item.ten !== rec.tenCha),
+		);
+
+		setDanhSachLopDangKy(temp);
+		setCoDangKyMoi(true);
 	};
 
 	/**
@@ -160,6 +233,27 @@ const DangKyLopHocPhan = () => {
 		);
 	};
 
+	const onDeleteLop = async (rec: DangKyTinChi.ILopDangKy) => {
+		try {
+			// Nếu đã đăng ký rồi thì gọi API để xóa lớp
+			if (rec.trangThai !== ETrangThaiDangKyTinChi.CHUA_DANG_KY)
+				await deleteDangKyTinChiModel(
+					{
+						phieuDktcId: phieuDangKy?._id ?? '',
+						lopHocPhanId: rec._id ?? '',
+					},
+					intl.formatMessage({ id: 'global.message.xoathanhcong' }),
+				);
+
+			// Xóa lớp ở danh sách tại local
+			const data = danhSachLopDangKy.filter((item) => item.maHocPhan !== rec.maHocPhan);
+			tinhDataLichHoc(data); // Tính lại dữ liệu lịch học
+			setDanhSachLopDangKy(data);
+		} catch (er) {
+			console.log(er);
+		}
+	};
+
 	const columns: IColumn<LopHocPhan.IRecord>[] = [
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.thutulop' }),
@@ -167,7 +261,27 @@ const DangKyLopHocPhan = () => {
 			width: 100,
 			align: 'center',
 			render: (val, rec) => (rec.soThuTuNhom ? `Nhóm TH ${rec.soThuTuNhom}` : val),
-			onCell,
+			hide: true,
+		},
+		{
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.malop' }),
+			dataIndex: 'maLop',
+			width: 140,
+			align: 'center',
+			filterType: 'string',
+			render: (val, rec) => val ?? rec?.ten,
+			// 	{
+			// 	return (
+			// 		<a
+			// 		// onClick={(e) => {
+			// 		// 	e.stopPropagation();
+			// 		// 	handleXemDeCuong(val, rec?.ten);
+			// 		// }}
+			// 		>
+			// 			{val ?? rec?.ten}
+			// 		</a>
+			// 	);
+			// },
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.giangvien' }),
@@ -181,53 +295,164 @@ const DangKyLopHocPhan = () => {
 						.join(', ')}
 				</ExpandText>
 			),
-			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.thongtinchitiet' }),
 			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={rec} />,
-			onCell,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.sisotoida' }),
 			dataIndex: 'siSoToiDa',
 			align: 'center',
-			width: 60,
-			onCell,
+			width: 100,
+			sortable: true,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.controng' }),
 			align: 'center',
-			width: 60,
+			width: 100,
 			render: (val, rec) => (rec.siSo !== undefined && rec.siSoToiDa >= rec.siSo ? rec.siSoToiDa - rec.siSo : 0),
-			onCell,
+			sortable: true,
 		},
+		// {
+		// 	title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.dlphong' }),
+		// 	dataIndex: 'phongCapacity',
+		// 	align: 'center',
+		// 	width: 120,
+		// 	onCell,
+		// 	sortable: true,
+		// 	hide: !cctFilter?.(),
+		// },
+		// {
+		// 	title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.hangcho' }),
+		// 	dataIndex: 'waitlistCount',
+		// 	align: 'center',
+		// 	width: 80,
+		// 	render: (val, rec) => `${val ?? 0}/${settings?.SINH_VIEN?.extraSlots ?? 0}`,
+		// 	onCell,
+		// 	sortable: true,
+		// 	hide: !cctFilter?.(),
+		// },
+		// {
+		// 	title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.hinhthucdt' }),
+		// 	dataIndex: 'maHinhThuc',
+		// 	width: 80,
+		// 	render: (val, rec) => rec.hinhThuc?.ten ?? val,
+		// 	onCell,
+		// },
+		// {
+		// 	title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.csdt' }),
+		// 	dataIndex: 'maCSDT',
+		// 	align: 'center',
+		// 	width: 60,
+		// 	onCell,
+		// },
+		// {
+		// 	title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.tinhchat' }),
+		// 	dataIndex: 'maTinhChat',
+		// 	align: 'center',
+		// 	width: 60,
+		// 	onCell,
+		// },
 		{
-			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.hinhthucdt' }),
-			dataIndex: 'maHinhThuc',
-			width: 80,
-			render: (val, rec) => rec.hinhThuc?.ten ?? val,
-			onCell,
-		},
-		{
-			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.csdt' }),
-			dataIndex: 'maCSDT',
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.thaotac' }),
 			align: 'center',
-			width: 60,
-			onCell,
-		},
-		{
-			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.tinhchat' }),
-			dataIndex: 'maTinhChat',
-			align: 'center',
-			width: 60,
-			onCell,
+			width: 120,
+			fixed: 'right',
+			render: (val, rec) => {
+				const daChon = isDaChonLop(rec);
+				const disabled = getDisabledDangKy(rec);
+
+				const lopDangKy = danhSachLopDangKy.find((item) => item._id === rec._id || item.ten === rec.ten);
+
+				if (daChon && dangKyNgay) {
+					return (
+						<Space>
+							<Tag color='green'>
+								{intl.formatMessage({
+									id: 'dangkytinchi.dankylophocphan.action.dadangky',
+								})}
+							</Tag>
+
+							<Popconfirm
+								title={intl.formatMessage({
+									id: 'dangkytinchi.phieudangky.columntable.huy.confirm',
+								})}
+								placement='topRight'
+								onConfirm={() => lopDangKy?._id && onDeleteLop(lopDangKy)}
+								disabled={
+									(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+										dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+									!rec.dangKyTinChi
+								}
+							>
+								<ButtonExtend
+									icon={<DeleteOutlined />}
+									danger
+									type='link'
+									tooltip={intl.formatMessage({
+										id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
+									})}
+									disabled={
+										(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+											dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+										!rec.dangKyTinChi
+									}
+								/>
+							</Popconfirm>
+						</Space>
+					);
+				}
+
+				if (daChon) {
+					return (
+						<div>
+							<ButtonExtend
+								type='primary'
+								onClick={(e) => {
+									e.stopPropagation();
+									onClickBoChon(rec);
+								}}
+							>
+								{intl.formatMessage({
+									id: 'dangkytinchi.dankylophocphan.action.dachon',
+								})}
+							</ButtonExtend>
+						</div>
+					);
+				}
+
+				const canhBao = renderTrangThaiCanhBao(rec);
+				if (canhBao && disabled) return canhBao;
+
+				return (
+					<div>
+						<ButtonExtend
+							type='primary'
+							disabled={disabled}
+							onClick={(e) => {
+								e.stopPropagation();
+
+								if (!disabled) {
+									onClickDangKy(rec);
+								}
+							}}
+						>
+							{intl.formatMessage({
+								id: dangKyNgay
+									? 'dangkytinchi.dankylophocphan.action.dangky'
+									: 'dangkytinchi.dankylophocphan.action.chon',
+							})}
+						</ButtonExtend>
+					</div>
+				);
+			},
 		},
 	];
 
 	return (
-		<FilterHocPhanDKTC>
+		<>
 			{recHocPhan?.ma ? (
 				// recHocPhan.trangThai === ETrangThaiHocPhanDangKyTinChi.DUOC_DK ? (
 				<div className='table-dang-ky'>
@@ -238,9 +463,8 @@ const DangKyLopHocPhan = () => {
 						dataState='danhSachLopDktc'
 						modelName='lophocphan.lophocphan'
 						hideCard
-						buttons={{ create: false, filter: false }}
-						addStt={false}
-						scroll={{ y: 600 }}
+						buttons={{ create: false }}
+						hideFilterColumn={false}
 						otherProps={{
 							rowKey: 'ten',
 							expandable: {
@@ -249,22 +473,39 @@ const DangKyLopHocPhan = () => {
 								expandedRowKeys: expandedLopHocPhan,
 								onExpand,
 							},
-							rowSelection,
 						}}
 						otherButtons={
-							loaiDangKy === ELoaiDangKyTheoLop.LOP_HANH_CHINH
-								? [
-										<Segmented
-											key='1'
-											options={[
-												intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.btn.segmented.lopgoiy' }),
-												intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.btn.segmented.luachonkhac' }),
-											]}
-											value={typeLop}
-											onChange={(val) => setTypeLop(val.toString())}
-										/>,
-									]
-								: undefined
+							[
+								// <Segmented
+								// 	key='lop-filter'
+								// 	value={trangThaiLopFilter}
+								// 	options={[
+								// 		{
+								// 			label: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.lopcontrong' }),
+								// 			value: 'lopcontrong',
+								// 		},
+								// 		{
+								// 			label: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filter.tatca' }),
+								// 			value: 'tatca',
+								// 		},
+								// 	]}
+								// 	onChange={(val) => setTrangThaiLopFilter(val as 'lopcontrong' | 'tatca')}
+								// />,
+							]
+
+							// loaiDangKy === ELoaiDangKyTheoLop.LOP_HANH_CHINH
+							// 	? [
+							// 			<Segmented
+							// 				key='1'
+							// 				options={[
+							// 					intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.btn.segmented.lopgoiy' }),
+							// 					intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.btn.segmented.luachonkhac' }),
+							// 				]}
+							// 				value={typeLop}
+							// 				onChange={(val) => setTypeLop(val.toString())}
+							// 			/>,
+							// 		]
+							// 	: undefined
 						}
 						emptyText={intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.table.empty.khongcolop' })}
 					/>
@@ -303,7 +544,9 @@ const DangKyLopHocPhan = () => {
 					style={{ marginTop: 30, marginBottom: 30 }}
 				/>
 			)}
-		</FilterHocPhanDKTC>
+
+			<ModalDangKyNgay visible={visibleDangKyNgay} setVisible={setVisibleDangKyNgay} />
+		</>
 	);
 };
 

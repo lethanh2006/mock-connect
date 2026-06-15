@@ -51,6 +51,7 @@ export default {
 	'diemrenluyen.step.sinhvien': 'Sinh viên đánh giá',
 	'diemrenluyen.step.bancansu': 'Ban cán sự đánh giá',
 	'diemrenluyen.step.chunhiemlop': 'Chủ nhiệm lớp xác nhận',
+	'diemrenluyen.step.khieunai': 'SV khiếu nại',
 	// Footer
 	'diemrenluyen.footer.button.gui': 'Gửi',
 	'diemrenluyen.footer.button.luuvaguisau': 'Lưu & Gửi sau',

@@ -3,8 +3,29 @@ import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 
+const {
+	APP_CONFIG_TEN_TRUONG = '',
+	APP_CONFIG_TIEN_TO_TRUONG = '',
+	APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH = '',
+} = process.env;
+
 export default defineConfig({
 	hash: true,
+	title: `HỆ THỐNG CHUYỂN ĐỔI SỐ - ${APP_CONFIG_TEN_TRUONG.toUpperCase()}`,
+	metas: [
+		{
+			name: 'keywords',
+			content: `${APP_CONFIG_TIEN_TO_TRUONG}, ${APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH}, Trực tuyến, HỆ THỐNG CHUYỂN ĐỔI SỐ - ${APP_CONFIG_TEN_TRUONG.toUpperCase()}, đào tạo`,
+		},
+		{ property: 'og:image', content: '/student/metadata.png' },
+		{
+			name: 'description',
+			content: `HỆ THỐNG CHUYỂN ĐỔI SỐ - ${APP_CONFIG_TEN_TRUONG.toUpperCase()}`,
+		},
+		{ name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' },
+	],
+	links: [{ rel: 'icon', href: '/student/favicon.ico', type: 'image/x-icon' }],
+
 	antd: {
 		import: false,
 		// Transform DayJS to MomentJS

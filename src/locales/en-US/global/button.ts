@@ -17,4 +17,8 @@ export default {
 	'global.button.ok': 'OK',
 	'global.button.xemthem': 'See more',
 	'global.button.thugon': 'See less',
+	'global.button.chitiet': 'Detail',
+	'global.button.teptin': 'View File',
+	'global.button.xacNhan': 'Confirm',
+	'global.button.xoa': 'Delete',
 };

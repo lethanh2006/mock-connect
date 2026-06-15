@@ -158,10 +158,10 @@ export enum ETrangThaiHocPhanDangKyNhuCau {
 }
 
 export const mapTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
-	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'Chờ duyệt',
-	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'Đã duyệt',
-	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'Không duyệt',
-	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'Đã phân lớp',
+	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'dangkyhoctap.status.choDuyet',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'dangkyhoctap.status.daDuyet',
+	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'dangkyhoctap.status.khongDuyet',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'dangkyhoctap.status.daPhanLop',
 };
 
 export const colorTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {

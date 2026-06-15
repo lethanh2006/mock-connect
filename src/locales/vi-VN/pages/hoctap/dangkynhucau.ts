@@ -25,4 +25,8 @@ export default {
 	'dangkyhoctap.message.error.tonTai': 'Đã tồn tại học phần trong bảng đăng ký!',
 
 	'dangkyhoctap.select.placeholder': 'Chọn học phần',
+	'dangkyhoctap.status.choDuyet': 'Chờ duyệt',
+	'dangkyhoctap.status.daDuyet': 'Đã duyệt',
+	'dangkyhoctap.status.khongDuyet': 'Không duyệt',
+	'dangkyhoctap.status.daPhanLop': 'Đã phân lớp',
 };
