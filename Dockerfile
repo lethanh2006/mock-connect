@@ -46,7 +46,7 @@ COPY package.json yarn.lock /app/
 RUN if [ ! -d node_modules ] || [ ! -f /opt/build-base.yarn.lock ] || ! cmp -s yarn.lock /opt/build-base.yarn.lock; then yarn install --frozen-lockfile && yarn cache clean; fi
 
 COPY . /app
-RUN cp .env.uat .env.production && yarn build && rm -rf node_modules
+RUN cp .env.production .env.production && yarn build && rm -rf node_modules
 
 FROM nginx:alpine-slim
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
