@@ -36,7 +36,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 		.filter((item) => item.type === 'DISCOUNT')
 		.reduce((sum, item) => sum + (item.amount ?? 0) * (item.quantity ?? 1), 0);
 
-	const totalThanhToan = sumCharge - sumDiscount;
+	const totalThanhToan = bill?.soTienConLai ?? 0;
 
 	const phiThanhToan = method.activeLePhiThanhToan
 		? method.loaiLePhiThanhToanMacDinh === 'TIEN'
@@ -69,7 +69,6 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			}
 		} catch (er) {
 			console.log(er);
-			message.error('Lỗi khi tạo thanh toán ONEPAY');
 		} finally {
 			setLoadingOnePay(false);
 		}
@@ -104,7 +103,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			<div className='payment-detail__summary'>
 				<div className='payment-detail__summary-row'>
 					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tongtienphainop' })}</span>
-					<span>{inputFormat(sumCharge)}đ</span>
+					<span>{inputFormat(totalThanhToan)}đ</span>
 				</div>
 
 				{/* {phiThanhToan > 0 && ( */}

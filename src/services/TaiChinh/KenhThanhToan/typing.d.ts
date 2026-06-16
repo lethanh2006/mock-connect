@@ -22,6 +22,7 @@ declare module KenhThanhToan {
         giaTriLePhiThanhToanMacDinh: number;
         moTaLePhiThanhToan: string;
         code: string;
+        icon?: string;
         kyHieuBank: string;
         serviceProfileBidv: string;
         signaturePublicKey: string;

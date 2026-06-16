@@ -1,27 +1,18 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
-import ModalThanhToan from '@/pages/TaiChinh/HoaDon/ThanhToan/ModalThanhToan';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
-import {
-	EMaTrangThaiThanhToan,
-	ETransactionPaymentType,
-	ETransactionSourceType,
-	ETransactionStatus,
-} from '@/services/TaiChinh/constant';
-import dayjs from '@/utils/dayjs';
-import { AppstoreAddOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Modal, Row, Space, Tabs } from 'antd';
+import { ETransactionPaymentType, ETransactionSourceType, ETransactionStatus } from '@/services/TaiChinh/constant';
+import { Button, Card, Col, Modal, Row, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-import CanhBaoGiaoDich from '../../GiaoDich/components/CanhBao';
+import { disableThanhToan } from '..';
 import DesThongTinHoaDon from '../ChiTiet/DesThongTin';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
 import FormThanhToan from '../ThanhToan/FormThanhToan';
-import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
+import LichSuThanhToan from './LichSuThanhToan';
 
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const intl = useIntl();
 	const { setVisible, getData } = props;
-	const { record: recHoaDon, visibleModalThanhToan, setVisibleModalThanhToan } = useModel('taichinh.hoadon');
+	const { record: recHoaDon } = useModel('taichinh.hoadon');
 	const { visibleThanhToan, setVisibleThanhToan, xemRutGonChiTiet, setXemRutGonChiTiet } =
 		useModel('taichinh.hoadonchitiet');
 	const {
@@ -36,13 +27,6 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	} = useModel('taichinh.giaodich');
 	const { record: recDotThu, getByIdModel: getDotThu } = useModel('taichinh.dotthu');
 	const [activeTab, setActiveTab] = useState('1');
-	const ngoaiThoiGianThanhToan =
-		!recHoaDon?.dotThu?._id ||
-		// !recHoaDon?.dotThu?.thoiGianBatDau ||
-		!recHoaDon?.dotThu?.thoiGianKetThuc ||
-		dayjs().isBefore(dayjs(recHoaDon.dotThu.thoiGianBatDau)) ||
-		dayjs().isAfter(dayjs(recHoaDon.dotThu.thoiGianKetThuc)) ||
-		!recHoaDon.dotThu.kichHoat;
 
 	/** Get giao dịch pending */
 	const getGiaoDich = () =>
@@ -97,92 +81,28 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 				</Col>
 
 				<Col span={24}>
-					<Tabs activeKey={activeTab} onChange={(tab) => onChangeTab(tab)}>
-						<Tabs.TabPane key={'1'} tab={intl.formatMessage({ id: 'taichinh.thanhtoan.tab.chitiet' })} />
-						<Tabs.TabPane key={'2'} tab={intl.formatMessage({ id: 'taichinh.thanhtoan.tab.lichsu' })} />
-					</Tabs>
-
-					{activeTab === '1' ? (
-						<Space direction='vertical' style={{ width: '100%' }}>
-							{/* {recGiaoDich?._id &&
-							recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
-							!ngoaiThoiGianThanhToan ? (
-								<Alert
-									message={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.title' })}
-									description={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.desc' })}
-									showIcon
-									type='info'
-									action={
-										<Space wrap>
-											<Button
-												type='primary'
-												onClick={() => onPay(recGiaoDich)}
-												icon={<DollarOutlined />}
-												loading={loading}
-											>
-												{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
-											</Button>
-											{/* <Popconfirm title='Xác nhận hủy giao dịch này?' onConfirm={() => onCancel(recGiaoDich)}>
-												<Button danger type='link'>
-													Hủy giao dịch
-												</Button>
-											</Popconfirm> */}
-							{/* </Space>
-									}
-								/>
-							) : (
-								<Space wrap>
-									<ButtonExtend
-										disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
-										onClick={() => setVisibleThanhToan(true)}
-										icon={<AppstoreAddOutlined />}
-										type='primary'
-										className='btn-success'
-										loading={loading}
-										notHideText
-										tooltip={
-											ngoaiThoiGianThanhToan
-												? intl.formatMessage({ id: 'taichinh.thanhtoan.tooltip.outOfTime' })
-												: undefined
-										}
-									>
-										{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
-									</ButtonExtend>
-
-									<Checkbox checked={xemRutGonChiTiet} onChange={(e) => setXemRutGonChiTiet(e.target.checked)}>
-										{intl.formatMessage({ id: 'taichinh.thanhtoan.checkbox.compact' })}
-									</Checkbox>
-									<i>{intl.formatMessage({ id: 'taichinh.thanhtoan.note.compact' })}</i>
-								</Space>
-							)} */}
-							<Space wrap>
-								<ButtonExtend
-									disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
-									onClick={() => setVisibleModalThanhToan(true)}
-									icon={<AppstoreAddOutlined />}
-									type='primary'
-									className='btn-success'
-									loading={loading}
-									notHideText
-									tooltip={
-										ngoaiThoiGianThanhToan
-											? intl.formatMessage({ id: 'taichinh.thanhtoan.tooltip.outOfTime' })
-											: undefined
-									}
-								>
-									{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
-								</ButtonExtend>
-							</Space>
-							<FormItemHoaDonChiTiet />
-						</Space>
-					) : (
-						<>
-							<div style={{ marginBottom: 6 }}>
-								<CanhBaoGiaoDich />
-							</div>
-							<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
-						</>
-					)}
+					<Tabs
+						activeKey={activeTab}
+						onChange={onChangeTab}
+						items={[
+							{
+								key: '1',
+								label: 'Chi tiết',
+								children: <FormItemHoaDonChiTiet />,
+							},
+							{
+								key: '2',
+								label: 'Lịch sử thanh toán',
+								children: (
+									<LichSuThanhToan
+										onPay={onPay}
+										onCancel={onCancel}
+										ngoaiThoiGianThanhToan={disableThanhToan(recHoaDon)}
+									/>
+								),
+							},
+						]}
+					/>
 				</Col>
 			</Row>
 
@@ -206,24 +126,14 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 				/>
 			</Modal>
 
-			<ModalThanhToan
-				visible={visibleModalThanhToan}
-				onClose={() => setVisibleModalThanhToan(false)}
-				onSuccess={() => {
-					if (activeTab === '1') getGiaoDich();
-					if (getData) getData();
-					setVisibleModalThanhToan(false);
-				}}
-			/>
-
 			{/* <ModalThanhToanNganHang
-				visible={visibleHuongDan}
-				onOk={() => {
-					if (activeTab === '1') getGiaoDich();
-					if (getData) getData();
-					setVisibleHuongDan(false);
-				}}
-			/> */}
+			visible={visibleHuongDan}
+			onOk={() => {
+				if (activeTab === '1') getGiaoDich();
+				if (getData) getData();
+				setVisibleHuongDan(false);
+			}}
+		/> */}
 		</Card>
 	);
 };
