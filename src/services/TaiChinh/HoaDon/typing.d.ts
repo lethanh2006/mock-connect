@@ -136,6 +136,15 @@ declare module HoaDon {
 		userUuDaiBillId?: string | null;
 		vnpayTransactionNo?: string | null;
 
+		maKhoanThu?: string;
+		tenKhoanThu?: string;
+		maMucThu?: string;
+		tenMucThu?: string;
+		maKyHoc?: string;
+		tenKyHoc?: string;
+		donGia?: number;
+
+		soLuong?: number;
 		quantity?: number
 	}
 }
