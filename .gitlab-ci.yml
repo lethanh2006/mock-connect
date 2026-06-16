@@ -10,6 +10,8 @@ variables:
   ECR_REPO_NAME: "vwa-connect"
   APP_NAME: "dhs-slink-web"
   RESOURCE_GROUP_PREFIX: "vwa-connect"
+  ENABLE_SIT_PIPELINE: "1"
+  ENABLE_SIT_DEPLOY: "1"
   BUILD_BASE_IMAGE_NAME: "vwa-connect"
   ENABLE_UAT_PIPELINE: "1"
   ENABLE_UAT_DEPLOY: "1"
