@@ -13,9 +13,9 @@ export const ETrangThaiThanhToan: any = {
 };
 
 export const EMauTrangThaiThanhToanTable = {
-	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'red',
-	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'gold',
-	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'green',
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'rgb(220, 53, 69)',
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'rgb(255, 215, 34)',
+	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'rgb(0, 128, 16)',
 	[EMaTrangThaiThanhToan.DONG]: undefined,
 };
 
