@@ -27,7 +27,8 @@ declare module HoaDon {
 		soTienConLai?: number;
 		soTienDaThu?: number;
 
-		transactions?: ITransaction[]
+		transactions?: ITransaction[];
+		linkFilePDF?: string;
 	}
 
 	interface IKhachHang {
