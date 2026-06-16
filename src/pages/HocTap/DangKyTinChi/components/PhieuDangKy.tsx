@@ -291,11 +291,11 @@ const PhieuDangKy = (props: {
 				}}
 				otherButtons={[
 					<Space wrap>
-						{danhSachLopDangKy.length ? (
+						{/* {danhSachLopDangKy.length ? (
 							<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
 								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
 							</ButtonExtend>
-						) : null}
+						) : null} */}
 						{/* {dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
 							<>
 								<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
