@@ -1,9 +1,8 @@
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMaTrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { Col, Row, Table } from 'antd';
+import { Col, Row, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -37,105 +36,83 @@ const FormItemHoaDonChiTiet = () => {
 
 	const columns: IColumn<HoaDon.ITransaction & { index: number }>[] = [
 		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.noidung' }),
-			dataIndex: 'name',
-			width: 180,
+			title: 'Mã định danh',
+			dataIndex: 'identityCode',
+			width: 130,
+			render: (val) => val || '-',
 		},
 		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.dongia' }),
-			dataIndex: 'amount',
-			width: 110,
+			title: 'Khoản thu',
+			dataIndex: 'tenKhoanThu',
+			width: 160,
+			render: (val, rec) => val || rec?.maKhoanThu || '-',
+		},
+		{
+			title: 'Mức thu',
+			dataIndex: 'maMucThu',
+			width: 120,
+			render: (val) => val || '-',
+		},
+		{
+			title: 'Kỳ học',
+			dataIndex: 'tenKyHoc',
+			width: 130,
+			render: (val, rec) => val || rec?.maKyHoc || '-',
+		},
+		{
+			title: 'Đơn giá',
+			dataIndex: 'donGia',
+			width: 120,
 			align: 'right',
-			render: (val, rec) => `${inputFormat(val)} ${rec.loaiTienTe ?? 'VND'}`,
+			render: (val) => val ?? 0,
 		},
 		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.SL' }),
-			dataIndex: 'quantity',
-			width: 45,
+			title: 'SL',
+			dataIndex: 'soLuong',
+			width: 70,
 			align: 'center',
-			render: (val, rec) => (
-				<div
-					style={{
-						textAlign: 'center',
-					}}
-				>
-					{val ?? 1}
-				</div>
-			),
+			render: (val) => val ?? '-',
 		},
 		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.thanhtien' }),
-			width: 100,
+			title: 'Số tiền',
+			dataIndex: 'amount',
+			width: 120,
 			align: 'right',
-			render: (val, rec) => {
-				const thanhTien = (rec.amount ?? 0) * (rec.quantity ?? 1);
-				return (
-					<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
-						{inputFormat(thanhTien)} VND
-					</span>
-				);
-			},
+			render: (val) => inputFormat(val ?? 0),
+		},
+		{
+			title: 'Loại GD',
+			dataIndex: 'type',
+			width: 100,
+			align: 'center',
+			render: (val) => <Tag color={val === 'CHARGE' ? 'blue' : 'green'}>{val || '--'}</Tag>,
+		},
+		// {
+		// 	title: 'Trạng thái',
+		// 	dataIndex: 'status',
+		// 	width: 100,
+		// 	align: 'center',
+		// 	render: (val) => <Tag color={val === 'success' ? 'green' : 'default'}>{val || '--'}</Tag>,
+		// },
+		// {
+		// 	title: 'Thanh toán',
+		// 	dataIndex: 'paid',
+		// 	width: 140,
+		// 	align: 'center',
+		// 	render: (val) => <Tag color={val ? 'green' : 'orange'}>{val ? 'Đã thanh toán' : 'Chưa thanh toán'}</Tag>,
+		// },
+		{
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 220,
+			render: (val) => val || '-',
 		},
 	];
 
 	return (
 		<Row gutter={[12, 0]}>
 			<Col span={24}>
-				<TableStaticData
-					columns={columns}
-					data={result}
-					loading={loading}
-					addStt
-					size='small'
-					otherProps={{
-						summary: (data: HoaDon.ITransaction[]) => {
-							const dataFiltered = data.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG);
-
-							const sumCharge = dataFiltered
-								.filter((item) => item.type === 'CHARGE')
-								.reduce((sum, item) => sum + (item.amount ?? 0) * (item.quantity ?? 1), 0);
-
-							const sumDiscount = dataFiltered
-								.filter((item) => item.type === 'DISCOUNT')
-								.reduce((sum, item) => sum + (item.amount ?? 0) * (item.quantity ?? 1), 0);
-
-							const total = sumCharge - sumDiscount;
-							return (
-								<Table.Summary fixed>
-									<Table.Summary.Row>
-										<Table.Summary.Cell index={0} colSpan={4} align='center'>
-											<b>{intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.tongcong' })}</b>
-										</Table.Summary.Cell>
-										<Table.Summary.Cell index={1} align='right'>
-											<b>{inputFormat(total)} VND</b>
-										</Table.Summary.Cell>
-										{/* <Table.Summary.Cell index={2} align='right'>
-											<b>{inputFormat(sumDiscount)} VND</b>
-										</Table.Summary.Cell>
-										<Table.Summary.Cell index={3} /> */}
-									</Table.Summary.Row>
-								</Table.Summary>
-							);
-						},
-						pagination: false,
-						// rowKey: (rec: HoaDon.IBillItem) => rec._id,
-						// rowSelection: isThanhToan
-						// 	? {
-						// 			type: 'checkbox',
-						// 			selectedRowKeys: selectedIds ?? [],
-						// 			preserveSelectedRowKeys: true,
-						// 			onChange: (selectedRowKeys: string[]) => setSelectedIds(selectedRowKeys),
-						// 			getCheckboxProps: (rec: HoaDon.IBillItem) => ({
-						// 				disabled: ![
-						// 					EMaTrangThaiThanhToan.CHUA_THANH_TOAN,
-						// 					EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU,
-						// 				].includes(rec.status),
-						// 			}),
-						// 			columnWidth: 40,
-						// 	  }
-						// 	: null,
-					}}
-				/>
+				<TableStaticData columns={columns} data={result} loading={loading} addStt size='small' />
 			</Col>
 		</Row>
 	);
