@@ -148,6 +148,9 @@ export type TableBaseProps<T extends object = any> = {
 	/** Danh sách các nút khác bên cạnh Thêm mới */
 	otherButtons?: JSX.Element[];
 
+	/** Danh sách các text khác trước xóa many */
+	otherTextButtons?: JSX.Element[];
+
 	/** Danh sách các text trước nút Tải lại */
 	otherExtra?: JSX.Element[];
 
@@ -169,6 +172,14 @@ export type TableBaseProps<T extends object = any> = {
 	deleteMany?: boolean;
 
 	hideTotal?: boolean;
+
+	/** Cấu hình TableHeader */
+	header?: {
+		total?: {
+			prefix?: string;
+		};
+	};
+
 	pageable?: boolean;
 	hideCard?: boolean;
 
@@ -338,8 +349,10 @@ export type TableStaticProps = Pick<
 	| 'hideChildrenRows'
 	| 'onReload'
 	| 'otherButtons'
+	| 'otherTextButtons'
 	| 'otherExtra'
 	| 'scroll'
+	| 'header'
 > & {
 	data: any[];
 	loading?: boolean;
@@ -354,8 +367,6 @@ export type TableStaticProps = Pick<
 	/** Có nút cấu hình cột ko? Mặc định: Có */
 	columnSetting?: boolean;
 	size?: 'small' | 'middle';
-
-	totalComponent?: any;
 	globalSearch?: boolean;
 };
 

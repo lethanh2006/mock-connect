@@ -17,6 +17,7 @@ import { useAccess, useIntl, useModel } from 'umi';
 import AlertVuotTin from './components/AlertVuotTin';
 import FilterDotDangKy from './components/FilterDotDangKy';
 import FilterHocPhanDKTC from './components/FilterHocPhan';
+import LopDaHuy from './components/LopDaHuy';
 import ModalLichSuVuotTin from './components/ModalLichSuVuotTin';
 import PhieuDangKy from './components/PhieuDangKy';
 import './components/style.less';
@@ -69,9 +70,13 @@ const DangKyTinChiPage = () => {
 	}, [isVerified]);
 
 	useEffect(() => {
-		if (dotDangKyHienTai?._id && sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK)
+		if (
+			dotDangKyHienTai?._id &&
+			dotDangKyHienTai.maHocKy === recHocKy?.ma &&
+			sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK
+		)
 			getPhieuDangKyModel(dotDangKyHienTai._id);
-	}, [sinhVienDot?._id]);
+	}, [recHocKy?.ma, dotDangKyHienTai?._id, sinhVienDot?.trangThaiSvDangKyTinChi]);
 
 	const getLopDangKy = () => recHocKy?.ma && getLopDangKyModel(recHocKy.ma);
 
@@ -127,6 +132,7 @@ const DangKyTinChiPage = () => {
 				<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
 					<Tabs.TabPane key='1' tab={intl.formatMessage({ id: 'dangkytinchi.tabs.dangky' })} />
 					<Tabs.TabPane key='2' tab={intl.formatMessage({ id: 'dangkytinchi.tabs.lichsudangky' })} />
+					<Tabs.TabPane key='3' tab={intl.formatMessage({ id: 'dangkytinchi.tabs.lopdahuy' })} />
 				</Tabs>
 
 				<Flex justify='space-between' align='center' style={{ marginBottom: 12 }}>
@@ -254,7 +260,7 @@ const DangKyTinChiPage = () => {
 							)}
 						</Spin>
 					</>
-				) : (
+				) : activeKey === '2' ? (
 					<PhieuDangKy
 						getData={getLopDangKy}
 						danhSachLopHienThi={danhSachLopHienThi}
@@ -262,6 +268,8 @@ const DangKyTinChiPage = () => {
 						soTinChiToiDa={soTinChiToiDa}
 						soTinChiToiThieu={soTinChiToiThieu}
 					/>
+				) : (
+					<LopDaHuy />
 				)}
 			</PageCard>
 

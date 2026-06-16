@@ -41,9 +41,10 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 	const getData = () =>
 		recHocKy?.ma &&
 		dotDangKyHienTai?._id &&
+		dotDangKyHienTai.maHocKy === recHocKy.ma &&
 		getHocPhanDKHPModel(recHocKy.ma, undefined, {
 			isOpenLop: true,
-			idDot: dotDangKyHienTai?._id,
+			idDot: dotDangKyHienTai._id,
 		});
 
 	useEffect(() => {
@@ -152,6 +153,11 @@ const FilterHocPhanDKTC = (props: { tongTinChi: number }) => {
 				hideCard
 				buttons={{ create: false }}
 				hideFilterColumn={false}
+				header={{
+					total: {
+						prefix: intl.formatMessage({ id: 'dangkytinchi.filter.hocphan.total.prefix' }),
+					},
+				}}
 				otherExtra={[
 					<span>
 						{intl.formatMessage({ id: 'dangkytinchi.tcdangky' })}:{' '}
