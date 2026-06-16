@@ -132,7 +132,7 @@ const DangKyTinChiPage = () => {
 				<Tabs activeKey={activeKey} onChange={(tab) => setActiveKey(tab)}>
 					<Tabs.TabPane key='1' tab={intl.formatMessage({ id: 'dangkytinchi.tabs.dangky' })} />
 					<Tabs.TabPane key='2' tab={intl.formatMessage({ id: 'dangkytinchi.tabs.lichsudangky' })} />
-					<Tabs.TabPane key='3' tab={intl.formatMessage({ id: 'dangkytinchi.tabs.lopdahuy' })} />
+					{/* <Tabs.TabPane key='3' tab={intl.formatMessage({ id: 'dangkytinchi.tabs.lopdahuy' })} /> */}
 				</Tabs>
 
 				<Flex justify='space-between' align='center' style={{ marginBottom: 12 }}>
@@ -269,7 +269,8 @@ const DangKyTinChiPage = () => {
 						soTinChiToiThieu={soTinChiToiThieu}
 					/>
 				) : (
-					<LopDaHuy />
+					// <LopDaHuy />
+					null
 				)}
 			</PageCard>
 
