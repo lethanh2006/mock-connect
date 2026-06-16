@@ -9,6 +9,7 @@ import type { DateRange, View } from 'react-big-calendar';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useIntl, useModel } from 'umi';
+import ModalChiTietBuoiHoc, { type CalendarLichHocEvent } from './ModalChiTietBuoiHoc';
 
 const localizer = dayjsLocalizer(dayjs);
 
@@ -18,10 +19,12 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	const { visibleModal, setVisibleModal, danhSachLopDangKy } = useModel('daotao.dotdangkytinchi');
 	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 	const [calendarView, setCalendarView] = useState<View>(Views.WEEK);
-	const [dataCalendar, setDataCalendar] = useState<{ title: string; [x: string]: unknown }[]>([]);
+	const [dataCalendar, setDataCalendar] = useState<CalendarLichHocEvent[]>([]);
 	const [date, setDate] = useState<Date>();
 	const [startDate, setStartDate] = useState<Date>();
 	const [endDate, setEndDate] = useState<Date>();
+	const [selectedEvent, setSelectedEvent] = useState<CalendarLichHocEvent>();
+	const [visibleDetail, setVisibleDetail] = useState(false);
 
 	useEffect(() => {
 		if (!recSetting?._id) getSettingLich();
@@ -34,6 +37,8 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 					title: `${item?.hocPhan?.ten || item?.maHocPhan} - ${item?.ten || ''}`,
 					start: dayjs(j?.thoiGianBatDau).toDate(),
 					end: dayjs(j?.thoiGianKetThuc).toDate(),
+					lopHocPhan: item,
+					tkb: j,
 				})),
 			)
 			.flat();
@@ -55,6 +60,7 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 			backgroundColor:
 				recSetting?.danhSachSettingLich?.find((item) => item?.loaiLich === ELoaiSuKien.LICH_HOC)?.maMau ??
 				ColorSuKien?.[ELoaiSuKien.LICH_HOC],
+			cursor: 'pointer',
 		},
 	});
 
@@ -96,6 +102,7 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 						dayRangeHeaderFormat: (range: DateRange) => {
 							return `${dayjs(range.start).format('DD/MM')} - ${dayjs(range.end).format('DD/MM')}`;
 						},
+						eventTimeRangeFormat: () => '',
 					}}
 					localizer={localizer}
 					events={dataCalendar}
@@ -113,12 +120,18 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 					max={dayjs('2100', 'HHmm').toDate()}
 					eventPropGetter={eventPropGetter}
 					components={{ event: (event: any) => eventCustom(event) }}
+					onSelectEvent={(event: CalendarLichHocEvent) => {
+						setSelectedEvent(event);
+						setVisibleDetail(true);
+					}}
 					onShowMore={(events: any[], d) => {
 						setCalendarView(Views.WEEK);
 						setDate(d);
 					}}
 				/>
 			</Card>
+
+			<ModalChiTietBuoiHoc visible={visibleDetail} setVisible={setVisibleDetail} event={selectedEvent} />
 		</Modal>
 	);
 };

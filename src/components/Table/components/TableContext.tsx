@@ -56,6 +56,7 @@ interface TableContextValue<T extends object = any> {
 	rowSelection?: boolean;
 	deleteMany?: boolean;
 	hideTotal?: boolean;
+	header?: TableBaseProps['header'];
 	hideFilterColumn?: boolean;
 	disableFilterModal?: boolean;
 	syncExternalToColumnFilter?: boolean;
