@@ -1,10 +1,12 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import { TRANSACTION_COLOR, TRANSACTION_LABEL } from '@/services/TaiChinh/constant';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { inputFormat } from '@/utils/utils';
 import { AppstoreAddOutlined } from '@ant-design/icons';
-import { Col, Row, Space, Tag } from 'antd';
+import { Col, Row, Tag } from 'antd';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import { disableThanhToan } from '..';
@@ -20,49 +22,42 @@ const FormItemHoaDonChiTiet = () => {
 	const isDisabled = disableThanhToan(record);
 
 	useEffect(() => {
-		const data = record?.transactions?.filter((tran) => tran.status === 'success' && tran.type === 'CHARGE');
+		const data = record?.transactions?.filter((tran) => tran.status === 'success');
 		setResult(data ?? []);
 	}, [record]);
 
 	const columns: IColumn<HoaDon.ITransaction & { index: number }>[] = [
 		{
-			title: 'Mã định danh',
+			title: 'Mã giao dịch',
 			dataIndex: 'identityCode',
 			width: 130,
 			render: (val) => val || '-',
 		},
-		{
-			title: 'Khoản thu',
-			dataIndex: 'tenKhoanThu',
-			width: 160,
-			render: (val, rec) => val || rec?.maKhoanThu || '-',
-		},
-		{
-			title: 'Mức thu',
-			dataIndex: 'maMucThu',
-			width: 120,
-			render: (val) => val || '-',
-		},
-		{
-			title: 'Kỳ học',
-			dataIndex: 'tenKyHoc',
-			width: 130,
-			render: (val, rec) => val || rec?.maKyHoc || '-',
-		},
 		// {
-		// 	title: 'Đơn giá',
-		// 	dataIndex: 'donGia',
+		// 	title: 'Khoản thu',
+		// 	dataIndex: 'tenKhoanThu',
+		// 	width: 160,
+		// 	render: (val, rec) => val || rec?.maKhoanThu || '-',
+		// },
+		// {
+		// 	title: 'Mức thu',
+		// 	dataIndex: 'maMucThu',
 		// 	width: 120,
-		// 	align: 'right',
-		// 	render: (val) => inputFormat(val) ?? 0,
+		// 	render: (val) => val || '-',
 		// },
 		// {
-		// 	title: 'SL',
-		// 	dataIndex: 'soLuong',
-		// 	width: 70,
-		// 	align: 'center',
-		// 	render: (val) => val ?? '-',
+		// 	title: 'Kỳ học',
+		// 	dataIndex: 'tenKyHoc',
+		// 	width: 130,
+		// 	render: (val, rec) => val || rec?.maKyHoc || '-',
 		// },
+		{
+			title: 'Loại giao dịch',
+			dataIndex: 'type',
+			width: 130,
+			align: 'center',
+			render: (val) => <Tag color={TRANSACTION_COLOR[val] ?? 'default'}>{TRANSACTION_LABEL[val] ?? val ?? '--'}</Tag>,
+		},
 		{
 			title: 'Số tiền',
 			dataIndex: 'amount',
@@ -70,27 +65,21 @@ const FormItemHoaDonChiTiet = () => {
 			align: 'right',
 			render: (val) => inputFormat(val ?? 0),
 		},
+
 		{
-			title: 'Loại GD',
-			dataIndex: 'type',
-			width: 100,
+			title: 'Ngày tạo',
+			dataIndex: 'createdAt',
+			width: 140,
 			align: 'center',
-			render: (val) => <Tag color={val === 'CHARGE' ? 'blue' : 'green'}>{val || '--'}</Tag>,
+			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '-'),
 		},
-		// {
-		// 	title: 'Trạng thái',
-		// 	dataIndex: 'status',
-		// 	width: 100,
-		// 	align: 'center',
-		// 	render: (val) => <Tag color={val === 'success' ? 'green' : 'default'}>{val || '--'}</Tag>,
-		// },
-		// {
-		// 	title: 'Thanh toán',
-		// 	dataIndex: 'paid',
-		// 	width: 140,
-		// 	align: 'center',
-		// 	render: (val) => <Tag color={val ? 'green' : 'orange'}>{val ? 'Đã thanh toán' : 'Chưa thanh toán'}</Tag>,
-		// },
+		{
+			title: 'Ngày giao dịch',
+			dataIndex: 'transactionDate',
+			width: 140,
+			align: 'center',
+			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '-'),
+		},
 		{
 			title: 'Ghi chú',
 			dataIndex: 'ghiChu',
@@ -102,8 +91,18 @@ const FormItemHoaDonChiTiet = () => {
 	return (
 		<Row gutter={[12, 0]}>
 			<Col span={24}>
-				<TableStaticData columns={columns} data={result} loading={loading} addStt size='small'>
-					<Space wrap>
+				<TableStaticData
+					columns={columns}
+					data={result}
+					loading={loading}
+					addStt
+					hasTotal
+					otherProps={{
+						pagination: false,
+						size: 'small',
+						scroll: { x: 1000 },
+					}}
+					otherButtons={[
 						<ButtonExtend
 							disabled={isDisabled}
 							onClick={() => setVisibleModalThanhToan(true)}
@@ -115,9 +114,9 @@ const FormItemHoaDonChiTiet = () => {
 							tooltip={isDisabled ? intl.formatMessage({ id: 'taichinh.thanhtoan.tooltip.outOfTime' }) : undefined}
 						>
 							{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
-						</ButtonExtend>
-					</Space>
-				</TableStaticData>
+						</ButtonExtend>,
+					]}
+				></TableStaticData>
 			</Col>
 		</Row>
 	);
