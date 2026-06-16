@@ -2,6 +2,7 @@
 ARG BUILD_BASE_IMAGE=node:22-alpine
 FROM ${BUILD_BASE_IMAGE} AS build
 
+ARG APP_ENV=uat
 
 # Set environment variables
 ENV APP_CONFIG_IP_ROOT=https://uat-apigw.vinuni.edu.vn/
@@ -46,7 +47,7 @@ COPY package.json yarn.lock /app/
 RUN if [ ! -d node_modules ] || [ ! -f /opt/build-base.yarn.lock ] || ! cmp -s yarn.lock /opt/build-base.yarn.lock; then yarn install --frozen-lockfile && yarn cache clean; fi
 
 COPY . /app
-RUN cp .env.production .env.production && yarn build && rm -rf node_modules
+RUN set -a; if [ -f ".env.${APP_ENV}" ]; then . ".env.${APP_ENV}"; fi; set +a; yarn build && rm -rf node_modules
 
 FROM nginx:alpine-slim
 COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
