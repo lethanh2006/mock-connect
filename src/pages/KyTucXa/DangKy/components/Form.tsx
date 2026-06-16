@@ -50,15 +50,26 @@ const FormDangKyKTX = () => {
 				phoneNumber: thongTinSinhVien.soDienThoai || '-',
 				nationality: thongTinSinhVien.quocTich || '-',
 				permanentHomeAddress: thongTinSinhVien.hoKhauThuongTru || '-',
-				emergencyContacts: [{
-					id: Date.now().toString(),
-					emergencyContactName: thongTinSinhVien.nguoiLienLac || '-',
-					emergencyContactNumber: thongTinSinhVien.soDienThoaiNguoiLienLac || '-',
-					emergencyRelationship: thongTinSinhVien.thanhVienGiaDinh || '-', 
-					secondaryContactNumber: '-',
-					emergencyEmail: '-',
-					address: thongTinSinhVien.hoKhauThuongTru || '-',
-				}],
+				emergencyContacts: [
+					{
+						id: Date.now().toString(),
+						emergencyContactName: thongTinSinhVien.nguoiLienLac || '-',
+						emergencyContactNumber: thongTinSinhVien.soDienThoaiNguoiLienLac || '-',
+						emergencyRelationship: thongTinSinhVien.thanhVienGiaDinh || '-', 
+						secondaryContactNumber: '-',
+						emergencyEmail: '-',
+						address: thongTinSinhVien.hoKhauThuongTru || '-',
+					},
+					{
+						id: (Date.now() + 1).toString(),
+						emergencyContactName: '-',
+						emergencyContactNumber: '-',
+						emergencyRelationship: '-', 
+						secondaryContactNumber: '-',
+						emergencyEmail: '-',
+						address: '-',
+					}
+				],
 			});
 		}
 	}, [thongTinSinhVien, visibleForm, form]);
@@ -74,15 +85,26 @@ const FormDangKyKTX = () => {
 		try {
 			await getThongTinSinhVienModel();
 			form.setFieldsValue({
-				emergencyContacts: [{
-					id: Date.now().toString(),
-					emergencyContactName: thongTinSinhVien?.nguoiLienLac || '-',
-					emergencyContactNumber: thongTinSinhVien?.soDienThoaiNguoiLienLac || '-',
-					emergencyRelationship: thongTinSinhVien?.thanhVienGiaDinh || '-', 
-					secondaryContactNumber: '-',
-					emergencyEmail: '-',
-					address: thongTinSinhVien?.hoKhauThuongTru || '-',
-				}]
+				emergencyContacts: [
+					{
+						id: Date.now().toString(),
+						emergencyContactName: thongTinSinhVien?.nguoiLienLac || '-',
+						emergencyContactNumber: thongTinSinhVien?.soDienThoaiNguoiLienLac || '-',
+						emergencyRelationship: thongTinSinhVien?.thanhVienGiaDinh || '-', 
+						secondaryContactNumber: '-',
+						emergencyEmail: '-',
+						address: thongTinSinhVien?.hoKhauThuongTru || '-',
+					},
+					{
+						id: (Date.now() + 1).toString(),
+						emergencyContactName: '-',
+						emergencyContactNumber: '-',
+						emergencyRelationship: '-', 
+						secondaryContactNumber: '-',
+						emergencyEmail: '-',
+						address: '-',
+					}
+				]
 			});
 		} catch (error) {
 			console.error('Lỗi khi tải lại thông tin sinh viên:', error);
@@ -265,6 +287,20 @@ const FormDangKyKTX = () => {
 													validator: (_, value) => {
 														if (!value || value.length < 2) {
 															return Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.msg.min2Contacts' })));
+														}
+														const isInvalid = value.some((item: any) => {
+															const name = item?.emergencyContactName?.trim();
+															const relationship = item?.emergencyRelationship?.trim();
+															const number = item?.emergencyContactNumber?.trim();
+															const addr = item?.address?.trim();
+															
+															return !name || name === '-' ||
+																!relationship || relationship === '-' ||
+																!number || number === '-' ||
+																!addr || addr === '-';
+														});
+														if (isInvalid) {
+															return Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.form.msg.emergencyContactsRequired' })));
 														}
 														return Promise.resolve();
 													}
