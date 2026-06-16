@@ -28,7 +28,9 @@ declare module HoaDon {
 		soTienDaThu?: number;
 
 		transactions?: ITransaction[];
-		linkFilePDF?: string;
+		loaiTienTe?: string;
+
+		ghiChu?: string;
 	}
 
 	interface IKhachHang {
@@ -40,6 +42,18 @@ declare module HoaDon {
 		userDOB: string;
 		userPhone: string;
 		userMetadata?: Record;
+
+		userTenKhoa?: string;
+		userMaKhoaSinhVien?: string
+
+		userTenNganh?: string;
+		userMaNganh?: string;
+
+		userLopHanhChinh?: string;
+
+		userTenTinhChat?: string;
+		userMaTinhChat?: string;
+
 	}
 
 	export interface IBillItem {
