@@ -34,12 +34,13 @@ export const TableHeader: React.FC = () => {
 	const {
 		buttons,
 		otherButtons,
+		// otherTextButtons,
 		otherExtra,
-		rowSelection,
-		deleteMany,
-		selectedIds,
-		handleDeleteMany,
-		hasFilter,
+		// rowSelection,
+		// deleteMany,
+		// selectedIds,
+		// handleDeleteMany,
+		// hasFilter,
 		finalColumns,
 		filters,
 		setFilters,
@@ -51,7 +52,8 @@ export const TableHeader: React.FC = () => {
 		loading,
 		total,
 		hideTotal,
-		disableFilterModal,
+		header,
+		// disableFilterModal,
 		size,
 	} = useTableContext();
 	const {
@@ -59,7 +61,7 @@ export const TableHeader: React.FC = () => {
 		minimizeGlobalSearch = size === 'small',
 		create: btnCreate = true,
 		export: btnExport,
-		filter: btnFilter = true,
+		// filter: btnFilter = true,
 		import: btnImport,
 		reload: btnReload = true,
 		columnSetting: btnColumnSetting = true,
@@ -248,16 +250,14 @@ export const TableHeader: React.FC = () => {
 							: undefined
 				}
 				enterButton={
-					!minimized ? (
-						<Button
-							loading={loading}
-							icon={
-								<Tooltip title={globalSearchTooltip}>
-									<SearchOutlined />
-								</Tooltip>
-							}
-						/>
-					) : null
+					<Button
+						loading={loading}
+						icon={
+							<Tooltip title={globalSearchTooltip}>
+								<SearchOutlined />
+							</Tooltip>
+						}
+					/>
 				}
 				onSearch={handleGlobalSearchTrigger}
 				onChange={(e) => {
@@ -291,7 +291,6 @@ export const TableHeader: React.FC = () => {
 						icon={<PlusCircleOutlined />}
 						className='btn-add'
 						type='primary'
-						notHideText
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
@@ -338,6 +337,9 @@ export const TableHeader: React.FC = () => {
 				{otherExtra}
 
 				{/* {rowSelection && deleteMany && selectedIds?.length ? (
+				{otherTextButtons}
+
+				{rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
 						title={intl.formatMessage({ id: 'global.table.index.button.xoa.title' }, { count: selectedIds?.length })}
 						onConfirm={handleDeleteMany}
@@ -391,8 +393,13 @@ export const TableHeader: React.FC = () => {
 				{!hideTotal && (
 					<Tooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
 						<div className={classNames({ total: true, small: size === 'small' })}>
-							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:
-							<span style={{ fontSize: 15 }}>{inputFormat(total || 0)}</span>
+							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:{' '}
+							<span style={{ fontSize: 15 }}>
+								{inputFormat(total || 0)}
+								{header?.total?.prefix ? (
+									<span style={{ fontSize: 15, marginLeft: 6 }}>{header.total.prefix}</span>
+								) : null}
+							</span>
 						</div>
 					</Tooltip>
 				)}
