@@ -116,7 +116,7 @@ export default {
 	'taichinh.thanhtoan.modal.phuongthuc': 'Payment Method',
 	'taichinh.thanhtoan.modal.title': 'Payment Details',
 	'taichinh.thanhtoan.modal.subtitle': 'Please check the information before making the payment',
-	'taichinh.thanhtoan.modal.magd': 'Transaction ID',
+	'taichinh.thanhtoan.modal.magd': 'Bill ID',
 	'taichinh.thanhtoan.modal.noidung': 'Description',
 
 	'taichinh.thanhtoan.modal.col.stt': 'No',

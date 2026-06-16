@@ -17,7 +17,6 @@ import DesThongTinHoaDon from '../ChiTiet/DesThongTin';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
 import FormThanhToan from '../ThanhToan/FormThanhToan';
 import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
-import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const intl = useIntl();
@@ -173,11 +172,6 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 								>
 									{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
 								</ButtonExtend>
-
-								{/* <Checkbox checked={xemRutGonChiTiet} onChange={(e) => setXemRutGonChiTiet(e.target.checked)}>
-									{intl.formatMessage({ id: 'taichinh.thanhtoan.checkbox.compact' })}
-								</Checkbox>
-								<i>{intl.formatMessage({ id: 'taichinh.thanhtoan.note.compact' })}</i> */}
 							</Space>
 							<FormItemHoaDonChiTiet />
 						</Space>
@@ -222,14 +216,14 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 				}}
 			/>
 
-			<ModalThanhToanNganHang
+			{/* <ModalThanhToanNganHang
 				visible={visibleHuongDan}
 				onOk={() => {
 					if (activeTab === '1') getGiaoDich();
 					if (getData) getData();
 					setVisibleHuongDan(false);
 				}}
-			/>
+			/> */}
 		</Card>
 	);
 };
