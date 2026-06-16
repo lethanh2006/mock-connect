@@ -1,5 +1,5 @@
 import { postTransactionMePayment } from '@/services/TaiChinh/KenhThanhToan';
-import { inputFormat, removeVietnameseTones } from '@/utils/utils';
+import { inputFormat } from '@/utils/utils';
 import { Button, Descriptions, message } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -26,9 +26,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			: initialState?.currentUser?.name);
 	const userCode = bill?.userCode ?? initialState?.currentUser?.preferred_username ?? '';
 	/** Nội dung chuyển khoản */
-	const addInfo = removeVietnameseTones(
-		`${userCode ?? ''} ${userFullname ?? ''} ${bill?.name ?? 'Nộp tiền'}`,
-	).toUpperCase();
+	const addInfo = bill?.dotThu?.tenDot;
 
 	const sumCharge = transactions
 		.filter((item) => item.type === 'CHARGE')
@@ -46,7 +44,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			: (totalThanhToan * method.giaTriLePhiThanhToanMacDinh) / 100
 		: 0;
 
-	const totalAmountFinal = totalThanhToan - phiThanhToan;
+	const totalAmountFinal = totalThanhToan + phiThanhToan;
 
 	const handlePayment = async () => {
 		// if (method.phuongThucThanhToan === 'ONEPAY') {
@@ -63,7 +61,6 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			});
 
 			const paymentUrl = res?.data?.data?.payUrl;
-			console.log('paymentUrl', paymentUrl);
 
 			if (paymentUrl) {
 				window.location.href = paymentUrl;
@@ -110,14 +107,9 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 					<span>{inputFormat(sumCharge)}đ</span>
 				</div>
 
-				<div className='payment-detail__summary-row'>
-					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tienuudai' })}</span>
-					<span>{inputFormat(sumDiscount)}đ</span>
-				</div>
-
 				{/* {phiThanhToan > 0 && ( */}
 				<div className='payment-detail__summary-row'>
-					<span>{method.moTaLePhiThanhToan || intl.formatMessage({ id: 'taichinh.thanhtoan.modal.phigiaodich' })}</span>
+					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.phigiaodich' })}</span>
 					<span>{inputFormat(phiThanhToan)}đ</span>
 				</div>
 				{/* )} */}

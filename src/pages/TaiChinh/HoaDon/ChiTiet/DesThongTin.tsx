@@ -17,6 +17,14 @@ const DesThongTinHoaDon = () => {
 
 	return (
 		<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
+			<Descriptions.Item label={'Mã sinh viên'}>{recHoaDon?.userCode ?? '-'}</Descriptions.Item>
+
+			<Descriptions.Item label={'Họ tên'}>{recHoaDon?.userFullname ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Email'}>{recHoaDon?.userEmail ?? '-'}</Descriptions.Item>
+			{/* <Descriptions.Item label={'Số điện thoại'}>
+				{recHoaDon?.} 
+
+			</Descriptions.Item> */}
 			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.dotthu' })}>
 				{recHoaDon?.dotThu?.tenDot ?? <i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>} -{' '}
 				{!recHoaDon?.dotThu?.kichHoat ? (

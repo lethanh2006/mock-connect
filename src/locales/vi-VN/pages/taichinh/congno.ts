@@ -123,7 +123,7 @@ export default {
 	'taichinh.thanhtoan.modal.phuongthuc': 'Phương thức thanh toán',
 	'taichinh.thanhtoan.modal.title': 'Chi tiết thanh toán',
 	'taichinh.thanhtoan.modal.subtitle': 'Vui lòng kiểm tra lại thông tin trước khi thanh toán',
-	'taichinh.thanhtoan.modal.magd': 'Mã giao dịch',
+	'taichinh.thanhtoan.modal.magd': 'Mã hóa đơn',
 	'taichinh.thanhtoan.modal.noidung': 'Nội dung',
 
 	'taichinh.thanhtoan.modal.col.stt': 'STT',
@@ -132,7 +132,7 @@ export default {
 	'taichinh.thanhtoan.modal.col.dongia': 'Đơn giá',
 	'taichinh.thanhtoan.modal.col.thanhtien': 'Thành tiền',
 
-	'taichinh.thanhtoan.modal.tongtienphainop': 'Tổng tiền phải nộp',
+	'taichinh.thanhtoan.modal.tongtienphainop': 'Số tiền cần thanh toán',
 	'taichinh.thanhtoan.modal.tienuudai': 'Số tiền ưu đãi',
 	'taichinh.thanhtoan.modal.phigiaodich': 'Phí giao dịch',
 	'taichinh.thanhtoan.modal.tongcong': 'Tổng cộng',
