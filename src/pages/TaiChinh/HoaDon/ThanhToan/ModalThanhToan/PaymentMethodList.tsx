@@ -1,3 +1,4 @@
+import { Image } from 'antd';
 import clsx from 'clsx';
 import React from 'react';
 import { useIntl } from 'umi';
@@ -18,6 +19,15 @@ const PaymentMethodList: React.FC<PaymentMethodListProps> = ({ methods, selected
 					})}
 					onClick={() => onChange(method)}
 				>
+					{method.icon && (
+						<Image
+							src={method.icon}
+							width={24}
+							height={24}
+							preview={false}
+							style={{ marginRight: 8, verticalAlign: 'middle' }}
+						/>
+					)}
 					{method.tenNganHang || method.code}
 				</div>
 			))}

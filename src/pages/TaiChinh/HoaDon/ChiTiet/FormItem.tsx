@@ -1,37 +1,27 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { inputFormat } from '@/utils/utils';
-import { Col, Row, Tag } from 'antd';
+import { AppstoreAddOutlined } from '@ant-design/icons';
+import { Col, Row, Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import { disableThanhToan } from '..';
 
 const FormItemHoaDonChiTiet = () => {
 	const intl = useIntl();
-	const { record } = useModel('taichinh.hoadon');
+	const { record, visibleModalThanhToan, setVisibleModalThanhToan } = useModel('taichinh.hoadon');
 
 	const { getAllModel, loading, danhSach, xemRutGonChiTiet } = useModel('taichinh.hoadonchitiet');
 	// const [result, setResult] = useState<HoaDon.IBillItem[]>([]);
 	const [result, setResult] = useState<HoaDon.ITransaction[]>([]);
 
-	// const setBillItemResult = (list: HoaDon.IBillItem[]) => {
-	// 	setResult(list.filter((item) => !xemRutGonChiTiet || item.status !== EMaTrangThaiThanhToan.DONG));
-	// };
-
-	// const getData = () =>
-	// 	record?._id &&
-	// 	getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode }).then((list) =>
-	// 		setBillItemResult(list),
-	// 	);
-
-	// useEffect(() => {
-	// 	getData();
-	// }, [record?._id]);
-
-	// useEffect(() => setBillItemResult(danhSach), [xemRutGonChiTiet]);
+	const isDisabled = disableThanhToan(record);
 
 	useEffect(() => {
-		setResult(record?.transactions ?? []);
+		const data = record?.transactions?.filter((tran) => tran.status === 'success' && tran.type === 'CHARGE');
+		setResult(data ?? []);
 	}, [record]);
 
 	const columns: IColumn<HoaDon.ITransaction & { index: number }>[] = [
@@ -59,20 +49,20 @@ const FormItemHoaDonChiTiet = () => {
 			width: 130,
 			render: (val, rec) => val || rec?.maKyHoc || '-',
 		},
-		{
-			title: 'Đơn giá',
-			dataIndex: 'donGia',
-			width: 120,
-			align: 'right',
-			render: (val) => val ?? 0,
-		},
-		{
-			title: 'SL',
-			dataIndex: 'soLuong',
-			width: 70,
-			align: 'center',
-			render: (val) => val ?? '-',
-		},
+		// {
+		// 	title: 'Đơn giá',
+		// 	dataIndex: 'donGia',
+		// 	width: 120,
+		// 	align: 'right',
+		// 	render: (val) => inputFormat(val) ?? 0,
+		// },
+		// {
+		// 	title: 'SL',
+		// 	dataIndex: 'soLuong',
+		// 	width: 70,
+		// 	align: 'center',
+		// 	render: (val) => val ?? '-',
+		// },
 		{
 			title: 'Số tiền',
 			dataIndex: 'amount',
@@ -112,7 +102,22 @@ const FormItemHoaDonChiTiet = () => {
 	return (
 		<Row gutter={[12, 0]}>
 			<Col span={24}>
-				<TableStaticData columns={columns} data={result} loading={loading} addStt size='small' />
+				<TableStaticData columns={columns} data={result} loading={loading} addStt size='small'>
+					<Space wrap>
+						<ButtonExtend
+							disabled={isDisabled}
+							onClick={() => setVisibleModalThanhToan(true)}
+							icon={<AppstoreAddOutlined />}
+							type='primary'
+							className='btn-success'
+							loading={loading}
+							notHideText
+							tooltip={isDisabled ? intl.formatMessage({ id: 'taichinh.thanhtoan.tooltip.outOfTime' }) : undefined}
+						>
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
+						</ButtonExtend>
+					</Space>
+				</TableStaticData>
 			</Col>
 		</Row>
 	);
