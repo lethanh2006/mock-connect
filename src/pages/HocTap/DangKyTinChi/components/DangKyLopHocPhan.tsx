@@ -49,16 +49,11 @@ const DangKyLopHocPhan = () => {
 	// const danhSachMaLopHc = danhSachLopHanhChinh.map((item) => item.ten);
 	const [visibleDangKyNgay, setVisibleDangKyNgay] = useState<boolean>(false);
 	const dangKyNgay: boolean = true;
-	const [trangThaiLopFilter, setTrangThaiLopFilter] = useState<'lopcontrong' | 'tatca'>('lopcontrong');
-
-	const otherQuery = {
-		// siSo: trangThaiLopFilter === 'lopcontrong',
-	};
 
 	const getData = () =>
 		recHocKy?.ma &&
 		recHocPhan?.ma &&
-		sinhVienGetLopDangKyModel(recHocKy.ma, loaiDangKy, recHocPhan.ma, typeLop !== 'Lớp gợi ý', otherQuery).then(
+		sinhVienGetLopDangKyModel(recHocKy.ma, loaiDangKy, recHocPhan.ma, typeLop !== 'Lớp gợi ý').then(
 			(data) => setExpandedLopHocPhan(data.filter((item) => !!item.children?.length).map((item) => item.ten)),
 		);
 

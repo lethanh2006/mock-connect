@@ -284,6 +284,11 @@ const PhieuDangKy = (props: {
 				loading={loading}
 				hasTotal
 				onReload={getData}
+				header={{
+					total: {
+						prefix: intl.formatMessage({ id: 'dangkytinchi.filter.hocphan.total.prefix' }),
+					},
+				}}
 				otherButtons={[
 					<Space wrap>
 						{danhSachLopDangKy.length ? (
