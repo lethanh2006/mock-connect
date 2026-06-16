@@ -81,3 +81,39 @@ export const colorTransactionStatus: Record<ETransactionStatus, string> = {
 	[ETransactionStatus.FAIL]: 'red',
 	[ETransactionStatus.CANCEL]: 'default',
 };
+
+/** Nhãn tiếng Việt cho loại giao dịch */
+export const TRANSACTION_LABEL: Record<string, string> = {
+	CHARGE: 'Ghi nợ',
+	PAYMENT: 'Thanh toán',
+	DISCOUNT: 'Khuyến mại',
+	DEPOSIT_CREDIT: 'Ghi có ký quỹ',
+	WALLET_PAYMENT: 'Thanh toán ví',
+	DISCOUNT_LATE: 'Giảm trễ hạn',
+	DEPOSIT_CLEARING: 'Cấn trừ ký quỹ',
+	FORFEITURE: 'Tịch thu',
+	REVERSE: 'Đảo giao dịch',
+	PENALTY_CHARGE: 'Phí phạt',
+	deposit: 'Nộp tiền',
+	withdraw: 'Rút tiền',
+	internal: 'Nội bộ',
+	refund: 'Hoàn trả',
+};
+
+/** Màu Tag cho loại giao dịch */
+export const TRANSACTION_COLOR: Record<string, string> = {
+	CHARGE: 'blue',
+	PAYMENT: 'green',
+	DISCOUNT: 'gold',
+	DEPOSIT_CREDIT: 'cyan',
+	WALLET_PAYMENT: 'green',
+	DISCOUNT_LATE: 'gold',
+	DEPOSIT_CLEARING: 'geekblue',
+	FORFEITURE: 'red',
+	REVERSE: 'volcano',
+	PENALTY_CHARGE: 'red',
+	deposit: 'green',
+	withdraw: 'orange',
+	internal: 'purple',
+	refund: 'default',
+};
