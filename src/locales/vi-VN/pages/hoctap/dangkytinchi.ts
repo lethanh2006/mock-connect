@@ -6,6 +6,7 @@ export default {
 		'Đợt đăng ký tín chỉ từ <b>{thoigianbatdau}</b> đến <b>{thoigianketthuc}</b>',
 	'dangkytinchi.filter.step.thoigianbatdaudk.title': 'Thời gian bắt đầu đăng ký',
 	'dangkytinchi.filter.step.thoigianketthucdk.title': 'Thời gian kết thúc đăng ký',
+	'dangkytinchi.filter.hocphan.total.prefix': 'Học phần',
 
 	'dangkytinchi.loaidangky.lop-hanh-chinh': 'Lớp theo kế hoạch giảng dạy',
 	'dangkytinchi.loaidangky.khoa-nganh': 'Theo chương trình đào tạo',
@@ -81,6 +82,7 @@ export default {
 	'dangkytinchi.phieudangky.columntable.mahocphan': 'Mã HP',
 	'dangkytinchi.phieudangky.columntable.tenhocphan': 'Tên học phần',
 	'dangkytinchi.phieudangky.columntable.malop': 'Mã lớp',
+	'dangkytinchi.phieudangky.columntable.loptinchi': 'Lớp tín chỉ',
 	'dangkytinchi.phieudangky.columntable.sotinchi': 'STC',
 	'dangkytinchi.phieudangky.columntable.giangvien': 'Giảng viên',
 	'dangkytinchi.phieudangky.columntable.thongtinchitiet': 'Thông tin lớp học',
@@ -127,6 +129,10 @@ export default {
 	'dangkytinchi.modallichhoc.description.dangkyloptinchi':
 		'Bạn đã đăng ký / đã chọn <b>{countLop} lớp tín chỉ</b>, tổng cộng có <b>{countBuoi} buổi học</b>, từ ngày {start} đến ngày {end}',
 	'dangkytinchi.modallichhoc.description.cuthenhusau': 'Cụ thể như sau:',
+	'dangkytinchi.modallichhoc.chitiet.title': 'Chi tiết buổi học',
+	'dangkytinchi.modallichhoc.chitiet.thoigian': 'Thời gian',
+	'dangkytinchi.modallichhoc.chitiet.phonghoc': 'Phòng học',
+	'dangkytinchi.modallichhoc.chitiet.lichhoc': 'Lịch học',
 	// modal đăng ký
 	'dangkytinchi.modaldangky.title': 'Danh sách đăng ký mới',
 	'dangkytinchi.modaldangky.columntable.mahocphan': 'Mã HP',
@@ -153,6 +159,7 @@ export default {
 
 	// render lịch học
 	'dangkytinchi.renderlichhoc.khongcothongtin': 'Không có thông tin lịch học',
+	'dangkytinchi.renderlichhoc.thoigian': 'Thời gian {thoigian}',
 	'dangkytinchi.renderlichhoc.tiet': 'tiết {batdau}-{ketthuc}',
 	'dangkytinchi.renderlichhoc.phong': 'phòng {phong}',
 	'dangkytinchi.renderlichhoc.tuan': '{count} tuần',
@@ -220,6 +227,18 @@ export default {
 
 	'dangkytinchi.tabs.dangky': 'Đăng ký',
 	'dangkytinchi.tabs.lichsudangky': 'Lớp đã đăng ký',
+	'dangkytinchi.tabs.lopdahuy': 'Lớp đã hủy',
+	'dangkytinchi.lopdahuy.columntable.mahocphan': 'Mã HP',
+	'dangkytinchi.lopdahuy.columntable.tenhocphan': 'Tên học phần',
+	'dangkytinchi.lopdahuy.columntable.malop': 'Mã lớp',
+	'dangkytinchi.lopdahuy.columntable.sotinchi': 'STC',
+	'dangkytinchi.lopdahuy.columntable.giangvien': 'Giảng viên',
+	'dangkytinchi.lopdahuy.columntable.lichhoc': 'Lịch học',
+	'dangkytinchi.lopdahuy.columntable.tgdangky': 'Thời gian đăng ký',
+	'dangkytinchi.lopdahuy.columntable.tghuy': 'Thời gian hủy',
+	'dangkytinchi.lopdahuy.columntable.trangthai': 'Trạng thái',
+	'dangkytinchi.lopdahuy.columntable.trangthai.dahuy': 'Đã hủy',
+	'dangkytinchi.lopdahuy.columntable.ghichu': 'Ghi chú',
 
 	'dangkytinchi.duongdan.thongtindangky': 'Thông tin Đăng ký',
 	'dangkytinchi.duongdan.thongtinkyhoc': 'Thông tin kỳ học',

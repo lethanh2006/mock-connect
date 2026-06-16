@@ -159,6 +159,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 				rowSelection: props.rowSelection,
 				deleteMany: props.deleteMany,
 				hideTotal: props.hideTotal,
+				header: props.header,
 				hideFilterColumn: props.hideFilterColumn,
 				size: props.otherProps?.size,
 				visibleForm,

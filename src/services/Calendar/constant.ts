@@ -17,8 +17,7 @@ export const useMessagesCalendar = () => {
 			date: intl.formatMessage({ id: 'lichsukien.calendar.date' }),
 			time: intl.formatMessage({ id: 'lichsukien.calendar.time' }),
 			event: intl.formatMessage({ id: 'lichsukien.calendar.event' }),
-			showMore: (total: number) =>
-				intl.formatMessage({ id: 'lichsukien.calendar.showmore' }, { total }),
+			showMore: (total: number) => intl.formatMessage({ id: 'lichsukien.calendar.showmore' }, { total }),
 			noEventsInRange: intl.formatMessage({ id: 'lichsukien.calendar.noeventsinrange' }),
 		}),
 		[intl],

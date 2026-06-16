@@ -4,11 +4,24 @@ import { MenuOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined } from
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { AutoComplete, Button, Card, ConfigProvider, Drawer, Empty, Input, Table, Tooltip, type InputRef } from 'antd';
+import {
+	AutoComplete,
+	Button,
+	Card,
+	ConfigProvider,
+	Drawer,
+	Empty,
+	Input,
+	Popover,
+	Table,
+	Tooltip,
+	type InputRef,
+} from 'antd';
 import classNames from 'classnames';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import { useMediaQuery } from 'react-responsive';
 import { useIntl, useModel } from 'umi';
 import { ColumnSettings } from './components/ColumnSettings';
 import { ResizableTitle } from './components/ResizableTitle';
@@ -35,6 +48,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		children,
 		hasCreate,
 		hasTotal,
+		header,
 		rowSortable,
 		resizable,
 		globalSearch = true,
@@ -378,6 +392,60 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 		);
 	};
 
+	const renderGlobalSearch = (minimized: boolean) => (
+		<AutoComplete
+			options={globalOptions}
+			value={globalSearchText}
+			size={size}
+			onSelect={handleGlobalSearchTrigger}
+			onChange={(val) => setGlobalSearchText(val)}
+		>
+			<Input.Search
+				ref={searchInputRef}
+				className='global-search'
+				size={size}
+				allowClear
+				value={globalSearchText}
+				placeholder={globalSearchPlaceholder}
+				autoFocus={minimized}
+				style={
+					globalSearchText
+						? {
+							width: 260,
+							borderColor: primaryColor,
+							outline: '1px solid ' + primaryColor,
+							borderRadius: 4,
+						}
+						: { width: 260 }
+				}
+				enterButton={
+					<Button
+						size={size}
+						icon={
+							<Tooltip title={globalSearchTooltip}>
+								<SearchOutlined />
+							</Tooltip>
+						}
+					/>
+				}
+				onSearch={handleGlobalSearchTrigger}
+				onChange={(e) => {
+					if (e.type === 'click') {
+						setGlobalSearchText('');
+						handleGlobalSearchTrigger('');
+					} else {
+						const val = e.target.value;
+						setGlobalSearchText(val);
+					}
+				}}
+			/>
+		</AutoComplete>
+	);
+
+	const isMobile = useMediaQuery({ maxWidth: 767 });
+	const isMinimize = size === 'small' || isMobile;
+	const canShowGlobalSearch = globalSearch && globalSearchColumns.length > 0;
+
 	const mainContent = (
 		<div className='table-base'>
 			<div className='header'>
@@ -411,60 +479,29 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							{intl.formatMessage({ id: 'global.tablestatic.button.tailai' })}
 						</ButtonExtend>
 					) : null}
+					{props.otherTextButtons}
 
 					{props.otherExtra}
+
 				</div>
 
 				<div className='extra'>
 					{columnSetting && <ColumnSettings />}
 
-					{globalSearch && globalSearchColumns.length ? (
-						<AutoComplete
-							options={globalOptions}
-							value={globalSearchText}
-							size={size}
-							onSelect={handleGlobalSearchTrigger}
-							onChange={(val) => setGlobalSearchText(val)}
-						>
-							<Input.Search
-								ref={searchInputRef}
-								className='global-search'
-								size={size}
-								allowClear
-								value={globalSearchText}
-								placeholder={globalSearchPlaceholder}
-								style={
-									globalSearchText
-										? {
-												width: 260,
-												borderColor: primaryColor,
-												outline: '1px solid ' + primaryColor,
-												borderRadius: 4,
-											}
-										: { width: 260 }
-								}
-								enterButton={
-									<Button
-										size={size}
-										icon={
-											<Tooltip title={globalSearchTooltip}>
-												<SearchOutlined />
-											</Tooltip>
-										}
-									/>
-								}
-								onSearch={handleGlobalSearchTrigger}
-								onChange={(e) => {
-									if (e.type === 'click') {
-										setGlobalSearchText('');
-										handleGlobalSearchTrigger('');
-									} else {
-										const val = e.target.value;
-										setGlobalSearchText(val);
-									}
-								}}
-							/>
-						</AutoComplete>
+					{canShowGlobalSearch ? (
+						isMinimize ? (
+							<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
+								<ButtonExtend
+									className='btn-minimize-search'
+									size={size}
+									tooltip={globalSearchTooltip}
+									icon={<SearchOutlined />}
+									style={globalSearchText ? { borderColor: primaryColor, color: primaryColor } : undefined}
+								/>
+							</Popover>
+						) : (
+							renderGlobalSearch(isMinimize)
+						)
 					) : null}
 
 					{hasTotal ? (
@@ -472,9 +509,13 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							<div className={classNames({ total: true, small: size === 'small' })}>
 								{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
 								<span style={{ fontSize: 15 }}>{total ?? tableData?.length ?? props.data?.length ?? 0}</span>
+								{header?.total?.prefix ? (
+									<span style={{ fontSize: 15, marginLeft: 6 }}>{header.total.prefix}</span>
+								) : null}
 							</div>
 						</Tooltip>
 					) : null}
+
 				</div>
 			</div>
 

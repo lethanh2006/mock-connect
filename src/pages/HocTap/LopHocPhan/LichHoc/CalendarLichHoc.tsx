@@ -44,6 +44,7 @@ const CalendarLichHocLopHp = (props: {
 				dayRangeHeaderFormat: (range: DateRange) => {
 					return `${dayjs(range.start).format('DD/MM')} - ${dayjs(range.end).format('DD/MM')}`;
 				},
+				eventTimeRangeFormat: () => '',
 			}}
 			localizer={localizer}
 			events={items.map((j) => ({
