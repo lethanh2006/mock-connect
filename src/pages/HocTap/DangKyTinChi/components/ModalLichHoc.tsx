@@ -26,9 +26,9 @@ const ModalLichHoc = (props: { soLopHienThi: number }) => {
 	const [selectedEvent, setSelectedEvent] = useState<CalendarLichHocEvent>();
 	const [visibleDetail, setVisibleDetail] = useState(false);
 
-	useEffect(() => {
-		if (!recSetting?._id) getSettingLich();
-	}, []);
+	// useEffect(() => {
+	// 	if (!recSetting?._id) getSettingLich();
+	// }, []);
 
 	const getData = () => {
 		const data = danhSachLopDangKy
