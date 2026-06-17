@@ -434,7 +434,11 @@ const FormPerstionActivityOutCome = (props: any) => {
 									</Col>
 
 									<Col span={22} md={12}>
-										<Form.Item label={msg('file')} name={['evidenceFile', 0, 'file']} rules={[...rules.required]}>
+										<Form.Item
+											label={msg('file')}
+											name={['evidenceFile', 0, 'file']}
+											//  rules={[...rules.required]}
+										>
 											<UploadFile
 												maxCount={1}
 												disabled={isView}
