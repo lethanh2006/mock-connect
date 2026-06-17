@@ -1,97 +1,90 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
+import { TRANSACTION_COLOR, TRANSACTION_LABEL } from '@/services/TaiChinh/constant';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import { formatDateTime } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
-import { Col, Row, Table, Tag } from 'antd';
-import _ from 'lodash';
+import { AppstoreAddOutlined } from '@ant-design/icons';
+import { Col, Row, Tag } from 'antd';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
+import { disableThanhToan } from '..';
 
 const FormItemHoaDonChiTiet = () => {
 	const intl = useIntl();
-	const { record } = useModel('taichinh.hoadon');
+	const { record, visibleModalThanhToan, setVisibleModalThanhToan } = useModel('taichinh.hoadon');
+
 	const { getAllModel, loading, danhSach, xemRutGonChiTiet } = useModel('taichinh.hoadonchitiet');
-	const [result, setResult] = useState<HoaDon.IBillItem[]>([]);
+	// const [result, setResult] = useState<HoaDon.IBillItem[]>([]);
+	const [result, setResult] = useState<HoaDon.ITransaction[]>([]);
 
-	const setBillItemResult = (list: HoaDon.IBillItem[]) => {
-		setResult(list.filter((item) => !xemRutGonChiTiet || item.status !== EMaTrangThaiThanhToan.DONG));
-	};
-
-	const getData = () =>
-		record?._id &&
-		getAllModel(undefined, undefined, { billIdentityCode: record?.identityCode }).then((list) =>
-			setBillItemResult(list),
-		);
+	const isDisabled = disableThanhToan(record);
 
 	useEffect(() => {
-		getData();
-	}, [record?._id]);
+		const data = record?.transactions?.filter((tran) => tran.status === 'success');
+		setResult(data ?? []);
+	}, [record]);
 
-	useEffect(() => setBillItemResult(danhSach), [xemRutGonChiTiet]);
+	const columns: IColumn<HoaDon.ITransaction & { index: number }>[] = [
+		{
+			title: 'Mã giao dịch',
+			dataIndex: 'identityCode',
+			width: 130,
+			render: (val) => val || '-',
+		},
+		// {
+		// 	title: 'Khoản thu',
+		// 	dataIndex: 'tenKhoanThu',
+		// 	width: 160,
+		// 	render: (val, rec) => val || rec?.maKhoanThu || '-',
+		// },
+		// {
+		// 	title: 'Mức thu',
+		// 	dataIndex: 'maMucThu',
+		// 	width: 120,
+		// 	render: (val) => val || '-',
+		// },
+		// {
+		// 	title: 'Kỳ học',
+		// 	dataIndex: 'tenKyHoc',
+		// 	width: 130,
+		// 	render: (val, rec) => val || rec?.maKyHoc || '-',
+		// },
+		{
+			title: 'Loại giao dịch',
+			dataIndex: 'type',
+			width: 130,
+			align: 'center',
+			render: (val) => <Tag color={TRANSACTION_COLOR[val] ?? 'default'}>{TRANSACTION_LABEL[val] ?? val ?? '--'}</Tag>,
+		},
+		{
+			title: 'Số tiền',
+			dataIndex: 'amount',
+			width: 120,
+			align: 'right',
+			render: (val) => inputFormat(val ?? 0),
+		},
 
-	const columns: IColumn<HoaDon.IBillItem & { index: number }>[] = [
 		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.noidung' }),
-			dataIndex: 'ten',
-			width: 180,
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.dongia' }),
-			dataIndex: 'unitAmount',
-			width: 110,
-			align: 'right',
-			render: (val, rec) => `${inputFormat(val)} VND${rec.unitLabel ? `/${rec.unitLabel}` : ''}`,
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.heso' }),
-			dataIndex: 'heSo',
-			width: 45,
-			align: 'center',
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.SL' }),
-			dataIndex: 'quantity',
-			width: 45,
-			align: 'center',
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.thanhtien' }),
-			dataIndex: 'amountDue',
-			width: 100,
-			align: 'right',
-			render: (val, rec) => (
-				<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
-					{inputFormat(val)} VND
-				</span>
-			),
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.uudai' }),
-			dataIndex: 'amountDiscount',
-			width: 100,
-			align: 'right',
-			render: (val, rec) => (
-				<span className={rec.status === EMaTrangThaiThanhToan.DONG ? 'text-line' : undefined}>
-					{inputFormat(val)} VND
-				</span>
-			),
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.thoigiantao' }),
+			title: 'Ngày tạo',
 			dataIndex: 'createdAt',
-			width: 120,
-			align: 'left',
-			render: (val) => formatDateTime(val),
+			width: 140,
+			align: 'center',
+			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '-'),
 		},
 		{
-			title: intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.trangthai' }),
-			dataIndex: 'status',
+			title: 'Ngày giao dịch',
+			dataIndex: 'transactionDate',
+			width: 140,
 			align: 'center',
-			width: 120,
-			render: (val: EMaTrangThaiThanhToan) =>
-				val && <Tag color={EMauTrangThaiThanhToanTable?.[val]}>{ETrangThaiThanhToan?.[val] ?? ''}</Tag>,
+			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '-'),
+		},
+		{
+			title: 'Ghi chú',
+			dataIndex: 'ghiChu',
+			width: 220,
+			render: (val) => val || '-',
 		},
 	];
 
@@ -103,48 +96,27 @@ const FormItemHoaDonChiTiet = () => {
 					data={result}
 					loading={loading}
 					addStt
-					size='small'
+					hasTotal
 					otherProps={{
-						summary: (data: HoaDon.IBillItem[]) => {
-							const dataFiltered = data.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG);
-							const sumDue = _.sumBy(dataFiltered, (item) => item.amountDue);
-							const sumDiscount = _.sumBy(dataFiltered, (item) => item.amountDiscount);
-							return (
-								<Table.Summary fixed>
-									<Table.Summary.Row>
-										<Table.Summary.Cell index={0} colSpan={5} align='center'>
-											<b>{intl.formatMessage({ id: 'taichinh.thanhtoan.formItem.tongcong' })}</b>
-										</Table.Summary.Cell>
-										<Table.Summary.Cell index={1} align='right'>
-											<b>{inputFormat(sumDue)} VND</b>
-										</Table.Summary.Cell>
-										<Table.Summary.Cell index={2} align='right'>
-											<b>{inputFormat(sumDiscount)} VND</b>
-										</Table.Summary.Cell>
-										<Table.Summary.Cell index={3} />
-									</Table.Summary.Row>
-								</Table.Summary>
-							);
-						},
 						pagination: false,
-						// rowKey: (rec: HoaDon.IBillItem) => rec._id,
-						// rowSelection: isThanhToan
-						// 	? {
-						// 			type: 'checkbox',
-						// 			selectedRowKeys: selectedIds ?? [],
-						// 			preserveSelectedRowKeys: true,
-						// 			onChange: (selectedRowKeys: string[]) => setSelectedIds(selectedRowKeys),
-						// 			getCheckboxProps: (rec: HoaDon.IBillItem) => ({
-						// 				disabled: ![
-						// 					EMaTrangThaiThanhToan.CHUA_THANH_TOAN,
-						// 					EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU,
-						// 				].includes(rec.status),
-						// 			}),
-						// 			columnWidth: 40,
-						// 	  }
-						// 	: null,
+						size: 'small',
+						scroll: { x: 1000 },
 					}}
-				/>
+					otherButtons={[
+						<ButtonExtend
+							disabled={isDisabled}
+							onClick={() => setVisibleModalThanhToan(true)}
+							icon={<AppstoreAddOutlined />}
+							type='primary'
+							className='btn-success'
+							loading={loading}
+							notHideText
+							tooltip={isDisabled ? intl.formatMessage({ id: 'taichinh.thanhtoan.tooltip.outOfTime' }) : undefined}
+						>
+							{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
+						</ButtonExtend>,
+					]}
+				></TableStaticData>
 			</Col>
 		</Row>
 	);

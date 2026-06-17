@@ -1,21 +1,41 @@
-import ExpandText from '@/components/ExpandText';
+import PDFViewerV2 from '@/components/PDFViewerV2';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
+import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { UnorderedListOutlined } from '@ant-design/icons';
-import { Modal, Tag, notification } from 'antd';
+import { EyeOutlined, FilePdfOutlined, MenuOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { Button, Empty, Modal, Popover, Space, Tag, notification } from 'antd';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import SelectDotThu from '../DotThu/Select';
+import ModalThanhToan from './ThanhToan/ModalThanhToan';
 import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
+
+/** Kiểm tra nút thanh toán có bị disable không: ngoài thời gian thanh toán */
+export const disableThanhToan = (rec?: HoaDon.IRecord): boolean => {
+	if (!rec) return true;
+	// Check hạn thanh toán từ hóa đơn
+	if (rec.ngayHetHanThanhToan && dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) return true;
+	// Check thời gian đợt thu
+	if (rec.dotThu?._id && rec.dotThu?.thoiGianKetThuc && rec.dotThu.kichHoat) {
+		if (dayjs().isBefore(dayjs(rec.dotThu.thoiGianBatDau)) || dayjs().isAfter(dayjs(rec.dotThu.thoiGianKetThuc)))
+			return true;
+	}
+	return false;
+};
 
 const HoaDonPage = () => {
 	const intl = useIntl();
-	const { getModel, page, limit, setRecord, record } = useModel('taichinh.hoadon');
+	const { getModel, page, limit, setRecord, record, visibleModalThanhToan, setVisibleModalThanhToan } =
+		useModel('taichinh.hoadon');
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
+	const [visibleModalPDF, setVisibleModalPDF] = useState<boolean>(false);
+	const [pdfUrl, setPdfUrl] = useState<string | undefined>(undefined);
+	const [loadingPdf, setLoadingPdf] = useState<boolean>(false);
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -59,71 +79,131 @@ const HoaDonPage = () => {
 			filterType: 'customselect',
 			filterCustomSelect: <SelectDotThu multiple />,
 		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.hoadon.column.khoanthu' }),
+		// 	width: 250,
+		// 	render: (val, rec) => (
+		// 		<ExpandText>
+		// 			{rec?.billItems
+		// 				?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
+		// 				?.map((item) => <div key={item._id}>- {item.ten ?? item?.tenKhoanThu}</div>)}
+		// 		</ExpandText>
+		// 	),
+		// },
 		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.khoanthu' }),
-			width: 250,
+			title: 'Hạn thanh toán',
+			dataIndex: 'ngayHetHanThanhToan',
+			width: 150,
 			render: (val, rec) => (
-				<ExpandText>
-					{rec?.billItems
-						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.map((item) => <div key={item._id}>- {item.ten ?? item?.tenKhoanThu}</div>)}
-				</ExpandText>
+				<div>
+					<div>{dayjs(val).format('DD/MM/YYYY')}</div>
+					{disableThanhToan(rec) && (
+						<div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12 }}>Quá hạn thanh toán</div>
+					)}
+				</div>
 			),
+			filterType: 'date',
+		},
+
+		{
+			title: 'Số tiền cần thanh toán',
+			dataIndex: 'soTienPhaiThu',
+			width: 150,
+			align: 'right',
+			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+		},
+		{
+			title: 'Số tiền đã thanh toán',
+			dataIndex: 'soTienDaThu',
+			width: 150,
+			align: 'right',
+			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+		},
+		{
+			title: 'Số tiền còn lại',
+			dataIndex: 'soTienConLai',
+			width: 150,
+			align: 'right',
+			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.trangthai' }),
 			dataIndex: 'status',
+			fixed: 'right',
 			align: 'center',
 			width: 150,
-			render: (val: EMaTrangThaiThanhToan) =>
-				val && <Tag color={EMauTrangThaiThanhToanTable?.[val]}>{ETrangThaiThanhToan?.[val] ?? ''}</Tag>,
+			render: (val: EMaTrangThaiThanhToan) => (
+				<Tag color={EMauTrangThaiThanhToanTable[val]}>{ETrangThaiThanhToan[val]}</Tag>
+			),
 			filterType: 'select',
 			filterData: Object.values(EMaTrangThaiThanhToan).map((item) => ({
-				label: ETrangThaiThanhToan[item],
 				value: item,
+				label: ETrangThaiThanhToan[item],
 			})),
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.sotienphainop' }),
-			width: 130,
-			align: 'right',
-			render: (val, rec) => {
-				const totalAmountDue = rec?.billItems
-					?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-					?.reduce((acc, item) => acc + ((item.amountDue ?? 0) - (item.amountDiscount ?? 0)), 0);
-				return `${inputFormat(totalAmountDue ?? 0)} VND`;
-			},
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.sotiendanop' }),
-			width: 130,
-			align: 'right',
-			render: (val, rec) => {
-				const totalAmountDue = rec?.billItems
-					?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-					?.reduce((acc, item) => acc + (item.amountPaid || 0), 0);
-				return `${inputFormat(totalAmountDue ?? 0)} VND`;
-			},
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.thaotac' }),
 			align: 'center',
 			width: 60,
 			fixed: 'right',
-			render: (val, rec) => (
-				<ButtonExtend
-					tooltip={intl.formatMessage({ id: 'taichinh.hoadon.action.thanhtoan' })}
-					onClick={() => handleDetail(rec)}
-					type='link'
-					className='text-success'
-					icon={<UnorderedListOutlined />}
-				/>
+			render: (val, rec: HoaDon.IRecord) => (
+				<div onClick={(e) => e.stopPropagation()}>
+					<Popover
+						placement='right'
+						content={
+							<Space size={4} wrap>
+								<ButtonExtend
+									tooltip={disableThanhToan(rec) ? 'Ngoài thời hạn thanh toán' : 'Thanh toán ngay'}
+									disabled={disableThanhToan(rec)}
+									onClick={() => {
+										setRecord(rec);
+										setVisibleModalThanhToan(true);
+									}}
+									type='link'
+									className='text-success'
+									icon={<UnorderedListOutlined />}
+								/>
+								<ButtonExtend
+									tooltip={'Xem chi tiết phiếu thu'}
+									icon={<EyeOutlined />}
+									onClick={() => handleDetail(rec)}
+									type='link'
+								/>
+
+								<ButtonExtend
+									tooltip={'Xem hướng dẫn thanh toán'}
+									danger
+									loading={loadingPdf}
+									onClick={async () => {
+										try {
+											setLoadingPdf(true);
+											const url = await getExportBillUrl(rec.identityCode);
+											if (url) {
+												setPdfUrl(url);
+												setVisibleModalPDF(true);
+											}
+										} catch {
+											// error handled by axios interceptor
+										} finally {
+											setLoadingPdf(false);
+										}
+									}}
+									type='link'
+									icon={<FilePdfOutlined />}
+								/>
+							</Space>
+						}
+					>
+						<Button type='link' icon={<MenuOutlined />} />
+					</Popover>
+				</div>
 			),
 		},
 	];
 
 	return (
 		<>
+			<style>{`.row-qua-han { background-color: #fff1f0 !important; }`}</style>
 			<TableBase
 				columns={columns}
 				getData={getData}
@@ -132,6 +212,13 @@ const HoaDonPage = () => {
 				modelName='taichinh.hoadon'
 				title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}
 				widthDrawer={1000}
+				otherProps={{
+					rowClassName: (rec: HoaDon.IRecord) => (disableThanhToan(rec) ? 'row-qua-han' : ''),
+					onRow: (rec: HoaDon.IRecord) => ({
+						onClick: () => handleDetail(rec),
+						style: { cursor: 'pointer' },
+					}),
+				}}
 			/>
 
 			<Modal
@@ -143,6 +230,26 @@ const HoaDonPage = () => {
 			>
 				<ThongTinThanhToan setVisible={setVisibleModal} getData={getData} />
 			</Modal>
+
+			<Modal
+				open={visibleModalPDF}
+				onCancel={() => setVisibleModalPDF(false)}
+				footer={null}
+				width={900}
+				title='Xem hướng dẫn thanh toán'
+			>
+				{/* <PreviewFile file={pdfUrl ?? ''} /> */}
+				{pdfUrl ? <PDFViewerV2 url={pdfUrl} height='80vh' /> : <Empty />}
+			</Modal>
+
+			<ModalThanhToan
+				visible={visibleModalThanhToan}
+				onClose={() => setVisibleModalThanhToan(false)}
+				onSuccess={() => {
+					getData();
+					setVisibleModalThanhToan(false);
+				}}
+			/>
 		</>
 	);
 };
