@@ -22,7 +22,7 @@ const NoticeIconView = () => {
 	}, [page, limit]);
 
 	const clearReadState = async () => {
-		readNotificationModel('ALL');
+		readNotificationModel('ALL', undefined, intl.formatMessage({ id: 'global.noticeion.all' }));
 		setVisiblePopup(false);
 	};
 

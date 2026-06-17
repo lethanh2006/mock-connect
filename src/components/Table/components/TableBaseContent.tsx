@@ -220,14 +220,14 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				rowSelection={
 					props?.rowSelection
 						? {
-							type: 'checkbox',
-							selectedRowKeys: selectedIds ?? [],
-							preserveSelectedRowKeys: true,
-							onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
-							columnWidth: 40,
-							fixed: 'left',
-							...props.detailRow,
-						}
+								type: 'checkbox',
+								selectedRowKeys: selectedIds ?? [],
+								preserveSelectedRowKeys: true,
+								onChange: (selectedRowKeys) => setSelectedIds?.(selectedRowKeys as (string | number)[]),
+								columnWidth: 40,
+								fixed: 'left',
+								...props.detailRow,
+							}
 						: undefined
 				}
 				loading={loading}
@@ -348,7 +348,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 						{ id: 'global.table.index.export.fileName' },
 						{ title: (title ?? intl.formatMessage({ id: 'global.table.index.export.defaultTitle' })) as any },
 					)}
-					otherQuery={props.exportParam}
+					otherQuery={props.exportParam ?? params}
 					filters={filters}
 				/>
 			) : null}
