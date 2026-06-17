@@ -34,6 +34,7 @@ export const TableHeader: React.FC = () => {
 	const {
 		buttons,
 		otherButtons,
+		otherExtra,
 		rowSelection,
 		deleteMany,
 		selectedIds,
@@ -247,16 +248,14 @@ export const TableHeader: React.FC = () => {
 							: undefined
 				}
 				enterButton={
-					!minimized ? (
-						<Button
-							loading={loading}
-							icon={
-								<Tooltip title={globalSearchTooltip}>
-									<SearchOutlined />
-								</Tooltip>
-							}
-						/>
-					) : null
+					<Button
+						loading={loading}
+						icon={
+							<Tooltip title={globalSearchTooltip}>
+								<SearchOutlined />
+							</Tooltip>
+						}
+					/>
 				}
 				onSearch={handleGlobalSearchTrigger}
 				onChange={(e) => {
@@ -290,7 +289,6 @@ export const TableHeader: React.FC = () => {
 						icon={<PlusCircleOutlined />}
 						className='btn-add'
 						type='primary'
-						notHideText
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
@@ -333,6 +331,8 @@ export const TableHeader: React.FC = () => {
 						{intl.formatMessage({ id: 'global.table.index.button.tailai' })}
 					</ButtonExtend>
 				)}
+
+				{otherExtra}
 
 				{/* {rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
@@ -392,6 +392,8 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				)}
+
+				{otherExtra}
 			</div>
 		</div>
 	);

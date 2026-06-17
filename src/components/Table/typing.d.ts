@@ -150,6 +150,9 @@ export type TableBaseProps<T extends object = any> = {
 	/** Danh sách các nút khác bên cạnh Thêm mới */
 	otherButtons?: JSX.Element[];
 
+	/** Danh sách các text trước nút Tải lại */
+	otherExtra?: JSX.Element[];
+
 	/** Biến lưu dữ liệu trong model, Mặc định: danhSach */
 	dataState?: string;
 
@@ -339,6 +342,7 @@ export type TableStaticProps = Pick<
 	| 'hideChildrenRows'
 	| 'onReload'
 	| 'otherButtons'
+	| 'otherExtra'
 	| 'scroll'
 > & {
 	data: any[];
@@ -356,6 +360,7 @@ export type TableStaticProps = Pick<
 	size?: 'small' | 'middle';
 
 	totalComponent?: any;
+	globalSearch?: boolean;
 };
 
 // IMPORT HEADER
