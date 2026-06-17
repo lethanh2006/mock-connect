@@ -1,5 +1,5 @@
 export default {
-	'taichinh.hoadon.title': 'Outstanding Balance',
+	'taichinh.hoadon.title': 'Tuition & Billing',
 	'taichinh.hoadon.column.identityCode': '',
 	'taichinh.hoadon.column.dotthu': 'Collection Period',
 	'taichinh.hoadon.column.khoanthu': 'Payment Details',
