@@ -1,5 +1,5 @@
 export default {
-	'taichinh.hoadon.title': 'Công nợ',
+	'taichinh.hoadon.title': 'Học phí & Hóa đơn',
 	'taichinh.hoadon.column.identityCode': 'Mã HĐ',
 	'taichinh.hoadon.column.dotthu': 'Đợt thu',
 	'taichinh.hoadon.column.khoanthu': 'Khoản thu',

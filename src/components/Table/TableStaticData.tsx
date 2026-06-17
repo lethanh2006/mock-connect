@@ -509,8 +509,6 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							</div>
 						</Tooltip>
 					) : null}
-
-					{props.otherExtra}
 				</div>
 			</div>
 

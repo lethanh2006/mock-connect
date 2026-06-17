@@ -335,33 +335,33 @@ export default [
 	// 		},
 	// 	],
 	// },
-	// {
-	// 	path: '/finance',
-	// 	name: 'Finance',
-	// 	icon: 'DollarOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'tuition-billing',
-	// 			name: 'TuitionBilling',
-	// 			component: 'New/TuitionBilling',
-	// 		},
-	// 		{
-	// 			path: 'payment-tracking',
-	// 			name: 'PaymentTracking',
-	// 			component: 'New/PaymentTracking',
-	// 		},
-	// 		{
-	// 			path: 'scholarship',
-	// 			name: 'Scholarship',
-	// 			component: 'New/Scholarship',
-	// 		},
-	// 		{
-	// 			path: 'financial-planning',
-	// 			name: 'FinancialPlanning',
-	// 			component: 'New/FinancialPlanning',
-	// 		},
-	// 	],
-	// },
+	{
+		path: '/finance',
+		name: 'Finance',
+		icon: 'DollarOutlined',
+		routes: [
+			{
+				path: 'tuition-billing',
+				name: 'TuitionBilling',
+				component: 'TaiChinh/HoaDon',
+			},
+			{
+				path: 'payment-tracking',
+				name: 'PaymentTracking',
+				component: 'New/PaymentTracking',
+			},
+			{
+				path: 'scholarship',
+				name: 'Scholarship',
+				component: 'New/Scholarship',
+			},
+			{
+				path: 'financial-planning',
+				name: 'FinancialPlanning',
+				component: 'New/FinancialPlanning',
+			},
+		],
+	},
 
 	// DANH MUC HE THONG
 	// {
@@ -860,28 +860,28 @@ export default [
 	// },
 
 	// TÀI CHÍNH
-	{
-		name: 'TaiChinh',
-		icon: 'TransactionOutlined',
-		path: '/tai-chinh',
-		routes: [
-			{
-				name: 'CongNo',
-				path: 'cong-no',
-				component: 'TaiChinh/HoaDon',
-			},
-			// {
-			// 	name: 'GiaoDich',
-			// 	path: 'giao-dich',
-			// 	component: 'TaiChinh/GiaoDich',
-			// },
-			// {
-			// 	name: 'UuDaiThanhToan',
-			// 	path: 'uu-dai-thanh-toan',
-			// 	component: 'TaiChinh/UuDaiThanhToan',
-			// },
-		],
-	},
+	// {
+	// 	name: 'TaiChinh',
+	// 	icon: 'TransactionOutlined',
+	// 	path: '/tai-chinh',
+	// 	routes: [
+	// 		{
+	// 			name: 'CongNo',
+	// 			path: 'cong-no',
+	// 			component: 'TaiChinh/HoaDon',
+	// 		},
+	// 		// {
+	// 		// 	name: 'GiaoDich',
+	// 		// 	path: 'giao-dich',
+	// 		// 	component: 'TaiChinh/GiaoDich',
+	// 		// },
+	// 		// {
+	// 		// 	name: 'UuDaiThanhToan',
+	// 		// 	path: 'uu-dai-thanh-toan',
+	// 		// 	component: 'TaiChinh/UuDaiThanhToan',
+	// 		// },
+	// 	],
+	// },
 
 	// TIỆN ÍCH
 	// {
