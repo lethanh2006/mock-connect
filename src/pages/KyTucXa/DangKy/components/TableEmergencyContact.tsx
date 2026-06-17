@@ -129,7 +129,7 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 					</Button>
 				</Space>
 			</div>
-			
+
 			<Table
 				dataSource={value}
 				columns={columns}
