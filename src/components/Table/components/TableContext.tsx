@@ -2,7 +2,7 @@ import { Namespaces } from '@/pages/TienIch/AuditLog/Modal';
 import type { InputRef } from 'antd';
 import _ from 'lodash';
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import type { IColumn, TableBaseProps, TExternalConditionItem, TFilter } from '../typing';
+import type { IColumn, TableBaseProps, TFilter } from '../typing';
 import { getTableFingerprint, stringHash } from '../utils';
 
 export interface IColumnSetting {
@@ -11,7 +11,7 @@ export interface IColumnSetting {
 	order?: number;
 }
 
-interface TableContextValue<T extends object = any> {
+interface TableContextValue<T extends object = any> extends Partial<TableBaseProps<T>> {
 	// Trạng thái hiển thị Modal
 	visibleFilter?: boolean;
 	setVisibleFilter?: (visible: boolean) => void;
@@ -50,11 +50,6 @@ interface TableContextValue<T extends object = any> {
 	onReload?: () => void;
 
 	// Cấu hình bảng
-	buttons?: TableBaseProps['buttons'];
-	otherButtons?: React.ReactNode;
-	otherExtra?: React.ReactNode;
-	rowSelection?: boolean;
-	deleteMany?: boolean;
 	hideTotal?: boolean;
 	hideFilterColumn?: boolean;
 	disableFilterModal?: boolean;
@@ -67,25 +62,10 @@ interface TableContextValue<T extends object = any> {
 	setVisibleForm?: (visible: boolean) => void;
 	isView?: boolean;
 	edit?: boolean;
-	Form?: React.FC;
-	title?: React.ReactNode;
-	widthDrawer?: number | 'full';
-	maskCloseableForm?: boolean;
-	destroyModal?: boolean;
-	formType?: 'Modal' | 'Drawer';
-	modalTitle?: string;
-	showModalTitle?: boolean;
-	formProps?: any;
 
 	// Cấu hình các modal
 	modelName?: Namespaces;
-	configKey?: string;
-	modelImportName?: Namespaces;
-	modelExportName?: Namespaces;
-	params?: any;
-	getData?: (params: any) => void;
 	setFilters?: (filters: TFilter<T>[]) => void;
-	externalConditions?: TExternalConditionItem<T>[];
 }
 
 export const TableContext = createContext<TableContextValue<any> | undefined>(undefined);
