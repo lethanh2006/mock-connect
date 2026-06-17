@@ -8,7 +8,7 @@ import {
 	ETransactionStatus,
 } from '@/services/TaiChinh/constant';
 import { currencyFormat } from '@/utils/utils';
-import { CalendarOutlined, EnvironmentOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import { CalendarOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, Modal, Row, Space, Tabs, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -212,18 +212,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						<Col xs={12} md={8}>
 							<InfoItem label='Ngành' value={recHoaDon?.userTenNganh || recHoaDon?.userMaNganh} />
 						</Col>
-						<Col xs={12} md={8}>
-							<InfoItem label='Lớp hành chính' value={recHoaDon?.userLopHanhChinh} />
-						</Col>
-						<Col xs={12} md={8}>
-							<InfoItem label='Tính chất' value={recHoaDon?.userTenTinhChat || recHoaDon?.userMaTinhChat} />
-						</Col>
-						<Col xs={12} md={8}>
-							<InfoItem label='Loại tiền' value={recHoaDon?.loaiTienTe || 'VND'} />
-						</Col>
-						<Col xs={24}>
-							<InfoItem icon={<EnvironmentOutlined />} label='Địa chỉ' value={recHoaDon?.userAddress} />
-						</Col>
+
 						{recHoaDon?.ghiChu && (
 							<Col xs={24}>
 								<InfoItem label='Ghi chú' value={recHoaDon?.ghiChu} />
@@ -244,7 +233,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							},
 							{
 								key: '2',
-								label: 'Lịch sử thanh toán',
+								label: 'Lịch sử giao dịch',
 								children: (
 									<LichSuThanhToan
 										onPay={onPay}
