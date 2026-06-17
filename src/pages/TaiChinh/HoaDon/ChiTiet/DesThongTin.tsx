@@ -1,8 +1,6 @@
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import dayjs from '@/utils/dayjs';
-import { formatDateTime } from '@/utils/formatDate';
 import { inputFormat } from '@/utils/utils';
-import { Descriptions, Tag } from 'antd';
+import { Descriptions } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const DesThongTinHoaDon = () => {
@@ -17,71 +15,25 @@ const DesThongTinHoaDon = () => {
 
 	return (
 		<Descriptions column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }} bordered>
-			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.dotthu' })}>
-				{recHoaDon?.dotThu?.tenDot ?? <i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>} -{' '}
-				{!recHoaDon?.dotThu?.kichHoat ? (
-					<span className='text-error'>{intl.formatMessage({ id: 'taichinh.hoadon.status.notOpen' })}</span>
-				) : null}
+			<Descriptions.Item label={'Mã sinh viên'}>{recHoaDon?.userCode ?? '-'}</Descriptions.Item>
+
+			<Descriptions.Item label={'Họ tên'}>{recHoaDon?.userFullname ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Email'}>{recHoaDon?.userEmail ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Số điện thoại'}>{recHoaDon?.userPhone ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Ngày sinh'}>{recHoaDon?.userDOB ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Địa chỉ'}>{recHoaDon?.userAddress ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Khóa'}>{recHoaDon?.userMaKhoaSinhVien ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Ngành'}>{recHoaDon?.userMaNganh ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Lớp hành chính'}>{recHoaDon?.userLopHanhChinh ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Tính chất'}>
+				{(recHoaDon as any)?.userTenTinhChat || (recHoaDon as any)?.userMaTinhChat || '-'}
 			</Descriptions.Item>
-			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.thoigianthu' })}>
-				<span className={ngoaiThoiGianThanhToan ? 'text-error' : undefined}>
-					{recHoaDon?.dotThu?.thoiGianBatDau ? (
-						`${formatDateTime(recHoaDon.dotThu.thoiGianBatDau)} - ${formatDateTime(
-							recHoaDon.dotThu.thoiGianKetThuc,
-						)}`
-					) : (
-						<i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>
-					)}
-				</span>
-			</Descriptions.Item>
-			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.trangthai' })}>
-				{recHoaDon?.status ? (
-					<Tag color={EMauTrangThaiThanhToanTable?.[recHoaDon.status]}>
-						{ETrangThaiThanhToan?.[recHoaDon.status] ?? ''}
-					</Tag>
-				) : (
-					<i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>
-				)}
-			</Descriptions.Item>
-			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.nguoinop' })}>
-				{recHoaDon?.userFullname ? (
-					`${recHoaDon.userFullname} - ${recHoaDon.userCode}`
-				) : (
-					<i>{intl.formatMessage({ id: 'taichinh.common.updating' })}</i>
-				)}
-			</Descriptions.Item>
-			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.tongtien' })}>
-				{inputFormat(
-					recHoaDon?.billItems
-						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.reduce((acc, item) => acc + (item.amountDue || 0), 0),
-				)}{' '}
-				VNĐ
-			</Descriptions.Item>
-			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.uudai' })}>
-				{inputFormat(
-					recHoaDon?.billItems
-						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.reduce((acc, item) => acc + (item.amountDiscount || 0), 0),
-				)}{' '}
-				VNĐ
-			</Descriptions.Item>
-			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.danop' })}>
-				{inputFormat(
-					recHoaDon?.billItems
-						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.reduce((acc, item) => acc + (item.amountPaid || 0), 0),
-				)}{' '}
-				VNĐ
-			</Descriptions.Item>
-			<Descriptions.Item label={intl.formatMessage({ id: 'taichinh.hoadon.desc.conlai' })}>
-				{inputFormat(
-					recHoaDon?.billItems
-						?.filter((item) => item.status !== EMaTrangThaiThanhToan.DONG)
-						?.reduce((acc, item) => acc + (item.amountRemaining || 0), 0),
-				)}{' '}
-				VNĐ
-			</Descriptions.Item>
+			<Descriptions.Item label={'Mã định danh'}>{recHoaDon?.identityCode ?? '-'}</Descriptions.Item>
+			<Descriptions.Item label={'Loại tiền'}>{recHoaDon?.currency ?? 'VND'}</Descriptions.Item>
+			<Descriptions.Item label={'Phải thu'}>{inputFormat(recHoaDon?.soTienPhaiThu ?? 0)} VNĐ</Descriptions.Item>
+			<Descriptions.Item label={'Đã thu'}>{inputFormat(recHoaDon?.soTienDaThu ?? 0)} VNĐ</Descriptions.Item>
+			<Descriptions.Item label={'Khuyến mại'}>{inputFormat(recHoaDon?.soTienKhuyenMai ?? 0)} VNĐ</Descriptions.Item>
+			<Descriptions.Item label={'Còn lại'}>{inputFormat(recHoaDon?.soTienConLai ?? 0)} VNĐ</Descriptions.Item>
 		</Descriptions>
 	);
 };
