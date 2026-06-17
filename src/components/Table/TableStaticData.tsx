@@ -477,6 +477,8 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							{intl.formatMessage({ id: 'global.tablestatic.button.tailai' })}
 						</ButtonExtend>
 					) : null}
+
+					{props.otherTextButtons}
 				</div>
 
 				<div className='extra'>
@@ -503,7 +505,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 							{props.totalComponent || (
 								<div className={classNames({ total: true, small: size === 'small' })}>
 									{intl.formatMessage({ id: 'global.tablestatic.button.tongso' })}:
-									<span>{total || props.data?.length || 0}</span>
+									<span>{total ?? tableData?.length ?? props.data?.length ?? 0}</span>
 								</div>
 							)}
 						</Tooltip>
