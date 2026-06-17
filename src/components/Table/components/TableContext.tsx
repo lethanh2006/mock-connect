@@ -52,6 +52,7 @@ interface TableContextValue<T extends object = any> {
 	// Cấu hình bảng
 	buttons?: TableBaseProps['buttons'];
 	otherButtons?: React.ReactNode;
+	otherExtra?: React.ReactNode;
 	rowSelection?: boolean;
 	deleteMany?: boolean;
 	hideTotal?: boolean;
