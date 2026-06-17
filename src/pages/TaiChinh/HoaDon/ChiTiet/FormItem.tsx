@@ -22,7 +22,9 @@ const FormItemHoaDonChiTiet = () => {
 	const isDisabled = disableThanhToan(record);
 
 	useEffect(() => {
-		const data = record?.transactions?.filter((tran) => tran.status === 'success');
+		const data = record?.transactions
+			?.filter((tran) => tran.status === 'success')
+			?.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
 		setResult(data ?? []);
 	}, [record]);
 

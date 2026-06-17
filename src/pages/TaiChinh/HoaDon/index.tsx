@@ -6,8 +6,8 @@ import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
 import { inputFormat } from '@/utils/utils';
-import { EyeOutlined, FilePdfOutlined, MenuOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { Button, Empty, Modal, Popover, Space, Tag, notification } from 'antd';
+import { EyeOutlined, FilePdfOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { Empty, Modal, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -144,58 +144,49 @@ const HoaDonPage = () => {
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.thaotac' }),
 			align: 'center',
-			width: 60,
+			width: 150,
 			fixed: 'right',
 			render: (val, rec: HoaDon.IRecord) => (
 				<div onClick={(e) => e.stopPropagation()}>
-					<Popover
-						placement='right'
-						content={
-							<Space size={4} wrap>
-								<ButtonExtend
-									tooltip={disableThanhToan(rec) ? 'Ngoài thời hạn thanh toán' : 'Thanh toán ngay'}
-									disabled={disableThanhToan(rec)}
-									onClick={() => {
-										setRecord(rec);
-										setVisibleModalThanhToan(true);
-									}}
-									type='link'
-									className='text-success'
-									icon={<UnorderedListOutlined />}
-								/>
-								<ButtonExtend
-									tooltip={'Xem chi tiết phiếu thu'}
-									icon={<EyeOutlined />}
-									onClick={() => handleDetail(rec)}
-									type='link'
-								/>
+					<ButtonExtend
+						tooltip={disableThanhToan(rec) ? 'Ngoài thời hạn thanh toán' : 'Thanh toán ngay'}
+						disabled={disableThanhToan(rec)}
+						onClick={() => {
+							setRecord(rec);
+							setVisibleModalThanhToan(true);
+						}}
+						type='link'
+						className='text-success'
+						icon={<UnorderedListOutlined />}
+					/>
+					<ButtonExtend
+						tooltip={'Xem chi tiết phiếu thu'}
+						icon={<EyeOutlined />}
+						onClick={() => handleDetail(rec)}
+						type='link'
+					/>
 
-								<ButtonExtend
-									tooltip={'Xem hướng dẫn thanh toán'}
-									danger
-									loading={loadingPdf}
-									onClick={async () => {
-										try {
-											setLoadingPdf(true);
-											const url = await getExportBillUrl(rec.identityCode);
-											if (url) {
-												setPdfUrl(url);
-												setVisibleModalPDF(true);
-											}
-										} catch {
-											// error handled by axios interceptor
-										} finally {
-											setLoadingPdf(false);
-										}
-									}}
-									type='link'
-									icon={<FilePdfOutlined />}
-								/>
-							</Space>
-						}
-					>
-						<Button type='link' icon={<MenuOutlined />} />
-					</Popover>
+					<ButtonExtend
+						tooltip={'Xem hướng dẫn thanh toán'}
+						danger
+						loading={loadingPdf}
+						onClick={async () => {
+							try {
+								setLoadingPdf(true);
+								const url = await getExportBillUrl(rec.identityCode);
+								if (url) {
+									setPdfUrl(url);
+									setVisibleModalPDF(true);
+								}
+							} catch {
+								// error handled by axios interceptor
+							} finally {
+								setLoadingPdf(false);
+							}
+						}}
+						type='link'
+						icon={<FilePdfOutlined />}
+					/>
 				</div>
 			),
 		},
