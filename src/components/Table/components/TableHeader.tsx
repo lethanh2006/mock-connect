@@ -34,6 +34,8 @@ export const TableHeader: React.FC = () => {
 	const {
 		buttons,
 		otherButtons,
+		otherTextButtons,
+		otherExtra,
 		rowSelection,
 		deleteMany,
 		selectedIds,
@@ -246,16 +248,14 @@ export const TableHeader: React.FC = () => {
 							: undefined
 				}
 				enterButton={
-					!minimized ? (
-						<Button
-							loading={loading}
-							icon={
-								<Tooltip title={globalSearchTooltip}>
-									<SearchOutlined />
-								</Tooltip>
-							}
-						/>
-					) : null
+					<Button
+						loading={loading}
+						icon={
+							<Tooltip title={globalSearchTooltip}>
+								<SearchOutlined />
+							</Tooltip>
+						}
+					/>
 				}
 				onSearch={handleGlobalSearchTrigger}
 				onChange={(e) => {
@@ -289,7 +289,6 @@ export const TableHeader: React.FC = () => {
 						icon={<PlusCircleOutlined />}
 						className='btn-add'
 						type='primary'
-						notHideText
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
@@ -320,6 +319,8 @@ export const TableHeader: React.FC = () => {
 
 				{otherButtons}
 
+				{otherTextButtons}
+
 				{rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
 						title={intl.formatMessage({ id: 'global.table.index.button.xoa.title' }, { count: selectedIds?.length })}
@@ -333,6 +334,8 @@ export const TableHeader: React.FC = () => {
 			</div>
 
 			<div className='extra no-print'>
+				{otherExtra}
+
 				{canShowGlobalSearch ? (
 					isMinimize ? (
 						<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
@@ -389,6 +392,7 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				)}
+
 				{btnColumnSetting && <ColumnSettings />}
 			</div>
 		</div>
