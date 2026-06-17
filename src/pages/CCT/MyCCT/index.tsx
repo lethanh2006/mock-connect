@@ -1,7 +1,6 @@
+import CCTCover from '@/assets/cct/CCT_Bia.png';
 import { ActivityOutCome } from '@/services/CCT/ActivityOutcome/typing';
 import { EStatusMyCCT } from '@/services/CCT/constant';
-import { exportMyCCT } from '@/services/CCT/MyCCT';
-import { getFilenameHeader } from '@/utils/utils';
 import {
 	CloseCircleOutlined,
 	FilePdfOutlined,
@@ -12,7 +11,8 @@ import {
 } from '@ant-design/icons';
 import { Badge, Button, Form, Space, Tag, Tooltip } from 'antd';
 import dayjs from 'dayjs';
-import fileDownload from 'js-file-download';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { useEffect, useRef, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import CardNoteMyCCT from './components/CardNote';
@@ -20,6 +20,15 @@ import CCTContent from './components/CCTContent';
 import ModalPeding from './components/ModalPeding';
 import PreviewCCTModal from './components/PreviewCCTModal';
 import './style.less';
+
+const loadImage = (src: string) =>
+	new Promise<HTMLImageElement>((resolve, reject) => {
+		const image = new Image();
+		image.crossOrigin = 'anonymous';
+		image.onload = () => resolve(image);
+		image.onerror = reject;
+		image.src = src;
+	});
 
 const MyCCT = () => {
 	const intl = useIntl();
@@ -41,6 +50,12 @@ const MyCCT = () => {
 	const [previewVisible, setPreviewVisible] = useState<boolean>(false);
 	const [loadingExport, setLoadingExport] = useState<boolean>(false);
 	const [visiblePending, setVisiblePending] = useState<boolean>(false);
+
+	const getExportFilename = () => {
+		const name = record?.myCCT?.code || record?.myCCT?.name || dayjs().format('YYYYMMDD_HHmm');
+
+		return `My_CCT_${name}`.replace(/[\\/:*?"<>|]/g, '_');
+	};
 
 	const getData = () => {
 		getByIdModel('me', false).then((res: any) => {
@@ -95,14 +110,59 @@ const MyCCT = () => {
 			.catch(() => {});
 	};
 
-	const hanldeExport = () => {
+	const hanldeExport = async () => {
+		if (!printRef.current) {
+			return;
+		}
+
 		setLoadingExport(true);
-		exportMyCCT()
-			.then((res) => {
-				fileDownload(res.data, getFilenameHeader(res));
-			})
-			.catch((er) => console.log(er))
-			.finally(() => setLoadingExport(false));
+
+		try {
+			const exportNode = printRef.current;
+			const exportWidth = 1587;
+			const exportHeight = 1123;
+
+			await document.fonts.ready;
+
+			const canvas = await html2canvas(exportNode, {
+				backgroundColor: '#ffffff',
+				scale: 3,
+				useCORS: true,
+				width: exportWidth,
+				height: exportHeight,
+				windowWidth: exportWidth,
+				windowHeight: exportHeight,
+				onclone: (clonedDocument) => {
+					const clonedExportArea = clonedDocument.querySelector<HTMLElement>('.cct-export-area');
+					const clonedTitle = clonedDocument.querySelector<HTMLElement>('.header-title');
+
+					clonedExportArea?.classList.add('exporting-pdf');
+
+					if (clonedTitle) {
+						clonedTitle.style.background = 'none';
+						clonedTitle.style.color = '#f4dab2';
+						clonedTitle.style.webkitTextFillColor = '#f4dab2';
+					}
+				},
+			});
+			const pdf = new jsPDF({
+				orientation: 'landscape',
+				unit: 'mm',
+				format: 'a3',
+			});
+			const pageWidth = 420;
+			const pageHeight = 297;
+			const coverImage = await loadImage(CCTCover);
+
+			pdf.addImage(coverImage, 'PNG', 0, 0, pageWidth, pageHeight, undefined, 'FAST');
+			pdf.addPage('a3', 'landscape');
+			pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pageWidth, pageHeight, undefined, 'FAST');
+			pdf.save(`${getExportFilename()}.pdf`);
+		} catch (er) {
+			console.log(er);
+		} finally {
+			setLoadingExport(false);
+		}
 	};
 
 	return (
@@ -273,7 +333,7 @@ const MyCCT = () => {
 					{!!record?.myCCT?.status && <CardNoteMyCCT myCCT={record?.myCCT ?? ({} as MyCCT.IRecord)} />}
 				</div>
 
-				<div className='cct-container' ref={printRef}>
+				<div className='cct-export-area' ref={printRef}>
 					<CCTContent record={record as any} form={form} edit={edit} />
 				</div>
 
