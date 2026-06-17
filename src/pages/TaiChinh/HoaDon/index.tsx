@@ -35,7 +35,7 @@ const HoaDonPage = () => {
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 	const [visibleModalPDF, setVisibleModalPDF] = useState<boolean>(false);
 	const [pdfUrl, setPdfUrl] = useState<string | undefined>(undefined);
-	const [loadingPdf, setLoadingPdf] = useState<boolean>(false);
+	const [loadingPdfMap, setLoadingPdfMap] = useState<Record<string, boolean>>({});
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -169,10 +169,10 @@ const HoaDonPage = () => {
 					<ButtonExtend
 						tooltip={'Xem hướng dẫn thanh toán'}
 						danger
-						loading={loadingPdf}
+						loading={loadingPdfMap[rec._id]}
 						onClick={async () => {
 							try {
-								setLoadingPdf(true);
+								setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: true }));
 								const url = await getExportBillUrl(rec.identityCode);
 								if (url) {
 									setPdfUrl(url);
@@ -181,7 +181,7 @@ const HoaDonPage = () => {
 							} catch {
 								// error handled by axios interceptor
 							} finally {
-								setLoadingPdf(false);
+								setLoadingPdfMap((prev) => ({ ...prev, [rec._id]: false }));
 							}
 						}}
 						type='link'
