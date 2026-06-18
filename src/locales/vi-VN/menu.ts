@@ -150,7 +150,7 @@ export default {
 	'menu.ExperiencePorfolio.StudentAwarding': 'Student Awarding',
 	'menu.ExperiencePorfolio.Events': 'Events & Engagement Calendar',
 	'menu.ExperiencePorfolio.ActivityLogging': 'Activity Logging',
-	'menu.ExperiencePorfolio.CCTPorfolio': 'CCT Porfolio',
+	'menu.ExperiencePorfolio.CCTPorfolio': 'Co-curriculum Porfolio',
 	'menu.StudentSupport': 'STUDENT SUPPORT & WELL-BEING',
 	'menu.StudentSupport.RegistrarServices': 'Registrar Services',
 	'menu.StudentSupport.RegistrarServices.Registration': 'Registration',
