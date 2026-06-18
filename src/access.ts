@@ -1,5 +1,6 @@
 import { tenTruongVietTatTiengAnh } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
+import { hasAccessCode, hasAnyAccessCode } from './utils/keycloakRoles';
 // import { currentRole } from './utils/ip';
 
 const vinUniSchoolCodes = ['VIN', 'VINUNI'];
@@ -30,8 +31,11 @@ export default function access(initialState: IInitialState) {
 		//     (vaiTro === 'Admin' || vaiTro === 'quan_tri' || vaiTro === 'nhan_vien')) ||
 		//   false,
 		// guest: (token && ((vaiTro && vaiTro === 'Guest') || !vaiTro)) || false,
-		accessFilter: (route: any) => scopes?.includes(route?.maChucNang) || false,
-		manyAccessFilter: (route: any) => route?.listChucNang?.some((role: string) => scopes?.includes(role)) || false,
+		accessFilter: (route: any) => hasAccessCode(initialState, route?.permission ?? route?.maChucNang),
+		manyAccessFilter: (route: any) =>
+			hasAnyAccessCode(initialState, route?.permissions ?? route?.listChucNang) ||
+			route?.listChucNang?.some((role: string) => scopes?.includes(role)) ||
+			false,
 
 		/** Co-curricular Activities (CCA) */
 		cctFilter: () => vinUniSchoolCodes.includes(tenTruongVietTatTiengAnh),

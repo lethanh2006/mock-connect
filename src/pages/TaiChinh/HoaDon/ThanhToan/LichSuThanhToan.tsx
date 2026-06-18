@@ -1,6 +1,7 @@
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
+import { usePermissionCheck } from '@/hooks/usePermissionCheck';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	ETransactionSourceType,
@@ -25,9 +26,11 @@ const LichSuThanhToan = (props: {
 	ngoaiThoiGianThanhToan?: boolean;
 }) => {
 	const intl = useIntl();
+	const { hasPermission } = usePermissionCheck();
 	const { record } = useModel('taichinh.hoadon');
 	const { getModel, page, limit } = useModel('taichinh.giaodich');
 	const { onPay, onCancel, ngoaiThoiGianThanhToan } = props;
+	const canPay = hasPermission('tc.transaction:pay');
 
 	const getData = () => {
 		record?.identityCode &&
@@ -107,6 +110,7 @@ const LichSuThanhToan = (props: {
 			width: 90,
 			align: 'center',
 			fixed: 'right',
+			hide: !canPay,
 			render: (val, rec) => (
 				<>
 					<ButtonExtend

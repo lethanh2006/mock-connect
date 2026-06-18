@@ -6,6 +6,8 @@ import {
 	moduleTapChiKhoaHoc,
 } from '@/services/base/constant';
 import type { Login } from '@/services/base/typing';
+import { hasModulePermission } from '@/utils/keycloakRoles';
+import { financeApiClientId, qldtApiClientId } from '@/utils/ip';
 import { UserSwitchOutlined } from '@ant-design/icons';
 import { Col, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
@@ -23,9 +25,12 @@ const ModuleView = () => {
 	if (moduleTapChiKhoaHoc.url) extendModules.push(moduleTapChiKhoaHoc);
 	if (moduleCongThongTin.url) extendModules.push(moduleCongThongTin);
 
-	const allowedModules = Object.entries(AppModules).filter(
-		([name, value]) => permissions?.includes(name as EModuleKey) && !!value.url,
-	);
+	const allowedModules = Object.entries(AppModules).filter(([name, value]) => {
+		const clientIds =
+			name === EModuleKey.QLDT ? [qldtApiClientId] : name === EModuleKey.TC ? [financeApiClientId] : undefined;
+
+		return (permissions?.includes(name as EModuleKey) || (clientIds && hasModulePermission(initialState, name, clientIds))) && !!value.url;
+	});
 	const cntModules = allowedModules.length + extendModules.length;
 
 	return (

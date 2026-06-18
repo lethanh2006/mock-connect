@@ -1,4 +1,5 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { usePermissionCheck } from '@/hooks/usePermissionCheck';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	EMaTrangThaiThanhToan,
@@ -20,7 +21,9 @@ import ModalThanhToanNganHang from './ModalThanhToanNganHang';
 
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const intl = useIntl();
+	const { hasPermission } = usePermissionCheck();
 	const { setVisible, getData } = props;
+	const canPay = hasPermission('tc.transaction:pay');
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
 	const { visibleThanhToan, setVisibleThanhToan, xemRutGonChiTiet, setXemRutGonChiTiet } =
 		useModel('taichinh.hoadonchitiet');
@@ -104,7 +107,8 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 					{activeTab === '1' ? (
 						<Space direction='vertical' style={{ width: '100%' }}>
-							{recGiaoDich?._id &&
+							{canPay &&
+							recGiaoDich?._id &&
 							recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
 							!ngoaiThoiGianThanhToan ? (
 								<Alert
@@ -130,7 +134,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 										</Space>
 									}
 								/>
-							) : (
+							) : canPay ? (
 								<Space wrap>
 									<ButtonExtend
 										disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
@@ -154,7 +158,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 									</Checkbox>
 									<i>{intl.formatMessage({ id: 'taichinh.thanhtoan.note.compact' })}</i>
 								</Space>
-							)}
+							) : null}
 
 							<FormItemHoaDonChiTiet />
 						</Space>
