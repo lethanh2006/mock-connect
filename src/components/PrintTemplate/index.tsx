@@ -2,8 +2,8 @@ import { coQuanChuQuan, unitName } from '@/services/base/constant';
 import dayjs from '@/utils/dayjs';
 import { Col, Row } from 'antd';
 import React from 'react';
+import { useIntl } from 'umi';
 import './style.less';
-import { useIntl } from '@umijs/max';
 
 /**
  * PRINT TEMPLATE
@@ -20,12 +20,15 @@ const PrintTemplate = React.forwardRef(
 			hideTieuNgu?: boolean;
 			isCompact?: boolean;
 
+			/** Nếu ẩn Tiểu ngữ có thể custom tiểu ngữ */
+			tieuNgu?: React.ReactNode;
+
 			/** Tên Phòng ban hiển thị dưới tên trường */
 			tenPhongBan?: string;
 		},
 		ref: any,
 	) => {
-		const { children, title, subTitle, footer, hideTieuNgu, isCompact, tenPhongBan } = props;
+		const { children, title, subTitle, footer, hideTieuNgu, isCompact, tenPhongBan, tieuNgu } = props;
 		const intl = useIntl();
 		// const contentRef = useRef(null);
 
@@ -39,6 +42,9 @@ const PrintTemplate = React.forwardRef(
 		// PRINT CONTENT
 		// <PrintTemplate ref={contentRef}></PrintTemplate>
 
+		const unitNameText = intl.formatMessage({ id: unitName });
+		const unitCoQuan = intl.formatMessage({ id: coQuanChuQuan });
+
 		return (
 			<div className={`print-section ${isCompact ? 'compact' : ''}`} ref={ref}>
 				<div className='to-print'>
@@ -47,13 +53,13 @@ const PrintTemplate = React.forwardRef(
 							<Col span={12} style={{ textAlign: 'center' }}>
 								{!!tenPhongBan ? (
 									<>
-										<div>{unitName.toUpperCase()}</div>
+										<div>{unitNameText.toUpperCase()}</div>
 										<span className='tieu-ngu'>{tenPhongBan.toUpperCase()}</span>
 									</>
 								) : (
 									<>
-										<div>{coQuanChuQuan.toUpperCase()}</div>
-										<span className='tieu-ngu'>{intl.formatMessage({ id: unitName }).toUpperCase()}</span>
+										<div>{unitCoQuan.toUpperCase()}</div>
+										<span className='tieu-ngu'>{unitNameText.toUpperCase()}</span>
 									</>
 								)}
 							</Col>
@@ -66,10 +72,12 @@ const PrintTemplate = React.forwardRef(
 								Số: ....................
 							</Col>
 							<Col span={12} className='date'>
-								...................., {dayjs().format('ngà\\y DD t\\háng MM nă\\m YYYY')}
+								...................., {dayjs().format('ngà[y] DD t[h]áng MM nă[m] YYYY')}
 							</Col>
 						</Row>
 					) : null}
+
+					{tieuNgu}
 
 					<div className='title'>{title}</div>
 					<div className='sub-title'>{subTitle}</div>
