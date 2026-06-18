@@ -31,6 +31,8 @@ const oneSignalRole = EModuleKey.CONNECT;
 const keycloakClientID = AppModules[currentRole].clientId;
 const keycloakAuthority = APP_CONFIG_KEYCLOAK_AUTHORITY;
 const resourceServerClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}auth`;
+const qldtApiClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}qldt-api`;
+const financeApiClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}tc-api`;
 const keycloakAuthEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/auth';
 const keycloakTokenEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/token';
 const keycloakUserInfoEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/userinfo';
@@ -46,6 +48,7 @@ export {
 	ipCore,
 	ipDaoTao,
 	ipFile,
+	financeApiClientId,
 	ipKhaoThi,
 	ipNewsWP,
 	ipNhanSu,
@@ -60,6 +63,7 @@ export {
 	moodleEndpoint,
 	oneSignalClient,
 	oneSignalRole,
+	qldtApiClientId,
 	replaceRole,
 	resourceServerClientId,
 	sentryDSN,
