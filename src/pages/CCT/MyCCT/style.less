@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'Lora';
-	src: url('/student/font/Lora.ttf') format('truetype');
+	src: url('/font/Lora.ttf') format('truetype');
 	font-weight: 100 900;
 	font-style: normal;
 	font-display: swap;
@@ -31,7 +31,7 @@
 			.header-title {
 				font-family: 'Lora', serif !important;
 				font-weight: bold;
-				font-size: 29px;
+				font-size: 20px;
 				line-height: 1.1;
 				background: linear-gradient(180deg, #f4dab2 0%, #ffffff 50%, #ddbd8b 100%);
 				-webkit-background-clip: text;
@@ -278,6 +278,264 @@
 		color: @navy-blue;
 		padding-left: 12px;
 		padding-bottom: 6px;
+	}
+}
+
+.cct-export-area {
+	max-width: 100%;
+	margin: 0 auto;
+	background: #fff;
+
+	&.exporting-pdf {
+		width: 1587px !important;
+		height: 1123px !important;
+		max-width: none !important;
+		margin: 0 !important;
+		overflow: hidden !important;
+
+		.ant-spin-nested-loading,
+		.ant-spin-container {
+			height: 100% !important;
+		}
+
+		.cct-container {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			width: 100% !important;
+			height: 100% !important;
+			max-width: none !important;
+			margin: 0 !important;
+			padding-bottom: 34px;
+			overflow: hidden;
+			box-sizing: border-box;
+		}
+
+		.cct-header {
+			flex: 0 0 auto;
+			padding: 26px 60px;
+		}
+
+		.cct-body {
+			flex: 1 1 auto;
+			min-height: 0;
+			padding: 34px 60px 0;
+			gap: 90px;
+		}
+
+		.header-title {
+			font-size: 24px !important;
+
+			.pdf-title-break {
+				display: block;
+			}
+		}
+
+		.gold-text {
+			font-size: 24px !important;
+		}
+
+		.intro-text,
+		.student-info,
+		.italic-text,
+		.skills-grid .skill-item,
+		.project-detail h3,
+		.project-detail p,
+		.award-item h3,
+		.award-item p,
+		.signatures,
+		.title-bottom {
+			font-size: 10.8px !important;
+		}
+
+		.project-year span:first-child {
+			font-size: 22px !important;
+		}
+
+		.project-year .role-indicator,
+		.legend-table .legend-row .symbol {
+			font-size: 19px !important;
+		}
+
+		.footer-legend .end-transcript-divider span {
+			font-size: 19px !important;
+		}
+
+		.legend-table .legend-row {
+			font-size: 8.4px !important;
+		}
+
+		section {
+			margin-bottom: 14px;
+		}
+
+		.intro-section {
+			margin-bottom: 22px;
+		}
+
+		.column {
+			min-height: 0;
+		}
+
+		.left-column,
+		.right-column {
+			height: 100%;
+		}
+
+		.profile-section {
+			flex: 0 0 auto;
+			margin-bottom: 22px;
+
+			.italic-text {
+				display: -webkit-box;
+				margin: 6px 0 0;
+				min-height: calc(10.8px * 1.4 * 6);
+				max-height: calc(10.8px * 1.4 * 6);
+				overflow: hidden;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 6;
+			}
+		}
+
+		.skills-section {
+			flex: 0 0 auto;
+			margin-bottom: 18px;
+
+			.italic-text {
+				margin: 0 0 10px;
+			}
+
+			.skills-grid {
+				min-height: calc(10.8px * 1.4 * 3 + 16px);
+				grid-template-rows: repeat(3, minmax(calc(10.8px * 1.4), auto));
+				align-content: start;
+			}
+		}
+
+		.projects-section,
+		.awards-section {
+			flex: 1 1 auto;
+			min-height: 0;
+			overflow: hidden;
+		}
+
+		.awards-section {
+			flex: 0 0 615px;
+			overflow: visible;
+
+			.section-title {
+				overflow: visible;
+			}
+		}
+
+		.footer-legend {
+			flex: 0 0 auto;
+			margin-top: 0;
+
+			.legend-table .legend-row {
+				align-items: center;
+
+				.symbol,
+				.label,
+				.desc {
+					display: flex;
+					align-items: center;
+					margin-top: 0;
+					margin-bottom: 0;
+					line-height: 1;
+				}
+			}
+		}
+
+		.projects-section {
+			.project-row {
+				margin-bottom: 10px;
+			}
+
+			.project-row:last-child {
+				margin-bottom: 0;
+			}
+
+			.project-item {
+				align-items: flex-start;
+			}
+
+			.project-year {
+				min-width: 70px;
+				padding-top: 0;
+				padding-right: 10px;
+				align-items: flex-end;
+
+				span:first-child {
+					line-height: 1;
+				}
+
+				.role-indicator {
+					width: auto;
+					line-height: 1;
+					margin-top: 0px;
+					margin-right: 0;
+					padding-bottom: 0;
+					text-align: right;
+				}
+			}
+
+			.project-detail {
+				padding-top: 0;
+				padding-left: 12px;
+
+				h3 {
+					line-height: 1.15;
+					margin-bottom: 2px;
+				}
+
+				p {
+					line-height: 1.2;
+				}
+			}
+		}
+
+		.title-bottom {
+			position: absolute;
+			bottom: 14px;
+			left: 60px;
+			padding: 0;
+		}
+	}
+}
+
+@media print {
+	@page {
+		size: A3 landscape;
+		margin: 0;
+	}
+
+	html,
+	body {
+		margin: 0 !important;
+		background: #fff !important;
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+	}
+
+	.cct-export-area {
+		width: 420mm !important;
+		min-height: 297mm !important;
+		margin: 0 !important;
+		overflow: hidden !important;
+		background: #fff !important;
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+
+		.cct-container {
+			width: 420mm !important;
+			min-height: 297mm !important;
+			max-width: none !important;
+			margin: 0 !important;
+			box-sizing: border-box !important;
+			-webkit-print-color-adjust: exact !important;
+			print-color-adjust: exact !important;
+		}
 	}
 }
 
