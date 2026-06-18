@@ -73,6 +73,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const daThu = recHoaDon?.soTienDaThu ?? 0;
 	const khuyenMai = recHoaDon?.soTienKhuyenMai ?? 0;
 	const conLai = recHoaDon?.soTienConLai ?? 0;
+	const daThanhToan = recHoaDon?.soTienDaThu ?? 0;
 
 	// Trạng thái thanh toán
 	const statusText: string | undefined = ETrangThaiThanhToan[recHoaDon?.status as EMaTrangThaiThanhToan];
@@ -130,10 +131,6 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	return (
 		<Card title={intl.formatMessage({ id: 'taichinh.thanhtoan.title' })}>
 			<>
-				{/* <Col span={24}>
-					<DesThongTinHoaDon />
-				</Col> */}
-
 				{/* Header sinh viên */}
 				<div
 					style={{
@@ -177,6 +174,18 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							</Space>
 						</div>
 					</div>
+
+					{recHoaDon?.ngayHetHanThanhToan && (
+						<div style={{ flexShrink: 0, textAlign: 'right' }}>
+							<Text type='secondary' style={{ fontSize: 12 }}>
+								<CalendarOutlined style={{ marginRight: 4 }} />
+								Hạn thanh toán
+							</Text>
+							<div style={{ fontSize: 16, fontWeight: 700, color: '#ff4d4f' }}>
+								{dayjs(recHoaDon.ngayHetHanThanhToan).format('DD/MM/YYYY')}
+							</div>
+						</div>
+					)}
 				</div>
 
 				{/* Tổng quan tài chính */}
@@ -189,14 +198,10 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 						<StatBox label='Tổng deduction (2)' value={khuyenMai} color='#faad14' />
 					</Col>
 					<Col xs={12} md={6}>
-						<StatBox label='Số tiền cần thanh toán (1-2)' value={conLai} color='#52c41a' />
+						<StatBox label='Số tiền đã thanh toán (3)' value={daThanhToan} color='#52c41a' />
 					</Col>
 					<Col xs={12} md={6}>
-						<StatBox
-							label='Hạn thanh toán'
-							value={dayjs(recHoaDon?.ngayHetHanThanhToan).format('DD/MM/YYYY')}
-							color={'#ff4d4f'}
-						/>
+						<StatBox label='Số tiền cần thanh toán (1-2-3)' value={conLai} color='#ff4d4f' />
 					</Col>
 				</Row>
 
@@ -213,11 +218,11 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 							<InfoItem label='Ngành' value={recHoaDon?.userTenNganh || recHoaDon?.userMaNganh} />
 						</Col>
 
-						{recHoaDon?.ghiChu && (
-							<Col xs={24}>
-								<InfoItem label='Ghi chú' value={recHoaDon?.ghiChu} />
-							</Col>
-						)}
+						{/* {recHoaDon?.ghiChu && ( */}
+						<Col xs={24}>
+							<InfoItem label='Ghi chú' value={recHoaDon?.ghiChu} />
+						</Col>
+						{/* )} */}
 					</Row>
 				</Card>
 

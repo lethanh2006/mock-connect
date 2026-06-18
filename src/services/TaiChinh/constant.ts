@@ -21,6 +21,16 @@ export const EMauTrangThaiThanhToanTable = {
 
 //Giao dịch
 export enum ETransactionType {
+	CHARGE = 'CHARGE',
+	PAYMENT = 'PAYMENT',
+	DISCOUNT = 'DISCOUNT',
+	DEPOSIT_CREDIT = 'DEPOSIT_CREDIT',
+	WALLET_PAYMENT = 'WALLET_PAYMENT',
+	DISCOUNT_LATE = 'DISCOUNT_LATE',
+	DEPOSIT_CLEARING = 'DEPOSIT_CLEARING',
+	FORFEITURE = 'FORFEITURE',
+	REVERSE = 'REVERSE',
+	PENALTY_CHARGE = 'PENALTY_CHARGE',
 	DEPOSIT = 'deposit',
 	WITHDRAW = 'withdraw',
 	INTERNAL = 'internal',
@@ -28,13 +38,33 @@ export enum ETransactionType {
 }
 
 export const transactionType: Record<ETransactionType, string> = {
-	[ETransactionType.DEPOSIT]: 'Nộp tiền',
-	[ETransactionType.WITHDRAW]: 'Rút tiền',
-	[ETransactionType.INTERNAL]: 'Thanh toán',
-	[ETransactionType.REFUND]: 'Hoàn trả',
+	[ETransactionType.CHARGE]: 'CHARGE',
+	[ETransactionType.PAYMENT]: 'PAYMENT',
+	[ETransactionType.DISCOUNT]: 'DISCOUNT',
+	[ETransactionType.DEPOSIT_CREDIT]: 'DEPOSIT_CREDIT',
+	[ETransactionType.WALLET_PAYMENT]: 'WALLET_PAYMENT',
+	[ETransactionType.DISCOUNT_LATE]: 'DISCOUNT_LATE',
+	[ETransactionType.DEPOSIT_CLEARING]: 'DEPOSIT_CLEARING',
+	[ETransactionType.FORFEITURE]: 'FORFEITURE',
+	[ETransactionType.REVERSE]: 'REVERSE',
+	[ETransactionType.PENALTY_CHARGE]: 'PENALTY_CHARGE',
+	[ETransactionType.DEPOSIT]: 'DEPOSIT',
+	[ETransactionType.WITHDRAW]: 'WITHDRAW',
+	[ETransactionType.INTERNAL]: 'INTERNAL',
+	[ETransactionType.REFUND]: 'REFUND',
 };
 
 export const colorTransactionType: Record<ETransactionType, string> = {
+	[ETransactionType.CHARGE]: 'blue',
+	[ETransactionType.PAYMENT]: 'green',
+	[ETransactionType.DISCOUNT]: 'gold',
+	[ETransactionType.DEPOSIT_CREDIT]: 'cyan',
+	[ETransactionType.WALLET_PAYMENT]: 'green',
+	[ETransactionType.DISCOUNT_LATE]: 'gold',
+	[ETransactionType.DEPOSIT_CLEARING]: 'geekblue',
+	[ETransactionType.FORFEITURE]: 'red',
+	[ETransactionType.REVERSE]: 'volcano',
+	[ETransactionType.PENALTY_CHARGE]: 'red',
 	[ETransactionType.DEPOSIT]: 'green',
 	[ETransactionType.WITHDRAW]: 'yellow',
 	[ETransactionType.INTERNAL]: 'purple',
