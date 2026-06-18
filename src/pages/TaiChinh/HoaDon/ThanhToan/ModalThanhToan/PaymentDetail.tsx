@@ -40,8 +40,8 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 
 	const phiThanhToan = method.activeLePhiThanhToan
 		? method.loaiLePhiThanhToanMacDinh === 'TIEN'
-			? method.giaTriLePhiThanhToanMacDinh
-			: (totalThanhToan * method.giaTriLePhiThanhToanMacDinh) / 100
+			? (method.giaTriLePhiThanhToanMacDinh ?? 0)
+			: Math.min((totalThanhToan * (method?.giaTriLePhiThanhToanMacDinh ?? 0)) / 100, method?.mucPhiDichVuToiDa ?? 0)
 		: 0;
 
 	const totalAmountFinal = totalThanhToan + phiThanhToan;

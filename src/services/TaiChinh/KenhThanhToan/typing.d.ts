@@ -18,9 +18,11 @@ declare module KenhThanhToan {
 
         active: boolean;
         activeLePhiThanhToan: boolean;
-        loaiLePhiThanhToanMacDinh: 'PHAN_TRAM' | 'TIEN';
-        giaTriLePhiThanhToanMacDinh: number;
-        moTaLePhiThanhToan: string;
+        loaiLePhiThanhToanMacDinh?: 'PHAN_TRAM' | 'TIEN';
+        giaTriLePhiThanhToanMacDinh?: number;
+        moTaLePhiThanhToan?: string;
+        mucPhiDichVuToiDa?: number;
+
         code: string;
         icon?: string;
         kyHieuBank: string;
@@ -43,6 +45,7 @@ declare module KenhThanhToan {
         urlBankTransInquest: string;
         urlBankInvoice: string;
         productCode: string;
+
         onepayPaymentUrl: string;
         onepayQueryUrl: string;
         onepayVersion: string;
