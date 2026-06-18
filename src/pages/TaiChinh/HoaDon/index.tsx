@@ -4,8 +4,13 @@ import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
-import { inputFormat } from '@/utils/utils';
+import {
+	EMaTrangThaiThanhToan,
+	EMauTrangThaiThanhToanTable,
+	ETrangThaiThanhToan,
+	ETransactionType,
+} from '@/services/TaiChinh/constant';
+import { currencyFormat, inputFormat } from '@/utils/utils';
 import { EyeOutlined, FilePdfOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Empty, Modal, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
@@ -95,36 +100,93 @@ const HoaDonPage = () => {
 			title: 'Hạn thanh toán',
 			dataIndex: 'ngayHetHanThanhToan',
 			width: 150,
-			render: (val, rec) => (
-				<div>
-					<div>{dayjs(val).format('DD/MM/YYYY')}</div>
-					{disableThanhToan(rec) && (
-						<div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12 }}>Quá hạn thanh toán</div>
-					)}
-				</div>
-			),
+			render: (val, rec) => {
+				const ngayHetHan = dayjs(val);
+				const now = dayjs();
+				const soNgayConLai = ngayHetHan.diff(now, 'day', true);
+
+				let extraText = null;
+
+				if (dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) {
+					extraText = <div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12 }}>Quá hạn thanh toán</div>;
+				} else if (soNgayConLai >= 0 && soNgayConLai <= 1) {
+					extraText = <div style={{ color: '#d48806', fontWeight: 500, fontSize: 12 }}>còn 1 ngày</div>;
+				} else if (soNgayConLai > 1 && soNgayConLai <= 10) {
+					extraText = (
+						<div style={{ color: '#52c41a', fontWeight: 500, fontSize: 12 }}>còn {Math.ceil(soNgayConLai)} ngày</div>
+					);
+				}
+
+				return (
+					<div>
+						<div>{ngayHetHan.format('DD/MM/YYYY')}</div>
+						{extraText}
+					</div>
+				);
+			},
 			filterType: 'date',
 		},
 
 		{
-			title: 'Số tiền cần thanh toán',
-			dataIndex: 'soTienPhaiThu',
-			width: 150,
-			align: 'right',
-			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+			title: 'Deduction',
+			width: 200,
+
+			render: (val, rec) => {
+				return (
+					<div>
+						{rec?.transactions
+							?.filter((item) => item.type === ETransactionType.DISCOUNT)
+							?.map((item, index) => (
+								<div style={{ marginBottom: 8 }} key={index}>
+									<div>
+										[{item.maKhoanThu}] {item.tenKhoanThu}
+									</div>
+									<div className='text-primary fw500'>
+										{item.loaiTienTe} {currencyFormat(item.amount)}
+									</div>
+								</div>
+							))}
+					</div>
+				);
+			},
 		},
+
 		{
-			title: 'Số tiền đã thanh toán',
-			dataIndex: 'soTienDaThu',
-			width: 150,
-			align: 'right',
-			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
-		},
-		{
-			title: 'Số tiền còn lại',
+			title: 'Số dư có thể cấn trừ',
 			dataIndex: 'soTienConLai',
-			width: 150,
+			width: 180,
+			sortable: true,
+			render: (val) => <span className='text-primary fw500'>{inputFormat(0)} VND</span>,
+		},
+		{
+			title: 'Tổng charge (1)',
+			dataIndex: 'soTienPhaiThu',
+			width: 180,
+			sortable: true,
+			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+		},
+		{
+			title: 'Tổng deduction (2)',
+			dataIndex: 'soTienKhuyenMai',
+			width: 180,
+			sortable: true,
+			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+		},
+		{
+			title: 'Số tiền đã thanh toán (3)',
+			dataIndex: 'soTienDaThu',
+			width: 130,
 			align: 'right',
+			sortable: true,
+			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+		},
+		{
+			title: 'Số tiền cần thanh toán (1-2-3)',
+			dataIndex: 'soTienConLai',
+			width: 130,
+			align: 'right',
+			sortable: true,
+
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
 		},
 		{
