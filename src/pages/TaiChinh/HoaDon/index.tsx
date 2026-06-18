@@ -18,13 +18,14 @@ import ThongTinThanhToan from './ThanhToan/ThongTinThanhToan';
 /** Kiểm tra nút thanh toán có bị disable không: ngoài thời gian thanh toán */
 export const disableThanhToan = (rec?: HoaDon.IRecord): boolean => {
 	if (!rec) return true;
-	// Check hạn thanh toán từ hóa đơn
-	if (rec.ngayHetHanThanhToan && dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) return true;
+
 	// Check thời gian đợt thu
-	if (rec.dotThu?._id && rec.dotThu?.thoiGianKetThuc && rec.dotThu.kichHoat) {
-		if (dayjs().isBefore(dayjs(rec.dotThu.thoiGianBatDau)) || dayjs().isAfter(dayjs(rec.dotThu.thoiGianKetThuc)))
-			return true;
-	}
+	// if (rec.dotThu?._id && rec.dotThu?.thoiGianKetThuc && rec.dotThu.kichHoat) {
+	// 	if (dayjs().isBefore(dayjs(rec.dotThu.thoiGianBatDau)) || dayjs().isAfter(dayjs(rec.dotThu.thoiGianKetThuc)))
+	// 		return true;
+	// }
+
+	if (rec?.status === EMaTrangThaiThanhToan.DONG) return true;
 	return false;
 };
 
@@ -204,7 +205,12 @@ const HoaDonPage = () => {
 				title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}
 				widthDrawer={1000}
 				otherProps={{
-					rowClassName: (rec: HoaDon.IRecord) => (disableThanhToan(rec) ? 'row-qua-han' : ''),
+					rowClassName: (rec: HoaDon.IRecord) => {
+						// Check hạn thanh toán từ hóa đơn
+						if (rec.ngayHetHanThanhToan && dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) return 'row-qua-han';
+
+						return '';
+					},
 					onRow: (rec: HoaDon.IRecord) => ({
 						onClick: () => handleDetail(rec),
 						style: { cursor: 'pointer' },
