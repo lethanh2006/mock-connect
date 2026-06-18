@@ -537,28 +537,28 @@ export default [
 	// },
 
 	// TÀI CHÍNH
-	// {
-	// 	name: 'TaiChinh',
-	// 	icon: 'TransactionOutlined',
-	// 	path: '/tai-chinh',
-	// 	routes: [
-	// 		{
-	// 			name: 'CongNo',
-	// 			path: 'cong-no',
-	// 			component: 'TaiChinh/HoaDon',
-	// 		},
-	// 		{
-	// 			name: 'GiaoDich',
-	// 			path: 'giao-dich',
-	// 			component: 'TaiChinh/GiaoDich',
-	// 		},
-	// 		{
-	// 			name: 'UuDaiThanhToan',
-	// 			path: 'uu-dai-thanh-toan',
-	// 			component: 'TaiChinh/UuDaiThanhToan',
-	// 		},
-	// 	],
-	// },
+	{
+		name: 'TaiChinh',
+		icon: 'TransactionOutlined',
+		path: '/tai-chinh',
+		routes: [
+			{
+				name: 'CongNo',
+				path: 'cong-no',
+				component: 'TaiChinh/HoaDon',
+			},
+			// {
+			// 	name: 'GiaoDich',
+			// 	path: 'giao-dich',
+			// 	component: 'TaiChinh/GiaoDich',
+			// },
+			// {
+			// 	name: 'UuDaiThanhToan',
+			// 	path: 'uu-dai-thanh-toan',
+			// 	component: 'TaiChinh/UuDaiThanhToan',
+			// },
+		],
+	},
 
 	// TIỆN ÍCH
 	{
