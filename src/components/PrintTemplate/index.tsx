@@ -20,15 +20,12 @@ const PrintTemplate = React.forwardRef(
 			hideTieuNgu?: boolean;
 			isCompact?: boolean;
 
-			/** Nếu ẩn Tiểu ngữ có thể custom tiểu ngữ */
-			tieuNgu?: React.ReactNode;
-
 			/** Tên Phòng ban hiển thị dưới tên trường */
 			tenPhongBan?: string;
 		},
 		ref: any,
 	) => {
-		const { children, title, subTitle, footer, hideTieuNgu, isCompact, tenPhongBan, tieuNgu } = props;
+		const { children, title, subTitle, footer, hideTieuNgu, isCompact, tenPhongBan } = props;
 		const intl = useIntl();
 		// const contentRef = useRef(null);
 
@@ -76,8 +73,6 @@ const PrintTemplate = React.forwardRef(
 							</Col>
 						</Row>
 					) : null}
-
-					{tieuNgu}
 
 					<div className='title'>{title}</div>
 					<div className='sub-title'>{subTitle}</div>
