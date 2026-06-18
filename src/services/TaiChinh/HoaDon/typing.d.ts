@@ -21,6 +21,16 @@ declare module HoaDon {
 		urlBienLai?: string;
 		maBienLai?: string;
 		billItems?: IBillItem[];
+
+		soTienPhaiThu?: number;
+		soTienKhuyenMai?: number;
+		soTienConLai?: number;
+		soTienDaThu?: number;
+
+		transactions?: ITransaction[];
+		loaiTienTe?: string;
+
+		ghiChu?: string;
 	}
 
 	interface IKhachHang {
@@ -32,6 +42,18 @@ declare module HoaDon {
 		userDOB: string;
 		userPhone: string;
 		userMetadata?: Record;
+
+		userTenKhoa?: string;
+		userMaKhoaSinhVien?: string
+
+		userTenNganh?: string;
+		userMaNganh?: string;
+
+		userLopHanhChinh?: string;
+
+		userTenTinhChat?: string;
+		userMaTinhChat?: string;
+
 	}
 
 	export interface IBillItem {
@@ -60,5 +82,84 @@ declare module HoaDon {
 		status: EMaTrangThaiThanhToan;
 		createdAt?: Date;
 		updatedAt?: Date;
+	}
+
+	export interface ITransaction {
+		_id: string;
+		amount: number;
+		amountAvailable?: number | null;
+		bankName?: string | null;
+		billId: string;
+		billIdentityCode: string;
+		createdAt: string; // Hoặc Date nếu bạn parse thủ công
+		createdById?: string | null;
+		createdByUsername?: string | null;
+		dataPartitionCode?: string | null;
+		debitCredit: 'DEBIT' | 'CREDIT' | string;
+		deletedById?: string | null;
+		deletedByUsername?: string | null;
+		externalAlias?: string | null;
+		externalIdentityCode?: string | null;
+		externalQrCode?: string | null;
+		fromAccount: string;
+		fullBill: boolean;
+		ghiChu: string;
+		idDotThu: string;
+		idDotThuTruocHocPhi?: string | null;
+		identityCode: string;
+		identityCodeIn?: string | null;
+		isDoiSoat: boolean;
+		isManual: boolean;
+		loaiTienTe: 'VND' | string;
+		manualUserCode: string;
+		manualUserEmail?: string | null;
+		manualUserFullname: string;
+		manualUserPhone?: string | null;
+		manualUserSsoId: string;
+		mbBillNumber?: string | null;
+		name: string;
+		ngayDoiSoat?: string | null;
+		oldTransDate?: string | null;
+		paymentType: 'manual' | string;
+		requestData?: any | null;
+		requestId?: string | null;
+		responseData?: any | null;
+		shbCreateAliasMsgId?: string | null;
+		shbDebtQrCode?: string | null;
+		status: 'success' | 'failed' | string;
+		toAccount: string;
+		transactionDate?: string | null;
+		transactionId?: string | null;
+		type: string; //'CHARGE' | 'DISCOUNT' | 'PAYMENT'
+		updatedAt: string;
+		updatedById?: string | null;
+		updatedByUsername?: string | null;
+		userAddress?: string | null;
+		userCode: string;
+		userCodeClose?: string | null;
+		userDOB?: string | null;
+		userEmail: string;
+		userFullname: string;
+		userFullnameClose?: string | null;
+		userIdClose?: string | null;
+		userLopHanhChinh?: string | null;
+		userMaKhoaSinhVien: string;
+		userMaNganh: string;
+		userMetadata?: any | null;
+		userPhone?: string | null;
+		userSsoId: string;
+		userUuDaiBillId?: string | null;
+		vnpayTransactionNo?: string | null;
+
+		maKhoanThu?: string;
+		tenKhoanThu?: string;
+		maMucThu?: string;
+		tenMucThu?: string;
+		maKyHoc?: string;
+		tenKyHoc?: string;
+		donGia?: number;
+
+		soLuong?: number;
+		quantity?: number
 	}
 }
