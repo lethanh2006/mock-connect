@@ -108,19 +108,19 @@ const HoaDonPage = () => {
 				let extraText = null;
 
 				if (dayjs().isAfter(dayjs(rec.ngayHetHanThanhToan), 'day')) {
-					extraText = <div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12 }}>Quá hạn thanh toán</div>;
+					extraText = <div style={{ color: '#cf1322', fontWeight: 500, fontSize: 12 }}>Đã hết hạn</div>;
 				} else if (soNgayConLai >= 0 && soNgayConLai <= 1) {
-					extraText = <div style={{ color: '#d48806', fontWeight: 500, fontSize: 12 }}>còn 1 ngày</div>;
+					extraText = <div style={{ color: '#d48806', fontWeight: 500, fontSize: 12 }}>Còn 1 ngày</div>;
 				} else if (soNgayConLai > 1 && soNgayConLai <= 10) {
 					extraText = (
-						<div style={{ color: '#52c41a', fontWeight: 500, fontSize: 12 }}>còn {Math.ceil(soNgayConLai)} ngày</div>
+						<div style={{ color: '#52c41a', fontWeight: 500, fontSize: 12 }}>Còn {Math.ceil(soNgayConLai)} ngày</div>
 					);
 				}
 
 				return (
 					<div>
 						<div>{ngayHetHan.format('DD/MM/YYYY')}</div>
-						{extraText}
+						{rec?.status !== EMaTrangThaiThanhToan.DA_THANH_TOAN_DU && extraText}
 					</div>
 				);
 			},
