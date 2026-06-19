@@ -1,3 +1,4 @@
+import { EOperatorType } from '@/components/Table/constant';
 import { KenhThanhToan } from '@/services/TaiChinh/KenhThanhToan/typing';
 import { Col, Modal, Row } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
@@ -18,17 +19,34 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 
 	const [selectedMethod, setSelectedMethod] = useState<KenhThanhToan.IRecord | null>(null);
 
-	// Load danh sách kênh thanh toán khi modal mở
 	useEffect(() => {
-		if (visible) {
-			getKenhThanhToan(undefined, undefined, { active: true })
-				.then((res) => {
-					if (res.length && !selectedMethod) {
-						setSelectedMethod(res.find((k) => k.isMacDinh) ?? res[0]);
+		if (!visible) return;
+
+		// Step 1: Tìm kênh thanh toán mặc định (isMacDinh: true)
+		getKenhThanhToan(undefined, undefined, { active: true }, [
+			{ field: 'isMacDinh', operator: EOperatorType.EQUAL, values: ['true'] },
+		])
+			.then((res: any) => {
+				if (!res?.data?.length) {
+					// Step 2: Không có kênh mặc định →  dùng kenhThanhToanIds từ đợt thu
+					const kenhThanhToanIds = recHoaDon?.dotThu?.kenhThanhToanIds;
+					if (kenhThanhToanIds?.length) {
+						return getKenhThanhToan(undefined, undefined, { active: true }, [
+							{ field: '_id', operator: EOperatorType.INCLUDE, values: kenhThanhToanIds },
+						]);
 					}
-				})
-				.catch((er) => console.log(er));
-		}
+					return;
+				}
+				if (!selectedMethod) {
+					setSelectedMethod(res.data.find((k: any) => k.isMacDinh) ?? res?.data?.[0]);
+				}
+			})
+			.then((resFallback: any) => {
+				if (resFallback?.data?.length && !selectedMethod) {
+					setSelectedMethod(resFallback.data[0]);
+				}
+			})
+			.catch((er) => console.log(er));
 	}, [visible]);
 
 	// Tính tổng tiền từ transactions

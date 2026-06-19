@@ -19,6 +19,7 @@ declare module DotThuTaiChinh {
 		metadata?: Record;
 
 		kenhThanhToanId?: string;
+		kenhThanhToanIds?: string[];
 		kenhThanhToan?: HinhThucThanhToan.IRecord;
 	}
 }
