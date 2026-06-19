@@ -1,7 +1,7 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
-import { TRANSACTION_COLOR, TRANSACTION_LABEL } from '@/services/TaiChinh/constant';
+import { colorTransactionType, ETransactionType, transactionType } from '@/services/TaiChinh/constant';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
 import { inputFormat } from '@/utils/utils';
 import { AppstoreAddOutlined } from '@ant-design/icons';
@@ -58,7 +58,8 @@ const FormItemHoaDonChiTiet = () => {
 			dataIndex: 'type',
 			width: 130,
 			align: 'center',
-			render: (val) => <Tag color={TRANSACTION_COLOR[val] ?? 'default'}>{TRANSACTION_LABEL[val] ?? val ?? '--'}</Tag>,
+			render: (val: ETransactionType) =>
+				val ? <Tag color={colorTransactionType[val]}>{transactionType[val]}</Tag> : '--',
 		},
 		{
 			title: 'Số tiền',
@@ -83,11 +84,18 @@ const FormItemHoaDonChiTiet = () => {
 			render: (val) => (val ? dayjs(val).format('HH:mm DD/MM/YYYY') : '-'),
 		},
 		{
-			title: 'Ghi chú',
-			dataIndex: 'ghiChu',
-			width: 220,
-			render: (val) => val || '-',
+			title: 'Giao dịch',
+			dataIndex: 'isManual',
+			width: 150,
+			align: 'center',
+			render: (val: boolean) => <Tag color={val ? 'blue' : 'green'}>{val ? 'Thủ công' : 'Hệ thống'}</Tag>,
 		},
+		// {
+		// 	title: 'Ghi chú',
+		// 	dataIndex: 'ghiChu',
+		// 	width: 220,
+		// 	render: (val) => val || '-',
+		// },
 	];
 
 	return (
