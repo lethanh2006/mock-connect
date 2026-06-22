@@ -192,7 +192,6 @@ const HoaDonPage = () => {
 			width: 180,
 			sortable: true,
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
-			fixed: 'right',
 		},
 		{
 			title: 'Tổng phí giảm trừ (2)',
@@ -200,7 +199,6 @@ const HoaDonPage = () => {
 			width: 180,
 			sortable: true,
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
-			fixed: 'right',
 		},
 		{
 			title: 'Tổng tiền đã thanh toán (3)',
@@ -209,7 +207,6 @@ const HoaDonPage = () => {
 			align: 'right',
 			sortable: true,
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
-			fixed: 'right',
 		},
 		{
 			title:  'Tổng tiền cần thanh toán (1-2-3)',
