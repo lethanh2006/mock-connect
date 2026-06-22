@@ -3,7 +3,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { colorTransactionType, ETransactionType, transactionType } from '@/services/TaiChinh/constant';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { inputFormat } from '@/utils/utils';
+import { currencyFormat, inputFormat } from '@/utils/utils';
 import { AppstoreAddOutlined } from '@ant-design/icons';
 import { Col, Row, Tag } from 'antd';
 import dayjs from 'dayjs';
@@ -30,10 +30,18 @@ const FormItemHoaDonChiTiet = () => {
 
 	const columns: IColumn<HoaDon.ITransaction & { index: number }>[] = [
 		{
+			title: 'Loại giao dịch',
+			dataIndex: 'type',
+			width: 130,
+			align: 'center',
+			render: (val: ETransactionType) =>
+				val ? <Tag color={colorTransactionType[val]}>{transactionType[val]}</Tag> : '--',
+		},
+		{
 			title: 'Mã giao dịch',
 			dataIndex: 'identityCode',
-			width: 130,
-			render: (val) => val || '-',
+			width: 140,
+			render: (val) => val ?? '-',
 		},
 		// {
 		// 	title: 'Khoản thu',
@@ -54,21 +62,39 @@ const FormItemHoaDonChiTiet = () => {
 		// 	render: (val, rec) => val || rec?.maKyHoc || '-',
 		// },
 		{
-			title: 'Loại giao dịch',
-			dataIndex: 'type',
-			width: 130,
-			align: 'center',
-			render: (val: ETransactionType) =>
-				val ? <Tag color={colorTransactionType[val]}>{transactionType[val]}</Tag> : '--',
+			title: 'Tên khoản thu',
+			dataIndex: 'tenKhoanThu',
+			width: 200,
+			render: (val, rec) => val ?? rec?.ten ?? rec?.name ?? '-',
 		},
 		{
-			title: 'Số tiền',
-			dataIndex: 'amount',
-			width: 120,
-			align: 'right',
-			render: (val) => inputFormat(val ?? 0),
+			title: 'Đơn vị tính',
+			dataIndex: 'unitLabel',
+			width: 110,
+			align: 'center',
+			render: (val) => val ?? '-',
 		},
-
+		{
+			title: 'Số lượng',
+			dataIndex: 'quantity',
+			width: 100,
+			align: 'right',
+			render: (val) => val ?? '-',
+		},
+		{
+			title: 'Đơn giá',
+			dataIndex: 'unitAmount',
+			width: 140,
+			align: 'right',
+			render: (val) => (val != null ? `${currencyFormat(val)} VND` : '-'),
+		},
+		{
+			title: 'Thành tiền',
+			dataIndex: 'amount',
+			width: 140,
+			align: 'right',
+			render: (val) => <span className='fw500'>{currencyFormat(val ?? 0)} VND</span>,
+		},
 		{
 			title: 'Ngày tạo',
 			dataIndex: 'createdAt',
@@ -88,8 +114,8 @@ const FormItemHoaDonChiTiet = () => {
 			dataIndex: 'isManual',
 			width: 150,
 			align: 'center',
-			render: (val: boolean) => <Tag color={val ? 'blue' : 'green'}>{val ? 'Thủ công' : 'Hệ thống'}</Tag>,
-		},
+			render: (val: boolean) => <Tag color={val ? 'blue' : 'green'} >{val ? 'Thủ công' : 'Hệ thống'}</Tag>
+		}
 		// {
 		// 	title: 'Ghi chú',
 		// 	dataIndex: 'ghiChu',

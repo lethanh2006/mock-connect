@@ -128,9 +128,35 @@ const HoaDonPage = () => {
 		},
 
 		{
-			title: 'Deduction',
+			title: 'Phí phải nộp',
 			width: 200,
+			// hide: releaseFilter === 'RELEASED',
+			render: (val, rec) => {
+				return (
+					<div>
+						{rec?.transactions
+							?.filter((item) => item.type === ETransactionType.CHARGE)
+							?.map((item, index) => (
+								<div style={{ marginBottom: 8 }} key={index}>
+									<div>
+										[{item.maKhoanThu}] {item.tenKhoanThu}
+									</div>
+									<div className='text-primary fw500'>
+										{item.loaiTienTe} {currencyFormat(item.amount)}
+									</div>
+								</div>
+							))}
+					</div>
+				);
+			},
+			
 
+		},
+
+			{
+			title: 'Phí giảm trừ',
+			width: 200,
+			// hide: releaseFilter === 'RELEASED',
 			render: (val, rec) => {
 				return (
 					<div>
@@ -149,46 +175,52 @@ const HoaDonPage = () => {
 					</div>
 				);
 			},
+	
+
 		},
 
+		// {
+		// 	title: 'Số dư có thể cấn trừ',
+		// 	dataIndex: 'soTienConLai',
+		// 	width: 180,
+		// 	sortable: true,
+		// 	render: (val) => <span className='text-primary fw500'>{inputFormat(0)} VND</span>,
+		// },
 		{
-			title: 'Số dư có thể cấn trừ',
-			dataIndex: 'soTienConLai',
-			width: 180,
-			sortable: true,
-			render: (val) => <span className='text-primary fw500'>{inputFormat(0)} VND</span>,
-		},
-		{
-			title: 'Tổng charge (1)',
+			title: 'Tổng phí phải nộp (1)',
 			dataIndex: 'soTienPhaiThu',
 			width: 180,
 			sortable: true,
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+			fixed: 'right',
 		},
 		{
-			title: 'Tổng deduction (2)',
+			title: 'Tổng phí giảm trừ (2)',
 			dataIndex: 'soTienKhuyenMai',
 			width: 180,
 			sortable: true,
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+			fixed: 'right',
 		},
 		{
-			title: 'Số tiền đã thanh toán (3)',
+			title: 'Tổng tiền đã thanh toán (3)',
 			dataIndex: 'soTienDaThu',
-			width: 130,
+			width: 180,
 			align: 'right',
 			sortable: true,
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+			fixed: 'right',
 		},
 		{
-			title: 'Số tiền cần thanh toán (1-2-3)',
+			title:  'Tổng tiền cần thanh toán (1-2-3)',
 			dataIndex: 'soTienConLai',
-			width: 130,
+			width: 180,
 			align: 'right',
 			sortable: true,
-
 			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+			fixed: 'right',
 		},
+
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.trangthai' }),
 			dataIndex: 'status',

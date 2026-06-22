@@ -1,6 +1,6 @@
 import { EOperatorType } from '@/components/Table/constant';
 import { KenhThanhToan } from '@/services/TaiChinh/KenhThanhToan/typing';
-import { Col, Modal, Row } from 'antd';
+import { Col, Modal, Row, Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import PaymentDetail from './PaymentDetail';
@@ -18,9 +18,12 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 	const { thanhToanMomoModel, loading: loadingPayment } = useModel('taichinh.giaodich');
 
 	const [selectedMethod, setSelectedMethod] = useState<KenhThanhToan.IRecord | null>(null);
+	const [loadingKenhThanhToan, setLoadingKenhThanhToan] = useState(false);
 
 	useEffect(() => {
 		if (!visible) return;
+
+		setLoadingKenhThanhToan(true);
 
 		// Step 1: Tìm kênh thanh toán mặc định (isMacDinh: true)
 		getKenhThanhToan(undefined, undefined, { active: true }, [
@@ -46,8 +49,19 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 					setSelectedMethod(resFallback.data[0]);
 				}
 			})
-			.catch((er) => console.log(er));
+			.catch((er) => console.log(er))
+			.finally(() => {
+				setLoadingKenhThanhToan(false);
+			});
 	}, [visible]);
+
+	// Auto-select kênh thanh toán đầu tiên khi danhSachKenh có data mà chưa có selectedMethod
+	useEffect(() => {
+		if (!selectedMethod && danhSachKenh?.length) {
+			const defaultMethod = danhSachKenh.find((k: any) => k.isMacDinh) ?? danhSachKenh[0];
+			setSelectedMethod(defaultMethod);
+		}
+	}, [danhSachKenh, selectedMethod]);
 
 	// Tính tổng tiền từ transactions
 	const totalAmount = useMemo(() => {
@@ -65,8 +79,13 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 			className='modal-thanh-toan'
 		>
 			<Row gutter={0} style={{ minHeight: 500 }}>
-				<Col span={7} style={{ borderRight: '1px solid #f0f0f0' }}>
-					<PaymentMethodList methods={danhSachKenh} selectedMethod={selectedMethod} onChange={setSelectedMethod} />
+				<Col span={7} style={{ borderRight: '1px solid #f0f0f0', position: 'relative' }}>
+					<PaymentMethodList
+						methods={danhSachKenh}
+						selectedMethod={selectedMethod}
+						onChange={setSelectedMethod}
+						loading={loadingKenhThanhToan}
+					/>
 				</Col>
 				<Col span={17}>
 					{selectedMethod && (
