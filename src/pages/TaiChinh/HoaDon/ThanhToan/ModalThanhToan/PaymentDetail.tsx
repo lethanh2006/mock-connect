@@ -44,7 +44,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			: Math.min((totalThanhToan * (method?.giaTriLePhiThanhToanMacDinh ?? 0)) / 100, method?.mucPhiDichVuToiDa ?? 0)
 		: 0;
 
-	const totalAmountFinal = totalThanhToan + phiThanhToan;
+	const totalAmountFinal = totalThanhToan; // + phiThanhToan;
 
 	const handlePayment = async () => {
 		// if (method.phuongThucThanhToan === 'ONEPAY') {
@@ -107,10 +107,11 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 				</div>
 
 				{/* {phiThanhToan > 0 && ( */}
-				<div className='payment-detail__summary-row'>
+				{/* bỏ phí thanh toán */}
+				{/* <div className='payment-detail__summary-row'>
 					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.phigiaodich' })}</span>
 					<span>{inputFormat(phiThanhToan)}đ</span>
-				</div>
+				</div> */}
 				{/* )} */}
 
 				<div className='payment-detail__total'>

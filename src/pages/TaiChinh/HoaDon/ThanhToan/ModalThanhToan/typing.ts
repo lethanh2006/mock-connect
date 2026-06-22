@@ -23,6 +23,7 @@ export interface PaymentMethodListProps {
     methods: KenhThanhToan.IRecord[];
     selectedMethod: KenhThanhToan.IRecord | null;
     onChange: (method: KenhThanhToan.IRecord) => void;
+    loading?: boolean;
 }
 
 /** Props cho PaymentDetail */
