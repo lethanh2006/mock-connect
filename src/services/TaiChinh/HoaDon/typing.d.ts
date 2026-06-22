@@ -53,7 +53,8 @@ declare module HoaDon {
 
 		userTenTinhChat?: string;
 		userMaTinhChat?: string;
-
+		userTrangThaiSv?: string;
+		userTrangThaiHoc?: string;
 	}
 
 	export interface IBillItem {
@@ -161,5 +162,8 @@ declare module HoaDon {
 
 		soLuong?: number;
 		quantity?: number
+		ten?: string;
+		unitLabel?: string;
+		unitAmount?: number;
 	}
 }

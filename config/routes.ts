@@ -16,7 +16,7 @@ export default [
 	{
 		name: 'DashboardGroup',
 		path: '/__group__/dashboard',
-		disabled: true,
+		disabled: true
 	},
 
 	///////////////////////////////////
@@ -446,7 +446,7 @@ export default [
 			{
 				name: 'MyCCT',
 				path: 'co-curricular-transcript',
-				component: 'CCT/MyCCTV2',
+				component: 'CCT/MyCCT',
 			},
 		],
 	},
