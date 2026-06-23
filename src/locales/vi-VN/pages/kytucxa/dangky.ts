@@ -121,6 +121,7 @@ export default {
     'kytucxa.dangky.table.emergencyContact.action': 'Thao tác',
 	'kytucxa.dangky.table.emergencyContact.deleteConfirm': 'Bạn có chắc chắn muốn xóa liên hệ này không?',
     'kytucxa.dangky.table.emergencyContact.msg.min2Contacts': 'Vui lòng thêm ít nhất 2 liên hệ khẩn cấp',
+    'kytucxa.dangky.form.msg.emergencyContactsRequired': 'Vui lòng điền đầy đủ thông tin cho tất cả các liên hệ khẩn cấp',
 
     'kytucxa.dangky.form.close': 'ĐÓNG',
     'kytucxa.dangky.form.save': 'LƯU',

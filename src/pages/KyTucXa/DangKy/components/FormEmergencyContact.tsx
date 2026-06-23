@@ -31,7 +31,14 @@ const FormEmergencyContactKTX: React.FC<FormEmergencyContactProps> = ({
 
 	useEffect(() => {
 		if (visible && initialData) {
-			form.setFieldsValue(initialData);
+			const sanitizedData = { ...initialData };
+			Object.keys(sanitizedData).forEach((key) => {
+				const val = sanitizedData[key as keyof EmergencyContact];
+				if (val === '-') {
+					(sanitizedData as any)[key] = undefined;
+				}
+			});
+			form.setFieldsValue(sanitizedData);
 		} else if (visible && !initialData) {
 			form.resetFields();
 		}

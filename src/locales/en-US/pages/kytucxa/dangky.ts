@@ -121,6 +121,7 @@ export default {
 	'kytucxa.dangky.table.emergencyContact.action': 'Action',
 	'kytucxa.dangky.table.emergencyContact.deleteConfirm': 'Are you sure you want to delete this contact?',
 	'kytucxa.dangky.table.emergencyContact.msg.min2Contacts': 'Please add at least two emergency contacts',
+	'kytucxa.dangky.form.msg.emergencyContactsRequired': 'Please fill in all information for all emergency contacts',
 	
 	'kytucxa.dangky.form.close': 'CLOSE',
 	'kytucxa.dangky.form.save': 'SAVE',

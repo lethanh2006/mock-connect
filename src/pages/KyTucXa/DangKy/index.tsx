@@ -11,7 +11,7 @@ import RoomDetailModal from './components/ModalDetailRoom';
 import SelectToaNhaKTX from './components/SelectToaNha';
 import SelectFloorKTX from './components/SelectFloor';
 import './style.less';
-import { FilterIconCustom } from './components/IconsRoom';
+// import { FilterIconCustom } from './components/IconsRoom';
 import { ETrangThaiDuyet } from '@/services/KyTucXa/constant';
 import SelectCapacityKTX from './components/SelectCapacity';
 import SelectRoomTypeKTX from './components/SelectRoomType';
@@ -199,23 +199,23 @@ const DangKyKyTucXaPage = () => {
 					<div className='ktx-page__main-card'>
 						<div className='ktx-page__filter-bar'>
 							<Row gutter={[12, 8]} align='middle' wrap={false}>
-								<Col flex='none' style={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
+								{/* <Col flex='none' style={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
 									<FilterIconCustom />
-								</Col>
+								</Col> */}
 
 								<Col flex='220px'>
-									<SelectToaNhaKTX 
-										value={selectedToa} 
-										onChange={handleChangeToa} 
-										allowClear={true} 
-										danhSachMaToa={danhSachMaToaHienTai} 
+									<SelectToaNhaKTX
+										value={selectedToa}
+										onChange={handleChangeToa}
+										allowClear={true}
+										danhSachMaToa={danhSachMaToaHienTai}
 									/>
 								</Col>
 
 								<Col flex='220px'>
 									<SelectFloorKTX value={selectedFloor} onChange={handleChangeFloor} allowClear={true} />
 								</Col>
-								
+
 								<Col flex='220px'>
 									<SelectRoomTypeKTX value={selectedRoomType} onChange={setSelectedRoomType} allowClear={true} />
 								</Col>
@@ -294,9 +294,9 @@ const DangKyKyTucXaPage = () => {
 					/>
 
 					<FormDangKy />
-					<ModalSuccessRegistration 
-						open={visibleAutoSuccess} 
-						onClose={() => setVisibleAutoSuccess(false)} 
+					<ModalSuccessRegistration
+						open={visibleAutoSuccess}
+						onClose={() => setVisibleAutoSuccess(false)}
 						phong={(danhSachPhong as KyTucXa.IPhong[])?.find(p => p.ma === maPhongDaDangKy) || activeRegistration?.phong}
 					/>
 				</>

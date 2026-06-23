@@ -16,7 +16,7 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 	const [visibleForm, setVisibleForm] = useState(false);
 	const [editingRecord, setEditingRecord] = useState<EmergencyContact | null>(null);
 	const [reloading, setReloading] = useState(false);
-	
+
 	const handleAdd = () => {
 		setEditingRecord(null);
 		setVisibleForm(true);

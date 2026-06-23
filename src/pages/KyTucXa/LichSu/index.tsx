@@ -8,7 +8,6 @@ import { KyTucXa } from '@/services/KyTucXa/typings';
 import FormLichSuDk from '@/pages/KyTucXa/LichSu/components/FormDangKy'; 
 import "@/pages/KyTucXa/DangKy/style.less"
 import SelectDotDangKyKTX from './components/SelectDotDangKy';
-import { FilterIconCustom } from '@/pages/KyTucXa/DangKy/components/IconsRoom';
 import { UnorderedListOutlined, DeleteOutlined, DollarOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Popover } from 'antd';
 import PaymentModal from './components/ModalPayment';
@@ -217,7 +216,6 @@ const LichSuDangKyKTX = () => {
 				widthDrawer={1000}
 			>
                 <div key='select-dot' style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 12, padding: '0 16px 16px 0' }}>
-                    <FilterIconCustom />
                     <SelectDotDangKyKTX
                         value={selectedDotId}
                         onChange={setSelectedDotId}
