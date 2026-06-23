@@ -1,13 +1,14 @@
 import { tienVietNam } from '@/utils/utils';
+import { getLocale } from '@umijs/max';
 import { Empty } from 'antd';
 import type { ApexOptions } from 'apexcharts';
-import vi from 'apexcharts/dist/locales/vi.json';
 import en from 'apexcharts/dist/locales/en.json';
+import vi from 'apexcharts/dist/locales/vi.json';
+import { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { useMediaQuery } from 'react-responsive';
 import type { DataChartType } from '.';
 import './style.less';
-import { getLocale } from '@umijs/max';
 
 const BarChart = (props: DataChartType) => {
 	const { title, xAxis, yAxis, yLabel, height = 350, formatY, otherOptions } = props;
@@ -71,10 +72,16 @@ const BarChart = (props: DataChartType) => {
 		legend: { show: yLabel.length > 1 },
 	};
 
-	const series = yLabel.map((label, index) => ({
-		name: label,
-		data: yAxis[index] ?? [],
-	}));
+	const series = useMemo(
+		() =>
+			yLabel.map((label, index) => ({
+				name: label,
+				data: yAxis[index] ?? [],
+			})),
+		[yLabel, yAxis],
+	);
+
+	const chartOptions = useMemo(() => ({ ...options, ...otherOptions }), [options, otherOptions]);
 
 	return (
 		<div
@@ -84,13 +91,7 @@ const BarChart = (props: DataChartType) => {
 				overflowY: 'auto',
 			}}
 		>
-			<Chart
-				options={{ ...options, ...otherOptions }}
-				series={series}
-				type='bar'
-				width='100%'
-				height={dynamicChartHeight}
-			/>
+			<Chart options={chartOptions} series={series} type='bar' width='100%' height={dynamicChartHeight} />
 		</div>
 	);
 };

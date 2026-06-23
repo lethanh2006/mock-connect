@@ -1,5 +1,7 @@
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
+import type { ChuongTrinhDaoTao } from '../ChuongTrinhDaoTao/typing';
+import type { ELoaiHocPhanCTDT } from '../constant';
 import { type HocPhan } from '../HocPhan/typings';
 import type { SinhVien } from '../SinhVien/typings';
 import type {
@@ -97,6 +99,26 @@ declare module DangKyTinChi {
 		hpHocTruoc?: Partial<HocPhan.IRecord>;
 	}
 
+	export type TThongTinCtdtHocPhan = {
+		tenKhoi?: string | null;
+		loai?: ELoaiHocPhanCTDT;
+		khoiKienThuc?: Partial<Pick<ChuongTrinhDaoTao.IKhoiKienThuc, 'ma' | 'ten' | 'maCha'>>;
+		maKhoiKienThuc?: string;
+		soThuTuKy?: number;
+		ten?: string;
+		chuyenNganh?: { ten?: string };
+		dsHocPhanTienQuyet?: ChuongTrinhDaoTao.THocPhanTuongQuan[] | null;
+		dsHocPhanTruoc?: ChuongTrinhDaoTao.THocPhanTuongQuan[] | null;
+		dsHocPhanSongHanh?: ChuongTrinhDaoTao.THocPhanTuongQuan[] | null;
+	};
+
+	export interface IChiTietHocPhanDangKyTinChi {
+		maHocPhan?: string;
+		tenHocPhan?: string;
+		soTinChi?: number;
+		thongTinCtdt?: TThongTinCtdtHocPhan[];
+	}
+
 	export interface AuditLog {
 		_id: string;
 		uId: string;
@@ -113,7 +135,7 @@ declare module DangKyTinChi {
 		ua?: unknown;
 		userAgent?: string;
 		response?: { data?: unknown | DangKyTinChi.ILopDangKy };
-		createdAt?: Date;
+		createdAt?: string;
 	}
 
 	export interface ICauHinhWaitlist {

@@ -403,6 +403,8 @@ export const TableHeader: React.FC = () => {
 						</div>
 					</Tooltip>
 				)}
+
+				{otherExtra}
 			</div>
 		</div>
 	);

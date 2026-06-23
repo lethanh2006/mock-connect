@@ -1,11 +1,9 @@
 import PageCard from '@/components/PageCard';
-import { TabViewPage } from '@/components/TabViewPage';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import { PicCenterOutlined, SnippetsOutlined } from '@ant-design/icons';
+import { Divider } from 'antd';
 import { useIntl, useModel } from 'umi';
 import KetQuaToanKhoaSinhVien from './KetQuaToanKhoa';
 import DiemThanhPhanSV from './components/DiemThanhPhanSV';
-import MayTinhThongMinh from './components/MayTinhThongMinh';
 
 const KetQuaHocTap = () => {
 	const intl = useIntl();
@@ -13,13 +11,15 @@ const KetQuaHocTap = () => {
 
 	return (
 		<PageCard
-			title='Grades & Transcript'
+			title={intl.formatMessage({ id: 'menu.Academic.GradesTranscript' })}
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<KetQuaToanKhoaSinhVien maKhoaNganh={maKhoaNganh} loadData={false} />
 
-			<div style={{ marginTop: 8 }}>
-				<TabViewPage
+			<Divider className='divider-big-title' dashed orientation='left'>
+				{intl.formatMessage({ id: 'ketquahoctap.diemtongket' })}
+			</Divider>
+			{/* <TabViewPage
 					hideCard
 					menu={[
 						{
@@ -28,15 +28,15 @@ const KetQuaHocTap = () => {
 							content: <DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />,
 							icon: <PicCenterOutlined />,
 						},
-						{
-							title: intl.formatMessage({ id: 'ketquahoctap.maytinh' }),
-							menuKey: 'may-tinh',
-							content: <MayTinhThongMinh maKhoaNganh={maKhoaNganh} />,
-							icon: <SnippetsOutlined />,
-						},
+						// {
+						// 	title: intl.formatMessage({ id: 'ketquahoctap.maytinh' }),
+						// 	menuKey: 'may-tinh',
+						// 	content: <MayTinhThongMinh maKhoaNganh={maKhoaNganh} />,
+						// 	icon: <SnippetsOutlined />,
+						// },
 					]}
-				/>
-			</div>
+				/> */}
+			<DiemThanhPhanSV maKhoaNganh={maKhoaNganh} />
 		</PageCard>
 	);
 };

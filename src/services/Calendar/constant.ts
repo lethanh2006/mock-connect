@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { ELoaiSuKien, ELoaiSuKienKhac, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
+import { useCallback, useMemo } from 'react';
 import { useIntl } from 'umi';
 
 export const useMessagesCalendar = () => {
@@ -20,6 +21,18 @@ export const useMessagesCalendar = () => {
 			showMore: (total: number) => intl.formatMessage({ id: 'lichsukien.calendar.showmore' }, { total }),
 			noEventsInRange: intl.formatMessage({ id: 'lichsukien.calendar.noeventsinrange' }),
 		}),
+		[intl],
+	);
+};
+
+export const useLoaiSuKienLabel = () => {
+	const intl = useIntl();
+
+	return useCallback(
+		(loai: ELoaiSuKien | ELoaiSuKienKhac | string) => {
+			const localeKey = LoaiSuKienLocaleKey[loai as ELoaiSuKien | ELoaiSuKienKhac];
+			return localeKey ? intl.formatMessage({ id: localeKey }) : String(loai);
+		},
 		[intl],
 	);
 };

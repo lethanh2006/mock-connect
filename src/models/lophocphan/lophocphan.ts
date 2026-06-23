@@ -1,4 +1,6 @@
+import type { TFilter } from '@/components/Table/typing';
 import useInitModel from '@/hooks/useInitModel';
+import { getLopHocPhanDangKyTheoHocPhan } from '@/services/DaoTao/DangKyTinChi';
 import { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
 import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { getGiaoAnSinhVien, getMoodleLopHocPhan, postWithdraw } from '@/services/HocTap/LopHocPhan';
@@ -11,7 +13,10 @@ import _ from 'lodash';
 import { useState } from 'react';
 
 export default () => {
-	const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
+	const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao, {
+		maHocPhan: 1,
+		ten: 1,
+	});
 	const {
 		getByIdModel,
 		getModel,
@@ -180,14 +185,22 @@ export default () => {
 		maHocPhan: string,
 		tatCa: boolean = false,
 		otherQuery?: any,
+		filterParams?: TFilter<LopHocPhan.IRecord>[],
+		sortParams?: Record<string, 1 | -1 | undefined>,
 	): Promise<LopHocPhan.IRecord[]> => {
 		setLoading(true);
+		const activeSort = Object.fromEntries(Object.entries(sortParams ?? {}).filter(([, value]) => value));
 		const payload = {
 			page,
 			limit,
-			sort: { soThuTuLop: 1 },
-			condition: { maHocPhan, loai: ELoaiLopHocPhan.CHINH, trangThaiLop: ETrangThaiLopHocPhan.MO },
+			sort: Object.keys(activeSort).length ? activeSort : { maHocPhan: 1, ten: 1 },
+			condition: {
+				...(maHocPhan ? { maHocPhan } : {}),
+				loai: ELoaiLopHocPhan.CHINH,
+				trangThaiLop: ETrangThaiLopHocPhan.MO,
+			},
 			otherQuery,
+			filters: (filterParams ?? []).filter((item) => item.active !== false).map(({ active, ...item }) => item),
 		};
 
 		try {
@@ -210,6 +223,48 @@ export default () => {
 				setTotal(tempTotal);
 				return tempData;
 			}
+		} catch (er) {
+			return Promise.reject(er);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const sinhVienGetLopDangKyTheoHocPhanModel = async (
+		maHocKy: string,
+		loaiDangKyTheoLop: 'lop-hanh-chinh' | 'khoa-nganh' | 'tat-ca',
+		otherQuery?: any,
+		filterParams?: TFilter<LopHocPhan.IRecord>[],
+		sortParams?: Record<string, 1 | -1 | undefined>,
+	): Promise<LopHocPhan.IRecord[]> => {
+		setLoading(true);
+		const activeSort = Object.fromEntries(Object.entries(sortParams ?? {}).filter(([, value]) => value));
+		const payload = {
+			page,
+			limit,
+			sort: Object.keys(activeSort).length ? activeSort : { maHocPhan: 1, ten: 1 },
+			condition: {
+				loai: ELoaiLopHocPhan.CHINH,
+				trangThaiLop: ETrangThaiLopHocPhan.MO,
+			},
+			...otherQuery,
+			filters: (filterParams ?? []).filter((item) => item.active !== false).map(({ active, ...item }) => item),
+		};
+
+		try {
+			const response = await getLopHocPhanDangKyTheoHocPhan(payload, maHocKy, loaiDangKyTheoLop);
+			const tempData: LopHocPhan.IRecord[] = response?.data?.data?.result ?? [];
+			const tempTotal: number = response?.data?.data?.total ?? 0;
+
+			if (tempData.length === 0 && tempTotal) {
+				const maxPage = Math.ceil(tempTotal / payload.limit) || 1;
+				setPage(maxPage);
+				return Promise.reject('Invalid page');
+			}
+
+			setDanhSachLopDktc(tempData);
+			setTotal(tempTotal);
+			return tempData;
 		} catch (er) {
 			return Promise.reject(er);
 		} finally {
@@ -270,6 +325,7 @@ export default () => {
 		sinhVienGetAllModel,
 		getMoodleLopHocPhanModel,
 		sinhVienGetLopDangKyModel,
+		sinhVienGetLopDangKyTheoHocPhanModel,
 		calculateNearestBuoiLop,
 		postWithdrawModel,
 		getGiaoAnSinhVienModel,

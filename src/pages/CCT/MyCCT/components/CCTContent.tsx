@@ -124,7 +124,9 @@ const CCTContent = (props: {
 			<div className='cct-container'>
 				<header className='cct-header'>
 					<div className='header-content-cct'>
-						<div className='header-title'>CO-CURRICULUM RECORD - STUDENT DEVELOPMENT PORFOLIO</div>
+						<div className='header-title'>
+							CO-CURRICULUM RECORD - STUDENT DEVELOPMENT <br /> PORFOLIO
+						</div>
 						<div className='university-logo'>
 							<img src={bgcct} style={{ height: 60 }} />
 						</div>
