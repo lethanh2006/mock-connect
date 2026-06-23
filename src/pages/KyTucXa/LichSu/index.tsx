@@ -8,8 +8,8 @@ import { KyTucXa } from '@/services/KyTucXa/typings';
 import FormLichSuDk from '@/pages/KyTucXa/LichSu/components/FormDangKy'; 
 import "@/pages/KyTucXa/DangKy/style.less"
 import SelectDotDangKyKTX from './components/SelectDotDangKy';
-import { UnorderedListOutlined, DeleteOutlined, DollarOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
-import { Button, Popover } from 'antd';
+import { DeleteOutlined, DollarOutlined, ReloadOutlined, EyeOutlined } from '@ant-design/icons';
+import { Button, Space, Tooltip, Popconfirm } from 'antd';
 import PaymentModal from './components/ModalPayment';
 import dayjs from '@/utils/dayjs';
 
@@ -99,7 +99,7 @@ const LichSuDangKyKTX = () => {
             align: 'center',
             render: (_val, record: KyTucXa.IThongTinDangKy) => {
                 const dot = dotMap.get(record.maDotId!);
-                return dot?.ngayChuyenVao ? dayjs(dot.ngayChuyenVao).format('DD/MM/YYYY') : '-';
+                return dot?.ngayChuyenVao ? dayjs(dot.ngayChuyenVao).format('MM/YYYY') : '-';
             },
         },
         {
@@ -109,7 +109,7 @@ const LichSuDangKyKTX = () => {
             align: 'center',
             render: (_val, record: KyTucXa.IThongTinDangKy) => {
                 const dot = dotMap.get(record.maDotId!);
-                return dot?.ngayChuyenRa ? dayjs(dot.ngayChuyenRa).format('DD/MM/YYYY') : '-';
+                return dot?.ngayChuyenRa ? dayjs(dot.ngayChuyenRa).format('MM/YYYY') : '-';
             },
         },
         {
@@ -138,59 +138,65 @@ const LichSuDangKyKTX = () => {
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.action' }),
-            width: 80,
+            width: 120,
             align: 'center',
             fixed: 'right',
             render: (_, record: KyTucXa.IThongTinDangKy) => {
                 const isChoThanhToan = record.trangThaiDuyet === ETrangThaiDuyet.CHO_THANH_TOAN;
                 const isChoPhepXoa = record.trangThaiDuyet === ETrangThaiDuyet.HUY || record.trangThaiDuyet === ETrangThaiDuyet.CHO_THANH_TOAN;
 
-                const content = (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <Button 
-                            onClick={() => {
-                                setRecord(record);
-                                setIsView(true);
-                                setVisibleForm(true);
-                            }}
-                            type="text"
-                            icon={<EyeOutlined />}
-                        >
-                            {intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.view' })}
-                        </Button>
-                        <Button 
-                            type="text"
-                            disabled={!isChoThanhToan}
-                            icon={<DollarOutlined />}
-                         
-                            onClick={() => {
-                                setRecord(record);
-                                setVisiblePaymentModal(true);
-                            }}
-                        >
-                            {intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.payment' })}
-                        </Button>
-                        <Button 
-                            onClick={() => {
-                                deleteModel(record._id);
-                            }}
-                            type="text"
-                            danger
-                            disabled={!isChoPhepXoa}
-                            icon={<DeleteOutlined />}
-                        >
-                            {intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.delete' })}
-                        </Button>
-                    </div>
-                );
-
                 return (
-                    <Popover content={content} trigger={['click', 'hover']} placement="bottomRight">
-                        <Button 
-                            type="text"
-                            icon={<UnorderedListOutlined />}
-                        />
-                    </Popover>
+                    <Space size="small">
+                        <Tooltip title={intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.view' })}>
+                            <Button 
+                                onClick={() => {
+                                    setRecord(record);
+                                    setIsView(true);
+                                    setVisibleForm(true);
+                                }}
+                                type="text"
+                                icon={<EyeOutlined />}
+                            />
+                        </Tooltip>
+                        
+                        <Tooltip title={intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.payment' })}>
+                            <Button 
+                                type="text"
+                                disabled={!isChoThanhToan}
+                                icon={<DollarOutlined />}
+                                onClick={() => {
+                                    setRecord(record);
+                                    setVisiblePaymentModal(true);
+                                }}
+                            />
+                        </Tooltip>
+
+                        {isChoPhepXoa ? (
+                            <Popconfirm
+                                title={intl.formatMessage({ id: 'kytucxa.lichsu.popconfirm.delete' })}
+                                onConfirm={() => deleteModel(record._id)}
+                                okText={intl.formatMessage({ id: 'kytucxa.lichsu.detail.yes' })}
+                                cancelText={intl.formatMessage({ id: 'kytucxa.lichsu.detail.no' })}
+                            >
+                                <Tooltip title={intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.delete' })}>
+                                    <Button 
+                                        type="text"
+                                        danger
+                                        icon={<DeleteOutlined />}
+                                    />
+                                </Tooltip>
+                            </Popconfirm>
+                        ) : (
+                            <Tooltip title={intl.formatMessage({ id: 'kytucxa.lichsu.tooltip.delete' })}>
+                                <Button 
+                                    type="text"
+                                    danger
+                                    disabled
+                                    icon={<DeleteOutlined />}
+                                />
+                            </Tooltip>
+                        )}
+                    </Space>
                 );
             },
         },

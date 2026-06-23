@@ -54,7 +54,7 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 		return {
 			slotLeft: left,
 			mainImg: phong.danhSachAnh?.[0],
-			numBedLabel: [phong.ma, phong.toaNha?.ten, phong.maLoaiPhongKtx ? loaiPhongMap.get(phong.maLoaiPhongKtx)?.ten : undefined].filter(Boolean).join(' · '),
+			numBedLabel: [phong.ma, phong.toaNha?.ten, phong.ten].filter(Boolean).join(' · '),
 			tienIchShow: mappedTienIchList.slice(0, MAX_TIEN_ICH_SHOW),
 			tienIchMore: Math.max(0, mappedTienIchList.length - MAX_TIEN_ICH_SHOW),
 		};

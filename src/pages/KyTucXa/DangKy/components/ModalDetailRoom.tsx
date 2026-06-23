@@ -57,7 +57,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 			.filter(Boolean);
 		return {
 			slotLeft: left,
-			numBedLabel: [phong.ma, phong.toaNha?.ten, phong.maLoaiPhongKtx ? loaiPhongMap.get(phong.maLoaiPhongKtx)?.ten : undefined].filter(Boolean).join(' · '),
+			numBedLabel: [phong.ma, phong.toaNha?.ten, phong?.ten].filter(Boolean).join(' · '),
 			images: imgs,
 			thumbs: tbs,
 			tienIchAll,
