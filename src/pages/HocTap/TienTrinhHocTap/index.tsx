@@ -2,58 +2,40 @@ import PageCard from '@/components/PageCard';
 import { TabViewPage } from '@/components/TabViewPage';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import SelectSongNganh from '@/pages/DaoTao/SongNganh/SelectSongNganh';
-import DangKyChuyenNganh from '@/pages/SinhVien/DangKyChuyenNganh';
-import DangKyChuyenNganhHistory from '@/pages/SinhVien/DangKyChuyenNganhMoi/History';
-import PathWayPage from '@/pages/SinhVien/PathWay';
-import { LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
 import { formatDate } from '@/utils/formatDate';
-import {
-	BookOutlined,
-	CheckCircleOutlined,
-	NodeIndexOutlined,
-	ProfileOutlined,
-	ScheduleOutlined,
-} from '@ant-design/icons';
-import { Alert, Col, Descriptions, Divider, Row, Spin, Tooltip, Typography } from 'antd';
-import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
-import { Link, useAccess, useIntl, useModel } from 'umi';
-import LichSuQuyDoiDiemPage from '../QuyDoiDiem';
+import { BookOutlined, ScheduleOutlined } from '@ant-design/icons';
+import { Alert, Col, Descriptions, Divider, Row, Spin } from 'antd';
+import { useEffect, useMemo, useState } from 'react';
+import { useAccess, useIntl, useModel } from 'umi';
 import TienTrinhChuongTrinhKhung from './ChuongTrinhKhung';
-import flag from './components/flag.svg';
 import './components/style.less';
 import TienTrinhThucTe from './TienTrinhThucTe';
+import { tinhThongKeMinor } from './utils';
 
 const TienTrinhHocTap = () => {
 	const intl = useIntl();
 	const { getAllModel, record: recDotQuyDoi, setRecord } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { maKhoaNganh, setMaKhoaNganh, record: recSinhVien, khoaNganhMe } = useModel('sinhvien.sinhvien');
 	const { record: recTienTrinh, getTienTrinhTotNghiepModel, loading } = useModel('sinhvien.tientrinhtotnghiep');
-	const { getByIdModel, record: recLoTrinh } = useModel('sinhvien.lotrinhhoctap');
 	const {
 		chuongTrinhHienTai,
+		tienTrinhKhungMinors,
 		loading: loadingChuongTrinh,
 		getChuongTrinhHienTaiModel,
+		sinhVienGetTienTrinhKhungModel,
 	} = useModel('daotao.chuongtrinhdaotao');
-	const { registeredPathway, getChosenPathwayDataModel } = useModel('sinhvien.pathway');
 	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
-	const [currentHash, setCurrentHash] = useState(window.location.hash.replace('#', ''));
 	const access = useAccess();
-	useEffect(() => {
-		const handleHashChange = () => {
-			setCurrentHash(window.location.hash.replace('#', ''));
-		};
-		window.addEventListener('hashchange', handleHashChange);
-		return () => window.removeEventListener('hashchange', handleHashChange);
-	}, []);
 	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
 	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh2 : recSinhVien?.chuyenNganh;
-	const ngoaiThoiGian =
-		recLoTrinh?.dotDangKyPathway?.kichHoat === false ||
-		!recLoTrinh?.dotDangKyPathway?.thoiGianBatDau ||
-		!recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc ||
-		dayjs().isBefore(recLoTrinh?.dotDangKyPathway?.thoiGianBatDau) ||
-		dayjs().isAfter(recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc);
+	const tenChuyenNganhPhu = tienTrinhKhungMinors?.[0]?.nganhMinor?.tenTiengViet;
+	const thongKeMinor = useMemo(() => tinhThongKeMinor(tienTrinhKhungMinors), [tienTrinhKhungMinors]);
+	const tongTinChiCtdtDaDat = recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa;
+	const tongTinChiCtdt = recTienTrinh?.ctdtKeHoach?.tongSoTinChi;
+	const tongTinChiDaDat = (tongTinChiCtdtDaDat ?? 0) + thongKeMinor.daDat;
+	const tongTinChiTatCa = (tongTinChiCtdt ?? 0) + thongKeMinor.tong;
+	const phanTramTinChi = tongTinChiTatCa ? Math.min(100, (tongTinChiDaDat * 100) / tongTinChiTatCa) : 0;
+
 	useEffect(() => {
 		//Get đợt me
 		getAllModel(undefined, undefined, undefined, undefined, 'current', false).then((res) => setRecord(res as any));
@@ -64,174 +46,143 @@ const TienTrinhHocTap = () => {
 		if (!recTienTrinh && maKhoaNganh) getTienTrinhTotNghiepModel(maKhoaNganh);
 		//Get đợt lộ trình học tập
 		if (maKhoaNganh) {
-			getByIdModel(`me?maKhoaNganh=${maKhoaNganh}`, true);
 			getChuongTrinhHienTaiModel(maKhoaNganh);
-			getChosenPathwayDataModel(maKhoaNganh);
+			sinhVienGetTienTrinhKhungModel(isSongNganh);
 		}
 	}, [maKhoaNganh]);
 
-	useEffect(() => {
-		if (maKhoaNganh) {
-			getChosenPathwayDataModel(maKhoaNganh);
-		}
-	}, [recLoTrinh?._id]);
-
-	const registeredPathwayNames =
-		registeredPathway
-			?.map((item) => item?.khoiKienThuc?.ten)
-			?.filter(Boolean)
-			?.join(', ') || '';
-
 	return (
 		<PageCard
-			title='Degree Audit'
+			title={intl.formatMessage({ id: 'menu.Academic.DegreeAudit' })}
 			extra={<SelectSongNganh style={{ width: 250 }} value={maKhoaNganh} onChange={(val) => setMaKhoaNganh(val)} />}
 		>
 			<Spin spinning={loadingChuongTrinh || loading}>
 				<Descriptions
-					column={{ xxl: 3, xl: 3, lg: 3, md: 3, sm: 3, xs: 1 }}
+					column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }}
 					layout='vertical'
 					className='highlight'
 					colon={false}
 					style={{ marginBottom: 16 }}
 				>
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })} span={2}>
-						<Link
-							to='#'
-							onClick={(e) => {
-								e.preventDefault();
-								setVisibleChuongTrinh(true);
-							}}
-						>
-							{recTienTrinh?.ctdtKeHoach?.ten || '-'}
-						</Link>{' '}
-						-{' '}
-						{chuongTrinhHienTai?.loai
-							? LoaiChuongTrinhDaoTao[chuongTrinhHienTai.loai]
-							: chuongTrinhHienTai?.loai || '-'}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'pathway.info.currentProgram' })}>
-						{chuongTrinhHienTai?.nganh?.ten || chuongTrinhHienTai?.ten || '-'}
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.cohortMajor' })}>
+						<a onClick={() => setVisibleChuongTrinh(true)}>
+							{chuongTrinhHienTai?.khoaNganh?.nganh?.ten || khoaNganhMe?.khoaNganhChinh?.ten || '-'}
+						</a>
 					</Descriptions.Item>
 
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
-						{(chuyenNganhHienTai as any)?.ten || (
-							<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
-						)}
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.college' })}>
+						{khoaNganhMe?.khoaNganhChinh?.nganh?.donVi?.ten ||
+							khoaNganhMe?.khoaNganhChinh?.nganh?.tenDonViPhuTrach ||
+							khoaNganhMe?.khoaNganhChinh?.nganh?.maDonVi ||
+							'-'}
 					</Descriptions.Item>
-
-					{access.cctFilter() && khoaNganhMe?.khoaNganhPhu && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}>
-							{khoaNganhMe.khoaNganhPhu.ten || <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>}
+					{chuyenNganhHienTai?.ten && (
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
+							{chuyenNganhHienTai.ten}
 						</Descriptions.Item>
 					)}
 
-					{/* TODO: Check có đợt đăng ký pathway hoặc đã đăng ký pathway thì show */}
-					{access.cctFilter() && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.pathway' })}>
-							{registeredPathway.length > 0 ? (
-								<Tooltip title={registeredPathwayNames}>
-									<div style={{ display: 'flex', alignItems: 'flex-end', gap: 8 }}>
-										<Typography.Paragraph
-											style={{ maxWidth: '100%', marginBottom: 0, flex: 1 }}
-											ellipsis={{ rows: 2, tooltip: false }}
-										>
-											{registeredPathwayNames}
-										</Typography.Paragraph>
-										{currentHash !== 'lo-trinh-hoc-tap' && (
-											<a
-												href='#lo-trinh-hoc-tap'
-												style={{ fontSize: 12, whiteSpace: 'nowrap' }}
-												onClick={() => {
-													window.location.hash = 'lo-trinh-hoc-tap';
-												}}
-											>
-												{intl.formatMessage({ id: 'pathway.button.viewMore' })}
-											</a>
-										)}
-									</div>
-								</Tooltip>
-							) : (
-								<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
-							)}
+					{access.cctFilter() && tenChuyenNganhPhu && (
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}>
+							{tenChuyenNganhPhu}
 						</Descriptions.Item>
 					)}
 				</Descriptions>
+
+				{/* <Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })} span={2}>
+					<Link to='#' onClick={(e) => { e.preventDefault(); setVisibleChuongTrinh(true); }}>
+						{recTienTrinh?.ctdtKeHoach?.ten || '-'}
+					</Link>{' '}
+					-{' '}
+					{chuongTrinhHienTai?.loai ? LoaiChuongTrinhDaoTao[chuongTrinhHienTai.loai] : chuongTrinhHienTai?.loai || '-'}
+				</Descriptions.Item> */}
 			</Spin>
 
 			{recDotQuyDoi?._id ? (
 				<Alert
 					style={{ marginBottom: 12 }}
 					type='info'
+					showIcon
 					message={intl.formatMessage(
 						{ id: 'tientrinhhoctap.message' },
 						{
-							tenDot: recDotQuyDoi?.tenDot,
-							tuNgay: formatDate(recDotQuyDoi?.thoiGianBatDau),
-							denNgay: formatDate(recDotQuyDoi?.thoiGianKetThuc),
-							b: (chunks) => <b>{chunks}</b>,
+							tenDot: <b>{recDotQuyDoi?.tenDot}</b>,
+							tuNgay: <b>{formatDate(recDotQuyDoi?.thoiGianBatDau)}</b>,
+							denNgay: <b>{formatDate(recDotQuyDoi?.thoiGianKetThuc)}</b>,
 						},
 					)}
 				/>
 			) : null}
 
-			{!ngoaiThoiGian && access.cctFilter() && (
-				<Alert
-					style={{ marginBottom: 12 }}
-					type='warning'
-					message={intl.formatMessage(
-						{ id: 'lotrinhhoctap.message' },
-						{
-							tenDot: recLoTrinh?.dotDangKyPathway?.ten,
-							tuNgay: formatDate(recLoTrinh?.dotDangKyPathway?.thoiGianBatDau),
-							denNgay: formatDate(recLoTrinh?.dotDangKyPathway?.thoiGianKetThuc),
-							b: (chunks) => <b>{chunks}</b>,
-						},
-					)}
-				/>
-			)}
-
 			<Spin spinning={loading}>
-				<Divider dashed orientation='left'>
+				<Divider dashed orientation='left' className='divider-big-title'>
 					{intl.formatMessage({ id: 'tientrinhhoctap.scttichluy' })}
 				</Divider>
 
 				<Row align='middle' gutter={[12, 12]}>
-					<Col span={20} md={22}>
-						<div className='progress-wrapper'>
-							<div
-								className='proress-bar'
-								style={{
-									width: `${
-										(Number(recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa) * 100) /
-										Number(recTienTrinh?.ctdtKeHoach?.tongSoTinChi)
-									}%`,
-								}}
-							>
-								<div className='progress-dot' />
-								<div className='progress-label'>
-									{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '--'}{' '}
-									{intl.formatMessage({ id: 'tientrinhhoctap.tin' })}
+					<Col span={24}>
+						<div className='progress-section'>
+							<div className='progress-row'>
+								<div className='progress-wrapper'>
+									<div
+										className='proress-bar'
+										style={{
+											width: `${phanTramTinChi}%`,
+										}}
+									/>
+								</div>
+								<div className='progress-logo'>
+									<img src='/student/logo.png' alt='' width={30} height={30} />
 								</div>
 							</div>
-							<div className='progress-img'>
-								<img src={flag} style={{ width: 30, height: 30 }} />
+							<div className='progress-meta'>
+								<div className='progress-legend'>
+									<div className='progress-legend__item'>
+										<span className='progress-legend__dot progress-legend__dot--primary' />
+										<span className='progress-legend__text'>
+											<b>{recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa ?? '--'}</b>
+											<span>
+												{' '}
+												/ {recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--'}{' '}
+												{intl.formatMessage({ id: 'tientrinhhoctap.ctdt' })}
+											</span>
+										</span>
+									</div>
+									{!!thongKeMinor.tong && (
+										<div className='progress-legend__item'>
+											<span className='progress-legend__dot progress-legend__dot--minor' />
+											<span className='progress-legend__text'>
+												<b>{thongKeMinor.daDat}</b>
+												<span>
+													{' '}
+													/ {thongKeMinor.tong} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
+												</span>
+											</span>
+										</div>
+									)}
+								</div>
+								<div className='progress-meta__logo'>
+									<div className='progress-credits'>
+										<b>{tongTinChiTatCa ? tongTinChiDaDat : '--'}</b>
+										<span>
+											{' '}
+											/ {tongTinChiTatCa || '--'} {intl.formatMessage({ id: 'tientrinhhoctap.progress.tongtinchi' })}
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
-					</Col>
-					<Col span={4} md={2} style={{ marginTop: 8 }}>
-						<b style={{ color: '#B31820' }}>
-							{recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--'} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
-						</b>
 					</Col>
 				</Row>
 			</Spin>
 
 			<TabViewPage
 				hideCard
+				tabType='line'
+				style={{ marginTop: 8 }}
 				menu={[
 					{
-						title: intl.formatMessage({ id: 'tientrinhhoctap.ctdt' }),
+						title: intl.formatMessage({ id: 'tientrinhhoctap.curriculumPlanner' }),
 						menuKey: 'chuong-trinh-dao-tao',
 						content: <TienTrinhChuongTrinhKhung />,
 						icon: <BookOutlined />,
@@ -242,32 +193,25 @@ const TienTrinhHocTap = () => {
 						content: <TienTrinhThucTe />,
 						icon: <ScheduleOutlined />,
 					},
-					{
-						title: intl.formatMessage({ id: 'lotrinhhoctap.title' }),
-						menuKey: 'lo-trinh-hoc-tap',
-						content: <PathWayPage getData={() => getByIdModel(`me?maKhoaNganh=${maKhoaNganh}`, true)} />,
-						icon: <NodeIndexOutlined />,
-						hide: !access.cctFilter(),
-					},
-					{
-						title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
-						menuKey: 'dang-ky-chuyen-nganh',
-						content: access.cctFilter() ? <DangKyChuyenNganhHistory type='concentration' /> : <DangKyChuyenNganh />,
-						icon: <ProfileOutlined />,
-					},
-					{
-						title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganhhep.title' }),
-						menuKey: 'dang-ky-chuyen-nganh-hep',
-						content: <DangKyChuyenNganhHistory type='minor' />,
-						icon: <ProfileOutlined />,
-						hide: !access.cctFilter(),
-					},
-					{
-						title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan' }),
-						menuKey: 'cong-nhan-kqht',
-						content: <LichSuQuyDoiDiemPage />,
-						icon: <CheckCircleOutlined />,
-					},
+					// {
+					// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganh.title' }),
+					// 	menuKey: 'dang-ky-chuyen-nganh',
+					// 	content: access.cctFilter() ? <DangKyChuyenNganhHistory type='concentration' /> : <DangKyChuyenNganh />,
+					// 	icon: <ProfileOutlined />,
+					// },
+					// {
+					// 	title: intl.formatMessage({ id: 'hoctapkhac.dangkychuyennganhhep.title' }),
+					// 	menuKey: 'dang-ky-chuyen-nganh-hep',
+					// 	content: <DangKyChuyenNganhHistory type='minor' />,
+					// 	icon: <ProfileOutlined />,
+					// 	hide: !access.cctFilter(),
+					// },
+					// {
+					// 	title: intl.formatMessage({ id: 'tientrinhhoctap.congnhan' }),
+					// 	menuKey: 'cong-nhan-kqht',
+					// 	content: <LichSuQuyDoiDiemPage />,
+					// 	icon: <CheckCircleOutlined />,
+					// },
 				]}
 			/>
 

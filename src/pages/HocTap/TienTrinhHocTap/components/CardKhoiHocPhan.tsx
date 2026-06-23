@@ -1,5 +1,7 @@
+import { accentColors, primaryColor } from '@/services/base/constant';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { Card, Modal, Tag } from 'antd';
+import { Card, Empty, Modal } from 'antd';
+import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import CardHocPhan from './CardHocPhan';
@@ -9,9 +11,10 @@ const CardKhoiHocPhan = (props: {
 	khoi?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 	colorKhoiKienThuc?: string;
 	onClickHocPhan: () => void;
+	label?: ReactNode;
 }) => {
 	const intl = useIntl();
-	const { khoi, colorKhoiKienThuc, onClickHocPhan } = props;
+	const { khoi, onClickHocPhan, label } = props;
 	const { setRecord: setChuongTrinh } = useModel('daotao.chuongtrinhdaotao');
 	const soTinChi = khoi?.soTinChiTuChonPhaiHoc ?? 0;
 	const [visible, setVisible] = useState<boolean>(false);
@@ -19,27 +22,42 @@ const CardKhoiHocPhan = (props: {
 	return (
 		<>
 			<div className='base-card'>
-				<Card hoverable onClick={() => setVisible(true)}>
+				<Card
+					hoverable
+					onClick={() => setVisible(true)}
+					style={{
+						backgroundColor: accentColors.accent800 ?? '#f8f8f8',
+						border: `1px solid ${accentColors.accent600 ?? '#D2D3D5'}`,
+					}}
+				>
 					{/* Folder icon background */}
 					<div className='card-background-image' />
 
 					{/* Content */}
 					<div className='card-content'>
 						{/* Course name */}
-						<h4 className='card-title default' title={khoi?.ten}>
+						{label && <span className='card-label'>{label}</span>}
+						<h4
+							className='card-title default'
+							style={{ color: primaryColor ?? '#134D8B', textDecoration: 'underline' }}
+							title={khoi?.ten}
+						>
 							{khoi?.ten}
 						</h4>
 
-						{/* Credits */}
-						<div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
-							<Tag className='credits-tag'>
+						{/* Credits & Electives */}
+						<div className='card-footer'>
+							<span className='card-credits-text'>
 								{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
-							</Tag>
+							</span>
+							<div className='card-footer-right'>
+								<span className='card-electives-text' style={{ color: primaryColor ?? '#134D8B' }}></span>
+							</div>
 						</div>
 					</div>
 
 					{/* Color indicator */}
-					<div className='color-indicator' style={{ backgroundColor: colorKhoiKienThuc }} />
+					{/* <div className='color-indicator' style={{ backgroundColor: colorKhoiKienThuc }} /> */}
 				</Card>
 			</div>
 
@@ -57,21 +75,28 @@ const CardKhoiHocPhan = (props: {
 				</span>
 
 				<div className='modal-grid'>
-					{khoi?.hocPhanCtdtList?.map((ctk) => (
+					{(khoi?.hocPhanCtdtList ?? []).map((ctk) => (
 						<CardHocPhan
 							key={ctk._id}
-							hocPhan={ctk.hocPhan}
-							colorKhoiKienThuc={colorKhoiKienThuc}
+							hocPhan={ctk.hocPhan ?? undefined}
+							// colorKhoiKienThuc={colorKhoiKienThuc}
 							onClick={() => {
+								if (!khoi) return;
 								// Truyền tên khối tự chọn vào các khối học phần chương trình
-								setChuongTrinh({ ...khoi, ...ctk, ten: khoi.ten });
+								setChuongTrinh({ ...khoi, ...ctk, ten: khoi.ten } as ChuongTrinhDaoTao.IKhoiHocPhanCTDT);
 								setVisible(false);
 								if (onClickHocPhan) onClickHocPhan();
 							}}
 							trangThaiHoc={ctk.hoc}
 							listDiem={ctk.lichSuDiem}
+							label={label}
 						/>
 					))}
+					{!khoi?.hocPhanCtdtList?.length && (
+						<div style={{ gridColumn: '1 / -1', width: '100%' }}>
+							<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+						</div>
+					)}
 				</div>
 			</Modal>
 		</>

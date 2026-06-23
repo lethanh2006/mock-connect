@@ -5,6 +5,7 @@
 	position: relative;
 	margin-bottom: 4px;
 	height: 100%;
+	min-height: 166px;
 
 	.ant-card {
 		border-radius: 8px;
@@ -12,7 +13,7 @@
 		overflow: hidden;
 		background: #fff;
 		height: 100%;
-		min-height: 120px;
+		min-height: 166px;
 		box-shadow: 0px 0px 12px 0px #0000000a;
 		cursor: pointer;
 		transition: all 0.3s ease;
@@ -51,16 +52,22 @@
 	flex: 1;
 	display: flex;
 	flex-direction: column;
+	gap: 8px;
 }
 
 // Title styles
 .card-title {
+	display: -webkit-box;
+	line-clamp: 3;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
 	font-size: 16px;
 	font-weight: 600;
 	margin-bottom: 12px;
 	margin-top: 0;
 	line-height: 1.4;
 	flex: 1;
+	overflow: hidden;
 
 	&.not-studied {
 		color: #8c8c8c;
@@ -71,14 +78,79 @@
 	}
 }
 
-// Label styles (Specialization/Pathway)
+// Label styles (Specialization)
 .card-label {
-	display: block;
-	font-size: 11px;
-	color: #8c8c8c;
-	font-weight: 500;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	color: var(--color-primary);
+	font-weight: 600;
 	margin-top: 4px;
 	line-height: 1.4;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.card-label > *:last-child {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.card-label-dot {
+	flex-shrink: 0;
+	width: 4.5px;
+	height: 4.5px;
+	border-radius: 50%;
+	background-color: var(--color-primary);
+}
+
+// Footer: credits & grade
+.card-footer {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 8px;
+	margin-top: auto;
+	padding-top: 12px;
+	border-top: 1px dashed #d9d9d9;
+}
+
+.card-credits-text {
+	font-size: 13px;
+	color: #8c8c8c;
+	text-transform: lowercase;
+}
+
+.card-footer-right {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.card-grade-text {
+	font-size: 24px;
+	font-weight: 600;
+	color: #52c41a;
+	line-height: 1;
+}
+
+.card-electives-text {
+	font-size: 13px;
+	font-weight: 600;
+	color: #8c8c8c;
+	line-height: 1.2;
+	text-align: right;
+}
+
+.card-registered-text {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--color-primary);
+	line-height: 1.2;
 }
 
 // Credits tag styles

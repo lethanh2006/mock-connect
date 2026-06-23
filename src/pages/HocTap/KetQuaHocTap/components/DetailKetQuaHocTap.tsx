@@ -1,13 +1,10 @@
 import DiemThiHocKy from '@/pages/KhaoThi/KyThi/DiemThiHocKy';
-import { ETrangThaiThi } from '@/services/HocTap/constant';
-import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
+import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { ETrangThaiDuThi, trangThaiDuThi } from '@/services/KhaoThi/SinhVienThi/constant';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Divider, Empty, Space, Spin, Tabs, Tag, Tooltip } from 'antd';
-import _ from 'lodash';
+import { Button, Descriptions, Empty, Spin, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
-import { history, useIntl, useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 
 const DetailKetQuaHocTap = (props: {
 	lopHocPhanId?: string;
@@ -21,24 +18,24 @@ const DetailKetQuaHocTap = (props: {
 	const [hienThiDiemThi, setHienThiDiemThi] = useState<boolean>(false);
 	const recDiem = diemHpSvHk ?? recSinhVienLhp?.diemHpSvHk;
 
-	const hasTrongSoThi =
-		!!recDiem?.trongSoThi1 ||
-		!!recDiem?.trongSoThi2 ||
-		!!recDiem?.trongSoThi3 ||
-		!!recDiem?.trongSoThi4 ||
-		!!recDiem?.trongSoThi5;
+	// const hasTrongSoThi =
+	// 	!!recDiem?.trongSoThi1 ||
+	// 	!!recDiem?.trongSoThi2 ||
+	// 	!!recDiem?.trongSoThi3 ||
+	// 	!!recDiem?.trongSoThi4 ||
+	// 	!!recDiem?.trongSoThi5;
 
-	const trongSoThanhPhan = _.range(1, 11).reduce((pre, cur) => {
-		const trongSo = +(recDiem?.[`trongSo${cur}` as keyof LopHocPhan.IDiemHpSvHk] ?? 0);
-		return pre + trongSo;
-	}, 0);
-	const hasTrongSo = !!trongSoThanhPhan;
+	// const trongSoThanhPhan = _.range(1, 11).reduce((pre, cur) => {
+	// 	const trongSo = +(recDiem?.[`trongSo${cur}` as keyof LopHocPhan.IDiemHpSvHk] ?? 0);
+	// 	return pre + trongSo;
+	// }, 0);
+	// const hasTrongSo = !!trongSoThanhPhan;
 	// Đầu điểm học phần theo đề cương
-	const dauDiemCoTrongSo = danhSachDauDiem.filter(
-		(item) =>
-			!hasTrongSo || // Đề cương học phần học kỳ này ko có trọng số
-			!!recDiem?.[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk],
-	);
+	// const dauDiemCoTrongSo = danhSachDauDiem.filter(
+	// 	(item) =>
+	// 		!hasTrongSo || // Đề cương học phần học kỳ này ko có trọng số
+	// 		!!recDiem?.[`trongSo${item.field}` as keyof LopHocPhan.IDiemHpSvHk],
+	// );
 
 	useEffect(() => {
 		setHienThiDiemThi(false);
@@ -58,139 +55,152 @@ const DetailKetQuaHocTap = (props: {
 		</div>
 	);
 
-	const renderDiemCloThanhPhan = () => {
-		if (!recDiem?.danhSachDiemChuanDauRaThanhPhan?.length) return null;
-		const gClos = _.groupBy(
-			_.sortBy(recDiem.danhSachDiemChuanDauRaThanhPhan, (i) => i.maClo),
-			(i) => i.field,
-		);
+	// const renderDiemCloThanhPhan = () => {
+	// 	if (!recDiem?.danhSachDiemChuanDauRaThanhPhan?.length) return null;
+	// 	const gClos = _.groupBy(
+	// 		_.sortBy(recDiem.danhSachDiemChuanDauRaThanhPhan, (i) => i.maClo),
+	// 		(i) => i.field,
+	// 	);
 
-		return (
-			<>
-				<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.danhgia' })}</Divider>
-				<Descriptions bordered>
-					{Object.keys(gClos).map((field, index) => {
-						const cdrs = gClos[field];
-						return (
-							<Descriptions.Item
-								label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.baodanhgia' })} ${index + 1}`}
-								key={field}
-							>
-								{cdrs.map((cdr) => (
-									<div key={cdr.maClo}>
-										{cdr.maClo}: <b>{cdr.diem ?? '--'}</b> <small>({cdr.trongSo}%)</small>
-									</div>
-								))}
-							</Descriptions.Item>
-						);
-					})}
-				</Descriptions>
-			</>
-		);
-	};
+	// 	return (
+	// 		<>
+	// 			<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.danhgia' })}</Divider>
+	// 			<Descriptions bordered>
+	// 				{Object.keys(gClos).map((field, index) => {
+	// 					const cdrs = gClos[field];
+	// 					return (
+	// 						<Descriptions.Item
+	// 							label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.baodanhgia' })} ${index + 1}`}
+	// 							key={field}
+	// 						>
+	// 							{cdrs.map((cdr) => (
+	// 								<div key={cdr.maClo}>
+	// 									{cdr.maClo}: <b>{cdr.diem ?? '--'}</b> <small>({cdr.trongSo}%)</small>
+	// 								</div>
+	// 							))}
+	// 						</Descriptions.Item>
+	// 					);
+	// 				})}
+	// 			</Descriptions>
+	// 		</>
+	// 	);
+	// };
 
-	const renderDiemCloKthp = () => {
-		if (!recDiem?.danhSachDiemChuanDauRaThi?.length) return null;
-		const diemThiClos = _.sortBy(
-			recDiem.danhSachDiemChuanDauRaThi.filter((i) => i.field.includes('diemThi')),
-			(i) => i.maClo,
-		);
-		const gClosThiLan1 = _.groupBy(
-			diemThiClos.filter((i) => i.field.includes('diemThi1')),
-			(i) => i.field,
-		);
-		const gClosThiLan2 = _.groupBy(
-			diemThiClos.filter((i) => i.field.includes('diemThi2')),
-			(i) => i.field,
-		);
+	// const renderDiemCloKthp = () => {
+	// 	if (!recDiem?.danhSachDiemChuanDauRaThi?.length) return null;
+	// 	const diemThiClos = _.sortBy(
+	// 		recDiem.danhSachDiemChuanDauRaThi.filter((i) => i.field.includes('diemThi')),
+	// 		(i) => i.maClo,
+	// 	);
+	// 	const gClosThiLan1 = _.groupBy(
+	// 		diemThiClos.filter((i) => i.field.includes('diemThi1')),
+	// 		(i) => i.field,
+	// 	);
+	// 	const gClosThiLan2 = _.groupBy(
+	// 		diemThiClos.filter((i) => i.field.includes('diemThi2')),
+	// 		(i) => i.field,
+	// 	);
 
-		const render = (gClos: _.Dictionary<LopHocPhan.TChiTietDiemCdr[]>) => {
-			return (
-				<Descriptions bordered>
-					{Object.keys(gClos).map((field, index) => {
-						const cdrs = gClos[field];
-						return (
-							<Descriptions.Item
-								label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.baidanhgia' })} ${index + 1}`}
-								key={field}
-							>
-								{cdrs.map((cdr) => (
-									<div key={cdr.maClo}>
-										{cdr.maClo}: <b>{cdr.diem ?? '--'}</b> <small>({cdr.trongSo}%)</small>
-									</div>
-								))}
-							</Descriptions.Item>
-						);
-					})}
-				</Descriptions>
-			);
-		};
+	// 	const render = (gClos: _.Dictionary<LopHocPhan.TChiTietDiemCdr[]>) => {
+	// 		return (
+	// 			<Descriptions bordered>
+	// 				{Object.keys(gClos).map((field, index) => {
+	// 					const cdrs = gClos[field];
+	// 					return (
+	// 						<Descriptions.Item
+	// 							label={`${intl.formatMessage({ id: 'lophocphan.id.ketqua.baidanhgia' })} ${index + 1}`}
+	// 							key={field}
+	// 						>
+	// 							{cdrs.map((cdr) => (
+	// 								<div key={cdr.maClo}>
+	// 									{cdr.maClo}: <b>{cdr.diem ?? '--'}</b> <small>({cdr.trongSo}%)</small>
+	// 								</div>
+	// 							))}
+	// 						</Descriptions.Item>
+	// 					);
+	// 				})}
+	// 			</Descriptions>
+	// 		);
+	// 	};
 
-		// TODO: Hiển thị điểm chuẩn đầu ra thi cuối
+	// 	// TODO: Hiển thị điểm chuẩn đầu ra thi cuối
 
-		return (
-			<>
-				{!!Object.keys(gClosThiLan1).length && (
-					<>
-						<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp' })}</Divider>
-						{render(gClosThiLan1)}
-					</>
-				)}
+	// 	return (
+	// 		<>
+	// 			{!!Object.keys(gClosThiLan1).length && (
+	// 				<>
+	// 					<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp' })}</Divider>
+	// 					{render(gClosThiLan1)}
+	// 				</>
+	// 			)}
 
-				{!!Object.keys(gClosThiLan2).length && (
-					<>
-						<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp2' })}</Divider>
-						{render(gClosThiLan2)}
-					</>
-				)}
-			</>
-		);
-	};
+	// 			{!!Object.keys(gClosThiLan2).length && (
+	// 				<>
+	// 					<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.hthp2' })}</Divider>
+	// 					{render(gClosThiLan2)}
+	// 				</>
+	// 			)}
+	// 		</>
+	// 	);
+	// };
 
-	const renderTrungBinhClo = () => {
-		if (!recDiem?.danhSachDiemMucTieuDauRa?.length) return null;
-		const trungBinhClos = _.sortBy(recDiem.danhSachDiemMucTieuDauRa, (i) => i.maClo);
+	// const renderTrungBinhClo = () => {
+	// 	if (!recDiem?.danhSachDiemMucTieuDauRa?.length) return null;
+	// 	const trungBinhClos = _.sortBy(recDiem.danhSachDiemMucTieuDauRa, (i) => i.maClo);
 
-		return (
-			<>
-				<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtb' })}</Divider>
-				<Descriptions bordered>
-					{trungBinhClos.map((cdr) => (
-						<Descriptions.Item label={cdr.maClo} key={cdr.maClo}>
-							<Space wrap>
-								<span className={cdr.pass ? 'text-success' : 'text-error'}>{renderDiem(cdr.diem)}</span>
-								{cdr.diemToiThieu ? <small>/{cdr.diemToiThieu}</small> : null}
-							</Space>
-						</Descriptions.Item>
-					))}
-				</Descriptions>
-			</>
-		);
-	};
+	// 	return (
+	// 		<>
+	// 			<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtb' })}</Divider>
+	// 			<Descriptions bordered>
+	// 				{trungBinhClos.map((cdr) => (
+	// 					<Descriptions.Item label={cdr.maClo} key={cdr.maClo}>
+	// 						<Space wrap>
+	// 							<span className={cdr.pass ? 'text-success' : 'text-error'}>{renderDiem(cdr.diem)}</span>
+	// 							{cdr.diemToiThieu ? <small>/{cdr.diemToiThieu}</small> : null}
+	// 						</Space>
+	// 					</Descriptions.Item>
+	// 				))}
+	// 			</Descriptions>
+	// 		</>
+	// 	);
+	// };
 
 	return (
 		<Spin spinning={loading}>
 			{recDiem ? (
 				recDiem.daDanhGiaGiangVien !== false ? (
-					<Tabs type='card' defaultActiveKey='1'>
-						<Tabs.TabPane
-							tab={
-								<>
-									{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemGPA' })}
-									{recDiem?.diemChu === ELoaiDiemChu.F ? (
-										<Tag color={'red'} style={{ marginLeft: 8 }}>
-											{intl.formatMessage({ id: 'lophocphan.id.ketqua.khongdat' })}
-										</Tag>
-									) : recDiem?.dat === true ? (
-										<Tag color={'green'} style={{ marginLeft: 8 }}>
-											{intl.formatMessage({ id: 'lophocphan.id.ketqua.dat' })}
-										</Tag>
-									) : null}
-								</>
-							}
-							key='1'
-						>
-							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtp' })}</Divider>
+					<>
+						{/* <Tabs type='card' defaultActiveKey='1'>
+							<Tabs.TabPane
+								tab={
+									<>
+										{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemGPA' })}
+										{recDiem?.diemChu === ELoaiDiemChu.F ? (
+											<Tag color={'red'} style={{ marginLeft: 8 }}>
+												{intl.formatMessage({ id: 'lophocphan.id.ketqua.khongdat' })}
+											</Tag>
+										) : recDiem?.dat === true ? (
+											<Tag color={'green'} style={{ marginLeft: 8 }}>
+												{intl.formatMessage({ id: 'lophocphan.id.ketqua.dat' })}
+											</Tag>
+										) : null}
+									</>
+								}
+								key='1'
+							> */}
+						{/* <div style={{ marginBottom: 12, fontWeight: 600 }}>
+							{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemGPA' })}
+							{recDiem?.diemChu === ELoaiDiemChu.F ? (
+								<Tag color={'red'} style={{ marginLeft: 8 }}>
+									{intl.formatMessage({ id: 'lophocphan.id.ketqua.khongdat' })}
+								</Tag>
+							) : recDiem?.dat === true ? (
+								<Tag color={'green'} style={{ marginLeft: 8 }}>
+									{intl.formatMessage({ id: 'lophocphan.id.ketqua.dat' })}
+								</Tag>
+							) : null}
+						</div> */}
+						{/* <Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtp' })}</Divider>
 							{hasTrongSo ? (
 								<Descriptions bordered>
 									{dauDiemCoTrongSo?.map((item) => (
@@ -214,9 +224,9 @@ const DetailKetQuaHocTap = (props: {
 									image={Empty.PRESENTED_IMAGE_SIMPLE}
 									description={intl.formatMessage({ id: 'lophocphan.id.ketqua.empty' })}
 								/>
-							)}
+							)} */}
 
-							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemthi' })}</Divider>
+						{/* <Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemthi' })}</Divider>
 							<Descriptions bordered>
 								{!hasTrongSoThi ? (
 									<>
@@ -264,11 +274,11 @@ const DetailKetQuaHocTap = (props: {
 										renderDiem(recDiem?.diemKthp)
 									)}
 								</Descriptions.Item>
-							</Descriptions>
+							</Descriptions> */}
 
-							{recDiem && (
-								<div style={{ marginTop: 8 }}>
-									<Space wrap>
+						{recDiem && (
+							<div style={{ marginTop: 8 }}>
+								{/* <Space wrap>
 										{!hienThiDiemThi && (
 											<a
 												onClick={(e) => {
@@ -286,40 +296,46 @@ const DetailKetQuaHocTap = (props: {
 										>
 											{intl.formatMessage({ id: 'lophocphan.id.ketqua.phuckhao' })}
 										</a>
-									</Space>
+									</Space> */}
 
-									{hienThiDiemThi && (
-										<>
-											<DiemThiHocKy maHocKy={recDiem?.maHocKy} maHocPhan={recDiem?.maHocPhan} />
-										</>
-									)}
-								</div>
-							)}
+								{hienThiDiemThi && (
+									<>
+										<DiemThiHocKy maHocKy={recDiem?.maHocKy} maHocPhan={recDiem?.maHocPhan} />
+									</>
+								)}
+							</div>
+						)}
 
-							<Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtongket' })}</Divider>
-							<Descriptions bordered>
-								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diem10' })}>
-									{renderDiem(recDiem?.diemTongKet)}
-								</Descriptions.Item>
-								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diem4' })}>
-									{renderDiem(recDiem?.diemThang4)}
-								</Descriptions.Item>
-								<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diemchu' })}>
-									{recDiem?.diemChu ? <Tag color={ColorDiemChu[recDiem.diemChu]}>{recDiem.diemChu}</Tag> : '--'}{' '}
-									{recDiem?.isCongNhanQuyDoiDiem && (
-										<Tooltip title={intl.formatMessage({ id: 'lophocphan.id.ketqua.diemquydoi' })}>
-											(R
-											{recDiem.coTichLuyQuyDoi
-												? ` - ${intl.formatMessage({ id: 'lophocphan.id.ketqua.tichluy' })}`
-												: ''}
-											)
-										</Tooltip>
-									)}
-								</Descriptions.Item>
-							</Descriptions>
-						</Tabs.TabPane>
+						{/* <Divider>{intl.formatMessage({ id: 'lophocphan.id.ketqua.diemtongket' })}</Divider> */}
+						<Descriptions bordered column={2}>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.kyhoc' })}>
+								{recDiem?.hocKy?.ten ?? recDiem?.maHocKy ?? '--'}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tenlop' })}>
+								{recDiem?.tenLopHocPhan ?? '--'}
+							</Descriptions.Item>
+							{/* <Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diem10' })}>
+								{renderDiem(recDiem?.diemTongKet)}
+							</Descriptions.Item> */}
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diem4' })}>
+								{renderDiem(recDiem?.diemThang4)}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.ketqua.diemchu' })}>
+								{recDiem?.diemChu ? <Tag color={ColorDiemChu[recDiem.diemChu]}>{recDiem.diemChu}</Tag> : '--'}{' '}
+								{recDiem?.isCongNhanQuyDoiDiem && (
+									<Tooltip title={intl.formatMessage({ id: 'lophocphan.id.ketqua.diemquydoi' })}>
+										(R
+										{recDiem.coTichLuyQuyDoi ? ` - ${intl.formatMessage({ id: 'lophocphan.id.ketqua.tichluy' })}` : ''})
+									</Tooltip>
+								)}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.baitap.ghichu' })} span={2}>
+								{recDiem?.ghiChuDiem ?? '--'}
+							</Descriptions.Item>
+						</Descriptions>
+						{/* </Tabs.TabPane> */}
 
-						{recDiem?.danhSachDiemChuanDauRaThanhPhan?.length ||
+						{/* {recDiem?.danhSachDiemChuanDauRaThanhPhan?.length ||
 						recDiem?.danhSachDiemChuanDauRaThi?.length ||
 						recDiem?.danhSachDiemMucTieuDauRa?.length ? (
 							<Tabs.TabPane
@@ -345,8 +361,9 @@ const DetailKetQuaHocTap = (props: {
 
 								{!!recDiem?.danhSachDiemMucTieuDauRa?.length && renderTrungBinhClo()}
 							</Tabs.TabPane>
-						) : null}
-					</Tabs>
+						) : null} */}
+						{/* </Tabs> */}
+					</>
 				) : (
 					<Empty
 						description={

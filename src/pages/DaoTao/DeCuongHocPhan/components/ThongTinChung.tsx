@@ -6,11 +6,7 @@ import { Button, Collapse, Descriptions, Divider } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
-type TKhoiChuongTrinhModal = Omit<Partial<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>, 'khoiKienThuc'> & {
-	khoiKienThuc?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT['khoiKienThuc'] | ChuongTrinhDaoTao.IKhoiKienThuc | null;
-};
-
-const ThongTinChungPage = (props: { khoiChuongTrinh?: TKhoiChuongTrinhModal }) => {
+const ThongTinChungPage = (props: { khoiChuongTrinh?: any }) => {
 	const intl = useIntl();
 	const { record } = useModel('hocphan.decuonghocphan');
 	const { record: recLopHocPhan } = useModel('lophocphan.lophocphan');
@@ -69,11 +65,9 @@ const ThongTinChungPage = (props: { khoiChuongTrinh?: TKhoiChuongTrinhModal }) =
 				{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chuongtrinh' })}
 			</Divider>
 			<Descriptions style={{ marginTop: 12 }}>
-				{khoiChuongTrinh?.soThuTuKy ? (
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tt' })}>
-						<b>{khoiChuongTrinh?.soThuTuKy}</b>
-					</Descriptions.Item>
-				) : null}
+				<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tt' })}>
+					<b>{khoiChuongTrinh?.soThuTuKy}</b>
+				</Descriptions.Item>
 				<Descriptions.Item
 					label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.khoikienthuc' })}
 					span={khoiChuongTrinh?.soThuTuKy ? 2 : 3}
@@ -124,13 +118,7 @@ const ThongTinChungPage = (props: { khoiChuongTrinh?: TKhoiChuongTrinhModal }) =
 
 			{/* <TrongSoHocPhanPage /> */}
 
-			<Collapse
-				bordered={false}
-				ghost
-				expandIconPosition='right'
-				className='collapse-big-title'
-				style={{ marginTop: 12 }}
-			>
+			<Collapse style={{ marginTop: 12 }}>
 				<Collapse.Panel header={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.muctieu' })} key='1'>
 					<div dangerouslySetInnerHTML={{ __html: record?.mucTieuHocPhan ?? '--' }} />
 				</Collapse.Panel>

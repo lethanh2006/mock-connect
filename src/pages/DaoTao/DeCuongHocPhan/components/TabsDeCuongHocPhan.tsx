@@ -1,14 +1,9 @@
-import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
 import ThongTinChungPage from './ThongTinChung';
 
-type TKhoiChuongTrinhModal = Omit<Partial<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>, 'khoiKienThuc'> & {
-	khoiKienThuc?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT['khoiKienThuc'] | ChuongTrinhDaoTao.IKhoiKienThuc | null;
-};
-
-const TabsDeCuongHocPhan = (props: { activeKey?: string; khoiChuongTrinh?: TKhoiChuongTrinhModal }) => {
+const TabsDeCuongHocPhan = (props: { activeKey?: string; khoiChuongTrinh?: any }) => {
 	const intl = useIntl();
 	const [activeKey, setActiveKey] = useState<string>(props.activeKey || '0');
 

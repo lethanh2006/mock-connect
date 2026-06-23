@@ -1,11 +1,9 @@
-import { Carousel, Empty, Spin } from 'antd';
+import { Carousel, Divider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import ChartDiemTrungBinh from './ChartDiemTrungBinh';
-import ChartPloToanKhoa from './ChartPlo';
 import ChartSoTinChi from './ChartSoTinChi';
 import StatKetQuaTichLuySinhVien from './StatKetQuaTichLuy';
-import './style.less';
 
 const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolean }) => {
 	const intl = useIntl();
@@ -22,11 +20,11 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolea
 		<Spin spinning={loading}>
 			{danhSach.length ? (
 				<>
-					<div style={{ marginBottom: 12 }}>
-						<StatKetQuaTichLuySinhVien />
-					</div>
-
-					<Carousel autoplay pauseOnDotsHover>
+					<StatKetQuaTichLuySinhVien maKhoaNganh={maKhoaNganh} />
+					<Divider orientation='left' dashed className='divider-big-title'>
+						{intl.formatMessage({ id: 'ketquahoctap.chart.creditStatistics' })}
+					</Divider>
+					<Carousel pauseOnDotsHover style={{ marginTop: 12 }} autoplay>
 						<div>
 							<div style={{ marginBottom: 8 }}>
 								<ChartSoTinChi />
@@ -37,11 +35,11 @@ const KetQuaToanKhoaSinhVien = (props: { maKhoaNganh?: string; loadData?: boolea
 								<ChartDiemTrungBinh />
 							</div>
 						</div>
-						<div>
+						{/* <div>
 							<div style={{ marginBottom: 8 }}>
 								<ChartPloToanKhoa maKhoaNganh={maKhoaNganh ?? ''} />
 							</div>
-						</div>
+						</div> */}
 					</Carousel>
 				</>
 			) : (
