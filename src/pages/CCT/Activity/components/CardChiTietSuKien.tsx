@@ -12,6 +12,7 @@ import { useIntl } from 'umi';
 import FormRoleEvidence from '../../History/components/FormRoleEvidence';
 import CardSuKienCCT from './CardSuKien';
 
+
 const CardChiTietSuKien = (props: {
 	record: Activity.IRecord;
 	evidenceDeadline: string;

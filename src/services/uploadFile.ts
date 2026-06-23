@@ -1,5 +1,5 @@
 import axios from '@/utils/axios';
-import { ipFile } from '@/utils/ip';
+import { ip3, ipFile } from '@/utils/ip';
 
 export enum EFileScope {
 	PUBLIC = 'Public',
@@ -32,6 +32,11 @@ const getFilename = (file: Blob): string => {
 const getFileExtension = (filename: string): string => {
 	const ext = filename.split('.').pop();
 	return ext && ext !== filename ? ext : '';
+};
+
+export const getFileRouteBase = (ip?: string) => {
+	const base = (ip ?? ip3).replace(/\/+$/, '');
+	return base.endsWith('/file') ? base : `${base}/file`;
 };
 
 const uploadMultipartParts = async (file: Blob, initData: TMultipartInitData): Promise<TMultipartCompletePart[]> => {
@@ -135,11 +140,9 @@ export async function uploadFile(
 	ip: string = ipFile,
 ) {
 	const form = new FormData();
-
-	form.append('file', payload.file);
-	form.append('scope', payload.scope);
-
-	return axios.post(ip, form);
+	form.append('file', payload?.file);
+	form.append('scope', payload?.scope);
+	return axios.post(getFileRouteBase(ip ?? ipFile), form);
 }
 
 /**

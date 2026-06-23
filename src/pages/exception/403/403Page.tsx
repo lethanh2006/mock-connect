@@ -1,7 +1,8 @@
 import Footer from '@/components/Footer';
 import { OIDCBounder } from '@/components/OIDCBounder';
 import { landingUrl } from '@/services/base/constant';
-import { currentRole } from '@/utils/ip';
+import { currentRole, financeApiClientId, qldtApiClientId } from '@/utils/ip';
+import { hasModulePermission } from '@/utils/keycloakRoles';
 import { GlobalOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Button, Result } from 'antd';
 import { useEffect } from 'react';
@@ -11,9 +12,9 @@ const NotAccessible = () => {
 	const { initialState } = useModel('@@initialState');
 
 	useEffect(() => {
-		if (currentRole && initialState?.authorizedPermissions?.find((item) => item.rsname === currentRole))
+		if (currentRole && hasModulePermission(initialState, currentRole, [qldtApiClientId, financeApiClientId]))
 			history.replace('/dashboard');
-	}, [initialState?.authorizedPermissions]);
+	}, [initialState?.authorizedPermissions, initialState?.authorizedRoles]);
 
 	const onLogout = (): void => OIDCBounder?.getActions()?.dangXuat();
 

@@ -44,6 +44,9 @@ export interface IInitialState {
 	settings?: Partial<ProSettings>;
 	currentUser?: Login.IUser;
 	authorizedPermissions?: Login.IPermission[];
+	authorizedRoles?: string[];
+	authorizedRolesByClient?: Record<string, string[]>;
+	realmRoles?: string[];
 	permissionLoading?: boolean;
 }
 
