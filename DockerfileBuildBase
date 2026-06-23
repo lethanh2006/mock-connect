@@ -4,4 +4,4 @@ WORKDIR /app
 
 COPY package.json yarn.lock /app/
 
-RUN yarn install && cp yarn.lock /opt/build-base.yarn.lock
+RUN yarn install --frozen-lockfile && yarn cache clean && cp yarn.lock /opt/build-base.yarn.lock

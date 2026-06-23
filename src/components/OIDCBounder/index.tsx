@@ -3,7 +3,8 @@ import { getPermission, getUserInfo } from '@/services/base/api';
 import { AppModules } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
-import { currentRole, replaceRole } from '@/utils/ip';
+import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
+import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
 import { notification } from 'antd';
 import queryString from 'query-string';
@@ -48,15 +49,20 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 		if (auth.user) {
 			handleAxios(auth.user.access_token);
 			try {
-				const [getPermissionsResponse, getUserInfoResponse] = await Promise.all([getPermission(), getUserInfo()]);
+				const [getUserInfoResponse, getPermissionsResponse] = await Promise.all([
+					getUserInfo(),
+					getPermission().catch(() => ({ data: [] })),
+				]);
 				const userInfo: Login.IUser = getUserInfoResponse?.data;
 				const permissions: Login.IPermission[] = getPermissionsResponse.data;
+				const roleContext = getKeycloakRoleContext(auth.user.access_token, [qldtApiClientId, financeApiClientId]);
 				const isUncheckPath = unCheckPermissionPaths.some((path) => window.location.pathname.includes(path));
-				const hasRole = permissions.some((item) => item.rsname === currentRole);
 				const tmpInitialState = {
 					currentUser: { ...userInfo, ssoId: userInfo.sub },
 					authorizedPermissions: permissions,
+					...roleContext,
 				};
+				const hasRole = hasModulePermission(tmpInitialState, currentRole, [qldtApiClientId, financeApiClientId]);
 
 				// Ensure permission is fully set before marking as loaded
 				setInitialState((prev) => ({
@@ -74,8 +80,8 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 					setInitialState((prev) => ({ ...prev, permissionLoading: false }));
 				}, 0);
 
-				if (!isUncheckPath && currentRole && permissions.length && !hasRole) {
-					const hasReplaceRole = permissions.some((item) => item.rsname === replaceRole);
+				if (!isUncheckPath && currentRole && !hasRole) {
+					const hasReplaceRole = hasModulePermission(tmpInitialState, replaceRole, [qldtApiClientId, financeApiClientId]);
 					const linkReplace = !!replaceRole && AppModules[replaceRole]?.url;
 
 					if (!!linkReplace && hasReplaceRole) {
