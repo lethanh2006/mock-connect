@@ -24,7 +24,6 @@ import SplitPane from 'react-split-pane';
 import Pane from 'react-split-pane/lib/Pane';
 import { Link, useIntl, useModel } from 'umi';
 import FilterColumn from './components/FilterColumn';
-import FormLichCaNhan from './components/FormLichCaNhan';
 import GhiChuLich from './components/GhiChuLich';
 // import LichSapToi from './components/LichSapToi';
 import ModalViewDetailCalendar from './components/ModalViewDetail';
@@ -380,9 +379,11 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 										className={styles.ngay__title}
 										style={{ color: dayjs().isSame(ngay, 'day') ? 'var(--color-primary)' : undefined }}
 									>
-										{thuTrongTuan}, {formatDate(ngay, 'DD/MM')}
+										{dayjs().isSame(ngay, 'day')
+											? messagesCalendar.today
+											: `${thuTrongTuan}, ${formatDate(ngay, 'DD/MM')}`}
 									</div>
-									<Tag color='red'>{cacSuKien.length}</Tag>
+									<Tag color='yellow'>{cacSuKien.length}</Tag>
 								</Space>
 							</Divider>
 							{cacSuKienSorted.map((sukien) => {
@@ -391,16 +392,17 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 								return (
 									<div
 										key={`${sukien._id ?? sukien.title}-${sukien.ngayHienThi ?? sukien.thoiGianBatDau}`}
-										className={styles.su_kien}
+										className={`${styles.su_kien} ${dayjs().isSame(ngay, 'day') ? styles.today : ''}`}
 										// style={{ background: ColorSuKien[sukien.loaiSuKien] }}
 										onClick={() => handleEventClick(sukien)}
 									>
 										<div className={styles.su_kien__left}>
-											{dayjs().isSameOrAfter(sukien.thoiGianBatDau) &&
-											dayjs().isSameOrBefore(sukien.thoiGianKetThuc) ? (
-												<div className={styles.pulse} />
-											) : null}
-											<div className={styles.su_kien__thoi_gian}>{renderListEventTime(sukien)}</div>
+											<div
+												className={styles.su_kien__thoi_gian}
+												style={{ color: dayjs().isSame(ngay, 'day') ? '#0E50CF' : undefined }}
+											>
+												{renderListEventTime(sukien)}
+											</div>
 										</div>
 										<div
 											className={styles.su_kien__right}
@@ -577,7 +579,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				</SplitPane>
 			)}
 
-			<Modal
+			{/* <Modal
 				open={visibleForm}
 				onCancel={() => setVisibleForm(false)}
 				footer={null}
@@ -590,7 +592,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 				}
 			>
 				<FormLichCaNhan getData={getData} />
-			</Modal>
+			</Modal> */}
 
 			{/* Modal xem chi tiết lịch */}
 			{selectEvent ? (

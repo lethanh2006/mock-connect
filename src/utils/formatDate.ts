@@ -1,14 +1,14 @@
-import dayjs from './dayjs';
 import { getLocale } from 'umi';
+import dayjs from './dayjs';
 
 /**
- * Normalizes the locale string from umi (e.g., 'vi-VN', 'en-US') 
+ * Normalizes the locale string from umi (e.g., 'vi-VN', 'en-US')
  * to dayjs locale (e.g., 'vi', 'en').
  */
 const getDayjsLocale = () => {
-  const locale = getLocale();
-  if (locale.startsWith('vi')) return 'vi';
-  return 'en';
+	const locale = getLocale();
+	if (locale.startsWith('vi')) return 'vi';
+	return 'en';
 };
 
 /**
@@ -16,8 +16,8 @@ const getDayjsLocale = () => {
  * @returns {string} Format string (e.g., 'DD/MM/YYYY' for vi, 'MM/DD/YYYY' for en)
  */
 export const getDateFormat = (): string => {
-  const locale = getDayjsLocale();
-  return locale === 'vi' ? 'DD/MM/YYYY' : 'MM/DD/YYYY';
+	const locale = getDayjsLocale();
+	return locale === 'vi' ? 'DD/MM/YYYY' : 'MM/DD/YYYY';
 };
 
 /**
@@ -25,8 +25,8 @@ export const getDateFormat = (): string => {
  * @returns {string} Format string
  */
 export const getDateTimeFormat = (): string => {
-  const locale = getDayjsLocale();
-  return locale === 'vi' ? 'DD/MM/YYYY HH:mm' : 'MM/DD/YYYY HH:mm';
+	const locale = getDayjsLocale();
+	return locale === 'vi' ? 'DD/MM/YYYY HH:mm' : 'MM/DD/YYYY HH:mm';
 };
 
 /**
@@ -44,8 +44,7 @@ export const formatTime = (time: any, formatStr?: string): string => {
 	if (formatStr) return parsed.locale(locale === 'vi' ? 'vi' : 'en').format(formatStr);
 
 	if (locale === 'vi') {
-		const meridiem = parsed.hour() < 12 ? 'SA' : 'CH';
-		return `${parsed.format('H:mm')} ${meridiem}`;
+		return `${parsed.format('H:mm')}`;
 	}
 
 	return parsed.locale('en').format('h:mm A');
@@ -54,9 +53,9 @@ export const formatTime = (time: any, formatStr?: string): string => {
 /**
  * Formats a time range from API datetime fields (thoiGianBatDau, thoiGianKetThuc).
  */
-export const formatTimeRange = (start: any, end: any): string => {
-	const startStr = formatTime(start);
-	const endStr = formatTime(end);
+export const formatTimeRange = (start: any, end: any, formatStr?: string): string => {
+	const startStr = formatTime(start, formatStr);
+	const endStr = formatTime(end, formatStr);
 
 	if (!startStr || !endStr) return '';
 
@@ -70,10 +69,10 @@ export const formatTimeRange = (start: any, end: any): string => {
  * @returns {string} Formatted date string
  */
 export const formatDate = (date: any, formatStr?: string): string => {
-  if (!date) return '';
-  const locale = getDayjsLocale();
-  const format = formatStr || (locale === 'vi' ? 'DD/MM/YYYY' : 'MM/DD/YYYY');
-  return dayjs(date).locale(locale).format(format);
+	if (!date) return '';
+	const locale = getDayjsLocale();
+	const format = formatStr || (locale === 'vi' ? 'DD/MM/YYYY' : 'MM/DD/YYYY');
+	return dayjs(date).locale(locale).format(format);
 };
 
 /**

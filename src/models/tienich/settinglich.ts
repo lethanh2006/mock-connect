@@ -2,6 +2,7 @@ import useInitModel from '@/hooks/useInitModel';
 import type { SettingLich } from '@/services/TienIch/SettingLich/typing';
 import { message } from 'antd';
 import { useState } from 'react';
+import { getIntl } from 'umi';
 
 const SETTING_LICH_STORAGE_KEY = 'setting-lich';
 
@@ -14,6 +15,7 @@ const getSettingLichStorage = () => {
 };
 
 export default () => {
+	const intl = getIntl();
 	const objInit = useInitModel<SettingLich.IRecord>('setting-lich');
 	const { record, setRecord, formSubmiting, setFormSubmiting, setVisibleForm } = objInit;
 	const [recSettingLocal, setRecSettingLocal] = useState<SettingLich.IRecord | undefined>(getSettingLichStorage);
@@ -43,7 +45,7 @@ export default () => {
 
 		try {
 			// const res = await postMeSettingLich(payload);
-			message.success('Lưu thành công');
+			message.success(intl.formatMessage({ id: 'global.message.luuthanhcong' }));
 			setRecordSettingLich({
 				...(record ?? recSettingLocal),
 				// ...(res.data?.data ?? {}),
@@ -72,7 +74,7 @@ export default () => {
 
 		try {
 			// const res = await putMeSettingLich(id, payload);
-			message.success('Lưu thành công');
+			message.success(intl.formatMessage({ id: 'global.message.luuthanhcong' }));
 			setRecordSettingLich({
 				...(record ?? recSettingLocal),
 				...payload,
