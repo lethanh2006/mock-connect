@@ -34,18 +34,18 @@ export default [
 	// 	component: 'TienIch/GioiThieu',
 	// 	hideInMenu: true,
 	// },
-	// {
-	// 	path: '/my-profile',
-	// 	name: 'MyProfile',
-	// 	icon: 'UserOutlined',
-	// 	component: 'New/MyProfile',
-	// },
-	// {
-	// 	path: '/my-calendar',
-	// 	name: 'MyCalendar',
-	// 	icon: 'CalendarOutlined',
-	// 	component: 'New/MyCalendar',
-	// },
+	{
+		path: '/my-profile',
+		name: 'MyProfile',
+		icon: 'UserOutlined',
+		component: 'SinhVien',
+	},
+	{
+		path: '/my-calendar',
+		name: 'MyCalendar',
+		icon: 'CalendarOutlined',
+		component: 'Calendar',
+	},
 	{
 		path: '/academic',
 		name: 'Academic',
@@ -61,16 +61,16 @@ export default [
 			// 	name: 'Timetable',
 			// 	component: 'Calendar',
 			// },
-			// {
-			// 	path: 'grades-transcript',
-			// 	name: 'GradesTranscript',
-			// 	component: 'HocTap/KetQuaHocTap',
-			// },
-			// {
-			// 	path: 'degree-audit',
-			// 	name: 'DegreeAudit',
-			// 	component: 'HocTap/TienTrinhHocTap',
-			// },
+			{
+				path: 'grades-transcript',
+				name: 'GradesTranscript',
+				component: 'HocTap/KetQuaHocTap',
+			},
+			{
+				path: 'degree-audit',
+				name: 'DegreeAudit',
+				component: 'HocTap/TienTrinhHocTap',
+			},
 			// {
 			// 	path: 'graduation-review',
 			// 	name: 'GraduationReview',

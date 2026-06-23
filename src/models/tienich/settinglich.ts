@@ -1,14 +1,37 @@
 import useInitModel from '@/hooks/useInitModel';
-import { postMeSettingLich, putMeSettingLich } from '@/services/TienIch/SettingLich';
 import type { SettingLich } from '@/services/TienIch/SettingLich/typing';
 import { message } from 'antd';
+import { useState } from 'react';
+
+const SETTING_LICH_STORAGE_KEY = 'setting-lich';
+
+const getSettingLichStorage = () => {
+	try {
+		return JSON.parse(localStorage.getItem(SETTING_LICH_STORAGE_KEY) || 'null') as SettingLich.IRecord | undefined;
+	} catch {
+		return undefined;
+	}
+};
 
 export default () => {
 	const objInit = useInitModel<SettingLich.IRecord>('setting-lich');
-	const { getModel, setRecord, formSubmiting, setFormSubmiting, setVisibleForm } = objInit;
+	const { record, setRecord, formSubmiting, setFormSubmiting, setVisibleForm } = objInit;
+	const [recSettingLocal, setRecSettingLocal] = useState<SettingLich.IRecord | undefined>(getSettingLichStorage);
+
+	const setRecordSettingLich = (rec?: SettingLich.IRecord) => {
+		setRecord(rec);
+		setRecSettingLocal(rec);
+
+		if (rec?.danhSachSettingLich) {
+			localStorage.setItem(SETTING_LICH_STORAGE_KEY, JSON.stringify(rec));
+		} else {
+			localStorage.removeItem(SETTING_LICH_STORAGE_KEY);
+		}
+	};
 
 	const getSettingLich = () => {
-		getModel(undefined, undefined, undefined, undefined, undefined, 'me')?.then((rec) => setRecord(rec[0] ?? {}));
+		// Không gọi API, chỉ lấy cấu hình màu lịch đã lưu ở localStorage.
+		setRecordSettingLich(getSettingLichStorage() ?? recSettingLocal);
 	};
 
 	const postMeSettingLichModel = async (
@@ -19,14 +42,19 @@ export default () => {
 		setFormSubmiting(true);
 
 		try {
-			const res = await postMeSettingLich(payload);
+			// const res = await postMeSettingLich(payload);
 			message.success('Lưu thành công');
+			setRecordSettingLich({
+				...(record ?? recSettingLocal),
+				// ...(res.data?.data ?? {}),
+				...payload,
+			} as SettingLich.IRecord);
 
 			if (getData) getData();
 			else getSettingLich();
 
 			setVisibleForm(false);
-			return res.data?.data;
+			// return res.data?.data;
 		} catch (err) {
 			return Promise.reject(err);
 		} finally {
@@ -43,14 +71,18 @@ export default () => {
 		setFormSubmiting(true);
 
 		try {
-			const res = await putMeSettingLich(id, payload);
+			// const res = await putMeSettingLich(id, payload);
 			message.success('Lưu thành công');
+			setRecordSettingLich({
+				...(record ?? recSettingLocal),
+				...payload,
+			} as SettingLich.IRecord);
 
 			if (getData) getData();
 			else getSettingLich();
 
 			setVisibleForm(false);
-			return res.data?.data;
+			// return res.data?.data;
 		} catch (err) {
 			return Promise.reject(err);
 		} finally {
@@ -60,6 +92,10 @@ export default () => {
 
 	return {
 		...objInit,
+		record: record ?? recSettingLocal,
+		setRecord: setRecordSettingLich,
+		recSettingLocal,
+		setRecSettingLocal: setRecordSettingLich,
 		getSettingLich,
 		postMeSettingLichModel,
 		putMeSettingLichModel,

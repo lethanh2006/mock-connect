@@ -106,16 +106,8 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					</div>
 					<div style={{ marginTop: 8 }}>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}</strong>:{' '}
-						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2.mota' })}
-					</div>
-					<div style={{ marginTop: 8 }}>
-						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc3' })}</strong>:{' '}
-						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc3.mota' })}
-					</div>
-					<div style={{ marginTop: 8 }}>
-						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc4' })}</strong>:{' '}
 						{intl.formatMessage(
-							{ id: 'dangkytinchi.duongdan.buoc4.mota' },
+							{ id: 'dangkytinchi.duongdan.buoc2.mota' },
 							{
 								dangky: (
 									<b style={{ color: '#134D8B' }}>{intl.formatMessage({ id: 'dangkytinchi.duongdan.dangky' })}</b>
