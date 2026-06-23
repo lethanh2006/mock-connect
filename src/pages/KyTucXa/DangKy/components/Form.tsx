@@ -293,6 +293,10 @@ const FormDangKyKTX = () => {
 							<div className="ktx-register-section mt-4">
 								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.emergencyContact' })}</Typography.Title>
 								<div className="ktx-register-section__content">
+									<Typography.Text style={{ display: 'block', marginBottom: 12, fontSize: 13 }}>
+										<span style={{ color: '#ff4d4f', marginRight: 4 }}>*</span>
+										{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.msg.min2Contacts' })}
+									</Typography.Text>
 									<Form.Item
 										name="emergencyContacts"
 										rules={[
@@ -436,7 +440,7 @@ const FormDangKyKTX = () => {
 					</div>
 				</div>
 			</Modal>
-			<ModalSuccessRegistration open={visibleSuccess} onClose={() => setVisibleSuccess(false)} />
+			<ModalSuccessRegistration open={visibleSuccess} onClose={() => setVisibleSuccess(false)} phong={phong} />
 		</>
 	);
 };

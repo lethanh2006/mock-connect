@@ -24,6 +24,7 @@ export default {
 	'kytucxa.lichsu.tooltip.delete': 'Delete',
 	'kytucxa.lichsu.tooltip.view': 'View Details',
 	'kytucxa.lichsu.tooltip.confirmDelete': 'Confirm Delete',
+	'kytucxa.lichsu.popconfirm.delete': 'Are you sure you want to cancel this dormitory room registration?',
 	'kytucxa.lichsu.tooltip.cannotPayment': 'Cannot pay in this status',
 	'kytucxa.lichsu.filter.period': 'Registration Period',
 	'kytucxa.lichsu.select.periodPlaceholder': 'Select Registration Period',

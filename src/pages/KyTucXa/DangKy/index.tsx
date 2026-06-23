@@ -11,12 +11,11 @@ import RoomDetailModal from './components/ModalDetailRoom';
 import SelectToaNhaKTX from './components/SelectToaNha';
 import SelectFloorKTX from './components/SelectFloor';
 import './style.less';
-// import { FilterIconCustom } from './components/IconsRoom';
+import { FilterIconCustom } from './components/IconsRoom';
 import { ETrangThaiDuyet } from '@/services/KyTucXa/constant';
 import SelectCapacityKTX from './components/SelectCapacity';
 import SelectRoomTypeKTX from './components/SelectRoomType';
 import PageCard from '@/components/PageCard';
-import ModalSuccessRegistration from './components/ModalSuccessRegistration';
 
 const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
@@ -39,14 +38,6 @@ const DangKyKyTucXaPage = () => {
 	}, [danhSachLichSu]);
 
 	const maPhongDaDangKy = activeRegistration?.phong?.ma || activeRegistration?.maPhong;
-
-	const [visibleAutoSuccess, setVisibleAutoSuccess] = useState(false);
-
-	useEffect(() => {
-		if (maPhongDaDangKy) {
-			setVisibleAutoSuccess(true);
-		}
-	}, [maPhongDaDangKy]);
 
 	useEffect(() => {
 		getDotDangKy();
@@ -199,9 +190,9 @@ const DangKyKyTucXaPage = () => {
 					<div className='ktx-page__main-card'>
 						<div className='ktx-page__filter-bar'>
 							<Row gutter={[12, 8]} align='middle' wrap={false}>
-								{/* <Col flex='none' style={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
+								<Col flex='none' style={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
 									<FilterIconCustom />
-								</Col> */}
+								</Col>
 
 								<Col flex='220px'>
 									<SelectToaNhaKTX
@@ -294,13 +285,8 @@ const DangKyKyTucXaPage = () => {
 					/>
 
 					<FormDangKy />
-					<ModalSuccessRegistration
-						open={visibleAutoSuccess}
-						onClose={() => setVisibleAutoSuccess(false)}
-						phong={(danhSachPhong as KyTucXa.IPhong[])?.find(p => p.ma === maPhongDaDangKy) || activeRegistration?.phong}
-					/>
 				</>
-			)}
+			)} 
 		</PageCard>
 	);
 };

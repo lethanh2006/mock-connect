@@ -23,6 +23,7 @@ export default {
     'kytucxa.lichsu.tooltip.delete': 'Xóa',
     'kytucxa.lichsu.tooltip.view': 'Xem chi tiết',
     'kytucxa.lichsu.tooltip.confirmDelete': 'Xác nhận xóa',
+    'kytucxa.lichsu.popconfirm.delete': 'Bạn có chắc chắn muốn huỷ đăng ký phòng này không?',
     'kytucxa.lichsu.tooltip.cannotPayment': 'Không thể thanh toán ở trạng thái này',
     'kytucxa.lichsu.filter.period': 'Đợt đăng ký',
     'kytucxa.lichsu.select.periodPlaceholder': 'Chọn đợt đăng ký',
