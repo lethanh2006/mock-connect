@@ -8,7 +8,7 @@ import Chart from 'react-apexcharts';
 import { useIntl, useModel } from 'umi';
 
 const getHocKySortValue = (item: KetQuaHocKy.IRecord) => {
-	return Number(item.hocKy?.ma ?? item.maHocKy ?? 0);
+	return Number(item.maHocKy ?? item.hocKy?.ma ?? 0);
 };
 
 const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
@@ -16,9 +16,10 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 	const { data } = props;
 	const { danhSach: danhSachModel } = useModel('daotao.ketquahocky');
 	const danhSach = useMemo(
-		() => [...(data ?? danhSachModel)].sort((a, b) => getHocKySortValue(b) - getHocKySortValue(a)),
+		() => [...(data ?? danhSachModel)].sort((a, b) => getHocKySortValue(a) - getHocKySortValue(b)),
 		[data, danhSachModel],
 	);
+
 	const locale = getLocale();
 	const defaultLocale = locale === 'vi-VN' ? 'vi' : 'en';
 
@@ -68,11 +69,10 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 		xaxis: {
 			categories: danhSach.map((item) => item.hocKy || item.maHocKy),
 			labels: {
-				rotate: -25,
-				rotateAlways: true,
+				rotate: danhSach.length < 13 ? 0 : -25,
+				rotateAlways: danhSach.length >= 13,
 				hideOverlappingLabels: false,
 				showDuplicates: true,
-				trim: false,
 				maxHeight: 90,
 				formatter: (value: any) => {
 					return value?.ten || value;
@@ -87,6 +87,36 @@ const ChartSoTinChi = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 					plotOptions: {
 						bar: {
 							columnWidth: '70%',
+						},
+					},
+				},
+			},
+			{
+				breakpoint: 1248,
+				options: {
+					legend: { position: 'bottom', horizontalAlign: 'center', offsetY: 0 },
+					xaxis: {
+						labels: {
+							rotate: -25,
+							rotateAlways: true,
+							maxHeight: 120,
+						},
+					},
+				},
+			},
+			{
+				breakpoint: 576,
+				options: {
+					legend: { show: false },
+				},
+			},
+			{
+				breakpoint: 506,
+				options: {
+					legend: { show: false },
+					xaxis: {
+						labels: {
+							show: false,
 						},
 					},
 				},

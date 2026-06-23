@@ -23,7 +23,7 @@ export default {
 	'lophocphan.card.tieptheo': 'Next',
 	'lophocphan.card.khongco': 'None',
 	'lophocphan.hocsaptoi.title': 'Upcoming Class Session',
-	'lophocphan.hocsaptoi.empty': 'No Scheduled Sessions',
+	'lophocphan.hocsaptoi.empty': 'No Scheduled Classes',
 	'lophocphan.hocsaptoi.xemchitiet': 'View Details',
 	'lophocphan.id.thongtinchung': 'General Information',
 	'lophocphan.id.lichhoc': 'Schedule',

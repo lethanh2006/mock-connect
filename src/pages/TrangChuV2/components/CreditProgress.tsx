@@ -1,6 +1,6 @@
 import { tinhThongKeMinor } from '@/pages/HocTap/TienTrinhHocTap/utils';
 import { Flex, Progress, Typography } from 'antd';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
 interface CreditProgressRowProps {
@@ -41,18 +41,10 @@ const CreditProgressRow = ({ title, current, total, color }: CreditProgressRowPr
 
 const CreditProgress = () => {
 	const intl = useIntl();
-	const { record: recTienTrinh, getTienTrinhTotNghiepModel } = useModel('sinhvien.tientrinhtotnghiep');
-	const { getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
-	const { tienTrinhKhungMinors, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+	const { record: recTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
+	const { tienTrinhKhungMinors } = useModel('daotao.chuongtrinhdaotao');
 
 	const thongKeMinor = useMemo(() => tinhThongKeMinor(tienTrinhKhungMinors), [tienTrinhKhungMinors]);
-
-	useEffect(() => {
-		getKhoaNganhMeModel().then((res) => {
-			if (res?.khoaNganhChinh?.ma) getTienTrinhTotNghiepModel(res.khoaNganhChinh.ma);
-			sinhVienGetTienTrinhKhungModel(false);
-		});
-	}, []);
 
 	return (
 		<Flex vertical gap={16}>

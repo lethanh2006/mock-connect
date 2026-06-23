@@ -5,14 +5,16 @@ import { useIntl, useModel } from 'umi';
 
 const CHART_COLORS = ['#5B8FF9', '#68DDB5'];
 
-const getHocKySortValue = (item: KetQuaHocKy.IRecord) => Number(item.hocKy?.ma ?? item.maHocKy ?? 0);
+const getHocKySortValue = (item: KetQuaHocKy.IRecord) => {
+	return Number(item.maHocKy ?? item.hocKy?.ma ?? 0);
+};
 
 const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 	const intl = useIntl();
 	const { data } = props;
 	const { danhSach: danhSachModel } = useModel('daotao.ketquahocky');
 	const danhSach = useMemo(
-		() => [...(data ?? danhSachModel)].sort((a, b) => getHocKySortValue(b) - getHocKySortValue(a)),
+		() => [...(data ?? danhSachModel)].sort((a, b) => getHocKySortValue(a) - getHocKySortValue(b)),
 		[data, danhSachModel],
 	);
 	const formatY = (val: number) => (Math.round(val * 100) / 100).toString();
@@ -43,11 +45,10 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 				xaxis: {
 					categories: danhSach.map((item) => item.hocKy || item.maHocKy),
 					labels: {
-						rotate: -25,
-						rotateAlways: true,
+						rotate: danhSach.length < 13 ? 0 : -25,
+						rotateAlways: danhSach.length >= 13,
 						hideOverlappingLabels: false,
 						showDuplicates: true,
-						trim: false,
 						maxHeight: 90,
 						formatter: (value: any) => {
 							return value?.ten || value;
@@ -72,6 +73,19 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 						breakpoint: 1600,
 						options: {
 							legend: { position: 'right', horizontalAlign: 'center', offsetY: 100 },
+						},
+					},
+					{
+						breakpoint: 1248,
+						options: {
+							legend: { position: 'bottom', horizontalAlign: 'center', offsetY: 0 },
+							xaxis: {
+								labels: {
+									rotate: -25,
+									rotateAlways: true,
+									maxHeight: 120,
+								},
+							},
 						},
 					},
 				],

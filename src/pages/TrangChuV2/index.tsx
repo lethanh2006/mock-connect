@@ -1,4 +1,6 @@
 import { Col, Flex, Row } from 'antd';
+import { useEffect } from 'react';
+import { useModel } from 'umi';
 import Activities from './components/Activities';
 import CardCalendar from './components/Calendar';
 import CardTienTrinh from './components/CardTienTrinh';
@@ -10,6 +12,17 @@ import WelcomeCard from './components/WelcomeCard';
 import './styles.less';
 
 const TrangChuV2 = () => {
+	const { getTienTrinhTotNghiepModel } = useModel('sinhvien.tientrinhtotnghiep');
+	const { getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
+	const { sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
+
+	useEffect(() => {
+		getKhoaNganhMeModel().then((res) => {
+			if (res?.khoaNganhChinh?.ma) getTienTrinhTotNghiepModel(res.khoaNganhChinh.ma);
+			sinhVienGetTienTrinhKhungModel(false);
+		});
+	}, []);
+
 	return (
 		<Row gutter={[24, 24]}>
 			<Col xs={24} lg={16} xl={17}>

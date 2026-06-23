@@ -1,5 +1,6 @@
 import {
 	deleteDangKyTinChi,
+	getChiTietHocPhanDangKyTinChi,
 	getDotAvailable,
 	getLichDangKyTinChiTrongKhoang,
 	getLopDaHuyDangKyTinChi,
@@ -29,6 +30,7 @@ export default () => {
 	const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký tín chỉ trong học kỳ, back tự tính
 	const [danhSachLopDangKy, setDanhSachLopDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp hp đăng ký, bao gồm cả các lớp mới thêm
 	const [danhSachLopDaHuy, setDanhSachLopDaHuy] = useState<DangKyTinChi.AuditLog[]>([]); //Danh sách lớp sinh viên đã hủy đăng ký
+	const [chiTietHocPhan, setChiTietHocPhan] = useState<DangKyTinChi.IChiTietHocPhanDangKyTinChi>();
 	// Dữ liệu lịch học cho các lớp đang đăng ký hiện tại
 	// Dưới dạng { "DDMMYY": [true, true, false, false, true, true]...}
 	// Mỗi ngày tương ứng với mảng các tiết học trong ngày đó: true => Có lớp học trong tiết tương ứng
@@ -229,6 +231,24 @@ export default () => {
 		}
 	};
 
+	const getChiTietHocPhanDangKyTinChiModel = async (
+		maHocPhan: string,
+		maKhoaNganh: string,
+	): Promise<DangKyTinChi.IChiTietHocPhanDangKyTinChi> => {
+		setLoading(true);
+		try {
+			const res = await getChiTietHocPhanDangKyTinChi(maHocPhan, maKhoaNganh);
+			const data: DangKyTinChi.IChiTietHocPhanDangKyTinChi = res.data?.data;
+			setChiTietHocPhan(data);
+			return data;
+		} catch (er) {
+			setChiTietHocPhan(undefined);
+			return Promise.reject(er);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const revertLopDangKyTinDaHuyModel = async (idAuditLog: string, getData?: () => void): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
 		setFormSubmiting(true);
@@ -267,9 +287,11 @@ export default () => {
 		tinhDataLichHoc,
 		checkTrungLich,
 		sinhVienDot,
+		chiTietHocPhan,
 		danhSachLopDaHuy,
 		getLopDaHuyDangKyTinChiModel,
 		getLichDangKyTinChiTrongKhoangModel,
+		getChiTietHocPhanDangKyTinChiModel,
 		revertLopDangKyTinDaHuyModel,
 	};
 };
