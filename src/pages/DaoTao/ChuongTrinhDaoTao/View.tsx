@@ -41,7 +41,9 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 								{recTienTrinh.ctdtKeHoach.ma}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loaict' })}>
-								{recTienTrinh.ctdtKeHoach.loai ? LoaiChuongTrinhDaoTao[recTienTrinh.ctdtKeHoach.loai] : ''}
+								{recTienTrinh.ctdtKeHoach.loai
+									? intl.formatMessage({ id: LoaiChuongTrinhDaoTao[recTienTrinh.ctdtKeHoach.loai] })
+									: ''}
 							</Descriptions.Item>
 
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoasv' })}>
@@ -50,16 +52,21 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.nganh' })}>
 								{recTienTrinh.ctdtKeHoach.nganh?.ten ?? recTienTrinh.ctdtKeHoach.maNganh}
 							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.ngonngudaotao' })}>
+								{recTienTrinh.ctdtKeHoach.ngonNguDaoTao ?? '--'}
+							</Descriptions.Item>
 
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.thoigian' })}>
-								{recTienTrinh.ctdtKeHoach.thoiGianDaoTao ?? '--'} năm
+								{recTienTrinh.ctdtKeHoach.thoiGianDaoTao ?? '--'}{' '}
+								{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.nam' })}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.thoigiantoida' })}>
-								{recTienTrinh.ctdtKeHoach.thoiGianDaoTaoToiDa ?? '--'} năm
+								{recTienTrinh.ctdtKeHoach.thoiGianDaoTaoToiDa ?? '--'}{' '}
+								{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.nam' })}
 							</Descriptions.Item>
-
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tongsotinchi' })}>
-								{recTienTrinh.ctdtKeHoach.tongSoTinChi ?? '--'} tín chỉ
+								{recTienTrinh.ctdtKeHoach.tongSoTinChi ?? '--'}{' '}
+								{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tinchi' })}
 							</Descriptions.Item>
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.file' })}>
 								{recTienTrinh.ctdtKeHoach.url ? (
@@ -68,28 +75,45 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 							</Descriptions.Item>
 						</Descriptions>
 
-						<Divider>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.muctieu' })}</Divider>
+						<Divider orientation='left' className='divider-big-title' dashed>
+							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.muctieu' })}
+						</Divider>
 						<div
 							dangerouslySetInnerHTML={{
 								__html: recTienTrinh.ctdtKeHoach.mucTieuDaoTao ?? updatingHtml,
 							}}
 						/>
 
-						<Divider>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuandauvao' })}</Divider>
+						<Divider orientation='left' className='divider-big-title' dashed>
+							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.thongtinhocphi' })}
+						</Divider>
+						<div
+							dangerouslySetInnerHTML={{
+								__html: recTienTrinh.ctdtKeHoach.thongTinHocPhi ?? updatingHtml,
+							}}
+						/>
+
+						<Divider orientation='left' className='divider-big-title' dashed>
+							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuandauvao' })}
+						</Divider>
 						<div
 							dangerouslySetInnerHTML={{
 								__html: recTienTrinh.ctdtKeHoach.chuanDauVao ?? updatingHtml,
 							}}
 						/>
 
-						<Divider>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuandaura' })}</Divider>
+						<Divider orientation='left' className='divider-big-title' dashed>
+							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuandaura' })}
+						</Divider>
 						<div
 							dangerouslySetInnerHTML={{
 								__html: recTienTrinh.ctdtKeHoach.chuanDauRa ?? updatingHtml,
 							}}
 						/>
 
-						<Divider>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.vitri' })}</Divider>
+						<Divider orientation='left' className='divider-big-title' dashed>
+							{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.vitri' })}
+						</Divider>
 						<div
 							dangerouslySetInnerHTML={{
 								__html: recTienTrinh.ctdtKeHoach.viTriLamViec ?? updatingHtml,

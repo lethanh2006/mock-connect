@@ -1,5 +1,5 @@
-import { ipDaoTao } from '@/utils/ip';
 import axios from '@/utils/axios';
+import { ipDaoTao } from '@/utils/ip';
 
 export async function getDotAvailable(maHocKy: string) {
 	return axios.get(`${ipDaoTao}/dang-ky-tin-chi/validate/hoc-ky/${maHocKy}`);
@@ -31,4 +31,8 @@ export async function getLopDaHuyDangKyTinChi(idPhieuDktc: string) {
 
 export async function revertLopDangKyTinDaHuy(idAuditLog: string) {
 	return axios.post(`${ipDaoTao}/dang-ky-tin-chi/audit-log/sv-del-dk/${idAuditLog}/revert/me`);
+}
+
+export async function getLichDangKyTinChiTrongKhoang(payload: { fromDate: string; toDate: string }) {
+	return axios.get(`${ipDaoTao}/dang-ky-tin-chi/dot/lich/sinh-vien/from/${payload.fromDate}/to/${payload.toDate}`);
 }

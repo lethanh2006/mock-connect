@@ -1,6 +1,7 @@
 import {
 	deleteDangKyTinChi,
 	getDotAvailable,
+	getLichDangKyTinChiTrongKhoang,
 	getLopDaHuyDangKyTinChi,
 	getLopDangKy,
 	getPhieuDangKy,
@@ -16,8 +17,10 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { message } from 'antd';
 import { useState } from 'react';
+import { getIntl } from 'umi';
 
 export default () => {
+	const intl = getIntl();
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 	const [visibleRegister, setVisibleRegister] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -175,7 +178,7 @@ export default () => {
 	): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
 		try {
 			const res = await postDangKyTinChi(data);
-			message.success(messageText ?? 'Đăng ký thành công');
+			message.success(messageText ?? intl.formatMessage({ id: 'dangkytinchi.thongbao.dangky' }));
 
 			return res.data?.data;
 		} catch (er) {
@@ -191,7 +194,7 @@ export default () => {
 		setFormSubmiting(true);
 		try {
 			const res = await deleteDangKyTinChi(data);
-			message.success(messageText ?? 'Hủy đăng ký thành công');
+			message.success(messageText ?? intl.formatMessage({ id: 'dangkytinchi.thongbao.huydangky' }));
 
 			return res.data?.data;
 		} catch (er) {
@@ -214,12 +217,24 @@ export default () => {
 		}
 	};
 
+	const getLichDangKyTinChiTrongKhoangModel = async (payload: {
+		fromDate: string;
+		toDate: string;
+	}): Promise<DangKyTinChi.IDotDangKy[]> => {
+		try {
+			const res = await getLichDangKyTinChiTrongKhoang(payload);
+			return res.data?.data ?? [];
+		} catch (er) {
+			return Promise.reject(er);
+		}
+	};
+
 	const revertLopDangKyTinDaHuyModel = async (idAuditLog: string, getData?: () => void): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
 		setFormSubmiting(true);
 		try {
 			const res = await revertLopDangKyTinDaHuy(idAuditLog);
-			message.success('Lưu thành công');
+			message.success(intl.formatMessage({ id: 'global.message.luuthanhcong' }));
 
 			if (getData) getData();
 			return res.data?.data;
@@ -254,6 +269,7 @@ export default () => {
 		sinhVienDot,
 		danhSachLopDaHuy,
 		getLopDaHuyDangKyTinChiModel,
+		getLichDangKyTinChiTrongKhoangModel,
 		revertLopDangKyTinDaHuyModel,
 	};
 };
