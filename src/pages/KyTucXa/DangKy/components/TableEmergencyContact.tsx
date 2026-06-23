@@ -16,7 +16,7 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 	const [visibleForm, setVisibleForm] = useState(false);
 	const [editingRecord, setEditingRecord] = useState<EmergencyContact | null>(null);
 	const [reloading, setReloading] = useState(false);
-
+	
 	const handleAdd = () => {
 		setEditingRecord(null);
 		setVisibleForm(true);
@@ -118,26 +118,34 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 
 	return (
 		<div>
-			<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-				<Typography.Text type="secondary" style={{ marginTop: 12 }}>
-					Total <span style={{ color: 'red', fontWeight: 600 }}>{value.length}</span>
-				</Typography.Text>
-				<Space>
-					<Button icon={<SyncOutlined />} onClick={handleReload} loading={reloading} />
-					<Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-						{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
-					</Button>
-				</Space>
-			</div>
-			
-			<Table
-				dataSource={value}
-				columns={columns}
-				rowKey="id"
-				pagination={false}
-				bordered
-				size="middle"
-			/>
+			{value.length > 0 ? (
+				<>
+					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+						<Typography.Text type="secondary" style={{ marginTop: 12 }}>
+							Total <span style={{ color: 'red', fontWeight: 600 }}>{value.length}</span>
+						</Typography.Text>
+						<Space>
+							<Button icon={<SyncOutlined />} onClick={handleReload} loading={reloading} />
+							<Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+								{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
+							</Button>
+						</Space>
+					</div>
+					
+					<Table
+						dataSource={value}
+						columns={columns}
+						rowKey="id"
+						pagination={false}
+						bordered
+						size="middle"
+					/>
+				</>
+			) : (
+				<Button type="dashed" block icon={<PlusOutlined />} onClick={handleAdd} style={{ marginBottom: 16 }}>
+					{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
+				</Button>
+			)}
 
 			<FormEmergencyContact
 				visible={visibleForm}

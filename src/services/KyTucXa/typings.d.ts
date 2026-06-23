@@ -127,6 +127,23 @@ declare module KyTucXa {
         tenQuocTich: string;
     }
 
+    export interface IDiaChi {
+        diaChi: string;
+    }
+
+    export interface IThanhVienGiaDinh {
+        loaiThanhVien: string;
+        hoDem: string;
+        ten: string;
+        ngheNghiep: string;
+        soDienThoai: string;
+        email: string;
+        coQuanCongTac: string;
+        quocTich: string;
+        diaChiHienNay: IDiaChi;
+        hoKhauThuongTru: IDiaChi;
+    }
+
     export interface IThongTinSinhVien {
         ten: string;
         ma: string;
@@ -140,9 +157,9 @@ declare module KyTucXa {
         noiCapCccd: string;
         ngayCapCccd: string;
         soDienThoai: string;
-        hoKhauThuongTru: string;
+        hoKhauThuongTru: IDiaChi;
         nguoiLienLac: string;
         soDienThoaiNguoiLienLac: string;
-        thanhVienGiaDinh: string;
+        thanhVienGiaDinh: IThanhVienGiaDinh[];
     }
 }

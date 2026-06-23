@@ -175,32 +175,32 @@ const FormLichSuDk = () => {
                                     style={{ borderRadius: 8, background: '#fafbff', borderColor: '#d6e4ff' }}
                                 >
                                     <Row gutter={[12, 0]}>
-                                        <Col xs={24} md={8}>
+                                        <Col xs={24} md={12}>
                                             <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.emergencyContactName' })} style={{ marginBottom: 8 }}>
                                                 <Input readOnly variant="filled" value={contact.emergencyContactName} />
                                             </Form.Item>
                                         </Col>
-                                        <Col xs={24} md={8}>
+                                        <Col xs={24} md={12}>
                                             <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.emergencyRelationship' })} style={{ marginBottom: 8 }}>
                                                 <Input readOnly variant="filled" value={contact.emergencyRelationship} />
                                             </Form.Item>
                                         </Col>
-                                        <Col xs={24} md={8}>
+                                        <Col xs={24} md={12}>
                                             <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.emergencyContactNumber' })} style={{ marginBottom: 8 }}>
                                                 <Input readOnly variant="filled" value={contact.emergencyContactNumber} prefix={<PhoneOutlined />} />
                                             </Form.Item>
                                         </Col>
-                                        <Col xs={24} md={8}>
+                                        <Col xs={24} md={12}>
                                             <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.secondaryContactNumber' })} style={{ marginBottom: 8 }}>
                                                 <Input readOnly variant="filled" value={contact.secondaryContactNumber || '-'} prefix={<PhoneOutlined />} />
                                             </Form.Item>
                                         </Col>
-                                        <Col xs={24} md={8}>
+                                        <Col xs={24}>
                                             <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.email' })} style={{ marginBottom: 8 }}>
                                                 <Input readOnly variant="filled" value={contact.emergencyEmail || '-'} prefix={<MailOutlined />} />
                                             </Form.Item>
                                         </Col>
-                                        <Col xs={24} md={16}>
+                                        <Col xs={24}>
                                             <Form.Item label={intl.formatMessage({ id: 'kytucxa.lichsu.detail.field.address' })} style={{ marginBottom: 8 }}>
                                                 <Input readOnly variant="filled" value={contact.address} />
                                             </Form.Item>

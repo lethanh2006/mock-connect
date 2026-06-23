@@ -8,8 +8,6 @@ const ModalSuccessRegistration = ({ open, onClose, phong }: { open: boolean, onC
 	const intl = useIntl();
 	const { loaiPhongMap } = useModel('kytucxa.loaiphong');
 
-	console.log(phong)
-
 	const numBedLabel = useMemo(() => {
 		if (!phong) return intl.formatMessage({ id: 'kytucxa.dangky.success.checkin.location' });
 		return [phong.ma, phong.toaNha?.ten, phong.maLoaiPhongKtx ? loaiPhongMap.get(phong.maLoaiPhongKtx)?.ten : undefined].filter(Boolean).join(' · ');

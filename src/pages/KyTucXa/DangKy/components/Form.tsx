@@ -50,15 +50,23 @@ const FormDangKyKTX = () => {
 				phoneNumber: thongTinSinhVien.soDienThoai || '-',
 				nationality: thongTinSinhVien.quocTich || '-',
 				permanentHomeAddress: thongTinSinhVien.hoKhauThuongTru || '-',
-				emergencyContacts: [{
-					id: Date.now().toString(),
-					emergencyContactName: thongTinSinhVien.nguoiLienLac || '-',
-					emergencyContactNumber: thongTinSinhVien.soDienThoaiNguoiLienLac || '-',
-					emergencyRelationship: thongTinSinhVien.thanhVienGiaDinh || '-', 
-					secondaryContactNumber: '-',
-					emergencyEmail: '-',
-					address: thongTinSinhVien.hoKhauThuongTru || '-',
-				}],
+				emergencyContacts: (() => {
+					const validMembers = thongTinSinhVien.thanhVienGiaDinh?.filter(
+						(m: KyTucXa.IThanhVienGiaDinh) => m.ten || m.hoDem || m.soDienThoai || m.loaiThanhVien
+					) || [];
+					
+					return validMembers.length > 0
+						? validMembers.map((member: KyTucXa.IThanhVienGiaDinh, index: number) => ({
+							id: Date.now().toString() + index,
+							emergencyContactName: `${member.hoDem || ''} ${member.ten || ''}`.trim() || '-',
+							emergencyContactNumber: member.soDienThoai || '-',
+							emergencyRelationship: member.loaiThanhVien || '-',
+							secondaryContactNumber: '-',
+							emergencyEmail: member.email || '-',
+							address: member.diaChiHienNay?.diaChi || member.hoKhauThuongTru?.diaChi || thongTinSinhVien.hoKhauThuongTru || '-',
+						}))
+						: [];
+				})(),
 			});
 		}
 	}, [thongTinSinhVien, visibleForm, form]);
@@ -72,17 +80,23 @@ const FormDangKyKTX = () => {
 
 	const handleReloadEmergencyContacts = async () => {
 		try {
-			await getThongTinSinhVienModel();
+			const newData = await getThongTinSinhVienModel();
+			const familyMembers = newData?.thanhVienGiaDinh?.filter(
+				(m: KyTucXa.IThanhVienGiaDinh) => m.ten || m.hoDem || m.soDienThoai || m.loaiThanhVien
+			) || [];
+			
 			form.setFieldsValue({
-				emergencyContacts: [{
-					id: Date.now().toString(),
-					emergencyContactName: thongTinSinhVien?.nguoiLienLac || '-',
-					emergencyContactNumber: thongTinSinhVien?.soDienThoaiNguoiLienLac || '-',
-					emergencyRelationship: thongTinSinhVien?.thanhVienGiaDinh || '-', 
-					secondaryContactNumber: '-',
-					emergencyEmail: '-',
-					address: thongTinSinhVien?.hoKhauThuongTru || '-',
-				}]
+				emergencyContacts: familyMembers.length > 0 
+					? familyMembers.map((member: KyTucXa.IThanhVienGiaDinh, index: number) => ({
+						id: Date.now().toString() + index,
+						emergencyContactName: `${member.hoDem || ''} ${member.ten || ''}`.trim() || '',
+						emergencyContactNumber: member.soDienThoai || '',
+						emergencyRelationship: member.loaiThanhVien || '',
+						secondaryContactNumber:  member.soDienThoai || '',
+						emergencyEmail: member.email || '',
+						address: member.diaChiHienNay?.diaChi || member.hoKhauThuongTru?.diaChi || '',
+					}))
+					: []
 			});
 		} catch (error) {
 			console.error('Lỗi khi tải lại thông tin sinh viên:', error);
