@@ -1,7 +1,13 @@
 .view-switch-container {
-	margin-bottom: 24px;
 	display: flex;
-	justify-content: flex-start;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.view-switch-search {
+	flex: 1;
+	max-width: 320px;
 }
 
 .header-content {
@@ -18,9 +24,11 @@
 }
 
 .credits-text {
-	color: red;
-	padding: 2px;
+	margin: 0;
 	font-weight: 500;
+	background-color: #fff1f0 !important;
+	border-color: #ffa39e !important;
+	color: #cf1322 !important;
 }
 
 .stats-tag {
@@ -33,4 +41,9 @@
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 	gap: 12px;
+	align-items: stretch;
+
+	> .base-card {
+		height: 100%;
+	}
 }

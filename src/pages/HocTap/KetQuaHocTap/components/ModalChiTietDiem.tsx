@@ -1,10 +1,11 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { colorTrangThaiHocTap, ETrangThaiHocTap, trangThaiHocTap } from '@/services/DaoTao/constant';
+import { colorTrangThaiHocTap, ETrangThaiHocTap } from '@/services/DaoTao/constant';
+import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { InfoCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Descriptions, message, Modal, Popover, Space, Tag, Tooltip } from 'antd';
-import { useState } from 'react';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Descriptions, Divider, Empty, Modal, Space, Tag, Tooltip } from 'antd';
+import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
 import ModalQuyDoiDiem from '../../QuyDoiDiem/components/Modal';
@@ -20,7 +21,7 @@ const ModalChiTietDiem = (
 
 		// Chương trình khung
 		trangThaiHoc?: ETrangThaiHocTap;
-		khoiChuongTrinh?: Partial<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>;
+		khoiChuongTrinh?: any;
 		colorKhoiKienThuc?: string;
 		maKhoaNganh?: string;
 	} & Partial<Pick<ChuongTrinhDaoTao.TTienTrinhThucTe, 'hocPhan'>>,
@@ -34,26 +35,76 @@ const ModalChiTietDiem = (
 	const [visibleCongNhan, setVisibleCongNhan] = useState<boolean>(false);
 	const deCuongId = props.deCuongId ?? hocPhan?.deCuongHienTaiId;
 
-	const handleShowDeCuong = async () => {
-		if (deCuongId) setVisibleDeCuong(true);
-		else message.error('Không tìm thấy đề cương học phần');
+	// const handleShowDeCuong = async () => {
+	// 	if (deCuongId) setVisibleDeCuong(true);
+	// 	else message.error('Không tìm thấy đề cương học phần');
+	// };
+
+	const diemHienTai = useMemo(() => {
+		if (!listDiem.length) return undefined;
+		return [...listDiem].sort((a, b) => (b.maHocKy ?? '').localeCompare(a.maHocKy ?? ''))[0];
+	}, [listDiem]);
+
+	const renderTrangThai = () => {
+		if (trangThaiHoc === ETrangThaiHocTap.CHUA_HOC || trangThaiHoc === ETrangThaiHocTap.DANG_HOC) {
+			return (
+				<Tag color={colorTrangThaiHocTap[trangThaiHoc]}>
+					{intl.formatMessage({
+						id:
+							trangThaiHoc === ETrangThaiHocTap.CHUA_HOC
+								? 'daotao.trangthaihoctap.chuaHoc'
+								: 'daotao.trangthaihoctap.dangHoc',
+					})}
+				</Tag>
+			);
+		}
+
+		if (
+			diemHienTai?.dat === false ||
+			diemHienTai?.diemChu === ELoaiDiemChu.F ||
+			diemHienTai?.diemChu === ELoaiDiemChu.HOAN_THI ||
+			diemHienTai?.diemChu === ELoaiDiemChu.W ||
+			trangThaiHoc === ETrangThaiHocTap.CHUA_DAT
+		) {
+			return (
+				<Tag color={colorTrangThaiHocTap[ETrangThaiHocTap.CHUA_DAT]}>
+					{intl.formatMessage({ id: 'lophocphan.id.ketqua.khongdat' })}
+				</Tag>
+			);
+		}
+
+		if (diemHienTai?.dat === true || trangThaiHoc === ETrangThaiHocTap.DA_HOC) {
+			return (
+				<Tag color={colorTrangThaiHocTap[ETrangThaiHocTap.DA_HOC]}>
+					{intl.formatMessage({ id: 'lophocphan.id.ketqua.dat' })}
+				</Tag>
+			);
+		}
+
+		return null;
 	};
 
-	const renderHocPhanCt = (dsHocPhan?: ChuongTrinhDaoTao.THocPhanTuongQuan[], label?: string) => (
-		<Descriptions.Item label={label} span={3}>
-			{dsHocPhan?.length ? (
-				<ul style={{ marginBottom: 0, paddingLeft: 14 }}>
-					{dsHocPhan?.map((item) => (
-						<li key={item.ma}>
-							{item.ma} - {item.ten}
-						</li>
-					))}
-				</ul>
-			) : (
-				<i style={{ color: '#aaa' }}>{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.khongcothongtin' })}</i>
-			)}
-		</Descriptions.Item>
-	);
+	const trangThaiContent = renderTrangThai();
+
+	const renderHocPhanCt = (dsHocPhan?: ChuongTrinhDaoTao.THocPhanTuongQuan[] | null, label?: string) => {
+		const danhSachHienThi = Array.isArray(dsHocPhan) && dsHocPhan[0]?.ten ? dsHocPhan : [];
+
+		return (
+			<Descriptions.Item label={label} span={3}>
+				{danhSachHienThi.length ? (
+					<ul style={{ marginBottom: 0, paddingLeft: 14 }}>
+						{danhSachHienThi.map((item) => (
+							<li key={item.ma}>
+								{item.ma} - {item.ten}
+							</li>
+						))}
+					</ul>
+				) : (
+					'--'
+				)}
+			</Descriptions.Item>
+		);
+	};
 
 	return (
 		<>
@@ -82,115 +133,87 @@ const ModalChiTietDiem = (
 						<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 					</Space>
 				}
-				width={800}
+				width={1000}
 			>
-				{hocPhan ? (
-					<Descriptions
-						title={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.thongtin' })}
-						column={{ xs: 1, sm: 1, md: 3 }}
+				<Divider className='divider-big-title' orientation='left'>
+					{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.thongtin' })}
+				</Divider>
+				<Descriptions column={{ xs: 1, sm: 1, md: 3 }}>
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hp' })} span={3}>
+						{hocPhan?.ten ? (
+							<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chitiet' })}>
+								{/* <a onClick={handleShowDeCuong}> */}
+								<b>{hocPhan?.ten ?? ''}</b>
+								{/* </a> */}
+							</Tooltip>
+						) : (
+							<i>--</i>
+						)}
+					</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.mahp' })}>
+						{hocPhan?.ma}
+					</Descriptions.Item>
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.stc' })}>
+						{hocPhan?.soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tc' })}
+					</Descriptions.Item>
+					{/* {trangThaiContent ? ( */}
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.trangthai' })}>
+						{trangThaiContent}
+					</Descriptions.Item>
+					{/* ) : null} */}
+				</Descriptions>
+
+				<Divider className='divider-big-title' orientation='left'>
+					{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chuongtrinh' })}
+				</Divider>
+				<Descriptions style={{ marginTop: 12 }}>
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tt' })}>
+						<b>{khoiChuongTrinh?.soThuTuKy}</b>
+					</Descriptions.Item>
+					<Descriptions.Item
+						label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.khoikienthuc' })}
+						span={khoiChuongTrinh?.soThuTuKy ? 2 : 3}
 					>
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hp' })} span={3}>
-							{hocPhan?.ten ? (
-								<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chitiet' })}>
-									<a onClick={handleShowDeCuong}>
-										<b>{hocPhan?.ten ?? ''}</b>
-									</a>
-								</Tooltip>
-							) : (
-								<i>{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chuacapnhat' })}</i>
-							)}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.mahp' })}>
-							{hocPhan?.ma}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.stc' })}>
-							{hocPhan?.soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tc' })}
-						</Descriptions.Item>
-						{trangThaiHoc ? (
-							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.trangthai' })}>
-								<Tag color={colorTrangThaiHocTap[trangThaiHoc]}>{trangThaiHocTap[trangThaiHoc]}</Tag>
-							</Descriptions.Item>
-						) : null}
-					</Descriptions>
-				) : null}
-
-				{khoiChuongTrinh ? (
-					<Descriptions
-						title={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chuongtrinh' })}
-						style={{ marginTop: 12 }}
-					>
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tt' })}>
-							<b>{khoiChuongTrinh.soThuTuKy}</b>
-						</Descriptions.Item>
-						<Descriptions.Item
-							label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.khoikienthuc' })}
-							span={2}
-						>
-							<span style={{ color: props.colorKhoiKienThuc }}>
-								{khoiChuongTrinh.khoiKienThuc?.ten ?? khoiChuongTrinh.maKhoiKienThuc}
-							</span>
-						</Descriptions.Item>
-						{/* Sẽ được truyền vào từ CardKhoiHocPhan.tsx */}
-						{khoiChuongTrinh.ten && (
-							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tuchon' })} span={3}>
-								{khoiChuongTrinh.ten}
-							</Descriptions.Item>
-						)}
-						{renderHocPhanCt(
-							khoiChuongTrinh.dsHocPhanTienQuyet,
-							intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tienquyet' }),
-						)}
-						{renderHocPhanCt(
-							khoiChuongTrinh.dsHocPhanTruoc,
-							intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hptruoc' }),
-						)}
-						{renderHocPhanCt(
-							khoiChuongTrinh.dsHocPhanSongHanh,
-							intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hpsongnganh' }),
-						)}
-					</Descriptions>
-				) : null}
-
-				{(trangThaiHoc === undefined || trangThaiHoc !== ETrangThaiHocTap.CHUA_HOC) && listDiem.length
-					? listDiem
-							.sort((a, b) => (b.maHocKy ?? '').localeCompare(a.maHocKy ?? '')) // Sort DESC
-							.map((diem, index) => (
-								// eslint-disable-next-line react/no-array-index-key
-								<div style={{ marginBottom: index === 1 ? undefined : 18 }} key={index}>
-									<h4 style={{ fontWeight: 600, fontSize: 16, marginBottom: 10, marginTop: 12 }}>
-										Chi tiết kết quả học tập
-										{listDiem.length > 1
-											? ` ${intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hoclan' })} ${listDiem.length - index}`
-											: null}{' '}
-										<Popover
-											content={
-												<Descriptions
-													column={1}
-													title={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hoctap' })}
-													style={{ maxWidth: 300 }}
-												>
-													<Descriptions.Item
-														label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.kyhoc' })}
-														span={2}
-													>
-														{diem?.hocKy?.ten ?? diem.maHocKy ?? '--'}
-													</Descriptions.Item>
-													<Descriptions.Item
-														label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tenlop' })}
-													>
-														{diem?.tenLopHocPhan ?? '--'}
-													</Descriptions.Item>
-												</Descriptions>
-											}
-										>
-											<InfoCircleOutlined />
-										</Popover>
-									</h4>
-
-									<DetailKetQuaHocTap key={diem._id} diemHpSvHk={diem} />
-								</div>
-							))
-					: null}
+						<span>{khoiChuongTrinh?.khoiKienThuc?.ten ?? khoiChuongTrinh?.maKhoiKienThuc}</span>
+					</Descriptions.Item>
+					{/* Sẽ được truyền vào từ CardKhoiHocPhan.tsx */}
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tuchon' })} span={3}>
+						{khoiChuongTrinh?.ten ?? '--'}
+					</Descriptions.Item>
+					{renderHocPhanCt(
+						khoiChuongTrinh?.dsHocPhanTienQuyet,
+						intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tienquyet' }),
+					)}
+					{renderHocPhanCt(
+						khoiChuongTrinh?.dsHocPhanTruoc,
+						intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hptruoc' }),
+					)}
+					{renderHocPhanCt(
+						khoiChuongTrinh?.dsHocPhanSongHanh,
+						intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hpsongnganh' }),
+					)}
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })} span={3}>
+						{khoiChuongTrinh?.chuyenNganh?.ten ?? '--'}
+					</Descriptions.Item>
+				</Descriptions>
+				<Divider dashed orientation='left' className='divider-big-title'>
+					{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chitietketqua' })}
+				</Divider>
+				{(trangThaiHoc === undefined || trangThaiHoc !== ETrangThaiHocTap.CHUA_HOC) && listDiem.length ? (
+					listDiem
+						.sort((a, b) => (b.maHocKy ?? '').localeCompare(a.maHocKy ?? '')) // Sort DESC
+						.map((diem, index) => (
+							// eslint-disable-next-line react/no-array-index-key
+							<div style={{ marginBottom: index === 1 ? undefined : 18, fontWeight: 600 }} key={index}>
+								{listDiem.length > 0
+									? `${intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hoclan' })} ${listDiem.length - index}`
+									: null}
+								<DetailKetQuaHocTap key={diem._id} diemHpSvHk={diem} />
+							</div>
+						))
+				) : (
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+				)}
 			</Modal>
 
 			<ModalHocPhan
@@ -198,6 +221,7 @@ const ModalChiTietDiem = (
 				setVisible={setVisibleDeCuong}
 				title={`${intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chitiethp' })} ${record?.hocKy?.ten ? `- ${record?.hocKy?.ten ?? ''}` : ''}`}
 				deCuongId={deCuongId}
+				khoiChuongTrinh={khoiChuongTrinh}
 			/>
 
 			{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (

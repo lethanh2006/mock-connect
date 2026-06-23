@@ -136,11 +136,7 @@ export declare module LopHocPhan {
 	}
 
 	export interface IDiemHpSvHk
-		extends IDiemThanhPhan,
-			IDiemThi,
-			IDiemTongKet,
-			HocPhan.ITrongSoDeCuong,
-			HocPhan.ITrongSoThi {
+		extends IDiemThanhPhan, IDiemThi, IDiemTongKet, HocPhan.ITrongSoDeCuong, HocPhan.ITrongSoThi {
 		_id: string;
 		sinhVienSsoId: string;
 		// maSinhVien: string;
@@ -171,6 +167,7 @@ export declare module LopHocPhan {
 		public: boolean;
 		/** Điểm nhập cứng, ko tính toán từ data? */
 		isStatic?: boolean;
+		ghiChuDiem?: string;
 		/** Bỏ qua HP ko tính vào điểm tích lũy */
 		skip?: boolean;
 

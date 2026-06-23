@@ -12,8 +12,8 @@ import {
 import { type DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import dayjs from '@/utils/dayjs';
-import { formatDateTime } from '@/utils/formatDate';
-import { CalendarOutlined, DeleteOutlined } from '@ant-design/icons';
+import { formatDateTime, formatTimeRange } from '@/utils/formatDate';
+import { CalendarOutlined, DeleteOutlined, HistoryOutlined } from '@ant-design/icons';
 import { Popconfirm, Space, Tag } from 'antd';
 import _ from 'lodash';
 import { useState } from 'react';
@@ -21,6 +21,7 @@ import { useIntl, useModel } from 'umi';
 import ConfirmKetHuyLopDKTC from './ConfirmHuyLop';
 import ModalDangKy from './ModalDangKy';
 import ModalLichHoc from './ModalLichHoc';
+import ModalLopDaHuy from './ModalLopDaHuy';
 import RenderLichHoc from './RenderLichHoc';
 
 /** Hiển thị danh sách các lớp đã đăng ký và đã chọn
@@ -34,7 +35,7 @@ const PhieuDangKy = (props: {
 	soTinChiToiDa: number;
 	soTinChiToiThieu: number;
 }) => {
-	const { getData, danhSachLopHienThi, tongTinChi, soTinChiToiDa, soTinChiToiThieu } = props;
+	const { getData, danhSachLopHienThi, tongTinChi, soTinChiToiThieu } = props;
 	const intl = useIntl();
 	const {
 		dotDangKyHienTai,
@@ -45,8 +46,6 @@ const PhieuDangKy = (props: {
 		deleteDangKyTinChiModel,
 		tinhDataLichHoc,
 		setVisibleModal,
-		setVisibleRegister,
-		sinhVienDot,
 	} = useModel('daotao.dotdangkytinchi');
 	const [visibleHuyLop, setVisibleHuyLop] = useState<boolean>(false);
 	const [visibleLopDaHuy, setVisibleLopDaHuy] = useState(false);
@@ -54,11 +53,6 @@ const PhieuDangKy = (props: {
 	const [deCuongModal, setDeCuongModal] = useState<{ deCuongId: string; title: string } | null>(null);
 
 	const [recLopDangKy, setRecLopDangKy] = useState<DangKyTinChi.ILopDangKy>();
-
-	const tongTinChiChuaDk = _.sumBy(
-		danhSachLopDangKy.filter((item) => item.trangThai === ETrangThaiDangKyTinChi.CHUA_DANG_KY),
-		(item) => item.soTinChi,
-	);
 
 	// Đang trong thời gian đăng ký tín chỉ => Được phép đăng ký, xóa đăng ký
 	const dangTrongThoiGian =
@@ -88,10 +82,24 @@ const PhieuDangKy = (props: {
 		}
 	};
 
-	const handleXemDeCuong = (maHocPhan: string, tenHocPhan?: string) => {
+	const renderKhoangThoiGian = (rec: DangKyTinChi.ILopDangKy) => {
+		const thoiKhoaBieuList = rec.thoiKhoaBieuList ?? [];
+		if (!thoiKhoaBieuList.length) return null;
+
+		const start = _.minBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
+		const end = _.maxBy(thoiKhoaBieuList, (item) => dayjs(item.ngay).valueOf())?.ngay;
+		if (!start || !end) return null;
+
+		return formatTimeRange(start, end, 'DD/MM');
+	};
+
+	const handleXemDeCuong = (rec: DangKyTinChi.ILopDangKy) => {
+		const deCuongId = rec.hocPhan?.deCuongHienTaiId ?? rec.deCuong?.deCuongId ?? rec.hocPhan?.ma ?? rec.maHocPhan;
+		if (!deCuongId) return;
+
 		setDeCuongModal({
-			deCuongId: maHocPhan,
-			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${tenHocPhan || maHocPhan || ''}`,
+			deCuongId,
+			title: `${intl.formatMessage({ id: 'lophocphan.id.decuong.title' })} - ${rec.hocPhan?.ten || rec.maHocPhan || ''}`,
 		});
 		setVisibleDeCuong(true);
 	};
@@ -102,18 +110,16 @@ const PhieuDangKy = (props: {
 			dataIndex: 'maHocPhan',
 			align: 'center',
 			width: 100,
-			// render: (val, rec) => {
-			// 	return (
-			// 		<a
-			// 			onClick={(e) => {
-			// 				e.stopPropagation();
-			// 				handleXemDeCuong(val, rec?.ten);
-			// 			}}
-			// 		>
-			// 			{val}
-			// 		</a>
-			// 	);
-			// },
+			render: (val, rec) => (
+				<a
+					onClick={(e) => {
+						e.stopPropagation();
+						handleXemDeCuong(rec);
+					}}
+				>
+					{val ?? rec.hocPhan?.ma}
+				</a>
+			),
 			filterType: 'string',
 		},
 		{
@@ -156,6 +162,12 @@ const PhieuDangKy = (props: {
 			),
 		},
 		{
+			title: intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.columntable.date' }),
+			width: 110,
+			align: 'center',
+			render: (val, rec) => renderKhoangThoiGian(rec),
+		},
+		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.thongtinchitiet' }),
 			width: 250,
 			render: (val, rec) => <RenderLichHoc lopHocPhan={{ ...rec, loai: ELoaiLopHocPhan.CHINH }} />, // Fake loại để ko lỗi
@@ -164,8 +176,8 @@ const PhieuDangKy = (props: {
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.tgdangky' }),
 			dataIndex: 'createdAt',
 			width: 150,
-			render: (val, rec) => val && formatDateTime(val),
-			sortable: true,
+			align: 'center',
+			render: (val) => (val ? formatDateTime(val) : '--'),
 		},
 		// {
 		// 	title: 'Mã khóa ngành',
@@ -262,6 +274,9 @@ const PhieuDangKy = (props: {
 							icon={<DeleteOutlined />}
 							danger
 							type='link'
+							otherTooltipProps={{
+								placement: 'bottom',
+							}}
 							disabled={
 								(rec.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
 									dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
@@ -286,53 +301,21 @@ const PhieuDangKy = (props: {
 				onReload={getData}
 				header={{
 					total: {
-						prefix: intl.formatMessage({ id: 'dangkytinchi.filter.hocphan.total.prefix' }),
+						prefix: intl.formatMessage({ id: 'dangkytinchi.filter.lop.total.prefix' }),
 					},
 				}}
 				otherButtons={[
 					<Space wrap>
-						{/* {danhSachLopDangKy.length ? (
+						<ButtonExtend
+							icon={<HistoryOutlined />}
+							onClick={() => setVisibleLopDaHuy(true)}
+							tooltip={intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
+						/>
+						{danhSachLopDangKy.length ? (
 							<ButtonExtend icon={<CalendarOutlined />} onClick={() => setVisibleModal(true)}>
 								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.xemtruoclichhoc' })}
 							</ButtonExtend>
-						) : null} */}
-						{/* {dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.XOA ? (
-							<>
-								<ButtonExtend icon={<DeleteOutlined />} onClick={() => setVisibleLopDaHuy(true)}>
-									{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.caclopdahuy' })}
-								</ButtonExtend>
-
-								<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
-							</>
 						) : null}
-						{tongTinChiChuaDk &&
-						dotDangKyHienTai?.tinhChatDangKy !== ETinhChatDangKyTC.XOA &&
-						sinhVienDot?.trangThaiSvDangKyTinChi === ETrangThaiSinhVienDKTinChi.DUOC_DK ? (
-							<ButtonExtend
-								tooltip={
-									tongTinChi > soTinChiToiDa
-										? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkyquasotin' })
-										: tongTinChi < soTinChiToiThieu
-											? intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.tooltip.alert.chuadangkydusotin' })
-											: !dangTrongThoiGian
-												? intl.formatMessage({
-														id: 'dangkytinchi.phieudangky.table.tooltip.alert.ngoaithoigiandangkytinchi',
-													})
-												: intl.formatMessage({
-														id: 'dangkytinchi.phieudangky.table.tooltip.alert.dangkytc',
-													})
-								}
-								type='primary'
-								icon={<SendOutlined />}
-								onClick={() => setVisibleRegister(true)}
-								disabled={tongTinChi > soTinChiToiDa || tongTinChi < soTinChiToiThieu || !dangTrongThoiGian}
-							>
-								{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.btn.dangky' })}
-							</ButtonExtend>
-						) : null}
-						{tongTinChi < soTinChiToiThieu ? (
-							<i className='text-error'>{intl.formatMessage({ id: 'dangkytinchi.phieudangky.table.alert.luuy' })}</i>
-						) : null} */}
 					</Space>,
 				]}
 				otherExtra={[
@@ -344,19 +327,17 @@ const PhieuDangKy = (props: {
 			/>
 
 			<ModalLichHoc soLopHienThi={danhSachLopHienThi.length} />
+			<ModalLopDaHuy visible={visibleLopDaHuy} setVisible={setVisibleLopDaHuy} />
 
 			<ModalDangKy tongTinChi={tongTinChi} danhSachDangKy={danhSachLopHienThi} />
 
 			<ConfirmKetHuyLopDKTC visible={visibleHuyLop} setVisible={setVisibleHuyLop} recLopDangKy={recLopDangKy} />
-
-			{deCuongModal && (
-				<ModalHocPhan
-					visible={visibleDeCuong}
-					setVisible={setVisibleDeCuong}
-					deCuongId={deCuongModal.deCuongId}
-					title={deCuongModal.title}
-				/>
-			)}
+			<ModalHocPhan
+				visible={visibleDeCuong}
+				setVisible={setVisibleDeCuong}
+				deCuongId={deCuongModal?.deCuongId}
+				title={deCuongModal?.title}
+			/>
 		</>
 	);
 };

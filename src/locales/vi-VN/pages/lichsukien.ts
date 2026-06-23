@@ -14,6 +14,7 @@ export default {
 
 	'lichsukien.lichsaptoi': 'Lịch sắp tới',
 	'lichsukien.lichsaptoi.empty': 'Lịch sắp tới',
+	'lichsukien.dangky_tinchi.title': 'ĐKTC: {ten}',
 
 	'lichsukien.form.tensv': 'Tên sự kiện',
 	'lichsukien.form.tensv.place': 'Nhập tên sự kiện',
@@ -59,16 +60,31 @@ export default {
 	'lichsukien.chitiet.loai': 'Loại sự kiện',
 
 	'lichsukien.calendar.allday': 'Cả ngày',
-	'lichsukien.calendar.previous': 'Trước',
-	'lichsukien.calendar.next': 'Sau',
+	'lichsukien.calendar.previous': 'Quay lại',
+	'lichsukien.calendar.next': 'Tiếp',
 	'lichsukien.calendar.today': 'Hôm nay',
 	'lichsukien.calendar.month': 'Tháng',
 	'lichsukien.calendar.week': 'Tuần',
 	'lichsukien.calendar.day': 'Ngày',
-	'lichsukien.calendar.agenda': 'Chung',
+	'lichsukien.calendar.ngay': 'ngày',
+	'lichsukien.calendar.agenda': 'Lịch biểu',
 	'lichsukien.calendar.date': 'Ngày',
 	'lichsukien.calendar.time': 'Thời gian',
 	'lichsukien.calendar.event': 'Sự kiện',
 	'lichsukien.calendar.showmore': '+ Xem thêm ({total})',
 	'lichsukien.calendar.noeventsinrange': 'Không có sự kiện nào trong khoảng thời gian này',
+
+	'lichsukien.loaisukien.chung': 'Chung',
+	'lichsukien.loaisukien.lich_hoc': 'Học phần',
+	'lichsukien.loaisukien.lich_thi': 'Lịch thi',
+	'lichsukien.loaisukien.bai_tap': 'Bài tập',
+	'lichsukien.loaisukien.hop_lop': 'Họp lớp',
+	'lichsukien.loaisukien.ca_nhan': 'Cá nhân',
+
+	'lichsukien.loaisukienkhac.cac_hoat_dong': 'Các hoạt động cho sinh viên',
+	'lichsukien.loaisukienkhac.dao_tao_boi_duong': 'Đào tạo bồi dưỡng',
+	'lichsukien.loaisukienkhac.hop_tac_nghien_cuu_chuyen_giao': 'Hợp tác - Nghiên cứu - chuyển giao',
+	'lichsukien.loaisukienkhac.thuc_thi_chinh_sach': 'Thực thi, phát triển chính sách',
+	'lichsukien.loaisukienkhac.hoat_dong_xa_hoi': 'Hoạt động xã hội',
+	'lichsukien.loaisukienkhac.khac': 'Khác',
 };
