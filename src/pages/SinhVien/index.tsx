@@ -1,22 +1,22 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
-import { exportLyLich } from '@/services/DaoTao/SinhVien';
+// import { exportLyLich } from '@/services/DaoTao/SinhVien';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { EditOutlined, LeftOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Space, Spin } from 'antd';
-import fileDownload from 'js-file-download';
-import { useEffect, useState } from 'react';
+// import fileDownload from 'js-file-download';
+import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalCapNhatAnhNhanDien from './CapNhatKhuonMat/Modal';
 import FormSinhVien from './components/Form';
 import PreviewHoSo from './components/PreviewHoSo';
 import './components/style.less';
 import ModalHocBaSinhVien from './HocBa/components/Modal';
-import { formatDate } from '@/utils/formatDate';
 
 const ThongTinSinhVienPage = () => {
 	const intl = useIntl();
-	const { record, loading, setLoading } = useModel('sinhvien.sinhvien');
-	const { record: recordDot, getAllModel: getDotCapNhat } = useModel('daotao.dotcapnhathoso');
+	const { record, loading /* , setLoading */ /* , getThongTinCuaToiModel */ } = useModel('sinhvien.sinhvien');
+	const { record: recordDot /* , getAllModel: getDotCapNhat */ } = useModel('daotao.dotcapnhathoso');
 	const [isCapNhat, setIsCapNhat] = useState<boolean>(false);
 	const [visibleCapNhat, setVisibleCapNhat] = useState<boolean>(false);
 	const [visibleHocBa, setVisibleHocBa] = useState<boolean>(false);
@@ -27,27 +27,79 @@ const ThongTinSinhVienPage = () => {
 			dayjs().isSameOrBefore(dayjs(recordDot?.thoiGianKetThuc), 'day') &&
 			dayjs().isSameOrAfter(dayjs(recordDot?.thoiGianBatDau), 'day'));
 
-	useEffect(() => {
-		if (!recordDot?._id) getDotCapNhat(true, undefined, { kichHoat: true });
-	}, []);
+	// useEffect(() => {
+	// 	if (!recordDot?._id) getDotCapNhat(true, undefined, { kichHoat: true });
+	// }, []);
 
-	const onExport = () => {
-		if (record?.ssoId) {
-			setLoading(true);
-			exportLyLich(record?.ssoId)
-				.then((res) => fileDownload(res.data, `Hồ sơ ${record.ten}.pdf`))
-				.catch((er) => console.log(er))
-				.finally(() => setLoading(false));
-		}
-	};
+	// const onExport = () => {
+	// 	if (record?.ssoId) {
+	// 		setLoading(true);
+	// 		exportLyLich(record?.ssoId)
+	// 			.then((res) => fileDownload(res.data, `Hồ sơ ${record.ten}.pdf`))
+	// 			.catch((er) => console.log(er))
+	// 			.finally(() => setLoading(false));
+	// 	}
+	// };
+
+	const previewHeader = (
+		<>
+			{recordDot?._id ? (
+				<Alert
+					type='info'
+					showIcon
+					message={intl.formatMessage(
+						{ id: 'thongtincanhan.dotcapnhat' },
+						{
+							tenDot: recordDot?.tenDot,
+							start: formatDate(recordDot?.thoiGianBatDau),
+							end: formatDate(recordDot?.thoiGianKetThuc),
+							b: (chunks) => <b>{chunks}</b>,
+						},
+					)}
+					style={{ marginBottom: 12 }}
+				/>
+			) : null}
+
+			{record?.ssoId ? (
+				<Space style={{ marginBottom: 12 }} wrap>
+					<ButtonExtend
+						disabled={!choPhepSua}
+						type='primary'
+						icon={<EditOutlined />}
+						onClick={() => setIsCapNhat(true)}
+						tooltip={
+							!choPhepSua
+								? intl.formatMessage({ id: 'thongtincanhan.ngoaithoigian' })
+								: intl.formatMessage({ id: 'thongtincanhan.capnhathoso' })
+						}
+						notHideText
+					>
+						{intl.formatMessage({ id: 'thongtincanhan.capnhathoso' })}
+					</ButtonExtend>
+
+					{/* <ButtonExtend icon={<OrderedListOutlined />} onClick={() => setVisibleHocBa(true)}>
+						{intl.formatMessage({ id: 'thongtincanhan.hocbaso' })}
+					</ButtonExtend> */}
+
+					{/* <ButtonExtend icon={<SmileOutlined />} onClick={() => setVisibleCapNhat(true)}>
+						{intl.formatMessage({ id: 'thongtincanhan.anhdaidien' })}
+					</ButtonExtend> */}
+
+					{/* <Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
+						{intl.formatMessage({ id: 'thongtincanhan.inhoso' })}
+					</Button> */}
+				</Space>
+			) : null}
+		</>
+	);
 
 	return (
 		<Card
 			title={intl.formatMessage({ id: 'thongtincanhan.title' })}
 			variant='borderless'
-			className='card-borderless card-big-title'
+			className='card-borderless card-big-title has-indicator'
 		>
-			<Card variant='borderless'>
+			{/* <Card variant='borderless'>
 				{recordDot?._id && choPhepSua ? (
 					<Alert
 						message={intl.formatMessage(
@@ -93,25 +145,31 @@ const ThongTinSinhVienPage = () => {
 								>
 									{intl.formatMessage({ id: 'thongtincanhan.capnhathoso' })}
 								</ButtonExtend>
-
-								{/* <ButtonExtend icon={<OrderedListOutlined />} onClick={() => setVisibleHocBa(true)}>
-									{intl.formatMessage({ id: 'thongtincanhan.hocbaso' })}
-								</ButtonExtend> */}
-
-								{/* <ButtonExtend icon={<SmileOutlined />} onClick={() => setVisibleCapNhat(true)}>
-									{intl.formatMessage({ id: 'thongtincanhan.anhdaidien' })}
-								</ButtonExtend> */}
-
-								{/* <Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
-									{intl.formatMessage({ id: 'thongtincanhan.inhoso' })}
-								</Button> */}
 							</Space>
 						) : null}
 
 						<PreviewHoSo />
 					</>
 				)}
-			</Card>
+			</Card> */}
+
+			{isCapNhat ? (
+				<>
+					<Space style={{ marginBottom: 12 }} wrap>
+						<Button icon={<LeftOutlined />} onClick={() => setIsCapNhat(false)}>
+							{intl.formatMessage({ id: 'thongtincanhan.quaylai' })}
+						</Button>
+					</Space>
+
+					<Card variant='borderless'>
+						<Spin spinning={loading}>
+							<FormSinhVien onCancel={() => setIsCapNhat(false)} />
+						</Spin>
+					</Card>
+				</>
+			) : (
+				<PreviewHoSo header={previewHeader} />
+			)}
 
 			{/* <Tabs
 				activeKey={currentStep}
@@ -147,7 +205,6 @@ const ThongTinSinhVienPage = () => {
 			</div> */}
 
 			<ModalCapNhatAnhNhanDien visible={visibleCapNhat} setVisible={setVisibleCapNhat} />
-
 			<ModalHocBaSinhVien visible={visibleHocBa} setVisible={setVisibleHocBa} />
 		</Card>
 	);
