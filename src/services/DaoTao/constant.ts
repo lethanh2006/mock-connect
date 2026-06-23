@@ -33,6 +33,12 @@ export enum ELoaiHocPhanCTDT {
 	TOT_NGHIEP = 'Tốt nghiệp',
 }
 
+export const LoaiHocPhanCTDT: Record<ELoaiHocPhanCTDT, string> = {
+	[ELoaiHocPhanCTDT.BAT_BUOC]: 'tientrinhhoctap.ctdt.loaiHocPhan.batBuoc',
+	[ELoaiHocPhanCTDT.TU_CHON]: 'tientrinhhoctap.ctdt.loaiHocPhan.tuChon',
+	[ELoaiHocPhanCTDT.TOT_NGHIEP]: 'tientrinhhoctap.ctdt.loaiHocPhan.totNghiep',
+};
+
 // Trạng thái học tập trong tiến trình học tập
 export enum ETrangThaiHocTap {
 	CHUA_HOC = 'CHUA_HOC',

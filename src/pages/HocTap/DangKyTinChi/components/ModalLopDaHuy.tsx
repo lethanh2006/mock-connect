@@ -1,11 +1,12 @@
 import ExpandText from '@/components/ExpandText';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { colorLogActionDktc, ELogActionDktc, logActionDktc } from '@/services/TienIch/AuditLog/constant';
 import { formatDateTime } from '@/utils/formatDate';
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import RenderLichHoc from './RenderLichHoc';
@@ -130,22 +131,28 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.columntable.loaithaotac' }),
+			dataIndex: 'action',
 			width: 160,
 			fixed: 'right',
 			align: 'center',
 			filterType: 'select',
 			filterData: [ELogActionDktc.SV_DK_LTC, ELogActionDktc.SV_DEL_DK_LTC].map((val) => ({
-				label: logActionDktc[val] ?? val,
+				label: intl.formatMessage({ id: logActionDktc[val] ?? val }),
 				value: val,
 			})),
-			render: (val: ELogActionDktc) => (
-				<span style={{ color: colorLogActionDktc[val] ?? 'blue' }}>{logActionDktc[val] ?? val}</span>
-			),
+			render: (val: ELogActionDktc) =>
+				val ? (
+					<span style={{ color: colorLogActionDktc[val] ?? 'blue' }}>
+						{intl.formatMessage({ id: logActionDktc[val] ?? val })}
+					</span>
+				) : (
+					'--'
+				),
 		},
 	];
 
 	return (
-		<Modal
+		<ModalExpandable
 			title={intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
 			open={visible}
 			onCancel={() => setVisible(false)}
@@ -165,7 +172,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 			<div className='form-footer'>
 				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'dangkytinchi.action.dong' })}</Button>
 			</div>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

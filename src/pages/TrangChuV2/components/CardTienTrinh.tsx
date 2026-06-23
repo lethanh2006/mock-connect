@@ -1,7 +1,5 @@
-import { EOperatorType } from '@/components/Table/constant';
-import { EActivityCategory, EActivityStatus } from '@/services/CCT/constant';
 import { Card, Col, Flex, Row, Typography } from 'antd';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useIntl, useModel } from 'umi';
 
 interface StatCardProps {
@@ -47,45 +45,8 @@ const StatCard = ({ title, value, subValue, periodText, disabled }: StatCardProp
 
 const CardTienTrinh = () => {
 	const intl = useIntl();
-	const {
-		getTienTrinhTotNghiepModel,
-		record: recTienTrinh,
-		loading: loadingTienTrinh,
-	} = useModel('sinhvien.tientrinhtotnghiep');
-	const { getKhoaNganhMeModel } = useModel('sinhvien.sinhvien');
-	const {
-		getAnalyticsStudentModel,
-		dataThongKe,
-		loadingThongKe,
-		getModel,
-		total: awardsCount,
-		loading: loadingAwards,
-	} = useModel('cct.activityoutcome');
-
-	useEffect(() => {
-		getKhoaNganhMeModel().then((res) => {
-			if (res?.khoaNganhChinh?.ma) getTienTrinhTotNghiepModel(res.khoaNganhChinh.ma);
-		});
-		getAnalyticsStudentModel(EActivityCategory.REGISTERED);
-
-		getModel(
-			undefined,
-			[
-				{
-					active: true,
-					field: 'isAwardRecognition',
-					values: [true],
-					operator: EOperatorType.EQUAL,
-				},
-			],
-			undefined,
-			1,
-			1,
-			'me/page',
-			{ status: EActivityStatus.APPROVED },
-			false,
-		);
-	}, []);
+	const { record: recTienTrinh, loading: loadingTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
+	const { dataThongKe, total: awardsCount, loading: loadingAwards } = useModel('cct.activityoutcome');
 
 	const stats = useMemo<StatCardProps[]>(() => {
 		const gpa = recTienTrinh?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4;
@@ -131,7 +92,7 @@ const CardTienTrinh = () => {
 			}
 			className='card-big-title card-borderless'
 			variant='borderless'
-			loading={loadingTienTrinh || loadingThongKe || loadingAwards}
+			loading={loadingTienTrinh || loadingAwards}
 		>
 			<Row gutter={[12, 12]}>
 				{stats.map((item) => (

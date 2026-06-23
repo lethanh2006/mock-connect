@@ -12,6 +12,8 @@ const ModalHocPhan = (props: {
 }) => {
 	const intl = useIntl();
 	const { title, visible, setVisible, activeKey, khoiChuongTrinh } = props;
+	// const { chiTietHocPhan, getChiTietHocPhanDangKyTinChiModel } = useModel('daotao.dotdangkytinchi');
+	// const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	// const { record } = useModel('lophocphan.lophocphan');
 	// const { getByIdModel } = useModel('hocphan.decuonghocphan');
 	// const deCuongId = props.deCuongId || record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
@@ -19,6 +21,12 @@ const ModalHocPhan = (props: {
 	// useEffect(() => {
 	// 	if (deCuongId && visible) getByIdModel(deCuongId ?? '');
 	// }, [deCuongId, visible, activeKey]);
+
+	// useEffect(() => {
+	// 	if (deCuongId && recSinhVien?.maKhoaNganh && visible) {
+	// 		getChiTietHocPhanDangKyTinChiModel(deCuongId, recSinhVien?.maKhoaNganh);
+	// 	}
+	// }, [deCuongId, recSinhVien?.maKhoaNganh, visible, activeKey]);
 
 	return (
 		<ModalExpandable

@@ -132,9 +132,9 @@ export default {
 	'dangkytinchi.lichsuthaotac.columntable.thoigianthuchien': 'Thời gian thực hiện',
 	'dangkytinchi.lichsuthaotac.columntable.loaithaotac': 'Loại thao tác',
 	'dangkytinchi.lichsuthaotac.action.svRegister': 'Sinh viên đăng ký TC',
-	'dangkytinchi.lichsuthaotac.action.svDelete': 'Sinh viên xóa đăng ký TC',
+	'dangkytinchi.lichsuthaotac.action.svDelete': 'Sinh viên hủy đăng ký TC',
 	'dangkytinchi.lichsuthaotac.action.staffRegister': 'Chuyên viên đăng ký',
-	'dangkytinchi.lichsuthaotac.action.staffDelete': 'Chuyên viên xóa đăng ký',
+	'dangkytinchi.lichsuthaotac.action.staffDelete': 'Chuyên viên hủy đăng ký',
 	// modal lịch học
 	'dangkytinchi.modallichhoc.title': 'Lịch học dự kiến',
 	'dangkytinchi.modallichhoc.description.dangkyloptinchi':
