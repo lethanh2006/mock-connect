@@ -120,6 +120,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	);
 
 	const tableData = useMemo(() => filterBySemester(data, maHocKyFilter), [data, maHocKyFilter]);
+	const hasTableRows = tableData.length > 0;
 
 	const handleShowHocPhan = useCallback((rec: DataType) => {
 		if (isSemesterRow(rec)) return;
@@ -176,7 +177,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			{
 				title: intl.formatMessage({ id: 'global.table.column.tt' }),
 				dataIndex: 'title',
-				width: 48,
+				width: 56,
 				align: 'center',
 				render: (val, rec) => (isSemesterRow(rec) ? rec.tenHocPhan : val),
 				onCell,
@@ -184,7 +185,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.maHp' }),
 				dataIndex: 'maHocPhan',
-				width: 100,
+				width: 120,
 				align: 'center',
 				filterType: 'string',
 				render: (val, rec) => {
@@ -214,14 +215,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			},
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.soTc' }),
-				width: 70,
+				width: 112,
 				align: 'center',
 				render: (val, rec) => rec?.hocPhan?.soTinChi,
 				onCell,
 			},
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.soTcTichLuy' }),
-				width: 70,
+				width: 112,
 				align: 'center',
 				render: (val, rec) => renderSoTinChiTichLuy(rec),
 				onCell,
@@ -229,7 +230,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tichLuy' }),
 				dataIndex: 'tichLuy',
-				width: 64,
+				width: 80,
 				align: 'center',
 				render: (val, rec) => isTichLuyDiem(rec) && <CheckOutlined />,
 				onCell,
@@ -261,7 +262,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			// },
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tongKet4' }),
-				width: 80,
+				width: 100,
 				dataIndex: 'diemThang4',
 				align: 'center',
 				render: (val) => <b style={val === 0 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
@@ -270,7 +271,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			},
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tongKetChu' }),
-				width: 60,
+				width: 104,
 				dataIndex: 'diemChu',
 				align: 'center',
 				fixed: 'right',
@@ -334,10 +335,10 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			<TableStaticData
 				loading={loading}
 				onReload={getData}
+				scroll={hasTableRows ? { y: 660 } : undefined}
 				otherProps={{
 					loading: loading,
 					pagination: false,
-					scroll: { y: 660, x: '100%' },
 					style: { width: '100%' },
 					onRow: (rec: DataType) =>
 						isSemesterRow(rec)
@@ -375,6 +376,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				hocPhan={recDiem?.hocPhan}
 				listDiem={listDiemSelected}
 				maKhoaNganh={maKhoaNganh}
+				khoiChuongTrinh={recDiem?.khoiHpCt}
 			/>
 		</>
 	);

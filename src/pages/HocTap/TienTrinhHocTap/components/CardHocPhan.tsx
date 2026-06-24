@@ -28,8 +28,6 @@ const CardHocPhan = (props: {
 	// Chỉ hiển thị điểm đầu tiên
 	const diemHienThi = listDiemChu?.[0];
 
-	console.log(trangThaiHoc, 'trangThaiHoc');
-
 	// Function to get grade image
 	// const getGradeImage = (grade: string) => {
 	// 	if (isNotStudied) return null;
