@@ -20,7 +20,7 @@ import PageCard from '@/components/PageCard';
 const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
 	const { danhSach: danhSachToa } = useModel('kytucxa.toanha');
-	const { danhSach: danhSachDotDangKy, getModel: getDotDangKy, loading: loadingDotDangKy, setRecord: setDotDangKyRecord } = useModel('kytucxa.dotdangky');
+	const { danhSach: danhSachDotDangKy, getModel: getDotDangKy, loading: loadingDotDangKy, setRecord: setDotDangKyRecord, record: recordDot } = useModel('kytucxa.dotdangky');
 	const { danhSach: danhSachPhong, getModel: getPhong, loading: loadingPhong, setRecord: setPhongRecord, setVisibleForm, setIsView } = useModel('kytucxa.phong');
 	const { danhSach: danhSachLichSu, getModel: getLichSu } = useModel('kytucxa.dangky');
 	const { getAllModel: getAllKhoanThu } = useModel('kytucxa.khoanthu');
@@ -134,7 +134,7 @@ const DangKyKyTucXaPage = () => {
 			return;
 		}
 		setDotDangKyRecord(cacDotDangKyHienTai[0]);
-		getPhong(undefined, undefined, undefined, undefined, undefined, '');
+		getPhong({maDotId: recordDot?._id });
 	}, [cacDotDangKyHienTai]);
 
 	const handleReset = () => {
@@ -241,7 +241,13 @@ const DangKyKyTucXaPage = () => {
 									<InfoCircleOutlined style={{ color: '#1d3a6b', marginTop: 3, fontSize: '15px' }} />
 									<Typography.Text style={{ fontSize: '14px', color: '#2E2E2E' }}>
 										{intl.formatMessage({ id: 'kytucxa.dangky.registerTime' })} <strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianBatDau)}</strong> {intl.formatMessage({ id: 'kytucxa.dangky.to' })}{' '}
-										<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>. {intl.formatMessage({ id: 'kytucxa.dangky.paymentBefore' })} <strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
+										<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
+										{activeRegistration && (
+											<>
+												{' '}{intl.formatMessage({ id: 'kytucxa.dangky.paymentBefore' })}{' '}
+												<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
+											</>
+										)}
 									</Typography.Text>
 								</div>
 							</div>

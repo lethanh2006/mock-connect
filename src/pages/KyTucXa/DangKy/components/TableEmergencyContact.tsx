@@ -1,5 +1,5 @@
-import { Button, Table, Space, Popconfirm, Typography } from 'antd';
-import { DeleteOutlined, EditOutlined, PlusOutlined, SyncOutlined } from '@ant-design/icons';
+import { Button, Table, Space, Popconfirm } from 'antd';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'umi';
 import { useState } from 'react';
 import FormEmergencyContact, { EmergencyContact } from './FormEmergencyContact';
@@ -15,7 +15,6 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 	const intl = useIntl();
 	const [visibleForm, setVisibleForm] = useState(false);
 	const [editingRecord, setEditingRecord] = useState<EmergencyContact | null>(null);
-	const [reloading, setReloading] = useState(false);
 
 	const handleAdd = () => {
 		setEditingRecord(null);
@@ -45,17 +44,6 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 		}
 		onChange?.(newData);
 		setVisibleForm(false);
-	};
-
-	const handleReload = async () => {
-		if (props.onReload) {
-			setReloading(true);
-			try {
-				await props.onReload();
-			} finally {
-				setReloading(false);
-			}
-		}
 	};
 
 	const columns = [
@@ -121,11 +109,7 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 			{value.length > 0 ? (
 				<>
 					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-						<Typography.Text type="secondary" style={{ marginTop: 12 }}>
-							Total <span style={{ color: 'red', fontWeight: 600 }}>{value.length}</span>
-						</Typography.Text>
 						<Space>
-							<Button icon={<SyncOutlined />} onClick={handleReload} loading={reloading} />
 							<Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
 								{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
 							</Button>

@@ -21,6 +21,7 @@ declare module KyTucXa {
 	}
 
     export interface IPhong {
+        maDotId?: string;
         _id: string;
         ma: string;
         ten: string;

@@ -91,10 +91,10 @@ const FormEmergencyContactKTX: React.FC<FormEmergencyContactProps> = ({
 
 				<Form.Item name="emergencyRelationship" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.emergencyRelationship' })} rules={[...rules.required]}>
 					<Select placeholder={intl.formatMessage({ id: 'kytucxa.dangky.form.placeholder.emergencyRelationship' })}>
-						<Select.Option value="Father">{intl.formatMessage({ id: 'kytucxa.dangky.form.option.father' })}</Select.Option>
-						<Select.Option value="Mother">{intl.formatMessage({ id: 'kytucxa.dangky.form.option.mother' })}</Select.Option>
-						<Select.Option value="Guardian">{intl.formatMessage({ id: 'kytucxa.dangky.form.option.guardian' })}</Select.Option>
-						<Select.Option value="Other">{intl.formatMessage({ id: 'kytucxa.dangky.form.option.other' })}</Select.Option>
+						<Select.Option value={intl.formatMessage({ id: 'kytucxa.dangky.form.option.father' })}>{intl.formatMessage({ id: 'kytucxa.dangky.form.option.father' })}</Select.Option>
+						<Select.Option value={intl.formatMessage({ id: 'kytucxa.dangky.form.option.mother' })}>{intl.formatMessage({ id: 'kytucxa.dangky.form.option.mother' })}</Select.Option>
+						<Select.Option value={intl.formatMessage({ id: 'kytucxa.dangky.form.option.guardian' })}>{intl.formatMessage({ id: 'kytucxa.dangky.form.option.guardian' })}</Select.Option>
+						<Select.Option value={intl.formatMessage({ id: 'kytucxa.dangky.form.option.other' })}>{intl.formatMessage({ id: 'kytucxa.dangky.form.option.other' })}</Select.Option>
 					</Select>
 				</Form.Item>
 
