@@ -186,6 +186,8 @@ export declare module LopHocPhan {
 
 		// maKhoaNganh: string;
 		// khoaNganh?: KhoaNganh.IRecord;
+
+		khoiHpCt?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 	}
 
 	export type TChiTietDiemCdr = {

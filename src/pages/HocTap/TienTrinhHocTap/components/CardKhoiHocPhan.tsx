@@ -3,19 +3,18 @@ import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typi
 import { Card, Empty, Modal } from 'antd';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { useIntl, useModel } from 'umi';
+import { useIntl } from 'umi';
 import CardHocPhan from './CardHocPhan';
 import './CardStyles.less';
 
 const CardKhoiHocPhan = (props: {
 	khoi?: ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 	colorKhoiKienThuc?: string;
-	onClickHocPhan: () => void;
+	onClickHocPhan: (record: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => void;
 	label?: ReactNode;
 }) => {
 	const intl = useIntl();
 	const { khoi, onClickHocPhan, label } = props;
-	const { setRecord: setChuongTrinh } = useModel('daotao.chuongtrinhdaotao');
 	const soTinChi = khoi?.soTinChiTuChonPhaiHoc ?? 0;
 	const [visible, setVisible] = useState<boolean>(false);
 
@@ -30,9 +29,6 @@ const CardKhoiHocPhan = (props: {
 						border: `1px solid ${accentColors.accent600 ?? '#D2D3D5'}`,
 					}}
 				>
-					{/* Folder icon background */}
-					<div className='card-background-image' />
-
 					{/* Content */}
 					<div className='card-content'>
 						{/* Course name */}
@@ -83,9 +79,9 @@ const CardKhoiHocPhan = (props: {
 							onClick={() => {
 								if (!khoi) return;
 								// Truyền tên khối tự chọn vào các khối học phần chương trình
-								setChuongTrinh({ ...khoi, ...ctk, ten: khoi.ten } as ChuongTrinhDaoTao.IKhoiHocPhanCTDT);
+								const selectedRecord = { ...khoi, ...ctk, ten: khoi.ten } as ChuongTrinhDaoTao.IKhoiHocPhanCTDT;
 								setVisible(false);
-								if (onClickHocPhan) onClickHocPhan();
+								onClickHocPhan(selectedRecord);
 							}}
 							trangThaiHoc={ctk.hoc}
 							listDiem={ctk.lichSuDiem}

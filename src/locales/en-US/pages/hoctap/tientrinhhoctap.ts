@@ -109,7 +109,8 @@ export default {
 	'tientrinhhoctap.ctdt.tinchi': 'credit(s)',
 	'tientrinhhoctap.ctdt.nam': 'year(s)',
 	'tientrinhhoctap.ctdt.khoihp': 'Course block / Module group',
-	'tientrinhhoctap.ctdt.noti': 'You must complete {soTinChi} credits in the following courses',
+	'tientrinhhoctap.ctdt.noti':
+		'Students take {soTinChi} credits of free electives from within the program or from any other program (at VinUniversity or accredited partner institutions)',
 	'tientrinhhoctap.ctdt.title': 'Planned Program Detail',
 	'tientrinhhoctap.ctdt.empty': 'No information',
 	'tientrinhhoctap.ctdt.ten': 'Program Name (VIE)',

@@ -52,8 +52,6 @@ const DangKyTinChiPage = () => {
 		}
 	};
 
-	console.log(sinhVienDot, 'sinhVienDot');
-
 	const getData = () => {
 		getModel(undefined, undefined, undefined, undefined, undefined, 'me/page');
 	};
