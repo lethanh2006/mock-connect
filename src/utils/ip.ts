@@ -30,7 +30,6 @@ const oneSignalRole = EModuleKey.CONNECT;
 // DO NOT TOUCH
 const keycloakClientID = AppModules[currentRole].clientId;
 const keycloakAuthority = APP_CONFIG_KEYCLOAK_AUTHORITY;
-const resourceServerClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}auth`;
 const qldtApiClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}qldt-api`;
 const financeApiClientId = `${APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID}tc-api`;
 const keycloakAuthEndpoint = APP_CONFIG_KEYCLOAK_AUTHORITY + '/protocol/openid-connect/auth';
@@ -65,6 +64,5 @@ export {
 	oneSignalRole,
 	qldtApiClientId,
 	replaceRole,
-	resourceServerClientId,
 	sentryDSN,
 };
