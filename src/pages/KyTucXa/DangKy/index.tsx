@@ -21,10 +21,8 @@ const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
 	const { danhSach: danhSachToa } = useModel('kytucxa.toanha');
 	const { danhSach: danhSachDotDangKy, getModel: getDotDangKy, loading: loadingDotDangKy, setRecord: setDotDangKyRecord, record: recordDot } = useModel('kytucxa.dotdangky');
-	const { danhSach: danhSachPhong, getModel: getPhong, loading: loadingPhong, setRecord: setPhongRecord, setVisibleForm, setIsView } = useModel('kytucxa.phong');
+	const { danhSach: danhSachPhong, getModel: getPhongModel, loading: loadingPhong, setRecord: setPhongRecord, setVisibleForm, setIsView } = useModel('kytucxa.phong');
 	const { danhSach: danhSachLichSu, getModel: getLichSu } = useModel('kytucxa.dangky');
-	const { getAllModel: getAllKhoanThu } = useModel('kytucxa.khoanthu');
-	const { getAllModel: getAllDanhTienIch } = useModel('kytucxa.tienich');
 
 	const [selectedToa, setSelectedToa] = useState<string | undefined>(undefined);
 	const [selectedCapacity, setSelectedCapacity] = useState<number | undefined>(undefined);
@@ -37,14 +35,13 @@ const DangKyKyTucXaPage = () => {
 		);
 	}, [danhSachLichSu]);
 
-	const maPhongDaDangKy = activeRegistration?.phong?.ma || activeRegistration?.maPhong;
-
 	useEffect(() => {
-		getDotDangKy();
-		getLichSu();
-		getAllKhoanThu();
-		getAllDanhTienIch();
-	}, []);
+		if (recordDot?._id) {
+			getPhongModel({ maDotId: recordDot._id }, undefined, undefined, undefined, undefined, '');
+		}
+	}, [recordDot?._id]);
+
+	const maPhongDaDangKy = activeRegistration?.phong?.ma || activeRegistration?.maPhong;
 
 	const handleChangeToa = (toaId?: string) => {
 		setSelectedToa(toaId);
@@ -134,7 +131,6 @@ const DangKyKyTucXaPage = () => {
 			return;
 		}
 		setDotDangKyRecord(cacDotDangKyHienTai[0]);
-		getPhong({maDotId: recordDot?._id });
 	}, [cacDotDangKyHienTai]);
 
 	const handleReset = () => {
@@ -204,7 +200,7 @@ const DangKyKyTucXaPage = () => {
 								</Col>
 
 								<Col flex='220px'>
-									<SelectFloorKTX value={selectedFloor} onChange={handleChangeFloor} allowClear={true} />
+									<SelectFloorKTX value={selectedFloor} onChange={handleChangeFloor} allowClear={true} condition={{ maDotId: recordDot?._id }} disableFetch={true} />
 								</Col>
 
 								<Col flex='220px'>
@@ -212,7 +208,7 @@ const DangKyKyTucXaPage = () => {
 								</Col>
 
 								<Col flex='220px'>
-									<SelectCapacityKTX value={selectedCapacity} onChange={handleChangeCapacity} allowClear={true} />
+									<SelectCapacityKTX value={selectedCapacity} onChange={handleChangeCapacity} allowClear={true} condition={{ maDotId: recordDot?._id }} disableFetch={true} />
 								</Col>
 
 								<Col flex='none'>

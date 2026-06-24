@@ -14,17 +14,20 @@ const SelectFloorKTX = (props: {
     style?: React.CSSProperties;
     isSetRecord?: boolean;
     selectMa?: boolean;
+    disableFetch?: boolean;
 }) => {
-    const { value, onChange, multiple, allowClear, style, isSetRecord, condition } = props;
+    const { value, onChange, multiple, allowClear, style, isSetRecord, condition, disableFetch } = props;
     const { danhSach: danhSachPhong, getModel, setRecord, loading } = useModel('kytucxa.phong');
     const { danhSach: danhSachDotDangKy } = useModel('kytucxa.dotdangky');
     const intl = useIntl();
 
     useEffect(() => {
-        getModel(undefined, undefined, condition, undefined, undefined, '').then(() => {
-            if (!isSetRecord) setRecord?.(undefined);
-        });
-    }, [JSON.stringify(condition)]);
+        if (!disableFetch) {
+            getModel(condition, undefined, undefined, undefined, undefined, '').then(() => {
+                if (!isSetRecord) setRecord?.(undefined);
+            });
+        }
+    }, [JSON.stringify(condition), disableFetch]);
 
     const uniqueFloors = useMemo(() => {
         if (!Array.isArray(danhSachPhong)) return [];

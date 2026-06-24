@@ -14,16 +14,19 @@ const SelectCapacityKTX = (props: {
 	style?: React.CSSProperties;
 	isSetRecord?: boolean;
 	selectMa?: boolean;
+	disableFetch?: boolean;
 }) => {
-	const { value, onChange, multiple, allowClear, style, isSetRecord, condition } = props;
+	const { value, onChange, multiple, allowClear, style, isSetRecord, condition, disableFetch } = props;
 	const { danhSach, getModel, setRecord, loading } = useModel('kytucxa.phong');
 	const intl = useIntl();
 
 	useEffect(() => {
-		getModel(undefined, undefined, condition, undefined, undefined, '').then(() => {
-			if (!isSetRecord) setRecord?.(undefined);
-		});
-	}, [JSON.stringify(condition)]);
+		if (!disableFetch) {
+			getModel(condition, undefined, undefined, undefined, undefined, '').then(() => {
+				if (!isSetRecord) setRecord?.(undefined);
+			});
+		}
+	}, [JSON.stringify(condition), disableFetch]);
 
 	const uniqueCapacities = Array.from(
 		new Set((danhSach || []).map((item) => item.soLuongToiDa).filter((val) => typeof val === 'number'))
