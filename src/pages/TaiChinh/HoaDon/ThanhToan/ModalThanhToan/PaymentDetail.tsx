@@ -65,7 +65,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			if (paymentUrl) {
 				window.location.href = paymentUrl;
 			} else {
-				message.error('Không nhận được URL thanh toán từ ONEPAY');
+				message.error(intl.formatMessage({ id: 'taichinh.thanhtoan.modal.error.noPaymentUrl' }));
 			}
 		} catch (er) {
 			console.log(er);

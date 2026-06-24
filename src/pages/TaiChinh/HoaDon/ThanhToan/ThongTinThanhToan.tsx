@@ -154,7 +154,9 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 					<div style={{ flex: 1, minWidth: 0 }}>
 						<Space align='center' wrap size={8}>
-							<span style={{ fontSize: 18, fontWeight: 700 }}>{fullname || 'Sinh viên'}</span>
+							<span style={{ fontSize: 18, fontWeight: 700 }}>
+								{fullname || intl.formatMessage({ id: 'taichinh.thanhtoan.info.sinhvien' })}
+							</span>
 							{statusText && <Tag color={statusColor}>{statusText}</Tag>}
 						</Space>
 					</div>
@@ -162,27 +164,51 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 
 				<Row gutter={[16, 8]} style={{ marginTop: 16, paddingLeft: 80 }}>
 					<Col xs={12} md={8}>
-						<InfoItem icon={<UserOutlined />} label='Mã sinh viên' value={recHoaDon?.userCode} />
+						<InfoItem
+							icon={<UserOutlined />}
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.info.masinhvien' })}
+							value={recHoaDon?.userCode}
+						/>
 					</Col>
 					<Col xs={12} md={8}>
-						<InfoItem icon={<MailOutlined />} label='Email' value={recHoaDon?.userEmail} />
+						<InfoItem
+							icon={<MailOutlined />}
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.info.email' })}
+							value={recHoaDon?.userEmail}
+						/>
 					</Col>
 					<Col xs={12} md={8}>
-						<InfoItem icon={<PhoneOutlined />} label='Số điện thoại' value={recHoaDon?.userPhone} />
+						<InfoItem
+							icon={<PhoneOutlined />}
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.info.sodienthoai' })}
+							value={recHoaDon?.userPhone}
+						/>
 					</Col>
 					<Col xs={12} md={8}>
-						<InfoItem icon={<CalendarOutlined />} label='Ngày sinh' value={recHoaDon?.userDOB} />
+						<InfoItem
+							icon={<CalendarOutlined />}
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.info.ngaysinh' })}
+							value={recHoaDon?.userDOB}
+						/>
 					</Col>
 					<Col xs={12} md={8}>
-						<InfoItem icon={<BankOutlined />} label='Khoá' value={recHoaDon?.userTenKhoa || recHoaDon?.userMaKhoaSinhVien} />
+						<InfoItem
+							icon={<BankOutlined />}
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.info.khoa' })}
+							value={recHoaDon?.userTenKhoa || recHoaDon?.userMaKhoaSinhVien}
+						/>
 					</Col>
 					<Col xs={12} md={8}>
-						<InfoItem icon={<BookOutlined />} label='Ngành' value={recHoaDon?.userTenNganh || recHoaDon?.userMaNganh} />
+						<InfoItem
+							icon={<BookOutlined />}
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.info.nganh' })}
+							value={recHoaDon?.userTenNganh || recHoaDon?.userMaNganh}
+						/>
 					</Col>
 					<Col xs={12} md={8}>
 						<InfoItem
 							icon={<IdcardOutlined />}
-							label='Trạng thái sinh viên'
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.info.trangthaisinhvien' })}
 							value={trangThaiSinhVien}
 						/>
 					</Col>
@@ -192,17 +218,33 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 					{/* Tổng quan tài chính */}
 			<Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
 				<Col xs={12} md={6}>
-					<StatBox label='Tổng phí phải nộp (1)' value={phaiThu} color='#1677ff' />
+					<StatBox
+						label={intl.formatMessage({ id: 'taichinh.thanhtoan.stat.tongphiphainop' })}
+						value={phaiThu}
+						color='#1677ff'
+					/>
 				</Col>
 
 				<Col xs={12} md={6}>
-					<StatBox label='Tổng phí giảm trừ (2)' value={khuyenMai} color='#faad14' />
+					<StatBox
+						label={intl.formatMessage({ id: 'taichinh.thanhtoan.stat.tongphigiamtru' })}
+						value={khuyenMai}
+						color='#faad14'
+					/>
 				</Col>
 				<Col xs={12} md={6}>
-					<StatBox label='Tổng tiền đã thanh toán (3)' value={daThanhToan} color='#52c41a' />
+					<StatBox
+						label={intl.formatMessage({ id: 'taichinh.thanhtoan.stat.tongdathanhtoan' })}
+						value={daThanhToan}
+						color='#52c41a'
+					/>
 				</Col>
 				<Col xs={12} md={6}>
-					<StatBox label='Tổng tiền cần thanh toán (1-2-3)' value={conLai} color='#ff4d4f' />
+					<StatBox
+						label={intl.formatMessage({ id: 'taichinh.thanhtoan.stat.tongcanthanhtoan' })}
+						value={conLai}
+						color='#ff4d4f'
+					/>
 				</Col>
 				{/* <Col xs={12} md={6}>
 					<StatBox
@@ -214,7 +256,11 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 			</Row>
 
 	{/* Thông tin phiếu thu */}
-			<Card size='small' title='Thông tin phiếu thu' style={{ marginBottom: 16 }}>
+			<Card
+				size='small'
+				title={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.title' })}
+				style={{ marginBottom: 16 }}
+			>
 				<Row gutter={[16, 8]}>
 					{/* <Col xs={12} md={8}>
 						<InfoItem
@@ -226,7 +272,7 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 					<Col xs={12} md={12}>
 						<InfoItem
 							icon={<CalendarOutlined />}
-							label='Hạn thanh toán'
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.hanthanhtoan' })}
 							value={
 								recHoaDon?.ngayHetHanThanhToan ? (
 									<span style={{ color: '#ff4d4f', fontWeight: 700 }}>
@@ -241,44 +287,55 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 					<Col xs={12} md={12}>
 						<InfoItem
 							icon={<FileOutlined />}
-							label='Trạng thái phiếu thu'
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.trangthai' })}
 							value={
-								<Tag color={daRelease ? 'success' : 'warning'}>{daRelease ? 'Đã release' : 'Chưa release'}</Tag>
+								<Tag color={daRelease ? 'success' : 'warning'}>
+									{daRelease
+										? intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.darelease' })
+										: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.chuarelease' })}
+								</Tag>
 							}
 						/>
 					</Col>
 					{daRelease && recHoaDon?.dotThu?.tenNguoiRelease && (
 						<Col xs={12} md={8}>
-							<InfoItem label='Người release' value={recHoaDon?.dotThu?.tenNguoiRelease} />
+							<InfoItem
+								label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.nguoirelease' })}
+								value={recHoaDon?.dotThu?.tenNguoiRelease}
+							/>
 						</Col>
 					)}
 					{daRelease && recHoaDon?.dotThu?.thoiGianRelease && (
 						<Col xs={12} md={8}>
 							<InfoItem
-								label='Thời gian release'
+								label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.thoigianrelease' })}
 								value={dayjs(recHoaDon?.dotThu?.thoiGianRelease).format('HH:mm DD/MM/YYYY')}
 							/>
 						</Col>
 					)}
 					<Col xs={24}>
-						<InfoItem icon={<FileTextOutlined />} label='Ghi chú' value={recHoaDon?.ghiChu} />
+						<InfoItem
+							icon={<FileTextOutlined />}
+							label={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.ghichu' })}
+							value={recHoaDon?.ghiChu}
+						/>
 					</Col>
 				</Row>
 			</Card>
 
-				<Card size='small' title='Chi tiết giao dịch'>
+				<Card size='small' title={intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.chitietgiaodich' })}>
 					<Tabs
 						activeKey={activeTab}
 						onChange={onChangeTab}
 						items={[
 							{
 								key: '1',
-								label: 'Chi tiết',
+								label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.chitiet' }),
 								children: <FormItemHoaDonChiTiet />,
 							},
 							{
 								key: '2',
-								label: 'Lịch sử giao dịch',
+								label: intl.formatMessage({ id: 'taichinh.thanhtoan.phieuthu.tab.lichsu' }),
 								children: (
 									<LichSuThanhToan
 										onPay={onPay}
