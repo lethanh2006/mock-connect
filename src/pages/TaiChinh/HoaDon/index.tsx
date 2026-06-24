@@ -75,7 +75,7 @@ const HoaDonPage = () => {
 			dataIndex: 'identityCode',
 			align: 'center',
 			filterType: 'string',
-			width: 500,
+			width: 120,
 		},
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.dotthu' }),
