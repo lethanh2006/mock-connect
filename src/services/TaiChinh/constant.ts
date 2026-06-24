@@ -13,14 +13,24 @@ export const ETrangThaiThanhToan: any = {
 };
 
 export const EMauTrangThaiThanhToanTable = {
-	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'red',
-	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'gold',
-	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'green',
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN]: 'rgb(220, 53, 69)',
+	[EMaTrangThaiThanhToan.CHUA_THANH_TOAN_DU]: 'rgb(255, 215, 34)',
+	[EMaTrangThaiThanhToan.DA_THANH_TOAN_DU]: 'rgb(0, 128, 16)',
 	[EMaTrangThaiThanhToan.DONG]: undefined,
 };
 
 //Giao dịch
 export enum ETransactionType {
+	CHARGE = 'CHARGE',
+	PAYMENT = 'PAYMENT',
+	DISCOUNT = 'DISCOUNT',
+	DEPOSIT_CREDIT = 'DEPOSIT_CREDIT',
+	WALLET_PAYMENT = 'WALLET_PAYMENT',
+	DISCOUNT_LATE = 'DISCOUNT_LATE',
+	DEPOSIT_CLEARING = 'DEPOSIT_CLEARING',
+	FORFEITURE = 'FORFEITURE',
+	REVERSE = 'REVERSE',
+	PENALTY_CHARGE = 'PENALTY_CHARGE',
 	DEPOSIT = 'deposit',
 	WITHDRAW = 'withdraw',
 	INTERNAL = 'internal',
@@ -28,13 +38,33 @@ export enum ETransactionType {
 }
 
 export const transactionType: Record<ETransactionType, string> = {
-	[ETransactionType.DEPOSIT]: 'Nộp tiền',
-	[ETransactionType.WITHDRAW]: 'Rút tiền',
-	[ETransactionType.INTERNAL]: 'Thanh toán',
-	[ETransactionType.REFUND]: 'Hoàn trả',
+	[ETransactionType.CHARGE]: 'CHARGE',
+	[ETransactionType.PAYMENT]: 'PAYMENT',
+	[ETransactionType.DISCOUNT]: 'DISCOUNT',
+	[ETransactionType.DEPOSIT_CREDIT]: 'DEPOSIT_CREDIT',
+	[ETransactionType.WALLET_PAYMENT]: 'WALLET_PAYMENT',
+	[ETransactionType.DISCOUNT_LATE]: 'DISCOUNT_LATE',
+	[ETransactionType.DEPOSIT_CLEARING]: 'DEPOSIT_CLEARING',
+	[ETransactionType.FORFEITURE]: 'FORFEITURE',
+	[ETransactionType.REVERSE]: 'REVERSE',
+	[ETransactionType.PENALTY_CHARGE]: 'PENALTY_CHARGE',
+	[ETransactionType.DEPOSIT]: 'DEPOSIT',
+	[ETransactionType.WITHDRAW]: 'WITHDRAW',
+	[ETransactionType.INTERNAL]: 'INTERNAL',
+	[ETransactionType.REFUND]: 'REFUND',
 };
 
 export const colorTransactionType: Record<ETransactionType, string> = {
+	[ETransactionType.CHARGE]: 'blue',
+	[ETransactionType.PAYMENT]: 'green',
+	[ETransactionType.DISCOUNT]: 'gold',
+	[ETransactionType.DEPOSIT_CREDIT]: 'cyan',
+	[ETransactionType.WALLET_PAYMENT]: 'green',
+	[ETransactionType.DISCOUNT_LATE]: 'gold',
+	[ETransactionType.DEPOSIT_CLEARING]: 'geekblue',
+	[ETransactionType.FORFEITURE]: 'red',
+	[ETransactionType.REVERSE]: 'volcano',
+	[ETransactionType.PENALTY_CHARGE]: 'red',
 	[ETransactionType.DEPOSIT]: 'green',
 	[ETransactionType.WITHDRAW]: 'yellow',
 	[ETransactionType.INTERNAL]: 'purple',
@@ -80,4 +110,40 @@ export const colorTransactionStatus: Record<ETransactionStatus, string> = {
 	[ETransactionStatus.SUCCESS]: 'green',
 	[ETransactionStatus.FAIL]: 'red',
 	[ETransactionStatus.CANCEL]: 'default',
+};
+
+/** Nhãn tiếng Việt cho loại giao dịch */
+export const TRANSACTION_LABEL: Record<string, string> = {
+	CHARGE: 'Ghi nợ',
+	PAYMENT: 'Thanh toán',
+	DISCOUNT: 'Khuyến mại',
+	DEPOSIT_CREDIT: 'Ghi có ký quỹ',
+	WALLET_PAYMENT: 'Thanh toán ví',
+	DISCOUNT_LATE: 'Giảm trễ hạn',
+	DEPOSIT_CLEARING: 'Cấn trừ ký quỹ',
+	FORFEITURE: 'Tịch thu',
+	REVERSE: 'Đảo giao dịch',
+	PENALTY_CHARGE: 'Phí phạt',
+	deposit: 'Nộp tiền',
+	withdraw: 'Rút tiền',
+	internal: 'Nội bộ',
+	refund: 'Hoàn trả',
+};
+
+/** Màu Tag cho loại giao dịch */
+export const TRANSACTION_COLOR: Record<string, string> = {
+	CHARGE: 'blue',
+	PAYMENT: 'green',
+	DISCOUNT: 'gold',
+	DEPOSIT_CREDIT: 'cyan',
+	WALLET_PAYMENT: 'green',
+	DISCOUNT_LATE: 'gold',
+	DEPOSIT_CLEARING: 'geekblue',
+	FORFEITURE: 'red',
+	REVERSE: 'volcano',
+	PENALTY_CHARGE: 'red',
+	deposit: 'green',
+	withdraw: 'orange',
+	internal: 'purple',
+	refund: 'default',
 };
