@@ -17,12 +17,8 @@ const SectionTitle = ({ title }: { title: string }) => (
 );
 
 type ExtraStudentProfile = Partial<{
-	hoChieu: string;
-	maBuuChinh: string;
-	maBuuChinhThuongTru: string;
 	passportNumber: string;
 	postalCode: string;
-	soHoChieu: string;
 }>;
 
 // const ProfileField = (props: { label: string; value?: ReactNode; highlight?: boolean }) => {
@@ -71,8 +67,8 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 		</Descriptions.Item>
 	);
 
-	const passportNumber = extraRecord?.soHoChieu ?? extraRecord?.passportNumber ?? extraRecord?.hoChieu;
-	const postalCode = extraRecord?.maBuuChinhThuongTru ?? extraRecord?.postalCode ?? extraRecord?.maBuuChinh;
+	const passportNumber = extraRecord?.passportNumber;
+	const postalCode = extraRecord?.postalCode;
 	const formatEnumMessage = <T extends string>(messageIds: Partial<Record<T, string>>, value?: T) =>
 		value && messageIds[value] ? intl.formatMessage({ id: messageIds[value] }) : value;
 
