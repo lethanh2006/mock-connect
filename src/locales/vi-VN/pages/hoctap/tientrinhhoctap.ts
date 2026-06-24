@@ -115,7 +115,8 @@ export default {
 	'tientrinhhoctap.ctdt.tinchi': 'tín chỉ',
 	'tientrinhhoctap.ctdt.nam': 'năm',
 	'tientrinhhoctap.ctdt.khoihp': 'Khối học phần',
-	'tientrinhhoctap.ctdt.noti': 'Bạn phải đảm bảo học {soTinChi} tín chỉ trong số những học phần sau đây',
+	'tientrinhhoctap.ctdt.noti':
+		'Sinh viên chọn {soTinChi} tín chỉ tự chọn từ trong chương trình hoặc từ bất kỳ chương trình nào khác (tại VinUniversity hoặc các tổ chức đối tác được công nhận)',
 
 	'tientrinhhoctap.ctdt.title': 'Chi tiết chương trình đào tạo/Kế hoạch học tập',
 	'tientrinhhoctap.ctdt.empty': 'Không có thông tin',
