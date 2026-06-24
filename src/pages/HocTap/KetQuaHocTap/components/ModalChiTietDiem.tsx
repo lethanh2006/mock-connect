@@ -62,8 +62,6 @@ const ModalChiTietDiem = (
 		if (
 			diemHienTai?.dat === false ||
 			diemHienTai?.diemChu === ELoaiDiemChu.F ||
-			diemHienTai?.diemChu === ELoaiDiemChu.HOAN_THI ||
-			diemHienTai?.diemChu === ELoaiDiemChu.W ||
 			trangThaiHoc === ETrangThaiHocTap.CHUA_DAT
 		) {
 			return (
