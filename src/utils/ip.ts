@@ -1,24 +1,27 @@
 import { AppModules, EModuleKey } from '@/services/base/constant';
 
 const ipRoot = APP_CONFIG_IP_ROOT; // ip dev
+const ipRootWithSlash = ipRoot.replace(/\/?$/, '/');
+const ipConnect = ipRootWithSlash + 'connect';
+const getConnectTarget = (target: string) => `${ipConnect}/${target}`;
 
-const ip3 = ipRoot + 'slink'; // ip dev
+const ip3 = ipConnect; // ip dev
 // const ip3 = 'http://192.168.1.38:3000'; // ip dev
 
-const ipNotif = ipRoot + 'notification'; // ip dev
+const ipNotif = getConnectTarget('notification'); // ip dev
 // const ipDaoTao = ipRoot + 'qldt'; // ip dev
 const ipDaoTao = ipRoot + 'qldt'; // ip dev
 // const ipDaoTao = 'http://192.168.1.149:3001'; // ip dev
 
 // const ipDaoTao = 'http://192.168.1.80:3001'; // ip dev
-const ipNhanSu = ipRoot + 'tcns';
-const ipCore = ipRoot + 'core';
-const ipTaiChinh = ipRoot + 'tai-chinh';
-const ipKhaoThi = ipRoot + 'khao-thi';
-const ipThuVien = ipRoot + 'thu-vien'; // ip dev
-const ipChatbot = ipRoot + 'chatbot-api';
-const ipCCT = ipRoot + 'co-curriculum'; // ip dev
-const ipFile = ipRoot + 'file';
+const ipNhanSu = getConnectTarget('tcns');
+const ipCore = getConnectTarget('core');
+const ipTaiChinh = getConnectTarget('tai-chinh');
+const ipKhaoThi = getConnectTarget('not-deployed/khao-thi');
+const ipThuVien = getConnectTarget('not-deployed/thu-vien'); // ip dev
+const ipChatbot = getConnectTarget('not-deployed/chatbot-api');
+const ipCCT = getConnectTarget('co-curriculum'); // ip dev
+const ipFile = getConnectTarget('file');
 // const ipCCT = 'http://192.168.1.38:3010'; // ip dev
 
 const ipNewsWP = APP_CONFIG_URL_LANDING;
@@ -41,15 +44,13 @@ const oneSignalClient = APP_CONFIG_ONE_SIGNAL_ID;
 const moodleEndpoint = APP_CONFIG_MOODLE_ENDPOINT;
 
 export {
-	currentRole,
-	ip3,
+	currentRole, financeApiClientId, ip3,
 	ipCCT,
 	ipChatbot,
+	ipConnect,
 	ipCore,
 	ipDaoTao,
-	ipFile,
-	financeApiClientId,
-	ipKhaoThi,
+	ipFile, ipKhaoThi,
 	ipNewsWP,
 	ipNhanSu,
 	ipNotif,
@@ -66,5 +67,6 @@ export {
 	qldtApiClientId,
 	replaceRole,
 	resourceServerClientId,
-	sentryDSN,
+	sentryDSN
 };
+
