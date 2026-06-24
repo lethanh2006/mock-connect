@@ -134,7 +134,7 @@ export default {
 	'dangkytinchi.lichsuthaotac.action.svDelete': 'Student removed credit registration',
 	'dangkytinchi.lichsuthaotac.action.staffRegister': 'Staff registered',
 	'dangkytinchi.lichsuthaotac.action.staffDelete': 'Staff removed registration',
-	'dangkytinchi.modallichhoc.title': 'Expected class schedule',
+	'dangkytinchi.modallichhoc.title': 'Expected section schedule',
 	'dangkytinchi.modallichhoc.description.dangkyloptinchi':
 		'You have registered / selected <b>{countLop} credit classes</b>, with a total of <b>{countBuoi} class sessions</b>, from {start} to {end}',
 	'dangkytinchi.modallichhoc.description.cuthenhusau': 'Specifically as follows:',

@@ -68,15 +68,11 @@ type TChuongTrinhHocKy = {
 
 const TienTrinhChuongTrinhKhung = () => {
 	const intl = useIntl();
-	const {
-		loading,
-		sinhVienGetTienTrinhKhungModel,
-		record: recChuongTrinh,
-		setRecord: setChuongTrinh,
-	} = useModel('daotao.chuongtrinhdaotao');
+	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
 	const { khoaNganhMe, maKhoaNganh, record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const [rawData, setRawData] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>([]);
 	const [minorData, setMinorData] = useState<ChuongTrinhDaoTao.TTienTrinhKhungMinor[]>([]);
+	const [recChuongTrinh, setChuongTrinh] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>();
 	const [viewType, setViewType] = useState<'semester' | 'block'>('semester');
 	const [searchText, setSearchText] = useState('');
 	const [searchOptions, setSearchOptions] = useState<{ value: string }[]>([]);
@@ -540,9 +536,6 @@ const TienTrinhChuongTrinhKhung = () => {
 				listDiem={recChuongTrinh?.lichSuDiem ?? []}
 				maKhoaNganh={maKhoaNganh}
 				khoiChuongTrinh={recChuongTrinh}
-				colorKhoiKienThuc={
-					recChuongTrinh?.maKhoiKienThuc ? mapColorKhoiKienThuc[recChuongTrinh.maKhoiKienThuc] : undefined
-				}
 				trangThaiHoc={recChuongTrinh?.hoc}
 			/>
 
