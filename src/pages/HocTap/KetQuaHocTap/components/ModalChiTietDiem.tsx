@@ -1,6 +1,6 @@
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { colorTrangThaiHocTap, ETrangThaiHocTap } from '@/services/DaoTao/constant';
-import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
+import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { Button, Descriptions, Divider, Empty, Modal, Tag } from 'antd';
 import { useMemo, useState } from 'react';
@@ -213,7 +213,7 @@ const ModalChiTietDiem = (
 									? `${intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hoclan' })} ${listDiem.length - index}`
 									: null}
 								{diemHienTai?._id === diem._id ? (
-									<Tag color={ColorDiemChu[diemHienTai.diemChu as ELoaiDiemChu]} style={{ marginLeft: 8 }}>
+									<Tag color='green' style={{ marginLeft: 8 }}>
 										{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.finalGrade' })}
 									</Tag>
 								) : null}

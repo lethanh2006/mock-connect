@@ -490,15 +490,20 @@ const TienTrinhChuongTrinhKhung = () => {
 													</>
 												) : undefined;
 											}
-											const majorName = item.chuyenNganh?.ten;
-											if (!majorName) return undefined;
+											const semester = item.soThuTuKy;
+											if (!semester) return undefined;
 
-											const isMinor = item.maChuyenNganh === recSinhVien?.maChuyenNganh2;
-											const labelId = isMinor
-												? 'tientrinhhoctap.ctdt.chuyennganhphu.label'
-												: 'tientrinhhoctap.ctdt.chuyennganh.label';
-
-											return `${intl.formatMessage({ id: labelId })}: ${majorName}`;
+											return (
+												<>
+													<span
+														className='card-label-dot'
+														style={{
+															backgroundColor: `var(--color-primary)`,
+														}}
+													/>
+													{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} {semester}
+												</>
+											);
 										})}
 									</Collapse.Panel>
 								</Collapse>
