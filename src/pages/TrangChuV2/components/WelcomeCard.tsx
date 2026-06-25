@@ -1,5 +1,5 @@
 import dayjs from '@/utils/dayjs';
-import { Card, Col, Flex, Row, Typography } from 'antd';
+import { Card, Col, Flex, Row, Tag, Typography } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const pillStyle = {
@@ -23,6 +23,7 @@ const WelcomeCard = () => {
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const { record: recSinhVien, loading } = useModel('sinhvien.sinhvien');
+	const { danhSach } = useModel('daotao.thoikhoabieu');
 
 	const ten =
 		recSinhVien?.ten?.trim() ||
@@ -63,11 +64,13 @@ const WelcomeCard = () => {
 					</Flex>
 				</Col>
 
-				{/* <Col xs={24} lg={10}>
+				<Col xs={24} lg={10}>
 					<Flex gap={8} wrap justify='flex-end'>
-						<Tag style={pillStyle}>{intl.formatMessage({ id: 'trangchu.v2.welcome.classesToday' }, { count: 3 })}</Tag>
+						<Tag style={pillStyle}>
+							{intl.formatMessage({ id: 'trangchu.v2.welcome.classesToday' }, { count: danhSach?.length ?? 0 })}
+						</Tag>
 					</Flex>
-				</Col> */}
+				</Col>
 			</Row>
 		</Card>
 	);

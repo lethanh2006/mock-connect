@@ -1,6 +1,7 @@
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { accentColors, primaryColor } from '@/services/base/constant';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { Card, Empty, Modal } from 'antd';
+import { Card, Modal } from 'antd';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useIntl } from 'umi';
@@ -17,13 +18,30 @@ const CardKhoiHocPhan = (props: {
 	const { khoi, onClickHocPhan, label } = props;
 	const soTinChi = khoi?.soTinChiTuChonPhaiHoc ?? 0;
 	const [visible, setVisible] = useState<boolean>(false);
+	const hasDanhSachHocPhan = !!khoi?.hocPhanCtdtList?.length;
+	const title = khoi?.ten ?? intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoihp' });
+
+	const handleClickKhoi = () => {
+		if (hasDanhSachHocPhan) {
+			setVisible(true);
+			return;
+		}
+
+		Modal.confirm({
+			className: 'khoi-confirm-modal',
+			title,
+			content: intl.formatMessage({ id: 'tientrinhhoctap.ctdt.noti.ngoaiChuongTrinh' }, { soTinChi }),
+			okText: intl.formatMessage({ id: 'global.button.dong' }),
+			cancelButtonProps: { hidden: true },
+		});
+	};
 
 	return (
 		<>
 			<div className='base-card'>
 				<Card
 					hoverable
-					onClick={() => setVisible(true)}
+					onClick={handleClickKhoi}
 					style={{
 						backgroundColor: accentColors.accent800 ?? '#f8f8f8',
 						border: `1px solid ${accentColors.accent600 ?? '#D2D3D5'}`,
@@ -57,9 +75,9 @@ const CardKhoiHocPhan = (props: {
 				</Card>
 			</div>
 
-			<Modal
+			<ModalExpandable
 				open={visible}
-				title={khoi?.ten ?? intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoihp' })}
+				title={title}
 				onCancel={() => setVisible(false)}
 				width={850}
 				okButtonProps={{ hidden: true }}
@@ -67,7 +85,7 @@ const CardKhoiHocPhan = (props: {
 				className='khoi-modal'
 			>
 				<span className='modal-description'>
-					{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.noti' }, { soTinChi })}:{' '}
+					{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.noti.trongChuongTrinh' }, { soTinChi })}:{' '}
 				</span>
 
 				<div className='modal-grid'>
@@ -88,13 +106,8 @@ const CardKhoiHocPhan = (props: {
 							label={label}
 						/>
 					))}
-					{!khoi?.hocPhanCtdtList?.length && (
-						<div style={{ gridColumn: '1 / -1', width: '100%' }}>
-							<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-						</div>
-					)}
 				</div>
-			</Modal>
+			</ModalExpandable>
 		</>
 	);
 };

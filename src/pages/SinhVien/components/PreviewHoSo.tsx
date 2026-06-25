@@ -2,7 +2,7 @@ import { colorTrangThaiHocSv, genderMessageIds, trangThaiHocSv } from '@/service
 import { placeOfBirthTypeMessageIds } from '@/services/DaoTao/SinhVien/constants';
 import { formatDate } from '@/utils/formatDate';
 import { formatPhoneNumber } from '@/utils/utils';
-import { Card, Col, Descriptions, Divider, Flex, Image, Row, Spin, Tag, Typography } from 'antd';
+import { Card, Col, Divider, Flex, Image, Row, Spin, Tag, Typography } from 'antd';
 // import { Card, Descriptions, Divider, Flex, Image, Spin, Splitter, Typography } from 'antd';
 import type { ReactNode } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -14,6 +14,10 @@ const SectionTitle = ({ title }: { title: string }) => (
 	<Divider orientation='left' dashed className='divider-big-title'>
 		{title}
 	</Divider>
+);
+
+const ProfileGroupTitle = ({ children }: { children: ReactNode }) => (
+	<Text className='sv-profile-group-title'>{children}</Text>
 );
 
 type ExtraStudentProfile = Partial<{
@@ -55,16 +59,13 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 		);
 	};
 
-	const renderDescription = (label: ReactNode, value?: ReactNode, bullet = true, highlight = false) => (
-		<Descriptions.Item
-			label={
-				<span className={bullet ? 'sv-profile-description-label sv-profile-description-label-bullet' : undefined}>
-					{label}
-				</span>
-			}
-		>
-			{renderValue(value, highlight)}
-		</Descriptions.Item>
+	const renderProfileField = (label: ReactNode, value?: ReactNode, highlight = false) => (
+		<div className='sv-profile-field'>
+			<Text type='secondary' className='sv-profile-field-label'>
+				{label}
+			</Text>
+			<div className='sv-profile-field-value'>{renderValue(value, highlight)}</div>
+		</div>
 	);
 
 	const passportNumber = extraRecord?.passportNumber;
@@ -77,7 +78,7 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 			<div className='sv-profile-summary'>
 				<Flex vertical align='center' gap={8}>
 					<div className='avatar-container'>
-						<Image src={record?.anhDaiDienUrl ?? '/metadata.png'} />
+						<Image src={record?.anhDaiDienUrl ?? '/student/metadata.png'} />
 					</div>
 					<Title level={4} className='sv-profile-name'>
 						{record?.ten ?? '--'}
@@ -112,28 +113,25 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 
 			<SectionTitle title={intl.formatMessage({ id: 'thongtincanhan.hoso.generalInfo' })} />
 
-			<Descriptions column={1} colon={false} layout='horizontal' className='sv-profile-detail-descriptions'>
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.masv' })}:`, record?.ma, false, false)}
-				{renderDescription(
+			<div className='sv-profile-field-list'>
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.masv' })}:`, record?.ma)}
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.gioitinh' })}:`,
 					formatEnumMessage(genderMessageIds, record?.gioiTinh),
-					false,
 				)}
-				{renderDescription(
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.ngaysinh' })}:`,
 					formatDate(record?.ngaySinh),
-					false,
 				)}
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.email' })}:`, record?.email, false)}
-				{renderDescription(
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.email' })}:`, record?.email)}
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.sdt' })}:`,
 					record?.soDienThoai ? formatPhoneNumber(record.soDienThoai) : undefined,
-					false,
 				)}
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.quoctich' })}:`, record?.quocTich, false)}
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.dantoc' })}:`, record?.danToc, false)}
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.tongiao' })}:`, record?.tonGiao, false)}
-			</Descriptions>
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.quoctich' })}:`, record?.quocTich)}
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.dantoc' })}:`, record?.danToc)}
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.tongiao' })}:`, record?.tonGiao)}
+			</div>
 
 			{/* <Flex vertical align='center' gap={8} style={{ marginBottom: 16 }}>
 				<div className='avatar-container'>
@@ -171,83 +169,62 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 	const rightPanel = (
 		<Card variant='borderless'>
 			<SectionTitle title={intl.formatMessage({ id: 'thongtincanhan.hoso.identity' })} />
-			<Descriptions
-				column={1}
-				colon={false}
-				layout='horizontal'
-				className='sv-profile-detail-descriptions'
-				title={intl.formatMessage({ id: 'thongtincanhan.hoso.nationalIdentification' })}
-			>
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.idNumber' })}:`, record?.cccd)}
-				{renderDescription(
+			<div className='sv-profile-field-list'>
+				<ProfileGroupTitle>
+					{intl.formatMessage({ id: 'thongtincanhan.hoso.nationalIdentification' })}
+				</ProfileGroupTitle>
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.idNumber' })}:`, record?.cccd)}
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.ngaycap' })}:`,
 					formatDate(record?.ngayCapCccd),
 				)}
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.noicap' })}:`, record?.noiCapCccd)}
-			</Descriptions>
-			<Descriptions
-				column={1}
-				colon={false}
-				layout='horizontal'
-				className='sv-profile-detail-descriptions'
-				title={intl.formatMessage({ id: 'thongtincanhan.hoso.passportIdentification' })}
-			>
-				{renderDescription(intl.formatMessage({ id: 'thongtincanhan.hoso.passportNumber' }), passportNumber)}
-			</Descriptions>
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.noicap' })}:`, record?.noiCapCccd)}
+			</div>
+			<div className='sv-profile-field-list'>
+				<ProfileGroupTitle>
+					{intl.formatMessage({ id: 'thongtincanhan.hoso.passportIdentification' })}
+				</ProfileGroupTitle>
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.passportNumber' })}:`, passportNumber)}
+			</div>
 
 			<SectionTitle title={intl.formatMessage({ id: 'thongtincanhan.hoso.addressInfo' })} />
-			<Descriptions
-				column={1}
-				colon={false}
-				layout='horizontal'
-				className='sv-profile-detail-descriptions'
-				title={`${intl.formatMessage({ id: 'thongtincanhan.hoso.placeOfBirth' })}:`}
-			>
-				{renderDescription(
+			<div className='sv-profile-field-list'>
+				<ProfileGroupTitle>{`${intl.formatMessage({ id: 'thongtincanhan.hoso.placeOfBirth' })}:`}</ProfileGroupTitle>
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.birthplaceType' })}:`,
 					formatEnumMessage(placeOfBirthTypeMessageIds, record?.loaiNoiSinh),
 				)}
-				{renderDescription(
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.tp' })}:`,
 					record?.tinhTpNoiSinh || record?.quocGiaNoiSinh,
 				)}
-			</Descriptions>
-			<Descriptions
-				column={1}
-				colon={false}
-				layout='horizontal'
-				className='sv-profile-detail-descriptions'
-				title={`${intl.formatMessage({ id: 'thongtincanhan.hoso.nativePlace' })}:`}
-			>
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.tp' })}:`, record?.tinhTpQueQuan)}
-				{renderDescription(
+			</div>
+			<div className='sv-profile-field-list'>
+				<ProfileGroupTitle>{`${intl.formatMessage({ id: 'thongtincanhan.hoso.nativePlace' })}:`}</ProfileGroupTitle>
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.tp' })}:`, record?.tinhTpQueQuan)}
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.quan' })}:`,
 					record?.quanHuyenQueQuan,
 				)}
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.xa' })}:`, record?.xaPhuongQueQuan)}
-			</Descriptions>
-			<Descriptions
-				column={1}
-				colon={false}
-				layout='horizontal'
-				className='sv-profile-detail-descriptions'
-				title={`${intl.formatMessage({ id: 'thongtincanhan.hoso.permanentAddress' })}:`}
-			>
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.postalCode' })}:`, postalCode)}
-				{renderDescription(`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.tp' })}:`, record?.tinhTpThuongTru)}
-				{renderDescription(
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.xa' })}:`, record?.xaPhuongQueQuan)}
+			</div>
+			<div className='sv-profile-field-list'>
+				<ProfileGroupTitle>{`${intl.formatMessage({ id: 'thongtincanhan.hoso.permanentAddress' })}:`}</ProfileGroupTitle>
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.postalCode' })}:`, postalCode)}
+				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.tp' })}:`, record?.tinhTpThuongTru)}
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.quan' })}:`,
 					record?.quanHuyenThuongTru,
 				)}
-				{renderDescription(
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.xa' })}:`,
 					record?.xaPhuongThuongTru,
 				)}
-				{renderDescription(
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.diachi.chitiet' })}:`,
 					record?.soNhaTenDuongThuongTru,
 				)}
-			</Descriptions>
+			</div>
 
 			{/* <Text strong style={{ display: 'block', marginBottom: 8 }}>
 				{intl.formatMessage({ id: 'thongtincanhan.hoso.permanentAddress' })}:
@@ -265,38 +242,33 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 			</ul> */}
 
 			<SectionTitle title={intl.formatMessage({ id: 'thongtincanhan.hoso.academicInfo' })} />
-			<Descriptions column={1} colon={false} layout='horizontal' className='sv-profile-detail-descriptions'>
-				{renderDescription(
+			<div className='sv-profile-field-list'>
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.college' })}:`,
 					record?.nganh?.donVi?.ten ?? record?.csdt?.ten,
-					false,
 				)}
-				{renderDescription(
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.trainingProgram' })}:`,
 					record?.khoaNganh?.chuongTrinh?.ten ?? record?.nganh?.ten,
-					false,
 				)}
-				{renderDescription(
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.cohortMajor' })}:`,
 					<>
 						{record?.khoaNganh?.ten ?? '--'}
 						{record?.nganh?.ten ? ` - ${record.nganh.ten}` : ''}
 					</>,
-					false,
 				)}
-				{renderDescription(
+				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.concentration' })}:`,
 					record?.chuyenNganh?.ten ?? record?.maChuyenNganh ?? '--',
-					false,
 				)}
 				{record?.chuyenNganh2?.ten || record?.khoaNganh2?.ten
-					? renderDescription(
+					? renderProfileField(
 							`${intl.formatMessage({ id: 'thongtincanhan.hoso.minor' })}:`,
 							record?.chuyenNganh2?.ten ?? record?.khoaNganh2?.ten,
-							false,
 						)
 					: null}
-			</Descriptions>
+			</div>
 		</Card>
 	);
 
