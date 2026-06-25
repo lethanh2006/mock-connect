@@ -94,6 +94,8 @@ export declare module LopHocPhan {
 		thu: number;
 		tietBatDau: number;
 		soTiet: number;
+		gioBatDau?: string;
+		gioKetThuc?: string;
 		nhanSuSsoId?: string; //SsoId
 		nhanSu?: ToChucNhanSu.INhanSu;
 		maNhanSu?: string;

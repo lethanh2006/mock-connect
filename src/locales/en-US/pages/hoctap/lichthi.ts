@@ -12,6 +12,7 @@ export default {
 	'lichthi.table.congNo': 'Debt',
 	'lichthi.table.trangThaiThi': 'Exam status',
 	'lichthi.table.thaoTac': 'Operation',
+	'pages.hoctap.lichthi.thoigian': 'Time',
 	'lichthi.tooltip.xemDSSV': 'View the list of students taking the exam',
 	'lichthi.modal.title': 'List of students taking the exam',
 	'lichthi.modal.sbd': 'Candidate number',

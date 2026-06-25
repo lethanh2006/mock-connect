@@ -109,7 +109,7 @@ const PhieuDangKy = (props: {
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.mahocphan' }),
 			dataIndex: 'maHocPhan',
 			align: 'center',
-			width: 100,
+			width: 140,
 			render: (val, rec) => (
 				<a
 					onClick={(e) => {
@@ -229,7 +229,7 @@ const PhieuDangKy = (props: {
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.phieudangky.columntable.huy' }),
-			width: 60,
+			width: 80,
 			fixed: 'right',
 			align: 'center',
 			render: (val, rec) =>
@@ -337,6 +337,7 @@ const PhieuDangKy = (props: {
 				setVisible={setVisibleDeCuong}
 				deCuongId={deCuongModal?.deCuongId}
 				title={deCuongModal?.title}
+				isChiTiet
 			/>
 		</>
 	);

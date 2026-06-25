@@ -232,6 +232,7 @@ export default () => {
 
 	const sinhVienGetLopDangKyTheoHocPhanModel = async (
 		maHocKy: string,
+		idDot: string,
 		loaiDangKyTheoLop: 'lop-hanh-chinh' | 'khoa-nganh' | 'tat-ca',
 		otherQuery?: any,
 		filterParams?: TFilter<LopHocPhan.IRecord>[],
@@ -246,6 +247,7 @@ export default () => {
 			condition: {
 				loai: ELoaiLopHocPhan.CHINH,
 				trangThaiLop: ETrangThaiLopHocPhan.MO,
+				idDot,
 			},
 			...otherQuery,
 			filters: (filterParams ?? []).filter((item) => item.active !== false).map(({ active, ...item }) => item),

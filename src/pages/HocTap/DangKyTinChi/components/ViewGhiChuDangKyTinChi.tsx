@@ -1,6 +1,9 @@
+import step1Image from '@/assets/dktc/step1.jpg';
+import step2Image from '@/assets/dktc/step2.jpg';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import { tinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
-import { Col, Divider, Modal, Row } from 'antd';
+import { Col, Divider, Row } from 'antd';
 import { useIntl, useModel } from 'umi';
 
 const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
@@ -10,12 +13,12 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
 
 	return (
-		<Modal
+		<ModalExpandable
 			title={intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtindangky' })}
 			open={visible}
 			footer={null}
 			onCancel={() => setVisible(false)}
-			width={800}
+			width={900}
 		>
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
@@ -104,6 +107,11 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1.mota' })}
 					</div>
+					<img
+						src={step1Image}
+						alt={intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1' })}
+						style={{ width: '100%', marginTop: 8, borderRadius: 4 }}
+					/>
 					<div style={{ marginTop: 8 }}>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}</strong>:{' '}
 						{intl.formatMessage(
@@ -115,9 +123,14 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 							},
 						)}
 					</div>
+					<img
+						src={step2Image}
+						alt={intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}
+						style={{ width: '100%', marginTop: 8, borderRadius: 4 }}
+					/>
 				</Col>
 			</Row>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

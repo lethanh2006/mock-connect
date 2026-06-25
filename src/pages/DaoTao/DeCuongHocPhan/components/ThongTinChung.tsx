@@ -2,9 +2,7 @@ import PreviewFile from '@/components/PreviewFile';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import type { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
-import { LoaiHocPhanCTDT } from '@/services/DaoTao/constant';
-import { getNameFile } from '@/utils/utils';
-import { Button, Collapse, Descriptions, Divider } from 'antd';
+import { Button, Descriptions, Divider } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 
@@ -17,9 +15,9 @@ const ThongTinChungPage = (props: { khoiChuongTrinh?: any }) => {
 	const { khoiChuongTrinh } = props;
 	const thongTinCtdt = chiTietHocPhan?.thongTinCtdt;
 	const hasThongTinCtdt = Array.isArray(thongTinCtdt) && thongTinCtdt.length > 0;
-	const danhSachThongTinCtdt: DangKyTinChi.TThongTinCtdtHocPhan[] = hasThongTinCtdt
-		? thongTinCtdt
-		: [khoiChuongTrinh ?? {}];
+	const thongTinCtdtHienThi: DangKyTinChi.TThongTinCtdtHocPhan = hasThongTinCtdt
+		? thongTinCtdt[0]
+		: (khoiChuongTrinh ?? {});
 	const soTinChi = record?.hocPhan?.soTinChi ?? recLopHocPhan?.hocPhan?.soTinChi ?? chiTietHocPhan?.soTinChi;
 
 	const renderHocPhanCt = (dsHocPhan?: ChuongTrinhDaoTao.THocPhanTuongQuan[] | null, label?: string) => {
@@ -69,51 +67,43 @@ const ThongTinChungPage = (props: { khoiChuongTrinh?: any }) => {
 			<Divider className='divider-big-title' orientation='left'>
 				{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chuongtrinh' })}
 			</Divider>
-			{danhSachThongTinCtdt.map((item, index) => (
-				<Descriptions
-					style={{ marginTop: 12 }}
-					key={`${item.khoiKienThuc?.ma ?? item.maKhoiKienThuc ?? 'ctdt'}-${index}`}
+			<Descriptions style={{ marginTop: 12 }}>
+				<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tt' })}>
+					<b>{thongTinCtdtHienThi?.soThuTuKy ?? '--'}</b>
+				</Descriptions.Item>
+				<Descriptions.Item
+					label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.khoikienthuc' })}
+					span={thongTinCtdtHienThi.soThuTuKy ? 2 : 3}
 				>
-					{(!hasThongTinCtdt || item.soThuTuKy) && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tt' })}>
-							<b>{item.soThuTuKy ?? '--'}</b>
-						</Descriptions.Item>
-					)}
-					<Descriptions.Item
-						label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.khoikienthuc' })}
-						span={item.soThuTuKy ? 2 : 3}
-					>
-						<span>{item.khoiKienThuc?.ten ?? item.maKhoiKienThuc ?? item.khoiKienThuc?.ma ?? '--'}</span>
+					<span>
+						{thongTinCtdtHienThi.khoiKienThuc?.ten ??
+							thongTinCtdtHienThi.maKhoiKienThuc ??
+							thongTinCtdtHienThi.khoiKienThuc?.ma ??
+							'--'}
+					</span>
+				</Descriptions.Item>
+				<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tuchon' })} span={3}>
+					{thongTinCtdtHienThi.tenKhoi ?? thongTinCtdtHienThi.ten ?? '--'}
+				</Descriptions.Item>
+				{renderHocPhanCt(
+					thongTinCtdtHienThi.dsHocPhanTienQuyet,
+					intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tienquyet' }),
+				)}
+				{renderHocPhanCt(
+					thongTinCtdtHienThi.dsHocPhanTruoc,
+					intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hptruoc' }),
+				)}
+				{renderHocPhanCt(
+					thongTinCtdtHienThi.dsHocPhanSongHanh,
+					intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hpsongnganh' }),
+				)}
+				{(!hasThongTinCtdt || thongTinCtdtHienThi.chuyenNganh?.ten) && (
+					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })} span={3}>
+						{thongTinCtdtHienThi.chuyenNganh?.ten ?? '--'}
 					</Descriptions.Item>
-					{(hasThongTinCtdt || item.loai) && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loai' })} span={3}>
-							{item.loai && LoaiHocPhanCTDT[item.loai]
-								? intl.formatMessage({ id: LoaiHocPhanCTDT[item.loai] })
-								: (item.loai ?? '--')}
-						</Descriptions.Item>
-					)}
-					{(!hasThongTinCtdt || item.tenKhoi || item.ten) && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tuchon' })} span={3}>
-							{item.tenKhoi ?? item.ten ?? '--'}
-						</Descriptions.Item>
-					)}
-					{renderHocPhanCt(
-						item.dsHocPhanTienQuyet,
-						intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tienquyet' }),
-					)}
-					{renderHocPhanCt(item.dsHocPhanTruoc, intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hptruoc' }))}
-					{renderHocPhanCt(
-						item.dsHocPhanSongHanh,
-						intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hpsongnganh' }),
-					)}
-					{(!hasThongTinCtdt || item.chuyenNganh?.ten) && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })} span={3}>
-							{item.chuyenNganh?.ten ?? '--'}
-						</Descriptions.Item>
-					)}
-				</Descriptions>
-			))}
-			<Divider className='divider-big-title' orientation='left'>
+				)}
+			</Descriptions>
+			{/* <Divider className='divider-big-title' orientation='left'>
 				{intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.decuong' })}
 			</Divider>
 			<Descriptions
@@ -134,24 +124,24 @@ const ThongTinChungPage = (props: { khoiChuongTrinh?: any }) => {
 				<Descriptions.Item label={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.dinhkem' })}>
 					{record?.url ? <a onClick={() => setVisibleFormFile(true)}>{getNameFile(record.url)}</a> : <i>--</i>}
 				</Descriptions.Item>
-			</Descriptions>
+			</Descriptions> */}
 
 			{/* <TrongSoHocPhanPage /> */}
 
-			<Collapse style={{ marginTop: 12 }}>
+			{/* <Collapse style={{ marginTop: 12 }}>
 				<Collapse.Panel header={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.muctieu' })} key='1'>
 					<div dangerouslySetInnerHTML={{ __html: record?.mucTieuHocPhan ?? '--' }} />
 				</Collapse.Panel>
 				<Collapse.Panel header={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.cdr' })} key='2'>
 					<div dangerouslySetInnerHTML={{ __html: record?.chuanDauRa ?? '--' }} />
-				</Collapse.Panel>
-				{/* <Collapse.Panel header='Nội dung tóm tắt' key='2'>
+				</Collapse.Panel> */}
+			{/* <Collapse.Panel header='Nội dung tóm tắt' key='2'>
 					<div dangerouslySetInnerHTML={{ __html: record?.noiDungTomTat ?? '--' }} />
 				</Collapse.Panel>
 				<Collapse.Panel header='Nội dung chi tiết' key='3'>
 					<div dangerouslySetInnerHTML={{ __html: record?.noiDungChiTiet ?? '--' }} />
 				</Collapse.Panel> */}
-			</Collapse>
+			{/* </Collapse> */}
 
 			<ModalExpandable
 				title={intl.formatMessage({ id: 'lophocphan.id.decuong.thongtinchung.chitiet' })}

@@ -46,13 +46,13 @@ const StatCard = ({ title, value, subValue, periodText, disabled }: StatCardProp
 const CardTienTrinh = () => {
 	const intl = useIntl();
 	const { record: recTienTrinh, loading: loadingTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
-	const { dataThongKe, total: awardsCount, loading: loadingAwards } = useModel('cct.activityoutcome');
+	const { danhSach: danhSachActivity } = useModel('cct.activity');
 
 	const stats = useMemo<StatCardProps[]>(() => {
 		const gpa = recTienTrinh?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4;
 		const credits = recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa;
 		const totalCredits = recTienTrinh?.ctdtKeHoach?.tongSoTinChi;
-		const activities = dataThongKe?.approved;
+		const activities = danhSachActivity?.length ?? 0;
 
 		return [
 			{
@@ -76,12 +76,11 @@ const CardTienTrinh = () => {
 			},
 			{
 				title: intl.formatMessage({ id: 'trangchu.v2.academicProgress.awards' }),
-				value: awardsCount ?? '--',
+				value: '--',
 				periodText: intl.formatMessage({ id: 'trangchu.v2.academicProgress.lastSemester' }),
-				disabled: awardsCount === null || awardsCount === undefined,
 			},
 		];
-	}, [awardsCount, dataThongKe?.approved, intl, recTienTrinh]);
+	}, [intl, recTienTrinh, danhSachActivity]);
 
 	return (
 		<Card
@@ -92,7 +91,7 @@ const CardTienTrinh = () => {
 			}
 			className='card-big-title card-borderless'
 			variant='borderless'
-			loading={loadingTienTrinh || loadingAwards}
+			loading={loadingTienTrinh}
 		>
 			<Row gutter={[12, 12]}>
 				{stats.map((item) => (

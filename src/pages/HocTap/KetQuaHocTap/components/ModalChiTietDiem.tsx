@@ -1,10 +1,8 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
 import { colorTrangThaiHocTap, ETrangThaiHocTap } from '@/services/DaoTao/constant';
-import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
+import { ColorDiemChu, ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Divider, Empty, Modal, Space, Tag, Tooltip } from 'antd';
+import { Button, Descriptions, Divider, Empty, Modal, Tag } from 'antd';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalHocPhan from '../../../DaoTao/DeCuongHocPhan/ModalHocPhan';
@@ -27,7 +25,7 @@ const ModalChiTietDiem = (
 	} & Partial<Pick<ChuongTrinhDaoTao.TTienTrinhThucTe, 'hocPhan'>>,
 ) => {
 	const intl = useIntl();
-	const { ngoaiQuyDoiDiem } = useModel('daotao.quydoidiem.dotquydoidiem');
+	// const { ngoaiQuyDoiDiem } = useModel('daotao.quydoidiem.dotquydoidiem');
 	const { record } = useModel('lophocphan.lophocphan');
 
 	const { visible, setVisible, hocPhan, listDiem, trangThaiHoc, khoiChuongTrinh, maKhoaNganh } = props;
@@ -46,12 +44,19 @@ const ModalChiTietDiem = (
 	}, [listDiem]);
 
 	const renderTrangThai = () => {
-		if (trangThaiHoc === ETrangThaiHocTap.CHUA_HOC || trangThaiHoc === ETrangThaiHocTap.DANG_HOC) {
+		if (
+			trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ||
+			trangThaiHoc === ETrangThaiHocTap.DANG_HOC ||
+			diemHienTai?.diemChu === ELoaiDiemChu.IP
+		) {
+			const trangThaiHienThi =
+				diemHienTai?.diemChu === ELoaiDiemChu.IP ? ETrangThaiHocTap.DANG_HOC : (trangThaiHoc as ETrangThaiHocTap);
+
 			return (
-				<Tag color={colorTrangThaiHocTap[trangThaiHoc]}>
+				<Tag color={colorTrangThaiHocTap[trangThaiHienThi]}>
 					{intl.formatMessage({
 						id:
-							trangThaiHoc === ETrangThaiHocTap.CHUA_HOC
+							trangThaiHienThi === ETrangThaiHocTap.CHUA_HOC
 								? 'daotao.trangthaihoctap.chuaHoc'
 								: 'daotao.trangthaihoctap.dangHoc',
 					})}
@@ -62,6 +67,8 @@ const ModalChiTietDiem = (
 		if (
 			diemHienTai?.dat === false ||
 			diemHienTai?.diemChu === ELoaiDiemChu.F ||
+			diemHienTai?.diemChu === ELoaiDiemChu.HOAN_THI ||
+			diemHienTai?.diemChu === ELoaiDiemChu.W ||
 			trangThaiHoc === ETrangThaiHocTap.CHUA_DAT
 		) {
 			return (
@@ -111,11 +118,11 @@ const ModalChiTietDiem = (
 				open={visible}
 				onCancel={() => setVisible(false)}
 				footer={
-					<Space wrap>
+					<>
 						{/* <ButtonExtend icon={<StarOutlined />} title='Quan tâm học phần'>
 							Quan tâm
 						</ButtonExtend> */}
-						{trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
+						{/* {trangThaiHoc === ETrangThaiHocTap.CHUA_HOC ? (
 							<ButtonExtend
 								tooltip={
 									ngoaiQuyDoiDiem ? intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.khongcodot' }) : null
@@ -126,10 +133,10 @@ const ModalChiTietDiem = (
 							>
 								{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.congnhan' })}
 							</ButtonExtend>
-						) : null}
+						) : null} */}
 
 						<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
-					</Space>
+					</>
 				}
 				width={1000}
 			>
@@ -139,11 +146,9 @@ const ModalChiTietDiem = (
 				<Descriptions column={{ xs: 1, sm: 1, md: 3 }}>
 					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hp' })} span={3}>
 						{hocPhan?.ten ? (
-							<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chitiet' })}>
-								{/* <a onClick={handleShowDeCuong}> */}
-								<b>{hocPhan?.ten ?? ''}</b>
-								{/* </a> */}
-							</Tooltip>
+							<div>
+								<b>{hocPhan.ten}</b>
+							</div>
 						) : (
 							<i>--</i>
 						)}
@@ -206,6 +211,11 @@ const ModalChiTietDiem = (
 								{listDiem.length > 0
 									? `${intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hoclan' })} ${listDiem.length - index}`
 									: null}
+								{diemHienTai?._id === diem._id ? (
+									<Tag color={ColorDiemChu[diemHienTai.diemChu as ELoaiDiemChu]} style={{ marginLeft: 8 }}>
+										{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.finalGrade' })}
+									</Tag>
+								) : null}
 								<DetailKetQuaHocTap key={diem._id} diemHpSvHk={diem} />
 							</div>
 						))
