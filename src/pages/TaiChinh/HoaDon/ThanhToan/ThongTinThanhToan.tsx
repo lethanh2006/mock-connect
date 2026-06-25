@@ -1,23 +1,65 @@
-import ButtonExtend from '@/components/Table/ButtonExtend';
 import { usePermissionCheck } from '@/hooks/usePermissionCheck';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	EMaTrangThaiThanhToan,
+	EMauTrangThaiThanhToanTable,
+	ETrangThaiThanhToan,
 	ETransactionPaymentType,
 	ETransactionSourceType,
 	ETransactionStatus,
 } from '@/services/TaiChinh/constant';
-import dayjs from '@/utils/dayjs';
-import { AppstoreAddOutlined, DollarOutlined } from '@ant-design/icons';
-import { Alert, Button, Card, Checkbox, Col, Modal, Row, Space, Tabs } from 'antd';
+import { currencyFormat } from '@/utils/utils';
+import {
+	BankOutlined,
+	BookOutlined,
+	CalendarOutlined,
+	DollarOutlined,
+	FileOutlined,
+	FileTextOutlined,
+	IdcardOutlined,
+	MailOutlined,
+	PhoneOutlined,
+	UserOutlined,
+} from '@ant-design/icons';
+import { Alert, Avatar, Button, Card, Col, Row, Space, Tabs, Tag, Typography } from 'antd';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-import CanhBaoGiaoDich from '../../GiaoDich/components/CanhBao';
-import DesThongTinHoaDon from '../ChiTiet/DesThongTin';
+import { disableThanhToan } from '..';
 import FormItemHoaDonChiTiet from '../ChiTiet/FormItem';
-import FormThanhToan from '../ThanhToan/FormThanhToan';
-import LichSuThanhToan from '../ThanhToan/LichSuThanhToan';
+import LichSuThanhToan from './LichSuThanhToan';
 import ModalThanhToanNganHang from './ModalThanhToanNganHang';
+
+const { Text } = Typography;
+
+/** Một dòng thông tin dạng nhãn trên, giá trị dưới */
+const InfoItem = (props: { icon?: React.ReactNode; label: string; value?: React.ReactNode }) => (
+	<div style={{ marginBottom: 4 }}>
+		<Text type='secondary' style={{ fontSize: 12 }}>
+			{props.icon && <span style={{ marginRight: 6 }}>{props.icon}</span>}
+			{props.label}
+		</Text>
+		<div style={{ fontWeight: 500, color: '#1f1f1f', wordBreak: 'break-word' }}>{props.value || '-'}</div>
+	</div>
+);
+
+/** Thẻ số liệu tài chính */
+const StatBox = (props: { label: string; value: number | string; color: string }) => (
+	<div
+		style={{
+			background: '#fafafa',
+			border: '1px solid #f0f0f0',
+			borderRadius: 8,
+			padding: '12px 16px',
+			height: '100%',
+		}}
+	>
+		<div style={{ fontSize: 12, color: '#8c8c8c', marginBottom: 6 }}>{props.label}</div>
+		<div style={{ fontSize: 18, fontWeight: 700, color: props.color, lineHeight: 1.2 }}>
+			{typeof props.value === 'number' ? `${currencyFormat(props.value)} VND` : props.value}
+		</div>
+	</div>
+);
 
 const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?: () => void }) => {
 	const intl = useIntl();
@@ -25,8 +67,6 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	const { setVisible, getData } = props;
 	const canPay = hasPermission('tc.transaction:pay');
 	const { record: recHoaDon } = useModel('taichinh.hoadon');
-	const { visibleThanhToan, setVisibleThanhToan, xemRutGonChiTiet, setXemRutGonChiTiet } =
-		useModel('taichinh.hoadonchitiet');
 	const {
 		getAllModel,
 		record: recGiaoDich,
@@ -39,13 +79,30 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 	} = useModel('taichinh.giaodich');
 	const { record: recDotThu, getByIdModel: getDotThu } = useModel('taichinh.dotthu');
 	const [activeTab, setActiveTab] = useState('1');
-	const ngoaiThoiGianThanhToan =
-		!recHoaDon?.dotThu?._id ||
-		!recHoaDon?.dotThu?.thoiGianBatDau ||
-		!recHoaDon?.dotThu?.thoiGianKetThuc ||
-		dayjs().isBefore(dayjs(recHoaDon.dotThu.thoiGianBatDau)) ||
-		dayjs().isAfter(dayjs(recHoaDon.dotThu.thoiGianKetThuc)) ||
-		!recHoaDon.dotThu.kichHoat;
+
+	// Tổng quan tài chính
+	const phaiThu = recHoaDon?.soTienPhaiThu ?? 0;
+	const khuyenMai = recHoaDon?.soTienKhuyenMai ?? 0;
+	const conLai = recHoaDon?.soTienConLai ?? 0;
+	const daThanhToan = recHoaDon?.soTienDaThu ?? 0;
+
+	// Trạng thái thanh toán
+	const statusText: string | undefined = ETrangThaiThanhToan[recHoaDon?.status as EMaTrangThaiThanhToan];
+	const statusColor = EMauTrangThaiThanhToanTable[recHoaDon?.status as EMaTrangThaiThanhToan];
+	const ngoaiThoiGianThanhToan = disableThanhToan(recHoaDon);
+
+	// Chữ cái đầu cho avatar
+	const fullname: string = recHoaDon?.userFullname || '';
+	const initial = (fullname.trim().split(' ').filter(Boolean).pop() || '?').charAt(0).toUpperCase();
+
+	// Trạng thái sinh viên
+	const trangThaiSinhVien: string | undefined =
+		recHoaDon?.userTrangThaiSv ||
+		recHoaDon?.userTrangThaiHoc ||
+		recHoaDon?.userMetadata?.trangThaiHoc ||
+		recHoaDon?.userMetadata?.trangThaiSv;
+
+	const daRelease: boolean = !!recHoaDon?.dotThu?.daRelease || !!recHoaDon?.dotThu?.thoiGianRelease;
 
 	/** Get giao dịch pending */
 	const getGiaoDich = () =>
@@ -88,110 +145,178 @@ const ThongTinThanhToan = (props: { setVisible: (val: boolean) => void; getData?
 					getGiaoDich();
 					if (getData) getData();
 				})
-				.catch((er) => console.log(er));
-		else return Promise.reject();
+				.catch((er: unknown) => console.log(er));
+
+		return Promise.reject();
 	};
+
+	const pendingPaymentAlert =
+		canPay &&
+		recGiaoDich?._id &&
+		recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
+		!ngoaiThoiGianThanhToan ? (
+			<Alert
+				message={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.title' })}
+				description={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.desc' })}
+				showIcon
+				type='info'
+				action={
+					<Button type='primary' onClick={() => onPay(recGiaoDich)} icon={<DollarOutlined />} loading={loading}>
+						{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
+					</Button>
+				}
+			/>
+		) : null;
 
 	return (
 		<Card title={intl.formatMessage({ id: 'taichinh.thanhtoan.title' })}>
-			<Row gutter={[12, 12]} style={{ marginBottom: 12 }}>
-				<Col span={24}>
-					<DesThongTinHoaDon />
-				</Col>
+			<>
+				{/* Header sinh viên */}
+				<div
+					style={{
+						padding: 16,
+						borderRadius: 10,
+						background: 'linear-gradient(135deg, #f0f5ff 0%, #f9f0ff 100%)',
+						border: '1px solid #f0f0f0',
+						marginBottom: 16,
+					}}
+				>
+					<div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+						<Avatar size={64} style={{ background: 'var(--color-primary, #1677ff)', flexShrink: 0 }}>
+							{initial}
+						</Avatar>
 
-				<Col span={24}>
-					<Tabs activeKey={activeTab} onChange={(tab) => onChangeTab(tab)}>
-						<Tabs.TabPane key={'1'} tab={intl.formatMessage({ id: 'taichinh.thanhtoan.tab.chitiet' })} />
-						<Tabs.TabPane key={'2'} tab={intl.formatMessage({ id: 'taichinh.thanhtoan.tab.lichsu' })} />
-					</Tabs>
+						<div style={{ flex: 1, minWidth: 0 }}>
+							<Space align='center' wrap size={8}>
+								<span style={{ fontSize: 18, fontWeight: 700 }}>{fullname || 'Sinh viên'}</span>
+								{statusText && <Tag color={statusColor}>{statusText}</Tag>}
+							</Space>
+						</div>
+					</div>
 
-					{activeTab === '1' ? (
-						<Space direction='vertical' style={{ width: '100%' }}>
-							{canPay &&
-							recGiaoDich?._id &&
-							recGiaoDich.paymentType !== ETransactionPaymentType.MANUAL &&
-							!ngoaiThoiGianThanhToan ? (
-								<Alert
-									message={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.title' })}
-									description={intl.formatMessage({ id: 'taichinh.thanhtoan.alert.pending.desc' })}
-									showIcon
-									type='info'
-									action={
-										<Space wrap>
-											<Button
-												type='primary'
-												onClick={() => onPay(recGiaoDich)}
-												icon={<DollarOutlined />}
-												loading={loading}
-											>
-												{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
-											</Button>
-											{/* <Popconfirm title='Xác nhận hủy giao dịch này?' onConfirm={() => onCancel(recGiaoDich)}>
-												<Button danger type='link'>
-													Hủy giao dịch
-												</Button>
-											</Popconfirm> */}
-										</Space>
-									}
+					<Row gutter={[16, 8]} style={{ marginTop: 16, paddingLeft: 80 }}>
+						<Col xs={12} md={8}>
+							<InfoItem icon={<UserOutlined />} label='Mã sinh viên' value={recHoaDon?.userCode} />
+						</Col>
+						<Col xs={12} md={8}>
+							<InfoItem icon={<MailOutlined />} label='Email' value={recHoaDon?.userEmail} />
+						</Col>
+						<Col xs={12} md={8}>
+							<InfoItem icon={<PhoneOutlined />} label='Số điện thoại' value={recHoaDon?.userPhone} />
+						</Col>
+						<Col xs={12} md={8}>
+							<InfoItem icon={<CalendarOutlined />} label='Ngày sinh' value={recHoaDon?.userDOB} />
+						</Col>
+						<Col xs={12} md={8}>
+							<InfoItem
+								icon={<BankOutlined />}
+								label='Khoá'
+								value={recHoaDon?.userTenKhoa || recHoaDon?.userMaKhoaSinhVien}
+							/>
+						</Col>
+						<Col xs={12} md={8}>
+							<InfoItem
+								icon={<BookOutlined />}
+								label='Ngành'
+								value={recHoaDon?.userTenNganh || recHoaDon?.userMaNganh}
+							/>
+						</Col>
+						<Col xs={12} md={8}>
+							<InfoItem icon={<IdcardOutlined />} label='Trạng thái sinh viên' value={trangThaiSinhVien} />
+						</Col>
+					</Row>
+				</div>
+
+				{/* Tổng quan tài chính */}
+				<Row gutter={[12, 12]} style={{ marginBottom: 16 }}>
+					<Col xs={12} md={6}>
+						<StatBox label='Tổng phí phải nộp (1)' value={phaiThu} color='#1677ff' />
+					</Col>
+					<Col xs={12} md={6}>
+						<StatBox label='Tổng phí giảm trừ (2)' value={khuyenMai} color='#faad14' />
+					</Col>
+					<Col xs={12} md={6}>
+						<StatBox label='Tổng tiền đã thanh toán (3)' value={daThanhToan} color='#52c41a' />
+					</Col>
+					<Col xs={12} md={6}>
+						<StatBox label='Tổng tiền cần thanh toán (1-2-3)' value={conLai} color='#ff4d4f' />
+					</Col>
+				</Row>
+
+				{/* Thông tin phiếu thu */}
+				<Card size='small' title='Thông tin phiếu thu' style={{ marginBottom: 16 }}>
+					<Row gutter={[16, 8]}>
+						<Col xs={12} md={12}>
+							<InfoItem
+								icon={<CalendarOutlined />}
+								label='Hạn thanh toán'
+								value={
+									recHoaDon?.ngayHetHanThanhToan ? (
+										<span style={{ color: '#ff4d4f', fontWeight: 700 }}>
+											{dayjs(recHoaDon.ngayHetHanThanhToan).format('DD/MM/YYYY')}
+										</span>
+									) : (
+										'-'
+									)
+								}
+							/>
+						</Col>
+						<Col xs={12} md={12}>
+							<InfoItem
+								icon={<FileOutlined />}
+								label='Trạng thái phiếu thu'
+								value={<Tag color={daRelease ? 'success' : 'warning'}>{daRelease ? 'Đã release' : 'Chưa release'}</Tag>}
+							/>
+						</Col>
+						{daRelease && recHoaDon?.dotThu?.tenNguoiRelease && (
+							<Col xs={12} md={8}>
+								<InfoItem label='Người release' value={recHoaDon?.dotThu?.tenNguoiRelease} />
+							</Col>
+						)}
+						{daRelease && recHoaDon?.dotThu?.thoiGianRelease && (
+							<Col xs={12} md={8}>
+								<InfoItem
+									label='Thời gian release'
+									value={dayjs(recHoaDon?.dotThu?.thoiGianRelease).format('HH:mm DD/MM/YYYY')}
 								/>
-							) : canPay ? (
-								<Space wrap>
-									<ButtonExtend
-										disabled={recHoaDon?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU || ngoaiThoiGianThanhToan}
-										onClick={() => setVisibleThanhToan(true)}
-										icon={<AppstoreAddOutlined />}
-										type='primary'
-										className='btn-success'
-										loading={loading}
-										notHideText
-										tooltip={
-											ngoaiThoiGianThanhToan
-												? intl.formatMessage({ id: 'taichinh.thanhtoan.tooltip.outOfTime' })
-												: undefined
-										}
-									>
-										{intl.formatMessage({ id: 'taichinh.thanhtoan.button.thanhtoan' })}
-									</ButtonExtend>
+							</Col>
+						)}
+						<Col xs={24}>
+							<InfoItem icon={<FileTextOutlined />} label='Ghi chú' value={recHoaDon?.ghiChu} />
+						</Col>
+					</Row>
+				</Card>
 
-									<Checkbox checked={xemRutGonChiTiet} onChange={(e) => setXemRutGonChiTiet(e.target.checked)}>
-										{intl.formatMessage({ id: 'taichinh.thanhtoan.checkbox.compact' })}
-									</Checkbox>
-									<i>{intl.formatMessage({ id: 'taichinh.thanhtoan.note.compact' })}</i>
-								</Space>
-							) : null}
-
-							<FormItemHoaDonChiTiet />
-						</Space>
-					) : (
-						<>
-							<div style={{ marginBottom: 6 }}>
-								<CanhBaoGiaoDich />
-							</div>
-							<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
-						</>
-					)}
-				</Col>
-			</Row>
+				<Card size='small' title='Chi tiết giao dịch'>
+					<Tabs
+						activeKey={activeTab}
+						onChange={onChangeTab}
+						items={[
+							{
+								key: '1',
+								label: 'Chi tiết',
+								children: (
+									<Space direction='vertical' style={{ width: '100%' }}>
+										{pendingPaymentAlert}
+										<FormItemHoaDonChiTiet />
+									</Space>
+								),
+							},
+							{
+								key: '2',
+								label: 'Lịch sử giao dịch',
+								children: (
+									<LichSuThanhToan onPay={onPay} onCancel={onCancel} ngoaiThoiGianThanhToan={ngoaiThoiGianThanhToan} />
+								),
+							},
+						]}
+					/>
+				</Card>
+			</>
 
 			<div style={{ marginTop: 18 }} className='form-footer'>
 				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'global.button.dong' })}</Button>
 			</div>
-
-			<Modal
-				title={intl.formatMessage({ id: 'taichinh.thanhtoan.title' })}
-				open={visibleThanhToan}
-				onCancel={() => setVisibleThanhToan(false)}
-				footer={null}
-				width={1000}
-				maskClosable={false}
-			>
-				<FormThanhToan
-					getData={() => {
-						if (activeTab === '1') getGiaoDich();
-						if (getData) getData();
-					}}
-				/>
-			</Modal>
 
 			<ModalThanhToanNganHang
 				visible={visibleHuongDan}

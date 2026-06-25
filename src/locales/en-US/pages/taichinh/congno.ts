@@ -1,6 +1,6 @@
 export default {
-	'taichinh.hoadon.title': 'Outstanding Balance',
-	'taichinh.hoadon.column.identityCode': '',
+	'taichinh.hoadon.title': 'Debt',
+	'taichinh.hoadon.column.identityCode': 'BillCode',
 	'taichinh.hoadon.column.dotthu': 'Collection Period',
 	'taichinh.hoadon.column.khoanthu': 'Payment Details',
 	'taichinh.hoadon.column.trangthai': 'Status',
@@ -112,4 +112,23 @@ export default {
 		'The QR Code is uniquely generated for each individual student and is for one-time use only. Please do not use your code to make payments for others',
 	'taichinh.thanhtoan.nganhang.baotri': 'The system is backing up data; please make payments between 01:00 and 23:00',
 	'taichinh.thanhtoan.nganhang.here': 'here',
+
+	'taichinh.thanhtoan.modal.phuongthuc': 'Payment Method',
+	'taichinh.thanhtoan.modal.title': 'Payment Details',
+	'taichinh.thanhtoan.modal.subtitle': 'Please check the information before making the payment',
+	'taichinh.thanhtoan.modal.magd': 'Bill ID',
+	'taichinh.thanhtoan.modal.noidung': 'Description',
+
+	'taichinh.thanhtoan.modal.col.stt': 'No',
+	'taichinh.thanhtoan.modal.col.noidung': 'Description',
+	'taichinh.thanhtoan.modal.col.loai': 'Type',
+	'taichinh.thanhtoan.modal.col.dongia': 'Unit Price',
+	'taichinh.thanhtoan.modal.col.thanhtien': 'Amount',
+
+	'taichinh.thanhtoan.modal.tongtienphainop': 'Amount Due',
+	'taichinh.thanhtoan.modal.tienuudai': 'Discount Amount',
+	'taichinh.thanhtoan.modal.phigiaodich': 'Transaction Fee',
+	'taichinh.thanhtoan.modal.tongcong': 'Total',
+	'taichinh.thanhtoan.modal.thanhtoanngay': 'Pay Now',
+	'taichinh.thanhtoan.modal.baomat': 'Security',
 };
