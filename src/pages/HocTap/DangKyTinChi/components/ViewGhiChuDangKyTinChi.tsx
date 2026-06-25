@@ -79,6 +79,10 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 
 				<Col span={24}>
 					<div>
+						<div style={{ marginTop: 8 }}>
+							<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan' })}</strong>:{' '}
+							{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan.mota' })}
+						</div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday.mota' })}
 					</div>
@@ -90,10 +94,6 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2.mota' })}
 					</div> */}
-					<div style={{ marginTop: 8 }}>
-						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan' })}</strong>:{' '}
-						{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan.mota' })}
-					</div>
 				</Col>
 
 				<Col span={24}>
@@ -110,7 +110,7 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					<img
 						src={step1Image}
 						alt={intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1' })}
-						style={{ width: '100%', marginTop: 8, borderRadius: 4 }}
+						style={{ width: '100%', maxWidth: 800, marginTop: 8, borderRadius: 4 }}
 					/>
 					<div style={{ marginTop: 8 }}>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}</strong>:{' '}
@@ -126,7 +126,7 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					<img
 						src={step2Image}
 						alt={intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}
-						style={{ width: '100%', marginTop: 8, borderRadius: 4 }}
+						style={{ width: '100%', maxWidth: 800, marginTop: 8, borderRadius: 4 }}
 					/>
 				</Col>
 			</Row>

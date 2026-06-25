@@ -45,10 +45,11 @@ const ChuongTrinhDaoTaoModalView: React.FC<TProps> = ({ visible, setVisible }) =
 									? intl.formatMessage({ id: LoaiChuongTrinhDaoTao[recTienTrinh.ctdtKeHoach.loai] })
 									: ''}
 							</Descriptions.Item>
-
-							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoasv' })}>
-								{recTienTrinh.ctdtKeHoach.khoaSinhVien?.ten ?? recTienTrinh.ctdtKeHoach.maKhoaSinhVien}
-							</Descriptions.Item>
+							{recTienTrinh.ctdtKeHoach.maKhoaSinhVien && (
+								<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khoasv' })}>
+									{recTienTrinh.ctdtKeHoach.khoaSinhVien?.ten ?? recTienTrinh.ctdtKeHoach.maKhoaSinhVien}
+								</Descriptions.Item>
+							)}
 							<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.nganh' })}>
 								{recTienTrinh.ctdtKeHoach.nganh?.ten ?? recTienTrinh.ctdtKeHoach.maNganh}
 							</Descriptions.Item>
