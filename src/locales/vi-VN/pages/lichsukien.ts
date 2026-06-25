@@ -46,6 +46,7 @@ export default {
 	'lichsukien.chitiet.diendan': 'Diễn đàn thảo luận',
 	'lichsukien.chitiet.baitap': 'Bài tập, bài kiểm tra',
 	'lichsukien.chitiet.xemchitiet': 'Xem chi tiết',
+	'lichsukien.chitiet.dangky_tinchi': 'Đăng ký tín chỉ',
 	'lichsukien.chitiet.monthi': 'Môn thi',
 	'lichsukien.chitiet.phongthi': 'Phòng thi',
 	'lichsukien.chitiet.dieukien': 'Điều kiện dự thi',

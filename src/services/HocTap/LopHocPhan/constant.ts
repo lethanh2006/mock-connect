@@ -83,6 +83,7 @@ export enum ELoaiDiemChu {
 	HOAN_THI = 'I', // hoãn thi (Incomplete)
 	CHUA_DU_DU_LIEU = 'X', // chưa đủ dữ liệu
 	MIEN_THI = 'M', // miễn thi
+	MIEN_HOC = 'Z', // miễn học
 	IP = 'IP', // In Progress
 	MT = 'MT', // Multi-term
 	NGR = 'NGR',
@@ -118,6 +119,7 @@ export const ColorDiemChu: Record<ELoaiDiemChu, string> = {
 	[ELoaiDiemChu.W]: 'rgb(173 173 173)',
 	[ELoaiDiemChu.DAT_NGOAI_CHUONG_TRINH]: '#13b755',
 	[ELoaiDiemChu.KHONG_DAT_NGOAI_CHUONG_TRINH]: '#a90b00',
+	[ELoaiDiemChu.MIEN_HOC]: '#13b755',
 };
 
 //LMS
