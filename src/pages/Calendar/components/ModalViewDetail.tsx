@@ -1,16 +1,8 @@
-import {
-	colorTrangThaiNopBaiTap,
-	mapTrangThaiNopBaiTap,
-	type ETrangThaiNopBaiTap,
-} from '@/services/DaoTao/BaiTap/constants';
 import { type ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { colorHinhThucGiangDay, type EHinhThucGiangDay } from '@/services/HocTap/constant';
-import type { LichThi } from '@/services/KhaoThi/LichThi/typing';
-import { colorTrangThaiThi } from '@/services/KhaoThi/constant';
-import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac } from '@/services/SuKien/constant';
+import { colorHinhThucGiangDay, mapHinhThucGiangDayI18n, type EHinhThucGiangDay } from '@/services/HocTap/constant';
+import { ColorSuKien, ELoaiSuKien, ELoaiSuKienKhac, LoaiSuKienLocaleKey } from '@/services/SuKien/constant';
 import { formatDateTime } from '@/utils/formatDate';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Descriptions, Dropdown, Modal, Popconfirm, Space, Tag, message } from 'antd';
+import { Button, Descriptions, Modal, Space, Tag, message } from 'antd';
 import { JSX } from 'react';
 import { history, useIntl, useModel } from 'umi';
 
@@ -39,6 +31,11 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 		);
 	};
 
+	const getLoaiSuKienLabel = (loai: ELoaiSuKien | ELoaiSuKienKhac) => {
+		const localeKey = LoaiSuKienLocaleKey[loai];
+		return localeKey ? intl.formatMessage({ id: localeKey }) : loai;
+	};
+
 	const handleMoodle = (lopHocPhanId?: string) => {
 		if (lopHocPhanId)
 			getMoodleLopHocPhanModel(lopHocPhanId).then((data) => {
@@ -49,7 +46,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 
 	// Default config for unmatched event types
 	const defaultEventConfig: EventTypeConfig = {
-		type: ELoaiSuKien.CA_NHAN,
+		type: ELoaiSuKien.CHUNG,
 		checker: () => true,
 		renderer: (evt) => (
 			<>
@@ -120,182 +117,200 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 						) : null}
 						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.hinhthuc' })}>
 							<Tag color={colorHinhThucGiangDay[thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay]}>
-								{thoiKhoaBieu?.hinhThucGiangDay}
+								{intl.formatMessage({
+									id: mapHinhThucGiangDayI18n[thoiKhoaBieu?.hinhThucGiangDay as EHinhThucGiangDay],
+								})}
 							</Tag>
 						</Descriptions.Item>
 					</>
 				);
 			},
-			actionButtons: (evt) => [
-				<Dropdown.Button
-					key='actions'
-					type='primary'
-					menu={{
-						items: [
-							{
-								key: 'thong-bao',
-								label: intl.formatMessage({ id: 'lichsukien.chitiet.thongbao' }),
-								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#thong-bao`),
-							},
-							{
-								key: 'dien-dan',
-								label: intl.formatMessage({ id: 'lichsukien.chitiet.diendan' }),
-								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#dien-dan`),
-							},
-							{
-								key: 'bai-tap',
-								label: intl.formatMessage({ id: 'lichsukien.chitiet.baitap' }),
-								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#bai-tap`),
-							},
-						],
-					}}
-					onClick={() => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}`)}
-				>
-					{intl.formatMessage({ id: 'lichsukien.chitiet.xemchitiet' })}
-				</Dropdown.Button>,
-			],
+			// actionButtons: (evt) => [
+			// 	<Dropdown.Button
+			// 		key='actions'
+			// 		type='primary'
+			// 		menu={{
+			// 			items: [
+			// 				{
+			// 					key: 'thong-bao',
+			// 					label: intl.formatMessage({ id: 'lichsukien.chitiet.thongbao' }),
+			// 					onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#thong-bao`),
+			// 				},
+			// 				{
+			// 					key: 'dien-dan',
+			// 					label: intl.formatMessage({ id: 'lichsukien.chitiet.diendan' }),
+			// 					onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#dien-dan`),
+			// 				},
+			// 				{
+			// 					key: 'bai-tap',
+			// 					label: intl.formatMessage({ id: 'lichsukien.chitiet.baitap' }),
+			// 					onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}#bai-tap`),
+			// 				},
+			// 			],
+			// 		}}
+			// 		onClick={() => history.push(`/hoc-tap/lop-tin-chi/${evt?.lopHocPhan?._id}`)}
+			// 	>
+			// 		{intl.formatMessage({ id: 'lichsukien.chitiet.xemchitiet' })}
+			// 	</Dropdown.Button>,
+			// ],
 		},
 		{
-			type: ELoaiSuKien.LICH_THI,
-			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.LICH_THI,
-			renderer: (evt) => {
-				const lichThi = evt as LichThi.IRecord;
-				return (
-					<>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.monthi' })}>
-							{lichThi?.danhSachHocPhan?.map((item) => `${item.ma} - ${item.ten}`).join(', ')}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
-							{formatDateTime(lichThi?.thoiGianBatDau)}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.phongthi' })}>
-							{lichThi?.phong?.ma ?? '--'}
-						</Descriptions.Item>
-						<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.dieukien' })}>
-							{lichThi?.trangThai ? <Tag color={colorTrangThaiThi[lichThi.trangThai]}>{lichThi.trangThai}</Tag> : '--'}
-						</Descriptions.Item>
-					</>
-				);
-			},
-			actionButtons: (evt) => [
-				<Button key='exam-schedule' type='primary' onClick={() => history.push('/hoc-tap/lich-thi')}>
-					{intl.formatMessage({ id: 'lichsukien.chitiet.xemlichthi' })}
-				</Button>,
-			],
-		},
-		{
-			type: ELoaiSuKien.BAI_TAP,
-			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.BAI_TAP,
-			renderer: (evt) => (
-				<>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tenbaitap' })}>
-						{evt?.assignment?.noiDung ?? '--'}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.loptinchi' })}>
-						{evt?.assignment?.tenLopHocPhan ?? '--'}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.giangvien' })}>
-						{evt?.assignment?.hoTenNguoiGiao ?? '--'}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tggiaobai' })}>
-						{evt?.assignment?.createdAt ? formatDateTime(evt?.assignment?.createdAt) : '--'}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.thoihan' })}>
-						{evt?.assignment?.thoiGianKetThuc
-							? formatDateTime(evt?.assignment?.thoiGianKetThuc)
-							: '--'}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.trangthai' })}>
-						<Tag color={colorTrangThaiNopBaiTap[evt.trangThai as ETrangThaiNopBaiTap]}>
-							{mapTrangThaiNopBaiTap[evt.trangThai as ETrangThaiNopBaiTap]}
-						</Tag>
-					</Descriptions.Item>
-				</>
-			),
-			actionButtons: (evt) => [
-				<Dropdown.Button
-					key='actions'
-					type='primary'
-					menu={{
-						items: [
-							{
-								key: 'thong-bao',
-								label: intl.formatMessage({ id: 'lichsukien.chitiet.thongbao' }),
-								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}#thong-bao`),
-							},
-							{
-								key: 'dien-dan',
-								label: intl.formatMessage({ id: 'lichsukien.chitiet.diendan' }),
-								onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}#dien-dan`),
-							},
-							{
-								key: 'bai-tap',
-								label: intl.formatMessage({ id: 'lichsukien.chitiet.baitap' }),
-								onClick: () =>
-									history.push(
-										`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}?idBaiTap=${evt?.assignment?._id}#bai-tap`,
-									),
-							},
-						],
-					}}
-					onClick={() =>
-						history.push(
-							`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}?idBaiTap=${evt?.assignment?._id}#bai-tap`,
-						)
-					}
-				>
-					{intl.formatMessage({ id: 'lichsukien.chitiet.xemchitiet' })}
-				</Dropdown.Button>,
-			],
-		},
-		{
-			type: ELoaiSuKien.CA_NHAN,
-			checker: (evt) => evt.loaiSuKien === ELoaiSuKien.CA_NHAN,
-			renderer: (evt) => (
-				<>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tensukien' })}>
-						{evt?.tenSuKien}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
-						{formatDateTime(evt?.thoiGianBatDau)}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
-						{formatDateTime(evt?.thoiGianKetThuc)}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.diadiem' })}>
-						{evt?.diaDiem ?? '--'}
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.ghichu' })}>
-						{evt?.ghiChu ?? '--'}
-					</Descriptions.Item>
-				</>
-			),
-			actionButtons: (evt) => [
+			type: ELoaiSuKien.CHUNG,
+			checker: (evt) => evt.isLichDktc,
+			renderer: defaultEventConfig.renderer,
+			actionButtons: () => [
 				<Button
-					key='edit'
+					key='course-registration'
 					type='primary'
 					onClick={() => {
-						handleEdit(evt);
-						setVisible(false);
+						history.push('/academic/course-registration');
 					}}
-					icon={<EditOutlined />}
 				>
-					{intl.formatMessage({ id: 'lichsukien.chitiet.chinhsua' })}
+					{intl.formatMessage({ id: 'lichsukien.chitiet.dangky_tinchi' })}
 				</Button>,
-				<Popconfirm
-					key='delete'
-					title={intl.formatMessage({ id: 'lichsukien.chitiet.xoa.xacnhan' })}
-					onConfirm={() => {
-						deleteModel(evt?._id ?? '', getData);
-						setVisible(false);
-					}}
-				>
-					<Button danger icon={<DeleteOutlined />}>
-						{intl.formatMessage({ id: 'lichsukien.chitiet.xoa' })}
-					</Button>
-				</Popconfirm>,
 			],
 		},
+		// {
+		// 	type: ELoaiSuKien.LICH_THI,
+		// 	checker: (evt) => evt.loaiSuKien === ELoaiSuKien.LICH_THI,
+		// 	renderer: (evt) => {
+		// 		const lichThi = evt as LichThi.IRecord;
+		// 		return (
+		// 			<>
+		// 				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.monthi' })}>
+		// 					{lichThi?.danhSachHocPhan?.map((item) => `${item.ma} - ${item.ten}`).join(', ')}
+		// 				</Descriptions.Item>
+		// 				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
+		// 					{formatDateTime(lichThi?.thoiGianBatDau)}
+		// 				</Descriptions.Item>
+		// 				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.phongthi' })}>
+		// 					{lichThi?.phong?.ma ?? '--'}
+		// 				</Descriptions.Item>
+		// 				<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.dieukien' })}>
+		// 					{lichThi?.trangThai ? <Tag color={colorTrangThaiThi[lichThi.trangThai]}>{lichThi.trangThai}</Tag> : '--'}
+		// 				</Descriptions.Item>
+		// 			</>
+		// 		);
+		// 	},
+		// 	actionButtons: (evt) => [
+		// 		<Button key='exam-schedule' type='primary' onClick={() => history.push('/hoc-tap/lich-thi')}>
+		// 			{intl.formatMessage({ id: 'lichsukien.chitiet.xemlichthi' })}
+		// 		</Button>,
+		// 	],
+		// },
+		// {
+		// 	type: ELoaiSuKien.BAI_TAP,
+		// 	checker: (evt) => evt.loaiSuKien === ELoaiSuKien.BAI_TAP,
+		// 	renderer: (evt) => (
+		// 		<>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tenbaitap' })}>
+		// 				{evt?.assignment?.noiDung ?? '--'}
+		// 			</Descriptions.Item>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.loptinchi' })}>
+		// 				{evt?.assignment?.tenLopHocPhan ?? '--'}
+		// 			</Descriptions.Item>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.giangvien' })}>
+		// 				{evt?.assignment?.hoTenNguoiGiao ?? '--'}
+		// 			</Descriptions.Item>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tggiaobai' })}>
+		// 				{evt?.assignment?.createdAt ? formatDateTime(evt?.assignment?.createdAt) : '--'}
+		// 			</Descriptions.Item>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.thoihan' })}>
+		// 				{evt?.assignment?.thoiGianKetThuc
+		// 					? formatDateTime(evt?.assignment?.thoiGianKetThuc)
+		// 					: '--'}
+		// 			</Descriptions.Item>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.trangthai' })}>
+		// 				<Tag color={colorTrangThaiNopBaiTap[evt.trangThai as ETrangThaiNopBaiTap]}>
+		// 					{mapTrangThaiNopBaiTap[evt.trangThai as ETrangThaiNopBaiTap]}
+		// 				</Tag>
+		// 			</Descriptions.Item>
+		// 		</>
+		// 	),
+		// 	actionButtons: (evt) => [
+		// 		<Dropdown.Button
+		// 			key='actions'
+		// 			type='primary'
+		// 			menu={{
+		// 				items: [
+		// 					{
+		// 						key: 'thong-bao',
+		// 						label: intl.formatMessage({ id: 'lichsukien.chitiet.thongbao' }),
+		// 						onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}#thong-bao`),
+		// 					},
+		// 					{
+		// 						key: 'dien-dan',
+		// 						label: intl.formatMessage({ id: 'lichsukien.chitiet.diendan' }),
+		// 						onClick: () => history.push(`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}#dien-dan`),
+		// 					},
+		// 					{
+		// 						key: 'bai-tap',
+		// 						label: intl.formatMessage({ id: 'lichsukien.chitiet.baitap' }),
+		// 						onClick: () =>
+		// 							history.push(
+		// 								`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}?idBaiTap=${evt?.assignment?._id}#bai-tap`,
+		// 							),
+		// 					},
+		// 				],
+		// 			}}
+		// 			onClick={() =>
+		// 				history.push(
+		// 					`/hoc-tap/lop-tin-chi/${evt?.assignment?.lopHocPhanId}?idBaiTap=${evt?.assignment?._id}#bai-tap`,
+		// 				)
+		// 			}
+		// 		>
+		// 			{intl.formatMessage({ id: 'lichsukien.chitiet.xemchitiet' })}
+		// 		</Dropdown.Button>,
+		// 	],
+		// },
+		// {
+		// 	type: ELoaiSuKien.CA_NHAN,
+		// 	checker: (evt) => evt.loaiSuKien === ELoaiSuKien.CA_NHAN,
+		// 	renderer: (evt) => (
+		// 		<>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tensukien' })}>
+		// 				{evt?.tenSuKien}
+		// 			</Descriptions.Item>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgbt' })}>
+		// 				{formatDateTime(evt?.thoiGianBatDau)}
+		// 			</Descriptions.Item>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.tgkt' })}>
+		// 				{formatDateTime(evt?.thoiGianKetThuc)}
+		// 			</Descriptions.Item>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.diadiem' })}>
+		// 				{evt?.diaDiem ?? '--'}
+		// 			</Descriptions.Item>
+		// 			<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.ghichu' })}>
+		// 				{evt?.ghiChu ?? '--'}
+		// 			</Descriptions.Item>
+		// 		</>
+		// 	),
+		// 	actionButtons: (evt) => [
+		// 		<Button
+		// 			key='edit'
+		// 			type='primary'
+		// 			onClick={() => {
+		// 				handleEdit(evt);
+		// 				setVisible(false);
+		// 			}}
+		// 			icon={<EditOutlined />}
+		// 		>
+		// 			{intl.formatMessage({ id: 'lichsukien.chitiet.chinhsua' })}
+		// 		</Button>,
+		// 		<Popconfirm
+		// 			key='delete'
+		// 			title={intl.formatMessage({ id: 'lichsukien.chitiet.xoa.xacnhan' })}
+		// 			onConfirm={() => {
+		// 				deleteModel(evt?._id ?? '', getData);
+		// 				setVisible(false);
+		// 			}}
+		// 		>
+		// 			<Button danger icon={<DeleteOutlined />}>
+		// 				{intl.formatMessage({ id: 'lichsukien.chitiet.xoa' })}
+		// 			</Button>
+		// 		</Popconfirm>,
+		// 	],
+		// },
 	];
 
 	// Find the appropriate config for current event
@@ -308,16 +323,16 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 	// Render event type tag
 	const renderEventTypeTag = () => (
 		<Descriptions.Item label={intl.formatMessage({ id: 'lichsukien.chitiet.loai' })}>
-			{loaiSuKien ? <Tag color={getColorSuKien(loaiSuKien)}>{loaiSuKien}</Tag> : '--'}
+			{loaiSuKien ? <Tag color={getColorSuKien(loaiSuKien)}>{getLoaiSuKienLabel(loaiSuKien)}</Tag> : '--'}
 		</Descriptions.Item>
 	);
 
 	// Render action buttons
 	const renderActionButtons = () => {
-		const buttons: JSX.Element[] = [];
+		const actionButtons: JSX.Element[] = [];
 
 		if (currentConfig?.actionButtons) {
-			buttons.push(
+			actionButtons.push(
 				...currentConfig.actionButtons(event, {
 					deleteModel,
 					handleEdit,
@@ -328,13 +343,14 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			);
 		}
 
-		buttons.push(
-			<Button key='close' onClick={() => setVisible(false)}>
-				{intl.formatMessage({ id: 'global.button.dong' })}
-			</Button>,
+		return (
+			<Space>
+				<Button key='close' onClick={() => setVisible(false)}>
+					{intl.formatMessage({ id: 'global.button.dong' })}
+				</Button>
+				{actionButtons}
+			</Space>
 		);
-
-		return buttons;
 	};
 
 	return (
@@ -344,7 +360,7 @@ const ModalViewDetailCalendar = (props: { visible: boolean; setVisible: any; eve
 			destroyOnClose
 			width={600}
 			onCancel={() => setVisible(false)}
-			footer={<Space wrap>{renderActionButtons()}</Space>}
+			footer={renderActionButtons()}
 		>
 			<Descriptions column={1}>
 				{renderEventTypeTag()}

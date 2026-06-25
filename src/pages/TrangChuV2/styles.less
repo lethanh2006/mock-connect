@@ -270,33 +270,117 @@
 		border-radius: 10px;
 	}
 
+	.dashboard_calendar {
+		height: auto;
+
+		.ngay {
+			margin-bottom: 16px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+
+		.ngay__title {
+			color: rgba(0, 0, 0, 0.5);
+			font-weight: 600;
+			font-size: 15px;
+		}
+
+		.su_kien {
+			display: flex;
+			align-items: stretch;
+			margin: 12px;
+			color: @color-text-main;
+			border-top: 1px dashed @color-border-dashed;
+			cursor: pointer;
+			transition: 0.3s all;
+
+			&:first-child {
+				border-top: none;
+			}
+
+			&.today {
+				.su_kien__thoi_gian {
+					color: #0e50cf;
+				}
+			}
+		}
+
+		.su_kien__left {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 86px;
+			padding: 14px 12px;
+			border-radius: 6px 0 0 6px;
+		}
+
+		.su_kien__thoi_gian {
+			font-weight: 600;
+			font-size: 15px;
+			white-space: nowrap;
+		}
+
+		.su_kien__right {
+			flex: 1;
+			align-content: center;
+			padding: 8px 12px;
+			border-left: 4px solid;
+		}
+
+		.su_kien__title {
+			display: flex;
+			align-items: center;
+			font-weight: 600;
+			font-size: 15px;
+			line-height: 1.35;
+		}
+
+		.su_kien__location {
+			display: flex;
+			gap: 6px;
+			align-items: center;
+			margin-top: 4px;
+			color: @color-text-muted;
+			font-size: 13px;
+			line-height: 1.3;
+		}
+	}
+
 	.event-item {
 		display: flex;
-		padding: 0 24px;
-		min-height: 100px;
+		padding: 16px;
+		min-height: 64px;
+		cursor: pointer;
+		border-bottom: 1px dashed @color-border-dashed;
+
+		&:last-child {
+			border-bottom: none;
+		}
 
 		.event-time {
 			width: 45px;
 			font-size: 14px;
 			font-weight: 700;
+			margin-right: 8px;
 			color: @color-text-muted;
-			padding-top: 42px;
 			flex-shrink: 0;
+			align-content: center;
 		}
 
 		.event-timeline {
 			position: relative;
-			width: 20px;
-			margin-right: 10px;
-			margin-top: 22px;
-			margin-bottom: 16px;
+			margin-inline: 10px;
 			display: flex;
 			justify-content: center;
 
 			.line {
-				width: 2px;
-				background-color: @color-bg-hover;
+				width: 4px;
+				background-color: @color-text-blue;
 				height: 100%;
+				border-radius: 2px;
 			}
 
 			.dot {
@@ -323,9 +407,10 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: flex-start;
-			padding: 18px 0;
 
 			.event-info {
+				min-width: 0;
+
 				.event-type {
 					font-size: 12px;
 					font-weight: 700;
@@ -365,7 +450,9 @@
 			}
 
 			.event-actions {
-				padding-top: 25px;
+				padding-top: 4px;
+				padding-left: 16px;
+				flex-shrink: 0;
 
 				&.has-action {
 					padding-left: 30px;
@@ -388,6 +475,15 @@
 				.warning-icon {
 					color: @color-danger-text;
 					font-size: 22px;
+				}
+
+				.event-tag {
+					margin-inline-end: 0;
+					padding: 3px 8px;
+					color: @color-text-blue;
+					font-weight: 700;
+					background: #eef8ff;
+					border-radius: 3px;
 				}
 			}
 		}

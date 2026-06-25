@@ -228,12 +228,12 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	const eventCustom = ({ event }: any) => {
 		const location = getEventLocation(event);
 		return (
-			<div style={{ width: '100%', fontSize: 13, lineHeight: 1.3 }}>
+			<div>
 				<div>{event.title || '--'}</div>
 				{location ? (
-					<Flex align='center' gap={4} style={{ fontSize: 11, opacity: 0.85, marginTop: 2 }}>
-						<EnvironmentOutlined style={{ fontSize: 10, flexShrink: 0 }} />
-						<span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{location}</span>
+					<Flex align='center' gap={6}>
+						<EnvironmentOutlined />
+						<span>{location}</span>
 					</Flex>
 				) : null}
 			</div>

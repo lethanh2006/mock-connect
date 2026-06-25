@@ -37,6 +37,7 @@ export default {
 	'tientrinhhoctap.tientrinhthucte.hptruoc': 'Previous Course(s)',
 	'tientrinhhoctap.tientrinhthucte.hpsongnganh': 'Co-requisite Course(s)',
 	'tientrinhhoctap.tientrinhthucte.hoclan': 'Attempt',
+	'tientrinhhoctap.tientrinhthucte.finalGrade': 'Final Grade',
 	'tientrinhhoctap.tientrinhthucte.chitietketqua': 'Academic Results Details',
 	'tientrinhhoctap.tientrinhthucte.hoctap': 'Academic Information',
 	'tientrinhhoctap.tientrinhthucte.kyhoc': 'Semester',
@@ -111,6 +112,9 @@ export default {
 	'tientrinhhoctap.ctdt.khoihp': 'Course block / Module group',
 	'tientrinhhoctap.ctdt.noti':
 		'Students take {soTinChi} credits of free electives from within the program or from any other program (at VinUniversity or accredited partner institutions)',
+	'tientrinhhoctap.ctdt.noti.ngoaiChuongTrinh':
+		'Students take {soTinChi} credits of free electives from outside the program or from any other program',
+	'tientrinhhoctap.ctdt.noti.trongChuongTrinh': 'Students can choose {soTinChi} credits from the below list',
 	'tientrinhhoctap.ctdt.title': 'Planned Program Detail',
 	'tientrinhhoctap.ctdt.empty': 'No information',
 	'tientrinhhoctap.ctdt.ten': 'Program Name (VIE)',

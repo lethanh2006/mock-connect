@@ -21,7 +21,7 @@ export default {
 	'trangchu.sukien.title': 'Events',
 	'trangchu.sukien.tag.dadangky': 'Registered',
 	'trangchu.sukien.tag.chuadangky': 'Not registered',
-	'trangchu.loptinchi.title': 'Credit Classes',
+	'trangchu.loptinchi.title': 'Sections',
 	'trangchu.loptinchi.xemtatca': 'View all',
 	'trangchu.baitap.title': 'Assignments & Tests',
 	'trangchu.baitap.filekhac': 'and {count} other files',
