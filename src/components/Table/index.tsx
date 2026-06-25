@@ -144,6 +144,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 	return (
 		<TableProvider<T>
 			value={{
+				...props,
 				selectedIds,
 				setSelectedIds,
 				loading,
@@ -166,26 +167,8 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 				setVisibleForm,
 				isView,
 				edit,
-				Form: props.Form,
-				title: props.title,
-				widthDrawer: props.widthDrawer,
-				maskCloseableForm: props.maskCloseableForm,
-				destroyModal: props.destroyModal,
-				formType: props.formType,
-				modalTitle: props.modalTitle,
-				showModalTitle: props.showModalTitle,
-				formProps: props.formProps,
-				modelName: props.modelName,
-				configKey: props.configKey,
-				modelImportName: props.modelImportName,
-				modelExportName: props.modelExportName,
-				params: props.params,
 				getData,
 				setFilters: handleSetFilters,
-				columns: props.columns || [],
-				disableFilterModal: props.disableFilterModal,
-				syncExternalToColumnFilter: props.syncExternalToColumnFilter,
-				externalConditions: props.externalConditions,
 			}}
 		>
 			<TableBaseContent {...props} />
