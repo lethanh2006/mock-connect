@@ -3,8 +3,8 @@ import { FilePdfOutlined } from '@ant-design/icons';
 import { useIntl, useModel } from 'umi';
 import { useMemo, useEffect, useRef, useState } from 'react';
 import { KyTucXa } from '@/services/KyTucXa/typings';
-import FormStep1Content from '../../DangKy/components/FormStep1Content';
-import FormStep2Content from '../../DangKy/components/FormStep2Content';
+import FormStep1Content from '../../DangKy/components/Form/FormStep1Content';
+import FormStep2Content from '../../DangKy/components/Form/FormStep2Content';
 import CheckinPrepContent from '../../DangKy/components/CheckinPrepContent';
 import { useReactToPrint } from 'react-to-print';
 import PrintTemplate from '@/components/PrintTemplate';
@@ -107,15 +107,13 @@ const ModalDetailDangKy: React.FC<ModalDetailDangKyProps> = ({ open, onClose }) 
 
     const footer = (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
+            <Space>
                 <Button 
                     icon={<FilePdfOutlined />} 
                     size="large" 
                     title={intl.formatMessage({ id: 'kytucxa.dangky.success.exportPdf' })}
                     onClick={() => handlePrint()}
                 />
-            </div>
-            <Space>
                 <Button size="large" onClick={onClose} className="ktx-register-btn-outline">
                     {intl.formatMessage({ id: 'kytucxa.dangky.form.close' })}
                 </Button>

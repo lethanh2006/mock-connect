@@ -5,7 +5,7 @@ import { KyTucXa } from '@/services/KyTucXa/typings';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import PrintTemplate from '@/components/PrintTemplate';
-import CheckinPrepContent from './CheckinPrepContent';
+import CheckinPrepContent from '../CheckinPrepContent';
 
 const ModalSuccessRegistration = ({ open, onClose, phong }: { open: boolean, onClose: () => void, phong?: KyTucXa.IPhong }) => {
 	const intl = useIntl();

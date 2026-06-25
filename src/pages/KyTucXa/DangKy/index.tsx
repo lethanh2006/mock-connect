@@ -6,15 +6,15 @@ import { Button, Card, Col, Empty, Row, Skeleton, Typography } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import RoomCard from './components/CardRoom';
-import FormDangKy from './components/Form';
-import RoomDetailModal from './components/ModalDetailRoom';
-import SelectToaNhaKTX from './components/SelectToaNha';
-import SelectFloorKTX from './components/SelectFloor';
+import FormDangKy from './components/Form/Form';
+import RoomDetailModal from './components/Modal/ModalDetailRoom';
+import SelectToaNhaKTX from './components/Select/SelectToaNha';
+import SelectFloorKTX from './components/Select/SelectFloor';
 import './style.less';
 import { FilterIconCustom } from './components/IconsRoom';
 import { ETrangThaiThanhToan } from '@/services/KyTucXa/constant';
-import SelectCapacityKTX from './components/SelectCapacity';
-import SelectRoomTypeKTX from './components/SelectRoomType';
+import SelectCapacityKTX from './components/Select/SelectCapacity';
+import SelectRoomTypeKTX from './components/Select/SelectRoomType';
 import PageCard from '@/components/PageCard';
 
 const DangKyKyTucXaPage = () => {

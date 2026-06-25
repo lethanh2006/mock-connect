@@ -1,7 +1,8 @@
 import { Checkbox, Col, Form, Input, Row, Typography } from 'antd';
 import { useIntl } from 'umi';
-import TableEmergencyContactKTX from './TableEmergencyContact';
+import TableEmergencyContactKTX from '../TableEmergencyContact';
 import rules from '@/utils/rules';
+import UploadFile from '@/components/Upload/UploadFile';
 
 const { TextArea } = Input;
 
@@ -102,6 +103,11 @@ const FormStep1Content: React.FC<FormStep1ContentProps> = (props) => {
 								<TextArea rows={2} disabled />
 							</Form.Item>
 						</Col>
+						<Col xs={24} md={12}>
+							<Form.Item required label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.identityImage' })}>
+								<UploadFile disabled={disabled} maxCount={2} />
+							</Form.Item>
+						</Col>
 					</Row>
 				</div>
 			</div>
@@ -109,10 +115,6 @@ const FormStep1Content: React.FC<FormStep1ContentProps> = (props) => {
 			<div className="ktx-register-section mt-4">
 				<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.emergencyContact' })}</Typography.Title>
 				<div className="ktx-register-section__content">
-					<Typography.Text style={{ display: 'block', marginBottom: 12, fontSize: 13 }}>
-						<span style={{ color: '#ff4d4f', marginRight: 4 }}>*</span>
-						{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.msg.min2Contacts' })}
-					</Typography.Text>
 					<Form.Item
 						name="emergencyContacts"
 						rules={showCheckbox ? [

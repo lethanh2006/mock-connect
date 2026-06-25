@@ -1,8 +1,8 @@
-import { Button, Table, Space, Popconfirm } from 'antd';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Table, Space, Popconfirm, Typography } from 'antd';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'umi';
 import { useState } from 'react';
-import FormEmergencyContact, { EmergencyContact } from './FormEmergencyContact';
+import FormEmergencyContact, { EmergencyContact } from './Form/FormEmergencyContact';
 
 interface TableEmergencyContactProps {
 	value?: EmergencyContact[];
@@ -55,7 +55,6 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 		fixed: 'right' as const,
 		render: (_text: any, record: EmergencyContact, index: number) => (
 			<Space>
-				<Button type="text" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
 				<Popconfirm
 					title={intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.deleteConfirm' })}
 					onConfirm={() => handleDelete(index)}
@@ -114,6 +113,10 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 				<>
 					{!disabled && (
 						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+							<Typography.Text style={{ fontSize: 13 }}>
+								<span style={{ color: '#ff4d4f', marginRight: 4 }}>*</span>
+								{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.msg.min2Contacts' })}
+							</Typography.Text>
 							<Space>
 								<Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
 									{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
@@ -133,9 +136,15 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 				</>
 			) : (
 				!disabled && (
-					<Button type="dashed" block icon={<PlusOutlined />} onClick={handleAdd} style={{ marginBottom: 16 }}>
-						{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
-					</Button>
+					<>
+						<Typography.Text style={{ display: 'block', marginBottom: 12, fontSize: 13 }}>
+							<span style={{ color: '#ff4d4f', marginRight: 4 }}>*</span>
+							{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.msg.min2Contacts' })}
+						</Typography.Text>
+						<Button type="dashed" block icon={<PlusOutlined />} onClick={handleAdd} style={{ marginBottom: 16 }}>
+							{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
+						</Button>
+					</>
 				)
 			)}
 

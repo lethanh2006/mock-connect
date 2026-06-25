@@ -70,6 +70,7 @@ export default {
     'kytucxa.dangky.form.placeholder.dateOfIssue': 'Chọn ngày cấp',
     'kytucxa.dangky.form.field.placeOfIssue': 'Nơi cấp',
     'kytucxa.dangky.form.placeholder.placeOfIssue': 'Nhập nơi cấp',
+    'kytucxa.dangky.form.field.identityImage': 'Ảnh giấy tờ tùy thân (CCCD/Hộ chiếu)',
     'kytucxa.dangky.form.field.nationality': 'Quốc tịch',
     'kytucxa.dangky.form.placeholder.nationality': 'Chọn quốc tịch',
     'kytucxa.dangky.form.field.otherNationality': 'Khác',

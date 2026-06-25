@@ -70,6 +70,7 @@ export default {
 	'kytucxa.dangky.form.placeholder.dateOfIssue': 'Select date of issue',
 	'kytucxa.dangky.form.field.placeOfIssue': 'Place of issue',
 	'kytucxa.dangky.form.placeholder.placeOfIssue': 'Enter place of issue',
+	'kytucxa.dangky.form.field.identityImage': 'Identity Document Image (ID Card/Passport)',
 	'kytucxa.dangky.form.field.nationality': 'Nationality',
 	'kytucxa.dangky.form.placeholder.nationality': 'Select nationality',
 	'kytucxa.dangky.form.field.otherNationality': 'Others',

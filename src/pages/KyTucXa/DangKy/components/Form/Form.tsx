@@ -1,13 +1,13 @@
 import { Button,  Form, Modal, Steps, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
-import './style.less';
+import '../style.less';
 import dayjs from 'dayjs';
 import { resetFieldsForm } from '@/utils/utils';
 import { KyTucXa } from '@/services/KyTucXa/typings';
 import FormStep1Content from './FormStep1Content';
 import FormStep2Content from './FormStep2Content';
-import ModalSuccessRegistration from './ModalSuccessRegistration';
+import ModalSuccessRegistration from '../Modal/ModalSuccessRegistration';
 
 const FormDangKyKTX = () => {
 	const intl = useIntl();

@@ -2,9 +2,9 @@ import { CheckCircleOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Modal, Row, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel, history } from 'umi';
-import { DienTichIconCustom, PhongTamIconCustom } from './IconsRoom';
+import { DienTichIconCustom, PhongTamIconCustom } from '../IconsRoom';
 import { KyTucXa } from '@/services/KyTucXa/typings';
-import './style.less';
+import '../style.less';
 
 interface RoomDetailModalProps {
 	onDangKy: (phong: KyTucXa.IPhong) => void;
