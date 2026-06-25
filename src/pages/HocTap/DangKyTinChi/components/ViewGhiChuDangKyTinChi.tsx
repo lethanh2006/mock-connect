@@ -79,6 +79,10 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 
 				<Col span={24}>
 					<div>
+						<div style={{ marginTop: 8 }}>
+							<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan' })}</strong>:{' '}
+							{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan.mota' })}
+						</div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday.mota' })}
 					</div>
@@ -90,10 +94,6 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2.mota' })}
 					</div> */}
-					<div style={{ marginTop: 8 }}>
-						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan' })}</strong>:{' '}
-						{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan.mota' })}
-					</div>
 				</Col>
 
 				<Col span={24}>

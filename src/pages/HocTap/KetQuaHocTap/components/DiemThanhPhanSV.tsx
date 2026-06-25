@@ -221,6 +221,13 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				onCell: onCellHocPhan,
 			},
 			{
+				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.soTcTichLuy' }),
+				width: 112,
+				align: 'center',
+				render: (val, rec) => renderSoTinChiTichLuy(rec),
+				onCell: onCellHocPhan,
+			},
+			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tichLuy' }),
 				dataIndex: 'tichLuy',
 				width: 80,

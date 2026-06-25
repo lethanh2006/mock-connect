@@ -93,20 +93,17 @@ const ModalChiTietDiem = (
 
 	const renderHocPhanCt = (dsHocPhan?: ChuongTrinhDaoTao.THocPhanTuongQuan[] | null, label?: string) => {
 		const danhSachHienThi = Array.isArray(dsHocPhan) && dsHocPhan[0]?.ten ? dsHocPhan : [];
+		if (!danhSachHienThi.length) return null;
 
 		return (
 			<Descriptions.Item label={label} span={3}>
-				{danhSachHienThi.length ? (
-					<ul style={{ marginBottom: 0, paddingLeft: 14 }}>
-						{danhSachHienThi.map((item) => (
-							<li key={item.ma}>
-								{item.ma} - {item.ten}
-							</li>
-						))}
-					</ul>
-				) : (
-					'--'
-				)}
+				<ul style={{ marginBottom: 0, paddingLeft: 14 }}>
+					{danhSachHienThi.map((item) => (
+						<li key={item.ma}>
+							{item.ma} - {item.ten}
+						</li>
+					))}
+				</ul>
 			</Descriptions.Item>
 		);
 	};
@@ -180,9 +177,11 @@ const ModalChiTietDiem = (
 						<span>{khoiChuongTrinh?.khoiKienThuc?.ten ?? khoiChuongTrinh?.maKhoiKienThuc}</span>
 					</Descriptions.Item>
 					{/* Sẽ được truyền vào từ CardKhoiHocPhan.tsx */}
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tuchon' })} span={3}>
-						{khoiChuongTrinh?.ten ?? '--'}
-					</Descriptions.Item>
+					{khoiChuongTrinh?.ten ? (
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tuchon' })} span={3}>
+							{khoiChuongTrinh.ten}
+						</Descriptions.Item>
+					) : null}
 					{renderHocPhanCt(
 						khoiChuongTrinh?.dsHocPhanTienQuyet,
 						intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.tienquyet' }),
@@ -195,9 +194,11 @@ const ModalChiTietDiem = (
 						khoiChuongTrinh?.dsHocPhanSongHanh,
 						intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.hpsongnganh' }),
 					)}
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })} span={3}>
-						{khoiChuongTrinh?.chuyenNganh?.ten ?? '--'}
-					</Descriptions.Item>
+					{khoiChuongTrinh?.chuyenNganh?.ten ? (
+						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })} span={3}>
+							{khoiChuongTrinh.chuyenNganh.ten}
+						</Descriptions.Item>
+					) : null}
 				</Descriptions>
 				<Divider dashed orientation='left' className='divider-big-title'>
 					{intl.formatMessage({ id: 'tientrinhhoctap.tientrinhthucte.chitietketqua' })}
