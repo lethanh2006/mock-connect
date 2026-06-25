@@ -29,7 +29,7 @@ export default {
 	'tientrinhhoctap.tientrinhthucte.stc': 'Credits',
 	'tientrinhhoctap.tientrinhthucte.tc': 'credits',
 	'tientrinhhoctap.tientrinhthucte.trangthai': 'Status',
-	'tientrinhhoctap.tientrinhthucte.chuongtrinh': 'Program Block',
+	'tientrinhhoctap.tientrinhthucte.chuongtrinh': 'Curriculum Infomation',
 	'tientrinhhoctap.tientrinhthucte.tt': 'Semester Order',
 	'tientrinhhoctap.tientrinhthucte.khoikienthuc': 'Knowledge Block',
 	'tientrinhhoctap.tientrinhthucte.tuchon': 'Elective Group',
