@@ -7,7 +7,7 @@ export default {
 	'trangchu.v2.welcome.meta': '{semester} {year} • Week {week}',
 	'trangchu.v2.welcome.greeting': 'Hello, {ten}. {welcome}',
 	'trangchu.v2.welcome.urgentActions': '{count} urgent actions',
-	'trangchu.v2.welcome.classesToday': '{count} classes today',
+	'trangchu.v2.welcome.classesToday': '{count} sections today',
 	'trangchu.v2.academicProgress.title': 'Academic Progress',
 	'trangchu.v2.academicProgress.cgpa': 'CGPA',
 	'trangchu.v2.academicProgress.credits': 'Credits',
