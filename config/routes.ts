@@ -860,28 +860,36 @@ export default [
 	// },
 
 	// TÀI CHÍNH
-	// {
-	// 	name: 'TaiChinh',
-	// 	icon: 'TransactionOutlined',
-	// 	path: '/tai-chinh',
-	// 	routes: [
-	// 		{
-	// 			name: 'CongNo',
-	// 			path: 'cong-no',
-	// 			component: 'TaiChinh/HoaDon',
-	// 		},
-	// 		{
-	// 			name: 'GiaoDich',
-	// 			path: 'giao-dich',
-	// 			component: 'TaiChinh/GiaoDich',
-	// 		},
-	// 		{
-	// 			name: 'UuDaiThanhToan',
-	// 			path: 'uu-dai-thanh-toan',
-	// 			component: 'TaiChinh/UuDaiThanhToan',
-	// 		},
-	// 	],
-	// },
+	{
+		name: 'TaiChinh',
+		icon: 'TransactionOutlined',
+		path: '/tai-chinh',
+		access: 'manyAccessFilter',
+		permissions: ['tc.bill:read', 'tc.transaction:read', 'tc.discount:read'],
+		routes: [
+			{
+				name: 'CongNo',
+				path: 'cong-no',
+				component: 'TaiChinh/HoaDon',
+				access: 'accessFilter',
+				permission: 'tc.bill:read',
+			},
+			// {
+			// 	name: 'GiaoDich',
+			// 	path: 'giao-dich',
+			// 	component: 'TaiChinh/GiaoDich',
+			// 	access: 'accessFilter',
+			// 	permission: 'tc.transaction:read',
+			// },
+			// {
+			// 	name: 'UuDaiThanhToan',
+			// 	path: 'uu-dai-thanh-toan',
+			// 	component: 'TaiChinh/UuDaiThanhToan',
+			// 	access: 'accessFilter',
+			// 	permission: 'tc.discount:read',
+			// },
+		],
+	},
 
 	// TIỆN ÍCH
 	// {
