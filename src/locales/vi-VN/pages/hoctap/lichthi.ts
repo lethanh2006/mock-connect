@@ -12,6 +12,7 @@ export default {
     'lichthi.table.congNo': 'Công nợ',
     'lichthi.table.trangThaiThi': 'Trạng thái thi',
     'lichthi.table.thaoTac': 'Thao tác',
+    'pages.hoctap.lichthi.thoigian': 'Thời gian',
     'lichthi.tooltip.xemDSSV': 'Xem danh sách sinh viên thi',
 
     'lichthi.modal.title': 'Danh sách sinh viên thi',

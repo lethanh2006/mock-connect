@@ -40,6 +40,7 @@ export default {
 	'tientrinhhoctap.tientrinhthucte.hptruoc': 'Học phần trước',
 	'tientrinhhoctap.tientrinhthucte.hpsongnganh': 'Học phần song hành',
 	'tientrinhhoctap.tientrinhthucte.hoclan': 'Học lần',
+	'tientrinhhoctap.tientrinhthucte.finalGrade': 'Điểm cuối',
 	'tientrinhhoctap.tientrinhthucte.chitietketqua': 'Chi tiết kết quả học tập',
 	'tientrinhhoctap.tientrinhthucte.hoctap': 'Thông tin học tập',
 	'tientrinhhoctap.tientrinhthucte.kyhoc': 'Kỳ học',
@@ -117,6 +118,9 @@ export default {
 	'tientrinhhoctap.ctdt.khoihp': 'Khối học phần',
 	'tientrinhhoctap.ctdt.noti':
 		'Sinh viên chọn {soTinChi} tín chỉ tự chọn từ trong chương trình hoặc từ bất kỳ chương trình nào khác (tại VinUniversity hoặc các tổ chức đối tác được công nhận)',
+	'tientrinhhoctap.ctdt.noti.ngoaiChuongTrinh':
+		'Sinh viên chọn {soTinChi} tín chỉ tự chọn từ ngoài chương trình hoặc từ bất kỳ chương trình nào khác',
+	'tientrinhhoctap.ctdt.noti.trongChuongTrinh': 'Sinh viên chọn {soTinChi} tín chỉ từ các học phần trong danh sách sau',
 
 	'tientrinhhoctap.ctdt.title': 'Chi tiết chương trình đào tạo/Kế hoạch học tập',
 	'tientrinhhoctap.ctdt.empty': 'Không có thông tin',

@@ -6,7 +6,20 @@ import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
 import { accentColors, primaryColor } from '@/services/base/constant';
 import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 import type { InputRef } from 'antd';
-import { AutoComplete, Button, Collapse, Divider, Input, Segmented, Space, Spin, Tag, Tooltip, Typography } from 'antd';
+import {
+	AutoComplete,
+	Button,
+	Collapse,
+	Divider,
+	Empty,
+	Input,
+	Segmented,
+	Space,
+	Spin,
+	Tag,
+	Tooltip,
+	Typography,
+} from 'antd';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -278,7 +291,10 @@ const TienTrinhChuongTrinhKhung = () => {
 						khoi={ctk}
 						key={ctk._id}
 						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc!]}
-						onClickHocPhan={() => setVisibleDiem(true)}
+						onClickHocPhan={(record) => {
+							setChuongTrinh(record);
+							setVisibleDiem(true);
+						}}
 						label={getLabel?.(ctk)}
 					/>
 				),
@@ -371,6 +387,7 @@ const TienTrinhChuongTrinhKhung = () => {
 			</div>
 
 			<Spin spinning={loading}>
+				{!filteredDanhSachHienThi?.length && !hasMinorData ? <Empty style={{ marginBlock: 36 }} /> : null}
 				{filteredDanhSachHienThi?.map((data, index) => (
 					<React.Fragment key={viewType === 'semester' ? data.soThuTuKy : data.maKhoiKienThuc}>
 						{/* Header học kỳ/Khối */}

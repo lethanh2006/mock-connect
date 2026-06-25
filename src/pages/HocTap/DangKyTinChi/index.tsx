@@ -6,7 +6,7 @@ import { ipDaoTao } from '@/utils/ip';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Flex, Space, Spin } from 'antd';
 import _ from 'lodash';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useAccess, useIntl, useModel } from 'umi';
 import AlertVuotTin from './components/AlertVuotTin';
@@ -115,6 +115,55 @@ const DangKyTinChiPage = () => {
 		};
 	}, []);
 
+	const danhSachLopHienThi = useMemo(() => {
+		const hocPhanCoLopThucHanh = new Set<string>();
+		const maHoaLichHocTheoHocPhan: Record<string, any[]> = {};
+
+		danhSachLopDangKy.forEach((item) => {
+			if (item.tenCha && item.maHocPhan) hocPhanCoLopThucHanh.add(item.maHocPhan);
+			if (item.maHocPhan) {
+				maHoaLichHocTheoHocPhan[item.maHocPhan] = [
+					...(maHoaLichHocTheoHocPhan[item.maHocPhan] ?? []),
+					...(item.maHoaLichHoc ?? []),
+				];
+			}
+		});
+
+		return danhSachLopDangKy
+			.filter((item) => !item.maHocPhan || !hocPhanCoLopThucHanh.has(item.maHocPhan) || !!item.tenCha)
+			.map((item) =>
+				item.maHocPhan && hocPhanCoLopThucHanh.has(item.maHocPhan)
+					? {
+							...item,
+							// Gộp lịch học lớp Chính với lớp hiển thị.
+							maHoaLichHoc: maHoaLichHocTheoHocPhan[item.maHocPhan] ?? [],
+						}
+					: item,
+			);
+	}, [danhSachLopDangKy]);
+
+	const tongTinChi = useMemo(
+		() =>
+			_.sumBy(
+				danhSachLopHienThi.filter((item) => item.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy !== false),
+				(item) => item.soTinChi,
+			),
+		[danhSachLopHienThi],
+	);
+	const tongHocPhanDangKy = useMemo(
+		() => _.uniq(danhSachLopHienThi.map((item) => item.maHocPhan).filter(Boolean)).length,
+		[danhSachLopHienThi],
+	);
+	const soTinChiToiDa =
+		khoaNganhMe?.khoaNganhPhu && phieuDangKy?.soTinChiToiDaSongNganh
+			? phieuDangKy.soTinChiToiDaSongNganh
+			: (phieuDangKy?.soTinChiToiDa ?? 0);
+	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
+	const trangThaiTinChi =
+		tongTinChi < soTinChiToiThieu
+			? intl.formatMessage({ id: 'dangkytinchi.fixedbar.chuadusotinchi' })
+			: intl.formatMessage({ id: 'dangkytinchi.fixedbar.dusotinchi' });
+
 	if (isVerified)
 		return (
 			<PageCard title={intl.formatMessage({ id: 'dangkytinchi.title' })}>
@@ -129,38 +178,6 @@ const DangKyTinChiPage = () => {
 				/>
 			</PageCard>
 		);
-
-	const hocPhanCoLopThucHanh = danhSachLopDangKy.filter((item) => !!item.tenCha).map((item) => item.maHocPhan);
-	const danhSachLopHienThi = danhSachLopDangKy
-		.filter((item) => !hocPhanCoLopThucHanh.includes(item.maHocPhan) || !!item.tenCha)
-		.map((item) =>
-			hocPhanCoLopThucHanh.includes(item.maHocPhan)
-				? {
-						...item,
-						// Gộp lịch học lớp Chính với lớp hiển thị
-						maHoaLichHoc:
-							danhSachLopDangKy
-								?.filter((j) => j.maHocPhan === item.maHocPhan)
-								?.map((j) => j.maHoaLichHoc ?? [])
-								?.flat() ?? [],
-					}
-				: item,
-		);
-
-	const tongTinChi = _.sumBy(
-		danhSachLopHienThi.filter((item) => item.hocPhan?.loaiHocPhan?.isTinhSoTinChiDangKy !== false),
-		(item) => item.soTinChi,
-	);
-	const tongHocPhanDangKy = _.uniq(danhSachLopHienThi.map((item) => item.maHocPhan).filter(Boolean)).length;
-	const soTinChiToiDa =
-		khoaNganhMe?.khoaNganhPhu && phieuDangKy?.soTinChiToiDaSongNganh
-			? phieuDangKy.soTinChiToiDaSongNganh
-			: (phieuDangKy?.soTinChiToiDa ?? 0);
-	const soTinChiToiThieu = phieuDangKy?.soTinChiToiThieu ?? 0;
-	const trangThaiTinChi =
-		tongTinChi < soTinChiToiThieu
-			? intl.formatMessage({ id: 'dangkytinchi.fixedbar.chuadusotinchi' })
-			: intl.formatMessage({ id: 'dangkytinchi.fixedbar.dusotinchi' });
 
 	return (
 		<>

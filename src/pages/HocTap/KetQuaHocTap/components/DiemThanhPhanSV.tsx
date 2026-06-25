@@ -44,7 +44,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			mahk: string,
 			hocKyTen: string | undefined,
 			kqhk?: {
-				trungBinhTichLuyToanKhoaThang4?: number | null;
+				trungBinhHocKyThang4?: number | null;
 				tongSoTinChiHocKy?: number | null;
 				tongSoTinChiTichLuyToanKhoa?: number | null;
 			},
@@ -55,7 +55,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				title += intl.formatMessage(
 					{ id: 'ketquahoctap.diemtp.semester.summary' },
 					{
-						gpa: kqhk.trungBinhTichLuyToanKhoaThang4 ?? '--',
+						gpa: kqhk.trungBinhHocKyThang4 ?? '--',
 						earned: earnedCredits ?? kqhk.tongSoTinChiHocKy ?? '--',
 						cumulative: kqhk.tongSoTinChiTichLuyToanKhoa ?? '--',
 					},
@@ -180,7 +180,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				width: 56,
 				align: 'center',
 				render: (val, rec) => (isSemesterRow(rec) ? rec.tenHocPhan : val),
-				onCell,
+				onCell: onCellHocPhan,
 			},
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.maHp' }),
@@ -216,16 +216,9 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.soTc' }),
 				width: 112,
+				dataIndex: ['hocPhan', 'soTinChi'],
 				align: 'center',
-				render: (val, rec) => rec?.hocPhan?.soTinChi,
-				onCell,
-			},
-			{
-				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.soTcTichLuy' }),
-				width: 112,
-				align: 'center',
-				render: (val, rec) => renderSoTinChiTichLuy(rec),
-				onCell,
+				onCell: onCellHocPhan,
 			},
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tichLuy' }),
@@ -233,7 +226,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				width: 80,
 				align: 'center',
 				render: (val, rec) => isTichLuyDiem(rec) && <CheckOutlined />,
-				onCell,
+				onCell: onCellHocPhan,
 			},
 			// {
 			// 	title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.diemThi1' }),
@@ -265,9 +258,9 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				width: 100,
 				dataIndex: 'diemThang4',
 				align: 'center',
-				render: (val) => <b style={val === 0 ? { color: 'red' } : {}}>{val ?? '--'}</b>,
+				render: (val) => <b>{val ?? '--'}</b>,
 				// sortable: true,
-				onCell,
+				onCell: onCellHocPhan,
 			},
 			{
 				title: intl.formatMessage({ id: 'ketquahoctap.diemtp.col.tongKetChu' }),
@@ -285,7 +278,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 						)}
 					</>
 				),
-				onCell,
+				onCell: onCellHocPhan,
 			},
 		];
 

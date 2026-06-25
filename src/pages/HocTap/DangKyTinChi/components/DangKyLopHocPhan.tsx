@@ -16,7 +16,7 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { formatTimeRange } from '@/utils/formatDate';
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Empty, Modal, Popconfirm, Popover, Select, Space, Tag } from 'antd';
+import { Empty, Modal, Popconfirm, Popover, Select, Space, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useAccess, useIntl, useModel } from 'umi';
@@ -62,8 +62,10 @@ const DangKyLopHocPhan = () => {
 
 	const getData = () =>
 		recHocKy?.ma &&
+		dotDangKyHienTai?._id &&
 		sinhVienGetLopDangKyTheoHocPhanModel(
 			recHocKy.ma,
+			dotDangKyHienTai?._id,
 			loaiDangKy,
 			{ tatCa: typeLop !== 'Lớp gợi ý' },
 			filters,
@@ -350,7 +352,7 @@ const DangKyLopHocPhan = () => {
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.filterhocphan.columntable.mahp' }),
 			dataIndex: 'maHocPhan',
-			width: 140,
+			width: 150,
 			align: 'center',
 			filterType: 'string',
 			sortable: true,
@@ -484,8 +486,14 @@ const DangKyLopHocPhan = () => {
 				const disabled = getDisabledDangKy(rec) || !coDotDangKyTinChi;
 
 				if (daChon && dangKyNgay) {
+					const disabledDelete =
+						(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
+							dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
+						!rec.dangKyTinChi ||
+						!coDotDangKyTinChi;
+
 					return (
-						<Space>
+						<Space size={6} wrap={false}>
 							<Tag color='green'>
 								{intl.formatMessage({
 									id: 'dangkytinchi.dankylophocphan.action.dadangky',
@@ -498,30 +506,28 @@ const DangKyLopHocPhan = () => {
 								})}
 								placement='topRight'
 								onConfirm={() => lopDangKy?._id && onDeleteLop(lopDangKy)}
-								disabled={
-									(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-										dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
-									!rec.dangKyTinChi ||
-									!coDotDangKyTinChi
-								}
+								disabled={disabledDelete}
 							>
-								<ButtonExtend
-									icon={<DeleteOutlined />}
-									danger
-									type='link'
-									otherTooltipProps={{
-										placement: 'bottom',
-									}}
-									tooltip={intl.formatMessage({
+								<Tooltip
+									placement='bottom'
+									title={intl.formatMessage({
 										id: 'dangkytinchi.phieudangky.columntable.huy.tooltip',
 									})}
-									disabled={
-										(lopDangKy?.trangThai === ETrangThaiDangKyTinChi.DA_DANG_KY &&
-											dotDangKyHienTai?.tinhChatDangKy === ETinhChatDangKyTC.DANG_KY) ||
-										!rec.dangKyTinChi ||
-										!coDotDangKyTinChi
-									}
-								/>
+								>
+									<span
+										style={{
+											color: disabledDelete ? '#d9d9d9' : '#ff4d4f',
+											cursor: disabledDelete ? 'not-allowed' : 'pointer',
+											fontSize: 18,
+											lineHeight: 1,
+										}}
+										onClick={(e) => {
+											if (disabledDelete) e.preventDefault();
+										}}
+									>
+										<DeleteOutlined />
+									</span>
+								</Tooltip>
 							</Popconfirm>
 						</Space>
 					);
@@ -662,6 +668,7 @@ const DangKyLopHocPhan = () => {
 				setVisible={setVisibleDeCuong}
 				deCuongId={deCuongModal?.deCuongId}
 				title={deCuongModal?.title}
+				isChiTiet
 			/>
 		</>
 	);
