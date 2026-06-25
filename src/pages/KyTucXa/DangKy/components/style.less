@@ -66,14 +66,6 @@
 
 .ktx-register-form {
 	padding: 16px 0px 0;
-	max-height: 70vh;
-	overflow-y: auto;
-	-ms-overflow-style: none;
-	scrollbar-width: none;
-
-	&::-webkit-scrollbar {
-		display: none;
-	}
 
 	.ant-form-item-label > label {
 		color: #2E2E2E;
@@ -712,74 +704,12 @@
 		}
 	}
 
-	&__nav {
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		background: rgba(0, 0, 0, 0.45);
-		border: none;
-		border-radius: 50%;
-		width: 32px;
-		height: 32px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		color: #fff;
-		font-size: 13px;
-		z-index: 5;
-		transition: background 0.15s;
-
-		&:hover {
-			background: rgba(0, 0, 0, 0.65);
-		}
-
-		&--prev {
-			left: 10px;
-		}
-
-		&--next {
-			right: 10px;
-		}
-	}
-
-	&__dots {
-		position: absolute;
-		bottom: 10px;
-		left: 50%;
-		transform: translateX(-50%);
-		display: flex;
-		gap: 6px;
-		z-index: 5;
-	}
-
-	&__dot-item {
-		width: 24px;
-		height: 4px;
-		border-radius: 2px;
-		background: rgba(255, 255, 255, 0.4);
-		cursor: pointer;
-		transition: background 0.2s, transform 0.2s;
-
-		&--active {
-			background: #cc2424;
-		}
-	}
-
-	&__thumbs {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
 	&__thumb {
 		width: 100%;
 		height: 100%;
 		border-radius: 6px;
 		overflow: hidden;
 		cursor: pointer;
-		border: 2px solid transparent;
-		transition: border-color 0.15s;
 		outline: none;
 
 		img {
@@ -788,9 +718,15 @@
 			object-fit: cover;
 			display: block;
 		}
+	}
 
-		&--active {
-			border-color: #cc2424 !important;
+	&__thumb-img-ant-wrap {
+		width: 100% !important;
+		height: 100% !important;
+		
+		.ant-image-img {
+			height: 100% !important;
+			object-fit: cover !important;
 		}
 	}
 

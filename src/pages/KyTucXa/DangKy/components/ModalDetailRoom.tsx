@@ -1,4 +1,4 @@
-import { CheckCircleOutlined, CloseOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Modal, Row, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import { useIntl, useModel, history } from 'umi';
@@ -40,13 +40,12 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 	const { danhSach: danhSachKhoanThu } = useModel('kytucxa.khoanthu');
 	const { tienIchMap } = useModel('kytucxa.tienich');
 	const { loaiPhongMap } = useModel('kytucxa.loaiphong');
-	const [activeImg, setActiveImg] = useState<number>(0);
 
-	const { slotLeft, numBedLabel, images, thumbs, tienIchAll } = useMemo(() => {
-		if (!phong) return { slotLeft: 0, numBedLabel: '', images: [], thumbs: [], tienIchAll: [] };
+	const { slotLeft, numBedLabel, displayImages, tienIchAll } = useMemo(() => {
+		if (!phong) return { slotLeft: 0, numBedLabel: '', displayImages: [], tienIchAll: [] };
 		const left = Math.max(0, phong.soLuongToiDa - phong.soLuongHienTai);
 		const imgs = phong.danhSachAnh ?? [];
-		const tbs = imgs.slice(0, 4);
+		const displayImages = imgs.slice(0, 5);
 		const tienIchAll = (phong.danhSachTienIch ?? [])
 			.map((it: KyTucXa.ITienIch) => {
 				const key = it?.maDanhMucTienIch;
@@ -58,8 +57,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 		return {
 			slotLeft: left,
 			numBedLabel: [phong.ma, phong.toaNha?.ten, phong?.ten].filter(Boolean).join(' · '),
-			images: imgs,
-			thumbs: tbs,
+			displayImages,
 			tienIchAll,
 		};
 	}, [phong, tienIchMap, loaiPhongMap]);
@@ -82,9 +80,6 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 
 	if (!phong) return null;
 
-	const prevImg = () => setActiveImg((i) => (i === 0 ? images.length - 1 : i - 1));
-	const nextImg = () => setActiveImg((i) => (i === images.length - 1 ? 0 : i + 1));
-
 	return (
 		<Modal
 			open={isView}
@@ -98,60 +93,33 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 		>
 			<div className='ktx-modal__content'>
 				<div className='ktx-modal__gallery-new'>
-					<div className='ktx-modal__gallery-main'>
-						{images.length > 0 ? (
-							<Image.PreviewGroup
-								items={images}
-								preview={{
-									current: activeImg,
-									onChange: (index) => setActiveImg(index),
-								}}
-							>
+					{displayImages.length > 0 ? (
+						<Image.PreviewGroup>
+							<div className='ktx-modal__gallery-main'>
 								<Image
-									src={images[activeImg] ?? images[0]}
+									src={displayImages[0]}
 									className='ktx-modal__main-img'
 									wrapperClassName='ktx-modal__main-img-ant-wrap'
 								/>
-							</Image.PreviewGroup>
-						) : (
-							<div className='ktx-modal__main-img ktx-modal__main-img--placeholder' />
-						)}
-
-						{images.length > 1 && (
-							<>
-								<button className='ktx-modal__nav ktx-modal__nav--prev' onClick={prevImg}>
-									<LeftOutlined />
-								</button>
-								<button className='ktx-modal__nav ktx-modal__nav--next' onClick={nextImg}>
-									<RightOutlined />
-								</button>
-							</>
-						)}
-
-						{images.length > 1 && (
-							<div className='ktx-modal__dots'>
-								{images.map((_, i) => (
-									<span
-										key={i}
-										className={`ktx-modal__dot-item${i === activeImg ? ' ktx-modal__dot-item--active' : ''}`}
-										onClick={() => setActiveImg(i)}
-									/>
-								))}
 							</div>
-						)}
-					</div>
-					
-					{thumbs.length > 1 && (
-						<div className='ktx-modal__gallery-grid'>
-							{thumbs.map((url, i) => (
-								<div
-									key={i}
-									className={`ktx-modal__thumb${i === activeImg ? ' ktx-modal__thumb--active' : ''}`}
-									onClick={() => setActiveImg(i)}
-								>
-									<img src={url} alt={`thumb-${i}`} />
+							
+							{displayImages.length > 1 && (
+								<div className='ktx-modal__gallery-grid'>
+									{displayImages.slice(1, 5).map((url, i) => (
+										<div key={i} className='ktx-modal__thumb'>
+											<Image 
+												src={url} 
+												className='ktx-modal__thumb-img'
+												wrapperClassName='ktx-modal__thumb-img-ant-wrap' 
+											/>
+										</div>
+									))}
 								</div>
-							))}
+							)}
+						</Image.PreviewGroup>
+					) : (
+						<div className='ktx-modal__gallery-main'>
+							<div className='ktx-modal__main-img ktx-modal__main-img--placeholder' />
 						</div>
 					)}
 				</div>

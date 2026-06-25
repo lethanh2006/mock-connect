@@ -6,6 +6,7 @@ export default {
     'kytucxa.dangky.to': 'đến',
     'kytucxa.dangky.note': 'Ghi chú',
     'kytucxa.dangky.roomNotFound': 'Không tìm thấy phòng phù hợp',
+    'kytucxa.dangky.exemptedMsg': 'Bạn thuộc diện miễn ký túc xá.',
 
     // Đăng ký - CARD PHÒNG
     'kytucxa.dangky.card.slotsLeft': 'Còn {slotLeft} chỗ',

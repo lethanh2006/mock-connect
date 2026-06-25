@@ -9,7 +9,7 @@ export enum ETrangThaiMinhChung {
 	TU_CHOI = 'Từ chối',
 }
 
-export enum ETrangThaiDuyet {
+export enum ETrangThaiThanhToan {
 	CHO_THANH_TOAN = 'Chờ thanh toán',
 	DA_THANH_TOAN = 'Đã thanh toán',
 	DA_NHAN_PHONG = 'Đã nhận phòng',

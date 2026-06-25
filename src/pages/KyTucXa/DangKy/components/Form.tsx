@@ -75,16 +75,13 @@ const FormDangKyKTX = () => {
 		try {
 			await form.validateFields(['fullName', 'studentId', 'dateOfBirth', 'email', 'phoneNumber', 'apid', 'college', 'identityNumber', 'dateOfIssue', 'placeOfIssue', 'nationality', 'emergencyContacts', 'confirmInfo']);
 			setCurrentStep(1);
+			setTimeout(() => {
+				const scrollContainer = document.querySelector('.ant-modal-wrap');
+				if (scrollContainer) scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+			}, 100);
 		} catch (error: any) {
 			if (error?.errorFields && error.errorFields.length > 0) {
-				const firstErrorField = error.errorFields[0].name[0];
-				form.scrollToField(firstErrorField, { block: 'center' });
-				setTimeout(() => {
-					const errorFieldNode = document.getElementById(firstErrorField);
-					if (errorFieldNode) {
-						errorFieldNode.focus();
-					}
-				}, 100);
+				form.scrollToField(error.errorFields[0].name, { behavior: 'smooth', block: 'center' });
 			}
 		}
 	};
@@ -159,14 +156,7 @@ const FormDangKyKTX = () => {
 		} catch (error: any) {
 			console.log(error);
 			if (error?.errorFields && error.errorFields.length > 0) {
-				const firstErrorField = error.errorFields[0].name[0];
-				form.scrollToField(firstErrorField, { block: 'center' });
-				setTimeout(() => {
-					const errorFieldNode = document.getElementById(firstErrorField);
-					if (errorFieldNode) {
-						errorFieldNode.focus();
-					}
-				}, 100);
+				form.scrollToField(error.errorFields[0].name, { behavior: 'smooth', block: 'center' });
 			}
 		}
 	};
@@ -346,7 +336,7 @@ const FormDangKyKTX = () => {
 							<div className="ktx-register-section mt-4">
 								<div className="ktx-register-section__content">
 									<Form.Item name="confirmInfo" valuePropName="checked" rules={[{ validator: (_, value) => value ? Promise.resolve() : Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.form.msg.mustAgree' }))) }]}>
-										<Checkbox id="confirmInfo" className="ktx-confirm-checkbox ktx-confirm-checkbox-step1">
+										<Checkbox className="ktx-confirm-checkbox ktx-confirm-checkbox-step1">
 											<span className="ktx-confirm-text">
 												{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.confirmText' })}
 											</span>
@@ -413,7 +403,7 @@ const FormDangKyKTX = () => {
 							<div className="ktx-register-section mt-4">
 								<div className="ktx-register-section__content">
 									<Form.Item name="confirmTerms" valuePropName="checked" rules={[{ validator: (_, value) => value ? Promise.resolve() : Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.form.msg.mustAgree' }))) }]}>
-										<Checkbox id="confirmTerms" className="ktx-confirm-checkbox">
+										<Checkbox className="ktx-confirm-checkbox">
 											<span className="ktx-confirm-text">
 												{intl.formatMessage({ id: 'kytucxa.dangky.form.confirmText' })}
 											</span>

@@ -1,4 +1,4 @@
-import { ETrangThaiDuyet, ETrangThaiMinhChung, EGioiTinh, ELoaiKhoanThu } from './constant';
+import { ETrangThaiMinhChung, EGioiTinh, ELoaiKhoanThu, ETrangThaiThanhToan } from './constant';
 
 declare module KyTucXa {
     export interface IToa {
@@ -56,7 +56,7 @@ declare module KyTucXa {
         thoiHanThanhToan?: string;
         urlMinhChung?: string;
         trangThaiMinhChung?: ETrangThaiMinhChung;
-        trangThaiDuyet?: ETrangThaiDuyet;
+        trangThaiThanhToan?: ETrangThaiThanhToan;
         createdAt?: string;
         updatedAt?: string;
         formDon?: IFormDangKy;
@@ -163,4 +163,25 @@ declare module KyTucXa {
         soDienThoaiNguoiLienLac: string;
         thanhVienGiaDinh: IThanhVienGiaDinh[];
     }
+
+    export interface IDanhSachMien {
+		_id: string;
+		maHocKy: string;
+		hanNopMinhChung: Date;
+		maSinhVien: string;
+		ssoId: string;
+		hoTen: string;
+		khoaSinhVien: string;
+		maKhoa: string;
+		tenKhoa: string;
+		maNganh: string;
+		tenNganh: string;
+		soDienThoai: string;
+		email: string;
+		urlMinhChung: string;
+		trangThaiMinhChung: string;
+		ngayDuyet: Date;
+		nguoiDuyet: string;
+		ghiChuDuyet: string;
+	}
 }

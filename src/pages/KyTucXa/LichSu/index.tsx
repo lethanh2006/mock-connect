@@ -3,7 +3,7 @@ import TableBase from '@/components/Table';
 import type { IColumn } from '@/components/Table/typing';
 import { useIntl, useModel } from 'umi';
 import { Tag, Modal, Col } from 'antd';
-import { ETrangThaiDuyet } from '@/services/KyTucXa/constant';
+import { ETrangThaiThanhToan } from '@/services/KyTucXa/constant';
 import { KyTucXa } from '@/services/KyTucXa/typings';
 import FormLichSuDk from '@/pages/KyTucXa/LichSu/components/FormDangKy'; 
 import "@/pages/KyTucXa/DangKy/style.less"
@@ -114,22 +114,22 @@ const LichSuDangKyKTX = () => {
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.table.status' }),
-            dataIndex: 'trangThaiDuyet',
+            dataIndex: 'trangThaiThanhToan',
             width: 120,
             align: 'center',
             render: (val) => {
                 let color = 'default';
                 let label = val;
-                if ([ETrangThaiDuyet.DA_THANH_TOAN].includes(val as ETrangThaiDuyet)) {
+                if ([ETrangThaiThanhToan.DA_THANH_TOAN].includes(val as ETrangThaiThanhToan)) {
                     color = 'success';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.success' });
-                } else if ([ETrangThaiDuyet.DA_NHAN_PHONG].includes(val as ETrangThaiDuyet)) {
+                } else if ([ETrangThaiThanhToan.DA_NHAN_PHONG].includes(val as ETrangThaiThanhToan)) {
                     color = 'purple';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.checkedin' });
-                } else if ([ETrangThaiDuyet.CHO_THANH_TOAN].includes(val as ETrangThaiDuyet)) {
+                } else if ([ETrangThaiThanhToan.CHO_THANH_TOAN].includes(val as ETrangThaiThanhToan)) {
                     color = 'processing';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.processing' });
-                } else if ([ETrangThaiDuyet.HUY].includes(val as ETrangThaiDuyet)) {
+                } else if ([ETrangThaiThanhToan.HUY].includes(val as ETrangThaiThanhToan)) {
                     color = 'error';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.expired' });
                 }
@@ -142,8 +142,8 @@ const LichSuDangKyKTX = () => {
             align: 'center',
             fixed: 'right',
             render: (_, record: KyTucXa.IThongTinDangKy) => {
-                const isChoThanhToan = record.trangThaiDuyet === ETrangThaiDuyet.CHO_THANH_TOAN;
-                const isChoPhepXoa = record.trangThaiDuyet === ETrangThaiDuyet.HUY || record.trangThaiDuyet === ETrangThaiDuyet.CHO_THANH_TOAN;
+                const isChoThanhToan = record.trangThaiThanhToan === ETrangThaiThanhToan.CHO_THANH_TOAN;
+                const isChoPhepXoa = record.trangThaiThanhToan === ETrangThaiThanhToan.HUY || record.trangThaiThanhToan === ETrangThaiThanhToan.CHO_THANH_TOAN;
 
                 return (
                     <Space size="small">

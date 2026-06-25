@@ -6,6 +6,7 @@ export default {
 	'kytucxa.dangky.to': 'to',
 	'kytucxa.dangky.note': 'Note',
 	'kytucxa.dangky.roomNotFound': 'No suitable room found',
+	'kytucxa.dangky.exemptedMsg': 'You are exempt from dormitory accommodation fees.',
 
 	// Registration - CARD ROOM
 	'kytucxa.dangky.card.slotsLeft': '{slotLeft} slots left',

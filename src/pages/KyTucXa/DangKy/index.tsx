@@ -1,7 +1,7 @@
 import { KyTucXa } from '@/services/KyTucXa/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
-import { ReloadOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { ReloadOutlined, InfoCircleOutlined, FileDoneOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Empty, Row, Skeleton, Typography } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -12,7 +12,7 @@ import SelectToaNhaKTX from './components/SelectToaNha';
 import SelectFloorKTX from './components/SelectFloor';
 import './style.less';
 import { FilterIconCustom } from './components/IconsRoom';
-import { ETrangThaiDuyet } from '@/services/KyTucXa/constant';
+import { ETrangThaiThanhToan } from '@/services/KyTucXa/constant';
 import SelectCapacityKTX from './components/SelectCapacity';
 import SelectRoomTypeKTX from './components/SelectRoomType';
 import PageCard from '@/components/PageCard';
@@ -21,6 +21,8 @@ const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
 	const { danhSach: danhSachToa } = useModel('kytucxa.toanha');
 	const { danhSach: danhSachDotDangKy, getModel: getDotDangKy, loading: loadingDotDangKy, setRecord: setDotDangKyRecord, record: recordDot } = useModel('kytucxa.dotdangky');
+	const { danhSach: danhSachMien } = useModel('kytucxa.danhsachmien');
+	const { record: thongTinSinhVien } = useModel('kytucxa.thongtinsinhvien');
 	const { danhSach: danhSachPhong, getModel: getPhongModel, loading: loadingPhong, setRecord: setPhongRecord, setVisibleForm, setIsView } = useModel('kytucxa.phong');
 	const { danhSach: danhSachLichSu, getModel: getLichSu } = useModel('kytucxa.dangky');
 
@@ -31,7 +33,7 @@ const DangKyKyTucXaPage = () => {
 
 	const activeRegistration = useMemo(() => {
 		return danhSachLichSu.find(
-			(item) => item.trangThaiDuyet !== ETrangThaiDuyet.HUY,
+			(item) => item.trangThaiThanhToan !== ETrangThaiThanhToan.HUY,
 		);
 	}, [danhSachLichSu]);
 
@@ -166,6 +168,15 @@ const DangKyKyTucXaPage = () => {
 		setVisibleForm(true);
 	}, [cacDotDangKyHienTai]);
 
+	const isExempted = useMemo(() => {
+		if (!danhSachMien || danhSachMien.length === 0 || cacDotDangKyHienTai.length === 0 || !thongTinSinhVien?.ma) return false;
+
+		const maHocKy = cacDotDangKyHienTai.map((dot) => dot.maHocKy);
+		return danhSachMien.some(
+			(item: KyTucXa.IDanhSachMien) => item.maSinhVien === thongTinSinhVien.ma && maHocKy.includes(item.maHocKy)
+		);
+	}, [danhSachMien, cacDotDangKyHienTai, thongTinSinhVien?.ma]);
+
 	return (
 		<PageCard
 			title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}
@@ -249,8 +260,16 @@ const DangKyKyTucXaPage = () => {
 							</div>
 						))}
 
-						<div className='ktx-page__list'>
-							{loadingPhong ? (
+						{isExempted ? (
+							<div style={{ textAlign: 'center', padding: '80px 20px', background: '#fff', borderRadius: '0 0 12px 12px' }}>
+								<FileDoneOutlined />
+								<Typography.Title level={4}>
+									{intl.formatMessage({ id: 'kytucxa.dangky.exemptedMsg' })}
+								</Typography.Title>
+							</div>
+						) : (
+							<div className='ktx-page__list'>
+								{loadingPhong ? (
 								<Row gutter={[12, 12]}>
 									{[1, 2, 3].map((i) => (
 										<Col key={i} xs={24} sm={12} md={8}>
@@ -276,6 +295,7 @@ const DangKyKyTucXaPage = () => {
 								</Row>
 							)}
 						</div>
+						)}
 					</div>
 
 					<RoomDetailModal
