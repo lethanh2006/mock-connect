@@ -4,7 +4,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
-import { colorLogActionDktc, ELogActionDktc, logActionDktc } from '@/services/TienIch/AuditLog/constant';
+import { ELogActionDktc, logActionDktc } from '@/services/TienIch/AuditLog/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { Button } from 'antd';
 import { useEffect } from 'react';
@@ -141,13 +141,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 				value: val,
 			})),
 			render: (val: ELogActionDktc) =>
-				val ? (
-					<span style={{ color: colorLogActionDktc[val] ?? 'blue' }}>
-						{intl.formatMessage({ id: logActionDktc[val] ?? val })}
-					</span>
-				) : (
-					'--'
-				),
+				val ? <span>{intl.formatMessage({ id: logActionDktc[val] ?? val })}</span> : '--',
 		},
 	];
 

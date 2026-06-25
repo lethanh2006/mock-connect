@@ -20,7 +20,7 @@ export default {
 	'dangkytinchi.empty.khongduocphepdangky': 'You are not allowed to register credits in this round!',
 	'dangkytinchi.empty.ghichu': 'Note',
 	'dangkytinchi.empty.alert':
-		'The registration period only allows you to <b>DELETE</b> previously registered credit classes!',
+		'The registration period only allows you to <b>DELETE</b> previously registered sections!',
 	'dangkytinchi.waitlist.alert':
 		'If the class is full, you can still register for the waitlist. When a spot becomes available or the instructor approves your request, you will be moved into the official class.',
 	'dangkytinchi.waitlist.confirm.title': 'Class is Full',
@@ -81,7 +81,7 @@ export default {
 	'dangkytinchi.phieudangky.columntable.mahocphan': 'Course Code',
 	'dangkytinchi.phieudangky.columntable.tenhocphan': 'Course Name',
 	'dangkytinchi.phieudangky.columntable.malop': 'Section Code',
-	'dangkytinchi.phieudangky.columntable.loptinchi': 'Credit Class',
+	'dangkytinchi.phieudangky.columntable.loptinchi': 'Section',
 	'dangkytinchi.phieudangky.columntable.sotinchi': 'Credits',
 	'dangkytinchi.phieudangky.columntable.giangvien': 'Faculty',
 	'dangkytinchi.phieudangky.columntable.thongtinchitiet': 'Schedule',
@@ -91,7 +91,7 @@ export default {
 	'dangkytinchi.phieudangky.columntable.huy': 'Action',
 	'dangkytinchi.phieudangky.columntable.huy.tooltip': 'Delete section',
 	'dangkytinchi.phieudangky.columntable.huy.confirm':
-		'Are you sure you want to delete the registration for this credit section?',
+		'Are you sure you want to delete the registration for this section?',
 	'dangkytinchi.phieudangky.columntable.huy.luuy':
 		'Note: After canceling the class, the total remaining credits do not meet the minimum credit requirement',
 	'dangkytinchi.phieudangky.danhsachdadangky.title': 'List of Registered Sections',
@@ -122,7 +122,7 @@ export default {
 	'dangkytinchi.modallophuy.columntable.hocphidukien': 'Expected tuition fee',
 	'dangkytinchi.modallophuy.columntable.thaotac': 'Operation',
 	'dangkytinchi.modallophuy.columntable.tooltip.banmuondangkylai':
-		'Do you want to re-register for this credit class registration?',
+		'Do you want to re-register for this section registration?',
 	'dangkytinchi.modallophuy.columntable.btn.tooltip.hoantac': 'Undo',
 	'dangkytinchi.modallophuy.title': 'Section list has been deregistered',
 	'dangkytinchi.lichsuthaotac.title': 'Activity Log',
@@ -130,13 +130,13 @@ export default {
 	'dangkytinchi.lichsuthaotac.columntable.ip': 'IP Address',
 	'dangkytinchi.lichsuthaotac.columntable.thoigianthuchien': 'Action Date',
 	'dangkytinchi.lichsuthaotac.columntable.loaithaotac': 'Operation Type',
-	'dangkytinchi.lichsuthaotac.action.svRegister': 'Student registered credits',
-	'dangkytinchi.lichsuthaotac.action.svDelete': 'Student removed credit registration',
+	'dangkytinchi.lichsuthaotac.action.svRegister': 'Student registered sections',
+	'dangkytinchi.lichsuthaotac.action.svDelete': 'Student removed section registration',
 	'dangkytinchi.lichsuthaotac.action.staffRegister': 'Staff registered',
 	'dangkytinchi.lichsuthaotac.action.staffDelete': 'Staff removed registration',
 	'dangkytinchi.modallichhoc.title': 'Expected section schedule',
 	'dangkytinchi.modallichhoc.description.dangkyloptinchi':
-		'You have registered / selected <b>{countLop} credit classes</b>, with a total of <b>{countBuoi} class sessions</b>, from {start} to {end}',
+		'You have registered / selected <b>{countLop} sections</b>, with a total of <b>{countBuoi} class sessions</b>, from {start} to {end}',
 	'dangkytinchi.modallichhoc.description.cuthenhusau': 'Specifically as follows:',
 	'dangkytinchi.modallichhoc.chitiet.title': 'Class Session Details',
 	'dangkytinchi.modallichhoc.chitiet.thoigian': 'Date',
@@ -145,12 +145,12 @@ export default {
 	'dangkytinchi.modaldangky.title': 'New registration list',
 	'dangkytinchi.modaldangky.columntable.mahocphan': 'Course ID',
 	'dangkytinchi.modaldangky.columntable.tenhocphan': 'Course Name',
-	'dangkytinchi.modaldangky.columntable.loptinchi': 'Credit Class',
+	'dangkytinchi.modaldangky.columntable.loptinchi': 'Section',
 	'dangkytinchi.modaldangky.columntable.trangthai': 'Status',
 	'dangkytinchi.modaldangky.columntable.hangcho': 'Waitlist',
 	'dangkytinchi.modaldangky.success.hoanthanhdangky': 'Registration completed',
 	'dangkytinchi.modaldangky.dangky.title': 'Registration confirmation',
-	'dangkytinchi.modaldangky.dangky.alert': 'Confirm registration of the selected credit classes?',
+	'dangkytinchi.modaldangky.dangky.alert': 'Confirm registration of the selected sections?',
 	'dangkytinchi.modaldangky.dangky.warning':
 		'Note: The total number of currently registered credits is lower than the minimum number of credits required to register for the semester!',
 	'dangkytinchi.modaldangky.info': 'Please carefully review your registration results before finishing',
@@ -171,7 +171,7 @@ export default {
 	'dangkytinchi.ghichudangkytinchi.step1': 'Step 1: Select Course Type',
 	'dangkytinchi.ghichudangkytinchi.step2': 'Step 2: Corresponding to the selected type, select the course to register',
 	'dangkytinchi.ghichudangkytinchi.step3':
-		'Step 3: Select the desired credit class (only classes of courses that have not been registered, do not have schedule conflicts, and still have available slots can be selected)',
+		'Step 3: Select the desired section (only sections of courses that have not been registered, do not have schedule conflicts, and still have available slots can be selected)',
 	'dangkytinchi.ghichudangkytinchi.step4': 'Step 4: Review the list and press the <b>Register</b> button',
 	'dangkytinchi.ghichudangkytinchi.link.xemhuongdan': 'Watch the tutorial video <a>here</a>',
 	'dangkytinchi.ghichudangkytinchi.ghichu': 'Note',
