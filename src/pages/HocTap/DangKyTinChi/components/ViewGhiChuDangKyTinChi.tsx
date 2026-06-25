@@ -110,7 +110,7 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					<img
 						src={step1Image}
 						alt={intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1' })}
-						style={{ width: '100%', marginTop: 8, borderRadius: 4 }}
+						style={{ width: '100%', maxWidth: 800, marginTop: 8, borderRadius: 4 }}
 					/>
 					<div style={{ marginTop: 8 }}>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}</strong>:{' '}
@@ -126,7 +126,7 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					<img
 						src={step2Image}
 						alt={intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}
-						style={{ width: '100%', marginTop: 8, borderRadius: 4 }}
+						style={{ width: '100%', maxWidth: 800, marginTop: 8, borderRadius: 4 }}
 					/>
 				</Col>
 			</Row>
