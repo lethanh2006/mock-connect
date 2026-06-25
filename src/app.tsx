@@ -20,7 +20,8 @@ import NotFoundContent from './pages/exception/404';
 import { AppModules } from './services/base/constant';
 import type { IInitialState } from './services/base/typing';
 import './styles/global.less';
-import { currentRole, replaceRole } from './utils/ip';
+import { hasModulePermission } from './utils/keycloakRoles';
+import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from './utils/ip';
 
 export function rootContainer(container: React.ReactNode) {
 	return (
@@ -38,8 +39,10 @@ export async function getInitialState(): Promise<IInitialState> {
 	try {
 		const raw = sessionStorage.getItem('initialState');
 		if (raw) {
-			const { authorizedPermissions } = JSON.parse(raw) as Partial<IInitialState>;
-			Object.assign(initialState, { authorizedPermissions });
+			const { authorizedPermissions, authorizedRoles, authorizedRolesByClient, realmRoles } = JSON.parse(
+				raw,
+			) as Partial<IInitialState>;
+			Object.assign(initialState, { authorizedPermissions, authorizedRoles, authorizedRolesByClient, realmRoles });
 		}
 	} catch (e) {}
 
@@ -74,10 +77,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
 				} else if (
 					!isUncheckPath &&
 					currentRole &&
-					initialState?.authorizedPermissions?.length &&
-					!initialState?.authorizedPermissions?.find((item) => item.rsname === currentRole)
+					!hasModulePermission(initialState, currentRole, [qldtApiClientId, financeApiClientId])
 				) {
-					const hasReplaceRole = initialState.authorizedPermissions.some((item) => item.rsname === replaceRole);
+					const hasReplaceRole = hasModulePermission(initialState, replaceRole, [qldtApiClientId, financeApiClientId]);
 					const linkReplace = !!replaceRole && AppModules[replaceRole]?.url;
 
 					if (!!linkReplace && hasReplaceRole) {
