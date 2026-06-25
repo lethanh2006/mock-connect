@@ -18,6 +18,8 @@ _roadhog-api-doc
 .DS_Store
 npm-debug.log*
 yarn-error.log
+.env
+.env.*
 
 /coverage
 .idea
@@ -40,4 +42,3 @@ screenshot
 .eslintcache
 
 build
-
