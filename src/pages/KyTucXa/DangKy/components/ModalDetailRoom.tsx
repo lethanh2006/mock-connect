@@ -40,7 +40,7 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 	const { danhSach: danhSachKhoanThu } = useModel('kytucxa.khoanthu');
 	const { tienIchMap } = useModel('kytucxa.tienich');
 	const { loaiPhongMap } = useModel('kytucxa.loaiphong');
-
+	
 	const { slotLeft, numBedLabel, displayImages, tienIchAll } = useMemo(() => {
 		if (!phong) return { slotLeft: 0, numBedLabel: '', displayImages: [], tienIchAll: [] };
 		const left = Math.max(0, phong.soLuongToiDa - phong.soLuongHienTai);
@@ -215,7 +215,11 @@ const ModalDetailRoomKTX: React.FC<RoomDetailModalProps> = ({ onDangKy, maPhongD
 						}}
 						className={`ktx-modal__btn-register`}
 					>
-						{phong.ma === maPhongDaDangKy ? intl.formatMessage({ id: 'kytucxa.dangky.success.paymentNow' }) : intl.formatMessage({ id: 'kytucxa.dangky.modal.register' })}
+						{phong.ma === maPhongDaDangKy 
+							? intl.formatMessage({ id: 'kytucxa.dangky.success.paymentNow' }) 
+							: slotLeft === 0 
+								? intl.formatMessage({ id: 'kytucxa.dangky.card.fullSlot' }) 
+								: intl.formatMessage({ id: 'kytucxa.dangky.modal.register' })}
 					</Button>
 				</div>
 			</div>

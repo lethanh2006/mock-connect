@@ -15,6 +15,7 @@ export default {
     'kytucxa.dangky.card.moreAmenities': '+ {tienIchMore} tiện ích khác',
     'kytucxa.dangky.card.registered': 'ĐÃ ĐĂNG KÝ',
     'kytucxa.dangky.card.register': 'ĐĂNG KÝ',
+    'kytucxa.dangky.card.fullSlot': 'HẾT CHỖ',
 
     // Đăng ký - MODAL CHI TIẾT
     'kytucxa.dangky.modal.title': 'Chi tiết phòng Ký túc xá',
@@ -172,6 +173,10 @@ export default {
     'kytucxa.dangky.success.financial.title': 'Chuẩn bị Tài chính',
     'kytucxa.dangky.success.financial.1': 'Xác nhận thanh toán tiền thuê tháng đầu tiên và tiền đặt cọc (tương đương 01 tháng tiền thuê) trước khi nhận phòng',
     'kytucxa.dangky.success.checkin.title': 'Thông tin Nhận phòng',
+    'kytucxa.dangky.success.checkin.dateLabel': 'Ngày:',
+    'kytucxa.dangky.success.checkin.locationLabel': 'Địa điểm:',
+    'kytucxa.dangky.success.checkin.hoursLabel': 'Giờ làm việc:',
+    'kytucxa.dangky.success.checkin.contactLabel': 'Liên hệ:',
     'kytucxa.dangky.success.checkin.date': 'Sẽ có thông báo cụ thể sau',
     'kytucxa.dangky.success.checkin.hours': '08:00 - 17:00, Thứ Hai đến Thứ Sáu',
     'kytucxa.dangky.success.checkin.contact': 'residential@vinuni.edu.vn',

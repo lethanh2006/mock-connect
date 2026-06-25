@@ -8,10 +8,11 @@ interface TableEmergencyContactProps {
 	value?: EmergencyContact[];
 	onChange?: (value: EmergencyContact[]) => void;
 	onReload?: () => Promise<void> | void;
+	disabled?: boolean;
 }
 
 const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) => {
-	const { value = [], onChange } = props;
+	const { value = [], onChange, disabled } = props;
 	const intl = useIntl();
 	const [visibleForm, setVisibleForm] = useState(false);
 	const [editingRecord, setEditingRecord] = useState<EmergencyContact | null>(null);
@@ -46,7 +47,26 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 		setVisibleForm(false);
 	};
 
-	const columns = [
+	const actionColumn = {
+		title: intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.action' }),
+		dataIndex: 'action',
+		width: 100,
+		align: 'center' as const,
+		fixed: 'right' as const,
+		render: (_text: any, record: EmergencyContact, index: number) => (
+			<Space>
+				<Button type="text" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+				<Popconfirm
+					title={intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.deleteConfirm' })}
+					onConfirm={() => handleDelete(index)}
+				>
+					<Button type="text" danger icon={<DeleteOutlined />} />
+				</Popconfirm>
+			</Space>
+		),
+	};
+
+	const baseColumns = [
 		{
 			title: intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.stt' }),
 			dataIndex: 'index',
@@ -84,38 +104,24 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 			dataIndex: 'address',
 			width: 150,
 		},
-		{
-			title: intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.action' }),
-			dataIndex: 'action',
-			width: 100,
-			align: 'center' as const,
-			fixed: 'right' as const,
-			render: (_text: any, record: EmergencyContact, index: number) => (
-				<Space>
-					<Button type="text" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
-					<Popconfirm
-						title={intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.deleteConfirm' })}
-						onConfirm={() => handleDelete(index)}
-					>
-						<Button type="text" danger icon={<DeleteOutlined />} />
-					</Popconfirm>
-				</Space>
-			),
-		},
 	];
+
+	const columns = disabled ? baseColumns : [...baseColumns, actionColumn];
 
 	return (
 		<div>
 			{value.length > 0 ? (
 				<>
-					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-						<Space>
-							<Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-								{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
-							</Button>
-						</Space>
-					</div>
-					
+					{!disabled && (
+						<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+							<Space>
+								<Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+									{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
+								</Button>
+							</Space>
+						</div>
+					)}
+
 					<Table
 						dataSource={value}
 						columns={columns}
@@ -126,9 +132,11 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 					/>
 				</>
 			) : (
-				<Button type="dashed" block icon={<PlusOutlined />} onClick={handleAdd} style={{ marginBottom: 16 }}>
-					{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
-				</Button>
+				!disabled && (
+					<Button type="dashed" block icon={<PlusOutlined />} onClick={handleAdd} style={{ marginBottom: 16 }}>
+						{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.add' })}
+					</Button>
+				)
 			)}
 
 			<FormEmergencyContact

@@ -166,7 +166,11 @@ const CardRoomKTX: React.FC<RoomCardProps> = ({ phong, onXemChiTiet, onDangKy, m
 							}
 						}}
 					>
-						{phong.ma === maPhongDaDangKy ? intl.formatMessage({ id: 'kytucxa.dangky.success.paymentNow' }) : intl.formatMessage({ id: 'kytucxa.dangky.card.register' })}
+						{phong.ma === maPhongDaDangKy 
+							? intl.formatMessage({ id: 'kytucxa.dangky.success.paymentNow' }) 
+							: slotLeft === 0 
+								? intl.formatMessage({ id: 'kytucxa.dangky.card.fullSlot' }) 
+								: intl.formatMessage({ id: 'kytucxa.dangky.card.register' })}
 					</Button>
 				</div>
 			</div>

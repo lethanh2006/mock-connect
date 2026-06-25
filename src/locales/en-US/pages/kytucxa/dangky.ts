@@ -15,6 +15,7 @@ export default {
 	'kytucxa.dangky.card.moreAmenities': '+ {tienIchMore} other amenities',
 	'kytucxa.dangky.card.registered': 'REGISTERED',
 	'kytucxa.dangky.card.register': 'REGISTER',
+	'kytucxa.dangky.card.fullSlot': 'FULL SLOT',
 
 	// Registration - MODAL DETAIL
 	'kytucxa.dangky.modal.title': 'Dormitory Details',
@@ -172,6 +173,10 @@ export default {
 	'kytucxa.dangky.success.financial.title': 'Financial Preparation',
 	'kytucxa.dangky.success.financial.1': 'Confirm payment of the first month\'s rent and security deposit (equivalent to 01 month\'s rent) before check-in',
 	'kytucxa.dangky.success.checkin.title': 'Check-in Information',
+	'kytucxa.dangky.success.checkin.dateLabel': 'Date:',
+	'kytucxa.dangky.success.checkin.locationLabel': 'Location:',
+	'kytucxa.dangky.success.checkin.hoursLabel': 'Hours:',
+	'kytucxa.dangky.success.checkin.contactLabel': 'Contact:',
 	'kytucxa.dangky.success.checkin.date': 'To be announced',
 	'kytucxa.dangky.success.checkin.hours': '08:00 - 17:00, Monday to Friday',
 	'kytucxa.dangky.success.checkin.contact': 'residential@vinuni.edu.vn',

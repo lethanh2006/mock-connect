@@ -61,6 +61,10 @@ export default {
 	'kytucxa.lichsu.detail.field.emergencyContactName': 'Contact Person',
 	'kytucxa.lichsu.detail.field.emergencyRelationship': 'Relationship',
 	'kytucxa.lichsu.detail.field.emergencyContactNumber': 'Emergency Contact Number',
+
+	// Tab labels
+	'kytucxa.lichsu.detail.tab.checkinPrep': 'Check-in Prep',
+	'kytucxa.lichsu.detail.tab.payment': 'Payment Information',
 	
 	// 'kytucxa.lichsu.detail.section.healthInfo': 'Health & Special Requirements',
 	// 'kytucxa.lichsu.detail.field.haveHealthInsurance': 'Have Health Insurance?',

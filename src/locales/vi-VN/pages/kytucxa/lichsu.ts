@@ -61,6 +61,10 @@ export default {
     'kytucxa.lichsu.detail.field.emergencyRelationship': 'Mối quan hệ',
     'kytucxa.lichsu.detail.field.emergencyContactNumber': 'Số điện thoại khẩn cấp',
     
+    // Tab labels
+    'kytucxa.lichsu.detail.tab.checkinPrep': 'Chuẩn bị Nhận phòng',
+    'kytucxa.lichsu.detail.tab.payment': 'Thông tin Thanh toán',
+    
     // 'kytucxa.lichsu.detail.section.healthInfo': 'Sức khỏe & Yêu cầu đặc biệt',
     // 'kytucxa.lichsu.detail.field.haveHealthInsurance': 'Có Bảo hiểm y tế không?',
     // 'kytucxa.lichsu.detail.field.specialRequirements': 'Yêu cầu đặc biệt',

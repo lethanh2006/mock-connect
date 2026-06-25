@@ -1,15 +1,13 @@
-import { Button, Checkbox, Col, Form, Input, Modal, Row, Steps, Typography, message } from 'antd';
+import { Button,  Form, Modal, Steps, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import './style.less';
 import dayjs from 'dayjs';
 import { resetFieldsForm } from '@/utils/utils';
 import { KyTucXa } from '@/services/KyTucXa/typings';
-import rules from '@/utils/rules';
-import TableEmergencyContactKTX from './TableEmergencyContact';
+import FormStep1Content from './FormStep1Content';
+import FormStep2Content from './FormStep2Content';
 import ModalSuccessRegistration from './ModalSuccessRegistration';
-
-const { TextArea } = Input;
 
 const FormDangKyKTX = () => {
 	const intl = useIntl();
@@ -58,12 +56,12 @@ const FormDangKyKTX = () => {
 					return validMembers.length > 0
 						? validMembers.map((member: KyTucXa.IThanhVienGiaDinh, index: number) => ({
 							id: Date.now().toString() + index,
-							emergencyContactName: `${member.hoDem || ''} ${member.ten || ''}`.trim() || '-',
-							emergencyContactNumber: member.soDienThoai || '-',
-							emergencyRelationship: member.loaiThanhVien || '-',
-							secondaryContactNumber: '-',
-							emergencyEmail: member.email || '-',
-							address: member.diaChiHienNay?.diaChi || member.hoKhauThuongTru?.diaChi || thongTinSinhVien.hoKhauThuongTru || '-',
+							emergencyContactName: `${member.hoDem || ''} ${member.ten || ''}`.trim() || '',
+							emergencyContactNumber: member.soDienThoai || '',
+							emergencyRelationship: member.loaiThanhVien || '',
+							secondaryContactNumber: member.soDienThoai || '',
+							emergencyEmail: member.email || '',
+							address: member.diaChiHienNay?.diaChi || member.hoKhauThuongTru?.diaChi || thongTinSinhVien.hoKhauThuongTru || '',
 						}))
 						: [];
 				})(),
@@ -191,226 +189,16 @@ const FormDangKyKTX = () => {
 
 					<Form form={form} layout="vertical" preserve={true} className="ktx-register-form">
 						<div style={{ display: currentStep === 0 ? 'block' : 'none' }}>
-							<div className="ktx-register-section">
-								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.terms' })}</Typography.Title>
-								<div className="ktx-register-section__content">
-									<div className="ktx-terms-content">
-										<ol className="ktx-terms-list">
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.terms.1' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.terms.2' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.terms.3' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.terms.4' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.terms.5' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.terms.6' })}</li>
-										</ol>
-									</div>
-								</div>
-							</div>
-
-							<div className="ktx-register-section">
-								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.studentInfo' })}</Typography.Title>
-								<div className="ktx-register-section__content">
-									<Row gutter={16}>
-										<Col xs={24} md={12}>
-											<Form.Item name="fullName" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.fullName' })}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="studentId" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.studentId' })}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="dateOfBirth" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.dateOfBirth' })}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="gender" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.gender' })}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="email" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.email' })} rules={[{ required: true }]}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="phoneNumber" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.phoneNumber' })} rules={[...rules.required]}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="program" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.program' })} rules={[{ required: true }]}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="college" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.college' })} rules={[{ required: true }]}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="identityNumber" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.identityNumber' })} rules={[...rules.required]}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={12}>
-											<Form.Item name="dateOfIssue" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.dateOfIssue' })} rules={[...rules.required]}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={24}>
-											<Form.Item name="placeOfIssue" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.placeOfIssue' })} rules={[...rules.required]}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24}>
-											<Form.Item name="nationality" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.nationality' })} rules={[...rules.required]}>
-												<Input disabled />
-											</Form.Item>
-										</Col>
-										<Col xs={24} md={24}>
-											<Form.Item name="permanentHomeAddress" label={intl.formatMessage({ id: 'kytucxa.dangky.form.field.permanentHomeAddress' })} rules={[...rules.required]}>
-												<TextArea rows={2} disabled />
-											</Form.Item>
-										</Col>
-									</Row>
-								</div>
-							</div>
-
-							<div className="ktx-register-section mt-4">
-								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.emergencyContact' })}</Typography.Title>
-								<div className="ktx-register-section__content">
-									<Typography.Text style={{ display: 'block', marginBottom: 12, fontSize: 13 }}>
-										<span style={{ color: '#ff4d4f', marginRight: 4 }}>*</span>
-										{intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.msg.min2Contacts' })}
-									</Typography.Text>
-									<Form.Item
-										name="emergencyContacts"
-										rules={[
-											{
-												validator: (_, value) => {
-													if (!value || value.length < 2) {
-														return Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.table.emergencyContact.msg.min2Contacts' })));
-													}
-													const isInvalid = value.some((item: any) => {
-														const name = item?.emergencyContactName?.trim();
-														const relationship = item?.emergencyRelationship?.trim();
-														const number = item?.emergencyContactNumber?.trim();
-														const addr = item?.address?.trim();
-
-														return !name || name === '-' ||
-															!relationship || relationship === '-' ||
-															!number || number === '-' ||
-															!addr || addr === '-';
-													});
-													if (isInvalid) {
-														return Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.form.msg.emergencyContactsRequired' })));
-													}
-													return Promise.resolve();
-												}
-											}
-										]}
-									>
-										<TableEmergencyContactKTX onReload={handleReloadEmergencyContacts} />
-									</Form.Item>
-								</div>
-							</div>
-							<div className="ktx-register-section mt-4">
-								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.privacyPolicy' })}</Typography.Title>
-								<div className="ktx-register-section__content">
-									<div className="ktx-terms-content">
-										<p className="fw-500" style={{ marginBottom: 12 }}>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.desc' })}</p>
-										<ol className="ktx-terms-list">
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.1' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.2' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.3' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.4' })}</li>
-										</ol>
-									</div>
-								</div>
-							</div>
-
-							<div className="ktx-register-section mt-4">
-								<div className="ktx-register-section__content">
-									<Form.Item name="confirmInfo" valuePropName="checked" rules={[{ validator: (_, value) => value ? Promise.resolve() : Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.form.msg.mustAgree' }))) }]}>
-										<Checkbox className="ktx-confirm-checkbox ktx-confirm-checkbox-step1">
-											<span className="ktx-confirm-text">
-												{intl.formatMessage({ id: 'kytucxa.dangky.form.privacy.confirmText' })}
-											</span>
-										</Checkbox>
-									</Form.Item>
-								</div>
-							</div>
+							<FormStep1Content 
+								showCheckbox={true} 
+								disabled={false} 
+								onReload={handleReloadEmergencyContacts} 
+							/>
 						</div>
 
 
-						<div className="ktx-step2-wrapper" style={{ display: currentStep === 1 ? 'block' : 'none' }}>
-							<div className="ktx-register-section">
-								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.section.commitments' })}</Typography.Title>
-								<div className="ktx-register-section__content">
-									<div className="ktx-terms-content">
-										<p className="fw-500" style={{ marginBottom: 12 }}>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.desc' })}</p>
-										<ol className="ktx-terms-list">
-											<li>
-												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.1.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.1.content' })}
-											</li>
-											<li>
-												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.2.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.2.content' })}
-											</li>
-											<li>
-												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.3.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.3.content' })}
-											</li>
-											<li>
-												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.4.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.4.content' })}
-											</li>
-											<li>
-												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.5.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.5.content' })}
-											</li>
-											<li>
-												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.6.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.6.content' })}
-											</li>
-											<li>
-												<strong>{intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.7.title' })}:</strong> {intl.formatMessage({ id: 'kytucxa.dangky.form.commitments.7.content' })}
-											</li>
-										</ol>
-									</div>
-								</div>
-							</div>
-
-							<div className="ktx-register-section mt-4">
-								<Typography.Title level={5} className="ktx-section-title-arrow">{intl.formatMessage({ id: 'kytucxa.dangky.form.step.waiver' })}</Typography.Title>
-								<div className="ktx-register-section__content">
-									<div className="ktx-terms-content">
-										<p className="fw-500" style={{ marginBottom: 12 }}>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.warning' })}</p>
-										<ol className="ktx-terms-list">
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.1' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.2' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.3' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.4' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.5' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.6' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.7' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.8' })}</li>
-											<li>{intl.formatMessage({ id: 'kytucxa.dangky.form.waiver.9' })}</li>
-										</ol>
-									</div>
-								</div>
-							</div>
-
-							<div className="ktx-register-section mt-4">
-								<div className="ktx-register-section__content">
-									<Form.Item name="confirmTerms" valuePropName="checked" rules={[{ validator: (_, value) => value ? Promise.resolve() : Promise.reject(new Error(intl.formatMessage({ id: 'kytucxa.dangky.form.msg.mustAgree' }))) }]}>
-										<Checkbox className="ktx-confirm-checkbox">
-											<span className="ktx-confirm-text">
-												{intl.formatMessage({ id: 'kytucxa.dangky.form.confirmText' })}
-											</span>
-										</Checkbox>
-									</Form.Item>
-								</div>
-							</div>
+						<div style={{ display: currentStep === 1 ? 'block' : 'none' }}>
+							<FormStep2Content showCheckbox={true} />
 						</div>
 					</Form>
 

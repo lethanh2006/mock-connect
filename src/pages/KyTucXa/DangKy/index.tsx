@@ -25,6 +25,7 @@ const DangKyKyTucXaPage = () => {
 	const { record: thongTinSinhVien } = useModel('kytucxa.thongtinsinhvien');
 	const { danhSach: danhSachPhong, getModel: getPhongModel, loading: loadingPhong, setRecord: setPhongRecord, setVisibleForm, setIsView } = useModel('kytucxa.phong');
 	const { danhSach: danhSachLichSu, getModel: getLichSu } = useModel('kytucxa.dangky');
+	const { getAllModel: getAllDanhTienIch } = useModel('kytucxa.tienich');
 
 	const [selectedToa, setSelectedToa] = useState<string | undefined>(undefined);
 	const [selectedCapacity, setSelectedCapacity] = useState<number | undefined>(undefined);
@@ -36,6 +37,12 @@ const DangKyKyTucXaPage = () => {
 			(item) => item.trangThaiThanhToan !== ETrangThaiThanhToan.HUY,
 		);
 	}, [danhSachLichSu]);
+
+	useEffect(() => {
+		getDotDangKy();
+		getLichSu();
+		getAllDanhTienIch();
+	}, []);
 
 	useEffect(() => {
 		if (recordDot?._id) {
