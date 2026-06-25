@@ -8,8 +8,8 @@ export default {
 	'dangkytinchi.filter.hocphan.total.prefix': 'courses',
 	'dangkytinchi.filter.lop.total.prefix': 'sections',
 
-	'dangkytinchi.loaidangky.lop-hanh-chinh': 'Classes according to the teaching plan',
-	'dangkytinchi.loaidangky.khoa-nganh': 'According to the curriculum',
+	'dangkytinchi.loaidangky.lop-hanh-chinh': 'Planned Courses',
+	'dangkytinchi.loaidangky.khoa-nganh': 'By Curriculum',
 	'dangkytinchi.loaidangky.khoa-nganh-2': 'According to the second major curriculum',
 	'dangkytinchi.loaidangky.tat-ca': 'All courses',
 
