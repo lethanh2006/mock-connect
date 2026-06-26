@@ -23,13 +23,6 @@ const SelectActivitiesTypeDomain = (props: {
 		getAllModel(!!isSetRecord, { order: 1 }, { ...condition });
 	}, [JSON.stringify(condition)]);
 
-	const fixedOption = {
-		key: 'award-recognition',
-		value: 'award-recognition',
-		label: 'Award & Recognition',
-		rawData: null,
-	};
-
 	const dynamicOptions = (danhSach || [])
 		.filter((item) => {
 			if (item.isActive) return true;
@@ -47,7 +40,7 @@ const SelectActivitiesTypeDomain = (props: {
 			rawData: item,
 		}));
 
-	const options = [...dynamicOptions, fixedOption];
+	const options = [...dynamicOptions];
 
 	return (
 		<Select
