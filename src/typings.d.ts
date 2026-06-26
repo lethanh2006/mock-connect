@@ -23,6 +23,7 @@ declare const APP_CONFIG_SENTRY_DSN: string;
 declare const APP_CONFIG_KEYCLOAK_AUTHORITY: string;
 declare const APP_CONFIG_PREFIX_OF_KEYCLOAK_CLIENT_ID: string;
 declare const APP_CONFIG_APP_VERSION: string;
+declare const APP_CONFIG_BASE_PATH: string;
 
 declare const APP_CONFIG_TEN_TRUONG: string;
 declare const APP_CONFIG_TIEN_TO_TRUONG: string;

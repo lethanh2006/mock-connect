@@ -2,6 +2,7 @@ import Footer from '@/components/Footer';
 import LoginWithKeycloak from '@/pages/user/Login/KeycloakLogin';
 import { adminlogin, getUserInfo } from '@/services/base/api';
 import { keycloakAuthority } from '@/utils/ip';
+import { getPublicAssetPath } from '@/utils/path';
 import rules from '@/utils/rules';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Tabs, message } from 'antd';
@@ -88,7 +89,7 @@ const Login: React.FC = () => {
 					<div className={styles.top}>
 						<div className={styles.header}>
 							<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-								<img alt='logo' className={styles.logo} src='/logo-full-white.svg' />
+								<img alt='logo' className={styles.logo} src={getPublicAssetPath('logo-full-white.png')} />
 							</div>
 						</div>
 					</div>
