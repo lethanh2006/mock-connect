@@ -10,7 +10,7 @@ import { BaiTap } from '@/services/DaoTao/BaiTap/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
+import { Button, Card, Carousel, Empty, Segmented, Space, Tag, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { history, Link, useIntl, useModel } from 'umi';
@@ -183,7 +183,6 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 			level={2}
 			hideInnerCard
 			className='card-baitap-dashboard'
-			variant='borderless'
 			title={
 				<>
 					{intl.formatMessage({ id: 'trangchu.baitap.title' })}{' '}
@@ -260,8 +259,8 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 				</Space>
 			}
 		>
-			<div className={`${isDashBoard ? 'content-wrapper' : ''}`}>
-				<div ref={containerRef}>
+			<Card className={`${isDashBoard && 'content-wrapper'} `} variant='borderless'>
+				<div ref={containerRef} style={{ margin: -18 }}>
 					{!!dataToUse.length ? (
 						<Carousel
 							ref={setCarouselRef}
@@ -283,7 +282,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 						/>
 					)}
 				</div>
-			</div>
+			</Card>
 		</PageCard>
 	);
 };
