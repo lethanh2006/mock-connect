@@ -427,30 +427,6 @@ export default [
 		],
 	},
 
-	{
-		name: 'Activity',
-		icon: 'AppstoreOutlined',
-		path: 'activity',
-		access: 'cctFilter',
-		routes: [
-			{
-				name: 'Register',
-				path: 'list-activity',
-				component: 'CCT/Activity',
-			},
-			{
-				name: 'MyActivity',
-				path: 'my-activity',
-				component: 'CCT/History',
-			},
-			{
-				name: 'MyCCT',
-				path: 'co-curricular-transcript',
-				component: 'CCT/MyCCT',
-			},
-		],
-	},
-
 	// GROUP TITLE
 	{
 		name: 'OtherGroup',
