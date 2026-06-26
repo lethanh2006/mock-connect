@@ -39,10 +39,12 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		disableFilterModal,
 		externalConditions,
 		getData,
+		size,
 	} = useTableContext();
 
 	const filtersDependency = JSON.stringify(filters ?? []);
 	const externalConditionsDependency = JSON.stringify(externalConditions ?? {});
+	const previousFiltersDependencyRef = useRef(filtersDependency);
 
 	const { handleFilter, handleSearch, finalColumns } = useTableColumns({
 		columns: props.columns,
@@ -71,10 +73,6 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	);
 
 	useEffect(() => {
-		setPage(1);
-	}, [filtersDependency]);
-
-	useEffect(() => {
 		// Block text selection during resize
 		const handleSelectStart = (e: Event) => {
 			if (isResizingRef.current) {
@@ -87,8 +85,17 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	}, []);
 
 	useEffect(() => {
+		const filtersChanged = previousFiltersDependencyRef.current !== filtersDependency;
+		if (filtersChanged) {
+			previousFiltersDependencyRef.current = filtersDependency;
+			if (page !== 1) {
+				setPage(1);
+				return;
+			}
+		}
+
 		getData?.(params);
-	}, [...dependencies, filtersDependency, externalConditionsDependency, condition, sort]);
+	}, [...dependencies, page, limit, filtersDependency, externalConditionsDependency, condition, sort]);
 
 	useEffect(() => {
 		return () => {
@@ -163,7 +170,19 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		);
 	}, []);
 
-	const onChange = (pagination: PaginationProps, fil: Record<string, FilterValue | null>, sorter: any) => {
+	const onChange = (
+		pagination: PaginationProps,
+		fil: Record<string, FilterValue | null>,
+		sorter: any,
+		extra?: { action?: 'paginate' | 'sort' | 'filter' },
+	) => {
+		const { current, pageSize } = pagination;
+		if (extra?.action === 'paginate') {
+			setPage(current);
+			setLimit(pageSize);
+			return;
+		}
+
 		// Skip sort if triggered within 300ms after resize (avoid resize->sort on mouseup)
 		const skipSort = sorter?.field && Date.now() - lastResizeEndTimeRef.current < 300;
 		if (skipSort) {
@@ -203,10 +222,16 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		if (!skipSort) {
 			const { order, field } = sorter;
 			const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
-			if (sorter && setSort) setSort({ [Array.isArray(field) ? field.join('.') : field]: orderValue });
+			const sortField = field ?? sorter?.column?.dataIndex;
+			if (setSort) {
+				if (!orderValue && extra?.action === 'sort') {
+					setSort({});
+				} else if (sortField) {
+					setSort({ [Array.isArray(sortField) ? sortField.join('.') : sortField]: orderValue });
+				}
+			}
 		}
 
-		const { current, pageSize } = pagination;
 		setPage(current);
 		setLimit(pageSize);
 	};
@@ -216,6 +241,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 		return (
 			<Table
+				size={size}
 				scroll={{ x: totalWidth ?? props.scroll?.x ?? 'max-content', ...props.scroll }}
 				rowSelection={
 					props?.rowSelection
@@ -340,7 +366,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 						{ id: 'global.table.index.export.fileName' },
 						{ title: (title ?? intl.formatMessage({ id: 'global.table.index.export.defaultTitle' })) as any },
 					)}
-					otherQuery={props.exportParam ?? params}
+					condition={props.params}
+					otherQuery={props.exportParam ?? props.params}
 					filters={filters}
 				/>
 			) : null}

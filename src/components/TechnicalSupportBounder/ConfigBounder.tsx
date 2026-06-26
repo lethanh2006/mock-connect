@@ -30,9 +30,6 @@ const ConfigBounder = (props: { children?: any }) => {
 	return (
 		<ConfigProvider
 			locale={locale}
-			form={{
-				requiredMark: false,
-			}}
 			renderEmpty={() => (
 				<Empty
 					style={{ marginTop: 32, marginBottom: 32 }}
