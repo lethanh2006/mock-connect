@@ -1,16 +1,24 @@
-import step1Image from '@/assets/dktc/step1.jpg';
-import step2Image from '@/assets/dktc/step2.jpg';
+import step1ENImage from '@/assets/dktc/step1-en.png';
+import step1VNImage from '@/assets/dktc/step1-vn.png';
+import step2ENImage from '@/assets/dktc/step2-en.png';
+import step2VNImage from '@/assets/dktc/step2-vn.png';
 import ModalExpandable from '@/components/Table/ModalExpandable';
 import { tinhChatDangKyTC } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDate, formatDateTime } from '@/utils/formatDate';
 import { Col, Divider, Row } from 'antd';
-import { useIntl, useModel } from 'umi';
+import { getLocale, useIntl, useModel } from 'umi';
 
 const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boolean) => void }) => {
 	const { visible, setVisible } = props;
+	const locale = getLocale();
 	const intl = useIntl();
 	const { record: recHocKy } = useModel('daotao.hocky');
 	const { dotDangKyHienTai } = useModel('daotao.dotdangkytinchi');
+	const contentGapStyle = { display: 'flex', flexDirection: 'column', gap: 8 } as const;
+	const stepImageStyle = { width: '100%', maxWidth: 800, borderRadius: 4 };
+
+	const step1Image = locale === 'vi-VN' ? step1VNImage : step1ENImage;
+	const step2Image = locale === 'vi-VN' ? step2VNImage : step2ENImage;
 
 	return (
 		<ModalExpandable
@@ -20,21 +28,21 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 			onCancel={() => setVisible(false)}
 			width={900}
 		>
-			<Row gutter={[12, 12]}>
+			<Row gutter={[4, 4]}>
 				<Col span={24}>
 					<Divider className='divider-big-title' orientation='left' style={{ marginTop: 0, marginBottom: 8 }}>
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.thongtinkyhoc' })}
 					</Divider>
 				</Col>
 
-				<Col span={24}>
+				<Col span={24} style={contentGapStyle}>
 					<div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tenhocky' })}</strong>: {recHocKy?.ten ?? '--'}
 					</div>
-					<div style={{ marginTop: 8 }}>
+					<div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.sotuanhoc' })}</strong>: {recHocKy?.soTuan ?? '--'}
 					</div>
-					<div style={{ marginTop: 8 }}>
+					<div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.thoigianbatdauhocky' })}</strong>:{' '}
 						{recHocKy?.thoiGianBatDau ? formatDate(recHocKy.thoiGianBatDau) : '--'}
 					</div>
@@ -48,20 +56,20 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 							</Divider>
 						</Col>
 
-						<Col span={24}>
+						<Col span={24} style={contentGapStyle}>
 							<div>
 								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tendotdangky' })}</strong>:{' '}
 								{dotDangKyHienTai?.ten ?? '--'}
 							</div>
-							<div style={{ marginTop: 8 }}>
+							<div>
 								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.batdau' })}</strong>:{' '}
 								{dotDangKyHienTai?.thoiGianBatDau ? formatDateTime(dotDangKyHienTai.thoiGianBatDau) : '--'}
 							</div>
-							<div style={{ marginTop: 8 }}>
+							<div>
 								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.ketthuc' })}</strong>:{' '}
 								{dotDangKyHienTai?.thoiGianKetThuc ? formatDateTime(dotDangKyHienTai.thoiGianKetThuc) : '--'}
 							</div>
-							<div style={{ marginTop: 8 }}>
+							<div>
 								<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tinhchat' })}</strong>:{' '}
 								{dotDangKyHienTai?.tinhChatDangKy
 									? intl.formatMessage({ id: tinhChatDangKyTC[dotDangKyHienTai.tinhChatDangKy] })
@@ -77,20 +85,20 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					</Divider>
 				</Col>
 
-				<Col span={24}>
+				<Col span={24} style={contentGapStyle}>
 					<div>
-						<div style={{ marginTop: 8 }}>
-							<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan' })}</strong>:{' '}
-							{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan.mota' })}
-						</div>
+						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan' })}</strong>:{' '}
+						{intl.formatMessage({ id: 'dangkytinchi.duongdan.tatcahocphan.mota' })}
+					</div>
+					<div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theokehoachgiangday.mota' })}
 					</div>
-					<div style={{ marginTop: 8 }}>
+					<div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhdaotao' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhdaotao.mota' })}
 					</div>
-					{/* <div style={{ marginTop: 8 }}>
+					{/* <div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.theochuongtrinhnganh2.mota' })}
 					</div> */}
@@ -102,7 +110,7 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					</Divider>
 				</Col>
 
-				<Col span={24}>
+				<Col span={24} style={contentGapStyle}>
 					<div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1' })}</strong>:{' '}
 						{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1.mota' })}
@@ -110,9 +118,9 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					<img
 						src={step1Image}
 						alt={intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc1' })}
-						style={{ width: '100%', maxWidth: 800, marginTop: 8, borderRadius: 4 }}
+						style={stepImageStyle}
 					/>
-					<div style={{ marginTop: 8 }}>
+					<div>
 						<strong>{intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}</strong>:{' '}
 						{intl.formatMessage(
 							{ id: 'dangkytinchi.duongdan.buoc2.mota' },
@@ -126,7 +134,7 @@ const ViewGhiChuDangKyTinChi = (props: { visible: boolean; setVisible: (val: boo
 					<img
 						src={step2Image}
 						alt={intl.formatMessage({ id: 'dangkytinchi.duongdan.buoc2' })}
-						style={{ width: '100%', maxWidth: 800, marginTop: 8, borderRadius: 4 }}
+						style={stepImageStyle}
 					/>
 				</Col>
 			</Row>
