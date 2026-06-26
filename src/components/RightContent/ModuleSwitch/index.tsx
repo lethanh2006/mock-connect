@@ -1,3 +1,4 @@
+import { getPublicAssetPath } from '@/utils/path';
 import { Tooltip } from 'antd';
 import { useMediaQuery } from 'react-responsive';
 import { useIntl } from 'umi';
@@ -15,7 +16,7 @@ const ModuleSwitch = () => {
 				placement='bottom'
 			>
 				<div className='header-menu-item'>
-					<img src='/icons/modules.svg' alt='apps' />
+					<img src={getPublicAssetPath('icons/modules.svg')} alt='apps' />
 				</div>
 			</Tooltip>
 		</HeaderDropdown>
