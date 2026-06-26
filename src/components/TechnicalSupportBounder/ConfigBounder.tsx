@@ -1,6 +1,6 @@
 import { primaryColor } from '@/services/base/constant';
-import { getLocale } from '@umijs/max';
-import { ConfigProvider, Spin } from 'antd';
+import { getIntl, getLocale } from '@umijs/max';
+import { ConfigProvider, Empty, Spin } from 'antd';
 import { useEffect } from 'react';
 
 /** Chú ý các route để layout: false thì phải bọc bởi ConfigBound để nhận styles */
@@ -23,6 +23,13 @@ const ConfigBounder = (props: { children?: any }) => {
 	return (
 		<ConfigProvider
 			locale={locale}
+			renderEmpty={() => (
+				<Empty
+					style={{ marginTop: 32, marginBottom: 32 }}
+					description={getIntl().formatMessage({ id: 'global.table.index.empty' })}
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+				/>
+			)}
 			theme={{
 				token: {
 					borderRadius: 4,
@@ -32,6 +39,7 @@ const ConfigBounder = (props: { children?: any }) => {
 				hashed: false,
 				cssVar: { prefix: '' },
 				components: {
+					Empty: {},
 					Carousel: {
 						dotHeight: 6,
 						dotOffset: 2, // khoảng cách từ bottom

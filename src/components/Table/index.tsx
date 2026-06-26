@@ -145,6 +145,7 @@ const TableBase = <T extends object = any>(props: TableBaseProps<T>) => {
 		<TableProvider<T>
 			value={{
 				...props,
+				size: props.size ?? props.otherProps?.size,
 				selectedIds,
 				setSelectedIds,
 				loading,

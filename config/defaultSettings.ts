@@ -1,4 +1,5 @@
 import { Settings as LayoutSettings } from '@ant-design/pro-layout';
+import { getPublicAssetPath } from '../src/utils/path';
 
 const defaultSettings: LayoutSettings & {
 	logo?: string;
@@ -10,7 +11,7 @@ const defaultSettings: LayoutSettings & {
 	fixedHeader: true,
 	fixSiderbar: true,
 	colorWeak: true,
-	logo: '/logo-text.png',
+	logo: getPublicAssetPath('logo-text.png'),
 	iconfontUrl: '',
 	siderWidth: 220,
 };
