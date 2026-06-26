@@ -260,7 +260,7 @@ const CardBaiTapDashboard = (props: { isDashBoard?: boolean }) => {
 			}
 		>
 			<Card className={`${isDashBoard && 'content-wrapper'} `} variant='borderless'>
-				<div ref={containerRef}>
+				<div ref={containerRef} style={{ margin: -18 }}>
 					{!!dataToUse.length ? (
 						<Carousel
 							ref={setCarouselRef}
