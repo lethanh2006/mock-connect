@@ -118,10 +118,4 @@ export default {
 	'menu.ThuVien.VaoRa': 'Lịch sử vào ra',
 	'menu.ThuVien.MuonTraSach': 'Tìm kiếm tài nguyên thư viện',
 	'menu.ThuVien.LichSuMuonTra': 'Lịch sử mượn trả',
-
-	// CCT
-	'menu.Activity': 'Hoạt động',
-	'menu.Activity.Register': 'Đăng ký',
-	'menu.Activity.MyActivity': 'Hoạt động của tôi',
-	'menu.Activity.MyCCT': 'Bảng điểm hoạt động ngoại khóa',
 };
