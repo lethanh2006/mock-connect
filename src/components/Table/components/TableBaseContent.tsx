@@ -1,18 +1,18 @@
 import PageCard from '@/components/PageCard';
+import { useTableColumns } from '@/components/Table/hooks/useTableColumns';
 import { MenuOutlined } from '@ant-design/icons';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ConfigProvider, Empty, Space, Table, type PaginationProps } from 'antd';
+import { ConfigProvider, Space, Table, type PaginationProps } from 'antd';
 import type { FilterValue } from 'antd/lib/table/interface';
 import _ from 'lodash';
 import { useEffect, useMemo, useRef } from 'react';
 import { useIntl, useModel } from 'umi';
 import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
-import { useTableColumns } from '../hooks/useTableColumns';
 import ModalImport from '../Import';
-import type { TableBaseProps } from '../typing';
+import type { IColumn, TableBaseProps } from '../typing';
 import { ResizableTitle } from './ResizableTitle';
 import { useTableContext } from './TableContext';
 import { TableFormModal } from './TableFormModal';
@@ -44,6 +44,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 	const filtersDependency = JSON.stringify(filters ?? []);
 	const externalConditionsDependency = JSON.stringify(externalConditions ?? {});
+	const previousFiltersDependencyRef = useRef(filtersDependency);
 
 	const { handleFilter, handleSearch, finalColumns } = useTableColumns({
 		columns: props.columns,
@@ -72,10 +73,6 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	);
 
 	useEffect(() => {
-		setPage(1);
-	}, [filtersDependency]);
-
-	useEffect(() => {
 		// Block text selection during resize
 		const handleSelectStart = (e: Event) => {
 			if (isResizingRef.current) {
@@ -88,8 +85,17 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	}, []);
 
 	useEffect(() => {
+		const filtersChanged = previousFiltersDependencyRef.current !== filtersDependency;
+		if (filtersChanged) {
+			previousFiltersDependencyRef.current = filtersDependency;
+			if (page !== 1) {
+				setPage(1);
+				return;
+			}
+		}
+
 		getData?.(params);
-	}, [...dependencies, filtersDependency, externalConditionsDependency, condition, sort]);
+	}, [...dependencies, page, limit, filtersDependency, externalConditionsDependency, condition, sort]);
 
 	useEffect(() => {
 		return () => {
@@ -164,7 +170,19 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		);
 	}, []);
 
-	const onChange = (pagination: PaginationProps, fil: Record<string, FilterValue | null>, sorter: any) => {
+	const onChange = (
+		pagination: PaginationProps,
+		fil: Record<string, FilterValue | null>,
+		sorter: any,
+		extra?: { action?: 'paginate' | 'sort' | 'filter' },
+	) => {
+		const { current, pageSize } = pagination;
+		if (extra?.action === 'paginate') {
+			setPage(current);
+			setLimit(pageSize);
+			return;
+		}
+
 		// Skip sort if triggered within 300ms after resize (avoid resize->sort on mouseup)
 		const skipSort = sorter?.field && Date.now() - lastResizeEndTimeRef.current < 300;
 		if (skipSort) {
@@ -172,7 +190,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		}
 
 		const allColumns = finalColumns
-			.map((col) => {
+			.map((col: IColumn<any>) => {
 				if (col.children?.length) return [col, ...col.children];
 				else return [col];
 			})
@@ -204,10 +222,16 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		if (!skipSort) {
 			const { order, field } = sorter;
 			const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
-			if (sorter && setSort) setSort({ [Array.isArray(field) ? field.join('.') : field]: orderValue });
+			const sortField = field ?? sorter?.column?.dataIndex;
+			if (setSort) {
+				if (!orderValue && extra?.action === 'sort') {
+					setSort({});
+				} else if (sortField) {
+					setSort({ [Array.isArray(sortField) ? sortField.join('.') : sortField]: orderValue });
+				}
+			}
 		}
 
-		const { current, pageSize } = pagination;
 		setPage(current);
 		setLimit(pageSize);
 	};
@@ -284,15 +308,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 			<TableHeader />
 
-			<ConfigProvider
-				renderEmpty={() => (
-					<Empty
-						style={{ marginTop: 32, marginBottom: 32 }}
-						description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
-						image={size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
-					/>
-				)}
-			>
+			<ConfigProvider>
 				{rowSortable ? (
 					<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 						<SortableContext items={tableData.map((item) => item.key)} strategy={verticalListSortingStrategy}>
@@ -350,7 +366,8 @@ export const TableBaseContent = (props: TableBaseProps) => {
 						{ id: 'global.table.index.export.fileName' },
 						{ title: (title ?? intl.formatMessage({ id: 'global.table.index.export.defaultTitle' })) as any },
 					)}
-					otherQuery={props.exportParam ?? params}
+					condition={props.params}
+					otherQuery={props.exportParam ?? props.params}
 					filters={filters}
 				/>
 			) : null}

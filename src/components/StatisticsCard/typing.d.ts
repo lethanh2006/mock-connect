@@ -8,12 +8,12 @@ import React, { JSX } from 'react';
  */
 export interface StatisticsItem {
 	/** Tiêu đề hiển thị của item thống kê */
-	title?: string | React.ReactNode;
+	title?: React.ReactNode;
 
 	/** Giá trị hiển thị, có thể là số hoặc chuỗi (đã format)
 	 * @example 100, '1,234 VNĐ', '50%'
 	 */
-	value: string | number;
+	value: React.ReactNode;
 
 	/** Icon hiển thị bên trái item */
 	icon?: JSX.Element;
@@ -69,7 +69,7 @@ export interface AutoBackgroundConfig {
  */
 export interface StatisticsCardProps {
 	/** Tiêu đề của card thống kê */
-	title: string;
+	title?: string;
 
 	/** Mảng dữ liệu thống kê cần hiển thị */
 	data: StatisticsItem[];
