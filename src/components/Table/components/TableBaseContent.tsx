@@ -39,6 +39,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		disableFilterModal,
 		externalConditions,
 		getData,
+		size,
 	} = useTableContext();
 
 	const filtersDependency = JSON.stringify(filters ?? []);
@@ -216,6 +217,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 
 		return (
 			<Table
+				size={size}
 				scroll={{ x: totalWidth ?? props.scroll?.x ?? 'max-content', ...props.scroll }}
 				rowSelection={
 					props?.rowSelection
@@ -287,7 +289,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					<Empty
 						style={{ marginTop: 32, marginBottom: 32 }}
 						description={props.emptyText ?? intl.formatMessage({ id: 'global.table.index.empty' })}
-						image={props.otherProps?.size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
+						image={size === 'small' ? Empty.PRESENTED_IMAGE_SIMPLE : undefined}
 					/>
 				)}
 			>

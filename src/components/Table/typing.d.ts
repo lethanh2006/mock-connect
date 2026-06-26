@@ -159,6 +159,8 @@ export type TableBaseProps<T extends object = any> = {
 
 	otherProps?: TableProps<any>;
 
+	size?: 'small' | 'middle' | 'large';
+
 	/** Click vào mask để đóng form ko? Mặc định: Không */
 	maskCloseableForm?: boolean;
 
