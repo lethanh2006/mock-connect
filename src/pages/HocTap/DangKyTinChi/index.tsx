@@ -3,7 +3,7 @@ import { ESettingKey } from '@/services/base/constant';
 import { ETrangThaiSinhVienDKTinChi } from '@/services/DaoTao/DangKyTinChi/constant';
 import { formatDateTime } from '@/utils/formatDate';
 import { ipDaoTao } from '@/utils/ip';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { FileTextOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Flex, Space, Spin } from 'antd';
 import _ from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -221,7 +221,7 @@ const DangKyTinChiPage = () => {
 									<Button
 										type='link'
 										size='small'
-										icon={<InfoCircleOutlined />}
+										icon={<FileTextOutlined />}
 										onClick={() => setVisibleThongTin(true)}
 									/>
 								}
