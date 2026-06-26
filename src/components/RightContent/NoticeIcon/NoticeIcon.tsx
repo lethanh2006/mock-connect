@@ -1,5 +1,6 @@
 import readAll from '@/assets/read-all.svg';
 import reLoad from '@/assets/refresh.svg';
+import { getPublicAssetPath } from '@/utils/path';
 import { Link, useIntl } from '@umijs/max';
 import { Badge, Space, Tooltip } from 'antd';
 import useMergedState from 'rc-util/es/hooks/useMergedState';
@@ -84,7 +85,11 @@ const NoticeIcon: React.FC<NoticeIconProps> = ({
 			<Tooltip title={intl.formatMessage({ id: 'app.header.notice', defaultMessage: 'Thông báo' })} placement='bottom'>
 				<div className='header-menu-item'>
 					<Badge count={count ? (count < 100 ? count : '99+') : undefined} className={styles.noti_badge}>
-						<img src='/icons/notification.svg' alt='notif' className={count ? styles.ringing : undefined} />
+						<img
+							src={getPublicAssetPath('icons/notification.svg')}
+							alt='notif'
+							className={count ? styles.ringing : undefined}
+						/>
 					</Badge>
 				</div>
 			</Tooltip>
