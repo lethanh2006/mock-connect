@@ -1,6 +1,6 @@
 import { KyTucXa } from '@/services/KyTucXa/typings';
 import { Select } from 'antd';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
 /**
@@ -15,29 +15,29 @@ const SelectToaNhaKTX = (props: {
 	style?: React.CSSProperties;
 	isSetRecord?: boolean;
 	selectMa?: boolean;
-	danhSachMaToa?: string[];
+	disableFetch?: boolean;
 }) => {
-	const { value, onChange, multiple, condition, allowClear, style, isSetRecord, danhSachMaToa } = props;
+	const { value, onChange, multiple, condition, allowClear, style, isSetRecord, disableFetch } = props;
 	const { danhSach, getAllModel, setRecord, loading } = useModel('kytucxa.toanha');
 	const intl = useIntl();
 
 	useEffect(() => {
-		getAllModel(undefined, undefined, condition).then(() => {
-			if (!isSetRecord) setRecord(undefined);
-		});
-	}, [JSON.stringify(condition)]);
-
-	const filteredDanhSach = useMemo(() => {
-		if (!danhSachMaToa || danhSachMaToa.length === 0) return danhSach;
-		return danhSach.filter((item: KyTucXa.IToa)=> danhSachMaToa.includes(item.ma));
-	}, [danhSach, danhSachMaToa]);
+		if (!disableFetch) {
+			if (condition && 'maDotId' in condition && !condition.maDotId) {
+				return;
+			}
+			getAllModel(undefined, undefined, undefined, undefined, undefined, undefined, undefined, condition).then(() => {
+				if (!isSetRecord) setRecord(undefined);
+			});
+		}
+	}, [JSON.stringify(condition), disableFetch]);
 
 	return (
 		<Select
 			mode={multiple ? 'multiple' : undefined}
 			value={value}
 			onChange={onChange}
-			options={filteredDanhSach.map((item: KyTucXa.IToa) => ({
+			options={danhSach.map((item: KyTucXa.IToa) => ({
 				key: item._id,
 				value: item._id,
 				label: `${item.ten}`,

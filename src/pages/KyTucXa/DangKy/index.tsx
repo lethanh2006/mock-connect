@@ -21,7 +21,7 @@ const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
 	const { danhSach: danhSachToa } = useModel('kytucxa.toanha');
 	const { danhSach: danhSachDotDangKy, getModel: getDotDangKy, loading: loadingDotDangKy, setRecord: setDotDangKyRecord, record: recordDot } = useModel('kytucxa.dotdangky');
-	const { danhSach: danhSachMien } = useModel('kytucxa.danhsachmien');
+	const { danhSach: danhSachMien, getModel: getDanhSachMien } = useModel('kytucxa.danhsachmien');
 	const { record: thongTinSinhVien } = useModel('kytucxa.thongtinsinhvien');
 	const { danhSach: danhSachPhong, getModel: getPhongModel, loading: loadingPhong, setRecord: setPhongRecord, setVisibleForm, setIsView } = useModel('kytucxa.phong');
 	const { danhSach: danhSachLichSu, getModel: getLichSu } = useModel('kytucxa.dangky');
@@ -40,6 +40,7 @@ const DangKyKyTucXaPage = () => {
 
 	useEffect(() => {
 		getDotDangKy();
+		getDanhSachMien();
 		getLichSu();
 		getAllDanhTienIch();
 	}, []);
@@ -85,17 +86,6 @@ const DangKyKyTucXaPage = () => {
 
 		return listDot.filter((dot) => now.isBetween(dayjs(dot.thoiGianBatDau), dayjs(dot.thoiGianKetThuc), null, '[]'));
 	}, [danhSachDotDangKy]);
-
-	const danhSachMaToaHienTai = useMemo(() => {
-		if (cacDotDangKyHienTai.length === 0) return [];
-		const maToas = new Set<string>();
-		cacDotDangKyHienTai.forEach(dot => {
-			if (dot.danhSachToaNha) {
-				dot.danhSachToaNha.forEach(ma => maToas.add(ma));
-			}
-		});
-		return Array.from(maToas);
-	}, [cacDotDangKyHienTai]);
 
 	const danhSachMaPhongHienTai = useMemo(() => {
 		if (cacDotDangKyHienTai.length === 0) return [];
@@ -215,7 +205,7 @@ const DangKyKyTucXaPage = () => {
 												value={selectedToa}
 												onChange={handleChangeToa}
 												allowClear={true}
-												danhSachMaToa={danhSachMaToaHienTai}
+												condition={{ maDotId: recordDot?._id }}
 											/>
 										</Col>
 
