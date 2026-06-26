@@ -48,7 +48,6 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				tongSoTinChiHocKy?: number | null;
 				tongSoTinChiTichLuyToanKhoa?: number | null;
 			},
-			earnedCredits?: number,
 		) => {
 			let title = hocKyTen ?? intl.formatMessage({ id: 'ketquahoctap.diemtp.semester.default' }, { maHocKy: mahk });
 			if (kqhk) {
@@ -56,7 +55,7 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 					{ id: 'ketquahoctap.diemtp.semester.summary' },
 					{
 						gpa: kqhk.trungBinhHocKyThang4 ?? '--',
-						earned: earnedCredits ?? kqhk.tongSoTinChiHocKy ?? '--',
+						earned: kqhk.tongSoTinChiHocKy ?? '--',
 						cumulative: kqhk.tongSoTinChiTichLuyToanKhoa ?? '--',
 					},
 				);
@@ -86,10 +85,8 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 							: '',
 					trongChuongTrinh: diem.infoKhoaNganh?.[maKhoaNganh]?.trongCtdt ?? false,
 				}));
-				const earnedCredits = _.sumBy(diemHpHkData, (diem) =>
-					diem.dat === true && diem.trongChuongTrinh === true ? (diem.hocPhan?.soTinChi ?? 0) : 0,
-				);
-				const tenHocPhan = buildSemesterTitle(mahk, hocKyTen, kqhk, earnedCredits);
+
+				const tenHocPhan = buildSemesterTitle(mahk, hocKyTen, kqhk);
 				// Thêm 1 hàng trống => Tên học kỳ
 				res.push({ _id: `semester-${mahk}`, tenHocPhan, maHocKy: mahk, hocKyTen, isSemesterHeader: true } as DataType);
 				// Thêm các hàng lớp trong kỳ, mỗi hàng có số thứ tự trong kỳ
