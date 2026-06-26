@@ -1,3 +1,4 @@
+import { getPublicAssetPath } from '@/utils/path';
 import { Menu } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
 import { getLocale, setLocale, useIntl } from 'umi';
@@ -23,13 +24,13 @@ const LocaleSwitch = () => {
 			key: 'vi-VN',
 			label: 'Tiếng Việt (vi-VN)',
 			onClick: handleChange('vi-VN'),
-			icon: <img src='/images/locales/vi-VN.svg' width={25} alt='vi' />,
+			icon: <img src={getPublicAssetPath('images/locales/vi-VN.svg')} width={25} alt='vi' />,
 		},
 		{
 			key: 'en-US',
 			label: 'English (en-US)',
 			onClick: handleChange('en-US'),
-			icon: <img src='/images/locales/en-US.svg' width={25} alt='en' />,
+			icon: <img src={getPublicAssetPath('images/locales/en-US.svg')} width={25} alt='en' />,
 		},
 	];
 
@@ -39,7 +40,9 @@ const LocaleSwitch = () => {
 		<HeaderDropdown content={<Menu items={items} />} trigger='hover'>
 			<span className={styles.action}>
 				<img
-					src={`/images/locales/${intl.formatMessage({ id: 'app.locale.image', defaultMessage: 'vi-VN.svg' })}`}
+					src={getPublicAssetPath(
+						`images/locales/${intl.formatMessage({ id: 'app.locale.image', defaultMessage: 'vi-VN.svg' })}`,
+					)}
 					alt='lang'
 					width={25}
 				/>

@@ -1,5 +1,6 @@
 // https://umijs.org/config/
 import { defineConfig } from 'umi';
+import { getPublicAssetPath } from '../src/utils/path';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 
@@ -18,15 +19,14 @@ export default defineConfig({
 			name: 'keywords',
 			content: `${APP_CONFIG_TIEN_TO_TRUONG}, ${APP_CONFIG_TEN_TRUONG_VIET_TAT_TIENG_ANH}, Trực tuyến, HỆ THỐNG CHUYỂN ĐỔI SỐ - ${APP_CONFIG_TEN_TRUONG.toUpperCase()}, đào tạo`,
 		},
-		{ property: 'og:image', content: '/metadata.png' },
+		{ property: 'og:image', content: getPublicAssetPath('/metadata.png') },
 		{
 			name: 'description',
 			content: `HỆ THỐNG CHUYỂN ĐỔI SỐ - ${APP_CONFIG_TEN_TRUONG.toUpperCase()}`,
 		},
 		{ name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' },
 	],
-	links: [{ rel: 'icon', href: '/favicon.ico', type: 'image/x-icon' }],
-
+	links: [{ rel: 'icon', href: getPublicAssetPath('/favicon.ico'), type: 'image/x-icon' }],
 	headScripts: APP_CONFIG_GA_ID
 		? [
 				{ src: `https://www.googletagmanager.com/gtag/js?id=${APP_CONFIG_GA_ID}`, async: true },
@@ -77,6 +77,10 @@ export default defineConfig({
 	// Fast Refresh 热更新
 	fastRefresh: true,
 
+	theme: {
+		'@base-path': process.env.APP_CONFIG_BASE_PATH || '/',
+	},
+
 	// plugins: ['@react-dev-inspector/umi4-plugin'],
 
 	alias: {
@@ -95,4 +99,7 @@ export default defineConfig({
 		}
 		return result;
 	}, {}),
+
+	base: process.env.APP_CONFIG_BASE_PATH,
+	publicPath: process.env.APP_CONFIG_BASE_PATH,
 });

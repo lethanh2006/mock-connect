@@ -1,15 +1,15 @@
 import { tienVietNam } from '@/utils/utils';
-import vi from 'apexcharts/dist/locales/vi.json';
+import { getLocale } from '@umijs/max';
 import en from 'apexcharts/dist/locales/en.json';
+import vi from 'apexcharts/dist/locales/vi.json';
+import { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 import { type DataChartType } from '.';
 import './style.less';
-import { getLocale } from '@umijs/max';
 
 const DonutChart = (props: DataChartType) => {
-	const { xAxis, yAxis, height, colors, formatY, showTotal, width, otherOptions } = props;
+	const { xAxis, yAxis, height, colors, formatY, showTotal, width, otherOptions, type } = props;
 	const locale = getLocale();
-	console.log('locale', locale);
 	const defaultLocale = locale === 'vi-VN' ? 'vi' : 'en';
 	const options = {
 		chart: {
@@ -60,13 +60,15 @@ const DonutChart = (props: DataChartType) => {
 		},
 	};
 
-	const series = yAxis?.[0] || [];
+	const series = useMemo(() => yAxis?.[0] || [], [yAxis]);
+
+	const chartOptions = useMemo(() => ({ ...options, ...otherOptions }), [options, otherOptions]);
 
 	return (
 		<Chart
-			options={{ ...options, ...otherOptions }}
+			options={chartOptions}
 			series={series}
-			type='donut'
+			type={type === 'radian' ? 'radialBar' : 'donut'}
 			height={height ?? 350}
 			width={width}
 		/>

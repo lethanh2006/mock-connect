@@ -14,7 +14,7 @@ export type DataChartType = {
 	yLabel: string[];
 	height?: number;
 	width?: number;
-	type?: 'bar' | 'area';
+	type?: 'bar' | 'area' | 'line' | 'radian';
 	colors?: string[];
 	formatY?: (val: number) => string;
 	showTotal?: boolean;

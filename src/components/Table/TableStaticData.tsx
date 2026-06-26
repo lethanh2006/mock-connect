@@ -393,6 +393,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 
 	const renderGlobalSearch = (minimized: boolean) => (
 		<AutoComplete
+			className='global-search-wrapper no-print'
 			options={globalOptions}
 			value={globalSearchText}
 			size={size}
@@ -489,7 +490,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 						isMinimize ? (
 							<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
 								<ButtonExtend
-									className='btn-minimize-search'
+									className='btn-minimize-search no-print'
 									size={size}
 									tooltip={globalSearchTooltip}
 									icon={<SearchOutlined />}
@@ -596,7 +597,7 @@ const TableStaticData: React.FC<TableStaticProps> = (props) => {
 			value={{
 				configKey: props.configKey,
 				title: props.title,
-				size: props.size,
+				size: props.size ?? props.otherProps?.size,
 				columns: props.columns,
 				columnSetting: props.columnSetting,
 			}}
