@@ -2,7 +2,7 @@ import useInitModel from '@/hooks/useInitModel';
 import {
 	choosePathway as choosePathwayService,
 	getManyKhoiLuaChonKhoaNganh,
-	getPathwayChoice,
+	// getPathwayChoice,
 	getPathwayList,
 } from '@/services/DaoTao/ChuongTrinhDaoTao';
 import type { ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
@@ -53,10 +53,12 @@ export default () => {
 
 	const getChosenPathwayDataModel = async (maKhoaNganh: string): Promise<ChuongTrinhDaoTao.IKhoiLuaChon> => {
 		try {
-			const response = await getPathwayChoice(maKhoaNganh);
-			setRegisteredPathway(response?.data?.data);
+			// const response = await getPathwayChoice(maKhoaNganh);
+			// setRegisteredPathway(response?.data?.data);
 
-			return response?.data?.data ?? null;
+			// return response?.data?.data ?? null;
+			setRegisteredPathway([]);
+			return [] as any;
 		} catch (error: any) {
 			return Promise.reject(error);
 		}

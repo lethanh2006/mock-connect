@@ -74,9 +74,9 @@ const TienTrinhThucTeV2 = () => {
 									gap: '12px',
 								}}
 							>
-								{data.map((sv) => (
+								{data.map((sv, idx) => (
 									<CardHocPhanV2
-										key={sv.diemHpSvHk._id}
+										key={sv.diemHpSvHk?._id || sv.hocPhan?.ma || idx}
 										hocPhan={sv.hocPhan}
 										onClick={() => {
 											setRecTienTrinh(sv);
