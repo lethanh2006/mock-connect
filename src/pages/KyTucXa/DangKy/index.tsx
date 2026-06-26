@@ -8,7 +8,7 @@ import { useIntl, useModel } from 'umi';
 import RoomCard from './components/CardRoom';
 import FormDangKy from './components/Form/Form';
 import RoomDetailModal from './components/Modal/ModalDetailRoom';
-import SelectToaNhaKTX from './components/Select/SelectToaNha';
+import SelectToaNhaKTX from './components/Select/SelectBuilding';
 import SelectFloorKTX from './components/Select/SelectFloor';
 import './style.less';
 import { FilterIconCustom } from './components/IconsRoom';
@@ -202,70 +202,74 @@ const DangKyKyTucXaPage = () => {
 			) : (
 				<>
 					<div className='ktx-page__main-card'>
-						<div className='ktx-page__filter-bar'>
-							<Row gutter={[12, 8]} align='middle' wrap={false}>
-								<Col flex='none' style={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
-									<FilterIconCustom />
-								</Col>
+						{!isExempted && (
+							<>
+								<div className='ktx-page__filter-bar'>
+									<Row gutter={[12, 8]} align='middle' wrap={false}>
+										<Col flex='none' style={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
+											<FilterIconCustom />
+										</Col>
 
-								<Col flex='220px'>
-									<SelectToaNhaKTX
-										value={selectedToa}
-										onChange={handleChangeToa}
-										allowClear={true}
-										danhSachMaToa={danhSachMaToaHienTai}
-									/>
-								</Col>
+										<Col flex='220px'>
+											<SelectToaNhaKTX
+												value={selectedToa}
+												onChange={handleChangeToa}
+												allowClear={true}
+												danhSachMaToa={danhSachMaToaHienTai}
+											/>
+										</Col>
 
-								<Col flex='220px'>
-									<SelectFloorKTX value={selectedFloor} onChange={handleChangeFloor} allowClear={true} condition={{ maDotId: recordDot?._id }} disableFetch={true} />
-								</Col>
+										<Col flex='220px'>
+											<SelectFloorKTX value={selectedFloor} onChange={handleChangeFloor} allowClear={true} condition={{ maDotId: recordDot?._id }} disableFetch={true} />
+										</Col>
 
-								<Col flex='220px'>
-									<SelectRoomTypeKTX value={selectedRoomType} onChange={setSelectedRoomType} allowClear={true} />
-								</Col>
+										<Col flex='220px'>
+											<SelectRoomTypeKTX value={selectedRoomType} onChange={setSelectedRoomType} allowClear={true} />
+										</Col>
 
-								<Col flex='220px'>
-									<SelectCapacityKTX value={selectedCapacity} onChange={handleChangeCapacity} allowClear={true} condition={{ maDotId: recordDot?._id }} disableFetch={true} />
-								</Col>
+										<Col flex='220px'>
+											<SelectCapacityKTX value={selectedCapacity} onChange={handleChangeCapacity} allowClear={true} condition={{ maDotId: recordDot?._id }} disableFetch={true} />
+										</Col>
 
-								<Col flex='none'>
-									<Button icon={<ReloadOutlined />} onClick={handleReset} className='ktx-page__reset-btn' />
-								</Col>
-							</Row>
-						</div>
-
-						{cacDotDangKyHienTai.map(dot => (
-							<div key={dot._id} style={{ padding: '16px 20px', borderBottom: '1px solid #e8edf5', background: '#fafcff' }}>
-								<Typography.Title level={5} style={{ marginBottom: 4, color: '#1d3a6b' }}>
-									{dot.tenDot}
-								</Typography.Title>
-								<div
-									style={{
-										marginTop: 10,
-										padding: '10px 14px',
-										background: '#f0f5ff',
-										borderLeft: '4px solid #1d3a6b',
-										borderRadius: '0 8px 8px 0',
-										display: 'flex',
-										alignItems: 'flex-start',
-										gap: 10,
-									}}
-								>
-									<InfoCircleOutlined style={{ color: '#1d3a6b', marginTop: 3, fontSize: '15px' }} />
-									<Typography.Text style={{ fontSize: '14px', color: '#2E2E2E' }}>
-										{intl.formatMessage({ id: 'kytucxa.dangky.registerTime' })} <strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianBatDau)}</strong> {intl.formatMessage({ id: 'kytucxa.dangky.to' })}{' '}
-										<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
-										{activeRegistration && (
-											<>
-												{' '}{intl.formatMessage({ id: 'kytucxa.dangky.paymentBefore' })}{' '}
-												<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
-											</>
-										)}
-									</Typography.Text>
+										<Col flex='none'>
+											<Button icon={<ReloadOutlined />} onClick={handleReset} className='ktx-page__reset-btn' />
+										</Col>
+									</Row>
 								</div>
-							</div>
-						))}
+
+								{cacDotDangKyHienTai.map(dot => (
+									<div key={dot._id} style={{ padding: '16px 20px', borderBottom: '1px solid #e8edf5', background: '#fafcff' }}>
+										<Typography.Title level={5} style={{ marginBottom: 4, color: '#1d3a6b' }}>
+											{dot.tenDot}
+										</Typography.Title>
+										<div
+											style={{
+												marginTop: 10,
+												padding: '10px 14px',
+												background: '#f0f5ff',
+												borderLeft: '4px solid #1d3a6b',
+												borderRadius: '0 8px 8px 0',
+												display: 'flex',
+												alignItems: 'flex-start',
+												gap: 10,
+											}}
+										>
+											<InfoCircleOutlined style={{ color: '#1d3a6b', marginTop: 3, fontSize: '15px' }} />
+											<Typography.Text style={{ fontSize: '14px', color: '#2E2E2E' }}>
+												{intl.formatMessage({ id: 'kytucxa.dangky.registerTime' })} <strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianBatDau)}</strong> {intl.formatMessage({ id: 'kytucxa.dangky.to' })}{' '}
+												<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
+												{activeRegistration && (
+													<>
+														{' '}{intl.formatMessage({ id: 'kytucxa.dangky.paymentBefore' })}{' '}
+														<strong style={{ color: '#0051FF' }}>{formatDateTime(dot.thoiGianKetThuc)}</strong>.
+													</>
+												)}
+											</Typography.Text>
+										</div>
+									</div>
+								))}
+							</>
+						)}
 
 						{isExempted ? (
 							<div style={{ textAlign: 'center', padding: '80px 20px', background: '#fff', borderRadius: '0 0 12px 12px' }}>

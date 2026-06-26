@@ -9,13 +9,15 @@ import "@/pages/KyTucXa/DangKy/style.less"
 import SelectDotDangKyKTX from './components/SelectDotDangKy';
 import { DeleteOutlined, DollarOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Space, Tooltip, Popconfirm } from 'antd';
-import ModalDetailDangKy from './components/ModalDetailDangKy';
+import ModalDetailDangKy from './components/ModalChiTiet';
 import dayjs from '@/utils/dayjs';
+import ModalPayment from './ThanhToan/ModalThanhToan';
+import { FilterIconCustom } from '../DangKy/components/IconsRoom';
 
 const LichSuDangKyKTX = () => {
 	const intl = useIntl();
     const { danhSach: danhSachToa, getAllModel: getAllToa } = useModel('kytucxa.toanha');
-	const { setRecord, deleteModel } = useModel('kytucxa.dangky');
+	const { record, setRecord, deleteModel } = useModel('kytucxa.dangky');
 	const { danhSach: danhSachDot } = useModel('kytucxa.dotdangky');
 
 	const dotMap = useMemo(() => {
@@ -24,6 +26,7 @@ const LichSuDangKyKTX = () => {
 
 	const [selectedDotId, setSelectedDotId] = useState<string>();
 	const [visibleDetailModal, setVisibleDetailModal] = useState(false);
+	const [visiblePaymentModal, setVisiblePaymentModal] = useState(false);
 
 	useEffect(() => {
 		if (!danhSachToa || danhSachToa.length === 0) getAllToa();
@@ -66,8 +69,8 @@ const LichSuDangKyKTX = () => {
             align: 'center',
             filterType: 'string',
             render: (val) => {
-                if (!val) return '-';
-                if (!danhSachToa || danhSachToa.length === 0) return '...';
+                if (!val) return '';
+                if (!danhSachToa || danhSachToa.length === 0) return '';
                 const toa = (danhSachToa as KyTucXa.IToa[])?.find((item) => item.ma === val);
                 return toa ? toa.ten : val;
             },
@@ -121,7 +124,7 @@ const LichSuDangKyKTX = () => {
                     color = 'error';
                     label = intl.formatMessage({ id: 'kytucxa.lichsu.table.status.expired' });
                 }
-                return <Tag color={color}>{label || '-'}</Tag>;
+                return <Tag color={color}>{label || ''}</Tag>;
             },
         },
         {
@@ -142,7 +145,8 @@ const LichSuDangKyKTX = () => {
                                     disabled={!isChoThanhToan}
                                     icon={<DollarOutlined />}
                                     onClick={() => {
-
+                                        setRecord(record);
+                                        setVisiblePaymentModal(true);
                                     }}
                                 />
                             </Tooltip>
@@ -207,6 +211,9 @@ const LichSuDangKyKTX = () => {
 				}}
 			>
                 <div key='select-dot' style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 12, padding: '0 16px 16px 0' }}>
+                    <Col flex='none' style={{ display: 'flex', alignItems: 'center', marginLeft: 4 }}>
+                        <FilterIconCustom />
+                    </Col>
                     <SelectDotDangKyKTX
                         value={selectedDotId}
                         onChange={setSelectedDotId}
@@ -221,6 +228,11 @@ const LichSuDangKyKTX = () => {
 			<ModalDetailDangKy
 				open={visibleDetailModal}
 				onClose={() => setVisibleDetailModal(false)}
+			/>
+			<ModalPayment 
+				open={visiblePaymentModal} 
+				onClose={() => setVisiblePaymentModal(false)} 
+				record={record as KyTucXa.IThongTinDangKy} 
 			/>
 		</>
     );

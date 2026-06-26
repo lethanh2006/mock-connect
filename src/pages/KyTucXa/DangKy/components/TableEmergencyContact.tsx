@@ -22,10 +22,10 @@ const TableEmergencyContactKTX: React.FC<TableEmergencyContactProps> = (props) =
 		setVisibleForm(true);
 	};
 
-	const handleEdit = (record: EmergencyContact) => {
-		setEditingRecord(record);
-		setVisibleForm(true);
-	};
+	// const handleEdit = (record: EmergencyContact) => {
+	// 	setEditingRecord(record);
+	// 	setVisibleForm(true);
+	// };
 
 	const handleDelete = (index: number) => {
 		const newData = [...value];

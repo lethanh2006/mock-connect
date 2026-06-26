@@ -1,4 +1,4 @@
-import { Button, Form, Modal, Space, Steps, Typography } from 'antd';
+import { Button, Form, Modal, Space, Steps } from 'antd';
 import { FilePdfOutlined } from '@ant-design/icons';
 import { useIntl, useModel } from 'umi';
 import { useMemo, useEffect, useRef, useState } from 'react';
@@ -6,16 +6,17 @@ import { KyTucXa } from '@/services/KyTucXa/typings';
 import FormStep1Content from '../../DangKy/components/Form/FormStep1Content';
 import FormStep2Content from '../../DangKy/components/Form/FormStep2Content';
 import CheckinPrepContent from '../../DangKy/components/CheckinPrepContent';
+import NoiDungThanhToan from '../ThanhToan/NoiDungThanhToan';
 import { useReactToPrint } from 'react-to-print';
 import PrintTemplate from '@/components/PrintTemplate';
 import '../../DangKy/components/style.less';
 
-interface ModalDetailDangKyProps {
+interface ModalChiTietLichSuKTXProps {
     open: boolean;
     onClose: () => void;
 }
 
-const Tab1Content = ({ record }: { record: KyTucXa.IThongTinDangKy }) => {
+const NoiDungStep1 = ({ record }: { record: KyTucXa.IThongTinDangKy }) => {
     const formDon = record?.formDon;
     const [form] = Form.useForm();
 
@@ -34,11 +35,11 @@ const Tab1Content = ({ record }: { record: KyTucXa.IThongTinDangKy }) => {
     );
 };
 
-const Tab2Content = () => {
+const NoiDungStep2 = () => {
     return <FormStep2Content showCheckbox={false} />;
 };
 
-const Tab3Content = ({ record }: { record: KyTucXa.IThongTinDangKy }) => {
+const NoiDungStep3 = ({ record }: { record: KyTucXa.IThongTinDangKy }) => {
     const { danhSach: danhSachDot } = useModel('kytucxa.dotdangky');
 
     const dotDangKy = useMemo(() => {
@@ -49,27 +50,11 @@ const Tab3Content = ({ record }: { record: KyTucXa.IThongTinDangKy }) => {
     return <CheckinPrepContent phong={record?.phong} dotDangKy={dotDangKy} />;
 };
 
-const Tab4Content = () => {
-    const intl = useIntl();
-    return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: 200,
-            color: '#aaa',
-            fontSize: 14,
-            gap: 8,
-        }}>
-            <Typography.Text type="secondary" style={{ fontSize: 15 }}>
-                {intl.formatMessage({ id: 'kytucxa.lichsu.detail.tab.payment.empty' })}
-            </Typography.Text>
-        </div>
-    );
+const NoiDungStep4 = () => {
+    return <NoiDungThanhToan />;
 };
 
-const ModalDetailDangKy: React.FC<ModalDetailDangKyProps> = ({ open, onClose }) => {
+const ModalChiTietLichSuKTX: React.FC<ModalChiTietLichSuKTXProps> = ({ open, onClose }) => {
     const intl = useIntl();
     const { record } = useModel('kytucxa.dangky');
     const [currentStep, setCurrentStep] = useState(0);
@@ -89,19 +74,19 @@ const ModalDetailDangKy: React.FC<ModalDetailDangKyProps> = ({ open, onClose }) 
     const steps = useMemo(() => [
         {
             title: intl.formatMessage({ id: 'kytucxa.dangky.form.step.generalInfo' }),
-            content: record ? <Tab1Content record={record as KyTucXa.IThongTinDangKy} /> : null,
+            content: record ? <NoiDungStep1 record={record as KyTucXa.IThongTinDangKy} /> : null,
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.dangky.form.step.waiver' }),
-            content: <Tab2Content />,
+            content: <NoiDungStep2 />,
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.detail.tab.checkinPrep' }),
-            content: record ? <Tab3Content record={record as KyTucXa.IThongTinDangKy} /> : null,
+            content: record ? <NoiDungStep3 record={record as KyTucXa.IThongTinDangKy} /> : null,
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.detail.tab.payment' }),
-            content: <Tab4Content />,
+            content: record ? <NoiDungStep4 /> : null,
         },
     ], [intl, record]);
 
@@ -148,9 +133,12 @@ const ModalDetailDangKy: React.FC<ModalDetailDangKyProps> = ({ open, onClose }) 
             <div className="ktx-modal__content">
                 <Steps
                     current={currentStep}
-                    className="ktx-register-steps"
+                    className={`ktx-register-steps ${currentStep > 0 ? 'step2-active' : ''}`}
                     size="small"
-                    items={steps.map(item => ({ title: item.title }))}
+                    items={steps.map((item, index) => ({ 
+                        title: item.title,
+                        status: index <= currentStep ? 'finish' : 'wait' as const
+                    }))}
                     style={{ marginBottom: 24 }}
                 />
                 
@@ -164,4 +152,4 @@ const ModalDetailDangKy: React.FC<ModalDetailDangKyProps> = ({ open, onClose }) 
     );
 };
 
-export default ModalDetailDangKy;
+export default ModalChiTietLichSuKTX;
