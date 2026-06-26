@@ -71,10 +71,12 @@ const TienTrinhHocTap = () => {
 					</Descriptions.Item>
 
 					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.college' })}>
-						{khoaNganhMe?.khoaNganhChinh?.nganh?.donVi?.ten ||
-							khoaNganhMe?.khoaNganhChinh?.nganh?.tenDonViPhuTrach ||
+						{chuongTrinhHienTai?.nganh?.tenDonViPhuTrach ||
+							chuongTrinhHienTai?.nganh?.donVi?.ten ||
+							chuongTrinhHienTai?.nganh?.maDonVi ||
 							khoaNganhMe?.khoaNganhChinh?.nganh?.maDonVi ||
-							'-'}
+							khoaNganhMe?.khoaNganhChinh?.nganh?.tenDonViPhuTrach ||
+							'--'}
 					</Descriptions.Item>
 					{chuyenNganhHienTai?.ten && (
 						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
