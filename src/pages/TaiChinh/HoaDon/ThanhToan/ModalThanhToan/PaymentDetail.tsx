@@ -1,7 +1,7 @@
 ﻿import { postTransactionMePayment } from '@/services/TaiChinh/KenhThanhToan';
 import { inputFormat } from '@/utils/utils';
 import { Button, Descriptions, InputNumber, message } from 'antd';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import './style.less';
 import type { PaymentDetailProps } from './typing';
@@ -29,25 +29,24 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	// nội dung chuyển khoản
 	const addInfo = bill?.dotThu?.tenDot;
 
-	const sumCharge = transactions
-		.filter((item) => item.type === 'CHARGE')
-		.reduce((sum, item) => sum + (item.amount ?? 0) * (item.quantity ?? 1), 0);
-
-	const sumDiscount = transactions
-		.filter((item) => item.type === 'DISCOUNT')
-		.reduce((sum, item) => sum + (item.amount ?? 0) * (item.quantity ?? 1), 0);
-
 	const totalThanhToan = bill?.soTienConLai ?? 0;
-
-	const phiThanhToan = method.activeLePhiThanhToan
-		? method.loaiLePhiThanhToanMacDinh === 'TIEN'
-			? (method.giaTriLePhiThanhToanMacDinh ?? 0)
-			: Math.min((totalThanhToan * (method?.giaTriLePhiThanhToanMacDinh ?? 0)) / 100, method?.mucPhiDichVuToiDa ?? 0)
-		: 0;
 
 	// const totalAmountFinal = totalThanhToan + phiThanhToan;
 
 	const soTienThanhToan = soTienMuonThanhToan ?? 0;
+	const phiThanhToan = useMemo(() => {
+		return method.activeLePhiThanhToan
+			? method.loaiLePhiThanhToanMacDinh === 'TIEN'
+				? Number(method.giaTriLePhiThanhToanMacDinh ?? 0)
+				: method?.mucPhiDichVuToiDa != null
+					? Math.min(
+							(soTienThanhToan * (Number(method?.giaTriLePhiThanhToanMacDinh) ?? 0)) / 100,
+							Number(method.mucPhiDichVuToiDa),
+						)
+					: (soTienThanhToan * (Number(method?.giaTriLePhiThanhToanMacDinh) ?? 0)) / 100
+			: 0;
+	}, [soTienThanhToan, method]);
+
 	const finalAmount = soTienThanhToan > 0 ? soTienThanhToan + phiThanhToan : 0;
 	const isAmountValid =
 		soTienMuonThanhToan !== null && soTienMuonThanhToan > 0 && soTienMuonThanhToan <= totalThanhToan;

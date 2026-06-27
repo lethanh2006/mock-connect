@@ -27,7 +27,7 @@ export const disableThanhToan = (rec?: HoaDon.IRecord): boolean => {
 	// 		return true;
 	// }
 
-	if (rec?.status === EMaTrangThaiThanhToan.DONG) return true;
+	if (rec?.status === EMaTrangThaiThanhToan.DONG || rec?.status === EMaTrangThaiThanhToan.DA_THANH_TOAN_DU) return true;
 	return false;
 };
 
@@ -262,7 +262,7 @@ const HoaDonPage = () => {
 							setVisibleModalThanhToan(true);
 						}}
 						type='link'
-						className='text-success'
+						className={disableThanhToan(rec) ? undefined : 'text-success'}
 						icon={<UnorderedListOutlined />}
 					/>
 					<ButtonExtend
