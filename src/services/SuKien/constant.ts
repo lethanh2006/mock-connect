@@ -82,6 +82,29 @@ export enum ELoaiSuKienKhac {
 	KHAC = 'Khác',
 }
 
+export const ELoaiSuKienLocaleKey: Record<ELoaiSuKien, string> = {
+	[ELoaiSuKien.CHUNG]: 'lichsukien.loaisukien.chung',
+	[ELoaiSuKien.LICH_HOC]: 'lichsukien.loaisukien.lich_hoc',
+	[ELoaiSuKien.LICH_THI]: 'lichsukien.loaisukien.lich_thi',
+	[ELoaiSuKien.BAI_TAP]: 'lichsukien.loaisukien.bai_tap',
+	[ELoaiSuKien.HOP_LOP]: 'lichsukien.loaisukien.hop_lop',
+	[ELoaiSuKien.CA_NHAN]: 'lichsukien.loaisukien.ca_nhan',
+};
+
+export const ELoaiSuKienKhacLocaleKey: Record<ELoaiSuKienKhac, string> = {
+	[ELoaiSuKienKhac.CAC_HOAT_DONG]: 'lichsukien.loaisukienkhac.cac_hoat_dong',
+	[ELoaiSuKienKhac.DAO_TAO_BOI_DUONG]: 'lichsukien.loaisukienkhac.dao_tao_boi_duong',
+	[ELoaiSuKienKhac.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO]: 'lichsukien.loaisukienkhac.hop_tac_nghien_cuu_chuyen_giao',
+	[ELoaiSuKienKhac.THUC_THI_CHINH_SACH]: 'lichsukien.loaisukienkhac.thuc_thi_chinh_sach',
+	[ELoaiSuKienKhac.HOAT_DONG_XA_HOI]: 'lichsukien.loaisukienkhac.hoat_dong_xa_hoi',
+	[ELoaiSuKienKhac.KHAC]: 'lichsukien.loaisukienkhac.khac',
+};
+
+export const LoaiSuKienLocaleKey: Record<ELoaiSuKien | ELoaiSuKienKhac, string> = {
+	...ELoaiSuKienLocaleKey,
+	...ELoaiSuKienKhacLocaleKey,
+};
+
 export const ColorSuKien: Partial<Record<ELoaiSuKien | ELoaiSuKienKhac, string>> = {
 	[ELoaiSuKien.LICH_HOC]: '#31becbb3',
 	[ELoaiSuKien.LICH_THI]: '#df4471b3',
@@ -106,12 +129,12 @@ export enum ELoaiSuKienSinhVien {
 }
 
 export const locationPathMappingToESuKienType: Partial<Record<string, ELoaiSuKien | ELoaiSuKienKhac>> = {
-	'cac-hoat-dong-cho-sinh-vien': ELoaiSuKienKhac.CAC_HOAT_DONG,
-	'dao-tao-boi-duong': ELoaiSuKienKhac.DAO_TAO_BOI_DUONG,
-	'hop-tac-nghien-cuu-chuyen-giao': ELoaiSuKienKhac.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO,
-	'thuc-thi-chinh-sach': ELoaiSuKienKhac.THUC_THI_CHINH_SACH,
-	'hoat-dong-xa-hoi': ELoaiSuKienKhac.HOAT_DONG_XA_HOI,
-	khac: ELoaiSuKienKhac.KHAC,
+	// 'cac-hoat-dong-cho-sinh-vien': ELoaiSuKienKhac.CAC_HOAT_DONG,
+	// 'dao-tao-boi-duong': ELoaiSuKienKhac.DAO_TAO_BOI_DUONG,
+	// 'hop-tac-nghien-cuu-chuyen-giao': ELoaiSuKienKhac.HOP_TAC_NGUYEN_CUU_CHUYEN_GAO,
+	// 'thuc-thi-chinh-sach': ELoaiSuKienKhac.THUC_THI_CHINH_SACH,
+	// 'hoat-dong-xa-hoi': ELoaiSuKienKhac.HOAT_DONG_XA_HOI,
+	// khac: ELoaiSuKienKhac.KHAC,
 };
 
 export const THU_TRONG_TUAN = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
