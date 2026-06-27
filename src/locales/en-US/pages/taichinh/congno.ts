@@ -16,8 +16,8 @@ export default {
 	'taichinh.hoadon.column.phigiamtru': 'Deductible Fees',
 	'taichinh.hoadon.column.tongphiphainop': 'Total Fees Payable (1)',
 	'taichinh.hoadon.column.tongphigiamtru': 'Total Deductible Fees (2)',
-	'taichinh.hoadon.column.tongdathanhtoan': 'Total Amount Paid (3)',
-	'taichinh.hoadon.column.tongcanthanhtoan': 'Total Amount Due (1-2-3)',
+	'taichinh.hoadon.column.tongdathanhtoan': 'Total Amount Paid',
+	'taichinh.hoadon.column.tongcanthanhtoan': 'Total Amount Due',
 	'taichinh.hoadon.tooltip.ngoaithoihan': 'Outside Payment Period',
 	'taichinh.hoadon.tooltip.thanhtoanngay': 'Pay Now',
 	'taichinh.hoadon.tooltip.xemchitiet': 'View Receipt Details',
@@ -146,6 +146,12 @@ export default {
 	'taichinh.thanhtoan.modal.thanhtoanngay': 'Pay Now',
 	'taichinh.thanhtoan.modal.baomat': 'Security',
 	'taichinh.thanhtoan.modal.error.noPaymentUrl': 'Could not retrieve payment URL from ONEPAY',
+	'taichinh.thanhtoan.modal.sotienmuonthanhtoan': 'Amount to be paid',
+	'taichinh.thanhtoan.modal.sotienconlai': 'Remaining amount',
+	'taichinh.thanhtoan.modal.sotienkhonghople': 'Invalid amount',
+	'taichinh.thanhtoan.modal.tamtinh': 'Estimated amount',
+	'taichinh.thanhtoan.modal.vuotquasotien': 'Amount cannot exceed {soTien}đ',
+	'taichinh.thanhtoan.modal.nhapsotienthanhtoan': 'Enter amount to be paid',
 
 	// Payment information - student header
 	'taichinh.thanhtoan.info.sinhvien': 'Student',

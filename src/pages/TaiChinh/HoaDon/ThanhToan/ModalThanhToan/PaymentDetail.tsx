@@ -1,6 +1,6 @@
-import { postTransactionMePayment } from '@/services/TaiChinh/KenhThanhToan';
+﻿import { postTransactionMePayment } from '@/services/TaiChinh/KenhThanhToan';
 import { inputFormat } from '@/utils/utils';
-import { Button, Descriptions, message } from 'antd';
+import { Button, Descriptions, InputNumber, message } from 'antd';
 import { useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import './style.less';
@@ -18,6 +18,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 	const intl = useIntl();
 	const { initialState } = useModel('@@initialState');
 	const [loadingOnePay, setLoadingOnePay] = useState(false);
+	const [soTienMuonThanhToan, setSoTienMuonThanhToan] = useState<number | null>(null);
 
 	const userFullname =
 		bill?.userFullname ??
@@ -25,7 +26,7 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			? `${initialState.currentUser.family_name} ${initialState.currentUser?.given_name ?? ''}`
 			: initialState?.currentUser?.name);
 	const userCode = bill?.userCode ?? initialState?.currentUser?.preferred_username ?? '';
-	/** Nội dung chuyển khoản */
+	// nội dung chuyển khoản
 	const addInfo = bill?.dotThu?.tenDot;
 
 	const sumCharge = transactions
@@ -44,20 +45,23 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 			: Math.min((totalThanhToan * (method?.giaTriLePhiThanhToanMacDinh ?? 0)) / 100, method?.mucPhiDichVuToiDa ?? 0)
 		: 0;
 
-	const totalAmountFinal = totalThanhToan; // + phiThanhToan;
+	// const totalAmountFinal = totalThanhToan + phiThanhToan;
 
+	const soTienThanhToan = soTienMuonThanhToan ?? 0;
+	const finalAmount = soTienThanhToan > 0 ? soTienThanhToan + phiThanhToan : 0;
+	const isAmountValid =
+		soTienMuonThanhToan !== null && soTienMuonThanhToan > 0 && soTienMuonThanhToan <= totalThanhToan;
 	const handlePayment = async () => {
-		// if (method.phuongThucThanhToan === 'ONEPAY') {
 		setLoadingOnePay(true);
+		const currentUrl = window.location.href;
 		try {
 			const res = await postTransactionMePayment({
 				againLink: window.location.href,
 				billIdentityCode: invoiceCode,
 				kenhThanhToanId: method._id,
-				// loaiLePhiThanhToan: method.loaiLePhiThanhToanMacDinh,
-				// phanTramLePhiThanhToan:
-				// 	method.loaiLePhiThanhToanMacDinh === 'PHAN_TRAM' ? method.giaTriLePhiThanhToanMacDinh : 0,
-				// soTienLePhiThanhToan: method.loaiLePhiThanhToanMacDinh === 'TIEN' ? method.giaTriLePhiThanhToanMacDinh : 0,
+				soTienThanhToan: soTienThanhToan,
+
+				webUrlCallBack: currentUrl,
 			});
 
 			const paymentUrl = res?.data?.data?.payUrl;
@@ -72,9 +76,6 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 		} finally {
 			setLoadingOnePay(false);
 		}
-		// } else {
-		// 	//todo: update cho các phương thức khác
-		// }
 	};
 
 	return (
@@ -100,28 +101,73 @@ const PaymentDetail: React.FC<PaymentDetailProps> = ({
 				</Descriptions>
 			</div>
 
+			{/* Nhập số tiền muốn thanh toán*/}
+			<div className='payment-detail__amount-input'>
+				<div className='payment-detail__amount-input-label'>
+					{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.sotienmuonthanhtoan' })}
+				</div>
+				<InputNumber
+					style={{ width: '100%' }}
+					size='large'
+					placeholder={intl.formatMessage({ id: 'taichinh.thanhtoan.modal.nhapsotienthanhtoan' })}
+					value={soTienMuonThanhToan}
+					onChange={(value) => setSoTienMuonThanhToan(value)}
+					min={1}
+					// max={totalThanhToan}
+					step={1}
+					precision={0}
+					formatter={(value) => `${value}`.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+					parser={(value) => value?.replace(/,/g, '') as any}
+					status={
+						soTienMuonThanhToan !== null && (soTienMuonThanhToan <= 0 || soTienMuonThanhToan > totalThanhToan)
+							? 'error'
+							: undefined
+					}
+				/>
+
+				{soTienMuonThanhToan !== null && soTienMuonThanhToan > totalThanhToan ? (
+					<div className='payment-detail__amount-error'>
+						{intl.formatMessage(
+							{ id: 'taichinh.thanhtoan.modal.vuotquasotien' },
+							{ soTien: inputFormat(totalThanhToan) },
+						)}
+					</div>
+				) : (
+					<div className='payment-detail__amount-input-hint'>
+						{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.sotienconlai' })}:{' '}
+						{inputFormat(totalThanhToan - (soTienMuonThanhToan ?? 0))}đ
+					</div>
+				)}
+			</div>
+
 			<div className='payment-detail__summary'>
 				<div className='payment-detail__summary-row'>
-					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tongtienphainop' })}</span>
-					<span>{inputFormat(totalThanhToan)}đ</span>
+					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tamtinh' })}</span>
+					<span>{inputFormat(soTienMuonThanhToan ?? 0)}đ</span>
 				</div>
 
 				{/* {phiThanhToan > 0 && ( */}
-				{/* bỏ phí thanh toán */}
-				{/* <div className='payment-detail__summary-row'>
+				<div className='payment-detail__summary-row'>
 					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.phigiaodich' })}</span>
 					<span>{inputFormat(phiThanhToan)}đ</span>
-				</div> */}
+				</div>
 				{/* )} */}
 
 				<div className='payment-detail__total'>
 					<span>{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.tongcong' })}</span>
-					<span>{inputFormat(totalAmountFinal)}đ</span>
+					<span>{inputFormat(finalAmount)}đ</span>
 				</div>
 			</div>
 
 			<div className='payment-detail__footer'>
-				<Button type='primary' block size='large' onClick={handlePayment} loading={loading || loadingOnePay}>
+				<Button
+					type='primary'
+					block
+					size='large'
+					onClick={handlePayment}
+					loading={loading || loadingOnePay}
+					disabled={!isAmountValid}
+				>
 					{intl.formatMessage({ id: 'taichinh.thanhtoan.modal.thanhtoanngay' })}
 				</Button>
 			</div>

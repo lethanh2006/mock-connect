@@ -9,6 +9,8 @@ export async function postTransactionMePayment(body: {
 	loaiLePhiThanhToan?: 'PHAN_TRAM' | 'TIEN';
 	phanTramLePhiThanhToan?: number;
 	soTienLePhiThanhToan?: number;
+	soTienThanhToan?: number;
+	webUrlCallBack?: string;
 }) {
 	return axios.post(`${ipTaiChinh}/transaction/me/payment`, body);
 }

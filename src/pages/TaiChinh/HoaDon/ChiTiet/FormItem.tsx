@@ -3,7 +3,7 @@ import TableStaticData from '@/components/Table/TableStaticData';
 import { type IColumn } from '@/components/Table/typing';
 import { colorTransactionType, ETransactionType, transactionType } from '@/services/TaiChinh/constant';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import { currencyFormat, inputFormat } from '@/utils/utils';
+import { currencyFormat } from '@/utils/utils';
 import { AppstoreAddOutlined } from '@ant-design/icons';
 import { Col, Row, Tag } from 'antd';
 import dayjs from 'dayjs';
@@ -22,9 +22,9 @@ const FormItemHoaDonChiTiet = () => {
 	const isDisabled = disableThanhToan(record);
 
 	useEffect(() => {
-		const data = record?.transactions
-			?.filter((tran) => tran.status === 'success')
-			?.sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
+		const data = (record?.transactions ?? [])
+			.filter((tran) => tran.status === 'success')
+			.sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf());
 		setResult(data ?? []);
 	}, [record]);
 
@@ -121,7 +121,7 @@ const FormItemHoaDonChiTiet = () => {
 						: intl.formatMessage({ id: 'taichinh.hoadonchitiet.giaodich.hethong' })}
 				</Tag>
 			),
-		}
+		},
 		// {
 		// 	title: 'Ghi chú',
 		// 	dataIndex: 'ghiChu',

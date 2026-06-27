@@ -16,8 +16,8 @@ export default {
 	'taichinh.hoadon.column.phigiamtru': 'Phí giảm trừ',
 	'taichinh.hoadon.column.tongphiphainop': 'Tổng phí phải nộp (1)',
 	'taichinh.hoadon.column.tongphigiamtru': 'Tổng phí giảm trừ (2)',
-	'taichinh.hoadon.column.tongdathanhtoan': 'Tổng tiền đã thanh toán (3)',
-	'taichinh.hoadon.column.tongcanthanhtoan': 'Tổng tiền cần thanh toán (1-2-3)',
+	'taichinh.hoadon.column.tongdathanhtoan': 'Tổng tiền đã thanh toán',
+	'taichinh.hoadon.column.tongcanthanhtoan': 'Tổng tiền cần thanh toán',
 	'taichinh.hoadon.tooltip.ngoaithoihan': 'Ngoài thời hạn thanh toán',
 	'taichinh.hoadon.tooltip.thanhtoanngay': 'Thanh toán ngay',
 	'taichinh.hoadon.tooltip.xemchitiet': 'Xem chi tiết phiếu thu',
@@ -152,6 +152,13 @@ export default {
 	'taichinh.thanhtoan.modal.tongcong': 'Tổng cộng',
 	'taichinh.thanhtoan.modal.thanhtoanngay': 'Thanh toán ngay',
 	'taichinh.thanhtoan.modal.baomat': 'Bảo mật',
+	'taichinh.thanhtoan.modal.sotienmuonthanhtoan': 'Số tiền muốn thanh toán',
+	'taichinh.thanhtoan.modal.sotienconlai': 'Số tiền còn lại',
+	'taichinh.thanhtoan.modal.tamtinh': 'Tạm tính',
+	'taichinh.thanhtoan.modal.sotienkhonghople': 'Số tiền không hợp lệ',
+	'taichinh.thanhtoan.modal.vuotquasotien': 'Số tiền không được vượt quá {soTien}đ',
+	'taichinh.thanhtoan.modal.nhapsotienthanhtoan': 'Nhập số tiền muốn thanh toán',
+
 	'taichinh.thanhtoan.modal.error.noPaymentUrl': 'Không nhận được URL thanh toán từ ONEPAY',
 
 	// Thông tin thanh toán - header sinh viên
