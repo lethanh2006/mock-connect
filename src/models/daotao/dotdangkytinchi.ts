@@ -1,6 +1,8 @@
 import {
 	deleteDangKyTinChi,
+	getChiTietHocPhanDangKyTinChi,
 	getDotAvailable,
+	getLichDangKyTinChiTrongKhoang,
 	getLopDaHuyDangKyTinChi,
 	getLopDangKy,
 	getPhieuDangKy,
@@ -16,8 +18,10 @@ import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { message } from 'antd';
 import { useState } from 'react';
+import { getIntl } from 'umi';
 
 export default () => {
+	const intl = getIntl();
 	const [visibleModal, setVisibleModal] = useState<boolean>(false);
 	const [visibleRegister, setVisibleRegister] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
@@ -26,6 +30,7 @@ export default () => {
 	const [phieuDangKy, setPhieuDangKy] = useState<DangKyTinChi.IPhieuDangKy>(); // Phiếu đăng ký tín chỉ trong học kỳ, back tự tính
 	const [danhSachLopDangKy, setDanhSachLopDangKy] = useState<DangKyTinChi.ILopDangKy[]>([]); // Danh sách lớp hp đăng ký, bao gồm cả các lớp mới thêm
 	const [danhSachLopDaHuy, setDanhSachLopDaHuy] = useState<DangKyTinChi.AuditLog[]>([]); //Danh sách lớp sinh viên đã hủy đăng ký
+	const [chiTietHocPhan, setChiTietHocPhan] = useState<DangKyTinChi.IChiTietHocPhanDangKyTinChi>();
 	// Dữ liệu lịch học cho các lớp đang đăng ký hiện tại
 	// Dưới dạng { "DDMMYY": [true, true, false, false, true, true]...}
 	// Mỗi ngày tương ứng với mảng các tiết học trong ngày đó: true => Có lớp học trong tiết tương ứng
@@ -121,13 +126,17 @@ export default () => {
 
 	const getLopDangKyModel = async (maHocKy: string): Promise<DangKyTinChi.ILopDangKy[]> => {
 		if (!maHocKy) return Promise.reject('Invalid maHocKy');
+
 		setLoading(true);
+
 		try {
 			const res = await getLopDangKy(maHocKy);
-			const lop: LopHocPhan.IRecordSinhVienLopHP[] = res.data?.data ?? [];
 
-			const lopDangKy =
-				lop
+			const mapLop = (
+				list: LopHocPhan.IRecordSinhVienLopHP[],
+				isWaitlist: boolean = false,
+			): DangKyTinChi.ILopDangKy[] =>
+				list
 					?.filter((item) => item.lopHocPhan?.trangThaiLop === ETrangThaiLopHocPhan.MO)
 					?.map((item) => ({
 						...item.lopHocPhan,
@@ -136,13 +145,23 @@ export default () => {
 						soTinChi: item.lopHocPhan?.hocPhan?.soTinChi ?? 0,
 						loai: item.loai,
 						loaiLop: item.lopHocPhan.loai,
-						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
 						maKhoaNganh: item.maKhoaNganh,
+						isWaitlist,
+						trangThai: ETrangThaiDangKyTinChi.DA_DANG_KY,
 					})) ?? [];
-			setDanhSachLopDangKy(lopDangKy);
-			tinhDataLichHoc(lopDangKy);
 
-			return lopDangKy;
+			const lop = res.data?.data?.registeredList ?? res.data?.data ?? []; // Back trả về có thể là {registeredList: [], waitlistList: []} hoặc chỉ là mảng lớp đã đăng ký
+			const waitList = res.data?.data?.waitlistList ?? [];
+
+			const lopDangKy = mapLop(lop, false);
+			const lopWaitList = mapLop(waitList, true);
+
+			const result = [...lopDangKy, ...lopWaitList];
+
+			setDanhSachLopDangKy(result);
+			tinhDataLichHoc(result);
+
+			return result;
 		} catch (er) {
 			setDanhSachLopDangKy([]);
 			setDataLichHoc({});
@@ -152,12 +171,16 @@ export default () => {
 		}
 	};
 
-	const postDangKyTinChiModel = async (data: {
-		dangKy: { lopHocPhanId: string; maKhoaNganh: string };
-		phieuDktcId: string;
-	}): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
+	const postDangKyTinChiModel = async (
+		data: {
+			dangKy: { lopHocPhanId: string; maKhoaNganh: string };
+			phieuDktcId: string;
+		},
+		messageText?: string,
+	): Promise<LopHocPhan.IRecordSinhVienLopHP> => {
 		try {
 			const res = await postDangKyTinChi(data);
+			message.success(messageText ?? intl.formatMessage({ id: 'dangkytinchi.thongbao.dangky' }));
 
 			return res.data?.data;
 		} catch (er) {
@@ -165,12 +188,15 @@ export default () => {
 		}
 	};
 
-	const deleteDangKyTinChiModel = async (data: { phieuDktcId: string; lopHocPhanId: string }): Promise<any> => {
+	const deleteDangKyTinChiModel = async (
+		data: { phieuDktcId: string; lopHocPhanId: string },
+		messageText?: string,
+	): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
 		setFormSubmiting(true);
 		try {
 			const res = await deleteDangKyTinChi(data);
-			message.success('Hủy đăng ký thành công');
+			message.success(messageText ?? intl.formatMessage({ id: 'dangkytinchi.thongbao.huydangky' }));
 
 			return res.data?.data;
 		} catch (er) {
@@ -193,12 +219,42 @@ export default () => {
 		}
 	};
 
+	const getLichDangKyTinChiTrongKhoangModel = async (payload: {
+		fromDate: string;
+		toDate: string;
+	}): Promise<DangKyTinChi.IDotDangKy[]> => {
+		try {
+			const res = await getLichDangKyTinChiTrongKhoang(payload);
+			return res.data?.data ?? [];
+		} catch (er) {
+			return Promise.reject(er);
+		}
+	};
+
+	const getChiTietHocPhanDangKyTinChiModel = async (
+		maHocPhan: string,
+		maKhoaNganh: string,
+	): Promise<DangKyTinChi.IChiTietHocPhanDangKyTinChi> => {
+		setLoading(true);
+		try {
+			const res = await getChiTietHocPhanDangKyTinChi(maHocPhan, maKhoaNganh);
+			const data: DangKyTinChi.IChiTietHocPhanDangKyTinChi = res.data?.data;
+			setChiTietHocPhan(data);
+			return data;
+		} catch (er) {
+			setChiTietHocPhan(undefined);
+			return Promise.reject(er);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const revertLopDangKyTinDaHuyModel = async (idAuditLog: string, getData?: () => void): Promise<any> => {
 		if (formSubmiting) return Promise.reject('Form submitting');
 		setFormSubmiting(true);
 		try {
 			const res = await revertLopDangKyTinDaHuy(idAuditLog);
-			message.success('Lưu thành công');
+			message.success(intl.formatMessage({ id: 'global.message.luuthanhcong' }));
 
 			if (getData) getData();
 			return res.data?.data;
@@ -231,8 +287,11 @@ export default () => {
 		tinhDataLichHoc,
 		checkTrungLich,
 		sinhVienDot,
+		chiTietHocPhan,
 		danhSachLopDaHuy,
 		getLopDaHuyDangKyTinChiModel,
+		getLichDangKyTinChiTrongKhoangModel,
+		getChiTietHocPhanDangKyTinChiModel,
 		revertLopDangKyTinDaHuyModel,
 	};
 };

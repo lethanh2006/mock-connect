@@ -3,8 +3,40 @@ import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import routes from './routes';
 
+const appBasePath = '/student/';
+const schoolName = 'Trường Đại học VinUni';
+const schoolPrefix = 'Trường';
+const schoolShortName = 'VINUNI';
+const isDev = process.env.NODE_ENV === 'development';
+const appConfigDefines = isDev
+	? Object.entries(process.env).reduce((result, [key, value]) => {
+			if (key.startsWith('APP_CONFIG_')) {
+				return {
+					...result,
+					[key]: value,
+				};
+			}
+			return result;
+		}, {})
+	: {};
+
 export default defineConfig({
 	hash: true,
+	title: `HỆ THỐNG CHUYỂN ĐỔI SỐ - ${schoolName.toUpperCase()}`,
+	metas: [
+		{
+			name: 'keywords',
+			content: `${schoolPrefix}, ${schoolShortName}, Trực tuyến, HỆ THỐNG CHUYỂN ĐỔI SỐ - ${schoolName.toUpperCase()}, đào tạo`,
+		},
+		{ property: 'og:image', content: '/student/metadata.png' },
+		{
+			name: 'description',
+			content: `HỆ THỐNG CHUYỂN ĐỔI SỐ - ${schoolName.toUpperCase()}`,
+		},
+		{ name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' },
+	],
+	links: [{ rel: 'icon', href: '/student/favicon.ico', type: 'image/x-icon' }],
+
 	antd: {
 		import: false,
 		// Transform DayJS to MomentJS
@@ -51,17 +83,10 @@ export default defineConfig({
 
 	jsMinifier: 'terser',
 	exportStatic: {},
+	headScripts: [{ src: `${appBasePath}env.js` }],
 
-	define: Object.entries(process.env).reduce((result, [key, value]) => {
-		if (key.startsWith('APP_CONFIG_')) {
-			return {
-				...result,
-				[key]: value,
-			};
-		}
-		return result;
-	}, {}),
+	define: appConfigDefines,
 
-	base: process.env.APP_CONFIG_BASE_PATH,
-	publicPath: process.env.APP_CONFIG_BASE_PATH,
+	base: appBasePath,
+	publicPath: appBasePath,
 });

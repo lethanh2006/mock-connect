@@ -10,15 +10,22 @@ import {
 	ReloadOutlined,
 	SearchOutlined,
 } from '@ant-design/icons';
-import { Button, Input, Popconfirm, Popover, Tooltip } from 'antd';
+import { AutoComplete, Button, Input, Popover, Tooltip } from 'antd';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useIntl } from 'umi';
-import { EOperatorType } from '../constant';
 import type { TFilter } from '../typing';
-import { findFiltersInColumns, updateSearchStorage } from '../utils';
+import {
+	buildGlobalSearchFilter,
+	findFiltersInColumns,
+	getGlobalSearchKeyword,
+	getSearchStorage,
+	getStandaloneSearchableFields,
+	isGlobalSearchFilter,
+	updateSearchStorage,
+} from '../utils';
 import { ColumnSettings } from './ColumnSettings';
 import { useTableContext } from './TableContext';
 
@@ -27,11 +34,13 @@ export const TableHeader: React.FC = () => {
 	const {
 		buttons,
 		otherButtons,
-		rowSelection,
-		deleteMany,
-		selectedIds,
-		handleDeleteMany,
-		hasFilter,
+		otherTextButtons,
+		otherExtra,
+		// rowSelection,
+		// deleteMany,
+		// selectedIds,
+		// handleDeleteMany,
+		// hasFilter,
 		finalColumns,
 		filters,
 		setFilters,
@@ -43,18 +52,27 @@ export const TableHeader: React.FC = () => {
 		loading,
 		total,
 		hideTotal,
+		header,
+		// disableFilterModal,
 		size,
 	} = useTableContext();
 	const {
 		globalSearch = true,
-		minimizeGlobalSearch,
+		minimizeGlobalSearch = size === 'small',
 		create: btnCreate = true,
 		export: btnExport,
-		filter: btnFilter = true,
+		// filter: btnFilter = true,
 		import: btnImport,
 		reload: btnReload = true,
+		columnSetting: btnColumnSetting = true,
 	} = buttons || {};
 	const [globalSearchText, setGlobalSearchText] = useState<string>('');
+	const [globalOptions, setGlobalOptions] = useState<{ value: string }[]>([]);
+	const searchInputRef = useRef<any>(null);
+	const currentPath = window.location.pathname;
+	const globalDataIndex = useMemo(() => `GLOBAL_SEARCH_${currentPath}`, [currentPath]);
+	const canOpenModalFilter = false;
+	// btnFilter && hasFilter && disableFilterModal !== true;
 
 	//#region Global Search Logic
 
@@ -85,63 +103,30 @@ export const TableHeader: React.FC = () => {
 		[searchableColumns],
 	);
 
-	const isGlobalSearchFilterGroup = useCallback(
-		(filter?: TFilter<any>) => {
-			if (!filter?.filters?.length) return false;
-			if (filter.operator !== EOperatorType.OR) return false;
-
-			const hasGlobalMarker = filter.readOnly === true || filter.filters.every((item) => item?.readOnly === true);
-			if (!hasGlobalMarker) return false;
-
-			let keyword: string | undefined;
-			return filter.filters.every((child) => {
-				const fieldKey = JSON.stringify(child?.field);
-				if (!searchableFieldKeys.has(fieldKey)) return false;
-				if (child?.operator !== EOperatorType.CONTAIN) return false;
-				const firstValue = child?.values?.[0];
-				if (firstValue === undefined || firstValue === null) return false;
-
-				const normalizedValue = `${firstValue}`.trim();
-				if (!normalizedValue) return false;
-
-				if (keyword === undefined) keyword = normalizedValue;
-				return keyword === normalizedValue;
-			});
-		},
-		[searchableFieldKeys],
-	);
-
 	const currentGlobalSearchText = useMemo(() => {
-		const globalFilter = (filters || []).find((item) => isGlobalSearchFilterGroup(item));
-		if (!globalFilter?.filters?.length) return '';
-
-		const value = globalFilter.filters?.[0]?.values?.[0];
-		if (value === undefined || value === null) return '';
-		return `${value}`.trim();
-	}, [filters, isGlobalSearchFilterGroup]);
+		const globalFilter = (filters || []).find((item) => isGlobalSearchFilter(item, searchableFieldKeys));
+		return getGlobalSearchKeyword(globalFilter, searchableFieldKeys) ?? '';
+	}, [filters, searchableFieldKeys]);
 
 	useEffect(() => {
 		setGlobalSearchText(currentGlobalSearchText);
 	}, [currentGlobalSearchText]);
 
 	const createGlobalSearchFilter = useCallback(
-		(keyword: string): TFilter<any> => ({
-			operator: EOperatorType.OR,
-			readOnly: true,
-			filters: searchableColumns.map((item) => ({
-				field: item.field,
-				operator: EOperatorType.CONTAIN,
-				values: [keyword],
-				readOnly: true,
-			})),
-		}),
+		(keyword: string, excludedFields: any[] = []): TFilter<any> | undefined =>
+			buildGlobalSearchFilter(
+				keyword,
+				searchableColumns.map((item) => item.field),
+				excludedFields,
+			),
 		[searchableColumns],
 	);
 
 	const applyGlobalSearch = useCallback(
 		(rawValue: string) => {
 			const keyword = rawValue?.trim() ?? '';
-			const remainFilters = (filters || []).filter((item) => !isGlobalSearchFilterGroup(item));
+			const remainFilters = (filters || []).filter((item) => !isGlobalSearchFilter(item, searchableFieldKeys));
+			const excludedFields = getStandaloneSearchableFields(remainFilters, searchableFieldKeys);
 
 			if (!keyword || !searchableColumns.length) {
 				setFilters?.(remainFilters);
@@ -154,9 +139,10 @@ export const TableHeader: React.FC = () => {
 				if (fieldName) updateSearchStorage(fieldName, keyword);
 			});
 
-			setFilters?.([createGlobalSearchFilter(keyword), ...remainFilters]);
+			const nextGlobalSearch = createGlobalSearchFilter(keyword, excludedFields);
+			setFilters?.(nextGlobalSearch ? [nextGlobalSearch, ...remainFilters] : remainFilters);
 		},
-		[filters, isGlobalSearchFilterGroup, searchableColumns, setFilters, createGlobalSearchFilter],
+		[filters, searchableColumns, searchableFieldKeys, setFilters, createGlobalSearchFilter],
 	);
 
 	const debounceSearch = useMemo(() => debounce(applyGlobalSearch, 500), [applyGlobalSearch]);
@@ -215,6 +201,80 @@ export const TableHeader: React.FC = () => {
 		);
 	}, [intl, searchableColumns]);
 
+	useEffect(() => {
+		const history = getSearchStorage(globalDataIndex);
+		setGlobalOptions(history.map((val: string) => ({ value: val })));
+	}, [globalDataIndex]);
+
+	const handleGlobalSearchTrigger = useCallback(
+		(value: string) => {
+			debounceSearch.cancel();
+			const keyword = value?.trim() || '';
+
+			setGlobalSearchText(keyword);
+			applyGlobalSearch(keyword);
+
+			const history = getSearchStorage(globalDataIndex);
+			setGlobalOptions(history.map((val: string) => ({ value: val, label: val })));
+
+			if (keyword) {
+				updateSearchStorage(globalDataIndex, keyword);
+			}
+			setTimeout(() => {
+				searchInputRef.current?.blur();
+			}, 0);
+		},
+		[globalDataIndex, applyGlobalSearch, debounceSearch],
+	);
+
+	const renderGlobalSearch = (minimized: boolean) => (
+		<AutoComplete
+			options={globalOptions}
+			value={globalSearchText}
+			onSelect={handleGlobalSearchTrigger}
+			onChange={(val) => setGlobalSearchText(val)}
+		>
+			<Input.Search
+				ref={searchInputRef}
+				className='global-search'
+				size={size}
+				allowClear
+				value={globalSearchText}
+				placeholder={globalSearchPlaceholder}
+				autoFocus={minimized}
+				style={
+					minimized
+						? { width: 250 }
+						: globalSearchText
+							? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
+							: undefined
+				}
+				enterButton={
+					<Button
+						loading={loading}
+						icon={
+							<Tooltip title={globalSearchTooltip}>
+								<SearchOutlined />
+							</Tooltip>
+						}
+					/>
+				}
+				onSearch={handleGlobalSearchTrigger}
+				onChange={(e) => {
+					if (e.type === 'click') {
+						debounceSearch.cancel();
+						setGlobalSearchText('');
+						handleGlobalSearchTrigger('');
+					} else {
+						const val = e.target.value;
+						setGlobalSearchText(val);
+						debounceSearch(val);
+					}
+				}}
+			/>
+		</AutoComplete>
+	);
+
 	const isMobile = useMediaQuery({ maxWidth: 767 });
 	const isMinimize = minimizeGlobalSearch || isMobile;
 	const canShowGlobalSearch = globalSearch && searchableColumns.length > 0;
@@ -231,7 +291,6 @@ export const TableHeader: React.FC = () => {
 						icon={<PlusCircleOutlined />}
 						className='btn-add'
 						type='primary'
-						notHideText
 						tooltip={intl.formatMessage({ id: 'global.table.index.button.themmoi.tooltip' })}
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.themmoi' })}
@@ -256,7 +315,7 @@ export const TableHeader: React.FC = () => {
 						className='btn-export'
 					>
 						{intl.formatMessage({ id: 'global.table.index.button.xuatdulieu' })}
-						{selectedIds?.length && selectedIds?.length > 0 ? ` (${selectedIds?.length})` : ''}
+						{/* {selectedIds?.length && selectedIds?.length > 0 ? ` (${selectedIds?.length})` : ''} */}
 					</ButtonExtend>
 				)}
 
@@ -275,6 +334,11 @@ export const TableHeader: React.FC = () => {
 					</ButtonExtend>
 				)}
 
+				{otherTextButtons}
+
+				{/* {rowSelection && deleteMany && selectedIds?.length ? (
+				{otherTextButtons}
+
 				{rowSelection && deleteMany && selectedIds?.length ? (
 					<Popconfirm
 						title={intl.formatMessage({ id: 'global.table.index.button.xoa.title' }, { count: selectedIds?.length })}
@@ -284,13 +348,13 @@ export const TableHeader: React.FC = () => {
 							{intl.formatMessage({ id: 'global.table.index.button.xoa' }, { count: selectedIds?.length })}
 						</ButtonExtend>
 					</Popconfirm>
-				) : null}
+				) : null} */}
 			</div>
 
 			<div className='extra no-print'>
-				<ColumnSettings />
+				{btnColumnSetting && <ColumnSettings />}
 
-				{btnFilter && hasFilter && (
+				{canOpenModalFilter && (
 					<ButtonExtend
 						className='btn-filter'
 						size={size}
@@ -311,30 +375,7 @@ export const TableHeader: React.FC = () => {
 
 				{canShowGlobalSearch ? (
 					isMinimize ? (
-						<Popover
-							content={
-								<Input.Search
-									className='global-search'
-									size={size}
-									allowClear
-									value={globalSearchText}
-									placeholder={globalSearchPlaceholder}
-									style={{ width: 280 }}
-									autoFocus
-									onChange={(e) => {
-										const nextValue = e.target.value;
-										setGlobalSearchText(nextValue);
-										debounceSearch(nextValue);
-									}}
-									onSearch={(value) => {
-										setGlobalSearchText(value);
-										applyGlobalSearch(value);
-									}}
-								/>
-							}
-							trigger='click'
-							placement='bottom'
-						>
+						<Popover content={renderGlobalSearch(isMinimize)} trigger='click' placement='bottom'>
 							<ButtonExtend
 								className='btn-minimize-search'
 								size={size}
@@ -345,47 +386,25 @@ export const TableHeader: React.FC = () => {
 							/>
 						</Popover>
 					) : (
-						<Input.Search
-							className='global-search'
-							size={size}
-							allowClear
-							value={globalSearchText}
-							placeholder={globalSearchPlaceholder}
-							style={
-								globalSearchText
-									? { borderColor: primaryColor, outline: '1px solid ' + primaryColor, borderRadius: 4 }
-									: undefined
-							}
-							enterButton={
-								<Button
-									loading={loading}
-									icon={
-										<Tooltip title={globalSearchTooltip}>
-											<SearchOutlined />
-										</Tooltip>
-									}
-								/>
-							}
-							onChange={(e) => {
-								const nextValue = e.target.value;
-								setGlobalSearchText(nextValue);
-								debounceSearch(nextValue);
-							}}
-							onSearch={(value) => {
-								setGlobalSearchText(value);
-								applyGlobalSearch(value);
-							}}
-						/>
+						renderGlobalSearch(isMinimize)
 					)
 				) : null}
 
 				{!hideTotal && (
 					<Tooltip title={intl.formatMessage({ id: 'global.table.index.button.tongso.tooltip' })}>
 						<div className={classNames({ total: true, small: size === 'small' })}>
-							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:<span>{inputFormat(total || 0)}</span>
+							{intl.formatMessage({ id: 'global.table.index.button.tongso' })}:{' '}
+							<span style={{ fontSize: 15 }}>
+								{inputFormat(total || 0)}
+								{header?.total?.prefix ? (
+									<span style={{ fontSize: 15, marginLeft: 6 }}>{header.total.prefix}</span>
+								) : null}
+							</span>
 						</div>
 					</Tooltip>
 				)}
+
+				{otherExtra}
 			</div>
 		</div>
 	);

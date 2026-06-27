@@ -1,12 +1,12 @@
 import ExpandText from '@/components/ExpandText';
-import ButtonExtend from '@/components/Table/ButtonExtend';
+import ModalExpandable from '@/components/Table/ModalExpandable';
 import TableStaticData from '@/components/Table/TableStaticData';
 import type { IColumn } from '@/components/Table/typing';
 import type { DangKyTinChi } from '@/services/DaoTao/DangKyTinChi/typing';
 import { ELoaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
-import { inputFormat } from '@/utils/utils';
-import { RedoOutlined } from '@ant-design/icons';
-import { Button, Modal, Popconfirm } from 'antd';
+import { ELogActionDktc, logActionDktc } from '@/services/TienIch/AuditLog/constant';
+import { formatDateTime } from '@/utils/formatDate';
+import { Button } from 'antd';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 import RenderLichHoc from './RenderLichHoc';
@@ -15,21 +15,24 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 	const intl = useIntl();
 
 	const { visible, setVisible } = props;
-	const { phieuDangKy, getLopDaHuyDangKyTinChiModel, danhSachLopDaHuy, loading, revertLopDangKyTinDaHuyModel } =
-		useModel('daotao.dotdangkytinchi');
-	const { tinhHocPhi } = useModel('taichinh.mucthuhocphi');
-	const { record: recHocKy } = useModel('daotao.hocky');
-	const { getLopDangKyModel } = useModel('daotao.dotdangkytinchi');
+	const {
+		phieuDangKy,
+		dotDangKyHienTai,
+		getPhieuDangKyModel,
+		getLopDaHuyDangKyTinChiModel,
+		danhSachLopDaHuy,
+		loading,
+	} = useModel('daotao.dotdangkytinchi');
 
-	const getDataDangKy = () => {
-		if (recHocKy?.ma) {
-			getLopDangKyModel(recHocKy.ma);
-		}
-	};
+	const getDataHuy = async () => {
+		if (!dotDangKyHienTai?._id) return;
 
-	const getDataHuy = () => {
-		if (phieuDangKy?._id) {
-			getLopDaHuyDangKyTinChiModel(phieuDangKy._id);
+		const isPhieuHienTai = phieuDangKy?.idDotDangKyTinChi === dotDangKyHienTai._id;
+		const nextPhieuDangKy =
+			phieuDangKy?._id && isPhieuHienTai ? phieuDangKy : await getPhieuDangKyModel(dotDangKyHienTai._id);
+
+		if (nextPhieuDangKy?._id) {
+			getLopDaHuyDangKyTinChiModel(nextPhieuDangKy._id);
 		}
 	};
 
@@ -37,7 +40,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 		if (visible) {
 			getDataHuy();
 		}
-	}, [phieuDangKy?._id, visible]);
+	}, [dotDangKyHienTai?._id, phieuDangKy?._id, phieuDangKy?.idDotDangKyTinChi, visible]);
 
 	// const tongHocPhi = _.sumBy(danhSachLopDaHuy, (lop) =>
 	// 	tinhHocPhi(lop?.lopHocPhan?.hocPhan?.soTinChi, lop.lopHocPhan.loai, lop?.lopHocPhan?.maNganh),
@@ -48,7 +51,7 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.mahp' }),
 			align: 'center',
 			dataIndex: ['response', 'data'],
-			width: 80,
+			width: 140,
 			render: (val: DangKyTinChi.ILopDangKy) => {
 				return val?.lopHocPhan?.maHocPhan;
 			},
@@ -60,21 +63,17 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 			render: (val: DangKyTinChi.ILopDangKy) => val?.lopHocPhan?.hocPhan?.ten,
 		},
 		{
-			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.ttlop' }),
-			width: 80,
+			title: intl.formatMessage({ id: 'dangkytinchi.dankylophocphan.columntable.malop' }),
+			width: 140,
 			dataIndex: ['response', 'data'],
 			align: 'center',
-			render: (val: DangKyTinChi.ILopDangKy) =>
-				`${val?.lopHocPhan?.soThuTuLop}${
-					val?.lopHocPhan?.soThuTuNhom ? ` (nhóm TH ${val?.lopHocPhan?.soThuTuNhom})` : ''
-				}`,
+			render: (val: DangKyTinChi.ILopDangKy) => val?.lopHocPhan?.maLop ?? val?.lopHocPhan?.ten,
 		},
 		{
 			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.sotinchi' }),
-			width: 60,
+			width: 90,
 			dataIndex: ['response', 'data'],
 			align: 'center',
-			sortable: true,
 			render: (val: DangKyTinChi.ILopDangKy) => (
 				<>
 					{val?.lopHocPhan?.hocPhan?.soTinChi}{' '}
@@ -108,48 +107,47 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 		},
 
 		{
-			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.hocphidukien' }),
-			dataIndex: ['response', 'data'],
-			align: 'right',
+			title: intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.columntable.ip' }),
+			dataIndex: 'ip',
+			align: 'center',
 			width: 120,
-			render: (val: DangKyTinChi.ILopDangKy) => {
-				const due = tinhHocPhi(val?.lopHocPhan?.hocPhan?.soTinChi, val?.loai, null);
-				if (due) {
-					return `${inputFormat(due)} VND`;
-				}
-				return null;
+			filterType: 'string',
+			render: (val, rec) => val ?? (rec.data as { ip?: string })?.ip ?? '--',
+		},
+		{
+			title: intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.columntable.thoigianthuchien' }),
+			width: 160,
+			dataIndex: 'createdAt',
+			render: (val) => (val ? formatDateTime(val) : '--'),
+		},
+		{
+			title: intl.formatMessage({ id: 'dangkytinchi.lopdahuy.columntable.ghichu' }),
+			width: 160,
+			render: (_, rec) => {
+				const responseData = rec.response?.data as DangKyTinChi.ILopDangKy & { ghiChu?: string };
+				const logData = rec.data as { ghiChu?: string; note?: string };
+				return <ExpandText>{logData?.ghiChu ?? logData?.note ?? responseData?.ghiChu ?? '--'}</ExpandText>;
 			},
 		},
 		{
-			title: intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.thaotac' }),
-			width: 60,
-			dataIndex: ['response', 'data'],
+			title: intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.columntable.loaithaotac' }),
+			dataIndex: 'action',
+			width: 160,
 			fixed: 'right',
 			align: 'center',
-			render: (val: DangKyTinChi.ILopDangKy, rec) => (
-				<Popconfirm
-					title={intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.tooltip.banmuondangkylai' })}
-					placement='topRight'
-					onConfirm={() =>
-						revertLopDangKyTinDaHuyModel(rec?._id, () => {
-							getDataDangKy();
-							getDataHuy();
-						})
-					}
-				>
-					<ButtonExtend
-						icon={<RedoOutlined />}
-						type='link'
-						tooltip={intl.formatMessage({ id: 'dangkytinchi.modallophuy.columntable.btn.tooltip.hoantac' })}
-					/>
-				</Popconfirm>
-			),
+			filterType: 'select',
+			filterData: [ELogActionDktc.SV_DK_LTC, ELogActionDktc.SV_DEL_DK_LTC].map((val) => ({
+				label: intl.formatMessage({ id: logActionDktc[val] ?? val }),
+				value: val,
+			})),
+			render: (val: ELogActionDktc) =>
+				val ? <span>{intl.formatMessage({ id: logActionDktc[val] ?? val })}</span> : '--',
 		},
 	];
 
 	return (
-		<Modal
-			title={intl.formatMessage({ id: 'dangkytinchi.modallophuy.title' })}
+		<ModalExpandable
+			title={intl.formatMessage({ id: 'dangkytinchi.lichsuthaotac.title' })}
 			open={visible}
 			onCancel={() => setVisible(false)}
 			width={1100}
@@ -157,23 +155,18 @@ const ModalLopDaHuy = (props: { visible: boolean; setVisible: (val: boolean) => 
 		>
 			<TableStaticData
 				columns={columnsLopHuy}
-				data={danhSachLopDaHuy ?? []}
+				data={dotDangKyHienTai?._id ? (danhSachLopDaHuy ?? []) : []}
 				addStt
 				loading={loading}
 				hasTotal
+				onReload={getDataHuy}
 				otherProps={{ pagination: false, scroll: { y: 600 } }}
-			>
-				{/* <Space wrap>
-					<ButtonExtend icon={<ReloadOutlined />} onClick={getDataHuy}>
-						Tải lại
-					</ButtonExtend>
-				</Space> */}
-			</TableStaticData>
+			/>
 
 			<div className='form-footer'>
 				<Button onClick={() => setVisible(false)}>{intl.formatMessage({ id: 'dangkytinchi.action.dong' })}</Button>
 			</div>
-		</Modal>
+		</ModalExpandable>
 	);
 };
 

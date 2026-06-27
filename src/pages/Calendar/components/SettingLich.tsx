@@ -1,34 +1,29 @@
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { Button, Col, ColorPicker, Form, Modal, Row } from 'antd';
+import type { Color } from 'antd/es/color-picker';
 import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
 const ModalSettingMauLich = () => {
 	const intl = useIntl();
-	const { formSubmiting, visibleForm, setVisibleForm, record, putMeSettingLichModel, postMeSettingLichModel } =
+	const { formSubmiting, visibleForm, setVisibleForm, recSettingLocal, putMeSettingLichModel, postMeSettingLichModel } =
 		useModel('tienich.settinglich');
 	const [form] = Form.useForm();
 
 	useEffect(() => {
 		const mapValue = Object.values(ELoaiSuKien).reduce((acc: any, item) => {
-			acc[item] = record?.danhSachSettingLich?.find((i) => i?.loaiLich === item)?.maMau ?? ColorSuKien[item];
+			acc[item] = recSettingLocal?.danhSachSettingLich?.find((i) => i?.loaiLich === item)?.maMau ?? ColorSuKien[item];
 			return acc;
 		}, {});
 
 		form.setFieldsValue(mapValue);
-	}, [record?._id, visibleForm]);
-
-	const rgbaToHex = (r: number, g: number, b: number, a: number): string => {
-		return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}${Math.round(a * 255)
-			.toString(16)
-			.padStart(2, '0')}`;
-	};
+	}, [recSettingLocal?.danhSachSettingLich, visibleForm]);
 
 	const onFinish = async (values: any) => {
 		const data = {
 			danhSachSettingLich: Object.values(ELoaiSuKien).map((item) => {
 				const color = values[item];
-				const hexColor = typeof color === 'string' ? color : rgbaToHex(color?.r, color?.g, color?.b, color?.a);
+				const hexColor = typeof color === 'string' ? color : (color as Color)?.toHexString();
 				return {
 					loaiLich: item,
 					maMau: hexColor,
@@ -36,8 +31,8 @@ const ModalSettingMauLich = () => {
 			}),
 		};
 
-		if (record?._id) {
-			putMeSettingLichModel(record._id, data).catch(console.log);
+		if (recSettingLocal?._id) {
+			putMeSettingLichModel(recSettingLocal._id, data).catch(console.log);
 		} else {
 			postMeSettingLichModel(data).catch(console.log);
 		}

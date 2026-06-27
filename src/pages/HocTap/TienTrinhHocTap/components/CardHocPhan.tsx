@@ -1,36 +1,13 @@
 import type { HocPhan } from '@/services/DaoTao/HocPhan/typings';
 import { ETrangThaiHocTap } from '@/services/DaoTao/constant';
-import { ELoaiDiemChu } from '@/services/HocTap/LopHocPhan/constant';
+import { ColorDiemChu } from '@/services/HocTap/LopHocPhan/constant';
 import type { LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
-import { Card, Tag } from 'antd';
+import { accentColors, tenTruongVietTatTiengAnh } from '@/services/base/constant';
+import { Card } from 'antd';
+// import { Card, Tag } from 'antd';
+import type { ReactNode } from 'react';
 import { useIntl } from 'umi';
 import './CardStyles.less';
-
-// Grade images mapping
-const GRADE_IMAGES = {
-	'A+': '/student/images/mark-a-plus.svg',
-	A: '/student/images/mark-a.svg',
-	'A-': '/student/images/mark-a-minus.svg',
-	'B+': '/student/images/mark-b-plus.svg',
-	B: '/student/images/mark-b.svg',
-	'B-': '/student/images/mark-b-minus.svg',
-	'C+': '/student/images/mark-c-plus.svg',
-	C: '/student/images/mark-c.svg',
-	'C-': '/student/images/mark-c-minus.svg',
-	'D+': '/student/images/mark-d-plus.svg',
-	D: '/student/images/mark-d.svg',
-	'D-': '/student/images/mark-d-minus.svg',
-	F: '/student/images/mark-f.svg',
-	P: '/student/images/mark-p.svg',
-	CR: '/student/images/mark-cr.svg',
-	NCR: '/student/images/mark-ncr.svg',
-	NGR: '/student/images/mark-ngr.svg',
-	S: '/student/images/mark-s.svg',
-	U: '/student/images/mark-u.svg',
-	W: '/student/images/mark-w.svg',
-	IP: '/student/images/mark-ip.svg',
-	DEFAULT: '/student/images/mark-default.svg',
-} as const;
 
 const CardHocPhan = (props: {
 	hocPhan?: Partial<HocPhan.IRecord>;
@@ -38,48 +15,77 @@ const CardHocPhan = (props: {
 	onClick: () => void;
 	colorKhoiKienThuc?: string;
 	trangThaiHoc?: ETrangThaiHocTap;
+	label?: ReactNode;
 }) => {
 	const intl = useIntl();
-	const { hocPhan, listDiem, colorKhoiKienThuc, trangThaiHoc, onClick } = props;
+	const { hocPhan, listDiem, trangThaiHoc, onClick, label } = props;
 	const soTinChi = hocPhan?.soTinChi ?? 0;
-	const listDiemChu = listDiem?.map((item) => item.diemChu || ELoaiDiemChu.CHUA_DU_DU_LIEU);
+	const listDiemChu = listDiem?.map((item) => item.diemChu || '');
 
+	const isNotStudied = trangThaiHoc === ETrangThaiHocTap.CHUA_HOC;
+	const isCurrentlyStudying = trangThaiHoc === ETrangThaiHocTap.DANG_HOC || undefined;
+	const isVinUni = tenTruongVietTatTiengAnh === 'VINUNI';
 	// Chỉ hiển thị điểm đầu tiên
 	const diemHienThi = listDiemChu?.[0];
 
 	// Function to get grade image
-	const getGradeImage = (grade: string) => {
-		if (isNotStudied) return null;
-		return GRADE_IMAGES[grade as keyof typeof GRADE_IMAGES] || GRADE_IMAGES.DEFAULT;
-	};
+	// const getGradeImage = (grade: string) => {
+	// 	if (isNotStudied) return null;
+	// 	return GRADE_IMAGES[grade as keyof typeof GRADE_IMAGES] || GRADE_IMAGES.DEFAULT;
+	// };
 
-	// Check status
-	const isNotStudied = trangThaiHoc === ETrangThaiHocTap.CHUA_HOC;
-	const isCurrentlyStudying = trangThaiHoc === ETrangThaiHocTap.DANG_HOC;
-
-	const gradeImage = diemHienThi ? getGradeImage(diemHienThi) : null;
+	// const gradeImage = diemHienThi ? getGradeImage(diemHienThi) : null;
 
 	return (
 		<div className='base-card'>
-			<Card hoverable onClick={onClick}>
+			<Card hoverable onClick={onClick} style={{ backgroundColor: accentColors.accent800 ?? '#f8f8f8' }}>
 				{/* Background Image - Dùng ảnh điểm làm background */}
-				{gradeImage && <div className='card-background-image' style={{ backgroundImage: `url(${gradeImage})` }} />}
+				{/* {gradeImage && <div className='card-background-image' style={{ backgroundImage: `url(${gradeImage})` }} />} */}
 
 				{/* Content */}
 				<div className='card-content'>
 					{/* Course name */}
+					{label && <span className='card-label'>{label}</span>}
+					{/* {label && (
+						<span className='card-label' style={{ paddingRight: gradeImage ? 100 : 0 }}>
+							{label}
+						</span>
+					)} */}
 					<h4 className={`card-title ${isNotStudied ? 'not-studied' : 'default'}`} title={hocPhan?.ten}>
 						{hocPhan?.ten}
 					</h4>
 
-					{/* Credits */}
-					<Tag className='credits-tag'>
-						{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
-					</Tag>
+					{/* Credits & Grade */}
+					<div className='card-footer'>
+						<span className='card-credits-text'>
+							{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
+						</span>
+						<div className='card-footer-right'>
+							{isCurrentlyStudying && !diemHienThi && isVinUni && (
+								<span className='card-registered-text'>{intl.formatMessage({ id: 'tientrinhhoctap.registered' })}</span>
+							)}
+							{diemHienThi && !isNotStudied && (
+								<span className='card-grade-text' style={{ color: ColorDiemChu[diemHienThi] }}>
+									{diemHienThi}
+								</span>
+							)}
+						</div>
+					</div>
+					{/* Credits & Status */}
+					{/* <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+						<Tag className='credits-tag'>
+							{soTinChi} {intl.formatMessage({ id: 'tientrinhhoctap.tinchi' })}
+						</Tag>
+						{isCurrentlyStudying && isVinUni && (
+							<div className='studying-text'>
+								{intl.formatMessage({ id: 'tientrinhhoctap.danghoc' })}
+							</div>
+						)}
+					</div> */}
 				</div>
 
-				{/* Currently studying indicator */}
-				{isCurrentlyStudying && (
+				{/* Currently studying indicator (Non-VinUni) */}
+				{isCurrentlyStudying && !isVinUni && (
 					<div
 						className='studying-indicator'
 						title={intl.formatMessage({ id: 'tientrinhhoctap.danghoc' })}

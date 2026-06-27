@@ -219,7 +219,13 @@ const FormPerstionActivityOutCome = (props: any) => {
 	return (
 		<>
 			<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
-				{(!!record?.revisionNote || !!record?.isAwardRecognition) && <CardNoteActivity />}
+				{[
+					EApprovalStatus.SUBMITTED,
+					EApprovalStatus.APPROVED,
+					EApprovalStatus.REJECTED,
+					EApprovalStatus.CHANGES_REQUIRED,
+				].includes(record?.workflow as EApprovalStatus) && <CardNoteActivity />}
+
 				<Row gutter={[12, 0]}>
 					<Col span={24}>
 						<Row gutter={[12, 0]}>

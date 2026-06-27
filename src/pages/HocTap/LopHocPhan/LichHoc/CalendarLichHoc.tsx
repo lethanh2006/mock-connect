@@ -1,4 +1,4 @@
-import { messagesCalendar } from '@/services/Calendar/constant';
+import { useMessagesCalendar } from '@/services/Calendar/constant';
 import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
@@ -8,6 +8,7 @@ import type { DateRange } from 'react-big-calendar';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useModel } from 'umi';
+
 const localizer = dayjsLocalizer(dayjs);
 
 const CalendarLichHocLopHp = (props: {
@@ -15,6 +16,7 @@ const CalendarLichHocLopHp = (props: {
 	onClickItem: (val: ThoiKhoaBieu.IRecord) => void;
 }) => {
 	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
+	const messagesCalendar = useMessagesCalendar();
 	const { items, onClickItem } = props;
 
 	useEffect(() => {
@@ -42,6 +44,7 @@ const CalendarLichHocLopHp = (props: {
 				dayRangeHeaderFormat: (range: DateRange) => {
 					return `${dayjs(range.start).format('DD/MM')} - ${dayjs(range.end).format('DD/MM')}`;
 				},
+				eventTimeRangeFormat: () => '',
 			}}
 			localizer={localizer}
 			events={items.map((j) => ({

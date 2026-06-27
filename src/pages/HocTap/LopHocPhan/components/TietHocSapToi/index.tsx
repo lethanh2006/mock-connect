@@ -1,3 +1,4 @@
+import PageCard from '@/components/PageCard';
 import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { primaryColor } from '@/services/base/constant';
 import { colorTrangThaiUserDiemDanh, ETrangThaiUserDiemDanh, trangThaiUserDiemDanh } from '@/services/DaoTao/constant';
@@ -5,13 +6,13 @@ import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { colorHinhThucGiangDay, EHinhThucGiangDay } from '@/services/HocTap/constant';
 import { ELoaiSuKien, THU_TRONG_TUAN } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
+import { formatDate } from '@/utils/formatDate';
 import { ArrowRightOutlined, BookOutlined } from '@ant-design/icons';
 import { Badge, Card, Empty, Space, Spin, Tag } from 'antd';
 import { type Dayjs } from 'dayjs';
 import { isEmpty, sortBy } from 'lodash';
 import { useEffect, useState } from 'react';
 import { history, Link, useIntl, useModel } from 'umi';
-import { formatDate } from '@/utils/formatDate';
 import styles from './style.less';
 
 interface RenderLichHocProps {
@@ -95,27 +96,24 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 
 	if (!loading && isEmpty(data)) {
 		return (
-			<Card
+			<PageCard
+				level={2}
 				title={intl.formatMessage({ id: 'lophocphan.hocsaptoi.title' })}
-				className='card-borderless'
-				variant='borderless'
 			>
-				<Card variant='borderless'>
-					<Empty
-						image={Empty.PRESENTED_IMAGE_SIMPLE}
-						description={intl.formatMessage({ id: 'lophocphan.hocsaptoi.empty' })}
-					/>
-				</Card>
-			</Card>
+				<Empty
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+					description={intl.formatMessage({ id: 'lophocphan.hocsaptoi.empty' })}
+				/>
+			</PageCard>
 		);
 	}
 
 	return (
-		<Card
+		<PageCard
+			level={2}
+			hideInnerCard
 			title={intl.formatMessage({ id: 'lophocphan.hocsaptoi.title' })}
-			className='card-big-title card-borderless'
-			variant='borderless'
-			styles={{ body: { height: '100%', maxHeight: 348 } }}
+			styles={{ body: { height: 'fit-content', maxHeight: 348 } }}
 			extra={
 				tietGanNhat && (
 					<Link
@@ -254,7 +252,7 @@ const RenderLichHoc = (props: RenderLichHocProps) => {
 					getData={getThoiKhoaBieu}
 				/>
 			) : null}
-		</Card>
+		</PageCard>
 	);
 };
 

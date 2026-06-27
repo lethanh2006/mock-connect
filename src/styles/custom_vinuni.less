@@ -1,35 +1,9 @@
 @font-face {
 	font-family: 'Montserrat';
 	src: url('/student/font/Montserrat.ttf') format('truetype');
-	font-weight: 100 900;
+	font-weight: 100 400 600 900;
 	font-style: normal;
 	font-display: swap;
-}
-
-// =============================================================================
-// Mixins dùng chung – giảm lặp cho triangle indicator
-// =============================================================================
-.vin-triangle-indicator(@color: ~'var(--vin-color-primary)'; @w: 14px; @h: 10px; @side: right; @rotate: 180deg) {
-	content: '' !important;
-	position: absolute !important;
-	width: 0 !important;
-	height: 0 !important;
-	border-top: @h solid transparent !important;
-	border-bottom: @h solid transparent !important;
-	display: block !important;
-	visibility: visible !important;
-	opacity: 1 !important;
-	z-index: 999 !important;
-	pointer-events: none !important;
-	rotate: @rotate !important;
-
-	& when (@side =right) {
-		border-right: @w solid @color !important;
-	}
-
-	& when (@side =left) {
-		border-left: @w solid @color !important;
-	}
 }
 
 // =============================================================================
@@ -106,26 +80,13 @@ body {
 }
 
 .ant-form-item-label > label {
-	height: auto;
-	margin: 4px 0 !important;
 	font-weight: 600 !important;
-	font-size: 14px !important;
-	line-height: 170% !important;
-	letter-spacing: 1.5% !important;
 }
 
 .ant-form-item-required::after {
 	color: var(--form-label-required-mark-color) !important;
 	visibility: visible !important;
 	content: '*' !important;
-}
-
-.ant-form-vertical .ant-form-item {
-	margin-bottom: 10px !important;
-
-	.ant-form-item-label {
-		padding: 0 !important;
-	}
 }
 
 // =============================================================================
@@ -149,6 +110,19 @@ body {
 
 	@media (max-width: 767px) {
 		margin-top: 16px !important;
+	}
+}
+
+.ant-pro-layout {
+	--layout-sider-width: 260px;
+	--layout-sider-collapsed-width: 64px;
+
+	&:has(.ant-layout-sider-collapsed) {
+		--layout-sider-width: var(--layout-sider-collapsed-width);
+	}
+
+	@media (max-width: 767px) {
+		--layout-sider-width: 0px;
 	}
 }
 
@@ -190,17 +164,13 @@ body {
 	}
 }
 
-.ant-menu-title-content {
-	color: var(--color-text-100) !important;
-}
-
 .ant-pro-sider-logo {
 	height: 64px;
 	display: flex;
 	align-items: center;
 
 	a {
-		gap: 10px;
+		gap: 6px;
 	}
 
 	img {
@@ -208,37 +178,9 @@ body {
 	}
 
 	h1 {
-		font-size: 16px;
-		font-weight: 700;
-		color: var(--color-official-200);
 		text-transform: uppercase;
-		display: block !important;
+		height: auto !important;
 	}
-}
-
-.ant-pro-sider-actions {
-	display: none !important;
-}
-
-.ant-pro-sider-collapsed-button {
-	z-index: 999 !important;
-	cursor: pointer !important;
-	pointer-events: auto !important;
-	width: 32px !important;
-	height: 32px !important;
-	min-width: 32px !important;
-	min-height: 32px !important;
-	display: flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	color: var(--color-text-100) !important;
-}
-
-.ant-layout-header {
-	background-image: url('/student/header_page_vinuni.png') !important;
-	background-size: 100% 100% !important;
-	background-position: top center !important;
-	background-repeat: no-repeat !important;
 }
 
 // =============================================================================
@@ -272,10 +214,6 @@ body {
 	}
 }
 
-.ant-table-selection-column {
-	text-align-last: center !important;
-}
-
 .ant-table-cell {
 	text-align: left !important;
 
@@ -284,34 +222,29 @@ body {
 		margin-bottom: 0 !important;
 	}
 
-	.ant-btn {
-		height: 28px;
-		width: 28px;
+	.ant-btn-sm {
+		height: 28px !important;
 	}
-}
 
-.ant-table-small .ant-table-cell {
-	height: 36px;
+	.ant-btn {
+		height: 32px;
+	}
+
+	.ant-btn-icon-only {
+		height: 32px;
+		width: 32px;
+	}
 }
 
 .ant-table-thead {
 	.ant-table-cell {
-		font-weight: 600 !important;
 		text-align: left !important;
-		border-bottom: 1px solid var(--color-accent-700) !important;
-	}
-
-	> tr > th {
-		color: var(--color-text-100) !important;
-		font-weight: 600 !important;
-		height: 44px;
-
-		&::before {
-			display: none !important;
-		}
 
 		.ant-table-column-title {
-			color: var(--color-text-100) !important;
+			display: flex !important;
+			justify-content: flex-start !important;
+			text-align: left !important;
+			width: auto !important;
 		}
 	}
 
@@ -321,10 +254,14 @@ body {
 	}
 }
 
+.ttCellWrapper {
+	justify-content: flex-start !important;
+}
+
 .ant-table-tbody .ant-table-row .ant-table-cell-fix-right:last-child {
 	gap: 6px !important;
 
-	.ant-btn {
+	> .ant-btn {
 		padding: 4px !important;
 		margin-right: 6px !important;
 		margin-bottom: 6px !important;
@@ -340,148 +277,80 @@ body {
 }
 
 .ant-card {
-	border-radius: 6px !important;
-
-	&.card-borderless {
-		box-shadow: none;
-		height: fit-content !important;
-
-		> .ant-card-body {
-			.table-base {
-				margin: 0 !important;
-			}
-		}
-
-		> .ant-card-head {
-			padding: 0 12px;
-		}
-	}
-
-	.ant-card-head-title {
+	> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
 		white-space: pre-wrap;
-		flex: auto;
 		font-size: 18px !important;
 		font-weight: bold !important;
 		color: var(--color-primary) !important;
 	}
 
-	.ant-card-head {
-		padding: 0 16px !important;
-		border-bottom: 1.5px solid var(--color-accent-700) !important;
-
-		@media (max-width: @screen-xs) {
-			padding: 0 12px;
+	&.has-indicator {
+		> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+			&::after {
+				.indicator();
+				left: -18px !important;
+				top: 8px !important;
+				transform: translateY(-50%) !important;
+			}
 		}
-
-		.ant-card-head-wrapper {
-			flex-wrap: wrap;
-		}
-	}
-
-	& > .ant-card-body {
-		padding: 10px 16px;
-	}
-
-	.ant-drawer .ant-card-body,
-	.ant-modal .ant-card-body {
-		padding-top: 12px !important;
 	}
 
 	&.card-big-title {
-		background: transparent;
-		border: none !important;
-
 		> .ant-card-head {
-			padding: 0 0 16px 0 !important;
-			border: none !important;
-			background-color: transparent !important;
-
-			.ant-card-head-title {
+			> .ant-card-head-wrapper > .ant-card-head-title {
 				font-size: 22px !important;
-				margin-left: 2px !important;
 				color: var(--color-accent-800) !important;
-				display: flex;
-				align-items: center;
+				margin-left: 0 !important;
+				padding-left: 0 !important;
+			}
+		}
+
+		&.has-indicator {
+			> .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+				margin-left: 2px !important;
 
 				&::after {
-					content: '' !important;
-					position: absolute !important;
+					.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 10px; @side: right);
 					left: -18px !important;
-					top: 0 !important;
+					top: 8px !important;
 					transform: translateY(-50%) !important;
-					width: 0 !important;
-					height: 0 !important;
-					border-right: 14px solid var(--vin-color-primary) !important;
-					border-top: 10px solid transparent !important;
-					border-bottom: 10px solid transparent !important;
-					display: block !important;
-					rotate: 180deg !important;
-					visibility: visible !important;
-					opacity: 1 !important;
-					z-index: 999 !important;
-					pointer-events: none !important;
-
-					@media (max-width: 768px) {
-						left: -18px !important;
-					}
-
-					@media (max-width: 425px) {
-						top: 4px !important;
-						left: -10px !important;
-						border-right: 10px solid var(--vin-color-primary) !important;
-						border-top: 8px solid transparent !important;
-						border-bottom: 8px solid transparent !important;
-					}
-				}
-
-				@media (max-width: 425px) {
-					padding-left: 6px !important;
-				}
-			}
-
-			.ant-card-extra {
-				.ant-space-align-center {
-					align-items: start !important;
-				}
-
-				.ant-btn {
-					.ant-btn-icon {
-						display: none !important;
-					}
 				}
 			}
 		}
+	}
 
-		> .ant-card-body {
-			border-radius: 4px;
-			background-color: transparent !important;
-			padding: 0 16px;
-
-			&.ant-spin-nested-loading {
-				margin: 0 -16px !important;
-			}
-
-			&.header {
-				margin: 0 -16px !important;
-			}
-
-			.ant-card {
-				.ant-spin-nested-loading {
-					margin: 0 !important;
-				}
-
-				.header {
-					margin: 0 !important;
-				}
-
-				.table-base {
-					margin: 0 !important;
-				}
+	&.highlight {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
+				color: var(--color-official-300) !important;
+				padding-left: 0 !important;
 			}
 		}
 
-		> .ant-card-head-wrapper > .ant-card-head-title {
-			font-size: 18px;
+		&.has-indicator {
+			.ant-card-head .ant-card-head-title {
+				padding-left: 18px !important;
+
+				&::after {
+					.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 7px; @side: right);
+					left: 0 !important;
+					top: 14px !important;
+					transform: translateY(-50%) !important;
+				}
+			}
+		}
+	}
+
+	&.normal {
+		> .ant-card-head {
+			> .ant-card-head-wrapper > .ant-card-head-title {
+				font-size: 16px !important;
+				color: var(--color-official-300) !important;
+
+				&::after {
+					display: none !important;
+				}
+			}
 		}
 	}
 }
@@ -494,110 +363,6 @@ body {
 	color: var(--color-primary) !important;
 }
 
-.card-big-title {
-	& > .ant-card-body {
-		padding: 0 !important;
-		background-color: transparent !important;
-		border-radius: 8px !important;
-
-		.ant-spin-nested-loading {
-			// margin: 0 -16px !important;
-			.ant-card {
-				& > .ant-card-body {
-					padding: 12px 16px !important;
-				}
-			}
-		}
-
-		.ant-card {
-			& > .ant-card-body {
-				& > .ant-card {
-					& > .ant-card-body {
-						padding: 0 !important;
-
-						.table-base {
-							margin: 0 !important;
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-// Style cho card base của bảng - VinUni
-.table-base-card {
-	background-color: transparent;
-
-	.ant-card-body {
-		background-color: var(--color-text-400) !important;
-		border-radius: 8px !important;
-		// padding: 0 16px !important;
-
-		.table-base {
-			border-radius: 8px !important;
-		}
-
-		@media (max-width: @screen-xs) {
-			padding: 0 !important;
-		}
-	}
-
-	.ant-card-head {
-		padding: 0 0 16px 0 !important;
-		border: none !important;
-		background-color: transparent !important;
-
-		.ant-card-head-title {
-			font-size: 22px !important;
-			color: var(--color-accent-800) !important;
-
-			&::after {
-				content: '' !important;
-				position: absolute !important;
-				left: -18px !important;
-				top: 0 !important;
-				transform: translateY(-50%) !important;
-				width: 0 !important;
-				height: 0 !important;
-				border-right: 14px solid var(--vin-color-primary) !important;
-				border-top: 10px solid transparent !important;
-				border-bottom: 10px solid transparent !important;
-				display: block !important;
-				rotate: 180deg !important;
-				visibility: visible !important;
-				opacity: 1 !important;
-				z-index: 999 !important;
-				pointer-events: none !important;
-
-				@media (max-width: 768px) {
-					left: -18px !important;
-				}
-
-				@media (max-width: 425px) {
-					top: 4px !important;
-					left: -10px !important;
-					border-right: 10px solid var(--vin-color-primary) !important;
-					border-top: 8px solid transparent !important;
-					border-bottom: 8px solid transparent !important;
-				}
-			}
-
-			@media (max-width: 425px) {
-				padding-left: 6px !important;
-			}
-		}
-
-		.ant-card-extra {
-			.ant-btn {
-				.ant-btn-icon {
-					display: none !important;
-				}
-			}
-		}
-	}
-}
-
 /* Các class button tùy chỉnh - VinUni */
 // Style chung cho tất cả button antd
 .ant-btn {
@@ -605,6 +370,11 @@ body {
 	align-items: center !important;
 	box-shadow: none !important;
 	text-transform: uppercase !important;
+
+	&:disabled,
+	&.ant-btn-disabled {
+		font-weight: 400 !important;
+	}
 }
 
 .ant-btn-sm {
@@ -632,16 +402,6 @@ body {
 	}
 }
 
-// .btn-import,
-// .btn-export,
-// .btn-reload,
-// .btn-filter,
-// .btn-column-settings{
-// 	background-color: var(--color-accent-700) !important;
-// 	border-radius: 4px;
-// 	border: none !important;
-// }
-
 // Style header của PageContainer - VinUni
 .ant-pro-page-container {
 	position: relative;
@@ -651,7 +411,7 @@ body {
 		content: '';
 		position: fixed;
 		top: 0;
-		left: 0;
+		left: var(--layout-sider-width, 260px);
 		right: 0;
 		height: 172px;
 		background-image: url('/student/header_page_vinuni.png') !important;
@@ -668,7 +428,7 @@ body {
 	}
 
 	.ant-pro-page-container-children-container {
-		padding: 0 18px !important;
+		padding: 0 16px !important; //main là 12px nhưng còn chừa chỗ con indicator nên để 16px
 		overflow-x: auto !important;
 		position: relative !important;
 		z-index: 2 !important;
@@ -682,6 +442,62 @@ body {
 		}
 	}
 
+	&.page-dashboard-no-header-bg {
+		&::before {
+			display: none !important;
+		}
+
+		.ant-page-header {
+			background-image: none !important;
+			background-color: #fff !important;
+			border-bottom: none !important;
+			box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.06) !important;
+
+			.ant-page-header-heading {
+				.ant-page-header-heading-extra {
+					.ant-space {
+						.ant-space-item {
+							[class*='menu_right'],
+							.menu_right {
+								color: var(--color-text-100) !important;
+
+								[class*='account'],
+								.account {
+									color: var(--color-text-100) !important;
+									font-weight: 700 !important;
+
+									[class*='name'],
+									.name {
+										color: var(--color-text-100) !important;
+										font-weight: 700 !important;
+									}
+								}
+
+								[class*='action']:not([class*='account']),
+								.action:not(.account) {
+									height: 36px !important;
+									width: 36px !important;
+									display: flex !important;
+									align-items: center !important;
+									justify-content: center !important;
+									background-color: var(--color-info-bg) !important;
+									border-radius: 4px !important;
+									box-shadow: none !important;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		[class*='menu_right'] .header-menu-item,
+		.menu_right .header-menu-item {
+			background-color: var(--color-info-bg) !important;
+			box-shadow: none !important;
+		}
+	}
+
 	.ant-page-header {
 		border-bottom: 1px solid var(--color-official-200) !important;
 		padding: 16px !important;
@@ -692,9 +508,8 @@ body {
 		justify-content: end;
 		position: fixed !important;
 		top: 0 !important;
-		left: 0 !important;
+		left: var(--layout-sider-width, 260px) !important;
 		right: 0 !important;
-		width: 100vw !important;
 		z-index: 10 !important;
 		background-color: transparent !important;
 		background-image: url('/student/header_page_vinuni.png') !important;
@@ -770,7 +585,7 @@ body {
 
 			&::before {
 				content: '' !important;
-				position: s !important;
+				position: absolute !important;
 				left: -32px !important;
 				top: 50% !important;
 				transform: translateY(-50%) !important;
@@ -794,26 +609,14 @@ body {
 }
 
 .table-base {
-	border-radius: 8px !important;
-
-	.table-base-header {
-		margin-bottom: 0 !important;
-	}
-
 	.header {
 		display: flex;
-		align-items: center !important;
 		flex-direction: row-reverse;
 		justify-content: space-between !important;
-		gap: 12px !important;
-		margin-bottom: 0 !important;
 
 		.action {
 			display: flex !important;
 			flex-direction: row-reverse;
-			align-items: center !important;
-			gap: 8px !important;
-			flex-wrap: wrap !important;
 
 			button.ant-btn:has(> .span-extend) {
 				> span.ant-btn-icon {
@@ -832,19 +635,11 @@ body {
 					}
 				}
 			}
-
-			.total {
-				z-index: 1 !important;
-				border: none !important;
-				font-size: 14px !important;
-				font-weight: 500 !important;
-			}
 		}
 
 		.extra {
 			display: flex !important;
 			align-items: center !important;
-			gap: 8px !important;
 
 			.ant-btn {
 				.ant-btn-icon,
@@ -869,223 +664,6 @@ body {
 			}
 		}
 	}
-
-	.ttCellWrapper {
-		position: relative !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: start !important;
-		width: 100% !important;
-		height: 100% !important;
-	}
-
-	.ant-table-wrapper {
-		padding: 12px 0 0 0 !important;
-	}
-}
-
-.css-glamorous-div--jgd0xx {
-	.ant-card {
-		.ant-card-body {
-			.table-base {
-				.ant-table-wrapper {
-					.ant-spin-nested-loading {
-						margin: 0 !important;
-					}
-				}
-			}
-		}
-	}
-}
-
-// =============================================================================
-// 5. Card
-// =============================================================================
-.ant-card {
-	border-radius: 6px !important;
-
-	.ant-card-head-title {
-		white-space: pre-wrap;
-		flex: auto;
-		font-size: 18px !important;
-		font-weight: bold !important;
-		color: var(--color-primary) !important;
-	}
-
-	.ant-card-head {
-		padding: 0 16px !important;
-		border-bottom: 1.5px solid var(--color-accent-700) !important;
-
-		@media (max-width: @screen-xs) {
-			padding: 0 12px;
-		}
-
-		.ant-card-head-wrapper {
-			flex-wrap: wrap;
-		}
-	}
-
-	& > .ant-card-body {
-		padding: 10px 16px;
-	}
-
-	.ant-drawer .ant-card-body,
-	.ant-modal .ant-card-body {
-		padding-top: 12px !important;
-	}
-
-	&.card-borderless {
-		box-shadow: none;
-		height: fit-content !important;
-
-		> .ant-card-body .table-base {
-			margin: 0 !important;
-		}
-
-		> .ant-card-head {
-			padding: 0 12px;
-		}
-	}
-
-	&.card-big-title {
-		// background: transparent;
-		border: none !important;
-
-		> .ant-card-head {
-			padding: 0 0 16px 0 !important;
-			border: none !important;
-			// background-color: transparent !important;
-
-			.ant-card-head-title {
-				font-size: 22px !important;
-				margin-left: 2px !important;
-				color: var(--color-accent-800) !important;
-				display: flex;
-				align-items: center;
-
-				&::after {
-					.vin-triangle-indicator(@side: right; @w: 14px; @h: 10px);
-					left: -18px !important;
-					top: 0 !important;
-					transform: translateY(-50%) !important;
-
-					@media (max-width: 425px) {
-						top: 4px !important;
-						left: -10px !important;
-						border-right: 10px solid var(--vin-color-primary) !important;
-						border-top: 8px solid transparent !important;
-						border-bottom: 8px solid transparent !important;
-					}
-				}
-
-				@media (max-width: 425px) {
-					padding-left: 6px !important;
-				}
-			}
-
-			.ant-card-extra {
-				.ant-space-align-center {
-					align-items: start !important;
-				}
-
-				.ant-btn .ant-btn-icon {
-					display: none !important;
-				}
-			}
-		}
-
-		> .ant-card-body {
-			border-radius: 4px;
-			// background-color: white !important;
-			padding: 0 16px;
-
-			.ant-card {
-				.ant-spin-nested-loading {
-					margin: 0 !important;
-				}
-
-				.header,
-				.table-base {
-					margin: 0 !important;
-				}
-			}
-		}
-
-		> .ant-card-head-wrapper > .ant-card-head-title {
-			font-size: 18px;
-		}
-	}
-}
-
-.card-big-title > .ant-card-body {
-	padding: 0 !important;
-	// background-color: transparent !important;
-	border-radius: 8px !important;
-
-	.ant-spin-nested-loading .ant-card > .ant-card-body {
-		padding: 12px 16px !important;
-	}
-
-	.ant-card > .ant-card-body {
-		& > .ant-card > .ant-card-body {
-			padding: 0 !important;
-
-			.table-base {
-				margin: 0 !important;
-			}
-		}
-	}
-}
-
-.table-base-card {
-	background-color: transparent;
-
-	.ant-card-body {
-		background-color: var(--color-text-400) !important;
-		border-radius: 8px !important;
-
-		.table-base {
-			border-radius: 8px !important;
-		}
-
-		@media (max-width: @screen-xs) {
-			padding: 0 !important;
-		}
-	}
-
-	.ant-card-head {
-		padding: 0 0 16px 0 !important;
-		border: none !important;
-		background-color: transparent !important;
-
-		.ant-card-head-title {
-			font-size: 22px !important;
-			color: var(--color-accent-800) !important;
-
-			&::after {
-				.vin-triangle-indicator(@side: right; @w: 14px; @h: 10px);
-				left: -18px !important;
-				top: 0 !important;
-				transform: translateY(-50%) !important;
-
-				@media (max-width: 425px) {
-					top: 4px !important;
-					left: -10px !important;
-					border-right: 10px solid var(--vin-color-primary) !important;
-					border-top: 8px solid transparent !important;
-					border-bottom: 8px solid transparent !important;
-				}
-			}
-
-			@media (max-width: 425px) {
-				padding-left: 6px !important;
-			}
-		}
-
-		.ant-card-extra .ant-btn .ant-btn-icon {
-			display: none !important;
-		}
-	}
 }
 
 .card-highlight .ant-card-head {
@@ -1095,161 +673,6 @@ body {
 
 .lich-sap-toi-card {
 	margin: 0 !important;
-}
-
-// =============================================================================
-// 6. Button
-// =============================================================================
-.ant-btn {
-	justify-content: center !important;
-	align-items: center !important;
-	box-shadow: none !important;
-	text-transform: uppercase !important;
-}
-
-.ant-btn-sm {
-	text-transform: none !important;
-}
-
-.ant-btn-primary.ant-btn-color-primary.ant-btn-variant-solid {
-	&:hover {
-		background-color: var(--color-accent-800) !important;
-		border-color: var(--color-primary) !important;
-		color: var(--color-primary) !important;
-	}
-}
-
-// =============================================================================
-// 7. Page Container & Header
-// =============================================================================
-.ant-pro-page-container {
-	position: relative;
-	overflow: visible !important;
-
-	&::before {
-		content: '';
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		height: 170px;
-		background-image: url('/student/header_page_vinuni.png') !important;
-		background-size: 101% 170px !important;
-		background-position: top center !important;
-		background-repeat: no-repeat !important;
-		z-index: 0;
-		pointer-events: none;
-	}
-
-	.ant-pro-page-container-children {
-		position: relative;
-		z-index: 1;
-	}
-
-	.ant-pro-page-container-children-container {
-		padding: 0 18px !important;
-		overflow-x: auto !important;
-		position: relative !important;
-		z-index: 2 !important;
-
-		@media (max-width: 425px) {
-			padding: 0 10px !important;
-		}
-	}
-
-	.ant-page-header {
-		border-bottom: 1px solid var(--color-official-200) !important;
-		padding: 16px !important;
-		min-height: 64px !important;
-		height: 64px !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: end;
-		position: fixed !important;
-		top: 0 !important;
-		left: 0 !important;
-		right: 0 !important;
-		width: 100vw !important;
-		z-index: 10 !important;
-		background-color: transparent !important;
-		background-image: url('/student/header_page_vinuni.png') !important;
-		background-size: 100% 172px !important;
-		background-position: top center !important;
-		background-repeat: no-repeat !important;
-
-		@media (max-width: 767px) {
-			display: none !important;
-		}
-
-		.ant-page-header-heading {
-			min-height: auto !important;
-			padding: 0 !important;
-			display: flex !important;
-			align-items: center !important;
-			width: 100% !important;
-			position: relative !important;
-			overflow: visible !important;
-
-			.ant-page-header-heading-extra .ant-space .ant-space-item {
-				[class*='menu_right'],
-				.menu_right {
-					margin-left: auto !important;
-					margin-right: 0 !important;
-					color: var(--color-accent-800) !important;
-					font-weight: 600 !important;
-
-					@media (max-width: 768px) {
-						width: 100% !important;
-						display: flex;
-						justify-content: end;
-					}
-
-					[class*='account'],
-					.account {
-						color: var(--color-accent-800) !important;
-						font-weight: 500 !important;
-						display: flex;
-						gap: 8px;
-
-						[class*='avatar'],
-						.avatar {
-							width: 36px !important;
-							height: 36px !important;
-						}
-					}
-
-					[class*='action'],
-					.action {
-						border-radius: 6px !important;
-						padding: 3px !important;
-					}
-				}
-			}
-		}
-
-		.ant-page-header-heading-title {
-			color: var(--color-accent-800) !important;
-			font-size: 22px !important;
-			font-weight: 700 !important;
-			line-height: 1.5 !important;
-			position: absolute !important;
-			left: 16px !important;
-			top: 70px !important;
-			display: inline-block !important;
-			overflow: visible !important;
-
-			&::before {
-				.vin-triangle-indicator(@side: left; @w: 16px; @h: 12px; @rotate: 0deg);
-				left: -32px !important;
-				top: 50% !important;
-				transform: translateY(-50%) !important;
-
-				@media (max-width: 768px) {
-					left: -10px !important;
-				}
-			}
-		}
-	}
 }
 
 .ant-page-header-no-children {
@@ -1270,22 +693,6 @@ body {
 	margin-left: auto !important;
 	display: flex !important;
 	align-items: center !important;
-}
-
-// Thay đổi icon của collapsed button dựa trên collapsed state
-// Khi sidebar collapsed (đóng) - hiển thị MenuUnfoldOutlined
-.ant-pro-sider-collapsed .ant-pro-sider-collapsed-button .anticon {
-	&::before {
-		content: '\e6d7' !important; // MenuUnfoldOutlined unicode
-	}
-}
-
-// Khi sidebar expanded (mở) - hiển thị MenuFoldOutlined
-.ant-pro-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon,
-.ant-layout-sider:not(.ant-pro-sider-collapsed) .ant-pro-sider-collapsed-button .anticon {
-	&::before {
-		content: '\e6d8' !important; // MenuFoldOutlined unicode
-	}
 }
 
 // Đảm bảo layout không tạo scrollbar thứ hai
@@ -1309,9 +716,16 @@ body {
 .ant-modal-close,
 .ant-drawer-close,
 .ant-table-expand-icon,
-.ant-table-row-expand-icon,
+.ant-table-row-expand-icon {
+	color: var(--color-text-100) !important;
+}
+
 .ant-card-extra .anticon {
 	color: var(--color-text-100) !important;
+}
+
+.ant-card-extra .ant-btn-primary .anticon {
+	color: currentColor !important;
 }
 
 // Kích thước và hình ảnh của menu item ở header - VinUni
@@ -1414,16 +828,6 @@ body {
 	}
 }
 
-.ant-modal-body .form-footer::before {
-	left: -24px;
-	right: -24px;
-}
-
-.ant-card-body .form-footer::before {
-	left: -18px;
-	right: -18px;
-}
-
 // =============================================================================
 // 9. Picker & Calendar
 // =============================================================================
@@ -1463,34 +867,31 @@ body {
 	}
 }
 
-// Style header của layout - VinUni
-.ant-layout-header {
-	background-image: url('/student/header_page_vinuni.png') !important;
-	background-size: 100% 100% !important;
-	background-position: top center !important;
-	background-repeat: no-repeat !important;
-}
-
-// Đẩy nội dung xuống dưới header fixed, giữ before background đủ không gian
-.ant-pro-layout-container {
-	margin-top: 80px !important;
-
-	@media (max-width: 767px) {
-		margin-top: 16px !important; // mobile đã ẩn header
-	}
-}
-
 @media (max-width: 425px) {
 	.ant-pro-layout .ant-pro-sider-collapsed-button {
 		right: -10px !important;
 	}
 }
 
+.collapse-big-title .ant-collapse-item .ant-collapse-header {
+	padding: 16px 2px !important;
+}
+
+.collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text {
+	font-weight: 600 !important;
+	font-size: 16px !important;
+}
+
 .collapse-big-title .ant-collapse-item .ant-collapse-header .ant-collapse-header-text::after {
-	.vin-triangle-indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
+	.indicator(@color: ~'var(--color-highlight)'; @w: 10px; @h: 6px; @side: right);
 	left: -16px !important;
-	top: 14px !important;
+	top: 17px !important;
 	transform: translateY(-50%) !important;
+}
+
+.ant-tabs-tab-btn {
+	font-size: 15px !important;
+	font-weight: 600 !important;
 }
 
 .divider-big-title .ant-divider-inner-text {
@@ -1498,14 +899,25 @@ body {
 	font-weight: 600;
 
 	&::before {
-		.vin-triangle-indicator(@w: 10px; @h: 6px; @side: right);
+		.indicator(@color: ~'var(--color-official-100)'; @w: 10px; @h: 6px; @side: right);
 		left: -16px !important;
-		top: 0 !important;
 		transform: translateY(-50%) !important;
 
 		@media (max-width: 768px) {
 			top: 32% !important;
 		}
+	}
+
+	&:has(> h1)::before {
+		top: 14px !important;
+	}
+
+	&:has(> h2)::before {
+		top: 6px !important;
+	}
+
+	&:has(h5)::before {
+		top: 4px !important;
 	}
 }
 
@@ -1518,9 +930,30 @@ body {
 }
 
 .ant-table-selection-column {
-	text-align-last: center !important;
+	text-align-last: left !important;
 }
 
 .tb-sk-wrapper .header-tb-sk {
 	padding: 6px 20px 0 !important;
+}
+
+.ant-steps {
+	.ant-steps-item-finish,
+	.ant-steps-item-process {
+		.ant-steps-item-icon {
+			.ant-steps-icon,
+			span {
+				color: white !important;
+			}
+		}
+	}
+}
+
+.ant-anchor-ink,
+.ant-anchor-ink.ant-anchor-ink-visible {
+	height: 35px !important;
+}
+
+.ant-pro-global-footer {
+	margin-block-start: 24;
 }

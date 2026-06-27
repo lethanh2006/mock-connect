@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useModel } from 'umi';
+import { getLegacyPermissionScopes, hasAccessCode, hasAllAccessCodes, hasAnyAccessCode } from '@/utils/keycloakRoles';
 
 /**
  * Hook để kiểm tra quyền truy cập - Tích hợp trực tiếp không cần file riêng
@@ -11,8 +12,9 @@ export const usePermissionCheck = () => {
     return useMemo(() => {
         const isLoading = initialState?.permissionLoading;
         const permissions = initialState?.authorizedPermissions;
-        const scopes = permissions?.map((item) => item.scopes).flat() || [];
-        const isReady = !isLoading && !!permissions;
+        const scopes = getLegacyPermissionScopes(initialState);
+        const roles = initialState?.authorizedRoles ?? [];
+        const isReady = !isLoading && (!!permissions || !!roles.length);
 
         return {
             /** Trạng thái loading permission */
@@ -21,6 +23,7 @@ export const usePermissionCheck = () => {
             isReady,
             /** Danh sách scopes hiện tại */
             scopes,
+            roles,
             /** Danh sách permissions đầy đủ */
             permissions,
 
@@ -29,7 +32,7 @@ export const usePermissionCheck = () => {
              */
             hasPermission: (permission: string) => {
                 if (!isReady) return false;
-                return scopes.includes(permission);
+                return hasAccessCode(initialState, permission);
             },
 
             /**
@@ -37,7 +40,7 @@ export const usePermissionCheck = () => {
              */
             hasAnyPermission: (permissionList: string[]) => {
                 if (!isReady) return false;
-                return permissionList.some(permission => scopes.includes(permission));
+                return hasAnyAccessCode(initialState, permissionList);
             },
 
             /**
@@ -45,7 +48,7 @@ export const usePermissionCheck = () => {
              */
             hasAllPermissions: (permissionList: string[]) => {
                 if (!isReady) return false;
-                return permissionList.every(permission => scopes.includes(permission));
+                return hasAllAccessCodes(initialState, permissionList);
             },
 
             /**
@@ -55,17 +58,17 @@ export const usePermissionCheck = () => {
                 if (!isReady) return false;
 
                 if (route.maChucNang) {
-                    return scopes.includes(route.maChucNang);
+                    return hasAccessCode(initialState, route.maChucNang);
                 }
 
                 if (route.listChucNang) {
-                    return route.listChucNang.some(permission => scopes.includes(permission));
+                    return hasAnyAccessCode(initialState, route.listChucNang);
                 }
 
                 return false;
             }
         };
-    }, [initialState?.permissionLoading, initialState?.authorizedPermissions]);
+    }, [initialState?.permissionLoading, initialState?.authorizedPermissions, initialState?.authorizedRoles]);
 };
 
 export default usePermissionCheck;

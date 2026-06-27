@@ -7,9 +7,9 @@ import { useState } from 'react';
 export default () => {
 	const objInit = useInitModel<HocPhan.IRecord>('hoc-phan', undefined, undefined, ipDaoTao);
 	const { getModel } = objInit;
-	const [loaiDangKy, setLoaiDangKy] = useState<ELoaiDangKyTheoLop>(ELoaiDangKyTheoLop.LOP_HANH_CHINH);
+	const [loaiDangKy, setLoaiDangKy] = useState<ELoaiDangKyTheoLop>(ELoaiDangKyTheoLop.TAT_CA);
 
-	const getHocPhanDKHPModel = (maHocKy: string, condition?: any) =>
+	const getHocPhanDKHPModel = (maHocKy: string, condition?: any, otherQuery?: any) =>
 		getModel(
 			condition,
 			undefined,
@@ -17,7 +17,7 @@ export default () => {
 			undefined,
 			undefined,
 			`dang-ky-tin-chi/sinh-vien/hoc-phan/hoc-ky/${maHocKy}/loai/${loaiDangKy}/page`,
-			undefined,
+			otherQuery,
 			undefined,
 			true,
 		);

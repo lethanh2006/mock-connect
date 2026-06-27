@@ -1,4 +1,3 @@
-import pathway from '@/locales/vi-VN/pages/pathway';
 import cct from './cct';
 import activity from './cct/activity';
 import dangky from './dichvuhanhchinh/dangky';
@@ -9,10 +8,12 @@ import chungchitotnghiep from './hoctap/chungchi';
 import dangkynhucau from './hoctap/dangkynhucau';
 import dangkytinchi from './hoctap/dangkytinchi';
 import dieukientotnghiep from './hoctap/dieukientotnghiep';
+import hocphannhucau from './hoctap/hocphannhucau';
 import ketquahoctap from './hoctap/ketquahoctap';
 import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
+import pathway from './hoctap/pathway';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
 import lichsukien from './lichsukien';
@@ -20,6 +21,7 @@ import login from './login';
 import lophanhchinh from './lophanhchinh';
 import minor from './minor';
 import phanhoi from './phanhoi';
+import syllabus from './syllabus';
 import congno from './taichinh/congno';
 import lichsugiaodich from './taichinh/lichsugiaodich';
 import uudaithanhtoan from './taichinh/uudaithanhtoan';
@@ -57,12 +59,14 @@ export default {
 	...dangky,
 	...lichsu,
 	...dangkynhucau,
+	...hocphannhucau,
 	...tintuc,
 	...lichthi,
 	...baithicuoiky,
 	...activity,
 	...pathway,
 	...minor,
+	...syllabus,
 	...cct,
 
 	'pages.trangchu.title': 'TRAINING STUDENT PORTAL',

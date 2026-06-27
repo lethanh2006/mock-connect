@@ -64,7 +64,7 @@ const GridChoice = (props: { question: BieuMau.CauHoi; form: FormInstance; disab
 
 	return (
 		<TableStaticData
-			otherProps={{ pagination: false, scroll: false }}
+			otherProps={{ pagination: false }}
 			data={props?.question?.luaChonHang}
 			columns={columns}
 			addStt

@@ -1,18 +1,36 @@
+import type { TFilter } from '@/components/Table/typing';
 import useInitModel from '@/hooks/useInitModel';
+import { getLopHocPhanDangKyTheoHocPhan } from '@/services/DaoTao/DangKyTinChi';
 import { ELoaiDangKyTheoLop } from '@/services/DaoTao/DangKyTinChi/constant';
 import { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
-import { getMoodleLopHocPhan } from '@/services/HocTap/LopHocPhan';
+import { getGiaoAnSinhVien, getMoodleLopHocPhan, postWithdraw } from '@/services/HocTap/LopHocPhan';
 import { ELoaiLopHocPhan, ETrangThaiLopHocPhan } from '@/services/HocTap/LopHocPhan/constant';
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import dayjs from '@/utils/dayjs';
 import { ipDaoTao } from '@/utils/ip';
+import { message } from 'antd';
 import _ from 'lodash';
 import { useState } from 'react';
 
 export default () => {
-	const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao);
-	const { getByIdModel, getModel, getAllModel, setLoading, page, limit, getService, setPage, setTotal, setDanhSach } =
-		objInit;
+	const objInit = useInitModel<LopHocPhan.IRecord>('lop-hoc-phan', undefined, undefined, ipDaoTao, {
+		maHocPhan: 1,
+		ten: 1,
+	});
+	const {
+		getByIdModel,
+		getModel,
+		getAllModel,
+		setLoading,
+		page,
+		limit,
+		getService,
+		setPage,
+		setTotal,
+		setDanhSach,
+		setFormSubmiting,
+		formSubmiting,
+	} = objInit;
 	const [danhSachLopDktc, setDanhSachLopDktc] = useState<LopHocPhan.IRecord[]>([]);
 	const [lopHienTai, setLopHienTai] = useState<LopHocPhan.IRecord>();
 	const [lopKeTiep, setLopKeTiep] = useState<LopHocPhan.IRecord>();
@@ -166,19 +184,30 @@ export default () => {
 		loaiDangKyTheoLop: ELoaiDangKyTheoLop,
 		maHocPhan: string,
 		tatCa: boolean = false,
+		otherQuery?: any,
+		filterParams?: TFilter<LopHocPhan.IRecord>[],
+		sortParams?: Record<string, 1 | -1 | undefined>,
 	): Promise<LopHocPhan.IRecord[]> => {
 		setLoading(true);
+		const activeSort = Object.fromEntries(Object.entries(sortParams ?? {}).filter(([, value]) => value));
 		const payload = {
 			page,
 			limit,
-			sort: { soThuTuLop: 1 },
-			condition: { maHocPhan, loai: ELoaiLopHocPhan.CHINH, trangThaiLop: ETrangThaiLopHocPhan.MO },
+			sort: Object.keys(activeSort).length ? activeSort : { maHocPhan: 1, ten: 1 },
+			condition: {
+				...(maHocPhan ? { maHocPhan } : {}),
+				loai: ELoaiLopHocPhan.CHINH,
+				trangThaiLop: ETrangThaiLopHocPhan.MO,
+			},
+			otherQuery,
+			filters: (filterParams ?? []).filter((item) => item.active !== false).map(({ active, ...item }) => item),
 		};
 
 		try {
 			const response = await getService(
 				payload,
-				`dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${loaiDangKyTheoLop === ELoaiDangKyTheoLop.LOP_HANH_CHINH && tatCa ? 'doi-tuong' : loaiDangKyTheoLop
+				`dang-ky-tin-chi/sinh-vien/lop-hoc-phan/hoc-ky/${maHocKy}/loai/${
+					loaiDangKyTheoLop === ELoaiDangKyTheoLop.LOP_HANH_CHINH && tatCa ? 'doi-tuong' : loaiDangKyTheoLop
 				}/page`,
 				true,
 			);
@@ -201,6 +230,50 @@ export default () => {
 		}
 	};
 
+	const sinhVienGetLopDangKyTheoHocPhanModel = async (
+		maHocKy: string,
+		idDot: string,
+		loaiDangKyTheoLop: 'lop-hanh-chinh' | 'khoa-nganh' | 'tat-ca',
+		otherQuery?: any,
+		filterParams?: TFilter<LopHocPhan.IRecord>[],
+		sortParams?: Record<string, 1 | -1 | undefined>,
+	): Promise<LopHocPhan.IRecord[]> => {
+		setLoading(true);
+		const activeSort = Object.fromEntries(Object.entries(sortParams ?? {}).filter(([, value]) => value));
+		const payload = {
+			page,
+			limit,
+			sort: Object.keys(activeSort).length ? activeSort : { maHocPhan: 1, ten: 1 },
+			condition: {
+				loai: ELoaiLopHocPhan.CHINH,
+				trangThaiLop: ETrangThaiLopHocPhan.MO,
+				idDot,
+			},
+			...otherQuery,
+			filters: (filterParams ?? []).filter((item) => item.active !== false).map(({ active, ...item }) => item),
+		};
+
+		try {
+			const response = await getLopHocPhanDangKyTheoHocPhan(payload, maHocKy, loaiDangKyTheoLop);
+			const tempData: LopHocPhan.IRecord[] = response?.data?.data?.result ?? [];
+			const tempTotal: number = response?.data?.data?.total ?? 0;
+
+			if (tempData.length === 0 && tempTotal) {
+				const maxPage = Math.ceil(tempTotal / payload.limit) || 1;
+				setPage(maxPage);
+				return Promise.reject('Invalid page');
+			}
+
+			setDanhSachLopDktc(tempData);
+			setTotal(tempTotal);
+			return tempData;
+		} catch (er) {
+			return Promise.reject(er);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const getMoodleLopHocPhanModel = async (lopHocPhanId: string): Promise<any> => {
 		setLoading(true);
 
@@ -215,6 +288,35 @@ export default () => {
 		}
 	};
 
+	const getGiaoAnSinhVienModel = async (lopHocPhanId: string): Promise<any> => {
+		setLoading(true);
+
+		try {
+			const res = await getGiaoAnSinhVien(lopHocPhanId);
+
+			return res.data?.data;
+		} catch (error) {
+			return Promise.reject(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const postWithdrawModel = async (payload: { lopHpSvId: string }): Promise<any> => {
+		if (formSubmiting) return Promise.reject('Form submiting');
+		setFormSubmiting(true);
+		try {
+			const res = await postWithdraw(payload);
+			message.success('Lưu thành công');
+
+			return res.data;
+		} catch (er) {
+			return Promise.reject(er);
+		} finally {
+			setFormSubmiting(false);
+		}
+	};
+
 	return {
 		...objInit,
 		danhSachLopDktc,
@@ -225,6 +327,9 @@ export default () => {
 		sinhVienGetAllModel,
 		getMoodleLopHocPhanModel,
 		sinhVienGetLopDangKyModel,
+		sinhVienGetLopDangKyTheoHocPhanModel,
 		calculateNearestBuoiLop,
+		postWithdrawModel,
+		getGiaoAnSinhVienModel,
 	};
 };

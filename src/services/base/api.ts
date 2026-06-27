@@ -5,7 +5,6 @@ import {
 	keycloakClientID,
 	keycloakTokenEndpoint,
 	keycloakUserInfoEndpoint,
-	resourceServerClientId,
 } from '@/utils/ip';
 import queryString from 'query-string';
 import type { ESettingKey } from './constant';
@@ -28,21 +27,6 @@ export async function refreshAccesssToken(payload: { refreshToken: string }) {
 		client_id: keycloakClientID,
 		grant_type: 'refresh_token',
 		refresh_token: payload.refreshToken,
-	};
-
-	return axios({
-		url: keycloakTokenEndpoint,
-		method: 'POST',
-		headers: { 'content-type': 'application/x-www-form-urlencoded' },
-		data: queryString.stringify(data),
-	});
-}
-
-export async function getPermission() {
-	const data = {
-		audience: resourceServerClientId,
-		grant_type: 'urn:ietf:params:oauth:grant-type:uma-ticket',
-		response_mode: 'permissions',
 	};
 
 	return axios({

@@ -2,10 +2,11 @@ import type { KhoaNganh } from '@/services/DaoTao/KhoaNganh/typing';
 import type { HocPhanNhuCau } from '@/services/HocTap/HocPhanNhuCau/typing';
 import { Button, Col, Descriptions, Form, message, Modal, Row, Tooltip } from 'antd';
 import { useEffect } from 'react';
-import { useModel } from 'umi';
+import { useIntl, useModel } from 'umi';
 import HocPhanCTDT from './HocPhan';
 
 const FormHocPhanDangKyNhuCau = (props: any) => {
+	const intl = useIntl();
 	const { getData, ngoaiThoiGian } = props;
 	const [form] = Form.useForm();
 	const { visibleForm, setVisibleForm, dangKyHocPhanNhuCauNModel, formSubmiting } = useModel(
@@ -26,7 +27,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 
 	const onFinish = async (values: HocPhanNhuCau.IRecord) => {
 		if (!selectedIds?.length) {
-			message.error('Vui lòng chọn học phần!');
+			message.error(intl.formatMessage({ id: 'hocphannhucau.form.message.chonHocPhan' }));
 			return;
 		}
 
@@ -44,7 +45,7 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 		<Modal
 			open={visibleForm}
 			onCancel={() => setVisibleForm(false)}
-			title='Đăng ký nhu cầu học phần'
+			title={intl.formatMessage({ id: 'hocphannhucau.tooltip.dangKyNhuCau' })}
 			width={1000}
 			footer={null}
 			destroyOnClose
@@ -53,24 +54,32 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 				<Row gutter={[12, 0]}>
 					<Col span={24}>
 						<Descriptions column={1}>
-							<Descriptions.Item label='Học kỳ'>{recHocKy?.ten ?? '--'}</Descriptions.Item>
-							<Descriptions.Item label='Khóa ngành'>{khoaNganh?.ten}</Descriptions.Item>
-							<Descriptions.Item label='Đợt đăng ký nhu cầu'>{recDot?.tenDot ?? '--'}</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'dangkytinchi.vuottin.form.descriptions.hocky' })}>
+								{recHocKy?.ten ?? '--'}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'dangkyhoctap.form.khoaNganh' })}>
+								{khoaNganh?.ten}
+							</Descriptions.Item>
+							<Descriptions.Item label={intl.formatMessage({ id: 'hocphannhucau.form.dotDangKy' })}>
+								{recDot?.tenDot ?? '--'}
+							</Descriptions.Item>
 						</Descriptions>
 						<div style={{ marginBottom: 12 }}>
 							<i style={{ color: 'red' }}>
-								Số lượng học phần cho phép đăng ký ngoài tiến trình trong đợt tối đa:{' '}
-								<b>{recDot?.soHocPhanDangKyNgoaiTienTrinh}</b> học phần (<b>không đăng ký học lại, cải thiện</b>)
+								{intl.formatMessage(
+									{ id: 'hocphannhucau.form.limitNgoaiTienTrinh' },
+									{
+										max: recDot?.soHocPhanDangKyNgoaiTienTrinh ?? '--',
+										b: (chunks) => <b>{chunks}</b>,
+									},
+								)}
 							</i>
 						</div>
 					</Col>
 
 					<Col span={24}>
 						<div style={{ marginBottom: 12 }}>
-							<i>
-								Lưu ý: Hệ thống tự động chọn học phần đúng tiến trình học tập của sinh viên, nếu sinh viên đã đăng ký
-								nhu cầu hệ thống sẽ tự động chọn học phần sinh viên đã đăng ký
-							</i>
+							<i>{intl.formatMessage({ id: 'hocphannhucau.form.luuYTuDongChon' })}</i>
 						</div>
 
 						<HocPhanCTDT />
@@ -78,12 +87,20 @@ const FormHocPhanDangKyNhuCau = (props: any) => {
 				</Row>
 
 				<div className='form-footer'>
-					<Tooltip title={ngoaiThoiGian ? 'Ngoài thời gian đăng ký' : 'Thêm mới'}>
+					<Tooltip
+						title={
+							ngoaiThoiGian
+								? intl.formatMessage({ id: 'hocphannhucau.alert.ngoaiThoiGian' })
+								: intl.formatMessage({ id: 'dangkyhoctap.button.themMoi' })
+						}
+					>
 						<Button loading={formSubmiting} htmlType='submit' type='primary' disabled={ngoaiThoiGian}>
-							Đăng ký
+							{intl.formatMessage({ id: 'hocphannhucau.button.dangKy' })}
 						</Button>
 					</Tooltip>
-					<Button onClick={() => setVisibleForm(false)}>Hủy</Button>
+					<Button onClick={() => setVisibleForm(false)}>
+						{intl.formatMessage({ id: 'dangkyhoctap.form.huy' })}
+					</Button>
 				</div>
 			</Form>
 		</Modal>

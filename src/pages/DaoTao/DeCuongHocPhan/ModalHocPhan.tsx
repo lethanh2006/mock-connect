@@ -9,16 +9,26 @@ const ModalHocPhan = (props: {
 	setVisible: any;
 	deCuongId?: string;
 	activeKey?: string;
+	khoiChuongTrinh?: any;
+	isChiTiet?: boolean;
 }) => {
 	const intl = useIntl();
-	const { title, visible, setVisible, activeKey } = props;
+	const { title, visible, setVisible, activeKey, khoiChuongTrinh, isChiTiet } = props;
+	const { getChiTietHocPhanDangKyTinChiModel } = useModel('daotao.dotdangkytinchi');
+	const { record: recSinhVien } = useModel('sinhvien.sinhvien');
 	const { record } = useModel('lophocphan.lophocphan');
-	const { getByIdModel } = useModel('hocphan.decuonghocphan');
+	// const { getByIdModel } = useModel('hocphan.decuonghocphan');
 	const deCuongId = props.deCuongId || record?.deCuong?.deCuongId || record?.hocPhan?.deCuongHienTaiId;
 
+	// useEffect(() => {
+	// 	if (deCuongId && visible && !isChiTiet) getByIdModel(deCuongId ?? '');
+	// }, [deCuongId, visible, activeKey]);
+
 	useEffect(() => {
-		if (deCuongId && visible) getByIdModel(deCuongId ?? '');
-	}, [deCuongId, visible, activeKey]);
+		if (deCuongId && recSinhVien?.maKhoaNganh && visible && isChiTiet) {
+			getChiTietHocPhanDangKyTinChiModel(deCuongId, recSinhVien?.maKhoaNganh);
+		}
+	}, [deCuongId, recSinhVien?.maKhoaNganh, visible, activeKey]);
 
 	return (
 		<ModalExpandable
@@ -29,7 +39,7 @@ const ModalHocPhan = (props: {
 			okButtonProps={{ hidden: true }}
 			cancelText={intl.formatMessage({ id: 'global.button.dong' })}
 		>
-			<TabsDeCuongHocPhan activeKey={activeKey} />
+			<TabsDeCuongHocPhan activeKey={activeKey} khoiChuongTrinh={khoiChuongTrinh} />
 		</ModalExpandable>
 	);
 };

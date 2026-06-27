@@ -1,10 +1,10 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { getDateTimeFormat } from '@/utils/formatDate';
 import rules from '@/utils/rules';
 import { CloseOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Col, Form, Input, InputNumber, Row, Select, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'umi';
-import { getDateTimeFormat } from '@/utils/formatDate';
 import MyDatePicker from '../../MyDatePicker';
 import { useTableContext } from '../components/TableContext';
 import { EOperatorType } from '../constant';
@@ -14,8 +14,8 @@ import { type RowFilterProps, type TDataOption } from '../typing';
 const FilterItem = (props: RowFilterProps) => {
 	const intl = useIntl();
 	const { name, onRemove, allowGrouping = true, level = 0, formOwner, parentPath, ...restProps } = props;
-	const { finalColumns, columns: originalColumns } = useTableContext();
-	const columns = originalColumns || finalColumns;
+	const { finalColumns } = useTableContext();
+	const columns = finalColumns;
 	const formInstance = Form.useFormInstance();
 	const { fieldsFiltered } = useFilterFields(columns, formOwner);
 	const [operators, setOperators] = useState<EOperatorType[]>([]);
@@ -70,11 +70,17 @@ const FilterItem = (props: RowFilterProps) => {
 		setOperators(opers);
 	}, [filterType]);
 
+	const isReadOnly = props.forceReadOnly || currentFilter.readOnly;
+
 	const renderDataComponent = () => {
-		const isReadOnly = currentFilter.readOnly;
 		switch (filterType) {
 			case 'string':
-				return <Input placeholder={intl.formatMessage({ id: 'global.table.customfilter.label.giatri' })} disabled={isReadOnly} />;
+				return (
+					<Input
+						placeholder={intl.formatMessage({ id: 'global.table.customfilter.label.giatri' })}
+						disabled={isReadOnly}
+					/>
+				);
 			case 'date':
 				return <MyDatePicker disabled={isReadOnly} />;
 			case 'datetime':
@@ -113,7 +119,7 @@ const FilterItem = (props: RowFilterProps) => {
 	return (
 		<Card styles={{ body: { padding: 8 } }} style={{ marginTop: 8 }} variant='borderless'>
 			<Row gutter={[8, 8]}>
-				<Col span={22} md={currentFilter.readOnly ? 24 : 23}>
+				<Col span={22} md={isReadOnly ? 24 : 23}>
 					<Row gutter={[8, 0]}>
 						<Col span={12}>
 							<Form.Item
@@ -123,13 +129,15 @@ const FilterItem = (props: RowFilterProps) => {
 								label={
 									<Space>
 										<Form.Item valuePropName='checked' initialValue={true} name={[...namePath, 'active']} noStyle>
-											<Checkbox disabled={currentFilter.readOnly}>{intl.formatMessage({ id: 'global.table.customfilter.label.thuoctinh' })}</Checkbox>
+											<Checkbox disabled={isReadOnly}>
+												{intl.formatMessage({ id: 'global.table.customfilter.label.thuoctinh' })}
+											</Checkbox>
 										</Form.Item>
 									</Space>
 								}
 							>
 								<Select
-									disabled={currentFilter.readOnly}
+									disabled={isReadOnly}
 									onChange={() => {
 										formInstance.setFieldValue([...fullPath, 'operator'], undefined);
 										formInstance.setFieldValue([...fullPath, 'values'], undefined);
@@ -174,20 +182,20 @@ const FilterItem = (props: RowFilterProps) => {
 										label: intl.formatMessage({ id: `global.table.operator.${item}` }),
 									}))}
 									placeholder={intl.formatMessage({ id: 'global.table.customfilter.placeholder.chondieukien' })}
-									disabled={currentFilter.readOnly}
+									disabled={isReadOnly}
 								/>
 							</Form.Item>
 						</Col>
 
 						{!!currentFilter.operator &&
-							currentFilter.operator !== EOperatorType.NULL &&
-							currentFilter.operator !== EOperatorType.NOT_NULL ? (
+						currentFilter.operator !== EOperatorType.NULL &&
+						currentFilter.operator !== EOperatorType.NOT_NULL ? (
 							<>
 								<Col
 									span={24}
 									md={
 										currentFilter.operator === EOperatorType.BETWEEN ||
-											currentFilter.operator === EOperatorType.NOT_BETWEEN
+										currentFilter.operator === EOperatorType.NOT_BETWEEN
 											? 12
 											: 24
 									}
@@ -195,7 +203,7 @@ const FilterItem = (props: RowFilterProps) => {
 									<Form.Item
 										name={
 											currentFilter.operator === EOperatorType.INCLUDE ||
-												currentFilter.operator === EOperatorType.NOT_INCLUDE
+											currentFilter.operator === EOperatorType.NOT_INCLUDE
 												? [...namePath, 'values']
 												: [...namePath, 'values', 0]
 										}
@@ -208,7 +216,7 @@ const FilterItem = (props: RowFilterProps) => {
 								</Col>
 
 								{currentFilter.operator === EOperatorType.BETWEEN ||
-									currentFilter.operator === EOperatorType.NOT_BETWEEN ? (
+								currentFilter.operator === EOperatorType.NOT_BETWEEN ? (
 									<Col span={24} md={12}>
 										<Form.Item
 											name={[...namePath, 'values', 1]}
@@ -223,7 +231,7 @@ const FilterItem = (props: RowFilterProps) => {
 						) : null}
 					</Row>
 				</Col>
-				{!currentFilter.readOnly && (
+				{!isReadOnly && (
 					<Col span={2} md={1}>
 						<Space direction='vertical' align='center' style={{ width: '100%' }} size={4}>
 							{allowGrouping && level === 0 && (
@@ -243,7 +251,7 @@ const FilterItem = (props: RowFilterProps) => {
 									tooltip={intl.formatMessage({ id: 'global.table.customfilter.button.chuyenthanhnhom' })}
 								/>
 							)}
-							{onRemove && (
+							{onRemove && !isReadOnly && (
 								<ButtonExtend
 									type='text'
 									size='small'

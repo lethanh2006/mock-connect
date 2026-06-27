@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { history, useIntl, useModel } from 'umi';
 import './style.less';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const QuyTrinhPage = () => {
 	const intl = useIntl();
@@ -119,82 +119,71 @@ const QuyTrinhPage = () => {
 
 	return (
 		<>
-			<div className='quy-trinh-page'>
-				<Title level={4} className='page-title'>
-					{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.title' })}
-				</Title>
+			<Card
+				className='quy-trinh-page card-big-title card-borderless'
+				variant='borderless'
+				loading={loading}
+				title={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.title' })}
+			>
+				{danhSachQuyTrinh && danhSachQuyTrinh.length > 0 ? (
+					<div className='quy-trinh-grid'>
+						{danhSachQuyTrinh.map((quyTrinh: QuyTrinh.IRecord, index: number) => (
+							<Card key={quyTrinh._id} className='quy-trinh-card' styles={{ body: { padding: '16px' } }}>
+								<div className='card-content'>
+									<div className='card-main'>
+										<div className='card-icon'>
+											<img src='/student/images/folder-icon.png' alt='' width={24} />
+										</div>
 
-				{/* Hiển thị loading state */}
-				{loading ? (
-					<div className='loading-container'>
-						<Text>{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.loading' })}</Text>
+										<div className='card-info'>
+											<div className='card-tags'>
+												<Tag color={getStatusColor(quyTrinh.order)} className='status-tag'>
+													● {getStatusText(quyTrinh.order)}
+												</Tag>
+											</div>
+											<Text className='card-title'>{quyTrinh.ten}</Text>
+										</div>
+									</div>
+
+									<div>
+										{quyTrinh?.danhSachCauHinhThongTinChung && quyTrinh?.danhSachCauHinhThongTinChung?.length > 0 ? (
+											<Button
+												type='primary'
+												onClick={() => {
+													setRecordThongTinChung(quyTrinh?.danhSachCauHinhThongTinChung);
+													setRecordQuyTrinh(quyTrinh);
+													setVisibleThongTinChung(true);
+												}}
+												className='use-button'
+											>
+												{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung' })}
+											</Button>
+										) : (
+											<Popconfirm
+												title={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung.xacnhan' })}
+												onConfirm={() => handleRedirect(quyTrinh)}
+												okText={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung' })}
+												cancelText={intl.formatMessage({ id: 'global.button.dong' })}
+											>
+												<Button type='primary' className='use-button'>
+													{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung' })}
+												</Button>
+											</Popconfirm>
+										)}
+									</div>
+								</div>
+							</Card>
+						))}
 					</div>
 				) : (
-					<>
-						{/* Danh sách quy trình */}
-						{danhSachQuyTrinh && danhSachQuyTrinh.length > 0 ? (
-							<div className='quy-trinh-grid'>
-								{danhSachQuyTrinh.map((quyTrinh: QuyTrinh.IRecord, index: number) => (
-									<Card key={quyTrinh._id} className='quy-trinh-card' styles={{ body: { padding: '16px' } }}>
-										<div className='card-content'>
-											<div className='card-main'>
-												<div className='card-icon'>
-													<img src='/student/images/folder-icon.png' alt='' width={24} />
-												</div>
-
-												<div className='card-info'>
-													<div className='card-tags'>
-														<Tag color={getStatusColor(quyTrinh.order)} className='status-tag'>
-															● {getStatusText(quyTrinh.order)}
-														</Tag>
-													</div>
-													<Text className='card-title'>{quyTrinh.ten}</Text>
-												</div>
-											</div>
-
-											<div>
-												{quyTrinh?.danhSachCauHinhThongTinChung &&
-												quyTrinh?.danhSachCauHinhThongTinChung?.length > 0 ? (
-													<Button
-														type='primary'
-														onClick={() => {
-															setRecordThongTinChung(quyTrinh?.danhSachCauHinhThongTinChung);
-															setRecordQuyTrinh(quyTrinh);
-															setVisibleThongTinChung(true);
-														}}
-														className='use-button'
-													>
-														{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung' })}
-													</Button>
-												) : (
-													<Popconfirm
-														title={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung.xacnhan' })}
-														onConfirm={() => handleRedirect(quyTrinh)}
-														okText={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung' })}
-														cancelText={intl.formatMessage({ id: 'global.button.dong' })}
-													>
-														<Button type='primary' className='use-button'>
-															{intl.formatMessage({ id: 'dichvuhanhchinh.dangky.button.sudung' })}
-														</Button>
-													</Popconfirm>
-												)}
-											</div>
-										</div>
-									</Card>
-								))}
-							</div>
-						) : (
-							<div className='empty-state'>
-								<Empty
-									image={Empty.PRESENTED_IMAGE_SIMPLE}
-									description={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.empty' })}
-								/>
-							</div>
-						)}
-					</>
+					<div className='empty-state'>
+						<Empty
+							image={Empty.PRESENTED_IMAGE_SIMPLE}
+							description={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.empty' })}
+						/>
+					</div>
 				)}
 
-				{/* Phân trang - chỉ hiển thị khi có dữ liệu */}
 				{total > 0 && (
 					<div className='pagination-container'>
 						<Pagination
@@ -210,7 +199,7 @@ const QuyTrinhPage = () => {
 						/>
 					</div>
 				)}
-			</div>
+			</Card>
 
 			<Modal
 				title={intl.formatMessage({ id: 'dichvuhanhchinh.dangky.modal.title' })}

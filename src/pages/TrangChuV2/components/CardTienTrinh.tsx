@@ -1,93 +1,106 @@
-import ManNon from '@/assets/trangchu/mam_non.svg';
-import Number1 from '@/assets/trangchu/number_1.svg';
-import Star1 from '@/assets/trangchu/star_1.svg';
-import TheThao from '@/assets/trangchu/the_thao.svg';
-import { FallOutlined, QuestionCircleOutlined, RiseOutlined } from '@ant-design/icons';
-import React from 'react';
+import { Card, Col, Flex, Row, Typography } from 'antd';
+import { useMemo } from 'react';
+import { useIntl, useModel } from 'umi';
 
 interface StatCardProps {
 	title: string;
 	value: string | number;
 	subValue?: string;
-	percent: string;
-	isUp: boolean;
-	periodText: string;
-	icon: React.ReactNode;
+	periodText?: string;
 	disabled?: boolean;
 }
 
-const StatCard = ({ title, value, subValue, percent, isUp, periodText, icon, disabled }: StatCardProps) => (
-	<div className={`card-container ${disabled ? 'is-disabled' : ''}`}>
-		<div className='card-header'>
-			<span className='title'>{title}</span>
-			<div className='icon-wrapper'>{icon}</div>
-		</div>
-		<div className='value-wrapper'>
-			<span className='main-value'>{disabled ? '--' : value}</span>
-			{subValue && <span className='sub-value'>{subValue}</span>}
-		</div>
-		<div className='footer'>
-			{disabled ? (
-				<div className='disabled-placeholder'>
-					<QuestionCircleOutlined className='q-icon' />
-					<span className='dash-text'>---</span>
-				</div>
-			) : (
-				<div className={`badge ${isUp ? 'up' : 'down'}`}>
-					{isUp ? <RiseOutlined /> : <FallOutlined />} {percent}
-				</div>
-			)}
+const StatCard = ({ title, value, subValue, periodText, disabled }: StatCardProps) => (
+	<Card size='small'>
+		<Flex vertical gap={4}>
+			<Typography.Text type='secondary' style={{ fontSize: 14 }}>
+				{title}
+			</Typography.Text>
 
-			<span className='period'>{periodText}</span>
-		</div>
-	</div>
+			<Typography.Text
+				style={{
+					fontSize: 18,
+					lineHeight: 1.2,
+					fontWeight: 700,
+					color: disabled ? '#cfcfcf' : '#2e2e2e',
+				}}
+			>
+				{disabled ? '--' : value}
+				{!disabled && subValue && (
+					<Typography.Text type='secondary' style={{ fontSize: 12, fontWeight: 600 }}>
+						{' '}
+						{subValue}
+					</Typography.Text>
+				)}
+			</Typography.Text>
+
+			{periodText && (
+				<Typography.Text type='secondary' style={{ fontSize: 12 }}>
+					{periodText}
+				</Typography.Text>
+			)}
+		</Flex>
+	</Card>
 );
 
 const CardTienTrinh = () => {
-	return (
-		<div className='stats-wrapper'>
-			<StatCard
-				title='GPA'
-				value='3.5'
-				percent='3%'
-				isUp={true}
-				periodText='vs. last period'
-				icon={<img src={ManNon} style={{ width: 25, height: 25 }} />}
-				disabled={true}
-			/>
-			<StatCard
-				title='Activities'
-				value='4'
-				percent='2,5%'
-				isUp={false}
-				periodText='vs. last week'
-				icon={<img src={TheThao} style={{ width: 25, height: 25 }} />}
-				disabled={true}
-			/>
-			<StatCard
-				title='Awards'
-				value='5'
-				percent='2,7%'
-				isUp={false}
-				periodText='vs. last period'
-				icon={<img src={Number1} style={{ width: 25, height: 25 }} />}
-				disabled={true}
-			/>
-			<StatCard
-				title='Credits'
-				value='28'
-				subValue='/150'
-				percent='3,1%'
-				isUp={true}
-				periodText='vs. last period'
-				icon={<img src={Star1} style={{ width: 25, height: 25 }} />}
-				disabled={true}
-			/>
+	const intl = useIntl();
+	const { record: recTienTrinh, loading: loadingTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
+	const { danhSach: danhSachActivity } = useModel('cct.activity');
 
-			<div className='add-card-button'>
-				<span className='plus-icon'>+</span>
-			</div>
-		</div>
+	const stats = useMemo<StatCardProps[]>(() => {
+		const gpa = recTienTrinh?.kqhtHocKy?.trungBinhTichLuyToanKhoaThang4;
+		const credits = recTienTrinh?.kqhtHocKy?.tongSoTinChiTichLuyToanKhoa;
+		const totalCredits = recTienTrinh?.ctdtKeHoach?.tongSoTinChi;
+		const activities = danhSachActivity?.length ?? 0;
+
+		return [
+			{
+				title: intl.formatMessage({ id: 'trangchu.v2.academicProgress.cgpa' }),
+				value: gpa ?? '--',
+				periodText: intl.formatMessage({ id: 'trangchu.v2.academicProgress.lastSemester' }),
+				disabled: gpa === null || gpa === undefined,
+			},
+			{
+				title: intl.formatMessage({ id: 'trangchu.v2.academicProgress.credits' }),
+				value: credits ?? '--',
+				subValue: totalCredits ? `/ ${totalCredits}` : undefined,
+				periodText: intl.formatMessage({ id: 'trangchu.v2.academicProgress.lastSemester' }),
+				disabled: credits === null || credits === undefined,
+			},
+			{
+				title: intl.formatMessage({ id: 'trangchu.v2.academicProgress.activities' }),
+				value: activities ?? '--',
+				periodText: intl.formatMessage({ id: 'trangchu.v2.academicProgress.lastWeek' }),
+				disabled: activities === null || activities === undefined,
+			},
+			{
+				title: intl.formatMessage({ id: 'trangchu.v2.academicProgress.awards' }),
+				value: '--',
+				periodText: intl.formatMessage({ id: 'trangchu.v2.academicProgress.lastSemester' }),
+			},
+		];
+	}, [intl, recTienTrinh, danhSachActivity]);
+
+	return (
+		<Card
+			title={
+				<span className='title' style={{ color: '#000' }}>
+					{intl.formatMessage({ id: 'trangchu.v2.academicProgress.title' })}
+				</span>
+			}
+			className='card-big-title card-borderless'
+			variant='borderless'
+			loading={loadingTienTrinh}
+		>
+			<Row gutter={[12, 12]}>
+				{stats.map((item) => (
+					<Col xs={24} sm={12} key={item.title}>
+						<StatCard {...item} />
+					</Col>
+				))}
+			</Row>
+		</Card>
 	);
 };
 
