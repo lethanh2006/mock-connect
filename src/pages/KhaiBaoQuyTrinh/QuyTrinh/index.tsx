@@ -26,6 +26,7 @@ const QuyTrinhPage = () => {
 		total,
 		setPage,
 		setLimit,
+		setDanhSach,
 	} = useModel('quytrinh.quytrinh');
 	const { getAllMyDotModel } = useModel('quytrinh.dotkhaibao');
 	const [quyTrinhIdSelect, setQuyTrinhIdSelect] = useState<string>('');
@@ -35,6 +36,8 @@ const QuyTrinhPage = () => {
 	useEffect(() => {
 		setCurrentFormKhaiBao(undefined);
 		setCurrent(undefined);
+		setDanhSach([]);
+		setLoading(true);
 	}, []);
 
 	// Thêm useEffect để lắng nghe thay đổi page và limit

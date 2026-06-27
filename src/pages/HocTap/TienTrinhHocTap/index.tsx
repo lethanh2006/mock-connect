@@ -47,7 +47,7 @@ const TienTrinhHocTap = () => {
 		//Get đợt lộ trình học tập
 		if (maKhoaNganh) {
 			getChuongTrinhHienTaiModel(maKhoaNganh);
-			sinhVienGetTienTrinhKhungModel(isSongNganh);
+			// sinhVienGetTienTrinhKhungModel(isSongNganh);
 		}
 	}, [maKhoaNganh]);
 
