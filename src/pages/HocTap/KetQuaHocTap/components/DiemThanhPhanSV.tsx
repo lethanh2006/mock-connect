@@ -155,18 +155,14 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 	};
 
 	const isPassTrongChuongTrinh = (rec: DataType) => rec.dat === true && rec.trongChuongTrinh === true;
-	const isTichLuyDiem = (rec: DataType) => isPassTrongChuongTrinh(rec) && rec.tichLuy === true;
+	const isTichLuyDiem = (rec: DataType) => rec.tichLuy === true;
 
 	const renderSoTinChiTichLuy = (rec: DataType) => {
-		if (rec.trongChuongTrinh && (rec.dat === false || rec.diemChu === ELoaiDiemChu.F)) {
-			return <b style={{ color: 'red' }}>0</b>;
-		}
-
 		if (isPassTrongChuongTrinh(rec)) {
 			return rec?.hocPhan?.soTinChi ?? '';
 		}
 
-		return '';
+		return '--';
 	};
 
 	const columns: IColumn<DataType>[] = useMemo(() => {
@@ -262,7 +258,9 @@ const DiemThanhPhanSV = (props: { maKhoaNganh?: string }) => {
 				width: 100,
 				dataIndex: 'diemThang4',
 				align: 'center',
-				render: (val) => <b>{val ?? '--'}</b>,
+				render: (val, rec) => (
+					<b style={{ color: val === 0 && rec.diemChu === ELoaiDiemChu.F ? 'red' : undefined }}>{val ?? '--'}</b>
+				),
 				// sortable: true,
 				onCell: onCellHocPhan,
 			},

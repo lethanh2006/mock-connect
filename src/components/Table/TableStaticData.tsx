@@ -411,11 +411,11 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 				style={
 					globalSearchText
 						? {
-							width: 260,
-							borderColor: primaryColor,
-							outline: '1px solid ' + primaryColor,
-							borderRadius: 4,
-						}
+								width: 260,
+								borderColor: primaryColor,
+								outline: '1px solid ' + primaryColor,
+								borderRadius: 4,
+							}
 						: { width: 260 }
 				}
 				enterButton={
@@ -481,7 +481,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					) : null}
 					{props.otherTextButtons}
 					{props.otherExtra}
-				</div >
+				</div>
 
 				<div className='extra'>
 					{columnSetting && <ColumnSettings />}
@@ -514,7 +514,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 						</Tooltip>
 					) : null}
 				</div>
-			</div >
+			</div>
 
 			<ConfigProvider
 				renderEmpty={() => (
@@ -535,7 +535,7 @@ const TableStaticContent: React.FC<TableStaticProps> = (props) => {
 					renderTable()
 				)}
 			</ConfigProvider>
-		</div >
+		</div>
 	);
 
 	return (

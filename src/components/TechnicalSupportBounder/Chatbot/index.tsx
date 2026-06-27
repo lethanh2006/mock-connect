@@ -1,5 +1,6 @@
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { defaultVoiceMessages } from '@/services/TienIch/Chatbot/constant';
+import { getPublicAssetPath } from '@/utils/path';
 import { RightOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
 import { nanoid } from 'nanoid';
@@ -54,7 +55,7 @@ const ChatbotOverlay = () => {
 					</div>
 
 					<div className='pulse' onClick={() => setBoxChatVisible(true)}>
-						<img src='/student/images/chatbot.png' alt='chatbot' />
+						<img src={getPublicAssetPath('images/chatbot.png')} alt='chatbot' />
 					</div>
 				</div>
 			)}
