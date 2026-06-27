@@ -1,3 +1,4 @@
+import { getPublicAssetPath } from '@/utils/path';
 import { Tooltip } from 'antd';
 import { unChatMessagerSupportPaths } from '../constant';
 
@@ -22,7 +23,7 @@ const PanpageHoTro = (props: { path: string }) => {
 								padding: 0,
 								borderRadius: '50%',
 							}}
-							src='/images/messenger_icon.png'
+							src={getPublicAssetPath('images/messenger_icon.png')}
 							alt='mess'
 						/>
 					</Tooltip>

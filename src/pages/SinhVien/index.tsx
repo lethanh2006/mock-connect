@@ -105,8 +105,8 @@ const ThongTinSinhVienPage = () => {
 								{/* <Button icon={<PrinterOutlined />} onClick={onExport} loading={loading}>
 									{intl.formatMessage({ id: 'thongtincanhan.inhoso' })}
 								</Button> */}
-							</Space>
-						) : null}
+						</Space>
+					) : null}
 
 						<PreviewHoSo />
 					</>

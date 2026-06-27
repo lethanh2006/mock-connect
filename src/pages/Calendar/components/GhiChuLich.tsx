@@ -1,3 +1,4 @@
+import { useLoaiSuKienLabel } from '@/services/Calendar/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import { Space } from 'antd';
 import { useEffect } from 'react';
@@ -5,6 +6,7 @@ import { useModel } from 'umi';
 
 const GhiChuLich = (props: { isDashboard?: boolean }) => {
 	const { isDashboard } = props;
+	const getLoaiSuKienLabel = useLoaiSuKienLabel();
 	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 	const { selectSuKiens, setSelectSuKiens, dataLichDashboard, dataLich, setDataCalendar, setDataCalendarDashboard } =
 		useModel('sukien.sukien');
@@ -56,7 +58,7 @@ const GhiChuLich = (props: { isDashboard?: boolean }) => {
 						}}
 						onClick={() => handleToggleSuKien(sukien)}
 					>
-						{sukien}
+						{getLoaiSuKienLabel(sukien)}
 					</div>
 				);
 			})}

@@ -2,6 +2,7 @@ import { quickReplies } from '@/services/TienIch/ChatbotV2/constant';
 import type { ChatbotAmiV2 } from '@/services/TienIch/ChatbotV2/typing';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
+import { getPublicAssetPath } from '@/utils/path';
 import { resetFieldsForm, toCamelCase } from '@/utils/utils';
 import { SendOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Collapse, Form, Input, Spin } from 'antd';
@@ -125,7 +126,7 @@ const ChatBotPage = () => {
 		return (
 			<>
 				<div className='avatar'>
-					<Avatar src='/images/chatbot_ava.png' />
+					<Avatar src={getPublicAssetPath('images/chatbot_ava.png')} />
 				</div>
 
 				<div className='content-text'>
@@ -229,7 +230,7 @@ const ChatBotPage = () => {
 									{formSubmiting ? (
 										<div className='message bot' id='tidot_loading'>
 											<div className='avatar'>
-												<Avatar src='/images/chatbot_ava.png' />
+												<Avatar src={getPublicAssetPath('images/chatbot_ava.png')} />
 											</div>
 											<div className='text'>
 												<div className='ticontainer'>

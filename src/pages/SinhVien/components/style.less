@@ -1,12 +1,61 @@
 .avatar-container {
-  width: 140px;
-  height: 180px;
+	width: 140px;
+	height: 180px;
 
-  .ant-image {
-    height: 100%;
-    overflow: hidden;
+	.ant-image {
+		height: 100%;
+		overflow: hidden;
 
-    display: flex;
-    align-items: center;
-  }
+		display: flex;
+		align-items: center;
+	}
+}
+
+.sv-profile-summary {
+	margin-bottom: 16px;
+}
+
+.sv-profile-name {
+	margin: 0;
+	text-align: center;
+}
+
+.sv-profile-status {
+	font-weight: 600;
+}
+
+.sv-profile-field-list {
+	display: grid;
+	gap: 10px;
+	margin-bottom: 16px;
+}
+
+.sv-profile-group-title {
+	display: block;
+	margin-bottom: 2px;
+	color: var(--color-text-100);
+	font-weight: 600;
+}
+
+.sv-profile-field {
+	display: grid;
+	grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+	column-gap: 12px;
+	align-items: baseline;
+}
+
+.sv-profile-field-label {
+	min-width: 0;
+}
+
+.sv-profile-field-value {
+	min-width: 0;
+	word-break: break-word;
+}
+
+@media (max-width: 575px) {
+	.sv-profile-field {
+		grid-template-columns: 1fr;
+		row-gap: 2px;
+	}
 }

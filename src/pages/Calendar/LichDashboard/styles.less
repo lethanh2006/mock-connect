@@ -24,13 +24,12 @@
 
 	.su_kien {
 		display: flex;
-		gap: 10px;
-		align-items: center;
-		margin: 0 6px 8px 6px;
-		padding: 4px;
+		align-items: stretch;
+		margin: 0 6px 10px 6px;
+		padding: 0;
 		color: #333;
-		background-color: #fafafa;
-		border-radius: 6px;
+		background-color: #f8f8f8;
+		border-radius: 4px;
 
 		cursor: pointer;
 		transition: 0.3s all;
@@ -58,19 +57,34 @@
 				outline-offset 0.3s ease;
 			margin-bottom: 12px;
 		}
+
+		&.today {
+			background-color: #f4f9ff;
+
+			.su_kien__left {
+				background: #f4f9ff;
+			}
+
+			.su_kien__thoi_gian {
+				color: #0e50cf;
+			}
+		}
 	}
 
 	.su_kien__left {
 		position: relative;
 		display: flex;
 		align-items: center;
-		padding-left: 12px;
-		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+		justify-content: center;
+		min-width: 86px;
+		padding: 14px 12px;
+		border-radius: 6px 0 0 6px;
+		background: #f8f8f8;
 
 		.pulse {
 			position: absolute;
-			top: -8px;
-			left: -2px;
+			top: 8px;
+			left: 8px;
 			display: block;
 			width: 10px;
 			height: 10px;
@@ -84,12 +98,32 @@
 	.su_kien__thoi_gian {
 		font-weight: 600;
 		font-size: 15px;
+		white-space: nowrap;
 	}
 
 	.su_kien__right {
-		padding: 6px;
-		border-left: 6px solid;
-		border-radius: 4px;
+		flex: 1;
+		padding: 8px 12px;
+		margin-block: 6px;
+		border-left: 4px solid;
+	}
+
+	.su_kien__title {
+		display: flex;
+		align-items: center;
+		font-weight: 600;
+		font-size: 15px;
+		line-height: 1.35;
+	}
+
+	.su_kien__location {
+		display: flex;
+		gap: 6px;
+		align-items: center;
+		margin-top: 4px;
+		color: #999;
+		font-size: 13px;
+		line-height: 1.3;
 	}
 
 	.sketch-picker {

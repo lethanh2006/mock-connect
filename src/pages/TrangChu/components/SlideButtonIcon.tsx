@@ -1,3 +1,4 @@
+import { getPublicAssetPath } from '@/utils/path';
 import React from 'react';
 
 interface ArrowIconProps {
@@ -11,7 +12,7 @@ const ArrowIcon: React.FC<ArrowIconProps> = ({ direction = 'right', size = '100%
 
 	return (
 		<img
-			src='/images/arrow-right.svg'
+			src={getPublicAssetPath('images/arrow-right.svg')}
 			alt={direction}
 			style={{
 				width: size,

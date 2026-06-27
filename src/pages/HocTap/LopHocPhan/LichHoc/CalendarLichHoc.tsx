@@ -1,4 +1,4 @@
-import { messagesCalendar } from '@/services/Calendar/constant';
+import { useMessagesCalendar } from '@/services/Calendar/constant';
 import type { ThoiKhoaBieu } from '@/services/DaoTao/ThoiKhoaBieu/typing';
 import { EHinhThucGiangDay } from '@/services/HocTap/LopHocPhan/constant';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
@@ -16,6 +16,7 @@ const CalendarLichHocLopHp = (props: {
 }) => {
 	const { record: recSetting, getSettingLich } = useModel('tienich.settinglich');
 	const { items, onClickItem } = props;
+	const messagesCalendar = useMessagesCalendar();
 
 	useEffect(() => {
 		if (!recSetting?._id) getSettingLich();
