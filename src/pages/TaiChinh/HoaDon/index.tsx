@@ -1,18 +1,15 @@
 import PDFViewerV2 from '@/components/PDFViewerV2';
+import PageCard from '@/components/PageCard';
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
+import { EOperatorType } from '@/components/Table/constant';
 import { type IColumn } from '@/components/Table/typing';
 import { getExportBillUrl } from '@/services/TaiChinh/HoaDon';
 import type { HoaDon } from '@/services/TaiChinh/HoaDon/typing';
-import {
-	EMaTrangThaiThanhToan,
-	EMauTrangThaiThanhToanTable,
-	ETrangThaiThanhToan,
-	ETransactionType,
-} from '@/services/TaiChinh/constant';
-import { currencyFormat, inputFormat } from '@/utils/utils';
+import { EMaTrangThaiThanhToan, EMauTrangThaiThanhToanTable, ETrangThaiThanhToan } from '@/services/TaiChinh/constant';
+import { inputFormat } from '@/utils/utils';
 import { EyeOutlined, FilePdfOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { Empty, Modal, Tag, notification } from 'antd';
+import { Empty, Modal, Tabs, Tag, notification } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useIntl, useModel } from 'umi';
@@ -42,6 +39,7 @@ const HoaDonPage = () => {
 	const [visibleModalPDF, setVisibleModalPDF] = useState<boolean>(false);
 	const [pdfUrl, setPdfUrl] = useState<string | undefined>(undefined);
 	const [loadingPdfMap, setLoadingPdfMap] = useState<Record<string, boolean>>({});
+	const [activeKey, setActiveKey] = useState<'chua_thanh_toan' | 'da_thanh_toan'>('chua_thanh_toan');
 
 	// Callback from MOMO
 	useEffect(() => {
@@ -58,8 +56,14 @@ const HoaDonPage = () => {
 				});
 	}, []);
 
-	const getData = () =>
-		getModel().then((res) => {
+	const getData = (activeKey: 'chua_thanh_toan' | 'da_thanh_toan') =>
+		getModel(undefined, [
+			{
+				field: 'status',
+				operator: activeKey === 'da_thanh_toan' ? EOperatorType.INCLUDE : EOperatorType.NOT_INCLUDE,
+				values: [`${EMaTrangThaiThanhToan.DA_THANH_TOAN_DU}`],
+			},
+		]).then((res) => {
 			// Sau khi thanh toán => Get lại danh sách và set lại record hóa đơn hiện tại
 			if (record?._id) setRecord(res.find((item) => item._id === record._id));
 		});
@@ -122,10 +126,7 @@ const HoaDonPage = () => {
 				} else if (soNgayConLai > 1 && soNgayConLai <= 10) {
 					extraText = (
 						<div style={{ color: '#52c41a', fontWeight: 500, fontSize: 12 }}>
-							{intl.formatMessage(
-								{ id: 'taichinh.hoadon.hanthanhtoan.conngay' },
-								{ soNgay: Math.ceil(soNgayConLai) },
-							)}
+							{intl.formatMessage({ id: 'taichinh.hoadon.hanthanhtoan.conngay' }, { soNgay: Math.ceil(soNgayConLai) })}
 						</div>
 					);
 				}
@@ -140,57 +141,53 @@ const HoaDonPage = () => {
 			filterType: 'date',
 		},
 
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.phiphainop' }),
-			width: 200,
-			// hide: releaseFilter === 'RELEASED',
-			render: (val, rec) => {
-				return (
-					<div>
-						{rec?.transactions
-							?.filter((item) => item.type === ETransactionType.CHARGE)
-							?.map((item, index) => (
-								<div style={{ marginBottom: 8 }} key={index}>
-									<div>
-										[{item.maKhoanThu}] {item.tenKhoanThu}
-									</div>
-									<div className='text-primary fw500'>
-										{item.loaiTienTe} {currencyFormat(item.amount)}
-									</div>
-								</div>
-							))}
-					</div>
-				);
-			},
-			
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.hoadon.column.phiphainop' }),
+		// 	width: 200,
+		// 	// hide: releaseFilter === 'RELEASED',
+		// 	render: (val, rec) => {
+		// 		return (
+		// 			<div>
+		// 				{rec?.transactions
+		// 					?.filter((item) => item.type === ETransactionType.CHARGE)
+		// 					?.map((item, index) => (
+		// 						<div style={{ marginBottom: 8 }} key={index}>
+		// 							<div>
+		// 								[{item.maKhoanThu}] {item.tenKhoanThu}
+		// 							</div>
+		// 							<div className='text-primary fw500'>
+		// 								{item.loaiTienTe} {currencyFormat(item.amount)}
+		// 							</div>
+		// 						</div>
+		// 					))}
+		// 			</div>
+		// 		);
+		// 	},
+		// },
 
-		},
-
-			{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.phigiamtru' }),
-			width: 200,
-			// hide: releaseFilter === 'RELEASED',
-			render: (val, rec) => {
-				return (
-					<div>
-						{rec?.transactions
-							?.filter((item) => item.type === ETransactionType.DISCOUNT)
-							?.map((item, index) => (
-								<div style={{ marginBottom: 8 }} key={index}>
-									<div>
-										[{item.maKhoanThu}] {item.tenKhoanThu}
-									</div>
-									<div className='text-primary fw500'>
-										{item.loaiTienTe} {currencyFormat(item.amount)}
-									</div>
-								</div>
-							))}
-					</div>
-				);
-			},
-	
-
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.hoadon.column.phigiamtru' }),
+		// 	width: 200,
+		// 	// hide: releaseFilter === 'RELEASED',
+		// 	render: (val, rec) => {
+		// 		return (
+		// 			<div>
+		// 				{rec?.transactions
+		// 					?.filter((item) => item.type === ETransactionType.DISCOUNT)
+		// 					?.map((item, index) => (
+		// 						<div style={{ marginBottom: 8 }} key={index}>
+		// 							<div>
+		// 								[{item.maKhoanThu}] {item.tenKhoanThu}
+		// 							</div>
+		// 							<div className='text-primary fw500'>
+		// 								{item.loaiTienTe} {currencyFormat(item.amount)}
+		// 							</div>
+		// 						</div>
+		// 					))}
+		// 			</div>
+		// 		);
+		// 	},
+		// },
 
 		// {
 		// 	title: 'Số dư có thể cấn trừ',
@@ -199,20 +196,20 @@ const HoaDonPage = () => {
 		// 	sortable: true,
 		// 	render: (val) => <span className='text-primary fw500'>{inputFormat(0)} VND</span>,
 		// },
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphiphainop' }),
-			dataIndex: 'soTienPhaiThu',
-			width: 180,
-			sortable: true,
-			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
-		},
-		{
-			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphigiamtru' }),
-			dataIndex: 'soTienKhuyenMai',
-			width: 180,
-			sortable: true,
-			render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
-		},
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphiphainop' }),
+		// 	dataIndex: 'soTienPhaiThu',
+		// 	width: 180,
+		// 	sortable: true,
+		// 	render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+		// },
+		// {
+		// 	title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongphigiamtru' }),
+		// 	dataIndex: 'soTienKhuyenMai',
+		// 	width: 180,
+		// 	sortable: true,
+		// 	render: (val) => <span className='text-primary fw500'>{inputFormat(val ?? 0)} VND</span>,
+		// },
 		{
 			title: intl.formatMessage({ id: 'taichinh.hoadon.column.tongdathanhtoan' }),
 			dataIndex: 'soTienDaThu',
@@ -302,15 +299,25 @@ const HoaDonPage = () => {
 	];
 
 	return (
-		<>
+		<PageCard title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}>
 			<style>{`.row-qua-han { background-color: #fff1f0 !important; }`}</style>
+
+			<Tabs
+				activeKey={activeKey}
+				onChange={(tab) => {
+					setActiveKey(tab as 'chua_thanh_toan' | 'da_thanh_toan');
+				}}
+			>
+				<Tabs.TabPane key='chua_thanh_toan' tab='Chưa thanh toán' />
+				<Tabs.TabPane key='da_thanh_toan' tab='Đã thanh toán' />
+			</Tabs>
+
 			<TableBase
 				columns={columns}
-				getData={getData}
+				getData={() => getData(activeKey)}
 				buttons={{ create: false }}
-				dependencies={[page, limit]}
+				dependencies={[page, limit, activeKey]}
 				modelName='taichinh.hoadon'
-				title={intl.formatMessage({ id: 'taichinh.hoadon.title' })}
 				widthDrawer={1000}
 				otherProps={{
 					rowClassName: (rec: HoaDon.IRecord) => {
@@ -333,7 +340,7 @@ const HoaDonPage = () => {
 				styles={{ body: { padding: 0 } }}
 				width={1000}
 			>
-				<ThongTinThanhToan setVisible={setVisibleModal} getData={getData} />
+				<ThongTinThanhToan setVisible={setVisibleModal} getData={() => getData(activeKey)} />
 			</Modal>
 
 			<Modal
@@ -351,11 +358,11 @@ const HoaDonPage = () => {
 				visible={visibleModalThanhToan}
 				onClose={() => setVisibleModalThanhToan(false)}
 				onSuccess={() => {
-					getData();
+					getData(activeKey);
 					setVisibleModalThanhToan(false);
 				}}
 			/>
-		</>
+		</PageCard>
 	);
 };
 

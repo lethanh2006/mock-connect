@@ -1,6 +1,5 @@
-import { EOperatorType } from '@/components/Table/constant';
 import { KenhThanhToan } from '@/services/TaiChinh/KenhThanhToan/typing';
-import { Col, Modal, Row, Spin } from 'antd';
+import { Col, Modal, Row } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useModel } from 'umi';
 import PaymentDetail from './PaymentDetail';
@@ -26,23 +25,21 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 		setLoadingKenhThanhToan(true);
 
 		// Step 1: Tìm kênh thanh toán mặc định (isMacDinh: true)
-		getKenhThanhToan(undefined, undefined, { active: true }, [
-			{ field: 'isMacDinh', operator: EOperatorType.EQUAL, values: ['true'] },
-		])
+		getKenhThanhToan(true, undefined, { active: true })
 			.then((res: any) => {
-				if (!res?.data?.length) {
-					// Step 2: Không có kênh mặc định →  dùng kenhThanhToanIds từ đợt thu
-					const kenhThanhToanIds = recHoaDon?.dotThu?.kenhThanhToanIds;
-					if (kenhThanhToanIds?.length) {
-						return getKenhThanhToan(undefined, undefined, { active: true }, [
-							{ field: '_id', operator: EOperatorType.INCLUDE, values: kenhThanhToanIds },
-						]);
-					}
-					return;
-				}
-				if (!selectedMethod) {
-					setSelectedMethod(res.data.find((k: any) => k.isMacDinh) ?? res?.data?.[0]);
-				}
+				// if (!res?.data?.length) {
+				// 	// Step 2: Không có kênh mặc định →  dùng kenhThanhToanIds từ đợt thu
+				// 	const kenhThanhToanIds = recHoaDon?.dotThu?.kenhThanhToanIds;
+				// 	if (kenhThanhToanIds?.length) {
+				// 		return getKenhThanhToan(undefined, undefined, { active: true }, [
+				// 			{ field: '_id', operator: EOperatorType.INCLUDE, values: kenhThanhToanIds },
+				// 		]);
+				// 	}
+				// 	return;
+				// }
+				// if (!selectedMethod) {
+				// 	setSelectedMethod(res.data.find((k: any) => k.isMacDinh) ?? res?.data?.[0]);
+				// }
 			})
 			.then((resFallback: any) => {
 				if (resFallback?.data?.length && !selectedMethod) {
@@ -54,6 +51,8 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 				setLoadingKenhThanhToan(false);
 			});
 	}, [visible]);
+
+	console.log('danhSachKenh', danhSachKenh);
 
 	// Auto-select kênh thanh toán đầu tiên khi danhSachKenh có data mà chưa có selectedMethod
 	useEffect(() => {
@@ -73,7 +72,7 @@ const ModalThanhToan: React.FC<ModalThanhToanProps> = ({ visible, onClose, onSuc
 			open={visible}
 			onCancel={onClose}
 			footer={null}
-			width={800}
+			width={1000}
 			closable
 			destroyOnClose
 			className='modal-thanh-toan'
