@@ -506,7 +506,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	return (
 		<Card
 			variant='borderless'
-			className='card-borderless card-big-title'
+			className='card-borderless card-big-title has-indicator'
 			title={
 				<>
 					{intl.formatMessage({ id: 'lichsukien.title' })}{' '}
