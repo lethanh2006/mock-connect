@@ -506,7 +506,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 	return (
 		<Card
 			variant='borderless'
-			className='card-borderless card-big-title has-indicator'
+			className='card-borderless card-big-title'
 			title={
 				<>
 					{intl.formatMessage({ id: 'lichsukien.title' })}{' '}
@@ -522,6 +522,18 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 						}}
 					/>
 				</>
+			}
+			extra={
+				<ButtonExtend
+					type='primary'
+					icon={<PlusCircleOutlined />}
+					onClick={() => {
+						setRecord(undefined);
+						setVisibleForm(true);
+					}}
+				>
+					{intl.formatMessage({ id: 'lichsukien.themmoi' })}
+				</ButtonExtend>
 			}
 		>
 			{isDashboard ? (
@@ -551,7 +563,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 							title={intl.formatMessage({ id: 'lichsukien.caidat' })}
 							extra={
 								<Space wrap>
-									<ButtonExtend
+									{/* <ButtonExtend
 										type='link'
 										size='large'
 										tooltip={intl.formatMessage({ id: 'lichsukien.themmoi' })}
@@ -560,7 +572,7 @@ const CalendarPage = (props: { isDashboard?: boolean }) => {
 											setRecord(undefined);
 											setVisibleForm(true);
 										}}
-									/>
+									/> */}
 									<ButtonExtend
 										type='link'
 										size='large'
