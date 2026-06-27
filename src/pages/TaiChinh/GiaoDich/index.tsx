@@ -1,6 +1,7 @@
 import TableBase from '@/components/Table';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import { type IColumn } from '@/components/Table/typing';
+import { usePermissionCheck } from '@/hooks/usePermissionCheck';
 import type { GiaoDich } from '@/services/TaiChinh/GiaoDich/typing';
 import {
 	ETransactionPaymentType,
@@ -28,6 +29,8 @@ import StatGiaoDich from './components/Stat';
 
 const GiaoDichPage = () => {
 	const intl = useIntl();
+	const { hasPermission } = usePermissionCheck();
+	const canPay = hasPermission('tc.transaction:pay');
 	const {
 		getModel,
 		page,
@@ -55,7 +58,7 @@ const GiaoDichPage = () => {
 			else
 				notification.warning({
 					message: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.title' }),
-					description: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.des' }),
+					description: intl.formatMessage({ id: 'lichsugiaodich.notify.fail.desc' }),
 				});
 	}, []);
 
@@ -174,6 +177,7 @@ const GiaoDichPage = () => {
 			width: 90,
 			align: 'center',
 			fixed: 'right',
+			hide: !canPay,
 			render: (val, rec) => (
 				<>
 					<ButtonExtend
@@ -230,22 +234,26 @@ const GiaoDichPage = () => {
 						key='select'
 					/>,
 
-					<ButtonExtend
-						loading={loading}
-						onClick={() => {
-							getModelDotThu(undefined, undefined, { _id: -1 })
-								.then((res) => {
-									setRecDotThu(res?.[0]);
-								})
-								.then(() => setVisibleHocPhi(true));
-						}}
-						icon={<PlusCircleOutlined />}
-						type='primary'
-						className='btn-success'
-						key='topup'
-					>
-						{intl.formatMessage({ id: 'lichsugiaodich.button.noptruoc' })}
-					</ButtonExtend>,
+					...(canPay
+						? [
+								<ButtonExtend
+									loading={loading}
+									onClick={() => {
+										getModelDotThu(undefined, undefined, { _id: -1 })
+											.then((res) => {
+												setRecDotThu(res?.[0]);
+											})
+											.then(() => setVisibleHocPhi(true));
+									}}
+									icon={<PlusCircleOutlined />}
+									type='primary'
+									className='btn-success'
+									key='topup'
+								>
+									{intl.formatMessage({ id: 'lichsugiaodich.button.noptruoc' })}
+								</ButtonExtend>,
+							]
+						: []),
 				]}
 			>
 				<StatGiaoDich />

@@ -12,7 +12,7 @@ import { useIntl, useModel } from 'umi';
 import ModalExport from '../Export';
 import ModalFilter from '../Filter/ModalFilter';
 import ModalImport from '../Import';
-import type { IColumn, TableBaseProps, TFilter } from '../typing';
+import type { IColumn, TableBaseProps } from '../typing';
 import { ResizableTitle } from './ResizableTitle';
 import { useTableContext } from './TableContext';
 import { TableFormModal } from './TableFormModal';
@@ -24,8 +24,6 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	const model = useModel(modelName) as any;
 	const { page, limit, setPage, setLimit, condition, sort, setSort, setFilters, initFilter } = model;
 	const { danhSach: dsPhanVung } = useModel('core.phanvungdulieu');
-	const filters: TFilter<any>[] = model?.filters;
-	const getData = props.getData ?? model?.getModel;
 	const {
 		visibleImport,
 		setVisibleImport,
@@ -37,7 +35,15 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		buttons,
 		hasFilter,
 		setSelectedIds,
+		filters,
+		disableFilterModal,
+		externalConditions,
+		getData,
 	} = useTableContext();
+
+	const filtersDependency = JSON.stringify(filters ?? []);
+	const externalConditionsDependency = JSON.stringify(externalConditions ?? {});
+	const previousFiltersDependencyRef = useRef(filtersDependency);
 
 	const { handleFilter, handleSearch, finalColumns } = useTableColumns({
 		columns: props.columns,
@@ -66,10 +72,6 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	);
 
 	useEffect(() => {
-		setPage(1);
-	}, [JSON.stringify(filters ?? [])]);
-
-	useEffect(() => {
 		// Block text selection during resize
 		const handleSelectStart = (e: Event) => {
 			if (isResizingRef.current) {
@@ -82,8 +84,17 @@ export const TableBaseContent = (props: TableBaseProps) => {
 	}, []);
 
 	useEffect(() => {
-		getData(params);
-	}, [...dependencies, filters, condition, sort]);
+		const filtersChanged = previousFiltersDependencyRef.current !== filtersDependency;
+		if (filtersChanged) {
+			previousFiltersDependencyRef.current = filtersDependency;
+			if (page !== 1) {
+				setPage(1);
+				return;
+			}
+		}
+
+		getData?.(params);
+	}, [...dependencies, page, limit, filtersDependency, externalConditionsDependency, condition, sort]);
 
 	useEffect(() => {
 		return () => {
@@ -158,7 +169,20 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		);
 	}, []);
 
-	const onChange = (pagination: PaginationProps, fil: Record<string, FilterValue | null>, sorter: any) => {
+	const onChange = (
+		pagination: PaginationProps,
+		fil: Record<string, FilterValue | null>,
+		sorter: any,
+		extra?: { action?: 'paginate' | 'sort' | 'filter' },
+	) => {
+		const { current, pageSize } = pagination;
+
+		if (extra?.action === 'paginate') {
+			setPage(current);
+			setLimit(pageSize);
+			return;
+		}
+
 		// Skip sort if triggered within 300ms after resize (avoid resize->sort on mouseup)
 		const skipSort = sorter?.field && Date.now() - lastResizeEndTimeRef.current < 300;
 		if (skipSort) {
@@ -171,23 +195,26 @@ export const TableBaseContent = (props: TableBaseProps) => {
 				else return [col];
 			})
 			.flat();
+
 		Object.entries(fil).map(([field, values]) => {
-			// Field từ table => nếu dataIndex là Array => field1.subfield
-			const dataIndex = field.includes('.') ? field.split('.') : field;
-			const col = allColumns.find((item: IColumn<any>) => JSON.stringify(item.dataIndex) === JSON.stringify(dataIndex));
+			// tìm col có key trùng với dataIndex đã hash của fil
+			const col = allColumns.find((item) => field === item.key);
+			// lấy dataIndex gốc
+			const cleanDataIndex = col ? col.dataIndex : field.includes('.') ? field.split('.') : field;
+
 			if (col?.handleFilter) {
 				col.handleFilter(values?.[0] as any);
 				if (col?.filterType === 'string') {
-					handleSearch(dataIndex, values?.[0] as any);
+					handleSearch(cleanDataIndex, values?.[0] as any);
 				} else if (col?.filterType === 'select') {
-					handleFilter(dataIndex, values as any);
+					handleFilter(cleanDataIndex, values as any);
 				}
 			} else if (col?.filterType === 'select') {
-				handleFilter(dataIndex, values as any);
+				handleFilter(cleanDataIndex, values as any);
 			} else if (col?.filterType === 'string') {
-				handleSearch(dataIndex, values?.[0] as any);
+				handleSearch(cleanDataIndex, values?.[0] as any);
 			} else if (col?.filterType === 'customselect') {
-				handleFilter(dataIndex, values as any);
+				handleFilter(cleanDataIndex, values as any);
 			}
 		});
 
@@ -195,10 +222,9 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		if (!skipSort) {
 			const { order, field } = sorter;
 			const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
-			if (sorter && setSort) setSort({ [Array.isArray(field) ? field.join('.') : field]: orderValue });
+			if (field && setSort) setSort({ [Array.isArray(field) ? field.join('.') : field]: orderValue });
 		}
 
-		const { current, pageSize } = pagination;
 		setPage(current);
 		setLimit(pageSize);
 	};
@@ -293,23 +319,33 @@ export const TableBaseContent = (props: TableBaseProps) => {
 			{props.hideCard ? (
 				mainContent
 			) : (
-				<PageCard title={props.title || false} extra={props.cardExtra} bordered={props.border}>
+				<PageCard
+					level={props.cardProps?.level}
+					showIndicator={props.cardProps?.showIndicator}
+					title={props.title || false}
+					extra={props.cardExtra}
+					bordered={props.border}
+				>
 					{mainContent}
 				</PageCard>
 			)}
 
 			<TableFormModal />
 
-			{buttons?.filter !== false && hasFilter ? <ModalFilter /> : null}
+			{buttons?.filter !== false && hasFilter && disableFilterModal !== true ? <ModalFilter /> : null}
 
 			{buttons?.import ? (
 				<ModalImport
 					visible={visibleImport ?? false}
 					modelName={props.modelImportName ?? modelName}
 					onCancel={() => setVisibleImport?.(false)}
-					onOk={() => getData(params)}
-					titleTemplate={title ? `Biểu mẫu ${title}.xlsx` : undefined}
-					extendData={params}
+					onOk={() => getData?.(params)}
+					titleTemplate={
+						title
+							? intl.formatMessage({ id: 'global.table.index.import.titleTemplate' }, { title: title as any })
+							: undefined
+					}
+					extendData={props.importParam ?? params}
 				/>
 			) : null}
 
@@ -318,8 +354,13 @@ export const TableBaseContent = (props: TableBaseProps) => {
 					visible={visibleExport ?? false}
 					modelName={props.modelExportName ?? modelName}
 					onCancel={() => setVisibleExport?.(false)}
-					fileName={`Danh sách ${title ?? 'dữ liệu'}.xlsx`}
-					condition={params}
+					fileName={intl.formatMessage(
+						{ id: 'global.table.index.export.fileName' },
+						{ title: (title ?? intl.formatMessage({ id: 'global.table.index.export.defaultTitle' })) as any },
+					)}
+					condition={props.params}
+					otherQuery={props.exportParam ?? params}
+					filters={filters}
 				/>
 			) : null}
 		</>

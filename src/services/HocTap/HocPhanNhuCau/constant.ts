@@ -5,9 +5,9 @@ export enum ETrangThaiSvDkHpNhuCau {
 }
 
 export const mapNameTrangThaiSvDkHpNhuCau: Record<ETrangThaiSvDkHpNhuCau, string> = {
-	[ETrangThaiSvDkHpNhuCau.CHUA_DANG_KY]: 'Chưa đăng ký',
-	[ETrangThaiSvDkHpNhuCau.CHUA_DUYET]: 'Chờ CVHT xác nhận',
-	[ETrangThaiSvDkHpNhuCau.DA_DUYET]: 'Đã xác nhận',
+	[ETrangThaiSvDkHpNhuCau.CHUA_DANG_KY]: 'hocphannhucau.svStatus.chuaDangKy',
+	[ETrangThaiSvDkHpNhuCau.CHUA_DUYET]: 'hocphannhucau.svStatus.choCvht',
+	[ETrangThaiSvDkHpNhuCau.DA_DUYET]: 'hocphannhucau.svStatus.daXacNhan',
 };
 
 export const colorTrangThaiSvDkHpNhuCau: Record<ETrangThaiSvDkHpNhuCau, string> = {
@@ -23,7 +23,7 @@ export enum ETinhChatHocPhanNhuCau {
 }
 
 export const mapNameETinhChatHocPhanNhuCau: Record<ETinhChatHocPhanNhuCau, string> = {
-	[ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH]: 'HP đúng tiến trình',
-	[ETinhChatHocPhanNhuCau.NGOAI_TIEN_TRINH]: 'HP ngoài tiến trình',
-	[ETinhChatHocPhanNhuCau.HOC_PHAN_KHAC]: 'HP khác',
+	[ETinhChatHocPhanNhuCau.DUNG_TIEN_TRINH]: 'hocphannhucau.tinhChat.hpDungTienTrinh',
+	[ETinhChatHocPhanNhuCau.NGOAI_TIEN_TRINH]: 'hocphannhucau.tinhChat.hpNgoaiTienTrinh',
+	[ETinhChatHocPhanNhuCau.HOC_PHAN_KHAC]: 'hocphannhucau.tinhChat.hpKhac',
 };

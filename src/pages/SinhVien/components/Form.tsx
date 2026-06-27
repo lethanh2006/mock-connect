@@ -55,9 +55,6 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 			layout='vertical'
 			onFinish={onFinish}
 			scrollToFirstError={{ behavior: 'smooth', block: 'center', inline: 'center' }}
-			onFinishFailed={() => {
-				message.warning('Một số trường thông tin còn thiếu vui lòng kiểm tra lại');
-			}}
 		>
 			<Row gutter={[12, 0]}>
 				<Col span={24} sm={9} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
@@ -371,11 +368,7 @@ const FormSinhVien = (props: { onCancel?: () => void }) => {
 					</Row>
 				</Collapse.Panel>
 
-				<Collapse.Panel
-					forceRender
-					header={intl.formatMessage({ id: 'thongtincanhan.form.thongtinvisa' })}
-					key='5'
-				>
+				<Collapse.Panel forceRender header={intl.formatMessage({ id: 'thongtincanhan.form.thongtinvisa' })} key='5'>
 					<Row gutter={[12, 0]}>
 						<Col span={24}>
 							<Form.Item name='visaList' label=''>

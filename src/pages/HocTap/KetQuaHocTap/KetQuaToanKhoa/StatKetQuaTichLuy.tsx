@@ -1,76 +1,86 @@
-import { primaryColor } from '@/services/base/constant';
-import { colorLoaiHocLuc } from '@/services/HocTap/constant';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Col, Row, Tooltip } from 'antd';
+import StatisticsCard from '@/components/StatisticsCard';
+import { StatisticsItem } from '@/components/StatisticsCard/typing';
+import { mapLoaiHocLuc, mapTrinhDoKqhtHocKy } from '@/services/HocTap/constant';
+import { Typography } from 'antd';
+import { useEffect } from 'react';
 import { useIntl, useModel } from 'umi';
 
-const StatKetQuaTichLuySinhVien = () => {
+const StatKetQuaTichLuySinhVien = (props: { maKhoaNganh?: string }) => {
 	const intl = useIntl();
+	const { maKhoaNganh } = props;
 	const { record } = useModel('daotao.ketquahocky');
+	const { record: recTienTrinh, getTienTrinhTotNghiepModel } = useModel('sinhvien.tientrinhtotnghiep');
 
-	if (!record?._id) return <></>;
+	useEffect(() => {
+		if (maKhoaNganh && !recTienTrinh?.ctdtKeHoach?.tongSoTinChi) {
+			getTienTrinhTotNghiepModel(maKhoaNganh);
+		}
+	}, [maKhoaNganh]);
+
+	if (!record?._id) return null;
+
+	const tongTinChi = record.tongSoTinChiTichLuyToanKhoa ?? '--';
+	const tongTinChiToanKhoa = recTienTrinh?.ctdtKeHoach?.tongSoTinChi ?? '--';
+	const trinhDo =
+		record.trinhDo && mapTrinhDoKqhtHocKy[record.trinhDo]
+			? intl.formatMessage({ id: mapTrinhDoKqhtHocKy[record.trinhDo] })
+			: (record.trinhDo ?? '--');
+	const hocLuc =
+		record.hocLuc && mapLoaiHocLuc[record.hocLuc]
+			? intl.formatMessage({ id: mapLoaiHocLuc[record.hocLuc] })
+			: (record.hocLuc ?? '--');
+
+	const items: StatisticsItem[] = [
+		{
+			title: (
+				<div>
+					<Typography.Text strong>{intl.formatMessage({ id: 'ketquahoctap.summary.cumGpa' })}</Typography.Text>
+					<Typography.Text type='secondary' style={{ display: 'block', fontSize: 12, marginTop: 2 }}>
+						{intl.formatMessage({ id: 'ketquahoctap.summary.cumGpaScale' })}
+					</Typography.Text>
+				</div>
+			),
+			value: record.trungBinhTichLuyToanKhoaThang4 ?? '--',
+			valueColor: 'var(--color-primary)',
+			backgroundColor: '#f3f7fb',
+		},
+		{
+			title: intl.formatMessage({ id: 'ketquahoctap.summary.totalCredits' }),
+			value: (
+				<span style={{ whiteSpace: 'nowrap' }}>
+					{tongTinChi}
+					<Typography.Text type='secondary' style={{ fontSize: 16, fontWeight: 400 }}>
+						{' '}
+						/{tongTinChiToanKhoa}
+					</Typography.Text>
+				</span>
+			),
+			valueColor: 'var(--color-primary)',
+			backgroundColor: '#f3f7fb',
+		},
+		{
+			title: intl.formatMessage({ id: 'ketquahoctap.summary.classification' }),
+			value: trinhDo,
+			valueColor: 'var(--color-primary)',
+			backgroundColor: '#f3f7fb',
+		},
+		{
+			title: intl.formatMessage({ id: 'ketquahoctap.summary.academicStanding' }),
+			value: hocLuc,
+			valueColor: 'var(--color-primary)',
+			backgroundColor: '#f3f7fb',
+		},
+	];
+
 	return (
-		<Row gutter={[12, 12]}>
-			<Col span={24} xxl={12}>
-				<Card className='ket-qua-card'>
-					<div className='ket-qua-content'>
-						<div className='title'>{intl.formatMessage({ id: 'ketquahoctap.stat.ketqua' })}</div>
-						<Row gutter={[8, 0]}>
-							{/* <Col span={24} lg={12}>
-								<div className='row'>
-									<span className='sum-text'>{record.trungBinhTichLuyToanKhoa ?? '--'}</span>
-									TBC tích lũy (hệ 10)
-								</div>
-							</Col> */}
-							<Col span={24} md={8}>
-								<div className='row'>
-									<span className='sum-text'>{record.trungBinhTichLuyToanKhoaThang4 ?? '--'}</span>
-									{intl.formatMessage({ id: 'ketquahoctap.stat.tbc' })}
-								</div>
-							</Col>
-							<Col span={24} md={8}>
-								<div className='row'>
-									<span className='sum-text' style={{ color: '#9bd437' }}>
-										{record.tongSoTinChiTichLuyToanKhoa ?? '--'}
-									</span>
-									{intl.formatMessage({ id: 'ketquahoctap.stat.tichluy' })}
-								</div>
-							</Col>
-							<Col span={24} md={8}>
-								<div className='row'>
-									<span className='sum-text' style={{ color: '#fc7e4d' }}>
-										{record.tongSoTinChiNoToanKhoa ?? '--'}
-									</span>
-									{intl.formatMessage({ id: 'ketquahoctap.stat.toankhoa' })}
-									<Tooltip title={intl.formatMessage({ id: 'ketquahoctap.stat.toankhoa.tooltip' })}>
-										<InfoCircleOutlined style={{ color: primaryColor }} />
-									</Tooltip>
-								</div>
-							</Col>
-						</Row>
-					</div>
-				</Card>
-			</Col>
-
-			<Col span={24} md={12} xxl={6}>
-				<Card className='ket-qua-card'>
-					<div className='ket-qua-content'>
-						<div className='title'>{intl.formatMessage({ id: 'ketquahoctap.stat.trinhdo' })}</div>
-						<span className='sum-text'>{record.trinhDo ?? '--'}</span>
-					</div>
-				</Card>
-			</Col>
-			<Col span={24} md={12} xxl={6}>
-				<Card className='ket-qua-card'>
-					<div className='ket-qua-content'>
-						<div className='title'>{intl.formatMessage({ id: 'ketquahoctap.stat.xeploai' })}</div>
-						<span className='sum-text' style={{ color: colorLoaiHocLuc[record.hocLuc] }}>
-							{record.hocLuc ?? '--'}
-						</span>
-					</div>
-				</Card>
-			</Col>
-		</Row>
+		<StatisticsCard
+			hideCard
+			data={items}
+			rowGutter={12}
+			colSpan={{ xs: 24, sm: 12, md: 12, lg: 12, xl: 6 }}
+			autoBackground={{ enabled: false }}
+			cardStyle={{ height: '100%', borderRadius: 10, alignItems: 'center' }}
+		/>
 	);
 };
 

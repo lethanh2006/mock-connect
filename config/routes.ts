@@ -34,50 +34,50 @@ export default [
 	// 	component: 'TienIch/GioiThieu',
 	// 	hideInMenu: true,
 	// },
-	// {
-	// 	path: '/my-profile',
-	// 	name: 'MyProfile',
-	// 	icon: 'UserOutlined',
-	// 	component: 'New/MyProfile',
-	// },
-	// {
-	// 	path: '/my-calendar',
-	// 	name: 'MyCalendar',
-	// 	icon: 'CalendarOutlined',
-	// 	component: 'New/MyCalendar',
-	// },
-	// {
-	// 	path: '/academic',
-	// 	name: 'Academic',
-	// 	icon: 'BookOutlined',
-	// 	routes: [
-	// 		{
-	// 			path: 'course-registration',
-	// 			name: 'CourseRegistration',
-	// 			component: 'New/CourseRegistration',
-	// 		},
-	// 		{
-	// 			path: 'timetable',
-	// 			name: 'Timetable',
-	// 			component: 'New/Timetable',
-	// 		},
-	// 		{
-	// 			path: 'grades-transcript',
-	// 			name: 'GradesTranscript',
-	// 			component: 'New/GradesTranscript',
-	// 		},
-	// 		{
-	// 			path: 'degree-audit',
-	// 			name: 'DegreeAudit',
-	// 			component: 'New/DegreeAudit',
-	// 		},
-	// 		{
-	// 			path: 'graduation-review',
-	// 			name: 'GraduationReview',
-	// 			component: 'New/GraduationReview',
-	// 		},
-	// 	],
-	// },
+	{
+		path: '/my-profile',
+		name: 'MyProfile',
+		icon: 'UserOutlined',
+		component: 'SinhVien',
+	},
+	{
+		path: '/my-calendar',
+		name: 'MyCalendar',
+		icon: 'CalendarOutlined',
+		component: 'Calendar',
+	},
+	{
+		path: '/academic',
+		name: 'Academic',
+		icon: 'BookOutlined',
+		routes: [
+			{
+				path: 'course-registration',
+				name: 'CourseRegistration',
+				component: 'HocTap/DangKyTinChi',
+			},
+			// {
+			// 	path: 'timetable',
+			// 	name: 'Timetable',
+			// 	component: 'Calendar',
+			// },
+			{
+				path: 'grades-transcript',
+				name: 'GradesTranscript',
+				component: 'HocTap/KetQuaHocTap',
+			},
+			{
+				path: 'degree-audit',
+				name: 'DegreeAudit',
+				component: 'HocTap/TienTrinhHocTap',
+			},
+			// {
+			// 	path: 'graduation-review',
+			// 	name: 'GraduationReview',
+			// 	component: 'HocTap/XetTotNghiep',
+			// },
+		],
+	},
 	// {
 	// 	path: '/learning-experience',
 	// 	name: 'LearningExperience',
@@ -137,11 +137,11 @@ export default [
 				name: 'StudentDevelopment',
 				component: 'New/StudentDevelopment',
 			},
-			// {
-			// 	path: 'student-awarding',
-			// 	name: 'StudentAwarding',
-			// 	component: 'New/StudentAwarding',
-			// },
+			{
+				path: 'student-awarding',
+				name: 'StudentAwarding',
+				component: 'New/StudentAwarding',
+			},
 			{
 				path: 'events',
 				name: 'Events',
@@ -860,28 +860,36 @@ export default [
 	// },
 
 	// TÀI CHÍNH
-	// {
-	// 	name: 'TaiChinh',
-	// 	icon: 'TransactionOutlined',
-	// 	path: '/tai-chinh',
-	// 	routes: [
-	// 		{
-	// 			name: 'CongNo',
-	// 			path: 'cong-no',
-	// 			component: 'TaiChinh/HoaDon',
-	// 		},
-	// 		{
-	// 			name: 'GiaoDich',
-	// 			path: 'giao-dich',
-	// 			component: 'TaiChinh/GiaoDich',
-	// 		},
-	// 		{
-	// 			name: 'UuDaiThanhToan',
-	// 			path: 'uu-dai-thanh-toan',
-	// 			component: 'TaiChinh/UuDaiThanhToan',
-	// 		},
-	// 	],
-	// },
+	{
+		name: 'TaiChinh',
+		icon: 'TransactionOutlined',
+		path: '/tai-chinh',
+		access: 'manyAccessFilter',
+		permissions: ['tc.bill:read', 'tc.transaction:read', 'tc.discount:read'],
+		routes: [
+			{
+				name: 'CongNo',
+				path: 'cong-no',
+				component: 'TaiChinh/HoaDon',
+				access: 'accessFilter',
+				permission: 'tc.bill:read',
+			},
+			// {
+			// 	name: 'GiaoDich',
+			// 	path: 'giao-dich',
+			// 	component: 'TaiChinh/GiaoDich',
+			// 	access: 'accessFilter',
+			// 	permission: 'tc.transaction:read',
+			// },
+			// {
+			// 	name: 'UuDaiThanhToan',
+			// 	path: 'uu-dai-thanh-toan',
+			// 	component: 'TaiChinh/UuDaiThanhToan',
+			// 	access: 'accessFilter',
+			// 	permission: 'tc.discount:read',
+			// },
+		],
+	},
 
 	// TIỆN ÍCH
 	// {

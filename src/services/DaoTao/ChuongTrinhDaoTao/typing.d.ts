@@ -1,7 +1,8 @@
 import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import type { ChungChi } from '../ChungChi/typing';
-import { type HocPhan } from '../HocPhan/typings';
 import type { ELoaiChuongTrinhDaoTao, ELoaiHocPhanCTDT, ETrangThaiHocTap } from '../constant';
+import { type HocPhan } from '../HocPhan/typings';
+import { KhoaNganh } from '../KhoaNganh/typing';
 
 declare module ChuongTrinhDaoTao {
 	export interface IRecord {
@@ -13,12 +14,14 @@ declare module ChuongTrinhDaoTao {
 		trinhDoDaoTao?: TrinhDoDaoTao.IRecordCoSo;
 		maNganh: string;
 		nganh?: NganhDaoTao.IRecordCoSo;
+		khoaNganh?: KhoaNganh.IRecord;
 		loai: ELoaiChuongTrinhDaoTao;
 		trangThai: ETrangThaiCtdt;
 
 		thoiGianDaoTao: number;
 		thoiGianDaoTaoToiDa?: number;
 		tongSoTinChi: number;
+		ngonNguDaoTao?: string;
 		canCuId: string;
 		canCu?: VanBanQuyDinh.IRecord;
 		namBanHanh: number;
@@ -28,6 +31,7 @@ declare module ChuongTrinhDaoTao {
 		url?: string | null;
 
 		mucTieuDaoTao: string;
+		thongTinHocPhi?: string;
 		chuanDauVao: string;
 		chuanDauRa: string;
 		viTriLamViec: string;
@@ -44,18 +48,27 @@ declare module ChuongTrinhDaoTao {
 	}
 
 	export interface IKhoiHocPhanCTDT extends IHocPhanBase {
-		maChuongTrinhDaoTao: string;
+		maChuongTrinhDaoTao?: string | null;
 		chuongTrinhDaoTao?: IRecord;
-		maKhoiKienThuc: string;
-		khoiKienThuc?: { ma: string; ten: string };
+		maKhoiKienThuc?: string;
+		khoiKienThuc?: KhoiKienThuc.IRecord | null;
 		maChuyenNganh?: string;
-		chuyenNganh?: NganhDaoTao.IRecordCoSo;
+		chuyenNganh?: NganhDaoTao.IRecordCoSo | null;
 		loaiHocPhanCtdt: ELoaiHocPhanCTDT;
 
+		/** Số thứ tự kỳ, kỳ thực tế */
 		soThuTuKy?: number;
-		soTinChiTuChonPhaiHoc?: number;
+		/** Số thứ tự kế hoạch (với chương trình kế hoạch) */
+		soThuTuKyKeHoach?: number;
+		// tinhChuanDauRa?: boolean;
+
+		phamViTuChon?: PhamViTuChonHpCtdt;
 		ten?: string; // Tên khối chương trình tự chọn
+		soTinChiTuChonPhaiHoc?: number;
+		soHocPhanTuChonPhaiHoc?: number;
 		isTinhSoTinChiTichLuy?: boolean;
+		// maLoaiHocPhan?: string;
+		// loaiHocPhan?: HocPhan.ILoaiHocPhan;
 		hocPhanCtdtList?: IHocPhanTuChonCTDT[];
 	}
 
@@ -66,25 +79,42 @@ declare module ChuongTrinhDaoTao {
 
 	export interface IHocPhanBase {
 		_id: string;
-		maHocPhan: string;
-		hocPhan?: HocPhan.IRecord;
+		maHocPhan?: string | null;
+		hocPhan?: HocPhan.IRecord | null;
 		// maHocPhanTienQuyet: string;
 		// hocPhanTienQuyet?: HocPhan.IRecord;
 		// maHocPhanTruoc: string;
 		// hocPhanTruoc?: HocPhan.IRecord;
 		// maHocPhanSongHanh: string;
 		// hocPhanSongHanh?: HocPhan.IRecord;
-		dsHocPhanTienQuyet?: THocPhanTuongQuan[];
-		dsHocPhanTruoc?: THocPhanTuongQuan[];
-		dsHocPhanSongHanh?: THocPhanTuongQuan[];
+		dsHocPhanTienQuyet?: THocPhanTuongQuan[] | null;
+		dsHocPhanTruoc?: THocPhanTuongQuan[] | null;
+		dsHocPhanSongHanh?: THocPhanTuongQuan[] | null;
 
 		createdAt?: string;
 		updatedAt?: string;
+		soTinChi?: number | null;
 
 		// Populate
-		hoc: ETrangThaiHocTap;
+		hoc?: ETrangThaiHocTap;
 		lichSuDiem?: LopHocPhan.IDiemHpSvHk[];
 	}
+
+	export type TTienTrinhKhungMinor = {
+		nganhMinor?: {
+			ma?: string;
+			ten?: string;
+			tenTiengViet?: string;
+			tenTiengAnh?: string;
+		};
+		idPhieu?: string;
+		khoiHpCtList?: IKhoiHocPhanCTDT[];
+	};
+
+	export type TTienTrinhKhung = {
+		tienTrinh: IKhoiHocPhanCTDT[];
+		minors: TTienTrinhKhungMinor[];
+	};
 
 	export type THocPhanTuongQuan = Pick<HocPhan.IRecord, 'ma' | 'ten' | 'soTinChi'> & { soHocPhan?: number };
 
@@ -121,7 +151,7 @@ declare module ChuongTrinhDaoTao {
 		cheDoTienQuyet?: string;
 		dsHocPhanTruoc?: THocPhanTuongQuan[];
 		dsHocPhanSongHanh?: THocPhanTuongQuan[];
-		chuongTrinhDaoTao?: { ma: string, ten: string };
+		chuongTrinhDaoTao?: { ma: string; ten: string };
 		hocPhan?: { ma: string; ten: string; soTinChi: number };
 		hocPhanCtdtList?: IKhoiHpCt[];
 		createdAt?: string;
@@ -149,11 +179,17 @@ declare module ChuongTrinhDaoTao {
 	}
 
 	export type TTienTrinhThucTe = {
-		diemHpSvHk: LopHocPhan.IDiemHpSvHk;
+		_id?: string;
+		diemHpSvHk?: LopHocPhan.IDiemHpSvHk;
+		lichSuDiem?: LopHocPhan.IDiemHpSvHk[];
 		hocPhan: Pick<HocPhan.IRecord, 'ma' | 'ten' | 'soTinChi' | 'deCuongHienTaiId'>;
 		kyHoc: Pick<HocKy.IRecord, 'ma' | 'ten'>;
 		lopHocPhan: Pick<LopHocPhan.IRecord, 'ten' | 'soThuTuLop' | 'deCuong'>;
 		soTinChi: number;
+		maKhoiKienThuc?: string;
+		khoiKienThuc?: IKhoiKienThuc | null;
+		isNgoaiCtdt?: boolean;
+		hoc?: ETrangThaiHocTap;
 	};
 
 	export type TThongKePloSinhVien = {
@@ -180,6 +216,7 @@ declare module ChuongTrinhDaoTao {
 		updatedAt: string;
 		khoiHpCtList?: IKhoiHocPhanCTDT[];
 		khoiCha?: IKhoiKienThuc;
+		khoiCon?: ChuongTrinhDaoTao.IKhoiKienThuc[];
 	}
 
 	export interface IKhoiLuaChon {
@@ -191,5 +228,6 @@ declare module ChuongTrinhDaoTao {
 		createdAt: string;
 		updatedAt: string;
 		khoiKienThuc?: IKhoiKienThuc;
+		maKhoiCha?: string;
 	}
 }

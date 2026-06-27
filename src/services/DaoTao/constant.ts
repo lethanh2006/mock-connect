@@ -33,6 +33,12 @@ export enum ELoaiHocPhanCTDT {
 	TOT_NGHIEP = 'Tốt nghiệp',
 }
 
+export const LoaiHocPhanCTDT: Record<ELoaiHocPhanCTDT, string> = {
+	[ELoaiHocPhanCTDT.BAT_BUOC]: 'tientrinhhoctap.ctdt.loaiHocPhan.batBuoc',
+	[ELoaiHocPhanCTDT.TU_CHON]: 'tientrinhhoctap.ctdt.loaiHocPhan.tuChon',
+	[ELoaiHocPhanCTDT.TOT_NGHIEP]: 'tientrinhhoctap.ctdt.loaiHocPhan.totNghiep',
+};
+
 // Trạng thái học tập trong tiến trình học tập
 export enum ETrangThaiHocTap {
 	CHUA_HOC = 'CHUA_HOC',
@@ -49,10 +55,10 @@ export enum ETrangThaiDonNghiHoc {
 }
 
 export const trangThaiHocTap: Record<ETrangThaiHocTap, string> = {
-	[ETrangThaiHocTap.CHUA_HOC]: 'Chưa học',
-	[ETrangThaiHocTap.DANG_HOC]: 'Đang học',
-	[ETrangThaiHocTap.DA_HOC]: 'Đã học',
-	[ETrangThaiHocTap.CHUA_DAT]: 'Chưa đạt',
+	[ETrangThaiHocTap.CHUA_HOC]: 'daotao.trangthaihoctap.chuaHoc',
+	[ETrangThaiHocTap.DANG_HOC]: 'daotao.trangthaihoctap.dangHoc',
+	[ETrangThaiHocTap.DA_HOC]: 'daotao.trangthaihoctap.daHoc',
+	[ETrangThaiHocTap.CHUA_DAT]: 'daotao.trangthaihoctap.chuaDat',
 };
 
 export const colorTrangThaiHocTap: Record<ETrangThaiHocTap, ETagColor> = {
@@ -66,6 +72,11 @@ export enum EGioiTinh {
 	Nam = 'Nam',
 	Nu = 'Nữ',
 }
+
+export const genderMessageIds: Partial<Record<EGioiTinh, string>> = {
+	[EGioiTinh.Nam]: 'thongtincanhan.hoso.enum.gioitinh.nam',
+	[EGioiTinh.Nu]: 'thongtincanhan.hoso.enum.gioitinh.nu',
+};
 
 export enum EPhuongThucTinhDiem {
 	DAT = 'Đạt',
@@ -91,6 +102,16 @@ export const colorTrangThaiHocSv: Record<ETrangThaiHocSv, string> = {
 	[ETrangThaiHocSv.THOI_HOC]: 'red',
 	[ETrangThaiHocSv.BUOC_THOI_HOC]: 'purple',
 	[ETrangThaiHocSv.CHUYEN_TRUONG]: 'volcano',
+};
+
+export const trangThaiHocSv: Partial<Record<ETrangThaiHocSv, string>> = {
+	[ETrangThaiHocSv.CHUA_PHAN_LOP]: 'thongtincanhan.hoso.enum.trangthaihoc.chuaPhanLop',
+	[ETrangThaiHocSv.DANG_HOC]: 'thongtincanhan.hoso.enum.trangthaihoc.dangHoc',
+	[ETrangThaiHocSv.BAO_LUU]: 'thongtincanhan.hoso.enum.trangthaihoc.baoLuu',
+	[ETrangThaiHocSv.DA_TOT_NGHIEP]: 'thongtincanhan.hoso.enum.trangthaihoc.daTotNghiep',
+	[ETrangThaiHocSv.THOI_HOC]: 'thongtincanhan.hoso.enum.trangthaihoc.thoiHoc',
+	[ETrangThaiHocSv.BUOC_THOI_HOC]: 'thongtincanhan.hoso.enum.trangthaihoc.buocThoiHoc',
+	[ETrangThaiHocSv.CHUYEN_TRUONG]: 'thongtincanhan.hoso.enum.trangthaihoc.chuyenTruong',
 };
 
 // Điểm danh lớp
@@ -144,9 +165,9 @@ export enum ELoaiChuongTrinhDaoTao {
 }
 
 export const LoaiChuongTrinhDaoTao: Record<ELoaiChuongTrinhDaoTao, string> = {
-	[ELoaiChuongTrinhDaoTao.CHUAN]: 'Chuẩn',
-	[ELoaiChuongTrinhDaoTao.KE_HOACH]: 'Kế hoạch',
-	[ELoaiChuongTrinhDaoTao.CA_NHAN]: 'Cá nhân',
+	[ELoaiChuongTrinhDaoTao.CHUAN]: 'daotao.loaichuongtrinh.chuan',
+	[ELoaiChuongTrinhDaoTao.KE_HOACH]: 'daotao.loaichuongtrinh.keHoach',
+	[ELoaiChuongTrinhDaoTao.CA_NHAN]: 'daotao.loaichuongtrinh.caNhan',
 };
 
 //Đăng ký nhu cầu
@@ -158,10 +179,10 @@ export enum ETrangThaiHocPhanDangKyNhuCau {
 }
 
 export const mapTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {
-	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'Chờ duyệt',
-	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'Đã duyệt',
-	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'Không duyệt',
-	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'Đã phân lớp',
+	[ETrangThaiHocPhanDangKyNhuCau.CHO_DUYET]: 'dangkyhoctap.status.choDuyet',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_DUYET]: 'dangkyhoctap.status.daDuyet',
+	[ETrangThaiHocPhanDangKyNhuCau.KHONG_DUYET]: 'dangkyhoctap.status.khongDuyet',
+	[ETrangThaiHocPhanDangKyNhuCau.DA_PHAN_LOP]: 'dangkyhoctap.status.daPhanLop',
 };
 
 export const colorTrangThaiHocPhanDangKyNhuCau: Record<ETrangThaiHocPhanDangKyNhuCau, string> = {

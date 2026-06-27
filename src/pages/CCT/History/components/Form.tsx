@@ -1,5 +1,6 @@
 import UploadFile from '@/components/Upload/UploadFile';
 import { Activity } from '@/services/CCT/Activity/typing';
+import { EApprovalStatus } from '@/services/CCT/constant';
 import { EFileScope, uploadFileManagerMultipart } from '@/services/uploadFile';
 import rules from '@/utils/rules';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
@@ -150,7 +151,13 @@ const FormActivityOutCome = (props: any) => {
 
 	return (
 		<Form form={form} layout='vertical' onFinish={(values) => onFinish(values, isSubmit)}>
-			{!!record?.revisionNote && <CardNoteActivity />}
+			{[
+				EApprovalStatus.SUBMITTED,
+				EApprovalStatus.APPROVED,
+				EApprovalStatus.REJECTED,
+				EApprovalStatus.CHANGES_REQUIRED,
+			].includes(record?.workflow as EApprovalStatus) && <CardNoteActivity />}
+
 			<Row gutter={[12, 12]}>
 				<Col span={24}>
 					<Form.Item name='rolesId' label={intl.formatMessage({ id: 'activity.outcome.role' })}>
@@ -317,7 +324,6 @@ const FormActivityOutCome = (props: any) => {
 					</Col>
 				)}
 			</Row>
-
 			<div className='form-footer'>
 				{!isView && (
 					<>

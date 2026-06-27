@@ -6,7 +6,6 @@ import {
 	getTienTrinhThucTe,
 } from '@/services/DaoTao/ChuongTrinhDaoTao';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { type LopHocPhan } from '@/services/HocTap/LopHocPhan/typings';
 import { ipDaoTao } from '@/utils/ip';
 import { useState } from 'react';
 
@@ -14,7 +13,8 @@ export default () => {
 	const objInit = useInitModel<ChuongTrinhDaoTao.IRecord>('chuong-trinh-dao-tao', undefined, undefined, ipDaoTao);
 	const [loading, setLoading] = useState<boolean>();
 	const [record, setRecord] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>();
-	const [tienTrinhHocTap, setTienTrinhHocTap] = useState<LopHocPhan.IRecordSinhVienLopHP[]>();
+	const [tienTrinhHocTap, setTienTrinhHocTap] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>();
+	const [tienTrinhKhungMinors, setTienTrinhKhungMinors] = useState<ChuongTrinhDaoTao.TTienTrinhKhungMinor[]>([]);
 	const [dsKhoiHocPhanTienQuyet, setDsKhoiHocPhanTienQuyet] = useState<ChuongTrinhDaoTao.IKhoiHpCt[]>([]);
 	const [loadingKhoiHocPhanTienQuyet, setLoadingKhoiHocPhanTienQuyet] = useState(false);
 	const [chuongTrinhHienTai, setChuongTrinhHienTai] = useState<ChuongTrinhDaoTao.IRecord | null>(null);
@@ -22,12 +22,20 @@ export default () => {
 	const sinhVienGetTienTrinhKhungModel = async (
 		isSongNhanh?: boolean,
 		personal?: boolean,
-	): Promise<ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]> => {
+	): Promise<ChuongTrinhDaoTao.TTienTrinhKhung> => {
 		setLoading(true);
 		try {
 			const response = await getTienTrinhKhung(isSongNhanh, personal);
-			setTienTrinhHocTap(response?.data?.data ?? null);
-			return response?.data?.data;
+			const data = response?.data?.data;
+			const nextData = Array.isArray(data)
+				? { tienTrinh: data, minors: [] }
+				: {
+						tienTrinh: Array.isArray(data?.tienTrinh) ? data.tienTrinh : [],
+						minors: Array.isArray(data?.minors) ? data.minors : [],
+					};
+			setTienTrinhHocTap(nextData.tienTrinh);
+			setTienTrinhKhungMinors(nextData.minors);
+			return nextData;
 		} catch (er) {
 			return Promise.reject(er);
 		} finally {
@@ -90,6 +98,8 @@ export default () => {
 		setLoading,
 		tienTrinhHocTap,
 		setTienTrinhHocTap,
+		tienTrinhKhungMinors,
+		setTienTrinhKhungMinors,
 		chuongTrinhHienTai,
 		setChuongTrinhHienTai,
 		sinhVienGetTienTrinhKhungModel,

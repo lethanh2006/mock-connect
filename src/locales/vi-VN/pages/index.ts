@@ -8,19 +8,21 @@ import chungchitotnghiep from './hoctap/chungchi';
 import dangkynhucau from './hoctap/dangkynhucau';
 import dangkytinchi from './hoctap/dangkytinchi';
 import dieukientotnghiep from './hoctap/dieukientotnghiep';
+import hocphannhucau from './hoctap/hocphannhucau';
 import ketquahoctap from './hoctap/ketquahoctap';
 import hoctapkhac from './hoctap/khac';
 import lichthi from './hoctap/lichthi';
 import lophocphan from './hoctap/lophocphan';
+import pathway from './hoctap/pathway';
 import tientrinhhoctap from './hoctap/tientrinhhoctap';
 import khaosat from './khaosat';
 import lichsukien from './lichsukien';
 import login from './login';
 import lophanhchinh from './lophanhchinh';
 import minor from './minor';
-import pathway from './pathway';
 import phanhoi from './phanhoi';
 import sinhvien from './sinhvien';
+import syllabus from './syllabus';
 import congno from './taichinh/congno';
 import lichsugiaodich from './taichinh/lichsugiaodich';
 import uudaithanhtoan from './taichinh/uudaithanhtoan';
@@ -58,6 +60,7 @@ export default {
 	...dangky,
 	...lichsu,
 	...dangkynhucau,
+	...hocphannhucau,
 	...tintuc,
 	...lichthi,
 	...baithicuoiky,
@@ -66,6 +69,7 @@ export default {
 	...sinhvien,
 	...pathway,
 	...minor,
+	...syllabus,
 
 	'pages.trangchu.title': 'PHÂN HỆ CỔNG SINH VIÊN',
 	'pages.trangchu.subtitle': 'HỆ THỐNG ĐẠI HỌC SỐ',

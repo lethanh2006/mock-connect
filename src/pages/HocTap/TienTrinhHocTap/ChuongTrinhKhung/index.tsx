@@ -1,19 +1,78 @@
+import ButtonExtend from '@/components/Table/ButtonExtend';
+import { getSearchStorage, updateSearchStorage } from '@/components/Table/utils';
 import ChuongTrinhDaoTaoModalView from '@/pages/DaoTao/ChuongTrinhDaoTao/View';
 import { type ChuongTrinhDaoTao } from '@/services/DaoTao/ChuongTrinhDaoTao/typing';
-import { ELoaiHocPhanCTDT, LoaiChuongTrinhDaoTao } from '@/services/DaoTao/constant';
-import { Collapse, Descriptions, Divider, Spin, Typography } from 'antd';
+import { ELoaiHocPhanCTDT, ETrangThaiHocTap } from '@/services/DaoTao/constant';
+import { accentColors, primaryColor } from '@/services/base/constant';
+import { ReloadOutlined, SearchOutlined } from '@ant-design/icons';
+import type { InputRef } from 'antd';
+import {
+	AutoComplete,
+	Button,
+	Collapse,
+	Divider,
+	Empty,
+	Input,
+	Segmented,
+	Space,
+	Spin,
+	Tag,
+	Tooltip,
+	Typography,
+} from 'antd';
 import _ from 'lodash';
-import React, { useEffect, useState } from 'react';
-import { Link, useAccess, useIntl, useModel } from 'umi';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useIntl, useModel } from 'umi';
 import ModalChiTietDiem from '../../KetQuaHocTap/components/ModalChiTietDiem';
 import CardHocPhanV2 from '../components/CardHocPhan';
 import CardKhoiHocPhan from '../components/CardKhoiHocPhan';
+import './style.less';
 
 const { Title } = Typography;
+
+const GLOBAL_SEARCH_KEY = 'CHUONG_TRINH_KHUNG_SEARCH';
+
+const sortByCourseName = (list: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) =>
+	_.sortBy(list, [
+		(item) => item.hocPhan?.ten?.toLowerCase() || item.ten?.toLowerCase() || '',
+		(item) => (item.chuyenNganh?.ten || item.khoiKienThuc?.ten || '').toLowerCase(),
+	]);
+
+const sortBySemester = (list: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) =>
+	_.sortBy(list, [
+		(item) => item.soThuTuKy ?? Number.MAX_SAFE_INTEGER,
+		(item) => (item.chuyenNganh?.ten || item.khoiKienThuc?.ten || '').toLowerCase(),
+		(item) => item.hocPhan?.ten?.toLowerCase() || item.ten?.toLowerCase() || '',
+	]);
+
+const matchKhoiHocPhan = (item: ChuongTrinhDaoTao.IKhoiHocPhanCTDT, keyword: string): boolean => {
+	const normalizedKeyword = keyword.trim().toLowerCase();
+	if (!normalizedKeyword) return true;
+
+	const searchableValues = [
+		item.hocPhan?.ma,
+		item.hocPhan?.ten,
+		item.hocPhan?.tenTiengAnh,
+		item.ten,
+		item.khoiKienThuc?.ten,
+		item.chuyenNganh?.ten,
+	];
+
+	if (searchableValues.some((value) => value?.toLowerCase().includes(normalizedKeyword))) return true;
+
+	return (
+		item.hocPhanCtdtList?.some((child) => {
+			const childValues = [child.hocPhan?.ma, child.hocPhan?.ten, child.hocPhan?.tenTiengAnh];
+			return childValues.some((value) => value?.toLowerCase().includes(normalizedKeyword));
+		}) ?? false
+	);
+};
 
 type TChuongTrinhHocKy = {
 	khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[];
 	soThuTuKy?: number;
+	maKhoiKienThuc?: string;
+	tenKhoiKienThuc?: string;
 	soTinChiPhaiHoc?: number;
 	soTinChiTuChon?: number;
 	soTinChiDaDat?: number;
@@ -22,214 +81,483 @@ type TChuongTrinhHocKy = {
 
 const TienTrinhChuongTrinhKhung = () => {
 	const intl = useIntl();
-	const {
-		loading,
-		sinhVienGetTienTrinhKhungModel,
-		record: recChuongTrinh,
-		setRecord: setChuongTrinh,
-	} = useModel('daotao.chuongtrinhdaotao');
+	const { loading, sinhVienGetTienTrinhKhungModel } = useModel('daotao.chuongtrinhdaotao');
 	const { khoaNganhMe, maKhoaNganh, record: recSinhVien } = useModel('sinhvien.sinhvien');
-	const { record: recTienTrinh } = useModel('sinhvien.tientrinhtotnghiep');
-	const [danhSachHocKy, setDanhSachHocKy] = useState<TChuongTrinhHocKy[]>([]);
+	const [rawData, setRawData] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]>([]);
+	const [minorData, setMinorData] = useState<ChuongTrinhDaoTao.TTienTrinhKhungMinor[]>([]);
+	const [recChuongTrinh, setChuongTrinh] = useState<ChuongTrinhDaoTao.IKhoiHocPhanCTDT>();
+	const [viewType, setViewType] = useState<'semester' | 'block'>('semester');
+	const [searchText, setSearchText] = useState('');
+	const [searchOptions, setSearchOptions] = useState<{ value: string }[]>([]);
+	const searchInputRef = useRef<InputRef>(null);
 	const [mapColorKhoiKienThuc, setMapColorKhoiKienThuc] = useState<Record<string, string>>({});
 	const [visibleDiem, setVisibleDiem] = useState(false);
-	const { cctFilter } = useAccess();
+	// const { cctFilter } = useAccess();
 	const [visibleChuongTrinh, setVisibleChuongTrinh] = useState(false);
 	const isSongNganh = maKhoaNganh === khoaNganhMe?.khoaNganhPhu?.ma;
-	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh : recSinhVien?.chuyenNganh;
+	const chuyenNganhHienTai = isSongNganh ? recSinhVien?.chuyenNganh2 : recSinhVien?.chuyenNganh;
+
+	const normalizeTienTrinhKhung = (data: unknown): ChuongTrinhDaoTao.TTienTrinhKhung => {
+		if (Array.isArray(data)) return { tienTrinh: data, minors: [] };
+
+		const nextData = data as Partial<ChuongTrinhDaoTao.TTienTrinhKhung> | undefined;
+		return {
+			tienTrinh: Array.isArray(nextData?.tienTrinh) ? nextData.tienTrinh : [],
+			minors: Array.isArray(nextData?.minors) ? nextData.minors : [],
+		};
+	};
 
 	const getColorMap = (listKhoiHpCt: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[]) => {
 		const listKhoi = _.uniq(listKhoiHpCt.map((item) => item.maKhoiKienThuc));
 		const temp: Record<string, string> = {};
-		listKhoi.forEach(
+		listKhoi?.forEach(
 			(khoi) =>
-				(temp[khoi] = `rgb(${Math.random() * 190 + 15}, ${Math.random() * 190 + 15}, ${Math.random() * 190 + 15})`),
+				(temp[khoi as string] =
+					`rgb(${Math.random() * 190 + 15}, ${Math.random() * 190 + 15}, ${Math.random() * 190 + 15})`),
 		);
 		setMapColorKhoiKienThuc(temp);
 	};
 
 	const fetch = async () => {
 		await sinhVienGetTienTrinhKhungModel(isSongNganh).then((data) => {
-			// Các mã chuyên ngành (nếu có)
-			const uniqchuyenNganh = _.uniq(data?.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
-
-			const gHocKy = _.groupBy(data, (item) => item.soThuTuKy);
-			const dataHocKy: TChuongTrinhHocKy[] = Object.values(gHocKy).map((hk) => {
-				// Học phần không phân chuyên ngành. Nếu chỉ có 1 chuyên ngành thì hiện hết ở khối chính
-				const khoiHocPhan = hk.filter((item) => !item.maChuyenNganh || uniqchuyenNganh.length < 2);
-
-				// Học phần ko có chuyên ngành hoặc thuộc chuyên ngành đầu tiên
-				const da1 = hk.filter((item) => !item.maChuyenNganh || item.maChuyenNganh === uniqchuyenNganh?.[0]);
-				const soTinChiPhaiHoc = _.sumBy(da1, (item) => item.hocPhan?.soTinChi ?? item.soTinChiTuChonPhaiHoc ?? 0);
-				const soTinChiTuChon = _.sumBy(da1, (item) => item.soTinChiTuChonPhaiHoc || 0);
-
-				const chuyenNganh = hk.filter((item) => !!item.maChuyenNganh && uniqchuyenNganh.length >= 2);
-				const chuyenNganhList = Object.values(_.groupBy(chuyenNganh, (item) => item.maChuyenNganh)).map((item) => ({
-					khoiHocPhan: item,
-				}));
-
-				return { khoiHocPhan, soTinChiPhaiHoc, soTinChiTuChon, chuyenNganhList, soThuTuKy: hk[0].soThuTuKy };
-			});
-			setDanhSachHocKy(dataHocKy);
-			getColorMap(data);
+			const nextData = normalizeTienTrinhKhung(data);
+			setRawData(nextData.tienTrinh);
+			setMinorData(nextData.minors);
+			getColorMap(nextData.tienTrinh);
 		});
 	};
 
+	const danhSachHienThi = useMemo(() => {
+		if (!rawData?.length) return [];
+
+		const isBlockView = viewType === 'block';
+		const maChuyenNganhHienTai = isSongNganh ? recSinhVien?.maChuyenNganh2 : recSinhVien?.maChuyenNganh;
+		// Lọc cứng theo chuyên ngành hiện tại, loại bỏ các môn thuộc chuyên ngành khác.
+		const dataAfterMajorFilter = rawData.filter((item) => {
+			if (!item.maChuyenNganh || !maChuyenNganhHienTai) return true;
+			return item.maChuyenNganh === maChuyenNganhHienTai;
+		});
+
+		if (!isBlockView) {
+			const gData = _.groupBy(dataAfterMajorFilter, (item) => item.soThuTuKy);
+			const sortedEntries = Object.entries(gData).sort(([a], [b]) => Number(a) - Number(b));
+
+			return sortedEntries.map(([key, group]) => {
+				const uniqchuyenNganh = _.uniq(group.filter((item) => !!item.maChuyenNganh).map((item) => item.maChuyenNganh));
+
+				const khoiHocPhan = sortByCourseName(group.filter((item) => !item.maChuyenNganh || uniqchuyenNganh.length < 2));
+				const da1 = group.filter(
+					(item) =>
+						!item.maChuyenNganh ||
+						item.maChuyenNganh === maChuyenNganhHienTai ||
+						item.maChuyenNganh === uniqchuyenNganh?.[0],
+				);
+				const soTinChiPhaiHoc = _.sumBy(da1, (item) => item.hocPhan?.soTinChi ?? item.soTinChiTuChonPhaiHoc ?? 0);
+				const soTinChiTuChon = _.sumBy(da1, (item) => item.soTinChiTuChonPhaiHoc || 0);
+
+				const chuyenNganh = group.filter((item) => !!item.maChuyenNganh && uniqchuyenNganh.length >= 2);
+				const chuyenNganhList = Object.values(_.groupBy(chuyenNganh, (item) => item.maChuyenNganh)).map((item) => ({
+					khoiHocPhan: sortByCourseName(item),
+					tenChuyenNganh: undefined as string | undefined,
+					maChuyenNganh: item[0].maChuyenNganh,
+				}));
+
+				return {
+					khoiHocPhan,
+					soTinChiPhaiHoc,
+					soTinChiTuChon,
+					chuyenNganhList,
+					soThuTuKy: group[0].soThuTuKy,
+					maKhoiKienThuc: undefined as string | undefined,
+					tenKhoiKienThuc: undefined as string | undefined,
+					soMonDaHoc: undefined as number | undefined,
+					tongSoMon: undefined as number | undefined,
+				};
+			});
+		}
+
+		// VIEW BLOCK: Nhóm theo Root Block (maCha || ma)
+		const gData = _.groupBy(dataAfterMajorFilter, (item) => item.khoiKienThuc?.maCha || item.maKhoiKienThuc);
+		const sortedEntries = Object.entries(gData).sort(([keyA, groupA], [keyB, groupB]) => {
+			const orderA = groupA[0].khoiKienThuc?.soThuTu ?? (groupA[0].khoiKienThuc?.khoiCha?.soThuTu || 999);
+			const orderB = groupB[0].khoiKienThuc?.soThuTu ?? (groupB[0].khoiKienThuc?.khoiCha?.soThuTu || 999);
+			return orderA - orderB;
+		});
+
+		return sortedEntries.map(([rootId, group]) => {
+			// Xác định tên Root Block
+			const rootItem = group.find((it) => !it.khoiKienThuc?.maCha);
+			const tenKhoiKienThuc =
+				rootItem?.khoiKienThuc?.ten ||
+				group.find((it) => it.khoiKienThuc?.khoiCha?.ten)?.khoiKienThuc?.khoiCha?.ten ||
+				group[0].khoiKienThuc?.ten;
+
+			const khoiHocPhan = sortBySemester(group.filter((item) => !item.maChuyenNganh));
+			const chuyenNganhList = Object.values(
+				_.groupBy(
+					group.filter((item) => !!item.maChuyenNganh),
+					(item) => item.maChuyenNganh,
+				),
+			).map((item) => ({
+				khoiHocPhan: sortBySemester(item),
+				tenChuyenNganh: undefined as string | undefined,
+				maChuyenNganh: item[0].maChuyenNganh,
+			}));
+			const soTinChiPhaiHoc = _.sumBy(group, (item) => item.hocPhan?.soTinChi ?? item.soTinChiTuChonPhaiHoc ?? 0);
+
+			return {
+				khoiHocPhan,
+				soTinChiPhaiHoc,
+				soTinChiTuChon: undefined as number | undefined,
+				chuyenNganhList,
+				soThuTuKy: undefined as number | undefined,
+				maKhoiKienThuc: rootId,
+				tenKhoiKienThuc,
+				// Thống kê môn học (Dùng so sánh chuỗi hoặc Enum nếu có)
+				soMonDaHoc: group.filter(
+					(item) => item.hoc === ETrangThaiHocTap.DA_HOC || item.hoc === ETrangThaiHocTap.DANG_HOC,
+				).length,
+				tongSoMon: group.length,
+			};
+		});
+	}, [rawData, viewType, isSongNganh, recSinhVien?.maChuyenNganh, recSinhVien?.maChuyenNganh2]);
+
+	const filteredDanhSachHienThi = useMemo(() => {
+		if (!searchText.trim()) return danhSachHienThi;
+
+		return danhSachHienThi
+			.map((group) => {
+				const khoiHocPhan = group.khoiHocPhan.filter((item) => matchKhoiHocPhan(item, searchText));
+				const chuyenNganhList = group.chuyenNganhList
+					?.map((chuyenNganh) => ({
+						...chuyenNganh,
+						khoiHocPhan: chuyenNganh.khoiHocPhan.filter((item) => matchKhoiHocPhan(item, searchText)),
+					}))
+					.filter((chuyenNganh) => chuyenNganh.khoiHocPhan.length > 0);
+
+				return {
+					...group,
+					khoiHocPhan,
+					chuyenNganhList,
+				};
+			})
+			.filter((group) => group.khoiHocPhan.length > 0 || (group.chuyenNganhList?.length ?? 0) > 0);
+	}, [danhSachHienThi, searchText]);
+
+	useEffect(() => {
+		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
+		setSearchOptions(history.map((value: string) => ({ value })));
+	}, []);
+
+	const handleSearchTrigger = useCallback((value: string) => {
+		const keyword = value?.trim() || '';
+		setSearchText(keyword);
+
+		if (keyword) updateSearchStorage(GLOBAL_SEARCH_KEY, keyword);
+
+		const history = getSearchStorage(GLOBAL_SEARCH_KEY);
+		setSearchOptions(history.map((val: string) => ({ value: val })));
+
+		setTimeout(() => {
+			searchInputRef.current?.blur();
+		}, 0);
+	}, []);
+
 	useEffect(() => {
 		fetch();
-	}, [maKhoaNganh]);
+	}, [isSongNganh, maKhoaNganh]);
 
-	const renderHocPhan = (data: TChuongTrinhHocKy) => (
-		<div
-			style={{
-				display: 'grid',
-				gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
-				gap: '12px',
-			}}
-		>
+	const renderHocPhan = (
+		data: TChuongTrinhHocKy | { khoiHocPhan: ChuongTrinhDaoTao.IKhoiHocPhanCTDT[] },
+		getLabel?: (item: ChuongTrinhDaoTao.IKhoiHocPhanCTDT) => React.ReactNode,
+	) => (
+		<div className='grid-container'>
 			{data.khoiHocPhan.map((ctk) =>
-				ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC ? (
+				ctk.loaiHocPhanCtdt === ELoaiHocPhanCTDT.BAT_BUOC || ctk.hocPhan ? (
 					<CardHocPhanV2
 						key={ctk._id}
-						hocPhan={ctk.hocPhan}
-						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
+						hocPhan={ctk.hocPhan ?? undefined}
+						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc!]}
 						onClick={() => {
 							setChuongTrinh(ctk);
 							setVisibleDiem(true);
 						}}
 						trangThaiHoc={ctk.hoc}
 						listDiem={ctk.lichSuDiem}
+						label={getLabel?.(ctk)}
 					/>
 				) : (
 					<CardKhoiHocPhan
 						khoi={ctk}
 						key={ctk._id}
-						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc]}
-						onClickHocPhan={() => setVisibleDiem(true)}
+						colorKhoiKienThuc={mapColorKhoiKienThuc?.[ctk.maKhoiKienThuc!]}
+						onClickHocPhan={(record) => {
+							setChuongTrinh(record);
+							setVisibleDiem(true);
+						}}
+						label={getLabel?.(ctk)}
 					/>
 				),
 			)}
 		</div>
 	);
 
-	console.log(recTienTrinh, 'recTienTrinh');
+	const getMinorName = (minor: ChuongTrinhDaoTao.TTienTrinhKhungMinor) =>
+		minor.nganhMinor?.tenTiengViet ??
+		minor.nganhMinor?.ten ??
+		minor.nganhMinor?.tenTiengAnh ??
+		minor.nganhMinor?.ma ??
+		intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' });
+
+	const hasMinorData = minorData.some((minor) => (minor.khoiHpCtList?.length ?? 0) > 0);
 
 	return (
 		<div>
-			{recTienTrinh?.ctdtKeHoach?._id && (
-				<Descriptions
-					style={{ marginBottom: 12 }}
-					layout='vertical'
-					column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2, xxl: 2 }}
-					className='highlight'
-					colon={false}
+			<div className='view-switch-container'>
+				<AutoComplete
+					className='view-switch-search'
+					options={searchOptions}
+					value={searchText}
+					onSelect={handleSearchTrigger}
+					onChange={(value) => setSearchText(value)}
 				>
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuongtrinh' })} span={2}>
-						<Link
-							to='#'
-							onClick={(e) => {
-								e.preventDefault();
-								setVisibleChuongTrinh(true);
-							}}
-						>
-							{recTienTrinh?.ctdtKeHoach?.ten}
-						</Link>
-					</Descriptions.Item>
-					<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.loai' })}>
-						{recTienTrinh?.ctdtKeHoach?.loai && LoaiChuongTrinhDaoTao[recTienTrinh?.ctdtKeHoach?.loai]}
-					</Descriptions.Item>
+					<Input.Search
+						ref={searchInputRef}
+						className='global-search'
+						allowClear
+						value={searchText}
+						placeholder={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.placeholder' })}
+						style={
+							searchText
+								? {
+										width: 320,
+										borderColor: primaryColor,
+										outline: `1px solid ${primaryColor}`,
+										borderRadius: 4,
+									}
+								: { width: 320 }
+						}
+						enterButton={
+							<Button
+								loading={loading}
+								icon={
+									<Tooltip title={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.search.tooltip' })}>
+										<SearchOutlined />
+									</Tooltip>
+								}
+							/>
+						}
+						onSearch={handleSearchTrigger}
+						onChange={(e) => {
+							if (e.type === 'click') {
+								handleSearchTrigger('');
+								return;
+							}
 
-					{!chuyenNganhHienTai && (
-						<Descriptions.Item label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}>
-							{chuyenNganhHienTai?.ten ?? <i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuadk' })}</i>}
-						</Descriptions.Item>
-					)}
-					<Descriptions.Item
-						style={{ display: !cctFilter() ? 'none' : '' }}
-						label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
-					>
-						<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
-					</Descriptions.Item>
-					<Descriptions.Item
-						style={{ display: !cctFilter() ? 'none' : '' }}
-						label={intl.formatMessage({ id: 'tientrinhhoctap.ctdt.pathway' })}
-					>
-						<i>{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.dangcapnhat' })}</i>
-					</Descriptions.Item>
-				</Descriptions>
-			)}
+							const value = e.target.value;
+							setSearchText(value);
+							if (!value.trim()) handleSearchTrigger('');
+						}}
+					/>
+				</AutoComplete>
+				<Space>
+					<ButtonExtend
+						icon={<ReloadOutlined />}
+						onClick={fetch}
+						loading={loading}
+						className='btn-reload'
+						tooltip={intl.formatMessage({ id: 'global.table.index.button.tailai.tooltip' })}
+					/>
+					<Segmented
+						value={viewType}
+						style={{ fontWeight: 600 }}
+						onChange={(val) => setViewType(val as any)}
+						options={[
+							{
+								label: intl.formatMessage({ id: 'tientrinhhoctap.view.semester' }),
+								value: 'semester',
+							},
+							{
+								label: intl.formatMessage({ id: 'tientrinhhoctap.view.block' }),
+								value: 'block',
+							},
+						]}
+					/>
+				</Space>
+			</div>
 
 			<Spin spinning={loading}>
-				{danhSachHocKy?.map((data, index) => (
-					<React.Fragment key={data.soThuTuKy}>
-						<div style={{ marginBottom: '16px' }}>
-							{/* Header học kỳ */}
-							<div
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-									marginBottom: '16px',
-								}}
-							>
-								<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-									<Title level={5} style={{ margin: 0, color: '#262626' }}>
-										{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} {data.soThuTuKy}
-									</Title>
-									<div
+				{!filteredDanhSachHienThi?.length && !hasMinorData ? <Empty style={{ marginBlock: 36 }} /> : null}
+				{filteredDanhSachHienThi?.map((data, index) => (
+					<React.Fragment key={viewType === 'semester' ? data.soThuTuKy : data.maKhoiKienThuc}>
+						{/* Header học kỳ/Khối */}
+						<Divider orientation='left' className='divider-big-title' dashed>
+							<div className='header-content'>
+								<Title level={5} style={{ margin: 0, color: '#262626' }}>
+									{viewType === 'semester'
+										? `${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} ${data.soThuTuKy}`
+										: data.tenKhoiKienThuc || intl.formatMessage({ id: 'tientrinhhoctap.ctdt.khongten' })}
+								</Title>
+								{viewType === 'semester' && (
+									<Tag color='blue'>
+										{data.soTinChiPhaiHoc} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tinchi' })}
+									</Tag>
+								)}
+
+								{/* Nhãn thống kê số môn (chỉ hiện ở chế độ Block) */}
+								{viewType === 'block' && (
+									<Tag color='blue'>
+										{data.soMonDaHoc}/{data.tongSoMon} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.courses' })}
+									</Tag>
+								)}
+							</div>
+						</Divider>
+
+						{/* Grid các môn học */}
+						{renderHocPhan(data, (item) => {
+							if (viewType === 'semester') {
+								const name = item.chuyenNganh?.ten || item.khoiKienThuc?.ten;
+								return name ? (
+									<>
+										<span
+											className='card-label-dot'
+											style={{
+												backgroundColor: `var(--color-primary)`,
+											}}
+										/>
+										{name}
+									</>
+								) : undefined;
+							}
+							const semester = item.soThuTuKy;
+							if (!semester) return undefined;
+
+							return (
+								<>
+									<span
+										className='card-label-dot'
 										style={{
-											width: '8px',
-											height: '8px',
-											backgroundColor: '#ff4d4f',
-											borderRadius: '50%',
+											backgroundColor: `var(--color-primary)`,
 										}}
 									/>
-									<div
-										style={{
-											color: 'red',
-											padding: '2px',
-											fontWeight: 500,
-										}}
-									>
-										{data.soTinChiPhaiHoc} {intl.formatMessage({ id: 'tientrinhhoctap.ctdt.tinchi' })}
-									</div>
-								</div>
-							</div>
+									{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} {semester}
+								</>
+							);
+						})}
 
-							{/* Grid các môn học */}
-							{renderHocPhan(data)}
-						</div>
+						{data.chuyenNganhList?.map((chuyenNganh) => {
+							const panelKey =
+								chuyenNganh.maChuyenNganh ||
+								chuyenNganh.khoiHocPhan[0].maChuyenNganh ||
+								chuyenNganh.khoiHocPhan[0].maKhoiKienThuc ||
+								'';
 
-						{data.chuyenNganhList?.length ? (
-							<Collapse bordered={false} defaultActiveKey={[chuyenNganhHienTai?.ma ?? '']}>
-								{data.chuyenNganhList.map((chuyenNganh) => (
+							return (
+								<Collapse
+									key={panelKey}
+									bordered
+									style={{ marginTop: 16 }}
+									defaultActiveKey={[chuyenNganhHienTai?.ma ?? '']}
+								>
 									<Collapse.Panel
-										key={chuyenNganh.khoiHocPhan[0].maChuyenNganh || chuyenNganh.khoiHocPhan[0]._id}
-										header={`${intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' })}: ${
-											chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ?? chuyenNganh.khoiHocPhan[0].maChuyenNganh
-										}`}
+										key={panelKey}
+										style={{ backgroundColor: accentColors.accent800 ?? '#f8f8f8' }}
+										header={
+											<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+												<span style={{ fontWeight: 500 }}>
+													{viewType === 'semester'
+														? intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganh' }) + ': '
+														: null}
+													{chuyenNganh.tenChuyenNganh ??
+														chuyenNganh.khoiHocPhan[0].chuyenNganh?.ten ??
+														chuyenNganh.khoiHocPhan[0].maChuyenNganh}
+												</span>
+											</div>
+										}
 									>
-										{renderHocPhan(chuyenNganh)}
-									</Collapse.Panel>
-								))}
-							</Collapse>
-						) : null}
+										{renderHocPhan(chuyenNganh, (item) => {
+											if (viewType === 'semester') {
+												const name = item.khoiKienThuc?.ten;
+												return name ? (
+													<>
+														<span
+															className='card-label-dot'
+															style={{
+																backgroundColor: `var(--color-primary)`,
+															}}
+														/>
+														{name}
+													</>
+												) : undefined;
+											}
+											const semester = item.soThuTuKy;
+											if (!semester) return undefined;
 
-						{/* Divider giữa các học kỳ */}
-						{index < danhSachHocKy.length - 1 && <Divider />}
+											return (
+												<>
+													<span
+														className='card-label-dot'
+														style={{
+															backgroundColor: `var(--color-primary)`,
+														}}
+													/>
+													{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.hocky' })} {semester}
+												</>
+											);
+										})}
+									</Collapse.Panel>
+								</Collapse>
+							);
+						})}
 					</React.Fragment>
 				))}
+
+				{hasMinorData && (
+					<>
+						<Divider orientation='left' className='divider-big-title' dashed>
+							<div className='header-content'>
+								<Title level={5} style={{ margin: 0, color: '#262626' }}>
+									{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.chuyennganhphu' })}
+								</Title>
+								<Tag color='blue'>
+									{_.sumBy(minorData, (minor) => minor.khoiHpCtList?.length ?? 0)}{' '}
+									{intl.formatMessage({ id: 'tientrinhhoctap.ctdt.courses' })}
+								</Tag>
+							</div>
+						</Divider>
+
+						{minorData.map((minor, index) => {
+							const minorName = getMinorName(minor);
+							const khoiHocPhan = minor.khoiHpCtList ?? [];
+							if (!khoiHocPhan.length) return null;
+
+							return (
+								<React.Fragment key={minor.idPhieu ?? minor.nganhMinor?.ma ?? index}>
+									{renderHocPhan({ khoiHocPhan }, () => (
+										<>
+											<span
+												className='card-label-dot'
+												style={{
+													backgroundColor: `var(--color-primary)`,
+												}}
+											/>
+											{minorName}
+										</>
+									))}
+								</React.Fragment>
+							);
+						})}
+					</>
+				)}
 			</Spin>
 
 			<ModalChiTietDiem
 				setVisible={setVisibleDiem}
 				visible={visibleDiem}
-				hocPhan={recChuongTrinh?.hocPhan}
+				hocPhan={recChuongTrinh?.hocPhan ?? undefined}
 				listDiem={recChuongTrinh?.lichSuDiem ?? []}
 				maKhoaNganh={maKhoaNganh}
 				khoiChuongTrinh={recChuongTrinh}
-				colorKhoiKienThuc={
-					recChuongTrinh?.maKhoiKienThuc ? mapColorKhoiKienThuc[recChuongTrinh?.maKhoiKienThuc] : undefined
-				}
 				trangThaiHoc={recChuongTrinh?.hoc}
 			/>
 

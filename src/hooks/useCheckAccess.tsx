@@ -1,10 +1,10 @@
 import { useModel } from 'umi';
+import { hasAccessCode } from '@/utils/keycloakRoles';
 
 const useCheckAccess = (code: string): boolean => {
 	const { initialState } = useModel('@@initialState');
-	const scopes = initialState?.authorizedPermissions?.flatMap((item) => item.scopes);
 
-	return scopes?.includes(code) || false;
+	return hasAccessCode(initialState, code);
 };
 
 export default useCheckAccess;

@@ -1,12 +1,12 @@
+import PageCard from '@/components/PageCard';
+import FormLichCaNhan from '@/pages/Calendar/components/FormLichCaNhan';
+import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import { ColorSuKien, ELoaiSuKien } from '@/services/SuKien/constant';
 import dayjs from '@/utils/dayjs';
 import { formatDate } from '@/utils/formatDate';
 import { Button, Card, Modal, Spin, Typography } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useIntl, useModel } from 'umi';
-
-import FormLichCaNhan from '@/pages/Calendar/components/FormLichCaNhan';
-import ModalViewDetailCalendar from '@/pages/Calendar/components/ModalViewDetail';
 import SlideButtonIcon from '../SlideButtonIcon';
 import './style.less';
 
@@ -312,8 +312,9 @@ const LichDashboard = () => {
 											}}
 										>
 											<div
-												className={`date-number ${responsiveClass} ${isSmallMonth ? 'small-month' : ''} ${isSelectedToday ? 'selected-today' : isToday ? 'today' : isSelected ? 'selected' : ''
-													} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
+												className={`date-number ${responsiveClass} ${isSmallMonth ? 'small-month' : ''} ${
+													isSelectedToday ? 'selected-today' : isToday ? 'today' : isSelected ? 'selected' : ''
+												} ${isCurrentMonth ? 'current-month' : 'other-month'}`}
 											>
 												{date.format('DD')}
 											</div>
@@ -359,9 +360,9 @@ const LichDashboard = () => {
 
 	return (
 		<>
-			<Card
-				variant='borderless'
-				className='card-borderless'
+			<PageCard
+				level={2}
+				hideInnerCard
 				title={intl.formatMessage({ id: 'trangchu.lich.title' })}
 				extra={
 					<Link to='/calendar' className='xem-tat-ca-link'>
@@ -372,7 +373,7 @@ const LichDashboard = () => {
 				<Card variant='borderless' className='calendar-card'>
 					{renderCalendar()}
 				</Card>
-			</Card>
+			</PageCard>
 
 			{/* Modal xem list sự kiện */}
 			<Modal
