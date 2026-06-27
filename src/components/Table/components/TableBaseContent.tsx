@@ -222,7 +222,14 @@ export const TableBaseContent = (props: TableBaseProps) => {
 		if (!skipSort) {
 			const { order, field } = sorter;
 			const orderValue = order === 'ascend' ? 1 : order === 'descend' ? -1 : undefined;
-			if (field && setSort) setSort({ [Array.isArray(field) ? field.join('.') : field]: orderValue });
+			const sortField = field ?? sorter?.column?.dataIndex;
+			if (setSort) {
+				if (!orderValue && extra?.action === 'sort') {
+					setSort({});
+				} else if (sortField) {
+					setSort({ [Array.isArray(sortField) ? sortField.join('.') : sortField]: orderValue });
+				}
+			}
 		}
 
 		setPage(current);
@@ -359,7 +366,7 @@ export const TableBaseContent = (props: TableBaseProps) => {
 						{ title: (title ?? intl.formatMessage({ id: 'global.table.index.export.defaultTitle' })) as any },
 					)}
 					condition={props.params}
-					otherQuery={props.exportParam ?? params}
+					otherQuery={props.exportParam ?? props.params}
 					filters={filters}
 				/>
 			) : null}
