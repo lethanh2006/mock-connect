@@ -30,6 +30,7 @@ const DangKyKyTucXaPage = () => {
 	const { danhSach: danhSachPhong, getModel: getPhongModel, loading: loadingPhong, setRecord: setPhongRecord, setVisibleForm, setIsView } = useModel('kytucxa.phong');
 	const { danhSach: danhSachLichSu, getModel: getLichSu } = useModel('kytucxa.dangky');
 	const { getAllModel: getAllDanhTienIch } = useModel('kytucxa.tienich');
+	const { loaiPhongMap } = useModel('kytucxa.loaiphong');
 
 	const [selectedToa, setSelectedToa] = useState<string | undefined>(undefined);
 	const [selectedCapacity, setSelectedCapacity] = useState<number | undefined>(undefined);
@@ -52,7 +53,9 @@ const DangKyKyTucXaPage = () => {
 		try {
 			const res = await axios.get(`${ipCsvc}/dang-ky-ky-tuc-xa/waiting-request/me`);
 			if (res?.data?.data) {
-				setHangCho(res.data.data);
+				const list = Array.isArray(res.data.data) ? res.data.data : [res.data.data];
+				const active = list.find((item: any) => item.trangThai === 'CHO_XU_LY') || list[0] || null;
+				setHangCho(active);
 			} else {
 				setHangCho(null);
 			}
@@ -65,7 +68,7 @@ const DangKyKyTucXaPage = () => {
 
 	useEffect(() => {
 		getDotDangKy();
-		getDanhSachMien();
+		getDanhSachMien(undefined, undefined, undefined, undefined, undefined, '');
 		getLichSu();
 		getAllDanhTienIch();
 		fetchHangCho();
@@ -290,7 +293,7 @@ const DangKyKyTucXaPage = () => {
 			}
 			await axios.post(`${ipCsvc}/dang-ky-ky-tuc-xa/me/mien-dang-ky/${activeExemption._id}/minh-chung`, { urlMinhChung: fileUrl });
 			message.success('Nộp minh chứng thành công');
-			getDanhSachMien();
+			getDanhSachMien(undefined, undefined, undefined, undefined, undefined, '');
 		} catch (err) {
 			console.error(err);
 			message.error('Có lỗi xảy ra, vui lòng thử lại');
@@ -298,6 +301,19 @@ const DangKyKyTucXaPage = () => {
 			setSubmittingExempt(false);
 		}
 	};
+
+	const toaNhaName = useMemo(() => {
+		if (!hangCho?.maToaNha) return '';
+		const list = Array.isArray(danhSachToa) ? (danhSachToa as KyTucXa.IToa[]) : [];
+		const found = list.find((toa) => toa.ma === hangCho.maToaNha);
+		return found ? found.ten : hangCho.maToaNha;
+	}, [hangCho?.maToaNha, danhSachToa]);
+
+	const loaiPhongName = useMemo(() => {
+		if (!hangCho?.maLoaiPhong) return '';
+		const found = loaiPhongMap.get(hangCho.maLoaiPhong);
+		return found ? found.ten : hangCho.maLoaiPhong;
+	}, [hangCho?.maLoaiPhong, loaiPhongMap]);
 
 	return (
 		<PageCard
@@ -315,11 +331,11 @@ const DangKyKyTucXaPage = () => {
 						<Row gutter={[16, 16]}>
 							<Col xs={24} sm={6}>
 								<Typography.Text type="secondary">Tòa nhà: </Typography.Text>
-								<Typography.Text strong>{hangCho.maToaNha}</Typography.Text>
+								<Typography.Text strong>{toaNhaName}</Typography.Text>
 							</Col>
 							<Col xs={24} sm={6}>
 								<Typography.Text type="secondary">Loại phòng: </Typography.Text>
-								<Typography.Text strong>{hangCho.maLoaiPhong}</Typography.Text>
+								<Typography.Text strong>{loaiPhongName}</Typography.Text>
 							</Col>
 							<Col xs={24} sm={6}>
 								<Typography.Text type="secondary">Số thứ tự xếp hàng: </Typography.Text>
