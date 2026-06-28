@@ -113,7 +113,7 @@ const PreviewHoSo = (_props: { header?: ReactNode }) => {
 
 			<SectionTitle title={intl.formatMessage({ id: 'thongtincanhan.hoso.generalInfo' })} />
 
-			<div className='sv-profile-field-list'>
+			<div className='sv-profile-field-list sv-profile-field-list-left'>
 				{renderProfileField(`${intl.formatMessage({ id: 'thongtincanhan.hoso.masv' })}:`, record?.ma)}
 				{renderProfileField(
 					`${intl.formatMessage({ id: 'thongtincanhan.hoso.gioitinh' })}:`,
