@@ -112,6 +112,30 @@ declare module KyTucXa {
         nationality: string;
         permanentHomeAddress: string;
         emergencyContacts: IEmergencyContacts[];
+        identityCardFrontUrl?: string;
+        identityCardBackUrl?: string;
+        passportUrl?: string;
+        agreedToPolicy: boolean;
+        signatureUrl: string;
+        hasSpecialCondition: boolean;
+        conditionDetails?: string;
+        haveHealthInsurance: boolean;
+        healthInsuranceFile?: string;
+        signedAt?: string;
+    }
+
+    export interface IYeuCauChoPhong {
+        _id: string;
+        maDotId: string;
+        maToaNha: string;
+        maLoaiPhong: string;
+        maSinhVien: string;
+        ssoId: string;
+        hoTen: string;
+        soThuTu: number;
+        trangThai: 'CHO_XU_LY' | 'DA_XU_LY' | 'HUY';
+        createdAt: string;
+        updatedAt: string;
     }
 
     export interface INganhHoc {

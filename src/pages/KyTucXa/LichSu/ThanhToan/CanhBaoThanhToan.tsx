@@ -16,7 +16,7 @@ const CanhBaoThanhToanKTX = () => {
 
     return (
         <Alert
-            message="Note:"
+            message={intl.formatMessage({ id: 'kytucxa.payment.history.noteLabel', defaultMessage: 'Lưu ý:' })}
             description={NoteMessage}
             type="info"
             showIcon={false}

@@ -1,6 +1,6 @@
 import { Tabs, Space, Checkbox } from 'antd';
-import { useIntl } from 'umi';
-import { useState } from 'react';
+import { useIntl, useModel } from 'umi';
+import { useState, useEffect } from 'react';
 import { AppstoreAddOutlined } from '@ant-design/icons';
 import ButtonExtend from '@/components/Table/ButtonExtend';
 import ThongTinThanhToanKTX from './ThongTinThanhToan';
@@ -11,6 +11,18 @@ import CanhBaoThanhToanKTX from './CanhBaoThanhToan';
 const NoiDungThanhToanKTX = () => {
     const intl = useIntl();
     const [activeTab, setActiveTab] = useState('details');
+    const { record: ktxRecord } = useModel('kytucxa.dangky');
+    const { getModel: getBillModel, setRecord: setBillRecord } = useModel('taichinh.hoadon');
+    const { getModel: getBillItems } = useModel('taichinh.hoadonchitiet');
+
+    useEffect(() => {
+        if (ktxRecord?.identityCode) {
+            getBillModel({ identityCode: ktxRecord.identityCode });
+            getBillItems({ billIdentityCode: ktxRecord.identityCode });
+        } else {
+            setBillRecord(undefined);
+        }
+    }, [ktxRecord?.identityCode]);
 
     return (
         <Space direction="vertical" style={{ width: '100%' }} size="large">

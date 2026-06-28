@@ -1,14 +1,14 @@
-import { Button, Form, Modal, Space, Steps } from 'antd';
+import { Button, Form, Modal, Space, Steps, message } from 'antd';
 import { FilePdfOutlined } from '@ant-design/icons';
 import { useIntl, useModel } from 'umi';
-import { useMemo, useEffect, useRef, useState } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { KyTucXa } from '@/services/KyTucXa/typings';
 import FormStep1Content from '../../DangKy/components/Form/FormStep1Content';
 import FormStep2Content from '../../DangKy/components/Form/FormStep2Content';
 import CheckinPrepContent from '../../DangKy/components/CheckinPrepContent';
 import NoiDungThanhToan from '../ThanhToan/NoiDungThanhToan';
-import { useReactToPrint } from 'react-to-print';
-import PrintTemplate from '@/components/PrintTemplate';
+import axios from '@/utils/axios';
+import { ipCsvc } from '@/utils/ip';
 import '../../DangKy/components/style.less';
 
 interface ModalChiTietLichSuKTXProps {
@@ -35,8 +35,24 @@ const NoiDungStep1 = ({ record }: { record: KyTucXa.IThongTinDangKy }) => {
     );
 };
 
-const NoiDungStep2 = () => {
-    return <FormStep2Content showCheckbox={false} />;
+const NoiDungStep2 = ({ record }: { record: KyTucXa.IThongTinDangKy }) => {
+    const formDon = record?.formDon;
+    const [form] = Form.useForm();
+
+    useEffect(() => {
+        if (formDon) {
+            form.setFieldsValue({
+                ...formDon,
+                signatureUrl: formDon.signatureUrl,
+            });
+        }
+    }, [formDon, form]);
+
+    return (
+        <Form form={form} layout="vertical" className="ktx-register-form">
+            <FormStep2Content showCheckbox={false} />
+        </Form>
+    );
 };
 
 const NoiDungStep3 = ({ record }: { record: KyTucXa.IThongTinDangKy }) => {
@@ -58,12 +74,29 @@ const ModalChiTietLichSuKTX: React.FC<ModalChiTietLichSuKTXProps> = ({ open, onC
     const intl = useIntl();
     const { record } = useModel('kytucxa.dangky');
     const [currentStep, setCurrentStep] = useState(0);
-    const contentRef = useRef<HTMLDivElement>(null);
+    const [exporting, setExporting] = useState(false);
 
-    const handlePrint = useReactToPrint({
-        contentRef: contentRef,
-        documentTitle: intl.formatMessage({ id: 'kytucxa.lichsu.detail.title' }),
-    });
+    const handleExportPdf = async () => {
+        if (!record?._id) return;
+        setExporting(true);
+        try {
+            const response = await axios.get(`${ipCsvc}/dang-ky-ky-tuc-xa/${record._id}/export`, {
+                responseType: 'blob',
+            });
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `Don_Dang_Ky_KTX_${record._id}.pdf`;
+            link.click();
+            window.URL.revokeObjectURL(link.href);
+            message.success('Tải tệp PDF thành công');
+        } catch (err) {
+            console.error('Lỗi khi xuất PDF:', err);
+            message.error('Không thể xuất tệp PDF, vui lòng thử lại sau');
+        } finally {
+            setExporting(false);
+        }
+    };
 
     useEffect(() => {
         if (open) {
@@ -78,7 +111,7 @@ const ModalChiTietLichSuKTX: React.FC<ModalChiTietLichSuKTXProps> = ({ open, onC
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.dangky.form.step.waiver' }),
-            content: <NoiDungStep2 />,
+            content: record ? <NoiDungStep2 record={record as KyTucXa.IThongTinDangKy} /> : null,
         },
         {
             title: intl.formatMessage({ id: 'kytucxa.lichsu.detail.tab.checkinPrep' }),
@@ -97,7 +130,8 @@ const ModalChiTietLichSuKTX: React.FC<ModalChiTietLichSuKTXProps> = ({ open, onC
                     icon={<FilePdfOutlined />} 
                     size="large" 
                     title={intl.formatMessage({ id: 'kytucxa.dangky.success.exportPdf' })}
-                    onClick={() => handlePrint()}
+                    onClick={handleExportPdf}
+                    loading={exporting}
                 />
                 <Button size="large" onClick={onClose} className="ktx-register-btn-outline">
                     {intl.formatMessage({ id: 'kytucxa.dangky.form.close' })}
@@ -142,11 +176,9 @@ const ModalChiTietLichSuKTX: React.FC<ModalChiTietLichSuKTXProps> = ({ open, onC
                     style={{ marginBottom: 24 }}
                 />
                 
-                <PrintTemplate ref={contentRef} title={intl.formatMessage({ id: 'kytucxa.lichsu.detail.title' })}>
-                    <div style={{ padding: '0 4px' }}>
-                        {steps[currentStep].content}
-                    </div>
-                </PrintTemplate>
+                <div style={{ padding: '0 4px' }}>
+                    {steps[currentStep].content}
+                </div>
             </div>
         </Modal>
     );

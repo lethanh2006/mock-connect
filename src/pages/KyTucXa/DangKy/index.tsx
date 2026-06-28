@@ -2,7 +2,7 @@ import { KyTucXa } from '@/services/KyTucXa/typings';
 import dayjs from '@/utils/dayjs';
 import { formatDateTime } from '@/utils/formatDate';
 import { ReloadOutlined, InfoCircleOutlined, FileDoneOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Empty, Row, Skeleton, Typography } from 'antd';
+import { Button, Card, Col, Empty, Row, Skeleton, Typography, Modal, message, Tag, Form, Spin } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useIntl, useModel } from 'umi';
 import RoomCard from './components/CardRoom';
@@ -16,6 +16,10 @@ import { ETrangThaiThanhToan } from '@/services/KyTucXa/constant';
 import SelectCapacityKTX from './components/Select/SelectCapacity';
 import SelectRoomTypeKTX from './components/Select/SelectRoomType';
 import PageCard from '@/components/PageCard';
+import axios from '@/utils/axios';
+import { ipCsvc } from '@/utils/ip';
+import UploadFile from '@/components/Upload/UploadFile';
+import { buildUpLoadFile } from '@/services/uploadFile';
 
 const DangKyKyTucXaPage = () => {
 	const intl = useIntl();
@@ -32,17 +36,39 @@ const DangKyKyTucXaPage = () => {
 	const [selectedRoomType, setSelectedRoomType] = useState<string | undefined>(undefined);
 	const [selectedFloor, setSelectedFloor] = useState<number | undefined>(undefined);
 
+	const [hangCho, setHangCho] = useState<KyTucXa.IYeuCauChoPhong | null>(null);
+	const [loadingHangCho, setLoadingHangCho] = useState(false);
+	const [formExempt] = Form.useForm();
+	const [submittingExempt, setSubmittingExempt] = useState(false);
+
 	const activeRegistration = useMemo(() => {
 		return danhSachLichSu.find(
 			(item) => item.trangThaiThanhToan !== ETrangThaiThanhToan.HUY,
 		);
 	}, [danhSachLichSu]);
 
+	const fetchHangCho = async () => {
+		setLoadingHangCho(true);
+		try {
+			const res = await axios.get(`${ipCsvc}/dang-ky-ky-tuc-xa/waiting-request/me`);
+			if (res?.data?.data) {
+				setHangCho(res.data.data);
+			} else {
+				setHangCho(null);
+			}
+		} catch (err) {
+			console.error('Lỗi khi tải hàng chờ:', err);
+		} finally {
+			setLoadingHangCho(false);
+		}
+	};
+
 	useEffect(() => {
 		getDotDangKy();
 		getDanhSachMien();
 		getLichSu();
 		getAllDanhTienIch();
+		fetchHangCho();
 	}, []);
 
 	useEffect(() => {
@@ -165,6 +191,59 @@ const DangKyKyTucXaPage = () => {
 		setVisibleForm(true);
 	}, [cacDotDangKyHienTai]);
 
+	const handleDangKyHangCho = useCallback(async (phong: KyTucXa.IPhong) => {
+		if (cacDotDangKyHienTai.length === 0) return;
+
+		const dotChuaPhong = cacDotDangKyHienTai.find(dot => {
+			if (dot.danhSachPhong && dot.danhSachPhong.length > 0) {
+				return dot.danhSachPhong.includes(phong.ma);
+			}
+			if (dot.danhSachToaNha && dot.danhSachToaNha.length > 0) {
+				return dot.danhSachToaNha.includes(phong.maToaNha);
+			}
+			return true;
+		}) || cacDotDangKyHienTai[0];
+
+		Modal.confirm({
+			title: 'Xác nhận đăng ký hàng chờ',
+			content: `Bạn có chắc chắn muốn đăng ký vào hàng chờ cho phòng thuộc tòa ${phong.toaNha?.ten || phong.maToaNha} không?`,
+			okText: 'Đăng ký',
+			cancelText: 'Hủy',
+			onOk: async () => {
+				try {
+					await axios.post(`${ipCsvc}/dang-ky-ky-tuc-xa/waiting-request`, {
+						maDotId: dotChuaPhong._id,
+						maToaNha: phong.maToaNha,
+						maLoaiPhong: phong.maLoaiPhongKtx,
+					});
+					message.success('Đăng ký hàng chờ thành công');
+					fetchHangCho();
+				} catch (err: any) {
+					console.error(err);
+					message.error(err?.response?.data?.message || 'Không thể đăng ký hàng chờ, vui lòng thử lại');
+				}
+			}
+		});
+	}, [cacDotDangKyHienTai]);
+
+	const handleCancelHangCho = async () => {
+		if (!hangCho?._id) return;
+		Modal.confirm({
+			title: 'Hủy đăng ký hàng chờ',
+			content: 'Bạn có chắc chắn muốn hủy yêu cầu hàng chờ này không?',
+			onOk: async () => {
+				try {
+					await axios.delete(`${ipCsvc}/dang-ky-ky-tuc-xa/waiting-request/${hangCho._id}`);
+					message.success('Hủy đăng ký hàng chờ thành công');
+					fetchHangCho();
+				} catch (err) {
+					console.error('Lỗi khi hủy hàng chờ:', err);
+					message.error('Không thể hủy hàng chờ, vui lòng thử lại sau');
+				}
+			}
+		});
+	};
+
 	const isExempted = useMemo(() => {
 		if (!danhSachMien || danhSachMien.length === 0 || cacDotDangKyHienTai.length === 0 || !thongTinSinhVien?.ma) return false;
 
@@ -174,10 +253,88 @@ const DangKyKyTucXaPage = () => {
 		);
 	}, [danhSachMien, cacDotDangKyHienTai, thongTinSinhVien?.ma]);
 
+	const activeExemption = useMemo(() => {
+		if (!danhSachMien || danhSachMien.length === 0 || cacDotDangKyHienTai.length === 0 || !thongTinSinhVien?.ma) return null;
+
+		const maHocKy = cacDotDangKyHienTai.map((dot) => dot.maHocKy);
+		return danhSachMien.find(
+			(item: KyTucXa.IDanhSachMien) => item.maSinhVien === thongTinSinhVien.ma && maHocKy.includes(item.maHocKy)
+		);
+	}, [danhSachMien, cacDotDangKyHienTai, thongTinSinhVien?.ma]);
+
+	const getExemptionStatusTag = (status: string) => {
+		switch (status) {
+			case 'CHO_NOP_MINH_CHUNG':
+				return <Tag color="warning">Chờ nộp minh chứng</Tag>;
+			case 'CHO_DUYET':
+				return <Tag color="processing">Chờ duyệt</Tag>;
+			case 'DA_DUYET':
+				return <Tag color="success">Đã duyệt</Tag>;
+			case 'TU_CHOI':
+				return <Tag color="error">Từ chối (Cần nộp lại)</Tag>;
+			default:
+				return <Tag>{status}</Tag>;
+		}
+	};
+
+	const handleNopMinhChung = async () => {
+		if (!activeExemption) return;
+		try {
+			const values = await formExempt.validateFields();
+			setSubmittingExempt(true);
+			const fileUrl = await buildUpLoadFile(values, 'urlMinhChung').catch(console.log);
+			if (!fileUrl) {
+				message.error('Vui lòng chọn file minh chứng');
+				setSubmittingExempt(false);
+				return;
+			}
+			await axios.post(`${ipCsvc}/dang-ky-ky-tuc-xa/me/mien-dang-ky/${activeExemption._id}/minh-chung`, { urlMinhChung: fileUrl });
+			message.success('Nộp minh chứng thành công');
+			getDanhSachMien();
+		} catch (err) {
+			console.error(err);
+			message.error('Có lỗi xảy ra, vui lòng thử lại');
+		} finally {
+			setSubmittingExempt(false);
+		}
+	};
+
 	return (
 		<PageCard
 			title={intl.formatMessage({ id: 'kytucxa.dangky.title' })}
 		>
+			{hangCho && (
+				<Spin spinning={loadingHangCho}>
+					<Card title="Yêu cầu hàng chờ phòng" style={{ marginBottom: 16, borderRadius: 12 }} extra={
+						hangCho.trangThai === 'CHO_XU_LY' && (
+							<Button type="primary" danger onClick={handleCancelHangCho}>
+								Hủy yêu cầu hàng chờ
+							</Button>
+						)
+					}>
+						<Row gutter={[16, 16]}>
+							<Col xs={24} sm={6}>
+								<Typography.Text type="secondary">Tòa nhà: </Typography.Text>
+								<Typography.Text strong>{hangCho.maToaNha}</Typography.Text>
+							</Col>
+							<Col xs={24} sm={6}>
+								<Typography.Text type="secondary">Loại phòng: </Typography.Text>
+								<Typography.Text strong>{hangCho.maLoaiPhong}</Typography.Text>
+							</Col>
+							<Col xs={24} sm={6}>
+								<Typography.Text type="secondary">Số thứ tự xếp hàng: </Typography.Text>
+								<Typography.Text strong style={{ fontSize: 16, color: '#1890ff' }}>{hangCho.soThuTu}</Typography.Text>
+							</Col>
+							<Col xs={24} sm={6}>
+								<Typography.Text type="secondary">Trạng thái: </Typography.Text>
+								<Tag color={hangCho.trangThai === 'CHO_XU_LY' ? 'processing' : hangCho.trangThai === 'DA_XU_LY' ? 'success' : 'default'}>
+									{hangCho.trangThai === 'CHO_XU_LY' ? 'Chờ xử lý' : hangCho.trangThai === 'DA_XU_LY' ? 'Đã xử lý' : 'Đã hủy'}
+								</Tag>
+							</Col>
+						</Row>
+					</Card>
+				</Spin>
+			)}
 
 			{loadingDotDangKy ? (
 				<Card className='ktx-page__dot-card' style={{ borderRadius: 12 }}>
@@ -262,40 +419,82 @@ const DangKyKyTucXaPage = () => {
 						)}
 
 						{isExempted ? (
-							<div style={{ textAlign: 'center', padding: '80px 20px', background: '#fff', borderRadius: '0 0 12px 12px' }}>
-								<FileDoneOutlined />
-								<Typography.Title level={4}>
-									{intl.formatMessage({ id: 'kytucxa.dangky.exemptedMsg' })}
-								</Typography.Title>
+							<div style={{ padding: '24px', background: '#fff', borderRadius: '0 0 12px 12px' }}>
+								<div style={{ textAlign: 'center', marginBottom: 24 }}>
+									<FileDoneOutlined style={{ fontSize: 48, color: '#52c41a', marginBottom: 16 }} />
+									<Typography.Title level={4}>
+										{intl.formatMessage({ id: 'kytucxa.dangky.exemptedMsg' })}
+									</Typography.Title>
+								</div>
+								
+								{activeExemption && (
+									<Card title="Chi tiết miễn giảm Ký túc xá" style={{ maxWidth: 600, margin: '0 auto', borderRadius: 8 }}>
+										<div style={{ marginBottom: 16 }}>
+											<Typography.Text type="secondary">Học kỳ: </Typography.Text>
+											<Typography.Text strong>{activeExemption.maHocKy}</Typography.Text>
+										</div>
+										<div style={{ marginBottom: 16 }}>
+											<Typography.Text type="secondary">Trạng thái minh chứng: </Typography.Text>
+											{getExemptionStatusTag(activeExemption.trangThaiMinhChung)}
+										</div>
+										{activeExemption.ghiChuDuyet && (
+											<div style={{ marginBottom: 16, padding: 8, background: '#f5f5f5', borderRadius: 4 }}>
+												<Typography.Text type="secondary">Ghi chú duyệt: </Typography.Text>
+												<Typography.Text>{activeExemption.ghiChuDuyet}</Typography.Text>
+											</div>
+										)}
+										
+										{(activeExemption.trangThaiMinhChung === 'CHO_NOP_MINH_CHUNG' || activeExemption.trangThaiMinhChung === 'TU_CHOI') && (
+											<Form form={formExempt} layout="vertical" style={{ marginTop: 24, borderTop: '1px solid #f0f0f0', paddingTop: 16 }}>
+												<Form.Item
+													name="urlMinhChung"
+													label="Tải lên minh chứng miễn giảm (PDF, PNG, JPG, JPEG, tối đa 5MB)"
+													rules={[{ required: true, message: 'Vui lòng chọn file minh chứng' }]}
+												>
+													<UploadFile maxCount={1} accept=".pdf,.png,.jpg,.jpeg" maxFileSize={5} />
+												</Form.Item>
+												<Button type="primary" loading={submittingExempt} onClick={handleNopMinhChung} style={{ width: '100%' }}>
+													Nộp minh chứng
+												</Button>
+											</Form>
+										)}
+									</Card>
+								)}
 							</div>
 						) : (
 							<div className='ktx-page__list'>
 								{loadingPhong ? (
-								<Row gutter={[12, 12]}>
-									{[1, 2, 3].map((i) => (
-										<Col key={i} xs={24} sm={12} md={8}>
-											<Card style={{ borderRadius: 12 }}>
-												<Skeleton active />
-											</Card>
-										</Col>
-									))}
-								</Row>
-							) : filteredPhong.length === 0 ? (
-								<Empty
-									description={intl.formatMessage({ id: 'kytucxa.dangky.roomNotFound' })}
-									image={Empty.PRESENTED_IMAGE_SIMPLE}
-									className='ktx-page__empty'
-								/>
-							) : (
-								<Row gutter={[12, 12]}>
-									{filteredPhong.map((phong) => (
-										<Col key={phong._id} xs={24} sm={12} md={8}>
-											<RoomCard phong={phong} onXemChiTiet={handleXemChiTiet} onDangKy={handleDangKy} maPhongDaDangKy={maPhongDaDangKy} />
-										</Col>
-									))}
-								</Row>
-							)}
-						</div>
+									<Row gutter={[12, 12]}>
+										{[1, 2, 3].map((i) => (
+											<Col key={i} xs={24} sm={12} md={8}>
+												<Card style={{ borderRadius: 12 }}>
+													<Skeleton active />
+												</Card>
+											</Col>
+										))}
+									</Row>
+								) : filteredPhong.length === 0 ? (
+									<Empty
+										description={intl.formatMessage({ id: 'kytucxa.dangky.roomNotFound' })}
+										image={Empty.PRESENTED_IMAGE_SIMPLE}
+										className='ktx-page__empty'
+									/>
+								) : (
+									<Row gutter={[12, 12]}>
+										{filteredPhong.map((phong) => (
+											<Col key={phong._id} xs={24} sm={12} md={8}>
+												<RoomCard 
+													phong={phong} 
+													onXemChiTiet={handleXemChiTiet} 
+													onDangKy={handleDangKy} 
+													onDangKyHangCho={handleDangKyHangCho}
+													maPhongDaDangKy={maPhongDaDangKy} 
+												/>
+											</Col>
+										))}
+									</Row>
+								)}
+							</div>
 						)}
 					</div>
 
