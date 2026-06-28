@@ -56,13 +56,6 @@ const ChartDiemTrungBinh = (props: { data?: KetQuaHocKy.IRecord[] }) => {
 					},
 				},
 				stroke: { curve: 'smooth', width: 3 },
-				markers: {
-					size: 3,
-					strokeWidth: 2,
-					strokeColors: CHART_COLORS,
-					// fillOpacity: 0,
-					hover: { size: 4 },
-				},
 				legend: {
 					position: 'right',
 					horizontalAlign: 'center',

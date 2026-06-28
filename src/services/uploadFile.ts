@@ -81,12 +81,13 @@ export async function uploadFileManagerMultipart(
 	ip: string = ipFile,
 ) {
 	const file = payload.file;
-
-	const initResponse = await axios.post(`${ip}/multipart/init`, {
-		filename: getFilename(file),
+	const filename = getFilename(file);
+	const fileRouteBase = getFileRouteBase(ip);
+	const initResponse = await axios.post(`${fileRouteBase}/multipart/init`, {
+		filename,
 		size: file.size,
 		mimetype: file.type || 'application/octet-stream',
-		ext: getFileExtension(getFilename(file)),
+		ext: getFileExtension(filename),
 		scope: payload.scope ?? EFileScope.PRIVATE,
 		module: payload.module ?? 'co-curriculum',
 	});
@@ -95,7 +96,7 @@ export async function uploadFileManagerMultipart(
 
 	const parts = await uploadMultipartParts(file, initData);
 
-	const completeResponse = await axios.post(`${ip}/multipart/complete`, {
+	const completeResponse = await axios.post(`${fileRouteBase}/multipart/complete`, {
 		fileId: initData.fileId,
 		parts,
 	});

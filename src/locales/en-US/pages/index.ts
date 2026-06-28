@@ -1,4 +1,3 @@
-import cct from './cct';
 import activity from './cct/activity';
 import dangky from './dichvuhanhchinh/dangky';
 import lichsu from './dichvuhanhchinh/lichsu';
@@ -67,7 +66,6 @@ export default {
 	...pathway,
 	...minor,
 	...syllabus,
-	...cct,
 
 	'pages.trangchu.title': 'TRAINING STUDENT PORTAL',
 	'pages.trangchu.subtitle': 'DIGITAL UNIVERSITY SYSTEM',
