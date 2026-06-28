@@ -1,9 +1,10 @@
 import { useAuthActions } from '@/hooks/useAuthActions';
-import { getPermission, getUserInfo } from '@/services/base/api';
-import { AppModules } from '@/services/base/constant';
+import { getUserInfo } from '@/services/base/api';
+import { AppModules, EModuleKey } from '@/services/base/constant';
 import { type Login } from '@/services/base/typing';
 import axios from '@/utils/axios';
 import { getKeycloakRoleContext, hasModulePermission } from '@/utils/keycloakRoles';
+import type { AuthorizedRolesByClient } from '@/utils/keycloakRoles';
 import { currentRole, financeApiClientId, qldtApiClientId, replaceRole } from '@/utils/ip';
 import { oidcConfig } from '@/utils/oidcConfig';
 import { notification } from 'antd';
@@ -15,6 +16,37 @@ import LoadingPage from '../Loading';
 import { unAuthPaths, unCheckPermissionPaths } from './constant';
 
 let OIDCBounderHandlers: ReturnType<typeof useAuthActions> | null = null;
+
+const getModuleClientIds = (moduleKey: EModuleKey) => {
+	const webClientId = AppModules[moduleKey]?.clientId;
+	const clientIds = [webClientId, webClientId ? `${webClientId}-api` : undefined];
+
+	return clientIds.filter(Boolean) as string[];
+};
+
+const getAllRoleClientIds = () =>
+	Array.from(
+		new Set([
+			...Object.keys(AppModules).flatMap((moduleKey) => getModuleClientIds(moduleKey as EModuleKey)),
+			qldtApiClientId,
+			financeApiClientId,
+		]),
+	);
+
+const getAuthorizedPermissionsFromRoles = (rolesByClient: AuthorizedRolesByClient): Login.IPermission[] =>
+	Object.keys(AppModules)
+		.map((moduleKey) => {
+			const scopes = getModuleClientIds(moduleKey as EModuleKey).flatMap((clientId) => rolesByClient[clientId] ?? []);
+			const uniqueScopes = Array.from(new Set(scopes));
+			if (!uniqueScopes.length) return undefined;
+
+			return {
+				rsid: moduleKey,
+				rsname: moduleKey as EModuleKey,
+				scopes: uniqueScopes,
+			};
+		})
+		.filter(Boolean) as Login.IPermission[];
 
 export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children }) => {
 	const intl = useIntl();
@@ -49,20 +81,21 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 		if (auth.user) {
 			handleAxios(auth.user.access_token);
 			try {
-				const [getUserInfoResponse, getPermissionsResponse] = await Promise.all([
-					getUserInfo(),
-					getPermission().catch(() => ({ data: [] })),
-				]);
+				const getUserInfoResponse = await getUserInfo();
 				const userInfo: Login.IUser = getUserInfoResponse?.data;
-				const permissions: Login.IPermission[] = getPermissionsResponse.data;
-				const roleContext = getKeycloakRoleContext(auth.user.access_token, [qldtApiClientId, financeApiClientId]);
+				const roleContext = getKeycloakRoleContext(auth.user.access_token, getAllRoleClientIds());
+				const permissions = getAuthorizedPermissionsFromRoles(roleContext.authorizedRolesByClient);
 				const isUncheckPath = unCheckPermissionPaths.some((path) => window.location.pathname.includes(path));
 				const tmpInitialState = {
 					currentUser: { ...userInfo, ssoId: userInfo.sub },
 					authorizedPermissions: permissions,
 					...roleContext,
 				};
-				const hasRole = hasModulePermission(tmpInitialState, currentRole, [qldtApiClientId, financeApiClientId]);
+				const hasRole = hasModulePermission(tmpInitialState, currentRole, [
+					...getModuleClientIds(currentRole),
+					qldtApiClientId,
+					financeApiClientId,
+				]);
 
 				// Ensure permission is fully set before marking as loaded
 				setInitialState((prev) => ({
@@ -81,7 +114,11 @@ export const OIDCBounder_: FC<{ children: React.ReactElement }> = ({ children })
 				}, 0);
 
 				if (!isUncheckPath && currentRole && !hasRole) {
-					const hasReplaceRole = hasModulePermission(tmpInitialState, replaceRole, [qldtApiClientId, financeApiClientId]);
+					const hasReplaceRole = hasModulePermission(tmpInitialState, replaceRole, [
+						...(replaceRole ? getModuleClientIds(replaceRole) : []),
+						qldtApiClientId,
+						financeApiClientId,
+					]);
 					const linkReplace = !!replaceRole && AppModules[replaceRole]?.url;
 
 					if (!!linkReplace && hasReplaceRole) {
