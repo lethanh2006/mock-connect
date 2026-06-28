@@ -65,6 +65,6 @@ export {
 	oneSignalRole,
 	qldtApiClientId,
 	replaceRole,
-	sentryDSN,
+	sentryDSN
 };
 
